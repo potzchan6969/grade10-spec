@@ -66,11 +66,11 @@ Featured Markets uses layered checks. Keep each layer focused on the risk it is 
 
 | Test type | Where it lives | What it verifies |
 | --- | --- | --- |
-| Static component-policy check | `packages/ui-components/scripts/check-stateless-components.sh` | Shared components do not introduce local product state, stores, data access, routing, analytics, or undocumented browser runtime APIs. |
+| Static component-policy check | `packages/ui-components/scripts/check-stateless-components.sh` | Detects known external data, persistence, application-store, routing, analytics, and feature-flag integrations; code review covers unlisted clients and application imports. |
 | Type checking and package build | `pnpm run build:components` | Public generic props and discriminated async states compile into the published package. |
 | Story render tests | `apps/ui/src/stories/FeaturedMarkets.stories.tsx` | The desktop chart, loading, error, and mobile layouts render from consumer-supplied props. |
 | Browser interaction tests | `Interactions` story's `play` function | Controlled asset/event selection updates accessible DOM state and selected market content in Chromium. |
-| Chart-runtime render coverage | `DesktopChart` story | ECharts mounts from ready-state fixture data in a browser, using the package's only allowed DOM-backed runtime. |
+| Chart-runtime render coverage | `DesktopChart` story | ECharts mounts from ready-state fixture data in a browser without fetching or subscribing to market data. |
 
 ### State-contract sample
 
@@ -150,7 +150,9 @@ Visual regression baselines and isolated chart-option unit tests are not impleme
 
 ## Authoring components
 
-Components must be prop-driven and free of data access, routing, stores, feature flags, analytics, context, and local product state. A documented DOM-backed visual runtime may use refs, effects, and browser APIs only to mount, update from props, resize, and dispose itself. Add an exported prop type, write Storybook stories in `apps/ui`, then run:
+Read the [portable UI component contract guide](../../docs/governance/ui-component-contracts.md) before designing a new public component or making a material contract change.
+
+Components must receive consumer-owned product state through props and remain free of data access, routing, stores, feature flags, analytics, browser storage, and application imports. They may use internal React state, context, effects, refs, timers, and browser APIs for presentation and DOM behavior, but not to acquire, persist, subscribe to, or orchestrate consumer-owned product state. Add an exported prop type, write Storybook stories in `apps/ui`, then run:
 
 ```bash
 pnpm run check:components

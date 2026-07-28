@@ -91,7 +91,7 @@ Prediction-market applications need a consistent featured-markets surface that c
 | --- | --- | --- | --- |
 | State ownership | Decided | Consumers own market and selection state; ECharts owns only its DOM lifecycle. | Product + engineering |
 | Chart engine | Decided | Use ECharts for a prop-driven single line series with optional reference marker. | Engineering |
-| Runtime exception | Decided | Refs/effects/ResizeObserver are limited to the documented chart-runtime directory. | Engineering |
+| Internal behavior | Decided | Components may use internal state, effects, timers, and browser APIs for presentation and DOM behavior; market data and other external product state remain consumer-owned. | Engineering |
 
 ## Rollout and risks
 
