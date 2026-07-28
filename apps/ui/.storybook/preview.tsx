@@ -1,5 +1,30 @@
 import type { Preview } from "@storybook/react-vite";
+import type { ReactNode } from "react";
 import "@acetrader/pred-spec-ui/styles.css";
+
+function MotionBoundary({
+	children,
+	paused,
+}: {
+	children: ReactNode;
+	paused: boolean;
+}) {
+	return (
+		<div data-storybook-pause-motion={paused || undefined}>
+			{paused ? (
+				<style>{`
+          [data-storybook-pause-motion] *, [data-storybook-pause-motion] *::before, [data-storybook-pause-motion] *::after {
+            animation-delay: 0s !important;
+            animation-play-state: paused !important;
+            transition-duration: 0s !important;
+            transition-delay: 0s !important;
+          }
+        `}</style>
+			) : null}
+			{children}
+		</div>
+	);
+}
 
 const preview: Preview = {
 	parameters: {
@@ -17,6 +42,13 @@ const preview: Preview = {
 			test: "todo",
 		},
 	},
+	decorators: [
+		(Story, context) => (
+			<MotionBoundary paused={context.parameters.pauseMotion === true}>
+				<Story />
+			</MotionBoundary>
+		),
+	],
 };
 
 export default preview;

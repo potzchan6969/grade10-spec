@@ -1,6 +1,8 @@
 import {
 	Badge,
 	Button,
+	FeaturedMarketStatus,
+	FeaturedMarketSummaryCard,
 	FeaturedMarkets,
 	FeaturedMarketsMobile,
 	type FeaturedMarketsProps,
@@ -12,12 +14,18 @@ import {
 } from "@acetrader/pred-spec-ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 
 type AssetId = "btc" | "eth" | "sol";
 type DurationId = "15m" | "1h";
 type EventId = "rate-cut" | "bitcoin-150k";
 type SourceId = "polymarket" | "kalshi";
+
+const onBrowseAll = fn();
+const onHeaderAction = fn();
+const onPrimaryAction = fn();
+const onSecondaryAction = fn();
+const onRetry = fn();
 
 const summary = (title: string, source: SourceId = "polymarket") => ({
 	header: {
@@ -243,17 +251,125 @@ export const Interactions: Story = {
 	render: () => <FeaturedMarketsDemo />,
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		await userEvent.click(canvas.getByRole("tab", { name: /ETH/ }));
-		expect(canvas.getByRole("tab", { name: /ETH/ })).toHaveAttribute(
-			"aria-selected",
-			"true",
-		);
+		const eth = canvas.getByRole("tab", { name: /ETH/ });
+		eth.focus();
+		await userEvent.keyboard("[Enter]");
+		expect(eth).toHaveAttribute("aria-selected", "true");
+		expect(
+			canvas.getByRole("heading", { name: "ETH 15 Minute Up or Down" }),
+		).toBeInTheDocument();
+		await userEvent.click(canvas.getByRole("button", { name: "1 hr Crypto" }));
+		expect(
+			canvas.getByText("This duration market is not available."),
+		).toBeInTheDocument();
 		await userEvent.click(
 			canvas.getByRole("button", { name: "Will Bitcoin exceed $150K?" }),
 		);
 		expect(
 			canvas.getByRole("heading", { name: "Will Bitcoin exceed $150K?" }),
 		).toBeInTheDocument();
+	},
+};
+
+function MobileInteractionDemo() {
+	const [selection, setSelection] = useState(featuredProps.selection);
+	const [mobileTab, setMobileTab] = useState(featuredProps.mobileTab);
+	return (
+		<FeaturedMarketsMobile
+			{...featuredProps}
+			mobileTab={mobileTab}
+			onBrowseAll={onBrowseAll}
+			onMobileTabChange={setMobileTab}
+			onSelectionChange={setSelection}
+			selection={selection}
+		/>
+	);
+}
+
+export const MobileInteractions: Story = {
+	render: () => (
+		<>
+			<style>{`.at-featured-mobile { display: flex !important; flex-direction: column; gap: 1rem; }`}</style>
+			<MobileInteractionDemo />
+		</>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole("tab", { name: "Trending" }));
+		expect(canvas.getByRole("tab", { name: "Trending" })).toHaveAttribute(
+			"aria-selected",
+			"true",
+		);
+		expect(
+			canvas.getByRole("heading", { name: "Will Bitcoin exceed $150K?" }),
+		).toBeInTheDocument();
+		await userEvent.click(canvas.getByRole("button", { name: "Browse All" }));
+		expect(onBrowseAll).toHaveBeenCalledTimes(1);
+	},
+};
+
+function MarketActionDemo() {
+	const [source, setSource] = useState<SourceId>("polymarket");
+	const base = summary("Actionable market", source);
+	const data = {
+		...base,
+		header: {
+			...base.header,
+			action: { label: "Open market", onAction: onHeaderAction },
+		},
+		primaryAction: { label: "View Event", onAction: onPrimaryAction },
+		secondaryAction: { label: "Share market", onAction: onSecondaryAction },
+		sourceSelection: { ...base.sourceSelection, onValueChange: setSource },
+	};
+	return <FeaturedMarketSummaryCard data={data} />;
+}
+
+export const MarketActions: Story = {
+	render: () => <MarketActionDemo />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole("tab", { name: "KA" }));
+		expect(canvas.getByRole("tab", { name: "KA" })).toHaveAttribute(
+			"aria-selected",
+			"true",
+		);
+		await userEvent.click(canvas.getByRole("button", { name: "Open market" }));
+		await userEvent.click(canvas.getByRole("button", { name: "View Event" }));
+		await userEvent.click(canvas.getByRole("button", { name: "Share market" }));
+		expect(onHeaderAction).toHaveBeenCalledTimes(1);
+		expect(onPrimaryAction).toHaveBeenCalledTimes(1);
+		expect(onSecondaryAction).toHaveBeenCalledTimes(1);
+	},
+};
+
+export const RetryAndDisabled: Story = {
+	render: () => {
+		const onAssetChange = fn();
+		return (
+			<Stack gap="md">
+				<FeaturedMarketStatus
+					state={{
+						message: "Markets are unavailable.",
+						onRetry,
+						status: "error",
+					}}
+				/>
+				<FeaturedMarkets
+					{...featuredProps}
+					assets={[
+						...featuredProps.assets,
+						{ disabled: true, id: "xrp" as AssetId, label: "XRP" },
+					]}
+					onSelectionChange={onAssetChange}
+				/>
+			</Stack>
+		);
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole("button", { name: "Try again" }));
+		expect(onRetry).toHaveBeenCalledTimes(1);
+		expect(canvas.getByRole("tab", { name: /XRP/ })).toBeDisabled();
 	},
 };
 

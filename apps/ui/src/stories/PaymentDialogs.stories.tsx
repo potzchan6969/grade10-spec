@@ -2,6 +2,7 @@ import {
 	CryptoPaymentCheckoutDialog,
 	CryptoPaymentConfirmationDialog,
 	FiatPaymentCheckoutDialog,
+	PaymentDialog,
 	PaymentOutcomeDialog,
 	PaymentPlanActivatedDialog,
 	type PaymentPriceState,
@@ -9,7 +10,7 @@ import {
 } from "@acetrader/pred-spec-ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 
 const price: PaymentPriceState = {
 	status: "ready",
@@ -19,6 +20,13 @@ const price: PaymentPriceState = {
 	supportingText: "Subscription",
 };
 const openOnly = { onOpenChange: () => undefined, open: true };
+const onPromoApply = fn();
+const onPrimaryAction = fn();
+const onPromoRemove = fn();
+const onDialogChange = fn();
+const onProcessingChange = fn();
+const onOutcomePrimary = fn();
+const onOutcomeSecondary = fn();
 
 function CryptoDemo() {
 	const [token, setToken] = useState<"USDC" | "USDT">("USDC");
@@ -38,9 +46,9 @@ function CryptoDemo() {
 			]}
 			onTokenChange={setToken}
 			price={{ ...price, currency: token }}
-			primaryAction={{ label: "Pay with Wallet", onAction: () => undefined }}
+			primaryAction={{ label: "Pay with Wallet", onAction: onPrimaryAction }}
 			promo={{
-				onApply: () => undefined,
+				onApply: onPromoApply,
 				onValueChange: setPromo,
 				status: "entry",
 				value: promo,
@@ -83,6 +91,230 @@ export const CryptoCheckout: Story = {
 		expect(canvas.getByRole("textbox", { name: "Promo code" })).toHaveValue(
 			"SAVE20",
 		);
+		await userEvent.click(canvas.getByRole("button", { name: "Apply" }));
+		expect(onPromoApply).toHaveBeenCalledTimes(1);
+		await userEvent.click(
+			canvas.getByRole("button", { name: "Pay with Wallet" }),
+		);
+		expect(onPrimaryAction).toHaveBeenCalledTimes(1);
+	},
+};
+
+function DialogLifecycleDemo() {
+	const [open, setOpen] = useState(false);
+	return (
+		<div>
+			<button onClick={() => setOpen(true)} type="button">
+				Open payment dialog
+			</button>
+			<PaymentDialog
+				description="A controlled dialog lifecycle fixture."
+				onOpenChange={(nextOpen) => {
+					onDialogChange(nextOpen);
+					setOpen(nextOpen);
+				}}
+				open={open}
+				title="Payment details"
+			>
+				<button type="button">First action</button>
+				<button type="button">Last action</button>
+			</PaymentDialog>
+		</div>
+	);
+}
+
+export const DialogLifecycle: Story = {
+	render: () => <DialogLifecycleDemo />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const opener = canvas.getByRole("button", { name: "Open payment dialog" });
+		await userEvent.click(opener);
+		const dialog = canvas.getByRole("dialog", { name: "Payment details" });
+		const close = within(dialog).getByRole("button", { name: "Close dialog" });
+		await waitFor(() => expect(close).toHaveFocus());
+		await userEvent.keyboard("{Shift>}{Tab}{/Shift}");
+		expect(
+			within(dialog).getByRole("button", { name: "Last action" }),
+		).toHaveFocus();
+		await userEvent.keyboard("[Tab]");
+		expect(close).toHaveFocus();
+		await userEvent.keyboard("[Escape]");
+		await waitFor(() =>
+			expect(canvas.queryByRole("dialog")).not.toBeInTheDocument(),
+		);
+		expect(opener).toHaveFocus();
+
+		await userEvent.click(opener);
+		await userEvent.click(
+			within(canvas.getByRole("dialog", { name: "Payment details" })).getByRole(
+				"button",
+				{ name: "Close dialog" },
+			),
+		);
+		await waitFor(() =>
+			expect(canvas.queryByRole("dialog")).not.toBeInTheDocument(),
+		);
+
+		await userEvent.click(opener);
+		const backdropDismiss = canvasElement.querySelector<HTMLButtonElement>(
+			".at-payment-dialog-backdrop__dismiss",
+		);
+		if (!backdropDismiss)
+			throw new Error("Dismissible backdrop was not rendered.");
+		await userEvent.click(backdropDismiss);
+		await waitFor(() =>
+			expect(canvas.queryByRole("dialog")).not.toBeInTheDocument(),
+		);
+		expect(onDialogChange).toHaveBeenCalledWith(false);
+	},
+};
+
+export const ProcessingIsNotDismissible: Story = {
+	render: () => (
+		<PaymentProcessingDialog
+			message="Payment is processing."
+			onOpenChange={onProcessingChange}
+			open
+			title="Processing"
+		/>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const dialog = canvas.getByRole("dialog", { name: "Processing" });
+		const spinnerAnimation = dialog
+			.querySelector(".at-payment-processing__spinner")
+			?.getAnimations()[0];
+		expect(spinnerAnimation?.playState).toBe("running");
+		const spinnerTime = Number(spinnerAnimation?.currentTime ?? 0);
+		await new Promise((resolve) => window.setTimeout(resolve, 80));
+		expect(Number(spinnerAnimation?.currentTime ?? 0)).toBeGreaterThan(
+			spinnerTime,
+		);
+		await userEvent.click(dialog);
+		await userEvent.keyboard("[Escape]");
+		expect(
+			canvas.getByRole("dialog", { name: "Processing" }),
+		).toBeInTheDocument();
+		expect(
+			canvas.queryByRole("button", { name: "Close dialog" }),
+		).not.toBeInTheDocument();
+		expect(onProcessingChange).not.toHaveBeenCalled();
+	},
+};
+
+function PromoStateDemo() {
+	const [value, setValue] = useState("SAVE20");
+	const [applied, setApplied] = useState(false);
+	return (
+		<FiatPaymentCheckoutDialog
+			{...openOnly}
+			price={price}
+			primaryAction={{ label: "Continue", onAction: () => undefined }}
+			promo={
+				applied
+					? {
+							code: "SAVE20",
+							onRemove: () => {
+								onPromoRemove();
+								setApplied(false);
+							},
+							savingsLabel: "20% off",
+							status: "applied",
+						}
+					: {
+							onApply: () => {
+								onPromoApply();
+								setApplied(true);
+							},
+							onValueChange: setValue,
+							status: "entry",
+							value,
+						}
+			}
+			title="Promo state"
+		/>
+	);
+}
+
+export const PromoEntryAndRemoval: Story = {
+	render: () => <PromoStateDemo />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const input = canvas.getByRole("textbox", { name: "Promo code" });
+		input.focus();
+		await userEvent.keyboard("[Enter]");
+		expect(onPromoApply).toHaveBeenCalled();
+		expect(canvas.getByText("SAVE20 applied")).toBeInTheDocument();
+		await userEvent.click(canvas.getByRole("button", { name: "Remove" }));
+		expect(onPromoRemove).toHaveBeenCalledTimes(1);
+		expect(
+			canvas.getByRole("textbox", { name: "Promo code" }),
+		).toBeInTheDocument();
+	},
+};
+
+const onDisabledPromoApply = fn();
+export const PromoErrorAndDisabled: Story = {
+	render: () => (
+		<FiatPaymentCheckoutDialog
+			{...openOnly}
+			price={price}
+			primaryAction={{
+				disabled: true,
+				label: "Continue",
+				onAction: () => undefined,
+			}}
+			promo={{
+				applying: true,
+				error: "This code has expired.",
+				onApply: onDisabledPromoApply,
+				onValueChange: () => undefined,
+				status: "entry",
+				value: "EXPIRED",
+			}}
+			title="Promo error"
+		/>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		expect(canvas.getByRole("alert")).toHaveTextContent(
+			"This code has expired.",
+		);
+		expect(canvas.getByRole("textbox", { name: "Promo code" })).toBeDisabled();
+		const apply = canvas.getByRole("button", { name: "Applying…" });
+		expect(apply).toBeDisabled();
+		await userEvent.click(apply);
+		expect(onDisabledPromoApply).not.toHaveBeenCalled();
+		expect(canvas.getByRole("button", { name: "Continue" })).toBeDisabled();
+	},
+};
+
+export const OutcomeActions: Story = {
+	render: () => (
+		<PaymentOutcomeDialog
+			{...openOnly}
+			message="Subscription completed."
+			outcome="success"
+			primaryAction={{ label: "Start Trading", onAction: onOutcomePrimary }}
+			secondaryAction={{ label: "Close", onAction: onOutcomeSecondary }}
+			title="Plan subscribed"
+			transaction={{
+				href: "https://example.com/transaction",
+				label: "View transaction",
+			}}
+		/>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole("button", { name: "Close" }));
+		await userEvent.click(
+			canvas.getByRole("button", { name: "Start Trading" }),
+		);
+		expect(onOutcomeSecondary).toHaveBeenCalledTimes(1);
+		expect(onOutcomePrimary).toHaveBeenCalledTimes(1);
+		expect(
+			canvas.getByRole("link", { name: "View transaction" }),
+		).toHaveAttribute("href", "https://example.com/transaction");
 	},
 };
 export const CryptoLoading: Story = {
