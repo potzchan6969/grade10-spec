@@ -41,7 +41,8 @@ Use the `stateless-ui-components` skill whenever creating or changing `packages/
 
 - Components receive all content, state, and behavior through props. Callback props use `on<Event>` names.
 - No data fetching, mutations, routing, app stores, analytics, feature flags, browser storage, or application imports.
-- Do not use React context, `useState`, `useReducer`, or `useEffect` in shared components. Controlled props make every visual state renderable in Storybook and consumer applications.
+- Do not use React context, `useState`, or `useReducer` in shared components. Controlled props make every visual state renderable in Storybook and consumer applications.
+- A component may use refs, effects, and `ResizeObserver` only inside a documented DOM-backed visual runtime (for example, an ECharts adapter) to mount, update from props, resize, and dispose that runtime. This exception never permits data fetching, stores, routing, analytics, feature flags, browser storage, timers that derive product state, or application imports.
 - Keep React a peer dependency; do not bundle React or a product design system.
 - Export each public component and its prop type from `src/index.ts`; changing an exported prop is a consumer-facing breaking change unless optional and backward compatible.
 - Storybook stories must cover default, interactive/disabled, loading, empty, error, and narrow-width states when those states exist.

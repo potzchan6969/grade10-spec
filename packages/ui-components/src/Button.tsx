@@ -8,6 +8,12 @@ export type ButtonProps = Omit<
 	children: ReactNode;
 	/** A stable presentation hook for consuming design systems. */
 	tone?: "neutral" | "primary" | "danger";
+	/** Stakeland-compatible visual treatment. */
+	variant?: "primary" | "secondary" | "ghost";
+	/** Compact buttons are suitable for toolbar and card actions. */
+	size?: "small" | "medium";
+	/** Makes an icon-only action discoverable to styles and assistive tooling. */
+	iconOnly?: boolean;
 };
 
 /**
@@ -17,11 +23,22 @@ export type ButtonProps = Omit<
 export function Button({
 	children,
 	tone = "primary",
+	variant = "primary",
+	size = "medium",
+	iconOnly = false,
 	type = "button",
 	...props
 }: ButtonProps) {
 	return (
-		<button data-tone={tone} type={type} {...props}>
+		<button
+			className="at-button"
+			data-icon-only={iconOnly || undefined}
+			data-size={size}
+			data-tone={tone}
+			data-variant={variant}
+			type={type}
+			{...props}
+		>
 			{children}
 		</button>
 	);
