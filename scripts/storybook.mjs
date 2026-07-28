@@ -35,10 +35,22 @@ function findAvailablePort() {
   });
 }
 
-const storybookArguments = process.argv.slice(2);
-if (storybookArguments[0] === "--") {
-  storybookArguments.shift();
+const DEFAULT_WORKSPACE_DIRECTORY = "apps/ui";
+
+const storybookArguments = process.argv
+  .slice(2)
+  .filter((argument) => argument !== "--");
+
+let workspaceDirectory = DEFAULT_WORKSPACE_DIRECTORY;
+if (storybookArguments[0] === "--dir") {
+  const [, directory] = storybookArguments.splice(0, 2);
+  if (!directory) {
+    console.error("--dir requires a workspace directory.");
+    process.exit(1);
+  }
+  workspaceDirectory = directory;
 }
+
 if (!hasPortArgument(storybookArguments)) {
   const port = await findAvailablePort();
   storybookArguments.push("--port", String(port));
@@ -48,7 +60,14 @@ if (!hasPortArgument(storybookArguments)) {
 const pnpm = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
 const child = spawn(
   pnpm,
-  ["--dir", "apps/ui", "exec", "storybook", "dev", ...storybookArguments],
+  [
+    "--dir",
+    workspaceDirectory,
+    "exec",
+    "storybook",
+    "dev",
+    ...storybookArguments,
+  ],
   { stdio: "inherit" },
 );
 
