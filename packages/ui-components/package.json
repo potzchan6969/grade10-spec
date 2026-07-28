@@ -7,26 +7,39 @@
 	"type": "module",
 	"files": [
 		"dist",
+		"styles.css",
 		"README.md"
 	],
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.js"
-		}
+		},
+		"./styles.css": "./styles.css"
 	},
 	"types": "./dist/index.d.ts",
-	"sideEffects": false,
+	"sideEffects": [
+		"./styles.css"
+	],
 	"peerDependencies": {
-		"react": ">=18"
+		"react": ">=18",
+		"tailwindcss": "^4.0.0"
 	},
 	"devDependencies": {
 		"@types/react": "^19.2.17",
 		"react": "^19.2.7",
+		"tailwindcss": "^4.3.3",
 		"typescript": "~6.0.2"
 	},
 	"scripts": {
 		"build": "tsc --project tsconfig.json",
 		"check:stateless": "bash scripts/check-stateless-components.sh"
+	},
+	"dependencies": {
+		"@base-ui/react": "^1.6.0",
+		"clsx": "^2.1.1",
+		"shadcn": "^4.15.0",
+		"tailwind-merge": "^3.6.0",
+		"tw-animate-css": "^1.4.0"
 	}
 }

@@ -1,6 +1,15 @@
 # `@acetrader/pred-spec-ui`
 
-Portable, stateless React components produced alongside product specifications. The package deliberately has no app dependencies and treats React as a peer dependency.
+Portable, stateless React components produced alongside product specifications. The package has no application-specific dependencies and treats React as a peer dependency.
+
+Components may use shadcn/ui utility classes. Consumer applications must use Tailwind CSS v4 and import the package stylesheet once from their global CSS:
+
+```css
+@import "tailwindcss";
+@import "@acetrader/pred-spec-ui/styles.css";
+```
+
+The stylesheet loads shadcn's shared Tailwind utilities and scans this package's emitted `dist/` files, so generated component classes are included in the consumer's Tailwind output.
 
 ## Consumer setup with a Git submodule
 
