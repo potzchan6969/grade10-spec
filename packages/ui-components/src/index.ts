@@ -72,6 +72,40 @@ export type {
 	FeaturedSourceSelection,
 } from "./FeaturedMarkets/types.js";
 export type {
+	CryptoPaymentCheckoutDialogProps,
+	CryptoPaymentConfirmationDialogProps,
+	FiatPaymentCheckoutDialogProps,
+	PaymentAction,
+	PaymentDetail,
+	PaymentDetailsListProps,
+	PaymentDialogProps,
+	PaymentOutcomeDialogProps,
+	PaymentPlanActivatedDialogProps,
+	PaymentPriceState,
+	PaymentPriceSummaryProps,
+	PaymentProcessingDialogProps,
+	PaymentPromoCodeFieldProps,
+	PaymentPromoCodeState,
+	PaymentTermsNoticeProps,
+	PaymentTimelineProps,
+	PaymentTimelineStep,
+	PaymentTokenOption,
+} from "./PaymentDialogs.js";
+export {
+	CryptoPaymentCheckoutDialog,
+	CryptoPaymentConfirmationDialog,
+	FiatPaymentCheckoutDialog,
+	PaymentDetailsList,
+	PaymentDialog,
+	PaymentOutcomeDialog,
+	PaymentPlanActivatedDialog,
+	PaymentPriceSummary,
+	PaymentProcessingDialog,
+	PaymentPromoCodeField,
+	PaymentTermsNotice,
+	PaymentTimeline,
+} from "./PaymentDialogs.js";
+export type {
 	SegmentedControlOption,
 	SegmentedControlProps,
 } from "./SegmentedControl.js";
