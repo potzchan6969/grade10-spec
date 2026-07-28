@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@acetrader/design-system/*": ["./src/*"]
+    },
+    "target": "es2023",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "types": ["react", "react-dom", "@figma/code-connect/figma-types"],
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true
+  },
+  "include": ["src"]
+}

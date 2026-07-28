@@ -1,0 +1,49 @@
+<style>
+  body { font: 12px -apple-system, system-ui, sans-serif; margin: 0; padding: 12px; color: var(--figma-color-text); background: var(--figma-color-bg); }
+  pre { margin: 0 0 10px; font: 11px ui-monospace, monospace; color: var(--figma-color-text-secondary); white-space: pre-wrap; }
+  textarea { width: 100%; height: 150px; box-sizing: border-box; font: 10px ui-monospace, monospace; margin-bottom: 10px;
+             background: var(--figma-color-bg-secondary); color: var(--figma-color-text); border: 1px solid var(--figma-color-border); border-radius: 4px; padding: 6px; }
+  button { font: 12px inherit; padding: 6px 12px; margin-right: 6px; border: 0; border-radius: 6px; cursor: pointer;
+           background: var(--figma-color-bg-brand); color: var(--figma-color-text-onbrand); }
+  button.secondary { background: var(--figma-color-bg-secondary); color: var(--figma-color-text); }
+  #note { color: var(--figma-color-text-secondary); }
+</style>
+
+<pre id="summary">reading variables…</pre>
+<textarea id="out" readonly></textarea>
+<button id="download" type="button">Download figma-dump.json</button>
+<button id="copy" type="button" class="secondary">Copy</button>
+<button id="close" type="button" class="secondary">Close</button>
+<div id="note"></div>
+
+<script>
+  let json = ""
+
+  window.onmessage = (e) => {
+    const msg = e.data.pluginMessage
+    if (!msg) return
+    json = msg.json
+    document.getElementById("summary").textContent = msg.summary
+    document.getElementById("out").value = json
+  }
+
+  document.getElementById("download").onclick = () => {
+    const blob = new Blob([json], { type: "application/json" })
+    const a = document.createElement("a")
+    a.href = URL.createObjectURL(blob)
+    a.download = "figma-dump.json"
+    a.click()
+    URL.revokeObjectURL(a.href)
+    document.getElementById("note").textContent = "Saved to your Downloads folder."
+  }
+
+  // Clipboard API is blocked in the plugin iframe; execCommand on a selection is not.
+  document.getElementById("copy").onclick = () => {
+    const t = document.getElementById("out")
+    t.select()
+    document.execCommand("copy")
+    document.getElementById("note").textContent = "Copied — paste into figma-dump.json."
+  }
+
+  document.getElementById("close").onclick = () => parent.postMessage({ pluginMessage: "close" }, "*")
+</script>

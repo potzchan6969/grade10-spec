@@ -7,7 +7,12 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["**", "!packages/ui-components/dist"]
+    "includes": [
+      "**",
+      "!packages/ui-components/dist",
+      "!packages/design-system/src/theme.css",
+      "!packages/design-system/src/themes/acetrader.css"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -37,5 +42,21 @@
         "organizeImports": "on"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["packages/design-system/scripts/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useTemplate": "off"
+          },
+          "suspicious": {
+            "noAssignInExpressions": "off",
+            "useIterableCallbackReturn": "off"
+          }
+        }
+      }
+    }
+  ]
 }

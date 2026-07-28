@@ -4,3 +4,10 @@ packages:
 allowBuilds:
   esbuild: true
 enableGlobalVirtualStore: true
+# next-themes ships types that reference the React namespace without depending on
+# @types/react. Under the global virtual store its package directory sits outside
+# this workspace, so TypeScript cannot find those types by directory walk.
+packageExtensions:
+  next-themes:
+    dependencies:
+      "@types/react": "^19.2.17"

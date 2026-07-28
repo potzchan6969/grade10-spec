@@ -28,3 +28,6 @@ dist-ssr
 
 *storybook.log
 storybook-static
+
+# Generated Figma plugin bundles from the design-system token pipeline
+packages/design-system/scripts/figma/build/

@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Relative imports (not the package's own name) so the Storybook build
+ * resolves them without a self-reference. */
+@import "../src/theme.css";
+@import "../src/themes/default.css";
+@import "../src/themes/acetrader.css";
+
+/* Generate utility classes used by the components + stories. */
+@source "../src";
