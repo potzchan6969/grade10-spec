@@ -1,0 +1,16 @@
+---
+description: Keep agent instructions and skills available to Codex, Claude, and Cursor in sync
+globs: '{AGENTS.md,AGENT.md,CLAUDE.md,GEMINI.md,.cursor/rules/**,.cursor/skills/**,.codex/skills/**,scripts/agent-platform/**}'
+alwaysApply: true
+---
+
+# Agent parity
+
+`AGENTS.md` is canonical; the root compatibility files must be aliases to it. `.cursor/skills/` is canonical for shared skills and `.codex/skills/` is an identical mirror.
+
+After changing an agent-related file, run:
+
+```bash
+pnpm run agent:sync-parity
+pnpm run agent:check-parity
+```
