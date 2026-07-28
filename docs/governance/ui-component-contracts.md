@@ -173,7 +173,7 @@ For a new or changed public component, reviewers should be able to answer yes to
 
 ## Applying the guide
 
-Use this guide for a new portable component or a material public-contract change. Update the linked PRD and OpenSpec change when the behavior, consumer contract, or validation obligations change. Keep feature-specific decisions in the PRD/OpenSpec; update this guide only for durable rules that should apply beyond one feature.
+Use this guide for a new portable component or a material public-contract change. Update the linked PRD and OpenSpec change when the behavior, consumer contract, or validation obligations change. Keep feature-specific decisions in the PRD/OpenSpec; update this guide only for durable rules that should apply beyond one feature. Use the [interaction and motion testing scope](ui-component-testing.md) to choose the required browser coverage.
 
 Related records:
 

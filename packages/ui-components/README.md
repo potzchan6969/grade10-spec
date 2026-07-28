@@ -152,6 +152,8 @@ Visual regression baselines and isolated chart-option unit tests are not impleme
 
 Read the [portable UI component contract guide](../../docs/governance/ui-component-contracts.md) before designing a new public component or making a material contract change.
 
+Use the [interaction and motion testing scope](../../docs/governance/ui-component-testing.md) to classify every public callback, keyboard control, async recovery state, disabled/loading guard, and intentional animation before adding its Storybook coverage.
+
 Components must receive consumer-owned product state through props and remain free of data access, routing, stores, feature flags, analytics, browser storage, and application imports. They may use internal React state, context, effects, refs, timers, and browser APIs for presentation and DOM behavior, but not to acquire, persist, subscribe to, or orchestrate consumer-owned product state. Add an exported prop type, write Storybook stories in `apps/ui`, then run:
 
 ```bash
