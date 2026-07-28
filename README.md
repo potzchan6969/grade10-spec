@@ -7,6 +7,7 @@ Versioned product requirements and portable React UI components for AceTrader ap
 - Product managers and designers write durable PRDs in [`docs/prds/`](docs/prds/README.md).
 - Product and engineering teams describe implementation deltas in [`openspec/`](openspec/README.md).
 - Stateless, app-neutral React components live in [`packages/ui-components/`](packages/ui-components/README.md).
+- Versioned Pencil design files live in [`designs/`](designs/README.md).
 - [`apps/ui/`](apps/ui/) is the Storybook workbench for reviewing those components; it is not a production application.
 
 Read [`AGENTS.md`](AGENTS.md) before using an AI agent in this repository. It defines the source-of-truth boundaries and the requirements for portable components.
