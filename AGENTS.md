@@ -63,6 +63,12 @@ Run the appropriate checks before handoff:
 - `pnpm run build:components` after a component source or public export changes; commit the regenerated `dist/` output.
 - `pnpm run lint` for repository formatting and static checks.
 
+## Pull Requests and Commits
+
+- PR labels: use one of `feature`, `bug`, `enhancement`, `maintenance`, or `documentation`, when labels are available.
+- Commit subjects use the Conventional Commits format. Do not add issue or PR prefixes; repository tooling adds them.
+- Keep commits atomic. Split unrelated implementation, documentation, refactoring, and generated build output into separate commits when practical.
+
 ## Agent-platform parity
 
 `AGENTS.md` is canonical. `AGENT.md`, `CLAUDE.md`, and `GEMINI.md` are compatibility aliases. The skills in `.cursor/skills/` and `.codex/skills/` must remain byte-for-byte identical.

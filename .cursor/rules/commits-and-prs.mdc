@@ -1,0 +1,31 @@
+---
+description: Commit and pull request formatting, including logical commit grouping
+globs: '**/*'
+alwaysApply: true
+---
+
+# Pull Requests and Commits
+
+## Pull request format
+
+- When labels are available, apply one of: `feature`, `bug`, `enhancement`, `maintenance`, or `documentation`.
+
+## Commit format
+
+Use atomic commits with clear messages.
+
+- Do not include issue or PR prefixes (for example, `[#I-2568]` or `[#1522]`) in commit subjects; tooling adds them automatically.
+- Use a Conventional Commit type such as `feat`, `fix`, `chore`, `refactor`, `docs`, or `test`.
+- Write a short, imperative description.
+
+```
+type: brief description
+
+Detailed explanation if needed
+```
+
+## Grouping commits
+
+- Prefer multiple small commits when changes are logically separable.
+- Keep one concern per commit when practical: split unrelated implementation, documentation, refactoring, and generated output changes.
+- When staging, consider whether files or concerns should be committed independently.
