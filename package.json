@@ -8,6 +8,9 @@
 	"scripts": {
 		"agent:sync-parity": "bash scripts/agent-platform/sync-parity.sh",
 		"agent:check-parity": "bash scripts/agent-platform/check-parity.sh",
+		"build:components": "pnpm --filter @acetrader/pred-spec-ui run build",
+		"check:components": "pnpm --filter @acetrader/pred-spec-ui run check:stateless",
+		"storybook": "pnpm --dir apps/ui storybook",
 		"lint": "biome check ."
 	},
 	"devDependencies": {

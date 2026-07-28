@@ -14,6 +14,9 @@ importers:
 
   apps/ui:
     dependencies:
+      '@acetrader/pred-spec-ui':
+        specifier: workspace:*
+        version: link:../../packages/ui-components
       react:
         specifier: ^19.2.7
         version: 19.2.8
@@ -93,6 +96,18 @@ importers:
       vitest:
         specifier: ^4.1.10
         version: 4.1.10(@types/node@24.13.3)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1))
+
+  packages/ui-components:
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      react:
+        specifier: ^19.2.7
+        version: 19.2.8
+      typescript:
+        specifier: ~6.0.2
+        version: 6.0.3
 
 packages:
 

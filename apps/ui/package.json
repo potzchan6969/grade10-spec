@@ -12,6 +12,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@acetrader/pred-spec-ui": "workspace:*",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
