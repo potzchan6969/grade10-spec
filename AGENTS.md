@@ -65,7 +65,7 @@ Run the appropriate checks before handoff:
 
 ## Pull Requests and Commits
 
-- PR labels: use one of `feature`, `bug`, `enhancement`, `maintenance`, or `documentation`, when labels are available.
+- PR labels: use one of `feature`, `bug`, `ci`, `agent`, `enhancement`, `maintenance`, or `documentation`, when labels are available.
 - Commit subjects use the Conventional Commits format. Do not add issue or PR prefixes; repository tooling adds them.
 - Keep commits atomic. Split unrelated implementation, documentation, refactoring, and generated build output into separate commits when practical.
 

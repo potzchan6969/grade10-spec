@@ -44,6 +44,8 @@ Optional body: why and notable behavior; wrap at ~72 chars.
 | `fix` | Bug or incorrect behavior |
 | `refactor` | Behavior-preserving restructure |
 | `chore` | Tooling, deps, config without product change |
+| `ci` | GitHub Actions or other continuous-integration workflow changes |
+| `agent` | Agent specifications, including skills, rules, and `AGENT.md` guidance |
 | `docs` | Documentation only |
 | `test` | Tests only |
 

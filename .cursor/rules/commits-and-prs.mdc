@@ -8,7 +8,7 @@ alwaysApply: true
 
 ## Pull request format
 
-- When labels are available, apply one of: `feature`, `bug`, `enhancement`, `maintenance`, or `documentation`.
+- When labels are available, apply one of: `feature`, `bug`, `ci`, `agent`, `enhancement`, `maintenance`, or `documentation`.
 
 ## Commit format
 
