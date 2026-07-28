@@ -1,0 +1,41 @@
+name: Typecheck
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-typecheck-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 24.14.1
+  PNPM_VERSION: 11.17.0
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run TypeScript compiler
+        run: pnpm run typecheck

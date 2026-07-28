@@ -15,7 +15,9 @@
     "setup:worktree": "pnpm install --frozen-lockfile --prefer-offline",
     "storybook": "node scripts/storybook.mjs",
     "test:stories": "pnpm --dir apps/ui exec vitest run",
-    "lint": "biome check ."
+    "typecheck": "pnpm --dir apps/ui exec tsc -b && pnpm --filter @acetrader/pred-spec-ui exec tsc --project tsconfig.json --noEmit",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write ."
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.5"
