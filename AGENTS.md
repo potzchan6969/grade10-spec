@@ -8,6 +8,7 @@ This repository is the versioned source of truth for product requirements and po
 - Prefer the smallest reusable artifact. Call out a preference or design-system choice as a choice, not as an objective improvement.
 - Keep changes reviewable: one product decision or component capability per pull request where practical.
 - Do not modify generated `packages/ui-components/dist/` by hand. Regenerate it with `pnpm run build:components`.
+- Do not modify generated `packages/design-system/src/theme.css` or `src/themes/acetrader.css` by hand. Edit `tokens.json` or `tokens.config.json` and regenerate with `pnpm run tokens:build`.
 
 ## Sources of truth
 
@@ -18,6 +19,8 @@ This repository is the versioned source of truth for product requirements and po
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
 | Portable UI component | `packages/ui-components/src/` | Framework-level, stateless React component. |
 | Component examples | `apps/ui/src/stories/` | Storybook only; never the component source of truth. |
+| Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
+| Design-system primitive | `packages/design-system/src/components/` | shadcn primitives and their colocated stories. |
 
 Do not duplicate a PRD verbatim in OpenSpec. Link the PRD from the change proposal and record only implementation-facing requirement deltas in `openspec/changes`.
 
@@ -48,6 +51,15 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 - Export each public component and its prop type from `src/index.ts`; changing an exported prop is a consumer-facing breaking change unless optional and backward compatible.
 - Storybook stories must cover default, interactive/disabled, loading, empty, error, and narrow-width states when those states exist.
 
+## Design system package
+
+`packages/design-system` (`@acetrader/design-system`) holds the theme tokens and the shadcn primitives beneath the product components. It is a separate package from `packages/ui-components` and the two do not import each other today; do not merge them without a recorded product decision.
+
+- The package is consumed from source: `exports` point at `src/`, there is no build step, and no `dist/` is committed.
+- Stories are colocated with each primitive here, which is deliberate and differs from the `apps/ui/src/stories/` rule for `packages/ui-components`. Run them with `pnpm run storybook:design-system`.
+- Token flow: `tokens.json` is the source of truth, `tokens.config.json` holds the engineer-owned projection rules, and Figma plus the theme CSS files are both projections. Read `packages/design-system/DESIGN.md` before touching any leg of that pipeline.
+- The Figma legs (`tokens:pull`, `tokens:push`, `tokens:plugin`) require a human to run a plugin inside Figma; they have no unattended path.
+
 ## Sharing components with consuming apps
 
 Consumers add this repository as a Git submodule and install the prebuilt `@acetrader/pred-spec-ui` package from that submodule. The component package commits `dist/` deliberately so a submodule consumer can install it without needing this monorepo's dev toolchain.
@@ -61,7 +73,9 @@ Run the appropriate checks before handoff:
 - `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
 - `pnpm run check:components` after a shared component changes.
 - `pnpm run build:components` after a component source or public export changes; commit the regenerated `dist/` output.
+- `pnpm run tokens:build` after `tokens.json` or `tokens.config.json` changes; commit the regenerated theme CSS.
 - `pnpm run lint` for repository formatting and static checks.
+- `pnpm run typecheck` after any TypeScript change.
 
 ## Pull Requests and Commits
 

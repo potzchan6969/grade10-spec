@@ -7,6 +7,7 @@ Versioned product requirements and portable React UI components for AceTrader ap
 - Product managers and designers write durable PRDs in [`docs/prds/`](docs/prds/README.md).
 - Product and engineering teams describe implementation deltas in [`openspec/`](openspec/README.md).
 - Stateless, app-neutral React components live in [`packages/ui-components/`](packages/ui-components/README.md).
+- Theme tokens and shadcn primitives live in [`packages/design-system/`](packages/design-system/DESIGN.md), including the two-way Figma token pipeline.
 - Versioned Pencil design files live in [`designs/`](designs/README.md).
 - [`apps/ui/`](apps/ui/) is the Storybook workbench for reviewing those components; it is not a production application.
 
@@ -18,7 +19,8 @@ Read [`AGENTS.md`](AGENTS.md) before using an AI agent in this repository. It de
 
 ```bash
 pnpm setup:worktree
-pnpm storybook
+pnpm storybook                     # apps/ui workbench for product components
+pnpm storybook:design-system       # design-system primitives
 ```
 
 For concurrent worktrees, install Playwright once before running browser tests:
@@ -36,6 +38,8 @@ Useful checks:
 pnpm run agent:check-parity
 pnpm run check:components
 pnpm run build:components
+pnpm run tokens:build
+pnpm run typecheck
 pnpm run lint
 ```
 
