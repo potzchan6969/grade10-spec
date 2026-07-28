@@ -16,9 +16,18 @@ Read [`AGENTS.md`](AGENTS.md) before using an AI agent in this repository. It de
 ## Quick start
 
 ```bash
-pnpm install
+pnpm setup:worktree
 pnpm storybook
 ```
+
+For concurrent worktrees, install Playwright once before running browser tests:
+
+```bash
+pnpm setup:browsers
+pnpm test:stories
+```
+
+See the [worktree development guide](docs/governance/worktree-development.md) for shared-store setup, concurrent Storybook instances, and durable project knowledge.
 
 Useful checks:
 
