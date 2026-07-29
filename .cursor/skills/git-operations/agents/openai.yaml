@@ -1,0 +1,4 @@
+interface:
+  display_name: "Git Operations"
+  short_description: "Use Git and GitHub safely across agents"
+  default_prompt: "Use $git-operations to prepare, publish, or review this repository change."
