@@ -26,7 +26,14 @@ export const Invalid: Story = { args: { "aria-invalid": true, value: "abc" } };
 export const Password: Story = {
   args: { type: "password", placeholder: "Password" },
 };
-export const File: Story = { args: { type: "file", placeholder: undefined } };
+/** A file input has no placeholder to fall back on, so it needs a name. */
+export const File: Story = {
+  args: {
+    "aria-label": "Upload a statement",
+    type: "file",
+    placeholder: undefined,
+  },
+};
 
 export const WithLabel: Story = {
   render: (args) => (

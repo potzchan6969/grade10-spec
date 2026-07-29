@@ -6,6 +6,9 @@ const meta = {
   title: "Components/Checkbox",
   component: Checkbox,
   tags: ["autodocs"],
+  // Standalone checkboxes have no visible label, so name them for axe. The
+  // WithLabel story renders its own Label and ignores these args.
+  args: { "aria-label": "Accept terms and conditions" },
 } satisfies Meta<typeof Checkbox>;
 
 export default meta;

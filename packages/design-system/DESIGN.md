@@ -32,6 +32,19 @@ Colocated stories are deliberate here and differ from `packages/ui-components`,
 whose examples live in `apps/ui/src/stories/`. Primitives are documented next to
 the primitive; product components are reviewed in the workbench app.
 
+Every story also runs as a test in headless Chromium, with axe checks from
+`@storybook/addon-a11y` applied to each rendered story:
+
+```bash
+pnpm run setup:browsers                   # once, installs Playwright Chromium
+pnpm run test:stories:design-system       # this package only
+pnpm run test:stories                     # both Storybooks, as CI runs them
+```
+
+`a11y.test` is set to `"todo"` in `.storybook/preview.tsx`, so violations are
+reported but do not fail the run. Set it to `"error"` to gate CI once the
+outstanding violations are cleared.
+
 Design source of truth: the `.pen` library under `designs/` at the repository
 root (the `Mode` / unprefixed variable set), alongside the Figma pipeline below.
 

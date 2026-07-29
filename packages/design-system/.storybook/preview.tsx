@@ -18,6 +18,10 @@ const preview: Preview = {
     layout: "centered",
     backgrounds: { disable: true }, // body bg comes from the theme tokens
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
+    // 'todo' - show a11y violations in the test UI only
+    // 'error' - fail CI on a11y violations
+    // 'off' - skip a11y checks entirely
+    a11y: { test: "todo" },
   },
   initialGlobals: {
     colorTheme: "default",

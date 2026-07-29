@@ -20,10 +20,13 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// A trigger with no associated Label needs its own accessible name; a
+// placeholder or selected value does not contribute one. The WithLabel story
+// is named by its Label instead.
 export const Default: Story = {
   render: () => (
     <Select>
-      <SelectTrigger className="w-48">
+      <SelectTrigger aria-label="Market" className="w-48">
         <SelectValue placeholder="Select a market" />
       </SelectTrigger>
       <SelectContent>
@@ -40,7 +43,7 @@ export const Default: Story = {
 export const WithDefaultValue: Story = {
   render: () => (
     <Select defaultValue="eth">
-      <SelectTrigger className="w-48">
+      <SelectTrigger aria-label="Market" className="w-48">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
@@ -57,7 +60,7 @@ export const WithDefaultValue: Story = {
 export const Small: Story = {
   render: () => (
     <Select defaultValue="btc">
-      <SelectTrigger size="sm" className="w-40">
+      <SelectTrigger aria-label="Market" size="sm" className="w-40">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
@@ -73,7 +76,7 @@ export const Small: Story = {
 export const WithGroups: Story = {
   render: () => (
     <Select>
-      <SelectTrigger className="w-48">
+      <SelectTrigger aria-label="Market" className="w-48">
         <SelectValue placeholder="Select a market" />
       </SelectTrigger>
       <SelectContent>
@@ -99,7 +102,7 @@ export const WithGroups: Story = {
 export const Disabled: Story = {
   render: () => (
     <Select defaultValue="btc" disabled>
-      <SelectTrigger className="w-48">
+      <SelectTrigger aria-label="Market" className="w-48">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
