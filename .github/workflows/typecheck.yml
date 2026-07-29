@@ -13,7 +13,6 @@ concurrency:
 
 env:
   NODE_VERSION: 24.14.1
-  PNPM_VERSION: 11.17.0
 
 jobs:
   typecheck:
@@ -25,8 +24,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4

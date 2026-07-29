@@ -13,7 +13,6 @@ concurrency:
 
 env:
   NODE_VERSION: 24.14.1
-  PNPM_VERSION: 11.17.0
   SLACK_NOTI_CHANNEL: C045K1QJVQT # web3-github
   SLACK_NOTI_FOOTER: ${{ github.repository }} | ${{ github.head_ref || github.ref_name }} | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|view logs>
   SLACK_NOTI_FOOTER_ICON: https://slack-imgs.com/?c=1&o1=wi32.he32.si&url=https%3A%2F%2Fslack.github.com%2Fstatic%2Fimg%2Ffavicon-neutral.png
@@ -30,8 +29,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
