@@ -1,6 +1,14 @@
 // url=https://www.figma.com/design/jlrBVwtKcun1NnJgohmFcn/Sean-x-Constance?node-id=86-3459
 // source=packages/design-system/src/components/forms/button.tsx
 // component=Button
+//
+// DO NOT PUBLISH until the `waGnoyIaXEId620TLen42o` branch merges into the file
+// named above. This template is written against the restructured set that lives
+// on that branch — `Size` as a VARIANT, and `Loading` as a `State` rather than a
+// `Type`. The parent file still has the old shape, where `getEnum("Size", …)`
+// names a property that does not exist and `getEnum("State", …)` names a
+// `Loading` option that does not exist. The url is deliberately left pointing at
+// the parent rather than the branch, because a branch key is transient.
 import figma from "figma";
 
 const instance = figma.selectedInstance;
@@ -57,17 +65,24 @@ const label = instance.getString("Label#318:0");
 // properties, so each resolved snippet is emitted into its own slot rather than
 // as a bare child. That makes the emitted order unrepresentable-if-wrong, which
 // children could not guarantee.
-const leadingIcon = instance.getBoolean("Show Leading Icon#175:0")
-  ? instance.getInstanceSwap("Leading Icon#175:20")
-  : null;
+//
+// Neither is emitted while loading. The component gives the leading slot to the
+// spinner and drops `trailing`, matching the Figma loading variants, which carry
+// a spinner and a label and no trailing icon — so emitting either would print a
+// prop the component ignores.
+const leadingIcon =
+  !loading && instance.getBoolean("Show Leading Icon#175:0")
+    ? instance.getInstanceSwap("Leading Icon#175:20")
+    : null;
 const leadingCode =
   leadingIcon && leadingIcon.type === "INSTANCE"
     ? leadingIcon.executeTemplate().example
     : null;
 
-const trailingIcon = instance.getBoolean("Show Trailing Icon#1171:0")
-  ? instance.getInstanceSwap("Trailing Icon#1171:43")
-  : null;
+const trailingIcon =
+  !loading && instance.getBoolean("Show Trailing Icon#1171:0")
+    ? instance.getInstanceSwap("Trailing Icon#1171:43")
+    : null;
 const trailingCode =
   trailingIcon && trailingIcon.type === "INSTANCE"
     ? trailingIcon.executeTemplate().example

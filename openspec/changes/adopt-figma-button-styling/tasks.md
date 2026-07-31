@@ -23,6 +23,8 @@ Done:
 
 Remaining:
 
+- [ ] **Merge the `waGnoyIaXEId620TLen42o` branch before publishing Code Connect.** This gates everything else. The restructured set lives only on the branch; the parent file still has `Loading` as a `Type` and no `Size` property, so publishing the template against it would emit `getEnum` calls naming properties that do not exist. `button.figma.ts` carries the same warning at the top of the file, and its `url=` deliberately still points at the parent rather than the branch, because a branch key is transient.
+
 - [x] **Restructured the Button component set on the `waGnoyIaXEId620TLen42o` branch.** Both defects below are fixed in Figma; the notes are kept because they explain the shape of the result and two Plugin API behaviours worth knowing before touching a component set again.
 
   The set is now 60 variants — `Type` (5) × `State` (4, with `Loading` moved off `Type`) × `Size` (3). Every variant keeps the `Label#318:0` binding, including the loading ones, which the original `Type=Loading` variant did not have. The Size Reference instances were migrated onto the `Size` property and their manual mode pins cleared; the three orphaned loading instances were repointed. `check:design-system` now reports `Button.Size -> cva size: 3 option(s) matched`, replacing a warning that was previously unresolvable.
