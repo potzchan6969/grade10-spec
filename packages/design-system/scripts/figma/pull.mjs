@@ -134,11 +134,16 @@ const modeIdByName = Object.fromEntries(
 for (const [name, themeCfg] of Object.entries(cfg.themes)) {
   const figmaMode = Object.keys(themeCfg.modes)[0];
   const modeId = modeIdByName[figmaMode];
+  // Hard failure, not a warning. Skipping here writes `themes: {}`, and
+  // tokens:build then leaves the theme's CSS untouched on disk — so a renamed
+  // Figma mode silently strands a stale theme file against fresh primitives.
+  // Renaming a mode is normal designer behaviour; it must stop the pull.
   if (modeId === undefined) {
-    console.warn(
-      `⚠  theme "${name}": Figma mode "${figmaMode}" not found — skipped`,
+    die(
+      `theme "${name}": Figma mode "${figmaMode}" not found in the "${cfg.semanticCollection}" collection.
+     Available modes: ${sem.modes.map((m) => `"${m.name}"`).join(", ")}
+     Fix tokens.config.json (themes.${name}.modes) or rename the mode in Figma.`,
     );
-    continue;
   }
   doc.themes[name] = {
     figmaMode,

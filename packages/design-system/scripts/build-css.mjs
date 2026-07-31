@@ -20,6 +20,10 @@ const cfg = JSON.parse(
   await readFile(resolve(pkgDir, "tokens.config.json"), "utf8"),
 );
 const doc = JSON.parse(await readFile(resolve(pkgDir, "tokens.json"), "utf8"));
+const die = (m) => {
+  console.error(`✗ ${m}`);
+  process.exit(1);
+};
 
 // Figma variable name -> CSS custom property (same rule the pull step uses to key tokens.json).
 const cssVar = (name) => {
@@ -71,12 +75,17 @@ const slotMap = cfg.slotMap ?? {};
 // "/* unmapped */" and the slot loses its value.
 const primitiveKeys = new Set(Object.keys(doc.primitives));
 for (const [name, themeCfg] of Object.entries(cfg.themes)) {
+  // Hard failure, not a warning. `continue` leaves the previous themes/<name>.css
+  // in place, so the theme keeps referencing primitives this build may have just
+  // renamed or removed — a stale file with dangling var() references, which is
+  // worse than an empty one because it still builds and lints clean.
   const theme = doc.themes?.[name];
   if (!theme) {
-    console.warn(
-      `⚠  theme "${name}" in config but not in tokens.json — skipped`,
+    die(
+      `theme "${name}" is configured in tokens.config.json but absent from tokens.json.
+     ${themeCfg.out} was NOT regenerated and is now stale.
+     Re-run tokens:pull — if it reported no theme, the Figma mode name has changed.`,
     );
-    continue;
   }
   const selector = Object.values(themeCfg.modes)[0];
   const keys = new Set(Object.keys(theme.tokens));
