@@ -29,6 +29,16 @@ export default defineConfig({
           },
         },
       },
+      {
+        // Source-level assertions about the component contracts. These read
+        // files rather than render them, so they need no browser and stay
+        // runnable when Playwright's chromium is not installed.
+        test: {
+          name: "contracts",
+          include: ["src/**/*.test.ts"],
+          environment: "node",
+        },
+      },
     ],
   },
 });

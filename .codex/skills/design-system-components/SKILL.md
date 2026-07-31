@@ -27,7 +27,7 @@ The operative rule: a component may not offer a variant or size the Figma set do
 2. **Pull tokens if design introduced any** (`pnpm tokens:sync`) and confirm the values exist in `src/themes/acetrader.css`. Never hand-edit `src/theme.css` or `src/themes/acetrader.css`; edit `tokens.json` or `tokens.config.json` and run `pnpm run tokens:build`.
 3. **Write `<name>.tsx`** with one cva option per Figma variant option and nothing more.
 4. **Write `<name>.figma.ts`** with a `getEnum` covering every option of every VARIANT property. An unmapped option resolves to `undefined` and emits broken code. Axes are matched through the template, not by name, so `Type → variant` and `Danger → destructive` are inferred from the mapping itself.
-5. **Write `<name>.stories.tsx`** with a story per variant plus disabled, loading, and every other contract state. Stories are colocated in this package, unlike `apps/ui/src/stories/`.
+5. **Write `<name>.stories.tsx`** with a story per variant plus disabled, loading, and every other contract state. Stories are colocated in this package, unlike `apps/ui/src/stories/`. `pnpm run test:stories` fails on any cva option no story renders; listing it in `argTypes` does not count.
 6. **Run `pnpm run check:design-system`** to zero errors and zero *unexplained* warnings. A warning you intend to keep belongs in an OpenSpec change with a reason, not in the run log.
 7. **Publish Code Connect** and verify with `get_code_connect_map`; it returns `{}` when nothing is published, and Dev Mode then shows no connected code however correct the template is.
 8. **Run `pnpm run lint` and `pnpm run typecheck`.** Commit regenerated theme CSS with the token change that produced it.
@@ -43,4 +43,4 @@ The operative rule: a component may not offer a variant or size the Figma set do
 
 ## What the checker does not cover
 
-Token values and geometry are unchecked: every axis and option can line up while the colours, heights, and padding are wrong. Stories are smoke-only and nothing asserts a story per variant. The Storybook suite renders the `default` theme, so a passing run says nothing about how the component looks in AceTrader — review that with the toolbar switched over. The CI job skips with a warning when `FIGMA_TOKEN` is unavailable, and a skipped run is not a passing run.
+Token values and geometry are unchecked: every axis and option can line up while the colours, heights, and padding are wrong. Stories are smoke-only — a story is asserted to exist per cva option, but not to render anything correct. The Storybook suite renders the `default` theme, so a passing run says nothing about how the component looks in AceTrader — review that with the toolbar switched over. The CI job skips with a warning when `FIGMA_TOKEN` is unavailable, and a skipped run is not a passing run.
