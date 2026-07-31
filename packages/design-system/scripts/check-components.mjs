@@ -7,11 +7,19 @@
  * or a Code Connect template whose node-id stopped resolving all look fine
  * until someone reads the Dev Mode snippet. This diffs the three.
  *
- *   FIGMA_DUMP=~/Downloads/figma-dump.json pnpm components:check
+ *   FIGMA_TOKEN=figd_… pnpm components:check        # unattended, use this in CI
+ *   FIGMA_DUMP=~/Downloads/dump.json pnpm components:check   # manual fallback
  *
- * Reads `meta.components` from the dump plugin (pnpm tokens:plugin dump).
  * ERROR = the mapping is broken and Dev Mode will emit wrong code; exits 1.
  * WARN  = the two sides disagree, which may be intentional; does not exit 1.
+ *
+ * Axes are matched through the Code Connect template, not by name: Figma's
+ * `Type` is cva's `variant`, and comparing those by name produced a pair of
+ * contradicting warnings on every component. See resolveAxis.
+ *
+ * What this still does NOT check: token values and geometry. Every axis and
+ * option can line up while the colours and sizes are wrong, which is exactly
+ * what happened to Button. Names only, for now.
  */
 import { readdir, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
@@ -23,22 +31,100 @@ const die = (m) => {
   process.exit(1);
 };
 
-if (!process.env.FIGMA_DUMP) {
-  die(`No dump given. Set FIGMA_DUMP=<file.json>, e.g.
+// ── where the Figma side comes from ─────────────────────────────────────────
+// Two sources, same normalized shape: { id -> { id, name, properties } }.
+//
+// REST is the default because it needs no human. The variables pull cannot use
+// REST — /v1/files/:key/variables/local needs file_variables:read, which Figma
+// gates to Enterprise (see scripts/figma/pull.mjs) — but that gate is specific
+// to variables. Component property definitions live in the file document, which
+// only needs the standard files:read scope, so this check can run unattended
+// even though the token pull cannot.
+//
+// A check that cannot reach Figma must fail, never pass quietly: an unenforced
+// check is worse than no check, because it reads as coverage.
+function fileKeyFrom(spec) {
+  // /design/:key/branch/:branchKey/:name resolves to the BRANCH key — a branch
+  // is a distinct file to the API, and tokens.config.json points at one today.
+  const branch = /\/branch\/([0-9a-zA-Z]{22,128})/.exec(spec)?.[1];
+  if (branch) return branch;
+  const inUrl = /\/(?:design|file)\/([0-9a-zA-Z]{22,128})/.exec(spec)?.[1];
+  if (inUrl) return inUrl;
+  return /^[0-9a-zA-Z]{22,128}$/.test(spec.trim()) ? spec.trim() : null;
+}
 
-     pnpm tokens:plugin dump                     # build the plugin
-     # Figma → Plugins → Development → Import plugin from manifest…
-     #   scripts/figma/build/dump/manifest.json
-     # run it, click Download
-     FIGMA_DUMP=~/Downloads/figma-dump.json pnpm components:check`);
+function componentsFromDocument(doc) {
+  const out = {};
+  const visit = (node) => {
+    if (node.type === "COMPONENT_SET") {
+      out[node.id] = {
+        id: node.id,
+        name: node.name,
+        properties: node.componentPropertyDefinitions ?? {},
+      };
+    }
+    for (const child of node.children ?? []) visit(child);
+  };
+  visit(doc);
+  return out;
 }
-const meta = JSON.parse(
-  await readFile(resolve(pkgDir, process.env.FIGMA_DUMP), "utf8"),
-).meta;
-if (!meta.components) {
-  die(`This dump has no \`meta.components\` — it predates component support.
+
+async function loadFigmaComponents() {
+  if (process.env.FIGMA_DUMP) {
+    const meta = JSON.parse(
+      await readFile(resolve(pkgDir, process.env.FIGMA_DUMP), "utf8"),
+    ).meta;
+    if (!meta?.components)
+      die(`This dump has no \`meta.components\` — it predates component support.
      Rebuild the plugin (pnpm tokens:plugin dump) and take a fresh dump.`);
+    return {
+      source: `dump ${process.env.FIGMA_DUMP}`,
+      components: meta.components,
+    };
+  }
+
+  const token = process.env.FIGMA_TOKEN;
+  if (!token)
+    die(`No Figma source. Set FIGMA_TOKEN (preferred — runs unattended in CI):
+
+     FIGMA_TOKEN=figd_… pnpm components:check
+
+   A personal access token with the \`files:read\` scope is enough; the
+   Enterprise-only \`file_variables:read\` gate applies to the token pull, not
+   to this check. Or fall back to the manual plugin dump:
+
+     FIGMA_DUMP=~/Downloads/figma-dump.json pnpm components:check`);
+
+  const spec = process.env.FIGMA_FILE ?? cfg.figmaFile;
+  if (!spec) die("No figmaFile in tokens.config.json and no FIGMA_FILE set.");
+  const key = fileKeyFrom(spec);
+  if (!key) die(`Could not read a file key out of figmaFile: ${spec}`);
+
+  const res = await fetch(`https://api.figma.com/v1/files/${key}`, {
+    headers: { "X-Figma-Token": token },
+  });
+  if (!res.ok)
+    die(
+      `Figma REST ${res.status} ${res.statusText} for file ${key}. ` +
+        `A 403 usually means the token lacks files:read or cannot see this file; ` +
+        `a 404 usually means the key is wrong (branch URLs resolve to the branch key).`,
+    );
+  const json = await res.json();
+  if (!json.document) die(`Figma REST returned no document for file ${key}.`);
+  const components = componentsFromDocument(json.document);
+  if (!Object.keys(components).length)
+    die(
+      `No COMPONENT_SET nodes found in file ${key}. Either the file has none, ` +
+        `or the response shape changed — failing rather than reporting "no drift".`,
+    );
+  return { source: `REST ${key}`, components };
 }
+
+const cfg = JSON.parse(
+  await readFile(resolve(pkgDir, "tokens.config.json"), "utf8"),
+);
+const { source: figmaSource, components: figmaComponents } =
+  await loadFigmaComponents();
 
 // ── source scanning ─────────────────────────────────────────────────────────
 const COMPONENTS = resolve(pkgDir, "src/components");
@@ -143,6 +229,48 @@ function cvaAxes(src) {
   return axes;
 }
 
+// flat `Key: <scalar>` pairs — getEnum maps are always flat, so this stays
+// simple where objectKeys has to handle nested cva bodies.
+function enumPairs(body) {
+  const out = {};
+  const re =
+    /(["']?)([A-Za-z0-9_ -]+)\1\s*:\s*(?:"([^"]*)"|'([^']*)'|(true|false|null))/g;
+  let m;
+  while ((m = re.exec(body))) {
+    out[m[2].trim()] =
+      m[3] ??
+      m[4] ??
+      (m[5] === "true" ? true : m[5] === "false" ? false : null);
+  }
+  return out;
+}
+
+// Which cva axis does a Figma axis correspond to?
+//
+// Not by name — Figma calls it `Type`, cva calls it `variant`, and comparing
+// those produced two mutually-contradicting warnings on every component, which
+// is how a real Danger/destructive mismatch once hid inside the noise. The
+// template already states the correspondence: getEnum('Type', {Danger:
+// 'destructive'}) says this axis produces cva values. So infer the axis from
+// the values it emits, and the alias needs no config to drift out of date.
+//
+// A map producing no strings (a boolean gate such as Loading -> loading) is not
+// an axis mapping at all and resolves to null.
+function resolveAxis(codeAxes, pairs) {
+  const values = Object.values(pairs).filter((v) => typeof v === "string");
+  if (!values.length) return null;
+  let best = null;
+  let bestHits = 0;
+  for (const [axis, options] of Object.entries(codeAxes)) {
+    const hits = values.filter((v) => options.includes(v)).length;
+    if (hits > bestHits) {
+      best = axis;
+      bestHits = hits;
+    }
+  }
+  return best ? { axis: best, values } : null;
+}
+
 const norm = (s) => s.replace(/[^a-z0-9]/gi, "").toLowerCase();
 const codeComponents = new Map(); // normalized name -> { file, axes }
 for (const f of files) {
@@ -166,20 +294,27 @@ for (const f of files) {
   const nodeId = /node-id=([\d]+[-:][\d]+)/
     .exec(url ?? "")?.[1]
     ?.replace("-", ":");
+  // Both halves of each getEnum: the Figma options it covers, and the code
+  // values it produces. The values are what let the axis alias be inferred
+  // instead of hand-maintained — see resolveAxis.
   const enums = {};
+  const maps = [];
   const re = /getEnum\(\s*['"]([^'"]+)['"]\s*,\s*\{/g;
   let m;
   while ((m = re.exec(src))) {
-    enums[m[1]] = Object.keys(objectKeys(sliceBalanced(src, re.lastIndex - 1)));
+    const body = sliceBalanced(src, re.lastIndex - 1);
+    const pairs = enumPairs(body);
+    enums[m[1]] = Object.keys(pairs);
+    maps.push({ axis: m[1], pairs });
   }
-  templates.push({ file: rel(f), url, nodeId, enums });
+  templates.push({ file: rel(f), url, nodeId, enums, maps });
 }
 
 // ── compare ─────────────────────────────────────────────────────────────────
 const errors = [];
 const warns = [];
 const ok = [];
-const figma = Object.values(meta.components);
+const figma = Object.values(figmaComponents);
 const figmaById = Object.fromEntries(figma.map((c) => [c.id, c]));
 
 for (const comp of figma) {
@@ -195,34 +330,59 @@ for (const comp of figma) {
     );
     continue;
   }
+  // The template for this component, if any — it carries the axis aliases.
+  const tpl = templates.find((t) => t.nodeId === comp.id);
+  const reachedAxes = new Set();
+
   for (const [axis, options] of Object.entries(variantAxes)) {
-    const codeOptions = code.axes[axis];
-    if (!codeOptions) {
+    const map = tpl?.maps.find((x) => x.axis === axis);
+    if (!map) {
       warns.push(
-        `${comp.name}.${axis}: Figma axis has no cva() counterpart in ${code.file}`,
+        `${comp.name}.${axis}: no getEnum('${axis}') in any template — this Figma axis reaches no code prop`,
       );
       continue;
     }
-    const missingInFigma = codeOptions.filter((o) => !options.includes(o));
-    const missingInCode = options.filter((o) => !codeOptions.includes(o));
-    if (!missingInFigma.length && !missingInCode.length) {
-      ok.push(
-        `${comp.name}.${axis}: ${options.length}/${options.length} matched`,
-      );
+    const resolved = resolveAxis(code.axes, map.pairs);
+    if (!resolved) {
+      // Boolean gate rather than an axis (Loading -> loading). Nothing to diff
+      // against a cva axis, and that is legitimate.
+      ok.push(`${comp.name}.${axis}: mapped to a non-variant prop`);
+      continue;
     }
-    if (missingInCode.length)
+    reachedAxes.add(resolved.axis);
+
+    // Values the template emits that the cva cannot honour. This is the check
+    // that name-matching could never make, and it is an error: Dev Mode would
+    // emit a prop value the component does not accept.
+    const bogus = [
+      ...new Set(
+        resolved.values.filter((v) => !code.axes[resolved.axis].includes(v)),
+      ),
+    ];
+    if (bogus.length)
       errors.push(
-        `${comp.name}.${axis}: in Figma but not in cva() — ${missingInCode.join(", ")}`,
+        `${comp.name}.${axis} -> cva ${resolved.axis}: emits ${bogus.join(", ")}, which ${code.file} does not define`,
       );
-    if (missingInFigma.length)
+
+    // cva options no Figma option can produce: code-only surface.
+    const unreachable = code.axes[resolved.axis].filter(
+      (o) => !resolved.values.includes(o),
+    );
+    if (unreachable.length)
       warns.push(
-        `${comp.name}.${axis}: in cva() but not in Figma — ${missingInFigma.join(", ")}`,
+        `${comp.name}.${axis} -> cva ${resolved.axis}: ${unreachable.join(", ")} exist in code but no Figma option maps to them`,
+      );
+
+    if (!bogus.length && !unreachable.length)
+      ok.push(
+        `${comp.name}.${axis} -> cva ${resolved.axis}: ${options.length} option(s) matched`,
       );
   }
+
   for (const axis of Object.keys(code.axes)) {
-    if (!variantAxes[axis])
+    if (!reachedAxes.has(axis))
       warns.push(
-        `${comp.name}.${axis}: cva() axis has no Figma variant property`,
+        `${comp.name}: cva axis '${axis}' in ${code.file} is reachable from no Figma variant property`,
       );
   }
 }
@@ -264,7 +424,7 @@ for (const t of templates) {
 
 // ── report ──────────────────────────────────────────────────────────────────
 console.log(
-  `Figma: ${figma.length} component(s) · code: ${codeComponents.size} · templates: ${templates.length}\n`,
+  `Source: ${figmaSource}\nFigma: ${figma.length} component(s) · code: ${codeComponents.size} · templates: ${templates.length}\n`,
 );
 for (const line of ok) console.log(`  ✓ ${line}`);
 if (warns.length) {
