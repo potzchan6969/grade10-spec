@@ -1,5 +1,5 @@
 {
-  "figmaFile": "https://www.figma.com/design/xRzLvpBKtFAr1XrjxjnJNy/Sean---DS-POC",
+  "figmaFile": "https://www.figma.com/design/jlrBVwtKcun1NnJgohmFcn/Sean-x-Constance",
   "_figmaFile_note": "Which Figma file to sync. Accepts a full figma.com/design/<key>/... link OR a bare file key. Override per-run with the FIGMA_FILE env var. Controls the REST pull target; the plugin-dump pull and push run against whichever file the Figma plugin is connected to (the generated push script names the intended file as a guard-rail).",
   "primitiveCollection": "Foundation",
   "semanticCollection": "Semantic",
@@ -9,51 +9,12 @@
   "themes": {
     "acetrader": {
       "out": "src/themes/acetrader.css",
-      "modes": { "AceTrader": ".theme-acetrader" }
+      "modes": { "AceTrader Dark": ".theme-acetrader" }
     }
   },
   "_pipeline_note": "2-way token sync. Source of truth = tokens.json (designer-owned DATA). This file holds engineer-owned PROJECTION rules (slotMap, selectors, collections). Legs: tokens:pull (Figma dump -> tokens.json), tokens:build (tokens.json -> CSS), tokens:push (tokens.json -> Figma plugin script). `default` theme is code-only (src/themes/default.css) and outside this pipeline.",
-  "_slotMap_note": "DRAFT — maps shadcn contract slots to Figma semantic tokens (each slot aliases one token). Review the judgment calls: --primary/--primary-foreground (AceTrader primary button is a translucent 'meme' fill), --destructive, --popover/--muted (both -> layer-02). --sidebar-* mirror their non-sidebar counterparts (--sidebar -> layer-01, a surface like --card). --info/--info-foreground are a NEUTRAL STAND-IN: AceTrader has no info color in Figma (no background-info / text-info), so info currently reads as a muted callout — add that pair in Figma and remap. NOTE: an unmapped slot does NOT fall back to nothing; index.css imports default.css first, so .theme-acetrader inherits default's LIGHT-mode value for anything it does not define.",
+  "_slotMap_note": "Near-identity. The Figma Semantic collection now models the shadcn contract directly (Base/*, Status/*, Chart/*, Sidebar/*), so a token's normalized name IS its slot name and build-css emits it from the raw section — build-css skips any slot where ref === slot. Only --radius still needs a mapping, because it aliases a Foundation primitive rather than a semantic token. Do not re-add identity entries; they emit nothing. NOTE: an unmapped slot does NOT fall back to nothing; index.css imports default.css first, so .theme-acetrader inherits default's LIGHT-mode value for anything it does not define.",
   "slotMap": {
-    "--background": "Background/background",
-    "--foreground": "Text/text-primary",
-    "--card": "Layer/layer-01",
-    "--card-foreground": "Text/text-primary",
-    "--popover": "Layer/layer-02",
-    "--popover-foreground": "Text/text-primary",
-    "--primary": "Button/button-primary",
-    "--primary-foreground": "Text/text-brand",
-    "--secondary": "Button/button-secondary",
-    "--secondary-foreground": "Text/text-primary",
-    "--muted": "Layer/layer-02",
-    "--muted-foreground": "Text/text-secondary",
-    "--accent": "Background/background-hover",
-    "--accent-foreground": "Text/text-primary",
-    "--destructive": "Button/button-danger",
-    "--border": "Border/default",
-    "--input": "field",
-    "--ring": "focus",
-    "--success": "Background/background-success",
-    "--success-foreground": "Text/text-success",
-    "--warning": "Background/background-warning",
-    "--warning-foreground": "Text/text-warning",
-    "--error": "Background/background-error",
-    "--error-foreground": "Text/text-error",
-    "--info": "Layer/layer-02",
-    "--info-foreground": "Text/text-secondary",
-    "--radius": "Radius/rounded-lg",
-    "--chart-1": "Chart/categorical-1",
-    "--chart-2": "Chart/categorical-2",
-    "--chart-3": "Chart/categorical-3",
-    "--chart-4": "Chart/categorical-4",
-    "--chart-5": "Chart/categorical-5",
-    "--sidebar": "Layer/layer-01",
-    "--sidebar-foreground": "Text/text-primary",
-    "--sidebar-primary": "Button/button-primary",
-    "--sidebar-primary-foreground": "Text/text-brand",
-    "--sidebar-accent": "Background/background-hover",
-    "--sidebar-accent-foreground": "Text/text-primary",
-    "--sidebar-border": "Border/default",
-    "--sidebar-ring": "focus"
+    "--radius": "Rounded/rounded-lg"
   }
 }
