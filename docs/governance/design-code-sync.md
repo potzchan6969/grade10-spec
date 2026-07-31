@@ -1,6 +1,6 @@
 # Keeping Figma and code in sync
 
-This guide covers the four artifacts that together define one design-system primitive, who owns which decision, and what is mechanically enforced. It applies to `packages/design-system`. Read it with [`ui-component-contracts.md`](ui-component-contracts.md), which covers the separate portable-component package, and with [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) for the token pipeline.
+This guide covers the four artifacts that together define one design-system primitive, who owns which decision, and what is mechanically enforced. It applies to `packages/design-system`. Read it with [`ui-component-contracts.md`](ui-component-contracts.md), which covers the product components built on top of these primitives, and with [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) for the token pipeline.
 
 ## The four artifacts
 

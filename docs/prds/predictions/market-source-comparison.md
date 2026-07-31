@@ -68,7 +68,7 @@ When a prediction market is offered by more than one source, a trader should be 
 | `MarketSourceComparison` | `sources`, `selectedOutcomeId`, `onOutcomeChange`, `onSourceAction`, `status`, `errorMessage?` | Use a semantic heading, labelled outcome selector, text status, and disabled semantics for unavailable actions. | Prediction-market web app; embedded market preview. |
 | `SourceComparisonRow` | `source`, `outcome`, `actionLabel`, `onAction`, `isActionDisabled` | Source name and outcome value must be programmatically associated; no color-only availability indication. | `MarketSourceComparison`; source-preview cards. |
 
-The eventual component belongs in `packages/ui-components/src/`, is exported from `src/index.ts`, and receives all values and behavior through props. The component contract must be refined in the linked OpenSpec change before implementation.
+The eventual component belongs in the consuming application's shared component directory, is exported from that component's entry module, and receives all values and behavior through props. The component contract must be refined in the linked OpenSpec change before implementation.
 
 ## Consuming applications and integration
 

@@ -40,7 +40,7 @@ Before proposing or implementing a feature, agents must read:
 1. the relevant document in `docs/prds/`;
 2. related contracts in `openspec/specs/`;
 3. any active changes in `openspec/changes/` that touch the same capability; and
-4. public component exports in `packages/ui-components/src/` when UI is involved.
+4. the design-system primitives in `packages/design-system/src/components/`, and the component's implementation in the consuming application, when UI is involved.
 
 If no PRD exists and the request changes a user experience or product policy, create one from [`docs/prds/_template.md`](../prds/_template.md). Record assumptions as open questions rather than silently choosing product behavior.
 
@@ -68,15 +68,14 @@ An agent must update the active change when it learns an implementation constrai
 
 ### 4. Keep component contracts aligned
 
-When a PRD requires a reusable component, name it in the PRD's UI component contract table. The related OpenSpec change must identify the exact export and compatibility impact. Component source remains in `packages/ui-components/src/`, its stories remain in `apps/ui/src/stories/`, and its compiled package must be rebuilt before release.
+When a PRD requires a reusable component, name it in the PRD's UI component contract table. The related OpenSpec change must identify the exact export, the compatibility impact, and the application that implements it. Component source lives in that application; this repository carries the contract and the design-system primitives beneath it.
 
-Any agent changing a public component must:
+Any agent changing a public component contract must:
 
 1. preserve compatible props or explicitly document a breaking change;
 2. update the PRD if the visible component behavior changed;
-3. update the active OpenSpec change's design/tasks and delta spec as appropriate;
-4. run `pnpm run check:components` and `pnpm run build:components`; and
-5. commit the regenerated `packages/ui-components/dist/` files.
+3. update the active OpenSpec change's design/tasks and delta spec as appropriate; and
+4. land the matching implementation change in the consuming application, with its own checks run there.
 
 ### 5. Finish a change without losing context
 

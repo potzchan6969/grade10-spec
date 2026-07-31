@@ -1,6 +1,8 @@
-# Portable UI component interaction and motion testing
+# Product UI component interaction and motion testing
 
-This is the durable scope for browser interaction tests in `packages/ui-components/`. Read it with [the component contract guide](ui-component-contracts.md). It applies to public exports and their stories in `apps/ui/src/stories/`.
+This is the durable scope for browser interaction tests of a product UI component. Read it with [the component contract guide](ui-component-contracts.md). Because component source now lives in the consuming application, the obligations below fall on that repository's test suite; this repository applies the same scope to the primitives in `packages/design-system`.
+
+The examples name components from the former `packages/ui-components` package. They are kept as worked cases of each category, not as pointers to code in this repository.
 
 ## Coverage categories
 
@@ -20,10 +22,10 @@ Every public callback, keyboard-operable native control, disabled/loading guard,
 
 Query through accessible role and name wherever possible. Native controls must be verified as keyboard operable. Do not add application integration tests here: API calls, stores, routing, analytics, persistence, wallets, hosted checkout, and notifications belong to consuming applications.
 
-The required browser gate is `pnpm run test:stories`. Storybook accessibility remains report-only while `a11y.test` is `"todo"`; promote it only in a separate clean-baseline change.
+In this repository the required browser gate is `pnpm run test:stories`. A consuming application must provide an equivalent gate over its own component stories or tests. Storybook accessibility remains report-only while `a11y.test` is `"todo"`; promote it only in a separate clean-baseline change.
 
 ## Motion policy
 
-CSS animations are checked with `Element.getAnimations()` or computed animation properties and a short bounded progress assertion. Visual baselines must set the Storybook `pauseMotion` parameter so CSS animations and transitions are frozen. The package currently has skeleton pulse, processing-spinner rotation, and asset-badge fade motion.
+CSS animations are checked with `Element.getAnimations()` or computed animation properties and a short bounded progress assertion. Visual baselines must set the Storybook `pauseMotion` parameter so CSS animations and transitions are frozen. The motion in scope has been skeleton pulse, processing-spinner rotation, and asset-badge fade.
 
 Canvas motion, including the ECharts line chart, is verified through prop-driven mount and update behavior rather than frame-by-frame assertions. A future visual-regression system may use a dedicated chart story with animation disabled or frozen. Reduced-motion behavior, performance budgets/traces, visual snapshots at fixed timestamps, and pure chart-option unit tests are optional future layers, not required gates.

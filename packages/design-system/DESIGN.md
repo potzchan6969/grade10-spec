@@ -4,10 +4,10 @@ The AceTrader design system: theme tokens + shadcn primitives. This is the
 **design-system half** of the design-system ↔ product split — product and
 compound components live elsewhere, not here.
 
-In this repository the product half is [`packages/ui-components`](../ui-components/README.md)
-(`@acetrader/pred-spec-ui`), the stateless component package consuming apps
-install. This package is the primitive and token layer beneath it; the two are
-independent packages and neither imports the other today.
+The product half lives in the consuming application: each app implements its own
+product components against these tokens. This repository once shipped them as
+`packages/ui-components`; that package was removed, and this package is now the
+only one here.
 
 ## What lives here
 
@@ -28,9 +28,9 @@ pnpm run storybook:design-system              # picks an available port
 pnpm run storybook:design-system -- --port 6007
 ```
 
-Colocated stories are deliberate here and differ from `packages/ui-components`,
-whose examples live in `apps/ui/src/stories/`. Primitives are documented next to
-the primitive; product components are reviewed in the workbench app.
+Colocated stories are deliberate: a primitive is documented next to the
+primitive. Product components are reviewed in the application that implements
+them.
 
 Every story also runs as a test in headless Chromium, with axe checks from
 `@storybook/addon-a11y` applied to each rendered story:
@@ -213,8 +213,7 @@ pnpm run lint
 
 This package is consumed from source: `exports` point at `src/`, so an app
 bundles the TypeScript and scans `src` with Tailwind's `@source`. It has no
-build step and no committed `dist/` — unlike `packages/ui-components`, which
-ships prebuilt output for submodule consumers.
+build step and no committed `dist/`.
 
 If the design system later needs its own release cadence, publish it (npm
 package or shadcn registry) and switch consumers from `workspace:*` to the

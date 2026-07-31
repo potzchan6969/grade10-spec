@@ -1,8 +1,8 @@
-# Portable UI component contracts
+# Product UI component contracts
 
-This guide records the reusable implementation decisions established while building `FeaturedMarkets`. It applies to the portable components in `packages/ui-components/`, not to consuming applications. Read it with [the component rules in `AGENTS.md`](../../AGENTS.md) and [the package README](../../packages/ui-components/README.md).
+This guide records the reusable implementation decisions established while building `FeaturedMarkets`. It defines the contract a product UI component must satisfy; the component itself is implemented in the application that renders it. Read it with [the component rules in `AGENTS.md`](../../AGENTS.md).
 
-`packages/ui-components` exports composites only. Every primitive beneath them comes from `packages/design-system`, which is bundled into the published `dist/` because it is never itself published — read [`design-code-sync.md`](design-code-sync.md) before adding or changing one.
+This repository once shipped those components as `packages/ui-components`. That package was removed and each application now owns its component source, so the rules below describe an obligation on the implementing application rather than on a package here. The design-system primitives in `packages/design-system` remain this repository's own — read [`design-code-sync.md`](design-code-sync.md) before adding or changing one.
 
 ## Purpose and boundary
 
@@ -25,8 +25,8 @@ A portable component renders a consumer-owned presentation. In this repository, 
 | Independent state boundaries | A loaded navigation list can coexist with an unavailable chart or summary. | Model independently resolving regions independently; do not collapse unrelated readiness into one global boolean. |
 | Normalized presentation data | The package must not know API schemas, number formats, clock logic, or market semantics. | Consumers provide display-ready labels, formatted values, semantic tones, status text, and callbacks. |
 | Local DOM lifecycle | Canvas/chart libraries need a DOM instance and resize cleanup, but that does not justify application state. | Keep renderer lifecycle local and prop-driven; never use it to fetch, subscribe to, or persist product data. |
-| Primitive-first composition | Shared visual and accessibility behavior should not be copied into each feature card. | Compose feature-specific pieces from the `@acetrader/design-system` primitives. This package originally exported its own primitive layer; [`move-primitives-to-design-system`](../../openspec/changes/move-primitives-to-design-system/proposal.md) removed it, because a second Button styled against a private palette drifted from the design one silently. |
-| Public API discipline | This package is consumed from a Git submodule and generated `dist/` output. | Export prop types from `src/index.ts`; treat required prop and semantic changes as consumer-facing compatibility work. |
+| Primitive-first composition | Shared visual and accessibility behavior should not be copied into each feature card. | Build the component's button, badge, card, and tab rungs once and reuse them, against the design-system token values rather than ad-hoc literals. The former component package originally exported its own primitive layer; [`move-primitives-to-design-system`](../../openspec/changes/move-primitives-to-design-system/proposal.md) removed it, because a second Button styled against a private palette drifted from the design one silently. |
+| Public API discipline | Other features import the component by name and depend on its prop shape. | Export the component and its prop types from one entry module; treat required prop and semantic changes as consumer-facing compatibility work. |
 
 ## Design the contract before markup
 
@@ -147,20 +147,20 @@ useEffect(() => {
 }, [state.status]);
 ```
 
-It does not fetch data, subscribe to feeds, persist user data, or derive product state. The package checker permits internal runtime APIs and scans for known external data, persistence, routing, store, analytics, and feature-flag integrations. That scan is a guardrail; code review must still reject unlisted clients and application imports.
+It does not fetch data, subscribe to feeds, persist user data, or derive product state. Internal runtime APIs are permitted; external data, persistence, routing, store, analytics, and feature-flag integrations are not. Code review must reject those clients and any import that reaches into a surrounding feature.
 
 ## Testing and review guidance
 
-Use the smallest test layer that proves the contract. The current Featured Markets examples live in `apps/ui/src/stories/FeaturedMarkets.stories.tsx` and the package README has executable samples and commands.
+Use the smallest test layer that proves the contract. The implementing application owns the examples and the tests.
 
 | Risk | Appropriate verification |
 | --- | --- |
-| Invalid public state shape or a known forbidden external integration | Type checking and `pnpm run check:components`, plus code review for unlisted clients and application imports |
+| Invalid public state shape or a known forbidden external integration | Type checking, plus code review for external clients and feature imports |
 | A state or responsive presentation fails to mount | Storybook render story for default, loading, empty, error, disabled, and narrow layouts that exist |
 | A controlled interaction does not emit/render the correct state | Storybook `play` interaction in Chromium using accessible roles |
 | Native semantics, labels, focus, or contrast regress | Storybook accessibility checks; make them blocking after the relevant baseline is clean |
 | Spacing, color, responsive shape, or chart rendering regresses | Visual baseline with deterministic fixture data and frozen/disabled chart animation |
-| Store/API/router/analytics wiring fails | Consumer-application integration or end-to-end test, never this portable package |
+| Store/API/router/analytics wiring fails | Feature-level integration or end-to-end test, never the component itself |
 
 For a new or changed public component, reviewers should be able to answer yes to each question:
 
@@ -169,13 +169,13 @@ For a new or changed public component, reviewers should be able to answer yes to
 - Does every user action have a clearly named callback and no hidden application side effect?
 - Are IDs and mutually exclusive display shapes represented by appropriate discriminated types?
 - Is DOM-backed behavior documented, scoped to presentation, and cleaned up without acquiring or persisting product state?
-- Do stories exercise the visible states, narrow viewport, and a representative interaction?
-- Were `check:components`, `build:components`, browser Storybook tests, Storybook build, and lint run as applicable?
-- Are public exports, consumer documentation, generated `dist/`, PRD, and OpenSpec records aligned?
+- Do the examples exercise the visible states, narrow viewport, and a representative interaction?
+- Were the implementing application's typecheck, tests, build, and lint run as applicable?
+- Are public exports, consumer documentation, PRD, and OpenSpec records aligned?
 
 ## Applying the guide
 
-Use this guide for a new portable component or a material public-contract change. Update the linked PRD and OpenSpec change when the behavior, consumer contract, or validation obligations change. Keep feature-specific decisions in the PRD/OpenSpec; update this guide only for durable rules that should apply beyond one feature. Use the [interaction and motion testing scope](ui-component-testing.md) to choose the required browser coverage.
+Use this guide for a new product UI component or a material public-contract change. Update the linked PRD and OpenSpec change when the behavior, consumer contract, or validation obligations change. Keep feature-specific decisions in the PRD/OpenSpec; update this guide only for durable rules that should apply beyond one feature. Use the [interaction and motion testing scope](ui-component-testing.md) to choose the required browser coverage.
 
 Related records:
 

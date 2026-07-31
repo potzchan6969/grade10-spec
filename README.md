@@ -1,17 +1,18 @@
 # AceTrader product specifications
 
-Versioned product requirements and portable React UI components for AceTrader applications.
+Versioned product requirements and the design system for AceTrader applications.
 
 ## What belongs here
 
 - Product managers and designers write durable PRDs in [`docs/prds/`](docs/prds/README.md).
 - Product and engineering teams describe implementation deltas in [`openspec/`](openspec/README.md).
-- Stateless, app-neutral React components live in [`packages/ui-components/`](packages/ui-components/README.md).
 - Theme tokens and shadcn primitives live in [`packages/design-system/`](packages/design-system/DESIGN.md), including the two-way Figma token pipeline.
 - Versioned Pencil design files live in [`designs/`](designs/README.md).
-- [`apps/ui/`](apps/ui/) is the Storybook workbench for reviewing those components; it is not a production application.
+- [`apps/ui/`](apps/ui/) is a Storybook workbench; it is not a production application.
 
-Read [`AGENTS.md`](AGENTS.md) before using an AI agent in this repository. It defines the source-of-truth boundaries and the requirements for portable components.
+Product UI components are implemented in the applications that render them. This repository records their contracts, not their source: the former `packages/ui-components` package was removed, and `FeaturedMarkets` now lives in the prediction application under `apps/web/src/features/featured-markets/`.
+
+Read [`AGENTS.md`](AGENTS.md) before using an AI agent in this repository. It defines the source-of-truth boundaries and the requirements for component contracts.
 
 [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md) explains why PRDs and OpenSpec are both used and how agents must keep their records aligned.
 
@@ -19,7 +20,7 @@ Read [`AGENTS.md`](AGENTS.md) before using an AI agent in this repository. It de
 
 ```bash
 pnpm setup:worktree
-pnpm storybook                     # apps/ui workbench for product components
+pnpm storybook                     # apps/ui workbench
 pnpm storybook:design-system       # design-system primitives
 ```
 
@@ -36,20 +37,18 @@ Useful checks:
 
 ```bash
 pnpm run agent:check-parity
-pnpm run check:components
-pnpm run build:components
+pnpm run check:design-system
 pnpm run tokens:build
 pnpm run typecheck
 pnpm run lint
 ```
 
-## Consume the UI package via Git submodule
+## Consume this repository via Git submodule
 
-In a consuming app repository, add this repository at a stable vendor path, then add the package as a file dependency:
+In a consuming app repository, add this repository at a stable vendor path:
 
 ```bash
 git submodule add git@github.com:9gag/acetrader-predictions-spec.git vendor/pred-spec
-pnpm add file:vendor/pred-spec/packages/ui-components
 ```
 
-The app can then import components from `@acetrader/pred-spec-ui`. Pin the submodule SHA in the app repository; updates are normal pull requests that move that SHA. See the [package consumer guide](packages/ui-components/README.md) for update and local-development details.
+The app reads the PRDs, the OpenSpec changes, and the design tokens from that path, and implements the components itself. Pin the submodule SHA in the app repository; updates are normal pull requests that move that SHA.
