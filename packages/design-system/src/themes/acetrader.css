@@ -3,110 +3,71 @@
 
 .theme-acetrader {
   /* Figma semantic set (raw) */
-  --background: var(--slate-950); /* Page background. The darkest surface — nothing sits behind it. */
-  --background-hover: var(--slate-opacity-white-10);
-  --background-active: var(--slate-opacity-white-25);
-  --background-inverse: var(--slate-50);
-  --background-inverse-hover: var(--slate-200);
-  --background-success: var(--meme-950);
-  --background-success-hover: var(--meme-900);
-  --background-warning: var(--yellow-950);
-  --background-warning-hover: var(--yellow-900);
-  --background-error: var(--red-950);
-  --background-error-hover: var(--red-900);
-  --layer-01: var(--slate-900); /* Raised surface: cards, panels, sheets. One step above the page background. */
-  --layer-02: var(--slate-800);
-  --text-primary: var(--slate-200); /* Default body and heading colour. Also the ring colour at 10% alpha on Card. */
-  --text-inverse: var(--slate-800);
-  --text-on-color: var(--slate-200);
-  --text-secondary: var(--slate-400);
-  --text-helper: var(--slate-400);
-  --text-placeholder: var(--slate-500);
-  --text-disabled: var(--slate-opacity-white-25);
-  --text-brand: var(--meme-400);
-  --text-error: var(--red-400);
-  --text-warning: var(--yellow-400);
-  --text-success: var(--meme-400);
-  --link-primary: var(--slate-200);
-  --link-primary-hover: var(--slate-400);
-  --link-secondary: var(--slate-400);
-  --link-secondary-hover: var(--slate-500);
-  --link-danger: var(--red-400);
-  --link-danger-hover: var(--red-600);
-  --link-success: var(--meme-400);
-  --link-success-hover: var(--meme-600);
-  --default: var(--slate-opacity-white-10);
-  --button-primary: var(--meme-opacity-meme-10); /* Primary button fill. meme-400 at 10% alpha — a fill, not a text colour; use Text/text-brand for label text on top of it. */
-  --button-primary-hover: var(--meme-opacity-meme-20);
-  --button-secondary: var(--slate-opacity-white-10);
-  --button-secondary-hover: var(--slate-opacity-white-15);
-  --brand: var(--meme-400);
-  --brand-subtle: var(--meme-opacity-meme-10);
-  --icon-primary: var(--slate-200);
-  --icon-secondary: var(--slate-400);
-  --icon-on-color: var(--slate-200);
-  --support-warning: var(--yellow-400);
-  --support-error: var(--red-400);
-  --support-success: var(--meme-400);
-  --icon-inverse: var(--slate-800);
-  --icon-disabled: var(--slate-opacity-white-25);
-  --icon-brand: var(--meme-400);
-  --button-disabled: var(--slate-700);
-  --button-danger: var(--red-opacity-red-10); /* Destructive button fill. red at 10% alpha — a fill, not a text colour; use Support/support-error for label text. */
-  --button-danger-hover: var(--red-opacity-red-20);
-  --field: var(--slate-opacity-white-10);
-  --skeleton-element: var(--slate-opacity-white-10);
-  --focus: var(--meme-opacity-meme-50);
-  --overlay: #0D131280;
-  --inline-tooltip-primary: var(--text-primary);
-  --inline-tooltip-secondary: var(--text-secondary);
-  --toggle-off: var(--slate-opacity-white-10);
-  --categorical-1: var(--meme-400);
-  --categorical-2: var(--blue-400);
-  --categorical-3: var(--purple-400);
-  --categorical-4: var(--orange-400);
-  --categorical-5: var(--red-400);
-  --categorical-6: var(--yellow-400);
-  --categorical-7: var(--teal-400);
+  --background: var(--slate-950); /* Main application background */
+  --foreground: var(--slate-200); /* Primary text color on the background */
+  --card: var(--slate-900); /* Primary text color on the background */
+  --card-foreground: var(--slate-200); /* Text and icons within cards */
+  --popover: var(--slate-900); /* Background for dropdown menus and popovers */
+  --popover-foreground: var(--slate-200); /* Text and icons within popovers */
+  --primary: var(--meme-400); /* Brand color for primary actions (buttons, highlights) */
+  --primary-foreground: var(--slate-800); /* Text and icons on primary-colored elements */
+  --secondary: var(--slate-800); /* Less prominent action color */
+  --secondary-foreground: var(--slate-400); /* Text and icons on secondary-colored elements */
+  --muted: var(--slate-50-opacity-10); /* Subdued background for less important elements */
+  --muted-foreground: var(--slate-200); /* De-emphasized text (captions, labels) */
+  --accent: var(--slate-50-opacity-10); /* Highlight color for active or focused elements */
+  --accent-foreground: var(--slate-200); /* Text and icons on accent-colored elements */
+  --destructive: var(--red-400); /* Error and deletion action color */
+  --border: var(--slate-50-opacity-10); /* Default border color */
+  --input: var(--slate-50-opacity-10); /* Form input and button borders */
+  --ring: var(--meme-400-opacity-50); /* Focus indicator color */
+  --overlay: var(--slate-950-opacity-50);
+  --success: var(--meme-950);
+  --success-foreground: var(--meme-300);
+  --info: var(--blue-950);
+  --info-foreground: var(--blue-300);
+  --warning: var(--yellow-950);
+  --warning-foreground: var(--yellow-400);
+  --error: var(--red-950);
+  --error-foreground: var(--red-300);
+  --chart-1: var(--meme-400);
+  --chart-2: var(--blue-400);
+  --chart-3: var(--purple-400);
+  --chart-4: var(--orange-400);
+  --chart-5: var(--red-400);
+  --chart-6: var(--yellow-400);
+  --chart-7: var(--teal-400);
+  --sidebar: var(--card); /* Sidebar background */
+  --sidebar-foreground: var(--foreground); /* Text and icons within the sidebar */
+  --sidebar-primary: var(--primary); /* Primary actions within the sidebar */
+  --sidebar-primary-foreground: var(--primary-foreground); /* Text on sidebar primary elements */
+  --sidebar-accent: var(--accent); /* Highlighted elements within the sidebar */
+  --sidebar-accent-foreground: var(--accent-foreground); /* Text on sidebar accent elements */
+  --sidebar-border: var(--border); /* Sidebar divider lines or borders */
+  --sidebar-ring: var(--ring); /* Focus indicators within the sidebar */
+  --field: var(--input); /* Input, textarea, and select surface */
+  --control: var(--background); /* Outline button and bordered trigger surface */
+  --control-hover: #F9F9F980; /* Outline button/trigger hover surface */
+  --field-border: var(--border); /* Resting field border */
+  --field-disabled: #F9F9F9CC; /* Disabled field wash */
+  --switch-track: #F9F9F9CC; /* Switch unchecked track */
+  --muted-hover: var(--slate-50-opacity-20); /* Ghost button hover */
+  --disabled: var(--slate-700); /* Disabled elements background */
+  --disabled-foreground: var(--slate-50-opacity-30); /* Text for disabled elements */
+  --primary-muted: var(--meme-400-opacity-10); /* Subtle primary tint (selected rows, kbd) */
+  --primary-muted-hover: var(--meme-400-opacity-20); /* Hover for subtle primary elements */
+  --primary-muted-foreground: var(--primary); /* Text color shown on a muted primary surface */
+  --primary-border: var(--meme-400-opacity-20); /* Checked-control border (switch, checkbox) */
+  --destructive-muted: var(--red-500-opacity-10); /* Tinted destructive button/badge background */
+  --destructive-muted-hover: var(--red-500-opacity-20); /* Hover for tinted destructive elements */
+  --destructive-muted-foreground: var(--red-400); /* Secondary destructive text */
+  --destructive-border: #F76F8280; /* Invalid/destructive field border */
+  --destructive-ring: #F76F8266; /* Invalid focus ring */
+  --focus-ring: #3CD48D80; /* Focus halo color (alpha varies per style) */
+  --menu-border: #E4E5E51A; /* Hairline border on menus, cards, popovers */
+  --menu-glass: #131918B2; /* Frosted menu background */
+  --warning-border: #FFC84D4D; /* Frosted menu background */
 
   /* shadcn contract slots (mapped) */
-  --foreground: var(--text-primary);
-  --card: var(--layer-01);
-  --card-foreground: var(--text-primary);
-  --popover: var(--layer-02);
-  --popover-foreground: var(--text-primary);
-  --primary: var(--button-primary);
-  --primary-foreground: var(--text-brand);
-  --secondary: var(--button-secondary);
-  --secondary-foreground: var(--text-primary);
-  --muted: var(--layer-02);
-  --muted-foreground: var(--text-secondary);
-  --accent: var(--background-hover);
-  --accent-foreground: var(--text-primary);
-  --destructive: var(--button-danger);
-  --border: var(--default);
-  --input: var(--field);
-  --ring: var(--focus);
-  --success: var(--background-success);
-  --success-foreground: var(--text-success);
-  --warning: var(--background-warning);
-  --warning-foreground: var(--text-warning);
-  --error: var(--background-error);
-  --error-foreground: var(--text-error);
-  --info: var(--layer-02);
-  --info-foreground: var(--text-secondary);
   --radius: var(--rounded-lg);
-  --chart-1: var(--categorical-1);
-  --chart-2: var(--categorical-2);
-  --chart-3: var(--categorical-3);
-  --chart-4: var(--categorical-4);
-  --chart-5: var(--categorical-5);
-  --sidebar: var(--layer-01);
-  --sidebar-foreground: var(--text-primary);
-  --sidebar-primary: var(--button-primary);
-  --sidebar-primary-foreground: var(--text-brand);
-  --sidebar-accent: var(--background-hover);
-  --sidebar-accent-foreground: var(--text-primary);
-  --sidebar-border: var(--default);
-  --sidebar-ring: var(--focus);
 }
