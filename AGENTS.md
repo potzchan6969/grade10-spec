@@ -58,6 +58,7 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 - The package is consumed from source: `exports` point at `src/`, there is no build step, and no `dist/` is committed.
 - Stories are colocated with each primitive here, which is deliberate and differs from the `apps/ui/src/stories/` rule for `packages/ui-components`. Run them with `pnpm run storybook:design-system`.
 - Token flow: `tokens.json` is the source of truth, `tokens.config.json` holds the engineer-owned projection rules, and Figma plus the theme CSS files are both projections. Read `packages/design-system/DESIGN.md` before touching any leg of that pipeline.
+- Read [`docs/governance/design-code-sync.md`](docs/governance/design-code-sync.md) before adding a primitive or changing one that has a Figma counterpart. A component may not offer a variant or size the Figma component set does not define; where code and design genuinely disagree, record it as an OpenSpec change rather than absorbing it into the Code Connect template.
 - The Figma legs (`tokens:pull`, `tokens:push`, `tokens:plugin`) require a human to run a plugin inside Figma; they have no unattended path.
 
 ## Sharing components with consuming apps
