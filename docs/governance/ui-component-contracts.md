@@ -2,6 +2,8 @@
 
 This guide records the reusable implementation decisions established while building `FeaturedMarkets`. It applies to the portable components in `packages/ui-components/`, not to consuming applications. Read it with [the component rules in `AGENTS.md`](../../AGENTS.md) and [the package README](../../packages/ui-components/README.md).
 
+`packages/ui-components` exports composites only. Every primitive beneath them comes from `packages/design-system`, which is bundled into the published `dist/` because it is never itself published — read [`design-code-sync.md`](design-code-sync.md) before adding or changing one.
+
 ## Purpose and boundary
 
 A portable component renders a consumer-owned presentation. In this repository, “stateless” means it does not own or connect to **external product state**; it does not mean hooks or internal UI state are prohibited. A component may own ephemeral presentation and DOM behavior, but it does not decide what external data is current, perform product actions, or connect itself to an application.
@@ -10,7 +12,7 @@ A portable component renders a consumer-owned presentation. In this repository, 
 | --- | --- |
 | Markup, styling, semantic controls, focus treatment, and responsive composition | Data fetching, subscriptions, caches, stores, authentication, feature flags, and browser storage |
 | Typed visual states, prop-driven formatting, callbacks, and local DOM-renderer lifecycle | Routing, analytics, notifications, clipboard, countdown derivation, and retry implementation |
-| App-neutral primitives and feature composites | Mapping domain/API data into the component's normalized contract |
+| App-neutral feature composites | Mapping domain/API data into the component's normalized contract |
 
 `FeaturedMarkets` is the reference implementation: its app-facing panel was decomposed into controlled primitives and composites, while its store, live feed, route, analytics, market-countdown derivation, and app-specific icons were deliberately excluded.
 
@@ -23,7 +25,7 @@ A portable component renders a consumer-owned presentation. In this repository, 
 | Independent state boundaries | A loaded navigation list can coexist with an unavailable chart or summary. | Model independently resolving regions independently; do not collapse unrelated readiness into one global boolean. |
 | Normalized presentation data | The package must not know API schemas, number formats, clock logic, or market semantics. | Consumers provide display-ready labels, formatted values, semantic tones, status text, and callbacks. |
 | Local DOM lifecycle | Canvas/chart libraries need a DOM instance and resize cleanup, but that does not justify application state. | Keep renderer lifecycle local and prop-driven; never use it to fetch, subscribe to, or persist product data. |
-| Primitive-first composition | Shared visual and accessibility behavior should not be copied into each feature card. | Export small primitives where they have independent reuse value; compose feature-specific pieces from them. |
+| Primitive-first composition | Shared visual and accessibility behavior should not be copied into each feature card. | Compose feature-specific pieces from the `@acetrader/design-system` primitives. This package originally exported its own primitive layer; [`move-primitives-to-design-system`](../../openspec/changes/move-primitives-to-design-system/proposal.md) removed it, because a second Button styled against a private palette drifted from the design one silently. |
 | Public API discipline | This package is consumed from a Git submodule and generated `dist/` output. | Export prop types from `src/index.ts`; treat required prop and semantic changes as consumer-facing compatibility work. |
 
 ## Design the contract before markup

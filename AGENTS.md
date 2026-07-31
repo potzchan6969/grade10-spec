@@ -7,7 +7,7 @@ This repository is the versioned source of truth for product requirements and po
 - Treat product managers, designers, and engineers as collaborators. Check existing PRDs, specs, components, and conventions before proposing a new structure.
 - Prefer the smallest reusable artifact. Call out a preference or design-system choice as a choice, not as an objective improvement.
 - Keep changes reviewable: one product decision or component capability per pull request where practical.
-- Do not modify generated `packages/ui-components/dist/` by hand. Regenerate it with `pnpm run build:components`.
+- Do not modify generated `packages/ui-components/dist/` or `packages/ui-components/theme/` by hand. Regenerate both with `pnpm run build:components`.
 - Do not modify generated `packages/design-system/src/theme.css` or `src/themes/acetrader.css` by hand. Edit `tokens.json` or `tokens.config.json` and regenerate with `pnpm run tokens:build`.
 
 ## Sources of truth
@@ -17,7 +17,7 @@ This repository is the versioned source of truth for product requirements and po
 | Product requirement document | `docs/prds/<product-area>/<feature>.md` | A full, durable PM/design artifact. |
 | Product vocabulary and durable requirements | `openspec/specs/<capability>/spec.md` | Requirement-level source used by implementation changes. |
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
-| Portable UI component | `packages/ui-components/src/` | Framework-level, stateless React component. |
+| Portable UI component | `packages/ui-components/src/` | App-neutral React composite. Primitives live in the design system. |
 | Component examples | `apps/ui/src/stories/` | Storybook only; never the component source of truth. |
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
 | Design-system primitive | `packages/design-system/src/components/` | shadcn primitives and their colocated stories. |
@@ -47,13 +47,15 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 - No data fetching, mutations, routing, app stores, analytics, feature flags, browser storage, or application imports.
 - Components may use React state, context, effects, refs, timers, and browser APIs for internal presentation and DOM behavior. They must not use those mechanisms to acquire, persist, subscribe to, or orchestrate consumer-owned product state.
 - In this repository, “stateless” means app-neutral: it excludes external product-state integration, not ephemeral internal UI state.
-- Keep React a peer dependency; do not bundle React or a product design system.
+- This package exports composites, not primitives. Compose from `@acetrader/design-system` instead of adding a primitive here, and import it by deep path (`@acetrader/design-system/components/display/badge`) rather than from the barrel.
+- Keep React a peer dependency; do not bundle React. `@acetrader/design-system` *is* bundled into `dist/`, deliberately, because it is never published and a submodule consumer cannot resolve it — see [`openspec/changes/move-primitives-to-design-system`](openspec/changes/move-primitives-to-design-system/design.md).
+- A design-system type must not reach an exported prop type. `scripts/build.mjs` fails the build when an emitted declaration references one, because tsc leaves the bare specifier and a consumer cannot resolve it.
 - Export each public component and its prop type from `src/index.ts`; changing an exported prop is a consumer-facing breaking change unless optional and backward compatible.
 - Storybook stories must cover default, interactive/disabled, loading, empty, error, and narrow-width states when those states exist.
 
 ## Design system package
 
-`packages/design-system` (`@acetrader/design-system`) holds the theme tokens and the shadcn primitives beneath the product components. It is a separate package from `packages/ui-components` and the two do not import each other today; do not merge them without a recorded product decision.
+`packages/design-system` (`@acetrader/design-system`) holds the theme tokens and the shadcn primitives beneath the product components. It is the only place a primitive lives: `packages/ui-components` depends on it, bundles it into `dist/`, and exports no primitive of its own. The dependency runs one way only — the design system must never import `packages/ui-components` — and the two remain separate packages; do not merge them without a recorded product decision.
 
 Use the `design-system-components` skill whenever creating or changing a primitive under `packages/design-system/src/components/`.
 
@@ -65,7 +67,7 @@ Use the `design-system-components` skill whenever creating or changing a primiti
 
 ## Sharing components with consuming apps
 
-Consumers add this repository as a Git submodule and install the prebuilt `@acetrader/pred-spec-ui` package from that submodule. The component package commits `dist/` deliberately so a submodule consumer can install it without needing this monorepo's dev toolchain.
+Consumers add this repository as a Git submodule and install the prebuilt `@acetrader/pred-spec-ui` package from that submodule. The component package commits `dist/` and `theme/` deliberately so a submodule consumer can install it without needing this monorepo's dev toolchain. `pnpm run build:components` bundles the design-system implementation into `dist/index.js` and copies its theme CSS into `theme/`, so the install stays a single package with `react` and `tailwindcss` as its only unbundled requirements.
 
 See `packages/ui-components/README.md` for exact commands and update workflow. Do not use git submodules inside this repository for components; this repository itself is the reusable submodule.
 
@@ -75,7 +77,7 @@ Run the appropriate checks before handoff:
 
 - `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
 - `pnpm run check:components` after a shared component changes.
-- `pnpm run build:components` after a component source or public export changes; commit the regenerated `dist/` output.
+- `pnpm run build:components` after a component source, public export, or design-system change reaches the portable package; commit the regenerated `dist/` and `theme/` output.
 - `pnpm run tokens:build` after `tokens.json` or `tokens.config.json` changes; commit the regenerated theme CSS.
 - `pnpm run lint` for repository formatting and static checks.
 - `pnpm run typecheck` after any TypeScript change.

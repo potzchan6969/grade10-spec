@@ -1,15 +1,17 @@
 # `@acetrader/pred-spec-ui`
 
-Portable, app-neutral React components produced alongside product specifications. React remains a peer dependency; the package includes ECharts for the prop-driven Featured Markets line chart.
+Portable, app-neutral React **composites** produced alongside product specifications — Featured Markets and the payment dialog suite. React remains a peer dependency; the package includes ECharts for the prop-driven Featured Markets line chart.
 
-Components may use shadcn/ui utility classes. Consumer applications must use Tailwind CSS v4 and import the package stylesheet once from their global CSS:
+This package does not export primitives. `Button`, `Badge`, `Skeleton`, `Stack`, `Text`, `Card`, and `Tabs` live in `@acetrader/design-system`, which is consumed from source inside this repository and **bundled into `dist/`** here, so a submodule consumer installs one package and needs nothing else. See [`openspec/changes/move-primitives-to-design-system`](../../openspec/changes/move-primitives-to-design-system/design.md) for why.
+
+Consumer applications must use Tailwind CSS v4 and import the package stylesheet once from their global CSS:
 
 ```css
 @import "tailwindcss";
 @import "@acetrader/pred-spec-ui/styles.css";
 ```
 
-The stylesheet loads shadcn's shared Tailwind utilities and scans this package's emitted `dist/` files, so generated component classes are included in the consumer's Tailwind output.
+The stylesheet loads shadcn's shared Tailwind utilities, the design-system theme vendored into `theme/`, and scans this package's emitted `dist/` bundle, so generated component classes are included in the consumer's Tailwind output. Add `class="theme-acetrader"` on any ancestor to select the AceTrader palette over the baseline one, and `dark` for the dark mode.
 
 ## Consumer setup with a Git submodule
 
@@ -23,14 +25,18 @@ pnpm add file:vendor/pred-spec/packages/ui-components
 Import from the package name:
 
 ```tsx
-import { Button } from '@acetrader/pred-spec-ui';
+import { PaymentDialog } from '@acetrader/pred-spec-ui';
 
-export function SavePanel() {
-  return <Button onClick={() => undefined}>Save</Button>;
+export function SavePanel({ open, onOpenChange }) {
+  return (
+    <PaymentDialog open={open} onOpenChange={onOpenChange} title="Confirm">
+      …
+    </PaymentDialog>
+  );
 }
 ```
 
-The package commits its generated `dist/` directory so the `file:` dependency works without this repository's development dependencies. The consumer controls styling with normal selectors, for example `button[data-tone='primary']`.
+The package commits its generated `dist/` and `theme/` directories so the `file:` dependency works without this repository's development dependencies. The consumer controls styling through the design-system tokens — override `--primary`, `--card`, `--border` and the rest on any ancestor — or with `data-slot` selectors such as `[data-slot='button']`.
 
 ## Updating a consumer
 
@@ -161,4 +167,6 @@ pnpm run check:components
 pnpm run build:components
 ```
 
-Commit the generated `dist/` files whenever `src/` or its public exports change.
+Commit the generated `dist/` and `theme/` output whenever `src/`, its public exports, or the design-system theme changes.
+
+Compose from `@acetrader/design-system` rather than adding a primitive here; a new primitive belongs in that package, under the [design/code sync rules](../../docs/governance/design-code-sync.md). Import it by deep path — `@acetrader/design-system/components/display/badge` — not from the barrel, which re-exports `sonner` and `next-themes` and would drag both into the bundle. A design-system type must not appear in an exported prop type: `dist/` bundles the implementation but a consumer cannot resolve the specifier a declaration file would emit, and `scripts/build.mjs` fails the build if one does.

@@ -24,7 +24,7 @@ Inventory the source before coding:
 | Viewports, loading/empty/error/resolved states, disabled and selected treatments | Story/state matrix and responsive acceptance criteria |
 | User actions and side effects | Named callback props; the consumer implements navigation, refresh, analytics, and mutations |
 | Store/API data and derived labels | Normalized, display-ready prop types; no API response types |
-| Repeated layout/interaction patterns | Foundation primitive or feature primitive with an independent contract |
+| Repeated layout/interaction patterns | A design-system primitive, or a feature primitive with an independent contract |
 | Charts, canvases, media, resize behavior | Prop-driven DOM runtime with lifecycle cleanup and no external data access |
 
 State the assumptions when the source cannot be read or an app behavior has no portable equivalent. Do not silently recreate product policy.
@@ -63,8 +63,8 @@ Use generic string-literal IDs when the consumer benefits from compile-time chec
 
 ## Build the right layers
 
-1. Reuse an existing primitive when it has the needed semantic and visual contract.
-2. Add a foundation primitive only for a recurring, independently useful behavior (for example, text, surface, badge, skeleton, segmented control, or button variant).
+1. Reuse an existing `@acetrader/design-system` primitive when it has the needed semantic and visual contract. Import it by deep path, not from the barrel.
+2. Do not add a foundation primitive here — `packages/ui-components` exports composites only. A missing primitive (text, badge, skeleton, tabs, button rung) belongs in `packages/design-system` under the `design-system-components` skill, which requires the Figma set first.
 3. Add feature primitives for meaningful domain parts such as navigation, header, stats, outcomes, status, or source tabs.
 4. Compose feature primitives into desktop, mobile, card, panel, and responsive-root views.
 5. Export each intentionally reusable public component and prop type from `src/index.ts`.
