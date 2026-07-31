@@ -67,9 +67,66 @@ Where code and design genuinely disagree, that is a decision to record in an Ope
 
 **What it does not check yet:** token values and geometry. Every axis and option can line up perfectly while the colours, heights, and padding are all wrong — which is exactly what happened to Button, whose variants matched by name for months while `default` rendered a solid fill against a design that specifies a tint.
 
+## For designers: before you create or change a component
+
+Written to be followed in order, in Figma, without reading the rest of this document. Each rule names the symptom it prevents, and every symptom listed has actually happened here.
+
+### 1. Decide what you are adding: an axis value, or a new component
+
+Answer this before drawing anything — the other rules follow from it.
+
+**Ask: does the new thing combine with the existing axes?**
+
+- A loading **Danger** button is a sensible thing to want, so `Loading` is a value of **State**, not of `Type`. It was originally a `Type`, which made a loading Danger button impossible to draw.
+- A link cannot be "outline" or "loading", and it has its own tonal axis, so it is a **separate component set**. The file gets this right.
+
+**The tell:** if your new value can only exist alongside one value of another axis, you have put it on the wrong axis. `Loading` had a single `State` where every other `Type` had three — a ragged row in what should be a complete cross-product. If you cannot fill in the whole grid, the axis is wrong.
+
+### 2. Anything a developer can choose must be a VARIANT property
+
+Not an instance-level override. Not a mode of a variable collection.
+
+*Symptom if ignored:* the property is invisible to code. Dev Mode cannot tell a developer which size an instance is, and the generated snippet has to guess.
+
+Reserve variable-collection **modes** for context that varies *outside* the component — theme, density — never for something a consumer picks per instance.
+
+*Symptom if ignored:* the component set looks perfect and **every instance renders at the default size**. Instances resolve modes from where they sit on the canvas, not from the component they came from. This is not a bug you can see in the component set.
+
+### 3. A variant must be self-contained
+
+Bind each variant's geometry to size-specific primitives — `rounded-md`, `Typeset/size-sm`, `Spacing/space-2` — so it renders correctly wherever it is placed.
+
+### 4. Name options after the tokens behind them
+
+Open the variable collection and use its names. Do not infer them from a related token.
+
+*Symptom if ignored:* the Button rungs were once named from a `rounded` binding rather than the Sizing collection, shifting every rung by one. "The sm button" meant 32px to design and 24px to code, and nothing flagged it.
+
+### 5. Build new variants by duplicating an existing one
+
+Never draw a variant from scratch, and after duplicating, confirm in the right-hand panel that:
+
+- the label still shows the **Label** property, not plain text
+- both icon slots are still swappable
+- any other component property is still wired
+
+*Symptom if ignored:* this is the most common defect found. The original `Loading` variant had **none** of the set's five properties wired, so a developer's generated snippet printed a stale label and the loading state ignored whatever text a consumer typed.
+
+### 6. Publish the set, and publish Code Connect
+
+*Symptom if ignored:* Dev Mode shows **no** connected code at all, however correct the mapping is. That is the current state of this file — `get_code_connect_map` returns `{}`.
+
+### 7. If you are modifying rather than creating
+
+Deleting or renaming a variant that instances already use leaves orphaned components behind and silently repoints live instances. Prefer **adding** an axis over renaming values, and check the instance count before deleting anything.
+
+### What happens next
+
+`check:design-system` diffs your axes and options against the code on every push. A new option with no code counterpart is a warning; a renamed or removed option is an error. You do not need to run it — but it is why an unannounced rename surfaces as a failed build rather than a wrong button in production.
+
 ## Rules for the Figma file
 
-These are design-side obligations. Most drift found so far originated here, not in code.
+The same obligations stated for engineers, as a reference. Most drift found so far originated here, not in code.
 
 - **Every axis code must read has to be a VARIANT property on the component set.** Not an instance-level override, and not a mode of a variable collection. Modes are not component properties, so no template can read them.
 - **A variant axis cannot be driven by a mode-switched variable.** This is the subtler half of the rule above and it costs a rebuild to discover. Pinning a collection mode on a variant (`setExplicitVariableModeForCollection`) affects only that variant node's own rendering; an *instance* resolves modes from its own ancestor chain, not from its main component. So a Size axis built that way looks right in the component set and renders every instance at the default size. Each variant must bind size-specific primitives directly — `Rounded/rounded-*`, `Typeset/size-*`, `Spacing/space-*` — so it is self-contained. Reserve collection modes for things that genuinely vary by context, such as theme.
