@@ -16,8 +16,6 @@ const dirname =
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  // The portable components are styled with design-system primitives, so the
-  // Tailwind v4 compiler has to run here for `styles.css` to emit any utility.
   plugins: [react(), tailwindcss()],
   test: {
     projects: [

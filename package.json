@@ -8,9 +8,7 @@
   "scripts": {
     "agent:sync-parity": "bash scripts/agent-platform/sync-parity.sh",
     "agent:check-parity": "bash scripts/agent-platform/check-parity.sh",
-    "build:components": "pnpm --filter @acetrader/pred-spec-ui run build",
     "cache:prime": "pnpm install --frozen-lockfile --prefer-offline",
-    "check:components": "pnpm --filter @acetrader/pred-spec-ui run check:stateless",
     "check:design-system": "pnpm --filter @acetrader/design-system run components:check",
     "setup:browsers": "pnpm --dir apps/ui exec playwright install chromium",
     "setup:worktree": "pnpm install --frozen-lockfile --prefer-offline",
@@ -21,7 +19,7 @@
     "test:stories:design-system": "pnpm --filter @acetrader/design-system run test:stories",
     "tokens:build": "pnpm --filter @acetrader/design-system run tokens:build",
     "tokens:sync": "pnpm --filter @acetrader/design-system run tokens:sync",
-    "typecheck": "pnpm --dir apps/ui exec tsc -b && pnpm --filter @acetrader/pred-spec-ui exec tsc --project tsconfig.json --noEmit && pnpm --filter @acetrader/design-system run typecheck",
+    "typecheck": "pnpm --dir apps/ui exec tsc -b && pnpm --filter @acetrader/design-system run typecheck",
     "lint": "biome check .",
     "lint:fix": "biome check --write ."
   },

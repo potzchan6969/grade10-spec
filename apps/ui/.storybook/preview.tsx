@@ -1,6 +1,5 @@
 import type { Preview } from "@storybook/react-vite";
 import type { ReactNode } from "react";
-import "@acetrader/pred-spec-ui/styles.css";
 
 function MotionBoundary({
   children,
