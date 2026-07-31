@@ -1,0 +1,56 @@
+name: Design sync
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-design-sync-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 24.14.1
+
+jobs:
+  components:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Forks and Dependabot cannot read secrets. Skipping loudly is the point:
+      # a design-sync check that quietly passes without reaching Figma is worse
+      # than no check, because a green tick then means nothing.
+      - name: Check for Figma token
+        id: token
+        run: |
+          if [ -n "${{ secrets.FIGMA_TOKEN }}" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=Design sync skipped::FIGMA_TOKEN is not available to this run, so Figma-vs-code drift was NOT checked."
+          fi
+
+      - name: Check components against Figma
+        if: steps.token.outputs.available == 'true'
+        env:
+          FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
+        run: pnpm run check:design-system
