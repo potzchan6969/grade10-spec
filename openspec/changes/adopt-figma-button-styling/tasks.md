@@ -23,7 +23,27 @@ Done:
 
 Remaining:
 
-- [ ] Ask design to add a Size VARIANT axis to the Button component set. This is the highest-value item: it is a genuine defect in the Figma file, it is what forces the hardcoded `size="lg"` in the template, and it means Dev Mode cannot tell a consumer which of the three sizes an instance is. Then replace the hardcoded value with a `getEnum` and omit the prop when the rung is `md`.
+- [ ] **Restructure the Button component set with design.** Two defects, one conversation — both are Figma-side modelling problems rather than code gaps, and together they are the highest-value remaining work. Neither changes `button.tsx`, whose props already have the shape the fix would land on; what changes is that the template loses its workarounds and Dev Mode starts emitting correct snippets.
+
+  The set has **16 variants** today: five Types × three States, plus `Loading` × one. Note that the API's `instanceCount: 18` counts instance usages in the file, not variants — do not read it as the matrix size.
+
+  **1. Size is not a VARIANT axis.** The design defines three sizes in "Buttons Size Reference" (`96:546`), but varies them by switching the Sizing collection's mode per instance. Modes are not component properties, so no `getEnum` can reach them. Consequences: the template hardcodes `size="lg"`, Dev Mode cannot tell a consumer which of the three sizes an instance is, and `check-components.mjs` reports `size` as reaching no Figma variant property — a warning that cannot be resolved while this stands. Fix: add a `Size` VARIANT, then replace the hardcoded value with a `getEnum` and omit the prop when the rung is `md`.
+
+  **2. `Loading` is modelled as a Type.** It is a state, not a type, and the set shows it: `Loading` is the only Type with a single State, making it a ragged row in an otherwise complete cross-product. It is orthogonal to Type — a loading Danger button cannot be drawn today. It contributes no styling of its own, binding exactly the `Custom/disabled` pair that every `State=Disabled` variant binds, so the whole delta is a spinner glyph. It also breaks the component's own TEXT property: the variant hides the layer bound to `Label#318:0` and shows a static "Loading" layer instead, which emitted a stale label until the template was changed to read the visible layer. And it forces `button.figma.ts` to call `getEnum("Type", …)` twice over one axis to produce two unrelated props.
+
+  Fix: make `Loading` a value of `State` (`Default` / `Hover` / `Disabled` / `Loading`). The matrix becomes regular, every Type can be loading, and the mapping collapses to one `getEnum('State', …)` yielding both `disabled` and `loading`. The cheaper alternative — a BOOLEAN that toggles the spinner, used with `State=Disabled` — needs fewer variants but depends on designers setting two things in the right combination and permits undesigned states; prefer the regular matrix.
+
+  Variant cost of the combined change, for the conversation with design:
+
+  | Structure | Variants |
+  | --- | --- |
+  | Today (ragged) | 16 |
+  | `Loading` becomes a `State` value | 20 |
+  | plus `Size` × 3 | 60 |
+  | minus `Hover`, which has no code counterpart | 45 |
+  | `Loading` as a boolean instead, minus `Hover`, with `Size` | 30 |
+
+  `Hover` is the cheapest third of the matrix to drop: it is a CSS pseudo-state with no prop behind it, the template already emits nothing for it deliberately, and Figma can express it through interactive styling. Note that `Disabled` cannot become a BOOLEAN — Figma booleans toggle layer visibility and cannot restyle a fill, and disabled changes the background to `Custom/disabled`.
 - [ ] Resolve the remaining open decisions in the proposal with design and product.
 - [ ] Review the design-system Storybook visually with the toolbar switched to the AceTrader theme, which is not the default. This inherits the theme-coverage gap recorded in [`sync-typography-motion-sizing`](../sync-typography-motion-sizing/proposal.md): the story suite renders the `default` theme, so it exercises the backfilled slots rather than the designed ones.
 - [ ] Run `pnpm run test:stories:design-system` as a regression guard. Note it validates the `default` theme only, so a pass says nothing about the acetrader rendering this change is about.
