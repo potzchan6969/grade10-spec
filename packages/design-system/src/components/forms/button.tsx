@@ -2,6 +2,7 @@ import { cn } from "@acetrader/design-system/lib/utils";
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cva, type VariantProps } from "class-variance-authority";
 import { LoaderCircleIcon } from "lucide-react";
+import type { ReactNode } from "react";
 
 const buttonVariants = cva(
   "group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:text-disabled-foreground aria-invalid:border-destructive-border aria-invalid:ring-3 aria-invalid:ring-destructive-ring [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
@@ -34,8 +35,12 @@ const buttonVariants = cva(
 
 type ButtonProps = ButtonPrimitive.Props &
   VariantProps<typeof buttonVariants> & {
-    /** Shows a leading spinner and disables the button. */
+    /** Shows a leading spinner and disables the button. Replaces `leading` and suppresses `trailing`, matching Figma's Loading state. */
     loading?: boolean;
+    /** Icon rendered before `children`. */
+    leading?: ReactNode;
+    /** Icon rendered after `children`. */
+    trailing?: ReactNode;
   };
 
 function Button({
@@ -43,6 +48,8 @@ function Button({
   variant = "default",
   size = "default",
   loading = false,
+  leading,
+  trailing,
   disabled,
   children,
   ...props
@@ -58,8 +65,11 @@ function Button({
     >
       {loading ? (
         <LoaderCircleIcon aria-hidden="true" className="animate-spin" />
-      ) : null}
+      ) : (
+        leading
+      )}
       {children}
+      {loading ? null : trailing}
     </ButtonPrimitive>
   );
 }

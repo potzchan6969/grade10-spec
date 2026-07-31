@@ -53,15 +53,10 @@ const label = instance.getString("Label#318:0");
 // instance rather than the placeholder layer name, so the mapping survives the
 // icon being swapped for a different one.
 //
-// Figma models these as two component properties; button.tsx models them as
-// children carrying `data-icon="inline-start"` / `"inline-end"`, which is the
-// convention badge.tsx and tabs.tsx follow too. The two models meet here: the
-// resolved snippet is emitted as a child, in order, around the label.
-//
-// A resolved snippet cannot carry `data-icon` — `executeTemplate()` returns an
-// opaque section list, not markup this template can annotate. It costs nothing:
-// padding-x is bound per size while a leading icon is shown, so no rung applies
-// tighten-on-icon compensation and there is nothing for the attribute to drive.
+// button.tsx exposes `leading` and `trailing` props mirroring these two
+// properties, so each resolved snippet is emitted into its own slot rather than
+// as a bare child. That makes the emitted order unrepresentable-if-wrong, which
+// children could not guarantee.
 const leadingIcon = instance.getBoolean("Show Leading Icon#175:0")
   ? instance.getInstanceSwap("Leading Icon#175:20")
   : null;
@@ -81,7 +76,7 @@ const trailingCode =
 export default {
   // `default` is the cva defaultVariant for both axes, so omit each prop in that
   // case and emit what someone would actually write.
-  example: figma.code`<Button${variant === "default" ? "" : figma.code` variant="${variant}"`}${size === "default" ? "" : figma.code` size="${size}"`}${loading ? figma.code` loading` : ""}${disabled ? figma.code` disabled` : ""}>${leadingCode ? figma.code`${leadingCode}` : ""}${label}${trailingCode ? figma.code`${trailingCode}` : ""}</Button>`,
+  example: figma.code`<Button${variant === "default" ? "" : figma.code` variant="${variant}"`}${size === "default" ? "" : figma.code` size="${size}"`}${loading ? figma.code` loading` : ""}${disabled ? figma.code` disabled` : ""}${leadingCode ? figma.code` leading={${leadingCode}}` : ""}${trailingCode ? figma.code` trailing={${trailingCode}}` : ""}>${label}</Button>`,
   imports: ['import { Button } from "@acetrader/design-system"'],
   id: "button",
   metadata: { nestable: true },

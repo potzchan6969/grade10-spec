@@ -33,12 +33,31 @@ export const DisabledOutline: Story = {
   args: { variant: "outline", disabled: true },
 };
 
-/**
- * Leading and trailing icons are children, in reading order. Figma exposes them
- * as component properties and shows both by default; here the caller composes
- * them, and the size rung's `gap` does the spacing.
- */
+/** `leading` and `trailing` mirror Figma's two icon properties, which show by default. */
 export const WithIcons: Story = {
+  args: { leading: <PlusIcon />, trailing: <ChevronRightIcon /> },
+};
+
+/** Icons scale with the rung: 16px at `default`, 14px at `sm`, 12px at `xs`. */
+export const WithIconsSmall: Story = {
+  args: { size: "sm", leading: <PlusIcon />, trailing: <ChevronRightIcon /> },
+};
+export const WithIconsExtraSmall: Story = {
+  args: { size: "xs", leading: <PlusIcon />, trailing: <ChevronRightIcon /> },
+};
+
+/** `loading` takes the leading slot and suppresses `trailing`, as Figma draws it. */
+export const LoadingWithIcons: Story = {
+  args: {
+    loading: true,
+    children: "Loading",
+    leading: <PlusIcon />,
+    trailing: <ChevronRightIcon />,
+  },
+};
+
+/** Icons passed as children still work; the slots are additive. */
+export const IconsAsChildren: Story = {
   args: {
     children: (
       <>
@@ -48,12 +67,4 @@ export const WithIcons: Story = {
       </>
     ),
   },
-};
-
-/** Icons scale with the rung: 16px at `default`, 14px at `sm`, 12px at `xs`. */
-export const WithIconsSmall: Story = {
-  args: { size: "sm", children: WithIcons.args?.children },
-};
-export const WithIconsExtraSmall: Story = {
-  args: { size: "xs", children: WithIcons.args?.children },
 };
