@@ -17,9 +17,10 @@
  * `Type` is cva's `variant`, and comparing those by name produced a pair of
  * contradicting warnings on every component. See resolveAxis.
  *
- * What this still does NOT check: token values and geometry. Every axis and
- * option can line up while the colours and sizes are wrong, which is exactly
- * what happened to Button. Names only, for now.
+ * Values are checked as well as names. Every axis and option could line up while
+ * the colours and sizes were wrong — which is exactly what happened to Button,
+ * whose variants matched by name for months while `default` painted a solid fill
+ * against a design that specifies a tint. See checkValues.
  */
 import { readdir, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
@@ -61,6 +62,18 @@ function componentsFromDocument(doc) {
         id: node.id,
         name: node.name,
         properties: node.componentPropertyDefinitions ?? {},
+        // Each child is one variant, named `Type=Danger, State=Default, ...`.
+        // REST resolves every binding, so these are the values a viewer sees —
+        // which is what makes a value check possible without the variables
+        // endpoint, whose file_variables:read scope Figma gates to Enterprise.
+        variants: (node.children ?? []).map((v) => ({
+          name: v.name,
+          fill: v.fills?.find((f) => f.visible !== false && f.type === "SOLID"),
+          height: v.absoluteBoundingBox?.height,
+          radius: v.cornerRadius,
+          padX: v.paddingLeft,
+          gap: v.itemSpacing,
+        })),
       };
     }
     for (const child of node.children ?? []) visit(child);
@@ -229,6 +242,96 @@ function cvaAxes(src) {
   return axes;
 }
 
+// component file -> { axis: { option: "class string" } } and the cva defaults.
+// cvaAxes above needs only the option names; the value check needs the classes
+// behind them, and which option applies when a prop is omitted.
+function cvaClasses(src) {
+  const axes = {};
+  const defaults = {};
+  let from = 0;
+  for (;;) {
+    const at = src.indexOf("cva(", from);
+    if (at === -1) break;
+    from = at + 4;
+    const open = src.indexOf("{", at);
+    if (open === -1) break;
+    const config = sliceBalanced(src, open);
+    const top = objectKeys(config);
+    if (!top.variants) continue;
+    for (const [axis, body] of Object.entries(objectKeys(top.variants))) {
+      if (body === null) continue;
+      const options = {};
+      const re = /(["']?)([A-Za-z0-9_-]+)\1\s*:\s*"((?:[^"\\]|\\.)*)"/g;
+      let m;
+      while ((m = re.exec(body))) options[m[2]] = m[3];
+      axes[axis] = options;
+    }
+    for (const [axis, value] of Object.entries(
+      enumPairs(top.defaultVariants ?? ""),
+    ))
+      defaults[axis] = value;
+  }
+  return { axes, defaults };
+}
+
+// tokens.json is the source of truth for values; `{ref}` chases through the
+// primitives. Returns 8-digit hex so an opacity-bearing token compares directly
+// against a Figma fill's colour plus its opacity.
+function tokenResolver(tokens) {
+  const flat = { ...tokens.primitives };
+  for (const theme of Object.values(tokens.themes ?? {}))
+    Object.assign(flat, theme.tokens ?? {});
+  const resolve_ = (name, seen = new Set()) => {
+    if (seen.has(name)) return null;
+    seen.add(name);
+    const raw = flat[name]?.$value;
+    if (typeof raw !== "string") return null;
+    const ref = /^\{([^}]+)\}$/.exec(raw.trim());
+    return ref ? resolve_(ref[1], seen) : raw;
+  };
+  return resolve_;
+}
+
+const px = (v) => (typeof v === "string" ? Number.parseFloat(v) : v);
+const toHex8 = (color, opacity) => {
+  const a = Math.round((color.a ?? 1) * (opacity ?? 1) * 255);
+  const part = (x) =>
+    Math.round(x * 255)
+      .toString(16)
+      .padStart(2, "0");
+  return `#${part(color.r)}${part(color.g)}${part(color.b)}${a.toString(16).padStart(2, "0")}`.toUpperCase();
+};
+const normHex = (hex) => {
+  const h = hex.replace("#", "").toUpperCase();
+  return `#${h.length === 6 ? `${h}FF` : h}`;
+};
+
+// A Tailwind utility a variant's class string states, turned into the value
+// Figma should show. Prefixed utilities (hover:, disabled:, [&_svg]:) describe
+// states this check cannot see in a static variant, so they are skipped.
+function expectations(classString, resolveToken) {
+  const out = [];
+  for (const cls of classString.split(/\s+/).filter(Boolean)) {
+    if (cls.includes(":")) continue;
+    let m;
+    if ((m = /^bg-(.+)$/.exec(cls))) {
+      const value = resolveToken(m[1]);
+      if (value?.startsWith("#"))
+        out.push({ prop: "fill", cls, expected: normHex(value) });
+    } else if ((m = /^h-(\d+(?:\.\d+)?)$/.exec(cls))) {
+      out.push({ prop: "height", cls, expected: Number(m[1]) * 4 });
+    } else if ((m = /^px-(\d+(?:\.\d+)?)$/.exec(cls))) {
+      out.push({ prop: "padX", cls, expected: Number(m[1]) * 4 });
+    } else if ((m = /^gap-(\d+(?:\.\d+)?)$/.exec(cls))) {
+      out.push({ prop: "gap", cls, expected: Number(m[1]) * 4 });
+    } else if ((m = /^rounded-(.+)$/.exec(cls))) {
+      const value = resolveToken(`rounded-${m[1]}`);
+      if (value) out.push({ prop: "radius", cls, expected: px(value) });
+    }
+  }
+  return out;
+}
+
 // flat `Key: <scalar>` pairs — getEnum maps are always flat, so this stays
 // simple where objectKeys has to handle nested cva bodies.
 function enumPairs(body) {
@@ -279,10 +382,115 @@ for (const f of files) {
     .split("/")
     .pop()
     .replace(/\.tsx$/, "");
+  const src = await readFile(f, "utf8");
+  const { axes: classes, defaults } = cvaClasses(src);
   codeComponents.set(norm(base), {
     file: rel(f),
-    axes: cvaAxes(await readFile(f, "utf8")),
+    axes: cvaAxes(src),
+    classes,
+    defaults,
   });
+}
+
+const resolveToken = tokenResolver(
+  JSON.parse(await readFile(resolve(pkgDir, "tokens.json"), "utf8")),
+);
+
+// `Type=Danger, State=Default, Size=default` -> { Type: 'Danger', ... }
+const variantKey = (name) =>
+  Object.fromEntries(
+    name.split(",").map((part) => {
+      const [k, ...v] = part.split("=");
+      return [k.trim(), v.join("=").trim()];
+    }),
+  );
+
+/*
+ * Compares the values behind the names, for one component.
+ *
+ * A variant is only comparable when every axis other than the one under test
+ * sits at its base option, or a Disabled variant's grey would be diffed against
+ * the default fill. Base is derived, never hardcoded: for a mapped axis it is
+ * the option producing the cva defaultVariant, and for a boolean gate it is the
+ * option every map reports false for — `State=Default` is neither disabled nor
+ * loading, and the template already says so.
+ */
+function checkValues(comp, tpl, code, report) {
+  if (!comp.variants?.length) return;
+
+  const base = {};
+  for (const map of tpl?.maps ?? []) {
+    const resolved = resolveAxis(code.axes, map.pairs);
+    if (resolved) {
+      const want = code.defaults[resolved.axis];
+      const hit = Object.entries(map.pairs).find(([, v]) => v === want);
+      if (hit) base[map.axis] = hit[0];
+    } else {
+      // Every boolean map for this axis has to agree the option is off. That
+      // can leave more than one candidate: `Hover` emits no props either, since
+      // it is a CSS pseudo-state with nothing behind it. Comparing against it
+      // would diff the hover tint, so prefer the option Figma names `Default`
+      // and refuse to guess when neither that nor a single candidate exists.
+      const maps = (tpl?.maps ?? []).filter((x) => x.axis === map.axis);
+      const candidates = Object.keys(map.pairs).filter((option) =>
+        maps.every((x) => x.pairs[option] === false),
+      );
+      const chosen = candidates.includes("Default")
+        ? "Default"
+        : candidates.length === 1
+          ? candidates[0]
+          : null;
+      if (chosen) base[map.axis] = chosen;
+      else if (candidates.length)
+        report.warns.push(
+          `${comp.name}.${map.axis}: cannot tell which of ${candidates.join(", ")} is the base state, so values are unchecked`,
+        );
+    }
+  }
+
+  for (const map of tpl?.maps ?? []) {
+    const resolved = resolveAxis(code.axes, map.pairs);
+    if (!resolved) continue;
+    for (const [figmaOption, cvaOption] of Object.entries(map.pairs)) {
+      const classString = code.classes[resolved.axis]?.[cvaOption];
+      if (!classString) continue;
+
+      const wanted = { ...base, [map.axis]: figmaOption };
+      const variant = comp.variants.find((v) => {
+        const key = variantKey(v.name);
+        return Object.entries(wanted).every(([k, val]) => key[k] === val);
+      });
+      if (!variant) continue;
+
+      for (const { prop, cls, expected } of expectations(
+        classString,
+        resolveToken,
+      )) {
+        const actual =
+          prop === "fill"
+            ? variant.fill
+              ? toHex8(variant.fill.color, variant.fill.opacity)
+              : null
+            : variant[prop];
+        const label = `${comp.name} ${map.axis}=${figmaOption}`;
+        if (actual == null) {
+          report.warns.push(
+            `${label}: code says ${cls} (${expected}) but the Figma variant sets no ${prop}`,
+          );
+        } else if (
+          typeof expected === "number"
+            ? Math.abs(actual - expected) > 0.5
+            : actual !== expected
+        ) {
+          report.warns.push(
+            `${label}: ${cls} is ${expected} in code but ${actual} in Figma`,
+          );
+        } else {
+          report.ok.push(`${label}: ${cls} matches Figma ${prop} ${actual}`);
+        }
+      }
+    }
+  }
 }
 
 // ── Code Connect templates ──────────────────────────────────────────────────
@@ -316,6 +524,15 @@ const warns = [];
 const ok = [];
 const figma = Object.values(figmaComponents);
 const figmaById = Object.fromEntries(figma.map((c) => [c.id, c]));
+
+// Only the REST document carries the variant nodes values are read from. A
+// plugin dump reaches this far but silently checks names only, which would read
+// as full coverage, so say so.
+if (figma.length && !figma.some((c) => c.variants?.length))
+  warns.push(
+    `${figmaSource} carries no variant nodes, so colours and geometry went unchecked. ` +
+      `Use FIGMA_TOKEN for the value checks.`,
+  );
 
 for (const comp of figma) {
   const variantAxes = Object.fromEntries(
@@ -385,6 +602,8 @@ for (const comp of figma) {
         `${comp.name}: cva axis '${axis}' in ${code.file} is reachable from no Figma variant property`,
       );
   }
+
+  checkValues(comp, tpl, code, { ok, warns });
 }
 
 for (const t of templates) {

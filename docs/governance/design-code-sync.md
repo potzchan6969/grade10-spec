@@ -67,7 +67,11 @@ Where code and design genuinely disagree, that is a decision to record in an Ope
 
 A separate, token-free check runs in the test suite. `vitest --project contracts` reads each `cva` config out of the component source and fails when an option no story renders — the option list comes from the cva itself rather than a restated list, because cva keeps its config in a closure and exposes nothing at runtime. It accepts both authoring styles in this package, `variant: "line"` in a story's `args` and `variant="line"` inside a `render`, and it treats a `defaultVariants` option as covered by any story that omits the prop. An `argTypes` `options` entry does not count; only a story does.
 
-**What it does not check yet:** token values and geometry. Every axis and option can line up perfectly while the colours, heights, and padding are all wrong — which is exactly what happened to Button, whose variants matched by name for months while `default` rendered a solid fill against a design that specifies a tint.
+**Values, not just names.** Every axis and option can line up perfectly while the colours, heights, and padding are all wrong — which is exactly what happened to Button, whose variants matched by name for months while `default` rendered a solid fill against a design that specifies a tint. So each variant's own class string is resolved and compared against the variant Figma draws: `bg-*` through `tokens.json` to an 8-digit hex, and `h-*`, `px-*`, `gap-*`, and `rounded-*` to pixels. A mismatch is a warning, not an error — the component renders, it just does not render what was drawn.
+
+This needs no variables endpoint. REST resolves every binding before it serializes, so `/v1/files/:key` reports the colour and geometry a viewer actually sees; `boundVariables` carries opaque IDs whose names would need the Enterprise-gated scope, and nothing here reads them. The plugin dump has no variant nodes at all, so it checks names only and says so rather than reporting a clean run.
+
+A variant is only comparable when every axis other than the one under test sits at its base option, or a `Disabled` variant's grey would be diffed against the default fill. Base is derived: for a mapped axis it is the option producing the cva `defaultVariant`, and for a boolean gate it is the option every map reports false for. That leaves `Default` and `Hover` tied, since hover is a pseudo-state with no prop behind it, so the option Figma names `Default` wins and an unresolvable tie skips the component rather than silently diffing a hover tint.
 
 ## For designers: before you create or change a component
 
@@ -153,6 +157,6 @@ Be aware that the Storybook suite renders the **`default`** theme. It therefore 
 
 Recorded so they are not mistaken for coverage:
 
-- No token-value or geometry checking, as above.
+- Value checking covers a variant's own background and box geometry, not its children. A wrong label colour, icon size, or border is still invisible to it, and only the base state of each axis is compared — hover, disabled, and loading values are unchecked.
 - Design-system stories are smoke-only. During the Button work the entire 14-file suite passed with `{children}` deleted from the component. `apps/ui/src/stories` does use `play` functions, so the convention exists in the repository but not in this package; whether to adopt it here belongs to [`define-ui-component-interaction-test-scope`](../../openspec/changes/define-ui-component-interaction-test-scope/proposal.md).
 - The CI job skips with a warning annotation when `FIGMA_TOKEN` is unavailable, as on forks. A skipped run is not a passing run.
