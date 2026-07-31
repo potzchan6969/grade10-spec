@@ -6,9 +6,6 @@ const meta = {
   component: Button,
   tags: ["autodocs"],
   args: { children: "Button" },
-  // One entry per Figma `Type`, minus Loading, which is the `loading` prop
-  // rather than a variant. Sizes are the three rungs of "Buttons Size
-  // Reference" (96:546).
   argTypes: {
     variant: {
       control: "select",
@@ -29,7 +26,7 @@ export const Destructive: Story = { args: { variant: "destructive" } };
 export const Small: Story = { args: { size: "sm" } };
 export const Large: Story = { args: { size: "lg" } };
 export const Disabled: Story = { args: { disabled: true } };
-/** Mirrors Figma `Type=Loading`, which shares the disabled fill and adds a spinner. */
+/** `loading` shows a spinner and disables the button. */
 export const Loading: Story = { args: { loading: true, children: "Loading" } };
 export const DisabledOutline: Story = {
   args: { variant: "outline", disabled: true },
