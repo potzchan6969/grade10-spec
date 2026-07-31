@@ -46,6 +46,30 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* tinted-surface extension (not stock shadcn) — the Custom/* slots
+   * acetrader.css carries from Figma. Derived from the stock slots above so
+   * the baseline theme still renders components that bind them; acetrader.css
+   * overrides every one with a designed value. Re-stated verbatim in .dark so
+   * they re-resolve against that block's own base slots. */
+  --primary-muted: color-mix(in oklab, var(--primary) 10%, transparent);
+  --primary-muted-hover: color-mix(in oklab, var(--primary) 20%, transparent);
+  --primary-muted-foreground: var(--primary);
+  --muted-hover: color-mix(in oklab, var(--foreground) 10%, transparent);
+  --destructive-muted: color-mix(in oklab, var(--destructive) 10%, transparent);
+  --destructive-muted-hover: color-mix(
+    in oklab,
+    var(--destructive) 20%,
+    transparent
+  );
+  --destructive-muted-foreground: var(--destructive);
+  --destructive-border: color-mix(
+    in oklab,
+    var(--destructive) 50%,
+    transparent
+  );
+  --destructive-ring: color-mix(in oklab, var(--destructive) 40%, transparent);
+  --disabled: var(--muted);
+  --disabled-foreground: var(--muted-foreground);
 }
 
 .dark {
@@ -89,4 +113,24 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  /* tinted-surface extension — see the :root block. */
+  --primary-muted: color-mix(in oklab, var(--primary) 10%, transparent);
+  --primary-muted-hover: color-mix(in oklab, var(--primary) 20%, transparent);
+  --primary-muted-foreground: var(--primary);
+  --muted-hover: color-mix(in oklab, var(--foreground) 10%, transparent);
+  --destructive-muted: color-mix(in oklab, var(--destructive) 10%, transparent);
+  --destructive-muted-hover: color-mix(
+    in oklab,
+    var(--destructive) 20%,
+    transparent
+  );
+  --destructive-muted-foreground: var(--destructive);
+  --destructive-border: color-mix(
+    in oklab,
+    var(--destructive) 50%,
+    transparent
+  );
+  --destructive-ring: color-mix(in oklab, var(--destructive) 40%, transparent);
+  --disabled: var(--muted);
+  --disabled-foreground: var(--muted-foreground);
 }
