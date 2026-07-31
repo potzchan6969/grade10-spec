@@ -45,17 +45,28 @@ pnpm run test:stories                     # both Storybooks, as CI runs them
 reported but do not fail the run. Set it to `"error"` to gate CI once the
 outstanding violations are cleared.
 
-Design source of truth: the `.pen` library under `designs/` at the repository
-root (the `Mode` / unprefixed variable set), alongside the Figma pipeline below.
+Design source of truth: in practice the Figma file, via the token pipeline below.
+A `.pen` library also exists under `designs/` at the repository root; the two have
+diverged and which one is canonical is an open question — see the note at the end
+of the Figma section before syncing from either.
 
 ## How an app consumes it
 
 ```css
 /* app src/index.css */
 @import "tailwindcss";
-@import "@acetrader/design-system/theme.css";   /* tokens */
+@import "@acetrader/design-system/theme.css";            /* preamble + primitives */
+@import "@acetrader/design-system/themes/default.css";   /* :root slot values */
+@import "@acetrader/design-system/themes/acetrader.css"; /* .theme-acetrader overrides */
 @source "../../../../packages/design-system/src";  /* generate component classes */
 ```
+
+All three imports are required, in that order. `theme.css` carries the `@theme
+inline` mapping and the mode-independent primitives but no slot *values*;
+`default.css` defines them on `:root`, and `acetrader.css` overrides that base
+under `.theme-acetrader`. Importing `theme.css` alone leaves every slot
+undefined. Apply the theme by putting `theme-acetrader` on `<html>` — see
+`ColorThemeProvider`, whose class dimension is orthogonal to the `dark` class.
 
 ```tsx
 import { Button, Card } from "@acetrader/design-system"
@@ -146,6 +157,14 @@ since `norm()` strips the group, that choice never affects matching later, and
 variables that already exist keep the names they have. Re-running creates nothing
 and re-sets the same values.
 
+**What is and is not pulled.** `pull.mjs` reads exactly the two collections named
+in `tokens.config.json` — `primitiveCollection` and `semanticCollection`. The
+Figma file also carries `Typography`, `Motion`, and `Sizing`, and those are
+silently ignored. `Sizing` in particular models modes as *size variants*
+(`default`/`sm`/`xs`) that must coexist on one page, which the config's
+one-selector-per-mode theme model cannot express. Wiring them up is tracked
+separately; do not assume a green `tokens:sync` means the whole file landed.
+
 **Known limits.** (1) A token whose alias target does not exist is skipped and
 reported — primitives are created first, so this only bites on a ref to a name
 absent from `tokens.json`. (2) Every leg needs a human to run a plugin in Figma —
@@ -153,8 +172,21 @@ there is no unattended/CI path, since the REST route is Enterprise-only.
 (3) The `default` theme (`src/themes/default.css`) is code-only and outside this
 pipeline.
 
-> Note: the older Pencil-based flow described above (`designs/acetrader-ui.pen`)
-> predates this Figma pipeline; reconcile which is the live design source.
+**Both legs fail hard on a missing theme.** A renamed Figma mode used to warn and
+exit 0: the pull wrote `themes: {}` and the build then *skipped* rewriting
+`themes/<name>.css`, leaving the previous file on disk pointing at primitives the
+same run had just renamed. Stale-and-dangling builds and lints clean, so it only
+showed up in a browser. Both now exit 1 — `pull.mjs` lists the collection's real
+mode names, and it checks before writing, so a failed pull leaves `tokens.json`
+untouched.
+
+> **Unresolved: two design sources.** The Pencil flow above
+> (`designs/acetrader-ui.pen`) predates this Figma pipeline and the two now
+> disagree. The evidence says Figma is live: the July 2026 resync landed a
+> full semantic-layer rewrite plus three new collections that have no Pencil
+> counterpart, and `tokens.json` is now a projection of the Figma file. Until
+> someone decides, treat the Pencil section as historical and do not sync from
+> it — a `.pen` pull would revert the Figma work.
 
 ## Add a primitive
 
