@@ -1,4 +1,0 @@
-interface:
-  display_name: "Replicate Portable UI"
-  short_description: "Port app UI into controlled components"
-  default_prompt: "Use $replicate-portable-ui to recreate this external component as a tested portable UI system."

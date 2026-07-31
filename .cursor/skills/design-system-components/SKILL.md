@@ -5,7 +5,7 @@ description: Create or change a design-system primitive in `packages/design-syst
 
 # Design-system components
 
-Use this skill for changes under `packages/design-system/src/components/`. `packages/ui-components` is a separate package with a different contract; use `stateless-ui-components` there.
+Use this skill for changes under `packages/design-system/src/components/`. Product components are implemented in the consuming application, not here; see [`docs/governance/ui-component-contracts.md`](../../../docs/governance/ui-component-contracts.md) for their contract.
 
 Read [`docs/governance/design-code-sync.md`](../../../docs/governance/design-code-sync.md) for the ownership table and the reasoning behind every rule below, and [`packages/design-system/DESIGN.md`](../../../packages/design-system/DESIGN.md) before touching the token pipeline.
 
