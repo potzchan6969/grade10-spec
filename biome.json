@@ -10,6 +10,7 @@
     "includes": [
       "**",
       "!packages/ui-components/dist",
+      "!packages/ui-components/theme",
       "!packages/design-system/src/theme.css",
       "!packages/design-system/src/themes/acetrader.css"
     ]
