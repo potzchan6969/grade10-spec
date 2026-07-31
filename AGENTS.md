@@ -55,6 +55,8 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 
 `packages/design-system` (`@acetrader/design-system`) holds the theme tokens and the shadcn primitives beneath the product components. It is a separate package from `packages/ui-components` and the two do not import each other today; do not merge them without a recorded product decision.
 
+Use the `design-system-components` skill whenever creating or changing a primitive under `packages/design-system/src/components/`.
+
 - The package is consumed from source: `exports` point at `src/`, there is no build step, and no `dist/` is committed.
 - Stories are colocated with each primitive here, which is deliberate and differs from the `apps/ui/src/stories/` rule for `packages/ui-components`. Run them with `pnpm run storybook:design-system`.
 - Token flow: `tokens.json` is the source of truth, `tokens.config.json` holds the engineer-owned projection rules, and Figma plus the theme CSS files are both projections. Read `packages/design-system/DESIGN.md` before touching any leg of that pipeline.
