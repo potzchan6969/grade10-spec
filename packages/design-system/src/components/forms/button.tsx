@@ -57,11 +57,7 @@ function Button({
       {...props}
     >
       {loading ? (
-        <LoaderCircleIcon
-          aria-hidden="true"
-          className="animate-spin"
-          data-icon="inline-start"
-        />
+        <LoaderCircleIcon aria-hidden="true" className="animate-spin" />
       ) : null}
       {children}
     </ButtonPrimitive>

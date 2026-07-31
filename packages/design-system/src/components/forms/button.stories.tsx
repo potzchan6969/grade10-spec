@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ChevronRightIcon, PlusIcon } from "lucide-react";
 import { Button } from "./button";
 
 const meta = {
@@ -30,4 +31,29 @@ export const Disabled: Story = { args: { disabled: true } };
 export const Loading: Story = { args: { loading: true, children: "Loading" } };
 export const DisabledOutline: Story = {
   args: { variant: "outline", disabled: true },
+};
+
+/**
+ * Leading and trailing icons are children, in reading order. Figma exposes them
+ * as component properties and shows both by default; here the caller composes
+ * them, and the size rung's `gap` does the spacing.
+ */
+export const WithIcons: Story = {
+  args: {
+    children: (
+      <>
+        <PlusIcon />
+        Button
+        <ChevronRightIcon />
+      </>
+    ),
+  },
+};
+
+/** Icons scale with the rung: 16px at `default`, 14px at `sm`, 12px at `xs`. */
+export const WithIconsSmall: Story = {
+  args: { size: "sm", children: WithIcons.args?.children },
+};
+export const WithIconsExtraSmall: Story = {
+  args: { size: "xs", children: WithIcons.args?.children },
 };
