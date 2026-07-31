@@ -20,14 +20,14 @@ const buttonVariants = cva(
           "bg-destructive-muted text-destructive-muted-foreground hover:bg-destructive-muted-hover disabled:bg-disabled",
       },
       size: {
-        sm: "h-6 gap-1 rounded-sm px-2 text-xs [&_svg:not([class*='size-'])]:size-3",
-        md: "h-8 gap-2 rounded-md px-2 text-sm",
-        lg: "h-12 gap-2 rounded-lg px-4 text-base",
+        xs: "h-6 gap-1 rounded-sm px-2 text-xs [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-8 gap-2 rounded-md px-2 text-sm [&_svg:not([class*='size-'])]:size-3.5",
+        default: "h-12 gap-2 rounded-lg px-4 text-base",
       },
     },
     defaultVariants: {
       variant: "default",
-      size: "md",
+      size: "default",
     },
   },
 );
@@ -41,7 +41,7 @@ type ButtonProps = ButtonPrimitive.Props &
 function Button({
   className,
   variant = "default",
-  size = "md",
+  size = "default",
   loading = false,
   disabled,
   children,

@@ -71,10 +71,18 @@ Where code and design genuinely disagree, that is a decision to record in an Ope
 
 These are design-side obligations. Most drift found so far originated here, not in code.
 
-- **Every axis code must read has to be a VARIANT property on the component set.** Not an instance-level override, and not a mode of a variable collection. Modes are not component properties, so no template can read them. Button's three sizes live in the modes of a Sizing collection applied per instance, which is why the template currently has to hardcode `size="lg"` and why Dev Mode cannot tell a consumer which size an instance is.
+- **Every axis code must read has to be a VARIANT property on the component set.** Not an instance-level override, and not a mode of a variable collection. Modes are not component properties, so no template can read them.
+- **A variant axis cannot be driven by a mode-switched variable.** This is the subtler half of the rule above and it costs a rebuild to discover. Pinning a collection mode on a variant (`setExplicitVariableModeForCollection`) affects only that variant node's own rendering; an *instance* resolves modes from its own ancestor chain, not from its main component. So a Size axis built that way looks right in the component set and renders every instance at the default size. Each variant must bind size-specific primitives directly — `Rounded/rounded-*`, `Typeset/size-*`, `Spacing/space-*` — so it is self-contained. Reserve collection modes for things that genuinely vary by context, such as theme.
 - **One concept, one component set.** A link is its own set, not a Button variant. If it cannot be expressed as an option on an existing axis, it is a different component.
 - **Publish both the set and its Code Connect mapping.**
 - **Do not repoint or duplicate a file without updating `tokens.config.json` and every `url=` header.** A previous change left both templates aimed at a file that had been replaced; every `getEnum` would have missed.
+- **Name variant options after the tokens behind them.** The Button size rungs were once guessed from a `rounded` binding rather than read from the Sizing collection, which shifted every rung by one: "the sm button" meant 32px to design and 24px to code. Read the collection.
+
+### Editing a component set through the Plugin API
+
+`clone()` silently drops `componentPropertyReferences`. A cloned variant's children come back with `refs: {}`, so a clone-based build produces variants with nothing wired to the component's own properties — and the failure is invisible until someone tries to set a label. Capture the references before cloning and reapply them by child index.
+
+Deleting a variant that instances still use leaves an orphaned component behind (`Button/Loading/Default`) and a stale entry in the page traversal index, on which even `.parent` throws. Prefer addressing known node IDs over `findAllWithCriteria` after structural edits.
 
 ## Theme coverage
 

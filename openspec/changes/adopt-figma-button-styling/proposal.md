@@ -66,13 +66,11 @@ The design does define three sizes, in "Buttons Size Reference" (`96:546`):
 
 | Rung | height | padding-x | gap | radius | text |
 | --- | --- | --- | --- | --- | --- |
-| `sm` | 24 | 8 | 4 | 4 | 12/16 |
-| `md` | 32 | 8 | 8 | 6 | 14/20 |
-| `lg` | 48 | 16 | 8 | 8 | 16/24 |
+| `xs` | 24 | 8 | 4 | 4 | 12/16 |
+| `sm` | 32 | 8 | 8 | 6 | 14/20 |
+| `default` | 48 | 16 | 8 | 8 | 16/24 |
 
-They are named after the `rounded` binding, which resolves to the `rounded-lg` / `rounded-md` / `rounded-sm` primitives. Each text pair maps exactly onto a Tailwind default. `md` at 32px is what the component's `md` already was before this change.
-
-This corrects an earlier reading in this change, which took the component set's single drawn size as the default and moved `md` to 48px. 48px is `lg`; `md` stays 32px and stays the default.
+The rungs take their names from the modes of Figma's Sizing collection — `default`, `sm`, `xs` — read from the collection rather than inferred. An earlier pass in this change named them `lg`/`md`/`sm` by guessing from the `rounded` binding, which shifted every rung by one: a designer saying "the sm button" meant 32px while `size="sm"` in code produced 24px. Code follows Figma here, so `default` is the 48px button and the cva default, not a middle rung. Each text pair maps exactly onto a Tailwind default.
 
 `packages/ui-components` does not import this package, so its `dist/` does not need regenerating.
 
@@ -96,8 +94,7 @@ The `Custom/*` backfill in `default.css` covers only the eleven slots the button
 
 | Question | Owner | Note |
 | --- | --- | --- |
-| **The published Button set has no Size axis.** | Design | This is a file defect, not a modelling decision. "Buttons Size Reference" (`96:546`) varies size by switching the Sizing collection's mode on each instance, and instance modes are not component properties — so no Code Connect template can read the size. Until a Size VARIANT is added to the set, the mapping has to hardcode `size="lg"`, because every variant of the set is drawn at 48px while the component default is `md`. Adding the axis is the fix; everything else here is a workaround. |
-| Does `sm` need an icon-size rung of its own? | Design | The Sizing collection binds `height`, `padding-x`, `gap`, `rounded` and the type pair, but nothing for the icon. `sm` drops its glyphs to 12px by inference from its 12px text; `md` and `lg` keep the inherited 16px. |
+| Should the `Sizing` collection's modes stay now that nothing reads them? | Design | The Button no longer resolves size through them; each variant binds size-specific primitives directly. The modes are left in place because other components may use them, but they are now dead weight for Button. |
 | Figma's explicit radius scale disagrees with the derived one. | Design + Eng | The rungs use `rounded-sm` / `rounded-md`, which the preamble derives as 4.8px and 6.4px, while Figma's primitives are 4px and 6px. Left on the derived ladder rather than hardcoded, because [`resync-design-tokens-from-figma`](../resync-design-tokens-from-figma/proposal.md) already owns this decision. |
 | Should `outline` keep `bg-background`? | Design | Figma binds no fill on `Outline` at rest. Absence of a bound variable is not positive evidence of transparency, so the existing `bg-background` is retained. The two differ only over a non-page surface such as a card or popover. |
 | Do the `Custom/*` slots belong in the baseline `default` theme at all? | Eng | The alternative is to declare the button acetrader-only and let the stock theme render it unstyled. |

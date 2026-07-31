@@ -23,7 +23,15 @@ Done:
 
 Remaining:
 
-- [ ] **Restructure the Button component set with design.** Two defects, one conversation — both are Figma-side modelling problems rather than code gaps, and together they are the highest-value remaining work. Neither changes `button.tsx`, whose props already have the shape the fix would land on; what changes is that the template loses its workarounds and Dev Mode starts emitting correct snippets.
+- [x] **Restructured the Button component set on the `waGnoyIaXEId620TLen42o` branch.** Both defects below are fixed in Figma; the notes are kept because they explain the shape of the result and two Plugin API behaviours worth knowing before touching a component set again.
+
+  The set is now 60 variants — `Type` (5) × `State` (4, with `Loading` moved off `Type`) × `Size` (3). Every variant keeps the `Label#318:0` binding, including the loading ones, which the original `Type=Loading` variant did not have. The Size Reference instances were migrated onto the `Size` property and their manual mode pins cleared; the three orphaned loading instances were repointed. `check:design-system` now reports `Button.Size -> cva size: 3 option(s) matched`, replacing a warning that was previously unresolvable.
+
+  **`clone()` silently drops `componentPropertyReferences`.** Cloning a variant returns children with `refs: {}`, so a naive clone-based build produces variants with no properties wired — the exact defect being fixed, propagated 44 times. Capture the references before cloning and reapply them by child index afterwards.
+
+  **A mode-switched variable cannot drive a variant axis.** Pinning a collection mode on a variant via `setExplicitVariableModeForCollection` only affects that variant node's own rendering. An instance resolves modes from its own ancestor chain, not from its main component — so every instance rendered at 48px while correctly reporting `Size: xs`. The fix is for each variant to bind size-specific primitives directly (`Rounded/rounded-*`, `Typeset/size-*`, `Typeset/leading-*`, `Spacing/space-*`) with a literal height, making the variant self-contained. This is worth stating plainly: **the Sizing collection's mode-based design is fundamentally incompatible with a Size variant axis**, which is why the original file used per-instance mode overrides.
+
+- [ ] ~~Restructure the Button component set with design.~~ Original write-up retained below for the record. Two defects, one conversation — both are Figma-side modelling problems rather than code gaps, and together they are the highest-value remaining work. Neither changes `button.tsx`, whose props already have the shape the fix would land on; what changes is that the template loses its workarounds and Dev Mode starts emitting correct snippets.
 
   The set has **16 variants** today: five Types × three States, plus `Loading` × one. Note that the API's `instanceCount: 18` counts instance usages in the file, not variants — do not read it as the matrix size.
 

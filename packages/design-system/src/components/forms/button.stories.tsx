@@ -11,7 +11,7 @@ const meta = {
       control: "select",
       options: ["default", "outline", "secondary", "ghost", "destructive"],
     },
-    size: { control: "select", options: ["sm", "md", "lg"] },
+    size: { control: "select", options: ["xs", "sm", "default"] },
   },
 } satisfies Meta<typeof Button>;
 
@@ -24,7 +24,7 @@ export const Outline: Story = { args: { variant: "outline" } };
 export const Ghost: Story = { args: { variant: "ghost" } };
 export const Destructive: Story = { args: { variant: "destructive" } };
 export const Small: Story = { args: { size: "sm" } };
-export const Large: Story = { args: { size: "lg" } };
+export const ExtraSmall: Story = { args: { size: "xs" } };
 export const Disabled: Story = { args: { disabled: true } };
 /** `loading` shows a spinner and disables the button. */
 export const Loading: Story = { args: { loading: true, children: "Loading" } };
