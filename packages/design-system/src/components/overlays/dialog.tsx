@@ -60,10 +60,12 @@ function DialogContent({
           <DialogPrimitive.Close
             data-slot="dialog-close"
             render={
+              // Square icon sizing is set here rather than through a `size`
+              // rung: Figma's Button models one size and no icon-only shape, so
+              // the design system no longer offers an `icon-sm` to reach for.
               <Button
                 variant="ghost"
-                className="absolute top-2 right-2"
-                size="icon-sm"
+                className="absolute top-2 right-2 size-7 p-0"
               />
             }
           >
