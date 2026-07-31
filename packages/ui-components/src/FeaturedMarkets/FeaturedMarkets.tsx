@@ -1,7 +1,6 @@
+import { Button } from "@acetrader/design-system/components/forms/button";
+import { Stack } from "@acetrader/design-system/components/layout/stack";
 import type { ReactNode } from "react";
-import { Button } from "../Button.js";
-import { Stack } from "../Stack.js";
-import { Surface } from "../Surface.js";
 import {
   FeaturedMarketContent,
   FeaturedMarketSummaryCard,
@@ -86,17 +85,16 @@ export function FeaturedMarketsPanel<
   className,
 }: FeaturedMarketsPanelProps<DurationId, EventId, SourceId>) {
   return (
-    <Surface
+    <div
       className={["at-featured-panel", className].filter(Boolean).join(" ")}
       data-selection={selection.kind}
-      variant="panel"
     >
       {sidebar}
       <main className="at-featured-panel__content">
         {selection.kind === "duration" ? assetTabs : null}
         <FeaturedMarketContent state={content} />
       </main>
-    </Surface>
+    </div>
   );
 }
 
@@ -255,7 +253,7 @@ export function FeaturedMarketsMobile<
         value={props.mobileTab}
       />
       {props.mobileTab === "crypto" ? (
-        <Surface className="at-featured-mobile__crypto" variant="panel">
+        <div className="at-featured-mobile__crypto">
           <FeaturedAssetTabs
             assets={props.assets}
             onAssetChange={(nextAssetId) =>
@@ -268,7 +266,7 @@ export function FeaturedMarketsMobile<
             selectedAssetId={assetId}
           />
           <MobileCards state={cards} />
-        </Surface>
+        </div>
       ) : (
         <MobileCards state={cards} />
       )}

@@ -1,7 +1,6 @@
+import { Skeleton } from "@acetrader/design-system/components/display/skeleton";
+import { Button } from "@acetrader/design-system/components/forms/button";
 import { type ReactNode, useEffect, useId, useRef } from "react";
-
-import { Button } from "./Button.js";
-import { Skeleton } from "./Skeleton.js";
 
 export type PaymentAction = {
   label: string;
@@ -223,9 +222,10 @@ export function PaymentPromoCodeField({ state }: PaymentPromoCodeFieldProps) {
           value={state.value}
         />
         <Button
-          disabled={state.disabled || state.applying || !state.value.trim()}
+          disabled={state.disabled || !state.value.trim()}
+          loading={state.applying}
           onClick={state.onApply}
-          size="small"
+          size="sm"
           variant="secondary"
         >
           {state.applying ? "Applying…" : (state.applyLabel ?? "Apply")}
@@ -424,12 +424,13 @@ export function FiatPaymentCheckoutDialog({
 function PaymentActionButton({ action }: { action: PaymentAction }) {
   return (
     <Button
-      disabled={action.disabled || action.loading}
+      disabled={action.disabled}
+      leading={action.leadingVisual}
+      loading={action.loading}
       onClick={action.onAction}
-      variant={action.variant === "secondary" ? "secondary" : "primary"}
+      variant={action.variant === "secondary" ? "secondary" : "default"}
     >
-      {action.leadingVisual}
-      {action.loading ? "Loading…" : action.label}
+      {action.label}
     </Button>
   );
 }

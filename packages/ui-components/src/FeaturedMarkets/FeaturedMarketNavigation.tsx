@@ -1,9 +1,12 @@
-import { Badge } from "../Badge.js";
-import { SegmentedControl } from "../SegmentedControl.js";
-import { Skeleton } from "../Skeleton.js";
-import { Stack } from "../Stack.js";
-import { Surface } from "../Surface.js";
-import { Text } from "../Text.js";
+import { Badge } from "@acetrader/design-system/components/display/badge";
+import { Skeleton } from "@acetrader/design-system/components/display/skeleton";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@acetrader/design-system/components/display/tabs";
+import { Text } from "@acetrader/design-system/components/display/text";
+import { Stack } from "@acetrader/design-system/components/layout/stack";
 import { FeaturedMarketStatus } from "./FeaturedMarketStatus.js";
 import type {
   FeaturedAsset,
@@ -12,6 +15,18 @@ import type {
   FeaturedEventMarket,
   FeaturedMobileTab,
 } from "./types.js";
+
+/**
+ * Badge has a destructive rung but no success rung, so the positive tone is
+ * applied from the token pair rather than invented as a design-system variant.
+ */
+const oddsTone = {
+  error: { variant: "destructive" as const, className: undefined },
+  success: {
+    variant: "secondary" as const,
+    className: "bg-success text-success-foreground",
+  },
+};
 
 export type FeaturedAssetTabsProps<AssetId extends string> = {
   assets: readonly FeaturedAsset<AssetId>[];
@@ -47,7 +62,12 @@ export function FeaturedAssetTabs<AssetId extends string>({
           >
             <span>{asset.label}</span>
             {asset.odds ? (
-              <Badge tone={asset.odds.tone}>{asset.odds.label}</Badge>
+              <Badge
+                className={oddsTone[asset.odds.tone].className}
+                variant={oddsTone[asset.odds.tone].variant}
+              >
+                {asset.odds.label}
+              </Badge>
             ) : (
               <Skeleton
                 className="at-featured-assets__placeholder"
@@ -75,16 +95,16 @@ export function FeaturedDurationList<DurationId extends string>({
   return (
     <Stack className="at-featured-nav-list" gap="xs">
       {durations.map((duration) => (
-        <Surface
-          as="button"
+        <button
+          className="at-featured-nav-item"
+          data-selected={duration.id === selectedDurationId || undefined}
           disabled={duration.disabled}
           key={duration.id}
           onClick={() => onDurationChange(duration.id)}
-          selected={duration.id === selectedDurationId}
-          variant="ghost"
+          type="button"
         >
           {duration.label}
-        </Surface>
+        </button>
       ))}
     </Stack>
   );
@@ -112,15 +132,15 @@ export function FeaturedEventList<
   return (
     <Stack className="at-featured-nav-list" gap="xs">
       {events.data.map((event) => (
-        <Surface
-          as="button"
+        <button
+          className="at-featured-nav-item"
+          data-selected={event.id === selectedEventId || undefined}
           key={event.id}
           onClick={() => onEventChange(event.id)}
-          selected={event.id === selectedEventId}
-          variant="ghost"
+          type="button"
         >
           <Text truncate>{event.label}</Text>
-        </Surface>
+        </button>
       ))}
     </Stack>
   );
@@ -198,16 +218,22 @@ export function FeaturedSourceTabs<SourceId extends string>({
 }: FeaturedSourceTabsProps<SourceId>) {
   if (sources.length < 2) return null;
   return (
-    <SegmentedControl
-      ariaLabel="Market source"
-      onValueChange={onValueChange}
-      options={sources.map((source) => ({
-        disabled: source.disabled,
-        label: source.shortLabel ?? source.label,
-        value: source.id,
-      }))}
+    <Tabs
+      onValueChange={(next) => onValueChange(next as SourceId)}
       value={value}
-    />
+    >
+      <TabsList aria-label="Market source" className="w-full">
+        {sources.map((source) => (
+          <TabsTrigger
+            disabled={source.disabled}
+            key={source.id}
+            value={source.id}
+          >
+            {source.shortLabel ?? source.label}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+    </Tabs>
   );
 }
 
@@ -221,14 +247,14 @@ export function FeaturedMobileTabs({
   onValueChange,
 }: FeaturedMobileTabsProps) {
   return (
-    <SegmentedControl
-      ariaLabel="Featured markets"
-      onValueChange={onValueChange}
-      options={[
-        { label: "Crypto Up or Down", value: "crypto" },
-        { label: "Trending", value: "trending" },
-      ]}
+    <Tabs
+      onValueChange={(next) => onValueChange(next as FeaturedMobileTab)}
       value={value}
-    />
+    >
+      <TabsList aria-label="Featured markets" className="w-full">
+        <TabsTrigger value="crypto">Crypto Up or Down</TabsTrigger>
+        <TabsTrigger value="trending">Trending</TabsTrigger>
+      </TabsList>
+    </Tabs>
   );
 }

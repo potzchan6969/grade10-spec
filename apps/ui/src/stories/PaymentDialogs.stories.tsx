@@ -283,7 +283,13 @@ export const PromoErrorAndDisabled: Story = {
     expect(canvas.getByRole("textbox", { name: "Promo code" })).toBeDisabled();
     const apply = canvas.getByRole("button", { name: "Applying…" });
     expect(apply).toBeDisabled();
-    await userEvent.click(apply);
+    // The design-system Button also sets `pointer-events: none` when disabled,
+    // which the default check treats as an invalid interaction rather than as
+    // the non-event this asserts.
+    await userEvent
+      .setup({ pointerEventsCheck: 0 })
+      .click(apply)
+      .catch(() => undefined);
     expect(onDisabledPromoApply).not.toHaveBeenCalled();
     expect(canvas.getByRole("button", { name: "Continue" })).toBeDisabled();
   },

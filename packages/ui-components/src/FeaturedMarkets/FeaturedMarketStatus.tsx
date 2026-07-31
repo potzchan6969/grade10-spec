@@ -1,7 +1,7 @@
-import { Button } from "../Button.js";
-import { Skeleton } from "../Skeleton.js";
-import { Stack } from "../Stack.js";
-import { Text } from "../Text.js";
+import { Skeleton } from "@acetrader/design-system/components/display/skeleton";
+import { Text } from "@acetrader/design-system/components/display/text";
+import { Button } from "@acetrader/design-system/components/forms/button";
+import { Stack } from "@acetrader/design-system/components/layout/stack";
 import type { FeaturedAsyncState } from "./types.js";
 
 export type FeaturedMarketStatusProps<T> = {

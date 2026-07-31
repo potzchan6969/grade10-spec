@@ -1,7 +1,8 @@
-import { Button } from "../Button.js";
-import { Stack } from "../Stack.js";
-import { Surface } from "../Surface.js";
-import { Text } from "../Text.js";
+import { Card } from "@acetrader/design-system/components/display/card";
+import { Text } from "@acetrader/design-system/components/display/text";
+import { Button } from "@acetrader/design-system/components/forms/button";
+import { Stack } from "@acetrader/design-system/components/layout/stack";
+import { cn } from "../lib/utils.js";
 import { FeaturedMarketLineChart } from "./chart-runtime/FeaturedMarketLineChart.js";
 import { FeaturedSourceTabs } from "./FeaturedMarketNavigation.js";
 import { FeaturedMarketStatus } from "./FeaturedMarketStatus.js";
@@ -11,6 +12,9 @@ import type {
   FeaturedMarketPresentation,
   FeaturedMarketSummaryData,
 } from "./types.js";
+
+/** The design system has no icon-only rung, so the square is applied here. */
+const iconButton = "aspect-square px-0";
 
 export type FeaturedMarketHeaderProps = {
   header: FeaturedMarketSummaryData["header"];
@@ -44,9 +48,10 @@ export function FeaturedMarketHeader({ header }: FeaturedMarketHeaderProps) {
       {header.action ? (
         <Button
           aria-label={header.action.label}
+          className={cn("ml-auto", iconButton)}
           disabled={header.action.disabled}
-          iconOnly
           onClick={header.action.onAction}
+          size="sm"
           variant="ghost"
         >
           ↗
@@ -65,7 +70,7 @@ export function FeaturedMarketStats({ stats }: FeaturedMarketStatsProps) {
     <div className="at-market-stats">
       {stats.map((stat) => (
         <div key={stat.label}>
-          <Text data-tone={stat.tone ?? "primary"} size="base" weight="medium">
+          <Text size="base" tone={stat.tone ?? "primary"} weight="medium">
             {stat.value}
           </Text>
           <Text size="xs" tone="secondary">
@@ -94,9 +99,9 @@ function OutcomeRow<SourceId extends string>({
         {values.map((value) => (
           <Text
             data-state={value.state ?? "active"}
-            data-tone={value.tone ?? "primary"}
             key={value.sourceId}
             size="sm"
+            tone={value.tone ?? "primary"}
           >
             {value.resolvedLabel ?? value.value}
           </Text>
@@ -148,12 +153,7 @@ export function FeaturedMarketSummaryCard<SourceId extends string>({
   className,
 }: FeaturedMarketSummaryCardProps<SourceId>) {
   return (
-    <Surface
-      className={["at-market-summary-card", className]
-        .filter(Boolean)
-        .join(" ")}
-      variant="card"
-    >
+    <Card className={cn("at-market-summary-card", className)}>
       <FeaturedMarketHeader header={data.header} />
       {data.sourceSelection ? (
         <FeaturedSourceTabs {...data.sourceSelection} />
@@ -168,6 +168,7 @@ export function FeaturedMarketSummaryCard<SourceId extends string>({
         <div className="at-market-summary-card__actions">
           {data.primaryAction ? (
             <Button
+              className="flex-1"
               disabled={data.primaryAction.disabled}
               onClick={data.primaryAction.onAction}
               variant="secondary"
@@ -178,8 +179,8 @@ export function FeaturedMarketSummaryCard<SourceId extends string>({
           {data.secondaryAction ? (
             <Button
               aria-label={data.secondaryAction.label}
+              className={iconButton}
               disabled={data.secondaryAction.disabled}
-              iconOnly
               onClick={data.secondaryAction.onAction}
               variant="ghost"
             >
@@ -188,7 +189,7 @@ export function FeaturedMarketSummaryCard<SourceId extends string>({
           ) : null}
         </div>
       ) : null}
-    </Surface>
+    </Card>
   );
 }
 
@@ -202,10 +203,7 @@ export function FeaturedMarketChartCard<SourceId extends string>({
   className,
 }: FeaturedMarketChartCardProps<SourceId>) {
   return (
-    <Surface
-      className={["at-market-chart-card", className].filter(Boolean).join(" ")}
-      variant="card"
-    >
+    <Card className={cn("at-market-chart-card", className)}>
       <FeaturedMarketHeader header={data.summary.header} />
       <FeaturedMarketStats stats={data.summary.stats} />
       {data.summary.sourceSelection ? (
@@ -217,7 +215,7 @@ export function FeaturedMarketChartCard<SourceId extends string>({
         visibleSourceId={data.summary.sourceSelection?.value}
       />
       <FeaturedMarketInsight insight={data.summary.insight} />
-    </Surface>
+    </Card>
   );
 }
 

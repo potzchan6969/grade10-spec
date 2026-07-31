@@ -1,38 +1,50 @@
 import {
-  Button,
   FeaturedAssetTabs,
-  SegmentedControl,
-  Skeleton,
-  Surface,
+  FeaturedDurationList,
+  FeaturedMarketStatus,
+  FeaturedSourceTabs,
 } from "@acetrader/pred-spec-ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, within } from "storybook/test";
 
-const onButtonAction = fn();
-const onSurfaceAction = fn();
-const onDisabledAction = fn();
+const onRetry = fn();
+const onDurationChange = fn();
+const onDisabledDuration = fn();
 
-function PrimitiveDemo() {
-  const [value, setValue] = useState<"one" | "two">("one");
+/**
+ * The primitives now come from `@acetrader/design-system` and are covered by
+ * that package's Storybook. What stays portable — and what this story asserts —
+ * is the controlled behaviour the composites put on top of them.
+ */
+function CompositeDemo() {
+  const [source, setSource] = useState<"pyth" | "chainlink">("pyth");
   return (
     <div style={{ display: "grid", gap: 16, maxWidth: 420 }}>
-      <Button onClick={onButtonAction}>Continue</Button>
-      <Surface as="button" onClick={onSurfaceAction} variant="ghost">
-        Choose plan
-      </Surface>
-      <Button disabled onClick={onDisabledAction}>
-        Unavailable
-      </Button>
-      <SegmentedControl
-        ariaLabel="Example choices"
-        onValueChange={setValue}
-        options={[
-          { label: "One", value: "one" },
-          { label: "Two", value: "two" },
-          { disabled: true, label: "Locked", value: "locked" as "one" },
+      <FeaturedMarketStatus
+        state={{
+          message: "Market feed unavailable.",
+          onRetry,
+          status: "error",
+        }}
+      />
+      <FeaturedDurationList
+        durations={[
+          { id: "1h", label: "1 hour" },
+          { disabled: true, id: "1d", label: "1 day" },
         ]}
-        value={value}
+        onDurationChange={(id) =>
+          id === "1d" ? onDisabledDuration() : onDurationChange(id)
+        }
+        selectedDurationId="1h"
+      />
+      <FeaturedSourceTabs
+        onValueChange={setSource}
+        sources={[
+          { id: "pyth", label: "Pyth" },
+          { id: "chainlink", label: "Chainlink" },
+        ]}
+        value={source}
       />
     </div>
   );
@@ -41,7 +53,7 @@ function PrimitiveDemo() {
 function MotionDemo({ paused = false }: { paused?: boolean }) {
   return (
     <div style={{ display: "grid", gap: 16, maxWidth: 420 }}>
-      <Skeleton shape="line" />
+      <FeaturedMarketStatus state={{ status: "loading" }} />
       <FeaturedAssetTabs
         assets={[
           {
@@ -67,34 +79,33 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const ControlledPrimitives: Story = {
-  render: () => <PrimitiveDemo />,
+export const ControlledComposites: Story = {
+  render: () => <CompositeDemo />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
-    expect(onButtonAction).toHaveBeenCalledTimes(1);
-    await userEvent.click(canvas.getByRole("button", { name: "Choose plan" }));
-    expect(onSurfaceAction).toHaveBeenCalledTimes(1);
 
-    const two = canvas.getByRole("tab", { name: "Two" });
-    two.focus();
-    await userEvent.keyboard("[Space]");
-    expect(two).toHaveAttribute("aria-selected", "true");
+    await userEvent.click(canvas.getByRole("button", { name: "Try again" }));
+    expect(onRetry).toHaveBeenCalledTimes(1);
 
-    const unavailable = canvas.getByRole("button", { name: "Unavailable" });
+    await userEvent.click(canvas.getByRole("button", { name: "1 hour" }));
+    expect(onDurationChange).toHaveBeenCalledTimes(1);
+
+    const unavailable = canvas.getByRole("button", { name: "1 day" });
     expect(unavailable).toBeDisabled();
-    expect(unavailable.getAnimations()).toHaveLength(0);
     await userEvent.click(unavailable);
-    expect(onDisabledAction).not.toHaveBeenCalled();
-    expect(canvas.getByRole("tab", { name: "Locked" })).toBeDisabled();
+    expect(onDisabledDuration).not.toHaveBeenCalled();
+
+    const chainlink = canvas.getByRole("tab", { name: "Chainlink" });
+    await userEvent.click(chainlink);
+    expect(chainlink).toHaveAttribute("aria-selected", "true");
   },
 };
 
 export const CssMotion: Story = {
   render: () => <MotionDemo />,
   play: async ({ canvasElement }) => {
-    const skeleton = canvasElement.querySelector(".at-skeleton");
-    const badge = canvasElement.querySelector(".at-badge");
+    const skeleton = canvasElement.querySelector('[data-slot="skeleton"]');
+    const badge = canvasElement.querySelector('[data-slot="badge"]');
     expect(skeleton).not.toBeNull();
     expect(badge).not.toBeNull();
     const skeletonAnimation = skeleton?.getAnimations()[0];
@@ -114,7 +125,7 @@ export const PausedMotion: Story = {
   render: () => <MotionDemo paused />,
   play: async ({ canvasElement }) => {
     const skeletonAnimation = canvasElement
-      .querySelector(".at-skeleton")
+      .querySelector('[data-slot="skeleton"]')
       ?.getAnimations()[0];
     expect(skeletonAnimation?.playState).toBe("paused");
   },

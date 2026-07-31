@@ -1,7 +1,3 @@
-export type { BadgeProps } from "./Badge.js";
-export { Badge } from "./Badge.js";
-export type { ButtonProps } from "./Button.js";
-export { Button } from "./Button.js";
 export type { FeaturedMarketLineChartProps } from "./FeaturedMarkets/chart-runtime/FeaturedMarketLineChart.js";
 export { FeaturedMarketLineChart } from "./FeaturedMarkets/chart-runtime/FeaturedMarketLineChart.js";
 export type {
@@ -105,16 +101,3 @@ export {
   PaymentTermsNotice,
   PaymentTimeline,
 } from "./PaymentDialogs.js";
-export type {
-  SegmentedControlOption,
-  SegmentedControlProps,
-} from "./SegmentedControl.js";
-export { SegmentedControl } from "./SegmentedControl.js";
-export type { SkeletonProps } from "./Skeleton.js";
-export { Skeleton } from "./Skeleton.js";
-export type { StackProps } from "./Stack.js";
-export { Stack } from "./Stack.js";
-export type { SurfaceButtonProps, SurfaceProps } from "./Surface.js";
-export { Surface } from "./Surface.js";
-export type { TextProps } from "./Text.js";
-export { Text } from "./Text.js";

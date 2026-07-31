@@ -1,16 +1,9 @@
 import {
-  Badge,
-  Button,
   FeaturedMarketStatus,
   FeaturedMarketSummaryCard,
   FeaturedMarkets,
   FeaturedMarketsMobile,
   type FeaturedMarketsProps,
-  SegmentedControl,
-  Skeleton,
-  Stack,
-  Surface,
-  Text,
 } from "@acetrader/pred-spec-ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
@@ -346,7 +339,7 @@ export const RetryAndDisabled: Story = {
   render: () => {
     const onAssetChange = fn();
     return (
-      <Stack gap="md">
+      <div style={{ display: "grid", gap: 16 }}>
         <FeaturedMarketStatus
           state={{
             message: "Markets are unavailable.",
@@ -362,7 +355,7 @@ export const RetryAndDisabled: Story = {
           ]}
           onSelectionChange={onAssetChange}
         />
-      </Stack>
+      </div>
     );
   },
   play: async ({ canvasElement }) => {
@@ -371,34 +364,4 @@ export const RetryAndDisabled: Story = {
     expect(onRetry).toHaveBeenCalledTimes(1);
     expect(canvas.getByRole("tab", { name: /XRP/ })).toBeDisabled();
   },
-};
-
-export const FoundationPrimitives: Story = {
-  render: () => (
-    <Stack gap="lg" style={{ maxWidth: 420 }}>
-      <Surface variant="panel">
-        <Stack direction="horizontal" gap="sm">
-          <Text as="h2" size="lg">
-            Surface
-          </Text>
-          <Badge tone="success">Ready</Badge>
-        </Stack>
-      </Surface>
-      <Stack direction="horizontal" gap="sm">
-        <Button>Primary</Button>
-        <Button variant="secondary">Secondary</Button>
-        <Button variant="ghost">Ghost</Button>
-      </Stack>
-      <SegmentedControl
-        ariaLabel="Example choices"
-        onValueChange={() => undefined}
-        options={[
-          { label: "One", value: "one" },
-          { label: "Two", value: "two" },
-        ]}
-        value="one"
-      />
-      <Skeleton shape="line" />
-    </Stack>
-  ),
 };
