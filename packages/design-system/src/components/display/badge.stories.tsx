@@ -10,15 +10,9 @@ const meta = {
   argTypes: {
     variant: {
       control: "select",
-      options: [
-        "default",
-        "secondary",
-        "destructive",
-        "outline",
-        "ghost",
-        "link",
-      ],
+      options: ["default", "success", "error", "warning"],
     },
+    size: { control: "inline-radio", options: ["default", "sm"] },
   },
 } satisfies Meta<typeof Badge>;
 
@@ -26,18 +20,33 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-export const Secondary: Story = { args: { variant: "secondary" } };
-export const Destructive: Story = { args: { variant: "destructive" } };
-export const Outline: Story = { args: { variant: "outline" } };
-export const Ghost: Story = { args: { variant: "ghost" } };
-export const Link: Story = { args: { variant: "link" } };
+export const Success: Story = { args: { variant: "success" } };
+// Named `ErrorStatus` rather than `Error` so the export does not shadow the global.
+export const ErrorStatus: Story = { args: { variant: "error" } };
+export const Warning: Story = { args: { variant: "warning" } };
 
-/** `data-icon` tightens the padding on the side the icon sits. */
+/** The two rungs Figma draws: 24px and 20px tall. */
+export const Small: Story = { args: { size: "sm" } };
+
+export const Sizes: Story = {
+  render: (args) => (
+    <div className="flex items-center gap-3">
+      {(["default", "sm"] as const).map((size) => (
+        <Badge key={size} {...args} size={size}>
+          {size}
+        </Badge>
+      ))}
+    </div>
+  ),
+};
+
+/** Every status variant carries a leading icon in Figma. */
 export const WithIcon: Story = {
   args: {
+    variant: "success",
     children: (
       <>
-        <CheckIcon data-icon="inline-start" />
+        <CheckIcon />
         Verified
       </>
     ),
@@ -47,7 +56,6 @@ export const WithIcon: Story = {
 /** `render` swaps the tag — hover styles are scoped to anchors. */
 export const AsLink: Story = {
   args: {
-    variant: "secondary",
     // biome-ignore lint/a11y/useAnchorContent: render prop only supplies the tag; Badge injects the children.
     render: <a href="#badge" />,
   },

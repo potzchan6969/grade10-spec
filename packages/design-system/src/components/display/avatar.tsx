@@ -6,17 +6,20 @@ import type * as React from "react";
 
 function Avatar({
   className,
-  size = "md",
+  size = "default",
   ...props
 }: AvatarPrimitive.Root.Props & {
-  size?: "md" | "sm" | "lg";
+  size?: "default" | "sm" | "lg";
 }) {
   return (
     <AvatarPrimitive.Root
       data-slot="avatar"
       data-size={size}
+      // Figma's Sizing collection puts the rungs at size-16 / size-12 / size-8
+      // (64 / 48 / 32px). The rung names are Figma's — `default` is the middle
+      // one, not a synonym for the smallest.
       className={cn(
-        "group/avatar relative flex size-8 shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten",
+        "group/avatar relative flex size-12 shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken data-[size=lg]:size-16 data-[size=sm]:size-8 dark:after:mix-blend-lighten",
         className,
       )}
       {...props}
@@ -59,9 +62,11 @@ function AvatarBadge({ className, ...props }: React.ComponentProps<"span">) {
       data-slot="avatar-badge"
       className={cn(
         "absolute right-0 bottom-0 z-10 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground bg-blend-color ring-2 ring-background select-none",
-        "group-data-[size=sm]/avatar:size-2 group-data-[size=sm]/avatar:[&>svg]:hidden",
-        "group-data-[size=md]/avatar:size-2.5 group-data-[size=md]/avatar:[&>svg]:size-2",
-        "group-data-[size=lg]/avatar:size-3 group-data-[size=lg]/avatar:[&>svg]:size-2",
+        // Figma draws no badge on Avatar, so these stay derived: roughly a
+        // quarter of each rung, tracking the rungs above.
+        "group-data-[size=sm]/avatar:size-2.5 group-data-[size=sm]/avatar:[&>svg]:hidden",
+        "group-data-[size=default]/avatar:size-3.5 group-data-[size=default]/avatar:[&>svg]:size-2.5",
+        "group-data-[size=lg]/avatar:size-4 group-data-[size=lg]/avatar:[&>svg]:size-3",
         className,
       )}
       {...props}
@@ -90,7 +95,7 @@ function AvatarGroupCount({
     <div
       data-slot="avatar-group-count"
       className={cn(
-        "relative flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-sm text-muted-foreground ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3",
+        "relative flex size-12 shrink-0 items-center justify-center rounded-full bg-muted text-sm text-muted-foreground ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-16 group-has-data-[size=sm]/avatar-group:size-8 [&>svg]:size-5 group-has-data-[size=lg]/avatar-group:[&>svg]:size-6 group-has-data-[size=sm]/avatar-group:[&>svg]:size-4",
         className,
       )}
       {...props}

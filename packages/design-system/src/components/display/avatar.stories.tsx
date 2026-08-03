@@ -15,9 +15,9 @@ const meta = {
   title: "Components/Avatar",
   component: Avatar,
   tags: ["autodocs"],
-  args: { size: "md" },
+  args: { size: "default" },
   argTypes: {
-    size: { control: "inline-radio", options: ["sm", "md", "lg"] },
+    size: { control: "inline-radio", options: ["sm", "default", "lg"] },
   },
   render: (args) => (
     <Avatar {...args}>
@@ -44,7 +44,7 @@ export const Fallback: Story = {
 export const Sizes: Story = {
   render: () => (
     <div className="flex items-end gap-3">
-      {(["sm", "md", "lg"] as const).map((size) => (
+      {(["sm", "default", "lg"] as const).map((size) => (
         <Avatar key={size} size={size}>
           <AvatarImage src={SRC} alt="@shadcn" />
           <AvatarFallback>CN</AvatarFallback>
@@ -58,7 +58,7 @@ export const Sizes: Story = {
 export const WithBadge: Story = {
   render: () => (
     <div className="flex items-end gap-3">
-      {(["sm", "md", "lg"] as const).map((size) => (
+      {(["sm", "default", "lg"] as const).map((size) => (
         <Avatar key={size} size={size}>
           <AvatarImage src={SRC} alt="@shadcn" />
           <AvatarFallback>CN</AvatarFallback>
