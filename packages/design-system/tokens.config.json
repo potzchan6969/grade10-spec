@@ -1,5 +1,5 @@
 {
-  "figmaFile": "https://www.figma.com/design/jlrBVwtKcun1NnJgohmFcn/branch/waGnoyIaXEId620TLen42o/Sean-x-Constance?node-id=96-546&m=draw",
+  "figmaFile": "https://www.figma.com/design/jlrBVwtKcun1NnJgohmFcn/Sean-x-Constance",
   "_figmaFile_note": "Which Figma file to sync. Accepts a full figma.com/design/<key>/... link OR a bare file key. Override per-run with the FIGMA_FILE env var. Controls the REST pull target; the plugin-dump pull and push run against whichever file the Figma plugin is connected to (the generated push script names the intended file as a guard-rail).",
   "primitiveCollection": "Foundation",
   "semanticCollection": "Semantic",
@@ -15,6 +15,6 @@
   "_pipeline_note": "2-way token sync. Source of truth = tokens.json (designer-owned DATA). This file holds engineer-owned PROJECTION rules (slotMap, selectors, collections). Legs: tokens:pull (Figma dump -> tokens.json), tokens:build (tokens.json -> CSS), tokens:push (tokens.json -> Figma plugin script). `default` theme is code-only (src/themes/default.css) and outside this pipeline.",
   "_slotMap_note": "Near-identity. The Figma Semantic collection now models the shadcn contract directly (Base/*, Status/*, Chart/*, Sidebar/*), so a token's normalized name IS its slot name and build-css emits it from the raw section — build-css skips any slot where ref === slot. Only --radius still needs a mapping, because it aliases a Foundation primitive rather than a semantic token. Do not re-add identity entries; they emit nothing. NOTE: an unmapped slot does NOT fall back to nothing; index.css imports default.css first, so .theme-acetrader inherits default's LIGHT-mode value for anything it does not define.",
   "slotMap": {
-    "--radius": "Rounded/rounded-lg"
+    "--radius": "Radius/radius-lg"
   }
 }
