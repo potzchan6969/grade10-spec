@@ -18,11 +18,16 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground",
         destructive:
-          "bg-destructive-muted text-destructive-muted-foreground hover:bg-destructive-muted-hover disabled:bg-disabled",
+          "bg-destructive-muted text-destructive-foreground hover:bg-destructive-muted-hover disabled:bg-disabled",
       },
       size: {
-        xs: "h-6 gap-1 rounded-sm px-2 text-xs [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-8 gap-2 rounded-md px-2 text-sm [&_svg:not([class*='size-'])]:size-3.5",
+        // Figma binds both small rungs to `Radius/radius-sm` (4px). The
+        // `rounded-sm`/`rounded-md` utilities cannot express that: theme.preamble.css
+        // derives the whole scale proportionally from `--radius`, so they compile to
+        // calc(--radius * 0.6) and calc(--radius * 0.8) — 4.8px and 6.4px against the
+        // acetrader `--radius` of 8px. Bind the Foundation primitive directly instead.
+        xs: "h-6 gap-1 rounded-(--radius-sm) px-2 text-xs [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-8 gap-2 rounded-(--radius-sm) px-2 text-sm [&_svg:not([class*='size-'])]:size-3.5",
         default: "h-12 gap-2 rounded-lg px-4 text-base",
       },
     },
