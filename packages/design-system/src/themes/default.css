@@ -70,6 +70,7 @@
   --destructive-ring: color-mix(in oklab, var(--destructive) 40%, transparent);
   --disabled: var(--muted);
   --disabled-foreground: var(--muted-foreground);
+  --field: color-mix(in oklab, var(--foreground) 10%, transparent);
 }
 
 .dark {
@@ -133,4 +134,5 @@
   --destructive-ring: color-mix(in oklab, var(--destructive) 40%, transparent);
   --disabled: var(--muted);
   --disabled-foreground: var(--muted-foreground);
+  --field: color-mix(in oklab, var(--foreground) 10%, transparent);
 }
