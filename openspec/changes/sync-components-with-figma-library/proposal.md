@@ -40,12 +40,19 @@ Note that `get_metadata` with no node id reports a single page named "Tokens" fo
 | --- | --- | --- | --- |
 | Icon Button | `2159:3195` | `forms/icon-button.tsx` | `variant` outline/ghost, `size` sm/xs, `state` → `disabled` |
 | Link | `96:341` | `forms/link.tsx` | `variant` default/secondary/error, `size` default/sm/xs, `state` → `disabled` |
+| List | `2176:4224` | `display/list.tsx` | none |
+| List Item | `2176:4213` | `display/list.tsx` | none |
+| Radio Button | `2213:130` | `forms/radio-button.tsx` | `selected`, `disabled` — both boolean gates |
+| Radio List Item | `2213:142` | `forms/radio-list-item.tsx` | `disabled` — boolean gate |
+| Radio List | `2213:392` | `forms/radio-list.tsx` | none |
 
-Both close gaps [`adopt-figma-button-styling`](../adopt-figma-button-styling/proposal.md) recorded as explicit non-goals when it deleted Button's `link` variant and its four `icon-*` rungs as undesigned.
+Link and Icon Button close gaps [`adopt-figma-button-styling`](../adopt-figma-button-styling/proposal.md) recorded as explicit non-goals when it deleted Button's `link` variant and its four `icon-*` rungs as undesigned.
 
-**Missing — published in Figma, absent from code (17):**
+Building the Radio set surfaced a hole in the token layer: **`Custom/field` existed in Figma but was absent from `tokens.json`**, while `theme.css` already mapped `--color-field` from the preamble. Any component binding `bg-field` would have rendered no background under either theme. Backfilled through `tokens.json` and regenerated rather than substituted with a same-valued token under a different name. `--field-border` and `--field-disabled` are still mapped with nothing behind them.
 
-Banner (`2176:3488`), Clickable Card (`2176:3951`), Checkbox List (`2213:240`), Checkbox List Input (`2176:3979`), Icon Dialog (`2213:104`), Empty State (`2176:4183`), Number Input (`2176:4273`), Text Input Search (`2132:2782`), List (`2176:4224`), List Item (`2176:4213`), Radio Button (`2213:130`), Radio List (`2213:392`), Radio List Item (`2213:142`), Segmented Control (`2121:1039`), Segmented Control Item (`2121:898`), Stat (`2132:2201`), Inline Text Tooltip (`2159:3382`).
+**Missing — published in Figma, absent from code (12):**
+
+Banner (`2176:3488`), Clickable Card (`2176:3951`), Checkbox List (`2213:240`), Checkbox List Input (`2176:3979`), Icon Dialog (`2213:104`), Empty State (`2176:4183`), Number Input (`2176:4273`), Text Input Search (`2132:2782`), Segmented Control (`2121:1039`), Segmented Control Item (`2121:898`), Stat (`2132:2201`), Inline Text Tooltip (`2159:3382`).
 
 Table Header Cell (`2220:498`) and Table Cell (`2220:642`) sit on a page named "Table (WIP)" and are excluded until design marks them ready.
 
@@ -97,6 +104,8 @@ The `line` variant on `TabsList` is left in place rather than deleted. Governanc
 | Should `Dialog`'s close button be repointed onto `IconButton`? | Eng | It currently renders `Button variant="ghost"` with `className` sizing, a workaround from when no icon button existed. Figma's `Dialog Header` composes `Icon Button`, so the two should converge — left out of this change to keep it reviewable. |
 | Does Badge's variant rename need a codemod for consuming apps? | Eng | `secondary` → `default` and `destructive` → `error` are mechanical; `outline`, `ghost` and `link` have no target and need a human. |
 | Should `TabsList variant="line"` be drawn in Figma, or dropped from code? | Design | It is the only code-only variant on an otherwise matched component. |
+| Normalise the Radio sets' option capitalisation. | Design | `Radio Button` uses `True`/`False`; `Radio List Item` uses `true`/`false`. Both templates match their own set verbatim, so nothing is broken today, but an unannounced rename on either is a checker error. |
+| How stale is `tokens.json` overall? | Design + Eng | `Custom/field` was in Figma and missing from `tokens.json`, found only because the Radio binds it. One token was backfilled by hand; a full `tokens:pull` is still owed and needs a human running the plugin. Other tokens may be missing the same way, and nothing detects that until a component happens to bind one. |
 | Should `select.tsx` be drawn in Figma? | Design | It is a real control with a `size` axis and no design counterpart. Figma has `Dropdown Menu`, which is a menu, not a form select. |
 | Rename `sonner.tsx` → `toast.tsx` so the checker can resolve it? | Eng | Required for `check-components.mjs` to ever match Figma's `Toast`; breaks the import path. |
 | Is `Blur/blur-md` 6px or 12px? | Design + Eng | Figma's Blur collection reports 6px; `tokens.json` and the generated theme both say 12px. Badge's status variants bind `backdrop-blur-md`, so the drift is now visible. This is a token-pipeline fix, and the Figma leg needs a human running the plugin. |
