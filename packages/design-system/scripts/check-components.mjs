@@ -292,6 +292,75 @@ function tokenResolver(tokens) {
   return resolve_;
 }
 
+/*
+ * `rounded-*` -> the pixel value a browser actually paints.
+ *
+ * This cannot go through tokenResolver by name. Two things get in the way, and
+ * both of them silently produced *no* radius check at all until they were
+ * modelled here — the lookup just missed and the expectation was dropped.
+ *
+ * 1. The token names moved. Figma renamed the Foundation collection
+ *    `Rounded/rounded-*` to `Radius/radius-*`, so the old `rounded-${rung}`
+ *    lookup stopped resolving for every rung at once.
+ *
+ * 2. The utility does not read the primitive anyway. theme.preamble.css
+ *    derives the scale proportionally in an `@theme inline` block
+ *    (`--radius-sm: calc(var(--radius) * 0.6)`), and `inline` means Tailwind
+ *    substitutes that expression into the utility rather than emitting a
+ *    var() reference. So `rounded-sm` paints calc(--radius * 0.6) = 4.8px
+ *    while the `radius-sm` primitive says 4px. Resolving the primitive would
+ *    assert a value nothing renders — papering over exactly the mismatch this
+ *    check exists to surface.
+ *
+ * So the scale is read out of the preamble rather than restated here, the same
+ * way axes are read through the Code Connect template rather than aliased: a
+ * rung the preamble overrides is evaluated from its own expression, and a rung
+ * it leaves alone falls through to the `radius-*` primitive, which is what
+ * Tailwind's non-inline default theme references.
+ */
+function radiusResolver(preambleCss, cfg, resolveToken) {
+  const inline = /@theme\s+inline\s*\{/.exec(preambleCss);
+  const block = inline
+    ? preambleCss.slice(inline.index, preambleCss.indexOf("}", inline.index))
+    : "";
+  const derived = Object.fromEntries(
+    [...block.matchAll(/--radius-([a-z0-9]+)\s*:\s*([^;]+);/g)].map((m) => [
+      m[1],
+      m[2].trim(),
+    ]),
+  );
+
+  // `--radius` is not a rung; it is the slot the whole scale is derived from,
+  // and tokens.config.json says which Figma token fills it.
+  const baseToken = cfg.slotMap?.["--radius"];
+  const base = baseToken
+    ? px(resolveToken(baseToken.replace(/^.*\//, "")))
+    : null;
+
+  return (rung) => {
+    // `rounded-(--radius-sm)` — an arbitrary property, so it references the
+    // custom property directly and the primitive is what resolves.
+    const arbitrary = /^\((--)?([a-z0-9-]+)\)$/.exec(rung);
+    if (arbitrary) return px(resolveToken(arbitrary[2]));
+
+    const expr = derived[rung];
+    if (expr) {
+      if (base == null) return null;
+      if (/^var\(--radius\)$/.test(expr)) return base;
+      const scaled = /^calc\(\s*var\(--radius\)\s*\*\s*([\d.]+)\s*\)$/.exec(
+        expr,
+      );
+      if (scaled) return base * Number(scaled[1]);
+      // A literal such as `--radius-pill: 999px`.
+      return Number.isNaN(px(expr)) ? null : px(expr);
+    }
+
+    // Not overridden in the preamble, so Tailwind's own theme entry applies and
+    // it is a plain var() reference onto the :root primitive.
+    return px(resolveToken(`radius-${rung}`));
+  };
+}
+
 const px = (v) => (typeof v === "string" ? Number.parseFloat(v) : v);
 const toHex8 = (color, opacity) => {
   const a = Math.round((color.a ?? 1) * (opacity ?? 1) * 255);
@@ -309,7 +378,7 @@ const normHex = (hex) => {
 // A Tailwind utility a variant's class string states, turned into the value
 // Figma should show. Prefixed utilities (hover:, disabled:, [&_svg]:) describe
 // states this check cannot see in a static variant, so they are skipped.
-function expectations(classString, resolveToken) {
+function expectations(classString, resolveToken, resolveRadius) {
   const out = [];
   for (const cls of classString.split(/\s+/).filter(Boolean)) {
     if (cls.includes(":")) continue;
@@ -325,8 +394,9 @@ function expectations(classString, resolveToken) {
     } else if ((m = /^gap-(\d+(?:\.\d+)?)$/.exec(cls))) {
       out.push({ prop: "gap", cls, expected: Number(m[1]) * 4 });
     } else if ((m = /^rounded-(.+)$/.exec(cls))) {
-      const value = resolveToken(`rounded-${m[1]}`);
-      if (value) out.push({ prop: "radius", cls, expected: px(value) });
+      const value = resolveRadius(m[1]);
+      if (value != null && !Number.isNaN(value))
+        out.push({ prop: "radius", cls, expected: value });
     }
   }
   return out;
@@ -394,6 +464,11 @@ for (const f of files) {
 
 const resolveToken = tokenResolver(
   JSON.parse(await readFile(resolve(pkgDir, "tokens.json"), "utf8")),
+);
+const resolveRadius = radiusResolver(
+  await readFile(resolve(pkgDir, cfg.preamble), "utf8"),
+  cfg,
+  resolveToken,
 );
 
 // `Type=Danger, State=Default, Size=default` -> { Type: 'Danger', ... }
@@ -465,6 +540,7 @@ function checkValues(comp, tpl, code, report) {
       for (const { prop, cls, expected } of expectations(
         classString,
         resolveToken,
+        resolveRadius,
       )) {
         const actual =
           prop === "fill"
