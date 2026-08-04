@@ -48,7 +48,6 @@
   --control: var(--background); /* Outline button and bordered trigger surface */
   --control-hover: #F9F9F980; /* Outline button/trigger hover surface */
   --switch-track: #F9F9F9CC; /* Switch unchecked track */
-  --field: var(--slate-50-opacity-10); /* Checkbox/radio control surface */
   --muted-hover: var(--slate-50-opacity-20); /* Ghost button hover */
   --disabled: var(--slate-700); /* Disabled elements background */
   --disabled-foreground: var(--slate-50-opacity-30); /* Text for disabled elements */
