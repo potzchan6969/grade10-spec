@@ -178,8 +178,56 @@ function sliceBalanced(src, openIdx) {
   return "";
 }
 
+/*
+ * Comments out of an object-literal body, strings left alone.
+ *
+ * Every key matcher below is a bare `word:` regex, and prose is full of those.
+ * `// … utilities cannot express that: theme.preamble.css` inside button.tsx's
+ * `size` variant parsed as an option named `that`, which surfaced as the
+ * nonsense warning "size -> cva size: that exist in code but no Figma option
+ * maps to them" — and a phantom option sitting next to a real code-only rung is
+ * exactly the noise this check exists to remove. Comments cannot be stripped
+ * from a whole file, because the template parser reads `// url=` out of one, so
+ * this runs per body instead.
+ */
+function stripComments(body) {
+  let out = "";
+  for (let i = 0; i < body.length; i++) {
+    const ch = body[i];
+    if (ch === '"' || ch === "'" || ch === "`") {
+      const start = i;
+      for (i++; i < body.length; i++) {
+        if (body[i] === "\\") {
+          i++;
+          continue;
+        }
+        if (body[i] === ch) break;
+      }
+      out += body.slice(start, i + 1);
+      continue;
+    }
+    if (ch === "/" && body[i + 1] === "/") {
+      const end = body.indexOf("\n", i);
+      if (end === -1) return out;
+      out += "\n";
+      i = end;
+      continue;
+    }
+    if (ch === "/" && body[i + 1] === "*") {
+      const end = body.indexOf("*/", i + 2);
+      if (end === -1) return out;
+      out += " ";
+      i = end + 1;
+      continue;
+    }
+    out += ch;
+  }
+  return out;
+}
+
 // top-level `key: {...}` pairs of an object literal body
-function objectKeys(body) {
+function objectKeys(rawBody) {
+  const body = stripComments(rawBody);
   const out = {};
   let i = 0;
   while (i < body.length) {
@@ -404,7 +452,8 @@ function expectations(classString, resolveToken, resolveRadius) {
 
 // flat `Key: <scalar>` pairs — getEnum maps are always flat, so this stays
 // simple where objectKeys has to handle nested cva bodies.
-function enumPairs(body) {
+function enumPairs(rawBody) {
+  const body = stripComments(rawBody);
   const out = {};
   const re =
     /(["']?)([A-Za-z0-9_ -]+)\1\s*:\s*(?:"([^"]*)"|'([^']*)'|(true|false|null))/g;
@@ -510,11 +559,12 @@ function checkValues(comp, tpl, code, report) {
       const candidates = Object.keys(map.pairs).filter((option) =>
         maps.every((x) => x.pairs[option] === false),
       );
-      const chosen = candidates.includes("Default")
-        ? "Default"
-        : candidates.length === 1
-          ? candidates[0]
-          : null;
+      // Case-insensitively: the file has since lowercased every option name, so
+      // matching `Default` literally skipped the value check on every set whose
+      // interaction axis is `default`/`hover` — which is now all of them.
+      const chosen =
+        candidates.find((o) => o.toLowerCase() === "default") ??
+        (candidates.length === 1 ? candidates[0] : null);
       if (chosen) base[map.axis] = chosen;
       else if (candidates.length)
         report.warns.push(
