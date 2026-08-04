@@ -14,11 +14,20 @@ Done:
 - [x] Run `pnpm run typecheck` — passes. Caught `getChildren()` not existing on `InstanceHandle`; the SLOT property is read with `getSlot`.
 - [x] Run `pnpm --filter @acetrader/design-system exec vitest run --project contracts` — 46 tests pass.
 - [x] Run `pnpm run lint` — passes. Caught a `Badge` story exported as `Error`, shadowing the global; renamed to `ErrorStatus`.
+- [x] **Re-audit the whole library against Figma and take `isDisabled`/`isLoading` as the file's shape.** The published listing was replayed into the checker's `FIGMA_DUMP` shape, so `check-components.mjs` itself did the diff rather than a hand comparison. It found three errors and one axis-level drift, all in templates, none in component source:
+
+  - `radio-button.figma.ts` read `selected` as `True`/`False` and named the disabled axis `disabled`. Both options resolved to `undefined` and the second axis did not exist. Now lowercase, on `isDisabled`.
+  - `radio-list-item.figma.ts` likewise named the axis `disabled` rather than `isDisabled`. The comment claiming the two Radio sets disagree on capitalisation was stale — they agree, and both are lowercase.
+  - `Button`, `Icon Button` and `Link` have moved `disabled` (and, on Button, `loading`) off `state` onto their own two-option axes, leaving `state` as `default`/`hover` only. Every template still read them off `state`, so both flags were permanently false and `isDisabled`/`isLoading` reached no prop at all. Each now maps the boolean axes directly and keeps a props-free `state` map so the axis is accounted for rather than reported unmapped.
+
+  Figma is the authority on which variants exist, so all four were fixed in code. `Text Input` and `Number Input` still carry `disabled`/`loading` inside `state` *and* a separate `isDisabled`; they have no code component yet, and that split should be normalised design-side before they get one.
+
+- [x] Fix two defects in `scripts/check-components.mjs` that the re-audit surfaced. `objectKeys` and `enumPairs` did not strip comments, so `// … cannot express that: theme.preamble.css` inside `button.tsx`'s `size` variant parsed as a cva option named `that` and emitted the nonsense warning `size -> cva size: that exist in code but no Figma option maps to them`. And `checkValues` looked for a base option named `Default` case-sensitively, which no longer matches any set now that the file is lowercase throughout — so the value check silently skipped every component with a `default`/`hover` axis.
 
 Remaining:
 
-- [ ] **Re-run `pnpm run check:design-system` with a `FIGMA_TOKEN` set.** This audit was done through the MCP server because no token is available in this environment. The checker compares resolved colour and geometry values per variant, which the MCP listing does not, so it may find value-level drift this sweep did not. It is also the only mechanical confirmation that the three new templates map cleanly.
-- [ ] **Publish Code Connect for Avatar, Badge and Card.** `get_code_connect_map` still returns `{}` for this file, so Dev Mode shows no connected code for any component regardless of template correctness. Needs a human in Figma.
+- [ ] **Re-run `pnpm run check:design-system` with a `FIGMA_TOKEN` set.** Names and options are now clean — the replayed listing gives zero errors, and every remaining warning is a component with no code counterpart. What no run here can cover is values: a dump carries no variant nodes, so colours and geometry are still entirely unchecked, and the `default`-casing fix above means the value pass will now actually execute for the first time on Button, Icon Button, Link and Tab.
+- [ ] **Publish Code Connect.** `get_code_connect_map` still returns `{}` for this file — re-confirmed against Button (`86:3459`) — so Dev Mode shows no connected code for any of the eleven templates, however correct they are. Needs a human in Figma.
 - [ ] Decide the Badge migration path for consuming applications, and write it up — `outline`, `ghost` and `link` have no replacement.
 - [ ] Reconcile `Blur/blur-md`: Figma reports 6px, `tokens.json` says 12px. Fix in `tokens.json` and regenerate, or correct the Figma variable. The Figma leg needs a human running the plugin.
 
