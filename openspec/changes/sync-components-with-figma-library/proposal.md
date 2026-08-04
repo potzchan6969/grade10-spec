@@ -52,7 +52,7 @@ Building the Radio set surfaced a hole in the token layer: **`Custom/field` exis
 
 **Missing — published in Figma, absent from code (12):**
 
-Banner (`2176:3488`), Clickable Card (`2176:3951`), Checkbox List (`2213:240`), Checkbox List Input (`2176:3979`), Icon Dialog (`2213:104`), Empty State (`2176:4183`), Number Input (`2176:4273`), Text Input Search (`2132:2782`), Segmented Control (`2121:1039`), Segmented Control Item (`2121:898`), Stat (`2132:2201`), Inline Text Tooltip (`2159:3382`).
+Banner (`2176:3488`), Clickable Card (`2176:3951`), Checkbox List (`2213:240`), Checkbox List Input (`2176:3979`), Icon Dialog (`2213:104`), Empty State (`2176:4183`), Number Input (`2176:4273`), Text Input Search (`2132:2782`, since renamed `Search Input`), Segmented Control (`2121:1039`), Segmented Control Item (`2121:898`), Stat (`2132:2201`), Inline Text Tooltip (`2159:3382`).
 
 Table Header Cell (`2220:498`) and Table Cell (`2220:642`) sit on a page named "Table (WIP)" and are excluded until design marks them ready.
 

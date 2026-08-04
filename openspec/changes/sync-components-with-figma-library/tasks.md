@@ -22,7 +22,7 @@ Done:
 
   Figma is the authority on which variants exist, so all four were fixed in code.
 
-- [x] **Normalise `Text Input` (`2132:2715`) and `Number Input` (`2176:4273`) in Figma.** Both carried `disabled`/`loading` inside `state` *and* a separate `isDisabled` that was `true` in exactly the two variants where `state=disabled` — a mirror of `state` carrying no information of its own. Both are now `status × state(default|focus) × isDisabled × isLoading`, matching Button, Icon Button, Link, and `Text Input Search`, which was already in this shape on the same page and settles what the file's convention is.
+- [x] **Normalise `Text Input` (`2132:2715`) and `Number Input` (`2176:4273`) in Figma.** Both carried `disabled`/`loading` inside `state` *and* a separate `isDisabled` that was `true` in exactly the two variants where `state=disabled` — a mirror of `state` carrying no information of its own. Both are now `status × state(default|focus) × isDisabled × isLoading`, matching Button, Icon Button, Link, and `Search Input` (published as `Text Input Search` at the time of this audit), which was already in this shape on the same page and settles what the file's convention is.
 
   The nine existing variants were renamed rather than rebuilt, so no node was recreated and nothing was cloned in that step. The grid was then filled from 9 to 16 per set — every status now has a focus, a disabled and a loading variant, so a disabled error field is drawable for the first time. Three rules were needed for combinations the file had never drawn, decided with the designer and recorded here because nothing in the file states them:
 
@@ -67,7 +67,7 @@ Missing components, each needing its own change (`<name>.tsx` + `.figma.ts` + `.
 
   This was reached through the sanctioned edit point rather than by substituting `bg-muted`, which resolves to the same colour in the acetrader theme and would have hidden the gap behind a wrong name. `--field-border` and `--field-disabled` are mapped in the preamble and still have no token behind them; nothing binds them yet.
 - [ ] `Checkbox Button` (`2176:4089`), `Checkbox List Input` (`2176:3979`), `Checkbox List` (`2213:240`) — extends the existing `forms/checkbox.tsx`.
-- [ ] `Text Input` (`2132:2715`) onto `forms/input.tsx`, then `Number Input` (`2176:4273`) and `Text Input Search` (`2132:2782`). All three now carry four axes — `status`, `state` (default/focus), `isDisabled`, `isLoading` — so `status` is the only cva axis; `state` is a pseudo-state with no prop, and the other two are boolean gates. `Text Input Search` calls its tonal axis `type` rather than `status` and has no loading state.
+- [ ] `Text Input` (`2132:2715`), `Number Input` (`2176:4273`) and `Search Input` (`2132:2782`, renamed from `Text Input Search`). All three now carry four axes — `status`, `state` (default/focus), `isDisabled`, `isLoading` — so `status` is the only cva axis; `state` is a pseudo-state with no prop, and the other two are boolean gates. `Search Input` calls its tonal axis `type` rather than `status` and has no loading state. Scoped in [`add-input-components`](../add-input-components/proposal.md), which supersedes this entry.
 - [ ] `Segmented Control Item` (`2121:898`) and `Segmented Control` (`2121:1039`).
 - [ ] `Banner` (`2176:3488`) — `status` default/warning/error/success. Composes Icon Button and Link.
 - [ ] `Empty State` (`2176:4183`) — composes Button.

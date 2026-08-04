@@ -90,7 +90,7 @@ type SearchInputProps = Omit<ComponentProps<"input">, "size"> & {
 
 `SearchInput` takes no `status`, `message` or `loading` because its Figma set has none. That is the open question in the proposal, not an omission here: a component may not offer what the design does not define.
 
-It is exported as `SearchInput` but lives in `forms/text-input-search.tsx`, because the checker resolves a Figma set to a **file basename** — `Text Input Search` normalises to `textinputsearch`, so renaming the file to `search-input.tsx` would make the set report "no code component". Export name and file name diverging is not new here; `list.tsx` exports both `List` and `ListItem` for the same reason. Renaming the Figma set to `Search Input` would let all three agree, and is the open decision in the proposal.
+The Figma set was renamed from `Text Input Search` to `Search Input` so that `forms/search-input.tsx`, the `SearchInput` export and the design all carry one name. The checker resolves a set to a **file basename** by normalising its Figma name, so this is the only arrangement where the filename is both natural and resolvable.
 
 `disabled` is the native attribute in all three, so Figma's `isDisabled` needs no prop of its own.
 
