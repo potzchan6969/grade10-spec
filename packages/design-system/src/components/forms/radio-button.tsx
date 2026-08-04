@@ -21,10 +21,12 @@ function RadioButton({ className, ...props }: RadioPrimitive.Root.Props) {
     >
       <span
         data-slot="radio-button-ring"
-        // `Custom/field` was missing from tokens.json when this landed — the
-        // Figma variable exists and the pull had not picked it up. Backfilled
-        // there rather than substituted here, so the name matches the design.
-        className="flex size-4 items-center justify-center rounded-full border border-border bg-field transition-colors group-focus-visible/radio:ring-3 group-focus-visible/radio:ring-ring/50 group-data-disabled/radio:bg-disabled"
+        // `Base/input`, which is what `Checkbox Button` binds on every variant.
+        // This was `bg-field` until `Custom/field` was deleted from the Semantic
+        // collection; the Figma Radio still holds a binding to that deleted
+        // variable, which is why the file renders correctly while the token no
+        // longer exists. Same value either way — the point is the live name.
+        className="flex size-4 items-center justify-center rounded-full border border-border bg-input transition-colors group-focus-visible/radio:ring-3 group-focus-visible/radio:ring-ring/50 group-data-disabled/radio:bg-disabled"
       >
         <RadioPrimitive.Indicator
           data-slot="radio-button-indicator"

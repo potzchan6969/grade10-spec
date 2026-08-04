@@ -79,7 +79,6 @@
   );
   --disabled: var(--muted);
   --disabled-foreground: var(--muted-foreground);
-  --field: color-mix(in oklab, var(--foreground) 10%, transparent);
 }
 
 .dark {
@@ -149,5 +148,4 @@
   );
   --disabled: var(--muted);
   --disabled-foreground: var(--muted-foreground);
-  --field: color-mix(in oklab, var(--foreground) 10%, transparent);
 }

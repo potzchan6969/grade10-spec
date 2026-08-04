@@ -55,9 +55,11 @@
   /* Custom/* — AceTrader extension set beyond the stock shadcn contract. */
   --color-control: var(--control);
   --color-control-hover: var(--control-hover);
-  --color-field: var(--field);
-  --color-field-border: var(--field-border);
-  --color-field-disabled: var(--field-disabled);
+  /* No --color-field*: `Custom/field` was deleted from the Semantic collection
+     and `field-border`/`field-disabled` never had a token behind them at all.
+     The form-control surface is `Base/input`, which Checkbox and Radio both
+     bind. A mapping with no variable behind it is silent — the utility simply
+     does not exist — so these are removed rather than left as bait. */
   --color-switch-track: var(--switch-track);
   --color-muted-hover: var(--muted-hover);
   --color-primary-muted: var(--primary-muted);
