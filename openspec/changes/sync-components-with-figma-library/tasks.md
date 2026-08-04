@@ -20,7 +20,17 @@ Done:
   - `radio-list-item.figma.ts` likewise named the axis `disabled` rather than `isDisabled`. The comment claiming the two Radio sets disagree on capitalisation was stale — they agree, and both are lowercase.
   - `Button`, `Icon Button` and `Link` have moved `disabled` (and, on Button, `loading`) off `state` onto their own two-option axes, leaving `state` as `default`/`hover` only. Every template still read them off `state`, so both flags were permanently false and `isDisabled`/`isLoading` reached no prop at all. Each now maps the boolean axes directly and keeps a props-free `state` map so the axis is accounted for rather than reported unmapped.
 
-  Figma is the authority on which variants exist, so all four were fixed in code. `Text Input` and `Number Input` still carry `disabled`/`loading` inside `state` *and* a separate `isDisabled`; they have no code component yet, and that split should be normalised design-side before they get one.
+  Figma is the authority on which variants exist, so all four were fixed in code.
+
+- [x] **Normalise `Text Input` (`2132:2715`) and `Number Input` (`2176:4273`) in Figma.** Both carried `disabled`/`loading` inside `state` *and* a separate `isDisabled` that was `true` in exactly the two variants where `state=disabled` — a mirror of `state` carrying no information of its own. Both are now `status × state(default|focus) × isDisabled × isLoading`, matching Button, Icon Button, Link, and `Text Input Search`, which was already in this shape on the same page and settles what the file's convention is.
+
+  The nine existing variants were renamed rather than rebuilt, so no node was recreated and nothing was cloned in that step. The grid was then filled from 9 to 16 per set — every status now has a focus, a disabled and a loading variant, so a disabled error field is drawable for the first time. Three rules were needed for combinations the file had never drawn, decided with the designer and recorded here because nothing in the file states them:
+
+  - **Focus wins the border.** `status=error, state=focus` binds `Base/ring`, not `Custom/destructive-ring`. The status is still carried by the message tone and the status icon, and this is how the code side stacks them — `focus-visible:ring` over the `aria-invalid` border.
+  - **Disabled is fully neutral.** Label, value, unit, message and the status icon all take `Custom/disabled-foreground`, and the border drops to `Base/border`. This is what disabled already did on `default` and `placeholder`. On Number Input the clear `X` is dropped too, since a disabled field cannot be cleared.
+  - **The spinner takes the trailing slot.** `isLoading=true` removes whatever was in it — clear button or status icon — rather than showing two. The message keeps its status tone, because while loading the status is stale rather than gone.
+
+  Not done here, and both need a human in Figma: the library has to be **republished** for consumers to see any of this, and any instance in another file that was set to `state=disabled` or `state=loading` has been repointed by the rename. Neither set has instances in this file.
 
 - [x] Fix two defects in `scripts/check-components.mjs` that the re-audit surfaced. `objectKeys` and `enumPairs` did not strip comments, so `// … cannot express that: theme.preamble.css` inside `button.tsx`'s `size` variant parsed as a cva option named `that` and emitted the nonsense warning `size -> cva size: that exist in code but no Figma option maps to them`. And `checkValues` looked for a base option named `Default` case-sensitively, which no longer matches any set now that the file is lowercase throughout — so the value check silently skipped every component with a `default`/`hover` axis.
 
@@ -57,7 +67,7 @@ Missing components, each needing its own change (`<name>.tsx` + `.figma.ts` + `.
 
   This was reached through the sanctioned edit point rather than by substituting `bg-muted`, which resolves to the same colour in the acetrader theme and would have hidden the gap behind a wrong name. `--field-border` and `--field-disabled` are mapped in the preamble and still have no token behind them; nothing binds them yet.
 - [ ] `Checkbox Button` (`2176:4089`), `Checkbox List Input` (`2176:3979`), `Checkbox List` (`2213:240`) — extends the existing `forms/checkbox.tsx`.
-- [ ] `Text Input` (`2132:2715`) `status` and `state` axes onto `forms/input.tsx`, then `Number Input` (`2176:4273`) and `Text Input Search` (`2132:2782`).
+- [ ] `Text Input` (`2132:2715`) onto `forms/input.tsx`, then `Number Input` (`2176:4273`) and `Text Input Search` (`2132:2782`). All three now carry four axes — `status`, `state` (default/focus), `isDisabled`, `isLoading` — so `status` is the only cva axis; `state` is a pseudo-state with no prop, and the other two are boolean gates. `Text Input Search` calls its tonal axis `type` rather than `status` and has no loading state.
 - [ ] `Segmented Control Item` (`2121:898`) and `Segmented Control` (`2121:1039`).
 - [ ] `Banner` (`2176:3488`) — `status` default/warning/error/success. Composes Icon Button and Link.
 - [ ] `Empty State` (`2176:4183`) — composes Button.
