@@ -10,7 +10,7 @@ Then:
 - [ ] Build `InputShell` and reduce `Input` to a bare control in `forms/input.tsx` — the shell owns fill, border, radius, height and padding. Note the breaking change for anyone rendering `<Input />` standalone.
 - [ ] `forms/text-input.tsx` — `status` cva axis (`default`/`error`/`success`), `label`, `message`, `loading`, native `disabled`.
 - [ ] `forms/number-input.tsx` — the above plus `unit` and `onClear`.
-- [ ] `forms/text-input-search.tsx` — leading magnifier, `onClear`, no status or message unless the question above changes that.
+- [ ] `forms/text-input-search.tsx` — exports `SearchInput`; leading magnifier, `onClear`, no status or message unless the question above changes that. Keep the filename: it has to normalise to the Figma set name `Text Input Search` or the checker loses it.
 - [ ] Export all three from `src/index.ts`.
 - [ ] `text-input.figma.ts`, `number-input.figma.ts`, `text-input-search.figma.ts`, each covering every option of every VARIANT property, with `status=placeholder` collapsing onto `default`.
 - [ ] Stories per component: one per `status` option plus `Disabled`, `Loading`, `WithoutLabel`, `WithoutMessage`, and the component-specific ones. Do not export a story named `Error` — it shadows the global.
@@ -21,5 +21,5 @@ Then:
 Decisions to settle before or during implementation, from the proposal:
 
 - [ ] Does `Input` stay exported once it is no longer a self-contained box?
-- [ ] Is `TextInputSearch` the export name, or does the Figma set get renamed to `Search Input`?
+- [ ] Rename the Figma set to `Search Input`? The export is `SearchInput` either way; renaming the set is what would let `forms/search-input.tsx` resolve too.
 - [ ] `unit` as `string` or `ReactNode`?

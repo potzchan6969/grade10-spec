@@ -26,7 +26,7 @@ Three exported components and one shared shell:
 | --- | --- | --- |
 | `Text Input` (`2132:2715`) | `forms/text-input.tsx` | `TextInput` |
 | `Number Input` (`2176:4273`) | `forms/number-input.tsx` | `NumberInput` |
-| `Text Input Search` (`2132:2782`) | `forms/text-input-search.tsx` | `TextInputSearch` |
+| `Text Input Search` (`2132:2782`) | `forms/text-input-search.tsx` | `SearchInput` |
 | — | `forms/input.tsx` | `Input` (bare control) + `InputShell` (label / field box / message) |
 
 ### Why three files and not one component
@@ -82,6 +82,6 @@ The alternative — leaving `Input` as it is and having the shell wrap a plain `
 | --- | --- | --- |
 | `Text Input Search` has no error or success. | Design | Its tonal axis is `type` with `default` \| `placeholder` only, so a search field cannot show an invalid state. That reads like a gap rather than a decision. Code will not offer what Figma does not draw, so if it is a gap, the Figma set needs the axis before the code can. |
 | Should `Input` stay exported once the box moves to the shell? | Eng | Keeping it means a public component with no Figma counterpart. Removing it is a second breaking change on top of the restyle. |
-| Is `TextInputSearch` the right export name? | Design + Eng | It matches the Figma set verbatim, which is what keeps the checker's basename resolution working. `SearchInput` reads better; renaming the Figma set would let both be true. |
+| Should the Figma set be renamed to `Search Input`? | Design | Settled for code: the export is `SearchInput`. The **file** cannot follow — `check-components.mjs` resolves a set by normalising its Figma name, so `Text Input Search` looks for `textinputsearch.tsx` and `search-input.tsx` would report "no code component". So `forms/text-input-search.tsx` keeps the Figma name while exporting `SearchInput`. Renaming the set to `Search Input` is the one move that lets file, export and design all agree; it is safe for existing instances, which reference a component by key rather than by name. |
 | Should the clear button be a `clear` boolean or an `onClear` callback? | Eng | Figma models it as a BOOLEAN. A boolean alone cannot clear anything, so the proposal is `onClear`, with presence gating the button — the same "presence of a value rather than its own boolean" pattern `list-item.figma.ts` already uses. |
 | Does `unit` belong to `NumberInput` as a string prop? | Design | Figma models it as TEXT. A string prop matches, but a `ReactNode` would allow a currency glyph or a small select. |
