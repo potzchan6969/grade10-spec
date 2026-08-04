@@ -69,6 +69,12 @@
   --color-destructive-muted-foreground: var(--destructive-muted-foreground);
   --color-destructive-border: var(--destructive-border);
   --color-destructive-ring: var(--destructive-ring);
+  /* Both of these were bound by components before they were mapped here, and a
+     missing @theme entry is silent: `text-destructive-foreground` was simply
+     not a utility, so button.tsx, link.tsx and badge.tsx rendered an inherited
+     colour. The variables themselves have always existed in tokens.json. */
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success-ring: var(--success-ring);
   --color-focus-ring: var(--focus-ring);
   --color-menu-border: var(--menu-border);
   --color-menu-glass: var(--menu-glass);
