@@ -68,7 +68,7 @@ The shell generates an id with `useId` when the consumer supplies none, and wire
 ## The three components
 
 ```tsx
-type TextInputProps = Omit<ComponentProps<"input">, "size"> & {
+type TextInputProps = ComponentProps<"input"> & {
   label?: ReactNode;
   message?: ReactNode;
   status?: "default" | "error" | "success";
@@ -77,12 +77,12 @@ type TextInputProps = Omit<ComponentProps<"input">, "size"> & {
 
 type NumberInputProps = TextInputProps & {
   /** Trailing unit — Figma's `unit` TEXT property. */
-  unit?: string;
+  unit?: ReactNode;
   /** Presence renders the clear button; Figma's `clear` BOOLEAN. */
   onClear?: () => void;
 };
 
-type SearchInputProps = Omit<ComponentProps<"input">, "size"> & {
+type SearchInputProps = ComponentProps<"input"> & {
   label?: ReactNode;
   onClear?: () => void;
 };
