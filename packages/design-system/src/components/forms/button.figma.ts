@@ -24,22 +24,27 @@ const variant = instance.getEnum("variant", {
   ghost: "ghost",
 });
 
-// `state` carries both non-interactive states. Hover is a CSS pseudo-state with
-// no prop behind it, so emitting anything for it would be wrong.
+// `state` is interaction only — `default` and `hover`. Hover is a CSS
+// pseudo-state with no prop behind it, so neither option emits anything, and
+// the map exists so the axis is accounted for rather than reported unmapped.
+instance.getEnum("state", {
+  default: false,
+  hover: false,
+});
+
+// Disabled and loading are their own two-option axes, so a loading Danger
+// button is drawable — the whole reason they were lifted off `state`. Each map
+// produces no strings and is recognised as a boolean gate, not an axis.
 //
 // `disabled` is deliberately not OR-ed with `loading`: the component derives
 // that itself, so emitting both would print a redundant prop.
-const disabled = instance.getEnum("state", {
-  default: false,
-  hover: false,
-  disabled: true,
-  loading: false,
+const disabled = instance.getEnum("isDisabled", {
+  false: false,
+  true: true,
 });
-const loading = instance.getEnum("state", {
-  default: false,
-  hover: false,
-  disabled: false,
-  loading: true,
+const loading = instance.getEnum("isLoading", {
+  false: false,
+  true: true,
 });
 
 // Rung names match the modes of Figma's Sizing collection, so `default` is the

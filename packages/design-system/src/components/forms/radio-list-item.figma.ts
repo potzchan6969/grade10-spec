@@ -5,10 +5,9 @@ import figma from "figma";
 
 const instance = figma.selectedInstance;
 
-// `disabled` is this set's only axis. Its options are lowercase here and
-// capitalised on `Radio Button` — an inconsistency in the file, not a typo
-// below. Both spellings have to match whichever set the template reads.
-const disabled = instance.getEnum("disabled", {
+// `isDisabled` is this set's only axis, with lowercase options — the same shape
+// `Radio Button` carries.
+const disabled = instance.getEnum("isDisabled", {
   false: false,
   true: true,
 });

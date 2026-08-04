@@ -7,16 +7,17 @@ const instance = figma.selectedInstance;
 
 // Both axes are two-option VARIANT properties standing in for booleans, so each
 // map produces no strings and is recognised as a non-variant prop rather than a
-// broken axis. Note the capitalised option names — this set uses `True`/`False`
-// where `Radio List Item` uses lowercase; the keys must match Figma verbatim.
+// broken axis. Option names are lowercase and the disabled axis is `isDisabled`
+// — the file's convention across every set, which this template used to miss on
+// both counts.
 const checked = instance.getEnum("selected", {
-  True: true,
-  False: false,
+  true: true,
+  false: false,
 });
 
-const disabled = instance.getEnum("disabled", {
-  False: false,
-  True: true,
+const disabled = instance.getEnum("isDisabled", {
+  false: false,
+  true: true,
 });
 
 // `checked` is emitted rather than `defaultChecked` because a lone radio is a

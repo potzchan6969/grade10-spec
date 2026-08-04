@@ -12,13 +12,18 @@ const variant = instance.getEnum("variant", {
   error: "error",
 });
 
-// `state` carries only one thing code can express. Hover is a CSS pseudo-state
-// with no prop behind it — and on this set it binds the same variables as
-// `default` anyway, so emitting anything for it would be doubly wrong.
-const disabled = instance.getEnum("state", {
+// `state` is interaction only. Hover is a CSS pseudo-state with no prop behind
+// it — and on this set it binds the same variables as `default` anyway, so
+// emitting anything for it would be doubly wrong.
+instance.getEnum("state", {
   default: false,
   hover: false,
-  disabled: true,
+});
+
+// Disabled is its own axis, as on Button and Icon Button.
+const disabled = instance.getEnum("isDisabled", {
+  false: false,
+  true: true,
 });
 
 // Rung names match the modes of Figma's Sizing collection, so `default` is the

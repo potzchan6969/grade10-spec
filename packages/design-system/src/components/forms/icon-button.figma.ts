@@ -18,12 +18,17 @@ const size = instance.getEnum("size", {
   xs: "xs",
 });
 
-// Hover is a CSS pseudo-state with no prop behind it. This set has no loading
-// state, unlike Button.
-const disabled = instance.getEnum("state", {
+// Hover is a CSS pseudo-state with no prop behind it, so `state` emits nothing
+// and is mapped only so the axis is accounted for.
+instance.getEnum("state", {
   default: false,
   hover: false,
-  disabled: true,
+});
+
+// Disabled is its own axis here, as on Button. This set has no loading state.
+const disabled = instance.getEnum("isDisabled", {
+  false: false,
+  true: true,
 });
 
 // The icon is a bare INSTANCE_SWAP with no BOOLEAN gate — an icon button
