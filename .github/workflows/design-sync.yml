@@ -3,12 +3,25 @@ name: Design sync
 on:
   push:
   pull_request:
+  # A Figma edit produces no event in this repository, so the push and
+  # pull_request triggers only ever catch drift that a code change happens to
+  # walk into. The schedule is what makes a designer-side rename or a changed
+  # fill surface on its own; 01:00 UTC is 09:00 in Hong Kong, so a failure is
+  # waiting at the start of the working day rather than mid-afternoon.
+  schedule:
+    - cron: "0 1 * * *"
+  # For re-checking on demand the moment a designer says they have published a
+  # change, instead of waiting for the next scheduled run.
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: ci-design-sync-${{ github.ref }}
+  # Keyed by event as well as ref: a scheduled run and a push to the default
+  # branch share a ref, so without this one would cancel the other and the
+  # nightly Figma check would silently stop running on busy days.
+  group: ci-design-sync-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 env:

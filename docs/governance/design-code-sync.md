@@ -128,7 +128,9 @@ Deleting or renaming a variant that instances already use leaves orphaned compon
 
 ### What happens next
 
-`check:design-system` diffs your axes and options against the code on every push. A new option with no code counterpart is a warning; a renamed or removed option is an error. You do not need to run it — but it is why an unannounced rename surfaces as a failed build rather than a wrong button in production.
+`check:design-system` diffs your axes and options against the code on every push, and again nightly at 01:00 UTC — a Figma edit raises no event in this repository, so the scheduled run is what catches a change you make on a day nobody pushes code. A new option with no code counterpart is a warning; a renamed or removed option is an error. You do not need to run it — but it is why an unannounced rename surfaces as a failed build rather than a wrong button in production.
+
+Anyone with repository access can also run it on demand from the Actions tab (**Design sync → Run workflow**) rather than waiting for the next nightly run.
 
 ## Rules for the Figma file
 
