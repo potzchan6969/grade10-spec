@@ -22,7 +22,7 @@
  * whose variants matched by name for months while `default` painted a solid fill
  * against a design that specifies a tint. See checkValues.
  */
-import { readdir, readFile } from "node:fs/promises";
+import { appendFile, readdir, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -599,18 +599,38 @@ function checkValues(comp, tpl, code, report) {
               : null
             : variant[prop];
         const label = `${comp.name} ${map.axis}=${figmaOption}`;
+        // Every value mismatch is recorded twice on purpose: as a warning
+        // string for the console, and structurally for the job summary. A
+        // designer reading the summary needs the numbers in columns, and
+        // re-parsing the prose back out of the warning would be worse.
         if (actual == null) {
-          report.warns.push(
-            `${label}: code says ${cls} (${expected}) but the Figma variant sets no ${prop}`,
-          );
+          const message = `${label}: code says ${cls} (${expected}) but the Figma variant sets no ${prop}`;
+          report.warns.push(message);
+          report.diffs.push({
+            message,
+            component: comp.name,
+            variant: `${map.axis}=${figmaOption}`,
+            prop,
+            cls,
+            code: expected,
+            figma: null,
+          });
         } else if (
           typeof expected === "number"
             ? Math.abs(actual - expected) > 0.5
             : actual !== expected
         ) {
-          report.warns.push(
-            `${label}: ${cls} is ${expected} in code but ${actual} in Figma`,
-          );
+          const message = `${label}: ${cls} is ${expected} in code but ${actual} in Figma`;
+          report.warns.push(message);
+          report.diffs.push({
+            message,
+            component: comp.name,
+            variant: `${map.axis}=${figmaOption}`,
+            prop,
+            cls,
+            code: expected,
+            figma: actual,
+          });
         } else {
           report.ok.push(`${label}: ${cls} matches Figma ${prop} ${actual}`);
         }
@@ -648,6 +668,10 @@ for (const f of files) {
 const errors = [];
 const warns = [];
 const ok = [];
+// Value mismatches in structured form, for the GitHub job summary. The console
+// report is written for whoever ran the command; the summary is written for a
+// designer who will only ever see the Actions page.
+const diffs = [];
 const figma = Object.values(figmaComponents);
 const figmaById = Object.fromEntries(figma.map((c) => [c.id, c]));
 
@@ -729,7 +753,7 @@ for (const comp of figma) {
       );
   }
 
-  checkValues(comp, tpl, code, { ok, warns });
+  checkValues(comp, tpl, code, { ok, warns, diffs });
 }
 
 for (const t of templates) {
@@ -767,6 +791,95 @@ for (const t of templates) {
   }
 }
 
+// ── job summary ─────────────────────────────────────────────────────────────
+// The console report above is for whoever ran the command. A designer never
+// does: they need the same numbers on a web page, which on GitHub means the
+// step summary. Written before the error exit below, or a failing run — the
+// one most worth reading — would publish nothing.
+const PROP_LABELS = {
+  fill: "Background",
+  height: "Height",
+  padX: "Horizontal padding",
+  gap: "Gap",
+  radius: "Corner radius",
+};
+const unit = (prop, value) =>
+  value == null ? "_not set_" : prop === "fill" ? `\`${value}\`` : `${value}px`;
+
+async function writeSummary() {
+  const path = process.env.GITHUB_STEP_SUMMARY;
+  if (!path) return;
+
+  const md = [
+    "## Design sync — Figma vs code",
+    "",
+    `\`${figmaSource}\` · ${figma.length} Figma component(s) · ${codeComponents.size} code component(s) · ${templates.length} template(s)`,
+    "",
+  ];
+
+  if (diffs.length) {
+    md.push(
+      `### ⚠ ${diffs.length} value(s) differ`,
+      "",
+      "What the code renders against what the Figma variant draws.",
+      "",
+      "| Component | Variant | Property | Code | Figma |",
+      "| --- | --- | --- | --- | --- |",
+      ...diffs.map(
+        (d) =>
+          `| ${d.component} | \`${d.variant}\` | ${PROP_LABELS[d.prop] ?? d.prop} (\`${d.cls}\`) | ${unit(d.prop, d.code)} | ${unit(d.prop, d.figma)} |`,
+      ),
+      "",
+      "A row here is not automatically a bug — the code may be right and the Figma file stale, or the difference deliberate. It is a disagreement someone has to settle.",
+      "",
+    );
+  } else {
+    md.push(
+      "### ✓ No value differences",
+      "",
+      "Every checked background, height, horizontal padding, gap and corner radius matches.",
+      "",
+    );
+  }
+
+  // Stated every run, passing or not. The narrow scope of the value check is
+  // the thing most likely to be mistaken for full coverage.
+  md.push(
+    "<details><summary>What this did and did not check</summary>",
+    "",
+    "Checked: each variant's own background, height, horizontal padding, gap and corner radius, at the base option of every axis.",
+    "",
+    "Not checked: vertical and per-side padding, anything inside the component (label colour, icon size, borders, type), and the hover, disabled and loading states. Values come from the utility classes the code declares, not from a rendered page, so a layout that is wrong on screen for some other reason still passes.",
+    "",
+    "</details>",
+    "",
+  );
+
+  // Everything the value table does not already show. Matched by exact
+  // message, not by component name — a component with a value diff can still
+  // have an unrelated structural warning, and prefix matching would swallow it.
+  const shown = new Set(diffs.map((d) => d.message));
+  const other = warns.filter((w) => !shown.has(w));
+  if (errors.length) {
+    md.push(
+      `### ✗ ${errors.length} error(s) — Dev Mode will emit wrong code`,
+      "",
+      ...errors.map((e) => `- ${e}`),
+      "",
+    );
+  }
+  if (other.length) {
+    md.push(
+      `### Structural warnings (${other.length})`,
+      "",
+      ...other.map((w) => `- ${w}`),
+      "",
+    );
+  }
+
+  await appendFile(path, `${md.join("\n")}\n`);
+}
+
 // ── report ──────────────────────────────────────────────────────────────────
 console.log(
   `Source: ${figmaSource}\nFigma: ${figma.length} component(s) · code: ${codeComponents.size} · templates: ${templates.length}\n`,
@@ -778,6 +891,7 @@ if (warns.length) {
   );
   for (const w of warns) console.log(`   ${w}`);
 }
+await writeSummary();
 if (errors.length) {
   console.error(
     `\n✗ ${errors.length} error(s) — Dev Mode will emit wrong code:`,
