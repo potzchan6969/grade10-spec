@@ -1,0 +1,71 @@
+name: Storybook
+
+# Publishes the design-system Storybook to GitHub Pages so a designer can open
+# the implemented primitives in a browser and measure them, without a checkout,
+# a Node install, or an engineer. Nothing else in this repository is deployed.
+#
+# One-time setup: Settings → Pages → Source must be set to "GitHub Actions".
+# Until that is done the deploy job fails with a 404 on the Pages API.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  # Pages allows one deployment at a time. Queue rather than cancel: a cancelled
+  # deploy can leave the site on an older build than the run that superseded it.
+  group: pages
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: 24.14.1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Storybook
+        run: pnpm run storybook:build:design-system
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: packages/design-system/storybook-static
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
