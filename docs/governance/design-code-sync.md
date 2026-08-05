@@ -126,6 +126,21 @@ Never draw a variant from scratch, and after duplicating, confirm in the right-h
 
 Deleting or renaming a variant that instances already use leaves orphaned components behind and silently repoints live instances. Prefer **adding** an axis over renaming values, and check the instance count before deleting anything.
 
+### Checking the built component yourself
+
+Two routes, neither of which needs a checkout or an engineer.
+
+**Measure it in Storybook.** Every push to `main` publishes the design-system Storybook to this repository's GitHub Pages site (Actions → **Storybook**, and the run's `deploy` step links the URL). Open a component, then:
+
+1. Switch the **Theme** toolbar control to **AceTrader**. It loads in `Default`, which is the baseline theme, not the designed one — comparing that against your Figma file will show differences that are not real. This is the single most common way to misread the page.
+2. Press <kbd>M</kbd> for **Measure**. Hovering any element overlays its real box model — width, height, padding and margin in rendered pixels. This is the direct answer to "is the padding what I drew".
+3. Press <kbd>O</kbd> for **Outline** to see every element boundary at once, which is faster for spotting a wrong gap or an unexpected wrapper.
+4. Use the **Controls** panel to switch variant, size and state, so you can measure the same rungs your component set defines.
+
+What you are measuring is the primitive as built, in a browser, at the real values — so a rung that is 24px in code and 32px in your Sizing collection is visible in about ten seconds.
+
+**Read the automated diff.** The nightly design-sync run posts a summary table on its own run page — Actions → **Design sync** → the newest run. Each row is one disagreement, in the form `Button · size=sm · Height (h-8) · 32px in code · 24px in Figma`, covering background, height, horizontal padding, gap and corner radius. The same page states what the check does not cover, which is worth reading once: vertical padding, anything inside the component, and the hover, disabled and loading states are all unchecked, so a clean table is not proof the component matches.
+
 ### What happens next
 
 `check:design-system` diffs your axes and options against the code on every push, and again nightly at 01:00 UTC — a Figma edit raises no event in this repository, so the scheduled run is what catches a change you make on a day nobody pushes code. A new option with no code counterpart is a warning; a renamed or removed option is an error. You do not need to run it — but it is why an unannounced rename surfaces as a failed build rather than a wrong button in production.
