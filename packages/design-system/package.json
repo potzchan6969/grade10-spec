@@ -10,6 +10,7 @@
     "tokens:plugin": "node scripts/figma/build-plugin.mjs",
     "tokens:sync": "pnpm tokens:pull && pnpm tokens:build",
     "components:check": "node scripts/check-components.mjs",
+    "code-connect:publish": "figma connect publish --exit-on-unreadable-files",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "storybook": "storybook dev",
     "build-storybook": "storybook build",

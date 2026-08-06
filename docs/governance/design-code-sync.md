@@ -39,7 +39,21 @@ Where code and design genuinely disagree, that is a decision to record in an Ope
 4. **Write `<name>.figma.ts`** with a `getEnum` covering *every* option of every VARIANT property. An unmapped option resolves to `undefined` and emits broken code.
 5. **Write `<name>.stories.tsx`** with a story per variant, plus disabled, loading, and any other state the contract has.
 6. **Run `pnpm run check:design-system`** and get to zero errors and zero *unexplained* warnings. A warning you intend to keep belongs in an OpenSpec change with a reason, not in the run log.
-7. **Publish Code Connect.** A correct template that was never published leaves Dev Mode showing no connected code at all — verify with `get_code_connect_map`, which returns `{}` when nothing is published.
+7. **Publish Code Connect** with `pnpm --filter @acetrader/design-system run code-connect:publish`. A correct template that was never published leaves Dev Mode showing no connected code at all — verify with `get_code_connect_map`, which returns `{}` when nothing is published.
+
+## Publishing Code Connect
+
+```bash
+FIGMA_ACCESS_TOKEN=figd_… pnpm --filter @acetrader/design-system run code-connect:publish
+```
+
+That script is `figma connect publish --exit-on-unreadable-files`. It publishes every template `figma.config.json` matches — `src/**/*.figma.ts`, under the `React` label — not just the one you changed, so a template broken by an unrelated Figma edit surfaces here. `--exit-on-unreadable-files` makes an unparseable template a failure rather than a silent omission.
+
+Append `--dry-run` to list what would be published and against which node, without writing anything. Do that first; it parses every template and then resolves each `url=` header against the API, so it catches a stale node ID before it reaches the file. It still needs a valid token for that second half — a dry run is not a token-free rehearsal.
+
+**The token is not the one the checker uses.** `check:design-system` reads `FIGMA_TOKEN` and needs only `files:read`. Publishing reads `FIGMA_ACCESS_TOKEN` (or `--token`) and needs **File content: read** plus **Code Connect: write**. A `files:read` token will parse fine and fail at the write.
+
+Publishing is a write to a shared Figma file and has no unattended path in CI by design — it is a deliberate step at the end of a change, not something a merge triggers.
 
 ## What the checker enforces
 
@@ -119,6 +133,8 @@ Never draw a variant from scratch, and after duplicating, confirm in the right-h
 *Symptom if ignored:* this is the most common defect found. The original `Loading` variant had **none** of the set's five properties wired, so a developer's generated snippet printed a stale label and the loading state ignored whatever text a consumer typed.
 
 ### 6. Publish the set, and publish Code Connect
+
+These are two separate publishes. You publish the **set** to the team library from Figma; an engineer publishes the **Code Connect mapping** by running [`code-connect:publish`](#publishing-code-connect) from a checkout. Yours has to happen first — Code Connect only resolves published components. Neither happens automatically, so say when your set is published rather than assuming the mapping followed it.
 
 *Symptom if ignored:* Dev Mode shows **no** connected code at all, however correct the mapping is. That is the current state of this file — `get_code_connect_map` returns `{}`.
 
