@@ -71,6 +71,6 @@ A task line before the first group heading is ignored.
 | Tool | Repository | Purpose |
 | --- | --- | --- |
 | `scripts/openspec/plan-preflight.mjs` | this one | Before PM edits a `tasks.md` engineering is implementing: refuses a stale or dirty copy, then prints the owners and counts being edited on top of |
-| `scripts/plan.mjs` | `acetrader-predictions` | The engineer's board, plus `claim`, `unclaim`, `done`, and `undone`, each writing through to this store as a commit |
+| `scripts/openspec/plan.mjs` | `acetrader-predictions` | The engineer's board, plus `claim`, `unclaim`, `done`, and `undone`, each writing through to this store as a commit |
 
 Both parse this format independently — the application repository consumes this repository as a submodule and an OpenSpec store, not as a library, so there is no shared module to import. Change this document first when the convention changes, then both implementations, and check the table above for anything a change would silently invalidate.

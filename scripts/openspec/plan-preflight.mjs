@@ -15,14 +15,17 @@
  *
  * This runs three checks — is this a repo, is `tasks.md` already dirty, is the clone
  * behind its upstream — then prints the state you are about to edit on top of, owners
- * and per-group counts, so a later diff is readable.
+ * and per-group counts, so a later diff is readable. Run it with no change id, or
+ * with `--help`, for those checks and the changes in flight.
  *
  * Zero dependencies, and deliberately no `openspec` call: the CLI is not a dependency
  * of this repo, so the checks read `tasks.md` directly.
  *
  * The format the regexes below parse is defined in `docs/governance/task-ownership.md`,
- * which `scripts/plan.mjs` in the application repo implements independently. Change
- * that document first; it also lists what a format change silently invalidates.
+ * which `scripts/openspec/plan.mjs` in the application repo implements independently.
+ * Change that document first; it also lists what a format change silently invalidates.
+ * This file follows that script's shape — the same color helpers, the same help
+ * layout — because the two are read as one tool from opposite ends.
  */
 
 import { execFileSync } from "node:child_process";
@@ -96,27 +99,97 @@ function changeIds() {
     .sort();
 }
 
+/** Every change in flight with its task counts — the list `help` prints. */
+function changeSummaries() {
+  return changeIds().map((id) => {
+    const path = join(ROOT, "openspec", "changes", id, "tasks.md");
+    if (!existsSync(path)) return { id, planned: false };
+    const tasks = readGroups(readFileSync(path, "utf8")).flatMap(
+      (g) => g.tasks,
+    );
+    return {
+      id,
+      planned: true,
+      done: tasks.filter((t) => t.done).length,
+      total: tasks.length,
+    };
+  });
+}
+
+/**
+ * The three checks, in the order they run — the same shape `pnpm plan help` prints
+ * in the application repo, which is the other half of this convention and the one
+ * an engineer sees far more often.
+ *
+ * This script has one command, so the table describes what a run does rather than
+ * verbs you can pick between; the argument is always a change id.
+ */
+const CHECKS = [
+  ["is a repo", "the store is a git repository, so it has an upstream at all"],
+  ["clean", "tasks.md has no uncommitted edits of your own"],
+  ["current", "the clone is not behind its upstream"],
+];
+
+function help() {
+  const width = Math.max(...CHECKS.map(([name]) => name.length));
+  console.log(
+    `${bold("pnpm plan:preflight")} <change-id>   ${dim("before editing a plan engineering is implementing")}`,
+  );
+  console.log(
+    dim(
+      "  Refuses an edit that would land on a stale copy, then prints the owners and",
+    ),
+  );
+  console.log(
+    dim(
+      "  per-group counts you are about to edit on top of, so a later diff reads.",
+    ),
+  );
+
+  console.log("\nChecks");
+  for (const [name, blurb] of CHECKS)
+    console.log(`  ${padVisible(cyan(name), width + 2)}${dim(blurb)}`);
+
+  console.log("\nChanges in flight");
+  const changes = changeSummaries();
+  if (!changes.length) {
+    console.log(dim("  none — openspec/changes is empty"));
+  } else {
+    const idWidth = Math.max(...changes.map((ch) => ch.id.length));
+    for (const ch of changes) {
+      const state = ch.planned
+        ? `${ch.done}/${ch.total} tasks`
+        : "no tasks.md yet";
+      console.log(`  ${ch.id.padEnd(idWidth + 2)}${dim(state)}`);
+    }
+  }
+
+  console.log(`\n${dim("Store")}  ${ROOT}`);
+  console.log(
+    dim(
+      "       this repo — engineering plans against it from acetrader-predictions",
+    ),
+  );
+  console.log(dim("       PLAN_NO_FETCH=1 skips the fetch this runs first"));
+}
+
 function fail(...lines) {
   for (const l of lines) console.error(l);
   process.exitCode = 1;
 }
 
+// No change id is not an error here: there is one command, so the help and the list
+// of changes in flight are what you wanted. Only a name that does not exist fails.
 const changeId = process.argv[2];
-if (!changeId) {
-  fail(
-    "Usage: node scripts/openspec/plan-preflight.mjs <change-id>",
-    "",
-    "Changes in flight:",
-  );
-  for (const id of changeIds()) console.error(`  ${id}`);
+if (!changeId || changeId === "--help" || changeId === "-h") {
+  help();
   process.exit();
 }
 
-const ids = changeIds();
-if (!ids.includes(changeId)) {
+if (!changeIds().includes(changeId)) {
   fail(
-    `No change in flight named '${changeId}'. Available:`,
-    ...ids.map((id) => `  ${id}`),
+    `No change in flight named '${changeId}'.`,
+    `Run ${cyan("pnpm plan:preflight")} for the list.`,
   );
   process.exit();
 }
