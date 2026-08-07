@@ -18,9 +18,11 @@
  * and per-group counts, so a later diff is readable.
  *
  * Zero dependencies, and deliberately no `openspec` call: the CLI is not a dependency
- * of this repo, so the checks read `tasks.md` directly. That means the ownership
- * convention below is encoded here as three regexes; it is also described in the
- * `proposal` rules in `openspec/config.yaml`, so keep the two in step.
+ * of this repo, so the checks read `tasks.md` directly.
+ *
+ * The format the regexes below parse is defined in `docs/governance/task-ownership.md`,
+ * which `scripts/plan.mjs` in the application repo implements independently. Change
+ * that document first; it also lists what a format change silently invalidates.
  */
 
 import { execFileSync } from "node:child_process";

@@ -48,6 +48,7 @@ rules:
   tasks:
     - Order groups so an engineer can ship and verify one group at a time.
     - Keep each task to something one engineer finishes in a session.
+    - 'Follow docs/governance/task-ownership.md for the group, task-id, and owner format. Write groups without owner tags - engineers claim them at pickup - and never renumber a group or task that is claimed or has checkmarks.'
 
 # Per-operation guidance (optional)
 operations:

@@ -19,6 +19,7 @@ This repository is the versioned source of truth for product requirements and th
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
 | Design-system primitive | `packages/design-system/src/components/` | shadcn primitives and their colocated stories. |
 | Product component implementation | The consuming application repository | This repository specifies the contract; it no longer ships a component package. |
+| Task group and owner format in `tasks.md` | `docs/governance/task-ownership.md` | Parsed independently by tooling in this repository and in the application repository. |
 
 If a statement is testable, it belongs in `openspec/specs/` and nowhere else. A PRD holds only what a requirement cannot carry, and links its capability spec rather than restating it. Where the two disagree, the spec is correct.
 
