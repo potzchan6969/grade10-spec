@@ -9,7 +9,13 @@ ln -sfn AGENTS.md AGENT.md
 ln -sfn AGENTS.md CLAUDE.md
 ln -sfn AGENTS.md GEMINI.md
 
-mkdir -p .codex/skills
-cp -R .cursor/skills/. .codex/skills/
+# .cursor/skills is the source; every other leg is a generated copy of it, so each is
+# removed before it is rewritten. Without that, a skill deleted from the source lingers
+# in a leg and check-parity fails on a manifest diff nothing here can resolve.
+for leg in .codex/skills .claude/skills; do
+  rm -rf "$leg"
+  mkdir -p "$leg"
+  cp -R .cursor/skills/. "$leg/"
+done
 
-echo "Synced root agent aliases and Cursor skills to Codex."
+echo "Synced root agent aliases and Cursor skills to Codex and Claude."
