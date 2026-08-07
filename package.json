@@ -22,6 +22,7 @@
     "tokens:sync": "pnpm --filter @acetrader/design-system run tokens:sync",
     "typecheck": "pnpm --dir apps/ui exec tsc -b && pnpm --filter @acetrader/design-system run typecheck",
     "lint": "biome check .",
+    "plan:preflight": "node scripts/plan-preflight.mjs",
     "lint:fix": "biome check --write ."
   },
   "devDependencies": {
