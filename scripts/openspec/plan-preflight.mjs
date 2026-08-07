@@ -44,9 +44,9 @@ const ANSI = /\x1b\[\d+m/g;
 const padVisible = (s, width) =>
   s + " ".repeat(Math.max(0, width - s.replace(ANSI, "").length));
 
-// The store is this repo, so its root is the script's parent — no registry lookup and
-// no dependence on the cwd you happen to run this from.
-const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
+// The store is this repo, so its root is two directories up from `scripts/openspec/` —
+// no registry lookup and no dependence on the cwd you happen to run this from.
+const ROOT = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
 function git(args) {
   try {
@@ -104,7 +104,7 @@ function fail(...lines) {
 const changeId = process.argv[2];
 if (!changeId) {
   fail(
-    "Usage: node scripts/plan-preflight.mjs <change-id>",
+    "Usage: node scripts/openspec/plan-preflight.mjs <change-id>",
     "",
     "Changes in flight:",
   );
