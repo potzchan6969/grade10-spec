@@ -13,28 +13,27 @@ This repository is the versioned source of truth for product requirements and th
 
 | Need | Canonical location | Notes |
 | --- | --- | --- |
-| Product requirement document | `docs/prds/<product-area>/<feature>.md` | A full, durable PM/design artifact. |
-| Product vocabulary and durable requirements | `openspec/specs/<capability>/spec.md` | Requirement-level source used by implementation changes. |
+| Durable requirements and component export contracts | `openspec/specs/<capability>/spec.md` | The single source of truth. An implementing engineer builds from this alone. |
+| Product decision behind a requirement | `docs/prds/<product-area>/<feature>.md` | Problem, users, non-goals, measurement, rollout, rationale. Explanatory, never authoritative over a requirement. |
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
 | Design-system primitive | `packages/design-system/src/components/` | shadcn primitives and their colocated stories. |
 | Product component implementation | The consuming application repository | This repository specifies the contract; it no longer ships a component package. |
 
-Do not duplicate a PRD verbatim in OpenSpec. Link the PRD from the change proposal and record only implementation-facing requirement deltas in `openspec/changes`.
+If a statement is testable, it belongs in `openspec/specs/` and nowhere else. A PRD holds only what a requirement cannot carry, and links its capability spec rather than restating it. Where the two disagree, the spec is correct.
 
 Read [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md) for the required maintenance lifecycle and a format-selection guide.
 
 ## Product specification workflow
 
-For a new product feature, use the `prd-authoring` skill before implementation planning:
+For a new product feature:
 
-1. Inspect related PRDs and active OpenSpec changes.
-2. Write or update the PRD from `docs/prds/_template.md`; give it a stable kebab-case path.
-3. Capture user outcomes, non-goals, flows, states, acceptance criteria, analytics, accessibility, and consuming-app impact.
-4. For implementation work, create an OpenSpec change named in kebab-case. Its proposal must link the PRD and identify affected component exports and consumer apps.
-5. Keep task checkboxes accurate as work lands; archive completed changes under `openspec/changes/archive/YYYY-MM-DD-<change-name>/`.
+1. Inspect the relevant capability in `openspec/specs/`, active OpenSpec changes, and any related PRD.
+2. Write the requirements as an OpenSpec change carrying deltas against `openspec/specs/<capability>/spec.md`. Its proposal must identify affected component exports and consumer apps.
+3. Use the `prd-authoring` skill when the feature turns on a product judgment the requirement text will not preserve — why this problem, for whom, what was ruled out, what will be measured. Skip the PRD when there is no such judgment.
+4. Keep task checkboxes accurate as work lands; fold accepted deltas into `openspec/specs/`, then archive under `openspec/changes/archive/YYYY-MM-DD-<change-name>/`.
 
-Ask only questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the PRD's Decisions and open questions section.
+Ask only questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or in the PRD's Decisions and open questions section when one exists.
 
 ## Product UI component contracts
 
@@ -46,7 +45,7 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 - No data fetching, mutations, routing, app stores, analytics, feature flags, browser storage, or application imports inside the component itself.
 - Components may use React state, context, effects, refs, timers, and browser APIs for internal presentation and DOM behavior. They must not use those mechanisms to acquire, persist, subscribe to, or orchestrate consumer-owned product state.
 - In this repository, “stateless” means app-neutral: it excludes external product-state integration, not ephemeral internal UI state.
-- Record a contract change as an OpenSpec change that names the exact exports affected and the consuming applications that must adapt.
+- The export contract lives in the capability spec under `openspec/specs/`. Record a contract change as an OpenSpec change whose delta names the exact exports affected and the consuming applications that must adapt.
 
 ## Design system package
 
@@ -62,7 +61,7 @@ Use the `design-system-components` skill whenever creating or changing a primiti
 
 ## Sharing with consuming apps
 
-Consumers add this repository as a Git submodule and read the specifications, the PRDs, and the design tokens from it. They do not install a component package from here: `packages/ui-components` was removed and each application now owns its own component source, so a shared component change is a specification change here plus an implementation change there.
+Consumers add this repository as a Git submodule and build from `openspec/specs/`, reading the PRDs for rationale and the design tokens for values. They do not install a component package from here: `packages/ui-components` was removed and each application now owns its own component source, so a shared component change is a specification change here plus an implementation change there.
 
 Pin the submodule SHA in the application repository; updates are normal pull requests that move that SHA. Do not use git submodules inside this repository; this repository itself is the reusable submodule.
 
