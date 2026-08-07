@@ -1,0 +1,54 @@
+schema: spec-driven
+
+# This repo is an OpenSpec store, and more besides: PM and design own everything
+# under openspec/ and docs/prds/, while packages/design-system/ and designs/ hold
+# the components and tokens the applications consume. Engineering reads the plan
+# from acetrader-predictions, which points here with
+# `store: acetrader-predictions-spec`.
+
+# Project context (optional)
+# This is shown to AI when creating artifacts.
+context: |
+  AceTrader - prediction markets. A market is a question users trade a position
+  on and resolves to an outcome.
+  This store holds planning for every AceTrader surface. Today that is one
+  implementing repo, acetrader-predictions (React 19 + TypeScript on Vite),
+  which consumes this repo two ways at once - as this OpenSpec store, and as its
+  `external/pred-spec` submodule publishing `@acetrader/design-system`.
+  Audience for these artifacts: a PM or designer writing them, and an engineer
+  in the application repo reading them as the only source of truth for what to
+  build.
+  Durable product requirements live in docs/prds/; a change under openspec/ is
+  the implementation delta against them. docs/governance/prd-and-openspec.md
+  explains how the two records stay aligned - follow it.
+  Money is always an integer count of minor units plus an ISO 4217 currency
+  code, never a float - specs must state amounts that way.
+  A change that alters a component or a token is work in this repo:
+  packages/design-system/ holds the primitives and the Figma token pipeline,
+  designs/ holds the versioned Pencil files, and apps/ui/ is the Storybook
+  workbench that renders them.
+
+# Per-artifact rules (optional)
+rules:
+  proposal:
+    - 'Start the file with an author line above `## Why`, in the form `**Author:** @handle - YYYY-MM-DD`, naming whoever wrote the proposal. Ask for the handle rather than guessing it. This is the change''s creator and does not change when someone else edits the proposal - task group owners in tasks.md are a separate thing.'
+    - Open with the trader problem and the evidence for it, not the solution.
+    - Include a metric that would move if this change works.
+    - Always list Non-goals so engineering knows the edges.
+  specs:
+    - Write requirements an engineer in another repo can implement without asking a follow-up question.
+    - Never name a class, function, table, or library in a spec - that is design.md's job.
+    - Every scenario must be checkable by a test or a manual pass.
+  design:
+    - Record alternatives considered for each decision; engineering inherits these trade-offs.
+    - Link the designs/ Pencil file and the docs/prds/ requirement rather than describing screens in prose.
+  tasks:
+    - Order groups so an engineer can ship and verify one group at a time.
+    - Keep each task to something one engineer finishes in a session.
+
+# Per-operation guidance (optional)
+operations:
+  archive:
+    guidance:
+      - Archive only after engineering confirms the change is deployed, not when the code merges.
+      - Re-read the updated main specs afterward and confirm they describe the shipped behavior.
