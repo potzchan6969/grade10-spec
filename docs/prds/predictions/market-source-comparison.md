@@ -32,7 +32,7 @@ When a prediction market is offered by more than one source, a trader should be 
 | Active trader | I see a market offered by multiple sources. | Help me understand which source has the outcome and price I want before I navigate away. |
 | Researching visitor | I am comparing market coverage without placing a trade. | Show me available and unavailable sources without implying a recommendation. |
 
-## Experience and requirements
+## Experience
 
 ### Primary flow
 
@@ -41,34 +41,11 @@ When a prediction market is offered by more than one source, a trader should be 
 3. The user selects an outcome to compare its displayed price across sources.
 4. The user chooses a source-specific call to action. The consuming app owns navigation and any downstream eligibility checks.
 
-### States and edge cases
+## Requirements
 
-| State | User-facing behavior | Recovery or next action |
-| --- | --- | --- |
-| Loading | Show labelled placeholders for source rows; do not show a stale price as current. | Preserve the section position until data resolves or fails. |
-| One source | Explain that comparison is unavailable because only one source currently offers the market. | Keep the source-specific action available. |
-| Outcome unavailable | Show “Not offered” in that source's outcome cell rather than a zero price. | User can select another outcome or source. |
-| Source suspended/resolved | Show a clear status and disable its source action. | User can inspect another active source. |
-| Error | Show a non-blocking message that source comparison could not load. | Provide retry through the consuming app; keep the market page usable. |
-| Narrow viewport | Stack comparison details by source while retaining the selected outcome and status. | Avoid horizontal truncation of source names or prices. |
+This example has no durable spec, because nothing here is approved. On approval its checkable requirements — the loading, single-source, unavailable-outcome, suspended, error, and narrow-viewport behavior, the accessibility obligations, and the component export contract — would be written to `openspec/specs/market-source-comparison/spec.md`, and this document would link to them from here rather than restate them.
 
-### Acceptance criteria
-
-- [ ] Given two or more supplied sources, the user can identify each source, its market status, and the value for a selected comparable outcome.
-- [ ] Given an outcome absent from a source, the UI says “Not offered” and never displays `0` as a substitute price.
-- [ ] Given loading, error, suspended, resolved, and one-source inputs, each state is visible without fetching or inferring data inside the shared component.
-- [ ] The component exposes callbacks for source selection but does not navigate, track analytics, or mutate data.
-- [ ] Keyboard users can move through interactive source actions in a logical order, and status is conveyed as text rather than color alone.
-- [ ] The layout remains understandable at a 320 px viewport width.
-
-## UI component contract
-
-| Component | Required props/states | Accessibility notes | Consumers |
-| --- | --- | --- | --- |
-| `MarketSourceComparison` | `sources`, `selectedOutcomeId`, `onOutcomeChange`, `onSourceAction`, `status`, `errorMessage?` | Use a semantic heading, labelled outcome selector, text status, and disabled semantics for unavailable actions. | Prediction-market web app; embedded market preview. |
-| `SourceComparisonRow` | `source`, `outcome`, `actionLabel`, `onAction`, `isActionDisabled` | Source name and outcome value must be programmatically associated; no color-only availability indication. | `MarketSourceComparison`; source-preview cards. |
-
-The eventual component belongs in the consuming application's shared component directory, is exported from that component's entry module, and receives all values and behavior through props. The component contract must be refined in the linked OpenSpec change before implementation.
+Note the shape that leaves behind: everything above and below this section is a product decision that a requirement cannot carry. That is the test for whether a PRD is worth writing.
 
 ## Consuming applications and integration
 
@@ -86,13 +63,6 @@ The eventual component belongs in the consuming application's shared component d
 | Comparison load failure rate | Failed comparison loads divided by comparison requests. | Platform team |
 
 Analytics event names, properties, privacy review, and instrumentation ownership must be decided in the linked OpenSpec change; the shared component must not emit analytics directly.
-
-## Accessibility and content
-
-- Keyboard and focus behavior: The outcome selector and each source action must be keyboard reachable; disabled actions must not appear actionable.
-- Screen-reader labels and announcements: Announce the selected outcome in context with each source's availability and value. Loading and error states use visible, programmatic status text.
-- Responsive behavior: At narrow widths, source information stacks into readable cards; visual order remains logical reading order.
-- Content and localization constraints: “Not offered”, status labels, source names, action labels, and timestamps are supplied by the consuming application and must support localization.
 
 ## Decisions and open questions
 
