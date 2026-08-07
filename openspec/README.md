@@ -1,7 +1,9 @@
-# OpenSpec change records
+# OpenSpec records
 
-OpenSpec records implementation-facing deltas that follow from a PRD. Durable product requirements belong in `openspec/specs/`; active changes belong in `openspec/changes/`; completed changes move to `openspec/changes/archive/`.
+`openspec/specs/<capability>/spec.md` is the single source of truth for what this product requires. An engineer in a consuming application builds from it without needing to read anything else first.
 
-Every change proposal links the canonical PRD in `docs/prds/` and describes affected consumer applications and public component exports. Use the `openspec-propose`, `openspec-apply-change`, and `openspec-archive-change` agent skills.
+Active implementation deltas live in `openspec/changes/`; completed changes move to `openspec/changes/archive/`. A change carries only the requirements that differ from the durable spec, and its accepted deltas are folded back into `openspec/specs/` before it is archived.
 
-Read [`docs/governance/prd-and-openspec.md`](../docs/governance/prd-and-openspec.md) for the distinction between the two formats and the agent maintenance lifecycle.
+A change proposal links its PRD in `docs/prds/` when one exists — the PRD explains the product decision, and never restates a requirement. Describe affected consumer applications and public component exports in the proposal. Use the `openspec-propose`, `openspec-apply-change`, and `openspec-archive-change` agent skills.
+
+Read [`docs/governance/prd-and-openspec.md`](../docs/governance/prd-and-openspec.md) for the boundary between the two records and the agent maintenance lifecycle.

@@ -171,14 +171,14 @@ For a new or changed public component, reviewers should be able to answer yes to
 - Is DOM-backed behavior documented, scoped to presentation, and cleaned up without acquiring or persisting product state?
 - Do the examples exercise the visible states, narrow viewport, and a representative interaction?
 - Were the implementing application's typecheck, tests, build, and lint run as applicable?
-- Are public exports, consumer documentation, PRD, and OpenSpec records aligned?
+- Do the public exports match the export contract in the capability spec, and does the consumer documentation agree?
 
 ## Applying the guide
 
-Use this guide for a new product UI component or a material public-contract change. Update the linked PRD and OpenSpec change when the behavior, consumer contract, or validation obligations change. Keep feature-specific decisions in the PRD/OpenSpec; update this guide only for durable rules that should apply beyond one feature. Use the [interaction and motion testing scope](ui-component-testing.md) to choose the required browser coverage.
+Use this guide for a new product UI component or a material public-contract change. When behavior, the consumer contract, or validation obligations change, carry the change as a delta against `openspec/specs/<capability>/spec.md`; update the PRD only if the product decision behind it changed. Keep feature-specific requirements in the capability spec; update this guide only for durable rules that should apply beyond one feature. Use the [interaction and motion testing scope](ui-component-testing.md) to choose the required browser coverage.
 
 Related records:
 
+- [Featured Markets capability spec](../../openspec/specs/featured-markets/spec.md)
 - [Featured Markets PRD](../prds/predictions/featured-markets-component.md)
-- [Featured Markets implementation change](../../openspec/changes/add-featured-markets-component/)
 - [PRD and OpenSpec lifecycle](prd-and-openspec.md)

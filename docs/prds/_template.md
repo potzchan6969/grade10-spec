@@ -24,31 +24,19 @@ One paragraph describing the user and outcome.
 | --- | --- | --- |
 |  |  |  |
 
-## Experience and requirements
+## Experience
 
 ### Primary flow
 
 1.
 
-### States and edge cases
+## Requirements
 
-| State | User-facing behavior | Recovery or next action |
-| --- | --- | --- |
-| Loading |  |  |
-| Empty |  |  |
-| Error |  |  |
+Link the capability spec that holds this feature's checkable requirements, state behavior, accessibility obligations, and component export contract:
 
-### Acceptance criteria
+`openspec/specs/<capability>/spec.md`
 
-- [ ]
-
-## UI component contract
-
-List reusable, stateless components needed by this feature. Link existing components when possible.
-
-| Component | Required props/states | Accessibility notes | Consumers |
-| --- | --- | --- | --- |
-|  |  |  |  |
+Do not restate those requirements here. If this feature has no approved requirements yet, say so and name the capability the spec will use.
 
 ## Consuming applications and integration
 
@@ -61,13 +49,6 @@ List reusable, stateless components needed by this feature. Link existing compon
 | Signal | Definition | Owner |
 | --- | --- | --- |
 |  |  |  |
-
-## Accessibility and content
-
-- Keyboard and focus behavior:
-- Screen-reader labels and announcements:
-- Responsive behavior:
-- Content and localization constraints:
 
 ## Decisions and open questions
 

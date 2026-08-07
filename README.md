@@ -4,8 +4,8 @@ Versioned product requirements and the design system for AceTrader applications.
 
 ## What belongs here
 
-- Product managers and designers write durable PRDs in [`docs/prds/`](docs/prds/README.md).
-- Product and engineering teams describe implementation deltas in [`openspec/`](openspec/README.md).
+- Durable requirements and component export contracts live in [`openspec/specs/`](openspec/README.md); implementation deltas live alongside them in `openspec/changes/`.
+- Product managers and designers record the decision behind a requirement — problem, users, non-goals, measurement, rollout — in [`docs/prds/`](docs/prds/README.md).
 - Theme tokens and shadcn primitives live in [`packages/design-system/`](packages/design-system/DESIGN.md), including the two-way Figma token pipeline.
 - Versioned Pencil design files live in [`designs/`](designs/README.md).
 - [`apps/ui/`](apps/ui/) is a Storybook workbench; it is not a production application.
@@ -14,7 +14,7 @@ Product UI components are implemented in the applications that render them. This
 
 Read [`AGENTS.md`](AGENTS.md) before using an AI agent in this repository. It defines the source-of-truth boundaries and the requirements for component contracts.
 
-[`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md) explains why PRDs and OpenSpec are both used and how agents must keep their records aligned.
+[`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md) explains why `openspec/specs/` is the single source of truth, what a PRD is still for, and how agents must keep the two aligned.
 
 ## Quick start
 

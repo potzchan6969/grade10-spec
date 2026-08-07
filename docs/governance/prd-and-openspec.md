@@ -1,103 +1,112 @@
-# PRDs and OpenSpec: different artifacts, one product record
+# PRDs and OpenSpec: one source of truth, one product record
 
-This repository keeps PRDs and OpenSpec deliberately separate. They are complementary formats, not interchangeable copies of the same document.
+`openspec/specs/` is the single source of truth for what this product requires. A PRD explains a product decision; it never restates a requirement.
 
-## Which format answers which question?
+## The rule
 
-| Dimension | PRD | OpenSpec |
-| --- | --- | --- |
-| Primary audience | Product managers, designers, reviewers, and consuming-app teams | Engineers and implementation agents |
-| Primary question | Why should we build this, for whom, and what experience/outcome is required? | What must change in the system to deliver the approved requirement? |
-| Lifespan | Durable feature context; updated as product decisions evolve | Active change record; archived after the implementation ships |
-| Canonical location | `docs/prds/<product-area>/<feature>.md` | Current contracts: `openspec/specs/<capability>/spec.md`; active deltas: `openspec/changes/<change-name>/` |
-| Typical content | Problem, goals, non-goals, flows, UX states, content, accessibility, analytics, rollout, consuming-app impact | Proposal, technical design, requirement deltas, component/API compatibility, implementation tasks, validation |
-| Detail to avoid | App-internal architecture, task breakdowns, and code-level choices | Repeating the entire product narrative, research, or visual rationale |
-| Completion signal | The outcome and acceptance criteria are understandable without reading code | The tasks, design, and requirement deltas are implemented, verified, and ready to archive |
+Every checkable requirement and every cross-repository contract lives in `openspec/specs/<capability>/spec.md`. An engineer in a consuming application builds from that spec alone, without reading a PRD first.
 
-## Source-of-truth rule
+A PRD holds only what a requirement cannot carry: the problem and its evidence, who it is for, what was deliberately excluded, what will be measured, how it rolls out, and which decisions were made and why. A PRD links its capability spec; it does not duplicate it.
 
-The PRD is the canonical explanation of the product decision. OpenSpec is the canonical record of an implementation change and the durable requirement contracts it updates.
+If a statement is testable, it belongs in the spec. If removing every testable statement leaves a PRD with nothing, the PRD should not exist — write the change and the spec instead.
 
-An OpenSpec proposal must link its PRD. It may summarize the user outcome to orient implementers, but it must not duplicate the PRD section-by-section. Conversely, a PRD may link a change for delivery status but must not become an engineering task tracker.
+## Which artifact answers which question?
 
-## When to use each format
+| Dimension | `openspec/specs/` | PRD | `openspec/changes/` |
+| --- | --- | --- | --- |
+| Primary question | What must be true of the product today? | Why did we decide this, for whom, and what did we rule out? | What is changing, and how will it be delivered? |
+| Primary audience | Engineers and implementation agents in consuming applications | Product managers, designers, reviewers | Whoever is delivering the change |
+| Authority | Canonical. Wins any conflict. | Explanatory. Never authoritative over a requirement. | Canonical for the in-flight delta only, until archived. |
+| Lifespan | Durable; edited in place as the product changes | Durable; edited when the product decision changes | Archived after delivery |
+| Typical content | Requirements, scenarios, state behavior, accessibility obligations, content ownership, named component exports | Problem, evidence, goals, non-goals, users and jobs, primary flow, consuming applications, measurement, decisions, rollout and risks | Proposal, design, requirement deltas, tasks |
+| Content to keep out | Class, hook, or library names — those are `design.md`'s job | Anything testable | The full product narrative |
+
+Public component exports are the exception to "no names in a spec": the export name *is* the contract between this repository and the application that implements it, so specs name it. Internal structure still belongs in `design.md`.
+
+## When to use each
 
 | Situation | Update | Reason |
 | --- | --- | --- |
-| Exploring a new customer problem, workflow, or UI concept | PRD | The team needs outcome, scope, and experience clarity before choosing implementation. |
-| The team approves implementation of an existing PRD | OpenSpec change | Engineering needs a bounded proposal, design, deltas, and tasks. |
-| A technical refactor changes no product-visible behavior | OpenSpec only | No product decision changed. |
-| A code discovery changes user behavior, scope, analytics, content, or accessibility | PRD first, then OpenSpec | The product decision changed and the implementation record must follow it. |
-| A requirement becomes a long-lived cross-app contract | `openspec/specs/` and link from the PRD | Consumers need a stable, implementation-readable contract. |
-| A change is complete | Sync durable specs, confirm the PRD, then archive the change | The current contract and product record must remain useful after delivery history moves to archive. |
+| Exploring a new customer problem, workflow, or UI concept | PRD | The team needs outcome, scope, and rationale before choosing implementation. |
+| A requirement, state behavior, accessibility obligation, or export contract changes | `openspec/specs/`, through a change | This is the source of truth; nothing else records it. |
+| The team approves implementation | An `openspec/changes/` change carrying requirement deltas | Delivery needs a bounded proposal, design, deltas, and tasks. |
+| A technical refactor changes no product-visible behavior | Change only, with no spec delta | No requirement and no product decision changed. |
+| A discovery changes user behavior, scope, analytics, content, or accessibility | Spec delta first; update the PRD if the *decision* changed | The requirement is what implementers read. |
+| The rationale for a decision changes but the behavior does not | PRD | Nothing testable moved. |
+| A change is complete | Fold deltas into `openspec/specs/`, confirm the PRD, then archive | The spec must describe current truth once delivery history moves to archive. |
 
 ## Maintenance workflow for future agents
 
-### 1. Start with product context
+### 1. Start with the spec
 
-Before proposing or implementing a feature, agents must read:
+Before proposing or implementing a feature, read in this order:
 
-1. the relevant document in `docs/prds/`;
-2. related contracts in `openspec/specs/`;
-3. any active changes in `openspec/changes/` that touch the same capability; and
-4. the design-system primitives in `packages/design-system/src/components/`, and the component's implementation in the consuming application, when UI is involved.
+1. the relevant capability in `openspec/specs/`;
+2. any active change in `openspec/changes/` touching that capability;
+3. the PRD in `docs/prds/`, for the rationale behind what the spec requires; and
+4. the design-system primitives in `packages/design-system/src/components/`, plus the component's implementation in the consuming application, when UI is involved.
 
-If no PRD exists and the request changes a user experience or product policy, create one from [`docs/prds/_template.md`](../prds/_template.md). Record assumptions as open questions rather than silently choosing product behavior.
+If the spec and a PRD disagree, the spec is correct and the PRD is stale — fix the PRD.
 
-### 2. Maintain the PRD when the product decision changes
+### 2. Write requirements into the capability spec
 
-Update the PRD whenever a change affects any of the following:
+A capability spec at `openspec/specs/<capability>/spec.md` contains:
 
-- target user, problem statement, goal, or non-goal;
-- user flow, visible state, copy, responsive behavior, or accessibility behavior;
-- acceptance criterion, measurement, rollout, or risk;
-- reusable UI component contract or the set of consuming applications.
+- a `## Purpose` naming what the capability is for and linking its PRD, when one exists;
+- `### Requirement:` entries written so an engineer in another repository can implement them without a follow-up question; and
+- `#### Scenario:` entries beneath each, every one checkable by a test or a manual pass.
 
-Keep the PRD readable as a standalone decision record. Replace superseded decisions and preserve useful rationale in the Decisions and open questions table; link an archived OpenSpec change for detailed history instead of embedding task logs.
+Do not name a class, hook, function, table, or library. Do name the public component exports a consuming application must provide, and keep them in one requirement so a contract change is easy to spot.
 
-### 3. Create and maintain an OpenSpec change for approved implementation
+### 3. Write a PRD only when there is a decision to explain
+
+Create one from [`docs/prds/_template.md`](../prds/_template.md) when a change turns on a product judgment that the requirement text will not preserve: why this problem, for whom, what was ruled out, what will be measured, what the risks are. Record assumptions as open questions rather than silently choosing product behavior.
+
+Update the PRD when the target user, problem, goal, non-goal, measurement, rollout, risk, or a recorded decision changes. Do not update it merely because a requirement changed — that is the spec's job.
+
+Keep the PRD readable as a standalone decision record. Replace superseded decisions and preserve the useful rationale in the Decisions and open questions table; link an archived change for detailed history rather than embedding task logs.
+
+### 4. Create and maintain a change for approved implementation
 
 For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 
-- `proposal.md` — scope, why now, direct PRD link, consumer impact, and non-goals;
+- `proposal.md` — scope, why now, consumer impact, non-goals, and a PRD link when one exists;
 - `design.md` — implementation choices, interfaces, compatibility, and validation approach;
 - `tasks.md` — small, checkable delivery steps; and
-- `specs/` — only requirement deltas from current durable contracts.
+- `specs/` — only the requirement deltas against `openspec/specs/`.
 
-An agent must update the active change when it learns an implementation constraint, splits delivery, changes a component export, or adds/removes a validation step. It must update the linked PRD too if that constraint changes the user-facing promise.
+Update the active change when you learn an implementation constraint, split delivery, change a component export, or add or remove a validation step. Update the PRD too only if that constraint changed a recorded product decision.
 
-### 4. Keep component contracts aligned
+### 5. Keep component contracts aligned
 
-When a PRD requires a reusable component, name it in the PRD's UI component contract table. The related OpenSpec change must identify the exact export, the compatibility impact, and the application that implements it. Component source lives in that application; this repository carries the contract and the design-system primitives beneath it.
-
-Any agent changing a public component contract must:
+A capability spec names the exact exports a consuming application must provide. The change that alters one must:
 
 1. preserve compatible props or explicitly document a breaking change;
-2. update the PRD if the visible component behavior changed;
-3. update the active OpenSpec change's design/tasks and delta spec as appropriate; and
-4. land the matching implementation change in the consuming application, with its own checks run there.
+2. carry the requirement delta against the capability spec;
+3. name every consuming application that must adapt; and
+4. land the matching implementation change in that application, with its own checks run there.
 
-### 5. Finish a change without losing context
+Component source lives in the application. This repository carries the contract and the design-system primitives beneath it.
 
-Before archiving an OpenSpec change:
+### 6. Finish a change without losing context
+
+Before archiving:
 
 1. ensure required tasks are complete and validation is recorded;
 2. fold accepted requirement deltas into `openspec/specs/`;
-3. verify the linked PRD describes the delivered user-visible behavior and consumer impact;
-4. archive the change at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`; and
-5. leave links between the PRD, durable spec, and archive where they aid future discovery.
+3. confirm the linked PRD still describes the decision accurately;
+4. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`; and
+5. leave links between the spec, the PRD, and the archive where they aid discovery.
 
-Do not archive a change as a substitute for updating the PRD or durable specs. Archives preserve history; the PRD and `openspec/specs/` must describe the current truth.
+Do not archive a change as a substitute for updating `openspec/specs/`. Archives preserve history; the spec must describe the current truth.
 
 ## Fast decision guide
 
 ```text
-Does the request change what a user, designer, or consuming app expects?
-├─ Yes → create/update the PRD.
-│        Is implementation being planned or performed?
-│        ├─ Yes → create/update a linked OpenSpec change.
-│        └─ No  → PRD only; record open questions and decisions.
-└─ No → Does it change a durable engineering contract or delivery plan?
-         ├─ Yes → OpenSpec only.
+Is the statement testable — could a test or a manual pass decide it?
+├─ Yes → it belongs in openspec/specs/<capability>/spec.md,
+│        reached through an openspec/changes/ delta.
+└─ No  → Does it explain a product judgment that outlives this change?
+         ├─ Yes → create or update the PRD.
          └─ No  → use normal repository documentation or code comments.
 ```
