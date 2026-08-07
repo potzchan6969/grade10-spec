@@ -46,6 +46,7 @@ rules:
     - Record alternatives considered for each decision; engineering inherits these trade-offs.
     - Link the designs/ Pencil file and the capability spec rather than describing screens in prose.
   tasks:
+    - 'Split groups by layer and order them so each one is buildable against what the ones before it already landed: shared types and interfaces first, then data migration, then backend and API, then frontend. Omit a layer the change does not touch rather than writing an empty group.'
     - Order groups so an engineer can ship and verify one group at a time.
     - Keep each task to something one engineer finishes in a session.
     - 'Follow docs/governance/task-ownership.md for the group, task-id, and owner format. Write groups without owner tags - engineers claim them at pickup - and never renumber a group or task that is claimed or has checkmarks.'
