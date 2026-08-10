@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@acetrader/design-system/lib/utils";
 import { Select as SelectPrimitive } from "@base-ui/react/select";
+import { cn } from "@grade10/design-system/lib/utils";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import type * as React from "react";
 

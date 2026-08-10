@@ -42,7 +42,7 @@ const clear = instance.getBoolean("clear#2176:199");
 
 export default {
   example: figma.code`<NumberInput${showLabel ? figma.code` label="${label}"` : ""} placeholder="${placeholder}" defaultValue="${value}" unit="${unit}"${status === "default" ? "" : figma.code` status="${status}"`}${message ? figma.code` message="${message}"` : ""}${clear ? figma.code` onClear={onClear}` : ""}${loading ? figma.code` loading` : ""}${disabled ? figma.code` disabled` : ""} />`,
-  imports: ['import { NumberInput } from "@acetrader/design-system"'],
+  imports: ['import { NumberInput } from "@grade10/design-system"'],
   id: "number-input",
   metadata: { nestable: true },
 };

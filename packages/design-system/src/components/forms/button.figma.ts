@@ -96,7 +96,7 @@ export default {
   // `default` is the cva defaultVariant for both axes, so omit each prop in that
   // case and emit what someone would actually write.
   example: figma.code`<Button${variant === "default" ? "" : figma.code` variant="${variant}"`}${size === "default" ? "" : figma.code` size="${size}"`}${loading ? figma.code` loading` : ""}${disabled ? figma.code` disabled` : ""}${leadingCode ? figma.code` leading={${leadingCode}}` : ""}${trailingCode ? figma.code` trailing={${trailingCode}}` : ""}>${label}</Button>`,
-  imports: ['import { Button } from "@acetrader/design-system"'],
+  imports: ['import { Button } from "@grade10/design-system"'],
   id: "button",
   metadata: { nestable: true },
 };

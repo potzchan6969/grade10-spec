@@ -34,17 +34,17 @@ Where code and design genuinely disagree, that is a decision to record in an Ope
 ## Creating a component
 
 1. **Publish the Figma component set first.** Code Connect only resolves published components, and `list_file_components_for_code_connect` only returns published ones.
-2. **Pull tokens** if the design introduced any (`pnpm tokens:sync`), and confirm the values you need exist in `src/themes/acetrader.css`. Adding a component that binds a token the baseline `default` theme lacks will render it unstyled outside `.theme-acetrader` — see "Theme coverage" below.
+2. **Pull tokens** if the design introduced any (`pnpm tokens:sync`), and confirm the values you need exist in `src/themes/grade10.css`. Adding a component that binds a token the baseline `default` theme lacks will render it unstyled outside `.theme-grade10` — see "Theme coverage" below.
 3. **Write `<name>.tsx`** with one cva option per Figma variant option, and nothing more.
 4. **Write `<name>.figma.ts`** with a `getEnum` covering *every* option of every VARIANT property. An unmapped option resolves to `undefined` and emits broken code.
 5. **Write `<name>.stories.tsx`** with a story per variant, plus disabled, loading, and any other state the contract has.
 6. **Run `pnpm run check:design-system`** and get to zero errors and zero *unexplained* warnings. A warning you intend to keep belongs in an OpenSpec change with a reason, not in the run log.
-7. **Publish Code Connect** with `pnpm --filter @acetrader/design-system run code-connect:publish`. A correct template that was never published leaves Dev Mode showing no connected code at all — verify with `get_code_connect_map`, which returns `{}` when nothing is published.
+7. **Publish Code Connect** with `pnpm --filter @grade10/design-system run code-connect:publish`. A correct template that was never published leaves Dev Mode showing no connected code at all — verify with `get_code_connect_map`, which returns `{}` when nothing is published.
 
 ## Publishing Code Connect
 
 ```bash
-FIGMA_ACCESS_TOKEN=figd_… pnpm --filter @acetrader/design-system run code-connect:publish
+FIGMA_ACCESS_TOKEN=figd_… pnpm --filter @grade10/design-system run code-connect:publish
 ```
 
 That script is `figma connect publish --exit-on-unreadable-files`. It publishes every template `figma.config.json` matches — `src/**/*.figma.ts`, under the `React` label — not just the one you changed, so a template broken by an unrelated Figma edit surfaces here. `--exit-on-unreadable-files` makes an unparseable template a failure rather than a silent omission.
@@ -148,7 +148,7 @@ Two routes, neither of which needs a checkout or an engineer.
 
 **Measure it in Storybook.** Every push to `main` publishes the design-system Storybook to this repository's GitHub Pages site (Actions → **Storybook**, and the run's `deploy` step links the URL). Open a component, then:
 
-1. Switch the **Theme** toolbar control to **AceTrader**. It loads in `Default`, which is the baseline theme, not the designed one — comparing that against your Figma file will show differences that are not real. This is the single most common way to misread the page.
+1. Switch the **Theme** toolbar control to **Grade10**. It loads in `Default`, which is the baseline theme, not the designed one — comparing that against your Figma file will show differences that are not real. This is the single most common way to misread the page.
 2. Press <kbd>M</kbd> for **Measure**. Hovering any element overlays its real box model — width, height, padding and margin in rendered pixels. This is the direct answer to "is the padding what I drew".
 3. Press <kbd>O</kbd> for **Outline** to see every element boundary at once, which is faster for spotting a wrong gap or an unexpected wrapper.
 4. Use the **Controls** panel to switch variant, size and state, so you can measure the same rungs your component set defines.
@@ -182,9 +182,9 @@ Deleting a variant that instances still use leaves an orphaned component behind 
 
 ## Theme coverage
 
-`src/themes/default.css` defines the `:root` baseline; `.theme-acetrader` layers over it. The `Custom/*` extension tokens exist only in the acetrader theme, so a component binding one renders with an undefined custom property — no background at all — under the baseline theme. When a component adopts a `Custom/*` token, add a derived baseline value to `default.css`, in both `:root` and `.dark` so it re-resolves against whichever base slots are in scope.
+`src/themes/default.css` defines the `:root` baseline; `.theme-grade10` layers over it. The `Custom/*` extension tokens exist only in the grade10 theme, so a component binding one renders with an undefined custom property — no background at all — under the baseline theme. When a component adopts a `Custom/*` token, add a derived baseline value to `default.css`, in both `:root` and `.dark` so it re-resolves against whichever base slots are in scope.
 
-Be aware that the Storybook suite renders the **`default`** theme. It therefore exercises those baseline values, not the designed ones, and a passing run says nothing about how a component looks in AceTrader. Review that in Storybook with the toolbar switched over.
+Be aware that the Storybook suite renders the **`default`** theme. It therefore exercises those baseline values, not the designed ones, and a passing run says nothing about how a component looks in Grade10. Review that in Storybook with the toolbar switched over.
 
 ## Known gaps
 

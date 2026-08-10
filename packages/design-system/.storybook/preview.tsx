@@ -7,7 +7,7 @@ import "./tailwind.css";
 const withTheme: Decorator = (Story, context) => {
   const { colorTheme, mode } = context.globals;
   const root = document.documentElement;
-  root.classList.remove("theme-default", "theme-acetrader");
+  root.classList.remove("theme-default", "theme-grade10");
   root.classList.add(`theme-${colorTheme}`);
   root.classList.toggle("dark", mode === "dark");
   return <Story />;
@@ -35,7 +35,7 @@ const preview: Preview = {
         icon: "paintbrush",
         items: [
           { value: "default", title: "Default" },
-          { value: "acetrader", title: "AceTrader" },
+          { value: "grade10", title: "Grade10" },
         ],
         dynamicTitle: true,
       },

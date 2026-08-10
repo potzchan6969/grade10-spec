@@ -1,6 +1,6 @@
-import { Button } from "@acetrader/design-system/components/forms/button";
-import { cn } from "@acetrader/design-system/lib/utils";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
+import { Button } from "@grade10/design-system/components/forms/button";
+import { cn } from "@grade10/design-system/lib/utils";
 import { XIcon } from "lucide-react";
 import type * as React from "react";
 

@@ -1,6 +1,6 @@
-import { RadioButton } from "@acetrader/design-system/components/forms/radio-button";
-import { cn } from "@acetrader/design-system/lib/utils";
 import type { Radio as RadioPrimitive } from "@base-ui/react/radio";
+import { RadioButton } from "@grade10/design-system/components/forms/radio-button";
+import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 
 type RadioListItemProps = RadioPrimitive.Root.Props & {

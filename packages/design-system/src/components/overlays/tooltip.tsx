@@ -1,5 +1,5 @@
-import { cn } from "@acetrader/design-system/lib/utils";
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
+import { cn } from "@grade10/design-system/lib/utils";
 
 function TooltipProvider({
   delay = 0,

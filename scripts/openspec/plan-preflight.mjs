@@ -4,7 +4,7 @@
  *
  *   pnpm run plan:preflight add-featured-markets-component
  *
- * This repo is the OpenSpec store for acetrader-predictions, and that repo's apply
+ * This repo is the OpenSpec store for grade10, and that repo's apply
  * guidance tells engineers to check off tasks in this store's `tasks.md` and commit
  * that separately from their code. So both sides write the same file from different
  * clones, and neither side has a guard: PM can edit `tasks.md` on top of a stale copy,
@@ -166,9 +166,7 @@ function help() {
 
   console.log(`\n${dim("Store")}  ${ROOT}`);
   console.log(
-    dim(
-      "       this repo — engineering plans against it from acetrader-predictions",
-    ),
+    dim("       this repo — engineering plans against it from grade10"),
   );
   console.log(dim("       PLAN_NO_FETCH=1 skips the fetch this runs first"));
 }

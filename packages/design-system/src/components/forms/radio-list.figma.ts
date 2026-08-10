@@ -15,7 +15,7 @@ const items = instance.getSlot("list#2213:8");
 // boolean to emit.
 export default {
   example: figma.code`<RadioList${showLabel ? figma.code` label="${label}"` : ""}>${items}</RadioList>`,
-  imports: ['import { RadioList } from "@acetrader/design-system"'],
+  imports: ['import { RadioList } from "@grade10/design-system"'],
   id: "radio-list",
   metadata: { nestable: true },
 };

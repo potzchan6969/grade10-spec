@@ -1,5 +1,5 @@
-import { cn } from "@acetrader/design-system/lib/utils";
 import { Radio as RadioPrimitive } from "@base-ui/react/radio";
+import { cn } from "@grade10/design-system/lib/utils";
 
 /**
  * The control on its own. Use it inside a `RadioGroup`, or reach for

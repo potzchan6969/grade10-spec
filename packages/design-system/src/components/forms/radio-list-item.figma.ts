@@ -16,7 +16,7 @@ const label = instance.getString("label#2176:172");
 
 export default {
   example: figma.code`<RadioListItem value={value}${disabled ? figma.code` disabled` : ""}>${label}</RadioListItem>`,
-  imports: ['import { RadioListItem } from "@acetrader/design-system"'],
+  imports: ['import { RadioListItem } from "@grade10/design-system"'],
   id: "radio-list-item",
   metadata: { nestable: true },
 };

@@ -1,6 +1,6 @@
-# @acetrader/design-system
+# @grade10/design-system
 
-The AceTrader design system: theme tokens + shadcn primitives. This is the
+The Grade10 design system: theme tokens + shadcn primitives. This is the
 **design-system half** of the design-system ↔ product split — product and
 compound components live elsewhere, not here.
 
@@ -14,7 +14,7 @@ only one here.
 | Path | Contents |
 |---|---|
 | `src/theme.css` | Generated design tokens — colors (light/dark), typography, radius, charts, status colors. Built from `tokens.json`; do not edit by hand. |
-| `src/themes/*.css` | Per-theme token sets (`acetrader.css` generated, `default.css` hand-maintained stock shadcn). |
+| `src/themes/*.css` | Per-theme token sets (`grade10.css` generated, `default.css` hand-maintained stock shadcn). |
 | `src/lib/utils.ts` | `cn()` helper. |
 | `src/components/**/*.tsx` | shadcn primitives (button, card, input, select, dialog, …). Generic and reusable. |
 | `src/components/**/*.stories.tsx` | Storybook examples, colocated with each primitive. |
@@ -55,24 +55,24 @@ of the Figma section before syncing from either.
 ```css
 /* app src/index.css */
 @import "tailwindcss";
-@import "@acetrader/design-system/theme.css";            /* preamble + primitives */
-@import "@acetrader/design-system/themes/default.css";   /* :root slot values */
-@import "@acetrader/design-system/themes/acetrader.css"; /* .theme-acetrader overrides */
+@import "@grade10/design-system/theme.css";            /* preamble + primitives */
+@import "@grade10/design-system/themes/default.css";   /* :root slot values */
+@import "@grade10/design-system/themes/grade10.css"; /* .theme-grade10 overrides */
 @source "../../../../packages/design-system/src";  /* generate component classes */
 ```
 
 All three imports are required, in that order. `theme.css` carries the `@theme
 inline` mapping and the mode-independent primitives but no slot *values*;
-`default.css` defines them on `:root`, and `acetrader.css` overrides that base
-under `.theme-acetrader`. Importing `theme.css` alone leaves every slot
-undefined. Apply the theme by putting `theme-acetrader` on `<html>` — see
+`default.css` defines them on `:root`, and `grade10.css` overrides that base
+under `.theme-grade10`. Importing `theme.css` alone leaves every slot
+undefined. Apply the theme by putting `theme-grade10` on `<html>` — see
 `ColorThemeProvider`, whose class dimension is orthogonal to the `dark` class.
 
 ```tsx
-import { Button, Card } from "@acetrader/design-system"
+import { Button, Card } from "@grade10/design-system"
 ```
 
-Imports use the package-scoped alias `@acetrader/design-system/*` (never `@/`),
+Imports use the package-scoped alias `@grade10/design-system/*` (never `@/`),
 so they resolve unambiguously when the app bundles the package source and never
 collide with the app's own `@` alias.
 
@@ -80,7 +80,7 @@ collide with the app's own `@` alias.
 
 Tokens are projected from the `.pen` file, not hand-maintained long-term:
 
-1. Open `designs/acetrader-ui.pen` in the Pencil desktop app.
+1. Open `designs/grade10-ui.pen` in the Pencil desktop app.
 2. Read the variables (Pencil MCP `get_variables`) — the unprefixed `Mode`
    Light/Dark set is AceTrader.
 3. Regenerate `src/theme.css` from that table: each `--token` becomes a
@@ -108,7 +108,7 @@ names) live in `tokens.config.json`. Figma and the CSS files are both
 | Command | Direction | Does |
 |---|---|---|
 | `pnpm tokens:pull` | Figma → code | Dump → `tokens.json` (needs `FIGMA_DUMP=<file>` from the dump plugin) |
-| `pnpm tokens:build` | code → CSS | `tokens.json` + config → `theme.css`, `themes/acetrader.css` |
+| `pnpm tokens:build` | code → CSS | `tokens.json` + config → `theme.css`, `themes/grade10.css` |
 | `pnpm tokens:push` | code → Figma | `tokens.json` → `scripts/figma/build/push.gen.js`, run inside Figma via `use_figma` or the built plugin |
 | `pnpm tokens:sync` | Figma → CSS | `tokens:pull && tokens:build` (full refresh) |
 
@@ -181,7 +181,7 @@ mode names, and it checks before writing, so a failed pull leaves `tokens.json`
 untouched.
 
 > **Unresolved: two design sources.** The Pencil flow above
-> (`designs/acetrader-ui.pen`) predates this Figma pipeline and the two now
+> (`designs/grade10-ui.pen`) predates this Figma pipeline and the two now
 > disagree. The evidence says Figma is live: the July 2026 resync landed a
 > full semantic-layer rewrite plus three new collections that have no Pencil
 > counterpart, and `tokens.json` is now a projection of the Figma file. Until
@@ -198,7 +198,7 @@ cd packages/design-system
 pnpm dlx shadcn@latest add <component> --yes
 ```
 
-Then export it from `src/index.ts` and add a story next to it. The AceTrader
+Then export it from `src/index.ts` and add a story next to it. The Grade10
 `.pen` library is the stock shadcn set, so most primitives come straight from
 the registry, auto-themed by `theme.css`.
 

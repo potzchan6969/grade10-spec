@@ -35,7 +35,7 @@ const leadingCode =
 
 export default {
   example: figma.code`<Badge${variant === "default" ? "" : figma.code` variant="${variant}"`}${size === "default" ? "" : figma.code` size="${size}"`}>${leadingCode ? figma.code`${leadingCode}` : ""}${label}</Badge>`,
-  imports: ['import { Badge } from "@acetrader/design-system"'],
+  imports: ['import { Badge } from "@grade10/design-system"'],
   id: "badge",
   metadata: { nestable: true },
 };

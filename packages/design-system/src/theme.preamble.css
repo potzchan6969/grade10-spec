@@ -1,8 +1,8 @@
 /*
- * AceTrader design system — theme preamble (HAND-MAINTAINED)
+ * Grade10 design system — theme preamble (HAND-MAINTAINED)
  * Everything below is prepended verbatim to the generated theme.css.
  * Put font imports, @custom-variant, and the @theme inline mapping here.
- * The token VALUE blocks (:root, .dark, .theme-acetrader) are generated
+ * The token VALUE blocks (:root, .dark, .theme-grade10) are generated
  * from Figma Variables by scripts/sync-tokens.mjs — do not add them here.
  */
 @import "@fontsource-variable/geist";
@@ -56,7 +56,7 @@
   --color-foreground: var(--foreground);
   --color-background: var(--background);
 
-  /* Custom/* — AceTrader extension set beyond the stock shadcn contract. */
+  /* Custom/* — Grade10 extension set beyond the stock shadcn contract. */
   --color-control: var(--control);
   --color-control-hover: var(--control-hover);
   /* No --color-field*: `Custom/field` was deleted from the Semantic collection

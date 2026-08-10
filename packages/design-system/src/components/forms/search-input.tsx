@@ -1,7 +1,7 @@
 import {
   Input,
   InputShell,
-} from "@acetrader/design-system/components/forms/input";
+} from "@grade10/design-system/components/forms/input";
 import { SearchIcon, XIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useId } from "react";

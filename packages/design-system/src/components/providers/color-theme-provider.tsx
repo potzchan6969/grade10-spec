@@ -2,9 +2,9 @@
 
 import * as React from "react";
 
-/* Color-theme dimension (e.g. default / acetrader), orthogonal to light/dark.
+/* Color-theme dimension (e.g. default / grade10), orthogonal to light/dark.
  * next-themes owns light/dark (the `dark` class); this owns the `${prefix}${name}`
- * class. Both classes coexist on <html>, matching the CSS: `.theme-acetrader.dark`.
+ * class. Both classes coexist on <html>, matching the CSS: `.theme-grade10.dark`.
  * Pair with the pre-paint script in index.html to avoid a flash on reload. */
 
 type ColorThemeContextValue = {

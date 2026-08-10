@@ -1,6 +1,6 @@
-# AceTrader product specifications
+# Grade10 product specifications
 
-Versioned product requirements and the design system for AceTrader applications.
+Versioned product requirements and the design system for Grade10 applications.
 
 ## What belongs here
 
@@ -48,7 +48,7 @@ pnpm run lint
 In a consuming app repository, add this repository at a stable vendor path:
 
 ```bash
-git submodule add git@github.com:9gag/acetrader-predictions-spec.git vendor/pred-spec
+git submodule add git@github.com:9gag/grade10-spec.git vendor/grade10-spec
 ```
 
 The app reads the PRDs, the OpenSpec changes, and the design tokens from that path, and implements the components itself. Pin the submodule SHA in the app repository; updates are normal pull requests that move that SHA.

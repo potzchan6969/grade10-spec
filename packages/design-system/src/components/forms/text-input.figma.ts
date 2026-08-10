@@ -45,7 +45,7 @@ export default {
   // `default` is the cva defaultVariant for `status`, so the prop is omitted
   // there. `showLabel` is expressed as the presence of `label`.
   example: figma.code`<TextInput${showLabel ? figma.code` label="${label}"` : ""} placeholder="${placeholder}" defaultValue="${value}"${status === "default" ? "" : figma.code` status="${status}"`}${message ? figma.code` message="${message}"` : ""}${loading ? figma.code` loading` : ""}${disabled ? figma.code` disabled` : ""} />`,
-  imports: ['import { TextInput } from "@acetrader/design-system"'],
+  imports: ['import { TextInput } from "@grade10/design-system"'],
   id: "text-input",
   metadata: { nestable: true },
 };

@@ -17,7 +17,7 @@ const divider = instance.getBoolean("divider#2176:188");
 
 export default {
   example: figma.code`<ListItem${showDescription ? figma.code` description="${description}"` : ""}${divider ? "" : figma.code` divider={false}`}>${label}</ListItem>`,
-  imports: ['import { ListItem } from "@acetrader/design-system"'],
+  imports: ['import { ListItem } from "@grade10/design-system"'],
   id: "list-item",
   metadata: { nestable: true },
 };

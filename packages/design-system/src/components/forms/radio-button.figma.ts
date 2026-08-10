@@ -24,7 +24,7 @@ const disabled = instance.getEnum("isDisabled", {
 // controlled leaf: the RadioGroup around it owns the value.
 export default {
   example: figma.code`<RadioButton value={value}${checked ? figma.code` checked` : ""}${disabled ? figma.code` disabled` : ""} />`,
-  imports: ['import { RadioButton } from "@acetrader/design-system"'],
+  imports: ['import { RadioButton } from "@grade10/design-system"'],
   id: "radio-button",
   metadata: { nestable: true },
 };

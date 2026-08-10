@@ -1,4 +1,4 @@
-import { cn } from "@acetrader/design-system/lib/utils";
+import { cn } from "@grade10/design-system/lib/utils";
 import type * as React from "react";
 
 /**

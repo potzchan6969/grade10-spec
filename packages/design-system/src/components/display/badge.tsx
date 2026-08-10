@@ -1,6 +1,6 @@
-import { cn } from "@acetrader/design-system/lib/utils";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
+import { cn } from "@grade10/design-system/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 // Figma binds the badge corner to `Radius/radius-sm` (4px), which the

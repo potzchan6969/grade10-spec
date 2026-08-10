@@ -1,5 +1,5 @@
-import { cn } from "@acetrader/design-system/lib/utils";
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group";
+import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 
 type RadioListProps = RadioGroupPrimitive.Props & {

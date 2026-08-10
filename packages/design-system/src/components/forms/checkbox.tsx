@@ -1,5 +1,5 @@
-import { cn } from "@acetrader/design-system/lib/utils";
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox";
+import { cn } from "@grade10/design-system/lib/utils";
 import { CheckIcon } from "lucide-react";
 
 function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {

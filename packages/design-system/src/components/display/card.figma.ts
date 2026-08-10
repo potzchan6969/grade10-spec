@@ -21,7 +21,7 @@ const content = instance.getSlot("Slot#2176:171");
 // `true` is the component's default, so the prop is emitted only when off.
 export default {
   example: figma.code`<Card${padding ? "" : figma.code` padding={false}`}>${content}</Card>`,
-  imports: ['import { Card } from "@acetrader/design-system"'],
+  imports: ['import { Card } from "@grade10/design-system"'],
   id: "card",
   metadata: { nestable: true },
 };

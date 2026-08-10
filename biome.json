@@ -10,7 +10,7 @@
     "includes": [
       "**",
       "!packages/design-system/src/theme.css",
-      "!packages/design-system/src/themes/acetrader.css"
+      "!packages/design-system/src/themes/grade10.css"
     ]
   },
   "formatter": {

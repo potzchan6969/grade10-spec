@@ -3,7 +3,7 @@ import {
   InputShell,
   type InputStatus,
   InputStatusIcon,
-} from "@acetrader/design-system/components/forms/input";
+} from "@grade10/design-system/components/forms/input";
 import type { ReactNode } from "react";
 import { useId } from "react";
 

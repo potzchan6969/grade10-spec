@@ -3,18 +3,18 @@ schema: spec-driven
 # This repo is an OpenSpec store, and more besides: PM and design own everything
 # under openspec/ and docs/prds/, while packages/design-system/ and designs/ hold
 # the components and tokens the applications consume. Engineering reads the plan
-# from acetrader-predictions, which points here with
-# `store: acetrader-predictions-spec`.
+# from grade10, which points here with
+# `store: grade10-spec`.
 
 # Project context (optional)
 # This is shown to AI when creating artifacts.
 context: |
-  AceTrader - prediction markets. A market is a question users trade a position
+  Grade10 - prediction markets. A market is a question users trade a position
   on and resolves to an outcome.
-  This store holds planning for every AceTrader surface. Today that is one
-  implementing repo, acetrader-predictions (React 19 + TypeScript on Vite),
+  This store holds planning for every Grade10 surface. Today that is one
+  implementing repo, grade10 (React 19 + TypeScript on Vite),
   which consumes this repo two ways at once - as this OpenSpec store, and as its
-  `external/pred-spec` submodule publishing `@acetrader/design-system`.
+  `external/grade10-spec` submodule publishing `@grade10/design-system`.
   Audience for these artifacts: a PM or designer writing them, and an engineer
   in the application repo reading them as the only source of truth for what to
   build.

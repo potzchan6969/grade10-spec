@@ -1,13 +1,13 @@
 # Product specification and design-system repository
 
-This repository is the versioned source of truth for product requirements and the design system beneath AceTrader applications. It is intentionally not an application: do not add product data fetching, authentication, routing, stores, or feature orchestration here.
+This repository is the versioned source of truth for product requirements and the design system beneath Grade10 applications. It is intentionally not an application: do not add product data fetching, authentication, routing, stores, or feature orchestration here.
 
 ## Operating principles
 
 - Treat product managers, designers, and engineers as collaborators. Check existing PRDs, specs, primitives, and conventions before proposing a new structure.
 - Prefer the smallest reusable artifact. Call out a preference or design-system choice as a choice, not as an objective improvement.
 - Keep changes reviewable: one product decision or component capability per pull request where practical.
-- Do not modify generated `packages/design-system/src/theme.css` or `src/themes/acetrader.css` by hand. Edit `tokens.json` or `tokens.config.json` and regenerate with `pnpm run tokens:build`.
+- Do not modify generated `packages/design-system/src/theme.css` or `src/themes/grade10.css` by hand. Edit `tokens.json` or `tokens.config.json` and regenerate with `pnpm run tokens:build`.
 
 ## Sources of truth
 
@@ -50,7 +50,7 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 
 ## Design system package
 
-`packages/design-system` (`@acetrader/design-system`) holds the theme tokens and the shadcn primitives this repository owns. It is the only package here; do not add a second one without a recorded product decision.
+`packages/design-system` (`@grade10/design-system`) holds the theme tokens and the shadcn primitives this repository owns. It is the only package here; do not add a second one without a recorded product decision.
 
 Use the `design-system-components` skill whenever creating or changing a primitive under `packages/design-system/src/components/`.
 

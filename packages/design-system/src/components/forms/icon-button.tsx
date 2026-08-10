@@ -1,5 +1,5 @@
-import { cn } from "@acetrader/design-system/lib/utils";
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
+import { cn } from "@grade10/design-system/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 // Figma's Icon Button (`2159:3195`) sits on the Button page but is a separate

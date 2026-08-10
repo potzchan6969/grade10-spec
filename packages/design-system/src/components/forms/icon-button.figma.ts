@@ -42,7 +42,7 @@ export default {
   // The component has no visible label, so the snippet carries an aria-label
   // placeholder rather than emitting an unnamed control.
   example: figma.code`<IconButton aria-label={label}${variant === "outline" ? "" : figma.code` variant="${variant}"`}${size === "sm" ? "" : figma.code` size="${size}"`}${disabled ? figma.code` disabled` : ""}>${iconCode}</IconButton>`,
-  imports: ['import { IconButton } from "@acetrader/design-system"'],
+  imports: ['import { IconButton } from "@grade10/design-system"'],
   id: "icon-button",
   metadata: { nestable: true },
 };

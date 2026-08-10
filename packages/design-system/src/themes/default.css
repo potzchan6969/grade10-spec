@@ -1,5 +1,5 @@
 /* Default theme — stock shadcn (neutral) tokens. HAND-MAINTAINED.
- * This theme is NOT part of the Figma token sync (that only drives acetrader.css);
+ * This theme is NOT part of the Figma token sync (that only drives grade10.css);
  * it tracks shadcn's default palette. Applies at :root, so it's the baseline theme.
  * The four status tokens (success/info/warning/error) are a design-system extension
  * the contract expects but stock shadcn does not ship — restrained defaults below. */
@@ -26,9 +26,9 @@
   /* status extension (not stock shadcn) */
   --success: oklch(0.95 0.03 150);
   --success-foreground: oklch(0.45 0.13 150);
-  /* Derived baseline for a token that exists only in .theme-acetrader. Read as
+  /* Derived baseline for a token that exists only in .theme-grade10. Read as
      the destructive TEXT tone, which is how every component binds it, not as
-     "text on a destructive fill" — acetrader pairs red-950 behind red-400. */
+     "text on a destructive fill" — grade10 pairs red-950 behind red-400. */
   --destructive-foreground: oklch(0.45 0.18 27.325);
   --info: oklch(0.95 0.03 255);
   --info-foreground: oklch(0.45 0.15 265);
@@ -51,8 +51,8 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   /* tinted-surface extension (not stock shadcn) — the Custom/* slots
-   * acetrader.css carries from Figma. Derived from the stock slots above so
-   * the baseline theme still renders components that bind them; acetrader.css
+   * grade10.css carries from Figma. Derived from the stock slots above so
+   * the baseline theme still renders components that bind them; grade10.css
    * overrides every one with a designed value. Re-stated verbatim in .dark so
    * they re-resolve against that block's own base slots. */
   --primary-muted: color-mix(in oklab, var(--primary) 10%, transparent);

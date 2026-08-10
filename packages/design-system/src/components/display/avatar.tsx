@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@acetrader/design-system/lib/utils";
 import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar";
+import { cn } from "@grade10/design-system/lib/utils";
 import type * as React from "react";
 
 function Avatar({

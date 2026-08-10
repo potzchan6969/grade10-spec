@@ -32,7 +32,7 @@ const clear = instance.getBoolean("clear#2132:87");
 
 export default {
   example: figma.code`<SearchInput${showLabel ? figma.code` label="${label}"` : ""} placeholder="${placeholder}" defaultValue="${value}"${clear ? figma.code` onClear={onClear}` : ""}${disabled ? figma.code` disabled` : ""} />`,
-  imports: ['import { SearchInput } from "@acetrader/design-system"'],
+  imports: ['import { SearchInput } from "@grade10/design-system"'],
   id: "search-input",
   metadata: { nestable: true },
 };

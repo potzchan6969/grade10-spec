@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@acetrader/design-system/lib/utils";
 import { Menu as MenuPrimitive } from "@base-ui/react/menu";
+import { cn } from "@grade10/design-system/lib/utils";
 import { CheckIcon, ChevronRightIcon } from "lucide-react";
 import type * as React from "react";
 

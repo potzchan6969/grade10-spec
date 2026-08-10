@@ -13,11 +13,11 @@
   "iconLibrary": "lucide",
   "rtl": false,
   "aliases": {
-    "components": "@acetrader/design-system/components",
-    "utils": "@acetrader/design-system/lib/utils",
-    "ui": "@acetrader/design-system/components",
-    "lib": "@acetrader/design-system/lib",
-    "hooks": "@acetrader/design-system/hooks"
+    "components": "@grade10/design-system/components",
+    "utils": "@grade10/design-system/lib/utils",
+    "ui": "@grade10/design-system/components",
+    "lib": "@grade10/design-system/lib",
+    "hooks": "@grade10/design-system/hooks"
   },
   "menuColor": "default",
   "menuAccent": "subtle",

@@ -10,7 +10,7 @@ const items = instance.getSlot("Items#2176:187");
 
 export default {
   example: figma.code`<List>${items}</List>`,
-  imports: ['import { List } from "@acetrader/design-system"'],
+  imports: ['import { List } from "@grade10/design-system"'],
   id: "list",
   metadata: { nestable: true },
 };

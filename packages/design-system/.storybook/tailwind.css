@@ -6,7 +6,7 @@
  * resolves them without a self-reference. */
 @import "../src/theme.css";
 @import "../src/themes/default.css";
-@import "../src/themes/acetrader.css";
+@import "../src/themes/grade10.css";
 
 /* Generate utility classes used by the components + stories. */
 @source "../src";

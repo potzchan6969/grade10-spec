@@ -23,7 +23,7 @@ export default {
   <AvatarFallback>{initials}</AvatarFallback>
 </Avatar>`,
   imports: [
-    'import { Avatar, AvatarFallback, AvatarImage } from "@acetrader/design-system"',
+    'import { Avatar, AvatarFallback, AvatarImage } from "@grade10/design-system"',
   ],
   id: "avatar",
   metadata: { nestable: true },

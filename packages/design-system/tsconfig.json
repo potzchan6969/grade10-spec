@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
-      "@acetrader/design-system/*": ["./src/*"]
+      "@grade10/design-system/*": ["./src/*"]
     },
     "target": "es2023",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],

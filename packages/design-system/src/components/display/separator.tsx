@@ -1,5 +1,5 @@
-import { cn } from "@acetrader/design-system/lib/utils";
 import { Separator as SeparatorPrimitive } from "@base-ui/react/separator";
+import { cn } from "@grade10/design-system/lib/utils";
 
 function Separator({
   className,
