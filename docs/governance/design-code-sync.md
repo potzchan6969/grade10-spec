@@ -2,6 +2,8 @@
 
 This guide covers the four artifacts that together define one design-system primitive, who owns which decision, and what is mechanically enforced. It applies to `packages/design-system`. Read it with [`ui-component-contracts.md`](ui-component-contracts.md), which covers the product components built on top of these primitives, and with [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) for the token pipeline.
 
+For the route a component takes from the Figma file to a shipped primitive — the ordered steps, who performs each one, and what each Figma construct becomes in code — read [`figma-component-to-code.md`](figma-component-to-code.md) first. This document is the rule book behind it.
+
 ## The four artifacts
 
 One component is one Figma component set and one basename, in four colocated files:
@@ -89,7 +91,7 @@ A variant is only comparable when every axis other than the one under test sits 
 
 ## For designers: before you create or change a component
 
-Written to be followed in order, in Figma, without reading the rest of this document. Each rule names the symptom it prevents, and every symptom listed has actually happened here.
+Written to be followed in order, in Figma, without reading the rest of this document. Each rule names the symptom it prevents, and every symptom listed has actually happened here. For where these rules sit in the wider handover — and what happens to your component after you publish it — see [`figma-component-to-code.md`](figma-component-to-code.md).
 
 ### 1. Decide what you are adding: an axis value, or a new component
 
