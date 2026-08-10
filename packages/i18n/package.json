@@ -1,0 +1,16 @@
+{
+  "name": "@grade10/i18n",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --project tsconfig.json --noEmit"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./messages/*": "./messages/*"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.2"
+  }
+}

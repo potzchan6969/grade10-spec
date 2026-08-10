@@ -20,7 +20,7 @@
     "test:stories:design-system": "pnpm --filter @grade10/design-system run test:stories",
     "tokens:build": "pnpm --filter @grade10/design-system run tokens:build",
     "tokens:sync": "pnpm --filter @grade10/design-system run tokens:sync",
-    "typecheck": "pnpm --dir apps/ui exec tsc -b && pnpm --filter @grade10/design-system run typecheck",
+    "typecheck": "pnpm --dir apps/ui exec tsc -b && pnpm --filter @grade10/design-system run typecheck && pnpm --filter @grade10/i18n run typecheck",
     "lint": "biome check .",
     "plan:preflight": "node scripts/openspec/plan-preflight.mjs",
     "lint:fix": "biome check --write ."
