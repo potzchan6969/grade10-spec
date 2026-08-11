@@ -118,7 +118,10 @@ open in — nothing here selects a file over the network. `tokens.config.json` �
 routing: the generated push/seed scripts print it at the top as a guard-rail.
 Confirm it matches the file you have open before running.
 
-**Pulling designer edits back (no Enterprise).** The REST variables endpoint is
+**Pulling designer edits back (no Enterprise).** The step-by-step procedure, its
+failure messages, and what the two configured collections leave behind are in
+[`docs/governance/figma-token-export.md`](../../docs/governance/figma-token-export.md);
+the summary is here. The REST variables endpoint is
 Enterprise-gated and this org is not on it, so the pull runs off a dump instead.
 `pnpm tokens:plugin dump` builds `scripts/figma/build/dump/`, imported the same way; it reads the local
 variables and hands back the exact `{ meta }` shape REST would have returned —

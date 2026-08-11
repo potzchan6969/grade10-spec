@@ -38,7 +38,7 @@ Ordered. Steps 1–4 and 11 are the designer's; 5–10 are the implementation st
 | 2 | Designer | Build it as **VARIANT properties**, each variant self-contained, options named after the variable collection behind them. | Every axis a developer can choose appears in the right-hand panel as a variant property. |
 | 3 | Designer | **Publish the set** to the team library. | Nothing else can start — Code Connect resolves only published components. |
 | 4 | Designer | **Say that you published it.** A Figma edit raises no event in this repository. | An engineer knows to start, or someone runs **Actions → Design sync → Run workflow**. |
-| 5 | Designer/Engineer | Pull tokens if the design introduced values — `pnpm tokens:sync`, then confirm they exist in `src/themes/acetrader.css`. | `git diff tokens.json` shows exactly what design changed. |
+| 5 | Designer/Engineer | Pull tokens if the design introduced values — see [`figma-token-export.md`](figma-token-export.md) — then confirm they exist in `src/themes/acetrader.css`. | `git diff tokens.json` shows exactly what design changed. |
 | 6 | Designer/Engineer | Write `src/components/<group>/<name>.tsx` with **one cva option per Figma option, and nothing more**. | The basename matches the set name; the checker resolves a set to code by that name alone. |
 | 7 | Designer/Engineer | Write `<name>.figma.ts` mapping every option of every variant property. | No option is left unmapped — an unmapped one resolves to `undefined` and emits broken code. |
 | 8 | Designer/Engineer | Write `<name>.stories.tsx` — one story per option, plus disabled, loading, and every contract state. | `pnpm run test:stories` passes; it fails on any cva option no story renders. |
