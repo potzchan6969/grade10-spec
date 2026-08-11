@@ -43,6 +43,8 @@ Where code and design genuinely disagree, that is a decision to record in an Ope
 6. **Run `pnpm run check:design-system`** and get to zero errors and zero *unexplained* warnings. A warning you intend to keep belongs in an OpenSpec change with a reason, not in the run log.
 7. **Publish Code Connect** with `pnpm --filter @grade10/design-system run code-connect:publish`. A correct template that was never published leaves Dev Mode showing no connected code at all — verify with `get_code_connect_map`, which returns `{}` when nothing is published.
 
+To hand steps 3–7 to an AI agent, paste [`prompts/implement-primitive-from-figma.md`](prompts/implement-primitive-from-figma.md). It carries the rules above, gates on an axis table before any code is written, and stops short of step 7 rather than writing to the shared Figma file unattended.
+
 ## Publishing Code Connect
 
 ```bash
