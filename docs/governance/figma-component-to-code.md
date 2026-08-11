@@ -38,12 +38,12 @@ Ordered. Steps 1–4 and 11 are the designer's; 5–10 are the implementation st
 | 2 | Designer | Build it as **VARIANT properties**, each variant self-contained, options named after the variable collection behind them. | Every axis a developer can choose appears in the right-hand panel as a variant property. |
 | 3 | Designer | **Publish the set** to the team library. | Nothing else can start — Code Connect resolves only published components. |
 | 4 | Designer | **Say that you published it.** A Figma edit raises no event in this repository. | An engineer knows to start, or someone runs **Actions → Design sync → Run workflow**. |
-| 5 | Designer/Engineer | Pull tokens if the design introduced values — see [`figma-token-export.md`](figma-token-export.md) — then confirm they exist in `src/themes/acetrader.css`. | `git diff tokens.json` shows exactly what design changed. |
+| 5 | Designer/Engineer | Pull tokens if the design introduced values — see [`figma-token-export.md`](figma-token-export.md) — then confirm they exist in `src/themes/grade10.css`. | `git diff tokens.json` shows exactly what design changed. |
 | 6 | Designer/Engineer | Write `src/components/<group>/<name>.tsx` with **one cva option per Figma option, and nothing more**. | The basename matches the set name; the checker resolves a set to code by that name alone. |
 | 7 | Designer/Engineer | Write `<name>.figma.ts` mapping every option of every variant property. | No option is left unmapped — an unmapped one resolves to `undefined` and emits broken code. |
 | 8 | Designer/Engineer | Write `<name>.stories.tsx` — one story per option, plus disabled, loading, and every contract state. | `pnpm run test:stories` passes; it fails on any cva option no story renders. |
 | 9 | Designer/Engineer | `pnpm run check:design-system` to zero errors and zero unexplained warnings. | Axes, options, colours, and box geometry all agree with the file. |
-| 10 | Designer/Engineer | `pnpm --filter @acetrader/design-system run code-connect:publish`. | `get_code_connect_map` stops returning `{}` for the node. |
+| 10 | Designer/Engineer | `pnpm --filter @grade10/design-system run code-connect:publish`. | `get_code_connect_map` stops returning `{}` for the node. |
 | 11 | Designer | Verify: read the snippet in Dev Mode, and measure the built component in Storybook. | See ["Checking it yourself"](#checking-it-yourself-no-checkout-no-engineer) below. |
 
 Steps 3 and 10 are two different publishes, in that order, neither of which happens automatically.
@@ -61,7 +61,7 @@ This is the actual translation. It is why step 2 above is worth care: a construc
 | A TEXT property (`label#318:0`) | `children` | `instance.getString`, key **verbatim including the `#id`** |
 | An INSTANCE_SWAP + its BOOLEAN toggle | A `ReactNode` slot prop (`leading`, `trailing`) | `getBoolean` gating `getInstanceSwap` |
 | A variable bound to a fill or radius | A Tailwind token utility (`bg-primary-muted`) | The token pipeline; the value check diffs it |
-| A variable collection **mode** | A theme class (`.theme-acetrader`) | `tokens.config.json → themes` |
+| A variable collection **mode** | A theme class (`.theme-grade10`) | `tokens.config.json → themes` |
 | An instance-level override | **Nothing.** Invisible to code. | — |
 | A mode used as a size axis | **Nothing** — and every instance silently renders at the default size | — |
 
@@ -109,7 +109,7 @@ Note what the template deliberately does *not* emit: `variant="default"` and `si
 
 **Read the snippet in Dev Mode.** Select an instance, open the Code section of the inspect panel. With the mapping published you get the `<Button …>` line above; with it unpublished you get a generated guess, however correct the template in the repository is. If you see no connected code, step 10 has not been run — that is the state [`design-code-sync.md`](design-code-sync.md#6-publish-the-set-and-publish-code-connect) records for this file.
 
-**Measure the built component in Storybook.** Every push to `main` publishes the design-system Storybook to this repository's GitHub Pages site (Actions → **Storybook**; the `deploy` step links the URL). Switch the **Theme** toolbar control to **AceTrader** first — it loads in `Default`, which is stock shadcn and not the designed theme, and comparing that against your file shows differences that are not real. Then press <kbd>M</kbd> for Measure to read the real box model, and <kbd>O</kbd> for Outline.
+**Measure the built component in Storybook.** Every push to `main` publishes the design-system Storybook to this repository's GitHub Pages site (Actions → **Storybook**; the `deploy` step links the URL). Switch the **Theme** toolbar control to **Grade10** first — it loads in `Default`, which is stock shadcn and not the designed theme, and comparing that against your file shows differences that are not real. Then press <kbd>M</kbd> for Measure to read the real box model, and <kbd>O</kbd> for Outline.
 
 **Read the automated diff.** Actions → **Design sync** → the newest run posts a table of disagreements, one row per mismatch: `Button · size=sm · Height (h-8) · 32px in code · 24px in Figma`. It runs nightly at 01:00 UTC and on demand via **Run workflow**. It covers background, height, horizontal padding, gap, and corner radius on each axis's base state only — vertical padding, anything inside the component, and the hover, disabled, and loading states are unchecked, so a clean table is not proof of a match.
 

@@ -40,11 +40,11 @@ FIGMA_DUMP=/absolute/path/to/figma-dump.json pnpm run tokens:sync   # pull + bui
 git diff packages/design-system/tokens.json                          # what design changed
 ```
 
-`tokens:sync` is `tokens:pull && tokens:build`: the dump becomes `tokens.json`, and `tokens.json` is projected to `src/theme.css` and `src/themes/acetrader.css`. Review the `tokens.json` diff — that is the designer's change in reviewable form — and **commit the regenerated CSS with it**. Never hand-edit either generated file.
+`tokens:sync` is `tokens:pull && tokens:build`: the dump becomes `tokens.json`, and `tokens.json` is projected to `src/theme.css` and `src/themes/grade10.css`. Review the `tokens.json` diff — that is the designer's change in reviewable form — and **commit the regenerated CSS with it**. Never hand-edit either generated file.
 
 **Use an absolute path.** `pull.mjs` resolves `FIGMA_DUMP` against `packages/design-system`, not your shell's working directory, so a relative path silently looks in the wrong place. `FIGMA_DUMP=~/Downloads/figma-dump.json` works unquoted because the shell expands the tilde before Node sees it; quote it and it will not.
 
-`tokens:pull` and `tokens:plugin` are package-level scripts with no root alias — run them from `packages/design-system`, or as `pnpm --filter @acetrader/design-system run tokens:pull`. `tokens:sync` and `tokens:build` do have root aliases, which is why the command above works from anywhere.
+`tokens:pull` and `tokens:plugin` are package-level scripts with no root alias — run them from `packages/design-system`, or as `pnpm --filter @grade10/design-system run tokens:pull`. `tokens:sync` and `tokens:build` do have root aliases, which is why the command above works from anywhere.
 
 ## The same dump also feeds the component checker
 
@@ -84,7 +84,7 @@ Every one of these exits non-zero and writes nothing, so a failed pull leaves `t
 | --- | --- | --- |
 | `No dump given. Set FIGMA_DUMP=<file.json>` | Ran `tokens:pull`/`tokens:sync` with no dump | Export one, or pass an absolute path |
 | `Collection not found. Available: …` | A collection was renamed in Figma, or you dumped the wrong file | Match `tokens.config.json` to the listed names, or re-dump the right file |
-| `theme "acetrader": Figma mode "…" not found` | A designer renamed a Semantic mode | Update `themes.<name>.modes`, or rename it back |
+| `theme "grade10": Figma mode "…" not found` | A designer renamed a Semantic mode | Update `themes.<name>.modes`, or rename it back |
 | `Name collision in Semantic / …: "Base/card" and "Sidebar/card" both normalize to "card"` | Two grouped Figma names normalize to one token key — `key()` drops the group prefix | Rename one in Figma |
 | `Dangling alias -> VariableID:…` | A variable aliases one that is not in the dump | Usually a cross-file alias; make the target local |
 | `This dump has no meta.components — it predates component support` | A dump taken before the plugin recorded components | `pnpm tokens:plugin dump` and re-export |
