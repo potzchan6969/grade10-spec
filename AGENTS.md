@@ -17,6 +17,7 @@ This repository is the versioned source of truth for product requirements and th
 | Product decision behind a requirement | `docs/prds/<product-area>/<feature>.md` | Problem, users, non-goals, measurement, rollout, rationale. Explanatory, never authoritative over a requirement. |
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
+| User-facing copy and translations | `packages/i18n/messages/` | `en.json` is the base catalog; other locales fall back key-by-key. |
 | Design-system primitive | `packages/design-system/src/components/` | shadcn primitives and their colocated stories. |
 | Product component implementation | The consuming application repository | This repository specifies the contract; it no longer ships a component package. |
 | Task group and owner format in `tasks.md` | `docs/governance/task-ownership.md` | Parsed independently by tooling in this repository and in the application repository. |
@@ -50,7 +51,7 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 
 ## Design system package
 
-`packages/design-system` (`@grade10/design-system`) holds the theme tokens and the shadcn primitives this repository owns. It is the only package here; do not add a second one without a recorded product decision.
+`packages/design-system` (`@grade10/design-system`) holds the theme tokens and the shadcn primitives this repository owns. `packages/i18n` (`@grade10/i18n`) holds the message catalogs. These are the only packages here; do not add another without a recorded product decision.
 
 Use the `design-system-components` skill whenever creating or changing a primitive under `packages/design-system/src/components/`.
 
