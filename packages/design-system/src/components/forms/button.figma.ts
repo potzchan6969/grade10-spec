@@ -3,10 +3,15 @@
 // component=Button
 //
 // The node ID is the component *set* (86-3459), not the page that holds it
-// (86-3366). The set carries five VARIANT properties — `variant`, `state`,
-// `size`, `isDisabled`, `isLoading` — all with lowercase property and option
-// names, so every key below is lowercase; these are Figma's names, not the
-// capitalised ones the pre-merge shape used.
+// (86-3366). The set carries five VARIANT properties — `variant` (5 options),
+// `state` (`default` | `hover`), `size` (`default` | `sm` | `xs`), and
+// `isDisabled` / `isLoading` (both `false` | `true`) — all with lowercase
+// property and option names, so every key below is lowercase; these are Figma's
+// names, not the capitalised ones the pre-merge shape used.
+//
+// `isDisabled` and `isLoading` are VARIANT axes, not BOOLEAN component
+// properties. That is why both are read with getEnum below rather than
+// getBoolean, and it is what makes a loading Danger button drawable.
 //
 // The 60 drawn variants are a curated subset of the 5x2x3x2x2 grid, not a
 // complete cross-product: `hover` is drawn only at `isDisabled=false,
