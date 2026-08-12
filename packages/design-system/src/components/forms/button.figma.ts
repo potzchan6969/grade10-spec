@@ -1,13 +1,11 @@
-// url=https://www.figma.com/design/jlrBVwtKcun1NnJgohmFcn/Sean-x-Constance?node-id=86-3459
+// url=https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=86-3459
 // source=packages/design-system/src/components/forms/button.tsx
 // component=Button
 //
-// The `waGnoyIaXEId620TLen42o` restructure has landed in the file named above:
-// the set now carries `variant`, `state`, and `size` as VARIANT properties over
-// a complete 5x4x3 cross-product, with `loading` a `state` rather than a
-// `variant`. It landed with lowercase property and option names, so every key
-// below is lowercase — Figma's names, not the capitalised ones the pre-merge
-// shape used.
+// The set carries `variant` (5 options), `state` (`default` | `hover`), and
+// `size` (`default` | `sm` | `xs`) as VARIANT properties, plus `isDisabled` and
+// `isLoading` as BOOLEAN properties. Names are lowercase — Figma's, not the
+// capitalised ones the pre-merge shape used.
 import figma from "figma";
 
 const instance = figma.selectedInstance;
