@@ -1,5 +1,10 @@
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import type { StorybookConfig } from "@storybook/react-vite";
 import tailwindcss from "@tailwindcss/vite";
+import { mergeConfig } from "vite";
+
+const packageRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(ts|tsx)"],
@@ -16,7 +21,16 @@ const config: StorybookConfig = {
   viteFinal: async (config) => {
     config.plugins = config.plugins ?? [];
     config.plugins.push(tailwindcss());
-    return config;
+    return mergeConfig(config, {
+      resolve: {
+        alias: {
+          "@grade10/design-system": join(packageRoot, "src"),
+        },
+      },
+      optimizeDeps: {
+        include: ["input-otp"],
+      },
+    });
   },
 };
 
