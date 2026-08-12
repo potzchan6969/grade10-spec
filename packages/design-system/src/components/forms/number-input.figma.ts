@@ -1,4 +1,4 @@
-// url=https://www.figma.com/design/jlrBVwtKcun1NnJgohmFcn/Sean-x-Constance?node-id=2176-4273
+// url=https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-4273
 // source=packages/design-system/src/components/forms/number-input.tsx
 // component=NumberInput
 import figma from "figma";

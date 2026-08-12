@@ -1,4 +1,4 @@
-// url=https://www.figma.com/design/jlrBVwtKcun1NnJgohmFcn/Sean-x-Constance?node-id=2159-3275
+// url=https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2159-3275
 // source=packages/design-system/src/components/display/avatar.tsx
 // component=Avatar
 import figma from "figma";

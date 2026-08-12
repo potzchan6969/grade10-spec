@@ -1,13 +1,18 @@
-// url=https://www.figma.com/design/jlrBVwtKcun1NnJgohmFcn/Sean-x-Constance?node-id=86-3459
+// url=https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=86-3459
 // source=packages/design-system/src/components/forms/button.tsx
 // component=Button
 //
-// The `waGnoyIaXEId620TLen42o` restructure has landed in the file named above:
-// the set now carries `variant`, `state`, and `size` as VARIANT properties over
-// a complete 5x4x3 cross-product, with `loading` a `state` rather than a
-// `variant`. It landed with lowercase property and option names, so every key
-// below is lowercase — Figma's names, not the capitalised ones the pre-merge
-// shape used.
+// The node ID is the component *set* (86-3459), not the page that holds it
+// (86-3366). The set carries five VARIANT properties — `variant`, `state`,
+// `size`, `isDisabled`, `isLoading` — all with lowercase property and option
+// names, so every key below is lowercase; these are Figma's names, not the
+// capitalised ones the pre-merge shape used.
+//
+// The 60 drawn variants are a curated subset of the 5x2x3x2x2 grid, not a
+// complete cross-product: `hover` is drawn only at `isDisabled=false,
+// isLoading=false`, and each of `isDisabled` and `isLoading` only at
+// `state=default`. Every option of every axis is still mapped below, which is
+// what the template owes; the undrawn combinations are unreachable in Figma.
 import figma from "figma";
 
 const instance = figma.selectedInstance;
