@@ -119,7 +119,7 @@ routing: the generated push/seed scripts print it at the top as a guard-rail.
 Confirm it matches the file you have open before running.
 
 **Pulling designer edits back (no Enterprise).** The step-by-step procedure, its
-failure messages, and what the two configured collections leave behind are in
+failure messages, and what the configured collections leave behind are in
 [`docs/governance/figma-token-export.md`](../../docs/governance/figma-token-export.md);
 the summary is here. The REST variables endpoint is
 Enterprise-gated and this org is not on it, so the pull runs off a dump instead.
@@ -160,13 +160,33 @@ since `norm()` strips the group, that choice never affects matching later, and
 variables that already exist keep the names they have. Re-running creates nothing
 and re-sets the same values.
 
-**What is and is not pulled.** `pull.mjs` reads exactly the two collections named
-in `tokens.config.json` — `primitiveCollection` and `semanticCollection`. The
-Figma file also carries `Typography`, `Motion`, and `Sizing`, and those are
-silently ignored. `Sizing` in particular models modes as *size variants*
-(`default`/`sm`/`xs`) that must coexist on one page, which the config's
-one-selector-per-mode theme model cannot express. Wiring them up is tracked
-separately; do not assume a green `tokens:sync` means the whole file landed.
+**What is and is not pulled.** `pull.mjs` reads the collections named in
+`tokens.config.json`: every entry of `primitiveCollections` (currently
+`Foundation` and `Typography`) plus `semanticCollection`. Each primitive entry
+maps a **tokens.json section** to a **Figma collection** — `Typography` lands in
+a `typography` section and gets its own labelled block inside the single `:root`
+of `theme.css`. Keeping the sections apart is what lets `tokens:push` file a
+newly created token back into the collection it came from; flattening them all
+into `primitives` would silently relocate every Typography token to Foundation
+on the next push.
+
+Because those sections share one `:root`, a key collision across collections is
+a hard failure: `Size/size-4` and `Typeset/size-4` both normalize to `size-4`,
+so the pull stops and names both rather than picking a winner.
+
+The Figma file still carries `Motion` and `Sizing`, and those remain ignored.
+`Sizing` in particular models modes as *size variants* (`default`/`sm`/`xs`)
+that must coexist on one page, which the config's one-selector-per-mode theme
+model cannot express. Wiring them up is tracked separately; do not assume a
+green `tokens:sync` means the whole file landed.
+
+**Units.** A Figma FLOAT is a bare number, so the CSS unit is inferred from the
+variable's Figma *scopes*, falling back to the token name; anything unmatched
+stays `px`. `FONT_WEIGHT` emits unitless (`--weight-medium: 500`, not `500px`)
+and `OPACITY` emits a percentage. A STRING variable such as `family-sans`
+("Inter") passes through as-is and is typed `fontFamily`. Note that `tokens:push`
+only *creates* COLOR and FLOAT variables — a new STRING token is reported as
+unconvertible rather than guessed at, so add those in Figma by hand.
 
 **Known limits.** (1) A token whose alias target does not exist is skipped and
 reported — primitives are created first, so this only bites on a ref to a name

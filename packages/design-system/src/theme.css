@@ -108,6 +108,7 @@
 
 /* Primitives — shared, mode-independent */
 :root {
+  /* primitives — Figma "Foundation" */
   --yellow-50: #FFFAF1;
   --yellow-100: #FFF5E2;
   --yellow-200: #FFEBC3;

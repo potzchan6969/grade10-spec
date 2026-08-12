@@ -58,12 +58,40 @@ const banner = (title, from) =>
 const preamble = (
   await readFile(resolve(pkgDir, cfg.preamble), "utf8")
 ).replace(/^\/\*[\s\S]*?\*\/\n/, "");
-const primLines = Object.entries(doc.primitives).map(([k, t]) =>
-  line(k, t.$value, t.$description),
+// Every mode-independent collection lands in ONE :root, in config order, each
+// under a comment naming the Figma collection it came from. They share a block
+// because they share a scope — splitting them into sibling :root rules would
+// change nothing in the cascade and only make the file longer.
+const primitiveSections = Object.entries(
+  cfg.primitiveCollections ?? { primitives: cfg.primitiveCollection },
 );
+// A section configured but absent from tokens.json is not fatal — it means the
+// config gained a collection that no pull has read yet, and the rest of the
+// file must still build. Reported at the end rather than silently skipped.
+const pendingSections = [];
+const primBlocks = [];
+for (const [section, collection] of primitiveSections) {
+  const tokens = doc[section];
+  if (!tokens) {
+    pendingSections.push([section, collection]);
+    continue;
+  }
+  const lines = Object.entries(tokens).map(([k, t]) =>
+    line(k, t.$value, t.$description),
+  );
+  primBlocks.push(
+    `  /* ${section} — Figma "${collection}" */\n${lines.join("\n")}`,
+  );
+}
+if (!primBlocks.length)
+  die(
+    `No primitive sections found in tokens.json. Expected one of: ${primitiveSections
+      .map(([s]) => s)
+      .join(", ")}. Run tokens:pull.`,
+  );
 await writeFile(
   resolve(pkgDir, cfg.contractOut),
-  `${banner("contract + shared primitives", "tokens.json (primitives)")}\n${preamble}\n/* Primitives — shared, mode-independent */\n:root {\n${primLines.join("\n")}\n}\n`,
+  `${banner("contract + shared primitives", "tokens.json (primitives)")}\n${preamble}\n/* Primitives — shared, mode-independent */\n:root {\n${primBlocks.join("\n\n")}\n}\n`,
   "utf8",
 );
 
@@ -73,7 +101,9 @@ const slotMap = cfg.slotMap ?? {};
 // primitives on :root, so var() resolves either way from inside a theme block.
 // Without this, moving a token from Semantic to Foundation silently emits
 // "/* unmapped */" and the slot loses its value.
-const primitiveKeys = new Set(Object.keys(doc.primitives));
+const primitiveKeys = new Set(
+  primitiveSections.flatMap(([section]) => Object.keys(doc[section] ?? {})),
+);
 for (const [name, themeCfg] of Object.entries(cfg.themes)) {
   // Hard failure, not a warning. `continue` leaves the previous themes/<name>.css
   // in place, so the theme keeps referencing primitives this build may have just
@@ -110,8 +140,15 @@ for (const [name, themeCfg] of Object.entries(cfg.themes)) {
 }
 
 console.log(
-  `✓ ${Object.keys(doc.primitives).length} primitives -> ${cfg.contractOut}`,
+  `✓ ${primitiveSections
+    .filter(([s]) => doc[s])
+    .map(([s]) => `${Object.keys(doc[s]).length} ${s}`)
+    .join(" + ")} -> ${cfg.contractOut}`,
 );
+for (const [section, collection] of pendingSections)
+  console.log(
+    `⚠ section "${section}" (Figma "${collection}") is configured but absent from tokens.json — run tokens:pull with a dump that includes that collection.`,
+  );
 for (const name of Object.keys(cfg.themes))
   if (doc.themes?.[name])
     console.log(

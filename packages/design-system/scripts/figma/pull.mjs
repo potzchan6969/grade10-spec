@@ -69,42 +69,88 @@ const key = (name) => {
     .replace(/^-|-$/g, "")
     .toLowerCase();
 };
-const cssType = (resolvedType) =>
-  resolvedType === "COLOR" ? "color" : "dimension";
-function emit(value, resolvedType) {
+// A Figma FLOAT is a bare number; the CSS unit has to be inferred. Blanket
+// "px" is what produced `--opacity-50: 50px`, and it turns Typography's
+// `Typeset/weight-medium` (500) into `500px` — a font weight CSS discards.
+// Figma's own variable scopes answer this wherever a designer has set them, so
+// read those first and fall back to the token name. Anything unmatched stays
+// px, which is right for every size, gap, radius and line-height here.
+const FLOAT_UNITS = [
+  {
+    scope: "FONT_WEIGHT",
+    name: /^(font-)?weight-/,
+    unit: "",
+    type: "fontWeight",
+  },
+  // Figma stores these 0–100, which is a percentage; `50` alone would read as
+  // fully opaque-ish nonsense to CSS while `50%` is exactly what was drawn.
+  { scope: "OPACITY", name: /^opacity-/, unit: "%", type: "number" },
+];
+const floatRule = (v, k) =>
+  FLOAT_UNITS.find(
+    (r) => (v.scopes ?? []).includes(r.scope) || r.name.test(k),
+  ) ?? { unit: "px", type: "dimension" };
+
+const cssType = (v, k) => {
+  if (v.resolvedType === "COLOR") return "color";
+  if (v.resolvedType === "BOOLEAN") return "boolean";
+  if (v.resolvedType === "STRING")
+    return (v.scopes ?? []).includes("FONT_FAMILY") || /^family-/.test(k)
+      ? "fontFamily"
+      : "string";
+  return floatRule(v, k).type;
+};
+function emit(v, modeId, k) {
+  const value = v.valuesByMode[modeId];
   if (value && value.type === "VARIABLE_ALIAS") {
     const target = variables[value.id];
     if (!target) die(`Dangling alias -> ${value.id}`);
     return `{${key(target.name)}}`;
   }
-  if (resolvedType === "COLOR") return toHex(value);
-  if (resolvedType === "FLOAT") return `${value}px`;
+  if (v.resolvedType === "COLOR") return toHex(value);
+  if (v.resolvedType === "FLOAT") return `${value}${floatRule(v, k).unit}`;
   return String(value);
 }
 const findCollection = (name) =>
   Object.values(collections).find((c) => c.name === name);
 // $description is the DTCG slot for Figma's variable Description field. Omitted
 // when blank so the diff stays quiet for the tokens nobody has documented.
-const token = (v, modeId) => ({
-  $type: cssType(v.resolvedType),
-  $value: emit(v.valuesByMode[modeId], v.resolvedType),
+const token = (v, modeId, k) => ({
+  $type: cssType(v, k),
+  $value: emit(v, modeId, k),
   ...(v.description ? { $description: v.description } : {}),
 });
 
 // ── NORMALIZE + EMIT ────────────────────────────────────────────────────────
-const prim = findCollection(cfg.primitiveCollection);
+// `primitiveCollections` maps a tokens.json section to a Figma collection. The
+// singular `primitiveCollection` predates it and still means one section named
+// "primitives".
+const primitiveSections = Object.entries(
+  cfg.primitiveCollections ?? { primitives: cfg.primitiveCollection },
+);
+const available = () =>
+  Object.values(collections)
+    .map((c) => `"${c.name}"`)
+    .join(", ");
 const sem = findCollection(cfg.semanticCollection);
-if (!prim || !sem)
+if (!sem)
   die(
-    `Collection not found. Available: ${Object.values(collections)
-      .map((c) => `"${c.name}"`)
-      .join(", ")}`,
+    `Semantic collection "${cfg.semanticCollection}" not found. Available: ${available()}`,
   );
+for (const [section, name] of primitiveSections)
+  if (!findCollection(name))
+    die(
+      `Collection "${name}" (primitiveCollections.${section}) not found. Available: ${available()}`,
+    );
 
 // key() drops the group prefix, so two grouped Figma names can normalize to one token key
 // ("Base/card" + "Sidebar/card" -> "card"). Object.fromEntries would silently keep the last.
-const keyed = (ids, modeId, where) => {
-  const seen = new Map();
+//
+// `seen` is threaded across calls so the check also spans collections: every
+// primitive section lands in one :root, so Foundation's `Size/size-4` and a
+// Typography `Typeset/size-4` would be one CSS property with the loser silently
+// dropped. Refuse rather than pick.
+const keyed = (ids, modeId, where, seen = new Map()) => {
   const out = {};
   for (const id of ids) {
     const name = variables[id].name;
@@ -114,20 +160,21 @@ const keyed = (ids, modeId, where) => {
         `Name collision in ${where}: "${seen.get(k)}" and "${name}" both normalize to "${k}". Rename one in Figma.`,
       );
     seen.set(k, name);
-    out[k] = token(variables[id], modeId);
+    out[k] = token(variables[id], modeId, k);
   }
   return out;
 };
 
 const doc = {
   "//": "Canonical design tokens — SOURCE OF TRUTH. Figma and CSS are projections of this file. Pull edits from Figma (tokens:pull), build CSS (tokens:build), push code edits to Figma (tokens:push). Projection rules (slotMap, selectors, collections) live in tokens.config.json.",
-  primitives: keyed(
-    prim.variableIds,
-    prim.defaultModeId,
-    cfg.primitiveCollection,
-  ),
-  themes: {},
 };
+// One shared `seen` across every primitive section — see keyed() above.
+const primSeen = new Map();
+for (const [section, name] of primitiveSections) {
+  const col = findCollection(name);
+  doc[section] = keyed(col.variableIds, col.defaultModeId, name, primSeen);
+}
+doc.themes = {};
 const modeIdByName = Object.fromEntries(
   sem.modes.map((m) => [m.name, m.modeId]),
 );
@@ -161,7 +208,12 @@ await writeFile(
   "utf8",
 );
 console.log(
-  `✓ ${prim.variableIds.length} primitives + ${sem.variableIds.length} semantic tokens -> tokens.json`,
+  `✓ ${primitiveSections
+    .map(
+      ([section, name]) =>
+        `${Object.keys(doc[section]).length} ${section} (${name})`,
+    )
+    .join(" + ")} + ${sem.variableIds.length} semantic tokens -> tokens.json`,
 );
 for (const [name, t] of Object.entries(doc.themes))
   console.log(`  theme ${name} (Figma mode "${t.figmaMode}")`);

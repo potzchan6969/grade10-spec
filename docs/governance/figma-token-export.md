@@ -60,13 +60,14 @@ This is the **fallback** path, not the normal one. `check:design-system` prefers
 
 ## What is and is not exported
 
-The plugin dumps **every** local collection. `pull.mjs` then reads exactly two of them — `primitiveCollection` and `semanticCollection` from `tokens.config.json`, currently `Foundation` and `Semantic`.
+The plugin dumps **every** local collection. `pull.mjs` then reads only the ones named in `tokens.config.json` — each entry of `primitiveCollections` plus `semanticCollection`, currently `Foundation`, `Typography` and `Semantic`.
 
 | In the dump file | Reaches `tokens.json`? |
 | --- | --- |
 | `Foundation`, default mode | Yes → `primitives` |
+| `Typography`, default mode | Yes → `typography` |
 | `Semantic`, the mode named per theme in `tokens.config.json` | Yes → `themes.<name>.tokens` |
-| `Typography`, `Motion`, `Sizing` | **No.** Silently ignored. |
+| `Motion`, `Sizing` | **No.** Silently ignored. |
 | Any other collection | **No.** Silently ignored. |
 | A second mode of a configured collection | **No.** One Figma mode per configured theme. |
 | Variable descriptions | Yes → `$description`, omitted when blank |
