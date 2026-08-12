@@ -1,5 +1,5 @@
 {
-  "figmaFile": "https://www.figma.com/design/jlrBVwtKcun1NnJgohmFcn/Sean-x-Constance",
+  "figmaFile": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026",
   "_figmaFile_note": "Which Figma file to sync. Accepts a full figma.com/design/<key>/... link OR a bare file key. Override per-run with the FIGMA_FILE env var. Controls the REST pull target; the plugin-dump pull and push run against whichever file the Figma plugin is connected to (the generated push script names the intended file as a guard-rail).",
   "primitiveCollection": "Foundation",
   "semanticCollection": "Semantic",
