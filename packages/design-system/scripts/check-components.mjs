@@ -56,29 +56,44 @@ function fileKeyFrom(spec) {
 
 function componentsFromDocument(doc) {
   const out = {};
-  const visit = (node) => {
-    if (node.type === "COMPONENT_SET") {
+  const visit = (node, parent) => {
+    // A COMPONENT_SET's children are its variants, so index the set and not
+    // each variant. A COMPONENT found anywhere else is a standalone component
+    // with no variant axes — List, List Item and Radio List are all drawn that
+    // way — and a template maps one by node ID exactly as it maps a set.
+    // Indexing sets alone left every such template reported as "not found in
+    // Figma", which read as deletion rather than as a blind spot here.
+    const isVariantOfSet = parent?.type === "COMPONENT_SET";
+    const isSet = node.type === "COMPONENT_SET";
+    if (isSet || (node.type === "COMPONENT" && !isVariantOfSet)) {
       out[node.id] = {
         id: node.id,
         name: node.name,
         properties: node.componentPropertyDefinitions ?? {},
-        // Each child is one variant, named `Type=Danger, State=Default, ...`.
+        // Each child of a set is one variant, named `Type=Danger, State=...`.
         // REST resolves every binding, so these are the values a viewer sees —
         // which is what makes a value check possible without the variables
         // endpoint, whose file_variables:read scope Figma gates to Enterprise.
-        variants: (node.children ?? []).map((v) => ({
-          name: v.name,
-          fill: v.fills?.find((f) => f.visible !== false && f.type === "SOLID"),
-          height: v.absoluteBoundingBox?.height,
-          radius: v.cornerRadius,
-          padX: v.paddingLeft,
-          gap: v.itemSpacing,
-        })),
+        //
+        // A standalone component has no variants; checkValues skips it, which
+        // is correct — there is no second rung to diff its geometry against.
+        variants: isSet
+          ? (node.children ?? []).map((v) => ({
+              name: v.name,
+              fill: v.fills?.find(
+                (f) => f.visible !== false && f.type === "SOLID",
+              ),
+              height: v.absoluteBoundingBox?.height,
+              radius: v.cornerRadius,
+              padX: v.paddingLeft,
+              gap: v.itemSpacing,
+            }))
+          : [],
       };
     }
-    for (const child of node.children ?? []) visit(child);
+    for (const child of node.children ?? []) visit(child, node);
   };
-  visit(doc);
+  visit(doc, null);
   return out;
 }
 
@@ -127,8 +142,9 @@ async function loadFigmaComponents() {
   const components = componentsFromDocument(json.document);
   if (!Object.keys(components).length)
     die(
-      `No COMPONENT_SET nodes found in file ${key}. Either the file has none, ` +
-        `or the response shape changed — failing rather than reporting "no drift".`,
+      `No COMPONENT or COMPONENT_SET nodes found in file ${key}. Either the ` +
+        `file has none, or the response shape changed — failing rather than ` +
+        `reporting "no drift".`,
     );
   return { source: `REST ${key}`, components };
 }
