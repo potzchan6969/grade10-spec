@@ -1,0 +1,3 @@
+[submodule "tools/openspec-viewer"]
+	path = tools/openspec-viewer
+	url = https://github.com/9gag/openspec-viewer
