@@ -56,13 +56,13 @@
 
 ## 8. Membership surface
 
-- [ ] 8.1 Surface shell and sign-in
-- [ ] 8.2 Membership: tier, balance, expiring points, progress, joining, activity
-- [ ] 8.3 Rewards: menu, redemption, redemption list
-- [ ] 8.4 Hold a redemption's retry key across a reload
-- [ ] 8.5 Render programme-computed dates in the programme's time zone
+- [x] 8.1 Surface shell and sign-in
+- [x] 8.2 Membership: tier, balance, expiring points, progress, joining, activity
+- [x] 8.3 Rewards: menu, redemption, redemption list
+- [x] 8.4 Hold a redemption's retry key across a reload
+- [x] 8.5 Render programme-computed dates in the programme's time zone
 
 ## 9. Registration
 
-- [ ] 9.1 Register both surfaces for local development, preview, and deployment
+- [x] 9.1 Register both surfaces for local development, preview, and deployment
 - [x] 9.2 Fail the build when a surface is missing from the test or build chain
