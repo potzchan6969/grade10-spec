@@ -16,7 +16,7 @@ const padding = instance.getEnum("padding", {
 // The body is a SLOT property, so read it with getSlot rather than walking the
 // children — that keeps whatever a consumer dropped in, including nested
 // instances that have their own Code Connect templates.
-const content = instance.getSlot("Slot#2176:171");
+const content = instance.getSlot("Slot");
 
 // `true` is the component's default, so the prop is emitted only when off.
 export default {

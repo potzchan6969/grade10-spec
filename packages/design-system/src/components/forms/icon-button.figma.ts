@@ -33,9 +33,11 @@ const disabled = instance.getEnum("isDisabled", {
 
 // The icon is a bare INSTANCE_SWAP with no BOOLEAN gate — an icon button
 // without its icon is not a state the design allows.
-const icon = instance.getInstanceSwap("icon#2176:166");
+const icon = instance.getInstanceSwap("icon");
 const iconCode =
-  icon && icon.type === "INSTANCE" ? icon.executeTemplate().example : null;
+  icon?.type === "INSTANCE" && icon.hasCodeConnect()
+    ? icon.executeTemplate().example
+    : null;
 
 export default {
   // `outline` and `sm` are the cva defaults, so both props are omitted there.

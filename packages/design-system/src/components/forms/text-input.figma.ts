@@ -35,11 +35,11 @@ const loading = instance.getEnum("isLoading", {
   true: true,
 });
 
-const label = instance.getString("label#2132:71");
-const value = instance.getString("value#2132:77");
-const message = instance.getString("message#2132:93");
-const placeholder = instance.getString("placeholder#2159:124");
-const showLabel = instance.getBoolean("showLabel#2159:108");
+const label = instance.getString("label");
+const value = instance.getString("value");
+const message = instance.getString("message");
+const placeholder = instance.getString("placeholder");
+const showLabel = instance.getBoolean("showLabel");
 
 export default {
   // `default` is the cva defaultVariant for `status`, so the prop is omitted

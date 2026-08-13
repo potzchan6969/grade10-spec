@@ -7,9 +7,9 @@ const instance = figma.selectedInstance;
 
 // No VARIANT properties on this one — it is a plain component with a slot, a
 // label and a boolean that gates the label.
-const label = instance.getString("label#2213:9");
-const showLabel = instance.getBoolean("showLabel#2213:10");
-const items = instance.getSlot("list#2213:8");
+const label = instance.getString("label");
+const showLabel = instance.getBoolean("showLabel");
+const items = instance.getSlot("list");
 
 // `showLabel` is expressed as the absence of the prop, so there is no separate
 // boolean to emit.

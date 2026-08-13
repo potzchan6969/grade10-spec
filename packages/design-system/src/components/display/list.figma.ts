@@ -6,7 +6,7 @@ import figma from "figma";
 const instance = figma.selectedInstance;
 
 // No VARIANT properties — the List is a bare slot in Figma.
-const items = instance.getSlot("Items#2176:187");
+const items = instance.getSlot("Items");
 
 export default {
   example: figma.code`<List>${items}</List>`,

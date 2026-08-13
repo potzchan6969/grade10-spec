@@ -22,9 +22,9 @@ const disabled = instance.getEnum("isDisabled", {
   true: true,
 });
 
-const label = instance.getString("label#2595:91");
-const message = instance.getString("message#2595:100");
-const showLabel = instance.getBoolean("showLabel#2595:109");
+const label = instance.getString("label");
+const message = instance.getString("message");
+const showLabel = instance.getBoolean("showLabel");
 
 export default {
   example: figma.code`<OtpInput${showLabel ? figma.code` label="${label}"` : ""} defaultValue="128450"${status === "default" ? "" : figma.code` status="${status}"`}${message ? figma.code` message="${message}"` : ""}${state === "focus" ? figma.code` focusedIndex={2}` : ""}${disabled ? figma.code` disabled` : ""} />`,

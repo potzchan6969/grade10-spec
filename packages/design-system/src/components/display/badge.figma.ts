@@ -7,6 +7,11 @@ const instance = figma.selectedInstance;
 
 // Figma and the cva agree on every option name. `default` is the cva
 // defaultVariant on both axes, so the prop is omitted for it below.
+//
+// Every property is addressed by its bare name. Figma suffixes non-VARIANT
+// keys with `#id`, but the template runtime resolves the unsuffixed name —
+// passing the suffixed key leaves the value unresolved and Dev Mode renders a
+// red `Error` chip where it should have been.
 const variant = instance.getEnum("variant", {
   default: "default",
   success: "success",
@@ -19,17 +24,20 @@ const size = instance.getEnum("size", {
   sm: "sm",
 });
 
-const label = instance.getString("label#845:1");
+const label = instance.getString("label");
 
 // The icon is an INSTANCE_SWAP gated by its own BOOLEAN. Resolve the swapped
 // instance rather than the placeholder layer, so the mapping survives the icon
 // being swapped for a different one. Badge takes it as a child — there is no
 // dedicated slot prop — so it is emitted before the label.
-const leadingIcon = instance.getBoolean("leading#845:2")
-  ? instance.getInstanceSwap("leadingIcon#845:0")
+//
+// `hasCodeConnect()` gates the call: the Phosphor icon sets are not connected,
+// and executing an unconnected instance's template emits an error section.
+const leadingIcon = instance.getBoolean("leading")
+  ? instance.getInstanceSwap("leadingIcon")
   : null;
 const leadingCode =
-  leadingIcon && leadingIcon.type === "INSTANCE"
+  leadingIcon?.type === "INSTANCE" && leadingIcon.hasCodeConnect()
     ? leadingIcon.executeTemplate().example
     : null;
 

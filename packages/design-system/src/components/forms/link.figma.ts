@@ -34,18 +34,18 @@ const size = instance.getEnum("size", {
   xs: "xs",
 });
 
-const label = instance.getString("label#96:2");
+const label = instance.getString("label");
 
 // The icon is an INSTANCE_SWAP gated by its own BOOLEAN. Resolve the swapped
 // instance rather than the placeholder layer, so the mapping survives the icon
 // being swapped for a different one. Note the layer is named `leading` in the
 // file while the property is `trailing` and renders after the label — the
 // property is what this reads.
-const trailingIcon = instance.getBoolean("trailing#96:3")
-  ? instance.getInstanceSwap("trailingContent#96:4")
+const trailingIcon = instance.getBoolean("trailing")
+  ? instance.getInstanceSwap("trailingContent")
   : null;
 const trailingCode =
-  trailingIcon && trailingIcon.type === "INSTANCE"
+  trailingIcon?.type === "INSTANCE" && trailingIcon.hasCodeConnect()
     ? trailingIcon.executeTemplate().example
     : null;
 

@@ -24,11 +24,11 @@ const disabled = instance.getEnum("isDisabled", {
   true: true,
 });
 
-const label = instance.getString("label#2132:85");
-const value = instance.getString("value#2132:86");
-const placeholder = instance.getString("placeholder#2159:134");
-const showLabel = instance.getBoolean("showLabel#2159:117");
-const clear = instance.getBoolean("clear#2132:87");
+const label = instance.getString("label");
+const value = instance.getString("value");
+const placeholder = instance.getString("placeholder");
+const showLabel = instance.getBoolean("showLabel");
+const clear = instance.getBoolean("clear");
 
 export default {
   example: figma.code`<SearchInput${showLabel ? figma.code` label="${label}"` : ""} placeholder="${placeholder}" defaultValue="${value}"${clear ? figma.code` onClear={onClear}` : ""}${disabled ? figma.code` disabled` : ""} />`,

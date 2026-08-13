@@ -12,7 +12,7 @@ const disabled = instance.getEnum("isDisabled", {
   true: true,
 });
 
-const label = instance.getString("label#2176:172");
+const label = instance.getString("label");
 
 export default {
   example: figma.code`<RadioListItem value={value}${disabled ? figma.code` disabled` : ""}>${label}</RadioListItem>`,

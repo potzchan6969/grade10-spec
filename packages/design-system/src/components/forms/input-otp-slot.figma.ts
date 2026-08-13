@@ -21,7 +21,7 @@ const disabled = instance.getEnum("isDisabled", {
   true: true,
 });
 
-const digit = instance.getString("digit#2595:81");
+const digit = instance.getString("digit");
 const filled = digit !== "0";
 
 export default {

@@ -66,10 +66,11 @@ const size = instance.getEnum("size", {
   xs: "xs",
 });
 
-// The label is a TEXT component property, not a bare text layer. Its key keeps
-// the `#id` suffix Figma generates and must be used verbatim — VARIANT keys
-// (`variant`, `state`, `size`) are the exception and carry no suffix.
-const label = instance.getString("label#318:0");
+// The label is a TEXT component property, not a bare text layer. Address it by
+// its bare name: Figma suffixes non-VARIANT property keys with `#id`, but the
+// template runtime resolves the unsuffixed name — passing the suffixed key
+// yields an unresolved value that Dev Mode renders as a red `Error` chip.
+const label = instance.getString("label");
 
 // Each icon is an INSTANCE_SWAP gated by its own BOOLEAN. Resolve the swapped
 // instance rather than the placeholder layer name, so the mapping survives the
@@ -85,20 +86,20 @@ const label = instance.getString("label#318:0");
 // a spinner and a label and no trailing icon — so emitting either would print a
 // prop the component ignores.
 const leadingIcon =
-  !loading && instance.getBoolean("leading#175:0")
-    ? instance.getInstanceSwap("leadingContent#175:20")
+  !loading && instance.getBoolean("leading")
+    ? instance.getInstanceSwap("leadingContent")
     : null;
 const leadingCode =
-  leadingIcon && leadingIcon.type === "INSTANCE"
+  leadingIcon?.type === "INSTANCE" && leadingIcon.hasCodeConnect()
     ? leadingIcon.executeTemplate().example
     : null;
 
 const trailingIcon =
-  !loading && instance.getBoolean("trailing#1171:0")
-    ? instance.getInstanceSwap("trailingContent#1171:43")
+  !loading && instance.getBoolean("trailing")
+    ? instance.getInstanceSwap("trailingContent")
     : null;
 const trailingCode =
-  trailingIcon && trailingIcon.type === "INSTANCE"
+  trailingIcon?.type === "INSTANCE" && trailingIcon.hasCodeConnect()
     ? trailingIcon.executeTemplate().example
     : null;
 
