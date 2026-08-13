@@ -23,6 +23,8 @@
     "typecheck": "pnpm --dir apps/ui exec tsc -b && pnpm --filter @grade10/design-system run typecheck && pnpm --filter @grade10/i18n run typecheck",
     "lint": "biome check .",
     "plan:preflight": "node scripts/openspec/plan-preflight.mjs",
+    "spec:view": "node tools/openspec-viewer/bin/openspec-viewer.mjs",
+    "spec:view:setup": "git submodule update --init tools/openspec-viewer && cd tools/openspec-viewer && pnpm install --ignore-workspace && ./node_modules/.bin/vite build",
     "lint:fix": "biome check --write ."
   },
   "devDependencies": {
