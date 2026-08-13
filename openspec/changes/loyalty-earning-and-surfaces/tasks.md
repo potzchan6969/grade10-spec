@@ -48,11 +48,11 @@
 
 ## 7. Operator identity lookup
 
-- [ ] 7.1 Serve identity on its own connection, requiring the identity permission and a verified second factor
-- [ ] 7.2 Reach it from the programme through an application-supplied port, with a test double
-- [ ] 7.3 Index the search for the query actually run, and bound its inputs
-- [ ] 7.4 Mark responses carrying identity as belonging to one caller
-- [ ] 7.5 Record identity reads without recording the identities
+- [x] 7.1 Serve identity on its own connection, requiring the identity permission and a verified second factor
+- [x] 7.2 Reach it from the programme through an application-supplied port, with a test double
+- [x] 7.3 Index the search for the query actually run, and bound its inputs
+- [x] 7.4 Mark responses carrying identity as belonging to one caller
+- [x] 7.5 Record identity reads without recording the identities
 
 ## 8. Membership surface
 
