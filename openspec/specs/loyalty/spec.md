@@ -142,6 +142,84 @@ points later expire.
 - **WHEN** a member's effective tier changes
 - **THEN** one entry records the move and what caused it
 
+### Requirement: A tier ladder is ordered, and refused at boot when it is not
+
+A programme's ladder SHALL be rejected when the product starts, not when a
+member is evaluated, if it is ambiguous about which tier a member holds.
+
+A ladder SHALL carry exactly one entry tier, which SHALL be its lowest rung.
+Tier identifiers SHALL be unique. Each earned tier SHALL ask more qualifying
+points than the tier below it, and every earned tier SHALL measure them over
+the same window. The programme's time zone SHALL name a real zone.
+
+#### Scenario: Two tiers share an identifier
+
+- **WHEN** a ladder repeats a tier identifier
+- **THEN** the product fails to start, naming the identifier
+
+#### Scenario: No entry tier, or more than one
+
+- **WHEN** a ladder has other than exactly one tier every member starts on
+- **THEN** the product fails to start, saying how many it found
+
+#### Scenario: The entry tier is not the lowest rung
+
+- **WHEN** the tier every member starts on is not first in the ladder
+- **THEN** the product fails to start
+
+#### Scenario: A higher tier is cheaper than the one below it
+
+- **WHEN** an earned tier asks no more qualifying points than the tier beneath it
+- **THEN** the product fails to start, naming both amounts
+- **AND** no member can hold a tier they skipped past
+
+#### Scenario: Earned tiers measure over different windows
+
+- **WHEN** two earned tiers count qualifying points over different periods
+- **THEN** the product fails to start, naming the periods
+
+#### Scenario: The programme names a zone that does not exist
+
+- **WHEN** the programme's time zone is not a real IANA zone
+- **THEN** the product fails to start, naming it
+
+### Requirement: Grade10's programme
+
+Grade10 SHALL run the programme in HKD on Asia/Hong_Kong time, granting one
+point per HKD 10 of qualifying spend, with points expiring twelve months after
+the activity that earned them.
+
+Its ladder SHALL be, in ascending rank:
+
+| Tier | Earns | Reached by |
+| --- | --- | --- |
+| Platinum | 1× | Every member starts here |
+| Diamond | 1.2× | 500 qualifying points inside a rolling twelve months |
+| Black | 1.7× | Invitation only |
+
+These are the values the product deploys, not a range it may vary within. They
+change by deploying a different configuration, never by an operator edit —
+an operator who can rewrite what a purchase earns can mint money. The reward
+menu is the intended lever and is editable.
+
+Why these numbers, and what is still open about the top tier:
+[Grade10 loyalty programme](../../../docs/prds/loyalty/programme.md).
+
+#### Scenario: A purchase earns at the member's rate
+
+- **WHEN** a Diamond member completes a HKD 1,000 purchase
+- **THEN** they earn 120 points
+
+#### Scenario: The second tier is reached by spending
+
+- **WHEN** a member's qualifying points inside the rolling twelve months reach 500
+- **THEN** they hold Diamond
+
+#### Scenario: The top tier cannot be bought
+
+- **WHEN** a member earns any number of points
+- **THEN** they never reach Black by earning alone
+
 ### Requirement: An invitation-only tier is granted and revoked by an operator
 
 A tier the programme marks as invitation-only SHALL be held only through an

@@ -2,9 +2,10 @@
 
 ## Summary
 
-Grade10 buyers get a membership that rewards them for spending: points on every
-purchase, three tiers that earn at increasing rates, and a menu of items those
-points buy. The top tier is given, not earned.
+Grade10 buyers get a membership that rewards them for spending: a point per
+HKD 10, three tiers that earn at increasing rates, and a menu of items those
+points buy. Platinum is where everyone starts, Diamond is earned at 500
+qualifying points and pays 1.2×, and Black pays 1.7× and is given, not earned.
 
 ## Context
 
@@ -79,6 +80,8 @@ points buy. The top tier is given, not earned.
 | Programme currency | Decided | The programme runs in HKD, and the store sells in HKD. The draft prices earning at HKD 10 per point and the programme keeps Hong Kong time; a store selling in another currency would be refused every purchase, so the two are pinned together and checked at startup | Product |
 | Tier economics live in code | Decided | The earn rate, expiry window and tier ladder are deployed and reviewed, not edited by an operator. An operator who can rewrite what a purchase earns can mint money; the reward menu is the intended lever and is editable | Engineering |
 | Second tier at 500 points | Decided | From the owner's draft. Roughly HKD 5,000 of spend at the entry rate | Owner |
+| Diamond earns 1.2×, Black 1.7× | Decided | The step to Diamond is small enough to be worth chasing at 500 points; Black's is large because it is a gift, not a target. Both are integer percentages, so earning never computes on a float | Product |
+| Platinum, Diamond, Black | Decided | Metal names read as status without implying a price, and leave room above and below if the ladder ever grows | Owner |
 | Twelve-month expiry | Decided | From the owner's draft, applied from the date of the activity that earned the points | Owner |
 | A tier once earned is kept | Decided | Expiring points do not demote a member. Demotion on expiry punishes a member for the passage of time and makes the tier meaningless as a status | Product |
 | Top tier by invitation | Decided | Given deliberately to a named member with a reason, revocable, never reachable by spending | Owner |
