@@ -4,7 +4,7 @@
 
 Prediction-market applications need a curated featured-markets surface that presents duration and trending markets consistently on desktop and mobile, while the consuming application retains ownership of market data, selection, navigation, and analytics.
 
-Product context: [Featured Markets reusable component PRD](../../../docs/prds/predictions/featured-markets-component.md).
+Product context: [Featured Markets reusable component PRD](../../../../docs/prds/predictions/featured-markets-component.md).
 
 ## Requirements
 

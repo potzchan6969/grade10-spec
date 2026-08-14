@@ -2,7 +2,7 @@
 
 A PRD records a product decision: the problem and its evidence, who it is for, what was ruled out, what will be measured, and what the risks are. It is not where requirements live.
 
-`openspec/specs/<capability>/spec.md` is the single source of truth for every checkable requirement and every component export contract. A PRD links its capability spec and does not restate it.
+`openspec/specs/<product>/<capability>/spec.md` is the single source of truth for every checkable requirement and every component export contract. A PRD links its capability spec and does not restate it.
 
 Create documents under a stable product-area directory, for example:
 

@@ -4,7 +4,7 @@
 
 ## The rule
 
-Every checkable requirement and every cross-repository contract lives in `openspec/specs/<capability>/spec.md`. An engineer in a consuming application builds from that spec alone, without reading a PRD first.
+Every checkable requirement and every cross-repository contract lives in `openspec/specs/<product>/<capability>/spec.md`. An engineer in a consuming application builds from that spec alone, without reading a PRD first.
 
 A PRD holds only what a requirement cannot carry: the problem and its evidence, who it is for, what was deliberately excluded, what will be measured, how it rolls out, and which decisions were made and why. A PRD links its capability spec; it does not duplicate it.
 
@@ -50,7 +50,7 @@ If the spec and a PRD disagree, the spec is correct and the PRD is stale — fix
 
 ### 2. Write requirements into the capability spec
 
-A capability spec at `openspec/specs/<capability>/spec.md` contains:
+A capability spec at `openspec/specs/<product>/<capability>/spec.md` contains:
 
 - a `## Purpose` naming what the capability is for and linking its PRD, when one exists;
 - `### Requirement:` entries written so an engineer in another repository can implement them without a follow-up question; and
@@ -104,7 +104,7 @@ Do not archive a change as a substitute for updating `openspec/specs/`. Archives
 
 ```text
 Is the statement testable — could a test or a manual pass decide it?
-├─ Yes → it belongs in openspec/specs/<capability>/spec.md,
+├─ Yes → it belongs in openspec/specs/<product>/<capability>/spec.md,
 │        reached through an openspec/changes/ delta.
 └─ No  → Does it explain a product judgment that outlives this change?
          ├─ Yes → create or update the PRD.

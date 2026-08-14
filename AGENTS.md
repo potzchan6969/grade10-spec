@@ -13,7 +13,7 @@ This repository is the versioned source of truth for product requirements and th
 
 | Need | Canonical location | Notes |
 | --- | --- | --- |
-| Durable requirements and component export contracts | `openspec/specs/<capability>/spec.md` | The single source of truth. An implementing engineer builds from this alone. |
+| Durable requirements and component export contracts | `openspec/specs/<product>/<capability>/spec.md` | The single source of truth. An implementing engineer builds from this alone. Products are listed in `openspec/specs/README.md`. |
 | Product decision behind a requirement | `docs/prds/<product-area>/<feature>.md` | Problem, users, non-goals, measurement, rollout, rationale. Explanatory, never authoritative over a requirement. |
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
@@ -31,7 +31,7 @@ Read [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md
 For a new product feature:
 
 1. Inspect the relevant capability in `openspec/specs/`, active OpenSpec changes, and any related PRD.
-2. Write the requirements as an OpenSpec change carrying deltas against `openspec/specs/<capability>/spec.md`. Its proposal must identify affected component exports and consumer apps.
+2. Write the requirements as an OpenSpec change carrying deltas against `openspec/specs/<product>/<capability>/spec.md`. Its proposal must identify affected component exports and consumer apps.
 3. Use the `prd-authoring` skill when the feature turns on a product judgment the requirement text will not preserve — why this problem, for whom, what was ruled out, what will be measured. Skip the PRD when there is no such judgment.
 4. Keep task checkboxes accurate as work lands; fold accepted deltas into `openspec/specs/`, then archive under `openspec/changes/archive/YYYY-MM-DD-<change-name>/`.
 

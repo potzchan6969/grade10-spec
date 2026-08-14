@@ -7,7 +7,7 @@ description: Create or revise a versioned product requirement document recording
 
 Use this skill when the request is to create, revise, review, or turn an idea into a PRD.
 
-A PRD is not where requirements live. `openspec/specs/<capability>/spec.md` is the single source of truth for every checkable requirement and component export contract; a PRD records only the product decision behind them.
+A PRD is not where requirements live. `openspec/specs/<product>/<capability>/spec.md` is the single source of truth for every checkable requirement and component export contract; a PRD records only the product decision behind them.
 
 1. Read `AGENTS.md`, `docs/governance/prd-and-openspec.md`, `docs/prds/README.md`, the relevant capability in `openspec/specs/`, and active `openspec/changes/` records.
 2. Decide whether a PRD is warranted. If stripping every testable statement from the intended document leaves nothing behind, write the capability spec instead and skip the PRD.

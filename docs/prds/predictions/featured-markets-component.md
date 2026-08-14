@@ -8,7 +8,7 @@ Prediction-market applications need a consistent featured-markets surface that c
 
 - Problem or opportunity: The Stakeland Featured Markets panel combines valuable UI patterns with application-owned data orchestration, preventing reuse by another consumer.
 - Evidence and links: Source reference: `/Users/tonyliang/workspace/stakeland-site/apps/bull-bear/bull-bear-site/components/features/predictions/FeaturedMarkets/FeaturedMarketsPanelWithStore.tsx`.
-- Related PRDs, OpenSpec changes, and designs: durable requirements at [`openspec/specs/featured-markets/spec.md`](../../../openspec/specs/featured-markets/spec.md).
+- Related PRDs, OpenSpec changes, and designs: durable requirements at [`openspec/specs/grade10-store/featured-markets/spec.md`](../../../openspec/specs/grade10-store/featured-markets/spec.md).
 
 ## Goals
 
@@ -40,7 +40,7 @@ Prediction-market applications need a consistent featured-markets surface that c
 
 ## Requirements
 
-Checkable requirements, state behavior, accessibility, content ownership, and the component export contract live in [`openspec/specs/featured-markets/spec.md`](../../../openspec/specs/featured-markets/spec.md). That spec is the source of truth an implementing engineer builds from; change it, not this document, when a requirement changes.
+Checkable requirements, state behavior, accessibility, content ownership, and the component export contract live in [`openspec/specs/grade10-store/featured-markets/spec.md`](../../../openspec/specs/grade10-store/featured-markets/spec.md). That spec is the source of truth an implementing engineer builds from; change it, not this document, when a requirement changes.
 
 ## Consuming applications and integration
 

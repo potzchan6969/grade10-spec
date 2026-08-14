@@ -15,7 +15,7 @@ qualifying points and pays 1.2×, and Black pays 1.7× and is given, not earned.
 - Evidence and links: the owner's programme draft — three tiers, HKD 10 per
   point, 500 points to the second tier, twelve-month expiry, top tier by
   invitation with CEO approval and an annual cap.
-- Related: [`openspec/specs/loyalty/spec.md`](../../../openspec/specs/loyalty/spec.md),
+- Related: [`openspec/specs/grade10-store/loyalty/spec.md`](../../../openspec/specs/grade10-store/loyalty/spec.md),
   change `loyalty-earning-and-surfaces`.
 
 ## Goals
@@ -53,7 +53,7 @@ qualifying points and pays 1.2×, and Black pays 1.7× and is given, not earned.
 
 ## Requirements
 
-`openspec/specs/loyalty/spec.md`
+`openspec/specs/grade10-store/loyalty/spec.md`
 
 ## Consuming applications and integration
 

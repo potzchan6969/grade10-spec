@@ -175,10 +175,10 @@ For a new or changed public component, reviewers should be able to answer yes to
 
 ## Applying the guide
 
-Use this guide for a new product UI component or a material public-contract change. When behavior, the consumer contract, or validation obligations change, carry the change as a delta against `openspec/specs/<capability>/spec.md`; update the PRD only if the product decision behind it changed. Keep feature-specific requirements in the capability spec; update this guide only for durable rules that should apply beyond one feature. Use the [interaction and motion testing scope](ui-component-testing.md) to choose the required browser coverage.
+Use this guide for a new product UI component or a material public-contract change. When behavior, the consumer contract, or validation obligations change, carry the change as a delta against `openspec/specs/<product>/<capability>/spec.md`; update the PRD only if the product decision behind it changed. Keep feature-specific requirements in the capability spec; update this guide only for durable rules that should apply beyond one feature. Use the [interaction and motion testing scope](ui-component-testing.md) to choose the required browser coverage.
 
 Related records:
 
-- [Featured Markets capability spec](../../openspec/specs/featured-markets/spec.md)
+- [Featured Markets capability spec](../../openspec/specs/grade10-store/featured-markets/spec.md)
 - [Featured Markets PRD](../prds/predictions/featured-markets-component.md)
 - [PRD and OpenSpec lifecycle](prd-and-openspec.md)

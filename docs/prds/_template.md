@@ -34,7 +34,7 @@ One paragraph describing the user and outcome.
 
 Link the capability spec that holds this feature's checkable requirements, state behavior, accessibility obligations, and component export contract:
 
-`openspec/specs/<capability>/spec.md`
+`openspec/specs/<product>/<capability>/spec.md`
 
 Do not restate those requirements here. If this feature has no approved requirements yet, say so and name the capability the spec will use.
 
