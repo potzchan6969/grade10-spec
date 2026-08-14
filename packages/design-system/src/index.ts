@@ -2,6 +2,7 @@ export * from "./components/display/avatar";
 export * from "./components/display/badge";
 export * from "./components/display/card";
 export * from "./components/display/list";
+export * from "./components/display/product-card";
 export * from "./components/display/separator";
 export * from "./components/display/skeleton";
 export * from "./components/display/tabs";
