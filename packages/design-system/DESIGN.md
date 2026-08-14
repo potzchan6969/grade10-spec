@@ -45,10 +45,10 @@ pnpm run test:stories                     # both Storybooks, as CI runs them
 reported but do not fail the run. Set it to `"error"` to gate CI once the
 outstanding violations are cleared.
 
-Design source of truth: in practice the Figma file, via the token pipeline below.
-A `.pen` library also exists under `designs/` at the repository root; the two have
-diverged and which one is canonical is an open question — see the note at the end
-of the Figma section before syncing from either.
+Design source of truth: the Figma file, via the token pipeline below. (A
+diverged Pencil `.pen` library under a root `designs/` directory was the
+original source; it was removed in August 2026 and survives only in git
+history.)
 
 ## How an app consumes it
 
@@ -75,21 +75,6 @@ import { Button, Card } from "@grade10/design-system"
 Imports use the package-scoped alias `@grade10/design-system/*` (never `@/`),
 so they resolve unambiguously when the app bundles the package source and never
 collide with the app's own `@` alias.
-
-## Design → code: regenerate tokens
-
-Tokens are projected from the `.pen` file, not hand-maintained long-term:
-
-1. Open `designs/grade10-ui.pen` in the Pencil desktop app.
-2. Read the variables (Pencil MCP `get_variables`) — the unprefixed `Mode`
-   Light/Dark set is AceTrader.
-3. Regenerate `src/theme.css` from that table: each `--token` becomes a
-   `:root` (Light) + `.dark` entry; `@theme inline` maps them to Tailwind
-   utilities.
-
-This is the reliable, deterministic sync direction. Component structure in the
-`.pen` file is the visual spec for the matching primitive here; keep them in
-step manually when a spec changes.
 
 ## Tokens: 2-way Figma sync
 
@@ -203,13 +188,12 @@ showed up in a browser. Both now exit 1 — `pull.mjs` lists the collection's re
 mode names, and it checks before writing, so a failed pull leaves `tokens.json`
 untouched.
 
-> **Unresolved: two design sources.** The Pencil flow above
-> (`designs/grade10-ui.pen`) predates this Figma pipeline and the two now
-> disagree. The evidence says Figma is live: the July 2026 resync landed a
-> full semantic-layer rewrite plus three new collections that have no Pencil
-> counterpart, and `tokens.json` is now a projection of the Figma file. Until
-> someone decides, treat the Pencil section as historical and do not sync from
-> it — a `.pen` pull would revert the Figma work.
+> **Resolved: one design source.** A Pencil `.pen` flow predated this Figma
+> pipeline and the two diverged. The July 2026 resync made Figma live
+> (semantic-layer rewrite plus three collections with no Pencil counterpart),
+> and the `designs/` directory was removed in August 2026 — Figma is the only
+> design source. The Pencil flow survives in git history alone; never sync
+> from it, a `.pen` pull would revert the Figma work.
 
 ## Add a primitive
 
@@ -222,7 +206,7 @@ pnpm dlx shadcn@latest add <component> --yes
 ```
 
 Then export it from `src/index.ts` and add a story next to it. The Grade10
-`.pen` library is the stock shadcn set, so most primitives come straight from
+component set is the stock shadcn set, so most primitives come straight from
 the registry, auto-themed by `theme.css`.
 
 Before handing off, run from the repository root:

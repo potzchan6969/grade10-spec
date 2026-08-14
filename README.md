@@ -7,7 +7,6 @@ Versioned product requirements and the design system for Grade10 applications.
 - Durable requirements and component export contracts live in [`openspec/specs/`](openspec/README.md); implementation deltas live alongside them in `openspec/changes/`.
 - Product managers and designers record the decision behind a requirement — problem, users, non-goals, measurement, rollout — in [`docs/prds/`](docs/prds/README.md).
 - Theme tokens and shadcn primitives live in [`packages/design-system/`](packages/design-system/DESIGN.md), including the two-way Figma token pipeline.
-- Versioned Pencil design files live in [`designs/`](designs/README.md).
 - [`apps/ui/`](apps/ui/) is a Storybook workbench; it is not a production application.
 
 Product UI components are implemented in the applications that render them. This repository records their contracts, not their source: the former `packages/ui-components` package was removed.

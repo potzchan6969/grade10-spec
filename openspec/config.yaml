@@ -1,7 +1,7 @@
 schema: spec-driven
 
 # This repo is an OpenSpec store, and more besides: PM and design own everything
-# under openspec/ and docs/prds/, while packages/design-system/ and designs/ hold
+# under openspec/ and docs/prds/, while packages/design-system/ holds
 # the components and tokens the applications consume. Engineering reads the plan
 # from grade10, which points here with
 # `store: grade10-spec`.
@@ -31,8 +31,7 @@ context: |
   code, never a float - specs must state amounts that way.
   A change that alters a component or a token is work in this repo:
   packages/design-system/ holds the primitives and the Figma token pipeline,
-  designs/ holds the versioned Pencil files, and apps/ui/ is the Storybook
-  workbench that renders them.
+  and apps/ui/ is the Storybook workbench that renders them.
 
 # Per-artifact rules (optional)
 rules:
@@ -50,7 +49,7 @@ rules:
     - Requirements live here and nowhere else. Never leave a testable statement in a PRD.
   design:
     - Record alternatives considered for each decision; engineering inherits these trade-offs.
-    - Link the designs/ Pencil file and the capability spec rather than describing screens in prose.
+    - Link the capability spec and the Figma source rather than describing screens in prose.
   tasks:
     - 'Split groups by layer and order them so each one is buildable against what the ones before it already landed: shared types and interfaces first, then data migration, then backend and API, then frontend. Omit a layer the change does not touch rather than writing an empty group.'
     - Order groups so an engineer can ship and verify one group at a time.

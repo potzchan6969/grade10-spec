@@ -1,8 +1,7 @@
 # Design: reinstate a shared compound-component package
 
 Capability spec: [`shared-ui/component-package`](specs/shared-ui/component-package/spec.md)
-(new). General design reference:
-[`designs/grade10-ui.pen`](../../../designs/grade10-ui.pen).
+(new).
 
 ## Package shape
 
@@ -74,10 +73,10 @@ history if a future change wants to draw on them.
 ### Design-sync stance for composites
 
 Compound components are not bound to Figma component sets;
-`design-code-sync.md` continues to govern primitives only. The versioned
-Pencil files under `designs/` remain the design reference for composites. A
-genuine code/design disagreement in a composite is recorded as an OpenSpec
-change, the same rule primitives follow.
+`design-code-sync.md` continues to govern primitives only. Composite designs
+are referenced from their Figma source. A genuine code/design disagreement in
+a composite is recorded as an OpenSpec change, the same rule primitives
+follow.
 
 ### Theming
 
