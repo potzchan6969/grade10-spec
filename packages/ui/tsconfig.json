@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@grade10/ui/*": ["./src/*"]
+    },
+    "target": "es2023",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "types": ["react", "react-dom"],
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true
+  },
+  "include": ["src"]
+}

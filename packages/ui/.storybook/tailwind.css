@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Relative paths into the sibling workspace package so the Storybook build
+ * resolves the generated theme CSS without exercising package exports. */
+@import "../../design-system/src/theme.css";
+@import "../../design-system/src/themes/default.css";
+@import "../../design-system/src/themes/grade10.css";
+
+/* Generate utility classes for this package's components and stories, and for
+ * the design-system primitives they compose. */
+@source "../src";
+@source "../../design-system/src";
