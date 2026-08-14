@@ -8,11 +8,11 @@ The examples name components from the former `packages/ui-components` package. T
 
 | Category | Required browser evidence | Current examples |
 | --- | --- | --- |
-| Controlled selection and navigation | Operate each selectable control; assert callback-driven selected state and representative rendered content. Exercise native Enter or Space activation. | SegmentedControl, Featured asset/duration/event/source/mobile tabs, payment token tabs |
+| Controlled selection and navigation | Operate each selectable control; assert callback-driven selected state and representative rendered content. Exercise native Enter or Space activation. | SegmentedControl, asset/duration/event/source/mobile tabs, payment token tabs |
 | Dialog lifecycle and focus | Assert initial focus, Tab/Shift+Tab containment, close button, backdrop, Escape, focus restoration, and non-dismissible behavior. | PaymentDialog and processing dialogs |
 | Controlled form and async actions | Assert value changes, submit paths, validation/error rendering, applied/removal states, and loading/disabled guards. | PaymentPromoCodeField and payment CTAs |
 | Callback-forwarding actions | Assert each public action callback fires once; assert disabled/loading actions do not fire. | Button, Surface button, market header/card actions, Browse All, outcome actions |
-| Async recovery | Render loading, empty, and error states; assert retry callbacks and recovery when supplied. | FeaturedMarketStatus and market lists |
+| Async recovery | Render loading, empty, and error states; assert retry callbacks and recovery when supplied. | Status regions and market lists |
 | Motion | Assert CSS animation presence and bounded progress in Chromium; provide a paused story mode for deterministic visual capture. | Skeleton pulse, processing spinner, fading asset badge |
 | Presentational-only exports | Render meaningful visual/data states. No play test is needed unless the export gains a consumer action or local interactive behavior. | Badge, Stack, Text, price/details/timeline summaries |
 

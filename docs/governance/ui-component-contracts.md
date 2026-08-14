@@ -1,6 +1,6 @@
 # Product UI component contracts
 
-This guide records the reusable implementation decisions established while building `FeaturedMarkets`. It defines the contract a product UI component must satisfy; the component itself is implemented in the application that renders it. Read it with [the component rules in `AGENTS.md`](../../AGENTS.md).
+This guide records the reusable implementation decisions established while building this repository's first portable product components. It defines the contract a product UI component must satisfy; the component itself is implemented in the application that renders it. Read it with [the component rules in `AGENTS.md`](../../AGENTS.md).
 
 This repository once shipped those components as `packages/ui-components`. That package was removed and each application now owns its component source, so the rules below describe an obligation on the implementing application rather than on a package here. The design-system primitives in `packages/design-system` remain this repository's own — read [`design-code-sync.md`](design-code-sync.md) before adding or changing one.
 
@@ -14,9 +14,9 @@ A portable component renders a consumer-owned presentation. In this repository, 
 | Typed visual states, prop-driven formatting, callbacks, and local DOM-renderer lifecycle | Routing, analytics, notifications, clipboard, countdown derivation, and retry implementation |
 | App-neutral feature composites | Mapping domain/API data into the component's normalized contract |
 
-`FeaturedMarkets` is the reference implementation: its app-facing panel was decomposed into controlled primitives and composites, while its store, live feed, route, analytics, market-countdown derivation, and app-specific icons were deliberately excluded.
+The reference pattern: an app-facing panel is decomposed into controlled primitives and composites, while its store, live feed, route, analytics, derived values, and app-specific icons are deliberately excluded and remain with the application.
 
-## Decisions established by Featured Markets
+## Established decisions
 
 | Decision | Rationale | Rule for future components |
 | --- | --- | --- |
@@ -25,7 +25,7 @@ A portable component renders a consumer-owned presentation. In this repository, 
 | Independent state boundaries | A loaded navigation list can coexist with an unavailable chart or summary. | Model independently resolving regions independently; do not collapse unrelated readiness into one global boolean. |
 | Normalized presentation data | The package must not know API schemas, number formats, clock logic, or market semantics. | Consumers provide display-ready labels, formatted values, semantic tones, status text, and callbacks. |
 | Local DOM lifecycle | Canvas/chart libraries need a DOM instance and resize cleanup, but that does not justify application state. | Keep renderer lifecycle local and prop-driven; never use it to fetch, subscribe to, or persist product data. |
-| Primitive-first composition | Shared visual and accessibility behavior should not be copied into each feature card. | Build the component's button, badge, card, and tab rungs once and reuse them, against the design-system token values rather than ad-hoc literals. The former component package originally exported its own primitive layer; [`move-primitives-to-design-system`](../../openspec/changes/move-primitives-to-design-system/proposal.md) removed it, because a second Button styled against a private palette drifted from the design one silently. |
+| Primitive-first composition | Shared visual and accessibility behavior should not be copied into each feature card. | Build the component's button, badge, card, and tab rungs once and reuse them, against the design-system token values rather than ad-hoc literals. The former component package originally exported its own primitive layer; the `move-primitives-to-design-system` change removed it, because a second Button styled against a private palette drifted from the design one silently. |
 | Public API discipline | Other features import the component by name and depend on its prop shape. | Export the component and its prop types from one entry module; treat required prop and semantic changes as consumer-facing compatibility work. |
 
 ## Design the contract before markup
@@ -42,24 +42,24 @@ Do not expose a component prop shaped like an API response. Do not ask a reusabl
 
 ### Model asynchronous content explicitly
 
-`FeaturedAsyncState<T>` is the default pattern for a visual boundary:
+A discriminated `AsyncState<T>` is the default pattern for a visual boundary:
 
 ```ts
-export type FeaturedAsyncState<T> =
+export type AsyncState<T> =
   | { status: "loading" }
   | { status: "empty"; message?: string }
   | { status: "error"; message: string; onRetry?: () => void }
   | { status: "ready"; data: T };
 ```
 
-Use the smallest appropriate boundary. For example, Featured Markets independently models duration data, event data, desktop presentation, mobile presentation, and chart data. An error in a chart must not erase a ready market summary.
+Use the smallest appropriate boundary. For example, a market panel can independently model duration data, event data, desktop presentation, mobile presentation, and chart data. An error in a chart must not erase a ready market summary.
 
 ### Make mutually exclusive selections impossible to misrepresent
 
 When a user can select different entity families, use a discriminated union instead of optional IDs:
 
 ```ts
-export type FeaturedMarketSelection<
+export type MarketSelection<
   AssetId extends string,
   DurationId extends string,
   EventId extends string,
@@ -79,7 +79,7 @@ type MarketPresentation<SourceId extends string> =
   | {
       kind: "chart";
       summary: MarketSummary<SourceId>;
-      chart: FeaturedAsyncState<ChartData>;
+      chart: AsyncState<ChartData>;
     }
   | { kind: "summary"; summary: MarketSummary<SourceId> };
 ```
@@ -88,10 +88,10 @@ Do not encode this with optional `chart?` fields and then infer behavior at rend
 
 ### Keep the root controlled
 
-The package does not store the selected market or mobile tab:
+A portable component does not store the selected market or mobile tab:
 
 ```tsx
-<FeaturedMarkets
+<MarketsPanel
   selection={selection}
   onSelectionChange={setSelection}
   mobileTab={mobileTab}
@@ -130,7 +130,7 @@ Before adding DOM-backed behavior, document:
 3. the mount, update, resize, and disposal lifecycle; and
 4. why it does not acquire, persist, subscribe to, or derive consumer-owned product state.
 
-The `FeaturedMarketLineChart` reference does only this:
+A line-chart component under this contract does only this:
 
 ```ts
 useEffect(() => {
@@ -179,6 +179,4 @@ Use this guide for a new product UI component or a material public-contract chan
 
 Related records:
 
-- [Featured Markets capability spec](../../openspec/specs/grade10-store/featured-markets/spec.md)
-- [Featured Markets PRD](../prds/predictions/featured-markets-component.md)
 - [PRD and OpenSpec lifecycle](prd-and-openspec.md)

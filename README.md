@@ -10,7 +10,7 @@ Versioned product requirements and the design system for Grade10 applications.
 - Versioned Pencil design files live in [`designs/`](designs/README.md).
 - [`apps/ui/`](apps/ui/) is a Storybook workbench; it is not a production application.
 
-Product UI components are implemented in the applications that render them. This repository records their contracts, not their source: the former `packages/ui-components` package was removed, and `FeaturedMarkets` now lives in the prediction application under `apps/web/src/features/featured-markets/`.
+Product UI components are implemented in the applications that render them. This repository records their contracts, not their source: the former `packages/ui-components` package was removed.
 
 Read [`AGENTS.md`](AGENTS.md) before using an AI agent in this repository. It defines the source-of-truth boundaries and the requirements for component contracts.
 

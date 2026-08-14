@@ -2,7 +2,7 @@
 /**
  * Run this before editing a change that engineering is already implementing:
  *
- *   pnpm run plan:preflight add-featured-markets-component
+ *   pnpm run plan:preflight reinstate-shared-ui-package
  *
  * This repo is the OpenSpec store for grade10, and that repo's apply
  * guidance tells engineers to check off tasks in this store's `tasks.md` and commit
