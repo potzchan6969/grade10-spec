@@ -48,7 +48,7 @@ export const SoldOut: Story = {
   ],
 };
 
-/** Both rungs Figma draws, side by side, at the designed 260px width. */
+/** The three rungs Figma draws, at the designed 260px width. */
 export const States: Story = {
   render: (args) => (
     <div className="flex items-start gap-10">
@@ -56,10 +56,25 @@ export const States: Story = {
         <ProductCard {...args} />
       </div>
       <div className="w-[260px]">
+        <ProductCard {...args} addedToCart quantity={3} />
+      </div>
+      <div className="w-[260px]">
         <ProductCard {...args} soldOut />
       </div>
     </div>
   ),
+};
+
+/** Figma `isAddedToCart=true` — Add button replaced by a quantity stepper. */
+export const AddedToCart: Story = {
+  args: { addedToCart: true, quantity: 3 },
+  decorators: [
+    (Story) => (
+      <div className="w-[260px]">
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 /** `hasDiscount=false` — no badge and no strikethrough price. */

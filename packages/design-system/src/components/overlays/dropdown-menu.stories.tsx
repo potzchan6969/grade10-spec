@@ -37,20 +37,24 @@ export const Default: Story = {
         <DropdownMenuLabel>My account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            trailing={<DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>}
+          >
             Profile
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            trailing={<DropdownMenuShortcut>⌘,</DropdownMenuShortcut>}
+          >
             Settings
-            <DropdownMenuShortcut>⌘,</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem disabled>Billing</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive">
+        <DropdownMenuItem
+          trailing={<DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>}
+          variant="destructive"
+        >
           Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

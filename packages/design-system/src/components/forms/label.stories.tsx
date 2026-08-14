@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Checkbox } from "./checkbox";
+import { CheckboxButton } from "./checkbox-button";
 import { Input } from "./input";
 import { Label } from "./label";
 
@@ -28,7 +28,7 @@ export const WithCheckbox: Story = {
   args: { children: "Remember me" },
   render: (args) => (
     <div className="flex items-center gap-2">
-      <Checkbox id="remember" />
+      <CheckboxButton id="remember" />
       <Label htmlFor="remember" {...args} />
     </div>
   ),
@@ -39,7 +39,7 @@ export const DisabledControl: Story = {
   args: { children: "Remember me" },
   render: (args) => (
     <div className="flex items-center gap-2">
-      <Checkbox id="remember-disabled" disabled />
+      <CheckboxButton id="remember-disabled" disabled />
       <Label htmlFor="remember-disabled" {...args} />
     </div>
   ),

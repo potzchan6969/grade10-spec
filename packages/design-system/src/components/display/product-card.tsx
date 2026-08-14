@@ -1,6 +1,7 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
+import { Stepper } from "@grade10/design-system/components/forms/stepper";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Heart } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
@@ -25,6 +26,16 @@ type ProductCardProps = {
    */
   soldOut?: boolean;
   /**
+   * Figma's `isAddedToCart` axis. Replaces the Add button with a quantity
+   * stepper. Ignored when `soldOut` — that combination is not drawn.
+   */
+  addedToCart?: boolean;
+  /** Quantity shown in the stepper. The consumer owns the value. */
+  quantity?: number;
+  onQuantityChange?: (value: number) => void;
+  minQuantity?: number;
+  maxQuantity?: number;
+  /**
    * Fires when the card surface is activated. No navigation target is wired
    * here — the consumer decides what happens (route, modal, etc.).
    */
@@ -41,12 +52,13 @@ type ProductCardProps = {
 };
 
 /**
- * Product tile for a card-box / pack grid. Figma (`4200:155`) has one axis,
- * `isSoldOut`; discount is a boolean that shows the badge and original price.
+ * Product tile for a card-box / pack grid. Figma (`4200:155`) has two axes,
+ * `isSoldOut` and `isAddedToCart`; discount is a boolean that shows the badge
+ * and original price.
  *
- * The image and copy share one button target; the wishlist icon and Add button
- * sit outside it so nested controls stay valid. Hover scales the photo inside
- * the clipped well. Sold-out tiles are inert.
+ * The image and copy share one button target; the wishlist icon and the Add
+ * button / stepper sit outside it so nested controls stay valid. Hover scales
+ * the photo inside the clipped well. Sold-out tiles are inert.
  */
 function ProductCard({
   className,
@@ -59,6 +71,11 @@ function ProductCard({
   originalPrice,
   discountLabel,
   soldOut = false,
+  addedToCart = false,
+  quantity = 1,
+  onQuantityChange,
+  minQuantity,
+  maxQuantity,
   onClick,
   ariaLabel,
   actionLabel,
@@ -155,6 +172,7 @@ function ProductCard({
     <div
       data-slot="product-card"
       data-sold-out={soldOut || undefined}
+      data-added-to-cart={(!soldOut && addedToCart) || undefined}
       className={cn(
         "group/product-card relative flex w-full flex-col gap-3 pb-3",
         className,
@@ -183,15 +201,27 @@ function ProductCard({
           <Heart aria-hidden size={12} weight="regular" />
         </IconButton>
       )}
-      <Button
-        className="w-full"
-        disabled={soldOut}
-        onClick={onAction}
-        size="sm"
-        variant="secondary"
-      >
-        {actionLabel ?? (soldOut ? "Sold Out" : "Add")}
-      </Button>
+      {soldOut ? (
+        <Button className="w-full" disabled size="sm" variant="secondary">
+          {actionLabel ?? "Sold Out"}
+        </Button>
+      ) : addedToCart ? (
+        <Stepper
+          max={maxQuantity}
+          min={minQuantity}
+          onValueChange={onQuantityChange}
+          value={quantity}
+        />
+      ) : (
+        <Button
+          className="w-full"
+          onClick={onAction}
+          size="sm"
+          variant="secondary"
+        >
+          {actionLabel ?? "Add"}
+        </Button>
+      )}
     </div>
   );
 }

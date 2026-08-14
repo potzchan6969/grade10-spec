@@ -11,7 +11,7 @@
       "**",
       "!packages/design-system/src/theme.css",
       "!packages/design-system/src/themes/grade10.css",
-      "!tools/openspec-viewer/**"
+      "!tools/openspec-viewer"
     ]
   },
   "formatter": {

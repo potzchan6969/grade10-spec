@@ -5,10 +5,15 @@ import figma from "figma";
 
 const instance = figma.selectedInstance;
 
-// `isSoldOut` is this set's only VARIANT axis. Both options map to a boolean
-// gate rather than a cva axis — the same shape RadioListItem uses for
-// `isDisabled`. Hover is a CSS pseudo-state on the image well, not a prop.
+// Both VARIANT axes are boolean gates rather than a cva axis — the same shape
+// RadioListItem uses for `isDisabled`. Hover is a CSS pseudo-state on the
+// image well, not a prop. `isSoldOut=true, isAddedToCart=true` is not drawn.
 const soldOut = instance.getEnum("isSoldOut", {
+  false: false,
+  true: true,
+});
+
+const addedToCart = instance.getEnum("isAddedToCart", {
   false: false,
   true: true,
 });
@@ -24,7 +29,7 @@ const price = instance.getString("price");
 const originalPrice = instance.getString("originalPrice");
 
 export default {
-  example: figma.code`<ProductCard category="${category}" name="${productName}" description="${description}" price="${price}"${hasDiscount ? figma.code` originalPrice="${originalPrice}" discountLabel="−15%"` : ""}${soldOut ? figma.code` soldOut` : ""} />`,
+  example: figma.code`<ProductCard category="${category}" name="${productName}" description="${description}" price="${price}"${hasDiscount ? figma.code` originalPrice="${originalPrice}" discountLabel="−15%"` : ""}${soldOut ? figma.code` soldOut` : ""}${!soldOut && addedToCart ? figma.code` addedToCart` : ""} />`,
   imports: ['import { ProductCard } from "@grade10/design-system"'],
   id: "product-card",
   metadata: { nestable: true },
