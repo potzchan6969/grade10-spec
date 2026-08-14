@@ -19,7 +19,7 @@ This repository is the versioned source of truth for product requirements and th
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
 | User-facing copy and translations | `packages/i18n/messages/` | `en.json` is the base catalog; other locales fall back key-by-key. |
 | Design-system primitive | `packages/design-system/src/components/` | shadcn primitives and their colocated stories. |
-| Product component implementation | The consuming application repository | This repository specifies the contract; it no longer ships a component package. |
+| Product component implementation | `packages/ui/src/components/` | Shared compound components, one directory per capability; the capability spec remains the export contract. |
 | Task group and owner format in `tasks.md` | `docs/governance/task-ownership.md` | Parsed independently by tooling in this repository and in the application repository. |
 
 If a statement is testable, it belongs in `openspec/specs/` and nowhere else. A PRD holds only what a requirement cannot carry, and links its capability spec rather than restating it. Where the two disagree, the spec is correct.
@@ -39,7 +39,7 @@ Ask only questions that materially affect scope or an irreversible product choic
 
 ## Product UI component contracts
 
-This repository specifies product UI components; it does not implement them. A component's source lives in the application that renders it, and the contract recorded here is what the application must satisfy.
+This repository specifies product UI components and, since the `reinstate-shared-ui-package` change, hosts their shared implementations: a compound component named by a capability spec lives once in `packages/ui` (`@grade10/ui`) and every consuming application imports it rather than maintaining its own copy. The capability spec under `openspec/specs/` remains the export contract the implementation must satisfy.
 
 Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-contracts.md) before designing a new public UI contract or making a material component-contract change.
 
@@ -51,7 +51,7 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 
 ## Design system package
 
-`packages/design-system` (`@grade10/design-system`) holds the theme tokens and the shadcn primitives this repository owns. `packages/i18n` (`@grade10/i18n`) holds the message catalogs. These are the only packages here; do not add another without a recorded product decision.
+`packages/design-system` (`@grade10/design-system`) holds the theme tokens and the shadcn primitives this repository owns. `packages/i18n` (`@grade10/i18n`) holds the message catalogs. `packages/ui` (`@grade10/ui`) holds the shared compound components, composing the design-system primitives one way and never importing the message catalogs — all content reaches its components through props. These are the only packages here; do not add another without a recorded product decision.
 
 Use the `design-system-components` skill whenever creating or changing a primitive under `packages/design-system/src/components/`.
 
@@ -63,7 +63,7 @@ Use the `design-system-components` skill whenever creating or changing a primiti
 
 ## Sharing with consuming apps
 
-Consumers add this repository as a Git submodule and build from `openspec/specs/`, reading the PRDs for rationale and the design tokens for values. They do not install a component package from here: `packages/ui-components` was removed and each application now owns its own component source, so a shared component change is a specification change here plus an implementation change there.
+Consumers add this repository as a Git submodule and build from `openspec/specs/`, reading the PRDs for rationale and the design tokens for values. Shared compound components are consumed from `@grade10/ui` directly from source — no build step, no published artifact — so a shared component change lands once here and reaches every application through a submodule bump. Application-owned state, adapters, and wiring remain implementation work in each application.
 
 Pin the submodule SHA in the application repository; updates are normal pull requests that move that SHA. Do not use git submodules inside this repository; this repository itself is the reusable submodule.
 

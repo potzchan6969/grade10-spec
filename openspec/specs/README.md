@@ -10,6 +10,7 @@ The products are:
 
 - `grade10-store` — the Grade10 prediction-market surfaces (all pre-existing capabilities live here).
 - `zzz-store` — no capabilities yet; create `openspec/specs/zzz-store/<capability>/` with its first spec.
+- `shared-ui` — cross-product contracts for the shared UI component package (`packages/ui`) that every store application consumes.
 
 A capability's OpenSpec ID is `<product>/<capability>` (for example `grade10-store/loyalty`); use that ID with `openspec show` and `openspec validate`. Adding a product is a new top-level directory here plus a bullet in this list.
 

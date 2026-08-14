@@ -1,8 +1,8 @@
 # Product UI component contracts
 
-This guide records the reusable implementation decisions established while building this repository's first portable product components. It defines the contract a product UI component must satisfy; the component itself is implemented in the application that renders it. Read it with [the component rules in `AGENTS.md`](../../AGENTS.md).
+This guide records the reusable implementation decisions established while building this repository's first portable product components. It defines the contract a product UI component must satisfy; the component itself is implemented once in `packages/ui` (`@grade10/ui`) and imported by every application that renders it. Read it with [the component rules in `AGENTS.md`](../../AGENTS.md).
 
-This repository once shipped those components as `packages/ui-components`. That package was removed and each application now owns its component source, so the rules below describe an obligation on the implementing application rather than on a package here. The design-system primitives in `packages/design-system` remain this repository's own — read [`design-code-sync.md`](design-code-sync.md) before adding or changing one.
+This repository once shipped those components as the prebuilt `packages/ui-components`, removed while a single application consumed it; the `reinstate-shared-ui-package` change brought the shared home back as the source-consumed `packages/ui` once a second application arrived. The rules below describe the obligation on that package's components. The design-system primitives in `packages/design-system` remain governed separately — read [`design-code-sync.md`](design-code-sync.md) before adding or changing one.
 
 ## Purpose and boundary
 
@@ -151,7 +151,7 @@ It does not fetch data, subscribe to feeds, persist user data, or derive product
 
 ## Testing and review guidance
 
-Use the smallest test layer that proves the contract. The implementing application owns the examples and the tests.
+Use the smallest test layer that proves the contract. This repository owns the component's stories and checks; the consuming application owns feature-level integration verification.
 
 | Risk | Appropriate verification |
 | --- | --- |
@@ -170,7 +170,7 @@ For a new or changed public component, reviewers should be able to answer yes to
 - Are IDs and mutually exclusive display shapes represented by appropriate discriminated types?
 - Is DOM-backed behavior documented, scoped to presentation, and cleaned up without acquiring or persisting product state?
 - Do the examples exercise the visible states, narrow viewport, and a representative interaction?
-- Were the implementing application's typecheck, tests, build, and lint run as applicable?
+- Were this repository's typecheck, lint, and story checks run, and each affected application's build where the contract changed?
 - Do the public exports match the export contract in the capability spec, and does the consumer documentation agree?
 
 ## Applying the guide

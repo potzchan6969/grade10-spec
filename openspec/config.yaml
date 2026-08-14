@@ -21,8 +21,10 @@ context: |
   openspec/specs/ is the single source of truth for every checkable requirement
   and component export contract; a change under openspec/ is the delta against
   it. Specs are grouped by product as openspec/specs/<product>/<capability>/;
-  the products are grade10-store (the Grade10 prediction-market surfaces) and
-  zzz-store. A capability's ID is <product>/<capability>. docs/prds/ holds only the product decision behind a requirement - problem,
+  the products are grade10-store (the Grade10 prediction-market surfaces),
+  zzz-store, and shared-ui (cross-product contracts for the shared component
+  package packages/ui that every store application consumes). A capability's
+  ID is <product>/<capability>. docs/prds/ holds only the product decision behind a requirement - problem,
   users, non-goals, measurement, rollout, rationale - and never restates one.
   docs/governance/prd-and-openspec.md explains the boundary - follow it.
   Money is always an integer count of minor units plus an ISO 4217 currency
