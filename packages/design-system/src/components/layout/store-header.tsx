@@ -21,12 +21,13 @@ type StoreHeaderNavItem = StoreHeaderLink & {
 };
 
 type StoreHeaderProps = ComponentProps<"header"> & {
-  promo?: ReactNode;
-  logo?: ReactNode;
+  /** Promotional bar copy. Pass `null` to drop the bar. */
+  promo: ReactNode;
+  logo: ReactNode;
   logoHref?: string;
-  utilityLinks?: StoreHeaderLink[];
-  navItems?: StoreHeaderNavItem[];
-  localeLabel?: ReactNode;
+  utilityLinks: StoreHeaderLink[];
+  navItems: StoreHeaderNavItem[];
+  localeLabel: ReactNode;
   onLocaleClick?: () => void;
   onSearchClick?: () => void;
   onAccountClick?: () => void;
@@ -38,32 +39,22 @@ type StoreHeaderProps = ComponentProps<"header"> & {
   cartLabel?: string;
 };
 
-const DEFAULT_UTILITY: StoreHeaderLink[] = [
-  { label: "Store Finder", href: "#store-finder" },
-  { label: "Help", href: "#help" },
-  { label: "Shipping & Delivery", href: "#shipping" },
-  { label: "Orders & Returns", href: "#orders" },
-];
-
-const DEFAULT_NAV: StoreHeaderNavItem[] = [
-  { label: "SHOP", href: "#shop", current: true },
-  { label: "NEW ARRIVALS", href: "#new" },
-  { label: "GRADE", href: "#grade" },
-  { label: "AUCTION", href: "#auction" },
-];
-
 /**
  * Store chrome. Figma (`4171:9937`) has no variant axes — content is passed
  * in so a consumer can swap copy and callbacks without owning the layout.
+ *
+ * Brand, navigation, and locale content is required rather than defaulted: two
+ * stores render this shell, and a default would let the second one ship the
+ * first one's navigation with nothing failing.
  */
 function StoreHeader({
   className,
-  promo = "PROMO UTILITY BAR",
-  logo = "Grade10 Marketplace",
+  promo,
+  logo,
   logoHref = "#",
-  utilityLinks = DEFAULT_UTILITY,
-  navItems = DEFAULT_NAV,
-  localeLabel = "Hong Kong (HKD)",
+  utilityLinks,
+  navItems,
+  localeLabel,
   onLocaleClick,
   onSearchClick,
   onAccountClick,

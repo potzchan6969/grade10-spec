@@ -4,7 +4,16 @@
 import figma from "figma";
 
 export default {
-  example: figma.code`<StoreHeader />`,
+  // The set has no variant axes, so nothing here is read from the instance.
+  // Every content prop is required and store-owned, so the snippet names the
+  // values the consumer supplies rather than emitting one store's content.
+  example: figma.code`<StoreHeader
+  promo={promo}
+  logo={logo}
+  utilityLinks={utilityLinks}
+  navItems={navItems}
+  localeLabel={localeLabel}
+/>`,
   imports: ['import { StoreHeader } from "@grade10/design-system"'],
   id: "store-header",
   metadata: { nestable: true },
