@@ -14,7 +14,8 @@
     "./components/*": "./src/components/*.tsx"
   },
   "dependencies": {
-    "@grade10/design-system": "workspace:*"
+    "@grade10/design-system": "workspace:*",
+    "@phosphor-icons/react": "^2.1.10"
   },
   "peerDependencies": {
     "react": "^19.0.0",

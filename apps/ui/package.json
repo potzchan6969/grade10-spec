@@ -4,14 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
     "storybook": "storybook dev",
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@grade10/design-system": "workspace:*",
+    "@grade10/ui": "workspace:*",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },

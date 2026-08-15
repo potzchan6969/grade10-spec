@@ -16,6 +16,12 @@ importers:
 
   apps/ui:
     dependencies:
+      '@grade10/design-system':
+        specifier: workspace:*
+        version: link:../../packages/design-system
+      '@grade10/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       react:
         specifier: ^19.2.7
         version: 19.2.8
@@ -207,6 +213,9 @@ importers:
       '@grade10/design-system':
         specifier: workspace:*
         version: link:../design-system
+      '@phosphor-icons/react':
+        specifier: ^2.1.10
+        version: 2.1.10(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
     devDependencies:
       '@storybook/addon-a11y':
         specifier: 10.5.4
