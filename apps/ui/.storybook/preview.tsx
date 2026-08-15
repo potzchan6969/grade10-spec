@@ -1,5 +1,6 @@
-import type { Preview } from "@storybook/react-vite";
+import type { Decorator, Preview } from "@storybook/react-vite";
 import type { ReactNode } from "react";
+import "./tailwind.css";
 
 function MotionBoundary({
   children,
@@ -25,8 +26,22 @@ function MotionBoundary({
   );
 }
 
+/* Toolbar-driven theming, identical to both package workbenches: toggle the
+ * two orthogonal class dimensions on the preview <html>. An assembly must
+ * re-theme exactly as its parts do, so the mechanism has to match. */
+const withTheme: Decorator = (Story, context) => {
+  const { colorTheme, mode } = context.globals;
+  const root = document.documentElement;
+  root.classList.remove("theme-default", "theme-grade10");
+  root.classList.add(`theme-${colorTheme}`);
+  root.classList.toggle("dark", mode === "dark");
+  return <Story />;
+};
+
 const preview: Preview = {
   parameters: {
+    layout: "fullscreen",
+    backgrounds: { disable: true }, // body bg comes from the theme tokens
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -41,7 +56,38 @@ const preview: Preview = {
       test: "todo",
     },
   },
+  initialGlobals: {
+    colorTheme: "grade10",
+    mode: "dark",
+  },
+  globalTypes: {
+    colorTheme: {
+      description: "Color theme",
+      toolbar: {
+        title: "Theme",
+        icon: "paintbrush",
+        items: [
+          { value: "default", title: "Default" },
+          { value: "grade10", title: "Grade10" },
+        ],
+        dynamicTitle: true,
+      },
+    },
+    mode: {
+      description: "Light / dark",
+      toolbar: {
+        title: "Mode",
+        icon: "contrast",
+        items: [
+          { value: "light", title: "Light" },
+          { value: "dark", title: "Dark" },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
   decorators: [
+    withTheme,
     (Story, context) => (
       <MotionBoundary paused={context.parameters.pauseMotion === true}>
         <Story />
