@@ -52,7 +52,17 @@ function PaginationLink({
   );
 }
 
-function PaginationEllipsis({ className, ...props }: ComponentProps<"span">) {
+type PaginationEllipsisProps = ComponentProps<"span"> & {
+  /** Screen-reader name for the gap. Overridable so a localizing consumer is
+   * not stuck with the English default. */
+  label?: string;
+};
+
+function PaginationEllipsis({
+  className,
+  label = "More pages",
+  ...props
+}: PaginationEllipsisProps) {
   return (
     <span
       data-slot="pagination-ellipsis"
@@ -63,7 +73,7 @@ function PaginationEllipsis({ className, ...props }: ComponentProps<"span">) {
       {...props}
     >
       <DotsThree aria-hidden size={24} weight="bold" />
-      <span className="sr-only">More pages</span>
+      <span className="sr-only">{label}</span>
     </span>
   );
 }
@@ -121,6 +131,7 @@ function PaginationNext({
 }
 
 export type {
+  PaginationEllipsisProps,
   PaginationLinkProps,
   PaginationNextProps,
   PaginationPreviousProps,
