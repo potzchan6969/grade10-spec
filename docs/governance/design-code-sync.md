@@ -195,5 +195,5 @@ Be aware that the Storybook suite renders the **`default`** theme. It therefore 
 Recorded so they are not mistaken for coverage:
 
 - Value checking covers a variant's own background and box geometry, not its children. A wrong label colour, icon size, or border is still invisible to it, and only the base state of each axis is compared — hover, disabled, and loading values are unchecked.
-- Design-system stories are smoke-only. During the Button work the entire 14-file suite passed with `{children}` deleted from the component. `apps/ui/src/stories` does use `play` functions, so the convention exists in the repository but not in this package; whether to adopt it here belongs to [`define-ui-component-interaction-test-scope`](../../openspec/changes/define-ui-component-interaction-test-scope/proposal.md).
+- Design-system stories are smoke-only. During the Button work the entire 14-file suite passed with `{children}` deleted from the component. `packages/ui` stories do use `play` functions to assert that a control reports its change and does not move its own display, so the convention exists in the repository but not in this package; whether to adopt it here is still open.
 - The CI job skips with a warning annotation when `FIGMA_TOKEN` is unavailable, as on forks. A skipped run is not a passing run.

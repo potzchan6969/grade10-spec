@@ -28,6 +28,42 @@ The reference pattern: an app-facing panel is decomposed into controlled primiti
 | Primitive-first composition | Shared visual and accessibility behavior should not be copied into each feature card. | Build the component's button, badge, card, and tab rungs once and reuse them, against the design-system token values rather than ad-hoc literals. The former component package originally exported its own primitive layer; the `move-primitives-to-design-system` change removed it, because a second Button styled against a private palette drifted from the design one silently. |
 | Public API discipline | Other features import the component by name and depend on its prop shape. | Export the component and its prop types from one entry module; treat required prop and semantic changes as consumer-facing compatibility work. |
 
+## Which layer a component belongs to
+
+Three layers, and the question that assigns a component to one. Ask them in
+order; the first that fits is the answer.
+
+| Layer | Home | Stories | Test |
+| --- | --- | --- | --- |
+| Primitive | `packages/design-system` | Colocated | Its variants are defined by a Figma component set, and it ships no store's content |
+| Compound component | `packages/ui` | Colocated | A capability spec names it, and more than one store imports it by name |
+| Assembly | the consuming application | `apps/ui` | It is put together once, for one store's route |
+
+An assembly has no home in either package, but it still has to be reviewable as
+a shopper meets it. `apps/ui` is that preview: the one workspace that imports
+both packages, supplying page content and owning the state loop the way a store
+does. A page story there is an example, never a contract — anything testable
+about the surface belongs in its capability spec.
+
+The test is not "is it compound?" — a composite can be a primitive. `ProductCard`
+belongs to the design system despite its domain name: it has two Figma variant
+axes and every prop is already display-ready, so it carries no store's content.
+
+The second half of the primitive test is the one that gets missed. A shared
+component may not supply a default, fallback, or built-in value for any prop
+carrying a store's brand, navigation, catalog, locale, copy, or corporate
+attribution — those props are required, so omitting one fails type checking
+rather than silently rendering another store's identity. A default for a
+variant, size, layout, accessibility behavior, or a standard control's
+accessible name is fine; none of those displays a store's content. This rule
+was recorded after `StoreHeader` and `Footer` shipped with one store's
+navigation, link columns, and corporate attribution as defaults, which a second
+store would have inherited with nothing failing.
+
+Where such a component has a Figma Code Connect template, the template must
+emit every required prop, or the snippet a designer copies out of Dev Mode will
+not compile.
+
 ## Design the contract before markup
 
 Start with a concise inventory of what the consumer owns:

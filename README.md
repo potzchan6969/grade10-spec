@@ -7,9 +7,10 @@ Versioned product requirements and the design system for Grade10 applications.
 - Durable requirements and component export contracts live in [`openspec/specs/`](openspec/README.md); implementation deltas live alongside them in `openspec/changes/`.
 - Product managers and designers record the decision behind a requirement — problem, users, non-goals, measurement, rollout — in [`docs/prds/`](docs/prds/README.md).
 - Theme tokens and shadcn primitives live in [`packages/design-system/`](packages/design-system/DESIGN.md), including the two-way Figma token pipeline.
-- [`apps/ui/`](apps/ui/) is a Storybook workbench; it is not a production application.
+- Shared compound components live in [`packages/ui/`](packages/ui/), one directory per capability, consumed from source.
+- [`apps/ui/`](apps/ui/) is the cross-package preview workbench, where whole pages are assembled from both packages; it is not a production application.
 
-Product UI components are implemented in the applications that render them. This repository records their contracts, not their source: the former `packages/ui-components` package was removed.
+A compound component named by a capability spec is implemented once here, in `packages/ui`, and every application imports it rather than keeping its own copy. Applications still own their data, routing, stores, and adapters.
 
 Read [`AGENTS.md`](AGENTS.md) before using an AI agent in this repository. It defines the source-of-truth boundaries and the requirements for component contracts.
 
@@ -19,8 +20,9 @@ Read [`AGENTS.md`](AGENTS.md) before using an AI agent in this repository. It de
 
 ```bash
 pnpm setup:worktree
-pnpm storybook                     # apps/ui workbench
+pnpm storybook                     # cross-package page assemblies
 pnpm storybook:design-system       # design-system primitives
+pnpm storybook:ui                  # shared compound components
 ```
 
 For concurrent worktrees, install Playwright once before running browser tests:
