@@ -1,19 +1,13 @@
 # shared-ui
 
-Cross-product contracts for the shared UI component package (`packages/ui`).
+Cross-product contracts for the shared UI component package (`packages/ui`),
+which every store application consumes.
 
-Two capabilities are incoming, each carried by an active change and folded in
-here when that change is archived:
+| Capability | What it governs |
+| --- | --- |
+| [`component-package`](component-package/spec.md) | What the package is: shipped once from here, consumed from source, app-neutral, built one way on the design system, and carrying no store's content as a default. |
+| [`store-product-listing`](store-product-listing/spec.md) | The category-browsing surface — filter panel, result count and sort, product grid, pagination — and its export contract. |
 
-- `shared-ui/component-package` — what the package is and what its components
-  may do. Carried by
-  [`reinstate-shared-ui-package`](../../changes/reinstate-shared-ui-package/proposal.md),
-  and extended by
-  [`store-product-listing-surface`](../../changes/store-product-listing-surface/proposal.md)
-  with the rule against a shared component carrying one store's content.
-- `shared-ui/store-product-listing` — the category-browsing surface both stores
-  render. Carried by
-  [`store-product-listing-surface`](../../changes/store-product-listing-surface/proposal.md).
-
-Fold `reinstate-shared-ui-package` first: `store-product-listing-surface`
-extends the capability it creates.
+A capability's OpenSpec ID is `shared-ui/<capability>`. Add one when a shared
+component set has a contract not already covered here, and add it as a change
+under `openspec/changes/` rather than directly.

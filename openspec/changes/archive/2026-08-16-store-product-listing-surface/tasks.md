@@ -48,4 +48,4 @@ Lands first and stands alone as its own pull request.
 - [x] 6.2 Record the shared-versus-application boundary test from `design.md` in `docs/governance/ui-component-contracts.md`, since it applies beyond this feature
 - [x] 6.3 Run `openspec validate --specs` and `openspec validate store-product-listing-surface`
 - [ ] 6.4 Confirm each consuming application builds against the moved submodule SHA and supplies the chrome content the removed defaults used to provide
-- [ ] 6.5 After delivery is confirmed, fold the accepted deltas into `openspec/specs/` and archive this change
+- [x] 6.5 After delivery is confirmed, fold the accepted deltas into `openspec/specs/` and archive this change

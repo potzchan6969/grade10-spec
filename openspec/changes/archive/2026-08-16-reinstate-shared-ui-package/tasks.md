@@ -12,4 +12,4 @@
 - [x] 2.1 Update `AGENTS.md` (package list, component-source statements) and run `pnpm run agent:sync-parity` then `pnpm run agent:check-parity`
 - [x] 2.2 Update `docs/governance/ui-component-contracts.md` so implementation obligations point at `packages/ui` instead of the consuming application
 - [x] 2.3 Add the `shared-ui` grouping to `openspec/specs/README.md` and the `openspec/config.yaml` context
-- [ ] 2.4 After delivery is confirmed, fold the accepted deltas into `openspec/specs/` and archive this change
+- [x] 2.4 After delivery is confirmed, fold the accepted deltas into `openspec/specs/` and archive this change
