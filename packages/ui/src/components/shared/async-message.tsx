@@ -1,7 +1,7 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
-import type { AsyncAction } from "./types";
+import type { AsyncAction } from "./async";
 
 type AsyncMessageProps = {
   message: ReactNode;

@@ -3,7 +3,7 @@ import { CheckboxList } from "@grade10/design-system/components/forms/checkbox-l
 import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
-import { AsyncMessage } from "./async-message";
+import { AsyncMessage } from "../shared/async-message";
 import type { AsyncState, FilterGroup, FilterSelection } from "./types";
 
 type ProductFilterPanelProps = {

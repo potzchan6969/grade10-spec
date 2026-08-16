@@ -8,7 +8,7 @@ import {
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
-import { AsyncMessage } from "./async-message";
+import { AsyncMessage } from "../shared/async-message";
 import { ProductFilterPanel } from "./product-filter-panel";
 import { ProductGrid } from "./product-grid";
 import { ProductListingToolbar } from "./product-listing-toolbar";
