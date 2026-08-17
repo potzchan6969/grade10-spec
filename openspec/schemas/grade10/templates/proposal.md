@@ -1,10 +1,20 @@
+**Author:** @<handle> - <YYYY-MM-DD>
+<!-- Whoever wrote this proposal. Ask for the handle rather than guessing it; it does
+     not change when someone else later edits the file. -->
+
 ## Why
 
-<!-- Explain the motivation for this change. What problem does this solve? Why now? -->
+<!-- Explain the motivation for this change. What problem does this solve? Why now?
+     Open with the collector problem and the evidence for it, not the solution, and
+     name a metric that would move if this change works. -->
 
 ## What Changes
 
 <!-- Describe what will change. Be specific about new capabilities, modifications, or removals. -->
+
+## Non-Goals
+
+<!-- What this change deliberately does not do, so engineering knows the edges. -->
 
 ## Capabilities
 
