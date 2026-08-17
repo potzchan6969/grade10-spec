@@ -1,4 +1,4 @@
-schema: spec-driven
+schema: grade10
 
 # This repo is an OpenSpec store, and more besides: PM and design own everything
 # under openspec/ and docs/prds/, while packages/design-system/ holds
@@ -59,7 +59,11 @@ rules:
     - Requirements live here and nowhere else. Never leave a testable statement in a PRD.
   design:
     - Record alternatives considered for each decision; engineering inherits these trade-offs.
-    - Link the capability spec and the Figma source rather than describing screens in prose.
+    - Link the capability spec rather than restating requirements; screens and Figma sources belong in ui.md.
+  ui:
+    - Link each screen's Figma frame rather than describing it in prose - the frame is the layout's source of truth.
+    - "Name design-system and packages/ui exports exactly - the export name is the cross-repo contract. A component, variant, or token that does not exist yet is work in this repo; flag it so tasks carries it."
+    - A state with no spec scenario behind it means the spec is missing one - fix the spec, not the ui doc.
   tasks:
     - "Split groups by layer: shared types and interfaces first, then data migration, then backend and API, then frontend. Omit a layer the change does not touch rather than writing an empty group. When a change spans this repo and an application repo, the groups here land first - the submodule bump is the boundary."
     - "Once the shared-interface group lands, backend and frontend groups depend on it, not on each other: write each so it can be claimed in parallel and verified on its own - frontend against the contracts and fixtures, never a running backend. When a group truly needs another group's landed code, say so in a prose line under its heading; otherwise group order is convention, not a dependency."
