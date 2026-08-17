@@ -8,7 +8,7 @@ Versioned product requirements and the design system for Grade10 applications.
 - Product managers and designers record the decision behind a requirement — problem, users, non-goals, measurement, rollout — in [`docs/prds/`](docs/prds/README.md).
 - Theme tokens and shadcn primitives live in [`packages/design-system/`](packages/design-system/DESIGN.md), including the two-way Figma token pipeline.
 - Shared compound components live in [`packages/ui/`](packages/ui/), one directory per capability, consumed from source.
-- [`apps/ui/`](apps/ui/) is the cross-package preview workbench, where whole pages are assembled from both packages; it is not a production application.
+- [`apps/preview/`](apps/preview/) is the cross-package preview app, where whole pages are assembled from both packages; it is not a production application.
 
 A compound component named by a capability spec is implemented once here, in `packages/ui`, and every application imports it rather than keeping its own copy. Applications still own their data, routing, stores, and adapters.
 

@@ -1,8 +1,8 @@
-# Preview workbench
+# Preview app
 
-The cross-package Storybook. It is not a production application and ships
-nothing: it exists so a whole page can be reviewed as a shopper meets it,
-rather than as a catalogue of parts.
+The cross-package Storybook, `@grade10/preview`. It is not a production
+application and ships nothing: it exists so a whole page can be reviewed as a
+shopper meets it, rather than as a catalogue of parts.
 
 ```bash
 pnpm storybook                 # the page assemblies alone
@@ -16,9 +16,9 @@ extends it — same addons, same preview, re-exported rather than restated — w
 both packages' colocated stories read in place, so the sidebar carries the
 assemblies, then the `@grade10/ui` compound components, then the
 `@grade10/design-system` primitives, and a primitive can be opened beside the
-page that composes it. Nothing is copied into this workspace; the two package
-workbenches (`pnpm storybook:ui`, `pnpm storybook:design-system`) remain the
-focused single-package views.
+page that composes it. Nothing is copied into this workspace; `pnpm
+storybook:ui` and `pnpm storybook:design-system` remain the focused
+single-package views.
 
 Tests run against `.storybook/` only, so each package keeps testing its own
 stories rather than having them run a second time here.
@@ -53,7 +53,7 @@ requirements is how `packages/design-system/src/pages/` went wrong.
    package: content that lives in a package is content a second store would
    inherit.
 2. Write `src/pages/<page>.stories.tsx` with a component that owns the state
-   and passes it down. Declare `layout: "fullscreen"` in its meta; the
-   workbench default is `centered`, so that the primitives and compound
-   components it borrows frame as they do in their own workbench.
+   and passes it down. Declare `layout: "fullscreen"` in its meta; the default
+   here is `centered`, so that the primitives and compound components the
+   combined view borrows frame as they do in their own Storybook.
 3. Run `pnpm test:stories:app`.

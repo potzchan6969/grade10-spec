@@ -37,10 +37,10 @@ order; the first that fits is the answer.
 | --- | --- | --- | --- |
 | Primitive | `packages/design-system` | Colocated | Its variants are defined by a Figma component set, and it ships no store's content |
 | Compound component | `packages/ui` | Colocated | A capability spec names it, and more than one store imports it by name |
-| Assembly | the consuming application | `apps/ui` | It is put together once, for one store's route |
+| Assembly | the consuming application | `apps/preview` | It is put together once, for one store's route |
 
 An assembly has no home in either package, but it still has to be reviewable as
-a shopper meets it. `apps/ui` is that preview: the one workspace that imports
+a shopper meets it. `apps/preview` is that preview: the one workspace that imports
 both packages, supplying page content and owning the state loop the way a store
 does. A page story there is an example, never a contract — anything testable
 about the surface belongs in its capability spec.
