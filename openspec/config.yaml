@@ -72,6 +72,7 @@ rules:
 operations:
   apply:
     guidance:
+      - "Run the implementing repository's `tdd` skill when it ships one (grade10 has it at `.claude/skills/tdd`); its red-green loop and test-quality rules govern the test-first work described next."
       - "Work test-first inside each task, one scenario at a time: the seams under test are pre-agreed - they are the spec scenarios and public export contracts the task names, never internals. Write the failing test at that seam, then only enough code to make it pass."
       - "Expected values in a test come from the spec or a worked example, never from recomputing what the code does; a test that breaks under refactor without a behavior change is testing the wrong thing."
       - "Run the implementing repository's typecheck and the touched test or story files regularly as you go; run its full check suite once at the end of each group, as that group's verification step."
