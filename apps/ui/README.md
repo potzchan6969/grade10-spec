@@ -5,9 +5,20 @@ nothing: it exists so a whole page can be reviewed as a shopper meets it,
 rather than as a catalogue of parts.
 
 ```bash
-pnpm storybook          # this workbench
-pnpm test:stories:ui    # its stories, in Chromium
+pnpm storybook                 # this workbench: every layer at once
+pnpm test:stories:workbench    # its own stories, in Chromium
 ```
+
+It is also the one place every layer is visible together. `.storybook/main.ts`
+reads both packages' colocated stories in place, so the sidebar carries the
+page assemblies, then the `@grade10/ui` compound components, then the
+`@grade10/design-system` primitives, and a primitive can be opened beside the
+page that composes it. Nothing is copied here, and the two package workbenches
+(`pnpm storybook:ui`, `pnpm storybook:design-system`) remain the focused views.
+
+Each package still tests its own stories, so `pnpm test:stories:workbench` runs
+the page assemblies only — `vite.config.ts` excludes the borrowed ones rather
+than running them a second time.
 
 ## What belongs here
 
@@ -39,5 +50,7 @@ requirements is how `packages/design-system/src/pages/` went wrong.
    package: content that lives in a package is content a second store would
    inherit.
 2. Write `src/pages/<page>.stories.tsx` with a component that owns the state
-   and passes it down.
-3. Run `pnpm test:stories:ui`.
+   and passes it down. Declare `layout: "fullscreen"` in its meta; the
+   workbench default is `centered`, so that the primitives and compound
+   components it borrows frame as they do in their own workbench.
+3. Run `pnpm test:stories:workbench`.

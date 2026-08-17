@@ -30,6 +30,11 @@ export default defineConfig({
         ],
         test: {
           name: "storybook",
+          // `.storybook/main.ts` also loads both packages' stories so the
+          // workbench can show every layer at once. Each package tests its own
+          // stories (`test:stories:ui`, `test:stories:design-system`), so this
+          // project stays on the page assemblies rather than running them twice.
+          exclude: ["../../packages/**"],
           browser: {
             enabled: true,
             headless: true,

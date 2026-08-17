@@ -40,12 +40,23 @@ const withTheme: Decorator = (Story, context) => {
 
 const preview: Preview = {
   parameters: {
-    layout: "fullscreen",
+    /* Matches both package workbenches, so a primitive or compound component
+     * frames here exactly as it does in its own. Page stories declare
+     * `layout: "fullscreen"` in their own meta. */
+    layout: "centered",
     backgrounds: { disable: true }, // body bg comes from the theme tokens
     controls: {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
+      },
+    },
+    /* Read top-down: the assemblies this workbench owns, then the compound
+     * components they are built from, then the primitives underneath. */
+    options: {
+      storySort: {
+        method: "alphabetical",
+        order: ["Pages", "*", "Components"],
       },
     },
 
