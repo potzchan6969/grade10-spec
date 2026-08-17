@@ -64,6 +64,13 @@ rules:
 
 # Per-operation guidance (optional)
 operations:
+  apply:
+    guidance:
+      - "Work test-first inside each task, one scenario at a time: the seams under test are pre-agreed - they are the spec scenarios and public export contracts the task names, never internals. Write the failing test at that seam, then only enough code to make it pass."
+      - "Expected values in a test come from the spec or a worked example, never from recomputing what the code does; a test that breaks under refactor without a behavior change is testing the wrong thing."
+      - "Run the implementing repository's typecheck and the touched test or story files regularly as you go; run its full check suite once at the end of each group, as that group's verification step."
+      - "When the change's tasks are done, review the branch's diff along two axes and report them separately, never merged: does the code follow the repository's documented conventions, and does it implement exactly the change's delta specs - flag missing or partial requirements, behavior nobody asked for, and requirements that look implemented but wrong."
+      - "Commit to the current branch as tasks complete, keeping commits atomic per the repository's commit conventions."
   archive:
     guidance:
       - Archive only after engineering confirms the change is deployed, not when the code merges.
