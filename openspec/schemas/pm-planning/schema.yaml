@@ -229,3 +229,19 @@ artifacts:
       Specs should be testable - each scenario is a potential test case.
     requires:
       - proposal
+apply:
+  requires:
+    - specs
+  tracks: null
+  instruction: |
+    This change is planning, and planning is finished: pm-planning ends at the
+    specs, and there is no tasks.md here to work through. Do not implement it
+    in this repo.
+
+    Hand the proposal and the spec deltas to engineering, who break the work
+    down and build it as their own change in the implementing repository. Any
+    apply guidance below describes that work and belongs there, not here.
+
+    The exception is a delta that names a component or token this repo owns -
+    that part is work here, and it needs a grade10-schema change carrying its
+    own design, ui, and tasks.
