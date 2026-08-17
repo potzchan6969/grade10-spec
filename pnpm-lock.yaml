@@ -14,7 +14,7 @@ importers:
         specifier: ^2.5.5
         version: 2.5.5
 
-  apps/ui:
+  apps/preview:
     dependencies:
       '@grade10/design-system':
         specifier: workspace:*

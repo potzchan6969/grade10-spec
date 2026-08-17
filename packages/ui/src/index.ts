@@ -1,59 +1,59 @@
 /* Public entry: re-exports exactly the compound-component exports the
- * capability specs name. Populated as components land under src/components/. */
+ * capability specs name. Populated as blocks land under src/blocks/. */
 
 // shared-ui/auth-sign-in
 export {
   SignInCard,
   type SignInCardAction,
   type SignInCardProps,
-} from "./components/auth-sign-in/sign-in-card";
+} from "./blocks/auth-sign-in/sign-in-card";
 export {
   SignInCodeForm,
   type SignInCodeFormProps,
-} from "./components/auth-sign-in/sign-in-code-form";
+} from "./blocks/auth-sign-in/sign-in-code-form";
 export {
   SignInEmailForm,
   type SignInEmailFormProps,
-} from "./components/auth-sign-in/sign-in-email-form";
+} from "./blocks/auth-sign-in/sign-in-email-form";
 // shared cross-capability types
-export type { AsyncAction, AsyncState } from "./components/shared/async";
+export type { AsyncAction, AsyncState } from "./blocks/shared/async";
 
 // shared-ui/store-product-listing
 export {
   ProductFilterPanel,
   type ProductFilterPanelProps,
-} from "./components/store-product-listing/product-filter-panel";
+} from "./blocks/store-product-listing/product-filter-panel";
 export {
   ProductGrid,
   type ProductGridProps,
-} from "./components/store-product-listing/product-grid";
+} from "./blocks/store-product-listing/product-grid";
 export {
   ProductListing,
   type ProductListingProps,
-} from "./components/store-product-listing/product-listing";
+} from "./blocks/store-product-listing/product-listing";
 export {
   ProductListingToolbar,
   type ProductListingToolbarProps,
-} from "./components/store-product-listing/product-listing-toolbar";
+} from "./blocks/store-product-listing/product-listing-toolbar";
 export type {
   FilterGroup,
   FilterOption,
   FilterSelection,
   ProductSummary,
   SortOption,
-} from "./components/store-product-listing/types";
+} from "./blocks/store-product-listing/types";
 
 // shared-ui/store-profile
 export {
   ProfileCard,
   type ProfileCardProps,
-} from "./components/store-profile/profile-card";
+} from "./blocks/store-profile/profile-card";
 export {
   ProfileDetails,
   type ProfileDetailsProps,
-} from "./components/store-profile/profile-details";
+} from "./blocks/store-profile/profile-details";
 export {
   ProfileForm,
   type ProfileFormProps,
-} from "./components/store-profile/profile-form";
-export type { ProfileFormValues } from "./components/store-profile/types";
+} from "./blocks/store-profile/profile-form";
+export type { ProfileFormValues } from "./blocks/store-profile/types";

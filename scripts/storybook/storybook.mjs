@@ -35,7 +35,7 @@ function findAvailablePort() {
   });
 }
 
-const DEFAULT_WORKSPACE_DIRECTORY = "apps/ui";
+const DEFAULT_WORKSPACE_DIRECTORY = "apps/preview";
 
 const storybookArguments = process.argv
   .slice(2)

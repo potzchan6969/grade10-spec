@@ -35,8 +35,8 @@ context: |
   A change that alters a component or a token is work in this repo:
   packages/design-system/ holds the primitives and the Figma token pipeline,
   packages/ui/ holds the shared compound components a capability spec names,
-  and apps/ui/ is the cross-package preview workbench where whole pages are
-  assembled from both. Each package colocates its own stories; apps/ui holds
+  and apps/preview/ is the cross-package preview app where whole pages are
+  assembled from both. Each package colocates its own stories; apps/preview holds
   only page assemblies, and supplies their content and state itself, the way a
   store application does.
 

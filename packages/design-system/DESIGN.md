@@ -21,7 +21,7 @@ only one here.
 | `src/index.ts` | Barrel export. |
 | `components.json` | shadcn CLI config (see "Add a primitive"). |
 
-Storybook for this package runs separately from the `apps/ui` workbench:
+Storybook for this package runs separately from the `apps/preview` app:
 
 ```bash
 pnpm run storybook:design-system              # picks an available port

@@ -45,7 +45,7 @@
   },
   "overrides": [
     {
-      "includes": ["packages/ui/src/components/**", "!**/*.stories.tsx"],
+      "includes": ["packages/ui/src/blocks/**", "!**/*.stories.tsx"],
       "plugins": ["./scripts/biome-plugins/use-layout-primitives.grit"]
     },
     {
