@@ -40,7 +40,7 @@ context: |
 # Per-artifact rules (optional)
 rules:
   proposal:
-    - 'Start the file with an author line above `## Why`, in the form `**Author:** @handle - YYYY-MM-DD`, naming whoever wrote the proposal. Ask for the handle rather than guessing it. This is the change''s creator and does not change when someone else edits the proposal - task group owners in tasks.md are a separate thing.'
+    - "Start the file with an author line above `## Why`, in the form `**Author:** @handle - YYYY-MM-DD`, naming whoever wrote the proposal. Ask for the handle rather than guessing it. This is the change's creator and does not change when someone else edits the proposal - task group owners in tasks.md are a separate thing."
     - Open with the trader problem and the evidence for it, not the solution.
     - Include a metric that would move if this change works.
     - Always list Non-goals so engineering knows the edges.
@@ -55,14 +55,17 @@ rules:
     - Record alternatives considered for each decision; engineering inherits these trade-offs.
     - Link the capability spec and the Figma source rather than describing screens in prose.
   tasks:
-    - 'Split groups by layer and order them so each one is buildable against what the ones before it already landed: shared types and interfaces first, then data migration, then backend and API, then frontend. Omit a layer the change does not touch rather than writing an empty group.'
-    - Order groups so an engineer can ship and verify one group at a time.
+    - "Split groups by layer: shared types and interfaces first, then data migration, then backend and API, then frontend. Omit a layer the change does not touch rather than writing an empty group. When a change spans this repo and an application repo, the groups here land first - the submodule bump is the boundary."
+    - "Once the shared-interface group lands, backend and frontend groups depend on it, not on each other: write each so it can be claimed in parallel and verified on its own - frontend against the contracts and fixtures, never a running backend. When a group truly needs another group's landed code, say so in a prose line under its heading; otherwise group order is convention, not a dependency."
+    - Order groups so an engineer can ship and verify one group at a time, ending each group with its verification step.
+    - 'Phrase an implementation task as the spec scenario(s) it makes pass, naming them, so the scenario''s test is the evidence behind the checkmark. Never split "write the tests" into its own task or group - the engineer works test-first inside each task.'
     - Keep each task to something one engineer finishes in a session.
-    - 'Follow docs/governance/task-ownership.md for the group, task-id, and owner format. Write groups without owner tags - engineers claim them at pickup - and never renumber a group or task that is claimed or has checkmarks.'
+    - "Follow docs/governance/task-ownership.md for the group, task-id, and owner format. Write groups without owner tags - engineers claim them at pickup - and never renumber a group or task that is claimed or has checkmarks."
 
 # Per-operation guidance (optional)
 operations:
   archive:
     guidance:
       - Archive only after engineering confirms the change is deployed, not when the code merges.
+      - "Never archive with an unchecked task: finish it, or append its disposition (dropped, moved where, blocked on what) to the task text so the record stays honest."
       - Re-read the updated main specs afterward and confirm they describe the shipped behavior.
