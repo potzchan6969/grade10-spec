@@ -8,7 +8,7 @@ openspec/specs/<product>/<capability>/spec.md
 
 The products are:
 
-- `grade10-store` — the Grade10 prediction-market surfaces (all pre-existing capabilities live here).
+- `grade10-store` — the Grade10 trading-card store surfaces (all pre-existing capabilities live here).
 - `zzz-store` — no capabilities yet; create `openspec/specs/zzz-store/<capability>/` with its first spec.
 - `shared-ui` — cross-product contracts for the shared UI component package (`packages/ui`) that every store application consumes.
 
