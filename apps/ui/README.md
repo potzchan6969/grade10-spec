@@ -7,7 +7,7 @@ rather than as a catalogue of parts.
 ```bash
 pnpm storybook                 # the page assemblies alone
 pnpm storybook:workbench       # those assemblies plus both packages' stories
-pnpm test:stories:workbench    # the assemblies, in Chromium
+pnpm test:stories:app          # the assemblies, in Chromium
 ```
 
 Two Storybook configs live here, and they differ only in which stories they
@@ -56,4 +56,4 @@ requirements is how `packages/design-system/src/pages/` went wrong.
    and passes it down. Declare `layout: "fullscreen"` in its meta; the
    workbench default is `centered`, so that the primitives and compound
    components it borrows frame as they do in their own workbench.
-3. Run `pnpm test:stories:workbench`.
+3. Run `pnpm test:stories:app`.
