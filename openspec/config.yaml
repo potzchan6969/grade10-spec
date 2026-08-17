@@ -9,8 +9,11 @@ schema: spec-driven
 # Project context (optional)
 # This is shown to AI when creating artifacts.
 context: |
-  Grade10 - prediction markets. A market is a question users trade a position
-  on and resolves to an outcome.
+  Grade10 (grade10.com) - Trading-card and collectibles ecosystem,
+  spanning grading, vaulting, card-backed financing, retail with an online
+  marketplace, live shows, and real-time card-market indexes. The core objects
+  are cards and graded collectibles in a collector's collection; users are
+  collectors who buy, sell, grade, vault, and showcase them.
   This store holds planning for every Grade10 surface. Today that is one
   implementing repo, grade10 (React 19 + TypeScript on Vite),
   which consumes this repo two ways at once - as this OpenSpec store, and as its
@@ -21,7 +24,7 @@ context: |
   openspec/specs/ is the single source of truth for every checkable requirement
   and component export contract; a change under openspec/ is the delta against
   it. Specs are grouped by product as openspec/specs/<product>/<capability>/;
-  the products are grade10-store (the Grade10 prediction-market surfaces),
+  the products are grade10-store (the Grade10 trading-card store surfaces),
   zzz-store, and shared-ui (cross-product contracts for the shared component
   package packages/ui that every store application consumes). A capability's
   ID is <product>/<capability>. docs/prds/ holds only the product decision behind a requirement - problem,
@@ -41,7 +44,7 @@ context: |
 rules:
   proposal:
     - "Start the file with an author line above `## Why`, in the form `**Author:** @handle - YYYY-MM-DD`, naming whoever wrote the proposal. Ask for the handle rather than guessing it. This is the change's creator and does not change when someone else edits the proposal - task group owners in tasks.md are a separate thing."
-    - Open with the trader problem and the evidence for it, not the solution.
+    - Open with the collector problem and the evidence for it, not the solution.
     - Include a metric that would move if this change works.
     - Always list Non-goals so engineering knows the edges.
     - "Before drafting, interview the author in rounds: ask every currently answerable open question at once, numbered, each with a recommended answer. Each round's answers unlock the next round's questions."
