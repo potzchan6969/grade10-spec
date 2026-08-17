@@ -13,7 +13,7 @@
   "themes": {
     "grade10": {
       "out": "src/themes/grade10.css",
-      "modes": { "Dark": ".theme-grade10" }
+      "modes": { "Grade10": ".theme-grade10" }
     }
   },
   "_pipeline_note": "2-way token sync. Source of truth = tokens.json (designer-owned DATA). This file holds engineer-owned PROJECTION rules (slotMap, selectors, collections). Legs: tokens:pull (Figma dump -> tokens.json), tokens:build (tokens.json -> CSS), tokens:push (tokens.json -> Figma plugin script). `default` theme is code-only (src/themes/default.css) and outside this pipeline.",
