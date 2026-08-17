@@ -20,7 +20,8 @@ Read [`AGENTS.md`](AGENTS.md) before using an AI agent in this repository. It de
 
 ```bash
 pnpm setup:worktree
-pnpm storybook                     # everything: page assemblies, compound components, primitives
+pnpm storybook                     # cross-package page assemblies
+pnpm storybook:workbench           # those assemblies plus both packages' stories
 pnpm storybook:design-system       # design-system primitives alone
 pnpm storybook:ui                  # shared compound components alone
 ```

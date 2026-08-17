@@ -5,20 +5,23 @@ nothing: it exists so a whole page can be reviewed as a shopper meets it,
 rather than as a catalogue of parts.
 
 ```bash
-pnpm storybook                 # this workbench: every layer at once
-pnpm test:stories:workbench    # its own stories, in Chromium
+pnpm storybook                 # the page assemblies alone
+pnpm storybook:workbench       # those assemblies plus both packages' stories
+pnpm test:stories:workbench    # the assemblies, in Chromium
 ```
 
-It is also the one place every layer is visible together. `.storybook/main.ts`
-reads both packages' colocated stories in place, so the sidebar carries the
-page assemblies, then the `@grade10/ui` compound components, then the
+Two Storybook configs live here, and they differ only in which stories they
+load. `.storybook/` is the page assemblies alone. `.storybook-workbench/`
+extends it — same addons, same preview, re-exported rather than restated — with
+both packages' colocated stories read in place, so the sidebar carries the
+assemblies, then the `@grade10/ui` compound components, then the
 `@grade10/design-system` primitives, and a primitive can be opened beside the
-page that composes it. Nothing is copied here, and the two package workbenches
-(`pnpm storybook:ui`, `pnpm storybook:design-system`) remain the focused views.
+page that composes it. Nothing is copied into this workspace; the two package
+workbenches (`pnpm storybook:ui`, `pnpm storybook:design-system`) remain the
+focused single-package views.
 
-Each package still tests its own stories, so `pnpm test:stories:workbench` runs
-the page assemblies only — `vite.config.ts` excludes the borrowed ones rather
-than running them a second time.
+Tests run against `.storybook/` only, so each package keeps testing its own
+stories rather than having them run a second time here.
 
 ## What belongs here
 
