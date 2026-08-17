@@ -44,6 +44,9 @@ rules:
     - Open with the trader problem and the evidence for it, not the solution.
     - Include a metric that would move if this change works.
     - Always list Non-goals so engineering knows the edges.
+    - "Before drafting, interview the author in rounds: ask every currently answerable open question at once, numbered, each with a recommended answer. Each round's answers unlock the next round's questions."
+    - "Find facts (existing specs, PRDs, change history, code) yourself before asking; bring only decisions to the author. If reading the existing material leaves nothing open, say so and proceed - the interview scales with the open questions, not the change's size."
+    - "Do not write the proposal until no open questions remain and the author confirms shared understanding. The author may accept all recommended answers to conclude in one round."
   specs:
     - Use Given/When/Then format
     - Reference existing patterns before inventing new ones
