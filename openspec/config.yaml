@@ -54,7 +54,7 @@ rules:
     - Use Given/When/Then format
     - Reference existing patterns before inventing new ones
     - Write requirements an engineer in another repo can implement without asking a follow-up question.
-    - Never name a class, function, hook, table, or library in a spec - that is design.md's job. Public component exports are the exception: the export name is the cross-repo contract, so name it, and keep the set in one requirement.
+    - "Never name a class, function, hook, table, or library in a spec - that is design.md's job. Public component exports are the exception: the export name is the cross-repo contract, so name it, and keep the set in one requirement."
     - Every scenario must be checkable by a test or a manual pass.
     - Requirements live here and nowhere else. Never leave a testable statement in a PRD.
   design:
