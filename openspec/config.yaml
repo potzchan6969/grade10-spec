@@ -9,7 +9,7 @@ schema: spec-driven
 # Project context (optional)
 # This is shown to AI when creating artifacts.
 context: |
-  Grade10 (grade10.com) - Asia's trading-card and collectibles ecosystem,
+  Grade10 (grade10.com) - Trading-card and collectibles ecosystem,
   spanning grading, vaulting, card-backed financing, retail with an online
   marketplace, live shows, and real-time card-market indexes. The core objects
   are cards and graded collectibles in a collector's collection; users are
