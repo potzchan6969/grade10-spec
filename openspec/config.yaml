@@ -1,3 +1,6 @@
+# Default workflow for new changes. `pm-planning` (proposal → specs) also
+# exists for planning that ends at specs: pass --schema pm-planning at
+# `openspec new change`; the choice is recorded per change.
 schema: grade10
 
 # This repo is an OpenSpec store, and more besides: PM and design own everything
