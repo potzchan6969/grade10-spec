@@ -299,13 +299,11 @@ artifacts:
 
       When to include ui.md: the change adds or alters something a user sees.
 
-      A change with no user-facing surface still creates the file, as the
+      A change with no user-facing surface skips this artifact - do not create
 
-      single line `No user-facing surface - see proposal Impact.` and nothing
+      the file. Nothing depends on it, so tasks and apply proceed without it;
 
-      else - the file is the skip marker, the way skip_specs marks a zero-delta
-
-      change, so status and dependency checks read the artifact as complete.
+      status simply lists it as not produced.
 
 
       Sections:
@@ -386,13 +384,13 @@ artifacts:
 
 
       Reference specs for what needs to be built, design for how to build it,
-      and ui for the screens, components, and states the frontend work names.
+      and ui, when the change ships one, for the screens, components, and
+      states the frontend work names.
 
       Each task should be verifiable - you know when it's done.
     requires:
       - specs
       - design
-      - ui
 apply:
   requires:
     - tasks
