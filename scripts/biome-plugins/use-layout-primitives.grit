@@ -1,0 +1,14 @@
+or {
+  // A class string that sets a flex direction is a stack drawn by hand.
+  // The `(?:[^"]*\s)?` guard requires the utility to be unprefixed, so a
+  // responsive `xl:flex-row` — which Stack cannot express — does not match
+  // on its own.
+  `$s` where {
+    $s <: r"\"(?:[^\"]*\s)?flex-(?:col|row)\b[^\"]*\"",
+    register_diagnostic(span=$s, message="Hand-rolled stack: use VStack/HStack (or Stack) from @grade10/design-system with a gap rung instead of flex direction classes. See docs/governance/figma-component-to-code.md.", severity="warn")
+  },
+  `$s` where {
+    $s <: r"(?:\"[^\"]*\bitems-center\b[^\"]*\bjustify-center\b[^\"]*\")|(?:\"[^\"]*\bjustify-center\b[^\"]*\bitems-center\b[^\"]*\")",
+    register_diagnostic(span=$s, message="Hand-rolled centring: use Center from @grade10/design-system instead of items-center plus justify-center. See docs/governance/figma-component-to-code.md.", severity="warn")
+  }
+}
