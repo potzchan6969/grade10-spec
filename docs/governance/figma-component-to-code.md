@@ -69,6 +69,42 @@ The last two rows are the ones that cost a rebuild here. A property a developer 
 
 Axis *names* need not match. Figma calls Button's tonal axis `variant` and draws its base option as `primary`; the cva calls that option `default`, because it is the cva default. The checker matches axes through the template's mapping rather than by name, so `Danger → destructive` is a legitimate mapping and not drift. What it will not tolerate is an option present on one side and absent on the other.
 
+## What an auto-layout frame becomes
+
+Most of a design is not a component set — it is plain auto-layout frames — and those translate too, into the layout primitives in `src/components/layout/`. Those primitives have no Figma component set on purpose: they draw nothing, and their Figma-side equivalent is auto-layout itself, a property of every frame rather than a component. The consequence is that no rail carries this translation automatically — Code Connect resolves only component instances, so Dev Mode will never suggest `<VStack>` for a frame. This table is where the translation lives, and a raw `<div className="flex flex-col gap-4">` in `packages/ui` is a missed translation, not a style preference.
+
+| In Figma | Becomes in code |
+| --- | --- |
+| Auto-layout frame, vertical | `<VStack gap={rung}>` |
+| Auto-layout frame, horizontal | `<HStack gap={rung}>` |
+| A frame that exists only to centre its child | `<Center>`, with `axis="horizontal"` or `"vertical"` when only one axis centres |
+| Wrap | `wrap` on the stack |
+| The alignment control | `hAlign` / `vAlign` — named after the axis you can see, exactly as Figma's control is, so `hAlign="center"` moves what dragging the dot horizontally moves |
+| "Space between" distribution | `vAlign="space-between"` on a `VStack`, `hAlign="space-between"` on an `HStack` |
+| Padding on the frame | The `padding` / `paddingInline` / `paddingBlock` rungs on `Center`; on a stack, a `p-*` token utility in `className` |
+
+Prefer `VStack`/`HStack` over `Stack` with a `direction`: their `hAlign`/`vAlign` props name the visual axis, which is the point of having them.
+
+The gap is read off the variable the designer bound, never measured in pixels — the same rule as naming variant options:
+
+| Figma gap binding | In code |
+| --- | --- |
+| `gap-1` (4px) | `gap="xs"` |
+| `gap-2` (8px) | `gap="sm"` |
+| `gap-4` (16px) | `gap="md"` — the default, so omit the prop |
+| `gap-6` (24px) | `gap="lg"` |
+| Another `gap-*` token (`gap-3`, `gap-8`, …) | Keep the primitive and override the rung: `<VStack className="gap-8">`. `cn` runs tailwind-merge, so the utility wins. |
+| A raw value bound to no variable | Drift, exactly like an off-token colour: raise it with the designer rather than hardcoding `gap-[13px]`. |
+
+Fall back to raw flex classes only where the primitives cannot express the frame. The known cases are a direction that changes at a breakpoint (`flex-col xl:flex-row` — a stack fixes its direction) and anything that is really a grid or absolute positioning.
+
+A lint backstop enforces this in `packages/ui`: `scripts/biome-plugins/use-layout-primitives.grit`, loaded by `biome.json` and run with `pnpm run lint`, warns on any class string that sets an unprefixed `flex-col`/`flex-row` or pairs `items-center` with `justify-center`. It is a warning rather than an error while the components that predate it migrate. A legitimate fallback keeps its raw classes under a stated reason:
+
+```tsx
+{/* biome-ignore lint/plugin: direction changes at xl; a stack fixes its direction */}
+<div className="flex flex-col gap-4 xl:flex-row">
+```
+
 ## Worked example: Button
 
 The Figma set carries `variant`, `state`, `size`, `isDisabled`, and `isLoading` as variant properties over a complete cross-product, plus a `label` text property and two swappable icon slots.
