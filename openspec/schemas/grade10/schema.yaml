@@ -299,9 +299,13 @@ artifacts:
 
       When to include ui.md: the change adds or alters something a user sees.
 
-      A change with no user-facing surface skips this artifact - state that in
+      A change with no user-facing surface still creates the file, as the
 
-      the proposal's Impact section rather than writing an empty document.
+      single line `No user-facing surface - see proposal Impact.` and nothing
+
+      else - the file is the skip marker, the way skip_specs marks a zero-delta
+
+      change, so status and dependency checks read the artifact as complete.
 
 
       Sections:
