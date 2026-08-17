@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { StoreHeader } from "./store-header";
+import { Nav } from "./nav";
 
 /* Grade10's own chrome content. It lives here, in an example, rather than in
  * the component as a default — a second store renders the same shell and must
@@ -19,8 +19,8 @@ const NAV_ITEMS = [
 ];
 
 const meta = {
-  title: "Components/StoreHeader",
-  component: StoreHeader,
+  title: "Components/Nav",
+  component: Nav,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
   args: {
@@ -30,7 +30,7 @@ const meta = {
     navItems: NAV_ITEMS,
     localeLabel: "Hong Kong (HKD)",
   },
-} satisfies Meta<typeof StoreHeader>;
+} satisfies Meta<typeof Nav>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

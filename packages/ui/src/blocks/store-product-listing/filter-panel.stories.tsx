@@ -1,25 +1,25 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
-import { FILTER_GROUPS, SELECTION } from "./fixtures";
-import { ProductFilterPanel } from "./product-filter-panel";
+import { FilterPanel } from "./filter-panel";
+import { FIGMA_SELECTION, FILTER_GROUPS, SELECTION } from "./fixtures";
 
 const meta = {
-  title: "Store Product Listing/ProductFilterPanel",
-  component: ProductFilterPanel,
+  title: "Store Product Listing/FilterPanel",
+  component: FilterPanel,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
     label: "Filters",
     groups: { status: "ready", data: FILTER_GROUPS },
-    selection: SELECTION,
+    selection: FIGMA_SELECTION,
     onFilterChange: fn(),
-    summary: "Price: HK$0 - HK$2,000",
   },
-} satisfies Meta<typeof ProductFilterPanel>;
+} satisfies Meta<typeof FilterPanel>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Matches the Product Listing filter panel instance in Figma (`4238:3996`). */
 export const Default: Story = {};
 
 export const Loading: Story = { args: { groups: { status: "loading" } } };
@@ -63,6 +63,7 @@ export const GroupWithNoOptions: Story = {
 /** Activating an option reports the group and the option, and leaves the
  * displayed selection alone until the consumer supplies a new one. */
 export const SelectionIsReported: Story = {
+  args: { selection: SELECTION },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const pack = canvas.getByRole("checkbox", { name: /Pack/ });

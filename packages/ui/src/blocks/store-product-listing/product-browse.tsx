@@ -9,9 +9,9 @@ import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 import { AsyncMessage } from "../shared/async-message";
-import { ProductFilterPanel } from "./product-filter-panel";
-import { ProductGrid } from "./product-grid";
-import { ProductListingToolbar } from "./product-listing-toolbar";
+import { FilterPanel } from "./filter-panel";
+import { ProductList } from "./product-list";
+import { ProductListHeader } from "./product-list-header";
 import type {
   AsyncState,
   FilterGroup,
@@ -20,13 +20,9 @@ import type {
   SortOption,
 } from "./types";
 
-type ProductListingProps = {
-  /** Breadcrumbs, heading, and blurb, assembled by the consumer. */
-  header?: ReactNode;
-
+type ProductBrowseProps = {
   filters: AsyncState<readonly FilterGroup[]>;
   filterPanelLabel: string;
-  filterSummary?: ReactNode;
   selection: FilterSelection;
   onFilterChange: (
     groupId: string,
@@ -89,11 +85,9 @@ function pageItems(page: number, pageCount: number): (number | "gap")[] {
  * leaves the filter panel usable, which is the common case when facets and
  * results come from separate calls.
  */
-function ProductListing({
-  header,
+function ProductBrowse({
   filters,
   filterPanelLabel,
-  filterSummary,
   selection,
   onFilterChange,
   results,
@@ -115,27 +109,25 @@ function ProductListing({
   onProductQuantityChange,
   onProductWishlistClick,
   className,
-}: ProductListingProps) {
+}: ProductBrowseProps) {
   return (
     <div
       className={cn("flex w-full flex-col", className)}
-      data-slot="product-listing"
+      data-slot="product-browse"
     >
-      {header}
       <div className="flex flex-col items-start gap-8 p-10 xl:flex-row">
-        <ProductFilterPanel
+        <FilterPanel
           groups={filters}
           label={filterPanelLabel}
           onFilterChange={onFilterChange}
           selection={selection}
-          summary={filterSummary}
         />
         <section
           aria-label={resultsLabel}
           className="flex min-w-0 flex-1 flex-col gap-6"
-          data-slot="product-listing-results"
+          data-slot="product-browse-results"
         >
-          <ProductListingToolbar
+          <ProductListHeader
             onSortChange={onSortChange}
             resultCount={resultCount}
             sortOptions={sortOptions}
@@ -163,7 +155,7 @@ function ProductListing({
           ) : null}
 
           {results.status === "ready" ? (
-            <ProductGrid
+            <ProductList
               onProductAction={onProductAction}
               onProductClick={onProductClick}
               onProductQuantityChange={onProductQuantityChange}
@@ -216,5 +208,5 @@ function ProductListing({
   );
 }
 
-export type { ProductListingProps };
-export { ProductListing };
+export type { ProductBrowseProps };
+export { ProductBrowse };

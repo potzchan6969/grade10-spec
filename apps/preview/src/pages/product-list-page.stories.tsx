@@ -2,9 +2,12 @@ import { BreadcrumbItem } from "@grade10/design-system/components/display/breadc
 import { BreadcrumbSeparator } from "@grade10/design-system/components/display/breadcrumb-separator";
 import { Breadcrumbs } from "@grade10/design-system/components/display/breadcrumbs";
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import { StoreHeader } from "@grade10/design-system/components/layout/store-header";
-import type { FilterSelection } from "@grade10/ui";
-import { ProductListing } from "@grade10/ui";
+import { Nav } from "@grade10/design-system/components/layout/nav";
+import {
+  CollectionBanner,
+  type FilterSelection,
+  ProductBrowse,
+} from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import {
@@ -14,12 +17,15 @@ import {
   PRODUCTS,
   SORT_OPTIONS,
   STORE_FOOTER,
-  STORE_HEADER,
+  STORE_NAV,
 } from "./store-content";
 
+const BANNER_IMAGE = new URL("./collection-banner.fixture.png", import.meta.url)
+  .href;
+
 /**
- * The product listing page as a store assembles it: design-system chrome, an
- * app-owned header block, and the shared `ProductListing` compound component.
+ * The product listing page as a store assembles it: `Nav`, `CollectionBanner`,
+ * the shared `ProductBrowse` compound, and `Footer`.
  *
  * The state loop lives here rather than in the component, which is the
  * contract: the surface renders a selection and reports a change, and this
@@ -37,30 +43,26 @@ function ProductListPage() {
 
   return (
     <div className="bg-background">
-      <StoreHeader {...STORE_HEADER} />
-      <ProductListing
+      <Nav {...STORE_NAV} />
+      <CollectionBanner
+        breadcrumbs={
+          <Breadcrumbs>
+            <BreadcrumbItem href="#home">Home</BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem href="#shop">Shop</BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem current>Pokémon</BreadcrumbItem>
+          </Breadcrumbs>
+        }
+        collection="Pokémon"
+        description="Japanese Pokémon sealed product for set builders, collectors, and opening nights."
+        imageAlt=""
+        imageSrc={BANNER_IMAGE}
+      />
+      <ProductBrowse
         {...PAGINATION_LABELS}
         filterPanelLabel="Filters"
-        filterSummary="Price: HK$0 - HK$2,000"
         filters={{ status: "ready", data: FILTER_GROUPS }}
-        header={
-          <div className="flex flex-col gap-2 px-10 pt-12 pb-8">
-            <Breadcrumbs>
-              <BreadcrumbItem href="#home">Home</BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem href="#shop">Shop</BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem current>Pokémon</BreadcrumbItem>
-            </Breadcrumbs>
-            <div className="flex flex-col gap-2">
-              <h1 className="font-bold text-5xl text-foreground">Pokémon</h1>
-              <p className="text-secondary-foreground text-sm">
-                Japanese Pokémon sealed product for set builders, collectors,
-                and opening nights.
-              </p>
-            </div>
-          </div>
-        }
         onFilterChange={(groupId, optionId, selected) =>
           setSelection((previous) => {
             const current = previous[groupId] ?? [];

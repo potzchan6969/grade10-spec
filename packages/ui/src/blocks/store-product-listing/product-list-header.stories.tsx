@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, screen, userEvent, within } from "storybook/test";
 import { SORT_OPTIONS } from "./fixtures";
-import { ProductListingToolbar } from "./product-listing-toolbar";
+import { ProductListHeader } from "./product-list-header";
 
 const meta = {
-  title: "Store Product Listing/ProductListingToolbar",
-  component: ProductListingToolbar,
+  title: "Store Product Listing/ProductListHeader",
+  component: ProductListHeader,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
@@ -15,7 +15,7 @@ const meta = {
     sortTriggerLabel: "Sort by popularity",
     onSortChange: fn(),
   },
-} satisfies Meta<typeof ProductListingToolbar>;
+} satisfies Meta<typeof ProductListHeader>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

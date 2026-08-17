@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4200-155
-// source=packages/design-system/src/components/display/product-card.tsx
+// source=packages/ui/src/blocks/store-product-listing/product-card.tsx
 // component=ProductCard
 import figma from "figma";
 
@@ -30,7 +30,7 @@ const originalPrice = instance.getString("originalPrice");
 
 export default {
   example: figma.code`<ProductCard category="${category}" name="${productName}" description="${description}" price="${price}"${hasDiscount ? figma.code` originalPrice="${originalPrice}" discountLabel="−15%"` : ""}${soldOut ? figma.code` soldOut` : ""}${!soldOut && addedToCart ? figma.code` addedToCart` : ""} />`,
-  imports: ['import { ProductCard } from "@grade10/design-system"'],
+  imports: ['import { ProductCard } from "@grade10/ui"'],
   id: "product-card",
   metadata: { nestable: true },
 };

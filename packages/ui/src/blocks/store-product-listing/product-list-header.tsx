@@ -10,7 +10,7 @@ import { CaretDown } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import type { SortOption } from "./types";
 
-type ProductListingToolbarProps = {
+type ProductListHeaderProps = {
   /** Formatted result total, displayed as supplied. Never derived from the
    * number of products on the page. */
   resultCount: ReactNode;
@@ -26,23 +26,23 @@ type ProductListingToolbarProps = {
 
 /**
  * Result count and sort control. Renderable on its own, so another results
- * surface can reuse it without the listing root.
+ * surface can reuse it without the browse root.
  */
-function ProductListingToolbar({
+function ProductListHeader({
   resultCount,
   sortOptions,
   sortValue,
   sortTriggerLabel,
   onSortChange,
   className,
-}: ProductListingToolbarProps) {
+}: ProductListHeaderProps) {
   return (
     <div
       className={cn(
         "flex items-center justify-between gap-4 border-b border-border py-2",
         className,
       )}
-      data-slot="product-listing-toolbar"
+      data-slot="product-list-header"
     >
       {/* `status` makes the count a polite live region, so a filter change is
        * announced where it is already displayed — no duplicate sr-only node,
@@ -80,5 +80,5 @@ function ProductListingToolbar({
   );
 }
 
-export type { ProductListingToolbarProps };
-export { ProductListingToolbar };
+export type { ProductListHeaderProps };
+export { ProductListHeader };

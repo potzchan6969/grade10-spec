@@ -16,7 +16,7 @@ const defaults = {
 };
 
 const meta = {
-  title: "Components/ProductCard",
+  title: "Store Product Listing/ProductCard",
   component: ProductCard,
   tags: ["autodocs"],
   args: defaults,

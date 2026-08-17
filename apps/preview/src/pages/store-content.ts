@@ -6,7 +6,7 @@ import type { FilterGroup, ProductSummary, SortOption } from "@grade10/ui";
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
-const STORE_HEADER = {
+const STORE_NAV = {
   promo: "PROMO UTILITY BAR",
   logo: "Grade10 Marketplace",
   localeLabel: "Hong Kong (HKD)",
@@ -137,7 +137,7 @@ const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
 }));
 
 const INITIAL_SELECTION = {
-  "product-type": ["box"],
+  "product-type": ["box", "pack"],
   collection: ["pokemon"],
   sets: ["m4"],
   availability: ["in-stock"],
@@ -157,5 +157,5 @@ export {
   PRODUCTS,
   SORT_OPTIONS,
   STORE_FOOTER,
-  STORE_HEADER,
+  STORE_NAV,
 };

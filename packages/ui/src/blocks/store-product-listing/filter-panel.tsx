@@ -2,11 +2,10 @@ import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { CheckboxList } from "@grade10/design-system/components/forms/checkbox-list";
 import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { cn } from "@grade10/design-system/lib/utils";
-import type { ReactNode } from "react";
 import { AsyncMessage } from "../shared/async-message";
 import type { AsyncState, FilterGroup, FilterSelection } from "./types";
 
-type ProductFilterPanelProps = {
+type FilterPanelProps = {
   /** Accessible name for the landmark. Consumer-supplied, like all copy. */
   label: string;
   groups: AsyncState<readonly FilterGroup[]>;
@@ -16,34 +15,33 @@ type ProductFilterPanelProps = {
     optionId: string,
     selected: boolean,
   ) => void;
-  /** Trailing line such as a price range. Rendered as supplied. */
-  summary?: ReactNode;
   className?: string;
 };
 
 const PANEL_CLASS =
-  "flex w-full shrink-0 flex-col gap-6 rounded-(--radius-xl) border border-border bg-card p-4 xl:w-[260px]";
+  "flex w-full shrink-0 flex-col gap-6 overflow-hidden rounded-(--radius-xl) border border-border bg-card p-4 xl:w-[260px]";
 
 /**
- * Filter groups with their counts. Renderable on its own, so a search-results
- * surface can reuse it without the listing root.
+ * Filter groups with their counts. Figma set `Filter Panel` (`4229:3273`) is a
+ * card shell around one or more `Checkbox List` groups — no variant axes.
  *
- * The panel reports a selection change and displays what it is given; it never
- * holds the selection, and never recounts what the consumer supplied.
+ * Renderable on its own, so a search-results surface can reuse it without the
+ * browse root. The panel reports a selection change and displays what it is
+ * given; it never holds the selection, and never recounts what the consumer
+ * supplied.
  */
-function ProductFilterPanel({
+function FilterPanel({
   label,
   groups,
   selection,
   onFilterChange,
-  summary,
   className,
-}: ProductFilterPanelProps) {
+}: FilterPanelProps) {
   return (
     <aside
       aria-label={label}
       className={cn(PANEL_CLASS, className)}
-      data-slot="product-filter-panel"
+      data-slot="filter-panel"
     >
       {groups.status === "loading" ? (
         <div className="flex flex-col gap-6" data-slot="filter-loading">
@@ -88,18 +86,9 @@ function ProductFilterPanel({
               </CheckboxList>
             ))
         : null}
-
-      {summary != null ? (
-        <p
-          className="w-full text-sm text-secondary-foreground"
-          data-slot="filter-summary"
-        >
-          {summary}
-        </p>
-      ) : null}
     </aside>
   );
 }
 
-export type { ProductFilterPanelProps };
-export { ProductFilterPanel };
+export type { FilterPanelProps };
+export { FilterPanel };

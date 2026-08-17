@@ -11,22 +11,22 @@ import {
 } from "@phosphor-icons/react";
 import type { ComponentProps, ReactNode } from "react";
 
-type StoreHeaderLink = {
+type NavLink = {
   label: ReactNode;
   href: string;
 };
 
-type StoreHeaderNavItem = StoreHeaderLink & {
+type NavItem = NavLink & {
   current?: boolean;
 };
 
-type StoreHeaderProps = ComponentProps<"header"> & {
+type NavProps = ComponentProps<"header"> & {
   /** Promotional bar copy. Pass `null` to drop the bar. */
   promo: ReactNode;
   logo: ReactNode;
   logoHref?: string;
-  utilityLinks: StoreHeaderLink[];
-  navItems: StoreHeaderNavItem[];
+  utilityLinks: NavLink[];
+  navItems: NavItem[];
   localeLabel: ReactNode;
   onLocaleClick?: () => void;
   onSearchClick?: () => void;
@@ -40,14 +40,15 @@ type StoreHeaderProps = ComponentProps<"header"> & {
 };
 
 /**
- * Store chrome. Figma (`4171:9937`) has no variant axes — content is passed
- * in so a consumer can swap copy and callbacks without owning the layout.
+ * Store chrome. Figma set `Nav` (`4171:9937`) has no variant axes — content
+ * is passed in so a consumer can swap copy and callbacks without owning the
+ * layout.
  *
  * Brand, navigation, and locale content is required rather than defaulted: two
  * stores render this shell, and a default would let the second one ship the
  * first one's navigation with nothing failing.
  */
-function StoreHeader({
+function Nav({
   className,
   promo,
   logo,
@@ -65,16 +66,16 @@ function StoreHeader({
   wishlistLabel = "Wishlist",
   cartLabel = "Cart",
   ...props
-}: StoreHeaderProps) {
+}: NavProps) {
   return (
     <header
-      data-slot="store-header"
+      data-slot="nav"
       className={cn("flex w-full flex-col", className)}
       {...props}
     >
       {promo != null ? (
         <div
-          data-slot="store-header-promo"
+          data-slot="nav-promo"
           className="flex h-9 items-center justify-center overflow-hidden bg-foreground px-10"
         >
           <p className="min-w-0 flex-1 truncate text-center text-sm font-medium text-primary-foreground">
@@ -83,7 +84,7 @@ function StoreHeader({
         </div>
       ) : null}
       <div
-        data-slot="store-header-utility"
+        data-slot="nav-utility"
         className="flex h-8 items-center bg-background px-10"
       >
         <div className="flex items-start gap-6">
@@ -100,12 +101,12 @@ function StoreHeader({
         </div>
       </div>
       <div
-        data-slot="store-header-nav"
+        data-slot="nav-bar"
         className="relative flex h-[72px] items-center justify-between border-b border-border bg-background px-10"
       >
         <a
           className="text-2xl font-bold text-foreground"
-          data-slot="store-header-logo"
+          data-slot="nav-logo"
           href={logoHref}
         >
           {logo}
@@ -177,5 +178,5 @@ function StoreHeader({
   );
 }
 
-export type { StoreHeaderLink, StoreHeaderNavItem, StoreHeaderProps };
-export { StoreHeader };
+export type { NavItem, NavLink, NavProps };
+export { Nav };

@@ -1,8 +1,8 @@
-import { ProductCard } from "@grade10/design-system/components/display/product-card";
 import { cn } from "@grade10/design-system/lib/utils";
+import { ProductCard } from "./product-card";
 import type { ProductSummary } from "./types";
 
-type ProductGridProps = {
+type ProductListProps = {
   products: readonly ProductSummary[];
   onProductClick?: (productId: string) => void;
   onProductAction?: (productId: string) => void;
@@ -13,22 +13,22 @@ type ProductGridProps = {
 
 /**
  * A grid of product tiles. Renderable on its own, so a search-results surface
- * can reuse it without the listing root.
+ * can reuse it without the browse root.
  *
  * The column progression is the component's, not the consumer's: a store that
  * wants a different grid wants a different design, not a prop.
  */
-function ProductGrid({
+function ProductList({
   products,
   onProductClick,
   onProductAction,
   onProductQuantityChange,
   onProductWishlistClick,
   className,
-}: ProductGridProps) {
+}: ProductListProps) {
   return (
     <div
-      data-slot="product-grid"
+      data-slot="product-list"
       className={cn(
         "grid grid-cols-1 gap-x-4 gap-y-6 md:grid-cols-2 xl:grid-cols-4",
         className,
@@ -73,5 +73,5 @@ function ProductGrid({
   );
 }
 
-export type { ProductGridProps };
-export { ProductGrid };
+export type { ProductListProps };
+export { ProductList };

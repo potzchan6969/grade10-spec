@@ -45,9 +45,11 @@ both packages, supplying page content and owning the state loop the way a store
 does. A page story there is an example, never a contract — anything testable
 about the surface belongs in its capability spec.
 
-The test is not "is it compound?" — a composite can be a primitive. `ProductCard`
-belongs to the design system despite its domain name: it has two Figma variant
-axes and every prop is already display-ready, so it carries no store's content.
+The test is not "is it compound?" — a composite can be a primitive. A Figma
+set named `Product / …` is a listing-surface block in `packages/ui`, even when
+every prop is already display-ready: the folder in the file is the assignment,
+not the presence of variant axes. `Nav` and `Footer` stay in the design system
+because they are store chrome, not a product item.
 
 The second half of the primitive test is the one that gets missed. A shared
 component may not supply a default, fallback, or built-in value for any prop

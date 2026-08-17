@@ -20,21 +20,29 @@ export type { AsyncAction, AsyncState } from "./blocks/shared/async";
 
 // shared-ui/store-product-listing
 export {
-  ProductFilterPanel,
-  type ProductFilterPanelProps,
-} from "./blocks/store-product-listing/product-filter-panel";
+  CollectionBanner,
+  type CollectionBannerProps,
+} from "./blocks/store-product-listing/collection-banner";
 export {
-  ProductGrid,
-  type ProductGridProps,
-} from "./blocks/store-product-listing/product-grid";
+  FilterPanel,
+  type FilterPanelProps,
+} from "./blocks/store-product-listing/filter-panel";
 export {
-  ProductListing,
-  type ProductListingProps,
-} from "./blocks/store-product-listing/product-listing";
+  ProductBrowse,
+  type ProductBrowseProps,
+} from "./blocks/store-product-listing/product-browse";
 export {
-  ProductListingToolbar,
-  type ProductListingToolbarProps,
-} from "./blocks/store-product-listing/product-listing-toolbar";
+  ProductCard,
+  type ProductCardProps,
+} from "./blocks/store-product-listing/product-card";
+export {
+  ProductList,
+  type ProductListProps,
+} from "./blocks/store-product-listing/product-list";
+export {
+  ProductListHeader,
+  type ProductListHeaderProps,
+} from "./blocks/store-product-listing/product-list-header";
 export type {
   FilterGroup,
   FilterOption,

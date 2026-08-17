@@ -1,25 +1,26 @@
 # shared-ui/store-product-listing Specification
 
 ## Purpose
-The surface a shopper browses a category on: a filter panel, a result count and
-sort control, a grid of product tiles, and pagination. Every store application
-renders it from one shared component source, supplying its own catalog content,
-copy, and theme. The components render a selection and report a change; which
-products match, how they are ordered, and how many pages exist are decided by
-the application.
+The surface a shopper browses a category on: a collection banner, a filter
+panel, a result count and sort control, a grid of product tiles, and
+pagination. Every store application renders it from one shared component
+source, supplying its own catalog content, copy, and theme. The components
+render a selection and report a change; which products match, how they are
+ordered, and how many pages exist are decided by the application.
 ## Requirements
 ### Requirement: The listing surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
-components for the listing surface — `ProductListing`, `ProductFilterPanel`,
-`ProductListingToolbar`, and `ProductGrid` — and exactly these types:
-`AsyncState`, `AsyncAction`, `ProductSummary`, `FilterGroup`, `FilterOption`,
-`FilterSelection`, `SortOption`, `ProductListingProps`,
-`ProductFilterPanelProps`, `ProductListingToolbarProps`, and `ProductGridProps`.
+components for the listing surface — `ProductBrowse`, `CollectionBanner`,
+`FilterPanel`, `ProductListHeader`, `ProductList`, and `ProductCard` — and
+exactly these types: `AsyncState`, `AsyncAction`, `ProductSummary`,
+`FilterGroup`, `FilterOption`, `FilterSelection`, `SortOption`,
+`ProductBrowseProps`, `CollectionBannerProps`, `FilterPanelProps`,
+`ProductListHeaderProps`, `ProductListProps`, and `ProductCardProps`.
 
-`ProductFilterPanel`, `ProductListingToolbar`, and `ProductGrid` SHALL each be
-renderable on their own, outside `ProductListing`, so a later surface can reuse
-one without the others.
+`CollectionBanner`, `FilterPanel`, `ProductListHeader`, `ProductList`, and
+`ProductCard` SHALL each be renderable on their own, outside `ProductBrowse`,
+so a later surface can reuse one without the others.
 
 #### Scenario: An application imports the surface
 
@@ -29,8 +30,26 @@ one without the others.
 
 #### Scenario: A part is reused alone
 
-- **WHEN** an application renders the product grid, the filter panel, or the toolbar without the listing root
-- **THEN** it renders and behaves as specified, with no missing-context error and no requirement to supply listing-root props
+- **WHEN** an application renders the product list, the filter panel, the list header, a product card, or the collection banner without the browse root
+- **THEN** it renders and behaves as specified, with no missing-context error and no requirement to supply browse-root props
+
+### Requirement: The collection banner displays store-supplied trail, title, and description
+
+The collection banner SHALL display the supplied breadcrumbs, collection name,
+and description, and SHALL NOT supply a default for any of them. When an image
+source is supplied it SHALL display that image; when it is omitted, only the
+copy remains.
+
+#### Scenario: Copy is displayed as supplied
+
+- **WHEN** the banner is rendered with a collection name and description
+- **THEN** both are displayed exactly as supplied
+
+#### Scenario: No image
+
+- **WHEN** the banner is rendered without an image source
+- **THEN** the breadcrumbs, collection name, and description are still displayed
+- **AND** no fallback image is shown
 
 ### Requirement: Every listing selection is consumer-controlled
 
@@ -109,11 +128,11 @@ supplied.
 - **GIVEN** a supplied filter group whose option list is empty
 - **THEN** the group's label is not displayed and the group occupies no space
 
-### Requirement: The toolbar displays the result count and the sort control
+### Requirement: The product list header displays the result count and the sort control
 
-The toolbar SHALL display the total result count exactly as the consumer
-supplied it, as a formatted string, and SHALL NOT derive it from the number of
-products on the current page.
+The product list header SHALL display the total result count exactly as the
+consumer supplied it, as a formatted string, and SHALL NOT derive it from the
+number of products on the current page.
 
 It SHALL display a sort control listing exactly the sort options supplied, in
 the order supplied, with the active option marked as selected and named on the
@@ -123,7 +142,7 @@ dismiss the option list.
 #### Scenario: The count is not derived
 
 - **GIVEN** a supplied result count of `38` and a page carrying 8 products
-- **THEN** the toolbar displays the supplied `38`
+- **THEN** the header displays the supplied `38`
 
 #### Scenario: Sorting is reported
 
@@ -137,16 +156,16 @@ dismiss the option list.
 - **GIVEN** an empty list of sort options
 - **THEN** the sort control is not displayed and the result count is still displayed
 
-### Requirement: The grid displays product tiles and delegates every product action
+### Requirement: The product list displays product tiles and delegates every product action
 
-The product grid SHALL display one tile per supplied product, in the order
+The product list SHALL display one tile per supplied product, in the order
 supplied, using each product's supplied image, category, name, description,
 formatted current price, formatted original price, discount label, sold-out
 condition, and cart condition. It SHALL report tile activation, the cart
 action, a quantity change, and the wishlist action through named callbacks,
 each identifying the product.
 
-The grid SHALL NOT format a price, compute a discount, decide whether a product
+The list SHALL NOT format a price, compute a discount, decide whether a product
 is sold out, or hold a cart quantity.
 
 #### Scenario: Prices are displayed as supplied
@@ -165,9 +184,9 @@ is sold out, or hold a cart quantity.
 - **GIVEN** a product supplied as sold out
 - **THEN** its tile displays the sold-out treatment and its cart action cannot be activated
 
-### Requirement: The grid adapts its column count to the available width
+### Requirement: The product list adapts its column count to the available width
 
-The product grid SHALL display four columns at desktop width, two at tablet
+The product list SHALL display four columns at desktop width, two at tablet
 width, and one at mobile width, at the design system's token breakpoints. A
 tile SHALL remain fully readable and its controls fully operable at every
 column count.
@@ -175,13 +194,13 @@ column count.
 #### Scenario: Narrow viewport
 
 - **WHEN** the surface is rendered at mobile width
-- **THEN** the grid displays one column
+- **THEN** the list displays one column
 - **AND** no content overflows the viewport horizontally
 
 #### Scenario: Desktop viewport
 
 - **WHEN** the surface is rendered at desktop width
-- **THEN** the grid displays four columns
+- **THEN** the list displays four columns
 
 ### Requirement: Pagination reflects and reports the page
 
@@ -223,7 +242,7 @@ The filter panel SHALL remain displayed and usable in both conditions.
 #### Scenario: Filters match nothing
 
 - **GIVEN** a resolved result set with no products and a supplied no-match message
-- **THEN** that message is displayed in place of the grid
+- **THEN** that message is displayed in place of the list
 - **AND** the filter panel is still displayed with the current selection intact
 - **AND** a clear-filters action is offered when the consumer supplied one, reporting activation through a callback
 

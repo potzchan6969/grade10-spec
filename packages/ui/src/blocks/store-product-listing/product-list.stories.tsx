@@ -1,23 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { PRODUCTS } from "./fixtures";
-import { ProductGrid } from "./product-grid";
+import { ProductList } from "./product-list";
 
 const meta = {
-  title: "Store Product Listing/ProductGrid",
-  component: ProductGrid,
+  title: "Store Product Listing/ProductList",
+  component: ProductList,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: { products: PRODUCTS },
-} satisfies Meta<typeof ProductGrid>;
+} satisfies Meta<typeof ProductList>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-/** No products, no tiles. The empty and no-match messages are the listing
- * root's job, not the grid's. */
+/** No products, no tiles. The empty and no-match messages are the browse
+ * root's job, not the list's. */
 export const NoProducts: Story = { args: { products: [] } };
 
 /** One column. The progression is four at desktop, two at tablet, one here. */

@@ -7,17 +7,16 @@ import {
   SELECTION,
   SORT_OPTIONS,
 } from "./fixtures";
-import { ProductListing } from "./product-listing";
+import { ProductBrowse } from "./product-browse";
 
 const meta = {
-  title: "Store Product Listing/ProductListing",
-  component: ProductListing,
+  title: "Store Product Listing/ProductBrowse",
+  component: ProductBrowse,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
   args: {
     filters: { status: "ready", data: FILTER_GROUPS },
     filterPanelLabel: "Filters",
-    filterSummary: "Price: HK$0 - HK$2,000",
     selection: SELECTION,
     onFilterChange: fn(),
     results: { status: "ready", data: PRODUCTS },
@@ -33,7 +32,7 @@ const meta = {
     onProductAction: fn(),
     ...PAGINATION_LABELS,
   },
-} satisfies Meta<typeof ProductListing>;
+} satisfies Meta<typeof ProductBrowse>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

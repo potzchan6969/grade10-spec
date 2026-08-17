@@ -79,6 +79,14 @@ const SELECTION = {
   availability: ["in-stock"],
 };
 
+/** Checked state from the Product Listing filter panel instance (`4238:3996`). */
+const FIGMA_SELECTION = {
+  "product-type": ["box", "pack"],
+  collection: ["pokemon"],
+  sets: ["m4"],
+  availability: ["in-stock"],
+};
+
 const PAGINATION_LABELS = {
   previousLabel: "Prev",
   nextLabel: "Next",
@@ -87,6 +95,7 @@ const PAGINATION_LABELS = {
 };
 
 export {
+  FIGMA_SELECTION,
   FILTER_GROUPS,
   IMAGE,
   PAGINATION_LABELS,

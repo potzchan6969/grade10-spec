@@ -510,6 +510,14 @@ function resolveAxis(codeAxes, pairs) {
 }
 
 const norm = (s) => s.replace(/[^a-z0-9]/gi, "").toLowerCase();
+// Figma library folders (`Product / Product Card`) are not part of the
+// basename. Try the full name, then the local name after the last ` / `.
+function codeForFigmaName(figmaName) {
+  const local = figmaName.includes(" / ")
+    ? figmaName.slice(figmaName.lastIndexOf(" / ") + 3)
+    : figmaName;
+  return codeComponents.get(norm(figmaName)) ?? codeComponents.get(norm(local));
+}
 const codeComponents = new Map(); // normalized name -> { file, axes }
 for (const f of files) {
   if (!f.endsWith(".tsx") || f.endsWith(".stories.tsx")) continue;
@@ -706,10 +714,13 @@ for (const comp of figma) {
       .filter(([, d]) => d.type === "VARIANT")
       .map(([name, d]) => [name, d.variantOptions ?? []]),
   );
-  const code = codeComponents.get(norm(comp.name));
+  const code = codeForFigmaName(comp.name);
   if (!code) {
+    const local = comp.name.includes(" / ")
+      ? comp.name.slice(comp.name.lastIndexOf(" / ") + 3)
+      : comp.name;
     warns.push(
-      `${comp.name}: no code component (looked for src/components/**/${norm(comp.name)}.tsx)`,
+      `${comp.name}: no code component (looked for src/components/**/${norm(comp.name)}.tsx or ${norm(local)}.tsx)`,
     );
     continue;
   }
