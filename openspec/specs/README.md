@@ -10,7 +10,12 @@ The products are:
 
 - `grade10-store` — the Grade10 trading-card store surfaces (all pre-existing capabilities live here).
 - `zzz-store` — no capabilities yet; create `openspec/specs/zzz-store/<capability>/` with its first spec.
-- `shared-ui` — cross-product contracts for the shared UI component package (`packages/ui`) that every store application consumes.
+- `grade10-site` — the grade10 application's own surfaces: the shell every page
+  renders in, and anything belonging to the site rather than to a product inside
+  it. No capabilities yet; the first arrives with `add-grade10-site-shell`.
+- `shared-ui` — cross-product contracts for the shared components every store
+  application consumes: the compound components in `packages/ui`, and the site
+  chrome the design system publishes.
 
 A capability's OpenSpec ID is `<product>/<capability>` (for example `grade10-store/loyalty`); use that ID with `openspec show` and `openspec validate`. Adding a product is a new top-level directory here plus a bullet in this list.
 
