@@ -6,15 +6,15 @@ time after this change is accepted.
 
 ## 1. Framework foundation (owner: @sean)
 
-- [ ] 1.1 Make `A nested address answers as its surface` and `An unknown
+- [x] 1.1 Make `A nested address answers as its surface` and `An unknown
       address resolves to not-found` pass: the application builds through
       the framework's Vite plugin, with a root module carrying the shell
       and one thin route module per surface over its existing page.
-- [ ] 1.2 Make `A chrome link navigates in place`, `A modified click is the
+- [x] 1.2 Make `A chrome link navigates in place`, `A modified click is the
       browser's`, and `Another origin is the browser's` pass: the document
       click seam delegates matched clicks to the router and the hand-rolled
       address hook retires, with every existing page-shell scenario green.
-- [ ] 1.3 Run typecheck, lint, and the app's test lane as this group's
+- [x] 1.3 Run typecheck, lint, and the app's test lane as this group's
       verification.
 
 ## 2. Session-decided addresses
