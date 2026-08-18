@@ -6,30 +6,30 @@
   --background: var(--slate-950); /* Main application background */
   --foreground: var(--slate-200); /* Primary text color on the background */
   --card: var(--slate-900); /* Background of card */
-  --card-foreground: var(--slate-200); /* Text and icons within cards */
+  --card-foreground: var(--foreground); /* Text and icons within cards */
   --popover: var(--slate-900); /* Background for dropdown menus and popovers */
   --popover-foreground: var(--slate-200); /* Text and icons within popovers */
   --primary: var(--yellow-400); /* Brand color for primary actions (buttons, highlights) */
   --primary-foreground: var(--slate-800); /* Text and icons on primary-colored elements */
   --secondary: var(--slate-800); /* Less prominent action color */
   --secondary-foreground: var(--slate-400); /* Text and icons on secondary-colored elements */
-  --muted: var(--slate-50-opacity-10); /* Subdued background for less important elements */
+  --muted: var(--slate-50-opacity-5); /* Subdued background for less important elements */
   --muted-foreground: var(--slate-200); /* De-emphasized text (captions, labels) */
-  --accent: var(--slate-50-opacity-10); /* Highlight color for active or focused elements */
+  --accent: var(--slate-50-opacity-5); /* Highlight color for active or focused elements */
   --accent-foreground: var(--slate-200); /* Text and icons on accent-colored elements */
   --border: var(--slate-50-opacity-10); /* Default border color */
   --border-hover: var(--slate-50-opacity-20); /* Border color for hovering cards */
-  --input: var(--slate-50-opacity-10); /* Form input and button borders */
+  --input: var(--slate-50-opacity-5); /* Form input and button borders */
   --ring: var(--foreground); /* Focus indicator color */
   --overlay: var(--slate-950-opacity-50);
-  --success: var(--green-950);
-  --success-foreground: var(--green-300);
+  --success: var(--green-300);
+  --success-foreground: var(--green-950);
   --info: var(--blue-950);
   --info-foreground: var(--blue-300);
-  --warning: var(--yellow-950);
-  --warning-foreground: var(--yellow-400);
-  --destructive: var(--red-950);
-  --destructive-foreground: var(--red-400);
+  --warning: var(--yellow-400);
+  --warning-foreground: var(--yellow-950);
+  --destructive: var(--red-400);
+  --destructive-foreground: var(--red-950);
   --chart-1: var(--green-400);
   --chart-2: var(--blue-400);
   --chart-3: var(--purple-400);
@@ -38,17 +38,10 @@
   --chart-6: var(--yellow-400);
   --chart-7: var(--teal-400);
   --sidebar: var(--card); /* Sidebar background */
-  --sidebar-foreground: var(--foreground); /* Text and icons within the sidebar */
-  --sidebar-primary: var(--primary); /* Primary actions within the sidebar */
-  --sidebar-primary-foreground: var(--primary-foreground); /* Text on sidebar primary elements */
-  --sidebar-accent: var(--accent); /* Highlighted elements within the sidebar */
-  --sidebar-accent-foreground: var(--accent-foreground); /* Text on sidebar accent elements */
-  --sidebar-border: var(--border); /* Sidebar divider lines or borders */
-  --sidebar-ring: var(--ring); /* Focus indicators within the sidebar */
   --control: var(--background); /* Outline button and bordered trigger surface */
   --control-hover: var(--slate-50-opacity-50); /* Outline button/trigger hover surface */
   --switch-track: var(--slate-50-opacity-80); /* Switch unchecked track */
-  --muted-hover: var(--slate-50-opacity-20); /* Ghost button hover */
+  --muted-hover: var(--slate-50-opacity-10); /* Ghost button hover */
   --disabled: var(--slate-700); /* Disabled elements background */
   --disabled-foreground: var(--slate-50-opacity-30); /* Text for disabled elements */
   --primary-muted: var(--yellow-400-opacity-10); /* Subtle primary tint (selected rows, kbd) */
@@ -65,6 +58,13 @@
   --menu-border: var(--slate-50-opacity-10); /* Hairline border on menus, cards, popovers */
   --menu-glass: var(--slate-950-opacity-70); /* Frosted menu background */
   --warning-border: var(--yellow-400-opacity-30); /* Frosted menu background */
+  --sidebar-foreground: var(--foreground); /* Text and icons within the sidebar */
+  --sidebar-primary: var(--primary); /* Primary actions within the sidebar */
+  --sidebar-primary-foreground: var(--primary-foreground); /* Text on sidebar primary elements */
+  --sidebar-accent: var(--accent); /* Highlighted elements within the sidebar */
+  --sidebar-accent-foreground: var(--accent-foreground); /* Text on sidebar accent elements */
+  --sidebar-border: var(--border); /* Sidebar divider lines or borders */
+  --sidebar-ring: var(--ring); /* Focus indicators within the sidebar */
 
   /* shadcn contract slots (mapped) */
   --radius: var(--radius-lg);
