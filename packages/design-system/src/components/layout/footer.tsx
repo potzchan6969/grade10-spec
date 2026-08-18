@@ -34,6 +34,14 @@ type FooterProps = ComponentProps<"footer"> & {
  * A section with nothing in it is absent rather than empty — including a
  * column whose destinations do not exist yet, which would otherwise render as
  * a heading over nothing.
+ *
+ * The columns stack below the desktop rungs. Four columns on a phone is not a
+ * layout: the catalog blurb ends up one word per line in an 80px column, wide
+ * enough to pass a scroll-width check and unreadable all the same.
+ *
+ * The rungs are container queries, not viewport ones: this shell answers to
+ * the width it is given, which is also the only width a story or a test can
+ * hand it.
  */
 function Footer({
   className,
@@ -51,12 +59,12 @@ function Footer({
     <footer
       data-slot="footer"
       className={cn(
-        "flex w-full flex-col border border-border bg-card",
+        "@container flex w-full flex-col border border-border bg-card",
         className,
       )}
       {...props}
     >
-      <div className="grid w-full grid-cols-4 gap-8 px-10 pt-12 pb-8">
+      <div className="grid w-full grid-cols-1 gap-8 px-4 pt-12 pb-8 @xl:grid-cols-2 @3xl:grid-cols-4 @3xl:px-10">
         <div className="flex flex-col items-start gap-4">
           <p className="text-sm font-medium text-foreground">{logo}</p>
           <p className="text-xs text-secondary-foreground">{description}</p>
@@ -103,7 +111,10 @@ function Footer({
           ),
         )}
       </div>
-      <div className="flex h-[60px] w-full items-center justify-between border-t border-border px-10">
+      <div
+        className="flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-border px-4 py-3 @3xl:h-[60px] @3xl:flex-nowrap @3xl:px-10 @3xl:py-0"
+        data-slot="footer-bar"
+      >
         <p className="text-xs font-medium text-secondary-foreground">
           {copyright}
         </p>

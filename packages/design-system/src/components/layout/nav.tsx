@@ -53,6 +53,11 @@ type NavProps = ComponentProps<"header"> & {
  * prop beside it: one fact, one place, and no way for the two to disagree. A
  * site with no basket therefore shows no basket instead of a button that
  * swallows the click.
+ *
+ * The bar's rungs are container queries: below them it wraps — logo and
+ * controls, navigation beneath — rather than centring the navigation over
+ * them. A shell answers to the width it is given, which is the only width a
+ * story can hand it.
  */
 function Nav({
   className,
@@ -76,13 +81,13 @@ function Nav({
   return (
     <header
       data-slot="nav"
-      className={cn("flex w-full flex-col", className)}
+      className={cn("@container flex w-full flex-col", className)}
       {...props}
     >
       {promo != null ? (
         <div
           data-slot="nav-promo"
-          className="flex h-9 items-center justify-center overflow-hidden bg-foreground px-4 md:px-10"
+          className="flex h-9 items-center justify-center overflow-hidden bg-foreground px-4 @3xl:px-10"
         >
           <p className="min-w-0 flex-1 truncate text-center text-sm font-medium text-primary-foreground">
             {promo}
@@ -92,7 +97,7 @@ function Nav({
       {utilityLinks.length > 0 ? (
         <div
           data-slot="nav-utility"
-          className="flex min-h-8 items-center bg-background px-4 py-1 md:px-10 md:py-0"
+          className="flex min-h-8 items-center bg-background px-4 py-1 @3xl:px-10 @3xl:py-0"
         >
           <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
             {utilityLinks.map((link) => (
@@ -110,7 +115,7 @@ function Nav({
       ) : null}
       <div
         data-slot="nav-bar"
-        className="relative flex flex-wrap items-center justify-between gap-y-2 border-b border-border bg-background px-4 py-3 md:h-[72px] md:flex-nowrap md:px-10 md:py-0"
+        className="relative flex flex-wrap items-center justify-between gap-y-2 border-b border-border bg-background px-4 py-3 @3xl:h-[72px] @3xl:flex-nowrap @3xl:px-10 @3xl:py-0"
       >
         <a
           className="text-2xl font-bold text-foreground"
@@ -121,7 +126,7 @@ function Nav({
         </a>
         <nav
           aria-label="Primary"
-          className="order-last flex w-full flex-wrap items-center justify-center gap-2 md:absolute md:top-1/2 md:left-1/2 md:order-none md:w-auto md:-translate-x-1/2 md:-translate-y-1/2 md:flex-nowrap"
+          className="order-last flex w-full flex-wrap items-center justify-center gap-2 @3xl:absolute @3xl:top-1/2 @3xl:left-1/2 @3xl:order-none @3xl:w-auto @3xl:-translate-x-1/2 @3xl:-translate-y-1/2 @3xl:flex-nowrap"
         >
           {navItems.map((item) => (
             <a

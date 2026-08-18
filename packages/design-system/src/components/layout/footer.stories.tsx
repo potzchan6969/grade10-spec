@@ -107,6 +107,39 @@ export const WithoutLinks: Story = {
   },
 };
 
+/**
+ * 375 CSS pixels: the columns stack instead of being squeezed into quarters of
+ * a phone, and the legal bar wraps rather than clipping at its fixed height.
+ */
+export const Narrow: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ width: 375 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const footer = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="footer"]',
+    );
+    expect(footer).not.toBeNull();
+    if (footer === null) return;
+    expect(footer.scrollWidth).toBeLessThanOrEqual(footer.clientWidth);
+
+    // Squeezing four columns onto a phone is what the width alone does not
+    // catch: the blurb ends up one word per line inside an 80px column.
+    const canvas = within(canvasElement);
+    const description = canvas.getByText(/Japanese trading cards/);
+    expect(description.clientWidth).toBeGreaterThan(240);
+
+    const bar = footer.querySelector<HTMLElement>('[data-slot="footer-bar"]');
+    expect(bar).not.toBeNull();
+    if (bar === null) return;
+    expect(bar.scrollHeight).toBeLessThanOrEqual(bar.clientHeight);
+  },
+};
+
 /** A column whose destinations do not exist yet is absent, heading and all. */
 export const ColumnWithNoLinks: Story = {
   args: { columns: [COLUMNS[0], { heading: "HELP", links: [] }] },
