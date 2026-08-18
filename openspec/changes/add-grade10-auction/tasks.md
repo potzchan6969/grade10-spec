@@ -17,8 +17,8 @@
 
 Task 3.4 depends on the contracts in group 1; it uses fixtures rather than a running backend.
 
-- [ ] 3.1 Make `A collector browses Auction listings` and `A consumer reads a listing contract` pass in `apps/frontend/grade10` while preserving its current Auction UI composition.
-- [ ] 3.2 Verify the current Auction frontend feature lane against renamed listing and extension contracts.
+- [x] 3.1 Make `A collector browses Auction listings` and `A consumer reads a listing contract` pass in `apps/frontend/grade10` while preserving its current Auction UI composition.
+- [x] 3.2 Verify the current Auction frontend feature lane against renamed listing and extension contracts.
 
 ## 4. Review
 
