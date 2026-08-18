@@ -22,7 +22,7 @@ Four facts from that foundation shape everything below.
   document. Nothing about the deploy changes: still static assets from the
   same worker.
 - **A route owns everything beneath it.** A trailing splat gives the auction
-  its mailed `/auction/lots/<id>` links and the store its future product
+  its mailed `/auction/listings/<id>` links and the store its future product
   addresses. Serving must keep that promise — a plain "no file, 404" would
   break them.
 - **The chrome does not wait for the session.** The `page-shell` capability
