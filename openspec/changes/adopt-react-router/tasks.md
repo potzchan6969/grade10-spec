@@ -4,7 +4,7 @@ Groups 1–3 land in the grade10 repository, in order — each builds on the
 one before. Group 4 lands in this store and blocks nothing: it can run any
 time after this change is accepted.
 
-## 1. Framework foundation (owner: @sean)
+## 1. Framework foundation
 
 - [ ] 1.1 Make `A nested address answers as its surface` and `An unknown
       address resolves to not-found` pass: the application builds through
