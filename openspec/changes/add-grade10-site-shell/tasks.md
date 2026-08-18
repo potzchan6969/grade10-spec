@@ -16,12 +16,12 @@ the boundary. Groups 2, 3, and 4 are grade10 and depend on that bump.
 
 ## 2. The shell (owner: @sean)
 
-- [ ] 2.1 Bump the `external/grade10-spec` submodule to the commit carrying group 1.
-- [ ] 2.2 Make `Every address is wrapped`, `The shell is not a page`, and `The page has one of each landmark` pass: the application root renders `Nav`, one content region, and `Footer` around every surface including not-found.
-- [ ] 2.3 Declare the header and footer content as route ids resolved through `ROUTES`, so `Navigation lists real surfaces` and `The footer drops what it cannot reach` pass and an unanswered destination cannot be named.
-- [ ] 2.4 Make `The promo bar and utility row wait for their pages` pass — no promo content, no utility links, until those pages exist.
-- [ ] 2.5 Take the shell's copy from the reference frame: brand block, catalog description, corporate attribution, social links, copyright, and locale label.
-- [ ] 2.6 Run `pnpm run typecheck`, `pnpm run lint`, and the grade10 app's test lane.
+- [x] 2.1 Bump the `external/grade10-spec` submodule to the commit carrying group 1.
+- [x] 2.2 Make `Every address is wrapped`, `The shell is not a page`, and `The page has one of each landmark` pass: the application root renders `Nav`, one content region, and `Footer` around every surface including not-found.
+- [x] 2.3 Declare the header and footer content as route ids resolved through `ROUTES`, so `Navigation lists real surfaces` and `The footer drops what it cannot reach` pass and an unanswered destination cannot be named.
+- [x] 2.4 Make `The promo bar and utility row wait for their pages` pass — no promo content, no utility links, until those pages exist.
+- [x] 2.5 Take the shell's copy from the reference frame: brand block, catalog description, corporate attribution, social links, copyright, and locale label.
+- [x] 2.6 Run `pnpm run typecheck`, `pnpm run lint`, and the grade10 app's test lane.
 
 ## 3. Session and the account control
 
