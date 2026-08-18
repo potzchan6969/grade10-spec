@@ -6,8 +6,8 @@ Product context: [Grade10 Auction](../../../docs/prds/auction/auction.md).
 ## Authority and data flow
 
 ```text
-Grade10 Store browser -> Grade10 API -> Auction public reads
-Grade10 Store browser -> Grade10 Store backend -> Grade10 Auction RPC
+Grade10 browser -> Grade10 API -> Auction public reads
+Grade10 browser -> Grade10 Store backend -> Grade10 Auction RPC
 ZZZ Store backend -> ZZZ Auction RPC
 Auction service -> Auction persistence: listings, bids, orders, policy snapshots
 Auction service -> storefront Stripe account: authorization, release, capture, invoice
@@ -35,9 +35,11 @@ current accepted bid and the recorded close; it accepts only an amount meeting
 the listing's minimum next amount while bidding is open. It stores one accepted
 bid record, updates current price/count/highest bidder, and applies an
 extension in that same decision. A bid arriving when 30 minutes or less remain
-sets close to exactly 30 minutes after its accepted timestamp. The listing
-closes only after its recorded close, so one later lower bid can neither
-replace an accepted higher bid nor reopen a closed listing.
+sets close to exactly 30 minutes after its accepted timestamp. When the listing
+has an extension cap, that close cannot exceed its scheduled close plus the
+cap; without a cap, every eligible bid extends the close. The listing closes
+only after its recorded close, so one later lower bid can neither replace an
+accepted higher bid nor reopen a closed listing.
 
 ## Card authorization and settlement
 
@@ -47,16 +49,18 @@ saved or recent card and binds its provider reference to the bid attempt. A
 bid becomes accepted only after the corresponding authorized outcome is
 recorded. Replays of a request or webhook return the existing outcome.
 
-When a higher valid bid displaces a bidder, Auction releases that bidder's
-listing authorization and records the release outcome. If Stripe confirms a
-delayed authorization after the bidder is already outbid, Auction releases it
-and does not accept the lower bid. At close, every non-winner authorization is
-released. The winner's final payable amount is calculated server-side from the
-winning bid and recorded fee, tax, fixed-shipping, and customs-declaration
-facts. Auction captures only an amount Stripe has authorized; if the original
-authorization cannot cover that payable amount, checkout obtains the needed
-additional authorization before capture. A successful capture marks payment
-paid and causes Stripe invoice creation.
+When a higher valid bid displaces a bidder, Auction marks that bidder's listing
+authorization for asynchronous release and records the provider's eventual
+release outcome. If Stripe confirms a delayed authorization after the bidder is
+already outbid, Auction marks it for release and does not accept the lower bid.
+At close, every non-winner authorization is marked for release. After winning,
+the customer provides home-delivery information before Auction calculates the
+final payable amount from the winning bid, recorded fee, delivery region,
+taxes, fixed shipping, and any customs-declaration facts. Auction captures only
+an amount Stripe has authorized; if the original authorization cannot cover
+that payable amount, checkout obtains the needed additional authorization before
+capture. A successful capture marks payment paid and causes Stripe invoice
+creation.
 
 Stripe webhooks are verified over their raw body before parsing, normalized by
 provider event identity, and processed idempotently. A status read and

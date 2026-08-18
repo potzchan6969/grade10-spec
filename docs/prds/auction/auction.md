@@ -28,8 +28,8 @@ and order record; Stripe supplies card authorization and payment processing.
 
 - Auction Buy Now, carts, stock counts, fixed-price checkout, search, saved
   searches, filters, favourites, related lots, and recent-sales data.
-- Auto-bidding, reserve auctions, age declarations, vault storage, global
-  shipping promises, delivery tracking, and notifications.
+- Auto-bidding, age declarations, vault storage, global shipping promises,
+  delivery tracking, and notifications.
 - Wire transfer, ACH, invoices before payment, or customer edits during an
   auto-pay window.
 
@@ -50,9 +50,10 @@ and order record; Stripe supplies card authorization and payment processing.
 2. The collector reviews its fixed facts, current bid, minimum next bid,
    buyer-fee disclosure, and scheduled bidding window.
 3. During the window, the collector submits a card-backed bid; a valid late
-   bid extends the close.
-4. The winning collector pays the complete breakdown with a saved or recent
-   card, receives a Stripe invoice, and follows the initial order milestones.
+   bid extends the close unless the listing's optional extension cap is reached.
+4. After winning, the collector supplies home-delivery information, reviews the
+   resulting complete breakdown, pays with a saved or recent card, receives a
+   Stripe invoice, and follows the initial order milestones.
 
 ## Requirements
 
@@ -64,7 +65,7 @@ The checkable requirements, state behavior, and integration boundary are in:
 
 | Application | How it consumes this work | Compatibility consideration |
 | --- | --- | --- |
-| `apps/frontend/grade10-store` | Renders the Grade10 Auction catalogue and listing detail using `@grade10/auction-frontend`; authenticated actions use its Store backend. | It never calls Stripe or determines bid acceptance in the browser. |
+| `apps/frontend/grade10` | Renders the Grade10 Auction catalogue and listing detail using `@grade10/auction-frontend`; authenticated actions use its Store backend. | It never calls Stripe or determines bid acceptance in the browser. |
 | `apps/backend/grade10/store` | Resolves the Grade10 customer session and calls the pinned Grade10 Auction service entrypoint for authenticated bid and payment actions. | It cannot act for another storefront. |
 | `apps/backend/grade10/auction` | Owns listings, bid serialization, policy snapshots, orders, and verified Stripe event handling. | New records and additive public/RPC routes are required. |
 | `apps/backend/grade10/api` | Routes anonymous Auction catalogue and listing reads to the shared Auction service. | It remains a thin gateway and never resolves bidder identity. |
@@ -86,8 +87,9 @@ The checkable requirements, state behavior, and integration boundary are in:
 | --- | --- | --- | --- |
 | Auction unit | Decided | A **listing** is one unit of auction lot and is the sole term used by this capability. | Product |
 | Buy Now | Decided | Excluded from this auction MVP, including browse-only Buy Now listings. | Product |
-| Hold model | Decided | One Stripe authorization hold exists per bidder per active listing; it grows only when that bidder raises their committed amount and is released when outbid or unsuccessful. | Product |
-| Extended close | Decided | A valid bid in the final 30 minutes moves the close to 30 minutes after that bid; this repeats until 30 minutes pass without a valid bid. | Product |
+| Hold model | Decided | One Stripe authorization hold exists per bidder per active listing; an outbid hold enters asynchronous release immediately and is later reconciled to completion. | Product |
+| Extended close | Decided | A valid bid in the final 30 minutes moves the close to 30 minutes after that bid; this repeats until 30 minutes pass without a valid bid, subject to an optional listing extension cap. | Product |
+| Delivery information | Decided | The winner supplies home-delivery information after winning and before Auction calculates the final total or starts payment. | Product |
 | Buyer-premium rate | Deferred | Display the applicable policy-derived buyer fee; defining a fixed rate is outside this change. | Product and finance |
 
 ## Rollout and risks

@@ -52,9 +52,11 @@ SHALL meet or exceed the current bid plus the listing's configured increment;
 when there is no current bid, it SHALL meet or exceed the starting price.
 
 When Grade10 accepts a valid bid with 30 minutes or less remaining, it SHALL
-set that listing's close to exactly 30 minutes after the accepted bid. It SHALL
-apply this rule to every later valid bid until 30 minutes pass without a valid
-bid. Grade10 SHALL display the current recorded close and, to an authenticated
+set that listing's close to exactly 30 minutes after the accepted bid. A listing
+MAY define an extension cap; when it does, its close SHALL NOT exceed its
+scheduled close plus that cap. Grade10 SHALL apply this rule to every later
+valid bid until 30 minutes pass without a valid bid or the cap is reached.
+Grade10 SHALL display the current recorded close and, to an authenticated
 bidder, their highest accepted bid on that listing.
 
 #### Scenario: A bid must meet the next increment
@@ -78,6 +80,13 @@ bidder, their highest accepted bid on that listing.
 - **THEN** the listing close becomes T plus 30 minutes
 - **AND** another valid bid within the resulting final 30 minutes applies the same rule again
 
+#### Scenario: An extension cap limits an otherwise eligible extension
+
+- **GIVEN** an open listing with an extension cap and a recorded close at that cap
+- **WHEN** Grade10 accepts a valid bid with 30 minutes or less remaining
+- **THEN** it accepts the bid without changing the recorded close
+- **AND** it does not extend the listing beyond its configured cap
+
 #### Scenario: A bidder sees live bid facts
 
 - **GIVEN** an authenticated bidder with an accepted bid on an open listing
@@ -94,19 +103,21 @@ authorization and SHALL raise it only when the bidder raises their committed
 bid amount. A bid is accepted only after its corresponding authorized outcome
 is recorded.
 
-When a bidder is outbid by a higher accepted bid, Grade10 SHALL request release
-of that bidder's active authorization. It SHALL also release every unsuccessful
-bidder's authorization when the listing closes. Stripe webhook signatures SHALL
-be verified over the unmodified raw body before processing; provider events and
-bid requests SHALL be idempotent. A delayed authorization for a bid that is no
-longer high enough SHALL be released and SHALL NOT become an accepted bid.
+When a bidder is outbid by a higher accepted bid, Grade10 SHALL immediately
+mark that bidder's active authorization for asynchronous release. It SHALL also
+mark every unsuccessful bidder's authorization for asynchronous release when the
+listing closes. Stripe webhook signatures SHALL be verified over the unmodified
+raw body before processing; provider events and bid requests SHALL be
+idempotent. A delayed authorization for a bid that is no longer high enough
+SHALL be marked for release and SHALL NOT become an accepted bid.
 
 #### Scenario: An outbid authorization is released
 
 - **GIVEN** a bidder has the active authorization for an open listing
 - **WHEN** Grade10 accepts a higher valid bid from another bidder
-- **THEN** Grade10 requests release of the outbid bidder's authorization
-- **AND** the outbid bidder no longer has an active authorization for that listing
+- **THEN** Grade10 marks the outbid bidder's authorization for asynchronous release
+- **AND** the outbid bidder no longer has an eligible top authorization for that listing
+- **AND** Grade10 records the Stripe release outcome when it arrives
 
 #### Scenario: Concurrent bids keep the highest valid outcome
 
@@ -134,13 +145,15 @@ longer high enough SHALL be released and SHALL NOT become an accepted bid.
 ### Requirement: A closed listing creates a payable winner order
 
 When a listing closes with an accepted highest bid, Grade10 SHALL create one
-winner order. The winner's server-calculated payable total SHALL contain the
-winning bid, applicable buyer fee, taxes, fixed home-delivery shipping, and any
-required international customs declaration. The winner SHALL be able to select
-a saved or recent credit-card payment method. Grade10 SHALL capture the final
-payable amount only after Stripe has authorized that amount; it SHALL obtain
-any necessary additional authorization before capture rather than capture more
-than Stripe authorized.
+winner order. Before Auction starts payment, the winner SHALL supply home
+delivery information. Grade10 SHALL use the supplied delivery information and
+the listing's recorded policy terms to calculate the winner's server-side
+payable total: winning bid, applicable buyer fee, taxes, fixed home-delivery
+shipping, and any required international customs declaration. The winner SHALL
+review that complete total and be able to select a saved or recent credit-card
+payment method. Grade10 SHALL capture the final payable amount only after
+Stripe has authorized that amount; it SHALL obtain any necessary additional
+authorization before capture rather than capture more than Stripe authorized.
 
 After Stripe confirms payment, Grade10 SHALL create a Stripe invoice and mark
 the order paid. It SHALL report order state independently as `won`, `paid`,
@@ -161,6 +174,20 @@ capability implies carrier tracking or delivery.
 - **WHEN** Grade10 returns checkout facts
 - **THEN** it displays the winning bid, buyer fee, taxes, fixed home-delivery shipping, any required customs declaration, and order total
 - **AND** it permits a saved or recent credit-card payment method
+
+#### Scenario: A winner provides delivery information before payment
+
+- **GIVEN** a winner order in won state
+- **WHEN** the winner supplies valid home-delivery information
+- **THEN** Grade10 calculates the server-side taxes, fixed shipping, and any required customs declaration for that delivery information
+- **AND** it returns the complete payable total before starting card payment
+
+#### Scenario: Payment cannot start without delivery information
+
+- **GIVEN** a winner order without home-delivery information
+- **WHEN** the winner attempts to start card payment
+- **THEN** Grade10 refuses payment and requests delivery information
+- **AND** it does not capture or create an additional Stripe authorization
 
 #### Scenario: A winner payment becomes paid once
 

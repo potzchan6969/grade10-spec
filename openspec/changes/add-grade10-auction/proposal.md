@@ -18,7 +18,8 @@ price decisions or payment-provider events that can race a closing auction.
 - A valid card-backed bid is accepted once, advances the highest valid bid
   atomically, and cannot be displaced by a delayed lower bid.
 - A valid bid within the last 30 minutes repeatedly extends closing by 30
-  minutes from that bid until a full 30-minute interval has no valid bid.
+  minutes from that bid until a full 30-minute interval has no valid bid,
+  subject to an optional listing extension cap.
 - A winner pays a complete card checkout, receives a Stripe invoice after
   payment, and reads Won, Paid, Shipping Started, and Shipped states.
 
@@ -33,9 +34,10 @@ price decisions or payment-provider events that can race a closing auction.
 - Stripe card authorization holds, verified webhook processing, release after
   outbid or an unsuccessful close, capture for a winner's payable total, and
   concurrency-safe bid acceptance.
-- Card checkout with saved/recent payment methods, a complete breakdown of
-  policy-derived fees, taxes, fixed home-delivery shipping, and any required
-  international customs declaration.
+- After winning and before payment, home-delivery information collection,
+  server-calculated taxes, fixed home-delivery shipping, any required
+  international customs declaration, and a complete breakdown paid through a
+  saved or recent card.
 - Stripe invoicing after payment, customer order reads, and authorized manual
   updates through Won, Paid, Shipping Started, and Shipped.
 
@@ -43,7 +45,7 @@ price decisions or payment-provider events that can race a closing auction.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/frontend/grade10-store` | Renders the Grade10 Auction catalogue and listing detail through the existing `@grade10/auction-frontend` feature; authenticated actions use the Grade10 Store backend. |
+| `apps/frontend/grade10` | Renders the Grade10 Auction catalogue and listing detail through the existing `@grade10/auction-frontend` feature; authenticated actions use the Grade10 Store backend. |
 | `apps/backend/grade10/store` | Resolves the Grade10 customer session and calls the pinned Grade10 Auction service entrypoint for authenticated bid and payment actions. |
 | `apps/backend/grade10/auction` | Owns auction routes, listing/bid/order persistence, serialized bid decisions, Stripe webhooks, and reconciliation. |
 | `apps/backend/grade10/api` | Routes anonymous Auction catalogue and listing reads to the Auction service. |
@@ -61,8 +63,8 @@ Auction components remain application-owned.
   catalogue entry.
 - Keyword/search history, filters, favourites, recent sales, related listings,
   upcoming-auction previews, and listing notifications.
-- Auto-bidding, outbid notifications, reserve/no-reserve auction behavior,
-  age declarations, one-time extensions, or extended-bidding emails.
+- Auto-bidding, outbid notifications, age declarations, one-time extensions,
+  or extended-bidding emails.
 - Vault selection, global-shipping coverage, tracking, order notifications,
   wire transfer, ACH, customer auto-pay-window edits, and manual invoices
   before payment.
@@ -100,6 +102,6 @@ fixture payment data.
 ## Follow-on changes
 
 - Auction Buy Now, cart, and inventory.
-- Auto-bidding, reserve auctions, notifications, saved listings, and search.
+- Auto-bidding, notifications, saved listings, and search.
 - Vault storage, delivery tracking, international shipping coverage, and
   post-sale customer-service workflows.
