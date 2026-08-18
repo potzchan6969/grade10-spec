@@ -11,25 +11,24 @@ const noop = () => {};
 
 const STORE_NAV = {
   promo: "PROMO UTILITY BAR",
-  logo: "Grade10 Marketplace",
+  logo: "Grade10",
   localeLabel: "Hong Kong (HKD)",
-  utilityLinks: [
-    { label: "Store Finder", href: "#store-finder" },
-    { label: "Help", href: "#help" },
-    { label: "Shipping & Delivery", href: "#shipping" },
-    { label: "Orders & Returns", href: "#orders" },
+  locales: [
+    { value: "HK", label: "Hong Kong (HKD)" },
+    { value: "KR", label: "South Korea (KRW)" },
   ],
+  locale: "HK",
+  utilityLinks: [],
   navItems: [
-    { label: "SHOP", href: "#shop", current: true },
-    { label: "NEW ARRIVALS", href: "#new" },
-    { label: "GRADE", href: "#grade" },
-    { label: "AUCTION", href: "#auction" },
+    { label: "Store", href: "#shop", current: true },
+    { label: "Auction", href: "#auction" },
+    { label: "Grade", href: "#grade" },
+    { label: "Store Locator", href: "#locator" },
   ],
   /* A control renders only where a handler backs it, and this workbench
-   * assembles the whole storefront the Figma page draws — so it answers all
-   * five. A store with fewer surfaces passes fewer and shows fewer. */
-  onLocaleClick: noop,
-  onSearchClick: noop,
+   * assembles the storefront the Figma nav draws — locale, account, wishlist,
+   * cart. A store with fewer surfaces passes fewer and shows fewer. */
+  onLocaleChange: noop,
   onAccountClick: noop,
   onWishlistClick: noop,
   onCartClick: noop,

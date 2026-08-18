@@ -1,6 +1,17 @@
+"use client";
+
 import { Button } from "@grade10/design-system/components/forms/button";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { Link } from "@grade10/design-system/components/forms/link";
+import { NavigationLink } from "@grade10/design-system/components/layout/navigation-link";
+import { NavigationList } from "@grade10/design-system/components/layout/navigation-list";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@grade10/design-system/components/overlays/dropdown-menu";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
   Globe,
@@ -18,6 +29,12 @@ type NavLink = {
 
 type NavItem = NavLink & {
   current?: boolean;
+  disabled?: boolean;
+};
+
+type NavLocale = {
+  value: string;
+  label: ReactNode;
 };
 
 type NavProps = ComponentProps<"header"> & {
@@ -28,7 +45,11 @@ type NavProps = ComponentProps<"header"> & {
   utilityLinks: NavLink[];
   navItems: NavItem[];
   localeLabel: ReactNode;
-  onLocaleClick?: () => void;
+  /** Options the locale trigger switches between. Empty when the label is display-only. */
+  locales?: NavLocale[];
+  /** Currently selected locale `value`. Owned by the application, including IP detection. */
+  locale?: string;
+  onLocaleChange?: (value: string) => void;
   onSearchClick?: () => void;
   onAccountClick?: () => void;
   onWishlistClick?: () => void;
@@ -39,10 +60,62 @@ type NavProps = ComponentProps<"header"> & {
   cartLabel?: string;
 };
 
+const globe = <Globe aria-hidden size={14} weight="regular" />;
+
+function LocaleControl({
+  localeLabel,
+  locales,
+  locale,
+  onLocaleChange,
+}: {
+  localeLabel: ReactNode;
+  locales: NavLocale[];
+  locale?: string;
+  onLocaleChange?: (value: string) => void;
+}) {
+  if (locales.length > 0 && onLocaleChange) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={<Button leading={globe} size="md" variant="ghost" />}
+        >
+          {localeLabel}
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="end"
+          className="w-max min-w-(--anchor-width) max-w-[calc(100vw-1.5rem)]"
+        >
+          <DropdownMenuRadioGroup
+            value={locale ?? locales[0]?.value}
+            onValueChange={(value) => onLocaleChange(value)}
+          >
+            {locales.map((item) => (
+              <DropdownMenuRadioItem key={item.value} value={item.value}>
+                {item.label}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+
+  return (
+    <span
+      className="flex items-center gap-2 px-3 text-sm font-medium text-foreground"
+      data-slot="nav-locale"
+    >
+      {globe}
+      {localeLabel}
+    </span>
+  );
+}
+
 /**
  * Store chrome. Figma set `Nav` (`4171:9937`) has no variant axes — content
  * is passed in so a consumer can swap copy and callbacks without owning the
- * layout.
+ * layout. Primary items are `NavigationList` / `NavigationLink`; the locale
+ * control opens a dropdown of the supplied locales when a handler backs it.
  *
  * Brand, navigation, and locale content is required rather than defaulted: two
  * stores render this shell, and a default would let the second one ship the
@@ -53,6 +126,9 @@ type NavProps = ComponentProps<"header"> & {
  * prop beside it: one fact, one place, and no way for the two to disagree. A
  * site with no basket therefore shows no basket instead of a button that
  * swallows the click.
+ *
+ * Default locale (detect by IP, otherwise Hong Kong) is an application
+ * decision. This shell only switches between the options it is given.
  *
  * The bar's rungs are container queries: below them it wraps — logo and
  * controls, navigation beneath — rather than centring the navigation over
@@ -67,7 +143,9 @@ function Nav({
   utilityLinks,
   navItems,
   localeLabel,
-  onLocaleClick,
+  locales = [],
+  locale,
+  onLocaleChange,
   onSearchClick,
   onAccountClick,
   onWishlistClick,
@@ -87,9 +165,9 @@ function Nav({
       {promo != null ? (
         <div
           data-slot="nav-promo"
-          className="flex h-9 items-center justify-center overflow-hidden bg-foreground px-4 @3xl:px-10"
+          className="flex h-9 items-center justify-center overflow-hidden bg-secondary px-6"
         >
-          <p className="min-w-0 flex-1 truncate text-center text-sm font-medium text-primary-foreground">
+          <p className="min-w-0 flex-1 truncate text-center text-sm font-bold text-secondary-foreground">
             {promo}
           </p>
         </div>
@@ -97,7 +175,7 @@ function Nav({
       {utilityLinks.length > 0 ? (
         <div
           data-slot="nav-utility"
-          className="flex min-h-8 items-center bg-background px-4 py-1 @3xl:px-10 @3xl:py-0"
+          className="flex min-h-8 items-center bg-background px-6 py-1"
         >
           <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
             {utilityLinks.map((link) => (
@@ -115,7 +193,7 @@ function Nav({
       ) : null}
       <div
         data-slot="nav-bar"
-        className="relative flex flex-wrap items-center justify-between gap-y-2 border-b border-border bg-background px-4 py-3 @3xl:h-[72px] @3xl:flex-nowrap @3xl:px-10 @3xl:py-0"
+        className="relative flex flex-wrap items-center justify-between gap-y-2 border-b border-border bg-background px-6 py-3 @3xl:h-[72px] @3xl:flex-nowrap @3xl:py-0"
       >
         <a
           className="text-2xl font-bold text-foreground"
@@ -124,53 +202,33 @@ function Nav({
         >
           {logo}
         </a>
-        <nav
-          aria-label="Primary"
-          className="order-last flex w-full flex-wrap items-center justify-center gap-2 @3xl:absolute @3xl:top-1/2 @3xl:left-1/2 @3xl:order-none @3xl:w-auto @3xl:-translate-x-1/2 @3xl:-translate-y-1/2 @3xl:flex-nowrap"
-        >
+        <NavigationList className="order-last w-full flex-wrap @3xl:absolute @3xl:top-1/2 @3xl:left-1/2 @3xl:order-none @3xl:w-auto @3xl:-translate-x-1/2 @3xl:-translate-y-1/2 @3xl:flex-nowrap">
           {navItems.map((item) => (
-            <a
-              aria-current={item.current ? "page" : undefined}
-              className={cn(
-                "px-3 py-2 text-xs font-medium",
-                item.current
-                  ? "text-primary-muted-foreground"
-                  : "text-secondary-foreground",
-              )}
+            <NavigationLink
+              active={item.current}
+              disabled={item.disabled}
               href={item.href}
               key={String(item.label)}
             >
               {item.label}
-            </a>
+            </NavigationLink>
           ))}
-        </nav>
+        </NavigationList>
         <div
           data-slot="nav-controls"
           className="flex flex-wrap items-center justify-end gap-1"
         >
-          {onLocaleClick ? (
-            <Button
-              leading={<Globe aria-hidden size={14} weight="regular" />}
-              onClick={onLocaleClick}
-              size="sm"
-              variant="ghost"
-            >
-              {localeLabel}
-            </Button>
-          ) : (
-            <span
-              className="flex items-center gap-1.5 px-3 text-xs font-medium text-secondary-foreground"
-              data-slot="nav-locale"
-            >
-              <Globe aria-hidden size={14} weight="regular" />
-              {localeLabel}
-            </span>
-          )}
+          <LocaleControl
+            locale={locale}
+            localeLabel={localeLabel}
+            locales={locales}
+            onLocaleChange={onLocaleChange}
+          />
           {onSearchClick ? (
             <IconButton
               aria-label={searchLabel}
               onClick={onSearchClick}
-              size="sm"
+              size="md"
               variant="ghost"
             >
               <MagnifyingGlass aria-hidden size={16} weight="regular" />
@@ -180,7 +238,7 @@ function Nav({
             <IconButton
               aria-label={accountLabel}
               onClick={onAccountClick}
-              size="sm"
+              size="md"
               variant="ghost"
             >
               <User aria-hidden size={16} weight="regular" />
@@ -190,7 +248,7 @@ function Nav({
             <IconButton
               aria-label={wishlistLabel}
               onClick={onWishlistClick}
-              size="sm"
+              size="md"
               variant="ghost"
             >
               <Heart aria-hidden size={16} weight="regular" />
@@ -200,7 +258,7 @@ function Nav({
             <IconButton
               aria-label={cartLabel}
               onClick={onCartClick}
-              size="sm"
+              size="md"
               variant="ghost"
             >
               <ShoppingBag aria-hidden size={16} weight="regular" />
@@ -212,5 +270,5 @@ function Nav({
   );
 }
 
-export type { NavItem, NavLink, NavProps };
+export type { NavItem, NavLink, NavLocale, NavProps };
 export { Nav };

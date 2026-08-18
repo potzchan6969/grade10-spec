@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { Nav } from "./nav";
 
 /* Grade10's own chrome content. It lives here, in an example, rather than in
@@ -13,13 +13,18 @@ const UTILITY_LINKS = [
 ];
 
 const NAV_ITEMS = [
-  { label: "SHOP", href: "#shop", current: true },
-  { label: "NEW ARRIVALS", href: "#new" },
-  { label: "GRADE", href: "#grade" },
-  { label: "AUCTION", href: "#auction" },
+  { label: "Store", href: "#store", current: true },
+  { label: "Auction", href: "#auction" },
+  { label: "Grade", href: "#grade" },
+  { label: "Store Locator", href: "#locator" },
 ];
 
-const CONTROLS = ["Search", "Account", "Wishlist", "Cart"];
+const LOCALES = [
+  { value: "HK", label: "Hong Kong (HKD)" },
+  { value: "KR", label: "South Korea (KRW)" },
+];
+
+const CONTROLS = ["Account", "Wishlist", "Cart"];
 
 const meta = {
   title: "Components/Nav",
@@ -28,12 +33,13 @@ const meta = {
   parameters: { layout: "fullscreen" },
   args: {
     promo: "PROMO UTILITY BAR",
-    logo: "Grade10 Marketplace",
-    utilityLinks: UTILITY_LINKS,
+    logo: "Grade10",
+    utilityLinks: [],
     navItems: NAV_ITEMS,
     localeLabel: "Hong Kong (HKD)",
-    onLocaleClick: fn(),
-    onSearchClick: fn(),
+    locales: LOCALES,
+    locale: "HK",
+    onLocaleChange: fn(),
     onAccountClick: fn(),
     onWishlistClick: fn(),
     onCartClick: fn(),
@@ -43,23 +49,42 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** A storefront that answers every control the set draws. */
+/** A storefront that answers the controls the set draws. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     for (const control of CONTROLS) {
       expect(canvas.getByRole("button", { name: control })).toBeInTheDocument();
     }
+    expect(canvas.queryByRole("button", { name: "Search" })).toBeNull();
     expect(
       canvas.getByRole("button", { name: "Hong Kong (HKD)" }),
     ).toBeInTheDocument();
-    expect(canvas.getByRole("link", { name: "SHOP" })).toHaveAttribute(
+    expect(canvas.getByRole("link", { name: "Store" })).toHaveAttribute(
       "aria-current",
       "page",
     );
-    expect(canvas.getByRole("link", { name: "GRADE" })).not.toHaveAttribute(
+    expect(canvas.getByRole("link", { name: "Grade" })).not.toHaveAttribute(
       "aria-current",
     );
+  },
+};
+
+/**
+ * The locale trigger opens a menu of the supplied regions. Which of those is
+ * the default — detect by IP, otherwise Hong Kong — is the application's.
+ */
+export const LocaleMenu: Story = {
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Hong Kong (HKD)" }),
+    );
+    await userEvent.click(
+      await body.findByRole("menuitemradio", { name: "South Korea (KRW)" }),
+    );
+    expect(args.onLocaleChange).toHaveBeenCalledWith("KR");
   },
 };
 
@@ -72,7 +97,7 @@ export const WithoutCart: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.queryByRole("button", { name: "Cart" })).toBeNull();
-    expect(canvas.getByRole("button", { name: "Search" })).toBeInTheDocument();
+    expect(canvas.getByRole("button", { name: "Account" })).toBeInTheDocument();
   },
 };
 
@@ -84,7 +109,8 @@ export const AccountOnly: Story = {
   args: {
     promo: null,
     utilityLinks: [],
-    onLocaleClick: undefined,
+    locales: [],
+    onLocaleChange: undefined,
     onSearchClick: undefined,
     onWishlistClick: undefined,
     onCartClick: undefined,
@@ -128,7 +154,8 @@ export const NothingDefaulted: Story = {
     utilityLinks: [],
     navItems: [],
     localeLabel: "Singapore (SGD)",
-    onLocaleClick: undefined,
+    locales: [],
+    onLocaleChange: undefined,
     onSearchClick: undefined,
     onAccountClick: undefined,
     onWishlistClick: undefined,
@@ -154,6 +181,7 @@ export const NothingDefaulted: Story = {
  * navigation looks like.
  */
 export const Narrow: Story = {
+  args: { utilityLinks: UTILITY_LINKS },
   decorators: [
     (Story) => (
       <div style={{ width: 375 }}>
@@ -191,5 +219,7 @@ export const AnotherStore: Story = {
       { label: "BRANDS", href: "#brands" },
     ],
     localeLabel: "Singapore (SGD)",
+    locales: [{ value: "SG", label: "Singapore (SGD)" }],
+    locale: "SG",
   },
 };

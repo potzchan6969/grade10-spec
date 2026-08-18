@@ -5,17 +5,16 @@ import figma from "figma";
 
 const instance = figma.selectedInstance;
 
-// Only two tones exist on this set; there is no `primary` or `destructive`
-// icon button in the design.
 const variant = instance.getEnum("variant", {
+  secondary: "secondary",
   outline: "outline",
   ghost: "ghost",
 });
 
-// Only the two smaller rungs exist — Figma draws no 48px icon button.
+// Figma draws `md` (40) and `sm` (32). `xs` is code-only and is not mapped.
 const size = instance.getEnum("size", {
+  md: "md",
   sm: "sm",
-  xs: "xs",
 });
 
 // Hover is a CSS pseudo-state with no prop behind it, so `state` emits nothing

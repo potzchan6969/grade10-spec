@@ -31,6 +31,8 @@ export * from "./components/layout/center";
 export * from "./components/layout/footer";
 export * from "./components/layout/hstack";
 export * from "./components/layout/nav";
+export * from "./components/layout/navigation-link";
+export * from "./components/layout/navigation-list";
 export * from "./components/layout/stack";
 export * from "./components/layout/vstack";
 export * from "./components/overlays/dialog";

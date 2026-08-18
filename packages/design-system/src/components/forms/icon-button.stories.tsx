@@ -8,8 +8,11 @@ const meta = {
   tags: ["autodocs"],
   args: { children: <XIcon />, "aria-label": "Close" },
   argTypes: {
-    variant: { control: "inline-radio", options: ["outline", "ghost"] },
-    size: { control: "inline-radio", options: ["sm", "xs"] },
+    variant: {
+      control: "inline-radio",
+      options: ["outline", "ghost", "secondary"],
+    },
+    size: { control: "inline-radio", options: ["md", "sm", "xs"] },
   },
 } satisfies Meta<typeof IconButton>;
 
@@ -18,8 +21,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 export const Ghost: Story = { args: { variant: "ghost" } };
+export const Secondary: Story = { args: { variant: "secondary" } };
 
-/** `sm` is the design's default rung; Figma draws no 48px icon button. */
+/** `sm` is the design's default rung. */
+export const Medium: Story = { args: { size: "md" } };
 export const ExtraSmall: Story = { args: { size: "xs" } };
 
 export const Disabled: Story = { args: { disabled: true } };
@@ -27,7 +32,7 @@ export const Disabled: Story = { args: { disabled: true } };
 export const Variants: Story = {
   render: (args) => (
     <div className="flex items-center gap-3">
-      {(["outline", "ghost"] as const).map((variant) => (
+      {(["outline", "ghost", "secondary"] as const).map((variant) => (
         <IconButton key={variant} {...args} variant={variant} />
       ))}
     </div>
@@ -37,7 +42,7 @@ export const Variants: Story = {
 export const Sizes: Story = {
   render: (args) => (
     <div className="flex items-center gap-3">
-      {(["sm", "xs"] as const).map((size) => (
+      {(["md", "sm", "xs"] as const).map((size) => (
         <IconButton key={size} {...args} size={size} />
       ))}
     </div>

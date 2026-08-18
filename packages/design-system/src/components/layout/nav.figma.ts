@@ -13,6 +13,8 @@ export default {
   utilityLinks={utilityLinks}
   navItems={navItems}
   localeLabel={localeLabel}
+  locales={locales}
+  locale={locale}
 />`,
   imports: ['import { Nav } from "@grade10/design-system"'],
   id: "nav",
