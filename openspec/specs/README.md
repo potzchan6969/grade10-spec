@@ -12,7 +12,7 @@ The products are:
 - `zzz-store` — no capabilities yet; create `openspec/specs/zzz-store/<capability>/` with its first spec.
 - `grade10-site` — the grade10 application's own surfaces: the shell every page
   renders in, and anything belonging to the site rather than to a product inside
-  it. No capabilities yet; the first arrives with `add-grade10-site-shell`.
+  it.
 - `shared-ui` — cross-product contracts for the shared components every store
   application consumes: the compound components in `packages/ui`, and the site
   chrome the design system publishes.
