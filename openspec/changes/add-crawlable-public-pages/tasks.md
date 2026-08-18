@@ -11,7 +11,7 @@ other.
 - [x] 1.2 Make `Each public surface names itself`, `Two surfaces, two names`, and `The title follows navigation` pass: each route module exports its own identity and derives its `meta` from it, so a public surface without one fails to compile.
 - [x] 1.3 Make `The marketing page answers whole` and `A catalogue answers its identity` pass: the public addresses are prerendered, the framework emitting each surface's document from the real application, listings still arriving by script.
 - [x] 1.4 Make `Scripts only add to the page` pass: the browser hydrates the served document, with every existing page-shell and navigation scenario green.
-- [ ] 1.5 Make `A preview fetcher reads the surface` pass: `og:title`, `og:description`, and `og:url` from the same identity.
+- [x] 1.5 Make `A preview fetcher reads the surface` pass: `og:title`, `og:description`, and `og:url` from the same identity.
 - [ ] 1.6 Run the full check suite and a production build as this group's verification.
 
 ## 2. Crawler directory
