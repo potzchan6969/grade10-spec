@@ -10,34 +10,64 @@ visible in one place. Every command here is real; nothing is illustrative.
 | `design.md`, `ui.md`, `tasks.md` | The engineer planning the delivery | this store |
 | Owner tags, checkmarks | The engineer doing the work | `grade10`, writing through to this store |
 
-Both roles run their agent against a clone of this store. The application
-repository has no planning shape of its own — its `openspec/` is config-only
-and resolves here — so there is never a second change to open over there.
+## Where you run this
+
+Everyone works in `grade10`, including PM and design. That repository's
+`openspec/` is config-only with `store: grade10-spec`, so every `openspec`
+command run there resolves to this store — it prints
+`Using OpenSpec root: grade10-spec (…)` and writes into your store clone at its
+absolute path. `openspec new change`, `status`, `instructions`, and `validate`
+all work from `grade10`; the files they create and the commits you make against
+them belong to the store clone, not to `grade10`.
+
+One thing does not carry across: **the skills live only in the store clone.**
+`grade10` ships its own (`tdd`, `testing-lanes`, and others), so
+`/openspec-propose` and `/openspec-archive-change` are not available there. The
+CLI is the substitute, and it is not a lesser one —
+`openspec instructions <artifact> --change <name>` returns the same project
+context, the same per-artifact rules (the grilling interview among them), and
+the same template the skill would have applied. Ask your agent to follow that
+output. Nothing syncs skills between the two repositories today; copying them
+into `grade10` would be a second source of truth to keep in step.
+
+There is never a second change to open in `grade10` — it has no planning shape
+of its own to hold one.
 
 ## The PM lane
 
 > "Collectors need an account settings page — notification preferences and a
 > shipping address."
 
-**1. Invoke the skill.** `/openspec-propose`. It reads the relevant capability
-in `openspec/specs/`, any active change touching it, and the PRD before asking
-anything: facts are the agent's job, decisions are yours.
-
-**2. The schema follows the author.** A PM writing requirements takes
-`pm-planning`, which ends at the specs.
+**1. Create the change; the schema follows the author.** A PM writing
+requirements takes `pm-planning`, which ends at the specs. From `grade10`:
 
 ```bash
 openspec new change account-setting-page --schema pm-planning
+# Created change 'account-setting-page' at <store-clone>/openspec/changes/account-setting-page/
 ```
 
 This records `schema: pm-planning` in the change's `.openspec.yaml`. Creating
 the directory by hand records nothing, and the change silently takes the
 `full-planning` default from `openspec/config.yaml`.
 
-**3. Expect to be interviewed.** The proposal rules require the `grilling`
-skill, so the agent runs a round-based interview before drafting and does not
-write until the frontier is empty. It asks for your `@handle` rather than
-guessing the author line.
+**2. Pull the instructions, and have the agent work from them.**
+
+```bash
+openspec instructions proposal --change account-setting-page
+```
+
+This is what stands in for `/openspec-propose`, which is not installed in
+`grade10`. It returns the store's project context, the proposal rules, and the
+template. Before writing anything, the agent should read the relevant capability
+in `openspec/specs/`, any active change touching it, and the PRD — facts are the
+agent's job, decisions are yours.
+
+**3. Expect to be interviewed.** Those rules require the `grilling` skill, so
+the agent runs a round-based interview before drafting and does not write until
+the frontier is empty. It asks for your `@handle` rather than guessing the
+author line. The skill itself lives in the store clone at
+`.claude/skills/grilling/SKILL.md`, and the rule names that path — point your
+agent at it if it cannot find the skill by name.
 
 **4. The agent writes two things.** `proposal.md` — author line, the collector
 problem and its evidence, a metric that would move, non-goals, the capabilities
@@ -68,12 +98,13 @@ That state is the promotion signal. It is also indistinguishable from a plan
 the PM has not finished, which is why a finished `pm-planning` change has to be
 promoted rather than noticed.
 
-**7. Promote it, in the store clone.** Delivery is planned here, by the engineer
-who will build it:
+**7. Promote it.** Delivery is planned here, by the engineer who will build it.
+The file being edited lives in the store clone; the command still runs from
+`grade10`:
 
 ```bash
-# in the store clone
-# .openspec.yaml:  schema: pm-planning  ->  schema: full-planning
+# <store-clone>/openspec/changes/account-setting-page/.openspec.yaml
+#   schema: pm-planning  ->  schema: full-planning
 openspec status --change account-setting-page   # now lists design, ui, tasks
 ```
 
@@ -82,7 +113,7 @@ Then write `design.md` (decisions and the alternatives behind them), `ui.md`
 until `design.md` exists), and `tasks.md`. Groups split by layer, no owner tags,
 each task phrased as the spec scenario it makes pass. Validate and push.
 
-**8. Claim and build.** Back in `grade10`:
+**8. Claim and build.**
 
 ```bash
 pnpm plan sync
@@ -102,16 +133,24 @@ pnpm plan done account-setting-page 2.1 2.2
 
 Each of these lands as a commit to this store from the engineer's clone.
 
-**10. Archive once deployed** — not when the code merges. Fold the accepted
-deltas into `openspec/specs/`, confirm the PRD still describes the decision,
-then `openspec archive account-setting-page`. The `openspec-archive-change`
-skill covers the sequence.
+**10. Archive once deployed** — not when the code merges.
+
+```bash
+openspec instructions archive --change account-setting-page
+```
+
+Same substitution as step 2: `/openspec-archive-change` is not in `grade10`, and
+this returns the store's archive guidance instead. Fold the accepted deltas into
+`openspec/specs/`, confirm the PRD still describes the decision, then
+`openspec archive account-setting-page`.
 
 ## Where this goes wrong
 
 - **Editing a live `tasks.md` from a stale clone.** Run
   `pnpm run plan:preflight account-setting-page` first; it refuses a stale or
   dirty copy and prints the owners and counts you are about to edit on top of.
+  This one is a script in the store clone, not a `pnpm plan` subcommand — run it
+  from there, not from `grade10`.
 - **Renumbering a claimed group.** A claim is recorded against a group number
   and a checkmark against a task id, so renumbering repoints someone's claim at
   different work while every id still validates. Append instead.
