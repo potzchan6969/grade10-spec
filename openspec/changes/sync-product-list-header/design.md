@@ -17,8 +17,7 @@ series. Annotations on that set are the interaction contract.
 
 The file's content annotation lists three application choices — "All Products",
 the collection name, "Search Results". Those stay in the consuming app. The
-header displays `title` as supplied and has no default, matching
-`CollectionBanner.collection`.
+header displays `title` as supplied and has no default.
 
 - *Rejected — inferring the title from filter selection.* That puts catalog
   judgment in the package.

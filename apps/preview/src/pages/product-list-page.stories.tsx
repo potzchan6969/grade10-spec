@@ -1,13 +1,6 @@
-import { BreadcrumbItem } from "@grade10/design-system/components/display/breadcrumb-item";
-import { BreadcrumbSeparator } from "@grade10/design-system/components/display/breadcrumb-separator";
-import { Breadcrumbs } from "@grade10/design-system/components/display/breadcrumbs";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { Nav } from "@grade10/design-system/components/layout/nav";
-import {
-  CollectionBanner,
-  type FilterSelection,
-  ProductBrowse,
-} from "@grade10/ui";
+import { type FilterSelection, ProductBrowse } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import {
@@ -22,12 +15,9 @@ import {
   STORE_NAV,
 } from "./store-content";
 
-const BANNER_IMAGE = new URL("./collection-banner.fixture.png", import.meta.url)
-  .href;
-
 /**
- * The product listing page as a store assembles it: `Nav`, `CollectionBanner`,
- * the shared `ProductBrowse` compound, and `Footer`.
+ * The product listing page as a store assembles it: `Nav`, the shared
+ * `ProductBrowse` compound, and `Footer`.
  *
  * The state loop lives here rather than in the component, which is the
  * contract: the surface renders a selection and reports a change, and this
@@ -45,21 +35,6 @@ function ProductListPage() {
   return (
     <div className="bg-background">
       <Nav {...STORE_NAV} />
-      <CollectionBanner
-        breadcrumbs={
-          <Breadcrumbs>
-            <BreadcrumbItem href="#home">Home</BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem href="#shop">Shop</BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem current>Pokémon</BreadcrumbItem>
-          </Breadcrumbs>
-        }
-        collection="Pokémon"
-        description="Japanese Pokémon sealed product for set builders, collectors, and opening nights."
-        imageAlt=""
-        imageSrc={BANNER_IMAGE}
-      />
       <ProductBrowse
         {...PAGINATION_LABELS}
         filterPanelLabel="Filters"

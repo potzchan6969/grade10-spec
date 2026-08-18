@@ -20,10 +20,6 @@ export type { AsyncAction, AsyncState } from "./blocks/shared/async";
 
 // shared-ui/store-product-listing
 export {
-  CollectionBanner,
-  type CollectionBannerProps,
-} from "./blocks/store-product-listing/collection-banner";
-export {
   FilterPanel,
   type FilterPanelProps,
 } from "./blocks/store-product-listing/filter-panel";
