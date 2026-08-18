@@ -13,7 +13,7 @@
 - [x] 2.3 Make `Concurrent bids keep the highest valid outcome`, `An outbid authorization is released`, and `A delayed lower authorization cannot land` pass through idempotent bid attempts and Stripe outcomes.
 - [x] 2.4 Verify every listing, bidding, authorization, extension, reserve-removal, and reconciliation scenario in this group through Auction backend feature tests.
 
-## 3. Customer Auction frontend
+## 3. Customer Auction frontend (owner: @htonyl)
 
 Task 3.4 depends on the contracts in group 1; it uses fixtures rather than a running backend.
 
