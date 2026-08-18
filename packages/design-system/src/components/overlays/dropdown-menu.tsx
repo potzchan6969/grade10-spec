@@ -55,10 +55,7 @@ function DropdownMenuContent({
   );
 }
 
-function DropdownMenuGroup({
-  className,
-  ...props
-}: MenuPrimitive.Group.Props) {
+function DropdownMenuGroup({ className, ...props }: MenuPrimitive.Group.Props) {
   return (
     <MenuPrimitive.Group
       data-slot="dropdown-menu-group"
