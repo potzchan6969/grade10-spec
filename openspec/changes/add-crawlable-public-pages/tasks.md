@@ -5,7 +5,7 @@ Group 1 is the whole served response — identity, the emitted documents, and
 what a link preview reads. Groups 2 and 3 depend on it and on nothing in each
 other.
 
-## 1. Public pages served whole
+## 1. Public pages served whole (owner: @sean)
 
 - [ ] 1.1 Move every browser-global read out of module scope and out of render, so a route module renders under the prerender build.
 - [ ] 1.2 Make `Each public surface names itself`, `Two surfaces, two names`, and `The title follows navigation` pass: each route module exports its own identity and derives its `meta` from it, so a public surface without one fails to compile.
