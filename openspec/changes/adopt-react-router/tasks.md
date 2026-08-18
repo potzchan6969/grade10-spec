@@ -38,7 +38,7 @@ time after this change is accepted.
 - [x] 3.3 Run the full check suite and a production build as this group's
       verification.
 
-## 4. Realign the crawlable change
+## 4. Realign the crawlable change (owner: @sean)
 
 - [ ] 4.1 Rewrite `add-crawlable-public-pages`'s design.md to derive from
       this foundation: identity as route-module `meta`, emitted pages from
