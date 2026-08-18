@@ -2,10 +2,9 @@
 
 ## Summary
 
-Collectors need a trustworthy way to discover a Grade10-authenticated card,
-bid during a scheduled auction, pay with a card when they win, and follow the
-first fulfilment milestones. Grade10 owns the auction catalogue, bid outcome,
-and order record; Stripe supplies card authorization and payment processing.
+Collectors need a trustworthy way to browse listings and bid during a scheduled
+auction. Grade10 owns the catalogue and bid outcome; Stripe supplies card
+authorization.
 
 ## Context
 
@@ -22,24 +21,21 @@ and order record; Stripe supplies card authorization and payment processing.
   and understand a listing's grade, condition, and Grade10 authentication.
 - Make the winner of a fair, time-bounded auction determinable even when bids
   and payment-provider events arrive concurrently.
-- Collect the won amount by card and give the winner an accurate order state.
+- Keep public Auction contracts free of reserve behavior and use consistent
+  listing and extension terminology.
 
 ## Non-goals
 
 - Auction Buy Now, carts, stock counts, fixed-price checkout, search, saved
   searches, filters, favourites, related lots, and recent-sales data.
-- Auto-bidding, age declarations, vault storage, global shipping promises,
-  delivery tracking, and notifications.
-- Wire transfer, ACH, invoices before payment, or customer edits during an
-  auto-pay window.
+- Auto-bidding, checkout, payment capture, delivery, fulfilment, vault storage,
+  global shipping, tracking, and notifications.
 
 ## Users and jobs to be done
 
 | User | Situation | Desired outcome |
 | --- | --- | --- |
 | Collector | Considering or following a card auction | See reliable listing facts, bid safely, and know whether they won. |
-| Winner | An auction has closed | Pay the complete order by card and see whether fulfilment has started. |
-| Auction operator | An order is ready for manual fulfilment | Record the transition from won to paid to shipping milestones. |
 
 ## Experience
 
@@ -51,9 +47,6 @@ and order record; Stripe supplies card authorization and payment processing.
    buyer-fee disclosure, and scheduled bidding window.
 3. During the window, the collector submits a card-backed bid; a valid late
    bid extends the close unless the listing's optional extension cap is reached.
-4. After winning, the collector supplies home-delivery information, reviews the
-   resulting complete breakdown, pays with a saved or recent card, receives a
-   Stripe invoice, and follows the initial order milestones.
 
 ## Requirements
 
@@ -89,7 +82,6 @@ The checkable requirements, state behavior, and integration boundary are in:
 | Buy Now | Decided | Excluded from this auction MVP, including browse-only Buy Now listings. | Product |
 | Hold model | Decided | One Stripe authorization hold exists per bidder per active listing; an outbid hold enters asynchronous release immediately and is later reconciled to completion. | Product |
 | Extended close | Decided | A valid bid in the final 30 minutes moves the close to 30 minutes after that bid; this repeats until 30 minutes pass without a valid bid, subject to an optional listing extension cap. | Product |
-| Delivery information | Decided | The winner supplies home-delivery information after winning and before Auction calculates the final total or starts payment. | Product |
 | Buyer-premium rate | Deferred | Display the applicable policy-derived buyer fee; defining a fixed rate is outside this change. | Product and finance |
 
 ## Rollout and risks

@@ -9,14 +9,13 @@ Product context: [Grade10 Auction](../../../docs/prds/auction/auction.md).
 Grade10 browser -> Grade10 API -> Auction public reads
 Grade10 browser -> Grade10 Store backend -> Grade10 Auction RPC
 ZZZ Store backend -> ZZZ Auction RPC
-Auction service -> Auction persistence: listings, bids, orders, policy snapshots
-Auction service -> storefront Stripe account: authorization, release, capture, invoice
-Stripe verified webhooks -> Auction service -> idempotent payment projection
-Grade10 admin portal -> Auction service -> manual shipping milestones
+Auction service -> Auction persistence: listings, bids, policy snapshots
+Auction service -> storefront Stripe account: authorization and release
+Stripe verified webhooks -> Auction service -> idempotent authorization projection
 ```
 
 The Auction service is authoritative for listing facts, bidding-window
-calculation, valid bid ordering, the winning bidder, and Auction orders. Each
+calculation, valid bid ordering, and the winning bidder. Each
 storefront's Stripe account is authoritative only for its card authorization,
 release, capture, and invoice facts. The browser submits identifiers and a bid
 amount through its storefront backend; it never decides whether a bid wins,
@@ -68,15 +67,13 @@ scheduled reconciliation query Stripe by stored provider references to repair
 delayed or missed events. Logs carry safe auction and provider identifiers,
 never card, address, secret, or raw webhook data.
 
-## Order and fulfilment lifecycle
+## Contract vocabulary and reserve removal
 
-Auction creates the winner's order at close. It reports `won` until payment is
-confirmed, `paid` after capture, `shipping_started` when an authorized operator
-begins in-house fulfilment, and `shipped` when that operator records dispatch.
-Transitions are one-way and auditable. The customer can read only their own
-order; authorized operators can update only manual shipping milestones. The
-capability does not invent a carrier, tracking number, delivery estimate, or
-delivery confirmation.
+The public API and customer-facing copy rename the auctioned-card unit from
+`auction item` or `lot` to `listing`, and rename `anti-snipe` configuration to
+`extension`. The existing customer UI keeps its current composition while its
+adapter and types adopt the renamed contract. The Auction service removes
+reserve configuration, reserve responses, and reserve-based no-sale outcomes.
 
 ## Alternatives considered
 

@@ -2,20 +2,21 @@
 
 ## Purpose
 
-Grade10's card-auction capability lets collectors browse an Auction listing,
-place a card-backed bid within its scheduled window, complete a won order, and
-read its initial manual-fulfilment progress. A **listing** is one auction lot.
+Grade10's card-auction capability lets collectors browse an Auction listing and
+place a card-backed bid within its scheduled window. A **listing** is the sole
+customer-facing term for one auctioned card.
 
 ## ADDED Requirements
 
 ### Requirement: Auction listing facts are available
 
-Grade10 SHALL publish a catalogue of Auction listings grouped by their
-collectible-card category. It SHALL NOT publish or represent Auction Buy Now
-listings in this capability. A listing detail SHALL identify the card's grading
-or condition and state that the card is Grade10 authenticated. It SHALL show
-the listing's starting price, bid increment, current bid, bid count, applicable
-buyer fee, bidding start and close, and whether bidding is open.
+Grade10 SHALL publish a catalogue of Auction listings. It SHALL NOT publish or
+represent Auction Buy Now listings in this capability. This change SHALL NOT
+alter the current customer-facing Auction browse composition.
+
+Auction listings SHALL be absolute: when a listing closes with accepted bids,
+the highest accepted bid wins. Grade10 SHALL NOT configure, store, return, or
+evaluate a reserve amount, reserve state, or reserve-based no-sale outcome.
 
 All money facts SHALL be an integer count of minor units paired with an ISO
 4217 currency code. A listing's applicable fee, currency, region, and deadline
@@ -29,13 +30,12 @@ the listing becomes available for bidding.
 - **THEN** Grade10 returns those Auction listings grouped or identifiable by category
 - **AND** it returns no Buy Now listing or purchasable stock count
 
-#### Scenario: A listing identifies its card facts
+#### Scenario: A closed listing is absolute
 
-- **GIVEN** an Auction listing for a graded card
-- **WHEN** a collector opens its detail
-- **THEN** Grade10 displays its grading or condition
-- **AND** it states that the card is Grade10 authenticated
-- **AND** it displays the listing's bidding facts without exposing payment credentials
+- **GIVEN** a listing closes with an accepted highest bid
+- **WHEN** Grade10 determines its outcome
+- **THEN** that highest accepted bidder wins the listing
+- **AND** no reserve condition changes the outcome
 
 #### Scenario: Money facts use minor units and currency
 
@@ -142,108 +142,39 @@ SHALL be marked for release and SHALL NOT become an accepted bid.
 - **THEN** Grade10 rejects the invalid event or returns the duplicate outcome without another state transition
 - **AND** it does not duplicate a bid, hold, release, capture, invoice, or order state
 
-### Requirement: A closed listing creates a payable winner order
+### Requirement: Public Auction contracts use listing and extension terms
 
-When a listing closes with an accepted highest bid, Grade10 SHALL create one
-winner order. Before Auction starts payment, the winner SHALL supply home
-delivery information. Grade10 SHALL use the supplied delivery information and
-the listing's recorded policy terms to calculate the winner's server-side
-payable total: winning bid, applicable buyer fee, taxes, fixed home-delivery
-shipping, and any required international customs declaration. The winner SHALL
-review that complete total and be able to select a saved or recent credit-card
-payment method. Grade10 SHALL capture the final payable amount only after
-Stripe has authorized that amount; it SHALL obtain any necessary additional
-authorization before capture rather than capture more than Stripe authorized.
+Public Auction contracts, routes, and customer-visible content SHALL use
+`listing` and `listingId` for the auctioned-card unit; they SHALL NOT use
+`auction item`, `auctionItemId`, or `lot`. They SHALL use `extension` for the
+late-bid window and cap; they SHALL NOT use `anti-snipe` or `antiSnipe`.
 
-After Stripe confirms payment, Grade10 SHALL create a Stripe invoice and mark
-the order paid. It SHALL report order state independently as `won`, `paid`,
-`shipping_started`, or `shipped`. Only an authorized operator MAY advance a
-paid order to `shipping_started` and then `shipped`; no state in this
-capability implies carrier tracking or delivery.
+#### Scenario: A consumer reads a listing contract
 
-#### Scenario: A closed listing creates its winner order
+- **WHEN** a customer application reads a public Auction listing or its extension facts
+- **THEN** its contract uses listing and extension terms
+- **AND** it exposes no reserve state
 
-- **GIVEN** a listing reaches its recorded close with an accepted highest bid
-- **WHEN** Grade10 closes the listing
-- **THEN** it creates exactly one order for that highest bidder in `won` state
-- **AND** it releases every non-winner authorization
-
-#### Scenario: A winner sees a complete checkout breakdown
-
-- **GIVEN** a winner opens their won order before payment
-- **WHEN** Grade10 returns checkout facts
-- **THEN** it displays the winning bid, buyer fee, taxes, fixed home-delivery shipping, any required customs declaration, and order total
-- **AND** it permits a saved or recent credit-card payment method
-
-#### Scenario: A winner provides delivery information before payment
-
-- **GIVEN** a winner order in won state
-- **WHEN** the winner supplies valid home-delivery information
-- **THEN** Grade10 calculates the server-side taxes, fixed shipping, and any required customs declaration for that delivery information
-- **AND** it returns the complete payable total before starting card payment
-
-#### Scenario: Payment cannot start without delivery information
-
-- **GIVEN** a winner order without home-delivery information
-- **WHEN** the winner attempts to start card payment
-- **THEN** Grade10 refuses payment and requests delivery information
-- **AND** it does not capture or create an additional Stripe authorization
-
-#### Scenario: A winner payment becomes paid once
-
-- **GIVEN** a winner order with a Stripe authorization sufficient for its payable total
-- **WHEN** Stripe confirms its capture
-- **THEN** Grade10 marks the order paid and creates one Stripe invoice
-- **AND** duplicate or delayed Stripe events do not create another capture, invoice, or paid transition
-
-#### Scenario: A winner sees their order state
-
-- **GIVEN** a winner has an Auction order
-- **WHEN** the winner reads that order
-- **THEN** Grade10 returns its current Won, Paid, Shipping Started, or Shipped state
-- **AND** it returns no invented tracking or delivery status
-
-#### Scenario: An authorized operator advances manual shipping
-
-- **GIVEN** a paid Auction order
-- **WHEN** an authorized operator records that fulfilment has begun and later records dispatch
-- **THEN** Grade10 advances the order from paid to shipping started and then shipped
-- **AND** it records the authorized operator and transition times
-
-#### Scenario: A customer cannot read another customer's order
-
-- **GIVEN** a signed-in Auction customer
-- **WHEN** the customer requests an order belonging to another customer
-- **THEN** Grade10 refuses the request
-- **AND** returns no order, payment, shipping, address, or authorization facts
-
-#### Scenario: An unauthorized user cannot update an Auction order
-
-- **GIVEN** a user without Auction-operator authorization
-- **WHEN** the user attempts to advance an Auction order's shipping state
-- **THEN** Grade10 refuses the request
-- **AND** the order state remains unchanged
-
-### Requirement: Stripe configuration and delayed payment facts are handled explicitly
+### Requirement: Stripe configuration and delayed authorization facts are handled explicitly
 
 Grade10 SHALL require the configured Stripe account, payment-method capability,
 webhook secret, and authorization/capture capability before it offers a
 card-backed Auction action. Missing configuration or an unsupported Stripe
 outcome SHALL fail the affected action explicitly without exposing credentials,
-card data, or customer address data. A winner-order read and scheduled
-reconciliation SHALL query Stripe by the recorded provider reference to repair
-a delayed or missed valid webhook.
+card data, or customer address data. A scheduled reconciliation SHALL query
+Stripe by the recorded provider reference to repair a delayed or missed valid
+webhook.
 
 #### Scenario: Stripe configuration is incomplete
 
 - **GIVEN** an Auction operation requiring Stripe
 - **WHEN** required Stripe configuration is absent or does not support the required authorization/capture action
 - **THEN** Grade10 fails that operation explicitly naming the unavailable capability
-- **AND** it does not silently create a bid, order payment, or fixture-backed outcome
+- **AND** it does not silently create a bid or fixture-backed outcome
 
-#### Scenario: A missed payment webhook is repaired
+#### Scenario: A missed authorization webhook is repaired
 
-- **GIVEN** Stripe has captured a winner payment but Grade10 has not processed its webhook
-- **WHEN** the winner reads the order or scheduled reconciliation reaches it
-- **THEN** Grade10 reads the recorded Stripe payment reference
-- **AND** it marks the order paid and creates its invoice exactly once
+- **GIVEN** Stripe has confirmed a bid authorization but Grade10 has not processed its webhook
+- **WHEN** scheduled reconciliation reaches its recorded provider reference
+- **THEN** Grade10 reads that authorization outcome
+- **AND** it applies the authorization outcome exactly once
