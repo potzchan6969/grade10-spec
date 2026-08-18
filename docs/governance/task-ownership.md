@@ -37,7 +37,7 @@ Group headings are free for us to use because OpenSpec parses only the checkbox 
 
 ## What the tools rely on
 
-- **A number is an address.** An owner is recorded against a group number and a checkmark against a task id, and `plan:done <change> 3.1` names that id. Renumbering a group or a task that is claimed or has checkmarks silently points someone's claim at different work, and every id still validates. Append to the end of a group, or add a new group; to split one, say so in the commit.
+- **A number is an address.** An owner is recorded against a group number and a checkmark against a task id, and `pnpm plan done <change> 3.1` names that id. Renumbering a group or a task that is claimed or has checkmarks silently points someone's claim at different work, and every id still validates. Append to the end of a group, or add a new group; to split one, say so in the commit.
 - **Owners are claimed at pickup, not assigned at planning time.** A name on a group therefore always means someone is on it now. Author groups without owners and let engineers claim them.
 - **Completed work never sits with nobody's name against it.** Checking off a task in an unclaimed group claims that group, and a group with checkmarks cannot be handed back — it keeps its owner as the record of who did the work.
 - **A checkmark is a claim that the work is real.** It goes in after the code is pushed, not when it is written.
@@ -47,8 +47,8 @@ Group headings are free for us to use because OpenSpec parses only the checkbox 
 | Field | Written by | How |
 | --- | --- | --- |
 | Groups, task ids, task text | The engineer planning the delivery, in this repository | Directly, after `pnpm run plan:preflight <change-id>` |
-| Owner tag | The engineer taking the group | `pnpm plan:claim` / `pnpm plan:unclaim` in the application repository |
-| Checkbox state | The engineer who did the work | `pnpm plan:done` / `pnpm plan:undone` in the application repository |
+| Owner tag | The engineer taking the group | `pnpm plan claim` / `pnpm plan unclaim` in the application repository |
+| Checkbox state | The engineer who did the work | `pnpm plan done` / `pnpm plan undone` in the application repository |
 
 A PM or designer writes the proposal and the specs, and nothing else: a change of theirs carries no `tasks.md` until an engineer plans the delivery, either by promoting it to `full-planning` or by authoring it that way from the start. Whoever writes the task text is therefore the person who will implement it, which is why groups carry no owner tags at that point — an engineer claims a group at pickup, and may be claiming their own.
 
@@ -74,7 +74,7 @@ A task line before the first group heading is ignored.
 
 | Tool | Repository | Purpose |
 | --- | --- | --- |
-| `scripts/openspec/plan-preflight.mjs` | this one | Before PM edits a `tasks.md` engineering is implementing: refuses a stale or dirty copy, then prints the owners and counts being edited on top of |
+| `scripts/openspec/plan-preflight.mjs` | this one | Before anyone edits a `tasks.md` engineering is implementing: refuses a stale or dirty copy, then prints the owners and counts being edited on top of |
 | `scripts/openspec/plan.mjs` | `grade10` | The engineer's board, plus `claim`, `unclaim`, `done`, and `undone`, each writing through to this store as a commit |
 
 Both parse this format independently — the application repository consumes this repository as a submodule and an OpenSpec store, not as a library, so there is no shared module to import. Change this document first when the convention changes, then both implementations, and check the table above for anything a change would silently invalidate.

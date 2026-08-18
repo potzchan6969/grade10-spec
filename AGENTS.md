@@ -39,6 +39,8 @@ For a new product feature:
 3. Use the `prd-authoring` skill when the feature turns on a product judgment the requirement text will not preserve — why this problem, for whom, what was ruled out, what will be measured. Skip the PRD when there is no such judgment.
 4. Keep task checkboxes accurate as work lands; fold accepted deltas into `openspec/specs/`, then archive under `openspec/changes/archive/YYYY-MM-DD-<change-name>/`.
 
+Read [`docs/governance/agent-workflow-example.md`](docs/governance/agent-workflow-example.md) for one feature walked through both repositories, from `openspec new change` to archive.
+
 Ask only questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or in the PRD's Decisions and open questions section when one exists.
 
 ## Product UI component contracts
