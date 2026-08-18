@@ -30,12 +30,12 @@ time after this change is accepted.
 
 ## 3. The collector's place and payload (owner: @sean)
 
-- [ ] 3.1 Make `Back returns to where they were` and `A new surface starts
+- [x] 3.1 Make `Back returns to where they were` and `A new surface starts
       at the top` pass: scroll restoration keyed to history entries.
-- [ ] 3.2 Make `The first visit pays for one surface` and `The destination
+- [x] 3.2 Make `The first visit pays for one surface` and `The destination
       loads on arrival` pass: each route module loads its page lazily, and
       the built output carries no surface's page code in the entry chunk.
-- [ ] 3.3 Run the full check suite and a production build as this group's
+- [x] 3.3 Run the full check suite and a production build as this group's
       verification.
 
 ## 4. Realign the crawlable change
