@@ -1,9 +1,7 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Button } from "@grade10/design-system/components/forms/button";
-import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { Stepper } from "@grade10/design-system/components/forms/stepper";
 import { cn } from "@grade10/design-system/lib/utils";
-import { Heart } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 
 type ProductCardProps = {
@@ -22,7 +20,7 @@ type ProductCardProps = {
   discountLabel?: ReactNode;
   /**
    * Figma's `isSoldOut` axis. Dims the photo, swaps the discount badge for
-   * SOLD OUT, disables the action, and drops the wishlist control.
+   * SOLD OUT, and disables the action.
    */
   soldOut?: boolean;
   /**
@@ -45,9 +43,6 @@ type ProductCardProps = {
   /** Action label. Defaults to `Add`, or `Sold Out` when `soldOut`. */
   actionLabel?: ReactNode;
   onAction?: () => void;
-  /** Accessible name for the wishlist control. */
-  wishlistLabel?: string;
-  onWishlistClick?: () => void;
   className?: string;
 };
 
@@ -56,9 +51,9 @@ type ProductCardProps = {
  * `isSoldOut` and `isAddedToCart`; discount is a boolean that shows the badge
  * and original price.
  *
- * The image and copy share one button target; the wishlist icon and the Add
- * button / stepper sit outside it so nested controls stay valid. Hover scales
- * the photo inside the clipped well. Sold-out tiles are inert.
+ * The image and copy share one button target; the Add button / stepper sit
+ * outside it so nested controls stay valid. Hover scales the photo inside the
+ * clipped well. Sold-out tiles are inert.
  */
 function ProductCard({
   className,
@@ -80,8 +75,6 @@ function ProductCard({
   ariaLabel,
   actionLabel,
   onAction,
-  wishlistLabel = "Add to wishlist",
-  onWishlistClick,
 }: ProductCardProps) {
   const cardAriaLabel =
     ariaLabel ?? (typeof name === "string" ? name : undefined);
@@ -174,7 +167,7 @@ function ProductCard({
       data-sold-out={soldOut || undefined}
       data-added-to-cart={(!soldOut && addedToCart) || undefined}
       className={cn(
-        "group/product-card relative flex w-full flex-col gap-3 pb-3",
+        "group/product-card flex w-full flex-col gap-3 pb-3",
         className,
       )}
     >
@@ -189,17 +182,6 @@ function ProductCard({
         >
           {body}
         </button>
-      )}
-      {soldOut ? null : (
-        <IconButton
-          aria-label={wishlistLabel}
-          className="absolute top-3 right-3 z-10 text-secondary-foreground"
-          onClick={onWishlistClick}
-          size="xs"
-          variant="ghost"
-        >
-          <Heart aria-hidden size={12} weight="regular" />
-        </IconButton>
       )}
       {soldOut ? (
         <Button className="w-full" disabled size="sm" variant="secondary">

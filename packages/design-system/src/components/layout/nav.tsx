@@ -15,7 +15,6 @@ import {
 import { cn } from "@grade10/design-system/lib/utils";
 import {
   Globe,
-  Heart,
   MagnifyingGlass,
   ShoppingBag,
   User,
@@ -52,11 +51,9 @@ type NavProps = ComponentProps<"header"> & {
   onLocaleChange?: (value: string) => void;
   onSearchClick?: () => void;
   onAccountClick?: () => void;
-  onWishlistClick?: () => void;
   onCartClick?: () => void;
   searchLabel?: string;
   accountLabel?: string;
-  wishlistLabel?: string;
   cartLabel?: string;
 };
 
@@ -148,11 +145,9 @@ function Nav({
   onLocaleChange,
   onSearchClick,
   onAccountClick,
-  onWishlistClick,
   onCartClick,
   searchLabel = "Search",
   accountLabel = "Account",
-  wishlistLabel = "Wishlist",
   cartLabel = "Cart",
   ...props
 }: NavProps) {
@@ -242,16 +237,6 @@ function Nav({
               variant="ghost"
             >
               <User aria-hidden size={16} weight="regular" />
-            </IconButton>
-          ) : null}
-          {onWishlistClick ? (
-            <IconButton
-              aria-label={wishlistLabel}
-              onClick={onWishlistClick}
-              size="md"
-              variant="ghost"
-            >
-              <Heart aria-hidden size={16} weight="regular" />
             </IconButton>
           ) : null}
           {onCartClick ? (

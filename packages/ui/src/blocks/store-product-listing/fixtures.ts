@@ -86,7 +86,6 @@ const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
   originalPrice: "HKD 123",
   discountLabel: "−15%",
   ariaLabel: `Ninja Spinner, item ${index + 1}`,
-  wishlistLabel: "Add to wishlist",
   actionLabel: "Add",
   addedToCart: index === 0,
   quantity: index === 0 ? 3 : 1,

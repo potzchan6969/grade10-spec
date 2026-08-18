@@ -7,7 +7,6 @@ type ProductListProps = {
   onProductClick?: (productId: string) => void;
   onProductAction?: (productId: string) => void;
   onProductQuantityChange?: (productId: string, quantity: number) => void;
-  onProductWishlistClick?: (productId: string) => void;
   className?: string;
 };
 
@@ -23,7 +22,6 @@ function ProductList({
   onProductClick,
   onProductAction,
   onProductQuantityChange,
-  onProductWishlistClick,
   className,
 }: ProductListProps) {
   return (
@@ -57,16 +55,10 @@ function ProductList({
               ? (value) => onProductQuantityChange(product.id, value)
               : undefined
           }
-          onWishlistClick={
-            onProductWishlistClick
-              ? () => onProductWishlistClick(product.id)
-              : undefined
-          }
           originalPrice={product.originalPrice}
           price={product.price}
           quantity={product.quantity}
           soldOut={product.soldOut}
-          wishlistLabel={product.wishlistLabel}
         />
       ))}
     </div>

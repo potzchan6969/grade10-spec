@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, within } from "storybook/test";
 import { ProductCard } from "./product-card";
 
 const IMAGE = new URL("./product-card.fixture.png", import.meta.url).href;
@@ -34,6 +35,10 @@ export const Default: Story = {
       </div>
     ),
   ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByRole("button", { name: /wishlist/i })).toBeNull();
+  },
 };
 
 /** Figma `isSoldOut=true` — dimmed photo, SOLD OUT badge, disabled action. */
@@ -46,6 +51,10 @@ export const SoldOut: Story = {
       </div>
     ),
   ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByRole("button", { name: /wishlist/i })).toBeNull();
+  },
 };
 
 /** The three rungs Figma draws, at the designed 260px width. */

@@ -24,7 +24,7 @@ const LOCALES = [
   { value: "KR", label: "South Korea (KRW)" },
 ];
 
-const CONTROLS = ["Account", "Wishlist", "Cart"];
+const CONTROLS = ["Account", "Cart"];
 
 const meta = {
   title: "Components/Nav",
@@ -41,7 +41,6 @@ const meta = {
     locale: "HK",
     onLocaleChange: fn(),
     onAccountClick: fn(),
-    onWishlistClick: fn(),
     onCartClick: fn(),
   },
 } satisfies Meta<typeof Nav>;
@@ -57,6 +56,7 @@ export const Default: Story = {
       expect(canvas.getByRole("button", { name: control })).toBeInTheDocument();
     }
     expect(canvas.queryByRole("button", { name: "Search" })).toBeNull();
+    expect(canvas.queryByRole("button", { name: "Wishlist" })).toBeNull();
     expect(
       canvas.getByRole("button", { name: "Hong Kong (HKD)" }),
     ).toBeInTheDocument();
@@ -102,8 +102,8 @@ export const WithoutCart: Story = {
 };
 
 /**
- * The grade10 site as it stands: an account to reach, and no search, wishlist
- * or basket behind the icons the set draws.
+ * The grade10 site as it stands: an account to reach, and no search or
+ * basket behind the icons the set draws.
  */
 export const AccountOnly: Story = {
   args: {
@@ -112,7 +112,6 @@ export const AccountOnly: Story = {
     locales: [],
     onLocaleChange: undefined,
     onSearchClick: undefined,
-    onWishlistClick: undefined,
     onCartClick: undefined,
   },
   play: async ({ canvasElement }) => {
@@ -158,7 +157,6 @@ export const NothingDefaulted: Story = {
     onLocaleChange: undefined,
     onSearchClick: undefined,
     onAccountClick: undefined,
-    onWishlistClick: undefined,
     onCartClick: undefined,
   },
   play: async ({ canvasElement }) => {

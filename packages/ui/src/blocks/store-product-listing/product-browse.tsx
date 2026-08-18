@@ -58,7 +58,6 @@ type ProductBrowseProps = {
   onProductClick?: (productId: string) => void;
   onProductAction?: (productId: string) => void;
   onProductQuantityChange?: (productId: string, quantity: number) => void;
-  onProductWishlistClick?: (productId: string) => void;
 
   className?: string;
 };
@@ -115,7 +114,6 @@ function ProductBrowse({
   onProductClick,
   onProductAction,
   onProductQuantityChange,
-  onProductWishlistClick,
   className,
 }: ProductBrowseProps) {
   return (
@@ -173,7 +171,6 @@ function ProductBrowse({
               onProductAction={onProductAction}
               onProductClick={onProductClick}
               onProductQuantityChange={onProductQuantityChange}
-              onProductWishlistClick={onProductWishlistClick}
               products={results.data}
             />
           ) : null}

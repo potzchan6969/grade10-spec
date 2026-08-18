@@ -26,11 +26,10 @@ const STORE_NAV = {
     { label: "Store Locator", href: "#locator" },
   ],
   /* A control renders only where a handler backs it, and this workbench
-   * assembles the storefront the Figma nav draws — locale, account, wishlist,
-   * cart. A store with fewer surfaces passes fewer and shows fewer. */
+   * assembles the storefront the Figma nav draws — locale, account, cart.
+   * A store with fewer surfaces passes fewer and shows fewer. */
   onLocaleChange: noop,
   onAccountClick: noop,
-  onWishlistClick: noop,
   onCartClick: noop,
 };
 
@@ -162,7 +161,6 @@ const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
   originalPrice: "HKD 123",
   discountLabel: "−15%",
   ariaLabel: `Ninja Spinner, item ${index + 1}`,
-  wishlistLabel: "Add to wishlist",
   actionLabel: "Add",
   soldOut: index === 7,
 }));

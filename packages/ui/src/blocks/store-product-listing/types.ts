@@ -26,7 +26,6 @@ type ProductSummary = {
   actionLabel?: ReactNode;
   /** Accessible name for the tile when it is activatable. */
   ariaLabel?: string;
-  wishlistLabel?: string;
 };
 
 /**
