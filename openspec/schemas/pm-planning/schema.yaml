@@ -235,13 +235,24 @@ apply:
   tracks: null
   instruction: |
     This change is planning, and planning is finished: pm-planning ends at the
-    specs, and there is no tasks.md here to work through. Do not implement it
-    in this repo.
+    specs, and there is no tasks.md yet. There is nothing to apply as it stands.
 
-    Hand the proposal and the spec deltas to engineering, who break the work
-    down and build it as their own change in the implementing repository. Any
-    apply guidance below describes that work and belongs there, not here.
+    Engineering does not open a change of its own to pick this up. The
+    implementing repository has no planning shape - its openspec/ resolves to
+    this store - so the work is planned here, and this change is promoted when
+    someone is ready to build it:
 
-    The exception is a delta that names a component or token this repo owns -
-    that part is work here, and it needs a full-planning change carrying its
-    own design, ui, and tasks.
+    1. Set `schema: full-planning` in the change's .openspec.yaml.
+    2. Add design.md and tasks.md, plus ui.md when the change alters something
+       a user sees. `openspec status --change <change-name>` then lists what is
+       still missing.
+
+    The proposal and the spec deltas carry over untouched, and apply works from
+    tasks.md as it does for any full-planning change.
+
+    Until that happens the engineer's board reports this change as still being
+    planned: a change with no tasks.md is indistinguishable from one whose plan
+    is unfinished. Promote it rather than leaving it to be found.
+
+    Any apply guidance below describes the promoted change. None of it applies
+    while the change is still pm-planning.

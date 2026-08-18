@@ -28,7 +28,7 @@ Read [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md
 
 ## Product specification workflow
 
-Two workflow schemas exist under `openspec/schemas/`, both sharing the same proposal and spec templates. `full-planning` (the default: proposal → specs → design → ui → tasks) is for changes that carry their implementation plan here. `pm-planning` (proposal → specs) is for product planning that is complete once the requirements are specified — create one with `openspec new change <name> --schema pm-planning`. A change records its schema in its `.openspec.yaml` at creation.
+Two workflow schemas exist under `openspec/schemas/`, both sharing the same proposal and spec templates. `full-planning` (the default: proposal → specs → design → ui → tasks) is for changes that carry their implementation plan here. `pm-planning` (proposal → specs) is for product planning that is complete once the requirements are specified — create one with `openspec new change <name> --schema pm-planning`. A change records its schema in its `.openspec.yaml` at creation, and that choice is not final: a `pm-planning` change is promoted to `full-planning` when someone is ready to build it — set `schema: full-planning`, add `design.md` and `tasks.md`, and the proposal and deltas carry over. Engineering never opens a change in the application repository; that repository has no planning shape of its own, so promotion here is how work reaches the engineer's board.
 
 For a new product feature:
 

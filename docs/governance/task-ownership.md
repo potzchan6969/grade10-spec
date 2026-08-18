@@ -6,6 +6,8 @@ A change's `tasks.md` is written here and checked off from the application repos
 
 `openspec/changes/<change-id>/tasks.md` in this store. Nothing else reads the convention, and no other file in this repository carries owners.
 
+A change has no `tasks.md` until it is planned that far, and both boards render that state as "still being planned". A `pm-planning` change stays in it by design until it is promoted to `full-planning` — see [`prd-and-openspec.md`](prd-and-openspec.md) — so a promotion, not a message, is what puts the work in front of an engineer.
+
 ## The format
 
 A group is a level-two heading numbered with a single integer. Its tasks are checkbox list items whose first token is the task id.

@@ -81,7 +81,7 @@ rules:
 operations:
   apply:
     guidance:
-      - "This guidance describes implementing a change that carries a tasks.md - a full-planning change. A pm-planning change has none: it is complete at its specs, and engineering plans and builds it in the implementing repo, where this guidance applies rather than here."
+      - "This guidance describes implementing a change that carries a tasks.md - a full-planning change. A pm-planning change has none: it is complete at its specs, and is promoted to full-planning - design.md and tasks.md added, `schema:` changed in its .openspec.yaml - when someone is ready to build it. Until then there is nothing here to apply."
       - "Run the implementing repository's `tdd` skill when it ships one (grade10 has it at `.claude/skills/tdd`); its red-green loop and test-quality rules govern the test-first work described next."
       - "Work test-first inside each task, one scenario at a time: the seams under test are pre-agreed - they are the spec scenarios and public export contracts the task names, never internals. Write the failing test at that seam, then only enough code to make it pass."
       - "Expected values in a test come from the spec or a worked example, never from recomputing what the code does; a test that breaks under refactor without a behavior change is testing the wrong thing."

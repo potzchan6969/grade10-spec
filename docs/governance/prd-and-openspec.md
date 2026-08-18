@@ -77,6 +77,10 @@ For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 
 Update the active change when you learn an implementation constraint, split delivery, change a component export, or add or remove a validation step. Update the PRD too only if that constraint changed a recorded product decision.
 
+A change created with `--schema pm-planning` carries only `proposal.md` and `specs/`, for planning that is complete once the requirements are. It is **promoted** to `full-planning` when someone is ready to build it: set `schema: full-planning` in the change's `.openspec.yaml`, then add `design.md`, `tasks.md`, and `ui.md` when the change alters something a user sees. The proposal and the deltas carry over untouched.
+
+Promotion is how the work reaches an engineer. The application repository has no planning shape of its own — its `openspec/` is config-only and resolves to this store — so nobody opens a change there, and a change with no `tasks.md` shows on the engineer's board as still being planned. A finished pm-planning change that is never promoted is therefore invisible as ready work, however complete its specs are.
+
 ### 5. Keep component contracts aligned
 
 A capability spec names the exact exports a consuming application must provide. The change that alters one must:
