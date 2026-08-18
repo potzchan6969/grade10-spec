@@ -58,6 +58,10 @@ limits.
   verification and account-recovery requirements.
 - **Display-name uniqueness.** A display name is a label on a private page, not
   a handle; two collectors may hold the same one.
+- **Secret avatar URLs.** The image is served from an unguessable address that
+  needs no session, so it is cacheable and survives into public profiles
+  unchanged. Anyone who obtains the URL keeps a working link until the avatar
+  is replaced or removed.
 - **Collector identity beyond the basics** — location, social links, collection
   showcases, badges.
 - **ZZZ.** `zzz-store` has no account surface and gains none here.
@@ -67,6 +71,9 @@ limits.
 ### New Capabilities
 - `grade10-store/account-profile`: what a signed-in collector's account profile
   holds, how it is read and edited, and how the avatar is set and removed.
+- `shared-ui/store-profile`: the profile components `@grade10/ui` exports and
+  what each one is responsible for. The block ships today with no spec; this
+  change alters its exports, so the contract is written down here.
 
 ### Modified Capabilities
 
@@ -80,9 +87,16 @@ None. No existing capability's requirements change.
   response instead of returning null; the write path is unchanged. Avatar
   upload, storage, and serving are new; the auction service's lot-image
   handling is the precedent in that repository.
-- **Design system** — none. `Avatar`, `AvatarImage`, and `AvatarFallback`
-  already ship from `@grade10/design-system`, so this change needs no new
-  component, variant, or token, and no work in this repository.
+- **Shared UI (`@grade10/ui`)** — the `store-profile` block changes:
+  `ProfileDetails` gains the avatar and email, `ProfileForm` gains the avatar
+  control, and `ProfileFormValues` gains the avatar. This is work in the
+  grade10-spec repository, and it lands before the grade10 side can consume it.
+- **Design system** — no new component, variant, or token. `Avatar`,
+  `AvatarImage`, and `AvatarFallback` already ship from
+  `@grade10/design-system`.
+- **Figma** — the `store-profile` block has no published frames and no
+  `.figma.ts` mappings, unlike `store-product-listing`. It stays that way here:
+  the components are built from the requirements below.
 - **Auth service** — read-only consumer of the session's name and email. No
   change.
 - **Admin panels** — unaffected.
