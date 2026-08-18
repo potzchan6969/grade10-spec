@@ -49,17 +49,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Forks and Dependabot cannot read secrets. Skipping loudly is the point:
-      # a design-sync check that quietly passes without reaching Figma is worse
-      # than no check, because a green tick then means nothing.
+      # A design-sync check that quietly passes without reaching Figma is worse
+      # than no check, because a green tick then means nothing. Forks and
+      # Dependabot genuinely cannot read secrets, so those warn and carry on;
+      # anywhere else a missing token is a misconfiguration and fails the job.
       - name: Check for Figma token
         id: token
+        env:
+          SECRETS_UNAVAILABLE: ${{ github.event.pull_request.head.repo.fork == true || github.actor == 'dependabot[bot]' }}
         run: |
           if [ -n "${{ secrets.FIGMA_TOKEN }}" ]; then
             echo "available=true" >> "$GITHUB_OUTPUT"
-          else
+          elif [ "$SECRETS_UNAVAILABLE" = "true" ]; then
             echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "::warning title=Design sync skipped::FIGMA_TOKEN is not available to this run, so Figma-vs-code drift was NOT checked."
+            echo "::warning title=Design sync skipped::FIGMA_TOKEN is unavailable to forked-PR and Dependabot runs, so Figma-vs-code drift was NOT checked."
+          else
+            echo "::error title=Design sync misconfigured::FIGMA_TOKEN is not set for this repository, so Figma-vs-code drift was NOT checked. Add it under Settings -> Secrets and variables -> Actions."
+            exit 1
           fi
 
       - name: Check components against Figma

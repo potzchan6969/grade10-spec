@@ -10,6 +10,10 @@
  *   FIGMA_TOKEN=figd_… pnpm components:check        # unattended, use this in CI
  *   FIGMA_DUMP=~/Downloads/dump.json pnpm components:check   # manual fallback
  *
+ * Locally, put FIGMA_TOKEN in a .env at the repository root instead of
+ * prefixing every invocation; see .env.example. CI passes it as a real
+ * environment variable and needs no file.
+ *
  * ERROR = the mapping is broken and Dev Mode will emit wrong code; exits 1.
  * WARN  = the two sides disagree, which may be intentional; does not exit 1.
  *
@@ -19,14 +23,27 @@
  *
  * Values are checked as well as names. Every axis and option could line up while
  * the colours and sizes were wrong — which is exactly what happened to Button,
- * whose variants matched by name for months while `default` painted a solid fill
- * against a design that specifies a tint. See checkValues.
+ * whose variants matched by name for months while `default` painted a 10% tint
+ * against a design that specifies a solid fill. See checkValues.
+ *
+ * Base states only: hover, disabled, and loading values are never compared, so
+ * a state expressed as an opacity over the variant's own colours is invisible
+ * here — the bg-* token this reads is unchanged by it.
  */
 import { appendFile, readdir, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const pkgDir = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+
+// A repository-root .env is a convenience for humans; CI passes the token as a
+// real environment variable and has no file. loadEnvFile throws when the file
+// is absent, which is the normal case in CI, so the miss is not an error.
+try {
+  process.loadEnvFile(resolve(pkgDir, "../..", ".env"));
+} catch {
+  // No .env checked in or present — fall through to the ambient environment.
+}
 const die = (m) => {
   console.error(`✗ ${m}`);
   process.exit(1);
