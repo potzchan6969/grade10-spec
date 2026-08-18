@@ -14,7 +14,7 @@ the boundary. Groups 2, 3, and 4 are grade10 and depend on that bump.
 - [x] 1.7 Make `A narrow viewport` pass for the header alone: the bar wraps rather than overflowing, with no absolute-positioned navigation at narrow widths.
 - [ ] 1.8 Cover a header with every handler and a header with none in the stories, check `apps/preview`'s product-list page still composes, and run this repository's checks.
 
-## 2. The shell
+## 2. The shell (owner: @sean)
 
 - [ ] 2.1 Bump the `external/grade10-spec` submodule to the commit carrying group 1.
 - [ ] 2.2 Make `Every address is wrapped`, `The shell is not a page`, and `The page has one of each landmark` pass: the application root renders `Nav`, one content region, and `Footer` around every surface including not-found.
