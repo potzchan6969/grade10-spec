@@ -3,7 +3,7 @@
 Group 1 lands in this repository; the submodule bump at the top of group 2 is
 the boundary. Groups 2, 3, and 4 are grade10 and depend on that bump.
 
-## 1. Site chrome
+## 1. Site chrome (owner: @sean)
 
 - [ ] 1.1 Make `An application imports the chrome` and `A page renders one without the other` pass: `Nav`, `Footer`, `NavProps`, `NavItem`, `NavLink`, `FooterProps`, `FooterColumn`, and `FooterLink` exported from the design system's entry.
 - [ ] 1.2 Make `A storefront with no cart`, `Only the supplied controls appear`, and `The locale label without a handler` pass — a search, account, wishlist, or cart control renders only with its handler, and the locale renders as a label without one.
