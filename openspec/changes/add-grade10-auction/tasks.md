@@ -1,8 +1,8 @@
 # Tasks: Grade10 Auction
 
-## 1. Auction and Stripe contracts
+## 1. Auction and Stripe contracts (owner: @htonyl)
 
-- [ ] 1.1 Make `Auction listing facts are available`, `A closed listing is absolute`, `Money facts use minor units and currency`, and `A consumer reads a listing contract` pass by migrating public contracts from auction-item/lot and anti-snipe terms to listing and extension terms.
+- [x] 1.1 Make `Auction listing facts are available`, `A closed listing is absolute`, `Money facts use minor units and currency`, and `A consumer reads a listing contract` pass by migrating public contracts from auction-item/lot and anti-snipe terms to listing and extension terms.
 - [ ] 1.2 Make `Stripe configuration is incomplete` and `A missed authorization webhook is repaired` pass by defining server-only bid authorization, asynchronous release, webhook, and reconciliation outcomes.
 - [ ] 1.3 Verify the Auction and Stripe contract fixtures preserve provider failures as typed, credential-safe outcomes.
 
