@@ -40,7 +40,7 @@ the boundary. Groups 2, 3, and 4 are grade10 and depend on that bump.
 
 ## 5. Delivery and review (owner: @sean)
 
-- [ ] 5.1 Confirm with design that a storefront supplying fewer handlers renders fewer controls, rather than diverging from the published set.
+- [x] 5.1 Confirm with design that a storefront supplying fewer handlers renders fewer controls, rather than diverging from the published set.
 - [x] 5.2 Verify every scenario in both deltas, then run `openspec validate add-grade10-site-shell` and `openspec validate --specs`.
 - [x] 5.3 Review the branch for convention drift and for delta coverage separately: requirements missing, partial, or implemented differently than specified.
-- [ ] 5.4 After rollout is confirmed, fold both accepted deltas into `openspec/specs/`, adding the `grade10-site` product directory, and archive this change.
+- [x] 5.4 After rollout is confirmed, fold both accepted deltas into `openspec/specs/`, adding the `grade10-site` product directory, and archive this change.
