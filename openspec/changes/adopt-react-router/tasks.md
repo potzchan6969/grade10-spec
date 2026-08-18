@@ -28,7 +28,7 @@ time after this change is accepted.
 - [x] 2.3 Run typecheck, lint, and the app's test lane as this group's
       verification.
 
-## 3. The collector's place and payload
+## 3. The collector's place and payload (owner: @sean)
 
 - [ ] 3.1 Make `Back returns to where they were` and `A new surface starts
       at the top` pass: scroll restoration keyed to history entries.
