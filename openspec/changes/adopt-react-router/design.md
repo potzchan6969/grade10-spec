@@ -102,8 +102,9 @@ regress what ships today.
 `packages/*/frontend` imports no router. Pages read params and location
 through the framework and hand features props and callbacks, the seam the
 application repository's clean-architecture convention already draws.
-`zzz-store` and the admin panels run no router, so a package that imported
-one would be unusable across the brands it serves.
+The shared feature packages serve both brands and the admin panels — a
+router import in one would bind every consumer to one application's
+routing choice, and the admin panels run none.
 
 *Alternatives:* letting features read `useParams` directly — rejected: it
 binds shared packages to one application's routing choice and breaks their

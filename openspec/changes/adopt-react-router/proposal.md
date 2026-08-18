@@ -59,8 +59,9 @@ were.
 - **Data loading through the router.** Loaders, pending states, and route
   errors for live data are each page's own change to adopt.
 - **New surfaces.** The five addresses the site answers today, no more.
-- **ZZZ and the admin panels.** Neither runs a router; their navigation is
-  their own concern, and nothing here binds them.
+- **ZZZ and the admin panels.** Nothing here binds them. The ZZZ store's
+  addresses are `add-zzz-store-navigation`'s to give, on this change's
+  foundation; the admin panels stay as they are.
 - **Feature packages touching the router.** `packages/*/frontend` stays
   router-free — pages read the address and pass props, as the application
   repository's conventions already require.
