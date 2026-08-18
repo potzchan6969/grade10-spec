@@ -7,7 +7,7 @@ other.
 
 ## 1. Public pages served whole (owner: @sean)
 
-- [ ] 1.1 Move every browser-global read out of module scope and out of render, so a route module renders under the prerender build.
+- [x] 1.1 Move every browser-global read out of module scope and out of render, so a route module renders under the prerender build.
 - [ ] 1.2 Make `Each public surface names itself`, `Two surfaces, two names`, and `The title follows navigation` pass: each route module exports its own identity and derives its `meta` from it, so a public surface without one fails to compile.
 - [ ] 1.3 Make `The marketing page answers whole` and `A catalogue answers its identity` pass: the public addresses are prerendered, the framework emitting each surface's document from the real application, listings still arriving by script.
 - [ ] 1.4 Make `Scripts only add to the page` pass: the browser hydrates the served document, with every existing page-shell and navigation scenario green.
