@@ -6,11 +6,32 @@ import type { FilterGroup, ProductSummary, SortOption } from "./types";
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
 const SORT_OPTIONS: SortOption[] = [
-  { id: "popularity", label: "Popularity" },
-  { id: "latest", label: "Latest deal" },
-  { id: "price-drop", label: "Price drop" },
-  { id: "price-asc", label: "Lowest price" },
-  { id: "price-desc", label: "Highest price" },
+  { id: "popular", label: "Popular" },
+  { id: "new", label: "New" },
+  { id: "price-desc", label: "Price", toggleId: "price-asc" },
+];
+
+const CHIP_FILTERS: FilterGroup[] = [
+  {
+    id: "product-type",
+    label: "Type",
+    options: [
+      { id: "pack", label: "Pack" },
+      { id: "box", label: "Box" },
+    ],
+  },
+];
+
+const SELECT_FILTERS: FilterGroup[] = [
+  {
+    id: "series",
+    label: "Series",
+    options: [
+      { id: "all", label: "All Series" },
+      { id: "m4", label: "M4" },
+      { id: "m10", label: "M10" },
+    ],
+  },
 ];
 
 const FILTER_GROUPS: FilterGroup[] = [
@@ -95,11 +116,13 @@ const PAGINATION_LABELS = {
 };
 
 export {
+  CHIP_FILTERS,
   FIGMA_SELECTION,
   FILTER_GROUPS,
   IMAGE,
   PAGINATION_LABELS,
   PRODUCTS,
+  SELECT_FILTERS,
   SELECTION,
   SORT_OPTIONS,
 };

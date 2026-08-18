@@ -1,9 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import {
+  CHIP_FILTERS,
   FILTER_GROUPS,
   PAGINATION_LABELS,
   PRODUCTS,
+  SELECT_FILTERS,
   SELECTION,
   SORT_OPTIONS,
 } from "./fixtures";
@@ -17,15 +19,23 @@ const meta = {
   args: {
     filters: { status: "ready", data: FILTER_GROUPS },
     filterPanelLabel: "Filters",
-    selection: SELECTION,
+    selection: {
+      collection: ["pokemon"],
+      sets: ["m4"],
+      availability: ["in-stock"],
+    },
     onFilterChange: fn(),
     results: { status: "ready", data: PRODUCTS },
     resultsLabel: "Products",
-    resultCount: "38 products",
+    title: "Pokémon",
+    resultCount: "38",
     sortOptions: SORT_OPTIONS,
-    sortValue: "popularity",
-    sortTriggerLabel: "Sort by popularity",
+    sortValue: "popular",
+    chipFilters: CHIP_FILTERS,
+    selectFilters: SELECT_FILTERS,
+    selectFilterValues: { series: "all" },
     onSortChange: fn(),
+    onSelectFilterChange: fn(),
     page: 2,
     pageCount: 10,
     onPageChange: fn(),
@@ -38,6 +48,22 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+/** Type chips start unselected; that empty selection does not hide results. */
+export const TypeChipsStartUnselected: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("button", { name: "Pack" })).toHaveAttribute(
+      "aria-pressed",
+      "false",
+    );
+    expect(canvas.getByRole("button", { name: "Box" })).toHaveAttribute(
+      "aria-pressed",
+      "false",
+    );
+    expect(canvas.getAllByText("Ninja Spinner").length).toBeGreaterThan(0);
+  },
+};
 
 /** Both regions loading. */
 export const Loading: Story = {
@@ -66,7 +92,7 @@ export const FiltersLoadingResultsReady: Story = {
   args: { filters: { status: "loading" } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("38 products")).toBeInTheDocument();
+    expect(canvas.getByText("38")).toBeInTheDocument();
   },
 };
 
@@ -74,7 +100,8 @@ export const FiltersLoadingResultsReady: Story = {
  * panel and the current selection intact. */
 export const NoMatch: Story = {
   args: {
-    resultCount: "0 products",
+    resultCount: "0",
+    selection: SELECTION,
     results: {
       status: "empty",
       message: "No products match these filters.",
@@ -93,7 +120,7 @@ export const NoMatch: Story = {
 /** An empty catalog: a different message, and no clear-filters action. */
 export const EmptyCatalog: Story = {
   args: {
-    resultCount: "0 products",
+    resultCount: "0",
     selection: {},
     results: {
       status: "empty",

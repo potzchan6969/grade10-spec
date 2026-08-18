@@ -11,10 +11,12 @@ import {
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import {
+  CHIP_FILTERS,
   FILTER_GROUPS,
   INITIAL_SELECTION,
   PAGINATION_LABELS,
   PRODUCTS,
+  SELECT_FILTERS,
   SORT_OPTIONS,
   STORE_FOOTER,
   STORE_NAV,
@@ -35,11 +37,10 @@ const BANNER_IMAGE = new URL("./collection-banner.fixture.png", import.meta.url)
 function ProductListPage() {
   const [selection, setSelection] =
     useState<FilterSelection>(INITIAL_SELECTION);
-  const [sort, setSort] = useState("popularity");
+  const [sort, setSort] = useState("popular");
+  const [series, setSeries] = useState("all");
   const [page, setPage] = useState(2);
   const [cart, setCart] = useState<Record<string, number>>({ "1": 3 });
-
-  const sortLabel = SORT_OPTIONS.find((option) => option.id === sort)?.label;
 
   return (
     <div className="bg-background">
@@ -81,10 +82,11 @@ function ProductListPage() {
         onProductQuantityChange={(productId, quantity) =>
           setCart((previous) => ({ ...previous, [productId]: quantity }))
         }
+        onSelectFilterChange={(_groupId, optionId) => setSeries(optionId)}
         onSortChange={setSort}
         page={page}
         pageCount={10}
-        resultCount="38 products"
+        resultCount="38"
         results={{
           status: "ready",
           data: PRODUCTS.map((product) => ({
@@ -94,10 +96,13 @@ function ProductListPage() {
           })),
         }}
         resultsLabel="Products"
+        selectFilters={SELECT_FILTERS}
+        selectFilterValues={{ series }}
         selection={selection}
         sortOptions={SORT_OPTIONS}
-        sortTriggerLabel={`Sort by ${String(sortLabel).toLowerCase()}`}
         sortValue={sort}
+        title="Pokémon"
+        chipFilters={CHIP_FILTERS}
       />
       <Footer {...STORE_FOOTER} />
     </div>

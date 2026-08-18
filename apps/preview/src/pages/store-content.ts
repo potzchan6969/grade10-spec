@@ -82,11 +82,32 @@ const STORE_FOOTER = {
 };
 
 const SORT_OPTIONS: SortOption[] = [
-  { id: "popularity", label: "Popularity" },
-  { id: "latest", label: "Latest deal" },
-  { id: "price-drop", label: "Price drop" },
-  { id: "price-asc", label: "Lowest price" },
-  { id: "price-desc", label: "Highest price" },
+  { id: "popular", label: "Popular" },
+  { id: "new", label: "New" },
+  { id: "price-desc", label: "Price", toggleId: "price-asc" },
+];
+
+const CHIP_FILTERS: FilterGroup[] = [
+  {
+    id: "product-type",
+    label: "Type",
+    options: [
+      { id: "pack", label: "Pack" },
+      { id: "box", label: "Box" },
+    ],
+  },
+];
+
+const SELECT_FILTERS: FilterGroup[] = [
+  {
+    id: "series",
+    label: "Series",
+    options: [
+      { id: "all", label: "All Series" },
+      { id: "m4", label: "M4" },
+      { id: "m10", label: "M10" },
+    ],
+  },
 ];
 
 const FILTER_GROUPS: FilterGroup[] = [
@@ -147,7 +168,6 @@ const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
 }));
 
 const INITIAL_SELECTION = {
-  "product-type": ["box", "pack"],
   collection: ["pokemon"],
   sets: ["m4"],
   availability: ["in-stock"],
@@ -161,10 +181,12 @@ const PAGINATION_LABELS = {
 };
 
 export {
+  CHIP_FILTERS,
   FILTER_GROUPS,
   INITIAL_SELECTION,
   PAGINATION_LABELS,
   PRODUCTS,
+  SELECT_FILTERS,
   SORT_OPTIONS,
   STORE_FOOTER,
   STORE_NAV,

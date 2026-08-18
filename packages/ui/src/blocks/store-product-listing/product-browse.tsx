@@ -33,12 +33,16 @@ type ProductBrowseProps = {
   results: AsyncState<readonly ProductSummary[]>;
   /** Accessible name for the results region. */
   resultsLabel: string;
+  title: ReactNode;
   resultCount: ReactNode;
 
   sortOptions: readonly SortOption[];
   sortValue?: string;
-  sortTriggerLabel?: ReactNode;
   onSortChange?: (optionId: string) => void;
+  chipFilters?: readonly FilterGroup[];
+  selectFilters?: readonly FilterGroup[];
+  selectFilterValues?: Readonly<Record<string, string>>;
+  onSelectFilterChange?: (groupId: string, optionId: string) => void;
 
   page: number;
   pageCount: number;
@@ -78,8 +82,8 @@ function pageItems(page: number, pageCount: number): (number | "gap")[] {
 }
 
 /**
- * The category-browsing surface: filters, a result count and sort control, a
- * grid of tiles, and pagination.
+ * The category-browsing surface: filters, a titled result header with sort
+ * and filter chips, a grid of tiles, and pagination.
  *
  * Filters and results are independent async boundaries — a failed result set
  * leaves the filter panel usable, which is the common case when facets and
@@ -92,11 +96,15 @@ function ProductBrowse({
   onFilterChange,
   results,
   resultsLabel,
+  title,
   resultCount,
   sortOptions,
   sortValue,
-  sortTriggerLabel,
   onSortChange,
+  chipFilters,
+  selectFilters,
+  selectFilterValues,
+  onSelectFilterChange,
   page,
   pageCount,
   onPageChange,
@@ -128,11 +136,17 @@ function ProductBrowse({
           data-slot="product-browse-results"
         >
           <ProductListHeader
+            chipFilters={chipFilters}
+            onFilterChange={onFilterChange}
+            onSelectFilterChange={onSelectFilterChange}
             onSortChange={onSortChange}
             resultCount={resultCount}
+            selectFilters={selectFilters}
+            selectFilterValues={selectFilterValues}
+            selection={selection}
             sortOptions={sortOptions}
-            sortTriggerLabel={sortTriggerLabel}
             sortValue={sortValue}
+            title={title}
           />
 
           {results.status === "loading" ? (

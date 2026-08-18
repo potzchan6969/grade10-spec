@@ -54,7 +54,15 @@ type FilterGroup = {
  */
 type FilterSelection = Readonly<Record<string, readonly string[]>>;
 
-type SortOption = { id: string; label: ReactNode };
+type SortOption = {
+  id: string;
+  label: ReactNode;
+  /** When this option is already selected, a further activation reports
+   * `toggleId` instead of `id`. The header rotates `trailing` 180° while
+   * `sortValue` equals `toggleId`. */
+  toggleId?: string;
+  trailing?: ReactNode;
+};
 
 export type {
   AsyncAction,
