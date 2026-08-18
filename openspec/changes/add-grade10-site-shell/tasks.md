@@ -5,13 +5,13 @@ the boundary. Groups 2, 3, and 4 are grade10 and depend on that bump.
 
 ## 1. Site chrome (owner: @sean)
 
-- [ ] 1.1 Make `An application imports the chrome` and `A page renders one without the other` pass: `Nav`, `Footer`, `NavProps`, `NavItem`, `NavLink`, `FooterProps`, `FooterColumn`, and `FooterLink` exported from the design system's entry.
-- [ ] 1.2 Make `A storefront with no cart`, `Only the supplied controls appear`, and `The locale label without a handler` pass — a search, account, wishlist, or cart control renders only with its handler, and the locale renders as a label without one.
-- [ ] 1.3 Make `No promo content` and `No utility links` pass by omitting each region, leaving no reserved height.
-- [ ] 1.4 Make `A surface is current` and `No surface is current` pass, marking the current item visually and to assistive technology.
-- [ ] 1.5 Make `Every section is supplied` and `A section has no content` pass in `Footer`.
-- [ ] 1.6 Make `Nothing is defaulted` pass — no visible copy either component supplies itself.
-- [ ] 1.7 Make `A narrow viewport` pass for the header alone: the bar wraps rather than overflowing, with no absolute-positioned navigation at narrow widths.
+- [x] 1.1 Make `An application imports the chrome` and `A page renders one without the other` pass: `Nav`, `Footer`, `NavProps`, `NavItem`, `NavLink`, `FooterProps`, `FooterColumn`, and `FooterLink` exported from the design system's entry.
+- [x] 1.2 Make `A storefront with no cart`, `Only the supplied controls appear`, and `The locale label without a handler` pass — a search, account, wishlist, or cart control renders only with its handler, and the locale renders as a label without one.
+- [x] 1.3 Make `No promo content` and `No utility links` pass by omitting each region, leaving no reserved height.
+- [x] 1.4 Make `A surface is current` and `No surface is current` pass, marking the current item visually and to assistive technology.
+- [x] 1.5 Make `Every section is supplied` and `A section has no content` pass in `Footer`.
+- [x] 1.6 Make `Nothing is defaulted` pass — no visible copy either component supplies itself.
+- [x] 1.7 Make `A narrow viewport` pass for the header alone: the bar wraps rather than overflowing, with no absolute-positioned navigation at narrow widths.
 - [ ] 1.8 Cover a header with every handler and a header with none in the stories, check `apps/preview`'s product-list page still composes, and run this repository's checks.
 
 ## 2. The shell
