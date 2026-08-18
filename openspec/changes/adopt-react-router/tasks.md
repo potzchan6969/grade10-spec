@@ -40,10 +40,10 @@ time after this change is accepted.
 
 ## 4. Realign the crawlable change (owner: @sean)
 
-- [ ] 4.1 Rewrite `add-crawlable-public-pages`'s design.md to derive from
+- [x] 4.1 Rewrite `add-crawlable-public-pages`'s design.md to derive from
       this foundation: identity as route-module `meta`, emitted pages from
       the framework's prerender, the address seam the framework's own —
       its delta specs untouched.
-- [ ] 4.2 Revise that change's tasks.md to the collapsed shape and run
+- [x] 4.2 Revise that change's tasks.md to the collapsed shape and run
       `openspec validate` strictly across the store as this group's
       verification.
