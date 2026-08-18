@@ -23,15 +23,15 @@ the boundary. Groups 2, 3, and 4 are grade10 and depend on that bump.
 - [x] 2.5 Take the shell's copy from the reference frame: brand block, catalog description, corporate attribution, social links, copyright, and locale label.
 - [x] 2.6 Run `pnpm run typecheck`, `pnpm run lint`, and the grade10 app's test lane.
 
-## 3. Session and the account control
+## 3. Session and the account control (owner: @sean)
 
-- [ ] 3.1 Add sign-out to the profile page, before the header loses it, so the site is never without one.
-- [ ] 3.2 Make `Signed in`, `Signed out`, and `Sign-out has one home` pass through the account control's destination.
-- [ ] 3.3 Make `A first paint while the session resolves` and `No layout shift when the session arrives` pass — chrome renders before the session, and nothing in it moves when the session arrives.
-- [ ] 3.4 Make `Absent surfaces are absent controls` pass by supplying a handler only for the account control.
-- [ ] 3.5 Make `A collector is on a listed surface` and `A collector is on an unlisted surface` pass, including addresses beneath a listed surface.
-- [ ] 3.6 Delete `navigation/SiteHeader.tsx` in the commit that stops rendering it.
-- [ ] 3.7 Run the grade10 app's test lane and `pnpm run typecheck`.
+- [x] 3.1 Add sign-out to the profile page, before the header loses it, so the site is never without one.
+- [x] 3.2 Make `Signed in`, `Signed out`, and `Sign-out has one home` pass through the account control's destination.
+- [x] 3.3 Make `A first paint while the session resolves` and `No layout shift when the session arrives` pass — chrome renders before the session, and nothing in it moves when the session arrives.
+- [x] 3.4 Make `Absent surfaces are absent controls` pass by supplying a handler only for the account control.
+- [x] 3.5 Make `A collector is on a listed surface` and `A collector is on an unlisted surface` pass, including addresses beneath a listed surface.
+- [x] 3.6 Delete `navigation/SiteHeader.tsx` in the commit that stops rendering it.
+- [x] 3.7 Run the grade10 app's test lane and `pnpm run typecheck`.
 
 ## 4. Small widths
 
