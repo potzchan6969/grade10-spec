@@ -46,9 +46,11 @@ Group headings are free for us to use because OpenSpec parses only the checkbox 
 
 | Field | Written by | How |
 | --- | --- | --- |
-| Groups, task ids, task text | PM or designer, in this repository | Directly, after `pnpm run plan:preflight <change-id>` |
+| Groups, task ids, task text | The engineer planning the delivery, in this repository | Directly, after `pnpm run plan:preflight <change-id>` |
 | Owner tag | The engineer taking the group | `pnpm plan:claim` / `pnpm plan:unclaim` in the application repository |
 | Checkbox state | The engineer who did the work | `pnpm plan:done` / `pnpm plan:undone` in the application repository |
+
+A PM or designer writes the proposal and the specs, and nothing else: a change of theirs carries no `tasks.md` until an engineer plans the delivery, either by promoting it to `full-planning` or by authoring it that way from the start. Whoever writes the task text is therefore the person who will implement it, which is why groups carry no owner tags at that point — an engineer claims a group at pickup, and may be claiming their own.
 
 Both sides commit to this store from their own clone of it, and nothing merges the two automatically. Whoever is editing should commit and push promptly; the longer `tasks.md` is held, the more there is to conflict.
 

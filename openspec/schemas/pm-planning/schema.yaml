@@ -239,8 +239,9 @@ apply:
 
     Engineering does not open a change of its own to pick this up. The
     implementing repository has no planning shape - its openspec/ resolves to
-    this store - so the work is planned here, and this change is promoted when
-    someone is ready to build it:
+    this store - so delivery is planned here, by the engineer who picks the
+    change up. The author's part is finished; do not send the proposal back for
+    a task list. To promote:
 
     1. Set `schema: full-planning` in the change's .openspec.yaml.
     2. Add design.md and tasks.md, plus ui.md when the change alters something

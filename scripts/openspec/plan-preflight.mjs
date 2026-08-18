@@ -6,9 +6,10 @@
  *
  * This repo is the OpenSpec store for grade10, and that repo's apply
  * guidance tells engineers to check off tasks in this store's `tasks.md` and commit
- * that separately from their code. So both sides write the same file from different
- * clones, and neither side has a guard: PM can edit `tasks.md` on top of a stale copy,
- * hit a conflict, resolve it toward their own side, and delete an engineer's
+ * that separately from their code. So the same file is written from different clones,
+ * and neither side has a guard: whoever edits `tasks.md` here — the engineer who
+ * planned the delivery, restructuring a group — can do it on top of a stale copy, hit
+ * a conflict, resolve it toward their own side, and delete another engineer's
  * checkmarks. Nothing catches that — OpenSpec parses only the `- [ ] X.Y` lines and has
  * no idea what the count should have been, so `validate --strict` still passes and the
  * board just quietly under-reports.
