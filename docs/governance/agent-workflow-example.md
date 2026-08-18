@@ -78,6 +78,78 @@ One more asymmetry: an agent in `grade10` reads that repository's `AGENTS.md`,
 not this store's. Everything this store expects of a proposal or a spec arrives
 through `openspec instructions`, which is why step 2 comes before any drafting.
 
+## Prompts that start each lane
+
+Most of us drive this workflow through an agent rather than typing the CLI
+commands ourselves, so the prompts come first; the lanes below are the
+step-by-step reference for what the agent does with them. They are starting
+points — swap the feature for yours — but each line in them exists because a
+step below requires it.
+
+**The PM lane.** The schema and the stop-point both have to be said out loud:
+the schema because the default is `full-planning`, the stop-point because an
+agent that drafts `tasks.md` unprompted erases the promotion signal in step 6.
+
+```text
+Draft an OpenSpec change proposal for a collector account settings page —
+notification preferences and a shipping address.
+
+Create it with `openspec new change account-setting-page --schema pm-planning`,
+then run `openspec instructions proposal --change account-setting-page` and
+work from what it returns, the grilling interview included.
+
+I'm writing this as a PM: produce only proposal.md and the spec deltas. Do
+not write design.md, ui.md, or tasks.md — the engineer who picks this up
+promotes the change.
+
+Before drafting, read the relevant capability in openspec/specs/, any active
+change touching it, and the related PRD. Identify affected component exports
+and consumer apps in the proposal. Keep every requirement testable; rationale
+that isn't testable is PRD material, not spec material.
+```
+
+**Full planning from scratch.** When the author is the engineer who will also
+plan the delivery, one change carries everything and the default schema is
+already right:
+
+```text
+Draft an OpenSpec change for adding a "report listing" action to the
+ListingCard component in @grade10/ui.
+
+Use the full-planning schema (the default): this change carries its
+implementation plan end to end — proposal, spec deltas, design.md, ui.md,
+tasks.md. Run `openspec instructions <artifact> --change report-listing`
+before each artifact and work from what it returns.
+
+Before writing:
+- Read the ListingCard capability spec in openspec/specs/ and confirm which
+  exports the contract names today.
+- Read docs/governance/ui-component-contracts.md — this is a
+  component-contract change, so the delta must name the exact exports
+  affected and the consuming applications that must adapt.
+- Read docs/governance/task-ownership.md so tasks.md uses the parseable
+  group/owner format.
+
+In design.md, record how the report flow reaches the application (callback
+prop vs. a new compound part) as a choice with alternatives, not as an
+objective improvement. Keep the change to this one component capability.
+```
+
+**Promotion.** The engineer lane's step 7, as a prompt:
+
+```text
+Promote the account-setting-page change from pm-planning to full-planning.
+Set schema: full-planning in its .openspec.yaml, leave the proposal and spec
+deltas untouched, and add design.md, ui.md, and tasks.md for the delivery.
+Run `openspec instructions <artifact> --change account-setting-page` for
+each, and follow docs/governance/task-ownership.md for the tasks format.
+```
+
+The proposal rules run the grilling interview by default (step 3 below). Say
+"skip the interview, draft from what I've given you" when the prompt already
+carries the decisions — otherwise expect to be questioned before anything is
+written.
+
 ## The PM lane
 
 > "Collectors need an account settings page — notification preferences and a
