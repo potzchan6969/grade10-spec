@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
+import { expect, fn, within } from "storybook/test";
 import { ProductCard } from "./product-card";
 
 const IMAGE = new URL("./product-card.fixture.png", import.meta.url).href;
@@ -7,13 +7,14 @@ const IMAGE = new URL("./product-card.fixture.png", import.meta.url).href;
 const defaults = {
   imageSrc: IMAGE,
   imageAlt: "Ninja Spinner booster box",
-  category: "POKÉMON",
+  tags: ["Pokémon", "M4", "JP"],
   name: "Ninja Spinner",
-  description: "M4, Japanese",
   price: "HKD 105",
   originalPrice: "HKD 123",
-  discountLabel: "−15%",
+  discountLabel: "SALE",
+  actionLabel: "Add to cart",
   onClick: () => {},
+  onAction: fn(),
 };
 
 const meta = {
@@ -38,12 +39,14 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.queryByRole("button", { name: /wishlist/i })).toBeNull();
+    expect(canvas.getByText("SALE")).toBeInTheDocument();
+    expect(canvas.getByText("Pokémon")).toBeInTheDocument();
   },
 };
 
-/** Figma `isSoldOut=true` — dimmed photo, SOLD OUT badge, disabled action. */
+/** Figma `isSoldOut=true` — dimmed photo, SOLD OUT badge, no cart action. */
 export const SoldOut: Story = {
-  args: { soldOut: true },
+  args: { soldOut: true, onAction: undefined },
   decorators: [
     (Story) => (
       <div className="w-[260px]">
@@ -53,7 +56,8 @@ export const SoldOut: Story = {
   ],
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.queryByRole("button", { name: /wishlist/i })).toBeNull();
+    expect(canvas.getByText("SOLD OUT")).toBeInTheDocument();
+    expect(canvas.queryByRole("button", { name: "Add to cart" })).toBeNull();
   },
 };
 
@@ -68,13 +72,13 @@ export const States: Story = {
         <ProductCard {...args} addedToCart quantity={3} />
       </div>
       <div className="w-[260px]">
-        <ProductCard {...args} soldOut />
+        <ProductCard {...args} onAction={undefined} soldOut />
       </div>
     </div>
   ),
 };
 
-/** Figma `isAddedToCart=true` — Add button replaced by a quantity stepper. */
+/** Figma `isAddedToCart=true` — quantity badge on the cart button. */
 export const AddedToCart: Story = {
   args: { addedToCart: true, quantity: 3 },
   decorators: [
@@ -84,11 +88,27 @@ export const AddedToCart: Story = {
       </div>
     ),
   ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("3")).toBeInTheDocument();
+  },
 };
 
 /** `hasDiscount=false` — no badge and no strikethrough price. */
 export const WithoutDiscount: Story = {
   args: { originalPrice: undefined, discountLabel: undefined },
+  decorators: [
+    (Story) => (
+      <div className="w-[260px]">
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/** Boneyard capture target — keep `loading` at Figma's 260px card width. */
+export const BoneyardCapture: Story = {
+  args: { loading: true, name: "", price: "" },
   decorators: [
     (Story) => (
       <div className="w-[260px]">

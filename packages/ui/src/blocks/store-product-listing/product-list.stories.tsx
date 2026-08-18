@@ -20,7 +20,7 @@ export const Default: Story = {};
  * root's job, not the list's. */
 export const NoProducts: Story = { args: { products: [] } };
 
-/** One column. The progression is four at desktop, two at tablet, one here. */
+/** One column when the viewport cannot fit a 260px tile beside padding. */
 export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
 };
@@ -34,13 +34,15 @@ export const ActionIsReported: Story = {
   },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    const add = canvas.getByRole("button", { name: "Add" });
+    const add = canvas.getByRole("button", { name: "Add to cart" });
 
     await userEvent.click(add);
 
     expect(args.onProductAction).toHaveBeenCalledTimes(1);
     expect(args.onProductAction).toHaveBeenCalledWith("reported");
     // Still the add action — the tile did not move on its own.
-    expect(canvas.getByRole("button", { name: "Add" })).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: "Add to cart" }),
+    ).toBeInTheDocument();
   },
 };

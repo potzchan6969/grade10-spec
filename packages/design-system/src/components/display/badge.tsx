@@ -12,7 +12,8 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-muted text-muted-foreground [a]:hover:bg-muted-hover",
+        default:
+          "bg-secondary text-secondary-foreground [a]:hover:bg-[color-mix(in_oklab,var(--secondary),white_5%)]",
         success: "bg-success text-success-foreground backdrop-blur-md",
         error: "bg-destructive text-destructive-foreground backdrop-blur-md",
         warning: "bg-warning text-warning-foreground backdrop-blur-md",

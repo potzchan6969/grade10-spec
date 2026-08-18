@@ -20,6 +20,14 @@ export type { AsyncAction, AsyncState } from "./blocks/shared/async";
 
 // shared-ui/store-product-listing
 export {
+  CollectionMenu,
+  type CollectionMenuProps,
+} from "./blocks/store-product-listing/collection-menu";
+export {
+  CollectionMenuItem,
+  type CollectionMenuItemProps,
+} from "./blocks/store-product-listing/collection-menu-item";
+export {
   FilterPanel,
   type FilterPanelProps,
 } from "./blocks/store-product-listing/filter-panel";
@@ -40,11 +48,13 @@ export {
   type ProductListHeaderProps,
 } from "./blocks/store-product-listing/product-list-header";
 export type {
+  CollectionOption,
   FilterGroup,
   FilterOption,
   FilterSelection,
   ProductSummary,
   SortOption,
+  UtilityLink,
 } from "./blocks/store-product-listing/types";
 
 // shared-ui/store-profile

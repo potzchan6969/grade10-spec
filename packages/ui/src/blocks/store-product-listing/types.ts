@@ -10,8 +10,8 @@ import type { AsyncAction, AsyncState } from "../shared/async";
 type ProductSummary = {
   id: string;
   name: ReactNode;
-  category: ReactNode;
-  description?: ReactNode;
+  /** Metadata badges such as collection, series, and region. */
+  tags?: readonly ReactNode[];
   imageSrc?: string;
   imageAlt?: string;
   /** Current or discounted price, already formatted. */
@@ -20,7 +20,7 @@ type ProductSummary = {
   originalPrice?: ReactNode;
   discountLabel?: ReactNode;
   soldOut?: boolean;
-  /** Swaps the add action for a quantity stepper. The consumer owns it. */
+  /** Shows the quantity on the cart button. The consumer owns it. */
   addedToCart?: boolean;
   quantity?: number;
   actionLabel?: ReactNode;
@@ -63,12 +63,27 @@ type SortOption = {
   trailing?: ReactNode;
 };
 
+/** One collection row in the sidebar menu. */
+type CollectionOption = {
+  id: string;
+  label: ReactNode;
+  disabled?: boolean;
+};
+
+/** One utility link below the collection menu. */
+type UtilityLink = {
+  label: ReactNode;
+  href: string;
+};
+
 export type {
   AsyncAction,
   AsyncState,
+  CollectionOption,
   FilterGroup,
   FilterOption,
   FilterSelection,
   ProductSummary,
   SortOption,
+  UtilityLink,
 };

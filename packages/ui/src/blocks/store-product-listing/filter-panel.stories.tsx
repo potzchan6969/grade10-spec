@@ -1,35 +1,68 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
+import { useState } from "react";
 import { FilterPanel } from "./filter-panel";
-import { FIGMA_SELECTION, FILTER_GROUPS, SELECTION } from "./fixtures";
+import { COLLECTIONS, UTILITY_LINKS } from "./fixtures";
 
 const meta = {
   title: "Store Product Listing/FilterPanel",
   component: FilterPanel,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
+  decorators: [
+    (Story) => (
+      <div className="w-64">
+        <Story />
+      </div>
+    ),
+  ],
   args: {
-    label: "Filters",
-    groups: { status: "ready", data: FILTER_GROUPS },
-    selection: FIGMA_SELECTION,
-    onFilterChange: fn(),
+    label: "Store navigation",
+    searchPlaceholder: "Search...",
+    searchLabel: "Search products",
+    collections: { status: "ready", data: COLLECTIONS },
+    activeCollection: "pokemon",
+    onCollectionChange: fn(),
+    onSearchChange: fn(),
+    utilityLinks: UTILITY_LINKS,
   },
 } satisfies Meta<typeof FilterPanel>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Matches the Product Listing filter panel instance in Figma (`4238:3996`). */
-export const Default: Story = {};
+/** Matches the Product Listing sidebar instance in Figma (`4288:13952`). */
+export const Default: Story = {
+  render: (args) => {
+    const [activeCollection, setActiveCollection] = useState(
+      args.activeCollection ?? "pokemon",
+    );
 
-export const Loading: Story = { args: { groups: { status: "loading" } } };
+    return (
+      <div className="w-64">
+        <FilterPanel
+          {...args}
+          activeCollection={activeCollection}
+          onCollectionChange={(collectionId) => {
+            setActiveCollection(collectionId);
+            args.onCollectionChange?.(collectionId);
+          }}
+        />
+      </div>
+    );
+  },
+};
+
+export const Loading: Story = {
+  args: { collections: { status: "loading" } },
+};
 
 /** The consumer supplies the message and what to call the action. */
 export const ErrorState: Story = {
   args: {
-    groups: {
+    collections: {
       status: "error",
-      message: "Filters could not be loaded.",
+      message: "Collections could not be loaded.",
       action: { label: "Try again", onAction: fn() },
     },
   },
@@ -37,56 +70,55 @@ export const ErrorState: Story = {
 
 export const Empty: Story = {
   args: {
-    groups: { status: "empty", message: "No filters apply to this category." },
-  },
-};
-
-/** A group with no options takes no space and shows no heading. */
-export const GroupWithNoOptions: Story = {
-  args: {
-    groups: {
-      status: "ready",
-      data: [
-        FILTER_GROUPS[0],
-        { id: "sizes", label: "Sizes", options: [] },
-        FILTER_GROUPS[2],
-      ],
+    collections: {
+      status: "empty",
+      message: "No collections are available.",
     },
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.queryByText("Sizes")).not.toBeInTheDocument();
-    expect(canvas.getByText("Product Type")).toBeInTheDocument();
-  },
 };
 
-/** Activating an option reports the group and the option, and leaves the
- * displayed selection alone until the consumer supplies a new one. */
-export const SelectionIsReported: Story = {
-  args: { selection: SELECTION },
+/** A collection change is reported and the active item stays put until the
+ * consumer supplies a new value. */
+export const CollectionChangeIsReported: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    const pack = canvas.getByRole("checkbox", { name: /Pack/ });
+    const dragonBall = canvas.getByRole("button", { name: "Dragon Ball" });
 
-    expect(pack).not.toBeChecked();
-    await userEvent.click(pack);
+    expect(dragonBall).not.toHaveAttribute("aria-current");
+    await userEvent.click(dragonBall);
 
-    expect(args.onFilterChange).toHaveBeenCalledTimes(1);
-    expect(args.onFilterChange).toHaveBeenCalledWith(
-      "product-type",
-      "pack",
-      true,
+    expect(args.onCollectionChange).toHaveBeenCalledTimes(1);
+    expect(args.onCollectionChange).toHaveBeenCalledWith("dragon-ball");
+    expect(canvas.getByRole("button", { name: "Pokémon" })).toHaveAttribute(
+      "aria-current",
+      "true",
     );
-    expect(canvas.getByRole("checkbox", { name: /Pack/ })).not.toBeChecked();
   },
 };
 
-/** Two options in one group can be selected at once. */
-export const MultipleSelected: Story = {
-  args: { selection: { ...SELECTION, "product-type": ["box", "pack"] } },
-  play: async ({ canvasElement }) => {
+/** Search reports each change; the field shows the supplied value only. */
+export const SearchChangeIsReported: Story = {
+  args: { searchValue: "" },
+  play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("checkbox", { name: /Box/ })).toBeChecked();
-    expect(canvas.getByRole("checkbox", { name: /Pack/ })).toBeChecked();
+    const field = canvas.getByRole("searchbox");
+
+    await userEvent.type(field, "pika");
+
+    expect(args.onSearchChange).toHaveBeenCalled();
+    expect(field).toHaveValue("");
+  },
+};
+
+/** Clear is offered only when the consumer supplies a value and a handler. */
+export const SearchClear: Story = {
+  args: {
+    searchValue: "Search query",
+    onSearchClear: fn(),
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Clear search" }));
+    expect(args.onSearchClear).toHaveBeenCalledTimes(1);
   },
 };

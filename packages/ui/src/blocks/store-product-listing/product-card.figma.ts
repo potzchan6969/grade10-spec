@@ -24,12 +24,13 @@ const hasDiscount = instance.getBoolean("hasDiscount");
 
 const category = instance.getString("category");
 const productName = instance.getString("productName");
-const description = instance.getString("description");
+const series = instance.getString("series");
+const region = instance.getString("region");
 const price = instance.getString("price");
 const originalPrice = instance.getString("originalPrice");
 
 export default {
-  example: figma.code`<ProductCard category="${category}" name="${productName}" description="${description}" price="${price}"${hasDiscount ? figma.code` originalPrice="${originalPrice}" discountLabel="−15%"` : ""}${soldOut ? figma.code` soldOut` : ""}${!soldOut && addedToCart ? figma.code` addedToCart` : ""} />`,
+  example: figma.code`<ProductCard tags={["${category}", "${series}", "${region}"]} name="${productName}" price="${price}"${hasDiscount ? figma.code` originalPrice="${originalPrice}" discountLabel="SALE"` : ""}${soldOut ? figma.code` soldOut` : ""}${!soldOut && addedToCart ? figma.code` addedToCart quantity={3}` : ""} />`,
   imports: ['import { ProductCard } from "@grade10/ui"'],
   id: "product-card",
   metadata: { nestable: true },

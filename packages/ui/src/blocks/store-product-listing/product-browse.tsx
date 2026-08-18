@@ -5,26 +5,34 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@grade10/design-system/components/display/pagination";
-import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
-import { AsyncMessage } from "../shared/async-message";
 import { FilterPanel } from "./filter-panel";
-import { ProductList } from "./product-list";
 import { ProductListHeader } from "./product-list-header";
+import { ProductResultsPanel } from "./product-results-panel";
 import type {
   AsyncState,
+  CollectionOption,
   FilterGroup,
   FilterSelection,
   ProductSummary,
   SortOption,
+  UtilityLink,
 } from "./types";
 
 type ProductBrowseProps = {
-  filters: AsyncState<readonly FilterGroup[]>;
   filterPanelLabel: string;
-  selection: FilterSelection;
-  onFilterChange: (
+  searchPlaceholder: ReactNode;
+  searchLabel?: ReactNode;
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
+  onSearchClear?: () => void;
+  collections: AsyncState<readonly CollectionOption[]>;
+  activeCollection?: string;
+  onCollectionChange?: (collectionId: string) => void;
+  utilityLinks?: readonly UtilityLink[];
+  selection?: FilterSelection;
+  onFilterChange?: (
     groupId: string,
     optionId: string,
     selected: boolean,
@@ -57,7 +65,6 @@ type ProductBrowseProps = {
 
   onProductClick?: (productId: string) => void;
   onProductAction?: (productId: string) => void;
-  onProductQuantityChange?: (productId: string, quantity: number) => void;
 
   className?: string;
 };
@@ -89,9 +96,17 @@ function pageItems(page: number, pageCount: number): (number | "gap")[] {
  * results come from separate calls.
  */
 function ProductBrowse({
-  filters,
   filterPanelLabel,
-  selection,
+  searchPlaceholder,
+  searchLabel,
+  searchValue,
+  onSearchChange,
+  onSearchClear,
+  collections,
+  activeCollection,
+  onCollectionChange,
+  utilityLinks,
+  selection = {},
   onFilterChange,
   results,
   resultsLabel,
@@ -113,7 +128,6 @@ function ProductBrowse({
   morePagesLabel,
   onProductClick,
   onProductAction,
-  onProductQuantityChange,
   className,
 }: ProductBrowseProps) {
   return (
@@ -121,19 +135,26 @@ function ProductBrowse({
       className={cn("flex w-full flex-col", className)}
       data-slot="product-browse"
     >
-      <div className="flex flex-col items-start gap-8 p-10 xl:flex-row">
+      <div className="flex w-full flex-col gap-8 p-6 lg:flex-row lg:items-start">
         <FilterPanel
-          groups={filters}
+          activeCollection={activeCollection}
+          collections={collections}
           label={filterPanelLabel}
-          onFilterChange={onFilterChange}
-          selection={selection}
+          onCollectionChange={onCollectionChange}
+          onSearchChange={onSearchChange}
+          onSearchClear={onSearchClear}
+          searchLabel={searchLabel}
+          searchPlaceholder={searchPlaceholder}
+          searchValue={searchValue}
+          utilityLinks={utilityLinks}
         />
         <section
           aria-label={resultsLabel}
-          className="flex min-w-0 flex-1 flex-col gap-6"
+          className="flex w-full min-w-0 flex-1 flex-col gap-6 lg:items-center"
           data-slot="product-browse-results"
         >
           <ProductListHeader
+            className="w-full"
             chipFilters={chipFilters}
             onFilterChange={onFilterChange}
             onSelectFilterChange={onSelectFilterChange}
@@ -147,33 +168,11 @@ function ProductBrowse({
             title={title}
           />
 
-          {results.status === "loading" ? (
-            <div
-              className="grid grid-cols-1 gap-x-4 gap-y-6 md:grid-cols-2 xl:grid-cols-4"
-              data-slot="results-loading"
-            >
-              {[0, 1, 2, 3, 4, 5, 6, 7].map((tile) => (
-                <Skeleton className="h-[340px] w-full" key={tile} />
-              ))}
-            </div>
-          ) : null}
-
-          {results.status === "empty" || results.status === "error" ? (
-            <AsyncMessage
-              action={results.action}
-              message={results.message}
-              slot={`results-${results.status}`}
-            />
-          ) : null}
-
-          {results.status === "ready" ? (
-            <ProductList
-              onProductAction={onProductAction}
-              onProductClick={onProductClick}
-              onProductQuantityChange={onProductQuantityChange}
-              products={results.data}
-            />
-          ) : null}
+          <ProductResultsPanel
+            onProductAction={onProductAction}
+            onProductClick={onProductClick}
+            results={results}
+          />
 
           {pageCount > 1 ? (
             <Pagination

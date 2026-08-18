@@ -1,29 +1,99 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
+import { useEffect, useState } from "react";
 import {
   CHIP_FILTERS,
-  FILTER_GROUPS,
+  COLLECTIONS,
   PAGINATION_LABELS,
   PRODUCTS,
   SELECT_FILTERS,
   SELECTION,
   SORT_OPTIONS,
+  UTILITY_LINKS,
 } from "./fixtures";
-import { ProductBrowse } from "./product-browse";
+import { ProductBrowse, type ProductBrowseProps } from "./product-browse";
+
+const RESULTS_LOAD_MS = 450;
+
+function collectionTitle(activeCollection: string) {
+  return (
+    COLLECTIONS.find((collection) => collection.id === activeCollection)
+      ?.label ?? "All Collections"
+  );
+}
+
+/** Storybook wrapper: keeps `activeCollection` in local state and simulates a
+ * short results reload when the default ready fixtures are in play. */
+function InteractiveProductBrowse(args: ProductBrowseProps) {
+  const [activeCollection, setActiveCollection] = useState(
+    args.activeCollection ?? "pokemon",
+  );
+  const simulateReload =
+    args.results.status === "ready" || args.results.status === "loading";
+  const [resultsStatus, setResultsStatus] = useState<
+    ProductBrowseProps["results"]["status"]
+  >(() => (args.results.status === "ready" ? "loading" : args.results.status));
+
+  useEffect(() => {
+    if (args.activeCollection != null) {
+      setActiveCollection(args.activeCollection);
+    }
+  }, [args.activeCollection]);
+
+  useEffect(() => {
+    if (!simulateReload) {
+      return;
+    }
+
+    setResultsStatus("loading");
+    const timeout = setTimeout(() => {
+      setResultsStatus(
+        args.results.status === "loading" ? "loading" : "ready",
+      );
+    }, RESULTS_LOAD_MS);
+
+    return () => clearTimeout(timeout);
+  }, [activeCollection, args.results.status, simulateReload]);
+
+  const results =
+    args.results.status === "error" || args.results.status === "empty"
+      ? args.results
+      : resultsStatus === "loading"
+        ? { status: "loading" as const }
+        : args.results.status === "ready"
+          ? { status: "ready" as const, data: args.results.data }
+          : { status: "loading" as const };
+
+  return (
+    <ProductBrowse
+      {...args}
+      activeCollection={activeCollection}
+      onCollectionChange={(collectionId) => {
+        setActiveCollection(collectionId);
+        args.onCollectionChange?.(collectionId);
+      }}
+      results={results}
+      title={collectionTitle(activeCollection)}
+    />
+  );
+}
 
 const meta = {
   title: "Store Product Listing/ProductBrowse",
   component: ProductBrowse,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
+  render: (args) => <InteractiveProductBrowse {...args} />,
   args: {
-    filters: { status: "ready", data: FILTER_GROUPS },
-    filterPanelLabel: "Filters",
-    selection: {
-      collection: ["pokemon"],
-      sets: ["m4"],
-      availability: ["in-stock"],
-    },
+    filterPanelLabel: "Store navigation",
+    searchPlaceholder: "Search...",
+    searchLabel: "Search products",
+    collections: { status: "ready", data: COLLECTIONS },
+    activeCollection: "pokemon",
+    onCollectionChange: fn(),
+    onSearchChange: fn(),
+    utilityLinks: UTILITY_LINKS,
+    selection: {},
     onFilterChange: fn(),
     results: { status: "ready", data: PRODUCTS },
     resultsLabel: "Products",
@@ -67,12 +137,14 @@ export const TypeChipsStartUnselected: Story = {
 
 /** Both regions loading. */
 export const Loading: Story = {
-  args: { filters: { status: "loading" }, results: { status: "loading" } },
+  args: {
+    collections: { status: "loading" },
+    results: { status: "loading" },
+  },
 };
 
-/** Results failed, filters stand. The panel is still usable — the two
- * boundaries resolve independently. */
-export const ResultsErrorFiltersReady: Story = {
+/** Results failed, sidebar stands. The two boundaries resolve independently. */
+export const ResultsErrorCollectionsReady: Story = {
   args: {
     results: {
       status: "error",
@@ -83,13 +155,15 @@ export const ResultsErrorFiltersReady: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("We could not load these products."));
-    expect(canvas.getByRole("checkbox", { name: /Box/ })).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: "Dragon Ball" }),
+    ).toBeInTheDocument();
   },
 };
 
-/** Filters still loading, results ready. The count and grid show anyway. */
-export const FiltersLoadingResultsReady: Story = {
-  args: { filters: { status: "loading" } },
+/** Collections still loading, results ready. The count and grid show anyway. */
+export const CollectionsLoadingResultsReady: Story = {
+  args: { collections: { status: "loading" } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("38")).toBeInTheDocument();
@@ -97,7 +171,7 @@ export const FiltersLoadingResultsReady: Story = {
 };
 
 /** Filters match nothing: the message and a clear-filters action, with the
- * panel and the current selection intact. */
+ * sidebar and the current selection intact. */
 export const NoMatch: Story = {
   args: {
     resultCount: "0",
@@ -113,7 +187,10 @@ export const NoMatch: Story = {
     expect(
       canvas.getByRole("button", { name: "Clear filters" }),
     ).toBeInTheDocument();
-    expect(canvas.getByRole("checkbox", { name: /Box/ })).toBeChecked();
+    expect(canvas.getByRole("button", { name: "Pokémon" })).toHaveAttribute(
+      "aria-current",
+      "true",
+    );
   },
 };
 
@@ -183,13 +260,12 @@ export const PageChangeIsReported: Story = {
   },
 };
 
-/** The filter panel is a complementary landmark and the results a named
- * region, so the surface is navigable by landmark. */
+/** The sidebar is a complementary landmark and the results a named region. */
 export const Landmarks: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("complementary", { name: "Filters" }),
+      canvas.getByRole("complementary", { name: "Store navigation" }),
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("region", { name: "Products" }),

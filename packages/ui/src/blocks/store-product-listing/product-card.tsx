@@ -1,107 +1,140 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
-import { Button } from "@grade10/design-system/components/forms/button";
-import { Stepper } from "@grade10/design-system/components/forms/stepper";
+import { IconButton } from "@grade10/design-system/components/forms/icon-button";
+import { Center } from "@grade10/design-system/components/layout/center";
+import { HStack } from "@grade10/design-system/components/layout/hstack";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
+import { ShoppingCartSimple } from "@phosphor-icons/react";
+import { Skeleton } from "boneyard-js/react";
 import type { ReactNode } from "react";
 
 type ProductCardProps = {
+  /** Boneyard skeleton overlay while the consumer resolves product data. */
+  loading?: boolean;
   /** Product photo. Omit it and the muted image well still renders. */
   imageSrc?: string;
   imageAlt?: string;
-  category: ReactNode;
+  /** Metadata badges below the image, such as collection, series, and region. */
+  tags?: readonly ReactNode[];
   /** Product title. Clamped to one line with an ellipsis, matching Figma. */
   name: ReactNode;
-  description?: ReactNode;
   /** Current (or discounted) price, already formatted. */
   price: ReactNode;
-  /** Strikethrough original price. Presence is Figma's `hasDiscount` gate. */
+  /** Strikethrough original price. Its presence is Figma's `hasDiscount` gate. */
   originalPrice?: ReactNode;
-  /** Discount badge copy such as `−15%`. Hidden when `soldOut`. */
+  /** Image badge copy such as `SALE`. Hidden when `soldOut`. */
   discountLabel?: ReactNode;
   /**
    * Figma's `isSoldOut` axis. Dims the photo, swaps the discount badge for
-   * SOLD OUT, and disables the action.
+   * SOLD OUT, and hides the cart action.
    */
   soldOut?: boolean;
   /**
-   * Figma's `isAddedToCart` axis. Replaces the Add button with a quantity
-   * stepper. Ignored when `soldOut` — that combination is not drawn.
+   * Figma's `isAddedToCart` axis. Shows the quantity on the cart button.
+   * Ignored when `soldOut`.
    */
   addedToCart?: boolean;
-  /** Quantity shown in the stepper. The consumer owns the value. */
+  /** Quantity shown on the cart button. The consumer owns the value. */
   quantity?: number;
-  onQuantityChange?: (value: number) => void;
-  minQuantity?: number;
-  maxQuantity?: number;
   /**
-   * Fires when the card surface is activated. No navigation target is wired
+   * Fires when the image surface is activated. No navigation target is wired
    * here — the consumer decides what happens (route, modal, etc.).
    */
   onClick?: () => void;
-  /** Accessible name when the card is interactive. Defaults to string `name`. */
+  /** Accessible name when the image is interactive. Defaults to string `name`. */
   ariaLabel?: string;
-  /** Action label. Defaults to `Add`, or `Sold Out` when `soldOut`. */
+  /** Accessible name for the cart action. */
   actionLabel?: ReactNode;
   onAction?: () => void;
   className?: string;
 };
 
-/**
- * Product tile for a card-box / pack grid. Figma (`4200:155`) has two axes,
- * `isSoldOut` and `isAddedToCart`; discount is a boolean that shows the badge
- * and original price.
- *
- * The image and copy share one button target; the Add button / stepper sit
- * outside it so nested controls stay valid. Hover scales the photo inside the
- * clipped well. Sold-out tiles are inert.
- */
-function ProductCard({
+type ProductCardContentProps = Omit<ProductCardProps, "loading">;
+
+const SKELETON_IMAGE = new URL("./product-card.fixture.png", import.meta.url)
+  .href;
+
+const SKELETON_FIXTURE_PROPS = {
+  imageSrc: SKELETON_IMAGE,
+  imageAlt: "Ninja Spinner booster box",
+  tags: ["Pokémon", "M4", "JP"],
+  name: "Ninja Spinner",
+  price: "HKD 105",
+  originalPrice: "HKD 123",
+  discountLabel: "SALE",
+  actionLabel: "Add to cart",
+  onClick: () => {},
+  onAction: () => {},
+} satisfies Omit<ProductCardContentProps, "className">;
+
+function ProductCardContent({
   className,
   imageSrc,
   imageAlt = "",
-  category,
+  tags = [],
   name,
-  description,
   price,
   originalPrice,
   discountLabel,
   soldOut = false,
   addedToCart = false,
   quantity = 1,
-  onQuantityChange,
-  minQuantity,
-  maxQuantity,
   onClick,
   ariaLabel,
   actionLabel,
   onAction,
-}: ProductCardProps) {
+}: ProductCardContentProps) {
   const cardAriaLabel =
     ariaLabel ?? (typeof name === "string" ? name : undefined);
+  const showCartAction = !soldOut && onAction != null;
+  const cartVisible = addedToCart ? "opacity-100" : "opacity-0";
 
-  const body = (
-    <>
+  return (
+    <VStack
+      className={cn("group/product-card w-full", className)}
+      data-added-to-cart={(!soldOut && addedToCart) || undefined}
+      data-slot="product-card"
+      data-sold-out={soldOut || undefined}
+      gap="md"
+    >
       <div
+        className={cn(
+          "relative aspect-square w-full overflow-hidden rounded-(--radius-md)",
+          soldOut && "opacity-50",
+        )}
         data-slot="product-card-image"
-        className="relative aspect-square w-full overflow-hidden rounded-(--radius-sm)"
       >
-        <div
-          className={cn("absolute inset-0 bg-muted", soldOut && "opacity-25")}
-        >
-          {imageSrc ? (
-            <img
-              alt={soldOut ? imageAlt : ""}
-              aria-hidden={soldOut ? undefined : true}
-              className={cn(
-                "size-full object-cover",
-                "transition-transform duration-200 ease-[ease] motion-reduce:transition-none",
-                !soldOut &&
+        {soldOut ? (
+          <div className="absolute inset-0 bg-muted">
+            {imageSrc ? (
+              <img
+                alt={imageAlt}
+                className="size-full object-cover"
+                src={imageSrc}
+              />
+            ) : null}
+          </div>
+        ) : (
+          <button
+            aria-label={cardAriaLabel}
+            className="absolute inset-0 cursor-pointer border-0 bg-muted p-0 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            onClick={onClick}
+            type="button"
+          >
+            {imageSrc ? (
+              <img
+                alt=""
+                aria-hidden
+                className={cn(
+                  "size-full object-cover",
+                  "transition-transform duration-200 ease-[ease] motion-reduce:transition-none",
                   "[@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:group-hover/product-card:scale-105",
-              )}
-              src={imageSrc}
-            />
-          ) : null}
-        </div>
+                )}
+                src={imageSrc}
+              />
+            ) : null}
+          </button>
+        )}
         {soldOut ? (
           <Badge className="absolute top-3 left-3" size="sm">
             SOLD OUT
@@ -111,31 +144,62 @@ function ProductCard({
             {discountLabel}
           </Badge>
         ) : null}
-      </div>
-      <div
-        data-slot="product-card-content"
-        className="flex min-w-0 flex-col gap-2"
-      >
-        <div
-          className={cn(
-            "flex min-w-0 flex-col gap-1",
-            soldOut ? "text-disabled-foreground" : "text-secondary-foreground",
-          )}
-        >
-          <p className="text-xs font-medium">{category}</p>
-          <p
+        {showCartAction ? (
+          <div
             className={cn(
-              "truncate text-sm font-medium",
-              soldOut ? "text-disabled-foreground" : "text-card-foreground",
+              "absolute right-3 bottom-3 transition-opacity duration-200 ease-out motion-reduce:transition-none",
+              cartVisible,
+              "[@media(hover:hover)_and_(pointer:fine)]:group-hover/product-card:opacity-100",
             )}
           >
-            {name}
-          </p>
-          {description != null ? (
-            <p className="text-xs font-normal">{description}</p>
-          ) : null}
-        </div>
-        <div className="flex items-center gap-1">
+            <div className="relative size-11">
+              <IconButton
+                aria-label={
+                  typeof actionLabel === "string" ? actionLabel : undefined
+                }
+                className="size-11"
+                onClick={onAction}
+                size="md"
+                variant="secondary"
+              >
+                <ShoppingCartSimple aria-hidden size={16} weight="bold" />
+              </IconButton>
+              {addedToCart ? (
+                <Center
+                  aria-hidden
+                  className="absolute top-0 left-7 h-4 min-w-4 rounded-full bg-primary px-1 text-xs font-medium text-primary-foreground"
+                >
+                  {quantity}
+                </Center>
+              ) : null}
+            </div>
+          </div>
+        ) : null}
+      </div>
+
+      <VStack className="min-w-0" data-slot="product-card-content" gap="sm">
+        {tags.length > 0 ? (
+          <HStack className="w-full flex-wrap" gap="xs" wrap>
+            {tags.map((tag, index) => (
+              <Badge
+                // biome-ignore lint/suspicious/noArrayIndexKey: tags are display-only and may repeat.
+                key={index}
+                size="sm"
+              >
+                {tag}
+              </Badge>
+            ))}
+          </HStack>
+        ) : null}
+        <p
+          className={cn(
+            "truncate text-base font-bold",
+            soldOut ? "text-disabled-foreground" : "text-card-foreground",
+          )}
+        >
+          {name}
+        </p>
+        <HStack gap="xs" vAlign="center">
           <p
             className={cn(
               "text-sm font-medium",
@@ -156,55 +220,40 @@ function ProductCard({
               {originalPrice}
             </p>
           ) : null}
-        </div>
-      </div>
-    </>
+        </HStack>
+      </VStack>
+    </VStack>
   );
+}
+
+const PRODUCT_CARD_FIXTURE = <ProductCardContent {...SKELETON_FIXTURE_PROPS} />;
+
+/**
+ * Product tile for a card-box / pack grid. Figma (`4200:155`) has `isSoldOut`
+ * and `isAddedToCart`; discount is a boolean that shows the SALE badge and
+ * original price.
+ *
+ * The image scales on hover; the cart action sits on the image and appears on
+ * hover, or stays visible when the product is already in the cart. Sold-out
+ * tiles are inert.
+ */
+function ProductCard({ loading = false, className, ...props }: ProductCardProps) {
+  if (!loading) {
+    return <ProductCardContent className={className} {...props} />;
+  }
 
   return (
-    <div
-      data-slot="product-card"
-      data-sold-out={soldOut || undefined}
-      data-added-to-cart={(!soldOut && addedToCart) || undefined}
-      className={cn(
-        "group/product-card flex w-full flex-col gap-3 pb-3",
-        className,
-      )}
+    <Skeleton
+      animate="pulse"
+      className={cn("w-full", className)}
+      darkColor="rgba(249, 250, 250, 0.05)"
+      fixture={PRODUCT_CARD_FIXTURE}
+      loading
+      name="store-product-card"
+      transition={300}
     >
-      {soldOut ? (
-        <div className="flex w-full flex-col gap-3 text-left">{body}</div>
-      ) : (
-        <button
-          type="button"
-          aria-label={cardAriaLabel}
-          onClick={onClick}
-          className="flex w-full cursor-pointer flex-col gap-3 border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-        >
-          {body}
-        </button>
-      )}
-      {soldOut ? (
-        <Button className="w-full" disabled size="sm" variant="secondary">
-          {actionLabel ?? "Sold Out"}
-        </Button>
-      ) : addedToCart ? (
-        <Stepper
-          max={maxQuantity}
-          min={minQuantity}
-          onValueChange={onQuantityChange}
-          value={quantity}
-        />
-      ) : (
-        <Button
-          className="w-full"
-          onClick={onAction}
-          size="sm"
-          variant="secondary"
-        >
-          {actionLabel ?? "Add"}
-        </Button>
-      )}
-    </div>
+      <ProductCardContent {...SKELETON_FIXTURE_PROPS} />
+    </Skeleton>
   );
 }
 
