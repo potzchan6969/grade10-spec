@@ -1,0 +1,88 @@
+# Account profile with basic information
+
+**Author:** @seankcw - 2026-08-18
+
+## Why
+
+A collector who signs in to Grade10 has no identity in the product. The account
+page asks them to create a profile before it shows them anything: the store
+worker only materializes a profile row when someone writes to it, so a first
+visit reads null and renders "You have no profile yet." The collector is asked
+to fill a blank form for a page only they can see, and almost nobody does — the
+store holds a display name and a bio for a small fraction of signed-in users,
+and no avatar at all, because there is nowhere to put one.
+
+That empty account page is also the reason none of this is measurable today: a
+profile that is absent and a profile that is deliberately left sparse look
+identical in the data.
+
+Nothing about the profile is written down either. `openspec/specs/` carries
+`grade10-store/loyalty` and the two `shared-ui` capabilities; the profile
+behavior that already ships — the field limits, the null read, the create/edit
+states — exists only in the grade10 repository's code. An engineer changing it
+has no contract to check against.
+
+**Metric:** share of signed-in collectors whose profile is complete (display
+name and avatar both set) within 7 days of first sign-in.
+
+## What Changes
+
+- **The account page is never empty.** A read with no stored row returns a
+  profile defaulted from the signed-in session — display name from the auth
+  name, an initials avatar — so the collector arrives at something to adjust
+  rather than something to create. Reads still write nothing: the row appears
+  the first time the collector saves.
+- **Avatars.** A collector uploads a JPEG, PNG, or WebP up to 5 MB, cropped
+  square, and can remove it again; with none set, the profile shows initials
+  derived from the display name.
+- **Email is shown, read-only.** The address the collector signed in with
+  appears on the page. It is not editable here.
+- **The shipped behavior becomes a requirement.** Display name and bio, their
+  limits and trimming, the save and cancel states, and what a signed-out or
+  failed read does are recorded as scenarios rather than left in code.
+
+No breaking changes: every field that exists today keeps its name, type, and
+limits.
+
+## Non-Goals
+
+- **A public collector profile.** Profiles stay visible to their owner only.
+  Sharing one — a public URL, seller identity on a listing or a lot, follower
+  counts — is a separate change with its own visibility, SEO, and
+  discoverability decisions.
+- **Avatar moderation.** With owner-only visibility the only person who sees an
+  avatar is the person who uploaded it, so nothing reviews or takes down an
+  image in this change. Public profiles cannot ship without it; that change
+  owns the requirement.
+- **Changing the email address.** That is an auth capability with its own
+  verification and account-recovery requirements.
+- **Display-name uniqueness.** A display name is a label on a private page, not
+  a handle; two collectors may hold the same one.
+- **Collector identity beyond the basics** — location, social links, collection
+  showcases, badges.
+- **ZZZ.** `zzz-store` has no account surface and gains none here.
+
+## Capabilities
+
+### New Capabilities
+- `grade10-store/account-profile`: what a signed-in collector's account profile
+  holds, how it is read and edited, and how the avatar is set and removed.
+
+### Modified Capabilities
+
+None. No existing capability's requirements change.
+
+## Impact
+
+- **grade10 SPA** — the `/profile` page and the profile feature it renders gain
+  the avatar and email fields, and lose the empty state.
+- **Store service** — the profile read composes session values into its
+  response instead of returning null; the write path is unchanged. Avatar
+  upload, storage, and serving are new; the auction service's lot-image
+  handling is the precedent in that repository.
+- **Design system** — none. `Avatar`, `AvatarImage`, and `AvatarFallback`
+  already ship from `@grade10/design-system`, so this change needs no new
+  component, variant, or token, and no work in this repository.
+- **Auth service** — read-only consumer of the session's name and email. No
+  change.
+- **Admin panels** — unaffected.
