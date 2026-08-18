@@ -1,5 +1,6 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
 import type { ReactNode } from "react";
+import "@grade10/ui/bones/registry";
 import "./tailwind.css";
 
 function MotionBoundary({

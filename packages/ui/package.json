@@ -7,15 +7,18 @@
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "storybook": "storybook dev",
     "build-storybook": "storybook build",
-    "test:stories": "vitest run"
+    "test:stories": "vitest run",
+    "bones:build": "boneyard-js build \"http://localhost:6010/iframe.html?id=store-product-listing-productcard--boneyard-capture&viewMode=story&globals=mode:dark;colorTheme:grade10\" --force --no-scan"
   },
   "exports": {
     ".": "./src/index.ts",
-    "./blocks/*": "./src/blocks/*.tsx"
+    "./blocks/*": "./src/blocks/*.tsx",
+    "./bones/registry": "./src/bones/registry.ts"
   },
   "dependencies": {
     "@grade10/design-system": "workspace:*",
-    "@phosphor-icons/react": "^2.1.10"
+    "@phosphor-icons/react": "^2.1.10",
+    "boneyard-js": "^1.9.0"
   },
   "peerDependencies": {
     "react": "^19.0.0",

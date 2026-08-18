@@ -1,4 +1,5 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
+import "../src/bones/registry";
 import "./tailwind.css";
 
 /* Toolbar-driven theming: toggle the two orthogonal class dimensions
