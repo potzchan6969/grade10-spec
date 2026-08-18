@@ -38,7 +38,7 @@ the boundary. Groups 2, 3, and 4 are grade10 and depend on that bump.
 - [x] 4.1 Make `A narrow viewport` pass across every surface at a 375px viewport: vertical scrolling only, nothing clipped, every control reachable.
 - [x] 4.2 Run `pnpm run build` and check each surface at 375px and at the frame's 1440px.
 
-## 5. Delivery and review
+## 5. Delivery and review (owner: @sean)
 
 - [ ] 5.1 Confirm with design that a storefront supplying fewer handlers renders fewer controls, rather than diverging from the published set.
 - [ ] 5.2 Verify every scenario in both deltas, then run `openspec validate add-grade10-site-shell` and `openspec validate --specs`.
