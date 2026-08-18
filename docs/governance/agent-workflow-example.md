@@ -20,15 +20,22 @@ absolute path. `openspec new change`, `status`, `instructions`, and `validate`
 all work from `grade10`; the files they create and the commits you make against
 them belong to the store clone, not to `grade10`.
 
-One thing does not carry across: **the skills live only in the store clone.**
-`grade10` ships its own (`tdd`, `testing-lanes`, and others), so
-`/openspec-propose` and `/openspec-archive-change` are not available there. The
-CLI is the substitute, and it is not a lesser one —
-`openspec instructions <artifact> --change <name>` returns the same project
-context, the same per-artifact rules (the grilling interview among them), and
-the same template the skill would have applied. Ask your agent to follow that
-output. Nothing syncs skills between the two repositories today; copying them
-into `grade10` would be a second source of truth to keep in step.
+Most skills do not carry across: **they live in the store clone.** `grade10`
+ships its own (`tdd`, `testing-lanes`, and others), so `/openspec-propose` and
+`/openspec-archive-change` are not available there. The CLI is the substitute,
+and it is not a lesser one — `openspec instructions <artifact> --change <name>`
+returns the same project context, the same per-artifact rules (the grilling
+interview among them), and the same template the skill would have applied. Ask
+your agent to follow that output.
+
+The two lane skills are the exception. `/pm-planning` and `/full-planning`
+exist in both repositories, and they are not copies of each other: the store's
+carry every artifact's rules, and `grade10`'s carry what is specific to picking
+work up there — promoting a change that has no `tasks.md`, and the verification
+steps its own task groups end with. Each points at the other for the half it
+does not hold, so neither is a second source of truth for the same thing.
+Nothing syncs skills between the repositories, so keep it that way: a rule
+about what an artifact must contain belongs in the store's copy only.
 
 There is never a second change to open in `grade10` — it has no planning shape
 of its own to hold one.
@@ -174,8 +181,9 @@ openspec instructions proposal --change account-setting-page
 ```
 
 This is what stands in for `/openspec-propose`, which is not installed in
-`grade10`. It returns the store's project context, the proposal rules, and the
-template. Before writing anything, the agent should read the relevant capability
+`grade10` — though `/pm-planning` there will run it for you and read the store's
+own copy of the lane instructions. It returns the store's project context, the
+proposal rules, and the template. Before writing anything, the agent should read the relevant capability
 in `openspec/specs/`, any active change touching it, and the PRD — facts are the
 agent's job, decisions are yours.
 

@@ -1,5 +1,6 @@
 # Default workflow for a change that records no schema of its own. AGENTS.md
-# documents both schemas and the `openspec-propose` skill chooses between them.
+# documents both schemas, the `openspec-propose` skill routes between them, and
+# the `pm-planning` and `full-planning` skills draft in each lane.
 schema: full-planning
 
 # This repo is an OpenSpec store, and more besides: PM and design own the
