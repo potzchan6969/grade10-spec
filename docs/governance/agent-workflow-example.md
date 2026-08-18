@@ -45,6 +45,24 @@ in-session, or `--add-dir` at launch — or every write stops for a prompt:
 /add-dir <path-to-your-store-clone>    # the one you registered, e.g. ../grade10-spec
 ```
 
+To stop doing that every session, put it in `grade10`'s
+`.claude/settings.local.json` — local, not `settings.json`, because the path is
+per-machine and that file is gitignored. `openspec store list` prints the path
+to use, and it must be the clone you registered:
+
+```json
+{
+  "permissions": {
+    "additionalDirectories": ["/absolute/path/to/your/grade10-spec"],
+    "deny": ["Edit(./external/grade10-spec/**)"]
+  }
+}
+```
+
+The `deny` entry is the belt to that braces: nobody should hand-edit a pinned
+submodule checkout for any reason, so denying writes there costs nothing and
+closes the trap below.
+
 **Do not let it write to `external/grade10-spec/`.** That submodule is the same
 upstream repository, checked out at the SHA this repo pins — today ten commits
 behind — and it carries a complete `openspec/` tree: `changes/`, `specs/`,
