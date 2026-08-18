@@ -6,6 +6,9 @@ import type { FilterGroup, ProductSummary, SortOption } from "@grade10/ui";
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
+/** The workbench has every surface and navigates to none of them. */
+const noop = () => {};
+
 const STORE_NAV = {
   promo: "PROMO UTILITY BAR",
   logo: "Grade10 Marketplace",
@@ -22,6 +25,14 @@ const STORE_NAV = {
     { label: "GRADE", href: "#grade" },
     { label: "AUCTION", href: "#auction" },
   ],
+  /* A control renders only where a handler backs it, and this workbench
+   * assembles the whole storefront the Figma page draws — so it answers all
+   * five. A store with fewer surfaces passes fewer and shows fewer. */
+  onLocaleClick: noop,
+  onSearchClick: noop,
+  onAccountClick: noop,
+  onWishlistClick: noop,
+  onCartClick: noop,
 };
 
 const STORE_FOOTER = {

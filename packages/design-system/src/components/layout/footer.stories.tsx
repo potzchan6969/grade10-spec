@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, within } from "storybook/test";
 import { Footer } from "./footer";
 
 /* Grade10's own footer content. It lives here, in an example, rather than in
@@ -73,7 +74,48 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    for (const heading of ["SHOP", "HELP", "LEGAL"]) {
+      expect(canvas.getByText(heading)).toBeInTheDocument();
+    }
+    expect(canvas.getByRole("link", { name: "INSTAGRAM" })).toBeInTheDocument();
+    expect(canvas.getByRole("link", { name: "PRIVACY" })).toBeInTheDocument();
+    expect(
+      canvas.getByText("© 2026 Grade10. All rights reserved."),
+    ).toBeInTheDocument();
+    expect(canvas.getByText("HONG KONG / HKD")).toBeInTheDocument();
+  },
+};
+
+/**
+ * A store with nowhere to link yet: the brand block, the copyright and the
+ * locale, and nothing standing in for the sections it has no content for.
+ */
+export const WithoutLinks: Story = {
+  args: { socialLinks: [], columns: [], legalLinks: [] },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryAllByRole("link")).toHaveLength(0);
+    // Absent, not empty: an empty row still reserves its padding.
+    for (const slot of ["footer-social", "footer-legal"]) {
+      expect(canvasElement.querySelector(`[data-slot="${slot}"]`)).toBeNull();
+    }
+    expect(canvas.getByText("Grade10 Marketplace")).toBeInTheDocument();
+    expect(canvas.getByText("HONG KONG / HKD")).toBeInTheDocument();
+  },
+};
+
+/** A column whose destinations do not exist yet is absent, heading and all. */
+export const ColumnWithNoLinks: Story = {
+  args: { columns: [COLUMNS[0], { heading: "HELP", links: [] }] },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("SHOP")).toBeInTheDocument();
+    expect(canvas.queryByText("HELP")).toBeNull();
+  },
+};
 
 /** The grid is four columns wide; supplying fewer leaves the brand block and
  * the columns it was given, rather than stretching them. */

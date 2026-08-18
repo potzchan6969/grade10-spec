@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, fn, within } from "storybook/test";
 import { Nav } from "./nav";
 
 /* Grade10's own chrome content. It lives here, in an example, rather than in
@@ -18,6 +19,8 @@ const NAV_ITEMS = [
   { label: "AUCTION", href: "#auction" },
 ];
 
+const CONTROLS = ["Search", "Account", "Wishlist", "Cart"];
+
 const meta = {
   title: "Components/Nav",
   component: Nav,
@@ -29,16 +32,149 @@ const meta = {
     utilityLinks: UTILITY_LINKS,
     navItems: NAV_ITEMS,
     localeLabel: "Hong Kong (HKD)",
+    onLocaleClick: fn(),
+    onSearchClick: fn(),
+    onAccountClick: fn(),
+    onWishlistClick: fn(),
+    onCartClick: fn(),
   },
 } satisfies Meta<typeof Nav>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+/** A storefront that answers every control the set draws. */
+export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    for (const control of CONTROLS) {
+      expect(canvas.getByRole("button", { name: control })).toBeInTheDocument();
+    }
+    expect(
+      canvas.getByRole("button", { name: "Hong Kong (HKD)" }),
+    ).toBeInTheDocument();
+    expect(canvas.getByRole("link", { name: "SHOP" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    expect(canvas.getByRole("link", { name: "GRADE" })).not.toHaveAttribute(
+      "aria-current",
+    );
+  },
+};
 
 /** Pass `promo: null` and the utility bar is the top edge. */
 export const WithoutPromo: Story = { args: { promo: null } };
+
+/** A store with no basket: the control is absent, not inert. */
+export const WithoutCart: Story = {
+  args: { onCartClick: undefined },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByRole("button", { name: "Cart" })).toBeNull();
+    expect(canvas.getByRole("button", { name: "Search" })).toBeInTheDocument();
+  },
+};
+
+/**
+ * The grade10 site as it stands: an account to reach, and no search, wishlist
+ * or basket behind the icons the set draws.
+ */
+export const AccountOnly: Story = {
+  args: {
+    promo: null,
+    utilityLinks: [],
+    onLocaleClick: undefined,
+    onSearchClick: undefined,
+    onWishlistClick: undefined,
+    onCartClick: undefined,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("button", { name: "Account" })).toBeInTheDocument();
+    for (const control of ["Search", "Wishlist", "Cart"]) {
+      expect(canvas.queryByRole("button", { name: control })).toBeNull();
+    }
+
+    // The label stays; nothing about it invites a click.
+    expect(canvas.getByText("Hong Kong (HKD)")).toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: "Hong Kong (HKD)" }),
+    ).toBeNull();
+
+    expect(canvasElement.querySelector('[data-slot="nav-promo"]')).toBeNull();
+    expect(canvasElement.querySelector('[data-slot="nav-utility"]')).toBeNull();
+  },
+};
+
+/** Nothing is current: an address that belongs to no navigation item. */
+export const NothingCurrent: Story = {
+  args: { navItems: NAV_ITEMS.map(({ label, href }) => ({ label, href })) },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    for (const item of NAV_ITEMS) {
+      expect(
+        canvas.getByRole("link", { name: item.label }),
+      ).not.toHaveAttribute("aria-current");
+    }
+  },
+};
+
+/** No copy of the component's own: what renders is what was passed. */
+export const NothingDefaulted: Story = {
+  args: {
+    promo: null,
+    logo: "ZZZ",
+    utilityLinks: [],
+    navItems: [],
+    localeLabel: "Singapore (SGD)",
+    onLocaleClick: undefined,
+    onSearchClick: undefined,
+    onAccountClick: undefined,
+    onWishlistClick: undefined,
+    onCartClick: undefined,
+  },
+  play: async ({ canvasElement }) => {
+    const text = canvasElement.querySelector('[data-slot="nav"]')?.textContent;
+    expect(text).toContain("ZZZ");
+    expect(text).toContain("Singapore (SGD)");
+    // What is left once the supplied strings are removed is whitespace, never
+    // a word the component brought with it.
+    const leftover = (text ?? "")
+      .replace("ZZZ", "")
+      .replace("Singapore (SGD)", "")
+      .trim();
+    expect(leftover).toBe("");
+  },
+};
+
+/**
+ * 375 CSS pixels, the narrowest viewport the shell must survive. The bar wraps
+ * rather than overflowing; nothing here decides what a designed mobile
+ * navigation looks like.
+ */
+export const Narrow: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ width: 375 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const header =
+      canvasElement.querySelector<HTMLElement>('[data-slot="nav"]');
+    expect(header).not.toBeNull();
+    if (header === null) return;
+    expect(header.scrollWidth).toBeLessThanOrEqual(header.clientWidth);
+    for (const slot of ["nav-promo", "nav-utility", "nav-bar"]) {
+      const region = header.querySelector<HTMLElement>(`[data-slot="${slot}"]`);
+      expect(region).not.toBeNull();
+      if (region === null) continue;
+      expect(region.scrollWidth).toBeLessThanOrEqual(region.clientWidth);
+    }
+  },
+};
 
 /** The same shell with another store's content, which is the whole point of
  * requiring it: nothing here is inherited. */

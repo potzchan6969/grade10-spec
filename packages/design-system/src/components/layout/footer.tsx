@@ -30,6 +30,10 @@ type FooterProps = ComponentProps<"footer"> & {
  * Every content prop is required rather than defaulted: two stores render this
  * shell, and a default would let the second one ship the first one's link
  * columns, catalog blurb, and corporate attribution with nothing failing.
+ *
+ * A section with nothing in it is absent rather than empty — including a
+ * column whose destinations do not exist yet, which would otherwise render as
+ * a heading over nothing.
  */
 function Footer({
   className,
@@ -57,56 +61,69 @@ function Footer({
           <p className="text-sm font-medium text-foreground">{logo}</p>
           <p className="text-xs text-secondary-foreground">{description}</p>
           <p className="text-xs text-secondary-foreground">{attribution}</p>
-          <div className="flex items-start gap-4 pt-3">
-            {socialLinks.map((link) => (
-              <Link
-                href={link.href}
-                key={String(link.label)}
-                size="xs"
-                variant="secondary"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+          {socialLinks.length > 0 ? (
+            <div
+              className="flex flex-wrap items-start gap-4 pt-3"
+              data-slot="footer-social"
+            >
+              {socialLinks.map((link) => (
+                <Link
+                  href={link.href}
+                  key={String(link.label)}
+                  size="xs"
+                  variant="secondary"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          ) : null}
         </div>
-        {columns.map((column) => (
-          <div
-            className="flex flex-col items-start gap-3"
-            key={String(column.heading)}
-          >
-            <p className="text-xs font-medium text-secondary-foreground">
-              {column.heading}
-            </p>
-            {column.links.map((link) => (
-              <Link
-                href={link.href}
-                key={String(link.label)}
-                size="xs"
-                variant="secondary"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        ))}
+        {columns.map((column) =>
+          column.links.length === 0 ? null : (
+            <div
+              className="flex flex-col items-start gap-3"
+              data-slot="footer-column"
+              key={String(column.heading)}
+            >
+              <p className="text-xs font-medium text-secondary-foreground">
+                {column.heading}
+              </p>
+              {column.links.map((link) => (
+                <Link
+                  href={link.href}
+                  key={String(link.label)}
+                  size="xs"
+                  variant="secondary"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          ),
+        )}
       </div>
       <div className="flex h-[60px] w-full items-center justify-between border-t border-border px-10">
         <p className="text-xs font-medium text-secondary-foreground">
           {copyright}
         </p>
-        <div className="flex items-start gap-6">
-          {legalLinks.map((link) => (
-            <Link
-              href={link.href}
-              key={String(link.label)}
-              size="xs"
-              variant="secondary"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
+        {legalLinks.length > 0 ? (
+          <div
+            className="flex flex-wrap items-start gap-x-6 gap-y-1"
+            data-slot="footer-legal"
+          >
+            {legalLinks.map((link) => (
+              <Link
+                href={link.href}
+                key={String(link.label)}
+                size="xs"
+                variant="secondary"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        ) : null}
         <p className="text-xs font-medium text-secondary-foreground">
           {locale}
         </p>
