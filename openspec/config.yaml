@@ -1,6 +1,6 @@
 # Default workflow for a change that records no schema of its own. AGENTS.md
 # documents both schemas and the `openspec-propose` skill chooses between them.
-schema: grade10
+schema: full-planning
 
 # This repo is an OpenSpec store, and more besides: PM and design own everything
 # under openspec/ and docs/prds/, while packages/design-system/ holds
@@ -59,7 +59,7 @@ rules:
     - Use Given/When/Then format
     - Reference existing patterns before inventing new ones
     - Write requirements an engineer in another repo can implement without asking a follow-up question.
-    - "Never name a class, function, hook, table, or library in a spec - that is design's job: design.md under the grade10 schema, and the implementing repo's own change under pm-planning. Public component exports are the exception: the export name is the cross-repo contract, so name it, and keep the set in one requirement."
+    - "Never name a class, function, hook, table, or library in a spec - that is design's job: design.md under the full-planning schema, and the implementing repo's own change under pm-planning. Public component exports are the exception: the export name is the cross-repo contract, so name it, and keep the set in one requirement."
     - Every scenario must be checkable by a test or a manual pass.
     - Requirements live here and nowhere else. Never leave a testable statement in a PRD.
   design:
@@ -81,7 +81,7 @@ rules:
 operations:
   apply:
     guidance:
-      - "This guidance describes implementing a change that carries a tasks.md - a grade10-schema change. A pm-planning change has none: it is complete at its specs, and engineering plans and builds it in the implementing repo, where this guidance applies rather than here."
+      - "This guidance describes implementing a change that carries a tasks.md - a full-planning change. A pm-planning change has none: it is complete at its specs, and engineering plans and builds it in the implementing repo, where this guidance applies rather than here."
       - "Run the implementing repository's `tdd` skill when it ships one (grade10 has it at `.claude/skills/tdd`); its red-green loop and test-quality rules govern the test-first work described next."
       - "Work test-first inside each task, one scenario at a time: the seams under test are pre-agreed - they are the spec scenarios and public export contracts the task names, never internals. Write the failing test at that seam, then only enough code to make it pass."
       - "Expected values in a test come from the spec or a worked example, never from recomputing what the code does; a test that breaks under refactor without a behavior change is testing the wrong thing."

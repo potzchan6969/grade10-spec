@@ -1,6 +1,6 @@
-name: grade10
+name: full-planning
 version: 1
-description: Grade10 workflow - proposal → specs → design → ui → tasks
+description: Full planning workflow - proposal → specs → design → ui → tasks
 artifacts:
   - id: proposal
     generates: proposal.md

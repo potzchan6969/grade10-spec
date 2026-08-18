@@ -243,5 +243,5 @@ apply:
     apply guidance below describes that work and belongs there, not here.
 
     The exception is a delta that names a component or token this repo owns -
-    that part is work here, and it needs a grade10-schema change carrying its
+    that part is work here, and it needs a full-planning change carrying its
     own design, ui, and tasks.

@@ -28,7 +28,7 @@ Read [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md
 
 ## Product specification workflow
 
-Two workflow schemas exist under `openspec/schemas/`, both sharing the same proposal and spec templates. `grade10` (the default: proposal → specs → design → ui → tasks) is for changes that carry their implementation plan here. `pm-planning` (proposal → specs) is for product planning that is complete once the requirements are specified — create one with `openspec new change <name> --schema pm-planning`. A change records its schema in its `.openspec.yaml` at creation.
+Two workflow schemas exist under `openspec/schemas/`, both sharing the same proposal and spec templates. `full-planning` (the default: proposal → specs → design → ui → tasks) is for changes that carry their implementation plan here. `pm-planning` (proposal → specs) is for product planning that is complete once the requirements are specified — create one with `openspec new change <name> --schema pm-planning`. A change records its schema in its `.openspec.yaml` at creation.
 
 For a new product feature:
 
