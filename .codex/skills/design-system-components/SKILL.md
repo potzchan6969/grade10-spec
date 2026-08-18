@@ -17,7 +17,7 @@ Does the new thing combine with the existing axes?
 
 - **It combines** — it is a new option on an existing VARIANT property. A loading Danger button is sensible, so `Loading` is a value of `State`, not of `Type`.
 - **It cannot combine** — if it is only valid alongside one value of another axis, it is a separate component set with its own four files. A link is not a Button variant.
-- **Code and design already disagree** — record the decision in an `openspec/changes/<change-name>/` proposal before writing anything. Never resolve a mismatch inside a `.figma.ts` template.
+- **Code and design already disagree** — note the mismatch while implementing, but do not create or update `openspec/changes/` during the edit. At the end, record the consolidated decision in one change proposal if the mismatch remains. Never resolve a mismatch silently inside a `.figma.ts` template.
 
 The operative rule: a component may not offer a variant or size the Figma set does not define. A code-only rung is a contract a consumer will ship that no designer drew.
 
@@ -31,6 +31,7 @@ The operative rule: a component may not offer a variant or size the Figma set do
 6. **Run `pnpm run check:design-system`** to zero errors and zero *unexplained* warnings. It needs `FIGMA_TOKEN` for the colour and geometry comparison; a plugin dump checks names only and says so. A warning you intend to keep belongs in an OpenSpec change with a reason, not in the run log.
 7. **Publish Code Connect** and verify with `get_code_connect_map`; it returns `{}` when nothing is published, and Dev Mode then shows no connected code however correct the template is.
 8. **Run `pnpm run lint` and `pnpm run typecheck`.** Commit regenerated theme CSS with the token change that produced it.
+9. **Update OpenSpec once at the end.** Consolidate any design/code decisions from this task into one `openspec/changes/<change-name>/` proposal, or leave OpenSpec unchanged when the implementation does not introduce a contract or design decision.
 
 ## Failures that have already cost a rebuild here
 

@@ -1,7 +1,7 @@
 ---
 description: Maintain versioned PRDs and OpenSpec change records without duplicating sources of truth
 globs: '{docs/prds/**,openspec/**}'
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Product specification rules
