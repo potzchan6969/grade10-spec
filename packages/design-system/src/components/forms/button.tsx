@@ -10,30 +10,31 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary-muted text-primary-muted-foreground hover:bg-primary-muted-hover disabled:bg-disabled",
+          "bg-primary text-primary-foreground hover:bg-[color-mix(in_oklab,var(--primary),black_10%)] disabled:bg-disabled",
         outline:
           "border-border text-accent-foreground hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground",
         secondary:
-          "bg-muted text-muted-foreground hover:bg-muted-hover aria-expanded:bg-muted-hover disabled:bg-disabled",
+          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklab,var(--secondary),white_5%)] aria-expanded:bg-[color-mix(in_oklab,var(--secondary),white_5%)] disabled:bg-disabled",
         ghost:
-          "hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground",
+          "text-foreground hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground",
         destructive:
-          "bg-destructive-muted text-destructive-foreground hover:bg-destructive-muted-hover disabled:bg-disabled",
+          "bg-destructive text-destructive-foreground hover:bg-[color-mix(in_oklab,var(--destructive),black_10%)] disabled:bg-disabled",
       },
       size: {
-        // Figma binds both small rungs to `Radius/radius-sm` (4px). The
-        // `rounded-sm`/`rounded-md` utilities cannot express that: theme.preamble.css
-        // derives the whole scale proportionally from `--radius`, so they compile to
-        // calc(--radius * 0.6) and calc(--radius * 0.8) — 4.8px and 6.4px against the
-        // grade10 `--radius` of 8px. Bind the Foundation primitive directly instead.
-        xs: "h-6 gap-1 rounded-(--radius-sm) px-2 text-xs [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-8 gap-2 rounded-(--radius-sm) px-2 text-sm [&_svg:not([class*='size-'])]:size-3.5",
-        default: "h-12 gap-2 rounded-lg px-4 text-base",
+        // Figma binds sm and md to `Radius/radius-sm` (4px). The `rounded-sm`
+        // utility cannot express that: theme.preamble.css derives the whole scale
+        // proportionally from `--radius`, so it compiles to calc(--radius * 0.6) —
+        // 4.8px against the grade10 `--radius` of 8px. Bind the Foundation
+        // primitive directly instead. `lg` binds `Radius/radius-lg`, which is
+        // `--radius` itself, so `rounded-lg` is exact.
+        sm: "h-8 gap-1 rounded-(--radius-sm) px-2 text-xs [&_svg:not([class*='size-'])]:size-3",
+        md: "h-10 gap-2 rounded-(--radius-sm) px-3 text-sm [&_svg:not([class*='size-'])]:size-3.5",
+        lg: "h-12 gap-2 rounded-lg px-4 text-base",
       },
     },
     defaultVariants: {
       variant: "default",
-      size: "default",
+      size: "lg",
     },
   },
 );
@@ -51,7 +52,7 @@ type ButtonProps = ButtonPrimitive.Props &
 function Button({
   className,
   variant = "default",
-  size = "default",
+  size = "lg",
   loading = false,
   leading,
   trailing,

@@ -12,7 +12,7 @@ const meta = {
       control: "select",
       options: ["default", "outline", "secondary", "ghost", "destructive"],
     },
-    size: { control: "select", options: ["xs", "sm", "default"] },
+    size: { control: "select", options: ["sm", "md", "lg"] },
   },
 } satisfies Meta<typeof Button>;
 
@@ -24,8 +24,8 @@ export const Secondary: Story = { args: { variant: "secondary" } };
 export const Outline: Story = { args: { variant: "outline" } };
 export const Ghost: Story = { args: { variant: "ghost" } };
 export const Destructive: Story = { args: { variant: "destructive" } };
+export const Medium: Story = { args: { size: "md" } };
 export const Small: Story = { args: { size: "sm" } };
-export const ExtraSmall: Story = { args: { size: "xs" } };
 export const Disabled: Story = { args: { disabled: true } };
 /** `loading` shows a spinner and disables the button. */
 export const Loading: Story = { args: { loading: true, children: "Loading" } };
@@ -38,12 +38,12 @@ export const WithIcons: Story = {
   args: { leading: <PlusIcon />, trailing: <ChevronRightIcon /> },
 };
 
-/** Icons scale with the rung: 16px at `default`, 14px at `sm`, 12px at `xs`. */
+/** Icons scale with the rung: 16px at `lg`, 14px at `md`, 12px at `sm`. */
+export const WithIconsMedium: Story = {
+  args: { size: "md", leading: <PlusIcon />, trailing: <ChevronRightIcon /> },
+};
 export const WithIconsSmall: Story = {
   args: { size: "sm", leading: <PlusIcon />, trailing: <ChevronRightIcon /> },
-};
-export const WithIconsExtraSmall: Story = {
-  args: { size: "xs", leading: <PlusIcon />, trailing: <ChevronRightIcon /> },
 };
 
 /** `loading` takes the leading slot and suppresses `trailing`, as Figma draws it. */

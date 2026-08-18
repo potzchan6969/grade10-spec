@@ -4,7 +4,7 @@
 //
 // The node ID is the component *set* (86-3459), not the page that holds it
 // (86-3366). The set carries five VARIANT properties — `variant` (5 options),
-// `state` (`default` | `hover`), `size` (`default` | `sm` | `xs`), and
+// `state` (`default` | `hover`), `size` (`lg` | `md` | `sm`), and
 // `isDisabled` / `isLoading` (both `false` | `true`) — all with lowercase
 // property and option names, so every key below is lowercase; these are Figma's
 // names, not the capitalised ones the pre-merge shape used.
@@ -47,7 +47,9 @@ instance.getEnum("state", {
 // produces no strings and is recognised as a boolean gate, not an axis.
 //
 // `disabled` is deliberately not OR-ed with `loading`: the component derives
-// that itself, so emitting both would print a redundant prop.
+// that itself, so emitting both would print a redundant prop. Figma draws
+// every loading variant with `isDisabled=true`, which is why the gate below
+// suppresses `disabled` while `loading` is on.
 const disabled = instance.getEnum("isDisabled", {
   false: false,
   true: true,
@@ -57,13 +59,13 @@ const loading = instance.getEnum("isLoading", {
   true: true,
 });
 
-// Rung names match the modes of Figma's Sizing collection, so `default` is the
-// 48px button rather than a middle rung. It is also the cva default, so the
+// Rung names match Figma's size options, which bind Size/size-12 (48),
+// Size/size-10 (40) and Size/size-8 (32). `lg` is also the cva default, so the
 // prop is omitted for it and emitted for the other two.
 const size = instance.getEnum("size", {
-  default: "default",
+  lg: "lg",
+  md: "md",
   sm: "sm",
-  xs: "xs",
 });
 
 // The label is a TEXT component property, not a bare text layer. Address it by
@@ -90,7 +92,7 @@ const leadingIcon =
     ? instance.getInstanceSwap("leadingContent")
     : null;
 const leadingCode =
-  leadingIcon?.type === "INSTANCE" && leadingIcon.hasCodeConnect()
+  leadingIcon?.type === "INSTANCE"
     ? leadingIcon.executeTemplate().example
     : null;
 
@@ -99,14 +101,14 @@ const trailingIcon =
     ? instance.getInstanceSwap("trailingContent")
     : null;
 const trailingCode =
-  trailingIcon?.type === "INSTANCE" && trailingIcon.hasCodeConnect()
+  trailingIcon?.type === "INSTANCE"
     ? trailingIcon.executeTemplate().example
     : null;
 
 export default {
-  // `default` is the cva defaultVariant for both axes, so omit each prop in that
+  // `default` / `lg` are the cva defaultVariants, so omit each prop in that
   // case and emit what someone would actually write.
-  example: figma.code`<Button${variant === "default" ? "" : figma.code` variant="${variant}"`}${size === "default" ? "" : figma.code` size="${size}"`}${loading ? figma.code` loading` : ""}${disabled ? figma.code` disabled` : ""}${leadingCode ? figma.code` leading={${leadingCode}}` : ""}${trailingCode ? figma.code` trailing={${trailingCode}}` : ""}>${label}</Button>`,
+  example: figma.code`<Button${variant === "default" ? "" : figma.code` variant="${variant}"`}${size === "lg" ? "" : figma.code` size="${size}"`}${loading ? figma.code` loading` : ""}${!loading && disabled ? figma.code` disabled` : ""}${leadingCode ? figma.code` leading={${leadingCode}}` : ""}${trailingCode ? figma.code` trailing={${trailingCode}}` : ""}>${label}</Button>`,
   imports: ['import { Button } from "@grade10/design-system"'],
   id: "button",
   metadata: { nestable: true },
