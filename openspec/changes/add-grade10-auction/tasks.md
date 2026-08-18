@@ -20,7 +20,7 @@ Task 3.4 depends on the contracts in group 1; it uses fixtures rather than a run
 - [x] 3.1 Make `A collector browses Auction listings` and `A consumer reads a listing contract` pass in `apps/frontend/grade10` while preserving its current Auction UI composition.
 - [x] 3.2 Verify the current Auction frontend feature lane against renamed listing and extension contracts.
 
-## 4. Review
+## 4. Review (owner: @htonyl)
 
 - [ ] 4.1 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and `pnpm run build` after the relevant Auction and Stripe feature lanes pass.
 - [ ] 4.2 Verify every scenario in this change, run `openspec validate add-grade10-auction`, and run `openspec validate --specs`.
