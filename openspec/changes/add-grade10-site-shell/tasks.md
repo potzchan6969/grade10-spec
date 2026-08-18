@@ -12,7 +12,7 @@ the boundary. Groups 2, 3, and 4 are grade10 and depend on that bump.
 - [x] 1.5 Make `Every section is supplied` and `A section has no content` pass in `Footer`.
 - [x] 1.6 Make `Nothing is defaulted` pass — no visible copy either component supplies itself.
 - [x] 1.7 Make `A narrow viewport` pass for the header alone: the bar wraps rather than overflowing, with no absolute-positioned navigation at narrow widths.
-- [ ] 1.8 Cover a header with every handler and a header with none in the stories, check `apps/preview`'s product-list page still composes, and run this repository's checks.
+- [ ] 1.8 Cover a header with every handler and a header with none in the stories, check `apps/preview`'s product-list page still composes, and run this repository's checks. Blocked on `pnpm run check:design-system`, which needs a `FIGMA_TOKEN` (or a `FIGMA_DUMP`) the implementing run did not have; the stories, the preview check, lint, typecheck and `test:stories` are done and passing. Run the Figma component check before the next design-system release.
 
 ## 2. The shell (owner: @sean)
 
