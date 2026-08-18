@@ -115,7 +115,7 @@ function ProductCardImage({
         >
           <IconButton
             aria-label={cartLabel}
-            className="absolute right-0 bottom-0"
+            className="absolute bottom-0 left-0"
             onClick={onCartClick}
             size="md"
             variant="secondary"
@@ -123,7 +123,10 @@ function ProductCardImage({
             <ShoppingCartSimple aria-hidden size={14} weight="bold" />
           </IconButton>
           {inCart && cartCount != null ? (
-            <StatusIndicator className="absolute top-0 right-0" type="count">
+            <StatusIndicator
+              className="absolute top-0 right-0 z-10"
+              type="count"
+            >
               {cartCount}
             </StatusIndicator>
           ) : null}
