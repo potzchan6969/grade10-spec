@@ -6,24 +6,25 @@ Motivation: [proposal.md](proposal.md) — Why.
 
 ## Context
 
-The grade10 site ships today as a client-rendered application: one HTML shell
-with an empty root element, served for every address by an assets-only worker
-whose not-found handling falls back to that same shell. The application
-renders entirely in the browser — the root is created client-side, the
-address is read from the browser's location, and the dependency container is
-built at module load.
+The grade10 site runs React Router in framework mode
+([`adopt-react-router`](../adopt-react-router/proposal.md)). Each surface is a
+route module over its page, addresses come from one table, and the router
+matches them. The application still renders in the browser only: the build
+emits one shell document, and the assets worker answers every address with it.
 
-Three existing facts shape everything below.
+Four facts from that foundation shape everything below.
 
-- **The route table is already the one place addresses are named.** The SPA's
-  navigation module holds every route as a typed table; links, pages, and the
-  session redirect all compile against it, and the surface-to-page map is
-  exhaustiveness-checked against the same ids.
-- **A route owns everything beneath it.** The auction's mail links at
-  `/auction/lots/<id>` and the store will grow product addresses; the routing
-  spec and tests already promise a nested address answers as its section.
-  Serving must keep that promise — a plain "no file, 404" would break mailed
-  links.
+- **A route module is where a surface says things about itself.** It already
+  names its address and which surface the chrome should mark. Identity is one
+  more export beside those, and `meta` is the framework's own name for it.
+- **The framework renders pages at build time when asked.** `ssr: false` plus
+  a `prerender` list runs the real application per address and writes the
+  document. Nothing about the deploy changes: still static assets from the
+  same worker.
+- **A route owns everything beneath it.** A trailing splat gives the auction
+  its mailed `/auction/lots/<id>` links and the store its future product
+  addresses. Serving must keep that promise — a plain "no file, 404" would
+  break them.
 - **The chrome does not wait for the session.** The `page-shell` capability
   requires the header and footer before the session resolves and forbids
   layout shift when it arrives. The session-unresolved state is therefore a
@@ -33,73 +34,77 @@ Three existing facts shape everything below.
 
 Design-level only; the proposal owns product scope.
 
-- **Goal:** one table drives everything — titles, descriptions, the emitted
-  pages, the sitemap, and the serving statuses all derive from the existing
-  route table, so a surface added later inherits the whole capability by
-  extending one typed record.
-- **Goal:** one rendering path. The served HTML comes from the same
-  components the browser runs, not a parallel template that can drift.
+- **Goal:** a surface added later inherits the whole capability by being a
+  route module — its identity, its emitted document, and its sitemap entry all
+  come from the module the surface already needs.
+- **Goal:** one rendering path. The served HTML comes from the same components
+  the browser runs, not a parallel template that can drift.
 - **Non-goal:** request-time rendering. Public content changes when a deploy
-  changes it; nothing here renders per request.
+  changes it. `ssr: true` plus loaders is one configuration change away when
+  card-level detail pages want per-request answers.
 - **Non-goal:** a `ui.md`. No Figma frame exists or is needed — the change
   alters what the first response contains, not how any surface looks.
 
 ## Decisions
 
-### Public pages are rendered at build time, and the browser takes over
+### A surface's identity is its route module's
 
-The build renders each public surface through the real application — shell,
-page, head tags — and emits one HTML document per route. The browser hydrates
-that document instead of rendering from an empty root. What is rendered is
-the session-unresolved state the `page-shell` spec already defines, so the
-served markup and the first client render agree by specification.
+Each public route module exports its title and description as a plain record,
+and its `meta` derives the head tags — title, description, and the Open Graph
+trio — from that record and the module's own address. The record is what the
+build reads for the sitemap and the prerender list; `meta` is what the
+framework renders, in the served document and after every client-side
+navigation alike. The document title following navigation costs nothing: it is
+what `meta` does.
 
-*Alternatives:* inject per-route meta into the shell at the edge — rejected,
-it satisfies link unfurls but serves an empty body, so the headline-and-copy
-requirement fails and script-less crawlers still index nothing. Render at
-request time at the edge — rejected, it forces a per-request story onto code
-that is browser-shaped (location reads, a module-scope container) for content
-that only changes at deploy; the cost buys nothing until per-card detail
-pages exist, and that change can revisit it. A separate static site for
-marketing only — rejected, it splits one site across two architectures and
-two deploys.
+*Alternatives:* one identity table in the navigation module, keyed by route id
+— rejected: it splits what a surface is across two files and needs its own
+compile-time guarantee that every route appears, which the route module gives
+for free by being the thing that exists. A per-page head-management component
+— rejected: pages stay framework-free, and this is what route modules are for.
 
-### One route identity table
+### The framework emits the pages
 
-The route table gains a title and description per surface, typed so a route
-without an identity fails to compile — the same guarantee the table already
-gives links and pages. The document title follows navigation by reading this
-table; the build emits head tags, the sitemap, and robots.txt from it. The
-copy lives in the application beside the rest of the site's copy.
+`prerender` lists the public addresses; the build runs the real application at
+each one and writes its document. What is rendered is the session-unresolved
+state the `page-shell` spec already defines, so the served markup and the first
+client render agree by specification, and the browser hydrates rather than
+rendering from an empty root.
 
-*Alternatives:* a per-page head-management component — rejected, it scatters
-the identity across pages and adds a runtime dependency for values that are
-static per route; the compile-checked table already exists.
+*Alternatives:* a custom build script rendering the app per route — rejected:
+it is the unsupported twin of a supported feature, and the reason
+`adopt-react-router` was worth doing first. Inject per-route meta into the
+shell at the edge — rejected: it satisfies link unfurls but serves an empty
+body, so the headline-and-copy requirement fails and script-less crawlers still
+index nothing. A separate static site for marketing — rejected: it splits one
+site across two architectures and two deploys.
 
-### Serving learns the route table's shape
+### Serving resolves addresses the way the router does
 
-A thin serving layer in front of the static assets resolves an address the
-same way the application does: an address nested under a public surface
-serves that surface's document with status 200; an address under no surface
-serves the shell with status 404, and the application renders its not-found
-surface as it already does. It shares the application's route table rather
-than restating it, so the two cannot disagree.
+The assets worker gains a thin layer in front of it that matches an address
+against the application's own route config: an address nested under a public
+surface serves that surface's prerendered document with status 200; an address
+under no surface serves the shell with status 404, and the application renders
+its not-found surface as it already does. It matches through the router's
+matcher over the shared route config, not a second table, so serving and the
+application cannot disagree.
 
-*Alternatives:* keep the single-page fallback — rejected, every unknown
-address answers 200 with the marketing shell's identity, a soft-404 that
-undermines the metric, and a nested auction address unfurls as the marketing
-page. Plain file-based 404 handling — rejected, it breaks the mailed lot
-links and every future detail address the day it ships.
+*Alternatives:* keep the single-page fallback — rejected: every unknown address
+answers 200 with the marketing shell's identity, a soft-404 that undermines the
+metric, and a nested auction address unfurls as the marketing page. Plain
+file-based 404 handling — rejected: it breaks the mailed lot links and every
+future detail address the day it ships.
 
-### The address is read through one seam
+### Browser globals move behind the render
 
-Build-time rendering supplies the address being rendered; in the browser the
-same seam reads the real location. Window reads that today happen at module
-scope or during render move behind that seam, which is also what keeps the
-served markup and the hydrating render identical.
+Prerendering runs the application outside a browser, so a `window` read at
+module scope or during render crashes the build. Those reads move to where the
+framework already supplies the answer — the router for the address, an effect
+for anything else — which is also what keeps the served markup and the
+hydrating render identical.
 
-*Alternatives:* guard each window read where it stands — rejected, the next
-window read added reintroduces the crash; one seam makes the category
+*Alternatives:* guard each window read where it stands — rejected: the next
+one added reintroduces the crash; moving them makes the category
 unrepresentable.
 
 ## Risks
@@ -109,6 +114,7 @@ unrepresentable.
   scenario fails. The discipline is mechanical — render the specified
   session-unresolved state and nothing else — and the scenario's test is the
   guard.
-- **A future surface skipping the table.** Mitigated by construction: a
-  route cannot be added without an identity, and the emitted pages and
-  sitemap derive from the same table.
+- **A future surface skipping the list.** A route module without an identity
+  fails to compile; the prerender list and the sitemap derive from the same
+  records, so the remaining gap is a public surface nobody marked public. The
+  sitemap's "nothing else" scenario is what catches it.
