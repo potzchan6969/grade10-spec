@@ -17,7 +17,7 @@ time after this change is accepted.
 - [x] 1.3 Run typecheck, lint, and the app's test lane as this group's
       verification.
 
-## 2. Session-decided addresses
+## 2. Session-decided addresses (owner: @sean)
 
 - [ ] 2.1 Make `A signed-out collector asks for the profile`, `A signed-in
       collector asks for sign-in`, and `Back never returns to a corrected
