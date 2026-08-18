@@ -19,13 +19,13 @@ time after this change is accepted.
 
 ## 2. Session-decided addresses (owner: @sean)
 
-- [ ] 2.1 Make `A signed-out collector asks for the profile`, `A signed-in
+- [x] 2.1 Make `A signed-out collector asks for the profile`, `A signed-in
       collector asks for sign-in`, and `Back never returns to a corrected
       address` pass: the session correction renders the corrected surface
       and replaces the history entry.
-- [ ] 2.2 Make `A public surface does not wait` pass: only the two
+- [x] 2.2 Make `A public surface does not wait` pass: only the two
       session-decided addresses hold for the session.
-- [ ] 2.3 Run typecheck, lint, and the app's test lane as this group's
+- [x] 2.3 Run typecheck, lint, and the app's test lane as this group's
       verification.
 
 ## 3. The collector's place and payload
