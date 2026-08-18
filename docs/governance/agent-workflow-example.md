@@ -33,6 +33,33 @@ into `grade10` would be a second source of truth to keep in step.
 There is never a second change to open in `grade10` — it has no planning shape
 of its own to hold one.
 
+### Give the agent the store clone, and only the store clone
+
+The CLI writes its own files, so `openspec new change`, `status`, `validate`,
+and `instructions` all run from `grade10` untouched. Drafting is different: the
+agent writes `proposal.md` and the delta specs itself, into a path *outside*
+`grade10`. Add the store clone to its working directories first — `/add-dir`
+in-session, or `--add-dir` at launch — or every write stops for a prompt:
+
+```bash
+/add-dir <path-to-your-store-clone>    # the one you registered, e.g. ../grade10-spec
+```
+
+**Do not let it write to `external/grade10-spec/`.** That submodule is the same
+upstream repository, checked out at the SHA this repo pins — today ten commits
+behind — and it carries a complete `openspec/` tree: `changes/`, `specs/`,
+`schemas/`, `config.yaml`. It sits inside the project root, so writing there
+draws no permission prompt at all, and a proposal written into it will validate,
+read correctly, and be invisible to the store, to `pnpm plan`, and to everyone
+else. The store clone is the registered one, read at its own `main`; the
+submodule is a pinned copy for building packages against. If your agent cannot
+reach the store clone, fix the working directory rather than accepting the path
+that happens to be writable.
+
+One more asymmetry: an agent in `grade10` reads that repository's `AGENTS.md`,
+not this store's. Everything this store expects of a proposal or a spec arrives
+through `openspec instructions`, which is why step 2 comes before any drafting.
+
 ## The PM lane
 
 > "Collectors need an account settings page — notification preferences and a
