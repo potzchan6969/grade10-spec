@@ -33,10 +33,10 @@ the boundary. Groups 2, 3, and 4 are grade10 and depend on that bump.
 - [x] 3.6 Delete `navigation/SiteHeader.tsx` in the commit that stops rendering it.
 - [x] 3.7 Run the grade10 app's test lane and `pnpm run typecheck`.
 
-## 4. Small widths
+## 4. Small widths (owner: @sean)
 
-- [ ] 4.1 Make `A narrow viewport` pass across every surface at a 375px viewport: vertical scrolling only, nothing clipped, every control reachable.
-- [ ] 4.2 Run `pnpm run build` and check each surface at 375px and at the frame's 1440px.
+- [x] 4.1 Make `A narrow viewport` pass across every surface at a 375px viewport: vertical scrolling only, nothing clipped, every control reachable.
+- [x] 4.2 Run `pnpm run build` and check each surface at 375px and at the frame's 1440px.
 
 ## 5. Delivery and review
 
