@@ -71,7 +71,7 @@ Publishing is a write to a shared Figma file and has no unattended path in CI by
 
 - A template's `node-id` is missing or no longer resolves.
 - A `getEnum` names a VARIANT property the component set does not have.
-- A `getEnum` omits an option, which would resolve to `undefined`.
+- A `getEnum` omits an option, which would resolve to `undefined`. Dev Mode renders that as an empty attribute — `<Button size="">` — which reads as a blank value rather than a broken template, so it is easy to look straight past.
 - A `getEnum` emits a value the cva does not define.
 
 **Warnings — the two sides disagree, which may be deliberate:**
@@ -85,11 +85,13 @@ Publishing is a write to a shared Figma file and has no unattended path in CI by
 
 A separate, token-free check runs in the test suite. `vitest --project contracts` reads each `cva` config out of the component source and fails when an option no story renders — the option list comes from the cva itself rather than a restated list, because cva keeps its config in a closure and exposes nothing at runtime. It accepts both authoring styles in this package, `variant: "line"` in a story's `args` and `variant="line"` inside a `render`, and it treats a `defaultVariants` option as covered by any story that omits the prop. An `argTypes` `options` entry does not count; only a story does.
 
-**Values, not just names.** Every axis and option can line up perfectly while the colours, heights, and padding are all wrong — which is exactly what happened to Button, whose variants matched by name for months while `default` rendered a solid fill against a design that specifies a tint. So each variant's own class string is resolved and compared against the variant Figma draws: `bg-*` through `tokens.json` to an 8-digit hex, and `h-*`, `px-*`, `gap-*`, and `rounded-*` to pixels. A mismatch is a warning, not an error — the component renders, it just does not render what was drawn.
+**Values, not just names.** Every axis and option can line up perfectly while the colours, heights, and padding are all wrong — which is exactly what happened to Button, whose variants matched by name for months while `default` rendered a 10% tint against a design that specifies a solid fill. So each variant's own class string is resolved and compared against the variant Figma draws: `bg-*` through `tokens.json` to an 8-digit hex, and `h-*`, `px-*`, `gap-*`, and `rounded-*` to pixels. A mismatch is a warning, not an error — the component renders, it just does not render what was drawn.
+
+**Base states only.** The comparison reaches each axis's base option and nothing else, so every hover, disabled, and loading value is unchecked, as are label colour, icon size, and border. Verify those by hand with `get_variable_defs` on the state's own node, and compare the *rule* rather than the colour: a disabled state may be a fill swap or the variant's own colours at `Opacity/opacity-50`, and those are different code. An opacity-based state is doubly invisible here, because the `bg-*` token this check compares is unchanged by it.
 
 This needs no variables endpoint. REST resolves every binding before it serializes, so `/v1/files/:key` reports the colour and geometry a viewer actually sees; `boundVariables` carries opaque IDs whose names would need the Enterprise-gated scope, and nothing here reads them. The plugin dump has no variant nodes at all, so it checks names only and says so rather than reporting a clean run.
 
-A variant is only comparable when every axis other than the one under test sits at its base option, or a `Disabled` variant's grey would be diffed against the default fill. Base is derived: for a mapped axis it is the option producing the cva `defaultVariant`, and for a boolean gate it is the option every map reports false for. That leaves `Default` and `Hover` tied, since hover is a pseudo-state with no prop behind it, so the option Figma names `Default` wins and an unresolvable tie skips the component rather than silently diffing a hover tint.
+A variant is only comparable when every axis other than the one under test sits at its base option, or a `Disabled` variant would be diffed against the default fill. Base is derived: for a mapped axis it is the option producing the cva `defaultVariant`, and for a boolean gate it is the option every map reports false for. That leaves `Default` and `Hover` tied, since hover is a pseudo-state with no prop behind it, so the option Figma names `Default` wins and an unresolvable tie skips the component rather than silently diffing a hover tint.
 
 ## For designers: before you create or change a component
 

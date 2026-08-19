@@ -107,16 +107,16 @@ A lint backstop enforces this in `packages/ui`: `scripts/biome-plugins/use-layou
 
 ## Worked example: Button
 
-The Figma set carries `variant`, `state`, `size`, `isDisabled`, and `isLoading` as variant properties over a complete cross-product, plus a `label` text property and two swappable icon slots.
+The Figma set carries `variant`, `state`, `size`, `isDisabled`, and `isLoading` as variant properties, plus a `label` text property and two swappable icon slots. Its 60 drawn variants are a curated subset of the 5×2×3×2×2 grid, not a complete cross-product: `hover` is drawn only where both gates are false, and each gate only at `state=default`. Every *option* is still mapped below — that is what the template owes; the undrawn combinations are simply unreachable.
 
 `button.tsx` — the contract. Five tonal options, three size rungs, and nothing invented:
 
 ```ts
 variants: {
   variant: { default: …, outline: …, secondary: …, ghost: …, destructive: … },
-  size:    { xs: "h-6 …", sm: "h-8 …", default: "h-12 …" },
+  size:    { sm: "h-8 …", md: "h-10 …", lg: "h-12 …" },
 },
-defaultVariants: { variant: "default", size: "default" },
+defaultVariants: { variant: "default", size: "lg" },
 ```
 
 `button.figma.ts` — the mapping. Every option listed, including the ones that emit nothing:
@@ -128,18 +128,18 @@ const variant = instance.getEnum("variant", {
 });
 instance.getEnum("state", { default: false, hover: false });  // pseudo-state: no prop behind it
 const loading = instance.getEnum("isLoading", { false: false, true: true });  // boolean gate
-const label = instance.getString("label#318:0");
+const label = instance.getString("label");  // bare name: a suffixed key renders as an Error chip
 ```
 
 The result a developer sees in Dev Mode, for three different instances of the same set:
 
 ```tsx
 <Button>Continue</Button>                                       // primary, default size
-<Button variant="secondary" size="sm" loading>Saving</Button>    // props omitted where they are the default
+<Button variant="secondary" size="md" loading>Saving</Button>    // props omitted where they are the default
 <Button variant="destructive" leading={<TrashIcon />}>Delete</Button>
 ```
 
-Note what the template deliberately does *not* emit: `variant="default"` and `size="default"` are omitted because they are the cva defaults, and the trailing icon is dropped while loading because the component gives that slot to the spinner. A Code Connect template's job is to emit what someone would actually write, not to enumerate the instance.
+Note what the template deliberately does *not* emit: `variant="default"` and `size="lg"` are omitted because they are the cva defaults, and the trailing icon is dropped while loading because the component gives that slot to the spinner. A Code Connect template's job is to emit what someone would actually write, not to enumerate the instance.
 
 ## Checking it yourself: no checkout, no engineer
 
@@ -147,7 +147,7 @@ Note what the template deliberately does *not* emit: `variant="default"` and `si
 
 **Measure the built component in Storybook.** Every push to `main` publishes the design-system Storybook to this repository's GitHub Pages site (Actions → **Storybook**; the `deploy` step links the URL). Switch the **Theme** toolbar control to **Grade10** first — it loads in `Default`, which is stock shadcn and not the designed theme, and comparing that against your file shows differences that are not real. Then press <kbd>M</kbd> for Measure to read the real box model, and <kbd>O</kbd> for Outline.
 
-**Read the automated diff.** Actions → **Design sync** → the newest run posts a table of disagreements, one row per mismatch: `Button · size=sm · Height (h-8) · 32px in code · 24px in Figma`. It runs nightly at 01:00 UTC and on demand via **Run workflow**. It covers background, height, horizontal padding, gap, and corner radius on each axis's base state only — vertical padding, anything inside the component, and the hover, disabled, and loading states are unchecked, so a clean table is not proof of a match.
+**Read the automated diff.** Actions → **Design sync** → the newest run posts a table of disagreements, one row per mismatch: `Button · size=md · Height (h-10) · 40px in code · 32px in Figma`. It runs nightly at 01:00 UTC and on demand via **Run workflow**. It covers background, height, horizontal padding, gap, and corner radius on each axis's base state only — vertical padding, anything inside the component, and the hover, disabled, and loading states are unchecked, so a clean table is not proof of a match.
 
 ## Four failures that look like success
 
