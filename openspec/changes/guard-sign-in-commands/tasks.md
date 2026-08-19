@@ -1,6 +1,6 @@
 ## 1. Email step gates cross-command (this repo) (owner: @sean)
 
-- [ ] 1.1 Make "One sign-in email per intent", "Only the running command looks busy", and "A settled request frees the step" pass in `SignInEmailForm` — both controls disabled while either flag is set, `loading` staying per-command, stories updated to show the gated states
+- [x] 1.1 Make "One sign-in email per intent", "Only the running command looks busy", and "A settled request frees the step" pass in `SignInEmailForm` — both controls disabled while either flag is set, `loading` staying per-command, stories updated to show the gated states
 
 Verify: `pnpm run test:stories:ui`, `pnpm run typecheck`, `pnpm run lint`.
 
