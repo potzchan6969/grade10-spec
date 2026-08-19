@@ -25,10 +25,10 @@
 
 ## 4. Collector-facing surfaces (grade10) (owner: @sean)
 
-- [ ] 4.1 Render both close times in `apps/frontend/grade10/src/pages/auctions/AuctionsPage.tsx` with `formatDeadline`, satisfying "The auction page shows a close", "A closed listing" and "A page and a message agree" — both now read `19 Aug 2026, 14:00 UTC` for one instant.
-- [ ] 4.2 Repoint `packages/grade10-store/frontend/src/features/account/profile/presentation/views/ProfileView.tsx` at `formatDay`, so both storefronts read one module through the shared feature.
-- [ ] 4.3 Repoint `packages/grade10-store/demo/src/useCases/{profile,orders}.tsx` and `packages/grade10-auction/demo/src/useCases/listingPage.tsx` at the module, whose UTC default already makes their assertions independent of the machine running them.
-- [ ] 4.4 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
+- [x] 4.1 Render both close times in `apps/frontend/grade10/src/pages/auctions/AuctionsPage.tsx` with `formatDeadline`, satisfying "The auction page shows a close", "A closed listing" and "A page and a message agree" — both now read `19 Aug 2026, 14:00 UTC` for one instant.
+- [x] 4.2 Repoint `packages/grade10-store/frontend/src/features/account/profile/presentation/views/ProfileView.tsx` at `formatDay`, so both storefronts read one module through the shared feature.
+- [x] 4.3 Repoint `packages/grade10-store/demo/src/useCases/{profile,orders}.tsx` and `packages/grade10-auction/demo/src/useCases/listingPage.tsx` at the module, whose UTC default already makes their assertions independent of the machine running them.
+- [x] 4.4 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
 
 ## 5. Keeping it consolidated (grade10)
 
