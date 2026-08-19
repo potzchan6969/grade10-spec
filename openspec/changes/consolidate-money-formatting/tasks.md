@@ -35,4 +35,4 @@ This group's check fails until groups 1 through 5 have landed their deletions.
 
 - [x] 6.1 Add a script in the `scripts/lib/` family, wired into `pnpm run check:libs`, that fails when `style: "currency"` or a minor-unit division appears outside `packages/utils/src/money.ts`, and name the money module in `docs/conventions/code-layout.md` as the one place either belongs.
 - [x] 6.2 Update `docs/architecture/handbook.html` for the `@grade10/utils/money` subpath and the surface Shopify no longer publishes.
-- [ ] 6.3 Run `pnpm run check:libs`, `pnpm run check:handbook`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and `pnpm run build`.
+- [x] 6.3 Run `pnpm run check:libs`, `pnpm run check:handbook`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and `pnpm run build`.
