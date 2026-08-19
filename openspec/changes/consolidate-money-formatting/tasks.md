@@ -19,9 +19,9 @@
 
 ## 4. Collector-facing surfaces (grade10) (owner: @sean)
 
-- [ ] 4.1 Repoint `apps/frontend/grade10/src/pages/{store/StorePage,auctions/AuctionsPage}.tsx` at `formatMoney` with the default symbol shape, delete `apps/frontend/grade10/src/money.ts`, and add `@grade10/utils` to the app's `package.json`, satisfying "Two collector surfaces agree" and "A collector reads their own locale".
-- [ ] 4.2 Repoint the four `packages/grade10-store/demo/src/useCases/*.tsx` and four `packages/grade10-auction/demo/src/useCases/*.tsx` call sites at `formatMoney` with an explicit `locale` so their assertions stay deterministic, delete both local `money.ts` files, and add `@grade10/utils` to the auction demo's `package.json`.
-- [ ] 4.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
+- [x] 4.1 Repoint `apps/frontend/grade10/src/pages/{store/StorePage,auctions/AuctionsPage}.tsx` at `formatMoney` with the default symbol shape, delete `apps/frontend/grade10/src/money.ts`, and add `@grade10/utils` to the app's `package.json`, satisfying "Two collector surfaces agree" and "A collector reads their own locale".
+- [x] 4.2 Repoint the four `packages/grade10-store/demo/src/useCases/*.tsx` and four `packages/grade10-auction/demo/src/useCases/*.tsx` call sites at `formatMoney` with an explicit `locale` so their assertions stay deterministic, delete both local `money.ts` files, and add `@grade10/utils` to the auction demo's `package.json`.
+- [x] 4.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
 
 ## 5. Operator-facing surfaces (grade10)
 
