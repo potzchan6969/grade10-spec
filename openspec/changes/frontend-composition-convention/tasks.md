@@ -26,9 +26,9 @@ Needs group 1's admin lists landed — an application cannot load a list its pac
 ## 4. Applications group their outbound clients (grade10) (owner: @sean)
 
 - [x] 4.1 Group the grade10 storefront's session and procedure clients into a client directory, with the shared response cache as its own module beside them — satisfies "An application constructs its clients" and "Cache-wide policy is added"
-- [ ] 4.2 Group the ZZZ storefront's clients the same way — satisfies "An application constructs its clients"
-- [ ] 4.3 Group each admin panel's session client beside its existing per-backend procedure clients, keeping the shared cache its own module — satisfies "An application constructs its clients" and "Cache-wide policy is added"
-- [ ] 4.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
+- [x] 4.2 Group the ZZZ storefront's clients the same way — satisfies "An application constructs its clients"
+- [x] 4.3 Group each admin panel's session client beside its existing per-backend procedure clients, keeping the shared cache its own module — satisfies "An application constructs its clients" and "Cache-wide policy is added"
+- [x] 4.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
 
 ## 5. Durable guidance (grade10)
 
