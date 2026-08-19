@@ -40,8 +40,8 @@ Design-level only; the proposal owns product scope.
 - **Goal:** one rendering path. The served HTML comes from the same components
   the browser runs, not a parallel template that can drift.
 - **Non-goal:** request-time rendering. Public content changes when a deploy
-  changes it. `ssr: true` plus loaders is one configuration change away when
-  card-level detail pages want per-request answers.
+  changes it. Turning it on later is a piece of work, not a flag — see
+  *Request-time rendering, if it is ever wanted* below.
 - **Non-goal:** a `ui.md`. No Figma frame exists or is needed — the change
   alters what the first response contains, not how any surface looks.
 
@@ -118,3 +118,44 @@ unrepresentable.
   fails to compile; the prerender list and the sitemap derive from the same
   records, so the remaining gap is a public surface nobody marked public. The
   sitemap's "nothing else" scenario is what catches it.
+
+## Request-time rendering, if it is ever wanted
+
+Measured against the delivered change, not guessed at: `ssr: true` builds, and
+the built worker does not start.
+
+The framework emits `dist/server/index.js` and the prerendered surfaces
+alongside it. Serving that bundle on Workers throws before the first request:
+
+```
+Uncaught TypeError: The argument 'path' must be a file URL object, a file URL
+string, or an absolute path string. Received 'undefined'
+  at node:module:34:15 in createRequire
+```
+
+The bundle carries esbuild's CommonJS shim, `createRequire(import.meta.url)`,
+and `import.meta.url` is undefined in a Workers bundle. It is there for
+`use-sync-external-store`, which is CommonJS-only and arrives through
+`@base-ui/react` in the design system — so it is in any server bundle of this
+application, and no setting in this repository removes it. `nodejs_compat`
+does not help: the flag supplies `createRequire`, and the argument is still
+undefined. Pointing vite's `ssr.resolve.conditions` at `workerd` produces a
+byte-identical bundle, because the framework's plugin owns that environment.
+
+What it would take:
+
+- `@cloudflare/vite-plugin`, a dependency this repository does not have. It
+  builds the server environment for workerd rather than bundling a
+  Node-targeted artifact afterwards.
+- Replacing the serving layer. It resolves an address to a prerendered
+  document; under request-time rendering there are none to resolve, and
+  `ssr: true` writes no shell — so the 404 answer has no document either.
+  Request-time rendering gives honest statuses itself, which is the reason
+  that layer exists.
+- Accepting the cost: the worker goes from 8.8 KB to 439 KB gzipped, and every
+  request runs the composition root and the session read that today run only
+  in a browser.
+
+None of this argues against the non-goal. Public content still changes when a
+deploy changes it. It says what the bill is when a card-level detail page
+wants a per-request answer.
