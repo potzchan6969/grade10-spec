@@ -1,4 +1,4 @@
-## 1. Product frontend packages publish their module lists (grade10)
+## 1. Product frontend packages publish their module lists (grade10) (owner: @sean)
 
 - [ ] 1.1 Publish `auth-frontend`'s module list at a `./modules` subpath, gathering the sign-in slice's module, and add the list file to the package's tsconfig `include` — satisfies "A package defines a single feature slice"
 - [ ] 1.2 Publish `store-admin-frontend`'s module list, gathering the orders slice — satisfies "An admin frontend package is composed"
