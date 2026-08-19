@@ -1,16 +1,16 @@
-# Design: ZZZ store navigation
+# Design: ZZZ site navigation
 
 Capability delta:
-[`zzz-store/navigation`](specs/zzz-store/navigation/spec.md).
+[`zzz/navigation`](specs/zzz/navigation/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
 ## Context
 
-The ZZZ store renders three views from one address: the app root switches
+The ZZZ site renders three views from one address: the app root switches
 on a signing-in flag and the session, so the address bar never moves and
 nothing can be pointed at. There is no route table, no history handling,
 and no not-found — an unknown address renders whatever the session decides.
-The `zzz-store` product has no capabilities recorded; this change writes
+The `zzz` product has no capabilities recorded; this change writes
 its first.
 
 `adopt-react-router` decides the routing foundation for the grade10 site
@@ -40,7 +40,7 @@ The app adopts the framework `adopt-react-router` chose, the same way: the
 `@react-router/dev` Vite plugin, a root module, one thin route module per
 surface lazily importing its view, generated route types. No prerendering —
 `ssr: false` with no prerender list keeps every address answering the app
-shell, which is what the store serves today.
+shell, which is what the site serves today.
 
 *Alternatives:* hand-roll a route table and address hook the way grade10
 did before its migration — rejected: it re-creates the machinery the other
@@ -65,9 +65,9 @@ rejected: two addresses for one surface, and no address means home.
 
 Once addresses exist, an unknown one has to answer something, and answering
 home is the soft-404 habit the grade10 site's specs already refuse. The
-store gains a minimal not-found view naming the failed address, rendered
+site gains a minimal not-found view naming the failed address, rendered
 without waiting for the session — the session has no say over an address
-the store does not answer.
+the site does not answer.
 
 *Alternatives:* resolve unknown addresses to home — rejected above. Reuse
 the grade10 site's not-found page — rejected: pages are brand-owned view

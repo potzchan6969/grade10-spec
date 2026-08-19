@@ -1,4 +1,4 @@
-# Tasks: ZZZ store navigation
+# Tasks: ZZZ site navigation
 
 Every group lands in the grade10 repository, in order — each builds on the
 one before. Group 1 assumes `adopt-react-router`'s foundation group has
@@ -12,7 +12,7 @@ exist in the repository.
       builds through the framework's Vite plugin with a root module, one
       thin route module per surface, and a minimal not-found view naming
       the failed address.
-- [ ] 1.2 Make `Sign-in opens in place`, `Back steps back into the store`,
+- [ ] 1.2 Make `Sign-in opens in place`, `Back steps back into the site`,
       and `Another origin is the browser's` pass: the state-switched
       rendering in the app root retires and moving between views becomes
       navigation.

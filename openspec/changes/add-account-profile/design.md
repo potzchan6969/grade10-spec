@@ -32,7 +32,7 @@ Three existing constraints shape everything below.
 
 Design-level only; the proposal owns product scope.
 
-- **Goal:** one source for what the account page shows, so `zzz-store` and the
+- **Goal:** one source for what the account page shows, so `zzz` and the
   admin panels inherit it rather than each composing session values.
 - **Goal:** the smallest transport change that carries bytes — not a second
   HTTP client.

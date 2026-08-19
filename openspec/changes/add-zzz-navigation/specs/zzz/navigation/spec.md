@@ -1,16 +1,16 @@
 ## Purpose
 
-How the ZZZ store answers an address: which surface it resolves to, how the
+How the ZZZ site answers an address: which surface it resolves to, how the
 session corrects an address it decides, what a navigation preserves, and
-what code a surface costs. The store's surfaces are home — the signed-out
+what code a surface costs. The site's surfaces are home — the signed-out
 landing — sign-in, and the profile; this capability binds them and every
-surface the store adds after them.
+surface the site adds after them.
 
 ## ADDED Requirements
 
 ### Requirement: An address resolves to one surface
 
-The store SHALL answer home, sign-in, and the profile each at an address of
+The site SHALL answer home, sign-in, and the profile each at an address of
 its own, and SHALL resolve every address to at most one surface. A surface
 SHALL own every address beneath its own. An address under no surface SHALL
 resolve to a not-found surface that names the address, never to home.
@@ -29,7 +29,7 @@ resolve to a not-found surface that names the address, never to home.
 
 #### Scenario: An unknown address resolves to not-found
 
-- **WHEN** a collector opens an address under no surface the store answers
+- **WHEN** a collector opens an address under no surface the site answers
 - **THEN** the not-found surface renders, naming the address that failed
 
 ### Requirement: The session corrects a session-decided address
@@ -69,12 +69,12 @@ to resolve.
 #### Scenario: Not-found does not wait
 
 - **GIVEN** the session has not yet resolved
-- **WHEN** a collector opens an address under no surface the store answers
+- **WHEN** a collector opens an address under no surface the site answers
 - **THEN** the not-found surface renders without waiting for it
 
 ### Requirement: In-app navigation stays in the page
 
-Moving between the store's surfaces SHALL happen without a full document
+Moving between the site's surfaces SHALL happen without a full document
 load, and the browser's history SHALL step back through it. A click the
 collector modifies, a link that opens elsewhere by its own declaration, and
 a destination on another origin SHALL be left to the browser untouched.
@@ -86,7 +86,7 @@ a destination on another origin SHALL be left to the browser untouched.
 - **THEN** the sign-in surface renders at its address without a full
   document load
 
-#### Scenario: Back steps back into the store
+#### Scenario: Back steps back into the site
 
 - **GIVEN** a collector who moved from home to sign-in
 - **WHEN** they go back

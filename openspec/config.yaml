@@ -33,7 +33,7 @@ context: |
   and component export contract; a change under openspec/ is the delta against
   it. Specs are grouped by product as openspec/specs/<product>/<capability>/;
   the products are grade10-store (the Grade10 trading-card store surfaces),
-  zzz-store, grade10-site (the grade10 application's own surfaces, starting
+  zzz, grade10-site (the grade10 application's own surfaces, starting
   with the shell every page renders in), and shared-ui (cross-product contracts
   for the shared components every store application consumes: packages/ui, and
   the site chrome the design system publishes). A capability's

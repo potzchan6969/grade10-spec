@@ -62,7 +62,7 @@ surface unfurls with that page's own title and description.
 - **Locale variants.** One language, no hreflang.
 - **Performance targets.** Content in the first response should help first
   paint, but no performance number is a success criterion here.
-- **ZZZ.** `zzz-store` gains nothing here; if that brand wants the same, it
+- **ZZZ.** `zzz` gains nothing here; if that brand wants the same, it
   is its own change against its own surfaces.
 
 ## Capabilities

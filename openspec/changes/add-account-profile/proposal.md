@@ -64,7 +64,7 @@ limits.
   is replaced or removed.
 - **Collector identity beyond the basics** — location, social links, collection
   showcases, badges.
-- **ZZZ.** `zzz-store` has no account surface and gains none here.
+- **ZZZ.** `zzz` has no account surface and gains none here.
 
 ## Capabilities
 
