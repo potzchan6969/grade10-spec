@@ -1,4 +1,4 @@
-## 1. The shared money module (grade10)
+## 1. The shared money module (grade10) (owner: @sean)
 
 - [ ] 1.1 Add `packages/utils/src/money.ts` with the ISO 4217 exponent table moved from `packages/shopify/backend/src/money/minorUnits.ts` and a `currencyExponent` lookup that throws naming the code and the platform's money handling, satisfying "An unrecognized currency stops the operation" for all three scenarios; register the `./money` subpath in `packages/utils/package.json`.
 - [ ] 1.2 Add `toMinorUnits` and `fromMinorUnits` as string-exact conversions driven by that table, satisfying "An amount converts by its own currency's exponent" for "A decimal amount from an external system" and "A decimal amount too precise for its currency"; move `packages/shopify/backend/test/money/minorUnits.test.ts` in with them, renaming the inverse.
