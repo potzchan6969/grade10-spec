@@ -23,7 +23,7 @@
 - [x] 4.2 Repoint the four `packages/grade10-store/demo/src/useCases/*.tsx` and four `packages/grade10-auction/demo/src/useCases/*.tsx` call sites at `formatMoney` with an explicit `locale` so their assertions stay deterministic, delete both local `money.ts` files, and add `@grade10/utils` to the auction demo's `package.json`.
 - [x] 4.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
 
-## 5. Operator-facing surfaces (grade10)
+## 5. Operator-facing surfaces (grade10) (owner: @sean)
 
 - [ ] 5.1 Render money in `apps/admin/grade10/src/pages/{auction/parts,store/OrdersTable,members/MemberLedgerTable}.tsx` with `formatMoney` at `currencyDisplay: "code"`, removing each local formatter and adding `@grade10/utils` to the panel's `package.json`, satisfying "An operator sees the currency code" and "Two operator tables agree".
 - [ ] 5.2 Do the same for `apps/admin/zzz/src/pages/store/OrdersTable.tsx`, so both panels read one module.
