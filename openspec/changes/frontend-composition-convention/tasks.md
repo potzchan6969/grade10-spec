@@ -1,11 +1,11 @@
 ## 1. Product frontend packages publish their module lists (grade10) (owner: @sean)
 
 - [x] 1.1 Publish `auth-frontend`'s module list at a `./modules` subpath, gathering the sign-in slice's module, and add the list file to the package's tsconfig `include` — satisfies "A package defines a single feature slice"
-- [ ] 1.2 Publish `store-admin-frontend`'s module list, gathering the orders slice — satisfies "An admin frontend package is composed"
-- [ ] 1.3 Publish `auction-admin-frontend`'s module list, gathering the bidders, fulfillment, listings, sales and settlements slices — satisfies "An admin frontend package is composed"
-- [ ] 1.4 Publish `audit-admin-frontend`'s module list, gathering the trail slice — satisfies "An admin frontend package is composed" and "A package defines a single feature slice"
-- [ ] 1.5 Point each package's own test harness at its published list where the harness stands in for a whole application — satisfies "A test exercises one feature slice"
-- [ ] 1.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run check:libs`, `pnpm run check:handbook`
+- [x] 1.2 Publish `store-admin-frontend`'s module list, gathering the orders slice — satisfies "An admin frontend package is composed"
+- [x] 1.3 Publish `auction-admin-frontend`'s module list, gathering the bidders, fulfillment, listings, sales and settlements slices — satisfies "An admin frontend package is composed"
+- [x] 1.4 Publish `audit-admin-frontend`'s module list, gathering the trail slice — satisfies "An admin frontend package is composed" and "A package defines a single feature slice"
+- [x] 1.5 Point each package's own test harness at its published list where the harness stands in for a whole application — satisfies "A test exercises one feature slice"
+- [x] 1.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run check:libs`, `pnpm run check:handbook`
 
 ## 2. Core-module factories name their product (grade10)
 
