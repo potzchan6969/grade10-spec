@@ -68,6 +68,8 @@ app-local — the day the zzz panel grows a date filter, it gets copied.
   day, a moment, a moment to the second, and a deadline that names its zone —
   each a stated format the platform owns, replacing five accidental variants
   whose output depended on the reader's browser.
+- State one zone for the whole platform — UTC — so an instant reads the same
+  on every screen, in every message, for every reader.
 - Give the auction close one rendering: the page names its zone the way the
   email already does.
 - Settle the operator inconsistency deliberately rather than by accident:
@@ -102,15 +104,24 @@ app-local — the day the zzz panel grows a date filter, it gets copied.
 - Visible change for operators: dates gain one shape across both panels.
   Tables that stopped at the minute keep doing so; audit logs keep their
   seconds.
+- Visible change for every reader outside UTC, and the largest one here:
+  every time on every screen is now stated in UTC. A Hong Kong operator who
+  reads `22:00` against an order today reads `14:00` after, and an instant
+  near midnight can show the previous day. The same instant, stated once for
+  everyone, with the deadline shape naming the zone so nobody reads it as
+  their own clock.
 - Visible change for every reader whose browser is not English: a date now
   reads in the format the platform states rather than the one the browser
-  picks — `19 Aug 2026, 22:00` where a German-locale operator sees
-  `19.08.2026, 22:00` today. This is the trade the change makes for one
-  platform voice, and the seam that lets a locale be passed once the message
-  catalogs need one.
-- Visible change in auction email: the close reads `19 Aug 2026, 14:00 GMT+0`
+  picks — `19 Aug 2026` where a German-locale operator sees `19.08.2026`
+  today. The trade the change makes for one platform voice, and the seam that
+  lets a language be passed once the message catalogs need one.
+- Visible change in auction email: the close reads `19 Aug 2026, 14:00 UTC`
   where it reads `Aug 19, 2026, 02:00 PM UTC` today — the same instant, in
-  the platform's format, with the zone label date-fns emits for UTC.
+  the platform's format, keeping its zone label.
+- Behaviour change where an operator types a date window: the window is now
+  the UTC day rather than the operator's local one, so a stored boundary
+  shifts by their offset. Existing windows are not migrated; the two surfaces
+  that own them measure in days.
 - No wire format changes. An instant stays an instant on every wire.
 - No database, deployment, or authentication impact.
 
@@ -122,8 +133,9 @@ app-local — the day the zzz panel grows a date filter, it gets copied.
 - Time-zone arithmetic. The loyalty program's period boundaries
   (`packages/loyalty/backend/src/utils/time.ts`) compute wall-clock instants
   in a program's zone; that is domain math, not display, and is out of scope.
-- Choosing or storing a reader's time zone. Surfaces keep rendering in the
-  runtime's zone; only what is *shown* about that zone changes.
+- Choosing, storing, or offering a reader's time zone. UTC is the platform's
+  zone for now; the module keeps the option that would let a reader's own be
+  threaded through, and nothing threads one.
 - Moving date strings into the message catalogs, or wiring a locale through
   the applications. The module accepts one; nothing passes a non-English one
   yet.

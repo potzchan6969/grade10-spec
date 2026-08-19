@@ -12,8 +12,8 @@ It also governs the one place the traffic runs the other way — a calendar day
 an operator types into a date field, which carries no time and no zone and
 has to become instants before a worker can store it.
 
-Which zone a reader is in, and whether the platform ever records one, are
-decided elsewhere and unchanged here.
+Which zone a reader is in is not consulted anywhere: the platform states one
+zone and every surface uses it.
 
 ## ADDED Requirements
 
@@ -86,6 +86,11 @@ accepts. Where a caller names none, the rendering SHALL use English.
 - **WHEN** it is rendered
 - **THEN** its words are English
 
+#### Scenario: A language the platform does not ship
+
+- **WHEN** a date is rendered with a language the platform has no words for
+- **THEN** the rendering fails with an error naming that language
+
 ### Requirement: A date that is not a date stops the render
 
 An attempt to render an instant that is not a valid point in time SHALL fail
@@ -97,6 +102,24 @@ with an error. No surface SHALL render placeholder text in place of a date.
 - **THEN** the rendering fails with an error
 - **AND** no placeholder date text is shown to the reader
 
+### Requirement: Every rendering states one zone
+
+Every instant the platform renders SHALL be stated in Coordinated Universal
+Time, on every surface, for every reader. No rendering SHALL use the zone the
+reader's machine is set to.
+
+#### Scenario: Two readers in different zones
+
+- **GIVEN** the same instant rendered for a reader whose machine is set east of UTC and one set west of it
+- **WHEN** each renders it
+- **THEN** both show identical text
+
+#### Scenario: An instant near midnight
+
+- **GIVEN** an instant that falls on one calendar date in UTC and the next in the reader's own zone
+- **WHEN** it is rendered as a day
+- **THEN** the day shown is the UTC one
+
 ### Requirement: A deadline names its time zone
 
 Any rendering of an instant a reader is expected to act before SHALL name the
@@ -107,7 +130,8 @@ surface that shows it.
 
 - **GIVEN** a listing open for bids
 - **WHEN** its close time is rendered on the auction page
-- **THEN** the rendering names the time zone it is stated in
+- **THEN** the rendering names the zone it is stated in
+- **AND** a reader whose machine is set to another zone sees that same name
 
 #### Scenario: A page and a message agree
 
@@ -125,11 +149,11 @@ surface that shows it.
 ### Requirement: A message the platform sends states one zone
 
 A date rendered into a message the platform sends — an email, a notification
-— SHALL be stated in a single fixed zone, named in the rendering, and SHALL
-be worded in English regardless of where the message is opened.
+— SHALL name the zone it is stated in, and SHALL be worded in English
+regardless of where the message is opened.
 
-A message is composed once and read anywhere, so it has no reader whose zone
-or language could be used.
+A message is composed once and read anywhere, so it has no reader whose
+language could be used, and the zone it states is the platform's.
 
 #### Scenario: An auction email states its zone
 
@@ -147,12 +171,12 @@ or language could be used.
 ### Requirement: A typed calendar day covers that whole day
 
 A calendar day a person types into a date field SHALL become the instant that
-day begins and the instant it ends, both in that person's own zone, so a
-window stated as two days includes every moment of both.
+day begins and the instant it ends, both in the platform's zone, so a window
+stated as two days includes every moment of both.
 
 An instant shown back in such a field SHALL be the calendar day that instant
-falls on in that person's own zone, so a day typed in and read back is the
-same day.
+falls on in the platform's zone, so a day typed in and read back is the same
+day, from any machine.
 
 #### Scenario: A window includes the last moment of its final day
 
@@ -165,6 +189,12 @@ same day.
 - **GIVEN** a calendar day typed into a date field and stored
 - **WHEN** the stored instant is shown in that field again
 - **THEN** the field shows the day that was typed
+
+#### Scenario: A day typed from a machine set to another zone
+
+- **GIVEN** the same calendar day typed by one person whose machine is set east of UTC and one set west of it
+- **WHEN** each is stored
+- **THEN** both produce the same pair of instants
 
 #### Scenario: An empty date field
 

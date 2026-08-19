@@ -1,5 +1,5 @@
 schema: full-planning
 created: 2026-08-19
-goal: Every surface renders a stored instant through one date-fns module, so
-  the same moment reads the same way on every machine and a deadline always
-  names its zone
+goal: Every surface renders a stored instant through one date-fns module, in
+  UTC, so the same moment reads the same way for every reader and a deadline
+  always names its zone

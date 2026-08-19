@@ -36,7 +36,8 @@ Constraints the approach has to respect:
 - A shape chosen by what the reader is doing, not by what the last author
   typed.
 - A deadline that cannot be rendered without its zone.
-- A format the platform states, identical on every reader's machine.
+- A format and a zone the platform states, identical on every reader's
+  machine.
 - A language a caller can pass, before a second one needs to be shown.
 - A twentieth copy fails a check rather than passing review.
 
@@ -110,9 +111,9 @@ but it pairs with the version of date-fns this graph is not on.
 formatDay(at: Date, opts?: DateFormat): string       // 19 Aug 2026
 formatMoment(at: Date, opts?: DateFormat): string    // 19 Aug 2026, 22:00
 formatEvent(at: Date, opts?: DateFormat): string     // 19 Aug 2026, 22:00:14
-formatDeadline(at: Date, opts?: DateFormat): string  // 19 Aug 2026, 22:00 GMT+8
+formatDeadline(at: Date, opts?: DateFormat): string  // 19 Aug 2026, 14:00 UTC
 
-type DateFormat = { locale?: Locale; timeZone?: string };  // Locale from date-fns
+type DateFormat = { locale?: string; timeZone?: string };  // BCP-47; UTC by default
 ```
 
 One pattern per shape, and the patterns are the module's whole vocabulary:
@@ -122,7 +123,7 @@ One pattern per shape, and the patterns are the module's whole vocabulary:
 | `formatDay` | `d MMM yyyy` |
 | `formatMoment` | `d MMM yyyy, HH:mm` |
 | `formatEvent` | `d MMM yyyy, HH:mm:ss` |
-| `formatDeadline` | `d MMM yyyy, HH:mm zzz` |
+| `formatDeadline` | `d MMM yyyy, HH:mm 'UTC'` |
 
 `HH` rather than `hh a`: a 24-hour clock is unambiguous at a glance, needs no
 locale to disambiguate, and is what an operator table wants in a fixed-width
@@ -147,57 +148,110 @@ differ in which fields exist at all.
 status quo with a nicer import. Nothing would stop the twentieth shape, and
 the guard in group 5 exists precisely to make a raw pattern unreachable.
 
-### `formatDeadline` renders the zone name, always
+### Every surface renders in UTC
 
-It is the one shape whose zone is not optional, and the requirement that makes
-it worth having. The `zzz` token gives the specific non-location name:
-`GMT+8` in Hong Kong, `GMT-4` in New York, `GMT+0` in UTC. `zzzz` would give
-`GMT+08:00` and cost a table column.
+`timeZone` defaults to `"UTC"`, and nothing overrides it. One zone for the
+whole platform: the storefront, both admin panels, the demos, and the mail
+the auction sends all state the same instant the same way.
 
-This changes the auction email's close from `Aug 19, 2026, 02:00 PM UTC` to
-`19 Aug 2026, 14:00 GMT+0` — same instant, platform format, and the label
-date-fns emits for UTC. Named in the proposal's Impact.
+This is the largest behavioural change in the change, and it is chosen rather
+than inherited. The alternative the code has today — every browser surface in
+its reader's own zone, mail in UTC — means an operator in Hong Kong and one in
+London describing the same order to each other are eight hours apart with
+nothing on screen to say so, and it means the mail about an auction and the
+page about the same auction disagree by design.
 
-*Rejected — special-casing UTC to the literal `UTC`:* nicer in mail, and a
-per-zone exception inside a formatter is exactly how a formatter grows a
-second shape. `GMT+0` is unambiguous, which is all the requirement asks for.
+*Reconsider when* the platform has somewhere to get a reader's zone from. The
+option stays on the signature, so that day is a changed default and a place to
+thread the value through — not a rewrite.
 
-The auction page passes no zone and renders in the reader's own, named.
+### `formatDeadline` names the zone, and the zone is a literal
 
-### `locale` is a date-fns `Locale`, and English is the default
+Its pattern is `d MMM yyyy, HH:mm 'UTC'`.
 
-date-fns has no notion of "the runtime's locale": a locale is an imported
-object, and `format` falls back to `enUS` when given none. So the module's
-`locale` takes a date-fns `Locale` and defaults to English.
+With one zone, the label is a constant, so it is written as one — a quoted
+literal in the pattern rather than a `zzz` token resolving to `GMT+0`. Two
+things fall out: the auction email's close keeps the exact zone label it
+prints today, and no reader has to work out that `GMT+0` and `UTC` are the
+same thing.
 
-This is the one place adopting the library changes behaviour rather than
-consolidating it, and it changes it deliberately. Today a date's ordering is
-whatever the reader's browser is set to, which is half of why the nineteen
-renderings diverge; after this, ordering and punctuation are the platform's
-in every browser, and only the *words* follow a locale someone passes. The
-`@grade10/i18n` catalogs are where that language will come from when a second
-one ships — importing `date-fns/locale/de` beside the German catalog is the
-whole wiring, and it is out of scope here.
+Naming the zone matters *more* under this decision, not less. A Hong Kong
+collector reading an unlabelled `19 Aug 2026, 14:00` will read their own
+clock and be eight hours wrong about when bidding ends; the label is what
+stops that.
 
-The proposal's Impact names what a non-English operator sees change.
+*Rejected — the `zzz` token:* correct, and it renders `GMT+0` for UTC. A
+token that can only ever produce one string is a lookup the reader has to do
+for no benefit. If a second zone ever arrives, the token comes back with it.
 
-*Rejected — mapping a BCP-47 string to a date-fns locale inside the module:*
-a registry of every locale the platform might ever want, statically imported
-into every bundle that formats a date, to serve callers that do not exist
-yet. The `Locale` object is date-fns's own currency; the caller that has a
-language has the import.
+### `locale` is a BCP-47 string, as it is in `money`
 
-### `timeZone` is a zone name, applied through `@date-fns/tz`
+```ts
+formatMoney(minor, code, { locale?: string, currencyDisplay?: … })   // shipped
+formatMoment(at,         { locale?: string, timeZone?: string })     // this change
+```
+
+`@grade10/utils` publishes two formatters, and an option that appears in both
+under the same name means the same thing and takes the same values. Anything
+else is a trap with a type error at the bottom of it: `{ locale: "en-US" }`
+is how every caller in the repository already writes it, and a second
+formatter that silently needs `{ locale: enUS }` — a date-fns object — reads
+identical and compiles differently.
+
+So `formatDay` and friends take a BCP-47 string and resolve it to a date-fns
+`Locale` inside the module, through a map that mirrors the languages
+`@grade10/i18n` actually ships. Today that map has one entry. It grows when a
+catalog does, in the same commit, which is the point: the module's supported
+languages and the platform's are one list.
+
+A tag the map has no entry for **throws, naming the tag** — the same failure
+`currencyExponent` gives an unknown currency code, for the same reason. No
+caller passes a locale by accident: omitting it is the documented way to get
+English, so a tag that arrives and is not recognized is a mistake in the code
+that passed it, not a preference to shrug at.
+
+*Rejected — taking a date-fns `Locale` object directly:* zero mapping and no
+registry, at the cost of the collision above. It also leaks the library
+through the module's own signature, which is the thing a wrapper exists to
+avoid — swapping date-fns out later would touch every call site that names a
+language rather than one file.
+
+*Rejected — a registry of every locale date-fns publishes:* the objection to
+mapping, and a real one, but only against the wrong registry. Statically
+importing all ~200 into every bundle to serve callers that do not exist is
+waste; importing the one the platform ships is an import.
+
+*Rejected — falling back to English on an unknown tag:* a French page whose
+dates quietly read English, discovered by a customer. Failing names the tag
+and the fix.
+
+### The two formatters differ in one thing, on purpose
+
+`formatMoney` defaults to the reader's own locale. The date shapes default to
+the platform's format for everyone. Same package, opposite defaults, and the
+difference is the point rather than an oversight:
+
+- A number's locale styling is **unambiguous either way**. `2,490.00` and
+  `2.490,00` are the same amount to any reader who sees one of them, so
+  following the browser is a courtesy with no downside.
+- A date's ordering is **ambiguous across locales**. `08/19/2026` and
+  `19/08/2026` are different dates to different readers, and nothing in the
+  string says which one you are looking at. A platform that lets the browser
+  decide has surfaces whose meaning depends on a setting nobody chose.
+
+Stated here because a reader of one module will find the other and read the
+difference as a bug. It belongs in `docs/conventions/code-layout.md` beside
+both rules, which group 5 carries.
+
+### `timeZone` is a zone name, applied through `@date-fns/tz`, defaulting to UTC
 
 `timeZone` takes an IANA name and reaches `format` as `{ in: tz(name) }`.
-Omitted, it renders in the runtime's zone — which is what every browser
-surface wants and what they all do today.
+Omitted — which is every call site in this change — it is `"UTC"`.
 
-The email worker passes `timeZone: "UTC"`, because a message composed once and
-read anywhere has no reader's zone to inherit. The demos pass an explicit
-`timeZone` and `locale` so their assertions do not depend on the machine
-running them — a real trap, since the store and auction demo suites run in CI
-and on laptops in different zones.
+Keeping the option rather than hard-coding the zone inside the patterns costs
+one line and is what makes the decision above reversible. It also means the
+demos and the module's own tests need nothing special to be deterministic:
+the default already is.
 
 ### Audit logs keep their seconds; every other operator table stops at the minute
 
@@ -210,17 +264,33 @@ disagree with, instead of a difference nobody chose.
 ### The calendar-day bridge moves in, and its string math goes
 
 `startOfDay`, `endOfDay`, and `dayValue` move from
-`apps/admin/grade10/src/dates.ts` into the module, keeping their names,
-signatures, and behaviour — and losing their hand-rolled bodies. Today they
-build a `Date` from an interpolated template string and pad month and day
-with `padStart`; on date-fns they are `startOfDay(parseISO(day))`,
-`endOfDay(parseISO(day))`, and `format(at, "yyyy-MM-dd")`.
+`apps/admin/grade10/src/dates.ts` into the module, keeping their names and
+signatures, and losing both their hand-rolled bodies and their zone. Today
+they build a `Date` from an interpolated template string in the operator's
+own zone; on date-fns, in UTC, they are:
 
-The output is identical, verified across the zone boundary that matters: a
-`2026-08-19` typed in Hong Kong yields `2026-08-18T16:00:00.000Z` and
-`2026-08-19T15:59:59.999Z` either way. The existing `dates.test.ts` moves
-with them and is the proof — this is a refactor under a passing suite, which
-is why it is one task rather than three.
+```ts
+startOfDay(parseISO(day, { in: UTC }), { in: UTC })
+endOfDay(parseISO(day, { in: UTC }), { in: UTC })
+format(at, "yyyy-MM-dd", { in: UTC })
+```
+
+**The `{ in: UTC }` on `parseISO` is the whole thing, and it is easy to
+lose.** `startOfDay(parseISO(day), { in: UTC })` reads correctly and is wrong:
+`parseISO` resolves a bare `2026-08-19` to local midnight, and truncating that
+instant to UTC midnight lands on **18 Aug** for any operator east of UTC.
+Worse, it is right on a UTC machine — so CI passes it and Hong Kong finds it.
+The suite pins a non-UTC `TZ` for exactly this reason.
+
+Because the zone changes, this is not the behaviour-preserving move it was
+before UTC was settled: a day typed in Hong Kong stored `2026-08-18T16:00Z →
+2026-08-19T15:59:59.999Z` and now stores `2026-08-19T00:00Z →
+2026-08-19T23:59:59.999Z`. The window an operator types shifts by their
+offset. Existing stored windows are not migrated — they were typed against
+the old boundaries and keep meaning what they meant; the two rewards and
+invitations surfaces that own them are the only callers, and their windows are
+days long, so an eight-hour edge moves no decision. The existing
+`dates.test.ts` moves with them, with its expectations restated in UTC.
 
 They belong here because they are the same subject — the seam between a
 calendar day and an instant, differing only in direction. Left app-local, the
@@ -266,26 +336,37 @@ product directories the way `money-amounts` does.
 ### No `ui.md`
 
 No screen is added or laid out, and no design-system or `@grade10/ui` export
-changes. The one collector-visible delta — the auction close gaining its zone
-— is text inside an existing `Text` node, named in the proposal's Impact and
-in the migration plan below.
+changes. The collector-visible deltas — the auction close gaining its zone,
+and every time reading UTC — are text inside existing `Text` nodes, named in
+the proposal's Impact and in the risks below.
 
 ## Risks / Trade-offs
 
-- **Every date loses the reader's locale ordering.** The largest visible
-  consequence of the library, deliberate and covered above: a German-locale
-  operator reads `19 Aug 2026, 22:00` where `19.08.2026, 22:00` shows today.
-  Consistency across the platform is bought with a browser preference nobody
-  set on purpose.
-- **The auction close changes shape for collectors.** Intended, and the
-  reason the change is worth making. `Closes 8/19/2026, 10:00:00 PM` becomes
-  `Closes 19 Aug 2026, 22:00 GMT+8`.
-- **The auction email's zone label changes** from `UTC` to `GMT+0`. Same
-  instant, uglier word. Decided above rather than special-cased.
-- **`zzz` reads as an offset, not an abbreviation.** `GMT+8`, not `HKT` —
-  neither date-fns nor ICU publishes a Hong Kong abbreviation. Correct and
-  unambiguous, but an operator expecting one may report it as a bug. Named
-  here so the answer is on record.
+- **Every time on every screen moves to UTC.** The largest consequence in the
+  change. A Hong Kong operator who reads `22:00` on an order today reads
+  `14:00` after it. Deliberate, and the reason the deadline shape labels its
+  zone — but it will generate questions on the day it ships, and it is worth
+  saying so in the release note rather than letting an operator discover it.
+- **An unlabelled moment can still be misread.** `formatMoment` and
+  `formatEvent` carry no zone, so a dense operator table shows UTC times that
+  look local. Acceptable while the panels are read by a small team who will
+  know; if it bites, the fix is the panel stating "times in UTC" once in its
+  chrome, not a label in every cell.
+- **A date near midnight changes its day.** An order placed
+  `2026-08-19T16:30Z` reads `20 Aug` to a Hong Kong operator today and
+  `19 Aug` after. The same instant, and the more defensible of the two, but
+  reports of "the date is wrong" should be read as this before they are read
+  as a bug.
+- **Every date loses the reader's locale ordering.** Deliberate and covered
+  above: a German-locale operator reads `19 Aug 2026, 14:00` where
+  `19.08.2026, 22:00` shows today. Consistency across the platform is bought
+  with a browser preference nobody set on purpose.
+- **The auction close changes shape for collectors.** Intended, and part of
+  why the change is worth making. `Closes 8/19/2026, 10:00:00 PM` becomes
+  `Closes 19 Aug 2026, 14:00 UTC`.
+- **Typed date windows shift by the operator's offset**, as the day bridge
+  moves to UTC. Covered above: no migration, and the two surfaces that own
+  such windows measure them in days.
 - **Two new dependencies in every bundle that shows a date**, including the
   auction email Worker. Both are pure ESM and tree-shakeable, and the module
   imports `format`, `parseISO`, `startOfDay`, `endOfDay` and `tz` by name —
@@ -309,8 +390,8 @@ same task — no compatibility period, since every caller is in this repository.
 1. `date-fns` and `@date-fns/tz` added to `@grade10/utils`, then
    `@grade10/utils/dates`: the four shapes, plus the day bridge moved in from
    the grade10 admin with its tests.
-2. Auction email repointed at `formatDeadline` with `timeZone: "UTC"` — the
-   rendered close changes text, and its suite's expectation changes with it.
+2. Auction email repointed at `formatDeadline` — the rendered close changes
+   shape, keeps its `UTC` label, and its suite's expectation changes with it.
 3. Both admin panels: thirteen inline formatters removed, the day bridge's
    two callers repointed, `apps/admin/grade10/src/dates.ts` deleted.
 4. Auction page and the three demos repointed; the auction close gains its
