@@ -20,7 +20,7 @@ other.
 - [x] 2.2 Make `The sitemap is exact` pass: the sitemap derives from the route modules' identities — every public surface, nothing else, absolute URLs of the serving environment.
 - [x] 2.3 Run typecheck, lint, and the app's test lane as this group's verification.
 
-## 3. Honest statuses
+## 3. Honest statuses (owner: @sean)
 
 - [ ] 3.1 Make `A nested address belongs to its surface` pass: serving matches an address through the application's own route config and answers a nested address with its surface's document and status 200.
 - [ ] 3.2 Make `An unknown address is refused honestly` pass: status 404 with the shell, the not-found surface rendering as it already does.
