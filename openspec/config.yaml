@@ -72,10 +72,11 @@ rules:
     - Link the capability spec rather than restating requirements; screens and Figma sources belong in ui.md.
   ui:
     - Link each screen's Figma frame rather than describing it in prose - the frame is the layout's source of truth.
-    - "Name design-system and packages/ui exports exactly - the export name is the cross-repo contract. A component, variant, or token that does not exist yet is work in this repo; flag it so tasks carries it."
+    - "Name design-system and packages/ui exports exactly - the export name is the cross-repo contract. A component, variant, or token that does not exist yet is work in grade10-spec; flag it so tasks carries it."
     - A state with no spec scenario behind it means the spec is missing one - fix the spec, not the ui doc.
   tasks:
-    - "Split groups by layer: shared types and interfaces first, then data migration, then backend and API, then frontend. Omit a layer the change does not touch rather than writing an empty group. When a change spans this repo and an application repo, the groups here land first - the submodule bump is the boundary."
+    - "Split groups by layer: shared types and interfaces first, then data migration, then backend and API, then frontend. Omit a layer the change does not touch rather than writing an empty group. When a change spans grade10-spec and an application repo, the grade10-spec groups land first - the submodule bump is the boundary."
+    - "Name a group's repository by its clone name in the group title - (grade10-spec), (grade10) - never 'this repo' or 'here': tasks.md is written in this store and read from the application repo, so a deictic reference flips meaning between the two."
     - "Once the shared-interface group lands, backend and frontend groups depend on it, not on each other: write each so it can be claimed in parallel and verified on its own - frontend against the contracts and fixtures, never a running backend. When a group truly needs another group's landed code, say so in a prose line under its heading; otherwise group order is convention, not a dependency."
     - Order groups so an engineer can ship and verify one group at a time, ending each group with its verification step.
     - 'Phrase an implementation task as the spec scenario(s) it makes pass, naming them, so the scenario''s test is the evidence behind the checkmark. Never split "write the tests" into its own task or group - the engineer works test-first inside each task.'

@@ -85,7 +85,8 @@ user-facing surface skips the file entirely — nothing depends on it.
   so never describe a screen in prose.
 - **Components**: name design-system and `packages/ui` exports exactly — the
   export name is the cross-repo contract. A component, variant, or token that
-  does not exist yet is work in **this** repo; flag it so `tasks.md` carries it.
+  does not exist yet is work in **grade10-spec**; flag it so `tasks.md`
+  carries it.
 - **States**: loading, empty, error and edge states, each tied to the spec
   scenario that defines it. A state with no scenario behind it means the spec
   is missing one — fix the spec, not this file.
@@ -98,8 +99,12 @@ tooling on both sides parses it.
 
 - **Group by layer**, in order: shared types and interfaces, data migration,
   backend and API, frontend. Omit a layer the change does not touch rather than
-  writing an empty group. When a change spans this repo and an application
-  repo, the groups here land first — the submodule bump is the boundary.
+  writing an empty group. When a change spans grade10-spec and an application
+  repo, the grade10-spec groups land first — the submodule bump is the
+  boundary. A group title names its repository by clone name —
+  `(grade10-spec)`, `(grade10)` — never "this repo" or "here": tasks.md is
+  written in this store and read from the application repo, so a deictic
+  reference flips meaning between the two.
 - **Once the shared-interface group lands, the rest are parallel.** Write each
   so it can be claimed on its own and verified on its own — frontend against
   the contracts and fixtures, never a running backend. When a group genuinely

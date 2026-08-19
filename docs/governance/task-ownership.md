@@ -31,6 +31,8 @@ A group is a level-two heading numbered with a single integer. Its tasks are che
 | No owner | Omit the tag, or write `(owner: unassigned)` | The two are equivalent everywhere. |
 | Task | `- [ ] <id> <text>` | `- [x]` or `- [X]` when done. `<id>` is the first whitespace-delimited token; `<text>` is required. |
 
+A group title that names a repository names it by clone name — `(grade10-spec)`, `(grade10)` — never "this repo" or "here": `tasks.md` is written in this store and read from the application repository, so a deictic reference flips meaning between the two.
+
 Task ids are conventionally `<group>.<n>`, and they must be unique within a change — the tooling indexes tasks by id, so a duplicate makes one of them unreachable.
 
 Group headings are free for us to use because OpenSpec parses only the checkbox lines. `openspec validate --changes --strict` and the task counts are unaffected by an owner tag; both remain the check that this convention has not broken anything.
