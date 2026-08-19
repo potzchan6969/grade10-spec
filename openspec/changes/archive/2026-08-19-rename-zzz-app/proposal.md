@@ -71,3 +71,18 @@ None. This is a rename: no requirement changes, so no spec does either.
   `docs/architecture/handbook.html`,
   `.claude/skills/react-clean-architecture/SKILL.md`.
 - **Untouched** — `packages/app-env`, the nginx vhost, the wrangler routes.
+
+## Archived
+
+Archived 2026-08-19 at the owner's direction, **before it shipped**. PR #42
+merged as `ef52fc94`; the newest successful deploy at that point was
+`1cc2f2cc` from 2026-08-18, which does not contain the merge, and the only
+attempt since — `fcc4013d`, 07:55 — failed. So the rename is on `main` and
+not on any environment.
+
+What that leaves unproven: the deploy workflow's ZZZ SPA step now names
+`apps/frontend/zzz`, and the worker it deploys is `zzz-web`. Neither path
+has been exercised by a real dispatch. The first ZZZ deploy is where a
+mistake in either would surface — and it is also the first ZZZ deploy ever,
+since both zones are unregistered placeholders and every ZZZ database in
+`neondb/registry.sh` is still `TODO`.
