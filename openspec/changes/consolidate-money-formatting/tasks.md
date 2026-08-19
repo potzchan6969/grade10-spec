@@ -17,7 +17,7 @@
 - [x] 3.2 Delete `formatMinorAmount` and its formatter cache from `packages/grade10-auction/backend/src/amounts.ts`, leaving `isMinorAmount` and its callers in `bidding/placeBid.ts` and `auctionItems/schedule.ts` untouched.
 - [x] 3.3 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`.
 
-## 4. Collector-facing surfaces (grade10)
+## 4. Collector-facing surfaces (grade10) (owner: @sean)
 
 - [ ] 4.1 Repoint `apps/frontend/grade10/src/pages/{store/StorePage,auctions/AuctionsPage}.tsx` at `formatMoney` with the default symbol shape, delete `apps/frontend/grade10/src/money.ts`, and add `@grade10/utils` to the app's `package.json`, satisfying "Two collector surfaces agree" and "A collector reads their own locale".
 - [ ] 4.2 Repoint the four `packages/grade10-store/demo/src/useCases/*.tsx` and four `packages/grade10-auction/demo/src/useCases/*.tsx` call sites at `formatMoney` with an explicit `locale` so their assertions stay deterministic, delete both local `money.ts` files, and add `@grade10/utils` to the auction demo's `package.json`.
