@@ -28,16 +28,16 @@ broken workspace, so 1.1 through 1.5 are one unit of work.
 
 Claimable once group 1 has landed.
 
-- [ ] 2.1 Correct the layout rules in `AGENTS.md` — the flat SPA list and
+- [x] 2.1 Correct the layout rules in `AGENTS.md` — the flat SPA list and
       the `@grade10/zzz-store-spa` naming example — and the two references
       in `.claude/skills/react-clean-architecture/SKILL.md`.
-- [ ] 2.2 Update the SPA list in `docs/architecture/multi-product.md`, and
+- [x] 2.2 Update the SPA list in `docs/architecture/multi-product.md`, and
       point its **Open** item — "ZZZ still runs one storefront on a
       subdomain rather than a whole site" — at `move-zzz-to-base-domain` by
       name, so the app being `zzz` at `store.zzz.*` reads as scheduled
       rather than half-finished.
-- [ ] 2.3 Update the ZZZ band in `docs/architecture/handbook.html`: the
+- [x] 2.3 Update the ZZZ band in `docs/architecture/handbook.html`: the
       `zzz-store-spa` node id and its card's title and path. The host it
       shows, `store.zzz.com`, is still correct and stays.
-- [ ] 2.4 Verify: `pnpm run check:handbook`, `pnpm run agent:check-parity`,
+- [x] 2.4 Verify: `pnpm run check:handbook`, `pnpm run agent:check-parity`,
       `pnpm run lint`.
