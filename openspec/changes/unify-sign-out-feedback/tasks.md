@@ -8,7 +8,7 @@ Verify: `pnpm run typecheck`, auth-frontend package tests, `pnpm run check:handb
 
 Depends on group 1.
 
-- [ ] 2.1 Make "An operator signs out of an admin panel" and "A refused sign-out is reported" pass across both admin panels — settings, users, store, and no-access surfaces drop their inline handlers for the shared command and show the inline failure state
-- [ ] 2.2 Make "A collector signs out of the grade10 site" and "A retry clears the failure" pass on the grade10 site and the zzz storefront — profile surfaces adopt the command, keeping surface-owned after-effects (marketing-page return, cart clearing) on the confirmed outcome
+- [x] 2.1 Make "An operator signs out of an admin panel" and "A refused sign-out is reported" pass across both admin panels — settings, users, store, and no-access surfaces drop their inline handlers for the shared command and show the inline failure state
+- [x] 2.2 Make "A collector signs out of the grade10 site" and "A retry clears the failure" pass on the grade10 site and the zzz storefront — profile surfaces adopt the command, keeping surface-owned after-effects (marketing-page return, cart clearing) on the confirmed outcome
 
 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
