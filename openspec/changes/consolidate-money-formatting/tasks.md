@@ -13,9 +13,9 @@
 
 ## 3. Auction messages (grade10) (owner: @sean)
 
-- [ ] 3.1 Render the amounts in `packages/grade10-auction/backend/src/email/render.tsx` with `formatMoney` at `locale: "en"`, satisfying "An auction email".
-- [ ] 3.2 Delete `formatMinorAmount` and its formatter cache from `packages/grade10-auction/backend/src/amounts.ts`, leaving `isMinorAmount` and its callers in `bidding/placeBid.ts` and `auctionItems/schedule.ts` untouched.
-- [ ] 3.3 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`.
+- [x] 3.1 Render the amounts in `packages/grade10-auction/backend/src/email/render.tsx` with `formatMoney` at `locale: "en"`, satisfying "An auction email".
+- [x] 3.2 Delete `formatMinorAmount` and its formatter cache from `packages/grade10-auction/backend/src/amounts.ts`, leaving `isMinorAmount` and its callers in `bidding/placeBid.ts` and `auctionItems/schedule.ts` untouched.
+- [x] 3.3 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`.
 
 ## 4. Collector-facing surfaces (grade10)
 
