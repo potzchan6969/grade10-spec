@@ -6,11 +6,11 @@ person types becomes an instant.
 Every date the platform holds is an instant — a single point in time, with no
 zone of its own. This capability governs what happens between that instant
 and a reader: which shape it takes, whether the shape names a time zone, and
-which locale decides its wording. It binds every Grade10 surface that shows a
-date: storefront pages, admin panels, demos, and the messages the platform
-sends. It also governs the one place the traffic runs the other way — a
-calendar day an operator types into a date field, which carries no time and
-no zone and has to become instants before a worker can store it.
+which language words it. It binds every Grade10 surface that shows a date:
+storefront pages, admin panels, demos, and the messages the platform sends.
+It also governs the one place the traffic runs the other way — a calendar day
+an operator types into a date field, which carries no time and no zone and
+has to become instants before a worker can store it.
 
 Which zone a reader is in, and whether the platform ever records one, are
 decided elsewhere and unchanged here.
@@ -58,11 +58,44 @@ produce a date by its own local formatting.
 - **WHEN** the log is rendered
 - **THEN** the two entries show different times
 
-#### Scenario: A reader reads their own locale
+#### Scenario: One reader, two browsers
 
-- **GIVEN** two readers of the same date whose locales order and word dates differently
-- **WHEN** the date is rendered for each
-- **THEN** each sees their own locale's ordering and wording
+- **GIVEN** the same date rendered for one reader on two browsers configured for different locales
+- **WHEN** each renders it
+- **THEN** both show identical text
+
+### Requirement: The platform states the format, and can be told the language
+
+A date's ordering and punctuation SHALL be the format the platform states,
+identical for every reader, so no surface's output depends on how a browser
+happens to be configured.
+
+The language a date's words are drawn from SHALL be an input every rendering
+accepts. Where a caller names none, the rendering SHALL use English.
+
+#### Scenario: A month name in another language
+
+- **GIVEN** a date rendered with a language named by the caller
+- **WHEN** it is rendered
+- **THEN** the month's wording is drawn from that language
+- **AND** the ordering and punctuation are unchanged from the platform's format
+
+#### Scenario: No language named
+
+- **GIVEN** a date rendered with no language named by the caller
+- **WHEN** it is rendered
+- **THEN** its words are English
+
+### Requirement: A date that is not a date stops the render
+
+An attempt to render an instant that is not a valid point in time SHALL fail
+with an error. No surface SHALL render placeholder text in place of a date.
+
+#### Scenario: An invalid instant
+
+- **WHEN** a surface renders an instant that is not a valid point in time
+- **THEN** the rendering fails with an error
+- **AND** no placeholder date text is shown to the reader
 
 ### Requirement: A deadline names its time zone
 
@@ -93,7 +126,7 @@ surface that shows it.
 
 A date rendered into a message the platform sends — an email, a notification
 — SHALL be stated in a single fixed zone, named in the rendering, and SHALL
-be worded in English regardless of any reader's locale.
+be worded in English regardless of where the message is opened.
 
 A message is composed once and read anywhere, so it has no reader whose zone
 or language could be used.
@@ -107,7 +140,7 @@ or language could be used.
 
 #### Scenario: Two recipients read one time
 
-- **GIVEN** two recipients of the same auction email in different locales and different zones
+- **GIVEN** two recipients of the same auction email in different countries and different zones
 - **WHEN** each opens the message
 - **THEN** both read the same text for the close time
 
