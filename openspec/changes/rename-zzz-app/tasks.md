@@ -1,4 +1,4 @@
-## 1. The ZZZ app's identity (grade10)
+## 1. The ZZZ app's identity (grade10) (owner: @sean)
 
 The rename lands whole: a directory moved without its package name is a
 broken workspace, so 1.1 through 1.5 are one unit of work.
