@@ -14,7 +14,7 @@
 - [x] 2.3 Rename `store-admin-frontend`'s core-module factory from its layer to its product, so it reads unambiguously beside the auction admin factory — satisfies "A composition root installs several core modules"
 - [x] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 3. Composition roots load lists (grade10)
+## 3. Composition roots load lists (grade10) (owner: @sean)
 
 Needs group 1's admin lists landed — an application cannot load a list its package does not publish yet. The auth and storefront work in 3.1 does not.
 
