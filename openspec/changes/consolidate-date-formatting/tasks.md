@@ -15,7 +15,7 @@
 - [x] 2.2 Confirm the auction Worker bundles date-fns without a runtime import failure, and record the bundle delta `pnpm run build` reports for the auction service.
 - [x] 2.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, and `pnpm run build`.
 
-## 3. Operator-facing surfaces (grade10)
+## 3. Operator-facing surfaces (grade10) (owner: @sean)
 
 - [ ] 3.1 Replace the inline formatters in `apps/admin/grade10/src/pages/{store/OrdersTable,auction/parts,liability/LiabilitySection,rewards/RewardsSection,members/MemberRedemptionsTable,members/MemberLedgerTable}.tsx` with `formatMoment`, and in `pages/{users/UserTable,members/MemberSummaryCard,invitations/InvitationsSection}.tsx` with `formatDay`, satisfying "Two operator tables show one moment the same way" and "One reader, two browsers".
 - [ ] 3.2 Replace the formatter in `apps/admin/grade10/src/pages/audit/AuditSection.tsx` with `formatEvent`, keeping the seconds an audit log is read for.
