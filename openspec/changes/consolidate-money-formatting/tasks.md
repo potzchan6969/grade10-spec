@@ -29,7 +29,7 @@
 - [x] 5.2 Do the same for `apps/admin/zzz/src/pages/store/OrdersTable.tsx`, so both panels read one module.
 - [x] 5.3 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test`.
 
-## 6. Keeping it consolidated (grade10)
+## 6. Keeping it consolidated (grade10) (owner: @sean)
 
 This group's check fails until groups 1 through 5 have landed their deletions.
 
