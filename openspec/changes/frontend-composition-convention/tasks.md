@@ -23,7 +23,7 @@ Needs group 1's admin lists landed — an application cannot load a list its pac
 - [x] 3.3 Leave the four single-slice sign-in page tests loading one module directly, and confirm no other consumer does — satisfies "A test exercises one feature slice"
 - [x] 3.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
 
-## 4. Applications group their outbound clients (grade10)
+## 4. Applications group their outbound clients (grade10) (owner: @sean)
 
 - [ ] 4.1 Group the grade10 storefront's session and procedure clients into a client directory, with the shared response cache as its own module beside them — satisfies "An application constructs its clients" and "Cache-wide policy is added"
 - [ ] 4.2 Group the ZZZ storefront's clients the same way — satisfies "An application constructs its clients"
