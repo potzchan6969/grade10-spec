@@ -36,7 +36,7 @@ Needs group 1's admin lists landed — an application cannot load a list its pac
 - [x] 5.2 Record the client directory and the product-named factory in the `react-clean-architecture` and `frontend-structure` skills, replacing what they say today rather than appending to it
 - [x] 5.3 Verify: `pnpm run agent:check-parity`, `pnpm run check:handbook`
 
-## 6. Sign-out becomes a composable slice (grade10)
+## 6. Sign-out becomes a composable slice (grade10) (owner: @sean)
 
 Added after groups 1–5 were planned. Sign-out bound nothing, so `auth-frontend`'s
 published list could not carry it and the convention had one slice it did not
