@@ -30,7 +30,7 @@
 - [x] 4.3 Repoint `packages/grade10-store/demo/src/useCases/{profile,orders}.tsx` and `packages/grade10-auction/demo/src/useCases/listingPage.tsx` at the module, whose UTC default already makes their assertions independent of the machine running them.
 - [x] 4.4 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
 
-## 5. Keeping it consolidated (grade10)
+## 5. Keeping it consolidated (grade10) (owner: @sean)
 
 This group's check fails until groups 1 through 4 have landed their deletions.
 
