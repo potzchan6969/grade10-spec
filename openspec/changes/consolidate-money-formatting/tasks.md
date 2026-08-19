@@ -5,7 +5,7 @@
 - [x] 1.3 Add `formatMoney(minor, code, { locale, currencyDisplay })`, taking fraction digits and the divisor from the same table and memoizing formatters on locale, currency and display, satisfying "A two-decimal currency", "A currency with no minor unit" and "A three-decimal currency", plus the shape halves of "An operator sees the currency code" and "A collector reads their own locale".
 - [x] 1.4 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test` for the `@grade10/utils` suite.
 
-## 2. The payment integration (grade10)
+## 2. The payment integration (grade10) (owner: @sean)
 
 - [ ] 2.1 Repoint `packages/shopify/backend/src/{wire/mappers,admin/createShopifyAdmin,webhooks/payloads}.ts` at `@grade10/utils/money`, delete `packages/shopify/backend/src/money/`, and drop its entry from the package barrel, satisfying "The error does not name one integration".
 - [ ] 2.2 Repoint `packages/shopify/demo/src/useCases/{browseCatalog,moneyMath}.tsx` and `moneyMath.test.tsx` at `@grade10/utils/money`, keeping the use case's prose accurate to the exports it now names.
