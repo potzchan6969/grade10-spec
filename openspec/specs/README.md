@@ -16,6 +16,9 @@ The products are:
 - `shared-ui` — cross-product contracts for the shared components every store
   application consumes: the compound components in `packages/ui`, and the site
   chrome the design system publishes.
+- `shared-auth` — cross-product session behavior, entering a session and
+  leaving one, shared by every surface of either brand regardless of which
+  application renders it.
 
 A capability's OpenSpec ID is `<product>/<capability>` (for example `grade10-store/loyalty`); use that ID with `openspec show` and `openspec validate`. Adding a product is a new top-level directory here plus a bullet in this list.
 

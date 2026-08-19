@@ -80,14 +80,14 @@ Signing out SHALL be offered on the profile, not in the header.
 ### Requirement: The header shows only controls this site has surfaces for
 
 The site SHALL supply the header a handler only for a control whose surface it
-answers, so a control with nothing behind it does not render. Search,
-wishlist, and cart SHALL NOT appear until the site answers them.
+answers, so a control with nothing behind it does not render. Search and cart
+SHALL NOT appear until the site answers them.
 
 #### Scenario: Absent surfaces are absent controls
 
 - **WHEN** the header renders
 - **THEN** it shows the locale label and the account control
-- **AND** no search, wishlist, or cart control appears
+- **AND** no search or cart control appears
 
 ### Requirement: A link is present only when the site answers it
 
