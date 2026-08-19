@@ -30,7 +30,7 @@ Needs group 1's admin lists landed — an application cannot load a list its pac
 - [x] 4.3 Group each admin panel's session client beside its existing per-backend procedure clients, keeping the shared cache its own module — satisfies "An application constructs its clients" and "Cache-wide policy is added"
 - [x] 4.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
 
-## 5. Durable guidance (grade10)
+## 5. Durable guidance (grade10) (owner: @sean)
 
 - [ ] 5.1 Record the published-list surface and the composition-root rule in `docs/conventions/packages.md`, including which packages publish a list
 - [ ] 5.2 Record the client directory and the product-named factory in the `react-clean-architecture` and `frontend-structure` skills, replacing what they say today rather than appending to it
