@@ -22,6 +22,6 @@ other.
 
 ## 3. Honest statuses (owner: @sean)
 
-- [ ] 3.1 Make `A nested address belongs to its surface` pass: serving matches an address through the application's own route config and answers a nested address with its surface's document and status 200.
-- [ ] 3.2 Make `An unknown address is refused honestly` pass: status 404 with the shell, the not-found surface rendering as it already does.
+- [x] 3.1 Make `A nested address belongs to its surface` pass: serving matches an address through the application's own route config and answers a nested address with its surface's document and status 200.
+- [x] 3.2 Make `An unknown address is refused honestly` pass: status 404 with the shell, the not-found surface rendering as it already does.
 - [ ] 3.3 Run the full check suite as this group's verification, and confirm the statuses against a deployed staging preview.
