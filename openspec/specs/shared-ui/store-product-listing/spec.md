@@ -263,6 +263,8 @@ price, formatted original price, discount label, sold-out condition, and cart
 condition. It SHALL report tile activation and the cart action through named
 callbacks, each identifying the product.
 
+A tile SHALL NOT offer a wishlist control.
+
 The list SHALL NOT format a price, compute a discount, decide whether a product
 is sold out, or hold a cart quantity.
 
@@ -281,6 +283,11 @@ is sold out, or hold a cart quantity.
 
 - **GIVEN** a product supplied as sold out
 - **THEN** its tile displays the sold-out treatment and its cart action cannot be activated
+
+#### Scenario: No wishlist control on a tile
+
+- **WHEN** a product tile renders, whether available or sold out
+- **THEN** no wishlist control appears on it
 
 ### Requirement: The product list adapts its column count to the available width
 
