@@ -35,3 +35,14 @@ Needs group 1's admin lists landed — an application cannot load a list its pac
 - [x] 5.1 Record the published-list surface and the composition-root rule in `docs/conventions/packages.md`, including which packages publish a list
 - [x] 5.2 Record the client directory and the product-named factory in the `react-clean-architecture` and `frontend-structure` skills, replacing what they say today rather than appending to it
 - [x] 5.3 Verify: `pnpm run agent:check-parity`, `pnpm run check:handbook`
+
+## 6. Sign-out becomes a composable slice (grade10)
+
+Added after groups 1–5 were planned. Sign-out bound nothing, so `auth-frontend`'s
+published list could not carry it and the convention had one slice it did not
+reach; the decision and its cost are in `design.md`.
+
+- [ ] 6.1 Give the sign-out slice a repository port over the client, one use case and its own tokens, and a module that joins the auth list — satisfies "A product gains a feature slice"
+- [ ] 6.2 Resolve the use case from the command hook, keeping its state, its in-flight guard and its resolved-boolean contract so the existing hook tests pass unchanged
+- [ ] 6.3 Point any app-standing-in test harness that mounts a signed-in surface at the published list — satisfies "A test exercises one feature slice"
+- [ ] 6.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`

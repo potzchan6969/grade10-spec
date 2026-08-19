@@ -25,7 +25,7 @@ A barrel cannot carry order, and `organizeImports` re-sorts a barrel's exports o
 
 ### The list ships even for a one-slice package
 
-`auth-frontend` defines one composable slice (sign-in; sign-out binds nothing and is a hook over a port the core module already binds). The list is published anyway.
+`auth-frontend` defined one composable slice when this was decided — sign-in — with sign-out a hook over a port the core module already bound. The list was published anyway, and sign-out became a slice during delivery (see below), which is exactly the second-slice case this decision was made for: it joined a one-line list rather than forcing every consumer to change.
 
 The alternative — publish the list when the second slice arrives — puts the cost exactly where it is highest: at that moment every composition root and test harness changes, which is the edit the convention exists to prevent. Publishing the one-entry list makes the second slice a one-line change in the package. This matches the existing rule that a one-file folder still carries its `index.ts` so nobody re-decides when the second file arrives.
 
@@ -51,9 +51,21 @@ An application constructs its clients in `src/clients/`, one module each, with t
 
 The cache is the case that motivates the split. Left as an export of the store client's module, cache-wide policy — a global error handler, retry defaults — has to be added to a file named for one backend. The admin panel already discovered this from the other direction: its `trpc/queryClient.ts` exists because four backends need one cache, and it grew a two-factor gate handler and a router-name-disjointness proof that belong to none of them.
 
-*Rejected: a directory per transport (`trpc/`, `auth/`).* Three of the four applications reach exactly one backend per transport, so the level separates nothing. The admin panel's existing `trpc/` folder earns its keep by holding four clients, and stays.
+*Rejected: a directory per transport (`trpc/`, `auth/`).* Three of the four applications reach exactly one backend per transport, so the level separates nothing.
+
+The admin panels' existing `trpc/` folder was expected to keep its name, on the grounds that it already held four clients. That did not survive delivery: the session client is a better-auth client, not a tRPC one, so leaving `trpc/` intact would have left each panel with two client directories and failed the requirement outright. The folder is therefore renamed to `clients/` — the same four modules, grouped as before, under a name that says what it holds rather than which transport. The collision that follows (`trpc/auth.ts`, the auth service's client, against the session client) is resolved by naming the former `auth-trpc.ts`, so `clients/auth.ts` is the session client in all four applications.
 
 *Rejected: leaving flat modules at the source root.* It works at two clients and stops working at four — and the root of a framework-mode SPA is already crowded with files the framework pins by name.
+
+### Sign-out became a slice during delivery
+
+Sign-out bound nothing, so it was the one feature in the repository that a composition root could not install — the published list had nothing of it to carry. It gained the layering sign-in has: a repository port over the client, one use case, its own tokens, and a module that joins `authModules`.
+
+This was not in the original task breakdown; it was decided while group 1 was being built and is recorded here rather than left to the diff. The hook keeps its state, its in-flight ref and its `Promise<boolean>` contract, so its existing tests pass unchanged — which is the evidence the behavior did not move.
+
+The cost is two forwarding layers: the use case returns what the repository returns, and the repository only reshapes an error envelope into an outcome. That is real, and the code carried a comment arguing against exactly this. The reason it was overruled is that "every slice publishes a module" is what makes the list trustworthy — a package where one slice is exempt is a package whose list no longer means "everything this product defines", and the exemption would have had to be remembered by every reader of every composition root.
+
+*Rejected: leaving sign-out hook-only and documenting the exception.* Cheaper today, and it makes the convention conditional. A rule with one remembered exception is a rule nobody can apply without asking.
 
 ## Risks / Trade-offs
 
