@@ -43,12 +43,11 @@ and `pnpm dev --only=zzz-web` still serves the app.
 
 - **The address.** ZZZ stays on `store.zzz.com`, `store.zzz.9jokes.com`, and
   `store.zzz.dev`. Moving the site to the brand's base domain is
-  `move-zzz-to-base-domain`, planned and parked; this change deliberately
-  leaves the site registry alone so that one stays a registry edit.
+  not planned; this change deliberately leaves the site registry alone, so
+  whenever ZZZ does move it stays a registry edit and a route edit.
 - **The `storageNamespace`.** It stays `zzz-store` — it keys a browser's
   storage against an origin that is not moving, so renaming it would evict
-  state for no gain. `move-zzz-to-base-domain` renames it when the origin
-  does change.
+  state for no gain. It is renamed if and when the origin changes.
 - **The ZZZ backends.** `zzz-store-service` and the `stg-/prd-zzz-store`
   databases keep their names: ZZZ genuinely runs a store service.
 - **What the app shows.** No surface, component, or route changes.

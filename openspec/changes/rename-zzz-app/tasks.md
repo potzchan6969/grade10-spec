@@ -33,8 +33,8 @@ Claimable once group 1 has landed.
       in `.claude/skills/react-clean-architecture/SKILL.md`.
 - [x] 2.2 Update the SPA list in `docs/architecture/multi-product.md`, and
       point its **Open** item — "ZZZ still runs one storefront on a
-      subdomain rather than a whole site" — at `move-zzz-to-base-domain` by
-      name, so the app being `zzz` at `store.zzz.*` reads as scheduled
+      subdomain rather than a whole site" — open, recording that the naming
+      half is done, so the app being `zzz` at `store.zzz.*` reads as known
       rather than half-finished.
 - [x] 2.3 Update the ZZZ band in `docs/architecture/handbook.html`: the
       `zzz-store-spa` node id and its card's title and path. The host it

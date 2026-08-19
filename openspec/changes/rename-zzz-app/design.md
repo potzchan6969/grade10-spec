@@ -57,15 +57,15 @@ exists.
 matches the host — rejected: it names the worker after a hostname rather
 than an app, which is not how any other worker here is named, and it buys a
 second rename later. Rename the worker *and* its route now — rejected: that
-is `move-zzz-to-base-domain`, which is parked.
+is the address move, which is not planned.
 
 ### `storageNamespace` stays `zzz-store`
 
 The prefix on every browser-storage key keeps its value. It is scoped to an
 origin, and the origin is not moving; renaming it would orphan whatever
 local state exists and buy nothing, since no collector reads it. It moves in
-`move-zzz-to-base-domain`, where the origin change makes the eviction
-correct rather than gratuitous.
+whichever change moves the origin, where the eviction becomes correct
+rather than gratuitous.
 
 *Alternatives:* rename it here for consistency with the other three names —
 rejected: it is not an identity, it is a storage key, and changing a storage
@@ -86,8 +86,7 @@ The vhost file stays
 the filename to sync `/etc/hosts`, and the hostname is not changing.
 
 The two disagreeing is the honest state: the app is `zzz-web` and it answers
-at `store.zzz.dev`. `move-zzz-to-base-domain` renames the vhost when that stops
-being true.
+at `store.zzz.dev`. The vhost is renamed when that stops being true.
 
 *Alternatives:* rename both — rejected: it would point `/etc/hosts` and the
 proxy at a host the app is not served at, breaking local dev outright.
@@ -97,8 +96,8 @@ proxy at a host the app is not served at, breaking local dev outright.
 - **A reader meets `apps/frontend/zzz` serving `store.zzz.com` and assumes
   the rename is half-done** → `docs/architecture/multi-product.md`'s *Open*
   item already records ZZZ as a storefront on a subdomain awaiting the
-  grade10 shape; task 4.2 points it at `move-zzz-to-base-domain` by name, so
-  the gap reads as scheduled rather than forgotten.
+  grade10 shape; task 2.2 keeps it open and says which half is done, so the
+  gap reads as known rather than forgotten.
 - **A stale `.dev.vars` or `.wrangler` left at the old path** → task 2.3
   adds the entry to `preflight.mjs`'s `OLD_APP_HOMES`, which is the existing
   mechanism for exactly this and already carries
