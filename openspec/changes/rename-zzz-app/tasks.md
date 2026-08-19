@@ -24,7 +24,7 @@ broken workspace, so 1.1 through 1.5 are one unit of work.
       `pnpm run build`, `pnpm run check:libs`, and `pnpm dev --only=zzz-web`
       serving the app at `https://store.zzz.dev`.
 
-## 2. The documented map (grade10)
+## 2. The documented map (grade10) (owner: @sean)
 
 Claimable once group 1 has landed.
 
