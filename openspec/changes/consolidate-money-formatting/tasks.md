@@ -11,7 +11,7 @@
 - [x] 2.2 Repoint `packages/shopify/demo/src/useCases/{browseCatalog,moneyMath}.tsx` and `moneyMath.test.tsx` at `@grade10/utils/money`, keeping the use case's prose accurate to the exports it now names.
 - [x] 2.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, and the shopify demo suite.
 
-## 3. Auction messages (grade10)
+## 3. Auction messages (grade10) (owner: @sean)
 
 - [ ] 3.1 Render the amounts in `packages/grade10-auction/backend/src/email/render.tsx` with `formatMoney` at `locale: "en"`, satisfying "An auction email".
 - [ ] 3.2 Delete `formatMinorAmount` and its formatter cache from `packages/grade10-auction/backend/src/amounts.ts`, leaving `isMinorAmount` and its callers in `bidding/placeBid.ts` and `auctionItems/schedule.ts` untouched.
