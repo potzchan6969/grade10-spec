@@ -7,9 +7,9 @@
 
 ## 2. The payment integration (grade10) (owner: @sean)
 
-- [ ] 2.1 Repoint `packages/shopify/backend/src/{wire/mappers,admin/createShopifyAdmin,webhooks/payloads}.ts` at `@grade10/utils/money`, delete `packages/shopify/backend/src/money/`, and drop its entry from the package barrel, satisfying "The error does not name one integration".
-- [ ] 2.2 Repoint `packages/shopify/demo/src/useCases/{browseCatalog,moneyMath}.tsx` and `moneyMath.test.tsx` at `@grade10/utils/money`, keeping the use case's prose accurate to the exports it now names.
-- [ ] 2.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, and the shopify demo suite.
+- [x] 2.1 Repoint `packages/shopify/backend/src/{wire/mappers,admin/createShopifyAdmin,webhooks/payloads}.ts` at `@grade10/utils/money`, delete `packages/shopify/backend/src/money/`, and drop its entry from the package barrel, satisfying "The error does not name one integration".
+- [x] 2.2 Repoint `packages/shopify/demo/src/useCases/{browseCatalog,moneyMath}.tsx` and `moneyMath.test.tsx` at `@grade10/utils/money`, keeping the use case's prose accurate to the exports it now names.
+- [x] 2.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, and the shopify demo suite.
 
 ## 3. Auction messages (grade10)
 
