@@ -180,9 +180,20 @@ collector reading an unlabelled `19 Aug 2026, 14:00` will read their own
 clock and be eight hours wrong about when bidding ends; the label is what
 stops that.
 
-*Rejected — the `zzz` token:* correct, and it renders `GMT+0` for UTC. A
-token that can only ever produce one string is a lookup the reader has to do
-for no benefit. If a second zone ever arrives, the token comes back with it.
+The literal holds only while UTC is what was asked for. `timeZone` is public,
+so `formatDeadline(at, { timeZone: "Asia/Tokyo" })` has to be answerable: it
+renders Tokyo's clock and labels it with the `zzz` token, never `UTC`. A
+deadline shape that printed another zone's time under a `UTC` label would be
+wrong in exactly the way this shape exists to prevent, and "nothing calls it
+today" is not a property of a public function.
+
+*Rejected — the `zzz` token everywhere:* correct, and it renders `GMT+0` for
+UTC, which is a lookup the reader has to do for the one zone every surface
+actually uses.
+
+*Rejected — dropping `timeZone` from the shapes:* it would make the literal
+unconditionally true, and give up the reversibility the decision above is
+built on.
 
 ### `locale` is a BCP-47 string, as it is in `money`
 
@@ -200,9 +211,11 @@ identical and compiles differently.
 
 So `formatDay` and friends take a BCP-47 string and resolve it to a date-fns
 `Locale` inside the module, through a map that mirrors the languages
-`@grade10/i18n` actually ships. Today that map has one entry. It grows when a
-catalog does, in the same commit, which is the point: the module's supported
-languages and the platform's are one list.
+`@grade10/i18n` actually ships — `en` and `zh-hant`, so two entries. It grows
+when a catalog does, in the same commit, which is the point: the module's
+supported languages and the platform's are one list. A test asserts that,
+reading `locales` from `@grade10/i18n` and rendering under each — a copy of a
+published list drifts unless something fails when it does.
 
 A tag the map has no entry for **throws, naming the tag** — the same failure
 `currencyExponent` gives an unknown currency code, for the same reason. No
@@ -309,19 +322,33 @@ screen that has a date filter.
 `packages/utils/src/dates.ts` — and equally when `date-fns` or `@date-fns/tz`
 is imported outside it.
 
+It reads the `.ts`/`.tsx` under `apps/` and `packages/`, which is where a date
+reaches a reader. Build scripts under `scripts/` are `.mjs` and render to a
+terminal, so they are outside it; submodules under `external/` and `tools/`
+belong to other repositories and are not this check's to police.
+
 The second half is what makes the first half hold. A library in the
 dependency tree is easier to reach for than four lines of `Intl` were, so
 adopting date-fns without guarding the import would trade nineteen hand-rolled
 renderings for nineteen `format(at, "dd/MM/yy")` calls and no way to see them.
 The module owns the patterns; nothing else names one.
 
-One exemption, declared in the script with its reason:
-`packages/loyalty/backend/src/utils/time.ts` builds an
-`Intl.DateTimeFormat` to read wall-clock *parts* through `formatToParts` and
-compute a program's period boundaries in its zone. It renders nothing to a
-reader. Exempting it by path — rather than by pattern — keeps the exemption
-visible and reviewable; a second file wanting the same treatment has to argue
-for it in a diff.
+Two exemptions, each declared in the script with its reason, and both in
+loyalty:
+
+- `src/utils/time.ts` builds an `Intl.DateTimeFormat` to read wall-clock
+  *parts* through `formatToParts` and compute a program's period boundaries in
+  its zone.
+- `src/loyaltyProgram.ts` builds one to find out whether an IANA zone name is
+  real, and throws it away. `Intl` is the only zone table the runtime has.
+
+Neither renders anything to a reader. The second was found by the check on its
+first run rather than by this design — which is the argument-in-a-diff the
+rule below asks for, made and accepted.
+
+Exempting by path — rather than by pattern — keeps each exemption visible and
+reviewable; a third file wanting the same treatment has to argue for it in a
+diff.
 
 *Rejected — exempting `formatToParts` by pattern:* a display formatter is one
 `.format()` away from a `formatToParts` that looks exempt, and the guard would
