@@ -7,7 +7,7 @@
 - [x] 1.5 Point each package's own test harness at its published list where the harness stands in for a whole application — satisfies "A test exercises one feature slice"
 - [x] 1.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run check:libs`, `pnpm run check:handbook`
 
-## 2. Core-module factories name their product (grade10)
+## 2. Core-module factories name their product (grade10) (owner: @sean)
 
 - [ ] 2.1 Rename `store-frontend`'s core-module factory to carry its product, updating every call site in one commit — satisfies "A package publishes a core-module factory"
 - [ ] 2.2 Rename `loyalty-frontend`'s core-module factory to carry its product — satisfies "A package publishes a core-module factory"
