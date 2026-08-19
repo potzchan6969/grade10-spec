@@ -20,7 +20,7 @@ broken workspace, so 1.1 through 1.5 are one unit of work.
       nginx vhost stays `store.zzz.dev` — the hostname is not changing.
 - [x] 1.4 Point the ZZZ SPA's deploy step at the new directory in
       `.github/workflows/deploy.yml`.
-- [ ] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `pnpm run build`, `pnpm run check:libs`, and `pnpm dev --only=zzz-web`
       serving the app at `https://store.zzz.dev`.
 
