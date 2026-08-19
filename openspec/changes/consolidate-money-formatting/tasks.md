@@ -3,7 +3,7 @@
 - [x] 1.1 Add `packages/utils/src/money.ts` with the ISO 4217 exponent table moved from `packages/shopify/backend/src/money/minorUnits.ts` and a `currencyExponent` lookup that throws naming the code and the platform's money handling, satisfying "An unrecognized currency stops the operation" for all three scenarios; register the `./money` subpath in `packages/utils/package.json`.
 - [x] 1.2 Add `toMinorUnits` and `fromMinorUnits` as string-exact conversions driven by that table, satisfying "An amount converts by its own currency's exponent" for "A decimal amount from an external system" and "A decimal amount too precise for its currency"; move `packages/shopify/backend/test/money/minorUnits.test.ts` in with them, renaming the inverse.
 - [x] 1.3 Add `formatMoney(minor, code, { locale, currencyDisplay })`, taking fraction digits and the divisor from the same table and memoizing formatters on locale, currency and display, satisfying "A two-decimal currency", "A currency with no minor unit" and "A three-decimal currency", plus the shape halves of "An operator sees the currency code" and "A collector reads their own locale".
-- [ ] 1.4 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test` for the `@grade10/utils` suite.
+- [x] 1.4 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test` for the `@grade10/utils` suite.
 
 ## 2. The payment integration (grade10)
 
