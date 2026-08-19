@@ -10,9 +10,9 @@
 ## 2. Core-module factories name their product (grade10) (owner: @sean)
 
 - [x] 2.1 Rename `store-frontend`'s core-module factory to carry its product, updating every call site in one commit — satisfies "A package publishes a core-module factory"
-- [ ] 2.2 Rename `loyalty-frontend`'s core-module factory to carry its product — satisfies "A package publishes a core-module factory"
-- [ ] 2.3 Rename `store-admin-frontend`'s core-module factory from its layer to its product, so it reads unambiguously beside the auction admin factory — satisfies "A composition root installs several core modules"
-- [ ] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 2.2 Rename `loyalty-frontend`'s core-module factory to carry its product — satisfies "A package publishes a core-module factory"
+- [x] 2.3 Rename `store-admin-frontend`'s core-module factory from its layer to its product, so it reads unambiguously beside the auction admin factory — satisfies "A composition root installs several core modules"
+- [x] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 3. Composition roots load lists (grade10)
 
