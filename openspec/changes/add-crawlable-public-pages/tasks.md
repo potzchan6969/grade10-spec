@@ -16,8 +16,8 @@ other.
 
 ## 2. Crawler directory (owner: @sean)
 
-- [ ] 2.1 Make `robots points at the sitemap` pass: robots.txt emitted per environment, permitting the public surfaces and naming the sitemap's absolute URL.
-- [ ] 2.2 Make `The sitemap is exact` pass: the sitemap derives from the route modules' identities — every public surface, nothing else, absolute URLs of the serving environment.
+- [x] 2.1 Make `robots points at the sitemap` pass: robots.txt emitted per environment, permitting the public surfaces and naming the sitemap's absolute URL.
+- [x] 2.2 Make `The sitemap is exact` pass: the sitemap derives from the route modules' identities — every public surface, nothing else, absolute URLs of the serving environment.
 - [ ] 2.3 Run typecheck, lint, and the app's test lane as this group's verification.
 
 ## 3. Honest statuses
