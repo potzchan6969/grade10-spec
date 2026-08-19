@@ -4,7 +4,7 @@
 
 Verify: `pnpm run test:stories:ui`, `pnpm run typecheck`, `pnpm run lint`.
 
-## 2. Sign-in commands guard themselves (grade10 repo)
+## 2. Sign-in commands guard themselves (grade10 repo) (owner: @sean)
 
 Independent of group 1; "One sign-in email per intent" needs group 1 landed
 and the `external/grade10-spec` submodule bumped before it holds end to end.
