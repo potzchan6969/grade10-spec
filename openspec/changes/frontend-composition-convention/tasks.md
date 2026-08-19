@@ -19,9 +19,9 @@
 Needs group 1's admin lists landed — an application cannot load a list its package does not publish yet. The auth and storefront work in 3.1 does not.
 
 - [x] 3.1 Switch every storefront and admin composition root from the sign-in module to `auth-frontend`'s published list, and the storefront test harness with them — satisfies "An application composes a product"
-- [ ] 3.2 Switch both admin panels from the seven named feature modules to one published list per product — satisfies "An application composes several products"
-- [ ] 3.3 Leave the four single-slice sign-in page tests loading one module directly, and confirm no other consumer does — satisfies "A test exercises one feature slice"
-- [ ] 3.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
+- [x] 3.2 Switch both admin panels from the seven named feature modules to one published list per product — satisfies "An application composes several products"
+- [x] 3.3 Leave the four single-slice sign-in page tests loading one module directly, and confirm no other consumer does — satisfies "A test exercises one feature slice"
+- [x] 3.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
 
 ## 4. Applications group their outbound clients (grade10)
 
