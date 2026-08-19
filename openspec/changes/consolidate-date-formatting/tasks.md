@@ -23,7 +23,7 @@
 - [x] 3.4 Repoint `apps/admin/grade10/src/pages/rewards/RewardFormDialog.tsx` and `pages/invitations/GrantInvitationDialog.tsx` at the module's day bridge and delete `apps/admin/grade10/src/dates.ts`, satisfying "A day reads back as it was typed" and "A day typed from a machine set to another zone" at the surfaces that type one.
 - [x] 3.5 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
 
-## 4. Collector-facing surfaces (grade10)
+## 4. Collector-facing surfaces (grade10) (owner: @sean)
 
 - [ ] 4.1 Render both close times in `apps/frontend/grade10/src/pages/auctions/AuctionsPage.tsx` with `formatDeadline`, satisfying "The auction page shows a close", "A closed listing" and "A page and a message agree" — both now read `19 Aug 2026, 14:00 UTC` for one instant.
 - [ ] 4.2 Repoint `packages/grade10-store/frontend/src/features/account/profile/presentation/views/ProfileView.tsx` at `formatDay`, so both storefronts read one module through the shared feature.
