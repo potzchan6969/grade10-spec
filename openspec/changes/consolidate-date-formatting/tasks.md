@@ -17,11 +17,11 @@
 
 ## 3. Operator-facing surfaces (grade10) (owner: @sean)
 
-- [ ] 3.1 Replace the inline formatters in `apps/admin/grade10/src/pages/{store/OrdersTable,auction/parts,liability/LiabilitySection,rewards/RewardsSection,members/MemberRedemptionsTable,members/MemberLedgerTable}.tsx` with `formatMoment`, and in `pages/{users/UserTable,members/MemberSummaryCard,invitations/InvitationsSection}.tsx` with `formatDay`, satisfying "Two operator tables show one moment the same way" and "One reader, two browsers".
-- [ ] 3.2 Replace the formatter in `apps/admin/grade10/src/pages/audit/AuditSection.tsx` with `formatEvent`, keeping the seconds an audit log is read for.
-- [ ] 3.3 Do the same for `apps/admin/zzz/src/pages/{store/OrdersTable,users/UserTable,audit/AuditSection}.tsx`, so both panels read one module, satisfying "The same shape across both brands".
-- [ ] 3.4 Repoint `apps/admin/grade10/src/pages/rewards/RewardFormDialog.tsx` and `pages/invitations/GrantInvitationDialog.tsx` at the module's day bridge and delete `apps/admin/grade10/src/dates.ts`, satisfying "A day reads back as it was typed" and "A day typed from a machine set to another zone" at the surfaces that type one.
-- [ ] 3.5 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
+- [x] 3.1 Replace the inline formatters in `apps/admin/grade10/src/pages/{store/OrdersTable,auction/parts,liability/LiabilitySection,rewards/RewardsSection,members/MemberRedemptionsTable,members/MemberLedgerTable}.tsx` with `formatMoment`, and in `pages/{users/UserTable,members/MemberSummaryCard,invitations/InvitationsSection}.tsx` with `formatDay`, satisfying "Two operator tables show one moment the same way" and "One reader, two browsers".
+- [x] 3.2 Replace the formatter in `apps/admin/grade10/src/pages/audit/AuditSection.tsx` with `formatEvent`, keeping the seconds an audit log is read for.
+- [x] 3.3 Do the same for `apps/admin/zzz/src/pages/{store/OrdersTable,users/UserTable,audit/AuditSection}.tsx`, so both panels read one module, satisfying "The same shape across both brands".
+- [x] 3.4 Repoint `apps/admin/grade10/src/pages/rewards/RewardFormDialog.tsx` and `pages/invitations/GrantInvitationDialog.tsx` at the module's day bridge and delete `apps/admin/grade10/src/dates.ts`, satisfying "A day reads back as it was typed" and "A day typed from a machine set to another zone" at the surfaces that type one.
+- [x] 3.5 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
 
 ## 4. Collector-facing surfaces (grade10)
 
