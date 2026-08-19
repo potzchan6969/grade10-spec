@@ -3,14 +3,14 @@
 The rename lands whole: a directory moved without its package name is a
 broken workspace, so 1.1 through 1.5 are one unit of work.
 
-- [ ] 1.1 Move `apps/frontend/zzz-store` to `apps/frontend/zzz` and rename
+- [x] 1.1 Move `apps/frontend/zzz-store` to `apps/frontend/zzz` and rename
       the package to `@grade10/zzz-web-spa`, updating the root `package.json`
       `build` script and regenerating `pnpm-lock.yaml` with `pnpm install`.
-- [ ] 1.2 Rename the Cloudflare worker in `apps/frontend/zzz/wrangler.jsonc`
+- [x] 1.2 Rename the Cloudflare worker in `apps/frontend/zzz/wrangler.jsonc`
       to `zzz-web`, `zzz-web-staging`, and `zzz-web-production`, leaving
       every `routes` pattern on `store.zzz.*` untouched; run
       `pnpm run cf-typegen`.
-- [ ] 1.3 Rename the dev service to `zzz-web` in `scripts/dev/services.mjs`
+- [x] 1.3 Rename the dev service to `zzz-web` in `scripts/dev/services.mjs`
       — matching grade10's `web`, and avoiding the `zzz` brand preset in the
       same file, which `--only=` resolves first — point it at the new
       directory, and add
@@ -18,7 +18,7 @@ broken workspace, so 1.1 through 1.5 are one unit of work.
       `scripts/dev/preflight.mjs` so leftover `.dev.vars` or `.wrangler`
       state at the old path is reported rather than silently ignored. The
       nginx vhost stays `store.zzz.dev` — the hostname is not changing.
-- [ ] 1.4 Point the ZZZ SPA's deploy step at the new directory in
+- [x] 1.4 Point the ZZZ SPA's deploy step at the new directory in
       `.github/workflows/deploy.yml`.
 - [ ] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `pnpm run build`, `pnpm run check:libs`, and `pnpm dev --only=zzz-web`
