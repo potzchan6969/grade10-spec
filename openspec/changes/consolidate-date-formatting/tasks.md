@@ -9,7 +9,7 @@
 - [x] 1.7 Pin a non-UTC `TZ` for the `@grade10/utils` suite so a zone-dependent mistake fails in CI rather than in Hong Kong, and assert the four shapes and the day bridge under it.
 - [x] 1.8 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test` for the `@grade10/utils` suite.
 
-## 2. Auction messages (grade10)
+## 2. Auction messages (grade10) (owner: @sean)
 
 - [ ] 2.1 Render the close time in `packages/grade10-auction/backend/src/email/render.tsx` with `formatDeadline`, deleting the local `CLOSES_AT` formatter, satisfying "A message the platform sends states one zone" for "Two recipients read one time"; the rendered close moves from `Aug 19, 2026, 02:00 PM UTC` to `19 Aug 2026, 14:00 UTC`, so update the email suite's expectation to the new text rather than around it.
 - [ ] 2.2 Confirm the auction Worker bundles date-fns without a runtime import failure, and record the bundle delta `pnpm run build` reports for the auction service.
