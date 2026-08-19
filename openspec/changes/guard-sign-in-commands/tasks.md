@@ -9,6 +9,12 @@ Verify: `pnpm run test:stories:ui`, `pnpm run typecheck`, `pnpm run lint`.
 Independent of group 1; "One sign-in email per intent" needs group 1 landed
 and the `external/grade10-spec` submodule bumped before it holds end to end.
 
+2.2 is blocked: bumping the submodule past group 1 (`6c866f5`) drags in the
+store-product-listing Figma redesign (`5c770ff`), whose grade10-side adoption
+(`ProductSummary` lost `category`/`description` for `tags`) no change plans
+yet. The gating stays inert but harmless in the app until that adoption lands
+and the bump rides it — as design.md's risk section records.
+
 - [x] 2.1 Make "Activating again during flight does nothing" pass at the package seam — the shared command helper in `@grade10/auth-frontend` keeps an in-flight ref, matching its sign-out command; exercised through the fixture client for send-link, send-code, and verify
 - [ ] 2.2 Bump `external/grade10-spec` past group 1 so the gated email step ships, and verify the flow against it
 
