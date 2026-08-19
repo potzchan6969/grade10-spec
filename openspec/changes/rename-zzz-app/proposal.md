@@ -17,19 +17,21 @@ other brand — is simply `grade10`, `@grade10/grade10-spa`'s counterpart, and
 storefront, for no difference in what they are.
 
 **Metric:** ZZZ SPA identities that name the app rather than a product it
-does not ship — from zero of three to three of three.
-**Acceptance signal:** `apps/frontend/zzz`, `@grade10/zzz-spa`, and
-`zzz-web` agree, and `pnpm dev --only=zzz` still serves the app.
+does not ship — from zero of four to four of four.
+**Acceptance signal:** `apps/frontend/zzz`, `@grade10/zzz-web-spa`, the
+`zzz-web` worker and the `zzz-web` dev service agree with grade10's shape,
+and `pnpm dev --only=zzz-web` still serves the app.
 
 ## What Changes
 
 - **The app is renamed to what it is.** `apps/frontend/zzz-store` becomes
-  `apps/frontend/zzz`, `@grade10/zzz-store-spa` becomes `@grade10/zzz-spa`,
-  and the Cloudflare worker `zzz-store-web` becomes `zzz-web` — the same
-  three-way agreement `apps/frontend/grade10` already has.
+  `apps/frontend/zzz`, `@grade10/zzz-store-spa` becomes
+  `@grade10/zzz-web-spa`, and the Cloudflare worker `zzz-store-web` becomes
+  `zzz-web` — exactly the shape grade10 already has, where the directory
+  names the brand (`apps/frontend/grade10`) and the package, worker and dev
+  service name the site role (`@grade10/web-spa`, `grade10-web`, `web`).
 - **The dev service is renamed with it.** `pnpm dev --only=zzz-store`
-  becomes `--only=zzz`, and `pnpm dev`'s picker shows the app under its own
-  name.
+  becomes `--only=zzz-web`.
 - **The documentation follows.** `AGENTS.md`, the handbook, the
   multi-product architecture note, and the `react-clean-architecture` skill
   all name the app.

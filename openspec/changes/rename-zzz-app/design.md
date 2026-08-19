@@ -5,12 +5,16 @@ Motivation: [proposal.md](proposal.md) — Why.
 
 ## Context
 
-Three names identify one SPA and the repository's layout rule ties them:
-`apps/frontend/<app>` is the directory, `@grade10/<app>-spa` the package,
-`<app>-web` the Cloudflare worker. ZZZ carries `zzz-store` in all three;
-grade10 carries `grade10` in all three. What ZZZ does *not* carry is a store
-— `apps/frontend/zzz-store/src/pages/` holds `home`, `sign-in`, and
-`profile`.
+Four names identify one SPA, and grade10 shows the shape they take: the
+directory names the brand (`apps/frontend/grade10`) and the package, worker
+and dev service name the *site role* it serves, with the brand dropping out
+of the default brand's names — `@grade10/web-spa`, `grade10-web`, and the
+`web` dev service. A second brand keeps its prefix.
+
+ZZZ carries `zzz-store` in all four instead, naming a product it does not
+have: `apps/frontend/zzz-store/src/pages/` holds `home`, `sign-in`, and
+`profile`, and nothing assembles the surfaces `@grade10/store-frontend`
+publishes.
 
 The site the app answers at is a separate registry
 (`packages/app-env/src/sites.ts`), which is why the two can be decided
@@ -20,7 +24,7 @@ apart: `BRAND_SITES.zzz` is `["store"]` and stays that way here.
 
 **Goals:**
 
-- The three names agree, and they name the app.
+- The four names agree, and they say brand + site role, as grade10's do.
 - The later address move is a registry edit and a route edit, with no
   rename tangled into it.
 - No behavior changes at all — the same bytes serve at the same host.
@@ -67,15 +71,22 @@ correct rather than gratuitous.
 rejected: it is not an identity, it is a storage key, and changing a storage
 key is a behavior change in a change that promises none.
 
+### The dev service is `zzz-web`, not `zzz`
+
+`scripts/dev/services.mjs` renames its entry to `zzz-web`, matching
+grade10's `web`. Naming it plain `zzz` would collide with the `zzz` brand
+*preset* in the same file, which selects every ZZZ service; `--only=zzz`
+resolves the preset first, so the frontend would become unselectable on its
+own.
+
 ### The dev service and the nginx vhost part company
 
-`scripts/dev/services.mjs` renames its entry to `zzz` — it keys the picker,
-the log file, and `--only=`, all of which name the app. The vhost file stays
+The vhost file stays
 `store.zzz.dev`, because `scripts/setup-nginx.sh` reads the *hostname* off
 the filename to sync `/etc/hosts`, and the hostname is not changing.
 
-The two disagreeing is the honest state: the app is `zzz` and it answers at
-`store.zzz.dev`. `move-zzz-to-base-domain` renames the vhost when that stops
+The two disagreeing is the honest state: the app is `zzz-web` and it answers
+at `store.zzz.dev`. `move-zzz-to-base-domain` renames the vhost when that stops
 being true.
 
 *Alternatives:* rename both — rejected: it would point `/etc/hosts` and the
