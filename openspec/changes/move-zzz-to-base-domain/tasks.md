@@ -1,4 +1,4 @@
-## 1. The site registry (grade10)
+## 1. The site registry (grade10) (owner: @sean)
 
 `packages/app-env` decides every ZZZ host. This group lands first; groups 2
 and 3 both read the address it sets.
