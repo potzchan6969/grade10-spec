@@ -4,7 +4,7 @@
 
 Verify: `pnpm run typecheck`, auth-frontend package tests, `pnpm run check:handbook` (the package surface changes).
 
-## 2. Every surface adopts the command
+## 2. Every surface adopts the command (owner: @sean)
 
 Depends on group 1.
 
