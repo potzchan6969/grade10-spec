@@ -1,6 +1,6 @@
 ## 1. Product frontend packages publish their module lists (grade10) (owner: @sean)
 
-- [ ] 1.1 Publish `auth-frontend`'s module list at a `./modules` subpath, gathering the sign-in slice's module, and add the list file to the package's tsconfig `include` — satisfies "A package defines a single feature slice"
+- [x] 1.1 Publish `auth-frontend`'s module list at a `./modules` subpath, gathering the sign-in slice's module, and add the list file to the package's tsconfig `include` — satisfies "A package defines a single feature slice"
 - [ ] 1.2 Publish `store-admin-frontend`'s module list, gathering the orders slice — satisfies "An admin frontend package is composed"
 - [ ] 1.3 Publish `auction-admin-frontend`'s module list, gathering the bidders, fulfillment, listings, sales and settlements slices — satisfies "An admin frontend package is composed"
 - [ ] 1.4 Publish `audit-admin-frontend`'s module list, gathering the trail slice — satisfies "An admin frontend package is composed" and "A package defines a single feature slice"
