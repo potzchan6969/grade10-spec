@@ -40,16 +40,15 @@ the base domain.
   link, the checkout return, and the push subject all read
   `storefrontUrl` from `packages/app-env`, so they move with the registry
   and not by hand.
-- **The app is renamed to what it is.** `apps/frontend/zzz-store` becomes
-  `apps/frontend/zzz`, `@grade10/zzz-store-spa` becomes `@grade10/zzz-spa`,
-  and the Cloudflare worker `zzz-store-web` becomes `zzz-web` — the same
-  shape `apps/frontend/grade10` and `grade10-web` already have.
-- **The `zzz-store` spec product becomes `zzz`.** It holds no capabilities
-  yet, so the rename costs a directory and the in-flight
-  `add-zzz-navigation` change that was about to write its first.
+- **The browser-storage namespace follows the origin.** The prefix on every
+  ZZZ storage key becomes `zzz`; the origin change is what makes evicting
+  the old keys correct rather than gratuitous.
 
 ## Non-Goals
 
+- **Renaming the app.** `rename-zzz-app` already made the directory
+  `apps/frontend/zzz`, the package `@grade10/zzz-spa`, and the worker
+  `zzz-web`. This change edits that worker's routes; it renames nothing.
 - **A storefront.** Nothing about what the site *shows* changes: home stays
   the signed-out landing, and the day ZZZ has products to sell, that change
   decides what `/` and `/store` answer. This change moves an address and a
@@ -85,20 +84,13 @@ requirements recorded yet.
 - **`packages/app-env`** — `sites.ts` is the whole behavioral change:
   `BRAND_SITES.zzz`, `BRAND_STOREFRONT.zzz`, and the `store` site id.
   Every consumer derives from it, so nothing else names a host.
-- **`apps/frontend/zzz-store` → `apps/frontend/zzz`** — directory, package
-  name, worker name, wrangler routes, browser-storage namespace.
-- **`apps/admin/zzz`, `apps/backend/zzz/*`** — the workspace dependency
-  name only; no behavior.
-- **Dev environment** — `scripts/dev/services.mjs`, the nginx vhost
-  (`store.zzz.dev` → `zzz.dev`; the existing certificate already covers the
-  base domain), `/etc/hosts` via `scripts/setup-nginx.sh`.
-- **Deployment** — `.github/workflows/deploy.yml` and the root `build`
-  script name the app directory; `scripts/deploy/components.mjs` derives
-  from the dev registry and needs no edit. Two Cloudflare workers
-  (`zzz-store-web-staging`, `zzz-store-web-production`) are retired.
-- **Docs** — `AGENTS.md`, `docs/architecture/multi-product.md` (the open item
-  closes), `docs/architecture/handbook.html`, `docs/deployment.md`,
-  `.claude/skills/react-clean-architecture/SKILL.md`.
-- **This store** — `openspec/specs/zzz-store/` → `openspec/specs/zzz/`,
-  the product list in `openspec/config.yaml`, and the in-flight
-  `add-zzz-store-navigation` change, renamed `add-zzz-navigation`.
+- **`apps/frontend/zzz`** — the wrangler `routes` per environment, and the
+  browser-storage namespace in `src/config.ts`.
+- **Dev environment** — the nginx vhost (`store.zzz.dev` → `zzz.dev`; the
+  existing zone certificate already covers the base domain) and `/etc/hosts`
+  via `scripts/setup-nginx.sh`.
+- **Cloudflare** — a Redirect Rule per ZZZ zone; the zones themselves have
+  to be registered first.
+- **Docs** — `docs/architecture/multi-product.md` (the open item closes),
+  `docs/architecture/handbook.html` (the host each ZZZ node shows), and
+  `docs/deployment.md`.

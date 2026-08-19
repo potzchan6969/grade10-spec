@@ -1,0 +1,104 @@
+# Design: rename the ZZZ app
+
+No capability delta — this is a rename (`skip_specs: true`).
+Motivation: [proposal.md](proposal.md) — Why.
+
+## Context
+
+Three names identify one SPA and the repository's layout rule ties them:
+`apps/frontend/<app>` is the directory, `@grade10/<app>-spa` the package,
+`<app>-web` the Cloudflare worker. ZZZ carries `zzz-store` in all three;
+grade10 carries `grade10` in all three. What ZZZ does *not* carry is a store
+— `apps/frontend/zzz-store/src/pages/` holds `home`, `sign-in`, and
+`profile`.
+
+The site the app answers at is a separate registry
+(`packages/app-env/src/sites.ts`), which is why the two can be decided
+apart: `BRAND_SITES.zzz` is `["store"]` and stays that way here.
+
+## Goals / Non-Goals
+
+**Goals:**
+
+- The three names agree, and they name the app.
+- The later address move is a registry edit and a route edit, with no
+  rename tangled into it.
+- No behavior changes at all — the same bytes serve at the same host.
+
+**Non-Goals:**
+
+- A `ui.md`. Nothing a collector sees changes.
+- Touching `packages/app-env`. The one seam that would make this change
+  behavioral is the one it must not cross.
+
+## Decisions
+
+### The worker is renamed even though its route is not
+
+`zzz-store-web` becomes `zzz-web` while it keeps answering at
+`store.zzz.com`. A worker names the app that deploys it — `grade10-web` is
+`apps/frontend/grade10`, not a claim about its hostname — and the route is
+wrangler config sitting beside it. Renaming now means the address move later
+edits a route and nothing else, and the worker carries its deploy history
+across that move instead of being replaced by a differently-named one.
+
+The rename is free because neither `zzz-store-web-staging` nor
+`zzz-store-web-production` has ever been deployed: every ZZZ database in
+`neondb/registry.sh` is `TODO` and both ZZZ zones are unregistered
+placeholders (`docs/architecture/multi-product.md`, *Open*). Nothing has to
+be deleted from Cloudflare, and no deploy history is lost because none
+exists.
+
+*Alternatives:* keep `zzz-store-web` until the address moves, so the name
+matches the host — rejected: it names the worker after a hostname rather
+than an app, which is not how any other worker here is named, and it buys a
+second rename later. Rename the worker *and* its route now — rejected: that
+is `move-zzz-to-base-domain`, which is parked.
+
+### `storageNamespace` stays `zzz-store`
+
+The prefix on every browser-storage key keeps its value. It is scoped to an
+origin, and the origin is not moving; renaming it would orphan whatever
+local state exists and buy nothing, since no collector reads it. It moves in
+`move-zzz-to-base-domain`, where the origin change makes the eviction
+correct rather than gratuitous.
+
+*Alternatives:* rename it here for consistency with the other three names —
+rejected: it is not an identity, it is a storage key, and changing a storage
+key is a behavior change in a change that promises none.
+
+### The dev service and the nginx vhost part company
+
+`scripts/dev/services.mjs` renames its entry to `zzz` — it keys the picker,
+the log file, and `--only=`, all of which name the app. The vhost file stays
+`store.zzz.dev`, because `scripts/setup-nginx.sh` reads the *hostname* off
+the filename to sync `/etc/hosts`, and the hostname is not changing.
+
+The two disagreeing is the honest state: the app is `zzz` and it answers at
+`store.zzz.dev`. `move-zzz-to-base-domain` renames the vhost when that stops
+being true.
+
+*Alternatives:* rename both — rejected: it would point `/etc/hosts` and the
+proxy at a host the app is not served at, breaking local dev outright.
+
+## Risks / Trade-offs
+
+- **A reader meets `apps/frontend/zzz` serving `store.zzz.com` and assumes
+  the rename is half-done** → `docs/architecture/multi-product.md`'s *Open*
+  item already records ZZZ as a storefront on a subdomain awaiting the
+  grade10 shape; task 4.2 points it at `move-zzz-to-base-domain` by name, so
+  the gap reads as scheduled rather than forgotten.
+- **A stale `.dev.vars` or `.wrangler` left at the old path** → task 2.3
+  adds the entry to `preflight.mjs`'s `OLD_APP_HOMES`, which is the existing
+  mechanism for exactly this and already carries
+  `apps/frontend/grade10-store`.
+- **The deploy workflow and the app registry drift** → `pnpm run check:libs`
+  fails when a `deploy:*` script no workflow step runs, and
+  `scripts/deploy/components.mjs` asserts workflow parity on every dispatch.
+
+## Migration Plan
+
+One group, one commit, no sequencing: the rename lands whole or not at all,
+because a directory moved without its package name is a broken workspace.
+Rollback is `git revert` — nothing is deployed, no data moves, no
+registry changes.
