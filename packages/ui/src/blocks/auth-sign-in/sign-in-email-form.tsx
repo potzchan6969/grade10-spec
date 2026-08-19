@@ -57,12 +57,16 @@ function SignInEmailForm({
         type="email"
         value={email}
       />
-      <Button disabled={!email} loading={submitting} type="submit">
+      <Button
+        disabled={!email || requestingCode}
+        loading={submitting}
+        type="submit"
+      >
         {submitLabel}
       </Button>
       {onRequestCode ? (
         <Button
-          disabled={!email}
+          disabled={!email || submitting}
           loading={requestingCode}
           onClick={onRequestCode}
           type="button"

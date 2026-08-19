@@ -62,3 +62,61 @@ export const SubmitIsReported: Story = {
     expect(args.onSubmit).toHaveBeenCalledOnce();
   },
 };
+
+/** One command at a time: while the link request runs, the code action
+ * refuses activation — and only the running control looks busy. */
+export const LinkRequestRunning: Story = {
+  args: {
+    submitting: true,
+    codeActionLabel: "Email me a code instead",
+    onRequestCode: fn(),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const submit = canvas.getByRole("button", { name: "Send magic link" });
+    const codeAction = canvas.getByRole("button", {
+      name: "Email me a code instead",
+    });
+    expect(submit).toHaveAttribute("aria-busy", "true");
+    expect(codeAction).toBeDisabled();
+    expect(codeAction).not.toHaveAttribute("aria-busy");
+  },
+};
+
+export const CodeRequestRunning: Story = {
+  args: {
+    requestingCode: true,
+    codeActionLabel: "Email me a code instead",
+    onRequestCode: fn(),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const submit = canvas.getByRole("button", { name: "Send magic link" });
+    const codeAction = canvas.getByRole("button", {
+      name: "Email me a code instead",
+    });
+    expect(codeAction).toHaveAttribute("aria-busy", "true");
+    expect(submit).toBeDisabled();
+    expect(submit).not.toHaveAttribute("aria-busy");
+  },
+};
+
+/** A settled request frees the step: with nothing in flight, either
+ * command starts normally. */
+export const SettledStepIsFree: Story = {
+  args: {
+    codeActionLabel: "Email me a code instead",
+    onRequestCode: fn(),
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Email me a code instead" }),
+    );
+    expect(args.onRequestCode).toHaveBeenCalledOnce();
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Send magic link" }),
+    );
+    expect(args.onSubmit).toHaveBeenCalledOnce();
+  },
+};
