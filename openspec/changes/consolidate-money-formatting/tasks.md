@@ -25,9 +25,9 @@
 
 ## 5. Operator-facing surfaces (grade10) (owner: @sean)
 
-- [ ] 5.1 Render money in `apps/admin/grade10/src/pages/{auction/parts,store/OrdersTable,members/MemberLedgerTable}.tsx` with `formatMoney` at `currencyDisplay: "code"`, removing each local formatter and adding `@grade10/utils` to the panel's `package.json`, satisfying "An operator sees the currency code" and "Two operator tables agree".
-- [ ] 5.2 Do the same for `apps/admin/zzz/src/pages/store/OrdersTable.tsx`, so both panels read one module.
-- [ ] 5.3 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test`.
+- [x] 5.1 Render money in `apps/admin/grade10/src/pages/{auction/parts,store/OrdersTable,members/MemberLedgerTable}.tsx` with `formatMoney` at `currencyDisplay: "code"`, removing each local formatter and adding `@grade10/utils` to the panel's `package.json`, satisfying "An operator sees the currency code" and "Two operator tables agree".
+- [x] 5.2 Do the same for `apps/admin/zzz/src/pages/store/OrdersTable.tsx`, so both panels read one module.
+- [x] 5.3 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test`.
 
 ## 6. Keeping it consolidated (grade10)
 
