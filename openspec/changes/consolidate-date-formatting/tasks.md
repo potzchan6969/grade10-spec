@@ -34,8 +34,8 @@
 
 This group's check fails until groups 1 through 4 have landed their deletions.
 
-- [ ] 5.1 Add `scripts/check-dates.mjs`, wired into `pnpm run check:libs` beside `check-money.mjs`, failing when `Intl.DateTimeFormat`, `toLocaleDateString`, `toLocaleTimeString` or `toLocaleString` appears outside `packages/utils/src/dates.ts`, and equally when `date-fns` or `@date-fns/tz` is imported outside it, with `packages/loyalty/backend/src/utils/time.ts` exempted by path and by a stated reason — it reads wall-clock parts to compute a program's period boundaries and renders nothing.
-- [ ] 5.2 Prove the guard by planting each pattern it claims to catch — including a bare `date-fns` import — and watching it fail, then removing them.
-- [ ] 5.3 Name the date module in `docs/conventions/code-layout.md` as the one place a date becomes text, beside the money rule it mirrors, recording UTC as the platform's zone and why the two formatters differ in their locale default — an ambiguous date ordering is a correctness problem, a thousands separator is not.
-- [ ] 5.4 Update `docs/architecture/handbook.html` for the `@grade10/utils/dates` subpath.
-- [ ] 5.5 Run `pnpm run check:libs`, `pnpm run check:handbook`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and `pnpm run build`.
+- [x] 5.1 Add `scripts/check-dates.mjs`, wired into `pnpm run check:libs` beside `check-money.mjs`, failing when `Intl.DateTimeFormat`, `toLocaleDateString`, `toLocaleTimeString` or `toLocaleString` appears outside `packages/utils/src/dates.ts`, and equally when `date-fns` or `@date-fns/tz` is imported outside it, with `packages/loyalty/backend/src/utils/time.ts` exempted by path and by a stated reason — it reads wall-clock parts to compute a program's period boundaries and renders nothing.
+- [x] 5.2 Prove the guard by planting each pattern it claims to catch — including a bare `date-fns` import — and watching it fail, then removing them.
+- [x] 5.3 Name the date module in `docs/conventions/code-layout.md` as the one place a date becomes text, beside the money rule it mirrors, recording UTC as the platform's zone and why the two formatters differ in their locale default — an ambiguous date ordering is a correctness problem, a thousands separator is not.
+- [x] 5.4 Update `docs/architecture/handbook.html` for the `@grade10/utils/dates` subpath.
+- [x] 5.5 Run `pnpm run check:libs`, `pnpm run check:handbook`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and `pnpm run build`.
