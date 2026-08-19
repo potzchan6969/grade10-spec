@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
-import { useState } from "react";
 import { FilterPanel } from "./filter-panel";
-import { COLLECTIONS, UTILITY_LINKS } from "./fixtures";
+import { FILTER_GROUPS, UTILITY_LINKS } from "./fixtures";
 
 const meta = {
   title: "Store Product Listing/FilterPanel",
@@ -17,12 +16,14 @@ const meta = {
     ),
   ],
   args: {
-    label: "Store navigation",
-    searchPlaceholder: "Search...",
+    label: "Store filters",
+    heading: "Filter",
+    searchPlaceholder: "Find product",
     searchLabel: "Search products",
-    collections: { status: "ready", data: COLLECTIONS },
-    activeCollection: "pokemon",
-    onCollectionChange: fn(),
+    groups: { status: "ready", data: FILTER_GROUPS },
+    selection: {},
+    onFilterChange: fn(),
+    onGroupExpand: fn(),
     onSearchChange: fn(),
     utilityLinks: UTILITY_LINKS,
   },
@@ -31,38 +32,19 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Matches the Product Listing sidebar instance in Figma (`4288:13952`). */
-export const Default: Story = {
-  render: (args) => {
-    const [activeCollection, setActiveCollection] = useState(
-      args.activeCollection ?? "pokemon",
-    );
-
-    return (
-      <div className="w-64">
-        <FilterPanel
-          {...args}
-          activeCollection={activeCollection}
-          onCollectionChange={(collectionId) => {
-            setActiveCollection(collectionId);
-            args.onCollectionChange?.(collectionId);
-          }}
-        />
-      </div>
-    );
-  },
-};
+/** Matches the Product List sidebar instance in Figma (`4288:13952`). */
+export const Default: Story = {};
 
 export const Loading: Story = {
-  args: { collections: { status: "loading" } },
+  args: { groups: { status: "loading" } },
 };
 
 /** The consumer supplies the message and what to call the action. */
 export const ErrorState: Story = {
   args: {
-    collections: {
+    groups: {
       status: "error",
-      message: "Collections could not be loaded.",
+      message: "Filters could not be loaded.",
       action: { label: "Try again", onAction: fn() },
     },
   },
@@ -70,29 +52,85 @@ export const ErrorState: Story = {
 
 export const Empty: Story = {
   args: {
-    collections: {
+    groups: {
       status: "empty",
-      message: "No collections are available.",
+      message: "No filters are available.",
     },
   },
 };
 
-/** A collection change is reported and the active item stays put until the
- * consumer supplies a new value. */
-export const CollectionChangeIsReported: Story = {
+/** Empty selection is unrestricted — every checkbox is unchecked. */
+export const NoFilterSelected: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("checkbox", { name: /Pokémon/ })).not.toBeChecked();
+    expect(
+      canvas.getByRole("checkbox", { name: /Booster Box/ }),
+    ).not.toBeChecked();
+  },
+};
+
+/** A filter change is reported and the box stays unchecked until the consumer
+ * supplies a new selection. */
+export const FilterChangeIsReported: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    const dragonBall = canvas.getByRole("button", { name: "Dragon Ball" });
+    const pokemon = canvas.getByRole("checkbox", { name: /Pokémon/ });
 
-    expect(dragonBall).not.toHaveAttribute("aria-current");
-    await userEvent.click(dragonBall);
+    expect(pokemon).not.toBeChecked();
+    await userEvent.click(pokemon);
 
-    expect(args.onCollectionChange).toHaveBeenCalledTimes(1);
-    expect(args.onCollectionChange).toHaveBeenCalledWith("dragon-ball");
-    expect(canvas.getByRole("button", { name: "Pokémon" })).toHaveAttribute(
-      "aria-current",
-      "true",
+    expect(args.onFilterChange).toHaveBeenCalledTimes(1);
+    expect(args.onFilterChange).toHaveBeenCalledWith("worlds", "pokemon", true);
+    expect(pokemon).not.toBeChecked();
+  },
+};
+
+/** Two options in one group selected together. */
+export const TwoOptionsSelected: Story = {
+  args: { selection: { worlds: ["pokemon", "formula-1"] } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("checkbox", { name: /Pokémon/ })).toBeChecked();
+    expect(canvas.getByRole("checkbox", { name: /Formula 1/ })).toBeChecked();
+    expect(
+      canvas.getByRole("checkbox", { name: /Shohei Ohtani/ }),
+    ).not.toBeChecked();
+  },
+};
+
+/** Expand reports the group; the option list is unchanged until the consumer
+ * supplies a longer one. */
+export const GroupExpandIsReported: Story = {
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: "See all worlds" }),
     );
+    expect(args.onGroupExpand).toHaveBeenCalledTimes(1);
+    expect(args.onGroupExpand).toHaveBeenCalledWith("worlds");
+  },
+};
+
+/** A group with no options occupies no space. */
+export const EmptyFilterGroup: Story = {
+  args: {
+    groups: {
+      status: "ready",
+      data: [
+        { id: "worlds", label: "Worlds", options: [] },
+        {
+          id: "types",
+          label: "Types",
+          options: [{ id: "booster-box", label: "Booster Box", count: "24" }],
+        },
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByText("Worlds")).not.toBeInTheDocument();
+    expect(canvas.getByText("Types")).toBeInTheDocument();
   },
 };
 
@@ -120,5 +158,19 @@ export const SearchClear: Story = {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole("button", { name: "Clear search" }));
     expect(args.onSearchClear).toHaveBeenCalledTimes(1);
+  },
+};
+
+/** No utility-link region when none are supplied. */
+export const NoUtilityLinks: Story = {
+  args: { utilityLinks: [] },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvasElement.querySelector("[data-slot='filter-panel-utility-links']"),
+    ).toBeNull();
+    expect(
+      canvas.queryByRole("link", { name: "Help" }),
+    ).not.toBeInTheDocument();
   },
 };

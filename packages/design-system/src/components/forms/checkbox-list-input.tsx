@@ -9,8 +9,8 @@ const checkboxListInputVariants = cva(
   {
     variants: {
       size: {
-        // Figma's Sizing collection: default is 16/24 with a 24px hit area,
-        // `sm` is 14/20 with a 20px hit area. The control itself stays 20px.
+        // Figma: default is a 16px control in a 24px hit (`Size/size-6`);
+        // `sm` is the same 16px control in a 20px hit (`Size/size-5`).
         default: "text-base [&_[data-slot=checkbox-button-hit]]:size-6",
         sm: "text-sm [&_[data-slot=checkbox-button-hit]]:size-5",
       },

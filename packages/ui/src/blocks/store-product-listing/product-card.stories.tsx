@@ -40,7 +40,9 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     expect(canvas.queryByRole("button", { name: /wishlist/i })).toBeNull();
     expect(canvas.getByText("SALE")).toBeInTheDocument();
-    expect(canvas.getByText("Pokémon")).toBeInTheDocument();
+    expect(canvas.queryByText("Pokémon")).toBeNull();
+    expect(canvas.queryByText("M4")).toBeNull();
+    expect(canvas.queryByText("JP")).toBeNull();
   },
 };
 

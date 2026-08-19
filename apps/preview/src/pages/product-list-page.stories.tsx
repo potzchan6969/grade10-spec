@@ -4,16 +4,15 @@ import { type FilterSelection, ProductBrowse } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useMemo, useState } from "react";
 import {
-  CHIP_FILTERS,
-  COLLECTIONS,
-  collectionLabel,
+  appliedFiltersFromSelection,
+  FILTER_GROUPS,
   INITIAL_SELECTION,
   PAGINATION_LABELS,
   PRODUCTS,
   SORT_OPTIONS,
   STORE_FOOTER,
   STORE_NAV,
-  seriesFiltersForCollection,
+  sortTriggerLabel,
   UTILITY_LINKS,
 } from "./store-content";
 
@@ -31,10 +30,8 @@ const RESULTS_LOAD_MS = 450;
 function ProductListPage() {
   const [selection, setSelection] =
     useState<FilterSelection>(INITIAL_SELECTION);
-  const [activeCollection, setActiveCollection] = useState("pokemon");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("popular");
-  const [series, setSeries] = useState("all");
   const [page, setPage] = useState(2);
   const [cart, setCart] = useState<Record<string, number>>({ "1": 3 });
   const [resultsStatus, setResultsStatus] = useState<"loading" | "ready">(
@@ -51,19 +48,37 @@ function ProductListPage() {
     [cart],
   );
 
+  const appliedFilters = useMemo(
+    () => appliedFiltersFromSelection(FILTER_GROUPS, selection),
+    [selection],
+  );
+
   useEffect(() => {
+    void search;
+    void sort;
+    void selection;
     setResultsStatus("loading");
     const timeout = setTimeout(
       () => setResultsStatus("ready"),
       RESULTS_LOAD_MS,
     );
     return () => clearTimeout(timeout);
-  }, [activeCollection]);
+  }, [search, sort, selection]);
 
-  const handleCollectionChange = (collectionId: string) => {
-    setActiveCollection(collectionId);
-    setSelection({});
-    setSeries("all");
+  const handleFilterChange = (
+    groupId: string,
+    optionId: string,
+    selected: boolean,
+  ) => {
+    setSelection((previous) => {
+      const current = previous[groupId] ?? [];
+      return {
+        ...previous,
+        [groupId]: selected
+          ? [...current, optionId]
+          : current.filter((id) => id !== optionId),
+      };
+    });
   };
 
   return (
@@ -71,22 +86,13 @@ function ProductListPage() {
       <Nav {...STORE_NAV} />
       <ProductBrowse
         {...PAGINATION_LABELS}
-        activeCollection={activeCollection}
-        chipFilters={CHIP_FILTERS}
-        collections={{ status: "ready", data: COLLECTIONS }}
-        filterPanelLabel="Store navigation"
-        onCollectionChange={handleCollectionChange}
-        onFilterChange={(groupId, optionId, selected) =>
-          setSelection((previous) => {
-            const current = previous[groupId] ?? [];
-            return {
-              ...previous,
-              [groupId]: selected
-                ? [...current, optionId]
-                : current.filter((id) => id !== optionId),
-            };
-          })
-        }
+        appliedFilters={appliedFilters}
+        clearFiltersLabel="Clear filters"
+        filterPanelLabel="Store filters"
+        groups={{ status: "ready", data: FILTER_GROUPS }}
+        heading="Filter"
+        onClearFilters={() => setSelection({})}
+        onFilterChange={handleFilterChange}
         onPageChange={setPage}
         onProductAction={(productId) =>
           setCart((previous) => ({
@@ -96,11 +102,10 @@ function ProductListPage() {
         }
         onSearchChange={setSearch}
         onSearchClear={() => setSearch("")}
-        onSelectFilterChange={(_groupId, optionId) => setSeries(optionId)}
         onSortChange={setSort}
         page={page}
         pageCount={10}
-        resultCount="38"
+        resultCount="100 Products"
         results={
           resultsStatus === "loading"
             ? { status: "loading" }
@@ -108,14 +113,12 @@ function ProductListPage() {
         }
         resultsLabel="Products"
         searchLabel="Search products"
-        searchPlaceholder="Search..."
+        searchPlaceholder="Find product"
         searchValue={search}
-        selectFilters={seriesFiltersForCollection(activeCollection)}
-        selectFilterValues={{ series }}
         selection={selection}
         sortOptions={SORT_OPTIONS}
+        sortTriggerLabel={sortTriggerLabel(sort)}
         sortValue={sort}
-        title={collectionLabel(activeCollection, COLLECTIONS)}
         utilityLinks={UTILITY_LINKS}
       />
       <Footer {...STORE_FOOTER} />

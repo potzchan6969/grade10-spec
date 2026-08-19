@@ -1,5 +1,5 @@
 import type {
-  CollectionOption,
+  AppliedFilter,
   FilterGroup,
   ProductSummary,
   SortOption,
@@ -12,43 +12,39 @@ import type {
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
 const SORT_OPTIONS: SortOption[] = [
-  { id: "popular", label: "Popular" },
-  { id: "new", label: "New" },
-  { id: "price-desc", label: "Price", toggleId: "price-asc" },
+  { id: "popular", label: "Popularity" },
+  { id: "new", label: "Latest product" },
+  { id: "price-asc", label: "Lowest price" },
+  { id: "price-desc", label: "Highest price" },
 ];
 
-const CHIP_FILTERS: FilterGroup[] = [
+const FILTER_GROUPS: FilterGroup[] = [
   {
-    id: "product-type",
-    label: "Type",
+    id: "worlds",
+    label: "Worlds",
+    expandLabel: "See all worlds",
     options: [
-      { id: "pack", label: "Pack" },
-      { id: "box", label: "Box" },
+      { id: "pokemon", label: "Pokémon", count: "51" },
+      { id: "shohei-ohtani", label: "Shohei Ohtani", count: "15" },
+      { id: "formula-1", label: "Formula 1", count: "6" },
+      { id: "manga-anime", label: "Manga & Anime", count: "9" },
+      { id: "music", label: "Music", count: "10" },
     ],
   },
-];
-
-const SELECT_FILTERS: FilterGroup[] = [
   {
-    id: "series",
-    label: "Series",
+    id: "types",
+    label: "Types",
     options: [
-      { id: "all", label: "All Series" },
-      { id: "m4", label: "M4" },
-      { id: "m10", label: "M10" },
+      { id: "booster-box", label: "Booster Box", count: "24" },
+      { id: "special-box", label: "Special Box", count: "6" },
+      { id: "graded-card", label: "Graded Card", count: "19" },
+      { id: "graded-magazine", label: "Graded Magazine", count: "16" },
+      { id: "original-art", label: "Original Art", count: "14" },
+      { id: "graded-music", label: "Graded Music", count: "0" },
+      { id: "collectibles", label: "Collectibles", count: "6" },
+      { id: "graded-manga", label: "Graded Manga", count: "5" },
     ],
   },
-];
-
-const COLLECTIONS: CollectionOption[] = [
-  { id: "all", label: "All Collections" },
-  { id: "pokemon", label: "Pokémon" },
-  { id: "dragon-ball", label: "Dragon Ball" },
-  { id: "one-piece", label: "One Piece" },
-  { id: "disney", label: "Disney" },
-  { id: "nba", label: "NBA" },
-  { id: "mlb", label: "MLB" },
-  { id: "formula-1", label: "Formula 1" },
 ];
 
 const UTILITY_LINKS: UtilityLink[] = [
@@ -74,8 +70,14 @@ const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
 }));
 
 const SELECTION = {
-  "product-type": ["box"],
+  worlds: ["pokemon"],
+  types: ["booster-box"],
 };
+
+const APPLIED_FILTERS: AppliedFilter[] = [
+  { groupId: "worlds", optionId: "pokemon", label: "Pokémon" },
+  { groupId: "types", optionId: "booster-box", label: "Booster Box" },
+];
 
 const PAGINATION_LABELS = {
   previousLabel: "Prev",
@@ -85,12 +87,11 @@ const PAGINATION_LABELS = {
 };
 
 export {
-  CHIP_FILTERS,
-  COLLECTIONS,
+  APPLIED_FILTERS,
+  FILTER_GROUPS,
   IMAGE,
   PAGINATION_LABELS,
   PRODUCTS,
-  SELECT_FILTERS,
   SELECTION,
   SORT_OPTIONS,
   UTILITY_LINKS,

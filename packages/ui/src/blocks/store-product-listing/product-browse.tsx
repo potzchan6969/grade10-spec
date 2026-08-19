@@ -5,14 +5,15 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@grade10/design-system/components/display/pagination";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 import { FilterPanel } from "./filter-panel";
 import { ProductListHeader } from "./product-list-header";
 import { ProductResultsPanel } from "./product-results-panel";
 import type {
+  AppliedFilter,
   AsyncState,
-  CollectionOption,
   FilterGroup,
   FilterSelection,
   ProductSummary,
@@ -22,35 +23,34 @@ import type {
 
 type ProductBrowseProps = {
   filterPanelLabel: string;
+  heading: ReactNode;
   searchPlaceholder: ReactNode;
   searchLabel?: ReactNode;
   searchValue?: string;
   onSearchChange?: (value: string) => void;
   onSearchClear?: () => void;
-  collections: AsyncState<readonly CollectionOption[]>;
-  activeCollection?: string;
-  onCollectionChange?: (collectionId: string) => void;
-  utilityLinks?: readonly UtilityLink[];
+  groups: AsyncState<readonly FilterGroup[]>;
   selection?: FilterSelection;
   onFilterChange?: (
     groupId: string,
     optionId: string,
     selected: boolean,
   ) => void;
+  onGroupExpand?: (groupId: string) => void;
+  utilityLinks?: readonly UtilityLink[];
 
   results: AsyncState<readonly ProductSummary[]>;
   /** Accessible name for the results region. */
   resultsLabel: string;
-  title: ReactNode;
   resultCount: ReactNode;
 
   sortOptions: readonly SortOption[];
   sortValue?: string;
+  sortTriggerLabel?: ReactNode;
   onSortChange?: (optionId: string) => void;
-  chipFilters?: readonly FilterGroup[];
-  selectFilters?: readonly FilterGroup[];
-  selectFilterValues?: Readonly<Record<string, string>>;
-  onSelectFilterChange?: (groupId: string, optionId: string) => void;
+  appliedFilters?: readonly AppliedFilter[];
+  clearFiltersLabel?: ReactNode;
+  onClearFilters?: () => void;
 
   page: number;
   pageCount: number;
@@ -68,6 +68,12 @@ type ProductBrowseProps = {
 
   className?: string;
 };
+
+/** Figma `ProductBrowse` (`4098:1952`): gap-12 (48px) between sidebar and
+ * results; px-8 / py-6 (32×24) on the frame. Direction is prefixed because
+ * it changes at lg; a stack cannot. */
+const BROWSE_CLASS =
+  "flex w-full max-lg:flex-col gap-12 px-8 py-6 lg:flex-row lg:items-start";
 
 /** First page, last page, and a window around the current one, with a gap
  * marker wherever the run breaks. */
@@ -88,8 +94,9 @@ function pageItems(page: number, pageCount: number): (number | "gap")[] {
 }
 
 /**
- * The category-browsing surface: filters, a titled result header with sort
- * and filter chips, a grid of tiles, and pagination.
+ * The product-browsing surface: a sidebar of world and type filters, a result
+ * header with applied-filter chips and a sort dropdown, a grid of tiles, and
+ * pagination.
  *
  * Filters and results are independent async boundaries — a failed result set
  * leaves the filter panel usable, which is the common case when facets and
@@ -97,28 +104,27 @@ function pageItems(page: number, pageCount: number): (number | "gap")[] {
  */
 function ProductBrowse({
   filterPanelLabel,
+  heading,
   searchPlaceholder,
   searchLabel,
   searchValue,
   onSearchChange,
   onSearchClear,
-  collections,
-  activeCollection,
-  onCollectionChange,
-  utilityLinks,
+  groups,
   selection = {},
   onFilterChange,
+  onGroupExpand,
+  utilityLinks,
   results,
   resultsLabel,
-  title,
   resultCount,
   sortOptions,
   sortValue,
+  sortTriggerLabel,
   onSortChange,
-  chipFilters,
-  selectFilters,
-  selectFilterValues,
-  onSelectFilterChange,
+  appliedFilters,
+  clearFiltersLabel,
+  onClearFilters,
   page,
   pageCount,
   onPageChange,
@@ -131,89 +137,86 @@ function ProductBrowse({
   className,
 }: ProductBrowseProps) {
   return (
-    <div
-      className={cn("flex w-full flex-col", className)}
-      data-slot="product-browse"
-    >
-      <div className="flex w-full flex-col gap-8 p-6 lg:flex-row lg:items-start">
-        <FilterPanel
-          activeCollection={activeCollection}
-          collections={collections}
-          label={filterPanelLabel}
-          onCollectionChange={onCollectionChange}
-          onSearchChange={onSearchChange}
-          onSearchClear={onSearchClear}
-          searchLabel={searchLabel}
-          searchPlaceholder={searchPlaceholder}
-          searchValue={searchValue}
-          utilityLinks={utilityLinks}
+    <div className={cn(BROWSE_CLASS, className)} data-slot="product-browse">
+      <FilterPanel
+        groups={groups}
+        heading={heading}
+        label={filterPanelLabel}
+        onFilterChange={onFilterChange}
+        onGroupExpand={onGroupExpand}
+        onSearchChange={onSearchChange}
+        onSearchClear={onSearchClear}
+        searchLabel={searchLabel}
+        searchPlaceholder={searchPlaceholder}
+        searchValue={searchValue}
+        selection={selection}
+        utilityLinks={utilityLinks}
+      />
+      <VStack
+        aria-label={resultsLabel}
+        className="w-full min-w-0 flex-1 gap-8 lg:items-center"
+        data-slot="product-browse-results"
+        gap="none"
+        role="region"
+      >
+        <ProductListHeader
+          appliedFilters={appliedFilters}
+          className="w-full"
+          clearFiltersLabel={clearFiltersLabel}
+          onClearFilters={onClearFilters}
+          onFilterChange={onFilterChange}
+          onSortChange={onSortChange}
+          resultCount={resultCount}
+          sortOptions={sortOptions}
+          sortTriggerLabel={sortTriggerLabel}
+          sortValue={sortValue}
         />
-        <section
-          aria-label={resultsLabel}
-          className="flex w-full min-w-0 flex-1 flex-col gap-6 lg:items-center"
-          data-slot="product-browse-results"
-        >
-          <ProductListHeader
+
+        <ProductResultsPanel
+          onProductAction={onProductAction}
+          onProductClick={onProductClick}
+          results={results}
+        />
+
+        {pageCount > 1 ? (
+          <Pagination
             className="w-full"
-            chipFilters={chipFilters}
-            onFilterChange={onFilterChange}
-            onSelectFilterChange={onSelectFilterChange}
-            onSortChange={onSortChange}
-            resultCount={resultCount}
-            selectFilters={selectFilters}
-            selectFilterValues={selectFilterValues}
-            selection={selection}
-            sortOptions={sortOptions}
-            sortValue={sortValue}
-            title={title}
-          />
-
-          <ProductResultsPanel
-            onProductAction={onProductAction}
-            onProductClick={onProductClick}
-            results={results}
-          />
-
-          {pageCount > 1 ? (
-            <Pagination
-              className="w-full"
-              // Spread only when set: passing `undefined` would clear the
-              // primitive's own accessible name rather than leave it alone.
-              {...(paginationLabel ? { "aria-label": paginationLabel } : {})}
+            // Spread only when set: passing `undefined` would clear the
+            // primitive's own accessible name rather than leave it alone.
+            {...(paginationLabel ? { "aria-label": paginationLabel } : {})}
+          >
+            <PaginationPrevious
+              disabled={page <= 1}
+              onClick={() => onPageChange?.(page - 1)}
             >
-              <PaginationPrevious
-                disabled={page <= 1}
-                onClick={() => onPageChange?.(page - 1)}
-              >
-                {previousLabel}
-              </PaginationPrevious>
-              {pageItems(page, pageCount).map((item, index) =>
-                item === "gap" ? (
-                  <PaginationEllipsis
-                    // biome-ignore lint/suspicious/noArrayIndexKey: a gap has no identity beyond its position.
-                    key={`gap-${index}`}
-                    label={morePagesLabel}
-                  />
-                ) : (
-                  <PaginationLink
-                    isActive={item === page}
-                    key={item}
-                    onClick={() => onPageChange?.(item)}
-                  >
-                    {item}
-                  </PaginationLink>
-                ),
-              )}
-              <PaginationNext
-                disabled={page >= pageCount}
-                onClick={() => onPageChange?.(page + 1)}
-              >
-                {nextLabel}
-              </PaginationNext>
-            </Pagination>
-          ) : null}
-        </section>
-      </div>
+              {previousLabel}
+            </PaginationPrevious>
+            {pageItems(page, pageCount).map((item, index) =>
+              item === "gap" ? (
+                <PaginationEllipsis
+                  // biome-ignore lint/suspicious/noArrayIndexKey: a gap has no identity beyond its position.
+                  key={`gap-${index}`}
+                  label={morePagesLabel}
+                />
+              ) : (
+                <PaginationLink
+                  isActive={item === page}
+                  key={item}
+                  onClick={() => onPageChange?.(item)}
+                >
+                  {item}
+                </PaginationLink>
+              ),
+            )}
+            <PaginationNext
+              disabled={page >= pageCount}
+              onClick={() => onPageChange?.(page + 1)}
+            >
+              {nextLabel}
+            </PaginationNext>
+          </Pagination>
+        ) : null}
+      </VStack>
     </div>
   );
 }

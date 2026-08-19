@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, screen, userEvent, within } from "storybook/test";
-import { CHIP_FILTERS, SELECT_FILTERS, SORT_OPTIONS } from "./fixtures";
+import { APPLIED_FILTERS, SORT_OPTIONS } from "./fixtures";
 import { ProductListHeader } from "./product-list-header";
 
 const meta = {
@@ -9,17 +9,15 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
-    title: "Pokémon",
-    resultCount: "38",
+    resultCount: "100 Products",
     sortOptions: SORT_OPTIONS,
     sortValue: "popular",
-    chipFilters: CHIP_FILTERS,
-    selectFilters: SELECT_FILTERS,
-    selection: {},
-    selectFilterValues: { series: "all" },
+    sortTriggerLabel: "Sort by popularity",
+    appliedFilters: APPLIED_FILTERS,
+    clearFiltersLabel: "Clear filters",
     onSortChange: fn(),
     onFilterChange: fn(),
-    onSelectFilterChange: fn(),
+    onClearFilters: fn(),
   },
 } satisfies Meta<typeof ProductListHeader>;
 
@@ -29,199 +27,126 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Pack" })).toHaveAttribute(
-      "aria-pressed",
-      "false",
-    );
-    expect(canvas.getByRole("button", { name: "Box" })).toHaveAttribute(
-      "aria-pressed",
-      "false",
-    );
+    expect(canvas.getByText("100 Products")).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: /Price/ }).querySelector("svg"),
-    ).not.toBeNull();
-    expect(
-      canvas.getByRole("button", { name: "Popular" }).querySelector("svg"),
-    ).toBeNull();
+      canvas.getByRole("button", { name: "Sort by popularity" }),
+    ).toBeInTheDocument();
+    expect(canvas.getByRole("button", { name: "Pokémon" })).toBeInTheDocument();
   },
 };
 
 /** The count is displayed as supplied, never derived from the page. */
 export const CountIsSupplied: Story = {
-  args: { resultCount: "1,204" },
+  args: { resultCount: "1,204 Products" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("1,204")).toBeInTheDocument();
+    expect(canvas.getByText("1,204 Products")).toBeInTheDocument();
   },
 };
 
-/** The title is displayed as supplied, with no fallback. */
-export const TitleIsSupplied: Story = {
-  args: { title: "Search Results" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("heading", { name: "Search Results" }),
-    ).toBeInTheDocument();
-    expect(canvas.queryByText("Pokémon")).not.toBeInTheDocument();
-  },
-};
-
-/** No sort options, no sort control — the title and count still show. */
+/** No sort options, no sort control — the count still shows. */
 export const WithoutSort: Story = {
   args: { sortOptions: [] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByText("100 Products")).toBeInTheDocument();
     expect(
-      canvas.getByRole("heading", { name: "Pokémon" }),
-    ).toBeInTheDocument();
-    expect(canvas.getByText("38")).toBeInTheDocument();
-    expect(
-      canvas.queryByRole("button", { name: "Popular" }),
+      canvas.queryByRole("button", { name: "Sort by popularity" }),
     ).not.toBeInTheDocument();
   },
 };
 
-/** Choosing an option reports it; the previous chip stays selected until the
- * consumer supplies a new one. */
+/** Choosing an option reports it and dismisses the list; the trigger stays
+ * on the previous label until the consumer supplies a new one. */
 export const SortIsReported: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await userEvent.click(canvas.getByRole("button", { name: "New" }));
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Sort by popularity" }),
+    );
+    await userEvent.click(
+      await screen.findByRole("menuitem", { name: "Latest product" }),
+    );
 
     expect(args.onSortChange).toHaveBeenCalledTimes(1);
     expect(args.onSortChange).toHaveBeenCalledWith("new");
-    expect(canvas.getByRole("button", { name: "Popular" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
-  },
-};
-
-/** A second tap on Price reports the paired identifier. */
-export const PriceReversesOnSecondTap: Story = {
-  args: { sortValue: "price-desc" },
-  play: async ({ args, canvasElement }) => {
-    const canvas = within(canvasElement);
-    const price = canvas.getByRole("button", { name: /Price/ });
-
-    expect(price).toHaveAttribute("aria-pressed", "true");
-    await userEvent.click(price);
-
-    expect(args.onSortChange).toHaveBeenCalledTimes(1);
-    expect(args.onSortChange).toHaveBeenCalledWith("price-asc");
-  },
-};
-
-/** Once the consumer supplies the paired identifier, the arrow is reversed. */
-export const PriceDirectionIsReversed: Story = {
-  args: { sortValue: "price-asc" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const price = canvas.getByRole("button", { name: /Price/ });
-    expect(price).toHaveAttribute("aria-pressed", "true");
-    expect(price.querySelector("[data-reversed]")).not.toBeNull();
-    expect(price.querySelector("svg")).not.toBeNull();
-  },
-};
-
-/** Activating a type chip reports the group and option, and leaves the
- * displayed selection alone until the consumer supplies a new one. */
-export const ChipFilterIsReported: Story = {
-  play: async ({ args, canvasElement }) => {
-    const canvas = within(canvasElement);
-    const pack = canvas.getByRole("button", { name: "Pack" });
-
-    expect(pack).toHaveAttribute("aria-pressed", "false");
-    expect(canvas.getByRole("button", { name: "Box" })).toHaveAttribute(
-      "aria-pressed",
-      "false",
-    );
-    await userEvent.click(pack);
-
-    expect(args.onFilterChange).toHaveBeenCalledTimes(1);
-    expect(args.onFilterChange).toHaveBeenCalledWith(
-      "product-type",
-      "pack",
-      true,
-    );
-    expect(canvas.getByRole("button", { name: "Pack" })).toHaveAttribute(
-      "aria-pressed",
-      "false",
-    );
-    expect(canvas.getByRole("button", { name: "Box" })).toHaveAttribute(
-      "aria-pressed",
-      "false",
-    );
-  },
-};
-
-/** Both type chips selected together — the consumer shows Pack and Box
- * products, same result set as none selected, with both chips marked. */
-export const BothTypeChipsSelected: Story = {
-  args: { selection: { "product-type": ["pack", "box"] } },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Pack" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
-    expect(canvas.getByRole("button", { name: "Box" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
-  },
-};
-
-/** Choosing a series option reports it and dismisses the list; the trigger
- * keeps naming the previous option until the consumer supplies a new one. */
-export const ExclusiveFilterIsReported: Story = {
-  play: async ({ args, canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    await userEvent.click(canvas.getByRole("button", { name: /All Series/ }));
-    await userEvent.click(await screen.findByRole("menuitem", { name: "M4" }));
-
-    expect(args.onSelectFilterChange).toHaveBeenCalledTimes(1);
-    expect(args.onSelectFilterChange).toHaveBeenCalledWith("series", "m4");
     expect(
-      canvas.getByRole("button", { name: /All Series/ }),
+      canvas.getByRole("button", { name: "Sort by popularity" }),
     ).toBeInTheDocument();
   },
 };
 
-/** An exclusive-filter group with no options occupies no space. */
-export const ExclusiveFilterWithNoOptions: Story = {
-  args: {
-    selectFilters: [{ id: "series", label: "Series", options: [] }],
-  },
-  play: async ({ canvasElement }) => {
+/** Choosing the already-active option reports nothing. */
+export const ActiveSortReportsNothing: Story = {
+  play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.queryByRole("button", { name: /All Series/ }),
-    ).not.toBeInTheDocument();
-    expect(canvas.getByRole("button", { name: "Popular" })).toBeInTheDocument();
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Sort by popularity" }),
+    );
+    await userEvent.click(
+      await screen.findByRole("menuitem", { name: "Popularity" }),
+    );
+
+    expect(args.onSortChange).not.toHaveBeenCalled();
   },
 };
 
-/** Sort, type, and series stay selected together. */
-export const SortAndFiltersCombine: Story = {
-  args: {
-    sortValue: "popular",
-    selection: { "product-type": ["pack"] },
-    selectFilterValues: { series: "m4" },
-  },
+/** No applied-filter region when none are supplied. */
+export const NoAppliedFilters: Story = {
+  args: { appliedFilters: [] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Popular" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
+    expect(canvas.getByText("100 Products")).toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: "Pokémon" }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: "Clear filters" }),
+    ).not.toBeInTheDocument();
+  },
+};
+
+/** Dismissing a chip reports the group and option as unselected. */
+export const AppliedFilterIsRemoved: Story = {
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Pokémon" }));
+
+    expect(args.onFilterChange).toHaveBeenCalledTimes(1);
+    expect(args.onFilterChange).toHaveBeenCalledWith(
+      "worlds",
+      "pokemon",
+      false,
     );
-    expect(canvas.getByRole("button", { name: "Pack" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
+    expect(canvas.getByRole("button", { name: "Pokémon" })).toBeInTheDocument();
+  },
+};
+
+/** Clear-all reports once; chips stay until the consumer supplies a new list. */
+export const AppliedFiltersAreCleared: Story = {
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Clear filters" }),
     );
-    expect(canvas.getByRole("button", { name: /M4/ })).toBeInTheDocument();
+
+    expect(args.onClearFilters).toHaveBeenCalledTimes(1);
+    expect(canvas.getByRole("button", { name: "Pokémon" })).toBeInTheDocument();
+  },
+};
+
+/** Sort and applied filters stay displayed together. */
+export const SortAndAppliedFiltersCombine: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("button", { name: "Sort by popularity" }),
+    ).toBeInTheDocument();
+    expect(canvas.getByRole("button", { name: "Pokémon" })).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: "Booster Box" }),
+    ).toBeInTheDocument();
   },
 };

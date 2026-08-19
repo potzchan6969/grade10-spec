@@ -71,7 +71,6 @@ function ProductCardContent({
   className,
   imageSrc,
   imageAlt = "",
-  tags = [],
   name,
   price,
   originalPrice,
@@ -178,19 +177,6 @@ function ProductCardContent({
       </div>
 
       <VStack className="min-w-0" data-slot="product-card-content" gap="sm">
-        {tags.length > 0 ? (
-          <HStack className="w-full flex-wrap" gap="xs" wrap>
-            {tags.map((tag, index) => (
-              <Badge
-                // biome-ignore lint/suspicious/noArrayIndexKey: tags are display-only and may repeat.
-                key={index}
-                size="sm"
-              >
-                {tag}
-              </Badge>
-            ))}
-          </HStack>
-        ) : null}
         <p
           className={cn(
             "truncate text-base font-bold",
@@ -237,7 +223,11 @@ const PRODUCT_CARD_FIXTURE = <ProductCardContent {...SKELETON_FIXTURE_PROPS} />;
  * hover, or stays visible when the product is already in the cart. Sold-out
  * tiles are inert.
  */
-function ProductCard({ loading = false, className, ...props }: ProductCardProps) {
+function ProductCard({
+  loading = false,
+  className,
+  ...props
+}: ProductCardProps) {
   if (!loading) {
     return <ProductCardContent className={className} {...props} />;
   }

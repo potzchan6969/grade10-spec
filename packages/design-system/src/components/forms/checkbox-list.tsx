@@ -10,6 +10,9 @@ type CheckboxListProps = ComponentProps<"div"> & {
 /**
  * A labelled stack of `CheckboxListInput`s. Unlike `RadioList`, the group does
  * not own a selected value — each item is independent.
+ *
+ * Figma (`2213:240`): 12px (`gap-3`) between the label and the list, 8px
+ * (`gap-2`) between items.
  */
 function CheckboxList({
   className,
@@ -20,7 +23,7 @@ function CheckboxList({
   return (
     <div
       data-slot="checkbox-list"
-      className={cn("flex w-full flex-col justify-center gap-2", className)}
+      className={cn("flex w-full flex-col justify-center gap-3", className)}
       {...props}
     >
       {label ? (

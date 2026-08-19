@@ -1,5 +1,6 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import { FilterChip } from "@grade10/design-system/components/forms/filter-chip";
+import { Link } from "@grade10/design-system/components/forms/link";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
@@ -9,52 +10,33 @@ import {
   DropdownMenuTrigger,
 } from "@grade10/design-system/components/overlays/dropdown-menu";
 import { cn } from "@grade10/design-system/lib/utils";
-import { ArrowDown, CaretDown, Check } from "@phosphor-icons/react";
+import { CaretDown, X } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
-import type { FilterGroup, FilterSelection, SortOption } from "./types";
+import type { AppliedFilter, SortOption } from "./types";
 
 type ProductListHeaderProps = {
-  /** Results heading. Figma's `title` text property. */
-  title: ReactNode;
   /** Formatted result total, displayed as supplied. Never derived from the
-   * number of products on the page. */
+   * number of products on the page. Figma's `Count`. */
   resultCount: ReactNode;
   sortOptions?: readonly SortOption[];
   /** ID of the active sort option. */
   sortValue?: string;
+  /** Whole trigger label, e.g. "Sort by popularity". */
+  sortTriggerLabel?: ReactNode;
   onSortChange?: (optionId: string) => void;
-  /** Multi-select chip groups (Type). Hidden when a group's options are empty. */
-  chipFilters?: readonly FilterGroup[];
-  /** Exclusive dropdown groups (Series). Hidden when a group's options are empty. */
-  selectFilters?: readonly FilterGroup[];
-  selectFilterValues?: Readonly<Record<string, string>>;
-  selection?: FilterSelection;
+  appliedFilters?: readonly AppliedFilter[];
   onFilterChange?: (
     groupId: string,
     optionId: string,
     selected: boolean,
   ) => void;
-  onSelectFilterChange?: (groupId: string, optionId: string) => void;
+  clearFiltersLabel?: ReactNode;
+  onClearFilters?: () => void;
   className?: string;
 };
 
-function isSortSelected(option: SortOption, sortValue?: string) {
-  return (
-    sortValue === option.id ||
-    (option.toggleId != null && sortValue === option.toggleId)
-  );
-}
-
-function nextSortId(option: SortOption, sortValue?: string) {
-  if (isSortSelected(option, sortValue)) {
-    if (!option.toggleId) return undefined;
-    return sortValue === option.id ? option.toggleId : option.id;
-  }
-  return option.id;
-}
-
 /**
- * Title, result count, sort chips, and optional type/series filters.
+ * Result count, optional applied-filter chips, and a sort dropdown.
  * Figma set `Product / Product List Header` (`4288:14117`).
  *
  * Renderable on its own, so another results surface can reuse it without the
@@ -62,169 +44,94 @@ function nextSortId(option: SortOption, sortValue?: string) {
  * never holds the selection.
  */
 function ProductListHeader({
-  title,
   resultCount,
   sortOptions = [],
   sortValue,
+  sortTriggerLabel,
   onSortChange,
-  chipFilters = [],
-  selectFilters = [],
-  selectFilterValues = {},
-  selection = {},
+  appliedFilters = [],
   onFilterChange,
-  onSelectFilterChange,
+  clearFiltersLabel,
+  onClearFilters,
   className,
 }: ProductListHeaderProps) {
-  const visibleChipFilters = chipFilters.filter(
-    (group) => group.options.length > 0,
-  );
-  const visibleSelectFilters = selectFilters.filter(
-    (group) => group.options.length > 0,
-  );
-  const showBar =
-    sortOptions.length > 0 ||
-    visibleChipFilters.length > 0 ||
-    visibleSelectFilters.length > 0;
+  const activeSort =
+    sortOptions.find((option) => option.id === sortValue) ?? sortOptions[0];
+  const triggerLabel = sortTriggerLabel ?? activeSort?.label;
+  const showFilters = appliedFilters.length > 0;
 
   return (
     <VStack
-      className={cn("pt-4", className)}
+      className={cn("w-full gap-3", className)}
       data-slot="product-list-header"
-      gap="md"
+      gap="none"
     >
-      <HStack className="w-full items-baseline gap-1.5" gap="none">
-        <h2 className="font-bold text-4xl text-foreground">{title}</h2>
-        <p
-          className="font-medium text-base text-secondary-foreground"
-          role="status"
-        >
+      <HStack className="w-full" hAlign="space-between" vAlign="center">
+        <p className="text-2xl font-bold text-foreground" role="status">
           {resultCount}
         </p>
+        {sortOptions.length > 0 ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  size="md"
+                  trailing={<CaretDown aria-hidden size={14} />}
+                  variant="ghost"
+                />
+              }
+            >
+              {triggerLabel}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {sortOptions.map((option) => (
+                <DropdownMenuItem
+                  key={option.id}
+                  onClick={() => {
+                    if (option.id !== sortValue) onSortChange?.(option.id);
+                  }}
+                  selected={option.id === sortValue}
+                >
+                  {option.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : null}
       </HStack>
-      {showBar ? (
+      {showFilters ? (
         <HStack
-          className="w-full"
+          className="w-full gap-4"
           data-slot="product-list-header-filters"
-          gap="md"
+          gap="none"
           vAlign="center"
           wrap
         >
-          {sortOptions.length > 0 ? (
-            <HStack
-              data-slot="product-list-header-sort"
-              gap="xs"
-              vAlign="center"
+          <HStack gap="sm" vAlign="center" wrap>
+            {appliedFilters.map((filter) => (
+              <FilterChip
+                className="bg-muted text-muted-foreground"
+                key={`${filter.groupId}:${filter.optionId}`}
+                onClick={() =>
+                  onFilterChange?.(filter.groupId, filter.optionId, false)
+                }
+                size="sm"
+                trailing={<X aria-hidden size={14} />}
+              >
+                {filter.label}
+              </FilterChip>
+            ))}
+          </HStack>
+          {onClearFilters != null && clearFiltersLabel != null ? (
+            <Link
+              onClick={onClearFilters}
+              render={<button type="button" />}
+              size="sm"
+              variant="secondary"
             >
-              {sortOptions.map((option) => {
-                const selected = isSortSelected(option, sortValue);
-                const reversed = sortValue === option.toggleId;
-                const trailing =
-                  option.trailing ??
-                  (option.toggleId ? (
-                    <ArrowDown aria-hidden size={14} />
-                  ) : undefined);
-
-                return (
-                  <FilterChip
-                    aria-pressed={selected}
-                    key={option.id}
-                    onClick={() => {
-                      const next = nextSortId(option, sortValue);
-                      if (next) onSortChange?.(next);
-                    }}
-                    selected={selected}
-                    trailing={
-                      trailing ? (
-                        <span
-                          className={cn(
-                            "inline-flex transition-transform duration-200",
-                            reversed && "rotate-180",
-                          )}
-                          data-reversed={reversed || undefined}
-                          data-slot="sort-direction"
-                        >
-                          {trailing}
-                        </span>
-                      ) : undefined
-                    }
-                  >
-                    {option.label}
-                  </FilterChip>
-                );
-              })}
-            </HStack>
+              {clearFiltersLabel}
+            </Link>
           ) : null}
-          {visibleChipFilters.map((group) => (
-            <HStack
-              aria-label={
-                typeof group.label === "string" ? group.label : undefined
-              }
-              data-slot="product-list-header-chip-filter"
-              gap="xs"
-              key={group.id}
-              role="group"
-              vAlign="center"
-            >
-              {group.options.map((option) => {
-                const selected = (selection[group.id] ?? []).includes(
-                  option.id,
-                );
-                return (
-                  <FilterChip
-                    aria-pressed={selected}
-                    disabled={option.disabled}
-                    key={option.id}
-                    onClick={() =>
-                      onFilterChange?.(group.id, option.id, !selected)
-                    }
-                    selected={selected}
-                  >
-                    {option.label}
-                  </FilterChip>
-                );
-              })}
-            </HStack>
-          ))}
-          {visibleSelectFilters.map((group) => {
-            const value = selectFilterValues[group.id];
-            const selectedOption =
-              group.options.find((option) => option.id === value) ??
-              group.options[0];
-
-            return (
-              <DropdownMenu key={group.id}>
-                <DropdownMenuTrigger
-                  render={
-                    <Button
-                      size="md"
-                      trailing={<CaretDown aria-hidden size={14} />}
-                      variant="outline"
-                    />
-                  }
-                >
-                  {selectedOption.label}
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start">
-                  {group.options.map((option) => (
-                    <DropdownMenuItem
-                      key={option.id}
-                      onClick={() =>
-                        onSelectFilterChange?.(group.id, option.id)
-                      }
-                      selected={option.id === value}
-                      trailing={
-                        option.id === value ? (
-                          <Check aria-hidden size={14} />
-                        ) : undefined
-                      }
-                    >
-                      {option.label}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            );
-          })}
         </HStack>
       ) : null}
     </VStack>

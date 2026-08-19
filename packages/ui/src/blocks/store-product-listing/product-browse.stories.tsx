@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
 import { useEffect, useState } from "react";
+import { expect, fn, userEvent, within } from "storybook/test";
 import {
-  CHIP_FILTERS,
-  COLLECTIONS,
+  APPLIED_FILTERS,
+  FILTER_GROUPS,
   PAGINATION_LABELS,
   PRODUCTS,
-  SELECT_FILTERS,
   SELECTION,
   SORT_OPTIONS,
   UTILITY_LINKS,
@@ -15,30 +14,14 @@ import { ProductBrowse, type ProductBrowseProps } from "./product-browse";
 
 const RESULTS_LOAD_MS = 450;
 
-function collectionTitle(activeCollection: string) {
-  return (
-    COLLECTIONS.find((collection) => collection.id === activeCollection)
-      ?.label ?? "All Collections"
-  );
-}
-
-/** Storybook wrapper: keeps `activeCollection` in local state and simulates a
- * short results reload when the default ready fixtures are in play. */
+/** Storybook wrapper: simulates a short results reload when the default ready
+ * fixtures are in play. */
 function InteractiveProductBrowse(args: ProductBrowseProps) {
-  const [activeCollection, setActiveCollection] = useState(
-    args.activeCollection ?? "pokemon",
-  );
   const simulateReload =
     args.results.status === "ready" || args.results.status === "loading";
   const [resultsStatus, setResultsStatus] = useState<
     ProductBrowseProps["results"]["status"]
   >(() => (args.results.status === "ready" ? "loading" : args.results.status));
-
-  useEffect(() => {
-    if (args.activeCollection != null) {
-      setActiveCollection(args.activeCollection);
-    }
-  }, [args.activeCollection]);
 
   useEffect(() => {
     if (!simulateReload) {
@@ -47,13 +30,11 @@ function InteractiveProductBrowse(args: ProductBrowseProps) {
 
     setResultsStatus("loading");
     const timeout = setTimeout(() => {
-      setResultsStatus(
-        args.results.status === "loading" ? "loading" : "ready",
-      );
+      setResultsStatus(args.results.status === "loading" ? "loading" : "ready");
     }, RESULTS_LOAD_MS);
 
     return () => clearTimeout(timeout);
-  }, [activeCollection, args.results.status, simulateReload]);
+  }, [args.results.status, simulateReload]);
 
   const results =
     args.results.status === "error" || args.results.status === "empty"
@@ -64,18 +45,7 @@ function InteractiveProductBrowse(args: ProductBrowseProps) {
           ? { status: "ready" as const, data: args.results.data }
           : { status: "loading" as const };
 
-  return (
-    <ProductBrowse
-      {...args}
-      activeCollection={activeCollection}
-      onCollectionChange={(collectionId) => {
-        setActiveCollection(collectionId);
-        args.onCollectionChange?.(collectionId);
-      }}
-      results={results}
-      title={collectionTitle(activeCollection)}
-    />
-  );
+  return <ProductBrowse {...args} results={results} />;
 }
 
 const meta = {
@@ -85,27 +55,26 @@ const meta = {
   parameters: { layout: "fullscreen" },
   render: (args) => <InteractiveProductBrowse {...args} />,
   args: {
-    filterPanelLabel: "Store navigation",
-    searchPlaceholder: "Search...",
+    filterPanelLabel: "Store filters",
+    heading: "Filter",
+    searchPlaceholder: "Find product",
     searchLabel: "Search products",
-    collections: { status: "ready", data: COLLECTIONS },
-    activeCollection: "pokemon",
-    onCollectionChange: fn(),
-    onSearchChange: fn(),
-    utilityLinks: UTILITY_LINKS,
+    groups: { status: "ready", data: FILTER_GROUPS },
     selection: {},
     onFilterChange: fn(),
+    onGroupExpand: fn(),
+    onSearchChange: fn(),
+    utilityLinks: UTILITY_LINKS,
     results: { status: "ready", data: PRODUCTS },
     resultsLabel: "Products",
-    title: "Pokémon",
-    resultCount: "38",
+    resultCount: "100 Products",
     sortOptions: SORT_OPTIONS,
     sortValue: "popular",
-    chipFilters: CHIP_FILTERS,
-    selectFilters: SELECT_FILTERS,
-    selectFilterValues: { series: "all" },
+    sortTriggerLabel: "Sort by popularity",
+    appliedFilters: [],
+    clearFiltersLabel: "Clear filters",
     onSortChange: fn(),
-    onSelectFilterChange: fn(),
+    onClearFilters: fn(),
     page: 2,
     pageCount: 10,
     onPageChange: fn(),
@@ -119,18 +88,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-/** Type chips start unselected; that empty selection does not hide results. */
-export const TypeChipsStartUnselected: Story = {
+/** Checkboxes start unselected; that empty selection does not hide results. */
+export const FiltersStartUnselected: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Pack" })).toHaveAttribute(
-      "aria-pressed",
-      "false",
-    );
-    expect(canvas.getByRole("button", { name: "Box" })).toHaveAttribute(
-      "aria-pressed",
-      "false",
-    );
+    expect(canvas.getByRole("checkbox", { name: /Pokémon/ })).not.toBeChecked();
+    expect(
+      canvas.getByRole("checkbox", { name: /Booster Box/ }),
+    ).not.toBeChecked();
     expect(canvas.getAllByText("Ninja Spinner").length).toBeGreaterThan(0);
   },
 };
@@ -138,13 +103,13 @@ export const TypeChipsStartUnselected: Story = {
 /** Both regions loading. */
 export const Loading: Story = {
   args: {
-    collections: { status: "loading" },
+    groups: { status: "loading" },
     results: { status: "loading" },
   },
 };
 
 /** Results failed, sidebar stands. The two boundaries resolve independently. */
-export const ResultsErrorCollectionsReady: Story = {
+export const ResultsErrorGroupsReady: Story = {
   args: {
     results: {
       status: "error",
@@ -156,17 +121,17 @@ export const ResultsErrorCollectionsReady: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("We could not load these products."));
     expect(
-      canvas.getByRole("button", { name: "Dragon Ball" }),
+      canvas.getByRole("checkbox", { name: /Pokémon/ }),
     ).toBeInTheDocument();
   },
 };
 
-/** Collections still loading, results ready. The count and grid show anyway. */
-export const CollectionsLoadingResultsReady: Story = {
-  args: { collections: { status: "loading" } },
+/** Filter groups still loading, results ready. The count and grid show anyway. */
+export const GroupsLoadingResultsReady: Story = {
+  args: { groups: { status: "loading" } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("38")).toBeInTheDocument();
+    expect(canvas.getByText("100 Products")).toBeInTheDocument();
   },
 };
 
@@ -174,8 +139,9 @@ export const CollectionsLoadingResultsReady: Story = {
  * sidebar and the current selection intact. */
 export const NoMatch: Story = {
   args: {
-    resultCount: "0",
+    resultCount: "0 Products",
     selection: SELECTION,
+    appliedFilters: APPLIED_FILTERS,
     results: {
       status: "empty",
       message: "No products match these filters.",
@@ -185,20 +151,18 @@ export const NoMatch: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("button", { name: "Clear filters" }),
-    ).toBeInTheDocument();
-    expect(canvas.getByRole("button", { name: "Pokémon" })).toHaveAttribute(
-      "aria-current",
-      "true",
-    );
+      canvas.getAllByRole("button", { name: "Clear filters" }).length,
+    ).toBeGreaterThan(0);
+    expect(canvas.getByRole("checkbox", { name: /Pokémon/ })).toBeChecked();
   },
 };
 
 /** An empty catalog: a different message, and no clear-filters action. */
 export const EmptyCatalog: Story = {
   args: {
-    resultCount: "0",
+    resultCount: "0 Products",
     selection: {},
+    appliedFilters: [],
     results: {
       status: "empty",
       message: "This category has no products yet.",
@@ -265,7 +229,7 @@ export const Landmarks: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("complementary", { name: "Store navigation" }),
+      canvas.getByRole("complementary", { name: "Store filters" }),
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("region", { name: "Products" }),

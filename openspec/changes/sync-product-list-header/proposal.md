@@ -1,5 +1,9 @@
 # Sync Product List Header with Figma
 
+> **Superseded** by `sync-product-list-page` (2026-08-19). Figma replaced this
+> header-chip layout with a sort dropdown and applied-filter chips. Do not
+> implement this change as written.
+
 **Author:** @constancetang - 2026-08-18
 
 ## Why

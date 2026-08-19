@@ -26,6 +26,7 @@ type FooterProps = ComponentProps<"footer"> & {
 /**
  * Store footer. Figma (`4171:9653`) has no variant axes — columns and copy
  * are consumer-owned so a locale or catalog change does not fork the layout.
+ * The fill is `Base/background`.
  *
  * Every content prop is required rather than defaulted: two stores render this
  * shell, and a default would let the second one ship the first one's link
@@ -59,7 +60,7 @@ function Footer({
     <footer
       data-slot="footer"
       className={cn(
-        "@container flex w-full flex-col border border-border bg-card",
+        "@container flex w-full flex-col border border-border bg-background",
         className,
       )}
       {...props}

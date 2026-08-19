@@ -15,7 +15,7 @@ import type { ReactNode } from "react";
  * BOOLEAN + INSTANCE_SWAP pair; omit it and only the label renders.
  */
 const filterChipVariants = cva(
-  "inline-flex shrink-0 items-center justify-center border bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[selected]:border-transparent data-[selected]:bg-foreground data-[selected]:text-background data-[selected]:hover:bg-[color-mix(in_oklab,var(--foreground),black_10%)] data-[selected]:focus-visible:border-ring",
+  "inline-flex shrink-0 cursor-pointer items-center justify-center border bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[selected]:border-transparent data-[selected]:bg-foreground data-[selected]:text-background data-[selected]:hover:bg-[color-mix(in_oklab,var(--foreground),black_10%)] data-[selected]:focus-visible:border-ring",
   {
     variants: {
       size: {

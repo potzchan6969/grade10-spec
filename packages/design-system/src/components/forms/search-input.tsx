@@ -56,7 +56,13 @@ function SearchInput({
         ) : null
       }
     >
-      <Input id={inputId} type="search" disabled={disabled} {...props} />
+      <Input
+        className="[&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
+        disabled={disabled}
+        id={inputId}
+        type="search"
+        {...props}
+      />
     </InputShell>
   );
 }

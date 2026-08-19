@@ -20,7 +20,7 @@ export const Default: Story = {};
  * root's job, not the list's. */
 export const NoProducts: Story = { args: { products: [] } };
 
-/** One column when the viewport cannot fit a 260px tile beside padding. */
+/** One column when the viewport cannot fit a 250px tile beside padding. */
 export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
 };

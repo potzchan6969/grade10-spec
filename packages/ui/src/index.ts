@@ -20,14 +20,6 @@ export type { AsyncAction, AsyncState } from "./blocks/shared/async";
 
 // shared-ui/store-product-listing
 export {
-  CollectionMenu,
-  type CollectionMenuProps,
-} from "./blocks/store-product-listing/collection-menu";
-export {
-  CollectionMenuItem,
-  type CollectionMenuItemProps,
-} from "./blocks/store-product-listing/collection-menu-item";
-export {
   FilterPanel,
   type FilterPanelProps,
 } from "./blocks/store-product-listing/filter-panel";
@@ -40,6 +32,10 @@ export {
   type ProductCardProps,
 } from "./blocks/store-product-listing/product-card";
 export {
+  ProductFilter,
+  type ProductFilterProps,
+} from "./blocks/store-product-listing/product-filter";
+export {
   ProductList,
   type ProductListProps,
 } from "./blocks/store-product-listing/product-list";
@@ -48,7 +44,7 @@ export {
   type ProductListHeaderProps,
 } from "./blocks/store-product-listing/product-list-header";
 export type {
-  CollectionOption,
+  AppliedFilter,
   FilterGroup,
   FilterOption,
   FilterSelection,

@@ -2,10 +2,11 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { ProductCard } from "./product-card";
 import type { ProductSummary } from "./types";
 
-/** Figma tile width (`260px`) drives auto-fill so columns grow with the
- * results area while the sidebar stays fixed. */
+/** Figma tile width on the Product List page (`250px`) drives auto-fill so
+ * columns grow with the results area while the sidebar stays fixed. Gaps
+ * match the page instance: 24px row, 32px column. */
 const PRODUCT_LIST_GRID_CLASS =
-  "grid grid-cols-[repeat(auto-fill,minmax(min(100%,260px),1fr))] gap-x-5 gap-y-6";
+  "grid grid-cols-[repeat(auto-fill,minmax(min(100%,250px),1fr))] gap-x-6 gap-y-8";
 
 const DEFAULT_SKELETON_COUNT = 8;
 
@@ -29,8 +30,8 @@ type ProductListProps = {
  * can reuse it without the browse root.
  *
  * The column count follows the available width after the fixed sidebar: each
- * tile needs at least 260px (Figma's card width). A store that wants a
- * different grid wants a different design, not a prop.
+ * tile needs at least 250px. A store that wants a different grid wants a
+ * different design, not a prop.
  */
 function ProductList({
   products,
@@ -44,7 +45,8 @@ function ProductList({
   className,
 }: ProductListProps) {
   const placeholderCount =
-    skeletonCount ?? (products.length > 0 ? products.length : DEFAULT_SKELETON_COUNT);
+    skeletonCount ??
+    (products.length > 0 ? products.length : DEFAULT_SKELETON_COUNT);
 
   return (
     <div
@@ -55,6 +57,7 @@ function ProductList({
       {loading
         ? Array.from({ length: placeholderCount }, (_, index) => (
             <ProductCard
+              // biome-ignore lint/suspicious/noArrayIndexKey: placeholders have no identity beyond position.
               key={`product-skeleton-${index}`}
               loading
               name=""
@@ -62,41 +65,42 @@ function ProductList({
             />
           ))
         : products.map((product, index) => (
-        <div
-          className={cn(
-            "translate-y-3 opacity-0 blur-[3px]",
-            "transition-[opacity,transform,filter] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:blur-none motion-reduce:transition-none",
-            revealed && "translate-y-0 opacity-100 blur-none",
-          )}
-          key={product.id}
-          style={{
-            transitionDelay: revealed
-              ? `${Math.min(index, revealStaggerCap) * revealStaggerMs}ms`
-              : "0ms",
-          }}
-        >
-          <ProductCard
-            addedToCart={product.addedToCart}
-            actionLabel={product.actionLabel}
-            ariaLabel={product.ariaLabel}
-            discountLabel={product.discountLabel}
-            imageAlt={product.imageAlt}
-            imageSrc={product.imageSrc}
-            name={product.name}
-            onAction={
-              onProductAction ? () => onProductAction(product.id) : undefined
-            }
-            onClick={
-              onProductClick ? () => onProductClick(product.id) : undefined
-            }
-            originalPrice={product.originalPrice}
-            price={product.price}
-            quantity={product.quantity}
-            soldOut={product.soldOut}
-            tags={product.tags}
-          />
-        </div>
-      ))}
+            <div
+              className={cn(
+                "translate-y-3 opacity-0 blur-[3px]",
+                "transition-[opacity,transform,filter] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:blur-none motion-reduce:transition-none",
+                revealed && "translate-y-0 opacity-100 blur-none",
+              )}
+              key={product.id}
+              style={{
+                transitionDelay: revealed
+                  ? `${Math.min(index, revealStaggerCap) * revealStaggerMs}ms`
+                  : "0ms",
+              }}
+            >
+              <ProductCard
+                addedToCart={product.addedToCart}
+                actionLabel={product.actionLabel}
+                ariaLabel={product.ariaLabel}
+                discountLabel={product.discountLabel}
+                imageAlt={product.imageAlt}
+                imageSrc={product.imageSrc}
+                name={product.name}
+                onAction={
+                  onProductAction
+                    ? () => onProductAction(product.id)
+                    : undefined
+                }
+                onClick={
+                  onProductClick ? () => onProductClick(product.id) : undefined
+                }
+                originalPrice={product.originalPrice}
+                price={product.price}
+                quantity={product.quantity}
+                soldOut={product.soldOut}
+              />
+            </div>
+          ))}
     </div>
   );
 }

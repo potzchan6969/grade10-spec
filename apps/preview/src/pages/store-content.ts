@@ -1,11 +1,11 @@
 import type {
-  CollectionOption,
+  AppliedFilter,
   FilterGroup,
+  FilterSelection,
   ProductSummary,
   SortOption,
   UtilityLink,
 } from "@grade10/ui";
-import type { ReactNode } from "react";
 
 /* Content this workbench owns, exactly as a store application owns its own.
  * None of it lives in `@grade10/ui` or `@grade10/design-system`: both packages
@@ -88,60 +88,65 @@ const STORE_FOOTER = {
 };
 
 const SORT_OPTIONS: SortOption[] = [
-  { id: "popular", label: "Popular" },
-  { id: "new", label: "New" },
-  { id: "price-desc", label: "Price", toggleId: "price-asc" },
+  { id: "popular", label: "Popularity" },
+  { id: "new", label: "Latest product" },
+  { id: "price-asc", label: "Lowest price" },
+  { id: "price-desc", label: "Highest price" },
 ];
 
-const CHIP_FILTERS: FilterGroup[] = [
+const FILTER_GROUPS: FilterGroup[] = [
   {
-    id: "product-type",
-    label: "Type",
+    id: "worlds",
+    label: "Worlds",
+    expandLabel: "See all worlds",
     options: [
-      { id: "pack", label: "Pack" },
-      { id: "box", label: "Box" },
+      { id: "pokemon", label: "Pokémon", count: "51" },
+      { id: "shohei-ohtani", label: "Shohei Ohtani", count: "15" },
+      { id: "formula-1", label: "Formula 1", count: "6" },
+      { id: "manga-anime", label: "Manga & Anime", count: "9" },
+      { id: "music", label: "Music", count: "10" },
+    ],
+  },
+  {
+    id: "types",
+    label: "Types",
+    options: [
+      { id: "booster-box", label: "Booster Box", count: "24" },
+      { id: "special-box", label: "Special Box", count: "6" },
+      { id: "graded-card", label: "Graded Card", count: "19" },
+      { id: "graded-magazine", label: "Graded Magazine", count: "16" },
+      { id: "original-art", label: "Original Art", count: "14" },
+      { id: "graded-music", label: "Graded Music", count: "0" },
+      { id: "collectibles", label: "Collectibles", count: "6" },
+      { id: "graded-manga", label: "Graded Manga", count: "5" },
     ],
   },
 ];
 
-const M_SERIES_FILTER: FilterGroup = {
-  id: "series",
-  label: "Series",
-  options: [
-    { id: "all", label: "All Series" },
-    { id: "m4", label: "M4" },
-    { id: "m10", label: "M10" },
-  ],
-};
-
-/** Pokémon and Dragon Ball share the M-prefixed series rung; others have none yet. */
-function seriesFiltersForCollection(collectionId: string): FilterGroup[] {
-  if (collectionId === "pokemon" || collectionId === "dragon-ball") {
-    return [M_SERIES_FILTER];
+function appliedFiltersFromSelection(
+  groups: readonly FilterGroup[],
+  selection: FilterSelection,
+): AppliedFilter[] {
+  const chips: AppliedFilter[] = [];
+  for (const group of groups) {
+    for (const optionId of selection[group.id] ?? []) {
+      const option = group.options.find((item) => item.id === optionId);
+      if (option) {
+        chips.push({
+          groupId: group.id,
+          optionId: option.id,
+          label: option.label,
+        });
+      }
+    }
   }
-  return [];
+  return chips;
 }
 
-function collectionLabel(
-  collectionId: string,
-  collections: readonly CollectionOption[],
-): ReactNode {
-  return (
-    collections.find((collection) => collection.id === collectionId)?.label ??
-    ""
-  );
+function sortTriggerLabel(sortValue: string): string {
+  const option = SORT_OPTIONS.find((item) => item.id === sortValue);
+  return option ? `Sort by ${String(option.label).toLowerCase()}` : "Sort by";
 }
-
-const COLLECTIONS: CollectionOption[] = [
-  { id: "all", label: "All Collections" },
-  { id: "pokemon", label: "Pokémon" },
-  { id: "dragon-ball", label: "Dragon Ball" },
-  { id: "one-piece", label: "One Piece" },
-  { id: "disney", label: "Disney" },
-  { id: "nba", label: "NBA" },
-  { id: "mlb", label: "MLB" },
-  { id: "formula-1", label: "Formula 1" },
-];
 
 const UTILITY_LINKS: UtilityLink[] = [
   { label: "Help", href: "#help" },
@@ -163,7 +168,10 @@ const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
   soldOut: index === 7,
 }));
 
-const INITIAL_SELECTION = {};
+const INITIAL_SELECTION: FilterSelection = {
+  worlds: ["pokemon"],
+  types: ["booster-box"],
+};
 
 const PAGINATION_LABELS = {
   previousLabel: "Prev",
@@ -173,15 +181,14 @@ const PAGINATION_LABELS = {
 };
 
 export {
-  CHIP_FILTERS,
-  COLLECTIONS,
-  collectionLabel,
+  appliedFiltersFromSelection,
+  FILTER_GROUPS,
   INITIAL_SELECTION,
   PAGINATION_LABELS,
   PRODUCTS,
   SORT_OPTIONS,
   STORE_FOOTER,
   STORE_NAV,
-  seriesFiltersForCollection,
+  sortTriggerLabel,
   UTILITY_LINKS,
 };

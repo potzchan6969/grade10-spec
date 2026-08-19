@@ -6,13 +6,14 @@ import figma from "figma";
 export default {
   example: figma.code`<FilterPanel
   label={label}
+  heading={heading}
   searchPlaceholder={searchPlaceholder}
   searchValue={searchValue}
   onSearchChange={onSearchChange}
   onSearchClear={onSearchClear}
-  collections={collections}
-  activeCollection={activeCollection}
-  onCollectionChange={onCollectionChange}
+  groups={groups}
+  selection={selection}
+  onFilterChange={onFilterChange}
   utilityLinks={utilityLinks}
 />`,
   imports: ['import { FilterPanel } from "@grade10/ui"'],

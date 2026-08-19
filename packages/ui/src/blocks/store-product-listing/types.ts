@@ -10,7 +10,8 @@ import type { AsyncAction, AsyncState } from "../shared/async";
 type ProductSummary = {
   id: string;
   name: ReactNode;
-  /** Metadata badges such as collection, series, and region. */
+  /** Metadata badges such as collection, series, and region. The tile does
+   * not display them while the Product List page hides `cardProps`. */
   tags?: readonly ReactNode[];
   imageSrc?: string;
   imageAlt?: string;
@@ -44,6 +45,8 @@ type FilterGroup = {
   id: string;
   label: ReactNode;
   options: readonly FilterOption[];
+  /** Shown after the options. Omit it and no expand affordance is rendered. */
+  expandLabel?: ReactNode;
 };
 
 /**
@@ -53,33 +56,28 @@ type FilterGroup = {
  */
 type FilterSelection = Readonly<Record<string, readonly string[]>>;
 
+/** One chip in the list header's applied-filter bar. */
+type AppliedFilter = {
+  groupId: string;
+  optionId: string;
+  label: ReactNode;
+};
+
 type SortOption = {
   id: string;
   label: ReactNode;
-  /** When this option is already selected, a further activation reports
-   * `toggleId` instead of `id`. The header rotates `trailing` 180° while
-   * `sortValue` equals `toggleId`. */
-  toggleId?: string;
-  trailing?: ReactNode;
 };
 
-/** One collection row in the sidebar menu. */
-type CollectionOption = {
-  id: string;
-  label: ReactNode;
-  disabled?: boolean;
-};
-
-/** One utility link below the collection menu. */
+/** One utility link below the product filter. */
 type UtilityLink = {
   label: ReactNode;
   href: string;
 };
 
 export type {
+  AppliedFilter,
   AsyncAction,
   AsyncState,
-  CollectionOption,
   FilterGroup,
   FilterOption,
   FilterSelection,

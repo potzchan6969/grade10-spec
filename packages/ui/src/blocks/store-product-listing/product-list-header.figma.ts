@@ -5,24 +5,19 @@ import figma from "figma";
 
 const instance = figma.selectedInstance;
 
-const title = instance.getString("title");
 const resultCount = instance.getString("resultCount");
 
 export default {
-  // Sort, type, and series options are nested instances the consumer
-  // assembles from its catalog — not TEXT properties on the set.
   example: figma.code`<ProductListHeader
-  title="${title}"
   resultCount="${resultCount}"
   sortOptions={sortOptions}
   sortValue={sortValue}
-  chipFilters={chipFilters}
-  selectFilters={selectFilters}
-  selection={selection}
-  selectFilterValues={selectFilterValues}
+  sortTriggerLabel={sortTriggerLabel}
+  appliedFilters={appliedFilters}
   onSortChange={onSortChange}
   onFilterChange={onFilterChange}
-  onSelectFilterChange={onSelectFilterChange}
+  onClearFilters={onClearFilters}
+  clearFiltersLabel={clearFiltersLabel}
 />`,
   imports: ['import { ProductListHeader } from "@grade10/ui"'],
   id: "product-list-header",
