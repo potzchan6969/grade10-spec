@@ -32,6 +32,6 @@ Needs group 1's admin lists landed — an application cannot load a list its pac
 
 ## 5. Durable guidance (grade10) (owner: @sean)
 
-- [ ] 5.1 Record the published-list surface and the composition-root rule in `docs/conventions/packages.md`, including which packages publish a list
-- [ ] 5.2 Record the client directory and the product-named factory in the `react-clean-architecture` and `frontend-structure` skills, replacing what they say today rather than appending to it
-- [ ] 5.3 Verify: `pnpm run agent:check-parity`, `pnpm run check:handbook`
+- [x] 5.1 Record the published-list surface and the composition-root rule in `docs/conventions/packages.md`, including which packages publish a list
+- [x] 5.2 Record the client directory and the product-named factory in the `react-clean-architecture` and `frontend-structure` skills, replacing what they say today rather than appending to it
+- [x] 5.3 Verify: `pnpm run agent:check-parity`, `pnpm run check:handbook`
