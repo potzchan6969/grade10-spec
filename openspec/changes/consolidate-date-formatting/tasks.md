@@ -1,4 +1,4 @@
-## 1. The shared date module (grade10)
+## 1. The shared date module (grade10) (owner: @sean)
 
 - [ ] 1.1 Add `date-fns@^4` and `@date-fns/tz@^1` to `packages/utils/package.json` and register the `./dates` subpath, checking the resolved versions against the optional peers `@base-ui/react` declares.
 - [ ] 1.2 Add `packages/utils/src/dates.ts` with `formatDay`, `formatMoment`, `formatEvent` and `formatDeadline` over date-fns `format`, one stated pattern each and `{ locale?: string; timeZone? }` applied through `tz` from `@date-fns/tz` with `"UTC"` as the default, satisfying "A date takes one of four shapes" for "A day carries no time" and "An audit entry is ordered to the second", and "Every rendering states one zone" for both its scenarios.
