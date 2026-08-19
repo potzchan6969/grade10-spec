@@ -1,6 +1,6 @@
 ## 1. Session command in the auth frontend package (owner: @sean)
 
-- [ ] 1.1 Make "The control is busy while sign-out runs", "A refused sign-out is reported", and "A retry clears the failure" pass at the package seam — the shared sign-out command in `@grade10/auth-frontend` (new `/sign-out` subpath), with the session client port and its fixture carrying the sign-out call
+- [x] 1.1 Make "The control is busy while sign-out runs", "A refused sign-out is reported", and "A retry clears the failure" pass at the package seam — the shared sign-out command in `@grade10/auth-frontend` (new `/sign-out` subpath), with the session client port and its fixture carrying the sign-out call
 
 Verify: `pnpm run typecheck`, auth-frontend package tests, `pnpm run check:handbook` (the package surface changes).
 
