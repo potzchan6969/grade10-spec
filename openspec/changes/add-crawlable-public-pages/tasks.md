@@ -14,7 +14,7 @@ other.
 - [x] 1.5 Make `A preview fetcher reads the surface` pass: `og:title`, `og:description`, and `og:url` from the same identity.
 - [x] 1.6 Run the full check suite and a production build as this group's verification.
 
-## 2. Crawler directory
+## 2. Crawler directory (owner: @sean)
 
 - [ ] 2.1 Make `robots points at the sitemap` pass: robots.txt emitted per environment, permitting the public surfaces and naming the sitemap's absolute URL.
 - [ ] 2.2 Make `The sitemap is exact` pass: the sitemap derives from the route modules' identities — every public surface, nothing else, absolute URLs of the serving environment.
