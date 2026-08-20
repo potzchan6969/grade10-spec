@@ -1,62 +1,143 @@
 ## Purpose
 
-Lets an authorized Grade10 operator create and update an Auction listing —
-its catalogue copy, prices, window, and an unprocessed gallery of up to eight
-images or videos — and publishes that gallery to collectors in the same order.
+Lets an authorized Grade10 operator draft, create, and publish an Auction
+listing — incomplete saves first, required fields enforced at create, publish
+now or at a scheduled time — with an unprocessed gallery of up to eight
+images or videos.
 
 ## ADDED Requirements
 
-### Requirement: Operator creates a listing as a draft
+### Requirement: Operator saves a listing as a draft
 
-An authorized operator SHALL create an Auction listing from the Grade10
-auction admin section. A successful create SHALL persist a draft listing and
-SHALL mint a new auctionable unit that has no other live listing. The listing
-SHALL NOT become visible on the public catalogue until it is published.
+An authorized operator SHALL save an Auction listing as a draft from the
+Grade10 auction admin section without filling every field. A successful draft
+save SHALL persist the listing in `draft` and, on the first save, SHALL mint
+a new auctionable unit that has no other live listing.
 
-Creating a listing SHALL require a title, a starting price, a minimum
-increment, a start time, and a scheduled close. Every other field on the
-create form is optional and, when omitted, takes the default named with that
-field.
+A draft SHALL allow every required field to be empty. Saving a draft SHALL
+NOT refuse a missing title, starting price, minimum increment, start time, or
+scheduled close. A field the operator does send SHALL still match that
+field's shape (a starting price that is present MUST be integer minor units
+greater than zero).
 
-A create from an operator who is not authorized to set an auction's prices
-and window SHALL be refused.
+A draft listing SHALL NOT be visible on the public catalogue.
 
-#### Scenario: Operator creates a complete draft
+A draft save from an operator who is not authorized to set an auction's
+prices and window SHALL be refused.
+
+#### Scenario: Operator saves an empty draft
 
 - **GIVEN** an authorized operator on the Grade10 auction listings section
-- **WHEN** they submit a new listing with a title, a starting price of 100000
-  minor units, a minimum increment of 5000 minor units, currency `HKD`, a
-  start in the future, and a scheduled close after that start
-- **THEN** Grade10 persists a draft listing with those facts
+- **WHEN** they save a new listing with no title, no prices, and no window
+- **THEN** Grade10 persists a draft listing with those fields empty
 - **AND** the listing is absent from the public catalogue
 
-#### Scenario: Create without a title is refused
+#### Scenario: Operator saves a partial draft
 
 - **GIVEN** an authorized operator
-- **WHEN** they submit a new listing with a blank title
-- **THEN** Grade10 refuses the create
-- **AND** it persists no listing
+- **WHEN** they save a draft with a title and no starting price
+- **THEN** Grade10 persists the title
+- **AND** the listing remains a draft
+- **AND** starting price stays empty
 
-#### Scenario: Unauthorized create is refused
+#### Scenario: Draft rejects a malformed price
+
+- **GIVEN** a draft listing
+- **WHEN** an operator sets starting price to a non-positive or non-integer
+  amount
+- **THEN** Grade10 refuses the write
+- **AND** starting price is unchanged
+
+#### Scenario: Unauthorized draft save is refused
 
 - **GIVEN** a signed-in operator who may not set an auction's prices and window
-- **WHEN** they submit a new listing
-- **THEN** Grade10 refuses the create
+- **WHEN** they save a new draft
+- **THEN** Grade10 refuses the save
 - **AND** it persists no listing
+
+### Requirement: Create validates required fields on the form and the API
+
+An authorized operator SHALL create a `draft` listing. Create is the
+validation gate: it SHALL succeed only when every required field is present
+and valid. A successful create SHALL move the listing to `created`. The
+listing SHALL still be absent from the public catalogue.
+
+Required at create:
+
+- **Title** — trimmed, 1 to 200 characters
+- **Starting price** — integer minor units greater than zero
+- **Minimum increment** — integer minor units greater than zero
+- **Starts at** — the scheduled bidding open
+- **Scheduled close** — after starts-at, and after the moment of create
+
+Optional fields, when omitted at create, take these defaults: currency
+`HKD`; sort index `0`; copy empty; no listing label; no sale; no categories;
+snipe window and extension reach both `0` (extension off); no extension cap;
+no publish-at; sandbox `false`.
+
+The admin form SHALL prevent submitting create while a required field is
+empty or invalid, and SHALL name the fields that fail. The API SHALL refuse
+the same create independently of the form. A created listing SHALL reject a
+later write that leaves a required field empty or invalid.
+
+Create of a listing that is not `draft` SHALL be refused. Create from an
+operator who is not authorized to set an auction's prices and window SHALL
+be refused.
+
+#### Scenario: Operator creates a filled draft
+
+- **GIVEN** a draft listing with a title, a starting price of 100000 minor
+  units, a minimum increment of 5000 minor units, currency `HKD`, a start in
+  the future, and a scheduled close after that start
+- **WHEN** an authorized operator creates the listing
+- **THEN** Grade10 moves it to `created`
+- **AND** the listing is still absent from the public catalogue
+
+#### Scenario: Create without a title is refused on the form and the API
+
+- **GIVEN** a draft listing with no title and every other required field set
+- **WHEN** the operator submits create
+- **THEN** the admin form does not send create and names title as missing
+- **AND** a create sent to the API without a title is refused
+- **AND** the listing remains a draft
+
+#### Scenario: Create without a starting price is refused
+
+- **GIVEN** a draft listing with a title, a window, and no starting price
+- **WHEN** the operator creates the listing
+- **THEN** Grade10 refuses the create
+- **AND** the listing remains a draft
+
+#### Scenario: Created listing cannot clear a required field
+
+- **GIVEN** a created listing with a title
+- **WHEN** an operator clears the title
+- **THEN** Grade10 refuses the write
+- **AND** the title is unchanged
+
+#### Scenario: Create of a published listing is refused
+
+- **GIVEN** a published listing
+- **WHEN** an operator creates it
+- **THEN** Grade10 refuses the create
+- **AND** the listing remains published
 
 ### Requirement: Catalogue fields an operator may write
 
-While a listing is `draft` or `published`, an authorized operator SHALL be
-able to set these catalogue fields. Each write SHALL replace the stored
-value; an omitted field on an update SHALL leave the stored value unchanged.
+While a listing is `draft`, `created`, or `published`, an authorized operator
+SHALL be able to set these catalogue fields. Each write SHALL replace the
+stored value; an omitted field on an update SHALL leave the stored value
+unchanged.
 
-- **Title** — required, trimmed, 1 to 200 characters.
+- **Title** — required at create; trimmed, 1 to 200 characters when set. Empty
+  is allowed only while `draft`.
 - **Copy** — optional, at most 4000 characters, empty allowed.
 - **Listing label** — optional catalogue number such as `12A`, trimmed, 1 to
   32 characters when set. Unique within the listing's sale. Two listings
   with no sale SHALL be allowed to share a label. Clearing the label SHALL
   store no label.
-- **Sort index** — optional whole number ≥ 0. Omitted on create SHALL store 0.
+- **Sort index** — optional whole number ≥ 0. Empty on draft SHALL store
+  nothing until create, which stores `0` when omitted.
 - **Sale** — optional. Omit or clear for a listing sold on its own. A listing
   SHALL join only a sale that is `draft` or `published`. A canceled sale
   SHALL be refused.
@@ -96,20 +177,26 @@ still be able to write these fields on an existing editable listing.
 - **THEN** Grade10 refuses the write
 - **AND** the listing's sale is unchanged
 
-### Requirement: Prices and window are writable only on a draft
+### Requirement: Prices and window are writable before publish
 
-While a listing is `draft`, an authorized operator SHALL be able to set:
+While a listing is `draft` or `created`, an authorized operator SHALL be able
+to set:
 
-- **Currency** — an ISO 4217 three-letter code. Omitted on create SHALL store
-  Grade10's store currency (`HKD`).
-- **Starting price** — integer minor units greater than zero.
-- **Minimum increment** — integer minor units greater than zero.
-- **Starts at** — the scheduled bidding open.
-- **Scheduled close** — the published close. It MUST be after starts-at and
-  after the moment of the write.
+- **Currency** — an ISO 4217 three-letter code. Empty on draft is allowed.
+  Omitted at create SHALL store Grade10's store currency (`HKD`).
+- **Starting price** — integer minor units greater than zero when set. Empty
+  is allowed only while `draft`.
+- **Minimum increment** — integer minor units greater than zero when set.
+  Empty is allowed only while `draft`.
+- **Starts at** — the scheduled bidding open. Empty is allowed only while
+  `draft`.
+- **Scheduled close** — the published close. Empty is allowed only while
+  `draft`. When both starts-at and scheduled close are set, close MUST be
+  after starts-at. At create, close MUST also be after now.
 - **Snipe window (seconds)** and **extension reach (seconds)** — whole
   numbers ≥ 0, set together or both zero (extension off). The snipe window
-  MUST NOT be greater than the reach.
+  MUST NOT be greater than the reach. Empty on draft is allowed. Omitted at
+  create SHALL store both as `0`.
 - **Extension cap (seconds)** — optional whole number ≥ 0, or absent for an
   uncapped listing. A cap below the reach is a hard final deadline, not an
   error.
@@ -118,15 +205,16 @@ A write of any of these fields on a `published`, `closed`, `settled`, or
 `canceled` listing SHALL be refused. The effective close is not an operator
 field: extension writes it, and this form SHALL NOT accept it.
 
-**Sandbox** SHALL be set only at create (whether the listing runs on
-test-mode money). A later write of sandbox SHALL be refused.
+**Sandbox** SHALL be writable only while `draft` (whether the listing runs
+on test-mode money). A write of sandbox on a `created` or later listing
+SHALL be refused.
 
-#### Scenario: Operator corrects a draft's starting price
+#### Scenario: Operator corrects a created listing's starting price
 
-- **GIVEN** a draft listing with starting price 100000 minor units `HKD`
+- **GIVEN** a created listing with starting price 100000 minor units `HKD`
 - **WHEN** an authorized operator sets starting price to 150000 minor units
 - **THEN** Grade10 stores 150000 minor units `HKD`
-- **AND** the listing remains a draft
+- **AND** the listing remains created
 
 #### Scenario: Published listing refuses a price change
 
@@ -135,15 +223,16 @@ test-mode money). A later write of sandbox SHALL be refused.
 - **THEN** Grade10 refuses the write
 - **AND** the starting price remains 100000 minor units
 
-#### Scenario: Scheduled close in the past is refused
+#### Scenario: Scheduled close in the past is refused at create
 
-- **GIVEN** an authorized operator creating or editing a draft
-- **WHEN** they set a scheduled close that is not after both starts-at and now
-- **THEN** Grade10 refuses the write
+- **GIVEN** a draft listing whose scheduled close is not after now
+- **WHEN** the operator creates the listing
+- **THEN** Grade10 refuses the create
+- **AND** the listing remains a draft
 
 #### Scenario: Snipe window without a reach is refused
 
-- **GIVEN** a draft listing
+- **GIVEN** a created listing
 - **WHEN** an operator sets a snipe window of 1800 seconds and an extension
   reach of 0
 - **THEN** Grade10 refuses the write
@@ -151,16 +240,81 @@ test-mode money). A later write of sandbox SHALL be refused.
 
 #### Scenario: Sandbox cannot change after create
 
-- **GIVEN** a draft listing created as sandbox
+- **GIVEN** a created listing that was drafted as sandbox
 - **WHEN** an operator clears sandbox
 - **THEN** Grade10 refuses the write
 - **AND** the listing remains sandbox
 
+### Requirement: Publish happens now or at a scheduled time
+
+An authorized operator SHALL publish a `created` listing. Publish SHALL move
+it to `published` and SHALL make it visible on the public catalogue.
+
+An authorized operator SHALL be able to set **publish at**, an optional
+timestamp.
+
+- While `draft` or `created`, publish at SHALL be writable. A write of
+  publish at on a `published` or later listing SHALL be refused.
+- When publish at is unset, the listing SHALL stay `created` until an
+  operator publishes it.
+- When publish at arrives and the listing is `created`, Grade10 SHALL
+  publish it without a further operator action.
+- When publish at is already due at the moment of create, Grade10 SHALL
+  publish the listing as part of that create.
+- A `draft` listing SHALL NOT be published, by hand or when publish at
+  arrives. Publish of a listing that is not `created` SHALL be refused.
+
+#### Scenario: Operator publishes a created listing immediately
+
+- **GIVEN** a created listing with no publish-at
+- **WHEN** an authorized operator publishes it
+- **THEN** Grade10 moves it to `published`
+- **AND** a collector can read it on the public catalogue
+
+#### Scenario: Created listing publishes at the scheduled time
+
+- **GIVEN** a created listing whose publish-at is in the future
+- **WHEN** that time arrives
+- **THEN** Grade10 moves it to `published`
+- **AND** a collector can read it on the public catalogue
+- **AND** no further operator action was required
+
+#### Scenario: Create with a due publish-at publishes immediately
+
+- **GIVEN** a draft listing with every required field set and publish-at in
+  the past
+- **WHEN** the operator creates the listing
+- **THEN** Grade10 publishes it
+- **AND** a collector can read it on the public catalogue
+
+#### Scenario: Draft is not published when publish-at arrives
+
+- **GIVEN** a draft listing with a publish-at that has arrived and a missing
+  title
+- **WHEN** that time is reached
+- **THEN** Grade10 does not publish the listing
+- **AND** it remains a draft
+- **AND** it stays absent from the public catalogue
+
+#### Scenario: Manual publish of a draft is refused
+
+- **GIVEN** a draft listing
+- **WHEN** an operator publishes it
+- **THEN** Grade10 refuses the publish
+- **AND** the listing remains a draft
+
+#### Scenario: Publish-at cannot change after publish
+
+- **GIVEN** a published listing
+- **WHEN** an operator sets a new publish-at
+- **THEN** Grade10 refuses the write
+- **AND** the listing remains published
+
 ### Requirement: A closed listing cannot be rewritten here
 
 A listing in `closed`, `settled`, or `canceled` SHALL reject every catalogue,
-price, window, sandbox, and media write from this form. Its facts are the
-record of what was offered and sold.
+price, window, sandbox, publish-at, and media write from this form. Its facts
+are the record of what was offered and sold.
 
 #### Scenario: Closed listing rejects a title edit
 
@@ -171,8 +325,8 @@ record of what was offered and sold.
 
 ### Requirement: Listing media is an ordered gallery of up to eight uploads
 
-While a listing is `draft` or `published`, an authorized operator SHALL be
-able to attach, replace, remove, and reorder media on that listing.
+While a listing is `draft`, `created`, or `published`, an authorized operator
+SHALL be able to attach, replace, remove, and reorder media on that listing.
 
 A listing SHALL hold at most **eight** media items. Each item is one uploaded
 file, either an image or a video. A ninth attach SHALL be refused and SHALL
