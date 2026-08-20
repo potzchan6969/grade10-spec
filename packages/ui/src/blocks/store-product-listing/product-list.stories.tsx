@@ -25,6 +25,15 @@ export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
 };
 
+/** Appending the next page shows Boneyard skeleton tiles below the grid. */
+export const LoadingMore: Story = {
+  args: {
+    loading: false,
+    loadingMore: true,
+    products: PRODUCTS,
+  },
+};
+
 /** The cart action is reported, not performed: the tile does not change until
  * the consumer supplies a new `addedToCart`. */
 export const ActionIsReported: Story = {

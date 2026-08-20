@@ -9,6 +9,8 @@ const PRODUCT_LIST_GRID_CLASS =
   "grid grid-cols-[repeat(auto-fill,minmax(min(100%,250px),1fr))] gap-x-6 gap-y-8";
 
 const DEFAULT_SKELETON_COUNT = 8;
+/** Figma Product List annotation: ten items per fetch while scrolling. */
+const DEFAULT_LOAD_MORE_SKELETON_COUNT = 10;
 
 type ProductListProps = {
   products: readonly ProductSummary[];
@@ -16,6 +18,10 @@ type ProductListProps = {
   loading?: boolean;
   /** Placeholder count while loading; defaults to `products.length` or 8. */
   skeletonCount?: number;
+  /** Appends Boneyard skeleton tiles below resolved products. */
+  loadingMore?: boolean;
+  /** Skeleton count while loading more; defaults to 10. */
+  loadMoreSkeletonCount?: number;
   onProductClick?: (productId: string) => void;
   onProductAction?: (productId: string) => void;
   /** Drives the staggered entrance after a `loading → ready` reload. */
@@ -37,6 +43,8 @@ function ProductList({
   products,
   loading = false,
   skeletonCount,
+  loadingMore = false,
+  loadMoreSkeletonCount = DEFAULT_LOAD_MORE_SKELETON_COUNT,
   onProductClick,
   onProductAction,
   revealed = true,
@@ -101,9 +109,24 @@ function ProductList({
               />
             </div>
           ))}
+      {loadingMore && !loading
+        ? Array.from({ length: loadMoreSkeletonCount }, (_, index) => (
+            <ProductCard
+              // biome-ignore lint/suspicious/noArrayIndexKey: placeholders have no identity beyond position.
+              key={`load-more-skeleton-${index}`}
+              loading
+              name=""
+              price=""
+            />
+          ))
+        : null}
     </div>
   );
 }
 
 export type { ProductListProps };
-export { PRODUCT_LIST_GRID_CLASS, ProductList };
+export {
+  DEFAULT_LOAD_MORE_SKELETON_COUNT,
+  PRODUCT_LIST_GRID_CLASS,
+  ProductList,
+};

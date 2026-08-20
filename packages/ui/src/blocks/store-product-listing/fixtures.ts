@@ -79,18 +79,10 @@ const APPLIED_FILTERS: AppliedFilter[] = [
   { groupId: "types", optionId: "booster-box", label: "Booster Box" },
 ];
 
-const PAGINATION_LABELS = {
-  previousLabel: "Prev",
-  nextLabel: "Next",
-  paginationLabel: "Pagination",
-  morePagesLabel: "More pages",
-};
-
 export {
   APPLIED_FILTERS,
   FILTER_GROUPS,
   IMAGE,
-  PAGINATION_LABELS,
   PRODUCTS,
   SELECTION,
   SORT_OPTIONS,

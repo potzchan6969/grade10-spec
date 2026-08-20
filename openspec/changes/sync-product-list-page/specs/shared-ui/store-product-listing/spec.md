@@ -31,10 +31,10 @@ so a later surface can reuse one without the others.
 ### Requirement: Every listing value is consumer-controlled
 
 The listing surface SHALL receive the search query, the filter selection, the
-active sort option, and the current page number as props, and SHALL report
-every change to them through a named callback. It SHALL NOT hold any of those
-values as its own state, and SHALL NOT change what it displays until the
-consumer supplies a new value.
+active sort option, whether more products can be loaded, and whether a load is
+in progress as props, and SHALL report every change to them through a named
+callback. It SHALL NOT hold any of those values as its own state, and SHALL
+NOT change what it displays until the consumer supplies a new value.
 
 #### Scenario: A control does not move on its own
 
@@ -45,13 +45,54 @@ consumer supplies a new value.
 
 #### Scenario: The consumer drives the display
 
-- **WHEN** the consumer supplies a new search query, filter selection, sort option, or page number
+- **WHEN** the consumer supplies a new search query, filter selection, sort option, load-more state, or product list
 - **THEN** the surface displays that value without any further interaction
 
 #### Scenario: Every state is reachable from props
 
 - **WHEN** the surface is rendered with props alone, with no application present
-- **THEN** each of loading, empty catalog, no filter matches, error, and a resolved page of results can be produced
+- **THEN** each of loading, empty catalog, no filter matches, error, loading more, and a resolved list of results can be produced
+
+### Requirement: More products load as the shopper scrolls
+
+The listing surface SHALL NOT display pagination. When the consumer supplies
+`hasMore` as true and an `onLoadMore` callback, the surface SHALL report
+`onLoadMore` once when the shopper scrolls the product list near its end.
+It SHALL NOT change which products are displayed until the consumer supplies
+a longer product list.
+
+When the consumer supplies `loadingMore` as true while results are otherwise
+ready, the surface SHALL append Boneyard skeleton tiles below the displayed
+products. The skeleton count SHALL default to ten when the consumer supplies
+no `loadMoreSkeletonCount`.
+
+When `hasMore` is false or omitted, no load trigger SHALL be displayed.
+When results are loading, empty, or in error, the surface SHALL NOT report
+`onLoadMore`.
+
+#### Scenario: More products are reported on scroll
+
+- **GIVEN** a resolved result list, `hasMore` true, and a supplied `onLoadMore` callback
+- **WHEN** a shopper scrolls the product list near its end
+- **THEN** `onLoadMore` is reported once
+- **AND** the displayed products are unchanged until the consumer supplies a longer list
+
+#### Scenario: Loading more shows skeleton tiles
+
+- **GIVEN** a resolved result list and `loadingMore` true
+- **THEN** Boneyard skeleton tiles are displayed below the resolved products
+- **AND** the resolved products remain displayed above them
+
+#### Scenario: The end of the catalog
+
+- **GIVEN** `hasMore` false
+- **THEN** no load trigger is displayed
+- **AND** no further load is reported
+
+#### Scenario: Initial load does not report load more
+
+- **GIVEN** results in a loading, empty, or error condition
+- **THEN** `onLoadMore` is not reported
 
 ### Requirement: Filter groups and result regions resolve independently
 
@@ -337,23 +378,31 @@ and SHALL NOT read a message catalog.
 The filter panel SHALL be a complementary landmark and the results region a
 region with an accessible name the consumer supplies. Every search field,
 filter option, expand affordance, utility link, sort option, applied-filter
-chip, clear-filters control, tile action, and pagination control SHALL be
-operable by keyboard alone, with a visible focus indicator, and SHALL expose
-its selected, active, or unavailable state to assistive technology through
-native semantics.
+chip, clear-filters control, and tile action SHALL be operable by keyboard
+alone, with a visible focus indicator, and SHALL expose its selected or
+active state to assistive technology through native semantics.
+
+While more products are loading, the results region SHALL expose a busy state
+without moving focus.
 
 A change to the displayed result count SHALL be announced without moving focus.
 
 #### Scenario: Keyboard-only operation
 
 - **WHEN** a shopper using a keyboard alone moves through the surface
-- **THEN** the search field, every filter option, every expand affordance, every utility link, the sort control, every applied-filter chip, the clear-filters control, every tile action, and every pagination control can be reached and activated
+- **THEN** the search field, every filter option, every expand affordance, every utility link, the sort control, every applied-filter chip, the clear-filters control, and every tile action can be reached and activated
 - **AND** the focused element is visibly indicated at each step
 
 #### Scenario: State is exposed natively
 
-- **WHEN** assistive technology inspects a selected filter option, the active sort option, an applied-filter chip, the active page, and an unavailable previous control
+- **WHEN** assistive technology inspects a selected filter option, the active sort option, and an applied-filter chip
 - **THEN** each state is reported through native semantics rather than styling alone
+
+#### Scenario: Loading more is announced as busy
+
+- **GIVEN** a resolved result list and `loadingMore` true
+- **THEN** the results region is exposed as busy
+- **AND** focus stays where the shopper left it
 
 #### Scenario: A result count change is announced
 

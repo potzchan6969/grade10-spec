@@ -7,7 +7,6 @@ import {
   appliedFiltersFromSelection,
   FILTER_GROUPS,
   INITIAL_SELECTION,
-  PAGINATION_LABELS,
   PRODUCTS,
   SORT_OPTIONS,
   STORE_FOOTER,
@@ -17,6 +16,8 @@ import {
 } from "./store-content";
 
 const RESULTS_LOAD_MS = 450;
+const PAGE_SIZE = 10;
+const TOTAL_PRODUCTS = 100;
 
 /**
  * The product listing page as a store assembles it: `Nav`, the shared
@@ -32,20 +33,34 @@ function ProductListPage() {
     useState<FilterSelection>(INITIAL_SELECTION);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("popular");
-  const [page, setPage] = useState(2);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [cart, setCart] = useState<Record<string, number>>({ "1": 3 });
   const [resultsStatus, setResultsStatus] = useState<"loading" | "ready">(
     "loading",
   );
 
+  const productCatalog = useMemo(
+    () =>
+      Array.from({ length: TOTAL_PRODUCTS }, (_, index) => {
+        const template = PRODUCTS[index % PRODUCTS.length];
+        return {
+          ...template,
+          id: String(index + 1),
+          ariaLabel: `Ninja Spinner, item ${index + 1}`,
+        };
+      }),
+    [],
+  );
+
   const productData = useMemo(
     () =>
-      PRODUCTS.map((product) => ({
+      productCatalog.slice(0, visibleCount).map((product) => ({
         ...product,
         addedToCart: (cart[product.id] ?? 0) > 0,
         quantity: cart[product.id] ?? 1,
       })),
-    [cart],
+    [cart, productCatalog, visibleCount],
   );
 
   const appliedFilters = useMemo(
@@ -57,6 +72,8 @@ function ProductListPage() {
     void search;
     void sort;
     void selection;
+    setVisibleCount(PAGE_SIZE);
+    setLoadingMore(false);
     setResultsStatus("loading");
     const timeout = setTimeout(
       () => setResultsStatus("ready"),
@@ -81,19 +98,34 @@ function ProductListPage() {
     });
   };
 
+  const handleLoadMore = () => {
+    if (loadingMore || visibleCount >= TOTAL_PRODUCTS) {
+      return;
+    }
+
+    setLoadingMore(true);
+    window.setTimeout(() => {
+      setVisibleCount((previous) =>
+        Math.min(previous + PAGE_SIZE, TOTAL_PRODUCTS),
+      );
+      setLoadingMore(false);
+    }, RESULTS_LOAD_MS);
+  };
+
   return (
     <div className="bg-background">
       <Nav {...STORE_NAV} />
       <ProductBrowse
-        {...PAGINATION_LABELS}
         appliedFilters={appliedFilters}
         clearFiltersLabel="Clear filters"
         filterPanelLabel="Store filters"
         groups={{ status: "ready", data: FILTER_GROUPS }}
+        hasMore={visibleCount < TOTAL_PRODUCTS}
         heading="Filter"
+        loadingMore={loadingMore}
         onClearFilters={() => setSelection({})}
         onFilterChange={handleFilterChange}
-        onPageChange={setPage}
+        onLoadMore={handleLoadMore}
         onProductAction={(productId) =>
           setCart((previous) => ({
             ...previous,
@@ -103,8 +135,6 @@ function ProductListPage() {
         onSearchChange={setSearch}
         onSearchClear={() => setSearch("")}
         onSortChange={setSort}
-        page={page}
-        pageCount={10}
         resultCount="100 Products"
         results={
           resultsStatus === "loading"

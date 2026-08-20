@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, within } from "storybook/test";
 import {
   APPLIED_FILTERS,
   FILTER_GROUPS,
-  PAGINATION_LABELS,
   PRODUCTS,
   SELECTION,
   SORT_OPTIONS,
@@ -13,6 +12,8 @@ import {
 import { ProductBrowse, type ProductBrowseProps } from "./product-browse";
 
 const RESULTS_LOAD_MS = 450;
+const PAGE_SIZE = 10;
+const TOTAL_PRODUCTS = 100;
 
 /** Storybook wrapper: simulates a short results reload when the default ready
  * fixtures are in play. */
@@ -75,11 +76,10 @@ const meta = {
     clearFiltersLabel: "Clear filters",
     onSortChange: fn(),
     onClearFilters: fn(),
-    page: 2,
-    pageCount: 10,
-    onPageChange: fn(),
+    hasMore: true,
+    loadingMore: false,
+    onLoadMore: fn(),
     onProductAction: fn(),
-    ...PAGINATION_LABELS,
   },
 } satisfies Meta<typeof ProductBrowse>;
 
@@ -147,6 +147,7 @@ export const NoMatch: Story = {
       message: "No products match these filters.",
       action: { label: "Clear filters", onAction: fn() },
     },
+    hasMore: false,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -167,6 +168,7 @@ export const EmptyCatalog: Story = {
       status: "empty",
       message: "This category has no products yet.",
     },
+    hasMore: false,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -177,9 +179,8 @@ export const EmptyCatalog: Story = {
   },
 };
 
-/** A single page shows no pagination. */
-export const SinglePage: Story = {
-  args: { page: 1, pageCount: 1 },
+/** No pagination is rendered on the browse surface. */
+export const NoPagination: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -188,39 +189,31 @@ export const SinglePage: Story = {
   },
 };
 
-/** Previous is unavailable on the first page. */
-export const FirstPage: Story = {
-  args: { page: 1 },
+/** Appending the next page shows Boneyard skeleton tiles below the grid. */
+export const LoadingMore: Story = {
+  args: {
+    loadingMore: true,
+    hasMore: true,
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Prev" })).toBeDisabled();
-    expect(canvas.getByRole("button", { name: "Next" })).toBeEnabled();
-  },
-};
-
-/** Next is unavailable on the last page. */
-export const LastPage: Story = {
-  args: { page: 10 },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Next" })).toBeDisabled();
-  },
-};
-
-/** A page change is reported; page 2 stays active until the consumer supplies
- * a new page. */
-export const PageChangeIsReported: Story = {
-  play: async ({ args, canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    await userEvent.click(canvas.getByRole("button", { name: "3" }));
-
-    expect(args.onPageChange).toHaveBeenCalledTimes(1);
-    expect(args.onPageChange).toHaveBeenCalledWith(3);
-    expect(canvas.getByRole("button", { name: "2" })).toHaveAttribute(
-      "aria-current",
-      "page",
+    expect(canvas.getByRole("region", { name: "Products" })).toHaveAttribute(
+      "aria-busy",
+      "true",
     );
+  },
+};
+
+/** The end of the catalog hides the load sentinel. */
+export const EndOfCatalog: Story = {
+  args: { hasMore: false },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="product-results-load-sentinel"]',
+      ),
+    ).not.toBeInTheDocument();
   },
 };
 
@@ -239,4 +232,49 @@ export const Landmarks: Story = {
 
 export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
+};
+
+/** Simulates infinite scroll: each load-more adds ten tiles until the total
+ * is reached. */
+export const InfiniteScroll: Story = {
+  render: (args) => {
+    function InfiniteScrollDemo(initialArgs: ProductBrowseProps) {
+      const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+      const [loadingMore, setLoadingMore] = useState(false);
+
+      const visibleProducts = PRODUCTS.concat(
+        Array.from({ length: Math.max(0, visibleCount - PRODUCTS.length) }, (_, index) => ({
+          ...PRODUCTS[index % PRODUCTS.length],
+          id: String(PRODUCTS.length + index + 1),
+          ariaLabel: `Ninja Spinner, item ${PRODUCTS.length + index + 1}`,
+        })),
+      ).slice(0, visibleCount);
+
+      const handleLoadMore = () => {
+        if (loadingMore || visibleCount >= TOTAL_PRODUCTS) {
+          return;
+        }
+
+        setLoadingMore(true);
+        window.setTimeout(() => {
+          setVisibleCount((previous) =>
+            Math.min(previous + PAGE_SIZE, TOTAL_PRODUCTS),
+          );
+          setLoadingMore(false);
+        }, RESULTS_LOAD_MS);
+      };
+
+      return (
+        <ProductBrowse
+          {...initialArgs}
+          hasMore={visibleCount < TOTAL_PRODUCTS}
+          loadingMore={loadingMore}
+          onLoadMore={handleLoadMore}
+          results={{ status: "ready", data: visibleProducts }}
+        />
+      );
+    }
+
+    return <InfiniteScrollDemo {...args} />;
+  },
 };

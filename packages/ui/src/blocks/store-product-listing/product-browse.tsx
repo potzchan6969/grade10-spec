@@ -1,10 +1,3 @@
-import {
-  Pagination,
-  PaginationEllipsis,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@grade10/design-system/components/display/pagination";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
@@ -52,16 +45,12 @@ type ProductBrowseProps = {
   clearFiltersLabel?: ReactNode;
   onClearFilters?: () => void;
 
-  page: number;
-  pageCount: number;
-  onPageChange?: (page: number) => void;
-  /** Required: the pagination primitive would otherwise fall back to its own
-   * English `Prev` / `Next`, which no consumer could translate. */
-  previousLabel: ReactNode;
-  nextLabel: ReactNode;
-  /** Accessible names, which may fall back to the primitive's default. */
-  paginationLabel?: string;
-  morePagesLabel?: string;
+  /** When true, scrolling near the list end reports `onLoadMore`. */
+  hasMore?: boolean;
+  loadingMore?: boolean;
+  onLoadMore?: () => void;
+  /** Skeleton tile count while loading more; defaults to 10. */
+  loadMoreSkeletonCount?: number;
 
   onProductClick?: (productId: string) => void;
   onProductAction?: (productId: string) => void;
@@ -75,28 +64,10 @@ type ProductBrowseProps = {
 const BROWSE_CLASS =
   "flex w-full max-lg:flex-col gap-12 px-8 py-6 lg:flex-row lg:items-start";
 
-/** First page, last page, and a window around the current one, with a gap
- * marker wherever the run breaks. */
-function pageItems(page: number, pageCount: number): (number | "gap")[] {
-  const wanted = [1, pageCount, page - 1, page, page + 1];
-  const shown = [...new Set(wanted)]
-    .filter((value) => value >= 1 && value <= pageCount)
-    .sort((a, b) => a - b);
-
-  const items: (number | "gap")[] = [];
-  let previous = 0;
-  for (const value of shown) {
-    if (previous && value - previous > 1) items.push("gap");
-    items.push(value);
-    previous = value;
-  }
-  return items;
-}
-
 /**
  * The product-browsing surface: a sidebar of world and type filters, a result
- * header with applied-filter chips and a sort dropdown, a grid of tiles, and
- * pagination.
+ * header with applied-filter chips and a sort dropdown, and a grid of tiles
+ * that loads more as the shopper scrolls.
  *
  * Filters and results are independent async boundaries — a failed result set
  * leaves the filter panel usable, which is the common case when facets and
@@ -125,17 +96,17 @@ function ProductBrowse({
   appliedFilters,
   clearFiltersLabel,
   onClearFilters,
-  page,
-  pageCount,
-  onPageChange,
-  paginationLabel,
-  previousLabel,
-  nextLabel,
-  morePagesLabel,
+  hasMore,
+  loadingMore,
+  onLoadMore,
+  loadMoreSkeletonCount,
   onProductClick,
   onProductAction,
   className,
 }: ProductBrowseProps) {
+  const resultsBusy =
+    results.status === "loading" || loadingMore ? true : undefined;
+
   return (
     <div className={cn(BROWSE_CLASS, className)} data-slot="product-browse">
       <FilterPanel
@@ -153,6 +124,7 @@ function ProductBrowse({
         utilityLinks={utilityLinks}
       />
       <VStack
+        aria-busy={resultsBusy}
         aria-label={resultsLabel}
         className="w-full min-w-0 flex-1 gap-8 lg:items-center"
         data-slot="product-browse-results"
@@ -173,49 +145,14 @@ function ProductBrowse({
         />
 
         <ProductResultsPanel
+          hasMore={hasMore}
+          loadMoreSkeletonCount={loadMoreSkeletonCount}
+          loadingMore={loadingMore}
+          onLoadMore={onLoadMore}
           onProductAction={onProductAction}
           onProductClick={onProductClick}
           results={results}
         />
-
-        {pageCount > 1 ? (
-          <Pagination
-            className="w-full"
-            // Spread only when set: passing `undefined` would clear the
-            // primitive's own accessible name rather than leave it alone.
-            {...(paginationLabel ? { "aria-label": paginationLabel } : {})}
-          >
-            <PaginationPrevious
-              disabled={page <= 1}
-              onClick={() => onPageChange?.(page - 1)}
-            >
-              {previousLabel}
-            </PaginationPrevious>
-            {pageItems(page, pageCount).map((item, index) =>
-              item === "gap" ? (
-                <PaginationEllipsis
-                  // biome-ignore lint/suspicious/noArrayIndexKey: a gap has no identity beyond its position.
-                  key={`gap-${index}`}
-                  label={morePagesLabel}
-                />
-              ) : (
-                <PaginationLink
-                  isActive={item === page}
-                  key={item}
-                  onClick={() => onPageChange?.(item)}
-                >
-                  {item}
-                </PaginationLink>
-              ),
-            )}
-            <PaginationNext
-              disabled={page >= pageCount}
-              onClick={() => onPageChange?.(page + 1)}
-            >
-              {nextLabel}
-            </PaginationNext>
-          </Pagination>
-        ) : null}
       </VStack>
     </div>
   );

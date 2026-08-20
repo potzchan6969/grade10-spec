@@ -49,3 +49,6 @@ separate public export.
 | Narrow viewport, one column | Narrow viewport |
 | Four 250px tiles | Wide viewport |
 | No tags on a tile | No metadata badges on a tile |
+| Scroll near list end reports load more | More products are reported on scroll |
+| `loadingMore` appends skeleton tiles | Loading more shows skeleton tiles |
+| `hasMore` false hides sentinel | The end of the catalog |

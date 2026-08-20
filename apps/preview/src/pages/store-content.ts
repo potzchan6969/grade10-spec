@@ -173,18 +173,10 @@ const INITIAL_SELECTION: FilterSelection = {
   types: ["booster-box"],
 };
 
-const PAGINATION_LABELS = {
-  previousLabel: "Prev",
-  nextLabel: "Next",
-  paginationLabel: "Pagination",
-  morePagesLabel: "More pages",
-};
-
 export {
   appliedFiltersFromSelection,
   FILTER_GROUPS,
   INITIAL_SELECTION,
-  PAGINATION_LABELS,
   PRODUCTS,
   SORT_OPTIONS,
   STORE_FOOTER,

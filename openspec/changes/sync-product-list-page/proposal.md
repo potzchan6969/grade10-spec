@@ -35,6 +35,11 @@ layout the file has now left.
   header type chips, and the series dropdown leave. **BREAKING:** `title`,
   `chipFilters`, and `selectFilters` are removed; `sortTriggerLabel` and
   `appliedFilters` are added.
+- **Product list uses infinite scroll.** Pagination leaves the browse surface.
+  Scrolling near the list end reports `onLoadMore`; `loadingMore` appends ten
+  Boneyard skeleton tiles by default. **BREAKING:** `page`, `pageCount`,
+  `onPageChange`, `previousLabel`, `nextLabel`, `paginationLabel`, and
+  `morePagesLabel` leave `ProductBrowse`.
 - **Product list gap matches the page; card metadata badges are hidden.**
   Horizontal gap 24px, vertical 32px, minimum tile 250px. Tiles do not display
   `cardProps` / `tags` badges.
@@ -75,4 +80,6 @@ layout the file has now left.
 - Consuming applications must stop importing `CollectionMenu` /
   `CollectionMenuItem`, stop passing `collections` / `activeCollection` /
   `title` / `chipFilters` / `selectFilters`, and pass `groups`, `selection`,
-  `appliedFilters`, and `sortTriggerLabel`.
+  `appliedFilters`, and `sortTriggerLabel`. Pagination props leave
+  `ProductBrowse`; infinite scroll uses `hasMore`, `loadingMore`, and
+  `onLoadMore` instead.
