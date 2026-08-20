@@ -76,6 +76,17 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   play: async ({ canvasElement }) => {
+    const footer = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="footer"]',
+    );
+    expect(footer).not.toBeNull();
+    if (footer === null) return;
+    expect(footer).toHaveClass("border-t");
+    expect(footer).not.toHaveClass("border");
+    expect(footer.firstElementChild).toHaveClass("gap-6", "p-8");
+    const bar = footer.querySelector('[data-slot="footer-bar"]');
+    expect(bar).toHaveClass("px-8");
+
     const canvas = within(canvasElement);
     for (const heading of ["SHOP", "HELP", "LEGAL"]) {
       expect(canvas.getByText(heading)).toBeInTheDocument();

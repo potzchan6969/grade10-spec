@@ -26,7 +26,10 @@ type FooterProps = ComponentProps<"footer"> & {
 /**
  * Store footer. Figma (`4171:9653`) has no variant axes — columns and copy
  * are consumer-owned so a locale or catalog change does not fork the layout.
- * The fill is `Base/background`.
+ * The fill is `Base/background`. The outer stroke is top-only (`Base/border`),
+ * matching Nav's bottom edge — this is page chrome, not a boxed card. Inset
+ * and column gap follow `Gap/gap-8` and `Gap/gap-6`; the legal row is centred
+ * on the bar, not spaced between the copyright and locale.
  *
  * Every content prop is required rather than defaulted: two stores render this
  * shell, and a default would let the second one ship the first one's link
@@ -60,12 +63,12 @@ function Footer({
     <footer
       data-slot="footer"
       className={cn(
-        "@container flex w-full flex-col border border-border bg-background",
+        "@container flex w-full flex-col border-t border-border bg-background",
         className,
       )}
       {...props}
     >
-      <div className="grid w-full grid-cols-1 gap-8 px-4 pt-12 pb-8 @xl:grid-cols-2 @3xl:grid-cols-4 @3xl:px-10">
+      <div className="grid w-full grid-cols-1 gap-6 p-8 @xl:grid-cols-2 @3xl:grid-cols-4">
         <div className="flex flex-col items-start gap-4">
           <p className="text-sm font-medium text-foreground">{logo}</p>
           <p className="text-xs text-secondary-foreground">{description}</p>
@@ -113,7 +116,7 @@ function Footer({
         )}
       </div>
       <div
-        className="flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-border px-4 py-3 @3xl:h-[60px] @3xl:flex-nowrap @3xl:px-10 @3xl:py-0"
+        className="relative flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-border px-8 py-3 @3xl:h-[60px] @3xl:flex-nowrap @3xl:py-0"
         data-slot="footer-bar"
       >
         <p className="text-xs font-medium text-secondary-foreground">
@@ -121,7 +124,7 @@ function Footer({
         </p>
         {legalLinks.length > 0 ? (
           <div
-            className="flex flex-wrap items-start gap-x-6 gap-y-1"
+            className="flex flex-wrap items-start gap-x-5 gap-y-1 @3xl:absolute @3xl:top-1/2 @3xl:left-1/2 @3xl:-translate-x-1/2 @3xl:-translate-y-1/2 @3xl:flex-nowrap"
             data-slot="footer-legal"
           >
             {legalLinks.map((link) => (
