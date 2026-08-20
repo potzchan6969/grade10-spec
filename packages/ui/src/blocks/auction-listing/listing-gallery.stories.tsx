@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
+import { ListingGalleryLoading } from "./fixtures";
 import { ListingGallery } from "./listing-gallery";
 
 const IMAGE = new URL(
@@ -58,4 +59,14 @@ export const SingleImage: Story = {
 
 export const Empty: Story = {
   args: { images: [] },
+};
+
+/** Page shell before images arrive — no zoom hint or carets. */
+export const Loading: Story = {
+  render: () => <ListingGalleryLoading />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByText("Click to zoom")).toBeNull();
+    expect(canvas.queryByRole("button", { name: "Previous image" })).toBeNull();
+  },
 };

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
+import { BASE_FACTS, ListingDetailsLoading, VAULT_SECTION } from "./fixtures";
 import { ListingDetails } from "./listing-details";
 
 const meta = {
@@ -10,16 +11,9 @@ const meta = {
   args: {
     heading: "Description",
     body: "Shadowless 1st Ed. Authenticated and vaulted.",
-    facts: [
-      { label: "Lot", value: "12" },
-      { label: "Sale", value: "September Slabs" },
-      { label: "Category", value: "Pokémon" },
-    ],
+    facts: [...BASE_FACTS],
     sections: [
-      {
-        heading: "Vault shipping",
-        body: "Stored in Grade10 Vault — ships from our facility within 1 business day of payment.",
-      },
+      VAULT_SECTION,
       {
         heading: "Authentication",
         body: "Authenticated by Grade10 Marketplace",
@@ -52,4 +46,29 @@ export const Default: Story = {
 
 export const BodyOnly: Story = {
   args: { facts: undefined, sections: undefined },
+};
+
+export const Loading: Story = {
+  render: () => <ListingDetailsLoading />,
+};
+
+export const PostSold: Story = {
+  args: {
+    facts: [...BASE_FACTS, { label: "Result", value: "Sold · HK$3,100.00" }],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Result")).toBeInTheDocument();
+    expect(canvas.getByText(/Sold · HK\$3,100/)).toBeInTheDocument();
+  },
+};
+
+export const PostUnsold: Story = {
+  args: {
+    facts: [...BASE_FACTS, { label: "Result", value: "Unsold" }],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Unsold")).toBeInTheDocument();
+  },
 };
