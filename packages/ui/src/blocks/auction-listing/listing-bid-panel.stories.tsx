@@ -12,6 +12,7 @@ import {
   WonSettledStanding,
 } from "./fixtures";
 import { ListingBidPanel } from "./listing-bid-panel";
+import { LiveBiddingDemo } from "./live-bidding-demo";
 
 const meta = {
   title: "Auction Listing/ListingBidPanel",
@@ -99,6 +100,44 @@ export const LiveNoBids: Story = {
     bidCount: "0 bids",
     history: "No bids yet.",
     actions: <LiveActions />,
+  },
+};
+
+/**
+ * One live lot, several bidders. Step the ledger to see current bid, history,
+ * and your standing flip between leading and outbid.
+ */
+export const LiveBidding: Story = {
+  render: () => <LiveBiddingDemo />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("No bids yet")).toBeInTheDocument();
+    expect(
+      canvas.queryByText(/highest bidder|outbid/i),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Show bid history" }),
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "Next bid" }));
+    expect(canvas.getByText("HK$1,200.00")).toBeInTheDocument();
+    expect(canvas.getAllByText(/Bidder 2/).length).toBeGreaterThan(0);
+
+    await userEvent.click(canvas.getByRole("button", { name: "Next bid" }));
+    expect(canvas.getByText(/highest bidder/i)).toBeInTheDocument();
+    expect(canvas.getByText("HK$1,300.00")).toBeInTheDocument();
+
+    await userEvent.click(canvas.getByRole("button", { name: "Next bid" }));
+    expect(canvas.getAllByText(/outbid/i).length).toBeGreaterThan(0);
+    expect(canvas.getByText("HK$1,400.00")).toBeInTheDocument();
+
+    await userEvent.click(canvas.getByRole("button", { name: "Next bid" }));
+    expect(canvas.getByText(/highest bidder/i)).toBeInTheDocument();
+
+    await userEvent.click(canvas.getByRole("button", { name: "Next bid" }));
+    expect(canvas.getAllByText(/outbid/i).length).toBeGreaterThan(0);
+    expect(canvas.getByText("HK$1,600.00")).toBeInTheDocument();
+    expect(canvas.getByText("5 bids")).toBeInTheDocument();
   },
 };
 
