@@ -15,6 +15,15 @@ export {
   SignInEmailForm,
   type SignInEmailFormProps,
 } from "./blocks/auth-sign-in/sign-in-email-form";
+// shared-ui/auth-two-factor
+export {
+  TwoFactorEnrollment,
+  type TwoFactorEnrollmentProps,
+} from "./blocks/auth-two-factor/two-factor-enrollment";
+export {
+  TwoFactorVerifyForm,
+  type TwoFactorVerifyFormProps,
+} from "./blocks/auth-two-factor/two-factor-verify-form";
 // shared cross-capability types
 export type { AsyncAction, AsyncState } from "./blocks/shared/async";
 
