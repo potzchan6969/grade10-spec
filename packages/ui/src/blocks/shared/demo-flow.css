@@ -1,0 +1,119 @@
+:root {
+  --demo-flow-moss: #163528;
+  --demo-flow-canopy: #0c1f16;
+  --demo-flow-mist: rgba(176, 196, 214, 0.28);
+  --demo-flow-cream: #f3efe4;
+  --demo-flow-ink: #12261c;
+  --demo-flow-leaf: rgba(62, 122, 74, 0.45);
+  --duration-stagger: 80ms;
+  --duration-very-slow: 500ms;
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.demo-flow {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  padding: 1.5rem;
+  color: var(--demo-flow-cream);
+  background:
+    radial-gradient(ellipse at 50% -20%, var(--demo-flow-mist), transparent 55%),
+    radial-gradient(ellipse at 12% 18%, var(--demo-flow-leaf), transparent 42%),
+    radial-gradient(ellipse at 88% 8%, rgba(30, 70, 48, 0.7), transparent 48%),
+    linear-gradient(180deg, #1e3d32 0%, var(--demo-flow-moss) 48%, var(--demo-flow-canopy) 100%);
+}
+
+.demo-flow::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(1.1rem 2.2rem at 6% 92%, rgba(6, 18, 12, 0.7) 42%, transparent 44%),
+    radial-gradient(0.85rem 1.8rem at 11% 94%, rgba(6, 18, 12, 0.55) 42%, transparent 44%),
+    radial-gradient(1.3rem 2.6rem at 18% 91%, rgba(6, 18, 12, 0.65) 42%, transparent 44%),
+    radial-gradient(1.2rem 2.4rem at 84% 93%, rgba(6, 18, 12, 0.6) 42%, transparent 44%),
+    radial-gradient(0.9rem 1.9rem at 91% 95%, rgba(6, 18, 12, 0.5) 42%, transparent 44%),
+    radial-gradient(1.4rem 2.8rem at 97% 90%, rgba(6, 18, 12, 0.55) 42%, transparent 44%);
+}
+
+.demo-flow::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 40, 70, 0.22) 0%,
+    transparent 38%,
+    transparent 70%,
+    rgba(12, 31, 22, 0.45) 100%
+  );
+}
+
+.demo-flow-body {
+  position: relative;
+  z-index: 1;
+}
+
+.demo-flow-toolbar {
+  color-scheme: light;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--demo-flow-cream) 92%, white);
+  color: var(--demo-flow-ink);
+  box-shadow: 0 8px 24px rgba(6, 18, 12, 0.28);
+}
+
+.demo-flow-toolbar [data-slot="text"],
+.demo-flow-toolbar [data-slot="tabs-list"] {
+  color: var(--demo-flow-ink);
+}
+
+.demo-flow-toolbar [data-slot="tabs-trigger"] {
+  color: color-mix(in srgb, var(--demo-flow-ink) 72%, transparent);
+}
+
+.demo-flow-toolbar [data-slot="tabs-trigger"]:hover,
+.demo-flow-toolbar [data-slot="tabs-trigger"][data-active] {
+  color: var(--demo-flow-ink);
+}
+
+.demo-flow-toolbar [data-slot="button"]:not(.bg-primary) {
+  color: var(--demo-flow-ink);
+  border-color: color-mix(in srgb, var(--demo-flow-ink) 28%, transparent);
+}
+
+.demo-flow-rule {
+  width: 1px;
+  height: 1.5rem;
+  background: var(--border);
+}
+
+.demo-flow-stage {
+  width: 100%;
+}
+
+.demo-flow-stage[data-busy] {
+  overflow: visible;
+}
+
+.demo-flow-case {
+  position: relative;
+  transform-origin: left top;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-flow::before,
+  .demo-flow::after {
+    animation: none !important;
+  }
+
+  .demo-flow-case {
+    transform: none !important;
+  }
+}

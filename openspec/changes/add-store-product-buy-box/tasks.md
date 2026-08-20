@@ -11,14 +11,14 @@ publishes.
 
 ## 1. Buying from a card's page (grade10) (owner: @sean)
 
-- [ ] 1.1 Make `A card with one thing to buy needs no choice` pass: the card's page carries the grades it lists as one choosable group, opening on the variant it already prices, and a card with one variant for sale needs nothing chosen.
-- [ ] 1.2 Make `A collector adds the grade they chose` pass: adding builds the cart line from the chosen variant — the same line the grid's tile builds, so one card cannot read two ways in the cart — and reaches `useCart`'s add.
-- [ ] 1.3 Make `The collector keeps their place` pass: adding leaves the collector on the card's address, and the page says what the cart holds without a count in the served document that the browser would then disagree with.
-- [ ] 1.4 Make `The same card twice` pass from the page: a second add of the same grade is one line with the quantity gained, which is what `AddToCart` already does — prove it through the page rather than answer it again.
-- [ ] 1.5 Make `One grade sold, another still for sale` pass: a variant not for sale is rendered unchoosable rather than dropped, and choosing it offers no add.
-- [ ] 1.6 Make `Nothing on the card is for sale` pass: a card with no variant for sale says so where the buying goes, keeps every price it lists, and offers nothing to press.
-- [ ] 1.7 Hold the page's serving where it was: the card still answers whole before any script runs, with `serving/prerender.test.tsx` and `serving/hydration.test.tsx` green over the page the buy box is now part of.
-- [ ] 1.8 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`.
+- [x] 1.1 Make `A card with one thing to buy needs no choice` pass: the card's page carries the grades it lists as one choosable group, opening on the variant it already prices, and a card with one variant for sale needs nothing chosen.
+- [x] 1.2 Make `A collector adds the grade they chose` pass: adding builds the cart line from the chosen variant — the same line the grid's tile builds, so one card cannot read two ways in the cart — and reaches `useCart`'s add.
+- [x] 1.3 Make `The collector keeps their place` pass: adding leaves the collector on the card's address, and the page says what the cart holds without a count in the served document that the browser would then disagree with.
+- [x] 1.4 Make `The same card twice` pass from the page: a second add of the same grade is one line with the quantity gained, which is what `AddToCart` already does — prove it through the page rather than answer it again.
+- [x] 1.5 Make `One grade sold, another still for sale` pass: a variant not for sale is rendered unchoosable rather than dropped, and choosing it offers no add.
+- [x] 1.6 Make `Nothing on the card is for sale` pass: a card with no variant for sale says so where the buying goes, keeps every price it lists, and offers nothing to press.
+- [x] 1.7 Hold the page's serving where it was: the card still answers whole before any script runs, with `serving/prerender.test.tsx` and `serving/hydration.test.tsx` green over the page the buy box is now part of.
+- [x] 1.8 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`.
 
 ## 2. Confirm on staging (grade10)
 
