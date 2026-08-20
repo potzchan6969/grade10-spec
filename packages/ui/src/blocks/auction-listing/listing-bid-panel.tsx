@@ -6,6 +6,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 import { useState } from "react";
+import { popInValue } from "./digit-pop-in";
 
 type ListingBidPanelProps = {
   title: ReactNode;
@@ -77,7 +78,7 @@ function ListingBidPanel({
           {priceLabel}
         </Text>
         <Text size="xl" weight="bold">
-          {price}
+          {popInValue(price)}
         </Text>
         {priceHint ? (
           <Text size="sm" tone="secondary">
@@ -88,7 +89,7 @@ function ListingBidPanel({
           <HStack gap="sm" vAlign="center" wrap>
             {bidCount != null ? (
               <Text size="sm" tone="secondary">
-                {bidCount}
+                {popInValue(bidCount)}
               </Text>
             ) : null}
             {canToggleHistory ? (
