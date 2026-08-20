@@ -1,7 +1,7 @@
 /// <reference path="./digit-pop-in.css.d.ts" />
-import { useLayoutEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
+import { useLayoutEffect, useRef } from "react";
 
 import "./digit-pop-in.css";
 
@@ -12,8 +12,7 @@ import "./digit-pop-in.css";
 function DigitPopIn({ text }: { text: string }) {
   const groupRef = useRef<HTMLSpanElement>(null);
   const previous = useRef<string | null>(null);
-  const chars = [...text];
-  const last = chars.length - 1;
+  const digits = digitSlots(text);
 
   useLayoutEffect(() => {
     const group = groupRef.current;
@@ -29,22 +28,31 @@ function DigitPopIn({ text }: { text: string }) {
   return (
     <span ref={groupRef} className="t-digit-group">
       <span className="sr-only">{text}</span>
-      {chars.map((ch, i) => {
-        const stagger =
-          i === last - 1 ? "1" : i === last ? "2" : undefined;
-        return (
-          <span
-            aria-hidden="true"
-            className="t-digit"
-            data-stagger={stagger}
-            key={`${i}-${ch}`}
-          >
-            {ch}
-          </span>
-        );
-      })}
+      {digits.map(({ ch, key, stagger }) => (
+        <span
+          aria-hidden="true"
+          className="t-digit"
+          data-stagger={stagger}
+          key={key}
+        >
+          {ch}
+        </span>
+      ))}
     </span>
   );
+}
+
+function digitSlots(text: string) {
+  const seen = new Map<string, number>();
+  const chars = [...text];
+  const last = chars.length - 1;
+  return chars.map((ch, position) => {
+    const n = (seen.get(ch) ?? 0) + 1;
+    seen.set(ch, n);
+    const stagger =
+      position === last - 1 ? "1" : position === last ? "2" : undefined;
+    return { ch, key: `${ch}-${n}`, stagger };
+  });
 }
 
 /** Split a string through DigitPopIn; leave other nodes alone. */

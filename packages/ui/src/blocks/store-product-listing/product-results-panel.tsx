@@ -1,10 +1,7 @@
 import { cn } from "@grade10/design-system/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import { AsyncMessage } from "../shared/async-message";
-import {
-  DEFAULT_LOAD_MORE_SKELETON_COUNT,
-  ProductList,
-} from "./product-list";
+import { DEFAULT_LOAD_MORE_SKELETON_COUNT, ProductList } from "./product-list";
 import type { AsyncState, ProductSummary } from "./types";
 
 const REVEAL_STAGGER_MS = 40;
@@ -82,15 +79,7 @@ function ProductResultsPanel({
 
   useEffect(() => {
     loadMorePendingRef.current = false;
-  }, [results, hasMore]);
-
-  useEffect(() => {
-    if (
-      !hasMore ||
-      !onLoadMore ||
-      loadingMore ||
-      results.status !== "ready"
-    ) {
+    if (!hasMore || !onLoadMore || loadingMore || results.status !== "ready") {
       return;
     }
 
