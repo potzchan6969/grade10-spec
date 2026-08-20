@@ -7,6 +7,7 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { ShoppingCartSimple } from "@phosphor-icons/react";
 import { Skeleton } from "boneyard-js/react";
 import type { ReactNode } from "react";
+import skeletonImage from "./product-card.fixture.png";
 
 type ProductCardProps = {
   /** Boneyard skeleton overlay while the consumer resolves product data. */
@@ -51,11 +52,8 @@ type ProductCardProps = {
 
 type ProductCardContentProps = Omit<ProductCardProps, "loading">;
 
-const SKELETON_IMAGE = new URL("./product-card.fixture.png", import.meta.url)
-  .href;
-
 const SKELETON_FIXTURE_PROPS = {
-  imageSrc: SKELETON_IMAGE,
+  imageSrc: skeletonImage,
   imageAlt: "Ninja Spinner booster box",
   tags: ["Pokémon", "M4", "JP"],
   name: "Ninja Spinner",

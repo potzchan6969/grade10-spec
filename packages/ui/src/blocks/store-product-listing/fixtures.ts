@@ -1,3 +1,5 @@
+import productImage from "./product.fixture.png";
+
 import type {
   AppliedFilter,
   FilterGroup,
@@ -9,7 +11,7 @@ import type {
 /* Grade10's own catalog content, for the examples only. A consumer supplies
  * its own; nothing here is a default. */
 
-const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
+const IMAGE = productImage;
 
 const SORT_OPTIONS: SortOption[] = [
   { id: "popular", label: "Popularity" },
