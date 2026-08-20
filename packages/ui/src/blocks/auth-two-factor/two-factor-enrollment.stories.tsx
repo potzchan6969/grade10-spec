@@ -37,8 +37,21 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** Storybook's default mode is dark — so this is the case the QR has to
- * survive. Its plate stays white whatever the surface behind it does. */
-export const Default: Story = {};
+ * survive. A scanner wants dark modules on a light field, so the plate and
+ * the code keep fixed colours instead of following the theme. */
+export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const plate = canvasElement.querySelector('[data-slot="authenticator-qr"]');
+    expect(plate).not.toBeNull();
+    expect(getComputedStyle(plate as Element).backgroundColor).toBe(
+      "rgb(255, 255, 255)",
+    );
+    const svg = plate?.querySelector("svg");
+    expect(svg).not.toBeNull();
+    // The dark modules are painted as paths in the foreground colour.
+    expect(svg?.querySelector('path[fill="#000000"]')).not.toBeNull();
+  },
+};
 
 export const LightMode: Story = { globals: { mode: "light" } };
 
