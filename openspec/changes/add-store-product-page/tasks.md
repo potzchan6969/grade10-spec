@@ -14,17 +14,18 @@ on nothing in each other.
 - [ ] 1.3 Render an address with no document in the worker, restating the status for an address no surface owns, and give each render its own react-query cache.
 - [ ] 1.4 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and every address shape answered by `wrangler dev` over that build.
 
-## 2. A card's page (grade10)
+## 2. A card's page (grade10, @grade10/store-frontend)
 
-- [ ] 2.1 Make `A card answers whole` pass: a product surface at `/store/products/<slug>` whose loader reads the card from the catalogue module, rendering its name, grade, certificate, price and description before any script runs.
+- [ ] 2.0 Publish the catalog slice's product read for a caller that is not a component, resolving the same repository `useProduct` does, and hand every `pnpm dev` service the CAs this repo generates so a server-side read can reach the local proxy.
+- [ ] 2.1 Make `A card answers whole` pass: a product surface at `/store/products/<handle>` whose loader reads the card through that read, rendering its name, its variants, their prices and its description before any script runs.
 - [ ] 2.2 Make `Two cards, two pages` pass: the head derives from what the read answered, so each card carries its own title, description and `og:url`.
-- [ ] 2.3 Make `A slug the catalogue has nothing for` and `A card added to the catalogue answers` pass: the loader refuses an unknown slug with a 404 the surface renders as the site's not-found page.
+- [ ] 2.3 Make `A handle the catalogue has nothing for` and `A card added to the catalogue answers` pass: the loader refuses an unknown handle with a 404 the surface renders as the site's not-found page.
 - [ ] 2.4 Make `A surface refuses an address of its own` pass, with the crawlable-pages scenarios it sits beside still green.
 - [ ] 2.5 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and both statuses read off `wrangler dev` over a build.
 
-## 3. Cards offered to crawlers (grade10)
+## 3. Reaching a card (grade10)
 
-- [ ] 3.1 Make `The sitemap names the cards` pass: the public addresses derive from the catalogue, so a card is listed by existing and no entry carries an unfilled parameter.
+- [ ] 3.1 Make `A card is opened from the grid` and `The sitemap names no pattern` pass: a tile opens the card's own address, and what the build cannot enumerate is left out of the sitemap rather than written as a pattern.
 - [ ] 3.2 Teach the build's public-pages check that only a written surface has a file to read, holding a rendered surface to the same rules where it can be rendered.
 - [ ] 3.3 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
 

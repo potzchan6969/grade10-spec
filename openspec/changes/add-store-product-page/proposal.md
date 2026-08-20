@@ -21,9 +21,10 @@ would not start, and the way out looked like a dependency this platform does
 not have. That finding is wrong, and this change carries the evidence: the
 worker starts, and the way out is three build settings.
 
-**Metric:** public addresses a crawler is offered — from the site's three
+**Metric:** public addresses that answer as themselves — from the site's three
 surfaces to one per card the catalogue holds. **Acceptance signal:** a link to
-a card unfurls with that card's name and grade rather than the storefront's.
+a card unfurls with that card's own name and price rather than the
+storefront's.
 
 ## What Changes
 
@@ -40,20 +41,23 @@ a card unfurls with that card's name and grade rather than the storefront's.
   which slugs are real, and it is asked when the address is asked for — so a
   slug it has nothing for answers 404 with the site's not-found surface,
   rather than an empty product page under a 200.
-- **The catalogue behind it is a stand-in.** Three fixture cards, in one
-  module the page reads through. Everything above that module — the address,
-  the head, the refusal, the sitemap — is the real thing.
+- **The card comes from the storefront's own catalogue.** The read is the one
+  `useProduct` makes — same repository, same container an app installs —
+  published for a caller that is not a component, because a loader answering a
+  request has no React to hold a query in. A product the shop adds answers at
+  its address with no deploy.
 
 ## Non-Goals
 
-- **The live catalogue.** Reading cards from the store service belongs to
-  `grade10-store/shopify-commerce`, which owns what a product is. This change
-  ends at the module that answers "which card is this slug".
-- **Linking cards from the storefront.** The grid's tiles still go nowhere; a
-  collector reaches a card by its address or the sitemap. The link arrives
-  with the live catalogue, where a tile knows its slug.
-- **Buying from the page.** No cart write, no checkout. The action on the page
-  is inert.
+- **What a product is.** `grade10-store/shopify-commerce` owns the catalogue
+  and its fields; this change reads what that capability already publishes and
+  adds nothing to it.
+- **A sitemap that names the cards.** Which addresses the catalogue answers is
+  not known when the site is built, so the sitemap keeps to the surfaces that
+  are. Listing products wants a sitemap the worker renders, which is its own
+  change — until then a crawler reaches a card by a link, not a listing.
+- **Buying from the page.** No cart write, no checkout: the page prices every
+  variant and says which are for sale, and that is all.
 - **Structured data.** JSON-LD is what a product page eventually owes a search
   result, and it wants the live catalogue's fields behind it.
 - **Share imagery.** Unchanged from `add-crawlable-public-pages`: no brand or
@@ -78,10 +82,14 @@ a card unfurls with that card's name and grade rather than the storefront's.
 
 ## Impact
 
-- **grade10 SPA (`apps/frontend/grade10`)** — the whole change lands here: the
-  surface table splits into what is written and what is rendered, the worker
-  gains the application built for the server, and the store gains a page and
-  the module standing in for its catalogue.
+- **grade10 SPA (`apps/frontend/grade10`)** — the surface table splits into
+  what is written and what is rendered, the worker gains the application built
+  for the server, and the store gains a page. Its tiles open a card.
+- **`@grade10/store-frontend`** — the catalog slice publishes its product read
+  for a caller that is not a component. Nothing existing changes shape.
+- **`pnpm dev`** — a server-rendered read leaves Node for the local proxy,
+  whose certificate this repo's own root CA signs. Every dev service is handed
+  those CAs, or the one fetch that fails locally is the server's.
 - **This repository** — one bug to fix, not a blocker: `@grade10/ui`'s
   product card resolves its skeleton fixture image against `import.meta.url`
   while it is being imported, and a worker has no module URL. The application

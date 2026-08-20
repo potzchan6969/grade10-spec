@@ -3,7 +3,8 @@
 What one card's address serves: the card's own page, in the response before
 any script runs, and the refusal when the catalogue holds no such card.
 
-A product address names one card by its slug. Every requirement of
+A product address names one card by its handle — the key the catalogue
+already addresses a product by. Every requirement of
 `grade10-site/crawlable-pages` binds it — it is a public surface, so its
 title, description, share metadata and sitemap entry are that capability's,
 per card rather than per page.
@@ -33,12 +34,12 @@ reads is the one the address names, not the catalogue it came from.
 
 ### Requirement: An address that names no card is refused
 
-The catalogue SHALL be what decides whether a slug is a card, asked when the
+The catalogue SHALL be what decides whether a handle is a card, asked when the
 address is asked for. An address under the store's products that names no
 card in the catalogue SHALL answer with status 404 and the site's not-found
 surface, never an empty product page.
 
-#### Scenario: A slug the catalogue has nothing for
+#### Scenario: A handle the catalogue has nothing for
 
 - **WHEN** an address under the store's products naming no card is fetched
 - **THEN** the response has status 404
@@ -50,14 +51,24 @@ surface, never an empty product page.
 - **WHEN** its address is fetched
 - **THEN** the response has status 200 and carries that card's page
 
-### Requirement: Every card is offered to a crawler
+### Requirement: A card is reached from the storefront
 
-The sitemap SHALL list one address per card the catalogue holds, and no
-address carrying a slug placeholder.
+The storefront SHALL open a card's own address from that card in the grid,
+without a page load.
 
-#### Scenario: The sitemap names the cards
+The sitemap lists the surfaces the build writes a document for, and a card is
+not one of them: which addresses the catalogue answers is not known when the
+site is built. It SHALL never list an address carrying an unfilled parameter
+in place of them.
+
+#### Scenario: A card is opened from the grid
+
+- **GIVEN** a collector on the storefront
+- **WHEN** they open a card in the grid
+- **THEN** that card's address is what they are on, showing that card's page
+
+#### Scenario: The sitemap names no pattern
 
 - **WHEN** the sitemap is fetched
-- **THEN** it lists each card's absolute address, alongside the site's other
-  public surfaces
-- **AND** no entry carries an unfilled parameter
+- **THEN** every entry is an address a collector can fetch
+- **AND** none of them carries an unfilled parameter

@@ -43,8 +43,8 @@ Three facts from that foundation shape what follows.
   without being restated. A crawler cannot tell which surfaces were written.
 - **Non-goal:** rendering what does not need it. A surface that answers at one
   address stays a file; per-request rendering costs a worker start.
-- **Non-goal:** the live catalogue. The read is behind one module, and the
-  change ends there.
+- **Non-goal:** anything about what a product is. The catalogue is
+  `shopify-commerce`'s; this reads what it publishes.
 
 ## Decisions
 
@@ -110,11 +110,36 @@ server render was a build step; in a worker it is one cache shared by every
 collector at once. The browser keeps its singleton across navigations, and a
 server render takes a new one.
 
-### The catalogue is one module
+### The read is the storefront's own, published for a loader
 
-`src/pages/store/products.ts` holds the fixture cards and the slug lookup.
-Everything above it — address, head, refusal, sitemap — reads through that
-lookup, so the live read replaces the module and nothing else.
+`useProduct` already reads one product through `CatalogRepository`, and the
+slice's tokens are private to it — deliberately, so nothing outside resolves a
+handle it should not. A loader has no component to hold a query in, so the
+slice publishes the read itself: `readProduct(handle)`, resolving the same
+repository out of the same container an app installs. A fixture binding
+therefore covers the loader and the hook at once, and a wire change still
+fails at the datasource.
+
+*Alternatives:* exporting `CATALOG_TOKENS` — rejected: it publishes the handle
+to make any read rather than the read, and the barrel's rule is that nothing
+outside imports deeper than it. A second client in the app — rejected: two
+paths to one product, and the page could disagree with the grid it was reached
+from. Prefetching into react-query during the render — rejected: it needs the
+same access and buys a cache the document does not use.
+
+### A dev service is handed the CAs this repo generates
+
+A server-rendered read leaves Node for `api.<brand>.dev`, whose certificate the
+root CA in `nginx/ssl/` signs. A browser trusts it because the developer
+installed it; Node ships its own bundle and refuses. `pnpm dev` writes the
+CAs it finds into one bundle and hands every service `NODE_EXTRA_CA_CERTS`,
+beside the `NODE_OPTIONS` it already sets for the same class of reason.
+
+*Alternatives:* `--use-system-ca` — rejected: it works only where the
+developer has trusted the CA in the OS store, and the repo has the CA itself.
+An internal plain-HTTP address for server-side reads — rejected: it gives the
+server a different view of the platform than the browser has, which is the
+thing `packages/app-env` exists to prevent.
 
 ## Risks / Trade-offs
 
@@ -130,7 +155,14 @@ lookup, so the live read replaces the module and nothing else.
   rendering the whole site in Node in the app's own suite.
 - **A refused card and a refused address answer alike.** A collector cannot
   tell a retired card from a typo. Both are honestly 404; distinguishing them
-  is copy work the live catalogue can afford.
+  is copy work.
+- **The catalogue is now on the request path.** A card's page cannot answer
+  when the store service cannot, and it answers 500 rather than a page. The
+  three written surfaces are unaffected — they are files.
+- **A card is in no sitemap.** Only a link leads to one, and the grid's tiles
+  open a card by navigation rather than by anchor, which a crawler does not
+  follow. A sitemap the worker renders is the way out, and it is its own
+  change.
 - **Archive order.** `grade10-site/crawlable-pages` is modified here and added
   by `add-crawlable-public-pages`, which must archive first. The branch stacks
   the same way, so the order cannot be taken by accident.
