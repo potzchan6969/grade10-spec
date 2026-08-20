@@ -14,8 +14,8 @@ per card rather than per page.
 ### Requirement: A card answers at its own address
 
 The site SHALL answer a product address with that card's page: its name, its
-grade, its certificate, its price, and its description, in the response HTML
-without any script executing.
+description, what each variant it lists costs, and which of them can be
+bought — in the response HTML without any script executing.
 
 Two product addresses SHALL answer with their own card — the page a collector
 reads is the one the address names, not the catalogue it came from.
@@ -23,8 +23,8 @@ reads is the one the address names, not the catalogue it came from.
 #### Scenario: A card answers whole
 
 - **WHEN** a product address is fetched and no script executes
-- **THEN** the response HTML contains that card's name, grade, certificate,
-  price and description
+- **THEN** the response HTML contains that card's name, its description, and
+  a price for every variant it lists
 
 #### Scenario: Two cards, two pages
 

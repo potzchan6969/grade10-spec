@@ -16,7 +16,7 @@ on nothing in each other.
 
 ## 2. A card's page (grade10, @grade10/store-frontend)
 
-- [ ] 2.0 Publish the catalog slice's product read for a caller that is not a component, resolving the same repository `useProduct` does, and hand every `pnpm dev` service the CAs this repo generates so a server-side read can reach the local proxy.
+- [ ] 2.0 Give one product its own slice, publishing the read a caller that is not a component makes — the same repository `useProduct` resolves — and hand every `pnpm dev` service the CAs this repo generates so a server-side read can reach the local proxy.
 - [ ] 2.1 Make `A card answers whole` pass: a product surface at `/store/products/<handle>` whose loader reads the card through that read, rendering its name, its variants, their prices and its description before any script runs.
 - [ ] 2.2 Make `Two cards, two pages` pass: the head derives from what the read answered, so each card carries its own title, description and `og:url`.
 - [ ] 2.3 Make `A handle the catalogue has nothing for` and `A card added to the catalogue answers` pass: the loader refuses an unknown handle with a 404 the surface renders as the site's not-found page.

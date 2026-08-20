@@ -112,20 +112,35 @@ server render takes a new one.
 
 ### The read is the storefront's own, published for a loader
 
-`useProduct` already reads one product through `CatalogRepository`, and the
-slice's tokens are private to it — deliberately, so nothing outside resolves a
-handle it should not. A loader has no component to hold a query in, so the
-slice publishes the read itself: `readProduct(handle)`, resolving the same
-repository out of the same container an app installs. A fixture binding
-therefore covers the loader and the hook at once, and a wire change still
-fails at the datasource.
+`useProduct` already read one product, and a slice's tokens are private to it —
+deliberately, so nothing outside resolves a handle it should not. A loader has
+no component to hold a query in, so the slice publishes the read itself:
+`readProduct(handle)`, resolving the same repository out of the same container
+an app installs. A fixture binding therefore covers the loader and the hook at
+once, and a wire change still fails at the datasource. It sits in
+`presentation/reads/` beside the hooks, because it is the same layer — what
+the feature hands a consumer — for a consumer that is not React.
 
-*Alternatives:* exporting `CATALOG_TOKENS` — rejected: it publishes the handle
-to make any read rather than the read, and the barrel's rule is that nothing
-outside imports deeper than it. A second client in the app — rejected: two
-paths to one product, and the page could disagree with the grid it was reached
-from. Prefetching into react-query during the render — rejected: it needs the
-same access and buys a cache the document does not use.
+*Alternatives:* exporting the slice's tokens — rejected: it publishes the
+handle to make any read rather than the read, and the barrel's rule is that
+nothing outside imports deeper than it. A second client in the app — rejected:
+two paths to one product, and the page could disagree with the grid it was
+reached from. Prefetching into react-query during the render — rejected: it
+needs the same access and buys a cache the document does not use.
+
+### One product is its own slice
+
+`products/catalog` browsed pages of products and answered one by handle; the
+two are read by different surfaces for different reasons, so `products/product`
+owns the second — port, decode, repository, token, module, and the
+`@grade10/store-frontend/product` subpath. What a product *is* goes with it,
+and the catalogue imports the model for the page of them it returns, the way
+`sales/listings` and `sales/auctions` divide the auction. Both stay shallow:
+reading one product protects no invariant either.
+
+It also gives the rules a surface reads a product by a home. Which variant can
+be bought, and which one a page prices, were answered in two page components
+and not the same way — they are the model's now, beside it.
 
 ### A dev service is handed the CAs this repo generates
 
