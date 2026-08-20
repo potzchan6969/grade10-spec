@@ -27,8 +27,8 @@ record in-house shipment after a listing is won.
 - Keep public Auction contracts free of reserve behavior and use consistent
   listing and extension terminology.
 - Let operators close out a won listing: see its outcome, reach the winner,
-  record payment (Stripe or manual), and record shipment by hand, with
-  payment and shipment as separate jobs.
+  collect card capture or a wire, record payment, and record shipment by
+  hand, with payment and shipment as separate jobs.
 
 ## Non-goals
 
@@ -45,7 +45,7 @@ record in-house shipment after a listing is won.
 | User | Situation | Desired outcome |
 | --- | --- | --- |
 | Collector | Considering or following a card auction | See reliable listing facts, bid safely, and know whether they won. |
-| Finance operator | A listing has a winner whose card capture stalled or who paid outside Stripe | Record the listing paid without being able to mark it shipped, and without rewriting who won. |
+| Finance operator | A listing has a winner whose card capture stalled, who will pay by wire, or who paid outside Stripe | Contact the winner when a wire is coming, record the listing paid without being able to mark it shipped, and without rewriting who won. |
 | Shipment operator | A listing is paid and the card will leave in-house | Reach the winner, record shipment started then completed, without being able to record payment. |
 
 ## Experience
@@ -64,8 +64,9 @@ record in-house shipment after a listing is won.
 1. An operator opens the Auction queue and reads each listing's outcome.
 2. They open a won listing, read the winner's contact, and work payment or
    shipment according to the grant they hold.
-3. Status changes and comments share one listing trail, with Stripe-originated
-   paid distinct from an operator-recorded paid.
+3. Status changes and comments share one listing trail. Paid via Stripe,
+   Paid via Manual, and Awaiting wire are different outcomes on the queue,
+   and rows waiting on an operator are highlighted.
 
 ## Requirements
 
@@ -104,8 +105,9 @@ Checkable requirements live in the capability specs, not here.
 | Hold model | Decided | One Stripe authorization hold exists per bidder per active listing; an outbid hold enters asynchronous release immediately and is later reconciled to completion. | Product |
 | Extended close | Decided | A valid bid in the final 30 minutes moves the close to 30 minutes after that bid; this repeats until 30 minutes pass without a valid bid, subject to an optional listing extension cap. | Product |
 | Buyer-premium rate | Deferred | Display the applicable policy-derived buyer fee; defining a fixed rate is outside this change. | Product and finance |
-| Operator outcome labels | Decided | Queue labels are Draft, Scheduled, Live, Ending soon, Unsold, Canceled, Awaiting payment, Payment failed, Paid, Shipped, Delivered. "Ending soon" is the last 60 minutes of the recorded close. "Awaiting payment" / "Paid" / "Shipped" / "Delivered" are the industry terms for payment pending, payment settled, shipping started, and shipping completed. | Product |
-| Payment source | Decided | Paid is either Stripe-originated capture or an operator-recorded collection. Manual paid releases an open authorization rather than capturing it, so an offline collection cannot also take the card. The first successful paid wins; neither path changes who won. | Product and finance |
+| Operator outcome labels | Decided | Queue labels are Draft, Scheduled, Live, Ending soon, Unsold, Canceled, Awaiting payment, Payment failed, Awaiting wire, Paid via Stripe, Paid via Manual, Shipped, Delivered. There is no single "Paid" label. "Ending soon" is the last 60 minutes of the recorded close. Payment failed, Awaiting wire, both paid outcomes, and Shipped are highlighted as waiting on an operator. | Product |
+| Payment source | Decided | Card capture becomes Paid via Stripe. Operator-recorded collection (including a completed wire) becomes Paid via Manual. The first successful paid wins; neither path changes who won. Manual paid and Awaiting wire release an open authorization rather than capturing it. | Product and finance |
+| Wire transfer | Decided | A winner paying by wire sits in Awaiting wire so the operator contacts them. An operator records that request in this change; a winner-initiated request on the storefront is follow-on. Collection of the wire is Paid via Manual. | Product and finance |
 | Shipment | Decided | In-house and offline: operators record started then completed. No carrier, no tracking. | Operations |
 | Operator grants | Decided | Payment-processing and shipment-processing are different grants and different scoped roles (`finance` vs `staff`). `admin` holds both. Catalogue publishing is not shipment-processing. | Product |
 | Winner phone | Decided | Not collected. Email is the primary contact; a delivery address is shown when held and can be recorded offline by shipment operators. | Product |
