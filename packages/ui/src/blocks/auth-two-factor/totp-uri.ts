@@ -18,6 +18,9 @@ type TotpEnrollment = {
  * A URI this cannot parse yields empty strings rather than throwing: the QR is
  * rendered from the raw URI and still scans, so a surprise here must cost a
  * row, never the screen.
+ *
+ * Exported because a consumer needs the same reading the enrollment block
+ * shows — copying the setup key off that screen has to copy what is on it.
  */
 function parseTotpUri(uri: string): TotpEnrollment {
   let url: URL;

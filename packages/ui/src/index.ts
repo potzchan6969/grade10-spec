@@ -15,6 +15,10 @@ export {
   SignInEmailForm,
   type SignInEmailFormProps,
 } from "./blocks/auth-sign-in/sign-in-email-form";
+export {
+  parseTotpUri,
+  type TotpEnrollment,
+} from "./blocks/auth-two-factor/totp-uri";
 // shared-ui/auth-two-factor
 export {
   TwoFactorEnrollment,
