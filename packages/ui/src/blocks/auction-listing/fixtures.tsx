@@ -107,11 +107,19 @@ export function WatchOnlyActions() {
   );
 }
 
-export function LiveActions() {
+export function LiveActions({
+  onPlaceBid,
+  onWatch,
+}: {
+  onPlaceBid?: () => void;
+  onWatch?: () => void;
+} = {}) {
   return (
     <VStack className="w-full" gap="sm">
-      <Button className="w-full">Place Bid</Button>
-      <Button className="w-full" variant="outline">
+      <Button className="w-full" onClick={onPlaceBid}>
+        Place Bid
+      </Button>
+      <Button className="w-full" onClick={onWatch} variant="outline">
         Add to Watch List
       </Button>
     </VStack>

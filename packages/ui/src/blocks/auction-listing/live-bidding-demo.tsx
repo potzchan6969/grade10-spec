@@ -1,10 +1,8 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { List, ListItem } from "@grade10/design-system/components/display/list";
 import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
-import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { useState } from "react";
+import { DemoFlow } from "../shared/demo-flow";
 import { LiveActions } from "./fixtures";
 import { ListingBidPanel } from "./listing-bid-panel";
 
@@ -73,64 +71,43 @@ function historyOf(bids: readonly ScriptBid[]) {
 
 function captionOf(bids: readonly ScriptBid[]): string {
   const lead = bids.at(-1);
-  if (!lead) return "Live — waiting for the first bid.";
-  if (lead.bidder === YOU) return `${YOU} bid ${lead.amount} — you lead.`;
-  const youHaveBid = bids.some((bid) => bid.bidder === YOU);
-  if (youHaveBid) {
-    return `${lead.bidder} bid ${lead.amount} — you're outbid.`;
-  }
-  return `${lead.bidder} bid ${lead.amount}.`;
+  if (!lead) return "Waiting";
+  return `${lead.bidder} · ${lead.amount}`;
 }
+
+function panelFor(bids: readonly ScriptBid[]) {
+  const lead = bids.at(-1);
+  return (
+    <ListingBidPanel
+      actions={<LiveActions />}
+      bidCount={`${bids.length} bid${bids.length === 1 ? "" : "s"}`}
+      deadline="1 Sep 2026, 18:00 UTC"
+      endsLabel="Ends"
+      extensionLabel="Extended bidding interval"
+      extensionValue="30 minutes"
+      hideHistoryLabel="Hide bid history"
+      history={historyOf(bids)}
+      kicker="Listing 12 · September Slabs"
+      price={lead?.amount ?? "No bids yet"}
+      priceHint="Buyer's premium is added at invoice."
+      priceLabel="Current bid"
+      remaining="13D 11H 33M 47S"
+      showHistoryLabel="Show bid history"
+      standing={standingOf(bids)}
+      title="1999 Charizard, PSA 10"
+    />
+  );
+}
+
+const CASES: ReadonlyArray<readonly [string, readonly ScriptBid[]]> = [
+  ["Waiting", []],
+  ...SCRIPT.map((_, index) => {
+    const bids = SCRIPT.slice(0, index + 1);
+    return [captionOf(bids), bids] as const;
+  }),
+];
 
 /** Steps a live lot through rival bids so the panel's price, history, and standing update in place. */
 export function LiveBiddingDemo() {
-  const [step, setStep] = useState(0);
-  const bids = SCRIPT.slice(0, step);
-  const lead = bids.at(-1);
-
-  return (
-    <VStack gap="md">
-      <VStack gap="sm">
-        <Text size="sm" tone="secondary">
-          Watching as {YOU}
-        </Text>
-        <Text>{captionOf(bids)}</Text>
-        <HStack gap="sm">
-          <Button
-            disabled={step >= SCRIPT.length}
-            onClick={() => setStep((current) => current + 1)}
-            size="sm"
-          >
-            Next bid
-          </Button>
-          <Button
-            disabled={step === 0}
-            onClick={() => setStep(0)}
-            size="sm"
-            variant="outline"
-          >
-            Reset
-          </Button>
-        </HStack>
-      </VStack>
-      <ListingBidPanel
-        actions={<LiveActions />}
-        bidCount={`${bids.length} bid${bids.length === 1 ? "" : "s"}`}
-        deadline="1 Sep 2026, 18:00 UTC"
-        endsLabel="Ends"
-        extensionLabel="Extended bidding interval"
-        extensionValue="30 minutes"
-        hideHistoryLabel="Hide bid history"
-        history={historyOf(bids)}
-        kicker="Listing 12 · September Slabs"
-        price={lead?.amount ?? "No bids yet"}
-        priceHint="Buyer's premium is added at invoice."
-        priceLabel="Current bid"
-        remaining="13D 11H 33M 47S"
-        showHistoryLabel="Show bid history"
-        standing={standingOf(bids)}
-        title="1999 Charizard, PSA 10"
-      />
-    </VStack>
-  );
+  return <DemoFlow cases={CASES}>{(bids) => panelFor(bids)}</DemoFlow>;
 }
