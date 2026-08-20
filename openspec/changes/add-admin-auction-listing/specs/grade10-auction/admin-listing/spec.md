@@ -15,8 +15,8 @@ save SHALL persist the listing in `draft` and, on the first save, SHALL mint
 a new auctionable unit that has no other live listing.
 
 A draft SHALL allow every required field to be empty. Saving a draft SHALL
-NOT refuse a missing title, starting price, minimum increment, start time, or
-scheduled close. A field the operator does send SHALL still match that
+NOT refuse a missing title, starting price, minimum increment, starts at, or
+scheduled close at. A field the operator does send SHALL still match that
 field's shape (a starting price that is present MUST be integer minor units
 greater than zero).
 
@@ -68,12 +68,12 @@ Required at create:
 - **Starting price** — integer minor units greater than zero
 - **Minimum increment** — integer minor units greater than zero
 - **Starts at** — the scheduled bidding open
-- **Scheduled close** — after starts-at, and after the moment of create
+- **Scheduled close at** — after starts at, and after the moment of create
 
 Optional fields, when omitted at create, take these defaults: currency
 `HKD`; sort index `0`; copy empty; no listing label; no sale; no categories;
-snipe window and extension reach both `0` (extension off); no extension cap;
-no publish-at; sandbox `false`.
+extension window and extension duration both `0` (extension off); no
+extension cap; no publish at; sandbox `false`.
 
 The admin form SHALL prevent submitting create while a required field is
 empty or invalid, and SHALL name the fields that fail. The API SHALL refuse
@@ -88,7 +88,7 @@ be refused.
 
 - **GIVEN** a draft listing with a title, a starting price of 100000 minor
   units, a minimum increment of 5000 minor units, currency `HKD`, a start in
-  the future, and a scheduled close after that start
+  the future, and a scheduled close at after that start
 - **WHEN** an authorized operator creates the listing
 - **THEN** Grade10 moves it to `created`
 - **AND** the listing is still absent from the public catalogue
@@ -190,24 +190,29 @@ to set:
   Empty is allowed only while `draft`.
 - **Starts at** — the scheduled bidding open. Empty is allowed only while
   `draft`.
-- **Scheduled close** — the published close. Empty is allowed only while
-  `draft`. When both starts-at and scheduled close are set, close MUST be
-  after starts-at. At create, close MUST also be after now.
-- **Snipe window (seconds)** and **extension reach (seconds)** — whole
-  numbers ≥ 0, set together or both zero (extension off). The snipe window
-  MUST NOT be greater than the reach. Empty on draft is allowed. Omitted at
-  create SHALL store both as `0`.
+- **Scheduled close at** — the published close. Empty is allowed only while
+  `draft`. When both starts at and scheduled close at are set, scheduled
+  close at MUST be after starts at. At create, scheduled close at MUST also
+  be after now.
+- **Extension window (seconds)** and **Extension duration (seconds)** —
+  whole numbers ≥ 0, set together or both zero (extension off). A bid
+  inside the extension window of the close moves the close to now plus the
+  extension duration. The extension window MUST NOT be greater than the
+  extension duration. Empty on draft is allowed. Omitted at create SHALL
+  store both as `0`.
 - **Extension cap (seconds)** — optional whole number ≥ 0, or absent for an
-  uncapped listing. A cap below the reach is a hard final deadline, not an
-  error.
+  uncapped listing. The close MUST NOT move past scheduled close at plus
+  this cap. A cap below the extension duration is a hard final deadline,
+  not an error.
 
 A write of any of these fields on a `published`, `closed`, `settled`, or
 `canceled` listing SHALL be refused. The effective close is not an operator
 field: extension writes it, and this form SHALL NOT accept it.
 
-**Sandbox** SHALL be writable only while `draft` (whether the listing runs
-on test-mode money). A write of sandbox on a `created` or later listing
-SHALL be refused.
+**Sandbox** SHALL be writable only while `draft`. A sandbox listing runs on
+test-mode payment credentials instead of live money, so the house can
+rehearse a sale. A write of sandbox on a `created` or later listing SHALL
+be refused.
 
 #### Scenario: Operator corrects a created listing's starting price
 
@@ -223,20 +228,20 @@ SHALL be refused.
 - **THEN** Grade10 refuses the write
 - **AND** the starting price remains 100000 minor units
 
-#### Scenario: Scheduled close in the past is refused at create
+#### Scenario: Scheduled close at in the past is refused at create
 
-- **GIVEN** a draft listing whose scheduled close is not after now
+- **GIVEN** a draft listing whose scheduled close at is not after now
 - **WHEN** the operator creates the listing
 - **THEN** Grade10 refuses the create
 - **AND** the listing remains a draft
 
-#### Scenario: Snipe window without a reach is refused
+#### Scenario: Extension window without a duration is refused
 
 - **GIVEN** a created listing
-- **WHEN** an operator sets a snipe window of 1800 seconds and an extension
-  reach of 0
+- **WHEN** an operator sets an extension window of 1800 seconds and an
+  extension duration of 0
 - **THEN** Grade10 refuses the write
-- **AND** the listing's extension knobs are unchanged
+- **AND** the listing's extension settings are unchanged
 
 #### Scenario: Sandbox cannot change after create
 
@@ -250,7 +255,7 @@ SHALL be refused.
 An authorized operator SHALL publish a `created` listing. Publish SHALL move
 it to `published` and SHALL make it visible on the public catalogue.
 
-An authorized operator SHALL be able to set **publish at**, an optional
+An authorized operator SHALL be able to set **Publish at**, an optional
 timestamp.
 
 - While `draft` or `created`, publish at SHALL be writable. A write of
@@ -266,30 +271,30 @@ timestamp.
 
 #### Scenario: Operator publishes a created listing immediately
 
-- **GIVEN** a created listing with no publish-at
+- **GIVEN** a created listing with no publish at
 - **WHEN** an authorized operator publishes it
 - **THEN** Grade10 moves it to `published`
 - **AND** a collector can read it on the public catalogue
 
 #### Scenario: Created listing publishes at the scheduled time
 
-- **GIVEN** a created listing whose publish-at is in the future
+- **GIVEN** a created listing whose publish at is in the future
 - **WHEN** that time arrives
 - **THEN** Grade10 moves it to `published`
 - **AND** a collector can read it on the public catalogue
 - **AND** no further operator action was required
 
-#### Scenario: Create with a due publish-at publishes immediately
+#### Scenario: Create with a due publish at publishes immediately
 
-- **GIVEN** a draft listing with every required field set and publish-at in
+- **GIVEN** a draft listing with every required field set and publish at in
   the past
 - **WHEN** the operator creates the listing
 - **THEN** Grade10 publishes it
 - **AND** a collector can read it on the public catalogue
 
-#### Scenario: Draft is not published when publish-at arrives
+#### Scenario: Draft is not published when publish at arrives
 
-- **GIVEN** a draft listing with a publish-at that has arrived and a missing
+- **GIVEN** a draft listing with a publish at that has arrived and a missing
   title
 - **WHEN** that time is reached
 - **THEN** Grade10 does not publish the listing
@@ -303,17 +308,17 @@ timestamp.
 - **THEN** Grade10 refuses the publish
 - **AND** the listing remains a draft
 
-#### Scenario: Publish-at cannot change after publish
+#### Scenario: Publish at cannot change after publish
 
 - **GIVEN** a published listing
-- **WHEN** an operator sets a new publish-at
+- **WHEN** an operator sets a new publish at
 - **THEN** Grade10 refuses the write
 - **AND** the listing remains published
 
 ### Requirement: A closed listing cannot be rewritten here
 
 A listing in `closed`, `settled`, or `canceled` SHALL reject every catalogue,
-price, window, sandbox, publish-at, and media write from this form. Its facts
+price, window, sandbox, publish at, and media write from this form. Its facts
 are the record of what was offered and sold.
 
 #### Scenario: Closed listing rejects a title edit

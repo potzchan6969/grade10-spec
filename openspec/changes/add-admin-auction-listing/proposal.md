@@ -1,4 +1,4 @@
-**Author:** @web3-app-cursor8 - 2026-08-20
+**Author:** @htonyl - 2026-08-20
 
 Product context: [Grade10 Auction](../../../docs/prds/auction/auction.md).
 Overlaps [`add-grade10-auction`](../add-grade10-auction/proposal.md) (collector
@@ -62,9 +62,9 @@ the listing. A draft save does not enforce it.
 | Starting price | yes | yes | yes | no | no |
 | Minimum increment | yes | yes | yes | no | no |
 | Starts at | yes | yes | yes | no | no |
-| Scheduled close | yes | yes | yes | no | no |
-| Snipe window (seconds) | no | yes | yes | no | no |
-| Extension reach (seconds) | no | yes | yes | no | no |
+| Scheduled close at | yes | yes | yes | no | no |
+| Extension window (seconds) | no | yes | yes | no | no |
+| Extension duration (seconds) | no | yes | yes | no | no |
 | Extension cap (seconds) | no | yes | yes | no | no |
 | Publish at | no | yes | yes | no | no |
 | Sandbox | no | yes | no | no | no |
@@ -72,6 +72,17 @@ the listing. A draft save does not enforce it.
 
 Not on this form: listing identity, the physical unit, status, the effective
 close (extension writes it), highest bid, created/updated/closed stamps.
+
+**Starts at** is when bidding opens. **Scheduled close at** is the published
+close. **Publish at** is when a created listing becomes public.
+
+**Extension window** is how close to the close a bid must land to extend.
+**Extension duration** is how far that bid moves the close (to now plus this
+many seconds). **Extension cap** is the farthest the close may go past
+scheduled close at; omit it for no cap.
+
+**Sandbox** runs the listing on test-mode payment credentials instead of
+live money, so the house can rehearse a sale.
 
 ## Non-Goals
 
@@ -104,9 +115,9 @@ close (extension writes it), highest bid, created/updated/closed stamps.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/admin/grade10` | Draft, create, and edit surfaces on the auction listings section, including client-side required-field checks at create and a publish-at control. |
-| `apps/backend/grade10/auction` | Today's create is a complete draft in one step; this needs a lenient draft save, a create gate that validates required fields, and publish at `publishAt`. Media stops being keyed by physical side and accepts video. |
-| `@grade10/auction-contracts` | Admin listing shape gains media and `publishAt`; public listing gallery becomes an ordered list of images and videos. **BREAKING** for `angle`. |
+| `apps/admin/grade10` | Draft, create, and edit surfaces on the auction listings section, including client-side required-field checks at create and a publish at control. |
+| `apps/backend/grade10/auction` | Today's create is a complete draft in one step; this needs a lenient draft save, a create gate that validates required fields, and publish at a scheduled time. Media stops being keyed by physical side and accepts video. |
+| `@grade10/auction-contracts` | Admin listing shape gains media and publish at; public listing gallery becomes an ordered list of images and videos. **BREAKING** for `angle`. |
 | `@grade10/auction-admin-frontend` | Draft/create/update repository and form wiring. |
 | `@grade10/auction-frontend` / Grade10 listing page | Gallery must show videos as well as images, in the operator's order. |
 | `@grade10/ui` `ListingGallery` | May need to accept video items; that is delivery work at promotion. |
