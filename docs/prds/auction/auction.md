@@ -29,7 +29,9 @@ authorization.
 - Auction Buy Now, carts, stock counts, fixed-price checkout, search, saved
   searches, filters, favourites, related lots, and recent-sales data.
 - Auto-bidding, checkout, payment capture, delivery, fulfilment, vault storage,
-  global shipping, tracking, and notifications.
+  global shipping, and tracking.
+- Listing-lifecycle and bid-activity email is a follow-on:
+  [Auction notifications](./notifications.md).
 
 ## Users and jobs to be done
 
