@@ -119,13 +119,13 @@ unrepresentable.
   records, so the remaining gap is a public surface nobody marked public. The
   sitemap's "nothing else" scenario is what catches it.
 
-## Request-time rendering, if it is ever wanted
+## Request-time rendering, and what it took
 
-Measured against the delivered change, not guessed at: `ssr: true` builds, and
-the built worker does not start.
+Measured against the delivered change, then done in
+[`add-store-product-page`](../add-store-product-page/design.md), which a card's
+page needed: its content is not known when the site is built.
 
-The framework emits `dist/server/index.js` and the prerendered surfaces
-alongside it. Serving that bundle on Workers throws before the first request:
+`ssr: true` alone builds a worker that does not start:
 
 ```
 Uncaught TypeError: The argument 'path' must be a file URL object, a file URL
@@ -133,29 +133,25 @@ string, or an absolute path string. Received 'undefined'
   at node:module:34:15 in createRequire
 ```
 
-The bundle carries esbuild's CommonJS shim, `createRequire(import.meta.url)`,
-and `import.meta.url` is undefined in a Workers bundle. It is there for
+The bundle carries a CommonJS shim, `createRequire(import.meta.url)`, and
+`import.meta.url` is undefined in a Workers bundle. It is there for
 `use-sync-external-store`, which is CommonJS-only and arrives through
-`@base-ui/react` in the design system — so it is in any server bundle of this
-application, and no setting in this repository removes it. `nodejs_compat`
-does not help: the flag supplies `createRequire`, and the argument is still
-undefined. Pointing vite's `ssr.resolve.conditions` at `workerd` produces a
-byte-identical bundle, because the framework's plugin owns that environment.
+`@base-ui/react` in the design system, so it is in any server bundle of this
+application.
 
-What it would take:
+What removes it is building the server bundle for the worker rather than for
+Node — `ssr.target: "webworker"` with everything bundled, React's web renderer
+named rather than its Node one, and a base for the module URL `@grade10/ui`
+resolves a fixture image against. No new dependency;
+`@cloudflare/vite-plugin` is the supported path and remains worth taking when
+a second application server-renders.
 
-- `@cloudflare/vite-plugin`, a dependency this repository does not have. It
-  builds the server environment for workerd rather than bundling a
-  Node-targeted artifact afterwards.
-- Replacing the serving layer. It resolves an address to a prerendered
-  document; under request-time rendering there are none to resolve, and
-  `ssr: true` writes no shell — so the 404 answer has no document either.
-  Request-time rendering gives honest statuses itself, which is the reason
-  that layer exists.
-- Accepting the cost: the worker goes from 8.8 KB to 439 KB gzipped, and every
-  request runs the composition root and the session read that today run only
-  in a browser.
+The rest of the bill stands. The serving layer had to be replaced: it resolves
+an address to a prerendered document, and `ssr: true` writes no shell, so the
+404 answer has no document either. The worker goes from 8.8 KB to 420 KB
+gzipped, and every rendered request runs the composition root and the session
+read that here run only in a browser.
 
-None of this argues against the non-goal. Public content still changes when a
-deploy changes it. It says what the bill is when a card-level detail page
-wants a per-request answer.
+None of that argues against the non-goal *for these surfaces*. Public content
+on the marketing page, the store and the auction changes when a deploy changes
+it, so their documents are still written by the build and served as files.
