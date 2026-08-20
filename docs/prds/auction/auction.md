@@ -122,9 +122,9 @@ Checkable requirements live in the capability specs, not here.
   customer surface launches.
 - Shipping remains manual. Customer-facing copy must not claim carrier
   tracking or delivery confirmation that Grade10 does not hold.
-- Manual paid while a card authorization is still open is a double-charge
-  risk if capture is not suppressed; release-not-capture is the decision
-  that closes it.
+- Manual paid or Awaiting wire while a card authorization is still open is
+  a double-charge risk if capture is not suppressed; release-not-capture is
+  the decision that closes it.
 - Winner email and delivery address on the operator detail are operational
   contact, not a reason to put those values on the platform-wide audit
   hashes.
