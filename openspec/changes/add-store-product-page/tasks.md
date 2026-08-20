@@ -29,9 +29,9 @@ on nothing in each other.
 - [x] 3.2 Teach the build's public-pages check that only a written surface has a file to read, holding a rendered surface to the same rules where it can be rendered.
 - [x] 3.3 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
 
-## 4. Confirm on staging (grade10)
+## 4. Confirm on staging (grade10) (owner: @sean)
 
-- [ ] 4.1 Deploy to staging and confirm against the preview: a card answers whole, an unknown slug answers 404, and a shared card link unfurls as that card.
+- [x] 4.1 Deploy to staging and confirm against the preview: a card answers whole, an unknown slug answers 404, and a shared card link unfurls as that card.
 
 ## 5. Remove the workaround (grade10-spec)
 
