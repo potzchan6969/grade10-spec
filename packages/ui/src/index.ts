@@ -1,6 +1,22 @@
 /* Public entry: re-exports exactly the compound-component exports the
  * capability specs name. Populated as blocks land under src/blocks/. */
 
+// shared-ui/auction-listing
+export {
+  ListingBidPanel,
+  type ListingBidPanelProps,
+} from "./blocks/auction-listing/listing-bid-panel";
+export {
+  ListingDetails,
+  type ListingDetailsFact,
+  type ListingDetailsProps,
+  type ListingDetailsSection,
+} from "./blocks/auction-listing/listing-details";
+export {
+  ListingGallery,
+  type ListingGalleryImage,
+  type ListingGalleryProps,
+} from "./blocks/auction-listing/listing-gallery";
 // shared-ui/auth-sign-in
 export {
   SignInCard,
@@ -30,7 +46,6 @@ export {
 } from "./blocks/auth-two-factor/two-factor-verify-form";
 // shared cross-capability types
 export type { AsyncAction, AsyncState } from "./blocks/shared/async";
-
 // shared-ui/store-product-listing
 export {
   FilterPanel,
@@ -65,7 +80,6 @@ export type {
   SortOption,
   UtilityLink,
 } from "./blocks/store-product-listing/types";
-
 // shared-ui/store-profile
 export {
   ProfileCard,
