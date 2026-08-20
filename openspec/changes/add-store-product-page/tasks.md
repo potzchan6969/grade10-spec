@@ -33,9 +33,9 @@ on nothing in each other.
 
 - [x] 4.1 Deploy to staging and confirm against the preview: a card answers whole, an unknown slug answers 404, and a shared card link unfurls as that card.
 
-## 5. Remove the workaround (grade10-spec)
+## 5. Remove the workaround (grade10-spec) (owner: @sean)
 
 Depends on nothing; the application works without it.
 
-- [ ] 5.1 Import the product card's skeleton fixture image instead of resolving it against `import.meta.url`, so a server bundle of any application carries no module-URL read.
+- [x] 5.1 Import the product card's skeleton fixture image instead of resolving it against `import.meta.url`, so a server bundle of any application carries no module-URL read.
 - [ ] 5.2 Bump the submodule in grade10 and drop the `import.meta.url` define from the web app's build.
