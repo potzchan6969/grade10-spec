@@ -16,21 +16,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Matches the published Figma composition: first page active, previous disabled. */
 export const Default: Story = {
-  render: () => (
-    <Pagination>
-      <PaginationPrevious />
-      <PaginationLink>1</PaginationLink>
-      <PaginationLink isActive>2</PaginationLink>
-      <PaginationLink>3</PaginationLink>
-      <PaginationEllipsis />
-      <PaginationLink>10</PaginationLink>
-      <PaginationNext />
-    </Pagination>
-  ),
-};
-
-export const PreviousDisabled: Story = {
   render: () => (
     <Pagination>
       <PaginationPrevious disabled />
@@ -40,6 +27,20 @@ export const PreviousDisabled: Story = {
       <PaginationEllipsis />
       <PaginationLink>10</PaginationLink>
       <PaginationNext />
+    </Pagination>
+  ),
+};
+
+export const NextDisabled: Story = {
+  render: () => (
+    <Pagination>
+      <PaginationPrevious />
+      <PaginationLink>1</PaginationLink>
+      <PaginationEllipsis />
+      <PaginationLink>8</PaginationLink>
+      <PaginationLink>9</PaginationLink>
+      <PaginationLink isActive>10</PaginationLink>
+      <PaginationNext disabled />
     </Pagination>
   ),
 };

@@ -5,9 +5,9 @@ import figma from "figma";
 
 export default {
   example: figma.code`<Pagination>
-  <PaginationPrevious />
-  <PaginationLink>1</PaginationLink>
-  <PaginationLink isActive>2</PaginationLink>
+  <PaginationPrevious disabled />
+  <PaginationLink isActive>1</PaginationLink>
+  <PaginationLink>2</PaginationLink>
   <PaginationLink>3</PaginationLink>
   <PaginationEllipsis />
   <PaginationLink>10</PaginationLink>

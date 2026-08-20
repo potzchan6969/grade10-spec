@@ -5,16 +5,23 @@ import figma from "figma";
 
 const instance = figma.selectedInstance;
 
-const isActive = instance.getEnum("isActive", {
+const isActive = instance.getEnum("active", {
   false: false,
   true: true,
 });
 
-const disabled = instance.getEnum("state", {
+const disabled = instance.getEnum("disabled", {
+  false: false,
+  true: true,
+});
+
+// Hover and pressed are CSS pseudo-states with no prop behind them. `state`
+// is mapped so the axis is accounted for; disabled is the `disabled` axis.
+instance.getEnum("state", {
   default: false,
   hover: false,
   pressed: false,
-  disabled: true,
+  disabled: false,
 });
 
 const label = instance.getString("label");
