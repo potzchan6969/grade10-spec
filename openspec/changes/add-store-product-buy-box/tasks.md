@@ -9,7 +9,7 @@ would meet it. There is no shared-interface group, because no contract
 changes: `useCart` and `pricedVariant` are what the storefront already
 publishes.
 
-## 1. Buying from a card's page (grade10)
+## 1. Buying from a card's page (grade10) (owner: @sean)
 
 - [ ] 1.1 Make `A card with one thing to buy needs no choice` pass: the card's page carries the grades it lists as one choosable group, opening on the variant it already prices, and a card with one variant for sale needs nothing chosen.
 - [ ] 1.2 Make `A collector adds the grade they chose` pass: adding builds the cart line from the chosen variant — the same line the grid's tile builds, so one card cannot read two ways in the cart — and reaches `useCart`'s add.
