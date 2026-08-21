@@ -1,8 +1,10 @@
+import { HStack } from "@grade10/design-system/components/layout/hstack";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Skeleton } from "boneyard-js/react";
 import type { ReactNode } from "react";
-import { ProductCardImage } from "./product-card-image";
 import skeletonImage from "./product-card.fixture.png";
+import { ProductCardImage } from "./product-card-image";
 
 type ProductCardProps = {
   /** Boneyard skeleton overlay while the consumer resolves product data. */
@@ -67,14 +69,11 @@ function ProductCardContent({
     ariaLabel ?? (typeof name === "string" ? name : undefined);
 
   const content = (
-    <div
-      className="flex min-w-0 flex-col gap-2"
-      data-slot="product-card-content"
-    >
+    <VStack className="min-w-0" data-slot="product-card-content" gap="sm">
       {badges != null ? (
-        <div className="flex flex-wrap content-start items-start gap-1">
+        <HStack className="content-start" gap="xs" vAlign="start" wrap>
           {badges}
-        </div>
+        </HStack>
       ) : null}
       <p
         className={cn(
@@ -84,7 +83,7 @@ function ProductCardContent({
       >
         {name}
       </p>
-      <div className="flex items-center gap-1">
+      <HStack gap="xs" vAlign="center">
         <p
           className={cn(
             "text-sm font-medium",
@@ -105,19 +104,17 @@ function ProductCardContent({
             {originalPrice}
           </p>
         ) : null}
-      </div>
-    </div>
+      </HStack>
+    </VStack>
   );
 
   return (
-    <div
-      className={cn(
-        "group/product-card relative flex w-full flex-col gap-4",
-        className,
-      )}
+    <VStack
+      className={cn("group/product-card relative w-full", className)}
       data-in-cart={(!soldOut && inCart) || undefined}
       data-slot="product-card"
       data-sold-out={soldOut || undefined}
+      gap="md"
     >
       <ProductCardImage
         ariaLabel={cardAriaLabel}
@@ -137,14 +134,14 @@ function ProductCardContent({
       ) : (
         <button
           aria-label={cardAriaLabel}
-          className="flex w-full cursor-pointer flex-col border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="w-full cursor-pointer border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           onClick={onClick}
           type="button"
         >
           {content}
         </button>
       )}
-    </div>
+    </VStack>
   );
 }
 
