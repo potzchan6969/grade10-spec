@@ -4,7 +4,7 @@ Two groups, in order: the catalogs and their resolution land in grade10-spec,
 and the application repository takes them as a submodule bump. Nothing in the
 second group waits on anything but the first being pushed.
 
-## 1. The shared layer and how a string resolves (grade10-spec)
+## 1. The shared layer and how a string resolves (grade10-spec) (owner: @sean)
 
 - [ ] 1.1 Add `messages/shared/<locale>/<namespace>.json` for every locale any
       brand speaks, carrying the value each key resolves to today wherever the
