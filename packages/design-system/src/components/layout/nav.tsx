@@ -12,9 +12,10 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@grade10/design-system/components/overlays/dropdown-menu";
+import { IconProvider } from "@grade10/design-system/components/providers/icon-provider";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
-  Globe,
+  CurrencyCircleDollar,
   MagnifyingGlass,
   ShoppingBag,
   User,
@@ -57,7 +58,7 @@ type NavProps = ComponentProps<"header"> & {
   cartLabel?: string;
 };
 
-const globe = <Globe aria-hidden size={14} weight="regular" />;
+const currency = <CurrencyCircleDollar aria-hidden size={14} />;
 
 function LocaleControl({
   localeLabel,
@@ -74,7 +75,7 @@ function LocaleControl({
     return (
       <DropdownMenu>
         <DropdownMenuTrigger
-          render={<Button leading={globe} size="md" variant="ghost" />}
+          render={<Button leading={currency} size="md" variant="ghost" />}
         >
           {localeLabel}
         </DropdownMenuTrigger>
@@ -102,7 +103,7 @@ function LocaleControl({
       className="flex items-center gap-2 px-3 text-sm font-medium text-foreground"
       data-slot="nav-locale"
     >
-      {globe}
+      {currency}
       {localeLabel}
     </span>
   );
@@ -112,7 +113,8 @@ function LocaleControl({
  * Store chrome. Figma set `Nav` (`4171:9937`) has no variant axes — content
  * is passed in so a consumer can swap copy and callbacks without owning the
  * layout. Primary items are `NavigationList` / `NavigationLink`; the locale
- * control opens a dropdown of the supplied locales when a handler backs it.
+ * control is a ghost `md` Button with a currency icon, and opens a dropdown
+ * of the supplied locales when a handler backs it.
  *
  * Brand, navigation, and locale content is required rather than defaulted: two
  * stores render this shell, and a default would let the second one ship the
@@ -152,106 +154,108 @@ function Nav({
   ...props
 }: NavProps) {
   return (
-    <header
-      data-slot="nav"
-      className={cn("@container flex w-full flex-col", className)}
-      {...props}
-    >
-      {promo != null ? (
+    <IconProvider>
+      <header
+        data-slot="nav"
+        className={cn("@container flex w-full flex-col", className)}
+        {...props}
+      >
+        {promo != null ? (
+          <div
+            data-slot="nav-promo"
+            className="flex h-9 items-center justify-center overflow-hidden bg-secondary-foreground px-8"
+          >
+            <p className="min-w-0 flex-1 truncate text-center text-sm font-medium text-primary-foreground">
+              {promo}
+            </p>
+          </div>
+        ) : null}
+        {utilityLinks.length > 0 ? (
+          <div
+            data-slot="nav-utility"
+            className="flex min-h-8 items-center px-8 py-1"
+          >
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
+              {utilityLinks.map((link) => (
+                <Link
+                  href={link.href}
+                  key={String(link.label)}
+                  size="xs"
+                  variant="secondary"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ) : null}
         <div
-          data-slot="nav-promo"
-          className="flex h-9 items-center justify-center overflow-hidden bg-secondary px-6"
+          data-slot="nav-bar"
+          className="relative flex flex-wrap items-center justify-between gap-y-2 px-8 py-3 @3xl:h-[72px] @3xl:flex-nowrap @3xl:py-0"
         >
-          <p className="min-w-0 flex-1 truncate text-center text-sm font-bold text-secondary-foreground">
-            {promo}
-          </p>
-        </div>
-      ) : null}
-      {utilityLinks.length > 0 ? (
-        <div
-          data-slot="nav-utility"
-          className="flex min-h-8 items-center bg-background px-6 py-1"
-        >
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
-            {utilityLinks.map((link) => (
-              <Link
-                href={link.href}
-                key={String(link.label)}
-                size="xs"
-                variant="secondary"
+          <a
+            className="text-2xl font-bold text-foreground"
+            data-slot="nav-logo"
+            href={logoHref}
+          >
+            {logo}
+          </a>
+          <NavigationList className="order-last w-full flex-wrap @3xl:absolute @3xl:top-1/2 @3xl:left-1/2 @3xl:order-none @3xl:w-auto @3xl:-translate-x-1/2 @3xl:-translate-y-1/2 @3xl:flex-nowrap">
+            {navItems.map((item) => (
+              <NavigationLink
+                active={item.current}
+                disabled={item.disabled}
+                href={item.href}
+                key={String(item.label)}
               >
-                {link.label}
-              </Link>
+                {item.label}
+              </NavigationLink>
             ))}
+          </NavigationList>
+          <div
+            data-slot="nav-controls"
+            className="flex flex-wrap items-center justify-end gap-1"
+          >
+            <LocaleControl
+              locale={locale}
+              localeLabel={localeLabel}
+              locales={locales}
+              onLocaleChange={onLocaleChange}
+            />
+            {onSearchClick ? (
+              <IconButton
+                aria-label={searchLabel}
+                onClick={onSearchClick}
+                size="md"
+                variant="ghost"
+              >
+                <MagnifyingGlass aria-hidden size={14} />
+              </IconButton>
+            ) : null}
+            {onAccountClick ? (
+              <IconButton
+                aria-label={accountLabel}
+                onClick={onAccountClick}
+                size="md"
+                variant="ghost"
+              >
+                <User aria-hidden size={14} />
+              </IconButton>
+            ) : null}
+            {onCartClick ? (
+              <IconButton
+                aria-label={cartLabel}
+                onClick={onCartClick}
+                size="md"
+                variant="ghost"
+              >
+                <ShoppingBag aria-hidden size={14} />
+              </IconButton>
+            ) : null}
           </div>
         </div>
-      ) : null}
-      <div
-        data-slot="nav-bar"
-        className="relative flex flex-wrap items-center justify-between gap-y-2 border-b border-border bg-background px-6 py-3 @3xl:h-[72px] @3xl:flex-nowrap @3xl:py-0"
-      >
-        <a
-          className="text-2xl font-bold text-foreground"
-          data-slot="nav-logo"
-          href={logoHref}
-        >
-          {logo}
-        </a>
-        <NavigationList className="order-last w-full flex-wrap @3xl:absolute @3xl:top-1/2 @3xl:left-1/2 @3xl:order-none @3xl:w-auto @3xl:-translate-x-1/2 @3xl:-translate-y-1/2 @3xl:flex-nowrap">
-          {navItems.map((item) => (
-            <NavigationLink
-              active={item.current}
-              disabled={item.disabled}
-              href={item.href}
-              key={String(item.label)}
-            >
-              {item.label}
-            </NavigationLink>
-          ))}
-        </NavigationList>
-        <div
-          data-slot="nav-controls"
-          className="flex flex-wrap items-center justify-end gap-1"
-        >
-          <LocaleControl
-            locale={locale}
-            localeLabel={localeLabel}
-            locales={locales}
-            onLocaleChange={onLocaleChange}
-          />
-          {onSearchClick ? (
-            <IconButton
-              aria-label={searchLabel}
-              onClick={onSearchClick}
-              size="md"
-              variant="ghost"
-            >
-              <MagnifyingGlass aria-hidden size={16} weight="regular" />
-            </IconButton>
-          ) : null}
-          {onAccountClick ? (
-            <IconButton
-              aria-label={accountLabel}
-              onClick={onAccountClick}
-              size="md"
-              variant="ghost"
-            >
-              <User aria-hidden size={16} weight="regular" />
-            </IconButton>
-          ) : null}
-          {onCartClick ? (
-            <IconButton
-              aria-label={cartLabel}
-              onClick={onCartClick}
-              size="md"
-              variant="ghost"
-            >
-              <ShoppingBag aria-hidden size={16} weight="regular" />
-            </IconButton>
-          ) : null}
-        </div>
-      </div>
-    </header>
+      </header>
+    </IconProvider>
   );
 }
 

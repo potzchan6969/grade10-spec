@@ -135,14 +135,3 @@
   position: relative;
   transform-origin: left top;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .demo-flow::before,
-  .demo-flow::after {
-    animation: none !important;
-  }
-
-  .demo-flow-case {
-    transform: none !important;
-  }
-}

@@ -6,7 +6,7 @@ import { configureBoneyard } from "boneyard-js/react";
 import _store_product_card from "./store-product-card.bones.json";
 
 configureBoneyard({
-  color: "#252826",
+  color: "#E6E6E6",
   darkColor: "rgba(249, 250, 250, 0.05)",
   animate: "pulse",
   transition: 300,

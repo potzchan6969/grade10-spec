@@ -47,7 +47,7 @@ function ProductListPage() {
         return {
           ...template,
           id: String(index + 1),
-          ariaLabel: `Ninja Spinner, item ${index + 1}`,
+          ariaLabel: `Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item ${index + 1}`,
         };
       }),
     [],
@@ -55,11 +55,14 @@ function ProductListPage() {
 
   const productData = useMemo(
     () =>
-      productCatalog.slice(0, visibleCount).map((product) => ({
-        ...product,
-        addedToCart: (cart[product.id] ?? 0) > 0,
-        quantity: cart[product.id] ?? 1,
-      })),
+      productCatalog.slice(0, visibleCount).map((product) => {
+        const cartCount = cart[product.id] ?? 0;
+        return {
+          ...product,
+          inCart: cartCount > 0,
+          cartCount: cartCount > 0 ? String(cartCount) : undefined,
+        };
+      }),
     [cart, productCatalog, visibleCount],
   );
 
@@ -113,7 +116,7 @@ function ProductListPage() {
   };
 
   return (
-    <div className="bg-background">
+    <div className="min-h-svh bg-white">
       <Nav {...STORE_NAV} />
       <ProductBrowse
         appliedFilters={appliedFilters}

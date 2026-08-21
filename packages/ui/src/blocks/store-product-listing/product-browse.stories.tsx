@@ -96,7 +96,10 @@ export const FiltersStartUnselected: Story = {
     expect(
       canvas.getByRole("checkbox", { name: /Booster Box/ }),
     ).not.toBeChecked();
-    expect(canvas.getAllByText("Ninja Spinner").length).toBeGreaterThan(0);
+    expect(
+      canvas.getAllByText("Pokémon TCG Sealed Booster Box – Abyss Eye (M5)")
+        .length,
+    ).toBeGreaterThan(0);
   },
 };
 
@@ -247,7 +250,7 @@ export const InfiniteScroll: Story = {
           (_, index) => ({
             ...PRODUCTS[index % PRODUCTS.length],
             id: String(PRODUCTS.length + index + 1),
-            ariaLabel: `Ninja Spinner, item ${PRODUCTS.length + index + 1}`,
+            ariaLabel: `Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item ${PRODUCTS.length + index + 1}`,
           }),
         ),
       ).slice(0, visibleCount);

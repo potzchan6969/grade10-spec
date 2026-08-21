@@ -46,6 +46,8 @@ function ProductResultsPanel({
   const loadMorePendingRef = useRef(false);
 
   useEffect(() => {
+    loadMorePendingRef.current = false;
+
     if (results.status === "loading") {
       shouldRevealRef.current = true;
       setRevealed(false);
@@ -78,7 +80,12 @@ function ProductResultsPanel({
   }, [results]);
 
   useEffect(() => {
-    loadMorePendingRef.current = false;
+    if (!hasMore) {
+      loadMorePendingRef.current = false;
+    }
+  }, [hasMore]);
+
+  useEffect(() => {
     if (!hasMore || !onLoadMore || loadingMore || results.status !== "ready") {
       return;
     }

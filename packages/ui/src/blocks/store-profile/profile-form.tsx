@@ -2,6 +2,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { type FormEvent, type ReactNode, useState } from "react";
 import type { ProfileFormValues } from "./types";
 
@@ -52,39 +53,41 @@ function ProfileForm({
   }
 
   return (
-    <form
-      className="flex flex-col gap-4"
-      data-slot="profile-form"
-      onSubmit={handleSubmit}
-    >
-      <TextInput
-        label={displayNameLabel}
-        maxLength={displayNameMaxLength}
-        onChange={(event) => setDisplayName(event.target.value)}
-        required
-        value={displayName}
-      />
-      <TextInput
-        label={bioLabel}
-        maxLength={bioMaxLength}
-        onChange={(event) => setBio(event.target.value)}
-        value={bio}
-      />
-      {error ? (
-        <Text size="sm" tone="error">
-          {error}
-        </Text>
-      ) : null}
-      <HStack gap="sm">
-        <Button disabled={!displayName.trim()} loading={pending} type="submit">
-          {submitLabel}
-        </Button>
-        {onCancel ? (
-          <Button onClick={onCancel} type="button" variant="ghost">
-            {cancelLabel}
-          </Button>
+    <form data-slot="profile-form" onSubmit={handleSubmit}>
+      <VStack gap="md">
+        <TextInput
+          label={displayNameLabel}
+          maxLength={displayNameMaxLength}
+          onChange={(event) => setDisplayName(event.target.value)}
+          required
+          value={displayName}
+        />
+        <TextInput
+          label={bioLabel}
+          maxLength={bioMaxLength}
+          onChange={(event) => setBio(event.target.value)}
+          value={bio}
+        />
+        {error ? (
+          <Text size="sm" tone="error">
+            {error}
+          </Text>
         ) : null}
-      </HStack>
+        <HStack gap="sm">
+          <Button
+            disabled={!displayName.trim()}
+            loading={pending}
+            type="submit"
+          >
+            {submitLabel}
+          </Button>
+          {onCancel ? (
+            <Button onClick={onCancel} type="button" variant="ghost">
+              {cancelLabel}
+            </Button>
+          ) : null}
+        </HStack>
+      </VStack>
     </form>
   );
 }

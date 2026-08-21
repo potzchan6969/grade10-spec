@@ -8,6 +8,7 @@ import {
 import { Divider } from "@grade10/design-system/components/display/divider";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 
@@ -56,24 +57,26 @@ function SignInCard({
         <CardTitle>{title}</CardTitle>
         {description ? <CardDescription>{description}</CardDescription> : null}
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        {children}
-        {message ? (
-          <Text data-slot="sign-in-message" size="sm" tone="success">
-            {message}
-          </Text>
-        ) : null}
-        {providerSlot ? (
-          <>
-            <Divider label={providerDividerLabel} />
-            {providerSlot}
-          </>
-        ) : null}
-        {exitAction ? (
-          <Button onClick={exitAction.onAction} type="button" variant="ghost">
-            {exitAction.label}
-          </Button>
-        ) : null}
+      <CardContent>
+        <VStack gap="md">
+          {children}
+          {message ? (
+            <Text data-slot="sign-in-message" size="sm" tone="success">
+              {message}
+            </Text>
+          ) : null}
+          {providerSlot ? (
+            <>
+              <Divider label={providerDividerLabel} />
+              {providerSlot}
+            </>
+          ) : null}
+          {exitAction ? (
+            <Button onClick={exitAction.onAction} type="button" variant="ghost">
+              {exitAction.label}
+            </Button>
+          ) : null}
+        </VStack>
       </CardContent>
     </Card>
   );

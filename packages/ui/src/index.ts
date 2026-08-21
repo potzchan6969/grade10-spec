@@ -60,6 +60,10 @@ export {
   type ProductCardProps,
 } from "./blocks/store-product-listing/product-card";
 export {
+  ProductCardImage,
+  type ProductCardImageProps,
+} from "./blocks/store-product-listing/product-card-image";
+export {
   ProductFilter,
   type ProductFilterProps,
 } from "./blocks/store-product-listing/product-filter";

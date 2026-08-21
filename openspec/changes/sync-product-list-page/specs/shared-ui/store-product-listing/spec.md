@@ -315,7 +315,7 @@ is sold out, or hold a cart quantity.
 ### Requirement: The product list adapts its column count to the available width
 
 The product list SHALL lay out tiles in an auto-fill grid with a minimum tile
-width of 250px and gaps of 24px horizontally and 32px vertically. The column
+width of 240px and gaps of 32px horizontally and vertically. The column
 count SHALL grow or shrink with the width remaining after the fixed sidebar.
 A tile SHALL remain fully readable and its controls fully operable at every
 column count.
@@ -328,7 +328,7 @@ column count.
 
 #### Scenario: Wide viewport
 
-- **WHEN** the surface is rendered with enough width for four 250px tiles
+- **WHEN** the surface is rendered with enough width for four 240px tiles
 - **THEN** the list displays four columns
 
 ### Requirement: Empty and no-match results are distinguished
