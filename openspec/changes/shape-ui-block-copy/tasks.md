@@ -38,7 +38,7 @@ Depends on group 1 landing: it follows the shape group 1 sets.
 - [x] 2.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and
       `pnpm run test:stories` as this group's verification.
 
-## 3. The auction listing blocks (grade10-spec)
+## 3. The auction listing blocks (grade10-spec) (owner: @sean)
 
 Depends on group 1 landing.
 
