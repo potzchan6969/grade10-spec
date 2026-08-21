@@ -10,7 +10,7 @@ const meta = {
   argTypes: {
     variant: {
       control: "inline-radio",
-      options: ["outline", "ghost", "secondary"],
+      options: ["outline", "ghost", "secondary", "primary"],
     },
     size: { control: "inline-radio", options: ["md", "sm", "xs"] },
   },
@@ -22,6 +22,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 export const Ghost: Story = { args: { variant: "ghost" } };
 export const Secondary: Story = { args: { variant: "secondary" } };
+export const Primary: Story = { args: { variant: "primary" } };
 
 /** `sm` is the design's default rung. */
 export const Medium: Story = { args: { size: "md" } };
@@ -32,9 +33,11 @@ export const Disabled: Story = { args: { disabled: true } };
 export const Variants: Story = {
   render: (args) => (
     <div className="flex items-center gap-3">
-      {(["outline", "ghost", "secondary"] as const).map((variant) => (
-        <IconButton key={variant} {...args} variant={variant} />
-      ))}
+      {(["outline", "ghost", "secondary", "primary"] as const).map(
+        (variant) => (
+          <IconButton key={variant} {...args} variant={variant} />
+        ),
+      )}
     </div>
   ),
 };

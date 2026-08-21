@@ -7,35 +7,38 @@ import type { ReactNode } from "react";
 // Figma draws every disabled variant as that variant's own fill and text at
 // `Opacity/opacity-50` — node `86:3694` (primary), `86:3690` (secondary) and
 // `86:3592` (ghost) each bind their normal colour pair plus `Opacity/opacity-50`
-// and bind no grey. So disabled is one base rule, not a per-variant colour swap;
-// the older `disabled:bg-disabled` / `disabled:text-disabled-foreground` pair
-// painted slate-700 that the component set never draws.
+// and bind no grey. So disabled is one base rule, not a per-variant colour swap.
+//
+// Every size binds `Radius/radius-full` (999) — the set is pills, not the
+// `radius-sm` / `radius-lg` rungs an earlier drawing used. Hover on
+// ghost/outline/secondary/destructive is `Custom/muted-hover`; primary hover
+// keeps `Base/primary` and adds the named inner glow. Secondary's fill is
+// `Base/muted`, not `Base/secondary`.
+//
+// Press is a 1px translate (same language as Pagination). Color and that
+// translate transition at 150ms ease-out — tens-of-times-a-day feedback, named
+// properties, no `transition-all`. Reduced motion keeps the color change and
+// drops the shift.
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 cursor-pointer items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive-border aria-invalid:ring-3 aria-invalid:ring-destructive-ring [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 cursor-pointer items-center justify-center rounded-(--radius-full) border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-[background-color,border-color,color,box-shadow,transform,opacity] duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-[background-color,border-color,color,box-shadow,opacity] motion-reduce:active:translate-y-0 aria-invalid:border-destructive-border aria-invalid:ring-3 aria-invalid:ring-destructive-ring [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:bg-[color-mix(in_oklab,var(--primary),black_10%)]",
+          "bg-primary text-primary-foreground hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)]",
         outline:
-          "border-border text-accent-foreground hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground",
+          "border-border text-foreground hover:bg-muted-hover aria-expanded:bg-muted-hover",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklab,var(--secondary),white_5%)] aria-expanded:bg-[color-mix(in_oklab,var(--secondary),white_5%)]",
+          "bg-muted text-muted-foreground hover:shadow-[inset_0_0_0_100vmax_var(--muted-hover)] aria-expanded:shadow-[inset_0_0_0_100vmax_var(--muted-hover)]",
         ghost:
-          "text-foreground hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground",
+          "text-muted-foreground hover:bg-muted-hover aria-expanded:bg-muted-hover",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-[color-mix(in_oklab,var(--destructive),black_10%)]",
+          "bg-destructive text-destructive-foreground hover:shadow-[inset_0_0_0_100vmax_var(--muted-hover)]",
       },
       size: {
-        // Figma binds sm and md to `Radius/radius-sm` (4px). The `rounded-sm`
-        // utility cannot express that: theme.preamble.css derives the whole scale
-        // proportionally from `--radius`, so it compiles to calc(--radius * 0.6) —
-        // 4.8px against the grade10 `--radius` of 8px. Bind the Foundation
-        // primitive directly instead. `lg` binds `Radius/radius-lg`, which is
-        // `--radius` itself, so `rounded-lg` is exact.
-        sm: "h-8 gap-1 rounded-(--radius-sm) px-2 text-xs [&_svg:not([class*='size-'])]:size-3",
-        md: "h-10 gap-2 rounded-(--radius-sm) px-3 text-sm [&_svg:not([class*='size-'])]:size-3.5",
-        lg: "h-12 gap-2 rounded-lg px-4 text-base",
+        sm: "h-8 gap-1 px-3 text-xs [&_svg:not([class*='size-'])]:size-3",
+        md: "h-10 gap-2 px-4 text-sm [&_svg:not([class*='size-'])]:size-3.5",
+        lg: "h-12 gap-2 px-4 text-base",
       },
     },
     defaultVariants: {
@@ -54,6 +57,51 @@ type ButtonProps = ButtonPrimitive.Props &
     /** Icon rendered after `children`. */
     trailing?: ReactNode;
   };
+
+function ButtonLeading({
+  loading,
+  leading,
+}: {
+  loading: boolean;
+  leading?: ReactNode;
+}) {
+  if (!leading && !loading) return null;
+  if (!leading) {
+    return <LoaderCircleIcon aria-hidden="true" className="animate-spin" />;
+  }
+
+  // Icon swap (`09-icon-swap`): leading and spinner share one grid cell so
+  // loading does not shift the label. 250ms ease-in-out, 2px blur, 0.25 start
+  // scale — the recipe values. Reduced motion snaps.
+  return (
+    <span
+      className="inline-grid shrink-0 [&>[data-icon]]:col-start-1 [&>[data-icon]]:row-start-1 [&>[data-icon]]:inline-flex [&>[data-icon]]:transition-[opacity,filter,transform] [&>[data-icon]]:duration-250 [&>[data-icon]]:ease-in-out [&>[data-icon]]:will-change-[opacity,filter,transform] motion-reduce:[&>[data-icon]]:transition-none"
+      data-state={loading ? "b" : "a"}
+    >
+      <span
+        className={
+          loading
+            ? "scale-[0.25] opacity-0 blur-[2px]"
+            : "scale-100 opacity-100"
+        }
+        data-icon="a"
+      >
+        {leading}
+      </span>
+      <span
+        aria-hidden="true"
+        className={
+          loading
+            ? "scale-100 opacity-100"
+            : "scale-[0.25] opacity-0 blur-[2px]"
+        }
+        data-icon="b"
+      >
+        <LoaderCircleIcon className="animate-spin" />
+      </span>
+    </span>
+  );
+}
 
 function Button({
   className,
@@ -75,11 +123,7 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     >
-      {loading ? (
-        <LoaderCircleIcon aria-hidden="true" className="animate-spin" />
-      ) : (
-        leading
-      )}
+      <ButtonLeading leading={leading} loading={loading} />
       {children}
       {loading ? null : trailing}
     </ButtonPrimitive>

@@ -6,6 +6,7 @@ import figma from "figma";
 const instance = figma.selectedInstance;
 
 const variant = instance.getEnum("variant", {
+  primary: "primary",
   secondary: "secondary",
   outline: "outline",
   ghost: "ghost",
@@ -24,19 +25,20 @@ instance.getEnum("state", {
   hover: false,
 });
 
-// Disabled is its own axis here, as on Button. This set has no loading state.
-const disabled = instance.getEnum("isDisabled", {
+// The set names this axis `disabled`, not Button's `isDisabled`. An unmapped
+// name is an empty attribute in Dev Mode. This set has no loading state.
+const disabled = instance.getEnum("disabled", {
   false: false,
   true: true,
 });
 
 // The icon is a bare INSTANCE_SWAP with no BOOLEAN gate — an icon button
-// without its icon is not a state the design allows.
+// without its icon is not a state the design allows. Do not gate on
+// hasCodeConnect(): that dropped the child whenever the swapped icon had no
+// published mapping, which is how Dev Mode emitted an empty IconButton.
 const icon = instance.getInstanceSwap("icon");
 const iconCode =
-  icon?.type === "INSTANCE" && icon.hasCodeConnect()
-    ? icon.executeTemplate().example
-    : null;
+  icon?.type === "INSTANCE" ? icon.executeTemplate().example : null;
 
 export default {
   // `outline` and `sm` are the cva defaults, so both props are omitted there.
