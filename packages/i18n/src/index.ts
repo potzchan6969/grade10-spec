@@ -1,4 +1,4 @@
-import { grade10En, grade10ZhHans, grade10ZhHant, zzzKo } from "./catalogs";
+import { grade10En, grade10ZhHans, grade10ZhHant, zzzKo } from "./catalogs.ts";
 
 /**
  * The vocabulary: every user-facing string either site renders, named once.
