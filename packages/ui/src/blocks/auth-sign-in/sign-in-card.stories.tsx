@@ -9,15 +9,16 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "centered" },
   args: {
-    title: "Sign in to Acme Store",
-    description: "Continue with your Acme account.",
+    copy: {
+      title: "Sign in to Acme Store",
+      description: "Continue with your Acme account.",
+    },
     children: (
       <SignInEmailForm
+        copy={{ email: "Email", submit: "Send magic link" }}
         email=""
-        emailLabel="Email"
         onEmailChange={fn()}
         onSubmit={fn()}
-        submitLabel="Send magic link"
       />
     ),
   },
@@ -38,7 +39,6 @@ export const WithMessage: Story = {
  * labelled divider. */
 export const WithProviderSlot: Story = {
   args: {
-    providerDividerLabel: "or",
     providerSlot: <button type="button">Continue with SSO</button>,
   },
 };

@@ -8,11 +8,10 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
+    copy: { email: "Email", submit: "Send magic link" },
     email: "collector@example.com",
-    emailLabel: "Email",
     onEmailChange: fn(),
     onSubmit: fn(),
-    submitLabel: "Send magic link",
   },
 } satisfies Meta<typeof SignInEmailForm>;
 
@@ -23,22 +22,37 @@ export const Default: Story = {};
 
 export const WithCodeAction: Story = {
   args: {
-    codeActionLabel: "Email me a code instead",
+    copy: {
+      email: "Email",
+      submit: "Send magic link",
+      codeAction: "Email me a code instead",
+    },
     onRequestCode: fn(),
   },
 };
 
 /** The consumer supplies the failure copy. */
 export const ErrorState: Story = {
-  args: { error: "Could not send the magic link." },
+  args: {
+    copy: {
+      email: "Email",
+      submit: "Send magic link",
+      codeAction: "Email me a code instead",
+    },
+    error: "Could not send the magic link.",
+  },
 };
 
 /** Both actions hold until an address exists; submit fires without the form
  * knowing what "send" means. */
 export const ActionsNeedAnAddress: Story = {
   args: {
+    copy: {
+      email: "Email",
+      submit: "Send magic link",
+      codeAction: "Email me a code instead",
+    },
     email: "",
-    codeActionLabel: "Email me a code instead",
     onRequestCode: fn(),
   },
   play: async ({ args, canvasElement }) => {
@@ -67,8 +81,12 @@ export const SubmitIsReported: Story = {
  * refuses activation — and only the running control looks busy. */
 export const LinkRequestRunning: Story = {
   args: {
+    copy: {
+      email: "Email",
+      submit: "Send magic link",
+      codeAction: "Email me a code instead",
+    },
     submitting: true,
-    codeActionLabel: "Email me a code instead",
     onRequestCode: fn(),
   },
   play: async ({ canvasElement }) => {
@@ -85,8 +103,12 @@ export const LinkRequestRunning: Story = {
 
 export const CodeRequestRunning: Story = {
   args: {
+    copy: {
+      email: "Email",
+      submit: "Send magic link",
+      codeAction: "Email me a code instead",
+    },
     requestingCode: true,
-    codeActionLabel: "Email me a code instead",
     onRequestCode: fn(),
   },
   play: async ({ canvasElement }) => {
@@ -105,7 +127,11 @@ export const CodeRequestRunning: Story = {
  * command starts normally. */
 export const SettledStepIsFree: Story = {
   args: {
-    codeActionLabel: "Email me a code instead",
+    copy: {
+      email: "Email",
+      submit: "Send magic link",
+      codeAction: "Email me a code instead",
+    },
     onRequestCode: fn(),
   },
   play: async ({ args, canvasElement }) => {

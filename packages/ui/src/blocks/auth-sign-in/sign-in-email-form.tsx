@@ -3,19 +3,25 @@ import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { FormEvent, ReactNode } from "react";
 
+/** The words the step says, whoever is signing in. */
+type SignInEmailFormCopy = {
+  email: string;
+  submit: string;
+  /** Names the alternative path — email a code instead. Omit it, and the
+   * handler with it, and no second button renders. */
+  codeAction?: string;
+};
+
 type SignInEmailFormProps = {
+  copy: SignInEmailFormCopy;
   /** Controlled by the consumer: the address outlives this step — the code
    * step shows it and the verify call sends it. */
   email: string;
   onEmailChange: (email: string) => void;
-  emailLabel: ReactNode;
   error?: ReactNode;
-  submitLabel: ReactNode;
   submitting?: boolean;
   onSubmit: () => void;
-  /** Alternative path: email a one-time code instead. Omit the three and no
-   * second button renders. */
-  codeActionLabel?: ReactNode;
+  /** Alternative path: email a one-time code instead. */
   requestingCode?: boolean;
   onRequestCode?: () => void;
 };
@@ -28,12 +34,10 @@ type SignInEmailFormProps = {
 function SignInEmailForm({
   email,
   onEmailChange,
-  emailLabel,
+  copy,
   error,
-  submitLabel,
   submitting = false,
   onSubmit,
-  codeActionLabel,
   requestingCode = false,
   onRequestCode,
 }: SignInEmailFormProps) {
@@ -47,7 +51,7 @@ function SignInEmailForm({
       <VStack gap="md">
         <TextInput
           autoComplete="email"
-          label={emailLabel}
+          label={copy.email}
           message={error ?? undefined}
           onChange={(event) => onEmailChange(event.target.value)}
           required
@@ -60,7 +64,7 @@ function SignInEmailForm({
           loading={submitting}
           type="submit"
         >
-          {submitLabel}
+          {copy.submit}
         </Button>
         {onRequestCode ? (
           <Button
@@ -70,7 +74,7 @@ function SignInEmailForm({
             type="button"
             variant="secondary"
           >
-            {codeActionLabel}
+            {copy.codeAction}
           </Button>
         ) : null}
       </VStack>
@@ -78,5 +82,5 @@ function SignInEmailForm({
   );
 }
 
-export type { SignInEmailFormProps };
+export type { SignInEmailFormCopy, SignInEmailFormProps };
 export { SignInEmailForm };
