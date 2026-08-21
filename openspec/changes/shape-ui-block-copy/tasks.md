@@ -25,7 +25,7 @@ its shape and can be claimed in parallel once it lands.
 - [x] 1.5 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and
       `pnpm run test:stories` as this group's verification.
 
-## 2. The site chrome (grade10-spec)
+## 2. The site chrome (grade10-spec) (owner: @sean)
 
 Depends on group 1 landing: it follows the shape group 1 sets.
 
