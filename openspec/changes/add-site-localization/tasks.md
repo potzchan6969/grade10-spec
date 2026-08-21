@@ -13,7 +13,7 @@ another change: crawlable public pages have shipped.
 - [x] 1.3 Inventory the user-facing strings of both sites' surfaces and the shared feature slices, and author the vocabulary with engineer-drafted values for `en`, `zh-Hant`, `zh-Hans`, and `ko`, including the login-email branch — marked for native review — so `A Chinese sign-in gets a Chinese email` and `The ZZZ email is Korean` have values to render.
 - [x] 1.4 Run `pnpm run typecheck` and `pnpm run lint` in grade10-spec as this group's verification.
 
-## 2. Shared surfaces speak the vocabulary (grade10)
+## 2. Shared surfaces speak the vocabulary (grade10) (owner: @sean)
 
 - [ ] 2.1 Bump `external/grade10-spec` to the new catalogs and mount the intl provider at each SPA's root — brand catalog plus active locale (grade10 still `en`, ZZZ still `en` until group 3) — with message keys typed against the vocabulary so `No raw key on screen` holds at typecheck.
 - [ ] 2.2 Make `A shared surface renders each brand's language` pass: the auth and store feature slices render their strings through the vocabulary instead of hardcoded copy, while `Commerce content stays in its source language`.
