@@ -67,7 +67,7 @@ Depends on group 1 landing.
       `pnpm run test`, and `pnpm run test:stories` as this group's
       verification.
 
-## 5. The applications compose the blocks' copy (grade10)
+## 5. The applications compose the blocks' copy (grade10) (owner: @sean)
 
 Depends on groups 1 to 4 being pushed.
 
