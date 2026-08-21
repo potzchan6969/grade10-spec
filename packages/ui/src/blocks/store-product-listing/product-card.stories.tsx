@@ -1,22 +1,8 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
+import { expect, within } from "storybook/test";
 import { ProductCard } from "./product-card";
 
 const IMAGE = new URL("./product-card.fixture.png", import.meta.url).href;
-
-const badges = (
-  <>
-    <Badge size="sm" variant="outline">
-      Pokémon
-    </Badge>
-    <Badge size="sm" variant="outline">
-      M4
-    </Badge>
-    <Badge size="sm" variant="outline">
-      JP
-    </Badge>
-  </>
-);
 
 const defaults = {
   imageSrc: IMAGE,
@@ -25,8 +11,8 @@ const defaults = {
   name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
   price: "HK$105",
   originalPrice: "HK$123",
-  discountLabel: "SALE",
-  actionLabel: "Add to cart",
+  saleLabel: "SALE",
+  cartLabel: "Add to cart",
   onClick: () => {},
 };
 
@@ -40,15 +26,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const well: Decorator[] = [
+  (Story) => (
+    <div className="w-[260px]">
+      <Story />
+    </div>
+  ),
+];
+
 /** Figma `soldOut=false` — available product with a discount. */
 export const Default: Story = {
-  decorators: [
-    (Story) => (
-      <div className="w-[260px]">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.queryByRole("button", { name: /wishlist/i })).toBeNull();
@@ -101,14 +89,8 @@ export const States: Story = {
 
 /** Set annotation: quantity on the cart button when already in the cart. */
 export const AddedToCart: Story = {
-  args: { addedToCart: true, quantity: 3 },
-  decorators: [
-    (Story) => (
-      <div className="w-[260px]">
-        <Story />
-      </div>
-    ),
-  ],
+  args: { inCart: true, cartCount: "3" },
+  decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("3")).toBeInTheDocument();
@@ -117,14 +99,8 @@ export const AddedToCart: Story = {
 
 /** `hasDiscount=false` — no badge and no strikethrough price. */
 export const WithoutDiscount: Story = {
-  args: { originalPrice: undefined, discountLabel: undefined },
-  decorators: [
-    (Story) => (
-      <div className="w-[260px]">
-        <Story />
-      </div>
-    ),
-  ],
+  args: { originalPrice: undefined, saleLabel: undefined },
+  decorators: well,
 };
 
 /** Boneyard capture target — keep `loading` at Figma's 260px card width. */
