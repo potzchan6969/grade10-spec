@@ -41,6 +41,11 @@ export const LiveBiddingWalkthrough: Story = {
     ).toBeInTheDocument();
 
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
+    expect(canvas.getByText("HK$1,250.00")).toBeInTheDocument();
+    expect(canvas.getByText("2 Bids")).toBeInTheDocument();
+    expect(canvas.getAllByText(/Bidder 1/).length).toBeGreaterThan(0);
+
+    await userEvent.click(canvas.getByRole("button", { name: "Next" }));
     expect(canvas.getByText(/Highest Bid/i)).toBeInTheDocument();
     expect(canvas.getByText("HK$1,300.00")).toBeInTheDocument();
 
@@ -54,11 +59,11 @@ export const LiveBiddingWalkthrough: Story = {
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
     expect(canvas.getAllByText(/outbid/i).length).toBeGreaterThan(0);
     expect(canvas.getByText("HK$1,600.00")).toBeInTheDocument();
-    expect(canvas.getByText("5 Bids")).toBeInTheDocument();
+    expect(canvas.getByText("6 Bids")).toBeInTheDocument();
 
     await userEvent.click(canvas.getByRole("tab", { name: "Expanded" }));
     expect(canvas.getByText("Starting bid")).toBeInTheDocument();
-    expect(canvas.getByText("HK$1,200.00")).toBeInTheDocument();
+    expect(canvas.getByText("HK$1,400.00")).toBeInTheDocument();
     expect(canvas.getByText("HK$1,500.00")).toBeInTheDocument();
     expect(canvas.getByText("HK$1,600.00")).toBeInTheDocument();
   },

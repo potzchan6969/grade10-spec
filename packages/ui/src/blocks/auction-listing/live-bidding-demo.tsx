@@ -26,6 +26,7 @@ type ScriptBid = {
  */
 const SCRIPT: readonly ScriptBid[] = [
   { bidder: "Bidder 2", amount: "HK$1,200.00", at: "21 Aug 2026, 11:00 UTC" },
+  { bidder: "Bidder 1", amount: "HK$1,250.00", at: "21 Aug 2026, 11:02 UTC" },
   { bidder: YOU, amount: "HK$1,300.00", at: "21 Aug 2026, 11:04 UTC" },
   { bidder: "Bidder 3", amount: "HK$1,400.00", at: "21 Aug 2026, 11:08 UTC" },
   { bidder: YOU, amount: "HK$1,500.00", at: "21 Aug 2026, 11:12 UTC" },
@@ -68,21 +69,28 @@ function standingOf(bids: readonly ScriptBid[]) {
 }
 
 function historyOf(bids: readonly ScriptBid[]) {
-  if (bids.length === 0) {
-    return <Text tone="secondary">No bids yet.</Text>;
-  }
+  if (bids.length === 0) return null;
   const newestFirst = [...bids].reverse().slice(0, 3);
   return (
     <List aria-label="Bid history">
       {newestFirst.map((bid) => (
         <ListItem
-          className="p-0 py-1"
+          className="t-bid-reveal p-0 py-1"
           divider={false}
           key={`${bid.bidder}-${bid.amount}`}
         >
-          <Text size="xs" tone="secondary">
-            {bid.bidder} · {bid.amount}
-          </Text>
+          <HStack className="w-full" gap="sm" hAlign="space-between">
+            <Text size="xs" tone="secondary">
+              {bid.bidder}
+            </Text>
+            <Text
+              className="text-right tabular-nums"
+              size="xs"
+              tone="secondary"
+            >
+              {bid.amount}
+            </Text>
+          </HStack>
         </ListItem>
       ))}
     </List>

@@ -21,6 +21,8 @@ import { Info } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import { popInValue } from "./digit-pop-in";
 
+import "./listing-bid-panel.css";
+
 type ListingBidPanelProps = {
   title: ReactNode;
   kicker?: ReactNode;
@@ -111,15 +113,22 @@ function ListingBidPanel({
               </Text>
             ) : null}
           </VStack>
-          {history != null ? (
-            <VStack className="pl-4" gap="sm">
-              {bidCount != null ? (
+          {bidCount != null ? (
+            <HStack className="w-full" gap="lg" vAlign="stretch">
+              <VStack className="min-w-0 flex-1 p-4" gap="xs">
                 <Text as="h3" size="lg" weight="bold">
                   {bidCount}
                 </Text>
-              ) : null}
-              {history}
-            </VStack>
+              </VStack>
+              <VStack
+                className="h-28 min-w-0 flex-1 overflow-hidden rounded-lg bg-muted/40 p-3"
+                gap="xs"
+              >
+                {history}
+              </VStack>
+            </HStack>
+          ) : history != null ? (
+            history
           ) : null}
           <Separator />
           <VStack gap="sm">
