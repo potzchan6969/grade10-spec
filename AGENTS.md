@@ -17,7 +17,7 @@ This repository is the versioned source of truth for product requirements and th
 | Product decision behind a requirement | `docs/prds/<product-area>/<feature>.md` | Problem, users, non-goals, measurement, rollout, rationale. Explanatory, never authoritative over a requirement. |
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
-| User-facing copy and translations | `packages/i18n/messages/<brand>/<locale>/<namespace>.json` | `grade10/en/` is the vocabulary every catalog is measured against, one file per namespace, assembled in `src/catalogs.ts`. A brand's default locale is complete or the build fails; every other locale falls back to it key-by-key. |
+| User-facing copy and translations | `packages/i18n/messages/{shared,<brand>}/<locale>/<namespace>.json` | `shared/` answers every key no brand claims, once per language; a brand answers only what says something about itself, in every language it speaks. Assembled in `src/catalogs.ts`. Types refuse a key the vocabulary does not name; `pnpm run test` refuses layers that leave one unanswered, or answer one twice. |
 | Design-system primitive | `packages/design-system/src/components/` | shadcn primitives and their colocated stories. |
 | Product component implementation | `packages/ui/src/blocks/` | Shared compound components, one directory per capability; the capability spec remains the export contract. |
 | Task group and owner format in `tasks.md` | `docs/governance/task-ownership.md` | Parsed independently by tooling in this repository and in the application repository. |
