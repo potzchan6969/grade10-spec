@@ -234,6 +234,7 @@ function ProductCard({
     <Skeleton
       animate="pulse"
       className={cn("w-full", className)}
+      color="#E6E6E6"
       darkColor="rgba(249, 250, 250, 0.05)"
       fixture={PRODUCT_CARD_FIXTURE}
       loading
