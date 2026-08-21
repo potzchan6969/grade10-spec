@@ -15,10 +15,10 @@ another change: crawlable public pages have shipped.
 
 ## 2. Shared surfaces speak the vocabulary (grade10) (owner: @sean)
 
-- [ ] 2.1 Bump `external/grade10-spec` to the new catalogs and mount the intl provider at each SPA's root — brand catalog plus active locale (grade10 still `en`, ZZZ still `en` until group 3) — with message keys typed against the vocabulary so `No raw key on screen` holds at typecheck.
-- [ ] 2.2 Make `A shared surface renders each brand's language` pass: the auth and store feature slices render their strings through the vocabulary instead of hardcoded copy, while `Commerce content stays in its source language`.
-- [ ] 2.3 Make `A month in Traditional Chinese` pass: date rendering on every localized surface names the active locale as its language input.
-- [ ] 2.4 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test` as this group's verification.
+- [x] 2.1 Bump `external/grade10-spec` to the new catalogs and mount the intl provider at each SPA's root — brand catalog plus active locale (grade10 still `en`, ZZZ still `en` until group 3) — with message keys typed against the vocabulary so `No raw key on screen` holds at typecheck.
+- [x] 2.2 Make `A shared surface renders each brand's language` pass: the auth and store feature slices render their strings through the vocabulary instead of hardcoded copy, while `Commerce content stays in its source language`.
+- [x] 2.3 Make `A month in Traditional Chinese` pass: date rendering on every localized surface names the active locale as its language input.
+- [x] 2.4 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test` as this group's verification.
 
 ## 3. ZZZ in Korean (grade10)
 
