@@ -1,4 +1,5 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
+import { IconProvider } from "../src/components/providers/icon-provider";
 import "./tailwind.css";
 
 /* Toolbar-driven color theme on the preview <html>. Light is the only mode —
@@ -10,6 +11,12 @@ const withTheme: Decorator = (Story, context) => {
   root.classList.add(`theme-${colorTheme}`);
   return <Story />;
 };
+
+const withIcons: Decorator = (Story) => (
+  <IconProvider>
+    <Story />
+  </IconProvider>
+);
 
 const preview: Preview = {
   parameters: {
@@ -44,7 +51,7 @@ const preview: Preview = {
       },
     },
   },
-  decorators: [withTheme],
+  decorators: [withTheme, withIcons],
 };
 
 export default preview;

@@ -41,5 +41,6 @@ export * from "./components/overlays/dropdown-menu";
 export * from "./components/overlays/sonner";
 export * from "./components/overlays/tooltip";
 export * from "./components/providers/color-theme-provider";
+export * from "./components/providers/icon-provider";
 export * from "./components/providers/theme-provider";
 export { cn } from "./lib/utils";

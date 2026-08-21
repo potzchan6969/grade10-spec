@@ -1,3 +1,4 @@
+import { IconProvider } from "@grade10/design-system/components/providers/icon-provider";
 import type { Decorator, Preview } from "@storybook/react-vite";
 import "../src/bones/registry";
 import "./tailwind.css";
@@ -11,6 +12,12 @@ const withTheme: Decorator = (Story, context) => {
   root.classList.add(`theme-${colorTheme}`);
   return <Story />;
 };
+
+const withIcons: Decorator = (Story) => (
+  <IconProvider>
+    <Story />
+  </IconProvider>
+);
 
 const preview: Preview = {
   parameters: {
@@ -44,7 +51,7 @@ const preview: Preview = {
       },
     },
   },
-  decorators: [withTheme],
+  decorators: [withTheme, withIcons],
 };
 
 export default preview;

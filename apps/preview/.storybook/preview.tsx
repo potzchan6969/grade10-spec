@@ -1,3 +1,4 @@
+import { IconProvider } from "@grade10/design-system/components/providers/icon-provider";
 import type { Decorator, Preview } from "@storybook/react-vite";
 import type { ReactNode } from "react";
 import "@grade10/ui/bones/registry";
@@ -87,9 +88,11 @@ const preview: Preview = {
   decorators: [
     withTheme,
     (Story, context) => (
-      <MotionBoundary paused={context.parameters.pauseMotion === true}>
-        <Story />
-      </MotionBoundary>
+      <IconProvider>
+        <MotionBoundary paused={context.parameters.pauseMotion === true}>
+          <Story />
+        </MotionBoundary>
+      </IconProvider>
     ),
   ],
 };
