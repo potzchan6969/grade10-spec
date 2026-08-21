@@ -1,6 +1,7 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { FormEvent, ReactNode } from "react";
 
 type SignInCodeFormProps = {
@@ -44,35 +45,33 @@ function SignInCodeForm({
   }
 
   return (
-    <form
-      className="flex flex-col gap-4"
-      data-slot="sign-in-code-form"
-      onSubmit={handleSubmit}
-    >
-      {hint ? (
-        <Text size="sm" tone="secondary">
-          {hint}
-        </Text>
-      ) : null}
-      <TextInput
-        autoComplete="one-time-code"
-        inputMode="numeric"
-        label={codeLabel}
-        maxLength={codeLength}
-        message={error ?? undefined}
-        onChange={(event) => onCodeChange(event.target.value)}
-        required
-        status={error ? "error" : "default"}
-        value={code}
-      />
-      <Button disabled={!code} loading={submitting} type="submit">
-        {submitLabel}
-      </Button>
-      {onBack ? (
-        <Button onClick={onBack} type="button" variant="ghost">
-          {backLabel}
+    <form data-slot="sign-in-code-form" onSubmit={handleSubmit}>
+      <VStack gap="md">
+        {hint ? (
+          <Text size="sm" tone="secondary">
+            {hint}
+          </Text>
+        ) : null}
+        <TextInput
+          autoComplete="one-time-code"
+          inputMode="numeric"
+          label={codeLabel}
+          maxLength={codeLength}
+          message={error ?? undefined}
+          onChange={(event) => onCodeChange(event.target.value)}
+          required
+          status={error ? "error" : "default"}
+          value={code}
+        />
+        <Button disabled={!code} loading={submitting} type="submit">
+          {submitLabel}
         </Button>
-      ) : null}
+        {onBack ? (
+          <Button onClick={onBack} type="button" variant="ghost">
+            {backLabel}
+          </Button>
+        ) : null}
+      </VStack>
     </form>
   );
 }

@@ -1,4 +1,5 @@
 import { Button } from "@grade10/design-system/components/forms/button";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 import type { AsyncAction } from "./async";
@@ -19,17 +20,14 @@ type AsyncMessageProps = {
  */
 function AsyncMessage({ message, action, slot, className }: AsyncMessageProps) {
   return (
-    <div
-      className={cn("flex flex-col items-start gap-3", className)}
-      data-slot={slot}
-    >
+    <VStack className={cn("gap-3", className)} data-slot={slot} hAlign="start">
       <p className="text-sm text-secondary-foreground">{message}</p>
       {action ? (
         <Button onClick={action.onAction} size="sm" variant="secondary">
           {action.label}
         </Button>
       ) : null}
-    </div>
+    </VStack>
   );
 }
 

@@ -1,5 +1,6 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { FormEvent, ReactNode } from "react";
 
 type SignInEmailFormProps = {
@@ -42,39 +43,37 @@ function SignInEmailForm({
   }
 
   return (
-    <form
-      className="flex flex-col gap-4"
-      data-slot="sign-in-email-form"
-      onSubmit={handleSubmit}
-    >
-      <TextInput
-        autoComplete="email"
-        label={emailLabel}
-        message={error ?? undefined}
-        onChange={(event) => onEmailChange(event.target.value)}
-        required
-        status={error ? "error" : "default"}
-        type="email"
-        value={email}
-      />
-      <Button
-        disabled={!email || requestingCode}
-        loading={submitting}
-        type="submit"
-      >
-        {submitLabel}
-      </Button>
-      {onRequestCode ? (
+    <form data-slot="sign-in-email-form" onSubmit={handleSubmit}>
+      <VStack gap="md">
+        <TextInput
+          autoComplete="email"
+          label={emailLabel}
+          message={error ?? undefined}
+          onChange={(event) => onEmailChange(event.target.value)}
+          required
+          status={error ? "error" : "default"}
+          type="email"
+          value={email}
+        />
         <Button
-          disabled={!email || submitting}
-          loading={requestingCode}
-          onClick={onRequestCode}
-          type="button"
-          variant="secondary"
+          disabled={!email || requestingCode}
+          loading={submitting}
+          type="submit"
         >
-          {codeActionLabel}
+          {submitLabel}
         </Button>
-      ) : null}
+        {onRequestCode ? (
+          <Button
+            disabled={!email || submitting}
+            loading={requestingCode}
+            onClick={onRequestCode}
+            type="button"
+            variant="secondary"
+          >
+            {codeActionLabel}
+          </Button>
+        ) : null}
+      </VStack>
     </form>
   );
 }

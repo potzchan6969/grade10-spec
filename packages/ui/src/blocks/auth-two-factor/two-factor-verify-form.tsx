@@ -1,6 +1,7 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import { OtpInput } from "@grade10/design-system/components/forms/otp-input";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { type FormEvent, type ReactNode, useState } from "react";
 import type { AsyncAction } from "../shared/async";
 
@@ -71,48 +72,50 @@ function TwoFactorVerifyForm({
 
   return (
     <form
-      className={className ?? "flex flex-col gap-4"}
+      className={className}
       data-slot="two-factor-verify-form"
       onSubmit={handleSubmit}
     >
-      {variant === "otp" ? (
-        <OtpInput
-          autoComplete="one-time-code"
-          inputMode="numeric"
-          label={label}
-          length={codeLength}
-          message={error ?? hint ?? undefined}
-          name="one-time-code"
-          onChange={setCode}
-          onComplete={submit}
-          status={error ? "error" : "default"}
-          value={code}
-        />
-      ) : (
-        <TextInput
-          autoComplete="one-time-code"
-          label={label}
-          message={error ?? hint ?? undefined}
-          name="one-time-code"
-          onChange={(event) => setCode(event.target.value)}
-          required
-          status={error ? "error" : "default"}
-          value={code}
-        />
-      )}
-      <Button disabled={!code.trim()} loading={pending} type="submit">
-        {submitLabel}
-      </Button>
-      {secondaryAction ? (
-        <Button
-          onClick={secondaryAction.onAction}
-          size="sm"
-          type="button"
-          variant="ghost"
-        >
-          {secondaryAction.label}
+      <VStack gap="md">
+        {variant === "otp" ? (
+          <OtpInput
+            autoComplete="one-time-code"
+            inputMode="numeric"
+            label={label}
+            length={codeLength}
+            message={error ?? hint ?? undefined}
+            name="one-time-code"
+            onChange={setCode}
+            onComplete={submit}
+            status={error ? "error" : "default"}
+            value={code}
+          />
+        ) : (
+          <TextInput
+            autoComplete="one-time-code"
+            label={label}
+            message={error ?? hint ?? undefined}
+            name="one-time-code"
+            onChange={(event) => setCode(event.target.value)}
+            required
+            status={error ? "error" : "default"}
+            value={code}
+          />
+        )}
+        <Button disabled={!code.trim()} loading={pending} type="submit">
+          {submitLabel}
         </Button>
-      ) : null}
+        {secondaryAction ? (
+          <Button
+            onClick={secondaryAction.onAction}
+            size="sm"
+            type="button"
+            variant="ghost"
+          >
+            {secondaryAction.label}
+          </Button>
+        ) : null}
+      </VStack>
     </form>
   );
 }

@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from "@grade10/design-system/components/display/card";
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 import type { AsyncState } from "../shared/async";
@@ -35,22 +36,24 @@ function ProfileCard({
         <CardTitle>{title}</CardTitle>
         {description ? <CardDescription>{description}</CardDescription> : null}
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        {state.status === "loading" ? (
-          <div className="flex flex-col gap-3" data-slot="profile-loading">
-            <Skeleton className="h-6 w-1/2" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-2/3" />
-          </div>
-        ) : null}
-        {state.status === "empty" || state.status === "error" ? (
-          <AsyncMessage
-            action={state.action}
-            message={state.message}
-            slot={`profile-${state.status}`}
-          />
-        ) : null}
-        {state.status === "ready" ? state.data : null}
+      <CardContent>
+        <VStack gap="md">
+          {state.status === "loading" ? (
+            <VStack className="gap-3" data-slot="profile-loading">
+              <Skeleton className="h-6 w-1/2" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-2/3" />
+            </VStack>
+          ) : null}
+          {state.status === "empty" || state.status === "error" ? (
+            <AsyncMessage
+              action={state.action}
+              message={state.message}
+              slot={`profile-${state.status}`}
+            />
+          ) : null}
+          {state.status === "ready" ? state.data : null}
+        </VStack>
       </CardContent>
     </Card>
   );

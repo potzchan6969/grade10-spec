@@ -208,7 +208,6 @@ export const LoadingMore: Story = {
 export const EndOfCatalog: Story = {
   args: { hasMore: false },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     expect(
       canvasElement.querySelector(
         '[data-slot="product-results-load-sentinel"]',
@@ -243,11 +242,14 @@ export const InfiniteScroll: Story = {
       const [loadingMore, setLoadingMore] = useState(false);
 
       const visibleProducts = PRODUCTS.concat(
-        Array.from({ length: Math.max(0, visibleCount - PRODUCTS.length) }, (_, index) => ({
-          ...PRODUCTS[index % PRODUCTS.length],
-          id: String(PRODUCTS.length + index + 1),
-          ariaLabel: `Ninja Spinner, item ${PRODUCTS.length + index + 1}`,
-        })),
+        Array.from(
+          { length: Math.max(0, visibleCount - PRODUCTS.length) },
+          (_, index) => ({
+            ...PRODUCTS[index % PRODUCTS.length],
+            id: String(PRODUCTS.length + index + 1),
+            ariaLabel: `Ninja Spinner, item ${PRODUCTS.length + index + 1}`,
+          }),
+        ),
       ).slice(0, visibleCount);
 
       const handleLoadMore = () => {

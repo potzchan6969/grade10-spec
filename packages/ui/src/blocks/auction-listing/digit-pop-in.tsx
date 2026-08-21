@@ -1,7 +1,7 @@
 /// <reference path="./digit-pop-in.css.d.ts" />
-import { useLayoutEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
+import { useLayoutEffect, useRef } from "react";
 
 import "./digit-pop-in.css";
 
@@ -26,23 +26,25 @@ function DigitPopIn({ text }: { text: string }) {
     group.classList.add("is-animating");
   }, [text]);
 
+  const glyphs = chars.map((ch, index) => ({
+    ch,
+    id: `${index}-${ch}`,
+    stagger: index === last - 1 ? "1" : index === last ? "2" : undefined,
+  }));
+
   return (
     <span ref={groupRef} className="t-digit-group">
       <span className="sr-only">{text}</span>
-      {chars.map((ch, i) => {
-        const stagger =
-          i === last - 1 ? "1" : i === last ? "2" : undefined;
-        return (
-          <span
-            aria-hidden="true"
-            className="t-digit"
-            data-stagger={stagger}
-            key={`${i}-${ch}`}
-          >
-            {ch}
-          </span>
-        );
-      })}
+      {glyphs.map((glyph) => (
+        <span
+          aria-hidden="true"
+          className="t-digit"
+          data-stagger={glyph.stagger}
+          key={glyph.id}
+        >
+          {glyph.ch}
+        </span>
+      ))}
     </span>
   );
 }

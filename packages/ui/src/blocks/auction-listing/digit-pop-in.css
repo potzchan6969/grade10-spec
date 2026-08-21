@@ -43,7 +43,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .t-digit-group .t-digit {
-    animation: none !important;
+  .t-digit-group.is-animating .t-digit,
+  .t-digit-group.is-animating .t-digit[data-stagger="1"],
+  .t-digit-group.is-animating .t-digit[data-stagger="2"] {
+    animation: none;
+    animation-delay: 0s;
   }
 }
