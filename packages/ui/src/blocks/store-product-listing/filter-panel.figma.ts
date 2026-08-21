@@ -5,9 +5,7 @@ import figma from "figma";
 
 export default {
   example: figma.code`<FilterPanel
-  label={label}
-  heading={heading}
-  searchPlaceholder={searchPlaceholder}
+  copy={copy}
   searchValue={searchValue}
   onSearchChange={onSearchChange}
   onSearchClear={onSearchClear}

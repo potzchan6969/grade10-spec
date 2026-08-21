@@ -9,15 +9,14 @@ const resultCount = instance.getString("resultCount");
 
 export default {
   example: figma.code`<ProductListHeader
+  copy={copy}
   resultCount="${resultCount}"
   sortOptions={sortOptions}
   sortValue={sortValue}
-  sortTriggerLabel={sortTriggerLabel}
   appliedFilters={appliedFilters}
   onSortChange={onSortChange}
   onFilterChange={onFilterChange}
   onClearFilters={onClearFilters}
-  clearFiltersLabel={clearFiltersLabel}
 />`,
   imports: ['import { ProductListHeader } from "@grade10/ui"'],
   id: "product-list-header",

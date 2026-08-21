@@ -6,13 +6,14 @@ import figma from "figma";
 export default {
   // The set has no variant axes, so nothing here is read from the instance.
   // Every content prop is required and store-owned, so the snippet names the
-  // values the consumer supplies rather than emitting one store's content.
+  // values the consumer supplies rather than emitting one store's content —
+  // the words as one `copy` object, the markup and the state beside it.
   example: figma.code`<Nav
+  copy={copy}
   promo={promo}
   logo={logo}
   utilityLinks={utilityLinks}
   navItems={navItems}
-  localeLabel={localeLabel}
   locales={locales}
   locale={locale}
 />`,
