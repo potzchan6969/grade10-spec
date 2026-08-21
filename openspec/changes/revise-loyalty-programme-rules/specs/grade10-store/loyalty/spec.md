@@ -9,7 +9,8 @@ points earned inside a qualifying window; they decide tier and SHALL NOT be
 reduced by a redemption. Redeemable points are the spendable balance; they rise
 on earning and fall on redemption.
 
-Every grant of points SHALL add the same amount to both counts. A redemption
+Every earning and every reward grant SHALL add the same amount to both
+counts; an operator correction SHALL add to the redeemable balance alone. A redemption
 SHALL reduce redeemable points alone. A claw-back SHALL reduce both.
 
 The two SHALL run on independent clocks: a tier's validity is measured from the
@@ -320,7 +321,7 @@ Every point movement SHALL be recorded as a dated entry that is never edited or
 deleted. Both the redeemable balance and the tier point count SHALL be derived
 by asking the ledger, never stored as running totals.
 
-#### Scenario: The balance counts what is unspent and unexpired
+#### Scenario: Balance excludes expired and spent points
 
 - **WHEN** a redeemable balance is asked for at a given instant
 - **THEN** it counts every credit recorded before that instant, less what has been spent or clawed back
@@ -567,10 +568,11 @@ consumed a unit.
 - **WHEN** a member asks to reverse a redemption
 - **THEN** no member surface offers it
 
-#### Scenario: A reversal does not extend the balance's life
+#### Scenario: Restored points keep their original expiry
 
 - **WHEN** a redemption is reversed
-- **THEN** the member's inactivity window is unchanged by the reversal
+- **THEN** the restored points rejoin the balance under the inactivity window already running
+- **AND** the reversal does not reset that window
 
 #### Scenario: A reversal after the balance expired returns nothing
 
