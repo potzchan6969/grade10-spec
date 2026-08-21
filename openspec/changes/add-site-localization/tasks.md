@@ -20,7 +20,7 @@ another change: crawlable public pages have shipped.
 - [x] 2.3 Make `A month in Traditional Chinese` pass: date rendering on every localized surface names the active locale as its language input.
 - [x] 2.4 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test` as this group's verification.
 
-## 3. ZZZ in Korean (grade10)
+## 3. ZZZ in Korean (grade10) (owner: @sean)
 
 - [ ] 3.1 Make `Every ZZZ surface is Korean`, `The ZZZ document is Korean`, and `One language needs no switcher` pass: the ZZZ root renders from the Korean catalog with the locale constant, the document declares `ko`, and the chrome's locale label is supplied with no handler.
 - [ ] 3.2 Make `The ZZZ email is Korean` pass: the ZZZ auth worker replaces its hardcoded English email catalog with the brand's Korean catalog.
