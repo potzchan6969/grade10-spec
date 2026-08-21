@@ -112,23 +112,32 @@ on every return visit until they pick again.
 
 ### Requirement: A grade10 public address names its language
 
-Each public surface of the grade10 site SHALL answer at one address per
-locale: the default locale at the address it has today, Traditional Chinese
-under the `/tc` prefix, and Simplified Chinese under `/sc`. Everything the
-crawlable-pages capability requires of a public address — its content without
-scripts, its self-naming, its share metadata, its honest statuses — SHALL
-hold at every one of these addresses, in that address's language.
+Each public surface the build writes a document for SHALL answer at one
+address per locale: the default locale at the address it has today,
+Traditional Chinese under the `/tc` prefix, and Simplified Chinese under
+`/sc`. Everything the crawlable-pages capability requires of a public
+address — its content without scripts, its self-naming, its share metadata,
+its honest statuses — SHALL hold at every one of these addresses, in that
+address's language.
 
 Each variant SHALL declare every language variant of itself, including the
 default, readable without executing scripts, and the sitemap SHALL list every
-variant of every public surface.
+variant of every surface it names.
+
+A public surface whose document is rendered when its address is asked for
+SHALL carry no address of its own per locale: the address it answers at stays
+as it is, and the sitemap keeps naming none of them — which addresses it
+answers is the catalogue's to say, not the build's. It SHALL render the
+platform's own copy in the locale the request carries and declare that
+locale, falling back to the brand default when the request carries none, so
+a crawler is answered in the default locale deterministically.
 
 The address SHALL win over the remembered choice: a prefixed address renders
 its own language, and navigation from it to another public surface stays in
 that language. A collector whose remembered locale is not the default SHALL
-end at that locale's address when they open an unprefixed public address.
-Session-shaped surfaces SHALL stay unprefixed and render the remembered
-locale.
+end at that locale's address when they open an unprefixed public address that
+has one. Session-shaped surfaces SHALL stay unprefixed and render the
+remembered locale.
 
 #### Scenario: A Chinese address answers whole
 
@@ -137,14 +146,27 @@ locale.
 
 #### Scenario: A variant declares its alternates
 
-- **WHEN** any public address is fetched and no script executes
+- **WHEN** any public address that has a variant per locale is fetched and no script executes
 - **THEN** the response names each language variant of that surface and its address, the default among them
 
 #### Scenario: The sitemap lists every variant
 
 - **WHEN** the sitemap is fetched
-- **THEN** each public surface appears once per grade10 locale
+- **THEN** each public surface the sitemap names appears once per grade10 locale
 - **AND** no session-shaped address appears
+- **AND** no address of a surface rendered when it is asked for appears
+
+#### Scenario: A rendered surface keeps its one address
+
+- **GIVEN** a collector whose remembered locale is Traditional Chinese
+- **WHEN** they open a public surface whose document is rendered when its address is asked for
+- **THEN** the address carries no locale prefix
+- **AND** the platform's own copy on the page is Traditional Chinese
+
+#### Scenario: A crawler reads a rendered surface in the default locale
+
+- **WHEN** such an address is fetched carrying no remembered locale and no script executes
+- **THEN** the response's own copy is English and the document declares it
 
 #### Scenario: The address wins over the memory
 
