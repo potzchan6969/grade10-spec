@@ -22,7 +22,7 @@ its shape and can be claimed in parallel once it lands.
       objects, and record the rule in
       `docs/governance/ui-component-contracts.md` — a word is a string, a slot
       is a node, values stay their own props.
-- [ ] 1.5 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and
+- [x] 1.5 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and
       `pnpm run test:stories` as this group's verification.
 
 ## 2. The site chrome (grade10-spec)
