@@ -5,9 +5,11 @@
 ### Requirement: One vocabulary, and every brand answers all of it
 
 The strings of every user-facing surface SHALL be named by one shared
-vocabulary of message keys. The vocabulary SHALL carry a brand-neutral value
-for every key in every locale any brand speaks; a brand's catalogs SHALL
-supply only the keys that brand says differently.
+vocabulary of message keys. A key SHALL be answered brand-neutrally wherever
+no brand claims it, and by a brand wherever one does — between them they SHALL
+answer every key of the vocabulary, in every locale that brand speaks. No key
+SHALL be answered brand-neutrally with a value written to be overridden: a
+name a brand must state is the brand's to state.
 
 A key a brand does not answer SHALL render the vocabulary's own value in the
 locale being read. A key a brand does answer SHALL render that brand's value,
@@ -31,6 +33,12 @@ locale's value. A raw message key SHALL never render.
 - **WHEN** that brand's page renders it
 - **THEN** the brand's value renders
 - **AND** every other brand's page renders the vocabulary's value
+
+#### Scenario: A brand leaves a key unanswered
+
+- **GIVEN** a key no brand-neutral value answers
+- **WHEN** a brand that does not answer it either is built
+- **THEN** the build fails naming the brand, the key, and the language
 
 #### Scenario: A brand's own words are missing a language
 

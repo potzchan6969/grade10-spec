@@ -61,22 +61,33 @@ collector sees the other brand's phrasing under this brand's logo.
 
 ### Types keep the shape, a test keeps the coverage
 
-`Messages` becomes `typeof sharedEn` — the vocabulary's English is the
-definition of what a key is — and every other file, shared or brand, stays an
-`Overlay<Messages, C>`, so an unknown or mistyped key is still a compile
-error and the vocabulary is still one type.
+`Messages` becomes `typeof sharedEn & typeof grade10En` — the brand-neutral
+answers plus the keys a brand has to state, enumerated in the one brand that
+speaks every locale — and every file, shared or brand, stays an
+`Overlay<Messages, C>`, so an unknown or mistyped key is still a compile error
+and the vocabulary is still one type.
+
+The shared layer is deliberately partial. A wordmark, an attribution line and
+a surface's title have no brand-neutral answer worth writing: a placeholder
+there is copy that never renders in the best case and ships as a brand's name
+in the worst, when a brand forgets to override it. So the vocabulary is the
+union of what nobody claims and what a brand must claim, and the enumeration
+of the second half lives with grade10 because it is the brand that speaks
+every locale the platform has.
 
 What types stop doing is completeness across layers. Whether `shared` plus
 `zzz` covers every key in Korean is a merge of two partial objects, and
 expressing that as a type is a deep-merge generic that fails unreadably when
-it fails. A test asserts it instead, one line per rule: every brand and locale
-resolves every key; a brand that answers a key answers it in all of its
-locales; no rendered value falls through to another language.
+it fails. A test asserts it instead, one line per rule: every brand and locale resolves
+every key, from either layer; a brand that answers a key answers it in all of
+its locales; no rendered value falls through to another language.
 
 *Alternatives:* a `DeepMerge` type over the layers — rejected on the error
 messages, which are what a compile-time check is for. A runtime scanner at
 startup — rejected: a check that runs when a page renders has already
-shipped the gap.
+shipped the gap. A complete shared layer with neutral placeholders for the
+keys a brand must state — rejected above: it trades a type quirk for copy
+nobody ships and a silent failure mode.
 
 ### `getMessages` keeps its signature
 

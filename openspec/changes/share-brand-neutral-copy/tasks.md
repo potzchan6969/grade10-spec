@@ -15,12 +15,14 @@ second group waits on anything but the first being pushed.
       pass: `getMessages` resolves the vocabulary's default locale, then the
       vocabulary's requested locale, then the brand's default, then the
       brand's requested, so a brand states only what it says differently.
-- [ ] 1.3 Make `A brand's own words are missing a language` and `A single-locale
-      brand is missing a string` pass: the shared layer is typechecked as the
-      vocabulary, every catalog as an overlay of it, and a coverage test names
-      the brand, the key, and the language when a layer leaves a gap — running
-      in `pnpm run test`, so `pnpm run typecheck` and the suite together are
-      what refuse an incomplete catalog.
+- [ ] 1.3 Make `A brand leaves a key unanswered`, `A brand's own words are
+      missing a language` and `A single-locale brand is missing a string`
+      pass: the vocabulary is the union of the shared layer and the keys a
+      brand states, every catalog is typechecked as an overlay of it, and a
+      coverage test names the brand, the key, and the language when the layers
+      together leave a gap — this repository has no unit lane yet, so the test
+      brings one: `vitest` in `packages/i18n` and a root `test` script that
+      runs every package's, beside the story lanes rather than inside them.
 - [ ] 1.4 Make `A new brand answers only for itself` pass and prove nothing a
       collector reads changed: a test resolves every key for every brand and
       locale and holds it against the value that brand rendered before the
