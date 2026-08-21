@@ -3,60 +3,59 @@
 
 .theme-grade10 {
   /* Figma semantic set (raw) */
-  --background: var(--slate-950); /* Main application background */
-  --foreground: var(--slate-200); /* Primary text color on the background */
-  --card: var(--slate-900); /* Background of card */
+  --background: var(--gray-50); /* Main application background */
+  --foreground: var(--gray-900); /* Primary text color on the background */
+  --card: var(--background); /* Background of card */
   --card-foreground: var(--foreground); /* Text and icons within cards */
-  --popover: var(--slate-900); /* Background for dropdown menus and popovers */
-  --popover-foreground: var(--slate-200); /* Text and icons within popovers */
-  --primary: var(--yellow-400); /* Brand color for primary actions (buttons, highlights) */
-  --primary-foreground: var(--slate-800); /* Text and icons on primary-colored elements */
-  --secondary: var(--slate-800); /* Less prominent action color */
-  --secondary-foreground: var(--slate-400); /* Text and icons on secondary-colored elements */
-  --muted: var(--slate-50-opacity-5); /* Subdued background for less important elements */
-  --muted-foreground: var(--slate-200); /* De-emphasized text (captions, labels) */
-  --accent: var(--slate-50-opacity-5); /* Highlight color for active or focused elements */
-  --accent-foreground: var(--slate-200); /* Text and icons on accent-colored elements */
-  --border: var(--slate-50-opacity-10); /* Default border color */
-  --border-hover: var(--slate-50-opacity-20); /* Border color for hovering cards */
-  --input: var(--slate-50-opacity-5); /* Form input and button borders */
-  --ring: var(--foreground); /* Focus indicator color */
-  --overlay: var(--slate-950-opacity-50);
-  --success: var(--green-300);
-  --success-foreground: var(--green-950);
+  --popover: var(--background); /* Background for dropdown menus and popovers */
+  --popover-foreground: var(--foreground); /* Text and icons within popovers */
+  --primary: var(--foreground); /* Brand color for primary actions (buttons, highlights) */
+  --primary-foreground: var(--gray-50); /* Text and icons on primary-colored elements */
+  --secondary: var(--gray-200); /* Less prominent action color */
+  --secondary-foreground: var(--gray-600); /* Text and icons on secondary-colored elements */
+  --muted: var(--gray-100); /* Subdued background for less important elements */
+  --muted-foreground: var(--foreground); /* De-emphasized text (captions, labels) */
+  --accent: var(--gray-950-opacity-4); /* Highlight color for active or focused elements */
+  --accent-foreground: var(--orange-500); /* Text and icons on accent-colored elements */
+  --border: var(--gray-300); /* Default border color */
+  --border-subtle: var(--gray-200); /* Subtle border color */
+  --border-hover: var(--gray-300); /* Border color for hovering cards */
+  --input: var(--background); /* Form input and button borders */
+  --ring: var(--gray-950-opacity-30); /* Focus indicator color */
+  --overlay: #FFFFFF66;
+  --success: var(--green-500);
+  --success-foreground: var(--green-50);
   --info: var(--blue-950);
-  --info-foreground: var(--blue-300);
-  --warning: var(--yellow-400);
-  --warning-foreground: var(--yellow-950);
-  --destructive: var(--red-400);
-  --destructive-foreground: var(--red-950);
+  --info-foreground: var(--blue-400);
+  --warning: var(--yellow-500);
+  --warning-foreground: var(--yellow-50);
+  --destructive: var(--red-600);
+  --destructive-foreground: var(--red-50);
   --chart-1: var(--green-400);
   --chart-2: var(--blue-400);
-  --chart-3: var(--purple-400);
+  --chart-3: var(--purple-500);
   --chart-4: var(--orange-400);
-  --chart-5: var(--red-400);
-  --chart-6: var(--yellow-400);
+  --chart-5: var(--red-500);
+  --chart-6: var(--yellow-300);
   --chart-7: var(--teal-400);
-  --sidebar: var(--card); /* Sidebar background */
+  --sidebar: var(--gray-100); /* Sidebar background */
   --control: var(--background); /* Outline button and bordered trigger surface */
   --control-hover: var(--slate-50-opacity-50); /* Outline button/trigger hover surface */
   --switch-track: var(--slate-50-opacity-80); /* Switch unchecked track */
-  --muted-hover: var(--slate-50-opacity-10); /* Ghost button hover */
-  --disabled: var(--slate-700); /* Disabled elements background */
+  --muted-hover: var(--gray-950-opacity-4); /* Ghost button hover */
+  --disabled: var(--gray-700); /* Disabled elements background */
   --disabled-foreground: var(--slate-50-opacity-30); /* Text for disabled elements */
   --primary-muted: var(--yellow-400-opacity-10); /* Subtle primary tint (selected rows, kbd) */
   --primary-muted-hover: var(--yellow-400-opacity-20); /* Hover for subtle primary elements */
   --primary-muted-foreground: var(--primary); /* Text color shown on a muted primary surface */
-  --primary-border: var(--yellow-400-opacity-20); /* Checked-control border (switch, checkbox) */
+  --primary-border: var(--primary); /* Checked-control border (switch, checkbox) */
   --tooltip-border: var(--secondary-foreground); /* Dotted border for inline text tooltip */
   --tab-border: var(--primary); /* border for tabs */
   --destructive-muted: var(--red-500-opacity-10); /* Tinted destructive button/badge background */
   --destructive-muted-hover: var(--red-500-opacity-20); /* Hover for tinted destructive elements */
   --destructive-border: var(--red-500-opacity-50); /* Invalid/destructive field border */
-  --destructive-ring: var(--destructive-foreground); /* Invalid focus ring */
-  --success-ring: var(--green-300); /* Valid focus ring */
-  --menu-border: var(--slate-50-opacity-10); /* Hairline border on menus, cards, popovers */
-  --menu-glass: var(--slate-950-opacity-70); /* Frosted menu background */
+  --destructive-ring: var(--destructive); /* Invalid focus ring */
+  --success-ring: var(--success); /* Valid focus ring */
   --warning-border: var(--yellow-400-opacity-30); /* Frosted menu background */
   --sidebar-foreground: var(--foreground); /* Text and icons within the sidebar */
   --sidebar-primary: var(--primary); /* Primary actions within the sidebar */
