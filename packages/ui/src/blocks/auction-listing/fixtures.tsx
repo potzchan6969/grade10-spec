@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@grade10/design-system/components/display/card";
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
+import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
