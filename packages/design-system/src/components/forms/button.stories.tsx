@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ChevronRightIcon, PlusIcon } from "lucide-react";
+import { expect, within } from "storybook/test";
 import { Button } from "./button";
 
 const meta = {
@@ -66,5 +67,35 @@ export const IconsAsChildren: Story = {
         <ChevronRightIcon />
       </>
     ),
+  },
+};
+
+/** A call to action that navigates is an anchor wearing the button's clothes.
+ * `render` says so and the component reads it, so the element gets the button
+ * semantics Base UI applies to a non-button — and not the `type="button"` an
+ * anchor has no use for. */
+export const AsALink: Story = {
+  args: {
+    // biome-ignore lint/a11y/useAnchorContent: Base UI merges the story's `children` into this element; the rule reads the JSX alone.
+    render: <a href="#store" />,
+    children: "Browse the store",
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const cta = canvas.getByRole("button", { name: "Browse the store" });
+    expect(cta.tagName).toBe("A");
+    expect(cta).not.toHaveAttribute("type");
+  },
+};
+
+/** An element that really is a button keeps its native semantics. */
+export const RenderingAButton: Story = {
+  args: { render: <button type="submit" />, children: "Save" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("button", { name: "Save" })).toHaveAttribute(
+      "type",
+      "submit",
+    );
   },
 };

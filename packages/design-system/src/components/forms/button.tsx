@@ -2,7 +2,7 @@ import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cn } from "@grade10/design-system/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { LoaderCircleIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import { isValidElement, type ReactNode } from "react";
 
 // Figma draws every disabled variant as that variant's own fill and text at
 // `Opacity/opacity-50` — node `86:3694` (primary), `86:3690` (secondary) and
@@ -103,6 +103,29 @@ function ButtonLeading({
   );
 }
 
+/**
+ * Whether what `render` will produce is a real `<button>`.
+ *
+ * Base UI has to know: a non-button claiming to be one silently loses the
+ * native semantics forms and screen readers depend on, and a real button
+ * claiming not to be gets Base UI's keyboard emulation stacked on the
+ * browser's own. A `render` element already says which it is, so reading it
+ * beats asking every call site to remember — the answer is in the JSX either
+ * way.
+ *
+ * `undefined` where it cannot be read: a render *function* is opaque, and no
+ * `render` at all means the primitive renders its own button. Both leave
+ * Base UI's default standing. A component element resolves to `false`,
+ * because the common case is a router link wrapping an `<a>`; one that really
+ * does render a button passes `nativeButton` itself.
+ */
+function rendersNativeButton(
+  render: ButtonProps["render"],
+): boolean | undefined {
+  if (!isValidElement(render)) return undefined;
+  return render.type === "button";
+}
+
 function Button({
   className,
   variant = "default",
@@ -112,6 +135,8 @@ function Button({
   trailing,
   disabled,
   children,
+  nativeButton,
+  render,
   ...props
 }: ButtonProps) {
   return (
@@ -120,6 +145,8 @@ function Button({
       data-loading={loading || undefined}
       aria-busy={loading || undefined}
       disabled={disabled || loading}
+      nativeButton={nativeButton ?? rendersNativeButton(render)}
+      render={render}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     >
