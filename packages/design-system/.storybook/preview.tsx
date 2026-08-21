@@ -31,7 +31,7 @@ const preview: Preview = {
   },
   initialGlobals: {
     colorTheme: "grade10",
-    mode: "dark",
+    mode: "light",
   },
   globalTypes: {
     colorTheme: {
