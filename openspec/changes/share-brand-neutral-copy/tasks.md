@@ -37,7 +37,7 @@ second group waits on anything but the first being pushed.
 
 Depends on group 1 being pushed.
 
-- [ ] 2.1 Bump `external/grade10-spec` to the shared-layer catalogs and confirm
+- [x] 2.1 Bump `external/grade10-spec` to the shared-layer catalogs and confirm
       `No raw key on screen` still holds: every message key still typechecks
       against the vocabulary, and no page, component, or worker changes.
 - [ ] 2.2 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
