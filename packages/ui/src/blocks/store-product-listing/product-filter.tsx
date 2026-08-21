@@ -5,16 +5,20 @@ import { Link } from "@grade10/design-system/components/forms/link";
 import { SearchInput } from "@grade10/design-system/components/forms/search-input";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import type { ReactNode } from "react";
 import { AsyncMessage } from "../shared/async-message";
 import type { AsyncState, FilterGroup, FilterSelection } from "./types";
 
-type ProductFilterProps = {
+/** The words the filter renders, whatever it is filtering. */
+type ProductFilterCopy = {
   /** Filter heading. Figma's `Header Text`. */
-  heading: ReactNode;
-  searchPlaceholder: ReactNode;
+  heading: string;
+  searchPlaceholder: string;
   /** Accessible name for the search field. Not shown visually. */
-  searchLabel?: ReactNode;
+  searchLabel?: string;
+};
+
+type ProductFilterProps = {
+  copy: ProductFilterCopy;
   searchValue?: string;
   onSearchChange?: (value: string) => void;
   onSearchClear?: () => void;
@@ -38,9 +42,7 @@ type ProductFilterProps = {
  * what it is given; it never holds the selection.
  */
 function ProductFilter({
-  heading,
-  searchPlaceholder,
-  searchLabel,
+  copy,
   searchValue,
   onSearchChange,
   onSearchClear,
@@ -64,21 +66,15 @@ function ProductFilter({
     >
       <VStack className="w-full gap-2" gap="none">
         <h2 className="flex h-10 w-full items-center text-2xl font-bold text-foreground">
-          {heading}
+          {copy.heading}
         </h2>
+        {/* Words, not nodes: a placeholder and an accessible name are read by
+            the browser, so they arrive as text and need no narrowing here. */}
         <SearchInput
-          aria-label={
-            searchLabel != null && typeof searchLabel === "string"
-              ? searchLabel
-              : undefined
-          }
+          aria-label={copy.searchLabel}
           onChange={(event) => onSearchChange?.(event.currentTarget.value)}
           onClear={showClear ? onSearchClear : undefined}
-          placeholder={
-            typeof searchPlaceholder === "string"
-              ? searchPlaceholder
-              : undefined
-          }
+          placeholder={copy.searchPlaceholder}
           value={searchValue}
         />
       </VStack>
@@ -133,5 +129,5 @@ function ProductFilter({
   );
 }
 
-export type { ProductFilterProps };
+export type { ProductFilterCopy, ProductFilterProps };
 export { ProductFilter };

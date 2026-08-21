@@ -4,15 +4,17 @@ import { ProductCard } from "./product-card";
 
 const IMAGE = new URL("./product-card.fixture.png", import.meta.url).href;
 
+/** The words every tile renders the same, supplied once. */
+const copy = { cart: "Add to cart", soldOut: "SOLD OUT", sale: "SALE" };
+
 const defaults = {
+  copy,
   imageSrc: IMAGE,
   imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
   tags: ["Pokémon", "M4", "JP"],
   name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
   price: "HK$105",
   originalPrice: "HK$123",
-  saleLabel: "SALE",
-  cartLabel: "Add to cart",
   onClick: () => {},
 };
 
@@ -49,7 +51,7 @@ export const Default: Story = {
 
 /** Figma `soldOut=true` — SOLD OUT badge, no cart action, tile inert. */
 export const SoldOut: Story = {
-  args: { soldOut: true, soldOutLabel: "SOLD OUT", saleLabel: undefined },
+  args: { soldOut: true },
   decorators: well,
 };
 
@@ -59,9 +61,10 @@ export const InCart: Story = {
   decorators: well,
 };
 
-/** `hasDiscount=false` — current price only, no strikethrough. */
+/** `hasDiscount=false` — current price only, no strikethrough, no badge: the
+ * discount treatment follows the original price rather than a second flag. */
 export const WithoutOriginalPrice: Story = {
-  args: { originalPrice: undefined, saleLabel: undefined },
+  args: { originalPrice: undefined },
   decorators: well,
 };
 
@@ -76,12 +79,7 @@ export const States: Story = {
         <ProductCard {...args} cartCount="1" inCart />
       </div>
       <div className="w-[260px]">
-        <ProductCard
-          {...args}
-          saleLabel={undefined}
-          soldOut
-          soldOutLabel="SOLD OUT"
-        />
+        <ProductCard {...args} originalPrice={undefined} soldOut />
       </div>
     </div>
   ),
@@ -99,7 +97,7 @@ export const AddedToCart: Story = {
 
 /** `hasDiscount=false` — no badge and no strikethrough price. */
 export const WithoutDiscount: Story = {
-  args: { originalPrice: undefined, saleLabel: undefined },
+  args: { originalPrice: undefined },
   decorators: well,
 };
 
@@ -107,4 +105,22 @@ export const WithoutDiscount: Story = {
 export const BoneyardCapture: Story = {
   args: { loading: true, name: "", price: "" },
   decorators: well,
+};
+
+/**
+ * Scenario: A tile is named once. What the card is called is the product's
+ * own name, and what the cart control is called is the list's word for it —
+ * neither repeated in a prop of its own.
+ */
+export const NamedOnce: Story = {
+  decorators: well,
+  args: { onCartClick: () => {} },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    expect(
+      canvas.getAllByRole("button", { name: defaults.name }).length,
+    ).toBeGreaterThan(0);
+    expect(canvas.getByRole("button", { name: copy.cart })).toBeInTheDocument();
+  },
 };

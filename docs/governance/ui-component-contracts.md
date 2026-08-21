@@ -78,6 +78,34 @@ Start with a concise inventory of what the consumer owns:
 
 Do not expose a component prop shaped like an API response. Do not ask a reusable component to infer a loading state from missing content. If a caller needs domain conversion, create an app-owned adapter before the component boundary.
 
+### A word is a string, a slot is a node
+
+Content splits in two, and the type says which half a prop is in.
+
+- **A word** is something the component says: a label, a heading, a placeholder, a hint, an accessible name. It is a `string`. A component holding a string can name a control with it, truncate it, transform its case, or compare it — and one holding a node can do none of those, which is what forces a second prop carrying the same text.
+- **A slot** is markup the consumer composes and the component only places: actions, banners, badge rows, a card's body. It is a `ReactNode`, and it is a prop of its own.
+- **A value** is what the component is showing right now — a formatted price, a count, a remaining time. It stays its own prop, because it changes with the data rather than with the language.
+
+Every word a component renders arrives in a single `copy` prop, whose type the component exports under its own name (`ProductCardCopy`, `NavCopy`). A component that renders others composes theirs, so a surface declares its words once and the compiler carries them down. A word every item renders the same way belongs to the list rather than to each item: supplying it per item invites two tiles to disagree about what the cart button is called.
+
+The consuming application composes the same way. A slice's copy type is the
+copy types of the blocks it renders, plus the words the slice itself says —
+never those blocks' labels restated one flat key at a time and adapted at the
+JSX call site. Both shapes typecheck, which is why this has to be a rule: the
+flat one just moves the assembly into the markup, where the next block added
+to the surface has nowhere to declare its words. The auction's
+`ListingViewCopy` carries the gallery's copy type and the details', and reads
+as the page reads.
+
+Where the word depends on product state, the vocabulary stays with the
+consumer and an adapter folds one copy object out of it. A lot's bid panel
+labels the same slot "Starting bid", "Current bid", "Winning bid", or
+"Result", according to where the lot is in its life — which the panel must not
+know. So the four words live on the slice's copy type and the function that
+already derives the screen state hands the panel one `ListingBidPanelCopy`,
+worded. This is not an exception to composition; the copy object is still
+assembled once, above the component, by whoever knows enough to choose.
+
 ### Model asynchronous content explicitly
 
 A discriminated `AsyncState<T>` is the default pattern for a visual boundary:

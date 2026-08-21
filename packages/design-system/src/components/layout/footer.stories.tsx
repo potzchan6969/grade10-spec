@@ -59,15 +59,17 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
   args: {
+    copy: {
+      description:
+        "Japanese trading cards selected for collectors, openers, and complete-set builders.",
+      attribution: "A division of MemeStrategy (HKEX: 2440)",
+      copyright: "© 2026 Grade10. All rights reserved.",
+      locale: "HONG KONG / HKD",
+    },
     logo: "Grade10 Marketplace",
-    description:
-      "Japanese trading cards selected for collectors, openers, and complete-set builders.",
-    attribution: "A division of MemeStrategy (HKEX: 2440)",
     socialLinks: SOCIAL_LINKS,
     columns: COLUMNS,
-    copyright: "© 2026 Grade10. All rights reserved.",
     legalLinks: LEGAL_LINKS,
-    locale: "HONG KONG / HKD",
   },
 } satisfies Meta<typeof Footer>;
 

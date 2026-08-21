@@ -1,34 +1,8 @@
 # shared-ui/store-product-listing Delta
 
-## MODIFIED Requirements
+## ADDED Requirements
 
-### Requirement: The listing surface exports
-
-The shared UI package SHALL export, from its public entry, exactly these
-components for the listing surface — `ProductBrowse`, `FilterPanel`,
-`ProductFilter`, `ProductListHeader`, `ProductList`, and `ProductCard` — and
-exactly these types: `AsyncState`, `AsyncAction`, `ProductSummary`,
-`FilterGroup`, `FilterOption`, `FilterSelection`, `AppliedFilter`,
-`SortOption`, `UtilityLink`, `ProductBrowseProps`, `FilterPanelProps`,
-`ProductFilterProps`, `ProductListHeaderProps`, `ProductListProps`, and
-`ProductCardProps`.
-
-`FilterPanel`, `ProductFilter`, `ProductListHeader`, `ProductList`, and
-`ProductCard` SHALL each be renderable on their own, outside `ProductBrowse`,
-so a later surface can reuse one without the others.
-
-#### Scenario: An application imports the surface
-
-- **WHEN** an application imports each name above from the shared UI package's public entry
-- **THEN** every import resolves
-- **AND** no other component or type is exported for this surface
-
-#### Scenario: A part is reused alone
-
-- **WHEN** an application renders the product list, the filter panel, the product filter, the list header, or a product card without the browse root
-- **THEN** it renders and behaves as specified, with no missing-context error and no requirement to supply browse-root props
-
-### Requirement: Every listing value is consumer-controlled
+### Requirement: The listing surface holds no state of its own
 
 The listing surface SHALL receive the search query, the filter selection, the
 active sort option, whether more products can be loaded, and whether a load is
@@ -270,6 +244,34 @@ time.
 - **WHEN** a sort option is selected and at least one applied filter is supplied
 - **THEN** both remain displayed together
 
+## MODIFIED Requirements
+
+### Requirement: The listing surface exports
+
+The shared UI package SHALL export, from its public entry, exactly these
+components for the listing surface — `ProductBrowse`, `FilterPanel`,
+`ProductFilter`, `ProductListHeader`, `ProductList`, and `ProductCard` — and
+exactly these types: `AsyncState`, `AsyncAction`, `ProductSummary`,
+`FilterGroup`, `FilterOption`, `FilterSelection`, `AppliedFilter`,
+`SortOption`, `UtilityLink`, `ProductBrowseProps`, `FilterPanelProps`,
+`ProductFilterProps`, `ProductListHeaderProps`, `ProductListProps`, and
+`ProductCardProps`.
+
+`FilterPanel`, `ProductFilter`, `ProductListHeader`, `ProductList`, and
+`ProductCard` SHALL each be renderable on their own, outside `ProductBrowse`,
+so a later surface can reuse one without the others.
+
+#### Scenario: An application imports the surface
+
+- **WHEN** an application imports each name above from the shared UI package's public entry
+- **THEN** every import resolves
+- **AND** no other component or type is exported for this surface
+
+#### Scenario: A part is reused alone
+
+- **WHEN** an application renders the product list, the filter panel, the product filter, the list header, or a product card without the browse root
+- **THEN** it renders and behaves as specified, with no missing-context error and no requirement to supply browse-root props
+
 ### Requirement: The product list displays product tiles and delegates every product action
 
 The product list SHALL display one tile per supplied product, in the order
@@ -409,3 +411,55 @@ A change to the displayed result count SHALL be announced without moving focus.
 - **WHEN** the consumer supplies a new result count after a filter change
 - **THEN** the new count is announced
 - **AND** focus stays where the shopper left it
+
+## REMOVED Requirements
+
+### Requirement: Every listing value is consumer-controlled
+
+**Reason:** Every value it named is gone or renamed — the active collection,
+the chip-filter selection, the exclusive-filter values, and the page number.
+What the surface now receives is stated by "The listing surface holds no state
+of its own", which keeps the same rule over the new set.
+
+**Migration:** None beyond the prop changes the replacing requirements name.
+
+### Requirement: Collections and result regions resolve independently
+
+**Reason:** There is no collection boundary to resolve. The sidebar's
+asynchronous boundary now carries filter groups, described by "Filter groups
+and result regions resolve independently".
+
+**Migration:** Supply the sidebar boundary as `groups` instead of
+`collections`. Its loading, empty, error, and resolved conditions are
+unchanged.
+
+### Requirement: The sidebar displays search, collections, and utility links
+
+**Reason:** The collection menu leaves the sidebar; multi-select filter groups
+take its place. Replaced by "The sidebar displays a heading, search, filter
+groups, and utility links".
+
+**Migration:** Stop importing `CollectionMenu`, `CollectionMenuItem`, and
+`CollectionOption`. Pass `groups` and a filter `selection` instead of
+`collections` and `activeCollection`, and supply the sidebar heading.
+
+### Requirement: The product list header displays the title, result count, and controls
+
+**Reason:** The header no longer carries a title, sort chips with a paired
+reversal, chip-filter groups, or an exclusive-filter dropdown. Replaced by
+"The product list header displays the result count, applied filters, and the
+sort control".
+
+**Migration:** Stop passing `title`, `chipFilters`, and `selectFilters`.
+Pass `sortTriggerLabel` and `appliedFilters`. Filter groups move to the
+sidebar's `groups`.
+
+### Requirement: Pagination reflects and reports the page
+
+**Reason:** The list loads more as the shopper scrolls, described by "More
+products load as the shopper scrolls". No page exists to reflect or report.
+
+**Migration:** Stop passing `page`, `pageCount`, `onPageChange`,
+`previousLabel`, `nextLabel`, `paginationLabel`, and `morePagesLabel`.
+Pass `hasMore`, `loadingMore`, and `onLoadMore`, appending to the
+supplied product list when `onLoadMore` is reported.

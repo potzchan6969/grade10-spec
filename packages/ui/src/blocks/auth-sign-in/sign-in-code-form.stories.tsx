@@ -8,13 +8,11 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
+    copy: { code: "Verification code", submit: "Verify code", back: "Back" },
     code: "",
-    codeLabel: "Verification code",
     hint: "Code sent to collector@example.com",
     onCodeChange: fn(),
     onSubmit: fn(),
-    submitLabel: "Verify code",
-    backLabel: "Back",
     onBack: fn(),
   },
 } satisfies Meta<typeof SignInCodeForm>;

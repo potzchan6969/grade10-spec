@@ -5,8 +5,7 @@ import figma from "figma";
 
 export default {
   example: figma.code`<ProductFilter
-  heading={heading}
-  searchPlaceholder={searchPlaceholder}
+  copy={copy}
   searchValue={searchValue}
   onSearchChange={onSearchChange}
   onSearchClear={onSearchClear}

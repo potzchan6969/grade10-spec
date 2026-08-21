@@ -109,19 +109,21 @@ function panelFor({ bids, watching }: DemoState) {
   const lead = bids.at(-1);
   return (
     <ListingBidPanel
+      copy={{
+        price: lead ? "Current bid" : "Starting bid",
+        ends: "Ends",
+        extension: "Extended bidding",
+        extensionTooltip: "Extended bidding rules",
+      }}
       actions={<LiveActions />}
       bidCount={`${bids.length} ${bids.length === 1 ? "Bid" : "Bids"}`}
       deadline="1 Sep 2026, 18:00 UTC"
-      endsLabel="Ends"
-      extensionLabel="Extended bidding"
       extensionValue="30 minutes"
       extensionTooltip="Bids placed in the final 30 minutes extend the auction by 30 minutes."
-      extensionTooltipLabel="Extended bidding rules"
       history={historyOf(bids)}
       kicker="Listing 12 · September Slabs"
       price={lead?.amount ?? "HK$1,200.00"}
       priceHint="Buyer's premium is added at invoice."
-      priceLabel={lead ? "Current bid" : "Starting bid"}
       remaining="13D 11H 33M 47S"
       standing={standingOf(bids)}
       title="1999 Charizard, PSA 10"

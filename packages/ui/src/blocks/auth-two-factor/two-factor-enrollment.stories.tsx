@@ -9,26 +9,28 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
+    copy: {
+      scanTitle: "Scan this with your authenticator",
+      openInApp: "Open in your password manager",
+      issuer: "Service",
+      account: "Account",
+      setupKey: "Setup key",
+      setupKeyHint: "Use this if you would rather type the account in by hand.",
+      backupCodesTitle: "Backup codes",
+      backupCodesDescription:
+        "Store these now — they are shown once, and each one signs you in if you lose your authenticator.",
+      scanDescription:
+        "Point your phone's authenticator app at the code, or open it in the password manager on this device.",
+      verify: "Verification code",
+      verifyHint: "Enter the code your authenticator shows now.",
+      verifySubmit: "Turn on two-factor authentication",
+      qrAlt: "QR code for adding this account to an authenticator app",
+    },
     totpURI: TOTP_URI,
     backupCodes: BACKUP_CODES,
-    scanTitle: "Scan this with your authenticator",
-    scanDescription:
-      "Point your phone's authenticator app at the code, or open it in the password manager on this device.",
-    qrAltText: "QR code for adding this account to an authenticator app",
-    openInAppLabel: "Open in your password manager",
-    issuerLabel: "Service",
-    accountLabel: "Account",
-    setupKeyLabel: "Setup key",
-    setupKeyHint: "Use this if you would rather type the account in by hand.",
     copySetupKey: { label: "Copy", onAction: fn() },
-    backupCodesTitle: "Backup codes",
-    backupCodesDescription:
-      "Store these now — they are shown once, and each one signs you in if you lose your authenticator.",
     copyBackupCodes: { label: "Copy all", onAction: fn() },
     downloadBackupCodes: { label: "Download", onAction: fn() },
-    verifyLabel: "Verification code",
-    verifyHint: "Enter the code your authenticator shows now.",
-    verifySubmitLabel: "Turn on two-factor authentication",
     onVerify: fn(),
   },
 } satisfies Meta<typeof TwoFactorEnrollment>;

@@ -10,30 +10,36 @@ import { AuthenticatorQr } from "./authenticator-qr";
 import { parseTotpUri } from "./totp-uri";
 import { TwoFactorVerifyForm } from "./two-factor-verify-form";
 
+/** Every word the enrollment says. What the server minted for it — the URI,
+ * the codes — is not a word and stays its own prop. */
+type TwoFactorEnrollmentCopy = {
+  scanTitle: string;
+  scanDescription?: string;
+  /** Alt text for the QR code. */
+  qrAlt: string;
+  /** Text of the `otpauth://` link — "Open in your password manager". */
+  openInApp: string;
+  issuer: string;
+  account: string;
+  setupKey: string;
+  setupKeyHint?: string;
+  backupCodesTitle: string;
+  backupCodesDescription: string;
+  verify: string;
+  verifyHint?: string;
+  verifySubmit: string;
+};
+
 type TwoFactorEnrollmentProps = {
+  copy: TwoFactorEnrollmentCopy;
   /** The `otpauth://` URI the server minted for this enrollment. */
   totpURI: string;
   /** Shown once and never again, so the consumer must have kept them. */
   backupCodes: readonly string[];
-  scanTitle: ReactNode;
-  scanDescription?: ReactNode;
-  /** Alt text for the QR code. Required — no built-in English. */
-  qrAltText: string;
-  /** Text of the `otpauth://` link — "Open in your password manager". */
-  openInAppLabel: ReactNode;
-  issuerLabel: ReactNode;
-  accountLabel: ReactNode;
-  setupKeyLabel: ReactNode;
-  setupKeyHint?: ReactNode;
   /** Omit and no copy button renders; the key stays selectable either way. */
   copySetupKey?: AsyncAction;
-  backupCodesTitle: ReactNode;
-  backupCodesDescription: ReactNode;
   copyBackupCodes?: AsyncAction;
   downloadBackupCodes?: AsyncAction;
-  verifyLabel: ReactNode;
-  verifyHint?: ReactNode;
-  verifySubmitLabel: ReactNode;
   error?: ReactNode;
   pending?: boolean;
   onVerify: (code: string) => void;
@@ -72,24 +78,12 @@ function DetailRow({ label, value }: { label: ReactNode; value: string }) {
  * consumer, which owns the clipboard, the file name and the network.
  */
 function TwoFactorEnrollment({
+  copy,
   totpURI,
   backupCodes,
-  scanTitle,
-  scanDescription,
-  qrAltText,
-  openInAppLabel,
-  issuerLabel,
-  accountLabel,
-  setupKeyLabel,
-  setupKeyHint,
   copySetupKey,
-  backupCodesTitle,
-  backupCodesDescription,
   copyBackupCodes,
   downloadBackupCodes,
-  verifyLabel,
-  verifyHint,
-  verifySubmitLabel,
   error,
   pending = false,
   onVerify,
@@ -100,25 +94,25 @@ function TwoFactorEnrollment({
   return (
     <VStack className={className} data-slot="two-factor-enrollment" gap="lg">
       <VStack gap="sm">
-        <Text weight="medium">{scanTitle}</Text>
-        {scanDescription ? (
+        <Text weight="medium">{copy.scanTitle}</Text>
+        {copy.scanDescription ? (
           <Text size="sm" tone="secondary">
-            {scanDescription}
+            {copy.scanDescription}
           </Text>
         ) : null}
-        <AuthenticatorQr altText={qrAltText} value={totpURI} />
+        <AuthenticatorQr altText={copy.qrAlt} value={totpURI} />
         <Link href={totpURI} size="sm">
-          {openInAppLabel}
+          {copy.openInApp}
         </Link>
       </VStack>
 
       <VStack gap="sm">
-        {issuer ? <DetailRow label={issuerLabel} value={issuer} /> : null}
-        {account ? <DetailRow label={accountLabel} value={account} /> : null}
+        {issuer ? <DetailRow label={copy.issuer} value={issuer} /> : null}
+        {account ? <DetailRow label={copy.account} value={account} /> : null}
         {secret ? (
           <VStack gap="xs">
             <Text size="sm" tone="secondary">
-              {setupKeyLabel}
+              {copy.setupKey}
             </Text>
             <HStack align="center" gap="sm" wrap>
               <Text className="break-all font-mono" size="sm">
@@ -135,9 +129,9 @@ function TwoFactorEnrollment({
                 </Button>
               ) : null}
             </HStack>
-            {setupKeyHint ? (
+            {copy.setupKeyHint ? (
               <Text size="sm" tone="secondary">
-                {setupKeyHint}
+                {copy.setupKeyHint}
               </Text>
             ) : null}
           </VStack>
@@ -147,9 +141,9 @@ function TwoFactorEnrollment({
       <Separator />
 
       <VStack gap="sm">
-        <Text weight="medium">{backupCodesTitle}</Text>
+        <Text weight="medium">{copy.backupCodesTitle}</Text>
         <Text size="sm" tone="secondary">
-          {backupCodesDescription}
+          {copy.backupCodesDescription}
         </Text>
         <VStack
           className="rounded-(--radius-md) border border-border p-3"
@@ -190,16 +184,18 @@ function TwoFactorEnrollment({
       <Separator />
 
       <TwoFactorVerifyForm
+        copy={{
+          label: copy.verify,
+          hint: copy.verifyHint,
+          submit: copy.verifySubmit,
+        }}
         error={error}
-        hint={verifyHint}
-        label={verifyLabel}
         onSubmit={onVerify}
         pending={pending}
-        submitLabel={verifySubmitLabel}
       />
     </VStack>
   );
 }
 
-export type { TwoFactorEnrollmentProps };
+export type { TwoFactorEnrollmentCopy, TwoFactorEnrollmentProps };
 export { TwoFactorEnrollment };

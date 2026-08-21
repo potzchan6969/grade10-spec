@@ -8,9 +8,11 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
-    label: "Verification code",
-    hint: "From your authenticator app.",
-    submitLabel: "Verify",
+    copy: {
+      label: "Verification code",
+      hint: "From your authenticator app.",
+      submit: "Verify",
+    },
     onSubmit: fn(),
   },
 } satisfies Meta<typeof TwoFactorVerifyForm>;
@@ -22,7 +24,14 @@ export const Default: Story = {};
 
 /** The consumer supplies the failure copy. */
 export const ErrorState: Story = {
-  args: { error: "That code didn't work." },
+  args: {
+    copy: {
+      label: "Backup code",
+      hint: "One of the codes you stored at setup.",
+      submit: "Verify",
+    },
+    error: "That code didn't work.",
+  },
 };
 
 export const Pending: Story = { args: { pending: true } };
@@ -31,8 +40,6 @@ export const Pending: Story = { args: { pending: true } };
 export const BackupCode: Story = {
   args: {
     variant: "text",
-    label: "Backup code",
-    hint: "One of the codes you stored at setup.",
   },
 };
 

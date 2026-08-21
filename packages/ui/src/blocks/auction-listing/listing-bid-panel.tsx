@@ -23,7 +23,24 @@ import { popInValue } from "./digit-pop-in";
 
 import "./listing-bid-panel.css";
 
+/**
+ * The words the panel says. What the lot currently costs, how long is left,
+ * and what a collector can do about it are values and slots, not words.
+ */
+type ListingBidPanelCopy = {
+  /** What the amount on show is: an opening bid, the current one, a result. */
+  price: string;
+  /** What the time on show is: when bidding opens, or when it ends. */
+  ends: string;
+  /** Names the extended-bidding row. Omit it and the row is drawn from its
+   * value alone. */
+  extension?: string;
+  /** Accessible name for the control that opens the extension's explanation. */
+  extensionTooltip?: string;
+};
+
 type ListingBidPanelProps = {
+  copy: ListingBidPanelCopy;
   title: ReactNode;
   kicker?: ReactNode;
   /** Highest-bidder / outbid / won banner. The consumer owns the content. */
@@ -32,22 +49,14 @@ type ListingBidPanelProps = {
   watchAction?: ReactNode;
   /** Whether the current viewer is watching this listing. */
   watching?: boolean;
-  priceLabel: ReactNode;
   price: ReactNode;
   priceHint?: ReactNode;
   bidCount?: ReactNode;
-  /** @deprecated Bid history is always visible when provided. */
-  showHistoryLabel?: ReactNode;
-  /** @deprecated Bid history is always visible when provided. */
-  hideHistoryLabel?: ReactNode;
   history?: ReactNode;
-  endsLabel: ReactNode;
   remaining: ReactNode;
   deadline?: ReactNode;
-  extensionLabel?: ReactNode;
   extensionValue?: ReactNode;
   extensionTooltip?: ReactNode;
-  extensionTooltipLabel?: string;
   /** Place bid, watch, share — the consumer owns the controls. */
   actions: ReactNode;
   className?: string;
@@ -63,18 +72,15 @@ function ListingBidPanel({
   standing,
   watchAction,
   watching,
-  priceLabel,
+  copy,
   price,
   priceHint,
   bidCount,
   history,
-  endsLabel,
   remaining,
   deadline,
-  extensionLabel,
   extensionValue,
   extensionTooltip,
-  extensionTooltipLabel,
   actions,
   className,
 }: ListingBidPanelProps) {
@@ -101,7 +107,7 @@ function ListingBidPanel({
           <VStack className="rounded-lg bg-muted/40 p-4" gap="sm">
             <VStack gap="xs">
               <Text size="sm" tone="secondary">
-                {priceLabel}
+                {copy.price}
               </Text>
               <Text size="xl" weight="bold">
                 {popInValue(price)}
@@ -135,7 +141,7 @@ function ListingBidPanel({
             <HStack gap="md" hAlign="space-between" vAlign="end" wrap>
               <VStack gap="xs">
                 <Text size="sm" tone="secondary">
-                  {endsLabel}
+                  {copy.ends}
                 </Text>
                 <Text size="xl" weight="bold">
                   {remaining}
@@ -147,11 +153,11 @@ function ListingBidPanel({
                 </Text>
               ) : null}
             </HStack>
-            {extensionLabel != null || extensionValue != null ? (
+            {copy.extension != null || extensionValue != null ? (
               <HStack className="w-full" gap="sm" hAlign="space-between" wrap>
-                {extensionLabel != null ? (
+                {copy.extension != null ? (
                   <HStack gap="xs" vAlign="center">
-                    <Text size="sm">{extensionLabel}</Text>
+                    <Text size="sm">{copy.extension}</Text>
                     {extensionTooltip != null ? (
                       <TooltipProvider>
                         <Tooltip>
@@ -159,7 +165,7 @@ function ListingBidPanel({
                             render={
                               <IconButton
                                 aria-label={
-                                  extensionTooltipLabel ??
+                                  copy.extensionTooltip ??
                                   "Extended bidding rules"
                                 }
                                 size="xs"
@@ -196,5 +202,5 @@ function ListingBidPanel({
   );
 }
 
-export type { ListingBidPanelProps };
+export type { ListingBidPanelCopy, ListingBidPanelProps };
 export { ListingBidPanel };

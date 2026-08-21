@@ -12,9 +12,14 @@ import type { ReactNode } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
 
+/** The words the card says, whoever's profile is in it. */
+type ProfileCardCopy = {
+  title: string;
+  description?: string;
+};
+
 type ProfileCardProps = {
-  title: ReactNode;
-  description?: ReactNode;
+  copy: ProfileCardCopy;
   /** The card's one async boundary. `ready` carries the body the consumer
    * chose — a `ProfileDetails`, a `ProfileForm`, or both around a hint —
    * because view-versus-edit is product state this card must not hold. */
@@ -24,17 +29,14 @@ type ProfileCardProps = {
 
 /** The profile surface: a card whose body is loading, failed, empty, or
  * whatever the consumer put behind `ready`. */
-function ProfileCard({
-  title,
-  description,
-  state,
-  className,
-}: ProfileCardProps) {
+function ProfileCard({ copy, state, className }: ProfileCardProps) {
   return (
     <Card className={cn("max-w-md", className)} data-slot="profile-card">
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        {description ? <CardDescription>{description}</CardDescription> : null}
+        <CardTitle>{copy.title}</CardTitle>
+        {copy.description ? (
+          <CardDescription>{copy.description}</CardDescription>
+        ) : null}
       </CardHeader>
       <CardContent>
         <VStack gap="md">
@@ -59,5 +61,5 @@ function ProfileCard({
   );
 }
 
-export type { ProfileCardProps };
+export type { ProfileCardCopy, ProfileCardProps };
 export { ProfileCard };

@@ -16,9 +16,11 @@ const meta = {
     ),
   ],
   args: {
-    heading: "Filter",
-    searchPlaceholder: "Find product",
-    searchLabel: "Search products",
+    copy: {
+      heading: "Filter",
+      searchPlaceholder: "Find product",
+      searchLabel: "Search products",
+    },
     groups: { status: "ready", data: FILTER_GROUPS },
     selection: {},
     onFilterChange: fn(),
