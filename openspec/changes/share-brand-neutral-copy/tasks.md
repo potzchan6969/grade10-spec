@@ -6,16 +6,16 @@ second group waits on anything but the first being pushed.
 
 ## 1. The shared layer and how a string resolves (grade10-spec) (owner: @sean)
 
-- [ ] 1.1 Add `messages/shared/<locale>/<namespace>.json` for every locale any
+- [x] 1.1 Add `messages/shared/<locale>/<namespace>.json` for every locale any
       brand speaks, carrying the value each key resolves to today wherever the
       brands agree on it, and leave the keys they disagree on in the brand
       directories — `src/catalogs.ts` assembles the new layer beside the
       brands, and the exported surface does not move.
-- [ ] 1.2 Make `A brand says nothing of its own` and `A brand names itself`
+- [x] 1.2 Make `A brand says nothing of its own` and `A brand names itself`
       pass: `getMessages` resolves the vocabulary's default locale, then the
       vocabulary's requested locale, then the brand's default, then the
       brand's requested, so a brand states only what it says differently.
-- [ ] 1.3 Make `A brand leaves a key unanswered`, `A brand's own words are
+- [x] 1.3 Make `A brand leaves a key unanswered`, `A brand's own words are
       missing a language` and `A single-locale brand is missing a string`
       pass: the vocabulary is the union of the shared layer and the keys a
       brand states, every catalog is typechecked as an overlay of it, and a
@@ -23,7 +23,7 @@ second group waits on anything but the first being pushed.
       together leave a gap — this repository has no unit lane yet, so the test
       brings one: `vitest` in `packages/i18n` and a root `test` script that
       runs every package's, beside the story lanes rather than inside them.
-- [ ] 1.4 Make `A new brand answers only for itself` pass and prove nothing a
+- [x] 1.4 Make `A new brand answers only for itself` pass and prove nothing a
       collector reads changed: a test resolves every key for every brand and
       locale and holds it against the value that brand rendered before the
       move.
