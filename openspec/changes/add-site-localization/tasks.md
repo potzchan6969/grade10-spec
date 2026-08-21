@@ -8,10 +8,10 @@ another change: crawlable public pages have shipped.
 
 ## 1. Brand-keyed catalogs and the shared vocabulary (grade10-spec) (owner: @sean)
 
-- [ ] 1.1 Restructure `packages/i18n` brand-first — one catalog per brand and locale, a per-brand registry of locale set and default, lookup by brand and locale — keeping the key-by-key overlay merge so `A partial translation falls back key by key` passes, and naming locales as the spec does (`zh-Hant`, `zh-Hans`) in place of today's lowercase `zh-hant`, since the same tag reaches `lang` and the address prefixes.
-- [ ] 1.2 Make `A single-locale brand is missing a string` pass: ZZZ's Korean catalog is typechecked as complete against the vocabulary, so a missing value fails `pnpm run typecheck` in this repository.
-- [ ] 1.3 Inventory the user-facing strings of both sites' surfaces and the shared feature slices, and author the vocabulary with engineer-drafted values for `en`, `zh-Hant`, `zh-Hans`, and `ko`, including the login-email branch — marked for native review — so `A Chinese sign-in gets a Chinese email` and `The ZZZ email is Korean` have values to render.
-- [ ] 1.4 Run `pnpm run typecheck` and `pnpm run lint` in grade10-spec as this group's verification.
+- [x] 1.1 Restructure `packages/i18n` brand-first — one catalog per brand and locale, a per-brand registry of locale set and default, lookup by brand and locale — keeping the key-by-key overlay merge so `A partial translation falls back key by key` passes, and naming locales as the spec does (`zh-Hant`, `zh-Hans`) in place of today's lowercase `zh-hant`, since the same tag reaches `lang` and the address prefixes.
+- [x] 1.2 Make `A single-locale brand is missing a string` pass: ZZZ's Korean catalog is typechecked as complete against the vocabulary, so a missing value fails `pnpm run typecheck` in this repository.
+- [x] 1.3 Inventory the user-facing strings of both sites' surfaces and the shared feature slices, and author the vocabulary with engineer-drafted values for `en`, `zh-Hant`, `zh-Hans`, and `ko`, including the login-email branch — marked for native review — so `A Chinese sign-in gets a Chinese email` and `The ZZZ email is Korean` have values to render.
+- [x] 1.4 Run `pnpm run typecheck` and `pnpm run lint` in grade10-spec as this group's verification.
 
 ## 2. Shared surfaces speak the vocabulary (grade10)
 
