@@ -2,14 +2,23 @@
 
 Every user-facing string either site renders, named once and answered per brand.
 
-`messages/grade10/en/` is the vocabulary: a key exists the moment English
-answers it, and every other catalog is measured against that shape. Catalogs
-are brand-first — `messages/<brand>/<locale>/<namespace>.json` — because the
-names are shared across brands and only the values differ, and one file per
-namespace because a namespace is what a translator, a reviewer and a change
-each work in at once. `src/catalogs.ts` is where those files add up to a
-catalog, and the only file naming one by path. Consumers bring their own
-renderer (`use-intl` in the application repositories).
+A string is written in one of two places, and the difference is whether it
+says anything about a brand.
+
+| Layer | Path | Holds |
+| --- | --- | --- |
+| Shared | `messages/shared/<locale>/<namespace>.json` | Every key no brand claims — what a feature calls things, written once per language however many brands render it |
+| Brand | `messages/<brand>/<locale>/<namespace>.json` | What that brand says for itself: its name, who runs it, where it sells, what each of its surfaces is called |
+
+A brand states its own words in **every language it speaks**, so a page never
+carries one brand's name inside another language's sentence. Everything else
+it inherits. Adding a brand costs a translation of what that brand calls
+itself — around twenty keys — not of the platform.
+
+One file per namespace, because a namespace is what a translator, a reviewer
+and a change each work in at once. `src/catalogs.ts` is where those files add
+up to the two layers, and the only file naming one by path. Consumers bring
+their own renderer (`use-intl` in the application repositories).
 
 | Brand | Locales | Default |
 | --- | --- | --- |
@@ -23,25 +32,34 @@ getMessages("grade10", "zh-Hant"); // Traditional Chinese over English
 getMessages("zzz", "ko");          // Korean, with nothing behind it
 ```
 
-A brand's default-locale catalog is complete — the typechecker says so, which
-is why a missing Korean value fails `pnpm run typecheck` instead of reaching a
-page. Every other catalog translates any subset and falls back to its brand's
-default key by key. A key no catalog names, or one a catalog misspells, is a
-compile error rather than a value nothing ever reads.
+`getMessages` merges four layers, each overriding the one before: the shared
+words in English, the shared words in the language asked for, the brand's own
+words in its default language, and the brand's own words in that language.
+Language before brand, because a brand answers its own keys in every language
+it speaks — so the only thing that ever falls back across languages is a
+translation a brand chose to leave partial.
 
-Adding a locale: create `messages/<brand>/<locale>/` with a file per
-namespace, add its catalog to `src/catalogs.ts`, and add the tag to that
-brand's `locales` in `src/index.ts`. Adding a namespace: a file under every
-locale of every brand, and a line in each catalog in `src/catalogs.ts` —
-miss the line under grade10's English and the namespace is not in the
-vocabulary at all, which every surface naming one of its keys says so.
-Adding a brand: a directory per locale, its catalogs, a registry entry, and a
-complete catalog for its default locale.
+A key no catalog names, or one a catalog misspells, is a compile error rather
+than a value nothing ever reads: `pnpm run typecheck` measures every layer
+against the vocabulary. That the layers *together* answer everything is
+`src/resolution.test.ts` — `pnpm run test` — which names the brand, the key
+and the language when they do not, and refuses a key answered twice.
 
-ZZZ's catalog lives here as an interim. It moves to `external/zzz-spec` when
-that submodule lands (`docs/architecture/multi-product.md` in the application
-repository); the brand key is the seam that split cuts along, so it is a move
-of one directory rather than a rewrite.
+Adding a locale: `messages/shared/<locale>/` with a file per namespace, the
+brand's own words in `messages/<brand>/<locale>/`, both wired into
+`src/catalogs.ts`, and the tag added to that brand's `locales` in
+`src/index.ts`. Adding a namespace: a file under `shared` for every language,
+one under a brand only where a brand has to say it itself, and a line per
+file in `src/catalogs.ts`. Adding a brand: a directory per locale holding
+the keys every other brand states — the test names them — plus a registry
+entry.
+
+ZZZ's own words live here as an interim. They move to `external/zzz-spec`
+when that submodule lands (`docs/architecture/multi-product.md` in the
+application repository); the brand key is the seam that split cuts along, so
+it is a move of `messages/zzz/` rather than a rewrite — and what moves is the
+twenty-odd keys ZZZ states, with the shared layer staying here as something
+that repository reads.
 
 ## Translations need native review
 

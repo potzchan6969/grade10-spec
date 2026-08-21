@@ -1,0 +1,15 @@
+{
+  "tagline": "Japanese trading cards selected for collectors, openers, and complete-set builders.",
+  "accountLabel": "Account",
+  "searchLabel": "Search",
+  "cartLabel": "Cart",
+  "nav": {
+    "store": "STORE",
+    "auction": "AUCTION"
+  },
+  "footer": {
+    "shopHeading": "SHOP",
+    "allCollections": "ALL COLLECTIONS",
+    "auction": "AUCTION"
+  }
+}

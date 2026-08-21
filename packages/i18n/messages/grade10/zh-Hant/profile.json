@@ -1,12 +1,3 @@
 {
-  "title": "我的個人檔案",
-  "description": "以你的 Grade10 使用者編號為索引的商店資料。",
-  "loadFailed": "無法載入你的個人檔案。",
-  "emptyHint": "你尚未建立個人檔案。首次寫入時，商店會為你建立。",
-  "displayNameLabel": "顯示名稱",
-  "bioLabel": "簡介",
-  "createLabel": "建立個人檔案",
-  "editLabel": "編輯個人檔案",
-  "emptyBio": "尚未填寫簡介。",
-  "memberSince": "{date} 起成為會員"
+  "description": "以你的 Grade10 使用者編號為索引的商店資料。"
 }

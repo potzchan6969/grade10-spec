@@ -1,12 +1,23 @@
-import { grade10En, grade10ZhHans, grade10ZhHant, zzzKo } from "./catalogs.ts";
+import { brandCatalogs, sharedCatalogs } from "./catalogs.ts";
 
 /**
  * The vocabulary: every user-facing string either site renders, named once.
- * grade10's English catalog is its type, so a key exists the moment English
- * answers it and every other catalog is measured against this shape. What
- * each catalog is made of — one file per namespace — is `catalogs.ts`.
+ *
+ * Two halves make it. The words no brand claims are answered once per
+ * language in `shared`; the words that say something about a brand are the
+ * brand's, and English grade10 is where they are enumerated because it is the
+ * brand that speaks every language the platform has. A key exists the moment
+ * one of those two answers it, and every catalog is measured against the
+ * shape they make together.
+ *
+ * The shared half is deliberately partial: a wordmark, an attribution line
+ * and a surface's title have no brand-neutral answer worth writing, and a
+ * placeholder there is copy that never renders — or worse, one brand's name
+ * on another brand's page when an override is forgotten. What each layer is
+ * made of — one file per namespace — is `catalogs.ts`.
  */
-export type Messages = typeof grade10En;
+export type Messages = typeof sharedCatalogs.en &
+  typeof brandCatalogs.grade10.en;
 
 /** Which languages a brand speaks, and which it falls back to. */
 export const brands = {
@@ -31,9 +42,9 @@ export const locales = [
 
 /**
  * A catalog measured against the vocabulary: no key the vocabulary does not
- * name, and a string wherever it names one. Every key may be omitted — the
- * brand's default locale answers it instead. A catalog with an unknown or
- * mistyped key is a compile error rather than a value nothing ever reads.
+ * name, and a string wherever it names one. Every key may be omitted — another
+ * layer answers it instead. A catalog with an unknown or mistyped key is a
+ * compile error rather than a value nothing ever reads.
  */
 type Overlay<Vocabulary, Catalog> = {
   [K in keyof Catalog]: K extends keyof Vocabulary
@@ -51,28 +62,27 @@ type Overlay<Vocabulary, Catalog> = {
 const overlay = <const C extends Overlay<Messages, C>>(catalog: C): C =>
   catalog;
 
-/**
- * A brand's default-locale catalog: complete, because nothing sits behind it.
- * A brand that speaks one language has only this one, which is why a missing
- * Korean value fails `pnpm run typecheck` rather than reaching a page.
- */
-const complete = <const C extends Overlay<Messages, C>>(
-  catalog: C & Messages,
-): C => catalog;
-
-const catalogs = {
-  grade10: {
-    en: complete(grade10En),
-    "zh-Hant": overlay(grade10ZhHant),
-    "zh-Hans": overlay(grade10ZhHans),
-  },
-  zzz: { ko: complete(zzzKo) },
-};
+/* Every layer is one, checked here so a key no catalog may name is a compile
+ * error. That the layers together answer everything is not something a type
+ * says readably — `src/resolution.test.ts` says it instead, naming the brand,
+ * the key and the language when they do not. */
+const _checked = [
+  ...Object.values(sharedCatalogs).map(overlay),
+  ...Object.values(brandCatalogs).flatMap((byLocale) =>
+    Object.values(byLocale).map(overlay),
+  ),
+];
 
 type MessageTree = { [key: string]: string | MessageTree };
 
-const treeOf = (brand: Brand, locale: string): MessageTree | undefined =>
-  (catalogs[brand] as Record<string, MessageTree>)[locale];
+/** The language every layer is measured against, and the one a partial
+ * translation falls back to. */
+const VOCABULARY_LOCALE = "en";
+
+const layer = (
+  catalogs: Record<string, unknown>,
+  locale: string,
+): MessageTree => (catalogs[locale] as MessageTree | undefined) ?? {};
 
 export function localesOf<B extends Brand>(brand: B): readonly LocaleOf<B>[] {
   return brands[brand].locales;
@@ -102,14 +112,33 @@ function merge(base: MessageTree, overlaid: MessageTree): MessageTree {
 }
 
 /**
- * One brand's copy in one language. A locale the brand does not speak reads as
- * its default, and a key the requested locale omits falls back key by key —
- * so a partial translation renders what it has and English (or the brand's
- * own default) everywhere else, never a raw key.
+ * One brand's copy in one language, from the two layers that answer it.
+ *
+ * Four merges, each overriding the one before: the vocabulary's own language,
+ * the vocabulary in the language asked for, what the brand says for itself,
+ * and what the brand says for itself in that language. Language before brand,
+ * because a brand states its own words in every language it speaks — so the
+ * only thing the brand layer can override is a sentence written in the same
+ * language, and the only thing that ever falls back across languages is a
+ * translation a brand chose to leave partial.
+ *
+ * A locale the brand does not speak reads as its default. A raw key is not
+ * among the outcomes: whatever no layer answered is what the coverage test
+ * refuses to let ship.
  */
 export function getMessages(brand: Brand, locale: string): Messages {
   const fallback = brands[brand].defaultLocale;
-  const base = treeOf(brand, fallback) as MessageTree;
-  if (!isLocale(brand, locale) || locale === fallback) return base as Messages;
-  return merge(base, treeOf(brand, locale) ?? {}) as Messages;
+  const active = isLocale(brand, locale) ? locale : fallback;
+  const brandLayers = brandCatalogs[brand] as Record<string, unknown>;
+
+  return merge(
+    merge(
+      merge(
+        layer(sharedCatalogs, VOCABULARY_LOCALE),
+        layer(sharedCatalogs, active),
+      ),
+      layer(brandLayers, fallback),
+    ),
+    layer(brandLayers, active),
+  ) as Messages;
 }

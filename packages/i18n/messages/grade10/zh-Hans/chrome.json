@@ -1,21 +1,8 @@
 {
   "wordmark": "Grade10",
-  "tagline": "为收藏者、开卡玩家与整套收集者精选的日本卡牌。",
   "footerLogo": "Grade10 Marketplace",
   "attribution": "MemeStrategy（香港交易所：2440）旗下品牌",
   "copyright": "© 2026 Grade10。保留所有权利。",
   "regionLabel": "香港（港币）",
-  "footerRegion": "香港 / 港币",
-  "accountLabel": "账户",
-  "searchLabel": "搜索",
-  "cartLabel": "购物车",
-  "nav": {
-    "store": "商店",
-    "auction": "拍卖"
-  },
-  "footer": {
-    "shopHeading": "购买",
-    "allCollections": "全部系列",
-    "auction": "拍卖"
-  }
+  "footerRegion": "香港 / 港币"
 }

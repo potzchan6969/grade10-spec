@@ -1,0 +1,13 @@
+{
+  "emailLabel": "Email",
+  "sendLinkLabel": "Send magic link",
+  "sendLinkFailed": "Could not send the magic link.",
+  "sendWait": "Please wait a minute before requesting another email.",
+  "linkSentMessage": "Check your inbox for a sign-in link.",
+  "codeActionLabel": "Email me a code instead",
+  "sendCodeFailed": "Could not send the code.",
+  "codeLabel": "Verification code",
+  "codeSentTo": "Code sent to {email}",
+  "verifyLabel": "Verify code",
+  "verifyFailed": "That code didn't work."
+}
