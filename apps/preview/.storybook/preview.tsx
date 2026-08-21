@@ -27,15 +27,14 @@ function MotionBoundary({
   );
 }
 
-/* Toolbar-driven theming, identical to both package workbenches: toggle the
- * two orthogonal class dimensions on the preview <html>. An assembly must
- * re-theme exactly as its parts do, so the mechanism has to match. */
+/* Toolbar-driven color theme, identical to both package workbenches. Light is
+ * the only mode — the design system does not ship a dark palette. An assembly
+ * must re-theme exactly as its parts do, so the mechanism has to match. */
 const withTheme: Decorator = (Story, context) => {
-  const { colorTheme, mode } = context.globals;
+  const { colorTheme } = context.globals;
   const root = document.documentElement;
-  root.classList.remove("theme-default", "theme-grade10");
+  root.classList.remove("theme-default", "theme-grade10", "dark");
   root.classList.add(`theme-${colorTheme}`);
-  root.classList.toggle("dark", mode === "dark");
   return <Story />;
 };
 
@@ -70,7 +69,6 @@ const preview: Preview = {
   },
   initialGlobals: {
     colorTheme: "grade10",
-    mode: "dark",
   },
   globalTypes: {
     colorTheme: {
@@ -81,18 +79,6 @@ const preview: Preview = {
         items: [
           { value: "default", title: "Default" },
           { value: "grade10", title: "Grade10" },
-        ],
-        dynamicTitle: true,
-      },
-    },
-    mode: {
-      description: "Light / dark",
-      toolbar: {
-        title: "Mode",
-        icon: "contrast",
-        items: [
-          { value: "light", title: "Light" },
-          { value: "dark", title: "Dark" },
         ],
         dynamicTitle: true,
       },
