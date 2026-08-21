@@ -46,29 +46,28 @@ function ProductResultsPanel({
   className,
 }: ProductResultsPanelProps) {
   const [revealed, setRevealed] = useState(false);
-  const shouldRevealRef = useRef(true);
   const [lastReadyCount, setLastReadyCount] = useState(0);
   const sentinelRef = useRef<HTMLDivElement>(null);
-  const loadMorePendingRef = useRef(false);
+  const requestedAtCountRef = useRef<number | null>(null);
+  const onLoadMoreRef = useRef(onLoadMore);
+
+  const status = results.status;
+  const readyCount = status === "ready" ? results.data.length : null;
 
   useEffect(() => {
-    loadMorePendingRef.current = false;
+    if (readyCount !== null) {
+      setLastReadyCount(readyCount);
+    }
+  }, [readyCount]);
 
-    if (results.status === "loading") {
-      shouldRevealRef.current = true;
+  /* The entrance is keyed to the status alone. `results` is rebuilt on every
+     render of the surface above, so an effect that watched it would cancel
+     the frames this one is waiting on and leave the tiles at opacity 0. */
+  useEffect(() => {
+    if (status !== "ready") {
       setRevealed(false);
       return;
     }
-
-    if (results.status === "ready") {
-      setLastReadyCount(results.data.length);
-    }
-
-    if (results.status !== "ready" || !shouldRevealRef.current) {
-      return;
-    }
-
-    shouldRevealRef.current = false;
 
     if (
       typeof window !== "undefined" &&
@@ -78,21 +77,26 @@ function ProductResultsPanel({
       return;
     }
 
-    const frame = requestAnimationFrame(() => {
-      requestAnimationFrame(() => setRevealed(true));
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => setRevealed(true));
     });
 
-    return () => cancelAnimationFrame(frame);
-  }, [results]);
+    return () => {
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+    };
+  }, [status]);
 
   useEffect(() => {
-    if (!hasMore) {
-      loadMorePendingRef.current = false;
-    }
-  }, [hasMore]);
+    onLoadMoreRef.current = onLoadMore;
+  }, [onLoadMore]);
 
+  /* One report per result set: what was asked for is remembered as the count
+     the ask was made at, so a page that arrives — or a sentinel that comes
+     back into view — is asked about again, and the same one never is. */
   useEffect(() => {
-    if (!hasMore || !onLoadMore || loadingMore || results.status !== "ready") {
+    if (!hasMore || loadingMore || status !== "ready") {
       return;
     }
 
@@ -106,34 +110,33 @@ function ProductResultsPanel({
         const entry = entries[0];
         if (
           !entry?.isIntersecting ||
-          loadMorePendingRef.current ||
-          loadingMore
+          requestedAtCountRef.current === readyCount
         ) {
           return;
         }
 
-        loadMorePendingRef.current = true;
-        onLoadMore();
+        requestedAtCountRef.current = readyCount;
+        onLoadMoreRef.current?.();
       },
       { rootMargin: "200px 0px" },
     );
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [hasMore, loadingMore, onLoadMore, results]);
+  }, [hasMore, loadingMore, readyCount, status]);
 
-  if (results.status === "empty" || results.status === "error") {
+  if (status === "empty" || status === "error") {
     return (
       <AsyncMessage
         action={results.action}
         className={className}
         message={results.message}
-        slot={`results-${results.status}`}
+        slot={`results-${status}`}
       />
     );
   }
 
-  const isLoading = results.status === "loading";
+  const isLoading = status === "loading";
 
   return (
     <div
@@ -150,13 +153,13 @@ function ProductResultsPanel({
         loadingMore={loadingMore}
         onProductAction={onProductAction}
         onProductClick={onProductClick}
-        products={results.status === "ready" ? results.data : []}
+        products={status === "ready" ? results.data : []}
         revealStaggerCap={REVEAL_STAGGER_CAP}
         revealStaggerMs={REVEAL_STAGGER_MS}
         revealed={!isLoading && revealed}
         skeletonCount={lastReadyCount > 0 ? lastReadyCount : undefined}
       />
-      {hasMore && results.status === "ready" ? (
+      {hasMore && status === "ready" ? (
         <div
           aria-hidden
           className="h-px w-full"
