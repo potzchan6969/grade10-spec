@@ -3,7 +3,7 @@
 Lets an authorized Grade10 operator draft, create, and publish an Auction
 listing — incomplete saves first, required fields enforced at create, publish
 now or at a future scheduled time — with an unprocessed gallery of one to
-eight images or videos.
+eight images or videos, and call one off while it has not closed.
 
 ## ADDED Requirements
 
@@ -74,7 +74,7 @@ Required at create:
 
 - **Title** — trimmed, 1 to 200 characters
 - **Slug** — trimmed, 1 to 64 characters, lower-case words joined by hyphens
-  (`charizard-psa-9`). Unique across listings.
+  (`charizard-psa-9`). Unique among listings that currently hold a slug.
 - **Starting price** — integer minor units greater than zero
 - **Minimum increment** — integer minor units greater than zero
 - **Starts at** — the scheduled bidding open
@@ -199,15 +199,18 @@ listing's public address `/auction/listings/<slug>`.
 
 - Trimmed, 1 to 64 characters, lower-case words joined by hyphens
   (`charizard-psa-9`). Empty is allowed only while `draft`. A slug that is
-  present and does not match that shape SHALL be refused.
-- A slug SHALL be unique across every listing, in any status (`draft`,
-  `created`, `published`, `closed`, `settled`, or `canceled`). No two
-  listings SHALL share a slug. A draft with no slug does not occupy one.
+  present and does not match that shape SHALL be refused. The 1-to-64 length
+  bound applies to a slug an operator writes.
+- A slug SHALL be unique among listings that currently hold that value. No
+  two listings SHALL share a slug. A draft with no slug does not occupy one.
   Setting or creating a slug that another listing already holds SHALL be
-  refused, including when the other listing is canceled or closed. A
-  listing rewriting its own slug to the same value is not a collision.
+  refused, including when the other listing is `closed` or `settled`. A
+  listing rewriting its own slug to the same value is not a collision. A
+  `canceled` listing SHALL NOT keep the slug it held before cancel: that
+  original value is free for another listing.
 - Slug SHALL be writable while `draft` or `created`. A write of slug on a
-  `published`, `closed`, `settled`, or `canceled` listing SHALL be refused.
+  `published`, `closed`, `settled`, or `canceled` listing SHALL be refused,
+  except the rewrite Grade10 applies when the listing is canceled.
 - A collector SHALL receive a `published`, `closed`, or `settled` listing by
   opening `/auction/listings/<slug>`. A slug that names no such listing
   SHALL be not found. A `draft`, `created`, or `canceled` listing SHALL NOT
@@ -227,7 +230,7 @@ listing's public address `/auction/listings/<slug>`.
 
 #### Scenario: Duplicate slug is refused
 
-- **GIVEN** a listing in any status whose slug is `charizard-psa-9`
+- **GIVEN** a listing that is not canceled whose slug is `charizard-psa-9`
 - **WHEN** an operator sets another listing's slug to `charizard-psa-9`
 - **THEN** Grade10 refuses the write
 - **AND** the second listing's slug is unchanged
@@ -246,14 +249,24 @@ listing's public address `/auction/listings/<slug>`.
 - **THEN** Grade10 accepts the save
 - **AND** neither draft occupies a slug
 
-#### Scenario: Create cannot reuse a canceled listing's slug
+#### Scenario: Create can reuse a canceled listing's original slug
 
-- **GIVEN** a canceled listing whose slug is `charizard-psa-9`
+- **GIVEN** a canceled listing that previously used slug `charizard-psa-9`
+- **AND** a draft with every required field set, including slug
+  `charizard-psa-9`
+- **WHEN** the operator creates the draft
+- **THEN** Grade10 moves the draft to `created`
+- **AND** the canceled listing still does not hold `charizard-psa-9`
+
+#### Scenario: Create cannot reuse a closed listing's slug
+
+- **GIVEN** a closed listing whose slug is `charizard-psa-9`
 - **AND** a draft with every required field set, including slug
   `charizard-psa-9`
 - **WHEN** the operator creates the draft
 - **THEN** Grade10 refuses the create
 - **AND** the draft remains a draft
+- **AND** `/auction/listings/charizard-psa-9` still returns the closed listing
 
 #### Scenario: Published slug cannot change
 
@@ -408,6 +421,107 @@ timestamp that MUST be after now.
 - **WHEN** an operator sets a new publish at
 - **THEN** Grade10 refuses the write
 - **AND** the listing remains published
+
+### Requirement: Operator may call off a listing that has not closed
+
+An operator authorized to call a listing off SHALL cancel a listing that is
+`draft`, `created`, or `published`. Cancel SHALL move the listing to
+`canceled` and SHALL release every live authorization standing against it.
+
+Cancel SHALL be refused when the listing is `closed`, `settled`, or already
+`canceled`. A closed or settled listing's outcome is absolute and SHALL NOT
+be reopened by cancel. Cancel of a listing that does not exist SHALL be
+refused.
+
+Cancel of a `published` listing SHALL be allowed whether or not bidding has
+opened and whether or not it has accepted bids. Cancel of a `created`
+listing SHALL be allowed even when a publish at is still in the future;
+Grade10 SHALL NOT later publish a listing that was canceled.
+
+When the listing has a slug, cancel SHALL rewrite that slug in the same
+step: the stored slug becomes the previous slug, then `-cancelled-`, then
+the listing's id from the seventh character onward (after the first six
+characters). That rewrite SHALL be stored even when the result is longer
+than 64 characters. A listing with no slug SHALL stay without one. After
+the rewrite, the previous slug SHALL be free for another listing, and the
+canceled listing SHALL NOT answer at `/auction/listings/<previous slug>`.
+
+The same rewrite SHALL apply when Grade10 cancels the listing because its
+sale was canceled.
+
+Cancel from an operator who is not authorized to call a listing off SHALL
+be refused, and the listing and slug SHALL be unchanged.
+
+#### Scenario: Operator calls off a draft
+
+- **GIVEN** a draft listing
+- **WHEN** an authorized operator calls it off
+- **THEN** Grade10 moves it to `canceled`
+- **AND** it stays absent from the public catalogue
+
+#### Scenario: Operator calls off a created listing before publish at
+
+- **GIVEN** a created listing with a publish at still in the future
+- **WHEN** an authorized operator calls it off
+- **THEN** Grade10 moves it to `canceled`
+- **AND** when that publish at arrives, Grade10 does not publish it
+- **AND** it stays absent from the public catalogue
+
+#### Scenario: Operator calls off a published listing that has bids
+
+- **GIVEN** a published listing with accepted bids and live authorizations
+- **WHEN** an authorized operator calls it off
+- **THEN** Grade10 moves it to `canceled`
+- **AND** it releases every live authorization standing against it
+- **AND** it is absent from the public catalogue
+
+#### Scenario: Closed listing cannot be called off
+
+- **GIVEN** a closed listing
+- **WHEN** an operator calls it off
+- **THEN** Grade10 refuses the cancel
+- **AND** the listing remains closed
+
+#### Scenario: Settled listing cannot be called off
+
+- **GIVEN** a settled listing
+- **WHEN** an operator calls it off
+- **THEN** Grade10 refuses the cancel
+- **AND** the listing remains settled
+
+#### Scenario: Already canceled listing cannot be called off again
+
+- **GIVEN** a canceled listing
+- **WHEN** an operator calls it off
+- **THEN** Grade10 refuses the cancel
+- **AND** the listing remains canceled
+
+#### Scenario: Cancel rewrites the slug and frees the original
+
+- **GIVEN** a published listing whose id is
+  `auc_550e8400-e29b-41d4-a716-446655440000` and whose slug is
+  `charizard-psa-9`
+- **WHEN** an authorized operator calls it off
+- **THEN** Grade10 stores slug
+  `charizard-psa-9-cancelled-0e8400-e29b-41d4-a716-446655440000`
+- **AND** `/auction/listings/charizard-psa-9` does not return that listing
+- **AND** a later listing may be created with slug `charizard-psa-9`
+
+#### Scenario: Cancel of a draft with no slug does not invent one
+
+- **GIVEN** a draft listing with no slug
+- **WHEN** an authorized operator calls it off
+- **THEN** Grade10 moves it to `canceled`
+- **AND** the listing still has no slug
+
+#### Scenario: Unauthorized cancel is refused
+
+- **GIVEN** a published listing
+- **AND** a signed-in operator who may not call a listing off
+- **WHEN** they call it off
+- **THEN** Grade10 refuses the cancel
+- **AND** the listing remains published
+- **AND** its slug is unchanged
 
 ### Requirement: A closed listing cannot be rewritten here
 

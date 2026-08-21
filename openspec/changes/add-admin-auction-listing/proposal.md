@@ -36,10 +36,17 @@ fields are present, and have it publish at a chosen time.
 - **An operator updates a listing that is still editable** (`draft`,
   `created`, or `published`). Closed, settled, and canceled listings are the
   record of what was sold and are not rewritten here.
+- **An operator may call a listing off** while it is `draft`, `created`, or
+  `published`. Closed and settled listings cannot be called off — the
+  outcome is absolute. Calling it off releases every live authorization and
+  rewrites the slug so a later listing can reuse the original address.
 - **A slug is the listing's public address.** Create requires a unique,
-  URL-safe slug. No two listings share a slug, in any status. A collector
-  reaches the listing at `/auction/listings/<slug>`. The slug cannot change
-  once the listing is published, so a shared link stays valid.
+  URL-safe slug. No two live listings share a slug. A canceled listing does
+  not keep its original slug: Grade10 appends `-cancelled-` and the listing
+  id from the seventh character onward, which frees the original for a
+  future listing. A collector reaches a published, closed, or settled
+  listing at `/auction/listings/<slug>`. The slug cannot change once the
+  listing is published, except by that cancel rewrite.
 - **Media is an ordered gallery of one to eight images or videos**, stored
   and served as uploaded. A draft may have none; create requires at least
   one. Image processing, renditions, and thumbnails are a separate change.
@@ -78,9 +85,11 @@ created/updated/closed stamps.
 
 **Slug** is the lookup key in the listing's public URL
 (`/auction/listings/<slug>`). Lower-case words joined by hyphens. Unique
-across every listing in any status — a canceled or closed listing still
-occupies its slug. Empty on draft; required and unique at create; locked
-once published.
+among listings that currently hold that slug. Empty on draft; required and
+unique at create; locked once published. A closed or settled listing keeps
+its slug. Canceling a listing that has a slug rewrites it to
+`<slug>-cancelled-<id from character 7 onward>`, which may be longer than
+64 characters, and frees the original.
 
 **Starts at** is when bidding opens. **Scheduled close at** is the published
 close. **Publish at** is when a created listing becomes public.
@@ -102,8 +111,7 @@ live money, so the house can rehearse a sale.
 - Relisting an existing unit, picking a product, or a consignment record.
 - A sale-scoped lot number (listing label / `12A`). An online listing is
   identified by its title and address.
-- Calling off a listing, or moving a published listing's window — those
-  actions already exist.
+- Moving a published listing's window — that action already exists.
 - Creating sales, taxonomies, or categories (pick from ones that exist).
 - Reserve amounts (removed by `add-grade10-auction`).
 - Buyer-fee editing (operational policy snapshot, not a listing field).
@@ -116,8 +124,9 @@ live money, so the house can rehearse a sale.
 
 - `grade10-auction/admin-listing`: an authorized operator drafts, creates,
   and publishes an Auction listing from the Grade10 admin section — which
-  fields they may write, when required fields are enforced, slug lookup at
-  `/auction/listings/<slug>`, scheduled publish, and the unprocessed media
+  fields they may write, when required fields are enforced, when a listing
+  may be called off, slug lookup at `/auction/listings/<slug>`, the cancel
+  rewrite that frees a slug, scheduled publish, and the unprocessed media
   gallery a listing then publishes.
 
 ### Modified Capabilities
@@ -130,7 +139,7 @@ live money, so the house can rehearse a sale.
 | Consumer | Change |
 | --- | --- |
 | `apps/admin/grade10` | Draft, create, and edit surfaces on the auction listings section, including client-side required-field checks at create and a publish at control. |
-| `apps/backend/grade10/auction` | Today's create is a complete draft in one step; this needs a lenient draft save, a create gate that validates required fields, and publish at a scheduled time. Media stops being keyed by physical side and accepts video. |
+| `apps/backend/grade10/auction` | Today's create is a complete draft in one step; this needs a lenient draft save, a create gate that validates required fields, and publish at a scheduled time. Media stops being keyed by physical side and accepts video. Cancel of a `created` listing is allowed; cancel rewrites the slug to free the original. |
 | `@grade10/auction-contracts` | Admin listing shape gains slug, media, and publish at; public listing gallery becomes an ordered list of images and videos. Public listing lookup is by slug. **BREAKING** for `angle` and for listing addresses that named an internal id. |
 | `@grade10/auction-admin-frontend` | Draft/create/update repository and form wiring. |
 | `@grade10/auction-frontend` / Grade10 listing page | Lookup by slug; gallery must show videos as well as images, in the operator's order. |
