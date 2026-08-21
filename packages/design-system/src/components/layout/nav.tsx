@@ -23,7 +23,8 @@ import {
 import type { ComponentProps, ReactNode } from "react";
 
 type NavLink = {
-  label: ReactNode;
+  /** What the link is called — text, so the header can name it to a reader. */
+  label: string;
   href: string;
 };
 
@@ -34,17 +35,34 @@ type NavItem = NavLink & {
 
 type NavLocale = {
   value: string;
-  label: ReactNode;
+  label: string;
+};
+
+/**
+ * The words the header says. What it points at, who handles a click, and
+ * which regions it draws are not words and stay their own props.
+ */
+type NavCopy = {
+  /** What the locale control displays — a language, or a region and its
+   * currency. Shown whether or not the control can be switched. */
+  locale: string;
+  /** Accessible names for the controls a handler backs. A control with no
+   * handler is not rendered, so its name is never read. */
+  search?: string;
+  account?: string;
+  cart?: string;
 };
 
 type NavProps = ComponentProps<"header"> & {
-  /** Promotional bar copy. Pass `null` to drop the bar. */
+  copy: NavCopy;
+  /** Promotional bar content. Pass `null` to drop the bar. */
   promo: ReactNode;
+  /** The brand's own mark: a wordmark, an image, whatever it is. Markup the
+   * header places rather than a word it says. */
   logo: ReactNode;
   logoHref?: string;
   utilityLinks: NavLink[];
   navItems: NavItem[];
-  localeLabel: ReactNode;
   /** Options the locale trigger switches between. Empty when the label is display-only. */
   locales?: NavLocale[];
   /** Currently selected locale `value`. Owned by the application, including IP detection. */
@@ -53,9 +71,6 @@ type NavProps = ComponentProps<"header"> & {
   onSearchClick?: () => void;
   onAccountClick?: () => void;
   onCartClick?: () => void;
-  searchLabel?: string;
-  accountLabel?: string;
-  cartLabel?: string;
 };
 
 const currency = <CurrencyCircleDollar aria-hidden size={14} />;
@@ -66,7 +81,7 @@ function LocaleControl({
   locale,
   onLocaleChange,
 }: {
-  localeLabel: ReactNode;
+  localeLabel: string;
   locales: NavLocale[];
   locale?: string;
   onLocaleChange?: (value: string) => void;
@@ -140,17 +155,14 @@ function Nav({
   logo,
   logoHref = "#",
   utilityLinks,
+  copy,
   navItems,
-  localeLabel,
   locales = [],
   locale,
   onLocaleChange,
   onSearchClick,
   onAccountClick,
   onCartClick,
-  searchLabel = "Search",
-  accountLabel = "Account",
-  cartLabel = "Cart",
   ...props
 }: NavProps) {
   return (
@@ -218,13 +230,13 @@ function Nav({
           >
             <LocaleControl
               locale={locale}
-              localeLabel={localeLabel}
+              localeLabel={copy.locale}
               locales={locales}
               onLocaleChange={onLocaleChange}
             />
             {onSearchClick ? (
               <IconButton
-                aria-label={searchLabel}
+                aria-label={copy.search ?? "Search"}
                 onClick={onSearchClick}
                 size="md"
                 variant="ghost"
@@ -234,7 +246,7 @@ function Nav({
             ) : null}
             {onAccountClick ? (
               <IconButton
-                aria-label={accountLabel}
+                aria-label={copy.account ?? "Account"}
                 onClick={onAccountClick}
                 size="md"
                 variant="ghost"
@@ -244,7 +256,7 @@ function Nav({
             ) : null}
             {onCartClick ? (
               <IconButton
-                aria-label={cartLabel}
+                aria-label={copy.cart ?? "Cart"}
                 onClick={onCartClick}
                 size="md"
                 variant="ghost"
@@ -259,5 +271,5 @@ function Nav({
   );
 }
 
-export type { NavItem, NavLink, NavLocale, NavProps };
+export type { NavCopy, NavItem, NavLink, NavLocale, NavProps };
 export { Nav };
