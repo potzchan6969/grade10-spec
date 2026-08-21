@@ -200,8 +200,12 @@ listing's public address `/auction/listings/<slug>`.
 - Trimmed, 1 to 64 characters, lower-case words joined by hyphens
   (`charizard-psa-9`). Empty is allowed only while `draft`. A slug that is
   present and does not match that shape SHALL be refused.
-- Two listings SHALL not share a slug. A write that collides SHALL be
-  refused.
+- A slug SHALL be unique across every listing, in any status (`draft`,
+  `created`, `published`, `closed`, `settled`, or `canceled`). No two
+  listings SHALL share a slug. A draft with no slug does not occupy one.
+  Setting or creating a slug that another listing already holds SHALL be
+  refused, including when the other listing is canceled or closed. A
+  listing rewriting its own slug to the same value is not a collision.
 - Slug SHALL be writable while `draft` or `created`. A write of slug on a
   `published`, `closed`, `settled`, or `canceled` listing SHALL be refused.
 - A collector SHALL receive a `published`, `closed`, or `settled` listing by
@@ -223,10 +227,33 @@ listing's public address `/auction/listings/<slug>`.
 
 #### Scenario: Duplicate slug is refused
 
-- **GIVEN** a listing whose slug is `charizard-psa-9`
+- **GIVEN** a listing in any status whose slug is `charizard-psa-9`
 - **WHEN** an operator sets another listing's slug to `charizard-psa-9`
 - **THEN** Grade10 refuses the write
 - **AND** the second listing's slug is unchanged
+
+#### Scenario: Two drafts cannot share a slug
+
+- **GIVEN** a draft whose slug is `charizard-psa-9`
+- **WHEN** an operator sets another draft's slug to `charizard-psa-9`
+- **THEN** Grade10 refuses the write
+- **AND** the second draft's slug is unchanged
+
+#### Scenario: Empty slugs on drafts are not a collision
+
+- **GIVEN** a draft with no slug
+- **WHEN** an operator saves another draft with no slug
+- **THEN** Grade10 accepts the save
+- **AND** neither draft occupies a slug
+
+#### Scenario: Create cannot reuse a canceled listing's slug
+
+- **GIVEN** a canceled listing whose slug is `charizard-psa-9`
+- **AND** a draft with every required field set, including slug
+  `charizard-psa-9`
+- **WHEN** the operator creates the draft
+- **THEN** Grade10 refuses the create
+- **AND** the draft remains a draft
 
 #### Scenario: Published slug cannot change
 

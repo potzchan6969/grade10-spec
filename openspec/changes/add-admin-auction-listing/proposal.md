@@ -37,9 +37,9 @@ fields are present, and have it publish at a chosen time.
   `created`, or `published`). Closed, settled, and canceled listings are the
   record of what was sold and are not rewritten here.
 - **A slug is the listing's public address.** Create requires a unique,
-  URL-safe slug. A collector reaches the listing at
-  `/auction/listings/<slug>`. The slug cannot change once the listing is
-  published, so a shared link stays valid.
+  URL-safe slug. No two listings share a slug, in any status. A collector
+  reaches the listing at `/auction/listings/<slug>`. The slug cannot change
+  once the listing is published, so a shared link stays valid.
 - **Media is an ordered gallery of one to eight images or videos**, stored
   and served as uploaded. A draft may have none; create requires at least
   one. Image processing, renditions, and thumbnails are a separate change.
@@ -77,9 +77,10 @@ status, the effective close (extension writes it), highest bid,
 created/updated/closed stamps.
 
 **Slug** is the lookup key in the listing's public URL
-(`/auction/listings/<slug>`). Lower-case words joined by hyphens, unique
-across listings. Empty on draft; required and unique at create; locked once
-published.
+(`/auction/listings/<slug>`). Lower-case words joined by hyphens. Unique
+across every listing in any status — a canceled or closed listing still
+occupies its slug. Empty on draft; required and unique at create; locked
+once published.
 
 **Starts at** is when bidding opens. **Scheduled close at** is the published
 close. **Publish at** is when a created listing becomes public.
