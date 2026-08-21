@@ -56,14 +56,14 @@ Depends on group 1 landing.
 
 Depends on group 1 landing.
 
-- [ ] 4.1 Give `SignInCard`, `SignInEmailForm`, `SignInCodeForm`,
+- [x] 4.1 Give `SignInCard`, `SignInEmailForm`, `SignInCodeForm`,
       `TwoFactorEnrollment`, `TwoFactorVerifyForm`, `ProfileCard`,
       `ProfileDetails` and `ProfileForm` a copy type each and one `copy` prop,
       keeping `providerSlot` and the async body as slots.
-- [ ] 4.2 Note in the proposal's non-goals what remains: these blocks still
+- [x] 4.2 Note in the proposal's non-goals what remains: these blocks still
       have no capability spec naming their exports, and this change does not
       add one.
-- [ ] 4.3 Update their stories and run `pnpm run typecheck`, `pnpm run lint`,
+- [x] 4.3 Update their stories and run `pnpm run typecheck`, `pnpm run lint`,
       `pnpm run test`, and `pnpm run test:stories` as this group's
       verification.
 
