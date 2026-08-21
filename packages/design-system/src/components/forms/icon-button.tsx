@@ -3,24 +3,32 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 // Figma's Icon Button (`2159:3195`) sits on the Button page but is a separate
-// published set with its own axes: a square box, and rungs at `md` (40) and
-// `sm` (32). `xs` remains for in-tree callers the set no longer draws.
+// published set: a square box that binds `Radius/radius-full` (a circle),
+// rungs at `md` (40 / 14px glyph) and `sm` (32 / 12px glyph), and a `primary`
+// fill alongside secondary / outline / ghost. `xs` remains for in-tree callers
+// the set no longer draws.
+//
+// Disabled is the variant's own colours at `Opacity/opacity-50` — same rule as
+// Button, including primary. Hover is `Custom/muted-hover` on the borderless
+// and outline rungs, and an inset overlay on secondary; primary keeps
+// `Base/primary` and the same inner glow Button uses.
 const iconButtonVariants = cva(
-  // Both rungs bind `Radius/radius-sm` (4px), which the `rounded-sm` utility
-  // cannot express — theme.preamble.css derives that scale from `--radius`.
-  // Bind the Foundation primitive directly, as button.tsx does.
-  "group/icon-button inline-flex shrink-0 items-center justify-center rounded-(--radius-sm) border border-transparent bg-clip-padding text-accent-foreground transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:text-disabled-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "group/icon-button inline-flex shrink-0 cursor-pointer items-center justify-center rounded-(--radius-full) border border-transparent bg-clip-padding transition-[background-color,border-color,color,box-shadow,transform,opacity] duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-[background-color,border-color,color,box-shadow,opacity] motion-reduce:active:translate-y-0 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
+        primary:
+          "bg-primary text-primary-foreground hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)]",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklab,var(--secondary),white_5%)] aria-expanded:bg-[color-mix(in_oklab,var(--secondary),white_5%)] disabled:bg-disabled",
-        outline: "border-border hover:bg-accent aria-expanded:bg-accent",
-        ghost: "hover:bg-accent aria-expanded:bg-accent",
+          "bg-muted text-muted-foreground hover:shadow-[inset_0_0_0_100vmax_var(--muted-hover)] aria-expanded:shadow-[inset_0_0_0_100vmax_var(--muted-hover)]",
+        outline:
+          "border-border text-foreground hover:bg-muted-hover aria-expanded:bg-muted-hover",
+        ghost:
+          "text-muted-foreground hover:bg-muted-hover aria-expanded:bg-muted-hover",
       },
       size: {
-        md: "size-10 [&_svg:not([class*='size-'])]:size-4",
-        sm: "size-8 [&_svg:not([class*='size-'])]:size-3.5",
+        md: "size-10 [&_svg:not([class*='size-'])]:size-3.5",
+        sm: "size-8 [&_svg:not([class*='size-'])]:size-3",
         xs: "size-6 [&_svg:not([class*='size-'])]:size-3",
       },
     },
