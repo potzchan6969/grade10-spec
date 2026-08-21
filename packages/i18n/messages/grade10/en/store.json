@@ -1,0 +1,9 @@
+{
+  "title": "Store",
+  "intro": "Graded slabs at a fixed price. The cart lives in this browser until you check out.",
+  "loading": "Loading the catalog…",
+  "empty": "Nothing is listed right now.",
+  "cartCount": "{count, plural, one {# item} other {# items}} in your cart",
+  "addToCart": "Add to cart",
+  "soldOut": "Sold out"
+}

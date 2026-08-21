@@ -1,0 +1,9 @@
+{
+  "title": "商店",
+  "intro": "以固定价格上架的评级卡。结算前，购物车只保存在这个浏览器里。",
+  "loading": "正在加载商品…",
+  "empty": "当前没有上架商品。",
+  "cartCount": "购物车内有 {count, plural, other {# 件商品}}",
+  "addToCart": "加入购物车",
+  "soldOut": "已售罄"
+}

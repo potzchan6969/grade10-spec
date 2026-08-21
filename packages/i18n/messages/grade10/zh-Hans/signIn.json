@@ -1,0 +1,15 @@
+{
+  "title": "登录 Grade10",
+  "description": "使用你的 Grade10 账户继续。",
+  "emailLabel": "邮箱地址",
+  "sendLinkLabel": "发送登录链接",
+  "sendLinkFailed": "无法发送登录链接。",
+  "sendWait": "请稍候一分钟再请求另一封邮件。",
+  "linkSentMessage": "请查看收件箱中的登录链接。",
+  "codeActionLabel": "改为发送验证码",
+  "sendCodeFailed": "无法发送验证码。",
+  "codeLabel": "验证码",
+  "codeSentTo": "验证码已发送至 {email}",
+  "verifyLabel": "验证",
+  "verifyFailed": "验证码不正确。"
+}

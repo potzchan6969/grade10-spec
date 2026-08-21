@@ -1,0 +1,9 @@
+{
+  "title": "商店",
+  "intro": "以固定價格上架的評級卡。結帳前，購物車只存在於這個瀏覽器。",
+  "loading": "正在載入商品…",
+  "empty": "目前沒有上架商品。",
+  "cartCount": "購物車內有 {count, plural, other {# 件商品}}",
+  "addToCart": "加入購物車",
+  "soldOut": "已售罄"
+}

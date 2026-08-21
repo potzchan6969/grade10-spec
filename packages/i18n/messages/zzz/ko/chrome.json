@@ -1,0 +1,21 @@
+{
+  "wordmark": "ZZZ Store",
+  "tagline": "등급 카드를 사고팝니다. 로그인하면 판매, 입찰, 주문이 연결되는 프로필을 만들 수 있습니다.",
+  "footerLogo": "ZZZ Store",
+  "attribution": "MemeStrategy(HKEX: 2440) 계열 브랜드",
+  "copyright": "© 2026 ZZZ. All rights reserved.",
+  "regionLabel": "대한민국 (KRW)",
+  "footerRegion": "대한민국 / KRW",
+  "accountLabel": "계정",
+  "searchLabel": "검색",
+  "cartLabel": "장바구니",
+  "nav": {
+    "store": "스토어",
+    "auction": "경매"
+  },
+  "footer": {
+    "shopHeading": "쇼핑",
+    "allCollections": "전체 컬렉션",
+    "auction": "경매"
+  }
+}

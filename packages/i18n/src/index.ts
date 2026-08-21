@@ -1,12 +1,10 @@
-import grade10En from "../messages/grade10/en.json";
-import grade10ZhHans from "../messages/grade10/zh-Hans.json";
-import grade10ZhHant from "../messages/grade10/zh-Hant.json";
-import zzzKo from "../messages/zzz/ko.json";
+import { grade10En, grade10ZhHans, grade10ZhHant, zzzKo } from "./catalogs";
 
 /**
  * The vocabulary: every user-facing string either site renders, named once.
  * grade10's English catalog is its type, so a key exists the moment English
- * answers it and every other catalog is measured against this shape.
+ * answers it and every other catalog is measured against this shape. What
+ * each catalog is made of — one file per namespace — is `catalogs.ts`.
  */
 export type Messages = typeof grade10En;
 

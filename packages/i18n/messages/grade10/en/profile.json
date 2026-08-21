@@ -1,0 +1,12 @@
+{
+  "title": "My profile",
+  "description": "Store data, keyed by your Grade10 user id.",
+  "loadFailed": "Could not load your profile.",
+  "emptyHint": "You have no profile yet. Store creates the row when you first write to it.",
+  "displayNameLabel": "Display name",
+  "bioLabel": "Bio",
+  "createLabel": "Create profile",
+  "editLabel": "Edit profile",
+  "emptyBio": "No bio yet.",
+  "memberSince": "Member since {date}"
+}

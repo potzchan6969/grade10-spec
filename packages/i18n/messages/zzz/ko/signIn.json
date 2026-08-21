@@ -1,0 +1,15 @@
+{
+  "title": "ZZZ Store 로그인",
+  "description": "ZZZ 계정으로 계속하세요.",
+  "emailLabel": "이메일",
+  "sendLinkLabel": "로그인 링크 보내기",
+  "sendLinkFailed": "로그인 링크를 보내지 못했습니다.",
+  "sendWait": "1분 후에 다시 이메일을 요청해 주세요.",
+  "linkSentMessage": "받은편지함에서 로그인 링크를 확인해 주세요.",
+  "codeActionLabel": "대신 인증 코드 받기",
+  "sendCodeFailed": "인증 코드를 보내지 못했습니다.",
+  "codeLabel": "인증 코드",
+  "codeSentTo": "{email}(으)로 인증 코드를 보냈습니다",
+  "verifyLabel": "코드 확인",
+  "verifyFailed": "인증 코드가 올바르지 않습니다."
+}

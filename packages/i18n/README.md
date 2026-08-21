@@ -2,10 +2,13 @@
 
 Every user-facing string either site renders, named once and answered per brand.
 
-`messages/grade10/en.json` is the vocabulary: a key exists the moment English
+`messages/grade10/en/` is the vocabulary: a key exists the moment English
 answers it, and every other catalog is measured against that shape. Catalogs
-are brand-first — `messages/<brand>/<locale>.json` — because the names are
-shared across brands and only the values differ. Consumers bring their own
+are brand-first — `messages/<brand>/<locale>/<namespace>.json` — because the
+names are shared across brands and only the values differ, and one file per
+namespace because a namespace is what a translator, a reviewer and a change
+each work in at once. `src/catalogs.ts` is where those files add up to a
+catalog, and the only file naming one by path. Consumers bring their own
 renderer (`use-intl` in the application repositories).
 
 | Brand | Locales | Default |
@@ -26,9 +29,14 @@ page. Every other catalog translates any subset and falls back to its brand's
 default key by key. A key no catalog names, or one a catalog misspells, is a
 compile error rather than a value nothing ever reads.
 
-Adding a locale: create `messages/<brand>/<locale>.json` and add the tag to
-that brand's `locales` in `src/index.ts`. Adding a brand: a directory, a
-registry entry, and a complete catalog for its default locale.
+Adding a locale: create `messages/<brand>/<locale>/` with a file per
+namespace, add its catalog to `src/catalogs.ts`, and add the tag to that
+brand's `locales` in `src/index.ts`. Adding a namespace: a file under every
+locale of every brand, and a line in each catalog in `src/catalogs.ts` —
+miss the line under grade10's English and the namespace is not in the
+vocabulary at all, which every surface naming one of its keys says so.
+Adding a brand: a directory per locale, its catalogs, a registry entry, and a
+complete catalog for its default locale.
 
 ZZZ's catalog lives here as an interim. It moves to `external/zzz-spec` when
 that submodule lands (`docs/architecture/multi-product.md` in the application
