@@ -1,8 +1,10 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@grade10/design-system/components/display/card";
@@ -10,6 +12,7 @@ import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { Eye } from "@phosphor-icons/react";
 
 export const IMAGE = new URL(
   "../store-product-listing/product-card.fixture.png",
@@ -54,25 +57,36 @@ export function ListingGalleryLoading() {
 /** Bid panel column while the listing payload loads. */
 export function ListingBidPanelLoading() {
   return (
-    <VStack className="min-w-0 w-full" gap="md">
-      <VStack gap="sm">
+    <Card className="min-w-0 w-full">
+      <CardHeader>
         <Skeleton className="h-8 w-3/4" />
         <Skeleton className="h-4 w-1/2" />
-      </VStack>
-      <VStack gap="sm">
-        <Skeleton className="h-4 w-24" />
-        <Skeleton className="h-8 w-40" />
-        <Skeleton className="h-4 w-full" />
-      </VStack>
-      <Skeleton className="h-px w-full" />
-      <VStack gap="sm">
-        <Skeleton className="h-4 w-16" />
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-4 w-56" />
-      </VStack>
-      <Skeleton className="h-10 w-full rounded-md" />
-      <Skeleton className="h-10 w-full rounded-md" />
-    </VStack>
+        <CardAction>
+          <Skeleton className="h-8 w-16" />
+        </CardAction>
+      </CardHeader>
+      <CardContent>
+        <VStack gap="md">
+          <VStack className="rounded-lg bg-muted/40 p-4" gap="sm">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-8 w-40" />
+            <Skeleton className="h-4 w-full" />
+          </VStack>
+          <Skeleton className="h-px w-full" />
+          <VStack gap="sm">
+            <Skeleton className="h-4 w-16" />
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-4 w-56" />
+          </VStack>
+        </VStack>
+      </CardContent>
+      <CardFooter className="items-stretch">
+        <VStack className="w-full" gap="sm">
+          <Skeleton className="h-10 w-full rounded-md" />
+          <Skeleton className="h-10 w-full rounded-md" />
+        </VStack>
+      </CardFooter>
+    </Card>
   );
 }
 
@@ -101,53 +115,58 @@ export function ListingDetailsLoading() {
 
 export function WatchOnlyActions() {
   return (
-    <Button className="w-full" variant="outline">
-      Add to Watch List
+    <Button leading={<Eye />} size="sm" variant="ghost">
+      Watch
     </Button>
   );
 }
 
-export function LiveActions({
-  onPlaceBid,
-  onWatch,
-}: {
-  onPlaceBid?: () => void;
-  onWatch?: () => void;
-} = {}) {
+export function WatchingAction() {
+  return (
+    <Button leading={<Eye weight="fill" />} size="sm" variant="ghost">
+      Watching
+    </Button>
+  );
+}
+
+export function LiveActions({ onPlaceBid }: { onPlaceBid?: () => void } = {}) {
   return (
     <VStack className="w-full" gap="sm">
       <Button className="w-full" onClick={onPlaceBid}>
         Place Bid
-      </Button>
-      <Button className="w-full" onClick={onWatch} variant="outline">
-        Add to Watch List
       </Button>
     </VStack>
   );
 }
 
 export function PostAuctionActions() {
-  return (
-    <VStack className="w-full" gap="sm">
-      <Button className="w-full" variant="outline">
-        Add to Watch List
-      </Button>
-    </VStack>
-  );
+  return null;
 }
 
 export function HighestBidderStanding() {
   return (
-    <HStack gap="sm" vAlign="center">
-      <Badge variant="success">You're the highest bidder</Badge>
+    <HStack className="w-full" gap="sm" hAlign="space-between" vAlign="center">
+      <VStack gap="xs">
+        <Text size="sm">Your bid: HK$4,800.00</Text>
+        <Text size="xs" tone="secondary">
+          21 Aug 2026, 11:16 UTC
+        </Text>
+      </VStack>
+      <Badge variant="success">Highest Bid</Badge>
     </HStack>
   );
 }
 
 export function OutbidStanding() {
   return (
-    <HStack gap="sm" vAlign="center">
-      <Badge variant="warning">You've been outbid</Badge>
+    <HStack className="w-full" gap="sm" hAlign="space-between" vAlign="center">
+      <VStack gap="xs">
+        <Text size="sm">Your bid: HK$4,800.00</Text>
+        <Text size="xs" tone="secondary">
+          21 Aug 2026, 11:16 UTC
+        </Text>
+      </VStack>
+      <Badge variant="warning">Outbid</Badge>
     </HStack>
   );
 }
