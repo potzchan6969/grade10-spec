@@ -22,7 +22,10 @@ Assembly in `apps/frontend/grade10` composing `ListingGallery` from
 ### Admin listings photo manager
 
 Assembly in `apps/admin/grade10` on the existing listings table. A Photos
-action opens a dialog with six side slots. No Figma; compose primitives
+action opens a dialog with six side slots in a grid (one column on narrow
+viewports, up to three per row on wide). File pick shows a local preview with
+Confirm and Discard before any upload. Stored photos show at card size; a
+magnify control reveals zoom size on hover. No Figma; compose primitives
 below.
 
 ## Components
@@ -68,12 +71,22 @@ and [`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
 
 ### Admin photo manager
 
-- **Draft, empty slot** — add is offered (`An accepted upload becomes that side's photo`).
+- **Draft, empty slot** — file pick is offered (`An accepted upload becomes that side's photo`).
 - **Draft, filled slot** — replace, remove, and alt (`A draft photo can be replaced and removed`).
-- **Published, empty slot** — add is offered (`A published listing can gain a missing side`).
+- **Published, empty slot** — file pick is offered (`A published listing can gain a missing side`).
 - **Published, filled slot** — alt only; replace and remove disabled
   (`Replacing a live photo is refused`, `Removing a live photo is refused`,
   `Alt can be edited on a published listing`).
+- **Pending confirmation** — after a file is chosen, that side shows a local
+  preview plus Confirm and Discard; no upload yet
+  (`Choosing a file shows a preview without uploading`,
+  `Confirming the preview stores the photo`,
+  `Discarding the preview leaves the side unchanged`).
+- **Stored photo, resting** — card-size image in the grid
+  (`The admin photo manager shows card size`).
+- **Magnify hovered / focused** — zoom-size preview at least three-quarters
+  of the viewport height (`Hovering the magnify control shows zoom size`).
+- **Magnify left** — zoom preview hidden (`Leaving the magnify control hides zoom`).
 - **Closed / settled / canceled** — every control disabled (`Adding after close is refused`).
 - **Unsupported type / oversize / over-length alt** — inline error, side
   unchanged (`An unsupported type is refused`, `An oversized photo is refused`,

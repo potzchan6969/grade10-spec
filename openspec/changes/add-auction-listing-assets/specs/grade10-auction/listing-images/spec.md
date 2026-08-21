@@ -56,6 +56,69 @@ with the upload. Unsupported types and oversize bodies SHALL be refused.
 - **THEN** the system refuses the upload
 - **AND** that side is unchanged
 
+### Requirement: An operator confirms a photo before it is stored
+
+The system SHALL NOT send listing-photo bytes to the auction service until the
+operator confirms after seeing a preview of the selected file in the admin
+photo manager. Choosing a file alone SHALL show that preview on the side being
+filled or replaced and SHALL leave the stored photo for that side unchanged.
+Discarding the preview SHALL clear the preview, leave the side unchanged, and
+SHALL NOT upload. Confirm applies to both adding a missing side and replacing
+a draft side.
+
+#### Scenario: Choosing a file shows a preview without uploading
+
+- **GIVEN** a draft listing with an empty front side
+- **WHEN** an operator selects a JPEG under 20 MB for the front side
+- **THEN** the admin photo manager shows a preview of that file on the front
+  side
+- **AND** the listing still has no stored front photo
+
+#### Scenario: Confirming the preview stores the photo
+
+- **GIVEN** an operator has selected a JPEG under 20 MB for a draft listing's
+  front side and sees its preview
+- **WHEN** they confirm the upload
+- **THEN** that side holds the photo
+- **AND** the preview is cleared
+
+#### Scenario: Discarding the preview leaves the side unchanged
+
+- **GIVEN** an operator has selected a photo for a draft listing's front side
+  and sees its preview
+- **WHEN** they discard the preview without confirming
+- **THEN** the listing still has no stored front photo
+- **AND** the preview is cleared
+- **AND** no upload was sent
+
+### Requirement: The admin photo manager reviews sides at card size with hover zoom
+
+The admin photo manager SHALL lay out the six sides in a grid with at most
+three sides per row. A stored photo SHALL be shown at card size. A magnify
+control on each shown photo SHALL, on hover (or keyboard focus), reveal that
+photo at zoom size in a preview at least three-quarters of the viewport
+height. Leaving the control SHALL hide the zoom preview. The magnify control
+SHALL NOT require a click to reveal zoom.
+
+#### Scenario: The admin photo manager shows card size
+
+- **GIVEN** a draft listing with a stored front photo
+- **WHEN** an operator opens the photo manager for that listing
+- **THEN** the front side shows the photo at card size
+
+#### Scenario: Hovering the magnify control shows zoom size
+
+- **GIVEN** a draft listing with a stored front photo open in the photo manager
+- **WHEN** the operator hovers the magnify control on the front side
+- **THEN** a zoom-size preview of that photo is shown
+- **AND** that preview is at least three-quarters of the viewport height
+
+#### Scenario: Leaving the magnify control hides zoom
+
+- **GIVEN** the zoom-size preview is visible from hovering the magnify control
+- **WHEN** the operator moves the pointer off the control
+- **THEN** the zoom-size preview is hidden
+
 ### Requirement: Replace and remove only while the listing is a draft
 
 The system SHALL refuse replacing a side that already has a photo, and SHALL

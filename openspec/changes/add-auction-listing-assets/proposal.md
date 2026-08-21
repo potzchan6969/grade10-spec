@@ -24,7 +24,12 @@ named for that slot.
 - Operators attach, replace, and remove listing photos from the existing
   listings table in the grade10 admin panel, one photo per physical side
   (`front`, `back`, `left`, `right`, `top`, `bottom`). A listing does not
-  need every side. Each photo may carry optional alt text.
+  need every side. Each photo may carry optional alt text. Choosing a file
+  shows a local preview first; bytes reach the auction service only after the
+  operator confirms, and discarding the preview uploads nothing. The photo
+  manager lays sides out in a grid (at most three per row), shows each stored
+  photo at card size, and reveals zoom size on hover of a magnify control —
+  the zoom preview is at least three-quarters of the viewport height.
 - Replace and remove are allowed only while the listing is a draft. Adding a
   missing side is allowed until the listing closes. Alt text may be edited
   until the listing closes.
@@ -84,7 +89,7 @@ behavior is a separate capability, not a patch on bidding.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/admin/grade10` | Photo manager on the listings table: per-side upload, replace, remove, and alt. |
+| `apps/admin/grade10` | Photo manager on the listings table: per-side preview and confirm, replace, remove, and alt. |
 | `apps/frontend/grade10` | Catalogue row shows the front photo at card size; details gallery passes sized sources and alt into `ListingGallery`. |
 | `apps/backend/grade10/auction` | Binding renamed to `AUCTION_LISTING_ASSETS`; Images binding for on-serve transform; public path gains a size segment; add vs replace vs remove vs alt-only follow the listing's status. |
 | `@grade10/auction-contracts` | Public photo shape gains alt and named-size paths; admin listing reads gain the photo list. |

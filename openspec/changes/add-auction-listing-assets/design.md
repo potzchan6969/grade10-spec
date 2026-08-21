@@ -164,6 +164,53 @@ purpose, and a `Blob` does not belong there.
 Makes pass: `An accepted upload becomes that side's photo`, `Operators attach
 photos from the admin listings table`.
 
+### Preview and confirm stay in the admin client
+
+Choosing a file must not call the byte route. The photo manager holds the
+selected `File` (or `Blob`) in component state, shows it with a local object
+URL, and only then offers Confirm and Discard. Confirm runs the existing
+`uploadListingImage` PUT; Discard revokes the object URL, clears the pending
+file, and leaves the side's stored photo alone. The same flow covers add and
+draft replace — status rules still decide whether the file picker is offered.
+
+No staging endpoint, no temporary R2 key, no server-side draft object. A
+mistake that never reaches Confirm never becomes an orphan for the sweep.
+Client-side type/size checks may short-circuit before Confirm for faster
+feedback; the service remains the authority on refuse codes.
+
+Alternatives considered:
+
+- **Upload on file pick, delete on "undo".** Rejected: a discarded pick would
+  still write R2 and a row (or leave an orphan), and a published add could not
+  be undone.
+- **Separate staging bucket / pending keys.** Rejected: more moving parts for
+  a single-operator confirm that the browser can already show.
+
+Makes pass: `Choosing a file shows a preview without uploading`, `Confirming
+the preview stores the photo`, `Discarding the preview leaves the side
+unchanged`.
+
+### Admin review uses card size and hover zoom
+
+The Photos dialog is wider than a single column and lays the six sides in a
+responsive grid capped at three columns. Each stored side renders
+`paths.card` (resolved against the API gateway origin — paths are
+gateway-rooted and the admin host is not the auction worker). A magnify
+control sits on the image; hover or focus opens a floating zoom preview that
+loads `paths.zoom` and is sized to at least `75vh`. Pointer leave / blur
+closes it. Click-to-open a second dialog was rejected: operators need a fast
+inspect while staying in the manager.
+
+Alternatives considered:
+
+- **Thumb size in the grid.** Rejected: too small to judge scan quality before
+  publish.
+- **Click opens a zoom dialog.** Rejected: slower than hover for checking
+  several sides in one pass.
+
+Makes pass: `The admin photo manager shows card size`, `Hovering the magnify
+control shows zoom size`, `Leaving the magnify control hides zoom`.
+
 ### `ListingGallery` takes three sources; the catalogue stays an assembly
 
 `ListingGalleryImage` gains optional `thumbSrc` and `zoomSrc` (omit → `src`).

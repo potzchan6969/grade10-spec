@@ -41,13 +41,27 @@ encode target, not a runtime import from a frontend.
 ## 5. Admin photo manager (grade10)
 
 Depends on group 1 through the submodule bump, and on groups 2 and 4's
-fixtures / procedure shapes.
+fixtures / procedure shapes. Preview and confirm stay in the admin client —
+no backend change; confirm calls the existing byte upload and discard never
+reaches the network.
 
 - [ ] 5.1 Bump the `external/grade10-spec` submodule to the commit carrying group 1.
 - [ ] 5.2 Make `Operators attach photos from the admin listings table` and `An accepted upload becomes that side's photo` pass with a Photos dialog on the listings table, six side slots, and the byte upload on the admin client.
 - [ ] 5.3 Make `A draft photo can be replaced and removed`, `A published listing can gain a missing side`, `Replacing a live photo is refused`, `Removing a live photo is refused`, `Alt can be edited on a published listing`, and `Adding after close is refused` pass as enabled and disabled controls plus the matching refusals.
 - [ ] 5.4 Make `An unsupported type is refused`, `An oversized photo is refused`, and `Over-length alt is refused` pass as inline errors that leave the side unchanged.
-- [ ] 5.5 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test`.
+- [ ] 5.5 Make `Choosing a file shows a preview without uploading` and
+  `Discarding the preview leaves the side unchanged` pass in the admin Photos
+  dialog: selecting a file shows a local preview on that side with Confirm and
+  Discard, and Discard clears the preview without calling the upload client.
+- [ ] 5.6 Make `Confirming the preview stores the photo` and
+  `An accepted upload becomes that side's photo` pass by uploading only when
+  Confirm is pressed (add and draft replace), then clearing the preview.
+- [ ] 5.7 Make `The admin photo manager shows card size`, `Hovering the magnify
+  control shows zoom size`, and `Leaving the magnify control hides zoom` pass:
+  the dialog is a grid of at most three sides per row, stored photos use card
+  size, and hovering the magnify control reveals a zoom preview at least
+  three-quarters of the viewport height.
+- [ ] 5.8 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test`.
 
 ## 6. Storefront catalogue and details (grade10)
 
