@@ -71,13 +71,13 @@ Depends on group 1 landing.
 
 Depends on groups 1 to 4 being pushed.
 
-- [ ] 5.1 Bump `external/grade10-spec` and rebuild each slice's copy type from
+- [x] 5.1 Bump `external/grade10-spec` and rebuild each slice's copy type from
       the blocks' — `ListingViewCopy`, `ProfileViewCopy` and `SignInFlowCopy`
       compose rather than restate — with the catalog mapping written for
       `add-site-localization` re-pointed at the composed shape.
-- [ ] 5.2 Confirm nothing a collector reads changed: the pages render the same
+- [x] 5.2 Confirm nothing a collector reads changed: the pages render the same
       strings in every language, and `No raw key on screen` still holds at
       typecheck.
-- [ ] 5.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 5.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `pnpm run test:backend`, and `pnpm run build` as this group's
       verification.
