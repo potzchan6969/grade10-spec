@@ -42,13 +42,13 @@ Depends on group 1 landing: it follows the shape group 1 sets.
 
 Depends on group 1 landing.
 
-- [ ] 3.1 Give `ListingBidPanel`, `ListingGallery`, `ListingDetails` and
+- [x] 3.1 Give `ListingBidPanel`, `ListingGallery`, `ListingDetails` and
       `ListingProduct` a copy type each and one `copy` prop, every word typed
       `string`, with `standing`, `watchAction`, `history` and `actions` left
       as slots and `price`, `remaining`, `deadline` and `bidCount` as values.
-- [ ] 3.2 Retire `showHistoryLabel` and `hideHistoryLabel`, which are already
+- [x] 3.2 Retire `showHistoryLabel` and `hideHistoryLabel`, which are already
       deprecated and have no behavior behind them.
-- [ ] 3.3 Update the auction stories, including the live bidding demo, and run
+- [x] 3.3 Update the auction stories, including the live bidding demo, and run
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and
       `pnpm run test:stories` as this group's verification.
 
