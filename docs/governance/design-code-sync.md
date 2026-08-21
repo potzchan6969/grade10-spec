@@ -33,6 +33,12 @@ The operative rule: **a component may not offer a variant or size the design doe
 
 Where code and design genuinely disagree, that is a decision to record in an OpenSpec change, not a difference to smooth over in a template.
 
+The template maps names, so a prop rename is a template change even when
+nothing visual moved. Reshaping a component's words into a single `copy`
+object renames every one of them at once, and a template still emitting
+`localeLabel={localeLabel}` hands a developer a snippet that no longer
+compiles. Nothing catches this for you — see "Known gaps".
+
 ## Creating a component
 
 1. **Publish the Figma component set first.** Code Connect only resolves published components, and `list_file_components_for_code_connect` only returns published ones.
@@ -42,6 +48,10 @@ Where code and design genuinely disagree, that is a decision to record in an Ope
 5. **Write `<name>.stories.tsx`** with a story per variant, plus disabled, loading, and any other state the contract has.
 6. **Run `pnpm run check:design-system`** and get to zero errors and zero *unexplained* warnings. A warning you intend to keep belongs in an OpenSpec change with a reason, not in the run log.
 7. **Publish Code Connect** with `pnpm --filter @grade10/design-system run code-connect:publish`. A correct template that was never published leaves Dev Mode showing no connected code at all — verify with `get_code_connect_map`, which returns `{}` when nothing is published.
+
+Changing an existing component follows the same list from step 3, and step 4
+is not optional when only the props moved: re-read the template against the
+component's current props before publishing.
 
 To hand steps 3–7 to an AI agent, paste [`prompts/implement-primitive-from-figma.md`](prompts/implement-primitive-from-figma.md). It carries the rules above, gates on an axis table before any code is written, and stops short of step 7 rather than writing to the shared Figma file unattended.
 
@@ -199,3 +209,11 @@ Recorded so they are not mistaken for coverage:
 - Value checking covers a variant's own background and box geometry, not its children. A wrong label colour, icon size, or border is still invisible to it, and only the base state of each axis is compared — hover, disabled, and loading values are unchecked.
 - Design-system stories are smoke-only. During the Button work the entire 14-file suite passed with `{children}` deleted from the component. `packages/ui` stories do use `play` functions to assert that a control reports its change and does not move its own display, so the convention exists in the repository but not in this package; whether to adopt it here is still open.
 - The CI job skips with a warning annotation when `FIGMA_TOKEN` is unavailable, as on forks. A skipped run is not a passing run.
+- The checker compares variant axes, options, and values. It never reads the
+  prop names a template emits, so a template naming a prop the component
+  dropped is a clean run. Six templates emitted props that no longer existed
+  after the `shape-ui-block-copy` reshape and the run reported no errors.
+- It walks `packages/design-system/src/components` only. The `packages/ui`
+  block templates are outside that tree, so nothing scans them at all — not
+  their node IDs, not their axes. `code-connect:publish` parses them, which is
+  the only automated read they get.
