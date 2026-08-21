@@ -20,6 +20,6 @@ publishes.
 - [x] 1.7 Hold the page's serving where it was: the card still answers whole before any script runs, with `serving/prerender.test.tsx` and `serving/hydration.test.tsx` green over the page the buy box is now part of.
 - [x] 1.8 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`.
 
-## 2. Confirm on staging (grade10)
+## 2. Confirm on staging (grade10) (owner: @sean)
 
-- [ ] 2.1 Deploy to staging and confirm against the preview: a card with several grades adds the one chosen, a sold-out grade cannot be chosen, a card with nothing for sale offers no add, and the card's document still carries its name, description and every price with scripts disabled.
+- [x] 2.1 Deploy to staging and confirm against the preview: a card with several grades adds the one chosen, a sold-out grade cannot be chosen, a card with nothing for sale offers no add, and the card's document still carries its name, description and every price with scripts disabled.
