@@ -24,7 +24,9 @@ const originalPrice = instance.getString("originalPrice");
 const badges = instance.getSlot("cardProps");
 
 export default {
-  example: figma.code`<ProductCard name="${productName}" price="${price}" cartLabel={cartLabel}${hasDiscount ? figma.code` originalPrice="${originalPrice}" saleLabel="SALE"` : ""}${soldOut ? figma.code` soldOut soldOutLabel="SOLD OUT"` : ""} />`,
+  // The words a tile renders the same whichever product is in it arrive as
+  // the list's copy, so the example shows the tile's own values only.
+  example: figma.code`<ProductCard copy={copy.card} name="${productName}" price="${price}"${hasDiscount ? figma.code` originalPrice="${originalPrice}"` : ""}${soldOut ? figma.code` soldOut` : ""} />`,
   imports: ['import { ProductCard } from "@grade10/ui"'],
   id: "product-card",
   metadata: { nestable: true },

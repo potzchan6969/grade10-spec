@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { LISTING_COPY } from "./fixtures";
 import { ProductResultsPanel } from "./product-results-panel";
 
 const meta = {
@@ -6,6 +7,7 @@ const meta = {
   component: ProductResultsPanel,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
+  args: { copy: LISTING_COPY },
 } satisfies Meta<typeof ProductResultsPanel>;
 
 export default meta;

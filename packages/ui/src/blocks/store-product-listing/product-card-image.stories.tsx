@@ -4,10 +4,13 @@ import { ProductCardImage } from "./product-card-image";
 
 const IMAGE = new URL("./product-card.fixture.png", import.meta.url).href;
 
+/** The words the well renders, whichever product is in it. */
+const copy = { cart: "Add to cart", soldOut: "SOLD OUT", sale: "SALE" };
+
 const defaults = {
+  copy,
   imageSrc: IMAGE,
   imageAlt: "Ninja Spinner booster box",
-  cartLabel: "Add to cart",
   onCartClick: fn(),
 };
 
@@ -32,7 +35,7 @@ const well: Decorator[] = [
 export const Default: Story = { decorators: well };
 
 export const Sale: Story = {
-  args: { saleLabel: "SALE" },
+  args: { discounted: true },
   decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -41,7 +44,7 @@ export const Sale: Story = {
 };
 
 export const SoldOut: Story = {
-  args: { saleLabel: "SALE", soldOut: true, soldOutLabel: "SOLD OUT" },
+  args: { discounted: true, soldOut: true },
   decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

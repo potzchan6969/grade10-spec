@@ -2,7 +2,7 @@ import { Link } from "@grade10/design-system/components/forms/link";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import type { ReactNode } from "react";
+import type { ProductFilterCopy } from "./product-filter";
 import { ProductFilter } from "./product-filter";
 import type {
   AsyncState,
@@ -11,13 +11,16 @@ import type {
   UtilityLink,
 } from "./types";
 
-type FilterPanelProps = {
+/**
+ * The words the panel renders: its own, and the filter's beneath it.
+ */
+type FilterPanelCopy = ProductFilterCopy & {
   /** Accessible name for the complementary landmark. */
   label: string;
-  heading: ReactNode;
-  searchPlaceholder: ReactNode;
-  /** Accessible name for the search field. Not shown visually. */
-  searchLabel?: ReactNode;
+};
+
+type FilterPanelProps = {
+  copy: FilterPanelCopy;
   searchValue?: string;
   onSearchChange?: (value: string) => void;
   onSearchClear?: () => void;
@@ -45,10 +48,7 @@ const PANEL_CLASS =
  * given; it never holds those values.
  */
 function FilterPanel({
-  label,
-  heading,
-  searchPlaceholder,
-  searchLabel,
+  copy,
   searchValue,
   onSearchChange,
   onSearchClear,
@@ -61,20 +61,18 @@ function FilterPanel({
 }: FilterPanelProps) {
   return (
     <aside
-      aria-label={label}
+      aria-label={copy.label}
       className={cn(PANEL_CLASS, className)}
       data-slot="filter-panel"
     >
       <VStack className="gap-8" gap="none">
         <ProductFilter
+          copy={copy}
           groups={groups}
-          heading={heading}
           onFilterChange={onFilterChange}
           onGroupExpand={onGroupExpand}
           onSearchChange={onSearchChange}
           onSearchClear={onSearchClear}
-          searchLabel={searchLabel}
-          searchPlaceholder={searchPlaceholder}
           searchValue={searchValue}
           selection={selection}
         />
@@ -103,5 +101,5 @@ function FilterPanel({
   );
 }
 
-export type { FilterPanelProps };
+export type { FilterPanelCopy, FilterPanelProps };
 export { FilterPanel };

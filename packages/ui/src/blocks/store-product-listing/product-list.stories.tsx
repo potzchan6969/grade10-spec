@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
-import { PRODUCTS } from "./fixtures";
+import { LISTING_COPY, PRODUCTS } from "./fixtures";
 import { ProductList } from "./product-list";
 
 const meta = {
@@ -8,7 +8,7 @@ const meta = {
   component: ProductList,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
-  args: { products: PRODUCTS },
+  args: { copy: LISTING_COPY, products: PRODUCTS },
 } satisfies Meta<typeof ProductList>;
 
 export default meta;

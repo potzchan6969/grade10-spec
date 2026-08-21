@@ -15,15 +15,21 @@ import { CaretDown, Check } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import type { AppliedFilter, SortOption } from "./types";
 
+/** The words the header renders, whatever it is listing. */
+type ProductListHeaderCopy = {
+  /** Whole trigger label, e.g. "Sort by popularity". */
+  sortTrigger?: string;
+  clearFilters?: string;
+};
+
 type ProductListHeaderProps = {
+  copy?: ProductListHeaderCopy;
   /** Formatted result total, displayed as supplied. Never derived from the
    * number of products on the page. Figma's `Count`. */
   resultCount: ReactNode;
   sortOptions?: readonly SortOption[];
   /** ID of the active sort option. */
   sortValue?: string;
-  /** Whole trigger label, e.g. "Sort by popularity". */
-  sortTriggerLabel?: ReactNode;
   onSortChange?: (optionId: string) => void;
   appliedFilters?: readonly AppliedFilter[];
   onFilterChange?: (
@@ -31,7 +37,6 @@ type ProductListHeaderProps = {
     optionId: string,
     selected: boolean,
   ) => void;
-  clearFiltersLabel?: ReactNode;
   onClearFilters?: () => void;
   className?: string;
 };
@@ -48,17 +53,16 @@ function ProductListHeader({
   resultCount,
   sortOptions = [],
   sortValue,
-  sortTriggerLabel,
+  copy,
   onSortChange,
   appliedFilters = [],
   onFilterChange,
-  clearFiltersLabel,
   onClearFilters,
   className,
 }: ProductListHeaderProps) {
   const activeSort =
     sortOptions.find((option) => option.id === sortValue) ?? sortOptions[0];
-  const triggerLabel = sortTriggerLabel ?? activeSort?.label;
+  const triggerLabel = copy?.sortTrigger ?? activeSort?.label;
   const showFilters = appliedFilters.length > 0;
 
   return (
@@ -127,14 +131,14 @@ function ProductListHeader({
                 </Chip>
               ))}
             </HStack>
-            {onClearFilters != null && clearFiltersLabel != null ? (
+            {onClearFilters != null && copy?.clearFilters != null ? (
               <Link
                 onClick={onClearFilters}
                 render={<button type="button" />}
                 size="sm"
                 variant="secondary"
               >
-                {clearFiltersLabel}
+                {copy.clearFilters}
               </Link>
             ) : null}
           </HStack>
@@ -144,5 +148,5 @@ function ProductListHeader({
   );
 }
 
-export type { ProductListHeaderProps };
+export type { ProductListHeaderCopy, ProductListHeaderProps };
 export { ProductListHeader };

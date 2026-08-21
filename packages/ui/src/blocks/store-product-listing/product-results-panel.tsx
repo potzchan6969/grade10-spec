@@ -1,13 +1,18 @@
 import { cn } from "@grade10/design-system/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import { AsyncMessage } from "../shared/async-message";
+import type { ProductListCopy } from "./product-list";
 import { DEFAULT_LOAD_MORE_SKELETON_COUNT, ProductList } from "./product-list";
 import type { AsyncState, ProductSummary } from "./types";
+
+/** What the panel's tiles say the same way. */
+type ProductResultsPanelCopy = ProductListCopy;
 
 const REVEAL_STAGGER_MS = 40;
 const REVEAL_STAGGER_CAP = 8;
 
 type ProductResultsPanelProps = {
+  copy: ProductResultsPanelCopy;
   results: AsyncState<readonly ProductSummary[]>;
   onProductClick?: (productId: string) => void;
   onProductAction?: (productId: string) => void;
@@ -30,6 +35,7 @@ type ProductResultsPanelProps = {
  * append below the resolved products.
  */
 function ProductResultsPanel({
+  copy,
   results,
   onProductClick,
   onProductAction,
@@ -138,6 +144,7 @@ function ProductResultsPanel({
     >
       <ProductList
         className="w-full"
+        copy={copy}
         loadMoreSkeletonCount={loadMoreSkeletonCount}
         loading={isLoading}
         loadingMore={loadingMore}
@@ -161,5 +168,5 @@ function ProductResultsPanel({
   );
 }
 
-export type { ProductResultsPanelProps };
+export type { ProductResultsPanelCopy, ProductResultsPanelProps };
 export { ProductResultsPanel };

@@ -67,19 +67,20 @@ const UTILITY_LINKS: UtilityLink[] = [
 
 const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
   id: String(index + 1),
-  name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+  name: `Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item ${index + 1}`,
   imageSrc: IMAGE,
   imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
   price: "HK$105",
   originalPrice: "HK$123",
-  saleLabel: "SALE",
-  cartLabel: "Add to cart",
-  ariaLabel: `Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item ${index + 1}`,
   inCart: index === 0,
   cartCount: index === 0 ? "1" : undefined,
   soldOut: index === 7,
-  soldOutLabel: index === 7 ? "SOLD OUT" : undefined,
 }));
+
+/** What every tile says the same way, whichever product it holds. */
+const LISTING_COPY = {
+  card: { cart: "Add to cart", soldOut: "SOLD OUT", sale: "SALE" },
+};
 
 const SELECTION = {
   worlds: ["pokemon"],
@@ -95,6 +96,7 @@ export {
   APPLIED_FILTERS,
   FILTER_GROUPS,
   IMAGE,
+  LISTING_COPY,
   PRODUCT_BADGES,
   PRODUCTS,
   SELECTION,

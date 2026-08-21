@@ -49,30 +49,37 @@ export type { AsyncAction, AsyncState } from "./blocks/shared/async";
 // shared-ui/store-product-listing
 export {
   FilterPanel,
+  type FilterPanelCopy,
   type FilterPanelProps,
 } from "./blocks/store-product-listing/filter-panel";
 export {
   ProductBrowse,
+  type ProductBrowseCopy,
   type ProductBrowseProps,
 } from "./blocks/store-product-listing/product-browse";
 export {
   ProductCard,
+  type ProductCardCopy,
   type ProductCardProps,
 } from "./blocks/store-product-listing/product-card";
 export {
   ProductCardImage,
+  type ProductCardImageCopy,
   type ProductCardImageProps,
 } from "./blocks/store-product-listing/product-card-image";
 export {
   ProductFilter,
+  type ProductFilterCopy,
   type ProductFilterProps,
 } from "./blocks/store-product-listing/product-filter";
 export {
   ProductList,
+  type ProductListCopy,
   type ProductListProps,
 } from "./blocks/store-product-listing/product-list";
 export {
   ProductListHeader,
+  type ProductListHeaderCopy,
   type ProductListHeaderProps,
 } from "./blocks/store-product-listing/product-list-header";
 export type {

@@ -5,20 +5,33 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { ShoppingCartSimple } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 
+/**
+ * What the well says, whichever product is in it — supplied once for a whole
+ * listing rather than restated per tile.
+ */
+type ProductCardImageCopy = {
+  /** Accessible name for the cart control. */
+  cart: string;
+  /** Shown in place of the sale badge when the product has sold out. */
+  soldOut?: string;
+  /** Badge on a discounted product. Omit it and no badge is drawn. */
+  sale?: string;
+};
+
 type ProductCardImageProps = {
+  copy: ProductCardImageCopy;
   imageSrc?: string;
   imageAlt?: string;
-  saleLabel?: ReactNode;
+  /** Whether this product is discounted — the badge follows it. */
+  discounted?: boolean;
   soldOut?: boolean;
-  soldOutLabel?: ReactNode;
   inCart?: boolean;
   cartCount?: ReactNode;
-  /** Required accessible name for the cart control. */
-  cartLabel: string;
   onCartClick?: () => void;
   /** Tile activation for the photo well. Ignored when `soldOut`. */
   onClick?: () => void;
-  ariaLabel?: string;
+  /** The product's own name, which names the well for a screen reader. */
+  name?: string;
   className?: string;
 };
 
@@ -32,17 +45,16 @@ type ProductCardImageProps = {
  */
 function ProductCardImage({
   className,
+  copy,
   imageSrc,
   imageAlt = "",
-  saleLabel,
+  discounted = false,
   soldOut = false,
-  soldOutLabel,
   inCart = false,
   cartCount,
-  cartLabel,
   onCartClick,
   onClick,
-  ariaLabel,
+  name,
 }: ProductCardImageProps) {
   const showCart = !soldOut;
   const cartAlwaysVisible = showCart && inCart;
@@ -70,14 +82,14 @@ function ProductCardImage({
           />
         ) : null}
       </div>
-      {soldOut && soldOutLabel != null ? (
+      {soldOut && copy.soldOut != null ? (
         <Badge className="absolute top-3 left-3 z-10" size="sm">
-          {soldOutLabel}
+          {copy.soldOut}
         </Badge>
       ) : null}
-      {!soldOut && saleLabel != null ? (
+      {!soldOut && discounted && copy.sale != null ? (
         <Badge className="absolute top-3 left-3 z-10" size="sm" variant="brand">
-          {saleLabel}
+          {copy.sale}
         </Badge>
       ) : null}
     </>
@@ -97,7 +109,7 @@ function ProductCardImage({
         <div className="absolute inset-0">{well}</div>
       ) : (
         <button
-          aria-label={ariaLabel}
+          aria-label={name}
           className="absolute inset-0 cursor-pointer border-0 bg-transparent p-0 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           onClick={onClick}
           type="button"
@@ -114,7 +126,7 @@ function ProductCardImage({
           )}
         >
           <IconButton
-            aria-label={cartLabel}
+            aria-label={copy.cart}
             className="absolute bottom-0 left-0"
             onClick={onCartClick}
             size="md"
@@ -137,5 +149,5 @@ function ProductCardImage({
   );
 }
 
-export type { ProductCardImageProps };
+export type { ProductCardImageCopy, ProductCardImageProps };
 export { ProductCardImage };

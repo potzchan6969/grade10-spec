@@ -1,8 +1,11 @@
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
+import type { FilterPanelCopy } from "./filter-panel";
 import { FilterPanel } from "./filter-panel";
+import type { ProductListHeaderCopy } from "./product-list-header";
 import { ProductListHeader } from "./product-list-header";
+import type { ProductResultsPanelCopy } from "./product-results-panel";
 import { ProductResultsPanel } from "./product-results-panel";
 import type {
   AppliedFilter,
@@ -14,11 +17,22 @@ import type {
   UtilityLink,
 } from "./types";
 
+/**
+ * Every word the browse root renders, as the components under it declare
+ * them — the filter panel's, the list header's, the tiles' — plus the one it
+ * owns itself.
+ */
+type ProductBrowseCopy = {
+  filterPanel: FilterPanelCopy;
+  listHeader?: ProductListHeaderCopy;
+  results: ProductResultsPanelCopy & {
+    /** Accessible name for the results region. */
+    label: string;
+  };
+};
+
 type ProductBrowseProps = {
-  filterPanelLabel: string;
-  heading: ReactNode;
-  searchPlaceholder: ReactNode;
-  searchLabel?: ReactNode;
+  copy: ProductBrowseCopy;
   searchValue?: string;
   onSearchChange?: (value: string) => void;
   onSearchClear?: () => void;
@@ -33,16 +47,12 @@ type ProductBrowseProps = {
   utilityLinks?: readonly UtilityLink[];
 
   results: AsyncState<readonly ProductSummary[]>;
-  /** Accessible name for the results region. */
-  resultsLabel: string;
   resultCount: ReactNode;
 
   sortOptions: readonly SortOption[];
   sortValue?: string;
-  sortTriggerLabel?: ReactNode;
   onSortChange?: (optionId: string) => void;
   appliedFilters?: readonly AppliedFilter[];
-  clearFiltersLabel?: ReactNode;
   onClearFilters?: () => void;
 
   /** When true, scrolling near the list end reports `onLoadMore`. */
@@ -74,10 +84,7 @@ const BROWSE_CLASS =
  * results come from separate calls.
  */
 function ProductBrowse({
-  filterPanelLabel,
-  heading,
-  searchPlaceholder,
-  searchLabel,
+  copy,
   searchValue,
   onSearchChange,
   onSearchClear,
@@ -87,14 +94,11 @@ function ProductBrowse({
   onGroupExpand,
   utilityLinks,
   results,
-  resultsLabel,
   resultCount,
   sortOptions,
   sortValue,
-  sortTriggerLabel,
   onSortChange,
   appliedFilters,
-  clearFiltersLabel,
   onClearFilters,
   hasMore,
   loadingMore,
@@ -110,22 +114,19 @@ function ProductBrowse({
   return (
     <div className={cn(BROWSE_CLASS, className)} data-slot="product-browse">
       <FilterPanel
+        copy={copy.filterPanel}
         groups={groups}
-        heading={heading}
-        label={filterPanelLabel}
         onFilterChange={onFilterChange}
         onGroupExpand={onGroupExpand}
         onSearchChange={onSearchChange}
         onSearchClear={onSearchClear}
-        searchLabel={searchLabel}
-        searchPlaceholder={searchPlaceholder}
         searchValue={searchValue}
         selection={selection}
         utilityLinks={utilityLinks}
       />
       <VStack
         aria-busy={resultsBusy}
-        aria-label={resultsLabel}
+        aria-label={copy.results.label}
         className="w-full min-w-0 flex-1 gap-8 lg:items-center"
         data-slot="product-browse-results"
         gap="none"
@@ -134,17 +135,17 @@ function ProductBrowse({
         <ProductListHeader
           appliedFilters={appliedFilters}
           className="w-full"
-          clearFiltersLabel={clearFiltersLabel}
+          copy={copy.listHeader}
           onClearFilters={onClearFilters}
           onFilterChange={onFilterChange}
           onSortChange={onSortChange}
           resultCount={resultCount}
           sortOptions={sortOptions}
-          sortTriggerLabel={sortTriggerLabel}
           sortValue={sortValue}
         />
 
         <ProductResultsPanel
+          copy={copy.results}
           hasMore={hasMore}
           loadMoreSkeletonCount={loadMoreSkeletonCount}
           loadingMore={loadingMore}
@@ -158,5 +159,5 @@ function ProductBrowse({
   );
 }
 
-export type { ProductBrowseProps };
+export type { ProductBrowseCopy, ProductBrowseProps };
 export { ProductBrowse };

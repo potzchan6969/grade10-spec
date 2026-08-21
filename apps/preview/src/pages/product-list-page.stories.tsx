@@ -47,7 +47,7 @@ function ProductListPage() {
         return {
           ...template,
           id: String(index + 1),
-          ariaLabel: `Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item ${index + 1}`,
+          name: `Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item ${index + 1}`,
         };
       }),
     [],
@@ -120,11 +120,24 @@ function ProductListPage() {
       <Nav {...STORE_NAV} />
       <ProductBrowse
         appliedFilters={appliedFilters}
-        clearFiltersLabel="Clear filters"
-        filterPanelLabel="Store filters"
+        copy={{
+          filterPanel: {
+            label: "Store filters",
+            heading: "Filter",
+            searchPlaceholder: "Find product",
+            searchLabel: "Search products",
+          },
+          listHeader: {
+            sortTrigger: sortTriggerLabel(sort),
+            clearFilters: "Clear filters",
+          },
+          results: {
+            label: "Products",
+            card: { cart: "Add to cart", soldOut: "SOLD OUT", sale: "SALE" },
+          },
+        }}
         groups={{ status: "ready", data: FILTER_GROUPS }}
         hasMore={visibleCount < TOTAL_PRODUCTS}
-        heading="Filter"
         loadingMore={loadingMore}
         onClearFilters={() => setSelection({})}
         onFilterChange={handleFilterChange}
@@ -144,13 +157,9 @@ function ProductListPage() {
             ? { status: "loading" }
             : { status: "ready", data: productData }
         }
-        resultsLabel="Products"
-        searchLabel="Search products"
-        searchPlaceholder="Find product"
         searchValue={search}
         selection={selection}
         sortOptions={SORT_OPTIONS}
-        sortTriggerLabel={sortTriggerLabel(sort)}
         sortValue={sort}
         utilityLinks={UTILITY_LINKS}
       />

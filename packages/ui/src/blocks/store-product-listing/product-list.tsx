@@ -1,6 +1,10 @@
 import { cn } from "@grade10/design-system/lib/utils";
+import type { ProductCardCopy } from "./product-card";
 import { ProductCard } from "./product-card";
 import type { ProductSummary } from "./types";
+
+/** What every tile in the list says the same way. */
+type ProductListCopy = { card: ProductCardCopy };
 
 /** Figma tile width on the Product List page (`240px`) drives auto-fill so
  * columns grow with the results area while the sidebar stays fixed. Gaps
@@ -13,6 +17,7 @@ const DEFAULT_SKELETON_COUNT = 8;
 const DEFAULT_LOAD_MORE_SKELETON_COUNT = 10;
 
 type ProductListProps = {
+  copy: ProductListCopy;
   products: readonly ProductSummary[];
   /** Renders Boneyard skeleton tiles instead of product data. */
   loading?: boolean;
@@ -40,6 +45,7 @@ type ProductListProps = {
  * different design, not a prop.
  */
 function ProductList({
+  copy,
   products,
   loading = false,
   skeletonCount,
@@ -65,7 +71,7 @@ function ProductList({
       {loading
         ? Array.from({ length: placeholderCount }, (_, index) => (
             <ProductCard
-              cartLabel=""
+              copy={copy.card}
               // biome-ignore lint/suspicious/noArrayIndexKey: placeholders have no identity beyond position.
               key={`product-skeleton-${index}`}
               loading
@@ -88,10 +94,9 @@ function ProductList({
               }}
             >
               <ProductCard
-                ariaLabel={product.ariaLabel}
                 badges={product.badges}
                 cartCount={product.cartCount}
-                cartLabel={product.cartLabel}
+                copy={copy.card}
                 imageAlt={product.imageAlt}
                 imageSrc={product.imageSrc}
                 inCart={product.inCart}
@@ -106,16 +111,14 @@ function ProductList({
                 }
                 originalPrice={product.originalPrice}
                 price={product.price}
-                saleLabel={product.saleLabel}
                 soldOut={product.soldOut}
-                soldOutLabel={product.soldOutLabel}
               />
             </div>
           ))}
       {loadingMore && !loading
         ? Array.from({ length: loadMoreSkeletonCount }, (_, index) => (
             <ProductCard
-              cartLabel=""
+              copy={copy.card}
               // biome-ignore lint/suspicious/noArrayIndexKey: placeholders have no identity beyond position.
               key={`load-more-skeleton-${index}`}
               loading
@@ -128,7 +131,7 @@ function ProductList({
   );
 }
 
-export type { ProductListProps };
+export type { ProductListCopy, ProductListProps };
 export {
   DEFAULT_LOAD_MORE_SKELETON_COUNT,
   PRODUCT_LIST_GRID_CLASS,
