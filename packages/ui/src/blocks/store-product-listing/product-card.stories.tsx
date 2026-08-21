@@ -1,30 +1,16 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
+import { expect, within } from "storybook/test";
 import { ProductCard } from "./product-card";
 
 const IMAGE = new URL("./product-card.fixture.png", import.meta.url).href;
 
-const badges = (
-  <>
-    <Badge size="sm" variant="outline">
-      Pokémon
-    </Badge>
-    <Badge size="sm" variant="outline">
-      M4
-    </Badge>
-    <Badge size="sm" variant="outline">
-      JP
-    </Badge>
-  </>
-);
-
 const defaults = {
   imageSrc: IMAGE,
-  imageAlt: "Ninja Spinner booster box",
-  badges,
-  name: "Ninja Spinner",
-  price: "HKD 105",
-  originalPrice: "HKD 123",
+  imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+  tags: ["Pokémon", "M4", "JP"],
+  name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+  price: "HK$105",
+  originalPrice: "HK$123",
   saleLabel: "SALE",
   cartLabel: "Add to cart",
   onClick: () => {},
@@ -48,10 +34,20 @@ const well: Decorator[] = [
   ),
 ];
 
-/** Figma `soldOut=false` — image, badge slot, name, prices. */
-export const Default: Story = { decorators: well };
+/** Figma `soldOut=false` — available product with a discount. */
+export const Default: Story = {
+  decorators: well,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByRole("button", { name: /wishlist/i })).toBeNull();
+    expect(canvas.getByText("SALE")).toBeInTheDocument();
+    expect(canvas.queryByText("Pokémon")).toBeNull();
+    expect(canvas.queryByText("M4")).toBeNull();
+    expect(canvas.queryByText("JP")).toBeNull();
+  },
+};
 
-/** Figma `soldOut=true` — dimmed photo, SOLD OUT badge, no cart. */
+/** Figma `soldOut=true` — SOLD OUT badge, no cart action, tile inert. */
 export const SoldOut: Story = {
   args: { soldOut: true, soldOutLabel: "SOLD OUT", saleLabel: undefined },
   decorators: well,
@@ -89,6 +85,22 @@ export const States: Story = {
       </div>
     </div>
   ),
+};
+
+/** Set annotation: quantity on the cart button when already in the cart. */
+export const AddedToCart: Story = {
+  args: { inCart: true, cartCount: "3" },
+  decorators: well,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("3")).toBeInTheDocument();
+  },
+};
+
+/** `hasDiscount=false` — no badge and no strikethrough price. */
+export const WithoutDiscount: Story = {
+  args: { originalPrice: undefined, saleLabel: undefined },
+  decorators: well,
 };
 
 /** Boneyard capture target — keep `loading` at Figma's 260px card width. */

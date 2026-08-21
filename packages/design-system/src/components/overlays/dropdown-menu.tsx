@@ -17,8 +17,22 @@ function DropdownMenuPortal({ ...props }: MenuPrimitive.Portal.Props) {
   return <MenuPrimitive.Portal data-slot="dropdown-menu-portal" {...props} />;
 }
 
-function DropdownMenuTrigger({ ...props }: MenuPrimitive.Trigger.Props) {
-  return <MenuPrimitive.Trigger data-slot="dropdown-menu-trigger" {...props} />;
+function DropdownMenuTrigger({
+  className,
+  ...props
+}: MenuPrimitive.Trigger.Props) {
+  // Figma Dropdown Menu: if the trigger is a button, rotate the chevron
+  // when the menu opens and closes.
+  return (
+    <MenuPrimitive.Trigger
+      data-slot="dropdown-menu-trigger"
+      className={cn(
+        "[&_svg]:transition-transform [&_svg]:duration-150 [&_svg]:ease-out motion-reduce:[&_svg]:transition-none [&[data-popup-open]_svg]:rotate-180",
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
 function DropdownMenuContent({
@@ -45,7 +59,7 @@ function DropdownMenuContent({
         <MenuPrimitive.Popup
           data-slot="dropdown-menu-content"
           className={cn(
-            "z-50 flex max-h-(--available-height) w-(--anchor-width) min-w-32 origin-(--transform-origin) flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-lg border border-border bg-card p-1 text-card-foreground shadow-md duration-100 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95",
+            "z-50 flex max-h-(--available-height) w-(--anchor-width) min-w-32 origin-(--transform-origin) flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))] bg-popover p-2 text-popover-foreground shadow-[0_4px_24px_var(--shadow-color,rgb(118_118_118_/_20%))] backdrop-blur-xl duration-100 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95",
             className,
           )}
           {...props}
@@ -150,20 +164,16 @@ function DropdownMenuCheckboxItem({
     <MenuPrimitive.CheckboxItem
       data-slot="dropdown-menu-checkbox-item"
       data-inset={inset}
-      className={cn(
-        dropdownMenuItemVariants(),
-        "pr-8 data-checked:bg-muted",
-        className,
-      )}
+      className={cn(dropdownMenuItemVariants(), "pr-8", className)}
       checked={checked}
       {...props}
     >
       <span
-        className="pointer-events-none absolute right-2 flex items-center justify-center text-secondary-foreground group-data-disabled/dropdown-menu-item:text-disabled-foreground"
+        className="pointer-events-none absolute right-2 flex items-center justify-center text-secondary-foreground"
         data-slot="dropdown-menu-checkbox-item-indicator"
       >
         <MenuPrimitive.CheckboxItemIndicator>
-          <CheckIcon className="text-secondary-foreground group-data-disabled/dropdown-menu-item:text-disabled-foreground" />
+          <CheckIcon className="text-secondary-foreground" />
         </MenuPrimitive.CheckboxItemIndicator>
       </span>
       {children}
@@ -196,19 +206,15 @@ function DropdownMenuRadioItem({
     <MenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
       data-inset={inset}
-      className={cn(
-        dropdownMenuItemVariants(),
-        "pr-8 data-checked:bg-muted",
-        className,
-      )}
+      className={cn(dropdownMenuItemVariants(), "pr-8", className)}
       {...props}
     >
       <span
-        className="pointer-events-none absolute right-2 flex items-center justify-center text-secondary-foreground group-data-disabled/dropdown-menu-item:text-disabled-foreground"
+        className="pointer-events-none absolute right-2 flex items-center justify-center text-secondary-foreground"
         data-slot="dropdown-menu-radio-item-indicator"
       >
         <MenuPrimitive.RadioItemIndicator>
-          <CheckIcon className="text-secondary-foreground group-data-disabled/dropdown-menu-item:text-disabled-foreground" />
+          <CheckIcon className="text-secondary-foreground" />
         </MenuPrimitive.RadioItemIndicator>
       </span>
       {children}

@@ -81,6 +81,37 @@ design turns the slot back on.
   hide is temporary per the page note; a removed prop is a second break for a
   slot that may return.
 
+### Applied-filter chips are `Chip`, not selected `FilterChip`
+
+The header instances `Chip` (`4396:5319`): a primary pill, `text-sm`,
+`radius-full`, always drawing a dismiss X. `FilterChip` (`4313:28`) is a
+separate selectable set (`md` / `sm`, selected inverts to foreground). Restyling
+`FilterChip` `sm` selected to look like `Chip` would disagree with its own set.
+
+- *Rejected — reuse `FilterChip` `sm` selected with className overrides.* The
+  page instances `Chip`, and the two sets do not share axes.
+
+### SALE is `Badge` `brand`; SOLD OUT is default
+
+The Badge set now includes `brand` (`Base/accent-foreground`) and `outline`,
+and every rung is a pill (`Radius/radius-full`). Default fill is
+`Base/primary`. SALE on the card is `brand` `sm`; SOLD OUT is default `sm`.
+
+- *Rejected — keeping SALE on `success`.* Code Connect emitted `variant=""`
+  because `brand` was unmapped; the fill on the page is the tan brand token,
+  not success.
+
+### Sort menu chrome matches `Dropdown Menu`
+
+The menu surface binds `Base/popover`, `Radius/radius-3xl`, `Effects/blur-xl`,
+and `border-subtle`. Items bind `Radius/radius-full`. The active option is
+`isSelected` with a trailing check and no fill; the label is
+`Base/popover-foreground`. Hover and keyboard highlight share
+`Custom/muted-hover`. The trigger chevron rotates 180° while the menu is
+open. Keyboard: Enter / Space / ↓ open; ↑ / ↓ move the highlight; Enter
+selects; Escape closes; typeahead jumps; disabled items are skipped. The
+popup stays in the viewport and aligns to the trigger.
+
 ### Footer fill is a value reconciliation
 
 `Footer` binds `Base/background` (`#090c0a`). Code currently uses `bg-card`.

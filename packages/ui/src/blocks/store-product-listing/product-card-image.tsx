@@ -47,25 +47,25 @@ function ProductCardImage({
   const showCart = !soldOut;
   const cartAlwaysVisible = showCart && inCart;
 
+  // Product photos ship with a white studio fill. Multiply knocks that white
+  // out onto the well's gradient (`isolate` keeps the blend inside the well).
+  const photoClassName = cn(
+    "size-full object-cover mix-blend-multiply",
+    !soldOut &&
+      "transition-transform duration-200 ease-[ease] motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:group-hover/product-card-image:scale-105",
+  );
+
   const well = (
     <>
       <div
         data-slot="product-card-image-well"
-        className={cn(
-          "absolute inset-0 overflow-hidden rounded-(--radius-md) bg-muted",
-          soldOut && "opacity-50",
-        )}
+        className="absolute inset-0 isolate overflow-hidden rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))] bg-gradient-to-b from-[var(--gray-50,#fafafa)] to-[var(--gray-100,#f3f3f3)]"
       >
         {imageSrc ? (
           <img
             alt={soldOut ? imageAlt : ""}
             aria-hidden={soldOut ? undefined : true}
-            className={cn(
-              "size-full object-cover",
-              "transition-transform duration-200 ease-[ease] motion-reduce:transition-none",
-              !soldOut &&
-                "[@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:group-hover/product-card-image:scale-105",
-            )}
+            className={photoClassName}
             src={imageSrc}
           />
         ) : null}
@@ -89,7 +89,7 @@ function ProductCardImage({
       data-sold-out={soldOut || undefined}
       data-in-cart={(!soldOut && inCart) || undefined}
       className={cn(
-        "group/product-card-image relative aspect-square w-full rounded-(--radius-md)",
+        "group/product-card-image relative aspect-square w-full rounded-(--radius-3xl)",
         className,
       )}
     >
@@ -118,7 +118,7 @@ function ProductCardImage({
             className="absolute bottom-0 left-0"
             onClick={onCartClick}
             size="md"
-            variant="secondary"
+            variant="primary"
           >
             <ShoppingCartSimple aria-hidden size={14} weight="bold" />
           </IconButton>

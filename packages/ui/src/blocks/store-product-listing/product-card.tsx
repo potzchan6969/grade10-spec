@@ -11,18 +11,38 @@ type ProductCardProps = {
   loading?: boolean;
   imageSrc?: string;
   imageAlt?: string;
-  /** `cardProps` slot — consumer-assembled badges, in order. */
+  /**
+   * Metadata badges such as collection, series, and region. Accepted so
+   * callers typecheck; the listing page does not display this slot.
+   */
+  tags?: readonly ReactNode[];
+  /** `cardProps` slot — accepted and currently not displayed. */
   badges?: ReactNode;
+  /** Product title. Clamped to two lines with an ellipsis, matching Figma. */
   name: ReactNode;
   price: ReactNode;
   originalPrice?: ReactNode;
+  /** Image badge copy such as `SALE`. Hidden when `soldOut`. */
   saleLabel?: ReactNode;
+  /**
+   * Figma's `soldOut` axis. Swaps the sale badge for the sold-out treatment
+   * and hides the cart action. The tile is inert.
+   */
   soldOut?: boolean;
   soldOutLabel?: ReactNode;
+  /**
+   * When the product is already in the cart, show the cart control and the
+   * supplied count. Ignored when `soldOut`.
+   */
   inCart?: boolean;
   cartCount?: ReactNode;
+  /** Required accessible name for the cart control. */
   cartLabel: string;
   onCartClick?: () => void;
+  /**
+   * Fires when the image surface is activated. No navigation target is wired
+   * here — the consumer decides what happens (route, modal, etc.).
+   */
   onClick?: () => void;
   ariaLabel?: string;
   className?: string;
@@ -32,10 +52,10 @@ type ProductCardContentProps = Omit<ProductCardProps, "loading">;
 
 const SKELETON_FIXTURE_PROPS = {
   imageSrc: skeletonImage,
-  imageAlt: "Ninja Spinner booster box",
-  name: "Ninja Spinner",
-  price: "HKD 105",
-  originalPrice: "HKD 123",
+  imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+  name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+  price: "HK$105",
+  originalPrice: "HK$123",
   saleLabel: "SALE",
   cartLabel: "Add to cart",
   onClick: () => {},
@@ -51,7 +71,6 @@ function ProductCardContent({
   className,
   imageSrc,
   imageAlt,
-  badges,
   name,
   price,
   originalPrice,
@@ -68,53 +87,13 @@ function ProductCardContent({
   const cardAriaLabel =
     ariaLabel ?? (typeof name === "string" ? name : undefined);
 
-  const content = (
-    <VStack className="min-w-0" data-slot="product-card-content" gap="sm">
-      {badges != null ? (
-        <HStack className="content-start" gap="xs" vAlign="start" wrap>
-          {badges}
-        </HStack>
-      ) : null}
-      <p
-        className={cn(
-          "truncate text-base font-bold",
-          soldOut ? "text-disabled-foreground" : "text-card-foreground",
-        )}
-      >
-        {name}
-      </p>
-      <HStack gap="xs" vAlign="center">
-        <p
-          className={cn(
-            "text-sm font-medium",
-            soldOut ? "text-disabled-foreground" : "text-card-foreground",
-          )}
-        >
-          {price}
-        </p>
-        {originalPrice != null ? (
-          <p
-            className={cn(
-              "text-sm font-medium line-through",
-              soldOut
-                ? "text-disabled-foreground"
-                : "text-secondary-foreground",
-            )}
-          >
-            {originalPrice}
-          </p>
-        ) : null}
-      </HStack>
-    </VStack>
-  );
-
   return (
     <VStack
-      className={cn("group/product-card relative w-full", className)}
+      className={cn("group/product-card w-full", className)}
       data-in-cart={(!soldOut && inCart) || undefined}
       data-slot="product-card"
       data-sold-out={soldOut || undefined}
-      gap="md"
+      gap="none"
     >
       <ProductCardImage
         ariaLabel={cardAriaLabel}
@@ -124,23 +103,29 @@ function ProductCardContent({
         imageSrc={imageSrc}
         inCart={inCart}
         onCartClick={onCartClick}
-        onClick={soldOut ? undefined : onClick}
+        onClick={onClick}
         saleLabel={saleLabel}
         soldOut={soldOut}
         soldOutLabel={soldOutLabel}
       />
-      {soldOut ? (
-        content
-      ) : (
-        <button
-          aria-label={cardAriaLabel}
-          className="w-full cursor-pointer border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-          onClick={onClick}
-          type="button"
-        >
-          {content}
-        </button>
-      )}
+
+      <VStack
+        className="min-w-0 gap-2 py-2"
+        data-slot="product-card-content"
+        gap="none"
+      >
+        <p className="line-clamp-2 text-base font-medium text-card-foreground">
+          {name}
+        </p>
+        <HStack gap="sm" vAlign="baseline">
+          <p className="text-base font-medium text-card-foreground">{price}</p>
+          {originalPrice != null ? (
+            <p className="text-base font-normal text-secondary-foreground line-through">
+              {originalPrice}
+            </p>
+          ) : null}
+        </HStack>
+      </VStack>
     </VStack>
   );
 }
@@ -148,13 +133,14 @@ function ProductCardContent({
 const PRODUCT_CARD_FIXTURE = <ProductCardContent {...SKELETON_FIXTURE_PROPS} />;
 
 /**
- * Product tile for a card-box / pack grid. Figma (`4200:155`) is the image, a
- * badge slot, the name, and the prices. Cart, sale, and sold-out live on
- * `ProductCardImage`.
+ * Product tile for a card-box / pack grid. Figma (`4200:155`) has a `soldOut`
+ * axis; discount is a boolean that shows the SALE badge and original price.
  *
- * The image scales on hover; the cart action sits on the image and appears on
- * hover or keyboard focus, or stays visible when the product is already in
- * the cart. Sold-out tiles are inert.
+ * Hover scales the photo inside the well. Product photos keep a white studio
+ * fill; multiply against the gray-50→gray-100 well makes that fill read as
+ * transparent. The cart action is `IconButton` `primary` `md` (Figma
+ * `4274:10075`) and appears on hover, or stays visible with a quantity when
+ * the product is already in the cart. Sold-out tiles are inert.
  */
 function ProductCard({
   loading = false,
@@ -169,6 +155,7 @@ function ProductCard({
     <Skeleton
       animate="pulse"
       className={cn("w-full", className)}
+      color="#E6E6E6"
       darkColor="rgba(249, 250, 250, 0.05)"
       fixture={PRODUCT_CARD_FIXTURE}
       loading

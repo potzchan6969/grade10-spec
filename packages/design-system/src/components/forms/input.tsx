@@ -13,13 +13,16 @@ import type { ReactNode } from "react";
  * no height — because `InputShell` owns all of that, the way Figma draws it:
  * one `Input` frame with the fill, stroke, radius and padding, and a text
  * layer inside it.
+ *
+ * Placeholder copy is `Base/foreground` at `Opacity/opacity-50` (Search Input
+ * node `2132:2787`), not `secondary-foreground`.
  */
 function Input({ className, ...props }: React.ComponentProps<"input">) {
   return (
     <InputPrimitive
       data-slot="input"
       className={cn(
-        "w-full min-w-0 bg-transparent text-sm text-foreground outline-none placeholder:text-secondary-foreground disabled:pointer-events-none disabled:text-disabled-foreground",
+        "w-full min-w-0 bg-transparent text-sm text-foreground outline-none placeholder:text-foreground/50 disabled:pointer-events-none disabled:text-disabled-foreground",
         className,
       )}
       {...props}
@@ -35,11 +38,11 @@ function Input({ className, ...props }: React.ComponentProps<"input">) {
 // Focus wins the border on every status — agreed with design when the Figma
 // grid was filled, so an error field still shows where the caret is.
 const inputBoxVariants = cva(
-  // Figma binds the corner to `Radius/radius-sm` (4px), which `rounded-sm`
-  // cannot express: theme.preamble.css derives the scale from `--radius`, so it
-  // compiles to calc(--radius * 0.6) = 4.8px. Bind the primitive directly, as
-  // button.tsx and badge.tsx already do.
-  "flex h-8 w-full items-center gap-2 rounded-(--radius-sm) border bg-input px-3 transition-colors focus-within:border-ring has-disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  // Search Input (`2132:2782`) and Text Input (`2132:2715`) both bind
+  // `Size/size-10`, `Radius/radius-full`, `Gap/gap-4` padding and `Gap/gap-2`
+  // between the magnifier/value. Bind `radius-full` on the token, as Button
+  // already does — `rounded-full` is a different number.
+  "flex h-10 w-full items-center gap-2 rounded-(--radius-full) border bg-input px-4 transition-colors focus-within:border-ring has-disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       status: {
@@ -87,6 +90,8 @@ type InputShellProps = React.ComponentProps<"div"> &
     messageId?: string;
     /** The control. */
     children?: ReactNode;
+    /** Extra classes on the field box — Search Input dims the pill, not the label. */
+    boxClassName?: string;
   };
 
 /**
@@ -109,6 +114,7 @@ function InputShell({
   htmlFor,
   messageId,
   children,
+  boxClassName,
   ...props
 }: InputShellProps) {
   return (
@@ -124,7 +130,7 @@ function InputShell({
           data-slot="input-label"
           htmlFor={htmlFor}
           className={cn(
-            "text-sm text-secondary-foreground",
+            "text-sm font-medium text-secondary-foreground",
             disabled && "text-disabled-foreground",
           )}
         >
@@ -139,6 +145,7 @@ function InputShell({
           // why it is a class on the box rather than a prop on each part.
           disabled &&
             "text-disabled-foreground [&_svg]:text-disabled-foreground",
+          boxClassName,
         )}
       >
         {leading}
