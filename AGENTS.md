@@ -17,7 +17,7 @@ This repository is the versioned source of truth for product requirements and th
 | Product decision behind a requirement | `docs/prds/<product-area>/<feature>.md` | Problem, users, non-goals, measurement, rollout, rationale. Explanatory, never authoritative over a requirement. |
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
-| User-facing copy and translations | `packages/i18n/messages/` | `en.json` is the base catalog; other locales fall back key-by-key. |
+| User-facing copy and translations | `packages/i18n/messages/<brand>/<locale>.json` | `grade10/en.json` is the vocabulary every catalog is measured against. A brand's default locale is complete or the build fails; every other locale falls back to it key-by-key. |
 | Design-system primitive | `packages/design-system/src/components/` | shadcn primitives and their colocated stories. |
 | Product component implementation | `packages/ui/src/blocks/` | Shared compound components, one directory per capability; the capability spec remains the export contract. |
 | Task group and owner format in `tasks.md` | `docs/governance/task-ownership.md` | Parsed independently by tooling in this repository and in the application repository. |
