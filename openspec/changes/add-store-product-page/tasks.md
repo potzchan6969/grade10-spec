@@ -44,4 +44,4 @@ would take `ListingGallery` out from under the app. It unblocks when those
 blocks land on `main`; the two lines merge clean.
 
 - [x] 5.1 Import the product card's skeleton fixture image instead of resolving it against `import.meta.url`, so a server bundle of any application carries no module-URL read.
-- [ ] 5.2 Bump the submodule in grade10 and drop the `import.meta.url` define from the web app's build.
+- [x] 5.2 Bump the submodule in grade10 and drop the `import.meta.url` define from the web app's build.
