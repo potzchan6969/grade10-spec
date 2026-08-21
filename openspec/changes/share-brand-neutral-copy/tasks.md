@@ -27,10 +27,10 @@ second group waits on anything but the first being pushed.
       collector reads changed: a test resolves every key for every brand and
       locale and holds it against the value that brand rendered before the
       move.
-- [ ] 1.5 Update `packages/i18n/README.md` and the sources-of-truth row in
+- [x] 1.5 Update `packages/i18n/README.md` and the sources-of-truth row in
       `AGENTS.md` for where a value is written now, including what ZZZ takes
       with it when its copy moves to `external/zzz-spec`.
-- [ ] 1.6 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test` as
+- [x] 1.6 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test` as
       this group's verification.
 
 ## 2. The application takes the catalogs (grade10)
