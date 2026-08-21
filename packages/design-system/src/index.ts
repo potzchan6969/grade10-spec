@@ -13,6 +13,7 @@ export * from "./components/forms/button";
 export * from "./components/forms/checkbox-button";
 export * from "./components/forms/checkbox-list";
 export * from "./components/forms/checkbox-list-input";
+export * from "./components/forms/chip";
 export * from "./components/forms/filter-chip";
 export * from "./components/forms/icon-button";
 export * from "./components/forms/input";
