@@ -21,7 +21,7 @@ the behaviour the programme exists to reward. And with no decided settlement, a
 redemption today produces a promise an operator has to honour by hand, so the
 reward menu cannot open at all.
 
-The measurable claim: **share of Diamond members who re-qualify within their
+The measurable claim: **share of Gold members who re-qualify within their
 validity period**, alongside the existing repeat-purchase rate. If tiers with a
 validity period work, the second number holds while the population earning 1.2×
 tracks members who are still buying.

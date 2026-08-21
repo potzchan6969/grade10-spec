@@ -27,7 +27,9 @@ Every component this change needs is new. The set to author in
 | `CouponList` | Issued coupons — code, what it is for, its own expiry, and whether it is spent or void |
 | `ActivityList` | The member's own entries, named in member-readable terms |
 
-No design-system token or primitive changes. The console composes the same
+No design-system token or primitive changes. The store checkout
+gains a points-payment control (group 14) — its frame lands with the same
+Figma work as the membership surface. The console composes the same
 exports as brand-owned view code; it needs no exports of its own.
 
 `tierValidityLine` in

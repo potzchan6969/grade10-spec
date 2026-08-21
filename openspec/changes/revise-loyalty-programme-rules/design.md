@@ -109,6 +109,27 @@ untouched requirement *Operator point grants distinguish correction from
 reward* explicitly excludes. The requirement now says "every earning and every
 reward grant", and names the correction case.
 
+### Decisions from the 21 Aug review (Jeff)
+
+The running engine was demoed against the proposal and five rules came back
+decided; the spec delta now carries them:
+
+- **Demotion resets tier progress.** The engine as built re-promoted a demoted
+  member from the rolling attainment window the day after the sweep took the
+  tier away. Decided: earnings before the drop count toward nothing afterwards.
+- **A claw-back re-evaluates the tier at once.** Refunded spend is spend that
+  never happened; the tier it bought does not survive it. This replaces the
+  earlier "no demotion inside a validity period".
+- **A reversal is for unused coupons only** — the out-of-stock remedy. A used
+  coupon is never reversed. The engine already refuses this; the spec now says
+  what the code does.
+- **Points pay at checkout** at the programme's exchange rate — decided at
+  HKD 1 per point for Grade10, deployed configuration like the earn rate.
+- **Account deletion clears the membership immediately** — balance, tier
+  progress, coupons, pending collections; the ledger record survives.
+- **Tier names**: Silver (was Platinum) and Gold (was Diamond); multipliers and
+  thresholds unchanged.
+
 ## Risks / Trade-offs
 
 - **The seller becomes the authority on what earns.** A bug in apportionment
@@ -146,19 +167,22 @@ its own row counts asserted before and after.
 
 ## Open Questions
 
-- **Does the counter's email → account lookup need the operator identity
-  model?** The untouched requirement *Reading a member's identity requires the
-  identity permission* refuses a service holding a connection but no operator
-  session. The counter is that shape — but it sends an email in and gets an
-  account handle back, disclosing no name or address, so it is arguably not an
-  identity read at all. It does disclose whether an email has an account, which
-  is worth a rate limit either way. **@gareth is taking this to the PM.** Until
-  it is answered, the tasks below build it as a service-to-service lookup with
-  its own rate limit and log, and no operator session.
-- **The retention threshold.** The baseline is the same 500 that qualifies for
-  Diamond; the business may prefer a softer 400. Deployed configuration either
-  way, and the boot validation already accepts both, so this changes a value
-  and no code.
-- **The exchange rate that prices the reward menu.** Undecided, and nothing
-  here depends on it — the menu's prices stay operator-editable and no monetary
-  value is recorded against a point.
+- **Retention threshold** — 500 (the qualification number) or a softer 400.
+  Still undecided at the 21 Aug review; deployed configuration, boot
+  validation accepts both.
+- **Overflow tier points on large purchases** — a single purchase far above a
+  threshold (an HKD 7,500 spend against a 500-point bar) may deserve special
+  handling for the excess; PM marked it TBC.
+- **External naming** of the two counts ("Status points" is the working
+  candidate) — marketing to confirm before member-facing UI.
+- **Coupon-and-refund lifecycle** — a coupon spent on an order later refunded,
+  the shortfall write-off when clawed-back points were already spent, and the
+  physical-reward collection window are all explicitly TBC from the 21 Aug
+  review; the operator's manual correction endpoints are the stopgap.
+- **Counter surface** — how staff sign in to the loyalty terminal, POS
+  attribution controls, and outage fallback are auth-platform and store-ops
+  questions, flagged to those tracks; this change builds the counter recording
+  path behind a rate-limited, logged service lookup and nothing more.
+- **"HKD 10 or equivalent"** — whether foreign-currency or crypto spend should
+  ever earn. The engine refuses non-HKD by design; any change here is its own
+  proposal.

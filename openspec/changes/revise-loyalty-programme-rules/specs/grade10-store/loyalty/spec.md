@@ -82,8 +82,13 @@ they still hold by earning or invitation — the entry tier when none is live. T
 drop SHALL take effect at that instant, without waiting for a scheduled pass,
 and SHALL be recorded the next time that member is evaluated.
 
-A tier SHALL NOT be lost inside its validity period, and SHALL NOT be lost
-because the points that qualified the member for it were spent or expired.
+Losing a tier SHALL also reset the member's tier progress: earnings dated
+before the drop SHALL NOT count toward reaching or retaining any tier
+afterwards, so the climb starts again from zero.
+
+A tier SHALL NOT be lost inside its validity period except through a
+claw-back, and SHALL NOT be lost because the points that qualified the member
+for it were spent or expired.
 
 #### Scenario: Re-qualifying keeps the tier
 
@@ -95,6 +100,12 @@ because the points that qualified the member for it were spent or expired.
 
 - **WHEN** a member's validity period ends and they earned less than the retention threshold inside it
 - **THEN** they hold the entry tier from that instant, unless a higher tier is still live by earning or invitation
+
+#### Scenario: Losing a tier resets the climb
+
+- **WHEN** a member is demoted at the end of a validity period and then makes a small purchase
+- **THEN** only earnings dated after the demotion count toward reaching the tier again
+- **AND** the earnings from the lapsed period do not re-promote them
 
 #### Scenario: Spending points does not demote
 
@@ -313,6 +324,43 @@ and a purchase there SHALL complete regardless.
 - **WHEN** a channel has recorded a purchase the programme has not yet accepted
 - **THEN** what the member reads as their balance is the programme's, not the channel's
 
+### Requirement: Points pay at checkout, at the programme's exchange rate
+
+A member SHALL be able to pay part of a qualifying purchase with redeemable
+points at checkout, converted at the programme's exchange rate. Paying with
+points SHALL reduce the redeemable balance alone, SHALL count as activity for
+the inactivity window, and SHALL NOT earn: qualifying spend counts only what
+the member paid in money.
+
+#### Scenario: Points reduce the bill
+
+- **WHEN** a member pays points toward a purchase
+- **THEN** the amount they owe in money falls by those points at the programme's exchange rate
+- **AND** their redeemable balance falls by the points paid
+
+#### Scenario: The part paid with points earns nothing
+
+- **WHEN** a purchase is paid partly with points and partly with money
+- **THEN** points are earned on the money part alone
+
+### Requirement: Deleting the account ends the membership at once
+
+When a member's Grade10 account is deleted, the programme SHALL immediately
+end the membership: the redeemable balance and tier progress SHALL fall to
+zero, unexpired coupons SHALL be voided, and redemptions awaiting collection
+SHALL be cancelled without refund. The ledger's record SHALL survive — nothing
+is erased, the identity simply holds nothing any more.
+
+#### Scenario: Deletion clears what the member held
+
+- **WHEN** a member's account is deleted
+- **THEN** their balance and tier progress are zero, their coupons are void, and their pending collections are cancelled
+
+#### Scenario: Deletion does not wait for a window
+
+- **WHEN** an account is deleted inside a live inactivity window or tier term
+- **THEN** the clearing is immediate, not deferred to either clock
+
 ## MODIFIED Requirements
 
 ### Requirement: The ledger is the only source of a balance
@@ -442,15 +490,16 @@ window longer than zero. The programme's time zone SHALL name a real zone.
 ### Requirement: Grade10's programme
 
 Grade10 SHALL run the programme in HKD on Asia/Hong_Kong time, granting one
-point per HKD 10 of qualifying spend, with a member's redeemable balance
-expiring after twelve months carrying no earning and no redemption.
+point per HKD 10 of qualifying spend, redeeming one point as HKD 1 at
+checkout, with a member's redeemable balance expiring after twelve months
+carrying no earning and no redemption.
 
 Its ladder SHALL be, in ascending rank:
 
 | Tier | Earns | Reached by | Valid for | Retained by |
 | --- | --- | --- | --- | --- |
-| Platinum | 1× | Every member starts here | Always | — |
-| Diamond | 1.2× | 500 tier points inside a rolling twelve months | Twelve months from activation | 500 tier points inside the validity period |
+| Silver | 1× | Every member starts here | Always | — |
+| Gold | 1.2× | 500 tier points inside a rolling twelve months | Twelve months from activation | 500 tier points inside the validity period |
 | Black | 1.7× | Invitation only | The invitation's own end date | A further invitation |
 
 The annual cap on Black and the approval step before granting it are not
@@ -467,38 +516,44 @@ about the retention threshold and the price of a point:
 
 #### Scenario: A purchase earns at the member's rate
 
-- **WHEN** a Diamond member completes a HKD 1,000 qualifying purchase
+- **WHEN** a Gold member completes a HKD 1,000 qualifying purchase
 - **THEN** they earn 120 points
 
 #### Scenario: A fractional point is dropped
 
-- **WHEN** a Platinum member's qualifying spend is HKD 125.50
+- **WHEN** a Silver member's qualifying spend is HKD 125.50
 - **THEN** they earn 12 points
 
 #### Scenario: A tier multiplier does not round twice
 
-- **WHEN** a Diamond member's qualifying spend is HKD 125.50
+- **WHEN** a Gold member's qualifying spend is HKD 125.50
 - **THEN** they earn 15 points
 
 #### Scenario: The second tier is reached by spending
 
 - **WHEN** a member's tier points inside the rolling twelve months reach 500
-- **THEN** they hold Diamond from that instant
+- **THEN** they hold Gold from that instant
 
-#### Scenario: Diamond is retained by earning again
+#### Scenario: Gold is retained by earning again
 
-- **WHEN** a Diamond member earns 500 tier points inside their validity period
-- **THEN** they hold Diamond for a further twelve months
+- **WHEN** a Gold member earns 500 tier points inside their validity period
+- **THEN** they hold Gold for a further twelve months
 
-#### Scenario: Diamond lapses after a quiet year
+#### Scenario: Gold lapses after a quiet year
 
-- **WHEN** a Diamond member earns 300 tier points in the twelve months following their upgrade
-- **THEN** they hold Platinum from the instant those twelve months end
+- **WHEN** a Gold member earns 300 tier points in the twelve months following their upgrade
+- **THEN** they hold Silver from the instant those twelve months end
 
 #### Scenario: A quiet year empties the balance
 
 - **WHEN** a member records no earning and no redemption for twelve months
 - **THEN** their redeemable balance is zero
+
+#### Scenario: A point is worth one Hong Kong dollar at checkout
+
+- **WHEN** a member pays 100 points toward an HKD 800 purchase
+- **THEN** HKD 100 is covered by points and HKD 700 remains payable in money
+- **AND** the purchase earns on HKD 700
 
 #### Scenario: The top tier cannot be bought
 
@@ -547,8 +602,11 @@ A member SHALL be able to list what they have redeemed and the state of each.
 Reversing a redemption SHALL be an operator action, recorded in the operator log.
 No member action SHALL reverse one.
 
-A reversal SHALL return exactly the number of points the redemption consumed, and
-SHALL void the coupon it issued, whether or not that coupon has been used.
+A reversal SHALL be possible only while the redemption's coupon is unused — the
+remedy for a reward that cannot be honoured, such as an item out of stock. It
+SHALL return exactly the number of points the redemption consumed and SHALL
+void the unused coupon. A coupon that has been used SHALL NOT be reversed, and
+its points stay spent.
 Returned points SHALL rejoin the redeemable balance under the inactivity window
 already running: a reversal SHALL NOT reset that window, and SHALL return nothing
 to a member whose window has already passed.
@@ -562,6 +620,12 @@ consumed a unit.
 - **WHEN** an operator reverses a redemption
 - **THEN** the coupon it issued can no longer be used
 - **AND** the points it consumed return to the member's redeemable balance
+
+#### Scenario: A used coupon cannot be reversed
+
+- **WHEN** an operator reverses a redemption whose coupon has already been used
+- **THEN** the reversal is refused and the points stay spent
+- **AND** the operator is told why
 
 #### Scenario: A member cannot reverse their own redemption
 
@@ -594,8 +658,10 @@ consumed a unit.
 When money is returned, the programme SHALL remove the points that money earned,
 priced at the rate each credit recorded, and SHALL never remove more than the
 member still holds from that money. A claw-back SHALL reduce both the member's
-redeemable balance and their tier points, and SHALL NOT reset the member's
-inactivity window.
+redeemable balance and their tier points, SHALL NOT reset the member's
+inactivity window, and SHALL re-evaluate the member's tier at once: money
+returned is spend that never happened, so the tier it bought does not survive
+it.
 
 Splitting a refund into several parts SHALL claw back exactly what one refund
 for the whole sum would have.
@@ -623,11 +689,11 @@ for the whole sum would have.
 - **THEN** the tier contribution of the earning they came from is reduced by the same amount
 - **AND** it leaves the qualifying window at the same time that earning does
 
-#### Scenario: A claw-back does not demote inside a validity period
+#### Scenario: A claw-back can demote
 
-- **WHEN** a claw-back takes a member's tier points below their tier's retention threshold
-- **THEN** they keep that tier until its validity period ends
-- **AND** the reduced count is what re-qualification is measured against
+- **WHEN** a claw-back takes a member's tier points below what attained their tier
+- **THEN** they hold the tier their remaining points still reach, from that instant
+- **AND** the drop is recorded in tier history
 
 ### Requirement: A member sees their own state and never the operating record behind it
 

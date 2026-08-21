@@ -59,9 +59,10 @@ Depends on group 2 for the `channel` column.
 
 ## 7. The counter (grade10)
 
-Built as a service-to-service lookup with no operator session — see the open
-question in [`design.md`](design.md), which @gareth is taking to the PM. If the
-answer changes, it changes 7.1 alone.
+Built as a service-to-service lookup with no operator session. Terminal
+sign-in, POS attribution controls, and outage fallback are auth-platform and
+store-ops questions (see [`design.md`](design.md) Open Questions) — nothing in
+this group waits on them.
 
 - [ ] 7.1 Resolve a counter sale's member by the email on their account through the identity system, storing the account identity and never the email, so *The counter earns against the account, not the email* passes
 - [ ] 7.2 Rate-limit and log the lookup per terminal, so probing which emails have accounts is bounded and visible
@@ -97,3 +98,44 @@ Depends on group 1 shipping and the submodule bump.
 - [ ] 10.3 State on the reversal action that it voids the coupon, leaving the action itself unchanged
 - [ ] 10.4 Return nothing and say why when a reversal lands after the balance expired, so *A reversal after the balance expired returns nothing* passes
 - [ ] 10.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
+
+## 11. Tier renaming (grade10)
+
+Display names only — Silver was Platinum, Gold was Diamond; multipliers,
+thresholds, and config ids are untouched unless a rename there is free.
+
+- [ ] 11.1 Rename the tier display names in the programme config and everywhere a member or operator reads them, so *The second tier is reached by spending* names Gold
+- [ ] 11.2 Rename the demo playground's programme and use-case copy to match
+- [ ] 11.3 Verify: `pnpm run typecheck`, `pnpm run test`
+
+## 12. Demotion resets tier progress (grade10)
+
+- [ ] 12.1 Make attainment and retention count only earnings dated after the member's last demotion, so *Losing a tier resets the climb* passes and the flip-flop dies
+- [ ] 12.2 Update the demo's "Demoted at the term's end, re-promoted the next day" use case and test to show the new behaviour — demoted stays demoted until a fresh 500
+- [ ] 12.3 Verify: `pnpm run test:backend`, demo tests
+
+## 13. A claw-back re-evaluates the tier (grade10)
+
+- [ ] 13.1 Re-evaluate the tier inside the claw-back path, so *A claw-back can demote* passes and a refunded promotion is taken back
+- [ ] 13.2 Update the demo's "A full refund claws the points back, and the tier stays" use case and test to the new rule — the tier no longer stays
+- [ ] 13.3 Verify: `pnpm run test:backend`, demo tests
+
+## 14. Points pay at checkout (grade10)
+
+Depends on group 2 for the contract shape; the exchange rate is deployed
+configuration beside the earn rate.
+
+- [ ] 14.1 Add the exchange rate to the programme config, validated at boot
+- [ ] 14.2 Debit points against a checkout payment as one recorded mutation, so *Points reduce the bill* passes and a retry cannot debit twice
+- [ ] 14.3 Exclude the points-paid amount from qualifying spend at the seller, so *The part paid with points earns nothing* passes
+- [ ] 14.4 Surface the points payment option in the store checkout flow
+- [ ] 14.5 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run test`
+
+## 15. Account deletion ends the membership (grade10)
+
+Needs the account-deletion signal from the auth service — coordinate the hook
+with the auth track before claiming.
+
+- [ ] 15.1 On account deletion, zero the balance and tier progress, void unexpired coupons, and cancel pending collections in one recorded pass, so *Deletion clears what the member held* passes
+- [ ] 15.2 Keep the ledger record intact and make the pass idempotent, so a replayed deletion signal changes nothing
+- [ ] 15.3 Verify: `pnpm run test:backend`
