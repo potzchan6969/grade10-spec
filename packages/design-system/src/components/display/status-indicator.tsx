@@ -12,6 +12,7 @@ const statusIndicatorVariants = cva("relative shrink-0 rounded-full", {
     variant: {
       default: "bg-primary text-primary-foreground",
       error: "bg-destructive text-destructive-foreground",
+      brand: "bg-accent-foreground text-primary-foreground",
     },
   },
   defaultVariants: {
@@ -27,8 +28,8 @@ type StatusIndicatorProps = Omit<ComponentProps<"span">, "children"> &
 
 /**
  * Status pip or count overlay. Figma set `StatusIndicator` (`4174:37`) has
- * `type` (`dot` | `count`) and `variant` (`default` | `error`). The count
- * contents are consumer-supplied; the pip has none.
+ * `type` (`dot` | `count`) and `variant` (`default` | `error` | `brand`). The
+ * count contents are consumer-supplied; the pip has none.
  */
 function StatusIndicator({
   className,

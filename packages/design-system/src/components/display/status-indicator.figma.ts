@@ -13,6 +13,7 @@ const type = instance.getEnum("type", {
 const variant = instance.getEnum("variant", {
   default: "default",
   error: "error",
+  brand: "brand",
 });
 
 const label = instance.getString("label");
