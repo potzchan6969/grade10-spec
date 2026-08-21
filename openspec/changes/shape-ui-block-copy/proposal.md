@@ -58,9 +58,16 @@ from its catalogs, and a block's own type says what words it needs.
   changes, and no block gains a capability.
 - **Naming the unspecified blocks.** The auction-listing, auth-sign-in,
   auth-two-factor and store-profile blocks are in `packages/ui` without a
-  capability spec naming their exports. They take the same shape here, but
-  giving them export contracts of their own is its own change — flagged, not
-  fixed.
+  capability spec naming their exports — and their copy types, added here,
+  are unnamed for the same reason. They take the same shape as the blocks a
+  spec does name, so the rule is true of the package; giving them export
+  contracts of their own is its own change.
+
+- **Reconciling the listing exports with the code.** `store-product-listing`
+  names `CollectionMenu` and `CollectionMenuItem`, which the package does not
+  have; it has `ProductFilter`, `ProductCardImage` and `ProductResultsPanel`,
+  which the spec does not name. That drift predates this change and belongs
+  to `sync-product-list-header`.
 - **Moving copy into the package.** A block still imports no catalog. What
   changes is the shape of what it is handed, not who owns it.
 - **The design-system primitives.** `packages/design-system` keeps its props;
