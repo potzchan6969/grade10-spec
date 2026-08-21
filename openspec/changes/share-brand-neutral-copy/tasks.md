@@ -33,7 +33,7 @@ second group waits on anything but the first being pushed.
 - [x] 1.6 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test` as
       this group's verification.
 
-## 2. The application takes the catalogs (grade10)
+## 2. The application takes the catalogs (grade10) (owner: @sean)
 
 Depends on group 1 being pushed.
 
