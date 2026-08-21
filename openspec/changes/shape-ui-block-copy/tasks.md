@@ -29,13 +29,13 @@ its shape and can be claimed in parallel once it lands.
 
 Depends on group 1 landing: it follows the shape group 1 sets.
 
-- [ ] 2.1 Make `The chrome's words arrive as one group` and `An application
+- [x] 2.1 Make `The chrome's words arrive as one group` and `An application
       imports the chrome` pass: `Nav` and `Footer` export `NavCopy` and
       `FooterCopy`, take one `copy` prop each, and keep destinations,
       handlers, regions and the locale set as their own props.
-- [ ] 2.2 Make `A page renders one without the other` pass over the new shape,
+- [x] 2.2 Make `A page renders one without the other` pass over the new shape,
       and update the chrome stories.
-- [ ] 2.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and
+- [x] 2.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and
       `pnpm run test:stories` as this group's verification.
 
 ## 3. The auction listing blocks (grade10-spec)
