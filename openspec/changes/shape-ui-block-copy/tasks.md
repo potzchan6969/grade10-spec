@@ -7,18 +7,18 @@ its shape and can be claimed in parallel once it lands.
 
 ## 1. The rule, and the listing surface (grade10-spec) (owner: @sean)
 
-- [ ] 1.1 Make `A consumer reads what a block needs`, `A slot takes markup, a
+- [x] 1.1 Make `A consumer reads what a block needs`, `A slot takes markup, a
       word does not` and `A word can be an accessible name` pass for the
       listing blocks: `ProductBrowse`, `FilterPanel`, `CollectionMenu`,
       `CollectionMenuItem`, `ProductListHeader`, `ProductList` and
       `ProductCard` each export a copy type and take one `copy` prop, every
       word in it typed `string`, slots and values left as their own props.
-- [ ] 1.2 Make `A tile is named once` pass: a tile's card name and its cart
+- [x] 1.2 Make `A tile is named once` pass: a tile's card name and its cart
       control's name come from the copy type, and `ariaLabel` retires.
-- [ ] 1.3 Make `A surface declares its words once` and `A part is reused
+- [x] 1.3 Make `A surface declares its words once` and `A part is reused
       alone` pass: `ProductBrowseCopy` composes the copy types of the blocks
       it renders, and each of those still renders outside it.
-- [ ] 1.4 Update the listing stories and the preview assemblies to pass copy
+- [x] 1.4 Update the listing stories and the preview assemblies to pass copy
       objects, and record the rule in
       `docs/governance/ui-component-contracts.md` — a word is a string, a slot
       is a node, values stay their own props.
