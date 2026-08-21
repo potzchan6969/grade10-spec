@@ -11,26 +11,34 @@ type ProductCardProps = {
   loading?: boolean;
   imageSrc?: string;
   imageAlt?: string;
-  /** Metadata badges below the image, such as collection, series, and region. */
+  /**
+   * Metadata badges such as collection, series, and region. Accepted so
+   * callers typecheck; the listing page does not display this slot.
+   */
   tags?: readonly ReactNode[];
+  /** `cardProps` slot — accepted and currently not displayed. */
+  badges?: ReactNode;
   /** Product title. Clamped to two lines with an ellipsis, matching Figma. */
   name: ReactNode;
   price: ReactNode;
   originalPrice?: ReactNode;
   /** Image badge copy such as `SALE`. Hidden when `soldOut`. */
-  discountLabel?: ReactNode;
+  saleLabel?: ReactNode;
   /**
-   * Figma's `soldOut` axis. Swaps the discount badge for SOLD OUT and
-   * hides the cart action. The tile is inert.
+   * Figma's `soldOut` axis. Swaps the sale badge for the sold-out treatment
+   * and hides the cart action. The tile is inert.
    */
   soldOut?: boolean;
+  soldOutLabel?: ReactNode;
   /**
-   * Annotation on the Product Card set: when the product is already in the
-   * cart, show quantity on the cart button. Ignored when `soldOut`.
+   * When the product is already in the cart, show the cart control and the
+   * supplied count. Ignored when `soldOut`.
    */
-  addedToCart?: boolean;
-  /** Quantity shown on the cart button. The consumer owns the value. */
-  quantity?: number;
+  inCart?: boolean;
+  cartCount?: ReactNode;
+  /** Required accessible name for the cart control. */
+  cartLabel: string;
+  onCartClick?: () => void;
   /**
    * Fires when the image surface is activated. No navigation target is wired
    * here — the consumer decides what happens (route, modal, etc.).
@@ -45,12 +53,11 @@ type ProductCardContentProps = Omit<ProductCardProps, "loading">;
 const SKELETON_FIXTURE_PROPS = {
   imageSrc: skeletonImage,
   imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
-  tags: ["Pokémon", "M4", "JP"],
   name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
   price: "HK$105",
   originalPrice: "HK$123",
-  discountLabel: "SALE",
-  actionLabel: "Add to cart",
+  saleLabel: "SALE",
+  cartLabel: "Add to cart",
   onClick: () => {},
   onCartClick: () => {},
 } satisfies Omit<ProductCardContentProps, "className">;
@@ -64,7 +71,6 @@ function ProductCardContent({
   className,
   imageSrc,
   imageAlt,
-  badges,
   name,
   price,
   originalPrice,
@@ -80,93 +86,28 @@ function ProductCardContent({
 }: ProductCardContentProps) {
   const cardAriaLabel =
     ariaLabel ?? (typeof name === "string" ? name : undefined);
-  const showCartAction = !soldOut && onAction != null;
-  const cartVisible = addedToCart ? "opacity-100" : "opacity-0";
-  // Product photos ship with a white studio fill. Multiply knocks that white
-  // out onto the well's gradient (`isolate` keeps the blend inside the well).
-  const photoClassName = cn(
-    "size-full object-cover mix-blend-multiply",
-    !soldOut &&
-      "transition-transform duration-200 ease-[ease] motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:group-hover/product-card:scale-105",
-  );
 
   return (
     <VStack
       className={cn("group/product-card w-full", className)}
-      data-added-to-cart={(!soldOut && addedToCart) || undefined}
+      data-in-cart={(!soldOut && inCart) || undefined}
       data-slot="product-card"
       data-sold-out={soldOut || undefined}
       gap="none"
     >
-      <div
-        className="relative isolate aspect-square w-full overflow-hidden rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))] bg-gradient-to-b from-[var(--gray-50,#fafafa)] to-[var(--gray-100,#f3f3f3)]"
-        data-slot="product-card-image"
-      >
-        {soldOut ? (
-          imageSrc ? (
-            <img
-              alt={imageAlt}
-              className={cn("absolute inset-0", photoClassName)}
-              src={imageSrc}
-            />
-          ) : null
-        ) : (
-          <button
-            aria-label={cardAriaLabel}
-            className="absolute inset-0 cursor-pointer border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-            onClick={onClick}
-            type="button"
-          >
-            {imageSrc ? (
-              <img
-                alt=""
-                aria-hidden
-                className={photoClassName}
-                src={imageSrc}
-              />
-            ) : null}
-          </button>
-        )}
-        {soldOut ? (
-          <Badge className="absolute top-3 left-3" size="sm">
-            SOLD OUT
-          </Badge>
-        ) : discountLabel != null ? (
-          <Badge className="absolute top-3 left-3" size="sm" variant="brand">
-            {discountLabel}
-          </Badge>
-        ) : null}
-        {showCartAction ? (
-          <div
-            className={cn(
-              "absolute right-3 bottom-3 transition-opacity duration-200 ease-out motion-reduce:transition-none",
-              cartVisible,
-              "[@media(hover:hover)_and_(pointer:fine)]:group-hover/product-card:opacity-100",
-            )}
-          >
-            <div className="relative">
-              <IconButton
-                aria-label={
-                  typeof actionLabel === "string" ? actionLabel : undefined
-                }
-                onClick={onAction}
-                size="md"
-                variant="primary"
-              >
-                <ShoppingCartSimple aria-hidden size={14} weight="bold" />
-              </IconButton>
-              {addedToCart ? (
-                <Center
-                  aria-hidden
-                  className="absolute -top-1 -right-1 h-4 min-w-4 rounded-full bg-accent-foreground px-1 text-xs font-medium text-primary-foreground"
-                >
-                  {quantity}
-                </Center>
-              ) : null}
-            </div>
-          </div>
-        ) : null}
-      </div>
+      <ProductCardImage
+        ariaLabel={cardAriaLabel}
+        cartCount={cartCount}
+        cartLabel={cartLabel}
+        imageAlt={imageAlt}
+        imageSrc={imageSrc}
+        inCart={inCart}
+        onCartClick={onCartClick}
+        onClick={onClick}
+        saleLabel={saleLabel}
+        soldOut={soldOut}
+        soldOutLabel={soldOutLabel}
+      />
 
       <VStack
         className="min-w-0 gap-2 py-2"

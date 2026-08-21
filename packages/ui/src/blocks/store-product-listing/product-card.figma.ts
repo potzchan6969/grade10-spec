@@ -24,7 +24,7 @@ const originalPrice = instance.getString("originalPrice");
 const badges = instance.getSlot("cardProps");
 
 export default {
-  example: figma.code`<ProductCard name="${productName}" price="${price}"${hasDiscount ? figma.code` originalPrice="${originalPrice}" discountLabel="SALE"` : ""}${soldOut ? figma.code` soldOut` : ""} />`,
+  example: figma.code`<ProductCard name="${productName}" price="${price}" cartLabel={cartLabel}${hasDiscount ? figma.code` originalPrice="${originalPrice}" saleLabel="SALE"` : ""}${soldOut ? figma.code` soldOut soldOutLabel="SOLD OUT"` : ""} />`,
   imports: ['import { ProductCard } from "@grade10/ui"'],
   id: "product-card",
   metadata: { nestable: true },
