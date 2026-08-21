@@ -1,27 +1,21 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
-import { IconButton } from "@grade10/design-system/components/forms/icon-button";
-import { Center } from "@grade10/design-system/components/layout/center";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { ShoppingCartSimple } from "@phosphor-icons/react";
 import { Skeleton } from "boneyard-js/react";
 import type { ReactNode } from "react";
 import skeletonImage from "./product-card.fixture.png";
+import { ProductCardImage } from "./product-card-image";
 
 type ProductCardProps = {
   /** Boneyard skeleton overlay while the consumer resolves product data. */
   loading?: boolean;
-  /** Product photo. Omit it and the muted image well still renders. */
   imageSrc?: string;
   imageAlt?: string;
   /** Metadata badges below the image, such as collection, series, and region. */
   tags?: readonly ReactNode[];
   /** Product title. Clamped to two lines with an ellipsis, matching Figma. */
   name: ReactNode;
-  /** Current (or discounted) price, already formatted. */
   price: ReactNode;
-  /** Strikethrough original price. Its presence is Figma's `hasDiscount` gate. */
   originalPrice?: ReactNode;
   /** Image badge copy such as `SALE`. Hidden when `soldOut`. */
   discountLabel?: ReactNode;
@@ -42,11 +36,7 @@ type ProductCardProps = {
    * here — the consumer decides what happens (route, modal, etc.).
    */
   onClick?: () => void;
-  /** Accessible name when the image is interactive. Defaults to string `name`. */
   ariaLabel?: string;
-  /** Accessible name for the cart action. */
-  actionLabel?: ReactNode;
-  onAction?: () => void;
   className?: string;
 };
 
@@ -62,24 +52,31 @@ const SKELETON_FIXTURE_PROPS = {
   discountLabel: "SALE",
   actionLabel: "Add to cart",
   onClick: () => {},
-  onAction: () => {},
+  onCartClick: () => {},
 } satisfies Omit<ProductCardContentProps, "className">;
 
+/**
+ * Listing tile. Figma set `Product / Product Card` (`4200:155`) is the image,
+ * a badge slot, the name, and the prices. Cart, sale, and sold-out live on
+ * `ProductCardImage`.
+ */
 function ProductCardContent({
   className,
   imageSrc,
-  imageAlt = "",
+  imageAlt,
+  badges,
   name,
   price,
   originalPrice,
-  discountLabel,
+  saleLabel,
   soldOut = false,
-  addedToCart = false,
-  quantity = 1,
+  soldOutLabel,
+  inCart = false,
+  cartCount,
+  cartLabel,
+  onCartClick,
   onClick,
   ariaLabel,
-  actionLabel,
-  onAction,
 }: ProductCardContentProps) {
   const cardAriaLabel =
     ariaLabel ?? (typeof name === "string" ? name : undefined);

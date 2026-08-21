@@ -20,6 +20,9 @@ const productName = instance.getString("productName");
 const price = instance.getString("price");
 const originalPrice = instance.getString("originalPrice");
 
+// Badge instances the consumer dropped into the published slot, in order.
+const badges = instance.getSlot("cardProps");
+
 export default {
   example: figma.code`<ProductCard name="${productName}" price="${price}"${hasDiscount ? figma.code` originalPrice="${originalPrice}" discountLabel="SALE"` : ""}${soldOut ? figma.code` soldOut` : ""} />`,
   imports: ['import { ProductCard } from "@grade10/ui"'],

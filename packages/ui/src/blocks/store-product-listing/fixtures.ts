@@ -1,3 +1,5 @@
+import { Badge } from "@grade10/design-system/components/display/badge";
+import { createElement, Fragment, type ReactNode } from "react";
 import productImage from "./product.fixture.png";
 
 import type {
@@ -12,6 +14,14 @@ import type {
  * its own; nothing here is a default. */
 
 const IMAGE = productImage;
+
+const PRODUCT_BADGES: ReactNode = createElement(
+  Fragment,
+  null,
+  createElement(Badge, { size: "sm", variant: "outline" }, "Pokémon"),
+  createElement(Badge, { size: "sm", variant: "outline" }, "M4"),
+  createElement(Badge, { size: "sm", variant: "outline" }, "JP"),
+);
 
 const SORT_OPTIONS: SortOption[] = [
   { id: "popular", label: "Popularity" },
@@ -69,6 +79,7 @@ const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
   addedToCart: index === 0,
   quantity: 1,
   soldOut: index === 7,
+  soldOutLabel: index === 7 ? "SOLD OUT" : undefined,
 }));
 
 const SELECTION = {
@@ -85,6 +96,7 @@ export {
   APPLIED_FILTERS,
   FILTER_GROUPS,
   IMAGE,
+  PRODUCT_BADGES,
   PRODUCTS,
   SELECTION,
   SORT_OPTIONS,

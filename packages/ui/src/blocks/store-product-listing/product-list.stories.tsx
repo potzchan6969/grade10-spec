@@ -35,21 +35,21 @@ export const LoadingMore: Story = {
 };
 
 /** The cart action is reported, not performed: the tile does not change until
- * the consumer supplies a new `addedToCart`. */
+ * the consumer supplies a new `inCart`. */
 export const ActionIsReported: Story = {
   args: {
-    products: [{ ...PRODUCTS[1], id: "reported" }],
+    products: [{ ...PRODUCTS[1], id: "reported", inCart: false }],
     onProductAction: fn(),
   },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    const add = canvas.getByRole("button", { name: "Add to cart" });
+    const cart = canvas.getByRole("button", { name: "Add to cart" });
 
-    await userEvent.click(add);
+    cart.focus();
+    await userEvent.keyboard("{Enter}");
 
     expect(args.onProductAction).toHaveBeenCalledTimes(1);
     expect(args.onProductAction).toHaveBeenCalledWith("reported");
-    // Still the add action — the tile did not move on its own.
     expect(
       canvas.getByRole("button", { name: "Add to cart" }),
     ).toBeInTheDocument();

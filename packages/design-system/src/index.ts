@@ -7,6 +7,7 @@ export * from "./components/display/list";
 export * from "./components/display/pagination";
 export * from "./components/display/separator";
 export * from "./components/display/skeleton";
+export * from "./components/display/status-indicator";
 export * from "./components/display/tabs";
 export * from "./components/display/text";
 export * from "./components/forms/button";

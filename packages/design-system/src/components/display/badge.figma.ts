@@ -14,6 +14,8 @@ const instance = figma.selectedInstance;
 // red `Error` chip where it should have been.
 const variant = instance.getEnum("variant", {
   default: "default",
+  outline: "outline",
+  brand: "brand",
   success: "success",
   error: "error",
   warning: "warning",

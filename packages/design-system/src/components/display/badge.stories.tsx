@@ -20,6 +20,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+export const Outline: Story = { args: { variant: "outline" } };
+export const Brand: Story = { args: { variant: "brand" } };
 export const Success: Story = { args: { variant: "success" } };
 // Named `ErrorStatus` rather than `Error` so the export does not shadow the global.
 export const ErrorStatus: Story = { args: { variant: "error" } };

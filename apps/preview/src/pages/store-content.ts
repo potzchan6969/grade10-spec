@@ -1,3 +1,4 @@
+import { Badge } from "@grade10/design-system/components/display/badge";
 import type {
   AppliedFilter,
   FilterGroup,
@@ -6,6 +7,7 @@ import type {
   SortOption,
   UtilityLink,
 } from "@grade10/ui";
+import { createElement, Fragment, type ReactNode } from "react";
 
 /* Content this workbench owns, exactly as a store application owns its own.
  * None of it lives in `@grade10/ui` or `@grade10/design-system`: both packages
@@ -154,6 +156,14 @@ const UTILITY_LINKS: UtilityLink[] = [
   { label: "Orders & Returns", href: "#orders" },
 ];
 
+const PRODUCT_BADGES: ReactNode = createElement(
+  Fragment,
+  null,
+  createElement(Badge, { size: "sm" }, "Pokémon"),
+  createElement(Badge, { size: "sm" }, "M4"),
+  createElement(Badge, { size: "sm" }, "JP"),
+);
+
 const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
   id: String(index + 1),
   name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
@@ -166,6 +176,7 @@ const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
   ariaLabel: `Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item ${index + 1}`,
   actionLabel: "Add to cart",
   soldOut: index === 7,
+  soldOutLabel: index === 7 ? "SOLD OUT" : undefined,
 }));
 
 const INITIAL_SELECTION: FilterSelection = {

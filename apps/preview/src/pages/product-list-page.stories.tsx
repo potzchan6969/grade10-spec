@@ -55,11 +55,14 @@ function ProductListPage() {
 
   const productData = useMemo(
     () =>
-      productCatalog.slice(0, visibleCount).map((product) => ({
-        ...product,
-        addedToCart: (cart[product.id] ?? 0) > 0,
-        quantity: cart[product.id] ?? 1,
-      })),
+      productCatalog.slice(0, visibleCount).map((product) => {
+        const cartCount = cart[product.id] ?? 0;
+        return {
+          ...product,
+          inCart: cartCount > 0,
+          cartCount: cartCount > 0 ? String(cartCount) : undefined,
+        };
+      }),
     [cart, productCatalog, visibleCount],
   );
 
