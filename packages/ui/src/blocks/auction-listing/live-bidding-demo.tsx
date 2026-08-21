@@ -81,18 +81,18 @@ function panelFor(bids: readonly ScriptBid[]) {
     <ListingBidPanel
       actions={<LiveActions />}
       bidCount={`${bids.length} bid${bids.length === 1 ? "" : "s"}`}
+      copy={{
+        price: "Current bid",
+        ends: "Ends",
+        extension: "Extended bidding interval",
+      }}
       deadline="1 Sep 2026, 18:00 UTC"
-      endsLabel="Ends"
-      extensionLabel="Extended bidding interval"
       extensionValue="30 minutes"
-      hideHistoryLabel="Hide bid history"
       history={historyOf(bids)}
       kicker="Listing 12 · September Slabs"
       price={lead?.amount ?? "No bids yet"}
       priceHint="Buyer's premium is added at invoice."
-      priceLabel="Current bid"
       remaining="13D 11H 33M 47S"
-      showHistoryLabel="Show bid history"
       standing={standingOf(bids)}
       title="1999 Charizard, PSA 10"
     />

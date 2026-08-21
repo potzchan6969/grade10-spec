@@ -9,7 +9,6 @@ import {
 } from "@grade10/design-system/components/overlays/dialog";
 import { cn } from "@grade10/design-system/lib/utils";
 import { CaretLeft, CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
-import type { ReactNode } from "react";
 import { useState } from "react";
 
 type ListingGalleryImage = {
@@ -19,11 +18,18 @@ type ListingGalleryImage = {
   thumbLabel?: string;
 };
 
+/** The words the gallery says, whichever lot it is showing. */
+type ListingGalleryCopy = {
+  /** Names the zoom affordance over the photo. */
+  zoom: string;
+  /** Accessible names for the two step controls. */
+  previous: string;
+  next: string;
+};
+
 type ListingGalleryProps = {
+  copy: ListingGalleryCopy;
   images: readonly ListingGalleryImage[];
-  zoomLabel: ReactNode;
-  previousLabel: string;
-  nextLabel: string;
   className?: string;
 };
 
@@ -31,13 +37,7 @@ type ListingGalleryProps = {
  * Left column of a product page: the main photo, a thumbnail strip, and zoom.
  * Selected index and the zoom dialog are presentation state.
  */
-function ListingGallery({
-  images,
-  zoomLabel,
-  previousLabel,
-  nextLabel,
-  className,
-}: ListingGalleryProps) {
+function ListingGallery({ images, copy, className }: ListingGalleryProps) {
   const [index, setIndex] = useState(0);
   const [zoomOpen, setZoomOpen] = useState(false);
   const image = images[index];
@@ -73,7 +73,7 @@ function ListingGallery({
         >
           <MagnifyingGlass aria-hidden size={14} weight="bold" />
           <Text size="sm" tone="secondary">
-            {zoomLabel}
+            {copy.zoom}
           </Text>
         </HStack>
         <HStack
@@ -82,7 +82,7 @@ function ListingGallery({
           justify="space-between"
         >
           <IconButton
-            aria-label={previousLabel}
+            aria-label={copy.previous}
             className="pointer-events-auto"
             disabled={!many}
             onClick={() => step(-1)}
@@ -91,7 +91,7 @@ function ListingGallery({
             <CaretLeft aria-hidden size={16} weight="bold" />
           </IconButton>
           <IconButton
-            aria-label={nextLabel}
+            aria-label={copy.next}
             className="pointer-events-auto"
             disabled={!many}
             onClick={() => step(1)}
@@ -125,7 +125,7 @@ function ListingGallery({
       {image ? (
         <Dialog onOpenChange={setZoomOpen} open={zoomOpen}>
           <DialogContent className="sm:max-w-2xl" showCloseButton>
-            <DialogTitle>{zoomLabel}</DialogTitle>
+            <DialogTitle>{copy.zoom}</DialogTitle>
             <img alt={image.alt} className="w-full" src={image.src} />
           </DialogContent>
         </Dialog>
@@ -134,5 +134,5 @@ function ListingGallery({
   );
 }
 
-export type { ListingGalleryImage, ListingGalleryProps };
+export type { ListingGalleryCopy, ListingGalleryImage, ListingGalleryProps };
 export { ListingGallery };

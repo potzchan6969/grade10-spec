@@ -1,29 +1,40 @@
 import { Separator } from "@grade10/design-system/components/display/separator";
 import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
-import { useState } from "react";
 import { popInValue } from "./digit-pop-in";
 
+/**
+ * The words the panel says. What the lot currently costs, how long is left,
+ * and what a collector can do about it are values and slots, not words.
+ */
+type ListingBidPanelCopy = {
+  /** What the amount on show is: an opening bid, the current one, a result. */
+  price: string;
+  /** What the time on show is: when bidding opens, or when it ends. */
+  ends: string;
+  /** Names the extended-bidding row. Omit it and the row is drawn from its
+   * value alone. */
+  extension?: string;
+  /** Accessible name for the control that opens the extension's explanation. */
+};
+
 type ListingBidPanelProps = {
+  copy: ListingBidPanelCopy;
   title: ReactNode;
   kicker?: ReactNode;
   /** Highest-bidder / outbid / won banner. The consumer owns the content. */
   standing?: ReactNode;
-  priceLabel: ReactNode;
   price: ReactNode;
   priceHint?: ReactNode;
   bidCount?: ReactNode;
-  showHistoryLabel?: ReactNode;
-  hideHistoryLabel?: ReactNode;
+  /** The bids so far, as the consumer composes them. Shown whenever it is
+   * given — there is nothing to open. */
   history?: ReactNode;
-  endsLabel: ReactNode;
   remaining: ReactNode;
   deadline?: ReactNode;
-  extensionLabel?: ReactNode;
   extensionValue?: ReactNode;
   /** Place bid, watch, share — the consumer owns the controls. */
   actions: ReactNode;
@@ -38,24 +49,17 @@ function ListingBidPanel({
   title,
   kicker,
   standing,
-  priceLabel,
+  copy,
   price,
   priceHint,
   bidCount,
-  showHistoryLabel,
-  hideHistoryLabel,
   history,
-  endsLabel,
   remaining,
   deadline,
-  extensionLabel,
   extensionValue,
   actions,
   className,
 }: ListingBidPanelProps) {
-  const [historyOpen, setHistoryOpen] = useState(false);
-  const canToggleHistory = history != null && showHistoryLabel != null;
-
   return (
     <VStack
       className={cn("min-w-0 w-full", className)}
@@ -75,7 +79,7 @@ function ListingBidPanel({
       {standing}
       <VStack gap="sm">
         <Text size="sm" tone="secondary">
-          {priceLabel}
+          {copy.price}
         </Text>
         <Text size="xl" weight="bold">
           {popInValue(price)}
@@ -85,30 +89,19 @@ function ListingBidPanel({
             {priceHint}
           </Text>
         ) : null}
-        {bidCount != null || canToggleHistory ? (
+        {bidCount != null ? (
           <HStack gap="sm" vAlign="center" wrap>
-            {bidCount != null ? (
-              <Text size="sm" tone="secondary">
-                {popInValue(bidCount)}
-              </Text>
-            ) : null}
-            {canToggleHistory ? (
-              <Button
-                onClick={() => setHistoryOpen((open) => !open)}
-                size="sm"
-                variant="ghost"
-              >
-                {historyOpen ? hideHistoryLabel : showHistoryLabel}
-              </Button>
-            ) : null}
+            <Text size="sm" tone="secondary">
+              {popInValue(bidCount)}
+            </Text>
           </HStack>
         ) : null}
-        {historyOpen ? history : null}
+        {history}
       </VStack>
       <Separator />
       <VStack gap="sm">
         <Text size="sm" tone="secondary">
-          {endsLabel}
+          {copy.ends}
         </Text>
         <Text size="xl" weight="bold">
           {remaining}
@@ -118,10 +111,10 @@ function ListingBidPanel({
             {deadline}
           </Text>
         ) : null}
-        {extensionLabel != null || extensionValue != null ? (
+        {copy.extension != null || extensionValue != null ? (
           <HStack className="w-full" gap="sm" hAlign="space-between" wrap>
-            {extensionLabel != null ? (
-              <Text size="sm">{extensionLabel}</Text>
+            {copy.extension != null ? (
+              <Text size="sm">{copy.extension}</Text>
             ) : null}
             {extensionValue != null ? (
               <Text size="sm" weight="medium">
@@ -136,5 +129,5 @@ function ListingBidPanel({
   );
 }
 
-export type { ListingBidPanelProps };
+export type { ListingBidPanelCopy, ListingBidPanelProps };
 export { ListingBidPanel };

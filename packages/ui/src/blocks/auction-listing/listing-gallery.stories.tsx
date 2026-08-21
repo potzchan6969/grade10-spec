@@ -14,9 +14,11 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
-    zoomLabel: "Click to zoom",
-    previousLabel: "Previous image",
-    nextLabel: "Next image",
+    copy: {
+      zoom: "Click to zoom",
+      previous: "Previous image",
+      next: "Next image",
+    },
     images: [
       { src: IMAGE, alt: "1999 Charizard, PSA 10", thumbLabel: "front" },
       { src: IMAGE, alt: "1999 Charizard, PSA 10 back", thumbLabel: "back" },

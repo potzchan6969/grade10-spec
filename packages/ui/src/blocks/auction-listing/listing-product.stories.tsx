@@ -45,22 +45,25 @@ const pageShell = (main: ReactNode, details: ReactNode) => (
   </VStack>
 );
 
+/** What the panel calls things, per phase of a sale. */
+const LIVE_COPY = {
+  price: "Current bid",
+  ends: "Ends",
+  extension: "Extended bidding interval",
+};
+
 const liveBidPanel = (
   <ListingBidPanel
     actions={<LiveActions />}
     bidCount="1 bid"
+    copy={LIVE_COPY}
     deadline="1 Sep 2026, 18:00 UTC"
-    endsLabel="Ends"
-    extensionLabel="Extended bidding interval"
     extensionValue="30 minutes"
-    hideHistoryLabel="Hide bid history"
     history="Bidder 3 · HK$4,800.00"
     kicker={KICKER}
     price="HK$4,800.00"
     priceHint={PREMIUM_HINT}
-    priceLabel="Current bid"
     remaining="13D 11H 33M 47S"
-    showHistoryLabel="Show bid history"
     title={TITLE}
   />
 );
@@ -69,7 +72,7 @@ const defaultDetails = (
   <ListingDetails
     body={DESCRIPTION}
     facts={[...BASE_FACTS]}
-    heading="Description"
+    copy={{ heading: "Description" }}
     sections={[VAULT_SECTION]}
   />
 );
@@ -95,20 +98,24 @@ export const PreAuction: Story = {
       <>
         <ListingGallery
           images={[...GALLERY_IMAGES]}
-          nextLabel="Next image"
-          previousLabel="Previous image"
-          zoomLabel="Click to zoom"
+          copy={{
+            zoom: "Click to zoom",
+            previous: "Previous image",
+            next: "Next image",
+          }}
         />
         <ListingBidPanel
+          copy={{
+            ends: "Opens",
+            extension: "Extended bidding interval",
+            price: "Opening bid",
+          }}
           actions={<WatchOnlyActions />}
           deadline="22 Aug 2026, 18:00 UTC"
-          endsLabel="Opens"
-          extensionLabel="Extended bidding interval"
           extensionValue="30 minutes"
           kicker={KICKER}
           price="HK$1,200.00"
           priceHint={PREMIUM_HINT}
-          priceLabel="Opening bid"
           remaining="2D 4H 12M 0S"
           title={TITLE}
         />
@@ -141,9 +148,11 @@ export const Live: Story = {
       <>
         <ListingGallery
           images={[...GALLERY_IMAGES]}
-          nextLabel="Next image"
-          previousLabel="Previous image"
-          zoomLabel="Click to zoom"
+          copy={{
+            zoom: "Click to zoom",
+            previous: "Previous image",
+            next: "Next image",
+          }}
         />
         {liveBidPanel}
       </>,
@@ -160,22 +169,21 @@ export const PostSold: Story = {
       <>
         <ListingGallery
           images={[...GALLERY_IMAGES]}
-          nextLabel="Next image"
-          previousLabel="Previous image"
-          zoomLabel="Click to zoom"
+          copy={{
+            zoom: "Click to zoom",
+            previous: "Previous image",
+            next: "Next image",
+          }}
         />
         <ListingBidPanel
+          copy={{ ends: "Ends", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           bidCount="1 bid"
-          endsLabel="Ends"
-          hideHistoryLabel="Hide bid history"
           history="Bidder 1 · HK$3,100.00"
           kicker={KICKER}
           price="HK$3,100.00"
           priceHint={PREMIUM_HINT}
-          priceLabel="Winning bid"
           remaining="Closed 30 Aug 2026, 09:15 UTC"
-          showHistoryLabel="Show bid history"
           title={TITLE}
         />
       </>,
@@ -185,7 +193,7 @@ export const PostSold: Story = {
           ...BASE_FACTS,
           { label: "Result", value: "Sold · HK$3,100.00" },
         ]}
-        heading="Description"
+        copy={{ heading: "Description" }}
         sections={[VAULT_SECTION]}
       />,
     ),
@@ -202,22 +210,21 @@ export const PostWonPaymentDue: Story = {
       <>
         <ListingGallery
           images={[...GALLERY_IMAGES]}
-          nextLabel="Next image"
-          previousLabel="Previous image"
-          zoomLabel="Click to zoom"
+          copy={{
+            zoom: "Click to zoom",
+            previous: "Previous image",
+            next: "Next image",
+          }}
         />
         <ListingBidPanel
+          copy={{ ends: "Ends", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           bidCount="1 bid"
-          endsLabel="Ends"
-          hideHistoryLabel="Hide bid history"
           history="Bidder 1 · HK$3,100.00"
           kicker={KICKER}
           price="HK$3,100.00"
           priceHint={PREMIUM_HINT}
-          priceLabel="Winning bid"
           remaining="Closed 30 Aug 2026, 09:15 UTC"
-          showHistoryLabel="Show bid history"
           standing={<WonPaymentDueStanding />}
           title={TITLE}
         />
@@ -228,7 +235,7 @@ export const PostWonPaymentDue: Story = {
           ...BASE_FACTS,
           { label: "Result", value: "Sold · HK$3,100.00" },
         ]}
-        heading="Description"
+        copy={{ heading: "Description" }}
         sections={[VAULT_SECTION]}
       />,
     ),
@@ -244,22 +251,21 @@ export const PostWonSettled: Story = {
       <>
         <ListingGallery
           images={[...GALLERY_IMAGES]}
-          nextLabel="Next image"
-          previousLabel="Previous image"
-          zoomLabel="Click to zoom"
+          copy={{
+            zoom: "Click to zoom",
+            previous: "Previous image",
+            next: "Next image",
+          }}
         />
         <ListingBidPanel
+          copy={{ ends: "Ends", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           bidCount="1 bid"
-          endsLabel="Ends"
-          hideHistoryLabel="Hide bid history"
           history="Bidder 1 · HK$3,100.00"
           kicker={KICKER}
           price="HK$3,100.00"
           priceHint={PREMIUM_HINT}
-          priceLabel="Winning bid"
           remaining="Closed 30 Aug 2026, 09:15 UTC"
-          showHistoryLabel="Show bid history"
           standing={<WonSettledStanding />}
           title={TITLE}
         />
@@ -270,7 +276,7 @@ export const PostWonSettled: Story = {
           ...BASE_FACTS,
           { label: "Result", value: "Sold · HK$3,100.00" },
         ]}
-        heading="Description"
+        copy={{ heading: "Description" }}
         sections={[VAULT_SECTION]}
       />,
     ),
@@ -287,22 +293,21 @@ export const PostLost: Story = {
       <>
         <ListingGallery
           images={[...GALLERY_IMAGES]}
-          nextLabel="Next image"
-          previousLabel="Previous image"
-          zoomLabel="Click to zoom"
+          copy={{
+            zoom: "Click to zoom",
+            previous: "Previous image",
+            next: "Next image",
+          }}
         />
         <ListingBidPanel
+          copy={{ ends: "Ends", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           bidCount="1 bid"
-          endsLabel="Ends"
-          hideHistoryLabel="Hide bid history"
           history="Bidder 1 · HK$3,100.00"
           kicker={KICKER}
           price="HK$3,100.00"
           priceHint={PREMIUM_HINT}
-          priceLabel="Winning bid"
           remaining="Closed 30 Aug 2026, 09:15 UTC"
-          showHistoryLabel="Show bid history"
           standing={<LostStanding />}
           title={TITLE}
         />
@@ -313,7 +318,7 @@ export const PostLost: Story = {
           ...BASE_FACTS,
           { label: "Result", value: "Sold · HK$3,100.00" },
         ]}
-        heading="Description"
+        copy={{ heading: "Description" }}
         sections={[VAULT_SECTION]}
       />,
     ),
@@ -330,22 +335,21 @@ export const PostUnsold: Story = {
       <>
         <ListingGallery
           images={[...GALLERY_IMAGES]}
-          nextLabel="Next image"
-          previousLabel="Previous image"
-          zoomLabel="Click to zoom"
+          copy={{
+            zoom: "Click to zoom",
+            previous: "Previous image",
+            next: "Next image",
+          }}
         />
         <ListingBidPanel
+          copy={{ ends: "Ends", price: "Result" }}
           actions={<PostAuctionActions />}
           bidCount="0 bids"
-          endsLabel="Ends"
-          hideHistoryLabel="Hide bid history"
           history="No bids yet."
           kicker={KICKER}
           price="Unsold"
           priceHint={PREMIUM_HINT}
-          priceLabel="Result"
           remaining="Closed 30 Aug 2026, 09:15 UTC"
-          showHistoryLabel="Show bid history"
           title="1999 Blastoise, PSA 9"
         />
       </>,
@@ -356,7 +360,7 @@ export const PostUnsold: Story = {
           { label: "Sale", value: "September Slabs" },
           { label: "Result", value: "Unsold" },
         ]}
-        heading="Description"
+        copy={{ heading: "Description" }}
         sections={[VAULT_SECTION]}
       />,
     ),

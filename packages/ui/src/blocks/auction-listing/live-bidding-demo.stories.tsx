@@ -35,9 +35,7 @@ export const LiveBiddingWalkthrough: Story = {
       canvas.getByRole("button", { name: "Place Bid" }),
     ).toBeInTheDocument();
 
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Show bid history" }),
-    );
+    /* The history is shown as given — there is nothing to open first. */
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
     expect(canvas.getByText("HK$1,200.00")).toBeInTheDocument();
     expect(canvas.getAllByText(/Bidder 2/).length).toBeGreaterThan(0);
@@ -58,10 +56,16 @@ export const LiveBiddingWalkthrough: Story = {
     expect(canvas.getByText("HK$1,600.00")).toBeInTheDocument();
     expect(canvas.getByText("5 bids")).toBeInTheDocument();
 
+    /* Expanded lays every step out at once, so each bid appears in the step
+       it landed on and in the history of every step after it. */
     await userEvent.click(canvas.getByRole("tab", { name: "Expanded" }));
     expect(canvas.getByText("Waiting")).toBeInTheDocument();
-    expect(canvas.getByText("Bidder 2 · HK$1,200.00")).toBeInTheDocument();
-    expect(canvas.getByText("You · HK$1,500.00")).toBeInTheDocument();
-    expect(canvas.getByText("Bidder 2 · HK$1,600.00")).toBeInTheDocument();
+    expect(
+      canvas.getAllByText("Bidder 2 · HK$1,200.00").length,
+    ).toBeGreaterThan(0);
+    expect(canvas.getAllByText("You · HK$1,500.00").length).toBeGreaterThan(0);
+    expect(
+      canvas.getAllByText("Bidder 2 · HK$1,600.00").length,
+    ).toBeGreaterThan(0);
   },
 };

@@ -19,19 +19,19 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
+    copy: {
+      price: "Current bid",
+      ends: "Ends",
+      extension: "Extended bidding interval",
+    },
     title: "1999 Charizard, PSA 10",
     kicker: "Listing 12 · September Slabs",
-    priceLabel: "Current bid",
     price: "HK$4,800.00",
     priceHint: "Buyer's premium is added at invoice.",
     bidCount: "1 bid",
-    showHistoryLabel: "Show bid history",
-    hideHistoryLabel: "Hide bid history",
     history: "Bidder 3 · HK$4,800.00",
-    endsLabel: "Ends",
     remaining: "13D 11H 33M 47S",
     deadline: "1 Sep 2026, 18:00 UTC",
-    extensionLabel: "Extended bidding interval",
     extensionValue: "30 minutes",
     actions: <LiveActions />,
   },
@@ -57,13 +57,10 @@ export const Loading: Story = {
 
 export const PreAuction: Story = {
   args: {
-    priceLabel: "Opening bid",
+    copy: { price: "Opening bid", ends: "Opens" },
     price: "HK$1,200.00",
     bidCount: undefined,
-    showHistoryLabel: undefined,
-    hideHistoryLabel: undefined,
     history: undefined,
-    endsLabel: "Opens",
     remaining: "2D 4H 12M 0S",
     deadline: "22 Aug 2026, 18:00 UTC",
     standing: undefined,
@@ -110,23 +107,23 @@ export const Outbid: Story = {
   args: { standing: <OutbidStanding /> },
 };
 
-export const OpensHistory: Story = {
+/** Bid history is what the panel was given, shown: there is nothing to open,
+ * and nothing to press to see it. */
+export const ShowsHistory: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Show bid history" }),
-    );
+
     expect(canvas.getByText(/Bidder 3/)).toBeInTheDocument();
+    expect(canvas.queryByRole("button", { name: /bid history/i })).toBeNull();
   },
 };
 
 export const PostSold: Story = {
   args: {
-    priceLabel: "Winning bid",
+    copy: { price: "Winning bid", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
-    extensionLabel: undefined,
     extensionValue: undefined,
     standing: undefined,
     actions: <PostAuctionActions />,
@@ -141,11 +138,10 @@ export const PostSold: Story = {
 
 export const PostWonPaymentDue: Story = {
   args: {
-    priceLabel: "Winning bid",
+    copy: { price: "Winning bid", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
-    extensionLabel: undefined,
     extensionValue: undefined,
     standing: <WonPaymentDueStanding />,
     actions: <PostAuctionActions />,
@@ -159,11 +155,10 @@ export const PostWonPaymentDue: Story = {
 
 export const PostWonSettled: Story = {
   args: {
-    priceLabel: "Winning bid",
+    copy: { price: "Winning bid", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
-    extensionLabel: undefined,
     extensionValue: undefined,
     standing: <WonSettledStanding />,
     actions: <PostAuctionActions />,
@@ -177,11 +172,10 @@ export const PostWonSettled: Story = {
 
 export const PostLost: Story = {
   args: {
-    priceLabel: "Winning bid",
+    copy: { price: "Winning bid", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
-    extensionLabel: undefined,
     extensionValue: undefined,
     standing: <LostStanding />,
     actions: <PostAuctionActions />,
@@ -194,13 +188,12 @@ export const PostLost: Story = {
 
 export const PostUnsold: Story = {
   args: {
-    priceLabel: "Result",
+    copy: { price: "Result", ends: "Ends" },
     price: "Unsold",
     bidCount: "0 bids",
     history: "No bids yet.",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
-    extensionLabel: undefined,
     extensionValue: undefined,
     standing: undefined,
     actions: <PostAuctionActions />,
@@ -215,11 +208,10 @@ export const PostUnsold: Story = {
 /** @deprecated Use PostSold — kept as alias for existing links. */
 export const Closed: Story = {
   args: {
-    priceLabel: "Winning bid",
+    copy: { price: "Winning bid", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
-    extensionLabel: undefined,
     extensionValue: undefined,
     actions: <PostAuctionActions />,
   },

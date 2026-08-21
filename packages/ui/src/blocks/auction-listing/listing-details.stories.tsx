@@ -9,7 +9,7 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
-    heading: "Description",
+    copy: { heading: "Description" },
     body: "Shadowless 1st Ed. Authenticated and vaulted.",
     facts: [...BASE_FACTS],
     sections: [
