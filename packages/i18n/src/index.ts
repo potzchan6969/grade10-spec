@@ -148,16 +148,13 @@ function merge(base: MessageTree, overlaid: MessageTree): MessageTree {
 export function getMessages(brand: Brand, locale: string): Messages {
   const fallback = brands[brand].defaultLocale;
   const active = isLocale(brand, locale) ? locale : fallback;
-  const brandLayers = brandCatalogs[brand] as Record<string, unknown>;
+  const brandLayer = owned[brand] as Record<string, unknown>;
 
   return merge(
     merge(
-      merge(
-        layer(sharedCatalogs, VOCABULARY_LOCALE),
-        layer(sharedCatalogs, active),
-      ),
-      layer(brandLayers, fallback),
+      merge(layer(shared, VOCABULARY_LOCALE), layer(shared, active)),
+      layer(brandLayer, fallback),
     ),
-    layer(brandLayers, active),
+    layer(brandLayer, active),
   ) as Messages;
 }
