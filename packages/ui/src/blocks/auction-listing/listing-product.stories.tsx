@@ -48,10 +48,11 @@ const pageShell = (main: ReactNode, details: ReactNode) => (
 const liveBidPanel = (
   <ListingBidPanel
     actions={<LiveActions />}
-    bidCount="1 bid"
+    watchAction={<WatchOnlyActions />}
+    bidCount="1 Bid"
     deadline="1 Sep 2026, 18:00 UTC"
     endsLabel="Ends"
-    extensionLabel="Extended bidding interval"
+    extensionLabel="Extended bidding"
     extensionValue="30 minutes"
     hideHistoryLabel="Hide bid history"
     history="Bidder 3 · HK$4,800.00"
@@ -100,10 +101,11 @@ export const PreAuction: Story = {
           zoomLabel="Click to zoom"
         />
         <ListingBidPanel
-          actions={<WatchOnlyActions />}
+          actions={null}
+          watchAction={<WatchOnlyActions />}
           deadline="22 Aug 2026, 18:00 UTC"
           endsLabel="Opens"
-          extensionLabel="Extended bidding interval"
+          extensionLabel="Extended bidding"
           extensionValue="30 minutes"
           kicker={KICKER}
           price="HK$1,200.00"
@@ -166,7 +168,8 @@ export const PostSold: Story = {
         />
         <ListingBidPanel
           actions={<PostAuctionActions />}
-          bidCount="1 bid"
+          watchAction={<WatchOnlyActions />}
+          bidCount="1 Bid"
           endsLabel="Ends"
           hideHistoryLabel="Hide bid history"
           history="Bidder 1 · HK$3,100.00"
@@ -208,7 +211,8 @@ export const PostWonPaymentDue: Story = {
         />
         <ListingBidPanel
           actions={<PostAuctionActions />}
-          bidCount="1 bid"
+          watchAction={<WatchOnlyActions />}
+          bidCount="1 Bid"
           endsLabel="Ends"
           hideHistoryLabel="Hide bid history"
           history="Bidder 1 · HK$3,100.00"
@@ -250,7 +254,8 @@ export const PostWonSettled: Story = {
         />
         <ListingBidPanel
           actions={<PostAuctionActions />}
-          bidCount="1 bid"
+          watchAction={<WatchOnlyActions />}
+          bidCount="1 Bid"
           endsLabel="Ends"
           hideHistoryLabel="Hide bid history"
           history="Bidder 1 · HK$3,100.00"
@@ -293,6 +298,7 @@ export const PostLost: Story = {
         />
         <ListingBidPanel
           actions={<PostAuctionActions />}
+          watchAction={<WatchOnlyActions />}
           bidCount="1 bid"
           endsLabel="Ends"
           hideHistoryLabel="Hide bid history"
@@ -336,7 +342,8 @@ export const PostUnsold: Story = {
         />
         <ListingBidPanel
           actions={<PostAuctionActions />}
-          bidCount="0 bids"
+          watchAction={<WatchOnlyActions />}
+          bidCount="0 Bids"
           endsLabel="Ends"
           hideHistoryLabel="Hide bid history"
           history="No bids yet."
