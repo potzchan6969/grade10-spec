@@ -4,16 +4,19 @@
 // shared-ui/auction-listing
 export {
   ListingBidPanel,
+  type ListingBidPanelCopy,
   type ListingBidPanelProps,
 } from "./blocks/auction-listing/listing-bid-panel";
 export {
   ListingDetails,
+  type ListingDetailsCopy,
   type ListingDetailsFact,
   type ListingDetailsProps,
   type ListingDetailsSection,
 } from "./blocks/auction-listing/listing-details";
 export {
   ListingGallery,
+  type ListingGalleryCopy,
   type ListingGalleryImage,
   type ListingGalleryProps,
 } from "./blocks/auction-listing/listing-gallery";
@@ -21,14 +24,17 @@ export {
 export {
   SignInCard,
   type SignInCardAction,
+  type SignInCardCopy,
   type SignInCardProps,
 } from "./blocks/auth-sign-in/sign-in-card";
 export {
   SignInCodeForm,
+  type SignInCodeFormCopy,
   type SignInCodeFormProps,
 } from "./blocks/auth-sign-in/sign-in-code-form";
 export {
   SignInEmailForm,
+  type SignInEmailFormCopy,
   type SignInEmailFormProps,
 } from "./blocks/auth-sign-in/sign-in-email-form";
 export {
@@ -38,10 +44,12 @@ export {
 // shared-ui/auth-two-factor
 export {
   TwoFactorEnrollment,
+  type TwoFactorEnrollmentCopy,
   type TwoFactorEnrollmentProps,
 } from "./blocks/auth-two-factor/two-factor-enrollment";
 export {
   TwoFactorVerifyForm,
+  type TwoFactorVerifyFormCopy,
   type TwoFactorVerifyFormProps,
 } from "./blocks/auth-two-factor/two-factor-verify-form";
 // shared cross-capability types
@@ -94,14 +102,17 @@ export type {
 // shared-ui/store-profile
 export {
   ProfileCard,
+  type ProfileCardCopy,
   type ProfileCardProps,
 } from "./blocks/store-profile/profile-card";
 export {
   ProfileDetails,
+  type ProfileDetailsCopy,
   type ProfileDetailsProps,
 } from "./blocks/store-profile/profile-details";
 export {
   ProfileForm,
+  type ProfileFormCopy,
   type ProfileFormProps,
 } from "./blocks/store-profile/profile-form";
 export type { ProfileFormValues } from "./blocks/store-profile/types";

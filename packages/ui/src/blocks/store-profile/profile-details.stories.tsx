@@ -26,7 +26,7 @@ export const WithoutBio: Story = {
 };
 
 export const EditIsReported: Story = {
-  args: { editLabel: "Edit profile", onEdit: fn() },
+  args: { copy: { edit: "Edit profile" }, onEdit: fn() },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole("button", { name: "Edit profile" }));

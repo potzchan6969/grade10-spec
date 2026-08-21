@@ -8,11 +8,9 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
+    copy: { displayName: "Display name", bio: "Bio", submit: "Save" },
     initialDisplayName: "Collector",
     initialBio: "",
-    displayNameLabel: "Display name",
-    bioLabel: "Bio",
-    submitLabel: "Save",
     onSubmit: fn(),
   },
 } satisfies Meta<typeof ProfileForm>;
@@ -22,14 +20,29 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Pending: Story = { args: { pending: true } };
+export const Pending: Story = {
+  args: {
+    copy: {
+      displayName: "Display name",
+      bio: "Bio",
+      submit: "Save",
+      cancel: "Cancel",
+    },
+    pending: true,
+  },
+};
 
 /** The consumer supplies the failure copy, and Cancel renders only when the
  * caller handles it. */
 export const ErrorWithCancel: Story = {
   args: {
+    copy: {
+      displayName: "Display name",
+      bio: "Bio",
+      submit: "Save",
+      cancel: "Cancel",
+    },
     error: "Profile could not be saved.",
-    cancelLabel: "Cancel",
     onCancel: fn(),
   },
   play: async ({ canvasElement }) => {

@@ -10,15 +10,17 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
-    title: "My profile",
-    description: "Store data, keyed by your account.",
+    copy: {
+      title: "My profile",
+      description: "Store data, keyed by your account.",
+    },
     state: {
       status: "ready",
       data: (
         <ProfileDetails
           bio="Chasing PSA 10s since 2019."
           displayName="Collector"
-          editLabel="Edit profile"
+          copy={{ edit: "Edit profile" }}
           meta="Member since Mar 12, 2024"
           onEdit={fn()}
         />
@@ -53,12 +55,10 @@ export const EditingBody: Story = {
       status: "ready",
       data: (
         <ProfileForm
-          bioLabel="Bio"
-          displayNameLabel="Display name"
+          copy={{ displayName: "Display name", bio: "Bio", submit: "Save" }}
           initialBio=""
           initialDisplayName="Collector"
           onSubmit={fn()}
-          submitLabel="Save"
         />
       ),
     },
