@@ -5,7 +5,7 @@ reviewable on its own; group 5 is the application, behind the submodule bump.
 Group 1 establishes the rule and the first worked example — the rest follow
 its shape and can be claimed in parallel once it lands.
 
-## 1. The rule, and the listing surface (grade10-spec)
+## 1. The rule, and the listing surface (grade10-spec) (owner: @sean)
 
 - [ ] 1.1 Make `A consumer reads what a block needs`, `A slot takes markup, a
       word does not` and `A word can be an accessible name` pass for the
