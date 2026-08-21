@@ -1,0 +1,23 @@
+{
+  "site": "Grade10",
+  "marketing": {
+    "title": "Grade10 — 评级卡买卖，一站完成",
+    "description": "在 Grade10 商店以定价购入评级卡，或竞投只出现一次的珍品。一个账户，承载你的个人资料、订单与出价。"
+  },
+  "store": {
+    "title": "商店 — Grade10",
+    "description": "以固定价格上架的评级卡，每张都标示评级。浏览 Grade10 商店，准备好即可结账。"
+  },
+  "auction": {
+    "title": "拍卖 — Grade10",
+    "description": "Grade10 每一场已公开的拍卖及其拍品，并列出各拍品的最高出价。浏览无需账户，出价则需要。"
+  },
+  "product": {
+    "title": "{name} — Grade10",
+    "description": "{name}，于 Grade10 商店上架。"
+  },
+  "auctionListing": {
+    "title": "{name} — Grade10",
+    "description": "{name}，正在 Grade10 拍卖中。"
+  }
+}

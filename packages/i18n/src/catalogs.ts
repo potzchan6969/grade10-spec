@@ -20,6 +20,7 @@ import grade10EnAuctionListing from "../messages/grade10/en/auctionListing.json"
 import grade10EnChrome from "../messages/grade10/en/chrome.json";
 import grade10EnCommon from "../messages/grade10/en/common.json";
 import grade10EnEmail from "../messages/grade10/en/email.json";
+import grade10EnHead from "../messages/grade10/en/head.json";
 import grade10EnLocale from "../messages/grade10/en/locale.json";
 import grade10EnMarketing from "../messages/grade10/en/marketing.json";
 import grade10EnNotFound from "../messages/grade10/en/notFound.json";
@@ -32,6 +33,7 @@ import grade10ZhHansAuctionListing from "../messages/grade10/zh-Hans/auctionList
 import grade10ZhHansChrome from "../messages/grade10/zh-Hans/chrome.json";
 import grade10ZhHansCommon from "../messages/grade10/zh-Hans/common.json";
 import grade10ZhHansEmail from "../messages/grade10/zh-Hans/email.json";
+import grade10ZhHansHead from "../messages/grade10/zh-Hans/head.json";
 import grade10ZhHansLocale from "../messages/grade10/zh-Hans/locale.json";
 import grade10ZhHansMarketing from "../messages/grade10/zh-Hans/marketing.json";
 import grade10ZhHansNotFound from "../messages/grade10/zh-Hans/notFound.json";
@@ -44,6 +46,7 @@ import grade10ZhHantAuctionListing from "../messages/grade10/zh-Hant/auctionList
 import grade10ZhHantChrome from "../messages/grade10/zh-Hant/chrome.json";
 import grade10ZhHantCommon from "../messages/grade10/zh-Hant/common.json";
 import grade10ZhHantEmail from "../messages/grade10/zh-Hant/email.json";
+import grade10ZhHantHead from "../messages/grade10/zh-Hant/head.json";
 import grade10ZhHantLocale from "../messages/grade10/zh-Hant/locale.json";
 import grade10ZhHantMarketing from "../messages/grade10/zh-Hant/marketing.json";
 import grade10ZhHantNotFound from "../messages/grade10/zh-Hant/notFound.json";
@@ -56,6 +59,7 @@ import zzzKoAuctionListing from "../messages/zzz/ko/auctionListing.json";
 import zzzKoChrome from "../messages/zzz/ko/chrome.json";
 import zzzKoCommon from "../messages/zzz/ko/common.json";
 import zzzKoEmail from "../messages/zzz/ko/email.json";
+import zzzKoHead from "../messages/zzz/ko/head.json";
 import zzzKoLocale from "../messages/zzz/ko/locale.json";
 import zzzKoMarketing from "../messages/zzz/ko/marketing.json";
 import zzzKoNotFound from "../messages/zzz/ko/notFound.json";
@@ -69,6 +73,7 @@ export const grade10En = {
   common: grade10EnCommon,
   locale: grade10EnLocale,
   chrome: grade10EnChrome,
+  head: grade10EnHead,
   marketing: grade10EnMarketing,
   store: grade10EnStore,
   product: grade10EnProduct,
@@ -85,6 +90,7 @@ export const grade10ZhHant = {
   common: grade10ZhHantCommon,
   locale: grade10ZhHantLocale,
   chrome: grade10ZhHantChrome,
+  head: grade10ZhHantHead,
   marketing: grade10ZhHantMarketing,
   store: grade10ZhHantStore,
   product: grade10ZhHantProduct,
@@ -101,6 +107,7 @@ export const grade10ZhHans = {
   common: grade10ZhHansCommon,
   locale: grade10ZhHansLocale,
   chrome: grade10ZhHansChrome,
+  head: grade10ZhHansHead,
   marketing: grade10ZhHansMarketing,
   store: grade10ZhHansStore,
   product: grade10ZhHansProduct,
@@ -117,6 +124,7 @@ export const zzzKo = {
   common: zzzKoCommon,
   locale: zzzKoLocale,
   chrome: zzzKoChrome,
+  head: zzzKoHead,
   marketing: zzzKoMarketing,
   store: zzzKoStore,
   product: zzzKoProduct,
