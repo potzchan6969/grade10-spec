@@ -42,3 +42,13 @@ Depends on groups 2, 3, and 4.
 - [x] 5.1 Update the product list page so "Nothing renders unsupplied copy" still passes: supply worlds/types groups, applied-filter chips, and `sortTriggerLabel`; drop collection navigation and the header title
 
 Verify: `pnpm run lint`, `pnpm run typecheck`, `pnpm run test:stories`.
+
+## 6. Figma value reconciliation (grade10-spec)
+
+- [x] 6.1 Match ProductBrowse padding and sidebar gap, ProductFilter and header rhythm, selected applied-filter chips, 32px list gaps with a 240px min tile, and ProductCard type/image well to `4098:1868`
+- [x] 6.2 Match nested Chip, Badge (brand SALE, default SOLD OUT, pill corners), DropdownMenu popover chrome, and the selected sort check to the page instances
+- [x] 6.3 Reconcile DropdownMenuItem selected (no fill), `popover-foreground` label, `muted-hover` highlight, trigger chevron rotation, and keyboard/a11y annotations on `2132:1693`
+- [x] 6.4 Reconcile `ProductCard` to set `4200:155` (`soldOut` axis, gradient image well, hover scale and in-cart quantity annotations)
+- [x] 6.5 Reconcile the product-card cart control to `IconButton` `primary` `md` on `Product / Product Card Image` (`4274:10074`)
+
+Verify: `pnpm run test:stories:ui`, `pnpm run test:stories:design-system`, `pnpm run check:design-system`, `pnpm run typecheck`.

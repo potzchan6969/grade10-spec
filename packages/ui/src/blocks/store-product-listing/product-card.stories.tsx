@@ -6,11 +6,11 @@ const IMAGE = new URL("./product-card.fixture.png", import.meta.url).href;
 
 const defaults = {
   imageSrc: IMAGE,
-  imageAlt: "Ninja Spinner booster box",
+  imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
   tags: ["Pokémon", "M4", "JP"],
-  name: "Ninja Spinner",
-  price: "HKD 105",
-  originalPrice: "HKD 123",
+  name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+  price: "HK$105",
+  originalPrice: "HK$123",
   discountLabel: "SALE",
   actionLabel: "Add to cart",
   onClick: () => {},
@@ -27,7 +27,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Figma `isSoldOut=false` — available product with a discount. */
+/** Figma `soldOut=false` — available product with a discount. */
 export const Default: Story = {
   decorators: [
     (Story) => (
@@ -46,7 +46,7 @@ export const Default: Story = {
   },
 };
 
-/** Figma `isSoldOut=true` — dimmed photo, SOLD OUT badge, no cart action. */
+/** Figma `soldOut=true` — SOLD OUT badge, no cart action, tile inert. */
 export const SoldOut: Story = {
   args: { soldOut: true, onAction: undefined },
   decorators: [
@@ -80,7 +80,7 @@ export const States: Story = {
   ),
 };
 
-/** Figma `isAddedToCart=true` — quantity badge on the cart button. */
+/** Set annotation: quantity on the cart button when already in the cart. */
 export const AddedToCart: Story = {
   args: { addedToCart: true, quantity: 3 },
   decorators: [

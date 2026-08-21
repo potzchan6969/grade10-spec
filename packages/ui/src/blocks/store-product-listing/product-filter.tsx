@@ -58,12 +58,14 @@ function ProductFilter({
 
   return (
     <VStack
-      className={cn("w-full gap-8", className)}
+      className={cn("w-full gap-6", className)}
       data-slot="product-filter"
       gap="none"
     >
-      <VStack className="w-full gap-3" gap="none">
-        <h2 className="w-full text-2xl font-bold text-foreground">{heading}</h2>
+      <VStack className="w-full gap-2" gap="none">
+        <h2 className="flex h-10 w-full items-center text-2xl font-bold text-foreground">
+          {heading}
+        </h2>
         <SearchInput
           aria-label={
             searchLabel != null && typeof searchLabel === "string"

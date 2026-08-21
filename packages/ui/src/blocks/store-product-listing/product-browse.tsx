@@ -58,11 +58,11 @@ type ProductBrowseProps = {
   className?: string;
 };
 
-/** Figma `ProductBrowse` (`4098:1952`): gap-12 (48px) between sidebar and
- * results; px-8 / py-6 (32×24) on the frame. Direction is prefixed because
- * it changes at lg; a stack cannot. */
+/** Figma `ProductBrowse` (`4098:1952`): gap-16 (64px) between sidebar and
+ * results; px-8 / pt-6 / pb-16 (32×24×64) on the frame. Direction is
+ * prefixed because it changes at lg; a stack cannot. */
 const BROWSE_CLASS =
-  "flex w-full max-lg:flex-col gap-12 px-8 py-6 lg:flex-row lg:items-start";
+  "flex w-full max-lg:flex-col gap-16 px-8 pt-6 pb-16 lg:flex-row lg:items-start";
 
 /**
  * The product-browsing surface: a sidebar of world and type filters, a result

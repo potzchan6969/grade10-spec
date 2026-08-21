@@ -2,11 +2,11 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { ProductCard } from "./product-card";
 import type { ProductSummary } from "./types";
 
-/** Figma tile width on the Product List page (`250px`) drives auto-fill so
+/** Figma tile width on the Product List page (`240px`) drives auto-fill so
  * columns grow with the results area while the sidebar stays fixed. Gaps
- * match the page instance: 24px row, 32px column. */
+ * match the page instance: 32px row and column. */
 const PRODUCT_LIST_GRID_CLASS =
-  "grid grid-cols-[repeat(auto-fill,minmax(min(100%,250px),1fr))] gap-x-6 gap-y-8";
+  "grid grid-cols-[repeat(auto-fill,minmax(min(100%,240px),1fr))] gap-8";
 
 const DEFAULT_SKELETON_COUNT = 8;
 /** Figma Product List annotation: ten items per fetch while scrolling. */
@@ -36,7 +36,7 @@ type ProductListProps = {
  * can reuse it without the browse root.
  *
  * The column count follows the available width after the fixed sidebar: each
- * tile needs at least 250px. A store that wants a different grid wants a
+ * tile needs at least 240px. A store that wants a different grid wants a
  * different design, not a prop.
  */
 function ProductList({

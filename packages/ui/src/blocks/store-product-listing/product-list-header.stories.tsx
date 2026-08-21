@@ -65,6 +65,9 @@ export const SortIsReported: Story = {
     await userEvent.click(
       canvas.getByRole("button", { name: "Sort by popularity" }),
     );
+    expect(
+      await screen.findByRole("menuitem", { name: "Popularity" }),
+    ).toHaveAttribute("aria-current", "true");
     await userEvent.click(
       await screen.findByRole("menuitem", { name: "Latest product" }),
     );

@@ -47,7 +47,7 @@ function ProductListPage() {
         return {
           ...template,
           id: String(index + 1),
-          ariaLabel: `Ninja Spinner, item ${index + 1}`,
+          ariaLabel: `Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item ${index + 1}`,
         };
       }),
     [],
@@ -113,7 +113,7 @@ function ProductListPage() {
   };
 
   return (
-    <div className="bg-background">
+    <div className="min-h-svh bg-white">
       <Nav {...STORE_NAV} />
       <ProductBrowse
         appliedFilters={appliedFilters}
