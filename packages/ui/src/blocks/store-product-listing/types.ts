@@ -10,21 +10,20 @@ import type { AsyncAction, AsyncState } from "../shared/async";
 type ProductSummary = {
   id: string;
   name: ReactNode;
-  /** Metadata badges such as collection, series, and region. The tile does
-   * not display them while the Product List page hides `cardProps`. */
-  tags?: readonly ReactNode[];
+  /** `cardProps` slot — consumer-assembled badges, in order. */
+  badges?: ReactNode;
   imageSrc?: string;
   imageAlt?: string;
   /** Current or discounted price, already formatted. */
   price: ReactNode;
   /** Strikethrough original price. Its presence shows the discount treatment. */
   originalPrice?: ReactNode;
-  discountLabel?: ReactNode;
+  saleLabel?: ReactNode;
   soldOut?: boolean;
-  /** Shows the quantity on the cart button. The consumer owns it. */
-  addedToCart?: boolean;
-  quantity?: number;
-  actionLabel?: ReactNode;
+  soldOutLabel?: ReactNode;
+  inCart?: boolean;
+  cartCount?: ReactNode;
+  cartLabel: string;
   /** Accessible name for the tile when it is activatable. */
   ariaLabel?: string;
 };

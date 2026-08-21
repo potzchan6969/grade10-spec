@@ -58,13 +58,14 @@ function ProductList({
 
   return (
     <div
+      className={cn(PRODUCT_LIST_GRID_CLASS, className)}
       data-revealed={revealed || undefined}
       data-slot="product-list"
-      className={cn(PRODUCT_LIST_GRID_CLASS, className)}
     >
       {loading
         ? Array.from({ length: placeholderCount }, (_, index) => (
             <ProductCard
+              cartLabel=""
               // biome-ignore lint/suspicious/noArrayIndexKey: placeholders have no identity beyond position.
               key={`product-skeleton-${index}`}
               loading
@@ -87,14 +88,15 @@ function ProductList({
               }}
             >
               <ProductCard
-                addedToCart={product.addedToCart}
-                actionLabel={product.actionLabel}
                 ariaLabel={product.ariaLabel}
-                discountLabel={product.discountLabel}
+                badges={product.badges}
+                cartCount={product.cartCount}
+                cartLabel={product.cartLabel}
                 imageAlt={product.imageAlt}
                 imageSrc={product.imageSrc}
+                inCart={product.inCart}
                 name={product.name}
-                onAction={
+                onCartClick={
                   onProductAction
                     ? () => onProductAction(product.id)
                     : undefined
@@ -104,14 +106,16 @@ function ProductList({
                 }
                 originalPrice={product.originalPrice}
                 price={product.price}
-                quantity={product.quantity}
+                saleLabel={product.saleLabel}
                 soldOut={product.soldOut}
+                soldOutLabel={product.soldOutLabel}
               />
             </div>
           ))}
       {loadingMore && !loading
         ? Array.from({ length: loadMoreSkeletonCount }, (_, index) => (
             <ProductCard
+              cartLabel=""
               // biome-ignore lint/suspicious/noArrayIndexKey: placeholders have no identity beyond position.
               key={`load-more-skeleton-${index}`}
               loading

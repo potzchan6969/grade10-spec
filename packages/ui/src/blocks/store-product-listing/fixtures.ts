@@ -1,3 +1,5 @@
+import { Badge } from "@grade10/design-system/components/display/badge";
+import { createElement, Fragment, type ReactNode } from "react";
 import productImage from "./product.fixture.png";
 
 import type {
@@ -12,6 +14,14 @@ import type {
  * its own; nothing here is a default. */
 
 const IMAGE = productImage;
+
+const PRODUCT_BADGES: ReactNode = createElement(
+  Fragment,
+  null,
+  createElement(Badge, { size: "sm", variant: "outline" }, "Pokémon"),
+  createElement(Badge, { size: "sm", variant: "outline" }, "M4"),
+  createElement(Badge, { size: "sm", variant: "outline" }, "JP"),
+);
 
 const SORT_OPTIONS: SortOption[] = [
   { id: "popular", label: "Popularity" },
@@ -58,17 +68,18 @@ const UTILITY_LINKS: UtilityLink[] = [
 const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
   id: String(index + 1),
   name: "Ninja Spinner",
-  tags: ["Pokémon", "M4", "JP"],
+  badges: PRODUCT_BADGES,
   imageSrc: IMAGE,
   imageAlt: "Ninja Spinner booster box",
   price: "HKD 105",
-  originalPrice: "HKD 123",
-  discountLabel: "SALE",
+  originalPrice: index === 0 ? "HKD 123" : undefined,
+  saleLabel: index === 0 ? "SALE" : undefined,
   ariaLabel: `Ninja Spinner, item ${index + 1}`,
-  actionLabel: "Add to cart",
-  addedToCart: index === 0,
-  quantity: index === 0 ? 3 : 1,
+  cartLabel: "Add to cart",
+  inCart: index === 0,
+  cartCount: index === 0 ? "1" : undefined,
   soldOut: index === 7,
+  soldOutLabel: index === 7 ? "SOLD OUT" : undefined,
 }));
 
 const SELECTION = {
@@ -85,6 +96,7 @@ export {
   APPLIED_FILTERS,
   FILTER_GROUPS,
   IMAGE,
+  PRODUCT_BADGES,
   PRODUCTS,
   SELECTION,
   SORT_OPTIONS,

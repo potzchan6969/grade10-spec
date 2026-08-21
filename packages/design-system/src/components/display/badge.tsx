@@ -3,24 +3,25 @@ import { useRender } from "@base-ui/react/use-render";
 import { cn } from "@grade10/design-system/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
-// Figma binds the badge corner to `Radius/radius-sm` (4px), which the
-// `rounded-sm` utility cannot express — theme.preamble.css derives the scale
-// proportionally from `--radius`, so it compiles to calc(--radius * 0.6). Bind
-// the Foundation primitive directly, as button.tsx does for the same reason.
+// Figma binds every badge corner to `Radius/radius-full` (999). Bind the
+// Foundation primitive directly, as button.tsx does — `rounded-full` is
+// Tailwind's own 999px, but the rest of this package names the token.
 const badgeVariants = cva(
-  "group/badge inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-(--radius-sm) border border-border py-0 text-xs font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3!",
+  "group/badge inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-(--radius-full) border border-transparent py-0 text-xs font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3!",
   {
     variants: {
       variant: {
         default:
-          "bg-secondary text-secondary-foreground [a]:hover:bg-[color-mix(in_oklab,var(--secondary),white_5%)]",
+          "bg-primary text-primary-foreground [a]:hover:bg-[color-mix(in_oklab,var(--primary),white_5%)]",
+        outline: "border-border bg-background text-foreground",
+        brand: "bg-accent-foreground text-primary-foreground",
         success: "bg-success text-success-foreground backdrop-blur-md",
         error: "bg-destructive text-destructive-foreground backdrop-blur-md",
         warning: "bg-warning text-warning-foreground backdrop-blur-md",
       },
       size: {
         default: "h-6 px-2",
-        sm: "h-5 px-1.5",
+        sm: "h-5 px-2",
       },
     },
     defaultVariants: {
