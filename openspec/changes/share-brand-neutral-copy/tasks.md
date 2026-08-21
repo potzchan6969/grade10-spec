@@ -40,7 +40,7 @@ Depends on group 1 being pushed.
 - [x] 2.1 Bump `external/grade10-spec` to the shared-layer catalogs and confirm
       `No raw key on screen` still holds: every message key still typechecks
       against the vocabulary, and no page, component, or worker changes.
-- [ ] 2.2 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 2.2 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `pnpm run test:backend`, and `pnpm run build` as this group's
       verification — the build renders every prerendered document in every
       language, which is what a resolution regression would show up in.
