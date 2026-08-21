@@ -33,7 +33,7 @@ another change: crawlable public pages have shipped.
 - [x] 4.3 Make `A Chinese sign-in gets a Chinese email` pass: a sign-in started on a localized page mails in that page's locale through the existing cookie seam, falling back to English when none is carried.
 - [x] 4.4 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run test:backend` as this group's verification.
 
-## 5. Localized public addresses (grade10)
+## 5. Localized public addresses (grade10) (owner: @sean)
 
 Depends on group 4's remembered locale.
 
