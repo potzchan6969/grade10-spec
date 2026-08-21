@@ -2,8 +2,8 @@
 
 Lets an authorized Grade10 operator draft, create, and publish an Auction
 listing — incomplete saves first, required fields enforced at create, publish
-now or at a scheduled time — with an unprocessed gallery of up to eight
-images or videos.
+now or at a future scheduled time — with an unprocessed gallery of one to
+eight images or videos.
 
 ## ADDED Requirements
 
@@ -15,10 +15,10 @@ save SHALL persist the listing in `draft` and, on the first save, SHALL mint
 a new auctionable unit that has no other live listing.
 
 A draft SHALL allow every required field to be empty. Saving a draft SHALL
-NOT refuse a missing title, starting price, minimum increment, starts at, or
-scheduled close at. A field the operator does send SHALL still match that
-field's shape (a starting price that is present MUST be integer minor units
-greater than zero).
+NOT refuse a missing title, starting price, minimum increment, starts at,
+scheduled close at, or media. A field the operator does send SHALL still
+match that field's shape (a starting price that is present MUST be integer
+minor units greater than zero).
 
 A draft listing SHALL NOT be visible on the public catalogue.
 
@@ -69,11 +69,12 @@ Required at create:
 - **Minimum increment** — integer minor units greater than zero
 - **Starts at** — the scheduled bidding open
 - **Scheduled close at** — after starts at, and after the moment of create
+- **Media** — at least one and at most eight images or videos
 
 Optional fields, when omitted at create, take these defaults: currency
-`HKD`; sort index `0`; copy empty; no listing label; no sale; no categories;
-extension window and extension duration both `0` (extension off); no
-extension cap; no publish at; sandbox `false`.
+`HKD`; sort index `0`; copy empty; no sale; no categories; extension window
+and extension duration both `0` (extension off); no extension cap; no
+publish at; sandbox `false`.
 
 The admin form SHALL prevent submitting create while a required field is
 empty or invalid, and SHALL name the fields that fail. The API SHALL refuse
@@ -88,7 +89,7 @@ be refused.
 
 - **GIVEN** a draft listing with a title, a starting price of 100000 minor
   units, a minimum increment of 5000 minor units, currency `HKD`, a start in
-  the future, and a scheduled close at after that start
+  the future, a scheduled close at after that start, and one JPEG
 - **WHEN** an authorized operator creates the listing
 - **THEN** Grade10 moves it to `created`
 - **AND** the listing is still absent from the public catalogue
@@ -104,6 +105,13 @@ be refused.
 #### Scenario: Create without a starting price is refused
 
 - **GIVEN** a draft listing with a title, a window, and no starting price
+- **WHEN** the operator creates the listing
+- **THEN** Grade10 refuses the create
+- **AND** the listing remains a draft
+
+#### Scenario: Create without media is refused
+
+- **GIVEN** a draft listing with every required field set except media
 - **WHEN** the operator creates the listing
 - **THEN** Grade10 refuses the create
 - **AND** the listing remains a draft
@@ -132,10 +140,6 @@ unchanged.
 - **Title** — required at create; trimmed, 1 to 200 characters when set. Empty
   is allowed only while `draft`.
 - **Copy** — optional, at most 4000 characters, empty allowed.
-- **Listing label** — optional catalogue number such as `12A`, trimmed, 1 to
-  32 characters when set. Unique within the listing's sale. Two listings
-  with no sale SHALL be allowed to share a label. Clearing the label SHALL
-  store no label.
 - **Sort index** — optional whole number ≥ 0. Empty on draft SHALL store
   nothing until create, which stores `0` when omitted.
 - **Sale** — optional. Omit or clear for a listing sold on its own. A listing
@@ -155,13 +159,6 @@ still be able to write these fields on an existing editable listing.
 - **THEN** Grade10 stores the new copy
 - **AND** a collector reading the listing sees the new copy
 - **AND** the title, prices, and window are unchanged
-
-#### Scenario: Listing label collides inside a sale
-
-- **GIVEN** a sale that already has a listing labelled `12A`
-- **WHEN** an operator sets another listing in that sale to `12A`
-- **THEN** Grade10 refuses the write
-- **AND** the second listing's label is unchanged
 
 #### Scenario: Two categories from one taxonomy are refused
 
@@ -256,16 +253,17 @@ An authorized operator SHALL publish a `created` listing. Publish SHALL move
 it to `published` and SHALL make it visible on the public catalogue.
 
 An authorized operator SHALL be able to set **Publish at**, an optional
-timestamp.
+timestamp that MUST be after now.
 
-- While `draft` or `created`, publish at SHALL be writable. A write of
-  publish at on a `published` or later listing SHALL be refused.
+- While `draft` or `created`, publish at SHALL be writable when the value is
+  after now, and SHALL be clearable. A write of publish at on a `published`
+  or later listing SHALL be refused.
+- A publish at that is not after now SHALL be refused on the admin form and
+  on the API. Create SHALL refuse if publish at is set and not after now.
 - When publish at is unset, the listing SHALL stay `created` until an
   operator publishes it.
 - When publish at arrives and the listing is `created`, Grade10 SHALL
   publish it without a further operator action.
-- When publish at is already due at the moment of create, Grade10 SHALL
-  publish the listing as part of that create.
 - A `draft` listing SHALL NOT be published, by hand or when publish at
   arrives. Publish of a listing that is not `created` SHALL be refused.
 
@@ -284,13 +282,21 @@ timestamp.
 - **AND** a collector can read it on the public catalogue
 - **AND** no further operator action was required
 
-#### Scenario: Create with a due publish at publishes immediately
+#### Scenario: A publish at in the past is refused
+
+- **GIVEN** a created listing
+- **WHEN** an operator sets publish at to a time that is not after now
+- **THEN** Grade10 refuses the write
+- **AND** the listing remains created and unpublished
+
+#### Scenario: Create with a past publish at is refused
 
 - **GIVEN** a draft listing with every required field set and publish at in
   the past
 - **WHEN** the operator creates the listing
-- **THEN** Grade10 publishes it
-- **AND** a collector can read it on the public catalogue
+- **THEN** Grade10 refuses the create
+- **AND** the listing remains a draft
+- **AND** it stays absent from the public catalogue
 
 #### Scenario: Draft is not published when publish at arrives
 
@@ -328,7 +334,7 @@ are the record of what was offered and sold.
 - **THEN** Grade10 refuses the write
 - **AND** the title is unchanged
 
-### Requirement: Listing media is an ordered gallery of up to eight uploads
+### Requirement: Listing media is an ordered gallery of one to eight uploads
 
 While a listing is `draft`, `created`, or `published`, an authorized operator
 SHALL be able to attach, replace, remove, and reorder media on that listing.
@@ -336,6 +342,10 @@ SHALL be able to attach, replace, remove, and reorder media on that listing.
 A listing SHALL hold at most **eight** media items. Each item is one uploaded
 file, either an image or a video. A ninth attach SHALL be refused and SHALL
 leave the gallery unchanged.
+
+A draft SHALL be allowed to have zero media. Create SHALL require at least
+one media item. A `created` or `published` listing SHALL reject a remove that
+would leave zero items.
 
 Accepted image types: JPEG, PNG, WebP, AVIF. Accepted video types: MP4, WebM,
 QuickTime. Any other type SHALL be refused. An empty file SHALL be refused.
@@ -349,8 +359,7 @@ operator's client, are untrusted layout hints and MUST NOT be treated as
 measurements.
 
 The gallery has a display order the operator controls. The first item SHALL
-be the catalogue card a browse list shows. A listing with no media SHALL
-publish no catalogue card.
+be the catalogue card a browse list shows.
 
 A collector reading a published listing SHALL receive the gallery in that
 order. An image item SHALL display as an image. A video item SHALL play as a
@@ -413,6 +422,13 @@ video from the uploaded bytes.
 - **WHEN** an operator moves C first and removes B
 - **THEN** the gallery is C, A
 - **AND** a collector's catalogue card is C
+
+#### Scenario: Last media item cannot be removed after create
+
+- **GIVEN** a published listing with one JPEG
+- **WHEN** an operator removes that JPEG
+- **THEN** Grade10 refuses the remove
+- **AND** the gallery still has that JPEG
 
 #### Scenario: Closed listing rejects a media upload
 

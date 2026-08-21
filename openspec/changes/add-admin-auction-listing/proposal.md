@@ -29,18 +29,19 @@ fields are present, and have it publish at a chosen time.
 - **A draft allows required fields to be empty.** Saving a draft does not
   validate them. Create validates them on the admin form and on the API; a
   client that skips the form cannot create an incomplete listing.
-- **Publish can be scheduled.** An optional `publish at` timestamp publishes
-  a created listing when that time arrives. An operator can still publish
-  immediately. A draft is never published, on a schedule or by hand.
+- **Publish can be scheduled.** An optional **Publish at** timestamp publishes
+  a created listing when that time arrives. The timestamp MUST be in the
+  future; a time that has already passed is refused. An operator can still
+  publish immediately. A draft is never published, on a schedule or by hand.
 - **An operator updates a listing that is still editable** (`draft`,
   `created`, or `published`). Closed, settled, and canceled listings are the
   record of what was sold and are not rewritten here.
 - **The form's fields are the listing's own facts**, listed below. A physical
   unit is minted with the first draft save; relisting an existing unit is
   out of scope.
-- **Media is an ordered gallery of up to eight images or videos**, stored and
-  served as uploaded. Image processing, renditions, and thumbnails are a
-  separate change.
+- **Media is an ordered gallery of one to eight images or videos**, stored
+  and served as uploaded. A draft may have none; create requires at least
+  one. Image processing, renditions, and thumbnails are a separate change.
 - **BREAKING** for the public listing gallery: media is no longer one photo
   per named physical side (`front` / `back` / `left` / `right` / `top` /
   `bottom`). It is an ordered list; the first item is the catalogue card.
@@ -54,7 +55,6 @@ the listing. A draft save does not enforce it.
 | --- | --- | --- | --- | --- | --- |
 | Title | yes | yes | yes | yes | no |
 | Copy | no | yes | yes | yes | no |
-| Listing label | no | yes | yes | yes | no |
 | Sort index | no | yes | yes | yes | no |
 | Sale | no | yes | yes | yes | no |
 | Categories | no | yes | yes | yes | no |
@@ -68,7 +68,7 @@ the listing. A draft save does not enforce it.
 | Extension cap (seconds) | no | yes | yes | no | no |
 | Publish at | no | yes | yes | no | no |
 | Sandbox | no | yes | no | no | no |
-| Media (≤ 8 images or videos) | no | yes | yes | yes | no |
+| Media (1–8 images or videos) | yes | yes | yes | yes | no |
 
 Not on this form: listing identity, the physical unit, status, the effective
 close (extension writes it), highest bid, created/updated/closed stamps.
@@ -81,6 +81,8 @@ close. **Publish at** is when a created listing becomes public.
 many seconds). **Extension cap** is the farthest the close may go past
 scheduled close at; omit it for no cap.
 
+**Publish at** MUST be after now when the operator sets it.
+
 **Sandbox** runs the listing on test-mode payment credentials instead of
 live money, so the house can rehearse a sale.
 
@@ -89,6 +91,8 @@ live money, so the house can rehearse a sale.
 - Image or video processing — resize, transcode, generated thumbnails, or
   derived renditions. This change stores the uploaded bytes and serves them.
 - Relisting an existing unit, picking a product, or a consignment record.
+- A sale-scoped lot number (listing label / `12A`). An online listing is
+  identified by its title and address.
 - Calling off a listing, or moving a published listing's window — those
   actions already exist.
 - Creating sales, taxonomies, or categories (pick from ones that exist).
