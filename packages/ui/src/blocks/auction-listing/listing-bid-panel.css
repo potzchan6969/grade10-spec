@@ -1,0 +1,24 @@
+@keyframes t-bid-reveal {
+  from {
+    transform: translateY(-0.5rem);
+    opacity: 0;
+    filter: blur(2px);
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.t-bid-reveal {
+  animation: t-bid-reveal 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity, filter;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-bid-reveal {
+    animation: none;
+    will-change: auto;
+  }
+}
