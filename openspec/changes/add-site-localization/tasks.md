@@ -28,9 +28,9 @@ another change: crawlable public pages have shipped.
 
 ## 4. grade10 resolves the locale, then remembers it (grade10) (owner: @sean)
 
-- [ ] 4.1 Make `A Hong Kong browser arrives`, `An unsupported language falls to the default`, and `An explicit pick outlives the visit` pass: first-visit negotiation from the browser's languages with the regional Chinese mapping, and the pick persisted in the `locale` cookie the auth service already reads.
-- [ ] 4.2 Make `A Chinese page says so` pass and wire the chrome's switcher: `Nav` receives the three locales and the change handler, the footer its locale slot, and the document declares the active locale.
-- [ ] 4.3 Make `A Chinese sign-in gets a Chinese email` pass: a sign-in started on a localized page mails in that page's locale through the existing cookie seam, falling back to English when none is carried.
+- [x] 4.1 Make `A Hong Kong browser arrives`, `An unsupported language falls to the default`, and `An explicit pick outlives the visit` pass: first-visit negotiation from the browser's languages with the regional Chinese mapping, and the pick persisted in the `locale` cookie the auth service already reads.
+- [x] 4.2 Make `A Chinese page says so` pass and wire the chrome's switcher: `Nav` receives the three locales and the change handler, the footer its locale slot, and the document declares the active locale.
+- [x] 4.3 Make `A Chinese sign-in gets a Chinese email` pass: a sign-in started on a localized page mails in that page's locale through the existing cookie seam, falling back to English when none is carried.
 - [ ] 4.4 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run test:backend` as this group's verification.
 
 ## 5. Localized public addresses (grade10)
