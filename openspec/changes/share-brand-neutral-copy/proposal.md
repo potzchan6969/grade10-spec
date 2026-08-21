@@ -11,20 +11,22 @@ authentication lines, the login email's subject. The other 178 say nothing
 about any brand at all: "Verification code", "Back to the store", "No bids
 yet", "Enter a valid amount", every error a shared feature slice renders.
 
-Those 178 are written once per brand per language anyway, because a brand's
-catalog is required to answer the whole vocabulary. Two brands and four
-languages already means the same sentence translated in two places, drifting
-independently; a third brand means re-translating 178 strings that have
-nothing to do with it, and ZZZ's Korean and grade10's Korean would answer
-"Verification code" separately for the rest of the platform's life.
+A brand's catalog is required to answer the whole vocabulary, so those 178
+are 178 strings every brand owes the platform. Today the two brands speak
+disjoint languages — grade10 English and both Chinese, ZZZ Korean — so
+nothing is literally written twice yet, and the cost is entirely in front of
+us: a third brand owes 178 translations that say nothing about it, ZZZ owes
+another 178 the day it renders English, and grade10 owes 178 more the day it
+sells in Korea. Each of those is a second translation of "Verification code"
+that then drifts from the first.
 
 The strings belong to the feature that renders them — the sign-in flow, the
 store listing, the bid panel — and a feature is shared across brands by
 design. Only what names a brand is the brand's.
 
-**Metric:** brand-neutral keys stated more than once, from 178 today to zero.
-**Acceptance signal:** adding a brand costs a translation of what that brand
-calls itself, not of the platform.
+**Metric:** what a brand owes to speak a language, from 202 keys to 24.
+**Acceptance signal:** adding a brand, or a language to a brand, costs a
+translation of what that brand calls itself and nothing else.
 
 ## What Changes
 
