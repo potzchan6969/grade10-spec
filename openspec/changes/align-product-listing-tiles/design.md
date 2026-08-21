@@ -16,7 +16,7 @@ has those axes; cart, sale, and sold-out live on a new nested set,
 `Product / Product Card Image` (`4274:10074`).
 
 `StatusIndicator` (`4174:37`) is published and unused in code. The in-cart
-count is its `type=count, variant=default` rung. `packages/ui/src/blocks/shared/`
+count is its `type=count, variant=brand` rung. `packages/ui/src/blocks/shared/`
 is the wrong home — that folder holds listing helpers (`AsyncState`), not
 Figma primitives.
 
@@ -39,8 +39,9 @@ Design-level only; the proposal owns product scope.
 
 Same folder as `Badge`. Basename `status-indicator`, export `StatusIndicator`,
 four files, checker-resolved from the published set name. Axes match Figma:
-`type` (`dot` | `count`) and `variant` (`default` | `error`). The `label` TEXT
-property is the count contents on the `count` rung and is omitted on `dot`.
+`type` (`dot` | `count`) and `variant` (`default` | `error` | `brand`). The
+`label` TEXT property is the count contents on the `count` rung and is omitted
+on `dot`. The published cart instance is `count` / `brand`.
 
 *Alternatives:* compose a one-off count overlay inside `ProductCardImage` —
 rejected, the set is published and the count is not listing-specific. Put it

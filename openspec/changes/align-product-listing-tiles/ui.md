@@ -24,15 +24,16 @@ in code by `packages/ui/src/blocks/store-product-listing/product-card.figma.ts`
 ### Status indicator
 
 [StatusIndicator `4174:37`](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4174-37)
-— `type` (`dot` | `count`) and `variant` (`default` | `error`). The in-cart
-count is `count` / `default`. New primitive in this change.
+— `type` (`dot` | `count`) and `variant` (`default` | `error` | `brand`). The
+in-cart count is `count` / `brand`. New primitive in this change.
 
 ## Components
 
 From `@grade10/design-system`:
 
-- `Badge` — sale overlay, sold-out overlay, and the consumer-supplied
-  `cardProps` slot. Existing `default` / `sm`. No new variant.
+- `Badge` — sale overlay (`brand`), sold-out overlay (`default`), and the
+  consumer-supplied `cardProps` slot. Size `sm`. `outline` and `brand` are
+  Figma variant options this change maps.
 - `IconButton` — cart control. **Changes in this repo:** add Figma rungs
   `variant="secondary"` and `size="md"`. Keep `outline`, `ghost`, `sm`, `xs`.
 - `StatusIndicator` — **new in this repo.** `type` and `variant` as above.

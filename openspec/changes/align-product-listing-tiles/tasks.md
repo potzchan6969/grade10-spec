@@ -9,8 +9,8 @@ exports yet.
 - [x] 1.1 Make `An in-cart count is displayed as supplied` possible by adding
       `StatusIndicator` under `packages/design-system/src/components/display/`
       with Figma axes `type` (`dot`, `count`) and `variant` (`default`,
-      `error`), colocated `.tsx`, `.figma.ts`, and `.stories.tsx`, and an
-      export from the package entry.
+      `error`, `brand`), colocated `.tsx`, `.figma.ts`, and `.stories.tsx`, and
+      an export from the package entry.
 - [x] 1.2 Cover every `type` × `variant` rung in stories, including a `count`
       rung whose label is consumer-supplied rather than hardcoded.
 - [x] 1.3 Add Figma-defined `IconButton` rungs `variant="secondary"` and

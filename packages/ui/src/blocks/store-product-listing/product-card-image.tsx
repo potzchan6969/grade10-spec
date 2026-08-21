@@ -76,7 +76,7 @@ function ProductCardImage({
         </Badge>
       ) : null}
       {!soldOut && saleLabel != null ? (
-        <Badge className="absolute top-3 left-3 z-10" size="sm">
+        <Badge className="absolute top-3 left-3 z-10" size="sm" variant="brand">
           {saleLabel}
         </Badge>
       ) : null}
@@ -126,6 +126,7 @@ function ProductCardImage({
             <StatusIndicator
               className="absolute top-0 right-0 z-10"
               type="count"
+              variant="brand"
             >
               {cartCount}
             </StatusIndicator>

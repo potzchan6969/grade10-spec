@@ -6,9 +6,15 @@ const IMAGE = new URL("./product-card.fixture.png", import.meta.url).href;
 
 const badges = (
   <>
-    <Badge size="sm">Pokémon</Badge>
-    <Badge size="sm">M4</Badge>
-    <Badge size="sm">JP</Badge>
+    <Badge size="sm" variant="outline">
+      Pokémon
+    </Badge>
+    <Badge size="sm" variant="outline">
+      M4
+    </Badge>
+    <Badge size="sm" variant="outline">
+      JP
+    </Badge>
   </>
 );
 

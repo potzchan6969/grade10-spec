@@ -38,7 +38,7 @@ on a search result or a merchandising rail.
   unchanged.
 - **`StatusIndicator` lands in `@grade10/design-system`**, at
   `src/components/display/` next to `Badge` — the common primitive path, not
-  the listing block. The in-cart count is Figma's `count` / `default` rung of
+  the listing block. The in-cart count is Figma's `count` / `brand` rung of
   that set (`4174:37`).
 - **`IconButton` gains the Figma rungs the cart control uses** (`secondary`,
   `md`). Existing `ghost` / `xs` stay; other surfaces still use them.

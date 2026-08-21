@@ -18,9 +18,9 @@ const IMAGE = productImage;
 const PRODUCT_BADGES: ReactNode = createElement(
   Fragment,
   null,
-  createElement(Badge, { size: "sm" }, "Pokémon"),
-  createElement(Badge, { size: "sm" }, "M4"),
-  createElement(Badge, { size: "sm" }, "JP"),
+  createElement(Badge, { size: "sm", variant: "outline" }, "Pokémon"),
+  createElement(Badge, { size: "sm", variant: "outline" }, "M4"),
+  createElement(Badge, { size: "sm", variant: "outline" }, "JP"),
 );
 
 const SORT_OPTIONS: SortOption[] = [
