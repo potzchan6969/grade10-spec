@@ -90,7 +90,7 @@
     "topBid": "최고 {amount}",
     "fromBid": "시작가 {amount}"
   },
-  "listing": {
+  "auctionListing": {
     "unpublished": "이 출품작은 공개되지 않았습니다.",
     "home": "홈",
     "backToAuctions": "경매로 돌아가기",

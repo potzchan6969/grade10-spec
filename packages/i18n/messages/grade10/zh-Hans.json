@@ -90,7 +90,7 @@
     "topBid": "最高 {amount}",
     "fromBid": "起拍 {amount}"
   },
-  "listing": {
+  "auctionListing": {
     "unpublished": "此拍品尚未公开。",
     "home": "首页",
     "backToAuctions": "返回拍卖",

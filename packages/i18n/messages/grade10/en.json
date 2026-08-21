@@ -90,7 +90,7 @@
     "topBid": "Top {amount}",
     "fromBid": "From {amount}"
   },
-  "listing": {
+  "auctionListing": {
     "unpublished": "This listing is not published.",
     "home": "Home",
     "backToAuctions": "Back to auctions",
