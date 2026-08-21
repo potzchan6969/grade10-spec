@@ -62,16 +62,35 @@ type Overlay<Vocabulary, Catalog> = {
 const overlay = <const C extends Overlay<Messages, C>>(catalog: C): C =>
   catalog;
 
-/* Every layer is one, checked here so a key no catalog may name is a compile
- * error. That the layers together answer everything is not something a type
- * says readably — `src/resolution.test.ts` says it instead, naming the brand,
- * the key and the language when they do not. */
-const _checked = [
-  ...Object.values(sharedCatalogs).map(overlay),
-  ...Object.values(brandCatalogs).flatMap((byLocale) =>
-    Object.values(byLocale).map(overlay),
-  ),
-];
+/**
+ * Every layer, measured against the vocabulary one catalog at a time — a key
+ * no catalog may name is a compile error in the file that wrote it. Named
+ * here rather than mapped over the tables, because a check that walks them
+ * measures the union of the catalogs instead of each of them, and an unknown
+ * key survives it.
+ *
+ * The `satisfies` clauses are what keep this list honest: a language a brand
+ * gains, or one the platform gains, is missing from here until it is added.
+ *
+ * That the layers together answer everything is not something a type says
+ * readably; `src/resolution.test.ts` says it instead, naming the brand, the
+ * key and the language when they do not.
+ */
+const shared = {
+  en: overlay(sharedCatalogs.en),
+  "zh-Hant": overlay(sharedCatalogs["zh-Hant"]),
+  "zh-Hans": overlay(sharedCatalogs["zh-Hans"]),
+  ko: overlay(sharedCatalogs.ko),
+} satisfies Record<Locale, unknown>;
+
+const owned = {
+  grade10: {
+    en: overlay(brandCatalogs.grade10.en),
+    "zh-Hant": overlay(brandCatalogs.grade10["zh-Hant"]),
+    "zh-Hans": overlay(brandCatalogs.grade10["zh-Hans"]),
+  },
+  zzz: { ko: overlay(brandCatalogs.zzz.ko) },
+} satisfies { [B in Brand]: Record<LocaleOf<B>, unknown> };
 
 type MessageTree = { [key: string]: string | MessageTree };
 
