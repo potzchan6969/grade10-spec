@@ -1,18 +1,23 @@
+import { IconProvider } from "@grade10/design-system/components/providers/icon-provider";
 import type { Decorator, Preview } from "@storybook/react-vite";
 import "../src/bones/registry";
 import "./tailwind.css";
 
-/* Toolbar-driven theming: toggle the two orthogonal class dimensions
- * (color theme + light/dark) directly on the preview <html>, mirroring the
- * runtime CSS contract. No providers needed — components just read the vars. */
+/* Toolbar-driven color theme on the preview <html>. Light is the only mode —
+ * the design system does not ship a dark palette. */
 const withTheme: Decorator = (Story, context) => {
-  const { colorTheme, mode } = context.globals;
+  const { colorTheme } = context.globals;
   const root = document.documentElement;
-  root.classList.remove("theme-default", "theme-grade10");
+  root.classList.remove("theme-default", "theme-grade10", "dark");
   root.classList.add(`theme-${colorTheme}`);
-  root.classList.toggle("dark", mode === "dark");
   return <Story />;
 };
+
+const withIcons: Decorator = (Story) => (
+  <IconProvider>
+    <Story />
+  </IconProvider>
+);
 
 const preview: Preview = {
   parameters: {
@@ -31,7 +36,6 @@ const preview: Preview = {
   },
   initialGlobals: {
     colorTheme: "grade10",
-    mode: "dark",
   },
   globalTypes: {
     colorTheme: {
@@ -46,20 +50,8 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
-    mode: {
-      description: "Light / dark",
-      toolbar: {
-        title: "Mode",
-        icon: "contrast",
-        items: [
-          { value: "light", title: "Light" },
-          { value: "dark", title: "Dark" },
-        ],
-        dynamicTitle: true,
-      },
-    },
   },
-  decorators: [withTheme],
+  decorators: [withTheme, withIcons],
 };
 
 export default preview;

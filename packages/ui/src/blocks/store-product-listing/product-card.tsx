@@ -11,18 +11,30 @@ type ProductCardProps = {
   loading?: boolean;
   imageSrc?: string;
   imageAlt?: string;
-  /** `cardProps` slot — consumer-assembled badges, in order. */
-  badges?: ReactNode;
+  /** Metadata badges below the image, such as collection, series, and region. */
+  tags?: readonly ReactNode[];
+  /** Product title. Clamped to two lines with an ellipsis, matching Figma. */
   name: ReactNode;
   price: ReactNode;
   originalPrice?: ReactNode;
-  saleLabel?: ReactNode;
+  /** Image badge copy such as `SALE`. Hidden when `soldOut`. */
+  discountLabel?: ReactNode;
+  /**
+   * Figma's `soldOut` axis. Swaps the discount badge for SOLD OUT and
+   * hides the cart action. The tile is inert.
+   */
   soldOut?: boolean;
-  soldOutLabel?: ReactNode;
-  inCart?: boolean;
-  cartCount?: ReactNode;
-  cartLabel: string;
-  onCartClick?: () => void;
+  /**
+   * Annotation on the Product Card set: when the product is already in the
+   * cart, show quantity on the cart button. Ignored when `soldOut`.
+   */
+  addedToCart?: boolean;
+  /** Quantity shown on the cart button. The consumer owns the value. */
+  quantity?: number;
+  /**
+   * Fires when the image surface is activated. No navigation target is wired
+   * here — the consumer decides what happens (route, modal, etc.).
+   */
   onClick?: () => void;
   ariaLabel?: string;
   className?: string;
@@ -32,12 +44,13 @@ type ProductCardContentProps = Omit<ProductCardProps, "loading">;
 
 const SKELETON_FIXTURE_PROPS = {
   imageSrc: skeletonImage,
-  imageAlt: "Ninja Spinner booster box",
-  name: "Ninja Spinner",
-  price: "HKD 105",
-  originalPrice: "HKD 123",
-  saleLabel: "SALE",
-  cartLabel: "Add to cart",
+  imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+  tags: ["Pokémon", "M4", "JP"],
+  name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+  price: "HK$105",
+  originalPrice: "HK$123",
+  discountLabel: "SALE",
+  actionLabel: "Add to cart",
   onClick: () => {},
   onCartClick: () => {},
 } satisfies Omit<ProductCardContentProps, "className">;
@@ -67,80 +80,111 @@ function ProductCardContent({
 }: ProductCardContentProps) {
   const cardAriaLabel =
     ariaLabel ?? (typeof name === "string" ? name : undefined);
-
-  const content = (
-    <VStack className="min-w-0" data-slot="product-card-content" gap="sm">
-      {badges != null ? (
-        <HStack className="content-start" gap="xs" vAlign="start" wrap>
-          {badges}
-        </HStack>
-      ) : null}
-      <p
-        className={cn(
-          "truncate text-base font-bold",
-          soldOut ? "text-disabled-foreground" : "text-card-foreground",
-        )}
-      >
-        {name}
-      </p>
-      <HStack gap="xs" vAlign="center">
-        <p
-          className={cn(
-            "text-sm font-medium",
-            soldOut ? "text-disabled-foreground" : "text-card-foreground",
-          )}
-        >
-          {price}
-        </p>
-        {originalPrice != null ? (
-          <p
-            className={cn(
-              "text-sm font-medium line-through",
-              soldOut
-                ? "text-disabled-foreground"
-                : "text-secondary-foreground",
-            )}
-          >
-            {originalPrice}
-          </p>
-        ) : null}
-      </HStack>
-    </VStack>
+  const showCartAction = !soldOut && onAction != null;
+  const cartVisible = addedToCart ? "opacity-100" : "opacity-0";
+  // Product photos ship with a white studio fill. Multiply knocks that white
+  // out onto the well's gradient (`isolate` keeps the blend inside the well).
+  const photoClassName = cn(
+    "size-full object-cover mix-blend-multiply",
+    !soldOut &&
+      "transition-transform duration-200 ease-[ease] motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:group-hover/product-card:scale-105",
   );
 
   return (
     <VStack
-      className={cn("group/product-card relative w-full", className)}
-      data-in-cart={(!soldOut && inCart) || undefined}
+      className={cn("group/product-card w-full", className)}
+      data-added-to-cart={(!soldOut && addedToCart) || undefined}
       data-slot="product-card"
       data-sold-out={soldOut || undefined}
-      gap="md"
+      gap="none"
     >
-      <ProductCardImage
-        ariaLabel={cardAriaLabel}
-        cartCount={cartCount}
-        cartLabel={cartLabel}
-        imageAlt={imageAlt}
-        imageSrc={imageSrc}
-        inCart={inCart}
-        onCartClick={onCartClick}
-        onClick={soldOut ? undefined : onClick}
-        saleLabel={saleLabel}
-        soldOut={soldOut}
-        soldOutLabel={soldOutLabel}
-      />
-      {soldOut ? (
-        content
-      ) : (
-        <button
-          aria-label={cardAriaLabel}
-          className="w-full cursor-pointer border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-          onClick={onClick}
-          type="button"
-        >
-          {content}
-        </button>
-      )}
+      <div
+        className="relative isolate aspect-square w-full overflow-hidden rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))] bg-gradient-to-b from-[var(--gray-50,#fafafa)] to-[var(--gray-100,#f3f3f3)]"
+        data-slot="product-card-image"
+      >
+        {soldOut ? (
+          imageSrc ? (
+            <img
+              alt={imageAlt}
+              className={cn("absolute inset-0", photoClassName)}
+              src={imageSrc}
+            />
+          ) : null
+        ) : (
+          <button
+            aria-label={cardAriaLabel}
+            className="absolute inset-0 cursor-pointer border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            onClick={onClick}
+            type="button"
+          >
+            {imageSrc ? (
+              <img
+                alt=""
+                aria-hidden
+                className={photoClassName}
+                src={imageSrc}
+              />
+            ) : null}
+          </button>
+        )}
+        {soldOut ? (
+          <Badge className="absolute top-3 left-3" size="sm">
+            SOLD OUT
+          </Badge>
+        ) : discountLabel != null ? (
+          <Badge className="absolute top-3 left-3" size="sm" variant="brand">
+            {discountLabel}
+          </Badge>
+        ) : null}
+        {showCartAction ? (
+          <div
+            className={cn(
+              "absolute right-3 bottom-3 transition-opacity duration-200 ease-out motion-reduce:transition-none",
+              cartVisible,
+              "[@media(hover:hover)_and_(pointer:fine)]:group-hover/product-card:opacity-100",
+            )}
+          >
+            <div className="relative">
+              <IconButton
+                aria-label={
+                  typeof actionLabel === "string" ? actionLabel : undefined
+                }
+                onClick={onAction}
+                size="md"
+                variant="primary"
+              >
+                <ShoppingCartSimple aria-hidden size={14} weight="bold" />
+              </IconButton>
+              {addedToCart ? (
+                <Center
+                  aria-hidden
+                  className="absolute -top-1 -right-1 h-4 min-w-4 rounded-full bg-accent-foreground px-1 text-xs font-medium text-primary-foreground"
+                >
+                  {quantity}
+                </Center>
+              ) : null}
+            </div>
+          </div>
+        ) : null}
+      </div>
+
+      <VStack
+        className="min-w-0 gap-2 py-2"
+        data-slot="product-card-content"
+        gap="none"
+      >
+        <p className="line-clamp-2 text-base font-medium text-card-foreground">
+          {name}
+        </p>
+        <HStack gap="sm" vAlign="baseline">
+          <p className="text-base font-medium text-card-foreground">{price}</p>
+          {originalPrice != null ? (
+            <p className="text-base font-normal text-secondary-foreground line-through">
+              {originalPrice}
+            </p>
+          ) : null}
+        </HStack>
+      </VStack>
     </VStack>
   );
 }
@@ -148,13 +192,14 @@ function ProductCardContent({
 const PRODUCT_CARD_FIXTURE = <ProductCardContent {...SKELETON_FIXTURE_PROPS} />;
 
 /**
- * Product tile for a card-box / pack grid. Figma (`4200:155`) is the image, a
- * badge slot, the name, and the prices. Cart, sale, and sold-out live on
- * `ProductCardImage`.
+ * Product tile for a card-box / pack grid. Figma (`4200:155`) has a `soldOut`
+ * axis; discount is a boolean that shows the SALE badge and original price.
  *
- * The image scales on hover; the cart action sits on the image and appears on
- * hover or keyboard focus, or stays visible when the product is already in
- * the cart. Sold-out tiles are inert.
+ * Hover scales the photo inside the well. Product photos keep a white studio
+ * fill; multiply against the gray-50→gray-100 well makes that fill read as
+ * transparent. The cart action is `IconButton` `primary` `md` (Figma
+ * `4274:10075`) and appears on hover, or stays visible with a quantity when
+ * the product is already in the cart. Sold-out tiles are inert.
  */
 function ProductCard({
   loading = false,
@@ -169,6 +214,7 @@ function ProductCard({
     <Skeleton
       animate="pulse"
       className={cn("w-full", className)}
+      color="#E6E6E6"
       darkColor="rgba(249, 250, 250, 0.05)"
       fixture={PRODUCT_CARD_FIXTURE}
       loading

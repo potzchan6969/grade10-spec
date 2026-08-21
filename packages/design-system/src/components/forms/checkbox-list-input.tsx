@@ -67,7 +67,7 @@ function CheckboxListInput({
       >
         <CheckboxButton disabled={disabled} {...props} />
       </span>
-      <span className="min-w-0 flex-1">{children}</span>
+      <span className="min-w-0 flex-1 text-foreground">{children}</span>
       {count != null ? (
         <span
           data-slot="checkbox-list-input-count"

@@ -20,8 +20,8 @@ const NAV_ITEMS = [
 ];
 
 const LOCALES = [
-  { value: "HK", label: "Hong Kong (HKD)" },
-  { value: "KR", label: "South Korea (KRW)" },
+  { value: "HK", label: "HKD" },
+  { value: "KR", label: "KRW" },
 ];
 
 const CONTROLS = ["Account", "Cart"];
@@ -36,7 +36,7 @@ const meta = {
     logo: "Grade10",
     utilityLinks: [],
     navItems: NAV_ITEMS,
-    localeLabel: "Hong Kong (HKD)",
+    localeLabel: "HKD",
     locales: LOCALES,
     locale: "HK",
     onLocaleChange: fn(),
@@ -57,9 +57,7 @@ export const Default: Story = {
     }
     expect(canvas.queryByRole("button", { name: "Search" })).toBeNull();
     expect(canvas.queryByRole("button", { name: "Wishlist" })).toBeNull();
-    expect(
-      canvas.getByRole("button", { name: "Hong Kong (HKD)" }),
-    ).toBeInTheDocument();
+    expect(canvas.getByRole("button", { name: "HKD" })).toBeInTheDocument();
     expect(canvas.getByRole("link", { name: "Store" })).toHaveAttribute(
       "aria-current",
       "page",
@@ -78,11 +76,9 @@ export const LocaleMenu: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const body = within(canvasElement.ownerDocument.body);
+    await userEvent.click(canvas.getByRole("button", { name: "HKD" }));
     await userEvent.click(
-      canvas.getByRole("button", { name: "Hong Kong (HKD)" }),
-    );
-    await userEvent.click(
-      await body.findByRole("menuitemradio", { name: "South Korea (KRW)" }),
+      await body.findByRole("menuitemradio", { name: "KRW" }),
     );
     expect(args.onLocaleChange).toHaveBeenCalledWith("KR");
   },
@@ -122,10 +118,8 @@ export const AccountOnly: Story = {
     }
 
     // The label stays; nothing about it invites a click.
-    expect(canvas.getByText("Hong Kong (HKD)")).toBeInTheDocument();
-    expect(
-      canvas.queryByRole("button", { name: "Hong Kong (HKD)" }),
-    ).toBeNull();
+    expect(canvas.getByText("HKD")).toBeInTheDocument();
+    expect(canvas.queryByRole("button", { name: "HKD" })).toBeNull();
 
     expect(canvasElement.querySelector('[data-slot="nav-promo"]')).toBeNull();
     expect(canvasElement.querySelector('[data-slot="nav-utility"]')).toBeNull();

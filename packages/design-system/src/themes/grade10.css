@@ -7,7 +7,7 @@
   --foreground: var(--gray-900); /* Primary text color on the background */
   --card: var(--background); /* Background of card */
   --card-foreground: var(--foreground); /* Text and icons within cards */
-  --popover: var(--background); /* Background for dropdown menus and popovers */
+  --popover: var(--gray-50-opacity-70); /* Background for dropdown menus and popovers */
   --popover-foreground: var(--foreground); /* Text and icons within popovers */
   --primary: var(--foreground); /* Brand color for primary actions (buttons, highlights) */
   --primary-foreground: var(--gray-50); /* Text and icons on primary-colored elements */

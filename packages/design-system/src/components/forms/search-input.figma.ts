@@ -9,9 +9,9 @@ const instance = figma.selectedInstance;
 // options — there is no error or success search field in the design, so the
 // component offers no status prop and this map emits nothing. Both options are
 // still listed: an unmapped one resolves to undefined.
-instance.getEnum("type", {
+const isPlaceholder = instance.getEnum("type", {
   default: false,
-  placeholder: false,
+  placeholder: true,
 });
 
 instance.getEnum("state", {
@@ -31,7 +31,7 @@ const showLabel = instance.getBoolean("showLabel");
 const clear = instance.getBoolean("clear");
 
 export default {
-  example: figma.code`<SearchInput${showLabel ? figma.code` label="${label}"` : ""} placeholder="${placeholder}" defaultValue="${value}"${clear ? figma.code` onClear={onClear}` : ""}${disabled ? figma.code` disabled` : ""} />`,
+  example: figma.code`<SearchInput${showLabel ? figma.code` label="${label}"` : ""} placeholder="${placeholder}"${isPlaceholder ? "" : figma.code` defaultValue="${value}"`}${clear ? figma.code` onClear={onClear}` : ""}${disabled ? figma.code` disabled` : ""} />`,
   imports: ['import { SearchInput } from "@grade10/design-system"'],
   id: "search-input",
   metadata: { nestable: true },

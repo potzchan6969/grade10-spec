@@ -5,13 +5,18 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 
+// Label is `Base/popover-foreground` on every rung — not `accent-foreground`,
+// which is the orange brand fill in Grade10. Selected (`isSelected`) has no
+// fill; the trailing check is the indicator. Hover and keyboard highlight
+// share `Custom/muted-hover`. Disabled is `Opacity/opacity-50` over the
+// item's own colours (node `2121:1400`), not a grey swap.
 const dropdownMenuItemVariants = cva(
-  "group/dropdown-menu-item relative flex cursor-default items-center gap-2 px-3 py-2 font-medium text-accent-foreground outline-hidden select-none hover:bg-accent focus:bg-accent data-selected:bg-muted data-inset:pl-7 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-disabled:pointer-events-none data-disabled:text-disabled-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:*:[svg]:text-destructive",
+  "group/dropdown-menu-item relative flex cursor-default items-center gap-2 rounded-full px-3 py-2 font-medium text-popover-foreground outline-hidden select-none hover:bg-muted-hover data-highlighted:bg-muted-hover data-inset:pl-7 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:*:[svg]:text-destructive",
   {
     variants: {
       size: {
-        sm: "h-9 rounded-(--radius-sm) text-sm [&_svg:not([class*='size-'])]:size-3.5",
-        md: "h-10 rounded-(--radius-md) text-base [&_svg:not([class*='size-'])]:size-4",
+        sm: "h-9 text-sm [&_svg:not([class*='size-'])]:size-3.5",
+        md: "h-10 text-base [&_svg:not([class*='size-'])]:size-4",
       },
     },
     defaultVariants: {
@@ -47,6 +52,7 @@ function DropdownMenuItem({
       data-selected={selected || undefined}
       className={cn(dropdownMenuItemVariants({ size }), className)}
       {...props}
+      aria-current={selected ? "true" : undefined}
     >
       {leading}
       <span className="min-w-0 flex-1 whitespace-nowrap">{children}</span>
@@ -54,7 +60,7 @@ function DropdownMenuItem({
         <span
           data-slot="dropdown-menu-item-trailing"
           className={cn(
-            "flex shrink-0 items-center justify-end gap-1 font-normal text-secondary-foreground group-data-disabled/dropdown-menu-item:text-disabled-foreground [&_svg]:text-secondary-foreground group-data-disabled/dropdown-menu-item:[&_svg]:text-disabled-foreground",
+            "flex shrink-0 items-center justify-end gap-1 font-normal text-secondary-foreground [&_svg]:text-secondary-foreground",
             size === "md" ? "text-base" : "text-sm",
           )}
         >

@@ -41,10 +41,15 @@ layout the file has now left.
   `onPageChange`, `previousLabel`, `nextLabel`, `paginationLabel`, and
   `morePagesLabel` leave `ProductBrowse`.
 - **Product list gap matches the page; card metadata badges are hidden.**
-  Horizontal gap 24px, vertical 32px, minimum tile 250px. Tiles do not display
+  Horizontal and vertical gap 32px, minimum tile 240px. Tiles do not display
   `cardProps` / `tags` badges.
 - **Footer fill is `background`.** Value reconciliation on the existing
   `Footer` primitive (`4171:9653`); not a contract change.
+- **Applied-filter chips use `Chip`.** Figma set `Chip` (`4396:5319`) is the
+  dismissible pill on the header, distinct from selectable `FilterChip`.
+- **Nested primitives on the page match their sets.** `Badge` gains `brand`
+  (SALE) and `outline`, default fill is primary, corners are pills;
+  `DropdownMenu` uses popover chrome and a check on the active sort item.
 
 ## Non-Goals
 
@@ -52,7 +57,6 @@ layout the file has now left.
 - Computing which products match, how groups are ordered, or which worlds sit
   behind "See all worlds" — the application supplies the visible options and
   their order.
-- A new Chip primitive. Applied-filter chips reuse `FilterChip`.
 - Publishing Code Connect.
 - Folding `sync-product-list-header` into the archive; that change is
   superseded here and should not be implemented as written.
@@ -74,7 +78,8 @@ layout the file has now left.
 - `@grade10/ui`: `ProductFilter`, `FilterPanel`, `ProductListHeader`,
   `ProductBrowse`, `ProductList`, `ProductCard`, types, fixtures, stories, and
   Code Connect templates. Delete `CollectionMenu` and `CollectionMenuItem`.
-- `@grade10/design-system`: `Footer` background token.
+- `@grade10/design-system`: `Chip`; `Badge` `brand` / `outline` and default
+  fill; `DropdownMenu` popover chrome; `Footer` background token.
 - `apps/preview` product list page: worlds/types selection, applied-filter
   chips, sort trigger copy, no header title.
 - Consuming applications must stop importing `CollectionMenu` /

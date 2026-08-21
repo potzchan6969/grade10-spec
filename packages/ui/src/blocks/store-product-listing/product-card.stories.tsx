@@ -20,13 +20,13 @@ const badges = (
 
 const defaults = {
   imageSrc: IMAGE,
-  imageAlt: "Ninja Spinner booster box",
-  badges,
-  name: "Ninja Spinner",
-  price: "HKD 105",
-  originalPrice: "HKD 123",
-  saleLabel: "SALE",
-  cartLabel: "Add to cart",
+  imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+  tags: ["Pokémon", "M4", "JP"],
+  name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+  price: "HK$105",
+  originalPrice: "HK$123",
+  discountLabel: "SALE",
+  actionLabel: "Add to cart",
   onClick: () => {},
 };
 
@@ -40,18 +40,26 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const well: Decorator[] = [
-  (Story) => (
-    <div className="w-[260px]">
-      <Story />
-    </div>
-  ),
-];
+/** Figma `soldOut=false` — available product with a discount. */
+export const Default: Story = {
+  decorators: [
+    (Story) => (
+      <div className="w-[260px]">
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByRole("button", { name: /wishlist/i })).toBeNull();
+    expect(canvas.getByText("SALE")).toBeInTheDocument();
+    expect(canvas.queryByText("Pokémon")).toBeNull();
+    expect(canvas.queryByText("M4")).toBeNull();
+    expect(canvas.queryByText("JP")).toBeNull();
+  },
+};
 
-/** Figma `soldOut=false` — image, badge slot, name, prices. */
-export const Default: Story = { decorators: well };
-
-/** Figma `soldOut=true` — dimmed photo, SOLD OUT badge, no cart. */
+/** Figma `soldOut=true` — SOLD OUT badge, no cart action, tile inert. */
 export const SoldOut: Story = {
   args: { soldOut: true, soldOutLabel: "SOLD OUT", saleLabel: undefined },
   decorators: well,
@@ -89,6 +97,34 @@ export const States: Story = {
       </div>
     </div>
   ),
+};
+
+/** Set annotation: quantity on the cart button when already in the cart. */
+export const AddedToCart: Story = {
+  args: { addedToCart: true, quantity: 3 },
+  decorators: [
+    (Story) => (
+      <div className="w-[260px]">
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("3")).toBeInTheDocument();
+  },
+};
+
+/** `hasDiscount=false` — no badge and no strikethrough price. */
+export const WithoutDiscount: Story = {
+  args: { originalPrice: undefined, discountLabel: undefined },
+  decorators: [
+    (Story) => (
+      <div className="w-[260px]">
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 /** Boneyard capture target — keep `loading` at Figma's 260px card width. */
