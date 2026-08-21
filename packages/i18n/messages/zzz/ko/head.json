@@ -1,0 +1,23 @@
+{
+  "site": "ZZZ Store",
+  "marketing": {
+    "title": "ZZZ Store — 등급 카드를 사고파는 곳",
+    "description": "ZZZ 스토어에서 등급 카드를 정가로 구매하거나, 한 번뿐인 카드에 입찰하세요. 하나의 계정이 프로필과 주문, 입찰을 이어 줍니다."
+  },
+  "store": {
+    "title": "스토어 — ZZZ Store",
+    "description": "정가로 등급이 표시되어 올라온 카드들. ZZZ 스토어를 둘러보고 준비되면 결제하세요."
+  },
+  "auction": {
+    "title": "경매 — ZZZ Store",
+    "description": "공개된 모든 ZZZ 경매와 그 아래의 출품 카드, 각 카드의 최고 입찰가까지. 둘러보는 데는 계정이 필요 없고, 입찰에는 필요합니다."
+  },
+  "product": {
+    "title": "{name} — ZZZ Store",
+    "description": "{name}, ZZZ 스토어에 등록된 카드입니다."
+  },
+  "auctionListing": {
+    "title": "{name} — ZZZ Store",
+    "description": "{name}, ZZZ 경매에 나온 카드입니다."
+  }
+}

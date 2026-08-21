@@ -17,11 +17,15 @@ Three seams already exist and the design leans on all of them.
   locale slot; `shared-ui/site-chrome` specifies both. No component work
   exists in this change.
 - The grade10 site runs React Router in framework mode, and
-  [`add-crawlable-public-pages`](../add-crawlable-public-pages/design.md)
-  gives each public route module an identity record that drives its `meta`,
-  its prerendered document, and the sitemap. **This change depends on that
-  one landing first**; the localized addresses extend its machinery per
-  locale rather than adding a second one.
+  `grade10-site/crawlable-pages` — landed and durable — gives each public
+  route module an identity record that drives its `meta`, its prerendered
+  document, and the sitemap. The localized addresses extend that machinery
+  per locale rather than adding a second one.
+- A public surface is one of two kinds since `grade10-store/product-page`
+  landed: one the build writes a document for (marketing, store, auction),
+  and one the worker renders when its address is asked for (a card's page,
+  `/store/products/:slug`). Only the first kind can be enumerated at build
+  time, which is why that capability keeps cards out of the sitemap.
 
 Both SPAs compose the same `auth-frontend` and `store-frontend` feature
 slices, so the message vocabulary must be shared across brands; only the
@@ -57,6 +61,14 @@ the existing key-by-key merge; ZZZ's Korean catalog is checked as *complete*
 against it, which is exactly the build failure the completeness requirement
 demands — no runtime scanner, the typechecker is the check.
 
+ZZZ's catalog living in the grade10 spec repository is an interim, and a
+deliberate one. `docs/architecture/multi-product.md` says ZZZ's copy moves to
+`external/zzz-spec` when that submodule lands; it does not exist yet, and the
+alternative today is leaving ZZZ's strings hardcoded in its auth worker,
+which is what this change is removing. Brand-keyed catalogs make that later
+step a move of one directory rather than a rewrite — the brand key is already
+the seam the split would cut along.
+
 *Alternatives:* catalogs colocated per feature slice — rejected: values are
 per-brand while slices are brand-shared, so colocation forces a second
 overlay mechanism on top, and a translator works across the whole surface at
@@ -64,7 +76,9 @@ once, not per directory. Per-application catalogs with strings passed into
 shared features as props — rejected: it turns every feature boundary into a
 string funnel. A separate ZZZ i18n package — rejected: the vocabulary must
 stay one type for the completeness check to mean anything, and this
-repository adds no package without a product decision.
+repository adds no package without a product decision. Waiting for
+`external/zzz-spec` — rejected: it blocks a Korean site on a submodule with
+no date.
 
 ### The remembered locale is the `locale` cookie the auth service already reads
 
@@ -83,11 +97,12 @@ in the proposal's non-goals.
 
 ### Localized addresses ride the crawlable-pages machinery
 
-The public route table gains the `/tc` and `/sc` prefixes over the same route
-modules; English keeps the unprefixed addresses. Each route module's identity
-record becomes locale-aware — title and description drawn from the catalogs —
-and everything downstream follows from what crawlable-pages already derives
-from identities: the prerender list emits every variant's document in its own
+The prefixes go exactly as far as the build can enumerate. The prerendered
+public route table gains `/tc` and `/sc` over the same route modules; English
+keeps the unprefixed addresses. Each of those route modules' identity records
+becomes locale-aware — title and description drawn from the catalogs — and
+everything downstream follows from what crawlable-pages already derives from
+identities: the prerender list emits every variant's document in its own
 language, `meta` adds the alternate-language links (default included), and
 the sitemap lists every variant. Serving keeps resolving through the route
 config, so a nonsense address under a prefix 404s by the rule that already
@@ -101,6 +116,23 @@ public arrival with a remembered non-default locale navigates to the prefixed
 variant. Crawlers carry no cookie and never see a redirect. Session-shaped
 surfaces are client-rendered only, so they read the cookie directly and stay
 unprefixed.
+
+A rendered public surface is the third case, and it gets no prefix. Giving a
+card's page one would mean either a sitemap the worker renders — which
+`grade10-store/product-page` deliberately does not have — or prefixed
+addresses absent from the sitemap, indexable by nothing. So its address stays
+as it is and the worker reads the locale off the request it is already
+handling: the cookie when one is carried, the brand default when none is.
+That is request-time locale logic, which the prerendered path rejects — but
+that path is static by design and this one is not, so the objection does not
+transfer. The served document and the first client render agree because both
+read the same cookie, and a crawler, carrying none, is answered in English
+every time.
+
+The cost is stated plainly in the proposal's non-goals: a card has no
+indexable Chinese address. A Chinese-speaking collector reads a card's page
+with Chinese chrome around English catalogue copy, which is what the
+commerce-content rule already says happens to the card's own text.
 
 *Alternatives:* an edge redirect from the cookie — rejected: it puts
 request-time logic back into a deliberately static serving path, and
@@ -153,9 +185,10 @@ language input; localized pages just supply the active locale.
 
 No data migrates. Order of landing: catalogs here → submodule bump →
 shared-feature conversion → the two sites, ZZZ and grade10 independently →
-localized public addresses last, after `add-crawlable-public-pages` is
-deployed. Each step ships alone and the sites render English (ZZZ: English
-until its group lands) throughout — no flag, no coordinated cutover.
+localized public addresses last. Crawlable public pages have shipped, so
+nothing in this change waits on another. Each step ships alone and the sites
+render English (ZZZ: English until its group lands) throughout — no flag, no
+coordinated cutover.
 
 ## Open Questions
 

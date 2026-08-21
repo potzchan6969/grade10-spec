@@ -45,18 +45,12 @@ const pageShell = (main: ReactNode, details: ReactNode) => (
   </VStack>
 );
 
-/** What the panel calls things, per phase of a sale. */
-const LIVE_COPY = {
-  price: "Current bid",
-  ends: "Ends",
-  extension: "Extended bidding interval",
-};
-
 const liveBidPanel = (
   <ListingBidPanel
+    copy={{ ends: "Ends", extension: "Extended bidding", price: "Current bid" }}
     actions={<LiveActions />}
-    bidCount="1 bid"
-    copy={LIVE_COPY}
+    watchAction={<WatchOnlyActions />}
+    bidCount="1 Bid"
     deadline="1 Sep 2026, 18:00 UTC"
     extensionValue="30 minutes"
     history="Bidder 3 · HK$4,800.00"
@@ -97,20 +91,21 @@ export const PreAuction: Story = {
     pageShell(
       <>
         <ListingGallery
-          images={[...GALLERY_IMAGES]}
           copy={{
-            zoom: "Click to zoom",
-            previous: "Previous image",
             next: "Next image",
+            previous: "Previous image",
+            zoom: "Click to zoom",
           }}
+          images={[...GALLERY_IMAGES]}
         />
         <ListingBidPanel
           copy={{
             ends: "Opens",
-            extension: "Extended bidding interval",
+            extension: "Extended bidding",
             price: "Opening bid",
           }}
-          actions={<WatchOnlyActions />}
+          actions={null}
+          watchAction={<WatchOnlyActions />}
           deadline="22 Aug 2026, 18:00 UTC"
           extensionValue="30 minutes"
           kicker={KICKER}
@@ -147,12 +142,12 @@ export const Live: Story = {
     pageShell(
       <>
         <ListingGallery
-          images={[...GALLERY_IMAGES]}
           copy={{
-            zoom: "Click to zoom",
-            previous: "Previous image",
             next: "Next image",
+            previous: "Previous image",
+            zoom: "Click to zoom",
           }}
+          images={[...GALLERY_IMAGES]}
         />
         {liveBidPanel}
       </>,
@@ -168,17 +163,18 @@ export const PostSold: Story = {
     pageShell(
       <>
         <ListingGallery
-          images={[...GALLERY_IMAGES]}
           copy={{
-            zoom: "Click to zoom",
-            previous: "Previous image",
             next: "Next image",
+            previous: "Previous image",
+            zoom: "Click to zoom",
           }}
+          images={[...GALLERY_IMAGES]}
         />
         <ListingBidPanel
           copy={{ ends: "Ends", price: "Winning bid" }}
           actions={<PostAuctionActions />}
-          bidCount="1 bid"
+          watchAction={<WatchOnlyActions />}
+          bidCount="1 Bid"
           history="Bidder 1 · HK$3,100.00"
           kicker={KICKER}
           price="HK$3,100.00"
@@ -209,17 +205,18 @@ export const PostWonPaymentDue: Story = {
     pageShell(
       <>
         <ListingGallery
-          images={[...GALLERY_IMAGES]}
           copy={{
-            zoom: "Click to zoom",
-            previous: "Previous image",
             next: "Next image",
+            previous: "Previous image",
+            zoom: "Click to zoom",
           }}
+          images={[...GALLERY_IMAGES]}
         />
         <ListingBidPanel
           copy={{ ends: "Ends", price: "Winning bid" }}
           actions={<PostAuctionActions />}
-          bidCount="1 bid"
+          watchAction={<WatchOnlyActions />}
+          bidCount="1 Bid"
           history="Bidder 1 · HK$3,100.00"
           kicker={KICKER}
           price="HK$3,100.00"
@@ -250,17 +247,18 @@ export const PostWonSettled: Story = {
     pageShell(
       <>
         <ListingGallery
-          images={[...GALLERY_IMAGES]}
           copy={{
-            zoom: "Click to zoom",
-            previous: "Previous image",
             next: "Next image",
+            previous: "Previous image",
+            zoom: "Click to zoom",
           }}
+          images={[...GALLERY_IMAGES]}
         />
         <ListingBidPanel
           copy={{ ends: "Ends", price: "Winning bid" }}
           actions={<PostAuctionActions />}
-          bidCount="1 bid"
+          watchAction={<WatchOnlyActions />}
+          bidCount="1 Bid"
           history="Bidder 1 · HK$3,100.00"
           kicker={KICKER}
           price="HK$3,100.00"
@@ -292,16 +290,17 @@ export const PostLost: Story = {
     pageShell(
       <>
         <ListingGallery
-          images={[...GALLERY_IMAGES]}
           copy={{
-            zoom: "Click to zoom",
-            previous: "Previous image",
             next: "Next image",
+            previous: "Previous image",
+            zoom: "Click to zoom",
           }}
+          images={[...GALLERY_IMAGES]}
         />
         <ListingBidPanel
           copy={{ ends: "Ends", price: "Winning bid" }}
           actions={<PostAuctionActions />}
+          watchAction={<WatchOnlyActions />}
           bidCount="1 bid"
           history="Bidder 1 · HK$3,100.00"
           kicker={KICKER}
@@ -334,17 +333,18 @@ export const PostUnsold: Story = {
     pageShell(
       <>
         <ListingGallery
-          images={[...GALLERY_IMAGES]}
           copy={{
-            zoom: "Click to zoom",
-            previous: "Previous image",
             next: "Next image",
+            previous: "Previous image",
+            zoom: "Click to zoom",
           }}
+          images={[...GALLERY_IMAGES]}
         />
         <ListingBidPanel
           copy={{ ends: "Ends", price: "Result" }}
           actions={<PostAuctionActions />}
-          bidCount="0 bids"
+          watchAction={<WatchOnlyActions />}
+          bidCount="0 Bids"
           history="No bids yet."
           kicker={KICKER}
           price="Unsold"

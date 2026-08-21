@@ -1,0 +1,15 @@
+{
+  "loading": "Loading…",
+  "error": "Something went wrong",
+  "back": "Back",
+  "backToHome": "Back to home",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "next": "Next",
+  "or": "or",
+  "previous": "Previous",
+  "save": "Save",
+  "signIn": "Sign in",
+  "signOut": "Sign out",
+  "signOutFailed": "Sign-out failed — try again."
+}

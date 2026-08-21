@@ -12,6 +12,7 @@
     "check:design-system": "pnpm --filter @grade10/design-system run components:check",
     "setup:browsers": "pnpm --dir apps/preview exec playwright install chromium",
     "setup:worktree": "pnpm install --frozen-lockfile --prefer-offline",
+    "test": "pnpm -r --if-present run test",
     "storybook": "node scripts/storybook/storybook.mjs",
     "storybook:workbench": "node scripts/storybook/storybook.mjs --dir apps/preview --config-dir .storybook-workbench",
     "storybook:design-system": "node scripts/storybook/storybook.mjs --dir packages/design-system",

@@ -3,8 +3,8 @@ import { expect, userEvent, within } from "storybook/test";
 import { LiveBiddingDemo } from "./live-bidding-demo";
 
 /**
- * One live lot, several bidders. Transition starts on the first case and
- * steps one panel with Next / Reset; Expanded lays every ledger beat in a row.
+ * One live lot, several bidders. Transition starts at the starting bid and
+ * steps through bid standings; placing the first bid automatically watches it.
  */
 const meta = {
   title: "Auction Listing/ListingBidPanel",
@@ -26,46 +26,46 @@ export const LiveBiddingWalkthrough: Story = {
   tags: ["!dev"],
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("No bids yet")).toBeInTheDocument();
-    expect(
-      canvas.queryByText(/highest bidder|outbid/i),
-    ).not.toBeInTheDocument();
-    expect(canvas.getByText("Waiting")).toBeInTheDocument();
+    expect(canvas.getAllByText("Starting bid").length).toBeGreaterThan(0);
+    expect(canvas.queryByText(/Highest Bid|Outbid/)).not.toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: "Place Bid" }),
     ).toBeInTheDocument();
 
-    /* The history is shown as given — there is nothing to open first. */
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
-    expect(canvas.getByText("HK$1,200.00")).toBeInTheDocument();
+    expect(canvas.getAllByText("HK$1,200.00").length).toBeGreaterThan(0);
     expect(canvas.getAllByText(/Bidder 2/).length).toBeGreaterThan(0);
+    expect(
+      canvas.getByRole("button", { name: "Watching" }),
+    ).toBeInTheDocument();
 
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
-    expect(canvas.getByText(/highest bidder/i)).toBeInTheDocument();
-    expect(canvas.getByText("HK$1,300.00")).toBeInTheDocument();
+    expect(canvas.getAllByText("HK$1,250.00").length).toBeGreaterThan(0);
+    expect(canvas.getAllByText("2 Bids").length).toBeGreaterThan(0);
+    expect(canvas.getAllByText(/Bidder 1/).length).toBeGreaterThan(0);
+
+    await userEvent.click(canvas.getByRole("button", { name: "Next" }));
+    expect(canvas.getAllByText(/Highest Bid/i).length).toBeGreaterThan(0);
+    expect(canvas.getAllByText("HK$1,300.00").length).toBeGreaterThan(0);
 
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
     expect(canvas.getAllByText(/outbid/i).length).toBeGreaterThan(0);
-    expect(canvas.getByText("HK$1,400.00")).toBeInTheDocument();
+    expect(canvas.getAllByText("HK$1,400.00").length).toBeGreaterThan(0);
 
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
-    expect(canvas.getByText(/highest bidder/i)).toBeInTheDocument();
+    expect(canvas.getAllByText(/Highest Bid/i).length).toBeGreaterThan(0);
 
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
     expect(canvas.getAllByText(/outbid/i).length).toBeGreaterThan(0);
-    expect(canvas.getByText("HK$1,600.00")).toBeInTheDocument();
-    expect(canvas.getByText("5 bids")).toBeInTheDocument();
+    expect(canvas.getAllByText("HK$1,600.00").length).toBeGreaterThan(0);
+    expect(canvas.getAllByText("6 Bids").length).toBeGreaterThan(0);
 
-    /* Expanded lays every step out at once, so each bid appears in the step
-       it landed on and in the history of every step after it. */
+    /* Expanded lays every step out at once, so a step's caption and the panel
+       under it both say what the amount on show is. */
     await userEvent.click(canvas.getByRole("tab", { name: "Expanded" }));
-    expect(canvas.getByText("Waiting")).toBeInTheDocument();
-    expect(
-      canvas.getAllByText("Bidder 2 · HK$1,200.00").length,
-    ).toBeGreaterThan(0);
-    expect(canvas.getAllByText("You · HK$1,500.00").length).toBeGreaterThan(0);
-    expect(
-      canvas.getAllByText("Bidder 2 · HK$1,600.00").length,
-    ).toBeGreaterThan(0);
+    expect(canvas.getAllByText("Starting bid").length).toBeGreaterThan(0);
+    expect(canvas.getAllByText("HK$1,400.00").length).toBeGreaterThan(0);
+    expect(canvas.getAllByText("HK$1,500.00").length).toBeGreaterThan(0);
+    expect(canvas.getAllByText("HK$1,600.00").length).toBeGreaterThan(0);
   },
 };

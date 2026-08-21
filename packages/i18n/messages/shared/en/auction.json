@@ -1,0 +1,17 @@
+{
+  "title": "Auctions",
+  "intro": "Every published sale. Browsing needs no account; bidding does.",
+  "loadingSales": "Loading sales…",
+  "noSales": "No sales are running right now.",
+  "viewListings": "View listings",
+  "hideListings": "Hide listings",
+  "loadingListings": "Loading listings…",
+  "saleClosed": "This sale has closed.",
+  "noListings": "No listings have been listed yet.",
+  "listingPrefix": "Listing {label} — ",
+  "closes": "Closes {when}",
+  "closed": "Closed {when}",
+  "open": "Open",
+  "topBid": "Top {amount}",
+  "fromBid": "From {amount}"
+}

@@ -1,0 +1,17 @@
+{
+  "title": "拍賣",
+  "intro": "所有已公開的拍賣場次。瀏覽無需帳戶，出價則需要。",
+  "loadingSales": "正在載入拍賣場次…",
+  "noSales": "目前沒有進行中的拍賣。",
+  "viewListings": "查看拍品",
+  "hideListings": "隱藏拍品",
+  "loadingListings": "正在載入拍品…",
+  "saleClosed": "此場次已結束。",
+  "noListings": "尚未有拍品上架。",
+  "listingPrefix": "拍品 {label} — ",
+  "closes": "{when}截止",
+  "closed": "已於{when}結束",
+  "open": "競投中",
+  "topBid": "最高 {amount}",
+  "fromBid": "起標 {amount}"
+}

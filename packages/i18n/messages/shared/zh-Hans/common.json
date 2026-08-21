@@ -1,0 +1,15 @@
+{
+  "loading": "加载中…",
+  "error": "出错了",
+  "back": "返回",
+  "backToHome": "返回首页",
+  "cancel": "取消",
+  "confirm": "确认",
+  "next": "下一页",
+  "or": "或",
+  "previous": "上一页",
+  "save": "保存",
+  "signIn": "登录",
+  "signOut": "退出登录",
+  "signOutFailed": "退出登录失败 — 请重试。"
+}

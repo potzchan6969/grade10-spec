@@ -1,0 +1,17 @@
+{
+  "title": "拍卖",
+  "intro": "所有已公开的拍卖场次。浏览无需账户，出价则需要。",
+  "loadingSales": "正在加载拍卖场次…",
+  "noSales": "当前没有进行中的拍卖。",
+  "viewListings": "查看拍品",
+  "hideListings": "隐藏拍品",
+  "loadingListings": "正在加载拍品…",
+  "saleClosed": "此场次已结束。",
+  "noListings": "尚无拍品上架。",
+  "listingPrefix": "拍品 {label} — ",
+  "closes": "{when}截止",
+  "closed": "已于{when}结束",
+  "open": "竞拍中",
+  "topBid": "最高 {amount}",
+  "fromBid": "起拍 {amount}"
+}
