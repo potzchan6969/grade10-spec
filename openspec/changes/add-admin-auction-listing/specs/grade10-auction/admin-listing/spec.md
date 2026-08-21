@@ -15,10 +15,11 @@ save SHALL persist the listing in `draft` and, on the first save, SHALL mint
 a new auctionable unit that has no other live listing.
 
 A draft SHALL allow every required field to be empty. Saving a draft SHALL
-NOT refuse a missing title, starting price, minimum increment, starts at,
-scheduled close at, or media. A field the operator does send SHALL still
+NOT refuse a missing title, slug, starting price, minimum increment, starts
+at, scheduled close at, or media. A field the operator does send SHALL still
 match that field's shape (a starting price that is present MUST be integer
-minor units greater than zero).
+minor units greater than zero; a slug that is present MUST be lower-case
+words joined by hyphens).
 
 A draft listing SHALL NOT be visible on the public catalogue.
 
@@ -48,6 +49,13 @@ prices and window SHALL be refused.
 - **THEN** Grade10 refuses the write
 - **AND** starting price is unchanged
 
+#### Scenario: Draft rejects a malformed slug
+
+- **GIVEN** a draft listing
+- **WHEN** an operator sets slug to `Charizard PSA 9`
+- **THEN** Grade10 refuses the write
+- **AND** the slug is unchanged
+
 #### Scenario: Unauthorized draft save is refused
 
 - **GIVEN** a signed-in operator who may not set an auction's prices and window
@@ -65,6 +73,8 @@ listing SHALL still be absent from the public catalogue.
 Required at create:
 
 - **Title** — trimmed, 1 to 200 characters
+- **Slug** — trimmed, 1 to 64 characters, lower-case words joined by hyphens
+  (`charizard-psa-9`). Unique across listings.
 - **Starting price** — integer minor units greater than zero
 - **Minimum increment** — integer minor units greater than zero
 - **Starts at** — the scheduled bidding open
@@ -87,9 +97,10 @@ be refused.
 
 #### Scenario: Operator creates a filled draft
 
-- **GIVEN** a draft listing with a title, a starting price of 100000 minor
-  units, a minimum increment of 5000 minor units, currency `HKD`, a start in
-  the future, a scheduled close at after that start, and one JPEG
+- **GIVEN** a draft listing with a title, slug `charizard-psa-9`, a starting
+  price of 100000 minor units, a minimum increment of 5000 minor units,
+  currency `HKD`, a start in the future, a scheduled close at after that
+  start, and one JPEG
 - **WHEN** an authorized operator creates the listing
 - **THEN** Grade10 moves it to `created`
 - **AND** the listing is still absent from the public catalogue
@@ -100,6 +111,13 @@ be refused.
 - **WHEN** the operator submits create
 - **THEN** the admin form does not send create and names title as missing
 - **AND** a create sent to the API without a title is refused
+- **AND** the listing remains a draft
+
+#### Scenario: Create without a slug is refused
+
+- **GIVEN** a draft listing with every required field set except slug
+- **WHEN** the operator creates the listing
+- **THEN** Grade10 refuses the create
 - **AND** the listing remains a draft
 
 #### Scenario: Create without a starting price is refused
@@ -173,6 +191,49 @@ still be able to write these fields on an existing editable listing.
 - **WHEN** an operator attaches a draft listing to it
 - **THEN** Grade10 refuses the write
 - **AND** the listing's sale is unchanged
+
+### Requirement: Slug is the listing's public lookup key
+
+An authorized operator SHALL set a **Slug** that is the lookup key of the
+listing's public address `/auction/listings/<slug>`.
+
+- Trimmed, 1 to 64 characters, lower-case words joined by hyphens
+  (`charizard-psa-9`). Empty is allowed only while `draft`. A slug that is
+  present and does not match that shape SHALL be refused.
+- Two listings SHALL not share a slug. A write that collides SHALL be
+  refused.
+- Slug SHALL be writable while `draft` or `created`. A write of slug on a
+  `published`, `closed`, `settled`, or `canceled` listing SHALL be refused.
+- A collector SHALL receive a `published`, `closed`, or `settled` listing by
+  opening `/auction/listings/<slug>`. A slug that names no such listing
+  SHALL be not found. A `draft`, `created`, or `canceled` listing SHALL NOT
+  answer at that address.
+
+#### Scenario: Collector opens a listing by slug
+
+- **GIVEN** a published listing whose slug is `charizard-psa-9`
+- **WHEN** a collector opens `/auction/listings/charizard-psa-9`
+- **THEN** Grade10 returns that listing
+
+#### Scenario: Unknown slug is not found
+
+- **GIVEN** no published, closed, or settled listing with slug `no-such-lot`
+- **WHEN** a collector opens `/auction/listings/no-such-lot`
+- **THEN** Grade10 answers as not found
+
+#### Scenario: Duplicate slug is refused
+
+- **GIVEN** a listing whose slug is `charizard-psa-9`
+- **WHEN** an operator sets another listing's slug to `charizard-psa-9`
+- **THEN** Grade10 refuses the write
+- **AND** the second listing's slug is unchanged
+
+#### Scenario: Published slug cannot change
+
+- **GIVEN** a published listing whose slug is `charizard-psa-9`
+- **WHEN** an operator sets slug to `charizard-psa-9-copy`
+- **THEN** Grade10 refuses the write
+- **AND** `/auction/listings/charizard-psa-9` still returns that listing
 
 ### Requirement: Prices and window are writable before publish
 
