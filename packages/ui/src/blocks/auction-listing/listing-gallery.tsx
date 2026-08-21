@@ -13,7 +13,12 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 
 type ListingGalleryImage = {
+  /** Main frame. Also the fallback when `thumbSrc` or `zoomSrc` is omitted. */
   src: string;
+  /** Thumbnail strip. Falls back to `src`. */
+  thumbSrc?: string;
+  /** Zoom dialog. Falls back to `src`. */
+  zoomSrc?: string;
   alt: string;
   /** Accessible name for the thumbnail. Defaults to `alt`. */
   thumbLabel?: string;
@@ -29,7 +34,8 @@ type ListingGalleryProps = {
 
 /**
  * Left column of a product page: the main photo, a thumbnail strip, and zoom.
- * Selected index and the zoom dialog are presentation state.
+ * Selected index and the zoom dialog are presentation state. Source addresses
+ * are consumer-owned — the gallery never rewrites them.
  */
 function ListingGallery({
   images,
@@ -113,11 +119,15 @@ function ListingGallery({
                   ? "border-foreground"
                   : "border-transparent",
               )}
-              key={`${thumb.src}:${thumb.thumbLabel ?? thumb.alt}`}
+              key={`${thumb.thumbSrc ?? thumb.src}:${thumb.thumbLabel ?? thumb.alt}`}
               onClick={() => setIndex(thumbIndex)}
               type="button"
             >
-              <img alt="" className="size-full object-cover" src={thumb.src} />
+              <img
+                alt=""
+                className="size-full object-cover"
+                src={thumb.thumbSrc ?? thumb.src}
+              />
             </button>
           ))}
         </HStack>
@@ -126,7 +136,11 @@ function ListingGallery({
         <Dialog onOpenChange={setZoomOpen} open={zoomOpen}>
           <DialogContent className="sm:max-w-2xl" showCloseButton>
             <DialogTitle>{zoomLabel}</DialogTitle>
-            <img alt={image.alt} className="w-full" src={image.src} />
+            <img
+              alt={image.alt}
+              className="w-full"
+              src={image.zoomSrc ?? image.src}
+            />
           </DialogContent>
         </Dialog>
       ) : null}
