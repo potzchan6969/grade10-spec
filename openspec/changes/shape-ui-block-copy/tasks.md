@@ -52,7 +52,7 @@ Depends on group 1 landing.
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and
       `pnpm run test:stories` as this group's verification.
 
-## 4. The sign-in, two-factor and profile blocks (grade10-spec)
+## 4. The sign-in, two-factor and profile blocks (grade10-spec) (owner: @sean)
 
 Depends on group 1 landing.
 
