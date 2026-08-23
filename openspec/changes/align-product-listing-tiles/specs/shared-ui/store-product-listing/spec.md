@@ -73,18 +73,25 @@ image SHALL contain no default, fallback, or built-in copy.
 
 The shared UI package SHALL export, from its public entry, exactly these
 components for the listing surface — `ProductBrowse`, `FilterPanel`,
-`CollectionMenu`, `CollectionMenuItem`, `ProductListHeader`, `ProductList`,
-`ProductCard`, and `ProductCardImage` — and exactly these types: `AsyncState`,
-`AsyncAction`, `ProductSummary`, `FilterGroup`, `FilterOption`,
-`FilterSelection`, `SortOption`, `CollectionOption`, `UtilityLink`,
-`ProductBrowseProps`, `FilterPanelProps`, `CollectionMenuProps`,
-`CollectionMenuItemProps`, `ProductListHeaderProps`, `ProductListProps`,
-`ProductCardProps`, and `ProductCardImageProps`.
+`ProductFilter`, `ProductListHeader`, `ProductList`, `ProductCard`, and
+`ProductCardImage` — and exactly these types: `AsyncState`, `AsyncAction`,
+`ProductSummary`, `FilterGroup`, `FilterOption`, `FilterSelection`,
+`AppliedFilter`, `SortOption`, `UtilityLink`, `ProductBrowseProps`,
+`FilterPanelProps`, `ProductFilterProps`, `ProductListHeaderProps`,
+`ProductListProps`, `ProductCardProps`, `ProductCardImageProps`, and the copy
+type of each of those components.
 
-`FilterPanel`, `CollectionMenu`, `CollectionMenuItem`, `ProductListHeader`,
-`ProductList`, `ProductCard`, and `ProductCardImage` SHALL each be renderable
-on their own, outside `ProductBrowse`, so a later surface can reuse one
-without the others.
+Each of those components SHALL take the words it renders in a single `copy`
+prop of its own copy type, and `ProductBrowseCopy` SHALL be composed of the
+copy types of the components `ProductBrowse` renders.
+
+A word every tile renders the same SHALL be supplied once for the list rather
+than per tile; a tile SHALL carry only what differs between one product and
+the next.
+
+`FilterPanel`, `ProductFilter`, `ProductListHeader`, `ProductList`,
+`ProductCard`, and `ProductCardImage` SHALL each be renderable on their own,
+outside `ProductBrowse`, so a later surface can reuse one without the others.
 
 #### Scenario: An application imports the surface
 
@@ -94,20 +101,35 @@ without the others.
 
 #### Scenario: A part is reused alone
 
-- **WHEN** an application renders the product list, the filter panel, the list header, a collection menu item, a product card, or the product card image without the browse root
+- **WHEN** an application renders the product list, the filter panel, the product filter, the list header, a product card, or the product card image without the browse root
 - **THEN** it renders and behaves as specified, with no missing-context error and no requirement to supply browse-root props
+
+#### Scenario: A tile is named once
+
+- **GIVEN** a product tile whose card is activatable and whose cart control needs a name
+- **WHEN** the consumer supplies the tiles and the words around them
+- **THEN** the card's accessible name is the product's own name, supplied once per product
+- **AND** the cart control's name comes from the list's copy, supplied once for every tile
+- **AND** no prop repeats either
 
 ### Requirement: The product list displays product tiles and delegates every product action
 
 The product list SHALL display one tile per supplied product, in the order
-supplied, using each product's supplied image, badge slot, name, formatted
-current price, formatted original price, sale label, sold-out condition, and
-in-cart condition with its supplied count. It SHALL report tile activation and
-the cart action through named callbacks, each identifying the product.
+supplied, using each product's supplied image, name, formatted current price,
+formatted original price, sold-out condition, and in-cart condition with its
+supplied count. It SHALL report tile activation and the cart action through
+named callbacks, each identifying the product.
 
-The list SHALL NOT format a price, compute a discount, decide whether a product
-is sold out, hold a cart quantity, or display a category line, description, add
-button, wishlist control, or quantity stepper.
+A tile SHALL NOT offer a wishlist control.
+
+A tile SHALL NOT display metadata badges such as collection, series, or
+region.
+
+A tile SHALL NOT display a category line, a description, an add button, or a
+quantity stepper.
+
+The list SHALL NOT format a price, compute a discount, decide whether a
+product is sold out, or hold a cart quantity.
 
 #### Scenario: Prices are displayed as supplied
 
@@ -115,31 +137,29 @@ button, wishlist control, or quantity stepper.
 - **THEN** the tile displays both exactly as supplied
 - **AND** the original price is shown with strikethrough treatment
 
-#### Scenario: Badges are displayed as supplied
-
-- **GIVEN** a product supplied with badges `Pokémon`, `M4`, and `JP`
-- **THEN** the tile displays those three in the order supplied
-- **AND** the tile does not invent, omit, or restyle them as a category line
-
-#### Scenario: A cart action is reported, not performed
-
-- **WHEN** a shopper activates the cart action on a tile
-- **THEN** the action is reported once, identifying that product
-- **AND** the tile's in-cart condition is unchanged until the consumer supplies a new one
-
-#### Scenario: A sold-out product
-
-- **GIVEN** a product supplied as sold out
-- **THEN** its tile displays the sold-out treatment
-- **AND** its cart action cannot be activated
-
 #### Scenario: No original price
 
 - **GIVEN** a product supplied with a current price and no original price
 - **THEN** only the current price is displayed
 - **AND** no strikethrough price is shown
 
+#### Scenario: A cart action is reported, not performed
+
+- **WHEN** a shopper activates the cart action on a tile
+- **THEN** the action is reported once, identifying that product
+- **AND** the tile's cart condition is unchanged until the consumer supplies a new one
+
+#### Scenario: A sold-out product
+
+- **GIVEN** a product supplied as sold out
+- **THEN** its tile displays the sold-out treatment and its cart action cannot be activated
+
 #### Scenario: No wishlist control on a tile
 
 - **WHEN** a product tile renders, whether available or sold out
 - **THEN** no wishlist control appears on it
+
+#### Scenario: No metadata badges on a tile
+
+- **WHEN** a product tile renders
+- **THEN** no collection, series, or region badge appears on it
