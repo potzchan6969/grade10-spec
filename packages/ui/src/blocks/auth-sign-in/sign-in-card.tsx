@@ -14,9 +14,17 @@ import type { ReactNode } from "react";
 
 type SignInCardAction = { label: ReactNode; onAction: () => void };
 
+/** The words the card says, whatever step is inside it. */
+type SignInCardCopy = {
+  title: string;
+  description?: string;
+  /** Names the divider between the email flow and the providers. Required
+   * whenever `providerSlot` is set — the card carries no English of its own. */
+  providerDivider?: string;
+};
+
 type SignInCardProps = {
-  title: ReactNode;
-  description?: ReactNode;
+  copy: SignInCardCopy;
   /** The active step — a `SignInEmailForm`, a `SignInCodeForm`, or anything
    * else the consumer's flow needs. */
   children: ReactNode;
@@ -26,9 +34,6 @@ type SignInCardProps = {
   /** External identity buttons (Google, passkeys…), rendered under the
    * divider. The consumer owns the widget; this card only places it. */
   providerSlot?: ReactNode;
-  /** Required whenever `providerSlot` is set: the divider between the email
-   * flow and the providers would otherwise carry built-in English. */
-  providerDividerLabel?: ReactNode;
   /** A way out of the flow — "back to home". */
   exitAction?: SignInCardAction;
   className?: string;
@@ -42,20 +47,20 @@ type SignInCardProps = {
  * OAuth, or any mix) is product state, so the card holds no step machine.
  */
 function SignInCard({
-  title,
-  description,
+  copy,
   children,
   message,
   providerSlot,
-  providerDividerLabel,
   exitAction,
   className,
 }: SignInCardProps) {
   return (
     <Card className={cn("w-full max-w-sm", className)} data-slot="sign-in-card">
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        {description ? <CardDescription>{description}</CardDescription> : null}
+        <CardTitle>{copy.title}</CardTitle>
+        {copy.description ? (
+          <CardDescription>{copy.description}</CardDescription>
+        ) : null}
       </CardHeader>
       <CardContent>
         <VStack gap="md">
@@ -67,7 +72,7 @@ function SignInCard({
           ) : null}
           {providerSlot ? (
             <>
-              <Divider label={providerDividerLabel} />
+              <Divider label={copy.providerDivider} />
               {providerSlot}
             </>
           ) : null}
@@ -82,5 +87,5 @@ function SignInCard({
   );
 }
 
-export type { SignInCardAction, SignInCardProps };
+export type { SignInCardAction, SignInCardCopy, SignInCardProps };
 export { SignInCard };

@@ -2,14 +2,20 @@ import type { ReactNode } from "react";
 import type { AsyncAction, AsyncState } from "../shared/async";
 
 /**
- * One product tile's content. Every value is display-ready: `price` is a
- * formatted string, not a number and a currency, because formatting needs
- * locale, currency display rules, and the store's rounding policy — three
- * things this package is forbidden to know.
+ * One product tile's content: what differs between one product and the next.
+ * Every value is display-ready — `price` is a formatted string, not a number
+ * and a currency, because formatting needs locale, currency display rules,
+ * and the store's rounding policy, three things this package is forbidden to
+ * know.
+ *
+ * What every tile says the same way — what the cart control is called, what a
+ * sold-out or discounted product is badged with — is the list's copy, supplied
+ * once rather than restated per product.
  */
 type ProductSummary = {
   id: string;
-  name: ReactNode;
+  /** The product's own name, and the name a screen reader reads the tile as. */
+  name: string;
   /** `cardProps` slot — consumer-assembled badges, in order. */
   badges?: ReactNode;
   imageSrc?: string;
@@ -18,14 +24,9 @@ type ProductSummary = {
   price: ReactNode;
   /** Strikethrough original price. Its presence shows the discount treatment. */
   originalPrice?: ReactNode;
-  saleLabel?: ReactNode;
   soldOut?: boolean;
-  soldOutLabel?: ReactNode;
   inCart?: boolean;
   cartCount?: ReactNode;
-  cartLabel: string;
-  /** Accessible name for the tile when it is activatable. */
-  ariaLabel?: string;
 };
 
 /**

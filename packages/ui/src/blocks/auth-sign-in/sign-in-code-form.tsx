@@ -4,20 +4,27 @@ import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { FormEvent, ReactNode } from "react";
 
+/** The words the step says, whoever is signing in. */
+type SignInCodeFormCopy = {
+  code: string;
+  submit: string;
+  /** Names the way back to the previous step. Omit it, and the handler with
+   * it, and no back button renders. */
+  back?: string;
+};
+
 type SignInCodeFormProps = {
+  copy: SignInCodeFormCopy;
   /** Controlled by the consumer: the verify call needs the code. */
   code: string;
   onCodeChange: (code: string) => void;
-  codeLabel: ReactNode;
   /** Where the code went — "Code sent to a@b.co". */
   hint?: ReactNode;
   codeLength?: number;
   error?: ReactNode;
-  submitLabel: ReactNode;
   submitting?: boolean;
   onSubmit: () => void;
-  /** Back to the previous step. Omit both and no back button renders. */
-  backLabel?: ReactNode;
+  /** Back to the previous step. */
   onBack?: () => void;
 };
 
@@ -29,14 +36,12 @@ type SignInCodeFormProps = {
 function SignInCodeForm({
   code,
   onCodeChange,
-  codeLabel,
+  copy,
   hint,
   codeLength = 6,
   error,
-  submitLabel,
   submitting = false,
   onSubmit,
-  backLabel,
   onBack,
 }: SignInCodeFormProps) {
   function handleSubmit(event: FormEvent) {
@@ -55,7 +60,7 @@ function SignInCodeForm({
         <TextInput
           autoComplete="one-time-code"
           inputMode="numeric"
-          label={codeLabel}
+          label={copy.code}
           maxLength={codeLength}
           message={error ?? undefined}
           onChange={(event) => onCodeChange(event.target.value)}
@@ -64,11 +69,11 @@ function SignInCodeForm({
           value={code}
         />
         <Button disabled={!code} loading={submitting} type="submit">
-          {submitLabel}
+          {copy.submit}
         </Button>
         {onBack ? (
           <Button onClick={onBack} type="button" variant="ghost">
-            {backLabel}
+            {copy.back}
           </Button>
         ) : null}
       </VStack>
@@ -76,5 +81,5 @@ function SignInCodeForm({
   );
 }
 
-export type { SignInCodeFormProps };
+export type { SignInCodeFormCopy, SignInCodeFormProps };
 export { SignInCodeForm };

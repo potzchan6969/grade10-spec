@@ -1,0 +1,15 @@
+{
+  "tagline": "为收藏者、开卡玩家与整套收集者精选的日本卡牌。",
+  "accountLabel": "账户",
+  "searchLabel": "搜索",
+  "cartLabel": "购物车",
+  "nav": {
+    "store": "商店",
+    "auction": "拍卖"
+  },
+  "footer": {
+    "shopHeading": "购买",
+    "allCollections": "全部系列",
+    "auction": "拍卖"
+  }
+}

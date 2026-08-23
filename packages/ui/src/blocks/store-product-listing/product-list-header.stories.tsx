@@ -9,12 +9,11 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
+    copy: { sortTrigger: "Sort by popularity", clearFilters: "Clear filters" },
     resultCount: "100 Products",
     sortOptions: SORT_OPTIONS,
     sortValue: "popular",
-    sortTriggerLabel: "Sort by popularity",
     appliedFilters: APPLIED_FILTERS,
-    clearFiltersLabel: "Clear filters",
     onSortChange: fn(),
     onFilterChange: fn(),
     onClearFilters: fn(),

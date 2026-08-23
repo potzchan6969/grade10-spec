@@ -3,24 +3,36 @@ import { cn } from "@grade10/design-system/lib/utils";
 import type { ComponentProps, ReactNode } from "react";
 
 type FooterLink = {
-  label: ReactNode;
+  /** What the link is called — text, so it can name itself to a reader. */
+  label: string;
   href: string;
 };
 
 type FooterColumn = {
-  heading: ReactNode;
+  heading: string;
   links: FooterLink[];
 };
 
+/**
+ * The words the footer says. Where it points and what it draws are not words
+ * and stay their own props.
+ */
+type FooterCopy = {
+  description: string;
+  attribution: string;
+  copyright: string;
+  /** What the site says it is being read in — a language, or a region and
+   * its currency. */
+  locale: string;
+};
+
 type FooterProps = ComponentProps<"footer"> & {
+  copy: FooterCopy;
+  /** The brand's own mark, which the footer places rather than says. */
   logo: ReactNode;
-  description: ReactNode;
-  attribution: ReactNode;
   socialLinks: FooterLink[];
   columns: FooterColumn[];
-  copyright: ReactNode;
   legalLinks: FooterLink[];
-  locale: ReactNode;
 };
 
 /**
@@ -50,13 +62,10 @@ type FooterProps = ComponentProps<"footer"> & {
 function Footer({
   className,
   logo,
-  description,
-  attribution,
+  copy,
   socialLinks,
   columns,
-  copyright,
   legalLinks,
-  locale,
   ...props
 }: FooterProps) {
   return (
@@ -71,8 +80,12 @@ function Footer({
       <div className="grid w-full grid-cols-1 gap-6 p-8 @xl:grid-cols-2 @3xl:grid-cols-4">
         <div className="flex flex-col items-start gap-4">
           <p className="text-sm font-medium text-foreground">{logo}</p>
-          <p className="text-xs text-secondary-foreground">{description}</p>
-          <p className="text-xs text-secondary-foreground">{attribution}</p>
+          <p className="text-xs text-secondary-foreground">
+            {copy.description}
+          </p>
+          <p className="text-xs text-secondary-foreground">
+            {copy.attribution}
+          </p>
           {socialLinks.length > 0 ? (
             <div
               className="flex flex-wrap items-start gap-4 pt-3"
@@ -120,7 +133,7 @@ function Footer({
         data-slot="footer-bar"
       >
         <p className="text-xs font-medium text-secondary-foreground">
-          {copyright}
+          {copy.copyright}
         </p>
         {legalLinks.length > 0 ? (
           <div
@@ -140,12 +153,12 @@ function Footer({
           </div>
         ) : null}
         <p className="text-xs font-medium text-secondary-foreground">
-          {locale}
+          {copy.locale}
         </p>
       </div>
     </footer>
   );
 }
 
-export type { FooterColumn, FooterLink, FooterProps };
+export type { FooterColumn, FooterCopy, FooterLink, FooterProps };
 export { Footer };

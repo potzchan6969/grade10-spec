@@ -17,9 +17,9 @@ const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 const noop = () => {};
 
 const STORE_NAV = {
+  copy: { locale: "HKD" },
   promo: "PROMO UTILITY BAR",
   logo: "Grade10",
-  localeLabel: "HKD",
   locales: [
     { value: "HK", label: "HKD" },
     { value: "KR", label: "KRW" },
@@ -41,12 +41,14 @@ const STORE_NAV = {
 };
 
 const STORE_FOOTER = {
+  copy: {
+    description:
+      "Japanese trading cards selected for collectors, openers, and complete-set builders.",
+    attribution: "A division of MemeStrategy (HKEX: 2440)",
+    copyright: "© 2026 Grade10. All rights reserved.",
+    locale: "HONG KONG / HKD",
+  },
   logo: "Grade10 Marketplace",
-  description:
-    "Japanese trading cards selected for collectors, openers, and complete-set builders.",
-  attribution: "A division of MemeStrategy (HKEX: 2440)",
-  copyright: "© 2026 Grade10. All rights reserved.",
-  locale: "HONG KONG / HKD",
   socialLinks: [
     { label: "INSTAGRAM", href: "#instagram" },
     { label: "YOUTUBE", href: "#youtube" },

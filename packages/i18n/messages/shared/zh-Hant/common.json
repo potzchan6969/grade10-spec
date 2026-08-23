@@ -1,0 +1,15 @@
+{
+  "loading": "載入中…",
+  "error": "發生錯誤",
+  "back": "返回",
+  "backToHome": "返回首頁",
+  "cancel": "取消",
+  "confirm": "確認",
+  "next": "下一頁",
+  "or": "或",
+  "previous": "上一頁",
+  "save": "儲存",
+  "signIn": "登入",
+  "signOut": "登出",
+  "signOutFailed": "登出失敗 — 請再試一次。"
+}

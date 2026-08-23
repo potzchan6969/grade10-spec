@@ -5,20 +5,25 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { type FormEvent, type ReactNode, useState } from "react";
 import type { AsyncAction } from "../shared/async";
 
+/** The words the form says, whichever kind of code it is taking. */
+type TwoFactorVerifyFormCopy = {
+  label: string;
+  /** Where the code comes from — "From your authenticator app". */
+  hint?: string;
+  submit: string;
+};
+
 type TwoFactorVerifyFormProps = {
   /**
    * `otp` is the six-slot authenticator code; `text` is a backup code, which
    * is neither six characters nor digits, so the slot row cannot serve it.
    */
   variant?: "otp" | "text";
-  label: ReactNode;
-  /** Where the code comes from — "From your authenticator app". */
-  hint?: ReactNode;
+  copy: TwoFactorVerifyFormCopy;
   /** Slots in the `otp` variant, max length in `text`. */
   codeLength?: number;
   error?: ReactNode;
   pending?: boolean;
-  submitLabel: ReactNode;
   onSubmit: (code: string) => void;
   /** Switches to the other kind of code. Omit it and no switch renders. */
   secondaryAction?: AsyncAction;
@@ -37,12 +42,10 @@ type TwoFactorVerifyFormProps = {
  */
 function TwoFactorVerifyForm({
   variant = "otp",
-  label,
-  hint,
+  copy,
   codeLength = 6,
   error,
   pending = false,
-  submitLabel,
   onSubmit,
   secondaryAction,
   className,
@@ -81,9 +84,9 @@ function TwoFactorVerifyForm({
           <OtpInput
             autoComplete="one-time-code"
             inputMode="numeric"
-            label={label}
+            label={copy.label}
             length={codeLength}
-            message={error ?? hint ?? undefined}
+            message={error ?? copy.hint ?? undefined}
             name="one-time-code"
             onChange={setCode}
             onComplete={submit}
@@ -93,8 +96,8 @@ function TwoFactorVerifyForm({
         ) : (
           <TextInput
             autoComplete="one-time-code"
-            label={label}
-            message={error ?? hint ?? undefined}
+            label={copy.label}
+            message={error ?? copy.hint ?? undefined}
             name="one-time-code"
             onChange={(event) => setCode(event.target.value)}
             required
@@ -103,7 +106,7 @@ function TwoFactorVerifyForm({
           />
         )}
         <Button disabled={!code.trim()} loading={pending} type="submit">
-          {submitLabel}
+          {copy.submit}
         </Button>
         {secondaryAction ? (
           <Button
@@ -120,5 +123,5 @@ function TwoFactorVerifyForm({
   );
 }
 
-export type { TwoFactorVerifyFormProps };
+export type { TwoFactorVerifyFormCopy, TwoFactorVerifyFormProps };
 export { TwoFactorVerifyForm };

@@ -6,19 +6,25 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { type FormEvent, type ReactNode, useState } from "react";
 import type { ProfileFormValues } from "./types";
 
+/** The words the form says, whoever is filling it in. */
+type ProfileFormCopy = {
+  displayName: string;
+  bio: string;
+  submit: string;
+  /** Names the way out. Omit it, and the handler with it, and the form is
+   * create-only. */
+  cancel?: string;
+};
+
 type ProfileFormProps = {
+  copy: ProfileFormCopy;
   initialDisplayName?: string;
   initialBio?: string;
-  displayNameLabel: ReactNode;
-  bioLabel: ReactNode;
   displayNameMaxLength?: number;
   bioMaxLength?: number;
   pending?: boolean;
   error?: ReactNode;
-  submitLabel: ReactNode;
   onSubmit: (values: ProfileFormValues) => void;
-  /** Omit both and the form is create-only, with no way to dismiss it. */
-  cancelLabel?: ReactNode;
   onCancel?: () => void;
 };
 
@@ -33,15 +39,12 @@ type ProfileFormProps = {
 function ProfileForm({
   initialDisplayName = "",
   initialBio = "",
-  displayNameLabel,
-  bioLabel,
+  copy,
   displayNameMaxLength = 80,
   bioMaxLength = 500,
   pending = false,
   error,
-  submitLabel,
   onSubmit,
-  cancelLabel,
   onCancel,
 }: ProfileFormProps) {
   const [displayName, setDisplayName] = useState(initialDisplayName);
@@ -56,14 +59,14 @@ function ProfileForm({
     <form data-slot="profile-form" onSubmit={handleSubmit}>
       <VStack gap="md">
         <TextInput
-          label={displayNameLabel}
+          label={copy.displayName}
           maxLength={displayNameMaxLength}
           onChange={(event) => setDisplayName(event.target.value)}
           required
           value={displayName}
         />
         <TextInput
-          label={bioLabel}
+          label={copy.bio}
           maxLength={bioMaxLength}
           onChange={(event) => setBio(event.target.value)}
           value={bio}
@@ -79,11 +82,11 @@ function ProfileForm({
             loading={pending}
             type="submit"
           >
-            {submitLabel}
+            {copy.submit}
           </Button>
           {onCancel ? (
             <Button onClick={onCancel} type="button" variant="ghost">
-              {cancelLabel}
+              {copy.cancel}
             </Button>
           ) : null}
         </HStack>
@@ -92,5 +95,5 @@ function ProfileForm({
   );
 }
 
-export type { ProfileFormProps };
+export type { ProfileFormCopy, ProfileFormProps };
 export { ProfileForm };

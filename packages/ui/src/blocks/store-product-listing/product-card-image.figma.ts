@@ -24,7 +24,9 @@ instance.getEnum("state", {
 });
 
 export default {
-  example: figma.code`<ProductCardImage cartLabel={cartLabel}${sale && !soldOut ? figma.code` saleLabel="SALE"` : ""}${soldOut ? figma.code` soldOut soldOutLabel="SOLD OUT"` : ""}${!soldOut && inCart ? figma.code` inCart cartCount="1"` : ""} />`,
+  // The badge words are the same on every tile, so they arrive in `copy`
+  // rather than per instance; the variant decides only which badge is drawn.
+  example: figma.code`<ProductCardImage copy={copy}${sale && !soldOut ? figma.code` discounted` : ""}${soldOut ? figma.code` soldOut` : ""}${!soldOut && inCart ? figma.code` inCart cartCount="1"` : ""} />`,
   imports: ['import { ProductCardImage } from "@grade10/ui"'],
   id: "product-card-image",
   metadata: { nestable: true },

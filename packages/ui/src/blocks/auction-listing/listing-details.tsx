@@ -5,17 +5,24 @@ import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 
 type ListingDetailsSection = {
-  heading: ReactNode;
+  heading: string;
   body: ReactNode;
 };
 
 type ListingDetailsFact = {
-  label: ReactNode;
+  label: string;
   value: ReactNode;
 };
 
+/** The words the block says about any lot. What each lot says for itself —
+ * its description, its facts, its extra sections — arrives as content. */
+type ListingDetailsCopy = {
+  /** Names the description region, e.g. "Description". */
+  heading: string;
+};
+
 type ListingDetailsProps = {
-  heading: ReactNode;
+  copy: ListingDetailsCopy;
   body: ReactNode;
   facts?: readonly ListingDetailsFact[];
   sections?: readonly ListingDetailsSection[];
@@ -27,7 +34,7 @@ type ListingDetailsProps = {
  * and extra text sections. All copy is display-ready.
  */
 function ListingDetails({
-  heading,
+  copy,
   body,
   facts,
   sections,
@@ -41,7 +48,7 @@ function ListingDetails({
     >
       <VStack gap="sm">
         <Text as="h3" size="lg" weight="medium">
-          {heading}
+          {copy.heading}
         </Text>
         <Text as="p">{body}</Text>
       </VStack>
@@ -64,7 +71,7 @@ function ListingDetails({
         </VStack>
       ) : null}
       {sections?.map((section) => (
-        <VStack gap="sm" key={String(section.heading)}>
+        <VStack gap="sm" key={section.heading}>
           <Text weight="medium">{section.heading}</Text>
           <Text as="p" tone="secondary">
             {section.body}
@@ -75,5 +82,10 @@ function ListingDetails({
   );
 }
 
-export type { ListingDetailsFact, ListingDetailsProps, ListingDetailsSection };
+export type {
+  ListingDetailsCopy,
+  ListingDetailsFact,
+  ListingDetailsProps,
+  ListingDetailsSection,
+};
 export { ListingDetails };

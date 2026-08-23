@@ -1,0 +1,8 @@
+{
+  "backToStore": "스토어로 돌아가기",
+  "forSale": "판매 중",
+  "notForSale": "판매하지 않음",
+  "gradeLabel": "등급",
+  "soldOutSuffix": " — 품절",
+  "notForSaleNote": "이 카드는 판매하지 않습니다."
+}

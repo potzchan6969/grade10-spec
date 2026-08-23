@@ -4,9 +4,14 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { Skeleton } from "boneyard-js/react";
 import type { ReactNode } from "react";
 import skeletonImage from "./product-card.fixture.png";
+import type { ProductCardImageCopy } from "./product-card-image";
 import { ProductCardImage } from "./product-card-image";
 
+/** What a tile says whichever product is in it. */
+type ProductCardCopy = ProductCardImageCopy;
+
 type ProductCardProps = {
+  copy: ProductCardCopy;
   /** Boneyard skeleton overlay while the consumer resolves product data. */
   loading?: boolean;
   imageSrc?: string;
@@ -18,46 +23,42 @@ type ProductCardProps = {
   tags?: readonly ReactNode[];
   /** `cardProps` slot — accepted and currently not displayed. */
   badges?: ReactNode;
-  /** Product title. Clamped to two lines with an ellipsis, matching Figma. */
-  name: ReactNode;
+  /** Product title. Clamped to two lines with an ellipsis, matching Figma —
+   * and the name a screen reader reads the tile as, so it is text. */
+  name: string;
   price: ReactNode;
+  /** Strikethrough original price. Its presence is what makes the tile
+   * discounted, and what draws the sale badge when the copy carries one. */
   originalPrice?: ReactNode;
-  /** Image badge copy such as `SALE`. Hidden when `soldOut`. */
-  saleLabel?: ReactNode;
   /**
    * Figma's `soldOut` axis. Swaps the sale badge for the sold-out treatment
    * and hides the cart action. The tile is inert.
    */
   soldOut?: boolean;
-  soldOutLabel?: ReactNode;
   /**
    * When the product is already in the cart, show the cart control and the
    * supplied count. Ignored when `soldOut`.
    */
   inCart?: boolean;
   cartCount?: ReactNode;
-  /** Required accessible name for the cart control. */
-  cartLabel: string;
   onCartClick?: () => void;
   /**
    * Fires when the image surface is activated. No navigation target is wired
    * here — the consumer decides what happens (route, modal, etc.).
    */
   onClick?: () => void;
-  ariaLabel?: string;
   className?: string;
 };
 
 type ProductCardContentProps = Omit<ProductCardProps, "loading">;
 
 const SKELETON_FIXTURE_PROPS = {
+  copy: { cart: "Add to cart", sale: "SALE" },
   imageSrc: skeletonImage,
   imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
   name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
   price: "HK$105",
   originalPrice: "HK$123",
-  saleLabel: "SALE",
-  cartLabel: "Add to cart",
   onClick: () => {},
   onCartClick: () => {},
 } satisfies Omit<ProductCardContentProps, "className">;
@@ -69,24 +70,18 @@ const SKELETON_FIXTURE_PROPS = {
  */
 function ProductCardContent({
   className,
+  copy,
   imageSrc,
   imageAlt,
   name,
   price,
   originalPrice,
-  saleLabel,
   soldOut = false,
-  soldOutLabel,
   inCart = false,
   cartCount,
-  cartLabel,
   onCartClick,
   onClick,
-  ariaLabel,
 }: ProductCardContentProps) {
-  const cardAriaLabel =
-    ariaLabel ?? (typeof name === "string" ? name : undefined);
-
   return (
     <VStack
       className={cn("group/product-card w-full", className)}
@@ -96,17 +91,16 @@ function ProductCardContent({
       gap="none"
     >
       <ProductCardImage
-        ariaLabel={cardAriaLabel}
         cartCount={cartCount}
-        cartLabel={cartLabel}
+        copy={copy}
+        discounted={originalPrice != null}
         imageAlt={imageAlt}
         imageSrc={imageSrc}
         inCart={inCart}
+        name={name}
         onCartClick={onCartClick}
         onClick={onClick}
-        saleLabel={saleLabel}
         soldOut={soldOut}
-        soldOutLabel={soldOutLabel}
       />
 
       <VStack
@@ -167,5 +161,5 @@ function ProductCard({
   );
 }
 
-export type { ProductCardProps };
+export type { ProductCardCopy, ProductCardProps };
 export { ProductCard };

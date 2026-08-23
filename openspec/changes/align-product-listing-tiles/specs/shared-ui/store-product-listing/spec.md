@@ -72,17 +72,19 @@ image SHALL contain no default, fallback, or built-in copy.
 ### Requirement: The listing surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
-components for the listing surface — `ProductBrowse`, `CollectionBanner`,
-`FilterPanel`, `ProductListHeader`, `ProductList`, `ProductCard`, and
-`ProductCardImage` — and exactly these types: `AsyncState`, `AsyncAction`,
-`ProductSummary`, `FilterGroup`, `FilterOption`, `FilterSelection`,
-`SortOption`, `ProductBrowseProps`, `CollectionBannerProps`,
-`FilterPanelProps`, `ProductListHeaderProps`, `ProductListProps`,
+components for the listing surface — `ProductBrowse`, `FilterPanel`,
+`CollectionMenu`, `CollectionMenuItem`, `ProductListHeader`, `ProductList`,
+`ProductCard`, and `ProductCardImage` — and exactly these types: `AsyncState`,
+`AsyncAction`, `ProductSummary`, `FilterGroup`, `FilterOption`,
+`FilterSelection`, `SortOption`, `CollectionOption`, `UtilityLink`,
+`ProductBrowseProps`, `FilterPanelProps`, `CollectionMenuProps`,
+`CollectionMenuItemProps`, `ProductListHeaderProps`, `ProductListProps`,
 `ProductCardProps`, and `ProductCardImageProps`.
 
-`CollectionBanner`, `FilterPanel`, `ProductListHeader`, `ProductList`,
-`ProductCard`, and `ProductCardImage` SHALL each be renderable on their own,
-outside `ProductBrowse`, so a later surface can reuse one without the others.
+`FilterPanel`, `CollectionMenu`, `CollectionMenuItem`, `ProductListHeader`,
+`ProductList`, `ProductCard`, and `ProductCardImage` SHALL each be renderable
+on their own, outside `ProductBrowse`, so a later surface can reuse one
+without the others.
 
 #### Scenario: An application imports the surface
 
@@ -92,7 +94,7 @@ outside `ProductBrowse`, so a later surface can reuse one without the others.
 
 #### Scenario: A part is reused alone
 
-- **WHEN** an application renders the product list, the filter panel, the list header, a product card, the product card image, or the collection banner without the browse root
+- **WHEN** an application renders the product list, the filter panel, the list header, a collection menu item, a product card, or the product card image without the browse root
 - **THEN** it renders and behaves as specified, with no missing-context error and no requirement to supply browse-root props
 
 ### Requirement: The product list displays product tiles and delegates every product action
@@ -136,3 +138,8 @@ button, wishlist control, or quantity stepper.
 - **GIVEN** a product supplied with a current price and no original price
 - **THEN** only the current price is displayed
 - **AND** no strikethrough price is shown
+
+#### Scenario: No wishlist control on a tile
+
+- **WHEN** a product tile renders, whether available or sold out
+- **THEN** no wishlist control appears on it
