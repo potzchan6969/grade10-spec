@@ -13,16 +13,24 @@ application.
 
 The shared UI package SHALL export, from its public entry, exactly these
 components for the listing surface — `ProductBrowse`, `FilterPanel`,
-`CollectionMenu`, `CollectionMenuItem`, `ProductListHeader`, `ProductList`, and
-`ProductCard` — and exactly these types: `AsyncState`, `AsyncAction`,
-`ProductSummary`, `FilterGroup`, `FilterOption`, `FilterSelection`,
-`SortOption`, `CollectionOption`, `UtilityLink`, `ProductBrowseProps`,
-`FilterPanelProps`, `CollectionMenuProps`, `CollectionMenuItemProps`,
-`ProductListHeaderProps`, `ProductListProps`, and `ProductCardProps`.
+`ProductFilter`, `ProductListHeader`, `ProductList`, and `ProductCard` — and
+exactly these types: `AsyncState`, `AsyncAction`, `ProductSummary`,
+`FilterGroup`, `FilterOption`, `FilterSelection`, `AppliedFilter`,
+`SortOption`, `UtilityLink`, `ProductBrowseProps`, `FilterPanelProps`,
+`ProductFilterProps`, `ProductListHeaderProps`, `ProductListProps`,
+`ProductCardProps`, and the copy type of each of those components.
 
-`FilterPanel`, `CollectionMenu`, `CollectionMenuItem`, `ProductListHeader`,
-`ProductList`, and `ProductCard` SHALL each be renderable on their own, outside
-`ProductBrowse`, so a later surface can reuse one without the others.
+Each of those components SHALL take the words it renders in a single `copy`
+prop of its own copy type, and `ProductBrowseCopy` SHALL be composed of the
+copy types of the components `ProductBrowse` renders.
+
+A word every tile renders the same SHALL be supplied once for the list rather
+than per tile; a tile SHALL carry only what differs between one product and
+the next.
+
+`FilterPanel`, `ProductFilter`, `ProductListHeader`, `ProductList`, and
+`ProductCard` SHALL each be renderable on their own, outside `ProductBrowse`,
+so a later surface can reuse one without the others.
 
 #### Scenario: An application imports the surface
 
@@ -32,83 +40,274 @@ components for the listing surface — `ProductBrowse`, `FilterPanel`,
 
 #### Scenario: A part is reused alone
 
-- **WHEN** an application renders the product list, the filter panel, the list header, a collection menu item, or a product card without the browse root
+- **WHEN** an application renders the product list, the filter panel, the product filter, the list header, or a product card without the browse root
 - **THEN** it renders and behaves as specified, with no missing-context error and no requirement to supply browse-root props
 
-### Requirement: Every listing value is consumer-controlled
+#### Scenario: A tile is named once
 
-The listing surface SHALL receive the search query, the active collection, the
-active chip-filter selection, the active sort option, any exclusive-filter
-values, and the current page number as props, and SHALL report every change to
-them through a named callback. It SHALL NOT hold any of those values as its own
-state, and SHALL NOT change what it displays until the consumer supplies a new
-value.
+- **GIVEN** a product tile whose card is activatable and whose cart control needs a name
+- **WHEN** the consumer supplies the tiles and the words around them
+- **THEN** the card's accessible name is the product's own name, supplied once per product
+- **AND** the cart control's name comes from the list's copy, supplied once for every tile
+- **AND** no prop repeats either
+
+### Requirement: The product list displays product tiles and delegates every product action
+
+The product list SHALL display one tile per supplied product, in the order
+supplied, using each product's supplied image, name, formatted current
+price, formatted original price, discount label, sold-out condition, and cart
+condition. It SHALL report tile activation and the cart action through named
+callbacks, each identifying the product.
+
+A tile SHALL NOT offer a wishlist control.
+
+A tile SHALL NOT display metadata badges such as collection, series, or
+region.
+
+The list SHALL NOT format a price, compute a discount, decide whether a product
+is sold out, or hold a cart quantity.
+
+#### Scenario: Prices are displayed as supplied
+
+- **GIVEN** a product supplied with a current price of `HKD 105`, an original price of `HKD 123`, and a discount label of `SALE`
+- **THEN** the tile displays all three exactly as supplied
+
+#### Scenario: A cart action is reported, not performed
+
+- **WHEN** a shopper activates the cart action on a tile
+- **THEN** the action is reported once, identifying that product
+- **AND** the tile's cart condition is unchanged until the consumer supplies a new one
+
+#### Scenario: A sold-out product
+
+- **GIVEN** a product supplied as sold out
+- **THEN** its tile displays the sold-out treatment and its cart action cannot be activated
+
+#### Scenario: No wishlist control on a tile
+
+- **WHEN** a product tile renders, whether available or sold out
+- **THEN** no wishlist control appears on it
+
+#### Scenario: No metadata badges on a tile
+
+- **WHEN** a product tile renders
+- **THEN** no collection, series, or region badge appears on it
+
+### Requirement: The product list adapts its column count to the available width
+
+The product list SHALL lay out tiles in an auto-fill grid with a minimum tile
+width of 240px and gaps of 32px horizontally and vertically. The column
+count SHALL grow or shrink with the width remaining after the fixed sidebar.
+A tile SHALL remain fully readable and its controls fully operable at every
+column count.
+
+#### Scenario: Narrow viewport
+
+- **WHEN** the surface is rendered at mobile width
+- **THEN** the list displays one column
+- **AND** no content overflows the viewport horizontally
+
+#### Scenario: Wide viewport
+
+- **WHEN** the surface is rendered with enough width for four 240px tiles
+- **THEN** the list displays four columns
+
+### Requirement: Empty and no-match results are distinguished
+
+When results resolve to no products, the surface SHALL display the message the
+consumer supplied for that condition, and SHALL allow the consumer to
+distinguish an empty catalog from a filter selection that matches nothing by
+supplying a different message and an optional action for each.
+
+The sidebar SHALL remain displayed and usable in both conditions.
+
+#### Scenario: Filters match nothing
+
+- **GIVEN** a resolved result set with no products and a supplied no-match message
+- **THEN** that message is displayed in place of the list
+- **AND** the sidebar is still displayed with the current search query and filter selection intact
+- **AND** a clear-filters action is offered when the consumer supplied one, reporting activation through a callback
+
+#### Scenario: An empty catalog
+
+- **GIVEN** a resolved result set with no products, no filter selected, and a supplied empty message
+- **THEN** that message is displayed and no clear-filters action is offered
+
+### Requirement: Every string on the surface is consumer-supplied
+
+Every human-readable string the listing surface displays SHALL be supplied by
+the consumer, including filter-group labels, option labels, counts, expand
+labels, search placeholder and label, utility-link labels, the result-count
+string, the sort trigger label, sort option labels, applied-filter labels,
+the clear-filters label, empty and error messages, accessible names, and every
+heading. The components SHALL contain no default, fallback, or built-in copy,
+and SHALL NOT read a message catalog.
+
+#### Scenario: Nothing renders unsupplied copy
+
+- **WHEN** the surface is rendered with only its required props
+- **THEN** every string displayed traces to a prop the consumer supplied
+- **AND** no store name, catalog term, currency, or locale appears that the consumer did not supply
+
+#### Scenario: A second locale needs no source change
+
+- **WHEN** a consumer supplies the same props with every string translated
+- **THEN** the surface displays the translated strings with no change to the package
+
+### Requirement: The surface is navigable and announced
+
+The filter panel SHALL be a complementary landmark and the results region a
+region with an accessible name the consumer supplies. Every search field,
+filter option, expand affordance, utility link, sort option, applied-filter
+chip, clear-filters control, and tile action SHALL be operable by keyboard
+alone, with a visible focus indicator, and SHALL expose its selected or
+active state to assistive technology through native semantics.
+
+While more products are loading, the results region SHALL expose a busy state
+without moving focus.
+
+A change to the displayed result count SHALL be announced without moving focus.
+
+#### Scenario: Keyboard-only operation
+
+- **WHEN** a shopper using a keyboard alone moves through the surface
+- **THEN** the search field, every filter option, every expand affordance, every utility link, the sort control, every applied-filter chip, the clear-filters control, and every tile action can be reached and activated
+- **AND** the focused element is visibly indicated at each step
+
+#### Scenario: State is exposed natively
+
+- **WHEN** assistive technology inspects a selected filter option, the active sort option, and an applied-filter chip
+- **THEN** each state is reported through native semantics rather than styling alone
+
+#### Scenario: Loading more is announced as busy
+
+- **GIVEN** a resolved result list and `loadingMore` true
+- **THEN** the results region is exposed as busy
+- **AND** focus stays where the shopper left it
+
+#### Scenario: A result count change is announced
+
+- **WHEN** the consumer supplies a new result count after a filter change
+- **THEN** the new count is announced
+- **AND** focus stays where the shopper left it
+
+### Requirement: The listing surface holds no state of its own
+
+The listing surface SHALL receive the search query, the filter selection, the
+active sort option, whether more products can be loaded, and whether a load is
+in progress as props, and SHALL report every change to them through a named
+callback. It SHALL NOT hold any of those values as its own state, and SHALL
+NOT change what it displays until the consumer supplies a new value.
 
 #### Scenario: A control does not move on its own
 
-- **GIVEN** a rendered listing surface with a chip-filter option unselected
+- **GIVEN** a rendered listing surface with a filter option unselected
 - **WHEN** a shopper activates that option and the consumer supplies no new selection
 - **THEN** the option is still displayed as unselected
 - **AND** the change was reported once, naming the filter group and the option
 
-#### Scenario: A collection does not move on its own
-
-- **GIVEN** a rendered listing surface with one collection marked active
-- **WHEN** a shopper activates a different collection and the consumer supplies no new active collection
-- **THEN** the previously active collection is still displayed as active
-- **AND** the change was reported once, naming the collection
-
 #### Scenario: The consumer drives the display
 
-- **WHEN** the consumer supplies a new search query, active collection, filter selection, sort option, or page number
+- **WHEN** the consumer supplies a new search query, filter selection, sort option, load-more state, or product list
 - **THEN** the surface displays that value without any further interaction
 
 #### Scenario: Every state is reachable from props
 
 - **WHEN** the surface is rendered with props alone, with no application present
-- **THEN** each of loading, empty catalog, no filter matches, error, and a resolved page of results can be produced
+- **THEN** each of loading, empty catalog, no filter matches, error, loading more, and a resolved list of results can be produced
 
-### Requirement: Collections and result regions resolve independently
+### Requirement: More products load as the shopper scrolls
 
-The sidebar collection list and the product results SHALL each be supplied as
+The listing surface SHALL NOT display pagination. When the consumer supplies
+`hasMore` as true and an `onLoadMore` callback, the surface SHALL report
+`onLoadMore` once when the shopper scrolls the product list near its end.
+It SHALL NOT change which products are displayed until the consumer supplies
+a longer product list.
+
+When the consumer supplies `loadingMore` as true while results are otherwise
+ready, the surface SHALL append Boneyard skeleton tiles below the displayed
+products. The skeleton count SHALL default to ten when the consumer supplies
+no `loadMoreSkeletonCount`.
+
+When `hasMore` is false or omitted, no load trigger SHALL be displayed.
+When results are loading, empty, or in error, the surface SHALL NOT report
+`onLoadMore`.
+
+#### Scenario: More products are reported on scroll
+
+- **GIVEN** a resolved result list, `hasMore` true, and a supplied `onLoadMore` callback
+- **WHEN** a shopper scrolls the product list near its end
+- **THEN** `onLoadMore` is reported once
+- **AND** the displayed products are unchanged until the consumer supplies a longer list
+
+#### Scenario: Loading more shows skeleton tiles
+
+- **GIVEN** a resolved result list and `loadingMore` true
+- **THEN** Boneyard skeleton tiles are displayed below the resolved products
+- **AND** the resolved products remain displayed above them
+
+#### Scenario: The end of the catalog
+
+- **GIVEN** `hasMore` false
+- **THEN** no load trigger is displayed
+- **AND** no further load is reported
+
+#### Scenario: Initial load does not report load more
+
+- **GIVEN** results in a loading, empty, or error condition
+- **THEN** `onLoadMore` is not reported
+
+### Requirement: Filter groups and result regions resolve independently
+
+The sidebar filter groups and the product results SHALL each be supplied as
 an independent asynchronous boundary, each carrying its own loading, empty,
 error, and resolved condition. A condition on one SHALL NOT change what the
 other displays.
 
-#### Scenario: Results fail while collections stand
+#### Scenario: Results fail while filter groups stand
 
-- **GIVEN** collections that have resolved and results that are in an error condition
-- **THEN** the sidebar still displays its search field, collection menu, and utility links, still usable
+- **GIVEN** filter groups that have resolved and results that are in an error condition
+- **THEN** the sidebar still displays its heading, search field, filter groups, and utility links, still usable
 - **AND** the results region displays the supplied error message
 - **AND** a retry affordance is offered when the consumer supplied one, reporting activation through a callback
 
-#### Scenario: Collections load while results are ready
+#### Scenario: Filter groups load while results are ready
 
-- **GIVEN** collections that are still loading and results that have resolved
+- **GIVEN** filter groups that are still loading and results that have resolved
 - **THEN** the results and their count are displayed
-- **AND** the sidebar displays a loading treatment rather than an empty collection menu
+- **AND** the sidebar displays a loading treatment rather than an empty filter list
 
 #### Scenario: One boundary is not inferred from the other
 
 - **WHEN** either boundary is in a loading condition
 - **THEN** the surface displays no global blocking treatment over the region that has resolved
 
-### Requirement: The sidebar displays search, collections, and utility links
+### Requirement: The sidebar displays a heading, search, filter groups, and utility links
 
-The filter panel SHALL display a search field, a collection menu, and any
-utility links the consumer supplied, in that order. It SHALL be a complementary
-landmark with an accessible name the consumer supplies.
+The filter panel SHALL display a consumer-supplied heading, a search field,
+the product filter, and any utility links the consumer supplied, in that
+order. It SHALL be a complementary landmark with an accessible name the
+consumer supplies.
 
 The search field SHALL display the supplied placeholder and the supplied query
 value, and SHALL report each change to the query through a callback. When the
 consumer supplies a clear handler and a non-empty query, a clear affordance
 SHALL be offered that reports activation through that callback.
 
-The collection menu SHALL list each supplied collection in the order supplied,
-marking exactly one as active when the consumer supplies an active collection
-identifier, and SHALL report a collection change through a callback naming the
-chosen collection. A collection SHALL be displayed as active only when its
-identifier matches the supplied active collection.
+The product filter SHALL display each supplied filter group in the order
+supplied, each with its label and its options in the order supplied. Each
+option SHALL be selectable together with other options in the same group and
+in other groups. An option SHALL be displayed as selected only when the
+supplied selection contains it. A group whose supplied selection contains no
+option SHALL display every option as unselected. That empty selection is valid
+and SHALL NOT hide or replace the supplied results — it is the unrestricted
+state of the group. Selecting a second option SHALL report it without
+clearing the first. A change SHALL name the group and the option.
+
+An option MAY carry a consumer-supplied count, displayed as supplied. A group
+whose option list is empty SHALL not be displayed. When a group carries an
+expand label, an expand affordance SHALL be offered that reports activation
+through a callback naming the group.
 
 Utility links SHALL be displayed in the order supplied, each with the
 supplied label and destination. When no utility links are supplied, that
@@ -135,59 +334,61 @@ region SHALL occupy no space.
 - **GIVEN** a non-empty supplied search query and no clear handler
 - **THEN** no clear affordance is displayed
 
-#### Scenario: A collection is displayed as active
+#### Scenario: No filter selected is unrestricted
 
-- **GIVEN** an active collection identifier of `pokemon`
-- **THEN** only the collection with that identifier is displayed as active
+- **GIVEN** a filter group whose supplied selection contains no option
+- **THEN** every option is displayed as unselected
+- **AND** the supplied results are still displayed
 
-#### Scenario: A collection change is reported
+#### Scenario: A sidebar filter is reported
 
-- **GIVEN** an active collection of `pokemon`
-- **WHEN** a shopper activates `dragon-ball` and the consumer supplies no new active collection
-- **THEN** `pokemon` is still displayed as active
-- **AND** `dragon-ball` was reported once through the callback
+- **GIVEN** a filter group with no option selected
+- **WHEN** a shopper activates one option and the consumer supplies no new selection
+- **THEN** that option is still displayed as unselected
+- **AND** every other option in the group stays unselected
+- **AND** the change was reported once, naming the group and the option
 
-#### Scenario: An empty collection list
+#### Scenario: Two filter options selected
 
-- **GIVEN** a resolved collection list with no collections
-- **THEN** the collection menu is not displayed
+- **GIVEN** a filter group whose supplied selection contains two options
+- **THEN** both options are displayed as selected together
+
+#### Scenario: An empty filter group
+
+- **GIVEN** a resolved filter list that includes a group with no options
+- **THEN** that group is not displayed
+
+#### Scenario: A group expand is reported
+
+- **GIVEN** a filter group with a supplied expand label
+- **WHEN** a shopper activates the expand affordance
+- **THEN** the expand handler is reported once, naming the group
 
 #### Scenario: No utility links
 
 - **GIVEN** no utility links supplied
 - **THEN** no utility-link region is displayed
 
-### Requirement: The product list header displays the title, result count, and controls
+### Requirement: The product list header displays the result count, applied filters, and the sort control
 
-The product list header SHALL display a consumer-supplied title and the total
-result count exactly as the consumer supplied it, as a formatted string, and
-SHALL NOT derive the count from the number of products on the current page.
-It SHALL NOT supply a default title.
+The product list header SHALL display the total result count exactly as the
+consumer supplied it, as a formatted string, and SHALL NOT derive the count
+from the number of products on the current page. It SHALL NOT display a
+separate title.
 
 It SHALL display a sort control listing exactly the sort options supplied, in
-the order supplied, with the active option marked as selected. Choosing an
-option SHALL report it through a callback. When the active option names a
-paired identifier, a further activation of that same control SHALL report the
-paired identifier instead, and SHALL rotate the option's trailing control
-180°. Choosing an already-active option that has no pair SHALL report nothing.
+the order supplied, with the active option marked as selected. The sort
+trigger SHALL display the consumer-supplied trigger label. Choosing an option
+SHALL report it through a callback and SHALL dismiss the list. Choosing an
+already-active option SHALL report nothing. An empty list of sort options
+SHALL hide the sort control.
 
-It SHALL display each supplied chip-filter group as a row of options that can
-be selected together, reporting a change that names the group and the option,
-and SHALL display an option as selected only when the supplied selection
-contains it. A group whose supplied selection contains no option SHALL display
-every option as unselected. That empty selection is valid and SHALL NOT hide
-or replace the supplied results — it is the unrestricted state of the group.
-Selecting a second option SHALL report it without clearing the first, so both
-can be selected together. It SHALL display each supplied exclusive-filter group as a
-dropdown listing exactly those options, marking the supplied value as
-selected and naming it on the trigger. Choosing an exclusive option SHALL
-report the group and the option and SHALL dismiss the list. The trigger SHALL
-still name the previously selected option until the consumer supplies a new
-value.
-
-A chip-filter group or exclusive-filter group whose option list is empty SHALL
-not be displayed. An empty list of sort options SHALL hide the sort control.
-Sort, chip filters, and exclusive filters SHALL be selectable at the same
+It SHALL display each supplied applied filter as a chip that can be dismissed,
+reporting a change that names the group and the option as unselected. When
+the consumer supplies a clear handler and at least one applied filter, a
+clear affordance SHALL be offered that reports activation through that
+callback. When no applied filter is supplied, the applied-filter region SHALL
+occupy no space. Sort and applied filters SHALL be selectable at the same
 time.
 
 #### Scenario: The count is not derived
@@ -195,213 +396,40 @@ time.
 - **GIVEN** a supplied result count of `38` and a page carrying 8 products
 - **THEN** the header displays the supplied `38`
 
-#### Scenario: The title is displayed as supplied
-
-- **WHEN** the header is rendered with a title
-- **THEN** that title is displayed exactly as supplied
-- **AND** no fallback title is shown
-
 #### Scenario: Sorting is reported
 
 - **WHEN** a shopper chooses a sort option other than the active one
 - **THEN** that option is reported once through the callback
+- **AND** the option list is dismissed
 - **AND** the previously active option stays marked as selected until the consumer supplies a new one
-
-#### Scenario: A paired sort option reverses on a second activation
-
-- **GIVEN** an active sort option that names a paired identifier
-- **WHEN** a shopper activates that same control again
-- **THEN** the paired identifier is reported once
-- **AND** the trailing control is shown rotated 180° once the consumer supplies the paired identifier as the active option
 
 #### Scenario: No sort options supplied
 
 - **GIVEN** an empty list of sort options
-- **THEN** the sort control is not displayed and the title and result count are still displayed
+- **THEN** the sort control is not displayed and the result count is still displayed
 
-#### Scenario: No chip filter selected
+#### Scenario: No applied filters
 
-- **GIVEN** a chip-filter group whose supplied selection contains no option
-- **THEN** every option is displayed as unselected
-- **AND** the supplied results are still displayed
+- **GIVEN** no applied filters supplied
+- **THEN** the applied-filter region is not displayed
+- **AND** the result count is still displayed
 
-#### Scenario: A chip filter is reported
+#### Scenario: An applied filter is removed
 
-- **GIVEN** a chip-filter group with no option selected
-- **WHEN** a shopper activates one option and the consumer supplies no new selection
-- **THEN** that option is still displayed as unselected
-- **AND** every other option in the group stays unselected
-- **AND** the change was reported once, naming the group and the option
+- **GIVEN** a supplied applied filter
+- **WHEN** a shopper dismisses that chip and the consumer supplies no new list
+- **THEN** the chip is still displayed
+- **AND** the change was reported once, naming the group and the option as unselected
 
-#### Scenario: Two chip filter options selected
+#### Scenario: Applied filters are cleared
 
-- **GIVEN** a chip-filter group whose supplied selection contains two options
-- **THEN** both options are displayed as selected together
+- **GIVEN** at least one supplied applied filter and a supplied clear handler
+- **WHEN** a shopper activates the clear affordance
+- **THEN** the clear handler is reported once
+- **AND** the chips are still displayed until the consumer supplies a new list
 
-#### Scenario: An exclusive filter is reported
+#### Scenario: Sort and applied filters combine
 
-- **WHEN** a shopper opens an exclusive-filter dropdown and chooses an option other than the active one
-- **THEN** that option is reported once, naming the group and the option
-- **AND** the option list is dismissed
-- **AND** the trigger still names the previously active option until the consumer supplies a new one
+- **WHEN** a sort option is selected and at least one applied filter is supplied
+- **THEN** both remain displayed together
 
-#### Scenario: An exclusive filter with no options
-
-- **GIVEN** an exclusive-filter group whose option list is empty
-- **THEN** that dropdown is not displayed
-
-#### Scenario: Sort and filters combine
-
-- **WHEN** a sort option, a chip-filter option, and an exclusive-filter option are each selected
-- **THEN** all three remain displayed as selected together
-
-### Requirement: The product list displays product tiles and delegates every product action
-
-The product list SHALL display one tile per supplied product, in the order
-supplied, using each product's supplied image, tags, name, formatted current
-price, formatted original price, discount label, sold-out condition, and cart
-condition. It SHALL report tile activation and the cart action through named
-callbacks, each identifying the product.
-
-A tile SHALL NOT offer a wishlist control.
-
-The list SHALL NOT format a price, compute a discount, decide whether a product
-is sold out, or hold a cart quantity.
-
-#### Scenario: Prices are displayed as supplied
-
-- **GIVEN** a product supplied with a current price of `HKD 105`, an original price of `HKD 123`, and a discount label of `SALE`
-- **THEN** the tile displays all three exactly as supplied
-
-#### Scenario: A cart action is reported, not performed
-
-- **WHEN** a shopper activates the cart action on a tile
-- **THEN** the action is reported once, identifying that product
-- **AND** the tile's cart condition is unchanged until the consumer supplies a new one
-
-#### Scenario: A sold-out product
-
-- **GIVEN** a product supplied as sold out
-- **THEN** its tile displays the sold-out treatment and its cart action cannot be activated
-
-#### Scenario: No wishlist control on a tile
-
-- **WHEN** a product tile renders, whether available or sold out
-- **THEN** no wishlist control appears on it
-
-### Requirement: The product list adapts its column count to the available width
-
-The product list SHALL lay out tiles in an auto-fill grid with a minimum tile
-width of 260px (Figma's product card width) and gaps of 20px horizontally and
-24px vertically. The column count SHALL grow or shrink with the width remaining
-after the fixed sidebar. A tile SHALL remain fully readable and its controls
-fully operable at every column count.
-
-#### Scenario: Narrow viewport
-
-- **WHEN** the surface is rendered at mobile width
-- **THEN** the list displays one column
-- **AND** no content overflows the viewport horizontally
-
-#### Scenario: Wide viewport
-
-- **WHEN** the surface is rendered with enough width for four 260px tiles
-- **THEN** the list displays four columns
-
-### Requirement: Pagination reflects and reports the page
-
-The listing surface SHALL display pagination when the supplied page count is
-greater than one, marking the supplied current page as active, and SHALL report
-a page change through a callback without changing the displayed page itself.
-
-Previous SHALL be unavailable on the first page and next SHALL be unavailable
-on the last. Pagination SHALL NOT be displayed when the supplied page count is
-one or zero.
-
-#### Scenario: A page change is reported
-
-- **GIVEN** a supplied page count of 10 and a current page of 2
-- **WHEN** a shopper activates page 3
-- **THEN** page 3 is reported once
-- **AND** page 2 is still displayed as active until the consumer supplies a new page
-
-#### Scenario: The ends of the range
-
-- **GIVEN** a current page of 1
-- **THEN** previous cannot be activated
-- **AND** on the last page, next cannot be activated
-
-#### Scenario: A single page
-
-- **GIVEN** a supplied page count of 1
-- **THEN** no pagination is displayed
-
-### Requirement: Empty and no-match results are distinguished
-
-When results resolve to no products, the surface SHALL display the message the
-consumer supplied for that condition, and SHALL allow the consumer to
-distinguish an empty catalog from a filter selection that matches nothing by
-supplying a different message and an optional action for each.
-
-The sidebar SHALL remain displayed and usable in both conditions.
-
-#### Scenario: Filters match nothing
-
-- **GIVEN** a resolved result set with no products and a supplied no-match message
-- **THEN** that message is displayed in place of the list
-- **AND** the sidebar is still displayed with the current search query, active collection, and header filter selection intact
-- **AND** a clear-filters action is offered when the consumer supplied one, reporting activation through a callback
-
-#### Scenario: An empty catalog
-
-- **GIVEN** a resolved result set with no products, no filter selected, and a supplied empty message
-- **THEN** that message is displayed and no clear-filters action is offered
-
-### Requirement: Every string on the surface is consumer-supplied
-
-Every human-readable string the listing surface displays SHALL be supplied by
-the consumer, including collection labels, search placeholder and label,
-utility-link labels, group labels, option labels, the result-count string,
-sort option labels, empty and error messages, accessible names, and every
-heading. The components SHALL contain no default, fallback, or built-in copy,
-and SHALL NOT read a message catalog.
-
-#### Scenario: Nothing renders unsupplied copy
-
-- **WHEN** the surface is rendered with only its required props
-- **THEN** every string displayed traces to a prop the consumer supplied
-- **AND** no store name, catalog term, currency, or locale appears that the consumer did not supply
-
-#### Scenario: A second locale needs no source change
-
-- **WHEN** a consumer supplies the same props with every string translated
-- **THEN** the surface displays the translated strings with no change to the package
-
-### Requirement: The surface is navigable and announced
-
-The filter panel SHALL be a complementary landmark and the results region a
-region with an accessible name the consumer supplies. Every search field,
-collection option, utility link, sort option, chip-filter option,
-exclusive-filter option, tile action, and pagination control SHALL be
-operable by keyboard alone, with a visible focus indicator, and SHALL expose
-its selected, active, or unavailable state to assistive technology through
-native semantics.
-
-A change to the displayed result count SHALL be announced without moving focus.
-
-#### Scenario: Keyboard-only operation
-
-- **WHEN** a shopper using a keyboard alone moves through the surface
-- **THEN** the search field, every collection option, every utility link, every sort and filter control, every tile action, and every pagination control can be reached and activated
-- **AND** the focused element is visibly indicated at each step
-
-#### Scenario: State is exposed natively
-
-- **WHEN** assistive technology inspects the active collection, a selected chip-filter option, the active sort option, the active page, and an unavailable previous control
-- **THEN** each state is reported through native semantics rather than styling alone
-
-#### Scenario: A result count change is announced
-
-- **WHEN** the consumer supplies a new result count after a filter change
-- **THEN** the new count is announced
-- **AND** focus stays where the shopper left it
