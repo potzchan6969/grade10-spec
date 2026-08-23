@@ -45,10 +45,13 @@ Depends on group 1.
 
 Depends on group 2.
 
-- [x] 3.1 Make `Prices are displayed as supplied`, `Badges are displayed as
-      supplied`, `No original price`, and `A sold-out product` pass on
-      `ProductCard` — image, badge slot, name, prices; no category,
-      description, Add, wishlist, or quantity stepper.
+- [x] 3.1 Make `Prices are displayed as supplied`, `No original price`, and
+      `A sold-out product` pass on `ProductCard` — image, name, prices; no
+      category, description, Add, wishlist, or quantity stepper.
+      `Badges are displayed as supplied` was dropped: `sync-product-list-page`
+      landed after this group and left `tags` and `badges` accepted so callers
+      typecheck but never rendered, so the delta keeps the durable
+      `A tile SHALL NOT display metadata badges` instead.
 - [x] 3.2 Make `The product list displays product tiles and delegates every
       product action` pass by reshaping `ProductSummary` to the fields in
       design.md and mapping them through `ProductList`, reporting tile
@@ -80,5 +83,5 @@ Depends on group 3.
 - [x] 5.2 Review the branch for convention drift and for delta coverage
       separately: requirements missing, partial, or implemented differently
       than specified.
-- [ ] 5.3 After rollout is confirmed, fold the accepted delta into
+- [x] 5.3 After rollout is confirmed, fold the accepted delta into
       `openspec/specs/` and archive this change.
