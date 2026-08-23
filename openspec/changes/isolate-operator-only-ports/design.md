@@ -60,13 +60,23 @@ package's, the store admin's and the audit console's. The description carries
 the product and the operator role, so neither the shared package's namespace
 nor a bare one is reused.
 
-**No dependency on the sibling collector-facing package.** The capability
-sanctions an admin package composing its sibling's core for shared plumbing,
-but there is nothing to share here: the container plumbing comes from the
-browser DI package directly, as it does in every other frontend package, and
-the two auth packages name each other nowhere. A panel passing one client to
-both factories is what connects them, at the composition root, which is where
-the capability already puts that knowledge.
+**The sibling package is composed for presentation, not for plumbing.** The
+capability sanctions an admin package composing its sibling's core, and this
+one does not need that: its container plumbing comes from the browser DI
+package directly, as in every other frontend package, and its ports name the
+sibling's nowhere. What connects the two at the DI layer is a panel passing one
+client to both factories, at the composition root, which is where the
+capability already puts that knowledge.
+
+The dependency it does take is on the sibling's sign-in view. The consoles are
+outside the localization scope — English by decision, named for the console
+rather than the storefront — so they cannot answer from a brand's catalogs the
+way a site does, which left each panel restating the same copy with one brand
+name changed. That copy belongs to the operator surface, so it lives in this
+package, wrapping the shared flow rather than reimplementing it: one state
+machine, two sets of words. The wrapper binds nothing and contributes no
+module, so it changes neither the published list nor the port boundary this
+change is about.
 
 **The panels keep their own presentation.** Each brand's second-factor screens
 stay brand-owned view code composing shared blocks, as they are for every other
