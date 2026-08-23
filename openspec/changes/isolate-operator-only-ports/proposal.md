@@ -23,13 +23,16 @@ nothing stops a collector-facing root from omitting the client and loading the
 slice anyway, and nothing but a comment tells the next person why they must
 not. Any product that grows an operator-only surface reaches the same wall and
 writes the same carve-out. Two of the four capability requirements are
-unsatisfied for this one slice — the root-loads-lists rule, and the rule that
-an operator-serving package publishes its modules as one list.
+unsatisfied for this one slice: the rule that a root loads published lists
+rather than an individual module, and the rule that a package publishes every
+module its slices define — the auth product defines three session slices and
+publishes two, and that requirement's operator scenario names this case
+exactly.
 
-Success is measured by the count of composition roots naming an individual
-feature slice module, which is two today and must be zero, and by the count of
-optional client ports in a shared core module, likewise two today and zero
-after.
+Success is measured by two counts. Composition roots naming an individual
+feature slice module: two today, and zero after. Ports a shared core module
+declares optional so that some consumers may omit them: one today — the
+two-factor client on the auth product's shared core module — and zero after.
 
 ## What Changes
 
