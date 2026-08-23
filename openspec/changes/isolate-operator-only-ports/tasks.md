@@ -35,7 +35,7 @@
 - [x] 3.2 Verify: `pnpm run check:libs`, `pnpm run check:handbook`,
       `pnpm run agent:check-parity`, `pnpm run lint`
 
-## 4. The consoles' sign-in view (grade10)
+## 4. The consoles' sign-in view (grade10) (owner: @sean)
 
 Carries no spec scenario. The capability governs which modules a package
 publishes and which ports a core module binds; this group adds neither, so
@@ -43,11 +43,11 @@ there is nothing in the delta for it to make pass. It is here because the work
 is part of building the operator-facing package and would otherwise be
 unaccounted for.
 
-- [ ] 4.1 Publish the consoles' sign-in view from the operator-facing package —
+- [x] 4.1 Publish the consoles' sign-in view from the operator-facing package —
       the shared flow wearing the console's copy, the brand its one input —
       and its subpath
-- [ ] 4.2 Repoint both panels' sign-in pages at it, leaving every rendered
+- [x] 4.2 Repoint both panels' sign-in pages at it, leaving every rendered
       word as it was
-- [ ] 4.3 Record the subpath in the package conventions and the Handbook
-- [ ] 4.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 4.3 Record the subpath in the package conventions and the Handbook
+- [x] 4.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `pnpm run build`, `pnpm run check:handbook`
