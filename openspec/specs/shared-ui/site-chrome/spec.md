@@ -9,8 +9,13 @@ destination, and every control that does something.
 ### Requirement: The chrome exports
 
 The design system SHALL export, from its public entry, the `Nav` and `Footer`
-components and these types: `NavProps`, `NavItem`, `NavLink`, `FooterProps`,
-`FooterColumn`, and `FooterLink`.
+components and these types: `NavProps`, `NavItem`, `NavLink`, `NavCopy`,
+`FooterProps`, `FooterColumn`, `FooterLink`, and `FooterCopy`.
+
+Each SHALL take the words it renders in a single `copy` prop of its own copy
+type; every other input — the destinations, the handlers, the promotional and
+utility regions, the locale set and the selected locale — SHALL remain its own
+prop.
 
 `Nav` and `Footer` SHALL each be renderable on their own, in either order, and
 neither SHALL require the other.
@@ -25,6 +30,12 @@ neither SHALL require the other.
 - **WHEN** an application renders the header without the footer, or the footer
   without the header
 - **THEN** it renders as specified, with no missing-context error
+
+#### Scenario: The chrome's words arrive as one group
+
+- **WHEN** an application supplies the chrome's words
+- **THEN** it passes one object per component, typed by that component's copy type
+- **AND** a word it omits is a type error rather than an empty region
 
 ### Requirement: A control renders only when it can act
 

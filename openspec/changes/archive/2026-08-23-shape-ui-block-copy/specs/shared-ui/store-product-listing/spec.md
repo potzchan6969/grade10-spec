@@ -6,13 +6,12 @@
 
 The shared UI package SHALL export, from its public entry, exactly these
 components for the listing surface — `ProductBrowse`, `FilterPanel`,
-`CollectionMenu`, `CollectionMenuItem`, `ProductListHeader`, `ProductList`, and
-`ProductCard` — and exactly these types: `AsyncState`, `AsyncAction`,
-`ProductSummary`, `FilterGroup`, `FilterOption`, `FilterSelection`,
-`SortOption`, `CollectionOption`, `UtilityLink`, `ProductBrowseProps`,
-`FilterPanelProps`, `CollectionMenuProps`, `CollectionMenuItemProps`,
-`ProductListHeaderProps`, `ProductListProps`, `ProductCardProps`, and the copy
-type of each of those components.
+`ProductFilter`, `ProductListHeader`, `ProductList`, and `ProductCard` — and
+exactly these types: `AsyncState`, `AsyncAction`, `ProductSummary`,
+`FilterGroup`, `FilterOption`, `FilterSelection`, `AppliedFilter`,
+`SortOption`, `UtilityLink`, `ProductBrowseProps`, `FilterPanelProps`,
+`ProductFilterProps`, `ProductListHeaderProps`, `ProductListProps`,
+`ProductCardProps`, and the copy type of each of those components.
 
 Each of those components SHALL take the words it renders in a single `copy`
 prop of its own copy type, and `ProductBrowseCopy` SHALL be composed of the
@@ -22,18 +21,19 @@ A word every tile renders the same SHALL be supplied once for the list rather
 than per tile; a tile SHALL carry only what differs between one product and
 the next.
 
-`FilterPanel`, `CollectionMenu`, `CollectionMenuItem`, `ProductListHeader`,
-`ProductList`, and `ProductCard` SHALL each be renderable on their own, outside
-`ProductBrowse`, so a later surface can reuse one without the others.
+`FilterPanel`, `ProductFilter`, `ProductListHeader`, `ProductList`, and
+`ProductCard` SHALL each be renderable on their own, outside `ProductBrowse`,
+so a later surface can reuse one without the others.
 
 #### Scenario: An application imports the surface
 
 - **WHEN** an application imports each name above from the shared UI package's public entry
 - **THEN** every import resolves
+- **AND** no other component or type is exported for this surface
 
 #### Scenario: A part is reused alone
 
-- **WHEN** an application renders the product list, the filter panel, the list header, a collection menu item, or a product card without the browse root
+- **WHEN** an application renders the product list, the filter panel, the product filter, the list header, or a product card without the browse root
 - **THEN** it renders and behaves as specified, with no missing-context error and no requirement to supply browse-root props
 
 #### Scenario: A tile is named once
