@@ -150,9 +150,9 @@ Deleting or renaming a variant that instances already use leaves orphaned compon
 
 ### Checking the built component yourself
 
-Two routes, neither of which needs a checkout or an engineer.
+Two routes. The automated diff needs only a browser; measuring in Storybook needs the repository checked out, so it is the one place here where you may need an engineer to start it for you.
 
-**Measure it in Storybook.** Every push to `main` publishes the design-system Storybook to this repository's GitHub Pages site (Actions → **Storybook**, and the run's `deploy` step links the URL). Open a component, then:
+**Measure it in Storybook.** Run `pnpm run storybook:design-system` and open the address it prints. Open a component, then:
 
 1. Switch the **Theme** toolbar control to **Grade10**. It loads in `Default`, which is the baseline theme, not the designed one — comparing that against your Figma file will show differences that are not real. This is the single most common way to misread the page.
 2. Press <kbd>M</kbd> for **Measure**. Hovering any element overlays its real box model — width, height, padding and margin in rendered pixels. This is the direct answer to "is the padding what I drew".

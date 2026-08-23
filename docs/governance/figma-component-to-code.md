@@ -141,11 +141,11 @@ The result a developer sees in Dev Mode, for three different instances of the sa
 
 Note what the template deliberately does *not* emit: `variant="default"` and `size="lg"` are omitted because they are the cva defaults, and the trailing icon is dropped while loading because the component gives that slot to the spinner. A Code Connect template's job is to emit what someone would actually write, not to enumerate the instance.
 
-## Checking it yourself: no checkout, no engineer
+## Checking it yourself
 
 **Read the snippet in Dev Mode.** Select an instance, open the Code section of the inspect panel. With the mapping published you get the `<Button …>` line above; with it unpublished you get a generated guess, however correct the template in the repository is. If you see no connected code, step 10 has not been run — that is the state [`design-code-sync.md`](design-code-sync.md#6-publish-the-set-and-publish-code-connect) records for this file.
 
-**Measure the built component in Storybook.** Every push to `main` publishes the design-system Storybook to this repository's GitHub Pages site (Actions → **Storybook**; the `deploy` step links the URL). Switch the **Theme** toolbar control to **Grade10** first — it loads in `Default`, which is stock shadcn and not the designed theme, and comparing that against your file shows differences that are not real. Then press <kbd>M</kbd> for Measure to read the real box model, and <kbd>O</kbd> for Outline.
+**Measure the built component in Storybook.** This is the one route that needs the repository checked out — the other two need only a browser. Run `pnpm run storybook:design-system` and open the address it prints. Switch the **Theme** toolbar control to **Grade10** first — it loads in `Default`, which is stock shadcn and not the designed theme, and comparing that against your file shows differences that are not real. Then press <kbd>M</kbd> for Measure to read the real box model, and <kbd>O</kbd> for Outline.
 
 **Read the automated diff.** Actions → **Design sync** → the newest run posts a table of disagreements, one row per mismatch: `Button · size=md · Height (h-10) · 40px in code · 32px in Figma`. It runs nightly at 01:00 UTC and on demand via **Run workflow**. It covers background, height, horizontal padding, gap, and corner radius on each axis's base state only — vertical padding, anything inside the component, and the hover, disabled, and loading states are unchecked, so a clean table is not proof of a match.
 
