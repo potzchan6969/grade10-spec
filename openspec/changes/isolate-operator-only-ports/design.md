@@ -78,9 +78,13 @@ machine, two sets of words. The wrapper binds nothing and contributes no
 module, so it changes neither the published list nor the port boundary this
 change is about.
 
-**The panels keep their own presentation.** Each brand's second-factor screens
-stay brand-owned view code composing shared blocks, as they are for every other
-capability a panel shows. The slice ships commands, not screens.
+**The panels keep their second-factor presentation.** Each brand's enrollment
+and verification screens stay brand-owned view code composing shared blocks, as
+they are for every other capability a panel shows: that slice ships commands,
+not screens. Sign-in is the exception and for a reason that does not generalise
+— its words are the console's rather than a brand's, and with no catalog above
+a panel to answer them, the only alternative is the same copy restated per
+panel.
 
 **One negative test is replaced rather than moved.** The old suite asserted
 that a container without a two-factor client could not resolve the repository —

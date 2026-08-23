@@ -42,4 +42,5 @@ satisfiable for every package a composition root loads.
 - **THEN** it installs that package's core-module factory with the operator
   client, and loads that package's published list
 - **AND THEN** the same client may satisfy the collector-facing package's port
-  as well, without either package naming the other
+  as well, bound at the composition root rather than by either package's ports
+  or core module naming the other's

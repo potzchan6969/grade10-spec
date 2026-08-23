@@ -44,6 +44,10 @@ two-factor client on the auth product's shared core module — and zero after.
   to that product's operator-facing frontend package, which publishes its own
   module list and its own core-module factory, and the shared package's port
   set returns to what every surface can satisfy.
+- Give the consoles one sign-in view. The panels are outside the localization
+  scope, so each restated the same copy with one brand name changed; those
+  words move to the operator-facing package, wrapping the shared flow rather
+  than reimplementing it. It binds nothing, so it joins no module list.
 - Leave the three existing requirements unedited. They were right; the code
   was not.
 
@@ -52,9 +56,10 @@ two-factor client on the auth product's shared core module — and zero after.
 - Splitting the collector-facing session slices. Sign-in and sign-out are
   mounted by every surface over a port both client kinds satisfy, and a second
   copy for operators would be duplication with no boundary behind it.
-- Moving the panels' own presentation. How a brand words and arranges a
-  second-factor screen stays brand-owned view code in each panel, as it is for
-  every other capability they show.
+- Moving the panels' second-factor screens. How a brand words and arranges
+  those stays brand-owned view code in each panel, as it is for every other
+  capability they show. The sign-in view is the one that moves, and only
+  because the consoles have no catalog to answer from.
 - A general rule that operator and collector code never share a package. The
   boundary drawn here is the client port; a package split follows a port a
   collector cannot satisfy, not an audience.
@@ -80,8 +85,11 @@ two-factor client on the auth product's shared core module — and zero after.
 - One new workspace package for the auth product's operator-facing frontend;
   both admin panels take it as a dependency.
 - No user-visible behavior, no wire contract, no backend change, no design
-  token or component export. Every binding that resolves today resolves after,
-  and an operator's enrollment, verification and disable paths are unchanged.
+  token. Every binding that resolves today resolves after, an operator's
+  enrollment, verification and disable paths are unchanged, and every sign-in
+  screen reads exactly as it did.
+- One component export is added — the consoles' sign-in view — on the
+  operator-facing package. Both panels consume it; nothing else may.
 - Durable guidance follows in `docs/conventions/packages.md`, the Handbook, and
   the application repository's `react-clean-architecture` skill.
 - Recorded after the fact. The implementation was written in the application
