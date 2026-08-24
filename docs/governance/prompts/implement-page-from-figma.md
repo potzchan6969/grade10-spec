@@ -43,6 +43,9 @@ THEN compose, under these rules, none of them negotiable:
   propose an OpenSpec change on the component instead.
 - All content through props or the app's i18n wiring; nothing in
   packages/ui imports the message catalogs or the application.
+- Open each new block component's JSDoc with its source component set's
+  Figma description. No description, or keywords-only? Write a real one
+  and report the gap as a readiness defect.
 - A new or changed block lands in its CAPABILITY's directory —
   packages/ui/src/blocks/<product-context>-<capability>/ — never a
   per-page one, and never a directory whose capability spec does not

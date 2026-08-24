@@ -61,6 +61,7 @@ While walking the frame, list these rather than compensating for them. Each is i
 - Import from `@grade10/design-system` and `@grade10/ui` only. No app imports inside anything that lands in `packages/ui`.
 - Layout goes through the layout primitives. A raw `flex flex-col` in `packages/ui` is a missed translation, and the `use-layout-primitives` lint plugin warns on it; the known legitimate fallbacks (breakpoint-dependent direction, real grids, absolute positioning) keep their raw classes under a `biome-ignore` with a stated reason.
 - All content through props. A block never imports the message catalogs; in this repository, stories supply the content, and the consuming application wires `@grade10/i18n`.
+- Open each new block component's JSDoc with its source component's **Figma description** (it lives on the component set, never on a variant), then add code-specific notes after it. A plain frame has no description and a set may have none or only library search keywords — write a real one there, and report the missing description as a readiness defect. A later description edit in Figma is a code change; the JSDoc is its only projection.
 - Never resolve a page to a component variant that does not exist, and never hand-edit generated theme CSS. Missing token → `tokens.json` + `pnpm run tokens:build`, with the designer in the loop.
 
 ## Verify

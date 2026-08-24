@@ -62,6 +62,7 @@ This is the actual translation. It is why step 2 above is worth care: a construc
 | An INSTANCE_SWAP + its BOOLEAN toggle | A `ReactNode` slot prop (`leading`, `trailing`) | `getBoolean` gating `getInstanceSwap` |
 | A variable bound to a fill or radius | A Tailwind token utility (`bg-primary-muted`) | The token pipeline; the value check diffs it |
 | A variable collection **mode** | A theme class (`.theme-grade10`) | `tokens.config.json → themes` |
+| The **set's description** | The JSDoc opening `<name>.tsx`'s export | Copied by hand at authoring — no rail carries it, so a description edit in Figma is a code change |
 | An instance-level override | **Nothing.** Invisible to code. | — |
 | A mode used as a size axis | **Nothing** — and every instance silently renders at the default size | — |
 

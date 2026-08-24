@@ -24,7 +24,9 @@ THEN build, in this order (docs/governance/design-code-sync.md, "Creating a
 component"):
 3. src/components/<group>/<name>.tsx — one cva option per Figma option and
    nothing more. Basename must match the normalized Figma set name; the
-   checker resolves a set to code by that name alone.
+   checker resolves a set to code by that name alone. Open its JSDoc with
+   the SET's Figma description (never a variant's); if it is empty or only
+   library search keywords, write a real one and say so in your report.
 4. <name>.figma.ts — a getEnum covering EVERY option of EVERY variant
    property. An unmapped option resolves to undefined and emits broken code.
    Axis names need not match; the checker infers them through the mapping.
