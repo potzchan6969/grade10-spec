@@ -175,6 +175,56 @@ const INITIAL_SELECTION: FilterSelection = {
   types: ["booster-box"],
 };
 
+const STORE_HOME_HERO = {
+  copy: {
+    eyebrow: "GRADE10",
+    shopLabel: "Shop",
+    auctionLabel: "Auction",
+  },
+  title: "Marketplace",
+  description:
+    "Et convallis massa risus habitant amet vitae commodo. Est etiam nunc ornare hendrerit felis nulla pulvinar non pellentesque. Quam nibh imperdiet fringilla quam ac rutrum nec mattis justo.",
+  imageSrc: new URL("./store-home-hero.fixture.png", import.meta.url).href,
+};
+
+const STORE_HOME_COLLECTIONS = [
+  {
+    id: "pokemon",
+    label: "Pokémon",
+    icon: "🐭",
+    href: "#pokemon",
+    featured: true,
+  },
+  { id: "dragon-ball", label: "Dragon Ball", icon: "🐉", href: "#dragon-ball" },
+  { id: "one-piece", label: "One Piece", icon: "🏴‍☠️", href: "#one-piece" },
+  { id: "nba", label: "NBA", icon: "🏀", href: "#nba" },
+  { id: "disney", label: "Disney", icon: "🏰", href: "#disney" },
+  { id: "mlb", label: "MLB", icon: "⚾", href: "#mlb" },
+  { id: "formula-1", label: "Formula 1", icon: "🏎️", href: "#formula-1" },
+] as const;
+
+const STORE_HOME_SECTION_COPY = {
+  collections: { browseAll: "Browse all" },
+  products: { browseAll: "Browse all" },
+};
+
+const STORE_HOME_PRODUCTS: ProductSummary[] = Array.from(
+  { length: 5 },
+  (_, index) => ({
+    id: String(index + 1),
+    name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+    imageSrc: IMAGE,
+    imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+    price: "HK$105",
+    originalPrice: index === 0 ? "HK$123" : undefined,
+  }),
+);
+
+const STORE_HOME_PRODUCT_CARD_COPY = {
+  cart: "Add to cart",
+  sale: "SALE",
+};
+
 export {
   appliedFiltersFromSelection,
   FILTER_GROUPS,
@@ -182,6 +232,11 @@ export {
   PRODUCTS,
   SORT_OPTIONS,
   STORE_FOOTER,
+  STORE_HOME_COLLECTIONS,
+  STORE_HOME_HERO,
+  STORE_HOME_PRODUCTS,
+  STORE_HOME_PRODUCT_CARD_COPY,
+  STORE_HOME_SECTION_COPY,
   STORE_NAV,
   sortTriggerLabel,
   UTILITY_LINKS,
