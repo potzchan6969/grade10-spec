@@ -49,7 +49,7 @@ navigating half of it and no worker — see design.md.
 - [x] 3.3 Run typecheck, lint, and the app's test lane as this group's
       verification.
 
-## 4. The collector's place and payload
+## 4. The collector's place and payload (owner: @sean)
 
 - [ ] 4.1 Make `Back returns to where they were` and `A new surface starts at
       the top` pass: scroll restoration keyed to history entries, rendered
