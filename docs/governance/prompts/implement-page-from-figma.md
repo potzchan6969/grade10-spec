@@ -61,11 +61,15 @@ VERIFY, and paste the real output of each:
   (fix it). Nothing in CI ever checks a block's classnames against Figma,
   and only you hold the element-to-node mapping — this table is the one
   verification they get.
-- Save that mapping as audit.json ([{"label","node","classes"}, ...]) and
-  run FIGMA_TOKEN=… pnpm run figma:audit -- --map audit.json. Paste its
-  real output: it re-checks the value column deterministically (resolved
-  values, not variable names — the table still owes the names) and exits
-  1 on drift.
+- Save that mapping as audit.json ([{"label","node","classes"}, ...]) —
+  ONE PER BLOCK, committed in the block's capability directory and
+  covering only that block's own elements; assembly glue stays out — and
+  run FIGMA_TOKEN=… pnpm run figma:audit -- --map <block>/audit.json.
+  Paste its real output: it re-checks the value column deterministically
+  (resolved values, not variable names — the table still owes the names)
+  and exits 1 on drift. The nightly design-sync sweeps every committed
+  audit.json (--all-blocks), so this file keeps checking the block after
+  the conversion is over.
 - pnpm run lint && pnpm run typecheck
 - pnpm run test:stories        (when a block was added or changed)
 - Render the result, screenshot it, and compare against get_screenshot of
@@ -100,7 +104,7 @@ Fixing these in Figma is far cheaper than compensating for them in code, and eve
 
 **Publishing is carved out**, for the same reason as the primitive prompt: `code-connect:publish` writes to a shared Figma file and has no undo.
 
-**The class audit runs at conversion time because it cannot run later.** `check:design-system` verifies a primitive's classnames against Figma — resolved to real hex and pixels — but it never walks `packages/ui`, and extending it to blocks would need an element↔node mapping that exists nowhere after the conversion. The converting agent is the only party that ever holds that mapping, having just read `get_variable_defs` on every node, so the audit is extracted while it is cheap — as a table carrying the variable *names*, and as `audit.json`, which `pnpm run figma:audit` re-checks deterministically by *value* (REST resolves bindings to the hex and pixels a viewer sees; the names themselves sit behind Figma's Enterprise-gated `file_variables:read` scope). Committing `audit.json` with the block is what turns a one-time audit into a re-runnable one. After that, the token-discipline lint keeps every classname inside the token system, where drift can only enter through the token pipeline — which is owned.
+**The class audit runs at conversion time because it cannot run later.** `check:design-system` verifies a primitive's classnames against Figma — resolved to real hex and pixels — but it never walks `packages/ui`, and extending it to blocks would need an element↔node mapping that exists nowhere after the conversion. The converting agent is the only party that ever holds that mapping, having just read `get_variable_defs` on every node, so the audit is extracted while it is cheap — as a table carrying the variable *names*, and as `audit.json`, which `pnpm run figma:audit` re-checks deterministically by *value* (REST resolves bindings to the hex and pixels a viewer sees; the names themselves sit behind Figma's Enterprise-gated `file_variables:read` scope). The unit of audit is the block — one `audit.json` per capability directory, assemblies excluded — because a block is the only conversion output this repository keeps: committing the file turns a one-time audit into a standing one, re-run against every block nightly by the design-sync workflow (`figma:audit --all-blocks`), with uncovered blocks listed rather than passed. After that, the token-discipline lint keeps every classname inside the token system, where drift can only enter through the token pipeline — which is owned.
 
 **"List the differences; do not assert a match."** A screenshot comparison summarized as "matches the design" hides exactly the drift it exists to catch. Requiring the difference list makes an empty list a claim the reviewer can spot-check.
 
