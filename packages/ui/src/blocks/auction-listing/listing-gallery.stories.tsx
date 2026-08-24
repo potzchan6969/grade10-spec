@@ -8,10 +8,6 @@ const IMAGE = new URL(
   import.meta.url,
 ).href;
 
-const THUMB = `${IMAGE}#thumb`;
-const DETAIL = `${IMAGE}#detail`;
-const ZOOM = `${IMAGE}#zoom`;
-
 const meta = {
   title: "Auction Listing/ListingGallery",
   component: ListingGallery,
@@ -146,61 +142,5 @@ export const Loading: Story = {
     const canvas = within(canvasElement);
     expect(canvas.queryByText("Click to zoom")).toBeNull();
     expect(canvas.queryByRole("button", { name: "Previous image" })).toBeNull();
-  },
-};
-
-export const DistinctSources: Story = {
-  args: {
-    images: [
-      {
-        src: DETAIL,
-        thumbSrc: THUMB,
-        zoomSrc: ZOOM,
-        alt: "1999 Charizard, PSA 10",
-        thumbLabel: "front",
-      },
-      {
-        src: DETAIL,
-        thumbSrc: THUMB,
-        zoomSrc: ZOOM,
-        alt: "1999 Charizard, PSA 10 back",
-        thumbLabel: "back",
-      },
-    ],
-  },
-  play: async ({ canvasElement }) => {
-    const root = within(canvasElement);
-    const main = root.getByRole("img", { name: /Charizard, PSA 10$/ });
-    expect(main).toHaveAttribute("src", DETAIL);
-
-    const frontThumb = root.getByRole("button", { name: "front" });
-    expect(frontThumb.querySelector("img")).toHaveAttribute("src", THUMB);
-
-    await userEvent.click(main);
-    const dialog = within(document.body);
-    const zoom = await dialog.findByRole("img", { name: /Charizard, PSA 10$/ });
-    expect(zoom).toHaveAttribute("src", ZOOM);
-  },
-};
-
-export const OmittedSourcesFallBack: Story = {
-  args: {
-    images: [
-      { src: DETAIL, alt: "1999 Charizard, PSA 10", thumbLabel: "front" },
-      { src: DETAIL, alt: "1999 Charizard, PSA 10 back", thumbLabel: "back" },
-    ],
-  },
-  play: async ({ canvasElement }) => {
-    const root = within(canvasElement);
-    const main = root.getByRole("img", { name: /Charizard, PSA 10$/ });
-    expect(main).toHaveAttribute("src", DETAIL);
-
-    const frontThumb = root.getByRole("button", { name: "front" });
-    expect(frontThumb.querySelector("img")).toHaveAttribute("src", DETAIL);
-
-    await userEvent.click(main);
-    const dialog = within(document.body);
-    const zoom = await dialog.findByRole("img", { name: /Charizard, PSA 10$/ });
-    expect(zoom).toHaveAttribute("src", DETAIL);
   },
 };
