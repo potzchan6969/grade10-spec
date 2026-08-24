@@ -64,10 +64,10 @@ navigating half of it and no worker — see design.md.
 
 ## 5. What the repository says (owner: @sean)
 
-- [ ] 5.1 Correct the `frontend-structure` skill: framework mode, the address
+- [x] 5.1 Correct the `frontend-structure` skill: framework mode, the address
       table and the route-module shape now hold for both SPAs; what stays
       grade10's alone is the worker, prerendering and the language prefixes.
-- [ ] 5.2 Say in `docs/architecture/serving.md` what a site with no worker
+- [x] 5.2 Say in `docs/architecture/serving.md` what a site with no worker
       answers an address with, so the two shapes are one document apart.
-- [ ] 5.3 Run `pnpm run agent:check-parity` and `pnpm run check:handbook`,
+- [x] 5.3 Run `pnpm run agent:check-parity` and `pnpm run check:handbook`,
       updating the Handbook where the ZZZ app's surface moved.
