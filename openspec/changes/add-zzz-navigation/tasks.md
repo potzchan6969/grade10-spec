@@ -40,13 +40,13 @@ navigating half of it and no worker — see design.md.
 
 ## 3. Session-decided addresses (owner: @sean)
 
-- [ ] 3.1 Make `A signed-in collector lands on home`, `A signed-in collector
+- [x] 3.1 Make `A signed-in collector lands on home`, `A signed-in collector
       asks for sign-in`, and `A signed-out collector asks for the profile`
       pass: each correction renders the corrected surface and replaces the
       history entry.
-- [ ] 3.2 Make `Back never returns to a corrected address` and `Not-found
+- [x] 3.2 Make `Back never returns to a corrected address` and `Not-found
       does not wait` pass.
-- [ ] 3.3 Run typecheck, lint, and the app's test lane as this group's
+- [x] 3.3 Run typecheck, lint, and the app's test lane as this group's
       verification.
 
 ## 4. The collector's place and payload
