@@ -54,6 +54,26 @@ export {
 } from "./blocks/auth-two-factor/two-factor-verify-form";
 // shared cross-capability types
 export type { AsyncAction, AsyncState } from "./blocks/shared/async";
+// shared-ui/store-home
+export {
+  StoreCollectionGrid,
+  type StoreCollectionGridProps,
+} from "./blocks/store-home/store-collection-grid";
+export {
+  StoreCollectionTile,
+  type StoreCollectionTileProps,
+} from "./blocks/store-home/store-collection-tile";
+export {
+  StoreHomeHero,
+  type StoreHomeHeroCopy,
+  type StoreHomeHeroProps,
+} from "./blocks/store-home/store-home-hero";
+export {
+  StoreSectionHeader,
+  type StoreSectionHeaderCopy,
+  type StoreSectionHeaderProps,
+} from "./blocks/store-home/store-section-header";
+export type { StoreCollectionSummary } from "./blocks/store-home/types";
 // shared-ui/store-product-listing
 export {
   FilterPanel,
