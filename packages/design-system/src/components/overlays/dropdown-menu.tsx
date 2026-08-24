@@ -2,6 +2,7 @@
 
 import { Menu as MenuPrimitive } from "@base-ui/react/menu";
 import { cn } from "@grade10/design-system/lib/utils";
+import type { VariantProps } from "class-variance-authority";
 import { CheckIcon, ChevronRightIcon } from "lucide-react";
 import type * as React from "react";
 import {
@@ -11,6 +12,17 @@ import {
 
 /**
  * The dropdown menu triggered from a button (or any element).
+ *
+ * Position the popup on the top, right, bottom, and align on the menu trigger.
+ * Base UI's Positioner avoids showing the menu out of the viewport.
+ *
+ * Enter / Space / ↓ to open the menu; ↑ / ↓ move the highlight; → opens a submenu,
+ * ← closes it; Enter selects; typing jumps to the matching item (typeahead).
+ * Disabled items are skipped by keyboard navigation and typeahead.
+ *
+ * Regular action items close on click; toggle and multi-select items stay open
+ * and close only on explicit dismiss. Escape closes the innermost submenu first,
+ * then root; clicking outside dismisses. Page scroll does not dismiss the menu.
  *
  * If the menu trigger is a button, rotate the chevron icon inside when
  * showing/hiding the menu — the trigger is the consumer's element, so that
@@ -98,7 +110,7 @@ function DropdownMenuLabel({
       data-slot="dropdown-menu-label"
       data-inset={inset}
       className={cn(
-        "px-1.5 py-1 text-xs font-medium text-muted-foreground data-inset:pl-7",
+        "px-3 py-1.5 text-xs font-medium text-muted-foreground data-inset:pl-7",
         className,
       )}
       {...props}
@@ -114,41 +126,41 @@ function DropdownMenuSubTrigger({
   className,
   inset,
   children,
+  size = "sm",
   ...props
-}: MenuPrimitive.SubmenuTrigger.Props & {
-  inset?: boolean;
-}) {
+}: MenuPrimitive.SubmenuTrigger.Props &
+  VariantProps<typeof dropdownMenuItemVariants> & {
+    inset?: boolean;
+  }) {
   return (
     <MenuPrimitive.SubmenuTrigger
       data-slot="dropdown-menu-sub-trigger"
       data-inset={inset}
       className={cn(
-        "flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:pl-7 data-popup-open:bg-accent data-popup-open:text-accent-foreground data-open:bg-accent data-open:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        dropdownMenuItemVariants({ size }),
+        "data-popup-open:bg-muted-hover data-open:bg-muted-hover",
         className,
       )}
       {...props}
     >
-      {children}
-      <ChevronRightIcon className="ml-auto" />
+      <span className="min-w-0 flex-1 whitespace-nowrap">{children}</span>
+      <ChevronRightIcon className="ml-auto text-secondary-foreground" />
     </MenuPrimitive.SubmenuTrigger>
   );
 }
 
 function DropdownMenuSubContent({
   align = "start",
-  alignOffset = -3,
+  alignOffset = -4,
   side = "right",
-  sideOffset = 0,
+  sideOffset = 4,
   className,
   ...props
 }: React.ComponentProps<typeof DropdownMenuContent>) {
   return (
     <DropdownMenuContent
       data-slot="dropdown-menu-sub-content"
-      className={cn(
-        "w-auto min-w-[96px] rounded-lg bg-popover p-1 text-popover-foreground shadow-lg ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
-        className,
-      )}
+      className={cn("w-auto min-w-32", className)}
       align={align}
       alignOffset={alignOffset}
       side={side}
@@ -163,27 +175,29 @@ function DropdownMenuCheckboxItem({
   children,
   checked,
   inset,
+  size = "sm",
   ...props
-}: MenuPrimitive.CheckboxItem.Props & {
-  inset?: boolean;
-}) {
+}: MenuPrimitive.CheckboxItem.Props &
+  VariantProps<typeof dropdownMenuItemVariants> & {
+    inset?: boolean;
+  }) {
   return (
     <MenuPrimitive.CheckboxItem
       data-slot="dropdown-menu-checkbox-item"
       data-inset={inset}
-      className={cn(dropdownMenuItemVariants(), "pr-8", className)}
+      className={cn(dropdownMenuItemVariants({ size }), className)}
       checked={checked}
       {...props}
     >
+      <span className="min-w-0 flex-1 whitespace-nowrap">{children}</span>
       <span
-        className="pointer-events-none absolute right-2 flex items-center justify-center text-secondary-foreground"
+        className="pointer-events-none flex shrink-0 items-center justify-end text-secondary-foreground"
         data-slot="dropdown-menu-checkbox-item-indicator"
       >
         <MenuPrimitive.CheckboxItemIndicator>
-          <CheckIcon className="text-secondary-foreground" />
+          <CheckIcon className={size === "md" ? "size-4" : "size-3.5"} />
         </MenuPrimitive.CheckboxItemIndicator>
       </span>
-      {children}
     </MenuPrimitive.CheckboxItem>
   );
 }
@@ -205,26 +219,28 @@ function DropdownMenuRadioItem({
   className,
   children,
   inset,
+  size = "sm",
   ...props
-}: MenuPrimitive.RadioItem.Props & {
-  inset?: boolean;
-}) {
+}: MenuPrimitive.RadioItem.Props &
+  VariantProps<typeof dropdownMenuItemVariants> & {
+    inset?: boolean;
+  }) {
   return (
     <MenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
       data-inset={inset}
-      className={cn(dropdownMenuItemVariants(), "pr-8", className)}
+      className={cn(dropdownMenuItemVariants({ size }), className)}
       {...props}
     >
+      <span className="min-w-0 flex-1 whitespace-nowrap">{children}</span>
       <span
-        className="pointer-events-none absolute right-2 flex items-center justify-center text-secondary-foreground"
+        className="pointer-events-none flex shrink-0 items-center justify-end text-secondary-foreground"
         data-slot="dropdown-menu-radio-item-indicator"
       >
         <MenuPrimitive.RadioItemIndicator>
-          <CheckIcon className="text-secondary-foreground" />
+          <CheckIcon className={size === "md" ? "size-4" : "size-3.5"} />
         </MenuPrimitive.RadioItemIndicator>
       </span>
-      {children}
     </MenuPrimitive.RadioItem>
   );
 }
@@ -250,7 +266,7 @@ function DropdownMenuShortcut({
     <span
       data-slot="dropdown-menu-shortcut"
       className={cn(
-        "ml-auto text-xs tracking-widest text-muted-foreground group-focus/dropdown-menu-item:text-accent-foreground",
+        "ml-auto text-xs tracking-widest text-secondary-foreground",
         className,
       )}
       {...props}
