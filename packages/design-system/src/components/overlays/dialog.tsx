@@ -1,9 +1,28 @@
+"use client";
+
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { cn } from "@grade10/design-system/lib/utils";
-import { XIcon } from "lucide-react";
-import type * as React from "react";
+import { X } from "@phosphor-icons/react";
+import { type ComponentProps, useRef } from "react";
 
+/**
+ * A modal window that overlays the page for focused tasks and content.
+ *
+ * Use a dialog for a focused task or piece of content that should interrupt
+ * the page – a form, a confirmation with detail.
+ *
+ * Open traps focus inside the popup. Escape and an outside click close it,
+ * and focus returns to the trigger. Scroll and interaction with the rest of
+ * the page are blocked while the dialog is open. Enter/exit motion is skipped
+ * when the user prefers reduced motion.
+ *
+ * Base UI's popup already exposes `role="dialog"` and `aria-modal="true"`.
+ * `DialogTitle` is the `<h2>` that `aria-labelledby` points at. Put the
+ * primary action last in `DialogFooter` so it receives default focus on open
+ * and Enter submits; a destructive confirm uses `Button variant="destructive"`.
+ */
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
 }
@@ -28,7 +47,7 @@ function DialogOverlay({
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
       className={cn(
-        "fixed inset-0 isolate z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+        "fixed inset-0 isolate z-50 bg-overlay duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:animate-none motion-reduce:duration-0",
         className,
       )}
       {...props}
@@ -36,50 +55,103 @@ function DialogOverlay({
   );
 }
 
+function DialogCloseIcon({ className }: { className?: string }) {
+  return (
+    <DialogPrimitive.Close
+      data-slot="dialog-close"
+      render={<IconButton aria-label="Close dialog" className={className} />}
+    >
+      <X aria-hidden />
+    </DialogPrimitive.Close>
+  );
+}
+
 function DialogContent({
   className,
   children,
-  showCloseButton = true,
+  showCloseButton = false,
+  initialFocus,
   ...props
 }: DialogPrimitive.Popup.Props & {
   showCloseButton?: boolean;
 }) {
+  const popupRef = useRef<HTMLDivElement>(null);
+
   return (
     <DialogPortal>
       <DialogOverlay />
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          // max-h-[640px] is the Figma frame max, not a token.
+          "fixed top-1/2 left-1/2 z-50 flex w-[calc(100%-2rem)] max-h-[640px] max-w-(--container-md) -translate-x-1/2 -translate-y-1/2 flex-col gap-6 overflow-hidden rounded-(--radius-4xl) border border-border-subtle bg-popover p-6 text-sm text-popover-foreground shadow-[0_24px_32px_-12px_var(--shadow-color,rgb(118_118_118_/_20%))] outline-none backdrop-blur-xl duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 motion-reduce:animate-none motion-reduce:duration-0",
           className,
         )}
+        initialFocus={
+          initialFocus ??
+          (() => {
+            const primary = popupRef.current?.querySelector(
+              '[data-slot="dialog-footer"] button:last-of-type',
+            );
+            return (primary as HTMLElement | undefined) ?? true;
+          })
+        }
         {...props}
+        ref={popupRef}
       >
         {children}
-        {showCloseButton && (
-          <DialogPrimitive.Close
-            data-slot="dialog-close"
-            render={
-              <Button
-                variant="ghost"
-                className="absolute top-2 right-2 size-7 p-0"
-              />
-            }
-          >
-            <XIcon />
-            <span className="sr-only">Close</span>
-          </DialogPrimitive.Close>
-        )}
+        {showCloseButton ? (
+          <DialogCloseIcon className="absolute top-6 right-6" />
+        ) : null}
       </DialogPrimitive.Popup>
     </DialogPortal>
   );
 }
 
-function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
+/**
+ * The title row of a dialog, with a close control on the trailing edge.
+ *
+ * Figma's Dialog Header set (`2159:3156`) has no description — this is the
+ * projection. Raise a description with the designer rather than leaving the
+ * set as search keywords.
+ *
+ * The close control is `IconButton` outline/sm (the set's defaults) with
+ * `aria-label="Close dialog"`. It is last in the header tab order; default
+ * focus on open still moves to the footer's last button so Enter confirms.
+ */
+function DialogHeader({
+  className,
+  showCloseButton = true,
+  children,
+  ...props
+}: ComponentProps<"div"> & {
+  showCloseButton?: boolean;
+}) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex flex-col gap-2", className)}
+      className={cn("flex w-full shrink-0 items-center gap-2", className)}
+      {...props}
+    >
+      {children}
+      {showCloseButton ? <DialogCloseIcon /> : null}
+    </div>
+  );
+}
+
+/**
+ * Scroll region between the pinned header and footer. For content taller than
+ * the viewport, this owns the overflow — matching the Figma body slot.
+ * Overflowing content gets shadcn's scroll-aware top/bottom fade.
+ */
+function DialogBody({ className, ...props }: ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-body"
+      className={cn(
+        "scroll-fade flex min-h-0 w-full flex-1 flex-col gap-4 overflow-x-clip overflow-y-auto",
+        className,
+      )}
       {...props}
     />
   );
@@ -90,21 +162,21 @@ function DialogFooter({
   showCloseButton = false,
   children,
   ...props
-}: React.ComponentProps<"div"> & {
+}: ComponentProps<"div"> & {
   showCloseButton?: boolean;
 }) {
   return (
     <div
       data-slot="dialog-footer"
       className={cn(
-        "-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:justify-end",
+        "flex w-full shrink-0 items-center justify-end gap-2",
         className,
       )}
       {...props}
     >
       {children}
       {showCloseButton && (
-        <DialogPrimitive.Close render={<Button variant="outline" />}>
+        <DialogPrimitive.Close render={<Button variant="outline" size="md" />}>
           Close
         </DialogPrimitive.Close>
       )}
@@ -117,7 +189,7 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
     <DialogPrimitive.Title
       data-slot="dialog-title"
       className={cn(
-        "font-heading text-base leading-none font-medium",
+        "min-w-0 flex-1 truncate text-lg leading-7 font-bold text-foreground",
         className,
       )}
       {...props}
@@ -133,7 +205,7 @@ function DialogDescription({
     <DialogPrimitive.Description
       data-slot="dialog-description"
       className={cn(
-        "text-sm text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
+        "text-sm leading-5 font-normal text-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
         className,
       )}
       {...props}
@@ -143,6 +215,7 @@ function DialogDescription({
 
 export {
   Dialog,
+  DialogBody,
   DialogClose,
   DialogContent,
   DialogDescription,

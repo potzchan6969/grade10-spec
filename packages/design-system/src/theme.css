@@ -28,6 +28,8 @@
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-overlay: var(--overlay);
   --color-error-foreground: var(--error-foreground);
   --color-error: var(--error);
   --color-warning-foreground: var(--warning-foreground);
@@ -115,7 +117,7 @@
 :root {
   /* primitives — Figma "Foundation" */
   --gray-50: #FAFAFA;
-  --gray-50-opacity-70: #FAFAFAB2;
+  --gray-50-opacity-80: #FAFAFACC;
   --gray-100: #F3F3F3;
   --gray-200: #E6E6E6;
   --gray-300: #D6D6D6;
@@ -328,8 +330,8 @@
   --container-3xl: 768px;
   --container-4xl: 896px;
   --container-5xl: 1024px;
-  --container-7xl: 1280px;
   --blur-sm: 4px;
+  --container-7xl: 1280px;
   --blur: 8px;
   --blur-md: 12px;
   --blur-lg: 16px;

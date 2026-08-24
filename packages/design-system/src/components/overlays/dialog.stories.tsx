@@ -4,6 +4,7 @@ import { Input } from "../forms/input";
 import { Label } from "../forms/label";
 import {
   Dialog,
+  DialogBody,
   DialogClose,
   DialogContent,
   DialogDescription,
@@ -30,17 +31,64 @@ export const Default: Story = {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Confirm your prediction</DialogTitle>
-          <DialogDescription>
-            This locks in your position. You can’t change it after the round
-            closes.
-          </DialogDescription>
+          <DialogTitle>Title</DialogTitle>
         </DialogHeader>
+        <DialogBody>
+          <DialogDescription>Dialog content here</DialogDescription>
+        </DialogBody>
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>
+          <DialogClose render={<Button variant="outline" size="md" />}>
             Cancel
           </DialogClose>
-          <DialogClose render={<Button />}>Confirm</DialogClose>
+          <DialogClose render={<Button size="md" />}>Confirm</DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  ),
+};
+
+/** Open on mount so the Figma composition can be measured without a click. */
+export const Open: Story = {
+  render: () => (
+    <Dialog defaultOpen>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Title</DialogTitle>
+        </DialogHeader>
+        <DialogBody>
+          <DialogDescription>Dialog content here</DialogDescription>
+        </DialogBody>
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline" size="md" />}>
+            Cancel
+          </DialogClose>
+          <DialogClose render={<Button size="md" />}>Confirm</DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  ),
+};
+
+/** Keep titles short and action-oriented; a long title truncates. */
+export const LongTitle: Story = {
+  render: () => (
+    <Dialog defaultOpen>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>
+            Delete this prediction and every wager tied to it?
+          </DialogTitle>
+        </DialogHeader>
+        <DialogBody>
+          <DialogDescription>This action cannot be undone.</DialogDescription>
+        </DialogBody>
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline" size="md" />}>
+            Cancel
+          </DialogClose>
+          <DialogClose render={<Button variant="destructive" size="md" />}>
+            Delete
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -57,10 +105,12 @@ export const WithFooterClose: Story = {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Round settled</DialogTitle>
+        </DialogHeader>
+        <DialogBody>
           <DialogDescription>
             Payouts have been credited to your balance.
           </DialogDescription>
-        </DialogHeader>
+        </DialogBody>
         <DialogFooter showCloseButton />
       </DialogContent>
     </Dialog>
@@ -76,50 +126,84 @@ export const WithForm: Story = {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
+        </DialogHeader>
+        <DialogBody>
           <DialogDescription>
             Changes are visible to everyone on the leaderboard.
           </DialogDescription>
-        </DialogHeader>
-        <div className="flex flex-col gap-3">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="display-name">Display name</Label>
-            <Input id="display-name" defaultValue="satoshi" />
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="display-name">Display name</Label>
+              <Input id="display-name" defaultValue="satoshi" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" placeholder="you@example.com" />
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="you@example.com" />
-          </div>
-        </div>
+        </DialogBody>
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>
+          <DialogClose render={<Button variant="outline" size="md" />}>
             Cancel
           </DialogClose>
-          <DialogClose render={<Button />}>Save</DialogClose>
+          <DialogClose render={<Button size="md" />}>Save</DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   ),
 };
 
-/** Set `showCloseButton={false}` when the footer already offers a way out. */
+/** Set `showCloseButton={false}` on the header when the footer already offers a way out. */
 export const WithoutCloseButton: Story = {
   render: () => (
     <Dialog>
       <DialogTrigger render={<Button variant="outline" />}>
         Open dialog
       </DialogTrigger>
-      <DialogContent showCloseButton={false}>
-        <DialogHeader>
+      <DialogContent>
+        <DialogHeader showCloseButton={false}>
           <DialogTitle>Delete prediction</DialogTitle>
-          <DialogDescription>This action cannot be undone.</DialogDescription>
         </DialogHeader>
+        <DialogBody>
+          <DialogDescription>This action cannot be undone.</DialogDescription>
+        </DialogBody>
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>
+          <DialogClose render={<Button variant="outline" size="md" />}>
             Cancel
           </DialogClose>
-          <DialogClose render={<Button variant="destructive" />}>
+          <DialogClose render={<Button variant="destructive" size="md" />}>
             Delete
           </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  ),
+};
+
+/** Tall body content scrolls between the pinned header and footer. */
+export const ScrollableBody: Story = {
+  render: () => (
+    <Dialog defaultOpen>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Terms</DialogTitle>
+        </DialogHeader>
+        <DialogBody>
+          {Array.from({ length: 24 }, (_, index) => {
+            const label = `Paragraph ${index + 1}`;
+            return (
+              <p key={label}>
+                {label}. The body owns overflow so the title and actions stay in
+                view.
+              </p>
+            );
+          })}
+        </DialogBody>
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline" size="md" />}>
+            Cancel
+          </DialogClose>
+          <DialogClose render={<Button size="md" />}>Accept</DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
