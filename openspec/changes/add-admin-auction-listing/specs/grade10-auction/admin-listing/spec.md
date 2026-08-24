@@ -2,8 +2,10 @@
 
 Lets an authorized Grade10 operator draft, create, and publish an Auction
 listing — incomplete saves first, required fields enforced at create, publish
-now or at a future scheduled time — with an unprocessed gallery of one to
-eight images or videos, and call one off while it has not closed.
+now or at a future scheduled time — with an ordered gallery of one to eight
+images or videos (originals stored and served as uploaded), and call one off
+while it has not closed. Named image sizes and optional alt live in
+`grade10-auction/listing-images` in this same change.
 
 ## ADDED Requirements
 
@@ -554,10 +556,12 @@ QuickTime. Any other type SHALL be refused. An empty file SHALL be refused.
 Each file SHALL be at most 100 mebibytes (104857600 bytes); a larger file
 SHALL be refused.
 
-Media SHALL be stored and served as uploaded. Grade10 SHALL NOT resize,
-transcode, generate a thumbnail, or otherwise derive a second object from the
-upload in this capability. Optional width and height, when supplied by the
-operator's client, are untrusted layout hints and MUST NOT be treated as
+Original media bytes SHALL be stored and served as uploaded. This capability
+SHALL NOT resize, transcode, generate a thumbnail, or otherwise derive a
+second object from the upload. Named public sizes for gallery **images** are
+owned by `grade10-auction/listing-images` and are an additional public
+contract on top of the original. Optional width and height, when supplied by
+the operator's client, are untrusted layout hints and MUST NOT be treated as
 measurements.
 
 The gallery has a display order the operator controls. The first item SHALL
@@ -593,8 +597,11 @@ video from the uploaded bytes.
 
 - **GIVEN** a draft listing
 - **WHEN** an operator uploads a JPEG whose body is 2 mebibytes
-- **THEN** Grade10 serves that same body and type for the item
-- **AND** it serves no derived smaller or differently typed object for it
+- **THEN** Grade10 stores and serves that same body and type as the item's
+  original
+- **AND** any named-size paths for the image come from
+  `grade10-auction/listing-images`, not from a second stored object written
+  at upload
 
 #### Scenario: Unsupported type is refused
 

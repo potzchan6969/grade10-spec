@@ -3,7 +3,12 @@
 Product context: [Grade10 Auction](../../../docs/prds/auction/auction.md).
 Overlaps [`add-grade10-auction`](../add-grade10-auction/proposal.md) (collector
 browse and bidding; archive still pending). This change is the operator half
-that change left out.
+that change left out, plus sized gallery delivery for collectors.
+
+This change absorbs [`add-auction-listing-assets`](../../archive/2026-08-24-add-auction-listing-assets/proposal.md)
+(archived 2026-08-24, specs not folded). Grade10 PRs #85 (admin listing
+workflow) and #71 (listing gallery assets, stacked on #85) ship together, so
+one OpenSpec change owns both.
 
 ## Why
 
@@ -15,10 +20,20 @@ console it already uses to run the sale. In practice an operator saves
 incomplete work, then creates the listing once the facts are in, then
 publishes — often on a schedule, not by clicking at that moment.
 
+Even when media is attached, the catalogue still reads as a text list of
+lots: each row is title, close, and price, and both the catalogue and the
+details gallery ask the browser for the original scan — often a
+multi-megabyte JPEG — with the same address for thumbnail, main frame, and
+zoom.
+
 **Metric:** listings created and updated from the Grade10 auction admin
-section that reach `published`. **Acceptance signal:** an operator can save
-an empty draft, fill it over more than one session, create it once required
-fields are present, and have it publish at a chosen time.
+section that reach `published`, and the share of those whose catalogue row
+shows a card-sized first image (when that item is an image) with sized
+gallery sources on the details page. **Acceptance signal:** an operator can
+save an empty draft, fill it over more than one session (including ordered
+gallery media with optional alt and preview-before-upload), create it once
+required fields are present, have it publish at a chosen time, and a
+collector sees the listing by slug with sized image delivery.
 
 ## What Changes
 
@@ -47,12 +62,21 @@ fields are present, and have it publish at a chosen time.
   future listing. A collector reaches a published, closed, or settled
   listing at `/auction/listings/<slug>`. The slug cannot change once the
   listing is published, except by that cancel rewrite.
-- **Media is an ordered gallery of one to eight images or videos**, stored
-  and served as uploaded. A draft may have none; create requires at least
-  one. Image processing, renditions, and thumbnails are a separate change.
-- **BREAKING** for the public listing gallery: media is no longer one photo
-  per named physical side (`front` / `back` / `left` / `right` / `top` /
-  `bottom`). It is an ordered list; the first item is the catalogue card.
+- **Media is an ordered gallery of one to eight images or videos.** A draft
+  may have none; create requires at least one. Originals are stored
+  content-addressed and served as uploaded. **BREAKING** for the public
+  listing gallery: media is no longer one photo per named physical side
+  (`front` / `back` / `left` / `right` / `top` / `bottom`). It is an ordered
+  list; the first item is the catalogue card.
+- **Named sizes and optional alt for gallery images.** Each published gallery
+  **image** is offered at four named sizes — `card`, `detail`, `thumb`,
+  `zoom` — transformed on serve when the named size is smaller than the
+  stored bytes. Image items carry optional alt (fallback: listing title).
+  Video items keep the original public path. The admin photo manager
+  previews and confirms before image bytes upload, reviews at card size,
+  and magnifies to zoom.
+- **Listing object store renamed** from `AUCTION_LISTING_IMAGES` to
+  `AUCTION_LISTING_ASSETS` so image and video share one bucket name.
 
 ### Fields
 
@@ -106,8 +130,13 @@ live money, so the house can rehearse a sale.
 
 ## Non-Goals
 
-- Image or video processing — resize, transcode, generated thumbnails, or
-  derived renditions. This change stores the uploaded bytes and serves them.
+- Video transcoding or generated video thumbnails. Video is stored and served
+  as uploaded; named sizes apply to images only.
+- Cloudflare Images as the object store, or precomputed derivatives in R2.
+  Originals stay content-addressed in R2; named sizes for images are produced
+  on serve.
+- Required alt text or a publish gate on images. Alt falls back to the
+  listing title. Create's "at least one media" rule stands.
 - Relisting an existing unit, picking a product, or a consignment record.
 - A sale-scoped lot number (listing label / `12A`). An online listing is
   identified by its title and address.
@@ -126,8 +155,17 @@ live money, so the house can rehearse a sale.
   and publishes an Auction listing from the Grade10 admin section — which
   fields they may write, when required fields are enforced, when a listing
   may be called off, slug lookup at `/auction/listings/<slug>`, the cancel
-  rewrite that frees a slug, scheduled publish, and the unprocessed media
-  gallery a listing then publishes.
+  rewrite that frees a slug, scheduled publish, and the ordered one-to-eight
+  image-or-video gallery (originals stored and served as uploaded).
+- `grade10-auction/listing-images`: optional alt on gallery images, named
+  public sizes (`card`, `detail`, `thumb`, `zoom`), admin photo-manager
+  preview-before-upload and card/zoom review, and catalogue/details
+  consumption of sized paths — on the gallery from admin-listing.
+- `shared-ui/auction-listing`: the listing product-page blocks `@grade10/ui`
+  already exports (`ListingGallery`, `ListingBidPanel`, `ListingDetails`) and
+  the gallery's distinct sources for thumbnail, main frame, and zoom. The
+  blocks ship today with no durable spec; this change alters the gallery
+  contract, so the surface is written down here.
 
 ### Modified Capabilities
 
@@ -138,12 +176,16 @@ live money, so the house can rehearse a sale.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/admin/grade10` | Draft, create, and edit surfaces on the auction listings section, including client-side required-field checks at create and a publish at control. |
-| `apps/backend/grade10/auction` | Today's create is a complete draft in one step; this needs a lenient draft save, a create gate that validates required fields, and publish at a scheduled time. Media stops being keyed by physical side and accepts video. Cancel of a `created` listing is allowed; cancel rewrites the slug to free the original. |
-| `@grade10/auction-contracts` | Admin listing shape gains slug, media, and publish at; public listing gallery becomes an ordered list of images and videos. Public listing lookup is by slug. **BREAKING** for `angle` and for listing addresses that named an internal id. |
-| `@grade10/auction-admin-frontend` | Draft/create/update repository and form wiring. |
-| `@grade10/auction-frontend` / Grade10 listing page | Lookup by slug; gallery must show videos as well as images, in the operator's order. |
-| `@grade10/ui` `ListingGallery` | May need to accept video items; that is delivery work at promotion. |
+| `apps/admin/grade10` | Draft, create, and edit surfaces; gallery photo manager with preview/confirm, card/zoom review, and alt; client-side required-field checks at create and a publish at control. |
+| `apps/frontend/grade10` | Catalogue row shows first image at card size; details gallery passes sized sources and alt into `ListingGallery`; public lookup by slug. |
+| `apps/backend/grade10/auction` | Lenient draft save, create gate, scheduled publish, ordered media (image and video), binding renamed to `AUCTION_LISTING_ASSETS`, Images binding for on-serve transform, public path gains a size segment for images. Cancel of a `created` listing is allowed; cancel rewrites the slug. |
+| `@grade10/auction-contracts` | Admin listing shape gains slug, media, publish at, alt, and named-size paths; public gallery becomes an ordered list. Public listing lookup is by slug. **BREAKING** for `angle` and for listing addresses that named an internal id. |
+| `@grade10/auction-admin-frontend` | Draft/create/update/media/alt repository and form wiring. |
+| `@grade10/auction-frontend` / Grade10 listing page | Lookup by slug; sized paths and alt; gallery shows videos as well as images. |
+| `@grade10/ui` | `ListingGallery` / `ListingGalleryImage` accept distinct thumbnail, main, and zoom sources; may render video items. |
 
-No new design-system primitive is proposed. Money remains integer minor units
-plus an ISO 4217 code.
+Cloudflare Images (Workers binding) is a new account-level dependency on the
+auction worker. The public listing-image path stays under
+`/api/public/listing-images`; only the object-store binding is renamed.
+Money remains integer minor units plus an ISO 4217 code. No new design-system
+primitive is proposed.

@@ -3,35 +3,46 @@
 The Auction worker currently creates a complete, immediately publishable
 listing around a pre-existing product, stores one image for each named physical
 side, and lets the admin panel publish, reschedule, or cancel that listing.
-The admin listing capability delta is the source of truth for the new
-lifecycle and public address. See [proposal.md](proposal.md) for motivation.
+See [proposal.md](proposal.md) for motivation. This design covers both the
+operator listing lifecycle and sized gallery delivery (formerly split across
+`add-admin-auction-listing` and `add-auction-listing-assets`).
+
+Capability deltas:
+[`grade10-auction/admin-listing`](specs/grade10-auction/admin-listing/spec.md),
+[`grade10-auction/listing-images`](specs/grade10-auction/listing-images/spec.md),
+[`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
 
 The worker is the authority for listing state, its Postgres schema, object
 store media, public routes, cache invalidation, and cron sweeps. The Grade10
 admin app composes data-backed auction features from
 `@grade10/auction-admin-frontend`; it does not call the transport directly.
+Screens: [ui.md](ui.md).
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Make draft, create, publish, scheduled publish, update, cancel, media, and
-  slug lookup one consistent listing lifecycle across the schema, worker,
-  contracts, and admin feature.
+- Make draft, create, publish, scheduled publish, update, cancel, ordered
+  media, slug lookup, optional image alt, and named image sizes one consistent
+  listing lifecycle across the schema, worker, contracts, admin feature, and
+  storefront.
 - Keep create as the single complete-field validation gate while preserving
   field-shape validation on each draft write.
 - Make the database, rather than a read-before-write check, protect live slug
   uniqueness and the listing state transitions that race with a sweep.
+- Serve originals from R2; produce named sizes for images on the public GET
+  through the Workers Images binding.
 - Let the admin feature run from contract-backed fixtures, independently of a
   running worker.
 
 **Non-Goals:**
 
-- General image/video processing, renditions, thumbnails, or content analysis.
+- Video transcoding or generated video thumbnails.
 - Changing auction bidding, close, or settlement mechanics beyond recognizing
   the new `created` lifecycle state.
 - Introducing a shared form component or a design-system primitive without a
   design-system decision.
+- Cloudflare Images as the object store, or precomputed derivatives in R2.
 
 ## Decisions
 
@@ -86,19 +97,53 @@ was rejected because publication must happen when no client is open.
 ### Replace angle-keyed images with an ordered media gallery
 
 Replace `auction_listing_images(angle)` with media rows that carry an integer
-position, media kind/content type, object key, and optional dimensions. The
-database bounds a listing to one ordered position per item and the service
-accepts only one to eight items at create; drafts may contain none. Uploads
-write immutable original bytes to the existing object store and insert,
-replace, remove, or reorder rows through the elevated listing path. Public and
-admin codecs expose an ordered media list, and public rendering chooses an
-image or video element from each item's media type.
+position, media kind/content type, object key, optional dimensions, and
+optional alt (images only). The database bounds a listing to one ordered
+position per item and the service accepts only one to eight items at create;
+drafts may contain none. Uploads write immutable original bytes to the object
+store and insert, replace, remove, or reorder rows through the elevated
+listing path. Public and admin codecs expose an ordered media list, and public
+rendering chooses an image or video element from each item's media type.
 
 Keeping the side vocabulary was rejected because it cannot express an ordered
 gallery or video. Storing media as a JSON array on the listing was rejected:
 row-level writes avoid lost updates and let the orphan-object sweep continue
-to discover all referenced keys. Derived uploads were rejected because this
-change deliberately serves originals only.
+to discover all referenced keys.
+
+### Originals stay in R2; named sizes for images are produced on serve
+
+Keep one object per unique byte string under binding `AUCTION_LISTING_ASSETS`
+(buckets `grade10-auction-listing-assets-{dev,staging,production}`). Image
+public paths gain a size segment:
+
+`/api/public/listing-images/<size>/<objectKey>`
+
+`<size>` is one of `card`, `detail`, `thumb`, `zoom`. The GET validates size
+then key, reads the original from R2, and — when the named size is smaller
+than the stored image — runs it through the Workers Images binding. Unknown
+size and unknown key both 404. Video items keep the original path; named
+sizes apply to images only. The in-process storage area stays `listingImages`,
+the table stays `auction_listing_images`, and `PUBLIC_ROUTES.listingImages`
+stays `/api/public/listing-images`.
+
+Pixel ceilings (CSS slot × 2, never upscale):
+
+| Size     | Max edge | Used by                          |
+| -------- | -------- | -------------------------------- |
+| `thumb`  | 128      | gallery strip (`h-16 w-12`)      |
+| `card`   | 800      | catalogue row                    |
+| `detail` | 1280     | gallery main frame               |
+| `zoom`   | 1600     | zoom dialog                      |
+
+The public image object grows `alt` (string or null) and a `paths` map of the
+four sizes. `imagePath` remains the `detail` path for stale clients.
+`IMAGES.info()` measures raster uploads; video skips measure. Upload size and
+type bounds: 100 mebibytes; JPEG/PNG/WebP/AVIF plus video types from
+admin-listing.
+
+Precomputing derivatives in R2 was rejected: content-addressed originals stay
+simple and cache absorbs repeat transforms. Serving only originals for every
+slot was rejected: catalogue and zoom would pull multi-megabyte scans.
 
 ### Use slug at the public boundary while retaining internal ids behind it
 
@@ -116,19 +161,27 @@ claim the same address.
 
 ### Keep the admin feature shallow and DI-backed
 
-Extend the existing `catalog/listings` slice with draft/create/update/media
+Extend the existing `catalog/listings` slice with draft/create/update/media/alt
 commands and form-facing models. Its datasource decodes the admin contract,
 the repository exposes the commands, and hooks invalidate listing queries.
-`apps/admin/grade10` owns the listing-form page composition, dialog state, and
-permission-gated actions. Fixtures implement the expanded procedure port so
-the package and app tests cover form states without a running worker.
+`apps/admin/grade10` owns the listing-form page composition, dialog state,
+permission-gated actions, and the photo manager (local preview with Confirm /
+Discard before upload; stored images at card size; magnify reveals zoom).
+Fixtures implement the expanded procedure port so the package and app tests
+cover form states without a running worker.
 
-This follows the existing auction admin slice pattern and keeps the app free
-of wire types. Putting the form and tRPC calls directly in the admin app was
-rejected because it would duplicate the feature for future admin consumers and
-bypass the decode/fixture seam. Adding a use-case layer was rejected because
-the browser owns no invariant beyond presentation validation; the worker owns
-the lifecycle rules.
+Putting the form and tRPC calls directly in the admin app was rejected because
+it would duplicate the feature for future admin consumers and bypass the
+decode/fixture seam. Adding a use-case layer was rejected because the browser
+owns no invariant beyond presentation validation; the worker owns the
+lifecycle rules.
+
+### `ListingGallery` takes three sources; catalogue stays an assembly
+
+`ListingGalleryImage` gains optional `thumbSrc` and `zoomSrc` (omit → `src`).
+Labels arrive as `copy: { zoom, previous, next }`. The grade10 listing page
+maps `paths.thumb` / `paths.detail` / `paths.zoom` and `alt ?? title`. The
+catalogue row is app-owned: an `img` at `paths.card` for the first image item.
 
 ## Risks / Trade-offs
 
@@ -140,26 +193,33 @@ the lifecycle rules.
   listing for every state transition; an already published or canceled row is a
   no-op for the sweep.
 - [A successful object write can outlive a rejected media-row write] → Keep the
-  existing write-object-first rule and let the orphan-object sweep reclaim
-  unreferenced originals.
+  write-object-first rule and let the orphan-object sweep reclaim unreferenced
+  originals.
 - [Browser validation drifts from the API] → Share the contract vocabulary and
   retain backend scenario tests as the authority; form tests prove only the
   early feedback.
-- [The fixed-size gallery exceeds worker/object-store constraints] → Enforce
-  content-type and byte limits at upload and one-to-eight media cardinality at
-  create; no processing is attempted in this change.
+- [Cloudflare Images is a paid Workers binding] → Without it, named sizes
+  cannot be produced. Fail loud (5xx + log); do not silently fall back to the
+  original multi-megabyte scan for sized paths.
+- [First request per size per object pays a transform] → Immutable cache
+  absorbs repeats.
 
 ## Migration Plan
 
-1. Add the expanded status, authoring, slug, scheduling, and ordered-media
-   schema with an expand migration; backfill existing complete listings as
-   published and convert each angle image to its deterministic gallery order.
-2. Generate and commit the worker migration artifacts, then ship the worker,
-   contracts, and admin feature together so every deployed reader understands
-   the new row shape.
-3. Deploy with the public lookup route accepting slugs only after existing
+1. Add the expanded status, authoring, slug, scheduling, ordered-media, and
+   nullable `alt` schema with expand migrations; backfill existing complete
+   listings as published and convert each angle image to its deterministic
+   gallery order. No alt backfill: null means "use the listing title".
+2. Create `grade10-auction-listing-assets-{staging,production}` in each
+   Cloudflare account; copy keys from prior listing-images buckets when any
+   exist; bind `IMAGES`. Local uses the wrangler-dev bucket of the same name.
+3. Generate and commit the worker migration artifacts, then ship the worker,
+   contracts, admin feature, and storefront together so every deployed reader
+   understands the new row shape and sized public GET.
+4. Deploy with the public lookup route accepting slugs only after existing
    visible listings have a unique backfilled slug. Monitor the publish-due
-   sweep and public lookup refusals.
-4. Roll back application code only while the expanded schema remains
+   sweep, sized GET failures, and public lookup refusals.
+5. Roll back application code only while the expanded schema remains
    compatible. Do not roll back the migration destructively; forward-fix data
    or code if a listing has already been authored under the new lifecycle.
+   Delete old listing-images buckets in a later change — not this one.
