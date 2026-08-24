@@ -70,7 +70,11 @@ const die = (m) => {
 // check is worse than no check, because it reads as coverage.
 function componentsFromDocument(doc) {
   const out = {};
+  // Every node, by id, so a template aimed at something that is not a
+  // component can say what it actually hit instead of reporting a deletion.
+  const nodes = {};
   const visit = (node, parent) => {
+    nodes[node.id] = { type: node.type, name: node.name };
     // A COMPONENT_SET's children are its variants, so index the set and not
     // each variant. A COMPONENT found anywhere else is a standalone component
     // with no variant axes — List, List Item and Radio List are all drawn that
@@ -108,7 +112,7 @@ function componentsFromDocument(doc) {
     for (const child of node.children ?? []) visit(child, node);
   };
   visit(doc, null);
-  return out;
+  return { components: out, nodes };
 }
 
 async function loadFigmaComponents() {
@@ -122,6 +126,9 @@ async function loadFigmaComponents() {
     return {
       source: `dump ${process.env.FIGMA_DUMP}`,
       components: meta.components,
+      // A plugin dump carries no document, so nothing can say what a stray
+      // node-id actually points at; those stay reported as absent.
+      nodes: {},
     };
   }
 
@@ -153,34 +160,67 @@ async function loadFigmaComponents() {
     );
   const json = await res.json();
   if (!json.document) die(`Figma REST returned no document for file ${key}.`);
-  const components = componentsFromDocument(json.document);
+  const { components, nodes } = componentsFromDocument(json.document);
+  // Descriptions do not live on the document nodes — they sit in the sibling
+  // `components` / `componentSets` maps of the same response, so the check
+  // costs no second request and no extra scope.
+  for (const [id, meta] of [
+    ...Object.entries(json.componentSets ?? {}),
+    ...Object.entries(json.components ?? {}),
+  ])
+    if (components[id])
+      components[id].description = (meta.description ?? "").trim();
   if (!Object.keys(components).length)
     die(
       `No COMPONENT or COMPONENT_SET nodes found in file ${key}. Either the ` +
         `file has none, or the response shape changed — failing rather than ` +
         `reporting "no drift".`,
     );
-  return { source: `REST ${key}`, components };
+  return { source: `REST ${key}`, components, nodes };
 }
 
 const cfg = JSON.parse(
   await readFile(resolve(pkgDir, "tokens.config.json"), "utf8"),
 );
-const { source: figmaSource, components: figmaComponents } =
-  await loadFigmaComponents();
+const {
+  source: figmaSource,
+  components: figmaComponents,
+  nodes: figmaNodes,
+} = await loadFigmaComponents();
 
 // ── source scanning ─────────────────────────────────────────────────────────
-const COMPONENTS = resolve(pkgDir, "src/components");
+// Two trees, not one. The primitives are the components this package owns, and
+// scanning them alone left the `packages/ui` block templates unread by anything
+// — not their node IDs, not their axes — while their Figma sets reported "no
+// code component" because the basename lookup could not see the block files.
+// `code-connect:publish` parsing them was the only automated read they got.
+//
+// Blocks carry no cva, so the axis and value comparisons below find nothing to
+// diff and skip; what the blocks gain here is node-ID resolution, the template
+// prop check, and the description check.
+const TREES = [
+  resolve(pkgDir, "src/components"),
+  resolve(pkgDir, "../ui/src/blocks"),
+];
 async function walk(dir) {
   const out = [];
-  for (const entry of await readdir(dir, { withFileTypes: true })) {
+  let entries;
+  try {
+    entries = await readdir(dir, { withFileTypes: true });
+  } catch (err) {
+    // A tree that is not checked out is not a failure; a tree that is there
+    // and unreadable is.
+    if (err?.code === "ENOENT") return out;
+    throw err;
+  }
+  for (const entry of entries) {
     const path = resolve(dir, entry.name);
     if (entry.isDirectory()) out.push(...(await walk(path)));
     else out.push(path);
   }
   return out;
 }
-const files = await walk(COMPONENTS);
+const files = (await Promise.all(TREES.map(walk))).flat();
 const rel = (p) => p.slice(resolve(pkgDir, "..", "..").length + 1);
 
 // ── a brace matcher that ignores braces inside strings ──────────────────────
@@ -404,7 +444,66 @@ function codeForFigmaName(figmaName) {
     : figmaName;
   return codeComponents.get(norm(figmaName)) ?? codeComponents.get(norm(local));
 }
-const codeComponents = new Map(); // normalized name -> { file, axes }
+// ── the description a designer wrote, and its only projection in code ───────
+// A set's description reaches code through nothing at all: no token pull, no
+// template, no generated file. The JSDoc opening the component is where it is
+// copied by hand, so a description edited in Figma stays invisible until
+// somebody happens to read both. It cannot be compared verbatim — prose is
+// rewrapped to the line width and code notes follow it — so this asserts what
+// the skills actually ask for: the JSDoc opens with the description, and its
+// first sentence is still in there.
+const DOC_BLOCK = /\/\*\*[\s\S]*?\*\//g;
+function docText(src) {
+  return (src.match(DOC_BLOCK) ?? [])
+    .map((b) =>
+      b
+        .replace(/^\/\*\*/, "")
+        .replace(/\*\/$/, "")
+        .replace(/^[ \t]*\*[ \t]?/gm, ""),
+    )
+    .join("\n");
+}
+// Comparison form: letters and digits only, single-spaced. Line wrapping,
+// punctuation style, and back-tick emphasis all differ between a Figma field
+// and a doc comment, and none of those differences is drift.
+const flatten = (s) =>
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+const firstSentence = (s) => {
+  const line = s.replace(/\s+/g, " ").trim();
+  const stop = /[.!?](\s|$)/.exec(line);
+  return stop ? line.slice(0, stop.index + 1) : line;
+};
+/*
+ * Not everything in the description field is a description, and the two
+ * exceptions must not be copied into a doc comment:
+ *
+ * - `keywords`: the comma-separated search terms Figma seeds library
+ *   components with ("chevron, directional, pointer"). Search metadata.
+ * - `attribution`: a bare upstream link, which says where the component came
+ *   from rather than what it is.
+ *
+ * Both are reported to the designer as a missing description rather than
+ * demanded of the code.
+ */
+function descriptionKind(desc) {
+  if (!desc) return "none";
+  if (/^https?:\/\/\S+$/.test(desc)) return "attribution";
+  if (/^based on\b/i.test(desc) && /https?:\/\//.test(desc))
+    return "attribution";
+  const parts = desc.split(",");
+  if (
+    !/[.!?]/.test(desc) &&
+    parts.length > 1 &&
+    parts.every((p) => p.trim().split(/\s+/).length <= 4)
+  )
+    return "keywords";
+  return "prose";
+}
+
+const codeComponents = new Map(); // normalized name -> { file, axes, docs }
 for (const f of files) {
   if (!f.endsWith(".tsx") || f.endsWith(".stories.tsx")) continue;
   const base = f
@@ -418,7 +517,23 @@ for (const f of files) {
     axes: cvaAxes(src),
     classes,
     defaults,
+    docs: docText(src),
+    source: src,
   });
+}
+
+// A component whose own file only re-exports it — `export { PaginationNext }
+// from "./pagination"` — has no JSDoc to carry a description, and the
+// documentation it should be compared against lives in the module it points
+// at. Follow one hop, so the check reads the docs that exist rather than the
+// file that merely shares the component's basename.
+const REEXPORT = /export\s*\{[^}]*\}\s*from\s*["']\.\/([\w.-]+)["']/;
+for (const entry of codeComponents.values()) {
+  if (entry.docs.trim()) continue;
+  const target = REEXPORT.exec(entry.source)?.[1];
+  if (!target) continue;
+  const hit = codeComponents.get(norm(target.replace(/\.tsx?$/, "")));
+  if (hit?.docs.trim()) entry.docs = hit.docs;
 }
 
 const resolveToken = tokenResolver(
@@ -549,6 +664,43 @@ function checkValues(comp, tpl, code, report) {
   }
 }
 
+/*
+ * The prop names a template's example emits, and which of them a component is
+ * allowed not to name.
+ *
+ * Nothing else reads them. Every check below compares axes and option values,
+ * so a template naming a prop the component has since dropped is a clean run —
+ * and six templates emitted exactly that after the `shape-ui-block-copy`
+ * reshape folded a component's words into one `copy` object. The snippet a
+ * designer copies out of Dev Mode then does not compile, and the run says
+ * nothing.
+ *
+ * A JSX attribute is `name={` or `name="`. An identifier followed by a space
+ * and `=` is an assignment or a comparison in the template's own code
+ * (`const variant =`, `variant === "default"`) and is deliberately not matched.
+ */
+const JSX_ATTR = /[\s`{]([a-zA-Z][\w-]*)=(?:\{|")/g;
+function emittedProps(src) {
+  const out = new Set();
+  JSX_ATTR.lastIndex = 0;
+  let m;
+  while ((m = JSX_ATTR.exec(src))) out.add(m[1]);
+  return [...out];
+}
+// Props a component accepts without ever naming them, by spreading
+// `ComponentProps<"a">` and friends. `href` is the live example: link.figma.ts
+// emits it and link.tsx never writes the word, so checking these would report
+// drift on a component that is entirely correct.
+const INHERITED = new Set(
+  `className style id href target rel type name value placeholder checked
+   defaultChecked defaultValue disabled required readOnly autoFocus maxLength
+   min max step src alt title width height role tabIndex key ref children
+   htmlFor form onClick onChange onBlur onFocus onInput onSubmit onKeyDown
+   onKeyUp onMouseEnter onMouseLeave onPointerDown`.split(/\s+/),
+);
+const inheritedProp = (p) =>
+  INHERITED.has(p) || p.startsWith("aria-") || p.startsWith("data-");
+
 // ── Code Connect templates ──────────────────────────────────────────────────
 const templates = [];
 for (const f of files) {
@@ -571,7 +723,18 @@ for (const f of files) {
     enums[m[1]] = Object.keys(pairs);
     maps.push({ axis: m[1], pairs });
   }
-  templates.push({ file: rel(f), url, nodeId, enums, maps });
+  // Every template carries a `// source=` header naming the component file it
+  // stands for, which is a firmer link than re-deriving one from the node.
+  const source = /^\/\/ source=(.*)$/m.exec(src)?.[1]?.trim();
+  templates.push({
+    file: rel(f),
+    url,
+    nodeId,
+    enums,
+    maps,
+    source,
+    props: emittedProps(src),
+  });
 }
 
 // ── compare ─────────────────────────────────────────────────────────────────
@@ -582,6 +745,11 @@ const ok = [];
 // report is written for whoever ran the command; the summary is written for a
 // designer who will only ever see the Actions page.
 const diffs = [];
+// Sets whose description field holds something that is not a description —
+// search keywords, a bare attribution, or nothing. Aggregated rather than
+// warned one by one: this is a list for the designer who owns the file, and
+// most of the library is on it.
+const describedGaps = [];
 const figma = Object.values(figmaComponents);
 const figmaById = Object.fromEntries(figma.map((c) => [c.id, c]));
 
@@ -610,6 +778,26 @@ for (const comp of figma) {
     );
     continue;
   }
+  // The description, which no rail carries: the JSDoc is its only projection.
+  if (comp.description !== undefined) {
+    const kind = descriptionKind(comp.description);
+    if (kind === "prose") {
+      const opening = firstSentence(comp.description);
+      if (flatten(code.docs).includes(flatten(opening)))
+        ok.push(`${comp.name}: description carried into ${code.file}`);
+      // Deliberately not "open the JSDoc with this": a description field can
+      // hold a note to nobody in particular ("Master Component Radix -
+      // Dialog"), and copying that into a doc comment would be worse than
+      // the gap. Either side can be the one that is wrong.
+      else
+        warns.push(
+          `${comp.name}: description "${opening}" is not in ${code.file} — carry it into the JSDoc, or fix the description in Figma`,
+        );
+    } else {
+      describedGaps.push({ name: comp.name, kind });
+    }
+  }
+
   // The template for this component, if any — it carries the axis aliases.
   const tpl = templates.find((t) => t.nodeId === comp.id);
   const reachedAxes = new Set();
@@ -678,9 +866,20 @@ for (const t of templates) {
   }
   const comp = figmaById[t.nodeId];
   if (!comp) {
-    errors.push(
-      `${t.file}: node-id ${t.nodeId} not found in Figma — the component was deleted or replaced`,
-    );
+    // Absent and present-but-not-a-component are different faults with
+    // different fixes, and calling the second one a deletion sends whoever
+    // reads it looking for a node that is sitting right there. Code Connect
+    // resolves published components, so a template aimed at a frame maps
+    // nothing however well-formed it is.
+    const node = figmaNodes[t.nodeId];
+    if (node)
+      warns.push(
+        `${t.file}: node-id ${t.nodeId} is a ${node.type} ("${node.name}"), not a component or component set — Code Connect resolves only published components, so repoint it at one`,
+      );
+    else
+      errors.push(
+        `${t.file}: node-id ${t.nodeId} not found in Figma — the component was deleted or replaced`,
+      );
     continue;
   }
   ok.push(`${t.file}: node-id ${t.nodeId} -> ${comp.name}`);
@@ -702,6 +901,42 @@ for (const t of templates) {
         `${t.file}: getEnum('${axis}') covers all ${options.length} options`,
       );
   }
+}
+
+// ── the props a template emits vs the component that must accept them ───────
+// Presence of the identifier in the component file, not a resolved type: props
+// arrive through a type alias, an intersection, or a re-export, and following
+// all three would be a type checker. Presence is enough to catch the failure
+// this exists for — a prop that was renamed or folded away entirely — while an
+// inherited DOM prop is skipped rather than guessed at.
+for (const t of templates) {
+  if (!t.source) {
+    warns.push(`${t.file}: no // source= header, so its props went unchecked`);
+    continue;
+  }
+  const base = t.source
+    .split("/")
+    .pop()
+    .replace(/\.tsx$/, "");
+  const code = codeComponents.get(norm(base));
+  if (!code) {
+    warns.push(
+      `${t.file}: source=${t.source} is not a component file this check can read`,
+    );
+    continue;
+  }
+  const missing = t.props.filter(
+    (p) =>
+      !inheritedProp(p) &&
+      !new RegExp(`(?<![\\w$])${p.replace(/[^\w-]/g, "")}(?![\\w$])`).test(
+        code.source,
+      ),
+  );
+  if (missing.length)
+    warns.push(
+      `${t.file}: emits ${missing.join(", ")}, which ${code.file} does not name — the Dev Mode snippet would not compile`,
+    );
+  else ok.push(`${t.file}: every prop it emits exists in ${code.file}`);
 }
 
 // ── job summary ─────────────────────────────────────────────────────────────
@@ -803,6 +1038,23 @@ if (warns.length) {
     `\n⚠  ${warns.length} warning(s) — the two sides disagree, which may be deliberate:`,
   );
   for (const w of warns) console.log(`   ${w}`);
+}
+// For the designer, not the build: a description is theirs to write, and the
+// code cannot invent one. Listed once, never failing.
+if (describedGaps.length) {
+  const by = (k) =>
+    describedGaps.filter((g) => g.kind === k).map((g) => g.name);
+  console.log(
+    `\n–  ${describedGaps.length} set(s) with a code component carry no usable description:`,
+  );
+  for (const [kind, label] of [
+    ["none", "no description"],
+    ["keywords", "library search keywords, not a description"],
+    ["attribution", "an upstream attribution, not a description"],
+  ]) {
+    const names = by(kind);
+    if (names.length) console.log(`   ${label}: ${names.join(", ")}`);
+  }
 }
 await writeSummary();
 if (errors.length) {
