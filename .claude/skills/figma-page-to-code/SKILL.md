@@ -24,6 +24,24 @@ This repository is not an application. Route the output by what it is:
 
 Working in this repository, the deliverable is therefore at most new or changed blocks plus their specs — plus a composition snippet the application will paste. Working in a consuming application checkout, the deliverable is the page itself, importing from `@grade10/ui` and `@grade10/design-system` only.
 
+## Where a new block lands
+
+`packages/ui/src/blocks/` is namespaced **by capability, never by page**. The page you are converting does not get a directory — its sections belong to the capabilities they express, and the page itself is an assembly (`ui-component-contracts.md`, "Which layer a component belongs to"). For each section that becomes a block, ask: *which capability spec names, or will name, this export?*
+
+- **The capability's directory exists** → add files there.
+- **A spec exists but no directory** → create one, named as below.
+- **No spec** → the section is unmatched; a `pm-planning` change mints the capability first. Never mint a directory ahead of its spec.
+
+The conventions, each visible in the existing directories:
+
+- **Directory: a globally unique `<product-context>-<capability>` kebab slug.** `auth-sign-in` (spec `shared-auth/sign-in`), `auction-listing` (spec `grade10-auction/listing-page`), `store-product-listing`. `blocks/` is one flat level, so the slug carries enough product context to read standalone — `sign-in` alone is ambiguous the day a second product grows one. No nesting, and no subdirectories inside a capability directory.
+- **The component name carries the namespace.** `src/index.ts` is a single flat export surface, so PascalCase names take a capability prefix: `ListingBidPanel`, `SignInCard`, `TwoFactorVerifyForm`. The test: the name reads unambiguously in an app's import statement with the path out of sight. Never a generic name (`Card`, `Panel`, `Header`) — it collides across capabilities and shadows the primitive it composes.
+- **One component per file, satellites share the basename.** `<name>.tsx`, `<name>.stories.tsx`, `<name>.figma.ts`, `<name>.css` + `.css.d.ts`, plus one per-directory `types.ts` and `fixtures.ts`. Basename matching is load-bearing here for the same reason as in the design system. A page-scale composition the spec names (`product-browse.tsx`) lives flat in its capability directory like any other block.
+- **Exports go through the spec-named barrel group.** One commented group per capability in `src/index.ts` (`// shared-ui/auction-listing`), exporting exactly what the spec names — the component and its `Props`/`Copy` types. No per-directory `index.ts`; that would be a second, uncontracted export surface.
+- **`shared/` is earned, not planned.** A conversion never writes into `shared/` directly. A helper lands in its capability directory and is promoted when its *second* consumer appears.
+
+The failure this prevents: a per-page directory (`blocks/store-home-page/`) feels natural mid-conversion and inverts the ownership — the next page reuses nothing, every block grows a twin, and the twins drift.
+
 ## The inventory gate — before any code
 
 1. Load the `figma-design-to-code` skill (mandatory before `get_design_context`), then read the frame with `get_metadata` and `get_design_context`.
