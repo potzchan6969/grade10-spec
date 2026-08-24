@@ -4,14 +4,17 @@
 
 Product context: [Grade10 loyalty programme](../../../docs/prds/loyalty/programme.md).
 
+The physical shop is a separate change, `add-shopify-membership-pos`, which
+builds on this one.
+
 ## Why
 
 The programme specified so far treats a tier as permanent, expires each point
 twelve months after the purchase that earned it, and settles a redemption as an
 unspecified entitlement. The business has since decided all three differently:
 a tier is a twelve-month standing that has to be re-qualified, the balance
-expires only when a member goes quiet for twelve months, and a redemption is a
-discount code the member takes to checkout or the counter.
+expires only when a member goes quiet for twelve months, and a redemption
+settles as the kind of thing it is.
 
 The gap is not academic. A permanent tier costs 1.2× forever on a member who
 bought once and left, so the programme's most expensive members are the ones it
@@ -35,11 +38,18 @@ tracks members who are still buying.
   period. This replaces "a tier once earned is kept".
 - **BREAKING — The redeemable balance expires on inactivity, not per purchase.**
   The whole balance expires after twelve months with no earn and no redemption,
-  and any earn or redemption resets that clock for the whole balance. This
-  replaces per-credit expiry measured from the earning purchase.
-- **Tier points and redeemable points become two ledgers.** Tier points are
-  cumulative and never reduced by redeeming; redeemable points are the spendable
-  balance. A member who spends their points no longer loses their tier progress.
+  and any earn or redemption resets that clock for the whole balance. Resetting
+  only ever pushes the date out, so a late-arriving record shortens nothing.
+- **Tier points and redeemable points become two counts on one ledger.** Tier
+  points are cumulative and never reduced by redeeming; redeemable points are the
+  spendable balance. Both are derived from the same append-only entries, so a
+  member who spends their points no longer loses their tier progress and nothing
+  has to be kept in step.
+- **Demotion resets tier progress.** Earnings from before a drop count toward
+  nothing after it, so a lapsed term cannot re-promote a member out of its own
+  earnings the next day.
+- **A claw-back re-evaluates the tier at once.** Refunded spend is spend that
+  never happened, so the tier it bought does not survive it.
 - **An upgrade is immediate; the new rate is not.** Reaching the threshold
   promotes the member on the spot, including on their first purchase, and the
   higher multiplier applies from their next purchase rather than the one that
@@ -48,33 +58,45 @@ tracks members who are still buying.
   after coupons, so redeeming a coupon cannot earn points on the value it
   already paid for. Order-level discounts are apportioned so a discount cannot
   be pushed onto the non-earning part of a basket.
-- **Earning has a stated scope.** Online store and counter purchases earn.
-  Shipping, grading service fees, gift-card purchases, credit top-ups, auction
-  wins, and unlisted categories do not.
-- **A redemption issues a coupon.** Every reward, discount or physical item, is
-  delivered as a discount code with its own validity period set per item on the
-  menu. A member cannot convert a coupon back into points; an operator can still
-  reverse a redemption on the record, which voids the coupon.
+- **Earning has a stated scope, on every channel.** Online and in-store
+  purchases earn. Shipping, grading service fees, gift-card purchases, credit
+  top-ups, auction wins, and unlisted categories do not, and no channel is a way
+  around that.
+- **Earning floors base points before the tier multiplier.** HKD 139 at 1.2×
+  earns 15, never 16. The floor's place is deployed configuration, so the
+  single-floor alternative stays one config line away.
+- **Points pay for purchases at HKD 1 each.** A member can pay part of a bill
+  with points on any channel that sells; the part paid in points earns nothing.
+  Whether a channel debits the balance directly or settles the same debit
+  through a money-off artifact, it costs the same points and records one
+  redemption.
+- **A redemption settles by what the reward is.** A reward that takes money off
+  is delivered as a discount code with its own validity period set per item on
+  the menu; a physical reward is handed over instead and never becomes a code.
+- **An artifact left to expire stays spent.** Points return only through an
+  operator's recorded cancellation; a used artifact is never reversed, and what
+  members forfeit is counted where an operator can read it.
+- **Deleting the account ends the membership at once** — balance, tier progress,
+  coupons and pending collections, with the ledger record surviving for audit.
+- **Tier display names become Silver and Gold**, renaming the deployed Platinum
+  and Diamond. Multipliers, thresholds and the persisted tier ids are untouched.
 - **Points cannot be spent on an auction.**
-- **A counter member is identified by the email on their account**, resolved
-  through the identity system, so the programme still stores no email address.
 
 ## Non-Goals
 
-- **The Black tier's full rules.** Its rate (1.7×), its invitation-only nature,
-  and the operator grant mechanism are already specified and unchanged. The
-  annual cap and the CEO approval step stay unenforced and parked, as they are
-  today.
-- **The points-to-money exchange rate.** Still undecided, so the menu's prices
-  stay operator-editable and no monetary value is recorded against a point.
+- **The Black tier's remaining rules.** Its rate (1.7×) and invitation-only
+  grant are specified and unchanged. The annual cap and the CEO approval step
+  stay unenforced and parked, as they are today.
 - **Auction earning.** Named as a Phase 2 candidate; this change specifies only
   that auctions neither earn nor redeem today.
 - **Credit top-up earning.** Same — a later-phase candidate, specified here only
   as not earning.
-- **Editable programme economics.** The rates, thresholds, windows, and validity
-  periods stay deployed configuration, not operator fields.
-- **Changing what an operator can do.** Permissions, the operator log, and the
-  console's shape are untouched beyond the reversal wording.
+- **The physical shop.** Identification at a till, staff acting for a member,
+  and in-person collection all land with `add-shopify-membership-pos`.
+- **Editable programme economics.** The rates, thresholds, windows, rounding
+  order and validity periods stay deployed configuration, not operator fields.
+- **The physical reward menu's content** — which items, their point prices, the
+  collection window's length, and how counter stock decrements.
 
 ## Capabilities
 
@@ -85,35 +107,38 @@ None. Every change lands on the existing loyalty capability.
 ### Modified Capabilities
 
 - `grade10-store/loyalty`: tier validity and downgrade replace the permanent
-  tier; activity-based balance expiry replaces per-credit expiry; tier points
-  and redeemable points separate; earning gains a defined basis and scope;
-  redemption becomes a coupon issuance; the ladder gains per-tier validity and
-  retention thresholds validated at boot.
+  tier; demotion resets progress and a claw-back re-evaluates at once;
+  activity-based balance expiry replaces per-credit expiry; tier points and
+  redeemable points separate; earning gains a defined basis, scope and rounding
+  order; redemption settles by reward kind and gains an artifact-expiry rule;
+  points pay at checkout; an operator can remove a tier; account deletion ends
+  the membership; and the ladder gains validity and retention thresholds
+  validated at boot.
 
 ## Impact
 
 | Application | What it must do |
 | --- | --- |
-| `grade10-loyalty` backend | Split the ledger reads into tier points and redeemable points, replace the expiry model, add tier validity and re-qualification, issue and void coupons, and validate the extended ladder at boot |
-| `grade10-store` backend | Compute qualifying spend after discounts and coupons, apportion order-level discounts, exclude the non-earning lines, and carry the channel on every recording |
-| Counter / POS integration | Resolve the member by account email through the identity system before recording, and complete the sale when it cannot |
-| `grade10-loyalty` console | Show tier validity and retention progress; reversal wording changes, the action does not |
-| `grade10-loyalty` membership surface | Show two balances, the tier's validity end, retention progress, and the balance's expiry date; list issued coupons and their own expiry |
+| `grade10-loyalty` backend | Add tier-progress reset on demotion, points payment at checkout, and account-deletion teardown; flip the refund policy; extend redemption with per-unit quantity, artifact expiry and pending collection |
+| `grade10-store` backend | Compute per-line earn eligibility with order-discount apportionment, and carry the channel on every recording |
+| `grade10-loyalty` console | Show tier validity and retention progress; add tier removal and redemption cancellation |
+| `grade10-loyalty` membership surface | Show two counts, the tier's validity end, retention progress, the balance's lapse date, and issued coupons |
 | `grade10-auction` | Reject points and coupons against an auction purchase |
 
 No design-system primitive changes and no `packages/ui` export contract
 changes.
 
 **Migration.** Members holding a tier when this lands have no activation date
-and no retention counter. A member's current tier should be activated at the
-date the change deploys, giving everyone a full validity period to re-qualify
-in; the alternative — backdating activation to the purchase that first
-qualified them — demotes members on day one for a rule that did not exist when
-they earned it. Existing per-credit expiry dates are dropped in favour of one
-last-activity date per member, taken from that member's most recent earn or
-redemption.
+and no retention counter. A member's current tier is activated at the date the
+change deploys, giving everyone a full validity period to re-qualify in; the
+alternative — backdating activation to the purchase that first qualified them —
+demotes members on day one for a rule that did not exist when they earned it.
+Each credit keeps its own expiry date — a check constraint on `ledger_entries`
+requires it — and gains one last-activity date per member, taken from that
+member's most recent earn or redemption; a credit counts while either is still
+ahead. Credits already past their own date are settled as expired before the
+member's date is written, so the change-over revives nothing.
 
-**Open decisions**, recorded in the PRD rather than resolved here: the
-retention threshold (the baseline is the same 500 that qualifies for the tier;
-the business may prefer a softer 400), and the exchange rate that prices the
-reward menu.
+**Open decisions**, recorded in the PRD rather than resolved here: the retention
+threshold (the deployed value is the same 500 that qualifies for the tier; the
+business may prefer a softer 400), and the public names for the two counts.

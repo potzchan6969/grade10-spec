@@ -2,35 +2,49 @@
 
 ## Context
 
-Most of the engine this change asks for is already standing. The loyalty
-backend in `grade10` (surveyed at `489a4a4c` on `feat/loyalty-program`) already
-carries the dual count, both clocks, and the ladder validation this change
-specifies:
+Most of the programme engine this change asks for is already standing on the
+grade10 mainline.
 
 | Already built | Where |
 | --- | --- |
 | Tier points separate from the spendable balance | `ledger_entries.qualifying_points` |
-| Tier activation, validity end, re-qualification, downgrade | `account_member.earned_tier_activated_at` / `_expires_at`, `services/tiers/review.ts` |
+| Tier activation, validity end, re-qualification, downgrade | `account_member.earned_tier_activated_at` / `_expires_at`; written in `services/tiers/evaluation.ts`, scanned and driven by `services/tiers/review.ts` |
 | Balance expiry measured from last activity | `account_member.activity_expires_at` |
 | Boot refusal on a bad retention threshold or validity term | `loyaltyProgram.ts` |
-| A redemption that issues a code, and a reversal that voids it | `services/rewards/fulfillment.ts`, `redemptions.ts` |
+| A redemption code, minted by the drain | `services/rewards/fulfillment.ts` (`newCode`, `ensureCode`) |
+| A reversal that voids the code and refuses a used one | `services/rewards/fulfillment.ts` (`deactivateFulfillment`), `services/rewards/reversal.ts` |
+| Tier re-evaluation on claw-back | `services/tiers/clawback.ts`, selected by `policies.tierOnRefund` |
+| Floor-first earning | `services/earning/earning.ts`, already deployed as `rounding: "base_points_first"` |
 
-What is missing is everything at the edges — where the programme meets the
-seller, the counter, and the vendor that makes a coupon real:
+Two of the owner's decisions are therefore configuration, not construction:
+Grade10 pins `tierOnRefund: "keep"` and must pin the re-evaluating value, and
+the rounding order is already explicit in the deployed config.
+
+What is missing is at the edges — where the programme meets the seller, the
+shop, and the vendor that makes a coupon real:
 
 - Nothing records **which channel** sold. Every ledger row says which surface
   wrote it (`written_by`), which is not the same fact and cannot stand in for
   it.
-- Nothing computes **qualifying spend**. The programme is handed a money amount
-  and prices it; no seller yet reduces that amount by discounts and coupons, or
-  drops the lines that do not earn.
+- **Per-line earn eligibility and order-discount apportionment** do not exist.
+  The seller already sends a goods-only, after-discount amount and names its
+  basis (`goods_after_discount`), so shipping and tax are already dropped and
+  the provider's discounts already netted; what is missing is dropping grading fees
+  and gift-card lines, and splitting a whole-order discount across lines.
 - No **fulfiller** is wired into the loyalty worker, so the only reward a
   deployment can hand over today is a manual one. The port exists
   (`services/rewards/fulfiller.ts`); no implementation does.
-- The **counter** does not exist as a caller at all.
+- **Points paying at checkout** does not exist in any form — no exchange rate on
+  the config, no debit path outside the reward menu.
+- **Demotion does not reset progress**: a lapsed term still re-attains from the
+  same rolling window. `testing/suites/tierValidity.ts` covers this as
+  *re-earns a tier from the rolling window instead of resurrecting the old term*
+  — an assertion that today's behaviour is correct, so it has to be inverted, not
+  extended.
 - The **auction** does not refuse points.
 
-Requirements: [`specs/grade10-store/loyalty/spec.md`](specs/grade10-store/loyalty/spec.md).
+Requirements: [`specs/grade10-store/loyalty/spec.md`](specs/grade10-store/loyalty/spec.md)
+and [`specs/grade10-store/membership/spec.md`](specs/grade10-store/membership/spec.md).
 
 ## Decisions
 
@@ -43,6 +57,19 @@ so a single write keeps the two consistent and no reconciliation job can drift.
 Rejected: a second ledger for tier points. It doubles every write and creates a
 state where one landed and the other did not — on an append-only financial
 record, that is unrecoverable without a manual repair.
+
+### Earning floors base points before the multiplier
+
+`computeEarnedPoints` carries both orders behind `program.earn.rounding`:
+absent or `base_points_first` floors money into whole base points and applies
+the multiplier to those, `once_at_end` lets the multiplier see the money and
+floors the total. Grade10 already deploys `base_points_first` explicitly — HKD
+139 at 1.2× earns 15, where once-at-end would pay 16.
+
+Keeping both is what makes this a business lever rather than a rewrite: the
+owner can move the floor with a config change, and `base_points` and
+`multiplier_x100` are already stamped on every earn, so an audit can always show
+which order priced a given entry.
 
 ### Balance expiry is one date per member, not a rewrite of every lot
 
@@ -62,7 +89,7 @@ lines, after coupons — and sends one amount. The programme prices it and does
 not see the basket.
 
 Rejected: sending the basket to loyalty. It would move product knowledge
-(which categories earn, how Shopify represents a discount) into a package that
+(which categories earn, how the provider represents a discount) into a package that
 must stay brand-neutral, and every catalogue change would then be a loyalty
 deploy.
 
@@ -78,24 +105,44 @@ fails at the type boundary instead of writing an unattributable row onto a
 financial ledger.
 
 Rejected: deriving it from `written_by`. That column records which surface
-wrote the row, not which channel sold — the counter and the online store can
+wrote the row, not which channel sold — the shop and the online store can
 reach the programme through the same surface.
 
-### A coupon is a Shopify discount code, made behind the existing port
+### A money-off reward is a provider discount code; a physical one is not
 
-Every reward — discount or physical item — settles as a Shopify discount code.
-That lands as a `RewardFulfiller` implementation in the app assembly, not in
-the loyalty package: the port already has `fulfill`, `deactivate` and `usage`,
-which is exactly what issuing, voiding and gating a reversal need.
+A reward that takes money off settles as a discount code at the commerce
+provider, landing as a `RewardFulfiller` implementation in the app assembly
+rather than in the loyalty package: the port already has `fulfill`, `deactivate`,
+`usage`, `kinds` and `validateTemplate`, which is exactly what issuing, voiding
+and gating a reversal need. The provider is Shopify — recorded here, and in no
+requirement, because no spec in this repository names a vendor.
 
-This vendor choice is recorded in the programme's source material and not in
-the specs, which never name a vendor. Physical rewards are the same path — the
-member gets a code and the counter honours it — so there is one settlement
-mechanism, not two.
+A physical reward is handed over instead and never becomes a code. Where it
+waits in between is `add-shopify-membership-pos`, with the shop that hands it
+over.
 
 Rejected: keeping the self-generated code that `fulfillment.ts` produces today.
 Nothing at checkout would honour it, so a member would hold a code that does
 not work.
+
+### Tier ids are frozen; only display names change
+
+The rename is Silver for Platinum and Gold for Diamond in what a member and an
+operator read. The persisted ids stay `platinum` and `diamond`.
+
+This is not a preference. `earned_tier_id` on the member row and `from_tier` /
+`to_tier` in tier history are persisted state, and the engine deliberately
+freezes any member holding an id the running config does not know:
+`holdsUnknownTier` logs and returns, `writeEarnedTier` gives up, `isTierAttainment`
+refuses, and the nightly `sweepTierReviews` counts that member `skipped` and
+leaves them in `leftover` forever. Renaming the id strands every current Diamond
+holder on a row no review can ever settle again.
+
+Changing the ids later is possible but it is a data migration — rewrite
+`account_member.earned_tier_id` and both tier-history columns in the same
+transaction as the config change — not a config edit. Note the backend test
+fixtures already use `silver` / `gold` ids; that is fixture-local and says
+nothing about what production may be renamed to.
 
 ### An operator correction adds no tier points
 
@@ -103,62 +150,77 @@ A correction repairs a balance the member should already have had; it is not
 spend, so it moves nothing toward a tier. A campaign or sign-up grant is a
 reward and does count.
 
-This resolves a contradiction the proposal's wording created: "every grant of
-points adds to both counts" would have swallowed corrections, which the
-untouched requirement *Operator point grants distinguish correction from
-reward* explicitly excludes. The requirement now says "every earning and every
-reward grant", and names the correction case.
+The untouched requirement *Operator point grants distinguish correction from
+reward* already draws that line, so the two-counts rule credits both counts for
+an earning and a reward grant, and names the correction case separately rather
+than saying "every grant".
 
-### Decisions from the 21 Aug review (Jeff)
+### One-way preferences are one deployed policy block
 
-The running engine was demoed against the proposal and five rules came back
-decided; the spec delta now carries them:
+Every "does a later event undo an earlier one" question — the refund's effect on
+a reached tier, reclaiming an expired redemption, the shortfall rule when an
+order is re-attributed — is a named switch in one deployed policy block, so the
+answers sit together and can be read at a glance. The owner has settled the
+first: a claw-back re-evaluates the tier. The rest default to *what happened
+stands*, and each is swapped without a code change once confirmed.
 
-- **Demotion resets tier progress.** The engine as built re-promoted a demoted
-  member from the rolling attainment window the day after the sweep took the
-  tier away. Decided: earnings before the drop count toward nothing afterwards.
+### Rules the owner settled against the running engine
+
+- **Demotion resets tier progress.** Earnings before a drop count toward nothing
+  after it. The engine re-promotes a demoted member from the rolling attainment
+  window the day after the sweep takes the tier away.
 - **A claw-back re-evaluates the tier at once.** Refunded spend is spend that
-  never happened; the tier it bought does not survive it. This replaces the
-  earlier "no demotion inside a validity period".
+  never happened; the tier it bought does not survive it.
 - **A reversal is for unused coupons only** — the out-of-stock remedy. A used
-  coupon is never reversed. The engine already refuses this; the spec now says
-  what the code does.
+  coupon is never reversed. The engine already refuses this, with two edges the
+  spec now closes: the gate only fires when a fulfiller is wired and the row
+  carries a code, and `deactivate` runs before the usage read, so a refused
+  reversal still kills the member's coupon.
 - **Points pay at checkout** at the programme's exchange rate — decided at
   HKD 1 per point for Grade10, deployed configuration like the earn rate.
 - **Account deletion clears the membership immediately** — balance, tier
   progress, coupons, pending collections; the ledger record survives.
-- **Tier names**: Silver (was Platinum) and Gold (was Diamond); multipliers and
-  thresholds unchanged.
+- **Tier names**: members and operators read Silver and Gold. Multipliers and
+  thresholds unchanged, and the persisted ids do not move, for the reason
+  recorded above.
 
 ## Risks / Trade-offs
 
 - **The seller becomes the authority on what earns.** A bug in apportionment
   mints or destroys points silently, and the ledger is append-only. The
-  arithmetic gets its own tests at the store boundary, and every recording
-  carries the basis it was priced from so a wrong number can be found later.
-- **The counter cannot be blocked on the programme.** A till that stops selling
-  because loyalty is down is worse than a lost point. Every counter path
-  completes the sale first and records after, which means a real window where a
-  purchase exists and its points do not.
+  arithmetic gets its own tests at the store boundary, and every spend carries
+  the basis it was priced from so a wrong number can be found later. Bonus
+  grants stamp no basis today; they price no money, so there is nothing to
+  attribute.
 - **A vendor now sits inside a redemption.** Points leave the balance before
-  Shopify confirms the code. The existing drain covers this — the code is
+  the provider confirms the code. The existing drain covers this — the code is
   committed before the vendor call and the same code is retried — but a
   permanent vendor failure leaves a member paid-for and empty-handed until an
   operator reverses it.
+- **Renaming tier display names while ids stay put splits one fact in two.**
+  Anyone reading `earned_tier_id` sees `diamond` where the member sees Gold. The
+  mapping lives in the programme config and nowhere else, and the ids are never
+  shown to a member or an operator.
 
 ## Migration Plan
 
 Members already hold tiers under the old permanent rule and lots under the old
 per-purchase expiry.
 
-1. **Tier activation.** Set every held tier's activation to the deploy date, so
-   everyone gets a full validity period to re-qualify in. Backdating to the
-   purchase that first qualified them would demote members on day one under a
-   rule that did not exist when they earned it.
+1. **Tier activation.** Set all four tier columns together —
+   `earned_tier_id`, `earned_tier_activated_at`, `earned_tier_period_started_at`
+   and `earned_tier_expires_at` — with activation at the deploy date, so everyone
+   gets a full validity period to re-qualify in. All four or none:
+   `getEarnedTerm` throws on a row holding a tier without both dates, and logs
+   loudly when the period start is behind the activation, so setting activation
+   alone breaks every migrated member's summary read. Backdating to the purchase
+   that first qualified them would demote members on day one under a rule that
+   did not exist when they earned it.
 2. **Balance expiry.** Derive one `activity_expires_at` per member from that
-   member's most recent earn or redemption. Existing per-lot dates stay on the
-   rows and stop being the binding constraint, because a lot lives to the later
-   of the two.
+   member's most recent earn or redemption, and drop the per-lot dates. The
+   effective rule in `repositories/ledger.ts` is the later of a lot's own date
+   and the member's, so leaving them costs nothing — but the spec's migration
+   note says drop, and two records of the same fact drift.
 3. **Channel backfill.** Existing rows predate the field; they are attributed
    to the online store, the only channel that has sold so far.
 
@@ -167,22 +229,22 @@ its own row counts asserted before and after.
 
 ## Open Questions
 
-- **Retention threshold** — 500 (the qualification number) or a softer 400.
-  Still undecided at the 21 Aug review; deployed configuration, boot
-  validation accepts both.
-- **Overflow tier points on large purchases** — a single purchase far above a
-  threshold (an HKD 7,500 spend against a 500-point bar) may deserve special
-  handling for the excess; PM marked it TBC.
+None of these change a requirement. Each is a deployed value or a later
+proposal, and the specs stand whichever way they land.
+
+- **Retention threshold** — the spec and the deployed config say 500, the same
+  number that attains the tier. The business may prefer a softer 400; boot
+  validation accepts either, so the answer moves a value.
+- **Overflow tier points on large purchases** — whether a single purchase far
+  above a threshold (an HKD 7,500 spend against a 500-point bar) should carry
+  its excess forward. Today it does not, and the spec says so; changing that is
+  its own proposal.
 - **External naming** of the two counts ("Status points" is the working
-  candidate) — marketing to confirm before member-facing UI.
+  candidate) — marketing to confirm before member-facing UI. It renames labels,
+  not counts.
 - **Coupon-and-refund lifecycle** — a coupon spent on an order later refunded,
-  the shortfall write-off when clawed-back points were already spent, and the
-  physical-reward collection window are all explicitly TBC from the 21 Aug
-  review; the operator's manual correction endpoints are the stopgap.
-- **Counter surface** — how staff sign in to the loyalty terminal, POS
-  attribution controls, and outage fallback are auth-platform and store-ops
-  questions, flagged to those tracks; this change builds the counter recording
-  path behind a rate-limited, logged service lookup and nothing more.
+  and the shortfall write-off when clawed-back points were already spent. The
+  operator's manual correction endpoints are the stopgap until it is settled.
 - **"HKD 10 or equivalent"** — whether foreign-currency or crypto spend should
   ever earn. The engine refuses non-HKD by design; any change here is its own
   proposal.

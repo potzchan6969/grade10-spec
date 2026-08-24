@@ -86,9 +86,13 @@ Losing a tier SHALL also reset the member's tier progress: earnings dated
 before the drop SHALL NOT count toward reaching or retaining any tier
 afterwards, so the climb starts again from zero.
 
-A tier SHALL NOT be lost inside its validity period except through a
-claw-back, and SHALL NOT be lost because the points that qualified the member
-for it were spent or expired.
+A tier SHALL NOT be lost inside its validity period except through a claw-back
+or an operator's recorded act, and SHALL NOT be lost because the points that
+qualified the member for it were spent or expired.
+
+An operator holding the permission SHALL be able to remove a tier a member holds,
+whatever its period says, recorded with who and why — the remedy for a tier
+granted or reached in error.
 
 #### Scenario: Re-qualifying keeps the tier
 
@@ -117,6 +121,12 @@ for it were spent or expired.
 - **WHEN** a validity period or a dated invitation passes its end
 - **THEN** the member stops holding that tier from that instant
 - **AND** the drop is recorded the next time that member is evaluated
+
+#### Scenario: An operator removes a tier granted in error
+
+- **WHEN** an operator with the permission removes a tier inside its validity period
+- **THEN** the member falls to the highest tier they still hold
+- **AND** the removal is recorded with who did it and why
 
 #### Scenario: Tier history records each move
 
@@ -199,19 +209,26 @@ Every ledger entry SHALL record the channel the activity came from.
 
 #### Scenario: An entry names its channel
 
-- **WHEN** a member reads an activity entry
-- **THEN** it names whether the activity happened in the online store or at the counter
+- **WHEN** any earning or redemption is recorded
+- **THEN** the entry carries the channel that sold, taken from the programme's closed set
+- **AND** a recording naming no channel, or one outside that set, is refused
 
 ### Requirement: The redeemable balance expires after a period of inactivity
 
 A member's whole redeemable balance SHALL expire once the programme's inactivity
-window has passed with no earning and no redemption. Any earning or redemption
-SHALL reset that window for the whole balance, whatever the age of the points in
-it.
+window has passed with no earning and no redemption. Any qualifying spend, any
+reward grant, and any redemption SHALL reset that window for the whole balance,
+whatever the age of the points in it — including a spend too small to earn a
+whole point, which is activity even when it credits nothing.
+
+Resetting SHALL only ever push the window out. An activity dated in the past
+SHALL NOT pull a member's expiry earlier than an activity already recorded, so a
+late-arriving record can shorten no balance.
 
 The balance SHALL stop counting at the instant the window passes, without
 waiting for any scheduled process. A refund, a claw-back, or an operator
-correction SHALL NOT reset the window.
+correction SHALL NOT reset the window. Points already expired SHALL NOT be
+revived by later activity.
 
 Expiry SHALL be recorded as a dated entry like any other movement, naming the
 whole amount it removed.
@@ -237,18 +254,36 @@ whole amount it removed.
 - **WHEN** an operator corrects a balance, or a refund claws points back
 - **THEN** the member's inactivity window is unchanged
 
+#### Scenario: A campaign grant keeps the balance alive
+
+- **WHEN** an operator grants campaign points as a reward
+- **THEN** the whole balance expires an inactivity window after that grant
+
+#### Scenario: A spend too small to earn still counts as activity
+
+- **WHEN** a member's qualifying spend is below the price of one point
+- **THEN** no points are credited
+- **AND** the member's inactivity window is reset from that spend
+
+#### Scenario: A late record cannot shorten the balance's life
+
+- **WHEN** a purchase dated before the member's most recent activity is recorded
+- **THEN** the balance's expiry is left where the later activity put it
+- **AND** it is never pulled back toward the older date
+
 #### Scenario: A partial sweep converges
 
 - **WHEN** a scheduled expiry pass stops before reaching every member
 - **THEN** it reports how many members it did not reach
 - **AND** the next pass covers them, with no state carried between passes
 
-### Requirement: A redemption issues a coupon the member cannot turn back into points
+### Requirement: A redemption settles by what the reward is, and never turns back into points
 
-Every reward SHALL be delivered as a coupon carrying a discount code, whether the
-reward is a discount or a physical item. A coupon SHALL carry its own validity
-period, taken from the reward it came from, independent of the member's balance
-expiry.
+A reward that takes money off SHALL be delivered as a coupon carrying a discount
+code. A reward that is a physical item SHALL be delivered by handing the item
+over, and SHALL NOT be settled as a discount code. A coupon SHALL carry its own
+validity period, taken from the reward it came from, independent of the member's
+balance expiry.
 
 Redemption SHALL be one way: no member action SHALL convert an issued coupon,
 used or unused, back into points.
@@ -259,10 +294,10 @@ NOT apply to an auction purchase, and points SHALL NOT be spent against one.
 A member SHALL be able to read the coupons they hold, each with its code, what it
 is for, its validity period, and whether it has been used.
 
-#### Scenario: A physical reward is still a coupon
+#### Scenario: A physical reward is not a discount code
 
 - **WHEN** a member redeems a reward that is a physical item
-- **THEN** they receive a coupon carrying a discount code, which the counter accepts for that item
+- **THEN** the redemption records an item owed to them, and no discount code is issued
 
 #### Scenario: A member cannot undo a redemption
 
@@ -279,29 +314,6 @@ is for, its validity period, and whether it has been used.
 
 - **WHEN** a member attempts to pay for an auction purchase with points or with a coupon
 - **THEN** it is refused
-
-### Requirement: A member at the counter is identified by the email on their account
-
-A counter sale SHALL identify the member by the email address on their Grade10
-account, resolved to that account's identity through the identity system, which
-is authoritative for how an email matches an account. The programme SHALL record
-the account identity and SHALL NOT store the email address.
-
-An email matching no account SHALL NOT stop the sale: the sale SHALL complete,
-nothing SHALL be recorded against the programme, and the counter SHALL be told
-the email is not recognised.
-
-#### Scenario: The counter earns against the account, not the email
-
-- **WHEN** a member gives their account email at the counter and completes a qualifying purchase
-- **THEN** the points are recorded against that account
-- **AND** the programme holds no email address for that member
-
-#### Scenario: An unrecognised email does not block a sale
-
-- **WHEN** the email given at the counter matches no account
-- **THEN** the sale completes
-- **AND** no ledger entry is written, and the counter is told the email is not recognised
 
 ### Requirement: The programme owns balances and tiers, whatever channel sells
 
@@ -327,10 +339,15 @@ and a purchase there SHALL complete regardless.
 ### Requirement: Points pay at checkout, at the programme's exchange rate
 
 A member SHALL be able to pay part of a qualifying purchase with redeemable
-points at checkout, converted at the programme's exchange rate. Paying with
-points SHALL reduce the redeemable balance alone, SHALL count as activity for
-the inactivity window, and SHALL NOT earn: qualifying spend counts only what
-the member paid in money.
+points, converted at the programme's exchange rate, on any channel that sells.
+Paying with points SHALL reduce the redeemable balance alone, SHALL count as
+activity for the inactivity window, and SHALL NOT earn: qualifying spend counts
+only what the member paid in money.
+
+How a channel carries that payment is the channel's own concern — a checkout
+that debits the balance directly and one that settles the same debit through a
+money-off artifact SHALL cost the member the same points and record one
+redemption either way.
 
 #### Scenario: Points reduce the bill
 
@@ -342,6 +359,12 @@ the member paid in money.
 
 - **WHEN** a purchase is paid partly with points and partly with money
 - **THEN** points are earned on the money part alone
+
+#### Scenario: One debit however the channel settles it
+
+- **WHEN** a member pays 100 points toward a purchase on a channel that settles through a money-off artifact
+- **THEN** 100 points leave their balance, the same as a channel debiting directly
+- **AND** exactly one redemption is recorded for that payment
 
 ### Requirement: Deleting the account ends the membership at once
 
@@ -361,6 +384,82 @@ is erased, the identity simply holds nothing any more.
 - **WHEN** an account is deleted inside a live inactivity window or tier term
 - **THEN** the clearing is immediate, not deferred to either clock
 
+### Requirement: Earning is priced in the programme's own currency, on its deployed rounding order
+
+Points SHALL be granted from qualifying spend using the programme's earn rate
+and the member's tier multiplier. The deployed configuration SHALL name where
+the floor lands: either the money becomes whole base points before the
+multiplier and the result floors again, or the total floors once after the rate
+and the multiplier. The order changes by deploying a different configuration,
+never by an operator edit.
+
+The multiplier applied SHALL be the tier the member held immediately before this
+spend is priced, so a spend that promotes a member earns at the tier they were
+on when they made it.
+
+A spend recorded in a currency other than the programme's SHALL be refused as
+invalid rather than converted.
+
+#### Scenario: Base points floor before the multiplier
+
+- **WHEN** the deployed order floors base points first
+- **THEN** the money becomes whole base points at the earn rate
+- **AND** the multiplier applies to those whole points, floored again
+
+#### Scenario: A single floor at the end
+
+- **WHEN** the deployed order floors once at the end
+- **THEN** the point total is floored once after applying the rate and the
+  multiplier, not at each step
+
+#### Scenario: A foreign currency is refused
+
+- **WHEN** a spend arrives in a currency the programme does not run in
+- **THEN** it is refused as invalid, naming both currencies
+- **AND** no ledger entry is written
+
+#### Scenario: Backdated activity keeps its own date
+
+- **WHEN** a spend carries a date in the past
+- **THEN** its tier contribution follows that date
+- **AND** its effect on the inactivity window follows the expiry rule, never shortening it
+- **AND** the multiplier applied is the tier the member held immediately before it is priced
+
+#### Scenario: Future-dated activity is refused
+
+- **WHEN** a spend carries a date more than five minutes ahead of now
+- **THEN** it is refused as invalid
+
+### Requirement: A spent redemption stays spent when its artifact expires
+
+When what a redemption produced — a discount code, an uncollected
+reward — passes its validity unused, the points SHALL NOT return by
+themselves: the member bought it, and letting it lapse is the member's
+responsibility. Points SHALL return only through an explicit operator
+cancellation, recorded with who and why. An artifact that was used SHALL
+never be reversed into points; any remedy for a used artifact is money,
+outside the programme.
+
+What members forfeit to expiry SHALL be counted and readable by an
+operator, never silent.
+
+#### Scenario: An expired unused code returns nothing by itself
+
+- **WHEN** a discount code passes its validity with no use
+- **THEN** the points remain spent
+- **AND** the forfeit is counted where an operator can read it
+
+#### Scenario: An operator cancellation is the credit path
+
+- **WHEN** an operator cancels a redemption whose artifact went unused
+- **THEN** the points return per the reversal rules
+- **AND** the cancellation records who and why
+
+#### Scenario: A used artifact is never reversed
+
+- **WHEN** a cancellation names a redemption whose artifact was used
+- **THEN** it is refused
+
 ## MODIFIED Requirements
 
 ### Requirement: The ledger is the only source of a balance
@@ -378,7 +477,7 @@ by asking the ledger, never stored as running totals.
 #### Scenario: Tier points are derived from the same entries
 
 - **WHEN** a tier point count is asked for over a given window
-- **THEN** it counts the earnings dated inside that window, less any claw-backs against them
+- **THEN** it counts the earnings dated inside that window and after the member's most recent demotion, less any claw-backs against them
 - **AND** redemptions do not appear in it
 
 #### Scenario: A balance never goes negative
@@ -393,53 +492,25 @@ by asking the ledger, never stored as running totals.
 - **THEN** the credits it drew from, and how much it took from each, are recorded
 - **AND** those amounts sum to exactly the debit
 
-### Requirement: Earning is priced once, in the programme's own currency
-
-Points SHALL be granted from qualifying spend using the programme's earn rate and
-the member's tier multiplier, rounded down once at the end of the calculation.
-
-The multiplier applied SHALL be the tier the member held immediately before this
-spend is priced, so a spend that promotes a member earns at the tier they were
-on when they made it.
-
-A spend recorded in a currency other than the programme's SHALL be refused as
-invalid rather than converted.
-
-#### Scenario: Rounding happens once
-
-- **WHEN** a spend is priced at a tier multiplier
-- **THEN** the point total is floored once after applying the rate and the multiplier,
-  not at each step
-
-#### Scenario: A foreign currency is refused
-
-- **WHEN** a spend arrives in a currency the programme does not run in
-- **THEN** it is refused as invalid, naming both currencies
-- **AND** no ledger entry is written
-
-#### Scenario: Backdated activity keeps its own date
-
-- **WHEN** a spend carries a date in the past
-- **THEN** its tier contribution, and its effect on the member's inactivity window, follow that date
-- **AND** the multiplier applied is the tier the member held immediately before it is priced
-
-#### Scenario: Future-dated activity is refused
-
-- **WHEN** a spend carries a date more than five minutes ahead of now
-- **THEN** it is refused as invalid
-
 ### Requirement: A tier ladder is ordered, and refused at boot when it is not
 
 A programme's ladder SHALL be rejected when the product starts, not when a
 member is evaluated, if it is ambiguous about which tier a member holds.
 
+An earned tier is one a member reaches by earning. A tier reachable only by
+invitation is not an earned tier: it lives by its invitation's own dates and is
+exempt from every rule below that names an earned tier.
+
 A ladder SHALL carry exactly one entry tier, which SHALL be its lowest rung.
 Tier identifiers SHALL be unique. Each earned tier SHALL ask more qualifying
-points than the tier below it, and every earned tier SHALL measure them over
-the same window. Each earned tier SHALL carry a validity period longer than
-zero, and a retention threshold greater than zero and no greater than the
-qualifying points that tier asks for. The programme SHALL carry an inactivity
-window longer than zero. The programme's time zone SHALL name a real zone.
+points than the tier below it, and every earned tier SHALL measure them over the
+same window. Each earned tier SHALL resolve to a validity period equal to that
+window — a term longer or shorter than the window it is measured over cannot be
+re-qualified in — and to a retention threshold greater than zero and no greater
+than the qualifying points that tier asks for; a programme naming no retention
+threshold SHALL resolve it to that tier's own attainment points rather than be
+refused. The programme SHALL carry an inactivity window longer than zero. The
+programme's time zone SHALL name a real zone.
 
 #### Scenario: Two tiers share an identifier
 
@@ -490,9 +561,10 @@ window longer than zero. The programme's time zone SHALL name a real zone.
 ### Requirement: Grade10's programme
 
 Grade10 SHALL run the programme in HKD on Asia/Hong_Kong time, granting one
-point per HKD 10 of qualifying spend, redeeming one point as HKD 1 at
-checkout, with a member's redeemable balance expiring after twelve months
-carrying no earning and no redemption.
+point per HKD 10 of qualifying spend — floored to whole base points before the
+tier multiplier applies — redeeming one point as HKD 1 at checkout, with a
+member's redeemable balance expiring after twelve months carrying no earning
+and no redemption.
 
 Its ladder SHALL be, in ascending rank:
 
@@ -510,8 +582,8 @@ change by deploying a different configuration, never by an operator edit —
 an operator who can rewrite what a purchase earns can mint money. The reward
 menu is the intended lever and is editable.
 
-Why these numbers, what is still open about the top tier, and what is still open
-about the retention threshold and the price of a point:
+Why these numbers, and what is still open about the top tier and the retention
+threshold:
 [Grade10 loyalty programme](../../../../docs/prds/loyalty/programme.md).
 
 #### Scenario: A purchase earns at the member's rate
@@ -524,10 +596,10 @@ about the retention threshold and the price of a point:
 - **WHEN** a Silver member's qualifying spend is HKD 125.50
 - **THEN** they earn 12 points
 
-#### Scenario: A tier multiplier does not round twice
+#### Scenario: Grade10 floors base points before the multiplier
 
-- **WHEN** a Gold member's qualifying spend is HKD 125.50
-- **THEN** they earn 15 points
+- **WHEN** a Gold member's qualifying spend is HKD 139
+- **THEN** they earn 15 points, never 16
 
 #### Scenario: The second tier is reached by spending
 
@@ -602,11 +674,15 @@ A member SHALL be able to list what they have redeemed and the state of each.
 Reversing a redemption SHALL be an operator action, recorded in the operator log.
 No member action SHALL reverse one.
 
-A reversal SHALL be possible only while the redemption's coupon is unused — the
-remedy for a reward that cannot be honoured, such as an item out of stock. It
-SHALL return exactly the number of points the redemption consumed and SHALL
-void the unused coupon. A coupon that has been used SHALL NOT be reversed, and
-its points stay spent.
+A reversal SHALL be possible only while what the redemption produced is
+unconsumed — a coupon not yet used, or a physical reward not yet collected. It
+is the remedy for a reward that cannot be honoured, such as an item out of
+stock. It SHALL return exactly the number of points the redemption consumed, as
+entries pointing back at the credits those points came from so a later claw-back
+can still reach them, and SHALL void an unused coupon or cancel a waiting
+collection. A coupon already used, or a reward already handed over, SHALL NOT be
+reversed, and its points stay spent. A redemption that produced nothing to
+consume SHALL still be reversible on the same terms.
 Returned points SHALL rejoin the redeemable balance under the inactivity window
 already running: a reversal SHALL NOT reset that window, and SHALL return nothing
 to a member whose window has already passed.
@@ -620,6 +696,16 @@ consumed a unit.
 - **WHEN** an operator reverses a redemption
 - **THEN** the coupon it issued can no longer be used
 - **AND** the points it consumed return to the member's redeemable balance
+
+#### Scenario: A collected reward cannot be reversed
+
+- **WHEN** an operator reverses a redemption whose physical reward was already handed over
+- **THEN** it is refused and the points stay spent
+
+#### Scenario: A waiting collection is cancelled by the reversal
+
+- **WHEN** an operator reverses a redemption whose physical reward is still waiting
+- **THEN** the points return and the collection is cancelled
 
 #### Scenario: A used coupon cannot be reversed
 
@@ -760,6 +846,17 @@ reloads between attempts.
 
 ## REMOVED Requirements
 
+### Requirement: Earning is priced once, in the programme's own currency
+
+**Reason**: The owner set the rounding order — money becomes whole base points
+before the tier multiplier — and engineering carries the order as deployed
+configuration, so "rounded once at the end" is one deployable choice, not the
+rule.
+
+**Migration**: Replaced by "Earning is priced in the programme's own currency,
+on its deployed rounding order". The currency, backdating, and future-dating
+rules carry over unchanged.
+
 ### Requirement: Points expire on a fixed window and stop counting immediately
 
 **Reason**: The programme moves to activity-based expiry. The whole redeemable
@@ -768,12 +865,12 @@ rather than each credit expiring twelve months after the activity that earned
 it. Replaced by "The redeemable balance expires after a period of inactivity",
 which carries the scheduled-pass scenario forward unchanged.
 
-**Migration**: Drop per-credit expiry dates and hold one last-activity date per
-member, taken from that member's most recent earning or redemption. A credit
-that would have expired under the old rule, but whose member has been active
-inside the inactivity window, is live again. That is a deliberate one-way
-loosening at the change-over: it cannot be reversed without re-deriving the
-per-credit dates the programme no longer keeps.
+**Migration**: Hold one last-activity date per member, taken from that member's
+most recent earning or redemption. Each credit keeps its own date, and a credit
+counts while either date is still ahead, so the member's date is what binds from
+the change-over on. Credits already past their own date at the change-over SHALL
+be settled as expired before the member's date is written, so nothing the old
+rule had already taken comes back.
 
 ### Requirement: Tier is derived, ratchets up on earning, and never silently drops
 
