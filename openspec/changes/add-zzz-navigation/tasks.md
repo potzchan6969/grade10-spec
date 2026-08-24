@@ -51,15 +51,15 @@ navigating half of it and no worker — see design.md.
 
 ## 4. The collector's place and payload (owner: @sean)
 
-- [ ] 4.1 Make `Back returns to where they were` and `A new surface starts at
+- [x] 4.1 Make `Back returns to where they were` and `A new surface starts at
       the top` pass: scroll restoration keyed to history entries, rendered
       once inside the site.
-- [ ] 4.2 Make `The first visit pays for one surface` and `The destination
+- [x] 4.2 Make `The first visit pays for one surface` and `The destination
       loads on arrival` pass: each route module loads its view lazily, and a
       check reads the built chunks and fails the build when a surface's page
       code lands in the entry — the one grade10's build already runs is the
       shape to follow.
-- [ ] 4.3 Run the full check suite and a production build as this group's
+- [x] 4.3 Run the full check suite and a production build as this group's
       verification.
 
 ## 5. What the repository says
