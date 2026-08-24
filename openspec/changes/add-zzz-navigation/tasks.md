@@ -22,7 +22,7 @@ navigating half of it and no worker — see design.md.
 - [x] 1.3 Run typecheck, lint, and the app's test lane as this group's
       verification.
 
-## 2. Addresses
+## 2. Addresses (owner: @sean)
 
 - [ ] 2.1 Make `Each view has an address`, `A refresh keeps the collector's
       place`, and `An unknown address resolves to not-found` pass:
