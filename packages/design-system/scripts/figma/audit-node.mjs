@@ -130,6 +130,11 @@ if (args["all-blocks"]) {
   const blocksDir = resolve(pkgDir, "../ui/src/blocks");
   for (const entry of await readdir(blocksDir, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
+    // shared/ is cross-capability plumbing that never came from a Figma
+    // frame (docs/governance/ui-component-contracts.md, "shared/ is earned,
+    // not planned") — there is no node to audit against, so listing it as
+    // uncovered forever would be noise rather than a gap.
+    if (entry.name === "shared") continue;
     try {
       await pushMap(
         resolve(blocksDir, entry.name, "audit.json"),

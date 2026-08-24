@@ -1,0 +1,32 @@
+[
+  {
+    "label": "product-card/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4200-155",
+    "classes": "group/product-card w-full",
+    "note": "Backfilled from product-card.figma.ts, not written at conversion time. The node is the template's target and may be the component set; if the sweep reports a missing prop, repoint to the base variant node."
+  },
+  {
+    "label": "product-card-image/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10074",
+    "classes": "group/product-card-image relative aspect-square w-full rounded-(--radius-3xl)",
+    "note": "Backfilled from product-card-image.figma.ts; rounded-(--radius-3xl) resolves to 24px and is the one checkable value here."
+  },
+  {
+    "label": "filter-panel/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-13952",
+    "classes": "sticky top-0 w-full shrink-0 self-stretch overflow-hidden lg:w-64 lg:shrink-0",
+    "note": "Backfilled from filter-panel.figma.ts. Every root utility is positional, so this entry currently pins the mapping rather than a value."
+  },
+  {
+    "label": "product-list-header/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-14117",
+    "classes": "w-full gap-2",
+    "note": "Backfilled from product-list-header.figma.ts; gap-2 (8px) checks against the node's item spacing."
+  },
+  {
+    "label": "product-filter/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4357-527",
+    "classes": "w-full gap-6",
+    "note": "Backfilled from product-filter.figma.ts; gap-6 (24px) checks against the node's item spacing."
+  }
+]
