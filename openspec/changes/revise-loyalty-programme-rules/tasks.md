@@ -90,12 +90,12 @@ against one being added, not a change to existing behaviour.
 genuine new work, and `testing/suites/tierValidity.ts` currently asserts the
 opposite as correct.
 
-- [ ] 8.1 Set `tierOnRefund` to re-evaluate in Grade10's deployed programme config, so *A claw-back can demote* passes, and cover both policy values so the switch stays a real choice
-- [ ] 8.2 Record the demotion date; no such marker exists today
-- [ ] 8.3 Count attainment and retention only from earnings dated after the last demotion, so *Losing a tier resets the climb* and *Tier points are derived from the same entries* agree
-- [ ] 8.4 Invert `re-earns a tier from the rolling window instead of resurrecting the old term` in `testing/suites/tierValidity.ts` — it asserts the behaviour this group removes
-- [ ] 8.5 Resolve a missing retention threshold to the tier's own attainment points and refuse a validity term that is not the qualifying window, so *A retention threshold asks more than the tier itself* and *Earned tiers measure over different windows* pass without refusing Grade10's own ladder
-- [ ] 8.6 Verify: `pnpm run test:backend`
+- [x] 8.1 Set `tierOnRefund` to re-evaluate in Grade10's deployed programme config, so *A claw-back can demote* passes, and cover both policy values so the switch stays a real choice
+- [x] 8.2 Record the demotion date; no such marker exists today
+- [x] 8.3 Count attainment and retention only from earnings dated after the last demotion, so *Losing a tier resets the climb* and *Tier points are derived from the same entries* agree
+- [x] 8.4 Invert `re-earns a tier from the rolling window instead of resurrecting the old term` in `testing/suites/tierValidity.ts` — it asserts the behaviour this group removes
+- [x] 8.5 Resolve a missing retention threshold to the tier's own attainment points and refuse a validity term that is not the qualifying window, so *A retention threshold asks more than the tier itself* and *Earned tiers measure over different windows* pass without refusing Grade10's own ladder
+- [x] 8.6 Verify: `pnpm run test:backend`
 
 ## 9. Points pay for purchases (grade10)
 
