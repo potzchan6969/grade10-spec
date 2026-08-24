@@ -9,7 +9,7 @@ openspec/specs/<product>/<capability>/spec.md
 The products are:
 
 - `grade10-store` — the Grade10 trading-card store surfaces (all pre-existing capabilities live here).
-- `zzz` — no capabilities yet; create `openspec/specs/zzz/<capability>/` with its first spec.
+- `zzz` — the ZZZ site's own surfaces, starting with how it answers an address.
 - `grade10-site` — the grade10 application's own surfaces: the shell every page
   renders in, and anything belonging to the site rather than to a product inside
   it.
