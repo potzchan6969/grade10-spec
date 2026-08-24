@@ -38,7 +38,7 @@ navigating half of it and no worker — see design.md.
 - [x] 2.3 Run typecheck, lint, and the app's test lane as this group's
       verification.
 
-## 3. Session-decided addresses
+## 3. Session-decided addresses (owner: @sean)
 
 - [ ] 3.1 Make `A signed-in collector lands on home`, `A signed-in collector
       asks for sign-in`, and `A signed-out collector asks for the profile`
