@@ -9,11 +9,18 @@
  *
  *   FIGMA_TOKEN=figd_… pnpm figma:audit -- --node <url> --classes "h-10 gap-2 bg-primary"
  *   FIGMA_TOKEN=figd_… pnpm figma:audit -- --map audit.json
+ *   FIGMA_TOKEN=figd_… pnpm figma:audit -- --all-blocks
  *   FIGMA_TOKEN=figd_… pnpm figma:audit -- --node <url>          # dump the node's values
  *
  * audit.json is the class-audit table the figma-page-to-code skill has the
  * converting agent emit: [{ "label": "hero/cta", "node": "<figma url>",
- * "classes": "h-10 px-4 gap-2 bg-primary rounded-md" }, …].
+ * "classes": "h-10 px-4 gap-2 bg-primary rounded-md" }, …]. The unit of
+ * audit is the BLOCK: each packages/ui/src/blocks/<capability>/ directory
+ * carries one audit.json covering the elements its conversion styled, and
+ * --all-blocks sweeps every one of them — which is what lets the nightly
+ * design-sync run re-check every block long after its converter is gone. A
+ * block with no audit.json is listed as uncovered rather than failed, so
+ * blocks that predate the convention read as gaps, not as passes.
  *
  * DRIFT (✗) = a class resolves to a value the node does not draw; exits 1.
  * UNCHECKED (–) = no rail carries that class (a state prefix, a non-visual
@@ -27,7 +34,7 @@
  * The in-session audit with get_variable_defs remains the stronger check;
  * this is the unattended, re-runnable one.
  */
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
@@ -51,12 +58,18 @@ const die = (m) => {
   process.exit(1);
 };
 
+// The root `figma:audit` script forwards through a second pnpm invocation,
+// which leaves a literal `--` in argv; parseArgs would read everything after
+// it as positionals and throw.
+const argv = process.argv.slice(2).filter((a) => a !== "--");
 const { values: args } = parseArgs({
+  args: argv,
   options: {
     node: { type: "string" },
     classes: { type: "string" },
     map: { type: "string" },
     file: { type: "string" },
+    "all-blocks": { type: "boolean" },
   },
 });
 
@@ -92,21 +105,50 @@ function parseNodeRef(ref) {
 }
 
 const entries = [];
-if (args.map) {
-  const rows = JSON.parse(await readFile(resolve(args.map), "utf8"));
-  if (!Array.isArray(rows)) die(`${args.map} is not a JSON array.`);
+const uncovered = [];
+async function pushMap(path, prefix = "") {
+  const rows = JSON.parse(await readFile(path, "utf8"));
+  if (!Array.isArray(rows)) die(`${path} is not a JSON array.`);
   for (const [i, row] of rows.entries()) {
     const ref = parseNodeRef(row.node ?? "");
     if (!ref)
       die(
-        `Entry ${i} (${row.label ?? "unlabelled"}): cannot read a file key and node id out of "${row.node}".`,
+        `${path} entry ${i} (${row.label ?? "unlabelled"}): cannot read a file key and node id out of "${row.node}".`,
       );
     entries.push({
-      label: row.label ?? `entry ${i}`,
+      label: `${prefix}${row.label ?? `entry ${i}`}`,
       ref,
       classes: row.classes ?? "",
     });
   }
+}
+if (args["all-blocks"]) {
+  // The unit of audit is the block: one audit.json per capability directory
+  // in packages/ui, written at conversion time. Sweeping them all is what
+  // the nightly run does; a directory without one is a gap to report, never
+  // a pass.
+  const blocksDir = resolve(pkgDir, "../ui/src/blocks");
+  for (const entry of await readdir(blocksDir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    try {
+      await pushMap(
+        resolve(blocksDir, entry.name, "audit.json"),
+        `${entry.name}: `,
+      );
+    } catch (err) {
+      if (err?.code !== "ENOENT") throw err;
+      uncovered.push(entry.name);
+    }
+  }
+  if (!entries.length) {
+    console.log(
+      `No block carries an audit.json yet (${uncovered.length} block(s) uncovered: ${uncovered.join(", ")}). ` +
+        `Nothing audited — the figma-page-to-code skill writes one per converted block.`,
+    );
+    process.exit(0);
+  }
+} else if (args.map) {
+  await pushMap(resolve(args.map));
 } else if (args.node) {
   const ref = parseNodeRef(args.node);
   if (!ref)
@@ -116,7 +158,7 @@ if (args.map) {
   entries.push({ label: args.node, ref, classes: args.classes ?? "" });
 } else {
   die(
-    'Nothing to audit. Pass --node <url> [--classes "…"] or --map audit.json.',
+    'Nothing to audit. Pass --node <url> [--classes "…"], --map audit.json, or --all-blocks.',
   );
 }
 
@@ -247,6 +289,10 @@ for (const e of entries) {
 }
 
 console.log("");
+if (uncovered.length)
+  console.log(
+    `– ${uncovered.length} block(s) carry no audit.json and were not audited: ${uncovered.join(", ")}`,
+  );
 if (drift) die(`${drift} value(s) drift from Figma.`);
 console.log(
   "✓ every checked value matches Figma; unchecked classes are listed above.",
