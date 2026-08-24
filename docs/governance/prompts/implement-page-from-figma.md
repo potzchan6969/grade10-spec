@@ -19,6 +19,9 @@ Implement the page at <FIGMA_FRAME_URL> in <TARGET>.
 
 FIRST, before writing any code:
 - Load the figma-design-to-code skill (required before get_design_context).
+  It ships with the official Figma plugin, not with this repository — in
+  Claude Code it is namespaced figma:figma-design-to-code. If the plugin is
+  not installed, stop and tell me rather than proceeding without it.
 - Walk the frame and classify EVERY section into exactly one of:
   block (an instance of a published @grade10/ui block — name it),
   primitive (an instance of a published design-system set — name it),
