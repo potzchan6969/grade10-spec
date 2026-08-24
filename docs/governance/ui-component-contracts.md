@@ -98,6 +98,12 @@ The conventions, each visible in the existing directories:
   stories are found by it. A page-scale composition the spec names
   (`product-browse.tsx`) lives flat in its capability directory like any
   other block.
+- **A block converted from Figma also carries one per-directory
+  `audit.json`** — the element↔node value audit that `pnpm run figma:audit`
+  re-checks nightly. Its `classes` column is a snapshot of the component's
+  own class strings, so changing a class in a block means updating its audit
+  entry in the same edit; a token-free freshness test in the package's test
+  suite fails when the two diverge, naming the stale class.
 - **Exports go through the spec-named barrel group.** One commented group per
   capability in `src/index.ts` (`// shared-ui/auction-listing`), exporting
   exactly what the capability spec names — the component and its

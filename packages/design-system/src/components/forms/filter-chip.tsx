@@ -37,6 +37,15 @@ type FilterChipProps = ButtonPrimitive.Props &
     trailing?: ReactNode;
   };
 
+/**
+ * Filter chips button group with multi-select capability for content
+ * filtering.
+ *
+ * That is the Figma description for the set (named `ChipSelectable` there),
+ * and it describes the group; this is one chip of it. Multi-select lives with
+ * the consumer, which owns each chip's `selected` and renders as many as the
+ * facet needs.
+ */
 function FilterChip({
   className,
   size = "md",

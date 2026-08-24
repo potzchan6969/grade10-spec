@@ -11,6 +11,8 @@ type NavigationLinkProps = useRender.ComponentProps<"a"> & {
 };
 
 /**
+ * Links for moving between the main areas of an app or site.
+ *
  * One item in a `NavigationList`. Figma set `NavigationLink` (`4344:508`)
  * has three VARIANT properties: `active`, `disabled`, and `state`. Hover is
  * a CSS pseudo-state with no prop behind it.

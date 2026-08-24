@@ -23,6 +23,9 @@ import { cva, type VariantProps } from "class-variance-authority";
  *
  * Resting and focus border utilities are mutually exclusive — applying both lets
  * Tailwind source order pick the colour, which breaks the focus tones.
+ *
+ * The set's Figma description carries only this attribution, not a
+ * description: based on https://ui.shadcn.com/docs/components/base/input-otp
  */
 const inputOtpSlotVariants = cva("", {
   variants: {

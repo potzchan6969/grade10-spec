@@ -1,0 +1,32 @@
+[
+  {
+    "label": "product-card/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4006-981",
+    "classes": "group/product-card w-full",
+    "note": "Base variant (soldOut=false) of set 4200:155; the set container itself carries a cosmetic 8px frame radius that no variant draws."
+  },
+  {
+    "label": "product-card-image/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10072",
+    "classes": "group/product-card-image relative aspect-square w-full rounded-(--radius-3xl)",
+    "note": "Base variant (state=default, inCart=false, soldOut=false) of set 4274:10074; every variant draws cornerRadius 24, matching rounded-(--radius-3xl). The set container's own 8px frame radius is cosmetic — auditing the set node reported it as drift, which is why this points at the variant."
+  },
+  {
+    "label": "filter-panel/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-13952",
+    "classes": "sticky top-0 w-full shrink-0 self-stretch overflow-hidden lg:w-64 lg:shrink-0",
+    "note": "Backfilled from filter-panel.figma.ts. Every root utility is positional, so this entry currently pins the mapping rather than a value."
+  },
+  {
+    "label": "product-list-header/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-14117",
+    "classes": "w-full gap-2",
+    "note": "Backfilled from product-list-header.figma.ts; gap-2 (8px) checks against the node's item spacing."
+  },
+  {
+    "label": "product-filter/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4357-527",
+    "classes": "w-full gap-6",
+    "note": "Backfilled from product-filter.figma.ts; gap-6 (24px) checks against the node's item spacing."
+  }
+]

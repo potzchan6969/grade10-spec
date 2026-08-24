@@ -35,7 +35,9 @@ type CheckboxListInputProps = CheckboxPrimitive.Root.Props &
   };
 
 /**
- * A checkbox with its label and optional count. Wrapping both in a `<label>`
+ * A box for turning an option on or off.
+ *
+ * Drawn here with its label and optional count. Wrapping both in a `<label>`
  * is what makes the text clickable — Figma draws the row but cannot express
  * the association.
  *

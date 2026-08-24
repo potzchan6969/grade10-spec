@@ -127,6 +127,14 @@ function ProductCardContent({
 const PRODUCT_CARD_FIXTURE = <ProductCardContent {...SKELETON_FIXTURE_PROPS} />;
 
 /**
+ * Display card box or card pack products in a grid layout.
+ *
+ * If discount is applied: show the discounted price and discount badge, with
+ * the strikethrough original price. Hover over the image container: scale up
+ * the background image within the container a bit with smooth transition.
+ * When the product has already added to the cart: show the qty on the button
+ * instead.
+ *
  * Product tile for a card-box / pack grid. Figma (`4200:155`) has a `soldOut`
  * axis; discount is a boolean that shows the SALE badge and original price.
  *
