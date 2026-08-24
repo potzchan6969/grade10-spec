@@ -43,6 +43,14 @@ THEN compose, under these rules, none of them negotiable:
   propose an OpenSpec change on the component instead.
 - All content through props or the app's i18n wiring; nothing in
   packages/ui imports the message catalogs or the application.
+- A new or changed block lands in its CAPABILITY's directory —
+  packages/ui/src/blocks/<product-context>-<capability>/ — never a
+  per-page one, and never a directory whose capability spec does not
+  exist yet. Component names carry the capability prefix (SignInCard,
+  never Card); satellites share the component's basename; exports go
+  through the capability's group in src/index.ts, exactly as the spec
+  names them; nothing lands in blocks/shared/ until a second capability
+  consumes it.
 
 VERIFY, and paste the real output of each:
 - pnpm run lint && pnpm run typecheck
@@ -74,6 +82,8 @@ Fixing these in Figma is far cheaper than compensating for them in code, and eve
 **The inventory gate, before any code.** A page conversion that starts generating markup resolves every ambiguity silently — and the expensive failure is not ugly code but a private reimplementation of an existing block, off-contract and invisible to the design-sync checker, which only walks `packages/design-system`. Forcing the classification first makes "no rail exists for this section" a reported decision rather than an absorbed one.
 
 **UNMATCHED stops the run.** A section no block covers is a product decision — a new capability spec and block, or a design-side fix — not a gap for an agent to fill with bespoke divs. This is the page-level restatement of the operative rule in [`design-code-sync.md`](../design-code-sync.md): code may not offer what design does not define, and a page may not use what no component defines.
+
+**Blocks are filed by capability, not by page.** Mid-conversion, a per-page directory (`blocks/store-home-page/`) is the path of least resistance — and it inverts the ownership: the next page reuses nothing, every block grows a twin, and the twins drift. The rule and its file-layout details live in the [`figma-page-to-code` skill](../../../.cursor/skills/figma-page-to-code/SKILL.md#where-a-new-block-lands); the prompt restates enough of it to hold without the skill loaded.
 
 **Publishing is carved out**, for the same reason as the primitive prompt: `code-connect:publish` writes to a shared Figma file and has no undo.
 
