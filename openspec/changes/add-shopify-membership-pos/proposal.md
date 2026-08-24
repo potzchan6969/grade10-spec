@@ -3,9 +3,10 @@
 **Author:** @ecchochan - 2026-08-22
 
 Product context: [Grade10 loyalty programme](../../../docs/prds/loyalty/programme.md).
-The engineering design record lives in the grade10 repo:
+The engineering design record is [`design.md`](design.md); the grade10 repo's
 `docs/references/shopify-membership-pos.md` and
-`docs/references/shopify-pos-extension.md`.
+`docs/references/shopify-pos-extension.md` carry the longer working notes once
+they land on its mainline.
 
 Depends on `revise-loyalty-programme-rules`, which carries the programme's own
 rules — tier validity, the two counts, activity-based expiry, the earning order,
@@ -72,6 +73,15 @@ member**, and **staff-assisted redemptions completed per week**.
 
 - `grade10-store/loyalty`: redemption gains a per-unit quantity and a
   collect-in-person lifecycle. Nothing else about the programme changes here.
+
+### Capabilities this one must agree with
+
+- `grade10-store/shopify-commerce` (active change `add-grade10-shopify-store`)
+  owns the online store's one-to-one account-to-customer link, including the
+  guest checkout that creates both. This change owns what that pairing means to
+  a member — the opaque key, erasure, and what may be adopted into an account
+  that already existed. Neither may redefine the other's half, and whichever
+  archives second reads the other first.
 
 ## Impact
 

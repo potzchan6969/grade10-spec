@@ -347,7 +347,11 @@ only what the member paid in money.
 How a channel carries that payment is the channel's own concern — a checkout
 that debits the balance directly and one that settles the same debit through a
 money-off artifact SHALL cost the member the same points and record one
-redemption either way.
+redemption either way. What an artifact may then be spent on is the channel's
+rule, not the programme's: a channel MAY require a purchase to reach the
+artifact's own value or refuse to combine it with another discount, and a
+member offered points on such a channel SHALL be told what they can spend
+before the points leave their balance, never after.
 
 #### Scenario: Points reduce the bill
 
@@ -365,6 +369,11 @@ redemption either way.
 - **WHEN** a member pays 100 points toward a purchase on a channel that settles through a money-off artifact
 - **THEN** 100 points leave their balance, the same as a channel debiting directly
 - **AND** exactly one redemption is recorded for that payment
+
+#### Scenario: A channel's own limit is disclosed before the points go
+
+- **WHEN** a channel settles through an artifact that cannot be spent on the member's cart
+- **THEN** the member is told before any points leave their balance
 
 ### Requirement: Deleting the account ends the membership at once
 
@@ -459,6 +468,45 @@ operator, never silent.
 
 - **WHEN** a cancellation names a redemption whose artifact was used
 - **THEN** it is refused
+
+### Requirement: The membership surface exports
+
+The shared UI package SHALL export, from its public entry, exactly these
+components for the membership surface — `MembershipSummary`, `RewardMenu`,
+`CouponList`, and `ActivityList` — and the props and copy type of each.
+
+`MembershipSummary` SHALL render the two counts as two counts, never one
+total, alongside the tier held, the date its validity ends, and progress
+toward retention. `RewardMenu` SHALL price each reward in points and state a
+money-off reward's own validity period. `CouponList` SHALL carry each issued
+code, what it is for, its own expiry, and whether it is spent or void.
+`ActivityList` SHALL name entries in terms a member reads, and SHALL NOT carry
+an operator reason, a retry key, or internal pricing.
+
+Each of those components SHALL take the words it renders in a single `copy`
+prop of its own copy type, and SHALL receive every count, date and state
+through props — none of them SHALL fetch, subscribe to, or store product
+state.
+
+The operator console composes these same exports as brand-owned view code and
+SHALL require no export of its own.
+
+#### Scenario: The two counts are never summed
+
+- **WHEN** a member holds spendable points and qualifying points that differ
+- **THEN** the summary shows both figures separately
+- **AND** no single combined total is rendered
+
+#### Scenario: A member's activity carries nothing operator-facing
+
+- **WHEN** an entry was written by an operator correction
+- **THEN** the member's activity names the entry in member-readable terms
+- **AND** it carries no operator reason, retry key or internal pricing
+
+#### Scenario: The components take content, not sources
+
+- **WHEN** any of the four components is rendered
+- **THEN** every count, date, state and word it shows arrived through props
 
 ## MODIFIED Requirements
 
@@ -721,8 +769,8 @@ consumed a unit.
 #### Scenario: Restored points keep their original expiry
 
 - **WHEN** a redemption is reversed
-- **THEN** the restored points rejoin the balance under the inactivity window already running
-- **AND** the reversal does not reset that window
+- **THEN** the restored points rejoin the credits they were taken from, keeping those credits' own dates
+- **AND** they fall under the member's inactivity window already running, which the reversal does not reset
 
 #### Scenario: A reversal after the balance expired returns nothing
 
@@ -843,6 +891,79 @@ reloads between attempts.
 
 - **WHEN** a member reads a date the programme computed
 - **THEN** it reads the same wherever the member is, in the programme's time zone
+
+### Requirement: Operators act through named permissions, with a second factor and a tamper-evident record
+
+Every operator action SHALL require a named permission, a session resolved
+without cache, and — where the environment enforces it — a second factor
+verified for that session. Every operator action that changes something SHALL be
+recorded in a hash-chained log whose breakage is detectable.
+
+Operator permissions SHALL separate reading a member's loyalty state, moving
+points, granting invitations, editing the reward menu, removing a tier a member
+holds, and cancelling a redemption, so an operator can hold one without the
+others. Removing a tier and cancelling a redemption SHALL each be their own
+permission: both undo something a member can see, and neither follows from
+being allowed to move points.
+
+#### Scenario: A permission is required per action
+
+- **WHEN** an operator without the action's permission attempts it
+- **THEN** the action is refused
+
+#### Scenario: Moving points does not carry tier removal
+
+- **WHEN** an operator holding only the point-movement permission attempts to
+  remove a tier
+- **THEN** the action is refused
+
+#### Scenario: The record survives an attempt to rewrite it
+
+- **WHEN** any recorded operator action is altered or removed
+- **THEN** verifying the log reports the position at which it breaks
+
+#### Scenario: An action with no place to record it does not run
+
+- **WHEN** the operator log cannot be written
+- **THEN** the action is refused rather than completed unrecorded
+
+### Requirement: An operator runs the programme from one console
+
+An operator SHALL be able, subject to their own permissions, to: find a member
+and read their loyalty state and activity; correct a balance and grant campaign
+points; grant and revoke an invitation-only tier and list live grants; remove a
+tier a member holds; create, edit and archive rewards and see archived and
+scheduled ones; find a redemption and reverse or cancel it; read what members
+have forfeited to expiry; and read the operator log and verify it has not been
+tampered with.
+
+The console SHALL show an operator only the sections their permissions allow,
+using the same permission the action itself requires, so that what is shown and
+what is allowed cannot disagree.
+
+Where a second factor is required and missing, the console SHALL take the
+operator to enrol or verify rather than reporting a refusal.
+
+#### Scenario: Sections match permissions
+
+- **WHEN** an operator holding only the loyalty read permission opens the console
+- **THEN** they can find and read members
+- **AND** no section offering point movement, invitations, rewards, tier removal, redemption cancellation or the operator log is shown
+
+#### Scenario: A missing second factor opens the gate
+
+- **WHEN** an operator attempts an action their role allows but their session has no verified second factor
+- **THEN** the console takes them to verify, and the action completes afterwards
+
+#### Scenario: A stale console reports what broke
+
+- **WHEN** the console reads a response whose shape it does not recognise
+- **THEN** it reports which call failed to decode, rather than showing missing values
+
+#### Scenario: A member can be found again later
+
+- **WHEN** an operator opens a member and shares the address of that view
+- **THEN** the same member opens for the recipient
 
 ## REMOVED Requirements
 

@@ -123,7 +123,7 @@ and the `grade10-store/membership` capability that change
 | Gold earns 1.2×, Black 1.7× | Decided | The step to Gold is small enough to be worth chasing at 500 points; Black's is large because it is a gift, not a target. Both are integer percentages, so earning never computes on a float | Product |
 | Silver, Gold, Black | Decided | Renames the deployed Platinum and Diamond. Metal names read as status without implying a price, and Silver and Gold sit in the order a buyer already expects, where Platinum below Diamond did not. Display names only — multipliers and thresholds are untouched | Owner |
 | A tier is valid for twelve months | Decided | A permanent tier pays 1.2× forever to a member who bought once and left, so the programme's most expensive members become the ones it no longer has. Demoting for the passage of time would make the tier meaningless, so re-qualification is measured on tier points earned in the period rather than on the balance — spending points never demotes anyone | Owner |
-| Retention threshold | **Open** | The baseline is the same 500 that qualifies for the tier. The business needs to decide whether a lower figure, around 400, should re-qualify as a softer landing. It is deployed configuration, so the answer changes a value, not the model — but it changes the size of the first downgrade cohort, so it is wanted before launch | Owner |
+| Retention threshold | Decided at 500, under review | The baseline is the same 500 that qualifies for the tier. The business needs to decide whether a lower figure, around 400, should re-qualify as a softer landing. It is deployed configuration, so the answer changes a value, not the model — but it changes the size of the first downgrade cohort, so it is wanted before launch | Owner |
 | Upgrade is immediate, the higher rate is not | Decided | A member is promoted the instant they cross the threshold, including on their first purchase, because the status is the reward. The rate applies from the next purchase, so one large purchase cannot claim a rate it had not reached when it was made | Product |
 | Demotion resets tier progress | Decided | Earnings before a drop count toward nothing afterwards. Without this a demoted member is re-promoted the next day out of the same rolling window that just lapsed, and the tier flip-flops | Owner |
 | Tier points and redeemable points are counted separately | Decided | Under a single count, redeeming would reduce tier progress — the programme would punish the exact behaviour it exists to encourage. Two counts derived from one append-only ledger keep redemption free of tier consequences, with nothing to reconcile between them | Product |
@@ -136,7 +136,7 @@ and the `grade10-store/membership` capability that change
 | Auctions and credit top-ups | Deferred | Phase 2 candidates for earning only. Neither earns today, and auctions never accept points or coupons in any phase | Owner |
 | Exchange rate | Decided | A point is worth HKD 1 when it pays at checkout. With earning at a point per HKD 10, the programme returns 10% at Silver, 12% at Gold and 17% at Black — high for retail, and the number that sets the liability Finance reports | Owner |
 | What a redemption gives the member | Decided | It settles by what the reward is: points paid against the bill at checkout or at the till, a single-use money-off code both checkouts accept, or a physical item collected at the counter. A physical reward is never dressed up as a discount code | Owner |
-| Members cannot reverse a redemption; operators can | Decided | Redemption is one way, so no member surface offers points back. An operator can still reverse one on the record, which voids the coupon — a support remedy for a mistake, not a member-facing option. A used artifact is never reversed, and a reversal is refused once the member's balance has already expired | Product |
+| Members cannot reverse a redemption; operators can | Decided | Redemption is one way, so no member surface offers points back. An operator can still reverse one on the record, which voids the coupon — a support remedy for a mistake, not a member-facing option. A used artifact is never reversed, and a reversal after the member's balance has already expired voids the artifact but returns no points | Product |
 | An artifact left to expire stays spent | Decided | An unused code that reaches its own end date returns nothing by itself; points come back only through an operator's recorded cancellation. The alternative silently re-credits every forgotten coupon, and the liability never settles | Owner |
 | Coupon validity is set per reward | Decided | A coupon's life is a property of what it buys, not of the balance it came from, so the menu carries it per item and a redemption remembers the validity it was issued with | Product |
 | One-way preferences live in one policy block | Decided | Every "does a later event undo an earlier one" choice — the refund's effect on a reached tier, reclaiming an expired redemption, the shortfall rule when an order is re-attributed — is a named switch in one deployed policy block, so the answers sit together. Unsettled ones default to "what happened stands" and are swapped without a code change | Owner |
@@ -162,12 +162,11 @@ and the `grade10-store/membership` capability that change
   17% at the top. That is generous against retail norms, it is now a committed
   number rather than an open one, and it is the single input that decides
   whether the menu's prices and the reported liability are sustainable.
-- The first downgrade cohort lands twelve months after this ships, all at once,
-  because every existing member's tier is activated on the deploy date rather
-  than backdated. That is deliberate — backdating would demote members on day
-  one under a rule that did not exist when they earned the tier — but it means
-  the retention threshold must be settled well before that anniversary, and the
-  cohort should be sized and warned before it lands.
+- Downgrades are not a one-off cohort landing a year after launch. Tier
+  validity is already running, so members carry real activation dates from real
+  attainments and lapse on their own schedule. The retention threshold still
+  has to be settled before the earliest of those dates, and the members
+  approaching one should be sized and warned.
 - Activity-based expiry makes the outstanding balance stickier than per-purchase
   expiry did: a member who buys once a year never loses a point. The liability
   grows faster and sheds only from members who have genuinely gone quiet.

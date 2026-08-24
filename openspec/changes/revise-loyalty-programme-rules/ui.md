@@ -28,7 +28,7 @@ Every component this change needs is new. The set to author in
 | `ActivityList` | The member's own entries, named in member-readable terms |
 
 No design-system token or primitive changes. The store checkout gains a
-points-payment control (group 11) — its frame lands with the same Figma work as
+points-payment control (group 9) — its frame lands with the same Figma work as
 the membership surface. The console composes the same exports as brand-owned
 view code; it needs no exports of its own.
 

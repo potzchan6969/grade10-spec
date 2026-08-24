@@ -13,12 +13,13 @@ grade10 mainline.
 | Boot refusal on a bad retention threshold or validity term | `loyaltyProgram.ts` |
 | A redemption code, minted by the drain | `services/rewards/fulfillment.ts` (`newCode`, `ensureCode`) |
 | A reversal that voids the code and refuses a used one | `services/rewards/fulfillment.ts` (`deactivateFulfillment`), `services/rewards/reversal.ts` |
-| Tier re-evaluation on claw-back | `services/tiers/clawback.ts`, selected by `policies.tierOnRefund` |
-| Floor-first earning | `services/earning/earning.ts`, already deployed as `rounding: "base_points_first"` |
+| Tier re-evaluation on claw-back | `services/tiers/clawback.ts` |
 
-Two of the owner's decisions are therefore configuration, not construction:
-Grade10 pins `tierOnRefund: "keep"` and must pin the re-evaluating value, and
-the rounding order is already explicit in the deployed config.
+A claw-back re-evaluates the tier, and that is now the only behaviour. The
+engine had a `policies.tierOnRefund` switch with a `keep` value; since the
+settled rules offer no keep, the switch and the `policies` block were removed
+rather than defaulted, so no deployment can select a rule the spec does not
+have.
 
 What is missing is at the edges — where the programme meets the seller, the
 shop, and the vendor that makes a coupon real:
@@ -43,8 +44,9 @@ shop, and the vendor that makes a coupon real:
   extended.
 - The **auction** does not refuse points.
 
-Requirements: [`specs/grade10-store/loyalty/spec.md`](specs/grade10-store/loyalty/spec.md)
-and [`specs/grade10-store/membership/spec.md`](specs/grade10-store/membership/spec.md).
+Requirements: [`specs/grade10-store/loyalty/spec.md`](specs/grade10-store/loyalty/spec.md).
+The membership capability and the store channel belong to
+`add-shopify-membership-pos`.
 
 ## Decisions
 
@@ -60,16 +62,22 @@ record, that is unrecoverable without a manual repair.
 
 ### Earning floors base points before the multiplier
 
-`computeEarnedPoints` carries both orders behind `program.earn.rounding`:
-absent or `base_points_first` floors money into whole base points and applies
-the multiplier to those, `once_at_end` lets the multiplier see the money and
-floors the total. Grade10 already deploys `base_points_first` explicitly — HKD
-139 at 1.2× earns 15, where once-at-end would pay 16.
+This is the one owner decision the engine today does the opposite of.
+`computeEarnedPoints` rounds once at the end and says so in its own comment;
+`program.earn` has no rounding key, and the config parser refuses an unknown
+one, so this cannot be turned on by configuration alone.
 
-Keeping both is what makes this a business lever rather than a rewrite: the
-owner can move the floor with a config change, and `base_points` and
-`multiplier_x100` are already stamped on every earn, so an audit can always show
-which order priced a given entry.
+The change adds `earn.rounding` to the config schema with two values.
+`base_points_first` floors money into whole base points and applies the
+multiplier to those; `once_at_end` keeps today's behaviour. Grade10 deploys
+`base_points_first` — HKD 139 at 1.2× earns 15, where once-at-end pays 16.
+
+Keeping both is what makes this a business lever rather than a one-way rewrite,
+and it lets the change land without silently repricing anyone: a deployment
+that says nothing keeps the order it already had. `base_points` and
+`multiplier_x100` are stamped on every earn, and under floor-first that stamp
+and the granted points finally agree — today `base_points` is floored from the
+money while the total is not, so the two disagree on every multiplied earn.
 
 ### Balance expiry is one date per member, not a rewrite of every lot
 
@@ -204,28 +212,38 @@ stands*, and each is swapped without a code change once confirmed.
 
 ## Migration Plan
 
-Members already hold tiers under the old permanent rule and lots under the old
-per-purchase expiry.
+Less is needed here than the shape of the change suggests. Tier validity and
+activity-based expiry are not new rules being introduced over old data: all four
+tier columns and `activity_expires_at` are in the loyalty baseline migration,
+`tierValidity: { months: 12 }` is already deployed, `writeEarnedTier` stamps the
+whole term on every attainment, and `resetActivityClock` moves the member clock
+on every earn and redemption. There is no cohort holding a permanent tier, and
+no member with activity and no clock.
 
-1. **Tier activation.** Set all four tier columns together —
-   `earned_tier_id`, `earned_tier_activated_at`, `earned_tier_period_started_at`
-   and `earned_tier_expires_at` — with activation at the deploy date, so everyone
-   gets a full validity period to re-qualify in. All four or none:
-   `getEarnedTerm` throws on a row holding a tier without both dates, and logs
-   loudly when the period start is behind the activation, so setting activation
-   alone breaks every migrated member's summary read. Backdating to the purchase
-   that first qualified them would demote members on day one under a rule that
-   did not exist when they earned it.
-2. **Balance expiry.** Derive one `activity_expires_at` per member from that
-   member's most recent earn or redemption, and drop the per-lot dates. The
-   effective rule in `repositories/ledger.ts` is the later of a lot's own date
-   and the member's, so leaving them costs nothing — but the spec's migration
-   note says drop, and two records of the same fact drift.
-3. **Channel backfill.** Existing rows predate the field; they are attributed
-   to the online store, the only channel that has sold so far.
+So the migration covers only what this change actually adds, plus repair of any
+row the engine has not touched:
 
-Nothing here is reversible by re-running it, so each step is a migration with
-its own row counts asserted before and after.
+1. **Channel backfill.** `channel` is new. Existing rows predate it and are
+   attributed to the online store, the only channel that has sold so far.
+2. **Tier column repair.** Any row holding `earned_tier_id` without a complete
+   term gets all four columns written together, activating at the deploy date.
+   All four or none: `getEarnedTerm` throws on a tier without both dates and
+   logs when the period start is behind the activation, so a partial write
+   breaks that member's every summary read. Expect this to touch nothing; it
+   runs because a throw on read is not an acceptable way to discover otherwise.
+3. **Expiry repair.** Settle any credit already past its own date **before**
+   writing a member clock. `repositories/ledger.ts` reads the later of the two
+   dates, so a clock written ahead of a dead credit revives it. Each credit
+   keeps its own date — `ck_ledger_entries_expires_at` requires every credit to
+   carry one, so dropping them is not available.
+
+Each step asserts its row counts before and after, and none is reversible by
+re-running it.
+
+**What this does change for rollout:** the first downgrade cohort is not a
+migration artifact landing twelve months after deploy. Members are already
+carrying real activation dates from real attainments, so downgrades arrive on
+the schedule the engine has been building all along.
 
 ## Open Questions
 

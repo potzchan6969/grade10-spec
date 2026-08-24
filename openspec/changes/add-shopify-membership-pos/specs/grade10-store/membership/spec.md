@@ -46,10 +46,14 @@ is meaningless outside the platform — never the platform's account
 identifier, which would outlive deletion in a vendor system. The platform
 SHALL remain the sole authority for the mapping.
 
-An existing customer record SHALL be adopted as a member's pair only
-when it matches an identifier the platform itself verified; an identifier
-merely typed by a buyer or by staff SHALL never attach history to a
-member.
+A customer record that already existed SHALL be adopted into an account
+that already existed only when the two are joined by an identifier the
+platform itself verified; an identifier merely typed by a buyer or by
+staff SHALL never attach one party's history to the other.
+
+An account created from a purchase SHALL pair with the customer record
+that purchase made. Nothing is being adopted there — the account and the
+customer are the same event, so there is no prior history to mis-attach.
 
 #### Scenario: The account identifier never leaves Grade10
 
@@ -57,10 +61,17 @@ member.
 - **THEN** it carries the opaque membership key and no platform account
   identifier
 
-#### Scenario: An unverified email attaches nothing
+#### Scenario: An unverified email attaches nothing to a member who already existed
 
-- **WHEN** a guest checkout used an email address a member never verified
+- **WHEN** a guest checkout used an email address matching a member who
+  never verified it
 - **THEN** that customer is not adopted as the member's pair
+
+#### Scenario: A purchase that creates the account also pairs it
+
+- **WHEN** a guest buys with an email belonging to no account, and the
+  account is created once the purchase is paid
+- **THEN** that account pairs with the customer record the purchase made
 
 ### Requirement: Erasing a member erases the commerce customer, irreversibly
 
@@ -127,7 +138,10 @@ redeemable balance, qualifying-window progress, tier renewal and
 balance-lapse dates, recent activity, affordable rewards, open discount
 codes, and pending collections — and SHALL be able to redeem points against the
 current sale, apply an open code, cancel the last redemption, and confirm
-a collection. Spending SHALL present a read-back facing the member —
+a collection. Cancelling is the programme's operator reversal reached from
+the till: it SHALL require the permission that action requires, be recorded
+in the operator log like any other, and be refused on anything already
+consumed. Staff holding no such permission SHALL see it refused, not hidden. Spending SHALL present a read-back facing the member —
 points spent, money still due, balance after, points this sale will
 earn, computed by the platform — before it commits.
 

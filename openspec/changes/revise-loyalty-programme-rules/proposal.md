@@ -125,19 +125,20 @@ None. Every change lands on the existing loyalty capability.
 | `grade10-loyalty` membership surface | Show two counts, the tier's validity end, retention progress, the balance's lapse date, and issued coupons |
 | `grade10-auction` | Reject points and coupons against an auction purchase |
 
-No design-system primitive changes and no `packages/ui` export contract
-changes.
+No design-system primitive changes. `packages/ui` gains four exports for the
+membership surface — `MembershipSummary`, `RewardMenu`, `CouponList` and
+`ActivityList` — named by the requirement *The membership surface exports*.
 
-**Migration.** Members holding a tier when this lands have no activation date
-and no retention counter. A member's current tier is activated at the date the
-change deploys, giving everyone a full validity period to re-qualify in; the
-alternative — backdating activation to the purchase that first qualified them —
-demotes members on day one for a rule that did not exist when they earned it.
-Each credit keeps its own expiry date — a check constraint on `ledger_entries`
-requires it — and gains one last-activity date per member, taken from that
-member's most recent earn or redemption; a credit counts while either is still
-ahead. Credits already past their own date are settled as expired before the
-member's date is written, so the change-over revives nothing.
+**Migration.** Little is needed. Tier validity and activity-based expiry are
+already running: all four tier columns and `activity_expires_at` are in the
+loyalty baseline, `tierValidity` is deployed, and both clocks are written on
+every attainment, earn and redemption. There is no cohort holding a permanent
+tier. What the migration adds is `channel` on existing rows, attributed to the
+online store; the rest is repair that should touch nothing — completing any
+tier row missing part of its term, and settling any credit already past its own
+date before a member clock is written, since the effective rule is the later of
+the two and a clock written ahead of a dead credit would revive it. Each credit
+keeps its own date; a check constraint on `ledger_entries` requires it.
 
 **Open decisions**, recorded in the PRD rather than resolved here: the retention
 threshold (the deployed value is the same 500 that qualifies for the tier; the

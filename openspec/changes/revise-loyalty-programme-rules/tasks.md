@@ -23,18 +23,22 @@ exports: [`ui.md`](ui.md).
 - [ ] 2.1 Add a required `channel` to the recording contract in `@grade10/loyalty-contracts`, valued from a closed set, and refuse a recording naming none or one outside it, so *An entry names its channel* passes
 - [ ] 2.2 Carry `channel` onto `ledger_entries` and regenerate the migration
 - [ ] 2.3 Extend the redemption contract with what a redemption produced — a code with its own validity period and void state, or an item owed — so *A coupon expires on its own terms* passes
-- [ ] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run db:drizzle:generate` with the output committed
+- [ ] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run db:drizzle:generate` with the output committed, `pnpm run check:migrations`
 
-## 3. Migration of members already holding tiers and points (grade10)
+## 3. Migration and repair (grade10)
 
-Depends on group 2 for the `channel` column.
+Depends on group 2 for the `channel` column. Smaller than it looks: all four
+tier columns and `activity_expires_at` are in the loyalty baseline,
+`tierValidity` already deploys, and `writeEarnedTier` and `resetActivityClock`
+already keep both clocks. There is no permanent-tier cohort and no member with
+activity and no clock — 3.2 and 3.3 are repair passes that should touch
+nothing, and run because a throw on read is a bad way to find out otherwise.
 
-- [ ] 3.1 Write all four tier columns together — `earned_tier_id`, `earned_tier_activated_at`, `earned_tier_period_started_at`, `earned_tier_expires_at` — activating at the deploy date; a row with a tier and no dates makes `getEarnedTerm` throw on every read
-- [ ] 3.2 Settle every credit already past its own expiry date **before** writing member clocks, so the change-over revives nothing
-- [ ] 3.3 Derive one `activity_expires_at` per member from that member's most recent earn or redemption, leaving each credit's own date in place — the check constraint on `ledger_entries` requires it and the effective rule is the later of the two
-- [ ] 3.4 Attribute existing ledger rows to the online store, the only channel that has sold
-- [ ] 3.5 Assert row counts before and after each step and fail loudly on any shrink
-- [ ] 3.6 Verify: `pnpm run test:backend`, and each migration run against a seeded local Postgres with counts reported
+- [ ] 3.1 Attribute existing ledger rows to the online store, the only channel that has sold
+- [ ] 3.2 Write all four tier columns together for any row holding `earned_tier_id` without a complete term — `earned_tier_activated_at`, `earned_tier_period_started_at`, `earned_tier_expires_at` — activating at the deploy date; a partial row makes `getEarnedTerm` throw on every read
+- [ ] 3.3 Settle every credit already past its own expiry date **before** writing any member clock, so a clock written ahead of a dead credit cannot revive it; leave each credit's own date in place, since `ck_ledger_entries_expires_at` requires every credit to carry one
+- [ ] 3.4 Assert row counts before and after each step and fail loudly on any shrink, and report how many rows each repair pass actually touched
+- [ ] 3.5 Verify: `pnpm run test:backend`, `pnpm run check:migrations`, and each migration run against a seeded local Postgres with counts reported
 
 ## 4. Operator grants, tier removal, and channel on the ledger (grade10)
 
@@ -44,9 +48,10 @@ a test, not a change. The clock behaviour in 4.2 is the reverse of what
 
 - [ ] 4.1 Cover that a correction credits the redeemable balance alone and a campaign grant credits both counts, so *A correction does not move a member up* and *A campaign grant moves a member up* pass
 - [ ] 4.2 Reset the inactivity window on a campaign grant and leave it alone on a correction, so *A campaign grant keeps the balance alive* and *A correction does not extend the balance's life* pass together
-- [ ] 4.3 Add an operator action that removes a tier inside its validity period, recorded with who and why, so *An operator removes a tier granted in error* passes — with a named permission, extending *Operators act through named permissions*
+- [ ] 4.3 Add an operator action that removes a tier inside its validity period, recorded with who and why, so *An operator removes a tier granted in error* passes — with a named permission, extending *Operators act through named permissions*. `tier_changes` already allows the `revocation` cause, so `ck_tier_changes_cause` needs no migration
 - [ ] 4.4 Require `channel` on every write path into the ledger, so no row can be recorded without saying which channel sold
-- [ ] 4.5 Verify: `pnpm run typecheck`, `pnpm run test:backend`
+- [ ] 4.5 Keep one balance and one tier whatever channel wrote the entry, and make a channel's own copy of a balance non-authoritative, so *One balance across both channels* and *The channel's copy is not the balance* pass
+- [ ] 4.6 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
 ## 5. Reward fulfilment (grade10)
 
@@ -59,7 +64,8 @@ a test, not a change. The clock behaviour in 4.2 is the reverse of what
 - [ ] 5.7 Make a code that cannot be turned back into points, so *A member cannot undo a redemption* passes
 - [ ] 5.8 Add the operator cancellation that credits points back for an unused expired artifact, so *An operator cancellation is the credit path* passes, and refuse it on a used one, so *A used artifact is never reversed* passes
 - [ ] 5.9 Count what members forfeit to expiry where an operator can read it, so *An expired unused code returns nothing by itself* passes
-- [ ] 5.10 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run build`
+- [ ] 5.10 Refuse a reversal once what the redemption produced has been consumed and cancel it while it is still waiting, so *A collected reward cannot be reversed* and *A waiting collection is cancelled by the reversal* pass — the states an item owed moves through are `add-shopify-membership-pos`; this is the gate over them
+- [ ] 5.11 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run build`
 
 ## 6. Qualifying spend at the seller (grade10)
 
@@ -155,3 +161,19 @@ columns, not part of this group.
 - [x] 13.2 Rename the demo playground's programme and use-case copy to match
 - [x] 13.3 Assert in a test that every configured tier id still resolves, so a future rename cannot strand a member silently
 - [x] 13.4 Verify: `pnpm run typecheck`, `pnpm run test`
+
+## 14. Earning floors base points before the multiplier (grade10)
+
+The one owner decision the engine does the opposite of today.
+`computeEarnedPoints` rounds once at the end — its own comment says so — and
+`program.earn` has no rounding key, so this cannot be reached by configuration.
+Its own group, appended rather than folded into the earning work in group 6:
+that group is about which money counts, this one is about how counted money
+becomes points, and this one alone reprices every earn.
+
+- [ ] 14.1 Add `earn.rounding` to the programme config schema, valued `base_points_first` or `once_at_end` and defaulting to `once_at_end` when absent, so an existing deployment keeps the order it already had
+- [ ] 14.2 Implement `base_points_first` in `computeEarnedPoints` — floor money into whole base points, then apply the multiplier to those — leaving `once_at_end` as it is, so *Base points floor before the multiplier* and *A single floor at the end* both pass
+- [ ] 14.3 Make the `base_points` stamp agree with the points actually granted under floor-first; today it is floored from the money while the total is not, so the two disagree on every multiplied earn
+- [ ] 14.4 Set `rounding: "base_points_first"` in Grade10's deployed programme config, so *Grade10 floors base points before the multiplier* passes and HKD 139 at 1.2× earns 15
+- [ ] 14.5 Invert `rounds once, at the end` in `test/services/earning/earning.test.ts` and the `rounding` case in `testing/suites/earning.ts` — both assert the order this group changes for Grade10; keep a case covering `once_at_end` so the config stays a real choice
+- [ ] 14.6 Verify: `pnpm run typecheck`, `pnpm run test:backend`

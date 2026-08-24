@@ -18,10 +18,21 @@ and [`specs/grade10-store/loyalty/spec.md`](specs/grade10-store/loyalty/spec.md)
 ### The commerce provider is Shopify, named here and never in a requirement
 
 Every "commerce customer", "provider order" and "till" in the requirements is
-Shopify, its orders, and a Shopify POS extension. The specs say none of that on
-purpose: they are the durable contract and no other spec in this repository
-names a vendor, so pinning one there would have to be re-cut the day the
-provider changes.
+Shopify, its orders, and a Shopify POS extension. The requirements say none of
+that because the loyalty side of this boundary is already built that way:
+`services/rewards/fulfiller.ts` states it in the code — *what the something is,
+and which vendor makes it, belongs to the app assembly, so nothing here names
+one*. A requirement that named Shopify would put the vendor on the wrong side
+of a port the engine already draws.
+
+This is not yet a repository-wide rule, and the sibling change
+`add-grade10-shopify-store` goes the other way — its capability is named
+`shopify-commerce` and its requirements name Shopify throughout. That is
+defensible for a capability whose whole subject is one provider's catalogue,
+inventory and webhooks. It is not defensible here, where the subject is a
+member's identity and balance and the provider is an implementation of it.
+The rule belongs in `docs/governance/` either way; until it is written down,
+this is a choice, not a convention.
 
 What that costs: a reader of the specs alone cannot tell which provider is
 meant. That is the point — the answer lives here, and here is where it changes.
