@@ -8,18 +8,18 @@ navigating half of it and no worker — see design.md.
 
 ## 1. The framework and the document (owner: @sean)
 
-- [ ] 1.1 The build runs through the framework: `react-router.config.ts`
+- [x] 1.1 The build runs through the framework: `react-router.config.ts`
       (`appDirectory: "src"`, `ssr: false`, no prerender list), the
       `@react-router/dev` Vite plugin in place of `@vitejs/plugin-react`,
       `react-router` and `@react-router/dev` added, the app's `dev`, `build`
       and `typecheck` scripts run through `react-router`, and wrangler's
       asset directory follows the build output in all three environments.
-- [ ] 1.2 The document moves out of `index.html`: a root module renders it
+- [x] 1.2 The document moves out of `index.html`: a root module renders it
       with `lang="ko"` and wraps every surface in the providers `main.tsx`
       holds today, and the dev sign-in mount moves to the client entry.
       Localization's `The ZZZ document is Korean` is asserted against the
       rendered root and still passes.
-- [ ] 1.3 Run typecheck, lint, and the app's test lane as this group's
+- [x] 1.3 Run typecheck, lint, and the app's test lane as this group's
       verification.
 
 ## 2. Addresses
