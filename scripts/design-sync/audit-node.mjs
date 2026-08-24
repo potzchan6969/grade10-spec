@@ -7,10 +7,10 @@
  * exists only in the head of whoever did the conversion. This script takes
  * that mapping as input and makes the value comparison deterministic.
  *
- *   FIGMA_TOKEN=figd_… pnpm figma:audit -- --node <url> --classes "h-10 gap-2 bg-primary"
- *   FIGMA_TOKEN=figd_… pnpm figma:audit -- --map audit.json
- *   FIGMA_TOKEN=figd_… pnpm figma:audit -- --all-blocks
- *   FIGMA_TOKEN=figd_… pnpm figma:audit -- --node <url>          # dump the node's values
+ *   FIGMA_TOKEN=figd_… pnpm run figma:audit --node <url> --classes "h-10 gap-2 bg-primary"
+ *   FIGMA_TOKEN=figd_… pnpm run figma:audit --map audit.json
+ *   FIGMA_TOKEN=figd_… pnpm run figma:audit --all-blocks
+ *   FIGMA_TOKEN=figd_… pnpm run figma:audit --node <url>          # dump the node's values
  *
  * audit.json is the class-audit table the figma-page-to-code skill has the
  * converting agent emit: [{ "label": "hero/cta", "node": "<figma url>",
@@ -47,9 +47,12 @@ import {
   tokenResolver,
 } from "./values.mjs";
 
-const pkgDir = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+// The design system owns the token data these scripts resolve against; the
+// scripts themselves are repository tooling, because they read both packages.
+const dsDir = resolve(repoRoot, "packages/design-system");
 try {
-  process.loadEnvFile(resolve(pkgDir, "../..", ".env"));
+  process.loadEnvFile(resolve(repoRoot, ".env"));
 } catch {
   // No .env checked in or present — fall through to the ambient environment.
 }
@@ -58,9 +61,11 @@ const die = (m) => {
   process.exit(1);
 };
 
-// The root `figma:audit` script forwards through a second pnpm invocation,
-// which leaves a literal `--` in argv; parseArgs would read everything after
-// it as positionals and throw.
+// `pnpm run figma:audit -- --all-blocks` is the habitual way to pass flags
+// through pnpm, and it leaves a literal `--` in argv that parseArgs would read
+// as the start of positionals and throw on. It is not needed any more — this
+// runs from the root with one hop — but tolerating it costs a filter, and the
+// alternative is a crash that reads as a bug in the flag someone just typed.
 const argv = process.argv.slice(2).filter((a) => a !== "--");
 const { values: args } = parseArgs({
   args: argv,
@@ -80,13 +85,13 @@ if (!token)
    which this audit deliberately does not read (it compares resolved values).`);
 
 const cfg = JSON.parse(
-  await readFile(resolve(pkgDir, "tokens.config.json"), "utf8"),
+  await readFile(resolve(dsDir, "tokens.config.json"), "utf8"),
 );
 const resolveToken = tokenResolver(
-  JSON.parse(await readFile(resolve(pkgDir, "tokens.json"), "utf8")),
+  JSON.parse(await readFile(resolve(dsDir, "tokens.json"), "utf8")),
 );
 const resolveRadius = radiusResolver(
-  await readFile(resolve(pkgDir, cfg.preamble), "utf8"),
+  await readFile(resolve(dsDir, cfg.preamble), "utf8"),
   cfg,
   resolveToken,
 );
@@ -127,7 +132,7 @@ if (args["all-blocks"]) {
   // in packages/ui, written at conversion time. Sweeping them all is what
   // the nightly run does; a directory without one is a gap to report, never
   // a pass.
-  const blocksDir = resolve(pkgDir, "../ui/src/blocks");
+  const blocksDir = resolve(repoRoot, "packages/ui/src/blocks");
   for (const entry of await readdir(blocksDir, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
     // shared/ is cross-capability plumbing that never came from a Figma

@@ -15,7 +15,7 @@ src/components/forms/button.stories.tsx   rendered evidence
                                           + the Figma component set
 ```
 
-The basename match is not cosmetic. `scripts/check-components.mjs` resolves a Figma component to its code by normalizing the set's name and looking for `src/components/**/<name>.tsx`; a mismatch is reported as "no code component".
+The basename match is not cosmetic. `scripts/design-sync/check-components.mjs` resolves a Figma component to its code by normalizing the set's name and looking for `src/components/**/<name>.tsx`; a mismatch is reported as "no code component".
 
 ## Ownership
 
@@ -78,7 +78,7 @@ Publishing is a write to a shared Figma file and has no unattended path in CI by
 
 ## What the checker enforces
 
-`pnpm run check:design-system` runs `scripts/check-components.mjs`.
+`pnpm run check:design-system` runs `scripts/design-sync/check-components.mjs`. It lives at the repository root rather than inside `packages/design-system`, because it reads both packages: a script that scans a sibling package from inside one of them has the dependency pointing the wrong way. The token data it resolves against is still the design system's, and it reads it from there.
 
 **Source.** `FIGMA_TOKEN` is the default and needs only the `files:read` scope. Note the contrast with the token pull: `scripts/figma/pull.mjs` has no REST path because `/v1/files/:key/variables/local` requires `file_variables:read`, which Figma gates to Enterprise. That gate is specific to *variables*. Component property definitions live in the file document, so this check runs unattended even though the token pull cannot. `FIGMA_DUMP=<file.json>` remains as a manual fallback.
 

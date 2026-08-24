@@ -7,8 +7,8 @@
  * or a Code Connect template whose node-id stopped resolving all look fine
  * until someone reads the Dev Mode snippet. This diffs the three.
  *
- *   FIGMA_TOKEN=figd_… pnpm components:check        # unattended, use this in CI
- *   FIGMA_DUMP=~/Downloads/dump.json pnpm components:check   # manual fallback
+ *   FIGMA_TOKEN=figd_… pnpm run check:design-system        # unattended, use this in CI
+ *   FIGMA_DUMP=~/Downloads/dump.json pnpm run check:design-system   # manual fallback
  *
  * Locally, put FIGMA_TOKEN in a .env at the repository root instead of
  * prefixing every invocation; see .env.example. CI passes it as a real
@@ -39,15 +39,18 @@ import {
   radiusResolver,
   toHex8,
   tokenResolver,
-} from "./figma/values.mjs";
+} from "./values.mjs";
 
-const pkgDir = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+// The design system owns the token data these scripts resolve against; the
+// scripts themselves are repository tooling, because they read both packages.
+const dsDir = resolve(repoRoot, "packages/design-system");
 
 // A repository-root .env is a convenience for humans; CI passes the token as a
 // real environment variable and has no file. loadEnvFile throws when the file
 // is absent, which is the normal case in CI, so the miss is not an error.
 try {
-  process.loadEnvFile(resolve(pkgDir, "../..", ".env"));
+  process.loadEnvFile(resolve(repoRoot, ".env"));
 } catch {
   // No .env checked in or present — fall through to the ambient environment.
 }
@@ -118,7 +121,7 @@ function componentsFromDocument(doc) {
 async function loadFigmaComponents() {
   if (process.env.FIGMA_DUMP) {
     const meta = JSON.parse(
-      await readFile(resolve(pkgDir, process.env.FIGMA_DUMP), "utf8"),
+      await readFile(resolve(repoRoot, process.env.FIGMA_DUMP), "utf8"),
     ).meta;
     if (!meta?.components)
       die(`This dump has no \`meta.components\` — it predates component support.
@@ -136,13 +139,13 @@ async function loadFigmaComponents() {
   if (!token)
     die(`No Figma source. Set FIGMA_TOKEN (preferred — runs unattended in CI):
 
-     FIGMA_TOKEN=figd_… pnpm components:check
+     FIGMA_TOKEN=figd_… pnpm run check:design-system
 
    A personal access token with the \`files:read\` scope is enough; the
    Enterprise-only \`file_variables:read\` gate applies to the token pull, not
    to this check. Or fall back to the manual plugin dump:
 
-     FIGMA_DUMP=~/Downloads/figma-dump.json pnpm components:check`);
+     FIGMA_DUMP=~/Downloads/figma-dump.json pnpm run check:design-system`);
 
   const spec = process.env.FIGMA_FILE ?? cfg.figmaFile;
   if (!spec) die("No figmaFile in tokens.config.json and no FIGMA_FILE set.");
@@ -180,7 +183,7 @@ async function loadFigmaComponents() {
 }
 
 const cfg = JSON.parse(
-  await readFile(resolve(pkgDir, "tokens.config.json"), "utf8"),
+  await readFile(resolve(dsDir, "tokens.config.json"), "utf8"),
 );
 const {
   source: figmaSource,
@@ -199,8 +202,8 @@ const {
 // diff and skip; what the blocks gain here is node-ID resolution, the template
 // prop check, and the description check.
 const TREES = [
-  resolve(pkgDir, "src/components"),
-  resolve(pkgDir, "../ui/src/blocks"),
+  resolve(dsDir, "src/components"),
+  resolve(repoRoot, "packages/ui/src/blocks"),
 ];
 async function walk(dir) {
   const out = [];
@@ -221,7 +224,7 @@ async function walk(dir) {
   return out;
 }
 const files = (await Promise.all(TREES.map(walk))).flat();
-const rel = (p) => p.slice(resolve(pkgDir, "..", "..").length + 1);
+const rel = (p) => p.slice(repoRoot.length + 1);
 
 // ── a brace matcher that ignores braces inside strings ──────────────────────
 // Tailwind class strings are full of [] () {} — counting them would desync.
@@ -537,10 +540,10 @@ for (const entry of codeComponents.values()) {
 }
 
 const resolveToken = tokenResolver(
-  JSON.parse(await readFile(resolve(pkgDir, "tokens.json"), "utf8")),
+  JSON.parse(await readFile(resolve(dsDir, "tokens.json"), "utf8")),
 );
 const resolveRadius = radiusResolver(
-  await readFile(resolve(pkgDir, cfg.preamble), "utf8"),
+  await readFile(resolve(dsDir, cfg.preamble), "utf8"),
   cfg,
   resolveToken,
 );
