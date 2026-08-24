@@ -20,6 +20,14 @@ type ChipProps = ButtonPrimitive.Props & {
   children?: ReactNode;
 };
 
+/**
+ * Small, optionally removable tag for filters and selections.
+ *
+ * "Optionally removable" is the Figma description; the set itself draws the
+ * dismiss X on every variant with no BOOLEAN behind it, so nothing here can
+ * turn it off. Raise that with the designer rather than adding a prop the set
+ * does not define.
+ */
 function Chip({ className, type = "button", children, ...props }: ChipProps) {
   return (
     <ButtonPrimitive

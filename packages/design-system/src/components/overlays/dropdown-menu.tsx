@@ -9,6 +9,13 @@ import {
   dropdownMenuItemVariants,
 } from "./dropdown-menu-item";
 
+/**
+ * The dropdown menu triggered from a button (or any element).
+ *
+ * If the menu trigger is a button, rotate the chevron icon inside when
+ * showing/hiding the menu — the trigger is the consumer's element, so that
+ * rotation belongs to whatever is passed to `DropdownMenuTrigger`.
+ */
 function DropdownMenu({ ...props }: MenuPrimitive.Root.Props) {
   return <MenuPrimitive.Root data-slot="dropdown-menu" {...props} />;
 }

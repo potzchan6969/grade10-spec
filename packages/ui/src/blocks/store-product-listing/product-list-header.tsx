@@ -42,6 +42,8 @@ type ProductListHeaderProps = {
 };
 
 /**
+ * The header of search and product list result.
+ *
  * Result count, optional applied-filter chips, and a sort dropdown.
  * Figma set `Product / Product List Header` (`4288:14117`).
  *

@@ -17,6 +17,9 @@ type StepperProps = Omit<ComponentProps<"div">, "onChange"> & {
 };
 
 /**
+ * The value may have a minimum or maximum. Disable the minus or plus icon
+ * button if reached to the maximum or minimum value.
+ *
  * Quantity stepper. Figma (`4208:2122`) has one axis, `isDisabled`. The minus
  * and plus buttons disable independently when `value` sits on `min` or `max`.
  */

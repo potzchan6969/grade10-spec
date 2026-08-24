@@ -133,8 +133,11 @@ function OtpInputSlots({
 }
 
 /**
+ * One-time password input with a labeled row of six digit fields and
+ * validation message. Based on shadcn/ui input-otp.
+ *
  * A labelled, editable row of verification-code slots with a status tone and an
- * optional message.
+ * optional message. The row length is a prop here, not fixed at six.
  *
  * Editing is delegated to `input-otp`, the same engine shadcn/ui uses: one native
  * input owns the value and caret, and each `InputOtpSlot` mirrors a character.
