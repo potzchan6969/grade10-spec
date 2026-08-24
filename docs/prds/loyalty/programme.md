@@ -4,12 +4,12 @@
 
 Grade10 buyers get a membership that rewards them for spending: a point per
 HKD 10, three tiers that earn at increasing rates, and a menu of items those
-points buy. Platinum is where everyone starts, Diamond is earned at 500 tier
+points buy. Silver is where everyone starts, Gold is earned at 500 tier
 points and pays 1.2×, and Black pays 1.7× and is given, not earned.
 
 A tier is a standing, not a possession: it is activated the moment a member
 reaches it and holds for twelve months, after which the member re-qualifies or
-falls back to Platinum. Tier progress and the spendable balance are counted
+falls back to Silver. Tier progress and the spendable balance are counted
 separately, so redeeming never costs a member their tier. The balance itself
 expires only after twelve months of silence, and a redemption is settled as a
 coupon the member takes to checkout or the counter.
@@ -68,7 +68,7 @@ coupon the member takes to checkout or the counter.
 4. They spend points from the reward menu and receive a coupon, which they use
    at checkout or at the counter.
 5. Inside the following twelve months they either earn the retention threshold
-   again and keep the tier, or fall back to Platinum when the period ends.
+   again and keep the tier, or fall back to Silver when the period ends.
 
 ## Requirements
 
@@ -88,7 +88,7 @@ coupon the member takes to checkout or the counter.
 | --- | --- | --- |
 | Repeat purchase rate | Share of buyers with a second purchase within 90 days, members against non-members | Product |
 | Tier progression | Members reaching the second tier per month | Product |
-| Tier retention | Share of Diamond members who earn the retention threshold inside their validity period | Product |
+| Tier retention | Share of Gold members who earn the retention threshold inside their validity period | Product |
 | Point redemption | Share of earned points redeemed before the balance expires | Product |
 | Coupon usage | Share of issued coupons used before their own validity ends | Product |
 | Points outstanding | Unexpired, unredeemed points, plus unused issued coupons, as a liability | Finance |
@@ -101,8 +101,8 @@ coupon the member takes to checkout or the counter.
 | Programme currency | Decided | The programme runs in HKD, and the store sells in HKD. The draft prices earning at HKD 10 per point and the programme keeps Hong Kong time; a store selling in another currency would be refused every purchase, so the two are pinned together and checked at startup | Product |
 | Tier economics live in code | Decided | The earn rate, expiry window, tier ladder, validity periods and retention thresholds are deployed and reviewed, not edited by an operator. An operator who can rewrite what a purchase earns can mint money; the reward menu is the intended lever and is editable | Engineering |
 | Second tier at 500 points | Decided | From the owner's draft. Roughly HKD 5,000 of spend at the entry rate | Owner |
-| Diamond earns 1.2×, Black 1.7× | Decided | The step to Diamond is small enough to be worth chasing at 500 points; Black's is large because it is a gift, not a target. Both are integer percentages, so earning never computes on a float | Product |
-| Platinum, Diamond, Black | Decided | Metal names read as status without implying a price, and leave room above and below if the ladder ever grows | Owner |
+| Gold earns 1.2×, Black 1.7× | Decided | The step to Gold is small enough to be worth chasing at 500 points; Black's is large because it is a gift, not a target. Both are integer percentages, so earning never computes on a float | Product |
+| Silver, Gold, Black | Decided | Metal names read as status without implying a price, and leave room above and below if the ladder ever grows | Owner |
 | A tier is valid for twelve months | Decided | Supersedes the earlier decision that a tier once earned is kept. A permanent tier pays 1.2× forever to a member who bought once and left, so the programme's most expensive members become the ones it no longer has. The rationale behind the old decision — that demoting a member for the passage of time makes the tier meaningless — is answered by measuring re-qualification on tier points earned in the period rather than on the balance, so spending points still never demotes anyone | Owner |
 | Retention threshold | **Open** | The baseline is the same 500 that qualifies for the tier. The business needs to decide whether a lower figure, around 400, should re-qualify as a softer landing. It is deployed configuration, so the answer changes a value, not the model — but it changes the size of the first downgrade cohort, so it is wanted before launch | Owner |
 | Upgrade is immediate, the higher rate is not | Decided | A member is promoted the instant they cross the threshold, including on their first purchase, because the status is the reward. The rate applies from the next purchase, so one large purchase cannot claim a rate it had not reached when it was made | Product |
