@@ -1,10 +1,14 @@
 ## Purpose
 
-How the ZZZ site answers an address: which surface it resolves to, how the
-session corrects an address it decides, what a navigation preserves, and
-what code a surface costs. The site's surfaces are home — the signed-out
-landing — sign-in, and the profile; this capability binds them and every
-surface the site adds after them.
+How the ZZZ site answers an address once it is running in the browser: which
+surface an address resolves to, how the session corrects an address it
+decides, what a navigation preserves, and what code a surface costs. The
+site's surfaces are home — the signed-out landing — sign-in, and the profile;
+this capability binds them and every surface the site adds after them.
+
+The site is served as one shell for every address, so what a response says
+before scripts run is not this capability's — the day ZZZ has a public
+surface, whatever specs that owns it.
 
 ## ADDED Requirements
 
@@ -12,8 +16,11 @@ surface the site adds after them.
 
 The site SHALL answer home, sign-in, and the profile each at an address of
 its own, and SHALL resolve every address to at most one surface. A surface
-SHALL own every address beneath its own. An address under no surface SHALL
-resolve to a not-found surface that names the address, never to home.
+SHALL own every address beneath its own, unless a nested surface names that
+address, in which case the nested one renders; where more than one surface
+could own an address, the deepest one naming it SHALL be the one that
+renders. An address under no surface SHALL resolve to a not-found surface
+that names the address, never to home.
 
 #### Scenario: Each view has an address
 
@@ -91,6 +98,12 @@ a destination on another origin SHALL be left to the browser untouched.
 - **GIVEN** a collector who moved from home to sign-in
 - **WHEN** they go back
 - **THEN** home renders, still without a full document load
+
+#### Scenario: A modified click is the browser's
+
+- **WHEN** a collector clicks an in-app link with a modifier held, such as
+  the one that opens a new tab
+- **THEN** the browser's own behavior happens, unaltered
 
 #### Scenario: Another origin is the browser's
 
