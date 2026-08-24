@@ -37,7 +37,7 @@ The operative rule: a component may not offer a variant or size the Figma set do
 
 ## The read-only Figma kit
 
-Verification needs three tools, none of which require the `figma-design-to-code` skill:
+Verification needs three tools, none of which require the `figma-design-to-code` skill — which this repository does not ship anyway: it comes from the official Figma plugin, namespaced `figma:figma-design-to-code` in Claude Code. A reconciliation runs without that plugin installed.
 
 - `get_metadata` on the component **set** — every variant's name, so every axis and option, plus each variant's box. Bounding boxes are the fastest way to spot a rung that moved.
 - `get_variable_defs` on a **single variant node** — the token names behind that variant. This is the workhorse: it resolves `Size/size-10`, `Radius/radius-sm`, `Base/primary` by name, which is what you compare the cva against.

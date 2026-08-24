@@ -14,6 +14,9 @@ packages/design-system. It is published to the team library.
 
 FIRST, before writing any code:
 - Load the figma-design-to-code skill (required before get_design_context).
+  It ships with the official Figma plugin, not with this repository — in
+  Claude Code it is namespaced figma:figma-design-to-code. If the plugin is
+  not installed, stop and tell me rather than proceeding without it.
 - Read the set's VARIANT properties and every option of each, plus its TEXT
   and INSTANCE_SWAP component properties.
 - Report the axes back to me as a table (Figma property -> options -> the cva

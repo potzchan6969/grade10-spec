@@ -36,6 +36,8 @@ The filing and naming conventions — the `<product-context>-<capability>` direc
 
 ## The inventory gate — before any code
 
+`figma-design-to-code` is not a skill this repository ships. It comes from the official Figma plugin, and in Claude Code it is namespaced after that plugin: `figma:figma-design-to-code`. Install the plugin before converting a page — without it there is no skill to load, and `get_design_context` is gated behind it.
+
 1. Load the `figma-design-to-code` skill (mandatory before `get_design_context`), then read the frame with `get_metadata` and `get_design_context`.
 2. Classify **every** section of the frame into exactly one row:
    - **Block** — an instance of a published `packages/ui` block. Code Connect names it; use the emitted snippet's component and props.
