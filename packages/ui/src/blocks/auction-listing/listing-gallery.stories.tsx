@@ -87,9 +87,9 @@ export const DistinctSources: Story = {
     const canvas = within(canvasElement);
     const main = canvas.getByRole("img", { name: /Charizard, PSA 10$/ });
     expect(main).toHaveAttribute("src", `${IMAGE}?slot=detail`);
-    const thumb = canvas.getByRole("button", { name: "front" }).querySelector(
-      "img",
-    );
+    const thumb = canvas
+      .getByRole("button", { name: "front" })
+      .querySelector("img");
     expect(thumb).toHaveAttribute("src", `${IMAGE}?slot=thumb`);
     await userEvent.click(main);
     const dialog = within(canvasElement.ownerDocument.body);
@@ -102,7 +102,11 @@ export const DistinctSources: Story = {
 export const FallbackToSrc: Story = {
   args: {
     images: [
-      { src: `${IMAGE}?slot=only`, alt: "1999 Charizard, PSA 10", thumbLabel: "front" },
+      {
+        src: `${IMAGE}?slot=only`,
+        alt: "1999 Charizard, PSA 10",
+        thumbLabel: "front",
+      },
       { src: `${IMAGE}?slot=only-back`, alt: "back", thumbLabel: "back" },
     ],
   },
@@ -110,9 +114,9 @@ export const FallbackToSrc: Story = {
     const canvas = within(canvasElement);
     const main = canvas.getByRole("img", { name: /Charizard/ });
     expect(main).toHaveAttribute("src", `${IMAGE}?slot=only`);
-    const thumb = canvas.getByRole("button", { name: "front" }).querySelector(
-      "img",
-    );
+    const thumb = canvas
+      .getByRole("button", { name: "front" })
+      .querySelector("img");
     expect(thumb).toHaveAttribute("src", `${IMAGE}?slot=only`);
     await userEvent.click(main);
     const dialog = within(canvasElement.ownerDocument.body);
