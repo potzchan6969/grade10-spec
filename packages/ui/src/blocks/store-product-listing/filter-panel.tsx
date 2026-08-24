@@ -43,6 +43,15 @@ const PANEL_CLASS =
  * The listing sidebar: product filter and optional utility links. Figma
  * frame `Filter Panel` (`4288:13952`) on the Product List page.
  *
+ * It has no Code Connect template, and that is deliberate: the Figma side is
+ * a page-level frame composing a `Product / Product Filter` instance with the
+ * utility links, not a published component, and Code Connect maps components.
+ * A template aimed at the frame resolved to nothing. If design publishes a
+ * Filter Panel component set, add `filter-panel.figma.ts` then — the props it
+ * would emit are in this file's git history. Until then the block's link to
+ * the frame is its `audit.json` entry, which compares values and does not
+ * care what kind of node it reads.
+ *
  * Renderable on its own, so another surface can reuse it without the browse
  * root. The panel reports search and filter changes and displays what it is
  * given; it never holds those values.
