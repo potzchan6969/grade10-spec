@@ -90,6 +90,17 @@ Publishing is a write to a shared Figma file and has no unattended path in CI by
 - A cva axis reachable from no Figma variant property.
 - A Figma axis no template maps.
 - A Figma component with no code component.
+- A set whose description does not appear in its component's JSDoc.
+- A template emitting a prop name the component file does not contain.
+- A template whose `node-id` resolves to a node that is not a component.
+
+**Three trees, not one, and three things beyond the axes.** The checker walks `packages/design-system/src/components` **and** `packages/ui/src/blocks`, so block templates are read rather than left to `code-connect:publish`; a block carries no `cva`, so the axis and value comparisons find nothing to diff and skip.
+
+*Descriptions* are the only thing a designer writes that no rail carries — not the token pull, not Code Connect — so the JSDoc opening the component is their sole projection, and a description edited in Figma is otherwise invisible. The comparison is by **first sentence, normalized** to letters and digits, because prose is rewrapped and code notes follow it. A description field holding library search keywords (`Tag, badge, label`) or a bare upstream attribution is reported to the designer as a missing description rather than demanded of the code, and a component file that only re-exports its component is followed one hop to the module that holds the documentation.
+
+*Prop names* close the gap that let six templates emit props that no longer existed after the `shape-ui-block-copy` reshape while the run stayed clean. The template's `// source=` header names the component file, and each name its example emits must appear there — presence, not type resolution, with inherited HTML and ARIA attributes skipped from a fixed list because `link.figma.ts` emits `href` and `link.tsx` never writes the word.
+
+*A node that is not a component* is distinguished from a node that is gone. Both used to read as "deleted or replaced", which sends whoever reads it looking for a node sitting right there; Code Connect resolves only published components, so a template aimed at a frame maps nothing however well-formed it is.
 
 **Axes are matched through the template, never by name.** Figma calls the axis `Type`; cva calls it `variant`. Comparing those by name produced two mutually contradicting warnings on every component, and a real `Danger`/`destructive` mismatch once hid inside that noise. Instead the checker reads the values a `getEnum` produces and finds the cva axis containing them, so `Type → variant` and `Danger → destructive` are inferred from the mapping that already states them. There is no alias config to drift out of date. A map producing no strings — a boolean gate such as `Loading → loading` — is recognized as a non-variant prop rather than a broken axis.
 
@@ -209,11 +220,12 @@ Recorded so they are not mistaken for coverage:
 - Value checking covers a variant's own background and box geometry, not its children. A wrong label colour, icon size, or border is still invisible to it, and only the base state of each axis is compared — hover, disabled, and loading values are unchecked.
 - Design-system stories are smoke-only. During the Button work the entire 14-file suite passed with `{children}` deleted from the component. `packages/ui` stories do use `play` functions to assert that a control reports its change and does not move its own display, so the convention exists in the repository but not in this package; whether to adopt it here is still open.
 - The CI job skips with a warning annotation when `FIGMA_TOKEN` is unavailable, as on forks. A skipped run is not a passing run.
-- The checker compares variant axes, options, and values. It never reads the
-  prop names a template emits, so a template naming a prop the component
-  dropped is a clean run. Six templates emitted props that no longer existed
-  after the `shape-ui-block-copy` reshape and the run reported no errors.
-- It walks `packages/design-system/src/components` only. The `packages/ui`
-  block templates are outside that tree, so nothing scans them at all — not
-  their node IDs, not their axes. `code-connect:publish` parses them, which is
-  the only automated read they get.
+- Descriptions are compared by first sentence, not in full. A designer who
+  rewrites the body of a description while leaving its opening intact changes
+  nothing the check can see, and prose is normalized to letters and digits
+  before comparison, so wording that differs only in punctuation passes.
+- The prop check asks whether the component file *contains* each name a
+  template emits, not whether its type actually accepts it. A prop that
+  arrives through `ComponentProps<"a">` is skipped from a fixed list of HTML
+  and ARIA attributes rather than resolved, so a component that genuinely
+  dropped `href` still passes.
