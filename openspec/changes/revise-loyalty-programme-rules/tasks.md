@@ -104,9 +104,9 @@ Depends on group 1 shipping and the submodule bump.
 Display names only — Silver was Platinum, Gold was Diamond; multipliers,
 thresholds, and config ids are untouched unless a rename there is free.
 
-- [ ] 11.1 Rename the tier display names in the programme config and everywhere a member or operator reads them, so *The second tier is reached by spending* names Gold
-- [ ] 11.2 Rename the demo playground's programme and use-case copy to match
-- [ ] 11.3 Verify: `pnpm run typecheck`, `pnpm run test`
+- [x] 11.1 Rename the tier display names in the programme config and everywhere a member or operator reads them, so *The second tier is reached by spending* names Gold
+- [x] 11.2 Rename the demo playground's programme and use-case copy to match
+- [x] 11.3 Verify: `pnpm run typecheck`, `pnpm run test`
 
 ## 12. Demotion resets tier progress (grade10)
 
