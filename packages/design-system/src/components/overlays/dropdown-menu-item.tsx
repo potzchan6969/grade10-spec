@@ -25,6 +25,18 @@ const dropdownMenuItemVariants = cva(
   },
 );
 
+/**
+ * An individual interactive item within a dropdown menu.
+ *
+ * Label is `Base/popover-foreground` on every rung — not `accent-foreground`,
+ * which is the orange brand fill in Grade10. Selected (`isSelected`) has no
+ * fill; the trailing check is the indicator. Hover and keyboard highlight
+ * share `Custom/muted-hover`. Disabled is `Opacity/opacity-50` over the
+ * item's own colours (node `2121:1400`), not a grey swap.
+ *
+ * Size `sm` (36px, `text-sm`, 14px icon) is default; size `md` (40px, `text-base`, 16px icon)
+ * supports larger menu listings.
+ */
 function DropdownMenuItem({
   className,
   inset,

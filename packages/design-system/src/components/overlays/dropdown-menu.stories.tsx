@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
+import { userEvent, within } from "storybook/test";
 import { Button } from "../forms/button";
 import {
   DropdownMenu,
@@ -28,15 +29,20 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole("button", {
+      name: "Open menu",
+    });
+    await userEvent.click(trigger);
+  },
   render: () => (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant="outline" />}>
         Open menu
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-52">
-        <DropdownMenuLabel>My account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          <DropdownMenuLabel>My account</DropdownMenuLabel>
           <DropdownMenuItem
             trailing={<DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>}
           >
@@ -63,6 +69,16 @@ export const Default: Story = {
 
 /** `inset` aligns unadorned items with those that carry an indicator. */
 export const WithSubmenu: Story = {
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole("button", {
+      name: "Open menu",
+    });
+    await userEvent.click(trigger);
+    const subTrigger = await within(document.body).findByRole("menuitem", {
+      name: "Share",
+    });
+    await userEvent.hover(subTrigger);
+  },
   render: () => (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant="outline" />}>
@@ -99,26 +115,35 @@ function CheckboxItemsExample() {
         Columns
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-52">
-        <DropdownMenuLabel>Visible columns</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {(Object.keys(columns) as (keyof typeof columns)[]).map((key) => (
-          <DropdownMenuCheckboxItem
-            key={key}
-            checked={columns[key]}
-            onCheckedChange={(checked) =>
-              setColumns((prev) => ({ ...prev, [key]: checked }))
-            }
-            closeOnClick={false}
-          >
-            <span className="capitalize">{key}</span>
-          </DropdownMenuCheckboxItem>
-        ))}
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Visible columns</DropdownMenuLabel>
+          {(Object.keys(columns) as (keyof typeof columns)[]).map((key) => (
+            <DropdownMenuCheckboxItem
+              key={key}
+              checked={columns[key]}
+              onCheckedChange={(checked) =>
+                setColumns((prev) => ({ ...prev, [key]: checked }))
+              }
+              closeOnClick={false}
+            >
+              <span className="capitalize">{key}</span>
+            </DropdownMenuCheckboxItem>
+          ))}
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
 
-export const CheckboxItems: Story = { render: () => <CheckboxItemsExample /> };
+export const CheckboxItems: Story = {
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole("button", {
+      name: "Columns",
+    });
+    await userEvent.click(trigger);
+  },
+  render: () => <CheckboxItemsExample />,
+};
 
 function RadioItemsExample() {
   const [range, setRange] = React.useState("7d");
@@ -129,12 +154,11 @@ function RadioItemsExample() {
         Range
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-52">
-        <DropdownMenuLabel>Time range</DropdownMenuLabel>
-        <DropdownMenuSeparator />
         <DropdownMenuRadioGroup
           value={range}
           onValueChange={(value) => setRange(value)}
         >
+          <DropdownMenuLabel>Time range</DropdownMenuLabel>
           <DropdownMenuRadioItem value="24h">
             Last 24 hours
           </DropdownMenuRadioItem>
@@ -148,4 +172,12 @@ function RadioItemsExample() {
   );
 }
 
-export const RadioItems: Story = { render: () => <RadioItemsExample /> };
+export const RadioItems: Story = {
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole("button", {
+      name: "Range",
+    });
+    await userEvent.click(trigger);
+  },
+  render: () => <RadioItemsExample />,
+};
