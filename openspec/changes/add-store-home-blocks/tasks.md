@@ -22,4 +22,4 @@
 
 - [x] 4.1 `pnpm run lint`
 - [x] 4.2 `pnpm run typecheck`
-- [ ] 4.3 `pnpm run test:stories`
+- [x] 4.3 `pnpm run test:stories` (52 + 26 + 2 files, 536 tests, pass)
