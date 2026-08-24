@@ -37,6 +37,8 @@ type ProductListProps = {
 };
 
 /**
+ * Infinite scroll product list.
+ *
  * A grid of product tiles. Renderable on its own, so a search-results surface
  * can reuse it without the browse root.
  *
