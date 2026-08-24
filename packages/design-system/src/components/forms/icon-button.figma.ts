@@ -12,8 +12,10 @@ const variant = instance.getEnum("variant", {
   ghost: "ghost",
 });
 
-// Figma draws `md` (40) and `sm` (32). `xs` is code-only and is not mapped.
+// Figma draws `lg` (48), `md` (40) and `sm` (32). `xs` is code-only and is not
+// mapped.
 const size = instance.getEnum("size", {
+  lg: "lg",
   md: "md",
   sm: "sm",
 });

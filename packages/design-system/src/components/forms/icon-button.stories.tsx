@@ -12,7 +12,7 @@ const meta = {
       control: "inline-radio",
       options: ["outline", "ghost", "secondary", "primary"],
     },
-    size: { control: "inline-radio", options: ["md", "sm", "xs"] },
+    size: { control: "inline-radio", options: ["lg", "md", "sm", "xs"] },
   },
 } satisfies Meta<typeof IconButton>;
 
@@ -24,7 +24,8 @@ export const Ghost: Story = { args: { variant: "ghost" } };
 export const Secondary: Story = { args: { variant: "secondary" } };
 export const Primary: Story = { args: { variant: "primary" } };
 
-/** `sm` is the design's default rung. */
+/** `sm` is the design's default rung, so the others are shown explicitly. */
+export const Large: Story = { args: { size: "lg" } };
 export const Medium: Story = { args: { size: "md" } };
 export const ExtraSmall: Story = { args: { size: "xs" } };
 
@@ -45,7 +46,7 @@ export const Variants: Story = {
 export const Sizes: Story = {
   render: (args) => (
     <div className="flex items-center gap-3">
-      {(["md", "sm", "xs"] as const).map((size) => (
+      {(["lg", "md", "sm", "xs"] as const).map((size) => (
         <IconButton key={size} {...args} size={size} />
       ))}
     </div>
