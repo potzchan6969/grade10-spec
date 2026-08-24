@@ -134,7 +134,7 @@ surfaces land in groups 4 and 5.
 - [ ] 11.5 Show what members forfeit to expiry
 - [ ] 11.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
 
-## 12. Account deletion ends the membership (grade10) (owner: @gareth0712)
+## 12. Account deletion ends the membership (grade10)
 
 Needs the account-deletion signal from the auth service — coordinate the hook
 with the auth track before claiming.
