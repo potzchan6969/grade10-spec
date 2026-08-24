@@ -57,11 +57,16 @@ To hand steps 3–7 to an AI agent, paste [`prompts/implement-primitive-from-fig
 
 ## Publishing Code Connect
 
+**Two packages, two publishes.** Each owns its own templates, and neither command touches the other's:
+
 ```bash
 FIGMA_ACCESS_TOKEN=figd_… pnpm --filter @grade10/design-system run code-connect:publish
+FIGMA_ACCESS_TOKEN=figd_… pnpm --filter @grade10/ui run code-connect:publish
 ```
 
-That script is `figma connect publish --exit-on-unreadable-files`. It publishes every template `figma.config.json` matches — `src/**/*.figma.ts`, under the `React` label — not just the one you changed, so a template broken by an unrelated Figma edit surfaces here. `--exit-on-unreadable-files` makes an unparseable template a failure rather than a silent omission.
+Both scripts are `figma connect publish --exit-on-unreadable-files`. Each publishes every template its own `figma.config.json` matches — `src/**/*.figma.ts`, under the `React` label — not just the one you changed, so a template broken by an unrelated Figma edit surfaces here. `--exit-on-unreadable-files` makes an unparseable template a failure rather than a silent omission.
+
+The `include` glob is package-relative, which is why the second command exists at all: for as long as only the first one did, the `packages/ui` block templates were matched by nothing and published by nothing. They were not being parsed either, so an unreadable one raised no failure anywhere. Publishing a block change means running both.
 
 Append `--dry-run` to list what would be published and against which node, without writing anything. Do that first; it parses every template and then resolves each `url=` header against the API, so it catches a stale node ID before it reaches the file. It still needs a valid token for that second half — a dry run is not a token-free rehearsal.
 
@@ -94,7 +99,7 @@ Publishing is a write to a shared Figma file and has no unattended path in CI by
 - A template emitting a prop name the component file does not contain.
 - A template whose `node-id` resolves to a node that is not a component.
 
-**Three trees, not one, and three things beyond the axes.** The checker walks `packages/design-system/src/components` **and** `packages/ui/src/blocks`, so block templates are read rather than left to `code-connect:publish`; a block carries no `cva`, so the axis and value comparisons find nothing to diff and skip.
+**Two trees, not one, and three things beyond the axes.** The checker walks `packages/design-system/src/components` **and** `packages/ui/src/blocks`. Before it did, nothing read a block template at all — not its node ID, not its axes, and not `code-connect:publish`, whose glob never matched them. A block carries no `cva`, so the axis and value comparisons find nothing to diff and skip.
 
 *Descriptions* are the only thing a designer writes that no rail carries — not the token pull, not Code Connect — so the JSDoc opening the component is their sole projection, and a description edited in Figma is otherwise invisible. The comparison is by **first sentence, normalized** to letters and digits, because prose is rewrapped and code notes follow it. A description field holding library search keywords (`Tag, badge, label`) or a bare upstream attribution is reported to the designer as a missing description rather than demanded of the code, and a component file that only re-exports its component is followed one hop to the module that holds the documentation.
 
