@@ -15,6 +15,16 @@ export default defineConfig({
   test: {
     projects: [
       {
+        // Token-free freshness check: an audit.json `classes` column is a
+        // snapshot of its component's class strings, and this is what fails
+        // when an edit lets the two diverge — see the test's header comment.
+        test: {
+          name: "audit",
+          environment: "node",
+          include: ["src/__tests__/audit-freshness.test.ts"],
+        },
+      },
+      {
         extends: true,
         plugins: [
           storybookTest({ configDir: path.join(dirname, ".storybook") }),
