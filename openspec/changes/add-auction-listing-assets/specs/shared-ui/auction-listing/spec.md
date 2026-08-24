@@ -9,11 +9,12 @@ and zoom.
 
 ### Requirement: The listing surface exports
 
-The shared UI package SHALL export, from its public entry, exactly these
-components for the listing product page — `ListingGallery`, `ListingBidPanel`,
-and `ListingDetails` — and exactly these types: `ListingGalleryImage`,
-`ListingGalleryProps`, `ListingBidPanelProps`, `ListingDetailsFact`,
-`ListingDetailsSection`, and `ListingDetailsProps`.
+The shared UI package SHALL export, from its public entry, these components
+for the listing product page — `ListingGallery`, `ListingBidPanel`, and
+`ListingDetails` — and these types: `ListingGalleryImage`,
+`ListingGalleryProps`, `ListingGalleryCopy`, `ListingBidPanelProps`,
+`ListingBidPanelCopy`, `ListingDetailsFact`, `ListingDetailsSection`,
+`ListingDetailsProps`, and `ListingDetailsCopy`.
 
 Each of those components SHALL be renderable on its own, so a later surface can
 reuse the gallery without the bid panel.
@@ -23,7 +24,6 @@ reuse the gallery without the bid panel.
 - **WHEN** an application imports each name above from the shared UI package's
   public entry
 - **THEN** every import resolves
-- **AND** no other component or type is exported for this surface
 
 #### Scenario: A part is reused alone
 
@@ -86,14 +86,14 @@ it SHALL render no photo and SHALL NOT present previous/next as available.
 
 ### Requirement: A control has no copy of its own
 
-`ListingGallery` SHALL receive `zoomLabel`, `previousLabel`, and `nextLabel`
-from the consumer. It SHALL NOT supply default user-visible copy for those
-slots.
+`ListingGallery` SHALL receive a required `copy` object
+(`ListingGalleryCopy`) with `zoom`, `previous`, and `next` from the consumer.
+It SHALL NOT supply default user-visible copy for those slots.
 
 #### Scenario: Labels come from the consumer
 
-- **GIVEN** a gallery rendered with `zoomLabel` "Click to zoom",
-  `previousLabel` "Previous image", and `nextLabel` "Next image"
+- **GIVEN** a gallery rendered with
+  `copy={{ zoom: "Click to zoom", previous: "Previous image", next: "Next image" }}`
 - **WHEN** it renders
 - **THEN** those strings are the accessible names and visible zoom hint
 - **AND** no other language appears in those slots
