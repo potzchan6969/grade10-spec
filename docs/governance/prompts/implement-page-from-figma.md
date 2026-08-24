@@ -53,14 +53,22 @@ THEN compose, under these rules, none of them negotiable:
   consumes it.
 
 VERIFY, and paste the real output of each:
+- A class-audit table: for every element you styled, each visual utility
+  applied -> the token it resolves to -> the variable Figma binds on the
+  corresponding node (get_variable_defs) -> match or drift. Every visual
+  class must trace to a bound variable; one that traces to nothing is
+  either unbound in Figma (report it as a readiness defect) or a hardcode
+  (fix it). Nothing in CI ever checks a block's classnames against Figma,
+  and only you hold the element-to-node mapping — this table is the one
+  verification they get.
 - pnpm run lint && pnpm run typecheck
 - pnpm run test:stories        (when a block was added or changed)
 - Render the result, screenshot it, and compare against get_screenshot of
   the Figma frame. List the differences; do not assert a match.
 
 STOP THERE. Do not run code-connect:publish — it writes to a shared Figma
-file. Report: the final inventory table, the readiness defects for the
-designer, and anything you could not verify.
+file. Report: the final inventory table, the class-audit table, the
+readiness defects for the designer, and anything you could not verify.
 ```
 
 ## Variant: preflight only, run by the designer
@@ -86,6 +94,8 @@ Fixing these in Figma is far cheaper than compensating for them in code, and eve
 **Blocks are filed by capability, not by page.** Mid-conversion, a per-page directory (`blocks/store-home-page/`) is the path of least resistance — and it inverts the ownership: the next page reuses nothing, every block grows a twin, and the twins drift. The rule and its file-layout details live in [`ui-component-contracts.md`, "Where a block lives and what it is named"](../ui-component-contracts.md#where-a-block-lives-and-what-it-is-named); the prompt restates enough of it to hold without that section loaded.
 
 **Publishing is carved out**, for the same reason as the primitive prompt: `code-connect:publish` writes to a shared Figma file and has no undo.
+
+**The class audit runs at conversion time because it cannot run later.** `check:design-system` verifies a primitive's classnames against Figma — resolved to real hex and pixels — but it never walks `packages/ui`, and extending it to blocks would need an element↔node mapping that exists nowhere after the conversion. The converting agent is the only party that ever holds that mapping, having just read `get_variable_defs` on every node, so the audit is extracted as a table while it is cheap. After that, the token-discipline lint keeps every classname inside the token system, where drift can only enter through the token pipeline — which is owned.
 
 **"List the differences; do not assert a match."** A screenshot comparison summarized as "matches the design" hides exactly the drift it exists to catch. Requiring the difference list makes an empty list a claim the reviewer can spot-check.
 

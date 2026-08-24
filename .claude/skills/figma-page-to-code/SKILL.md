@@ -65,6 +65,7 @@ While walking the frame, list these rather than compensating for them. Each is i
 
 ## Verify
 
+- **Produce a class-audit table before anything else**: for every element you styled, each visual utility applied → the token it resolves to → the variable Figma binds on the corresponding node (`get_variable_defs`) → match or drift. Every visual class must trace to a bound variable. One that traces to nothing is either a readiness defect (unbound in Figma — the designer's fix) or a hardcode (yours). Do this **now, not later**: you are the only party that ever holds the element↔node mapping — `check:design-system` never reaches `packages/ui`, and after the conversion the mapping evaporates. The audit is the one classname verification a block will ever get against Figma.
 - For a new or changed block: stories per contract state, then `pnpm run test:stories`, `pnpm run lint`, `pnpm run typecheck`. `pnpm run check:design-system` only reaches `packages/design-system` — nothing scans block templates, so say what was not machine-checked.
 - Render the result — Storybook for a block, the app dev server for a page — screenshot it, and compare against `get_screenshot` of the Figma frame. List the differences instead of asserting a match.
 - Do **not** run `code-connect:publish`. It writes to a shared Figma file; hand that decision back.
