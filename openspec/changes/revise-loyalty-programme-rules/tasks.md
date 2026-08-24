@@ -99,7 +99,7 @@ Depends on group 1 shipping and the submodule bump.
 - [ ] 10.4 Return nothing and say why when a reversal lands after the balance expired, so *A reversal after the balance expired returns nothing* passes
 - [ ] 10.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
 
-## 11. Tier renaming (grade10)
+## 11. Tier renaming (grade10) (owner: @gareth0712)
 
 Display names only — Silver was Platinum, Gold was Diamond; multipliers,
 thresholds, and config ids are untouched unless a rename there is free.
