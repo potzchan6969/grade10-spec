@@ -46,7 +46,10 @@
   "overrides": [
     {
       "includes": ["packages/ui/src/blocks/**", "!**/*.stories.tsx"],
-      "plugins": ["./scripts/biome-plugins/use-layout-primitives.grit"]
+      "plugins": [
+        "./scripts/biome-plugins/use-layout-primitives.grit",
+        "./scripts/biome-plugins/use-token-values.grit"
+      ]
     },
     {
       "includes": [
