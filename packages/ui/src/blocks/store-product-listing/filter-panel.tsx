@@ -37,7 +37,7 @@ type FilterPanelProps = {
 };
 
 const PANEL_CLASS =
-  "sticky top-0 w-full shrink-0 self-stretch overflow-hidden lg:w-64 lg:shrink-0";
+  "sticky top-0 w-full shrink-0 self-stretch lg:w-64 lg:shrink-0";
 
 /**
  * The listing sidebar: product filter and optional utility links. Figma
