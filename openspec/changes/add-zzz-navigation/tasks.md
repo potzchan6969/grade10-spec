@@ -24,18 +24,18 @@ navigating half of it and no worker — see design.md.
 
 ## 2. Addresses (owner: @sean)
 
-- [ ] 2.1 Make `Each view has an address`, `A refresh keeps the collector's
+- [x] 2.1 Make `Each view has an address`, `A refresh keeps the collector's
       place`, and `An unknown address resolves to not-found` pass:
       `src/surfaces.ts` names every address and the pattern each surface
       matches, `src/routes.ts` gives each one a thin
       `src/routes/<surface>.tsx`, and a catch-all not-found view renders the
       shared `notFound` copy with the address that failed.
-- [ ] 2.2 Make `Sign-in opens in place`, `Back steps back into the site`, `A
+- [x] 2.2 Make `Sign-in opens in place`, `Back steps back into the site`, `A
       modified click is the browser's`, and `Another origin is the browser's`
       pass: the state-switched rendering in the app root retires, and one
       click seam in the root turns a same-origin anchor below it into a
       navigation.
-- [ ] 2.3 Run typecheck, lint, and the app's test lane as this group's
+- [x] 2.3 Run typecheck, lint, and the app's test lane as this group's
       verification.
 
 ## 3. Session-decided addresses
