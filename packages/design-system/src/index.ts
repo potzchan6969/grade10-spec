@@ -28,7 +28,7 @@ export * from "./components/forms/radio-list";
 export * from "./components/forms/radio-list-item";
 export * from "./components/forms/search-input";
 export * from "./components/forms/select";
-export * from "./components/forms/stepper";
+export * from "./components/forms/stepper-input";
 export * from "./components/forms/text-input";
 export * from "./components/layout/center";
 export * from "./components/layout/footer";
