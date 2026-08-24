@@ -5,45 +5,52 @@ Capability deltas:
 [`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
+Depends on the gallery shape in
+[`add-admin-auction-listing`](../add-admin-auction-listing/specs/grade10-auction/admin-listing/spec.md)
+(`grade10-auction/admin-listing`): at most eight ordered media items (image or
+video), first item is the catalogue card, no physical-side identity.
+
 ## Context
 
-The auction worker already stores listing photos: table
-`auction.auction_listing_images` (one row per listing per side), R2 bucket
-bound as `AUCTION_LISTING_IMAGES`, content-addressed keys
-`listings/<sha256>.<ext>`, admin `PUT`/`DELETE`
-`/api/admin/listings/:listingId/images/:angle`, and public
-`GET /api/public/listing-images/*` serving the original bytes `immutable`.
-`putListingImage` upserts on `(listing_id, angle)` and currently allows any
-editable listing (draft or published) to overwrite a side.
+`add-admin-auction-listing` moves listing media to an ordered gallery keyed by
+`position` (0–7), unique on `(listing_id, position)`, with image and video
+types and a 100 mebibyte bound. This change sits on that gallery: optional
+`alt` on image rows, named public sizes for images, preview-and-confirm in the
+admin photo manager, and storefront wiring of sized paths into
+`ListingGallery`.
 
-The public summary already carries the front photo; the details payload
-already carries every side. `ListingView` maps each to `ListingGallery` with a
-single `src`. `AuctionsPage`'s listing row never renders the photo. The admin
-listings table has no photo controls, and `@grade10/auction-admin-frontend`
-has no upload method.
-
-`ListingGallery` already exists in `@grade10/ui` (`shared-ui/auction-listing`
-in the package entry) with no capability spec. Width and height on the row are
-untrusted browser hints; the worker comment that nothing can measure an image
-predates the Images binding.
+The R2 binding is renamed to `AUCTION_LISTING_ASSETS`. Public sized GET:
+`/api/public/listing-images/<size>/<objectKey>`. Original bytes remain
+available for video and for `mediaPath` from admin-listing.
 
 Screens: [ui.md](ui.md).
 
 ## Decisions
 
-### Originals stay content-addressed in R2; named sizes are produced on serve
+### Gallery identity is position order from admin-listing, not physical sides
 
-Keep one object per unique byte string. The public path gains a size segment:
+Do not restore `UNIQUE(listing_id, angle)` or six side slots as the product
+model. Angle may remain a compatibility label on the row for older upload
+routes; product requirements speak only of gallery order and the eight-item
+cap. Catalogue card = first gallery item. Details order = gallery order.
+
+Makes pass: `Image items use the ordered gallery, not physical sides`,
+`Several images appear in gallery order`, `The catalogue shows the first
+gallery image when it is an image`.
+
+### Originals stay content-addressed in R2; named sizes are produced on serve for images
+
+Keep one object per unique byte string. Image public paths gain a size
+segment:
 
 `/api/public/listing-images/<size>/<objectKey>`
 
-`<size>` is one of `card`, `detail`, `thumb`, `zoom`. `<objectKey>` stays
-`listings/<64-hex>.<ext>`, minted by the existing `contentKey` helper. The GET
-validates size then key, reads the original from R2, and — when the named size
-is smaller than the stored image — runs it through the Workers Images binding
+`<size>` is one of `card`, `detail`, `thumb`, `zoom`. The GET validates size
+then key, reads the original from R2, and — when the named size is smaller
+than the stored image — runs it through the Workers Images binding
 (`env.IMAGES.input(body).transform({ width, fit: "scale-down" }).output(...)`).
-The response is `immutable` for a year, same as today. The cache key includes
-the size, so a `card` entry can never be served as `zoom`.
+Unknown size and unknown key both 404. Video items keep the original path;
+named sizes apply to images only.
 
 Pixel ceilings (CSS slot × 2, never upscale):
 
@@ -54,220 +61,83 @@ Pixel ceilings (CSS slot × 2, never upscale):
 | `detail` | 1280     | gallery main frame               |
 | `zoom`   | 1600     | zoom dialog                      |
 
-Output format follows `Accept` (`image/avif`, `image/webp`, else `image/jpeg`)
-and sends `Vary: Accept`. Unknown size and unknown key both 404.
+The public image object grows `alt` (string or null) and a `paths` map of the
+four sizes. `imagePath` remains the `detail` path for stale clients. New
+consumers use `paths`.
 
-The public photo object grows `alt` (string or null) and a `paths` map of the
-four sizes. `imagePath` remains the `detail` path so a stale client that
-concatenates `imageBaseUrl + imagePath` still gets a usable frame rather than
-the original scan. New consumers use `paths`.
+`IMAGES.info()` measures raster uploads; video skips measure. Upload size and
+type bounds for media match admin-listing (100 mebibytes; JPEG/PNG/WebP/AVIF
+plus video types on that capability).
 
-A transform port sits next to `ObjectStorePort`. Tests bind a fake that
-returns the input bytes tagged with the requested size; the worker binds
-`IMAGES`. `IMAGES.info()` runs at upload so `width`/`height` on the row are
-measured, not taken from the query string. A body `info()` rejects is
-`INVALID_CONTENT_TYPE`, the same as a bad header.
+Makes pass: `Each gallery image is published at named sizes`, `The catalogue
+uses card size for an image card`, `The details gallery uses thumb, detail,
+and zoom`, `An unknown size is not found`.
 
-*Alternatives considered*
-
-- **Precompute four derivatives at upload and store them in R2.** Rejected:
-  adding a size later requires rewriting every object; the orphan sweep would
-  have to know the derivative keys; re-uploading the same original would mint
-  four new keys instead of one. The content-addressed original is the whole
-  point of the current store.
-- **Cloudflare Images as the object store (`imagedelivery.net`).** Rejected
-  under Q7: a second product, a second id space, and the proof-document bucket
-  would still be R2. Named variants on Images duplicate the size table this
-  path already has.
-- **Query string `?width=` on the existing path.** Rejected: open numeric
-  parameters are not a contract, and the immutable cache would need to vary on
-  an unbounded key. Four names are the spec.
-
-Makes pass: `Each photo is published at named sizes`, `The catalogue uses card
-size`, `The details gallery uses thumb, detail, and zoom`, `An unknown size is
-not found`.
-
-### The binding is `AUCTION_LISTING_ASSETS`; the table and public path keep saying photos
+### The binding is `AUCTION_LISTING_ASSETS`; the table and public path keep listing-images
 
 Wrangler binding and env field rename to `AUCTION_LISTING_ASSETS`. Bucket
 names become `grade10-auction-listing-assets-{dev,staging,production}`. The
 in-process storage area stays `listingImages`, the table stays
 `auction_listing_images`, and `PUBLIC_ROUTES.listingImages` stays
-`/api/public/listing-images`. Videos are a follow-up that will add a content
-kind and likely a second public prefix; renaming the HTTP path now would
-break every already-published `imagePath` for no collector-facing gain.
+`/api/public/listing-images`. Video shares this bucket via admin-listing;
+renaming the HTTP path would break published `imagePath` values for no gain.
 
-Migration: create the new buckets, copy existing keys (content-addressed, so
-the key does not change), switch the binding, keep the old buckets until
-staging has served a week of photos from the new name. Local dev has no
-precious objects — `pnpm dev:clean` already drops R2 state.
+### Attach / replace / remove / alt follow admin-listing status rules
 
-*Alternatives considered*
+Gallery mutation windows and the last-item / eight-item rules are
+admin-listing's. This change adds alt-only (`listings.updateImageAlt`) and
+preview-before-upload for image bytes. Closed / settled / canceled refuse
+image mutations. Measuring and named-size encoding are this capability's.
 
-- **Rename the table and the public path too.** Rejected: this change does
-  not store videos, and the public path is already in payloads and caches.
-- **Keep the old binding and add a second assets bucket.** Rejected: two
-  public photo buckets is the typo hazard `docs/architecture/auction.md`
-  already refused when it split photos from proofs.
+Makes pass: `Replace and remove follow the admin-listing gallery rules`,
+`A gallery image may be added until the listing closes`, `Alt text is optional
+and editable until close`.
 
-### Add, replace, remove, and alt-only are four operations, not one upsert
+### Admin photo manager is a gallery image reviewer, not six side slots
 
-`putListingImage` today is `ON CONFLICT DO UPDATE` on `(listing_id, angle)`.
-Split it:
+A Photos action opens a dialog over the ordered gallery (at most eight
+items). Image pick shows a local preview with Confirm and Discard before
+upload. Stored images render `paths.card`; magnify reveals `paths.zoom` at
+least `75vh`. Grid at most three columns.
 
-| Op        | Draft | Published | Closed / settled / canceled |
-| --------- | ----- | --------- | --------------------------- |
-| Add       | yes   | yes       | no                          |
-| Replace   | yes   | no        | no                          |
-| Remove    | yes   | no        | no                          |
-| Alt-only  | yes   | yes       | no                          |
+Makes pass: `An operator confirms an image before it is stored`, `The admin
+photo manager reviews images at card size with hover zoom`.
 
-Add is a PUT to a side that has no row. Replace is a PUT to a side that has
-one. The byte route stays `PUT /api/admin/listings/:listingId/images/:angle`
-with `alt`, `width`, and `height` as query params (`width`/`height` ignored
-once `info()` lands; kept for one release so old clients do not 400). Alt-only
-is `listings.updateImageAlt` on tRPC, no bytes. Delete stays `DELETE` on the
-same path.
-
-Refusal codes: `NOT_EDITABLE` stays for closed listings; `NOT_REPLACABLE` for
-a replace on a published side; `NOT_REMOVABLE` for a delete on a published
-side. The admin UI disables those actions rather than surprising the operator
-with the code, but the codes are what a test asserts.
-
-`isEditableListing` (draft + published) is **not** reused for replace/remove.
-It still governs copy, sale, and schedule. Photo rules are their own
-predicates so a published listing can gain a missing back without opening the
-front to a swap.
-
-Objects still write before the row. Delete still drops the row and leaves the
-object; the orphan sweep reclaims it.
-
-Makes pass: `A published listing can gain a missing side`, `Replacing a live
-photo is refused`, `Removing a live photo is refused`, `A draft photo can be
-replaced and removed`, `Alt can be edited on a published listing`, `Adding
-after close is refused`.
-
-### Admin photos hang off the existing listings table
-
-No listing-editor page. `listings.get` grows `images` (every side that has a
-row, with alt and the four paths). `listings.list` grows a nullable
-`frontImage` so the table can show a card-sized thumb without N+1 gets. A
-"Photos" action on each row opens a dialog with six side slots.
-
-The admin panel already talks tRPC for listing mutations and a Hono byte route
-for uploads. Keep that split: the photo manager's upload calls `PUT` with
-`credentials: "include"`; alt, delete, and the listing read stay on the
-procedure client. A new `uploadListingImage` method lives next to the
-procedure client, not on it — the procedure client is JSON-unknown on
-purpose, and a `Blob` does not belong there.
-
-Makes pass: `An accepted upload becomes that side's photo`, `Operators attach
-photos from the admin listings table`.
-
-### Preview and confirm stay in the admin client
-
-Choosing a file must not call the byte route. The photo manager holds the
-selected `File` (or `Blob`) in component state, shows it with a local object
-URL, and only then offers Confirm and Discard. Confirm runs the existing
-`uploadListingImage` PUT; Discard revokes the object URL, clears the pending
-file, and leaves the side's stored photo alone. The same flow covers add and
-draft replace — status rules still decide whether the file picker is offered.
-
-No staging endpoint, no temporary R2 key, no server-side draft object. A
-mistake that never reaches Confirm never becomes an orphan for the sweep.
-Client-side type/size checks may short-circuit before Confirm for faster
-feedback; the service remains the authority on refuse codes.
-
-Alternatives considered:
-
-- **Upload on file pick, delete on "undo".** Rejected: a discarded pick would
-  still write R2 and a row (or leave an orphan), and a published add could not
-  be undone.
-- **Separate staging bucket / pending keys.** Rejected: more moving parts for
-  a single-operator confirm that the browser can already show.
-
-Makes pass: `Choosing a file shows a preview without uploading`, `Confirming
-the preview stores the photo`, `Discarding the preview leaves the side
-unchanged`.
-
-### Admin review uses card size and hover zoom
-
-The Photos dialog is wider than a single column and lays the six sides in a
-responsive grid capped at three columns. Each stored side renders
-`paths.card` (resolved against the API gateway origin — paths are
-gateway-rooted and the admin host is not the auction worker). A magnify
-control sits on the image; hover or focus opens a floating zoom preview that
-loads `paths.zoom` and is sized to at least `75vh`. Pointer leave / blur
-closes it. Click-to-open a second dialog was rejected: operators need a fast
-inspect while staying in the manager.
-
-Alternatives considered:
-
-- **Thumb size in the grid.** Rejected: too small to judge scan quality before
-  publish.
-- **Click opens a zoom dialog.** Rejected: slower than hover for checking
-  several sides in one pass.
-
-Makes pass: `The admin photo manager shows card size`, `Hovering the magnify
-control shows zoom size`, `Leaving the magnify control hides zoom`.
-
-### `ListingGallery` takes three sources; the catalogue stays an assembly
+### `ListingGallery` takes three sources; catalogue stays an assembly
 
 `ListingGalleryImage` gains optional `thumbSrc` and `zoomSrc` (omit → `src`).
-`alt` is already required. The grade10 listing page maps `paths.thumb` /
-`paths.detail` / `paths.zoom` and `alt ?? title`. The catalogue row is
-app-owned (`AuctionsPage` `ListingRow`): an `img` at `paths.card`, no new
-`@grade10/ui` card. ZZZ has no auction UI.
+Labels arrive as `copy: { zoom, previous, next }`. The grade10 listing page
+maps `paths.thumb` / `paths.detail` / `paths.zoom` and `alt ?? title`. The
+catalogue row is app-owned: an `img` at `paths.card` for the first image item.
 
-*Alternatives considered*
-
-- **A shared listing card in `@grade10/ui`.** Rejected: the catalogue is one
-  brand's assembly today, and this change is the photo, not a redesign of the
-  sale list.
-- **Keep a single `src` and let the browser download detail bytes for
-  thumbs.** Rejected under Q4: that is the status quo.
-
-Makes pass: `Distinct sources are used in each slot`, `A listing with a front
-photo shows it on the catalogue`, `Several sides appear in side order`.
+Makes pass: `Distinct sources are used in each slot`, `A listing with a first
+gallery image shows it on the catalogue`, `Several images appear in gallery
+order`.
 
 ## Risks / Trade-offs
 
 - **Cloudflare Images is a paid Workers binding.** Without it, named sizes
-  cannot be produced in the worker. Delivery creates the binding on each
-  account before the worker that reads it deploys; local wrangler provides
-  the binding in `wrangler dev`. If a given environment's Images is not
-  enabled, the public GET fails loud (5xx + log), it does not silently fall
-  back to the original 20 MB scan.
-- **First request per size per object pays a transform.** The immutable cache
-  and the short browse cache in front of listing JSON (which only carries
-  paths) absorb repeats. A purge still never prefixes listing-image paths.
-- **Copying staging/production objects into the renamed bucket** is a one-time
-  ops step. Keys are hashes, so a copy is idempotent; dual-running two
-  bindings is not attempted.
+  cannot be produced in the worker. Fail loud (5xx + log); do not silently
+  fall back to the original multi-megabyte scan for sized paths.
+- **admin-listing says media is served as uploaded.** Sized paths are an
+  additional public contract for images; `mediaPath` / unsized GET still serve
+  the original for video and for callers that need it.
+- **First request per size per object pays a transform.** Immutable cache
+  absorbs repeats.
 
 ## Migration Plan
 
 1. Create `grade10-auction-listing-assets-{staging,production}` in each
    Cloudflare account. Local uses the wrangler-dev bucket of the same name.
-2. Copy keys from `grade10-auction-listing-images-*` into the new buckets
-   (no-op when empty).
+2. Copy keys from prior listing-images buckets when any exist.
 3. Ship the worker with the renamed binding, the `IMAGES` binding, the size
-   segment on the public GET, and the add/replace split.
+   segment on the public GET, and alt on image rows.
 4. Add nullable `alt` on `auction_listing_images` (expand). No backfill: null
    means "use the listing title".
-5. Stop writing `width`/`height` from the query string once `info()` is in;
-   leave the columns.
-6. After staging has served photos from the new bucket, delete the old
-   buckets in a later change — not this one.
-
-No contract break for JSON clients that only read `imagePath`: it now points
-at `detail` instead of the original, which is smaller and correct. Clients
-that fetched the original path without a size segment receive 404 (the old
-path no longer exists). That path was never on the grade10 SPA except through
-`imagePath`, which this change rewrites.
+5. After staging has served images from the new bucket, delete old buckets in
+   a later change — not this one.
 
 ## Open Questions
 
-None. Q1–Q9 are closed; remaining unknowns (Images entitlement on an account,
-whether staging has objects to copy) are delivery checks, not spec or task
-changes.
+None. Gallery shape is decided by admin-listing; this change only adds sized
+image delivery and alt.

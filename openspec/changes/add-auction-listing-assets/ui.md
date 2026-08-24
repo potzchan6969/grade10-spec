@@ -5,28 +5,30 @@
 **No Figma frame exists for these surfaces.** Layout sources until a designer
 adds frames: Storybook `Auction Listing/ListingGallery` for the details
 gallery, the live grade10 auction catalogue and listing page for the
-storefront assembly, and the live grade10 admin listings table for the photo
-manager. Designing the catalogue thumbnail and the admin dialog is work in
+storefront assembly, and the live grade10 admin listings photo manager.
+Designing the catalogue thumbnail and the admin dialog is work in
 grade10-spec against the fields this change already publishes.
 
 ### Auction catalogue (grade10 `/auction`)
 
-Assembly in `apps/frontend/grade10`. Each listing row shows the front photo at
-card size when `front` is present.
+Assembly in `apps/frontend/grade10`. Each listing row shows the first gallery
+item at card size when that item is an image (gallery order from
+admin-listing).
 
 ### Listing details (grade10 `/auction/:listingId`)
 
 Assembly in `apps/frontend/grade10` composing `ListingGallery` from
-`@grade10/ui`. Storybook: `Auction Listing/ListingGallery`.
+`@grade10/ui`. Storybook: `Auction Listing/ListingGallery`. Images use
+`paths.thumb` / `paths.detail` / `paths.zoom` and `alt ?? title`.
 
 ### Admin listings photo manager
 
-Assembly in `apps/admin/grade10` on the existing listings table. A Photos
-action opens a dialog with six side slots in a grid (one column on narrow
-viewports, up to three per row on wide). File pick shows a local preview with
-Confirm and Discard before any upload. Stored photos show at card size; a
-magnify control reveals zoom size on hover. No Figma; compose primitives
-below.
+Assembly in `apps/admin/grade10` on the listings surface. A Photos action
+opens a dialog over the ordered gallery (at most eight media items). File
+pick for an image shows a local preview with Confirm and Discard before any
+upload. Stored images show at card size; a magnify control reveals zoom size
+on hover. No Figma; compose primitives below. Gallery attach/reorder/video
+controls that admin-listing already owns stay on that surface.
 
 ## Components
 
@@ -34,8 +36,7 @@ From `@grade10/ui` (this change records the contract):
 
 - `ListingGallery`, `ListingGalleryImage`, `ListingGalleryProps` — details
   gallery. `ListingGalleryImage` gains optional `thumbSrc` and `zoomSrc`.
-  **Those two fields are new**; they do not exist on the component today.
-  Flagged so tasks in grade10-spec land them.
+  Labels arrive via `copy: { zoom, previous, next }` (`ListingGalleryCopy`).
 
 From `@grade10/ui`, unchanged and not restyled here:
 
@@ -56,38 +57,37 @@ and [`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
 
 ### Catalogue
 
-- **Front photo present** — `A listing with a front photo shows it on the catalogue`.
-- **No front photo** — `A listing without a front photo still lists`.
+- **First gallery image present** — `A listing with a first gallery image shows it on the catalogue`.
+- **No catalogue image** — `A listing without a catalogue image still lists`.
 - Loading / error stay the sale-list states already on the page; this change
-  does not add a photo-specific error.
+  does not add an image-specific error.
 
 ### Listing details gallery
 
-- **Several sides** — `Several sides appear in side order`, `Several photos show a strip`.
-- **One photo** — `One photo has no strip`.
-- **No photos** — `No photos still shows the listing`, `No photos`.
+- **Several images** — `Several images appear in gallery order`, `Several photos show a strip`.
+- **One image** — `One image has no strip` / `One photo has no strip`.
+- **No images** — `No images still shows the listing`, `No photos`.
 - **Alt present / absent** — `Supplied alt is shown`, `Missing alt uses the listing title`.
 - **Sized sources** — `Distinct sources are used in each slot`, `The details gallery uses thumb, detail, and zoom`.
 
 ### Admin photo manager
 
-- **Draft, empty slot** — file pick is offered (`An accepted upload becomes that side's photo`).
-- **Draft, filled slot** — replace, remove, and alt (`A draft photo can be replaced and removed`).
-- **Published, empty slot** — file pick is offered (`A published listing can gain a missing side`).
-- **Published, filled slot** — alt only; replace and remove disabled
-  (`Replacing a live photo is refused`, `Removing a live photo is refused`,
-  `Alt can be edited on a published listing`).
-- **Pending confirmation** — after a file is chosen, that side shows a local
+- **Draft, empty slot** — file pick is offered (`An accepted upload becomes a gallery image`).
+- **Draft, filled slot** — replace, remove, and alt (`A draft gallery image can be replaced and removed`).
+- **Published, room under eight** — add allowed (`A published listing can gain another image`).
+- **Published, filled** — replace/remove follow admin-listing; alt editable
+  (`Alt can be edited on a published listing`).
+- **Pending confirmation** — after a file is chosen, that slot shows a local
   preview plus Confirm and Discard; no upload yet
   (`Choosing a file shows a preview without uploading`,
-  `Confirming the preview stores the photo`,
-  `Discarding the preview leaves the side unchanged`).
-- **Stored photo, resting** — card-size image in the grid
+  `Confirming the preview stores the image`,
+  `Discarding the preview leaves the gallery unchanged`).
+- **Stored image, resting** — card-size image in the grid
   (`The admin photo manager shows card size`).
 - **Magnify hovered / focused** — zoom-size preview at least three-quarters
   of the viewport height (`Hovering the magnify control shows zoom size`).
 - **Magnify left** — zoom preview hidden (`Leaving the magnify control hides zoom`).
 - **Closed / settled / canceled** — every control disabled (`Adding after close is refused`).
-- **Unsupported type / oversize / over-length alt** — inline error, side
-  unchanged (`An unsupported type is refused`, `An oversized photo is refused`,
+- **Unsupported type / oversize / over-length alt** — inline error, gallery
+  unchanged (`An unsupported type is refused`, `An oversized image is refused`,
   `Over-length alt is refused`).
