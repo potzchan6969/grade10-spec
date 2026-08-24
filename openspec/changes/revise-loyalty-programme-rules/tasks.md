@@ -83,7 +83,7 @@ against one being added, not a change to existing behaviour.
 - [ ] 7.2 Assert no earning is recorded for an auction win, so *An auction win earns nothing* passes
 - [ ] 7.3 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
-## 8. Tier rules the owner settled (grade10)
+## 8. Tier rules the owner settled (grade10) (owner: @gareth0712)
 
 `services/tiers/clawback.ts` already re-derives the tier after a claw-back and
 `policies.tierOnRefund` selects it; Grade10 pins `keep`. Demotion reset is
