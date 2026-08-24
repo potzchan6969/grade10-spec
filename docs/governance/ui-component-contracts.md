@@ -66,6 +66,55 @@ Where such a component has a Figma Code Connect template, the template must
 emit every required prop, or the snippet a designer copies out of Dev Mode will
 not compile.
 
+## Where a block lives and what it is named
+
+`packages/ui/src/blocks/` is one flat level of capability directories. The
+namespace is the **capability, never the page**: a page is an assembly, so the
+sections of a page being converted or specified belong to the capabilities
+they express, and the page itself never gets a directory. For each new block,
+the assigning question is *which capability spec names, or will name, this
+export?* If the capability's directory exists, the block joins it; if the spec
+exists but no directory does, create one; if no spec exists, the spec comes
+first — never mint a directory ahead of its capability.
+
+The conventions, each visible in the existing directories:
+
+- **Directory: a globally unique `<product-context>-<capability>` kebab
+  slug.** `auth-sign-in` carries `shared-auth/sign-in`; `auction-listing`
+  carries `grade10-auction/listing-page`. Because `blocks/` is flat, the slug
+  includes enough product context to read standalone — `sign-in` alone is
+  ambiguous the day a second product grows one. No nesting, and no
+  subdirectories inside a capability directory.
+- **The component name carries the namespace.** `src/index.ts` is a single
+  flat export surface, so PascalCase names take a capability prefix:
+  `ListingBidPanel`, `SignInCard`, `TwoFactorVerifyForm`. The test: the name
+  reads unambiguously in a consumer's import statement with the path out of
+  sight. Never a generic name (`Card`, `Panel`, `Header`) — it collides
+  across capabilities and shadows the primitive it composes.
+- **One component per file, satellites share the basename.** `<name>.tsx`,
+  `<name>.stories.tsx`, `<name>.figma.ts`, `<name>.css` plus `.css.d.ts`, and
+  one per-directory `types.ts` and `fixtures.ts`. The basename match is
+  load-bearing for the same reason as in the design system: the template and
+  stories are found by it. A page-scale composition the spec names
+  (`product-browse.tsx`) lives flat in its capability directory like any
+  other block.
+- **Exports go through the spec-named barrel group.** One commented group per
+  capability in `src/index.ts` (`// shared-ui/auction-listing`), exporting
+  exactly what the capability spec names — the component and its
+  `Props`/`Copy` types. No per-directory `index.ts`; that is a second,
+  uncontracted export surface. The `./blocks/*` subpath exists for direct
+  file access, but anything a consumer imports by name goes through the root
+  barrel, and adding to it is an OpenSpec change naming the export.
+- **`shared/` is earned, not planned.** A helper lands in its capability
+  directory and is promoted when its *second* consumer appears. Today's
+  `shared/` is exactly that — cross-capability plumbing, not "things that
+  look reusable."
+
+The failure this section exists to prevent: a per-page directory
+(`blocks/store-home-page/`) is the path of least resistance while converting
+a page design, and it inverts the ownership — the next page reuses nothing,
+every block grows a twin, and the twins drift.
+
 ## Design the contract before markup
 
 Start with a concise inventory of what the consumer owns:

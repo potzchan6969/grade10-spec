@@ -83,7 +83,7 @@ Fixing these in Figma is far cheaper than compensating for them in code, and eve
 
 **UNMATCHED stops the run.** A section no block covers is a product decision — a new capability spec and block, or a design-side fix — not a gap for an agent to fill with bespoke divs. This is the page-level restatement of the operative rule in [`design-code-sync.md`](../design-code-sync.md): code may not offer what design does not define, and a page may not use what no component defines.
 
-**Blocks are filed by capability, not by page.** Mid-conversion, a per-page directory (`blocks/store-home-page/`) is the path of least resistance — and it inverts the ownership: the next page reuses nothing, every block grows a twin, and the twins drift. The rule and its file-layout details live in the [`figma-page-to-code` skill](../../../.cursor/skills/figma-page-to-code/SKILL.md#where-a-new-block-lands); the prompt restates enough of it to hold without the skill loaded.
+**Blocks are filed by capability, not by page.** Mid-conversion, a per-page directory (`blocks/store-home-page/`) is the path of least resistance — and it inverts the ownership: the next page reuses nothing, every block grows a twin, and the twins drift. The rule and its file-layout details live in [`ui-component-contracts.md`, "Where a block lives and what it is named"](../ui-component-contracts.md#where-a-block-lives-and-what-it-is-named); the prompt restates enough of it to hold without that section loaded.
 
 **Publishing is carved out**, for the same reason as the primitive prompt: `code-connect:publish` writes to a shared Figma file and has no undo.
 
