@@ -25,20 +25,21 @@ exports: [`ui.md`](ui.md).
 - [ ] 2.3 Extend the redemption contract with what a redemption produced — a code with its own validity period and void state, or an item owed — so *A coupon expires on its own terms* passes
 - [ ] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run db:drizzle:generate` with the output committed, `pnpm run check:migrations`
 
-## 3. Migration and repair (grade10)
+## 3. Migration of members already holding tiers and points (grade10)
 
 Depends on group 2 for the `channel` column. Smaller than it looks: all four
 tier columns and `activity_expires_at` are in the loyalty baseline,
 `tierValidity` already deploys, and `writeEarnedTier` and `resetActivityClock`
 already keep both clocks. There is no permanent-tier cohort and no member with
-activity and no clock — 3.2 and 3.3 are repair passes that should touch
-nothing, and run because a throw on read is a bad way to find out otherwise.
+activity and no clock, so 3.1 and 3.3 are repair passes that should touch
+nothing — they run because a throw on read is a bad way to find out otherwise.
 
-- [ ] 3.1 Attribute existing ledger rows to the online store, the only channel that has sold
-- [ ] 3.2 Write all four tier columns together for any row holding `earned_tier_id` without a complete term — `earned_tier_activated_at`, `earned_tier_period_started_at`, `earned_tier_expires_at` — activating at the deploy date; a partial row makes `getEarnedTerm` throw on every read
-- [ ] 3.3 Settle every credit already past its own expiry date **before** writing any member clock, so a clock written ahead of a dead credit cannot revive it; leave each credit's own date in place, since `ck_ledger_entries_expires_at` requires every credit to carry one
-- [ ] 3.4 Assert row counts before and after each step and fail loudly on any shrink, and report how many rows each repair pass actually touched
-- [ ] 3.5 Verify: `pnpm run test:backend`, `pnpm run check:migrations`, and each migration run against a seeded local Postgres with counts reported
+- [ ] 3.1 Write all four tier columns together — `earned_tier_id`, `earned_tier_activated_at`, `earned_tier_period_started_at`, `earned_tier_expires_at` — activating at the deploy date, for any row holding a tier without a complete term; a partial row makes `getEarnedTerm` throw on every read
+- [ ] 3.2 Settle every credit already past its own expiry date **before** writing member clocks, so the change-over revives nothing
+- [ ] 3.3 Derive one `activity_expires_at` per member from that member's most recent earn or redemption, for any member missing one, leaving each credit's own date in place — `ck_ledger_entries_expires_at` requires it and the effective rule is the later of the two
+- [ ] 3.4 Attribute existing ledger rows to the online store, the only channel that has sold
+- [ ] 3.5 Assert row counts before and after each step, fail loudly on any shrink, and report how many rows each repair pass actually touched
+- [ ] 3.6 Verify: `pnpm run test:backend`, `pnpm run check:migrations`, and each migration run against a seeded local Postgres with counts reported
 
 ## 4. Operator grants, tier removal, and channel on the ledger (grade10)
 
@@ -50,8 +51,8 @@ a test, not a change. The clock behaviour in 4.2 is the reverse of what
 - [ ] 4.2 Reset the inactivity window on a campaign grant and leave it alone on a correction, so *A campaign grant keeps the balance alive* and *A correction does not extend the balance's life* pass together
 - [ ] 4.3 Add an operator action that removes a tier inside its validity period, recorded with who and why, so *An operator removes a tier granted in error* passes — with a named permission, extending *Operators act through named permissions*. `tier_changes` already allows the `revocation` cause, so `ck_tier_changes_cause` needs no migration
 - [ ] 4.4 Require `channel` on every write path into the ledger, so no row can be recorded without saying which channel sold
-- [ ] 4.5 Keep one balance and one tier whatever channel wrote the entry, and make a channel's own copy of a balance non-authoritative, so *One balance across both channels* and *The channel's copy is not the balance* pass
-- [ ] 4.6 Verify: `pnpm run typecheck`, `pnpm run test:backend`
+- [ ] 4.5 Verify: `pnpm run typecheck`, `pnpm run test:backend`
+- [ ] 4.6 Keep one balance and one tier whatever channel wrote the entry, and make a channel's own copy of a balance non-authoritative, so *One balance across both channels* and *The channel's copy is not the balance* pass
 
 ## 5. Reward fulfilment (grade10)
 
@@ -64,8 +65,8 @@ a test, not a change. The clock behaviour in 4.2 is the reverse of what
 - [ ] 5.7 Make a code that cannot be turned back into points, so *A member cannot undo a redemption* passes
 - [ ] 5.8 Add the operator cancellation that credits points back for an unused expired artifact, so *An operator cancellation is the credit path* passes, and refuse it on a used one, so *A used artifact is never reversed* passes
 - [ ] 5.9 Count what members forfeit to expiry where an operator can read it, so *An expired unused code returns nothing by itself* passes
-- [ ] 5.10 Refuse a reversal once what the redemption produced has been consumed and cancel it while it is still waiting, so *A collected reward cannot be reversed* and *A waiting collection is cancelled by the reversal* pass — the states an item owed moves through are `add-shopify-membership-pos`; this is the gate over them
-- [ ] 5.11 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run build`
+- [ ] 5.10 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run build`
+- [ ] 5.11 Refuse a reversal once what the redemption produced has been consumed and cancel it while it is still waiting, so *A collected reward cannot be reversed* and *A waiting collection is cancelled by the reversal* pass — the states an item owed moves through are `add-shopify-membership-pos`; this is the gate over them
 
 ## 6. Qualifying spend at the seller (grade10)
 
