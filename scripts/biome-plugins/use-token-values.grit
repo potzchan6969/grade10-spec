@@ -1,0 +1,28 @@
+or {
+  // An arbitrary length is a value read off the canvas instead of the
+  // variable the designer bound — the classname form of the drift the gap
+  // table in docs/governance/figma-component-to-code.md names. Matches
+  // literal px/rem/em/% inside a bracket (`gap-[13px]`, `w-[420px]`);
+  // leaves grid templates, transition property lists, easing functions,
+  // and var()/calc() references alone.
+  `$s` where {
+    $s <: r"\"[^\"]*-\[-?[0-9]+(?:\.[0-9]+)?(?:px|rem|em|%)\][^\"]*\"",
+    register_diagnostic(span=$s, message="Arbitrary length: read the value off the variable the designer bound and use its token utility (or raise unbound drift with the designer) instead of hardcoding a measured length. See docs/governance/figma-component-to-code.md.", severity="warn")
+  },
+  // A literal colour — hex or a colour function — bypasses tokens.json
+  // entirely, so no theme and no design-sync diff ever sees it. Also fires
+  // on a hex fallback inside var(), which quietly ships one theme's value
+  // to every other theme.
+  `$s` where {
+    $s <: r"\"[^\"]*-\[[^\]]*(?:#[0-9a-fA-F]{3,8}\b|(?:rgba?|hsla?|oklch|oklab|color-mix)\()[^\]]*\][^\"]*\"",
+    register_diagnostic(span=$s, message="Literal colour in a class: colours travel Figma variables -> tokens.json -> theme CSS. Use the token utility, or add the token, rather than a hex or colour function. See docs/governance/figma-component-to-code.md.", severity="warn")
+  },
+  // Tailwind's stock palette (`bg-red-500`) renders fine and belongs to no
+  // one: it is not in tokens.json, so it never varies by theme and no
+  // checker diffs it against Figma. The token utilities are the only
+  // colour vocabulary in packages/ui.
+  `$s` where {
+    $s <: r"\"[^\"]*\b(?:bg|text|border|ring|fill|stroke|from|via|to|outline|decoration|divide|accent|caret|shadow)-(?:red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|slate|gray|zinc|neutral|stone)-[0-9]{2,3}\b[^\"]*\"",
+    register_diagnostic(span=$s, message="Stock Tailwind palette class: not a token, so it never varies by theme and design sync never diffs it. Use a token utility from tokens.json. See docs/governance/figma-component-to-code.md.", severity="warn")
+  }
+}
