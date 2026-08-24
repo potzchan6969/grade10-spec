@@ -7,10 +7,10 @@
  * exists only in the head of whoever did the conversion. This script takes
  * that mapping as input and makes the value comparison deterministic.
  *
- *   FIGMA_TOKEN=figd_… pnpm figma:audit -- --node <url> --classes "h-10 gap-2 bg-primary"
- *   FIGMA_TOKEN=figd_… pnpm figma:audit -- --map audit.json
- *   FIGMA_TOKEN=figd_… pnpm figma:audit -- --all-blocks
- *   FIGMA_TOKEN=figd_… pnpm figma:audit -- --node <url>          # dump the node's values
+ *   FIGMA_TOKEN=figd_… pnpm run figma:audit --node <url> --classes "h-10 gap-2 bg-primary"
+ *   FIGMA_TOKEN=figd_… pnpm run figma:audit --map audit.json
+ *   FIGMA_TOKEN=figd_… pnpm run figma:audit --all-blocks
+ *   FIGMA_TOKEN=figd_… pnpm run figma:audit --node <url>          # dump the node's values
  *
  * audit.json is the class-audit table the figma-page-to-code skill has the
  * converting agent emit: [{ "label": "hero/cta", "node": "<figma url>",
@@ -23,9 +23,19 @@
  * blocks that predate the convention read as gaps, not as passes.
  *
  * DRIFT (✗) = a class resolves to a value the node does not draw; exits 1.
- * UNCHECKED (–) = no rail carries that class (a state prefix, a non-visual
- * utility, a token this cannot resolve); never fails, always listed — a run
- * that only says ✓ would read as coverage it does not have.
+ * UNCHECKED (–) = never fails, always listed — a run that only says ✓ would
+ * read as coverage it does not have. Two different things produce one:
+ *   - No rail carries the class: a state or breakpoint prefix, a non-visual
+ *     utility (`group/*`, `relative`), a token this cannot resolve. `w-full`
+ *     is deliberately here: it means FILL, but a component or page-level
+ *     frame is the root of its own auto-layout and reads FIXED whatever the
+ *     code does with it, so a rail would fail every block for being a block.
+ *   - A rail carries it, but the node states no such property — layoutAlign
+ *     and layoutGrow exist only on a child of an auto-layout frame,
+ *     targetAspectRatio only where the ratio is locked. Silence is not
+ *     disagreement, so these read as unchecked and name the property looked
+ *     for. `overflow-hidden` is the exception: every frame and component
+ *     states clipsContent, so silence there would itself be an answer.
  *
  * Values, not names: REST resolves every variable binding before it
  * serializes, so this compares the hex and pixels a viewer sees. A wrong
@@ -47,9 +57,12 @@ import {
   tokenResolver,
 } from "./values.mjs";
 
-const pkgDir = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+// The design system owns the token data these scripts resolve against; the
+// scripts themselves are repository tooling, because they read both packages.
+const dsDir = resolve(repoRoot, "packages/design-system");
 try {
-  process.loadEnvFile(resolve(pkgDir, "../..", ".env"));
+  process.loadEnvFile(resolve(repoRoot, ".env"));
 } catch {
   // No .env checked in or present — fall through to the ambient environment.
 }
@@ -58,9 +71,11 @@ const die = (m) => {
   process.exit(1);
 };
 
-// The root `figma:audit` script forwards through a second pnpm invocation,
-// which leaves a literal `--` in argv; parseArgs would read everything after
-// it as positionals and throw.
+// `pnpm run figma:audit -- --all-blocks` is the habitual way to pass flags
+// through pnpm, and it leaves a literal `--` in argv that parseArgs would read
+// as the start of positionals and throw on. It is not needed any more — this
+// runs from the root with one hop — but tolerating it costs a filter, and the
+// alternative is a crash that reads as a bug in the flag someone just typed.
 const argv = process.argv.slice(2).filter((a) => a !== "--");
 const { values: args } = parseArgs({
   args: argv,
@@ -80,13 +95,13 @@ if (!token)
    which this audit deliberately does not read (it compares resolved values).`);
 
 const cfg = JSON.parse(
-  await readFile(resolve(pkgDir, "tokens.config.json"), "utf8"),
+  await readFile(resolve(dsDir, "tokens.config.json"), "utf8"),
 );
 const resolveToken = tokenResolver(
-  JSON.parse(await readFile(resolve(pkgDir, "tokens.json"), "utf8")),
+  JSON.parse(await readFile(resolve(dsDir, "tokens.json"), "utf8")),
 );
 const resolveRadius = radiusResolver(
-  await readFile(resolve(pkgDir, cfg.preamble), "utf8"),
+  await readFile(resolve(dsDir, cfg.preamble), "utf8"),
   cfg,
   resolveToken,
 );
@@ -127,7 +142,7 @@ if (args["all-blocks"]) {
   // in packages/ui, written at conversion time. Sweeping them all is what
   // the nightly run does; a directory without one is a gap to report, never
   // a pass.
-  const blocksDir = resolve(pkgDir, "../ui/src/blocks");
+  const blocksDir = resolve(repoRoot, "packages/ui/src/blocks");
   for (const entry of await readdir(blocksDir, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
     // shared/ is cross-capability plumbing that never came from a Figma
@@ -211,20 +226,61 @@ function nodeValues(doc) {
     padY: doc.paddingTop ?? null,
     padYBottom: doc.paddingBottom ?? null,
     gap: doc.itemSpacing ?? null,
+    // Layout intent, as booleans, for the utilities that carry no number.
+    // Each is null when the node does not state the property at all, which
+    // is the difference between "Figma disagrees" and "Figma is silent" —
+    // see the `optional` expectations below.
+    clips: doc.clipsContent ?? null,
+    sticky:
+      doc.scrollBehavior == null
+        ? null
+        : doc.scrollBehavior === "STICKY_SCROLLS",
+    square:
+      doc.targetAspectRatio == null
+        ? null
+        : doc.targetAspectRatio.x === doc.targetAspectRatio.y,
+    // layoutAlign / layoutGrow exist only on a child of an auto-layout
+    // frame. A component or page-level frame is neither, so these stay null
+    // there rather than asserting a default nothing chose.
+    stretch: doc.layoutAlign == null ? null : doc.layoutAlign === "STRETCH",
+    noGrow: doc.layoutGrow == null ? null : doc.layoutGrow === 0,
   };
 }
 
 // Audit-only expectations layered over the shared set: width, vertical
-// padding, and text colour on TEXT nodes. These stay here rather than in
-// values.mjs because checkValues compares against variant properties that
-// have no width or padY, and a shared expectation it cannot meet would
-// warn on every primitive.
-function auditExpectations(classString, nodeType) {
+// padding, text colour on TEXT nodes, and the layout-intent booleans. These
+// stay here rather than in values.mjs because checkValues compares against
+// variant properties that have no width, padY, or layout intent, and a
+// shared expectation it cannot meet would warn on every primitive.
+//
+// `optional` marks an expectation the node is allowed to be SILENT about:
+// absent reads as unchecked, not as drift. Every layout-intent rail is
+// optional, because the Figma property behind it exists only in a context
+// the node may not be in — layoutAlign and layoutGrow only on a child of an
+// auto-layout frame, targetAspectRatio only where the ratio was locked. A
+// non-optional expectation still fails when the node sets no such value,
+// which is what keeps a missing height or padding a real finding.
+function auditExpectations(classString, v) {
+  const nodeType = v.type;
   const out = expectations(classString, resolveToken, resolveRadius);
   for (const cls of classString.split(/\s+/).filter(Boolean)) {
     if (cls.includes(":")) continue;
     let m;
-    if ((m = /^w-(\d+(?:\.\d+)?)$/.exec(cls))) {
+    if (cls === "overflow-hidden") {
+      // clipsContent is stated by every frame and component, so this one is
+      // not optional: silence would itself be the answer.
+      out.push({ prop: "clips", cls, expected: true });
+    } else if (cls === "overflow-visible") {
+      out.push({ prop: "clips", cls, expected: false });
+    } else if (cls === "sticky") {
+      out.push({ prop: "sticky", cls, expected: true, optional: true });
+    } else if (cls === "aspect-square") {
+      out.push({ prop: "square", cls, expected: true, optional: true });
+    } else if (cls === "self-stretch") {
+      out.push({ prop: "stretch", cls, expected: true, optional: true });
+    } else if (cls === "shrink-0") {
+      out.push({ prop: "noGrow", cls, expected: true, optional: true });
+    } else if ((m = /^w-(\d+(?:\.\d+)?)$/.exec(cls))) {
       out.push({ prop: "width", cls, expected: Number(m[1]) * 4 });
     } else if ((m = /^py-(\d+(?:\.\d+)?)$/.exec(cls))) {
       out.push({ prop: "padY", cls, expected: Number(m[1]) * 4 });
@@ -239,6 +295,17 @@ function auditExpectations(classString, nodeType) {
   }
   return out;
 }
+
+// The layout-intent props are named for what the class means; when one is
+// reported as unstated, name the Figma property instead, because that is
+// what whoever opens the file has to go and look at.
+const figmaProp = {
+  clips: "clipsContent",
+  sticky: "scrollBehavior",
+  square: "targetAspectRatio",
+  stretch: "layoutAlign",
+  noGrow: "layoutGrow",
+};
 
 let drift = 0;
 for (const e of entries) {
@@ -269,11 +336,16 @@ for (const e of entries) {
       `  ! asymmetric vertical padding (${v.padY} / ${v.padYBottom}); py-* compares against the top`,
     );
 
-  const expected = auditExpectations(e.classes, v.type);
+  const expected = auditExpectations(e.classes, v);
   const checked = new Set(expected.map((x) => x.cls));
-  for (const { prop, cls, expected: want } of expected) {
+  for (const { prop, cls, expected: want, optional } of expected) {
     const actual = v[prop];
-    if (actual == null) {
+    if (actual == null && optional) {
+      // The node is in no position to state this — not a disagreement.
+      console.log(
+        `  – ${cls.padEnd(24)} unchecked (node states no ${figmaProp[prop] ?? prop})`,
+      );
+    } else if (actual == null) {
       console.error(
         `  ✗ ${cls.padEnd(24)} ${want} in code, but the node sets no ${prop}`,
       );

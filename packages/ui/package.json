@@ -8,6 +8,7 @@
     "storybook": "storybook dev",
     "build-storybook": "storybook build",
     "test:stories": "vitest run",
+    "code-connect:publish": "figma connect publish --exit-on-unreadable-files",
     "bones:build": "boneyard-js build \"http://localhost:6010/iframe.html?id=store-product-listing-productcard--boneyard-capture&viewMode=story&globals=mode:dark;colorTheme:grade10\" --force --no-scan"
   },
   "exports": {
@@ -26,6 +27,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@figma/code-connect": "^1.4.9",
     "@storybook/addon-a11y": "10.5.4",
     "@storybook/addon-docs": "10.5.4",
     "@storybook/addon-vitest": "10.5.4",

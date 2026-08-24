@@ -15,7 +15,7 @@ src/components/forms/button.stories.tsx   rendered evidence
                                           + the Figma component set
 ```
 
-The basename match is not cosmetic. `scripts/check-components.mjs` resolves a Figma component to its code by normalizing the set's name and looking for `src/components/**/<name>.tsx`; a mismatch is reported as "no code component".
+The basename match is not cosmetic. `scripts/design-sync/check-components.mjs` resolves a Figma component to its code by normalizing the set's name and looking for `src/components/**/<name>.tsx`; a mismatch is reported as "no code component".
 
 ## Ownership
 
@@ -47,7 +47,7 @@ compiles. Nothing catches this for you — see "Known gaps".
 4. **Write `<name>.figma.ts`** with a `getEnum` covering *every* option of every VARIANT property. An unmapped option resolves to `undefined` and emits broken code.
 5. **Write `<name>.stories.tsx`** with a story per variant, plus disabled, loading, and any other state the contract has.
 6. **Run `pnpm run check:design-system`** and get to zero errors and zero *unexplained* warnings. A warning you intend to keep belongs in an OpenSpec change with a reason, not in the run log.
-7. **Publish Code Connect** with `pnpm --filter @grade10/design-system run code-connect:publish`. A correct template that was never published leaves Dev Mode showing no connected code at all — verify with `get_code_connect_map`, which returns `{}` when nothing is published.
+7. **Publish Code Connect** with `pnpm run code-connect:publish:design-system` (a block's templates publish with `code-connect:publish:ui` instead). A correct template that was never published leaves Dev Mode showing no connected code at all — verify with `get_code_connect_map`, which returns `{}` when nothing is published.
 
 Changing an existing component follows the same list from step 3, and step 4
 is not optional when only the props moved: re-read the template against the
@@ -57,13 +57,20 @@ To hand steps 3–7 to an AI agent, paste [`prompts/implement-primitive-from-fig
 
 ## Publishing Code Connect
 
+**Two packages, two publishes.** Each owns its own templates, and neither command touches the other's:
+
 ```bash
-FIGMA_ACCESS_TOKEN=figd_… pnpm --filter @grade10/design-system run code-connect:publish
+FIGMA_ACCESS_TOKEN=figd_… pnpm run code-connect:publish:design-system
+FIGMA_ACCESS_TOKEN=figd_… pnpm run code-connect:publish:ui
 ```
 
-That script is `figma connect publish --exit-on-unreadable-files`. It publishes every template `figma.config.json` matches — `src/**/*.figma.ts`, under the `React` label — not just the one you changed, so a template broken by an unrelated Figma edit surfaces here. `--exit-on-unreadable-files` makes an unparseable template a failure rather than a silent omission.
+There is deliberately no `pnpm run code-connect:publish` that runs both. Each command writes to a shared Figma file and cannot be undone, so which templates you are publishing is a thing to state rather than a thing to inherit from a script name.
 
-Append `--dry-run` to list what would be published and against which node, without writing anything. Do that first; it parses every template and then resolves each `url=` header against the API, so it catches a stale node ID before it reaches the file. It still needs a valid token for that second half — a dry run is not a token-free rehearsal.
+Both scripts are `figma connect publish --exit-on-unreadable-files`. Each publishes every template its own `figma.config.json` matches — `src/**/*.figma.ts`, under the `React` label — not just the one you changed, so a template broken by an unrelated Figma edit surfaces here. `--exit-on-unreadable-files` makes an unparseable template a failure rather than a silent omission.
+
+The `include` glob is package-relative, which is why the second command exists at all: for as long as only the first one did, the `packages/ui` block templates were matched by nothing and published by nothing. They were not being parsed either, so an unreadable one raised no failure anywhere. Publishing a block change means running both.
+
+Append `--dry-run` to list what would be published and against which node, without writing anything — `pnpm run code-connect:publish:ui --dry-run`, with **no `--` before it**. These scripts forward through a second `pnpm`, and a literal `--` reaches the Figma CLI as an argument, which stops it parsing the rest: the flag is dropped and `--token` with it, so the run fails on `Couldn't find a Figma access token` while the token is sitting right there in the command. Do that first; it parses every template and then resolves each `url=` header against the API, so it catches a stale node ID before it reaches the file. It still needs a valid token for that second half — a dry run is not a token-free rehearsal.
 
 **The token is not the one the checker uses.** `check:design-system` reads `FIGMA_TOKEN` and needs only `files:read`. Publishing reads `FIGMA_ACCESS_TOKEN` (or `--token`) and needs **File content: read** plus **Code Connect: write**. A `files:read` token will parse fine and fail at the write.
 
@@ -71,7 +78,7 @@ Publishing is a write to a shared Figma file and has no unattended path in CI by
 
 ## What the checker enforces
 
-`pnpm run check:design-system` runs `scripts/check-components.mjs`.
+`pnpm run check:design-system` runs `scripts/design-sync/check-components.mjs`. It lives at the repository root rather than inside `packages/design-system`, because it reads both packages: a script that scans a sibling package from inside one of them has the dependency pointing the wrong way. The token data it resolves against is still the design system's, and it reads it from there.
 
 **Source.** `FIGMA_TOKEN` is the default and needs only the `files:read` scope. Note the contrast with the token pull: `scripts/figma/pull.mjs` has no REST path because `/v1/files/:key/variables/local` requires `file_variables:read`, which Figma gates to Enterprise. That gate is specific to *variables*. Component property definitions live in the file document, so this check runs unattended even though the token pull cannot. `FIGMA_DUMP=<file.json>` remains as a manual fallback.
 
@@ -90,6 +97,17 @@ Publishing is a write to a shared Figma file and has no unattended path in CI by
 - A cva axis reachable from no Figma variant property.
 - A Figma axis no template maps.
 - A Figma component with no code component.
+- A set whose description does not appear in its component's JSDoc.
+- A template emitting a prop name the component file does not contain.
+- A template whose `node-id` resolves to a node that is not a component.
+
+**Two trees, not one, and three things beyond the axes.** The checker walks `packages/design-system/src/components` **and** `packages/ui/src/blocks`. Before it did, nothing read a block template at all — not its node ID, not its axes, and not `code-connect:publish`, whose glob never matched them. A block carries no `cva`, so the axis and value comparisons find nothing to diff and skip.
+
+*Descriptions* are the only thing a designer writes that no rail carries — not the token pull, not Code Connect — so the JSDoc opening the component is their sole projection, and a description edited in Figma is otherwise invisible. The comparison is by **first sentence, normalized** to letters and digits, because prose is rewrapped and code notes follow it. A description field holding library search keywords (`Tag, badge, label`) or a bare upstream attribution is reported to the designer as a missing description rather than demanded of the code, and a component file that only re-exports its component is followed one hop to the module that holds the documentation.
+
+*Prop names* close the gap that let six templates emit props that no longer existed after the `shape-ui-block-copy` reshape while the run stayed clean. The template's `// source=` header names the component file, and each name its example emits must appear there — presence, not type resolution, with inherited HTML and ARIA attributes skipped from a fixed list because `link.figma.ts` emits `href` and `link.tsx` never writes the word.
+
+*A node that is not a component* is distinguished from a node that is gone. Both used to read as "deleted or replaced", which sends whoever reads it looking for a node sitting right there; Code Connect resolves only published components, so a template aimed at a frame maps nothing however well-formed it is.
 
 **Axes are matched through the template, never by name.** Figma calls the axis `Type`; cva calls it `variant`. Comparing those by name produced two mutually contradicting warnings on every component, and a real `Danger`/`destructive` mismatch once hid inside that noise. Instead the checker reads the values a `getEnum` produces and finds the cva axis containing them, so `Type → variant` and `Danger → destructive` are inferred from the mapping that already states them. There is no alias config to drift out of date. A map producing no strings — a boolean gate such as `Loading → loading` — is recognized as a non-variant prop rather than a broken axis.
 
@@ -209,11 +227,12 @@ Recorded so they are not mistaken for coverage:
 - Value checking covers a variant's own background and box geometry, not its children. A wrong label colour, icon size, or border is still invisible to it, and only the base state of each axis is compared — hover, disabled, and loading values are unchecked.
 - Design-system stories are smoke-only. During the Button work the entire 14-file suite passed with `{children}` deleted from the component. `packages/ui` stories do use `play` functions to assert that a control reports its change and does not move its own display, so the convention exists in the repository but not in this package; whether to adopt it here is still open.
 - The CI job skips with a warning annotation when `FIGMA_TOKEN` is unavailable, as on forks. A skipped run is not a passing run.
-- The checker compares variant axes, options, and values. It never reads the
-  prop names a template emits, so a template naming a prop the component
-  dropped is a clean run. Six templates emitted props that no longer existed
-  after the `shape-ui-block-copy` reshape and the run reported no errors.
-- It walks `packages/design-system/src/components` only. The `packages/ui`
-  block templates are outside that tree, so nothing scans them at all — not
-  their node IDs, not their axes. `code-connect:publish` parses them, which is
-  the only automated read they get.
+- Descriptions are compared by first sentence, not in full. A designer who
+  rewrites the body of a description while leaving its opening intact changes
+  nothing the check can see, and prose is normalized to letters and digits
+  before comparison, so wording that differs only in punctuation passes.
+- The prop check asks whether the component file *contains* each name a
+  template emits, not whether its type actually accepts it. A prop that
+  arrives through `ComponentProps<"a">` is skipped from a fixed list of HTML
+  and ARIA attributes rather than resolved, so a component that genuinely
+  dropped `href` still passes.

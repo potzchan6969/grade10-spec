@@ -83,4 +83,4 @@ jobs:
         if: steps.token.outputs.available == 'true'
         env:
           FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
-        run: pnpm run figma:audit -- --all-blocks
+        run: pnpm run figma:audit --all-blocks

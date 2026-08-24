@@ -49,7 +49,10 @@
       "plugins": ["./scripts/biome-plugins/use-layout-primitives.grit"]
     },
     {
-      "includes": ["packages/design-system/scripts/**"],
+      "includes": [
+        "packages/design-system/scripts/**",
+        "scripts/design-sync/**"
+      ],
       "linter": {
         "rules": {
           "style": {

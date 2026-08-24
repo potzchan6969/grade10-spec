@@ -43,7 +43,7 @@ Ordered. Steps 1–4 and 11 are the designer's; 5–10 are the implementation st
 | 7 | Designer/Engineer | Write `<name>.figma.ts` mapping every option of every variant property. | No option is left unmapped — an unmapped one resolves to `undefined` and emits broken code. |
 | 8 | Designer/Engineer | Write `<name>.stories.tsx` — one story per option, plus disabled, loading, and every contract state. | `pnpm run test:stories` passes; it fails on any cva option no story renders. |
 | 9 | Designer/Engineer | `pnpm run check:design-system` to zero errors and zero unexplained warnings. | Axes, options, colours, and box geometry all agree with the file. |
-| 10 | Designer/Engineer | `pnpm --filter @grade10/design-system run code-connect:publish`. | `get_code_connect_map` stops returning `{}` for the node. |
+| 10 | Designer/Engineer | `pnpm run code-connect:publish:design-system` — or `code-connect:publish:ui` for a block. Each package publishes its own templates; there is no command for both. | `get_code_connect_map` stops returning `{}` for the node. |
 | 11 | Designer | Verify: read the snippet in Dev Mode, and measure the built component in Storybook. | See ["Checking it yourself"](#checking-it-yourself-no-checkout-no-engineer) below. |
 
 Steps 3 and 10 are two different publishes, in that order, neither of which happens automatically.
