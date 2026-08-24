@@ -4,9 +4,9 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 // Figma's Icon Button (`2159:3195`) sits on the Button page but is a separate
 // published set: a square box that binds `Radius/radius-full` (a circle),
-// rungs at `md` (40 / 14px glyph) and `sm` (32 / 12px glyph), and a `primary`
-// fill alongside secondary / outline / ghost. `xs` remains for in-tree callers
-// the set no longer draws.
+// rungs at `lg` (48 / 16px glyph), `md` (40 / 14px glyph) and `sm` (32 / 12px
+// glyph), and a `primary` fill alongside secondary / outline / ghost. `xs`
+// remains for in-tree callers the set no longer draws.
 //
 // Disabled is the variant's own colours at `Opacity/opacity-50` — same rule as
 // Button, including primary. Hover is `Custom/muted-hover` on the borderless
@@ -27,6 +27,7 @@ const iconButtonVariants = cva(
           "text-muted-foreground hover:bg-muted-hover aria-expanded:bg-muted-hover",
       },
       size: {
+        lg: "size-12 [&_svg:not([class*='size-'])]:size-4",
         md: "size-10 [&_svg:not([class*='size-'])]:size-3.5",
         sm: "size-8 [&_svg:not([class*='size-'])]:size-3",
         xs: "size-6 [&_svg:not([class*='size-'])]:size-3",
