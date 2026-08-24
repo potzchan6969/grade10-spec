@@ -73,3 +73,14 @@ jobs:
         env:
           FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
         run: pnpm run check:design-system
+
+      # Blocks have no component-set diff — their one durable Figma-side check
+      # is the per-block audit.json written at conversion time. Sweeping them
+      # all here is what makes a designer-side edit to a block's source nodes
+      # surface as a failed nightly, the same way a variant rename does above.
+      # A block without an audit.json is listed as uncovered, never as passing.
+      - name: Audit block classnames against Figma
+        if: steps.token.outputs.available == 'true'
+        env:
+          FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
+        run: pnpm run figma:audit -- --all-blocks
