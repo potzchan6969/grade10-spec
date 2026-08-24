@@ -101,13 +101,14 @@ an item and replacing a draft item.
 
 ### Requirement: The admin photo manager reviews images at card size with hover zoom
 
-The admin photo manager SHALL lay out gallery image items in a grid with at
-most three items per row (up to eight items in the gallery). A stored image
-SHALL be shown at card size. A magnify control on each shown image SHALL, on
-hover (or keyboard focus), reveal that image at zoom size in a preview at
-least three-quarters of the viewport height. Leaving the control SHALL hide
-the zoom preview. The magnify control SHALL NOT require a click to reveal
-zoom.
+The admin photo manager SHALL let an operator review the listing's gallery
+images (at most eight items) so they can upload, replace, and inspect them.
+Layout of that surface is not prescribed — any arrangement that shows the
+gallery items is fine. A stored image SHALL be shown at card size. A magnify
+control on each shown image SHALL, on hover (or keyboard focus), reveal that
+image at zoom size in a preview at least three-quarters of the viewport
+height. Leaving the control SHALL hide the zoom preview. The magnify control
+SHALL NOT require a click to reveal zoom.
 
 #### Scenario: The admin photo manager shows card size
 
