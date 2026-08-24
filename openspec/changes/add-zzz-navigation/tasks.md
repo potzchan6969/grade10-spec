@@ -62,7 +62,7 @@ navigating half of it and no worker — see design.md.
 - [x] 4.3 Run the full check suite and a production build as this group's
       verification.
 
-## 5. What the repository says
+## 5. What the repository says (owner: @sean)
 
 - [ ] 5.1 Correct the `frontend-structure` skill: framework mode, the address
       table and the route-module shape now hold for both SPAs; what stays
