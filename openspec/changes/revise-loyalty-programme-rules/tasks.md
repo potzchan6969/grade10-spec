@@ -154,4 +154,4 @@ columns, not part of this group.
 - [x] 13.1 Rename the tier display names in the programme config and everywhere a member or operator reads them, so *The second tier is reached by spending* names Gold
 - [x] 13.2 Rename the demo playground's programme and use-case copy to match
 - [x] 13.3 Assert in a test that every configured tier id still resolves, so a future rename cannot strand a member silently
-- [ ] 13.4 Verify: `pnpm run typecheck`, `pnpm run test`
+- [x] 13.4 Verify: `pnpm run typecheck`, `pnpm run test`
