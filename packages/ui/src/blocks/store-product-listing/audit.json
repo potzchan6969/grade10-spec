@@ -1,15 +1,15 @@
 [
   {
     "label": "product-card/root",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4200-155",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4006-981",
     "classes": "group/product-card w-full",
-    "note": "Backfilled from product-card.figma.ts, not written at conversion time. The node is the template's target and may be the component set; if the sweep reports a missing prop, repoint to the base variant node."
+    "note": "Base variant (soldOut=false) of set 4200:155; the set container itself carries a cosmetic 8px frame radius that no variant draws."
   },
   {
     "label": "product-card-image/root",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10074",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10072",
     "classes": "group/product-card-image relative aspect-square w-full rounded-(--radius-3xl)",
-    "note": "Backfilled from product-card-image.figma.ts; rounded-(--radius-3xl) resolves to 24px and is the one checkable value here."
+    "note": "Base variant (state=default, inCart=false, soldOut=false) of set 4274:10074; every variant draws cornerRadius 24, matching rounded-(--radius-3xl). The set container's own 8px frame radius is cosmetic — auditing the set node reported it as drift, which is why this points at the variant."
   },
   {
     "label": "filter-panel/root",
