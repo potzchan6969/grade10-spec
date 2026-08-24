@@ -4,7 +4,9 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   Dialog,
+  DialogBody,
   DialogContent,
+  DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import { cn } from "@grade10/design-system/lib/utils";
@@ -134,13 +136,17 @@ function ListingGallery({ images, copy, className }: ListingGalleryProps) {
       ) : null}
       {image ? (
         <Dialog onOpenChange={setZoomOpen} open={zoomOpen}>
-          <DialogContent className="sm:max-w-2xl" showCloseButton>
-            <DialogTitle>{copy.zoom}</DialogTitle>
-            <img
-              alt={image.alt}
-              className="w-full"
-              src={image.zoomSrc ?? image.src}
-            />
+          <DialogContent className="sm:max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>{copy.zoom}</DialogTitle>
+            </DialogHeader>
+            <DialogBody>
+              <img
+                alt={image.alt}
+                className="w-full"
+                src={image.zoomSrc ?? image.src}
+              />
+            </DialogBody>
           </DialogContent>
         </Dialog>
       ) : null}
