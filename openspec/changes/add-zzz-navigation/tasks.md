@@ -6,7 +6,7 @@ in the repository: `apps/frontend/grade10` runs it, `docs/architecture/serving.m
 and the `frontend-structure` skill say what the shape is. ZZZ takes the
 navigating half of it and no worker — see design.md.
 
-## 1. The framework and the document
+## 1. The framework and the document (owner: @sean)
 
 - [ ] 1.1 The build runs through the framework: `react-router.config.ts`
       (`appDirectory: "src"`, `ssr: false`, no prerender list), the
