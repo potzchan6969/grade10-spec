@@ -47,7 +47,7 @@ compiles. Nothing catches this for you — see "Known gaps".
 4. **Write `<name>.figma.ts`** with a `getEnum` covering *every* option of every VARIANT property. An unmapped option resolves to `undefined` and emits broken code.
 5. **Write `<name>.stories.tsx`** with a story per variant, plus disabled, loading, and any other state the contract has.
 6. **Run `pnpm run check:design-system`** and get to zero errors and zero *unexplained* warnings. A warning you intend to keep belongs in an OpenSpec change with a reason, not in the run log.
-7. **Publish Code Connect** with `pnpm --filter @grade10/design-system run code-connect:publish`. A correct template that was never published leaves Dev Mode showing no connected code at all — verify with `get_code_connect_map`, which returns `{}` when nothing is published.
+7. **Publish Code Connect** with `pnpm run code-connect:publish:design-system` (a block's templates publish with `code-connect:publish:ui` instead). A correct template that was never published leaves Dev Mode showing no connected code at all — verify with `get_code_connect_map`, which returns `{}` when nothing is published.
 
 Changing an existing component follows the same list from step 3, and step 4
 is not optional when only the props moved: re-read the template against the
@@ -60,15 +60,17 @@ To hand steps 3–7 to an AI agent, paste [`prompts/implement-primitive-from-fig
 **Two packages, two publishes.** Each owns its own templates, and neither command touches the other's:
 
 ```bash
-FIGMA_ACCESS_TOKEN=figd_… pnpm --filter @grade10/design-system run code-connect:publish
-FIGMA_ACCESS_TOKEN=figd_… pnpm --filter @grade10/ui run code-connect:publish
+FIGMA_ACCESS_TOKEN=figd_… pnpm run code-connect:publish:design-system
+FIGMA_ACCESS_TOKEN=figd_… pnpm run code-connect:publish:ui
 ```
+
+There is deliberately no `pnpm run code-connect:publish` that runs both. Each command writes to a shared Figma file and cannot be undone, so which templates you are publishing is a thing to state rather than a thing to inherit from a script name.
 
 Both scripts are `figma connect publish --exit-on-unreadable-files`. Each publishes every template its own `figma.config.json` matches — `src/**/*.figma.ts`, under the `React` label — not just the one you changed, so a template broken by an unrelated Figma edit surfaces here. `--exit-on-unreadable-files` makes an unparseable template a failure rather than a silent omission.
 
 The `include` glob is package-relative, which is why the second command exists at all: for as long as only the first one did, the `packages/ui` block templates were matched by nothing and published by nothing. They were not being parsed either, so an unreadable one raised no failure anywhere. Publishing a block change means running both.
 
-Append `--dry-run` to list what would be published and against which node, without writing anything. Do that first; it parses every template and then resolves each `url=` header against the API, so it catches a stale node ID before it reaches the file. It still needs a valid token for that second half — a dry run is not a token-free rehearsal.
+Append `--dry-run` to list what would be published and against which node, without writing anything — `pnpm run code-connect:publish:ui --dry-run`, with **no `--` before it**. These scripts forward through a second `pnpm`, and a literal `--` reaches the Figma CLI as an argument, which stops it parsing the rest: the flag is dropped and `--token` with it, so the run fails on `Couldn't find a Figma access token` while the token is sitting right there in the command. Do that first; it parses every template and then resolves each `url=` header against the API, so it catches a stale node ID before it reaches the file. It still needs a valid token for that second half — a dry run is not a token-free rehearsal.
 
 **The token is not the one the checker uses.** `check:design-system` reads `FIGMA_TOKEN` and needs only `files:read`. Publishing reads `FIGMA_ACCESS_TOKEN` (or `--token`) and needs **File content: read** plus **Code Connect: write**. A `files:read` token will parse fine and fail at the write.
 
