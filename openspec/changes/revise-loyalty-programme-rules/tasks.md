@@ -139,9 +139,9 @@ surfaces land in groups 4 and 5.
 Needs the account-deletion signal from the auth service — coordinate the hook
 with the auth track before claiming.
 
-- [x] 12.1 On account deletion, zero the balance and tier progress, void unexpired coupons, and cancel anything a member is still owed, in one recorded pass, so *Deletion clears what the member held* passes
-- [x] 12.2 Keep the ledger record intact and make the pass idempotent, and act without waiting for any window, so *Deletion does not wait for a window* passes
-- [x] 12.3 Verify: `pnpm run test:backend`
+- [ ] 12.1 On account deletion, zero the balance and tier progress, void unexpired coupons, and cancel anything a member is still owed, in one recorded pass, so *Deletion clears what the member held* passes
+- [ ] 12.2 Keep the ledger record intact and make the pass idempotent, and act without waiting for any window, so *Deletion does not wait for a window* passes
+- [ ] 12.3 Verify: `pnpm run test:backend`
 
 ## 13. Tier renaming (grade10) (owner: @gareth0712)
 
