@@ -77,6 +77,68 @@ export const Empty: Story = {
   },
 };
 
+/** Scenario: Distinct sources are used in each slot. */
+export const DistinctSources: Story = {
+  args: {
+    images: [
+      {
+        src: `${IMAGE}?slot=detail`,
+        thumbSrc: `${IMAGE}?slot=thumb`,
+        zoomSrc: `${IMAGE}?slot=zoom`,
+        alt: "1999 Charizard, PSA 10",
+        thumbLabel: "front",
+      },
+      {
+        src: `${IMAGE}?slot=detail-back`,
+        thumbSrc: `${IMAGE}?slot=thumb-back`,
+        zoomSrc: `${IMAGE}?slot=zoom-back`,
+        alt: "1999 Charizard, PSA 10 back",
+        thumbLabel: "back",
+      },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const main = canvas.getByRole("img", { name: /Charizard, PSA 10$/ });
+    expect(main).toHaveAttribute("src", `${IMAGE}?slot=detail`);
+    const thumb = canvas
+      .getByRole("button", { name: "front" })
+      .querySelector("img");
+    expect(thumb).toHaveAttribute("src", `${IMAGE}?slot=thumb`);
+    await userEvent.click(main);
+    const dialog = within(canvasElement.ownerDocument.body);
+    const zoom = dialog.getByRole("dialog").querySelector("img");
+    expect(zoom).toHaveAttribute("src", `${IMAGE}?slot=zoom`);
+  },
+};
+
+/** Scenario: Omitted sources fall back to src. */
+export const FallbackToSrc: Story = {
+  args: {
+    images: [
+      {
+        src: `${IMAGE}?slot=only`,
+        alt: "1999 Charizard, PSA 10",
+        thumbLabel: "front",
+      },
+      { src: `${IMAGE}?slot=only-back`, alt: "back", thumbLabel: "back" },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const main = canvas.getByRole("img", { name: /Charizard/ });
+    expect(main).toHaveAttribute("src", `${IMAGE}?slot=only`);
+    const thumb = canvas
+      .getByRole("button", { name: "front" })
+      .querySelector("img");
+    expect(thumb).toHaveAttribute("src", `${IMAGE}?slot=only`);
+    await userEvent.click(main);
+    const dialog = within(canvasElement.ownerDocument.body);
+    const zoom = dialog.getByRole("dialog").querySelector("img");
+    expect(zoom).toHaveAttribute("src", `${IMAGE}?slot=only`);
+  },
+};
+
 /** Page shell before images arrive — no zoom hint or carets. */
 export const Loading: Story = {
   render: () => <ListingGalleryLoading />,
