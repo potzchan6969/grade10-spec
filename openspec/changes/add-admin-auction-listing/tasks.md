@@ -96,9 +96,9 @@ reaches the network. Dialog is an ordered gallery (≤ eight), not six sides.
   Confirm is pressed (add and draft replace), then clearing the preview.
 - [ ] 9.7 Make `The admin photo manager shows card size`, `Hovering the magnify
   control shows zoom size`, and `Leaving the magnify control hides zoom` pass:
-  the dialog is a grid of at most three items per row, stored images use card
-  size, and hovering the magnify control reveals a zoom preview at least
-  three-quarters of the viewport height.
+  stored images use card size, and hovering the magnify control reveals a zoom
+  preview at least three-quarters of the viewport height. Layout of the photo
+  manager is not prescribed.
 - [ ] 9.8 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test`.
 
 ## 10. Compose the Grade10 admin listing screens (grade10)

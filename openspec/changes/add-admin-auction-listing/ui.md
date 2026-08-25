@@ -87,7 +87,7 @@ and [`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
   (`Choosing a file shows a preview without uploading`,
   `Confirming the preview stores the image`,
   `Discarding the preview leaves the gallery unchanged`).
-- **Stored image, resting** — card-size image in the grid
+- **Stored image, resting** — card-size image in the photo manager
   (`The admin photo manager shows card size`).
 - **Magnify hovered / focused** — zoom-size preview at least three-quarters
   of the viewport height (`Hovering the magnify control shows zoom size`).
