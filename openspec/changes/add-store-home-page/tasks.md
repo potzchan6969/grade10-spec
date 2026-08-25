@@ -6,7 +6,7 @@ group 2's surface table and depend on nothing in each other: group 3's tiles
 and browse-all links point at the listing's address with a collection named on
 it, and reach an unscoped listing until group 4 lands.
 
-## 1. What the front door says (grade10-spec)
+## 1. What the front door says (grade10-spec) (owner: @sean)
 
 - [ ] 1.1 Add a shared `storeHome` namespace in every language the platform speaks — the hero's headline, its copy, both hero button labels, browse-all, the collections heading, and the loading and retry lines — so `The front door answers whole` and `A failed read can be retried` have words to render.
 - [ ] 1.2 Add the hero's eyebrow to each brand's own catalog, grade10 and zzz, in every language that brand speaks, keeping `resolution.test.ts` green — every key is answered for every brand.
