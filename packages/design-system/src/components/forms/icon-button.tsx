@@ -22,7 +22,7 @@ const iconButtonVariants = cva(
         secondary:
           "bg-muted text-muted-foreground hover:shadow-[inset_0_0_0_100vmax_var(--muted-hover)] aria-expanded:shadow-[inset_0_0_0_100vmax_var(--muted-hover)]",
         outline:
-          "border-border text-foreground hover:bg-muted-hover aria-expanded:bg-muted-hover",
+          "border-border bg-control text-foreground hover:bg-muted-hover aria-expanded:bg-muted-hover",
         ghost:
           "text-muted-foreground hover:bg-muted-hover aria-expanded:bg-muted-hover",
       },

@@ -1,0 +1,12 @@
+[
+  {
+    "label": "checkbox-list/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2213-240",
+    "classes": "flex w-full flex-col justify-center gap-3"
+  },
+  {
+    "label": "radio-list/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2213-392",
+    "classes": "flex w-full flex-col justify-center gap-2"
+  }
+]

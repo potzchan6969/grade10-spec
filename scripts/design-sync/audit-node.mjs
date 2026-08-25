@@ -60,6 +60,7 @@ import {
   expectations,
   fileKeyFrom,
   normHex,
+  omissions,
   radiusResolver,
   toHex8,
   tokenResolver,
@@ -130,6 +131,10 @@ function parseNodeRef(ref) {
 const entries = [];
 const uncovered = [];
 const nothingChecked = [];
+// Components a rail must own, resolved to their Figma node kind after the
+// fetch below: a component SET is the variant comparison's, a standalone one
+// needs an audit table here.
+const candidates = [];
 // Uncovered directories come from more than one root now, and a design-system
 // directory listed flat beside a block reads as one set of equals. Group them
 // so a reader can tell which package a gap is in.
@@ -154,6 +159,17 @@ async function pushMap(path, prefix = "") {
       label: `${prefix}${row.label ?? `entry ${i}`}`,
       ref,
       classes: row.classes ?? "",
+      // Classes deliberately not compared, each with the reason. A recorded
+      // divergence is a class the design and the code express differently on
+      // purpose; dropping it from `classes` instead would leave a reader
+      // unable to tell coverage from omission.
+      diverges: row.diverges ?? {},
+      // Figma sometimes draws as two nodes what the code renders as one — a
+      // frame that positions and an inner slot that carries the spacing. An
+      // entry may then point at the inner node while still being the coverage
+      // its component owes; `covers` names that component so the coverage
+      // report does not go on calling it a gap.
+      covers: row.covers ?? null,
     });
   }
 }
@@ -180,20 +196,41 @@ if (args["all-blocks"]) {
       // providers/ is the same case as shared/ one root up: it draws nothing
       // and has no Figma counterpart to audit against.
       skip: new Set(["providers"]),
+      // A design-system directory holds both kinds of component. Reporting the
+      // directory would call `forms` a gap while Button, Text Input, and the
+      // rest of its component SETS are compared variant by variant elsewhere —
+      // and would go on saying so after the one standalone component in it was
+      // covered. Ask per component instead; which rail owes a component is
+      // decided by whether its Figma counterpart has variant axes.
+      perComponent: true,
     },
   ];
   for (const root of roots) {
     for (const entry of await readdir(root.dir, { withFileTypes: true })) {
       if (!entry.isDirectory()) continue;
       if (root.skip.has(entry.name)) continue;
+      const dir = resolve(root.dir, entry.name);
+      let covered = true;
       try {
-        await pushMap(
-          resolve(root.dir, entry.name, "audit.json"),
-          `${entry.name}: `,
-        );
+        await pushMap(resolve(dir, "audit.json"), `${entry.name}: `);
       } catch (err) {
         if (err?.code !== "ENOENT") throw err;
-        uncovered.push({ root: root.label, name: entry.name });
+        covered = false;
+      }
+      if (!root.perComponent) {
+        if (!covered) uncovered.push({ root: root.label, name: entry.name });
+        continue;
+      }
+      for (const file of await readdir(dir)) {
+        if (!file.endsWith(".figma.ts")) continue;
+        const src = await readFile(resolve(dir, file), "utf8");
+        const ref = parseNodeRef(/url=(\S+)/.exec(src)?.[1] ?? "");
+        if (!ref) continue;
+        candidates.push({
+          root: root.label,
+          name: /component=(.+)/.exec(src)?.[1]?.trim() ?? file,
+          ref,
+        });
       }
     }
   }
@@ -222,7 +259,7 @@ if (args["all-blocks"]) {
 // One request per file key, all ids batched — /nodes is the cheap endpoint,
 // and a page audit is one file with many nodes.
 const byKey = new Map();
-for (const e of entries) {
+for (const e of [...entries, ...candidates]) {
   if (!byKey.has(e.ref.key)) byKey.set(e.ref.key, new Set());
   byKey.get(e.ref.key).add(e.ref.id);
 }
@@ -322,6 +359,18 @@ function auditExpectations(classString, v) {
     if (cls === "overflow-hidden") {
       // clipsContent is stated by every frame and component, so this one is
       // not optional: silence would itself be the answer.
+      //
+      // Unless the element also declares scrolling or a height ceiling. Then
+      // its overflow-hidden is what contains the scroll, and a design frame —
+      // drawn at the size of the content it happens to hold — has no view on
+      // it. A dialog that scrolls past 640px must clip; the 188px frame it was
+      // drawn from clips nothing, and neither fact contradicts the other.
+      if (
+        /(^|\s)(overflow-[xy]-auto|overflow-auto|overflow-[xy]-scroll|max-h-)/.test(
+          classString,
+        )
+      )
+        continue;
       out.push({ prop: "clips", cls, expected: true });
     } else if (cls === "overflow-visible") {
       out.push({ prop: "clips", cls, expected: false });
@@ -346,68 +395,6 @@ function auditExpectations(classString, v) {
         out.push({ prop: "fill", cls, expected: normHex(value) });
     }
   }
-  return out;
-}
-
-// Every expectation above is raised BY a class, so a property the code never
-// styled raises none and is never compared — which is how a header that drew
-// no background at all audited clean while Figma filled its frame. Fill and
-// stroke are read off the node instead, and the class list is searched for
-// something that claims them. Silence on either side is an answer, the same
-// argument `overflow-hidden` already makes above: every frame and component
-// states `fills` and `strokes`, so an empty one is a statement, not a shrug.
-//
-// This is deliberately not general. A rail that demanded a class for every
-// property a node happens to state would fail every element for the ones
-// Figma always emits; these two are singled out because they are the ones a
-// node cannot decline to answer, and the ones a viewer sees immediately.
-const isColor = (cls, prefix, resolveToken) => {
-  const m = new RegExp(`^${prefix}-(.+)$`).exec(cls);
-  if (!m) return false;
-  // `text-sm` is a size and `border-t` is an edge; only a value that resolves
-  // through the tokens to a hex is this element claiming a colour.
-  return !!resolveToken(m[1])?.startsWith("#");
-};
-
-function nodeOmissions(classString, v) {
-  const classes = classString.split(/\s+/).filter(Boolean);
-  // A prefixed utility describes a state this check cannot see, so it cannot
-  // be what claims the node's resting fill either.
-  const plain = classes.filter((c) => !c.includes(":"));
-  const out = [];
-
-  // On a TEXT node the fill IS the text colour, so text-* is what claims it
-  // and bg-* would be claiming something else entirely.
-  const claimsFill =
-    v.type === "TEXT"
-      ? plain.some((c) => isColor(c, "text", resolveToken))
-      : plain.some((c) => /^bg-/.test(c));
-  const fillClaim = v.type === "TEXT" ? "text-*" : "bg-*";
-  // `bg-transparent` resolves to no hex, so it raises no expectation above —
-  // here it is the element saying out loud that the node draws nothing, which
-  // is the one way to hold this rail off an element that means it.
-  const declaresNoFill = plain.includes("bg-transparent");
-
-  if (declaresNoFill && v.fill != null)
-    out.push(`bg-transparent in code, ${v.fill} in Figma`);
-  else if (v.fill != null && !claimsFill)
-    out.push(`node fills ${v.fill}, no ${fillClaim} class claims it`);
-  else if (v.fill == null && claimsFill && v.type !== "TEXT")
-    if (!plain.some((c) => isColor(c, "bg", resolveToken)))
-      // A bg-* naming a token that resolves to a hex is already compared above;
-      // this catches the one that resolves to nothing and would go unchecked.
-      out.push(
-        `${plain.find((c) => /^bg-/.test(c))} in code, no fill in Figma`,
-      );
-
-  const claimsStroke = plain.some((c) => /^border(-|$)/.test(c));
-  if (v.stroke != null && !claimsStroke)
-    out.push(`node strokes ${v.stroke}, no border-* class claims it`);
-  else if (v.stroke == null && claimsStroke)
-    out.push(
-      `${plain.find((c) => /^border(-|$)/.test(c))} in code, no stroke in Figma`,
-    );
-
   return out;
 }
 
@@ -438,6 +425,19 @@ for (const e of entries) {
 }
 const omissionsReported = new Set();
 
+// A component SET is compared variant by variant by check-components.mjs, so
+// it is not this rail's to cover and is not a gap. A standalone component has
+// no second rung to diff against there — checkValues skips it — so if no entry
+// here names its node, nothing in the repository compares its values.
+const audited = new Set(entries.map((e) => `${e.ref.key}/${e.ref.id}`));
+const claimed = new Set(entries.map((e) => e.covers).filter(Boolean));
+for (const c of candidates) {
+  const doc = fetched.get(`${c.ref.key}/${c.ref.id}`);
+  if (!doc || doc.type === "COMPONENT_SET") continue;
+  if (!audited.has(`${c.ref.key}/${c.ref.id}`) && !claimed.has(c.name))
+    uncovered.push({ root: `${c.root} standalone component`, name: c.name });
+}
+
 let drift = 0;
 for (const e of entries) {
   const doc = fetched.get(`${e.ref.key}/${e.ref.id}`);
@@ -467,7 +467,14 @@ for (const e of entries) {
       `  ! asymmetric vertical padding (${v.padY} / ${v.padYBottom}); py-* compares against the top`,
     );
 
-  const expected = auditExpectations(e.classes, v);
+  const diverged = Object.keys(e.diverges ?? {});
+  const expected = auditExpectations(
+    e.classes
+      .split(/\s+/)
+      .filter((c) => c && !diverged.includes(c))
+      .join(" "),
+    v,
+  );
   // A spacing rail only means something on an auto-layout frame; elsewhere
   // the node cannot answer, so demote these to the optional set rather than
   // reading their absence as drift.
@@ -508,14 +515,21 @@ for (const e of entries) {
   const nodeKey = `${e.ref.key}/${e.ref.id}`;
   if (!omissionsReported.has(nodeKey)) {
     omissionsReported.add(nodeKey);
-    for (const line of nodeOmissions(claimsByNode.get(nodeKey) ?? "", v)) {
+    for (const line of omissions(
+      claimsByNode.get(nodeKey) ?? "",
+      v,
+      resolveToken,
+    )) {
       console.error(`  ✗ ${"(unstyled)".padEnd(24)} ${line}`);
       drift++;
       compared++;
     }
   }
+  for (const [cls, why] of Object.entries(e.diverges ?? {}))
+    console.log(`  ≠ ${cls.padEnd(24)} recorded divergence: ${why}`);
   for (const cls of e.classes.split(/\s+/).filter(Boolean))
-    if (!checked.has(cls)) console.log(`  – ${cls.padEnd(24)} unchecked`);
+    if (!checked.has(cls) && !diverged.includes(cls))
+      console.log(`  – ${cls.padEnd(24)} unchecked`);
   if (compared === 0) {
     // Every class was unchecked and the node volunteered nothing. Saying
     // nothing here would let the run's closing ✓ stand for this element too,
@@ -529,7 +543,7 @@ console.log("");
 if (uncovered.length)
   for (const [root, names] of groupUncovered(uncovered))
     console.log(
-      `– ${names.length} ${root} director${names.length === 1 ? "y" : "ies"} carry no audit.json and were not audited: ${names.join(", ")}`,
+      `– ${names.length} ${root}${names.length === 1 ? "" : "s"} carry no audit table and were not audited: ${names.join(", ")}`,
     );
 if (nothingChecked.length)
   console.log(

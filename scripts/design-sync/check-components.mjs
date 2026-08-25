@@ -14,8 +14,14 @@
  * prefixing every invocation; see .env.example. CI passes it as a real
  * environment variable and needs no file.
  *
- * ERROR = the mapping is broken and Dev Mode will emit wrong code; exits 1.
- * WARN  = the two sides disagree, which may be intentional; does not exit 1.
+ * ERROR = the mapping is broken and Dev Mode will emit wrong code, OR a value
+ *         the code renders disagrees with the one Figma draws; exits 1. A rail
+ *         that cannot fail is documentation: Button's `default` painted a 10%
+ *         tint against a solid fill for months while this reported it as
+ *         advice nobody had to read.
+ * WARN  = hygiene, and no claim that anything renders wrongly — a missing
+ *         description, an axis option nothing maps to, a Figma component with
+ *         no code counterpart. Does not exit 1.
  *
  * Axes are matched through the Code Connect template, not by name: Figma's
  * `Type` is cva's `variant`, and comparing those by name produced a pair of
@@ -36,6 +42,7 @@ import { fileURLToPath } from "node:url";
 import {
   expectations,
   fileKeyFrom,
+  omissions,
   radiusResolver,
   toHex8,
   tokenResolver,
@@ -103,6 +110,12 @@ function componentsFromDocument(doc) {
               name: v.name,
               fill: v.fills?.find(
                 (f) => f.visible !== false && f.type === "SOLID",
+              ),
+              // Read for the same reason as the fill and on the same terms:
+              // every variant states `strokes`, so an empty one is the design
+              // saying this variant draws no border. See omissions().
+              stroke: v.strokes?.find(
+                (x) => x.visible !== false && x.type === "SOLID",
               ),
               height: v.absoluteBoundingBox?.height,
               radius: v.cornerRadius,
@@ -369,6 +382,7 @@ function cvaAxes(src) {
 function cvaClasses(src) {
   const axes = {};
   const defaults = {};
+  let baseClasses = "";
   let from = 0;
   for (;;) {
     const at = src.indexOf("cva(", from);
@@ -379,6 +393,11 @@ function cvaClasses(src) {
     const config = sliceBalanced(src, open);
     const top = objectKeys(config);
     if (!top.variants) continue;
+    // The base string is the first argument: everything cva applies whatever
+    // the axes say. A fill declared there is claimed for every variant, so
+    // omissions() has to see it or it reports every variant as unclaimed.
+    const baseLiteral = /^\s*"((?:[^"\\]|\\.)*)"/.exec(src.slice(at + 4));
+    if (baseLiteral) baseClasses = baseLiteral[1];
     for (const [axis, body] of Object.entries(objectKeys(top.variants))) {
       if (body === null) continue;
       const options = {};
@@ -392,7 +411,7 @@ function cvaClasses(src) {
     ))
       defaults[axis] = value;
   }
-  return { axes, defaults };
+  return { axes, defaults, baseClasses };
 }
 
 // flat `Key: <scalar>` pairs — getEnum maps are always flat, so this stays
@@ -514,10 +533,11 @@ for (const f of files) {
     .pop()
     .replace(/\.tsx$/, "");
   const src = await readFile(f, "utf8");
-  const { axes: classes, defaults } = cvaClasses(src);
+  const { axes: classes, defaults, baseClasses } = cvaClasses(src);
   codeComponents.set(norm(base), {
     file: rel(f),
     axes: cvaAxes(src),
+    baseClasses,
     classes,
     defaults,
     docs: docText(src),
@@ -633,7 +653,7 @@ function checkValues(comp, tpl, code, report) {
         // re-parsing the prose back out of the warning would be worse.
         if (actual == null) {
           const message = `${label}: code says ${cls} (${expected}) but the Figma variant sets no ${prop}`;
-          report.warns.push(message);
+          report.errors.push(message);
           report.diffs.push({
             message,
             component: comp.name,
@@ -649,7 +669,7 @@ function checkValues(comp, tpl, code, report) {
             : actual !== expected
         ) {
           const message = `${label}: ${cls} is ${expected} in code but ${actual} in Figma`;
-          report.warns.push(message);
+          report.errors.push(message);
           report.diffs.push({
             message,
             component: comp.name,
@@ -662,6 +682,50 @@ function checkValues(comp, tpl, code, report) {
         } else {
           report.ok.push(`${label}: ${cls} matches Figma ${prop} ${actual}`);
         }
+      }
+
+      // Everything above is raised BY a class, so a fill this variant draws
+      // and the cva config never names is compared against nothing. Ask the
+      // variant instead. Same rule, same module, as the audit tables use.
+      //
+      // The claim is the union of the base string and EVERY axis that applies
+      // to this variant, not the one axis being iterated: a `size` option
+      // holds `h-*` and `px-*` and can never name a colour, so asking it
+      // alone would report every size variant of every component as
+      // unclaimed. The same union the audit tables take across the elements
+      // that render one node.
+      const label = `${comp.name} ${map.axis}=${figmaOption}`;
+      const claims = [code.baseClasses ?? ""];
+      for (const other of tpl?.maps ?? []) {
+        const otherAxis = resolveAxis(code.axes, other.pairs);
+        const otherOption = other.pairs[wanted[other.axis]];
+        if (otherAxis && otherOption != null)
+          claims.push(code.classes[otherAxis.axis]?.[otherOption] ?? "");
+      }
+      for (const line of omissions(
+        claims.join(" "),
+        {
+          type: "COMPONENT",
+          fill: variant.fill
+            ? toHex8(variant.fill.color, variant.fill.opacity)
+            : null,
+          stroke: variant.stroke
+            ? toHex8(variant.stroke.color, variant.stroke.opacity)
+            : null,
+        },
+        resolveToken,
+      )) {
+        const message = `${label}: the variant ${line}`;
+        report.errors.push(message);
+        report.diffs.push({
+          message,
+          component: comp.name,
+          variant: `${map.axis}=${figmaOption}`,
+          prop: "fill",
+          cls: "(unstyled)",
+          code: null,
+          figma: null,
+        });
       }
     }
   }
@@ -857,7 +921,7 @@ for (const comp of figma) {
       );
   }
 
-  checkValues(comp, tpl, code, { ok, warns, diffs });
+  checkValues(comp, tpl, code, { ok, warns, errors, diffs });
 }
 
 for (const t of templates) {
@@ -1062,7 +1126,7 @@ if (describedGaps.length) {
 await writeSummary();
 if (errors.length) {
   console.error(
-    `\n✗ ${errors.length} error(s) — Dev Mode will emit wrong code:`,
+    `\n✗ ${errors.length} error(s) — Dev Mode will emit wrong code, or the code renders a value Figma does not draw:`,
   );
   for (const e of errors) console.error(`   ${e}`);
   process.exit(1);

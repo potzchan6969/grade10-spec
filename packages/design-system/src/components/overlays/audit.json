@@ -1,0 +1,25 @@
+[
+  {
+    "label": "dialog-content/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2159-3169",
+    "classes": "fixed top-1/2 left-1/2 z-50 flex w-[calc(100%-2rem)] max-h-[640px] max-w-(--container-md) -translate-x-1/2 -translate-y-1/2 flex-col gap-6 overflow-hidden rounded-(--radius-4xl) border border-border-subtle bg-popover p-6 text-sm text-popover-foreground outline-none backdrop-blur-xl"
+  },
+  {
+    "label": "dialog-header/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2159-3156",
+    "classes": "flex w-full shrink-0 items-center gap-2"
+  },
+  {
+    "label": "dropdown-menu-content/box",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2132-1693",
+    "classes": "z-50 flex max-h-(--available-height) w-(--anchor-width) min-w-32 flex-col overflow-x-hidden overflow-y-auto rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))] bg-popover p-2 text-popover-foreground backdrop-blur-xl outline-none",
+    "note": "The popup's own box — fill, stroke, radius, inset. Its itemSpacing separates a single Items slot and describes nothing visible, so the element's gap is audited against that slot below."
+  },
+  {
+    "label": "dropdown-menu-content/items",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2132-1694",
+    "classes": "gap-1",
+    "covers": "DropdownMenuContent",
+    "note": "The same element as dropdown-menu-content/box. Figma splits the popup into the frame and an Items slot; the gap between menu items lives on the slot (4px), which is what gap-1 renders."
+  }
+]

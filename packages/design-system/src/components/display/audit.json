@@ -1,0 +1,43 @@
+[
+  {
+    "label": "breadcrumbs/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4180-1293",
+    "classes": "flex flex-wrap items-center gap-1"
+  },
+  {
+    "label": "breadcrumb-separator/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4180-1276",
+    "classes": "inline-flex items-center justify-center text-sm font-normal text-secondary-foreground",
+    "note": "Re-exported from breadcrumbs.tsx; the classes are the ones that file applies."
+  },
+  {
+    "label": "breadcrumb-ellipsis/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4180-1291",
+    "classes": "inline-flex h-7 w-5 items-center justify-center text-secondary-foreground",
+    "note": "The audited element is the inner span, which carries the box; the <li> around it only holds inline-flex. Height and the rest compare; the width is a recorded divergence.",
+    "diverges": {
+      "w-5": "Figma draws a 12px TEXT glyph; the code renders a 20px DotsThree icon, which needs a 20px box. A representation difference, not a width the code got wrong — resolving it means changing what is drawn, on one side or the other."
+    }
+  },
+  {
+    "label": "list/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-4224",
+    "classes": "flex w-full flex-col items-start"
+  },
+  {
+    "label": "list-item/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-4213",
+    "classes": "flex w-full flex-col items-start gap-1 p-2 text-sm text-foreground",
+    "note": "Resting state. The divider is a conditional bottom hairline, not part of the base class string."
+  },
+  {
+    "label": "pagination/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4181-2010",
+    "classes": "flex items-center justify-center gap-1"
+  },
+  {
+    "label": "pagination-ellipsis/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4181-1979",
+    "classes": "inline-flex h-10 w-7 items-center justify-center text-foreground"
+  }
+]

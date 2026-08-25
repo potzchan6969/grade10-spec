@@ -29,5 +29,12 @@
     "label": "footer/bar",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9598",
     "classes": "relative flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-[color:var(--gray-500-opacity-20)] px-8 py-3 @3xl:h-[60px] @3xl:flex-nowrap @3xl:py-0"
+  },
+  {
+    "label": "navigation-list/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4343-16420",
+    "classes": "flex items-center justify-center gap-1",
+    "covers": "NavigationList",
+    "note": "Points at the Slot (4343:16420), not the NavigationList frame the .figma.ts names: Figma draws a frame containing a Slot, and the gap the code renders lives on the Slot. `covers` records that this is NavigationList's coverage all the same."
   }
 ]
