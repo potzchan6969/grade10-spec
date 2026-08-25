@@ -178,7 +178,7 @@ function ListingGallery({ images, copy, className }: ListingGalleryProps) {
                     aria-hidden
                     className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/35"
                   >
-                    <Play className="text-white" size={18} weight="fill" />
+                    <Play color="white" size={18} weight="fill" />
                   </span>
                 ) : null}
               </button>
