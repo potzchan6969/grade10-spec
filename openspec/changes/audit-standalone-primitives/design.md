@@ -80,6 +80,33 @@ the class strings out of each component and calling that the expectation would
 record what the code does as what the design wants, which is a table that can
 never fail. Each entry is written by opening its node.
 
+**Three findings the backfill produced, and what each turned out to be.** All
+three were the audited element and the node expressing different things, not
+the code rendering a wrong value — which is the outcome task 3.5 exists to
+distinguish, and the reason it forbids editing a table into agreement.
+
+- **`DropdownMenuContent`'s gap.** The popup node's `itemSpacing` separates a
+  single `Items` slot and describes nothing visible; the slot's own spacing is
+  4px, exactly what `gap-1` renders. One element implements two nodes, so it
+  is audited as two entries — the box against the frame, the item spacing
+  against the slot. The inverse of the split `product-card-image` needed.
+- **`DialogContent`'s clipping.** The rail read `clipsContent: false` as the
+  design refusing to clip. It is not: a frame drawn at the size of the content
+  it holds clips nothing, while a dialog with a height ceiling must clip to
+  scroll. `overflow-hidden` is now unchecked wherever the element also declares
+  scrolling or a max height — the two facts do not contradict each other.
+- **`BreadcrumbEllipsis`'s width.** Figma draws a 12px TEXT glyph; the code
+  renders a 20px `DotsThree` icon, which needs a 20px box. Recorded as a
+  divergence rather than reconciled, because closing it means changing what is
+  drawn on one side or the other, and that is a decision for whoever owns the
+  breadcrumb's appearance — not something to settle inside a coverage change.
+
+**Divergences are recorded in the table, not dropped from it.** A row may carry
+`diverges`, mapping a class to why it is deliberately not compared, and the run
+prints each one. The alternative — quietly leaving the class out of `classes` —
+produces a table a reader cannot distinguish from a complete one, which is the
+failure this change's own risk section names.
+
 ## Risks / Trade-offs
 
 **Thirteen components enter a rail that has never run on them, and findings

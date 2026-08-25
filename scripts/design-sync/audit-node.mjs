@@ -159,6 +159,11 @@ async function pushMap(path, prefix = "") {
       label: `${prefix}${row.label ?? `entry ${i}`}`,
       ref,
       classes: row.classes ?? "",
+      // Classes deliberately not compared, each with the reason. A recorded
+      // divergence is a class the design and the code express differently on
+      // purpose; dropping it from `classes` instead would leave a reader
+      // unable to tell coverage from omission.
+      diverges: row.diverges ?? {},
       // Figma sometimes draws as two nodes what the code renders as one — a
       // frame that positions and an inner slot that carries the spacing. An
       // entry may then point at the inner node while still being the coverage
@@ -354,6 +359,18 @@ function auditExpectations(classString, v) {
     if (cls === "overflow-hidden") {
       // clipsContent is stated by every frame and component, so this one is
       // not optional: silence would itself be the answer.
+      //
+      // Unless the element also declares scrolling or a height ceiling. Then
+      // its overflow-hidden is what contains the scroll, and a design frame —
+      // drawn at the size of the content it happens to hold — has no view on
+      // it. A dialog that scrolls past 640px must clip; the 188px frame it was
+      // drawn from clips nothing, and neither fact contradicts the other.
+      if (
+        /(^|\s)(overflow-[xy]-auto|overflow-auto|overflow-[xy]-scroll|max-h-)/.test(
+          classString,
+        )
+      )
+        continue;
       out.push({ prop: "clips", cls, expected: true });
     } else if (cls === "overflow-visible") {
       out.push({ prop: "clips", cls, expected: false });
@@ -450,7 +467,14 @@ for (const e of entries) {
       `  ! asymmetric vertical padding (${v.padY} / ${v.padYBottom}); py-* compares against the top`,
     );
 
-  const expected = auditExpectations(e.classes, v);
+  const diverged = Object.keys(e.diverges ?? {});
+  const expected = auditExpectations(
+    e.classes
+      .split(/\s+/)
+      .filter((c) => c && !diverged.includes(c))
+      .join(" "),
+    v,
+  );
   // A spacing rail only means something on an auto-layout frame; elsewhere
   // the node cannot answer, so demote these to the optional set rather than
   // reading their absence as drift.
@@ -501,8 +525,11 @@ for (const e of entries) {
       compared++;
     }
   }
+  for (const [cls, why] of Object.entries(e.diverges ?? {}))
+    console.log(`  ≠ ${cls.padEnd(24)} recorded divergence: ${why}`);
   for (const cls of e.classes.split(/\s+/).filter(Boolean))
-    if (!checked.has(cls)) console.log(`  – ${cls.padEnd(24)} unchecked`);
+    if (!checked.has(cls) && !diverged.includes(cls))
+      console.log(`  – ${cls.padEnd(24)} unchecked`);
   if (compared === 0) {
     // Every class was unchecked and the node volunteered nothing. Saying
     // nothing here would let the run's closing ✓ stand for this element too,

@@ -16,7 +16,7 @@
 - [x] 3.2 Write `packages/design-system/src/components/forms/audit.json` for `Checkbox List` and `Radio List`.
 - [x] 3.3 Write `packages/design-system/src/components/overlays/audit.json` for `Dialog`, `Dialog Header`, and `Dropdown Menu`.
 - [x] 3.4 Write `navigation-list` into the existing `layout/audit.json` beside the chrome, completing all 13 — making *A standalone component drifts* pass.
-- [ ] 3.5 Triage every finding the three new tables produce: correct the code where it drifted, and where the design is the stale side, record it rather than editing the table to agree with the code. Report the triage before moving on — a finding resolved by loosening its own table is the one failure this change cannot detect.
+- [x] 3.5 Triage every finding the three new tables produce: correct the code where it drifted, and where the design is the stale side, record it rather than editing the table to agree with the code. Report the triage before moving on — a finding resolved by loosening its own table is the one failure this change cannot detect.
 
 ## 4. Report coverage by component (grade10-spec)
 
@@ -25,5 +25,5 @@
 
 ## 5. Verify (grade10-spec)
 
-- [ ] 5.1 Run `pnpm run lint`, `pnpm run typecheck`, `pnpm run test`, `pnpm run test:stories`, `pnpm run check:design-system`, and `pnpm run figma:audit --all-blocks`; then `openspec validate audit-standalone-primitives --strict`.
-- [ ] 5.2 Confirm the metric: all 40 design-system components with a Figma counterpart are compared by a rail that can fail — 25 by the variant-set comparison, 15 by audit tables — and the run reports no component as uncovered.
+- [x] 5.1 Run `pnpm run lint`, `pnpm run typecheck`, `pnpm run test`, `pnpm run test:stories`, `pnpm run check:design-system`, and `pnpm run figma:audit --all-blocks`; then `openspec validate audit-standalone-primitives --strict`.
+- [x] 5.2 Confirm the metric: all 40 design-system components with a Figma counterpart are compared by a rail that can fail — 25 by the variant-set comparison, 15 by audit tables — and the run reports no component as uncovered.

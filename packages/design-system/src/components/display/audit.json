@@ -14,7 +14,10 @@
     "label": "breadcrumb-ellipsis/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4180-1291",
     "classes": "inline-flex h-7 w-5 items-center justify-center text-muted-foreground",
-    "note": "The audited element is the inner span, which carries the box; the <li> around it only holds inline-flex."
+    "note": "The audited element is the inner span, which carries the box; the <li> around it only holds inline-flex. Height and the rest compare; the width is a recorded divergence.",
+    "diverges": {
+      "w-5": "Figma draws a 12px TEXT glyph; the code renders a 20px DotsThree icon, which needs a 20px box. A representation difference, not a width the code got wrong — resolving it means changing what is drawn, on one side or the other."
+    }
   },
   {
     "label": "list/root",
