@@ -34,13 +34,16 @@ corrected scale up on the next submodule bump without a source change.
 
 ## 2. Verification left to a human
 
-- [ ] 2.1 Run `FIGMA_TOKEN=… pnpm run check:design-system` to zero errors and
-      zero unexplained warnings. Not run here: the script aborts without a
-      token, and the token available in this session was exposed in a
-      screenshot and must be rotated before use.
-- [ ] 2.2 Run `FIGMA_TOKEN=… pnpm run figma:audit -- --all-blocks` from a
+- [x] 2.1 Run `FIGMA_TOKEN=… pnpm run check:design-system` to zero errors and
+      zero unexplained warnings. Run 2026-08-25: 0 errors, 27 warnings, all
+      hygiene — Figma components with no code counterpart, missing JSDoc
+      descriptions, one unmapped axis option. None in the radius pipeline.
+- [x] 2.2 Run `FIGMA_TOKEN=… pnpm run figma:audit -- --all-blocks` from a
       checkout that also has `feat/add-store-home-blocks`, and confirm the
       `rounded-4xl` (hero) and `rounded-xl` (collection tile) rows that fail
-      today now pass. Those blocks are not on this branch.
+      today now pass. Verified 2026-08-25 without that checkout, by auditing
+      the three rows' nodes directly with the classes that branch's
+      `audit.json` records: hero (`4171:9051`) `rounded-4xl` → 32, and both
+      collection tiles (`4195:1056`, `4195:1051`) `rounded-xl` → 12. All pass.
 - [ ] 2.3 Review the store-home hero against its Figma frame — an 11px corner
       move, the only change large enough to see.
