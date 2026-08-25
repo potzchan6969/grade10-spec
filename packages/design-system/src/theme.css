@@ -86,13 +86,13 @@
   --color-disabled: var(--disabled);
   --color-disabled-foreground: var(--disabled-foreground);
 
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  /* No --radius-* rungs here. Tailwind registers its own non-inline, so with
+     no override `rounded-xl` emits `var(--radius-xl)` and resolves against the
+     unlayered :root block below, which tokens.json owns. Declaring a rung here
+     would shadow that: @theme inline substitutes the expression into the
+     utility, so the token is never read. That is how this block once derived
+     the whole scale from --radius and rendered rounded-xl at 11.2px against a
+     12px token. --radius-pill stays because no Tailwind rung claims it. */
   --radius-pill: 999px;
 }
 
