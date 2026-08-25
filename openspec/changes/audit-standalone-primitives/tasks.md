@@ -6,9 +6,9 @@
 
 ## 2. A rail that fails (grade10-spec)
 
-- [ ] 2.1 Sort findings by what they claim: value disagreements — the set already carried in `report.diffs` — become errors; descriptions, unmapped axis options, and Figma components with no code counterpart stay warnings — making *A variant's fill stops matching* and *A hygiene finding* pass.
-- [ ] 2.2 Verify against today's corpus: all 27 existing warnings are hygiene, so `pnpm run check:design-system` must still exit 0 after the split, with the same warnings and no errors.
-- [ ] 2.3 Verify the other direction with a deliberate local edit — change one variant's fill class, confirm the run fails and names both values, then revert.
+- [x] 2.1 Sort findings by what they claim: value disagreements — the set already carried in `report.diffs` — become errors; descriptions, unmapped axis options, and Figma components with no code counterpart stay warnings — making *A variant's fill stops matching* and *A hygiene finding* pass.
+- [x] 2.2 Verify against today's corpus: all 27 existing warnings are hygiene, so `pnpm run check:design-system` must still exit 0 after the split, with the same warnings and no errors.
+- [x] 2.3 Verify the other direction with a deliberate local edit — change one variant's fill class, confirm the run fails and names both values, then revert.
 
 ## 3. Cover the standalone components (grade10-spec)
 

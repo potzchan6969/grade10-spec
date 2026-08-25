@@ -14,8 +14,14 @@
  * prefixing every invocation; see .env.example. CI passes it as a real
  * environment variable and needs no file.
  *
- * ERROR = the mapping is broken and Dev Mode will emit wrong code; exits 1.
- * WARN  = the two sides disagree, which may be intentional; does not exit 1.
+ * ERROR = the mapping is broken and Dev Mode will emit wrong code, OR a value
+ *         the code renders disagrees with the one Figma draws; exits 1. A rail
+ *         that cannot fail is documentation: Button's `default` painted a 10%
+ *         tint against a solid fill for months while this reported it as
+ *         advice nobody had to read.
+ * WARN  = hygiene, and no claim that anything renders wrongly — a missing
+ *         description, an axis option nothing maps to, a Figma component with
+ *         no code counterpart. Does not exit 1.
  *
  * Axes are matched through the Code Connect template, not by name: Figma's
  * `Type` is cva's `variant`, and comparing those by name produced a pair of
@@ -647,7 +653,7 @@ function checkValues(comp, tpl, code, report) {
         // re-parsing the prose back out of the warning would be worse.
         if (actual == null) {
           const message = `${label}: code says ${cls} (${expected}) but the Figma variant sets no ${prop}`;
-          report.warns.push(message);
+          report.errors.push(message);
           report.diffs.push({
             message,
             component: comp.name,
@@ -663,7 +669,7 @@ function checkValues(comp, tpl, code, report) {
             : actual !== expected
         ) {
           const message = `${label}: ${cls} is ${expected} in code but ${actual} in Figma`;
-          report.warns.push(message);
+          report.errors.push(message);
           report.diffs.push({
             message,
             component: comp.name,
@@ -710,7 +716,7 @@ function checkValues(comp, tpl, code, report) {
         resolveToken,
       )) {
         const message = `${label}: the variant ${line}`;
-        report.warns.push(message);
+        report.errors.push(message);
         report.diffs.push({
           message,
           component: comp.name,
@@ -915,7 +921,7 @@ for (const comp of figma) {
       );
   }
 
-  checkValues(comp, tpl, code, { ok, warns, diffs });
+  checkValues(comp, tpl, code, { ok, warns, errors, diffs });
 }
 
 for (const t of templates) {
@@ -1120,7 +1126,7 @@ if (describedGaps.length) {
 await writeSummary();
 if (errors.length) {
   console.error(
-    `\n✗ ${errors.length} error(s) — Dev Mode will emit wrong code:`,
+    `\n✗ ${errors.length} error(s) — Dev Mode will emit wrong code, or the code renders a value Figma does not draw:`,
   );
   for (const e of errors) console.error(`   ${e}`);
   process.exit(1);
