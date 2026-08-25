@@ -61,7 +61,13 @@ Then:
    the change (`feat/`, `fix/`, `build/`, `chore/`, `docs/`, `refactor/`,
    `test/`, or `ci/`), and run `git switch -c <branch>`; then re-gather the
    branch and status. Never push `main` directly.
-3. Detached HEAD → stop. A named feature branch is required.
+3. Detached HEAD:
+   - When the user explicitly asks to copy selected commits from a source branch
+     into this worktree, create a named target branch from `origin/main` before
+     cherry-picking. Derive its `<type>/<short-description>` name from the
+     requested work; do not treat the detached source checkout as the target.
+     Re-gather after the cherry-pick, then continue this workflow.
+   - Otherwise stop. A named feature branch is required.
 4. No commits ahead of `origin/main` → stop. Nothing to PR.
 
 ## Push
