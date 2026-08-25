@@ -29,8 +29,8 @@ blocks, same order, same spacing.
 
 - [ ] 3.1 Export the hero image from frame `4171:9051`, import it into the page, and render the hero at the store's address so `The front door answers whole` and `The hero does not wait` pass with the served document carrying the headline and copy.
 - [ ] 3.2 Wire the hero's two ways on, making `The hero reaches the catalogue` and `The hero reaches the auction` pass.
-- [ ] 3.3 State which collections the front door offers, in what order and which takes the large cell, and render the bento from the catalogue's own names — `The grid names the catalogue's collections`, `A collection the shop no longer carries`, `The large cell is never empty` and `A tile opens its collection`.
-- [ ] 3.4 Render the merchandised row from the collection the table names, titled as the catalogue names it — `The row is the collection's first cards`, `A card opens its own page`, `The row reaches the rest of the collection` and `Nothing to merchandise`.
+- [ ] 3.3 Render the bento from the collections the catalogue lists — their order, their names, their own artwork, the first in the large cell — making `The grid is the shop's collections`, `A collection added to the shop`, `A collection with no artwork`, `Nothing to offer` and `A tile opens its collection` pass.
+- [ ] 3.4 Render the merchandised row from the first collection the catalogue lists, titled as the catalogue names it — making `The row is the first collection's cards`, `The row follows the shop`, `A card opens its own page`, `The row reaches the rest of the collection` and `Nothing to merchandise` pass.
 - [ ] 3.5 Give both sections their in-flight and failed states, making `A section says it is loading` and `A failed read can be retried` pass.
 - [ ] 3.6 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and the front door read off a build with no script running.
 

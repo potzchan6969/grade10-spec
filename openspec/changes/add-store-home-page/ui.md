@@ -51,8 +51,11 @@ From `@grade10/ui`:
   callback omits that button.
 - `StoreSectionHeader`, with `StoreSectionHeaderCopy` — both section headings
   and their browse-all links.
-- `StoreCollectionGrid` over `StoreCollectionSummary` — the bento. `featured`
-  on a summary is what takes the large cell.
+- `StoreCollectionGrid` over `StoreCollectionSummary` — the bento, one summary
+  per collection the catalogue lists. `featured` marks the first, which takes
+  the large cell. The `icon` slot takes the collection's own image; a
+  collection carrying none is identified by its name instead
+  (design.md — *The front door is the shop's collections, artwork and all*).
 - `StoreCollectionTile` — used only through the grid here.
 - `ProductCard`, with `ProductCardCopy` — the merchandised row's cards,
   mapped over a five-column grid rather than through `ProductList`
@@ -78,9 +81,11 @@ in `@grade10/ui` (design.md — *The hero's image ships with the application*).
   renders; the grid does not render empty.
 - **Collections failed** — `A failed read can be retried`. The section says so
   and offers to try again.
-- **A tile missing** — `A collection the shop no longer carries`, and
-  `The large cell is never empty`. No visible error; the grid renders what the
-  catalogue answered for.
+- **A tile without artwork** — `A collection with no artwork`. The tile
+  renders and names the collection; the icon well carries its initial rather
+  than a gap.
+- **No collections at all** — `Nothing to offer`. Heading and grid both
+  absent, the way the row goes when there is nothing to merchandise.
 - **Merchandised row loading / failed** — same two scenarios as the
   collections section.
 - **No row at all** — `Nothing to merchandise`. Heading and grid both absent;

@@ -43,62 +43,76 @@ SHALL reach this surface rather than a refusal or a redirect.
 
 ### Requirement: The front door offers collections as ways in
 
-The front door SHALL show a grid of collection tiles, each naming one
-collection and carrying an icon. Which collections appear, the order they
-appear in, and which one occupies the grid's large cell SHALL be the
-application's to state — the catalogue carries neither an icon nor a rank.
+The front door SHALL show a grid of tiles, one for every collection the
+catalogue lists, in the order the catalogue lists them. Each tile SHALL carry
+that collection's own name and its own artwork, and the first SHALL occupy the
+grid's large cell.
 
-A collection's name SHALL come from the catalogue, so what a tile is called is
-what the shop calls it.
+Nothing about which collections appear, their order, or which is featured
+SHALL be stated by the application: a collection is on the front door by being
+in the shop, so one added there reaches the front door with no deploy.
 
-A stated collection the catalogue does not carry SHALL be left out of the
-grid rather than shown empty or named from the application's own words. When
-the collection stated for the large cell is left out, the first remaining
-collection SHALL take that cell, so the grid keeps its shape.
+A collection the catalogue lists without artwork SHALL still be a tile,
+identified by its name, rather than being left out or shown with a gap where
+the artwork goes.
 
-#### Scenario: The grid names the catalogue's collections
+#### Scenario: The grid is the shop's collections
 
-- **GIVEN** the application states an ordered set of collections for the front
-  door
-- **WHEN** the catalogue carries every one of them
-- **THEN** each is a tile, in the stated order, labelled as the catalogue
-  names it, and the stated one occupies the large cell
+- **WHEN** the front door renders and the catalogue lists collections
+- **THEN** each is a tile, in the order the catalogue listed them, carrying
+  that collection's name and artwork
+- **AND** the first occupies the large cell
 
-#### Scenario: A collection the shop no longer carries
+#### Scenario: A collection added to the shop
 
-- **GIVEN** the application states a collection the catalogue has nothing for
+- **GIVEN** a collection the catalogue did not list before
+- **WHEN** the catalogue lists it and the front door renders
+- **THEN** it is a tile, with no application change
+
+#### Scenario: A collection with no artwork
+
+- **GIVEN** the catalogue lists a collection carrying no artwork
 - **WHEN** the front door renders
-- **THEN** that tile is absent and every other tile still renders
+- **THEN** that tile renders and names the collection
 
-#### Scenario: The large cell is never empty
+#### Scenario: Nothing to offer
 
-- **GIVEN** the collection stated for the large cell is one the catalogue has
-  nothing for
-- **WHEN** the front door renders
-- **THEN** the first collection that remains occupies the large cell
+- **WHEN** the catalogue lists no collections at all
+- **THEN** neither the grid nor its heading is on the page, and the rest of
+  the surface renders
 
 #### Scenario: A tile opens its collection
 
 - **WHEN** a collector activates a collection tile
 - **THEN** the browse listing renders, scoped to that collection
 
-### Requirement: The front door merchandises one collection
+### Requirement: The front door merchandises its first collection
 
-The front door SHALL show a row of cards from one collection the application
-names, titled with that collection's own name from the catalogue, with a way
-on to the listing scoped to it. Each card SHALL carry the card's name, its
-image and its price.
+The front door SHALL show a row of cards from the first collection the
+catalogue lists — the one the grid features — titled with that collection's
+own name, with a way on to the listing scoped to it. Each card SHALL carry the
+card's name, its image and its price.
 
-The row SHALL be absent — heading and all — when the catalogue has nothing for
-the named collection or the collection holds no cards, rather than rendering a
-titled empty row.
+Which collection this is SHALL follow the catalogue rather than the
+application, so the shop decides what the front door leads with by deciding
+what it lists first.
 
-#### Scenario: The row is the collection's first cards
+The row SHALL be absent — heading and all — when the catalogue lists no
+collections or that collection holds no cards, rather than rendering a titled
+empty row.
 
-- **GIVEN** the application names a collection to merchandise
-- **WHEN** the front door renders and the catalogue carries it
+#### Scenario: The row is the first collection's cards
+
+- **WHEN** the front door renders and the catalogue lists a collection holding
+  cards
 - **THEN** the section is titled as the catalogue names that collection, and
   its cards are that collection's, each with a name, an image and a price
+
+#### Scenario: The row follows the shop
+
+- **GIVEN** the catalogue lists a different collection first than it did
+- **WHEN** the front door renders
+- **THEN** the row is that collection's, with no application change
 
 #### Scenario: A card opens its own page
 
@@ -112,7 +126,7 @@ titled empty row.
 
 #### Scenario: Nothing to merchandise
 
-- **GIVEN** the catalogue has nothing for the named collection
+- **GIVEN** the catalogue lists no collection holding cards
 - **WHEN** the front door renders
 - **THEN** neither the row nor its heading is on the page, and the rest of the
   surface renders

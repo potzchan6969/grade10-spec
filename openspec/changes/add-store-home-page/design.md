@@ -78,24 +78,33 @@ change with a history entry, so back undoes a narrowing.
 navigate with router state. Router state does not survive a shared link or a
 reload, which is the whole point of a tile.
 
-### Which collections are on the front door is a table in the app
+### The front door is the shop's collections, artwork and all
 
-A `StoreCollectionSummary` needs an icon, an order and a featured flag. A
-`Collection` from the catalogue carries an id, handle, title, description and
-image — none of the three. So the front door states them, in one module beside
-`siteContent.ts`, keyed by handle: order is the array order, `featured` marks
-the large cell, and the icon is the emoji the frame draws. The catalogue is
-asked for the rest; a handle it answers nothing for drops out, and the
-featured cell falls to the first survivor.
+Every tile comes from `useCollections()`: the collections the catalogue lists,
+in the order it lists them, each carrying its own title and its own image. The
+first takes the bento's large cell and is what the product row merchandises.
+The application states nothing — no table of handles, no icons, no rank — so a
+collection reaches the front door by being in the shop.
 
-The same module names the collection the product row merchandises.
+A collection the catalogue lists without an image still renders; its tile is
+identified by its name rather than left out, because a shop that has not
+uploaded artwork yet has still made the collection.
 
-*Alternatives rejected.* **Shopify metafields** — a merchandiser-editable
-icon and rank, at the cost of contract, worker and Shopify-side work, and a
-front door that quietly loses a tile when a metafield is unset. Worth doing
-when merchandising demands it, not to ship a landing page. **The collection's
-own image in the tile well** — no new data, but the tile is drawn for a 48px
-icon disc, and a product photo in it is a different component.
+*Alternatives rejected.* **A stated table in the application** — an ordered
+list of handles with an emoji each, which is what this change shipped first.
+It matched the frame exactly and cost nothing to build, but a collection the
+shop adds is invisible until someone edits code, a typo drops a tile silently,
+and nothing tests the table itself. **Shopify metafields for an icon and a
+rank** — merchandiser-controlled and the closest to the frame, at the cost of
+the Shopify query, the codec, the contracts, the worker and both fixtures, and
+a front door that quietly loses a tile when a metafield is unset. Worth doing
+when merchandising asks for an order the shop's own cannot express.
+
+**Known deviation from the frame.** `StoreCollectionTile` draws its icon well
+as a 48px disc, sized for the emoji the frame puts there. A collection's image
+is a photograph. It is rendered to fill that disc, which is not what
+`4195:1050` shows — recorded here rather than absorbed silently, and settled
+with design in the review this change ends on.
 
 ### The hero's image ships with the application
 
