@@ -1,0 +1,33 @@
+[
+  {
+    "label": "nav/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9937",
+    "classes": "@container flex w-full flex-col bg-background",
+    "note": "The set has no variant axes, so the one node is the whole contract. This entry exists because the fill was missing here and nothing caught it: the header drew no background at all while the frame fills Base/background, and every preview story sat on a gray-50 page that hid it."
+  },
+  {
+    "label": "nav/promo",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9025",
+    "classes": "flex h-9 items-center justify-center overflow-hidden bg-secondary-foreground px-8"
+  },
+  {
+    "label": "nav/bar",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9033",
+    "classes": "relative flex flex-wrap items-center justify-between gap-y-2 px-8 py-3 @3xl:h-[72px] @3xl:flex-nowrap @3xl:py-0"
+  },
+  {
+    "label": "footer/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653",
+    "classes": "@container flex w-full flex-col bg-primary"
+  },
+  {
+    "label": "footer/grid",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9564",
+    "classes": "grid w-full grid-cols-1 gap-6 p-8 @xl:grid-cols-2 @3xl:grid-cols-4"
+  },
+  {
+    "label": "footer/bar",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9598",
+    "classes": "relative flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-[color:var(--gray-500-opacity-20)] px-8 py-3 @3xl:h-[60px] @3xl:flex-nowrap @3xl:py-0"
+  }
+]

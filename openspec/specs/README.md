@@ -19,6 +19,9 @@ The products are:
 - `shared-auth` — cross-product session behavior, entering a session and
   leaving one, shared by every surface of either brand regardless of which
   application renders it.
+- `design-sync` — the rails that hold code and the Figma file to each other:
+  what the design-to-code audit must detect, and which components it must
+  reach. Not a product surface; a contract the tooling owes every product.
 
 A capability's OpenSpec ID is `<product>/<capability>` (for example `grade10-store/loyalty`); use that ID with `openspec show` and `openspec validate`. Adding a product is a new top-level directory here plus a bullet in this list.
 

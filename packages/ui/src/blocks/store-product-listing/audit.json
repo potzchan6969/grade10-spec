@@ -12,6 +12,12 @@
     "note": "Base variant (state=default, inCart=false, soldOut=false) of set 4274:10074; every variant draws cornerRadius 24, matching rounded-(--radius-3xl). The set container's own 8px frame radius is cosmetic — auditing the set node reported it as drift, which is why this points at the variant."
   },
   {
+    "label": "product-card-image/surface",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10072",
+    "classes": "absolute inset-0 isolate overflow-hidden rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))]",
+    "note": "The same variant node as product-card-image/root. The conversion split it across two elements: the root carries the box's size and the surface carries its paint — radius, the gray-200 stroke, and the gradient. Both are listed so the node's stroke is claimed by something; auditing the root alone reported the stroke as unclaimed."
+  },
+  {
     "label": "filter-panel/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-13952",
     "classes": "sticky top-0 w-full shrink-0 self-stretch lg:w-64 lg:shrink-0",

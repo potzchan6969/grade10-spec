@@ -74,12 +74,16 @@ jobs:
           FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
         run: pnpm run check:design-system
 
-      # Blocks have no component-set diff — their one durable Figma-side check
-      # is the per-block audit.json written at conversion time. Sweeping them
-      # all here is what makes a designer-side edit to a block's source nodes
-      # surface as a failed nightly, the same way a variant rename does above.
-      # A block without an audit.json is listed as uncovered, never as passing.
-      - name: Audit block classnames against Figma
+      # A component with no variant axes has no component-set diff — its one
+      # durable Figma-side check is the per-directory audit.json written at
+      # conversion time. Sweeping them all here is what makes a designer-side
+      # edit to a source node surface as a failed nightly, the same way a
+      # variant rename does above. The sweep covers packages/ui blocks and the
+      # design-system components alike: the site chrome has no variant axes and
+      # lives in the design system, so a sweep of one package would leave it
+      # checked by neither rail. A directory without an audit.json is listed as
+      # uncovered, never as passing.
+      - name: Audit component classnames against Figma
         if: steps.token.outputs.available == 'true'
         env:
           FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
