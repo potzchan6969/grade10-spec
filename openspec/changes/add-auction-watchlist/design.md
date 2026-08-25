@@ -18,7 +18,7 @@ nothing behind them.
 
 ### The watch record lives with the auction, beside the lot
 
-A watch is `(user id, lot, watched instant)`, stored by the auction service
+A watch is `(user id, lot, Watched At)`, stored by the auction service
 that owns the lot.
 
 *Alternative rejected — store watches per brand, beside the collector.* Lots
@@ -32,11 +32,11 @@ brand's identity population. It already holds bidder identity the same way.
 
 ### Watching is idempotent, and unwatching is a delete
 
-Watching a lot already watched changes nothing, including the instant. This
+Watching a lot already watched changes nothing, including Watched At. This
 keeps the list's ordering stable when a collector taps twice or a request is
 retried.
 
-*Alternative rejected — refresh the instant on a repeat watch.* It would
+*Alternative rejected — refresh Watched At on a repeat watch.* It would
 reorder a collector's list for an action they did not perceive as an action.
 
 ### A watch survives its lot
@@ -66,7 +66,7 @@ ZZZ adopting it is that moment — not before.
 | The control repeats the removed wishlist's mistake — a heart that saves nothing | Persistence, the list surface, and the control land in this one change. None ships alone. |
 | A collector reads watching as reserving the lot | The spec forbids any standing; copy must not use reserve-like words. Named in `ui.md`. |
 | Watch counts spanning brands mislead an operator into reading demand as one market | The count is presented as watchers, never as expected bidders. |
-| An unbounded watched list grows slow to read | Ordering is a single index on the watch instant; the list is paged by the surface. Revisit only if a collector's list becomes large. |
+| An unbounded watched list grows slow to read | Ordering is a single index on Watched At; the list is paged by the surface. Revisit only if a collector's list becomes large. |
 
 ## Migration plan
 

@@ -9,14 +9,14 @@ and it is the trigger auction mail fires on.
 - Watching a listing
   - Watch and unwatch: a signed-in collector marks a listing to come back to
   - Sign-in required: a signed-out viewer is offered sign-in, not a local watch
-  - Idempotent watch: watching twice leaves one watch with the original instant
+  - Idempotent watch: watching twice leaves one watch with the original Watched At
 - Watch privacy
   - Private signal: only the collector who watched sees it
   - No standing: watching does not bid, reserve, or change the sale
   - Operator count: an operator sees how many collectors watch, across both brands
 - Watched list
   - Recency order: most recently watched first
-  - Enough to act: each entry shows identity, current bid, and close
+  - Enough to act: each entry shows identity, current bid, and Closes At
   - Survives close: a closed or called-off listing stays until the collector unwatches
 
 ## ADDED Requirements
@@ -36,7 +36,7 @@ Watching SHALL require a signed-in collector. A viewer who is not signed
 in SHALL be offered sign-in rather than a watch that cannot be stored.
 Grade10 SHALL NOT hold a watch only in the browser. Watching the same
 listing again SHALL leave one watch, and SHALL NOT create a second or
-change the instant of the first.
+change the Watched At of the first.
 
 #### Scenario: A collector watches a lot
 
@@ -57,7 +57,7 @@ change the instant of the first.
 - **GIVEN** a collector who already watches a lot
 - **WHEN** a second watch for the same collector and lot is submitted
 - **THEN** the collector watches that lot exactly once
-- **AND** the instant of the original watch is unchanged
+- **AND** the Watched At of the original watch is unchanged
 
 #### Scenario: A signed-out viewer is offered sign-in
 
@@ -84,7 +84,7 @@ be the collector's user id, per `shared-auth/session`.
 | --- | --- |
 | Collector | User id of the watching collector |
 | Listing | The listing watched |
-| Watched instant | When Grade10 accepted the first watch; a repeat does not change it |
+| Watched At | When Grade10 accepted the first watch; a repeat does not change it |
 
 #### Scenario: A watch belongs to one collector
 
@@ -188,7 +188,7 @@ as still open. A close SHALL follow `dates-and-times`.
 | --- | --- |
 | Listing | Identity of the watched listing |
 | Current bid | Same shape as that listing's own surface |
-| Close | Same shape as that listing's own surface |
+| Closes At | Same shape as that listing's close |
 | Sale state | Open, closed, or called off |
 
 #### Scenario: An entry carries the facts needed to act

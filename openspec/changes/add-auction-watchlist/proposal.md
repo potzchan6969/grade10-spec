@@ -75,7 +75,7 @@ shared UI contract does not change; see Impact.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/backend/grade10/auction` | Owns the watch record: collector, listing, and the instant it was made. Shared across both brands, like the listings themselves. |
+| `apps/backend/grade10/auction` | Owns the watch record: collector, listing, and Watched At. Shared across both brands, like the listings themselves. |
 | `@grade10/auction-contracts` | Gains watch and unwatch actions, the viewer's watching state on authenticated listing facts, and a watched-lots read. Additive; nothing breaks. |
 | `apps/frontend/grade10` | Fills `ListingBidPanel`'s existing `watchAction` slot and passes `watching`; adds a watch control to the catalogue tile and a watched-lots surface. |
 | `apps/frontend/zzz` | Same, on the ZZZ auction surface. |
