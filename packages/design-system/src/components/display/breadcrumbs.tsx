@@ -4,6 +4,10 @@ import type { ComponentProps, ReactNode } from "react";
 
 type BreadcrumbsProps = ComponentProps<"nav">;
 
+/**
+ * A trail of links showing the current page's location in a navigational hierarchy.
+ * Figma `Breadcrumbs` (`4180:1293`).
+ */
 function Breadcrumbs({ className, children, ...props }: BreadcrumbsProps) {
   return (
     <nav
@@ -25,8 +29,9 @@ type BreadcrumbItemProps = ComponentProps<"a"> & {
 };
 
 /**
- * One crumb. `current` is the only consumer-facing axis; hover and focus are
- * CSS pseudo-states, and `disabled` is the other boolean gate.
+ * One crumb's <li> wrapper.
+ * Figma `BreadcrumbItem` (`4180:1290`). `current` is the only consumer-facing axis;
+ * hover and focus are CSS pseudo-states, and `disabled` is the other boolean gate.
  */
 function BreadcrumbItem({
   className,
@@ -37,11 +42,11 @@ function BreadcrumbItem({
   ...props
 }: BreadcrumbItemProps) {
   const classes = cn(
-    "inline-flex items-center justify-center rounded-(--radius-sm) p-1 text-sm outline-none",
+    "inline-flex items-center justify-center rounded-(--radius-sm) p-1 text-sm font-medium outline-none transition-colors",
     current
-      ? "font-medium text-foreground"
-      : "font-normal text-muted-foreground hover:bg-accent hover:font-medium hover:text-foreground focus-visible:font-medium focus-visible:text-foreground focus-visible:ring-2 focus-visible:ring-ring",
-    disabled && "pointer-events-none text-disabled-foreground",
+      ? "text-foreground"
+      : "text-secondary-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50",
+    disabled && "pointer-events-none opacity-50",
     className,
   );
 
@@ -69,6 +74,10 @@ function BreadcrumbItem({
   );
 }
 
+/**
+ * The divider between crumbs. Decorative (`aria-hidden`); renders a chevron unless you pass `children`.
+ * Figma `BreadcrumbSeparator` (`4180:1276`).
+ */
 function BreadcrumbSeparator({
   className,
   children = "/",
@@ -79,7 +88,7 @@ function BreadcrumbSeparator({
       aria-hidden
       data-slot="breadcrumb-separator"
       className={cn(
-        "inline-flex items-center justify-center text-sm text-muted-foreground",
+        "inline-flex items-center justify-center text-sm font-normal text-secondary-foreground",
         className,
       )}
       {...props}
@@ -89,12 +98,16 @@ function BreadcrumbSeparator({
   );
 }
 
+/**
+ * A "…" placeholder for collapsed crumbs. Decorative, with an `sr-only` "More" label.
+ * Figma `BreadcrumbEllipsis` (`4180:1291`).
+ */
 function BreadcrumbEllipsis({ className, ...props }: ComponentProps<"span">) {
   return (
     <li data-slot="breadcrumb-ellipsis" className="inline-flex">
       <span
         className={cn(
-          "inline-flex h-7 w-5 items-center justify-center text-muted-foreground",
+          "inline-flex h-7 w-5 items-center justify-center text-secondary-foreground",
           className,
         )}
         {...props}
