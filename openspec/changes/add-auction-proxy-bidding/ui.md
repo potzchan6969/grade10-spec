@@ -11,7 +11,7 @@ that group rather than leaving it implied.
 | Screen | Frame | What is new on it |
 | --- | --- | --- |
 | Auction listing page — bid panel | *to be produced* | The bid control asks for a maximum; the panel shows the viewer's own maximum and whether they lead. |
-| Admin listing — bid history | *to be produced* | Each row shows the committed maximum, the resulting current bid, and whether Grade10 placed the bid. |
+| Admin listing — bid history | *to be produced* | Each row shows the committed maximum, the resulting current bid, Accepted At, and whether Grade10 placed the bid. |
 
 ## Components
 

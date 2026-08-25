@@ -33,22 +33,28 @@ sets a maximum, closes the tab, and wins at less than that maximum.
 ## What Changes
 
 - **A bidder commits a maximum, not a bid.** They enter the most they will
-  pay; the platform raises their bid in the listing's own increment only as
-  far as needed to lead.
+  pay; the platform bids for them only as far as needed to lead.
+- **The current bid is the second-highest maximum plus one increment**,
+  capped at the leader's maximum — the eBay and Goldin resolve. A bid below
+  the leader's maximum still adds the listing increment. The first bidder
+  sits at the starting price.
 - **The maximum stays hidden while it leads.** Another bidder learns it only
   by beating it, and then only because the current bid steps to it plus one
   increment.
 - **The increment is the listing's own.** The one an operator already sets per
   listing. This change introduces **no** price-banded increment schedule; a
   lot's increment is a lot's own business.
+- **Grade10 resolves once per new commitment.** It lands at the two-maximum
+  price in one bid. Standing maxima do not keep bidding, and there is no
+  proxy timer.
 - **A maximum can be raised, never lowered.** Raising re-commits; lowering
   would withdraw a commitment other bidders have already bid against.
 - **The card hold covers the maximum, not the current bid.** A bidder who
   commits 50000 minor units has 50000 authorized, even while the current bid
   is 22500. This keeps the existing one-authorization-per-bidder-per-listing
-  rule true and means a proxy step never needs a fresh card check mid-auction.
+  rule true and means a proxy bid never needs a fresh card check mid-auction.
 - **A proxy bid is a bid.** It extends the close exactly as a manual bid does,
-  including inside the extension window.
+  including inside the extension window, once per accepted commitment.
 
 ## Non-Goals
 
@@ -70,9 +76,10 @@ sets a maximum, closes the tab, and wins at less than that maximum.
 ### New Capabilities
 
 - `grade10-auction/proxy-bidding`: a bidder commits a maximum and the platform
-  bids for them — how the current bid is determined, who leads on a tie, when
-  a maximum may be raised, what stays hidden, how the card hold relates to the
-  maximum, and how a proxy bid behaves in the extension window.
+  bids for them — the two-maximum rule, that the price is the second-highest
+  plus one increment, who leads on a tie, when a maximum may be raised, what
+  stays hidden, how the card hold relates to the maximum, and that a proxy bid
+  resolves once per commitment.
 
 ### Modified Capabilities
 

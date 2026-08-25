@@ -19,12 +19,12 @@ Lands first: every other group consumes this through the submodule bump.
 
 Needs the contracts from group 2 landed.
 
-- [ ] 3.1 Store a committed maximum per bidder per listing with its accepted instant, and migrate each existing accepted bid to a maximum equal to its amount per `design.md`'s migration plan.
-- [ ] 3.2 Make *A challenger below the leader's maximum raises the price only*, *A challenger above the leader's maximum takes the lead*, *The step to lead cannot exceed the new leader's maximum*, and *A first maximum opens the bidding* pass by deriving leader and current bid from the two highest maximums using the listing's own increment.
-- [ ] 3.3 Make *A tie goes to the earlier commitment* and *A tie is not a refusal* pass by settling equal maximums on accepted-instant order inside the existing serialized listing decision.
+- [ ] 3.1 Store a committed maximum per bidder per listing with its Accepted At, and migrate each existing accepted bid to a maximum equal to its amount per `design.md`'s migration plan.
+- [ ] 3.2 Make *A challenger below the leader's maximum raises the price only*, *A challenger above the leader's maximum takes the lead*, *The first bidder is overtaken by a higher maximum*, *The overtaken bidder raises but stays below*, *The overtaken bidder raises past the leader*, *The step to lead cannot exceed the new leader's maximum*, *A first maximum opens the bidding*, and *A challenge lands at the two-maximum price, not a ladder* pass by deriving leader and current bid from the two highest maxima using the listing's own increment.
+- [ ] 3.3 Make *A tie goes to the earlier commitment* and *A tie is not a refusal* pass by settling equal maxima on Accepted At order inside the existing serialized listing decision.
 - [ ] 3.4 Make *A leader raises their own maximum*, *Lowering a maximum is refused*, and *A maximum below the minimum next bid is refused* pass on the commitment path.
 - [ ] 3.5 Make *The hold is the maximum, not the price*, *A raise that cannot be authorized changes nothing*, and *A proxy step needs no new card check* pass by authorizing the maximum and keeping one active authorization per bidder and listing. Outbid release stays `grade10-auction/auction`.
-- [ ] 3.6 Make *A proxy bid extends the close*, *A proxy bid is counted and recorded*, and *Two maximums with room left keep extending* pass by treating a bid Grade10 places as an accepted bid under the existing extension rule and cap.
+- [ ] 3.6 Make *A proxy bid in the extension window extends once*, *A proxy bid is counted and recorded*, and *Standing maxima do not keep bidding* pass by treating a bid Grade10 places as an accepted bid under the existing extension rule and cap, once per accepted commitment.
 - [ ] 3.7 Make *A leader's maximum is not public* pass, and verify every scenario in this group through auction backend feature tests including concurrent commitments against one listing.
 
 ## 4. Listing page (grade10)
@@ -43,7 +43,7 @@ Claimable against the contracts and fixtures from group 2; it does not need a ru
 Claimable against the contracts from group 2.
 
 - [ ] 5.1 Produce the admin bid-history Figma frame named in `ui.md` and link it there.
-- [ ] 5.2 Make *An operator can answer a dispute* pass by showing each commitment's bidder, maximum, and accepted instant, with amounts in the operator money shape.
+- [ ] 5.2 Make *An operator can answer a dispute* pass by showing each commitment's bidder, maximum, and Accepted At, with amounts in the operator money shape.
 - [ ] 5.3 Show whether Grade10 placed a bid on a bidder's behalf, per *A proxy bid is counted and recorded*.
 - [ ] 5.4 Verify the admin auction feature lane.
 

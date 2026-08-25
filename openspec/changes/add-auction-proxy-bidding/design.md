@@ -20,10 +20,10 @@ second place where a bid is accepted.
 
 ### The stored fact is the maximum; the current bid is derived
 
-A bid record stores the bidder's committed maximum and the instant Grade10
-accepted it. The current bid and the leader are derived from the two highest
-maximums by the rule in the spec, then persisted alongside the listing so
-reads stay cheap and no reader re-derives them.
+A bid record stores the bidder's committed maximum and its Accepted At. The
+current bid and the leader are derived from the two highest maximums by the
+rule in the spec, then persisted alongside the listing so reads stay cheap
+and no reader re-derives them.
 
 *Alternative rejected — store the current bid as the primary fact and keep the
 maximum beside it.* The maximum is what the bidder authorized and what the
@@ -51,32 +51,46 @@ The accepted cost is that a bidder's money is held above what they are likely
 to pay, which discourages high maximums — exactly the behaviour the feature
 wants to encourage. Recorded as a risk below.
 
-### A challenger at or below the leader's maximum sets the current bid to their own maximum
+### The current bid is the second-highest maximum plus one increment
 
-Not to their maximum plus an increment. This follows the worked example in the
-source document: a challenger bidding 22500 against a hidden 50000 makes the
-current bid 22500, not 25000.
+Follows eBay and Goldin. With two or more maxima, the current bid is the
+lesser of the leader's maximum and the second-highest maximum plus the
+listing increment. The first bidder sits at the starting price.
 
-*Alternative rejected — the common marketplace rule, where the current bid
-becomes the lesser of the challenger's maximum plus one increment and the
-leader's maximum.* It extracts slightly more per lot, but it was not what the
-product asked for, and it makes the displayed price a number no bidder
-actually named. Revisit only as a deliberate pricing change.
+Worked example: a challenger bidding 22500 against a hidden 50000, increment
+2500, makes the current bid 25000, not 22500.
 
-### Automatic bidding runs in the extension window and moves the close
+*Alternative rejected — set the current bid to the challenger's exact
+maximum when they are below the leader.* That displays a number someone
+named, but it is not how eBay or Goldin resolve, and a collector who has
+used those will expect the extra increment.
 
-A bid Grade10 places is a bid. It counts, it is recorded, and it extends.
+### Grade10 resolves once per accepted commitment, not on a timer
+
+A new or raised maximum is the trigger. Grade10 lands at the two-maximum
+price in a single bid. Standing maxima do not keep firing. There is no proxy
+interval.
+
+Two collectors raising their maxima by hand can still move the price quickly;
+that is the same as manual bidding. What this rule prevents is the system
+walking two high maxima through every increment on its own, which would fill
+the bid history, extend the close on every step, and look like a price spike.
+
+*Alternative rejected — step one increment at a time on a schedule.* Even a
+slow interval (one bid per listing per 30 seconds) turns two maxima into a
+visible war and a close-extension storm. Faster than that is worse. The
+two-maximum rule already names the landing price; executing it as a ladder is
+the same result with those side effects. If a later change wants a visible
+climb, the floor is one proxy bid per listing per 30 seconds — this change
+does not introduce that climb.
 
 *Alternative rejected — only a manual bid moves the close.* A bidder whose
 maximum still had room would lose to the clock while their commitment was
 willing to go higher, which is the opposite of what committing a maximum is
 for. *Alternative rejected — automatic bidding stops when the extension window
-opens.* Same objection, more bluntly: the collector who set a maximum and left
-is exactly the person the feature exists for.
-
-The cost is that two live maximums can trade automatic bids and hold a listing
-open. The per-listing extension cap already delivered is the bound on that,
-and this change adds no new one.
+opens.* Same objection: the collector who set a maximum and left is exactly
+the person the feature exists for. A proxy bid still extends, once, when the
+commitment that caused it is accepted.
 
 ### A maximum cannot be lowered
 
@@ -95,7 +109,7 @@ between the check and the write.
 | --- | --- |
 | Holding the maximum discourages high maximums, blunting the feature | The bid surface must state plainly that the hold is the maximum and the bidder usually pays less. Measure committed maximum against final price. |
 | A card issuer declines a large authorization, so a bidder cannot commit at all | The raise is refused explicitly and the previous commitment stands. The spec requires the failure to change nothing. |
-| Two maximums extend a listing for a long time | The per-listing extension cap already exists; operators should set one on high-value listings. |
+| Two maximums extend a listing for a long time | Standing maxima do not keep bidding. A proxy bid extends once, when the commitment that caused it is accepted. The per-listing extension cap still bounds a collector who keeps raising by hand. |
 | A bidder misreads the maximum as the price and commits far too much | Confirmation on the bid control; copy is named in `ui.md` as work. |
 | Deriving the leader concurrently could produce two leaders | The derivation happens inside the existing serialized per-listing decision. No second decision path is introduced. |
 
