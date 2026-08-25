@@ -61,6 +61,15 @@ rules:
     - "Find facts (existing specs, PRDs, change history, code) yourself before asking; bring only decisions to the author. If reading the existing material leaves nothing open, say so and proceed - the interview scales with the open questions, not the change's size."
     - "Do not write the proposal until the frontier is empty and the author confirms shared understanding. The author may accept all recommended answers to conclude in one round."
   specs:
+    - "Open with `## Purpose`, then `## Feature set`, then `## ADDED Requirements` (or MODIFIED / REMOVED / RENAMED). The feature set is the spec's map; requirements follow it."
+    - "Feature set is two-layer bullets. Each root group name is at most five words. Each child is `Name: purpose` - a short sentence for why that item exists, not only a label."
+    - "Keep feature-set groups coarse. Nest related work under the job it serves (for example winner contact under payment collection). Put grants in the groups they belong to; do not make grants its own group."
+    - "Group requirements under those same root titles. Write `### Group name` then a line of `---` as a separator, then `### Requirement:` blocks under it. OpenSpec ignores a `###` heading that is not `### Requirement:`. Do not use ATX `## Group` - that ends `## ADDED Requirements` and drops every requirement."
+    - "Write one requirement for the flow. Numbered steps for whoever uses the surface - collector, operator, or both. Do not write a scenario per step."
+    - "Write one requirement per entity that has fields, only when this change adds or changes those fields. Describe fields in a markdown table. Do not restate unchanged facts as a requirement."
+    - "Write one requirement per entity that has states. Describe states in a markdown table."
+    - "Drop scenarios that only restate platform defaults. Keep scenarios for distinctive behavior."
+    - "Keep copy brief and simple. Tables carry the detail; prose stays short."
     - Use Given/When/Then format
     - Reference existing patterns before inventing new ones
     - Write requirements an engineer in another repo can implement without asking a follow-up question.
