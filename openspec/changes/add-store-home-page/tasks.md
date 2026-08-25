@@ -38,9 +38,9 @@ blocks, same order, same spacing.
 
 Needs group 2's surface table.
 
-- [ ] 4.1 Read the collection to narrow to out of the address on the listing, making `An address opens the listing narrowed`, `No collection named` and `A collection the catalogue has nothing for` pass.
-- [ ] 4.2 Write a narrowing made in the page back to the address as a new history entry, making `Narrowing in the page is linkable` and `Back undoes a narrowing` pass, with every existing listing test still green.
-- [ ] 4.3 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
+- [x] 4.1 Read the collection to narrow to out of the address on the listing, making `An address opens the listing narrowed`, `No collection named` and `A collection the catalogue has nothing for` pass.
+- [x] 4.2 Write a narrowing made in the page back to the address as a new history entry, making `Narrowing in the page is linkable` and `Back undoes a narrowing` pass, with every existing listing test still green.
+- [x] 4.3 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
 
 ## 5. Delivery and review (grade10)
 
