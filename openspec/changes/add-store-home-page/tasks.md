@@ -13,7 +13,7 @@ it, and reach an unscoped listing until group 4 lands.
 - [ ] 1.3 Add a head entry for the browse listing's address and rewrite the store's to describe a front door, so `The store and the listing are two surfaces` passes.
 - [ ] 1.4 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test` in grade10-spec, then open a PR and push it — group 2 bumps onto the merged SHA.
 
-## 2. The listing's own address (grade10)
+## 2. The listing's own address (grade10) (owner: @sean)
 
 Starts with the submodule bump onto group 1.
 
