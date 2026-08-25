@@ -45,5 +45,6 @@ corrected scale up on the next submodule bump without a source change.
       the three rows' nodes directly with the classes that branch's
       `audit.json` records: hero (`4171:9051`) `rounded-4xl` → 32, and both
       collection tiles (`4195:1056`, `4195:1051`) `rounded-xl` → 12. All pass.
-- [ ] 2.3 Review the store-home hero against its Figma frame — an 11px corner
-      move, the only change large enough to see.
+- [x] 2.3 Review the store-home hero against its Figma frame — an 11px corner
+      move, the only change large enough to see. Reviewed and accepted by
+      @seankcw on 2026-08-25.
