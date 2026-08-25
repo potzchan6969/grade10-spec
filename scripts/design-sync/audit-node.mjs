@@ -159,6 +159,12 @@ async function pushMap(path, prefix = "") {
       label: `${prefix}${row.label ?? `entry ${i}`}`,
       ref,
       classes: row.classes ?? "",
+      // Figma sometimes draws as two nodes what the code renders as one — a
+      // frame that positions and an inner slot that carries the spacing. An
+      // entry may then point at the inner node while still being the coverage
+      // its component owes; `covers` names that component so the coverage
+      // report does not go on calling it a gap.
+      covers: row.covers ?? null,
     });
   }
 }
@@ -407,10 +413,11 @@ const omissionsReported = new Set();
 // no second rung to diff against there — checkValues skips it — so if no entry
 // here names its node, nothing in the repository compares its values.
 const audited = new Set(entries.map((e) => `${e.ref.key}/${e.ref.id}`));
+const claimed = new Set(entries.map((e) => e.covers).filter(Boolean));
 for (const c of candidates) {
   const doc = fetched.get(`${c.ref.key}/${c.ref.id}`);
   if (!doc || doc.type === "COMPONENT_SET") continue;
-  if (!audited.has(`${c.ref.key}/${c.ref.id}`))
+  if (!audited.has(`${c.ref.key}/${c.ref.id}`) && !claimed.has(c.name))
     uncovered.push({ root: `${c.root} standalone component`, name: c.name });
 }
 
