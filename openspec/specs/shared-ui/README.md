@@ -6,6 +6,7 @@ which every store application consumes.
 | Capability | What it governs |
 | --- | --- |
 | [`component-package`](component-package/spec.md) | What the package is: shipped once from here, consumed from source, app-neutral, built one way on the design system, and carrying no store's content as a default. |
+| [`store-home`](store-home/spec.md) | The store landing surface between site chrome and a product row — marketing hero, titled section header with a browse-all link, and a bento grid of collection tiles — and its export contract. |
 | [`store-product-listing`](store-product-listing/spec.md) | The product-browsing surface — sidebar search and world/type filters, result header with applied filters and sort, product grid, pagination — and its export contract. |
 
 A capability's OpenSpec ID is `shared-ui/<capability>`. Add one when a shared
