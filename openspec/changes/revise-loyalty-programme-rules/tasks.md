@@ -74,12 +74,12 @@ The seller already sends a goods-only, after-discount amount and names its
 basis, so shipping, tax and the provider's own discounts are handled. What is
 missing is per-line eligibility and whole-order apportionment.
 
-- [ ] 6.1 Drop grading service fees, gift-card lines, credit top-ups and unlisted categories from the earning amount, so *Shipping and service fees earn nothing*, *A gift card earns once, not twice*, *A credit top-up earns nothing* and *An unlisted category earns nothing* pass
-- [ ] 6.2 Apportion an order-level discount across lines in proportion to line value, so *An order discount cannot be pushed onto the non-earning lines* passes
-- [ ] 6.3 Reduce the amount by any coupon that paid for it, so *A discount reduces what the purchase earns* and *A coupon reduces what the purchase it pays for earns* pass
-- [ ] 6.4 Record nothing when the whole order is discounted away, so *A fully discounted order earns nothing* passes
+- [x] 6.1 Drop grading service fees, gift-card lines, credit top-ups and unlisted categories from the earning amount, so *Shipping and service fees earn nothing*, *A gift card earns once, not twice*, *A credit top-up earns nothing* and *An unlisted category earns nothing* pass
+- [x] 6.2 Apportion an order-level discount across lines in proportion to line value, so *An order discount cannot be pushed onto the non-earning lines* passes
+- [x] 6.3 Reduce the amount by any coupon that paid for it, so *A discount reduces what the purchase earns* and *A coupon reduces what the purchase it pays for earns* pass
+- [x] 6.4 Record nothing when the whole order is discounted away, so *A fully discounted order earns nothing* passes
 - [ ] 6.5 Send `channel` on every recording from the store
-- [ ] 6.6 Verify: `pnpm run typecheck`, `pnpm run test:backend`
+- [x] 6.6 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
 ## 7. The auction refuses points (grade10)
 
