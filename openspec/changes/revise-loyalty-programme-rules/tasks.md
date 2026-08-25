@@ -104,7 +104,7 @@ opposite as correct.
 - [x] 8.5 Resolve a missing retention threshold to the tier's own attainment points and refuse a validity term that is not the qualifying window, so *A retention threshold asks more than the tier itself* and *Earned tiers measure over different windows* pass without refusing Grade10's own ladder
 - [x] 8.6 Verify: `pnpm run test:backend`
 
-## 9. Points pay for purchases (grade10)
+## 9. Points pay for purchases (grade10) (owner: @gareth0712)
 
 Depends on group 2 for the contract shape. Nothing of this exists today — no
 rate on the config and no debit path outside the reward menu.
