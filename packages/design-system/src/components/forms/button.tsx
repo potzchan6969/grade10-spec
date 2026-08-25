@@ -27,7 +27,7 @@ const buttonVariants = cva(
         default:
           "bg-primary text-primary-foreground hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)]",
         outline:
-          "border-border text-foreground hover:bg-muted-hover aria-expanded:bg-muted-hover",
+          "border-border bg-control text-foreground hover:bg-muted-hover aria-expanded:bg-muted-hover",
         secondary:
           "bg-muted text-muted-foreground hover:shadow-[inset_0_0_0_100vmax_var(--muted-hover)] aria-expanded:shadow-[inset_0_0_0_100vmax_var(--muted-hover)]",
         ghost:

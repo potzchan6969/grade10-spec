@@ -27,7 +27,7 @@ import { cva, type VariantProps } from "class-variance-authority";
  * The set's Figma description carries only this attribution, not a
  * description: based on https://ui.shadcn.com/docs/components/base/input-otp
  */
-const inputOtpSlotVariants = cva("", {
+const inputOtpSlotVariants = cva("bg-control", {
   variants: {
     status: {
       default: "border border-border",
