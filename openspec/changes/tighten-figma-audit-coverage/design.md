@@ -78,6 +78,28 @@ separately — rejected above. Withholding the chrome `audit.json` until the
 repaint lands — rejected: it ships coverage that deliberately excludes the
 component that motivated the change.
 
+**The footer's links carry their tone as a `className`, not as a variant.** A
+dark footer needs light link text, and `Link`'s tonal axis
+(`default` / `secondary` / `error`) has no inverse rung. Figma solves it by
+overriding the label fill on each instance — the footer's links are the same
+`secondary` `xs` variant used everywhere else, with the fill overridden — so
+the design file defines no inverse variant either. The code mirrors the
+mechanism: a `className` at each call site, which the existing `cn()` merge
+already supports and which invents no contract.
+
+*Alternatives considered.* Adding an `inverse` variant to `Link` — rejected,
+and not merely deferred: `design-code-sync.md` is explicit that a component may
+not offer a variant its Figma component set does not define. Adding an
+"on-primary" family of semantic token slots and binding `Link` to them —
+rejected as the largest possible answer to one component's problem; it changes
+`tokens.json`, the generated themes, and the Figma Semantic collection, and it
+should be driven by a second surface needing it, not by this one.
+
+*Consequence worth naming:* if a third dark surface appears, this override
+stops being a mirror of the design and starts being a pattern, which is the
+signal that the `Link` set needs the axis. Whoever meets that case should open
+the Figma-side change rather than copy the `className`.
+
 **`Nav`'s fill is already fixed** and is deliberately not re-litigated here.
 Verifying it is what produced this change; the rail must now be able to catch
 its recurrence, which is what the chrome `audit.json` is for.

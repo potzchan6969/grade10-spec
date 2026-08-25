@@ -10,10 +10,15 @@ the rail's obligations, not any one component's appearance.
 ### Requirement: A drawn value the code omits is a finding
 
 The audit SHALL report a finding where the Figma node states a visible fill or
-a visible stroke and the audited element names no corresponding class, and
-where the audited element names such a class and the node draws no
-corresponding value. A property the design draws SHALL NOT pass unremarked
-merely because the implementation is silent about it.
+a visible stroke and no element audited against that node names a
+corresponding class, and where an audited element names such a class and the
+node draws no corresponding value. A property the design draws SHALL NOT pass
+unremarked merely because the implementation is silent about it.
+
+An implementation MAY render one node as several elements. The audit SHALL
+therefore ask whether the node's value is claimed by any element audited
+against it, not by each element separately, and SHALL report an unclaimed
+value once per node rather than once per element.
 
 This applies to fill and stroke, which every frame and component states. It
 SHALL NOT apply to a property a node is permitted to leave unstated, where
@@ -22,9 +27,17 @@ absence carries no meaning.
 #### Scenario: The design fills a frame the code does not
 
 - **GIVEN** a Figma node that draws a visible solid fill
-- **WHEN** the audit runs against an element whose classes name no background
+- **WHEN** the audit runs and no element audited against that node names a background
 - **THEN** it reports a finding naming the value the node draws
 - **AND** the run fails
+
+#### Scenario: One node rendered as two elements
+
+- **GIVEN** a Figma node that draws a visible stroke
+- **AND** two elements audited against it, of which one names a border and the
+  other names only layout
+- **WHEN** the audit runs
+- **THEN** it reports no unclaimed-stroke finding for that node
 
 #### Scenario: The code paints a fill the design does not
 
