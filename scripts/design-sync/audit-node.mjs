@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 /*
  * AUDIT: the classnames applied to an element vs the Figma node it was
- * converted from — for arbitrary nodes, which is what a `packages/ui` block
- * is made of. check-components.mjs owns the same comparison for primitive
- * variant sets; nothing owns it for blocks, because the element↔node mapping
- * exists only in the head of whoever did the conversion. This script takes
- * that mapping as input and makes the value comparison deterministic.
+ * converted from — for arbitrary nodes, which is what a block or a component
+ * with no variant axes is made of. check-components.mjs owns the same
+ * comparison for primitive variant sets; nothing owns it here, because the
+ * element↔node mapping exists only in the head of whoever did the conversion.
+ * This script takes that mapping as input and makes the comparison
+ * deterministic.
  *
  *   FIGMA_TOKEN=figd_… pnpm run figma:audit --node <url> --classes "h-10 gap-2 bg-primary"
  *   FIGMA_TOKEN=figd_… pnpm run figma:audit --map audit.json
@@ -15,14 +16,21 @@
  * audit.json is the class-audit table the page-from-figma skill has the
  * converting agent emit: [{ "label": "hero/cta", "node": "<figma url>",
  * "classes": "h-10 px-4 gap-2 bg-primary rounded-md" }, …]. The unit of
- * audit is the BLOCK: each packages/ui/src/blocks/<capability>/ directory
- * carries one audit.json covering the elements its conversion styled, and
- * --all-blocks sweeps every one of them — which is what lets the nightly
- * design-sync run re-check every block long after its converter is gone. A
- * block with no audit.json is listed as uncovered rather than failed, so
- * blocks that predate the convention read as gaps, not as passes.
+ * audit is the COMPONENT DIRECTORY: each packages/ui/src/blocks/<capability>/
+ * and each packages/design-system/src/components/<group>/ carries one
+ * audit.json covering the elements its conversion styled, and --all-blocks
+ * sweeps every one of them — which is what lets the nightly design-sync run
+ * re-check them long after their converter is gone. Which package a component
+ * lives in decides nothing: the site chrome sits in the design system, has no
+ * variant axes for check-components.mjs to diff, and so was checked by neither
+ * rail while its footer shipped the inverse of its design. A directory with no
+ * audit.json is listed as uncovered rather than failed, so components that
+ * predate the convention read as gaps, not as passes.
  *
- * DRIFT (✗) = a class resolves to a value the node does not draw; exits 1.
+ * DRIFT (✗) = a class resolves to a value the node does not draw, OR the node
+ * draws a fill or a stroke that nothing mapped to it claims; exits 1. The
+ * second half exists because expectations are otherwise raised BY classes, so
+ * a property the code never styled was compared against nothing at all.
  * UNCHECKED (–) = never fails, always listed — a run that only says ✓ would
  * read as coverage it does not have. Two different things produce one:
  *   - No rail carries the class: a state or breakpoint prefix, a non-visual
@@ -121,6 +129,18 @@ function parseNodeRef(ref) {
 
 const entries = [];
 const uncovered = [];
+const nothingChecked = [];
+// Uncovered directories come from more than one root now, and a design-system
+// directory listed flat beside a block reads as one set of equals. Group them
+// so a reader can tell which package a gap is in.
+function groupUncovered(rows) {
+  const byRoot = new Map();
+  for (const { root, name } of rows) {
+    if (!byRoot.has(root)) byRoot.set(root, []);
+    byRoot.get(root).push(name);
+  }
+  return byRoot;
+}
 async function pushMap(path, prefix = "") {
   const rows = JSON.parse(await readFile(path, "utf8"));
   if (!Array.isArray(rows)) die(`${path} is not a JSON array.`);
@@ -138,31 +158,48 @@ async function pushMap(path, prefix = "") {
   }
 }
 if (args["all-blocks"]) {
-  // The unit of audit is the block: one audit.json per capability directory
-  // in packages/ui, written at conversion time. Sweeping them all is what
-  // the nightly run does; a directory without one is a gap to report, never
-  // a pass.
-  const blocksDir = resolve(repoRoot, "packages/ui/src/blocks");
-  for (const entry of await readdir(blocksDir, { withFileTypes: true })) {
-    if (!entry.isDirectory()) continue;
-    // shared/ is cross-capability plumbing that never came from a Figma
-    // frame (docs/governance/ui-component-contracts.md, "shared/ is earned,
-    // not planned") — there is no node to audit against, so listing it as
-    // uncovered forever would be noise rather than a gap.
-    if (entry.name === "shared") continue;
-    try {
-      await pushMap(
-        resolve(blocksDir, entry.name, "audit.json"),
-        `${entry.name}: `,
-      );
-    } catch (err) {
-      if (err?.code !== "ENOENT") throw err;
-      uncovered.push(entry.name);
+  // The unit of audit is the component directory: one audit.json per
+  // capability in packages/ui, and per component group in the design system,
+  // written at conversion time. Which package a component lives in decides
+  // nothing about whether it is checked — the site chrome sits in the design
+  // system and drifted for weeks behind a sweep that walked packages/ui only.
+  // A directory without an audit.json is a gap to report, never a pass.
+  const roots = [
+    {
+      label: "block",
+      dir: resolve(repoRoot, "packages/ui/src/blocks"),
+      // shared/ is cross-capability plumbing that never came from a Figma
+      // frame (docs/governance/ui-component-contracts.md, "shared/ is earned,
+      // not planned") — there is no node to audit against, so listing it as
+      // uncovered forever would be noise rather than a gap.
+      skip: new Set(["shared"]),
+    },
+    {
+      label: "design-system",
+      dir: resolve(repoRoot, "packages/design-system/src/components"),
+      // providers/ is the same case as shared/ one root up: it draws nothing
+      // and has no Figma counterpart to audit against.
+      skip: new Set(["providers"]),
+    },
+  ];
+  for (const root of roots) {
+    for (const entry of await readdir(root.dir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      if (root.skip.has(entry.name)) continue;
+      try {
+        await pushMap(
+          resolve(root.dir, entry.name, "audit.json"),
+          `${entry.name}: `,
+        );
+      } catch (err) {
+        if (err?.code !== "ENOENT") throw err;
+        uncovered.push({ root: root.label, name: entry.name });
+      }
     }
   }
   if (!entries.length) {
     console.log(
-      `No block carries an audit.json yet (${uncovered.length} block(s) uncovered: ${uncovered.join(", ")}). ` +
+      `No component directory carries an audit.json yet (${uncovered.length} uncovered: ${uncovered.map((u) => u.name).join(", ")}). ` +
         `Nothing audited — the page-from-figma skill writes one per converted block.`,
     );
     process.exit(0);
@@ -214,10 +251,20 @@ function nodeValues(doc) {
   const fill = doc.fills?.find(
     (f) => f.visible !== false && f.type === "SOLID",
   );
+  // A stroke is read the same way as a fill and for the same reason: every
+  // frame and component states `strokes`, so an empty array is the node
+  // saying it draws no border, not the node declining to answer. Which edges
+  // carry it is not compared — `border-t` and a full box both read as "there
+  // is a stroke here", and Figma's individualStrokeWeights would have to be
+  // matched against four separate utilities to say more.
+  const stroke = doc.strokes?.find(
+    (s) => s.visible !== false && s.type === "SOLID",
+  );
   return {
     type: doc.type,
     name: doc.name,
     fill: fill ? toHex8(fill.color, fill.opacity) : null,
+    stroke: stroke ? toHex8(stroke.color, stroke.opacity) : null,
     height: doc.absoluteBoundingBox?.height ?? null,
     width: doc.absoluteBoundingBox?.width ?? null,
     radius: doc.cornerRadius ?? null,
@@ -226,6 +273,12 @@ function nodeValues(doc) {
     padY: doc.paddingTop ?? null,
     padYBottom: doc.paddingBottom ?? null,
     gap: doc.itemSpacing ?? null,
+    // Padding and item spacing exist only on an auto-layout frame. A frame
+    // that positions its children absolutely insets them with offsets
+    // instead, and states no padding at all — so a px-* on the element that
+    // renders it is unverifiable here, not wrong. Same rule as layoutAlign
+    // below: silence from a node in no position to speak is not disagreement.
+    autoLayout: doc.layoutMode != null && doc.layoutMode !== "None",
     // Layout intent, as booleans, for the utilities that carry no number.
     // Each is null when the node does not state the property at all, which
     // is the difference between "Figma disagrees" and "Figma is silent" —
@@ -296,16 +349,94 @@ function auditExpectations(classString, v) {
   return out;
 }
 
+// Every expectation above is raised BY a class, so a property the code never
+// styled raises none and is never compared — which is how a header that drew
+// no background at all audited clean while Figma filled its frame. Fill and
+// stroke are read off the node instead, and the class list is searched for
+// something that claims them. Silence on either side is an answer, the same
+// argument `overflow-hidden` already makes above: every frame and component
+// states `fills` and `strokes`, so an empty one is a statement, not a shrug.
+//
+// This is deliberately not general. A rail that demanded a class for every
+// property a node happens to state would fail every element for the ones
+// Figma always emits; these two are singled out because they are the ones a
+// node cannot decline to answer, and the ones a viewer sees immediately.
+const isColor = (cls, prefix, resolveToken) => {
+  const m = new RegExp(`^${prefix}-(.+)$`).exec(cls);
+  if (!m) return false;
+  // `text-sm` is a size and `border-t` is an edge; only a value that resolves
+  // through the tokens to a hex is this element claiming a colour.
+  return !!resolveToken(m[1])?.startsWith("#");
+};
+
+function nodeOmissions(classString, v) {
+  const classes = classString.split(/\s+/).filter(Boolean);
+  // A prefixed utility describes a state this check cannot see, so it cannot
+  // be what claims the node's resting fill either.
+  const plain = classes.filter((c) => !c.includes(":"));
+  const out = [];
+
+  // On a TEXT node the fill IS the text colour, so text-* is what claims it
+  // and bg-* would be claiming something else entirely.
+  const claimsFill =
+    v.type === "TEXT"
+      ? plain.some((c) => isColor(c, "text", resolveToken))
+      : plain.some((c) => /^bg-/.test(c));
+  const fillClaim = v.type === "TEXT" ? "text-*" : "bg-*";
+  // `bg-transparent` resolves to no hex, so it raises no expectation above —
+  // here it is the element saying out loud that the node draws nothing, which
+  // is the one way to hold this rail off an element that means it.
+  const declaresNoFill = plain.includes("bg-transparent");
+
+  if (declaresNoFill && v.fill != null)
+    out.push(`bg-transparent in code, ${v.fill} in Figma`);
+  else if (v.fill != null && !claimsFill)
+    out.push(`node fills ${v.fill}, no ${fillClaim} class claims it`);
+  else if (v.fill == null && claimsFill && v.type !== "TEXT")
+    if (!plain.some((c) => isColor(c, "bg", resolveToken)))
+      // A bg-* naming a token that resolves to a hex is already compared above;
+      // this catches the one that resolves to nothing and would go unchecked.
+      out.push(
+        `${plain.find((c) => /^bg-/.test(c))} in code, no fill in Figma`,
+      );
+
+  const claimsStroke = plain.some((c) => /^border(-|$)/.test(c));
+  if (v.stroke != null && !claimsStroke)
+    out.push(`node strokes ${v.stroke}, no border-* class claims it`);
+  else if (v.stroke == null && claimsStroke)
+    out.push(
+      `${plain.find((c) => /^border(-|$)/.test(c))} in code, no stroke in Figma`,
+    );
+
+  return out;
+}
+
 // The layout-intent props are named for what the class means; when one is
 // reported as unstated, name the Figma property instead, because that is
 // what whoever opens the file has to go and look at.
 const figmaProp = {
+  padX: "layoutMode, so no padding",
+  padY: "layoutMode, so no padding",
+  gap: "layoutMode, so no itemSpacing",
   clips: "clipsContent",
   sticky: "scrollBehavior",
   square: "targetAspectRatio",
   stretch: "layoutAlign",
   noGrow: "layoutGrow",
 };
+
+// A conversion routinely splits one Figma node across two elements — a root
+// that positions and an inner surface that paints — so asking whether THIS
+// element claims the node's fill would fail the root of every such pair. The
+// question is whether anything mapped to the node claims it, which is why the
+// claims are unioned per node and the answer reported once, against the first
+// entry that names it.
+const claimsByNode = new Map();
+for (const e of entries) {
+  const k = `${e.ref.key}/${e.ref.id}`;
+  claimsByNode.set(k, `${claimsByNode.get(k) ?? ""} ${e.classes}`);
+}
+const omissionsReported = new Set();
 
 let drift = 0;
 for (const e of entries) {
@@ -337,7 +468,15 @@ for (const e of entries) {
     );
 
   const expected = auditExpectations(e.classes, v);
+  // A spacing rail only means something on an auto-layout frame; elsewhere
+  // the node cannot answer, so demote these to the optional set rather than
+  // reading their absence as drift.
+  if (!v.autoLayout)
+    for (const x of expected)
+      if (x.prop === "padX" || x.prop === "padY" || x.prop === "gap")
+        x.optional = true;
   const checked = new Set(expected.map((x) => x.cls));
+  let compared = 0;
   for (const { prop, cls, expected: want, optional } of expected) {
     const actual = v[prop];
     if (actual == null && optional) {
@@ -350,6 +489,7 @@ for (const e of entries) {
         `  ✗ ${cls.padEnd(24)} ${want} in code, but the node sets no ${prop}`,
       );
       drift++;
+      compared++;
     } else if (
       typeof want === "number" ? Math.abs(actual - want) > 0.5 : actual !== want
     ) {
@@ -357,18 +497,43 @@ for (const e of entries) {
         `  ✗ ${cls.padEnd(24)} ${want} in code, ${actual} in Figma`,
       );
       drift++;
+      compared++;
     } else {
       console.log(`  ✓ ${cls.padEnd(24)} ${actual}`);
+      compared++;
+    }
+  }
+  // Raised by the node rather than by a class, so these are reported after
+  // the class list and carry no class to name in the left column.
+  const nodeKey = `${e.ref.key}/${e.ref.id}`;
+  if (!omissionsReported.has(nodeKey)) {
+    omissionsReported.add(nodeKey);
+    for (const line of nodeOmissions(claimsByNode.get(nodeKey) ?? "", v)) {
+      console.error(`  ✗ ${"(unstyled)".padEnd(24)} ${line}`);
+      drift++;
+      compared++;
     }
   }
   for (const cls of e.classes.split(/\s+/).filter(Boolean))
     if (!checked.has(cls)) console.log(`  – ${cls.padEnd(24)} unchecked`);
+  if (compared === 0) {
+    // Every class was unchecked and the node volunteered nothing. Saying
+    // nothing here would let the run's closing ✓ stand for this element too,
+    // which is coverage it does not have.
+    nothingChecked.push(e.label);
+    console.log("  ! nothing in this element could be checked against Figma");
+  }
 }
 
 console.log("");
 if (uncovered.length)
+  for (const [root, names] of groupUncovered(uncovered))
+    console.log(
+      `– ${names.length} ${root} director${names.length === 1 ? "y" : "ies"} carry no audit.json and were not audited: ${names.join(", ")}`,
+    );
+if (nothingChecked.length)
   console.log(
-    `– ${uncovered.length} block(s) carry no audit.json and were not audited: ${uncovered.join(", ")}`,
+    `! ${nothingChecked.length} element(s) had nothing checkable against Figma: ${nothingChecked.join(", ")}`,
   );
 if (drift) die(`${drift} value(s) drift from Figma.`);
 console.log(
