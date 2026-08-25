@@ -15,7 +15,9 @@ const linkVariants = cva(
       variant: {
         default: "text-foreground",
         secondary: "text-secondary-foreground",
-        error: "text-destructive-foreground",
+        // Figma binds Status/destructive (`--destructive`), not the on-fill
+        // `destructive-foreground` used by solid destructive buttons/badges.
+        error: "text-destructive",
       },
       // The rungs are Figma's Sizing collection: 16/24, 14/20 and 12/16, each
       // with an icon matching its type size.
