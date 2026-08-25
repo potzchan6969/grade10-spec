@@ -38,7 +38,7 @@
   --chart-5: var(--red-500);
   --chart-6: var(--yellow-300);
   --chart-7: var(--teal-400);
-  --sidebar: var(--gray-100); /* Sidebar background */
+  --sidebar: var(--background); /* Sidebar background */
   --control: var(--background); /* Outline button and bordered trigger surface */
   --control-hover: var(--slate-50-opacity-50); /* Outline button/trigger hover surface */
   --switch-track: var(--slate-50-opacity-80); /* Switch unchecked track */
