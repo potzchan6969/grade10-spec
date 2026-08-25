@@ -21,7 +21,7 @@ message is transactional mail to their registered account email.
 - Delivery
   - Registered email: every message goes to the account email
   - Call-off suppresses: a called-off listing sends nothing further
-  - Sent record: an operator can see what was sent, to whom, and when
+  - Send log: type, recipient email, listing, and Sent At — no body — filterable by email
 
 ## ADDED Requirements
 
@@ -184,25 +184,46 @@ registered account email. Identity SHALL be the recipient's user id, per
 `shared-auth/session`. Money and times SHALL follow `money-amounts` and
 `dates-and-times`.
 
-Grade10 SHALL record what it sent so an operator can answer a collector
-who says they were not told.
-
-| Field | Meaning |
-| --- | --- |
-| Message | Which of the six |
-| Recipient | Collector's user id |
-| When | Instant Grade10 sent it |
-
 #### Scenario: Mail reaches the registered address
 
 - **WHEN** Grade10 sends any message in this capability
 - **THEN** it sends it to the recipient's registered account email
 
+### Requirement: Operators can read a send log by type and email
+
+Grade10 SHALL keep a log of every message it sends in this capability so
+an operator can answer a collector who says they were not told. Each row
+SHALL show the message type and SHALL NOT store or show the message body
+or any other rendered content.
+
+| Field | Meaning |
+| --- | --- |
+| Type | Which of the six messages |
+| Sent to | The registered account email at send time |
+| Sent At | When Grade10 sent it |
+| Listing | Which lot |
+
+An authorized operator SHALL be able to filter this log by the collector's
+email. The filter SHALL match the address the message was sent to.
+
 #### Scenario: An operator can see what was sent
 
 - **GIVEN** a collector who says they were never told about a lot
-- **WHEN** an authorized operator reads that lot's sent messages
-- **THEN** they see each message sent, its recipient, and when it was sent
+- **WHEN** an authorized operator filters the send log by that collector's email
+- **THEN** they see each message sent to that address: its type, the lot, and its Sent At
+
+#### Scenario: The send log shows type, not content
+
+- **GIVEN** a message Grade10 has sent
+- **WHEN** an authorized operator reads its log row
+- **THEN** the row shows the message type
+- **AND** it does not show the body or any rendered content
+
+#### Scenario: The send log is filterable by email
+
+- **GIVEN** messages sent to two collectors on one or more lots
+- **WHEN** an authorized operator filters the log by one collector's email
+- **THEN** they see only rows sent to that address
 
 ### Requirement: A called-off lot stops its mail
 

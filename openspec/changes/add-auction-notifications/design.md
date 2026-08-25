@@ -18,17 +18,25 @@ choose which close it means.
 
 ## Decisions
 
-### The auction service decides who is enrolled; the store service sends
+### The auction service decides who is enrolled; a dedicated email service sends
 
 The service that owns the lot knows who watches it and who has bid on it, and
 already sees every accepted bid and every state change. It emits an event
-naming the recipients. The brand's store service renders and sends, because it
-owns the collector's registered address.
+naming the message type, the listing, and the recipient's user id. A dedicated
+email sending service — not the auction service, and not the store service —
+resolves the registered address, renders, sends, and owns the send log.
+
+*Alternative rejected — let the auction service send.* Sending couples the
+auction worker to the mail provider, the templates, and the retry ladder. The
+auction's job is who is enrolled and which message is owed.
+
+*Alternative rejected — let the store service send.* Auction already must not
+grow a store binding. The store does not own auction enrolment, and putting
+send on each brand's store duplicates the log and the once-per-lot rule.
 
 *Alternative rejected — let the sender work out recipients.* It would need to
-read watches and bids across both brands, duplicating the ownership the
-auction service already has, and it would put the deduplication rule in two
-places.
+read watches and bids, duplicating the ownership the auction service already
+has, and it would put the deduplication rule in two places.
 
 ### The closing warning is keyed to the scheduled close, not the effective one
 
@@ -51,13 +59,21 @@ is the one that matters at that point.
 
 ### Deduplication is per collector, per lot, per message
 
-A record of what was sent is kept, and it is what makes "once per lot per
-collector" and the outbid-beats-new-bid rule true. It is also the operator's
-answer to "I was never told".
+The email service's send log is the record of what was sent. It is what makes
+"once per lot per collector" true, and it is the operator's answer to "I was
+never told". Auction still chooses outbid over new-bid before it emits, so the
+email service never sees both for one bid.
+
+The log stores type, the address it was sent to, Sent At, and the listing. It
+does not store the body. An operator filters it by that address.
 
 *Alternative rejected — derive it from enrolment at send time.* A collector's
 enrolment changes; a sent message does not. Deriving means a collector who
 unwatches and re-watches receives the opening message twice.
+
+*Alternative rejected — store the rendered body on the log.* The operator's
+question is which message went out, not what it said. Bodies go stale when
+templates change, and they are the collector's mail.
 
 ### The outbid message wins over the new-bid message
 
@@ -77,11 +93,11 @@ retrofitted.
 
 | Risk | Mitigation |
 | --- | --- |
-| A proxy-bidding war generates a message per step, flooding both bidders | The outbid message is sent when a collector *stops leading*, not per bid, so a bidder receives one per lead change rather than one per step. Monitor volume once automatic bidding ships. |
+| A proxy-bidding war generates a message per step, flooding both bidders | Standing maxima no longer generate a bid ladder. The outbid message is sent when a collector *stops leading*, not per bid. Monitor volume once automatic bidding ships. |
 | A collector reads transactional mail as marketing and marks it spam | Every message is about a lot the collector watched or bid on; none recommends another lot. |
 | Mail is sent about a lot an operator has just called off | The spec suppresses everything from the moment of call-off. |
 | The 24-hour warning misleads on a heavily extended lot | Extended bidding sends its own message; the warning does not claim to be the final word. |
-| A send failure silently loses a message a collector needed | The sent record distinguishes sent from attempted, so an operator can see the difference. |
+| A send failure silently loses a message a collector needed | The send log distinguishes sent from attempted, so an operator can see the difference. |
 
 ## Migration plan
 
@@ -93,9 +109,7 @@ bid-activity mail at release; that is the intent, not a migration.
 
 Answerable later without changing the specs, the approach, or the tasks.
 
-- Whether an operator sees sent messages on the listing's admin page or in a
-  separate view. The record and its contents are specified either way.
-- How long the sent record is retained.
+- How long the send log is retained.
 - Whether the new-bid message states the new current bid or only that a bid
   arrived. The outbid message's contents are specified; this one's are not
   constrained by any scenario.

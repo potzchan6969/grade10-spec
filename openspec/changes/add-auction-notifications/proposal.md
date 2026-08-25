@@ -46,6 +46,8 @@ overnight returns and raises their maximum before the lot closes.
   could act on the message.
 - **Amounts and times follow the platform's existing rules.** English money in
   a sent message; every close names its zone and matches the page.
+- **Operators have a send log** of type, recipient email, listing, and Sent
+  At — no bodies — filterable by the collector's email.
 
 ## Non-Goals
 
@@ -69,8 +71,8 @@ overnight returns and raises their maximum before the lot closes.
 ### New Capabilities
 
 - `grade10-auction/notifications`: which auction emails Grade10 sends, what
-  each one fires on, who receives it, how a collector is enrolled, and what
-  suppresses a message.
+  each one fires on, who receives it, how a collector is enrolled, what
+  suppresses a message, and the operator send log.
 
 ### Modified Capabilities
 
@@ -81,12 +83,11 @@ a separate in-flight change and is not modified here.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/backend/grade10/auction` | Emits the six events. Owns which collectors are enrolled on a lot and the record of what was sent, so a message is not sent twice. |
+| `apps/backend/grade10/auction` | Emits the six events. Owns which collectors are enrolled on a lot. |
 | `@grade10/auction-contracts` | Gains the notification events. Additive. |
-| `apps/backend/grade10/store` | Renders and sends to the registered account email, in English, using the platform's money and date shapes. |
-| `apps/backend/zzz/store` | Same for ZZZ collectors watching or bidding on the same lot. |
+| Email sending service | Renders and sends. Owns the send log. Not the auction service and not the store service. See `design.md`. |
 | `@grade10/i18n` | **No change.** Sent messages are English; nothing enters the locale catalogs. |
-| `apps/admin/grade10` | An operator can see what was sent for a lot when answering "I was never told". |
+| `apps/admin/grade10` | A send log showing type, recipient email, listing, and Sent At, filterable by user email. No message bodies. |
 
 **Ordering.** `add-auction-watchlist` must land first. Independent of
 `add-auction-proxy-bidding`, though the outbid mail becomes considerably more

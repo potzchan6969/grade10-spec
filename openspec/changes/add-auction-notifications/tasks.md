@@ -12,18 +12,18 @@ of the six messages fire on a watch.
 - [ ] 1.5 Make *A called-off lot sends nothing further* and *A scheduled message is suppressed by a call-off* pass by suppressing every unsent message from the moment of call-off.
 - [ ] 1.6 Verify every scenario in this group through auction backend feature tests, including a lot whose close has moved.
 
-## 2. Sent record and deduplication (grade10)
+## 2. Sent log and deduplication (grade10)
 
-Needs group 1 landed.
+Needs group 1 landed. Lives on the email sending service per `design.md`.
 
-- [ ] 2.1 Record every message sent, its recipient user id, and the instant, making *An operator can see what was sent* pass.
-- [ ] 2.2 Make *A progress message is sent once per lot* and *A watcher who also bids receives one copy* pass from that record.
-- [ ] 2.3 Make *An outbid collector gets one message, not two* pass by preferring the outbid message for one accepted bid.
+- [ ] 2.1 Record type, the address sent to, listing, and Sent At for every message, and store no body, making *An operator can see what was sent* and *The send log shows type, not content* pass.
+- [ ] 2.2 Make *A progress message is sent once per lot* and *A watcher who also bids receives one copy* pass from that log.
+- [ ] 2.3 Make *An outbid collector gets one message, not two* pass by preferring the outbid message for one accepted bid before emit.
 - [ ] 2.4 Verify deduplication against a collector who unwatches and watches again, per `design.md`'s rejected alternative.
 
 ## 3. Rendering and delivery (grade10)
 
-Claimable against the events from group 1.
+Claimable against the events from group 1. The dedicated email sending service sends; auction and store do not.
 
 - [ ] 3.1 Make *Mail reaches the registered address* pass, resolving the recipient by user id and sending to their registered account email.
 - [ ] 3.2 Render money in each message using the sent-message shape in `money-amounts`.
@@ -32,15 +32,16 @@ Claimable against the events from group 1.
 
 ## 4. ZZZ delivery (grade10)
 
-Claimable against the events from group 1, independently of group 3.
+Claimable against the events from group 1, independently of group 3. Same email sending service, ZZZ identity.
 
 - [ ] 4.1 Send the same six messages to ZZZ collectors enrolled on a shared lot, resolving their registered address through the ZZZ identity boundary.
 - [ ] 4.2 Verify the ZZZ delivery lane on a lot enrolled from both brands.
 
-## 5. Operator view (grade10)
+## 5. Operator send log (grade10)
 
-- [ ] 5.1 Show a lot's sent messages to an authorized operator, distinguishing sent from attempted per `design.md`.
-- [ ] 5.2 Verify the admin auction feature lane.
+- [ ] 5.1 Produce the admin send-log Figma frame named in `ui.md` and link it there.
+- [ ] 5.2 Make *The send log is filterable by email* and *An operator can see what was sent* pass: type, sent-to email, listing, and Sent At; no body; distinguishing sent from attempted per `design.md`.
+- [ ] 5.3 Verify the admin auction feature lane.
 
 ## 6. Review (grade10)
 
