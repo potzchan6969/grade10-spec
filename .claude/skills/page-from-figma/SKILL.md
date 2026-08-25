@@ -1,9 +1,9 @@
 ---
-name: figma-page-to-code
+name: page-from-figma
 description: Turn a page or screen drafted in Figma into code composed from existing blocks, primitives, and tokens. Use when asked to implement, build, or convert a Figma page, screen, or flow into code — before any get_design_context call on a page-level frame.
 ---
 
-# Figma page to code
+# Page from Figma
 
 Use this skill when the unit of work is a **page-level frame** — a whole screen or flow a designer drafted — rather than a component set. For a component set, use the `design-system-components` skill instead; this skill will send you there the moment a section turns out to be a new component.
 
