@@ -48,18 +48,14 @@ adding a variant in the application repository. Money uses
 
 ### Auction listing queue
 
-- **Live and Ending soon** — `A published listing still taking bids is Live`,
-  `A listing inside the last hour is Ending soon`, and `Ending soon does not
-  look like Live` define the labels and distinct treatments.
-- **Payment outcomes** — `A won listing waiting for card capture is Awaiting
-  payment`, `Stripe capture and manual collection are different queue rows`,
-  and `Paid via Stripe does not look like Paid via Manual` define the mutually
-  exclusive labels.
+- **Live and Ending soon** — `A listing inside the last hour is Ending soon`
+  and the Listing outcomes table define the labels and families.
+- **Payment outcomes** — `Stripe capture and manual collection are different
+  outcomes` defines the mutually exclusive paid labels.
 - **Filtered** — `An operator works only listings awaiting wire` defines a
   ready filtered queue.
-- **Needs attention** — `Paid via Stripe is highlighted as needing action` and
-  `Awaiting wire is highlighted as needing action` define the extra row
-  treatment. The remaining attention outcomes follow the same requirement.
+- **Needs attention** — `Awaiting wire is highlighted as needing action` and
+  the Needs action column define the extra row treatment.
 - **Loading, empty, and transport error** — no new capability-specific visual
   state is defined. The queue keeps the admin surface's existing Skeleton,
   empty Text, and error Text treatments; none changes an outcome or invents a
@@ -67,30 +63,25 @@ adding a variant in the application repository. Money uses
 
 ### Auction listing detail
 
-- **Won listing** — `An operator opens a won listing` defines the complete
+- **Won listing** — `Operator opens a won listing` defines the complete
   facts, money, winner, payment, shipment, and trail composition.
-- **No winner** — `A listing without a winner has no winner block` defines the
-  edge state.
-- **Winner contact** — `The winner's email is the emphasized contact`, `A
-  shipment operator can record a missing delivery address`, and `A payment
-  operator sees winner contact without the ban grant` define the contact and
-  missing-address states.
-- **Payment actions** — `An operator records that the winner will pay by wire`,
-  `Collection after a wire becomes Paid via Manual`, `An operator records
-  payment collected offline`, and `A second paid attempt is refused` define
-  enabled and terminal states.
-- **Shipment actions** — `An operator records that shipment started after
-  Stripe payment`, `An operator records that shipment started after manual
-  payment`, `An operator records that shipment completed`, `Shipment cannot
-  start before a paid outcome`, and `Completion cannot skip Started` define
-  the milestone controls.
-- **Trail and comments** — `Stripe paid and a later comment share one trail`,
-  `Manual paid and Stripe paid are distinguishable on the trail`, `An empty
-  comment is refused`, and `A comment cannot be taken back` define ready,
-  refusal, and immutable states.
-- **Grant-disabled** — `A staff operator sees payment controls disabled` and
-  `A finance operator sees shipment controls disabled` require visible disabled
-  controls; `An admin can do both` defines the enabled combined path.
+- **No winner** — Winner fields: the block is shown only when there is a
+  winner.
+- **Winner contact** — `Winner email is the contact without Stripe
+  identifiers` defines the contact block. `Recording an address does not
+  ship the listing` defines the missing-address state on shipment.
+- **Payment actions** — `Wire request releases the card hold`, `Manual
+  collection marks Paid via Manual and releases the hold`, and `A second paid
+  attempt is refused` define enabled and terminal states.
+- **Shipment actions** — `Shipment follows paid, then started, then
+  completed` and `Shipment cannot skip ahead` define the milestone controls.
+  `Operator closes out a won listing` is the combined paid-then-shipped path.
+- **Trail and comments** — `Stripe paid and an operator comment share the
+  trail` defines ready trail composition. Empty and immutable comments stay
+  in the Trail fields requirement.
+- **Grant-disabled** — `Staff cannot record payment` and `Finance cannot
+  record shipment` require visible disabled controls for a missing grant.
+  `Operator closes out a won listing` is the enabled combined admin path.
 - **Loading and transport error** — no new capability-specific visual state is
   defined. The detail keeps the admin surface's existing Skeleton and error
   Text treatments and retains the selected listing so a retry does not return
