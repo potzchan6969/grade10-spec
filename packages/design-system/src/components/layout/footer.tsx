@@ -38,10 +38,14 @@ type FooterProps = ComponentProps<"footer"> & {
 /**
  * Store footer. Figma (`4171:9653`) has no variant axes — columns and copy
  * are consumer-owned so a locale or catalog change does not fork the layout.
- * The fill is `Base/background`. The outer stroke is top-only (`Base/border`),
- * matching Nav's bottom edge — this is page chrome, not a boxed card. Inset
- * and column gap follow `Gap/gap-8` and `Gap/gap-6`; the legal row is centred
- * on the bar, not spaced between the copyright and locale.
+ * The palette here does not match the Figma source and has not been
+ * reconciled: the design fills the frame with `Base/primary` and sets every
+ * string in `Base/primary-foreground` — a dark footer — while this renders
+ * `bg-background` with foreground text. The design also puts its only stroke
+ * on the bottom bar's top edge; the outer frame has none, and Nav has no
+ * bottom edge for one to match. Inset and column gap follow `Gap/gap-8` and
+ * `Gap/gap-6`; the legal row is centred on the bar, not spaced between the
+ * copyright and locale.
  *
  * Every content prop is required rather than defaulted: two stores render this
  * shell, and a default would let the second one ship the first one's link
