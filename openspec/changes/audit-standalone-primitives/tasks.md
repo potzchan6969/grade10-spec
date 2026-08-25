@@ -20,8 +20,8 @@
 
 ## 4. Report coverage by component (grade10-spec)
 
-- [ ] 4.1 Resolve each `.figma.ts` in a swept directory to its node kind, and report as uncovered the standalone components no audit table names, rather than the directory — making *Coverage is reported by component* pass.
-- [ ] 4.2 Confirm a component whose Figma counterpart defines variant axes is neither audited by a table nor listed as uncovered — making *A component with variant axes* pass.
+- [x] 4.1 Resolve each `.figma.ts` in a swept directory to its node kind, and report as uncovered the standalone components no audit table names, rather than the directory — making *Coverage is reported by component* pass.
+- [x] 4.2 Confirm a component whose Figma counterpart defines variant axes is neither audited by a table nor listed as uncovered — making *A component with variant axes* pass.
 
 ## 5. Verify (grade10-spec)
 

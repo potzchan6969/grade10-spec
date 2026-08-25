@@ -131,6 +131,10 @@ function parseNodeRef(ref) {
 const entries = [];
 const uncovered = [];
 const nothingChecked = [];
+// Components a rail must own, resolved to their Figma node kind after the
+// fetch below: a component SET is the variant comparison's, a standalone one
+// needs an audit table here.
+const candidates = [];
 // Uncovered directories come from more than one root now, and a design-system
 // directory listed flat beside a block reads as one set of equals. Group them
 // so a reader can tell which package a gap is in.
@@ -181,20 +185,41 @@ if (args["all-blocks"]) {
       // providers/ is the same case as shared/ one root up: it draws nothing
       // and has no Figma counterpart to audit against.
       skip: new Set(["providers"]),
+      // A design-system directory holds both kinds of component. Reporting the
+      // directory would call `forms` a gap while Button, Text Input, and the
+      // rest of its component SETS are compared variant by variant elsewhere —
+      // and would go on saying so after the one standalone component in it was
+      // covered. Ask per component instead; which rail owes a component is
+      // decided by whether its Figma counterpart has variant axes.
+      perComponent: true,
     },
   ];
   for (const root of roots) {
     for (const entry of await readdir(root.dir, { withFileTypes: true })) {
       if (!entry.isDirectory()) continue;
       if (root.skip.has(entry.name)) continue;
+      const dir = resolve(root.dir, entry.name);
+      let covered = true;
       try {
-        await pushMap(
-          resolve(root.dir, entry.name, "audit.json"),
-          `${entry.name}: `,
-        );
+        await pushMap(resolve(dir, "audit.json"), `${entry.name}: `);
       } catch (err) {
         if (err?.code !== "ENOENT") throw err;
-        uncovered.push({ root: root.label, name: entry.name });
+        covered = false;
+      }
+      if (!root.perComponent) {
+        if (!covered) uncovered.push({ root: root.label, name: entry.name });
+        continue;
+      }
+      for (const file of await readdir(dir)) {
+        if (!file.endsWith(".figma.ts")) continue;
+        const src = await readFile(resolve(dir, file), "utf8");
+        const ref = parseNodeRef(/url=(\S+)/.exec(src)?.[1] ?? "");
+        if (!ref) continue;
+        candidates.push({
+          root: root.label,
+          name: /component=(.+)/.exec(src)?.[1]?.trim() ?? file,
+          ref,
+        });
       }
     }
   }
@@ -223,7 +248,7 @@ if (args["all-blocks"]) {
 // One request per file key, all ids batched — /nodes is the cheap endpoint,
 // and a page audit is one file with many nodes.
 const byKey = new Map();
-for (const e of entries) {
+for (const e of [...entries, ...candidates]) {
   if (!byKey.has(e.ref.key)) byKey.set(e.ref.key, new Set());
   byKey.get(e.ref.key).add(e.ref.id);
 }
@@ -377,6 +402,18 @@ for (const e of entries) {
 }
 const omissionsReported = new Set();
 
+// A component SET is compared variant by variant by check-components.mjs, so
+// it is not this rail's to cover and is not a gap. A standalone component has
+// no second rung to diff against there — checkValues skips it — so if no entry
+// here names its node, nothing in the repository compares its values.
+const audited = new Set(entries.map((e) => `${e.ref.key}/${e.ref.id}`));
+for (const c of candidates) {
+  const doc = fetched.get(`${c.ref.key}/${c.ref.id}`);
+  if (!doc || doc.type === "COMPONENT_SET") continue;
+  if (!audited.has(`${c.ref.key}/${c.ref.id}`))
+    uncovered.push({ root: `${c.root} standalone component`, name: c.name });
+}
+
 let drift = 0;
 for (const e of entries) {
   const doc = fetched.get(`${e.ref.key}/${e.ref.id}`);
@@ -472,7 +509,7 @@ console.log("");
 if (uncovered.length)
   for (const [root, names] of groupUncovered(uncovered))
     console.log(
-      `– ${names.length} ${root} director${names.length === 1 ? "y" : "ies"} carry no audit.json and were not audited: ${names.join(", ")}`,
+      `– ${names.length} ${root}${names.length === 1 ? "" : "s"} carry no audit table and were not audited: ${names.join(", ")}`,
     );
 if (nothingChecked.length)
   console.log(
