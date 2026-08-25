@@ -38,14 +38,21 @@ type FooterProps = ComponentProps<"footer"> & {
 /**
  * Store footer. Figma (`4171:9653`) has no variant axes — columns and copy
  * are consumer-owned so a locale or catalog change does not fork the layout.
- * The palette here does not match the Figma source and has not been
- * reconciled: the design fills the frame with `Base/primary` and sets every
- * string in `Base/primary-foreground` — a dark footer — while this renders
- * `bg-background` with foreground text. The design also puts its only stroke
- * on the bottom bar's top edge; the outer frame has none, and Nav has no
- * bottom edge for one to match. Inset and column gap follow `Gap/gap-8` and
- * `Gap/gap-6`; the legal row is centred on the bar, not spaced between the
- * copyright and locale.
+ * This is a dark surface: the frame fills `Base/primary` and every string on
+ * it is `Base/primary-foreground`. The outer frame draws no stroke at all —
+ * the only one in the design sits on the bottom bar's top edge, bound to the
+ * `gray-500-opacity-20` primitive rather than to a semantic slot, which is
+ * how Figma binds it and the reason no slot was invented for it here.
+ *
+ * Each `Link` carries the light tone as a `className`. Figma does the same
+ * thing by a different mechanism — the footer's link instances are the same
+ * `secondary` `xs` variant used everywhere else, with the label fill
+ * overridden per instance — because the `Link` component set defines no
+ * inverse tonal axis. Until it does, a shared component may not offer one:
+ * see docs/governance/design-code-sync.md.
+ *
+ * Inset and column gap follow `Gap/gap-8` and `Gap/gap-6`; the legal row is
+ * centred on the bar, not spaced between the copyright and locale.
  *
  * Every content prop is required rather than defaulted: two stores render this
  * shell, and a default would let the second one ship the first one's link
@@ -75,21 +82,14 @@ function Footer({
   return (
     <footer
       data-slot="footer"
-      className={cn(
-        "@container flex w-full flex-col border-t border-border bg-background",
-        className,
-      )}
+      className={cn("@container flex w-full flex-col bg-primary", className)}
       {...props}
     >
       <div className="grid w-full grid-cols-1 gap-6 p-8 @xl:grid-cols-2 @3xl:grid-cols-4">
         <div className="flex flex-col items-start gap-4">
-          <p className="text-sm font-medium text-foreground">{logo}</p>
-          <p className="text-xs text-secondary-foreground">
-            {copy.description}
-          </p>
-          <p className="text-xs text-secondary-foreground">
-            {copy.attribution}
-          </p>
+          <p className="text-sm font-medium text-primary-foreground">{logo}</p>
+          <p className="text-xs text-primary-foreground">{copy.description}</p>
+          <p className="text-xs text-primary-foreground">{copy.attribution}</p>
           {socialLinks.length > 0 ? (
             <div
               className="flex flex-wrap items-start gap-4 pt-3"
@@ -97,6 +97,7 @@ function Footer({
             >
               {socialLinks.map((link) => (
                 <Link
+                  className="text-primary-foreground"
                   href={link.href}
                   key={String(link.label)}
                   size="xs"
@@ -115,11 +116,12 @@ function Footer({
               data-slot="footer-column"
               key={String(column.heading)}
             >
-              <p className="text-xs font-medium text-secondary-foreground">
+              <p className="text-xs font-medium text-primary-foreground">
                 {column.heading}
               </p>
               {column.links.map((link) => (
                 <Link
+                  className="text-primary-foreground"
                   href={link.href}
                   key={String(link.label)}
                   size="xs"
@@ -133,10 +135,10 @@ function Footer({
         )}
       </div>
       <div
-        className="relative flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-border px-8 py-3 @3xl:h-[60px] @3xl:flex-nowrap @3xl:py-0"
+        className="relative flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-[color:var(--gray-500-opacity-20)] px-8 py-3 @3xl:h-[60px] @3xl:flex-nowrap @3xl:py-0"
         data-slot="footer-bar"
       >
-        <p className="text-xs font-medium text-secondary-foreground">
+        <p className="text-xs font-medium text-primary-foreground">
           {copy.copyright}
         </p>
         {legalLinks.length > 0 ? (
@@ -146,6 +148,7 @@ function Footer({
           >
             {legalLinks.map((link) => (
               <Link
+                className="text-primary-foreground"
                 href={link.href}
                 key={String(link.label)}
                 size="xs"
@@ -156,7 +159,7 @@ function Footer({
             ))}
           </div>
         ) : null}
-        <p className="text-xs font-medium text-secondary-foreground">
+        <p className="text-xs font-medium text-primary-foreground">
           {copy.locale}
         </p>
       </div>
