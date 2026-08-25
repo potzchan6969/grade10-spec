@@ -1,0 +1,22 @@
+[
+  {
+    "label": "store-home-hero/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9051",
+    "classes": "relative h-[470px] w-full overflow-hidden rounded-4xl"
+  },
+  {
+    "label": "store-section-header/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4195-1048",
+    "classes": "w-full"
+  },
+  {
+    "label": "store-collection-tile/standard",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4195-1056",
+    "classes": "rounded-xl border border-border bg-secondary p-4 col-span-1 h-[114px]"
+  },
+  {
+    "label": "store-collection-tile/featured",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4195-1051",
+    "classes": "rounded-xl border border-border bg-secondary p-4 col-span-2 row-span-2 h-[244px]"
+  }
+]
