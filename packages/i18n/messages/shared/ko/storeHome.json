@@ -1,0 +1,11 @@
+{
+  "title": "마켓플레이스",
+  "description": "미개봉 박스와 낱장 카드, 등급 카드까지 가격이 정해진 채 바로 배송됩니다. 한 번뿐인 카드는 경매에서 만나보세요.",
+  "shopLabel": "쇼핑하기",
+  "auctionLabel": "경매",
+  "browseAll": "전체 보기",
+  "collections": "컬렉션",
+  "loading": "불러오는 중…",
+  "error": "이 섹션을 불러오지 못했습니다.",
+  "retry": "다시 시도"
+}

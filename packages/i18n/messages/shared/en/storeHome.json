@@ -1,0 +1,11 @@
+{
+  "title": "Marketplace",
+  "description": "Sealed boxes, singles and graded slabs, priced and ready to ship. The ones that only come up once go to auction.",
+  "shopLabel": "Shop",
+  "auctionLabel": "Auction",
+  "browseAll": "Browse all",
+  "collections": "Collections",
+  "loading": "Loading…",
+  "error": "This section could not be loaded.",
+  "retry": "Try again"
+}
