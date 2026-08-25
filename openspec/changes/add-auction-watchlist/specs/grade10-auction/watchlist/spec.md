@@ -1,28 +1,42 @@
-# Watching a lot — delta
-
 ## Purpose
 
-How a collector marks an auction lot to come back to without bidding on it. A
-watch is a private signal between one collector and one lot: it confers no
-standing in the sale, it is visible to nobody else, and it is the trigger the
-platform's auction mail fires on.
+Lets a collector mark an auction listing to come back to without bidding
+on it. A watch is a private signal that confers no standing in the sale,
+and it is the trigger auction mail fires on.
+
+## Feature set
+
+- Watching a listing
+  - Watch and unwatch: a signed-in collector marks a listing to come back to
+  - Sign-in required: a signed-out viewer is offered sign-in, not a local watch
+  - Idempotent watch: watching twice leaves one watch with the original instant
+- Watch privacy
+  - Private signal: only the collector who watched sees it
+  - No standing: watching does not bid, reserve, or change the sale
+  - Operator count: an operator sees how many collectors watch, across both brands
+- Watched list
+  - Recency order: most recently watched first
+  - Enough to act: each entry shows identity, current bid, and close
+  - Survives close: a closed or called-off listing stays until the collector unwatches
 
 ## ADDED Requirements
 
+### Watching a listing
+------------------
+
 ### Requirement: A signed-in collector watches and unwatches a lot
 
-A signed-in collector SHALL be able to watch an auction lot, and to unwatch a
-lot they watch. Watching SHALL be available wherever a lot is shown to them,
-including the catalogue and the lot's own page.
+A signed-in collector SHALL:
 
-Grade10 SHALL store a watch against the collector and the lot with the instant
-it was made. It SHALL NOT hold a watch only in the browser.
+1. Watch a listing from the catalogue or from that listing's own page.
+2. See it as watched wherever it is shown to them.
+3. Unwatch it, including after it has closed or been called off.
 
-Watching SHALL require a signed-in collector. A viewer who is not signed in
-SHALL be offered sign-in rather than a watch that cannot be stored.
-
-Watching the same lot again SHALL leave one watch, and SHALL NOT create a
-second or change the instant of the first.
+Watching SHALL require a signed-in collector. A viewer who is not signed
+in SHALL be offered sign-in rather than a watch that cannot be stored.
+Grade10 SHALL NOT hold a watch only in the browser. Watching the same
+listing again SHALL leave one watch, and SHALL NOT create a second or
+change the instant of the first.
 
 #### Scenario: A collector watches a lot
 
@@ -58,19 +72,45 @@ second or change the instant of the first.
 - **WHEN** they sign in on another device and open that lot
 - **THEN** it shows as watched
 
+### Requirement: Watch fields
+
+Each watch SHALL carry these fields. Both brands sell the same auction
+listings and sign a collector in per brand, so the same listing SHALL
+accept a watch from a collector of either brand. A collector SHALL see
+only their own watches, on the brand they signed in to. Identity SHALL
+be the collector's user id, per `shared-auth/session`.
+
+| Field | Meaning |
+| --- | --- |
+| Collector | User id of the watching collector |
+| Listing | The listing watched |
+| Watched instant | When Grade10 accepted the first watch; a repeat does not change it |
+
+#### Scenario: A watch belongs to one collector
+
+- **GIVEN** a lot watched by a collector on one brand and by a different collector on the other
+- **WHEN** each reads the lots they watch
+- **THEN** each sees that lot listed once
+- **AND** neither sees the other's watch
+
+### Watch privacy
+-------------
+
 ### Requirement: A watch is private and confers nothing
 
-A watch SHALL be visible only to the collector who made it. Grade10 SHALL NOT
-disclose to another collector, to an unauthenticated reader, or in any public
-listing fact that a lot is watched, who watches it, or how many collectors
-watch it.
+A watch SHALL be visible only to the collector who made it. Grade10
+SHALL NOT disclose to another collector, to an unauthenticated reader,
+or in any public listing fact that a listing is watched, who watches it,
+or how many collectors watch it.
 
-A watch SHALL confer no standing in the sale. It SHALL NOT affect the current
-bid, the leader, bid validity, the close, or any outcome of the auction, and
-it SHALL NOT reserve the lot or grant priority.
+A watch SHALL confer no standing in the sale. It SHALL NOT affect the
+current bid, the leader, bid validity, the close, or any outcome of the
+auction, and it SHALL NOT reserve the listing or grant priority.
 
-An authorized operator MAY see how many collectors watch a lot, in order to
-judge interest. An operator SHALL NOT be shown a watch as a commitment to buy.
+An authorized operator SHALL be able to see how many collectors watch a
+listing, in order to judge interest. That count SHALL include every
+watch on that listing across both brands. An operator SHALL NOT be shown
+a watch as a commitment to buy.
 
 #### Scenario: A watch count is not public
 
@@ -91,30 +131,31 @@ judge interest. An operator SHALL NOT be shown a watch as a commitment to buy.
 - **THEN** the current bid, the leader, and the close are unchanged
 - **AND** no bid validity rule is affected
 
+#### Scenario: An operator counts every watch on a lot
+
+- **GIVEN** a lot watched by two collectors on one brand and one collector on the other
+- **WHEN** an authorized operator reads that lot's watch count
+- **THEN** the count is 3
+
+### Watched list
+------------
+
 ### Requirement: A collector reads the lots they watch
 
-Grade10 SHALL show a signed-in collector the lots they watch, most recently
-watched first. Each entry SHALL carry enough to decide whether to act: the
-lot's identity, its current bid, and its close, each in the shape that lot's
-own surface uses.
+Grade10 SHALL show a signed-in collector the listings they watch, most
+recently watched first. A collector who watches nothing SHALL be shown
+that they watch nothing, and SHALL NOT be shown an error or an empty
+page with no explanation. Each entry SHALL lead to that listing.
 
-A collector who watches nothing SHALL be shown that they watch nothing, and
-SHALL NOT be shown an error or an empty page with no explanation.
-
-Each entry SHALL lead to the lot.
+A watch SHALL survive its listing's close, call-off, or being won by
+another collector. Grade10 SHALL NOT remove a watch for those reasons.
+A collector SHALL be able to unwatch such a listing.
 
 #### Scenario: The list is ordered by when each watch was made
 
 - **GIVEN** a collector who watched lot A, then lot B, then lot C
 - **WHEN** they read the lots they watch
 - **THEN** the order is C, B, A
-
-#### Scenario: An entry carries the facts needed to act
-
-- **GIVEN** a collector watching an open lot
-- **WHEN** they read the lots they watch
-- **THEN** that entry shows the lot's identity, its current bid, and its close
-- **AND** the close names the time zone it is stated in
 
 #### Scenario: A collector watching nothing
 
@@ -129,17 +170,32 @@ Each entry SHALL lead to the lot.
 - **WHEN** they open an entry
 - **THEN** they arrive at that lot
 
-### Requirement: A watch outlives its lot
+#### Scenario: A collector unwatches a closed lot
 
-A watch SHALL survive its lot's close. A closed lot a collector watches SHALL
-remain in the lots they watch, shown as closed, so the collector can see what
-became of it.
+- **GIVEN** a collector watching a closed lot
+- **WHEN** they unwatch it
+- **THEN** the watch is removed
+- **AND** the lot no longer appears in the lots they watch
 
-Grade10 SHALL NOT remove a watch when its lot closes, is called off, or is
-won by another collector. A collector MAY still unwatch such a lot.
+### Requirement: Watched-list entry fields
 
-A lot that has been called off SHALL be shown as called off rather than as
-still open.
+Each entry SHALL carry enough to decide whether to act, in the shape
+that listing's own surface uses. A closed listing SHALL be shown as
+closed. A called-off listing SHALL be shown as called off rather than
+as still open. A close SHALL follow `dates-and-times`.
+
+| Field | Meaning |
+| --- | --- |
+| Listing | Identity of the watched listing |
+| Current bid | Same shape as that listing's own surface |
+| Close | Same shape as that listing's own surface |
+| Sale state | Open, closed, or called off |
+
+#### Scenario: An entry carries the facts needed to act
+
+- **GIVEN** a collector watching an open lot
+- **WHEN** they read the lots they watch
+- **THEN** that entry shows the lot's identity, its current bid, and its close
 
 #### Scenario: A closed lot stays in the list
 
@@ -153,43 +209,3 @@ still open.
 - **GIVEN** a collector watching a lot an operator then calls off
 - **WHEN** they read the lots they watch
 - **THEN** that lot is shown as called off, not as open
-
-#### Scenario: A collector unwatches a closed lot
-
-- **GIVEN** a collector watching a closed lot
-- **WHEN** they unwatch it
-- **THEN** the watch is removed
-- **AND** the lot no longer appears in the lots they watch
-
-### Requirement: A watch is keyed by collector and lot
-
-A watch SHALL be keyed by the watching collector's user id and the lot. It
-SHALL NOT be keyed by email or by any brand-scoped identifier other than the
-user id.
-
-Because both brands sell the same auction lots but sign a collector in per
-brand, one lot MAY carry watches from collectors of either brand. A collector
-SHALL see only their own watches, and SHALL see them on the brand they signed
-in to.
-
-An operator's watch count for a lot SHALL count every watch on that lot,
-across both brands, because the lot is one lot.
-
-#### Scenario: A watch belongs to one collector
-
-- **GIVEN** a lot watched by a collector on one brand and by a different collector on the other
-- **WHEN** each reads the lots they watch
-- **THEN** each sees that lot listed once
-- **AND** neither sees the other's watch
-
-#### Scenario: An operator counts every watch on a lot
-
-- **GIVEN** a lot watched by two collectors on one brand and one collector on the other
-- **WHEN** an authorized operator reads that lot's watch count
-- **THEN** the count is 3
-
-#### Scenario: A watch is keyed by user id
-
-- **WHEN** Grade10 stores a watch
-- **THEN** it keys it by the collector's user id and the lot
-- **AND** it does not key it by email

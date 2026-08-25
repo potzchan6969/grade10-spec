@@ -2,7 +2,7 @@
 
 ## 1. Watch records and contracts (grade10)
 
-- [ ] 1.1 Store a watch as the collector's user id, the lot, and the watched instant, beside the lot in the auction service, making *A watch is keyed by user id* pass.
+- [ ] 1.1 Store a watch as the collector's user id, the lot, and the watched instant, beside the lot in the auction service, making *A watch belongs to one collector* pass.
 - [ ] 1.2 Make *A collector watches a lot*, *A collector unwatches a lot*, and *Watching twice leaves one watch* pass through idempotent watch and unwatch actions.
 - [ ] 1.3 Make *A watch follows the collector, not the browser* and *A watch belongs to one collector* pass, with no watch state held in the browser.
 - [ ] 1.4 Add the viewer's watching state to authenticated listing facts and keep it off public facts, making *A watch count is not public* and *One collector cannot see another's watch* pass.

@@ -1,25 +1,49 @@
-# Auction email notifications — delta
-
 ## Purpose
 
-Which messages Grade10 sends a collector about an auction lot, what each one
-fires on, and who receives it. Every message here is transactional mail about
-a lot the collector chose to engage with, by watching it or by bidding on it,
-and every one goes to their registered account email.
+Which messages Grade10 sends a collector about an auction listing they
+watched or bid on, what each one fires on, and who receives it. Every
+message is transactional mail to their registered account email.
+
+## Feature set
+
+- Enrolment
+  - Watch or bid: either action enrols the collector in that listing's mail
+  - One copy: a collector who both watches and bids still gets one message
+  - Unwatch ends watch mail: bidding enrolment survives unwatch
+- Progress messages
+  - Opens in 24 hours: sent 24 hours before the scheduled start
+  - Bidding has opened: sent when bidding starts
+  - Closes in 24 hours: keyed to the scheduled close, not the moved close
+  - Extended bidding started: sent when the listing enters the extension window
+- Bid-activity messages
+  - New bid: other enrolled bidders hear about an accepted bid
+  - Outbid: the collector who just lost the lead hears that, not also the new-bid
+- Delivery
+  - Registered email: every message goes to the account email
+  - Call-off suppresses: a called-off listing sends nothing further
+  - Sent record: an operator can see what was sent, to whom, and when
 
 ## ADDED Requirements
 
+### Enrolment
+---------
+
 ### Requirement: A collector is enrolled by watching or by bidding
 
-Grade10 SHALL treat a collector as enrolled in a lot's mail when they watch
-that lot, when they have committed a bid on it, or both.
+A collector SHALL:
 
-Bidding on a lot SHALL enrol the bidder in that lot's bid-activity mail without
-requiring them to watch it. Unwatching a lot SHALL end enrolment that came from
-watching, and SHALL NOT end enrolment that came from bidding.
+1. Watch a listing, bid on it, or both.
+2. Receive each message they are enrolled for at most once, however many
+   reasons they have to receive it.
+3. Unwatch to stop watcher enrolment. Bidding enrolment SHALL NOT end.
 
-Grade10 SHALL send a collector at most one copy of a given message about a
-given lot, however many reasons they have to receive it.
+| Enrolment | How it starts | Mail it receives | How it ends |
+| --- | --- | --- | --- |
+| Watcher | The collector watches the listing | The four progress messages | Unwatch |
+| Bidder | The collector has a committed bid on the listing | Closing warning, extended bidding, new-bid, outbid | Does not end on unwatch |
+
+Bidding on a listing SHALL enrol the bidder in that listing's
+bid-activity mail without requiring them to watch it.
 
 #### Scenario: Bidding enrols without watching
 
@@ -47,29 +71,30 @@ given lot, however many reasons they have to receive it.
 - **AND** bidding opens on that lot
 - **THEN** Grade10 does not send them the bidding-has-opened message
 
+### Progress messages
+-----------------
+
 ### Requirement: Grade10 sends four messages about a lot's progress
 
-Grade10 SHALL send each of the following to every collector watching the lot,
-once per lot per collector:
+Grade10 SHALL send each progress message once per listing per collector
+to everyone enrolled for it. The closing warning SHALL use the listing's
+**scheduled** close, not its current effective close.
 
-- **Bidding opens in 24 hours** — 24 hours before the lot's scheduled start.
-- **Bidding has opened** — when the lot's bidding starts.
-- **Bidding closes in 24 hours** — 24 hours before the lot's **scheduled**
-  close, not its current effective close.
-- **Extended bidding has started** — when the lot enters its extension window.
+| Message | When | Recipients |
+| --- | --- | --- |
+| Bidding opens in 24 hours | 24 hours before the listing's scheduled start | Watchers |
+| Bidding has opened | When the listing's bidding starts | Watchers |
+| Bidding closes in 24 hours | 24 hours before the listing's scheduled close | Watchers and bidders |
+| Extended bidding has started | When the listing enters its extension window | Watchers and bidders |
 
-The last two SHALL also go to every collector who has bid on the lot.
-
-Each message SHALL carry the lot's identity and the time it concerns. A time
-SHALL name the zone it is stated in and SHALL match the same instant shown on
-the lot's page.
+Each message SHALL carry the listing's identity and the time it concerns.
+Money and times SHALL follow `money-amounts` and `dates-and-times`.
 
 #### Scenario: A watcher is told bidding opens tomorrow
 
 - **GIVEN** a collector watching a lot whose scheduled start is 24 hours away
 - **WHEN** Grade10 reaches that point
 - **THEN** it sends them the bidding-opens-in-24-hours message
-- **AND** the message names the zone its time is stated in
 
 #### Scenario: A watcher is told bidding has opened
 
@@ -96,24 +121,25 @@ the lot's page.
 - **WHEN** Grade10 evaluates that lot's mail again
 - **THEN** it does not send them that message a second time
 
+### Bid-activity messages
+---------------------
+
 ### Requirement: Grade10 sends two messages about bid activity
 
-Grade10 SHALL send to every collector who has bid on a lot:
-
-- **A lot you bid on received a new bid** — when a bid is accepted on that lot,
-  to every enrolled bidder other than the one whose bid it is.
-- **You have been outbid** — when a collector who was leading the lot stops
-  leading it, to that collector.
-
-A collector SHALL NOT receive the new-bid message for their own bid, including
-a bid Grade10 placed on their behalf.
-
-Where both messages would go to the same collector for the same accepted bid,
+Grade10 SHALL send bid-activity mail to every collector who has bid on
+the listing. A collector SHALL NOT receive the new-bid message for their
+own bid, including a bid Grade10 placed on their behalf. Where both
+messages would go to the same collector for the same accepted bid,
 Grade10 SHALL send the outbid message and SHALL NOT also send the new-bid
 message.
 
-An outbid message SHALL carry the lot's current bid after the bid that
-displaced them, and its effective close.
+| Message | When | Recipients |
+| --- | --- | --- |
+| A lot you bid on received a new bid | A bid is accepted on that listing | Every enrolled bidder other than the one whose bid it is |
+| You have been outbid | A collector who was leading stops leading | That collector |
+
+An outbid message SHALL carry the listing's current bid after the bid
+that displaced them, and its effective close.
 
 #### Scenario: A bidder hears about someone else's bid
 
@@ -148,13 +174,41 @@ displaced them, and its effective close.
 - **WHEN** the lot is called off
 - **THEN** Grade10 does not send them the outbid message
 
+### Delivery
+--------
+
+### Requirement: Every message goes to the registered account email
+
+Grade10 SHALL send every message in this capability to the recipient's
+registered account email. Identity SHALL be the recipient's user id, per
+`shared-auth/session`. Money and times SHALL follow `money-amounts` and
+`dates-and-times`.
+
+Grade10 SHALL record what it sent so an operator can answer a collector
+who says they were not told.
+
+| Field | Meaning |
+| --- | --- |
+| Message | Which of the six |
+| Recipient | Collector's user id |
+| When | Instant Grade10 sent it |
+
+#### Scenario: Mail reaches the registered address
+
+- **WHEN** Grade10 sends any message in this capability
+- **THEN** it sends it to the recipient's registered account email
+
+#### Scenario: An operator can see what was sent
+
+- **GIVEN** a collector who says they were never told about a lot
+- **WHEN** an authorized operator reads that lot's sent messages
+- **THEN** they see each message sent, its recipient, and when it was sent
+
 ### Requirement: A called-off lot stops its mail
 
-Grade10 SHALL NOT send any message about a lot that has been called off,
-from the moment it is called off.
-
-A message already sent SHALL NOT be recalled by this rule; only messages not
-yet sent are suppressed.
+Grade10 SHALL NOT send any message about a listing that has been called
+off, from the moment it is called off. A message already sent SHALL NOT
+be recalled; only messages not yet sent are suppressed.
 
 #### Scenario: A called-off lot sends nothing further
 
@@ -168,42 +222,3 @@ yet sent are suppressed.
 - **WHEN** an operator calls it off
 - **AND** the 24-hours-before point arrives
 - **THEN** Grade10 does not send the closing-in-24-hours message
-
-### Requirement: Every message goes to the registered account email
-
-Grade10 SHALL send every message in this capability to the recipient's
-registered account email, and SHALL identify the recipient by user id.
-
-Every message SHALL be rendered in English regardless of the recipient's
-locale. Money in a message SHALL be an integer count of minor units and an ISO
-4217 currency code rendered in the platform's sent-message shape. A time SHALL
-name the zone it is stated in.
-
-Grade10 SHALL record what it sent, to whom, and when, so an operator can
-answer a collector who says they were not told.
-
-#### Scenario: Mail reaches the registered address
-
-- **WHEN** Grade10 sends any message in this capability
-- **THEN** it sends it to the recipient's registered account email
-- **AND** it resolves the recipient by user id, not by email
-
-#### Scenario: A message reads in English whatever the reader's locale
-
-- **GIVEN** two enrolled collectors whose locales differ
-- **WHEN** Grade10 sends them the same message carrying an amount
-- **THEN** both messages are rendered in English
-- **AND** both show the amount in the platform's sent-message money shape
-
-#### Scenario: A message and the page agree on the close
-
-- **GIVEN** a message carrying a lot's close
-- **WHEN** it is compared with that lot's page
-- **THEN** both name the zone the close is stated in
-- **AND** both state the same instant
-
-#### Scenario: An operator can see what was sent
-
-- **GIVEN** a collector who says they were never told about a lot
-- **WHEN** an authorized operator reads that lot's sent messages
-- **THEN** they see each message sent, its recipient, and when it was sent

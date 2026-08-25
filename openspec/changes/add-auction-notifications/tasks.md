@@ -26,8 +26,8 @@ Needs group 1 landed.
 Claimable against the events from group 1.
 
 - [ ] 3.1 Make *Mail reaches the registered address* pass, resolving the recipient by user id and sending to their registered account email.
-- [ ] 3.2 Make *A message reads in English whatever the reader's locale* pass, using the platform's sent-message money shape.
-- [ ] 3.3 Make *A message and the page agree on the close* pass, naming the zone in every time a message states.
+- [ ] 3.2 Render money in each message using the sent-message shape in `money-amounts`.
+- [ ] 3.3 Render every time a message states using `dates-and-times`, so a close names its zone and matches the listing's page.
 - [ ] 3.4 Verify the six rendered messages against the money and date shapes, with amounts in more than one currency exponent.
 
 ## 4. ZZZ delivery (grade10)

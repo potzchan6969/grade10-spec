@@ -24,8 +24,7 @@ All from `@grade10/ui`. Export names are the cross-repo contract.
 
 The panel's `standing` slot already carries the highest-bidder / outbid banner
 and needs no change — "you lead" and "you have been outbid" are content the
-consumer supplies, which is what the requirement *A bidder sees their own
-maximum* needs.
+consumer supplies, which is what *A bidder reads their own commitment* needs.
 
 No new design-system primitive is proposed. No new variant, size, or token.
 
@@ -47,5 +46,5 @@ Each tied to the scenario that defines it.
 | Commitment accepted but not leading (equal maximum) | *A tie is not a refusal* — accepted, not leading. This state is easy to render as an error and must not be. |
 | Listing closed | Existing closed-listing behaviour; no maximum entry is offered. |
 
-An unauthenticated viewer sees the current bid and no maximum slot, per the
-requirement *A maximum is hidden while it leads*.
+An unauthenticated viewer sees the current bid and no maximum slot, per
+*A leader's maximum is not public*.

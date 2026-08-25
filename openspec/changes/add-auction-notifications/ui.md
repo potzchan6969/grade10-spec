@@ -29,8 +29,7 @@ None. Mail is rendered by the sending service and shares nothing with the
 site's component packages.
 
 `@grade10/i18n` is **not** involved: these messages are English regardless of
-the reader's locale, per the requirement *A message reads in English whatever
-the reader's locale*.
+the reader's locale, per `money-amounts`.
 
 ## States
 
@@ -40,8 +39,8 @@ is content, and each variation is tied to the scenario that defines it.
 | Variation | Scenario |
 | --- | --- |
 | A lot whose close has moved past its scheduled close | *The closing warning uses the scheduled close* — the warning states the scheduled close; the message must not imply it is the final deadline |
-| An amount in a currency with a different minor-unit exponent | *A message reads in English whatever the reader's locale* |
-| A close rendered in the message | *A message and the page agree on the close* — names its zone, same instant as the page |
+| An amount in a currency with a different minor-unit exponent | `money-amounts` — English sent-message money shape |
+| A close rendered in the message | `dates-and-times` — names its zone, same instant as the page |
 | The outbid message's figures | *A collector is told they have been outbid* — current bid after the displacing bid, and the effective close |
 | A recipient enrolled by both watching and bidding | *A watcher who also bids receives one copy* — one message, not a merged or repeated one |
 
