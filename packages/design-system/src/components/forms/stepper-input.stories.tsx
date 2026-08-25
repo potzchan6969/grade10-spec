@@ -1,3 +1,4 @@
+import { Trash } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Stepper } from "./stepper-input";
@@ -79,4 +80,27 @@ function BoundedExample() {
 /** Minus disables at `min`, plus at `max`. */
 export const AtBounds: Story = {
   render: () => <BoundedExample />,
+};
+
+/** At `min`, decrement stays enabled and runs a custom action (e.g. remove). */
+export const AtMinAction: Story = {
+  render: function AtMinActionExample() {
+    const [value, setValue] = useState(1);
+    const [removed, setRemoved] = useState(false);
+    if (removed) {
+      return <p className="text-sm text-secondary-foreground">Removed</p>;
+    }
+    return (
+      <Stepper
+        decrementAtMinIcon={<Trash aria-hidden />}
+        decrementAtMinLabel="Remove item"
+        label="Cart quantity"
+        max={5}
+        min={1}
+        onDecrementAtMin={() => setRemoved(true)}
+        onValueChange={setValue}
+        value={value}
+      />
+    );
+  },
 };
