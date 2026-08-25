@@ -166,10 +166,7 @@ export const Loading: Story = {
 /** Checkout CTA pending redirect (e.g. Shopify) — click Proceed to see Redirecting… */
 export const CheckoutRedirecting: Story = {
   render: (args) => (
-    <CartDrawerFooter
-      {...args}
-      onCheckout={() => new Promise(() => {})}
-    />
+    <CartDrawerFooter {...args} onCheckout={() => new Promise(() => {})} />
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

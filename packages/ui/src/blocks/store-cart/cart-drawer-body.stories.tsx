@@ -46,9 +46,8 @@ type Story = StoryObj<typeof meta>;
 /** Default baseline: 2 items and 3 empty placeholder slots */
 export const Default: Story = {
   render: (args) => {
-    const [items, setItems] = useState<readonly CartItemSummary[]>(
-      SAMPLE_CART_ITEMS,
-    );
+    const [items, setItems] =
+      useState<readonly CartItemSummary[]>(SAMPLE_CART_ITEMS);
 
     return (
       <CartDrawerBody

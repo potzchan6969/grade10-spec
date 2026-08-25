@@ -4,8 +4,8 @@ import {
   CartDrawer,
   type CartItemSummary,
   type FilterSelection,
-  type PromoState,
   ProductBrowse,
+  type PromoState,
 } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useMemo, useState } from "react";

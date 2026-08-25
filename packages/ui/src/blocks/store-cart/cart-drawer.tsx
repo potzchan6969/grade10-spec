@@ -187,10 +187,7 @@ function CartItemContent({
         <HStack
           gap="sm"
           vAlign="center"
-          className={cn(
-            "w-full whitespace-nowrap",
-            isSoldOut && "opacity-50",
-          )}
+          className={cn("w-full whitespace-nowrap", isSoldOut && "opacity-50")}
         >
           <span className="text-sm font-medium leading-5 text-foreground">
             {item.price}
@@ -305,11 +302,7 @@ function CartAmountSkeleton({
   return (
     <Skeleton
       animate="pulse"
-      className={cn(
-        "inline-block",
-        size === "lg" ? "h-6" : "h-5",
-        className,
-      )}
+      className={cn("inline-block", size === "lg" ? "h-6" : "h-5", className)}
       color="#E6E6E6"
       darkColor="rgba(249, 250, 250, 0.05)"
       loading

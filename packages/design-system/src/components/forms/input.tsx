@@ -1,10 +1,6 @@
 import { Input as InputPrimitive } from "@base-ui/react/input";
 import { cn } from "@grade10/design-system/lib/utils";
-import {
-  CheckCircle,
-  CircleNotch,
-  WarningCircle,
-} from "@phosphor-icons/react";
+import { CheckCircle, CircleNotch, WarningCircle } from "@phosphor-icons/react";
 import { cva, type VariantProps } from "class-variance-authority";
 import type { ReactNode } from "react";
 
