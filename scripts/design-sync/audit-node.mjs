@@ -12,7 +12,7 @@
  *   FIGMA_TOKEN=figd_… pnpm run figma:audit --all-blocks
  *   FIGMA_TOKEN=figd_… pnpm run figma:audit --node <url>          # dump the node's values
  *
- * audit.json is the class-audit table the figma-page-to-code skill has the
+ * audit.json is the class-audit table the page-from-figma skill has the
  * converting agent emit: [{ "label": "hero/cta", "node": "<figma url>",
  * "classes": "h-10 px-4 gap-2 bg-primary rounded-md" }, …]. The unit of
  * audit is the BLOCK: each packages/ui/src/blocks/<capability>/ directory
@@ -163,7 +163,7 @@ if (args["all-blocks"]) {
   if (!entries.length) {
     console.log(
       `No block carries an audit.json yet (${uncovered.length} block(s) uncovered: ${uncovered.join(", ")}). ` +
-        `Nothing audited — the figma-page-to-code skill writes one per converted block.`,
+        `Nothing audited — the page-from-figma skill writes one per converted block.`,
     );
     process.exit(0);
   }

@@ -12,7 +12,7 @@ Copy the block, replace `<FIGMA_FRAME_URL>` and `<TARGET>` (an app path, or "thi
 ## The prompt
 
 ```text
-Use the figma-page-to-code skill if it is available in this workspace; the
+Use the page-from-figma skill if it is available in this workspace; the
 rules below restate it either way.
 
 Implement the page at <FIGMA_FRAME_URL> in <TARGET>.
@@ -116,4 +116,4 @@ Fixing these in Figma is far cheaper than compensating for them in code, and eve
 
 ## Keeping it current
 
-This prompt restates rules that live in [`figma-component-to-code.md`](../figma-component-to-code.md), [`ui-component-contracts.md`](../ui-component-contracts.md), and the [`figma-page-to-code` skill](../../../.cursor/skills/figma-page-to-code/SKILL.md). Those are authoritative; this file is a convenience for pasting into an agent that has none of them loaded. When a rule changes there, update or delete the restated line — do not let the two drift and leave an agent following the stale copy.
+This prompt restates rules that live in [`figma-component-to-code.md`](../figma-component-to-code.md), [`ui-component-contracts.md`](../ui-component-contracts.md), and the [`page-from-figma` skill](../../../.cursor/skills/page-from-figma/SKILL.md). Those are authoritative; this file is a convenience for pasting into an agent that has none of them loaded. When a rule changes there, update or delete the restated line — do not let the two drift and leave an agent following the stale copy.
