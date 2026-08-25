@@ -17,9 +17,9 @@ it, and reach an unscoped listing until group 4 lands.
 
 Starts with the submodule bump onto group 1.
 
-- [ ] 2.1 Bump `external/grade10-spec` onto group 1 and give the browse listing its own prerendered row in the surface table, in every language, so `The listing answers at its address` and `The listing is offered to crawlers` pass with the build's public-pages check green.
-- [ ] 2.2 Point the chrome at both surfaces — the nav's store destination at the front door, the footer's all-collections at the listing — and mark the store as the surface being viewed on each, making `The listing is still the store`, `The chrome reaches the front door` and `The chrome reaches every collection` pass.
-- [ ] 2.3 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and both addresses read off a build.
+- [x] 2.1 Bump `external/grade10-spec` onto group 1 and give the browse listing its own prerendered row in the surface table, in every language, so `The listing answers at its address` and `The listing is offered to crawlers` pass with the build's public-pages check green.
+- [x] 2.2 Point the chrome at both surfaces — the nav's store destination at the front door, the footer's all-collections at the listing — and mark the store as the surface being viewed on each, making `The listing is still the store`, `The chrome reaches the front door` and `The chrome reaches every collection` pass.
+- [x] 2.3 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and both addresses read off a build.
 
 ## 3. The front door (grade10) (owner: @sean)
 
@@ -27,12 +27,12 @@ Needs group 2's surface table. Assemble against
 `apps/preview/src/pages/store-home-page.stories.tsx` in grade10-spec — same
 blocks, same order, same spacing.
 
-- [ ] 3.1 Export the hero image from frame `4171:9051`, import it into the page, and render the hero at the store's address so `The front door answers whole` and `The hero does not wait` pass with the served document carrying the headline and copy.
-- [ ] 3.2 Wire the hero's two ways on, making `The hero reaches the catalogue` and `The hero reaches the auction` pass.
-- [ ] 3.3 Render the bento from the collections the catalogue lists — their order, their names, their own artwork, the first in the large cell — making `The grid is the shop's collections`, `A collection added to the shop`, `A collection with no artwork`, `Nothing to offer` and `A tile opens its collection` pass.
-- [ ] 3.4 Render the merchandised row from the first collection the catalogue lists, titled as the catalogue names it — making `The row is the first collection's cards`, `The row follows the shop`, `A card opens its own page`, `The row reaches the rest of the collection` and `Nothing to merchandise` pass.
-- [ ] 3.5 Give both sections their in-flight and failed states, making `A section says it is loading` and `A failed read can be retried` pass.
-- [ ] 3.6 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and the front door read off a build with no script running.
+- [x] 3.1 Export the hero image from frame `4171:9051`, import it into the page, and render the hero at the store's address so `The front door answers whole` and `The hero does not wait` pass with the served document carrying the headline and copy.
+- [x] 3.2 Wire the hero's two ways on, making `The hero reaches the catalogue` and `The hero reaches the auction` pass.
+- [x] 3.3 Render the bento from the collections the catalogue lists — their order, their names, their own artwork, the first in the large cell — making `The grid is the shop's collections`, `A collection added to the shop`, `A collection with no artwork`, `Nothing to offer` and `A tile opens its collection` pass.
+- [x] 3.4 Render the merchandised row from the first collection the catalogue lists, titled as the catalogue names it — making `The row is the first collection's cards`, `The row follows the shop`, `A card opens its own page`, `The row reaches the rest of the collection` and `Nothing to merchandise` pass.
+- [x] 3.5 Give both sections their in-flight and failed states, making `A section says it is loading` and `A failed read can be retried` pass.
+- [x] 3.6 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and the front door read off a build with no script running.
 
 ## 4. Narrowing the listing from its address (grade10) (owner: @sean)
 
