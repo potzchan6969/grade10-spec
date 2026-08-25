@@ -8,10 +8,10 @@ it, and reach an unscoped listing until group 4 lands.
 
 ## 1. What the front door says (grade10-spec) (owner: @sean)
 
-- [ ] 1.1 Add a shared `storeHome` namespace in every language the platform speaks — the hero's headline, its copy, both hero button labels, browse-all, the collections heading, and the loading and retry lines — so `The front door answers whole` and `A failed read can be retried` have words to render.
-- [ ] 1.2 Add the hero's eyebrow to each brand's own catalog, grade10 and zzz, in every language that brand speaks, keeping `resolution.test.ts` green — every key is answered for every brand.
-- [ ] 1.3 Add a head entry for the browse listing's address and rewrite the store's to describe a front door, so `The store and the listing are two surfaces` passes.
-- [ ] 1.4 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test` in grade10-spec, then open a PR and push it — group 2 bumps onto the merged SHA.
+- [x] 1.1 Add a shared `storeHome` namespace in every language the platform speaks — the hero's headline, its copy, both hero button labels, browse-all, the collections heading, and the loading and retry lines — so `The front door answers whole` and `A failed read can be retried` have words to render.
+- [x] 1.2 Add the hero's eyebrow to each brand's own catalog, grade10 and zzz, in every language that brand speaks, keeping `resolution.test.ts` green — every key is answered for every brand.
+- [x] 1.3 Add a head entry for the browse listing's address and rewrite the store's to describe a front door, so `The store and the listing are two surfaces` passes.
+- [x] 1.4 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test` in grade10-spec, then open a PR and push it — group 2 bumps onto the merged SHA.
 
 ## 2. The listing's own address (grade10) (owner: @sean)
 
