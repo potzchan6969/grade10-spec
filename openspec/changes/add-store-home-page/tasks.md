@@ -44,5 +44,5 @@ Needs group 2's surface table.
 
 ## 5. Delivery and review (grade10) (owner: @sean)
 
-- [ ] 5.1 Deploy to staging and confirm against the preview: the store address answers with the front door, a tile opens the listing narrowed to its collection, the merchandised row is the shop's, and a shared link to a narrowed listing opens narrowed.
+- [x] 5.1 Deploy to staging and confirm against the preview: the store address answers with the front door, a tile opens the listing narrowed to its collection, the merchandised row is the shop's, and a shared link to a narrowed listing opens narrowed.
 - [ ] 5.2 Review the front door beside frame `4171:9023` and the preview story with design, and record any layout gap as its own change rather than absorbing it here.
