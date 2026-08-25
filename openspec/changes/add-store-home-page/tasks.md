@@ -34,7 +34,7 @@ blocks, same order, same spacing.
 - [ ] 3.5 Give both sections their in-flight and failed states, making `A section says it is loading` and `A failed read can be retried` pass.
 - [ ] 3.6 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and the front door read off a build with no script running.
 
-## 4. Narrowing the listing from its address (grade10)
+## 4. Narrowing the listing from its address (grade10) (owner: @sean)
 
 Needs group 2's surface table.
 
