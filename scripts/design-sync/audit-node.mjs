@@ -60,6 +60,7 @@ import {
   expectations,
   fileKeyFrom,
   normHex,
+  omissions,
   radiusResolver,
   toHex8,
   tokenResolver,
@@ -349,68 +350,6 @@ function auditExpectations(classString, v) {
   return out;
 }
 
-// Every expectation above is raised BY a class, so a property the code never
-// styled raises none and is never compared — which is how a header that drew
-// no background at all audited clean while Figma filled its frame. Fill and
-// stroke are read off the node instead, and the class list is searched for
-// something that claims them. Silence on either side is an answer, the same
-// argument `overflow-hidden` already makes above: every frame and component
-// states `fills` and `strokes`, so an empty one is a statement, not a shrug.
-//
-// This is deliberately not general. A rail that demanded a class for every
-// property a node happens to state would fail every element for the ones
-// Figma always emits; these two are singled out because they are the ones a
-// node cannot decline to answer, and the ones a viewer sees immediately.
-const isColor = (cls, prefix, resolveToken) => {
-  const m = new RegExp(`^${prefix}-(.+)$`).exec(cls);
-  if (!m) return false;
-  // `text-sm` is a size and `border-t` is an edge; only a value that resolves
-  // through the tokens to a hex is this element claiming a colour.
-  return !!resolveToken(m[1])?.startsWith("#");
-};
-
-function nodeOmissions(classString, v) {
-  const classes = classString.split(/\s+/).filter(Boolean);
-  // A prefixed utility describes a state this check cannot see, so it cannot
-  // be what claims the node's resting fill either.
-  const plain = classes.filter((c) => !c.includes(":"));
-  const out = [];
-
-  // On a TEXT node the fill IS the text colour, so text-* is what claims it
-  // and bg-* would be claiming something else entirely.
-  const claimsFill =
-    v.type === "TEXT"
-      ? plain.some((c) => isColor(c, "text", resolveToken))
-      : plain.some((c) => /^bg-/.test(c));
-  const fillClaim = v.type === "TEXT" ? "text-*" : "bg-*";
-  // `bg-transparent` resolves to no hex, so it raises no expectation above —
-  // here it is the element saying out loud that the node draws nothing, which
-  // is the one way to hold this rail off an element that means it.
-  const declaresNoFill = plain.includes("bg-transparent");
-
-  if (declaresNoFill && v.fill != null)
-    out.push(`bg-transparent in code, ${v.fill} in Figma`);
-  else if (v.fill != null && !claimsFill)
-    out.push(`node fills ${v.fill}, no ${fillClaim} class claims it`);
-  else if (v.fill == null && claimsFill && v.type !== "TEXT")
-    if (!plain.some((c) => isColor(c, "bg", resolveToken)))
-      // A bg-* naming a token that resolves to a hex is already compared above;
-      // this catches the one that resolves to nothing and would go unchecked.
-      out.push(
-        `${plain.find((c) => /^bg-/.test(c))} in code, no fill in Figma`,
-      );
-
-  const claimsStroke = plain.some((c) => /^border(-|$)/.test(c));
-  if (v.stroke != null && !claimsStroke)
-    out.push(`node strokes ${v.stroke}, no border-* class claims it`);
-  else if (v.stroke == null && claimsStroke)
-    out.push(
-      `${plain.find((c) => /^border(-|$)/.test(c))} in code, no stroke in Figma`,
-    );
-
-  return out;
-}
-
 // The layout-intent props are named for what the class means; when one is
 // reported as unstated, name the Figma property instead, because that is
 // what whoever opens the file has to go and look at.
@@ -508,7 +447,11 @@ for (const e of entries) {
   const nodeKey = `${e.ref.key}/${e.ref.id}`;
   if (!omissionsReported.has(nodeKey)) {
     omissionsReported.add(nodeKey);
-    for (const line of nodeOmissions(claimsByNode.get(nodeKey) ?? "", v)) {
+    for (const line of omissions(
+      claimsByNode.get(nodeKey) ?? "",
+      v,
+      resolveToken,
+    )) {
       console.error(`  ✗ ${"(unstyled)".padEnd(24)} ${line}`);
       drift++;
       compared++;

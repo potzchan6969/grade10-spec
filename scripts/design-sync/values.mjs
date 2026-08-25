@@ -148,3 +148,102 @@ export function expectations(classString, resolveToken, resolveRadius) {
   }
   return out;
 }
+
+// `text-sm` is a size and `border-t` is an edge; only a value that resolves
+// through the tokens to a hex is a class claiming a colour.
+const isColorClass = (cls, prefix, resolveToken) => {
+  const m = new RegExp(`^${prefix}-(.+)$`).exec(cls);
+  return m ? !!resolveToken(m[1])?.startsWith("#") : false;
+};
+
+/**
+ * The other half of `expectations`, and the half that has to be asked of the
+ * NODE rather than of the class string.
+ *
+ * Every expectation above is raised BY a class, so a property the code never
+ * styled raises none and is compared against nothing — which is how a header
+ * that drew no background at all audited clean while Figma filled its frame.
+ * Fill and stroke are read off the node instead, and the classes are searched
+ * for something that claims them.
+ *
+ * Silence on either side is an answer here, unlike the layout-intent rails:
+ * every frame, component, and variant states `fills` and `strokes`, so an
+ * empty one is the node saying it draws nothing rather than declining to say.
+ *
+ * Deliberately not general. A rail demanding a class for every property a
+ * node happens to state would fail every element for the ones Figma always
+ * emits; these two are singled out because they are the ones a node cannot
+ * decline to answer, and the ones a viewer sees immediately.
+ *
+ * `values` is `{ type, fill, stroke }` — 8-digit hex or null, and the node
+ * type, because on a TEXT node the fill IS the text colour and `text-*`
+ * rather than `bg-*` is what claims it. Both callers build it their own way:
+ * audit-node.mjs from a node, check-components.mjs from one variant.
+ */
+export function omissions(classString, values, resolveToken) {
+  // A prefixed utility describes a state this cannot see, so it is not what
+  // claims the resting fill either. But a colon inside an arbitrary value —
+  // `border-[color:var(--border-subtle)]` — is not a variant prefix, and
+  // dropping those drops the very classes that carry a colour. A prefix is a
+  // colon that comes before any bracket.
+  const isPrefixed = (c) => {
+    const colon = c.indexOf(":");
+    if (colon === -1) return false;
+    const bracket = c.indexOf("[");
+    return bracket === -1 || colon < bracket;
+  };
+  const plain = classString.split(/\s+/).filter((c) => c && !isPrefixed(c));
+  const out = [];
+  const isText = values.type === "TEXT";
+  const prefix = isText ? "text" : "bg";
+
+  // Three answers, not two. A class can name a colour, say there is
+  // deliberately none, or — the case that made this subtle — be a `bg-*` or
+  // `border-*` utility that is not about colour at all. `bg-clip-padding`,
+  // `bg-cover`, a bare `border` and `border-t` are geometry and painting
+  // hints; reading them as colour claims marks a component covered when
+  // nothing has compared its fill.
+  //
+  // Order matters, and last wins, because that is what the cascade does. The
+  // classes arrive base-first: a base `border border-transparent` followed by
+  // a variant's `border-border` renders the variant's colour, so reading the
+  // first answer would report every such variant as declaring no border.
+  const claim = (kind) => {
+    let answer = "unclaimed";
+    for (const c of plain) {
+      if (c === `${kind}-transparent`) answer = "none";
+      // An arbitrary value — bg-[#fff], border-[color:var(--x)] — or a
+      // gradient paints without resolving through the tokens, so it claims
+      // the property even though expectations() cannot compare what it paints.
+      else if (new RegExp(`^${kind}-\\[`).test(c)) answer = "opaque";
+      else if (kind === "bg" && /^bg-(gradient|linear|radial|conic)/.test(c))
+        answer = "opaque";
+      else if (isColorClass(c, kind, resolveToken)) answer = "token";
+    }
+    return answer;
+  };
+
+  const fill = claim(prefix);
+  if (fill === "none" && values.fill != null)
+    out.push(`${prefix}-transparent in code, ${values.fill} in Figma`);
+  else if (fill === "unclaimed" && values.fill != null)
+    out.push(`draws ${values.fill}, no ${prefix}-* class claims it`);
+  else if (fill === "opaque" && values.fill == null)
+    // A token-resolved class is already compared by expectations(); only the
+    // arbitrary value it cannot resolve needs reporting here.
+    out.push(
+      `${plain.find((c) => new RegExp(`^${prefix}-`).test(c))} in code, no fill in Figma`,
+    );
+
+  const stroke = claim("border");
+  if (stroke === "none" && values.stroke != null)
+    out.push(`border-transparent in code, ${values.stroke} in Figma`);
+  else if (stroke === "unclaimed" && values.stroke != null)
+    out.push(`strokes ${values.stroke}, no border-* class claims it`);
+  else if (stroke === "opaque" && values.stroke == null)
+    out.push(
+      `${plain.find((c) => /^border-\[/.test(c))} in code, no stroke in Figma`,
+    );
+
+  return out;
+}

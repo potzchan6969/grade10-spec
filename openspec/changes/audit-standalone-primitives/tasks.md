@@ -1,8 +1,8 @@
 ## 1. One definition of omission, two callers (grade10-spec)
 
-- [ ] 1.1 Move the fill-and-stroke omission check out of `audit-node.mjs` into `values.mjs` beside `expectations()`, keeping the per-node union of claims, and have `audit-node.mjs` call it from its new home with no change to what it reports.
-- [ ] 1.2 Call it from the variant-set comparison, reading each variant's own fills and strokes, so a variant fill no class in the configuration names is a finding — making *A variant fills what the code never names* pass.
-- [ ] 1.3 Confirm `pnpm run figma:audit --all-blocks` reports exactly what it did before the move; the refactor changes where the rule lives, not what it finds.
+- [x] 1.1 Move the fill-and-stroke omission check out of `audit-node.mjs` into `values.mjs` beside `expectations()`, keeping the per-node union of claims, and have `audit-node.mjs` call it from its new home with no change to what it reports.
+- [x] 1.2 Call it from the variant-set comparison, reading each variant's own fills and strokes, so a variant fill no class in the configuration names is a finding — making *A variant fills what the code never names* pass.
+- [x] 1.3 Confirm `pnpm run figma:audit --all-blocks` reports exactly what it did before the move; the refactor changes where the rule lives, not what it finds.
 
 ## 2. A rail that fails (grade10-spec)
 
