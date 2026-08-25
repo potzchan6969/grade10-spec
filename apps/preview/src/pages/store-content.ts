@@ -225,12 +225,40 @@ const STORE_HOME_PRODUCT_CARD_COPY = {
   sale: "SALE",
 };
 
+/** Cart drawer copy owned by the workbench the same way nav and footer copy are. */
+const STORE_CART_COPY = {
+  header: {
+    title: "Cart",
+    closeCartLabel: "Close cart",
+  },
+  item: {
+    lowStockWarning: "Low stock. Quantity adjusted",
+    soldOutLabel: "Sold Out",
+    removeItemLabel: "Remove item",
+    decreaseQtyLabel: "Decrease quantity",
+    increaseQtyLabel: "Increase quantity",
+  },
+  footer: {
+    subtotalLabel: "Subtotal",
+    shippingLabel: "Shipping",
+    shippingValue: "TBD",
+    estimatedTotalLabel: "Estimated Total",
+    usePromoCode: "Use promo code",
+    applyPromo: "Apply",
+    promoPlaceholder: "Enter promo code",
+    removePromo: "Remove",
+    checkoutButton: "Proceed to Checkout",
+    checkoutRedirecting: "Redirecting...",
+  },
+};
+
 export {
   appliedFiltersFromSelection,
   FILTER_GROUPS,
   INITIAL_SELECTION,
   PRODUCTS,
   SORT_OPTIONS,
+  STORE_CART_COPY,
   STORE_FOOTER,
   STORE_HOME_COLLECTIONS,
   STORE_HOME_HERO,
