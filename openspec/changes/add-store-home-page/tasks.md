@@ -21,7 +21,7 @@ Starts with the submodule bump onto group 1.
 - [ ] 2.2 Point the chrome at both surfaces — the nav's store destination at the front door, the footer's all-collections at the listing — and mark the store as the surface being viewed on each, making `The listing is still the store`, `The chrome reaches the front door` and `The chrome reaches every collection` pass.
 - [ ] 2.3 Verification: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and both addresses read off a build.
 
-## 3. The front door (grade10)
+## 3. The front door (grade10) (owner: @sean)
 
 Needs group 2's surface table. Assemble against
 `apps/preview/src/pages/store-home-page.stories.tsx` in grade10-spec — same
