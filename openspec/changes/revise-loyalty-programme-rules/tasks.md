@@ -68,7 +68,7 @@ a test, not a change. The clock behaviour in 4.2 is the reverse of what
 - [ ] 5.10 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run build`
 - [ ] 5.11 Refuse a reversal once what the redemption produced has been consumed and cancel it while it is still waiting, so *A collected reward cannot be reversed* and *A waiting collection is cancelled by the reversal* pass — the states an item owed moves through are `add-shopify-membership-pos`; this is the gate over them
 
-## 6. Qualifying spend at the seller (grade10)
+## 6. Qualifying spend at the seller (grade10) (owner: @gareth0712)
 
 The seller already sends a goods-only, after-discount amount and names its
 basis, so shipping, tax and the provider's own discounts are handled. What is
