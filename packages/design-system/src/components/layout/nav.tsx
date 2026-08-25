@@ -169,7 +169,10 @@ function Nav({
     <IconProvider>
       <header
         data-slot="nav"
-        className={cn("@container flex w-full flex-col", className)}
+        className={cn(
+          "@container flex w-full flex-col bg-background",
+          className,
+        )}
         {...props}
       >
         {promo != null ? (
