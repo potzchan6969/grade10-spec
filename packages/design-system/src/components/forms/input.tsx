@@ -1,11 +1,7 @@
 import { Input as InputPrimitive } from "@base-ui/react/input";
 import { cn } from "@grade10/design-system/lib/utils";
+import { CheckCircle, CircleNotch, WarningCircle } from "@phosphor-icons/react";
 import { cva, type VariantProps } from "class-variance-authority";
-import {
-  CircleAlertIcon,
-  CircleCheckIcon,
-  LoaderCircleIcon,
-} from "lucide-react";
 import type { ReactNode } from "react";
 
 /**
@@ -35,20 +31,25 @@ function Input({ className, ...props }: React.ComponentProps<"input">) {
 // `placeholder` is an empty value rather than a choice, and `isDisabled` and
 // `isLoading` are boolean gates.
 //
-// Focus wins the border on every status — agreed with design when the Figma
-// grid was filled, so an error field still shows where the caret is.
+// Focus keeps the status stroke and adds a matching 1px ring (Text Input
+// `2132:2715`, Stepper `4623:395`) — error/success stay destructive/success,
+// they do not flip to the default ring. Ring is inset so overflow-hidden
+// ancestors (drawer, height reveals) cannot clip it.
 const inputBoxVariants = cva(
   // Search Input (`2132:2782`) and Text Input (`2132:2715`) both bind
   // `Size/size-10`, `Radius/radius-full`, `Gap/gap-4` padding and `Gap/gap-2`
   // between the magnifier/value. Bind `radius-full` on the token, as Button
   // already does — `rounded-full` is a different number.
-  "flex h-10 w-full items-center gap-2 rounded-(--radius-full) border bg-input px-4 transition-colors focus-within:border-ring has-disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "flex h-10 w-full items-center gap-2 rounded-(--radius-full) border bg-input px-4 transition-[color,box-shadow,border-color] focus-within:ring-1 focus-within:ring-inset has-disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       status: {
-        default: "border-border",
-        error: "border-destructive-ring",
-        success: "border-success-ring",
+        default:
+          "border-border focus-within:border-ring focus-within:ring-ring",
+        error:
+          "border-destructive-ring focus-within:border-destructive-ring focus-within:ring-destructive-ring",
+        success:
+          "border-success-ring focus-within:border-success-ring focus-within:ring-success-ring",
       },
     },
     defaultVariants: {
@@ -61,8 +62,10 @@ const messageVariants = cva("text-xs", {
   variants: {
     status: {
       default: "text-secondary-foreground",
-      error: "text-destructive-foreground",
-      success: "text-success-foreground",
+      // Figma binds Status/destructive and Status/success, not the on-fill
+      // `*-foreground` tokens used by solid destructive/success surfaces.
+      error: "text-destructive",
+      success: "text-success",
     },
   },
   defaultVariants: {
@@ -174,6 +177,11 @@ function InputShell({
  * One slot holds one icon: while loading, the status is being revalidated
  * rather than gone, so the spinner takes the slot and the message keeps its
  * tone. Agreed with design when the Figma grid was filled.
+ *
+ * Glyphs match Text Input (`2132:2715`): Phosphor WarningCircle / CheckCircle /
+ * CircleNotch, toned with Status/destructive and Status/success. Regular
+ * weight overrides the package IconProvider bold default — Figma draws thin
+ * strokes on these status glyphs.
  */
 function InputStatusIcon({
   status = "default",
@@ -182,9 +190,27 @@ function InputStatusIcon({
   status?: InputStatus;
   loading?: boolean;
 }) {
-  if (loading) return <LoaderCircleIcon className="animate-spin" />;
-  if (status === "error") return <CircleAlertIcon />;
-  if (status === "success") return <CircleCheckIcon />;
+  if (loading) {
+    return (
+      <span className="animate-spin text-secondary-foreground group-data-[disabled]/input-shell:text-disabled-foreground">
+        <CircleNotch aria-hidden size={16} weight="regular" />
+      </span>
+    );
+  }
+  if (status === "error") {
+    return (
+      <span className="text-destructive group-data-[disabled]/input-shell:text-disabled-foreground">
+        <WarningCircle aria-hidden size={16} weight="regular" />
+      </span>
+    );
+  }
+  if (status === "success") {
+    return (
+      <span className="text-success group-data-[disabled]/input-shell:text-disabled-foreground">
+        <CheckCircle aria-hidden size={16} weight="regular" />
+      </span>
+    );
+  }
   return null;
 }
 

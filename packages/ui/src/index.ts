@@ -54,6 +54,30 @@ export {
 } from "./blocks/auth-two-factor/two-factor-verify-form";
 // shared cross-capability types
 export type { AsyncAction, AsyncState } from "./blocks/shared/async";
+// shared-ui/store-cart
+export {
+  CartDrawer,
+  CartDrawerBody,
+  type CartDrawerBodyProps,
+  CartDrawerFooter,
+  type CartDrawerFooterProps,
+  CartDrawerHeader,
+  type CartDrawerHeaderProps,
+  type CartDrawerProps,
+  CartItem,
+  type CartItemProps,
+  CartItemSlot,
+  type CartItemSlotProps,
+} from "./blocks/store-cart/cart-drawer";
+export type {
+  CartDrawerCopy,
+  CartDrawerFooterCopy,
+  CartDrawerHeaderCopy,
+  CartItemCopy,
+  CartItemStatus,
+  CartItemSummary,
+  PromoState,
+} from "./blocks/store-cart/types";
 // shared-ui/store-home
 export {
   StoreCollectionGrid,

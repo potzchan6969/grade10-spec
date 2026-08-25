@@ -1,0 +1,32 @@
+{
+  "breakpoints": {
+    "375": {
+      "name": "store-cart-badge",
+      "viewportWidth": 375,
+      "width": 28,
+      "height": 24,
+      "bones": [[0, 0, 100, 24, 999]]
+    },
+    "768": {
+      "name": "store-cart-badge",
+      "viewportWidth": 768,
+      "width": 28,
+      "height": 24,
+      "bones": [[0, 0, 100, 24, 999]]
+    },
+    "1280": {
+      "name": "store-cart-badge",
+      "viewportWidth": 1280,
+      "width": 28,
+      "height": 24,
+      "bones": [[0, 0, 100, 24, 999]]
+    },
+    "1440": {
+      "name": "store-cart-badge",
+      "viewportWidth": 1440,
+      "width": 28,
+      "height": 24,
+      "bones": [[0, 0, 100, 24, 999]]
+    }
+  }
+}
