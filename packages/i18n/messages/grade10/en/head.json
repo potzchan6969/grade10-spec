@@ -5,8 +5,12 @@
     "description": "Buy graded slabs outright from the Grade10 store, or bid on the ones that only come up once. One account carries your profile, your orders, and your bids."
   },
   "store": {
-    "title": "Store — Grade10",
-    "description": "Graded slabs at a fixed price, each listed with its grade. Browse the Grade10 store and check out when you are ready."
+    "title": "Marketplace — Grade10",
+    "description": "Sealed boxes, singles and graded slabs, priced and ready to ship. Start from a collection, or bid on the cards that only come up once."
+  },
+  "storeCollections": {
+    "title": "All collections — Grade10",
+    "description": "Graded slabs at a fixed price, each listed with its grade. Browse every collection the Grade10 store carries and check out when you are ready."
   },
   "auction": {
     "title": "Auctions — Grade10",

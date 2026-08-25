@@ -1,0 +1,11 @@
+{
+  "title": "交易市集",
+  "description": "原封盒、单卡与评级卡，均已定价，随时发货。只出现一次的珍品，则在拍卖中登场。",
+  "shopLabel": "选购",
+  "auctionLabel": "拍卖",
+  "browseAll": "查看全部",
+  "collections": "系列",
+  "loading": "正在加载…",
+  "error": "此区块加载失败。",
+  "retry": "再试一次"
+}
