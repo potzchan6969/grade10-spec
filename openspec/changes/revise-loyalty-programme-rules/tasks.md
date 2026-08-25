@@ -109,8 +109,8 @@ opposite as correct.
 Depends on group 2 for the contract shape. Nothing of this exists today — no
 rate on the config and no debit path outside the reward menu.
 
-- [ ] 9.1 Add the exchange rate to the programme config, validated at boot
-- [ ] 9.2 Debit points against a purchase as one recorded mutation, so *Points reduce the bill* passes and a retry cannot debit twice
+- [x] 9.1 Add the exchange rate to the programme config, validated at boot
+- [x] 9.2 Debit points against a purchase as one recorded mutation, so *Points reduce the bill* passes and a retry cannot debit twice
 - [ ] 9.3 Make a channel settling through a money-off artifact cost the same points and record one redemption, so *One debit however the channel settles it* passes
 - [ ] 9.4 Exclude the points-paid amount from qualifying spend at the seller — needs group 6 — so *The part paid with points earns nothing* passes
 - [ ] 9.5 Surface the points payment option in the store checkout flow
