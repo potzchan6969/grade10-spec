@@ -249,6 +249,12 @@ whole amount it removed.
 - **WHEN** a member's inactivity window passes
 - **THEN** their balance stops counting toward what they can spend immediately
 
+#### Scenario: Expired points do not come back
+
+- **WHEN** a member whose balance has expired makes a purchase
+- **THEN** the new earning starts a fresh balance and a fresh inactivity window
+- **AND** nothing that expired returns
+
 #### Scenario: A correction does not extend the balance's life
 
 - **WHEN** an operator corrects a balance, or a refund claws points back
