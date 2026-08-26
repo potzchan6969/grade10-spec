@@ -8,37 +8,46 @@ automatically accepted requirement.
 
 ### Requirement: Tracked annotation text is compared with a reviewed baseline
 
-The monitor SHALL compare every annotation in each registered design surface
-with a versioned baseline. It SHALL report an annotation as added, changed, or
-removed when its text or presence differs, while ignoring representation-only
+The monitor SHALL compare every annotation occurrence in each registered
+design surface with a versioned baseline. A node MAY carry zero, one, or
+multiple annotations. Each occurrence SHALL preserve its text, category, and
+set of pinned properties; an annotation without text SHALL remain a trackable
+occurrence. The monitor SHALL report an occurrence as added, changed, or removed
+when its content or presence differs, while ignoring representation-only
 differences such as line-ending style.
 
-The baseline SHALL identify annotations by their Figma file and node identity
-and SHALL retain any reviewed association to an OpenSpec capability, change,
-or task group. A scan SHALL NOT update the baseline.
+The baseline SHALL identify the containing Figma file and node, then identify
+each accepted annotation occurrence with a baseline-local key that is stable
+across text edits and array reordering. Each occurrence SHALL retain its own
+reviewed association to an OpenSpec capability, change, or task group. A scan
+SHALL NOT update the baseline.
 
 #### Scenario: Annotation text changes
 
-- **GIVEN** a tracked node whose current annotation text differs from its
-  baseline text
+- **GIVEN** a tracked node has multiple baseline annotation occurrences
+- **AND** one current occurrence has different text while its siblings are
+  unchanged
 - **WHEN** the monitor scans the node
-- **THEN** it reports the annotation as changed
+- **THEN** it reports only that occurrence as changed
 - **AND** it includes the previous and current text
+- **AND** it does not report the unchanged sibling occurrences
 
 #### Scenario: Annotation is added under a tracked design surface
 
-- **GIVEN** a node within a registered design surface has an annotation that is
-  absent from the baseline
+- **GIVEN** a node within a registered design surface has an annotation
+  occurrence that is absent from the baseline
 - **WHEN** the monitor scans that surface
-- **THEN** it reports the annotation as added
-- **AND** it does not add the annotation to the baseline
+- **THEN** it reports that occurrence as added
+- **AND** it does not add the occurrence to the baseline
 
 #### Scenario: Annotation is removed from an existing node
 
-- **GIVEN** the baseline contains an annotation for a node that still exists
-- **AND** the current node has no annotation
+- **GIVEN** the baseline contains multiple annotation occurrences for a node
+  that still exists
+- **AND** one baseline occurrence is absent while another remains current
 - **WHEN** the monitor scans the node
-- **THEN** it reports the annotation as removed
+- **THEN** it reports only the absent occurrence as removed
+- **AND** it does not report the remaining occurrence
 
 #### Scenario: Only line-ending representation differs
 
@@ -46,6 +55,83 @@ or task group. A scan SHALL NOT update the baseline.
   representation
 - **WHEN** the monitor compares them
 - **THEN** it reports no annotation change
+
+#### Scenario: Multiple annotations are baselined independently
+
+- **GIVEN** one tracked node has two annotations with different text or
+  structure
+- **WHEN** the baseline is reviewed
+- **THEN** it records two annotation occurrences under that node
+- **AND** each occurrence has its own baseline-local key and associations
+
+#### Scenario: Property-only annotation is tracked
+
+- **GIVEN** a tracked node has an annotation with pinned properties and no text
+- **WHEN** the monitor scans the node
+- **THEN** it treats that annotation as an occurrence
+- **AND** it compares the category and pinned properties with the baseline
+
+### Requirement: Multiple annotations are matched without guessing
+
+The monitor SHALL compare annotations on the same node as an order-independent
+multiset. It SHALL first match occurrences whose normalized text, category, and
+canonical pinned-property set are equal. Among the remaining occurrences, it
+SHALL classify one old and one current occurrence as changed only when they are
+the unique unmatched pair with the same category and pinned-property set.
+
+The monitor SHALL preserve the number of identical occurrences. When multiple
+unmatched old and current occurrences share the same category and
+pinned-property set, it SHALL NOT infer which texts correspond. It SHALL report
+the unresolved old occurrences as removed, the unresolved current occurrences
+as added, and the pairing as ambiguous. An occurrence whose category or pinned
+properties change SHALL likewise be reported as removed plus added rather than
+being paired by similar text.
+
+#### Scenario: Annotation array order changes
+
+- **GIVEN** a node has the same annotation occurrences as its baseline in a
+  different array order
+- **WHEN** the monitor scans the node
+- **THEN** it reports no annotation change
+
+#### Scenario: One of several structural matches changes text
+
+- **GIVEN** exact matching cancels every unchanged annotation on a node
+- **AND** one unmatched baseline occurrence and one unmatched current
+  occurrence share the same category and pinned-property set
+- **WHEN** the monitor compares the remaining occurrences
+- **THEN** it reports that unique pair as one changed annotation
+- **AND** it retains the baseline-local key and associations on the finding
+
+#### Scenario: Duplicate annotation count decreases
+
+- **GIVEN** the baseline contains two identical annotation occurrences on one
+  node
+- **AND** the current node contains one identical occurrence
+- **WHEN** the monitor compares their multiplicity
+- **THEN** it reports one occurrence as removed
+- **AND** it does not collapse the baseline duplicates into one occurrence
+- **AND** if the duplicate occurrences have different associations, it marks
+  the removed occurrence's ownership as ambiguous
+
+#### Scenario: Several unmatched siblings are ambiguous
+
+- **GIVEN** two unmatched baseline occurrences and two unmatched current
+  occurrences share the same category and pinned-property set
+- **WHEN** the monitor cannot pair them uniquely
+- **THEN** it reports the baseline occurrences as removed
+- **AND** it reports the current occurrences as added
+- **AND** it marks the pairing and any occurrence-specific ownership as
+  ambiguous
+
+#### Scenario: Annotation structure changes
+
+- **GIVEN** an annotation retains similar text but changes category or pinned
+  properties
+- **WHEN** the monitor compares the node with its baseline
+- **THEN** it reports the baseline occurrence as removed
+- **AND** it reports the current occurrence as added
+- **AND** it does not infer occurrence identity from similar text
 
 ### Requirement: Missing evidence never appears as a clean scan
 
@@ -166,7 +252,8 @@ The project SHALL provide one manually runnable workflow skill through its
 supported agent-platform parity mechanism. Every supported AI model or harness
 SHALL receive the same report contract from that skill without requiring a
 harness-specific project workflow. Each finding SHALL include its Figma file
-and node link, change kind, previous and current text when applicable,
+and node link, annotation key when known, category and pinned properties,
+change kind, previous and current text when applicable, ambiguity and
 association evidence, ownership group, and a recommended next action.
 
 The default report SHALL show `My assigned work`, `Authored by me`, and

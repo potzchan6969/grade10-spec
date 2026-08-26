@@ -12,16 +12,30 @@
   repository test command.
 - [x] 1.4 Verify the group with the design-sync fixture tests, `pnpm run test`,
   `pnpm run lint`, and `pnpm run typecheck`.
+- [ ] 1.5 Migrate the baseline to per-node annotation occurrence arrays with
+  stable local keys and per-occurrence associations, preserving schema-version-1
+  evidence so `Multiple annotations are baselined independently` and
+  `Property-only annotation is tracked` pass.
+- [ ] 1.6 Replace the single-annotation guard with order-independent multiset
+  matching and occurrence-aware findings so `Annotation array order changes`,
+  `Annotation text changes`, `One of several structural matches changes
+  text`, `Duplicate annotation count decreases`, `Several unmatched siblings
+  are ambiguous`, and `Annotation structure changes` pass.
+- [ ] 1.7 Verify the extended group with fixtures covering zero, one, multiple,
+  duplicate, reordered, property-only, uniquely changed, structurally changed,
+  and ambiguously changed annotations; `pnpm run test`; `pnpm run lint`; and
+  `pnpm run typecheck`.
 
 ## 2. Establish the shared nightly rail (grade10-spec)
 
 This group depends on group 1's scanner contract landing first.
 
-- [ ] 2.1 Inventory the configured Figma file, review linked and explicit
-  annotation roots, and add the initial baseline with exact capability, change,
-  task-group, or no-impact associations so `Annotation is added under a tracked
-  design surface` and `An annotation has no project association` are exercised
-  against representative current nodes.
+- [ ] 2.1 Inventory the configured Figma file, review every occurrence beneath
+  linked and explicit annotation roots, and add the initial schema-version-2
+  baseline with occurrence-specific capability, change, task-group, or
+  no-impact associations so `Multiple annotations are baselined independently`,
+  `Annotation is added under a tracked design surface`, and `An annotation has
+  no project association` are exercised against representative current nodes.
 - [x] 2.2 Add the annotation scanner to the design-sync workflow with a GitHub
   step summary and distinct drift versus blocked failures so `Annotation text
   changes` and `Figma cannot be read` remain visible to the whole team.
@@ -29,8 +43,9 @@ This group depends on group 1's scanner contract landing first.
   reviewed-baseline acceptance, stale association, and rollback procedures
   required by `Tracked annotation text is compared with a reviewed baseline`
   and `Annotation changes are traced only through exact evidence`.
-- [ ] 2.4 Verify the group with clean, changed, removed, untracked, orphaned,
-  and unavailable-Figma fixtures; a read-only live `pnpm run
+- [ ] 2.4 Verify the group with clean, changed, removed, multiple, reordered,
+  duplicate, untracked, orphaned, and unavailable-Figma fixtures; a read-only
+  live `pnpm run
   figma:annotations -- --json` when `FIGMA_TOKEN` is available; `pnpm run
   check:design-system`; `pnpm run test`; `pnpm run lint`; and `pnpm run
   typecheck`.
@@ -62,3 +77,12 @@ submodule is the boundary before the application-repository work begins.
   current-owner, authored, unassigned, and other-owner invocations; `pnpm run
   agent:check-parity`; `pnpm run lint`; `pnpm run typecheck`; and `pnpm run
   test`.
+- [ ] 3.6 Update the skill's report rules to keep separate findings and
+  occurrence-specific ownership for several annotations on one node, while
+  preserving ambiguity for unpairable duplicates, so `Annotation text
+  changes`, `Several unmatched siblings are ambiguous`, and `Actionable changes
+  are found` pass together.
+- [ ] 3.7 Verify the extended group with one-node fixtures containing unchanged,
+  independently owned, and ambiguously paired sibling annotations, then rerun
+  `pnpm run agent:check-parity`, `pnpm run lint`, `pnpm run typecheck`, and
+  `pnpm run test`.

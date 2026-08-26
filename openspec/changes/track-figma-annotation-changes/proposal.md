@@ -14,6 +14,9 @@ below one business day.
 
 - Add a versioned baseline and deterministic scanner for annotations attached
   to tracked Figma components and nodes.
+- Preserve and compare every annotation occurrence on a node independently,
+  including its text, category, pinned properties, and OpenSpec associations,
+  without treating array order as identity.
 - Produce a stable machine-readable diff that distinguishes added, changed,
   removed, untracked, ambiguous, and blocked evidence.
 - Add a Grade10 project skill that interprets the diff against active OpenSpec

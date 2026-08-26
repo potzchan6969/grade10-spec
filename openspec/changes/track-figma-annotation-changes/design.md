@@ -63,15 +63,25 @@ Alternatives considered:
 - Let the skill call Figma directly: rejected because AI-generated comparisons
   would be harder to test, reproduce, and run in CI.
 
-### 2. A versioned manifest is both scan scope and accepted baseline
+### 2. A versioned occurrence manifest is both scan scope and accepted baseline
 
-`scripts/design-sync/annotation-baseline.json` will carry a schema version and
-entries keyed by Figma file plus colon-form node ID. Each entry records the
-source root, accepted annotation text, and optional exact associations to a
-capability, active change, and task group. Source roots are discovered from
-Code Connect URLs and audit tables; the manifest may register an additional
-root for annotation-only design nodes that are not represented by either
-source.
+`scripts/design-sync/annotation-baseline.json` schema version 2 will group
+entries by Figma file plus colon-form node ID. A node entry holds an
+`annotations` array rather than one text value. Each accepted occurrence has a
+baseline-local `annotationKey`, normalized text, category ID, a canonical
+sorted pinned-property set, and its own optional exact associations to a
+capability, active change, and task group. The key is unique within the node and
+stable when text or array order changes; it is not derived from an array index
+or mutable text.
+
+Schema version 1 entries migrate one-to-one into node entries containing one
+occurrence. The migration assigns a deterministic initial key and preserves
+the entry's source root, associations, and no-impact reason. A malformed or
+partly migrated baseline blocks the scan instead of mixing schemas.
+
+Source roots are discovered from Code Connect URLs and audit tables; the
+manifest may register an additional root for annotation-only design nodes that
+are not represented by either source.
 
 The scanner will inspect each root and its descendants. A separate inventory
 mode will enumerate annotations in the configured Figma file for the initial
@@ -84,6 +94,26 @@ Text comparison will normalize carriage-return line endings to newline and
 nothing semantic. Whitespace, punctuation, links, labels, and markdown remain
 part of the diff because they can change the instruction.
 
+The scanner will canonicalize each current annotation as normalized text (empty
+when the annotation is property-only), category ID or null, and a sorted set of
+pinned properties. Matching is local to one node and follows four deterministic
+steps:
+
+1. Cancel exact canonical matches as a multiset, independent of Figma array
+   order.
+2. Within each category plus pinned-property signature, pair one remaining old
+   and one remaining current occurrence as changed only when that pair is
+   unique.
+3. Emit every still-unmatched baseline occurrence as removed and every
+   still-unmatched current occurrence as added.
+4. Mark a signature ambiguous when more than one old and current occurrence
+   remain, and do not transfer an occurrence-specific association by guess.
+
+Identical duplicate annotations retain multiplicity. When one of two identical
+occurrences disappears, the scanner reports one removal; if those baseline
+duplicates carry different associations, ownership remains ambiguous because
+Figma supplies no occurrence identity that can prove which one was removed.
+
 Alternatives considered:
 
 - Scan the whole file every day: rejected because the design file contains
@@ -94,6 +124,12 @@ Alternatives considered:
   expired or replaced artifact would silently redefine the comparison point.
 - Derive scope only from Code Connect: rejected because some audited or
   annotation-only nodes are not component mappings.
+- Use Figma array position as identity: rejected because reordering unchanged
+  annotations would create false changed findings and move associations.
+- Use a text hash as identity: rejected because editing the text would turn one
+  change into an unrelated removal and addition.
+- Pair duplicates by edit distance or prose similarity: rejected because a
+  deterministic-looking guess could transfer the wrong OpenSpec ownership.
 
 ### 3. The scanner has a stable JSON contract and meaningful exit states
 
@@ -101,8 +137,14 @@ Alternatives considered:
 and environment-loading utilities rather than add a client dependency. Its
 `--json` output will contain a schema version, overall status, scanned sources,
 blockers, and findings. Every finding will carry a stable ID, file and node
-link, node name, change kind, old and current text where applicable, registered
-source, and baseline associations.
+link, node name, annotation key when matched, canonical annotation structure,
+change kind, old and current text where applicable, ambiguity details,
+registered source, and baseline associations. Finding identity includes the
+annotation occurrence so two changes of the same kind on one node never
+collide. Inventory emits one record per occurrence rather than one record per
+annotated node. An unmatched current occurrence uses its canonical fingerprint
+plus a one-based multiplicity ordinal after canonical sorting, never its raw
+Figma array position, so repeated scans of the same multiset keep stable IDs.
 
 Exit `0` means every registered surface was read and no drift was found. Exit
 `1` means the scan completed and found annotation drift. Exit `2` means some
@@ -132,10 +174,10 @@ record either an exact OpenSpec association or an explicit no-impact reason.
 The resulting Git diff is the acceptance record and can be reviewed beside the
 relevant requirement, design, or implementation change.
 
-A baseline entry may point to a durable capability without an active task.
-Active change and task-group associations are optional and should be removed or
-updated when they stop being true. Stale references are findings, not reasons
-to guess a successor.
+A baseline annotation occurrence may point to a durable capability without an
+active task. Active change and task-group associations are optional and should
+be removed or updated when they stop being true. Stale references are findings,
+not reasons to guess a successor.
 
 Alternatives considered:
 
@@ -221,6 +263,11 @@ Alternatives considered:
 - [A Figma node is replaced and receives a new ID] -> Report the old node as
   orphaned and the new annotation as untracked; require one reviewed patch to
   reconnect them.
+- [Several same-structure annotations change together] -> Report unmatched
+  removals and additions with ambiguity evidence rather than transferring the
+  wrong annotation key or owner.
+- [Figma reorders annotations] -> Compare canonical occurrences as a multiset
+  and never use array position as identity.
 - [OpenSpec task groups are renamed, archived, or reassigned] -> Resolve active
   artifacts on every run and surface stale associations as ambiguous or
   unassigned.
@@ -234,10 +281,11 @@ Alternatives considered:
 
 ## Migration Plan
 
-1. Add fixture-driven scanner tests and the baseline schema without enabling
-   CI enforcement.
-2. Run whole-file inventory against the configured Figma file, review the
-   initial tracked roots and associations, and commit a clean baseline.
+1. Add fixture-driven scanner tests and migrate the single-annotation baseline
+   schema to occurrence arrays without enabling CI enforcement.
+2. Run whole-file inventory against the configured Figma file, review every
+   annotation occurrence, tracked root, and association, and commit a clean
+   schema-version-2 baseline.
 3. Enable the annotation step in the nightly design-sync workflow and confirm a
    controlled fixture or temporary annotation difference produces the expected
    GitHub summary and exit state.
