@@ -6,7 +6,7 @@ already exists unchanged. Group 1 is the seam — the split between "answers at
 one address per locale" and "the build wrote a document" — and groups 2 and 3
 both need it landed. Those two depend on nothing in each other.
 
-## 1. Addresses and the route table (grade10)
+## 1. Addresses and the route table (grade10) (owner: @sean)
 
 - [ ] 1.1 Split the address layer's one predicate in two — answers at one address per locale (now every public surface) and the build wrote a document (still only the prerendered ones) — deriving both from the surface table, so a surface added later inherits its prefixes by being public.
 - [ ] 1.2 Register the prefixed card and lot patterns ahead of the prefixed catalogue splat, making `A card answers under a prefix as itself` and `A lot answers under a prefix as itself` pass — today the splat answers those addresses with the catalogue's own page.
