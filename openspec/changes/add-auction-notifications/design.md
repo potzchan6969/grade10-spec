@@ -6,104 +6,160 @@ Motivation is in [`proposal.md`](proposal.md).
 
 ## Context
 
-Two platform rules already govern the content of these messages and are not
-restated here: `money-amounts` requires a sent message to render money in
-English independent of the reader's locale, and `dates-and-times` requires a
-close in an auction email to name its zone and to state the same instant as
-the page.
+Who is enrolled, which six messages fire, that the closing warning uses the
+scheduled close, that outbid wins over new-bid, and that a called-off listing
+sends nothing further are the spec. Money and times in a sent message already
+follow `money-amounts` and `dates-and-times`.
 
-A lot's close moves. The extension rule pushes it back for every late bid, up
-to an optional per-listing cap. Any message keyed to "before the close" has to
-choose which close it means.
+Auction already mails from bid and watch notify columns (`outbid`,
+`now_top`, `listing_ending_soon` at one hour before `scheduled_ends_at`, and
+others). `@grade10/email` is a render-and-send library with no database.
 
 ## Decisions
 
-### The auction service decides who is enrolled; a dedicated email service sends
+### Auction emits; `@grade10/email` sends; auction owns the log
 
-The service that owns the lot knows who watches it and who has bid on it, and
-already sees every accepted bid and every state change. It emits an event
-naming the message type, the listing, and the recipient's user id. A dedicated
-email sending service — not the auction service, and not the store service —
-resolves the registered address, renders, sends, and owns the send log.
+Auction names the type, the listing, and the recipient. The email library
+renders and delivers. The send log is an auction table: the operator reads it
+next to the listing, and `@grade10/email` has no store.
 
-*Alternative rejected — let the auction service send.* Sending couples the
-auction worker to the mail provider, the templates, and the retry ladder. The
-auction's job is who is enrolled and which message is owed.
+*Alternative rejected — the auction worker talks to the mail provider.*
+Sending couples the worker to templates and the retry ladder. *Alternative
+rejected — the store service sends.* Auction already must not grow a store
+binding. *Alternative rejected — a new email-service database for the log.*
+One table would mint a Neon role and an admin path that then joins listings
+it does not own. *Alternative rejected — the sender works out recipients.*
+It would duplicate watches and bids.
 
-*Alternative rejected — let the store service send.* Auction already must not
-grow a store binding. The store does not own auction enrolment, and putting
-send on each brand's store duplicates the log and the once-per-lot rule.
+### Closing warning reuses `ending_soon_notified_at`
 
-*Alternative rejected — let the sender work out recipients.* It would need to
-read watches and bids, duplicating the ownership the auction service already
-has, and it would put the deduplication rule in two places.
+The existing watch stamp becomes the spec's 24-hour closing warning (lead
+changes from one hour to 24). Bidders without a watch still receive it, so
+`bids` gains the same stamp. Do not add a second closing column.
 
-### The closing warning is keyed to the scheduled close, not the effective one
+*Alternative rejected — a new `closes_in_24h_notified_at` beside the existing
+stamp.* Two stamps for one message. Already-stamped watches stay stamped;
+they are not mailed again.
 
-A "closes in 24 hours" message measured against a close that moves would be
-recomputed every time a late bid landed, and could fire more than once or
-never fire at all. The scheduled close is fixed at publish, so the point is
-computable once.
+### Once is a unique row on `mail_sends`, plus sweep stamps
 
-*Alternative rejected — key it to the effective close.* Late bids arrive
-inside the final 30 minutes, so the effective close rarely moves more than
-hours; the warning would either be sent late or be cancelled and rescheduled
-repeatedly. *Alternative rejected — send it against the effective close and
-suppress duplicates.* Same complexity, and the collector receives a warning
-that no longer matches the deadline they will actually face, since extended
-bidding announces itself separately anyway.
+Progress uniqueness is `(listing_id, storefront, user_id, type)`. Activity
+uniqueness includes `cause_id` (the triggering bid). Sweep stamps on
+`watches` and `bids` keep a pass from claiming the same row twice before the
+log write lands. The log stores no body.
 
-The accepted cost: on a lot extended by hours, the 24-hour warning is more
-than 24 hours before the real end. Extended bidding has its own message, which
-is the one that matters at that point.
+*Alternative rejected — derive once from enrolment at send time.* A
+collector who unwatches and re-watches would receive the opening message
+twice. *Alternative rejected — store the rendered body.* Templates go stale;
+the operator's question is which message went out.
 
-### Deduplication is per collector, per lot, per message
+Outbid-over-new-bid is chosen before emit, so the log never sees both for
+one bid.
 
-The email service's send log is the record of what was sent. It is what makes
-"once per lot per collector" true, and it is the operator's answer to "I was
-never told". Auction still chooses outbid over new-bid before it emits, so the
-email service never sees both for one bid.
+## Data model
 
-The log stores type, the address it was sent to, Sent At, and the listing. It
-does not store the body. An operator filters it by that address.
+Schema `auction`. Timestamps are `timestamptz(3)`. `mail_sends.type` slugs:
 
-*Alternative rejected — derive it from enrolment at send time.* A collector's
-enrolment changes; a sent message does not. Deriving means a collector who
-unwatches and re-watches receives the opening message twice.
+`opens_in_24h` · `opened` · `closes_in_24h` · `extended` · `new_bid` ·
+`outbid`
 
-*Alternative rejected — store the rendered body on the log.* The operator's
-question is which message went out, not what it said. Bodies go stale when
-templates change, and they are the collector's mail.
+### `watches` — additive stamp columns
 
-### The outbid message wins over the new-bid message
+| Column | Type | Null | Default |
+| --- | --- | --- | --- |
+| `opens_in_24h_notified_at` | `timestamptz(3)` | NULL | `NULL` |
+| `opened_notified_at` | `timestamptz(3)` | NULL | `NULL` |
+| `extended_notified_at` | `timestamptz(3)` | NULL | `NULL` |
 
-One accepted bid can qualify a collector for both. Being outbid is the
-stronger and more actionable fact, so it is the one sent.
+Indexes, partial so stamped rows leave them:
 
-*Alternative rejected — send both.* Two messages about one event, arriving
-together, reading as if two things happened.
+| Index | On | Where |
+| --- | --- | --- |
+| `idx_watches_opens_in_24h_due` | `(listing_id, created_at)` | `opens_in_24h_notified_at IS NULL` |
+| `idx_watches_opened_due` | `(listing_id, created_at)` | `opened_notified_at IS NULL` |
+| `idx_watches_extended_due` | `(listing_id, created_at)` | `extended_notified_at IS NULL` |
 
-### A bid Grade10 places on a collector's behalf is that collector's own bid
+The existing `idx_watches_listing_id_notified` stays the `closes_in_24h`
+claim.
 
-So it never triggers their own new-bid message. This matters only once
-automatic bidding ships, and is specified now so the rule does not have to be
-retrofitted.
+### `bids` — additive stamp columns
+
+`outbid_notified_at` already exists. `new_bid` is per triggering bid, so it
+is not a stamp on the recipient row; the activity unique key is the once.
+
+| Column | Type | Null | Default |
+| --- | --- | --- | --- |
+| `ending_soon_notified_at` | `timestamptz(3)` | NULL | `NULL` |
+| `extended_notified_at` | `timestamptz(3)` | NULL | `NULL` |
+
+| Index | On | Where |
+| --- | --- | --- |
+| `idx_bids_ending_soon_due` | `(listing_id, created_at)` | `ending_soon_notified_at IS NULL` |
+| `idx_bids_extended_due` | `(listing_id, created_at)` | `extended_notified_at IS NULL` |
+
+### `mail_sends` — new table
+
+`sent_to` is the registered address at send time, so a later email change
+does not rewrite history. `cause_id` is the triggering bid id for `new_bid`
+and `outbid`; NULL for the four progress messages.
+
+| Column | Type | Null | Default |
+| --- | --- | --- | --- |
+| `id` | `text` | NOT NULL | — (PK) |
+| `listing_id` | `text` | NOT NULL | — (FK `auction_listings.id`) |
+| `storefront` | `text` | NOT NULL | — |
+| `user_id` | `text` | NOT NULL | — |
+| `sent_to` | `text` | NOT NULL | — |
+| `type` | `text` | NOT NULL | — |
+| `cause_id` | `text` | NULL | `NULL` |
+| `state` | `text` | NOT NULL | `'attempted'` |
+| `attempted_at` | `timestamptz(3)` | NOT NULL | `now()` |
+| `sent_at` | `timestamptz(3)` | NULL | `NULL` |
+
+Checks:
+
+- `ck_mail_sends_type`: `type` in the six slugs above
+- `ck_mail_sends_state`: `state IN ('attempted', 'sent')`
+- `ck_mail_sends_sent_at`: `state = 'sent' AND sent_at IS NOT NULL` or
+  `state = 'attempted' AND sent_at IS NULL`
+- `ck_mail_sends_cause`: progress types have `cause_id IS NULL`;
+  `new_bid` and `outbid` have `cause_id IS NOT NULL`
+
+| Index | On | Where |
+| --- | --- | --- |
+| `uq_mail_sends_progress` | `(listing_id, storefront, user_id, type)` | `cause_id IS NULL` |
+| `uq_mail_sends_activity` | `(listing_id, storefront, user_id, type, cause_id)` | `cause_id IS NOT NULL` |
+| `idx_mail_sends_sent_to_attempted_at` | `(sent_to, attempted_at DESC)` | no |
+
+The spec's email filter is `sent_to = :email`. Sweeps skip
+`auction_listings.status = 'canceled'`; they do not delete log rows.
+
+### Contracts
+
+Extend `AuctionPushKind` / `EmailKind` with the four new progress kinds and
+`new_bid`. `outbid` already exists. Existing `listing_ending_soon` stays the
+push slug; new `mail_sends` rows use `closes_in_24h`.
+
+Admin gains a send-log read: filter by `sent_to`, page by `attempted_at`.
+There is no body column. No public storefront contract beyond the kinds.
 
 ## Risks and trade-offs
 
 | Risk | Mitigation |
 | --- | --- |
-| A proxy-bidding war generates a message per step, flooding both bidders | Standing maxima no longer generate a bid ladder. The outbid message is sent when a collector *stops leading*, not per bid. Monitor volume once automatic bidding ships. |
-| A collector reads transactional mail as marketing and marks it spam | Every message is about a lot the collector watched or bid on; none recommends another lot. |
-| Mail is sent about a lot an operator has just called off | The spec suppresses everything from the moment of call-off. |
-| The 24-hour warning misleads on a heavily extended lot | Extended bidding sends its own message; the warning does not claim to be the final word. |
-| A send failure silently loses a message a collector needed | The send log distinguishes sent from attempted, so an operator can see the difference. |
+| A send failure silently loses a message | `state` distinguishes `attempted` from `sent`. |
+| Changing ending-soon from 1h to 24h re-mails people already stamped | Existing stamps stand; those watches are not claimed again. Unstamped listings still inside 24h get the warning once. |
 
 ## Migration plan
 
-None. No auction mail is sent today and no stored data changes shape.
-Collectors already enrolled by having bid on an open lot begin receiving
-bid-activity mail at release; that is the intent, not a migration.
+1. Additive auction migration: the three watch stamps, the two bid stamps,
+   `mail_sends` and its indexes and checks. No backfill. Existing
+   `ending_soon_notified_at` values stand.
+2. Deploy after `add-auction-watchlist`, with the closing-soon lead set to 24
+   hours.
+3. Collectors who already bid on an open listing begin receiving bid-activity
+   mail at release; that is the intent, not a data backfill.
+4. Rollback keeps the columns and `mail_sends`. Do not delete log rows.
 
 ## Open questions
 

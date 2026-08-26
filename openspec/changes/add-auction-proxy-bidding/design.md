@@ -2,128 +2,121 @@
 
 Requirements are in
 [`specs/grade10-auction/proxy-bidding/spec.md`](specs/grade10-auction/proxy-bidding/spec.md).
-Motivation is in [`proposal.md`](proposal.md). This file records the decisions
-behind the approach and the alternatives rejected.
+Motivation is in [`proposal.md`](proposal.md).
 
 ## Context
 
 `add-grade10-auction` delivered a serialized bid decision per listing: bids are
-evaluated in one order, the current bid is the highest valid accepted amount,
-and a card authorization is obtained per bidder per listing before a bid is
-accepted. Late bids move the close, repeatedly, up to an optional per-listing
-extension cap. Increments are configured per listing by an operator.
+evaluated in one order, the current bid is `auction_listings.top_amount`, and
+a card authorization is obtained per bidder per listing before a bid is
+accepted. `bids.amount` is that accepted amount. There is no committed
+maximum, and `placeBid` takes `amountMinor`.
 
-Everything below fits inside that decision. Automatic bidding does not add a
-second place where a bid is accepted.
+Everything below fits inside the existing listing-row lock. Automatic bidding
+does not add a second place where a bid is accepted.
 
 ## Decisions
 
-### The stored fact is the maximum; the current bid is derived
+Pricing, the hold covering the maximum, once-per-commitment resolution, and
+raise-only are the spec. This file records how those land on the existing
+rows.
 
-A bid record stores the bidder's committed maximum and its Accepted At. The
-current bid and the leader are derived from the two highest maximums by the
-rule in the spec, then persisted alongside the listing so reads stay cheap
-and no reader re-derives them.
+### Persist the derived price on the listing
 
-*Alternative rejected — store the current bid as the primary fact and keep the
-maximum beside it.* The maximum is what the bidder authorized and what the
-card hold covers; the current bid is a consequence. Making the consequence
-primary means two writers can disagree about which is true.
+After each resolution, write the spec's current bid and leader onto
+`top_amount` and `current_top_bid_id`. Reads do not re-derive.
 
-### The card hold covers the maximum
+*Alternative rejected — leave `top_amount` as a cache anyone may recompute.*
+Two writers can then disagree about which number is true. The listing row is
+already the serializer.
 
-Committing 50000 minor units authorizes 50000, even while the current bid is
-22500. This is the decision with the largest product consequence, so the
-alternatives are recorded in full.
+### The hold amount is `bids.maximum`
 
-*Alternative rejected — authorize the current bid and re-authorize on each
-proxy step.* A step happens without the bidder present, so an authorization
-that fails there drops them out of an auction they believed they were winning,
-silently, with no way to intervene. That converts an issuer decline into a lost
-lot and a support ticket. It also multiplies authorization traffic by the
-number of steps.
+Stripe's create-hold path passes `maximum` as `amountMinor`. `payment_holds`
+gains no column; it already keys one intent per bid and seq.
 
-*Alternative rejected — authorize the current bid and top up in bands.* Fewer
-checks than per-step, but it keeps the same failure mode at every band
-boundary while adding a threshold nobody can explain to a bidder.
+*Alternative rejected — authorize `amount` and re-authorize on each proxy
+row.* A proxy row is written without the bidder present, so an issuer decline
+there would drop them mid-auction. *Alternative rejected — top up in bands.*
+Same failure mode at every band boundary.
 
-The accepted cost is that a bidder's money is held above what they are likely
-to pay, which discourages high maximums — exactly the behaviour the feature
-wants to encourage. Recorded as a risk below.
+### A commitment is a new bid row
 
-### The current bid is the second-highest maximum plus one increment
+A collector commitment and a platform-placed bid are both inserts, not
+updates of `maximum` in place. `source` distinguishes them (`manual` |
+`proxy`). Accepted At is `created_at`. That keeps the operator history
+append-only and matches how `bids` already works.
 
-Follows eBay and Goldin. With two or more maxima, the current bid is the
-lesser of the leader's maximum and the second-highest maximum plus the
-listing increment. The first bidder sits at the starting price.
+*Alternative rejected — one row per bidder per listing, updated in place.* It
+loses prior maxima and forces Accepted At to move. *Alternative rejected —
+step intermediate increments on a timer.* The spec already forbids a ladder;
+a schedule would also fill the ledger and extend the close on every step.
 
-Worked example: a challenger bidding 22500 against a hidden 50000, increment
-2500, makes the current bid 25000, not 22500.
+## Data model
 
-*Alternative rejected — set the current bid to the challenger's exact
-maximum when they are below the leader.* That displays a number someone
-named, but it is not how eBay or Goldin resolve, and a collector who has
-used those will expect the extra increment.
+Schema `auction`. Types follow the existing listing and bid columns: money is
+`bigint` (integer minor units), timestamps are `timestamptz(3)`, identity is
+`(storefront, user_id)`.
 
-### Grade10 resolves once per accepted commitment, not on a timer
+### `bids` — additive columns
 
-A new or raised maximum is the trigger. Grade10 lands at the two-maximum
-price in a single bid. Standing maxima do not keep firing. There is no proxy
-interval.
+| Column | Type | Null | Default |
+| --- | --- | --- | --- |
+| `maximum` | `bigint` | NOT NULL | none; backfill `amount` |
+| `source` | `text` | NOT NULL | `'manual'` |
 
-Two collectors raising their maxima by hand can still move the price quickly;
-that is the same as manual bidding. What this rule prevents is the system
-walking two high maxima through every increment on its own, which would fill
-the bid history, extend the close on every step, and look like a price spike.
+`amount` stays the standing amount of this row — what `top_amount` becomes
+when this bid is the leader. After backfill, `maximum = amount`. They
+diverge once a proxy resolution lands below the cap.
 
-*Alternative rejected — step one increment at a time on a schedule.* Even a
-slow interval (one bid per listing per 30 seconds) turns two maxima into a
-visible war and a close-extension storm. Faster than that is worse. The
-two-maximum rule already names the landing price; executing it as a ladder is
-the same result with those side effects. If a later change wants a visible
-climb, the floor is one proxy bid per listing per 30 seconds — this change
-does not introduce that climb.
+Checks:
 
-*Alternative rejected — only a manual bid moves the close.* A bidder whose
-maximum still had room would lose to the clock while their commitment was
-willing to go higher, which is the opposite of what committing a maximum is
-for. *Alternative rejected — automatic bidding stops when the extension window
-opens.* Same objection: the collector who set a maximum and left is exactly
-the person the feature exists for. A proxy bid still extends, once, when the
-commitment that caused it is accepted.
+- `ck_bids_source`: `source IN ('manual', 'proxy')`
+- `ck_bids_maximum_covers_amount`: `maximum >= amount AND maximum > 0`
 
-### A maximum cannot be lowered
+Index: `idx_bids_listing_id_maximum` on `(listing_id, maximum)` so the
+two-maximum derivation does not sort the listing's whole ledger. Live
+derivation still runs under the listing row lock.
 
-Other bidders have already bid against a commitment; withdrawing it would
-retroactively change a price they responded to. Raising re-commits and
-re-authorizes.
+### Contracts
 
-*Alternative rejected — allow lowering while the bidder does not lead.* The
-leader is a function of the maximums, so "not leading" is not stable enough to
-key a permission on: a concurrent commitment can make a bidder the leader
-between the check and the write.
+**BREAKING.** `placeBid` input `amountMinor` becomes `maximumMinor`. Same
+integer minor units, same currency check. `AMOUNT_TOO_LOW` still returns
+`minimumNextAmount`.
+
+Authenticated listing facts (not the public listing) gain:
+
+| Field | Type | Null | Notes |
+| --- | --- | --- | --- |
+| `ownMaximumMinor` | `int` | yes | The viewer's latest accepted maximum; absent when they have none |
+| `leading` | `boolean` | no | Whether that viewer currently leads |
+
+`MyBidStanding` gains `maximumMinor: int` (required when the standing
+exists). Public `bids[]` and `topAmount` do not gain a maximum.
+`publicBidSchema` gains `source: 'manual' \| 'proxy'` so history can mark a
+platform-placed bid without implying identity.
 
 ## Risks and trade-offs
 
 | Risk | Mitigation |
 | --- | --- |
-| Holding the maximum discourages high maximums, blunting the feature | The bid surface must state plainly that the hold is the maximum and the bidder usually pays less. Measure committed maximum against final price. |
-| A card issuer declines a large authorization, so a bidder cannot commit at all | The raise is refused explicitly and the previous commitment stands. The spec requires the failure to change nothing. |
-| Two maximums extend a listing for a long time | Standing maxima do not keep bidding. A proxy bid extends once, when the commitment that caused it is accepted. The per-listing extension cap still bounds a collector who keeps raising by hand. |
-| A bidder misreads the maximum as the price and commits far too much | Confirmation on the bid control; copy is named in `ui.md` as work. |
-| Deriving the leader concurrently could produce two leaders | The derivation happens inside the existing serialized per-listing decision. No second decision path is introduced. |
+| Holding the maximum discourages high maximums | The bid surface must state that the hold is the maximum. Named in `ui.md`. |
+| A card issuer declines a large authorization | The raise is refused; the previous row stands. |
+| Deriving the leader concurrently could produce two leaders | Derivation stays inside the existing listing-row lock. |
 
 ## Migration plan
 
-Listings already open when this ships hold accepted bids that are amounts, not
-maximums. Each such bid becomes a committed maximum equal to its amount, which
-preserves the leader and the current bid exactly: a bidder who bid 30000
-manually behaves as one who committed a maximum of 30000 and is immediately at
-their limit.
-
-Existing card authorizations already cover those amounts, so no
-re-authorization is needed at migration. The first raise after the change
-follows the new rule.
+1. Additive migration: add `maximum bigint`, backfill `maximum = amount`,
+   then `SET NOT NULL`; add `source text NOT NULL DEFAULT 'manual'` and the
+   two checks; add `idx_bids_listing_id_maximum`.
+2. Existing open listings keep their leader and `top_amount`: a bidder who
+   bid 30000 behaves as one who committed a maximum of 30000 and is at their
+   limit. Existing holds already cover those amounts; do not re-authorize.
+3. Deploy contracts, then the auction worker. The first raise after deploy
+   follows the new rule.
+4. Rollback keeps the columns. Do not drop `maximum`. Old code that writes
+   `amount` without `maximum` cannot be redeployed after `maximum` is
+   `NOT NULL`.
 
 ## Open questions
 

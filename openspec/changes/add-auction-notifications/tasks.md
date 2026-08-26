@@ -14,7 +14,7 @@ of the six messages fire on a watch.
 
 ## 2. Sent log and deduplication (grade10)
 
-Needs group 1 landed. Lives on the email sending service per `design.md`.
+Needs group 1 landed. The send log is `auction.mail_sends` per `design.md`.
 
 - [ ] 2.1 Record type, the address sent to, listing, and Sent At for every message, and store no body, making *An operator can see what was sent* and *The send log shows type, not content* pass.
 - [ ] 2.2 Make *A progress message is sent once per lot* and *A watcher who also bids receives one copy* pass from that log.
@@ -23,7 +23,7 @@ Needs group 1 landed. Lives on the email sending service per `design.md`.
 
 ## 3. Rendering and delivery (grade10)
 
-Claimable against the events from group 1. The dedicated email sending service sends; auction and store do not.
+Claimable against the events from group 1. Auction emits; `@grade10/email` sends. Auction does not talk to the mail provider.
 
 - [ ] 3.1 Make *Mail reaches the registered address* pass, resolving the recipient by user id and sending to their registered account email.
 - [ ] 3.2 Render money in each message using the sent-message shape in `money-amounts`.
