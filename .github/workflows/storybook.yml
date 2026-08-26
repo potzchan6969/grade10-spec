@@ -6,7 +6,7 @@ name: Storybook
 # Local equivalent: pnpm run storybook:workbench
 #
 # Typical URL:
-#   https://grade10-storybook-workbench.memeland-qa.workers.dev
+#   https://grade10-storybook.memeland-qa.workers.dev
 #
 # One-time ops:
 # - Repo secret CLOUDFLARE_API_TOKEN_QA must be available here (same staging
@@ -79,7 +79,7 @@ jobs:
           {
             echo "## Storybook workbench → staging (workers.dev)"
             echo
-            echo "https://grade10-storybook-workbench.memeland-qa.workers.dev"
+            echo "https://grade10-storybook.memeland-qa.workers.dev"
             echo
             echo "Combined view: preview pages + UI + design-system (\`pnpm storybook:workbench\`)."
             echo

@@ -2,9 +2,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   // Static publish of the workbench Storybook (preview pages + UI + design-
   // system stories) to workers.dev on the staging Cloudflare account.
-  // URL: https://grade10-storybook-workbench.<account-subdomain>.workers.dev
+  // URL: https://grade10-storybook.<account-subdomain>.workers.dev
   // (staging is typically memeland-qa.workers.dev).
-  "name": "grade10-storybook-workbench",
+  "name": "grade10-storybook",
   "compatibility_date": "2026-08-01",
   "account_id": "de021143aac704ccbda9c3cd00be261d",
   "assets": {

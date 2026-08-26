@@ -28,7 +28,7 @@ pnpm storybook:ui                  # shared compound components alone
 
 The workbench Storybook on `main` (preview pages + UI + design-system) is
 published at
-[https://grade10-storybook-workbench.memeland-qa.workers.dev](https://grade10-storybook-workbench.memeland-qa.workers.dev).
+[https://grade10-storybook.memeland-qa.workers.dev](https://grade10-storybook.memeland-qa.workers.dev).
 Locally that is `pnpm storybook:workbench`.
 
 For concurrent worktrees, install Playwright once before running browser tests:

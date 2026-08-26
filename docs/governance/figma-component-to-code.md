@@ -147,7 +147,7 @@ Note what the template deliberately does *not* emit: `variant="default"` and `si
 **Read the snippet in Dev Mode.** Select an instance, open the Code section of the inspect panel. With the mapping published you get the `<Button …>` line above; with it unpublished you get a generated guess, however correct the template in the repository is. If you see no connected code, step 10 has not been run — that is the state [`design-code-sync.md`](design-code-sync.md#6-publish-the-set-and-publish-code-connect) records for this file.
 
 **Measure the built component in Storybook.** Open
-[https://grade10-storybook-workbench.memeland-qa.workers.dev](https://grade10-storybook-workbench.memeland-qa.workers.dev)
+[https://grade10-storybook.memeland-qa.workers.dev](https://grade10-storybook.memeland-qa.workers.dev)
 (the workbench Storybook published from `main`: preview pages + UI +
 design-system). Switch the **Theme** toolbar control to **Grade10** first —
 it loads in `Default`, which is stock shadcn and not the designed theme, and
