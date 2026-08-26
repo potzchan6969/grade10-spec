@@ -23,7 +23,7 @@ both need it landed. Those two depend on nothing in each other.
 - [x] 2.5 Hold `The address wins over the memory` and `A prefixed visit stays in its language` across a card and a lot, alongside the catalogue surfaces they already cover.
 - [x] 2.6 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
 
-## 3. Catalogue enumeration and the rendered sitemap (grade10)
+## 3. Catalogue enumeration and the rendered sitemap (grade10) (owner: @sean)
 
 - [ ] 3.1 Add the read that enumerates every card the catalogue holds, beside the catalog feature that owns it, paginating to the end and proven against fixtures with no running backend.
 - [ ] 3.2 Add the read that enumerates every lot of every auction, beside the auction feature that owns it, on the same terms.
