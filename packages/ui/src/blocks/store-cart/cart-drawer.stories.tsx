@@ -247,9 +247,7 @@ export const UnavailableItemsRemoved: Story = {
     await userEvent.click(canvas.getByRole("button", { name: "Open Cart" }));
 
     await waitFor(() => {
-      expect(
-        canvas.queryByText(DELISTED_PRODUCT_NAME),
-      ).not.toBeInTheDocument();
+      expect(canvas.queryByText(DELISTED_PRODUCT_NAME)).not.toBeInTheDocument();
     });
 
     expect(
