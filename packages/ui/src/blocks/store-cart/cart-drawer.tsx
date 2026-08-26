@@ -982,7 +982,7 @@ function CartDrawer({
         className={cn(
           // Keep mounted while closed so opacity can animate out — do not
           // toggle visibility (that snaps the exit).
-          "fixed inset-0 cursor-pointer border-0 bg-overlay/30 backdrop-blur-[calc(var(--blur-xl)/2)] transition-[opacity,backdrop-filter] motion-reduce:transition-none",
+          "fixed inset-0 cursor-pointer border-0 bg-overlay backdrop-blur-[calc(var(--blur-xl)/2)] transition-[opacity,backdrop-filter] motion-reduce:transition-none",
           open
             ? "opacity-100 duration-[400ms] ease-[cubic-bezier(0.32,0.72,0,1)]"
             : "opacity-0 duration-[280ms] ease-[cubic-bezier(0.32,0.72,0,1)]",
