@@ -36,7 +36,7 @@ share; may land beside it.
 - [ ] 4.2 Make the gallery migration scenario pass: replace physical-side image rows with ordered media rows, preserve each existing image in deterministic order, and enforce one-to-eight items, positions, and supported stored metadata structurally.
 - [ ] 4.3 Generate the auction migration artifacts and verify the migration/schema suites with `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, `pnpm run typecheck`, and `pnpm run test:backend`.
 
-## 5. Listing photo data (grade10)
+## 5. Listing media data (grade10)
 
 Depends on nothing in group 3. Lands with or after group 4's ordered-media
 columns.
@@ -76,7 +76,7 @@ Depends on group 2.
 - [ ] 8.2 Make the admin repository and fixture scenarios for upload, reorder, and removal of ordered image/video media pass, including query invalidation after every successful listing mutation.
 - [ ] 8.3 Verify the auction admin frontend package with its focused module/hook tests, `pnpm run typecheck`, and `pnpm run lint`.
 
-## 9. Admin photo manager (grade10)
+## 9. Admin media manager (grade10)
 
 Depends on group 1 through the submodule bump, and on groups 3 and 7's
 fixtures / procedure shapes. Preview and confirm stay in the admin client —
@@ -94,7 +94,7 @@ reaches the network. Dialog is an ordered gallery (≤ eight), not six sides.
 - [ ] 9.6 Make `Confirming the preview stores the image` and
   `An accepted upload becomes a gallery image` pass by uploading only when
   Confirm is pressed (add and draft replace), then clearing the preview.
-- [ ] 9.7 Make `The admin photo manager shows card size`, `Hovering the magnify
+- [ ] 9.7 Make `The admin media manager shows card size`, `Hovering the magnify
   control shows zoom size`, and `Leaving the magnify control hides zoom` pass:
   stored images use card size, and hovering the magnify control reveals a zoom
   preview at least three-quarters of the viewport height. Layout of the photo

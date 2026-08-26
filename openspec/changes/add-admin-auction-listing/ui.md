@@ -15,9 +15,9 @@ Assembly in `apps/admin/grade10` composing `@grade10/auction-admin-frontend`.
 Operators save drafts, create, schedule or publish, call off, and edit
 editable fields. Create-draft is an icon control on the listings surface.
 Gallery attach, reorder, remove, and video sit on this surface; image
-preview/confirm and card/zoom review live in the photo manager below.
+preview/confirm and card/zoom review live in the media manager below.
 
-### Admin listings photo manager
+### Admin listings media manager
 
 A Photos action opens a dialog over the ordered gallery (at most eight media
 items). File pick for an image shows a local preview with Confirm and Discard
@@ -75,7 +75,7 @@ and [`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
   (`Closed listing rejects a title edit`, `Closed listing rejects a media
   upload`).
 
-### Admin photo manager
+### Admin media manager
 
 - **Draft, empty slot** — file pick is offered (`An accepted upload becomes a gallery image`).
 - **Draft, filled slot** — replace, remove, and alt (`A draft gallery image can be replaced and removed`).
@@ -87,8 +87,8 @@ and [`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
   (`Choosing a file shows a preview without uploading`,
   `Confirming the preview stores the image`,
   `Discarding the preview leaves the gallery unchanged`).
-- **Stored image, resting** — card-size image in the photo manager
-  (`The admin photo manager shows card size`).
+- **Stored image, resting** — card-size image in the media manager
+  (`The admin media manager shows card size`).
 - **Magnify hovered / focused** — zoom-size preview at least three-quarters
   of the viewport height (`Hovering the magnify control shows zoom size`).
 - **Magnify left** — zoom preview hidden (`Leaving the magnify control hides zoom`).
