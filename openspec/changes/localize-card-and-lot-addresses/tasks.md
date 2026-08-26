@@ -34,7 +34,7 @@ both need it landed. Those two depend on nothing in each other.
 - [x] 3.7 Move the sitemap assertions out of the check that reads a build, which now has no file to read, to where the render can be run, and hold `Every listed address answers` there.
 - [x] 3.8 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
 
-## 4. Delivery and review (grade10)
+## 4. Delivery and review (grade10) (owner: @sean)
 
 - [ ] 4.1 Confirm every scenario of the two capability deltas has a test behind it, and that `A Chinese address answers whole` still passes unchanged for the three catalogue surfaces.
 - [ ] 4.2 Run the full validation set: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
