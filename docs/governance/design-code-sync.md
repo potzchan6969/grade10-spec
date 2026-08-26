@@ -220,6 +220,63 @@ Deleting a variant that instances still use leaves an orphaned component behind 
 
 Be aware that the Storybook suite renders the **`default`** theme. It therefore exercises those baseline values, not the designed ones, and a passing run says nothing about how a component looks in Grade10. Review that in Storybook with the toolbar switched over.
 
+## Monitoring Figma annotations
+
+Annotations are design evidence, not automatically accepted requirements. The
+annotation rail records a reviewed text baseline at
+`scripts/design-sync/annotation-baseline.json` and compares it with the
+annotations below registered Code Connect and audit roots. It reads the same
+Figma file as the other design-sync checks and never writes to Figma or the
+baseline during a scan.
+
+Run the two read-only forms locally:
+
+```bash
+FIGMA_TOKEN=figd_… pnpm run figma:annotations -- --inventory
+FIGMA_TOKEN=figd_… pnpm run figma:annotations -- --json
+```
+
+Inventory scans the whole registered surface and prints candidate node IDs and
+text for the initial review. The daily scan uses only the roots recorded in
+the baseline plus the current Code Connect and audit registrations, so
+exploratory design areas do not become engineering findings accidentally.
+
+The manifest has `schemaVersion: 1`, a `roots` list, and `entries` keyed by
+`<file-key>:<node-id>` using a colon in the node ID. Each entry stores the
+accepted annotation text, its source root, and optional exact `associations`
+for a capability, change, and task group. A reviewed entry with no OpenSpec
+association may carry a `noImpactReason`; similar prose is never an
+association.
+
+The scanner exits `0` for verified no change, `1` for annotation drift, and
+`2` when any registered evidence is blocked or malformed. A missing Figma file,
+credential, permission, request, response, or tracked node is blocked. A
+missing baseline node is orphaned evidence, not an annotation removal. Newly
+seen text remains in the report as `added` and `untracked` when no exact
+component or OpenSpec association exists.
+
+### Review and accept a change
+
+1. Open the finding's Figma node link and inspect the previous and current
+   text.
+2. Trace it through the exact registered component, baseline association, or
+   OpenSpec artifact. Do not use editor identity, Git blame, or similar words
+   as ownership evidence.
+3. Decide whether the text is a requirement, UI state, technical note, visual
+   note, or no-impact clarification. If it changes product behaviour, update
+   the OpenSpec requirement in the planning store first.
+4. Patch the matching baseline entry in a reviewed change, replacing its text
+   and recording the exact capability/change/task-group association or an
+   explicit `noImpactReason`. The scanner has no update flag by design.
+5. Run the JSON scan again and review the Git diff. A clean result is only
+   meaningful when every registered surface was read successfully.
+
+When a node is replaced, keep the old entry until the orphaned finding is
+reviewed; add the new node separately and reconnect it in the same reviewed
+patch. To roll back the rail, disable the annotation workflow step and leave
+the versioned manifest in place as evidence. No external record or scheduler
+is created by this process.
+
 ## Known gaps
 
 Recorded so they are not mistaken for coverage:
