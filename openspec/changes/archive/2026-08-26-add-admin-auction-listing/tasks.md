@@ -130,8 +130,11 @@ a running backend.
 - [x] 12.2 Verify every scenario in the three deltas, then run `openspec validate add-admin-auction-listing` and `openspec validate --specs`.
 - [x] 12.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and `pnpm run build` after the feature lanes pass.
 - [x] 12.4 Review the branch for convention drift and for delta coverage separately: requirements missing, partial, or implemented differently than specified.
-- [ ] 12.5 After rollout is confirmed, fold the accepted deltas into `openspec/specs/` (adding `grade10-auction` to `openspec/specs/README.md` if needed), confirm `docs/architecture/auction.md` names the binding and named sizes, and archive this change.
+- [x] 12.5 After rollout is confirmed, fold the accepted deltas into `openspec/specs/` (adding `grade10-auction` to `openspec/specs/README.md` if needed), confirm `docs/architecture/auction.md` names the binding and named sizes, and archive this change.
 
-  Blocked on deploy: archive waits until staging (at least) runs the combined
-  admin-listing + assets PRs. `docs/architecture/auction.md` already names
-  `AUCTION_LISTING_ASSETS` and sized public GETs in grade10.
+  Remark (2026-08-26): owner assumed group 12 done and asked to archive.
+  Implementation PR #90 is merged to main; `docs/architecture/auction.md`
+  already names `AUCTION_LISTING_ASSETS` and sized public GETs. Staging
+  deploy of that merge was not yet confirmed successful at archive time —
+  deferred ops smoke (Images binding / listing-media GET) stays outside
+  this change.
