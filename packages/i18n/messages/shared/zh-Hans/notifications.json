@@ -1,0 +1,25 @@
+{
+  "control": {
+    "title": "推送通知",
+    "description": "拍品一有动静，立即在此设备提醒你。",
+    "emailStays": "邮件一样会寄出，这只是在此设备多一个提醒。",
+    "enable": "开启",
+    "disable": "关闭",
+    "statusOn": "已为此浏览器开启",
+    "statusOff": "已为此浏览器关闭",
+    "unsupported": "此浏览器无法显示推送通知。",
+    "blocked": "此浏览器已屏蔽本网站的通知。只有浏览器本身的设置能重新允许，此页面做不到。",
+    "failed": "操作未成功，请再试一次。"
+  },
+  "push": {
+    "outbid": "有人出价 {amount}，再出价才能保住领先。",
+    "nowTop": "你的 {amount} 目前是最高出价。",
+    "holdFailed": "你的出价未能成立 — 信用卡未获授权。",
+    "lostAtClose": "此拍品已结束，你未能得标。",
+    "listingCanceled": "此拍品已撤回。",
+    "winner": "你已得标。",
+    "captureFailed": "付款未能完成，请检查你的信用卡。",
+    "endingSoon": "即将截止。",
+    "other": "此拍品有新消息。"
+  }
+}

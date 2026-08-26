@@ -5,7 +5,8 @@
   "cartLabel": "購物車",
   "nav": {
     "store": "商店",
-    "auction": "拍賣"
+    "auction": "拍賣",
+    "vault": "金庫"
   },
   "footer": {
     "shopHeading": "購買",

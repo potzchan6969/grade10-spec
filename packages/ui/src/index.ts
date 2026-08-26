@@ -52,6 +52,46 @@ export {
   type TwoFactorVerifyFormCopy,
   type TwoFactorVerifyFormProps,
 } from "./blocks/auth-two-factor/two-factor-verify-form";
+// shared-ui/loyalty-membership
+export {
+  ActivityList,
+  type ActivityListCopy,
+  type ActivityListProps,
+} from "./blocks/loyalty-membership/activity-list";
+export {
+  CouponList,
+  type CouponListCopy,
+  type CouponListProps,
+} from "./blocks/loyalty-membership/coupon-list";
+export {
+  MemberCard,
+  type MemberCardCopy,
+  type MemberCardProps,
+  type MemberCardState,
+  type MemberCardUse,
+} from "./blocks/loyalty-membership/member-card";
+export {
+  MembershipSummary,
+  type MembershipSummaryCopy,
+  type MembershipSummaryProps,
+} from "./blocks/loyalty-membership/membership-summary";
+export {
+  PendingCollectionList,
+  type PendingCollectionListCopy,
+  type PendingCollectionListProps,
+} from "./blocks/loyalty-membership/pending-collection-list";
+export {
+  RewardMenu,
+  type RewardMenuCopy,
+  type RewardMenuProps,
+} from "./blocks/loyalty-membership/reward-menu";
+export type {
+  ActivityEntry,
+  CouponItem,
+  CouponStatus,
+  PendingCollectionItem,
+  RewardMenuItem,
+} from "./blocks/loyalty-membership/types";
 // shared cross-capability types
 export type { AsyncAction, AsyncState } from "./blocks/shared/async";
 // shared-ui/store-cart

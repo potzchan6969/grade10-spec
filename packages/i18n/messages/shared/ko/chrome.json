@@ -5,7 +5,8 @@
   "cartLabel": "장바구니",
   "nav": {
     "store": "스토어",
-    "auction": "경매"
+    "auction": "경매",
+    "vault": "금고"
   },
   "footer": {
     "shopHeading": "쇼핑",

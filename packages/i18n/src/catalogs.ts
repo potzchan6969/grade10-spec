@@ -51,12 +51,15 @@ import sharedEnCommon from "../messages/shared/en/common.json";
 import sharedEnEmail from "../messages/shared/en/email.json";
 import sharedEnLocale from "../messages/shared/en/locale.json";
 import sharedEnMarketing from "../messages/shared/en/marketing.json";
+import sharedEnMembership from "../messages/shared/en/membership.json";
 import sharedEnNotFound from "../messages/shared/en/notFound.json";
+import sharedEnNotifications from "../messages/shared/en/notifications.json";
 import sharedEnProduct from "../messages/shared/en/product.json";
 import sharedEnProfile from "../messages/shared/en/profile.json";
 import sharedEnSignIn from "../messages/shared/en/signIn.json";
 import sharedEnStore from "../messages/shared/en/store.json";
 import sharedEnStoreHome from "../messages/shared/en/storeHome.json";
+import sharedEnVault from "../messages/shared/en/vault.json";
 import sharedKoAuction from "../messages/shared/ko/auction.json";
 import sharedKoAuctionListing from "../messages/shared/ko/auctionListing.json";
 import sharedKoChrome from "../messages/shared/ko/chrome.json";
@@ -64,12 +67,15 @@ import sharedKoCommon from "../messages/shared/ko/common.json";
 import sharedKoEmail from "../messages/shared/ko/email.json";
 import sharedKoLocale from "../messages/shared/ko/locale.json";
 import sharedKoMarketing from "../messages/shared/ko/marketing.json";
+import sharedKoMembership from "../messages/shared/ko/membership.json";
 import sharedKoNotFound from "../messages/shared/ko/notFound.json";
+import sharedKoNotifications from "../messages/shared/ko/notifications.json";
 import sharedKoProduct from "../messages/shared/ko/product.json";
 import sharedKoProfile from "../messages/shared/ko/profile.json";
 import sharedKoSignIn from "../messages/shared/ko/signIn.json";
 import sharedKoStore from "../messages/shared/ko/store.json";
 import sharedKoStoreHome from "../messages/shared/ko/storeHome.json";
+import sharedKoVault from "../messages/shared/ko/vault.json";
 import sharedZhHansAuction from "../messages/shared/zh-Hans/auction.json";
 import sharedZhHansAuctionListing from "../messages/shared/zh-Hans/auctionListing.json";
 import sharedZhHansChrome from "../messages/shared/zh-Hans/chrome.json";
@@ -77,12 +83,15 @@ import sharedZhHansCommon from "../messages/shared/zh-Hans/common.json";
 import sharedZhHansEmail from "../messages/shared/zh-Hans/email.json";
 import sharedZhHansLocale from "../messages/shared/zh-Hans/locale.json";
 import sharedZhHansMarketing from "../messages/shared/zh-Hans/marketing.json";
+import sharedZhHansMembership from "../messages/shared/zh-Hans/membership.json";
 import sharedZhHansNotFound from "../messages/shared/zh-Hans/notFound.json";
+import sharedZhHansNotifications from "../messages/shared/zh-Hans/notifications.json";
 import sharedZhHansProduct from "../messages/shared/zh-Hans/product.json";
 import sharedZhHansProfile from "../messages/shared/zh-Hans/profile.json";
 import sharedZhHansSignIn from "../messages/shared/zh-Hans/signIn.json";
 import sharedZhHansStore from "../messages/shared/zh-Hans/store.json";
 import sharedZhHansStoreHome from "../messages/shared/zh-Hans/storeHome.json";
+import sharedZhHansVault from "../messages/shared/zh-Hans/vault.json";
 import sharedZhHantAuction from "../messages/shared/zh-Hant/auction.json";
 import sharedZhHantAuctionListing from "../messages/shared/zh-Hant/auctionListing.json";
 import sharedZhHantChrome from "../messages/shared/zh-Hant/chrome.json";
@@ -90,12 +99,15 @@ import sharedZhHantCommon from "../messages/shared/zh-Hant/common.json";
 import sharedZhHantEmail from "../messages/shared/zh-Hant/email.json";
 import sharedZhHantLocale from "../messages/shared/zh-Hant/locale.json";
 import sharedZhHantMarketing from "../messages/shared/zh-Hant/marketing.json";
+import sharedZhHantMembership from "../messages/shared/zh-Hant/membership.json";
 import sharedZhHantNotFound from "../messages/shared/zh-Hant/notFound.json";
+import sharedZhHantNotifications from "../messages/shared/zh-Hant/notifications.json";
 import sharedZhHantProduct from "../messages/shared/zh-Hant/product.json";
 import sharedZhHantProfile from "../messages/shared/zh-Hant/profile.json";
 import sharedZhHantSignIn from "../messages/shared/zh-Hant/signIn.json";
 import sharedZhHantStore from "../messages/shared/zh-Hant/store.json";
 import sharedZhHantStoreHome from "../messages/shared/zh-Hant/storeHome.json";
+import sharedZhHantVault from "../messages/shared/zh-Hant/vault.json";
 
 import zzzKoAuctionListing from "../messages/zzz/ko/auctionListing.json";
 import zzzKoChrome from "../messages/zzz/ko/chrome.json";
@@ -116,12 +128,15 @@ export const sharedCatalogs = {
     email: sharedEnEmail,
     locale: sharedEnLocale,
     marketing: sharedEnMarketing,
+    membership: sharedEnMembership,
     notFound: sharedEnNotFound,
+    notifications: sharedEnNotifications,
     product: sharedEnProduct,
     profile: sharedEnProfile,
     signIn: sharedEnSignIn,
     store: sharedEnStore,
     storeHome: sharedEnStoreHome,
+    vault: sharedEnVault,
   },
   "zh-Hant": {
     auction: sharedZhHantAuction,
@@ -131,12 +146,15 @@ export const sharedCatalogs = {
     email: sharedZhHantEmail,
     locale: sharedZhHantLocale,
     marketing: sharedZhHantMarketing,
+    membership: sharedZhHantMembership,
     notFound: sharedZhHantNotFound,
+    notifications: sharedZhHantNotifications,
     product: sharedZhHantProduct,
     profile: sharedZhHantProfile,
     signIn: sharedZhHantSignIn,
     store: sharedZhHantStore,
     storeHome: sharedZhHantStoreHome,
+    vault: sharedZhHantVault,
   },
   "zh-Hans": {
     auction: sharedZhHansAuction,
@@ -146,12 +164,15 @@ export const sharedCatalogs = {
     email: sharedZhHansEmail,
     locale: sharedZhHansLocale,
     marketing: sharedZhHansMarketing,
+    membership: sharedZhHansMembership,
     notFound: sharedZhHansNotFound,
+    notifications: sharedZhHansNotifications,
     product: sharedZhHansProduct,
     profile: sharedZhHansProfile,
     signIn: sharedZhHansSignIn,
     store: sharedZhHansStore,
     storeHome: sharedZhHansStoreHome,
+    vault: sharedZhHansVault,
   },
   ko: {
     auction: sharedKoAuction,
@@ -161,12 +182,15 @@ export const sharedCatalogs = {
     email: sharedKoEmail,
     locale: sharedKoLocale,
     marketing: sharedKoMarketing,
+    membership: sharedKoMembership,
     notFound: sharedKoNotFound,
+    notifications: sharedKoNotifications,
     product: sharedKoProduct,
     profile: sharedKoProfile,
     signIn: sharedKoSignIn,
     store: sharedKoStore,
     storeHome: sharedKoStoreHome,
+    vault: sharedKoVault,
   },
 };
 

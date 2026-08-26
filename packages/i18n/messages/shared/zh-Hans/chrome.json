@@ -5,7 +5,8 @@
   "cartLabel": "购物车",
   "nav": {
     "store": "商店",
-    "auction": "拍卖"
+    "auction": "拍卖",
+    "vault": "金库"
   },
   "footer": {
     "shopHeading": "购买",
