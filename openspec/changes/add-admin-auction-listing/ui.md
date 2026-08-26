@@ -15,11 +15,11 @@ Assembly in `apps/admin/grade10` composing `@grade10/auction-admin-frontend`.
 Operators save drafts, create, schedule or publish, call off, and edit
 editable fields. Create-draft is an icon control on the listings surface.
 Gallery attach, reorder, remove, and video sit on this surface; image
-preview/confirm and card/zoom review live in the photo manager below.
+preview/confirm and card/zoom review live in the media manager below.
 
-### Admin listings photo manager
+### Admin listings media manager
 
-A Photos action opens a dialog over the ordered gallery (at most eight media
+A Media action opens a dialog over the ordered gallery (at most eight media
 items). File pick for an image shows a local preview with Confirm and Discard
 before any upload. Stored images show at card size; a magnify control reveals
 zoom size on hover. No Figma; compose primitives below.
@@ -58,7 +58,7 @@ Nothing new in the design system. No new `@grade10/ui` listing card.
 
 Tied to
 [`grade10-auction/admin-listing`](specs/grade10-auction/admin-listing/spec.md),
-[`grade10-auction/listing-images`](specs/grade10-auction/listing-images/spec.md),
+[`grade10-auction/listing-media`](specs/grade10-auction/listing-media/spec.md),
 and [`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
 
 ### Admin listing editor
@@ -75,7 +75,7 @@ and [`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
   (`Closed listing rejects a title edit`, `Closed listing rejects a media
   upload`).
 
-### Admin photo manager
+### Admin media manager
 
 - **Draft, empty slot** — file pick is offered (`An accepted upload becomes a gallery image`).
 - **Draft, filled slot** — replace, remove, and alt (`A draft gallery image can be replaced and removed`).
@@ -87,8 +87,8 @@ and [`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
   (`Choosing a file shows a preview without uploading`,
   `Confirming the preview stores the image`,
   `Discarding the preview leaves the gallery unchanged`).
-- **Stored image, resting** — card-size image in the photo manager
-  (`The admin photo manager shows card size`).
+- **Stored image, resting** — card-size image in the media manager
+  (`The admin media manager shows card size`).
 - **Magnify hovered / focused** — zoom-size preview at least three-quarters
   of the viewport height (`Hovering the magnify control shows zoom size`).
 - **Magnify left** — zoom preview hidden (`Leaving the magnify control hides zoom`).
@@ -106,9 +106,9 @@ and [`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
 
 ### Listing details gallery
 
-- **Several images** — `Several images appear in gallery order`, `Several photos show a strip`.
-- **One image** — `One image has no strip` / `One photo has no strip`.
-- **No images** — `No images still shows the listing`, `No photos`.
+- **Several images** — `Several images appear in gallery order`, `Several gallery items show a strip`.
+- **One image** — `One image has no strip` / `One gallery item has no strip`.
+- **No images** — `No images still shows the listing`, `No gallery items`.
 - **Mixed media / video** — `Mixed images and videos are accepted`.
 - **Alt present / absent** — `Supplied alt is shown`, `Missing alt uses the listing title`.
 - **Sized sources** — `Distinct sources are used in each slot`, `The details gallery uses thumb, detail, and zoom`.

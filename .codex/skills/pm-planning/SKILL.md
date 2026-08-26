@@ -21,7 +21,11 @@ execute it is not.
 
 ## Steps
 
-1. **Read before writing.** The capability under
+1. **Read from an up-to-date main.** `git fetch origin` first; when
+   `git log --oneline HEAD..origin/main` is not empty, update before reading. A
+   MODIFIED block copied from a stale spec silently reverts whatever landed in
+   between, and an overlap scan against a stale `openspec/changes/` finds
+   nothing. Then read: the capability under
    `openspec/specs/<product>/<capability>/`, every active change in
    `openspec/changes/` for overlap, and the PRD under `docs/prds/` when one
    exists. Find facts yourself — bring only decisions to the author.

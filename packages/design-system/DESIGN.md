@@ -28,6 +28,10 @@ pnpm run storybook:design-system              # picks an available port
 pnpm run storybook:design-system -- --port 6007
 ```
 
+The published combined Storybook (pages + UI + these primitives) is the
+workbench — see `apps/preview/README.md` and
+https://grade10-storybook.memeland-qa.workers.dev.
+
 Colocated stories are deliberate: a primitive is documented next to the
 primitive. Product components are reviewed in the application that implements
 them.

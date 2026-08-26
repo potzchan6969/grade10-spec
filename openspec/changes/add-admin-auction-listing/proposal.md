@@ -65,14 +65,14 @@ collector sees the listing by slug with sized image delivery.
 - **Media is an ordered gallery of one to eight images or videos.** A draft
   may have none; create requires at least one. Originals are stored
   content-addressed and served as uploaded. **BREAKING** for the public
-  listing gallery: media is no longer one photo per named physical side
+  listing gallery: media is no longer one item per named physical side
   (`front` / `back` / `left` / `right` / `top` / `bottom`). It is an ordered
   list; the first item is the catalogue card.
 - **Named sizes and optional alt for gallery images.** Each published gallery
   **image** is offered at four named sizes — `card`, `detail`, `thumb`,
   `zoom` — transformed on serve when the named size is smaller than the
   stored bytes. Image items carry optional alt (fallback: listing title).
-  Video items keep the original public path. The admin photo manager
+  Video items keep the original public path. The admin media manager
   previews and confirms before image bytes upload, reviews at card size,
   and magnifies to zoom.
 - **Listing object store renamed** from `AUCTION_LISTING_IMAGES` to
@@ -157,8 +157,8 @@ live money, so the house can rehearse a sale.
   may be called off, slug lookup at `/auction/listings/<slug>`, the cancel
   rewrite that frees a slug, scheduled publish, and the ordered one-to-eight
   image-or-video gallery (originals stored and served as uploaded).
-- `grade10-auction/listing-images`: optional alt on gallery images, named
-  public sizes (`card`, `detail`, `thumb`, `zoom`), admin photo-manager
+- `grade10-auction/listing-media`: optional alt on gallery images, named
+  public sizes (`card`, `detail`, `thumb`, `zoom`), admin media-manager
   preview-before-upload and card/zoom review, and catalogue/details
   consumption of sized paths — on the gallery from admin-listing.
 - `shared-ui/auction-listing`: the listing product-page blocks `@grade10/ui`
@@ -176,7 +176,7 @@ live money, so the house can rehearse a sale.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/admin/grade10` | Draft, create, and edit surfaces; gallery photo manager with preview/confirm, card/zoom review, and alt; client-side required-field checks at create and a publish at control. |
+| `apps/admin/grade10` | Draft, create, and edit surfaces; gallery media manager with preview/confirm, card/zoom review, and alt; client-side required-field checks at create and a publish at control. |
 | `apps/frontend/grade10` | Catalogue row shows first image at card size; details gallery passes sized sources and alt into `ListingGallery`; public lookup by slug. |
 | `apps/backend/grade10/auction` | Lenient draft save, create gate, scheduled publish, ordered media (image and video), binding renamed to `AUCTION_LISTING_ASSETS`, Images binding for on-serve transform, public path gains a size segment for images. Cancel of a `created` listing is allowed; cancel rewrites the slug. |
 | `@grade10/auction-contracts` | Admin listing shape gains slug, media, publish at, alt, and named-size paths; public gallery becomes an ordered list. Public listing lookup is by slug. **BREAKING** for `angle` and for listing addresses that named an internal id. |
@@ -185,7 +185,7 @@ live money, so the house can rehearse a sale.
 | `@grade10/ui` | `ListingGallery` / `ListingGalleryImage` accept distinct thumbnail, main, and zoom sources; may render video items. |
 
 Cloudflare Images (Workers binding) is a new account-level dependency on the
-auction worker. The public listing-image path stays under
-`/api/public/listing-images`; only the object-store binding is renamed.
-Money remains integer minor units plus an ISO 4217 code. No new design-system
-primitive is proposed.
+auction worker. The public gallery path is `/api/public/listing-media` (sized
+segment for images; originals for video). The object-store binding is
+`AUCTION_LISTING_ASSETS`. Money remains integer minor units plus an ISO 4217
+code. No new design-system primitive is proposed.

@@ -16,6 +16,7 @@ const badgeVariants = cva(
         success: "bg-success text-success-foreground backdrop-blur-md",
         error: "bg-destructive text-destructive-foreground backdrop-blur-md",
         warning: "bg-warning text-warning-foreground backdrop-blur-md",
+        info: "bg-info text-info-foreground backdrop-blur-md",
         brand: "bg-accent-foreground text-primary-foreground",
         outline: "border-border bg-background text-foreground",
       },

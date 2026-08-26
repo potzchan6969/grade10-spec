@@ -146,62 +146,71 @@ on every return visit until they pick again.
 - **WHEN** the ZZZ site's header renders
 - **THEN** its locale label displays Korean and invites no interaction
 
-### Requirement: A grade10 public address names its language
+### Requirement: Every grade10 public address names its language
 
-Each public surface the build writes a document for SHALL answer at one
-address per locale: the default locale at the address it has today,
-Traditional Chinese under the `/tc` prefix, and Simplified Chinese under
-`/sc`. Everything the crawlable-pages capability requires of a public
+Every public surface SHALL answer at one address per locale: the default
+locale at the address it has today, Traditional Chinese under the `/tc`
+prefix, and Simplified Chinese under `/sc`. This binds a surface whose
+document the build writes and a surface whose document is rendered when its
+address is asked for alike — under a prefix, a card and a lot answer as
+themselves in that language rather than as the surface above them, and refuse
+an address the catalogue holds nothing for exactly as their unprefixed
+addresses do. Everything the crawlable-pages capability requires of a public
 address — its content without scripts, its self-naming, its share metadata,
 its honest statuses — SHALL hold at every one of these addresses, in that
 address's language.
 
 Each variant SHALL declare every language variant of itself, including the
-default, readable without executing scripts, and the sitemap SHALL list every
-variant of every surface it names.
-
-A public surface whose document is rendered when its address is asked for
-SHALL carry no address of its own per locale: the address it answers at stays
-as it is, and the sitemap keeps naming none of them — which addresses it
-answers is the catalogue's to say, not the build's. It SHALL render the
-platform's own copy in the locale the request carries and declare that
-locale, falling back to the brand default when the request carries none, so
-a crawler is answered in the default locale deterministically.
+default, readable without executing scripts. The sitemap SHALL list every
+address it names once per locale.
 
 The address SHALL win over the remembered choice: a prefixed address renders
 its own language, and navigation from it to another public surface stays in
 that language. A collector whose remembered locale is not the default SHALL
-end at that locale's address when they open an unprefixed public address that
-has one. Session-shaped surfaces SHALL stay unprefixed and render the
-remembered locale.
+end at that locale's address when they open an unprefixed public address. An
+unprefixed public address SHALL render the brand default when the request
+carries no remembered locale, so a crawler is answered in the default locale
+deterministically. Session-shaped surfaces SHALL stay unprefixed and render
+the remembered locale.
 
 #### Scenario: A Chinese address answers whole
 
 - **WHEN** the Traditional Chinese store address is fetched and no script executes
 - **THEN** the response HTML carries the store's title, meta description, headline, and static copy in Traditional Chinese
 
+#### Scenario: A card answers under a prefix as itself
+
+- **WHEN** the Traditional Chinese address of a card the catalogue holds is fetched and no script executes
+- **THEN** the response has status 200 and carries that card's own name, description, and prices
+- **AND** the platform's own copy around it is Traditional Chinese
+- **AND** the storefront's page is not what answered
+
+#### Scenario: A lot answers under a prefix as itself
+
+- **WHEN** the Simplified Chinese address of a lot the auction holds is fetched and no script executes
+- **THEN** the response has status 200 and carries that lot's own identity
+- **AND** the platform's own copy around it is Simplified Chinese
+
+#### Scenario: A prefixed address naming nothing is refused
+
+- **WHEN** a Simplified Chinese address under the store's cards naming no card in the catalogue is fetched
+- **THEN** the response has status 404
+- **AND** a collector opening it sees the not-found surface in Simplified Chinese
+
 #### Scenario: A variant declares its alternates
 
-- **WHEN** any public address that has a variant per locale is fetched and no script executes
+- **WHEN** any public address is fetched and no script executes
 - **THEN** the response names each language variant of that surface and its address, the default among them
 
 #### Scenario: The sitemap lists every variant
 
 - **WHEN** the sitemap is fetched
-- **THEN** each public surface the sitemap names appears once per grade10 locale
+- **THEN** each address the sitemap names appears once per grade10 locale
 - **AND** no session-shaped address appears
-- **AND** no address of a surface rendered when it is asked for appears
 
-#### Scenario: A rendered surface keeps its one address
+#### Scenario: A crawler reads an unprefixed address in the default locale
 
-- **GIVEN** a collector whose remembered locale is Traditional Chinese
-- **WHEN** they open a public surface whose document is rendered when its address is asked for
-- **THEN** the address carries no locale prefix
-- **AND** the platform's own copy on the page is Traditional Chinese
-
-#### Scenario: A crawler reads a rendered surface in the default locale
-
-- **WHEN** such an address is fetched carrying no remembered locale and no script executes
+- **WHEN** an unprefixed public address is fetched carrying no remembered locale and no script executes
 - **THEN** the response's own copy is English and the document declares it
 
 #### Scenario: The address wins over the memory
@@ -216,11 +225,17 @@ remembered locale.
 - **WHEN** they navigate to the auction
 - **THEN** they arrive at the auction's Traditional Chinese address
 
+#### Scenario: A prefixed catalogue opens a prefixed card
+
+- **GIVEN** a collector on the Traditional Chinese store address
+- **WHEN** they open a card from the grid
+- **THEN** they arrive at that card's Traditional Chinese address
+
 #### Scenario: The memory redirects an unprefixed arrival
 
 - **GIVEN** a collector whose remembered locale is Traditional Chinese
-- **WHEN** they open the unprefixed marketing address
-- **THEN** they end at the marketing page's Traditional Chinese address
+- **WHEN** they open the unprefixed marketing address, and then an unprefixed card address
+- **THEN** they end at the Traditional Chinese address of each
 
 #### Scenario: An unknown prefixed address is refused honestly
 

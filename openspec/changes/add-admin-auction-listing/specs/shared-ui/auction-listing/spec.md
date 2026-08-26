@@ -1,7 +1,7 @@
 ## Purpose
 
 The shared listing product-page blocks every auction storefront composes: the
-photo gallery, the bid panel, and the details section. This change records the
+media gallery, the bid panel, and the details section. This change records the
 export contract and the gallery's distinct sources for thumbnail, main frame,
 and zoom.
 
@@ -55,33 +55,33 @@ back to `alt`). When `thumbSrc` or `zoomSrc` is omitted, that slot SHALL use
 - **WHEN** it is rendered
 - **THEN** the main frame, and zoom, request `src`
 
-### Requirement: The gallery matches how many photos it was given
+### Requirement: The gallery matches how many items it was given
 
-`ListingGallery` SHALL render the photos in the order supplied. With two or
-more photos it SHALL show a thumbnail strip and enable previous/next. With
-exactly one photo it SHALL hide the strip and disable previous/next. With none
-it SHALL render no photo and SHALL NOT present previous/next as available.
+`ListingGallery` SHALL render the gallery items in the order supplied. With
+two or more items it SHALL show a thumbnail strip and enable previous/next.
+With exactly one item it SHALL hide the strip and disable previous/next. With
+none it SHALL render no item and SHALL NOT present previous/next as available.
 
-#### Scenario: Several photos show a strip
+#### Scenario: Several gallery items show a strip
 
-- **GIVEN** two or more gallery images
+- **GIVEN** two or more gallery items
 - **WHEN** the gallery renders
-- **THEN** a thumbnail exists for each image
+- **THEN** a thumbnail exists for each item
 - **AND** previous and next are enabled
 
-#### Scenario: One photo has no strip
+#### Scenario: One gallery item has no strip
 
-- **GIVEN** exactly one gallery image
+- **GIVEN** exactly one gallery item
 - **WHEN** the gallery renders
-- **THEN** that photo is shown
+- **THEN** that item is shown
 - **AND** no thumbnail strip is shown
 - **AND** previous and next are disabled
 
-#### Scenario: No photos
+#### Scenario: No gallery items
 
-- **GIVEN** an empty images list
+- **GIVEN** an empty gallery list
 - **WHEN** the gallery renders
-- **THEN** no photo is shown
+- **THEN** no item is shown
 - **AND** previous and next are not available
 
 ### Requirement: A control has no copy of its own

@@ -2,7 +2,7 @@
   {
     "label": "cart-drawer/overlay",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4674-3832",
-    "classes": "fixed inset-0 cursor-pointer border-0 bg-overlay/30 backdrop-blur-[calc(var(--blur-xl)/2)] transition-[opacity,backdrop-filter] motion-reduce:transition-none"
+    "classes": "fixed inset-0 cursor-pointer border-0 bg-overlay backdrop-blur-[calc(var(--blur-xl)/2)] transition-[opacity,backdrop-filter] motion-reduce:transition-none"
   },
   {
     "label": "cart-drawer/container",
@@ -16,22 +16,22 @@
   },
   {
     "label": "cart-drawer/body",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6321",
     "classes": "scroll-fade min-h-0 flex-1 overflow-y-auto px-6 py-4"
   },
   {
     "label": "cart-drawer/slot",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-5944",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-5852",
     "classes": "group/slot w-full shrink-0 cursor-pointer rounded-lg border border-dashed border-border bg-muted p-6 transition-all hover:bg-muted-hover focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
   },
   {
     "label": "cart-drawer/item",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4761-1494",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-5631",
     "classes": "w-full py-2"
   },
   {
     "label": "cart-drawer/footer",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4791-2773",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6284",
     "classes": "w-full shrink-0 border-t border-border p-6"
   }
 ]

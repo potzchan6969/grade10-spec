@@ -12,7 +12,7 @@ that merges #71 and #85.
 
 - [ ] 1.1 Make `An application imports the surface` and `A part is reused alone` pass by recording `ListingGallery`, `ListingBidPanel`, `ListingDetails`, and their listed types (including `*Copy`) as the `shared-ui/auction-listing` exports on the package entry.
 - [ ] 1.2 Make `Distinct sources are used in each slot` and `Omitted sources fall back to src` pass on `ListingGalleryImage` via optional `thumbSrc` and `zoomSrc`.
-- [ ] 1.3 Make `Several photos show a strip`, `One photo has no strip`, `No photos`, and `Labels come from the consumer` pass in the gallery stories (consumer `copy`), then run this repository's `pnpm run typecheck`, `pnpm run lint`, and the block's story tests.
+- [ ] 1.3 Make `Several gallery items show a strip`, `One gallery item has no strip`, `No gallery items`, and `Labels come from the consumer` pass in the gallery stories (consumer `copy`), then run this repository's `pnpm run typecheck`, `pnpm run lint`, and the block's story tests.
 
 ## 2. Share listing lifecycle and media contracts (grade10)
 
@@ -26,8 +26,8 @@ Depends on nothing in group 2 beyond the ordered gallery vocabulary both
 share; may land beside it.
 
 - [ ] 3.1 Make `Each gallery image is published at named sizes` pass on the public image shape: `alt` (nullable string), named-size `paths` for `card`, `detail`, `thumb`, and `zoom`, and `imagePath` equal to the `detail` path.
-- [ ] 3.2 Make admin listing reads carry gallery images with alt and paths (list: nullable first-image thumb; get: every gallery image with alt and paths), aligned with admin-listing's ordered media.
-- [ ] 3.3 Add the image upload, delete, and alt-only calls to the admin client port and its fixture so groups 7 and 8 can build against fixtures alone.
+- [ ] 3.2 Make admin listing reads carry one ordered `media` list (alt and named-size paths when the item is an image; null paths for video). List rows carry a nullable catalogue `frontImage`; get answers `{ listing, media }` only.
+- [ ] 3.3 Add the media upload, delete, reorder, and alt-only calls to the admin client port and its fixture so groups 7 and 8 can build against fixtures alone.
 - [ ] 3.4 Run `pnpm run typecheck` and the contracts lane.
 
 ## 4. Migrate the auction listing and gallery model (grade10)
@@ -36,12 +36,12 @@ share; may land beside it.
 - [ ] 4.2 Make the gallery migration scenario pass: replace physical-side image rows with ordered media rows, preserve each existing image in deterministic order, and enforce one-to-eight items, positions, and supported stored metadata structurally.
 - [ ] 4.3 Generate the auction migration artifacts and verify the migration/schema suites with `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, `pnpm run typecheck`, and `pnpm run test:backend`.
 
-## 5. Listing photo data (grade10)
+## 5. Listing media data (grade10)
 
 Depends on nothing in group 3. Lands with or after group 4's ordered-media
 columns.
 
-- [ ] 5.1 Add nullable `alt` (text, ≤ 200 after trim) to `auction_listing_images`.
+- [ ] 5.1 Add nullable `alt` (text, ≤ 200 after trim) to `auction_listing_media`.
 - [ ] 5.2 Run `pnpm run db:drizzle:generate` and `pnpm run check:migrations`, and commit the generated SQL.
 
 ## 6. Implement the authoritative listing lifecycle and public surface (grade10)
@@ -64,8 +64,8 @@ admin-listing (group 6).
 - [ ] 7.1 Rename the wrangler binding and env field to `AUCTION_LISTING_ASSETS` with bucket names `grade10-auction-listing-assets-{dev,staging,production}`, bind `IMAGES`, and run `pnpm run cf-typegen`.
 - [ ] 7.2 Make `An accepted upload becomes a gallery image`, `An unsupported type is refused`, and `An oversized image is refused` pass on the byte route, measuring width and height with the Images port for rasters.
 - [ ] 7.3 Make replace/remove/add follow admin-listing gallery rules (`Replace and remove follow the admin-listing gallery rules`, `A published listing can gain another image`, `Adding after close is refused`).
-- [ ] 7.4 Make `Missing alt uses the listing title`, `Supplied alt is shown`, `Alt can be edited on a published listing`, and `Over-length alt is refused` pass on upload and on `listings.updateImageAlt`.
-- [ ] 7.5 Make `The catalogue uses card size for an image card`, `The details gallery uses thumb, detail, and zoom`, and `An unknown size is not found` pass on `GET /api/public/listing-images/:size/*`, transforming through the Images port when the stored bytes exceed the named ceiling.
+- [ ] 7.4 Make `Missing alt uses the listing title`, `Supplied alt is shown`, `Alt can be edited on a published listing`, and `Over-length alt is refused` pass on upload and on `listings.updateMediaAlt`.
+- [ ] 7.5 Make `The catalogue uses card size for an image card`, `The details gallery uses thumb, detail, and zoom`, and `An unknown size is not found` pass on `GET /api/public/listing-media/:size/*`, transforming through the Images port when the stored bytes exceed the named ceiling.
 - [ ] 7.6 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`.
 
 ## 8. Extend the auction admin feature slice (grade10)
@@ -76,7 +76,7 @@ Depends on group 2.
 - [ ] 8.2 Make the admin repository and fixture scenarios for upload, reorder, and removal of ordered image/video media pass, including query invalidation after every successful listing mutation.
 - [ ] 8.3 Verify the auction admin frontend package with its focused module/hook tests, `pnpm run typecheck`, and `pnpm run lint`.
 
-## 9. Admin photo manager (grade10)
+## 9. Admin media manager (grade10)
 
 Depends on group 1 through the submodule bump, and on groups 3 and 7's
 fixtures / procedure shapes. Preview and confirm stay in the admin client —
@@ -84,20 +84,20 @@ no backend change; confirm calls the existing byte upload and discard never
 reaches the network. Dialog is an ordered gallery (≤ eight), not six sides.
 
 - [ ] 9.1 Bump the `external/grade10-spec` submodule to the commit carrying group 1.
-- [ ] 9.2 Make `Operators attach gallery images from admin` and `An accepted upload becomes a gallery image` pass with a Photos dialog on the listings surface and the byte upload on the admin client.
+- [ ] 9.2 Make `Operators attach gallery images from admin` and `An accepted upload becomes a gallery image` pass with a Media dialog on the listings surface and the byte upload on the admin client.
 - [ ] 9.3 Make gallery replace/remove/add/alt controls follow admin-listing status rules plus `Alt can be edited on a published listing` and `Adding after close is refused`.
 - [ ] 9.4 Make `An unsupported type is refused`, `An oversized image is refused`, and `Over-length alt is refused` pass as inline errors that leave the gallery unchanged.
 - [ ] 9.5 Make `Choosing a file shows a preview without uploading` and
-  `Discarding the preview leaves the gallery unchanged` pass in the admin Photos
+  `Discarding the preview leaves the gallery unchanged` pass in the admin Media
   dialog: selecting a file shows a local preview with Confirm and
   Discard, and Discard clears the preview without calling the upload client.
 - [ ] 9.6 Make `Confirming the preview stores the image` and
   `An accepted upload becomes a gallery image` pass by uploading only when
   Confirm is pressed (add and draft replace), then clearing the preview.
-- [ ] 9.7 Make `The admin photo manager shows card size`, `Hovering the magnify
+- [ ] 9.7 Make `The admin media manager shows card size`, `Hovering the magnify
   control shows zoom size`, and `Leaving the magnify control hides zoom` pass:
   stored images use card size, and hovering the magnify control reveals a zoom
-  preview at least three-quarters of the viewport height. Layout of the photo
+  preview at least three-quarters of the viewport height. Layout of the media
   manager is not prescribed.
 - [ ] 9.8 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test`.
 
@@ -121,7 +121,7 @@ a running backend.
 
 ## 12. Delivery and review (grade10)
 
-- [ ] 12.1 Create `grade10-auction-listing-assets-{staging,production}` in each Cloudflare account, copy keys from the previous listing-images buckets when any exist, enable the Images binding, and confirm both resolve in staging before the worker that reads them deploys.
+- [ ] 12.1 Create `grade10-auction-listing-assets-{staging,production}` in each Cloudflare account, copy keys from prior listing-asset buckets when any exist, enable the Images binding, and confirm both resolve in staging before the worker that reads them deploys.
 - [ ] 12.2 Verify every scenario in the three deltas, then run `openspec validate add-admin-auction-listing` and `openspec validate --specs`.
 - [ ] 12.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and `pnpm run build` after the feature lanes pass.
 - [ ] 12.4 Review the branch for convention drift and for delta coverage separately: requirements missing, partial, or implemented differently than specified.

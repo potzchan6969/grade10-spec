@@ -5,7 +5,7 @@ listing — incomplete saves first, required fields enforced at create, publish
 now or at a future scheduled time — with an ordered gallery of one to eight
 images or videos (originals stored and served as uploaded), and call one off
 while it has not closed. Named image sizes and optional alt live in
-`grade10-auction/listing-images` in this same change.
+`grade10-auction/listing-media` in this same change.
 
 ## ADDED Requirements
 
@@ -559,7 +559,7 @@ SHALL be refused.
 Original media bytes SHALL be stored and served as uploaded. This capability
 SHALL NOT resize, transcode, generate a thumbnail, or otherwise derive a
 second object from the upload. Named public sizes for gallery **images** are
-owned by `grade10-auction/listing-images` and are an additional public
+owned by `grade10-auction/listing-media` and are an additional public
 contract on top of the original. Optional width and height, when supplied by
 the operator's client, are untrusted layout hints and MUST NOT be treated as
 measurements.
@@ -600,7 +600,7 @@ video from the uploaded bytes.
 - **THEN** Grade10 stores and serves that same body and type as the item's
   original
 - **AND** any named-size paths for the image come from
-  `grade10-auction/listing-images`, not from a second stored object written
+  `grade10-auction/listing-media`, not from a second stored object written
   at upload
 
 #### Scenario: Unsupported type is refused

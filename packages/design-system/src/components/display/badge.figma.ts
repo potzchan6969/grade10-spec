@@ -19,6 +19,7 @@ const variant = instance.getEnum("variant", {
   success: "success",
   error: "error",
   warning: "warning",
+  info: "info",
 });
 
 const size = instance.getEnum("size", {

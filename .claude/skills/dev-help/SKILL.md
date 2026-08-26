@@ -23,6 +23,7 @@ The delivery line, in order. Skip a step that does not apply.
 | `/tdd` | The red → green loop. `/implement` already runs the work through it; invoke when you want the loop on its own. |
 | `/commit` | Local commits, `type(domain):`. Only when invoked. Chain `/pr-push` in the same message to publish. |
 | `/pr-push` | Create a `<type>/<short-description>` branch (`feat/`, `fix/`, `build/`, etc.) when publishable work is on `main`, then push it and ensure an open PR. Commits dirty files that belong on the PR; irrelevant dirty files do not block. Push updated submodules before this repo. Only when invoked. Re-run; rewrite the description only when this session changed code. |
+| `/spec-push` | Land the branch here: rebase onto `main`, settle conflicts by reading the change, merge the PR. A change reaches the application repo only once it is on `main`. |
 | `/review-changes` | Two-axis review (Standards and Spec) since a fixed point. |
 | `/archive-change` | The change shipped (deployed, not merely merged). Fold specs in the planning store. |
 
