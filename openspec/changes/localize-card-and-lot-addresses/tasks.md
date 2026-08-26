@@ -14,7 +14,7 @@ both need it landed. Those two depend on nothing in each other.
 - [x] 1.4 Hold `An unknown prefixed address is refused honestly` against the widened table: an address under a prefix no language claims still matches nothing, and a prefixed session-shaped address still answers 404.
 - [x] 1.5 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test`.
 
-## 2. Serving, language and heads (grade10)
+## 2. Serving, language and heads (grade10) (owner: @sean)
 
 - [ ] 2.1 Stop the request's remembered locale deciding the language of a public document, so `A crawler reads an unprefixed address in the default locale` passes for a card and a lot and the unprefixed document is one set of bytes for every request; a session-shaped surface keeps reading it.
 - [ ] 2.2 Extend the after-hydration move to a remembered locale to every public surface, making `The memory redirects an unprefixed arrival` pass on a card as well as the marketing page, replacing the history entry rather than adding one.
