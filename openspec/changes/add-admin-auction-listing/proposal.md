@@ -72,7 +72,7 @@ collector sees the listing by slug with sized image delivery.
   **image** is offered at four named sizes — `card`, `detail`, `thumb`,
   `zoom` — transformed on serve when the named size is smaller than the
   stored bytes. Image items carry optional alt (fallback: listing title).
-  Video items keep the original public path. The admin photo manager
+  Video items keep the original public path. The admin media manager
   previews and confirms before image bytes upload, reviews at card size,
   and magnifies to zoom.
 - **Listing object store renamed** from `AUCTION_LISTING_IMAGES` to
@@ -158,7 +158,7 @@ live money, so the house can rehearse a sale.
   rewrite that frees a slug, scheduled publish, and the ordered one-to-eight
   image-or-video gallery (originals stored and served as uploaded).
 - `grade10-auction/listing-media`: optional alt on gallery images, named
-  public sizes (`card`, `detail`, `thumb`, `zoom`), admin photo-manager
+  public sizes (`card`, `detail`, `thumb`, `zoom`), admin media-manager
   preview-before-upload and card/zoom review, and catalogue/details
   consumption of sized paths — on the gallery from admin-listing.
 - `shared-ui/auction-listing`: the listing product-page blocks `@grade10/ui`
@@ -176,7 +176,7 @@ live money, so the house can rehearse a sale.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/admin/grade10` | Draft, create, and edit surfaces; gallery photo manager with preview/confirm, card/zoom review, and alt; client-side required-field checks at create and a publish at control. |
+| `apps/admin/grade10` | Draft, create, and edit surfaces; gallery media manager with preview/confirm, card/zoom review, and alt; client-side required-field checks at create and a publish at control. |
 | `apps/frontend/grade10` | Catalogue row shows first image at card size; details gallery passes sized sources and alt into `ListingGallery`; public lookup by slug. |
 | `apps/backend/grade10/auction` | Lenient draft save, create gate, scheduled publish, ordered media (image and video), binding renamed to `AUCTION_LISTING_ASSETS`, Images binding for on-serve transform, public path gains a size segment for images. Cancel of a `created` listing is allowed; cancel rewrites the slug. |
 | `@grade10/auction-contracts` | Admin listing shape gains slug, media, publish at, alt, and named-size paths; public gallery becomes an ordered list. Public listing lookup is by slug. **BREAKING** for `angle` and for listing addresses that named an internal id. |

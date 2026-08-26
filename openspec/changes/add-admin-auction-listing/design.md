@@ -166,7 +166,7 @@ Extend the existing `catalog/listings` slice with draft/create/update/media/alt
 commands and form-facing models. Its datasource decodes the admin contract,
 the repository exposes the commands, and hooks invalidate listing queries.
 `apps/admin/grade10` owns the listing-form page composition, dialog state,
-permission-gated actions, and the photo manager (local preview with Confirm /
+permission-gated actions, and the media manager (local preview with Confirm /
 Discard before upload; stored images at card size; magnify reveals zoom).
 Fixtures implement the expanded procedure port so the package and app tests
 cover form states without a running worker.

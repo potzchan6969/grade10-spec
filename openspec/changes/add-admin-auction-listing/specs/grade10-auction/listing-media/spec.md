@@ -54,7 +54,7 @@ requirement covers image items and their alt.
 #### Scenario: An unsupported type is refused
 
 - **GIVEN** a draft listing
-- **WHEN** an operator uploads a PDF as a listing image
+- **WHEN** an operator uploads a PDF as gallery media
 - **THEN** the system refuses the upload
 - **AND** the gallery is unchanged
 
@@ -69,7 +69,7 @@ requirement covers image items and their alt.
 
 The system SHALL NOT send listing-media bytes to the auction service until
 the operator confirms after seeing a preview of the selected file in the
-admin photo manager. Choosing a file alone SHALL show that preview for the
+admin media manager. Choosing a file alone SHALL show that preview for the
 gallery slot being filled or replaced and SHALL leave the stored item for
 that slot unchanged. Discarding the preview SHALL clear the preview, leave
 the gallery unchanged, and SHALL NOT upload. Confirm applies to both adding
@@ -79,7 +79,7 @@ an item and replacing a draft item.
 
 - **GIVEN** a draft listing with an empty gallery slot the operator is filling
 - **WHEN** an operator selects a JPEG under the media size bound
-- **THEN** the admin photo manager shows a preview of that file
+- **THEN** the admin media manager shows a preview of that file
 - **AND** the listing still has no new stored image for that slot
 
 #### Scenario: Confirming the preview stores the image
@@ -99,9 +99,9 @@ an item and replacing a draft item.
 - **AND** the preview is cleared
 - **AND** no upload was sent
 
-### Requirement: The admin photo manager reviews images at card size with hover zoom
+### Requirement: The admin media manager reviews images at card size with hover zoom
 
-The admin photo manager SHALL let an operator review the listing's gallery
+The admin media manager SHALL let an operator review the listing's gallery
 images (at most eight items) so they can upload, replace, and inspect them.
 Layout of that surface is not prescribed — any arrangement that shows the
 gallery items is fine. A stored image SHALL be shown at card size. A magnify
@@ -110,10 +110,10 @@ image at zoom size in a preview at least three-quarters of the viewport
 height. Leaving the control SHALL hide the zoom preview. The magnify control
 SHALL NOT require a click to reveal zoom.
 
-#### Scenario: The admin photo manager shows card size
+#### Scenario: The admin media manager shows card size
 
 - **GIVEN** a draft listing with a stored gallery image
-- **WHEN** an operator opens the photo manager for that listing
+- **WHEN** an operator opens the media manager for that listing
 - **THEN** that image shows at card size
 
 #### Scenario: Hovering the magnify control shows zoom size
@@ -244,7 +244,7 @@ admin-listing; named sizes apply to images only.
 
 #### Scenario: An unknown size is not found
 
-- **GIVEN** a published listing image
+- **GIVEN** a published gallery image
 - **WHEN** a browser requests it at a size other than `card`, `detail`,
   `thumb`, or `zoom`
 - **THEN** the system answers as it would for an image that does not exist
