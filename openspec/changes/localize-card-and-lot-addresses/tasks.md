@@ -37,6 +37,6 @@ both need it landed. Those two depend on nothing in each other.
 ## 4. Delivery and review (grade10) (owner: @sean)
 
 - [x] 4.1 Confirm every scenario of the two capability deltas has a test behind it, and that `A Chinese address answers whole` still passes unchanged for the three catalogue surfaces.
-- [ ] 4.2 Run the full validation set: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
-- [ ] 4.3 Deploy to staging and read a prefixed card address, its alternates, and the sitemap off the deployed site.
-- [ ] 4.4 Archive the change once it is deployed to production.
+- [x] 4.2 Run the full validation set: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
+- [x] 4.3 Deploy to staging and read a prefixed card address, its alternates, and the sitemap off the deployed site.
+- [x] 4.4 Archive the change once it is deployed to production.
