@@ -12,7 +12,7 @@ that merges #71 and #85.
 
 - [ ] 1.1 Make `An application imports the surface` and `A part is reused alone` pass by recording `ListingGallery`, `ListingBidPanel`, `ListingDetails`, and their listed types (including `*Copy`) as the `shared-ui/auction-listing` exports on the package entry.
 - [ ] 1.2 Make `Distinct sources are used in each slot` and `Omitted sources fall back to src` pass on `ListingGalleryImage` via optional `thumbSrc` and `zoomSrc`.
-- [ ] 1.3 Make `Several photos show a strip`, `One photo has no strip`, `No photos`, and `Labels come from the consumer` pass in the gallery stories (consumer `copy`), then run this repository's `pnpm run typecheck`, `pnpm run lint`, and the block's story tests.
+- [ ] 1.3 Make `Several gallery items show a strip`, `One gallery item has no strip`, `No gallery items`, and `Labels come from the consumer` pass in the gallery stories (consumer `copy`), then run this repository's `pnpm run typecheck`, `pnpm run lint`, and the block's story tests.
 
 ## 2. Share listing lifecycle and media contracts (grade10)
 
@@ -41,7 +41,7 @@ share; may land beside it.
 Depends on nothing in group 3. Lands with or after group 4's ordered-media
 columns.
 
-- [ ] 5.1 Add nullable `alt` (text, ≤ 200 after trim) to `auction_listing_media` (or to `auction_listing_images` before that table is renamed in the same expand).
+- [ ] 5.1 Add nullable `alt` (text, ≤ 200 after trim) to `auction_listing_media`.
 - [ ] 5.2 Run `pnpm run db:drizzle:generate` and `pnpm run check:migrations`, and commit the generated SQL.
 
 ## 6. Implement the authoritative listing lifecycle and public surface (grade10)
@@ -84,11 +84,11 @@ no backend change; confirm calls the existing byte upload and discard never
 reaches the network. Dialog is an ordered gallery (≤ eight), not six sides.
 
 - [ ] 9.1 Bump the `external/grade10-spec` submodule to the commit carrying group 1.
-- [ ] 9.2 Make `Operators attach gallery images from admin` and `An accepted upload becomes a gallery image` pass with a Photos dialog on the listings surface and the byte upload on the admin client.
+- [ ] 9.2 Make `Operators attach gallery images from admin` and `An accepted upload becomes a gallery image` pass with a Media dialog on the listings surface and the byte upload on the admin client.
 - [ ] 9.3 Make gallery replace/remove/add/alt controls follow admin-listing status rules plus `Alt can be edited on a published listing` and `Adding after close is refused`.
 - [ ] 9.4 Make `An unsupported type is refused`, `An oversized image is refused`, and `Over-length alt is refused` pass as inline errors that leave the gallery unchanged.
 - [ ] 9.5 Make `Choosing a file shows a preview without uploading` and
-  `Discarding the preview leaves the gallery unchanged` pass in the admin Photos
+  `Discarding the preview leaves the gallery unchanged` pass in the admin Media
   dialog: selecting a file shows a local preview with Confirm and
   Discard, and Discard clears the preview without calling the upload client.
 - [ ] 9.6 Make `Confirming the preview stores the image` and
@@ -97,7 +97,7 @@ reaches the network. Dialog is an ordered gallery (≤ eight), not six sides.
 - [ ] 9.7 Make `The admin media manager shows card size`, `Hovering the magnify
   control shows zoom size`, and `Leaving the magnify control hides zoom` pass:
   stored images use card size, and hovering the magnify control reveals a zoom
-  preview at least three-quarters of the viewport height. Layout of the photo
+  preview at least three-quarters of the viewport height. Layout of the media
   manager is not prescribed.
 - [ ] 9.8 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test`.
 

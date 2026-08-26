@@ -65,7 +65,7 @@ collector sees the listing by slug with sized image delivery.
 - **Media is an ordered gallery of one to eight images or videos.** A draft
   may have none; create requires at least one. Originals are stored
   content-addressed and served as uploaded. **BREAKING** for the public
-  listing gallery: media is no longer one photo per named physical side
+  listing gallery: media is no longer one item per named physical side
   (`front` / `back` / `left` / `right` / `top` / `bottom`). It is an ordered
   list; the first item is the catalogue card.
 - **Named sizes and optional alt for gallery images.** Each published gallery

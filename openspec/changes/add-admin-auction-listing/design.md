@@ -94,9 +94,10 @@ Workers do not provide durable per-row timers and it would create a second
 scheduler beside the existing cron pass. Having the admin client publish it
 was rejected because publication must happen when no client is open.
 
-### Replace angle-keyed images with an ordered media gallery
+### Replace angle-keyed rows with an ordered media gallery
 
-Replace `auction_listing_images(angle)` with media rows that carry an integer
+Formerly `auction_listing_images` keyed by physical side (`angle`). Replace
+that with `auction_listing_media` rows that carry an integer
 position, media kind/content type, object key, optional dimensions, and
 optional alt (images only). The database bounds a listing to one ordered
 position per item and the service accepts only one to eight items at create;
