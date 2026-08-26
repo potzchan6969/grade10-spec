@@ -8,7 +8,8 @@
   {
     "label": "nav/promo",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9025",
-    "classes": "flex h-9 items-center justify-center overflow-hidden bg-secondary-foreground px-8"
+    "classes": "flex h-9 items-center justify-center overflow-hidden bg-secondary-foreground px-8",
+    "note": "Size/size-9 + Gap/gap-8. Fill resolves to #575757 in Figma (Grade10 secondary-foreground / gray-600), not Base/primary — get_variable_defs lists Base/primary on the node for other bindings; the audit fill is authoritative."
   },
   {
     "label": "nav/bar",
@@ -24,6 +25,12 @@
     "label": "footer/grid",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9564",
     "classes": "grid w-full grid-cols-1 gap-6 p-8 @xl:grid-cols-2 @3xl:grid-cols-4"
+  },
+  {
+    "label": "footer/logo",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4848-7593",
+    "classes": "flex h-9 items-center text-primary-foreground",
+    "note": "Logo Frame is Size/size-9; the g10-logo_mono instance inside is Size/size-5 and consumer-owned."
   },
   {
     "label": "footer/bar",

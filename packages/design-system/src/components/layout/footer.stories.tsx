@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
+import { G10LogoMono } from "../display/g10-logo-mono";
 import { Footer } from "./footer";
 
 /* Grade10's own footer content. It lives here, in an example, rather than in
@@ -53,6 +54,8 @@ const LEGAL_LINKS = [
   { label: "SHIPPING", href: "#shipping" },
 ];
 
+const GRADE10_LOGO = <G10LogoMono className="h-5 w-auto" />;
+
 const meta = {
   title: "Components/Footer",
   component: Footer,
@@ -66,7 +69,8 @@ const meta = {
       copyright: "© 2026 Grade10. All rights reserved.",
       locale: "HONG KONG / HKD",
     },
-    logo: "Grade10 Marketplace",
+    logo: GRADE10_LOGO,
+    logoHref: "/",
     socialLinks: SOCIAL_LINKS,
     columns: COLUMNS,
     legalLinks: LEGAL_LINKS,
@@ -103,6 +107,11 @@ export const Default: Story = {
       canvas.getByText("© 2026 Grade10. All rights reserved."),
     ).toBeInTheDocument();
     expect(canvas.getByText("HONG KONG / HKD")).toBeInTheDocument();
+    // Annotation: logo click redirects to the homepage. The mark itself is
+    // decorative inside the named home link (`Size/size-9` frame).
+    const logo = footer.querySelector('[data-slot="footer-logo"]');
+    expect(logo).toHaveAttribute("href", "/");
+    expect(logo).toHaveClass("h-9");
   },
 };
 
@@ -114,12 +123,16 @@ export const WithoutLinks: Story = {
   args: { socialLinks: [], columns: [], legalLinks: [] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.queryAllByRole("link")).toHaveLength(0);
+    // Only the homepage logo link remains — annotation: click goes home.
+    expect(canvas.getAllByRole("link")).toHaveLength(1);
+    expect(canvas.getByRole("link", { name: "Grade10" })).toHaveAttribute(
+      "href",
+      "/",
+    );
     // Absent, not empty: an empty row still reserves its padding.
     for (const slot of ["footer-social", "footer-legal"]) {
       expect(canvasElement.querySelector(`[data-slot="${slot}"]`)).toBeNull();
     }
-    expect(canvas.getByText("Grade10 Marketplace")).toBeInTheDocument();
     expect(canvas.getByText("HONG KONG / HKD")).toBeInTheDocument();
   },
 };

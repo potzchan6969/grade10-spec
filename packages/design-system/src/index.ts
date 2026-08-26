@@ -3,6 +3,7 @@ export * from "./components/display/badge";
 export * from "./components/display/breadcrumbs";
 export * from "./components/display/card";
 export * from "./components/display/divider";
+export * from "./components/display/g10-logo-mono";
 export * from "./components/display/list";
 export * from "./components/display/pagination";
 export * from "./components/display/separator";
