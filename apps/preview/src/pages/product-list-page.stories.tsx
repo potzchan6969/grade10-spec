@@ -180,11 +180,7 @@ function ProductListPage() {
 
   return (
     <div className="min-h-svh bg-white">
-      <Nav
-        {...STORE_NAV}
-        promo={null}
-        onCartClick={() => setCartOpen(true)}
-      />
+      <Nav {...STORE_NAV} promo={null} onCartClick={() => setCartOpen(true)} />
       <ProductBrowse
         appliedFilters={appliedFilters}
         copy={{
