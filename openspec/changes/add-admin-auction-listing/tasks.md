@@ -128,7 +128,7 @@ a running backend.
   buckets, confirm the Images binding in staging, and smoke-resolve before
   the worker that reads them deploys.
 - [x] 12.2 Verify every scenario in the three deltas, then run `openspec validate add-admin-auction-listing` and `openspec validate --specs`.
-- [ ] 12.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and `pnpm run build` after the feature lanes pass.
+- [x] 12.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and `pnpm run build` after the feature lanes pass.
 - [x] 12.4 Review the branch for convention drift and for delta coverage separately: requirements missing, partial, or implemented differently than specified.
 - [ ] 12.5 After rollout is confirmed, fold the accepted deltas into `openspec/specs/` (adding `grade10-auction` to `openspec/specs/README.md` if needed), confirm `docs/architecture/auction.md` names the binding and named sizes, and archive this change.
 
