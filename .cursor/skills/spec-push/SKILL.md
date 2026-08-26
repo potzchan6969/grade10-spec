@@ -1,6 +1,6 @@
 ---
 name: spec-push
-description: "Land a spec branch on main - rebase onto origin/main, resolve conflicts by reading the OpenSpec change, validate, force-push, and merge the PR once it is settled. Invoke with /spec-push. Only when invoked."
+description: "Land a spec branch on main - rebase onto origin/main, resolve conflicts by reading the OpenSpec change, validate, force-push, and merge the PR once it is settled and the author says go. Invoke with /spec-push. Only when invoked."
 disable-model-invocation: true
 ---
 
@@ -14,7 +14,8 @@ this store at its `main`, so a change sitting on a branch reaches nobody:
 `pnpm plan board` there flags it and `pnpm plan claim` refuses it. Until this
 runs, the work cannot be picked up.
 
-**Done when:** the PR is merged into `main`. **Stop when:** something is
+**Done when:** the PR is merged into `main`, or the merge is the only thing
+left and the author has been asked for it. **Stop when:** something is
 unsettled — a conflict the change itself cannot decide, a red check, or a
 review still asking for something.
 
@@ -25,8 +26,8 @@ expects a pushed branch with an open PR; no PR yet → run `/pr-push` first
 rather than opening one here.
 
 Invoking this skill is the authorisation to rebase published work and
-force-push **this** branch. It authorises nothing on any other branch, and
-never `main` directly.
+force-push **this** branch. It authorises nothing on any other branch, never
+`main` directly, and not the merge itself — that is asked for at the end.
 
 ## Gather
 
@@ -139,18 +140,45 @@ Settled is all of these, checked rather than assumed:
 
 ```bash
 gh pr checks <pr-url>
-gh pr view <pr-url> --json isDraft,mergeable,mergeStateStatus,reviewDecision
+gh pr view <pr-url> --json isDraft,mergeable,mergeStateStatus,reviewDecision,reviewRequests
 ```
 
-- Not a draft.
-- Checks green. Pending is not green — wait, or report and stop.
+- Checks green. Pending is not green — wait, or report and stop. A failure is
+  compared against the same check on the base first:
+
+  ```bash
+  gh run list --branch main --workflow=<workflow> --limit 3 --json conclusion,headSha
+  ```
+
+  Red on the base too → inherited, not yours. Still not green, so it still
+  stops, but say which commits on `main` it has been failing on rather than
+  letting it read as something this branch broke. Landing onto a red base is
+  the author's call to make, not yours.
 - `reviewDecision` is not `CHANGES_REQUESTED`.
+- `reviewRequests` is empty. Someone was asked to look and has not yet.
 - `mergeable` is `MERGEABLE`.
 - Validation above passed.
 
 Any one unmet or unknown → stop and say which. Do not merge through it.
 
-All met:
+All met, and the PR is a draft:
+
+```bash
+gh pr ready <pr-url>
+```
+
+A draft here is `/pr-push`'s default, not a decision anyone made — every PR
+from that skill starts as one. Invoking `/spec-push` is the author saying the
+change is finished, which is the same thing clicking *Ready for review* says,
+so clear it rather than stopping on it. A reviewer who was actually asked for
+is the case above, and that one does stop.
+
+Then ask before merging. Say what lands — the change ids, the commits, the
+base — and wait. Everything up to here is recoverable: a rebase from the
+reflog, a force-push from the remote's old SHA. The merge is not, and it is the
+step that puts a requirement in front of every engineer reading the store.
+
+On the go-ahead:
 
 ```bash
 gh pr merge <pr-url> --merge
