@@ -18,10 +18,10 @@ both need it landed. Those two depend on nothing in each other.
 
 - [x] 2.1 Stop the request's remembered locale deciding the language of a public document, so `A crawler reads an unprefixed address in the default locale` passes for a card and a lot and the unprefixed document is one set of bytes for every request; a session-shaped surface keeps reading it.
 - [x] 2.2 Extend the after-hydration move to a remembered locale to every public surface, making `The memory redirects an unprefixed arrival` pass on a card as well as the marketing page, replacing the history entry rather than adding one.
-- [ ] 2.3 Give a card's and a lot's head the alternates of its own address and its own canonical, so `A variant declares its alternates` passes per card rather than only per catalogue page.
-- [ ] 2.4 Make `A prefixed address naming nothing is refused` pass: a prefixed address whose handle or id the catalogue has nothing for answers 404 with the not-found surface in that language, never the catalogue's page.
-- [ ] 2.5 Hold `The address wins over the memory` and `A prefixed visit stays in its language` across a card and a lot, alongside the catalogue surfaces they already cover.
-- [ ] 2.6 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
+- [x] 2.3 Give a card's and a lot's head the alternates of its own address and its own canonical, so `A variant declares its alternates` passes per card rather than only per catalogue page.
+- [x] 2.4 Make `A prefixed address naming nothing is refused` pass: a prefixed address whose handle or id the catalogue has nothing for answers 404 with the not-found surface in that language, never the catalogue's page.
+- [x] 2.5 Hold `The address wins over the memory` and `A prefixed visit stays in its language` across a card and a lot, alongside the catalogue surfaces they already cover.
+- [x] 2.6 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
 
 ## 3. Catalogue enumeration and the rendered sitemap (grade10)
 
