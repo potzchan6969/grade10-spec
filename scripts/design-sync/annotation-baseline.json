@@ -1,0 +1,652 @@
+{
+  "schemaVersion": 1,
+  "roots": [
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4180:1293",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4180-1293",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/display/audit.json",
+      "label": "breadcrumbs/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4180:1276",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4180-1276",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/display/audit.json",
+      "label": "breadcrumb-separator/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4180:1291",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4180-1291",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/display/audit.json",
+      "label": "breadcrumb-ellipsis/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2176:4224",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-4224",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/display/audit.json",
+      "label": "list/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2176:4213",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-4213",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/display/audit.json",
+      "label": "list-item/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4181:2010",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4181-2010",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/display/audit.json",
+      "label": "pagination/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4181:1979",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4181-1979",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/display/audit.json",
+      "label": "pagination-ellipsis/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2159:3275",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2159-3275",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/avatar.figma.ts",
+      "component": "Avatar"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2132:2294",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2132-2294",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/badge.figma.ts",
+      "component": "Badge"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4180:1291",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4180-1291",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/breadcrumb-ellipsis.figma.ts",
+      "component": "BreadcrumbEllipsis"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4180:1290",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4180-1290",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/breadcrumb-item.figma.ts",
+      "component": "BreadcrumbItem"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4180:1276",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4180-1276",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/breadcrumb-separator.figma.ts",
+      "component": "BreadcrumbSeparator"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4180:1293",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4180-1293",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/breadcrumbs.figma.ts",
+      "component": "Breadcrumbs"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2176:3946",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-3946",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/card.figma.ts",
+      "component": "Card"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2176:4213",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-4213",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/list-item.figma.ts",
+      "component": "ListItem"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2176:4224",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-4224",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/list.figma.ts",
+      "component": "List"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4181:1979",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4181-1979",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/pagination-ellipsis.figma.ts",
+      "component": "PaginationEllipsis"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4181:1978",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4181-1978",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/pagination-link.figma.ts",
+      "component": "PaginationLink"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4181:2009",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4181-2009",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/pagination-next.figma.ts",
+      "component": "PaginationNext"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4181:1996",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4181-1996",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/pagination-previous.figma.ts",
+      "component": "PaginationPrevious"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4181:2010",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4181-2010",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/pagination.figma.ts",
+      "component": "Pagination"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4174:37",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4174-37",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/display/status-indicator.figma.ts",
+      "component": "StatusIndicator"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2213:240",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2213-240",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/forms/audit.json",
+      "label": "checkbox-list/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2213:392",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2213-392",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/forms/audit.json",
+      "label": "radio-list/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "86:3459",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=86-3459",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/button.figma.ts",
+      "component": "Button"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2176:4089",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-4089",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/checkbox-button.figma.ts",
+      "component": "CheckboxButton"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2176:3979",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-3979",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/checkbox-list-input.figma.ts",
+      "component": "CheckboxListInput"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2213:240",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2213-240",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/checkbox-list.figma.ts",
+      "component": "CheckboxList"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4396:5319",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4396-5319",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/chip.figma.ts",
+      "component": "Chip"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4313:28",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4313-28",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/filter-chip.figma.ts",
+      "component": "FilterChip"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2159:3195",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2159-3195",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/icon-button.figma.ts",
+      "component": "IconButton"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2595:158",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2595-158",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/input-otp-slot.figma.ts",
+      "component": "InputOtpSlot"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "96:341",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=96-341",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/link.figma.ts",
+      "component": "Link"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2176:4273",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-4273",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/number-input.figma.ts",
+      "component": "NumberInput"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2595:295",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2595-295",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/otp-input.figma.ts",
+      "component": "OtpInput"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2213:130",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2213-130",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/radio-button.figma.ts",
+      "component": "RadioButton"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2213:142",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2213-142",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/radio-list-item.figma.ts",
+      "component": "RadioListItem"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2213:392",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2213-392",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/radio-list.figma.ts",
+      "component": "RadioList"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2132:2782",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2132-2782",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/search-input.figma.ts",
+      "component": "SearchInput"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4623:395",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4623-395",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/stepper-input.figma.ts",
+      "component": "Stepper"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2132:2715",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2132-2715",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/forms/text-input.figma.ts",
+      "component": "TextInput"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4171:9937",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9937",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/layout/audit.json",
+      "label": "nav/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4171:9025",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9025",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/layout/audit.json",
+      "label": "nav/promo",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4171:9033",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9033",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/layout/audit.json",
+      "label": "nav/bar",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4171:9653",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/layout/audit.json",
+      "label": "footer/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4171:9564",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9564",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/layout/audit.json",
+      "label": "footer/grid",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4171:9598",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9598",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/layout/audit.json",
+      "label": "footer/bar",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4343:16420",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4343-16420",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/layout/audit.json",
+      "label": "navigation-list/root",
+      "covers": "NavigationList"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4171:9653",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/layout/footer.figma.ts",
+      "component": "Footer"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4171:9937",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9937",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/layout/nav.figma.ts",
+      "component": "Nav"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4344:508",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4344-508",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/layout/navigation-link.figma.ts",
+      "component": "NavigationLink"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4343:16418",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4343-16418",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/layout/navigation-list.figma.ts",
+      "component": "NavigationList"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2159:3169",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2159-3169",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/overlays/audit.json",
+      "label": "dialog-content/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2159:3156",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2159-3156",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/overlays/audit.json",
+      "label": "dialog-header/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2132:1693",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2132-1693",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/overlays/audit.json",
+      "label": "dropdown-menu-content/box",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2132:1694",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2132-1694",
+      "kind": "audit",
+      "path": "packages/design-system/src/components/overlays/audit.json",
+      "label": "dropdown-menu-content/items",
+      "covers": "DropdownMenuContent"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2159:3156",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2159-3156",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/overlays/dialog-header.figma.ts",
+      "component": "DialogHeader"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2159:3169",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2159-3169",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/overlays/dialog.figma.ts",
+      "component": "DialogContent"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2121:1385",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2121-1385",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/overlays/dropdown-menu-item.figma.ts",
+      "component": "DropdownMenuItem"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "2132:1693",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2132-1693",
+      "kind": "code-connect",
+      "path": "packages/design-system/src/components/overlays/dropdown-menu.figma.ts",
+      "component": "DropdownMenuContent"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4171:9051",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9051",
+      "kind": "audit",
+      "path": "packages/ui/src/blocks/store-home/audit.json",
+      "label": "store-home-hero/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4195:1048",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4195-1048",
+      "kind": "audit",
+      "path": "packages/ui/src/blocks/store-home/audit.json",
+      "label": "store-section-header/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4195:1056",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4195-1056",
+      "kind": "audit",
+      "path": "packages/ui/src/blocks/store-home/audit.json",
+      "label": "store-collection-tile/standard",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4195:1051",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4195-1051",
+      "kind": "audit",
+      "path": "packages/ui/src/blocks/store-home/audit.json",
+      "label": "store-collection-tile/featured",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4195:1051",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4195-1051",
+      "kind": "code-connect",
+      "path": "packages/ui/src/blocks/store-home/store-collection-tile.figma.ts",
+      "component": "StoreCollectionTile"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4171:9051",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9051",
+      "kind": "code-connect",
+      "path": "packages/ui/src/blocks/store-home/store-home-hero.figma.ts",
+      "component": "StoreHomeHero"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4195:1048",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4195-1048",
+      "kind": "code-connect",
+      "path": "packages/ui/src/blocks/store-home/store-section-header.figma.ts",
+      "component": "StoreSectionHeader"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4006:981",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4006-981",
+      "kind": "audit",
+      "path": "packages/ui/src/blocks/store-product-listing/audit.json",
+      "label": "product-card/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4274:10072",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10072",
+      "kind": "audit",
+      "path": "packages/ui/src/blocks/store-product-listing/audit.json",
+      "label": "product-card-image/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4274:10072",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10072",
+      "kind": "audit",
+      "path": "packages/ui/src/blocks/store-product-listing/audit.json",
+      "label": "product-card-image/surface",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4288:13952",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-13952",
+      "kind": "audit",
+      "path": "packages/ui/src/blocks/store-product-listing/audit.json",
+      "label": "filter-panel/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4288:14117",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-14117",
+      "kind": "audit",
+      "path": "packages/ui/src/blocks/store-product-listing/audit.json",
+      "label": "product-list-header/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4357:527",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4357-527",
+      "kind": "audit",
+      "path": "packages/ui/src/blocks/store-product-listing/audit.json",
+      "label": "product-filter/root",
+      "covers": null
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4274:10074",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10074",
+      "kind": "code-connect",
+      "path": "packages/ui/src/blocks/store-product-listing/product-card-image.figma.ts",
+      "component": "ProductCardImage"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4200:155",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4200-155",
+      "kind": "code-connect",
+      "path": "packages/ui/src/blocks/store-product-listing/product-card.figma.ts",
+      "component": "ProductCard"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4357:527",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4357-527",
+      "kind": "code-connect",
+      "path": "packages/ui/src/blocks/store-product-listing/product-filter.figma.ts",
+      "component": "ProductFilter"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4288:14117",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-14117",
+      "kind": "code-connect",
+      "path": "packages/ui/src/blocks/store-product-listing/product-list-header.figma.ts",
+      "component": "ProductListHeader"
+    }
+  ],
+  "entries": {}
+}
