@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { brandCatalogs, sharedCatalogs } from "./catalogs.ts";
 import type { Brand } from "./index.ts";
-import { brands, getMessages, localesOf } from "./index.ts";
+import { brands, getMessages, locales, localesOf } from "./index.ts";
 
 type Tree = { [key: string]: string | Tree };
 
@@ -135,19 +135,33 @@ describe("what each layer is answerable for", () => {
     expect(owed[0].keys.length).toBeLessThan(VOCABULARY.length / 4);
   });
 
-  /* A brand's default language has nothing behind it but the shared words, so
-     between them they answer everything — no key falls through to a language
-     the collector did not ask for. */
-  it.each(brandNames)(
-    "answers %s's own language without falling back",
-    (brand) => {
-      const locale = brands[brand].defaultLocale;
+  /* Scenario: a language is declared and nobody speaks it. The shipped list
+     is what the brands speak, so the pairs walked below are every language
+     the platform has — a second list cannot drift out from under them. */
+  it("ships exactly the languages the brands speak", () => {
+    const spokenLocales = [...new Set(spoken.map(({ locale }) => locale))];
+
+    expect([...locales].sort()).toEqual(spokenLocales.sort());
+  });
+
+  /* Scenario: a language is left half-written. Every language a brand speaks
+     answers the whole vocabulary from its own two layers, so nothing falls
+     through to English — a fallback that renders is a missing translation
+     nobody sees. */
+  it.each(spoken)(
+    "answers $brand in $locale without falling back",
+    ({ brand, locale }) => {
       const answered = new Set([
         ...keysIn(layers(sharedCatalogs)[locale] ?? {}),
         ...keysIn(layers(brandCatalogs[brand])[locale] ?? {}),
       ]);
+      const untranslated = VOCABULARY.filter((key) => !answered.has(key));
 
-      expect(VOCABULARY.filter((key) => !answered.has(key))).toEqual([]);
+      expect({ brand, locale, untranslated }).toEqual({
+        brand,
+        locale,
+        untranslated: [],
+      });
     },
   );
 });

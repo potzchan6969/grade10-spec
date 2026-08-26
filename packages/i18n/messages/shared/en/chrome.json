@@ -5,7 +5,8 @@
   "cartLabel": "Cart",
   "nav": {
     "store": "STORE",
-    "auction": "AUCTION"
+    "auction": "AUCTION",
+    "vault": "VAULT"
   },
   "footer": {
     "shopHeading": "SHOP",

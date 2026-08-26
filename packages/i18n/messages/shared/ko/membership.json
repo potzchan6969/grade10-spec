@@ -1,0 +1,12 @@
+{
+  "card": {
+    "expired": "이 코드는 만료되었습니다",
+    "expiresIn": "남은 시간",
+    "fallbackCode": "또는 이 코드를 읽어 주세요",
+    "inStore": "매장",
+    "qrAlt": "스캔할 수 있는 회원 코드",
+    "refresh": "새 코드",
+    "secondsUnit": "초",
+    "used": "이 코드는 이미 사용되었습니다"
+  }
+}

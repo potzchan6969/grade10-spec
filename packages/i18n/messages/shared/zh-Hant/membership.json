@@ -1,0 +1,12 @@
+{
+  "card": {
+    "expired": "此碼已過期",
+    "expiresIn": "尚餘",
+    "fallbackCode": "或讀出這組編號",
+    "inStore": "門市",
+    "qrAlt": "你的會員碼，可供掃描的方格",
+    "refresh": "換一組新碼",
+    "secondsUnit": "秒",
+    "used": "此碼已被使用"
+  }
+}

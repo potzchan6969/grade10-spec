@@ -1,0 +1,25 @@
+{
+  "control": {
+    "title": "Push notifications",
+    "description": "An alert on this device the moment a lot needs you.",
+    "emailStays": "Email arrives either way. This only adds an alert here.",
+    "enable": "Turn on",
+    "disable": "Turn off",
+    "statusOn": "On for this browser",
+    "statusOff": "Off for this browser",
+    "unsupported": "This browser cannot show push notifications.",
+    "blocked": "This browser is blocking notifications for this site. Only the browser's own settings can allow them again — this page cannot.",
+    "failed": "That did not work. Try again."
+  },
+  "push": {
+    "outbid": "Someone bid {amount}. Bid again to stay in.",
+    "nowTop": "Your {amount} is the top bid.",
+    "holdFailed": "Your bid did not go through — the card was not authorised.",
+    "lostAtClose": "This lot closed without you.",
+    "listingCanceled": "This lot was withdrawn.",
+    "winner": "You won this lot.",
+    "captureFailed": "Payment did not go through. Check your card.",
+    "endingSoon": "Closing soon.",
+    "other": "There is news about this lot."
+  }
+}
