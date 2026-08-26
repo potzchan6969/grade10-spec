@@ -1,87 +1,104 @@
 ## Context
 
-Auction **sale events** already ship end-to-end: table `auctions`, statuses
-`draft | published | canceled`, admin tRPC `auctions.{list,get,create,update,publish,cancel}`,
-and a thin Sales panel that only opens a draft by title and publishes from
-the table. Listings optionally reference a sale via `auctionId`;
+Auction **sale events** already ship: table `auctions`, admin tRPC
+`auctions.{list,get,create,update,publish,cancel}`, and a thin Sales panel
+that opens a draft by title and publishes from the table. Listings optionally
+reference a sale via `auctionId`. Today statuses are only
+`draft | published | canceled`, and
 `OPEN_AUCTION_STATES = ["draft", "published"]` gates attachment. The listing
 editor never exposes that field. Admin sales repository/client only wire
 `list` / `create` / `publish` — not `update` / `cancel` / `get`.
 
-This change completes the operator surface on that model. It does **not**
-add a second “campaign” entity or a `created` sale status. Store checkout
+This change completes the operator surface and **aligns sale status with
+listing** (`draft` → `created` → `published` | `canceled`). A sale remains
+one campaign/event cover that **many listings** may belong to. Store checkout
 and inventory “sold” are unrelated products.
 
 Capability specs:
 [`grade10-auction/admin-sale`](specs/grade10-auction/admin-sale/spec.md),
 [`grade10-auction/admin-listing`](specs/grade10-auction/admin-listing/spec.md)
-(delta). Attach eligibility is already required under admin-listing catalogue
-fields; this plan adds editor scenarios and the sale CRUD capability.
+(delta).
+
+## Goals / Non-Goals
+
+**Goals:**
+
+- Sale editor (create / edit / publish / cancel) mirroring listing authoring.
+- Listing editor sale picker limited to **`draft` | `created`**.
+- Introduce `created` on sales; tighten attach eligibility accordingly.
+
+**Non-Goals:**
+
+- Parallel campaign table; store/inventory coupling; sale-level clocks or money.
 
 ## Decisions
 
 ### 1. Reuse the existing sale event — do not invent a parallel table
 
 **Decision:** Product language stays **sale**; persistence and tRPC keep
-`auctions` / `auctionId`. Admin domain maps to `saleId` as today.
+`auctions` / `auctionId`. Admin domain maps to `saleId` as today. One sale
+holds many listings (campaign / event cover).
 
-**Rejected:** A new `sale_events` (or similar) table and API. That would
-fork identity from live catalogue covers, fan-out cancel, and every listing
-FK already in production.
+**Rejected:** A new `sale_events` table. That would fork identity from live
+catalogue covers and every listing FK already in production.
 
-### 2. Sale status machine stays `draft → published | canceled`
+### 2. Sale status machine matches listing: `draft → created → published | canceled`
 
-**Decision:** No `created` on sales. Open requires a title; that is the only
-authoring gate. Publish moves `draft → published`. Cancel moves
-`draft|published → canceled` and fans out listing cancel.
+**Decision:** Add `created`. Open requires a title and persists `draft`.
+**Create** moves `draft → created` (title still required). **Publish** moves
+`created → published` only. **Cancel** moves `draft | created | published →
+canceled` and fans out listing cancel. Edit title/copy while
+`draft | created | published`.
 
-**Rejected:** Mirroring listing’s `draft → created → published`. Listings need
-a create gate for money/window/media; sales carry identity/copy only. Adding
-`created` would force a migration and break `OPEN_AUCTION_STATES` and public
-cover rules for no operator gain.
+**Rejected:** Keeping only `draft | published | canceled` with no `created`.
+Product asked for the same stages as listing and for a picker of draft /
+created only.
 
-**Rejected:** Making only `draft` sales attachable (the ambiguous reading of
-“not published/draft/canceled”). Code and durable admin-listing already
-allow **`draft` or `published`**. Tightening would strand live covers that
-still receive lots.
+**Rejected:** Publish directly from `draft`. Create is the ready gate; publish
+is the public-cover gate — same shape as listings.
 
 ### 3. Listing ↔ sale selection rule (final)
 
-A listing may attach a sale **only when that sale is `draft` or
-`published`**. `canceled` is refused. Clearing the sale is always allowed
+A listing may attach a sale **only when that sale is `draft` or `created`**.
+`published` and `canceled` are refused. Clearing the sale is always allowed
 while the listing is editable. Publishing a listing does **not** require a
 sale.
 
-Wire paths: pass `auctionId` on draft save and create (already on payloads);
-for post-create edits on `created`/`published` listings, call
-`listings.setAuction` (extend the admin procedure client — it is missing
-today). Picker options come from `auctions.list` filtered client-side to
-open statuses (or keep canceled out of the control).
+Wire paths: pass `auctionId` on draft save and create; for post-create edits
+on `created`/`published` listings, call `listings.setAuction`. Picker options
+come from `auctions.list` filtered to `draft` and `created`.
+`OPEN_AUCTION_STATES` becomes `["draft", "created"]`.
+
+**Rejected:** Keeping published sales attachable (prior shipping behaviour).
+Product feedback: draft or created only.
+
+Existing listings already under a published sale keep their `auctionId`;
+operators simply cannot attach **new** listings to that published sale.
 
 ### 4. Admin UI mirrors listing authoring, not listing complexity
 
 **Decision:** Sales tab keeps a table; “new” / row open swaps to a
 full-page **SaleEditorPage** beside `ListingEditorPage` patterns
-(back control, `Card` form, `TextInput` for title/copy, primary actions).
+(back control, `Card` form, `TextInput` for title/copy, primary actions:
+create when draft, publish when created, cancel when authorized).
 No media, prices, or schedule on the sale editor.
 
 **Rejected:** Growing the inline “New sale” title field into the only edit
-surface. Operators need cancel and copy edit without leaving a one-line form.
+surface.
 
 ### 5. Packages and ownership
 
 **Decision:** All work under `@grade10/auction-*` and
-`apps/admin/grade10` auction pages. No store/finance coupling. No
-grade10-spec design-system or `@grade10/ui` package change unless a Select
-primitive is later requested — compose existing primitives (native
-`<select>` labeled with design-system `Text` / field patterns is enough).
+`apps/admin/grade10` auction pages. Compose existing primitives (native
+`<select>` for the sale picker until a design-system Select exists).
 
 ### 6. Backend scope
 
-**Decision:** Prefer **no migration**. Tables and status check already match
-the specs. Backend tasks are verification and any thin gap (none expected
-beyond ensuring admin cancel/update remain the authority). Frontend and
-procedure-client wiring are the bulk.
+**Decision:** Migration required: extend `ck_auctions_status` (and
+`AUCTION_STATUSES`) with `created`; flip `OPEN_AUCTION_STATES` to
+`draft` | `created`; publish path accepts only `created`; add/verify create
+transition `draft → created`. Frontend and procedure-client wiring remain
+bulk of the UX work.
 
 **Rejected:** Expanding the sale row with campaign window or hero media in
 this change.
@@ -90,17 +107,19 @@ this change.
 
 | Risk | Mitigation |
 | --- | --- |
-| Operators expect listing-like `created` on sales | Spec and UI copy state open → publish; no create gate |
-| Cancel of a large sale is batched | Existing cancel + sweep; UI reports remaining if the client surfaces it |
-| Parallel `add-grade10-inventory` naming collision | Proposal non-goals; sale = event cover only |
-| Submodule pin lags store | Implementers bump `external/grade10-spec` only if this change ships UI contracts there (none planned) |
+| Existing flows publish draft → published | Spec + tasks: create then publish; migrate admin UI and tests |
+| Published sales no longer accept new lots | Documented product rule; existing attachments unchanged |
+| Parallel `add-grade10-inventory` naming | Proposal non-goals; sale = event cover only |
 
 ## Migration Plan
 
-None for schema. Rollout is admin SPA + package deploys with the grade10
-product. Existing sales and listing `auctionId` values keep working.
+1. Expand status check to include `created`.
+2. Deploy worker with create transition and tightened `OPEN_AUCTION_STATES`.
+3. Ship admin SPA: sale editor create/publish actions + listing picker filter.
+4. No row backfill required — existing `draft` / `published` / `canceled`
+   rows stay valid; operators create drafts before publishing new covers.
 
 ## Open Questions
 
-None that block the task breakdown. Eligibility (`draft` \| `published`) and
-no-`created` are settled against shipping code and durable admin-listing.
+None blocking. Product confirmed: sale = multi-listing campaign/event;
+picker = `draft` | `created` only; statuses align with listing.

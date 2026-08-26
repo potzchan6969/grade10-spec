@@ -6,14 +6,14 @@
 
 The Grade10 auction listing editor SHALL let an authorized operator pick at
 most one **Sale** for the listing, or clear the sale so the listing stands
-alone. The picker SHALL list only sales that are `draft` or `published`. A
-`canceled` sale SHALL NOT appear as a selectable option.
+alone. The picker SHALL list only sales that are `draft` or `created`. A
+`published` or `canceled` sale SHALL NOT appear as a selectable option.
 
 Selecting a sale SHALL persist through the same draft-save and create paths
 that write other catalogue fields, and on an editable listing that already
 exists SHALL update the listing’s sale. Clearing the sale SHALL store no
-sale. Attaching a canceled sale through the API SHALL still be refused under
-**Catalogue fields an operator may write**.
+sale. Attaching a `published` or `canceled` sale through the API SHALL be
+refused.
 
 An operator who may catalogue a listing SHALL be able to set or clear the
 sale. The picker SHALL NOT block create or publish when no sale is chosen.
@@ -26,9 +26,9 @@ sale. The picker SHALL NOT block create or publish when no sale is chosen.
 - **THEN** Grade10 stores the listing under that sale
 - **AND** the listing remains a draft
 
-#### Scenario: Operator attaches a listing to a published sale
+#### Scenario: Operator attaches a listing to a created sale
 
-- **GIVEN** a created listing and a published sale
+- **GIVEN** a created listing and a created sale
 - **WHEN** an authorized operator selects that sale in the listing editor
   and saves
 - **THEN** Grade10 stores the listing under that sale
@@ -41,13 +41,21 @@ sale. The picker SHALL NOT block create or publish when no sale is chosen.
 - **THEN** Grade10 stores the listing with no sale
 - **AND** the listing remains a draft
 
-#### Scenario: Canceled sales are not offered in the picker
+#### Scenario: Published and canceled sales are not offered in the picker
 
-- **GIVEN** a canceled sale and a draft sale
+- **GIVEN** a published sale, a canceled sale, and a draft sale
 - **WHEN** an authorized operator opens the sale picker on the listing
   editor
 - **THEN** the draft sale is offered
+- **AND** the published sale is not offered
 - **AND** the canceled sale is not offered
+
+#### Scenario: Published sale cannot receive a listing
+
+- **GIVEN** a draft listing and a published sale
+- **WHEN** an authorized operator attempts to attach that sale
+- **THEN** Grade10 refuses the attach
+- **AND** the listing’s sale is unchanged
 
 #### Scenario: Listing without a sale still creates
 

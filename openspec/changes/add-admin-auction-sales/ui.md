@@ -11,14 +11,16 @@ frame is work in grade10-spec later; this change does not block on it.
 ### Admin auction Sales list and sale editor
 
 Assembly in `apps/admin/grade10` composing
-`@grade10/auction-admin-frontend/sales`. Operators open a draft, edit title
-and copy, publish, and cancel from a full-page editor opened from the Sales
-tab (same list → editor swap as listings). Canceled sales open read-only.
+`@grade10/auction-admin-frontend/sales`. Operators open a draft, create it,
+edit title and copy, publish, and cancel from a full-page editor opened from
+the Sales tab (same list → editor swap as listings). A sale is a campaign /
+event cover for multiple listings. Canceled sales open read-only.
 
 ### Admin listing editor — sale field
 
 Assembly on the existing listing editor. One optional control selects a sale
-or “on its own” (no sale). Options are eligible sales only.
+or “on its own” (no sale). Options are eligible sales only (`draft` or
+`created`).
 
 ## Components
 
@@ -48,8 +50,11 @@ Tied to
 ### Sale editor
 
 - **New sale** — `Operator opens the editor for a new sale`.
-- **Draft** — `Operator opens the editor for a draft sale`; publish offered.
-- **Published** — edit title/copy; publish absent; cancel offered when
+- **Draft** — `Operator opens the editor for a draft sale`; create offered;
+  publish absent.
+- **Created** — `Operator opens the editor for a created sale`; publish
+  offered; create absent.
+- **Published** — edit title/copy; create/publish absent; cancel offered when
   authorized (`Operator updates copy on a published sale`,
   `Operator cancels a published sale`).
 - **Canceled read-only** — `Canceled sale opens read-only`.
@@ -61,7 +66,7 @@ Tied to
 ### Listing editor sale picker
 
 - **Attach draft sale** — `Operator attaches a draft listing to a draft sale`.
-- **Attach published sale** — `Operator attaches a listing to a published sale`.
+- **Attach created sale** — `Operator attaches a listing to a created sale`.
 - **Clear** — `Operator clears the sale on a listing`.
-- **Filter** — `Canceled sales are not offered in the picker`.
+- **Filter** — `Published and canceled sales are not offered in the picker`.
 - **Optional** — `Listing without a sale still creates`.
