@@ -1,3 +1,4 @@
+import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import type {
   AppliedFilter,
   FilterGroup,
@@ -6,6 +7,7 @@ import type {
   SortOption,
   UtilityLink,
 } from "@grade10/ui";
+import { createElement, type ReactNode } from "react";
 
 /* Content this workbench owns, exactly as a store application owns its own.
  * None of it lives in `@grade10/ui` or `@grade10/design-system`: both packages
@@ -16,10 +18,18 @@ const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 /** The workbench has every surface and navigates to none of them. */
 const noop = () => {};
 
+const NAV_LOGO: ReactNode = createElement(G10LogoMono, {
+  className: "h-7 w-auto",
+});
+const FOOTER_LOGO: ReactNode = createElement(G10LogoMono, {
+  className: "h-5 w-auto",
+});
+
 const STORE_NAV = {
   copy: { locale: "HKD" },
   promo: "PROMO UTILITY BAR",
-  logo: "Grade10",
+  logo: NAV_LOGO,
+  logoHref: "/",
   locales: [
     { value: "HK", label: "HKD" },
     { value: "KR", label: "KRW" },
@@ -48,7 +58,8 @@ const STORE_FOOTER = {
     copyright: "© 2026 Grade10. All rights reserved.",
     locale: "HONG KONG / HKD",
   },
-  logo: "Grade10 Marketplace",
+  logo: FOOTER_LOGO,
+  logoHref: "/",
   socialLinks: [
     { label: "INSTAGRAM", href: "#instagram" },
     { label: "YOUTUBE", href: "#youtube" },
