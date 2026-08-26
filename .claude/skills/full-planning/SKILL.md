@@ -28,6 +28,9 @@ store — so delivery is planned here, by you.
    something a user sees.
 3. `openspec status --change <change-name>` then lists what is still missing.
 
+Promote on the branch that carries the change, not on `main`. If it is already
+merged, start from an up-to-date `main`; if it is still on a branch, work there.
+
 The proposal and the spec deltas carry over untouched. Do not send the proposal
 back to its author for a task list — their part is finished.
 
