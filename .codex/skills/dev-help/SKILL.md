@@ -19,6 +19,7 @@ The delivery line, in order. Skip a step that does not apply.
 | `/pm-planning` | Requirements only: proposal and spec deltas. No design, no tasks. |
 | `/full-planning` | Delivery plan: design, ui, tasks. Promote a pm-planning change, or plan one you will implement. A change with no `tasks.md` is not ready to `/implement`. |
 | `/implement` | A change with tasks, or tickets with no OpenSpec store. Runs through `/tdd`. Stops at the group boundary. |
+| `/parallel` | Independent implementation groups or tickets delegated to separate task worktrees with a chosen model and effort, committed atomically, then integrated and validated once. |
 | `/implement-then-review` | Same as `/implement`, then `/review-changes` when the last slice is green. |
 | `/tdd` | The red → green loop. `/implement` already runs the work through it; invoke when you want the loop on its own. |
 | `/commit` | Local commits, `type(domain):`. Only when invoked. Chain `/pr-push` in the same message to publish. |
