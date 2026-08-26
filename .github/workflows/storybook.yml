@@ -1,9 +1,12 @@
 name: Storybook
 
-# Publishes the design-system Storybook to workers.dev on the staging Cloudflare
-# account (Workers Assets). No custom domain — URL is printed by wrangler and is
-# typically:
-#   https://grade10-design-system-storybook.memeland-qa.workers.dev
+# Publishes the workbench Storybook (apps/preview/.storybook-workbench) to
+# workers.dev on the staging Cloudflare account. That config is the combined
+# view: preview page assemblies + @grade10/ui + @grade10/design-system.
+# Local equivalent: pnpm run storybook:workbench
+#
+# Typical URL:
+#   https://grade10-storybook-workbench.memeland-qa.workers.dev
 #
 # One-time ops:
 # - Repo secret CLOUDFLARE_API_TOKEN_QA must be available here (same staging
@@ -15,7 +18,9 @@ on:
   push:
     branches: [main]
     paths:
+      - "apps/preview/**"
       - "packages/design-system/**"
+      - "packages/ui/**"
       - ".github/workflows/storybook.yml"
       - "package.json"
   workflow_dispatch:
@@ -34,7 +39,7 @@ env:
 
 jobs:
   deploy:
-    name: Deploy design-system Storybook → staging
+    name: Deploy workbench Storybook → staging
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -62,19 +67,21 @@ jobs:
             exit 1
           fi
 
-      - name: Build Storybook
-        run: pnpm run storybook:build:design-system
+      - name: Build workbench Storybook
+        run: pnpm run storybook:build:workbench
 
       - name: Deploy Storybook
-        working-directory: packages/design-system
+        working-directory: apps/preview
         run: pnpm dlx wrangler@${{ env.WRANGLER_VERSION }} deploy -c wrangler.storybook.jsonc
 
       - name: Summary
         run: |
           {
-            echo "## Storybook → staging (workers.dev)"
+            echo "## Storybook workbench → staging (workers.dev)"
             echo
-            echo "https://grade10-design-system-storybook.memeland-qa.workers.dev"
+            echo "https://grade10-storybook-workbench.memeland-qa.workers.dev"
+            echo
+            echo "Combined view: preview pages + UI + design-system (\`pnpm storybook:workbench\`)."
             echo
             echo "Ref: \`${{ github.sha }}\`"
             echo

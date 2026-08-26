@@ -6,7 +6,9 @@
   "scripts": {
     "lint": "eslint .",
     "storybook": "storybook dev",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build --disable-telemetry",
+    "build-storybook:workbench": "storybook build --config-dir .storybook-workbench --disable-telemetry",
+    "deploy-storybook:staging": "pnpm run build-storybook:workbench && pnpm dlx wrangler@4.120.0 deploy -c wrangler.storybook.jsonc"
   },
   "dependencies": {
     "@grade10/design-system": "workspace:*",

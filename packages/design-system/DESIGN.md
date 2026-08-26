@@ -28,15 +28,9 @@ pnpm run storybook:design-system              # picks an available port
 pnpm run storybook:design-system -- --port 6007
 ```
 
-The same build is published on every push to `main` (and on demand) to
-**https://grade10-design-system-storybook.memeland-qa.workers.dev** —
-Cloudflare Workers Assets on `workers.dev` (staging account; no custom
-domain). Confirm the exact host in the deploy log if the account subdomain
-differs. Locally:
-
-```bash
-pnpm run storybook:deploy:staging             # needs CLOUDFLARE_API_TOKEN
-```
+The published combined Storybook (pages + UI + these primitives) is the
+workbench — see `apps/preview/README.md` and
+https://grade10-storybook-workbench.memeland-qa.workers.dev.
 
 Colocated stories are deliberate: a primitive is documented next to the
 primitive. Product components are reviewed in the application that implements
