@@ -25,14 +25,14 @@ both need it landed. Those two depend on nothing in each other.
 
 ## 3. Catalogue enumeration and the rendered sitemap (grade10) (owner: @sean)
 
-- [ ] 3.1 Add the read that enumerates every card the catalogue holds, beside the catalog feature that owns it, paginating to the end and proven against fixtures with no running backend.
-- [ ] 3.2 Add the read that enumerates every lot of every auction, beside the auction feature that owns it, on the same terms.
-- [ ] 3.3 Answer the sitemap from the application rather than a file the build writes, listing every public surface the build writes a document for and every card and lot the catalogue holds — `The sitemap is exact` and `The sitemap names no pattern` — each once per locale, per `The sitemap lists every variant`.
-- [ ] 3.4 Make `The catalogue decides what is listed` pass: a card the catalogue gains appears with no deploy in between, and one it no longer holds stops appearing.
-- [ ] 3.5 Put a cache directive on the sitemap response, and assert its entry count against a threshold below what a crawler accepts, so crossing it fails a check rather than being silently ignored by a crawler.
-- [ ] 3.6 Keep `robots.txt` a file the build writes — nothing in it depends on the catalogue — and keep `robots points at the sitemap` passing against the rendered sitemap's address.
-- [ ] 3.7 Move the sitemap assertions out of the check that reads a build, which now has no file to read, to where the render can be run, and hold `Every listed address answers` there.
-- [ ] 3.8 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
+- [x] 3.1 Add the read that enumerates every card the catalogue holds, beside the catalog feature that owns it, paginating to the end and proven against fixtures with no running backend.
+- [x] 3.2 Add the read that enumerates every lot of every auction, beside the auction feature that owns it, on the same terms.
+- [x] 3.3 Answer the sitemap from the application rather than a file the build writes, listing every public surface the build writes a document for and every card and lot the catalogue holds — `The sitemap is exact` and `The sitemap names no pattern` — each once per locale, per `The sitemap lists every variant`.
+- [x] 3.4 Make `The catalogue decides what is listed` pass: a card the catalogue gains appears with no deploy in between, and one it no longer holds stops appearing.
+- [x] 3.5 Put a cache directive on the sitemap response, and assert its entry count against a threshold below what a crawler accepts, so crossing it fails a check rather than being silently ignored by a crawler.
+- [x] 3.6 Keep `robots.txt` a file the build writes — nothing in it depends on the catalogue — and keep `robots points at the sitemap` passing against the rendered sitemap's address.
+- [x] 3.7 Move the sitemap assertions out of the check that reads a build, which now has no file to read, to where the render can be run, and hold `Every listed address answers` there.
+- [x] 3.8 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
 
 ## 4. Delivery and review (grade10)
 
