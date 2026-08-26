@@ -1,4 +1,5 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { CartItem } from "./cart-drawer";
 import { DEFAULT_CART_COPY, SAMPLE_CART_ITEMS } from "./fixtures";
@@ -87,16 +88,82 @@ export const QuantityAdjusted: Story = {
       id: "item-adj",
       name: "1999 Pokémon Base Set #4 Charizard Holo PSA 10",
       price: "HK$24,500.00",
-      quantity: 1,
-      maxQuantity: 1,
+      quantity: 2,
+      maxQuantity: 2,
       status: "adjusted",
     },
   },
-  play: async ({ canvasElement }) => {
+  parameters: {
+    docs: {
+      story: {
+        // Keep the docs canvas on the opening state (qty 2 + low-stock warning).
+        autoplay: false,
+      },
+    },
+  },
+  render: function QuantityAdjustedStory(args) {
+    const initialQuantity = args.item.quantity;
+    const [quantity, setQuantity] = useState(initialQuantity);
+    const [instanceKey, setInstanceKey] = useState(0);
+
+    return (
+      <div>
+        <CartItem
+          key={instanceKey}
+          {...args}
+          item={{ ...args.item, quantity }}
+          onQuantityChange={(next) => {
+            setQuantity(next);
+            args.onQuantityChange?.(next);
+          }}
+        />
+        {/* Restores the opening visual after play so the canvas ends on qty 2 + warning */}
+        <button
+          type="button"
+          className="sr-only"
+          onClick={() => {
+            setQuantity(initialQuantity);
+            setInstanceKey((key) => key + 1);
+          }}
+        >
+          Reset quantity adjusted story
+        </button>
+      </div>
+    );
+  },
+  play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     expect(
       canvas.getByText("Low stock. Quantity adjusted"),
     ).toBeInTheDocument();
+    expect(canvas.getByDisplayValue("2")).toBeInTheDocument();
+
+    const increaseBtn = canvas.getByRole("button", {
+      name: "Increase quantity",
+    });
+    expect(increaseBtn).toBeDisabled();
+
+    const decreaseBtn = canvas.getByRole("button", {
+      name: "Decrease quantity",
+    });
+    expect(decreaseBtn).toBeEnabled();
+
+    await userEvent.click(decreaseBtn);
+    expect(args.onQuantityChange).toHaveBeenCalledWith(1);
+    expect(
+      canvas.queryByText("Low stock. Quantity adjusted"),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: "Remove item" }),
+    ).toBeInTheDocument();
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Reset quantity adjusted story" }),
+    );
+    expect(
+      canvas.getByText("Low stock. Quantity adjusted"),
+    ).toBeInTheDocument();
+    expect(canvas.getByDisplayValue("2")).toBeInTheDocument();
   },
 };
 
