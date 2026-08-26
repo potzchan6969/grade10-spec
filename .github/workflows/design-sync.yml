@@ -88,3 +88,30 @@ jobs:
         env:
           FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
         run: pnpm run figma:audit --all-blocks
+
+      # Annotation drift is a separate rail from component structure and
+      # rendered-value checks. Capture the scanner's exit state so the final
+      # step can distinguish a real edit (1) from missing evidence (2), while
+      # the scanner writes the same human summary to GITHUB_STEP_SUMMARY.
+      - name: Monitor Figma annotations
+        id: annotations
+        if: steps.token.outputs.available == 'true'
+        continue-on-error: true
+        env:
+          FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
+        run: |
+          set +e
+          node scripts/design-sync/annotation-monitor.mjs --json | tee annotation-monitor.json
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+
+      - name: Fail on annotation drift or blocked evidence
+        if: steps.annotations.outputs.exit_code != '' && steps.annotations.outputs.exit_code != '0'
+        run: |
+          if [ "${{ steps.annotations.outputs.exit_code }}" = "1" ]; then
+            echo "::error title=Figma annotation drift::Review annotation-monitor.json and the step summary."
+          else
+            echo "::error title=Figma annotation evidence blocked::The annotation scan could not verify every registered surface."
+          fi
+          exit 1
