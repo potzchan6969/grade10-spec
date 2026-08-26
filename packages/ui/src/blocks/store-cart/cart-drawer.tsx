@@ -143,6 +143,29 @@ function CartItemContent({
   const isSoldOut = item.status === "soldOut";
   const isAdjusted = item.status === "adjusted";
   const isDiscounted = item.originalPrice != null;
+  const [adjustedWarningDismissed, setAdjustedWarningDismissed] =
+    useState(false);
+  const previousStatusRef = useRef(item.status);
+
+  useEffect(() => {
+    const previousStatus = previousStatusRef.current;
+    previousStatusRef.current = item.status;
+    if (item.status === "adjusted" && previousStatus !== "adjusted") {
+      setAdjustedWarningDismissed(false);
+    }
+    if (item.status !== "adjusted") {
+      setAdjustedWarningDismissed(false);
+    }
+  }, [item.status]);
+
+  const showLowStockWarning = isAdjusted && !adjustedWarningDismissed;
+
+  const handleQuantityChange = (quantity: number) => {
+    if (isAdjusted) {
+      setAdjustedWarningDismissed(true);
+    }
+    onQuantityChange?.(quantity);
+  };
 
   return (
     <HStack
@@ -206,7 +229,7 @@ function CartItemContent({
           </span>
         ) : null}
 
-        {isAdjusted ? (
+        {showLowStockWarning ? (
           <span className="w-full text-xs font-semibold leading-4 text-warning">
             {copy.lowStockWarning}
           </span>
@@ -235,7 +258,7 @@ function CartItemContent({
             max={item.maxQuantity}
             min={1}
             onDecrementAtMin={onRemove}
-            onValueChange={onQuantityChange}
+            onValueChange={handleQuantityChange}
             size="md"
             value={item.quantity}
           />
