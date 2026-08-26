@@ -7,6 +7,7 @@ import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { Center } from "@grade10/design-system/components/layout/center";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { toast } from "@grade10/design-system/components/overlays/sonner";
 import { cn } from "@grade10/design-system/lib/utils";
 import { CaretDown, Plus, Trash, X } from "@phosphor-icons/react";
 import { Skeleton } from "boneyard-js/react";
@@ -824,6 +825,9 @@ const MIN_ROW_BASELINE = 5;
  * - Empty state: Renders 5 empty slot placeholders, hides the count badge in the header,
  *   and hides the footer entirely.
  * - Active item badge: Counts active items, excluding sold-out items.
+ * - Unavailable (delisted) items: After open loading ends, lines with status
+ *   `unavailable` are removed via `onRemoveItem` without rendering a row, and
+ *   a single design-system toast uses `copy.unavailableItemsRemoved`.
  */
 function CartDrawer({
   open,
@@ -847,11 +851,15 @@ function CartDrawer({
   className,
 }: CartDrawerProps) {
   const [isFetching, setIsFetching] = useState(false);
+  const removedUnavailableIdsRef = useRef(new Set<string>());
+  const didToastUnavailableRef = useRef(false);
 
   // Trigger fetch of product status and price when drawer opens
   useEffect(() => {
     if (!open) {
       setIsFetching(false);
+      removedUnavailableIdsRef.current.clear();
+      didToastUnavailableRef.current = false;
       return;
     }
 
@@ -871,12 +879,40 @@ function CartDrawer({
 
   const isLoading = loading ?? isFetching;
 
+  // After open loading ends, silently drop delisted catalogue lines and toast once per open.
+  useEffect(() => {
+    if (!open || isLoading) return;
+
+    const unavailableIds = items
+      .filter(
+        (item) =>
+          item.status === "unavailable" &&
+          !removedUnavailableIdsRef.current.has(item.id),
+      )
+      .map((item) => item.id);
+    if (unavailableIds.length === 0) return;
+
+    for (const id of unavailableIds) {
+      removedUnavailableIdsRef.current.add(id);
+      onRemoveItem?.(id);
+    }
+    if (!didToastUnavailableRef.current) {
+      didToastUnavailableRef.current = true;
+      toast(copy.unavailableItemsRemoved);
+    }
+  }, [open, isLoading, items, onRemoveItem, copy.unavailableItemsRemoved]);
+
+  // Never paint unavailable rows (sold-out treatment stays for `soldOut` only).
+  const visibleItems = items.filter((item) => item.status !== "unavailable");
+
   // Exclude sold-out items from badge count
-  const activeItemCount = items.filter((i) => i.status !== "soldOut").length;
-  const isEmpty = items.length === 0;
+  const activeItemCount = visibleItems.filter(
+    (i) => i.status !== "soldOut",
+  ).length;
+  const isEmpty = visibleItems.length === 0;
 
   // Compute placeholder slots up to 5-row baseline
-  const emptySlotCount = Math.max(0, MIN_ROW_BASELINE - items.length);
+  const emptySlotCount = Math.max(0, MIN_ROW_BASELINE - visibleItems.length);
 
   // Esc key dismissal
   useEffect(() => {
@@ -950,7 +986,7 @@ function CartDrawer({
 
         {/* Scrollable Body */}
         <CartDrawerBody
-          items={items}
+          items={visibleItems}
           copy={copy.item}
           loading={isLoading}
           emptySlotCount={emptySlotCount}
