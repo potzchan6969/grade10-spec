@@ -9,7 +9,7 @@ never a running worker.
 
 - [ ] 1.1 Make the product and unit contract scenarios pass: publish product
   fields, inventory-unit fields, status vocabulary
-  (`available` | `reserved` | `sold` | `withdrawn`), and sold price/currency
+  (`available` | `auction-listing` | `auction-sold` | `withdrawn`), and sold price/currency
   nullability rules from `Product record fields`, `Inventory unit record
   fields`, `Unit status and sold money`, and `Ten units are ten records`.
 - [ ] 1.2 Make the admin procedure-client and fixture scenarios pass for list
@@ -59,7 +59,7 @@ Depends on groups 1 and 2.
   refused`, `Money on a non-sold status is refused`, `Operator edits a unit
   name`, `Operator deletes an available unit`, `Delete of a sold unit is
   refused`, `Remaining count ignores non-available units`, `Unknown product
-  remaining count is not found`, `Unit ids include reserved and sold`.
+  remaining count is not found`, `Unit ids include auction-listing and auction-sold`.
 - [ ] 3.4 Make change-history scenarios pass for operator and server actors:
   `Operator create appends history with user actor`, `Server update appends
   history with server actor`, `Refused write leaves history unchanged`

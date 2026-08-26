@@ -26,12 +26,16 @@ ids for a product — all from the Grade10 admin panel, admin-only.
 - **Inventory units** — one unit per physical item of a product. Operators
   add units for a product by **quantity** (N identical unit rows, distinct
   ids, same product). Operators edit or delete a unit. Status is
-  auction-agnostic (`available`, `reserved`, `sold`, `withdrawn`). Sold
+  **channel-tied**: `available`, `auction-listing`, `auction-sold`,
+  `withdrawn` in this change — so a sold unit records *how* it sold
+  (Auction today; Store or other channels later as e.g. `store-sold`). Sold
   price (integer minor units) and sold currency (ISO 4217) are set only when
-  status is `sold`; otherwise null.
-- **Change history** — every add, update, and delete on a product or unit
-  records who did it: the operator’s user id, or `server` when the system
-  updates a unit (for example marking sold).
+  status is a sold status (`auction-sold` now); otherwise null.
+- **Change history** — **every** successful add, update, and delete on a
+  product or unit is recorded (platform audit for operator elevated writes,
+  plus domain changelogs for every mutation including server-driven ones).
+  Actor is the operator’s user id, or `server` when the system updates a
+  unit (for example marking `auction-sold`).
 - **Admin console** — Grade10 admin section: products table; open a product
   to see its units; add product; add units by quantity; edit product; edit
   or delete a unit.
@@ -40,7 +44,8 @@ ids for a product — all from the Grade10 admin panel, admin-only.
   or public surface in this change.
 - **Auction seam (documented only)** — Auction will later take a product id
   in its listing editor and map listing lifecycle onto unit
-  `reserved` / `sold`. This change does **not** wire that connection.
+  `auction-listing` / `auction-sold`. This change does **not** wire that
+  connection.
 
 ## Capabilities
 

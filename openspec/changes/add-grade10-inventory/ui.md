@@ -33,7 +33,8 @@ App-local parts (not design-system), following auction admin:
 
 - Table / Row / Cell chrome under `pages/inventory/parts` (or shared admin
   table helpers if the app already factors them).
-- Status badge mapping for `available` | `reserved` | `sold` | `withdrawn`.
+- Status badge mapping for `available` | `auction-listing` | `auction-sold` |
+  `withdrawn`.
 
 **Nothing new in `@grade10/ui` or the design system.** If a designer later
 wants a shared stock status chip or quantity stepper as a design-system

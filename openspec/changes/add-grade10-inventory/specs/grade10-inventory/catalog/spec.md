@@ -86,13 +86,13 @@ refresh updated at. Edit SHALL NOT change id, created at, or created by.
 ### Requirement: Remaining available unit count
 
 Remaining available count for a product SHALL equal the number of that
-product’s inventory units whose status is `available`. Units in `reserved`,
-`sold`, or `withdrawn` SHALL NOT count. The admin API SHALL expose this count
+product’s inventory units whose status is `available`. Units in `auction-listing`,
+`auction-sold`, or `withdrawn` SHALL NOT count. The admin API SHALL expose this count
 for a given product id.
 
 #### Scenario: Remaining count ignores non-available units
 
-- **GIVEN** a product with two `available` units, one `reserved`, and one `sold`
+- **GIVEN** a product with two `available` units, one `auction-listing`, and one `auction-sold`
 - **WHEN** an authorized inventory admin reads remaining available count
 - **THEN** the count is two
 
@@ -120,9 +120,9 @@ with quantity ten. Fields:
 | Added by | Operator user id at create, immutable |
 | Created at | Set on create, immutable |
 | Updated at | Set on every successful update |
-| Status | One of `available`, `reserved`, `sold`, `withdrawn` |
-| Sold price | Integer minor units greater than zero when status is `sold`; null otherwise |
-| Sold currency | ISO 4217 code when status is `sold`; null otherwise |
+| Status | One of `available`, `auction-listing`, `auction-sold`, `withdrawn` |
+| Sold price | Integer minor units greater than zero when status is `auction-sold`; null otherwise |
+| Sold currency | ISO 4217 code when status is `auction-sold`; null otherwise |
 | Remarks | Trimmed text, may be empty |
 
 #### Scenario: Ten units are ten records
@@ -134,12 +134,12 @@ with quantity ten. Fields:
 
 ### Requirement: Unit status and sold money
 
-Status SHALL be one of `available`, `reserved`, `sold`, or `withdrawn`. Status
-names SHALL NOT encode a sales channel (for example they SHALL NOT be
-auction-specific labels). When status is `sold`, sold price and sold currency
-SHALL both be present and valid. When status is not `sold`, sold price and
-sold currency SHALL both be null. A write that sets `sold` without both money
-fields, or that sets money while status is not `sold`, SHALL be refused.
+Status SHALL be one of `available`, `auction-listing`, `auction-sold`, or `withdrawn`. Status names SHALL encode the sales channel when the unit is listed or
+sold through a channel (Auction in this capability; other channels later).
+When status is `auction-sold`, sold price and sold currency
+SHALL both be present and valid. When status is not `auction-sold`, sold price and
+sold currency SHALL both be null. A write that sets `auction-sold` without both money
+fields, or that sets money while status is not `auction-sold`, SHALL be refused.
 
 #### Scenario: Available unit has null sold money
 
@@ -151,14 +151,14 @@ fields, or that sets money while status is not `sold`, SHALL be refused.
 #### Scenario: Sold requires price and currency
 
 - **GIVEN** an inventory unit
-- **WHEN** an authorized inventory admin sets status to `sold` with price
+- **WHEN** an authorized inventory admin sets status to `auction-sold` with price
   `5000` minor units and currency `HKD`
 - **THEN** Grade10 persists those values
 
 #### Scenario: Sold without money is refused
 
 - **GIVEN** an inventory unit in `available`
-- **WHEN** an authorized inventory admin sets status to `sold` without price
+- **WHEN** an authorized inventory admin sets status to `auction-sold` without price
   or currency
 - **THEN** Grade10 refuses the write
 - **AND** the unit is unchanged
@@ -205,7 +205,7 @@ action. Adding units for an unknown product SHALL be refused.
 An authorized inventory admin SHALL update an existing unit’s name, status,
 sold money (subject to the sold rules), and remarks. An authorized inventory
 admin SHALL delete a unit whose status is `available` or `withdrawn`. Delete
-of a `reserved` or `sold` unit SHALL be refused. Delete SHALL remove the unit
+of an `auction-listing` or `auction-sold` unit SHALL be refused. Delete SHALL remove the unit
 record and SHALL append a change-history entry for that deletion.
 
 #### Scenario: Operator edits a unit name
@@ -222,9 +222,9 @@ record and SHALL append a change-history entry for that deletion.
 - **THEN** the unit is gone
 - **AND** a change-history entry records the delete
 
-#### Scenario: Delete of a sold unit is refused
+#### Scenario: Delete of an auction-sold unit is refused
 
-- **GIVEN** an inventory unit in `sold`
+- **GIVEN** an inventory unit in `auction-sold`
 - **WHEN** an authorized inventory admin deletes it
 - **THEN** Grade10 refuses the delete
 - **AND** the unit remains
@@ -235,9 +235,9 @@ An authorized inventory admin SHALL list every inventory unit id for a given
 product, including units that are not `available`. The list for an unknown
 product SHALL be not found.
 
-#### Scenario: Unit ids include reserved and sold
+#### Scenario: Unit ids include auction-listing and auction-sold
 
-- **GIVEN** a product with one `available`, one `reserved`, and one `sold` unit
+- **GIVEN** a product with one `available`, one `auction-listing`, and one `auction-sold` unit
 - **WHEN** an authorized inventory admin lists unit ids for that product
 - **THEN** all three ids are returned
 
@@ -248,13 +248,17 @@ product SHALL be not found.
 ### Requirement: Every product or unit mutation is recorded
 
 Every successful create, update, or delete of a product or inventory unit
-SHALL append one change-history entry. Each entry SHALL record: when it
-happened; the actor; the subject kind (`product` or `inventory-unit`); the
-subject id; the action (`create`, `update`, or `delete`); and a details
-payload sufficient to see what changed. The actor SHALL be the operator’s
-user id when a person performed the write, or the literal `server` when the
-system updated a unit without an operator (for example marking a unit sold
-from an automated path). Failed writes SHALL NOT append an entry.
+SHALL be recorded — no successful mutation may complete without a history
+entry. Grade10 SHALL append one domain change-history (`changelogs`) entry
+for that mutation. Each entry SHALL record: when it happened; the actor; the
+subject kind (`product` or `inventory-unit`); the subject id; the action
+(`create`, `update`, or `delete`); and a details payload sufficient to see
+what changed. The actor SHALL be the operator’s user id when a person
+performed the write, or the literal `server` when the system updated a unit
+without an operator (for example marking a unit `auction-sold` from an
+automated path). Operator writes that go through elevated inventory
+procedures SHALL also append the platform `audit_logs` chain for that call.
+Failed or refused writes SHALL NOT append a changelog or audit entry.
 
 #### Scenario: Operator create appends history with user actor
 
