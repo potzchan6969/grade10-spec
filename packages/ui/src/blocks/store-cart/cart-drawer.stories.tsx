@@ -246,6 +246,13 @@ export const UnavailableItemsRemoved: Story = {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole("button", { name: "Open Cart" }));
 
+    // Rows render a shared sizing fixture while the open fetch runs, so no real
+    // item name is in the DOM yet — wait the busy state out before asserting on
+    // names, or every assertion below reads the skeleton instead.
+    await waitFor(() => {
+      expect(canvasElement.querySelector('[aria-busy="true"]')).toBeNull();
+    });
+
     await waitFor(() => {
       expect(canvas.queryByText(DELISTED_PRODUCT_NAME)).not.toBeInTheDocument();
     });

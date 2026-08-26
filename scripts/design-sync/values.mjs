@@ -153,7 +153,22 @@ export function expectations(classString, resolveToken, resolveRadius) {
 // through the tokens to a hex is a class claiming a colour.
 const isColorClass = (cls, prefix, resolveToken) => {
   const m = new RegExp(`^${prefix}-(.+)$`).exec(cls);
-  return m ? !!resolveToken(m[1])?.startsWith("#") : false;
+  if (!m) return false;
+  // `bg-sidebar/95` is a token carrying an opacity modifier, and it claims the
+  // property as surely as the bare token does — reading the modifier as part
+  // of the name resolved nothing, so a glass surface audited as if it painted
+  // no background at all.
+  //
+  // The modifier is multiplied into whatever alpha the token ALREADY carries,
+  // so a token that is itself translucent is deliberately left unresolved and
+  // goes on being reported. `bg-overlay/30` over an `--overlay` that is itself
+  // 30% paints 9%: that is how the cart and dialog scrims shipped a third as
+  // dark as Figma draws them, and this rail is what surfaced it.
+  const slash = m[1].lastIndexOf("/");
+  const modified = slash > 0 && /^[\d.]+$/.test(m[1].slice(slash + 1));
+  const hex = resolveToken(modified ? m[1].slice(0, slash) : m[1]);
+  if (!hex?.startsWith("#")) return false;
+  return !modified || hex.length <= 7 || /ff$/i.test(hex);
 };
 
 /**
