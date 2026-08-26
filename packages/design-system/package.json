@@ -12,7 +12,7 @@
     "code-connect:publish": "figma connect publish --exit-on-unreadable-files",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "storybook": "storybook dev",
-    "build-storybook": "storybook build",
+    "build-storybook": "storybook build --disable-telemetry",
     "test:stories": "vitest run"
   },
   "exports": {
