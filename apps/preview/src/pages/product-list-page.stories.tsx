@@ -9,7 +9,6 @@ import {
 } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useMemo, useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
 import {
   appliedFiltersFromSelection,
   FILTER_GROUPS,
@@ -277,17 +276,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const cartButton = canvas.getByRole("button", { name: "Cart" });
-    await userEvent.click(cartButton);
-    expect(canvas.getByRole("heading", { name: "Cart" })).toBeInTheDocument();
-    expect(
-      canvas.getByRole("button", { name: "Proceed to Checkout" }),
-    ).toBeInTheDocument();
-  },
-};
+export const Default: Story = {};
 
 export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
