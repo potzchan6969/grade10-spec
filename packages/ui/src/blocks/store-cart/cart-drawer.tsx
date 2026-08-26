@@ -201,7 +201,7 @@ function CartItemContent({
           type="button"
           onClick={onClickProduct}
           className={cn(
-            "w-full cursor-pointer text-left text-sm font-semibold leading-5 text-foreground hover:underline focus-visible:outline-none",
+            "w-full cursor-pointer text-left text-sm font-medium leading-5 text-foreground hover:underline focus-visible:outline-none",
             isSoldOut && "opacity-50",
           )}
         >
@@ -230,7 +230,7 @@ function CartItemContent({
         ) : null}
 
         {showLowStockWarning ? (
-          <span className="w-full text-xs font-semibold leading-4 text-warning">
+          <span className="w-full text-xs font-semibold leading-4 text-secondary-foreground">
             {copy.lowStockWarning}
           </span>
         ) : null}
@@ -723,11 +723,11 @@ function CartDrawerFooter({
       {/* Estimated Total & Promo Code Section */}
       <VStack gap="none" className="w-full">
         <HStack gap="none" vAlign="center" className="w-full justify-between">
-          <span className="text-base font-bold leading-6 text-foreground">
+          <span className="text-base font-semibold leading-6 text-foreground">
             {copy.estimatedTotalLabel}
           </span>
           <CartAmountSkeleton loading={loading} size="lg">
-            <span className="text-base font-bold leading-6 text-foreground">
+            <span className="text-base font-semibold leading-6 text-foreground">
               {estimatedTotal}
             </span>
           </CartAmountSkeleton>
