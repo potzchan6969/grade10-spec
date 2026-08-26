@@ -853,8 +853,11 @@ function CartDrawer({
   const [isFetching, setIsFetching] = useState(false);
   const removedUnavailableIdsRef = useRef(new Set<string>());
   const didToastUnavailableRef = useRef(false);
+  const onFetchStatusAndPriceRef = useRef(onFetchStatusAndPrice);
+  onFetchStatusAndPriceRef.current = onFetchStatusAndPrice;
 
-  // Trigger fetch of product status and price when drawer opens
+  // Fetch status and price only when the drawer opens — not on parent
+  // re-renders while open (e.g. quantity changes recreating inline handlers).
   useEffect(() => {
     if (!open) {
       setIsFetching(false);
@@ -863,10 +866,11 @@ function CartDrawer({
       return;
     }
 
-    if (onFetchStatusAndPrice) {
+    const fetchStatusAndPrice = onFetchStatusAndPriceRef.current;
+    if (fetchStatusAndPrice) {
       setIsFetching(true);
       let isMounted = true;
-      Promise.resolve(onFetchStatusAndPrice()).finally(() => {
+      Promise.resolve(fetchStatusAndPrice()).finally(() => {
         if (isMounted) {
           setIsFetching(false);
         }
@@ -875,7 +879,7 @@ function CartDrawer({
         isMounted = false;
       };
     }
-  }, [open, onFetchStatusAndPrice]);
+  }, [open]);
 
   const isLoading = loading ?? isFetching;
 
