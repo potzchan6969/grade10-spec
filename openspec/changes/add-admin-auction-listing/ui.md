@@ -58,7 +58,7 @@ Nothing new in the design system. No new `@grade10/ui` listing card.
 
 Tied to
 [`grade10-auction/admin-listing`](specs/grade10-auction/admin-listing/spec.md),
-[`grade10-auction/listing-images`](specs/grade10-auction/listing-images/spec.md),
+[`grade10-auction/listing-media`](specs/grade10-auction/listing-media/spec.md),
 and [`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
 
 ### Admin listing editor
