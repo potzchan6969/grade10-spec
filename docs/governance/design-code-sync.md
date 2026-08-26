@@ -178,16 +178,19 @@ Deleting or renaming a variant that instances already use leaves orphaned compon
 
 ### Checking the built component yourself
 
-Two routes. The automated diff needs only a browser; measuring in Storybook needs the repository checked out, so it is the one place here where you may need an engineer to start it for you.
+Two routes that need only a browser: the automated diff, and the published
+Storybook. Local Storybook is the fallback for a branch that is not on `main`.
 
-**Measure it in Storybook.** Run `pnpm run storybook:design-system` and open the address it prints. Open a component, then:
+**Measure it in Storybook.** Open
+[https://grade10-design-system-storybook.memeland-qa.workers.dev](https://grade10-design-system-storybook.memeland-qa.workers.dev)
+(published from `main` on every relevant push). Open a component, then:
 
 1. Switch the **Theme** toolbar control to **Grade10**. It loads in `Default`, which is the baseline theme, not the designed one — comparing that against your Figma file will show differences that are not real. This is the single most common way to misread the page.
 2. Press <kbd>M</kbd> for **Measure**. Hovering any element overlays its real box model — width, height, padding and margin in rendered pixels. This is the direct answer to "is the padding what I drew".
 3. Press <kbd>O</kbd> for **Outline** to see every element boundary at once, which is faster for spotting a wrong gap or an unexpected wrapper.
 4. Use the **Controls** panel to switch variant, size and state, so you can measure the same rungs your component set defines.
 
-What you are measuring is the primitive as built, in a browser, at the real values — so a rung that is 24px in code and 32px in your Sizing collection is visible in about ten seconds.
+What you are measuring is the primitive as built, in a browser, at the real values — so a rung that is 24px in code and 32px in your Sizing collection is visible in about ten seconds. For a branch that is not yet on `main`, run `pnpm run storybook:design-system` from a checkout.
 
 **Read the automated diff.** The nightly design-sync run posts a summary table on its own run page — Actions → **Design sync** → the newest run. Each row is one disagreement, in the form `Button · size=sm · Height (h-8) · 32px in code · 24px in Figma`, covering background, height, horizontal padding, gap and corner radius. The same page states what the check does not cover, which is worth reading once: vertical padding, anything inside the component, and the hover, disabled and loading states are all unchecked, so a clean table is not proof the component matches.
 

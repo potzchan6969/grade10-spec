@@ -1,0 +1,82 @@
+name: Storybook
+
+# Publishes the design-system Storybook to workers.dev on the staging Cloudflare
+# account (Workers Assets). No custom domain — URL is printed by wrangler and is
+# typically:
+#   https://grade10-design-system-storybook.memeland-qa.workers.dev
+#
+# One-time ops:
+# - Repo secret CLOUDFLARE_API_TOKEN_QA must be available here (same staging
+#   token grade10 uses). Org secrets may need this repo added to their allowlist.
+# - Confirm Cloudflare Access covers this workers.dev host if you gate
+#   *.memeland-qa.workers.dev.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/design-system/**"
+      - ".github/workflows/storybook.yml"
+      - "package.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: storybook-staging
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 24.14.1
+  # Pin so CI does not need a lockfile entry for wrangler.
+  WRANGLER_VERSION: 4.120.0
+
+jobs:
+  deploy:
+    name: Deploy design-system Storybook → staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_QA }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Require Cloudflare token
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN_QA is empty. Grant this repository the staging Cloudflare token (same secret grade10 uses)."
+            exit 1
+          fi
+
+      - name: Build Storybook
+        run: pnpm run storybook:build:design-system
+
+      - name: Deploy Storybook
+        working-directory: packages/design-system
+        run: pnpm dlx wrangler@${{ env.WRANGLER_VERSION }} deploy -c wrangler.storybook.jsonc
+
+      - name: Summary
+        run: |
+          {
+            echo "## Storybook → staging (workers.dev)"
+            echo
+            echo "https://grade10-design-system-storybook.memeland-qa.workers.dev"
+            echo
+            echo "Ref: \`${{ github.sha }}\`"
+            echo
+            echo "Confirm the exact host in the Deploy step log if the account subdomain differs."
+          } >> "$GITHUB_STEP_SUMMARY"

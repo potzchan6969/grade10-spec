@@ -44,7 +44,7 @@ Ordered. Steps 1–4 and 11 are the designer's; 5–10 are the implementation st
 | 8 | Designer/Engineer | Write `<name>.stories.tsx` — one story per option, plus disabled, loading, and every contract state. | `pnpm run test:stories` passes; it fails on any cva option no story renders. |
 | 9 | Designer/Engineer | `pnpm run check:design-system` to zero errors and zero unexplained warnings. | Axes, options, colours, and box geometry all agree with the file. |
 | 10 | Designer/Engineer | `pnpm run code-connect:publish:design-system` — or `code-connect:publish:ui` for a block. Each package publishes its own templates; there is no command for both. | `get_code_connect_map` stops returning `{}` for the node. |
-| 11 | Designer | Verify: read the snippet in Dev Mode, and measure the built component in Storybook. | See ["Checking it yourself"](#checking-it-yourself-no-checkout-no-engineer) below. |
+| 11 | Designer | Verify: read the snippet in Dev Mode, and measure the built component in Storybook. | See ["Checking it yourself"](#checking-it-yourself) below. |
 
 Steps 3 and 10 are two different publishes, in that order, neither of which happens automatically.
 
@@ -146,7 +146,15 @@ Note what the template deliberately does *not* emit: `variant="default"` and `si
 
 **Read the snippet in Dev Mode.** Select an instance, open the Code section of the inspect panel. With the mapping published you get the `<Button …>` line above; with it unpublished you get a generated guess, however correct the template in the repository is. If you see no connected code, step 10 has not been run — that is the state [`design-code-sync.md`](design-code-sync.md#6-publish-the-set-and-publish-code-connect) records for this file.
 
-**Measure the built component in Storybook.** This is the one route that needs the repository checked out — the other two need only a browser. Run `pnpm run storybook:design-system` and open the address it prints. Switch the **Theme** toolbar control to **Grade10** first — it loads in `Default`, which is stock shadcn and not the designed theme, and comparing that against your file shows differences that are not real. Then press <kbd>M</kbd> for Measure to read the real box model, and <kbd>O</kbd> for Outline.
+**Measure the built component in Storybook.** Open
+[https://grade10-design-system-storybook.memeland-qa.workers.dev](https://grade10-design-system-storybook.memeland-qa.workers.dev)
+(the design-system Storybook published from `main`). Switch the **Theme**
+toolbar control to **Grade10** first — it loads in `Default`, which is stock
+shadcn and not the designed theme, and comparing that against your file shows
+differences that are not real. Then press <kbd>M</kbd> for Measure to read
+the real box model, and <kbd>O</kbd> for Outline. To measure a branch that
+is not yet on `main`, check out the repository and run
+`pnpm run storybook:design-system`.
 
 **Read the automated diff.** Actions → **Design sync** → the newest run posts a table of disagreements, one row per mismatch: `Button · size=md · Height (h-10) · 40px in code · 32px in Figma`. It runs nightly at 01:00 UTC and on demand via **Run workflow**. It covers background, height, horizontal padding, gap, and corner radius on each axis's base state only — vertical padding, anything inside the component, and the hover, disabled, and loading states are unchecked, so a clean table is not proof of a match.
 
