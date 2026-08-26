@@ -83,7 +83,12 @@ rules:
     - Requirements live here and nowhere else. Never leave a testable statement in a PRD.
   design:
     - Record alternatives considered for each decision; engineering inherits these trade-offs.
-    - Link the capability spec rather than restating requirements; screens and Figma sources belong in ui.md.
+    - "Link the capability spec rather than restating requirements. Open Decisions by naming what the spec already governs, then write only how it lands - which existing row, which service owns the write, persist vs recompute, reuse vs add. A decision that could be a spec scenario does not belong here."
+    - "Do not restate SHALL behavior as decisions. Point at the spec. Keep the implementation alternative an engineer might still try (re-authorize per step, update in place, a second database) even when the spec forbids the resulting behavior."
+    - "Database schema is a must: for each added or changed column, Postgres type, nullability, and default, matching the existing schema's conventions. Reuse a table or stamp that already holds the fact; do not add a second column for the same message. Spec fields read from another row at query time are not stored."
+    - "API contracts are optional: include them only when the wire changes in a meaningful way (breaking rename, additive authenticated field, new admin read). Do not list unchanged endpoints."
+    - "Do not mitigate a risk with 'the spec says so'. Mitigation is an implementation control - a lock, a stamp, a state column."
+    - Screens and Figma sources belong in ui.md.
   ui:
     - Link each screen's Figma frame rather than describing it in prose - the frame is the layout's source of truth.
     - "Name design-system and packages/ui exports exactly - the export name is the cross-repo contract. A component, variant, or token that does not exist yet is work in grade10-spec; flag it so tasks carries it."
