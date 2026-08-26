@@ -67,7 +67,7 @@ requirement covers image items and their alt.
 
 ### Requirement: An operator confirms an image before it is stored
 
-The system SHALL NOT send listing-image bytes to the auction service until
+The system SHALL NOT send listing-media bytes to the auction service until
 the operator confirms after seeing a preview of the selected file in the
 admin photo manager. Choosing a file alone SHALL show that preview for the
 gallery slot being filled or replaced and SHALL leave the stored item for

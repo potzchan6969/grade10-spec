@@ -9,7 +9,7 @@ operator listing lifecycle and sized gallery delivery (formerly split across
 
 Capability deltas:
 [`grade10-auction/admin-listing`](specs/grade10-auction/admin-listing/spec.md),
-[`grade10-auction/listing-images`](specs/grade10-auction/listing-images/spec.md),
+[`grade10-auction/listing-media`](specs/grade10-auction/listing-media/spec.md),
 [`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
 
 The worker is the authority for listing state, its Postgres schema, object
@@ -116,15 +116,16 @@ Keep one object per unique byte string under binding `AUCTION_LISTING_ASSETS`
 (buckets `grade10-auction-listing-assets-{dev,staging,production}`). Image
 public paths gain a size segment:
 
-`/api/public/listing-images/<size>/<objectKey>`
+`/api/public/listing-media/<size>/<objectKey>`
 
 `<size>` is one of `card`, `detail`, `thumb`, `zoom`. The GET validates size
 then key, reads the original from R2, and — when the named size is smaller
 than the stored image — runs it through the Workers Images binding. Unknown
-size and unknown key both 404. Video items keep the original path; named
-sizes apply to images only. The in-process storage area stays `listingImages`,
-the table stays `auction_listing_images`, and `PUBLIC_ROUTES.listingImages`
-stays `/api/public/listing-images`.
+size and unknown key both 404. Video items keep the original path (no size
+segment); named sizes apply to images only. The in-process storage area is
+`listingMedia`, the table is `auction_listing_media` (renamed from
+`auction_listing_images` when angle gives way to position), and
+`PUBLIC_ROUTES.listingMedia` is `/api/public/listing-media`.
 
 Pixel ceilings (CSS slot × 2, never upscale):
 
@@ -211,7 +212,7 @@ catalogue row is app-owned: an `img` at `paths.card` for the first image item.
    listings as published and convert each angle image to its deterministic
    gallery order. No alt backfill: null means "use the listing title".
 2. Create `grade10-auction-listing-assets-{staging,production}` in each
-   Cloudflare account; copy keys from prior listing-images buckets when any
+   Cloudflare account; copy keys from prior listing-asset buckets when any
    exist; bind `IMAGES`. Local uses the wrangler-dev bucket of the same name.
 3. Generate and commit the worker migration artifacts, then ship the worker,
    contracts, admin feature, and storefront together so every deployed reader
@@ -222,4 +223,4 @@ catalogue row is app-owned: an `img` at `paths.card` for the first image item.
 5. Roll back application code only while the expanded schema remains
    compatible. Do not roll back the migration destructively; forward-fix data
    or code if a listing has already been authored under the new lifecycle.
-   Delete old listing-images buckets in a later change — not this one.
+   Delete old pre-rename object-store buckets in a later change — not this one.

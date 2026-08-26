@@ -157,7 +157,7 @@ live money, so the house can rehearse a sale.
   may be called off, slug lookup at `/auction/listings/<slug>`, the cancel
   rewrite that frees a slug, scheduled publish, and the ordered one-to-eight
   image-or-video gallery (originals stored and served as uploaded).
-- `grade10-auction/listing-images`: optional alt on gallery images, named
+- `grade10-auction/listing-media`: optional alt on gallery images, named
   public sizes (`card`, `detail`, `thumb`, `zoom`), admin photo-manager
   preview-before-upload and card/zoom review, and catalogue/details
   consumption of sized paths — on the gallery from admin-listing.
@@ -185,7 +185,7 @@ live money, so the house can rehearse a sale.
 | `@grade10/ui` | `ListingGallery` / `ListingGalleryImage` accept distinct thumbnail, main, and zoom sources; may render video items. |
 
 Cloudflare Images (Workers binding) is a new account-level dependency on the
-auction worker. The public listing-image path stays under
-`/api/public/listing-images`; only the object-store binding is renamed.
-Money remains integer minor units plus an ISO 4217 code. No new design-system
-primitive is proposed.
+auction worker. The public gallery path is `/api/public/listing-media` (sized
+segment for images; originals for video). The object-store binding is
+`AUCTION_LISTING_ASSETS`. Money remains integer minor units plus an ISO 4217
+code. No new design-system primitive is proposed.
