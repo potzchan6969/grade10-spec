@@ -122,6 +122,11 @@ a running backend.
 ## 12. Delivery and review (grade10) (owner: @mason5991)
 
 - [ ] 12.1 Create `grade10-auction-listing-assets-{staging,production}` in each Cloudflare account, copy keys from prior listing-asset buckets when any exist, enable the Images binding, and confirm both resolve in staging before the worker that reads them deploys.
+
+  Remark (2026-08-26): buckets `grade10-auction-listing-assets-{staging,production}`
+  already exist. Deferred for now: copy keys from any prior listing-asset
+  buckets, confirm the Images binding in staging, and smoke-resolve before
+  the worker that reads them deploys.
 - [x] 12.2 Verify every scenario in the three deltas, then run `openspec validate add-admin-auction-listing` and `openspec validate --specs`.
 - [ ] 12.3 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and `pnpm run build` after the feature lanes pass.
 - [x] 12.4 Review the branch for convention drift and for delta coverage separately: requirements missing, partial, or implemented differently than specified.
