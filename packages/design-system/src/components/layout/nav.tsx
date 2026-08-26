@@ -131,6 +131,14 @@ function LocaleControl({
  * control is a ghost `md` Button with a currency icon, and opens a dropdown
  * of the supplied locales when a handler backs it.
  *
+ * Annotations on the set: the logo link goes to the homepage (`logoHref`);
+ * the locale control switches currency (e.g. HKD / KRW) when `locales` and
+ * `onLocaleChange` are supplied. The promo bar fills at `Size/size-9` with
+ * `text-sm/semibold` `Base/primary-foreground` copy — its fill resolves to
+ * the same value as `secondary-foreground` in the Grade10 theme (`#575757`),
+ * not `Base/primary`. Grade10's mark is the consumer-owned `g10-logo_mono`
+ * instance sized at `Size/size-7` in the bar.
+ *
  * Brand, navigation, and locale content is required rather than defaulted: two
  * stores render this shell, and a default would let the second one ship the
  * first one's navigation with nothing failing.
@@ -180,7 +188,7 @@ function Nav({
             data-slot="nav-promo"
             className="flex h-9 items-center justify-center overflow-hidden bg-secondary-foreground px-8"
           >
-            <p className="min-w-0 flex-1 truncate text-center text-sm font-medium text-primary-foreground">
+            <p className="min-w-0 flex-1 truncate text-center text-sm font-semibold text-primary-foreground">
               {promo}
             </p>
           </div>

@@ -30,6 +30,9 @@ type FooterProps = ComponentProps<"footer"> & {
   copy: FooterCopy;
   /** The brand's own mark, which the footer places rather than says. */
   logo: ReactNode;
+  /** Homepage destination for the logo. Annotation on the set: click
+   * redirects to the homepage. */
+  logoHref?: string;
   socialLinks: FooterLink[];
   columns: FooterColumn[];
   legalLinks: FooterLink[];
@@ -43,6 +46,10 @@ type FooterProps = ComponentProps<"footer"> & {
  * the only one in the design sits on the bottom bar's top edge, bound to the
  * `gray-500-opacity-20` primitive rather than to a semantic slot, which is
  * how Figma binds it and the reason no slot was invented for it here.
+ *
+ * Annotation on the set: the logo link goes to the homepage (`logoHref`).
+ * Grade10's mark is the consumer-owned `g10-logo_mono` instance, drawn at
+ * `Size/size-5` inside a `Size/size-9` logo frame.
  *
  * Each `Link` carries the light tone as a `className`. Figma does the same
  * thing by a different mechanism — the footer's link instances are the same
@@ -73,6 +80,7 @@ type FooterProps = ComponentProps<"footer"> & {
 function Footer({
   className,
   logo,
+  logoHref = "#",
   copy,
   socialLinks,
   columns,
@@ -87,7 +95,13 @@ function Footer({
     >
       <div className="grid w-full grid-cols-1 gap-6 p-8 @xl:grid-cols-2 @3xl:grid-cols-4">
         <div className="flex flex-col items-start gap-4">
-          <p className="text-sm font-medium text-primary-foreground">{logo}</p>
+          <a
+            className="flex h-9 items-center text-primary-foreground"
+            data-slot="footer-logo"
+            href={logoHref}
+          >
+            {logo}
+          </a>
           <p className="text-xs text-primary-foreground">{copy.description}</p>
           <p className="text-xs text-primary-foreground">{copy.attribution}</p>
           {socialLinks.length > 0 ? (

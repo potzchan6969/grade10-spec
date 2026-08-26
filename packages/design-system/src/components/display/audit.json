@@ -39,5 +39,12 @@
     "label": "pagination-ellipsis/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4181-1979",
     "classes": "inline-flex h-10 w-7 items-center justify-center text-foreground"
+  },
+  {
+    "label": "g10-logo-mono/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4848-7543",
+    "classes": "block h-[52px] w-auto",
+    "covers": "G10LogoMono",
+    "note": "Intrinsic viewBox size; consumers override with h-7 (nav) or h-5 (footer). Fill is currentColor, not a token class on the mark itself."
   }
 ]
