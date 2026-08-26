@@ -17,10 +17,8 @@ The delivery line, in order. Skip a step that does not apply.
 | Invoke | When |
 | --- | --- |
 | `/prd-authoring` | Create or revise a versioned product requirement document. |
-| `/openspec-propose` | Choose the planning lane for a new OpenSpec change. |
 | `/pm-planning` | Draft requirements only: proposal and spec deltas, no design or tasks. |
-| `/full-planning` | Delivery plan: design, ui, and tasks. Promote a pm-planning change, or plan one you will apply. A change with no `tasks.md` is not ready to `/openspec-apply-change`. |
-| `/openspec-apply-change` | Implement the tasks in an approved OpenSpec change. |
+| `/full-planning` | Add design, UI, and tasks to a planned OpenSpec change. |
 | `/commit` | Local commits, `type(domain):`. Only when invoked. Chain `/pr-push` in the same message to publish. |
 | `/pr-push` | Create a `<type>/<short-description>` branch (`feat/`, `fix/`, `build/`, etc.) when publishable work is on `main`, then push it and ensure an open PR. Commits dirty files that belong on the PR; irrelevant dirty files do not block. Push updated submodules before this repo. Only when invoked. Re-run; rewrite the description only when this session changed code. |
 | `/openspec-archive-change` | Finalize a completed OpenSpec change and preserve its decision history. |
