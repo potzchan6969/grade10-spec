@@ -118,7 +118,7 @@ SHALL NOT require a click to reveal zoom.
 
 #### Scenario: Hovering the magnify control shows zoom size
 
-- **GIVEN** a draft listing with a stored gallery image open in the photo
+- **GIVEN** a draft listing with a stored gallery image open in the media
   manager
 - **WHEN** the operator hovers the magnify control on that image
 - **THEN** a zoom-size preview of that image is shown

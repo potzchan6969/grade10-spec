@@ -19,7 +19,7 @@ preview/confirm and card/zoom review live in the media manager below.
 
 ### Admin listings media manager
 
-A Photos action opens a dialog over the ordered gallery (at most eight media
+A Media action opens a dialog over the ordered gallery (at most eight media
 items). File pick for an image shows a local preview with Confirm and Discard
 before any upload. Stored images show at card size; a magnify control reveals
 zoom size on hover. No Figma; compose primitives below.
@@ -106,9 +106,9 @@ and [`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
 
 ### Listing details gallery
 
-- **Several images** — `Several images appear in gallery order`, `Several photos show a strip`.
-- **One image** — `One image has no strip` / `One photo has no strip`.
-- **No images** — `No images still shows the listing`, `No photos`.
+- **Several images** — `Several images appear in gallery order`, `Several gallery items show a strip`.
+- **One image** — `One image has no strip` / `One gallery item has no strip`.
+- **No images** — `No images still shows the listing`, `No gallery items`.
 - **Mixed media / video** — `Mixed images and videos are accepted`.
 - **Alt present / absent** — `Supplied alt is shown`, `Missing alt uses the listing title`.
 - **Sized sources** — `Distinct sources are used in each slot`, `The details gallery uses thumb, detail, and zoom`.
