@@ -48,8 +48,8 @@ columns.
 
 Depends on groups 2 and 4.
 
-- [ ] 6.1 Make the draft-save scenarios pass: authorized operators can save empty and partial drafts, while malformed field values and unauthorized price/window writes are refused without changing the row or public catalogue.
-- [ ] 6.2 Make the create and editable-update scenarios pass: create validates every required field and defaults optional fields, created/published edits preserve the lifecycle invariants, and closed/settled/canceled listings reject rewrites.
+- [x] 6.1 Make the draft-save scenarios pass: authorized operators can save empty and partial drafts, while malformed field values and unauthorized price/window writes are refused without changing the row or public catalogue.
+- [x] 6.2 Make the create and editable-update scenarios pass: create validates every required field and defaults optional fields, created/published edits preserve the lifecycle invariants, and closed/settled/canceled listings reject rewrites.
 - [x] 6.3 Make the slug lookup and cancellation scenarios pass: protect held slugs transactionally, expose only public states at `/auction/listings/<slug>`, and rewrite a canceled slug atomically while preserving existing authorization-release behaviour.
 - [x] 6.4 Make the immediate and scheduled publication scenarios pass: validate a future publish time, publish a created listing now, and add an idempotent bounded due-publish sweep that locks and rechecks each candidate before it becomes public.
 - [x] 6.5 Make the ordered media scenarios pass: accept supported image and video originals up to 100 MiB, enforce gallery cardinality and ordering, reject unsupported or closed-listing writes, and serve the first item as the catalogue card; originals remain unprocessed (named sizes are group 7).
@@ -105,8 +105,8 @@ reaches the network. Dialog is an ordered gallery (≤ eight), not six sides.
 
 Depends on groups 2 and 8. Fixtures, not a running backend.
 
-- [ ] 10.1 Make the admin form scenarios for empty-draft save, required-field create feedback, editable-field updates, publish-now/schedule, and permission-gated call-off pass using the contract-backed listing feature and the UI source recorded in `ui.md`.
-- [ ] 10.2 Make the gallery form scenarios for mixed ordered image/video uploads, eighth-item acceptance, ninth-item refusal, reorder/removal, and closed-listing refusal pass without reaching the worker transport from the app.
+- [x] 10.1 Make the admin form scenarios for empty-draft save, required-field create feedback, editable-field updates, publish-now/schedule, and permission-gated call-off pass using the contract-backed listing feature and the UI source recorded in `ui.md`.
+- [x] 10.2 Make the gallery form scenarios for mixed ordered image/video uploads, eighth-item acceptance, ninth-item refusal, reorder/removal, and closed-listing refusal pass without reaching the worker transport from the app.
 - [x] 10.3 Make the collector listing-page scenarios for slug routing, not-found private states, and ordered image/video gallery rendering pass using the public listing contract.
 - [x] 10.4 Verify the admin and storefront lifecycle integration with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.
 
