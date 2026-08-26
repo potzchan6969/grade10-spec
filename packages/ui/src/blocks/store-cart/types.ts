@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-type CartItemStatus = "default" | "adjusted" | "soldOut";
+type CartItemStatus = "default" | "adjusted" | "soldOut" | "unavailable";
 
 /**
  * One line item in the shopping cart.
@@ -54,6 +54,8 @@ type CartDrawerCopy = {
   header: CartDrawerHeaderCopy;
   item: CartItemCopy;
   footer: CartDrawerFooterCopy;
+  /** Toast when delisted catalogue lines are cleared after open loading. */
+  unavailableItemsRemoved: string;
 };
 
 export type {

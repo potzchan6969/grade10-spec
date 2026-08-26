@@ -24,6 +24,8 @@ const DEFAULT_CART_COPY: CartDrawerCopy = {
     checkoutButton: "Proceed to Checkout",
     checkoutRedirecting: "Redirecting...",
   },
+  unavailableItemsRemoved:
+    "Some item(s) have been removed as they’re no longer available",
 };
 
 const SAMPLE_CART_ITEMS: CartItemSummary[] = [

@@ -1,7 +1,8 @@
 import { Button } from "@grade10/design-system/components/forms/button";
+import { Toaster } from "@grade10/design-system/components/overlays/sonner";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { CartDrawer } from "./cart-drawer";
 import {
   DEFAULT_CART_COPY,
@@ -177,5 +178,91 @@ export const FetchingOnOpen: Story = {
         />
       </div>
     );
+  },
+};
+
+const DELISTED_PRODUCT_NAME =
+  "1998 Japanese Base Set No Rarity Charmander PSA 10";
+
+/**
+ * After open fetch, a delisted catalogue line is cleared silently and
+ * one bottom-right toast explains the removal. Remaining lines stay.
+ */
+export const UnavailableItemsRemoved: Story = {
+  render: (args) => {
+    const [open, setOpen] = useState(false);
+    const [items, setItems] = useState<readonly CartItemSummary[]>([
+      SAMPLE_CART_ITEMS[0],
+      {
+        id: "item-delisted",
+        name: DELISTED_PRODUCT_NAME,
+        price: "HK$3,200.00",
+        quantity: 1,
+        maxQuantity: 1,
+        status: "default",
+      },
+    ]);
+
+    return (
+      <>
+        <Toaster position="bottom-right" />
+        <div className="p-8">
+          <Button type="button" onClick={() => setOpen(true)}>
+            Open Cart
+          </Button>
+          <CartDrawer
+            {...args}
+            open={open}
+            onClose={() => setOpen(false)}
+            items={items}
+            subtotal="HK$24,500.00"
+            estimatedTotal="HK$24,500.00"
+            onRemoveItem={(id) =>
+              setItems((prev) => prev.filter((item) => item.id !== id))
+            }
+            onQuantityChange={(id, qty) =>
+              setItems((prev) =>
+                prev.map((item) =>
+                  item.id === id ? { ...item, quantity: qty } : item,
+                ),
+              )
+            }
+            onFetchStatusAndPrice={async () => {
+              await new Promise((resolve) => setTimeout(resolve, 600));
+              setItems((prev) =>
+                prev.map((item) =>
+                  item.id === "item-delisted"
+                    ? { ...item, status: "unavailable" }
+                    : item,
+                ),
+              );
+            }}
+          />
+        </div>
+      </>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Open Cart" }));
+
+    await waitFor(() => {
+      expect(
+        canvas.queryByText(DELISTED_PRODUCT_NAME),
+      ).not.toBeInTheDocument();
+    });
+
+    expect(
+      canvas.getByText("1999 Pokémon Base Set #4 Charizard Holo PSA 10"),
+    ).toBeInTheDocument();
+
+    const body = within(document.body);
+    await waitFor(() => {
+      expect(
+        body.getByText(
+          "Some item(s) have been removed as they’re no longer available",
+        ),
+      ).toBeInTheDocument();
+    });
   },
 };
