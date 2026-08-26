@@ -1,0 +1,34 @@
+{
+  "fileKey": "ABCDEFGHIJKLMNOPQRSTUV",
+  "document": {
+    "id": "0:0",
+    "type": "DOCUMENT",
+    "name": "Document",
+    "children": [
+      {
+        "id": "1:1",
+        "type": "COMPONENT_SET",
+        "name": "Button",
+        "children": [
+          {
+            "id": "2:1",
+            "type": "COMPONENT",
+            "name": "Button / default",
+            "annotations": [
+              {
+                "label": "Keep this note",
+                "categoryId": "a11y",
+                "properties": [{ "type": "fills" }]
+              },
+              {
+                "labelMarkdown": "Review the updated button contract.",
+                "categoryId": "interaction",
+                "properties": [{ "type": "width" }]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

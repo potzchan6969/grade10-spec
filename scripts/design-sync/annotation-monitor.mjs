@@ -8,7 +8,7 @@ import { parseArgs } from "node:util";
 
 import { fileKeyFrom } from "./values.mjs";
 
-export const ANNOTATION_SCHEMA_VERSION = 1;
+export const ANNOTATION_SCHEMA_VERSION = 2;
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const defaultBaselinePath = resolve(
@@ -52,30 +52,94 @@ function nodeKey(fileKey, nodeId) {
   return `${fileKey}:${normalizeNodeId(nodeId)}`;
 }
 
-function stableFindingId(fileKey, nodeId, kind) {
+function stableFindingId(fileKey, nodeId, kind, occurrenceIdentity = "") {
   return createHash("sha256")
-    .update(`${fileKey}:${normalizeNodeId(nodeId)}:${kind}`)
+    .update(
+      `${fileKey}:${normalizeNodeId(nodeId)}:${kind}:${occurrenceIdentity}`,
+    )
     .digest("hex")
     .slice(0, 16);
 }
 
-function textFromNode(node) {
-  if (node.annotations === undefined) return null;
-  if (!Array.isArray(node.annotations))
-    throw new Error("node annotations must be an array");
-  if (node.annotations.length === 0) return null;
-  if (node.annotations.length > 1)
-    throw new Error("multiple annotations are not supported by the monitor");
-  const annotation = node.annotations[0];
+function canonicalPinnedProperties(properties) {
+  if (properties === undefined) return [];
+  if (!Array.isArray(properties))
+    throw new Error("annotation properties must be an array");
+  const types = properties.map((property) => {
+    if (
+      !property ||
+      typeof property !== "object" ||
+      typeof property.type !== "string" ||
+      !property.type.trim()
+    ) {
+      throw new Error("annotation property must have a non-empty type");
+    }
+    return property.type.trim();
+  });
+  return [...new Set(types)].sort((left, right) => left.localeCompare(right));
+}
+
+function annotationOccurrenceFromRaw(annotation) {
   if (!annotation || typeof annotation !== "object")
     throw new Error("annotation must be an object");
-  const text =
-    typeof annotation.labelMarkdown === "string"
-      ? annotation.labelMarkdown
-      : annotation.label;
-  if (typeof text !== "string")
-    throw new Error("annotation has no label or labelMarkdown text");
-  return text;
+
+  let text = "";
+  if (annotation.labelMarkdown !== undefined) {
+    if (typeof annotation.labelMarkdown !== "string")
+      throw new Error("annotation labelMarkdown must be a string");
+    text = annotation.labelMarkdown;
+  } else if (annotation.label !== undefined) {
+    if (typeof annotation.label !== "string")
+      throw new Error("annotation label must be a string");
+    text = annotation.label;
+  }
+  const categoryId =
+    annotation.categoryId === undefined || annotation.categoryId === null
+      ? null
+      : typeof annotation.categoryId === "string" &&
+          annotation.categoryId.trim()
+        ? annotation.categoryId.trim()
+        : (() => {
+            throw new Error("annotation categoryId must be a string or null");
+          })();
+  const pinnedProperties = canonicalPinnedProperties(annotation.properties);
+  const normalizedText = normalizeText(text);
+  const signature = JSON.stringify({
+    text: normalizedText,
+    categoryId,
+    pinnedProperties,
+  });
+  return {
+    text: normalizedText,
+    categoryId,
+    pinnedProperties,
+    signature,
+    structureSignature: JSON.stringify({ categoryId, pinnedProperties }),
+  };
+}
+
+function annotationOccurrencesFromNode(node) {
+  if (node.annotations === undefined) return [];
+  if (!Array.isArray(node.annotations))
+    throw new Error("node annotations must be an array");
+  const occurrences = node.annotations
+    .map(annotationOccurrenceFromRaw)
+    .sort((left, right) => left.signature.localeCompare(right.signature));
+  const ordinals = new Map();
+  return occurrences.map((occurrence) => {
+    const fingerprint = createHash("sha256")
+      .update(occurrence.signature)
+      .digest("hex")
+      .slice(0, 16);
+    const ordinal = (ordinals.get(fingerprint) ?? 0) + 1;
+    ordinals.set(fingerprint, ordinal);
+    const currentAnnotationKey = `current:${fingerprint}:${ordinal}`;
+    return {
+      ...occurrence,
+      fingerprint,
+      currentAnnotationKey,
+    };
+  });
 }
 
 function indexDocument(document) {
@@ -143,6 +207,89 @@ function normalizeSource(source) {
   return { ...source, fileKey, nodeId };
 }
 
+function normalizeBaselineOccurrence(raw, blockers, entryKey, index) {
+  if (!raw || typeof raw !== "object") {
+    blockers.push({
+      kind: "malformed-baseline",
+      entryKey,
+      reason: `annotation ${index + 1} is not an object`,
+    });
+    return null;
+  }
+  if (typeof raw.annotationKey !== "string" || !raw.annotationKey.trim()) {
+    blockers.push({
+      kind: "malformed-baseline",
+      entryKey,
+      reason: `annotation ${index + 1} needs annotationKey`,
+    });
+    return null;
+  }
+  if (typeof raw.text !== "string") {
+    blockers.push({
+      kind: "malformed-baseline",
+      entryKey,
+      reason: `annotation ${index + 1} needs text`,
+    });
+    return null;
+  }
+  const categoryId =
+    raw.categoryId === undefined || raw.categoryId === null
+      ? null
+      : typeof raw.categoryId === "string" && raw.categoryId.trim()
+        ? raw.categoryId.trim()
+        : null;
+  if (raw.categoryId !== undefined && raw.categoryId !== null && !categoryId) {
+    blockers.push({
+      kind: "malformed-baseline",
+      entryKey,
+      reason: `annotation ${index + 1} categoryId must be a string or null`,
+    });
+    return null;
+  }
+  if (!Array.isArray(raw.pinnedProperties)) {
+    blockers.push({
+      kind: "malformed-baseline",
+      entryKey,
+      reason: `annotation ${index + 1} pinnedProperties must be an array`,
+    });
+    return null;
+  }
+  const pinnedProperties = [];
+  for (const property of raw.pinnedProperties) {
+    if (typeof property !== "string" || !property.trim()) {
+      blockers.push({
+        kind: "malformed-baseline",
+        entryKey,
+        reason: `annotation ${index + 1} pinnedProperties must contain non-empty strings`,
+      });
+      return null;
+    }
+    pinnedProperties.push(property.trim());
+  }
+  const normalizedText = normalizeText(raw.text);
+  const canonicalProperties = [...new Set(pinnedProperties)].sort(
+    (left, right) => left.localeCompare(right),
+  );
+  return {
+    annotationKey: raw.annotationKey.trim(),
+    text: normalizedText,
+    categoryId,
+    pinnedProperties: canonicalProperties,
+    signature: JSON.stringify({
+      text: normalizedText,
+      categoryId,
+      pinnedProperties: canonicalProperties,
+    }),
+    structureSignature: JSON.stringify({
+      categoryId,
+      pinnedProperties: canonicalProperties,
+    }),
+    sourceRoot: raw.sourceRoot ?? null,
+    associations: raw.associations ?? null,
+    noImpactReason: raw.noImpactReason ?? null,
+  };
+}
+
 function normaliseBaselineEntries(baseline, blockers) {
   if (!baseline || typeof baseline !== "object") {
     blockers.push({
@@ -151,10 +298,10 @@ function normaliseBaselineEntries(baseline, blockers) {
     });
     return [];
   }
-  if (baseline.schemaVersion !== ANNOTATION_SCHEMA_VERSION) {
+  if (baseline.schemaVersion !== 1 && baseline.schemaVersion !== 2) {
     blockers.push({
       kind: "malformed-baseline",
-      reason: `expected schemaVersion ${ANNOTATION_SCHEMA_VERSION}`,
+      reason: "expected schemaVersion 1 or 2",
     });
   }
   if (!baseline.entries || typeof baseline.entries !== "object") {
@@ -164,6 +311,8 @@ function normaliseBaselineEntries(baseline, blockers) {
     });
     return [];
   }
+
+  if (baseline.schemaVersion !== 1 && baseline.schemaVersion !== 2) return [];
 
   const entries = [];
   for (const [entryKey, raw] of Object.entries(baseline.entries)) {
@@ -179,11 +328,11 @@ function normaliseBaselineEntries(baseline, blockers) {
     const nodeId = normalizeNodeId(
       raw.nodeId ?? entryKey.slice(fileKey.length + 1),
     );
-    if (!fileKey || !nodeId || typeof raw.text !== "string") {
+    if (!fileKey || !nodeId) {
       blockers.push({
         kind: "malformed-baseline",
         entryKey,
-        reason: "entry needs fileKey, nodeId, and text",
+        reason: "entry needs fileKey and nodeId",
       });
       continue;
     }
@@ -195,12 +344,85 @@ function normaliseBaselineEntries(baseline, blockers) {
       });
       continue;
     }
+    if (baseline.schemaVersion === 1) {
+      if (typeof raw.text !== "string") {
+        blockers.push({
+          kind: "malformed-baseline",
+          entryKey,
+          reason: "schema-version-1 entry needs text",
+        });
+        continue;
+      }
+      entries.push({
+        fileKey,
+        nodeId,
+        key: nodeKey(fileKey, nodeId),
+        sourceRoot: raw.sourceRoot ?? null,
+        annotations: [
+          {
+            annotationKey: "legacy-1",
+            text: normalizeText(raw.text),
+            categoryId: null,
+            pinnedProperties: [],
+            signature: JSON.stringify({
+              text: normalizeText(raw.text),
+              categoryId: null,
+              pinnedProperties: [],
+            }),
+            structureSignature: JSON.stringify({
+              categoryId: null,
+              pinnedProperties: [],
+            }),
+            sourceRoot: raw.sourceRoot ?? null,
+            associations: raw.associations ?? null,
+            noImpactReason: raw.noImpactReason ?? null,
+          },
+        ],
+      });
+      continue;
+    }
+
+    if (Object.hasOwn(raw, "text")) {
+      blockers.push({
+        kind: "partly-migrated-baseline",
+        entryKey,
+        reason: "schema-version-2 entry must use annotations",
+      });
+      continue;
+    }
+    if (!Array.isArray(raw.annotations)) {
+      blockers.push({
+        kind: "malformed-baseline",
+        entryKey,
+        reason: "schema-version-2 entry annotations must be an array",
+      });
+      continue;
+    }
+    const annotations = raw.annotations
+      .map((annotation, index) =>
+        normalizeBaselineOccurrence(annotation, blockers, entryKey, index),
+      )
+      .filter(Boolean);
+    if (
+      new Set(annotations.map((annotation) => annotation.annotationKey))
+        .size !== annotations.length
+    ) {
+      blockers.push({
+        kind: "malformed-baseline",
+        entryKey,
+        reason: "annotationKey values must be unique within a node",
+      });
+      continue;
+    }
     entries.push({
-      ...raw,
       fileKey,
       nodeId,
       key: nodeKey(fileKey, nodeId),
-      text: normalizeText(raw.text),
+      sourceRoot: raw.sourceRoot ?? null,
+      annotations: annotations.map((annotation) => ({
+        ...annotation,
+        sourceRoot: annotation.sourceRoot ?? raw.sourceRoot ?? null,
+      })),
     });
   }
   return entries;
@@ -225,10 +447,15 @@ function makeFinding({
   node,
   nodeId,
   kind,
-  previousText,
-  currentText,
+  previous,
+  current,
   sources,
   baselineEntry,
+  annotationKey = null,
+  ambiguity = null,
+  candidateAnnotationKeys = null,
+  associationCandidates = null,
+  identityHint = null,
 }) {
   const registeredSources = sources.map((source) => ({
     kind: source.kind ?? "registered-source",
@@ -239,39 +466,292 @@ function makeFinding({
     fileKey: source.fileKey,
     nodeId: source.nodeId,
   }));
+  const effectiveAssociations = ambiguity
+    ? null
+    : (previous?.associations ?? null);
   const evidence = [
-    ...(baselineEntry
+    ...(previous && !ambiguity
       ? [
           {
             kind: "reviewed-baseline",
             fileKey,
             nodeId,
-            sourceRoot: baselineEntry.sourceRoot ?? null,
-            associations: baselineEntry.associations ?? null,
-            noImpactReason: baselineEntry.noImpactReason ?? null,
+            annotationKey: previous.annotationKey,
+            sourceRoot:
+              previous.sourceRoot ?? baselineEntry?.sourceRoot ?? null,
+            associations: previous.associations ?? null,
+            noImpactReason: previous.noImpactReason ?? null,
           },
         ]
       : []),
+    ...(associationCandidates ?? []).map((candidate) => ({
+      kind: "reviewed-baseline-candidate",
+      fileKey,
+      nodeId,
+      annotationKey: candidate.annotationKey,
+      associations: candidate.associations ?? null,
+      noImpactReason: candidate.noImpactReason ?? null,
+    })),
     ...sources.map(sourceAssociation).filter(Boolean),
   ];
   const hasAssociation =
-    Boolean(baselineEntry?.associations) ||
+    Boolean(effectiveAssociations) ||
     sources.some((source) => source.component || source.covers);
+  const previousAnnotation = previous
+    ? {
+        text: previous.text,
+        categoryId: previous.categoryId,
+        pinnedProperties: previous.pinnedProperties,
+      }
+    : null;
+  const currentAnnotation = current
+    ? {
+        text: current.text,
+        categoryId: current.categoryId,
+        pinnedProperties: current.pinnedProperties,
+      }
+    : null;
+  const currentAnnotationKey = current?.currentAnnotationKey ?? null;
+  const identity =
+    identityHint ??
+    annotationKey ??
+    currentAnnotationKey ??
+    `${kind}:${ambiguity?.kind ?? "none"}:${candidateAnnotationKeys?.join(",") ?? ""}`;
 
   return {
-    id: stableFindingId(fileKey, nodeId, kind),
+    id: stableFindingId(fileKey, nodeId, kind, identity),
     fileKey,
     nodeId,
     nodeLink: nodeLink(fileUrl, fileKey, nodeId),
     nodeName: node?.name ?? "(unnamed node)",
     kind,
-    previousText: previousText ?? null,
-    currentText: currentText ?? null,
+    annotationKey,
+    currentAnnotationKey,
+    previousText: previous?.text ?? null,
+    currentText: current?.text ?? null,
+    previousCategoryId: previous?.categoryId ?? null,
+    currentCategoryId: current?.categoryId ?? null,
+    previousPinnedProperties: previous?.pinnedProperties ?? null,
+    currentPinnedProperties: current?.pinnedProperties ?? null,
+    previousAnnotation,
+    currentAnnotation,
+    ambiguity,
+    candidateAnnotationKeys,
     registeredSources,
-    associations: baselineEntry?.associations ?? null,
+    associations: effectiveAssociations,
+    associationCandidates,
     associationEvidence: evidence,
-    classification: hasAssociation ? "associated" : "untracked",
+    classification: ambiguity
+      ? "ambiguous"
+      : hasAssociation
+        ? "associated"
+        : "untracked",
   };
+}
+
+function occurrenceGroups(occurrences, field) {
+  const groups = new Map();
+  for (const occurrence of occurrences) {
+    const key = occurrence[field];
+    const group = groups.get(key) ?? [];
+    group.push(occurrence);
+    groups.set(key, group);
+  }
+  return groups;
+}
+
+function sameAssociations(left, right) {
+  return (
+    JSON.stringify({
+      associations: left.associations ?? null,
+      noImpactReason: left.noImpactReason ?? null,
+    }) ===
+    JSON.stringify({
+      associations: right.associations ?? null,
+      noImpactReason: right.noImpactReason ?? null,
+    })
+  );
+}
+
+function structureChangeFor(occurrence, opposite) {
+  return opposite.filter(
+    (candidate) =>
+      candidate.text === occurrence.text &&
+      candidate.structureSignature !== occurrence.structureSignature,
+  );
+}
+
+function compareOccurrences({
+  oldOccurrences,
+  currentOccurrences,
+  fileKey,
+  fileUrl,
+  node,
+  nodeId,
+  sources,
+  baselineEntry,
+}) {
+  const findings = [];
+  const oldBySignature = occurrenceGroups(oldOccurrences, "signature");
+  const currentBySignature = occurrenceGroups(currentOccurrences, "signature");
+  const unmatchedOld = [];
+  const unmatchedCurrent = [];
+
+  const exactSignatures = new Set([
+    ...oldBySignature.keys(),
+    ...currentBySignature.keys(),
+  ]);
+  for (const signature of [...exactSignatures].sort()) {
+    const oldGroup = [...(oldBySignature.get(signature) ?? [])].sort((a, b) =>
+      a.annotationKey.localeCompare(b.annotationKey),
+    );
+    const currentGroup = [...(currentBySignature.get(signature) ?? [])].sort(
+      (a, b) => a.currentAnnotationKey.localeCompare(b.currentAnnotationKey),
+    );
+    const matched = Math.min(oldGroup.length, currentGroup.length);
+    unmatchedOld.push(...oldGroup.slice(matched));
+    unmatchedCurrent.push(...currentGroup.slice(matched));
+  }
+
+  const oldByStructure = occurrenceGroups(unmatchedOld, "structureSignature");
+  const currentByStructure = occurrenceGroups(
+    unmatchedCurrent,
+    "structureSignature",
+  );
+  const structures = new Set([
+    ...oldByStructure.keys(),
+    ...currentByStructure.keys(),
+  ]);
+
+  for (const structure of [...structures].sort()) {
+    const oldGroup = [...(oldByStructure.get(structure) ?? [])].sort((a, b) =>
+      a.annotationKey.localeCompare(b.annotationKey),
+    );
+    const currentGroup = [...(currentByStructure.get(structure) ?? [])].sort(
+      (a, b) => a.currentAnnotationKey.localeCompare(b.currentAnnotationKey),
+    );
+
+    if (oldGroup.length === 1 && currentGroup.length === 1) {
+      findings.push(
+        makeFinding({
+          fileKey,
+          fileUrl,
+          node,
+          nodeId,
+          kind: "changed",
+          previous: oldGroup[0],
+          current: currentGroup[0],
+          sources,
+          baselineEntry,
+          annotationKey: oldGroup[0].annotationKey,
+        }),
+      );
+      continue;
+    }
+
+    const oldStructureChanges = oldGroup.flatMap((occurrence) =>
+      structureChangeFor(occurrence, unmatchedCurrent),
+    );
+    const currentStructureChanges = currentGroup.flatMap((occurrence) =>
+      structureChangeFor(occurrence, unmatchedOld),
+    );
+    const oldKeys = oldGroup.map((occurrence) => occurrence.annotationKey);
+    const ambiguous = oldGroup.length > 0 && currentGroup.length > 0;
+    const ambiguityKind =
+      oldStructureChanges.length || currentStructureChanges.length
+        ? "structure-changed"
+        : ambiguous
+          ? "multiple-unmatched"
+          : null;
+    const ambiguity = ambiguityKind
+      ? {
+          kind: ambiguityKind,
+          reason:
+            ambiguityKind === "structure-changed"
+              ? "annotation structure changed; text is not used to pair occurrences"
+              : "more than one unmatched occurrence shares the same structural signature",
+        }
+      : null;
+    const candidates = oldGroup.map((occurrence) => ({
+      annotationKey: occurrence.annotationKey,
+      associations: occurrence.associations ?? null,
+      noImpactReason: occurrence.noImpactReason ?? null,
+    }));
+
+    for (const occurrence of oldGroup) {
+      const duplicateCountDecrease =
+        oldBySignature.get(occurrence.signature)?.length >
+        (currentBySignature.get(occurrence.signature)?.length ?? 0);
+      const duplicateCandidates =
+        oldBySignature.get(occurrence.signature) ?? [];
+      const duplicateAmbiguous =
+        duplicateCountDecrease &&
+        duplicateCandidates.some(
+          (candidate) => !sameAssociations(candidate, duplicateCandidates[0]),
+        );
+      const removedAmbiguity = duplicateAmbiguous
+        ? {
+            kind: "duplicate-count-decrease",
+            reason:
+              "duplicate occurrences have different baseline associations, so the removed occurrence cannot be identified",
+          }
+        : ambiguity;
+      const removedCandidates = duplicateAmbiguous
+        ? duplicateCandidates.map((candidate) => ({
+            annotationKey: candidate.annotationKey,
+            associations: candidate.associations ?? null,
+            noImpactReason: candidate.noImpactReason ?? null,
+          }))
+        : ambiguous
+          ? candidates
+          : null;
+      findings.push(
+        makeFinding({
+          fileKey,
+          fileUrl,
+          node,
+          nodeId,
+          kind: "removed",
+          previous: occurrence,
+          current: null,
+          sources,
+          baselineEntry,
+          annotationKey: duplicateAmbiguous ? null : occurrence.annotationKey,
+          ambiguity: removedAmbiguity,
+          candidateAnnotationKeys:
+            removedCandidates?.map((candidate) => candidate.annotationKey) ??
+            null,
+          associationCandidates: removedCandidates,
+          identityHint: duplicateAmbiguous ? occurrence.annotationKey : null,
+        }),
+      );
+    }
+    for (const occurrence of currentGroup) {
+      const currentAmbiguity = ambiguity
+        ? {
+            ...ambiguity,
+          }
+        : null;
+      findings.push(
+        makeFinding({
+          fileKey,
+          fileUrl,
+          node,
+          nodeId,
+          kind: "added",
+          previous: null,
+          current: occurrence,
+          sources,
+          baselineEntry,
+          annotationKey: occurrence.currentAnnotationKey,
+          ambiguity: currentAmbiguity,
+          candidateAnnotationKeys: ambiguous ? oldKeys : null,
+          associationCandidates: ambiguous ? candidates : null,
+        }),
+      );
+    }
+  }
+  return findings;
 }
 
 function blockerForFile(fileKey, blocker) {
@@ -296,7 +776,6 @@ export function scanAnnotations({
       .filter(Boolean),
   );
   const entries = normaliseBaselineEntries(baseline, blockers);
-  const entriesByKey = new Map(entries.map((entry) => [entry.key, entry]));
   const fileKeys = new Set([
     ...normalizedSources.map((source) => source.fileKey),
     ...entries.map((entry) => entry.fileKey),
@@ -308,7 +787,7 @@ export function scanAnnotations({
     });
   }
 
-  for (const fileKey of fileKeys) {
+  for (const fileKey of [...fileKeys].sort()) {
     const fileSources = normalizedSources.filter(
       (source) => source.fileKey === fileKey,
     );
@@ -367,70 +846,32 @@ export function scanAnnotations({
       }
     }
 
-    for (const entry of entries.filter(
+    const fileEntries = entries.filter(
       (candidate) => candidate.fileKey === fileKey,
-    )) {
-      const record = nodes.get(entry.nodeId);
+    );
+    const entriesForNode = new Map(
+      fileEntries.map((entry) => [entry.nodeId, entry]),
+    );
+    const candidateNodeIds = new Set([
+      ...sourcesByNode.keys(),
+      ...entriesForNode.keys(),
+    ]);
+    for (const nodeId of [...candidateNodeIds].sort()) {
+      const entry = entriesForNode.get(nodeId) ?? null;
+      const record = nodes.get(nodeId);
       if (!record) {
         blockers.push(
           blockerForFile(fileKey, {
             kind: "orphaned-baseline-node",
-            nodeId: entry.nodeId,
+            nodeId,
             reason: "baseline node cannot be resolved",
           }),
         );
         continue;
       }
-      let currentText;
+      let currentOccurrences;
       try {
-        currentText = textFromNode(record.node);
-      } catch (error) {
-        blockers.push(
-          blockerForFile(fileKey, {
-            kind: "malformed-response",
-            nodeId: entry.nodeId,
-            reason: error instanceof Error ? error.message : String(error),
-          }),
-        );
-        continue;
-      }
-      const nodeSources = sourcesByNode.get(entry.nodeId) ?? [];
-      if (currentText === null) {
-        findings.push(
-          makeFinding({
-            fileKey,
-            fileUrl: fileUrls[fileKey] ?? nodeSources[0]?.fileUrl,
-            node: record.node,
-            nodeId: entry.nodeId,
-            kind: "removed",
-            previousText: entry.text,
-            currentText: null,
-            sources: nodeSources,
-            baselineEntry: entry,
-          }),
-        );
-      } else if (normalizeText(currentText) !== entry.text) {
-        findings.push(
-          makeFinding({
-            fileKey,
-            fileUrl: fileUrls[fileKey] ?? nodeSources[0]?.fileUrl,
-            node: record.node,
-            nodeId: entry.nodeId,
-            kind: "changed",
-            previousText: entry.text,
-            currentText,
-            sources: nodeSources,
-            baselineEntry: entry,
-          }),
-        );
-      }
-    }
-
-    for (const [nodeId, nodeSources] of sourcesByNode) {
-      const record = nodes.get(nodeId);
-      let currentText;
-      try {
-        currentText = textFromNode(record.node);
+        currentOccurrences = annotationOccurrencesFromNode(record.node);
       } catch (error) {
         blockers.push(
           blockerForFile(fileKey, {
@@ -441,23 +882,19 @@ export function scanAnnotations({
         );
         continue;
       }
-      if (currentText === null) continue;
-      const entry = entriesByKey.get(nodeKey(fileKey, nodeId));
-      if (!entry) {
-        findings.push(
-          makeFinding({
-            fileKey,
-            fileUrl: fileUrls[fileKey] ?? nodeSources[0]?.fileUrl,
-            node: record.node,
-            nodeId,
-            kind: "added",
-            previousText: null,
-            currentText,
-            sources: nodeSources,
-            baselineEntry: null,
-          }),
-        );
-      }
+      const nodeSources = sourcesByNode.get(nodeId) ?? [];
+      findings.push(
+        ...compareOccurrences({
+          oldOccurrences: entry?.annotations ?? [],
+          currentOccurrences,
+          fileKey,
+          fileUrl: fileUrls[fileKey] ?? nodeSources[0]?.fileUrl,
+          node: record.node,
+          nodeId,
+          sources: nodeSources,
+          baselineEntry: entry,
+        }),
+      );
     }
   }
 
@@ -493,7 +930,7 @@ export function inventoryAnnotations({
     ...requestedFileKeys,
   ]);
 
-  for (const fileKey of fileKeys) {
+  for (const fileKey of [...fileKeys].sort()) {
     const fileSources = normalizedSources.filter(
       (source) => source.fileKey === fileKey,
     );
@@ -552,9 +989,9 @@ export function inventoryAnnotations({
     const candidates = wholeFile ? nodes : sourcesByNode;
     for (const [nodeId] of candidates) {
       const node = nodes.get(nodeId).node;
-      let text;
+      let occurrences;
       try {
-        text = textFromNode(node);
+        occurrences = annotationOccurrencesFromNode(node);
       } catch (error) {
         blockers.push(
           blockerForFile(fileKey, {
@@ -565,33 +1002,37 @@ export function inventoryAnnotations({
         );
         continue;
       }
-      if (text === null) continue;
       const nodeSources = sourcesByNode.get(nodeId) ?? [];
-      const key = nodeKey(fileKey, nodeId);
-      const current = annotations.get(key) ?? {
-        fileKey,
-        nodeId,
-        nodeName: node.name ?? "(unnamed node)",
-        text,
-        nodeLink: nodeLink(
-          fileUrls[fileKey] ?? nodeSources[0]?.fileUrl,
+      for (const occurrence of occurrences) {
+        const key = `${nodeKey(fileKey, nodeId)}:${occurrence.currentAnnotationKey}`;
+        const current = annotations.get(key) ?? {
           fileKey,
           nodeId,
-        ),
-        registeredSources: [],
-      };
-      current.registeredSources.push(
-        ...nodeSources.map((source) => ({
-          kind: source.kind ?? "registered-source",
-          path: source.path ?? null,
-          label: source.label ?? null,
-          component: source.component ?? null,
-          covers: source.covers ?? null,
-          fileKey: source.fileKey,
-          nodeId: source.nodeId,
-        })),
-      );
-      annotations.set(key, current);
+          nodeName: node.name ?? "(unnamed node)",
+          annotationKey: occurrence.currentAnnotationKey,
+          text: occurrence.text,
+          categoryId: occurrence.categoryId,
+          pinnedProperties: occurrence.pinnedProperties,
+          nodeLink: nodeLink(
+            fileUrls[fileKey] ?? nodeSources[0]?.fileUrl,
+            fileKey,
+            nodeId,
+          ),
+          registeredSources: [],
+        };
+        current.registeredSources.push(
+          ...nodeSources.map((source) => ({
+            kind: source.kind ?? "registered-source",
+            path: source.path ?? null,
+            label: source.label ?? null,
+            component: source.component ?? null,
+            covers: source.covers ?? null,
+            fileKey: source.fileKey,
+            nodeId: source.nodeId,
+          })),
+        );
+        annotations.set(key, current);
+      }
     }
   }
 
@@ -604,7 +1045,9 @@ export function inventoryAnnotations({
     scannedSources,
     blockers,
     annotations: [...annotations.values()].sort((a, b) =>
-      `${a.fileKey}:${a.nodeId}`.localeCompare(`${b.fileKey}:${b.nodeId}`),
+      `${a.fileKey}:${a.nodeId}:${a.annotationKey}`.localeCompare(
+        `${b.fileKey}:${b.nodeId}:${b.annotationKey}`,
+      ),
     ),
   };
 }
@@ -621,7 +1064,9 @@ export function renderHuman(result) {
       `✓ Inventory found ${result.annotations.length} annotation(s).`,
     ];
     for (const annotation of result.annotations)
-      lines.push(`  ${annotation.nodeLink} ${JSON.stringify(annotation.text)}`);
+      lines.push(
+        `  ${annotation.nodeLink} ${annotation.annotationKey} ${JSON.stringify(annotation.text)} category=${annotation.categoryId ?? "none"} properties=${JSON.stringify(annotation.pinnedProperties)}`,
+      );
     return lines.join("\n");
   }
   if (result.status === "clean") return "✓ No tracked annotations changed.";
@@ -640,6 +1085,18 @@ export function renderHuman(result) {
       lines.push(`    previous: ${JSON.stringify(finding.previousText)}`);
     if (finding.currentText !== null)
       lines.push(`    current:  ${JSON.stringify(finding.currentText)}`);
+    if (finding.annotationKey || finding.currentAnnotationKey)
+      lines.push(
+        `    annotation: ${finding.annotationKey ?? finding.currentAnnotationKey}`,
+      );
+    if (finding.currentCategoryId !== null)
+      lines.push(`    category: ${finding.currentCategoryId}`);
+    if (finding.currentPinnedProperties !== null)
+      lines.push(
+        `    properties: ${JSON.stringify(finding.currentPinnedProperties)}`,
+      );
+    if (finding.ambiguity)
+      lines.push(`    ambiguity: ${finding.ambiguity.kind}`);
   }
   return lines.join("\n");
 }

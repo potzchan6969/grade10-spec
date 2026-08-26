@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
+  ANNOTATION_SCHEMA_VERSION,
   discoverSources,
   exitCodeFor,
   inventoryAnnotations,
@@ -14,6 +15,11 @@ const fileKey = "ABCDEFGHIJKLMNOPQRSTUV";
 const fileUrl = `https://www.figma.com/design/${fileKey}/Grade10-DS-2026`;
 const changedFixture = JSON.parse(
   readFileSync(new URL("./fixtures/annotations/changed.json", import.meta.url)),
+);
+const multipleFixture = JSON.parse(
+  readFileSync(
+    new URL("./fixtures/annotations/multiple.json", import.meta.url),
+  ),
 );
 
 const source = {
@@ -67,6 +73,13 @@ const document = {
 };
 
 function documentWithAnnotation(annotation, nodeId = "2:1") {
+  return documentWithAnnotations(
+    annotation === undefined ? undefined : [annotation],
+    nodeId,
+  );
+}
+
+function documentWithAnnotations(annotations, nodeId = "2:1") {
   return {
     ...document,
     children: [
@@ -76,7 +89,7 @@ function documentWithAnnotation(annotation, nodeId = "2:1") {
           {
             ...document.children[0].children[0],
             id: nodeId,
-            annotations: annotation === undefined ? undefined : [annotation],
+            annotations,
           },
         ],
       },
@@ -86,6 +99,21 @@ function documentWithAnnotation(annotation, nodeId = "2:1") {
 
 function baselineWithEntries(entries, roots = [source]) {
   return { schemaVersion: 1, roots, entries };
+}
+
+function occurrenceBaseline(annotations, nodeId = "2:1") {
+  return {
+    schemaVersion: ANNOTATION_SCHEMA_VERSION,
+    roots: [source],
+    entries: {
+      [`${fileKey}:${nodeId}`]: {
+        fileKey,
+        nodeId,
+        sourceRoot: "1:1",
+        annotations,
+      },
+    },
+  };
 }
 
 test("reports changed annotation text with previous and current text", () => {
@@ -170,6 +198,371 @@ test("ignores carriage-return line-ending representation changes", () => {
   assert.deepEqual(result.findings, []);
 });
 
+test("migrates a schema-version-1 annotation entry to one stable occurrence", () => {
+  const result = scanAnnotations({
+    baseline,
+    sources: [source],
+    documents: { [fileKey]: changedFixture },
+  });
+
+  assert.equal(result.schemaVersion, 2);
+  assert.equal(result.findings[0].annotationKey, "legacy-1");
+  assert.equal(result.findings[0].previousCategoryId, null);
+  assert.deepEqual(result.findings[0].previousPinnedProperties, []);
+});
+
+test("matches multiple annotations independently of array order", () => {
+  const result = scanAnnotations({
+    baseline: occurrenceBaseline([
+      {
+        annotationKey: "interaction-note",
+        text: "Use the reviewed button contract.",
+        categoryId: "interaction",
+        pinnedProperties: ["width"],
+      },
+      {
+        annotationKey: "a11y-note",
+        text: "Keep this note",
+        categoryId: "a11y",
+        pinnedProperties: ["fills"],
+      },
+    ]),
+    sources: [source],
+    documents: { [fileKey]: { document: multipleFixture.document } },
+  });
+
+  assert.equal(result.status, "drift");
+  assert.equal(result.findings.length, 1);
+  assert.equal(result.findings[0].kind, "changed");
+  assert.equal(result.findings[0].annotationKey, "interaction-note");
+  assert.equal(
+    result.findings[0].previousText,
+    "Use the reviewed button contract.",
+  );
+  assert.equal(
+    result.findings[0].currentText,
+    "Review the updated button contract.",
+  );
+  assert.equal(result.findings[0].currentCategoryId, "interaction");
+  assert.deepEqual(result.findings[0].currentPinnedProperties, ["width"]);
+});
+
+test("does not report a reordered multi-annotation baseline as drift", () => {
+  const result = scanAnnotations({
+    baseline: occurrenceBaseline([
+      {
+        annotationKey: "a11y-note",
+        text: "Keep this note",
+        categoryId: "a11y",
+        pinnedProperties: ["fills"],
+      },
+      {
+        annotationKey: "interaction-note",
+        text: "Review the updated button contract.",
+        categoryId: "interaction",
+        pinnedProperties: ["width"],
+      },
+    ]),
+    sources: [source],
+    documents: { [fileKey]: { document: multipleFixture.document } },
+  });
+
+  assert.equal(result.status, "clean");
+  assert.deepEqual(result.findings, []);
+});
+
+test("tracks property-only annotations by category and pinned properties", () => {
+  const result = scanAnnotations({
+    baseline: occurrenceBaseline([
+      {
+        annotationKey: "layout-note",
+        text: "",
+        categoryId: "visual",
+        pinnedProperties: ["padding", "width"],
+      },
+    ]),
+    sources: [source],
+    documents: {
+      [fileKey]: {
+        document: documentWithAnnotations([
+          {
+            categoryId: "visual",
+            properties: [{ type: "width" }, { type: "padding" }],
+          },
+        ]),
+      },
+    },
+  });
+
+  assert.equal(result.status, "clean");
+  assert.deepEqual(result.findings, []);
+});
+
+test("reports only the newly added occurrence when siblings already match", () => {
+  const result = scanAnnotations({
+    baseline: occurrenceBaseline([
+      {
+        annotationKey: "a11y-note",
+        text: "Keep this note",
+        categoryId: "a11y",
+        pinnedProperties: ["fills"],
+      },
+    ]),
+    sources: [source],
+    documents: { [fileKey]: { document: multipleFixture.document } },
+  });
+
+  assert.equal(result.status, "drift");
+  assert.equal(result.findings.length, 1);
+  assert.equal(result.findings[0].kind, "added");
+  assert.equal(result.findings[0].previousText, null);
+  assert.equal(
+    result.findings[0].currentText,
+    "Review the updated button contract.",
+  );
+  assert.match(result.findings[0].annotationKey, /^current:/);
+});
+
+test("reports only the absent occurrence when another baseline sibling remains", () => {
+  const result = scanAnnotations({
+    baseline: occurrenceBaseline([
+      {
+        annotationKey: "interaction-note",
+        text: "Review the updated button contract.",
+        categoryId: "interaction",
+        pinnedProperties: ["width"],
+      },
+      {
+        annotationKey: "a11y-note",
+        text: "Keep this note",
+        categoryId: "a11y",
+        pinnedProperties: ["fills"],
+      },
+    ]),
+    sources: [source],
+    documents: {
+      [fileKey]: {
+        document: documentWithAnnotations([
+          {
+            label: "Keep this note",
+            categoryId: "a11y",
+            properties: [{ type: "fills" }],
+          },
+        ]),
+      },
+    },
+  });
+
+  assert.equal(result.status, "drift");
+  assert.equal(result.findings.length, 1);
+  assert.equal(result.findings[0].kind, "removed");
+  assert.equal(result.findings[0].annotationKey, "interaction-note");
+});
+
+test("reports a unique text change for one remaining structural signature", () => {
+  const result = scanAnnotations({
+    baseline: occurrenceBaseline([
+      {
+        annotationKey: "interaction-note",
+        text: "Old behavior",
+        categoryId: "interaction",
+        pinnedProperties: ["width"],
+      },
+      {
+        annotationKey: "a11y-note",
+        text: "Keep this note",
+        categoryId: "a11y",
+        pinnedProperties: ["fills"],
+      },
+    ]),
+    sources: [source],
+    documents: {
+      [fileKey]: {
+        document: documentWithAnnotations([
+          {
+            label: "Keep this note",
+            categoryId: "a11y",
+            properties: [{ type: "fills" }],
+          },
+          {
+            label: "New behavior",
+            categoryId: "interaction",
+            properties: [{ type: "width" }],
+          },
+        ]),
+      },
+    },
+  });
+
+  assert.equal(result.status, "drift");
+  assert.equal(result.findings.length, 1);
+  assert.equal(result.findings[0].kind, "changed");
+  assert.equal(result.findings[0].annotationKey, "interaction-note");
+});
+
+test("reports a structure change as removed plus added without pairing by text", () => {
+  const result = scanAnnotations({
+    baseline: occurrenceBaseline([
+      {
+        annotationKey: "note",
+        text: "Same note",
+        categoryId: "interaction",
+        pinnedProperties: ["width"],
+      },
+    ]),
+    sources: [source],
+    documents: {
+      [fileKey]: {
+        document: documentWithAnnotations([
+          {
+            label: "Same note",
+            categoryId: "a11y",
+            properties: [{ type: "width" }],
+          },
+        ]),
+      },
+    },
+  });
+
+  assert.equal(result.status, "drift");
+  assert.deepEqual(result.findings.map((finding) => finding.kind).sort(), [
+    "added",
+    "removed",
+  ]);
+  assert.ok(
+    result.findings.every(
+      (finding) => finding.ambiguity?.kind === "structure-changed",
+    ),
+  );
+});
+
+test("preserves duplicate multiplicity when one identical occurrence disappears", () => {
+  const result = scanAnnotations({
+    baseline: occurrenceBaseline([
+      {
+        annotationKey: "note-a",
+        text: "Same note",
+        categoryId: "interaction",
+        pinnedProperties: ["width"],
+      },
+      {
+        annotationKey: "note-b",
+        text: "Same note",
+        categoryId: "interaction",
+        pinnedProperties: ["width"],
+      },
+    ]),
+    sources: [source],
+    documents: {
+      [fileKey]: {
+        document: documentWithAnnotations([
+          {
+            label: "Same note",
+            categoryId: "interaction",
+            properties: [{ type: "width" }],
+          },
+        ]),
+      },
+    },
+  });
+
+  assert.equal(result.findings.length, 1);
+  assert.equal(result.findings[0].kind, "removed");
+  assert.equal(result.findings[0].annotationKey, "note-b");
+  assert.equal(result.findings[0].ambiguity, null);
+});
+
+test("marks a duplicate removal ambiguous when baseline associations differ", () => {
+  const result = scanAnnotations({
+    baseline: occurrenceBaseline([
+      {
+        annotationKey: "note-a",
+        text: "Same note",
+        categoryId: "interaction",
+        pinnedProperties: ["width"],
+        associations: { change: "change-a", taskGroup: "1" },
+      },
+      {
+        annotationKey: "note-b",
+        text: "Same note",
+        categoryId: "interaction",
+        pinnedProperties: ["width"],
+        associations: { change: "change-b", taskGroup: "1" },
+      },
+    ]),
+    sources: [source],
+    documents: {
+      [fileKey]: {
+        document: documentWithAnnotations([
+          {
+            label: "Same note",
+            categoryId: "interaction",
+            properties: [{ type: "width" }],
+          },
+        ]),
+      },
+    },
+  });
+
+  assert.equal(result.findings.length, 1);
+  assert.equal(result.findings[0].annotationKey, null);
+  assert.equal(result.findings[0].ambiguity?.kind, "duplicate-count-decrease");
+  assert.deepEqual(result.findings[0].candidateAnnotationKeys, [
+    "note-a",
+    "note-b",
+  ]);
+  assert.equal(result.findings[0].classification, "ambiguous");
+});
+
+test("marks several unmatched siblings ambiguous instead of pairing them", () => {
+  const result = scanAnnotations({
+    baseline: occurrenceBaseline([
+      {
+        annotationKey: "old-a",
+        text: "Old A",
+        categoryId: "interaction",
+        pinnedProperties: ["width"],
+      },
+      {
+        annotationKey: "old-b",
+        text: "Old B",
+        categoryId: "interaction",
+        pinnedProperties: ["width"],
+      },
+    ]),
+    sources: [source],
+    documents: {
+      [fileKey]: {
+        document: documentWithAnnotations([
+          {
+            label: "New A",
+            categoryId: "interaction",
+            properties: [{ type: "width" }],
+          },
+          {
+            label: "New B",
+            categoryId: "interaction",
+            properties: [{ type: "width" }],
+          },
+        ]),
+      },
+    },
+  });
+
+  assert.equal(result.findings.length, 4);
+  assert.deepEqual(result.findings.map((finding) => finding.kind).sort(), [
+    "added",
+    "added",
+    "removed",
+    "removed",
+  ]);
+  assert.ok(
+    result.findings.every(
+      (finding) => finding.ambiguity?.kind === "multiple-unmatched",
+    ),
+  );
+});
+
 test("blocks an unreadable Figma file without reporting baseline annotations as removed", () => {
   const result = scanAnnotations({
     baseline,
@@ -222,9 +615,10 @@ test("keeps an annotation with no exact association visible as untracked", () =>
   assert.equal(exitCodeFor(result), 1);
 });
 
-test("blocks malformed multiple annotation evidence", () => {
-  const malformed = documentWithAnnotation({ label: "First" });
-  malformed.children[0].children[0].annotations.push({ label: "Second" });
+test("blocks malformed annotation structure", () => {
+  const malformed = documentWithAnnotations([
+    { label: "First", properties: [{ type: "" }] },
+  ]);
   const result = scanAnnotations({
     baseline: baselineWithEntries({}),
     sources: [source],
@@ -234,6 +628,28 @@ test("blocks malformed multiple annotation evidence", () => {
   assert.equal(result.status, "blocked");
   assert.equal(result.findings.length, 0);
   assert.equal(result.blockers[0].kind, "malformed-response");
+});
+
+test("blocks a partly migrated schema-version-2 baseline", () => {
+  const result = scanAnnotations({
+    baseline: {
+      schemaVersion: 2,
+      roots: [source],
+      entries: {
+        [`${fileKey}:2:1`]: {
+          fileKey,
+          nodeId: "2:1",
+          text: "old shape",
+          annotations: [],
+        },
+      },
+    },
+    sources: [source],
+    documents: { [fileKey]: { document: documentWithAnnotation(undefined) } },
+  });
+
+  assert.equal(result.status, "blocked");
+  assert.equal(result.blockers[0].kind, "partly-migrated-baseline");
 });
 
 test("inventories current annotations without producing a baseline", () => {
@@ -253,7 +669,10 @@ test("inventories current annotations without producing a baseline", () => {
       fileKey,
       nodeId: "2:1",
       nodeName: "Button / default",
+      annotationKey: "current:a7227475ce778873:1",
       text: "Inventory me",
+      categoryId: null,
+      pinnedProperties: [],
       nodeLink: `${fileUrl}?node-id=2-1`,
       registeredSources: [
         {

@@ -236,17 +236,32 @@ FIGMA_TOKEN=figd_… pnpm run figma:annotations -- --inventory
 FIGMA_TOKEN=figd_… pnpm run figma:annotations -- --json
 ```
 
-Inventory scans the whole registered surface and prints candidate node IDs and
-text for the initial review. The daily scan uses only the roots recorded in
-the baseline plus the current Code Connect and audit registrations, so
-exploratory design areas do not become engineering findings accidentally.
+Inventory scans the whole registered surface and prints one record per current
+annotation occurrence, including its node ID, occurrence key, text, category,
+and pinned properties. It is the candidate output for the initial review; it
+does not write the baseline. The daily scan uses only the roots recorded in the
+baseline plus the current Code Connect and audit registrations, so exploratory
+design areas do not become engineering findings accidentally.
 
-The manifest has `schemaVersion: 1`, a `roots` list, and `entries` keyed by
-`<file-key>:<node-id>` using a colon in the node ID. Each entry stores the
-accepted annotation text, its source root, and optional exact `associations`
-for a capability, change, and task group. A reviewed entry with no OpenSpec
-association may carry a `noImpactReason`; similar prose is never an
-association.
+The manifest has `schemaVersion: 2`, a `roots` list, and `entries` keyed by
+`<file-key>:<node-id>` using a colon in the node ID. Each node entry stores an
+`annotations` array. Each occurrence has a baseline-local `annotationKey`,
+normalized text (empty for property-only annotations), a category ID or null,
+and a canonical sorted set of pinned properties. Its optional exact
+`associations` and `noImpactReason` remain on that occurrence. Schema-version-1
+entries migrate in memory to one `legacy-1` occurrence with their source root
+and review evidence preserved; a malformed or partly migrated manifest blocks
+the scan. Similar prose is never an association.
+
+Occurrences are matched on the same node as an order-independent multiset:
+exact text/category/property matches cancel first, then one remaining old and
+current occurrence with the same category and pinned properties may be paired
+as changed. Several remaining siblings are reported as removed and added with
+ambiguity, and a category or pinned-property change is never paired by text.
+Identical duplicates retain their count; if duplicate baseline associations
+differ, a count-decrease finding remains ownership-ambiguous. Current
+unmatched keys use a canonical fingerprint and one-based multiplicity ordinal,
+not the Figma array position.
 
 The scanner exits `0` for verified no change, `1` for annotation drift, and
 `2` when any registered evidence is blocked or malformed. A missing Figma file,
@@ -257,17 +272,20 @@ component or OpenSpec association exists.
 
 ### Review and accept a change
 
-1. Open the finding's Figma node link and inspect the previous and current
-   text.
+1. Open the finding's Figma node link and inspect its occurrence key, category,
+   pinned properties, and previous/current text.
 2. Trace it through the exact registered component, baseline association, or
    OpenSpec artifact. Do not use editor identity, Git blame, or similar words
    as ownership evidence.
 3. Decide whether the text is a requirement, UI state, technical note, visual
    note, or no-impact clarification. If it changes product behaviour, update
    the OpenSpec requirement in the planning store first.
-4. Patch the matching baseline entry in a reviewed change, replacing its text
-   and recording the exact capability/change/task-group association or an
-   explicit `noImpactReason`. The scanner has no update flag by design.
+4. Patch the matching node's `annotations` occurrence in a reviewed change,
+   replacing its canonical values and recording the exact
+   capability/change/task-group association or an explicit `noImpactReason`.
+   Preserve the occurrence key when accepting a text or array-order change;
+   assign a new reviewed key only after confirming an added occurrence. The
+   scanner has no update flag by design.
 5. Run the JSON scan again and review the Git diff. A clean result is only
    meaningful when every registered surface was read successfully.
 

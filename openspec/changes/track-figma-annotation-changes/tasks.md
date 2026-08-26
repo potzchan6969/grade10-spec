@@ -12,16 +12,16 @@
   repository test command.
 - [x] 1.4 Verify the group with the design-sync fixture tests, `pnpm run test`,
   `pnpm run lint`, and `pnpm run typecheck`.
-- [ ] 1.5 Migrate the baseline to per-node annotation occurrence arrays with
+- [x] 1.5 Migrate the baseline to per-node annotation occurrence arrays with
   stable local keys and per-occurrence associations, preserving schema-version-1
   evidence so `Multiple annotations are baselined independently` and
   `Property-only annotation is tracked` pass.
-- [ ] 1.6 Replace the single-annotation guard with order-independent multiset
+- [x] 1.6 Replace the single-annotation guard with order-independent multiset
   matching and occurrence-aware findings so `Annotation array order changes`,
   `Annotation text changes`, `One of several structural matches changes
   text`, `Duplicate annotation count decreases`, `Several unmatched siblings
   are ambiguous`, and `Annotation structure changes` pass.
-- [ ] 1.7 Verify the extended group with fixtures covering zero, one, multiple,
+- [x] 1.7 Verify the extended group with fixtures covering zero, one, multiple,
   duplicate, reordered, property-only, uniquely changed, structurally changed,
   and ambiguously changed annotations; `pnpm run test`; `pnpm run lint`; and
   `pnpm run typecheck`.
@@ -77,12 +77,12 @@ submodule is the boundary before the application-repository work begins.
   current-owner, authored, unassigned, and other-owner invocations; `pnpm run
   agent:check-parity`; `pnpm run lint`; `pnpm run typecheck`; and `pnpm run
   test`.
-- [ ] 3.6 Update the skill's report rules to keep separate findings and
+- [x] 3.6 Update the skill's report rules to keep separate findings and
   occurrence-specific ownership for several annotations on one node, while
   preserving ambiguity for unpairable duplicates, so `Annotation text
   changes`, `Several unmatched siblings are ambiguous`, and `Actionable changes
   are found` pass together.
-- [ ] 3.7 Verify the extended group with one-node fixtures containing unchanged,
+- [x] 3.7 Verify the extended group with one-node fixtures containing unchanged,
   independently owned, and ambiguously paired sibling annotations, then rerun
   `pnpm run agent:check-parity`, `pnpm run lint`, `pnpm run typecheck`, and
   `pnpm run test`.
