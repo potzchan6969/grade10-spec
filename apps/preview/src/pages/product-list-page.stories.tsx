@@ -100,12 +100,12 @@ function ProductListPage() {
   const cartItems = useMemo((): CartItemSummary[] => {
     return Object.entries(cart)
       .filter(([, quantity]) => quantity > 0)
-      .map(([id, quantity]) => {
+      .flatMap(([id, quantity]) => {
         const product = productCatalog.find((item) => item.id === id);
         if (!product) {
-          return null;
+          return [];
         }
-        return {
+        const item: CartItemSummary = {
           id,
           name: product.name,
           price: product.price,
@@ -113,10 +113,10 @@ function ProductListPage() {
           imageSrc: product.imageSrc,
           imageAlt: product.imageAlt,
           quantity,
-          status: product.soldOut ? ("soldOut" as const) : ("default" as const),
+          status: product.soldOut ? "soldOut" : "default",
         };
-      })
-      .filter((item): item is CartItemSummary => item !== null);
+        return [item];
+      });
   }, [cart, productCatalog]);
 
   const cartTotal = useMemo(() => {

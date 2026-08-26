@@ -250,6 +250,8 @@ const STORE_CART_COPY = {
     checkoutButton: "Proceed to Checkout",
     checkoutRedirecting: "Redirecting...",
   },
+  unavailableItemsRemoved:
+    "Some item(s) have been removed as they’re no longer available",
 };
 
 export {
