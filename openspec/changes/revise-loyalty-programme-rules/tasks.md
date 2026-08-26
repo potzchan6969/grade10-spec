@@ -97,7 +97,7 @@ against one being added, not a change to existing behaviour.
 genuine new work, and `testing/suites/tierValidity.ts` currently asserts the
 opposite as correct.
 
-- [x] 8.1 Set `tierOnRefund` to re-evaluate in Grade10's deployed programme config, so *A claw-back can demote* passes, and cover both policy values so the switch stays a real choice — done by removing the switch: the settled spec offers no keep, so `tierOnRefund` and the `policies` block are gone rather than defaulted (packages/loyalty/backend, commit e6c08959 in grade10)
+- [x] 8.1 Set `tierOnRefund` to re-evaluate in Grade10's deployed programme config, so *A claw-back can demote* passes, and cover both policy values so the switch stays a real choice — done by removing the switch: the settled spec offers no keep, so `tierOnRefund` and the `policies` block are gone rather than defaulted (packages/loyalty/backend, commit e6c08959 in grade10). 2026-08-25 disposition: re-evaluation also withdraws a retention extension when the refunded earning was what supported it, so *A claw-back withdraws an unsupported retention extension* passes.
 - [x] 8.2 Record the demotion date; no such marker exists today
 - [x] 8.3 Count attainment and retention only from earnings dated after the last demotion, so *Losing a tier resets the climb* and *Tier points are derived from the same entries* agree
 - [x] 8.4 Invert `re-earns a tier from the rolling window instead of resurrecting the old term` in `testing/suites/tierValidity.ts` — it asserts the behaviour this group removes
@@ -152,15 +152,14 @@ with the auth track before claiming.
 
 ## 13. Tier renaming (grade10) (owner: @gareth0712)
 
-Display names only. The persisted ids `platinum` and `diamond` **do not move**:
-`holdsUnknownTier` freezes any member holding an id the running config does not
-know, and the nightly review leaves them unsettled forever. Renaming an id is a
-data migration over `account_member.earned_tier_id` and both tier-history
-columns, not part of this group.
+The feature has not launched, so names and persisted ids move together with no
+compatibility mapping or data migration: `silver`, `gold`, `black`. A later
+post-launch rename would require an atomic migration over
+`account_member.earned_tier_id` and both tier-history columns.
 
-- [x] 13.1 Rename the tier display names in the programme config and everywhere a member or operator reads them, so *The second tier is reached by spending* names Gold
+- [x] 13.1 Rename the tier display names and persisted ids in the programme config and everywhere a member or operator reads them, so *The second tier is reached by spending* names Gold and *Tier records use the public identifiers* passes
 - [x] 13.2 Rename the demo playground's programme and use-case copy to match
-- [x] 13.3 Assert in a test that every configured tier id still resolves, so a future rename cannot strand a member silently
+- [x] 13.3 Assert through the deployed programme and a real database that config, member state and tier history use `silver` and `gold`, with no `platinum` or `diamond` compatibility ids
 - [x] 13.4 Verify: `pnpm run typecheck`, `pnpm run test`
 
 ## 14. Earning floors base points before the multiplier (grade10)

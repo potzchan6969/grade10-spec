@@ -78,8 +78,9 @@ tracks members who are still buying.
   members forfeit is counted where an operator can read it.
 - **Deleting the account ends the membership at once** — balance, tier progress,
   coupons and pending collections, with the ledger record surviving for audit.
-- **Tier display names become Silver and Gold**, renaming the deployed Platinum
-  and Diamond. Multipliers, thresholds and the persisted tier ids are untouched.
+- **Tier names and identifiers become Silver and Gold**, replacing the
+  pre-launch Platinum and Diamond names and persisted ids. No compatibility
+  mapping or data migration is needed because the feature has not launched.
 - **Points cannot be spent on an auction.**
 
 ## Non-Goals

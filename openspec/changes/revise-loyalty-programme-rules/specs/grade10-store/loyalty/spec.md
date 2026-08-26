@@ -628,6 +628,10 @@ Its ladder SHALL be, in ascending rank:
 | Gold | 1.2× | 500 tier points inside a rolling twelve months | Twelve months from activation | 500 tier points inside the validity period |
 | Black | 1.7× | Invitation only | The invitation's own end date | A further invitation |
 
+The persisted identifiers for those tiers SHALL be `silver`, `gold` and
+`black`, matching their public names. The pre-launch Platinum and Diamond
+identifiers SHALL NOT remain as compatibility aliases.
+
 The annual cap on Black and the approval step before granting it are not
 enforced by the programme and are not specified here.
 
@@ -659,6 +663,12 @@ threshold:
 
 - **WHEN** a member's tier points inside the rolling twelve months reach 500
 - **THEN** they hold Gold from that instant
+
+#### Scenario: Tier records use the public identifiers
+
+- **WHEN** enrollment, promotion or demotion records a Silver or Gold tier
+- **THEN** the persisted identifier is `silver` or `gold`, respectively
+- **AND** no record uses `platinum` or `diamond`
 
 #### Scenario: Gold is retained by earning again
 
@@ -828,6 +838,14 @@ for the whole sum would have.
 - **WHEN** points are clawed back
 - **THEN** the tier contribution of the earning they came from is reduced by the same amount
 - **AND** it leaves the qualifying window at the same time that earning does
+
+#### Scenario: A claw-back withdraws an unsupported retention extension
+
+- **GIVEN** a purchase inside a tier's validity period reached its retention threshold and started a fresh validity period
+- **WHEN** that purchase is fully refunded and the remaining points inside the original validity period no longer reach the retention threshold
+- **THEN** the fresh validity period is withdrawn
+- **AND** the member keeps the tier only until the original validity period ends
+- **AND** their retention progress reflects only the points that remain
 
 #### Scenario: A claw-back can demote
 

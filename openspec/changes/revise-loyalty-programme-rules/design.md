@@ -133,24 +133,18 @@ Rejected: keeping the self-generated code that `fulfillment.ts` produces today.
 Nothing at checkout would honour it, so a member would hold a code that does
 not work.
 
-### Tier ids are frozen; only display names change
+### Tier ids match their public names before launch
 
-The rename is Silver for Platinum and Gold for Diamond in what a member and an
-operator read. The persisted ids stay `platinum` and `diamond`.
+The ladder uses `silver`, `gold` and `black` as its persisted identifiers and
+Silver, Gold and Black as its display names. The feature has not launched, so
+there is no production cohort or history to migrate and no compatibility alias
+to preserve. Development and demo databases reset onto the renamed config.
 
-This is not a preference. `earned_tier_id` on the member row and `from_tier` /
-`to_tier` in tier history are persisted state, and the engine deliberately
-freezes any member holding an id the running config does not know:
-`holdsUnknownTier` logs and returns, `writeEarnedTier` gives up, `isTierAttainment`
-refuses, and the nightly `sweepTierReviews` counts that member `skipped` and
-leaves them in `leftover` forever. Renaming the id strands every current Diamond
-holder on a row no review can ever settle again.
-
-Changing the ids later is possible but it is a data migration — rewrite
-`account_member.earned_tier_id` and both tier-history columns in the same
-transaction as the config change — not a config edit. Note the backend test
-fixtures already use `silver` / `gold` ids; that is fixture-local and says
-nothing about what production may be renamed to.
+This direct rename is deliberately pre-launch. Once member rows and tier
+history exist in production, changing an id requires one transaction that
+rewrites `account_member.earned_tier_id` and both tier-history columns alongside
+the config change; changing only the config would strand those members behind
+the engine's unknown-tier guard.
 
 ### An operator correction adds no tier points
 
@@ -188,9 +182,9 @@ stands*, and each is swapped without a code change once confirmed.
   HKD 1 per point for Grade10, deployed configuration like the earn rate.
 - **Account deletion clears the membership immediately** — balance, tier
   progress, coupons, pending collections; the ledger record survives.
-- **Tier names**: members and operators read Silver and Gold. Multipliers and
-  thresholds unchanged, and the persisted ids do not move, for the reason
-  recorded above.
+- **Tier names and ids**: members and operators read Silver and Gold, while the
+  persisted identifiers are `silver` and `gold`. Multipliers and thresholds
+  are unchanged.
 
 ## Risks / Trade-offs
 
@@ -205,10 +199,9 @@ stands*, and each is swapped without a code change once confirmed.
   committed before the vendor call and the same code is retried — but a
   permanent vendor failure leaves a member paid-for and empty-handed until an
   operator reverses it.
-- **Renaming tier display names while ids stay put splits one fact in two.**
-  Anyone reading `earned_tier_id` sees `diamond` where the member sees Gold. The
-  mapping lives in the programme config and nowhere else, and the ids are never
-  shown to a member or an operator.
+- **Tier ids become expensive to rename after launch.** The direct
+  `silver`/`gold` rename is safe only because no production member or tier
+  history exists yet. Any later id change requires an atomic data migration.
 
 ## Migration Plan
 
