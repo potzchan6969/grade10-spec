@@ -10,9 +10,9 @@ both need it landed. Those two depend on nothing in each other.
 
 - [x] 1.1 Split the address layer's one predicate in two — answers at one address per locale (now every public surface) and the build wrote a document (still only the prerendered ones) — deriving both from the surface table, so a surface added later inherits its prefixes by being public.
 - [x] 1.2 Register the prefixed card and lot patterns ahead of the prefixed catalogue splat, making `A card answers under a prefix as itself` and `A lot answers under a prefix as itself` pass — today the splat answers those addresses with the catalogue's own page.
-- [ ] 1.3 Make the link builders for a card and a lot answer in a language, so `A prefixed catalogue opens a prefixed card` passes and the storefront grid, the auction catalogue and the serving lab all follow it without naming a path of their own.
-- [ ] 1.4 Hold `An unknown prefixed address is refused honestly` against the widened table: an address under a prefix no language claims still matches nothing, and a prefixed session-shaped address still answers 404.
-- [ ] 1.5 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test`.
+- [x] 1.3 Make the link builders for a card and a lot answer in a language, so `A prefixed catalogue opens a prefixed card` passes and the storefront grid, the auction catalogue and the serving lab all follow it without naming a path of their own.
+- [x] 1.4 Hold `An unknown prefixed address is refused honestly` against the widened table: an address under a prefix no language claims still matches nothing, and a prefixed session-shaped address still answers 404.
+- [x] 1.5 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test`.
 
 ## 2. Serving, language and heads (grade10)
 
