@@ -72,6 +72,18 @@ under `.theme-grade10`. Importing `theme.css` alone leaves every slot
 undefined. Apply the theme by putting `theme-grade10` on `<html>` — see
 `ColorThemeProvider`, whose class dimension is orthogonal to the `dark` class.
 
+Brand sans is Gibson from Adobe Fonts. Load the Typekit kit in the document
+head — a nested `@import` inside `theme.css` is illegal once that file sits
+after Tailwind/shadcn in the bundle, so the kit is not shipped that way:
+
+```html
+<link rel="stylesheet" href="https://use.typekit.net/lnk7gwq.css" />
+```
+
+The CSS family name is `canada-type-gibson` (mapped to `--font-sans` /
+`--font-heading`); the Typography token `family-sans` keeps the designer
+label `Gibson`.
+
 ```tsx
 import { Button, Card } from "@grade10/design-system"
 ```
@@ -173,7 +185,7 @@ green `tokens:sync` means the whole file landed.
 variable's Figma *scopes*, falling back to the token name; anything unmatched
 stays `px`. `FONT_WEIGHT` emits unitless (`--weight-medium: 500`, not `500px`)
 and `OPACITY` emits a percentage. A STRING variable such as `family-sans`
-("Inter") passes through as-is and is typed `fontFamily`. Note that `tokens:push`
+("Gibson") passes through as-is and is typed `fontFamily`. Note that `tokens:push`
 only *creates* COLOR and FLOAT variables — a new STRING token is reported as
 unconvertible rather than guessed at, so add those in Figma by hand.
 
