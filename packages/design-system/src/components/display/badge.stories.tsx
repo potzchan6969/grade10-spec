@@ -10,7 +10,15 @@ const meta = {
   argTypes: {
     variant: {
       control: "select",
-      options: ["default", "success", "error", "warning", "brand", "outline"],
+      options: [
+        "default",
+        "success",
+        "error",
+        "warning",
+        "info",
+        "brand",
+        "outline",
+      ],
     },
     size: { control: "inline-radio", options: ["default", "sm"] },
   },
@@ -26,6 +34,7 @@ export const Success: Story = { args: { variant: "success" } };
 // Named `ErrorStatus` rather than `Error` so the export does not shadow the global.
 export const ErrorStatus: Story = { args: { variant: "error" } };
 export const Warning: Story = { args: { variant: "warning" } };
+export const Info: Story = { args: { variant: "info" } };
 
 /** The two rungs Figma draws: 24px and 20px tall. */
 export const Small: Story = { args: { size: "sm" } };
