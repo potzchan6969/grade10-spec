@@ -10,7 +10,7 @@ components, so they belong to grade10-spec.
 - [x] 1.3 Add the slice's hooks over the shared response cache: the paginated directory read, role changes, moderation, session listing and revocation, and account deletion, each with a hook test over the real graph with the fake bound at the port only.
 - [x] 1.4 Join the slice to the package's published list and move both panels' user pages onto its hooks, keeping the existing view tests unedited — scenario: Two brands show the same operator surface.
 - [x] 1.5 Delete the duplicated user directory from the zzz panel and the data layer from the grade10 one, leaving one page per brand composing the slice — scenario: A brand needs the surface to differ.
-- [ ] 1.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
+- [x] 1.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
 
 ## 2. Vault console slices (grade10)
 
