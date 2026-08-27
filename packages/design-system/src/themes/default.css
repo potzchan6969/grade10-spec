@@ -9,6 +9,8 @@
   /* Derived baseline: grade10 defines these; without them an outline
    * control renders with no surface outside .theme-grade10, including
    * in the story suite, which runs this theme. */
+  --background-subtle: oklch(0.985 0 0);
+  --background-inverse: oklch(0.145 0 0);
   --control: var(--background);
   --control-hover: oklch(0.97 0 0);
   --foreground: oklch(0.145 0 0);
@@ -29,6 +31,7 @@
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
   --border-subtle: var(--border);
+  --border-strong: oklch(0.87 0 0);
   --overlay: color-mix(in oklab, var(--foreground) 30%, transparent);
   /* status extension (not stock shadcn) */
   --success: oklch(0.95 0.03 150);
@@ -90,6 +93,8 @@
 
 .dark {
   --background: oklch(0.145 0 0);
+  --background-subtle: oklch(0.205 0 0);
+  --background-inverse: oklch(0.985 0 0);
   --control: var(--background);
   --control-hover: oklch(1 0 0 / 8%);
   --foreground: oklch(0.985 0 0);
@@ -110,6 +115,7 @@
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
   --border-subtle: var(--border);
+  --border-strong: oklch(1 0 0 / 20%);
   --overlay: color-mix(in oklab, var(--foreground) 30%, transparent);
   /* status extension (not stock shadcn) */
   --success: oklch(0.27 0.04 150);
