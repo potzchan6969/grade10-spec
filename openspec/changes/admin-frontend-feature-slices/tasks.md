@@ -62,7 +62,7 @@ Lands last, when there is nothing left for it to fail on.
 - [ ] 6.2 Give the check named exemptions carrying their reason, including the storefront's demo lab pages, and make an exemption whose path no longer exists fail the run — scenario: A path is exempt on purpose.
 - [ ] 6.3 Verify: `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`.
 
-## 7. Directory views as shared blocks (grade10-spec)
+## 7. Directory views as shared blocks (grade10-spec) (owner: @sean)
 
 The four views the two panels hold identical copies of are compound
 components built from design-system primitives, so they belong in the shared
