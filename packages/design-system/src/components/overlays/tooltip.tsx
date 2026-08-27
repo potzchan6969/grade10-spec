@@ -14,6 +14,17 @@ function TooltipProvider({
   );
 }
 
+/**
+ * The Figma set carries one word of description: "Deprecated." Design has
+ * retired the drawn component, but this export is still consumed — three files
+ * under `packages/ui/src/blocks/auction-listing` use it — so it stays until a
+ * replacement is named and its consumers migrate.
+ *
+ * Deliberately not tagged `@deprecated`: that would strike the symbol through
+ * at every call site and fail consumer lints over a retirement this repository
+ * has not yet recorded. Retiring the export is a contract change and needs an
+ * OpenSpec delta naming the replacement and the consuming applications.
+ */
 function Tooltip({ ...props }: TooltipPrimitive.Root.Props) {
   return <TooltipPrimitive.Root data-slot="tooltip" {...props} />;
 }
