@@ -1,225 +1,337 @@
 ## Context
 
-Grade10 has no house stock ledger. Auction already has a thin `products`
-identity used when minting a listing, and Shopify owns storefront catalogue
-quantity — neither is an operator-facing per-unit inventory for house stock.
-See [proposal.md](proposal.md). Capability:
+Grade10 has no house stock ledger. Auction has a thin product identity and
+Shopify owns storefront quantities, but neither can arbitrate physical units
+shared by Auction, Vault, and later Grade10 applications. See
+[proposal.md](proposal.md). Capability:
 [`grade10-inventory/catalog`](specs/grade10-inventory/catalog/spec.md).
 Screens: [ui.md](ui.md).
 
-Conventions this design follows: `docs/conventions/packages.md`,
-`docs/conventions/backend.md`, `docs/architecture/multi-product.md`,
-`docs/architecture/security.md` in the grade10 monorepo.
+This design follows `docs/conventions/packages.md`,
+`docs/conventions/backend.md`, `docs/architecture/cross-service.md`,
+`docs/architecture/multi-product.md`, and `docs/architecture/security.md` in
+the grade10 monorepo.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Ship a Grade10-only inventory worker and admin console for products and
-  serialized units, with remaining available count and change history.
-- Use **channel-tied** unit statuses so a sold (or listed) unit records
-  which service moved it — Auction now (`auction-listing` /
-  `auction-sold`), Store or others later (`store-sold`, …) without a
-  channel-blind `sold`.
-- Record **every** successful product/unit mutation (platform audit +
-  domain changelogs); reuse elevated-procedure audit and existing admin
-  table/editor patterns.
+- Ship a Grade10-only inventory worker and admin console for products,
+  serialized units, and application reservations.
+- Make reservation ownership orthogonal to physical unit state so multiple
+  applications can hold disjoint units of the same product.
+- Enforce one active holder per unit atomically and make another holder's
+  reserved units invisible across the service boundary.
+- Record the holder, purpose, external reference, concrete unit ids, and actor
+  for every reservation and release.
+- Record every successful ledger mutation in domain history; elevated operator
+  writes also use the platform audit chain.
 
 **Non-Goals:**
 
-- Auction listing editor `productId` wiring (seam documented below only).
-- Shopify inventory sync or ZZZ inventory.
+- Changing Auction or Vault flows to call inventory in this change.
+- Shopify inventory sync, ZZZ inventory, warehouses, transfers, or receiving.
 - New design-system or `@grade10/ui` components.
 
 ## Decisions
 
-### Package and worker layout
+### Inventory is a standalone product boundary
 
 Place the product under `packages/inventory/{contracts,backend,admin-frontend}`
 publishing `@grade10/inventory-contracts`, `@grade10/inventory-service`, and
-`@grade10/inventory-admin-frontend`. Thin worker at
-`apps/backend/grade10/inventory` (factory + migrations + wrangler), matching
-auction/vault assembly. Register service id `inventory` in
-`packages/app-env` `ServiceId` / `BRAND_SERVICES.grade10` only; bind
-`INVENTORY_SERVICE` on `apps/backend/grade10/api`.
+`@grade10/inventory-admin-frontend`. The thin worker lives at
+`apps/backend/grade10/inventory`. Register `inventory` in
+`packages/app-env` for Grade10 only and bind `INVENTORY_SERVICE` on the API
+gateway for admin HTTP routing.
 
-**Rejected:** `packages/grade10-inventory` — newer domains (`vault`,
-`loyalty`, `appointment`) use unprefixed directory names; npm already scopes
-`@grade10/`. **Rejected:** embedding inventory inside the auction worker —
-stock outlives any one channel and must stay reusable.
+**Rejected:** inventory inside Auction or Vault. Physical stock outlives any
+one consumer and must arbitrate between them. **Rejected:** Shopify as the
+ledger. It owns retail locations, not all Grade10-held stock.
 
-### Serialized units, not a quantity column
+### Serialized units remain the source of quantity
 
-`inventories` (domain: inventory units) stores one row per physical item.
-“Add with quantity N” inserts N rows sharing `productId` with distinct ids.
-There is no quantity column on product or unit.
+`inventories` stores one row per physical item. Adding quantity N inserts N
+rows with distinct ids. There is no product or unit quantity column.
 
-**Rejected:** a single row with `quantity` — cannot reserve or sell one unit
-independently, and breaks the future Auction-per-unit seam.
+This makes the conservation rule structural: for a product, every unit row is
+either linked to one active reservation or has no active reservation.
 
-### Channel-tied unit status
+**Rejected:** quantity buckets per holder. They cannot prove which physical
+item is held, cannot prevent the same item from appearing in two workflows,
+and lose the per-unit trace needed by Auction and Vault.
 
-Status vocabulary in this change:
-`available` | `auction-listing` | `auction-sold` | `withdrawn`.
+### Unit state and reservation ownership are separate axes
 
-Remaining available count = units in `available` only.
+Unit state is `in-stock` | `auction-sold` | `withdrawn`. Availability is
+derived as `in-stock` with no active reservation. A held unit remains
+`in-stock`; the reservation, not the state string, says who holds it and why.
+Sold money is present only for `auction-sold`.
 
-Pattern for later channels (Store not confirmed): add
-`{channel}-listing` / `{channel}-sold` (e.g. `store-sold`) to the same enum
-when that channel ships — do **not** collapse back to a bare `sold`.
+A held unit cannot change state. Its holder or an admin must release it first;
+Auction settlement wiring can later compose release and sale under its own
+idempotent workflow.
 
-**Future Auction mapping (not built here):** listing committed / live →
-`auction-listing`; sale settled → `auction-sold` (with price/currency);
-call-off or release → back to `available` or `withdrawn` as Auction
-decides. Listing editor will later accept a `productId` (and eventually a
-unit id).
+**Rejected:** `auction-listing` or `{app}-held` unit states. They conflate a
+physical state with application ownership and require enum growth for every
+new consumer. **Rejected:** a generic `reserved` state. It still cannot say
+which application owns the hold or keep that holder opaque from peers.
 
-**Rejected:** channel-blind `available` | `reserved` | `sold` | `withdrawn`
-— a later Store (or other) sale path would overwrite *how* the unit sold;
-ops and reconciliation need the channel in the status.
+### Count names distinguish current stock from ledger history
 
-### Sold money only on sold statuses
+Use these terms in contracts, persistence queries, and UI copy:
 
-`soldPrice` (integer minor units > 0) and `soldCurrency` (ISO 4217) are both
-non-null iff status is a sold status (`auction-sold` in this change);
-otherwise both null. Enforced in contracts and service writes. When a new
-`{channel}-sold` status is added, the same money rule applies to it.
+- **stock count** — all units whose state is `in-stock`; partitions into
+  available and actively reserved stock;
+- **ledger count** — all retained unit rows; partitions into stock,
+  `auction-sold`, and `withdrawn`.
 
-### Change history vs `@grade10/audit`
+The two equations are `available + active reserved = stock count` and `stock
+count + auction-sold + withdrawn = ledger count`. Holder-scoped responses
+receive available count only.
 
-**Both layers — every successful mutation, no silent paths:**
+**Rejected:** using `total` for both values. It makes a correct count depend on
+whether the reader silently includes historical states. **Rejected:**
+`on-hand`; a withdrawn unit may still be physically present even though it is
+outside reservable stock.
 
-1. **Platform audit** — every admin mutation goes through
-   `elevatedProcedure("inventory:…")` and appends to the worker’s
-   `audit_logs` chain via `@grade10/postgres` audit helpers, same as auction.
-   The merged admin Audit section gains an `inventory` chain entry. A write
-   that skips the elevated ladder is a bug.
-2. **Domain change history** — a product-owned append-only `changelogs` table
-   records **every** successful create/update/delete on products and units —
-   operator elevated writes **and** server-driven updates — with actor =
-   user id **or** `server`, subject kind/id, action, and details. Admin and
-   services query this for per-entity history. Automated
-   `auction-listing` / `auction-sold` paths that never hit an elevated
-   operator call still leave a changelog trail.
+### Reservations are immutable-identity allocation headers plus unit links
 
-**Invariant:** if a product or unit row changes successfully, at least one
-changelog row is written in the same transaction. Operator writes also
-append `audit_logs`. Failed / refused writes append neither.
+Persistence adds:
 
-**Why not audit alone:** `@grade10/audit-contracts` list input has no
-subject filter (cursor + limit only), details is mutation-input JSON keyed
-for the elevated call, and server-driven updates are not elevated operator
-actions. Audit remains the compliance chain; changelogs are the entity
-ledger the inventory console and future channel hooks need.
+- **reservations** — id, product_id, holder (`auction` | `vault`),
+  holder_reference, purpose, state (`active` | `released`), created_at,
+  updated_at, created_actor, released_at, released_actor.
+- **reservation_units** — reservation_id, inventory_unit_id, assigned_at;
+  immutable history retained after release, with product_id carried for
+  composite foreign keys.
+- **active_reservation_units** — inventory_unit_id primary key,
+  reservation_id, product_id; current ownership only.
 
-**Rejected:** changelogs without `audit_logs` — would skip the elevated
-ladder required by `docs/architecture/security.md`. **Rejected:** audit-only
-or optional changelog on “important” actions — product requires each action
-recorded. **Rejected:** extending shared audit list filters in this change —
-out of scope for a new product.
+`(holder, holder_reference)` is unique for idempotency. A retry with the same
+product, quantity, and purpose returns the existing reservation; a differing
+payload is refused.
 
-### RBAC admin-only
+A partial release is deliberately absent. Releasing a reservation closes the
+whole allocation. A consumer that needs independent lifetimes creates
+separate reservation references.
 
-Add `inventory: ["read", "write"]` to `PERMISSION_STATEMENTS`. Do **not** add
-those grants to `staff`, `support`, `treasurer`, or `auditor`. `admin`
-receives them via `ALL_PERMISSIONS`. Section door: `inventory:read`; writes
-use `inventory:write`. Durable `shared-auth/roles` is already behind the
-implementing repo (missing treasurer/vault); this change does not rewrite
-that map — grants live in auth contracts and are pinned by inventory
-procedure permission maps.
+**Rejected:** mutable `held_by` columns on units. They make batch intent,
+purpose, idempotency, and released history implicit. **Rejected:** free-form
+holder names. Named entrypoints and a finite contract vocabulary prevent an
+unrecognized principal from becoming an allocation owner.
 
-### Admin composition
+### Composite keys keep reservations inside one product
 
-Brand pages under `apps/admin/grade10/src/pages/inventory/` compose hooks from
-`@grade10/inventory-admin-frontend`, mirroring auction `ListingsPanel`: app
-owns table chrome; package owns DI feature slices and fixtures. No new
-`@grade10/ui` exports.
+Add `UNIQUE (id, product_id)` to both `inventories` and `reservations`.
+`reservation_units` and `active_reservation_units` each carry `product_id` and
+have both composite foreign keys:
 
-### Data model (persistence)
+```sql
+FOREIGN KEY (reservation_id, product_id)
+  REFERENCES reservations (id, product_id),
+FOREIGN KEY (inventory_unit_id, product_id)
+  REFERENCES inventories (id, product_id)
+```
 
-Schema lives in `@grade10/inventory-service` (backend package); migrations in
-`apps/backend/grade10/inventory/src/db/migrations`.
+`active_reservation_units.inventory_unit_id` remains its primary key. The
+database therefore refuses both cross-product assignments and a second active
+owner even if a service bug bypasses its checks.
+
+**Rejected:** validating product equality in TypeScript only. The invariant is
+part of custody integrity and must survive alternate write paths and future
+refactors.
+
+### A product-row lock makes reservation races deterministic
+
+Reserve quantity N in one database transaction:
+
+1. Validate integer quantity is from 1 through 500. PostgreSQL `integer` can
+   represent up to 2,147,483,647, but the API never attempts that many
+   serialized inserts in one transaction.
+2. Lock the product row. Every reserve, release, unit-state change, and unit
+   delete for that product takes this lock before reading allocation state.
+3. Resolve or create the idempotency key `(holder, holder_reference)`. An
+   existing exact request returns its current reservation; it never
+   reactivates a released one. A differing payload is refused.
+4. Select N eligible units in stable `(created_at, id)` order.
+5. Refuse and roll back when fewer than N exist.
+6. Insert history links, active-owner rows, and the changelog; commit once.
+
+Illustrative SQL inside the repository transaction:
+
+```sql
+SELECT id
+FROM products
+WHERE id = $1
+FOR UPDATE;
+
+SELECT i.id, i.product_id
+FROM inventories AS i
+WHERE i.product_id = $1
+  AND i.state = 'in-stock'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM active_reservation_units AS active
+    WHERE active.inventory_unit_id = i.id
+  )
+ORDER BY i.created_at, i.id
+LIMIT $2
+FOR UPDATE OF i;
+```
+
+The service checks that the second query returned exactly `$2` rows before
+inserting. A mismatch raises the typed insufficient-inventory refusal and the
+transaction rolls back.
+
+Without the product lock, two `READ COMMITTED` transactions can both evaluate
+the `NOT EXISTS` predicate before either inserts an active-owner row:
+
+| Step | Transaction A | Transaction B |
+| --- | --- | --- |
+| 1 | Selects unit U1 and locks it | Evaluates U1 as unreserved, then waits for U1 |
+| 2 | Inserts active owner for U1 and commits | Acquires unchanged U1 after the wait |
+| 3 | Returns success | Attempts active owner for U1 and hits unique violation `23505` |
+
+The primary key prevents overlap, but B receives a storage fault instead of
+the specified insufficient-inventory result. With the product lock, B waits
+before evaluating availability; after A commits, B re-runs against current
+state, sees no candidate, and returns the domain refusal.
+
+`active_reservation_units.inventory_unit_id` is the primary key, so Postgres
+enforces one current holder per unit. Concurrency tests with two real worker
+entrypoints are the acceptance evidence; application checks alone are
+insufficient.
+
+Release marks the header released, deletes its active-owner rows, and appends
+history in one transaction. Historical unit links stay intact.
+
+**Rejected:** `FOR UPDATE SKIP LOCKED` without the product lock. It avoids the
+unique fault but may report transient insufficiency when another reservation
+later rolls back. **Rejected:** distributed locks or a Durable Object.
+Postgres already owns the rows and can serialize only the affected product.
+
+### Named service entrypoints are the holder grant
+
+The worker exports `AuctionInventoryService` and `VaultInventoryService`.
+Both implement one holder-scoped contract, but each adapter closes over its
+holder id; holder is never accepted in RPC input. The default entrypoint does
+not expose these methods.
+
+The holder surface supports:
+
+| Method | Result |
+| --- | --- |
+| `getAvailability(productId)` | Unreserved in-stock count only |
+| `reserve(productId, quantity, purpose, holderReference)` | Idempotent own reservation + assigned unit ids |
+| `getReservation(id)` / `listReservations(productId?)` | Own reservations only |
+| `release(reservationId)` | Release own active reservation; foreign ids answer not found |
+
+Contracts publish the binding narrowing and typed refusal values. A binding
+is added to Auction or Vault only when that caller's integration is planned;
+the entrypoints can ship unused first.
+
+The admin API remains elevated HTTP/tRPC and may name `holder` because the
+operator has a global inventory grant. The public API gateway routes admin
+procedures but never holder RPC methods.
+
+**Rejected:** a caller-supplied holder argument. Any bound service could
+impersonate another app. **Rejected:** one shared secret per caller. Named
+Cloudflare entrypoints make the deployment binding itself the capability and
+match existing cross-service conventions.
+
+### Read models are scoped before serialization
+
+Repositories expose separate admin and holder queries. Admin queries join all
+reservations and return stock count, ledger count, available count, active
+count grouped by holder, sold/withdrawn breakdown, and reservation detail.
+Holder queries filter to:
+
+- unreserved in-stock availability; and
+- reservations whose holder is fixed by the entrypoint.
+
+They never load another holder's reservation rows into a response DTO. The
+holder response omits total-unit and other-holder counts because those values
+would reveal held quantities by subtraction.
+
+**Rejected:** return the global model and filter in the caller or UI. That
+crosses the trust boundary and makes an accidental field addition a data leak.
+
+### Every ledger mutation has domain history
+
+`changelogs` is append-only and records subject kind/id, action, canonical
+details, and actor. Actors are operator user ids, `auction`, `vault`, or
+`server`. Reservation create/release details include the concrete unit ids.
+The changelog write shares the domain transaction; refused and idempotent
+no-op requests append nothing.
+
+Elevated admin mutations additionally use `elevatedProcedure` and the
+worker's hash-chained `audit_logs`. Application entrypoints are not operator
+actions and write domain history only.
+
+**Rejected:** audit alone. Platform audit has no subject-scoped inventory
+read and does not represent machine holder actions. **Rejected:** optional
+history on selected writes. It would leave gaps in physical custody.
+
+### Admin composition and RBAC
+
+Add `inventory:read` and `inventory:write` permissions. Only `admin` receives
+them through `ALL_PERMISSIONS`. Brand pages under
+`apps/admin/grade10/src/pages/inventory/` compose feature slices from
+`@grade10/inventory-admin-frontend`; app code owns the table and dialogs.
+
+The product table shows stock, ledger, available, and reserved counts. Product detail
+shows unit state and active holder plus a reservation view with holder,
+purpose, reference, state, and assigned unit ids. Operators can create and
+release reservations on behalf of Auction or Vault through elevated writes.
+
+**Rejected:** staff read access. Global allocation reveals custody across
+applications and remains admin-only in this capability.
+
+### Complete persistence model
+
+Schema lives in `@grade10/inventory-service`; migrations live under the new
+inventory worker.
 
 - **products** — id, name, description, created_at, updated_at, created_by,
   remarks.
-- **inventories** — id, product_id (FK), name, added_by, created_at,
-  updated_at, status, sold_price (nullable int), sold_currency (nullable),
-  remarks.
-- **changelogs** — id/seq, at, actor (`userId` string or `server`), subject
-  kind, subject id, action, details (canonical JSON text). Append-only;
-  prefer DB triggers that block UPDATE/DELETE like audit, without requiring
-  the cryptographic hash chain (that stays on `audit_logs`).
-- **audit_logs** — standard per-worker chain.
+- **inventories** — id, product_id, name, added_by, created_at, updated_at,
+  state, sold_price, sold_currency, remarks.
+- **reservations**, **reservation_units**, and **active_reservation_units** —
+  as defined above; composite keys enforce same-product assignment and the
+  active table enforces single ownership.
+- **changelogs** — append-only domain history.
+- **audit_logs** — standard per-worker compliance chain.
 
-Deletes of units are hard deletes of eligible rows (`available` /
-`withdrawn` only), with a changelog entry written in the same transaction
-before delete.
-
-### API surface (admin procedures)
-
-Illustrative procedure map (exact paths pinned in contracts):
-
-| Procedure | Permission | Behaviour |
-| --- | --- | --- |
-| `products.list` | read | Products + remaining available count |
-| `products.get` | read | Product + units summary |
-| `products.create` / `products.update` | write | Product writes |
-| `products.remainingCount` | read | Available count for product id |
-| `inventories.listIds` | read | Unit ids for product id |
-| `inventories.list` | read | Units for product (admin detail) |
-| `inventories.add` | write | Quantity N create |
-| `inventories.update` / `inventories.delete` | write | Unit edit / eligible delete |
-
-Internal service helpers (not public admin API in this change) mark units
-`auction-listing` / `auction-sold` / release for future Auction; they append
-changelogs with actor `server`.
-
-### Auction seam (document only)
-
-| Later work | This change |
-| --- | --- |
-| Listing editor selects `productId` | Not implemented |
-| Bind listing ↔ unit id | Not implemented |
-| Listing lifecycle → unit status | Vocabulary reserved only |
-
-Auction’s existing thin product table stays Auction-local until a follow-on
-explicitly migrates or dual-writes; do not silently share tables across
-workers.
-
-## Alternatives considered
-
-| Alternative | Why rejected |
-| --- | --- |
-| Quantity column on product | Cannot treat units independently |
-| Channel-blind `reserved` / `sold` | Hides whether Auction, Store, or another service sold the unit |
-| Audit-only or selective history | No subject filter; product requires every action recorded |
-| Inventory inside auction worker | Blocks reuse; wrong service boundary |
-| Staff read access | User asked admin-only for now |
+An unreserved `in-stock` or `withdrawn` unit may be hard-deleted after its
+changelog is written. Reserved and sold units cannot be deleted.
 
 ## Risks / Trade-offs
 
-- **Two history stores** — operators may look at Audit vs inventory changelog
-  for different questions; document in admin copy later if confusing.
-- **Hard unit delete** — `auction-sold` / `auction-listing` protected;
-  `available` / `withdrawn` removable. If ops need tombstones later, add
-  soft-delete in a follow-on.
-- **Quantity cap 500** — protects a single transaction; large intakes need
-  multiple adds.
-- **Stale shared-auth roles spec** — implement against auth contracts in
-  grade10; archive/sync of roles vocabulary is separate work.
+- **Named entrypoints ship before consumers** → contract and auxiliary-worker
+  tests prove the boundary; caller bindings land with each later integration.
+- **Whole-reservation release** → callers use one reference per independently
+  releasable allocation; add partial release only with a concrete workflow.
+- **Two history stores** → admin custody views use domain history; the Audit
+  section remains the operator compliance view.
+- **Hard unit delete** → only unreserved non-sold units are eligible; add
+  tombstones later if operational retention requires them.
+- **Quantity cap 500** → protects transaction size; large intake or holds use
+  multiple requests.
 
 ## Migration Plan
 
-Greenfield Neon database for `grade10-inventory` (dev/staging/production).
-No backfill from Auction products. Deploy order: inventory worker after auth,
-before or with admin frontend; API gateway binding required before admin
-calls succeed.
+Create a greenfield `grade10-inventory` Neon database with all constraints in
+its initial migration; there is no Auction backfill. Deploy the inventory
+worker after auth and before or with the admin frontend. The API gateway
+binding is required for admin calls. Named consumer entrypoints need no caller
+binding until Auction or Vault integration work lands.
+
+Rollback removes the unused admin route and worker deployment. Once real
+reservations exist, retain the database and restore the service rather than
+dropping custody history.
 
 ## Open Questions
 
-None that change specs, approach, or task breakdown. Authoritative answers
-from product feedback: channel-tied statuses (`auction-listing` /
-`auction-sold`, extensible per channel), every mutation recorded (audit +
-changelogs), admin-only, quantity = N rows, sold money only on sold
-statuses, package path `packages/inventory`. Store channel status labels
-remain deferred until Store sales are confirmed.
+None that change the specs, approach, or task breakdown. Auction and Vault are
+the initial holder vocabulary. Other Grade10 applications get a named
+entrypoint only when their physical-stock workflow is specified.
