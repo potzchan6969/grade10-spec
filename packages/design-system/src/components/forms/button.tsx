@@ -130,6 +130,9 @@ function rendersNativeButton(
 
 /**
  * A flexible button component for triggering actions and navigation.
+ *
+ * The opening line is the Figma set's own description; no rail carries it, so
+ * this JSDoc is its only projection in code. Edit it in Figma first.
  */
 function Button({
   className,

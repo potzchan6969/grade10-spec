@@ -104,7 +104,7 @@ function ProductCardContent({
       />
 
       <VStack
-        className="min-w-0 gap-2 py-2"
+        className="min-w-0 gap-1 py-2"
         data-slot="product-card-content"
         gap="none"
       >
