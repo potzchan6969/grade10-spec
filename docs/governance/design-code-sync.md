@@ -84,12 +84,14 @@ Publishing is a write to a shared Figma file and has no unattended path in CI by
 
 `tokens.config.json → figmaFile` names the target. Branch URLs (`/design/:key/branch/:branchKey/...`) resolve to the **branch** key, because a branch is a distinct file to the API.
 
-**Errors — exit 1, Dev Mode would emit wrong code:**
+**Errors — exit 1, Dev Mode would emit wrong code or the code renders a value Figma does not draw:**
 
 - A template's `node-id` is missing or no longer resolves.
 - A `getEnum` names a VARIANT property the component set does not have.
 - A `getEnum` omits an option, which would resolve to `undefined`. Dev Mode renders that as an empty attribute — `<Button size="">` — which reads as a blank value rather than a broken template, so it is easy to look straight past.
 - A `getEnum` emits a value the cva does not define.
+- A resolved value disagrees with the one Figma draws — a background, height, horizontal padding, gap, or corner radius.
+- A variant draws a fill or a stroke that no class mapped to it claims, or draws none where the code paints one.
 
 **Warnings — the two sides disagree, which may be deliberate:**
 
@@ -113,7 +115,7 @@ Publishing is a write to a shared Figma file and has no unattended path in CI by
 
 A separate, token-free check runs in the test suite. `vitest --project contracts` reads each `cva` config out of the component source and fails when an option no story renders — the option list comes from the cva itself rather than a restated list, because cva keeps its config in a closure and exposes nothing at runtime. It accepts both authoring styles in this package, `variant: "line"` in a story's `args` and `variant="line"` inside a `render`, and it treats a `defaultVariants` option as covered by any story that omits the prop. An `argTypes` `options` entry does not count; only a story does.
 
-**Values, not just names.** Every axis and option can line up perfectly while the colours, heights, and padding are all wrong — which is exactly what happened to Button, whose variants matched by name for months while `default` rendered a 10% tint against a design that specifies a solid fill. So each variant's own class string is resolved and compared against the variant Figma draws: `bg-*` through `tokens.json` to an 8-digit hex, and `h-*`, `px-*`, `gap-*`, and `rounded-*` to pixels. A mismatch is a warning, not an error — the component renders, it just does not render what was drawn.
+**Values, not just names.** Every axis and option can line up perfectly while the colours, heights, and padding are all wrong — which is exactly what happened to Button, whose variants matched by name for months while `default` rendered a 10% tint against a design that specifies a solid fill. So each variant's own class string is resolved and compared against the variant Figma draws: `bg-*` through `tokens.json` to an 8-digit hex, and `h-*`, `px-*`, `gap-*`, and `rounded-*` to pixels. A mismatch **fails the run**. It was a warning for as long as it took to learn that a rail which cannot fail is documentation: `default` shipped that tint for months while every run stayed green and the advice went unread. Failing says nothing about which side is wrong — the code may be right and the Figma file stale — only that somebody has to settle it before this merges.
 
 **Base states only.** The comparison reaches each axis's base option and nothing else, so every hover, disabled, and loading value is unchecked, as are label colour, icon size, and border. Verify those by hand with `get_variable_defs` on the state's own node, and compare the *rule* rather than the colour: a disabled state may be a fill swap or the variant's own colours at `Opacity/opacity-50`, and those are different code. An opacity-based state is doubly invisible here, because the `bg-*` token this check compares is unchanged by it.
 
@@ -193,11 +195,11 @@ view as `pnpm storybook:workbench`). Open a component, then:
 
 What you are measuring is the primitive as built, in a browser, at the real values — so a rung that is 24px in code and 32px in your Sizing collection is visible in about ten seconds. For a branch that is not yet on `main`, run `pnpm run storybook:workbench` from a checkout.
 
-**Read the automated diff.** The nightly design-sync run posts a summary table on its own run page — Actions → **Design sync** → the newest run. Each row is one disagreement, in the form `Button · size=sm · Height (h-8) · 32px in code · 24px in Figma`, covering background, height, horizontal padding, gap and corner radius. The same page states what the check does not cover, which is worth reading once: vertical padding, anything inside the component, and the hover, disabled and loading states are all unchecked, so a clean table is not proof the component matches.
+**Read the automated diff.** The nightly design-sync run posts a summary table on its own run page — Actions → **Design sync** → the newest run. Each row is one disagreement, in the form `Button · size=sm · Height (h-8) · 32px in code · 24px in Figma`, covering background, height, horizontal padding, gap and corner radius. A row here fails the run, so a table with rows in it is a red build waiting for someone — you or an engineer — to say which of the two numbers is right. The same page states what the check does not cover, which is worth reading once: vertical padding, anything inside the component, and the hover, disabled and loading states are all unchecked, so a clean table is not proof the component matches.
 
 ### What happens next
 
-`design-system:check` diffs your axes and options against the code on every push, and again nightly at 01:00 UTC — a Figma edit raises no event in this repository, so the scheduled run is what catches a change you make on a day nobody pushes code. A new option with no code counterpart is a warning; a renamed or removed option is an error. You do not need to run it — but it is why an unannounced rename surfaces as a failed build rather than a wrong button in production.
+`design-system:check` diffs your axes and options against the code on every push, and again nightly at 01:00 UTC — a Figma edit raises no event in this repository, so the scheduled run is what catches a change you make on a day nobody pushes code. A new option with no code counterpart is a warning; a renamed or removed option is an error, and so is a value you change on a variant that the code still draws the old way. You do not need to run it — but it is why an unannounced rename surfaces as a failed build rather than a wrong button in production.
 
 Anyone with repository access can also run it on demand from the Actions tab (**Design sync → Run workflow**) rather than waiting for the next nightly run.
 
