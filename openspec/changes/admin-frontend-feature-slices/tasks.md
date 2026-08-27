@@ -35,7 +35,7 @@ currently declares for itself; nothing outside this group depends on it.
 - [x] 3.5 Delete the appointments section's decoding and its procedure imports, so the section names nothing in the application's client directory.
 - [x] 3.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
 
-## 4. Loyalty console slices (grade10)
+## 4. Loyalty console slices (grade10) (owner: @sean)
 
 - [ ] 4.1 Stand up `packages/loyalty/admin-frontend`: its procedure port over the loyalty worker's operator procedures, a fixture, a core module, and an empty published list — scenario: A product gains an operator surface.
 - [ ] 4.2 Build `programme/members` — lookup, search, one member, the ledger, adjustments and bonuses — with its module test and hook tests.
