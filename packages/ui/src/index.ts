@@ -52,6 +52,33 @@ export {
   type TwoFactorVerifyFormCopy,
   type TwoFactorVerifyFormProps,
 } from "./blocks/auth-two-factor/two-factor-verify-form";
+export type {
+  UserDirectoryRow,
+  UserRoleOption,
+  UserSessionRow,
+} from "./blocks/auth-user-directory/types";
+// shared-ui/auth-user-directory
+export {
+  UserModerationDialog,
+  type UserModerationDialogCopy,
+  type UserModerationDialogProps,
+  type UserModerationTone,
+} from "./blocks/auth-user-directory/user-moderation-dialog";
+export {
+  UserRolesDialog,
+  type UserRolesDialogCopy,
+  type UserRolesDialogProps,
+} from "./blocks/auth-user-directory/user-roles-dialog";
+export {
+  UserSessionsDialog,
+  type UserSessionsDialogCopy,
+  type UserSessionsDialogProps,
+} from "./blocks/auth-user-directory/user-sessions-dialog";
+export {
+  UserTable,
+  type UserTableCopy,
+  type UserTableProps,
+} from "./blocks/auth-user-directory/user-table";
 // shared-ui/loyalty-membership
 export {
   ActivityList,
