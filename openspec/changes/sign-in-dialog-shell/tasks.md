@@ -18,7 +18,7 @@ This group needs group 1's class strings to exist; claim it after 1.2 lands.
 - [ ] 2.2 Run `pnpm run design-sync:audit --all-blocks` and reconcile any value it reports, so `auth-sign-in` no longer lists as carrying no audit table
 - [ ] 2.3 Update `sign-in-card.stories.tsx` for the controlled dialog: an open story, a story with a provider slot, one without, and one carrying `legal`
 
-## 3. Adopt the new shell (grade10)
+## 3. Adopt the new shell (grade10) (owner: @sean)
 
 Needs the submodule bump that carries groups 1 and 2.
 
