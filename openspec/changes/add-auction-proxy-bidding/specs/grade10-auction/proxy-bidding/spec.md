@@ -22,6 +22,47 @@ current bid is the second-highest maximum plus the listing increment.
   - Counts as a bid: it records, counts, and extends the close
   - Once per commitment: resolve when someone commits, in one bid, not on a timer
 
+## User journeys
+
+### proxy-bidding-US-01: Set a maximum and leave
+
+As a bidder, I want to commit the most I will pay and have Grade10 bid for
+me only as far as needed to lead, so that I can close the tab and still
+compete.
+
+**Accepted by:** `proxy-bidding-SC-01`, `proxy-bidding-SC-02`,
+`proxy-bidding-SC-09`, `proxy-bidding-SC-11`, `proxy-bidding-SC-12`,
+`proxy-bidding-SC-15`, `proxy-bidding-SC-16`, `proxy-bidding-SC-19`,
+`proxy-bidding-SC-21`, `proxy-bidding-SC-22`, `proxy-bidding-SC-23`,
+`proxy-bidding-SC-24`
+
+### proxy-bidding-US-02: Raise a standing maximum
+
+As a bidder, I want to raise the most I will pay on an open listing, so
+that I can compete again after being overtaken, without being able to
+take a commitment back.
+
+**Accepted by:** `proxy-bidding-SC-03`, `proxy-bidding-SC-04`,
+`proxy-bidding-SC-10`, `proxy-bidding-SC-13`, `proxy-bidding-SC-14`,
+`proxy-bidding-SC-20`
+
+### proxy-bidding-US-03: See my standing without revealing others' caps
+
+As a bidder, I want to see my own maximum and whether I lead, as facts
+apart from the current bid, so that I know where I stand without other
+bidders learning my cap.
+
+**Accepted by:** `proxy-bidding-SC-05`, `proxy-bidding-SC-06`,
+`proxy-bidding-SC-07`, `proxy-bidding-SC-17`, `proxy-bidding-SC-18`
+
+### proxy-bidding-US-04: Trace who committed what
+
+As an auction operator, I want to read each commitment's bidder, maximum,
+and Accepted At, so that I can answer a dispute about who led and at
+what cap.
+
+**Accepted by:** `proxy-bidding-SC-08`, `proxy-bidding-SC-23`
+
 ## ADDED Requirements
 
 ### Committing a maximum
@@ -49,7 +90,7 @@ maximum. A bidder SHALL be able to raise their maximum on an open listing
 at any time that listing accepts a bid. Grade10 SHALL refuse to lower or
 withdraw a committed maximum.
 
-#### Scenario: A first maximum opens the bidding
+#### Scenario: proxy-bidding-SC-01 - A first maximum opens the bidding
 
 - **GIVEN** an open listing with a starting price of 20000 minor units and no bids
 - **WHEN** a bidder commits a maximum of 50000 minor units
@@ -57,14 +98,14 @@ withdraw a committed maximum.
 - **AND** the current bid is 20000 minor units
 - **AND** that bidder leads
 
-#### Scenario: A maximum below the minimum next bid is refused
+#### Scenario: proxy-bidding-SC-02 - A maximum below the minimum next bid is refused
 
 - **GIVEN** an open listing whose current bid is 22500 minor units and whose minimum increment is 2500 minor units
 - **WHEN** a bidder commits a maximum of 24000 minor units
 - **THEN** Grade10 refuses the commitment
 - **AND** the current bid and the leader are unchanged
 
-#### Scenario: A leader raises their own maximum
+#### Scenario: proxy-bidding-SC-03 - A leader raises their own maximum
 
 - **GIVEN** bidder A leads with a committed maximum of 50000 minor units
 - **WHEN** bidder A raises their maximum to 80000 minor units
@@ -72,7 +113,7 @@ withdraw a committed maximum.
 - **AND** bidder A still leads
 - **AND** the current bid is unchanged
 
-#### Scenario: Lowering a maximum is refused
+#### Scenario: proxy-bidding-SC-04 - Lowering a maximum is refused
 
 - **GIVEN** a bidder with a committed maximum of 50000 minor units on an open listing
 - **WHEN** they commit a maximum of 30000 minor units on that listing
@@ -97,7 +138,7 @@ operator SHALL see every committed maximum and its Accepted At.
 | Accepted At | When Grade10 accepted this commitment |
 | Leading | Whether this bidder currently leads |
 
-#### Scenario: A bidder reads their own commitment
+#### Scenario: proxy-bidding-SC-05 - A bidder reads their own commitment
 
 - **GIVEN** bidder A has committed a maximum of 50000 minor units while the current bid is 25000 minor units
 - **WHEN** bidder A opens the listing
@@ -105,21 +146,21 @@ operator SHALL see every committed maximum and its Accepted At.
 - **AND** they see the current bid of 25000 minor units as a separate fact
 - **AND** they see that they lead
 
-#### Scenario: An overtaken bidder sees that they no longer lead
+#### Scenario: proxy-bidding-SC-06 - An overtaken bidder sees that they no longer lead
 
 - **GIVEN** bidder A has been overtaken on a listing
 - **WHEN** bidder A opens it
 - **THEN** they see that they do not lead
 - **AND** they see their own committed maximum unchanged
 
-#### Scenario: A leader's maximum is not public
+#### Scenario: proxy-bidding-SC-07 - A leader's maximum is not public
 
 - **GIVEN** bidder A leads with a committed maximum of 50000 minor units while the current bid is 25000
 - **WHEN** any other bidder reads the listing's public facts
 - **THEN** those facts carry the current bid of 25000 minor units
 - **AND** they do not carry, and do not allow deriving, A's maximum of 50000
 
-#### Scenario: An operator can answer a dispute
+#### Scenario: proxy-bidding-SC-08 - An operator can answer a dispute
 
 - **GIVEN** a listing with several committed maximums
 - **WHEN** an authorized operator reads its bid history
@@ -176,7 +217,7 @@ A later commitment equal to the leader's maximum SHALL NOT be refused: it
 is accepted, it sets the current bid to that maximum, and it does not
 displace the leader.
 
-#### Scenario: A challenger below the leader's maximum raises the price only
+#### Scenario: proxy-bidding-SC-09 - A challenger below the leader's maximum raises the price only
 
 - **GIVEN** a listing whose minimum increment is 2500 minor units
 - **AND** bidder A leads with a committed maximum of 50000 minor units
@@ -184,21 +225,21 @@ displace the leader.
 - **THEN** bidder A still leads
 - **AND** the current bid is 25000 minor units
 
-#### Scenario: A challenger raises again, still below
+#### Scenario: proxy-bidding-SC-10 - A challenger raises again, still below
 
 - **GIVEN** the listing from the previous scenario, with the current bid at 25000 minor units
 - **WHEN** bidder B raises their maximum to 30000 minor units
 - **THEN** bidder A still leads
 - **AND** the current bid is 32500 minor units
 
-#### Scenario: A challenger above the leader's maximum takes the lead
+#### Scenario: proxy-bidding-SC-11 - A challenger above the leader's maximum takes the lead
 
 - **GIVEN** the listing from the previous scenario, where A's maximum is 50000 minor units and the increment is 2500
 - **WHEN** bidder B raises their maximum to 60000 minor units
 - **THEN** bidder B leads
 - **AND** the current bid is 52500 minor units
 
-#### Scenario: The first bidder is overtaken by a higher maximum
+#### Scenario: proxy-bidding-SC-12 - The first bidder is overtaken by a higher maximum
 
 - **GIVEN** an open listing with a starting price of 20000 minor units and a minimum increment of 2500 minor units
 - **AND** bidder A has committed a maximum of 22500 minor units and leads at 20000 minor units
@@ -206,21 +247,21 @@ displace the leader.
 - **THEN** bidder B leads
 - **AND** the current bid is 25000 minor units
 
-#### Scenario: The overtaken bidder raises but stays below
+#### Scenario: proxy-bidding-SC-13 - The overtaken bidder raises but stays below
 
 - **GIVEN** the listing from the previous scenario, where B leads with a maximum of 50000 minor units
 - **WHEN** bidder A raises their maximum to 30000 minor units
 - **THEN** bidder B still leads
 - **AND** the current bid is 32500 minor units
 
-#### Scenario: The overtaken bidder raises past the leader
+#### Scenario: proxy-bidding-SC-14 - The overtaken bidder raises past the leader
 
 - **GIVEN** the listing from the previous scenario, where B's maximum is 50000 minor units and the increment is 2500
 - **WHEN** bidder A raises their maximum to 60000 minor units
 - **THEN** bidder A leads
 - **AND** the current bid is 52500 minor units
 
-#### Scenario: The step to lead cannot exceed the new leader's maximum
+#### Scenario: proxy-bidding-SC-15 - The step to lead cannot exceed the new leader's maximum
 
 - **GIVEN** a listing whose minimum increment is 2500 minor units
 - **AND** bidder A leads with a committed maximum of 50000 minor units
@@ -228,7 +269,7 @@ displace the leader.
 - **THEN** bidder B leads
 - **AND** the current bid is 51000 minor units
 
-#### Scenario: A challenge lands at the two-maximum price, not a ladder
+#### Scenario: proxy-bidding-SC-16 - A challenge lands at the two-maximum price, not a ladder
 
 - **GIVEN** a listing whose minimum increment is 2500 minor units, starting price 20000 minor units, and no bids
 - **AND** bidder A has committed a maximum of 50000 minor units
@@ -237,14 +278,14 @@ displace the leader.
 - **AND** the current bid is 52500 minor units
 - **AND** Grade10 has not accepted bids at the intermediate increment amounts between 20000 and 52500
 
-#### Scenario: A tie goes to the earlier commitment
+#### Scenario: proxy-bidding-SC-17 - A tie goes to the earlier commitment
 
 - **GIVEN** bidder B leads a listing with a committed maximum of 60000 minor units
 - **WHEN** bidder C commits a maximum of 60000 minor units
 - **THEN** bidder B still leads
 - **AND** the current bid is 60000 minor units
 
-#### Scenario: A tie is not a refusal
+#### Scenario: proxy-bidding-SC-18 - A tie is not a refusal
 
 - **GIVEN** the listing from the previous scenario
 - **WHEN** bidder C reads their own standing on it
@@ -271,14 +312,14 @@ further card check.
 | Raise authorization fails | Nothing changes |
 | Grade10 places a bid on their behalf | No further card check |
 
-#### Scenario: The hold is the maximum, not the price
+#### Scenario: proxy-bidding-SC-19 - The hold is the maximum, not the price
 
 - **GIVEN** a listing whose current bid is 22500 minor units
 - **WHEN** a bidder commits a maximum of 50000 minor units and it is accepted
 - **THEN** Grade10 holds an authorization for 50000 minor units
 - **AND** it holds exactly one active authorization for that bidder and listing
 
-#### Scenario: A raise that cannot be authorized changes nothing
+#### Scenario: proxy-bidding-SC-20 - A raise that cannot be authorized changes nothing
 
 - **GIVEN** bidder A leads with a committed maximum of 50000 minor units
 - **WHEN** A raises to 80000 minor units and the card authorization for 80000 fails
@@ -286,7 +327,7 @@ further card check.
 - **AND** A's committed maximum remains 50000 minor units
 - **AND** the leader and the current bid are unchanged
 
-#### Scenario: A proxy step needs no new card check
+#### Scenario: proxy-bidding-SC-21 - A proxy step needs no new card check
 
 - **GIVEN** bidder A leads with an authorized maximum of 50000 minor units and the current bid is 25000
 - **WHEN** a challenger commits a maximum of 30000 minor units
@@ -330,7 +371,7 @@ Grade10 places inside that window SHALL move the close exactly as a
 manual bid placed at the same moment would. Two standing maxima SHALL
 NOT keep extending the close on their own.
 
-#### Scenario: A proxy bid in the extension window extends once
+#### Scenario: proxy-bidding-SC-22 - A proxy bid in the extension window extends once
 
 - **GIVEN** a listing inside its extension window, and a leader whose committed maximum has room left
 - **WHEN** a challenger's commitment causes Grade10 to raise the leader's bid on their behalf
@@ -338,14 +379,14 @@ NOT keep extending the close on their own.
 - **AND** the listing does not close while that extension stands
 - **AND** Grade10 places no further bid until another commitment is accepted
 
-#### Scenario: A proxy bid is counted and recorded
+#### Scenario: proxy-bidding-SC-23 - A proxy bid is counted and recorded
 
 - **GIVEN** Grade10 raises a bidder's bid on their behalf
 - **WHEN** a collector reads the listing's bid count and history
 - **THEN** the bid count includes that bid
 - **AND** the history shows it as placed on that bidder's behalf, not as a manual bid
 
-#### Scenario: Standing maxima do not keep bidding
+#### Scenario: proxy-bidding-SC-24 - Standing maxima do not keep bidding
 
 - **GIVEN** two bidders have committed maxima and the listing has been resolved to the two-maximum price
 - **WHEN** no further commitment is accepted

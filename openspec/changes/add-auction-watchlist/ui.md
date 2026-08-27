@@ -25,8 +25,8 @@ application-owned until ZZZ adopts them, per `design.md`.
 
 Copy reaches every control through props; catalog entries live in
 `@grade10/i18n`. The watch control's words must not imply the lot is held,
-reserved, or claimed — the requirement *A watch is private and confers
-nothing* is a promise the copy has to keep.
+reserved, or claimed — watching confers no standing, and the copy has to
+keep that promise.
 
 ## States
 
@@ -34,14 +34,14 @@ Each tied to the scenario that defines it.
 
 | State | Scenario |
 | --- | --- |
-| Not watching | *A collector unwatches a lot* — the resting state after unwatching |
-| Watching | *A collector watches a lot* |
-| Signed out | *A signed-out viewer is offered sign-in* — the control offers sign-in, and is not hidden |
-| Watched list, populated | *The list is ordered by when each watch was made* |
-| Watched list, entry facts | *An entry carries the facts needed to act* — identity, current bid, close with its time zone |
-| Watched list, empty | *A collector watching nothing* — an explanation, never a bare page or an error |
-| Watched entry, lot closed | *A closed lot stays in the list* |
-| Watched entry, lot called off | *A called-off lot is shown as called off* |
+| Not watching | `watchlist-SC-02` — the resting state after unwatching |
+| Watching | `watchlist-SC-01` |
+| Signed out | `watchlist-SC-04` — the control offers sign-in, and is not hidden |
+| Watched list, populated | `watchlist-SC-11` |
+| Watched list, entry facts | `watchlist-SC-15` — identity, current bid, close with its time zone |
+| Watched list, empty | `watchlist-SC-12` — an explanation, never a bare page or an error |
+| Watched entry, lot closed | `watchlist-SC-16` |
+| Watched entry, lot called off | `watchlist-SC-17` |
 
 A viewer who is not signed in never sees another collector's watch state, per
-*One collector cannot see another's watch*.
+`watchlist-SC-08`.

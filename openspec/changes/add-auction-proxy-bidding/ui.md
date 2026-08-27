@@ -24,7 +24,7 @@ All from `@grade10/ui`. Export names are the cross-repo contract.
 
 The panel's `standing` slot already carries the highest-bidder / outbid banner
 and needs no change — "you lead" and "you have been outbid" are content the
-consumer supplies, which is what *A bidder reads their own commitment* needs.
+consumer supplies, which is what `proxy-bidding-SC-05` needs.
 
 No new design-system primitive is proposed. No new variant, size, or token.
 
@@ -38,13 +38,13 @@ Each tied to the scenario that defines it.
 
 | State | Scenario |
 | --- | --- |
-| Viewer leads, maximum above current bid | *A bidder reads their own commitment* |
-| Viewer has been overtaken, maximum unchanged | *An overtaken bidder sees that they no longer lead* |
+| Viewer leads, maximum above current bid | `proxy-bidding-SC-05` |
+| Viewer has been overtaken, maximum unchanged | `proxy-bidding-SC-06` |
 | Viewer has committed nothing | No maximum slot is rendered — there is nothing to show. Covered by the panel's existing behaviour for an omitted optional slot. |
-| Commitment refused as below the minimum next bid | *A maximum below the minimum next bid is refused* |
-| Commitment refused because the card authorization failed | *A raise that cannot be authorized changes nothing* — the previous maximum must still be shown, unchanged. |
-| Commitment accepted but not leading (equal maximum) | *A tie is not a refusal* — accepted, not leading. This state is easy to render as an error and must not be. |
+| Commitment refused as below the minimum next bid | `proxy-bidding-SC-02` |
+| Commitment refused because the card authorization failed | `proxy-bidding-SC-20` — the previous maximum must still be shown, unchanged. |
+| Commitment accepted but not leading (equal maximum) | `proxy-bidding-SC-18` — accepted, not leading. This state is easy to render as an error and must not be. |
 | Listing closed | Existing closed-listing behaviour; no maximum entry is offered. |
 
 An unauthenticated viewer sees the current bid and no maximum slot, per
-*A leader's maximum is not public*.
+`proxy-bidding-SC-07`.

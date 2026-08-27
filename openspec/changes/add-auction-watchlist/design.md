@@ -28,35 +28,34 @@ survives close, and what the list shows are the spec.
 The key stays `(storefront, user_id, listing_id)`. Watched At is
 `created_at`. Same user id on two brands is two collectors.
 
-*Alternative rejected — key only by `(user_id, listing_id)`.* User ids are
-per-brand; colliding strings would merge two people. *Alternative rejected —
-store watches per brand, beside the collector.* Listings are shared and
-collectors are not, so an operator count would have to be assembled across
-two systems.
+*Rejected — key only by `(user_id, listing_id)`.* User ids are per-brand;
+colliding strings would merge two people. *Rejected — store watches per
+brand, beside the collector.* Listings are shared and collectors are not, so
+an operator count would have to be assembled across two systems.
 
 ### Repeat watch is `ON CONFLICT DO NOTHING`; unwatch is a delete
 
 A second insert does not change `created_at`. There is no `source` column.
 
-*Alternative rejected — refresh `created_at` on a repeat watch.* It would
-reorder the list for an action the collector did not perceive as an action.
+*Rejected — refresh `created_at` on a repeat watch.* It would reorder the
+list for an action the collector did not perceive as an action.
 
 ### `placeBid` stops writing `watches`
 
 Bid-activity mail stays on `bids`. Watcher mail stays on `watches`. That is
 what makes unwatch end watcher enrolment without ending bidder enrolment.
 
-*Alternative rejected — keep auto-watch on bid and add a `source` column.* A
-second kind of watch is a second product. Existing rows written by a bid
-remain; new bids do not create one.
+*Rejected — keep auto-watch on bid and add a `source` column.* A second kind
+of watch is a second product. Existing rows written by a bid remain; new
+bids do not create one.
 
 ### The catalogue control stays application-owned
 
 The lot page fills `ListingBidPanel`'s existing slot. The catalogue tile's
 control is built in each application.
 
-*Alternative rejected — add a watch control to the shared auction tile now.*
-A second consumer is what justifies promoting it.
+*Rejected — add a watch control to the shared auction tile now.* A second
+consumer is what justifies promoting it.
 
 ## Data model
 
