@@ -42,17 +42,22 @@ never a running worker.
 Depends on group 1.
 
 - [ ] 2.1 Make `Ten units are ten records`, `Admin unit ids include held and
-  sold units`, and `Stock and ledger counts separate current and historical
-  units` pass with products, inventories, count-query indexes, changelogs, and
-  per-worker `audit_logs` schemas and append-only guards.
+  sold units`, `Stock and ledger counts separate current and historical
+  units`, `Unit update records before and after snapshots`, and `Quantity add
+  records every created unit` pass with the exact products, inventories,
+  changelog actor/subject/action/before/after columns, count/history indexes,
+  subject-action checks, immutable reservation-unit history, the shared
+  per-worker `audit_logs`, and append-only guards outlined in `design.md`.
 - [ ] 2.2 Make `Auction and Vault reserve disjoint units of one product` and
   `Overlapping reservation is impossible under concurrency` pass structurally
   with reservations, immutable reservation-unit history, active ownership,
   composite same-product foreign keys, unique `(holder, holder_reference)`,
   and primary-key exclusion of a second active owner.
-- [ ] 2.3 Make `Released holder reference never reactivates` and `Vault
-  releases a reservation` pass structurally by retaining reservation and unit
-  history while deleting only current active-owner rows on release.
+- [ ] 2.3 Make `Released holder reference never reactivates`, `Vault releases a
+  reservation`, `Release records the custody transition`, and `Delete of a
+  previously reserved unit is refused` pass structurally by retaining
+  reservation and unit history while deleting only current active-owner rows
+  on release and restricting deletion of any historically assigned unit.
 - [ ] 2.4 Generate migration artifacts for
   `apps/backend/grade10/inventory`, then run `pnpm run db:drizzle:generate`,
   `pnpm run check:migrations`, `pnpm run typecheck`, and `pnpm run
@@ -75,8 +80,8 @@ Depends on groups 1 and 2.
 - [ ] 3.3 Make `Operator adds three units`, `Quantity zero is refused`, `Add
   for unknown product is refused`, `Operator edits a unit name`, `Operator
   deletes an unreserved in-stock unit`, `Delete of an auction-sold unit is
-  refused`, and `Delete of a reserved unit is refused` pass through elevated
-  unit procedures.
+  refused`, `Delete of a reserved unit is refused`, and `Delete of a previously
+  reserved unit is refused` pass through elevated unit procedures.
 - [ ] 3.4 Make `In-stock unit has null sold money`, `Sold requires price and
   currency`, `Sold without money is refused`, `Money on a non-sold state is
   refused`, and `State change on a reserved unit is refused` pass through unit
@@ -100,10 +105,12 @@ Depends on groups 1 and 2.
   methods` pass with auxiliary-worker tests exercising both named entrypoints,
   foreign/unknown identifiers, and the empty default/public surface.
 - [ ] 3.9 Make `Operator create appends history with user actor`, `Server
-  update appends history with server actor`, `Holder reservation appends
-  history with application actor`, and `Refused write leaves history
-  unchanged` pass with changelogs in each domain transaction and platform
-  audit on elevated writes.
+  update appends history with server actor`, `Unit update records before and
+  after snapshots`, `Quantity add records every created unit`, `Holder
+  reservation appends history with application actor`, `Release records the
+  custody transition`, and `Refused write leaves history unchanged` pass with
+  one changelog per mutated domain subject in each transaction, canonical
+  snapshots, and one platform audit entry per elevated request.
 - [ ] 3.10 Verify worker, RPC, gateway, schema, and configuration with `pnpm
   run typecheck`, `pnpm run lint`, `pnpm run test:backend`, `pnpm run
   cf-typegen`, `pnpm run check:libs`, and `pnpm run build`.
@@ -148,8 +155,8 @@ Depends on groups 1 and 4. Fixtures only; no running worker.
   `Sold without money is refused`, `Money on a non-sold state is refused`,
   `State change on a reserved unit is refused`, `Operator deletes an
   unreserved in-stock unit`, `Delete of an auction-sold unit is refused`, and
-  `Delete of a reserved unit is refused` pass in edit/delete dialogs and
-  inline errors.
+  `Delete of a reserved unit is refused`, and `Delete of a previously reserved
+  unit is refused` pass in edit/delete dialogs and inline errors.
 - [ ] 5.5 Make `Operator reserves and releases on behalf of a holder`,
   `Insufficient stock reserves nothing`, `Reservation quantity outside the
   batch limit is refused`, and `Released holder reference never reactivates`

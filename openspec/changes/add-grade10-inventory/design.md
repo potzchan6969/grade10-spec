@@ -100,7 +100,8 @@ Persistence adds:
 
 - **reservations** — id, product_id, holder (`auction` | `vault`),
   holder_reference, purpose, state (`active` | `released`), created_at,
-  updated_at, created_actor, released_at, released_actor.
+  updated_at, created_actor_kind, created_actor_id, released_at,
+  released_actor_kind, released_actor_id.
 - **reservation_units** — reservation_id, inventory_unit_id, assigned_at;
   immutable history retained after release, with product_id carried for
   composite foreign keys.
@@ -258,11 +259,21 @@ crosses the trust boundary and makes an accidental field addition a data leak.
 
 ### Every ledger mutation has domain history
 
-`changelogs` is append-only and records subject kind/id, action, canonical
-details, and actor. Actors are operator user ids, `auction`, `vault`, or
-`server`. Reservation create/release details include the concrete unit ids.
-The changelog write shares the domain transaction; refused and idempotent
-no-op requests append nothing.
+`changelogs` is append-only and records product, typed actor, subject,
+subject-specific action, and canonical before/after JSON snapshots. Actor kind
+separates a human operator from a holder application and an unowned server
+path; actor id is the operator id, `auction` / `vault`, or null respectively.
+Reservation snapshots include the allocation header and assigned unit ids, so
+`reserve` is null → active allocation and `release` is active → released
+allocation. The changelog write shares the domain transaction; refused and
+idempotent no-op requests append nothing.
+
+History cardinality follows domain subjects, not API calls or persistence
+rows. Product create/update writes one product entry, unit create/update/delete
+writes one entry per unit, and reserve/release writes one reservation entry.
+`reservation_units` and `active_reservation_units` are representations of that
+reservation and do not create extra history. Therefore one elevated quantity
+add can create one platform audit entry and N domain changelog entries.
 
 Elevated admin mutations additionally use `elevatedProcedure` and the
 worker's hash-chained `audit_logs`. Application entrypoints are not operator
@@ -289,21 +300,161 @@ applications and remains admin-only in this capability.
 
 ### Complete persistence model
 
-Schema lives in `@grade10/inventory-service`; migrations live under the new
-inventory worker.
+Schema lives in `@grade10/inventory-service` under PostgreSQL schema
+`inventory`; migrations live under the new inventory worker. Application ids
+are prefixed UUID strings in `text`, matching Auction and Vault domain ids.
+Every timestamp uses the shared `msTimestamp()` representation,
+`timestamp(3) with time zone`, so JavaScript dates round-trip exactly.
 
-- **products** — id, name, description, created_at, updated_at, created_by,
-  remarks.
-- **inventories** — id, product_id, name, added_by, created_at, updated_at,
-  state, sold_price, sold_currency, remarks.
-- **reservations**, **reservation_units**, and **active_reservation_units** —
-  as defined above; composite keys enforce same-product assignment and the
-  active table enforces single ownership.
-- **changelogs** — append-only domain history.
-- **audit_logs** — standard per-worker compliance chain.
+#### Entity relationships
 
-An unreserved `in-stock` or `withdrawn` unit may be hard-deleted after its
-changelog is written. Reserved and sold units cannot be deleted.
+```mermaid
+erDiagram
+  PRODUCTS ||--o{ INVENTORIES : contains
+  PRODUCTS ||--o{ RESERVATIONS : allocates
+  RESERVATIONS ||--|{ RESERVATION_UNITS : remembers
+  INVENTORIES ||--o{ RESERVATION_UNITS : assigned_over_time
+  RESERVATIONS ||--o{ ACTIVE_RESERVATION_UNITS : currently_owns
+  INVENTORIES ||--o| ACTIVE_RESERVATION_UNITS : has_current_owner
+  PRODUCTS ||--o{ CHANGELOGS : scopes
+```
+
+`reservation_units` is immutable allocation history; the active table is the
+projection deleted on release. Its `inventory_unit_id` primary key supplies
+the zero-or-one current-owner cardinality in the diagram. Changelog subject is
+polymorphic and intentionally has no subject foreign key: a deleted unit must
+remain named in history. `changelogs.product_id` remains a foreign key because
+products are not deleted. `audit_logs` is a separate compliance chain for
+operator requests, not a custody relationship.
+
+#### `products`
+
+| Column | PostgreSQL type | Null | Default / constraint |
+| --- | --- | --- | --- |
+| `id` | `text` | No | No database default; app-minted `prd_<uuid>`, primary key |
+| `name` | `text` | No | No default; trimmed length 1–200 |
+| `description` | `text` | No | `''` |
+| `created_at` | `timestamp(3) with time zone` | No | `now()` |
+| `updated_at` | `timestamp(3) with time zone` | No | `now()`; service advances it on update |
+| `created_by` | `text` | No | No default; operator user id |
+| `remarks` | `text` | No | `''` |
+
+Index product names for the admin list only if the implemented query supports
+name search; the first capability does not require that index.
+
+#### `inventories`
+
+| Column | PostgreSQL type | Null | Default / constraint |
+| --- | --- | --- | --- |
+| `id` | `text` | No | No database default; app-minted `inv_<uuid>`, primary key |
+| `product_id` | `text` | No | No default; FK → `products.id` |
+| `name` | `text` | No | No default; trimmed length 1–200 |
+| `added_by` | `text` | No | No default; operator user id |
+| `created_at` | `timestamp(3) with time zone` | No | `now()` |
+| `updated_at` | `timestamp(3) with time zone` | No | `now()`; service advances it on update |
+| `state` | `text` | No | `'in-stock'`; check in `in-stock`, `auction-sold`, `withdrawn` |
+| `sold_price` | `integer` | Yes | `NULL`; greater than zero exactly when state is `auction-sold` |
+| `sold_currency` | `text` | Yes | `NULL`; three uppercase letters exactly when state is `auction-sold` |
+| `remarks` | `text` | No | `''` |
+
+Add `UNIQUE (id, product_id)`, an index on
+`(product_id, state, created_at, id)` for stable allocation and count reads,
+and a sold-money check covering state, price, and currency together. PostgreSQL
+`integer` tops out at 2,147,483,647; that is sufficient for one unit's minor
+currency amount while the contract still requires a positive value.
+
+#### `reservations`
+
+| Column | PostgreSQL type | Null | Default / constraint |
+| --- | --- | --- | --- |
+| `id` | `text` | No | No database default; app-minted `res_<uuid>`, primary key |
+| `product_id` | `text` | No | No default; FK → `products.id` |
+| `holder` | `text` | No | No default; check in `auction`, `vault` |
+| `holder_reference` | `text` | No | No default; non-empty holder-owned idempotency reference |
+| `purpose` | `text` | No | No default; trimmed length 1–200 |
+| `state` | `text` | No | `'active'`; check in `active`, `released` |
+| `created_at` | `timestamp(3) with time zone` | No | `now()` |
+| `updated_at` | `timestamp(3) with time zone` | No | `now()`; advances on release |
+| `created_actor_kind` | `text` | No | No default; check in `operator`, `application`, `server` |
+| `created_actor_id` | `text` | Yes | `NULL` only when actor kind is `server` |
+| `released_at` | `timestamp(3) with time zone` | Yes | `NULL`; set exactly when state is `released` |
+| `released_actor_kind` | `text` | Yes | `NULL`; set on release with the same actor-kind check |
+| `released_actor_id` | `text` | Yes | `NULL`; null for server release, otherwise required when released |
+
+Add `UNIQUE (id, product_id)`, `UNIQUE (holder, holder_reference)`, an index on
+`(product_id, state, holder)`, and checks that active rows have no release
+fields while released rows have `released_at` and `released_actor_kind`.
+Actor-id checks require a non-empty id for operator/application and null for
+server.
+
+#### `reservation_units`
+
+| Column | PostgreSQL type | Null | Default / constraint |
+| --- | --- | --- | --- |
+| `reservation_id` | `text` | No | No default |
+| `inventory_unit_id` | `text` | No | No default |
+| `product_id` | `text` | No | No default |
+| `assigned_at` | `timestamp(3) with time zone` | No | `now()` |
+
+The primary key is `(reservation_id, inventory_unit_id)`. Composite foreign
+keys `(reservation_id, product_id)` → `reservations(id, product_id)` and
+`(inventory_unit_id, product_id)` → `inventories(id, product_id)` enforce one
+product without relying on application code. Index
+`(inventory_unit_id, assigned_at)` for a unit's custody history. Rows are never
+updated or deleted; install the same update/delete/truncate guard pattern used
+for other append-only tables. A unit with any such row is therefore not
+hard-delete eligible.
+
+#### `active_reservation_units`
+
+| Column | PostgreSQL type | Null | Default / constraint |
+| --- | --- | --- | --- |
+| `inventory_unit_id` | `text` | No | No default; primary key |
+| `reservation_id` | `text` | No | No default |
+| `product_id` | `text` | No | No default |
+
+Use the same two composite foreign keys as `reservation_units`, plus an index
+on `reservation_id` for release. Reserve inserts these rows; release deletes
+them. No cascade is configured: an attempted unit or reservation deletion
+cannot silently erase ownership.
+
+#### `changelogs`
+
+| Column | PostgreSQL type | Null | Default / constraint |
+| --- | --- | --- | --- |
+| `id` | `text` | No | No database default; app-minted `chg_<uuid>`, primary key |
+| `occurred_at` | `timestamp(3) with time zone` | No | `now()` |
+| `product_id` | `text` | No | No default; FK → `products.id` |
+| `actor_kind` | `text` | No | No default; check in `operator`, `application`, `server` |
+| `actor_id` | `text` | Yes | `NULL` only for `server`; otherwise required |
+| `subject_kind` | `text` | No | No default; check in `product`, `inventory-unit`, `reservation` |
+| `subject_id` | `text` | No | No default; intentionally no subject FK |
+| `action` | `text` | No | No default; subject/action pair checked against the spec vocabulary |
+| `before` | `jsonb` | Yes | `NULL`; required except for `create` and `reserve` |
+| `after` | `jsonb` | Yes | `NULL`; required except for inventory-unit `delete` |
+
+Add `(product_id, occurred_at DESC, id DESC)` and
+`(subject_kind, subject_id, occurred_at DESC, id DESC)` indexes. A check
+enforces valid subject/action pairs and the before/after nullability matrix.
+The initial migration installs the shared append-only triggers to reject
+`UPDATE`, `DELETE`, and `TRUNCATE`; application code also exposes no mutation
+repository for history rows.
+
+#### `audit_logs`
+
+Instantiate the shared `createAuditLogsTable(inventorySchema)` unchanged. It
+adds `seq bigint` primary key; `at timestamp(3) with time zone`, `actor_id
+text`, `actor_roles text`, `action text`, `ok boolean`, and `hash text` as
+non-null columns without defaults; and nullable `subject_type text`,
+`subject_id text`, `details text`, and `prev_hash text`, all defaulting to
+`NULL`. Add its standard `at` index, hash-chain append path, append-only
+triggers, and genesis migration. Changelog JSON is domain state; audit
+`details` remains canonical text because its exact stored bytes are hashed.
+
+An unreserved `in-stock` or `withdrawn` unit that has never appeared in
+`reservation_units` may be hard-deleted after its changelog is written.
+Active, sold, and previously reserved units cannot be deleted, preserving both
+current custody and immutable reservation history.
 
 ## Risks / Trade-offs
 

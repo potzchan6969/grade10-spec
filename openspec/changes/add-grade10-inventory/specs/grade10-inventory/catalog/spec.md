@@ -234,7 +234,8 @@ action. Adding units for an unknown product SHALL be refused.
 An authorized inventory admin SHALL update an existing unit’s name, state,
 sold money (subject to the sold rules), and remarks. An authorized inventory
 admin SHALL delete an unreserved unit whose state is `in-stock` or
-`withdrawn`. Delete of an actively reserved or `auction-sold` unit SHALL be
+`withdrawn` and which has never been assigned to a reservation. Delete of an
+actively or previously reserved unit, or an `auction-sold` unit, SHALL be
 refused. Delete SHALL remove the unit record and SHALL append a change-history
 entry for that deletion.
 
@@ -266,6 +267,13 @@ entry for that deletion.
 - **THEN** Grade10 refuses the delete
 - **AND** the unit and reservation remain
 
+#### Scenario: Delete of a previously reserved unit is refused
+
+- **GIVEN** an `in-stock` inventory unit whose reservation was released
+- **WHEN** an authorized inventory admin deletes it
+- **THEN** Grade10 refuses the delete
+- **AND** the unit and released reservation history remain
+
 ### Requirement: Operators list inventory unit ids for a product
 
 An authorized inventory admin SHALL list every inventory unit id for a given
@@ -289,7 +297,9 @@ product to exactly one holder application. Holder SHALL be `auction` or
 `vault` in this capability. A reservation SHALL carry a system-minted id,
 product id, holder, holder-owned reference, trimmed purpose of 1 to 200
 characters, state (`active` or `released`), created at, updated
-at, created actor, and its assigned unit ids. Holder and holder-owned
+at, created actor kind and id, released at, released actor kind and id, and its
+assigned unit ids. Release fields SHALL be null while active and set according
+to the change-history actor rules when released. Holder and holder-owned
 reference SHALL be immutable and unique together, so retrying the same request
 is idempotent. A retry with different product, quantity, or purpose SHALL be
 refused. Reservation quantity SHALL be an integer from 1 through 500 per
@@ -415,38 +425,89 @@ its current state without changing stock or appending a duplicate mutation.
 Every successful create, update, or delete of a product or inventory unit and
 every successful reservation create or release SHALL be recorded —
 no successful ledger mutation may complete without a history entry. Grade10
-SHALL append one domain change-history (`changelogs`) entry for that mutation.
-Each entry SHALL record: when it happened; the actor; the subject kind
-(`product`, `inventory-unit`, or `reservation`); the subject id; the action;
-and a details payload sufficient to see what changed, including assigned unit
-ids for reservation mutations. The actor SHALL be the operator’s user id when
-a person performed the write, `auction` or `vault` when that holder entrypoint
-performed it, or the literal `server` for an unowned automated path. Operator
-writes through elevated inventory procedures SHALL also append the platform
-`audit_logs` chain. Failed, refused, and idempotent no-op writes SHALL NOT
-append a changelog or audit entry.
+SHALL append one domain change-history (`changelogs`) entry per mutated domain
+subject in the same transaction as the mutation. A bulk add of N units SHALL
+therefore append N inventory-unit entries. Reservation assignment rows are
+persistence beneath the reservation subject and SHALL NOT append separate
+entries.
+
+Every changelog entry SHALL carry these fields:
+
+| Field | Rules |
+| --- | --- |
+| Id | Unique, system-minted, immutable |
+| Occurred at | Server time of the successful mutation, immutable |
+| Product id | Product whose ledger changed; retained when an inventory unit is deleted |
+| Actor kind | One of `operator`, `application`, or `server` |
+| Actor id | Operator user id for `operator`; `auction` or `vault` for `application`; null for `server` |
+| Subject kind | One of `product`, `inventory-unit`, or `reservation` |
+| Subject id | Id of the changed product, inventory unit, or reservation |
+| Action | `create` or `update` for a product; `create`, `update`, or `delete` for an inventory unit; `reserve` or `release` for a reservation |
+| Before | Canonical subject snapshot immediately before the mutation; null for `create` and `reserve` |
+| After | Canonical subject snapshot immediately after the mutation; null for inventory-unit `delete` |
+
+A product or inventory-unit snapshot SHALL contain every field of that record.
+A reservation snapshot SHALL contain its id, product id, holder, holder
+reference, purpose, state, created at, updated at, created actor kind and id,
+released at, released actor kind and id, and assigned unit ids in stable id
+order. Thus `reserve`
+records null before and the active allocation after; `release` records the
+same allocation first as active and then as released. Snapshot keys and
+assigned unit ordering SHALL be canonical so equivalent writes serialize
+identically.
+
+An elevated operator request MAY produce one platform `audit_logs` entry while
+producing several changelog entries, such as one per unit in a quantity add.
+Application and server mutations write domain history only. Failed, refused,
+and idempotent no-op writes SHALL NOT append a changelog or audit entry.
 
 #### Scenario: Operator create appends history with user actor
 
 - **GIVEN** an authorized inventory admin
 - **WHEN** they create a product
 - **THEN** a change-history entry exists for that product create
-- **AND** the actor is that operator’s user id
+- **AND** actor kind is `operator` and actor id is that operator’s user id
+- **AND** before is null and after is the created product snapshot
 
 #### Scenario: Server update appends history with server actor
 
 - **GIVEN** an inventory unit updated by an automated server path
 - **WHEN** the update succeeds
 - **THEN** a change-history entry exists for that unit update
-- **AND** the actor is `server`
+- **AND** actor kind is `server` and actor id is null
+
+#### Scenario: Unit update records before and after snapshots
+
+- **GIVEN** an inventory unit named `Card A` in `in-stock`
+- **WHEN** an authorized inventory admin renames it to `Card B`
+- **THEN** one `inventory-unit` `update` entry identifies that unit and product
+- **AND** before contains name `Card A` and after contains name `Card B`
+- **AND** both snapshots contain the unit’s complete record
+
+#### Scenario: Quantity add records every created unit
+
+- **GIVEN** an existing product
+- **WHEN** an authorized inventory admin adds quantity three
+- **THEN** three `inventory-unit` `create` entries are appended
+- **AND** each entry has null before and the distinct created unit as after
 
 #### Scenario: Holder reservation appends history with application actor
 
 - **GIVEN** Auction requests a valid reservation through its named entrypoint
 - **WHEN** the reservation succeeds
-- **THEN** a change-history entry exists for that reservation create
-- **AND** the actor is `auction`
-- **AND** the details identify every assigned unit id
+- **THEN** one `reservation` `reserve` entry exists for that reservation
+- **AND** actor kind is `application` and actor id is `auction`
+- **AND** before is null
+- **AND** after identifies the holder, purpose, reference, active state, and every assigned unit id
+
+#### Scenario: Release records the custody transition
+
+- **GIVEN** Vault has an active reservation containing two units
+- **WHEN** Vault releases it
+- **THEN** one `reservation` `release` entry exists for that reservation
+- **AND** actor kind is `application` and actor id is `vault`
+- **AND** before records the active reservation and both assigned unit ids
+- **AND** after records the released reservation and the same assigned unit ids
 
 #### Scenario: Refused write leaves history unchanged
 
