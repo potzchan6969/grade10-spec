@@ -28,7 +28,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** An empty row renders every slot in its placeholder state. */
+/** An empty row — blank slots until the user types. */
 export const Placeholder: Story = { args: { defaultValue: "" } };
 
 export const Filled: Story = { args: { defaultValue: "128450" } };

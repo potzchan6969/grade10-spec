@@ -40,6 +40,10 @@ import {
  * choice, and `disabled` is the native attribute. `status` and `size` are the
  * axes with code counterparts.
  */
+// Disabled (`4623:336`) is `Opacity/opacity-50` on the whole field plus a fill
+// swap on the control to `Base/background-subtle` — same rule as Text /
+// Number / Search Input. Status tones the border only; the message stays
+// `Base/secondary-foreground`.
 const stepperControlVariants = cva(
   "w-full overflow-hidden rounded-(--radius-full) border bg-input transition-colors",
   {
@@ -257,6 +261,7 @@ function Stepper({
             size,
           }),
           size === "lg" ? "h-12" : "h-10",
+          disabled && "bg-background-subtle",
         )}
       >
         <IconButton

@@ -4,34 +4,37 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 /**
  * One box of a verification-code row: a 44×48 rounded square drawn around a
- * digit. Figma models three axes on the set (`Status/Input OTP Slot`), of which
- * one is a cva axis: `status` owns the resting border tone, `state=focus` is a
- * boolean `focused` prop (the resting border is what makes the slot differ from
- * an ordinary box, and focus paints the ring), and `isDisabled` is the plain
- * disabled boolean. The digit is the set's TEXT component property.
+ * digit. Figma models three axes on the set (`Input OTP Slot`, `2595:158`), of
+ * which one is a cva axis: `status` owns the resting border tone, `state=focus`
+ * is a boolean `focused` prop (focus paints a 2px ring in place of the resting
+ * border), and `isDisabled` is the plain disabled boolean. The digit is the
+ * set's TEXT component property.
  *
- * Figma's default digit `"0"` is the placeholder glyph for an empty slot, not a
- * filled value — omit `digit` to render it in the secondary tone. A filled slot
- * passes the entered character and paints it in the foreground tone.
+ * Figma's set paints `"0"` in every empty variant as a design stand-in. In
+ * product use an empty slot is blank — omit `digit` and leave `placeholder`
+ * unset (or pass `""`). Digits bind `Base/foreground` (`2595:140`).
  *
  * Border tones from Figma (`2595:158`), Grade10 theme:
- * - default resting → `border`
- * - default focus → `ring` at 2px
- * - error resting → `destructive-border` (red-500 @ 50%)
- * - error focus → `destructive-ring` (red-400) at 2px
- * - success resting/focus → `success-ring` (green-300); focus adds 2px weight
+ * - default resting → `Base/border` at 1px
+ * - default focus → `Base/ring` at 2px
+ * - error resting / focus → `Custom/destructive-ring` (1px / 2px)
+ * - success resting / focus → `Custom/success-ring` (1px / 2px)
  *
  * Resting and focus border utilities are mutually exclusive — applying both lets
  * Tailwind source order pick the colour, which breaks the focus tones.
  *
+ * Disabled (`2595:144`) is `Opacity/opacity-50` plus a fill swap to
+ * `Base/background-subtle` — not a `disabled-foreground` colour swap. The
+ * status border stays.
+ *
  * The set's Figma description carries only this attribution, not a
  * description: based on https://ui.shadcn.com/docs/components/base/input-otp
  */
-const inputOtpSlotVariants = cva("bg-control", {
+const inputOtpSlotVariants = cva("bg-input", {
   variants: {
     status: {
       default: "border border-border",
-      error: "border border-destructive-border",
+      error: "border border-destructive-ring",
       success: "border border-success-ring",
     },
   },
@@ -53,20 +56,23 @@ function inputOtpSlotFocusBorder(status: InputStatus) {
 
 type InputOtpSlotProps = React.ComponentProps<"div"> &
   VariantProps<typeof inputOtpSlotVariants> & {
-    /** The entered digit. Omit it and the placeholder glyph renders. */
+    /** The entered digit. Omit it and the slot stays blank. */
     digit?: string | null;
-    /** Empty-slot glyph. Figma's `digit` default is `"0"`. */
+    /**
+     * Optional empty-slot glyph. Defaults to blank — Figma's set `"0"` is a
+     * design stand-in, not a product placeholder.
+     */
     placeholder?: string;
     /** Paints the focus ring instead of the resting border — Figma's `state=focus`. */
     focused?: boolean;
-    /** Figma's `isDisabled`. Dims the glyph; the tone border stays. */
+    /** Figma's `isDisabled`. Opacity + subtle fill; the tone border stays. */
     disabled?: boolean;
   };
 
 function InputOtpSlot({
   className,
   digit,
-  placeholder = "0",
+  placeholder = "",
   focused = false,
   disabled = false,
   status = "default",
@@ -82,26 +88,20 @@ function InputOtpSlot({
       data-disabled={disabled || undefined}
       data-filled={filled || undefined}
       className={cn(
-        "flex h-12 w-11 shrink-0 items-center justify-center rounded-lg bg-input font-medium text-lg transition-colors",
+        "flex h-12 w-11 shrink-0 items-center justify-center rounded-(--radius-lg) font-medium text-lg text-foreground transition-[color,background-color,border-color,opacity]",
         focused
           ? inputOtpSlotFocusBorder(status ?? "default")
           : inputOtpSlotVariants({ status }),
+        disabled && "bg-background-subtle opacity-50",
         className,
       )}
       {...props}
     >
-      <span
-        className={cn(
-          "text-lg leading-7 font-medium",
-          disabled
-            ? "text-disabled-foreground"
-            : filled
-              ? "text-foreground"
-              : "text-secondary-foreground",
-        )}
-      >
-        {filled ? digit : placeholder}
-      </span>
+      {filled || placeholder ? (
+        <span className="text-lg leading-7 font-medium text-foreground">
+          {filled ? digit : placeholder}
+        </span>
+      ) : null}
     </div>
   );
 }
