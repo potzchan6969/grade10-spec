@@ -11,6 +11,9 @@ type RadioListProps = RadioGroupPrimitive.Props & {
 /**
  * A labelled group of `RadioListItem`s. The group is what owns the selected
  * value; the items are stateless and report through it.
+ *
+ * Figma (`2213:392`): optional `label` is `text-sm/medium` in
+ * `Base/secondary-foreground`; the list slot stacks items with `Gap/gap-2`.
  */
 function RadioList({ className, label, children, ...props }: RadioListProps) {
   return (
