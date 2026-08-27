@@ -31,9 +31,9 @@ currently declares for itself; nothing outside this group depends on it.
 - [x] 3.1 Stand up `packages/appointment/admin-frontend`: its procedure port over the diary worker, a fixture, a core module, and an empty published list — scenario: A product's first surface serves operators.
 - [x] 3.2 Build `diary/locations` and `diary/availability` — rules, exceptions and derived slots — each with its module test and hook tests over the fixture.
 - [x] 3.3 Build `diary/bookings` as a read, with its module test, and record in the slice why it carries no command.
-- [ ] 3.4 Join the slices to the published list, install the package in the grade10 panel's composition root, and move the appointments section and the vault booking row onto the hooks with their existing view tests unedited.
-- [ ] 3.5 Delete the appointments section's decoding and its procedure imports, so the section names nothing in the application's client directory.
-- [ ] 3.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
+- [x] 3.4 Join the slices to the published list, install the package in the grade10 panel's composition root, and move the appointments section and the vault booking row onto the hooks with their existing view tests unedited.
+- [x] 3.5 Delete the appointments section's decoding and its procedure imports, so the section names nothing in the application's client directory.
+- [x] 3.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
 
 ## 4. Loyalty console slices (grade10)
 
