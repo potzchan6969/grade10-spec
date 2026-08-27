@@ -103,7 +103,7 @@ a separate in-flight change and is not modified here.
 | ZZZ | Same six messages, ZZZ identity. |
 
 **Ordering.** `add-auction-watchlist` must land first. Independent of
-`add-auction-proxy-bidding`, though the outbid mail becomes considerably more
+`add-auction-auto-bidding`, though the outbid mail becomes considerably more
 useful once a collector has a maximum to raise. This change absorbs the
 in-flight `auction-email-notification-base` plan: one capability, one
 delivery.

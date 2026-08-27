@@ -17,10 +17,10 @@ record in-house shipment after a listing is won.
   named follow-on of `add-grade10-auction`.
 - Related OpenSpec changes: `add-grade10-auction` (browse and bid),
   `add-auction-payment-fulfillment` (operator payment and shipment),
-  `add-auction-proxy-bidding` (automatic bidding),
+  `add-auction-auto-bidding` (auto bidding),
   `add-auction-watchlist` (watching a lot),
   `add-auction-notifications` (listing and bid-activity mail).
-  Follow-on product decisions: [automatic bidding](./proxy-bidding.md),
+  Follow-on product decisions: [auto bidding](./auto-bidding.md),
   [watching a lot](./watchlist.md), [notifications](./notifications.md).
 
 ## Goals
@@ -39,7 +39,7 @@ record in-house shipment after a listing is won.
 
 - Auction Buy Now, carts, stock counts, fixed-price checkout, search, saved
   searches, filters, related lots, and recent-sales data.
-- Auto-bidding is specified separately in [automatic bidding](./proxy-bidding.md).
+- Auto-bidding is specified separately in [auto bidding](./auto-bidding.md).
   Vault storage, global shipping rate shopping, carrier accounts, tracking
   numbers, and a customer shipment-notification programme remain out of this
   MVP.

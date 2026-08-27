@@ -84,7 +84,7 @@ shared UI contract does not change; see Impact.
 
 **Ordering.** `add-auction-notifications` depends on this change; its §9.1 and
 §9.2 mail cannot fire until a watch exists. Independent of
-`add-auction-proxy-bidding`.
+`add-auction-auto-bidding`.
 
 **On the removed wishlist.** `2026-08-19-remove-wishlist-control` removed the
 store heart because no surface answered it. That reasoning is respected here:

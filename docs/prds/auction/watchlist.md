@@ -95,4 +95,4 @@ Checkable requirements: `openspec/specs/grade10-auction/watchlist/spec.md`
   mistake; they land together.
 - Stopping auto-watch on bid would drop bidders from watcher mail; bidder
   mail stays on bids (`add-auction-notifications`).
-- Independent of automatic bidding. Prerequisite for auction mail.
+- Independent of auto bidding. Prerequisite for auction mail.
