@@ -36,7 +36,8 @@ never a running worker.
   `catalog-SC-26 - Release history records allocation and snapshot`,
   `catalog-SC-27 - Terminal history records action details`, and
   `catalog-SC-28 - Refused write leaves history unchanged` pass with typed
-  changelog action, quantity, actor, action-detail, and snapshot contracts.
+  changelog changed-entity, non-null inventory reference, nullable reservation
+  reference, action, quantity, actor, action-detail, and snapshot contracts.
 - [ ] 1.6 Make `catalog-SC-32 - Unauthorized inventory read is refused` and
   `catalog-SC-33 - Inventory section hidden without grants` pass by adding
   `inventory:read` / `inventory:write` to auth permission statements,
@@ -69,8 +70,9 @@ Depends on group 1.
   `catalog-SC-26 - Release history records allocation and snapshot`,
   `catalog-SC-27 - Terminal history records action details`, and
   `catalog-SC-28 - Refused write leaves history unchanged` pass structurally
-  with changelog action-specific checks, history indexes, append-only guards,
-  and shared per-worker `audit_logs`.
+  with the non-null inventory foreign key, subject/action checks, composite
+  reservation/inventory foreign key, action-specific checks, history indexes,
+  append-only guards, and shared per-worker `audit_logs`.
 - [ ] 2.4 Generate migration artifacts for
   `apps/backend/grade10/inventory`, then run
   `pnpm run db:drizzle:generate`, `pnpm run check:migrations`,
@@ -119,7 +121,8 @@ Depends on groups 1 and 2.
   `catalog-SC-26 - Release history records allocation and snapshot`,
   `catalog-SC-27 - Terminal history records action details`, and
   `catalog-SC-28 - Refused write leaves history unchanged` pass with one
-  changelog per business transition and one platform audit per elevated write.
+  inventory-scoped changelog per business transition, correct product versus
+  inventory subject, and one platform audit per elevated write.
 - [ ] 3.8 Verify worker, RPC, gateway, schema, and configuration with
   `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`,
   `pnpm run cf-typegen`, `pnpm run check:libs`, and `pnpm run build`.

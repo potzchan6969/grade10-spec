@@ -46,10 +46,10 @@ ledger. It owns retail locations, not all Grade10-managed stock.
 
 ### Product and inventory are one-to-one
 
-`products` owns descriptive identity. `inventories` uses `product_id` as
-its primary key and stores the latest aggregate snapshot. Product creation
-inserts both rows in one transaction; every later intake updates the same
-inventory row.
+`products` owns descriptive identity. `inventories` has its own immutable id
+and a unique `product_id` foreign key, giving each side an explicit identity
+while enforcing one inventory per product. Product creation inserts both rows
+in one transaction; every later intake updates the same inventory row.
 
 There is no inventory-unit table. This model promises quantity integrity, not
 item identity. If Grade10 later tags physical objects, a separate serialized
@@ -129,22 +129,22 @@ Reserve quantity N in one database transaction:
 Illustrative SQL:
 
 ```sql
-SELECT stock_count, reserved_count, ledger_count
+SELECT id, stock_count, reserved_count, ledger_count
 FROM inventory.inventories
 WHERE product_id = $1
 FOR UPDATE;
 
 INSERT INTO inventory.reservations (
-  id, product_id, holder, holder_reference, purpose, quantity,
+  id, inventory_id, holder, holder_reference, purpose, quantity,
   state, created_actor_kind, created_actor_id
-) VALUES ($2, $1, $3, $4, $5, $6, 'active', $7, $8)
+) VALUES ($3, $2, $4, $5, $6, $7, 'active', $8, $9)
 ON CONFLICT (holder, holder_reference) DO NOTHING
 RETURNING id;
 
 UPDATE inventory.inventories
-SET reserved_count = reserved_count + $6,
+SET reserved_count = reserved_count + $7,
     updated_at = now()
-WHERE product_id = $1;
+WHERE id = $2;
 ```
 
 Release, intake, sale, and withdrawal take the same row lock before checking
@@ -217,10 +217,17 @@ product. Intake, sale, and withdrawal snapshot inventory before and after.
 Reserve/release snapshots both inventory and the affected reservation so the
 allocation transition is reconstructable without extra assignment rows.
 
-Action-specific relational columns carry quantity, reservation id, sale money,
-and withdrawal reason for filtering and validation. Canonical JSONB
-before/after carries the full snapshots. Failed, refused, and idempotent no-op
-requests append nothing.
+Every row is scoped to the product's non-null inventory foreign key.
+`subject_kind` distinguishes product metadata changes from inventory changes;
+the action check binds product create/update to `product` and intake, reserve,
+release, sell, and withdraw to `inventory`. Action-specific relational columns
+carry quantity, reservation id, sale money, and withdrawal reason for filtering
+and validation. Canonical JSONB before/after carries the full snapshots.
+Failed, refused, and idempotent no-op requests append nothing.
+
+Reservation id is nullable and present only on reserve/release. Its composite
+foreign key includes the inventory id, so a changelog cannot reference
+a reservation from another inventory.
 
 Elevated admin mutations additionally use `elevatedProcedure` and the
 worker's shared hash-chained `audit_logs`. Application entrypoints write only
@@ -228,7 +235,7 @@ domain history.
 
 **Rejected:** changelog-only current state. Every availability read would
 replay the event stream. **Rejected:** platform audit alone. It does not model
-application actors or provide the product-scoped transition ledger.
+application actors or provide the inventory-scoped transition ledger.
 
 ### Admin composition and RBAC
 
@@ -256,14 +263,16 @@ prefixed UUID strings in `text`. Timestamps use the shared
 ```mermaid
 erDiagram
   PRODUCTS ||--|| INVENTORIES : owns
-  PRODUCTS ||--o{ RESERVATIONS : allocates
-  PRODUCTS ||--o{ CHANGELOGS : changes
-  RESERVATIONS ||--o{ CHANGELOGS : referenced_by
+  INVENTORIES ||--o{ RESERVATIONS : allocates
+  INVENTORIES ||--o{ CHANGELOGS : scopes
+  RESERVATIONS o|--o{ CHANGELOGS : optionally_referenced_by
 ```
 
-`changelogs.reservation_id` is nullable because product, intake, sale, and
-withdrawal changes do not concern a reservation. Products and reservations are
-not deleted, so history foreign keys remain valid.
+Every changelog has an inventory relationship, including product metadata
+changes, because product and inventory are created together and remain
+one-to-one. `subject_kind` says which entity changed. Reservation relationship
+is optional because only reserve/release concern one. Products, inventories,
+and reservations are not deleted, so history foreign keys remain valid.
 
 #### `products`
 
@@ -281,7 +290,8 @@ not deleted, so history foreign keys remain valid.
 
 | Column | PostgreSQL type | Null | Default / constraint |
 | --- | --- | --- | --- |
-| `product_id` | `text` | No | FK → `products.id`, primary key |
+| `id` | `text` | No | No database default; app-minted `inv_<uuid>`, primary key |
+| `product_id` | `text` | No | FK → `products.id`; unique |
 | `stock_count` | `bigint` | No | `0`; non-negative |
 | `reserved_count` | `bigint` | No | `0`; between zero and stock count |
 | `sold_count` | `bigint` | No | `0`; non-negative |
@@ -302,7 +312,7 @@ insert; all later changes update this row under lock.
 | Column | PostgreSQL type | Null | Default / constraint |
 | --- | --- | --- | --- |
 | `id` | `text` | No | No database default; app-minted `res_<uuid>`, primary key |
-| `product_id` | `text` | No | FK → `inventories.product_id` |
+| `inventory_id` | `text` | No | FK → `inventories.id` |
 | `holder` | `text` | No | Check in `auction`, `vault` |
 | `holder_reference` | `text` | No | Non-empty; unique with holder |
 | `purpose` | `text` | No | Trimmed length 1–200 |
@@ -316,9 +326,11 @@ insert; all later changes update this row under lock.
 | `released_actor_kind` | `text` | Yes | `NULL`; required when released |
 | `released_actor_id` | `text` | Yes | `NULL` for server release; otherwise required |
 
-Add `UNIQUE (holder, holder_reference)` and index
-`(product_id, state, holder)`. Checks keep active rows free of release stamps
-and released rows fully stamped.
+Add `UNIQUE (id, inventory_id)`, `UNIQUE (holder, holder_reference)`, and index
+`(inventory_id, state, holder)`. Checks keep active rows free of release stamps
+and released rows fully stamped. Contract `productId` is read through
+`reservations.inventory_id` → `inventories.product_id`; it is not duplicated
+on the reservation row.
 
 #### `changelogs`
 
@@ -326,22 +338,26 @@ and released rows fully stamped.
 | --- | --- | --- | --- |
 | `id` | `text` | No | No database default; app-minted `chg_<uuid>`, primary key |
 | `occurred_at` | `timestamp(3) with time zone` | No | `now()` |
-| `product_id` | `text` | No | FK → `products.id` |
+| `inventory_id` | `text` | No | FK → `inventories.id` |
+| `subject_kind` | `text` | No | Check in `product`, `inventory` |
 | `actor_kind` | `text` | No | Check in `operator`, `application`, `server` |
 | `actor_id` | `text` | Yes | `NULL` only for server |
 | `action` | `text` | No | Check in the spec action vocabulary |
 | `quantity` | `bigint` | Yes | Positive for inventory actions; `NULL` for product actions |
-| `reservation_id` | `text` | Yes | FK → `reservations.id`; required for reserve/release |
+| `reservation_id` | `text` | Yes | `NULL`; required for reserve/release |
 | `sold_total_price` | `bigint` | Yes | Positive only for sell |
 | `sold_currency` | `text` | Yes | Three uppercase letters only for sell |
 | `reason` | `text` | Yes | Required for withdraw; optional for intake; null otherwise |
 | `before` | `jsonb` | Yes | `NULL` only for product-create |
 | `after` | `jsonb` | No | No default; canonical complete snapshot |
 
-Add indexes `(product_id, occurred_at DESC, id DESC)` and
-`(reservation_id, occurred_at DESC, id DESC)`. Checks enforce actor-id rules
-and the action-specific nullability matrix. The initial migration installs
-append-only triggers rejecting `UPDATE`, `DELETE`, and `TRUNCATE`.
+Add the composite foreign key `(reservation_id, inventory_id)` →
+`reservations(id, inventory_id)`, plus indexes
+`(inventory_id, occurred_at DESC, id DESC)` and
+`(reservation_id, occurred_at DESC, id DESC)`. Checks enforce actor-id rules,
+the subject/action mapping, and the action-specific nullability matrix. The
+initial migration installs append-only triggers rejecting `UPDATE`, `DELETE`,
+and `TRUNCATE`.
 
 #### `audit_logs`
 

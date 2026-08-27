@@ -99,7 +99,8 @@ latest counts below; quantities SHALL be non-negative whole numbers.
 
 | Field | Rules |
 | --- | --- |
-| Product id | The product identity; unique and immutable |
+| Id | Unique, system-minted, immutable |
+| Product id | Required, unique, and immutable |
 | Stock count | Quantity currently in stock, including available and reserved stock |
 | Reserved count | Sum of quantities in active reservations |
 | Available count | Derived as stock count minus reserved count |
@@ -347,23 +348,26 @@ entry in the same transaction. Each entry SHALL carry:
 | --- | --- |
 | Id | Unique, system-minted, immutable |
 | Occurred at | Server time of the successful mutation, immutable |
-| Product id | Product whose catalogue or inventory changed |
+| Inventory id | Required identity of the product's one inventory |
+| Changed entity | `product` for metadata changes; `inventory` for stock and reservation changes |
 | Actor kind | `operator`, `application`, or `server` |
 | Actor id | Operator user id; `auction` or `vault`; null for server |
-| Action | `product-create`, `product-update`, `intake`, `reserve`, `release`, `sell`, or `withdraw` |
+| Action | `product-create` or `product-update` for product; `intake`, `reserve`, `release`, `sell`, or `withdraw` for inventory |
 | Quantity | Positive transition quantity for inventory actions; null for product actions |
-| Reservation id | Required for reserve/release; null otherwise |
+| Reservation id | Reference to the affected reservation for reserve/release; null otherwise |
 | Sold total price | Positive integer minor units for sell; null otherwise |
 | Sold currency | ISO 4217 code for sell; null otherwise |
 | Reason | Required for withdraw; optional remarks for intake; null otherwise |
 | Before | Canonical snapshot immediately before; null for product-create |
 | After | Canonical snapshot immediately after |
 
-Product actions SHALL snapshot the complete product. Inventory actions SHALL
-snapshot the complete inventory and, for reserve/release, the affected
-reservation. Reserve SHALL show a null reservation before and an active one
-after. Release SHALL show that reservation active before and released after.
-Snapshot keys SHALL be canonical.
+Every entry SHALL reference the inventory belonging to its product. Product
+actions SHALL identify `product` as the changed entity and snapshot the
+complete product metadata. Inventory actions SHALL identify `inventory` and
+snapshot the complete inventory; reserve/release SHALL also snapshot and
+reference the affected reservation. Reserve SHALL show a null reservation
+before and an active one after. Release SHALL show that reservation active
+before and released after. Snapshot keys SHALL be canonical.
 
 An elevated operator request SHALL also append one platform audit entry.
 Application and server mutations write domain history only. Failed, refused,
@@ -374,6 +378,7 @@ and idempotent no-op writes SHALL append neither history nor audit.
 - **GIVEN** an existing product named `Card A`
 - **WHEN** an authorized inventory admin renames it to `Card B`
 - **THEN** one `product-update` change identifies the operator
+- **AND** its changed entity is `product` and it references that product's inventory
 - **AND** before contains `Card A` and after contains `Card B`
 
 #### Scenario: catalog-SC-24 - Intake history carries the added quantity
@@ -381,6 +386,7 @@ and idempotent no-op writes SHALL append neither history nor audit.
 - **GIVEN** an inventory with stock count two and ledger count two
 - **WHEN** an authorized inventory admin intakes quantity three
 - **THEN** one `intake` change records quantity three
+- **AND** its changed entity is `inventory` and it references that inventory
 - **AND** before records both counts as two and after records both as five
 
 #### Scenario: catalog-SC-25 - Reserve history records allocation and snapshot
@@ -388,6 +394,7 @@ and idempotent no-op writes SHALL append neither history nor audit.
 - **GIVEN** Auction requests a valid quantity-two reservation
 - **WHEN** the reservation succeeds
 - **THEN** one `reserve` change records quantity two and the reservation id
+- **AND** its changed entity is `inventory` and the reservation belongs to that inventory
 - **AND** actor kind is `application` and actor id is `auction`
 - **AND** before and after show reserved count increasing by two
 
@@ -396,6 +403,7 @@ and idempotent no-op writes SHALL append neither history nor audit.
 - **GIVEN** Vault has an active quantity-two reservation
 - **WHEN** Vault releases it
 - **THEN** one `release` change records quantity two and the reservation id
+- **AND** its changed entity is `inventory` and the reservation belongs to that inventory
 - **AND** before and after show reserved count decreasing by two
 - **AND** the reservation snapshot changes from active to released
 
