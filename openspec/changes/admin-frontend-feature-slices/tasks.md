@@ -5,7 +5,7 @@ duplicated today. Take this group first.
 
 - [x] 1.1 Add a narrowed directory client port and the auth worker's procedure port to the operator-facing auth package's core, each with a typed fixture, and bind them through that package's core-module factory — scenario: An application constructs a transport client.
 - [x] 1.2 Build the `directory/users` slice — domain models, repository, datasource decoding each call against the auth contracts, tokens, data module, feature module, subpath export, and the module test resolving every token through decode against the fixtures.
-- [ ] 1.3 Add the slice's hooks over the shared response cache: the paginated directory read, role changes, moderation, session listing and revocation, and account deletion, each with a hook test over the real graph with the fake bound at the port only.
+- [x] 1.3 Add the slice's hooks over the shared response cache: the paginated directory read, role changes, moderation, session listing and revocation, and account deletion, each with a hook test over the real graph with the fake bound at the port only.
 - [ ] 1.4 Join the slice to the package's published list and move both panels' user pages onto its hooks, keeping the existing view tests unedited — scenario: Two brands show the same operator surface.
 - [ ] 1.5 Delete the duplicated user directory from the zzz panel and the data layer from the grade10 one, leaving one page per brand composing the slice — scenario: A brand needs the surface to differ.
 - [ ] 1.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
