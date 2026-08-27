@@ -12,7 +12,7 @@ components, so they belong to grade10-spec.
 - [x] 1.5 Delete the duplicated user directory from the zzz panel and the data layer from the grade10 one, leaving one page per brand composing the slice — scenario: A brand needs the surface to differ.
 - [x] 1.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
 
-## 2. Vault console slices (grade10)
+## 2. Vault console slices (grade10) (owner: @sean)
 
 The largest surface. Its first task adds the one contract codec the console
 currently declares for itself; nothing outside this group depends on it.
