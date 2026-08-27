@@ -7,6 +7,64 @@ images or videos (originals stored and served as uploaded), and call one off
 while it has not closed. Named image sizes and optional alt live in
 `grade10-auction/listing-media` in this same change.
 
+## User journeys
+
+### admin-listing-US-01: Save an unfinished listing and come back to it
+
+As an auction operator, I want to save a listing before I know every fact about
+the card, so that I can start from the item in front of me and finish once the
+rest arrives.
+
+**Accepted by:** `admin-listing-SC-01`, `admin-listing-SC-02`,
+`admin-listing-SC-03`, `admin-listing-SC-04`, `admin-listing-SC-05`
+
+### admin-listing-US-02: Put a gallery on a listing
+
+As an auction operator, I want to attach, order, and replace the photographs
+and video of a card, so that a collector judges the item from the images
+without asking me for more.
+
+**Accepted by:** `admin-listing-SC-46`, `admin-listing-SC-47`,
+`admin-listing-SC-48`, `admin-listing-SC-49`, `admin-listing-SC-50`,
+`admin-listing-SC-51`, `admin-listing-SC-53`, `admin-listing-SC-54`
+
+### admin-listing-US-03: Create a listing that is ready to sell
+
+As an auction operator, I want the listing checked against everything an
+auction needs — its title, its address, its prices, and its window — at the
+moment I create it, so that nothing incomplete can reach a bidder.
+
+**Accepted by:** `admin-listing-SC-06`, `admin-listing-SC-07`,
+`admin-listing-SC-08`, `admin-listing-SC-09`, `admin-listing-SC-10`,
+`admin-listing-SC-11`, `admin-listing-SC-12`, `admin-listing-SC-14`,
+`admin-listing-SC-15`, `admin-listing-SC-18`, `admin-listing-SC-19`,
+`admin-listing-SC-20`, `admin-listing-SC-21`, `admin-listing-SC-22`,
+`admin-listing-SC-24`, `admin-listing-SC-26`, `admin-listing-SC-27`,
+`admin-listing-SC-28`
+
+### admin-listing-US-04: Put a listing in front of collectors
+
+As an auction operator, I want to publish a listing now or at a time I set in
+advance, so that a lot opens at the hour the sale was announced for and reads
+at its own public address from then on.
+
+**Accepted by:** `admin-listing-SC-13`, `admin-listing-SC-16`,
+`admin-listing-SC-17`, `admin-listing-SC-23`, `admin-listing-SC-25`,
+`admin-listing-SC-29`, `admin-listing-SC-30`, `admin-listing-SC-31`,
+`admin-listing-SC-32`, `admin-listing-SC-33`, `admin-listing-SC-34`,
+`admin-listing-SC-35`, `admin-listing-SC-52`
+
+### admin-listing-US-05: Call a listing off before it closes
+
+As an auction operator, I want to withdraw a lot at any point up to its close,
+so that a consignor who pulls out or a card that fails authentication leaves
+the sale cleanly and no bidder's money stays held against it.
+
+**Accepted by:** `admin-listing-SC-36`, `admin-listing-SC-37`,
+`admin-listing-SC-38`, `admin-listing-SC-39`, `admin-listing-SC-40`,
+`admin-listing-SC-41`, `admin-listing-SC-42`, `admin-listing-SC-43`,
+`admin-listing-SC-44`, `admin-listing-SC-45`, `admin-listing-SC-55`
+
 ## ADDED Requirements
 
 ### Requirement: Operator saves a listing as a draft
@@ -28,14 +86,14 @@ A draft listing SHALL NOT be visible on the public catalogue.
 A draft save from an operator who is not authorized to set an auction's
 prices and window SHALL be refused.
 
-#### Scenario: Operator saves an empty draft
+#### Scenario: admin-listing-SC-01 - Operator saves an empty draft
 
 - **GIVEN** an authorized operator on the Grade10 auction listings section
 - **WHEN** they save a new listing with no title, no prices, and no window
 - **THEN** Grade10 persists a draft listing with those fields empty
 - **AND** the listing is absent from the public catalogue
 
-#### Scenario: Operator saves a partial draft
+#### Scenario: admin-listing-SC-02 - Operator saves a partial draft
 
 - **GIVEN** an authorized operator
 - **WHEN** they save a draft with a title and no starting price
@@ -43,7 +101,7 @@ prices and window SHALL be refused.
 - **AND** the listing remains a draft
 - **AND** starting price stays empty
 
-#### Scenario: Draft rejects a malformed price
+#### Scenario: admin-listing-SC-03 - Draft rejects a malformed price
 
 - **GIVEN** a draft listing
 - **WHEN** an operator sets starting price to a non-positive or non-integer
@@ -51,14 +109,14 @@ prices and window SHALL be refused.
 - **THEN** Grade10 refuses the write
 - **AND** starting price is unchanged
 
-#### Scenario: Draft rejects a malformed slug
+#### Scenario: admin-listing-SC-04 - Draft rejects a malformed slug
 
 - **GIVEN** a draft listing
 - **WHEN** an operator sets slug to `Charizard PSA 9`
 - **THEN** Grade10 refuses the write
 - **AND** the slug is unchanged
 
-#### Scenario: Unauthorized draft save is refused
+#### Scenario: admin-listing-SC-05 - Unauthorized draft save is refused
 
 - **GIVEN** a signed-in operator who may not set an auction's prices and window
 - **WHEN** they save a new draft
@@ -97,7 +155,7 @@ Create of a listing that is not `draft` SHALL be refused. Create from an
 operator who is not authorized to set an auction's prices and window SHALL
 be refused.
 
-#### Scenario: Operator creates a filled draft
+#### Scenario: admin-listing-SC-06 - Operator creates a filled draft
 
 - **GIVEN** a draft listing with a title, slug `charizard-psa-9`, a starting
   price of 100000 minor units, a minimum increment of 5000 minor units,
@@ -107,7 +165,7 @@ be refused.
 - **THEN** Grade10 moves it to `created`
 - **AND** the listing is still absent from the public catalogue
 
-#### Scenario: Create without a title is refused on the form and the API
+#### Scenario: admin-listing-SC-07 - Create without a title is refused on the form and the API
 
 - **GIVEN** a draft listing with no title and every other required field set
 - **WHEN** the operator submits create
@@ -115,35 +173,35 @@ be refused.
 - **AND** a create sent to the API without a title is refused
 - **AND** the listing remains a draft
 
-#### Scenario: Create without a slug is refused
+#### Scenario: admin-listing-SC-08 - Create without a slug is refused
 
 - **GIVEN** a draft listing with every required field set except slug
 - **WHEN** the operator creates the listing
 - **THEN** Grade10 refuses the create
 - **AND** the listing remains a draft
 
-#### Scenario: Create without a starting price is refused
+#### Scenario: admin-listing-SC-09 - Create without a starting price is refused
 
 - **GIVEN** a draft listing with a title, a window, and no starting price
 - **WHEN** the operator creates the listing
 - **THEN** Grade10 refuses the create
 - **AND** the listing remains a draft
 
-#### Scenario: Create without media is refused
+#### Scenario: admin-listing-SC-10 - Create without media is refused
 
 - **GIVEN** a draft listing with every required field set except media
 - **WHEN** the operator creates the listing
 - **THEN** Grade10 refuses the create
 - **AND** the listing remains a draft
 
-#### Scenario: Created listing cannot clear a required field
+#### Scenario: admin-listing-SC-11 - Created listing cannot clear a required field
 
 - **GIVEN** a created listing with a title
 - **WHEN** an operator clears the title
 - **THEN** Grade10 refuses the write
 - **AND** the title is unchanged
 
-#### Scenario: Create of a published listing is refused
+#### Scenario: admin-listing-SC-12 - Create of a published listing is refused
 
 - **GIVEN** a published listing
 - **WHEN** an operator creates it
@@ -172,7 +230,7 @@ unchanged.
 An operator who may catalogue a listing and not operate its window SHALL
 still be able to write these fields on an existing editable listing.
 
-#### Scenario: Operator updates copy on a published listing
+#### Scenario: admin-listing-SC-13 - Operator updates copy on a published listing
 
 - **GIVEN** a published listing titled "Charizard 1st Edition"
 - **WHEN** an authorized operator changes its copy to a new description
@@ -180,14 +238,14 @@ still be able to write these fields on an existing editable listing.
 - **AND** a collector reading the listing sees the new copy
 - **AND** the title, prices, and window are unchanged
 
-#### Scenario: Two categories from one taxonomy are refused
+#### Scenario: admin-listing-SC-14 - Two categories from one taxonomy are refused
 
 - **GIVEN** a taxonomy with categories Pokémon and Sport
 - **WHEN** an operator assigns both to the same listing
 - **THEN** Grade10 refuses the write
 - **AND** the listing's categories are unchanged
 
-#### Scenario: Canceled sale cannot receive a listing
+#### Scenario: admin-listing-SC-15 - Canceled sale cannot receive a listing
 
 - **GIVEN** a canceled sale
 - **WHEN** an operator attaches a draft listing to it
@@ -218,40 +276,40 @@ listing's public address `/auction/listings/<slug>`.
   SHALL be not found. A `draft`, `created`, or `canceled` listing SHALL NOT
   answer at that address.
 
-#### Scenario: Collector opens a listing by slug
+#### Scenario: admin-listing-SC-16 - Collector opens a listing by slug
 
 - **GIVEN** a published listing whose slug is `charizard-psa-9`
 - **WHEN** a collector opens `/auction/listings/charizard-psa-9`
 - **THEN** Grade10 returns that listing
 
-#### Scenario: Unknown slug is not found
+#### Scenario: admin-listing-SC-17 - Unknown slug is not found
 
 - **GIVEN** no published, closed, or settled listing with slug `no-such-lot`
 - **WHEN** a collector opens `/auction/listings/no-such-lot`
 - **THEN** Grade10 answers as not found
 
-#### Scenario: Duplicate slug is refused
+#### Scenario: admin-listing-SC-18 - Duplicate slug is refused
 
 - **GIVEN** a listing that is not canceled whose slug is `charizard-psa-9`
 - **WHEN** an operator sets another listing's slug to `charizard-psa-9`
 - **THEN** Grade10 refuses the write
 - **AND** the second listing's slug is unchanged
 
-#### Scenario: Two drafts cannot share a slug
+#### Scenario: admin-listing-SC-19 - Two drafts cannot share a slug
 
 - **GIVEN** a draft whose slug is `charizard-psa-9`
 - **WHEN** an operator sets another draft's slug to `charizard-psa-9`
 - **THEN** Grade10 refuses the write
 - **AND** the second draft's slug is unchanged
 
-#### Scenario: Empty slugs on drafts are not a collision
+#### Scenario: admin-listing-SC-20 - Empty slugs on drafts are not a collision
 
 - **GIVEN** a draft with no slug
 - **WHEN** an operator saves another draft with no slug
 - **THEN** Grade10 accepts the save
 - **AND** neither draft occupies a slug
 
-#### Scenario: Create can reuse a canceled listing's original slug
+#### Scenario: admin-listing-SC-21 - Create can reuse a canceled listing's original slug
 
 - **GIVEN** a canceled listing that previously used slug `charizard-psa-9`
 - **AND** a draft with every required field set, including slug
@@ -260,7 +318,7 @@ listing's public address `/auction/listings/<slug>`.
 - **THEN** Grade10 moves the draft to `created`
 - **AND** the canceled listing still does not hold `charizard-psa-9`
 
-#### Scenario: Create cannot reuse a closed listing's slug
+#### Scenario: admin-listing-SC-22 - Create cannot reuse a closed listing's slug
 
 - **GIVEN** a closed listing whose slug is `charizard-psa-9`
 - **AND** a draft with every required field set, including slug
@@ -270,7 +328,7 @@ listing's public address `/auction/listings/<slug>`.
 - **AND** the draft remains a draft
 - **AND** `/auction/listings/charizard-psa-9` still returns the closed listing
 
-#### Scenario: Published slug cannot change
+#### Scenario: admin-listing-SC-23 - Published slug cannot change
 
 - **GIVEN** a published listing whose slug is `charizard-psa-9`
 - **WHEN** an operator sets slug to `charizard-psa-9-copy`
@@ -314,28 +372,28 @@ test-mode payment credentials instead of live money, so the house can
 rehearse a sale. A write of sandbox on a `created` or later listing SHALL
 be refused.
 
-#### Scenario: Operator corrects a created listing's starting price
+#### Scenario: admin-listing-SC-24 - Operator corrects a created listing's starting price
 
 - **GIVEN** a created listing with starting price 100000 minor units `HKD`
 - **WHEN** an authorized operator sets starting price to 150000 minor units
 - **THEN** Grade10 stores 150000 minor units `HKD`
 - **AND** the listing remains created
 
-#### Scenario: Published listing refuses a price change
+#### Scenario: admin-listing-SC-25 - Published listing refuses a price change
 
 - **GIVEN** a published listing with starting price 100000 minor units
 - **WHEN** an operator sets starting price to 150000 minor units
 - **THEN** Grade10 refuses the write
 - **AND** the starting price remains 100000 minor units
 
-#### Scenario: Scheduled close at in the past is refused at create
+#### Scenario: admin-listing-SC-26 - Scheduled close at in the past is refused at create
 
 - **GIVEN** a draft listing whose scheduled close at is not after now
 - **WHEN** the operator creates the listing
 - **THEN** Grade10 refuses the create
 - **AND** the listing remains a draft
 
-#### Scenario: Extension window without a duration is refused
+#### Scenario: admin-listing-SC-27 - Extension window without a duration is refused
 
 - **GIVEN** a created listing
 - **WHEN** an operator sets an extension window of 1800 seconds and an
@@ -343,7 +401,7 @@ be refused.
 - **THEN** Grade10 refuses the write
 - **AND** the listing's extension settings are unchanged
 
-#### Scenario: Sandbox cannot change after create
+#### Scenario: admin-listing-SC-28 - Sandbox cannot change after create
 
 - **GIVEN** a created listing that was drafted as sandbox
 - **WHEN** an operator clears sandbox
@@ -370,14 +428,14 @@ timestamp that MUST be after now.
 - A `draft` listing SHALL NOT be published, by hand or when publish at
   arrives. Publish of a listing that is not `created` SHALL be refused.
 
-#### Scenario: Operator publishes a created listing immediately
+#### Scenario: admin-listing-SC-29 - Operator publishes a created listing immediately
 
 - **GIVEN** a created listing with no publish at
 - **WHEN** an authorized operator publishes it
 - **THEN** Grade10 moves it to `published`
 - **AND** a collector can read it on the public catalogue
 
-#### Scenario: Created listing publishes at the scheduled time
+#### Scenario: admin-listing-SC-30 - Created listing publishes at the scheduled time
 
 - **GIVEN** a created listing whose publish at is in the future
 - **WHEN** that time arrives
@@ -385,14 +443,14 @@ timestamp that MUST be after now.
 - **AND** a collector can read it on the public catalogue
 - **AND** no further operator action was required
 
-#### Scenario: A publish at in the past is refused
+#### Scenario: admin-listing-SC-31 - A publish at in the past is refused
 
 - **GIVEN** a created listing
 - **WHEN** an operator sets publish at to a time that is not after now
 - **THEN** Grade10 refuses the write
 - **AND** the listing remains created and unpublished
 
-#### Scenario: Create with a past publish at is refused
+#### Scenario: admin-listing-SC-32 - Create with a past publish at is refused
 
 - **GIVEN** a draft listing with every required field set and publish at in
   the past
@@ -401,7 +459,7 @@ timestamp that MUST be after now.
 - **AND** the listing remains a draft
 - **AND** it stays absent from the public catalogue
 
-#### Scenario: Draft is not published when publish at arrives
+#### Scenario: admin-listing-SC-33 - Draft is not published when publish at arrives
 
 - **GIVEN** a draft listing with a publish at that has arrived and a missing
   title
@@ -410,14 +468,14 @@ timestamp that MUST be after now.
 - **AND** it remains a draft
 - **AND** it stays absent from the public catalogue
 
-#### Scenario: Manual publish of a draft is refused
+#### Scenario: admin-listing-SC-34 - Manual publish of a draft is refused
 
 - **GIVEN** a draft listing
 - **WHEN** an operator publishes it
 - **THEN** Grade10 refuses the publish
 - **AND** the listing remains a draft
 
-#### Scenario: Publish at cannot change after publish
+#### Scenario: admin-listing-SC-35 - Publish at cannot change after publish
 
 - **GIVEN** a published listing
 - **WHEN** an operator sets a new publish at
@@ -454,14 +512,14 @@ sale was canceled.
 Cancel from an operator who is not authorized to call a listing off SHALL
 be refused, and the listing and slug SHALL be unchanged.
 
-#### Scenario: Operator calls off a draft
+#### Scenario: admin-listing-SC-36 - Operator calls off a draft
 
 - **GIVEN** a draft listing
 - **WHEN** an authorized operator calls it off
 - **THEN** Grade10 moves it to `canceled`
 - **AND** it stays absent from the public catalogue
 
-#### Scenario: Operator calls off a created listing before publish at
+#### Scenario: admin-listing-SC-37 - Operator calls off a created listing before publish at
 
 - **GIVEN** a created listing with a publish at still in the future
 - **WHEN** an authorized operator calls it off
@@ -469,7 +527,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** when that publish at arrives, Grade10 does not publish it
 - **AND** it stays absent from the public catalogue
 
-#### Scenario: Operator calls off a published listing that has bids
+#### Scenario: admin-listing-SC-38 - Operator calls off a published listing that has bids
 
 - **GIVEN** a published listing with accepted bids and live authorizations
 - **WHEN** an authorized operator calls it off
@@ -477,28 +535,28 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** it releases every live authorization standing against it
 - **AND** it is absent from the public catalogue
 
-#### Scenario: Closed listing cannot be called off
+#### Scenario: admin-listing-SC-39 - Closed listing cannot be called off
 
 - **GIVEN** a closed listing
 - **WHEN** an operator calls it off
 - **THEN** Grade10 refuses the cancel
 - **AND** the listing remains closed
 
-#### Scenario: Settled listing cannot be called off
+#### Scenario: admin-listing-SC-40 - Settled listing cannot be called off
 
 - **GIVEN** a settled listing
 - **WHEN** an operator calls it off
 - **THEN** Grade10 refuses the cancel
 - **AND** the listing remains settled
 
-#### Scenario: Already canceled listing cannot be called off again
+#### Scenario: admin-listing-SC-41 - Already canceled listing cannot be called off again
 
 - **GIVEN** a canceled listing
 - **WHEN** an operator calls it off
 - **THEN** Grade10 refuses the cancel
 - **AND** the listing remains canceled
 
-#### Scenario: Cancel rewrites the slug and frees the original
+#### Scenario: admin-listing-SC-42 - Cancel rewrites the slug and frees the original
 
 - **GIVEN** a published listing whose id is
   `auc_550e8400-e29b-41d4-a716-446655440000` and whose slug is
@@ -509,14 +567,14 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** `/auction/listings/charizard-psa-9` does not return that listing
 - **AND** a later listing may be created with slug `charizard-psa-9`
 
-#### Scenario: Cancel of a draft with no slug does not invent one
+#### Scenario: admin-listing-SC-43 - Cancel of a draft with no slug does not invent one
 
 - **GIVEN** a draft listing with no slug
 - **WHEN** an authorized operator calls it off
 - **THEN** Grade10 moves it to `canceled`
 - **AND** the listing still has no slug
 
-#### Scenario: Unauthorized cancel is refused
+#### Scenario: admin-listing-SC-44 - Unauthorized cancel is refused
 
 - **GIVEN** a published listing
 - **AND** a signed-in operator who may not call a listing off
@@ -531,7 +589,7 @@ A listing in `closed`, `settled`, or `canceled` SHALL reject every catalogue,
 price, window, sandbox, publish at, and media write from this form. Its facts
 are the record of what was offered and sold.
 
-#### Scenario: Closed listing rejects a title edit
+#### Scenario: admin-listing-SC-45 - Closed listing rejects a title edit
 
 - **GIVEN** a closed listing
 - **WHEN** an operator changes its title
@@ -571,20 +629,20 @@ A collector reading a published listing SHALL receive the gallery in that
 order. An image item SHALL display as an image. A video item SHALL play as a
 video from the uploaded bytes.
 
-#### Scenario: Operator uploads an eighth file
+#### Scenario: admin-listing-SC-46 - Operator uploads an eighth file
 
 - **GIVEN** a draft listing with seven media items
 - **WHEN** the operator uploads an eighth JPEG
 - **THEN** Grade10 stores eight media items in the operator's order
 
-#### Scenario: A ninth file is refused
+#### Scenario: admin-listing-SC-47 - A ninth file is refused
 
 - **GIVEN** a draft listing with eight media items
 - **WHEN** the operator uploads a ninth file
 - **THEN** Grade10 refuses the upload
 - **AND** the gallery still has eight items
 
-#### Scenario: Mixed images and videos are accepted
+#### Scenario: admin-listing-SC-48 - Mixed images and videos are accepted
 
 - **GIVEN** a draft listing with no media
 - **WHEN** an operator uploads a JPEG, then an MP4, then a WebP
@@ -593,7 +651,7 @@ video from the uploaded bytes.
   MP4, and the WebP in that order
 - **AND** the MP4 plays as video from the uploaded bytes
 
-#### Scenario: Upload is stored without processing
+#### Scenario: admin-listing-SC-49 - Upload is stored without processing
 
 - **GIVEN** a draft listing
 - **WHEN** an operator uploads a JPEG whose body is 2 mebibytes
@@ -603,7 +661,7 @@ video from the uploaded bytes.
   `grade10-auction/listing-media`, not from a second stored object written
   at upload
 
-#### Scenario: Unsupported type is refused
+#### Scenario: admin-listing-SC-50 - Unsupported type is refused
 
 - **GIVEN** a draft listing
 - **WHEN** an operator uploads a file that is not JPEG, PNG, WebP, AVIF, MP4,
@@ -611,35 +669,35 @@ video from the uploaded bytes.
 - **THEN** Grade10 refuses the upload
 - **AND** the gallery is unchanged
 
-#### Scenario: File over 100 mebibytes is refused
+#### Scenario: admin-listing-SC-51 - File over 100 mebibytes is refused
 
 - **GIVEN** a draft listing
 - **WHEN** an operator uploads a file larger than 104857600 bytes
 - **THEN** Grade10 refuses the upload
 - **AND** the gallery is unchanged
 
-#### Scenario: First item is the catalogue card
+#### Scenario: admin-listing-SC-52 - First item is the catalogue card
 
 - **GIVEN** a published listing whose gallery is a video then a JPEG
 - **WHEN** a collector opens the Auction catalogue
 - **THEN** that listing's card uses the video as its media
 - **AND** it does not require a named physical side such as `front`
 
-#### Scenario: Operator reorders and removes media
+#### Scenario: admin-listing-SC-53 - Operator reorders and removes media
 
 - **GIVEN** a published listing with three images in order A, B, C
 - **WHEN** an operator moves C first and removes B
 - **THEN** the gallery is C, A
 - **AND** a collector's catalogue card is C
 
-#### Scenario: Last media item cannot be removed after create
+#### Scenario: admin-listing-SC-54 - Last media item cannot be removed after create
 
 - **GIVEN** a published listing with one JPEG
 - **WHEN** an operator removes that JPEG
 - **THEN** Grade10 refuses the remove
 - **AND** the gallery still has that JPEG
 
-#### Scenario: Closed listing rejects a media upload
+#### Scenario: admin-listing-SC-55 - Closed listing rejects a media upload
 
 - **GIVEN** a closed listing
 - **WHEN** an operator uploads an image
