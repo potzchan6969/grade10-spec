@@ -29,7 +29,7 @@ dist-ssr
 storybook-static
 
 # Generated Figma plugin bundles from the design-system token pipeline
-scripts/tokens/figma/build/
+scripts/tokens-sync/figma/build/
 
 # Local secrets. .env.example is the checked-in template.
 .env

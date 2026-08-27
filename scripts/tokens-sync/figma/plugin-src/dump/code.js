@@ -1,4 +1,4 @@
-/* DUMP: local Figma Variables -> the JSON scripts/tokens/figma/pull.mjs expects.
+/* DUMP: local Figma Variables -> the JSON scripts/tokens-sync/figma/pull.mjs expects.
  *
  * Hand-written source, NOT generated — there is nothing in tokens.json to derive
  * a read from. Import via Figma → Plugins → Development → Import plugin from

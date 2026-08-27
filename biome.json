@@ -52,7 +52,7 @@
       ]
     },
     {
-      "includes": ["scripts/tokens/**", "scripts/design-sync/**"],
+      "includes": ["scripts/tokens-sync/**", "scripts/design-sync/**"],
       "linter": {
         "rules": {
           "style": {

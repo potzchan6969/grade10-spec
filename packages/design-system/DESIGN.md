@@ -110,10 +110,10 @@ names) live in `tokens.config.json`. Figma and the CSS files are both
 |---|---|---|
 | `pnpm tokens:import` | Figma → code | Dump → `tokens.json` (needs `FIGMA_DUMP=<file>` from the dump plugin) |
 | `pnpm tokens:build` | code → CSS | `tokens.json` + config → `theme.css`, `themes/grade10.css` |
-| `pnpm tokens:push` | code → Figma | `tokens.json` → `scripts/tokens/figma/build/push.gen.js`, run inside Figma via `use_figma` or the built plugin |
+| `pnpm tokens:push` | code → Figma | `tokens.json` → `scripts/tokens-sync/figma/build/push.gen.js`, run inside Figma via `use_figma` or the built plugin |
 | `pnpm tokens:pull` | Figma → CSS | `tokens:import && tokens:build` — the normal entry point. A bare `tokens:import` leaves the CSS stale. |
 
-**Where these run.** The tooling lives at `scripts/tokens/` and the scripts are
+**Where these run.** The tooling lives at `scripts/tokens-sync/` and the scripts are
 defined in the root `package.json`, so run every leg from the repository root —
 they are not package scripts and will not resolve from inside this directory.
 What they read and write does stay here: `tokens.json` and `tokens.config.json`
@@ -130,7 +130,7 @@ failure messages, and what the configured collections leave behind are in
 [`docs/governance/figma-token-export.md`](../../docs/governance/figma-token-export.md);
 the summary is here. The REST variables endpoint is
 Enterprise-gated and this org is not on it, so the pull runs off a dump instead.
-`pnpm tokens:plugin dump` builds `scripts/tokens/figma/build/dump/`, imported the same way; it reads the local
+`pnpm tokens:plugin dump` builds `scripts/tokens-sync/figma/build/dump/`, imported the same way; it reads the local
 variables and hands back the exact `{ meta }` shape REST would have returned —
 Download writes `figma-dump.json` to your Downloads folder. Then:
 
@@ -146,7 +146,7 @@ pulling it back reproduces `tokens.json` byte for byte.
 against whichever file the Figma plugin is bound to, which is not always the one
 you asked for. `pnpm tokens:plugin push` (or `seed`) wraps the generated script
 into an importable plugin folder — Figma → Plugins → Development → Import plugin
-from manifest… → `scripts/tokens/figma/build/push/manifest.json`. It runs inside the file you have
+from manifest… → `scripts/tokens-sync/figma/build/push/manifest.json`. It runs inside the file you have
 open, so there is no binding to get wrong. Open Plugins → Development → Open
 console first; the headline lands in a toast, the full JSON in the console.
 
