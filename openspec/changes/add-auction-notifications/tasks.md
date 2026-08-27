@@ -1,51 +1,67 @@
 # Tasks: auction email notifications
 
-`add-auction-watchlist` must be deployed before group 1 can be verified: four
+`add-auction-watchlist` must be deployed before group 4 can be verified: four
 of the six messages fire on a watch.
 
-## 1. Enrolment and events (grade10)
+## 1. Provider send errors (grade10)
 
-- [ ] 1.1 Resolve a lot's enrolled collectors from its watches and its bids, making *Bidding enrols without watching*, *Unwatching does not end bidder enrolment*, and *Unwatching ends watcher enrolment* pass.
-- [ ] 1.2 Emit the four progress events, keying the closing warning to the scheduled close, making *A watcher is told bidding opens tomorrow*, *A watcher is told bidding has opened*, *The closing warning uses the scheduled close*, and *Extended bidding announces itself to watchers and bidders* pass.
-- [ ] 1.3 Emit the two bid-activity events, making *A bidder hears about someone else's bid* and *A collector is told they have been outbid* pass, with the outbid event carrying the current bid and effective close.
-- [ ] 1.4 Make *Losing the lead without a new bid is not an outbid* and *A bid placed on a collector's behalf is still their own bid* pass.
-- [ ] 1.5 Make *A called-off lot sends nothing further* and *A scheduled message is suppressed by a call-off* pass by suppressing every unsent message from the moment of call-off.
-- [ ] 1.6 Verify every scenario in this group through auction backend feature tests, including a lot whose close has moved.
+Independent of groups 2–7.
 
-## 2. Sent log and deduplication (grade10)
+- [ ] 1.1 Make `notifications-SC-21` and `notifications-SC-22` pass at the send seam: `@grade10/email` throws a typed permanent error on provider 4xx other than 429, and a normal throw on 429, 5xx, missing ids, and partial batches, without sleeping.
+- [ ] 1.2 Run `pnpm run typecheck`, `pnpm run lint`, and the `@grade10/email` suite (`pnpm --dir packages/email test`).
 
-Needs group 1 landed. The send log is `auction.mail_sends` per `design.md`.
+## 2. Shared vocabulary (grade10)
 
-- [ ] 2.1 Record type, the address sent to, listing, and Sent At for every message, and store no body, making *An operator can see what was sent* and *The send log shows type, not content* pass.
-- [ ] 2.2 Make *A progress message is sent once per lot* and *A watcher who also bids receives one copy* pass from that log.
-- [ ] 2.3 Make *An outbid collector gets one message, not two* pass by preferring the outbid message for one accepted bid before emit.
-- [ ] 2.4 Verify deduplication against a collector who unwatches and watches again, per `design.md`'s rejected alternative.
+- [ ] 2.1 Add `listing_opens_in_24h`, `listing_opened`, `listing_closes_in_24h`, `listing_extended`, and `listing_new_bid` to `AuctionPushKind` so `notifications-SC-18` has names both ports can carry; keep push claiming on the existing eight kinds.
+- [ ] 2.2 Extend the listing shape the letter renders (`startsAt` and `scheduledEndsAt` beside the effective close) so `notifications-SC-06` and `notifications-SC-08` can name the instants the spec requires.
+- [ ] 2.3 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`.
 
-## 3. Rendering and delivery (grade10)
+## 3. Stamps and send log (grade10)
 
-Claimable against the events from group 1. Auction emits; `@grade10/email` sends. Auction does not talk to the mail provider.
+Needs group 2 for the kind names the columns serve.
 
-- [ ] 3.1 Make *Mail reaches the registered address* pass, resolving the recipient by user id and sending to their registered account email.
-- [ ] 3.2 Render money in each message using the sent-message shape in `money-amounts`.
-- [ ] 3.3 Render every time a message states using `dates-and-times`, so a close names its zone and matches the listing's page.
-- [ ] 3.4 Verify the six rendered messages against the money and date shapes, with amounts in more than one currency exponent.
+- [ ] 3.1 Add nullable `opens_in_24h_notified_at`, `opened_notified_at`, `closes_in_24h_notified_at`, `extended_notified_at`, and `new_bid_told_bid_id` on watches, plus `closes_in_24h_notified_at`, `extended_notified_at`, and `new_bid_told_bid_id` on bids for the participant fallback, and create `auction.mail_sends` per `design.md`; generate and commit the Drizzle migration.
+- [ ] 3.2 Run `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`.
 
-## 4. ZZZ delivery (grade10)
+## 4. Enrolment, fanout, and coalescing (grade10)
 
-Claimable against the events from group 1, independently of group 3. Same email sending service, ZZZ identity.
+Needs groups 1–3.
 
-- [ ] 4.1 Send the same six messages to ZZZ collectors enrolled on a shared lot, resolving their registered address through the ZZZ identity boundary.
-- [ ] 4.2 Verify the ZZZ delivery lane on a lot enrolled from both brands.
+- [ ] 4.1 Resolve a lot's enrolled collectors from its watches and its bids, making `notifications-SC-01`, `notifications-SC-03`, and `notifications-SC-04` pass.
+- [ ] 4.2 Make `notifications-SC-05`, `notifications-SC-06`, `notifications-SC-07`, `notifications-SC-08`, `notifications-SC-09`, and `notifications-SC-10` pass through batched watcher lists (50 recipients, one rendering) that drop a false statement and stamp per chunk; close-soon and extended include bid participants with no watch, anchored to `scheduled_ends_at` / first extension.
+- [ ] 4.3 Make `notifications-SC-11`, `notifications-SC-12`, `notifications-SC-13`, `notifications-SC-14`, `notifications-SC-15`, and `notifications-SC-16` pass: new-bid list after the existing outbid list, skip the live overtake still owed outbid, stamp `new_bid_told_bid_id` to the current leading bid, drop when the listing no longer takes bids.
+- [ ] 4.4 Make `notifications-SC-02`, `notifications-SC-23`, `notifications-SC-27`, and `notifications-SC-28` pass: one copy however enrolled; drop-and-stamp when no longer biddable; suppress every unsent message from call-off; leave the one-hour ending-soon list in place and after these lists in `WORK_LISTS`.
+- [ ] 4.5 Verify every scenario in this group through auction backend feature tests, including a lot whose close has moved.
 
-## 5. Operator send log (grade10)
+## 5. Rendering and delivery (grade10)
 
-- [ ] 5.1 Produce the admin send-log Figma frame named in `ui.md` and link it there.
-- [ ] 5.2 Make *The send log is filterable by email* and *An operator can see what was sent* pass: type, sent-to email, listing, and Sent At; no body; distinguishing sent from attempted per `design.md`.
-- [ ] 5.3 Verify the admin auction feature lane.
+Needs group 2. Claimable against the events from group 4. Auction emits; `@grade10/email` sends.
 
-## 6. Review (grade10)
+- [ ] 5.1 Make `notifications-SC-18`, `notifications-SC-19`, and `notifications-SC-20` pass by adding English copy branches for the five new kinds, keeping one template; `canUnsubscribe` true for start-soon and has-started; false for outbid and new-bid; close-soon and extended only when the recipient is a watcher who never bid.
+- [ ] 5.2 Make `notifications-SC-17` pass, resolving the recipient by user id and sending to their registered account email.
+- [ ] 5.3 Render money and times using the sent-message shapes in `money-amounts` and `dates-and-times`.
+- [ ] 5.4 Verify the six rendered messages against those shapes, with amounts in more than one currency exponent.
 
-- [ ] 6.1 Run the application repository's full check suite once every group above is green.
-- [ ] 6.2 Verify every scenario in this change, then run `openspec validate add-auction-notifications --strict` and `openspec validate --specs`.
-- [ ] 6.3 Review message volume on a lot with two active maximums before staging, per `design.md`'s flooding risk.
-- [ ] 6.4 After rollout is confirmed, fold the accepted delta into `openspec/specs/grade10-auction/` and archive this change.
+## 6. ZZZ delivery (grade10)
+
+Claimable against the events from group 4, independently of group 5. Same email library, ZZZ identity.
+
+- [ ] 6.1 Send the same six messages to ZZZ collectors enrolled on a shared lot, resolving their registered address through the ZZZ identity boundary.
+- [ ] 6.2 Verify the ZZZ delivery lane on a lot enrolled from both brands.
+
+## 7. Operator send log (grade10)
+
+Needs group 3.
+
+- [ ] 7.1 Produce the admin send-log Figma frame named in `ui.md` and link it there.
+- [ ] 7.2 Make `notifications-SC-24`, `notifications-SC-25`, and `notifications-SC-26` pass: type, sent-to email, listing, and Sent At; no body; distinguishing sent from attempted per `design.md`.
+- [ ] 7.3 Verify the admin auction feature lane.
+
+## 8. Review (grade10)
+
+Needs groups 4–7.
+
+- [ ] 8.1 Run the application repository's full check suite once every group above is green.
+- [ ] 8.2 Verify every scenario in this change, then run `openspec validate add-auction-notifications --strict` and `openspec validate --specs`.
+- [ ] 8.3 Review message volume on a lot with two active maximums before staging, per `design.md`'s snipe-war coalescing.
+- [ ] 8.4 After rollout is confirmed, fold the accepted delta into `openspec/specs/grade10-auction/` and archive this change.

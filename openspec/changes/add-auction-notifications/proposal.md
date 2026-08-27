@@ -2,7 +2,7 @@
 
 **Author:** @jeffffej0909 - 2026-08-24
 
-Product context: [Grade10 Auction](../../../docs/prds/auction/auction.md).
+Product context: [Auction notifications](../../../docs/prds/auction/notifications.md).
 Depends on [`add-auction-watchlist`](../add-auction-watchlist/proposal.md):
 the before-and-during-auction mail fires on a watch, which does not exist yet.
 
@@ -25,8 +25,10 @@ specifies how an amount is rendered in "an outbid or lot-won email", and
 and to match the page. The contracts were written for messages nobody sends.
 
 **Metric:** the share of outbid collectors who return and bid again within the
-lot's remaining window. **Acceptance signal:** a collector who is outbid
-overnight returns and raises their maximum before the lot closes.
+lot's remaining window. **Noise cap:** new-bid letters per bidder per listing
+stay near one per sweep pass during an extension, not one per increment.
+**Acceptance signal:** a collector who is outbid overnight returns and raises
+their maximum before the lot closes.
 
 ## What Changes
 
@@ -35,36 +37,44 @@ overnight returns and raises their maximum before the lot closes.
   extended bidding has started, a lot you bid on received a new bid, and you
   have been outbid.
 - **Two audiences.** The first four go to collectors watching the lot; the
-  last two go to collectors who have bid on it. Bidding on a lot enrols the
-  collector in its bid-activity mail without watching it.
+  last two go to collectors who have bid on it. Closing warning and extended
+  bidding also reach bidders. Bidding on a lot enrols the collector in its
+  bid-activity mail without watching it.
 - **A collector receives a lot's mail once**, however many reasons they have
   to receive it. A collector who both watches and bids is one recipient.
 - **Mail follows the sale, not the clock.** Because the close moves, "closes
   in 24 hours" is measured against the scheduled close, and extended bidding
-  announces itself when it begins.
+  announces itself when it begins. A snipe war produces one new-bid letter
+  about the current lead, not one per increment.
+- **One letter shape** for every auction email: heading, body, listing
+  action, footer. Watch-driven letters offer a signed-in way to unwatch;
+  bid-activity letters do not.
+- **A temporary provider failure is retried; a permanent one stops.** A
+  statement that has become false is not sent late.
 - **Nothing is sent about a lot that was called off** before the collector
   could act on the message.
-- **Amounts and times follow the platform's existing rules.** English money in
-  a sent message; every close names its zone and matches the page.
 - **Operators have a send log** of type, recipient email, listing, and Sent
   At — no bodies — filterable by the collector's email.
 
 ## Non-Goals
 
-- **In-app, push, WhatsApp, or SMS notification.** Email only. The source
-  document mentions an in-app notification and then states every notification
-  is delivered by email; this change specifies the email.
+- **In-app, push, WhatsApp, or SMS notification.** Email only. Device push
+  for the new kinds is named on the shared vocabulary so a follow-on does not
+  rename them, and is not delivered here.
 - **Notification preferences or per-lot muting.** Everything here is
   transactional mail about a lot the collector chose to engage with.
-  Preferences are a change of their own, and need a settings surface.
 - **Marketing mail** — recommended lots, auction round-ups, re-engagement.
 - **Mail about winning, losing, paying, invoicing, or shipping.** The
-  after-the-close flow is deliberately out of scope until the orders and
-  invoices work is specified.
+  after-the-close flow is out of scope until the orders work is specified.
+- **Replacing the existing bid-state receipts** (you lead, you won, hold
+  failed, lost at close) **or the one-hour closing-soon reminder** already
+  sent to watchers. The 24-hour close letter is additive.
 - **Telling a collector they are about to be outbid**, or that their maximum
   is nearly exhausted.
-- **A digest.** One event, one message.
+- **A digest.** One event, one message — coalescing several increments of
+  the same new-bid event is not a digest.
 - **Localised mail.** Sent messages are English today, per `money-amounts`.
+- **One-click unsubscribe.** The destination is a signed-in page.
 
 ## Capabilities
 
@@ -72,7 +82,8 @@ overnight returns and raises their maximum before the lot closes.
 
 - `grade10-auction/notifications`: which auction emails Grade10 sends, what
   each one fires on, who receives it, how a collector is enrolled, what
-  suppresses a message, and the operator send log.
+  suppresses a message, the shared letter shape, send failure, and the
+  operator send log.
 
 ### Modified Capabilities
 
@@ -83,12 +94,16 @@ a separate in-flight change and is not modified here.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/backend/grade10/auction` | Emits the six events. Owns which collectors are enrolled on a lot. |
+| `apps/backend/grade10/auction` | Emits the six events. Owns which collectors are enrolled on a lot. Owns the send log. |
 | `@grade10/auction-contracts` | Gains the notification events. Additive. |
-| Email sending service | Renders and sends. Owns the send log. Not the auction service and not the store service. See `design.md`. |
+| `@grade10/email` | Renders and talks to the provider. Classifies temporary vs permanent send failure. Does not own the log. |
 | `@grade10/i18n` | **No change.** Sent messages are English; nothing enters the locale catalogs. |
 | `apps/admin/grade10` | A send log showing type, recipient email, listing, and Sent At, filterable by user email. No message bodies. |
+| `apps/frontend/grade10` | No new page. Watch-driven letters link a signed-in listing page. |
+| ZZZ | Same six messages, ZZZ identity. |
 
 **Ordering.** `add-auction-watchlist` must land first. Independent of
 `add-auction-proxy-bidding`, though the outbid mail becomes considerably more
-useful once a collector has a maximum to raise.
+useful once a collector has a maximum to raise. This change absorbs the
+in-flight `auction-email-notification-base` plan: one capability, one
+delivery.
