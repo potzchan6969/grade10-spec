@@ -13,13 +13,13 @@ What that means in practice is that "converting the component" is really three s
 | What travels | From → to | How | Automatic? |
 | --- | --- | --- | --- |
 | **Values** — colours, radii, spacing | Figma variables → `tokens.json` → theme CSS | `pnpm tokens:pull` | No. Needs a human to run a plugin in Figma. |
-| **Structure** — which variants, sizes, and states exist | Figma component set → a `cva` config in `<name>.tsx` | Written by hand, diffed by `check:design-system` | Written by hand; the diff runs nightly. |
+| **Structure** — which variants, sizes, and states exist | Figma component set → a `cva` config in `<name>.tsx` | Written by hand, diffed by `design-system:check` | Written by hand; the diff runs nightly. |
 | **Usage** — the snippet that appears in Dev Mode | `<name>.figma.ts` → Figma | `code-connect:publish` | No. Deliberately a manual step. |
 
 Conflating them is the usual source of confusion. Publishing your component set does not move a value; running the token sync does not add a variant; and a perfect Code Connect template that was never published shows a developer nothing at all.
 
 ```
-   Figma component set  ──(read by check:design-system)──▶  button.tsx        (the contract, hand-written)
+   Figma component set  ──(read by design-system:check)──▶  button.tsx        (the contract, hand-written)
             │                                                    │
             │                                              button.stories.tsx (proof each option renders)
             │                                                    │
@@ -42,7 +42,7 @@ Ordered. Steps 1–4 and 11 are the designer's; 5–10 are the implementation st
 | 6 | Designer/Engineer | Write `src/components/<group>/<name>.tsx` with **one cva option per Figma option, and nothing more**. | The basename matches the set name; the checker resolves a set to code by that name alone. |
 | 7 | Designer/Engineer | Write `<name>.figma.ts` mapping every option of every variant property. | No option is left unmapped — an unmapped one resolves to `undefined` and emits broken code. |
 | 8 | Designer/Engineer | Write `<name>.stories.tsx` — one story per option, plus disabled, loading, and every contract state. | `pnpm run test:stories` passes; it fails on any cva option no story renders. |
-| 9 | Designer/Engineer | `pnpm run check:design-system` to zero errors and zero unexplained warnings. | Axes, options, colours, and box geometry all agree with the file. |
+| 9 | Designer/Engineer | `pnpm run design-system:check` to zero errors and zero unexplained warnings. | Axes, options, colours, and box geometry all agree with the file. |
 | 10 | Designer/Engineer | `pnpm run code-connect:publish:design-system` — or `code-connect:publish:ui` for a block. Each package publishes its own templates; there is no command for both. | `get_code_connect_map` stops returning `{}` for the node. |
 | 11 | Designer | Verify: read the snippet in Dev Mode, and measure the built component in Storybook. | See ["Checking it yourself"](#checking-it-yourself) below. |
 
@@ -169,7 +169,7 @@ Each has happened here, and each passes every check that does not specifically l
 
 ## Related reading
 
-- [`design-code-sync.md`](design-code-sync.md) — the ownership table, everything `check:design-system` enforces, and the rules for the Figma file.
+- [`design-code-sync.md`](design-code-sync.md) — the ownership table, everything `design-system:check` enforces, and the rules for the Figma file.
 - [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) — the token pipeline: `tokens:import`, `tokens:build`, `tokens:push`, and why every leg needs a human in Figma.
 - [`ui-component-contracts.md`](ui-component-contracts.md) — product components, which are specified here and implemented in the consuming application.
 - [`prompts/implement-page-from-figma.md`](prompts/implement-page-from-figma.md) — the page-level counterpart: converting a whole page frame by composing existing blocks and primitives, with a paste-ready prompt and a designer-run preflight.

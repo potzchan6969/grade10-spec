@@ -7,8 +7,8 @@
  * or a Code Connect template whose node-id stopped resolving all look fine
  * until someone reads the Dev Mode snippet. This diffs the three.
  *
- *   FIGMA_TOKEN=figd_… pnpm run check:design-system        # unattended, use this in CI
- *   FIGMA_DUMP=~/Downloads/dump.json pnpm run check:design-system   # manual fallback
+ *   FIGMA_TOKEN=figd_… pnpm run design-system:check        # unattended, use this in CI
+ *   FIGMA_DUMP=~/Downloads/dump.json pnpm run design-system:check   # manual fallback
  *
  * Locally, put FIGMA_TOKEN in a .env at the repository root instead of
  * prefixing every invocation; see .env.example. CI passes it as a real
@@ -152,13 +152,13 @@ async function loadFigmaComponents() {
   if (!token)
     die(`No Figma source. Set FIGMA_TOKEN (preferred — runs unattended in CI):
 
-     FIGMA_TOKEN=figd_… pnpm run check:design-system
+     FIGMA_TOKEN=figd_… pnpm run design-system:check
 
    A personal access token with the \`files:read\` scope is enough; the
    Enterprise-only \`file_variables:read\` gate applies to the token pull, not
    to this check. Or fall back to the manual plugin dump:
 
-     FIGMA_DUMP=~/Downloads/figma-dump.json pnpm run check:design-system`);
+     FIGMA_DUMP=~/Downloads/figma-dump.json pnpm run design-system:check`);
 
   const spec = process.env.FIGMA_FILE ?? cfg.figmaFile;
   if (!spec) die("No figmaFile in tokens.config.json and no FIGMA_FILE set.");

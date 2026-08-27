@@ -10,7 +10,7 @@
     "agent:sync-parity": "bash scripts/agent-platform/sync-parity.sh",
     "agent:check-parity": "bash scripts/agent-platform/check-parity.sh",
     "cache:prime": "pnpm install --frozen-lockfile --prefer-offline",
-    "check:design-system": "node scripts/design-sync/check-components.mjs",
+    "design-system:check": "node scripts/design-sync/check-components.mjs",
     "figma:audit": "node scripts/design-sync/audit-node.mjs",
     "code-connect:publish:design-system": "pnpm --filter @grade10/design-system run code-connect:publish",
     "code-connect:publish:ui": "pnpm --filter @grade10/ui run code-connect:publish",

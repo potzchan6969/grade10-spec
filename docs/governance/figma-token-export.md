@@ -51,10 +51,10 @@ git diff packages/design-system/tokens.json                          # what desi
 `meta.components` is additive: the plugin walks every page and records each component set with its `componentPropertyDefinitions`. `pull.mjs` reads only `.variables` and `.variableCollections` and ignores it entirely.
 
 ```bash
-FIGMA_DUMP=/absolute/path/to/figma-dump.json pnpm run check:design-system
+FIGMA_DUMP=/absolute/path/to/figma-dump.json pnpm run design-system:check
 ```
 
-This is the **fallback** path, not the normal one. `check:design-system` prefers `FIGMA_TOKEN`, which needs only `files:read` — the Enterprise gate applies to variables, not to component definitions, so that check runs unattended in CI even though the token pull cannot. A dump carries no variant nodes, so colours and geometry go unchecked; the run says so rather than reporting clean:
+This is the **fallback** path, not the normal one. `design-system:check` prefers `FIGMA_TOKEN`, which needs only `files:read` — the Enterprise gate applies to variables, not to component definitions, so that check runs unattended in CI even though the token pull cannot. A dump carries no variant nodes, so colours and geometry go unchecked; the run says so rather than reporting clean:
 
 > `dump …/figma-dump.json carries no variant nodes, so colours and geometry went unchecked. Use FIGMA_TOKEN for the value checks.`
 
@@ -71,7 +71,7 @@ The plugin dumps **every** local collection. `pull.mjs` then reads only the ones
 | Any other collection | **No.** Silently ignored. |
 | A second mode of a configured collection | **No.** One Figma mode per configured theme. |
 | Variable descriptions | Yes → `$description`, omitted when blank |
-| `meta.components` | Not by the pull; read by `check:design-system` |
+| `meta.components` | Not by the pull; read by `design-system:check` |
 
 `Sizing` is the notable absence. It models modes as *size variants* (`default`/`sm`/`xs`) that must coexist on one page, which the config's one-selector-per-mode theme model cannot express. Wiring it up is tracked separately — **a green `tokens:pull` does not mean the whole file landed.**
 
@@ -104,4 +104,4 @@ Note that the manifest sets `documentAccess: "dynamic-page"`, so pages load lazi
 
 - [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) — the whole token pipeline: `tokens:import`, `tokens:build`, `tokens:push`, the ownership boundary, and round-trip guarantees.
 - [`figma-component-to-code.md`](figma-component-to-code.md) — where this step sits in the component handover.
-- [`design-code-sync.md`](design-code-sync.md) — what `check:design-system` enforces once the tokens have landed.
+- [`design-code-sync.md`](design-code-sync.md) — what `design-system:check` enforces once the tokens have landed.
