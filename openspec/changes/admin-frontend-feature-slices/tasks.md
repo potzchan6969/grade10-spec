@@ -41,9 +41,9 @@ currently declares for itself; nothing outside this group depends on it.
 - [x] 4.2 Build `programme/members` — lookup, search, one member, the ledger, adjustments and bonuses — with its module test and hook tests.
 - [x] 4.3 Build `programme/rewards`, covering the catalogue and its redemptions including settle and retry, with its module test and hook tests.
 - [x] 4.4 Build `programme/invitations` and `programme/liability`, each with its module test and hook tests.
-- [ ] 4.5 Join the slices to the published list, install the package in the grade10 panel's composition root, and move the members, rewards, invitations and liability sections onto the hooks with their existing view tests unedited.
-- [ ] 4.6 Delete those sections' decoding and their procedure imports, so none names anything in the application's client directory.
-- [ ] 4.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
+- [x] 4.5 Join the slices to the published list, install the package in the grade10 panel's composition root, and move the members, rewards, invitations and liability sections onto the hooks with their existing view tests unedited.
+- [x] 4.6 Delete those sections' decoding and their procedure imports, so none names anything in the application's client directory.
+- [x] 4.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
 
 ## 5. Panel cleanup (grade10)
 
