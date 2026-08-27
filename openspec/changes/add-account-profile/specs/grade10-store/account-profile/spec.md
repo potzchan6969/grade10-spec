@@ -31,8 +31,10 @@ request without a session SHALL be refused.
 The system SHALL return a complete profile for every signed-in collector,
 whether or not they have saved anything. Values the collector has not set SHALL
 be defaulted from their signed-in session — display name from the session name,
-avatar as initials. Reading a profile SHALL NOT create or modify stored data;
-the collector's profile record is created when they first save.
+or, when the session carries no name, from the part of the signed-in address
+before the `@`; avatar as initials. Reading a profile SHALL NOT create or
+modify stored data; the collector's profile record is created when they first
+save.
 
 #### Scenario: A collector who has never saved sees a profile
 
@@ -42,6 +44,15 @@ the collector's profile record is created when they first save.
   avatar, and an empty bio
 - **AND** the page offers editing, not creation — nothing asks them to create a
   profile first
+
+#### Scenario: A collector whose session carries no name
+
+- **GIVEN** a collector who signed in by emailed link or code, whose session
+  carries no name
+- **WHEN** they open their account page
+- **THEN** the display name shown is the part of their signed-in address before
+  the `@`, and the avatar shows initials derived from it
+- **AND** nothing shows a generated identifier in place of a name
 
 #### Scenario: A read stores nothing
 
@@ -68,15 +79,16 @@ the collector's profile record is created when they first save.
 
 The system SHALL present exactly these fields on the account page: display
 name, bio, avatar, the email address of the signed-in session, and the date the
-collector's profile record was first created. Display name, bio, and avatar
-SHALL be editable by the collector; email SHALL NOT.
+collector first saved their profile. Member-since SHALL be that date and not
+the date some other part of the store created their record. Display name, bio,
+and avatar SHALL be editable by the collector; email SHALL NOT.
 
 #### Scenario: Every field is present
 
 - **GIVEN** a signed-in collector with a saved profile
 - **WHEN** they open their account page
 - **THEN** the page shows their display name, bio, avatar, signed-in email
-  address, and the date their profile record was first created
+  address, and the date they first saved their profile
 
 #### Scenario: Member-since is absent before the first save
 
@@ -84,6 +96,14 @@ SHALL be editable by the collector; email SHALL NOT.
 - **WHEN** they open their account page
 - **THEN** no member-since date is shown, and its absence is not presented as
   an error
+
+#### Scenario: A record another part of the store created dates nothing
+
+- **GIVEN** a collector whose profile record exists because some other part of
+  the store wrote it, and who has never saved it themselves
+- **WHEN** they open their account page
+- **THEN** no member-since date is shown, and that record's creation date is
+  not presented as the date they joined
 
 ### Requirement: Email is read-only
 
@@ -159,8 +179,11 @@ SHALL let a collector clear it.
 
 The system SHALL accept a JPEG, PNG, or WebP image of at most 5 MB as the
 collector's avatar, presented square. An upload SHALL replace whatever avatar
-the collector had. A rejected upload SHALL leave the previous avatar in place
-and SHALL state why it was rejected.
+the collector had, and the replaced image SHALL be deleted from storage and
+SHALL be served from a different address than its replacement. A copy already
+held in a cache outside the system MAY answer the replaced image's address
+until that cache expires. A rejected upload SHALL leave the previous avatar in
+place and SHALL state why it was rejected.
 
 #### Scenario: An accepted upload becomes the avatar
 
@@ -184,20 +207,21 @@ and SHALL state why it was rejected.
 
 - **GIVEN** a collector with an avatar
 - **WHEN** they upload another accepted image
-- **THEN** the page shows the new image, and the previous one is no longer
-  served
+- **THEN** the page shows the new image at a different address, and the
+  previous image is deleted from storage
 
 ### Requirement: A collector removes their avatar and falls back to initials
 
-The system SHALL let a collector remove their avatar, and SHALL show initials
-derived from the display name whenever no avatar is set.
+The system SHALL let a collector remove their avatar and SHALL delete the
+removed image from storage, and SHALL show initials derived from the display
+name whenever no avatar is set.
 
 #### Scenario: Removing an avatar restores the initials
 
 - **GIVEN** a collector with an avatar
 - **WHEN** they remove it
 - **THEN** the page shows initials derived from their display name, and the
-  removed image is no longer served
+  removed image is deleted from storage
 
 #### Scenario: A collector who never uploaded sees initials
 
@@ -211,12 +235,18 @@ derived from the display name whenever no avatar is set.
 - **WHEN** they change their display name
 - **THEN** the initials shown are derived from the new display name
 
-### Requirement: Editing is explicit, and a save that changes nothing is refused
+### Requirement: Editing is explicit, and a save carrying no field is refused
 
 The system SHALL let a collector edit their profile and either save or cancel.
 Cancelling SHALL discard the edits and leave the stored profile untouched. A
-save SHALL persist every changed field together and return the updated profile.
-A save carrying no change SHALL be refused.
+save SHALL persist the display name and bio it carries together — both or
+neither — and SHALL return the updated profile. A save carrying no editable
+field SHALL be refused; a save repeating the stored values SHALL be accepted
+and change nothing.
+
+An avatar is set and removed on its own, so an edit touching both the avatar
+and the text fields SHALL report each outcome and SHALL NOT present a refused
+text save as having undone an accepted avatar change.
 
 #### Scenario: A save persists and is reflected immediately
 
@@ -230,11 +260,20 @@ A save carrying no change SHALL be refused.
 - **WHEN** they cancel
 - **THEN** the page shows the stored profile again and nothing was stored
 
-#### Scenario: A save with no change is refused
+#### Scenario: A save with no field is refused
 
 - **WHEN** a save request carries no editable field
-- **THEN** the system refuses it, stating that at least one field must change,
-  and stores nothing
+- **THEN** the system refuses it, stating that it carried nothing to save, and
+  stores nothing
+
+#### Scenario: An accepted avatar stands when the text save is refused
+
+- **GIVEN** a collector who changes their avatar and their display name in one
+  edit
+- **WHEN** the avatar is accepted and the display name is refused
+- **THEN** the page shows the new avatar, states why the display name was
+  refused, and keeps the collector's entered text so they can retry
+- **AND** the stored display name and bio are unchanged
 
 ### Requirement: A failed read or save is reported, never hidden
 

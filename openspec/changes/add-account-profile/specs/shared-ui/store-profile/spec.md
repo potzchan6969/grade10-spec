@@ -12,8 +12,9 @@ belong to the application.
 
 The shared UI package SHALL export, from its public entry, exactly these
 components for the profile surface — `ProfileCard`, `ProfileDetails`, and
-`ProfileForm` — and exactly these types: `ProfileCardProps`,
-`ProfileDetailsProps`, `ProfileFormProps`, and `ProfileFormValues`.
+`ProfileForm` — and exactly these types: `ProfileCardProps`, `ProfileCardCopy`,
+`ProfileDetailsProps`, `ProfileDetailsCopy`, `ProfileFormProps`,
+`ProfileFormCopy`, and `ProfileFormValues`.
 
 `ProfileDetails` and `ProfileForm` SHALL each be renderable on their own,
 outside `ProfileCard`.
@@ -29,6 +30,28 @@ outside `ProfileCard`.
 - **WHEN** an application renders the read view or the form without the card
 - **THEN** it renders and behaves as specified, with no missing-context error
   and no requirement to supply card props
+
+### Requirement: The card frames a body the application supplies
+
+`ProfileCard` SHALL render a titled card whose body is whichever of four states
+the application selects — loading, empty, failed, or ready — and in the ready
+state SHALL render the element the application supplied. The card SHALL NOT
+hold or decide whether the collector is reading or editing.
+
+#### Scenario: The ready body is the application's
+
+- **WHEN** the card is rendered ready with a read view, a form, or both
+- **THEN** it renders exactly what was supplied, inside the card's frame
+
+#### Scenario: A loading card shows no profile fields
+
+- **WHEN** the card is rendered loading
+- **THEN** it shows a loading placeholder and none of the profile's fields
+
+#### Scenario: A failed card states what happened
+
+- **WHEN** the card is rendered failed with a message and an action
+- **THEN** it displays that message and that action, and no profile fields
 
 ### Requirement: The read view shows avatar, display name, email, bio, and meta
 
@@ -57,8 +80,8 @@ edit label and an edit handler.
 
 `ProfileDetails` and `ProfileForm` SHALL display the supplied fallback content
 in place of the avatar image whenever no image source is supplied, and whenever
-a supplied image fails to load. The application supplies the fallback content;
-the components SHALL NOT derive it.
+a supplied image fails to load. The application supplies the fallback content
+and the image's accessible name; the components SHALL NOT derive either.
 
 #### Scenario: No image source
 
@@ -71,6 +94,12 @@ the components SHALL NOT derive it.
 - **WHEN** the image fails to load
 - **THEN** the supplied fallback content is displayed instead, and no broken
   image is shown
+
+#### Scenario: The image is named by the application
+
+- **WHEN** the avatar is rendered with an image source
+- **THEN** the image carries the accessible name the application supplied, and
+  the components substitute no name of their own
 
 ### Requirement: The form edits the avatar alongside the text fields
 
@@ -110,14 +139,21 @@ refusal back through the form's error content.
 - **THEN** the form reports it without refusing it, and displays only the error
   content the application supplies
 
-### Requirement: Every string on the surface is supplied by the application
+### Requirement: Every word on the surface arrives in the component's copy group
 
-The profile components SHALL render no built-in user-facing copy. Every label,
-including the avatar's choose and remove controls, SHALL come from the
-application.
+The profile components SHALL render no built-in user-facing copy. Each
+component SHALL take every word it renders in its own `copy` prop, whose type
+it exports under its own name, per `shared-ui/component-package`. The avatar's
+choose and remove labels SHALL belong to `ProfileFormCopy`.
 
 #### Scenario: A control has no copy of its own
 
 - **WHEN** the surface is rendered
-- **THEN** every visible string is one the application supplied, and no
-  component substitutes wording of its own
+- **THEN** every visible string is one the application supplied through a
+  `copy` prop, and no component substitutes wording of its own
+
+#### Scenario: The avatar controls are named by the form's copy
+
+- **WHEN** an engineer opens `ProfileFormCopy`
+- **THEN** it names the choose and remove labels alongside the form's other
+  words, and the form renders no label the type does not carry
