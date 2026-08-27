@@ -49,8 +49,8 @@ currently declares for itself; nothing outside this group depends on it.
 
 Needs groups 1 to 4 landed — it deletes what they replace.
 
-- [ ] 5.1 Collapse the panel's per-backend response caches into the one shared cache module, now that every slice owns its query keys.
-- [ ] 5.2 Delete the panel's own decoder helper, and reduce its client directory to the clients the composition root hands to ports.
+- [x] 5.1 Collapse the panel's per-backend response caches into the one shared cache module, now that every slice owns its query keys.
+- [x] 5.2 Delete the panel's own decoder helper, and reduce its client directory to the clients the composition root hands to ports.
 - [ ] 5.3 Update the repository's frontend architecture documentation and skill so the operator-facing packages are named alongside the collector-facing ones, and the enforcement line says the boundary is checked rather than reviewed.
 - [ ] 5.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, `pnpm run agent:check-parity`.
 
