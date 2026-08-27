@@ -6,7 +6,8 @@ type PaginationProps = ComponentProps<"nav">;
 
 /**
  * Navigation for splitting long lists of content across multiple pages.
- * Figma `Pagination` (`4181:2010`).
+ * Figma `Pagination` (`4181:2010`) — a `Gap/gap-1` row of previous / page /
+ * ellipsis / next controls.
  */
 function Pagination({ className, children, ...props }: PaginationProps) {
   return (
@@ -21,16 +22,22 @@ function Pagination({ className, children, ...props }: PaginationProps) {
   );
 }
 
-// Square controls bind Size/size-10 (40) and Radius/radius-md (6). Disabled is
-// the variant's own colours at Opacity/opacity-50 *and* a
-// Custom/disabled-foreground fill on the glyph — Figma draws both, so both
-// land here. Pressed is the hover accent fill plus a 1px translate matching
-// Button, with no opacity change.
+// Square controls bind Size/size-10 (40) and Radius/radius-full (999) —
+// PaginationLink `4181:1962`, Previous `4181:1984`. Idle resting is
+// `Base/background` + `Base/border`; hover/pressed swap to
+// `Base/background-subtle` + `Base/border-strong` (`4181:1964` / `4181:1966`).
+// Pressed also dims the fill (`Opacity/opacity-80` in Figma); the border stays
+// full-strength `border-strong` rather than inheriting that opacity, so the
+// token still reads. Disabled is the resting colours at `Opacity/opacity-50`
+// — the glyph stays `Base/foreground`, not a `disabled-foreground` swap
+// (`4181:1968`, `4181:1993`). Active page fills `Base/primary` with
+// `Base/primary-foreground` (`4181:1970`). Press keeps the 1px translate
+// shared with Button.
 const paginationControlClassName =
-  "inline-flex size-10 shrink-0 items-center justify-center rounded-(--radius-md) text-sm font-medium outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:text-disabled-foreground disabled:opacity-50 aria-disabled:pointer-events-none";
+  "inline-flex size-10 shrink-0 items-center justify-center rounded-(--radius-full) text-sm font-normal outline-none transition-[background-color,border-color,color,transform,opacity] duration-150 ease-out focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none";
 
 const paginationIdleClassName =
-  "cursor-pointer border border-border text-foreground transition-[background-color,border-color,color,transform] duration-150 ease-out hover:bg-accent active:bg-accent active:not-aria-[haspopup]:translate-y-px motion-reduce:transition-[background-color,border-color,color] motion-reduce:active:translate-y-0";
+  "cursor-pointer border border-border bg-background text-foreground hover:border-border-strong hover:bg-background-subtle active:border-border-strong active:bg-background-subtle/80 active:not-aria-[haspopup]:translate-y-px motion-reduce:transition-[background-color,border-color,color] motion-reduce:active:translate-y-0";
 
 type PaginationLinkProps = ComponentProps<"button"> & {
   /** Figma's `active` axis. The current page is a non-interactive
@@ -48,7 +55,7 @@ function PaginationLink({
   const classes = cn(
     paginationControlClassName,
     isActive
-      ? "bg-foreground text-primary-foreground"
+      ? "bg-primary text-primary-foreground"
       : paginationIdleClassName,
     className,
   );
