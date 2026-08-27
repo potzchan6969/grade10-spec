@@ -9,7 +9,7 @@
     "label": "nav/promo",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9025",
     "classes": "flex h-9 items-center justify-center overflow-hidden bg-secondary-foreground px-8",
-    "note": "Size/size-9 + Gap/gap-8. Fill resolves to #575757 in Figma (Grade10 secondary-foreground / gray-600), not Base/primary — get_variable_defs lists Base/primary on the node for other bindings; the audit fill is authoritative."
+    "note": "Size/size-9 + Gap/gap-8. Fill resolves to #575757 in Figma (Grade10 secondary-foreground / gray-600), not Base/primary \u2014 get_variable_defs lists Base/primary on the node for other bindings; the audit fill is authoritative."
   },
   {
     "label": "nav/bar",
@@ -43,5 +43,10 @@
     "classes": "flex items-center justify-center gap-1",
     "covers": "NavigationList",
     "note": "Points at the Slot (4343:16420), not the NavigationList frame the .figma.ts names: Figma draws a frame containing a Slot, and the gap the code renders lives on the Slot. `covers` records that this is NavigationList's coverage all the same."
+  },
+  {
+    "label": "navigation-link/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4344-502",
+    "classes": "inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-(--radius-full) px-4 py-2 text-sm font-medium whitespace-nowrap text-foreground outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-disabled:hover:bg-transparent"
   }
 ]
