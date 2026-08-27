@@ -9,6 +9,7 @@
  * bridge is unavailable or bound to the wrong file: Figma → Plugins →
  * Development → Import plugin from manifest…
  *
+ *   node scripts/tokens-sync/figma-plugins/build-plugin.mjs        # every plugin below
  *   node scripts/tokens-sync/figma-plugins/build-plugin.mjs push   # -> scripts/tokens-sync/figma-plugins/build/push/
  *   node scripts/tokens-sync/figma-plugins/build-plugin.mjs seed   # -> scripts/tokens-sync/figma-plugins/build/seed/
  *   node scripts/tokens-sync/figma-plugins/build-plugin.mjs dump   # -> scripts/tokens-sync/figma-plugins/build/dump/
@@ -17,6 +18,7 @@
  * tokens.json changes). dump COPIES hand-written source from scripts/tokens-sync/figma-plugins/plugin-src/dump/
  * (reads Figma at runtime, carries no data, so it never goes stale).
  */
+import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -30,6 +32,7 @@ const die = (m) => {
 const TARGETS = {
   push: {
     gen: "scripts/tokens-sync/figma-plugins/build/push.gen.js",
+    producedBy: "pnpm run tokens:push",
     out: "scripts/tokens-sync/figma-plugins/build/push",
     name: "DS Token Push",
     id: "ds-token-push-local",
@@ -38,6 +41,7 @@ const TARGETS = {
   },
   seed: {
     gen: "scripts/tokens-sync/figma-plugins/build/seed-default.gen.js",
+    producedBy: "node scripts/tokens-sync/figma-plugins/seed-default.mjs",
     out: "scripts/tokens-sync/figma-plugins/build/seed",
     name: "DS Token Seed (shadcn default)",
     id: "ds-token-seed-default-local",
@@ -56,27 +60,29 @@ const TARGETS = {
   },
 };
 
-const t = TARGETS[process.argv[2]];
-if (!t)
+const TARGET_KEYS = Object.keys(TARGETS);
+const arg = process.argv[2];
+if (arg && !TARGETS[arg])
   die(
-    `Usage: node scripts/tokens-sync/figma-plugins/build-plugin.mjs <${Object.keys(TARGETS).join("|")}>`,
+    `Unknown target "${arg}". Usage: node scripts/tokens-sync/figma-plugins/build-plugin.mjs [${TARGET_KEYS.join("|")}] — with no target, every plugin is rebuilt.`,
   );
 
-const outDir = resolve(repoRoot, t.out);
-await mkdir(outDir, { recursive: true });
-const written = [];
+async function build(t) {
+  const outDir = resolve(repoRoot, t.out);
+  await mkdir(outDir, { recursive: true });
+  const written = [];
 
-if (t.gen) {
-  // WRAP: the generated script carries the token values and is reshaped to run
-  // as a plugin. push.mjs emits `return await (async () => {…})()`;
-  // seed-default.mjs emits a bare body with top-level await + a trailing
-  // return. Neither is legal at the top level of a plugin, so both end up
-  // inside one IIFE.
-  const src = (await readFile(resolve(repoRoot, t.gen), "utf8")).trimEnd();
-  const body = src.includes("return await (async () => {")
-    ? src.replace("return await (async () => {", "(async () => {")
-    : `(async () => {\n${src}\n})()`;
-  const code = `${body}
+  if (t.gen) {
+    // WRAP: the generated script carries the token values and is reshaped to run
+    // as a plugin. push.mjs emits `return await (async () => {…})()`;
+    // seed-default.mjs emits a bare body with top-level await + a trailing
+    // return. Neither is legal at the top level of a plugin, so both end up
+    // inside one IIFE.
+    const src = (await readFile(resolve(repoRoot, t.gen), "utf8")).trimEnd();
+    const body = src.includes("return await (async () => {")
+      ? src.replace("return await (async () => {", "(async () => {")
+      : `(async () => {\n${src}\n})()`;
+    const code = `${body}
   .then((r) => {
     console.log(JSON.stringify(r, null, 2));
     figma.closePlugin(${t.headline});
@@ -86,42 +92,66 @@ if (t.gen) {
     figma.closePlugin("ERROR: " + e.message);
   });
 `;
-  new Function(code); // parse check — a syntax error here beats one inside Figma
-  await writeFile(resolve(outDir, "code.js"), code, "utf8");
-  written.push("code.js");
-} else {
-  // COPY: the dump reads Figma at runtime and bakes in no data, so its source is
-  // already plugin-shaped and constant. Only the manifest is generated.
-  for (const f of t.files) {
-    const content = await readFile(resolve(repoRoot, t.src, f), "utf8");
-    if (f.endsWith(".js")) new Function("figma", "__html__", content);
-    await writeFile(resolve(outDir, f), content, "utf8");
-    written.push(f);
+    new Function(code); // parse check — a syntax error here beats one inside Figma
+    await writeFile(resolve(outDir, "code.js"), code, "utf8");
+    written.push("code.js");
+  } else {
+    // COPY: the dump reads Figma at runtime and bakes in no data, so its source is
+    // already plugin-shaped and constant. Only the manifest is generated.
+    for (const f of t.files) {
+      const content = await readFile(resolve(repoRoot, t.src, f), "utf8");
+      if (f.endsWith(".js")) new Function("figma", "__html__", content);
+      await writeFile(resolve(outDir, f), content, "utf8");
+      written.push(f);
+    }
   }
+
+  await writeFile(
+    resolve(outDir, "manifest.json"),
+    JSON.stringify(
+      {
+        name: t.name,
+        id: t.id,
+        api: "1.0.0",
+        main: "code.js",
+        ...(t.ui ? { ui: t.ui } : {}),
+        editorType: ["dev"],
+        capabilities: ["inspect", "vscode"],
+        documentAccess: "dynamic-page",
+      },
+      null,
+      2,
+    ) + "\n",
+    "utf8",
+  );
+
+  console.log(
+    `✓ ${t.gen ?? t.src} -> ${t.out}/ (${written.join(" + ")} + manifest.json)`,
+  );
+  console.log(
+    `  Figma → Plugins → Development → Import plugin from manifest… → ${t.out}/manifest.json`,
+  );
 }
 
-await writeFile(
-  resolve(outDir, "manifest.json"),
-  JSON.stringify(
-    {
-      name: t.name,
-      id: t.id,
-      api: "1.0.0",
-      main: "code.js",
-      ...(t.ui ? { ui: t.ui } : {}),
-      editorType: ["dev"],
-      capabilities: ["inspect", "vscode"],
-      documentAccess: "dynamic-page",
-    },
-    null,
-    2,
-  ) + "\n",
-  "utf8",
-);
+// A gen-backed plugin bakes in token values, so it cannot be built before the
+// script emitting them has run. Named explicitly that is an error; in a
+// build-all it is a skip, because the targets that are ready still stand.
+const skipped = [];
+let built = 0;
+for (const key of arg ? [arg] : TARGET_KEYS) {
+  const t = TARGETS[key];
+  if (t.gen && !existsSync(resolve(repoRoot, t.gen))) {
+    if (arg)
+      die(`${t.gen} does not exist yet — run \`${t.producedBy}\` first.`);
+    skipped.push(t);
+    continue;
+  }
+  await build(t);
+  built++;
+}
 
-console.log(
-  `✓ ${t.gen ?? t.src} -> ${t.out}/ (${written.join(" + ")} + manifest.json)`,
-);
-console.log(
-  `  Figma → Plugins → Development → Import plugin from manifest… → ${t.out}/manifest.json`,
-);
+for (const t of skipped)
+  console.log(
+    `⚠ skipped ${t.name} — no ${t.gen} yet (run \`${t.producedBy}\`)`,
+  );
+if (!built) die("nothing to build");

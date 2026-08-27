@@ -150,6 +150,11 @@ from manifest… → `scripts/tokens-sync/figma-plugins/build/push/manifest.json
 open, so there is no binding to get wrong. Open Plugins → Development → Open
 console first; the headline lands in a toast, the full JSON in the console.
 
+`pnpm tokens:plugin` with no target rebuilds all three. `push` and `seed` bake in
+token values, so a build-all skips either one whose generated script does not
+exist yet and names the command that writes it; asking for one by name when its
+script is missing is an error instead.
+
 **Ownership boundary (how conflicts are avoided):** designers own values in Figma
 (land via `tokens:pull` → PR); engineers own the contract/`slotMap` and code-only
 themes. `tokens.json` is the git merge point — two people editing the same token
