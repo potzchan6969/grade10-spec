@@ -58,8 +58,8 @@ Needs groups 1 to 4 landed — it deletes what they replace.
 
 Lands last, when there is nothing left for it to fail on.
 
-- [ ] 6.1 Add the boundary check to the repository's check registry: it fails on a transport client named in application page, view or component code, a request issued directly to a product backend, or a response schema declared in place — scenario: Application code reaches a transport directly.
-- [ ] 6.2 Give the check named exemptions carrying their reason, including the storefront's demo lab pages, and make an exemption whose path no longer exists fail the run — scenario: A path is exempt on purpose.
+- [x] 6.1 Add the boundary check to the repository's check registry: it fails on a transport client named in application page, view or component code, a request issued directly to a product backend, or a response schema declared in place — scenario: Application code reaches a transport directly.
+- [x] 6.2 Give the check named exemptions carrying their reason, including the storefront's demo lab pages, and make an exemption whose path no longer exists fail the run — scenario: A path is exempt on purpose.
 - [ ] 6.3 Verify: `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`.
 
 ## 7. Directory views as shared blocks (grade10-spec) (owner: @sean)
