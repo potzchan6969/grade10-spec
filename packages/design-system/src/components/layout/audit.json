@@ -19,7 +19,7 @@
   {
     "label": "footer/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653",
-    "classes": "@container flex w-full flex-col bg-primary"
+    "classes": "@container flex w-full flex-col bg-background-inverse"
   },
   {
     "label": "footer/grid",
