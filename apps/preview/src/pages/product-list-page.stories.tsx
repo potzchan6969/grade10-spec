@@ -1,5 +1,4 @@
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import { Nav } from "@grade10/design-system/components/layout/nav";
 import {
   CartDrawer,
   type CartItemSummary,
@@ -21,6 +20,7 @@ import {
   sortTriggerLabel,
   UTILITY_LINKS,
 } from "./store-content";
+import { WorkbenchAccountNav } from "./workbench-account-nav";
 
 const RESULTS_LOAD_MS = 450;
 const PAGE_SIZE = 10;
@@ -53,7 +53,8 @@ function formatHkd(amount: number): string {
  * change; this workbench simulates that fetch with a short loading beat.
  *
  * The nav cart button opens the shared drawer; checkout redirect stays a
- * workbench stub (consumer-owned in a real store).
+ * workbench stub (consumer-owned in a real store). Account opens a temporary
+ * workbench menu with Order History.
  */
 function ProductListPage() {
   const [selection, setSelection] =
@@ -180,7 +181,11 @@ function ProductListPage() {
 
   return (
     <div className="min-h-svh bg-white">
-      <Nav {...STORE_NAV} promo={null} onCartClick={() => setCartOpen(true)} />
+      <WorkbenchAccountNav
+        {...STORE_NAV}
+        promo={null}
+        onCartClick={() => setCartOpen(true)}
+      />
       <ProductBrowse
         appliedFilters={appliedFilters}
         copy={{
