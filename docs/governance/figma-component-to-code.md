@@ -173,5 +173,6 @@ Each has happened here, and each passes every check that does not specifically l
 - [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) — the token pipeline: `tokens:import`, `tokens:build`, `tokens:push`, and why every leg needs a human in Figma.
 - [`ui-component-contracts.md`](ui-component-contracts.md) — product components, which are specified here and implemented in the consuming application.
 - [`prompts/implement-page-from-figma.md`](prompts/implement-page-from-figma.md) — the page-level counterpart: converting a whole page frame by composing existing blocks and primitives, with a paste-ready prompt and a designer-run preflight.
+- `.cursor/skills/design-tokens/SKILL.md` — the working checklist for step 5, covering all three legs of the token pipeline.
 - `.cursor/skills/design-system-components/SKILL.md` — the working checklist an agent or engineer follows for steps 5–10.
 - `.cursor/skills/page-from-figma/SKILL.md` — the same for a page-level frame.
