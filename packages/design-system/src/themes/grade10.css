@@ -3,34 +3,36 @@
 
 .theme-grade10 {
   /* Figma semantic set (raw) */
-  --background: var(--gray-50); /* Main application background */
-  --foreground: var(--gray-900); /* Primary text color on the background */
+  --background: #FFFFFF; /* Base page surface */
+  --background-subtle: var(--gray-50); /* Slightly raised areas */
+  --background-inverse: var(--gray-950); /* Inverted surfaces */
+  --foreground: var(--gray-900); /* Default body text */
   --card: var(--background); /* Background of card */
   --card-foreground: var(--foreground); /* Text and icons within cards */
-  --popover: var(--gray-50-opacity-80); /* Background for dropdown menus and popovers */
+  --popover: var(--background); /* Background for dropdown menus and popovers */
   --popover-foreground: var(--foreground); /* Text and icons within popovers */
-  --primary: var(--foreground); /* Brand color for primary actions (buttons, highlights) */
-  --primary-foreground: var(--gray-50); /* Text and icons on primary-colored elements */
+  --primary: var(--orange-400); /* Brand color for primary actions (buttons, highlights) */
+  --primary-foreground: #FFFFFF; /* Text and icons on primary-colored elements */
   --secondary: var(--gray-200); /* Less prominent action color */
-  --secondary-foreground: var(--gray-600); /* Text and icons on secondary-colored elements */
+  --secondary-foreground: var(--gray-500); /* Secondary text, descriptions */
   --muted: var(--gray-100); /* Subdued background for less important elements */
-  --muted-foreground: var(--foreground); /* De-emphasized text (captions, labels) */
+  --muted-foreground: var(--gray-400); /* Placeholders, disabled labels, markers */
   --accent: var(--gray-950-opacity-4); /* Highlight color for active or focused elements */
   --accent-foreground: var(--orange-400); /* Text and icons on accent-colored elements */
-  --border: var(--gray-300); /* Default border color */
-  --border-subtle: var(--gray-200); /* Subtle border color */
-  --border-hover: var(--gray-300); /* Border color for hovering cards */
+  --border: var(--gray-200); /* Default border color */
+  --border-subtle: var(--gray-100); /* Subtle border color */
+  --border-strong: var(--gray-300); /* Border color for hovering cards */
   --input: var(--background); /* Form input and button borders */
-  --ring: var(--gray-950-opacity-30); /* Focus indicator color */
+  --ring: var(--gray-300); /* Focus indicator color */
   --overlay: var(--gray-950-opacity-30);
   --success: var(--green-500);
-  --success-foreground: var(--green-50);
+  --success-foreground: #FFFFFF;
   --info: var(--blue-500);
-  --info-foreground: var(--blue-50);
+  --info-foreground: #FFFFFF;
   --warning: var(--yellow-400);
-  --warning-foreground: var(--yellow-50);
+  --warning-foreground: #FFFFFF;
   --destructive: var(--red-500);
-  --destructive-foreground: var(--red-50);
+  --destructive-foreground: #FFFFFF;
   --chart-1: var(--green-400);
   --chart-2: var(--blue-400);
   --chart-3: var(--purple-500);

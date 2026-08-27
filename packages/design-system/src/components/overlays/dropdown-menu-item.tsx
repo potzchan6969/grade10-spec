@@ -8,10 +8,10 @@ import type * as React from "react";
 // Label is `Base/popover-foreground` on every rung — not `accent-foreground`,
 // which is the orange brand fill in Grade10. Selected (`isSelected`) has no
 // fill; the trailing check is the indicator. Hover and keyboard highlight
-// share `Custom/muted-hover`. Disabled is `Opacity/opacity-50` over the
-// item's own colours (node `2121:1400`), not a grey swap.
+// paint `Base/muted` (node `2121:1414`). Disabled is `Opacity/opacity-50` over
+// the item's own colours (node `2121:1400`), not a grey swap.
 const dropdownMenuItemVariants = cva(
-  "group/dropdown-menu-item relative flex cursor-default items-center gap-2 rounded-full px-3 py-2 font-medium text-popover-foreground outline-hidden select-none hover:bg-muted-hover data-highlighted:bg-muted-hover data-inset:pl-7 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:*:[svg]:text-destructive",
+  "group/dropdown-menu-item relative flex cursor-default items-center gap-2 rounded-full px-3 py-2 font-medium text-popover-foreground outline-hidden select-none hover:bg-muted data-highlighted:bg-muted data-inset:pl-7 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:*:[svg]:text-destructive",
   {
     variants: {
       size: {
@@ -28,14 +28,15 @@ const dropdownMenuItemVariants = cva(
 /**
  * An individual interactive item within a dropdown menu.
  *
- * Label is `Base/popover-foreground` on every rung — not `accent-foreground`,
- * which is the orange brand fill in Grade10. Selected (`isSelected`) has no
- * fill; the trailing check is the indicator. Hover and keyboard highlight
- * share `Custom/muted-hover`. Disabled is `Opacity/opacity-50` over the
- * item's own colours (node `2121:1400`), not a grey swap.
+ * Figma `Dropdown Menu Item` (`2121:1385`). Label is `Base/popover-foreground`
+ * on every rung — not `accent-foreground`, which is the orange brand fill in
+ * Grade10. Selected (`isSelected`) has no fill; the trailing check is the
+ * indicator. Hover and keyboard highlight paint `Base/muted`. Disabled is
+ * `Opacity/opacity-50` over the item's own colours, not a grey swap.
  *
- * Size `sm` (36px, `text-sm`, 14px icon) is default; size `md` (40px, `text-base`, 16px icon)
- * supports larger menu listings.
+ * Size `sm` (36px, `text-sm`, 14px icon) is default; size `md` (40px,
+ * `text-base`, 16px icon) supports larger menu listings. Trailing content
+ * binds `Base/secondary-foreground` at regular weight.
  */
 function DropdownMenuItem({
   className,

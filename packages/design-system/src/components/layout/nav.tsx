@@ -129,15 +129,18 @@ function LocaleControl({
  * is passed in so a consumer can swap copy and callbacks without owning the
  * layout. Primary items are `NavigationList` / `NavigationLink`; the locale
  * control is a ghost `md` Button with a currency icon, and opens a dropdown
- * of the supplied locales when a handler backs it.
+ * of the supplied locales when a handler backs it. Trailing controls are
+ * ghost `md` IconButtons at `Size/size-10` with 14px glyphs, spaced
+ * `Gap/gap-1`.
  *
  * Annotations on the set: the logo link goes to the homepage (`logoHref`);
  * the locale control switches currency (e.g. HKD / KRW) when `locales` and
  * `onLocaleChange` are supplied. The promo bar fills at `Size/size-9` with
  * `text-sm/semibold` `Base/primary-foreground` copy — its fill resolves to
- * the same value as `secondary-foreground` in the Grade10 theme (`#575757`),
+ * the same value as `secondary-foreground` in the Grade10 theme (`#75726f`),
  * not `Base/primary`. Grade10's mark is the consumer-owned `g10-logo_mono`
- * instance sized at `Size/size-7` in the bar.
+ * instance sized at `Size/size-7` in the bar. The main bar is `Size/size-18`
+ * (72) with `Gap/gap-8` horizontal inset.
  *
  * Brand, navigation, and locale content is required rather than defaulted: two
  * stores render this shell, and a default would let the second one ship the

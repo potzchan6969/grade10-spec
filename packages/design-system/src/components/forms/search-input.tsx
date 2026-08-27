@@ -57,11 +57,6 @@ function SearchInput({
 
   return (
     <InputShell
-      boxClassName={
-        disabled
-          ? "opacity-50 text-foreground [&_svg]:text-secondary-foreground"
-          : undefined
-      }
       className={className}
       disabled={disabled}
       htmlFor={inputId}
@@ -91,7 +86,7 @@ function SearchInput({
     >
       <Input
         {...props}
-        className="[&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden disabled:text-foreground"
+        className="[&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
         disabled={disabled}
         id={inputId}
         type="search"

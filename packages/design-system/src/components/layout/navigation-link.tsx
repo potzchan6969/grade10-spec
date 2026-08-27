@@ -17,11 +17,12 @@ type NavigationLinkProps = useRender.ComponentProps<"a"> & {
  * has three VARIANT properties: `active`, `disabled`, and `state`. Hover is
  * a CSS pseudo-state with no prop behind it.
  *
- * Label is `Base/foreground` on every rung — not `accent-foreground`, which
- * is the orange brand fill. Active and hover share `Custom/muted-hover`.
- * Disabled is the same colours at `Opacity/opacity-50` — node `4344:506`
- * binds no grey — so it is one opacity rule, not a `disabled-foreground`
- * swap. Every variant binds `Radius/radius-full`.
+ * Label is `Base/foreground` on every rung. Active and hover fill
+ * `Base/muted` (`4343:16409`, `4344:504`) — not `Custom/muted-hover`. Disabled
+ * (`4344:506`) is the same colours at `Opacity/opacity-50`, so it is one
+ * opacity rule, not a `disabled-foreground` swap. Geometry: `Size/size-10`
+ * height, `Gap/gap-4` horizontal padding, `Gap/gap-2` vertical padding and
+ * item gap, `Radius/radius-full`.
  */
 function NavigationLink({
   className,
@@ -35,8 +36,8 @@ function NavigationLink({
     props: mergeProps<"a">(
       {
         className: cn(
-          "inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full px-3 py-2 text-sm font-medium whitespace-nowrap text-foreground outline-none transition-colors hover:bg-muted-hover focus-visible:ring-3 focus-visible:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-disabled:hover:bg-transparent",
-          active && "bg-muted-hover",
+          "inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-(--radius-full) px-4 py-2 text-sm font-medium whitespace-nowrap text-foreground outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-disabled:hover:bg-transparent",
+          active && "bg-muted",
           className,
         ),
         "aria-current": active ? "page" : undefined,

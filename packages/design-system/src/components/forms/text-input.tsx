@@ -25,7 +25,9 @@ type TextInputProps = React.ComponentProps<"input"> & {
  * Figma models four axes on this set, of which one is a prop: `state` is a CSS
  * pseudo-state, `status=placeholder` is what an empty field looks like rather
  * than a choice, and `isDisabled` is the native attribute. `status` is the
- * only axis with a code counterpart.
+ * only axis with a code counterpart. The message stays
+ * `Base/secondary-foreground` on every status — error and success tone the
+ * border and trailing icon only.
  */
 function TextInput({
   className,

@@ -90,7 +90,7 @@ export const Default: Story = {
     // The dark surface, and no stroke on the outer frame: the design draws
     // its only one on the bottom bar, asserted below. This used to assert a
     // top border here, which is how the drift outlived the component.
-    expect(footer).toHaveClass("bg-primary");
+    expect(footer).toHaveClass("bg-background-inverse");
     expect(footer).not.toHaveClass("border-t");
     expect(footer.firstElementChild).toHaveClass("gap-6", "p-8");
     const bar = footer.querySelector('[data-slot="footer-bar"]');

@@ -28,7 +28,7 @@ export const FooterSize: Story = {
   args: { className: "h-5 w-auto text-primary-foreground" },
   decorators: [
     (Story) => (
-      <div className="bg-primary p-8">
+      <div className="bg-background-inverse p-8">
         <Story />
       </div>
     ),

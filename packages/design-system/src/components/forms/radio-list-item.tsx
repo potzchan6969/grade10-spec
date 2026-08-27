@@ -14,8 +14,10 @@ type RadioListItemProps = RadioPrimitive.Root.Props & {
  * A radio with its label. Wrapping both in a `<label>` is what makes the text
  * clickable — Figma draws the pair but cannot express the association.
  *
- * `disabled` is Figma's only axis here, and it dims the label as well as the
- * control, so the tone lives on the label rather than on `RadioButton`.
+ * Figma (`2213:142`) has one axis: `isDisabled`. Disabled is
+ * `Opacity/opacity-50` over the row; the label stays `Base/foreground` and
+ * `text-base/normal`, with `Gap/gap-2` between the control and the text. The
+ * nested radio still gets its disabled ring fill (`Base/background-subtle`).
  */
 function RadioListItem({
   className,
@@ -29,12 +31,16 @@ function RadioListItem({
       data-slot="radio-list-item"
       data-disabled={disabled || undefined}
       className={cn(
-        "group/radio-item flex w-full items-start gap-2 text-base text-foreground has-data-disabled:text-disabled-foreground",
-        disabled ? "cursor-not-allowed" : "cursor-pointer",
+        "group/radio-item flex w-full items-start gap-2 text-base text-foreground",
+        disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
         className,
       )}
     >
-      <RadioButton disabled={disabled} {...props} />
+      <RadioButton
+        {...props}
+        disabled={disabled}
+        className={disabled ? "disabled:opacity-100" : undefined}
+      />
       {children}
     </label>
   );

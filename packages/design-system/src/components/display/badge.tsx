@@ -4,15 +4,14 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 // Figma binds every badge corner to `Radius/radius-full`. Default fill is
-// `Base/primary`; `brand` is `Base/accent-foreground` (the SALE treatment);
-// `outline` is the only rung that draws `Base/border`.
+// `Base/muted` with `Base/foreground` text; `brand` is `Base/accent-foreground`
+// (the SALE treatment); `outline` is the only rung that draws `Base/border`.
 const badgeVariants = cva(
   "group/badge inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent py-0 text-xs font-medium whitespace-nowrap [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3!",
   {
     variants: {
       variant: {
-        default:
-          "bg-primary text-primary-foreground [a]:hover:bg-[color-mix(in_oklab,var(--primary),white_5%)]",
+        default: "bg-muted text-foreground",
         success: "bg-success text-success-foreground backdrop-blur-md",
         error: "bg-destructive text-destructive-foreground backdrop-blur-md",
         warning: "bg-warning text-warning-foreground backdrop-blur-md",

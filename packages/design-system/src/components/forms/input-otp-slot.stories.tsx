@@ -16,7 +16,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Figma's default digit `"0"` is the placeholder glyph for an empty slot. */
+/** Empty slot — blank until a digit is passed. */
 export const Placeholder: Story = {};
 
 export const Filled: Story = { args: { digit: "8" } };
@@ -29,7 +29,7 @@ export const SuccessFilled: Story = { args: { status: "success", digit: "8" } };
 
 /** Figma's `state=focus` paints the ring instead of the resting border. */
 export const Focused: Story = { args: { focused: true, digit: "8" } };
-export const FocusedPlaceholder: Story = { args: { focused: true } };
+export const FocusedEmpty: Story = { args: { focused: true } };
 export const FocusedError: Story = {
   args: { focused: true, status: "error", digit: "8" },
 };

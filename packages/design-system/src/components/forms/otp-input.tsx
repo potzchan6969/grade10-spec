@@ -43,7 +43,10 @@ type OtpInputProps = Omit<
   disabled?: boolean;
   /** How many slots to draw. Figma draws six. */
   length?: number;
-  /** Empty-slot glyph passed through to each slot. Figma's default is `"0"`. */
+  /**
+   * Optional empty-slot glyph. Defaults to blank — Figma's set paints `"0"` as
+   * a design stand-in, but product OTP fields leave empty slots empty.
+   */
   placeholder?: string;
   /** Pins the focus ring on mount — Figma's `state=focus` uses slot 3. */
   defaultFocusedIndex?: number;
@@ -109,7 +112,7 @@ function OtpInputSlots({
         <InputOtpSlot
           key={slotKeys[index]}
           digit={slot.char}
-          placeholder={slot.placeholderChar ?? placeholder}
+          placeholder={placeholder ? (slot.placeholderChar ?? placeholder) : ""}
           status={status}
           focused={slot.isActive}
           disabled={disabled}
@@ -143,8 +146,8 @@ function OtpInputSlots({
  * input owns the value and caret, and each `InputOtpSlot` mirrors a character.
  * Figma models three axes on this set, of which one is a prop: `state` is which
  * slot carries the focus ring, `status` is the tone shared with the slots and
- * message, and `isDisabled` is the plain disabled boolean. An empty row is not
- * a separate status — it is what the field looks like before the user types.
+ * message, and `isDisabled` is the plain disabled boolean. An empty row is blank
+ * boxes — not a `"0"` placeholder — until the user types.
  */
 function OtpInput({
   className,
@@ -153,7 +156,7 @@ function OtpInput({
   status = "default",
   disabled = false,
   length = 6,
-  placeholder = "0",
+  placeholder = "",
   defaultFocusedIndex,
   focusedIndex,
   id,
@@ -168,7 +171,7 @@ function OtpInput({
   const inputId = id ?? generatedId;
   const messageId = message ? `${inputId}-message` : undefined;
   const inputRef = useRef<HTMLInputElement>(null);
-  const placeholderValue = placeholder.repeat(length);
+  const placeholderValue = placeholder ? placeholder.repeat(length) : undefined;
   const isControlled = value !== undefined;
   const initialFocusedIndex = focusedIndex ?? defaultFocusedIndex;
 
@@ -192,7 +195,7 @@ function OtpInput({
           htmlFor={inputId}
           className={cn(
             "text-sm text-secondary-foreground",
-            disabled && "text-disabled-foreground",
+            disabled && "opacity-50",
           )}
         >
           {label}
@@ -209,7 +212,7 @@ function OtpInput({
         onChange={onChange}
         onComplete={onComplete}
         containerClassName={cn(
-          "relative flex w-full gap-2 has-disabled:opacity-50",
+          "relative flex w-full gap-2",
           // The library paints an absolute input over the slots; let slots receive clicks.
           "[&_[data-input-otp]]:!pointer-events-none",
         )}
@@ -233,7 +236,7 @@ function OtpInput({
           id={messageId}
           className={cn(
             messageVariants({ status: disabled ? "default" : status }),
-            disabled && "text-disabled-foreground",
+            disabled && "opacity-50",
           )}
         >
           {message}

@@ -22,6 +22,8 @@ const disabled = instance.getEnum("isDisabled", {
 });
 
 const digit = instance.getString("digit");
+// Figma's set paints `"0"` as an empty-slot stand-in. Product slots are blank
+// until a real digit is entered, so `"0"` emits no `digit` prop.
 const filled = digit !== "0";
 
 export default {

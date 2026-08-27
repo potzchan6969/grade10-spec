@@ -4,7 +4,6 @@ import {
   type InputStatus,
   InputStatusIcon,
 } from "@grade10/design-system/components/forms/input";
-import { cn } from "@grade10/design-system/lib/utils";
 import { XIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useId } from "react";
@@ -88,10 +87,7 @@ function NumberInput({
       {unit ? (
         <span
           data-slot="input-unit"
-          className={cn(
-            "shrink-0 text-sm text-secondary-foreground",
-            disabled && "text-disabled-foreground",
-          )}
+          className="shrink-0 text-sm text-secondary-foreground"
         >
           {unit}
         </span>

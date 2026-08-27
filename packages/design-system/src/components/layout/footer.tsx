@@ -41,8 +41,8 @@ type FooterProps = ComponentProps<"footer"> & {
 /**
  * Store footer. Figma (`4171:9653`) has no variant axes — columns and copy
  * are consumer-owned so a locale or catalog change does not fork the layout.
- * This is a dark surface: the frame fills `Base/primary` and every string on
- * it is `Base/primary-foreground`. The outer frame draws no stroke at all —
+ * This is a dark surface: the frame fills `Base/background-inverse` and every
+ * string on it is `Base/primary-foreground`. The outer frame draws no stroke at all —
  * the only one in the design sits on the bottom bar's top edge, bound to the
  * `gray-500-opacity-20` primitive rather than to a semantic slot, which is
  * how Figma binds it and the reason no slot was invented for it here.
@@ -90,7 +90,10 @@ function Footer({
   return (
     <footer
       data-slot="footer"
-      className={cn("@container flex w-full flex-col bg-primary", className)}
+      className={cn(
+        "@container flex w-full flex-col bg-background-inverse",
+        className,
+      )}
       {...props}
     >
       <div className="grid w-full grid-cols-1 gap-6 p-8 @xl:grid-cols-2 @3xl:grid-cols-4">
