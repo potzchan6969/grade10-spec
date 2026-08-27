@@ -112,7 +112,7 @@ Rejected: passing better-auth's client whole. The narrowed port is the reason a
 plugin change fails to compile in one file instead of surfacing at runtime in a
 panel.
 
-### Every response is decoded at the datasource, against a contract codec
+### Every response is decoded at the datasource, where a contract owns the shape
 
 The application's own decoder helper and the codecs declared inside the vault
 page directory both go. Each datasource decodes with the codec from its
@@ -123,9 +123,21 @@ the signer list a case's packet answers with. A composition of an existing
 contract codec — a list of a shape the contract already defines — needs no new
 contract entry and is composed at the datasource.
 
+The user directory is the exception, and deliberately so. Its shapes are
+better-auth's, declared in that library's own types, and the auth contracts
+carry no codecs at all — they are types and service bindings. A codec there
+would assert a third-party library's wire rather than a contract one of our
+workers publishes, which is the judgement the sign-in and two-factor slices
+already made: a narrowed structural port, typed and not decoded, so a plugin
+change fails to compile at the composition root. The one call in that slice
+our own worker answers, account deletion, rides its typed procedure client for
+the same reason every other procedure does.
+
 Rejected: moving the application's decoder helper into a shared package. Each
 package already owns a decode that names the call, and a second general one
-invites a datasource to hand back a body it did not parse.
+invites a datasource to hand back a body it did not parse. Also rejected:
+defining directory codecs in the auth contracts to make that slice look like
+its siblings — matching a shape is not the same as owning it.
 
 ### The panel returns to one response cache
 
@@ -150,6 +162,27 @@ two-factor slice is untouched.
 Rejected: keeping the hand-rolled state to preserve the package's no-query
 delta. The delta was a statement about commands, not a budget, and re-fetching
 after a ban is the read pattern the cache exists for.
+
+### A view two panels hold identically is a shared block, not a slice view
+
+The four user-directory views are byte-identical across the brands, so one of
+them has to go — but they are built from design-system primitives, and no
+product frontend package builds on those directly. The shared component
+package is where a compound component both consoles render belongs, and its
+capability spec is where the export contract for one is recorded.
+
+So the views move up rather than across: they become blocks in the shared
+component package, and the slice's pages compose them alongside its hooks.
+That makes the group span two repositories, with the shared-component work
+landing first and the submodule bump as the boundary.
+
+Rejected: moving the views into the product package on the design system
+directly. One slice in the repository already does that, so it is not
+unprecedented — but it is the exception rather than the pattern, and it would
+put a second answer to "where does a shared component live" beside a package
+built precisely to answer it. Also rejected: leaving a copy in each panel. It
+is the duplication this change exists to remove, and the surface would drift
+the moment one brand edited its copy.
 
 ### An automated check, in the registry the repository already runs
 

@@ -1,7 +1,9 @@
 ## 1. User directory slice (grade10) (owner: @sean)
 
 The worked reference for the other three, and the only surface that is
-duplicated today. Take this group first.
+duplicated today. Take this group first. Tasks 1.4 and 1.5 need group 7
+landed and the submodule re-pointed: the views the pages compose are shared
+components, so they belong to grade10-spec.
 
 - [x] 1.1 Add a narrowed directory client port and the auth worker's procedure port to the operator-facing auth package's core, each with a typed fixture, and bind them through that package's core-module factory — scenario: An application constructs a transport client.
 - [x] 1.2 Build the `directory/users` slice — domain models, repository, datasource decoding each call against the auth contracts, tokens, data module, feature module, subpath export, and the module test resolving every token through decode against the fixtures.
@@ -59,3 +61,16 @@ Lands last, when there is nothing left for it to fail on.
 - [ ] 6.1 Add the boundary check to the repository's check registry: it fails on a transport client named in application page, view or component code, a request issued directly to a product backend, or a response schema declared in place — scenario: Application code reaches a transport directly.
 - [ ] 6.2 Give the check named exemptions carrying their reason, including the storefront's demo lab pages, and make an exemption whose path no longer exists fail the run — scenario: A path is exempt on purpose.
 - [ ] 6.3 Verify: `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`.
+
+## 7. Directory views as shared blocks (grade10-spec)
+
+The four views the two panels hold identical copies of are compound
+components built from design-system primitives, so they belong in the shared
+component package rather than in a product frontend package — that package
+publishes blocks, and no product package builds on the primitives directly.
+Group 1's last two tasks wait on this and on the submodule bump that follows.
+
+- [ ] 7.1 Record the export contract for the directory views as a delta against the shared UI capability, naming each export exactly.
+- [ ] 7.2 Build the four blocks in the shared component package — the directory table, the roles editor, the moderation confirmation and the session list — each taking every value and callback as a prop, with its stories.
+- [ ] 7.3 Move the panels' existing view tests onto the blocks, unedited except for where they import from, so the move is proven not to have changed what they render.
+- [ ] 7.4 Verify: `pnpm run lint`, `pnpm run typecheck`, `pnpm run test`, `pnpm run design-sync:check`.
