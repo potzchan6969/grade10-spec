@@ -54,7 +54,7 @@ Needs groups 1 to 4 landed — it deletes what they replace.
 - [ ] 5.3 Update the repository's frontend architecture documentation and skill so the operator-facing packages are named alongside the collector-facing ones, and the enforcement line says the boundary is checked rather than reviewed.
 - [ ] 5.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, `pnpm run agent:check-parity`.
 
-## 6. Boundary check (grade10)
+## 6. Boundary check (grade10) (owner: @sean)
 
 Lands last, when there is nothing left for it to fail on.
 
