@@ -26,7 +26,7 @@ currently declares for itself; nothing outside this group depends on it.
 - [x] 2.7 Delete the vault section's page-level codecs, its direct request, and the panel's vault procedure imports, so the section names nothing in the application's client directory — scenario: A page renders data from a backend.
 - [x] 2.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
 
-## 3. Appointments diary slices (grade10)
+## 3. Appointments diary slices (grade10) (owner: @sean)
 
 - [ ] 3.1 Stand up `packages/appointment/admin-frontend`: its procedure port over the diary worker, a fixture, a core module, and an empty published list — scenario: A product's first surface serves operators.
 - [ ] 3.2 Build `diary/locations` and `diary/availability` — rules, exceptions and derived slots — each with its module test and hook tests over the fixture.
