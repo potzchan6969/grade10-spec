@@ -47,6 +47,10 @@ type StatusIndicatorProps = Omit<ComponentProps<"span">, "children"> &
  * `type` is `dot` | `count`; `variant` is `default` | `error` | `brand`. Count
  * contents are consumer-supplied (Figma's `label`); the pip has none. Count
  * is at least `Size/size-4` wide (`min-w-4`) so a single digit stays circular.
+ *
+ * `default` draws `Base/muted` over `Base/foreground`, following Badge off
+ * `Base/primary` once primary became the brand orange. The ring is
+ * `Base/background`, so a pip stays legible on any surface it overlays.
  */
 function StatusIndicator({
   className,
