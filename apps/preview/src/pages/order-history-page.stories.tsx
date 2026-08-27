@@ -7,7 +7,7 @@ import { Footer } from "@grade10/design-system/components/layout/footer";
 import { Nav } from "@grade10/design-system/components/layout/nav";
 import { OrderHistory } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
+import { expect, waitFor, within } from "storybook/test";
 import {
   ACTIVE_ORDERS,
   ORDER_HISTORY_COPY,
@@ -58,9 +58,27 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+function orderHistoryRevealed(canvasElement: HTMLElement): boolean {
+  const root = canvasElement.querySelector('[data-slot="order-history"]');
+  if (root?.getAttribute("data-revealed") !== "true") return false;
+
+  const empty = canvasElement.querySelector(
+    '[data-slot="order-history-empty"]',
+  );
+  if (empty) {
+    return Number(getComputedStyle(empty).opacity) > 0.9;
+  }
+
+  const card = canvasElement.querySelector('[data-slot="order-history-card"]');
+  const wrapper = card?.parentElement;
+  if (!wrapper) return false;
+  return Number(getComputedStyle(wrapper).opacity) > 0.9;
+}
+
 export const Filled: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    await waitFor(() => expect(orderHistoryRevealed(canvasElement)).toBe(true));
     expect(
       canvas.getByRole("heading", { level: 1, name: "Your Orders" }),
     ).toBeVisible();
@@ -78,6 +96,7 @@ export const Empty: Story = {
   args: { empty: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    await waitFor(() => expect(orderHistoryRevealed(canvasElement)).toBe(true));
     expect(canvas.getByText("No orders yet")).toBeVisible();
     expect(canvas.getByRole("button", { name: "Shop Now" })).toBeVisible();
     expect(

@@ -53,12 +53,12 @@ type ProductCardProps = {
 type ProductCardContentProps = Omit<ProductCardProps, "loading">;
 
 const SKELETON_FIXTURE_PROPS = {
-  copy: { cart: "Add to cart", sale: "SALE" },
+  copy: { cart: "Add to cart" },
   imageSrc: skeletonImage,
-  imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
-  name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+  imageAlt: "Abyss Eye Booster Box",
+  /** One-line name so the Boneyard capture matches the common single-line tile. */
+  name: "Abyss Eye Booster Box",
   price: "HK$105",
-  originalPrice: "HK$123",
   onClick: () => {},
   onCartClick: () => {},
 } satisfies Omit<ProductCardContentProps, "className">;

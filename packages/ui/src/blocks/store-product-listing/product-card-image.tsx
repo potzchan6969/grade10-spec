@@ -62,7 +62,7 @@ function ProductCardImage({
   // Product photos ship with a white studio fill. Multiply knocks that white
   // out onto the well's gradient (`isolate` keeps the blend inside the well).
   const photoClassName = cn(
-    "size-full object-cover mix-blend-multiply",
+    "size-full rounded-(--radius-3xl) object-cover mix-blend-multiply",
     !soldOut &&
       "transition-transform duration-200 ease-[ease] motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:group-hover/product-card-image:scale-105",
   );
@@ -106,11 +106,13 @@ function ProductCardImage({
       )}
     >
       {soldOut || !onClick ? (
-        <div className="absolute inset-0">{well}</div>
+        <div className="absolute inset-0 overflow-hidden rounded-(--radius-3xl)">
+          {well}
+        </div>
       ) : (
         <button
           aria-label={name}
-          className="absolute inset-0 cursor-pointer border-0 bg-transparent p-0 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="absolute inset-0 cursor-pointer overflow-hidden rounded-(--radius-3xl) border-0 bg-transparent p-0 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           onClick={onClick}
           type="button"
         >
@@ -120,7 +122,7 @@ function ProductCardImage({
       {showCart ? (
         <div
           className={cn(
-            "absolute right-1 bottom-2 z-10 size-11",
+            "absolute right-1 bottom-2 z-10 size-11 transition-opacity duration-150 ease-out motion-reduce:transition-none",
             !cartAlwaysVisible &&
               "pointer-events-none opacity-0 group-focus-within/product-card-image:pointer-events-auto group-focus-within/product-card-image:opacity-100 group-hover/product-card-image:pointer-events-auto group-hover/product-card-image:opacity-100",
           )}
