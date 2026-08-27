@@ -23,8 +23,8 @@ currently declares for itself; nothing outside this group depends on it.
 - [x] 2.4 Build `custody/valuation` and `custody/settlement`, moving the money entry and formatting helpers into domain with their tests, each with its module test and hook tests.
 - [x] 2.5 Build `custody/compliance`, including the packet re-derivation read through the route port, with the identity-derivation helper moved into domain carrying its tests.
 - [x] 2.6 Join all four slices to the published list, install the package in the grade10 panel's composition root, and move the vault section's panels onto the hooks with their existing view tests unedited — scenario: A product gains an operator surface.
-- [ ] 2.7 Delete the vault section's page-level codecs, its direct request, and the panel's vault procedure imports, so the section names nothing in the application's client directory — scenario: A page renders data from a backend.
-- [ ] 2.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
+- [x] 2.7 Delete the vault section's page-level codecs, its direct request, and the panel's vault procedure imports, so the section names nothing in the application's client directory — scenario: A page renders data from a backend.
+- [x] 2.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
 
 ## 3. Appointments diary slices (grade10)
 
