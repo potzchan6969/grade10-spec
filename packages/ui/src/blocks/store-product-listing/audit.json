@@ -9,13 +9,13 @@
     "label": "product-card-image/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10072",
     "classes": "group/product-card-image relative aspect-square w-full rounded-(--radius-3xl)",
-    "note": "Base variant (state=default, inCart=false, soldOut=false) of set 4274:10074; every variant draws cornerRadius 24, matching rounded-(--radius-3xl). The set container's own 8px frame radius is cosmetic — auditing the set node reported it as drift, which is why this points at the variant."
+    "note": "Base variant (state=default, inCart=false, soldOut=false) of set 4274:10074; every variant draws cornerRadius 24, matching rounded-(--radius-3xl). The set container's own 8px frame radius is cosmetic \u2014 auditing the set node reported it as drift, which is why this points at the variant."
   },
   {
     "label": "product-card-image/surface",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10072",
     "classes": "absolute inset-0 isolate overflow-hidden rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))]",
-    "note": "The same variant node as product-card-image/root. The conversion split it across two elements: the root carries the box's size and the surface carries its paint — radius, the gray-200 stroke, and the gradient. Both are listed so the node's stroke is claimed by something; auditing the root alone reported the stroke as unclaimed."
+    "note": "The same variant node as product-card-image/root. The conversion split it across two elements: the root carries the box's size and the surface carries its paint \u2014 radius, the gray-200 stroke, and the gradient. Both are listed so the node's stroke is claimed by something; auditing the root alone reported the stroke as unclaimed."
   },
   {
     "label": "filter-panel/root",
@@ -34,5 +34,15 @@
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4357-527",
     "classes": "w-full gap-6",
     "note": "Backfilled from product-filter.figma.ts; gap-6 (24px) checks against the node's item spacing."
+  },
+  {
+    "label": "product-list/grid",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4238-4585",
+    "classes": "grid grid-cols-[repeat(auto-fill,minmax(min(100%,240px),1fr))] gap-8"
+  },
+  {
+    "label": "product-list-header/filters",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4396-5424",
+    "classes": "w-full gap-4"
   }
 ]

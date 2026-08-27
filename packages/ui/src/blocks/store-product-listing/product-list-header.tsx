@@ -115,7 +115,7 @@ function ProductListHeader({
         </HStack>
         {showFilters ? (
           <HStack
-            className="w-full gap-4 py-1"
+            className="w-full gap-4"
             data-slot="product-list-header-filters"
             gap="none"
             vAlign="center"
