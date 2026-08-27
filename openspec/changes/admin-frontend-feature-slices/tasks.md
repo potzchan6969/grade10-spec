@@ -70,7 +70,7 @@ component package rather than in a product frontend package — that package
 publishes blocks, and no product package builds on the primitives directly.
 Group 1's last two tasks wait on this and on the submodule bump that follows.
 
-- [ ] 7.1 Record the export contract for the directory views as a delta against the shared UI capability, naming each export exactly.
-- [ ] 7.2 Build the four blocks in the shared component package — the directory table, the roles editor, the moderation confirmation and the session list — each taking every value and callback as a prop, with its stories.
-- [ ] 7.3 Carry every behaviour the panels' view tests assert onto the blocks as story play functions — the component lane this package actually has — so the move is proven not to have changed what they render, and the panel-side tests can go with their views.
-- [ ] 7.4 Verify: `pnpm run lint`, `pnpm run typecheck`, `pnpm run test`, `pnpm run design-sync:check`.
+- [x] 7.1 Record the export contract for the directory views as a delta against the shared UI capability, naming each export exactly.
+- [x] 7.2 Build the four blocks in the shared component package — the directory table, the roles editor, the moderation confirmation and the session list — each taking every value and callback as a prop, with its stories.
+- [x] 7.3 Carry every behaviour the panels' view tests assert onto the blocks as story play functions — the component lane this package actually has — so the move is proven not to have changed what they render, and the panel-side tests can go with their views.
+- [x] 7.4 Verify: `pnpm run lint`, `pnpm run typecheck`, `pnpm run test`, `pnpm run design-sync:check`.
