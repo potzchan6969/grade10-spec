@@ -4,7 +4,7 @@
  *
  * Emits `scripts/figma/build/push.gen.js` — run it inside Figma via the `use_figma`
  * MCP tool or the plugin console (no Enterprise / no REST token, same manual
- * step as the FIGMA_DUMP path of tokens:pull). Idempotent.
+ * step as the FIGMA_DUMP path of tokens:import). Idempotent.
  *
  * Identity = the normalized CSS name. In Figma, each local variable's name is
  * normalized the same way (cssVar) and matched against our token keys, so we

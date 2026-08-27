@@ -12,7 +12,7 @@ What that means in practice is that "converting the component" is really three s
 
 | What travels | From → to | How | Automatic? |
 | --- | --- | --- | --- |
-| **Values** — colours, radii, spacing | Figma variables → `tokens.json` → theme CSS | `pnpm tokens:sync` | No. Needs a human to run a plugin in Figma. |
+| **Values** — colours, radii, spacing | Figma variables → `tokens.json` → theme CSS | `pnpm tokens:pull` | No. Needs a human to run a plugin in Figma. |
 | **Structure** — which variants, sizes, and states exist | Figma component set → a `cva` config in `<name>.tsx` | Written by hand, diffed by `check:design-system` | Written by hand; the diff runs nightly. |
 | **Usage** — the snippet that appears in Dev Mode | `<name>.figma.ts` → Figma | `code-connect:publish` | No. Deliberately a manual step. |
 
@@ -25,7 +25,7 @@ Conflating them is the usual source of confusion. Publishing your component set 
             │                                                    │
             └───◀──(code-connect:publish)──  button.figma.ts  ◀───┘           (the name mapping)
 
-   Figma variables  ──tokens:pull──▶  tokens.json  ──tokens:build──▶  theme.css + themes/*.css
+   Figma variables  ──tokens:import──▶  tokens.json  ──tokens:build──▶  theme.css + themes/*.css
 ```
 
 ## The route, step by step
@@ -170,7 +170,7 @@ Each has happened here, and each passes every check that does not specifically l
 ## Related reading
 
 - [`design-code-sync.md`](design-code-sync.md) — the ownership table, everything `check:design-system` enforces, and the rules for the Figma file.
-- [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) — the token pipeline: `tokens:pull`, `tokens:build`, `tokens:push`, and why every leg needs a human in Figma.
+- [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) — the token pipeline: `tokens:import`, `tokens:build`, `tokens:push`, and why every leg needs a human in Figma.
 - [`ui-component-contracts.md`](ui-component-contracts.md) — product components, which are specified here and implemented in the consuming application.
 - [`prompts/implement-page-from-figma.md`](prompts/implement-page-from-figma.md) — the page-level counterpart: converting a whole page frame by composing existing blocks and primitives, with a paste-ready prompt and a designer-run preflight.
 - `.cursor/skills/design-system-components/SKILL.md` — the working checklist an agent or engineer follows for steps 5–10.

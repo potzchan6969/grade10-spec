@@ -5,6 +5,7 @@
     "node": "24.14.1",
     "pnpm": "11.17.0"
   },
+  "_scriptAliases_note": "Root scripts are thin aliases over package-level ones. A package script earns a root alias when it runs unattended: in CI, or by an agent. The Figma legs (tokens:import, tokens:push, tokens:plugin) do not - each needs a human to run a plugin inside Figma - so they stay package-level, run as `pnpm --filter @grade10/design-system run <script>`.",
   "scripts": {
     "agent:sync-parity": "bash scripts/agent-platform/sync-parity.sh",
     "agent:check-parity": "bash scripts/agent-platform/check-parity.sh",
@@ -28,7 +29,7 @@
     "test:stories:ui": "pnpm --filter @grade10/ui run test:stories",
     "test:stories:app": "pnpm --dir apps/preview exec vitest run",
     "tokens:build": "pnpm --filter @grade10/design-system run tokens:build",
-    "tokens:sync": "pnpm --filter @grade10/design-system run tokens:sync",
+    "tokens:pull": "pnpm --filter @grade10/design-system run tokens:pull",
     "typecheck": "pnpm --dir apps/preview exec tsc -b && pnpm --filter @grade10/design-system run typecheck && pnpm --filter @grade10/i18n run typecheck && pnpm --filter @grade10/ui run typecheck",
     "lint": "biome check .",
     "plan:preflight": "node scripts/openspec/plan-preflight.mjs",

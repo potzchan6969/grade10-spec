@@ -40,7 +40,7 @@ if (!process.env.FIGMA_DUMP) {
      # Figma → Plugins → Development → Import plugin from manifest…
      #   scripts/figma/build/dump/manifest.json
      # run it, click Download
-     FIGMA_DUMP=~/Downloads/figma-dump.json pnpm tokens:sync`);
+     FIGMA_DUMP=~/Downloads/figma-dump.json pnpm tokens:pull`);
 }
 const meta = JSON.parse(
   await readFile(resolve(pkgDir, process.env.FIGMA_DUMP), "utf8"),
@@ -166,7 +166,7 @@ const keyed = (ids, modeId, where, seen = new Map()) => {
 };
 
 const doc = {
-  "//": "Canonical design tokens — SOURCE OF TRUTH. Figma and CSS are projections of this file. Pull edits from Figma (tokens:pull), build CSS (tokens:build), push code edits to Figma (tokens:push). Projection rules (slotMap, selectors, collections) live in tokens.config.json.",
+  "//": "Canonical design tokens — SOURCE OF TRUTH. Figma and CSS are projections of this file. Pull edits from Figma (tokens:import), build CSS (tokens:build), push code edits to Figma (tokens:push). Projection rules (slotMap, selectors, collections) live in tokens.config.json.",
 };
 // One shared `seen` across every primitive section — see keyed() above.
 const primSeen = new Map();

@@ -4,7 +4,7 @@
  * a read from. Import via Figma → Plugins → Development → Import plugin from
  * manifest…, run it, hit Download, then:
  *
- *   FIGMA_DUMP=~/Downloads/figma-dump.json pnpm tokens:sync
+ *   FIGMA_DUMP=~/Downloads/figma-dump.json pnpm tokens:pull
  *
  * Shape mirrors GET /v1/files/:key/variables/local — pull.mjs reads
  * `.meta`, so the REST route and this one are interchangeable. That endpoint is

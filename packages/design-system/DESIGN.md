@@ -101,17 +101,17 @@ names) live in `tokens.config.json`. Figma and the CSS files are both
 *projections* of `tokens.json`, never sources.
 
 ```
-   Figma Variables ──tokens:pull──▶  tokens.json  ──tokens:build──▶  theme.css + themes/*.css
-   (designer edits)                 (git, canonical)                 (consumed by apps)
-                        ◀──tokens:push──┘  (engineer edits → Figma plugin script)
+   Figma Variables ──tokens:import──▶  tokens.json  ──tokens:build──▶  theme.css + themes/*.css
+   (designer edits)                    (git, canonical)                (consumed by apps)
+                          ◀──tokens:push──┘  (engineer edits → Figma plugin script)
 ```
 
 | Command | Direction | Does |
 |---|---|---|
-| `pnpm tokens:pull` | Figma → code | Dump → `tokens.json` (needs `FIGMA_DUMP=<file>` from the dump plugin) |
+| `pnpm tokens:import` | Figma → code | Dump → `tokens.json` (needs `FIGMA_DUMP=<file>` from the dump plugin) |
 | `pnpm tokens:build` | code → CSS | `tokens.json` + config → `theme.css`, `themes/grade10.css` |
 | `pnpm tokens:push` | code → Figma | `tokens.json` → `scripts/figma/build/push.gen.js`, run inside Figma via `use_figma` or the built plugin |
-| `pnpm tokens:sync` | Figma → CSS | `tokens:pull && tokens:build` (full refresh) |
+| `pnpm tokens:pull` | Figma → CSS | `tokens:import && tokens:build` — the normal entry point. A bare `tokens:import` leaves the CSS stale. |
 
 **Which file.** Every leg runs inside Figma, against whichever file the plugin is
 open in — nothing here selects a file over the network. `tokens.config.json` →
@@ -129,7 +129,7 @@ variables and hands back the exact `{ meta }` shape REST would have returned —
 Download writes `figma-dump.json` to your Downloads folder. Then:
 
 ```
-FIGMA_DUMP=~/Downloads/figma-dump.json pnpm tokens:sync   # pull + build
+FIGMA_DUMP=~/Downloads/figma-dump.json pnpm tokens:pull   # import + build
 git diff tokens.json                                       # what the designer changed
 ```
 
@@ -179,7 +179,7 @@ The Figma file still carries `Motion` and `Sizing`, and those remain ignored.
 `Sizing` in particular models modes as *size variants* (`default`/`sm`/`xs`)
 that must coexist on one page, which the config's one-selector-per-mode theme
 model cannot express. Wiring them up is tracked separately; do not assume a
-green `tokens:sync` means the whole file landed.
+green `tokens:pull` means the whole file landed.
 
 **Units.** A Figma FLOAT is a bare number, so the CSS unit is inferred from the
 variable's Figma *scopes*, falling back to the token name; anything unmatched

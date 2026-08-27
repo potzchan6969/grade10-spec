@@ -42,7 +42,7 @@ compiles. Nothing catches this for you — see "Known gaps".
 ## Creating a component
 
 1. **Publish the Figma component set first.** Code Connect only resolves published components, and `list_file_components_for_code_connect` only returns published ones.
-2. **Pull tokens** if the design introduced any (`pnpm tokens:sync`), and confirm the values you need exist in `src/themes/grade10.css`. Adding a component that binds a token the baseline `default` theme lacks will render it unstyled outside `.theme-grade10` — see "Theme coverage" below.
+2. **Pull tokens** if the design introduced any (`pnpm tokens:pull`), and confirm the values you need exist in `src/themes/grade10.css`. Adding a component that binds a token the baseline `default` theme lacks will render it unstyled outside `.theme-grade10` — see "Theme coverage" below.
 3. **Write `<name>.tsx`** with one cva option per Figma variant option, and nothing more.
 4. **Write `<name>.figma.ts`** with a `getEnum` covering *every* option of every VARIANT property. An unmapped option resolves to `undefined` and emits broken code.
 5. **Write `<name>.stories.tsx`** with a story per variant, plus disabled, loading, and any other state the contract has.

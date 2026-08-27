@@ -36,15 +36,15 @@ You only rebuild when the plugin source itself changes. Unlike `tokens:plugin pu
 ## Landing it in the repository
 
 ```bash
-FIGMA_DUMP=/absolute/path/to/figma-dump.json pnpm run tokens:sync   # pull + build
+FIGMA_DUMP=/absolute/path/to/figma-dump.json pnpm run tokens:pull   # import + build
 git diff packages/design-system/tokens.json                          # what design changed
 ```
 
-`tokens:sync` is `tokens:pull && tokens:build`: the dump becomes `tokens.json`, and `tokens.json` is projected to `src/theme.css` and `src/themes/grade10.css`. Review the `tokens.json` diff — that is the designer's change in reviewable form — and **commit the regenerated CSS with it**. Never hand-edit either generated file.
+`tokens:pull` is `tokens:import && tokens:build`: the dump becomes `tokens.json`, and `tokens.json` is projected to `src/theme.css` and `src/themes/grade10.css`. Review the `tokens.json` diff — that is the designer's change in reviewable form — and **commit the regenerated CSS with it**. Never hand-edit either generated file.
 
 **Use an absolute path.** `pull.mjs` resolves `FIGMA_DUMP` against `packages/design-system`, not your shell's working directory, so a relative path silently looks in the wrong place. `FIGMA_DUMP=~/Downloads/figma-dump.json` works unquoted because the shell expands the tilde before Node sees it; quote it and it will not.
 
-`tokens:pull` and `tokens:plugin` are package-level scripts with no root alias — run them from `packages/design-system`, or as `pnpm --filter @grade10/design-system run tokens:pull`. `tokens:sync` and `tokens:build` do have root aliases, which is why the command above works from anywhere.
+`tokens:import` and `tokens:plugin` have no root alias — the note above `scripts` in the root `package.json` says why — so run them as `pnpm --filter @grade10/design-system run tokens:import`.
 
 ## The same dump also feeds the component checker
 
@@ -73,7 +73,7 @@ The plugin dumps **every** local collection. `pull.mjs` then reads only the ones
 | Variable descriptions | Yes → `$description`, omitted when blank |
 | `meta.components` | Not by the pull; read by `check:design-system` |
 
-`Sizing` is the notable absence. It models modes as *size variants* (`default`/`sm`/`xs`) that must coexist on one page, which the config's one-selector-per-mode theme model cannot express. Wiring it up is tracked separately — **a green `tokens:sync` does not mean the whole file landed.**
+`Sizing` is the notable absence. It models modes as *size variants* (`default`/`sm`/`xs`) that must coexist on one page, which the config's one-selector-per-mode theme model cannot express. Wiring it up is tracked separately — **a green `tokens:pull` does not mean the whole file landed.**
 
 `src/themes/default.css` is stock shadcn, hand-maintained and deliberately outside this pipeline entirely.
 
@@ -83,7 +83,7 @@ Every one of these exits non-zero and writes nothing, so a failed pull leaves `t
 
 | Message | Cause | Fix |
 | --- | --- | --- |
-| `No dump given. Set FIGMA_DUMP=<file.json>` | Ran `tokens:pull`/`tokens:sync` with no dump | Export one, or pass an absolute path |
+| `No dump given. Set FIGMA_DUMP=<file.json>` | Ran `tokens:import`/`tokens:pull` with no dump | Export one, or pass an absolute path |
 | `Collection not found. Available: …` | A collection was renamed in Figma, or you dumped the wrong file | Match `tokens.config.json` to the listed names, or re-dump the right file |
 | `theme "grade10": Figma mode "…" not found` | A designer renamed a Semantic mode | Update `themes.<name>.modes`, or rename it back |
 | `Name collision in Semantic / …: "Base/card" and "Sidebar/card" both normalize to "card"` | Two grouped Figma names normalize to one token key — `key()` drops the group prefix | Rename one in Figma |
@@ -102,6 +102,6 @@ Note that the manifest sets `documentAccess: "dynamic-page"`, so pages load lazi
 
 ## Related reading
 
-- [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) — the whole token pipeline: `tokens:pull`, `tokens:build`, `tokens:push`, the ownership boundary, and round-trip guarantees.
+- [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) — the whole token pipeline: `tokens:import`, `tokens:build`, `tokens:push`, the ownership boundary, and round-trip guarantees.
 - [`figma-component-to-code.md`](figma-component-to-code.md) — where this step sits in the component handover.
 - [`design-code-sync.md`](design-code-sync.md) — what `check:design-system` enforces once the tokens have landed.
