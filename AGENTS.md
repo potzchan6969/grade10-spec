@@ -59,7 +59,7 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 
 `packages/design-system` (`@grade10/design-system`) holds the theme tokens and the shadcn primitives this repository owns. `packages/i18n` (`@grade10/i18n`) holds the message catalogs. `packages/ui` (`@grade10/ui`) holds the shared compound components, composing the design-system primitives one way and never importing the message catalogs — all content reaches its components through props. These are the only packages here; do not add another without a recorded product decision.
 
-Use the `design-system-components` skill whenever creating or changing a primitive under `packages/design-system/src/components/`.
+Use the `design-system-primitives` skill whenever creating or changing a primitive under `packages/design-system/src/components/`.
 
 - The package is consumed from source: `exports` point at `src/`, there is no build step, and no `dist/` is committed.
 - Stories are colocated with each primitive. Run them with `pnpm run storybook:design-system`.

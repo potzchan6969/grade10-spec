@@ -7,7 +7,7 @@ Copy the block, replace `<FIGMA_URL>` and `<group>`, and paste it whole. Read th
 ## The prompt
 
 ```text
-Use the design-system-components skill.
+Use the design-system-primitives skill.
 
 Implement the Figma component set at <FIGMA_URL> as a primitive in
 packages/design-system. It is published to the team library.
@@ -64,7 +64,7 @@ reason, and anything you could not verify.
 For steps 5–6 alone, when `<name>.tsx` and `<name>.figma.ts` are already written:
 
 ```text
-Use the design-system-components skill. <ComponentName> already has
+Use the design-system-primitives skill. <ComponentName> already has
 <name>.tsx and <name>.figma.ts. Add <name>.stories.tsx with a story per cva
 option plus every contract state, then run pnpm run test:stories:design-system
 and FIGMA_TOKEN=… pnpm run design-sync:check to zero errors and zero
@@ -83,4 +83,4 @@ Three parts are load-bearing. Trim them and the prompt stops guarding the failur
 
 ## Keeping it current
 
-This prompt restates rules that live in [`design-code-sync.md`](../design-code-sync.md) and in the [`design-system-components` skill](../../../.cursor/skills/design-system-components/SKILL.md). Those two are authoritative; this file is a convenience. When a rule changes there, either update the paste block or delete the restated line and let the skill carry it — do not let the two drift and leave an agent following the stale copy.
+This prompt restates rules that live in [`design-code-sync.md`](../design-code-sync.md) and in the [`design-system-primitives` skill](../../../.cursor/skills/design-system-primitives/SKILL.md). Those two are authoritative; this file is a convenience. When a rule changes there, either update the paste block or delete the restated line and let the skill carry it — do not let the two drift and leave an agent following the stale copy.

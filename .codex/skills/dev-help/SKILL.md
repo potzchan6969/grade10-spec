@@ -34,7 +34,7 @@ Off the delivery line, and not a sequence — pick by what you are touching. All
 | Invoke | When |
 | --- | --- |
 | `/page-from-figma` | A page or screen drafted in Figma becomes code composed from existing blocks, primitives, and tokens. Invoke it *before* any `get_design_context` on a page-level frame. |
-| `/design-system-components` | A primitive's variants, sizes, or states, or its Code Connect template. The Figma component set is the contract; a component may not offer a rung the design does not define. |
+| `/design-system-primitives` | A primitive's variants, sizes, or states, or its Code Connect template. The Figma component set is the contract; a component may not offer a rung the design does not define. |
 | `/design-tokens` | A token value moved — pull a designer's change in, rebuild the theme CSS, push values back. Never hand-edit the generated CSS. |
 | `/design-sync-check` | `design-sync:check` failed, the nightly reported drift, or Dev Mode is emitting something wrong. Triage what it printed. |
 

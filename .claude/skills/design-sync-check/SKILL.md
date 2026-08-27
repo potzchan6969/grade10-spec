@@ -1,6 +1,6 @@
 ---
 name: design-sync-check
-description: Run `pnpm run design-sync:check` and act on what it reports - the Figma-vs-code drift check over every component set, its Code Connect templates, and the values they render. Use when the Design sync job fails or a nightly run reports drift, when asked whether the code still matches Figma, when a run prints `No Figma source`, when triaging a `node-id`, `getEnum`, or value-mismatch line, and also when the symptom arrives with no checker named - Dev Mode emitting an empty attribute or a snippet that will not compile, a component rendering a colour or size the design does not draw, or a designer having renamed, republished, or deleted a variant. For authoring a component, use `design-system-components`; for token values, `design-tokens`.
+description: Run `pnpm run design-sync:check` and act on what it reports - the Figma-vs-code drift check over every component set, its Code Connect templates, and the values they render. Use when the Design sync job fails or a nightly run reports drift, when asked whether the code still matches Figma, when a run prints `No Figma source`, when triaging a `node-id`, `getEnum`, or value-mismatch line, and also when the symptom arrives with no checker named - Dev Mode emitting an empty attribute or a snippet that will not compile, a component rendering a colour or size the design does not draw, or a designer having renamed, republished, or deleted a variant. For authoring a component, use `design-system-primitives`; for token values, `design-tokens`.
 ---
 
 # Design-system check
@@ -66,7 +66,7 @@ A value mismatch is an **error**, not a warning. It was a warning once, and Butt
 
 - Reconciling code to what Figma already draws is a plain commit. Three Button reconciliations landed that way.
 - A **Figma-side** fix is a message to the designer, never a code edit that hides it.
-- An option renamed, dropped, or a mismatch you are deliberately keeping is a contract change — hand off to `design-system-components`, and record an OpenSpec change naming the exact exports and the consuming applications. A warning you intend to keep belongs there with a reason, not in the run log.
+- An option renamed, dropped, or a mismatch you are deliberately keeping is a contract change — hand off to `design-system-primitives`, and record an OpenSpec change naming the exact exports and the consuming applications. A warning you intend to keep belongs there with a reason, not in the run log.
 
 Never resolve a mismatch by editing the `.figma.ts` template to agree with the code. The template maps names; papering over a disagreement there deletes the only evidence of it.
 

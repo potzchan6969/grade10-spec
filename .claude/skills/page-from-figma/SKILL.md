@@ -5,7 +5,7 @@ description: Turn a page or screen drafted in Figma into code composed from exis
 
 # Page from Figma
 
-Use this skill when the unit of work is a **page-level frame** — a whole screen or flow a designer drafted — rather than a component set. For a component set, use the `design-system-components` skill instead; this skill will send you there the moment a section turns out to be a new component.
+Use this skill when the unit of work is a **page-level frame** — a whole screen or flow a designer drafted — rather than a component set. For a component set, use the `design-system-primitives` skill instead; this skill will send you there the moment a section turns out to be a new component.
 
 The premise: **a page is composition, not invention.** Everything on a well-formed page frame is an instance of a published component, a layout frame, or a token binding — each of which already has a translation rail in this repository. Your job is to ride those rails and to *stop* on anything that has no rail, because an unmatched section is a product decision (a new block, a new variant, a new token), not something a page conversion absorbs into bespoke markup.
 
@@ -19,7 +19,7 @@ This repository is not an application. Route the output by what it is:
 | --- | --- | --- |
 | Instances of existing blocks and primitives, arranged | Page composition | The **consuming application**, never here |
 | A reusable compound section no block covers | A new block, behind an OpenSpec change | `packages/ui/src/blocks/<capability>/` |
-| A widget no primitive covers | A new primitive, via the `design-system-components` skill | `packages/design-system/src/components/` |
+| A widget no primitive covers | A new primitive, via the `design-system-primitives` skill | `packages/design-system/src/components/` |
 | A value no token names | A `tokens.json` conversation with the designer | Not your call to hardcode |
 
 Working in this repository, the deliverable is therefore at most new or changed blocks plus their specs — plus a composition snippet the application will paste. Working in a consuming application checkout, the deliverable is the page itself, importing from `@grade10/ui` and `@grade10/design-system` only.

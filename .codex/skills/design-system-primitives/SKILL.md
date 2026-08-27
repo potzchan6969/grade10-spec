@@ -1,11 +1,11 @@
 ---
-name: design-system-components
+name: design-system-primitives
 description: Create or change a design-system primitive in `packages/design-system` whose contract is defined by a Figma component set. Use when adding a variant, size, or state, when editing a Code Connect template, or when reconciling code with the Figma file.
 ---
 
-# Design-system components
+# Design-system primitives
 
-Use this skill for changes under `packages/design-system/src/components/`. Product components are implemented in the consuming application, not here; see [`docs/governance/ui-component-contracts.md`](../../../docs/governance/ui-component-contracts.md) for their contract.
+Use this skill for changes under `packages/design-system/src/components/`. The shared compound components built on top of these primitives live in `packages/ui/src/blocks`, and a page assembled from them is `page-from-figma`'s job; see [`docs/governance/ui-component-contracts.md`](../../../docs/governance/ui-component-contracts.md) for their contract.
 
 Read [`docs/governance/design-code-sync.md`](../../../docs/governance/design-code-sync.md) for the ownership table and the reasoning behind every rule below, and [`packages/design-system/DESIGN.md`](../../../packages/design-system/DESIGN.md) before touching the token pipeline.
 

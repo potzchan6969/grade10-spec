@@ -1,6 +1,6 @@
 ---
 name: design-tokens
-description: Move design token values between Figma and the repository - pull a designer's variable changes in, rebuild the theme CSS, or push token values back to a Figma file. Use when design changed a colour, radius, or spacing value, when the theme CSS is stale or wrong, when `tokens.json` or `tokens.config.json` is edited, when seeding a fresh Figma file, when running `tokens:pull`, `tokens:build`, `tokens:push`, or `tokens:plugin`, or when landing a `figma-dump.json` export. For a component's variants, sizes, or states, use `design-system-components` instead.
+description: Move design token values between Figma and the repository - pull a designer's variable changes in, rebuild the theme CSS, or push token values back to a Figma file. Use when design changed a colour, radius, or spacing value, when the theme CSS is stale or wrong, when `tokens.json` or `tokens.config.json` is edited, when seeding a fresh Figma file, when running `tokens:pull`, `tokens:build`, `tokens:push`, or `tokens:plugin`, or when landing a `figma-dump.json` export. For a component's variants, sizes, or states, use `design-system-primitives` instead.
 ---
 
 # Design tokens
@@ -18,7 +18,7 @@ Read [`packages/design-system/DESIGN.md`](../../../packages/design-system/DESIGN
 | A designer changed variables in Figma | `pnpm tokens:pull` | Yes — runs the dump plugin |
 | `tokens.json` or `tokens.config.json` changed in the repo | `pnpm tokens:build` | No — the only unattended leg |
 | Token values in the repo need to reach a Figma file, or a fresh file needs seeding | `pnpm tokens:push` | Yes — runs the generated script |
-| A component gained a variant, size, or state | Not this skill — `design-system-components` | — |
+| A component gained a variant, size, or state | Not this skill — `design-system-primitives` | — |
 
 Conflating these is the usual confusion. Publishing a component set moves no values, the token sync adds no variants, and `tokens:import` on its own leaves the CSS stale.
 
@@ -57,4 +57,4 @@ This is a write to a shared file. Confirm the target before running it, not afte
 
 Designers own values in Figma and land them through `tokens:pull` → PR. Engineers own `tokens.config.json` — the `slotMap`, the selectors, the collection names — and any code-only theme. `tokens.json` is the git merge point: two people editing the same token is a normal PR conflict for a human to resolve, and there is no automatic value merge.
 
-A token change is values only. If the work also moves a component's axes or options, that is a contract change — hand off to `design-system-components` and read [`docs/governance/design-code-sync.md`](../../../docs/governance/design-code-sync.md) for what the checker enforces.
+A token change is values only. If the work also moves a component's axes or options, that is a contract change — hand off to `design-system-primitives` and read [`docs/governance/design-code-sync.md`](../../../docs/governance/design-code-sync.md) for what the checker enforces.
