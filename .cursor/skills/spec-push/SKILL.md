@@ -117,7 +117,7 @@ On the rebased commits, not the ones you started with:
 - `openspec validate <change-id> --strict` — every change on the branch.
 - `openspec validate --specs` — a durable spec was touched or conflicted.
 - `pnpm run lint` and `pnpm run typecheck` — always.
-- `pnpm run check:design-system` — a primitive under
+- `pnpm run design-sync:check` — a primitive under
   `packages/design-system/src/components/` changed.
 - `pnpm run test` — `packages/i18n` or `packages/ui` changed.
 - `pnpm run agent:check-parity` — agent instructions, rules, or skills changed.

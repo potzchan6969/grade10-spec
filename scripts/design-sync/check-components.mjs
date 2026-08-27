@@ -7,8 +7,8 @@
  * or a Code Connect template whose node-id stopped resolving all look fine
  * until someone reads the Dev Mode snippet. This diffs the three.
  *
- *   FIGMA_TOKEN=figd_… pnpm run check:design-system        # unattended, use this in CI
- *   FIGMA_DUMP=~/Downloads/dump.json pnpm run check:design-system   # manual fallback
+ *   FIGMA_TOKEN=figd_… pnpm run design-sync:check        # unattended, use this in CI
+ *   FIGMA_DUMP=~/Downloads/dump.json pnpm run design-sync:check   # manual fallback
  *
  * Locally, put FIGMA_TOKEN in a .env at the repository root instead of
  * prefixing every invocation; see .env.example. CI passes it as a real
@@ -71,7 +71,7 @@ const die = (m) => {
 //
 // REST is the default because it needs no human. The variables pull cannot use
 // REST — /v1/files/:key/variables/local needs file_variables:read, which Figma
-// gates to Enterprise (see scripts/figma/pull.mjs) — but that gate is specific
+// gates to Enterprise (see scripts/tokens-sync/figma-plugins/pull.mjs) — but that gate is specific
 // to variables. Component property definitions live in the file document, which
 // only needs the standard files:read scope, so this check can run unattended
 // even though the token pull cannot.
@@ -152,13 +152,13 @@ async function loadFigmaComponents() {
   if (!token)
     die(`No Figma source. Set FIGMA_TOKEN (preferred — runs unattended in CI):
 
-     FIGMA_TOKEN=figd_… pnpm run check:design-system
+     FIGMA_TOKEN=figd_… pnpm run design-sync:check
 
    A personal access token with the \`files:read\` scope is enough; the
    Enterprise-only \`file_variables:read\` gate applies to the token pull, not
    to this check. Or fall back to the manual plugin dump:
 
-     FIGMA_DUMP=~/Downloads/figma-dump.json pnpm run check:design-system`);
+     FIGMA_DUMP=~/Downloads/figma-dump.json pnpm run design-sync:check`);
 
   const spec = process.env.FIGMA_FILE ?? cfg.figmaFile;
   if (!spec) die("No figmaFile in tokens.config.json and no FIGMA_FILE set.");

@@ -17,7 +17,7 @@ component exports: [`ui.md`](ui.md).
 - [ ] 1.2 Export `MemberCard` from `@grade10/ui` — the dynamic identification code, rendered scannable and as a short typed fallback
 - [ ] 1.3 Export `PendingCollectionList` from `@grade10/ui` — rewards paid for and awaiting collection, each with its window and where to collect it
 - [ ] 1.4 Extend `RewardMenu` to take a quantity for a per-unit reward and to state a physical reward's collection window
-- [ ] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:stories:ui`, `pnpm run check:design-system`
+- [ ] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:stories:ui`, `pnpm run design-sync:check`
 
 ## 2. Commerce customer pairing (grade10)
 

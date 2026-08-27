@@ -23,9 +23,12 @@ import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const pkgDir = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
+// Token data and the CSS it projects to are the design system's and stay there;
+// only the tooling lives at the root. Same split as scripts/design-sync/.
+const dsDir = resolve(repoRoot, "packages/design-system");
 const cfg = JSON.parse(
-  await readFile(resolve(pkgDir, "tokens.config.json"), "utf8"),
+  await readFile(resolve(dsDir, "tokens.config.json"), "utf8"),
 );
 const die = (m) => {
   console.error(`✗ ${m}`);
@@ -38,12 +41,12 @@ if (!process.env.FIGMA_DUMP) {
 
      pnpm tokens:plugin dump                     # build the plugin
      # Figma → Plugins → Development → Import plugin from manifest…
-     #   scripts/figma/build/dump/manifest.json
+     #   scripts/tokens-sync/figma-plugins/build/dump/manifest.json
      # run it, click Download
-     FIGMA_DUMP=~/Downloads/figma-dump.json pnpm tokens:sync`);
+     FIGMA_DUMP=~/Downloads/figma-dump.json pnpm tokens:pull`);
 }
 const meta = JSON.parse(
-  await readFile(resolve(pkgDir, process.env.FIGMA_DUMP), "utf8"),
+  await readFile(resolve(repoRoot, process.env.FIGMA_DUMP), "utf8"),
 ).meta;
 const { variables, variableCollections: collections } = meta;
 
@@ -166,7 +169,7 @@ const keyed = (ids, modeId, where, seen = new Map()) => {
 };
 
 const doc = {
-  "//": "Canonical design tokens — SOURCE OF TRUTH. Figma and CSS are projections of this file. Pull edits from Figma (tokens:pull), build CSS (tokens:build), push code edits to Figma (tokens:push). Projection rules (slotMap, selectors, collections) live in tokens.config.json.",
+  "//": "Canonical design tokens — SOURCE OF TRUTH. Figma and CSS are projections of this file. Pull edits from Figma (tokens:import), build CSS (tokens:build), push code edits to Figma (tokens:push). Projection rules (slotMap, selectors, collections) live in tokens.config.json.",
 };
 // One shared `seen` across every primitive section — see keyed() above.
 const primSeen = new Map();
@@ -203,7 +206,7 @@ for (const [name, themeCfg] of Object.entries(cfg.themes)) {
 }
 
 await writeFile(
-  resolve(pkgDir, "tokens.json"),
+  resolve(dsDir, "tokens.json"),
   JSON.stringify(doc, null, 2) + "\n",
   "utf8",
 );

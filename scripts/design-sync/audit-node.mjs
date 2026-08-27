@@ -8,10 +8,10 @@
  * This script takes that mapping as input and makes the comparison
  * deterministic.
  *
- *   FIGMA_TOKEN=figd_… pnpm run figma:audit --node <url> --classes "h-10 gap-2 bg-primary"
- *   FIGMA_TOKEN=figd_… pnpm run figma:audit --map audit.json
- *   FIGMA_TOKEN=figd_… pnpm run figma:audit --all-blocks
- *   FIGMA_TOKEN=figd_… pnpm run figma:audit --node <url>          # dump the node's values
+ *   FIGMA_TOKEN=figd_… pnpm run design-sync:audit --node <url> --classes "h-10 gap-2 bg-primary"
+ *   FIGMA_TOKEN=figd_… pnpm run design-sync:audit --map audit.json
+ *   FIGMA_TOKEN=figd_… pnpm run design-sync:audit --all-blocks
+ *   FIGMA_TOKEN=figd_… pnpm run design-sync:audit --node <url>          # dump the node's values
  *
  * audit.json is the class-audit table the page-from-figma skill has the
  * converting agent emit: [{ "label": "hero/cta", "node": "<figma url>",
@@ -80,7 +80,7 @@ const die = (m) => {
   process.exit(1);
 };
 
-// `pnpm run figma:audit -- --all-blocks` is the habitual way to pass flags
+// `pnpm run design-sync:audit -- --all-blocks` is the habitual way to pass flags
 // through pnpm, and it leaves a literal `--` in argv that parseArgs would read
 // as the start of positionals and throw on. It is not needed any more — this
 // runs from the root with one hop — but tolerating it costs a filter, and the

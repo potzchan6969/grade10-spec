@@ -101,17 +101,23 @@ names) live in `tokens.config.json`. Figma and the CSS files are both
 *projections* of `tokens.json`, never sources.
 
 ```
-   Figma Variables ──tokens:pull──▶  tokens.json  ──tokens:build──▶  theme.css + themes/*.css
-   (designer edits)                 (git, canonical)                 (consumed by apps)
-                        ◀──tokens:push──┘  (engineer edits → Figma plugin script)
+   Figma Variables ──tokens:import──▶  tokens.json  ──tokens:build──▶  theme.css + themes/*.css
+   (designer edits)                    (git, canonical)                (consumed by apps)
+                          ◀──tokens:push──┘  (engineer edits → Figma plugin script)
 ```
 
 | Command | Direction | Does |
 |---|---|---|
-| `pnpm tokens:pull` | Figma → code | Dump → `tokens.json` (needs `FIGMA_DUMP=<file>` from the dump plugin) |
+| `pnpm tokens:import` | Figma → code | Dump → `tokens.json` (needs `FIGMA_DUMP=<file>` from the dump plugin) |
 | `pnpm tokens:build` | code → CSS | `tokens.json` + config → `theme.css`, `themes/grade10.css` |
-| `pnpm tokens:push` | code → Figma | `tokens.json` → `scripts/figma/build/push.gen.js`, run inside Figma via `use_figma` or the built plugin |
-| `pnpm tokens:sync` | Figma → CSS | `tokens:pull && tokens:build` (full refresh) |
+| `pnpm tokens:push` | code → Figma | `tokens.json` → `scripts/tokens-sync/figma-plugins/build/push.gen.js`, run inside Figma via `use_figma` or the built plugin |
+| `pnpm tokens:pull` | Figma → CSS | `tokens:import && tokens:build` — the normal entry point. A bare `tokens:import` leaves the CSS stale. |
+
+**Where these run.** The tooling lives at `scripts/tokens-sync/` and the scripts are
+defined in the root `package.json`, so run every leg from the repository root —
+they are not package scripts and will not resolve from inside this directory.
+What they read and write does stay here: `tokens.json` and `tokens.config.json`
+are the design system's, and so is the CSS they project to.
 
 **Which file.** Every leg runs inside Figma, against whichever file the plugin is
 open in — nothing here selects a file over the network. `tokens.config.json` →
@@ -124,13 +130,13 @@ failure messages, and what the configured collections leave behind are in
 [`docs/governance/figma-token-export.md`](../../docs/governance/figma-token-export.md);
 the summary is here. The REST variables endpoint is
 Enterprise-gated and this org is not on it, so the pull runs off a dump instead.
-`pnpm tokens:plugin dump` builds `scripts/figma/build/dump/`, imported the same way; it reads the local
+`pnpm tokens:plugin dump` builds `scripts/tokens-sync/figma-plugins/build/dump/`, imported the same way; it reads the local
 variables and hands back the exact `{ meta }` shape REST would have returned —
 Download writes `figma-dump.json` to your Downloads folder. Then:
 
 ```
-FIGMA_DUMP=~/Downloads/figma-dump.json pnpm tokens:sync   # pull + build
-git diff tokens.json                                       # what the designer changed
+FIGMA_DUMP=~/Downloads/figma-dump.json pnpm tokens:pull   # import + build
+git diff packages/design-system/tokens.json                # what the designer changed
 ```
 
 Round-trip is lossless: pushing `tokens.json` into an empty file, dumping it, and
@@ -140,9 +146,14 @@ pulling it back reproduces `tokens.json` byte for byte.
 against whichever file the Figma plugin is bound to, which is not always the one
 you asked for. `pnpm tokens:plugin push` (or `seed`) wraps the generated script
 into an importable plugin folder — Figma → Plugins → Development → Import plugin
-from manifest… → `scripts/figma/build/push/manifest.json`. It runs inside the file you have
+from manifest… → `scripts/tokens-sync/figma-plugins/build/push/manifest.json`. It runs inside the file you have
 open, so there is no binding to get wrong. Open Plugins → Development → Open
 console first; the headline lands in a toast, the full JSON in the console.
+
+`pnpm tokens:plugin` with no target rebuilds all three. `push` and `seed` bake in
+token values, so a build-all skips either one whose generated script does not
+exist yet and names the command that writes it; asking for one by name when its
+script is missing is an error instead.
 
 **Ownership boundary (how conflicts are avoided):** designers own values in Figma
 (land via `tokens:pull` → PR); engineers own the contract/`slotMap` and code-only
@@ -179,7 +190,7 @@ The Figma file still carries `Motion` and `Sizing`, and those remain ignored.
 `Sizing` in particular models modes as *size variants* (`default`/`sm`/`xs`)
 that must coexist on one page, which the config's one-selector-per-mode theme
 model cannot express. Wiring them up is tracked separately; do not assume a
-green `tokens:sync` means the whole file landed.
+green `tokens:pull` means the whole file landed.
 
 **Units.** A Figma FLOAT is a bare number, so the CSS unit is inferred from the
 variable's Figma *scopes*, falling back to the token name; anything unmatched

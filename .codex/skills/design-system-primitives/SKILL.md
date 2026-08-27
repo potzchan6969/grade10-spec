@@ -1,11 +1,11 @@
 ---
-name: design-system-components
+name: design-system-primitives
 description: Create or change a design-system primitive in `packages/design-system` whose contract is defined by a Figma component set. Use when adding a variant, size, or state, when editing a Code Connect template, or when reconciling code with the Figma file.
 ---
 
-# Design-system components
+# Design-system primitives
 
-Use this skill for changes under `packages/design-system/src/components/`. Product components are implemented in the consuming application, not here; see [`docs/governance/ui-component-contracts.md`](../../../docs/governance/ui-component-contracts.md) for their contract.
+Use this skill for changes under `packages/design-system/src/components/`. The shared compound components built on top of these primitives live in `packages/ui/src/blocks`, and a page assembled from them is `page-from-figma`'s job; see [`docs/governance/ui-component-contracts.md`](../../../docs/governance/ui-component-contracts.md) for their contract.
 
 Read [`docs/governance/design-code-sync.md`](../../../docs/governance/design-code-sync.md) for the ownership table and the reasoning behind every rule below, and [`packages/design-system/DESIGN.md`](../../../packages/design-system/DESIGN.md) before touching the token pipeline.
 
@@ -23,7 +23,7 @@ git log -1 --format='%h %ci %an %s' -- 'packages/design-system/src/components/**
 
 Task groups here are claimed and worked in parallel across people and agents (see [`docs/governance/task-ownership.md`](../../../docs/governance/task-ownership.md)), so a component can be rewritten underneath a long-running analysis. Every conclusion drawn from a file that has since moved is stale, including conclusions that still look right. Check the hash once at the start and once before reporting.
 
-**Confirm you can reach Figma's values.** `pnpm run check:design-system` does not degrade without `FIGMA_TOKEN` — it aborts, exit 1, printing `✗ No Figma source`, and the colour and geometry comparison never runs. A component can be green on lint, typecheck, and every story test while rendering the wrong fill. If no token is available, say so in the handoff and fall back to sampling base variants by hand with `get_variable_defs`; do not report a verified component off a run that never reached Figma.
+**Confirm you can reach Figma's values.** Running and triaging the checker is the `design-sync-check` skill; the short version is that `pnpm run design-sync:check` does not degrade without `FIGMA_TOKEN` — it aborts, exit 1, printing `✗ No Figma source`, and the colour and geometry comparison never runs. A component can be green on lint, typecheck, and every story test while rendering the wrong fill. If no token is available, say so in the handoff and fall back to sampling base variants by hand with `get_variable_defs`; do not report a verified component off a run that never reached Figma.
 
 ## Decide this before editing either side
 
@@ -48,11 +48,11 @@ Verification needs three tools, none of which require the `figma-design-to-code`
 ## Order of operations — authoring
 
 1. **Publish the Figma component set first.** Code Connect resolves only published components, and `list_file_components_for_code_connect` returns only published ones.
-2. **Pull tokens if design introduced any** (`pnpm tokens:sync`) and confirm the values exist in `src/themes/grade10.css`. Never hand-edit `src/theme.css` or `src/themes/grade10.css`; edit `tokens.json` or `tokens.config.json` and run `pnpm run tokens:build`.
+2. **Pull tokens if design introduced any** (`pnpm tokens:pull` — the `design-tokens` skill carries that leg) and confirm the values exist in `src/themes/grade10.css`. Never hand-edit `src/theme.css` or `src/themes/grade10.css`; edit `tokens.json` or `tokens.config.json` and run `pnpm run tokens:build`.
 3. **Write `<name>.tsx`** with one cva option per Figma variant option and nothing more. Open the JSDoc above the export with the **set's Figma description** (it lives on the set, never on a variant), then add any code-specific notes after it. If the description is empty or is only library search keywords ("todo, task, list…" — search metadata, not documentation), write a real one and tell the designer the set has none. A description edit in Figma is a code change: no rail carries it, so the JSDoc is its only projection.
 4. **Write `<name>.figma.ts`** with a `getEnum` covering every option of every VARIANT property. An unmapped option resolves to `undefined`, which Dev Mode emits as an empty attribute — `<Button size="">` — not as a visible error. Axes are matched through the template, not by name, so `Type → variant` and `Danger → destructive` are inferred from the mapping itself.
 5. **Write `<name>.stories.tsx`** with a story per variant plus disabled, loading, and every other contract state. Stories are colocated in this package, unlike `apps/preview/src/pages/`. `pnpm run test:stories` fails on any cva option no story renders; listing it in `argTypes` does not count.
-6. **Run `pnpm run check:design-system`** to zero errors and zero *unexplained* warnings. It aborts without `FIGMA_TOKEN` — see the precondition above. A plugin dump checks names only and says so. A warning you intend to keep belongs in an OpenSpec change with a reason, not in the run log.
+6. **Run `pnpm run design-sync:check`** to zero errors and zero *unexplained* warnings — `design-sync-check` carries the triage table. It aborts without `FIGMA_TOKEN` — see the precondition above. A plugin dump checks names only and says so. A warning you intend to keep belongs in an OpenSpec change with a reason, not in the run log.
 7. **Publish Code Connect** and verify with `get_code_connect_map`; it returns `{}` when nothing is published, and Dev Mode then shows no connected code however correct the template is.
 8. **Run `pnpm run lint` and `pnpm run typecheck`.** Commit regenerated theme CSS with the token change that produced it.
 9. **Update OpenSpec only if the export contract moved.** A prop added or removed, an option renamed, a rung dropped, or a mismatch you are deliberately keeping — those are changes a consumer must adapt to, and the delta names the exact exports and the consuming applications. Reconciling a value — a fill, a height, a disabled treatment — to what Figma already draws is not a contract change and lands as a plain commit; three Button reconciliations have landed that way. When an option is renamed, say so loudly: a removed option is a type error, but a renamed one that still exists compiles and ships the wrong size.
@@ -66,7 +66,7 @@ Cheapest and highest-signal first. Stop as soon as a step tells you the componen
 3. **`get_metadata` on the set.** Read the axis and option names off the variant names, and diff them against the cva. Read the set's description too, against the JSDoc's opening — a description that moved in Figma is part of a reconciliation, and nothing else will ever flag it. Compare the boxes across variants at the same rung: a rung that is one size for some variants and another size for the rest is a Figma-side drawing error, not something to model in code.
 4. **`get_variable_defs` on base variants**, then on at least one **disabled** and one **hover** node, for one solid variant and one borderless one. The checker compares base states only, so a whole state model can drift without a single warning.
 5. **`get_screenshot` of the set** to confirm fills and relative sizes.
-6. **`pnpm run check:design-system`**, then `pnpm run lint`, `pnpm run typecheck`, and `pnpm run test:stories`.
+6. **`pnpm run design-sync:check`**, then `pnpm run lint`, `pnpm run typecheck`, and `pnpm run test:stories`.
 7. **Re-baseline the file** before writing up.
 
 ## Failures that have already cost a rebuild here

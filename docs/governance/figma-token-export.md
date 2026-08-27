@@ -1,6 +1,6 @@
 # Exporting tokens from Figma
 
-How to get the variables out of the Figma file and into `tokens.json`, using the dump plugin in [`packages/design-system/scripts/figma/plugin-src/dump/`](../../packages/design-system/scripts/figma/plugin-src/dump/).
+How to get the variables out of the Figma file and into `tokens.json`, using the dump plugin in [`scripts/tokens-sync/figma-plugins/plugin-src/dump/`](../../scripts/tokens-sync/figma-plugins/plugin-src/dump/).
 
 This is the design → code leg of the token pipeline, and step 5 of [`figma-component-to-code.md`](figma-component-to-code.md#the-route-step-by-step). [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) covers the pipeline as a whole and the other two legs; this document is the procedure for this one.
 
@@ -17,10 +17,10 @@ The cost is that **every export needs a human with the file open**. There is no 
 The built plugin folder is gitignored (`.gitignore:32`), so each person builds their own. From `packages/design-system`:
 
 ```bash
-pnpm tokens:plugin dump          # -> scripts/figma/build/dump/
+pnpm tokens:plugin dump          # -> scripts/tokens-sync/figma-plugins/build/dump/
 ```
 
-That writes `code.js`, `ui.html`, and a generated `manifest.json`. Then in the Figma desktop app: **Plugins → Development → Import plugin from manifest…** → `packages/design-system/scripts/figma/build/dump/manifest.json`. It appears as **DS Token Dump**.
+That writes `code.js`, `ui.html`, and a generated `manifest.json`. Then in the Figma desktop app: **Plugins → Development → Import plugin from manifest…** → `scripts/tokens-sync/figma-plugins/build/dump/manifest.json`. It appears as **DS Token Dump**.
 
 You only rebuild when the plugin source itself changes. Unlike `tokens:plugin push` and `seed`, which wrap a generated script with token values baked in, the dump bakes in no data — `build-plugin.mjs` copies the hand-written source verbatim and only generates the manifest. A dump plugin imported months ago is not stale.
 
@@ -36,25 +36,25 @@ You only rebuild when the plugin source itself changes. Unlike `tokens:plugin pu
 ## Landing it in the repository
 
 ```bash
-FIGMA_DUMP=/absolute/path/to/figma-dump.json pnpm run tokens:sync   # pull + build
+FIGMA_DUMP=/absolute/path/to/figma-dump.json pnpm run tokens:pull   # import + build
 git diff packages/design-system/tokens.json                          # what design changed
 ```
 
-`tokens:sync` is `tokens:pull && tokens:build`: the dump becomes `tokens.json`, and `tokens.json` is projected to `src/theme.css` and `src/themes/grade10.css`. Review the `tokens.json` diff — that is the designer's change in reviewable form — and **commit the regenerated CSS with it**. Never hand-edit either generated file.
+`tokens:pull` is `tokens:import && tokens:build`: the dump becomes `tokens.json`, and `tokens.json` is projected to `src/theme.css` and `src/themes/grade10.css`. Review the `tokens.json` diff — that is the designer's change in reviewable form — and **commit the regenerated CSS with it**. Never hand-edit either generated file.
 
-**Use an absolute path.** `pull.mjs` resolves `FIGMA_DUMP` against `packages/design-system`, not your shell's working directory, so a relative path silently looks in the wrong place. `FIGMA_DUMP=~/Downloads/figma-dump.json` works unquoted because the shell expands the tilde before Node sees it; quote it and it will not.
+**Use an absolute path.** `pull.mjs` resolves `FIGMA_DUMP` against the repository root, not your shell's working directory, so a relative path silently looks in the wrong place. `FIGMA_DUMP=~/Downloads/figma-dump.json` works unquoted because the shell expands the tilde before Node sees it; quote it and it will not.
 
-`tokens:pull` and `tokens:plugin` are package-level scripts with no root alias — run them from `packages/design-system`, or as `pnpm --filter @grade10/design-system run tokens:pull`. `tokens:sync` and `tokens:build` do have root aliases, which is why the command above works from anywhere.
+Every leg is a root script (`scripts/tokens-sync/`), so all of them run from anywhere in the repository. The Figma legs still need a human driving a plugin inside Figma; only `tokens:build` runs unattended.
 
 ## The same dump also feeds the component checker
 
 `meta.components` is additive: the plugin walks every page and records each component set with its `componentPropertyDefinitions`. `pull.mjs` reads only `.variables` and `.variableCollections` and ignores it entirely.
 
 ```bash
-FIGMA_DUMP=/absolute/path/to/figma-dump.json pnpm run check:design-system
+FIGMA_DUMP=/absolute/path/to/figma-dump.json pnpm run design-sync:check
 ```
 
-This is the **fallback** path, not the normal one. `check:design-system` prefers `FIGMA_TOKEN`, which needs only `files:read` — the Enterprise gate applies to variables, not to component definitions, so that check runs unattended in CI even though the token pull cannot. A dump carries no variant nodes, so colours and geometry go unchecked; the run says so rather than reporting clean:
+This is the **fallback** path, not the normal one. `design-sync:check` prefers `FIGMA_TOKEN`, which needs only `files:read` — the Enterprise gate applies to variables, not to component definitions, so that check runs unattended in CI even though the token pull cannot. A dump carries no variant nodes, so colours and geometry go unchecked; the run says so rather than reporting clean:
 
 > `dump …/figma-dump.json carries no variant nodes, so colours and geometry went unchecked. Use FIGMA_TOKEN for the value checks.`
 
@@ -71,9 +71,9 @@ The plugin dumps **every** local collection. `pull.mjs` then reads only the ones
 | Any other collection | **No.** Silently ignored. |
 | A second mode of a configured collection | **No.** One Figma mode per configured theme. |
 | Variable descriptions | Yes → `$description`, omitted when blank |
-| `meta.components` | Not by the pull; read by `check:design-system` |
+| `meta.components` | Not by the pull; read by `design-sync:check` |
 
-`Sizing` is the notable absence. It models modes as *size variants* (`default`/`sm`/`xs`) that must coexist on one page, which the config's one-selector-per-mode theme model cannot express. Wiring it up is tracked separately — **a green `tokens:sync` does not mean the whole file landed.**
+`Sizing` is the notable absence. It models modes as *size variants* (`default`/`sm`/`xs`) that must coexist on one page, which the config's one-selector-per-mode theme model cannot express. Wiring it up is tracked separately — **a green `tokens:pull` does not mean the whole file landed.**
 
 `src/themes/default.css` is stock shadcn, hand-maintained and deliberately outside this pipeline entirely.
 
@@ -83,7 +83,7 @@ Every one of these exits non-zero and writes nothing, so a failed pull leaves `t
 
 | Message | Cause | Fix |
 | --- | --- | --- |
-| `No dump given. Set FIGMA_DUMP=<file.json>` | Ran `tokens:pull`/`tokens:sync` with no dump | Export one, or pass an absolute path |
+| `No dump given. Set FIGMA_DUMP=<file.json>` | Ran `tokens:import`/`tokens:pull` with no dump | Export one, or pass an absolute path |
 | `Collection not found. Available: …` | A collection was renamed in Figma, or you dumped the wrong file | Match `tokens.config.json` to the listed names, or re-dump the right file |
 | `theme "grade10": Figma mode "…" not found` | A designer renamed a Semantic mode | Update `themes.<name>.modes`, or rename it back |
 | `Name collision in Semantic / …: "Base/card" and "Sidebar/card" both normalize to "card"` | Two grouped Figma names normalize to one token key — `key()` drops the group prefix | Rename one in Figma |
@@ -94,7 +94,7 @@ The renamed-mode case is a hard failure on purpose. It used to warn and exit 0, 
 
 ## Changing the plugin
 
-The source is hand-written and lives at `packages/design-system/scripts/figma/plugin-src/dump/` — `code.js` (the export) and `ui.html` (the window). There is nothing in `tokens.json` from which a *read* could be derived, which is why this one is not generated.
+The source is hand-written and lives at `scripts/tokens-sync/figma-plugins/plugin-src/dump/` — `code.js` (the export) and `ui.html` (the window). There is nothing in `tokens.json` from which a *read* could be derived, which is why this one is not generated.
 
 Edit the source, then `pnpm tokens:plugin dump` to copy it into `build/dump/`; `build-plugin.mjs` runs a `new Function(...)` parse check on the way, so a syntax error surfaces at the terminal rather than inside Figma. Figma picks up the rebuilt file on the next run — no re-import needed. Keep the output shaped like the REST `{ meta }` response; that equivalence is the only reason `pull.mjs` needs no second code path.
 
@@ -102,6 +102,7 @@ Note that the manifest sets `documentAccess: "dynamic-page"`, so pages load lazi
 
 ## Related reading
 
-- [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) — the whole token pipeline: `tokens:pull`, `tokens:build`, `tokens:push`, the ownership boundary, and round-trip guarantees.
+- [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) — the whole token pipeline: `tokens:import`, `tokens:build`, `tokens:push`, the ownership boundary, and round-trip guarantees.
 - [`figma-component-to-code.md`](figma-component-to-code.md) — where this step sits in the component handover.
-- [`design-code-sync.md`](design-code-sync.md) — what `check:design-system` enforces once the tokens have landed.
+- [`design-code-sync.md`](design-code-sync.md) — what `design-sync:check` enforces once the tokens have landed.
+- `.cursor/skills/design-tokens/SKILL.md` — the working checklist for this leg and the other two, for an agent or anyone who would rather be told which leg they are on than read the pipeline.

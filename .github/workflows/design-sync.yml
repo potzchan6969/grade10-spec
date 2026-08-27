@@ -72,7 +72,7 @@ jobs:
         if: steps.token.outputs.available == 'true'
         env:
           FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
-        run: pnpm run check:design-system
+        run: pnpm run design-sync:check
 
       # A component with no variant axes has no component-set diff — its one
       # durable Figma-side check is the per-directory audit.json written at
@@ -87,4 +87,4 @@ jobs:
         if: steps.token.outputs.available == 'true'
         env:
           FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
-        run: pnpm run figma:audit --all-blocks
+        run: pnpm run design-sync:audit --all-blocks
