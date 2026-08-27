@@ -1,0 +1,41 @@
+[
+  {
+    "label": "order-history-status/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4872-8536",
+    "classes": "inline-flex items-start",
+    "note": "shipped variant of set 4872:8537; Badge sm/info is nested."
+  },
+  {
+    "label": "order-history-line-item/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4901-3026",
+    "classes": "grid w-80 shrink-0 grid-cols-[auto_minmax(0,1fr)] items-stretch overflow-hidden rounded-xl border border-border bg-card"
+  },
+  {
+    "label": "order-history-line-item/image",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4901-2860",
+    "classes": "relative aspect-square h-auto min-h-0 min-w-0 self-stretch overflow-hidden border-r border-border bg-gradient-to-b from-background-subtle to-muted",
+    "note": "Product / Image nested in the order line card. Outer stroke omitted so the well shares the card border; border-r is the image/text separator."
+  },
+  {
+    "label": "order-history-card-header/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4863-8260",
+    "classes": "w-full overflow-hidden bg-muted px-6 py-4"
+  },
+  {
+    "label": "order-history-card/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4872-8325",
+    "classes": "w-full overflow-hidden rounded-2xl border border-border bg-card"
+  },
+  {
+    "label": "order-history-card/body",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4901-3011",
+    "classes": "scroll-fade-x w-full overflow-x-auto px-6 py-5",
+    "note": "Horizontal scroll + scroll-fade-x (not scroll-fade — that axis is vertical)."
+  },
+  {
+    "label": "order-history/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4835-1563",
+    "classes": "w-full max-w-7xl gap-12 overflow-hidden px-8 pt-8 pb-16",
+    "note": "Main frame of Order History page; Nav/Footer excluded. max-w-7xl is 1280px."
+  }
+]

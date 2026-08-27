@@ -138,6 +138,34 @@ export {
   type StoreSectionHeaderProps,
 } from "./blocks/store-home/store-section-header";
 export type { StoreCollectionSummary } from "./blocks/store-home/types";
+// shared-ui/store-order-history
+export {
+  OrderHistory,
+  type OrderHistoryCopy,
+  type OrderHistoryProps,
+} from "./blocks/store-order-history/order-history";
+export {
+  OrderHistoryCard,
+  type OrderHistoryCardProps,
+} from "./blocks/store-order-history/order-history-card";
+export {
+  OrderHistoryCardHeader,
+  type OrderHistoryCardHeaderCopy,
+  type OrderHistoryCardHeaderProps,
+} from "./blocks/store-order-history/order-history-card-header";
+export {
+  OrderHistoryLineItem,
+  type OrderHistoryLineItemProps,
+} from "./blocks/store-order-history/order-history-line-item";
+export {
+  OrderHistoryStatus,
+  type OrderHistoryStatusProps,
+} from "./blocks/store-order-history/order-history-status";
+export type {
+  OrderHistoryFulfillmentStatus,
+  OrderHistoryLineSummary,
+  OrderHistoryOrderSummary,
+} from "./blocks/store-order-history/types";
 // shared-ui/store-product-listing
 export {
   FilterPanel,
