@@ -7,6 +7,47 @@ so it is shared. What an operator is *allowed* to do is `shared-auth/users` and
 `shared-auth/sessions`; this capability governs only what the components render
 and the contract they expose.
 
+## Feature set
+
+- Directory exports
+  - Named components: table and the three confirmation dialogs from the package entry
+- No identity vocabulary
+  - Consumer-supplied roles and dates: the components neither parse roles nor format dates
+- Permitted moves
+  - Handler-gated: roles and delete appear only when the console supplies a handler
+- Sessions
+  - Identifier not secret: a session is named by an id the consumer supplies
+
+## User journeys
+
+### auth-user-directory-US-01: Operator opens the identity directory
+
+**As an** operator,
+**I want** the table to offer only the moves my console permits,
+**so that** a banned account offers unban, and an account's joined date is the one the console supplied.
+
+**Accepted by:**
+
+- `auth-user-directory-SC-01` — An application imports the directory
+- `auth-user-directory-SC-02` — A console offers its own role vocabulary
+- `auth-user-directory-SC-04` — An account joined on a given day
+- `auth-user-directory-SC-05` — An operator without elevated grants opens the directory
+- `auth-user-directory-SC-06` — A banned account is shown
+
+### auth-user-directory-US-02: Operator confirms a change to an account
+
+**As an** operator,
+**I want** roles, standing, and sessions behind a confirmation that reports what I chose,
+**so that** an empty role list is submitted empty, a session is named without its secret, and a reason is collected only when the move needs one.
+
+**Accepted by:**
+
+- `auth-user-directory-SC-03` — A selection is submitted
+- `auth-user-directory-SC-07` — An operator reads where an account is signed in
+- `auth-user-directory-SC-08` — An account holds no sessions
+- `auth-user-directory-SC-09` — A move that collects a reason is confirmed
+- `auth-user-directory-SC-10` — A move that collects no reason is confirmed
+
 ## ADDED Requirements
 
 ### Requirement: The user directory exports
@@ -19,7 +60,7 @@ components for the user directory surface: `UserTable`, `UserRolesDialog`,
 `UserModerationTone`, `UserSessionsDialogProps`, `UserSessionsDialogCopy`,
 `UserDirectoryRow`, `UserRoleOption`, and `UserSessionRow`.
 
-#### Scenario: An application imports the directory
+#### Scenario: auth-user-directory-SC-01 - An application imports the directory
 
 - **WHEN** an application imports any export named above from the shared UI package's public entry
 - **THEN** the import resolves without error
@@ -33,19 +74,19 @@ by the roles dialog SHALL be ordered as the options were offered rather than as
 they were selected, and an empty selection SHALL be submitted as an empty list,
 leaving any default-role decision to the consumer.
 
-#### Scenario: A console offers its own role vocabulary
+#### Scenario: auth-user-directory-SC-02 - A console offers its own role vocabulary
 
 - **WHEN** a console renders the roles dialog with the roles its identity system defines
 - **THEN** each role is offered with the label and permission summary the console supplied
 - **AND THEN** no role the console did not supply is offered
 
-#### Scenario: A selection is submitted
+#### Scenario: auth-user-directory-SC-03 - A selection is submitted
 
 - **WHEN** an operator changes which roles are selected and saves
 - **THEN** the submitted list holds the selected roles in the order the options were offered
 - **AND THEN** an operator who selected none submits an empty list
 
-#### Scenario: An account joined on a given day
+#### Scenario: auth-user-directory-SC-04 - An account joined on a given day
 
 - **WHEN** the table renders an account
 - **THEN** it shows the joined date exactly as the consumer supplied it
@@ -59,13 +100,13 @@ for each, so a console can withhold a move the operator's grants do not allow.
 A row SHALL offer ban or unban according to whether the account is banned, and
 never both.
 
-#### Scenario: An operator without elevated grants opens the directory
+#### Scenario: auth-user-directory-SC-05 - An operator without elevated grants opens the directory
 
 - **WHEN** a console renders the table without a roles handler or a delete handler
 - **THEN** neither action appears on any row
 - **AND THEN** the sessions action still appears on every row
 
-#### Scenario: A banned account is shown
+#### Scenario: auth-user-directory-SC-06 - A banned account is shown
 
 - **WHEN** the table renders an account that is banned
 - **THEN** that row offers unban and does not offer ban
@@ -78,13 +119,13 @@ supplies and SHALL NOT accept or render the secret that authenticates a
 session. It SHALL report a revocation by that same identifier. When the account
 holds no sessions, ending every session SHALL NOT be offered.
 
-#### Scenario: An operator reads where an account is signed in
+#### Scenario: auth-user-directory-SC-07 - An operator reads where an account is signed in
 
 - **WHEN** the dialog renders an account's sessions
 - **THEN** each is named by its identifier
 - **AND THEN** no authenticating secret is rendered
 
-#### Scenario: An account holds no sessions
+#### Scenario: auth-user-directory-SC-08 - An account holds no sessions
 
 - **WHEN** the dialog renders an account with no sessions
 - **THEN** it says so
@@ -97,12 +138,12 @@ whether it collects a reason are supplied by the consumer, and SHALL report the
 confirmation with the reason collected — or with an empty reason where none was
 collected — so a consumer reads one signature whichever move it asked for.
 
-#### Scenario: A move that collects a reason is confirmed
+#### Scenario: auth-user-directory-SC-09 - A move that collects a reason is confirmed
 
 - **WHEN** an operator confirms a move the consumer said collects a reason
 - **THEN** the dialog reports the reason that was typed
 
-#### Scenario: A move that collects no reason is confirmed
+#### Scenario: auth-user-directory-SC-10 - A move that collects no reason is confirmed
 
 - **WHEN** an operator confirms a move the consumer said collects no reason
 - **THEN** no reason field is rendered
