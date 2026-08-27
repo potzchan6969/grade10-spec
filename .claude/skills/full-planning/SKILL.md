@@ -67,17 +67,28 @@ before coding.
 
 - **Context**: only the current state and constraints needed to explain the
   approach. Point at the proposal for motivation; never restate it.
-- **Decisions**: each with its rationale and the alternatives considered and
-  rejected. Engineering inherits those trade-offs — an alternative you leave
-  out gets re-litigated during implementation.
-- **Risks / Trade-offs**, and a **Migration Plan** where one applies.
+- **Decisions**: how the spec lands, not a restatement of it. Open by naming
+  what the spec already governs, then record the implementation choice
+  (which row, which service, persist vs recompute, reuse vs add) and the
+  alternatives rejected. A decision that could be a spec scenario belongs
+  in the spec. Keep the implementation alternative an engineer might still
+  try even when the spec forbids the resulting behavior.
+- **Data model**: database schema is a must. Each added or changed column
+  with Postgres type, nullability, and default, matching the existing
+  schema. Reuse a table or stamp that already holds the fact. Spec fields
+  read from another row at query time are not stored.
+- **Contracts**: only when the wire changes in a meaningful way. Do not list
+  unchanged endpoints.
+- **Risks / Trade-offs**, and a **Migration Plan** where one applies. Do not
+  mitigate a risk with "the spec says so".
 - **Open Questions** only for unknowns that can be answered later *without*
   changing the specs, the approach, or the task breakdown. Anything that would
   change one of those is not an open question — resolve it now, asking rather
   than guessing.
 
-Link the capability spec instead of restating requirements. Screens and Figma
-sources belong in `ui.md`.
+Screens and Figma sources belong in `ui.md`. The store's full design rules
+live in `openspec/config.yaml` (`rules.design`); `openspec instructions design`
+carries them.
 
 ## ui.md
 

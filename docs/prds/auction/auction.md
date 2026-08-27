@@ -16,7 +16,12 @@ record in-house shipment after a listing is won.
   workflows. Bidding and holds shipped first; capture and fulfilment were the
   named follow-on of `add-grade10-auction`.
 - Related OpenSpec changes: `add-grade10-auction` (browse and bid),
-  `add-auction-payment-fulfillment` (operator payment and shipment).
+  `add-auction-payment-fulfillment` (operator payment and shipment),
+  `add-auction-auto-bidding` (auto bidding),
+  `add-auction-watchlist` (watching a lot),
+  `add-auction-notifications` (listing and bid-activity mail).
+  Follow-on product decisions: [auto bidding](./auto-bidding.md),
+  [watching a lot](./watchlist.md), [notifications](./notifications.md).
 
 ## Goals
 
@@ -33,9 +38,13 @@ record in-house shipment after a listing is won.
 ## Non-goals
 
 - Auction Buy Now, carts, stock counts, fixed-price checkout, search, saved
-  searches, filters, favourites, related lots, and recent-sales data.
-- Auto-bidding, vault storage, global shipping rate shopping, carrier
-  accounts, tracking numbers, and a customer shipment-notification programme.
+  searches, filters, related lots, and recent-sales data.
+- Auto-bidding is specified separately in [auto bidding](./auto-bidding.md).
+  Vault storage, global shipping rate shopping, carrier accounts, tracking
+  numbers, and a customer shipment-notification programme remain out of this
+  MVP.
+- Store favourites. Auction watching is specified separately in
+  [watching a lot](./watchlist.md).
 - Customer-facing checkout, invoices, refunds, disputes, or a second payment
   provider.
 - Collecting a phone number Grade10 does not already hold.
