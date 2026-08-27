@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Package } from "@phosphor-icons/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "../forms/button";
 import { EmptyState } from "./empty-state";
 

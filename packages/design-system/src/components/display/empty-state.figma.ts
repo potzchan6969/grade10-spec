@@ -33,13 +33,15 @@ const hasActions = instance.getBoolean("hasActions");
 export default {
   // Nested Button attrs use object-spread so the design-sync prop scanner does
   // not treat `variant` as an EmptyState prop (it only matches `name={` / `name="`).
-  example: figma.code`<EmptyState${compact ? figma.code` compact` : ""}${iconCode ? figma.code` icon={${iconCode}}` : ""}${description ? figma.code` description="${description}"` : ""}${hasActions ? figma.code` actions={<>
+  example: figma.code`<EmptyState${compact ? figma.code` compact` : ""}${iconCode ? figma.code` icon={${iconCode}}` : ""}${description ? figma.code` description="${description}"` : ""}${
+    hasActions
+      ? figma.code` actions={<>
   <Button size="md" {...{ variant: "secondary" }}>Take action</Button>
   <Button size="md">Take action</Button>
-</>}` : ""} title="${title}" />`,
-  imports: [
-    'import { Button, EmptyState } from "@grade10/design-system"',
-  ],
+</>}`
+      : ""
+  } title="${title}" />`,
+  imports: ['import { Button, EmptyState } from "@grade10/design-system"'],
   id: "empty-state",
   metadata: { nestable: true },
 };

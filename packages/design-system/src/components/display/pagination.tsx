@@ -54,9 +54,7 @@ function PaginationLink({
 }: PaginationLinkProps) {
   const classes = cn(
     paginationControlClassName,
-    isActive
-      ? "bg-primary text-primary-foreground"
-      : paginationIdleClassName,
+    isActive ? "bg-primary text-primary-foreground" : paginationIdleClassName,
     className,
   );
 

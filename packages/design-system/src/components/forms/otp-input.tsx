@@ -112,11 +112,7 @@ function OtpInputSlots({
         <InputOtpSlot
           key={slotKeys[index]}
           digit={slot.char}
-          placeholder={
-            placeholder
-              ? (slot.placeholderChar ?? placeholder)
-              : ""
-          }
+          placeholder={placeholder ? (slot.placeholderChar ?? placeholder) : ""}
           status={status}
           focused={slot.isActive}
           disabled={disabled}
