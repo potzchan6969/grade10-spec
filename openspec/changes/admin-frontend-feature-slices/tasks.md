@@ -1,4 +1,4 @@
-## 1. User directory slice (grade10)
+## 1. User directory slice (grade10) (owner: @sean)
 
 The worked reference for the other three, and the only surface that is
 duplicated today. Take this group first.
