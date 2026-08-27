@@ -71,7 +71,7 @@ const die = (m) => {
 //
 // REST is the default because it needs no human. The variables pull cannot use
 // REST — /v1/files/:key/variables/local needs file_variables:read, which Figma
-// gates to Enterprise (see scripts/figma/pull.mjs) — but that gate is specific
+// gates to Enterprise (see scripts/tokens/figma/pull.mjs) — but that gate is specific
 // to variables. Component property definitions live in the file document, which
 // only needs the standard files:read scope, so this check can run unattended
 // even though the token pull cannot.

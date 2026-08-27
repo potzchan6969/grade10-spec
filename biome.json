@@ -52,10 +52,7 @@
       ]
     },
     {
-      "includes": [
-        "packages/design-system/scripts/**",
-        "scripts/design-sync/**"
-      ],
+      "includes": ["scripts/tokens/**", "scripts/design-sync/**"],
       "linter": {
         "rules": {
           "style": {

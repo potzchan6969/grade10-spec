@@ -4,11 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "tokens:import": "node scripts/figma/pull.mjs",
-    "tokens:build": "node scripts/build-css.mjs",
-    "tokens:push": "node scripts/figma/push.mjs",
-    "tokens:plugin": "node scripts/figma/build-plugin.mjs",
-    "tokens:pull": "pnpm tokens:import && pnpm tokens:build",
     "code-connect:publish": "figma connect publish --exit-on-unreadable-files",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "storybook": "storybook dev",
