@@ -116,13 +116,29 @@ bulk of the UX work. Wire identifiers stay `auctions` / `auctionId`.
 **Rejected:** Expanding the campaign row with window or hero media in this
 change.
 
+### 5. Listing productId comes from inventory eligibility
+
+**Decision:** Replace free-text product id on the listing editor with a picker
+(or validated select) fed by inventory’s Auction-facing eligibility list:
+products in state **`created`** with **ready available > 0**. Draft and
+out-of-stock products are omitted. Save/create refuse ineligible ids.
+Campaign covers do not carry a product id.
+
+**Depends on** [`add-grade10-inventory`](../add-grade10-inventory/design.md)
+holder/admin read of ready available. Until inventory ships, fixtures stub
+the eligibility list.
+
+**Rejected:** Keeping free-text product ids without inventory checks.
+**Rejected:** Putting product selection on the campaign cover.
+
 ## Risks / Trade-offs
 
 | Risk | Mitigation |
 | --- | --- |
 | Existing flows publish draft → published | Spec + tasks: create then publish; migrate admin UI and tests |
 | Published campaigns no longer accept new lots | Documented product rule; existing attachments unchanged |
-| Parallel `add-grade10-inventory` naming | Campaigns chrome requirement; proposal non-goals; inventory sale = sold stock only |
+| Inventory not shipped yet | Fixtures stub eligibility; tasks gated on inventory contracts for live wire |
+| Parallel `add-grade10-inventory` naming | Campaigns ≠ inventory sold; product picker only consumes eligibility |
 | Code paths still say `sale` / `SalesPanel` | Tasks require operator-visible Campaigns labels; internal path rename optional in same change |
 
 ## Migration Plan
@@ -131,13 +147,14 @@ change.
    (including listing Campaign field label) — no schema change.
 2. Expand status check to include `created`.
 3. Deploy worker with create transition and tightened `OPEN_AUCTION_STATES`.
-4. Ship admin SPA: campaign editor create/publish actions and listing picker
-   filter.
+4. Ship admin SPA: campaign editor create/publish actions, listing campaign
+   picker filter, and inventory-backed product picker (created + in stock).
 5. No row backfill required — existing `draft` / `published` / `canceled`
    rows stay valid; operators create drafts before publishing new covers.
 
 ## Open Questions
 
 None blocking. Product confirmed: campaign = multi-listing catalogue cover;
-operator language Campaigns; picker = `draft` | `created` only; statuses
+operator language Campaigns; campaign picker = `draft` | `created` only;
+listing product picker = inventory `created` + ready available > 0; statuses
 align with listing; wire table stays `auctions`.
