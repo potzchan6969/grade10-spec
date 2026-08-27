@@ -51,8 +51,8 @@ Needs groups 1 to 4 landed — it deletes what they replace.
 
 - [x] 5.1 Collapse the panel's per-backend response caches into the one shared cache module, now that every slice owns its query keys.
 - [x] 5.2 Delete the panel's own decoder helper, and reduce its client directory to the clients the composition root hands to ports.
-- [ ] 5.3 Update the repository's frontend architecture documentation and skill so the operator-facing packages are named alongside the collector-facing ones, and the enforcement line says the boundary is checked rather than reviewed.
-- [ ] 5.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, `pnpm run agent:check-parity`.
+- [x] 5.3 Update the repository's frontend architecture documentation and skill so the operator-facing packages are named alongside the collector-facing ones, and the enforcement line says the boundary is checked rather than reviewed.
+- [x] 5.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, `pnpm run agent:check-parity`.
 
 ## 6. Boundary check (grade10) (owner: @sean)
 
@@ -60,7 +60,7 @@ Lands last, when there is nothing left for it to fail on.
 
 - [x] 6.1 Add the boundary check to the repository's check registry: it fails on a transport client named in application page, view or component code, a request issued directly to a product backend, or a response schema declared in place — scenario: Application code reaches a transport directly.
 - [x] 6.2 Give the check named exemptions carrying their reason, including the storefront's demo lab pages, and make an exemption whose path no longer exists fail the run — scenario: A path is exempt on purpose.
-- [ ] 6.3 Verify: `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`.
+- [x] 6.3 Verify: `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`.
 
 ## 7. Directory views as shared blocks (grade10-spec) (owner: @sean)
 
