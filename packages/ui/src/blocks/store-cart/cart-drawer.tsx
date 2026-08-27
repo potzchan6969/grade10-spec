@@ -213,7 +213,7 @@ function CartItemContent({
           vAlign="center"
           className={cn("w-full whitespace-nowrap", isSoldOut && "opacity-50")}
         >
-          <span className="text-sm font-medium leading-5 text-foreground">
+          <span className="text-sm font-normal leading-5 text-foreground">
             {item.price}
           </span>
           {isDiscounted ? (

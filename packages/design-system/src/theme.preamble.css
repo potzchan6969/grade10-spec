@@ -114,6 +114,8 @@
   }
   html {
     @apply font-sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     /* Reserve the scrollbar's gutter whether or not the page overflows, so a
        short page and a long one lay out at the same width and content does
        not jump sideways between them. A no-op where the platform draws

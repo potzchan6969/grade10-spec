@@ -112,7 +112,7 @@ function ProductCardContent({
           {name}
         </p>
         <HStack gap="sm" vAlign="baseline">
-          <p className="text-base font-medium text-card-foreground">{price}</p>
+          <p className="text-base font-normal text-card-foreground">{price}</p>
           {originalPrice != null ? (
             <p className="text-base font-normal text-secondary-foreground line-through">
               {originalPrice}
