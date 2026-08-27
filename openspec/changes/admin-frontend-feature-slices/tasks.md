@@ -18,7 +18,7 @@ The largest surface. Its first task adds the one contract codec the console
 currently declares for itself; nothing outside this group depends on it.
 
 - [x] 2.1 Add the case packet's signer list to the vault contracts as the one definition both ends check against, and delete the codec the panel declares for it.
-- [ ] 2.2 Stand up `packages/vault/admin-frontend`: its procedure port over the vault worker's operator procedures, a route port for the packet re-derivation read, the fixture for each, a core module composing the collector-facing package's failure vocabulary and photo port, and an empty published list.
+- [x] 2.2 Stand up `packages/vault/admin-frontend`: its procedure port over the vault worker's operator procedures, a route port for the packet re-derivation read, the fixture for each, a core module composing the collector-facing package's failure vocabulary and photo port, and an empty published list.
 - [ ] 2.3 Build `custody/cases` — the queue, the case read, its timeline and contact, and the state moves — with the queue-ordering and contact-link helpers moved into its domain carrying their existing tests, plus its module test and hook tests — scenario: A page carries out an operator command.
 - [ ] 2.4 Build `custody/valuation` and `custody/settlement`, moving the money entry and formatting helpers into domain with their tests, each with its module test and hook tests.
 - [ ] 2.5 Build `custody/compliance`, including the packet re-derivation read through the route port, with the identity-derivation helper moved into domain carrying its tests.
