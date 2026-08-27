@@ -15,6 +15,29 @@ has to become instants before a worker can store it.
 
 Which zone a reader is in is not consulted anywhere: the platform states one
 zone and every surface uses it.
+
+## Feature set
+
+- Reading shapes
+  - Four shapes: a day, a moment, an event, and a deadline, one per the reader's task
+  - Shape consistency: two surfaces showing one instant in one shape show identical text
+- Format and language
+  - Platform format: ordering and punctuation are the platform's, not a browser's configuration
+  - Named language: every rendering accepts the language its words are drawn from, English where none is named
+- One stated zone
+  - UTC everywhere: every rendering states Coordinated Universal Time, never the reader's machine zone
+  - Named deadlines: an instant a reader is expected to act before names the zone it is stated in
+- Refusals
+  - Unshipped language: a language the platform has no words for fails rather than degrading quietly
+  - Invalid instant: an instant that is not a valid point in time fails rather than rendering placeholder text
+- Sent messages
+  - English wording: a message is composed once and read anywhere, so no reader's language words it
+  - Stated zone: a date in a message names its zone, so every recipient reads the same time
+- Typed calendar days
+  - Whole-day windows: a typed day becomes the instants it begins and ends, so a window includes both days entirely
+  - Read-back symmetry: an instant shown back in a date field is the day that was typed, from any machine
+  - Empty field: a date field left empty produces no instant at all
+
 ## Requirements
 ### Requirement: A date takes one of four shapes
 
@@ -32,32 +55,32 @@ produce a date by its own local formatting.
 - A **deadline** — a date, a time to the minute, and the name of the zone it
   is in — where the reader will act before the time arrives.
 
-#### Scenario: Two operator tables show one moment the same way
+#### Scenario: dates-and-times-SC-01 - Two operator tables show one moment the same way
 
 - **GIVEN** an order table and a member ledger table each showing the same instant
 - **WHEN** each row is rendered for the same reader
 - **THEN** both show identical text
 
-#### Scenario: The same shape across both brands
+#### Scenario: dates-and-times-SC-02 - The same shape across both brands
 
 - **GIVEN** the same instant shown in the grade10 admin panel and the zzz admin panel
 - **WHEN** each is rendered for the same reader
 - **THEN** both show identical text
 
-#### Scenario: A day carries no time
+#### Scenario: dates-and-times-SC-03 - A day carries no time
 
 - **GIVEN** a surface showing when a member joined
 - **WHEN** it is rendered
 - **THEN** it shows the calendar date
 - **AND** it shows no time of day
 
-#### Scenario: An audit entry is ordered to the second
+#### Scenario: dates-and-times-SC-04 - An audit entry is ordered to the second
 
 - **GIVEN** two audit entries recorded eleven seconds apart in the same minute
 - **WHEN** the log is rendered
 - **THEN** the two entries show different times
 
-#### Scenario: One reader, two browsers
+#### Scenario: dates-and-times-SC-05 - One reader, two browsers
 
 - **GIVEN** the same date rendered for one reader on two browsers configured for different locales
 - **WHEN** each renders it
@@ -72,20 +95,20 @@ happens to be configured.
 The language a date's words are drawn from SHALL be an input every rendering
 accepts. Where a caller names none, the rendering SHALL use English.
 
-#### Scenario: A month name in another language
+#### Scenario: dates-and-times-SC-06 - A month name in another language
 
 - **GIVEN** a date rendered with a language named by the caller
 - **WHEN** it is rendered
 - **THEN** the month's wording is drawn from that language
 - **AND** the ordering and punctuation are unchanged from the platform's format
 
-#### Scenario: No language named
+#### Scenario: dates-and-times-SC-07 - No language named
 
 - **GIVEN** a date rendered with no language named by the caller
 - **WHEN** it is rendered
 - **THEN** its words are English
 
-#### Scenario: A language the platform does not ship
+#### Scenario: dates-and-times-SC-08 - A language the platform does not ship
 
 - **WHEN** a date is rendered with a language the platform has no words for
 - **THEN** the rendering fails with an error naming that language
@@ -95,7 +118,7 @@ accepts. Where a caller names none, the rendering SHALL use English.
 An attempt to render an instant that is not a valid point in time SHALL fail
 with an error. No surface SHALL render placeholder text in place of a date.
 
-#### Scenario: An invalid instant
+#### Scenario: dates-and-times-SC-09 - An invalid instant
 
 - **WHEN** a surface renders an instant that is not a valid point in time
 - **THEN** the rendering fails with an error
@@ -107,13 +130,13 @@ Every instant the platform renders SHALL be stated in Coordinated Universal
 Time, on every surface, for every reader. No rendering SHALL use the zone the
 reader's machine is set to.
 
-#### Scenario: Two readers in different zones
+#### Scenario: dates-and-times-SC-10 - Two readers in different zones
 
 - **GIVEN** the same instant rendered for a reader whose machine is set east of UTC and one set west of it
 - **WHEN** each renders it
 - **THEN** both show identical text
 
-#### Scenario: An instant near midnight
+#### Scenario: dates-and-times-SC-11 - An instant near midnight
 
 - **GIVEN** an instant that falls on one calendar date in UTC and the next in the reader's own zone
 - **WHEN** it is rendered as a day
@@ -125,21 +148,21 @@ Any rendering of an instant a reader is expected to act before SHALL name the
 time zone it is stated in. An auction's close is such an instant on every
 surface that shows it.
 
-#### Scenario: The auction page shows a close
+#### Scenario: dates-and-times-SC-12 - The auction page shows a close
 
 - **GIVEN** a listing open for bids
 - **WHEN** its close time is rendered on the auction page
 - **THEN** the rendering names the zone it is stated in
 - **AND** a reader whose machine is set to another zone sees that same name
 
-#### Scenario: A page and a message agree
+#### Scenario: dates-and-times-SC-13 - A page and a message agree
 
 - **GIVEN** the same listing's close shown on the auction page and in an auction email
 - **WHEN** both are rendered
 - **THEN** both name the zone they are stated in
 - **AND** both use the deadline shape
 
-#### Scenario: A closed listing
+#### Scenario: dates-and-times-SC-14 - A closed listing
 
 - **GIVEN** a listing that has already closed
 - **WHEN** its close time is rendered
@@ -154,14 +177,14 @@ regardless of where the message is opened.
 A message is composed once and read anywhere, so it has no reader whose
 language could be used, and the zone it states is the platform's.
 
-#### Scenario: An auction email states its zone
+#### Scenario: dates-and-times-SC-15 - An auction email states its zone
 
 - **GIVEN** an auction email carrying a close time
 - **WHEN** the message is rendered
 - **THEN** the time is stated in one fixed zone
 - **AND** the rendering names that zone
 
-#### Scenario: Two recipients read one time
+#### Scenario: dates-and-times-SC-16 - Two recipients read one time
 
 - **GIVEN** two recipients of the same auction email in different countries and different zones
 - **WHEN** each opens the message
@@ -177,25 +200,25 @@ An instant shown back in such a field SHALL be the calendar day that instant
 falls on in the platform's zone, so a day typed in and read back is the same
 day, from any machine.
 
-#### Scenario: A window includes the last moment of its final day
+#### Scenario: dates-and-times-SC-17 - A window includes the last moment of its final day
 
 - **GIVEN** a window typed as beginning and ending on stated calendar days
 - **WHEN** it is stored
 - **THEN** an event in the final second of the final day falls inside the window
 
-#### Scenario: A day reads back as it was typed
+#### Scenario: dates-and-times-SC-18 - A day reads back as it was typed
 
 - **GIVEN** a calendar day typed into a date field and stored
 - **WHEN** the stored instant is shown in that field again
 - **THEN** the field shows the day that was typed
 
-#### Scenario: A day typed from a machine set to another zone
+#### Scenario: dates-and-times-SC-19 - A day typed from a machine set to another zone
 
 - **GIVEN** the same calendar day typed by one person whose machine is set east of UTC and one set west of it
 - **WHEN** each is stored
 - **THEN** both produce the same pair of instants
 
-#### Scenario: An empty date field
+#### Scenario: dates-and-times-SC-20 - An empty date field
 
 - **GIVEN** a date field left empty
 - **WHEN** the form is read
