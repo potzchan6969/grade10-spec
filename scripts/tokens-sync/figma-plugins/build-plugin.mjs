@@ -9,12 +9,12 @@
  * bridge is unavailable or bound to the wrong file: Figma → Plugins →
  * Development → Import plugin from manifest…
  *
- *   node scripts/tokens-sync/figma/build-plugin.mjs push   # -> scripts/tokens-sync/figma/build/push/
- *   node scripts/tokens-sync/figma/build-plugin.mjs seed   # -> scripts/tokens-sync/figma/build/seed/
- *   node scripts/tokens-sync/figma/build-plugin.mjs dump   # -> scripts/tokens-sync/figma/build/dump/
+ *   node scripts/tokens-sync/figma-plugins/build-plugin.mjs push   # -> scripts/tokens-sync/figma-plugins/build/push/
+ *   node scripts/tokens-sync/figma-plugins/build-plugin.mjs seed   # -> scripts/tokens-sync/figma-plugins/build/seed/
+ *   node scripts/tokens-sync/figma-plugins/build-plugin.mjs dump   # -> scripts/tokens-sync/figma-plugins/build/dump/
  *
  * push/seed WRAP a generated script (token values baked in — rebuild whenever
- * tokens.json changes). dump COPIES hand-written source from scripts/tokens-sync/figma/plugin-src/dump/
+ * tokens.json changes). dump COPIES hand-written source from scripts/tokens-sync/figma-plugins/plugin-src/dump/
  * (reads Figma at runtime, carries no data, so it never goes stale).
  */
 import { mkdir, readFile, writeFile } from "node:fs/promises";
@@ -29,16 +29,16 @@ const die = (m) => {
 
 const TARGETS = {
   push: {
-    gen: "scripts/tokens-sync/figma/build/push.gen.js",
-    out: "scripts/tokens-sync/figma/build/push",
+    gen: "scripts/tokens-sync/figma-plugins/build/push.gen.js",
+    out: "scripts/tokens-sync/figma-plugins/build/push",
     name: "DS Token Push",
     id: "ds-token-push-local",
     headline:
       '"created " + r.created + " · set " + r.set + " · missing " + r.missing.length + " · collisions " + r.collisions.length',
   },
   seed: {
-    gen: "scripts/tokens-sync/figma/build/seed-default.gen.js",
-    out: "scripts/tokens-sync/figma/build/seed",
+    gen: "scripts/tokens-sync/figma-plugins/build/seed-default.gen.js",
+    out: "scripts/tokens-sync/figma-plugins/build/seed",
     name: "DS Token Seed (shadcn default)",
     id: "ds-token-seed-default-local",
     headline:
@@ -47,9 +47,9 @@ const TARGETS = {
   // No `gen`: the dump bakes in no token data, so its source is hand-written and
   // copied verbatim. Nothing to regenerate when tokens.json changes.
   dump: {
-    src: "scripts/tokens-sync/figma/plugin-src/dump",
+    src: "scripts/tokens-sync/figma-plugins/plugin-src/dump",
     files: ["code.js", "ui.html"],
-    out: "scripts/tokens-sync/figma/build/dump",
+    out: "scripts/tokens-sync/figma-plugins/build/dump",
     name: "DS Token Dump",
     id: "ds-token-dump-local",
     ui: "ui.html",
@@ -59,7 +59,7 @@ const TARGETS = {
 const t = TARGETS[process.argv[2]];
 if (!t)
   die(
-    `Usage: node scripts/tokens-sync/figma/build-plugin.mjs <${Object.keys(TARGETS).join("|")}>`,
+    `Usage: node scripts/tokens-sync/figma-plugins/build-plugin.mjs <${Object.keys(TARGETS).join("|")}>`,
   );
 
 const outDir = resolve(repoRoot, t.out);

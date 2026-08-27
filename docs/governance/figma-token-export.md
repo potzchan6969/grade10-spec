@@ -1,6 +1,6 @@
 # Exporting tokens from Figma
 
-How to get the variables out of the Figma file and into `tokens.json`, using the dump plugin in [`scripts/tokens-sync/figma/plugin-src/dump/`](../../scripts/tokens-sync/figma/plugin-src/dump/).
+How to get the variables out of the Figma file and into `tokens.json`, using the dump plugin in [`scripts/tokens-sync/figma-plugins/plugin-src/dump/`](../../scripts/tokens-sync/figma-plugins/plugin-src/dump/).
 
 This is the design → code leg of the token pipeline, and step 5 of [`figma-component-to-code.md`](figma-component-to-code.md#the-route-step-by-step). [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) covers the pipeline as a whole and the other two legs; this document is the procedure for this one.
 
@@ -17,10 +17,10 @@ The cost is that **every export needs a human with the file open**. There is no 
 The built plugin folder is gitignored (`.gitignore:32`), so each person builds their own. From `packages/design-system`:
 
 ```bash
-pnpm tokens:plugin dump          # -> scripts/tokens-sync/figma/build/dump/
+pnpm tokens:plugin dump          # -> scripts/tokens-sync/figma-plugins/build/dump/
 ```
 
-That writes `code.js`, `ui.html`, and a generated `manifest.json`. Then in the Figma desktop app: **Plugins → Development → Import plugin from manifest…** → `scripts/tokens-sync/figma/build/dump/manifest.json`. It appears as **DS Token Dump**.
+That writes `code.js`, `ui.html`, and a generated `manifest.json`. Then in the Figma desktop app: **Plugins → Development → Import plugin from manifest…** → `scripts/tokens-sync/figma-plugins/build/dump/manifest.json`. It appears as **DS Token Dump**.
 
 You only rebuild when the plugin source itself changes. Unlike `tokens:plugin push` and `seed`, which wrap a generated script with token values baked in, the dump bakes in no data — `build-plugin.mjs` copies the hand-written source verbatim and only generates the manifest. A dump plugin imported months ago is not stale.
 
@@ -94,7 +94,7 @@ The renamed-mode case is a hard failure on purpose. It used to warn and exit 0, 
 
 ## Changing the plugin
 
-The source is hand-written and lives at `scripts/tokens-sync/figma/plugin-src/dump/` — `code.js` (the export) and `ui.html` (the window). There is nothing in `tokens.json` from which a *read* could be derived, which is why this one is not generated.
+The source is hand-written and lives at `scripts/tokens-sync/figma-plugins/plugin-src/dump/` — `code.js` (the export) and `ui.html` (the window). There is nothing in `tokens.json` from which a *read* could be derived, which is why this one is not generated.
 
 Edit the source, then `pnpm tokens:plugin dump` to copy it into `build/dump/`; `build-plugin.mjs` runs a `new Function(...)` parse check on the way, so a syntax error surfaces at the terminal rather than inside Figma. Figma picks up the rebuilt file on the next run — no re-import needed. Keep the output shaped like the REST `{ meta }` response; that equivalence is the only reason `pull.mjs` needs no second code path.
 

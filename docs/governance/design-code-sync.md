@@ -80,7 +80,7 @@ Publishing is a write to a shared Figma file and has no unattended path in CI by
 
 `pnpm run design-system:check` runs `scripts/design-sync/check-components.mjs`. It lives at the repository root rather than inside `packages/design-system`, because it reads both packages: a script that scans a sibling package from inside one of them has the dependency pointing the wrong way. The token data it resolves against is still the design system's, and it reads it from there.
 
-**Source.** `FIGMA_TOKEN` is the default and needs only the `files:read` scope. Note the contrast with the token pull: `scripts/tokens-sync/figma/pull.mjs` has no REST path because `/v1/files/:key/variables/local` requires `file_variables:read`, which Figma gates to Enterprise. That gate is specific to *variables*. Component property definitions live in the file document, so this check runs unattended even though the token pull cannot. `FIGMA_DUMP=<file.json>` remains as a manual fallback.
+**Source.** `FIGMA_TOKEN` is the default and needs only the `files:read` scope. Note the contrast with the token pull: `scripts/tokens-sync/figma-plugins/pull.mjs` has no REST path because `/v1/files/:key/variables/local` requires `file_variables:read`, which Figma gates to Enterprise. That gate is specific to *variables*. Component property definitions live in the file document, so this check runs unattended even though the token pull cannot. `FIGMA_DUMP=<file.json>` remains as a manual fallback.
 
 `tokens.config.json → figmaFile` names the target. Branch URLs (`/design/:key/branch/:branchKey/...`) resolve to the **branch** key, because a branch is a distinct file to the API.
 

@@ -41,7 +41,7 @@ if (!process.env.FIGMA_DUMP) {
 
      pnpm tokens:plugin dump                     # build the plugin
      # Figma → Plugins → Development → Import plugin from manifest…
-     #   scripts/tokens-sync/figma/build/dump/manifest.json
+     #   scripts/tokens-sync/figma-plugins/build/dump/manifest.json
      # run it, click Download
      FIGMA_DUMP=~/Downloads/figma-dump.json pnpm tokens:pull`);
 }
