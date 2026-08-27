@@ -22,7 +22,7 @@ currently declares for itself; nothing outside this group depends on it.
 - [x] 2.3 Build `custody/cases` — the queue, the case read, its timeline and contact, and the state moves — with the queue-ordering and contact-link helpers moved into its domain carrying their existing tests, plus its module test and hook tests — scenario: A page carries out an operator command.
 - [x] 2.4 Build `custody/valuation` and `custody/settlement`, moving the money entry and formatting helpers into domain with their tests, each with its module test and hook tests.
 - [x] 2.5 Build `custody/compliance`, including the packet re-derivation read through the route port, with the identity-derivation helper moved into domain carrying its tests.
-- [ ] 2.6 Join all four slices to the published list, install the package in the grade10 panel's composition root, and move the vault section's panels onto the hooks with their existing view tests unedited — scenario: A product gains an operator surface.
+- [x] 2.6 Join all four slices to the published list, install the package in the grade10 panel's composition root, and move the vault section's panels onto the hooks with their existing view tests unedited — scenario: A product gains an operator surface.
 - [ ] 2.7 Delete the vault section's page-level codecs, its direct request, and the panel's vault procedure imports, so the section names nothing in the application's client directory — scenario: A page renders data from a backend.
 - [ ] 2.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`.
 
