@@ -2,7 +2,7 @@
 
 **Author:** @jeffffej0909 - 2026-08-24
 
-Product context: [Grade10 Auction](../../../docs/prds/auction/auction.md).
+Product context: [Automatic bidding](../../../docs/prds/auction/proxy-bidding.md).
 Builds on [`add-grade10-auction`](../add-grade10-auction/proposal.md), which
 delivered browse, the scheduled window, card-backed bids, and the extension
 rule, and listed auto-bidding as a non-goal. This change is that non-goal.
@@ -104,8 +104,8 @@ its archive must make.
 displays "their highest accepted bid" to an authenticated bidder. Under proxy
 bidding a bidder's highest accepted bid and their committed maximum are
 different numbers, and the useful one is the maximum. When that change folds
-into `openspec/specs/`, that sentence needs updating to match *A bidder reads
-their own commitment*. Recorded here so it is not lost.
+into `openspec/specs/`, that sentence needs updating to match
+`proxy-bidding-SC-05`. Recorded here so it is not lost.
 
 **Ordering.** Independent of `add-auction-watchlist` and
 `add-auction-notifications`. It shares no capability with either and can land
