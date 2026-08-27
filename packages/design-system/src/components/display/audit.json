@@ -16,7 +16,7 @@
     "classes": "inline-flex h-7 w-5 items-center justify-center text-muted-foreground",
     "note": "The audited element is the inner span, which carries the box; the <li> around it only holds inline-flex. Height and the rest compare; the width is a recorded divergence.",
     "diverges": {
-      "w-5": "Figma draws a 12px TEXT glyph; the code renders a 20px DotsThree icon, which needs a 20px box. A representation difference, not a width the code got wrong — resolving it means changing what is drawn, on one side or the other."
+      "w-5": "Figma draws a 12px TEXT glyph; the code renders a 20px DotsThree icon, which needs a 20px box. A representation difference, not a width the code got wrong \u2014 resolving it means changing what is drawn, on one side or the other."
     }
   },
   {
@@ -46,5 +46,25 @@
     "classes": "block h-[52px] w-auto",
     "covers": "G10LogoMono",
     "note": "Intrinsic viewBox size; consumers override with h-7 (nav) or h-5 (footer). Fill is currentColor, not a token class on the mark itself."
+  },
+  {
+    "label": "card/box",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-3934",
+    "classes": "group/card flex flex-col overflow-hidden rounded-(--radius-2xl) border border-border bg-card py-(--card-spacing) text-sm text-card-foreground [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[padding=false]:[--card-spacing:--spacing(0)] *:[img:first-child]:rounded-t-(--radius-2xl) *:[img:last-child]:rounded-b-(--radius-2xl)",
+    "covers": "Card",
+    "note": "Radius, fill and clipping on the component itself. The 16px gap the code renders lives on the Slot inside it, audited as card/slot below \u2014 the same split Figma draws for Dropdown Menu. Radius moved 24 -> 16 in Figma on 2026-08-27; this entry is what will catch the next move."
+  },
+  {
+    "label": "card/slot",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-3933",
+    "classes": "gap-4",
+    "covers": "Card",
+    "note": "The same element as card/box. Figma puts the card's own padding on the component and the gap between its children on the Slot; the code has one element carrying both."
+  },
+  {
+    "label": "empty-state/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2571-44",
+    "classes": "flex w-full flex-col items-center gap-4 rounded-2xl border border-dashed border-border bg-background-subtle",
+    "note": "isCompact=false, the cva default."
   }
 ]

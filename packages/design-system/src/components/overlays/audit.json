@@ -13,7 +13,7 @@
     "label": "dropdown-menu-content/box",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2132-1693",
     "classes": "z-50 flex max-h-(--available-height) w-(--anchor-width) min-w-32 flex-col overflow-x-hidden overflow-y-auto rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))] bg-popover p-2 text-popover-foreground backdrop-blur-xl outline-none",
-    "note": "The popup's own box — fill, stroke, radius, inset. Its itemSpacing separates a single Items slot and describes nothing visible, so the element's gap is audited against that slot below."
+    "note": "The popup's own box \u2014 fill, stroke, radius, inset. Its itemSpacing separates a single Items slot and describes nothing visible, so the element's gap is audited against that slot below."
   },
   {
     "label": "dropdown-menu-content/items",
@@ -21,5 +21,13 @@
     "classes": "gap-1",
     "covers": "DropdownMenuContent",
     "note": "The same element as dropdown-menu-content/box. Figma splits the popup into the frame and an Items slot; the gap between menu items lives on the slot (4px), which is what gap-1 renders."
+  },
+  {
+    "label": "tooltip-content/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2159-3379",
+    "classes": "z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-(--radius-sm) bg-foreground px-2 py-1 text-xs text-background has-data-[slot=kbd]:pr-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-sm data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+    "diverges": {
+      "gap-1.5": "The Figma node has a single text child and states no itemSpacing. The gap only applies when a kbd child is present, which the design does not draw."
+    }
   }
 ]
