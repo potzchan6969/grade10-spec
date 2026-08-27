@@ -1,6 +1,7 @@
 # grade10-store/home Specification
 
 ## Purpose
+
 What the store's own address serves: the marketing hero it answers with before
 any script runs, the collections it offers as ways into the catalogue, the one
 merchandised row of cards, and where each of them reaches.
@@ -9,7 +10,100 @@ The store address is a public surface, so every requirement of
 `grade10-site/crawlable-pages` binds it — its title, description, share
 metadata and sitemap entry are that capability's. What it says it is changes
 here: the address that used to name the catalogue now names the front door.
+
+## Feature set
+
+- Front door
+  - Marketing hero: eyebrow, headline, copy, image, and two ways on in the HTML
+  - Stable address: the store address keeps answering; old links still reach it
+- Collection ways in
+  - Collection grid: one tile per catalogue collection, in catalogue order
+  - Shop-driven: collections reach the front door by being in the shop
+- Merchandised row
+  - First-collection cards: a row titled with the first collection's name
+  - Shop-driven lead: which collection leads follows the catalogue
+- Catalogue resilience
+  - Hero first: the hero renders whether or not the catalogue has answered
+  - Load and retry: sections say they are loading or failed, and offer retry
+- Store chrome
+  - Store marked: chrome marks the store on the front door and the listing
+  - Chrome destinations: store goes to the front door; all-collections to the listing
+
+## User journeys
+
+### home-US-01: Collector arrives at the store front door
+
+**As a** collector,
+**I want** the store address to answer with a marketing hero and two ways on
+before any script runs,
+**so that** I understand what the store sells and can move straight into
+browsing or bidding.
+
+**Accepted by:**
+
+- `home-SC-01` — The front door answers whole
+- `home-SC-02` — The store and the listing are two surfaces
+- `home-SC-03` — The hero reaches the catalogue
+- `home-SC-04` — The hero reaches the auction
+- `home-SC-15` — The hero does not wait
+
+### home-US-02: Collector enters the catalogue through a collection
+
+**As a** collector,
+**I want** every collection the shop lists as a tile on the front door,
+**so that** I can open a scoped browse listing without the application
+deciding which collections appear.
+
+**Accepted by:**
+
+- `home-SC-05` — The grid is the shop's collections
+- `home-SC-06` — A collection added to the shop
+- `home-SC-07` — A collection with no artwork
+- `home-SC-08` — Nothing to offer
+- `home-SC-09` — A tile opens its collection
+
+### home-US-03: Collector browses the merchandised collection
+
+**As a** collector,
+**I want** a row of cards from the first collection the catalogue lists,
+**so that** I can open a card's page or the rest of that collection from the
+front door.
+
+**Accepted by:**
+
+- `home-SC-10` — The row is the first collection's cards
+- `home-SC-11` — The row follows the shop
+- `home-SC-12` — A card opens its own page
+- `home-SC-13` — The row reaches the rest of the collection
+- `home-SC-14` — Nothing to merchandise
+
+### home-US-04: Collector keeps using the front door while the catalogue lags
+
+**As a** collector,
+**I want** the hero usable while catalogue sections load or fail, and a way
+to retry a failed read without a full page load,
+**so that** a slow or broken catalogue does not block the front door.
+
+**Accepted by:**
+
+- `home-SC-16` — A section says it is loading
+- `home-SC-17` — A failed read can be retried
+
+### home-US-05: Collector moves around the store from the chrome
+
+**As a** collector,
+**I want** the site chrome to mark the store on every store surface and to
+reach the front door or the unscoped listing,
+**so that** I can navigate the store without guessing destinations.
+
+**Accepted by:**
+
+- `home-SC-18` — The listing is still the store
+- `home-SC-19` — The chrome reaches the front door
+- `home-SC-20` — The chrome reaches every collection
+
 ## Requirements
+
 ### Requirement: The store answers with its front door
 
 The site SHALL answer the store address with a marketing hero: an eyebrow, a
@@ -20,22 +114,22 @@ no script executing.
 The store address SHALL keep answering. A collector who holds a link to it
 SHALL reach this surface rather than a refusal or a redirect.
 
-#### Scenario: The front door answers whole
+#### Scenario: home-SC-01 - The front door answers whole
 
 - **WHEN** the store address is fetched and no script executes
 - **THEN** the response HTML contains the hero's headline and its copy
 
-#### Scenario: The store and the listing are two surfaces
+#### Scenario: home-SC-02 - The store and the listing are two surfaces
 
 - **WHEN** the store address and the browse listing's address are compared
 - **THEN** their titles differ and their meta descriptions differ
 
-#### Scenario: The hero reaches the catalogue
+#### Scenario: home-SC-03 - The hero reaches the catalogue
 
 - **WHEN** a collector activates the hero's shopping affordance
 - **THEN** the browse listing renders, unscoped
 
-#### Scenario: The hero reaches the auction
+#### Scenario: home-SC-04 - The hero reaches the auction
 
 - **WHEN** a collector activates the hero's auction affordance
 - **THEN** the auction surface renders
@@ -55,32 +149,32 @@ A collection the catalogue lists without artwork SHALL still be a tile,
 identified by its name, rather than being left out or shown with a gap where
 the artwork goes.
 
-#### Scenario: The grid is the shop's collections
+#### Scenario: home-SC-05 - The grid is the shop's collections
 
 - **WHEN** the front door renders and the catalogue lists collections
 - **THEN** each is a tile, in the order the catalogue listed them, carrying
   that collection's name and artwork
 - **AND** the first occupies the large cell
 
-#### Scenario: A collection added to the shop
+#### Scenario: home-SC-06 - A collection added to the shop
 
 - **GIVEN** a collection the catalogue did not list before
 - **WHEN** the catalogue lists it and the front door renders
 - **THEN** it is a tile, with no application change
 
-#### Scenario: A collection with no artwork
+#### Scenario: home-SC-07 - A collection with no artwork
 
 - **GIVEN** the catalogue lists a collection carrying no artwork
 - **WHEN** the front door renders
 - **THEN** that tile renders and names the collection
 
-#### Scenario: Nothing to offer
+#### Scenario: home-SC-08 - Nothing to offer
 
 - **WHEN** the catalogue lists no collections at all
 - **THEN** neither the grid nor its heading is on the page, and the rest of
   the surface renders
 
-#### Scenario: A tile opens its collection
+#### Scenario: home-SC-09 - A tile opens its collection
 
 - **WHEN** a collector activates a collection tile
 - **THEN** the browse listing renders, scoped to that collection
@@ -100,30 +194,30 @@ The row SHALL be absent — heading and all — when the catalogue lists no
 collections or that collection holds no cards, rather than rendering a titled
 empty row.
 
-#### Scenario: The row is the first collection's cards
+#### Scenario: home-SC-10 - The row is the first collection's cards
 
 - **WHEN** the front door renders and the catalogue lists a collection holding
   cards
 - **THEN** the section is titled as the catalogue names that collection, and
   its cards are that collection's, each with a name, an image and a price
 
-#### Scenario: The row follows the shop
+#### Scenario: home-SC-11 - The row follows the shop
 
 - **GIVEN** the catalogue lists a different collection first than it did
 - **WHEN** the front door renders
 - **THEN** the row is that collection's, with no application change
 
-#### Scenario: A card opens its own page
+#### Scenario: home-SC-12 - A card opens its own page
 
 - **WHEN** a collector activates a card in the row
 - **THEN** that card's own page renders
 
-#### Scenario: The row reaches the rest of the collection
+#### Scenario: home-SC-13 - The row reaches the rest of the collection
 
 - **WHEN** a collector activates the row's browse-all affordance
 - **THEN** the browse listing renders, scoped to that collection
 
-#### Scenario: Nothing to merchandise
+#### Scenario: home-SC-14 - Nothing to merchandise
 
 - **GIVEN** the catalogue lists no collection holding cards
 - **WHEN** the front door renders
@@ -137,18 +231,18 @@ read is in flight the front door SHALL say that section is loading rather than
 show it empty; when a read fails it SHALL say so and offer to try again, and
 trying again SHALL re-read without a page load.
 
-#### Scenario: The hero does not wait
+#### Scenario: home-SC-15 - The hero does not wait
 
 - **GIVEN** the catalogue has not answered
 - **WHEN** the front door renders
 - **THEN** the hero and its two ways on are on screen and usable
 
-#### Scenario: A section says it is loading
+#### Scenario: home-SC-16 - A section says it is loading
 
 - **WHEN** the collections read or the merchandised read is in flight
 - **THEN** that section shows it is loading, and shows no empty grid or row
 
-#### Scenario: A failed read can be retried
+#### Scenario: home-SC-17 - A failed read can be retried
 
 - **GIVEN** a section's read failed
 - **WHEN** the collector takes the offer to try again
@@ -162,18 +256,17 @@ door and on the browse listing alike. Its store destination SHALL be the front
 door; the destination it names for every collection SHALL be the browse
 listing, unscoped.
 
-#### Scenario: The listing is still the store
+#### Scenario: home-SC-18 - The listing is still the store
 
 - **WHEN** a collector is on the browse listing
 - **THEN** the chrome marks the store as the surface being viewed
 
-#### Scenario: The chrome reaches the front door
+#### Scenario: home-SC-19 - The chrome reaches the front door
 
 - **WHEN** a collector follows the chrome's store destination
 - **THEN** the front door renders
 
-#### Scenario: The chrome reaches every collection
+#### Scenario: home-SC-20 - The chrome reaches every collection
 
 - **WHEN** a collector follows the chrome's all-collections destination
 - **THEN** the browse listing renders, unscoped
-
