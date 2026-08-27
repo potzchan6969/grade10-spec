@@ -280,10 +280,26 @@ for (const [key, ids] of byKey) {
     fetched.set(`${key}/${id}`, entry?.document ?? null);
 }
 
+// A GRID frame states no `itemSpacing` at all — its spacing lives in
+// `gridRowGap` and `gridColumnGap`. Reading only itemSpacing reported every
+// `gap-*` on a grid as a finding, which is the opposite of what "a property
+// the node may leave unstated is unchecked, not a finding" asks for: a grid is
+// not silent about its spacing, it says it somewhere else.
+//
+// `gap-N` sets both axes, so it is comparable only when the two agree. When
+// they differ, no single `gap-*` utility can express the node and the property
+// is left unstated deliberately, so it reports as unchecked and names what to
+// go and look at.
+const gridGap = (n) =>
+  n.layoutMode === "GRID" && n.gridRowGap === n.gridColumnGap
+    ? (n.gridRowGap ?? null)
+    : null;
+
 // The same properties check-components.mjs reads off a variant, plus width
 // and vertical padding, which a page audit meets and a variant diff never
 // needed. On a TEXT node the fill IS the text colour, so text-* is the class
 // that compares against it and bg-* stops being meaningful.
+
 function nodeValues(doc) {
   const fill = doc.fills?.find(
     (f) => f.visible !== false && f.type === "SOLID",
@@ -309,7 +325,7 @@ function nodeValues(doc) {
     padXRight: doc.paddingRight ?? null,
     padY: doc.paddingTop ?? null,
     padYBottom: doc.paddingBottom ?? null,
-    gap: doc.itemSpacing ?? null,
+    gap: doc.itemSpacing ?? gridGap(doc),
     // Padding and item spacing exist only on an auto-layout frame. A frame
     // that positions its children absolutely insets them with offsets
     // instead, and states no padding at all — so a px-* on the element that
@@ -404,7 +420,7 @@ function auditExpectations(classString, v) {
 const figmaProp = {
   padX: "layoutMode, so no padding",
   padY: "layoutMode, so no padding",
-  gap: "layoutMode, so no itemSpacing",
+  gap: "layoutMode, or a GRID whose row and column gaps differ",
   clips: "clipsContent",
   sticky: "scrollBehavior",
   square: "targetAspectRatio",
