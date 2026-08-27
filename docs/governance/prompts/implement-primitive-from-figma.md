@@ -47,7 +47,7 @@ RULES, none of them negotiable:
   Never resolve a mismatch inside the .figma.ts template.
 
 VERIFY, and paste the real output of each:
-- FIGMA_TOKEN=… pnpm run design-system:check   (zero errors, zero
+- FIGMA_TOKEN=… pnpm run design-sync:check   (zero errors, zero
   unexplained warnings; a warning you intend to keep needs a stated reason)
 - pnpm run test:stories:design-system
 - pnpm run lint && pnpm run typecheck
@@ -67,7 +67,7 @@ For steps 5–6 alone, when `<name>.tsx` and `<name>.figma.ts` are already writt
 Use the design-system-components skill. <ComponentName> already has
 <name>.tsx and <name>.figma.ts. Add <name>.stories.tsx with a story per cva
 option plus every contract state, then run pnpm run test:stories:design-system
-and FIGMA_TOKEN=… pnpm run design-system:check to zero errors and zero
+and FIGMA_TOKEN=… pnpm run design-sync:check to zero errors and zero
 unexplained warnings. Paste real output. Do not publish Code Connect.
 ```
 
@@ -79,7 +79,7 @@ Three parts are load-bearing. Trim them and the prompt stops guarding the failur
 
 **Publishing is carved out.** `code-connect:publish` writes to a shared Figma file and has no undo, which is why [`design-code-sync.md`](../design-code-sync.md#publishing-code-connect) frames it as a deliberate step rather than something a merge triggers. An agent should hand that decision back, not take it.
 
-**"Paste the real output."** `design-system:check` skips with a warning annotation when `FIGMA_TOKEN` is unavailable, and a plugin dump reaches the end of the run while checking names only. Both look like success in a summary. Requiring the output makes the difference visible.
+**"Paste the real output."** `design-sync:check` skips with a warning annotation when `FIGMA_TOKEN` is unavailable, and a plugin dump reaches the end of the run while checking names only. Both look like success in a summary. Requiring the output makes the difference visible.
 
 ## Keeping it current
 

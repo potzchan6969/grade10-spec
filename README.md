@@ -44,7 +44,7 @@ Useful checks:
 
 ```bash
 pnpm run agent:check-parity
-pnpm run design-system:check
+pnpm run design-sync:check
 pnpm run tokens:build
 pnpm run typecheck
 pnpm run lint

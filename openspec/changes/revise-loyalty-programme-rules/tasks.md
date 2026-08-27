@@ -16,7 +16,7 @@ exports: [`ui.md`](ui.md).
 - [ ] 1.3 Export `RewardMenu` from `@grade10/ui` — each reward priced in points, money-off rewards stating their code's validity period
 - [ ] 1.4 Export `CouponList` from `@grade10/ui` — code, purpose, own expiry, and spent or void
 - [ ] 1.5 Export `ActivityList` from `@grade10/ui` — entries named in terms a member reads, carrying no operator reason, retry key or internal pricing
-- [ ] 1.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:stories:ui`, `pnpm run design-system:check`
+- [ ] 1.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:stories:ui`, `pnpm run design-sync:check`
 
 ## 2. Recording contract (grade10)
 

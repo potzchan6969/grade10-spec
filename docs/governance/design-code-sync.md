@@ -46,7 +46,7 @@ compiles. Nothing catches this for you — see "Known gaps".
 3. **Write `<name>.tsx`** with one cva option per Figma variant option, and nothing more.
 4. **Write `<name>.figma.ts`** with a `getEnum` covering *every* option of every VARIANT property. An unmapped option resolves to `undefined` and emits broken code.
 5. **Write `<name>.stories.tsx`** with a story per variant, plus disabled, loading, and any other state the contract has.
-6. **Run `pnpm run design-system:check`** and get to zero errors and zero *unexplained* warnings. A warning you intend to keep belongs in an OpenSpec change with a reason, not in the run log.
+6. **Run `pnpm run design-sync:check`** and get to zero errors and zero *unexplained* warnings. A warning you intend to keep belongs in an OpenSpec change with a reason, not in the run log.
 7. **Publish Code Connect** with `pnpm run code-connect:publish:design-system` (a block's templates publish with `code-connect:publish:ui` instead). A correct template that was never published leaves Dev Mode showing no connected code at all — verify with `get_code_connect_map`, which returns `{}` when nothing is published.
 
 Changing an existing component follows the same list from step 3, and step 4
@@ -72,13 +72,13 @@ The `include` glob is package-relative, which is why the second command exists a
 
 Append `--dry-run` to list what would be published and against which node, without writing anything — `pnpm run code-connect:publish:ui --dry-run`, with **no `--` before it**. These scripts forward through a second `pnpm`, and a literal `--` reaches the Figma CLI as an argument, which stops it parsing the rest: the flag is dropped and `--token` with it, so the run fails on `Couldn't find a Figma access token` while the token is sitting right there in the command. Do that first; it parses every template and then resolves each `url=` header against the API, so it catches a stale node ID before it reaches the file. It still needs a valid token for that second half — a dry run is not a token-free rehearsal.
 
-**The token is not the one the checker uses.** `design-system:check` reads `FIGMA_TOKEN` and needs only `files:read`. Publishing reads `FIGMA_ACCESS_TOKEN` (or `--token`) and needs **File content: read** plus **Code Connect: write**. A `files:read` token will parse fine and fail at the write.
+**The token is not the one the checker uses.** `design-sync:check` reads `FIGMA_TOKEN` and needs only `files:read`. Publishing reads `FIGMA_ACCESS_TOKEN` (or `--token`) and needs **File content: read** plus **Code Connect: write**. A `files:read` token will parse fine and fail at the write.
 
 Publishing is a write to a shared Figma file and has no unattended path in CI by design — it is a deliberate step at the end of a change, not something a merge triggers.
 
 ## What the checker enforces
 
-`pnpm run design-system:check` runs `scripts/design-sync/check-components.mjs`. It lives at the repository root rather than inside `packages/design-system`, because it reads both packages: a script that scans a sibling package from inside one of them has the dependency pointing the wrong way. The token data it resolves against is still the design system's, and it reads it from there.
+`pnpm run design-sync:check` runs `scripts/design-sync/check-components.mjs`. It lives at the repository root rather than inside `packages/design-system`, because it reads both packages: a script that scans a sibling package from inside one of them has the dependency pointing the wrong way. The token data it resolves against is still the design system's, and it reads it from there.
 
 **Source.** `FIGMA_TOKEN` is the default and needs only the `files:read` scope. Note the contrast with the token pull: `scripts/tokens-sync/figma-plugins/pull.mjs` has no REST path because `/v1/files/:key/variables/local` requires `file_variables:read`, which Figma gates to Enterprise. That gate is specific to *variables*. Component property definitions live in the file document, so this check runs unattended even though the token pull cannot. `FIGMA_DUMP=<file.json>` remains as a manual fallback.
 
@@ -199,7 +199,7 @@ What you are measuring is the primitive as built, in a browser, at the real valu
 
 ### What happens next
 
-`design-system:check` diffs your axes and options against the code on every push, and again nightly at 01:00 UTC — a Figma edit raises no event in this repository, so the scheduled run is what catches a change you make on a day nobody pushes code. A new option with no code counterpart is a warning; a renamed or removed option is an error, and so is a value you change on a variant that the code still draws the old way. You do not need to run it — but it is why an unannounced rename surfaces as a failed build rather than a wrong button in production.
+`design-sync:check` diffs your axes and options against the code on every push, and again nightly at 01:00 UTC — a Figma edit raises no event in this repository, so the scheduled run is what catches a change you make on a day nobody pushes code. A new option with no code counterpart is a warning; a renamed or removed option is an error, and so is a value you change on a variant that the code still draws the old way. You do not need to run it — but it is why an unannounced rename surfaces as a failed build rather than a wrong button in production.
 
 Anyone with repository access can also run it on demand from the Actions tab (**Design sync → Run workflow**) rather than waiting for the next nightly run.
 

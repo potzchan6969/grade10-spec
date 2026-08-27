@@ -1,11 +1,11 @@
 ---
-name: design-system-check
-description: Run `pnpm run design-system:check` and act on what it reports - the Figma-vs-code drift check over every component set, its Code Connect templates, and the values they render. Use when the Design sync job fails or a nightly run reports drift, when asked whether the code still matches Figma, when a run prints `No Figma source`, when triaging a `node-id`, `getEnum`, or value-mismatch line, and also when the symptom arrives with no checker named - Dev Mode emitting an empty attribute or a snippet that will not compile, a component rendering a colour or size the design does not draw, or a designer having renamed, republished, or deleted a variant. For authoring a component, use `design-system-components`; for token values, `design-tokens`.
+name: design-sync-check
+description: Run `pnpm run design-sync:check` and act on what it reports - the Figma-vs-code drift check over every component set, its Code Connect templates, and the values they render. Use when the Design sync job fails or a nightly run reports drift, when asked whether the code still matches Figma, when a run prints `No Figma source`, when triaging a `node-id`, `getEnum`, or value-mismatch line, and also when the symptom arrives with no checker named - Dev Mode emitting an empty attribute or a snippet that will not compile, a component rendering a colour or size the design does not draw, or a designer having renamed, republished, or deleted a variant. For authoring a component, use `design-system-components`; for token values, `design-tokens`.
 ---
 
 # Design-system check
 
-`pnpm run design-system:check` runs `scripts/design-sync/check-components.mjs` from the repository root. It walks **two** trees — `packages/design-system/src/components` and `packages/ui/src/blocks` — and diffs three things that nothing else keeps honest: the Figma component set's axes, the `cva()` config, and the Code Connect template that maps between them. It takes no arguments and checks no subset; there is no way to scope it to one component.
+`pnpm run design-sync:check` runs `scripts/design-sync/check-components.mjs` from the repository root. It walks **two** trees — `packages/design-system/src/components` and `packages/ui/src/blocks` — and diffs three things that nothing else keeps honest: the Figma component set's axes, the `cva()` config, and the Code Connect template that maps between them. It takes no arguments and checks no subset; there is no way to scope it to one component.
 
 Read [`docs/governance/design-code-sync.md`](../../../docs/governance/design-code-sync.md) for what each rail enforces and why. This skill is about running it and deciding what to do with the result.
 
@@ -33,7 +33,7 @@ Run the check before theorizing. It is one command and it has usually already fo
 
 A component can be green on lint, typecheck, and every story while rendering the wrong fill, so **never report a component verified off a run that never reached Figma.** If no token is available, say so and fall back to sampling variants by hand with `get_variable_defs`.
 
-`FIGMA_DUMP=/absolute/path pnpm run design-system:check` is the manual fallback. A plugin dump carries no variant nodes, so colours and geometry go unchecked; the run warns that it checked names only. Do not read that as coverage. The path is resolved against the repository root, so make it absolute.
+`FIGMA_DUMP=/absolute/path pnpm run design-sync:check` is the manual fallback. A plugin dump carries no variant nodes, so colours and geometry go unchecked; the run warns that it checked names only. Do not read that as coverage. The path is resolved against the repository root, so make it absolute.
 
 ## Four output classes, one of them fails
 
@@ -75,7 +75,7 @@ Never resolve a mismatch by editing the `.figma.ts` template to agree with the c
 - **Base states only.** Hover, disabled, and loading values are never compared. An opacity-based disabled state is doubly invisible — the `bg-*` token this compares is unchanged by it.
 - **The variant's own box only.** Label colour, icon size, borders, vertical padding, and anything inside the component are unchecked.
 - **Classes, not pixels.** Values come from the utility classes the code declares, not a rendered page.
-- **Components with no variant axes have no set to diff.** They are covered by `pnpm run figma:audit --all-blocks` against each directory's `audit.json`, and a directory without one is listed as uncovered. A green `design-system:check` alone is not a green Design sync.
+- **Components with no variant axes have no set to diff.** They are covered by `pnpm run design-sync:audit --all-blocks` against each directory's `audit.json`, and a directory without one is listed as uncovered. A green `design-sync:check` alone is not a green Design sync.
 - **Stories are smoke-only**, and the token-free option-coverage rail is `vitest --project contracts`, not this.
 
 ## When CI is what failed
