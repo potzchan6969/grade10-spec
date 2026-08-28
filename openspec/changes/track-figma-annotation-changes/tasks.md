@@ -179,10 +179,10 @@ This group depends on the end-to-end workflow in groups 4 and 5 passing.
 This group depends on group 5 passing and the governance update in group 6
 being available in the registered store.
 
-- [ ] 7.1 Remove the `monitor-figma-annotations` skill, its agent metadata, and
+- [x] 7.1 Remove the `monitor-figma-annotations` skill, its agent metadata, and
   its `/dev-help` route so `A supported harness opens the annotation workflow`
   exposes only `reconcile-figma-annotations`.
-- [ ] 7.2 Fold the old monitor helper, tests, package commands, and any duplicate
+- [x] 7.2 Fold the old monitor helper, tests, package commands, and any duplicate
   annotation wrapper into the new reporting and reconciliation paths, then
   delete the obsolete names. Preserve exact-association, ownership,
   multi-occurrence, ambiguity, and blocked-evidence coverage.
