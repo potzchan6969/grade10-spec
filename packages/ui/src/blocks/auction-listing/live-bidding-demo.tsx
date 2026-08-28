@@ -100,9 +100,13 @@ function historyOf(bids: readonly ScriptBid[]) {
 function captionOf(bids: readonly ScriptBid[]): string {
   const lead = bids.at(-1);
   if (!lead) return "Starting bid";
-  if (lead.bidder === YOU) return "Your bid · Highest Bid";
-  if (bids.some((bid) => bid.bidder === YOU)) return "Your bid · Outbid";
-  return "Current bid";
+  const standing =
+    lead.bidder === YOU
+      ? "Your bid · Highest Bid"
+      : bids.some((bid) => bid.bidder === YOU)
+        ? "Your bid · Outbid"
+        : "Current bid";
+  return `${standing} · ${lead.amount}`;
 }
 
 function panelFor({ bids, watching }: DemoState) {
@@ -114,6 +118,7 @@ function panelFor({ bids, watching }: DemoState) {
         ends: "Ends",
         extension: "Extended bidding",
         extensionTooltip: "Extended bidding rules",
+        maximum: "Your maximum",
       }}
       actions={<LiveActions />}
       bidCount={`${bids.length} ${bids.length === 1 ? "Bid" : "Bids"}`}

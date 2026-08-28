@@ -30,6 +30,8 @@ import "./listing-bid-panel.css";
 type ListingBidPanelCopy = {
   /** What the amount on show is: an opening bid, the current one, a result. */
   price: string;
+  /** Names the viewer's own committed maximum. */
+  maximum: string;
   /** What the time on show is: when bidding opens, or when it ends. */
   ends: string;
   /** Names the extended-bidding row. Omit it and the row is drawn from its
@@ -50,6 +52,8 @@ type ListingBidPanelProps = {
   /** Whether the current viewer is watching this listing. */
   watching?: boolean;
   price: ReactNode;
+  /** Viewer’s own committed maximum. Omit when the viewer has no commitment. */
+  maximum?: ReactNode;
   priceHint?: ReactNode;
   bidCount?: ReactNode;
   history?: ReactNode;
@@ -74,6 +78,7 @@ function ListingBidPanel({
   watching,
   copy,
   price,
+  maximum,
   priceHint,
   bidCount,
   history,
@@ -86,11 +91,11 @@ function ListingBidPanel({
 }: ListingBidPanelProps) {
   return (
     <Card
-      className={cn("min-w-0 w-full", className)}
+      className={cn("min-w-0 w-full overflow-hidden", className)}
       data-slot="listing-bid-panel"
       data-watching={watching == null ? undefined : watching}
     >
-      <CardHeader>
+      <CardHeader className="pb-4">
         <Text as="h2" size="xl" weight="bold">
           {title}
         </Text>
@@ -102,42 +107,72 @@ function ListingBidPanel({
         {watchAction ? <CardAction>{watchAction}</CardAction> : null}
       </CardHeader>
       <CardContent>
-        <VStack gap="md">
+        <VStack gap="lg">
           {standing}
-          <VStack className="rounded-lg bg-muted/40 p-4" gap="sm">
-            <VStack gap="xs">
-              <Text size="sm" tone="secondary">
+          <div className="grid gap-3">
+            <VStack
+              className="rounded-xl border border-border/70 bg-muted/50 p-5 shadow-sm"
+              gap="sm"
+            >
+              <Text
+                className="uppercase tracking-wide"
+                size="sm"
+                tone="secondary"
+              >
                 {copy.price}
               </Text>
-              <Text size="xl" weight="bold">
+              <Text className="text-3xl sm:text-4xl" size="xl" weight="bold">
                 {popInValue(price)}
               </Text>
+              {priceHint ? (
+                <Text size="sm" tone="secondary">
+                  {priceHint}
+                </Text>
+              ) : null}
             </VStack>
-            {priceHint ? (
-              <Text size="sm" tone="secondary">
-                {priceHint}
-              </Text>
+            {maximum != null ? (
+              <VStack
+                className="rounded-xl border border-border/60 bg-background p-5"
+                gap="sm"
+              >
+                <Text
+                  className="uppercase tracking-wide"
+                  size="sm"
+                  tone="secondary"
+                >
+                  {copy.maximum}
+                </Text>
+                <Text className="text-2xl" size="xl" weight="bold">
+                  {maximum}
+                </Text>
+              </VStack>
             ) : null}
-          </VStack>
+          </div>
           {bidCount != null ? (
-            <HStack className="w-full" gap="lg" vAlign="stretch">
-              <VStack className="min-w-0 flex-1 p-4" gap="xs">
-                <Text as="h3" size="lg" weight="bold">
+            <div className="grid grid-cols-[auto_minmax(0,1fr)] items-stretch gap-4">
+              <VStack
+                className="min-w-24 justify-center rounded-xl border border-border/60 bg-muted/20 px-4 py-3"
+                gap="xs"
+              >
+                <Text as="h3" size="xl" weight="bold">
                   {bidCount}
                 </Text>
               </VStack>
               <VStack
-                className="h-28 min-w-0 flex-1 overflow-hidden rounded-lg bg-muted/40 p-3"
+                className="min-h-24 min-w-0 overflow-hidden rounded-xl border border-border/60 bg-muted/20 p-4"
                 gap="xs"
               >
                 {history}
               </VStack>
-            </HStack>
+            </div>
           ) : history != null ? (
             history
           ) : null}
           <Separator />
-          <VStack gap="sm">
+          <VStack
+            className="rounded-xl border border-border/60 bg-muted/20 p-4"
+            gap="sm"
+          >
             <HStack gap="md" hAlign="space-between" vAlign="end" wrap>
               <VStack gap="xs">
                 <Text size="sm" tone="secondary">
@@ -192,7 +227,7 @@ function ListingBidPanel({
         </VStack>
       </CardContent>
       {actions ? (
-        <CardFooter className="items-stretch">
+        <CardFooter className="items-stretch border-t bg-muted/20 p-5">
           <VStack className="w-full" gap="sm">
             {actions}
           </VStack>
