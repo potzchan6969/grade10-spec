@@ -100,7 +100,7 @@ and cleanup plan.
   `Only selected findings are accepted`, `Ambiguous duplicate is selected`,
   `Association decision is missing`, and `Observation changed before
   acceptance`.
-- [ ] 4.4 Extend acceptance fixtures for removals, replacement nodes, and
+- [x] 4.4 Extend acceptance fixtures for removals, replacement nodes, and
   orphaned baseline entries so each requires explicit review; prove accepted
   annotation keys, exact associations, and `noImpactReason` metadata survive
   unrelated reconciliations.
