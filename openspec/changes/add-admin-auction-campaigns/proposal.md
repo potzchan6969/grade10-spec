@@ -24,7 +24,8 @@ were updated or canceled from the Campaigns section without leaving the
 panel. **Acceptance signal:** an operator opens a campaign, creates it, edits
 its cover fields, publishes or cancels it from an editor that mirrors the
 listing authoring pattern, and on a listing’s editor picks one eligible
-campaign (or clears it) — with the auction admin section labeled Campaigns.
+campaign (or clears it) and one eligible inventory product — with the auction
+admin section labeled Campaigns.
 
 ## What Changes
 
@@ -44,6 +45,13 @@ campaign (or clears it) — with the auction admin section labeled Campaigns.
   `created` only** — or clears the campaign so the listing stands alone. A
   `published` or `canceled` campaign is not offered and attaching one is
   refused.
+- **Listing editor inventory product picker.** The listing's catalogue
+  `productId` is chosen from Grade10 inventory products whose **`status` is
+  `created`** (not `draft`) and **`available > 0`**. Draft and out-of-stock
+  products are omitted from the picker and refused on save/create. Consumes
+  [`add-grade10-inventory`](../add-grade10-inventory/design.md) Contracts
+  (`AuctionEligibleProduct`, `listEligibleProducts`); fixtures stub until
+  inventory ships.
 - **Backend.** Extend the existing cover entity (`auctions` table / tRPC)
   with the `created` status and tightened attach eligibility; complete the
   admin client for update / cancel / get / create / setAuction. No parallel
@@ -52,8 +60,8 @@ campaign (or clears it) — with the auction admin section labeled Campaigns.
   `add-admin-auction-sales`) so the planning name matches operator language.
 - **Specs.** New durable capability `grade10-auction/admin-campaign` for
   campaign CRUD, lifecycle, and admin rename. `grade10-auction/admin-listing`
-  gains editor scenarios for selecting and clearing a campaign under the
-  draft/created rule.
+  gains editor scenarios for campaign selection and inventory product
+  eligibility.
 
 ## Capabilities
 
@@ -66,23 +74,20 @@ campaign (or clears it) — with the auction admin section labeled Campaigns.
 ### Modified Capabilities
 
 - `grade10-auction/admin-listing`: Listing editor exposes optional campaign
-  selection among eligible campaigns; scenarios for attach, clear, refusal of
-  published or canceled campaigns, and Campaign field labeling.
+  selection among eligible campaigns; inventory product picker limited to
+  **`status` `created`** with **available > 0**; scenarios for attach, clear,
+  refusal of published or canceled campaigns, Campaign field labeling, and
+  product eligibility.
 
 ## Impact
 
-- **grade10** — `packages/grade10-auction/{contracts,backend,admin-frontend}`,
-  `apps/admin/grade10` auction Campaigns and listing editor panels (rename
-  from Sales); auction worker migration for `created` on `auctions.status` and
-  `OPEN_AUCTION_STATES = ["draft", "created"]`.
-- **grade10-spec** — new `admin-campaign` capability; admin-listing delta; no
-  new `@grade10/ui` export expected (compose `@grade10/design-system`).
-- **Out of scope / Non-goals:** store checkout “sale”; inventory ledger or
-  “sold” stock; campaign-level clocks or money (listings keep their own
-  windows and prices); requiring a campaign to publish a listing; campaign
-  hero media or scheduling fields; coupling to finance or Shopify; attaching
-  new listings to an already `published` campaign; renaming the `auctions`
-  persistence / wire identifiers.
+| Consumer | Change |
+| --- | --- |
+| `@grade10/auction-contracts` | `adminSaleStatusSchema` adds `created`; listing product eligibility refusals |
+| `@grade10/auction-admin-frontend` | Campaign editor, listing campaign + product pickers, fixture eligibility stub |
+| `apps/backend/grade10/auction` | `ck_auctions_status` + `created`; `OPEN_AUCTION_STATES`; productId validation via inventory binding |
+| `apps/admin/grade10` | Campaigns section (rename from Sales), listing editor pickers |
+| `@grade10/inventory-contracts` | **Consumed** — `AuctionEligibleProduct`, `listEligibleProducts` (not implemented here) |
 
 ## Non-goals
 
@@ -91,4 +96,14 @@ campaign (or clears it) — with the auction admin section labeled Campaigns.
   not).
 - Storefront redesign of public campaign covers beyond what admin edits
   already purge/cache today.
-- Overlap work owned by `add-grade10-inventory`.
+- Implementing the inventory ledger — only consuming its eligibility read
+  model (see `add-grade10-inventory`).
+- Store checkout “sale”; inventory intake / vault mutations; campaign clocks
+  or money; requiring a campaign to publish a listing; campaign hero media;
+  product picker on the campaign cover itself.
+
+## Validation
+
+- `openspec validate add-admin-auction-campaigns --strict`
+- Scenarios cover Campaigns rename, campaign lifecycle with `created`, listing
+  campaign attach rules, and inventory product eligibility refusals.

@@ -1,4 +1,4 @@
-# UI: Admin auction Campaigns and listing campaign picker
+# UI: Admin auction Campaigns and listing pickers
 
 ## Screens
 
@@ -9,13 +9,17 @@ adds frames: the live grade10 admin auction catalogue-cover tab (today
 Designing a dedicated campaign cover frame is work in grade10-spec later;
 this change does not block on it.
 
+Assembly in `apps/admin/grade10` composing `@grade10/auction-admin-frontend`.
+Behavior:
+[`grade10-auction/admin-campaign`](specs/grade10-auction/admin-campaign/spec.md),
+[`grade10-auction/admin-listing`](specs/grade10-auction/admin-listing/spec.md)
+(delta).
+
 ### Rename first — existing Sales tab becomes Campaigns
 
 Before new editor behaviour, the live Sales tab/page is relabeled
 **Campaigns** (tab title, section heading, empty states, list actions). The
-listing editor’s optional cover field is labeled **Campaign**. Assembly in
-`apps/admin/grade10` and `@grade10/auction-admin-frontend` (today under
-`sales` paths — operator-visible copy and routes say Campaigns).
+listing editor’s optional cover field is labeled **Campaign**.
 
 ### Admin auction Campaigns list and campaign editor
 
@@ -27,9 +31,17 @@ never Sale / Sales.
 
 ### Admin listing editor — Campaign field
 
-Assembly on the existing listing editor. One optional control selects a
-campaign or “on its own” (no campaign). Options are eligible campaigns only
-(`draft` or `created`). The control is labeled **Campaign**.
+One optional control selects a campaign or “on its own” (no campaign). Options
+are eligible campaigns only (`draft` or `created`). The control is labeled
+**Campaign**.
+
+### Admin listing editor — inventory product field
+
+Same listing editor. Product selection is a picker (not free text) fed by
+inventory eligibility: products whose **`status` is `created`** and
+**`available > 0`** (`AuctionEligibleProduct` from inventory Contracts).
+Draft-status and out-of-stock products are omitted. Campaign editors have no
+product field.
 
 ## Components
 
@@ -40,22 +52,21 @@ editor already uses):
 - `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`
 - `IconButton`, `Tooltip`, `TooltipContent`, `TooltipProvider`, `TooltipTrigger`
 
-**Campaign picker:** no `Select` / `Combobox` export exists in the design
-system or `@grade10/ui` today. Compose a native `<select>` (or equivalent)
-with design-system label/`Text` messaging — same approach other admin forms
-use when no Select primitive ships. **Gap flagged:** a shared Select in
-grade10-spec is optional future work; **not** required for this change’s
-tasks.
+**Campaign / product pickers:** no `Select` / `Combobox` export exists in the
+design system or `@grade10/ui` today. Compose a native `<select>` (or
+equivalent) with design-system label/`Text` messaging — same approach other
+admin forms use when no Select primitive ships. **Gap flagged:** a shared
+Select in grade10-spec is optional future work; **not** required for this
+change's tasks.
 
 From `@grade10/ui`: **none.** No new shared compound export.
 
+From `@grade10/inventory-contracts`: **consumed type only**
+(`AuctionEligibleProduct`) — no UI export.
+
 ## States
 
-Tied to
-[`grade10-auction/admin-campaign`](specs/grade10-auction/admin-campaign/spec.md)
-and
-[`grade10-auction/admin-listing`](specs/grade10-auction/admin-listing/spec.md)
-(delta).
+Tied to spec scenarios in admin-campaign and admin-listing (delta).
 
 ### Campaigns chrome
 
@@ -70,8 +81,7 @@ and
 - **Created** — `Operator opens the editor for a created campaign`; publish
   offered; create absent.
 - **Published** — edit title/copy; create/publish absent; cancel offered when
-  authorized (`Operator updates copy on a published campaign`,
-  `Operator cancels a published campaign`).
+  authorized.
 - **Canceled read-only** — `Canceled campaign opens read-only`.
 - **Validation** — `Open without a title is refused`,
   `Clearing the title is refused`.
@@ -89,3 +99,12 @@ and
   picker`.
 - **Optional** — `Listing without a campaign still creates`.
 - **Label** — `Listing editor campaign field is labeled Campaign`.
+
+### Listing editor inventory product picker
+
+- **Omit draft** — `Product picker omits draft inventory products`.
+- **Omit out of stock** — `Product picker omits out-of-stock inventory
+  products`.
+- **Refuse draft on save** — `Draft product id is refused on listing save`.
+- **Refuse OOS on create** — `Out-of-stock product id is refused on listing
+  create`.

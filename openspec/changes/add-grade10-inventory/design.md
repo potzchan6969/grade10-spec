@@ -2,7 +2,8 @@
 
 Grade10 has no aggregate house-stock owner. Auction has a thin product identity
 and Shopify owns storefront quantities, but neither arbitrates stock shared by
-Auction and Vault. See [proposal.md](proposal.md). Capability:
+Auction and Vault. Vault's real product story is custody (`vaulted` →
+`released`), not sale. Capability:
 [`grade10-inventory/catalog`](specs/grade10-inventory/catalog/spec.md).
 Screens: [ui.md](ui.md).
 
@@ -15,16 +16,22 @@ This design follows `docs/conventions/packages.md`,
 
 **Goals:**
 
-- Ship one current inventory snapshot per Grade10 inventory product.
-- Serialize every count transition on that snapshot.
-- Reserve quantities for named applications without leaking other holders.
+- Ship one inventory snapshot per product (`UNIQUE(product_id)`).
+- Serialize every count transition on that snapshot under row lock.
+- Reserve quantities for consumers classified by explicit `holder_kind`
+  (`grade10-auction` | `grade10-vault`), with remaining / sold / vaulted / released tracking.
+- Allow reservation quantity adjust with inventory `reserved` sync and
+  changelog.
+- Support partial sell-from-reservation (Auction), partial
+  vault-from-reservation (Vault), and partial release.
 - Retain an append-only explanation of how the current counts were reached.
-- Keep ledger count non-decreasing while stock moves to terminal counts.
 
 **Non-Goals:**
 
+- `reservation_allocations`, multi-inventory rows, or inventory `status`.
 - Identifying or tracking individual physical objects.
-- Wiring Auction or Vault flows to inventory in this change.
+- Full Auction/Vault reserve-on-create wiring (eligibility list ships; picker
+  in `add-admin-auction-campaigns`).
 - Shopify inventory sync, ZZZ inventory, warehouses, or transfers.
 - New design-system or `@grade10/ui` components.
 
@@ -40,361 +47,374 @@ publishing `@grade10/inventory-contracts`,
 `packages/app-env` for Grade10 only and bind `INVENTORY_SERVICE` on the API
 gateway for admin HTTP routing.
 
-**Rejected:** inventory inside Auction or Vault. Shared stock and its
-reservation arbitration outlive either consumer. **Rejected:** Shopify as the
-ledger. It owns retail locations, not all Grade10-managed stock.
+**Rejected:** inventory inside Auction or Vault. **Rejected:** Shopify as the
+ledger.
 
 ### Product and inventory are one-to-one
 
-`products` owns descriptive identity. `inventories` has its own immutable id
-and a unique `product_id` foreign key, giving each side an explicit identity
-while enforcing one inventory per product. Product creation inserts both rows
-in one transaction; every later intake updates the same inventory row.
+`products` owns descriptive identity and lifecycle `status` (`draft` |
+`created`). `inventories` has its own immutable id and a **unique**
+`product_id` foreign key — exactly one inventory row per product.
 
-There is no inventory-unit table. This model promises quantity integrity, not
-item identity. If Grade10 later tags physical objects, a separate serialized
-asset capability can reference the product without changing the aggregate
-reservation contract.
+Product create inserts both rows in one transaction: product in `draft` with
+one inventory at zero counts. Marking `created` is an explicit admin write.
+Holder reserve and adjust-up require `status = 'created'`.
 
-**Rejected:** one row per physical item. The current workflow does not provide
-a barcode, certificate number, or other physical identity, so generated rows
-would create artificial traceability. **Rejected:** multiple inventory
-buckets per product. There is no warehouse/location dimension in scope, and
-multiple rows would make current stock ambiguous.
+There is no inventory-unit table and no `reservation_allocations` table —
+quantity integrity, not item identity.
 
-### The snapshot stores the reconciliation partitions
+**Rejected:** multiple inventory rows per product. **Rejected:** allocation
+lines that pin quantity across buckets.
 
-`inventories` stores stock, reserved, sold, withdrawn, and ledger counts.
-Available is derived as stock minus reserved rather than persisted. Keeping
-sold and withdrawn partitions makes the ledger equation queryable without
-replaying history:
+### The snapshot stores balances; ledger and available are derived
+
+`inventories` stores `stock`, `reserved`, `sold`, `withdrawn`, and `vaulted`.
+The service updates these counters in the same locked transaction as the
+mutation. Tests reconcile `reserved` with the sum of active reservation
+`remaining` after every transition.
 
 ```text
-available = stock_count - reserved_count
-stock_count + sold_count + withdrawn_count = ledger_count
+available = stock - reserved                    # derived, not a column
+ledger    = stock + sold + withdrawn + vaulted  # derived, not a column
 ```
 
-Intake increments stock and ledger. Sale transfers stock to sold; withdrawal
-transfers stock to withdrawn. Reserve/release changes reserved only. No
-capability decrements sold, withdrawn, or ledger. A database trigger rejects a
-new ledger count below the old value, while row checks enforce both equations
-and non-negative counts.
+| Transition | stock | reserved | vaulted | sold | withdrawn | derived ledger |
+| --- | --- | --- | --- | --- | --- | --- |
+| Intake (stock up) | ↑ | — | — | — | — | ↑ |
+| Free-pool sell / withdraw (stock down) | ↓ | — | — | ↑ / ↑ | ↑ / — | — |
+| Reserve / adjust-up | — | ↑ | — | — | — | — |
+| Release / adjust-down | — | ↓ | — | — | — | — |
+| Sell-from-reservation | ↓ | ↓ | — | ↑ | — | — |
+| Vault-from-reservation | ↓ | ↓ | ↑ | — | — | — |
 
-Use PostgreSQL `bigint` for lifetime counts and total sale money. The request
-boundary remains 1–500 so one operation stays bounded. Drizzle reads these
-columns in number mode and contracts reject values outside JavaScript's safe
-integer range. PostgreSQL `integer` tops out at 2,147,483,647; it is avoided
-for cumulative counts so a long-lived ledger is not tied to that ceiling.
+Sold, withdrawn, and vaulted SHALL never decrease.
 
-**Rejected:** compute the snapshot by replaying changelogs. Admin reads and
-reservation decisions would grow with all historical activity. **Rejected:**
-store available count. It is exactly derivable and would add a third value
-that can drift from stock and reserved.
+**Rejected:** store `ledger`. **Rejected:** Postgres triggers that sync
+`reserved` from child rows — app writes under lock (option A).
 
-### Reservations hold quantities
+### Reservations are product-level headers on the single inventory
 
-`reservations` is an immutable-quantity allocation header: product, holder,
-holder reference, purpose, quantity, state, and actor stamps. There are no
-assignment or active-owner link tables. Active ownership is the reservation
-row itself; current reserved count is the cached sum protected by the
-inventory-row transaction.
+`reservations` is the hold header: `product_id`, `inventory_id` (the product's
+one row), `holder_kind`, `holder_reference`, `remarks`, `quantity`,
+`remaining`, `sold`, `vaulted`, `released`, `status` (`active` | `closed`).
 
-`(holder, holder_reference)` is unique for idempotency. An exact retry returns
-the existing reservation. A differing payload is refused. A released
-reservation is never reactivated. Release is whole-reservation only; callers
-create separate references for quantities with independent lifetimes.
+`quantity = remaining + sold + vaulted + released`. Inventory `reserved`
+equals the sum of `remaining` on active reservations for that product.
 
-**Rejected:** one reservation row per quantity unit. It recreates synthetic
-unit identity without adding a physical discriminator. **Rejected:** only a
-holder count on inventory. It cannot retain purpose, external reference,
-idempotency, or released history.
+Partial unique: `UNIQUE (holder_kind, holder_reference) WHERE status = 'active'`.
+After close, the same kind + reference MAY reserve again (new row).
 
-### The inventory row serializes every count transition
+**Rejected:** `reservation_allocations`. **Rejected:** immutable reservation
+quantity — adjust changes quantity under the same id.
 
-Reserve quantity N in one database transaction:
+### Reserve, adjust, release, and settle under one inventory lock
 
-1. Lock the product's inventory row.
-2. Resolve the holder reference. Return an exact existing request, or refuse a
-   conflicting one.
-3. Re-read stock and reserved counts under the lock.
-4. Refuse if `stock_count - reserved_count < N`.
-5. Insert the active reservation with `ON CONFLICT (holder,
-   holder_reference) DO NOTHING RETURNING id`. When another product won that
-   key concurrently, read and compare the winning row in the next statement;
-   return it if exact or refuse the conflict. Do not update counts on this
-   path.
-6. For a newly inserted row, increment reserved count, append one
-   changelog, and commit.
+All mutations lock the product's inventory row (`FOR UPDATE`), then:
 
-Illustrative SQL:
+1. **Reserve** — refuse if product not `created` or available < qty; insert
+   active reservation; `reserved += qty`.
+2. **Adjust** — `floor = sold + vaulted + released`; new qty ≥ floor; delta =
+   new remaining − old remaining; refuse adjust-up if available < delta;
+   update reservation quantity/remaining; `reserved += delta`.
+3. **Release** — decrease remaining and `released`; `reserved -= qty`; close
+   when remaining = 0.
+4. **Sell-from-reservation** — decrease remaining; increase reservation sold
+   and inventory sold; decrease stock and reserved.
+5. **Vault-from-reservation** — decrease remaining; increase reservation
+   vaulted and inventory vaulted; decrease stock and reserved.
 
-```sql
-SELECT id, stock_count, reserved_count, ledger_count
-FROM inventory.inventories
-WHERE product_id = $1
-FOR UPDATE;
+Each successful mutation appends one changelog in the same transaction.
 
-INSERT INTO inventory.reservations (
-  id, inventory_id, holder, holder_reference, purpose, quantity,
-  state, created_actor_kind, created_actor_id
-) VALUES ($3, $2, $4, $5, $6, $7, 'active', $8, $9)
-ON CONFLICT (holder, holder_reference) DO NOTHING
-RETURNING id;
-
-UPDATE inventory.inventories
-SET reserved_count = reserved_count + $7,
-    updated_at = now()
-WHERE id = $2;
-```
-
-Release, intake, sale, and withdrawal take the same row lock before checking
-and updating counts. The reservation insert, snapshot update, and changelog
-append share the transaction.
-
-Without the lock, two `READ COMMITTED` reserve transactions can both approve
-the last available quantity:
-
-| Step | Transaction A | Transaction B |
-| --- | --- | --- |
-| 1 | Reads stock 1, reserved 0 | Reads stock 1, reserved 0 |
-| 2 | Inserts Auction reservation quantity 1 | Inserts Vault reservation quantity 1 |
-| 3 | Increments reserved to 1 and commits | Attempts to increment reserved to 2 |
-| 4 | Returns success | Hits the stock/reserved check constraint |
-
-The check prevents committed oversubscription, but B receives SQLSTATE
-`23514` instead of the typed insufficient-inventory refusal. If updates were
-written from stale absolute values instead of increments, both reservations
-could commit while reserved count incorrectly remained one. With
-`SELECT ... FOR UPDATE`, B waits before reading; after A commits it sees zero
-available and returns the domain refusal without attempting a violating write.
-
-Concurrency tests use two real worker entrypoints. Application-only prechecks
-are not acceptance evidence.
-
-**Rejected:** a guarded atomic update without a row lock. It can protect the
-count, but coordinating idempotency, the reservation row, before/after
-snapshots, and a typed refusal is less explicit. **Rejected:** distributed
-locks or a Durable Object. PostgreSQL already owns the snapshot being changed.
+Do **not** release the whole reservation and create a new one for listing qty
+edits — use `adjustReservation(id, newQuantity)`.
 
 ### Named service entrypoints are the holder grant
 
-The worker exports `AuctionInventoryService` and
-`VaultInventoryService`. Each closes over its holder id; holder is never RPC
-input. The default entrypoint exposes no holder methods.
+The worker exports `AuctionInventoryService` and `VaultInventoryService`.
+Each closes over `holder_kind`; kind is never RPC input.
 
-The holder surface supports:
+Holder surface includes reserve, adjust, release, sell-from-reservation
+(Auction only), vault-from-reservation (Vault only), and scoped reads.
 
-| Method | Result |
-| --- | --- |
-| `getAvailability(productId)` | Unreserved stock count only |
-| `reserve(productId, quantity, purpose, holderReference)` | Idempotent own reservation |
-| `getReservation(id)` / `listReservations(productId?)` | Own reservations only |
-| `release(reservationId)` | Release own active reservation; foreign ids answer not found |
-
-Contracts publish binding narrowing and typed refusals. A binding is added to
-Auction or Vault only when that caller's integration is planned. The admin API
-may name holder because its operator grant is global. Holder RPC methods are
-not routed through the public gateway.
-
-**Rejected:** caller-supplied holder. A bound service could impersonate
-another application. **Rejected:** global responses filtered in callers. That
-crosses the privacy boundary before filtering.
+Auction eligibility list: products with `status = created` and available > 0.
 
 ### Read models are scoped before serialization
 
-Admin queries return the full snapshot, active and released reservations,
-active quantities grouped by holder, and changelogs. Holder queries return
-available count and reservations filtered by the fixed entrypoint holder.
-They never load another holder's rows into a holder response DTO.
-
-The holder response omits stock, ledger, and aggregate reserved counts because
-those values reveal another application's allocation by subtraction.
+Admin queries return full snapshot, reservations grouped by `holder_kind`, and
+changelogs. Holder queries return available and own reservations only.
 
 ### Changelogs are the transition ledger
 
-One business mutation writes one changelog. Product create/update snapshots the
-product. Intake, sale, and withdrawal snapshot inventory before and after.
-Reserve/release snapshots both inventory and the affected reservation so the
-allocation transition is reconstructable without extra assignment rows.
+One business mutation → one changelog. Actions include `adjust`. Reserve,
+release, adjust, sell-from-reservation, and vault-from-reservation snapshot
+both inventory and the affected reservation. Intake and terminal transitions
+snapshot inventory with the quantity delta.
 
-Every row is scoped to the product's non-null inventory foreign key.
-`subject_kind` distinguishes product metadata changes from inventory changes;
-the action check binds product create/update to `product` and intake, reserve,
-release, sell, and withdraw to `inventory`. Action-specific relational columns
-carry quantity, reservation id, sale money, and withdrawal reason for filtering
-and validation. Canonical JSONB before/after carries the full snapshots.
-Failed, refused, and idempotent no-op requests append nothing.
-
-Reservation id is nullable and present only on reserve/release. Its composite
-foreign key includes the inventory id, so a changelog cannot reference
-a reservation from another inventory.
-
-Elevated admin mutations additionally use `elevatedProcedure` and the
-worker's shared hash-chained `audit_logs`. Application entrypoints write only
-domain history.
-
-**Rejected:** changelog-only current state. Every availability read would
-replay the event stream. **Rejected:** platform audit alone. It does not model
-application actors or provide the inventory-scoped transition ledger.
+Elevated admin mutations also use the platform audit chain.
 
 ### Admin composition and RBAC
 
-Add `inventory:read` and `inventory:write` permissions. Only `admin`
-receives them through `ALL_PERMISSIONS`. Brand pages under
-`apps/admin/grade10/src/pages/inventory/` compose feature slices from
-`@grade10/inventory-admin-frontend`.
+Add `inventory:read` and `inventory:write`. Brand pages under
+`apps/admin/grade10/src/pages/inventory/` compose
+`@grade10/inventory-admin-frontend` (products list, product page).
 
-The products table shows all snapshot counts. Product detail shows aggregate
-counts, reservation allocation, and change history. Intake, sale, withdrawal,
-reserve, and release use dialogs composed from existing primitives.
+## Flows
 
-**Rejected:** staff read access. Global allocation reveals custody across
-applications and remains admin-only in this capability.
+### Count and reservation lifecycle
 
-### Database schema
+```mermaid
+flowchart TD
+  create[Create draft product + empty inventory] --> intake[Intake stock up]
+  intake --> stockUp["stock↑ (derived ledger↑)"]
+  mark[Mark product created] --> ready[Holders may reserve]
+  stockUp --> ready
+  ready --> reserve[Reserve by holder_kind]
+  reserve --> remUp["remaining↑ reserved↑"]
+  remUp --> branch{Commit or free?}
+  branch -->|Adjust qty| adj[adjustReservation]
+  branch -->|Auction sell| sellFr[sellFromReservation]
+  branch -->|Vault vault| vaultFr[vaultFromReservation]
+  branch -->|Release| rel[release]
+  adj --> remUp
+  sellFr --> soldPath["remaining↓ reserved↓ stock↓ sold↑"]
+  vaultFr --> vaultPath["remaining↓ reserved↓ stock↓ vaulted↑"]
+  rel --> freePath["remaining↓ reserved↓ available↑"]
+  soldPath --> maybeClose{remaining = 0?}
+  vaultPath --> maybeClose
+  freePath --> maybeClose
+  maybeClose -->|yes| closed[status = closed]
+  maybeClose -->|no| remUp
+  closed --> rereserve[Same holder_kind + reference may reserve again]
+  rereserve --> reserve
+```
+
+## Database schema
 
 Schema lives in `@grade10/inventory-service` under PostgreSQL schema
-`inventory`; migrations live under the inventory worker. Application ids are
-prefixed UUID strings in `text`. Timestamps use the shared
-`msTimestamp()`: `timestamp(3) with time zone`.
+`inventory`. Timestamps: `timestamp(3) with time zone`.
 
-#### Entity relationships
+### Entity relationships
 
 ```mermaid
 erDiagram
   PRODUCTS ||--|| INVENTORIES : owns
-  INVENTORIES ||--o{ RESERVATIONS : allocates
+  PRODUCTS ||--o{ RESERVATIONS : holds
+  INVENTORIES ||--o{ RESERVATIONS : scopes
   INVENTORIES ||--o{ CHANGELOGS : scopes
   RESERVATIONS o|--o{ CHANGELOGS : optionally_referenced_by
 ```
 
-Every changelog has an inventory relationship, including product metadata
-changes, because product and inventory are created together and remain
-one-to-one. `subject_kind` says which entity changed. Reservation relationship
-is optional because only reserve/release concern one. Products, inventories,
-and reservations are not deleted, so history foreign keys remain valid.
+### `products`
 
-#### `products`
+| Column | PostgreSQL type | Null | Default / constraint | Meaning |
+| --- | --- | --- | --- | --- |
+| `id` | `text` | No | App-minted `prd_<uuid>`, PK | Product identity |
+| `name` | `text` | No | Trimmed length 1–200 | Display name |
+| `description` | `text` | No | `''` | Long-form description; may be empty |
+| `status` | `text` | No | `'draft'`; check in `draft`, `created` | Lifecycle: `draft` until marked `created`; holders may reserve only when `created` |
+| `created_at` | `timestamp(3) with time zone` | No | `now()` | Create time |
+| `updated_at` | `timestamp(3) with time zone` | No | `now()` | Last metadata or status change |
+| `created_by` | `text` | No | Operator user id | Operator who created the product |
+| `remarks` | `text` | No | `''` | Operator notes; editable |
 
-| Column | PostgreSQL type | Null | Default / constraint |
-| --- | --- | --- | --- |
-| `id` | `text` | No | No database default; app-minted `prd_<uuid>`, primary key |
-| `name` | `text` | No | No default; trimmed length 1–200 |
-| `description` | `text` | No | `''` |
-| `created_at` | `timestamp(3) with time zone` | No | `now()` |
-| `updated_at` | `timestamp(3) with time zone` | No | `now()` |
-| `created_by` | `text` | No | No default; operator user id |
-| `remarks` | `text` | No | `''` |
+`draft` → `created` is an explicit admin write; `created` → `draft` is refused.
 
-#### `inventories`
+### `inventories`
 
-| Column | PostgreSQL type | Null | Default / constraint |
-| --- | --- | --- | --- |
-| `id` | `text` | No | No database default; app-minted `inv_<uuid>`, primary key |
-| `product_id` | `text` | No | FK → `products.id`; unique |
-| `stock_count` | `bigint` | No | `0`; non-negative |
-| `reserved_count` | `bigint` | No | `0`; between zero and stock count |
-| `sold_count` | `bigint` | No | `0`; non-negative |
-| `withdrawn_count` | `bigint` | No | `0`; non-negative |
-| `ledger_count` | `bigint` | No | `0`; equals stock + sold + withdrawn |
-| `created_at` | `timestamp(3) with time zone` | No | `now()` |
-| `updated_at` | `timestamp(3) with time zone` | No | `now()` |
+Each product owns exactly one inventory row (`UNIQUE product_id`), seeded at
+product create with zero counts.
 
-Install checks for non-negative counts, `reserved_count <= stock_count`, and
-the ledger equation. A before-update trigger rejects
-`NEW.ledger_count < OLD.ledger_count`,
-`NEW.sold_count < OLD.sold_count`, or
-`NEW.withdrawn_count < OLD.withdrawn_count`. Product creation owns the only
-insert; all later changes update this row under lock.
+| Column | PostgreSQL type | Null | Default / constraint | Meaning |
+| --- | --- | --- | --- | --- |
+| `id` | `text` | No | App-minted `inv_<uuid>`, PK | The product's single inventory row identity |
+| `product_id` | `text` | No | FK → `products.id`; **UNIQUE** | Owning product; one row per product |
+| `stock` | `bigint` | No | `0`; non-negative | Units on hand (`available + reserved`); ↑ intake, ↓ sell / withdraw / settle-from-reservation |
+| `reserved` | `bigint` | No | `0`; `0 ≤ reserved ≤ stock` | Units held by active reservations; app-written under lock = Σ active `remaining` |
+| `sold` | `bigint` | No | `0`; non-negative | Lifetime units sold from this product's pool |
+| `withdrawn` | `bigint` | No | `0`; non-negative | Lifetime units withdrawn from this product's pool |
+| `vaulted` | `bigint` | No | `0`; non-negative | Lifetime units vaulted from this product's pool |
+| `created_at` | `timestamp(3) with time zone` | No | `now()` | Row create time (seeded with product) |
+| `updated_at` | `timestamp(3) with time zone` | No | `now()` | Last successful count transition on this row |
 
-#### `reservations`
+**No `ledger` column.** **No `status` column.** Readers derive `available` and
+`ledger`.
 
-| Column | PostgreSQL type | Null | Default / constraint |
-| --- | --- | --- | --- |
-| `id` | `text` | No | No database default; app-minted `res_<uuid>`, primary key |
-| `inventory_id` | `text` | No | FK → `inventories.id` |
-| `holder` | `text` | No | Check in `auction`, `vault` |
-| `holder_reference` | `text` | No | Non-empty; unique with holder |
-| `purpose` | `text` | No | Trimmed length 1–200 |
-| `quantity` | `bigint` | No | No default; check from 1 through 500 |
-| `state` | `text` | No | `'active'`; check in `active`, `released` |
-| `created_at` | `timestamp(3) with time zone` | No | `now()` |
-| `updated_at` | `timestamp(3) with time zone` | No | `now()` |
-| `created_actor_kind` | `text` | No | Check in `operator`, `application`, `server` |
-| `created_actor_id` | `text` | Yes | `NULL` only for server |
-| `released_at` | `timestamp(3) with time zone` | Yes | `NULL`; required when released |
-| `released_actor_kind` | `text` | Yes | `NULL`; required when released |
-| `released_actor_id` | `text` | Yes | `NULL` for server release; otherwise required |
+Before-update trigger rejects decreases of `sold`, `withdrawn`, or `vaulted`.
 
-Add `UNIQUE (id, inventory_id)`, `UNIQUE (holder, holder_reference)`, and index
-`(inventory_id, state, holder)`. Checks keep active rows free of release stamps
-and released rows fully stamped. Contract `productId` is read through
-`reservations.inventory_id` → `inventories.product_id`; it is not duplicated
-on the reservation row.
+### `reservations`
 
-#### `changelogs`
+Product-level hold header on the product's single inventory row.
 
-| Column | PostgreSQL type | Null | Default / constraint |
-| --- | --- | --- | --- |
-| `id` | `text` | No | No database default; app-minted `chg_<uuid>`, primary key |
-| `occurred_at` | `timestamp(3) with time zone` | No | `now()` |
-| `inventory_id` | `text` | No | FK → `inventories.id` |
-| `subject_kind` | `text` | No | Check in `product`, `inventory` |
-| `actor_kind` | `text` | No | Check in `operator`, `application`, `server` |
-| `actor_id` | `text` | Yes | `NULL` only for server |
-| `action` | `text` | No | Check in the spec action vocabulary |
-| `quantity` | `bigint` | Yes | Positive for inventory actions; `NULL` for product actions |
-| `reservation_id` | `text` | Yes | `NULL`; required for reserve/release |
-| `sold_total_price` | `bigint` | Yes | Positive only for sell |
-| `sold_currency` | `text` | Yes | Three uppercase letters only for sell |
-| `reason` | `text` | Yes | Required for withdraw; optional for intake; null otherwise |
-| `before` | `jsonb` | Yes | `NULL` only for product-create |
-| `after` | `jsonb` | No | No default; canonical complete snapshot |
+| Column | PostgreSQL type | Null | Default / constraint | Meaning |
+| --- | --- | --- | --- | --- |
+| `id` | `text` | No | App-minted `res_<uuid>`, PK | Reservation identity |
+| `product_id` | `text` | No | FK → `products.id` | Product this hold is for |
+| `inventory_id` | `text` | No | FK → `inventories.id` | The product's one inventory row this hold scopes |
+| `holder_kind` | `text` | No | Check in `grade10-auction`, `grade10-vault` | Consumer classifier (explicit; not inferred from reference) |
+| `holder_reference` | `text` | No | Non-empty business key | Holder's idempotency / business id (e.g. listingId, caseId) |
+| `remarks` | `text` | No | `''` | Optional operator or application note on why the hold exists |
+| `quantity` | `bigint` | No | 1–500; changes via adjust | Current hold size; `remaining + sold + vaulted + released` |
+| `remaining` | `bigint` | No | ≤ quantity | Still reserved |
+| `sold` | `bigint` | No | `0` | Sold from this hold (Auction) |
+| `vaulted` | `bigint` | No | `0` | Vaulted from this hold (Vault) |
+| `released` | `bigint` | No | `0` | Released back to available |
+| `status` | `text` | No | `active` or `closed` | `active` while `remaining > 0`; `closed` when `remaining = 0` |
+| `created_at` | `timestamp(3) with time zone` | No | `now()` | Reserve time |
+| `updated_at` | `timestamp(3) with time zone` | No | `now()` | Last successful reservation mutation |
+| `created_actor_kind` | `text` | No | `operator`, `application`, `server` | Who created the hold |
+| `created_actor_id` | `text` | Yes | NULL for server | Actor id at create |
+| `closed_at` | `timestamp(3) with time zone` | Yes | NULL while active | When remaining hit zero |
+| `closed_actor_kind` | `text` | Yes | Required when closed | Who closed the hold |
+| `closed_actor_id` | `text` | Yes | NULL for server close | Actor id at close |
 
-Add the composite foreign key `(reservation_id, inventory_id)` →
-`reservations(id, inventory_id)`, plus indexes
-`(inventory_id, occurred_at DESC, id DESC)` and
-`(reservation_id, occurred_at DESC, id DESC)`. Checks enforce actor-id rules,
-the subject/action mapping, and the action-specific nullability matrix. The
-initial migration installs append-only triggers rejecting `UPDATE`, `DELETE`,
-and `TRUNCATE`.
+Constraints:
 
-#### `audit_logs`
+- `quantity = remaining + sold + vaulted + released`
+- Partial unique: `UNIQUE (holder_kind, holder_reference) WHERE status = 'active'`
+- Index `(product_id, status, holder_kind)`
 
-Instantiate shared `createAuditLogsTable(inventorySchema)` unchanged:
-`seq bigint` primary key; non-null `at timestamp(3) with time zone`,
-`actor_id text`, `actor_roles text`, `action text`, `ok boolean`, and
-`hash text`; nullable `subject_type text`, `subject_id text`, `details
-text`, and `prev_hash text`. Use its standard index, hash-chain append path,
-append-only triggers, and genesis migration.
+### `changelogs`
+
+| Column | PostgreSQL type | Null | Default / constraint | Meaning |
+| --- | --- | --- | --- | --- |
+| `id` | `text` | No | App-minted `chg_<uuid>`, PK | Changelog row identity |
+| `occurred_at` | `timestamp(3) with time zone` | No | `now()` | When the transition happened |
+| `inventory_id` | `text` | No | FK → `inventories.id` | Inventory row whose counts changed |
+| `subject_kind` | `text` | No | `product`, `inventory` | Whether the write was product metadata or a count transition |
+| `actor_kind` | `text` | No | `operator`, `application`, `server` | Who performed the action |
+| `actor_id` | `text` | Yes | NULL for server | Actor id |
+| `action` | `text` | No | See constraint list below | Transition type |
+| `quantity` | `bigint` | Yes | Transition qty; for adjust, new quantity | Delta or new quantity for the action |
+| `reservation_id` | `text` | Yes | Required for reservation actions | Affected reservation, when applicable |
+| `sold_total_price` | `bigint` | Yes | Sell actions | Sale proceeds in minor units |
+| `sold_currency` | `text` | Yes | Sell actions | ISO 4217 currency for sale |
+| `reason` | `text` | Yes | Withdraw; optional intake | Operator reason text |
+| `before` | `jsonb` | Yes | NULL only for product-create | Snapshot before the transition |
+| `after` | `jsonb` | No | Canonical snapshot | Snapshot after the transition |
+
+`action` values: `product-create`, `product-update`, `intake`, `reserve`,
+`adjust`, `release`, `sell-from-reservation`, `vault-from-reservation`,
+`sell`, `withdraw`.
+
+Append-only triggers on changelogs. Composite FK `(reservation_id,
+inventory_id)` → `reservations` when reservation_id set.
+
+### `audit_logs`
+
+Instantiate shared `createAuditLogsTable(inventorySchema)` unchanged.
+
+Index on `products (status)` supports the Auction eligibility list.
+
+## Contracts
+
+**New.** `@grade10/inventory-contracts` is the wire surface both ends compile
+against: codecs, failure vocabulary, admin procedure shapes, holder service
+APIs, and binding helpers. No drizzle, hono, or workers globals.
+
+### Shared wire types
+
+| Type | Stored / wire fields | Derived on read |
+| --- | --- | --- |
+| `Product` | `id`, `name`, `description`, `remarks`, **`status`** (`draft` \| `created`), `createdAt`, `updatedAt`, `createdBy` | — |
+| `InventorySnapshot` | `id`, `productId`, `stock`, `reserved`, `sold`, `withdrawn`, `vaulted`, `createdAt`, `updatedAt` | `available`, `ledger` |
+| `Reservation` | `id`, `productId`, `inventoryId`, `holderKind`, `holderReference`, `remarks`, `quantity`, `remaining`, `sold`, `vaulted`, `released`, **`status`** (`active` \| `closed`), actor stamps, `closedAt` | — |
+| `Changelog` | `id`, `occurredAt`, `inventoryId`, `subjectKind`, `actorKind`, `actorId`, `action`, `quantity`, `reservationId`, sell money fields, `reason`, `before`, `after` | — |
+| `AuctionEligibleProduct` | `productId`, `name`, `available` | — |
+
+Products use **`status`** (`draft` \| `created`); reservations use **`status`**
+(`active` \| `closed`). Inventory rows have no `status` column.
+
+Quantity bounds: intake, reserve, adjust, release, sell, vault, and withdraw
+quantities are integers **1–500** unless the scenario names a refusal.
+
+Money on free-pool and sell-from-reservation actions uses minor units plus
+ISO 4217 currency, same as store contracts.
+
+### Admin tRPC (`inventory.*`)
+
+Routed through the API gateway to the inventory worker. Requires
+`inventory:read` or `inventory:write` as appropriate.
+
+| Procedure | Purpose |
+| --- | --- |
+| `products.list` | Every product with status and snapshot counts (catalog-SC-13) |
+| `products.get` | One product, its single inventory snapshot, reservations by `holderKind`, changelogs (catalog-SC-29) |
+| `products.create` | Draft product + zeroed inventory (catalog-SC-01) |
+| `products.update` | Name, description, remarks only (catalog-SC-57) |
+| `products.markCreated` | One-way `draft` → `created` (catalog-SC-52, catalog-SC-54) |
+| `inventory.intake` | Stock up (catalog-SC-05, catalog-SC-06) |
+| `inventory.sell` | Free-pool sell (catalog-SC-10) |
+| `inventory.withdraw` | Free-pool withdraw (catalog-SC-11) |
+| `reservations.release` | Partial or full release; admin may act for any kind (catalog-SC-22, catalog-SC-35) |
+| `reservations.adjust` | `adjustReservation(id, newQuantity)` (catalog-SC-47–catalog-SC-50) |
+| `reservations.sellFromReservation` | Auction holds only (catalog-SC-36, catalog-SC-37) |
+| `reservations.vaultFromReservation` | Vault holds only (catalog-SC-38) |
+| `changelogs.list` | Product-scoped history (catalog-SC-23–catalog-SC-28, catalog-SC-41–catalog-SC-44) |
+
+Admin fixture client mirrors every procedure above for frontend work without a
+running worker.
+
+### Holder service bindings
+
+Machine-only; not exposed on the public gateway. `holderKind` is fixed by the
+bound entrypoint — never an RPC input.
+
+| Entrypoint | Closed-over kind | Methods |
+| --- | --- | --- |
+| `AuctionInventoryService` | `grade10-auction` | `getAvailability`, `reserve`, `adjustReservation`, `release`, `sellFromReservation`, `listOwnReservations`, `listEligibleProducts` |
+| `VaultInventoryService` | `grade10-vault` | `getAvailability`, `reserve`, `adjustReservation`, `release`, `vaultFromReservation`, `listOwnReservations` |
+
+`listEligibleProducts` returns only products with **`status = created`** and
+**available > 0** (catalog-SC-61, catalog-SC-62). Consumed by Auction and by
+the admin listing editor via fixtures until inventory ships.
+
+**Rejected:** caller-supplied `holderKind`. **Rejected:** Vault exposing
+`sellFromReservation`. **Rejected:** Auction exposing `vaultFromReservation`.
+
+Binding shape follows existing product workers:
+
+```typescript
+export type AuctionInventoryServiceApi = { /* methods above */ };
+export type VaultInventoryServiceApi = { /* vault methods above */ };
+
+export type AuctionInventoryServiceBinding = {
+  createAuctionInventoryService():
+    | AuctionInventoryServiceApi
+    | Promise<AuctionInventoryServiceApi>;
+};
+export type VaultInventoryServiceBinding = {
+  createVaultInventoryService():
+    | VaultInventoryServiceApi
+    | Promise<VaultInventoryServiceApi>;
+};
+```
+
+Worker default export exposes both factories; Auction binds
+`createAuctionInventoryService`, Vault binds `createVaultInventoryService`.
+
+### Typed refusals
+
+Contract failures name at least: unknown product, unknown reservation, invalid
+quantity, insufficient available stock, product not `created`, reservation not
+`active`, wrong holder kind, adjust below settled floor, unauthorized, and
+idempotent active reserve retry (returns existing row, no history).
 
 ## Risks / Trade-offs
 
-- **No physical identity** → reservations guarantee quantities only; introduce
-  a separate serialized-asset model if a workflow gains real tags or serials.
-- **Cached reserved count can drift from reservation rows** → all writers use
-  the inventory lock and transaction; backend tests reconcile the cached count
-  with the active reservation sum after every transition and race.
-- **Monotonic ledger retains erroneous intake** → corrections move quantity to
-  withdrawn with a reason instead of deleting history.
-- **Whole-reservation release** → callers create one reference per
-  independently releasable allocation.
-- **Quantity cap 500** → protects transaction and operator mistakes; large
-  intake or holds use multiple references.
+- **No physical identity** → quantity integrity only.
+- **Cached `reserved`** → app-written under lock; tests reconcile with Σ
+  active `remaining`.
+- **Monotonic vaulted / sold / withdrawn** → no unvault/unsell.
+- **Quantity cap 500** → large holds use multiple references.
+- **Draft products** → holders cannot reserve until marked `created`.
 
 ## Migration Plan
 
-Create a greenfield `grade10-inventory` Neon database with all tables,
-constraints, triggers, and audit genesis in its initial migration. There is no
-Auction backfill. Deploy the inventory worker after auth and before or with the
-admin frontend. Named consumer entrypoints need no caller binding until
-Auction or Vault integration work lands.
-
-Rollback removes the unused admin route and worker deployment. Once inventory
-activity exists, retain the database and restore the service rather than
-dropping the snapshot or history.
+Greenfield `grade10-inventory` Neon database with products, inventories,
+reservations (no allocation table), changelogs, constraints, triggers, and
+audit genesis in the initial migration. Deploy worker after auth and before or
+with the admin frontend.
 
 ## Open Questions
 
-None that change the specs, approach, or task breakdown. Item-level identity is
-explicitly deferred until a workflow supplies a real physical discriminator.
+None that change the specs or task breakdown.

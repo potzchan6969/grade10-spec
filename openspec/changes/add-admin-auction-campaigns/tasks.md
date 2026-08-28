@@ -1,11 +1,14 @@
 # Tasks: Admin auction campaigns
 
 Campaign covers already exist in the auction worker (`auctions` table). This
-change **first** renames operator language from Sales to Campaigns on the
-existing admin tab, then adds `created`, tightens listing attach eligibility,
-and completes the campaign editor and listing campaign picker. Once group 2
-lands, groups 3–5 are parallel unless a prose line says otherwise. Frontend
-builds against fixtures, not a running worker.
+change **first** renames operator language from Sales to Campaigns, then adds
+campaign `created`, tightens listing attach eligibility, completes the
+campaign editor, and wires the listing inventory product picker against
+[`add-grade10-inventory`](../add-grade10-inventory/design.md) Contracts
+(`AuctionEligibleProduct`, `listEligibleProducts`).
+
+Once group 2 lands, groups 3–5 can proceed in parallel unless a prose line says
+otherwise. Frontend builds against fixtures, not a running worker.
 
 ## 1. Rename Sales → Campaigns in the Grade10 auction admin (grade10)
 
@@ -21,14 +24,16 @@ and listing-editor wording first.
 - [ ] 1.3 Verify with `pnpm run typecheck`, `pnpm run lint`, and the focused
   admin SPA / auction-admin-frontend tests that assert visible labels.
 
-## 2. Share campaign and listing-campaign contracts (grade10)
+## 2. Share campaign and listing contracts (grade10)
 
-- [ ] 2.1 Make the admin-campaign wire scenarios pass on the shared admin
-  contracts: campaign statuses `draft` / `created` / `published` /
-  `canceled`, title and copy shapes, and the cancellation answer shape
+Depends on nothing in group 1. May land beside it.
+
+- [ ] 2.1 Make the admin-campaign wire scenarios pass on `@grade10/auction-contracts`:
+  campaign **`status`** includes `created` (`draft` / `created` / `published` /
+  `canceled`), title and copy shapes, and cancellation answer shape
   (`Operator opens a draft campaign`, `Operator creates a draft campaign`,
   `Operator publishes a created campaign`, `Operator cancels a published
-  campaign`).
+  campaign`) per `design.md` Contracts.
 - [ ] 2.2 Make the admin procedure-client and fixture scenarios pass for
   campaign `get` / `update` / `cancel` / create-transition (alongside list /
   open / publish) and for listing campaign attachment via draft/create
@@ -36,16 +41,24 @@ and listing-editor wording first.
   published campaign`, `Canceled campaign rejects a title edit`, `Operator
   attaches a listing to a created campaign`, `Operator clears the campaign
   on a listing`, `Published campaign cannot receive a listing`).
-- [ ] 2.3 Verify with `pnpm run typecheck`, `pnpm run lint`, and the focused
+- [ ] 2.3 Make listing inventory product eligibility scenarios pass on
+  contracts/fixtures using `AuctionEligibleProduct` from
+  `@grade10/inventory-contracts` (or a pinned duplicate until that package
+  lands): picker options and save/create refusals for draft-status and
+  out-of-stock products (`Product picker omits draft inventory products`,
+  `Product picker omits out-of-stock inventory products`, `Draft product id
+  is refused on listing save`, `Out-of-stock product id is refused on listing
+  create`). Stub `listEligibleProducts` until inventory group 1 ships.
+- [ ] 2.4 Verify with `pnpm run typecheck`, `pnpm run lint`, and the focused
   contracts / admin-frontend fixture tests.
 
 ## 3. Migrate campaign status and verify authoritative lifecycle (grade10)
 
-Depends on group 2 only where fixture shapes must match; may land beside it
+Depends on group 2 where fixture shapes must match; may land beside group 2
 when contracts already pin the shapes.
 
 - [ ] 3.1 Make the schema / status-check scenarios pass: `auctions.status`
-  accepts `created`; `OPEN_AUCTION_STATES` is `draft` | `created` only
+  accepts **`created`**; `OPEN_AUCTION_STATES` is `draft` | `created` only
   (`Operator creates a draft campaign`, `Published campaign cannot receive a
   listing`). Generate and check the migration with
   `pnpm run db:drizzle:generate` and `pnpm run check:migrations`.
@@ -66,7 +79,10 @@ when contracts already pin the shapes.
 - [ ] 3.7 Make listing attach eligibility pass: attach allowed for `draft`
   and `created` only; `Published campaign cannot receive a listing` and
   durable canceled-campaign refusal.
-- [ ] 3.8 Verify with `pnpm run typecheck`, `pnpm run lint`,
+- [ ] 3.8 Make listing `productId` validation pass against inventory
+  eligibility (`status = created`, `available > 0`) on save/create, including
+  the four product-picker refusal scenarios.
+- [ ] 3.9 Verify with `pnpm run typecheck`, `pnpm run lint`,
   `pnpm run test:backend`, and `pnpm run build`.
 
 ## 4. Extend the auction admin campaigns and listings features (grade10)
@@ -82,10 +98,13 @@ Depends on group 2. Builds on the Campaigns chrome from group 1.
   campaign id pass on draft save / create / setAuction (`Operator attaches
   a draft listing to a draft campaign`, `Operator attaches a listing to a
   created campaign`, `Operator clears the campaign on a listing`).
-- [ ] 4.3 Verify `@grade10/auction-admin-frontend` with its focused module
+- [ ] 4.3 Make listing productId eligibility pass against
+  `listEligibleProducts` (or fixtures with the same shape), including
+  refusals for inventory **`status` `draft`** and zero **available**.
+- [ ] 4.4 Verify `@grade10/auction-admin-frontend` with its focused module
   tests, `pnpm run typecheck`, and `pnpm run lint`.
 
-## 5. Compose Grade10 admin campaign editor and listing picker (grade10)
+## 5. Compose Grade10 admin campaign editor and listing pickers (grade10)
 
 Depends on groups 1 and 4. Fixtures, not a running backend.
 
@@ -104,5 +123,9 @@ Depends on groups 1 and 4. Fixtures, not a running backend.
   listing to a created campaign`, `Operator clears the campaign on a
   listing`, `Published and canceled campaigns are not offered in the
   picker`, `Listing without a campaign still creates`.
-- [ ] 5.4 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [ ] 5.4 Make listing editor inventory product picker scenarios pass:
+  `Product picker omits draft inventory products`, `Product picker omits
+  out-of-stock inventory products`, `Draft product id is refused on listing
+  save`, `Out-of-stock product id is refused on listing create`.
+- [ ] 5.5 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
   and `pnpm run build`.

@@ -74,3 +74,54 @@ chosen.
 - **WHEN** they view the optional campaign control
 - **THEN** the control is labeled Campaign
 - **AND** it is not labeled Sale
+
+### Requirement: Listing editor product selection uses inventory eligibility
+
+The Grade10 auction listing editor SHALL let an authorized operator select
+the catalogue **product** the listing reserves against from Grade10
+inventory ([`add-grade10-inventory`](../../../add-grade10-inventory/proposal.md)).
+The product picker SHALL list only inventory products whose **`status` is
+`created`** (not `draft`) and that have **available greater than zero**.
+
+A `draft` inventory product SHALL NOT appear in the picker. A `created`
+product with zero available (out of stock for reservation) SHALL NOT appear in
+the picker. Product ids that are not eligible SHALL be refused on
+draft-save and create.
+
+Campaign covers do **not** select a product — only listings do.
+
+#### Scenario: Product picker omits draft inventory products
+
+- **GIVEN** a draft inventory product with available stock and a created
+  inventory product with available stock
+- **WHEN** an authorized operator opens the product picker on the listing
+  editor
+- **THEN** the created product is offered
+- **AND** the draft product is not offered
+
+#### Scenario: Product picker omits out-of-stock inventory products
+
+- **GIVEN** a created inventory product with available zero and another
+  created inventory product with available at least one
+- **WHEN** an authorized operator opens the product picker on the listing
+  editor
+- **THEN** the in-stock created product is offered
+- **AND** the out-of-stock product is not offered
+
+#### Scenario: Draft product id is refused on listing save
+
+- **GIVEN** a draft listing and a draft inventory product id
+- **WHEN** an authorized operator attempts to save that product id on the
+  listing
+- **THEN** Grade10 refuses the write
+- **AND** the listing's product id is unchanged
+
+#### Scenario: Out-of-stock product id is refused on listing create
+
+- **GIVEN** a draft listing with quantity one and a created inventory
+  product whose available is zero
+- **WHEN** an authorized operator attempts to create the listing with that
+  product id
+- **THEN** Grade10 refuses the create
+- **AND** the listing remains a draft
+
