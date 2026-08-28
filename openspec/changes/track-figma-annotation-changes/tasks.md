@@ -164,7 +164,7 @@ This group depends on the end-to-end workflow in groups 4 and 5 passing.
   annotation package command, and CI-specific summary rendering after migrating
   every useful canonicalization, matching, blocker, and fixture test to the
   snapshot diff and acceptance commands.
-- [ ] 6.3 Replace the annotation section of the governance guide with one
+- [x] 6.3 Replace the annotation section of the governance guide with one
   end-to-end example: Figma Plugin API observation -> temporary snapshot ->
   ownership-aware drift report -> finding selection -> confirmed baseline and
   spec decisions -> Git diff -> verification -> optional local commit. State
