@@ -186,7 +186,7 @@ being available in the registered store.
   annotation wrapper into the new reporting and reconciliation paths, then
   delete the obsolete names. Preserve exact-association, ownership,
   multi-occurrence, ambiguity, and blocked-evidence coverage.
-- [ ] 7.3 Run `pnpm run agent:check-parity`, `pnpm run lint`, `pnpm run
+- [x] 7.3 Run `pnpm run agent:check-parity`, `pnpm run lint`, `pnpm run
   typecheck`, `pnpm run test`, and `git diff --check`; confirm the canonical
   skill remains under `.claude/skills/` and parity paths remain symlinks.
 - [ ] 7.4 Perform the final cross-repository acceptance run with categorized
