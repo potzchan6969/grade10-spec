@@ -1,6 +1,6 @@
 # Tasks — admin-console-blocks
 
-## 1. Console package grows the shared blocks (grade10)
+## 1. Console package grows the shared blocks (grade10) (owner: @sean)
 
 - [ ] 1.1 Bump `external/grade10-spec` to a `main` SHA carrying the design-system Table primitives; rebase the console package's table furniture onto `Table`/`TableHeader`/`TableBody`/`TableRow`/`TableHead`/`TableCell`, keying headings positionally, keeping its consumer surface unchanged so `console-blocks-SC-01` and `console-blocks-SC-02` hold
 - [ ] 1.2 Add `SectionHeader`, `StatusBadge`, and `Figure` with props types, ported from the surveyed markup, making `console-blocks-SC-03` and `console-blocks-SC-12` pass
