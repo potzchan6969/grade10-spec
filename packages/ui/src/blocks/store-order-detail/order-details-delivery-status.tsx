@@ -51,7 +51,7 @@ function OrderDetailsDeliveryStatus({
       className={cn("w-full", className)}
       data-slot="order-details-delivery-status"
     >
-      <Card className="overflow-hidden p-0" padding={false}>
+      <Card className="gap-0 overflow-hidden p-0" padding={false}>
         <HStack
           className="w-full justify-between border-b border-border bg-muted px-6 py-4"
           gap="none"

@@ -68,7 +68,7 @@ function OrderDetailsSidebar({
       className={cn("w-full", className)}
       data-slot="order-details-sidebar"
     >
-      <Card className="overflow-hidden p-0" padding={false}>
+      <Card className="gap-0 overflow-hidden p-0" padding={false}>
         <VStack
           className="w-full border-b border-border bg-background-subtle p-6"
           gap="md"
