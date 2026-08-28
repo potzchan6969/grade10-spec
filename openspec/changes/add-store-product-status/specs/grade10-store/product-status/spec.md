@@ -21,13 +21,20 @@ out of stock at zero, SHALL NOT be offered for purchase, and SHALL NOT be
 distinguished from any other out-of-stock variant.
 
 An available variant SHALL be purchasable wherever the surface offers
-purchasing. An out-of-stock variant SHALL NOT be purchasable on any surface.
+purchasing, whatever quantity remains. An out-of-stock variant SHALL NOT be
+purchasable on any surface.
 
 #### Scenario: Stock remains
 
 - **WHEN** a variant's available quantity is 12
 - **THEN** it is available
 - **AND** it can be added to the cart
+
+#### Scenario: The final copy
+
+- **WHEN** a variant's available quantity is 1
+- **THEN** it is available
+- **AND** it can be added to the cart, exactly as a variant with 12 can
 
 #### Scenario: Stock exhausted
 
@@ -48,43 +55,28 @@ purchasing. An out-of-stock variant SHALL NOT be purchasable on any surface.
 - **WHEN** a variant's available quantity is below 0
 - **THEN** it is out of stock
 
-### Requirement: Low stock is an overlay on an available variant
+### Requirement: Quantity is not communicated beyond whether a variant can be bought
 
-An available variant whose available quantity is below 5 SHALL additionally be
-flagged low stock. Low stock SHALL be a second fact about an available variant
-and SHALL NOT be an availability of its own: a low-stock variant is available,
-is purchasable, and is offered exactly as any other available variant is.
+A surface SHALL communicate whether a variant can be bought and nothing more
+about how much of it remains. It SHALL NOT display a remaining count, a
+scarcity treatment, or any label that distinguishes one available variant from
+another by quantity.
 
-An out-of-stock variant SHALL NOT carry the low-stock flag.
+Availability SHALL be the only fact the store derives from quantity, so that
+two available variants are offered identically however far apart their
+quantities are.
 
-The threshold SHALL be 5 for every variant the store lists, regardless of its
-collection, series or price.
+#### Scenario: A scarce variant is offered as any other
 
-#### Scenario: The last few copies
+- **GIVEN** one variant with an available quantity of 1 and another with 400
+- **WHEN** a collector sees each of them
+- **THEN** both read available, with the same treatment and the same controls
+- **AND** neither shows a remaining count or a scarcity label
 
-- **WHEN** a variant's available quantity is 4
-- **THEN** it is available and flagged low stock
-- **AND** it can be added to the cart
+#### Scenario: No count reaches the collector
 
-#### Scenario: The final copy
-
-- **WHEN** a variant's available quantity is 1
-- **THEN** it is available and flagged low stock
-
-#### Scenario: At the threshold
-
-- **WHEN** a variant's available quantity is 5
-- **THEN** it is available and is not flagged low stock
-
-#### Scenario: Out of stock carries no overlay
-
-- **WHEN** a variant's available quantity is 0
-- **THEN** it is out of stock and is not flagged low stock
-
-#### Scenario: The threshold does not vary
-
-- **GIVEN** two variants in different collections, each with an available quantity of 4
-- **THEN** both are flagged low stock
+- **WHEN** any surface communicates a variant's availability
+- **THEN** it names no remaining quantity
 
 ### Requirement: A card's availability is that of its most available variant
 
@@ -92,30 +84,15 @@ Where a card lists more than one variant, the card's own availability SHALL be
 that of its most available variant, with available beating out of stock. A card
 SHALL be out of stock only when every variant it lists is out of stock.
 
-The card SHALL carry the low-stock flag of the variant its availability was
-taken from, and SHALL NOT carry a flag taken from a variant that did not decide
-it.
-
-Where more than one variant is equally available, the card SHALL take its
-availability and its flag from the one with the greatest available quantity, so
-a card reads as low stock only when nothing better is on it.
-
 #### Scenario: One grade left, another sold out
 
 - **GIVEN** a card listing one variant with quantity 20 and one with quantity 0
 - **THEN** the card is available
-- **AND** the card is not flagged low stock
 
-#### Scenario: Only scarce grades remain
+#### Scenario: Only a scarce grade remains
 
 - **GIVEN** a card listing one variant with quantity 2 and one with quantity 0
-- **THEN** the card is available and flagged low stock
-
-#### Scenario: Plenty of one grade, few of another
-
-- **GIVEN** a card listing one variant with quantity 40 and one with quantity 1
-- **THEN** the card is available
-- **AND** the card is not flagged low stock
+- **THEN** the card is available, with no treatment marking it apart
 
 #### Scenario: Nothing left on the card
 
@@ -128,10 +105,9 @@ The listing, a card's own page, and the cart SHALL each communicate the
 availability this capability derives, and SHALL NOT derive their own. For the
 same variant, read at the same moment, the three SHALL agree.
 
-The listing SHALL communicate each card's rolled-up availability and its
-low-stock flag on that card's tile. A card's own page SHALL communicate
-availability and the low-stock flag per variant, for every variant it lists,
-rather than for the card as a whole.
+The listing SHALL communicate each card's rolled-up availability on that card's
+tile. A card's own page SHALL communicate availability per variant, for every
+variant it lists, rather than for the card as a whole.
 
 A surface SHALL NOT hide a price because a variant is out of stock, and SHALL
 NOT offer a purchase control that cannot be used.
@@ -140,16 +116,16 @@ NOT offer a purchase control that cannot be used.
 
 - **GIVEN** a card listing one variant with quantity 3 and one with quantity 0
 - **WHEN** a collector sees its tile and then opens its page
-- **THEN** the tile reads available and low stock
-- **AND** the page reads the quantity-3 variant as available and low stock, and
-  the quantity-0 variant as out of stock
+- **THEN** the tile reads available
+- **AND** the page reads the quantity-3 variant as available and the quantity-0
+  variant as out of stock
 
 #### Scenario: Per-variant, not per-card, on the page
 
-- **GIVEN** a card listing one variant with quantity 30 and one with quantity 2
+- **GIVEN** a card listing one variant with quantity 30 and one with quantity 0
 - **WHEN** a collector opens its page
-- **THEN** the first variant reads available without a low-stock flag
-- **AND** the second reads available and low stock
+- **THEN** each variant reads on its own, and the card's rolled-up availability
+  is not what either of them shows
 
 #### Scenario: An out-of-stock variant keeps its price
 
@@ -169,9 +145,8 @@ Out of stock and unavailable SHALL be reported as distinct conditions: a
 collector whose card sold out is told something different from one whose card
 was withdrawn from sale.
 
-A cart line SHALL NOT be flagged low stock. Scarcity is a reason to buy, not a
-report on something already in the cart, and a line held at a quantity the
-store can still fill needs no warning.
+A line whose variant is still available SHALL be reported as available and
+SHALL NOT carry a warning, however little of it remains.
 
 #### Scenario: The card sold out while it sat in the cart
 
@@ -187,17 +162,12 @@ store can still fill needs no warning.
   sales channel
 - **THEN** the line is reported as unavailable, and not as out of stock
 
-#### Scenario: A scarce line is not flagged
+#### Scenario: A scarce line carries no warning
 
 - **GIVEN** a cart line for a variant whose quantity is 2
 - **WHEN** the cart refreshes
-- **THEN** the line reads available and carries no low-stock flag
-
-#### Scenario: A line that is still fine
-
-- **GIVEN** a cart line for a variant whose quantity is 30
-- **WHEN** the cart refreshes
 - **THEN** the line reads available and can be checked out
+- **AND** no warning is shown on it
 
 ### Requirement: Unavailable is reported for a cart line and nowhere else
 
