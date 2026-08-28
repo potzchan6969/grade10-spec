@@ -53,9 +53,9 @@ available stock.
   vault part of remaining; either may release part back to available. A
   reservation closes when remaining reaches zero. Closed references may be
   reserved again (new row).
-- **Scoped visibility** — admins see the complete inventory and allocation by
-  `holder_kind`. Consumer entrypoints see unreserved availability and their
-  own reservations only.
+- **Scoped visibility** — admins see the complete inventory and holds grouped
+  by `holder_kind`. Consumer entrypoints see unreserved availability and
+  their own reservations only.
 - **Change history** — every successful product create/update, intake, reserve,
   adjust, change-product, release, sell-from-reservation,
   vault-from-reservation, free-pool sell, and withdrawal records quantity,

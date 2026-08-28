@@ -59,7 +59,7 @@ catalog-SC-63, catalog-SC-64, catalog-SC-65.
 
 As a consuming application, I want to reserve, adjust, partially settle, and
 release my quantity without seeing another kind's holds, so that I can safely
-use my allocation. Auction sells; Vault vaults.
+use my hold. Auction sells; Vault vaults.
 
 Accepted by: catalog-SC-15, catalog-SC-16, catalog-SC-19, catalog-SC-20,
 catalog-SC-21, catalog-SC-39, catalog-SC-40, catalog-SC-61, catalog-SC-62,
@@ -72,7 +72,7 @@ so that I can explain how the latest snapshot was reached.
 
 Accepted by: catalog-SC-23, catalog-SC-24, catalog-SC-25, catalog-SC-26,
 catalog-SC-27, catalog-SC-28, catalog-SC-41, catalog-SC-42, catalog-SC-43,
-catalog-SC-44.
+catalog-SC-44, catalog-SC-45.
 
 ## ADDED Requirements
 
@@ -383,7 +383,7 @@ its `holder_kind`; kind SHALL NOT be caller input. A holder SHALL read
 available and its own reservations (including remaining / sold / vaulted /
 released). It SHALL NOT receive stock, derived ledger, aggregate reserved,
 vaulted totals, or another kind's reservation fields. Admin reads SHALL expose
-the complete allocation grouped by `holder_kind`.
+the complete hold ledger grouped by `holder_kind`.
 
 The Auction entrypoint (and inventory admin reads used by the auction listing
 editor) SHALL list products eligible for a new listing reservation: product
@@ -698,14 +698,14 @@ audit.
 - **AND** its changed entity is `inventory`
 - **AND** before and after show stock increasing by three
 
-#### Scenario: catalog-SC-25 - Reserve history records allocation and snapshot
+#### Scenario: catalog-SC-25 - Reserve history records hold and snapshot
 
 - **GIVEN** Auction requests a valid quantity-two reservation
 - **WHEN** the reservation succeeds
 - **THEN** one `reserve` change records quantity two and the reservation id
 - **AND** before and after show reserved increasing by two
 
-#### Scenario: catalog-SC-26 - Release history records allocation and snapshot
+#### Scenario: catalog-SC-26 - Release history records hold and snapshot
 
 - **GIVEN** Vault has an active reservation with remaining two
 - **WHEN** Vault releases it
@@ -759,6 +759,18 @@ audit.
 - **THEN** one `adjust` change records quantity two and the reservation id
 - **AND** before and after show reserved decreasing by three
 
+#### Scenario: catalog-SC-45 - Change-product history records both inventories
+
+- **GIVEN** an active Auction reservation on product A with quantity three and
+  remaining three
+- **AND** product B is **created** with available at least three
+- **WHEN** Auction calls `changeReservationProduct` to product B with quantity
+  three
+- **THEN** one `change-product` change records quantity three and the
+  reservation id
+- **AND** before and after show product A reserved decreasing by three and
+  product B reserved increasing by three
+
 ### Admin console
 
 ---
@@ -774,11 +786,12 @@ The Grade10 admin panel SHALL offer an Inventory section with:
    reservations grouped by **`holder_kind`**, and change history.
 
 Operators SHALL intake, record free-pool sale or withdrawal, reserve for Auction
-or Vault, adjust active reservation quantity, partially release,
-sell-from-reservation, and vault-from-reservation from the product page.
+or Vault, adjust active reservation quantity, change reservation product,
+partially release, sell-from-reservation, and vault-from-reservation from the
+product page.
 Loading, empty, and error states SHALL be visible.
 
-#### Scenario: catalog-SC-29 - Operator oversees inventory and allocation on the product page
+#### Scenario: catalog-SC-29 - Operator oversees inventory and holds on the product page
 
 - **GIVEN** a created product with Auction and Vault reservations and prior
   vaulted and sold transitions

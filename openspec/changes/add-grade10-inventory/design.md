@@ -30,9 +30,8 @@ This design follows `docs/conventions/packages.md`,
 
 - `reservation_allocations`, multi-inventory rows, or inventory `status`.
 - Identifying or tracking individual physical objects.
-- Full Auction/Vault reserve-on-create wiring (eligibility list ships; picker
-  in `add-admin-auction-campaigns`; listing reservation sync ships in that
-  change via holder RPCs defined here).
+- Auction listing editor UI or auction-worker save/create orchestration (holder
+  RPCs are defined here; wiring lives in `add-admin-auction-campaigns`).
 - Shopify inventory sync, ZZZ inventory, warehouses, or transfers.
 - New design-system or `@grade10/ui` components.
 
@@ -137,8 +136,9 @@ Auction.
 The worker exports `AuctionInventoryService` and `VaultInventoryService`.
 Each closes over `holder_kind`; kind is never RPC input.
 
-Holder surface includes reserve, adjust, release, sell-from-reservation
-(Auction only), vault-from-reservation (Vault only), and scoped reads.
+Holder surface includes reserve, adjust, changeReservationProduct, release,
+sell-from-reservation (Auction only), vault-from-reservation (Vault only),
+and scoped reads.
 
 Auction eligibility list: products with `status = created` and available > 0.
 

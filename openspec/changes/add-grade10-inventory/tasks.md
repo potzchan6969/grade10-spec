@@ -53,14 +53,15 @@ running worker.
   list shape.
 - [ ] 1.6 Make `catalog-SC-23 - Product update records operator and
   snapshots`, `catalog-SC-24 - Intake history carries the added quantity`,
-  `catalog-SC-25 - Reserve history records allocation and snapshot`,
-  `catalog-SC-26 - Release history records allocation and snapshot`,
+  `catalog-SC-25 - Reserve history records hold and snapshot`,
+  `catalog-SC-26 - Release history records hold and snapshot`,
   `catalog-SC-27 - Terminal history records action details`,
   `catalog-SC-28 - Refused write leaves history unchanged`,
   `catalog-SC-41 - Sell-from-reservation history`,
   `catalog-SC-42 - Vault-from-reservation history`,
   `catalog-SC-43 - Adjust history records new quantity`, and
-  `catalog-SC-44 - Adjust decrease records freed quantity` pass with typed
+  `catalog-SC-44 - Adjust decrease records freed quantity`, and
+  `catalog-SC-45 - Change-product history records both inventories` pass with typed
   changelog changed-entity, non-null inventory reference, nullable reservation
   reference, action (including `adjust` and `change-product`), quantity, actor,
   action-detail, and snapshot contracts.
@@ -101,9 +102,10 @@ Depends on group 1.
   checks, and indexes.
 - [ ] 2.3 Make `catalog-SC-07`, `catalog-SC-23`, `catalog-SC-24`,
   `catalog-SC-25`, `catalog-SC-26`, `catalog-SC-27`, `catalog-SC-28`,
-  `catalog-SC-41`, `catalog-SC-42`, `catalog-SC-43`, and `catalog-SC-44`
-  pass structurally with the non-null inventory foreign key, subject/action
-  checks (including `adjust`, sell-from-reservation, vault-from-reservation),
+  `catalog-SC-41`, `catalog-SC-42`, `catalog-SC-43`, `catalog-SC-44`, and
+  `catalog-SC-45` pass structurally with the non-null inventory foreign key,
+  subject/action checks (including `adjust`, `change-product`,
+  sell-from-reservation, vault-from-reservation),
   reservation/inventory foreign key, action-specific checks, history indexes,
   append-only guards, and shared per-worker `audit_logs`.
 - [ ] 2.4 Generate migration artifacts for
@@ -139,8 +141,8 @@ Depends on groups 1 and 2.
   `catalog-SC-40`, `catalog-SC-61`, `catalog-SC-62`, and `catalog-SC-66`
   pass through entrypoint-scoped services.
 - [ ] 3.9 Make `catalog-SC-07`, `catalog-SC-23` through `catalog-SC-28`,
-  `catalog-SC-41`, `catalog-SC-42`, `catalog-SC-43`, and `catalog-SC-44`
-  pass with domain changelog + elevated audit writes.
+  `catalog-SC-41`, `catalog-SC-42`, `catalog-SC-43`, `catalog-SC-44`, and
+  `catalog-SC-45` pass with domain changelog + elevated audit writes.
 - [ ] 3.10 Verify with `pnpm run typecheck`, `pnpm run lint`, and
   `pnpm run test:backend`.
 
@@ -156,8 +158,8 @@ Depends on group 3.
   sell-from-reservation, vault-from-reservation, `catalog-SC-16`, and
   `catalog-SC-35`–`catalog-SC-40` pass through reservation admin and holder
   entrypoints.
-- [ ] 4.4 Make history scenarios including `catalog-SC-43` and
-  `catalog-SC-44` pass through read models.
+- [ ] 4.4 Make history scenarios including `catalog-SC-43`, `catalog-SC-44`,
+  and `catalog-SC-45` pass through read models.
 - [ ] 4.5 Verify with `pnpm run typecheck`, `pnpm run lint`,
   `pnpm run test:backend`, and `pnpm run build` for the inventory worker /
   API wiring.
@@ -178,7 +180,7 @@ Depends on groups 1 and 4. Fixtures, not a live worker.
   sell-from-reservation, vault-from-reservation, `catalog-SC-16`,
   `catalog-SC-35`–`catalog-SC-38`, and `catalog-SC-53` pass in product-page
   reservation dialogs.
-- [ ] 5.5 Make history including adjust, sell-from-reservation, and
-  vault-from-reservation badges pass.
+- [ ] 5.5 Make history including adjust, change-product,
+  sell-from-reservation, and vault-from-reservation badges pass.
 - [ ] 5.6 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
   and `pnpm run build` for the admin app slice.

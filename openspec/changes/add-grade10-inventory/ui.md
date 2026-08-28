@@ -26,8 +26,8 @@ opens the product page.
 Route: product detail / create. Behavior: catalog-SC-01, catalog-SC-02,
 catalog-SC-29, catalog-SC-52, catalog-SC-54, catalog-SC-57, catalog-SC-58,
 plus reservation and history scenarios (catalog-SC-14–catalog-SC-22,
-catalog-SC-35–catalog-SC-38, catalog-SC-47–catalog-SC-50, catalog-SC-23–catalog-SC-28,
-catalog-SC-41–catalog-SC-44).
+catalog-SC-35–catalog-SC-38, catalog-SC-47–catalog-SC-51, catalog-SC-63–catalog-SC-65,
+catalog-SC-23–catalog-SC-28, catalog-SC-41–catalog-SC-45).
 
 Shows:
 
@@ -38,8 +38,9 @@ Shows:
   remaining / sold / vaulted / released and status
 - Product-scoped change history
 
-Intake, free-pool sell/withdraw, reserve, adjust, partial release,
-sell-from-reservation, and vault-from-reservation dialogs live on this page.
+Intake, free-pool sell/withdraw, reserve, adjust, change-product, partial
+release, sell-from-reservation, and vault-from-reservation dialogs live on
+this page.
 
 ## Components
 
@@ -47,7 +48,8 @@ Existing `@grade10/design-system` exports only:
 
 - Fields: `TextInput` for product text, reservation remarks, holder reference, intake
   remarks, and withdrawal reason; `NumberInput` for intake, reserve, adjust,
-  release, sell, vault, and withdrawal quantities, and sold total price.
+  change-product, release, sell, vault, and withdrawal quantities, and sold
+  total price.
 - Choice: `Select`, `SelectTrigger`, `SelectValue`, `SelectContent`,
   and `SelectItem` for **`holder_kind`** (Auction / Vault) and sold currency.
 - Actions and layout: `Button`, `Text`, `HStack`, `VStack`, and `Badge`.
@@ -61,7 +63,8 @@ App-local parts, following the auction admin:
 - Reservation-status badges for `active` and `closed`, plus **`holder_kind`**
   labels for Auction and Vault.
 - Change-action badges for product create/update, intake, reserve, adjust,
-  release, sell-from-reservation, vault-from-reservation, sell, and withdraw.
+  change-product, release, sell-from-reservation, vault-from-reservation,
+  sell, and withdraw.
 
 Nothing new is required from `@grade10/ui` or the design system.
 
@@ -92,6 +95,7 @@ Nothing new is required from `@grade10/ui` or the design system.
 - **Re-reserve after close** — catalog-SC-16.
 - **Partial / full release** — catalog-SC-22 and catalog-SC-35.
 - **Adjust reservation quantity** — catalog-SC-47–catalog-SC-50.
+- **Change reservation product** — catalog-SC-51, catalog-SC-63–catalog-SC-65.
 - **Sell-from-reservation** — catalog-SC-36 and catalog-SC-37.
 - **Vault-from-reservation** — catalog-SC-38.
-- **Change history** — catalog-SC-23–catalog-SC-28, catalog-SC-41–catalog-SC-44.
+- **Change history** — catalog-SC-23–catalog-SC-28, catalog-SC-41–catalog-SC-45.
