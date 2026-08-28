@@ -84,13 +84,18 @@ rules:
     - Every scenario must be checkable by a test or a manual pass.
     - Requirements live here and nowhere else. Never leave a testable statement in a PRD.
   design:
+    - "Use top-level sections for Context, Goals / Non-Goals, Decisions, each material implementation contract, Risks / Trade-offs, and Migration Plan. Database Schema and Service Interfaces are implementation contracts, not subsections of Decisions. Omit a section that does not apply."
+    - Use bullets and tables for dense technical material; reserve paragraphs for short connective text.
+    - Link the capability spec rather than restating requirements.
+    - Screens and Figma sources belong in ui.md.
     - Record alternatives considered for each decision; engineering inherits these trade-offs.
-    - "Link the capability spec rather than restating requirements. Open Decisions by naming what the spec already governs, then write only how it lands - which existing row, which service owns the write, persist vs recompute, reuse vs add. A decision that could be a spec scenario does not belong here."
-    - "Do not restate SHALL behavior as decisions. Point at the spec. Keep the implementation alternative an engineer might still try (re-authorize per step, update in place, a second database) even when the spec forbids the resulting behavior."
-    - "Database schema is a must: for each added or changed column, Postgres type, nullability, and default, matching the existing schema's conventions. Reuse a table or stamp that already holds the fact; do not add a second column for the same message. Spec fields read from another row at query time are not stored."
+    - "For a data-model change, add a top-level Database Schema section that names owning and affected tables, gives proposed columns with types and nullability, states keys, constraints and indexes, distinguishes authoritative from derived data, and includes an ER diagram for the relevant relationships."
+    - "For each added or changed column under Database Schema section, Postgres type, nullability, and default, matching the existing schema's conventions. Reuse a table or stamp that already holds the fact; do not add a second column for the same message. Spec fields read from another row at query time are not stored."
+    - "For a service change, add a top-level Service Interfaces section that models each service function as a processor with one fixed input shape and one fixed success/refusal output shape. State transaction ownership, locks, reads, writes, idempotency, faults, and the boundary between entrypoint, service, repository, and persistence."
+    - "For every flow that mutates multiple tables, name the mutation order and atomic boundary, then give concrete example input and output values showing the affected rows before or after processing."
+    - Show end-to-end identity and data enrichment when a request crosses browser, authenticated backend, service entrypoint, service, repository, or persistence boundaries.
     - "API contracts are optional: include them only when the wire changes in a meaningful way (breaking rename, additive authenticated field, new admin read). Do not list unchanged endpoints."
     - "Do not mitigate a risk with 'the spec says so'. Mitigation is an implementation control - a lock, a stamp, a state column."
-    - Screens and Figma sources belong in ui.md.
   ui:
     - Link each screen's Figma frame rather than describing it in prose - the frame is the layout's source of truth.
     - "Name design-system and packages/ui exports exactly - the export name is the cross-repo contract. A component, variant, or token that does not exist yet is work in grade10-spec; flag it so tasks carries it."
