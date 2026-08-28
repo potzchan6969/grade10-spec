@@ -1,3 +1,5 @@
+// biome-ignore-all lint/a11y/useSemanticElements: the Figma table is a flex layout — a <table> element cannot carry the pill-shaped header row or the flex column sizing, so ARIA roles carry the semantics the elements would have given.
+// biome-ignore-all lint/a11y/useFocusableInteractive: rows and column headers are static content inside a role="table", not a role="grid" — nothing in them is keyboard-interactive.
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ComponentProps, ReactNode } from "react";
 
