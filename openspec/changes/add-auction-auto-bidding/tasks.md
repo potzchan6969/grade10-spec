@@ -4,9 +4,9 @@
 
 Lands first: every other group consumes this through the submodule bump.
 
-- [ ] 1.1 Add the viewer's-own-maximum slot to `ListingBidPanel` and `ListingBidPanelProps`, and the label to `ListingBidPanelCopy`, so `auto-bidding-SC-05` has a place to render its two distinct facts.
-- [ ] 1.2 Cover the slot's states in colocated stories: leading with a maximum above the current bid, overtaken with the maximum unchanged, and no commitment, per `auto-bidding-SC-06`.
-- [ ] 1.3 Verify with `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:stories:ui`.
+- [x] 1.1 Add the viewer's-own-maximum slot to `ListingBidPanel` and `ListingBidPanelProps`, and the label to `ListingBidPanelCopy`, so `auto-bidding-SC-05` has a place to render its two distinct facts.
+- [x] 1.2 Cover the slot's states in colocated stories: leading with a maximum above the current bid, overtaken with the maximum unchanged, and no commitment, per `auto-bidding-SC-06`.
+- [x] 1.3 Verify with `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:stories:ui`.
 
 ## 2. Auction and Stripe contracts (grade10)
 
