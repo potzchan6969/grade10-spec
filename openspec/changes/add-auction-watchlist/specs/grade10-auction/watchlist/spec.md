@@ -80,7 +80,7 @@ to buy.
 ## ADDED Requirements
 
 ### Watching a listing
-------------------
+---
 
 ### Requirement: A signed-in collector watches and unwatches a lot
 
@@ -152,7 +152,7 @@ be the collector's user id, per `shared-auth/session`.
 - **AND** neither sees the other's watch
 
 ### Watch privacy
--------------
+---
 
 ### Requirement: A watch is private and confers nothing
 
@@ -196,7 +196,7 @@ a watch as a commitment to buy.
 - **THEN** the count is 3
 
 ### Watched list
-------------
+---
 
 ### Requirement: A collector reads the lots they watch
 

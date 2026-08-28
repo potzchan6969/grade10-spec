@@ -91,7 +91,7 @@ the current bid,
 ## ADDED Requirements
 
 ### Committing a maximum
----------------------
+---
 
 ### Requirement: A bidder commits a maximum
 
@@ -161,7 +161,12 @@ operator SHALL see every committed maximum and its Accepted At.
 | --- | --- |
 | Maximum | Integer minor units in the listing's currency, with that listing's ISO 4217 code |
 | Accepted At | When Grade10 accepted this commitment |
-| Leading | Whether this bidder currently leads |
+| Standing | Leading or not leading, as a fact apart from the current bid |
+
+| Standing | Meaning |
+| --- | --- |
+| Leading | This commitment is the highest, or it ties the highest and Grade10 accepted it first |
+| Not leading | A higher commitment exists, or an equal earlier one does |
 
 #### Scenario: auto-bidding-SC-05 - A bidder reads their own commitment
 
@@ -192,7 +197,7 @@ operator SHALL see every committed maximum and its Accepted At.
 - **THEN** each commitment shows its bidder, its maximum, and its Accepted At
 
 ### Current bid
------------
+---
 
 ### Requirement: Two-maximum rule
 
@@ -318,7 +323,7 @@ displace the leader.
 - **AND** they are not the leader
 
 ### Card authorization
-------------------
+---
 
 ### Requirement: The card authorization covers the committed maximum
 
@@ -361,7 +366,7 @@ further card check.
 - **AND** A's authorization remains 50000 minor units
 
 ### Auto bid
----------
+---
 
 ### Requirement: A bid Grade10 places counts as a bid
 
