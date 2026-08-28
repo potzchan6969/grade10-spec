@@ -48,7 +48,7 @@ export const Default: Story = {
   },
 };
 
-/** The stepper reports; the quantity moves only when the consumer supplies it. */
+/** The stepper input reports; the quantity moves only when the consumer supplies it. */
 export const QuantityChangeIsReported: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);

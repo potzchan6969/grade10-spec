@@ -2,7 +2,7 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { Link } from "@grade10/design-system/components/forms/link";
-import { Stepper } from "@grade10/design-system/components/forms/stepper-input";
+import { StepperInput } from "@grade10/design-system/components/forms/stepper-input";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { Center } from "@grade10/design-system/components/layout/center";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
@@ -236,7 +236,7 @@ function CartItemContent({
         ) : null}
       </VStack>
 
-      {/* Action: Stepper or Sold-Out Remove */}
+      {/* Action: StepperInput or Sold-Out Remove */}
       <div className={cn("shrink-0", !isSoldOut && "w-28")}>
         {isSoldOut ? (
           <IconButton
@@ -248,7 +248,7 @@ function CartItemContent({
             <Trash aria-hidden size={14} />
           </IconButton>
         ) : (
-          <Stepper
+          <StepperInput
             aria-label={item.name}
             className="w-full"
             decrementAtMinIcon={<Trash aria-hidden />}

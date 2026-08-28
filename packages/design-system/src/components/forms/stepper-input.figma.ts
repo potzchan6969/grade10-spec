@@ -1,6 +1,6 @@
 // url=https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4623-395
 // source=packages/design-system/src/components/forms/stepper-input.tsx
-// component=Stepper
+// component=StepperInput
 import figma from "figma";
 
 const instance = figma.selectedInstance;
@@ -42,8 +42,8 @@ const message = instance.getString("message");
 const placeholder = instance.getString("placeholder");
 
 export default {
-  example: figma.code`<Stepper${label ? figma.code` label="${label}"` : ""}${placeholder ? figma.code` placeholder="${placeholder}"` : ""}${isPlaceholder || !value ? "" : figma.code` defaultValue={${value}}`}${status === "default" ? "" : figma.code` status="${status}"`}${size === "md" ? "" : figma.code` size="${size}"`}${message ? figma.code` message="${message}"` : ""}${disabled ? figma.code` disabled` : ""} />`,
-  imports: ['import { Stepper } from "@grade10/design-system"'],
+  example: figma.code`<StepperInput${label ? figma.code` label="${label}"` : ""}${placeholder ? figma.code` placeholder="${placeholder}"` : ""}${isPlaceholder || !value ? "" : figma.code` defaultValue={${value}}`}${status === "default" ? "" : figma.code` status="${status}"`}${size === "md" ? "" : figma.code` size="${size}"`}${message ? figma.code` message="${message}"` : ""}${disabled ? figma.code` disabled` : ""} />`,
+  imports: ['import { StepperInput } from "@grade10/design-system"'],
   id: "stepper-input",
   metadata: { nestable: true },
 };

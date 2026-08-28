@@ -16,7 +16,7 @@ const container: Decorator[] = [
 /**
  * Cart line item (`4761:1494`, `4765:2301`, `4761:1486`).
  *
- * Owns per-row visuals: default/stepper, sold out, quantity adjusted, and row bones.
+ * Owns per-row visuals: default/stepper input, sold out, quantity adjusted, and row bones.
  * List composition lives on [`CartDrawerBody`](?path=/docs/store-cart-cartdrawerbody--docs).
  */
 const meta = {
@@ -36,7 +36,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Default active item with stepper and price */
+/** Default active item with stepper input and price */
 export const Default: Story = {
   args: {
     item: {

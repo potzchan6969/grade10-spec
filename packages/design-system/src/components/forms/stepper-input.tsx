@@ -44,7 +44,7 @@ import {
 // swap on the control to `Base/background-subtle` — same rule as Text /
 // Number / Search Input. Status tones the border only; the message stays
 // `Base/secondary-foreground`.
-const stepperControlVariants = cva(
+const stepperInputControlVariants = cva(
   "w-full overflow-hidden rounded-(--radius-full) border bg-input transition-colors",
   {
     variants: {
@@ -71,7 +71,7 @@ const stepperControlVariants = cva(
   },
 );
 
-type StepperProps = Omit<
+type StepperInputProps = Omit<
   ComponentProps<"input">,
   | "value"
   | "defaultValue"
@@ -82,7 +82,7 @@ type StepperProps = Omit<
   | "max"
   | "step"
 > &
-  VariantProps<typeof stepperControlVariants> & {
+  VariantProps<typeof stepperInputControlVariants> & {
     /** Rendered above the field. Omit it and no label renders. */
     label?: ReactNode;
     /** Helper or validation text below the field. Figma's `message`. */
@@ -145,7 +145,7 @@ function stepDelta(
   return step;
 }
 
-function Stepper({
+function StepperInput({
   className,
   id,
   label,
@@ -166,7 +166,7 @@ function Stepper({
   decrementAtMinLabel,
   decrementAtMinIcon,
   ...props
-}: StepperProps) {
+}: StepperInputProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const messageId = message ? `${inputId}-message` : undefined;
@@ -256,7 +256,7 @@ function Stepper({
         vAlign="center"
         data-slot="stepper-control"
         className={cn(
-          stepperControlVariants({
+          stepperInputControlVariants({
             status: disabled ? "default" : status,
             size,
           }),
@@ -373,5 +373,5 @@ function Stepper({
   );
 }
 
-export type { StepperProps };
-export { Stepper, stepperControlVariants };
+export type { StepperInputProps };
+export { StepperInput, stepperInputControlVariants };

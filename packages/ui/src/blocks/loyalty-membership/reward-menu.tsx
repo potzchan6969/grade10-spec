@@ -2,7 +2,7 @@ import { List, ListItem } from "@grade10/design-system/components/display/list";
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
-import { Stepper } from "@grade10/design-system/components/forms/stepper-input";
+import { StepperInput } from "@grade10/design-system/components/forms/stepper-input";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { AsyncState } from "../shared/async";
@@ -21,7 +21,7 @@ type RewardMenuCopy = {
   atQuantityBound: string;
   /** Names a reward the balance cannot pay for. Omit it and the control just disables. */
   insufficient?: string;
-  /** Standard-control names for the quantity stepper, for a localizing consumer. */
+  /** Standard-control names for the quantity stepper input, for a localizing consumer. */
   decreaseQuantity?: string;
   increaseQuantity?: string;
 };
@@ -90,7 +90,7 @@ function RewardRow({
       </HStack>
       {item.maxQuantity != null ? (
         <VStack gap="xs">
-          <Stepper
+          <StepperInput
             className="w-28"
             decrementLabel={copy.decreaseQuantity}
             incrementLabel={copy.increaseQuantity}

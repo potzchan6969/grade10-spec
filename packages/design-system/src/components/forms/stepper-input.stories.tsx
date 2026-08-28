@@ -1,11 +1,11 @@
 import { Trash } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { Stepper } from "./stepper-input";
+import { StepperInput } from "./stepper-input";
 
 const meta = {
-  title: "Components/Stepper",
-  component: Stepper,
+  title: "Components/StepperInput",
+  component: StepperInput,
   tags: ["autodocs"],
   args: {
     label: "Number Stepper",
@@ -29,7 +29,7 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof Stepper>;
+} satisfies Meta<typeof StepperInput>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -66,7 +66,7 @@ export const WithoutMessage: Story = {
 function BoundedExample() {
   const [value, setValue] = useState(1);
   return (
-    <Stepper
+    <StepperInput
       label="Number Stepper"
       max={5}
       message="Enter a value between 1–5"
@@ -91,7 +91,7 @@ export const AtMinAction: Story = {
       return <p className="text-sm text-secondary-foreground">Removed</p>;
     }
     return (
-      <Stepper
+      <StepperInput
         decrementAtMinIcon={<Trash aria-hidden />}
         decrementAtMinLabel="Remove item"
         label="Cart quantity"
