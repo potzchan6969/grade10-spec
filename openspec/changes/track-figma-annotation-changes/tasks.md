@@ -111,7 +111,7 @@ and cleanup plan.
 - [x] 4.6 Verify this group with the focused design-sync tests, `pnpm run test`,
   `pnpm run lint`, `pnpm run typecheck`, and `git diff --check`.
 
-## 5. Add the single interactive reconciliation skill (grade10)
+## 5. Add the single interactive reconciliation skill (grade10) (owner: @kinisworking)
 
 This group depends on group 4 being available in the standalone registered
 `grade10-spec` store. It does not depend on the `external/grade10-spec`
