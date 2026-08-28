@@ -1,17 +1,15 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
+import { PRODUCT_CARD_CART_COPY } from "./fixtures";
 import { ProductCardImage } from "./product-card-image";
 
 const IMAGE = new URL("./product-card.fixture.png", import.meta.url).href;
 
-/** The words the well renders, whichever product is in it. */
-const copy = { cart: "Add to cart", soldOut: "SOLD OUT", sale: "SALE" };
-
 const defaults = {
-  copy,
+  copy: PRODUCT_CARD_CART_COPY,
   imageSrc: IMAGE,
   imageAlt: "Ninja Spinner booster box",
-  onCartClick: fn(),
+  onCartQuantityChange: fn(),
 };
 
 const meta = {
@@ -39,20 +37,26 @@ export const Sale: Story = {
   decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const photo = canvasElement.querySelector("img");
     expect(canvas.getByText("SALE")).toBeInTheDocument();
+    expect(photo).not.toBeNull();
+    expect(getComputedStyle(photo as HTMLElement).opacity).toBe("1");
   },
 };
 
 export const SoldOut: Story = {
-  args: { discounted: true, soldOut: true },
+  args: { soldOut: true },
   decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const photo = canvasElement.querySelector("img");
     expect(canvas.getByText("SOLD OUT")).toBeInTheDocument();
     expect(canvas.queryByText("SALE")).not.toBeInTheDocument();
     expect(
       canvas.queryByRole("button", { name: "Add to cart" }),
     ).not.toBeInTheDocument();
+    expect(photo).not.toBeNull();
+    expect(getComputedStyle(photo as HTMLElement).opacity).toBe("0.5");
   },
 };
 
@@ -61,8 +65,8 @@ export const InCart: Story = {
   decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Add to cart" })).toBeVisible();
-    expect(canvas.getByText("1")).toBeInTheDocument();
+    expect(canvas.getByRole("button", { name: /1\./i })).toBeVisible();
+    expect(canvas.getByText("×1")).toBeInTheDocument();
   },
 };
 
@@ -74,9 +78,9 @@ export const NoImage: Story = {
   },
 };
 
-/** Keyboard focus reveals the cart control and activating it reports once. */
+/** Keyboard focus reveals the cart control and activating it reports quantity 1. */
 export const KeyboardRevealsCart: Story = {
-  args: { onCartClick: fn() },
+  args: { onCartQuantityChange: fn() },
   decorators: well,
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -87,6 +91,7 @@ export const KeyboardRevealsCart: Story = {
 
     await userEvent.keyboard("{Enter}");
 
-    expect(args.onCartClick).toHaveBeenCalledTimes(1);
+    expect(args.onCartQuantityChange).toHaveBeenCalledTimes(1);
+    expect(args.onCartQuantityChange).toHaveBeenCalledWith(1);
   },
 };

@@ -78,8 +78,18 @@ const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
 }));
 
 /** What every tile says the same way, whichever product it holds. */
+const PRODUCT_CARD_CART_COPY = {
+  cart: "Add to cart",
+  decreaseQuantity: "Decrease quantity",
+  increaseQuantity: "Increase quantity",
+  removeFromCart: "Remove from cart",
+  adjustQuantity: "Adjust cart quantity",
+  soldOut: "SOLD OUT",
+  sale: "SALE",
+} as const;
+
 const LISTING_COPY = {
-  card: { cart: "Add to cart", soldOut: "SOLD OUT", sale: "SALE" },
+  card: PRODUCT_CARD_CART_COPY,
 };
 
 const SELECTION = {
@@ -98,6 +108,7 @@ export {
   IMAGE,
   LISTING_COPY,
   PRODUCT_BADGES,
+  PRODUCT_CARD_CART_COPY,
   PRODUCTS,
   SELECTION,
   SORT_OPTIONS,

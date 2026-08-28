@@ -15,7 +15,7 @@ type ProductResultsPanelProps = {
   copy: ProductResultsPanelCopy;
   results: AsyncState<readonly ProductSummary[]>;
   onProductClick?: (productId: string) => void;
-  onProductAction?: (productId: string) => void;
+  onProductCartQuantityChange?: (productId: string, quantity: number) => void;
   /** When true, scrolling near the list end reports `onLoadMore`. */
   hasMore?: boolean;
   loadingMore?: boolean;
@@ -46,7 +46,7 @@ function ProductResultsPanel({
   copy,
   results,
   onProductClick,
-  onProductAction,
+  onProductCartQuantityChange,
   hasMore = false,
   loadingMore = false,
   onLoadMore,
@@ -222,7 +222,7 @@ function ProductResultsPanel({
         loadMoreSkeletonCount={loadMoreSkeletonCount}
         loading={isLoading}
         loadingMore={loadingMore}
-        onProductAction={onProductAction}
+        onProductCartQuantityChange={onProductCartQuantityChange}
         onProductClick={onProductClick}
         products={status === "ready" ? results.data : []}
         revealFromIndex={revealFromIndex}
