@@ -24,8 +24,9 @@ were updated or canceled from the Campaigns section without leaving the
 panel. **Acceptance signal:** an operator opens a campaign, creates it, edits
 its cover fields, publishes or cancels it from an editor that mirrors the
 listing authoring pattern, and on a listing’s editor picks one eligible
-campaign (or clears it) and one eligible inventory product — with the auction
-admin section labeled Campaigns.
+campaign (or clears it), one eligible inventory product with quantity, clicks
+**Save** to reserve stock, then creates the listing — with the auction admin
+section labeled Campaigns.
 
 ## What Changes
 
@@ -45,17 +46,21 @@ admin section labeled Campaigns.
   `created` only** — or clears the campaign so the listing stands alone. A
   `published` or `canceled` campaign is not offered and attaching one is
   refused.
-- **Listing editor inventory product picker.** The listing's catalogue
-  `productId` is chosen from Grade10 inventory products whose **`status` is
-  `created`** (not `draft`) and **`available > 0`**. Draft and out-of-stock
-  products are omitted from the picker and refused on save/create. Consumes
-  [`add-grade10-inventory`](../add-grade10-inventory/design.md) Contracts
-  (`AuctionEligibleProduct`, `listEligibleProducts`); fixtures stub until
-  inventory ships.
+- **Listing editor inventory product picker and quantity.** The listing's
+  catalogue **productId** and **quantity** (1–500; defaults to **1** when a
+  product is picked in the form) come from Grade10 inventory. Picker lists
+  **`status` `created`** products with **`available > 0`**, plus the listing's
+  current product when this listing already holds its last units. Explicit
+  **Save** synchronizes an **active** inventory hold; no auto-save on field
+  change. **`listings.create`** verifies the hold matches — it does not
+  reserve. Changing product after a prior Save prompts confirmation that the
+  old hold will release on Save. Consumes
+  [`add-grade10-inventory`](../add-grade10-inventory/design.md) holder APIs.
 - **Backend.** Extend the existing cover entity (`auctions` table / tRPC)
-  with the `created` status and tightened attach eligibility; complete the
-  admin client for update / cancel / get / create / setAuction. No parallel
-  campaign table — product rename only; persistence keeps the existing store.
+  with the `created` status and tightened attach eligibility; add listing
+  **quantity** column; wire reservation sync on Save, hold verification on
+  create, and hold release on cancel; complete the admin client for update /
+  cancel / get / create / setAuction.
 - **Change id.** This change is `add-admin-auction-campaigns` (renamed from
   `add-admin-auction-sales`) so the planning name matches operator language.
 - **Specs.** New durable capability `grade10-auction/admin-campaign` for
@@ -74,20 +79,20 @@ admin section labeled Campaigns.
 ### Modified Capabilities
 
 - `grade10-auction/admin-listing`: Listing editor exposes optional campaign
-  selection among eligible campaigns; inventory product picker limited to
-  **`status` `created`** with **available > 0**; scenarios for attach, clear,
-  refusal of published or canceled campaigns, Campaign field labeling, and
-  product eligibility.
+  selection; inventory product picker and **quantity**; explicit Save with
+  reservation sync; create verifies hold; product-change confirmation;
+  cancel releases hold; scenarios for attach, eligibility, save sync, and
+  refusals.
 
 ## Impact
 
 | Consumer | Change |
 | --- | --- |
-| `@grade10/auction-contracts` | `adminSaleStatusSchema` adds `created`; listing product eligibility refusals |
-| `@grade10/auction-admin-frontend` | Campaign editor, listing campaign + product pickers, fixture eligibility stub |
-| `apps/backend/grade10/auction` | `ck_auctions_status` + `created`; `OPEN_AUCTION_STATES`; productId validation via inventory binding |
-| `apps/admin/grade10` | Campaigns section (rename from Sales), listing editor pickers |
-| `@grade10/inventory-contracts` | **Consumed** — `AuctionEligibleProduct`, `listEligibleProducts` (not implemented here) |
+| `@grade10/auction-contracts` | `adminSaleStatusSchema` adds `created`; listing `quantity`; hold sync refusals |
+| `@grade10/auction-admin-frontend` | Campaign editor, listing Save-only editor, product-change dialog, quantity field |
+| `apps/backend/grade10/auction` | `ck_auctions_status` + `created`; listing `quantity`; reservation sync on Save; create hold verify; cancel release |
+| `apps/admin/grade10` | Campaigns section (rename from Sales), listing editor pickers + explicit Save |
+| `@grade10/inventory-contracts` | **Consumed** — holder APIs including `changeReservationProduct` |
 
 ## Non-goals
 
@@ -96,8 +101,9 @@ admin section labeled Campaigns.
   not).
 - Storefront redesign of public campaign covers beyond what admin edits
   already purge/cache today.
-- Implementing the inventory ledger — only consuming its eligibility read
-  model (see `add-grade10-inventory`).
+- Implementing the inventory ledger — consuming its holder RPCs (see
+  `add-grade10-inventory`).
+- Auto-save or save-on-blur on the listing editor catalogue fields.
 - Store checkout “sale”; inventory intake / vault mutations; campaign clocks
   or money; requiring a campaign to publish a listing; campaign hero media;
   product picker on the campaign cover itself.
@@ -106,4 +112,5 @@ admin section labeled Campaigns.
 
 - `openspec validate add-admin-auction-campaigns --strict`
 - Scenarios cover Campaigns rename, campaign lifecycle with `created`, listing
-  campaign attach rules, and inventory product eligibility refusals.
+  campaign attach rules, explicit Save reservation sync, create hold verify,
+  product-change confirmation, and inventory eligibility refusals.

@@ -35,13 +35,14 @@ One optional control selects a campaign or “on its own” (no campaign). Optio
 are eligible campaigns only (`draft` or `created`). The control is labeled
 **Campaign**.
 
-### Admin listing editor — inventory product field
+### Admin listing editor — inventory product, quantity, and Save
 
-Same listing editor. Product selection is a picker (not free text) fed by
-inventory eligibility: products whose **`status` is `created`** and
-**`available > 0`** (`AuctionEligibleProduct` from inventory Contracts).
-Draft-status and out-of-stock products are omitted. Campaign editors have no
-product field.
+Same listing editor. Product selection is a picker fed by inventory
+eligibility plus the listing's current product when held. **Quantity**
+defaults to **1** when a product is picked. Catalogue fields persist only on
+explicit **Save** — no auto-save. Changing product after a prior Save with
+an active hold opens a confirmation dialog. Save errors surface when
+inventory refuses product change or qty increase.
 
 ## Components
 
@@ -51,6 +52,10 @@ editor already uses):
 - `Badge`, `Button`, `Text`, `TextInput`, `HStack`, `VStack`
 - `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`
 - `IconButton`, `Tooltip`, `TooltipContent`, `TooltipProvider`, `TooltipTrigger`
+
+**Product-change confirmation:** compose with existing `Card` / `Button` /
+`Text` — native dialog or modal pattern the listing editor already uses for
+destructive confirms. Warns that Save will release the prior product's hold.
 
 **Campaign / product pickers:** no `Select` / `Combobox` export exists in the
 design system or `@grade10/ui` today. Compose a native `<select>` (or
@@ -100,11 +105,23 @@ Tied to spec scenarios in admin-campaign and admin-listing (delta).
 - **Optional** — `Listing without a campaign still creates`.
 - **Label** — `Listing editor campaign field is labeled Campaign`.
 
-### Listing editor inventory product picker
+### Listing editor inventory product, quantity, and Save
 
+- **Explicit Save only** — `Picking a product does not reserve stock until
+  Save`; `Changing quantity does not adjust the hold until Save`.
+- **Quantity default** — `Product selection defaults quantity to one in the
+  form`.
 - **Omit draft** — `Product picker omits draft inventory products`.
-- **Omit out of stock** — `Product picker omits out-of-stock inventory
-  products`.
+- **Omit OOS** — `Product picker omits out-of-stock inventory products`.
+- **Current product when held** — `Current product remains selectable when
+  this listing holds the last units`.
 - **Refuse draft on save** — `Draft product id is refused on listing save`.
-- **Refuse OOS on create** — `Out-of-stock product id is refused on listing
-  create`.
+- **Refuse OOS on save** — `Out-of-stock product id is refused on listing
+  save` (no prior hold).
+- **Product-change confirm** — `Product change prompts when a hold already
+  exists`; `First product selection does not prompt`; `Canceling the
+  product-change dialog keeps the prior product`.
+- **Save errors** — `Save shows error when new product has insufficient
+  stock`.
+- **Create verify** — create button enabled only when hold matches (backend
+  enforces; UI may surface hold-mismatch refusal from create).
