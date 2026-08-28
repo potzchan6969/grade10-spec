@@ -189,7 +189,7 @@ being available in the registered store.
 - [x] 7.3 Run `pnpm run agent:check-parity`, `pnpm run lint`, `pnpm run
   typecheck`, `pnpm run test`, and `git diff --check`; confirm the canonical
   skill remains under `.claude/skills/` and parity paths remain symlinks.
-- [ ] 7.4 Perform the final cross-repository acceptance run with categorized
+- [x] 7.4 Perform the final cross-repository acceptance run with categorized
   multiple annotations, partial acceptance, related OpenSpec metadata, Git diff,
   remaining-drift verification, declined commit, and confirmed local commit.
   Confirm no tracked current snapshot, annotation CI step, REST live fetch,
