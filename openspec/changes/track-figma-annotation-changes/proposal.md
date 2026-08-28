@@ -2,55 +2,62 @@
 
 ## Why
 
-Designers can change a component annotation after its implementation work has
-started, but the current design-sync rail checks component structure and drawn
-values rather than the annotation text that may describe product behaviour.
-Developers therefore have no dependable way to notice, trace, or triage those
-changes; success means every tracked annotation change is surfaced by the next
-daily scan and the median time from edit to a relevant developer report stays
-below one business day.
+Designers can change annotation text or categories after implementation starts,
+but the existing REST-backed CI monitor cannot retrieve the category labels
+shown in Figma and leaves acceptance as a separate manual editing exercise.
+Developers need one reviewable workflow that fetches complete live evidence,
+shows which registered engineering work is affected, and applies only the
+changes they explicitly accept. Success means every selected annotation change
+is traceable from Figma evidence to a reviewed baseline or OpenSpec decision,
+while no unselected, ambiguous, or blocked finding is silently accepted.
 
 ## What Changes
 
-- Add a versioned baseline and deterministic scanner for annotations attached
-  to tracked Figma components and nodes.
-- Preserve and compare every annotation occurrence on a node independently,
-  including its text, category, pinned properties, and OpenSpec associations,
-  without treating array order as identity.
-- Produce a stable machine-readable diff that distinguishes added, changed,
-  removed, untracked, ambiguous, and blocked evidence.
-- Add a Grade10 project skill that interprets the diff against active OpenSpec
-  changes and groups findings by the current user's task ownership, proposal
-  authorship, unassigned work, and work owned by others.
-- Publish the read-only reporting skill through the repository's existing
-  agent-platform parity so different AI models and harnesses can invoke the same
-  workflow on demand or through their own scheduling facilities.
-- Document how a reviewed OpenSpec change accepts an annotation baseline update
-  and how designers and developers trace a finding back to Figma and OpenSpec.
+- Replace the annotation-specific CI and read-only monitoring path with one
+  interactive `reconcile-figma-annotations` project skill.
+- Fetch annotations only from registered engineering surfaces through a Figma
+  Plugin API or equivalent MCP capability, including one category catalog per
+  file so category IDs can be reported as labels such as `Content` and
+  `Interaction` without one request per annotation.
+- Compare a temporary normalized live observation with the reviewed
+  schema-version-2 annotation baseline. Preserve annotation multiplicity and
+  match occurrences independently of Figma array order.
+- Produce stable finding IDs, exact Figma and OpenSpec evidence, current
+  ownership grouping, category metadata, and recommended follow-up actions.
+- Let the developer select findings, supply or confirm exact OpenSpec
+  associations or an explicit `noImpactReason`, preview an atomic baseline and
+  spec patch, and verify the remaining drift.
+- After a separate explicit confirmation, let the skill commit only the
+  relevant standalone `grade10-spec` changes. Pushing remains a developer
+  action.
+- Remove superseded annotation CI steps, ephemeral report artifacts, REST live
+  fetching, and the old `monitor-figma-annotations` workflow after the new path
+  is verified. Preserve the existing component and audit design-sync checks.
 
 ## Non-Goals
 
-- Inferring responsibility from a Figma editor, Git commit author, component
-  author, or fuzzy text similarity.
-- Automatically accepting annotation changes into the baseline.
-- Automatically creating or editing OpenSpec changes, task assignments, GitHub
-  issues, pull requests, Slack messages, or other external records.
-- Replacing the existing component-structure, rendered-value, token, or Code
-  Connect checks.
-- Treating annotation prose as an executable product requirement without an
-  explicit OpenSpec decision.
-- Defining, configuring, or standardizing a Codex-, Claude-, Cursor-, or other
-  harness-specific scheduler.
-- Building a product-facing notification UI or a new centrally hosted
-  scheduler.
+- Scanning exploratory Figma areas outside registered engineering surfaces.
+- Modifying Figma or treating annotation prose as an automatically approved
+  product requirement.
+- Persisting an `annotation-current.json` snapshot, CI artifact, or other
+  generated current-state file in either repository.
+- Automatically accepting findings, inferring occurrence identity, ownership,
+  or OpenSpec associations from similar prose, or resolving ambiguous
+  duplicates.
+- Automatically pushing, opening a pull request, writing a protected branch,
+  or creating external notifications.
+- Defining a scheduler or workflow for Codex, Claude, Gemini, Cursor, or any
+  other harness.
+- Replacing the component-structure, rendered-value, token, audit, or Code
+  Connect checks in design sync.
 
 ## Capabilities
 
 ### New Capabilities
 
-- `design-sync/annotation-monitoring`: Versioning, detecting, tracing, and
-  reporting changes to tracked Figma annotations without silently accepting or
-  misattributing them.
+- `design-sync/annotation-monitoring`: Category-aware observation, deterministic
+  drift detection, exact engineering traceability, and selective reconciliation
+  of Figma annotation occurrences.
 
 ### Modified Capabilities
 
@@ -58,13 +65,14 @@ None.
 
 ## Impact
 
-- `grade10-spec`: design-sync scripts, fixtures, package commands, governance
-  documentation, the nightly design-sync workflow, and the versioned annotation
-  baseline.
-- `grade10`: a project-local workflow skill, its `/dev-help` route, and parity
-  checks across supported agent platforms.
-- Supported agent harnesses: one canonical read-only skill distributed through
-  the repository's existing parity mechanism; each harness owns any recurrence
-  it configures around that skill.
-- Existing Figma read credentials are reused; no new production dependency,
-  deployment, or public API is introduced.
+- `grade10-spec`: annotation baseline, deterministic diff and acceptance
+  commands, fixtures and tests, governance documentation, and removal of the
+  annotation-specific design-sync CI path.
+- `grade10`: one canonical interactive skill, deterministic reporting and
+  ownership helpers, `/dev-help`, parity checks, and removal of the deprecated
+  read-only skill and wrappers.
+- Agent harnesses: the workflow requires read access to a Figma Plugin API or
+  equivalent MCP tool, but the normalized snapshot, diff, acceptance, and Git
+  behavior remain harness-neutral.
+- No new production dependency, deployment, credential, hosted service, or
+  public API is introduced.

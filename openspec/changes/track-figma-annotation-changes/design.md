@@ -1,302 +1,333 @@
 ## Context
 
-See [proposal.md](proposal.md) for the problem. The existing design-sync job in
-`grade10-spec` already reads the Grade10 Figma file every night with
-`FIGMA_TOKEN`, resolves file keys from the design-system configuration, and
-fails rather than claiming a clean result when Figma is unavailable. Its
-component and audit rails do not persist or compare Figma annotation text.
+See [proposal.md](proposal.md) for the problem and the
+[annotation-monitoring spec](specs/design-sync/annotation-monitoring/spec.md)
+for required behavior.
 
-OpenSpec planning lives in the separately registered `grade10-spec` clone,
-while an engineer starts workflows from the `grade10` repository. That
-repository's `pnpm plan` command already owns current-user identity and task
-claims. The implementation must preserve that boundary and satisfy the
-[annotation-monitoring spec](specs/design-sync/annotation-monitoring/spec.md).
+The existing implementation has useful deterministic occurrence matching and
+OpenSpec ownership logic, but its live scanner reads the Figma REST response.
+That response exposes annotation prose without the category IDs and category
+catalog needed to report labels such as `Content` and `Interaction`. The
+annotation step also runs in the shared design-sync workflow, produces an
+ephemeral `annotation-monitor.json`, and fails CI without providing a guided
+acceptance path.
+
+The baseline is already schema version 2 and supports several annotation
+occurrences per node. OpenSpec planning lives in the separately registered
+`grade10-spec` clone, while developers enter workflow skills from `grade10`.
+The new design keeps those repository boundaries and replaces only the
+annotation-specific automation.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Make annotation drift a deterministic, reviewable diff before AI interprets
-  it.
-- Reuse the current Figma credential, design-source registrations, OpenSpec
-  store registry, and planning identity rather than introducing parallel
-  configuration.
-- Give an engineer the same short personal report through any supported agent
-  harness while preserving every unassigned, ambiguous, and other-owner finding
-  for team triage.
-- Keep baseline acceptance and any external notification as deliberate human
-  actions.
+- Give developers one workflow from complete live observation through report,
+  selective acceptance, verification, and optional local commit.
+- Retrieve categories efficiently and make the current label visible beside
+  every annotation finding.
+- Keep matching, stable finding IDs, baseline mutation, and verification
+  deterministic across AI models and harnesses.
+- Preserve exact Figma and OpenSpec evidence, current ownership grouping,
+  occurrence multiplicity, and reviewed baseline metadata.
+- Remove superseded annotation CI and read-only monitor paths after the new
+  workflow proves equivalent or stronger behavior.
 
 **Non-Goals:**
 
-- Running an LLM to decide whether two annotation snapshots differ.
-- Defining a scheduler adapter or automation prompt for each AI harness; the
-  nightly design-sync check remains the shared daily backstop.
-- Adding a database, hosted service, webhook receiver, or Figma write path.
-- Guaranteeing the identity of the person who edited an annotation; the Figma
-  document evidence does not provide a dependable ownership signal for this
-  workflow.
+- Adding a CI writer, bot credential, protected-branch write, scheduler, hosted
+  current snapshot, or external notification.
+- Reading annotations outside registered engineering surfaces.
+- Making product decisions, ownership assignments, or occurrence matches from
+  prose similarity.
+- Modifying Figma, pushing Git commits, advancing the application repository's
+  submodule, or opening a pull request.
 
 ## Decisions
 
-### 1. Detection and interpretation live on opposite sides of the repo boundary
+### 1. One interactive Grade10 skill owns the user journey
 
-`grade10-spec` will own a read-only annotation scanner, its fixtures, the
-reviewed baseline, and the design-governance documentation. It already owns the
-Figma source and OpenSpec store, so a baseline there changes in the same review
-as the requirement decision that accepts it.
+`grade10` will expose `reconcile-figma-annotations` as the only annotation
+workflow on `/dev-help`. It will guide observation, deterministic diff,
+ownership-aware reporting, finding selection, decision confirmation, baseline
+and related OpenSpec edits, diff review, verification, and optional commit.
 
-`grade10` will own a `monitor-figma-annotations` workflow skill and its entry on
-the `/dev-help` map. The skill will resolve the store path through `openspec
-store list --json`, invoke the scanner in that clone, and interpret its JSON
-against active OpenSpec artifacts. It will never hardcode a developer's clone
-path or a Figma file path.
+The skill will resolve the standalone planning store through OpenSpec on every
+run. It will never substitute `external/grade10-spec` or hardcode a developer's
+clone path. Its canonical files will live under `.claude/skills/`; the existing
+symlinks will provide platform parity.
 
-Alternatives considered:
+The workflow has three deliberate confirmation boundaries:
 
-- Put everything in `grade10`: rejected because it would duplicate design
-  evidence outside its source-of-truth repository and the registered planning
-  store.
-- Put the skill in `grade10-spec`: rejected because developers enter the
-  planning workflow from `grade10`, where `/dev-help`, `pnpm plan`, and current
-  task ownership already live.
-- Let the skill call Figma directly: rejected because AI-generated comparisons
-  would be harder to test, reproduce, and run in CI.
-
-### 2. A versioned occurrence manifest is both scan scope and accepted baseline
-
-`scripts/design-sync/annotation-baseline.json` schema version 2 will group
-entries by Figma file plus colon-form node ID. A node entry holds an
-`annotations` array rather than one text value. Each accepted occurrence has a
-baseline-local `annotationKey`, normalized text, category ID, a canonical
-sorted pinned-property set, and its own optional exact associations to a
-capability, active change, and task group. The key is unique within the node and
-stable when text or array order changes; it is not derived from an array index
-or mutable text.
-
-Schema version 1 entries migrate one-to-one into node entries containing one
-occurrence. The migration assigns a deterministic initial key and preserves
-the entry's source root, associations, and no-impact reason. A malformed or
-partly migrated baseline blocks the scan instead of mixing schemas.
-
-Source roots are discovered from Code Connect URLs and audit tables; the
-manifest may register an additional root for annotation-only design nodes that
-are not represented by either source.
-
-The scanner will inspect each root and its descendants. A separate inventory
-mode will enumerate annotations in the configured Figma file for the initial
-backfill, but the daily scan will stay inside registered roots so unrelated
-design exploration does not flood engineering reports. An annotation found
-under a registered root with no accepted entry remains an `added` and
-`untracked` finding.
-
-Text comparison will normalize carriage-return line endings to newline and
-nothing semantic. Whitespace, punctuation, links, labels, and markdown remain
-part of the diff because they can change the instruction.
-
-The scanner will canonicalize each current annotation as normalized text (empty
-when the annotation is property-only), category ID or null, and a sorted set of
-pinned properties. Matching is local to one node and follows four deterministic
-steps:
-
-1. Cancel exact canonical matches as a multiset, independent of Figma array
-   order.
-2. Within each category plus pinned-property signature, pair one remaining old
-   and one remaining current occurrence as changed only when that pair is
-   unique.
-3. Emit every still-unmatched baseline occurrence as removed and every
-   still-unmatched current occurrence as added.
-4. Mark a signature ambiguous when more than one old and current occurrence
-   remain, and do not transfer an occurrence-specific association by guess.
-
-Identical duplicate annotations retain multiplicity. When one of two identical
-occurrences disappears, the scanner reports one removal; if those baseline
-duplicates carry different associations, ownership remains ambiguous because
-Figma supplies no occurrence identity that can prove which one was removed.
+1. The initial report is read-only and asks which stable finding IDs to handle.
+2. A decision preview asks the developer to confirm the selected occurrences,
+   exact associations or `noImpactReason`, and any related OpenSpec edits before
+   files change.
+3. After the resulting diff and verification report, a separate prompt asks
+   whether to create a local `grade10-spec` commit.
 
 Alternatives considered:
 
-- Scan the whole file every day: rejected because the design file contains
-  exploratory and documentation areas outside any shipped surface.
-- Store only a hash: rejected because reviewers and reports need the old text
-  without recovering an earlier artifact.
-- Store the last scan as an unversioned CI artifact: rejected because an
-  expired or replaced artifact would silently redefine the comparison point.
-- Derive scope only from Code Connect: rejected because some audited or
-  annotation-only nodes are not component mappings.
-- Use Figma array position as identity: rejected because reordering unchanged
-  annotations would create false changed findings and move associations.
-- Use a text hash as identity: rejected because editing the text would turn one
-  change into an unrelated removal and addition.
-- Pair duplicates by edit distance or prose similarity: rejected because a
-  deterministic-looking guess could transfer the wrong OpenSpec ownership.
+- Keep separate monitor and reconcile skills: rejected because developers
+  would have to discover which second command continues a report, and the
+  duplicated observation paths could disagree.
+- Put the skill in `grade10-spec`: rejected because Grade10's project workflow,
+  current-user identity, `/dev-help`, and agent parity live in `grade10`.
+- Keep a CI monitor as a daily backstop: rejected because the team chose an
+  on-demand harness-neutral flow and CI cannot retrieve the approved Plugin API
+  evidence without adding another execution and credential model.
 
-### 3. The scanner has a stable JSON contract and meaningful exit states
+### 2. Figma Plugin API observation is a portable boundary, not business logic
 
-`scripts/design-sync/annotation-monitor.mjs` will share existing Figma file-key
-and environment-loading utilities rather than add a client dependency. Its
-`--json` output will contain a schema version, overall status, scanned sources,
-blockers, and findings. Every finding will carry a stable ID, file and node
-link, node name, annotation key when matched, canonical annotation structure,
-change kind, old and current text where applicable, ambiguity details,
-registered source, and baseline associations. Finding identity includes the
-annotation occurrence so two changes of the same kind on one node never
-collide. Inventory emits one record per occurrence rather than one record per
-annotated node. An unmatched current occurrence uses its canonical fingerprint
-plus a one-based multiplicity ordinal after canonical sorting, never its raw
-Figma array position, so repeated scans of the same multiset keep stable IDs.
+The skill will require a harness capability that can execute a read-only Figma
+Plugin API or equivalent MCP operation. A checked-in skill reference will
+describe one bounded observation program. For each configured Figma file it
+will:
 
-Exit `0` means every registered surface was read and no drift was found. Exit
-`1` means the scan completed and found annotation drift. Exit `2` means some
-evidence was blocked or malformed. The JSON remains available for exits `1`
-and `2`, so the workflow skill can report the evidence instead of reducing it
-to a command failure. Human output and the GitHub step summary will be rendered
-from the same result object.
+1. load the registered roots and descendants needed for engineering scope;
+2. read every annotation occurrence from those nodes;
+3. read the file's annotation category catalog once;
+4. resolve every category ID through an in-memory catalog map; and
+5. return a normalized JSON observation to the invoking session.
 
-Tests will use Node's built-in test runner and checked-in Figma response
-fixtures. The root test command will include the design-sync tests, avoiding a
-new production or development dependency.
+The observation contract will contain schema version, file identity, observed
+roots, exact node and ancestor evidence, category catalog metadata, canonical
+occurrences, blockers, and a digest over the normalized payload. A null
+category remains `Uncategorized`. A non-null ID missing from the catalog is a
+blocker. The skill will store the payload only in a newly created operating
+system temporary directory for the duration of the run and remove it when the
+session completes where the harness permits.
+
+No category call occurs per annotation. For a file with 127 occurrences, the
+cost is one catalog read plus the bounded node observation, followed by local
+lookups.
 
 Alternatives considered:
 
-- Exit successfully when drift exists: rejected because the shared nightly
-  rail would then require someone to open a passing run to notice the change.
-- Use one failure exit for drift and inaccessible evidence: rejected because a
-  developer must know whether to review a real edit or repair the scanner.
-- Print human prose only: rejected because the skill would have to scrape an
-  unstable presentation format.
+- Continue using the REST response: rejected because current evidence showed
+  annotation prose but no category IDs or catalog.
+- Request category metadata once for every occurrence: rejected because the
+  catalog is file-scoped and repeated calls add latency and failure points
+  without adding evidence.
+- Persist `annotation-current.json`: rejected because live state is useful only
+  for the current review, creates merge churn, and risks being mistaken for
+  accepted engineering state.
+- Let each harness invent its own observation output: rejected because the
+  deterministic commands and tests need one validated contract.
 
-### 4. Baseline acceptance is a reviewed patch, never a scanner side effect
+### 3. Deterministic commands consume a snapshot and own baseline semantics
 
-The scanner will not expose an in-place update flag. Its inventory and JSON
-forms provide candidate values, but an engineer must patch the baseline and
-record either an exact OpenSpec association or an explicit no-impact reason.
-The resulting Git diff is the acceptance record and can be reviewed beside the
-relevant requirement, design, or implementation change.
+`grade10-spec` will refactor the existing annotation monitor into a small
+deterministic command surface that consumes the normalized temporary
+observation instead of fetching Figma:
 
-A baseline annotation occurrence may point to a durable capability without an
-active task. Active change and task-group associations are optional and should
-be removed or updated when they stop being true. Stale references are findings,
-not reasons to guess a successor.
+- `pnpm figma:annotations:diff --snapshot <path> --json` validates the snapshot
+  and baseline, then emits blockers and stable findings without writes.
+- `pnpm figma:annotations:accept --snapshot <path> --ids <id,...>
+  --decisions <path>` validates a complete selected decision set and applies an
+  atomic baseline patch.
 
-Alternatives considered:
+Names may be adjusted to the repository's final command style, but snapshot
+input, stable JSON output, selective IDs, and no implicit live fetch are fixed
+interfaces. Existing canonicalization and multiset matching will be extracted
+from the REST-coupled CLI rather than rewritten. Existing fixtures will be
+migrated to normalized snapshot fixtures and expanded with category catalogs,
+blocked evidence, and acceptance cases.
 
-- Automatically snapshot after every successful scan: rejected because the
-  first scan after an edit would erase the evidence it was meant to report.
-- Let the AI skill rewrite the baseline: rejected because report generation
-  must stay read-only and safe to schedule unattended.
+The baseline remains schema version 2. `categoryId` is authoritative accepted
+identity; labels, colors, and preset flags are resolved current presentation
+metadata. This avoids rewriting every accepted occurrence when a category's
+display label or color is edited while still showing developers the current
+Figma category.
 
-### 5. Personal responsibility comes from planning claims, with explicit precedence
-
-The skill will call `pnpm plan mine` to obtain the same normalized current
-handle and task claims as the existing planning workflow, then read the board
-and exact active artifacts from the registered store. It will not duplicate
-the `OPENSPEC_HANDLE` / clone config / GitHub-login precedence in skill prose.
-
-An annotation is eligible for a task owner only when the baseline or active
-artifact gives an exact change and task-group association. The report applies
-the spec's precedence: current user's claimed group, another user's claimed
-group, current user's proposal authorship with no applicable claimed group,
-then unassigned or untracked. Multiple exact candidates remain ambiguous.
-
-The AI layer may recommend how to handle the prose, but each recommendation
-must cite the deterministic finding and exact mapping evidence. Similar words
-can be shown as a search lead only if clearly labelled non-authoritative; they
-cannot affect ownership or hide an untracked finding.
+Exit `0` means complete evidence with no drift, exit `1` means complete
+evidence with drift, and exit `2` means blocked or malformed evidence. All
+states retain machine-readable output.
 
 Alternatives considered:
 
-- Use the Figma editor or annotation author: rejected because the fetched node
-  is design evidence, not a reliable assignment source.
-- Use Git blame or component ownership: rejected because code history does not
-  express who currently handles the OpenSpec work.
-- Treat proposal authorship as assignment: rejected because proposals and task
-  claims intentionally have separate owners.
-- Add a second user mapping file: rejected because it would drift from
-  `pnpm plan mine` and create conflicting identities.
+- Put comparison and acceptance inside skill prose: rejected because behavior
+  would vary by model and would be difficult to test atomically.
+- Generate keys for every observed addition: rejected because an unreviewed
+  observation must not acquire accepted identity.
+- Store category labels in each accepted occurrence: rejected because category
+  IDs are the stable Figma reference and duplicated display metadata would
+  create unrelated baseline churn.
+- Use array order, text hashes, or edit distance as identity: rejected because
+  reordering and edits would transfer keys or associations without evidence.
 
-### 6. Shared CI detection and harness-neutral skill reporting serve different audiences
+### 4. Acceptance is selected, evidence-pinned, and atomic
 
-The nightly `design-sync` workflow will run the scanner after the existing
-Figma checks, append its human summary to the GitHub job summary, and fail on
-drift or blocked evidence. This is the team-visible backstop.
+The diff result will bind every stable finding ID to the observation digest and
+accepted baseline state. Before acceptance, the skill will collect a decision
+for each selected ID:
 
-The committed Grade10 skill will be the portable personal-reporting interface.
-It will live in the canonical project skill location and flow to Codex, Claude,
-Cursor, and other supported integrations through the repository's existing
-agent-platform parity. Its contract defines how to invoke the scanner and
-render the result, but it does not define a recurrence. A developer may run it
-on demand or schedule it with facilities supplied by their chosen harness.
+- retain or set an exact capability, change, or task-group association; or
+- record an explicit `noImpactReason`.
 
-Alternatives considered:
+The skill may draft a related OpenSpec patch, but the developer must confirm
+the requirement text and association. Similar prose may be shown as a search
+lead only and cannot populate a decision.
 
-- Create GitHub issues or messages automatically: deferred because those are
-  external writes, require channel-specific permissions and deduplication, and
-  are unnecessary to prove the detection and ownership model.
-- Define a Codex-specific automation: rejected because the team uses different
-  models and harnesses, and a project workflow for one would not be portable.
-- Build scheduler adapters for every harness: rejected because their scheduling
-  APIs, storage, permissions, and lifecycle differ; that work does not improve
-  the shared detection or report contract.
-- Rely only on GitHub Actions: rejected because a failed shared check does not
-  tell each developer which findings are likely theirs.
+The acceptance command will validate the entire selected set before writing.
+It will reject stale digests, unknown IDs, missing decisions, ambiguous
+duplicates, and overlapping or malformed operations. A unique text edit keeps
+its accepted key. A confirmed addition gets a new reviewed key at apply time.
+A selected removal deletes only its confirmed occurrence. Replaced nodes and
+orphans require an explicit old-to-new decision rather than inference.
 
-### 7. This change has no product UI artifact
-
-The output is terminal text, a GitHub summary, and an agent-session reply. There
-is no customer or admin screen, no Figma source for the reporting surface, and
-no responsive or accessibility behaviour to specify in `ui.md`.
+Baseline changes are built in memory, validated as a complete schema-version-2
+document, written to a sibling temporary file, and atomically renamed. When a
+related OpenSpec edit is needed, the skill will prepare and validate all file
+patches before applying any of them; a failed validation leaves every target
+unchanged. The skill will refuse to overwrite unrelated changes in a target
+file.
 
 Alternatives considered:
 
-- Add a dashboard: rejected as a new hosted surface and operating burden before
-  the team has evidence that the report needs persistent browsing.
+- Update the baseline during observation: rejected because seeing a change is
+  not accepting its engineering meaning.
+- Accept every finding in one command: rejected because developers need partial
+  progress and unselected drift must remain visible.
+- Auto-pair duplicate additions and removals: rejected because Figma provides
+  no occurrence identity that proves the relationship.
+- Update the baseline first and ask for metadata later: rejected because it can
+  leave accepted state without traceability.
+
+### 5. Exact OpenSpec evidence and ownership remain reporting inputs
+
+The Grade10 reporting helper will retain the existing exact-association and
+ownership precedence logic. It will enrich deterministic findings with active
+artifacts from the registered store and current identity from `pnpm plan mine`.
+Reviewed baseline associations, exact node or registered-ancestor references,
+and exact component registrations are authoritative. Similar prose, Figma
+editors, and Git authors are not.
+
+The report will show all findings and use four groups in order: `My assigned
+work`, `Owned by others`, `Authored by me`, and `Unassigned or untracked`.
+Category ID and current label will appear beside every finding. Ambiguous exact
+matches will name every candidate and remain unassigned.
+
+Alternatives considered:
+
+- Infer the current developer from code ownership or Git blame: rejected
+  because those sources do not represent current OpenSpec task claims.
+- Treat proposal authorship as assignment: rejected because an explicitly
+  claimed task group has stronger evidence.
+- Hide other-owner findings: rejected because shared design changes may still
+  reveal cross-team drift that must remain inspectable.
+
+### 6. Verification reuses the same observation and commit is a separate action
+
+After applying selected decisions, the skill will show `git diff` from the
+standalone `grade10-spec` clone and rerun the deterministic diff against the
+same temporary observation digest. Accepted findings must disappear; rejected
+and unselected findings must remain. The skill will report blockers and
+remaining drift before offering a commit.
+
+On explicit commit confirmation, the skill will stage an allowlist containing
+only the baseline and exact related OpenSpec files shown in the decision
+preview. It will inspect the staged diff, use the repository's commit-message
+convention, and create one local commit. Existing unrelated or overlapping
+working-tree changes block this step. It will never push, open a pull request,
+advance `external/grade10-spec`, or modify Figma.
+
+Alternatives considered:
+
+- Fetch Figma again for verification: rejected because the design may change
+  between acceptance and verification; the pinned observation is the reviewed
+  evidence for this transaction.
+- Commit immediately after writing: rejected because the developer must see
+  the actual diff and remaining drift first.
+- Reuse the application repository's `/commit` blindly: rejected because the
+  changes live in the separately registered store and need an explicit path
+  allowlist there.
+
+### 7. Deprecated paths are removed only after replacement verification
+
+Cleanup will be the final implementation phase. In `grade10-spec`, remove only
+the annotation scanner steps and annotation report handling from
+`design-sync.yml`; preserve all existing workflow triggers and non-annotation
+checks. Remove the REST fetch path and obsolete command names after their
+matching, normalization, and fixture coverage has moved to the snapshot-based
+commands. Update governance documentation to describe the interactive flow.
+
+In `grade10`, remove `monitor-figma-annotations`, its agent metadata, old helper
+and wrapper names, and its `/dev-help` entry only after the new skill and tests
+pass. Migrate the exact-association and ownership implementation and tests into
+the new reporting path. Restore parity from `.claude/skills/` and prove no real
+copies replaced the symlinks.
+
+Alternatives considered:
+
+- Delete old code before building the replacement: rejected because useful
+  matching, ownership, fixtures, and failure semantics would lose their
+  regression coverage.
+- Leave both workflows indefinitely: rejected because two supported paths
+  would drift and make it unclear which one may write.
+- Remove the whole design-sync workflow: rejected because its component,
+  token, rendered-value, audit, and Code Connect checks remain valuable and are
+  outside this change.
+
+### 8. This change has no product UI artifact
+
+The output is an agent-session report, terminal JSON, Git diff, and local
+commit. There is no customer or admin screen and no Figma-authored reporting
+surface, so this change does not need `ui.md`.
+
+Alternatives considered:
+
+- Add a dashboard: rejected because it would add a hosted product and storage
+  model before the team has evidence that persistent browsing is needed.
 
 ## Risks / Trade-offs
 
-- [Tracked roots miss an annotation elsewhere in the file] -> Inventory the
-  whole configured file during backfill, report source coverage, and make
-  explicit roots reviewable in the baseline.
-- [Large initial inventory creates noisy ownership gaps] -> Land an explicit
-  reviewed baseline before enforcing the nightly step and leave uncertain
-  entries untracked rather than guessing.
-- [A Figma node is replaced and receives a new ID] -> Report the old node as
-  orphaned and the new annotation as untracked; require one reviewed patch to
-  reconnect them.
-- [Several same-structure annotations change together] -> Report unmatched
-  removals and additions with ambiguity evidence rather than transferring the
-  wrong annotation key or owner.
-- [Figma reorders annotations] -> Compare canonical occurrences as a multiset
-  and never use array position as identity.
-- [OpenSpec task groups are renamed, archived, or reassigned] -> Resolve active
-  artifacts on every run and surface stale associations as ambiguous or
-  unassigned.
-- [An individual harness does not schedule or invoke the skill] -> Keep the
-  independent nightly GitHub check as the shared daily detection rail.
-- [Annotation prose is mistaken for an approved requirement] -> Label the AI
-  classification as a recommendation and require OpenSpec plus baseline review
-  before acceptance.
-- [Scanner exit `1` complicates AI invocation] -> Require the skill to capture
-  stdout for all documented exit states and branch on the JSON status.
+- [A harness cannot execute the Figma Plugin API] -> Block before writing and
+  explain the required capability; do not fall back to incomplete REST evidence.
+- [Registered roots miss engineering annotations] -> Keep roots explicit and
+  reviewable; do not widen a normal run to the whole exploratory file.
+- [A category ID cannot be resolved] -> Treat the observation as incomplete and
+  make no repository write.
+- [Figma changes during a review] -> Pin report, acceptance, and verification
+  to one observation digest; require a new run for newer evidence.
+- [Several same-structure annotations change together] -> Report removals and
+  additions as ambiguous and require explicit occurrence review.
+- [A node is replaced] -> Keep the old entry orphaned and the new occurrence
+  added until the developer confirms the replacement.
+- [The standalone store contains unrelated edits] -> Allow read-only reporting,
+  but block writes or commits that overlap target files and stage only an
+  explicit allowlist.
+- [Removing CI reduces passive visibility] -> Make the project skill the sole,
+  documented workflow and keep reports concise enough to run during normal
+  implementation and design review.
+- [Category labels change while IDs remain stable] -> Always display labels
+  from the current file catalog while keeping category ID as accepted identity.
 
 ## Migration Plan
 
-1. Add fixture-driven scanner tests and migrate the single-annotation baseline
-   schema to occurrence arrays without enabling CI enforcement.
-2. Run whole-file inventory against the configured Figma file, review every
-   annotation occurrence, tracked root, and association, and commit a clean
-   schema-version-2 baseline.
-3. Enable the annotation step in the nightly design-sync workflow and confirm a
-   controlled fixture or temporary annotation difference produces the expected
-   GitHub summary and exit state.
-4. Land the Grade10 skill and `/dev-help` entry after the scanner contract is
-   available in the planning store, then verify clean, drift, blocked,
-   unassigned, current-owner, and other-owner reports.
-5. Restore agent-platform parity, verify the same skill contract is visible to
-   every supported harness path, and document only the on-demand invocation and
-   report contract; harness-specific scheduling remains outside the project.
+1. In `grade10-spec`, extract the existing schema-version-2 normalization,
+   multiset matching, blockers, and stable findings into snapshot-driven diff
+   code. Add category-aware normalized snapshot fixtures and retain all current
+   occurrence regression coverage.
+2. Add the selective acceptance command and tests for stable keys, additions,
+   partial acceptance, ambiguity, stale evidence, metadata retention, atomic
+   writes, removals, replacements, and orphans.
+3. In `grade10`, add the canonical `reconcile-figma-annotations` skill,
+   read-only Plugin API observation reference, ownership-aware report, guided
+   decision flow, diff and verification, and separately confirmed commit.
+4. Verify the new workflow end to end with clean, drift, blocked, categorized,
+   multiple-occurrence, partial-acceptance, dirty-tree, declined-commit, and
+   confirmed-commit fixtures across both repositories.
+5. Remove the annotation-specific CI step and ephemeral report from
+   `grade10-spec`, then remove the REST live-fetch entry point. Keep all other
+   design-sync behavior.
+6. Remove the deprecated Grade10 monitor skill, helper and wrapper entry points,
+   and duplicate package scripts after migrating their ownership and
+   exact-association tests. Update `/dev-help` and restore skill parity.
+7. Rewrite governance documentation around: Figma observation -> temporary
+   normalized snapshot -> drift report -> finding selection -> baseline and
+   spec decisions -> Git diff -> verification -> optional local commit.
 
-Rollback disables the nightly annotation step and removes the project skill.
-The baseline remains harmless versioned evidence and can be removed in a
-reviewed follow-up if the workflow is abandoned; no production data or API
-migration is involved.
+Rollback restores the old files from Git only if the new skill has not become
+the documented path. Accepted schema-version-2 baseline data remains valid;
+there is no production data, deployed API, or hosted state to migrate.
