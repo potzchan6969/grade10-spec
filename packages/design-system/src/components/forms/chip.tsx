@@ -1,27 +1,42 @@
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cn } from "@grade10/design-system/lib/utils";
 import { X } from "@phosphor-icons/react";
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 import type { ReactNode } from "react";
 
-// Figma set `Chip` (`4396:5319`). The only VARIANT axis is `state` (default /
-// hover), which is a CSS pseudo-state, so there is no cva option behind it.
+// Figma set `Chip` (`4396:5319`). VARIANT axes are `variant` (default / primary)
+// and `state` (default / hover), the latter a CSS pseudo-state with no prop
+// behind it. Geometry: `Size/size-8` (32) height, `Gap/gap-3` (12) horizontal
+// padding, `Gap/gap-1-5` (6) between label and dismiss, `Radius/radius-full`.
+// Type is `text-sm/medium` (14/20). The set always draws a dismiss X
+// (Outline/Bold, 14) — nested instance, not a BOOLEAN.
 //
-// Geometry: `Size/size-8` (32) height, `Gap/gap-3` (12) horizontal padding,
-// `Gap/gap-1-5` (6) between label and dismiss, `Radius/radius-full`. Fill is
-// `Base/primary` with `Base/primary-foreground` label; type is `text-sm/medium`
-// (14/20). The set always draws a dismiss X (Outline/Bold, 14) — nested
-// instance, not a BOOLEAN — and hover adds the same primary inner glow as
-// Button (`#FFFFFF4D`, radius 20). There is no size, selected, or disabled
-// axis; selectable chips previously lived as Figma `ChipSelectable` /
-// `FilterChip`, which has been removed from the file.
+// `default` is `Base/muted` fill with `Base/foreground` label and
+// `Base/secondary-foreground` dismiss; hover swaps to `Base/background-subtle`.
+// `primary` is `Base/primary` / `Base/primary-foreground` with the same inner
+// glow on hover as Button (`#FFFFFF4D`, radius 20). There is no size,
+// selected, or disabled axis.
 const chipVariants = cva(
-  "inline-flex h-8 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-(--radius-full) border border-transparent bg-primary bg-clip-padding px-3 text-sm leading-5 font-medium text-primary-foreground whitespace-nowrap [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] outline-none select-none transition-[box-shadow,transform] duration-150 ease-out hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:translate-y-px motion-reduce:transition-[box-shadow] motion-reduce:active:translate-y-0 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0",
+  "inline-flex h-8 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-(--radius-full) border border-transparent bg-clip-padding px-3 text-sm leading-5 font-medium whitespace-nowrap [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] outline-none select-none transition-[background-color,box-shadow,transform] duration-150 ease-out focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:translate-y-px motion-reduce:transition-[background-color,box-shadow] motion-reduce:active:translate-y-0 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-muted text-foreground hover:bg-background-subtle [&_svg]:text-secondary-foreground",
+        primary:
+          "bg-primary text-primary-foreground hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)]",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  },
 );
 
-type ChipProps = ButtonPrimitive.Props & {
-  children?: ReactNode;
-};
+type ChipProps = ButtonPrimitive.Props &
+  VariantProps<typeof chipVariants> & {
+    children?: ReactNode;
+  };
 
 /**
  * Small, optionally removable tag for filters and selections.
@@ -30,10 +45,16 @@ type ChipProps = ButtonPrimitive.Props & {
  * variant with no BOOLEAN behind it, so nothing here can turn it off. Raise
  * that with the designer rather than adding a prop the set does not define.
  */
-function Chip({ className, type = "button", children, ...props }: ChipProps) {
+function Chip({
+  className,
+  variant = "default",
+  type = "button",
+  children,
+  ...props
+}: ChipProps) {
   return (
     <ButtonPrimitive
-      className={cn(chipVariants(), className)}
+      className={cn(chipVariants({ variant }), className)}
       data-slot="chip"
       type={type}
       {...props}

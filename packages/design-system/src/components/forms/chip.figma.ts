@@ -5,6 +5,11 @@ import figma from "figma";
 
 const instance = figma.selectedInstance;
 
+const variant = instance.getEnum("variant", {
+  default: "default",
+  primary: "primary",
+});
+
 // Hover is a CSS pseudo-state with no prop behind it. The map exists so the
 // axis is accounted for rather than reported unmapped.
 instance.getEnum("state", {
@@ -15,7 +20,7 @@ instance.getEnum("state", {
 const label = instance.getString("label");
 
 export default {
-  example: figma.code`<Chip>${label}</Chip>`,
+  example: figma.code`<Chip${variant === "default" ? "" : figma.code` variant="${variant}"`}>${label}</Chip>`,
   imports: ['import { Chip } from "@grade10/design-system"'],
   id: "chip",
   metadata: { nestable: true },
