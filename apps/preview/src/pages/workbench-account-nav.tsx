@@ -15,6 +15,9 @@ import { useState } from "react";
 /** Storybook story id for the filled Order History page assembly. */
 const ORDER_HISTORY_STORY_ID = "pages-order-history-page--filled";
 
+/** Storybook story id for the filled Order Details page assembly. */
+const ORDER_DETAILS_STORY_ID = "pages-order-details-page--filled";
+
 /**
  * Temporary workbench helper: opens an Account dropdown from Nav's user icon
  * so page stories can jump to Order History. Not a product contract — preview
@@ -96,4 +99,9 @@ function WorkbenchAccountNav(props: NavProps) {
   );
 }
 
-export { navigateToStory, ORDER_HISTORY_STORY_ID, WorkbenchAccountNav };
+export {
+  navigateToStory,
+  ORDER_DETAILS_STORY_ID,
+  ORDER_HISTORY_STORY_ID,
+  WorkbenchAccountNav,
+};

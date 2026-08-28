@@ -3,7 +3,15 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Package } from "@phosphor-icons/react";
-import { type ReactNode, useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import {
+  REVEAL_HIDDEN_CLASS,
+  REVEAL_REDUCED_MOTION_CLASS,
+  REVEAL_TRANSITION_CLASS,
+  REVEAL_VISIBLE_CLASS,
+  revealStaggerDelayMs,
+  useFirstPaintReveal,
+} from "../shared/use-first-paint-reveal";
 import { OrderHistoryCard } from "./order-history-card";
 import type { OrderHistoryCardHeaderCopy } from "./order-history-card-header";
 import { OrderHistoryLineItem } from "./order-history-line-item";
@@ -38,36 +46,6 @@ type OrderHistoryProps = {
   className?: string;
 };
 
-const CARD_REVEAL_STAGGER_MS = 40;
-const CARD_REVEAL_STAGGER_CAP = 6;
-
-/** Double-rAF first paint, then settle; reduced motion settles immediately. */
-function useFirstPaintReveal() {
-  const [revealed, setRevealed] = useState(false);
-
-  useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      setRevealed(true);
-      return;
-    }
-
-    let second = 0;
-    const first = requestAnimationFrame(() => {
-      second = requestAnimationFrame(() => setRevealed(true));
-    });
-
-    return () => {
-      cancelAnimationFrame(first);
-      cancelAnimationFrame(second);
-    };
-  }, []);
-
-  return revealed;
-}
-
 function OrderSection({
   heading,
   orders,
@@ -96,16 +74,14 @@ function OrderSection({
           return (
             <div
               className={cn(
-                "translate-y-2 opacity-0",
-                "transition-[opacity,transform] duration-[280ms] ease-[cubic-bezier(0.23,1,0.32,1)]",
-                "motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none",
-                revealed && "translate-y-0 opacity-100",
+                REVEAL_HIDDEN_CLASS,
+                REVEAL_TRANSITION_CLASS,
+                REVEAL_REDUCED_MOTION_CLASS,
+                revealed && REVEAL_VISIBLE_CLASS,
               )}
               key={order.id}
               style={{
-                transitionDelay: revealed
-                  ? `${Math.min(staggerIndex, CARD_REVEAL_STAGGER_CAP) * CARD_REVEAL_STAGGER_MS}ms`
-                  : "0ms",
+                transitionDelay: revealStaggerDelayMs(staggerIndex, revealed),
               }}
             >
               <OrderHistoryCard

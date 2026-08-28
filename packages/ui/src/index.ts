@@ -165,6 +165,46 @@ export {
   type StoreSectionHeaderProps,
 } from "./blocks/store-home/store-section-header";
 export type { StoreCollectionSummary } from "./blocks/store-home/types";
+// shared-ui/store-order-detail
+export {
+  OrderDetails,
+  type OrderDetailsCopy,
+  type OrderDetailsProps,
+} from "./blocks/store-order-detail/order-details";
+export {
+  OrderDetailsDeliveryStatus,
+  type OrderDetailsDeliveryStatusProps,
+} from "./blocks/store-order-detail/order-details-delivery-status";
+export {
+  OrderDetailsHeader,
+  type OrderDetailsHeaderProps,
+} from "./blocks/store-order-detail/order-details-header";
+export {
+  OrderDetailsOrderItem,
+  type OrderDetailsOrderItemProps,
+} from "./blocks/store-order-detail/order-details-order-item";
+export {
+  OrderDetailsOrderTable,
+  type OrderDetailsOrderTableProps,
+} from "./blocks/store-order-detail/order-details-order-table";
+export {
+  OrderDetailsPaymentLogo,
+  type OrderDetailsPaymentLogoProps,
+} from "./blocks/store-order-detail/order-details-payment-logo";
+export {
+  OrderDetailsSidebar,
+  type OrderDetailsSidebarProps,
+} from "./blocks/store-order-detail/order-details-sidebar";
+export type {
+  OrderDetailsAddress,
+  OrderDetailsDelivery,
+  OrderDetailsDeliveryStep,
+  OrderDetailsFulfillmentStatus,
+  OrderDetailsLineItem,
+  OrderDetailsPayment,
+  OrderDetailsPaymentBrand,
+  OrderDetailsSummary,
+} from "./blocks/store-order-detail/types";
 // shared-ui/store-order-history
 export {
   OrderHistory,

@@ -66,5 +66,61 @@
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2571-44",
     "classes": "flex w-full flex-col items-center gap-4 rounded-2xl border border-dashed border-border bg-background-subtle",
     "note": "isCompact=false, the cva default."
+  },
+  {
+    "label": "step-indicator/upcoming",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-5569",
+    "classes": "relative shrink-0 inline-flex",
+    "covers": "StepIndicator",
+    "note": "Visual is the nested Checkbox Button; audited at checkbox-button/control."
+  },
+  {
+    "label": "step-indicator/progress",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-5697",
+    "classes": "relative shrink-0 size-4",
+    "note": "Progress uses animate-ping on the outer ring instead of a static drop shadow."
+  },
+  {
+    "label": "step-indicator/completed",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-5568",
+    "classes": "relative shrink-0 inline-flex",
+    "covers": "StepIndicator",
+    "note": "Visual is the nested Checkbox Button; audited at checkbox-button/control."
+  },
+  {
+    "label": "step/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-5484",
+    "classes": "min-w-0 flex-1 py-2"
+  },
+  {
+    "label": "stepper/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-5637",
+    "classes": "flex w-full items-start"
+  },
+  {
+    "label": "table-cell/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4969-4888",
+    "classes": "flex min-h-12 items-center px-4 py-3 text-sm leading-5 text-foreground"
+  },
+  {
+    "label": "table-head/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4969-4912",
+    "classes": "flex min-h-12 min-w-0 items-center px-4 py-3 text-sm leading-5 font-medium text-secondary-foreground"
+  },
+  {
+    "label": "table-header/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4969-4927",
+    "classes": "flex w-full items-center overflow-hidden rounded-full bg-muted"
+  },
+  {
+    "label": "table-row/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4969-4960",
+    "classes": "flex w-full items-center overflow-hidden border-b border-border last:border-b-0"
+  },
+  {
+    "label": "table/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4969-4934",
+    "classes": "flex w-full flex-col overflow-hidden rounded-3xl border border-border bg-background p-1",
+    "note": "Composition frame, not a published component set."
   }
 ]

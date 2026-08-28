@@ -222,6 +222,9 @@ importers:
       qrcode.react:
         specifier: ^4.2.0
         version: 4.2.0(react@19.2.8)
+      react-svg-credit-card-payment-icons:
+        specifier: 6.0.4
+        version: 6.0.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
     devDependencies:
       '@figma/code-connect':
         specifier: ^1.4.9
@@ -3372,6 +3375,18 @@ packages:
 
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
+
+  react-svg-credit-card-payment-icons@6.0.4:
+    resolution: {integrity: sha512-kp8Dhk5kedjPMmFIzkeIQKa1NouOEVymwiXwPcKEcIBVM4qzxQdEd5fMTl9H5fVTCZWviX/g0tjd6RCCpvbUYw==}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+      react-native-svg: '>=12'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native-svg:
+        optional: true
 
   react@19.2.8:
     resolution: {integrity: sha512-PWaYA1L/q9u2u7xYQi+Y3L3Yfnie7XyLeaJICV1MGD6LprsBxcAqGjYyr0eY3p+QdsA+x/Irkt4Qif8D63+Sbw==}
@@ -6948,6 +6963,12 @@ snapshots:
       scheduler: 0.27.0
 
   react-is@17.0.2: {}
+
+  react-svg-credit-card-payment-icons@6.0.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+    dependencies:
+      react: 19.2.8
+    optionalDependencies:
+      react-dom: 19.2.8(react@19.2.8)
 
   react@19.2.8: {}
 
