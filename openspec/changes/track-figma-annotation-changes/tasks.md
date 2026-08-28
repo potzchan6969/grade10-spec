@@ -108,7 +108,7 @@ and cleanup plan.
   commands, keep all JSON and exit behavior deterministic, and prove diff never
   writes, invalid acceptance writes nothing, and successful acceptance replaces
   the baseline atomically.
-- [ ] 4.6 Verify this group with the focused design-sync tests, `pnpm run test`,
+- [x] 4.6 Verify this group with the focused design-sync tests, `pnpm run test`,
   `pnpm run lint`, `pnpm run typecheck`, and `git diff --check`.
 
 ## 5. Add the single interactive reconciliation skill (grade10)
