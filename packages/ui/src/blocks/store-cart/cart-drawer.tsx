@@ -19,6 +19,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { rollValue } from "../shared/rolling-value";
 import type {
   CartDrawerCopy,
   CartDrawerFooterCopy,
@@ -673,9 +674,10 @@ function CartDrawerFooter({
             {copy.subtotalLabel}
           </span>
           <CartAmountSkeleton loading={loading}>
-            <span className="text-sm font-normal leading-5 text-foreground">
-              {subtotal}
-            </span>
+            {rollValue(subtotal, {
+              className: "text-sm font-normal leading-5 text-foreground",
+              loading,
+            })}
           </CartAmountSkeleton>
         </HStack>
 
@@ -727,9 +729,10 @@ function CartDrawerFooter({
             {copy.estimatedTotalLabel}
           </span>
           <CartAmountSkeleton loading={loading} size="lg">
-            <span className="text-base font-semibold leading-6 text-foreground">
-              {estimatedTotal}
-            </span>
+            {rollValue(estimatedTotal, {
+              className: "text-base font-semibold leading-6 text-foreground",
+              loading,
+            })}
           </CartAmountSkeleton>
         </HStack>
 

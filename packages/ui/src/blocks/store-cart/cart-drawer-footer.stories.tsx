@@ -1,3 +1,5 @@
+import { Button } from "@grade10/design-system/components/forms/button";
+import { HStack } from "@grade10/design-system/components/layout/hstack";
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, within } from "storybook/test";
@@ -141,6 +143,51 @@ export const Interactive: Story = {
           return false;
         }}
       />
+    );
+  },
+};
+
+const AMOUNT_STEPS = [
+  "HK$38,430.00",
+  "HK$42,700.00",
+  "HK$49,000.00",
+  "HK$83,600.00",
+] as const;
+
+/** Bump subtotal and estimated total up/down to preview the Stepper-style roll. */
+export const AmountRolling: Story = {
+  render: (args) => {
+    const [step, setStep] = useState(1);
+    const amount = AMOUNT_STEPS[step];
+
+    return (
+      <div className="flex flex-col gap-4">
+        <HStack gap="sm" vAlign="center">
+          <Button
+            size="sm"
+            type="button"
+            variant="outline"
+            disabled={step === 0}
+            onClick={() => setStep((current) => Math.max(0, current - 1))}
+          >
+            Decrease
+          </Button>
+          <Button
+            size="sm"
+            type="button"
+            variant="outline"
+            disabled={step === AMOUNT_STEPS.length - 1}
+            onClick={() =>
+              setStep((current) =>
+                Math.min(AMOUNT_STEPS.length - 1, current + 1),
+              )
+            }
+          >
+            Increase
+          </Button>
+        </HStack>
+        <CartDrawerFooter {...args} estimatedTotal={amount} subtotal={amount} />
+      </div>
     );
   },
 };
