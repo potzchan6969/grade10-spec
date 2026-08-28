@@ -104,7 +104,7 @@ and cleanup plan.
   orphaned baseline entries so each requires explicit review; prove accepted
   annotation keys, exact associations, and `noImpactReason` metadata survive
   unrelated reconciliations.
-- [ ] 4.5 Replace the old package command with focused snapshot diff and accept
+- [x] 4.5 Replace the old package command with focused snapshot diff and accept
   commands, keep all JSON and exit behavior deterministic, and prove diff never
   writes, invalid acceptance writes nothing, and successful acceptance replaces
   the baseline atomically.
