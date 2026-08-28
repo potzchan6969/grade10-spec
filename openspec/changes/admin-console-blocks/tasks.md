@@ -39,9 +39,9 @@ Needs group 2 merged in grade10: the application repo re-points before this dele
 
 ## 6. Vault console migrates (grade10) (owner: @sean)
 
-- [ ] 6.1 Move the case queue, timeline, payouts, and documents tables onto `Table`, `Status`, `SectionHeader`, and `Figure`, making `console-blocks-SC-01` pass there
-- [ ] 6.2 Re-point vault's exported minor-unit formatter to the console package's formatter so `console-blocks-SC-13` passes with one implementation
-- [ ] 6.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 6.1 Move the case queue, timeline, payouts, and documents tables onto `Table`, `Status`, `SectionHeader`, and `Figure`, making `console-blocks-SC-01` pass there
+- [x] 6.2 Re-point vault's exported minor-unit formatter to the console package's formatter so `console-blocks-SC-13` passes with one implementation
+- [x] 6.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 7. Auction console migrates (grade10)
 
