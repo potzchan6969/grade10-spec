@@ -37,7 +37,7 @@ Needs group 2 merged in grade10: the application repo re-points before this dele
 - [x] 5.2 Move the appointment day and schedule panels onto `Table`, `Status`, and `SectionHeader`, making `console-blocks-SC-01` and `console-blocks-SC-05`–`SC-07` pass there
 - [x] 5.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 6. Vault console migrates (grade10)
+## 6. Vault console migrates (grade10) (owner: @sean)
 
 - [ ] 6.1 Move the case queue, timeline, payouts, and documents tables onto `Table`, `Status`, `SectionHeader`, and `Figure`, making `console-blocks-SC-01` pass there
 - [ ] 6.2 Re-point vault's exported minor-unit formatter to the console package's formatter so `console-blocks-SC-13` passes with one implementation
