@@ -304,6 +304,12 @@ function nodeValues(doc) {
   const fill = doc.fills?.find(
     (f) => f.visible !== false && f.type === "SOLID",
   );
+  // A gradient or an image paints the node without resolving to one hex, so
+  // `fill` stays null while the node is plainly painted. omissions() needs
+  // that difference to avoid reading a drawn gradient as a missing fill.
+  const fillUncomparable =
+    !fill &&
+    (doc.fills ?? []).some((f) => f.visible !== false && f.type !== "SOLID");
   // A stroke is read the same way as a fill and for the same reason: every
   // frame and component states `strokes`, so an empty array is the node
   // saying it draws no border, not the node declining to answer. Which edges
@@ -317,6 +323,7 @@ function nodeValues(doc) {
     type: doc.type,
     name: doc.name,
     fill: fill ? toHex8(fill.color, fill.opacity) : null,
+    fillUncomparable,
     stroke: stroke ? toHex8(stroke.color, stroke.opacity) : null,
     height: doc.absoluteBoundingBox?.height ?? null,
     width: doc.absoluteBoundingBox?.width ?? null,
