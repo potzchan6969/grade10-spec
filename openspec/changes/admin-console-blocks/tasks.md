@@ -13,9 +13,9 @@
 
 Needs group 1 landed: the ported table sits on the console package's furniture.
 
-- [ ] 2.1 Copy `UserTable`, `UserRolesDialog`, `UserModerationDialog`, `UserSessionsDialog`, their types, and their tests into the console package, exports unchanged, table shell on the package furniture, so `user-directory-SC-01` through `user-directory-SC-10` pass from the new home
-- [ ] 2.2 Re-point grade10-auth admin-frontend's directory imports to the console package (`user-directory-SC-01`), leaving the apps' two-factor imports on `@grade10/ui` (`console-blocks-SC-04`)
-- [ ] 2.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 2.1 Copy `UserTable`, `UserRolesDialog`, `UserModerationDialog`, `UserSessionsDialog`, their types, and their tests into the console package, exports unchanged, table shell on the package furniture, so `user-directory-SC-01` through `user-directory-SC-10` pass from the new home
+- [x] 2.2 Re-point grade10-auth admin-frontend's directory imports to the console package (`user-directory-SC-01`), leaving the apps' two-factor imports on `@grade10/ui` (`console-blocks-SC-04`)
+- [x] 2.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 3. The shared UI package sheds the directory (grade10-spec)
 
