@@ -20,8 +20,8 @@ This design follows `docs/conventions/packages.md`,
 - Serialize every count transition on that snapshot under row lock.
 - Reserve quantities for consumers classified by explicit `holder_kind`
   (`grade10-auction` | `grade10-vault`), with remaining / sold / vaulted / released tracking.
-- Allow reservation quantity adjust with inventory `reserved` sync and
-  changelog.
+- Allow reservation quantity adjust and **product change** with inventory
+  `reserved` sync and changelog.
 - Support partial sell-from-reservation (Auction), partial
   vault-from-reservation (Vault), and partial release.
 - Retain an append-only explanation of how the current counts were reached.
@@ -31,7 +31,8 @@ This design follows `docs/conventions/packages.md`,
 - `reservation_allocations`, multi-inventory rows, or inventory `status`.
 - Identifying or tracking individual physical objects.
 - Full Auction/Vault reserve-on-create wiring (eligibility list ships; picker
-  in `add-admin-auction-campaigns`).
+  in `add-admin-auction-campaigns`; listing reservation sync ships in that
+  change via holder RPCs defined here).
 - Shopify inventory sync, ZZZ inventory, warehouses, or transfers.
 - New design-system or `@grade10/ui` components.
 
@@ -126,7 +127,10 @@ All mutations lock the product's inventory row (`FOR UPDATE`), then:
 Each successful mutation appends one changelog in the same transaction.
 
 Do **not** release the whole reservation and create a new one for listing qty
-edits — use `adjustReservation(id, newQuantity)`.
+edits — use `adjustReservation(id, newQuantity)`. For listing **product**
+changes, use `changeReservationProduct(id, newProductId, newQuantity)` under
+one transaction locking both inventory rows — do not release-then-reserve from
+Auction.
 
 ### Named service entrypoints are the holder grant
 
@@ -145,8 +149,9 @@ changelogs. Holder queries return available and own reservations only.
 
 ### Changelogs are the transition ledger
 
-One business mutation → one changelog. Actions include `adjust`. Reserve,
-release, adjust, sell-from-reservation, and vault-from-reservation snapshot
+One business mutation → one changelog. Actions include `adjust` and
+`change-product`. Reserve, release, adjust, change-product,
+sell-from-reservation, and vault-from-reservation snapshot
 both inventory and the affected reservation. Intake and terminal transitions
 snapshot inventory with the quantity delta.
 
@@ -293,8 +298,8 @@ Constraints:
 | `after` | `jsonb` | No | Canonical snapshot | Snapshot after the transition |
 
 `action` values: `product-create`, `product-update`, `intake`, `reserve`,
-`adjust`, `release`, `sell-from-reservation`, `vault-from-reservation`,
-`sell`, `withdraw`.
+`adjust`, `change-product`, `release`, `sell-from-reservation`,
+`vault-from-reservation`, `sell`, `withdraw`.
 
 Append-only triggers on changelogs. Composite FK `(reservation_id,
 inventory_id)` → `reservations` when reservation_id set.
@@ -347,6 +352,7 @@ Routed through the API gateway to the inventory worker. Requires
 | `inventory.withdraw` | Free-pool withdraw (catalog-SC-11) |
 | `reservations.release` | Partial or full release; admin may act for any kind (catalog-SC-22, catalog-SC-35) |
 | `reservations.adjust` | `adjustReservation(id, newQuantity)` (catalog-SC-47–catalog-SC-50) |
+| `reservations.changeProduct` | `changeReservationProduct(id, newProductId, newQuantity)` (catalog-SC-51, catalog-SC-63–catalog-SC-65) |
 | `reservations.sellFromReservation` | Auction holds only (catalog-SC-36, catalog-SC-37) |
 | `reservations.vaultFromReservation` | Vault holds only (catalog-SC-38) |
 | `changelogs.list` | Product-scoped history (catalog-SC-23–catalog-SC-28, catalog-SC-41–catalog-SC-44) |
@@ -361,8 +367,8 @@ bound entrypoint — never an RPC input.
 
 | Entrypoint | Closed-over kind | Methods |
 | --- | --- | --- |
-| `AuctionInventoryService` | `grade10-auction` | `getAvailability`, `reserve`, `adjustReservation`, `release`, `sellFromReservation`, `listOwnReservations`, `listEligibleProducts` |
-| `VaultInventoryService` | `grade10-vault` | `getAvailability`, `reserve`, `adjustReservation`, `release`, `vaultFromReservation`, `listOwnReservations` |
+| `AuctionInventoryService` | `grade10-auction` | `getAvailability`, `reserve`, `adjustReservation`, `changeReservationProduct`, `release`, `sellFromReservation`, `listOwnReservations`, `listEligibleProducts` |
+| `VaultInventoryService` | `grade10-vault` | `getAvailability`, `reserve`, `adjustReservation`, `changeReservationProduct`, `release`, `vaultFromReservation`, `listOwnReservations` |
 
 `listEligibleProducts` returns only products with **`status = created`** and
 **available > 0** (catalog-SC-61, catalog-SC-62). Consumed by Auction and by
@@ -396,8 +402,22 @@ Worker default export exposes both factories; Auction binds
 
 Contract failures name at least: unknown product, unknown reservation, invalid
 quantity, insufficient available stock, product not `created`, reservation not
-`active`, wrong holder kind, adjust below settled floor, unauthorized, and
-idempotent active reserve retry (returns existing row, no history).
+`active`, wrong holder kind, adjust below settled floor, product change to
+same product (use adjust), unauthorized, and idempotent active reserve retry
+(returns existing row, no history).
+
+### Grade10 Auction listing integration
+
+[`add-admin-auction-campaigns`](../add-admin-auction-campaigns/design.md)
+consumes holder RPCs for listing draft Saves:
+
+- **`reserve`** — first explicit Save with product + quantity (default qty 1).
+- **`adjustReservation`** — quantity change on same product.
+- **`changeReservationProduct`** — product change in one transaction.
+- **`release`** — clear product/qty or listing cancel.
+
+Auction **`listings.create`** verifies an active hold matches; it does not
+call inventory. Listing editor uses explicit Save only (no auto-save).
 
 ## Risks / Trade-offs
 

@@ -52,7 +52,8 @@ sold stock.
 
 Accepted by: catalog-SC-14, catalog-SC-17, catalog-SC-18, catalog-SC-22,
 catalog-SC-35, catalog-SC-36, catalog-SC-37, catalog-SC-38, catalog-SC-47,
-catalog-SC-48, catalog-SC-49, catalog-SC-50, catalog-SC-53.
+catalog-SC-48, catalog-SC-49, catalog-SC-50, catalog-SC-51, catalog-SC-53,
+catalog-SC-63, catalog-SC-64, catalog-SC-65.
 
 ### catalog-US-03: Use inventory through a holder-kind boundary
 
@@ -61,7 +62,8 @@ release my quantity without seeing another kind's holds, so that I can safely
 use my allocation. Auction sells; Vault vaults.
 
 Accepted by: catalog-SC-15, catalog-SC-16, catalog-SC-19, catalog-SC-20,
-catalog-SC-21, catalog-SC-39, catalog-SC-40, catalog-SC-61, catalog-SC-62.
+catalog-SC-21, catalog-SC-39, catalog-SC-40, catalog-SC-61, catalog-SC-62,
+catalog-SC-66.
 
 ### catalog-US-04: Reconstruct stock changes
 
@@ -386,7 +388,19 @@ the complete allocation grouped by `holder_kind`.
 The Auction entrypoint (and inventory admin reads used by the auction listing
 editor) SHALL list products eligible for a new listing reservation: product
 status **`created`** and **available greater than zero**. `draft` products and
-products with zero available SHALL be omitted.
+products with zero available SHALL be omitted. Auction listing edit flows MAY
+also offer a listing's **current** product when that listing's active hold
+accounts for the product's remaining free pool (consumed by
+[`add-admin-auction-campaigns`](../../../../add-admin-auction-campaigns/proposal.md)).
+
+#### Scenario: catalog-SC-66 - Own reservation counts toward effective available on edit
+
+- **GIVEN** an active Auction reservation of remaining three on a created
+  product whose global available is zero
+- **WHEN** Auction validates increasing that same listing's hold to quantity
+  three on explicit Save
+- **THEN** effective available is three and the save is allowed
+- **AND** global available remains zero until the hold changes
 
 #### Scenario: catalog-SC-20 - Vault cannot see Auction reservations
 
@@ -503,6 +517,77 @@ quantity and before/after snapshots of inventory and reservation.
 - **THEN** Grade10 refuses
 - **AND** the reservation is unchanged
 
+### Requirement: Active reservations may change product atomically
+
+The owning kind or an authorized inventory admin SHALL move an **active**
+reservation to a different **created** product and new quantity via
+`changeReservationProduct`. The call SHALL keep the same reservation id and
+`holder_reference`. It SHALL NOT close the reservation and create a new row.
+
+Input: reservation id, `newProductId`, `newQuantity` (integer 1–500). The new
+product SHALL be **`status` `created`**. The new quantity SHALL be at least
+`sold + vaulted + released` on the reservation and SHALL not exceed the new
+product's available plus this reservation's current **remaining** when the
+product is unchanged (for product switches, available on the new product
+only).
+
+Under one database transaction the service SHALL:
+
+1. Lock both affected inventory rows in deterministic **`product_id`** order.
+2. Refuse when the new product lacks sufficient available for `newQuantity`,
+   when the reservation is not **active**, when the new product is **draft**,
+   or when `newQuantity` is below `sold + vaulted + released` — leaving the
+   reservation and both inventories unchanged.
+3. Decrease inventory **`reserved`** on the old product by the reservation's
+   current **remaining** (freeing that stock back to available). Do **not**
+   increase reservation **`released`** for this transition.
+4. Reassign the reservation row to `newProductId` and its inventory id; set
+   **`quantity`** and **`remaining`** to `newQuantity`; increase the new
+   product's inventory **`reserved`** by `newQuantity`.
+5. Append one changelog recording the product change and before/after snapshots
+   for both inventories and the reservation.
+
+Auction listing explicit Saves call this RPC when product changes; quantity-only
+changes on the same product SHALL use `adjustReservation` instead.
+
+#### Scenario: catalog-SC-51 - Listing product change moves hold in one transaction
+
+- **GIVEN** an active Auction reservation for listing `listing-42` on product A
+  with quantity three and remaining three
+- **AND** product B is **created** with available at least three
+- **WHEN** Auction calls `changeReservationProduct` with product B and quantity
+  three
+- **THEN** the same reservation id is **active** on product B with quantity
+  three and remaining three
+- **AND** product A **reserved** decreases by three and product B **reserved**
+  increases by three
+- **AND** stock and derived ledger on both products are unchanged
+- **AND** exactly one reservation remains active for `listing-42`
+
+#### Scenario: catalog-SC-63 - Product change refused when new product lacks stock
+
+- **GIVEN** an active Auction reservation on product A with remaining three
+- **AND** product B available is one
+- **WHEN** Auction calls `changeReservationProduct` to product B with quantity
+  three
+- **THEN** Grade10 refuses for insufficient available inventory
+- **AND** the reservation stays on product A with remaining three
+- **AND** both products' **reserved** counts are unchanged
+
+#### Scenario: catalog-SC-64 - Product change refused for draft target product
+
+- **GIVEN** an active Auction reservation on a **created** product
+- **WHEN** Auction calls `changeReservationProduct` to a **draft** product
+- **THEN** Grade10 refuses
+- **AND** the reservation is unchanged
+
+#### Scenario: catalog-SC-65 - Product change refused below settled floor
+
+- **GIVEN** an Auction reservation with quantity five, sold two, remaining three
+- **WHEN** it is changed to another product with quantity one
+- **THEN** Grade10 refuses
+- **AND** the reservation and both inventories are unchanged
+
 ### Requirement: Auction sells from reservation remaining
 
 Auction (or an authorized inventory admin acting for an Auction reservation)
@@ -578,9 +663,9 @@ entry in the same transaction. Each entry SHALL carry:
 | Changed entity | `product` for metadata changes; `inventory` for stock and reservation changes |
 | Actor kind | `operator`, `application`, or `server` |
 | Actor id | Operator user id; `grade10-auction` or `grade10-vault`; null for server |
-| Action | `product-create`, `product-update`, `intake`, `reserve`, `adjust`, `release`, `sell-from-reservation`, `vault-from-reservation`, `sell`, or `withdraw` |
-| Quantity | Positive transition quantity for inventory actions; for adjust, the new quantity; null for product metadata |
-| Reservation id | Required for reserve, adjust, release, sell-from-reservation, vault-from-reservation; null otherwise |
+| Action | `product-create`, `product-update`, `intake`, `reserve`, `adjust`, `change-product`, `release`, `sell-from-reservation`, `vault-from-reservation`, `sell`, or `withdraw` |
+| Quantity | Positive transition quantity for inventory actions; for adjust or change-product, the new quantity; null for product metadata |
+| Reservation id | Required for reserve, adjust, change-product, release, sell-from-reservation, vault-from-reservation; null otherwise |
 | Sold total price | Positive integer minor units for sell / sell-from-reservation; null otherwise |
 | Sold currency | ISO 4217 code for sell / sell-from-reservation; null otherwise |
 | Reason | Required for withdraw; optional remarks for intake; null otherwise |

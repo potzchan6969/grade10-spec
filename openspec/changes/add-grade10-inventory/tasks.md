@@ -29,7 +29,8 @@ running worker.
   `catalog-SC-16 - Closed reference may reserve again`,
   `catalog-SC-22 - Vault releases a full remaining hold`,
   `catalog-SC-35 - Partial release leaves remaining active`, and
-  `catalog-SC-47` through `catalog-SC-50` pass with reservation fields
+  `catalog-SC-47` through `catalog-SC-50`, `catalog-SC-51`, and `catalog-SC-63`
+  through `catalog-SC-65` pass with reservation fields
   (`holder_kind`, remaining/sold/vaulted/released, status active/closed,
   adjustable quantity), inputs, outputs, actor stamps, and the 1–500
   boundary.
@@ -43,9 +44,10 @@ running worker.
 - [ ] 1.5 Make `catalog-SC-20 - Vault cannot see Auction reservations`,
   `catalog-SC-21 - Another kind cannot release a reservation`,
   `catalog-SC-34 - Public caller cannot reach holder methods`,
-  `catalog-SC-61 - Auction eligibility list omits draft and out-of-stock`, and
-  `catalog-SC-62 - Eligibility available matches inventory available` pass at
-  the type boundary with scoped RPC surfaces,
+  `catalog-SC-61 - Auction eligibility list omits draft and out-of-stock`,
+  `catalog-SC-62 - Eligibility available matches inventory available`, and
+  `catalog-SC-66 - Own reservation counts toward effective available on edit`
+  pass at the type boundary with scoped RPC surfaces,
   `AuctionInventoryService` / `VaultInventoryService` binding narrowings
   (`holder_kind` from entrypoint, never input), and the Auction eligibility
   list shape.
@@ -60,8 +62,8 @@ running worker.
   `catalog-SC-43 - Adjust history records new quantity`, and
   `catalog-SC-44 - Adjust decrease records freed quantity` pass with typed
   changelog changed-entity, non-null inventory reference, nullable reservation
-  reference, action (including `adjust`), quantity, actor, action-detail, and
-  snapshot contracts.
+  reference, action (including `adjust` and `change-product`), quantity, actor,
+  action-detail, and snapshot contracts.
 - [ ] 1.7 Make `catalog-SC-32 - Unauthorized inventory read is refused` and
   `catalog-SC-33 - Inventory section hidden without grants` pass by adding
   `inventory:read` / `inventory:write` to auth permission statements,
@@ -130,13 +132,16 @@ Depends on groups 1 and 2.
 - [ ] 3.6 Make `catalog-SC-47`, `catalog-SC-48`, `catalog-SC-49`, and
   `catalog-SC-50` pass through `adjustReservation` syncing inventory
   `reserved` and reservation quantity/remaining with changelog.
-- [ ] 3.7 Make `catalog-SC-20`, `catalog-SC-21`, `catalog-SC-39`,
-  `catalog-SC-40`, `catalog-SC-61`, and `catalog-SC-62` pass through
-  entrypoint-scoped services.
-- [ ] 3.8 Make `catalog-SC-07`, `catalog-SC-23` through `catalog-SC-28`,
+- [ ] 3.7 Make `catalog-SC-51`, `catalog-SC-63`, `catalog-SC-64`, and
+  `catalog-SC-65` pass through `changeReservationProduct` locking both
+  inventory rows and syncing both products' `reserved`.
+- [ ] 3.8 Make `catalog-SC-20`, `catalog-SC-21`, `catalog-SC-39`,
+  `catalog-SC-40`, `catalog-SC-61`, `catalog-SC-62`, and `catalog-SC-66`
+  pass through entrypoint-scoped services.
+- [ ] 3.9 Make `catalog-SC-07`, `catalog-SC-23` through `catalog-SC-28`,
   `catalog-SC-41`, `catalog-SC-42`, `catalog-SC-43`, and `catalog-SC-44`
   pass with domain changelog + elevated audit writes.
-- [ ] 3.9 Verify with `pnpm run typecheck`, `pnpm run lint`, and
+- [ ] 3.10 Verify with `pnpm run typecheck`, `pnpm run lint`, and
   `pnpm run test:backend`.
 
 ## 4. Expose admin and holder RPC surfaces (grade10)
@@ -147,9 +152,10 @@ Depends on group 3.
   `catalog-SC-34` pass through admin procedures and gateway routing.
 - [ ] 4.2 Make intake/sell/withdraw and `catalog-SC-12` pass through admin
   mutations and fixtures.
-- [ ] 4.3 Make reserve, adjust, partial release, sell-from-reservation,
-  vault-from-reservation, `catalog-SC-16`, and `catalog-SC-35`–`catalog-SC-40`
-  pass through reservation admin and holder entrypoints.
+- [ ] 4.3 Make reserve, adjust, change-product, partial release,
+  sell-from-reservation, vault-from-reservation, `catalog-SC-16`, and
+  `catalog-SC-35`–`catalog-SC-40` pass through reservation admin and holder
+  entrypoints.
 - [ ] 4.4 Make history scenarios including `catalog-SC-43` and
   `catalog-SC-44` pass through read models.
 - [ ] 4.5 Verify with `pnpm run typecheck`, `pnpm run lint`,
@@ -168,9 +174,10 @@ Depends on groups 1 and 4. Fixtures, not a live worker.
   by `holder_kind`).
 - [ ] 5.3 Make intake, free-pool sell/withdraw, and `catalog-SC-12` /
   `catalog-SC-31` pass in dialogs on the product page.
-- [ ] 5.4 Make reserve, adjust, partial release, sell-from-reservation,
-  vault-from-reservation, `catalog-SC-16`, `catalog-SC-35`–`catalog-SC-38`,
-  and `catalog-SC-53` pass in product-page reservation dialogs.
+- [ ] 5.4 Make reserve, adjust, change-product, partial release,
+  sell-from-reservation, vault-from-reservation, `catalog-SC-16`,
+  `catalog-SC-35`–`catalog-SC-38`, and `catalog-SC-53` pass in product-page
+  reservation dialogs.
 - [ ] 5.5 Make history including adjust, sell-from-reservation, and
   vault-from-reservation badges pass.
 - [ ] 5.6 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,

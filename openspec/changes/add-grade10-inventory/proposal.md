@@ -44,7 +44,11 @@ available stock.
   `reserved` tracks the sum of active `remaining`.
 - **Adjust quantity** — an active reservation's quantity MAY change up or down
   under the same id; inventory `reserved` syncs in the same transaction.
-  Changelog records every adjust.
+- **Change product** — an active reservation MAY move to another **created**
+  product via `changeReservationProduct` in one transaction; both inventories'
+  **`reserved`** sync; reservation **`released`** does not increase for the
+  freed remaining (same rule as adjust-down).
+  Changelog records every adjust and product change.
 - **Partial settle and release** — Auction may sell part of remaining; Vault may
   vault part of remaining; either may release part back to available. A
   reservation closes when remaining reaches zero. Closed references may be
@@ -53,12 +57,13 @@ available stock.
   `holder_kind`. Consumer entrypoints see unreserved availability and their
   own reservations only.
 - **Change history** — every successful product create/update, intake, reserve,
-  adjust, release, sell-from-reservation, vault-from-reservation, free-pool
-  sell, and withdrawal records quantity, actor, and before/after snapshots.
+  adjust, change-product, release, sell-from-reservation,
+  vault-from-reservation, free-pool sell, and withdrawal records quantity,
+  actor, and before/after snapshots.
 - **Admin console** — products list and product page (single inventory per
   product); create/edit product, draft→created, intake, reserve, adjust,
-  partial release, sell-from-reservation, vault-from-reservation, free-pool
-  sale/withdrawal, history.
+  change-product, partial release, sell-from-reservation,
+  vault-from-reservation, free-pool sale/withdrawal, history.
 - **Admin and application-scoped APIs** — elevated admin procedures manage the
   whole ledger. Named service-binding entrypoints grant Auction and Vault only
   their own surface; `holder_kind` comes from the bound entrypoint, never
@@ -90,7 +95,7 @@ available stock.
 | `packages/inventory/{contracts,backend,admin-frontend}` | New product packages (`@grade10/inventory-*`), including holder-scoped RPC contracts. |
 | `@grade10/auth-contracts` | Add `inventory` resource permissions; admin-only grants. |
 | `packages/app-env` / deploy / Neon | Register `inventory` service id, Hyperdrive, migrations. |
-| Grade10 Auction / Vault | Named entrypoints + eligibility list; listing `productId` picker in `add-admin-auction-campaigns`; full reserve-on-create wiring may trail. |
+| Grade10 Auction / Vault | Holder RPCs (`reserve`, `adjustReservation`, `changeReservationProduct`, `release`); listing sync in `add-admin-auction-campaigns`. |
 
 Shopify store inventory and POS stock stay Shopify's; this ledger is Grade10's
 house-managed Auction and Vault stock, not a replacement for store catalogue
@@ -101,8 +106,8 @@ quantity.
 - Identifying, tagging, or tracing individual physical items.
 - `reservation_allocations` or multi-row inventory per product.
 - Inventory `status` (stocked / ready) or ready-only gating.
-- Wiring Auction or Vault product flows to reservation entrypoints beyond
-  eligibility reads and the listing product picker.
+- Wiring Auction or Vault flows beyond holder RPCs and the listing reservation
+  sync defined in [`add-admin-auction-campaigns`](../add-admin-auction-campaigns/proposal.md).
 - Unvault / reverse of `vaulted` back to stock.
 - Collector or public inventory APIs; storefront stock display.
 - Replacing or syncing Shopify inventory levels.
@@ -115,5 +120,6 @@ quantity.
 - `openspec validate add-grade10-inventory --strict`
 - Scenarios cover intake, monotonic sold/vaulted/withdrawn, stock terminal
   transitions, reservation remaining conservation, partial sell/vault/release,
-  adjust with inventory sync, re-reserve after close, concurrent exclusion,
+  adjust with inventory sync, change-product atomically, re-reserve after close,
+  concurrent exclusion,
   holder-scoped visibility, structured history, and unauthorized refusal.
