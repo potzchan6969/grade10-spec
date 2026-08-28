@@ -81,7 +81,7 @@ and cleanup plan.
 
 ## 4. Build the category-aware reconciliation core (grade10-spec) (owner: @kinisworking)
 
-- [ ] 4.1 Define and validate a normalized temporary observation schema with a
+- [x] 4.1 Define and validate a normalized temporary observation schema with a
   pinned digest, registered roots, exact node and ancestor evidence, category
   catalog metadata, and canonical occurrences. Add fixtures for `One category
   catalog resolves many annotations`, `Content and Interaction labels are
