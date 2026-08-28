@@ -79,7 +79,7 @@ matching, ownership, and test foundations. Their uncompleted nightly-rail and
 submodule tasks are superseded. Groups 4 through 7 are the active replacement
 and cleanup plan.
 
-## 4. Build the category-aware reconciliation core (grade10-spec)
+## 4. Build the category-aware reconciliation core (grade10-spec) (owner: @kinisworking)
 
 - [ ] 4.1 Define and validate a normalized temporary observation schema with a
   pinned digest, registered roots, exact node and ancestor evidence, category
