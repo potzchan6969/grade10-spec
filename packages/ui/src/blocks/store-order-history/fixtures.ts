@@ -9,7 +9,8 @@ const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 const STATUS_LABELS: Record<OrderHistoryFulfillmentStatus, string> = {
   completed: "Completed",
   shipped: "Shipped",
-  pending: "Pending",
+  processing: "Processing",
+  pickup: "Ready for Pickup",
   canceled: "Canceled",
   refunded: "Refunded",
 };

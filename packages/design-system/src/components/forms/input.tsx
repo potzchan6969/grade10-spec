@@ -33,7 +33,7 @@ function Input({ className, ...props }: React.ComponentProps<"input">) {
 // `isLoading` are boolean gates.
 //
 // Focus keeps the status stroke and adds a matching 1px ring (Text Input
-// `2132:2715`, Stepper `4623:395`) — error/success stay destructive/success,
+// `2132:2715`, StepperInput `4623:395`) — error/success stay destructive/success,
 // they do not flip to the default ring. Ring is inset so overflow-hidden
 // ancestors (drawer, height reveals) cannot clip it.
 //
@@ -66,7 +66,7 @@ const inputBoxVariants = cva(
 
 // Figma's message layer binds `Base/secondary-foreground` on every status —
 // error and success tone the border and trailing icon only (Text Input
-// `2132:2712` / `2132:2873`, Stepper `4623:345`).
+// `2132:2712` / `2132:2873`, StepperInput `4623:345`).
 const messageVariants = cva("text-xs text-secondary-foreground", {
   variants: {
     status: {

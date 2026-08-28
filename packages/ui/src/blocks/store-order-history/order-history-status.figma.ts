@@ -8,7 +8,8 @@ const instance = figma.selectedInstance;
 const status = instance.getEnum("status", {
   completed: "completed",
   shipped: "shipped",
-  pending: "pending",
+  processing: "processing",
+  pickup: "pickup",
   canceled: "canceled",
   refunded: "refunded",
 });

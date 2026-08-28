@@ -5,9 +5,10 @@ import { OrderHistoryStatus } from "./order-history-status";
 import type { OrderHistoryFulfillmentStatus } from "./types";
 
 const STATUSES: OrderHistoryFulfillmentStatus[] = [
-  "completed",
+  "processing",
   "shipped",
-  "pending",
+  "pickup",
+  "completed",
   "canceled",
   "refunded",
 ];
@@ -39,8 +40,12 @@ export const Completed: Story = {
   args: { status: "completed", children: STATUS_LABELS.completed },
 };
 
-export const Pending: Story = {
-  args: { status: "pending", children: STATUS_LABELS.pending },
+export const Processing: Story = {
+  args: { status: "processing", children: STATUS_LABELS.processing },
+};
+
+export const Pickup: Story = {
+  args: { status: "pickup", children: STATUS_LABELS.pickup },
 };
 
 export const Canceled: Story = {

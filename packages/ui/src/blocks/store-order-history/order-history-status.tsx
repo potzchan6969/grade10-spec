@@ -9,7 +9,8 @@ const STATUS_BADGE_VARIANT: Record<
 > = {
   completed: "outline",
   shipped: "info",
-  pending: "warning",
+  processing: "warning",
+  pickup: "info",
   canceled: "outline",
   refunded: "outline",
 };
@@ -26,9 +27,9 @@ type OrderHistoryStatusProps = {
  * state of an order. Supports both online and in-store order channels.
  *
  * Figma set `Product / Order / Order Status` (`4872:8537`). Axis `status`:
- * `completed` · `shipped` · `pending` · `canceled` · `refunded`. Each rung
- * composes design-system `Badge` `sm`: `outline` for completed / canceled /
- * refunded, `info` for shipped, `warning` for pending.
+ * `completed` · `shipped` · `processing` · `pickup` · `canceled` · `refunded`.
+ * Each rung composes design-system `Badge` `sm`: `outline` for completed /
+ * canceled / refunded, `info` for shipped and pickup, `warning` for processing.
  */
 function OrderHistoryStatus({
   status,

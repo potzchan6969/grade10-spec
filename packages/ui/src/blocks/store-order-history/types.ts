@@ -4,7 +4,8 @@ import type { ReactNode } from "react";
 type OrderHistoryFulfillmentStatus =
   | "completed"
   | "shipped"
-  | "pending"
+  | "processing"
+  | "pickup"
   | "canceled"
   | "refunded";
 
