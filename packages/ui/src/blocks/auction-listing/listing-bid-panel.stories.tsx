@@ -23,6 +23,7 @@ const meta = {
   args: {
     copy: {
       price: "Current bid",
+      maximum: "Your maximum",
       ends: "Ends",
       extension: "Extended bidding",
       extensionTooltip: "Extended bidding rules",
@@ -64,7 +65,7 @@ export const Loading: Story = {
 
 export const PreAuction: Story = {
   args: {
-    copy: { price: "Starting bid", ends: "Opens" },
+    copy: { price: "Starting bid", maximum: "Your maximum", ends: "Opens" },
     price: "HK$1,200.00",
     bidCount: undefined,
     history: undefined,
@@ -95,9 +96,69 @@ export const Default: Story = {
   },
 };
 
+export const LeadingMaximum: Story = {
+  args: {
+    copy: {
+      ends: "Ends",
+      extension: "Extended bidding",
+      extensionTooltip: "Extended bidding rules",
+      maximum: "Your maximum",
+      price: "Current bid",
+    },
+    maximum: "HK$8,000.00",
+    price: "HK$4,800.00",
+    standing: <HighestBidderStanding />,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Your maximum")).toBeInTheDocument();
+    expect(canvas.getByText("HK$8,000.00")).toBeInTheDocument();
+    expect(canvas.getByText("Current bid")).toBeInTheDocument();
+    expect(canvas.getByText("HK$4,800.00")).toBeInTheDocument();
+  },
+};
+
+export const OvertakenMaximum: Story = {
+  args: {
+    copy: {
+      ends: "Ends",
+      extension: "Extended bidding",
+      extensionTooltip: "Extended bidding rules",
+      maximum: "Your maximum",
+      price: "Current bid",
+    },
+    maximum: "HK$8,000.00",
+    price: "HK$8,250.00",
+    standing: <OutbidStanding />,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Your maximum")).toBeInTheDocument();
+    expect(canvas.getByText("HK$8,000.00")).toBeInTheDocument();
+    expect(canvas.getByText("Outbid")).toBeInTheDocument();
+  },
+};
+
+export const NoMaximum: Story = {
+  args: {
+    copy: {
+      ends: "Ends",
+      extension: "Extended bidding",
+      extensionTooltip: "Extended bidding rules",
+      maximum: "Your maximum",
+      price: "Current bid",
+    },
+    maximum: undefined,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByText("Your maximum")).toBeNull();
+  },
+};
+
 export const LiveNoBids: Story = {
   args: {
-    copy: { price: "Starting bid", ends: "Ends" },
+    copy: { price: "Starting bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$1,200.00",
     bidCount: "0 Bids",
     history: "No bids yet.",
@@ -127,7 +188,7 @@ export const ShowsBidHistory: Story = {
 
 export const PostSold: Story = {
   args: {
-    copy: { price: "Winning bid", ends: "Ends" },
+    copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
@@ -145,7 +206,7 @@ export const PostSold: Story = {
 
 export const PostWonPaymentDue: Story = {
   args: {
-    copy: { price: "Winning bid", ends: "Ends" },
+    copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
@@ -162,7 +223,7 @@ export const PostWonPaymentDue: Story = {
 
 export const PostWonSettled: Story = {
   args: {
-    copy: { price: "Winning bid", ends: "Ends" },
+    copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
@@ -179,7 +240,7 @@ export const PostWonSettled: Story = {
 
 export const PostLost: Story = {
   args: {
-    copy: { price: "Winning bid", ends: "Ends" },
+    copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
@@ -195,7 +256,7 @@ export const PostLost: Story = {
 
 export const PostUnsold: Story = {
   args: {
-    copy: { price: "Result", ends: "Ends" },
+    copy: { price: "Result", maximum: "Your maximum", ends: "Ends" },
     price: "Unsold",
     bidCount: "0 Bids",
     history: "No bids yet.",
@@ -215,7 +276,7 @@ export const PostUnsold: Story = {
 /** @deprecated Use PostSold — kept as alias for existing links. */
 export const Closed: Story = {
   args: {
-    copy: { price: "Winning bid", ends: "Ends" },
+    copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
@@ -245,6 +306,7 @@ function CountdownStory() {
         ends: "Ends",
         extension: "Extended bidding",
         extensionTooltip: "Extended bidding rules",
+        maximum: "Your maximum",
         price: "Current bid",
       }}
       actions={<LiveActions />}
