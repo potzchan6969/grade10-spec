@@ -4,7 +4,7 @@
 - [x] 1.2 Make `A competing bid visibly causes an outbid state`, `An automatic response is attributed to You`, `A failed attempt sits beside the unchanged auction state`, and `An automatic maximum is configured and raised` pass with complete standing, event, safe-failure, amount, time, loading, retry, and action vocabulary, with catalog-layer tests proving no brand answers the shared keys twice.
 - [x] 1.3 Verify the catalog group with `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test` in grade10-spec.
 
-## 2. Shared bidding-history contracts (grade10)
+## 2. Shared bidding-history contracts (grade10) (owner: @htonyl)
 
 Implementation starts only after automatic bidding and its authoritative
 action-group facts have landed. After group 1 lands, update the
