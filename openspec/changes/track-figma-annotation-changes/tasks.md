@@ -160,7 +160,7 @@ This group depends on the end-to-end workflow in groups 4 and 5 passing.
   `annotation-monitor.json` from the existing design-sync workflow. Verify
   `Design-sync workflow still checks registered components`: preserve its
   triggers and component, rendered-value, token, audit, and Code Connect checks.
-- [ ] 6.2 Remove the REST live-fetch path, old scanner entry point, obsolete
+- [x] 6.2 Remove the REST live-fetch path, old scanner entry point, obsolete
   annotation package command, and CI-specific summary rendering after migrating
   every useful canonicalization, matching, blocker, and fixture test to the
   snapshot diff and acceptance commands.
