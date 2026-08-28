@@ -1,5 +1,188 @@
 # Loyalty — delta
 
+## Purpose
+
+Rewrites how Grade10's loyalty programme counts points, promotes and drops
+tiers, prices earning, settles redemptions, and what a member versus an
+operator can see. Two counts replace one: tier progress is not spendable, and
+the spendable balance is not the tier.
+
+## Feature set
+
+- Two counts
+  - Tier vs redeemable: earning credits both; redemption spends only the balance
+- Promotion and validity
+  - Instant promotion: a threshold is reached at the purchase; the next purchase earns at the new rate
+  - Fixed period: re-qualify or drop when the period ends
+- Qualifying spend
+  - Paid goods: discounts, shipping, gift cards, and auctions follow the earning rules
+- Redemption and checkout
+  - Reward type: a physical reward and a coupon settle differently; points can pay the bill
+- Member and operator surfaces
+  - Two views: a member never sees the operating record; an operator acts through named permissions
+
+## User journeys
+
+### loyalty-US-01: Member holds tier points and a redeemable balance apart
+
+**As a** member,
+**I want** earning to credit both counts and redeeming to spend only the balance,
+**so that** spending points cannot take my tier, and losing the balance cannot take it either.
+
+**Accepted by:**
+
+- `loyalty-SC-70` — Redeeming costs no tier progress
+- `loyalty-SC-71` — Earning credits both counts
+- `loyalty-SC-72` — Losing the balance does not lose the tier
+- `loyalty-SC-73` — Losing the tier does not lose the balance
+- `loyalty-SC-74` — A first purchase can promote
+- `loyalty-SC-75` — The triggering purchase earns at the old rate
+- `loyalty-SC-76` — A promotion dates the validity period
+- `loyalty-SC-77` — Re-qualifying keeps the tier
+- `loyalty-SC-78` — Not re-qualifying drops the tier
+- `loyalty-SC-79` — Losing a tier resets the climb
+- `loyalty-SC-80` — Spending points does not demote
+- `loyalty-SC-81` — A drop is observed, not scheduled
+- `loyalty-SC-82` — An operator removes a tier granted in error
+- `loyalty-SC-83` — Tier history records each move
+
+### loyalty-US-02: Member earns only on what they actually paid
+
+**As a** member,
+**I want** points from qualifying goods I paid for, and inactivity to expire the balance,
+**so that** a discount, a gift card, or an auction win does not invent earn, and a quiet year empties spendable points.
+
+**Accepted by:**
+
+- `loyalty-SC-84` — A discount reduces what the purchase earns
+- `loyalty-SC-85` — A coupon reduces what the purchase it pays for earns
+- `loyalty-SC-86` — An order discount cannot be pushed onto the non-earning lines
+- `loyalty-SC-87` — A fully discounted order earns nothing
+- `loyalty-SC-88` — Shipping and service fees earn nothing
+- `loyalty-SC-89` — A gift card earns once, not twice
+- `loyalty-SC-90` — An auction win earns nothing
+- `loyalty-SC-91` — A credit top-up earns nothing
+- `loyalty-SC-92` — An unlisted category earns nothing
+- `loyalty-SC-93` — An entry names its channel
+- `loyalty-SC-94` — Buying keeps the whole balance alive
+- `loyalty-SC-95` — Redeeming also resets the window
+- `loyalty-SC-96` — Expiry needs no sweep
+- `loyalty-SC-97` — Expired points do not come back
+- `loyalty-SC-98` — A correction does not extend the balance's life
+- `loyalty-SC-99` — A campaign grant keeps the balance alive
+- `loyalty-SC-100` — A spend too small to earn still counts as activity
+- `loyalty-SC-101` — A late record cannot shorten the balance's life
+- `loyalty-SC-102` — A partial sweep converges
+
+### loyalty-US-03: Member redeems and can pay with points at checkout
+
+**As a** member,
+**I want** a redemption to settle as the reward it is, and points to reduce a bill at the programme's rate,
+**so that** I cannot undo a spent reward, and deleting my account ends membership at once.
+
+**Accepted by:**
+
+- `loyalty-SC-103` — A physical reward is not a discount code
+- `loyalty-SC-104` — A member cannot undo a redemption
+- `loyalty-SC-105` — A coupon expires on its own terms
+- `loyalty-SC-106` — Points buy nothing at an auction
+- `loyalty-SC-107` — One balance across both channels
+- `loyalty-SC-108` — The channel's copy is not the balance
+- `loyalty-SC-109` — Points reduce the bill
+- `loyalty-SC-110` — The part paid with points earns nothing
+- `loyalty-SC-111` — One debit however the channel settles it
+- `loyalty-SC-112` — A channel's own limit is disclosed before the points go
+- `loyalty-SC-113` — Deletion clears what the member held
+- `loyalty-SC-114` — Deletion does not wait for a window
+- `loyalty-SC-115` — Base points floor before the multiplier
+- `loyalty-SC-116` — A single floor at the end
+- `loyalty-SC-117` — A foreign currency is refused
+- `loyalty-SC-118` — Backdated activity keeps its own date
+- `loyalty-SC-119` — Future-dated activity is refused
+- `loyalty-SC-120` — An expired unused code returns nothing by itself
+- `loyalty-SC-121` — An operator cancellation is the credit path
+- `loyalty-SC-122` — A used artifact is never reversed
+
+### loyalty-US-04: Member reads two counts and redeems from one surface
+
+**As a** member,
+**I want** my tier, balance, and activity on one surface, in the programme's dates,
+**so that** I can join, redeem, and never see the operator's reasons behind an entry.
+
+**Accepted by:**
+
+- `loyalty-SC-123` — The two counts are never summed
+- `loyalty-SC-124` — A member's activity carries nothing operator-facing
+- `loyalty-SC-125` — The components take content, not sources
+- `loyalty-SC-03` — Balance excludes expired and spent points
+- `loyalty-SC-126` — Tier points are derived from the same entries
+- `loyalty-SC-04` — A balance never goes negative
+- `loyalty-SC-05` — Every debit is fully accounted
+- `loyalty-SC-17` — Two tiers share an identifier
+- `loyalty-SC-18` — No entry tier, or more than one
+- `loyalty-SC-19` — The entry tier is not the lowest rung
+- `loyalty-SC-20` — A higher tier is cheaper than the one below it
+- `loyalty-SC-21` — Earned tiers measure over different windows
+- `loyalty-SC-127` — A retention threshold asks more than the tier itself
+- `loyalty-SC-128` — An earned tier has no validity period
+- `loyalty-SC-129` — The programme has no inactivity window
+- `loyalty-SC-22` — The programme names a zone that does not exist
+- `loyalty-SC-23` — A purchase earns at the member's rate
+- `loyalty-SC-130` — A fractional point is dropped
+- `loyalty-SC-131` — Grade10 floors base points before the multiplier
+- `loyalty-SC-24` — The second tier is reached by spending
+- `loyalty-SC-132` — Tier records use the public identifiers
+- `loyalty-SC-133` — Gold is retained by earning again
+- `loyalty-SC-134` — Gold lapses after a quiet year
+- `loyalty-SC-135` — A quiet year empties the balance
+- `loyalty-SC-136` — A point is worth one Hong Kong dollar at checkout
+- `loyalty-SC-25` — The top tier cannot be bought
+- `loyalty-SC-29` — Repricing does not rewrite history
+- `loyalty-SC-137` — Re-dating a reward's coupon does not shorten one already issued
+- `loyalty-SC-30` — Stock is not oversold
+- `loyalty-SC-31` — A reward outside its window cannot be redeemed
+- `loyalty-SC-32` — The public menu shows only what a member can buy
+- `loyalty-SC-138` — A reversal voids the coupon
+- `loyalty-SC-139` — A collected reward cannot be reversed
+- `loyalty-SC-140` — A waiting collection is cancelled by the reversal
+- `loyalty-SC-141` — A used coupon cannot be reversed
+- `loyalty-SC-142` — A member cannot reverse their own redemption
+- `loyalty-SC-33` — Restored points keep their original expiry
+- `loyalty-SC-143` — A reversal after the balance expired returns nothing
+- `loyalty-SC-144` — Tier progress is untouched by a reversal
+- `loyalty-SC-34` — An unlimited reward returns no stock
+- `loyalty-SC-35` — A split refund matches a single refund
+- `loyalty-SC-36` — A member who already spent the points is not driven negative
+- `loyalty-SC-37` — A refund before its earning is not lost
+- `loyalty-SC-38` — A claw-back cancels the tier contribution it removes
+- `loyalty-SC-145` — A claw-back withdraws an unsupported retention extension
+- `loyalty-SC-146` — A claw-back can demote
+- `loyalty-SC-147` — The two counts are shown as two counts
+- `loyalty-SC-59` — An operator's reason stays out of a member's view
+- `loyalty-SC-60` — Retry keys and internal pricing stay out of a member's view
+- `loyalty-SC-61` — A retired reward is still readable in history
+- `loyalty-SC-62` — A member who never joined is invited to
+- `loyalty-SC-63` — A double redemption costs one
+- `loyalty-SC-148` — A coupon is readable as soon as it is issued
+- `loyalty-SC-64` — Dates read in the programme's time zone
+
+### loyalty-US-05: Operator runs the programme from one console
+
+**As an** operator,
+**I want** each action behind a named permission, with a record that cannot be rewritten,
+**so that** I can correct, reverse, and find a member without holding powers I was not given.
+
+**Accepted by:**
+
+- `loyalty-SC-45` — A permission is required per action
+- `loyalty-SC-149` — Moving points does not carry tier removal
+- `loyalty-SC-46` — The record survives an attempt to rewrite it
+- `loyalty-SC-47` — An action with no place to record it does not run
+- `loyalty-SC-50` — Sections match permissions
+- `loyalty-SC-51` — A missing second factor opens the gate
+- `loyalty-SC-52` — A stale console reports what broke
+- `loyalty-SC-53` — A member can be found again later
+
 ## ADDED Requirements
 
 ### Requirement: Tier points and redeemable points are counted separately
@@ -18,23 +201,23 @@ date that tier was activated for that member, and the redeemable balance's
 expiry is measured from that member's most recent earning or redemption.
 Neither clock SHALL move the other.
 
-#### Scenario: Redeeming costs no tier progress
+#### Scenario: loyalty-SC-70 - Redeeming costs no tier progress
 
 - **WHEN** a member holding 600 tier points and 600 redeemable points redeems a reward priced at 500 points
 - **THEN** their redeemable balance is 100
 - **AND** their tier points are still 600, and their tier is unchanged
 
-#### Scenario: Earning credits both counts
+#### Scenario: loyalty-SC-71 - Earning credits both counts
 
 - **WHEN** a member earns 40 points
 - **THEN** their tier points and their redeemable balance each rise by 40
 
-#### Scenario: Losing the balance does not lose the tier
+#### Scenario: loyalty-SC-72 - Losing the balance does not lose the tier
 
 - **WHEN** a member's redeemable balance expires
 - **THEN** they keep the tier they hold until that tier's own validity period ends
 
-#### Scenario: Losing the tier does not lose the balance
+#### Scenario: loyalty-SC-73 - Losing the tier does not lose the balance
 
 - **WHEN** a member is downgraded at the end of a validity period
 - **THEN** their redeemable balance is unchanged
@@ -49,18 +232,18 @@ The spend that triggers a promotion SHALL be priced at the tier the member held
 before it. The higher multiplier SHALL apply from the member's next earning
 onward.
 
-#### Scenario: A first purchase can promote
+#### Scenario: loyalty-SC-74 - A first purchase can promote
 
 - **WHEN** a member's first recorded purchase takes their tier points to a tier's threshold
 - **THEN** they hold that tier from that instant
 
-#### Scenario: The triggering purchase earns at the old rate
+#### Scenario: loyalty-SC-75 - The triggering purchase earns at the old rate
 
 - **WHEN** a purchase takes a member's tier points from below a tier's threshold to at or above it
 - **THEN** that purchase earns at the multiplier of the tier they held before it
 - **AND** their next purchase earns at the new tier's multiplier
 
-#### Scenario: A promotion dates the validity period
+#### Scenario: loyalty-SC-76 - A promotion dates the validity period
 
 - **WHEN** a member is promoted
 - **THEN** one tier history entry records the move and that earning caused it
@@ -94,41 +277,41 @@ An operator holding the permission SHALL be able to remove a tier a member holds
 whatever its period says, recorded with who and why — the remedy for a tier
 granted or reached in error.
 
-#### Scenario: Re-qualifying keeps the tier
+#### Scenario: loyalty-SC-77 - Re-qualifying keeps the tier
 
 - **WHEN** a member earns at least the retention threshold in tier points inside their tier's validity period
 - **THEN** they keep that tier
 - **AND** a fresh validity period starts at the instant the previous one ends
 
-#### Scenario: Not re-qualifying drops the tier
+#### Scenario: loyalty-SC-78 - Not re-qualifying drops the tier
 
 - **WHEN** a member's validity period ends and they earned less than the retention threshold inside it
 - **THEN** they hold the entry tier from that instant, unless a higher tier is still live by earning or invitation
 
-#### Scenario: Losing a tier resets the climb
+#### Scenario: loyalty-SC-79 - Losing a tier resets the climb
 
 - **WHEN** a member is demoted at the end of a validity period and then makes a small purchase
 - **THEN** only earnings dated after the demotion count toward reaching the tier again
 - **AND** the earnings from the lapsed period do not re-promote them
 
-#### Scenario: Spending points does not demote
+#### Scenario: loyalty-SC-80 - Spending points does not demote
 
 - **WHEN** a member redeems every point that qualified them for their tier
 - **THEN** they keep that tier until its validity period ends
 
-#### Scenario: A drop is observed, not scheduled
+#### Scenario: loyalty-SC-81 - A drop is observed, not scheduled
 
 - **WHEN** a validity period or a dated invitation passes its end
 - **THEN** the member stops holding that tier from that instant
 - **AND** the drop is recorded the next time that member is evaluated
 
-#### Scenario: An operator removes a tier granted in error
+#### Scenario: loyalty-SC-82 - An operator removes a tier granted in error
 
 - **WHEN** an operator with the permission removes a tier inside its validity period
 - **THEN** the member falls to the highest tier they still hold
 - **AND** the removal is recorded with who did it and why
 
-#### Scenario: Tier history records each move
+#### Scenario: loyalty-SC-83 - Tier history records each move
 
 - **WHEN** a member's effective tier changes
 - **THEN** one entry records the move and what caused it
@@ -145,23 +328,23 @@ falling on qualifying lines SHALL reduce qualifying spend.
 
 Qualifying spend SHALL never be less than zero.
 
-#### Scenario: A discount reduces what the purchase earns
+#### Scenario: loyalty-SC-84 - A discount reduces what the purchase earns
 
 - **WHEN** a discount reduces what a member pays for qualifying goods
 - **THEN** qualifying spend is the amount after the discount, not the amount before it
 
-#### Scenario: A coupon reduces what the purchase it pays for earns
+#### Scenario: loyalty-SC-85 - A coupon reduces what the purchase it pays for earns
 
 - **WHEN** a member pays for part of a qualifying basket with a redeemed coupon
 - **THEN** qualifying spend is the basket less the coupon's value
 
-#### Scenario: An order discount cannot be pushed onto the non-earning lines
+#### Scenario: loyalty-SC-86 - An order discount cannot be pushed onto the non-earning lines
 
 - **WHEN** an order-level discount applies to an order that is four fifths qualifying goods and one fifth shipping, measured before the discount
 - **THEN** four fifths of the discount reduces qualifying spend
 - **AND** the fifth falling on shipping reduces nothing
 
-#### Scenario: A fully discounted order earns nothing
+#### Scenario: loyalty-SC-87 - A fully discounted order earns nothing
 
 - **WHEN** discounts and coupons reduce qualifying spend to zero or below
 - **THEN** no points are granted and no ledger entry is written
@@ -180,34 +363,34 @@ earns: qualifying goods bought with either earn as any other purchase does.
 
 Every ledger entry SHALL record the channel the activity came from.
 
-#### Scenario: Shipping and service fees earn nothing
+#### Scenario: loyalty-SC-88 - Shipping and service fees earn nothing
 
 - **WHEN** a purchase carries qualifying goods, a shipping charge and a grading service fee
 - **THEN** qualifying spend is the qualifying goods alone
 
-#### Scenario: A gift card earns once, not twice
+#### Scenario: loyalty-SC-89 - A gift card earns once, not twice
 
 - **WHEN** a member buys a gift card
 - **THEN** that purchase earns nothing
 - **AND** spending that gift card on qualifying goods later earns as any other purchase does
 
-#### Scenario: An auction win earns nothing
+#### Scenario: loyalty-SC-90 - An auction win earns nothing
 
 - **WHEN** a member wins an auction
 - **THEN** no points are granted
 
-#### Scenario: A credit top-up earns nothing
+#### Scenario: loyalty-SC-91 - A credit top-up earns nothing
 
 - **WHEN** a member tops up store credit
 - **THEN** no points are granted
 
-#### Scenario: An unlisted category earns nothing
+#### Scenario: loyalty-SC-92 - An unlisted category earns nothing
 
 - **WHEN** a purchase carries a line in a category the programme does not list as qualifying
 - **THEN** that line is excluded from qualifying spend
 - **AND** the rest of the purchase earns
 
-#### Scenario: An entry names its channel
+#### Scenario: loyalty-SC-93 - An entry names its channel
 
 - **WHEN** any earning or redemption is recorded
 - **THEN** the entry carries the channel that sold, taken from the programme's closed set
@@ -233,51 +416,51 @@ revived by later activity.
 Expiry SHALL be recorded as a dated entry like any other movement, naming the
 whole amount it removed.
 
-#### Scenario: Buying keeps the whole balance alive
+#### Scenario: loyalty-SC-94 - Buying keeps the whole balance alive
 
 - **WHEN** a member earns points eleven months after their previous activity
 - **THEN** the whole balance, oldest points included, expires an inactivity window after this earning
 - **AND** not an inactivity window after the earning that produced those older points
 
-#### Scenario: Redeeming also resets the window
+#### Scenario: loyalty-SC-95 - Redeeming also resets the window
 
 - **WHEN** a member redeems and records no other activity
 - **THEN** the remaining balance expires an inactivity window after that redemption
 
-#### Scenario: Expiry needs no sweep
+#### Scenario: loyalty-SC-96 - Expiry needs no sweep
 
 - **WHEN** a member's inactivity window passes
 - **THEN** their balance stops counting toward what they can spend immediately
 
-#### Scenario: Expired points do not come back
+#### Scenario: loyalty-SC-97 - Expired points do not come back
 
 - **WHEN** a member whose balance has expired makes a purchase
 - **THEN** the new earning starts a fresh balance and a fresh inactivity window
 - **AND** nothing that expired returns
 
-#### Scenario: A correction does not extend the balance's life
+#### Scenario: loyalty-SC-98 - A correction does not extend the balance's life
 
 - **WHEN** an operator corrects a balance, or a refund claws points back
 - **THEN** the member's inactivity window is unchanged
 
-#### Scenario: A campaign grant keeps the balance alive
+#### Scenario: loyalty-SC-99 - A campaign grant keeps the balance alive
 
 - **WHEN** an operator grants campaign points as a reward
 - **THEN** the whole balance expires an inactivity window after that grant
 
-#### Scenario: A spend too small to earn still counts as activity
+#### Scenario: loyalty-SC-100 - A spend too small to earn still counts as activity
 
 - **WHEN** a member's qualifying spend is below the price of one point
 - **THEN** no points are credited
 - **AND** the member's inactivity window is reset from that spend
 
-#### Scenario: A late record cannot shorten the balance's life
+#### Scenario: loyalty-SC-101 - A late record cannot shorten the balance's life
 
 - **WHEN** a purchase dated before the member's most recent activity is recorded
 - **THEN** the balance's expiry is left where the later activity put it
 - **AND** it is never pulled back toward the older date
 
-#### Scenario: A partial sweep converges
+#### Scenario: loyalty-SC-102 - A partial sweep converges
 
 - **WHEN** a scheduled expiry pass stops before reaching every member
 - **THEN** it reports how many members it did not reach
@@ -300,23 +483,23 @@ NOT apply to an auction purchase, and points SHALL NOT be spent against one.
 A member SHALL be able to read the coupons they hold, each with its code, what it
 is for, its validity period, and whether it has been used.
 
-#### Scenario: A physical reward is not a discount code
+#### Scenario: loyalty-SC-103 - A physical reward is not a discount code
 
 - **WHEN** a member redeems a reward that is a physical item
 - **THEN** the redemption records an item owed to them, and no discount code is issued
 
-#### Scenario: A member cannot undo a redemption
+#### Scenario: loyalty-SC-104 - A member cannot undo a redemption
 
 - **WHEN** a member holding an unused coupon asks for their points back
 - **THEN** no member surface offers it, and the points are not returned
 
-#### Scenario: A coupon expires on its own terms
+#### Scenario: loyalty-SC-105 - A coupon expires on its own terms
 
 - **WHEN** a coupon's validity period ends
 - **THEN** it can no longer be used
 - **AND** the member's redeemable balance is unaffected
 
-#### Scenario: Points buy nothing at an auction
+#### Scenario: loyalty-SC-106 - Points buy nothing at an auction
 
 - **WHEN** a member attempts to pay for an auction purchase with points or with a coupon
 - **THEN** it is refused
@@ -332,12 +515,12 @@ Earning and redemption SHALL both be available in the online store and at the
 counter. A channel the programme does not run on SHALL neither earn nor redeem,
 and a purchase there SHALL complete regardless.
 
-#### Scenario: One balance across both channels
+#### Scenario: loyalty-SC-107 - One balance across both channels
 
 - **WHEN** a member earns online and then redeems at the counter
 - **THEN** both act on the same balance, and the counter sees the online earning
 
-#### Scenario: The channel's copy is not the balance
+#### Scenario: loyalty-SC-108 - The channel's copy is not the balance
 
 - **WHEN** a channel has recorded a purchase the programme has not yet accepted
 - **THEN** what the member reads as their balance is the programme's, not the channel's
@@ -359,24 +542,24 @@ artifact's own value or refuse to combine it with another discount, and a
 member offered points on such a channel SHALL be told what they can spend
 before the points leave their balance, never after.
 
-#### Scenario: Points reduce the bill
+#### Scenario: loyalty-SC-109 - Points reduce the bill
 
 - **WHEN** a member pays points toward a purchase
 - **THEN** the amount they owe in money falls by those points at the programme's exchange rate
 - **AND** their redeemable balance falls by the points paid
 
-#### Scenario: The part paid with points earns nothing
+#### Scenario: loyalty-SC-110 - The part paid with points earns nothing
 
 - **WHEN** a purchase is paid partly with points and partly with money
 - **THEN** points are earned on the money part alone
 
-#### Scenario: One debit however the channel settles it
+#### Scenario: loyalty-SC-111 - One debit however the channel settles it
 
 - **WHEN** a member pays 100 points toward a purchase on a channel that settles through a money-off artifact
 - **THEN** 100 points leave their balance, the same as a channel debiting directly
 - **AND** exactly one redemption is recorded for that payment
 
-#### Scenario: A channel's own limit is disclosed before the points go
+#### Scenario: loyalty-SC-112 - A channel's own limit is disclosed before the points go
 
 - **WHEN** a channel settles through an artifact that cannot be spent on the member's cart
 - **THEN** the member is told before any points leave their balance
@@ -389,12 +572,12 @@ zero, unexpired coupons SHALL be voided, and redemptions awaiting collection
 SHALL be cancelled without refund. The ledger's record SHALL survive — nothing
 is erased, the identity simply holds nothing any more.
 
-#### Scenario: Deletion clears what the member held
+#### Scenario: loyalty-SC-113 - Deletion clears what the member held
 
 - **WHEN** a member's account is deleted
 - **THEN** their balance and tier progress are zero, their coupons are void, and their pending collections are cancelled
 
-#### Scenario: Deletion does not wait for a window
+#### Scenario: loyalty-SC-114 - Deletion does not wait for a window
 
 - **WHEN** an account is deleted inside a live inactivity window or tier term
 - **THEN** the clearing is immediate, not deferred to either clock
@@ -415,32 +598,32 @@ on when they made it.
 A spend recorded in a currency other than the programme's SHALL be refused as
 invalid rather than converted.
 
-#### Scenario: Base points floor before the multiplier
+#### Scenario: loyalty-SC-115 - Base points floor before the multiplier
 
 - **WHEN** the deployed order floors base points first
 - **THEN** the money becomes whole base points at the earn rate
 - **AND** the multiplier applies to those whole points, floored again
 
-#### Scenario: A single floor at the end
+#### Scenario: loyalty-SC-116 - A single floor at the end
 
 - **WHEN** the deployed order floors once at the end
 - **THEN** the point total is floored once after applying the rate and the
   multiplier, not at each step
 
-#### Scenario: A foreign currency is refused
+#### Scenario: loyalty-SC-117 - A foreign currency is refused
 
 - **WHEN** a spend arrives in a currency the programme does not run in
 - **THEN** it is refused as invalid, naming both currencies
 - **AND** no ledger entry is written
 
-#### Scenario: Backdated activity keeps its own date
+#### Scenario: loyalty-SC-118 - Backdated activity keeps its own date
 
 - **WHEN** a spend carries a date in the past
 - **THEN** its tier contribution follows that date
 - **AND** its effect on the inactivity window follows the expiry rule, never shortening it
 - **AND** the multiplier applied is the tier the member held immediately before it is priced
 
-#### Scenario: Future-dated activity is refused
+#### Scenario: loyalty-SC-119 - Future-dated activity is refused
 
 - **WHEN** a spend carries a date more than five minutes ahead of now
 - **THEN** it is refused as invalid
@@ -458,19 +641,19 @@ outside the programme.
 What members forfeit to expiry SHALL be counted and readable by an
 operator, never silent.
 
-#### Scenario: An expired unused code returns nothing by itself
+#### Scenario: loyalty-SC-120 - An expired unused code returns nothing by itself
 
 - **WHEN** a discount code passes its validity with no use
 - **THEN** the points remain spent
 - **AND** the forfeit is counted where an operator can read it
 
-#### Scenario: An operator cancellation is the credit path
+#### Scenario: loyalty-SC-121 - An operator cancellation is the credit path
 
 - **WHEN** an operator cancels a redemption whose artifact went unused
 - **THEN** the points return per the reversal rules
 - **AND** the cancellation records who and why
 
-#### Scenario: A used artifact is never reversed
+#### Scenario: loyalty-SC-122 - A used artifact is never reversed
 
 - **WHEN** a cancellation names a redemption whose artifact was used
 - **THEN** it is refused
@@ -497,19 +680,19 @@ state.
 The operator console composes these same exports as brand-owned view code and
 SHALL require no export of its own.
 
-#### Scenario: The two counts are never summed
+#### Scenario: loyalty-SC-123 - The two counts are never summed
 
 - **WHEN** a member holds spendable points and qualifying points that differ
 - **THEN** the summary shows both figures separately
 - **AND** no single combined total is rendered
 
-#### Scenario: A member's activity carries nothing operator-facing
+#### Scenario: loyalty-SC-124 - A member's activity carries nothing operator-facing
 
 - **WHEN** an entry was written by an operator correction
 - **THEN** the member's activity names the entry in member-readable terms
 - **AND** it carries no operator reason, retry key or internal pricing
 
-#### Scenario: The components take content, not sources
+#### Scenario: loyalty-SC-125 - The components take content, not sources
 
 - **WHEN** any of the four components is rendered
 - **THEN** every count, date, state and word it shows arrived through props
@@ -522,25 +705,25 @@ Every point movement SHALL be recorded as a dated entry that is never edited or
 deleted. Both the redeemable balance and the tier point count SHALL be derived
 by asking the ledger, never stored as running totals.
 
-#### Scenario: Balance excludes expired and spent points
+#### Scenario: loyalty-SC-03 - Balance excludes expired and spent points
 
 - **WHEN** a redeemable balance is asked for at a given instant
 - **THEN** it counts every credit recorded before that instant, less what has been spent or clawed back
 - **AND** it counts nothing once the member's inactivity window has passed
 
-#### Scenario: Tier points are derived from the same entries
+#### Scenario: loyalty-SC-126 - Tier points are derived from the same entries
 
 - **WHEN** a tier point count is asked for over a given window
 - **THEN** it counts the earnings dated inside that window and after the member's most recent demotion, less any claw-backs against them
 - **AND** redemptions do not appear in it
 
-#### Scenario: A balance never goes negative
+#### Scenario: loyalty-SC-04 - A balance never goes negative
 
 - **WHEN** any debit is recorded
 - **THEN** it draws only on credits that have points remaining
 - **AND** no sequence of recorded activity can drive a member below zero
 
-#### Scenario: Every debit is fully accounted
+#### Scenario: loyalty-SC-05 - Every debit is fully accounted
 
 - **WHEN** a debit is recorded
 - **THEN** the credits it drew from, and how much it took from each, are recorded
@@ -566,48 +749,48 @@ threshold SHALL resolve it to that tier's own attainment points rather than be
 refused. The programme SHALL carry an inactivity window longer than zero. The
 programme's time zone SHALL name a real zone.
 
-#### Scenario: Two tiers share an identifier
+#### Scenario: loyalty-SC-17 - Two tiers share an identifier
 
 - **WHEN** a ladder repeats a tier identifier
 - **THEN** the product fails to start, naming the identifier
 
-#### Scenario: No entry tier, or more than one
+#### Scenario: loyalty-SC-18 - No entry tier, or more than one
 
 - **WHEN** a ladder has other than exactly one tier every member starts on
 - **THEN** the product fails to start, saying how many it found
 
-#### Scenario: The entry tier is not the lowest rung
+#### Scenario: loyalty-SC-19 - The entry tier is not the lowest rung
 
 - **WHEN** the tier every member starts on is not first in the ladder
 - **THEN** the product fails to start
 
-#### Scenario: A higher tier is cheaper than the one below it
+#### Scenario: loyalty-SC-20 - A higher tier is cheaper than the one below it
 
 - **WHEN** an earned tier asks no more qualifying points than the tier beneath it
 - **THEN** the product fails to start, naming both amounts
 - **AND** no member can hold a tier they skipped past
 
-#### Scenario: Earned tiers measure over different windows
+#### Scenario: loyalty-SC-21 - Earned tiers measure over different windows
 
 - **WHEN** two earned tiers count qualifying points over different periods
 - **THEN** the product fails to start, naming the periods
 
-#### Scenario: A retention threshold asks more than the tier itself
+#### Scenario: loyalty-SC-127 - A retention threshold asks more than the tier itself
 
 - **WHEN** an earned tier's retention threshold is greater than the qualifying points that tier asks for
 - **THEN** the product fails to start, naming both amounts
 
-#### Scenario: An earned tier has no validity period
+#### Scenario: loyalty-SC-128 - An earned tier has no validity period
 
 - **WHEN** an earned tier carries a validity period of zero or less
 - **THEN** the product fails to start, naming the tier
 
-#### Scenario: The programme has no inactivity window
+#### Scenario: loyalty-SC-129 - The programme has no inactivity window
 
 - **WHEN** the programme's inactivity window is zero or less
 - **THEN** the product fails to start
 
-#### Scenario: The programme names a zone that does not exist
+#### Scenario: loyalty-SC-22 - The programme names a zone that does not exist
 
 - **WHEN** the programme's time zone is not a real IANA zone
 - **THEN** the product fails to start, naming it
@@ -644,54 +827,54 @@ Why these numbers, and what is still open about the top tier and the retention
 threshold:
 [Grade10 loyalty programme](../../../../docs/prds/loyalty/programme.md).
 
-#### Scenario: A purchase earns at the member's rate
+#### Scenario: loyalty-SC-23 - A purchase earns at the member's rate
 
 - **WHEN** a Gold member completes a HKD 1,000 qualifying purchase
 - **THEN** they earn 120 points
 
-#### Scenario: A fractional point is dropped
+#### Scenario: loyalty-SC-130 - A fractional point is dropped
 
 - **WHEN** a Silver member's qualifying spend is HKD 125.50
 - **THEN** they earn 12 points
 
-#### Scenario: Grade10 floors base points before the multiplier
+#### Scenario: loyalty-SC-131 - Grade10 floors base points before the multiplier
 
 - **WHEN** a Gold member's qualifying spend is HKD 139
 - **THEN** they earn 15 points, never 16
 
-#### Scenario: The second tier is reached by spending
+#### Scenario: loyalty-SC-24 - The second tier is reached by spending
 
 - **WHEN** a member's tier points inside the rolling twelve months reach 500
 - **THEN** they hold Gold from that instant
 
-#### Scenario: Tier records use the public identifiers
+#### Scenario: loyalty-SC-132 - Tier records use the public identifiers
 
 - **WHEN** enrollment, promotion or demotion records a Silver or Gold tier
 - **THEN** the persisted identifier is `silver` or `gold`, respectively
 - **AND** no record uses `platinum` or `diamond`
 
-#### Scenario: Gold is retained by earning again
+#### Scenario: loyalty-SC-133 - Gold is retained by earning again
 
 - **WHEN** a Gold member earns 500 tier points inside their validity period
 - **THEN** they hold Gold for a further twelve months
 
-#### Scenario: Gold lapses after a quiet year
+#### Scenario: loyalty-SC-134 - Gold lapses after a quiet year
 
 - **WHEN** a Gold member earns 300 tier points in the twelve months following their upgrade
 - **THEN** they hold Silver from the instant those twelve months end
 
-#### Scenario: A quiet year empties the balance
+#### Scenario: loyalty-SC-135 - A quiet year empties the balance
 
 - **WHEN** a member records no earning and no redemption for twelve months
 - **THEN** their redeemable balance is zero
 
-#### Scenario: A point is worth one Hong Kong dollar at checkout
+#### Scenario: loyalty-SC-136 - A point is worth one Hong Kong dollar at checkout
 
 - **WHEN** a member pays 100 points toward an HKD 800 purchase
 - **THEN** HKD 100 is covered by points and HKD 700 remains payable in money
 - **AND** the purchase earns on HKD 700
 
-#### Scenario: The top tier cannot be bought
+#### Scenario: loyalty-SC-25 - The top tier cannot be bought
 
 - **WHEN** a member earns any number of points
 - **THEN** they never reach Black by earning alone
@@ -707,27 +890,27 @@ cost or how long its coupon runs.
 
 A member SHALL be able to list what they have redeemed and the state of each.
 
-#### Scenario: Repricing does not rewrite history
+#### Scenario: loyalty-SC-29 - Repricing does not rewrite history
 
 - **WHEN** a reward's point cost changes after a member redeemed it
 - **THEN** the earlier redemption still records the price the member paid
 
-#### Scenario: Re-dating a reward's coupon does not shorten one already issued
+#### Scenario: loyalty-SC-137 - Re-dating a reward's coupon does not shorten one already issued
 
 - **WHEN** a reward's coupon validity period changes after a member redeemed it
 - **THEN** the coupon already issued keeps the validity it was issued with
 
-#### Scenario: Stock is not oversold
+#### Scenario: loyalty-SC-30 - Stock is not oversold
 
 - **WHEN** two members redeem the last unit of a limited reward at once
 - **THEN** exactly one succeeds and the other is refused as out of stock
 
-#### Scenario: A reward outside its window cannot be redeemed
+#### Scenario: loyalty-SC-31 - A reward outside its window cannot be redeemed
 
 - **WHEN** a member redeems a reward that is archived, or outside its live window
 - **THEN** the redemption is refused
 
-#### Scenario: The public menu shows only what a member can buy
+#### Scenario: loyalty-SC-32 - The public menu shows only what a member can buy
 
 - **WHEN** the reward menu is read without signing in
 - **THEN** it lists only live, unarchived rewards, each with its point price and the validity of the coupon it issues
@@ -755,50 +938,50 @@ A member's tier points SHALL be unaffected by a reversal, because the redemption
 did not reduce them. Stock SHALL be returned only when the redemption actually
 consumed a unit.
 
-#### Scenario: A reversal voids the coupon
+#### Scenario: loyalty-SC-138 - A reversal voids the coupon
 
 - **WHEN** an operator reverses a redemption
 - **THEN** the coupon it issued can no longer be used
 - **AND** the points it consumed return to the member's redeemable balance
 
-#### Scenario: A collected reward cannot be reversed
+#### Scenario: loyalty-SC-139 - A collected reward cannot be reversed
 
 - **WHEN** an operator reverses a redemption whose physical reward was already handed over
 - **THEN** it is refused and the points stay spent
 
-#### Scenario: A waiting collection is cancelled by the reversal
+#### Scenario: loyalty-SC-140 - A waiting collection is cancelled by the reversal
 
 - **WHEN** an operator reverses a redemption whose physical reward is still waiting
 - **THEN** the points return and the collection is cancelled
 
-#### Scenario: A used coupon cannot be reversed
+#### Scenario: loyalty-SC-141 - A used coupon cannot be reversed
 
 - **WHEN** an operator reverses a redemption whose coupon has already been used
 - **THEN** the reversal is refused and the points stay spent
 - **AND** the operator is told why
 
-#### Scenario: A member cannot reverse their own redemption
+#### Scenario: loyalty-SC-142 - A member cannot reverse their own redemption
 
 - **WHEN** a member asks to reverse a redemption
 - **THEN** no member surface offers it
 
-#### Scenario: Restored points keep their original expiry
+#### Scenario: loyalty-SC-33 - Restored points keep their original expiry
 
 - **WHEN** a redemption is reversed
 - **THEN** the restored points rejoin the credits they were taken from, keeping those credits' own dates
 - **AND** they fall under the member's inactivity window already running, which the reversal does not reset
 
-#### Scenario: A reversal after the balance expired returns nothing
+#### Scenario: loyalty-SC-143 - A reversal after the balance expired returns nothing
 
 - **WHEN** an operator reverses a redemption for a member whose inactivity window has already passed
 - **THEN** no points are returned, and the operator is told why
 
-#### Scenario: Tier progress is untouched by a reversal
+#### Scenario: loyalty-SC-144 - Tier progress is untouched by a reversal
 
 - **WHEN** a redemption is reversed
 - **THEN** the member's tier points are unchanged
 
-#### Scenario: An unlimited reward returns no stock
+#### Scenario: loyalty-SC-34 - An unlimited reward returns no stock
 
 - **WHEN** a redemption of a reward that had unlimited stock is reversed
 - **THEN** no stock is returned
@@ -816,30 +999,30 @@ it.
 Splitting a refund into several parts SHALL claw back exactly what one refund
 for the whole sum would have.
 
-#### Scenario: A split refund matches a single refund
+#### Scenario: loyalty-SC-35 - A split refund matches a single refund
 
 - **WHEN** a refund is recorded in two parts
 - **THEN** the total clawed back equals what one refund of the combined amount removes
 
-#### Scenario: A member who already spent the points is not driven negative
+#### Scenario: loyalty-SC-36 - A member who already spent the points is not driven negative
 
 - **WHEN** a refund exceeds what the member still holds from that money
 - **THEN** the shortfall is recorded and counted by cause
 - **AND** the member's balance does not go below zero
 
-#### Scenario: A refund before its earning is not lost
+#### Scenario: loyalty-SC-37 - A refund before its earning is not lost
 
 - **WHEN** a refund names money that has not yet earned anything
 - **THEN** it is refused as not found and nothing is recorded
 - **AND** a later retry claws back once the earning lands
 
-#### Scenario: A claw-back cancels the tier contribution it removes
+#### Scenario: loyalty-SC-38 - A claw-back cancels the tier contribution it removes
 
 - **WHEN** points are clawed back
 - **THEN** the tier contribution of the earning they came from is reduced by the same amount
 - **AND** it leaves the qualifying window at the same time that earning does
 
-#### Scenario: A claw-back withdraws an unsupported retention extension
+#### Scenario: loyalty-SC-145 - A claw-back withdraws an unsupported retention extension
 
 - **GIVEN** a purchase inside a tier's validity period reached its retention threshold and started a fresh validity period
 - **WHEN** that purchase is fully refunded and the remaining points inside the original validity period no longer reach the retention threshold
@@ -847,7 +1030,7 @@ for the whole sum would have.
 - **AND** the member keeps the tier only until the original validity period ends
 - **AND** their retention progress reflects only the points that remain
 
-#### Scenario: A claw-back can demote
+#### Scenario: loyalty-SC-146 - A claw-back can demote
 
 - **WHEN** a claw-back takes a member's tier points below what attained their tier
 - **THEN** they hold the tier their remaining points still reach, from that instant
@@ -864,23 +1047,23 @@ operator reasons, retry keys, or the internal pricing of an entry.
 Each activity entry SHALL name what it was for, and which channel it came from,
 in terms the member can read.
 
-#### Scenario: The two counts are shown as two counts
+#### Scenario: loyalty-SC-147 - The two counts are shown as two counts
 
 - **WHEN** a member reads their membership
 - **THEN** the points that decide their tier and the points they can spend are shown as separate named figures
 
-#### Scenario: An operator's reason stays out of a member's view
+#### Scenario: loyalty-SC-59 - An operator's reason stays out of a member's view
 
 - **WHEN** an operator corrects a member's balance with a written reason
 - **THEN** that reason does not appear anywhere in what the member can read
 
-#### Scenario: Retry keys and internal pricing stay out of a member's view
+#### Scenario: loyalty-SC-60 - Retry keys and internal pricing stay out of a member's view
 
 - **WHEN** a member reads their activity
 - **THEN** no entry carries a retry key, a request record, or the tier and
   money arithmetic the entry was priced from
 
-#### Scenario: A retired reward is still readable in history
+#### Scenario: loyalty-SC-61 - A retired reward is still readable in history
 
 - **WHEN** a member reads an activity entry for a reward that has since been archived
 - **THEN** the entry still names that reward
@@ -896,22 +1079,22 @@ state and validity period.
 Redeeming twice by accident SHALL cost nothing, including when the member
 reloads between attempts.
 
-#### Scenario: A member who never joined is invited to
+#### Scenario: loyalty-SC-62 - A member who never joined is invited to
 
 - **WHEN** a member with recorded activity but no join date opens the surface
 - **THEN** they are shown how to join, and their existing points
 
-#### Scenario: A double redemption costs one
+#### Scenario: loyalty-SC-63 - A double redemption costs one
 
 - **WHEN** a member submits the same redemption twice, with or without a reload in between
 - **THEN** exactly one redemption is recorded
 
-#### Scenario: A coupon is readable as soon as it is issued
+#### Scenario: loyalty-SC-148 - A coupon is readable as soon as it is issued
 
 - **WHEN** a member completes a redemption
 - **THEN** the coupon's code and validity period are shown to them without a further step
 
-#### Scenario: Dates read in the programme's time zone
+#### Scenario: loyalty-SC-64 - Dates read in the programme's time zone
 
 - **WHEN** a member reads a date the programme computed
 - **THEN** it reads the same wherever the member is, in the programme's time zone
@@ -930,23 +1113,23 @@ others. Removing a tier and cancelling a redemption SHALL each be their own
 permission: both undo something a member can see, and neither follows from
 being allowed to move points.
 
-#### Scenario: A permission is required per action
+#### Scenario: loyalty-SC-45 - A permission is required per action
 
 - **WHEN** an operator without the action's permission attempts it
 - **THEN** the action is refused
 
-#### Scenario: Moving points does not carry tier removal
+#### Scenario: loyalty-SC-149 - Moving points does not carry tier removal
 
 - **WHEN** an operator holding only the point-movement permission attempts to
   remove a tier
 - **THEN** the action is refused
 
-#### Scenario: The record survives an attempt to rewrite it
+#### Scenario: loyalty-SC-46 - The record survives an attempt to rewrite it
 
 - **WHEN** any recorded operator action is altered or removed
 - **THEN** verifying the log reports the position at which it breaks
 
-#### Scenario: An action with no place to record it does not run
+#### Scenario: loyalty-SC-47 - An action with no place to record it does not run
 
 - **WHEN** the operator log cannot be written
 - **THEN** the action is refused rather than completed unrecorded
@@ -968,23 +1151,23 @@ what is allowed cannot disagree.
 Where a second factor is required and missing, the console SHALL take the
 operator to enrol or verify rather than reporting a refusal.
 
-#### Scenario: Sections match permissions
+#### Scenario: loyalty-SC-50 - Sections match permissions
 
 - **WHEN** an operator holding only the loyalty read permission opens the console
 - **THEN** they can find and read members
 - **AND** no section offering point movement, invitations, rewards, tier removal, redemption cancellation or the operator log is shown
 
-#### Scenario: A missing second factor opens the gate
+#### Scenario: loyalty-SC-51 - A missing second factor opens the gate
 
 - **WHEN** an operator attempts an action their role allows but their session has no verified second factor
 - **THEN** the console takes them to verify, and the action completes afterwards
 
-#### Scenario: A stale console reports what broke
+#### Scenario: loyalty-SC-52 - A stale console reports what broke
 
 - **WHEN** the console reads a response whose shape it does not recognise
 - **THEN** it reports which call failed to decode, rather than showing missing values
 
-#### Scenario: A member can be found again later
+#### Scenario: loyalty-SC-53 - A member can be found again later
 
 - **WHEN** an operator opens a member and shares the address of that view
 - **THEN** the same member opens for the recipient

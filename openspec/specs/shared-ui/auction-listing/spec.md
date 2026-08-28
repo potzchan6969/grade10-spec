@@ -6,6 +6,19 @@ media gallery, the bid panel, and the details section. This change records the
 export contract and the gallery's distinct sources for thumbnail, main frame,
 and zoom.
 
+## Feature set
+
+- Surface exports
+  - Named components: gallery, bid panel, and details from the package entry
+  - Reusable parts: the gallery renders without the bid panel
+- Gallery sources
+  - Distinct addresses: thumbnail, main frame, and zoom each have their own source
+  - Fallback to src: an omitted thumb or zoom uses the main source
+- Gallery strip
+  - Several items: more than one image shows a strip; one item does not
+- Consumer labels
+  - Supplied copy: accessible names come from the application
+
 ## Requirements
 
 ### Requirement: The listing surface exports
@@ -20,13 +33,13 @@ for the listing product page — `ListingGallery`, `ListingBidPanel`, and
 Each of those components SHALL be renderable on its own, so a later surface can
 reuse the gallery without the bid panel.
 
-#### Scenario: An application imports the surface
+#### Scenario: auction-listing-SC-01 - An application imports the surface
 
 - **WHEN** an application imports each name above from the shared UI package's
   public entry
 - **THEN** every import resolves
 
-#### Scenario: A part is reused alone
+#### Scenario: auction-listing-SC-02 - A part is reused alone
 
 - **WHEN** an application renders `ListingGallery` without `ListingBidPanel`
   or `ListingDetails`
@@ -40,7 +53,7 @@ name, and optional `thumbLabel` as the thumbnail's accessible name (falling
 back to `alt`). When `thumbSrc` or `zoomSrc` is omitted, that slot SHALL use
 `src`. The gallery SHALL NOT fetch, derive, or rewrite those addresses.
 
-#### Scenario: Distinct sources are used in each slot
+#### Scenario: auction-listing-SC-03 - Distinct sources are used in each slot
 
 - **GIVEN** a gallery image whose `thumbSrc`, `src`, and `zoomSrc` are three
   different addresses
@@ -50,7 +63,7 @@ back to `alt`). When `thumbSrc` or `zoomSrc` is omitted, that slot SHALL use
 - **AND** the main frame requests `src`
 - **AND** the zoom dialog requests `zoomSrc`
 
-#### Scenario: Omitted sources fall back to src
+#### Scenario: auction-listing-SC-04 - Omitted sources fall back to src
 
 - **GIVEN** a gallery image that supplies only `src` and `alt`
 - **WHEN** it is rendered
@@ -63,14 +76,14 @@ two or more items it SHALL show a thumbnail strip and enable previous/next.
 With exactly one item it SHALL hide the strip and disable previous/next. With
 none it SHALL render no item and SHALL NOT present previous/next as available.
 
-#### Scenario: Several gallery items show a strip
+#### Scenario: auction-listing-SC-05 - Several gallery items show a strip
 
 - **GIVEN** two or more gallery items
 - **WHEN** the gallery renders
 - **THEN** a thumbnail exists for each item
 - **AND** previous and next are enabled
 
-#### Scenario: One gallery item has no strip
+#### Scenario: auction-listing-SC-06 - One gallery item has no strip
 
 - **GIVEN** exactly one gallery item
 - **WHEN** the gallery renders
@@ -78,7 +91,7 @@ none it SHALL render no item and SHALL NOT present previous/next as available.
 - **AND** no thumbnail strip is shown
 - **AND** previous and next are disabled
 
-#### Scenario: No gallery items
+#### Scenario: auction-listing-SC-07 - No gallery items
 
 - **GIVEN** an empty gallery list
 - **WHEN** the gallery renders
@@ -91,7 +104,7 @@ none it SHALL render no item and SHALL NOT present previous/next as available.
 (`ListingGalleryCopy`) with `zoom`, `previous`, and `next` from the consumer.
 It SHALL NOT supply default user-visible copy for those slots.
 
-#### Scenario: Labels come from the consumer
+#### Scenario: auction-listing-SC-08 - Labels come from the consumer
 
 - **GIVEN** a gallery rendered with
   `copy={{ zoom: "Click to zoom", previous: "Previous image", next: "Next image" }}`

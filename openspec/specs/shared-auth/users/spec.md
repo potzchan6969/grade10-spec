@@ -6,6 +6,64 @@ and unbans them, and changes their roles. Listing and ending their sessions
 is `shared-auth/sessions`. Recording those actions is `shared-auth/audit`.
 Auction bidder bans belong to auction, not here.
 
+## Feature set
+
+- Directory
+  - Grant-gated list: only `user:list` sees accounts; search matches email without letter case
+  - Banned remain: a banned account stays in the directory
+- Ban and unban
+  - Stops money and sign-in: a ban ends sessions and refuses new ones; unban restores sign-in
+  - Last admin protected: an operator cannot ban themselves or the last admin
+- Role changes
+  - Admin sets others: clearing operator roles leaves a user; an operator cannot change their own
+
+## User journeys
+
+### users-US-01: Operator lists people in the identity directory
+
+**As an** operator who can list users,
+**I want** to search and open accounts by user id,
+**so that** I can find a person without seeing records I am not granted.
+
+**Accepted by:**
+
+- `users-SC-01` — An operator with the grant lists accounts
+- `users-SC-02` — A caller without the grant is refused
+- `users-SC-03` — Search matches email without letter case
+- `users-SC-04` — An account opens by user id
+- `users-SC-05` — A banned account stays in the directory
+
+### users-US-02: Operator bans and unbans an account
+
+**As an** operator who can ban,
+**I want** a ban to stop money-moving and sign-in, and an unban to restore them,
+**so that** a person who must leave cannot keep acting, and a mistaken ban is reversible.
+
+**Accepted by:**
+
+- `users-SC-06` — A ban stops money-moving
+- `users-SC-07` — A banned person cannot sign in
+- `users-SC-08` — A banned person is not signed in
+- `users-SC-09` — An unban lets them sign in again
+- `users-SC-10` — A caller who cannot ban is refused
+- `users-SC-11` — An operator cannot ban themselves
+- `users-SC-12` — Support cannot ban an admin
+- `users-SC-13` — The last admin cannot be banned
+
+### users-US-03: Operator changes another person's roles
+
+**As an** admin,
+**I want** to set another person's roles without changing my own or stranding the last admin,
+**so that** grants stay a closed set I cannot widen from the call site.
+
+**Accepted by:**
+
+- `users-SC-14` — Admin changes another person's roles
+- `users-SC-15` — Clearing operator roles leaves a user
+- `users-SC-16` — Support cannot set roles
+- `users-SC-17` — An operator cannot change their own roles
+- `users-SC-18` — The last admin keeps admin
+
 ## Requirements
 
 ### Requirement: Only operators who can list users see the directory
@@ -17,28 +75,28 @@ operator SHALL be able to open an account by user id. Results SHALL name
 each account by user id; email is an attribute. A banned account SHALL
 remain in the directory.
 
-#### Scenario: An operator with the grant lists accounts
+#### Scenario: users-SC-01 - An operator with the grant lists accounts
 
 - **GIVEN** a signed-in operator who holds `user:list`
 - **WHEN** they open the users directory
 - **THEN** they see accounts from this brand's identity system
 - **AND** each account is named by user id
 
-#### Scenario: A caller without the grant is refused
+#### Scenario: users-SC-02 - A caller without the grant is refused
 
 - **GIVEN** a signed-in person who does not hold `user:list`
 - **WHEN** they try to list accounts
 - **THEN** the system refuses the request
 - **AND** returns no account records
 
-#### Scenario: Search matches email without letter case
+#### Scenario: users-SC-03 - Search matches email without letter case
 
 - **GIVEN** an operator who can list users
 - **WHEN** they search the directory by an email fragment in a different
   letter case than the account
 - **THEN** the results are accounts whose email contains that fragment
 
-#### Scenario: An account opens by user id
+#### Scenario: users-SC-04 - An account opens by user id
 
 - **GIVEN** an operator who can list users
 - **WHEN** they open an account by its user id
@@ -46,7 +104,7 @@ remain in the directory.
 - **AND** they do not receive a different account that shares an email
   attribute
 
-#### Scenario: A banned account stays in the directory
+#### Scenario: users-SC-05 - A banned account stays in the directory
 
 - **GIVEN** a banned account
 - **WHEN** an operator who can list users opens the directory
@@ -65,52 +123,52 @@ A caller SHALL NOT ban their own account. A caller who does not hold
 and the account SHALL be unchanged. Banning an already-banned account SHALL
 leave it banned.
 
-#### Scenario: A ban stops money-moving
+#### Scenario: users-SC-06 - A ban stops money-moving
 
 - **GIVEN** an operator who holds `user:ban`
 - **WHEN** they ban an account
 - **THEN** that person cannot complete a money-moving action
 
-#### Scenario: A banned person cannot sign in
+#### Scenario: users-SC-07 - A banned person cannot sign in
 
 - **GIVEN** a banned account
 - **WHEN** that person completes a sign-in method
 - **THEN** they are not signed in
 
-#### Scenario: A banned person is not signed in
+#### Scenario: users-SC-08 - A banned person is not signed in
 
 - **GIVEN** a person who signed in and is then banned
 - **WHEN** a product reads who is calling
 - **THEN** it reports no person
 
-#### Scenario: An unban lets them sign in again
+#### Scenario: users-SC-09 - An unban lets them sign in again
 
 - **GIVEN** a banned account
 - **WHEN** an operator who can ban unbans it
 - **THEN** that person can sign in again
 
-#### Scenario: A caller who cannot ban is refused
+#### Scenario: users-SC-10 - A caller who cannot ban is refused
 
 - **GIVEN** a signed-in operator who does not hold `user:ban`
 - **WHEN** they try to ban an account
 - **THEN** the system refuses the request
 - **AND** the account remains unbanned
 
-#### Scenario: An operator cannot ban themselves
+#### Scenario: users-SC-11 - An operator cannot ban themselves
 
 - **GIVEN** an operator who holds `user:ban`
 - **WHEN** they try to ban their own account
 - **THEN** the system refuses the request
 - **AND** their account remains unbanned
 
-#### Scenario: Support cannot ban an admin
+#### Scenario: users-SC-12 - Support cannot ban an admin
 
 - **GIVEN** a person whose operator role is `support`
 - **WHEN** they try to ban an account that holds `admin`
 - **THEN** the system refuses the request
 - **AND** the account remains unbanned
 
-#### Scenario: The last admin cannot be banned
+#### Scenario: users-SC-13 - The last admin cannot be banned
 
 - **GIVEN** the only account that holds `admin`
 - **WHEN** an operator who can ban tries to ban it
@@ -126,33 +184,33 @@ The system SHALL let a caller change an account's roles only when they hold
 `admin` SHALL NOT have `admin` removed. A caller without the grant SHALL be
 refused, and the roles SHALL be unchanged.
 
-#### Scenario: Admin changes another person's roles
+#### Scenario: users-SC-14 - Admin changes another person's roles
 
 - **GIVEN** an operator who holds `user:set-role`
 - **WHEN** they set another account to `staff`
 - **THEN** that account's roles include `staff`
 
-#### Scenario: Clearing operator roles leaves a user
+#### Scenario: users-SC-15 - Clearing operator roles leaves a user
 
 - **GIVEN** an operator who can set roles
 - **WHEN** they save another account with no operator role selected
 - **THEN** that account's roles are `user` only
 
-#### Scenario: Support cannot set roles
+#### Scenario: users-SC-16 - Support cannot set roles
 
 - **GIVEN** an operator who holds `user:ban` but not `user:set-role`
 - **WHEN** they try to change another account's roles
 - **THEN** the system refuses the request
 - **AND** the roles are unchanged
 
-#### Scenario: An operator cannot change their own roles
+#### Scenario: users-SC-17 - An operator cannot change their own roles
 
 - **GIVEN** an operator who holds `user:set-role`
 - **WHEN** they try to change their own roles
 - **THEN** the system refuses the request
 - **AND** their roles are unchanged
 
-#### Scenario: The last admin keeps admin
+#### Scenario: users-SC-18 - The last admin keeps admin
 
 - **GIVEN** the only account that holds `admin`
 - **WHEN** an operator who can set roles saves it without `admin`

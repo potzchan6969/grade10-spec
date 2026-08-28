@@ -3,10 +3,133 @@
 ## Purpose
 How a listing's gallery images get optional alt text and named public sizes
 (`card`, `detail`, `thumb`, `zoom`) on top of the ordered one-to-eight media
-gallery defined by `grade10-auction/admin-listing` in this same change, and
+gallery defined by `grade10-auction/admin-listing`, and
 how the catalogue and details page consume those sized paths. Gallery attach,
 order, video, and the eight-item cap live in admin-listing; this capability
 covers image delivery and alt.
+
+## Feature set
+
+- Gallery images, not sides
+  - Ordered image items: gallery images are the image items in admin-listing's
+    ordered gallery, so no physical side names identity and no empty slot is
+    invented
+  - Shared eight-item cap: the eight-item bound comes from admin-listing rather
+    than from a second gallery defined here
+- Operator image upload
+  - Accepted types and size: JPEG, PNG, WebP and AVIF within the shared media
+    size bound reach storage; anything else is refused
+  - Confirm before store: an operator sees a preview of the selected file and
+    confirms before any bytes leave for the auction service
+  - Card-size review with zoom: the admin media manager shows stored images at
+    card size and reveals a large zoom preview on hover or focus
+- Image lifecycle
+  - Replace and remove: image mutations follow admin-listing's writable states
+    and its refusal to remove the last item after create
+  - Add until close: another image may join while the listing is draft,
+    created, or published, and never after it closes
+- Alt text
+  - Optional alt per image: trimmed, at most 200 characters, and absent when
+    the value is empty
+  - Title fallback: the listing title is the accessible name when an image
+    carries no alt text
+  - Editable until close: alt changes without touching the image bytes while
+    the listing is still writable
+- Named public sizes
+  - card, detail, thumb, zoom: every published gallery image is fetchable at
+    exactly these four named paths
+  - No upscaling: an image already within a named size is answered as it is
+  - Unknown size: a size name outside the set answers as a missing image
+- Collector-facing gallery
+  - Catalogue card image: the catalogue shows a listing's first gallery item at
+    card size when that item is an image
+  - Details page order: the details page shows every gallery image in gallery
+    order, at thumb, detail and zoom sizes
+  - Empty and single cases: one image shows no thumbnail strip, and a listing
+    with no images still renders
+
+## User journeys
+
+### listing-media-US-01: Operator attaches an image to a listing gallery
+
+**As an** operator with catalogue grant,
+**I want** to upload a supported image into a listing's gallery and confirm it
+from a preview,
+**so that** only the file I meant to store is sent, and the gallery stays
+within the cap admin-listing sets.
+
+**Accepted by:**
+
+- `listing-media-SC-01` — A listing may hold fewer than eight items
+- `listing-media-SC-02` — A ninth media item is refused by the gallery cap
+- `listing-media-SC-03` — An accepted upload becomes a gallery image
+- `listing-media-SC-04` — An unsupported type is refused
+- `listing-media-SC-05` — An oversized image is refused
+- `listing-media-SC-06` — Choosing a file shows a preview without uploading
+- `listing-media-SC-07` — Confirming the preview stores the image
+- `listing-media-SC-08` — Discarding the preview leaves the gallery unchanged
+- `listing-media-SC-15` — A published listing can gain another image
+- `listing-media-SC-16` — Adding after close is refused
+
+### listing-media-US-02: Operator inspects a stored image at zoom size
+
+**As an** operator with catalogue grant,
+**I want** the admin media manager to show each stored image at card size and
+reveal it at zoom size on hover,
+**so that** I can judge a card's condition without clicking through to it.
+
+**Accepted by:**
+
+- `listing-media-SC-09` — The admin media manager shows card size
+- `listing-media-SC-10` — Hovering the magnify control shows zoom size
+- `listing-media-SC-11` — Leaving the magnify control hides zoom
+
+### listing-media-US-03: Operator corrects a listing's gallery images
+
+**As an** operator with catalogue grant,
+**I want** to replace and remove gallery images while the listing is still
+writable,
+**so that** I can fix a bad photograph without ever leaving a published
+listing with no image at all.
+
+**Accepted by:**
+
+- `listing-media-SC-12` — Replacing a gallery image on a published listing
+- `listing-media-SC-13` — Removing the last image after create is refused
+- `listing-media-SC-14` — A draft gallery image can be replaced and removed
+
+### listing-media-US-04: Operator describes a gallery image with alt text
+
+**As an** operator with catalogue grant,
+**I want** to supply and later change optional alt text on a gallery image,
+**so that** each image has an accessible name, falling back to the listing
+title when I have written none.
+
+**Accepted by:**
+
+- `listing-media-SC-17` — Missing alt uses the listing title
+- `listing-media-SC-18` — Supplied alt is shown
+- `listing-media-SC-19` — Alt can be edited on a published listing
+- `listing-media-SC-20` — Over-length alt is refused
+
+### listing-media-US-05: Collector views a listing's gallery images
+
+**As a** collector,
+**I want** a listing's images at the size the surface needs, in gallery order,
+**so that** I can pick a listing off the catalogue and study its images on the
+details page.
+
+**Accepted by:**
+
+- `listing-media-SC-21` — The catalogue uses card size for an image card
+- `listing-media-SC-22` — The details gallery uses thumb, detail, and zoom
+- `listing-media-SC-23` — An unknown size is not found
+- `listing-media-SC-24` — A listing with a first gallery image shows it on the
+  catalogue
+- `listing-media-SC-25` — A listing without a catalogue image still lists
+- `listing-media-SC-26` — Several images appear in gallery order
+- `listing-media-SC-27` — One image has no strip
+- `listing-media-SC-28` — No images still shows the listing
 
 ## Requirements
 
@@ -19,7 +142,7 @@ vocabulary (`front`, `back`, and the rest) as identity. A listing SHALL NOT
 invent empty slots for unused positions. This capability SHALL NOT introduce
 a second gallery keyed by side.
 
-#### Scenario: A listing may hold fewer than eight items
+#### Scenario: listing-media-SC-01 - A listing may hold fewer than eight items
 
 - **GIVEN** a draft listing with only one JPEG in the gallery
 - **WHEN** an operator publishes it (after create)
@@ -27,7 +150,7 @@ a second gallery keyed by side.
 - **AND** the details page shows that one image
 - **AND** no empty gallery slots are invented
 
-#### Scenario: A ninth media item is refused by the gallery cap
+#### Scenario: listing-media-SC-02 - A ninth media item is refused by the gallery cap
 
 - **GIVEN** a draft listing with eight media items
 - **WHEN** an operator uploads a ninth image
@@ -44,7 +167,7 @@ characters with the upload. Unsupported image types and oversize bodies
 SHALL be refused. Video attach and playback stay under admin-listing; this
 requirement covers image items and their alt.
 
-#### Scenario: An accepted upload becomes a gallery image
+#### Scenario: listing-media-SC-03 - An accepted upload becomes a gallery image
 
 - **GIVEN** a draft listing with fewer than eight media items and an operator
   with catalogue grant
@@ -52,14 +175,14 @@ requirement covers image items and their alt.
 - **THEN** that image is stored in gallery order
 - **AND** the admin listings surface can show it on that listing
 
-#### Scenario: An unsupported type is refused
+#### Scenario: listing-media-SC-04 - An unsupported type is refused
 
 - **GIVEN** a draft listing
 - **WHEN** an operator uploads a PDF as gallery media
 - **THEN** the system refuses the upload
 - **AND** the gallery is unchanged
 
-#### Scenario: An oversized image is refused
+#### Scenario: listing-media-SC-05 - An oversized image is refused
 
 - **GIVEN** a draft listing
 - **WHEN** an operator uploads an image larger than 104857600 bytes
@@ -76,14 +199,14 @@ that slot unchanged. Discarding the preview SHALL clear the preview, leave
 the gallery unchanged, and SHALL NOT upload. Confirm applies to both adding
 an item and replacing a draft item.
 
-#### Scenario: Choosing a file shows a preview without uploading
+#### Scenario: listing-media-SC-06 - Choosing a file shows a preview without uploading
 
 - **GIVEN** a draft listing with an empty gallery slot the operator is filling
 - **WHEN** an operator selects a JPEG under the media size bound
 - **THEN** the admin media manager shows a preview of that file
 - **AND** the listing still has no new stored image for that slot
 
-#### Scenario: Confirming the preview stores the image
+#### Scenario: listing-media-SC-07 - Confirming the preview stores the image
 
 - **GIVEN** an operator has selected a JPEG for a draft listing gallery slot
   and sees its preview
@@ -91,7 +214,7 @@ an item and replacing a draft item.
 - **THEN** that slot holds the image
 - **AND** the preview is cleared
 
-#### Scenario: Discarding the preview leaves the gallery unchanged
+#### Scenario: listing-media-SC-08 - Discarding the preview leaves the gallery unchanged
 
 - **GIVEN** an operator has selected an image for a draft listing gallery
   slot and sees its preview
@@ -111,13 +234,13 @@ image at zoom size in a preview at least three-quarters of the viewport
 height. Leaving the control SHALL hide the zoom preview. The magnify control
 SHALL NOT require a click to reveal zoom.
 
-#### Scenario: The admin media manager shows card size
+#### Scenario: listing-media-SC-09 - The admin media manager shows card size
 
 - **GIVEN** a draft listing with a stored gallery image
 - **WHEN** an operator opens the media manager for that listing
 - **THEN** that image shows at card size
 
-#### Scenario: Hovering the magnify control shows zoom size
+#### Scenario: listing-media-SC-10 - Hovering the magnify control shows zoom size
 
 - **GIVEN** a draft listing with a stored gallery image open in the media
   manager
@@ -125,7 +248,7 @@ SHALL NOT require a click to reveal zoom.
 - **THEN** a zoom-size preview of that image is shown
 - **AND** that preview is at least three-quarters of the viewport height
 
-#### Scenario: Leaving the magnify control hides zoom
+#### Scenario: listing-media-SC-11 - Leaving the magnify control hides zoom
 
 - **GIVEN** the zoom-size preview is visible from hovering the magnify control
 - **WHEN** the operator moves the pointer off the control
@@ -139,21 +262,21 @@ Replace and remove of gallery images SHALL follow
 closed-listing refusals. A closed, settled, or canceled listing SHALL refuse
 every image mutation from this surface.
 
-#### Scenario: Replacing a gallery image on a published listing
+#### Scenario: listing-media-SC-12 - Replacing a gallery image on a published listing
 
 - **GIVEN** a published listing with a gallery image at a position
 - **WHEN** an operator replaces that image (allowed by admin-listing)
 - **THEN** that position holds the new image
 - **AND** other gallery items are unchanged
 
-#### Scenario: Removing the last image after create is refused
+#### Scenario: listing-media-SC-13 - Removing the last image after create is refused
 
 - **GIVEN** a published listing with one JPEG
 - **WHEN** an operator removes that JPEG
 - **THEN** the system refuses the removal
 - **AND** the gallery still has that JPEG
 
-#### Scenario: A draft gallery image can be replaced and removed
+#### Scenario: listing-media-SC-14 - A draft gallery image can be replaced and removed
 
 - **GIVEN** a draft listing with one gallery image
 - **WHEN** an operator replaces it, then removes it
@@ -165,7 +288,7 @@ The system SHALL accept an additional image while the listing is `draft`,
 `created`, or `published` and the gallery has fewer than eight items. Once
 the listing has closed, settled, or been canceled, an add SHALL be refused.
 
-#### Scenario: A published listing can gain another image
+#### Scenario: listing-media-SC-15 - A published listing can gain another image
 
 - **GIVEN** a published listing with one gallery image and room under the
   eight-item cap
@@ -173,7 +296,7 @@ the listing has closed, settled, or been canceled, an add SHALL be refused.
 - **THEN** the details page shows both images in gallery order
 - **AND** the first image is unchanged
 
-#### Scenario: Adding after close is refused
+#### Scenario: listing-media-SC-16 - Adding after close is refused
 
 - **GIVEN** a closed listing with one gallery image
 - **WHEN** an operator uploads another image
@@ -190,28 +313,28 @@ replacing the image while the listing is a draft, created, or published.
 After close, an alt-only edit SHALL be refused. Video items are outside this
 alt requirement.
 
-#### Scenario: Missing alt uses the listing title
+#### Scenario: listing-media-SC-17 - Missing alt uses the listing title
 
 - **GIVEN** a published listing titled "1999 Charizard, PSA 10" whose first
   gallery image has no alt text
 - **WHEN** a collector opens the listing
 - **THEN** that image's accessible name is "1999 Charizard, PSA 10"
 
-#### Scenario: Supplied alt is shown
+#### Scenario: listing-media-SC-18 - Supplied alt is shown
 
 - **GIVEN** a published listing whose first gallery image has alt text "Holo
   Charizard, front of slab"
 - **WHEN** a collector opens the listing
 - **THEN** that image's accessible name is "Holo Charizard, front of slab"
 
-#### Scenario: Alt can be edited on a published listing
+#### Scenario: listing-media-SC-19 - Alt can be edited on a published listing
 
 - **GIVEN** a published listing with a gallery image
 - **WHEN** an operator changes only that image's alt text
 - **THEN** the image bytes are unchanged
 - **AND** the details page uses the new alt text
 
-#### Scenario: Over-length alt is refused
+#### Scenario: listing-media-SC-20 - Over-length alt is refused
 
 - **GIVEN** a draft listing
 - **WHEN** an operator sets alt text longer than 200 characters
@@ -229,13 +352,13 @@ upscale it. An unknown size name SHALL be indistinguishable from a missing
 image. Video gallery items SHALL keep their original public path from
 admin-listing; named sizes apply to images only.
 
-#### Scenario: The catalogue uses card size for an image card
+#### Scenario: listing-media-SC-21 - The catalogue uses card size for an image card
 
 - **GIVEN** a published listing whose first gallery item is an image
 - **WHEN** a collector opens the auction catalogue
 - **THEN** that listing's card image is requested at size `card`
 
-#### Scenario: The details gallery uses thumb, detail, and zoom
+#### Scenario: listing-media-SC-22 - The details gallery uses thumb, detail, and zoom
 
 - **GIVEN** a published listing with two gallery images
 - **WHEN** a collector opens that listing
@@ -243,7 +366,7 @@ admin-listing; named sizes apply to images only.
 - **AND** the main frame requests size `detail`
 - **AND** zoom requests size `zoom`
 
-#### Scenario: An unknown size is not found
+#### Scenario: listing-media-SC-23 - An unknown size is not found
 
 - **GIVEN** a published gallery image
 - **WHEN** a browser requests it at a size other than `card`, `detail`,
@@ -258,14 +381,14 @@ is not an image, the listing SHALL still appear; this capability SHALL NOT
 invent a placeholder image. Which item is first is gallery order from
 admin-listing, not a physical side named `front`.
 
-#### Scenario: A listing with a first gallery image shows it on the catalogue
+#### Scenario: listing-media-SC-24 - A listing with a first gallery image shows it on the catalogue
 
 - **GIVEN** a published listing whose gallery is image A then image B
 - **WHEN** a collector opens the auction catalogue
 - **THEN** the listing row shows image A at card size
 - **AND** it does not show image B on the card
 
-#### Scenario: A listing without a catalogue image still lists
+#### Scenario: listing-media-SC-25 - A listing without a catalogue image still lists
 
 - **GIVEN** a published listing with no gallery images
 - **WHEN** a collector opens the auction catalogue
@@ -282,21 +405,21 @@ with no images SHALL render the rest of the page. Video items in the gallery
 remain admin-listing's concern for playback; this requirement covers the
 sized image slots passed into the shared gallery.
 
-#### Scenario: Several images appear in gallery order
+#### Scenario: listing-media-SC-26 - Several images appear in gallery order
 
 - **GIVEN** a published listing with three gallery images uploaded in order
   A, B, C
 - **WHEN** a collector opens that listing
 - **THEN** the gallery shows three images in the order A, B, C
 
-#### Scenario: One image has no strip
+#### Scenario: listing-media-SC-27 - One image has no strip
 
 - **GIVEN** a published listing with only one gallery image
 - **WHEN** a collector opens that listing
 - **THEN** the gallery shows that image
 - **AND** it does not show a thumbnail strip
 
-#### Scenario: No images still shows the listing
+#### Scenario: listing-media-SC-28 - No images still shows the listing
 
 - **GIVEN** a published listing with no gallery images
 - **WHEN** a collector opens that listing
