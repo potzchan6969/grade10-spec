@@ -46,7 +46,8 @@ type ProductCardImageProps = {
 
 /**
  * Product photo well. Figma set `Product / Product Card Image` (`4274:10074`)
- * has `state` (hover, CSS), `inCart`, `soldOut`, and BOOLEAN `sale`.
+ * has `state` (hover, CSS) and `soldOut`, plus the BOOLEAN `sale`. In-cart
+ * chrome is an annotation on the set, not an axis, so `inCart` is code-only.
  *
  * Cart sits outside the well's activation target so nested buttons stay valid.
  * Hover and `:focus-within` reveal it when the product is available and not

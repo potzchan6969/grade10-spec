@@ -1,7 +1,7 @@
 import { Card } from "@grade10/design-system/components/display/card";
 import { Step } from "@grade10/design-system/components/display/step";
-import { Stepper } from "@grade10/design-system/components/display/stepper";
 import type { StepIndicatorState } from "@grade10/design-system/components/display/step-indicator";
+import { Stepper } from "@grade10/design-system/components/display/stepper";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { cn } from "@grade10/design-system/lib/utils";

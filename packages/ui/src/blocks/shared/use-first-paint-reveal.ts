@@ -37,10 +37,7 @@ function useFirstPaintReveal() {
   return revealed;
 }
 
-function revealStaggerDelayMs(
-  staggerIndex: number,
-  revealed: boolean,
-): string {
+function revealStaggerDelayMs(staggerIndex: number, revealed: boolean): string {
   if (!revealed) return "0ms";
   return `${Math.min(staggerIndex, REVEAL_STAGGER_CAP) * REVEAL_STAGGER_MS}ms`;
 }

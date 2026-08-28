@@ -73,7 +73,8 @@ export const OverflowingLines: Story = {
       '[data-slot="order-history-card-body"]',
     );
     expect(body).toHaveClass("scroll-fade-x", "overflow-x-auto");
-    expect(body!.scrollWidth).toBeGreaterThan(body!.clientWidth);
+    if (!body) throw new Error("order-history-card-body is not rendered");
+    expect(body.scrollWidth).toBeGreaterThan(body.clientWidth);
   },
 };
 

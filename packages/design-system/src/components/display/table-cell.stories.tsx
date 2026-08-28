@@ -11,9 +11,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: () => (
-    <TableCell className="w-40">Table Cell</TableCell>
-  ),
+  render: () => <TableCell className="w-40">Table Cell</TableCell>,
 };
 
 export const EndAligned: Story = {

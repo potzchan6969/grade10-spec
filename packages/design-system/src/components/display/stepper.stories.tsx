@@ -20,11 +20,7 @@ export const ThreeSteps: Story = {
         showLeadingConnector={false}
         state="completed"
       />
-      <Step
-        description="Aug 27, 2026"
-        label="Shipped"
-        state="progress"
-      />
+      <Step description="Aug 27, 2026" label="Shipped" state="progress" />
       <Step label="Completed" showTrailingConnector={false} state="upcoming" />
     </Stepper>
   ),

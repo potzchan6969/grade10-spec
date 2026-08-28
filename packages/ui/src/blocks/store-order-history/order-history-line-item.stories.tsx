@@ -36,10 +36,10 @@ export const Default: Story = {
     const root = canvasElement.querySelector(
       '[data-slot="order-history-line-item"]',
     );
-    expect(well).toBeTruthy();
-    expect(root).toBeTruthy();
-    const wellBox = well!.getBoundingClientRect();
-    const rootBox = root!.getBoundingClientRect();
+    if (!well) throw new Error("order-history-line-item-image is not rendered");
+    if (!root) throw new Error("order-history-line-item is not rendered");
+    const wellBox = well.getBoundingClientRect();
+    const rootBox = root.getBoundingClientRect();
     // Square well whose height fills the row (Figma self-stretch + aspect 1).
     // Allow 2px for the card's border box vs the stretched content edge.
     expect(Math.round(wellBox.width)).toBe(Math.round(wellBox.height));

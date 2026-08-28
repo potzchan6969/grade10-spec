@@ -76,9 +76,23 @@ function orderDetailsRevealed(canvasElement: HTMLElement): boolean {
   const header = canvasElement.querySelector(
     '[data-slot="order-details-header"]',
   );
-  const wrapper = header?.parentElement;
-  if (!wrapper) return false;
-  return Number(getComputedStyle(wrapper).opacity) > 0.9;
+  const headerWrapper = header?.parentElement;
+  if (
+    !headerWrapper ||
+    Number(getComputedStyle(headerWrapper).opacity) <= 0.9
+  ) {
+    return false;
+  }
+
+  // The sidebar reveals on a stagger delay behind the header, so waiting on
+  // the header alone leaves "Order Summary" mid-fade — which is what the
+  // block's own story already waits for.
+  const sidebar = canvasElement.querySelector(
+    '[data-slot="order-details-sidebar"]',
+  );
+  const sidebarWrapper = sidebar?.parentElement;
+  if (!sidebarWrapper) return false;
+  return Number(getComputedStyle(sidebarWrapper).opacity) > 0.9;
 }
 
 export const Filled: Story = {

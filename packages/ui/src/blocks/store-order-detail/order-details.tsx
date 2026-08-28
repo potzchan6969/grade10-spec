@@ -157,7 +157,11 @@ function OrderDetails({
             />
           </RevealGroup>
         </VStack>
-        <RevealGroup className="min-w-0" revealed={revealed} staggerIndex={sidebarStaggerIndex}>
+        <RevealGroup
+          className="min-w-0"
+          revealed={revealed}
+          staggerIndex={sidebarStaggerIndex}
+        >
           <OrderDetailsSidebar
             copy={copy.sidebar}
             loyaltyPoints={loyaltyPoints}
