@@ -57,13 +57,19 @@ This design follows `docs/conventions/packages.md` and
 
 ### Operator language is Campaign; persistence stays `auctions`
 
-Operator-visible copy says **Campaign** / **Campaigns**. Wire identifiers,
-table name, and tRPC router path stay `auctions` / `auctionId`. Admin domain
-may keep `saleId` as an alias until a later cleanup.
+Operator-visible copy says **Campaign** / **Campaigns**. Code that names the
+catalogue-cover entity — admin contracts, admin feature modules, app panels, and
+auction-service helpers for covers and their listings — SHALL use **campaign**
+identifiers (`adminCampaign*`, `CampaignsPanel`, `campaignsModule`,
+`publishedCampaignJoin`, `publicListingsOfCampaign`, etc.), not **sale**.
+
+Wire persistence and paths that already use **auction** stay: `auctions` table,
+`auctions.*` tRPC router, listing `auctionId`. Post-sale and inventory
+sell/sold vocabulary are out of scope — they name different domains.
 
 **Rejected:** A new `campaigns` table — would fork identity from every live
-`auctionId` FK. **Rejected:** Keeping the **Sales** label — overlaps store
-checkout and inventory sold.
+`auctionId` FK. **Rejected:** Keeping **Sales** / `adminSale*` / `SalesPanel` —
+overlaps store checkout, inventory sold, and post-sale.
 
 ### Campaign status machine matches listing
 
@@ -252,13 +258,14 @@ mismatch on create. **Consumed.** `@grade10/inventory-contracts` holder APIs
 
 | Type | Change |
 | --- | --- |
-| `adminSaleStatusSchema` | Add literal `"created"` → `draft \| created \| published \| canceled` |
-| `adminSaleSchema` | Unchanged fields; `status` may be `created` |
-| `adminSaleCancellationSchema` | Unchanged — cancel fan-out answer shape |
+| `adminCampaignStatusSchema` | Rename from `adminSaleStatusSchema`; add literal `"created"` → `draft \| created \| published \| canceled` |
+| `adminCampaignSchema` | Rename from `adminSaleSchema`; `status` may be `created` |
+| `adminCampaignCancellationSchema` | Rename from `adminSaleCancellationSchema` — cancel fan-out answer shape |
 | `adminListingSchema` / draft input | Add optional `quantity` (integer 1–500) |
 
-Wire names stay `adminSale*` / `auctions.*` until a later identifier cleanup;
-operator copy is Campaign.
+Remove `adminSale*` exports and `AuctionAdminSale*` types — no alias layer.
+Listing and campaign wire fields stay `auctionId` on listings; tRPC paths stay
+`auctions.*`. Operator copy is Campaign.
 
 ### Admin tRPC (`auctions.*`, listing mutations)
 
@@ -318,13 +325,15 @@ below settled floor — atomic refusal; listing and prior hold unchanged.
 | Operators accustomed to publish draft → published | Spec + tasks: create then publish; migrate UI and tests |
 | Published campaigns no longer accept new lots | Documented; existing attachments unchanged |
 | Inventory not shipped | Fixtures stub holder methods + `AuctionEligibleProduct[]`; tasks name inventory dependency |
-| Code paths still say `sale` / `SalesPanel` | Group 1 requires operator-visible Campaigns labels |
+| Code still says `sale` for catalogue covers | Group 1 renames admin labels and code identifiers to campaign |
 | Browser cannot call inventory holder RPC | Auction worker proxies sync on Save; fixtures stub until binding exists |
 | Product change leaves transient unreconciled stock if RPC fails mid-flight | `changeReservationProduct` is one inventory transaction; spec refuses partial listing write |
 
 ## Migration Plan
 
-1. Ship operator rename (Campaigns tab, listing Campaign label) — no schema.
+1. Ship operator and code rename (Campaigns tab, `CampaignsPanel`, `campaigns`
+   modules, `adminCampaign*` contracts, catalogue-cover backend helpers) —
+   no schema.
 2. Migration: extend `ck_auctions_status` with `created`; add `auction_listings.quantity`;
    deploy auction worker with create transition, reservation sync on Save, and
    `OPEN_AUCTION_STATES = ["draft", "created"]`.

@@ -18,8 +18,9 @@ Behavior:
 ### Rename first — existing Sales tab becomes Campaigns
 
 Before new editor behaviour, the live Sales tab/page is relabeled
-**Campaigns** (tab title, section heading, empty states, list actions). The
-listing editor’s optional cover field is labeled **Campaign**.
+**Campaigns** (tab title, section heading, empty states, list actions) and
+renamed in code (`SalesPanel` → `CampaignsPanel`, `sales` modules →
+`campaigns`). The listing editor’s optional cover field is labeled **Campaign**.
 
 ### Admin auction Campaigns list and campaign editor
 
@@ -78,6 +79,7 @@ Tied to spec scenarios in admin-campaign and admin-listing (delta).
 
 - **Section label** — `Auction admin section is labeled Campaigns`.
 - **Editor chrome** — `Campaign editor chrome says Campaign`.
+- **Code identifiers** — `Admin catalogue-cover code uses campaign identifiers`.
 
 ### Campaign editor
 

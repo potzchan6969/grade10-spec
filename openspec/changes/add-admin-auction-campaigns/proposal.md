@@ -30,9 +30,13 @@ section labeled Campaigns.
 
 ## What Changes
 
-- **Rename Sales → Campaigns in admin.** The Grade10 auction admin tab,
-  section chrome, empty states, and listing-editor field for catalogue covers
-  use **Campaign** / **Campaigns**, not **Sale** / **Sales**.
+- **Rename Sales → Campaigns in admin — labels and code.** Operator chrome and
+  listing-editor copy use **Campaign** / **Campaigns**, not **Sale** / **Sales**.
+  Auction admin packages, contracts, and backend helpers for the catalogue-cover
+  entity rename **sale** identifiers to **campaign** (for example `adminSale*`
+  schemas, `SalesPanel`, `sales` feature modules). Persistence and wire paths
+  that already say **auction** stay (`auctions` table, `auctions.*` tRPC,
+  listing `auctionId`).
 - **Admin campaign authoring.** Authorized operators create, edit (title and
   copy), publish, and cancel auction **campaigns** from the Campaigns section
   via a dedicated editor (not only an inline title form).
@@ -88,15 +92,18 @@ section labeled Campaigns.
 
 | Consumer | Change |
 | --- | --- |
-| `@grade10/auction-contracts` | `adminSaleStatusSchema` adds `created`; listing `quantity`; hold sync refusals |
-| `@grade10/auction-admin-frontend` | Campaign editor, listing Save-only editor, product-change dialog, quantity field |
-| `apps/backend/grade10/auction` | `ck_auctions_status` + `created`; listing `quantity`; reservation sync on Save; create hold verify; cancel release |
-| `apps/admin/grade10` | Campaigns section (rename from Sales), listing editor pickers + explicit Save |
+| `@grade10/auction-contracts` | `adminSale*` → `adminCampaign*`; `created` status; listing `quantity`; hold sync refusals |
+| `@grade10/auction-admin-frontend` | `sales` → `campaigns` modules; campaign editor, listing Save-only editor, product-change dialog, quantity field |
+| `@grade10/auction-service` | Catalogue-cover helpers `*Sale*` → `*Campaign*`; `ck_auctions_status` + `created`; listing `quantity`; reservation sync |
+| `apps/admin/grade10` | `SalesPanel` → `CampaignsPanel`; listing editor pickers + explicit Save |
 | `@grade10/inventory-contracts` | **Consumed** — holder APIs including `changeReservationProduct` |
 
 ## Non-goals
 
-- Renaming the existing `auctions` table, tRPC paths, or wire field names.
+- Renaming the `auctions` table, `auctions.*` tRPC router paths, or listing
+  `auctionId` wire field — those already use auction vocabulary.
+- Renaming post-sale (`postSale`, `PostSalePanel`) or inventory sell/sold
+  vocabulary — different domains.
 - Keeping published campaigns eligible for new listing attachment (they are
   not).
 - Storefront redesign of public campaign covers beyond what admin edits

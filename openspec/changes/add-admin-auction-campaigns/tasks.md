@@ -1,36 +1,49 @@
 # Tasks: Admin auction campaigns
 
 Campaign covers already exist in the auction worker (`auctions` table). This
-change **first** renames operator language from Sales to Campaigns, then adds
-campaign `created`, tightens listing attach eligibility, completes the
-campaign editor, and wires the listing inventory product picker against
+change **first** renames operator language and code identifiers from Sales to
+Campaigns, then adds campaign `created`, tightens listing attach eligibility,
+completes the campaign editor, and wires the listing inventory product picker
+against
 [`add-grade10-inventory`](../add-grade10-inventory/design.md) Contracts
 (`AuctionEligibleProduct`, `listEligibleProducts`).
 
 Once group 2 lands, groups 3–5 can proceed in parallel unless a prose line says
 otherwise. Frontend builds against fixtures, not a running worker.
 
-## 1. Rename Sales → Campaigns in the Grade10 auction admin (grade10)
+## 1. Rename Sales → Campaigns in admin labels and code (grade10)
 
-No dependency on later groups — ship the label change on the live Sales tab
-and listing-editor wording first.
+No dependency on later groups — ship the label and identifier rename on the
+live Sales tab and auction packages first. Do not rename `auctions` table,
+`auctions.*` tRPC paths, listing `auctionId`, post-sale, or inventory
+sell/sold vocabulary.
 
 - [ ] 1.1 Make `Auction admin section is labeled Campaigns` pass — tab title,
   section heading, empty states, and list actions on the existing catalogue-
-  cover page use **Campaigns**, not **Sales** (today `SalesPanel`).
+  cover page use **Campaigns**, not **Sales** (today `SalesPanel` →
+  `CampaignsPanel`).
 - [ ] 1.2 Make `Campaign editor chrome says Campaign` and `Listing editor
   campaign field is labeled Campaign` pass wherever those surfaces already
   exist or are stubbed; no Sale / Sales operator copy for this entity.
-- [ ] 1.3 Verify with `pnpm run typecheck`, `pnpm run lint`, and the focused
-  admin SPA / auction-admin-frontend tests that assert visible labels.
+- [ ] 1.3 Make `Admin catalogue-cover code uses campaign identifiers` pass —
+  `@grade10/auction-contracts` exports `adminCampaign*` / `AuctionAdminCampaign*`
+  (no `adminSale*` aliases); `@grade10/auction-admin-frontend` uses `campaigns`
+  feature modules and tokens (not `sales`); `@grade10/auction-service` catalogue-
+  cover helpers use campaign names (`publishedCampaignJoin`,
+  `publicListingsOfCampaign`, `canceledCampaigns` sweep key, etc.) while
+  `auctions` table and `auctions.*` tRPC paths stay unchanged.
+- [ ] 1.4 Verify with `pnpm run typecheck`, `pnpm run lint`, and the focused
+  admin SPA / auction-admin-frontend / contracts tests that assert visible
+  labels and renamed exports.
 
 ## 2. Share campaign and listing contracts (grade10)
 
 Depends on nothing in group 1. May land beside it.
 
 - [ ] 2.1 Make the admin-campaign wire scenarios pass on `@grade10/auction-contracts`:
-  campaign **`status`** includes `created` (`draft` / `created` / `published` /
-  `canceled`), title and copy shapes, and cancellation answer shape
+  rename `adminSale*` → `adminCampaign*`; campaign **`status`** includes `created`
+  (`draft` / `created` / `published` / `canceled`), title and copy shapes, and
+  cancellation answer shape
   (`Operator opens a draft campaign`, `Operator creates a draft campaign`,
   `Operator publishes a created campaign`, `Operator cancels a published
   campaign`) per `design.md` Contracts.

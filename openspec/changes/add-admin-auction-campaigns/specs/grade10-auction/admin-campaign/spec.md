@@ -14,6 +14,7 @@ checkout and with inventory “sold” stock).
 - Rename Sales to Campaigns
   - Admin tab and page: existing Sales tab, section heading, and empty states become Campaigns
   - Editor and field labels: campaign editor chrome and listing Campaign field never say Sale
+  - Code identifiers: admin contracts, feature modules, app panels, and auction-service catalogue-cover helpers use campaign names, not sale
 - Campaigns section
   - Campaign list: operators browse and open campaigns from that section
 - Campaign editor
@@ -49,6 +50,28 @@ editor chrome SHALL NOT use the words **Sale** or **Sales** for this entity.
 - **WHEN** the campaign editor is shown
 - **THEN** the editor chrome names it a Campaign
 - **AND** it does not name it a Sale
+
+### Requirement: Admin catalogue-cover code uses campaign identifiers
+
+Auction admin packages and the auction worker's catalogue-cover code SHALL name
+the cover entity **campaign**, not **sale**, in exports, modules, panels, and
+internal helpers. Examples: `adminCampaign*` contracts, `campaigns` feature
+modules, `CampaignsPanel`, `publishedCampaignJoin`,
+`publicListingsOfCampaign`.
+
+The `auctions` table, `auctions.*` tRPC router paths, and listing `auctionId`
+wire field SHALL stay unchanged. Post-sale (`postSale`, `PostSalePanel`) and
+inventory sell/sold vocabulary SHALL stay unchanged — they name different
+domains.
+
+#### Scenario: Admin catalogue-cover code uses campaign identifiers
+
+- **GIVEN** the Grade10 auction admin contracts and catalogue-cover backend
+- **WHEN** an engineer imports or reads catalogue-cover identifiers
+- **THEN** exported schemas and types use `adminCampaign` / `AuctionAdminCampaign`
+- **AND** they do not export `adminSale` / `AuctionAdminSale` aliases
+- **AND** the admin SPA exposes `CampaignsPanel` and `campaigns` modules, not
+  `SalesPanel` or `sales` modules for this entity
 
 ### Campaigns section
 -------------------
