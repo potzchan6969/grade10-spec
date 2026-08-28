@@ -1,0 +1,81 @@
+#!/usr/bin/env node
+
+import { readFile } from "node:fs/promises";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { parseArgs } from "node:util";
+import { exitCodeFor, renderHuman } from "./annotation-monitor.mjs";
+import { scanSnapshot } from "./annotation-reconciliation.mjs";
+
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const defaultBaselinePath = resolve(
+  repoRoot,
+  "scripts/design-sync/annotation-baseline.json",
+);
+
+async function readJson(path, label) {
+  try {
+    return JSON.parse(await readFile(path, "utf8"));
+  } catch (error) {
+    throw new Error(
+      `${label}: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+}
+
+function blockedResult(reason, kind = "invalid-input") {
+  return {
+    schemaVersion: 2,
+    observationSchemaVersion: null,
+    observationDigest: null,
+    status: "blocked",
+    scannedSources: [],
+    blockers: [{ kind, reason }],
+    findings: [],
+  };
+}
+
+export async function runCli({ argv = process.argv.slice(2) } = {}) {
+  const { values } = parseArgs({
+    args: argv.filter((arg) => arg !== "--"),
+    options: {
+      json: { type: "boolean", default: false },
+      baseline: { type: "string", default: defaultBaselinePath },
+      snapshot: { type: "string" },
+    },
+    strict: true,
+  });
+  let result;
+  try {
+    if (!values.snapshot) throw new Error("--snapshot is required");
+    const [baseline, snapshot] = await Promise.all([
+      readJson(resolve(repoRoot, values.baseline), "annotation baseline"),
+      readJson(resolve(repoRoot, values.snapshot), "annotation snapshot"),
+    ]);
+    result = scanSnapshot({ baseline, snapshot });
+  } catch (error) {
+    result = blockedResult(
+      error instanceof Error ? error.message : String(error),
+      "invalid-input",
+    );
+  }
+  if (values.json) console.log(JSON.stringify(result, null, 2));
+  else console.log(renderHuman(result));
+  return exitCodeFor(result);
+}
+
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(resolve(process.argv[1])).href
+) {
+  runCli()
+    .then((code) => {
+      process.exitCode = code;
+    })
+    .catch((error) => {
+      console.error(
+        `✗ ${error instanceof Error ? error.message : String(error)}`,
+      );
+      process.exitCode = 2;
+    });
+}

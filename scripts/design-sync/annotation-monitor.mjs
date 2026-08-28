@@ -207,7 +207,7 @@ function normalizeSource(source) {
   return { ...source, fileKey, nodeId };
 }
 
-function normalizeBaselineOccurrence(raw, blockers, entryKey, index) {
+export function normalizeBaselineOccurrence(raw, blockers, entryKey, index) {
   if (!raw || typeof raw !== "object") {
     blockers.push({
       kind: "malformed-baseline",
@@ -290,7 +290,7 @@ function normalizeBaselineOccurrence(raw, blockers, entryKey, index) {
   };
 }
 
-function normaliseBaselineEntries(baseline, blockers) {
+export function normaliseBaselineEntries(baseline, blockers) {
   if (!baseline || typeof baseline !== "object") {
     blockers.push({
       kind: "malformed-baseline",
@@ -441,7 +441,7 @@ function nodeLink(fileUrl, fileKey, nodeId) {
   }
 }
 
-function makeFinding({
+export function makeFinding({
   fileKey,
   fileUrl,
   node,
@@ -456,6 +456,7 @@ function makeFinding({
   candidateAnnotationKeys = null,
   associationCandidates = null,
   identityHint = null,
+  ancestorEvidence = null,
 }) {
   const registeredSources = sources.map((source) => ({
     kind: source.kind ?? "registered-source",
@@ -465,6 +466,9 @@ function makeFinding({
     covers: source.covers ?? null,
     fileKey: source.fileKey,
     nodeId: source.nodeId,
+    name: source.name ?? null,
+    type: source.type ?? null,
+    ancestors: source.ancestors ?? [],
   }));
   const effectiveAssociations = ambiguity
     ? null
@@ -531,6 +535,14 @@ function makeFinding({
     currentText: current?.text ?? null,
     previousCategoryId: previous?.categoryId ?? null,
     currentCategoryId: current?.categoryId ?? null,
+    previousCategoryLabel: previous?.categoryLabel ?? null,
+    currentCategoryLabel:
+      current?.categoryLabel ??
+      (current?.categoryId === null ? "Uncategorized" : null),
+    previousCategoryColor: previous?.categoryColor ?? null,
+    currentCategoryColor: current?.categoryColor ?? null,
+    previousCategoryIsPreset: previous?.categoryIsPreset ?? null,
+    currentCategoryIsPreset: current?.categoryIsPreset ?? null,
     previousPinnedProperties: previous?.pinnedProperties ?? null,
     currentPinnedProperties: current?.pinnedProperties ?? null,
     previousAnnotation,
@@ -541,6 +553,7 @@ function makeFinding({
     associations: effectiveAssociations,
     associationCandidates,
     associationEvidence: evidence,
+    ancestorEvidence: ancestorEvidence ?? node?.ancestors ?? null,
     classification: ambiguity
       ? "ambiguous"
       : hasAssociation
@@ -581,7 +594,7 @@ function structureChangeFor(occurrence, opposite) {
   );
 }
 
-function compareOccurrences({
+export function compareOccurrences({
   oldOccurrences,
   currentOccurrences,
   fileKey,
@@ -1089,8 +1102,13 @@ export function renderHuman(result) {
       lines.push(
         `    annotation: ${finding.annotationKey ?? finding.currentAnnotationKey}`,
       );
-    if (finding.currentCategoryId !== null)
-      lines.push(`    category: ${finding.currentCategoryId}`);
+    if (
+      finding.currentCategoryId !== null ||
+      finding.currentCategoryLabel !== null
+    )
+      lines.push(
+        `    category: ${finding.currentCategoryId ?? "none"} (${finding.currentCategoryLabel ?? "Uncategorized"})`,
+      );
     if (finding.currentPinnedProperties !== null)
       lines.push(
         `    properties: ${JSON.stringify(finding.currentPinnedProperties)}`,
