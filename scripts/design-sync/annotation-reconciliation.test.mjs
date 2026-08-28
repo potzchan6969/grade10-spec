@@ -199,6 +199,117 @@ test("a supplied digest must pin the normalized observation", () => {
   );
 });
 
+test("snapshot diff migrates a schema-version-1 entry to one stable occurrence", () => {
+  const input = observation();
+  input.files[0].nodes[0].annotations = [{ label: "New legacy text" }];
+  const result = scanSnapshot({
+    baseline: {
+      schemaVersion: 1,
+      roots: [{ fileKey, nodeId: "1:1", fileUrl }],
+      entries: {
+        [`${fileKey}:2:1`]: {
+          fileKey,
+          nodeId: "2:1",
+          sourceRoot: "1:1",
+          text: "Old legacy text",
+        },
+      },
+    },
+    snapshot: input,
+  });
+
+  assert.equal(result.status, "drift");
+  assert.equal(result.findings.length, 1);
+  assert.equal(result.findings[0].kind, "changed");
+  assert.equal(result.findings[0].annotationKey, "legacy-1");
+  assert.equal(result.findings[0].previousCategoryId, null);
+  assert.deepEqual(result.findings[0].previousPinnedProperties, []);
+});
+
+test("snapshot diff reports a removal from a resolvable node", () => {
+  const baseline = baselineWithAnnotations([
+    {
+      annotationKey: "content-note",
+      text: "Keep the content contract.",
+      categoryId: "content",
+      pinnedProperties: ["width"],
+    },
+    {
+      annotationKey: "interaction-note",
+      text: "Review interaction states.",
+      categoryId: "interaction",
+      pinnedProperties: ["fills"],
+    },
+  ]);
+  const snapshot = snapshotWithAnnotations([
+    {
+      label: "Review interaction states.",
+      categoryId: "interaction",
+      properties: [{ type: "fills" }],
+    },
+  ]);
+  const result = scanSnapshot({ baseline, snapshot });
+
+  assert.equal(result.status, "drift");
+  assert.deepEqual(
+    result.findings.map((finding) => finding.kind),
+    ["removed"],
+  );
+  assert.equal(result.findings[0].annotationKey, "content-note");
+});
+
+test("snapshot diff keeps an exact-surface addition untracked without an association", () => {
+  const input = observation();
+  input.files[0].roots[0].source.component = null;
+  const result = scanSnapshot({
+    baseline: { schemaVersion: 2, roots: [], entries: {} },
+    snapshot: input,
+  });
+
+  assert.equal(result.status, "drift");
+  assert.equal(result.findings.length, 2);
+  assert.ok(
+    result.findings.every((finding) => finding.classification === "untracked"),
+  );
+  assert.ok(
+    result.findings.every(
+      (finding) => finding.associationEvidence.length === 0,
+    ),
+  );
+});
+
+test("snapshot diff blocks malformed baseline and observation evidence", () => {
+  const partlyMigrated = scanSnapshot({
+    baseline: {
+      schemaVersion: 2,
+      roots: [],
+      entries: {
+        [`${fileKey}:2:1`]: {
+          fileKey,
+          nodeId: "2:1",
+          text: "old shape",
+          annotations: [],
+        },
+      },
+    },
+    snapshot: observation(),
+  });
+  assert.equal(partlyMigrated.status, "blocked");
+  assert.equal(partlyMigrated.blockers[0].kind, "partly-migrated-baseline");
+
+  const malformedObservation = observation();
+  malformedObservation.files[0].nodes[0].annotations = [
+    { label: "Malformed", properties: [{ type: "" }] },
+  ];
+  const blocked = scanSnapshot({
+    baseline: { schemaVersion: 2, roots: [], entries: {} },
+    snapshot: malformedObservation,
+  });
+  assert.equal(blocked.status, "blocked");
+  assert.equal(blocked.blockers[0].kind, "malformed-observation");
+  assert.equal(blocked.findings.length, 0);
+});
+
 test("snapshot diff preserves schema-v2 keys and reports category metadata", () => {
   const baseline = {
     schemaVersion: 2,

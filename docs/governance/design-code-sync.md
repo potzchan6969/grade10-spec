@@ -220,80 +220,41 @@ Deleting a variant that instances still use leaves an orphaned component behind 
 
 Be aware that the Storybook suite renders the **`default`** theme. It therefore exercises those baseline values, not the designed ones, and a passing run says nothing about how a component looks in Grade10. Review that in Storybook with the toolbar switched over.
 
-## Monitoring Figma annotations
+## Reconciling Figma annotations
 
-Annotations are design evidence, not automatically accepted requirements. The
-annotation rail records a reviewed text baseline at
-`scripts/design-sync/annotation-baseline.json` and compares it with the
-annotations below registered Code Connect and audit roots. It reads the same
-Figma file as the other design-sync checks and never writes to Figma or the
-baseline during a scan.
+Annotations are design evidence, not automatically accepted requirements. Use
+the `reconcile-figma-annotations` project skill from a supported harness when
+you need to review them. It is the only annotation workflow; component,
+rendered-value, token, audit, and Code Connect checks remain in this workflow.
 
-Run the two read-only forms locally:
+The end-to-end flow is:
 
-```bash
-FIGMA_TOKEN=figd_… pnpm run figma:annotations -- --inventory
-FIGMA_TOKEN=figd_… pnpm run figma:annotations -- --json
-```
+1. The harness reads the registered engineering roots through the Figma Plugin
+   API and reads one category catalog per file. It resolves categories locally,
+   excludes exploratory areas, normalizes each occurrence, and keeps the
+   result as a temporary, digest-pinned snapshot.
+2. The skill compares that snapshot with the reviewed
+   `scripts/design-sync/annotation-baseline.json` and produces an
+   ownership-aware report. Each finding has a stable ID, category, Figma node
+   evidence, previous/current text, pinned properties, exact OpenSpec evidence,
+   and a recommended action. Missing or incomplete evidence is blocked, not
+   clean.
+3. Select individual finding IDs. Confirm an exact capability, change, or
+   task-group association for each selected occurrence, or give an explicit
+   `noImpactReason`. Similar prose and editor or Git identity are not evidence.
+4. After confirmation, the registered store's acceptance command validates the
+   observation digest and decisions, updates the selected baseline occurrences
+   atomically, prepares any exact related OpenSpec edits, and shows the Git
+   diff. Unselected, ambiguous, removed, replacement, and orphaned findings
+   remain for review unless explicitly resolved.
+5. The skill reruns the comparison against the same pinned snapshot and shows
+   all remaining drift. Only after a second explicit confirmation may it make
+   one local commit in `grade10-spec`, staging only the confirmed files.
 
-Inventory scans the whole registered surface and prints one record per current
-annotation occurrence, including its node ID, occurrence key, text, category,
-and pinned properties. It is the candidate output for the initial review; it
-does not write the baseline. The daily scan uses only the roots recorded in the
-baseline plus the current Code Connect and audit registrations, so exploratory
-design areas do not become engineering findings accidentally.
-
-The manifest has `schemaVersion: 2`, a `roots` list, and `entries` keyed by
-`<file-key>:<node-id>` using a colon in the node ID. Each node entry stores an
-`annotations` array. Each occurrence has a baseline-local `annotationKey`,
-normalized text (empty for property-only annotations), a category ID or null,
-and a canonical sorted set of pinned properties. Its optional exact
-`associations` and `noImpactReason` remain on that occurrence. Schema-version-1
-entries migrate in memory to one `legacy-1` occurrence with their source root
-and review evidence preserved; a malformed or partly migrated manifest blocks
-the scan. Similar prose is never an association.
-
-Occurrences are matched on the same node as an order-independent multiset:
-exact text/category/property matches cancel first, then one remaining old and
-current occurrence with the same category and pinned properties may be paired
-as changed. Several remaining siblings are reported as removed and added with
-ambiguity, and a category or pinned-property change is never paired by text.
-Identical duplicates retain their count; if duplicate baseline associations
-differ, a count-decrease finding remains ownership-ambiguous. Current
-unmatched keys use a canonical fingerprint and one-based multiplicity ordinal,
-not the Figma array position.
-
-The scanner exits `0` for verified no change, `1` for annotation drift, and
-`2` when any registered evidence is blocked or malformed. A missing Figma file,
-credential, permission, request, response, or tracked node is blocked. A
-missing baseline node is orphaned evidence, not an annotation removal. Newly
-seen text remains in the report as `added` and `untracked` when no exact
-component or OpenSpec association exists.
-
-### Review and accept a change
-
-1. Open the finding's Figma node link and inspect its occurrence key, category,
-   pinned properties, and previous/current text.
-2. Trace it through the exact registered component, baseline association, or
-   OpenSpec artifact. Do not use editor identity, Git blame, or similar words
-   as ownership evidence.
-3. Decide whether the text is a requirement, UI state, technical note, visual
-   note, or no-impact clarification. If it changes product behaviour, update
-   the OpenSpec requirement in the planning store first.
-4. Patch the matching node's `annotations` occurrence in a reviewed change,
-   replacing its canonical values and recording the exact
-   capability/change/task-group association or an explicit `noImpactReason`.
-   Preserve the occurrence key when accepting a text or array-order change;
-   assign a new reviewed key only after confirming an added occurrence. The
-   scanner has no update flag by design.
-5. Run the JSON scan again and review the Git diff. A clean result is only
-   meaningful when every registered surface was read successfully.
-
-When a node is replaced, keep the old entry until the orphaned finding is
-reviewed; add the new node separately and reconnect it in the same reviewed
-patch. To roll back the rail, disable the annotation workflow step and leave
-the versioned manifest in place as evidence. No external record or scheduler
-is created by this process.
+There is no annotation CI scan, CI snapshot artifact,
+`annotation-current.json`, or automatic push. The workflow never writes to
+Figma, advances the application repository's submodule, opens a pull request,
+or creates a scheduler.
 
 ## Known gaps
 

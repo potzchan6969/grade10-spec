@@ -4,8 +4,11 @@ import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
-import { exitCodeFor, renderHuman } from "./annotation-monitor.mjs";
-import { scanSnapshot } from "./annotation-reconciliation.mjs";
+import {
+  exitCodeFor,
+  renderHuman,
+  scanSnapshot,
+} from "./annotation-reconciliation.mjs";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const defaultBaselinePath = resolve(

@@ -4,10 +4,10 @@ import { readFile, rename, unlink, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
-import { renderHuman } from "./annotation-monitor.mjs";
 import {
   AcceptanceValidationError,
   acceptSnapshot,
+  renderHuman,
 } from "./annotation-reconciliation.mjs";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");

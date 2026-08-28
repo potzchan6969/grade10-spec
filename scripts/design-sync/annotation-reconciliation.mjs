@@ -3,7 +3,7 @@ import {
   compareOccurrences,
   makeFinding,
   normaliseBaselineEntries,
-} from "./annotation-monitor.mjs";
+} from "./annotation-core.mjs";
 import {
   normalizeObservation,
   ObservationValidationError,
@@ -483,4 +483,48 @@ export function scanSnapshot({ baseline, snapshot } = {}) {
       ...finding,
     })),
   };
+}
+
+export function exitCodeFor(result) {
+  if (result.status === "blocked") return 2;
+  if (result.status === "drift") return 1;
+  return 0;
+}
+
+export function renderHuman(result) {
+  if (result.status === "clean") return "✓ No tracked annotations changed.";
+  const lines = [
+    result.status === "blocked"
+      ? `✗ Annotation scan blocked (${result.blockers.length} blocker(s)).`
+      : `✗ Annotation drift found (${result.findings.length} finding(s)).`,
+  ];
+  for (const blocker of result.blockers ?? [])
+    lines.push(
+      `  BLOCKED ${blocker.fileKey ?? ""} ${blocker.nodeId ?? ""} ${blocker.reason}`.trim(),
+    );
+  for (const finding of result.findings ?? []) {
+    lines.push(`  ${finding.kind.toUpperCase()} ${finding.nodeLink}`);
+    if (finding.previousText !== null)
+      lines.push(`    previous: ${JSON.stringify(finding.previousText)}`);
+    if (finding.currentText !== null)
+      lines.push(`    current:  ${JSON.stringify(finding.currentText)}`);
+    if (finding.annotationKey || finding.currentAnnotationKey)
+      lines.push(
+        `    annotation: ${finding.annotationKey ?? finding.currentAnnotationKey}`,
+      );
+    if (
+      finding.currentCategoryId !== null ||
+      finding.currentCategoryLabel !== null
+    )
+      lines.push(
+        `    category: ${finding.currentCategoryId ?? "none"} (${finding.currentCategoryLabel ?? "Uncategorized"})`,
+      );
+    if (finding.currentPinnedProperties !== null)
+      lines.push(
+        `    properties: ${JSON.stringify(finding.currentPinnedProperties)}`,
+      );
+    if (finding.ambiguity)
+      lines.push(`    ambiguity: ${finding.ambiguity.kind}`);
+  }
+  return lines.join("\n");
 }

@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 
-import { normalizeNodeId, normalizeText } from "./annotation-monitor.mjs";
+import { normalizeNodeId, normalizeText } from "./annotation-core.mjs";
 
 export const ANNOTATION_OBSERVATION_SCHEMA_VERSION = 1;
 
