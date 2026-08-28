@@ -117,29 +117,29 @@ This group depends on group 4 being available in the standalone registered
 `grade10-spec` store. It does not depend on the `external/grade10-spec`
 submodule pointer.
 
-- [ ] 5.1 Add the canonical `reconcile-figma-annotations` skill and a reusable
+- [x] 5.1 Add the canonical `reconcile-figma-annotations` skill and a reusable
   read-only Figma Plugin API observation reference that reads registered roots,
   reads one category catalog per file, resolves categories locally, emits the
   normalized temporary snapshot, and performs no Figma or repository write.
   Cover `Figma Plugin API access is unavailable` and the category observation
   scenarios with fixture-based contract tests.
-- [ ] 5.2 Migrate the existing exact-association and ownership helper into the
+- [x] 5.2 Migrate the existing exact-association and ownership helper into the
   new report path. Show stable finding ID, category ID and label, Figma URL,
   node and ancestor evidence, old and current text, pinned properties,
   ambiguity, exact OpenSpec evidence, owner group, and next action for `Exact
   active change reference is found`, `Similar prose is the only lead`,
   `Matching task group belongs to the current user`, `Proposal authorship does
   not override another owner`, and `Current identity is unavailable`.
-- [ ] 5.3 Implement the guided report, finding selection, decision collection,
+- [x] 5.3 Implement the guided report, finding selection, decision collection,
   and pre-write confirmation. Prove the initial phase is read-only, unselected
   findings remain drift, blocked evidence offers no write, and no association
   or `noImpactReason` is inferred.
-- [ ] 5.4 Invoke the registered store's acceptance command for the confirmed
+- [x] 5.4 Invoke the registered store's acceptance command for the confirmed
   selection, prepare any exact related OpenSpec edits as one validated patch,
   show the resulting standalone-store Git diff, and rerun diff against the same
   observation digest. Cover `Reconciliation verifies cleanly` with clean,
   partial, rejected, stale, ambiguous, removal, replacement, and orphan cases.
-- [ ] 5.5 Add the second explicit commit confirmation and an exact staging
+- [x] 5.5 Add the second explicit commit confirmation and an exact staging
   allowlist. Cover `Developer confirms the commit` and `Developer declines the
   commit`, including unrelated and overlapping dirty-store changes, and prove
   the workflow never pushes, advances a submodule, opens a pull request, or
