@@ -31,7 +31,7 @@ Needs group 2 merged in grade10: the application repo re-points before this dele
 - [x] 4.2 Move the store orders table, POS switches card, and order-claims card onto `Table`, `Status`, `SectionHeader`, `StatusBadge`, and `Money`, making `console-blocks-SC-01`, `console-blocks-SC-05`–`SC-07`, and `console-blocks-SC-13` pass there
 - [x] 4.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 5. Loyalty and appointment consoles migrate (grade10)
+## 5. Loyalty and appointment consoles migrate (grade10) (owner: @sean)
 
 - [ ] 5.1 Move the loyalty ledger and redemptions tables onto `Table`, `Status`, `StatusBadge`, and `Money`, and collapse the two private figure components into `Figure`, making `console-blocks-SC-01` and `console-blocks-SC-13` pass there
 - [ ] 5.2 Move the appointment day and schedule panels onto `Table`, `Status`, and `SectionHeader`, making `console-blocks-SC-01` and `console-blocks-SC-05`–`SC-07` pass there
