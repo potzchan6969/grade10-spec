@@ -125,7 +125,9 @@ observation instead of fetching Figma:
   and baseline, then emits blockers and stable findings without writes.
 - `pnpm figma:annotations:accept --snapshot <path> --ids <id,...>
   --decisions <path>` validates a complete selected decision set and applies an
-  atomic baseline patch.
+  atomic baseline and related-OpenSpec patch. The diff includes a
+  `baselineDigest`; acceptance requires that digest as well as the observation
+  digest, so concurrent baseline metadata edits cannot be overwritten.
 
 Names may be adjusted to the repository's final command style, but snapshot
 input, stable JSON output, selective IDs, and no implicit live fetch are fixed
@@ -159,17 +161,23 @@ Alternatives considered:
 ### 4. Acceptance is selected, evidence-pinned, and atomic
 
 The diff result will bind every stable finding ID to the observation digest and
-accepted baseline state. Before acceptance, the skill will collect a decision
+an accepted-baseline digest. Before acceptance, the skill will collect a decision
 for each selected ID:
 
-- retain or set an exact capability, change, or task-group association; or
+- retain or set exactly one existing capability, change, or change/task-group
+  association; or
 - record an explicit `noImpactReason`.
 
 The skill may draft a related OpenSpec patch, but the developer must confirm
 the requirement text and association. Similar prose may be shown as a search
 lead only and cannot populate a decision.
 
-The acceptance command will validate the entire selected set before writing.
+The acceptance command will validate the entire selected set before writing,
+including association keys and target existence in the registered store. A
+related file payload contains an exact relative OpenSpec path, expected
+pre-write content digest, and complete replacement content. It validates the
+resulting baseline and every related file, checks that no target is dirty or
+overlapping, then installs all files through one rollback-capable transaction.
 It will reject stale digests, unknown IDs, missing decisions, ambiguous
 duplicates, and overlapping or malformed operations. A unique text edit keeps
 its accepted key. A confirmed addition gets a new reviewed key at apply time.
@@ -293,7 +301,8 @@ Alternatives considered:
 - [Several same-structure annotations change together] -> Report removals and
   additions as ambiguous and require explicit occurrence review.
 - [A node is replaced] -> Keep the old entry orphaned and the new occurrence
-  added until the developer confirms the replacement.
+  added as reviewable drift until the developer confirms the replacement;
+  reserve blocked/no-write for incomplete or malformed evidence.
 - [The standalone store contains unrelated edits] -> Allow read-only reporting,
   but block writes or commits that overlap target files and stage only an
   explicit allowlist.

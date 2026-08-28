@@ -141,8 +141,11 @@ The workflow SHALL distinguish verified no drift from evidence it could not
 read or validate. An inaccessible file, missing tool capability, insufficient
 permission, failed request, malformed response, unresolved registered root, or
 unresolved category SHALL make the affected evidence blocked and the run
-unsuccessful. A baseline node that no longer resolves SHALL be reported as
-orphaned rather than silently treated as a removal.
+unsuccessful. A baseline node that no longer resolves SHALL be reported as an
+orphaned finding in complete, reviewable drift: it SHALL NOT make the run
+blocked or clean, and it SHALL remain selectable only with an explicit
+removal or replacement decision. Blocked/no-write is reserved for incomplete
+or malformed evidence.
 
 #### Scenario: Figma Plugin API access is unavailable
 
@@ -217,11 +220,14 @@ existing agent-platform parity mechanism. The skill SHALL perform observation,
 comparison, reporting, selection, reconciliation, verification, and optional
 commit as one guided workflow. The initial report phase SHALL be read-only.
 
-Each finding SHALL show its stable ID, change kind, category ID and label,
-Figma file and node link, registered root and ancestor evidence, previous and
-current text when applicable, pinned properties, ambiguity, exact OpenSpec
-evidence, ownership group, and recommended next action. The developer SHALL be
-able to select individual finding IDs; unselected findings SHALL remain drift.
+The default human report SHALL show all four ownership groups, including
+findings owned by others, without hiding their details. Each finding SHALL
+show its stable ID, change kind, category ID and label, Figma file and node
+link, registered root and ancestor evidence, previous and current text when
+applicable, pinned properties, ambiguity, exact OpenSpec evidence, ownership
+group, and recommended next action. A compact owner summary SHALL be explicit
+opt-in only. The developer SHALL be able to select individual finding IDs;
+unselected findings SHALL remain drift.
 
 #### Scenario: Actionable findings are reported
 
@@ -250,13 +256,19 @@ able to select individual finding IDs; unselected findings SHALL remain drift.
 
 Before writing, the skill SHALL require the developer to confirm the selected
 findings and each resulting engineering decision. Every accepted occurrence
-SHALL have an exact capability, change, or task-group association, or an
-explicit `noImpactReason`. The workflow MAY assist with related OpenSpec edits,
-but it SHALL NOT invent a requirement, association, no-impact decision, or
-ownership claim.
+SHALL have exactly one supported association form — an existing capability,
+an existing change, or an existing change plus task-group — or an explicit
+`noImpactReason`. Unknown association keys and references to missing store
+artifacts SHALL be rejected by the registered store interface. The workflow
+MAY assist with related OpenSpec edits, but it SHALL NOT invent a requirement,
+association, no-impact decision, or ownership claim.
 
 The acceptance operation SHALL validate the pinned observation digest and
-apply all selected baseline and OpenSpec patches atomically. A changed
+accepted baseline digest, then apply all selected baseline and OpenSpec
+patches atomically. Related OpenSpec edits SHALL carry exact relative paths,
+expected pre-write content digests, and complete replacement contents; the
+operation SHALL validate the resulting baseline and every related file before
+writing, and SHALL refuse overlapping dirty targets. A changed
 occurrence SHALL retain its existing annotation key. A confirmed addition
 SHALL receive a new reviewed key only when accepted. Unselected, rejected, or
 ambiguous findings SHALL not modify the baseline. Removals, replacement nodes,

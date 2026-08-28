@@ -18,6 +18,30 @@ function nodeKey(fileKey, nodeId) {
   return `${fileKey}:${normalizeNodeId(nodeId)}`;
 }
 
+function canonicalize(value) {
+  if (Array.isArray(value)) return value.map(canonicalize);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.keys(value)
+        .filter((key) => key !== "baselineDigest")
+        .sort()
+        .map((key) => [key, canonicalize(value[key])]),
+    );
+  }
+  return value;
+}
+
+function digestFor(value) {
+  return `sha256:${createHash("sha256")
+    .update(JSON.stringify(canonicalize(value)))
+    .digest("hex")}`;
+}
+
+/** Digest of the accepted baseline, excluding its optional pin marker. */
+export function baselineDigestFor(baseline) {
+  return digestFor(baseline ?? null);
+}
+
 function stableFindingId(fileKey, nodeId, kind, occurrenceIdentity = "") {
   return createHash("sha256")
     .update(

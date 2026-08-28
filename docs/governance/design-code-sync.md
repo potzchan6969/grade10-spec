@@ -235,10 +235,13 @@ The end-to-end flow is:
    result as a temporary, digest-pinned snapshot.
 2. The skill compares that snapshot with the reviewed
    `scripts/design-sync/annotation-baseline.json` and produces an
-   ownership-aware report. Each finding has a stable ID, category, Figma node
-   evidence, previous/current text, pinned properties, exact OpenSpec evidence,
-   and a recommended action. Missing or incomplete evidence is blocked, not
-   clean.
+   ownership-aware report. The default human report renders every ownership
+   group and every finding with its stable ID, kind, category ID and label,
+   Figma file/node link, registered root and ancestor evidence, previous/current
+   text, pinned properties, ambiguity, exact OpenSpec evidence, ownership, and
+   recommended next action. Missing or incomplete evidence is blocked, not
+   clean; a resolved orphan or replacement is reviewable drift that can be
+   explicitly accepted.
 3. Select individual finding IDs. Confirm an exact capability, change, or
    task-group association for each selected occurrence, or give an explicit
    `noImpactReason`. Similar prose and editor or Git identity are not evidence.

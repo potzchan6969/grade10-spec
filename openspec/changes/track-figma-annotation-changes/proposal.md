@@ -24,9 +24,15 @@ while no unselected, ambiguous, or blocked finding is silently accepted.
   match occurrences independently of Figma array order.
 - Produce stable finding IDs, exact Figma and OpenSpec evidence, current
   ownership grouping, category metadata, and recommended follow-up actions.
+- Preserve resolved nodes with zero annotations so final-annotation removals
+  remain findings, and present orphaned or replacement findings as reviewable
+  drift rather than unrecoverable blockers.
 - Let the developer select findings, supply or confirm exact OpenSpec
   associations or an explicit `noImpactReason`, preview an atomic baseline and
   spec patch, and verify the remaining drift.
+- Pin acceptance to both observation and baseline digests. Reject unknown
+  association keys or missing store targets, and apply exact related OpenSpec
+  file payloads together with the baseline only after complete validation.
 - After a separate explicit confirmation, let the skill commit only the
   relevant standalone `grade10-spec` changes. Pushing remains a developer
   action.

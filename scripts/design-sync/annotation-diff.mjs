@@ -1,30 +1,18 @@
 #!/usr/bin/env node
 
-import { readFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { resolve as resolvePath } from "node:path";
+import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
+import {
+  defaultBaselinePath,
+  readJson,
+  resolveRepoPath,
+} from "./annotation-cli.mjs";
 import {
   exitCodeFor,
   renderHuman,
   scanSnapshot,
 } from "./annotation-reconciliation.mjs";
-
-const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-const defaultBaselinePath = resolve(
-  repoRoot,
-  "scripts/design-sync/annotation-baseline.json",
-);
-
-async function readJson(path, label) {
-  try {
-    return JSON.parse(await readFile(path, "utf8"));
-  } catch (error) {
-    throw new Error(
-      `${label}: ${error instanceof Error ? error.message : String(error)}`,
-    );
-  }
-}
 
 function blockedResult(reason, kind = "invalid-input") {
   return {
@@ -52,8 +40,8 @@ export async function runCli({ argv = process.argv.slice(2) } = {}) {
   try {
     if (!values.snapshot) throw new Error("--snapshot is required");
     const [baseline, snapshot] = await Promise.all([
-      readJson(resolve(repoRoot, values.baseline), "annotation baseline"),
-      readJson(resolve(repoRoot, values.snapshot), "annotation snapshot"),
+      readJson(resolveRepoPath(values.baseline), "annotation baseline"),
+      readJson(resolveRepoPath(values.snapshot), "annotation snapshot"),
     ]);
     result = scanSnapshot({ baseline, snapshot });
   } catch (error) {
@@ -69,7 +57,7 @@ export async function runCli({ argv = process.argv.slice(2) } = {}) {
 
 if (
   process.argv[1] &&
-  import.meta.url === pathToFileURL(resolve(process.argv[1])).href
+  import.meta.url === pathToFileURL(resolvePath(process.argv[1])).href
 ) {
   runCli()
     .then((code) => {

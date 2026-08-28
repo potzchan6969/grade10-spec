@@ -1,43 +1,20 @@
 #!/usr/bin/env node
 
-import { readFile, rename, unlink, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
+import {
+  defaultBaselinePath,
+  readJson,
+  repoRoot,
+  resolveRepoPath,
+} from "./annotation-cli.mjs";
 import {
   AcceptanceValidationError,
   acceptSnapshot,
   renderHuman,
 } from "./annotation-reconciliation.mjs";
-
-const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-const defaultBaselinePath = resolve(
-  repoRoot,
-  "scripts/design-sync/annotation-baseline.json",
-);
-
-async function readJson(path, label) {
-  try {
-    return JSON.parse(await readFile(path, "utf8"));
-  } catch (error) {
-    throw new Error(
-      `${label}: ${error instanceof Error ? error.message : String(error)}`,
-    );
-  }
-}
-
-async function writeJsonAtomically(path, value) {
-  const temporaryPath = `${path}.tmp-${process.pid}`;
-  try {
-    await writeFile(temporaryPath, `${JSON.stringify(value, null, 2)}\n`, {
-      flag: "wx",
-    });
-    await rename(temporaryPath, path);
-  } catch (error) {
-    await unlink(temporaryPath).catch(() => {});
-    throw error;
-  }
-}
+import { applyAcceptanceTransaction } from "./annotation-store.mjs";
 
 function blockedResult(error) {
   return {
@@ -54,7 +31,10 @@ function blockedResult(error) {
   };
 }
 
-export async function runCli({ argv = process.argv.slice(2) } = {}) {
+export async function runCli({
+  argv = process.argv.slice(2),
+  storeRoot = repoRoot,
+} = {}) {
   const { values } = parseArgs({
     args: argv.filter((arg) => arg !== "--"),
     options: {
@@ -71,26 +51,34 @@ export async function runCli({ argv = process.argv.slice(2) } = {}) {
     if (!values.snapshot) throw new Error("--snapshot is required");
     if (!values.ids) throw new Error("--ids is required");
     if (!values.decisions) throw new Error("--decisions is required");
-    const baselinePath = resolve(repoRoot, values.baseline);
+    const baselinePath = resolve(storeRoot, values.baseline);
     const [baseline, snapshot, decisions] = await Promise.all([
       readJson(baselinePath, "annotation baseline"),
-      readJson(resolve(repoRoot, values.snapshot), "annotation snapshot"),
-      readJson(resolve(repoRoot, values.decisions), "annotation decisions"),
+      readJson(resolveRepoPath(values.snapshot), "annotation snapshot"),
+      readJson(resolveRepoPath(values.decisions), "annotation decisions"),
     ]);
     output = acceptSnapshot({
       baseline,
       snapshot,
+      storeRoot,
       ids: values.ids
         .split(",")
         .map((id) => id.trim())
         .filter(Boolean),
       decisions,
     });
-    await writeJsonAtomically(baselinePath, output.baseline);
+    const transaction = applyAcceptanceTransaction({
+      storeRoot,
+      baselinePath,
+      baseline: output.baseline,
+      decisions,
+    });
     output = {
       status: output.status,
       observationDigest: output.observationDigest,
+      baselineDigest: decisions.baselineDigest,
       acceptedIds: output.acceptedIds,
+      files: transaction.files,
       remaining: output.remaining,
     };
   } catch (error) {

@@ -1,5 +1,6 @@
 import {
   ANNOTATION_SCHEMA_VERSION,
+  baselineDigestFor,
   compareOccurrences,
   makeFinding,
   normaliseBaselineEntries,
@@ -8,6 +9,10 @@ import {
   normalizeObservation,
   ObservationValidationError,
 } from "./annotation-snapshot.mjs";
+import {
+  normalizeRelatedFiles,
+  validateAssociation,
+} from "./annotation-store.mjs";
 
 function sourceFromRoot(root, fileUrl) {
   return {
@@ -43,11 +48,16 @@ function orphanFindings({ file, entry, sources }) {
   );
 }
 
-function blockedResult(blockers, observationDigest = null) {
+function blockedResult(
+  blockers,
+  observationDigest = null,
+  baselineDigest = null,
+) {
   return {
     schemaVersion: ANNOTATION_SCHEMA_VERSION,
     observationSchemaVersion: null,
     observationDigest,
+    baselineDigest,
     status: "blocked",
     scannedSources: [],
     blockers,
@@ -70,7 +80,7 @@ function isRecord(value) {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
-function validateDecision(decision, finding) {
+function validateDecision(decision, finding, { storeRoot } = {}) {
   if (!isRecord(decision))
     acceptanceError(`decision for ${finding.id} must be an object`);
   const hasAssociations = decision.associations !== undefined;
@@ -81,18 +91,12 @@ function validateDecision(decision, finding) {
     );
   }
   if (hasAssociations) {
-    if (
-      !isRecord(decision.associations) ||
-      !Object.keys(decision.associations).length
-    )
+    try {
+      validateAssociation(decision.associations, { storeRoot });
+    } catch (error) {
       acceptanceError(
-        `decision for ${finding.id} associations must be a non-empty object`,
+        `decision for ${finding.id} has an invalid association: ${error instanceof Error ? error.message : String(error)}`,
       );
-    for (const [key, value] of Object.entries(decision.associations)) {
-      if (typeof value !== "string" || !value.trim())
-        acceptanceError(
-          `decision for ${finding.id} association ${key} must be a non-empty string`,
-        );
     }
   } else if (
     typeof decision.noImpactReason !== "string" ||
@@ -226,6 +230,7 @@ export function acceptSnapshot({
   snapshot,
   ids = [],
   decisions,
+  storeRoot,
 } = {}) {
   if (!Array.isArray(ids) || !ids.length)
     acceptanceError("at least one finding ID must be selected");
@@ -234,17 +239,27 @@ export function acceptSnapshot({
   if (!isRecord(decisions)) acceptanceError("decisions must be an object");
 
   const diff = scanSnapshot({ baseline, snapshot });
-  const blockingKinds = new Set([
-    "orphaned-baseline-node",
-    "orphaned-baseline",
-  ]);
-  const blockingEvidence = diff.blockers.filter(
-    (blocker) => !blockingKinds.has(blocker.kind),
-  );
-  if (blockingEvidence.length)
+  if (diff.blockers.length)
     acceptanceError("observation or baseline evidence is blocked");
   if (decisions.observationDigest !== diff.observationDigest)
     acceptanceError("decision observation digest does not match the snapshot");
+  if (decisions.baselineDigest !== diff.baselineDigest)
+    acceptanceError(
+      "decision baseline digest does not match the accepted baseline",
+    );
+  if (
+    decisions.relatedFiles !== undefined ||
+    decisions.relatedOpenSpec !== undefined
+  ) {
+    try {
+      normalizeRelatedFiles(
+        decisions.relatedFiles ?? decisions.relatedOpenSpec,
+        { storeRoot },
+      );
+    } catch (error) {
+      acceptanceError(error instanceof Error ? error.message : String(error));
+    }
+  }
   if (!Array.isArray(decisions.decisions))
     acceptanceError("decisions.decisions must be an array");
   const findingsById = new Map(
@@ -264,7 +279,7 @@ export function acceptSnapshot({
     const decision = decisionsById.get(id);
     if (!decision)
       acceptanceError(`missing decision for selected finding ${id}`);
-    validateDecision(decision, finding);
+    validateDecision(decision, finding, { storeRoot });
   }
   for (const id of decisionsById.keys()) {
     if (!ids.includes(id)) acceptanceError(`decision ${id} was not selected`);
@@ -367,7 +382,7 @@ export function scanSnapshot({ baseline, snapshot } = {}) {
       error instanceof ObservationValidationError
         ? error.blockers
         : [{ kind: "malformed-observation", reason: String(error) }];
-    return blockedResult(blockers);
+    return blockedResult(blockers, null, baselineDigestFor(baseline));
   }
 
   const blockers = [...normalized.blockers];
@@ -426,13 +441,6 @@ export function scanSnapshot({ baseline, snapshot } = {}) {
       const entry = entriesForNode.get(nodeId) ?? null;
       const node = nodes.get(nodeId);
       if (!node) {
-        blockers.push(
-          blockerForFile(fileKey, {
-            kind: "orphaned-baseline-node",
-            nodeId,
-            reason: "baseline node cannot be resolved in the snapshot",
-          }),
-        );
         findings.push(
           ...orphanFindings({
             file,
@@ -475,6 +483,7 @@ export function scanSnapshot({ baseline, snapshot } = {}) {
     schemaVersion: ANNOTATION_SCHEMA_VERSION,
     observationSchemaVersion: normalized.schemaVersion,
     observationDigest: normalized.digest,
+    baselineDigest: baselineDigestFor(baseline),
     status,
     scannedSources,
     blockers,

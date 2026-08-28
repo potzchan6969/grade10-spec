@@ -194,3 +194,32 @@ being available in the registered store.
   remaining-drift verification, declined commit, and confirmed local commit.
   Confirm no tracked current snapshot, annotation CI step, REST live fetch,
   deprecated skill, automatic push, submodule advance, or Figma write remains.
+
+## 8. Apply review fixes to the Grade10 observation and workflow (grade10)
+
+- [x] 8.1 Preserve resolved registered nodes with zero annotations so removal
+  of the final annotation is reported, and keep orphaned or replacement
+  findings as selectable reviewable drift rather than blocked evidence.
+- [x] 8.2 Make the default human report actionable for every ownership group:
+  render stable ID, kind, category ID and label, Figma link, registered root
+  and ancestor evidence, old/current text, pinned properties, ambiguity,
+  exact OpenSpec evidence, ownership, and next action.
+- [x] 8.3 Restore `pnpm test` to the frontend lane, add the dedicated Node
+  tooling lane and validation wiring, and rename/split scenario tests so all
+  approved delta scenario names appear exactly in behavior-level test titles.
+- [x] 8.4 Verify the focused observation, report, and tooling tests plus parity,
+  lint, typecheck, frontend tests, tooling tests, and diff checks.
+
+## 9. Apply review fixes to the authoritative store transaction (grade10-spec)
+
+- [x] 9.1 Make the store the sole semantic authority for exact association
+  forms and registered capability/change/task-group target existence; reject
+  unknown keys and preserve reviewable orphan/replacement drift semantics.
+- [x] 9.2 Pin diff and acceptance to the accepted baseline digest, and require
+  exact related OpenSpec file payloads with expected content digests.
+- [x] 9.3 Validate the complete resulting baseline and related OpenSpec files,
+  reject overlapping dirty targets, and apply the whole checked set through a
+  rollback-capable all-or-nothing transaction.
+- [x] 9.4 Remove meaningful duplicated CLI setup with shared helpers, then
+  verify focused design-sync tests, repository lint/typecheck/test,
+  `check:design-system`, strict OpenSpec validation, and diff checks.
