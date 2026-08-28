@@ -44,13 +44,6 @@ campaign (or clears it) — with the auction admin section labeled Campaigns.
   `created` only** — or clears the campaign so the listing stands alone. A
   `published` or `canceled` campaign is not offered and attaching one is
   refused.
-- **Listing editor inventory product picker.** The listing’s catalogue
-  `productId` is chosen from Grade10 inventory products that are **`created`**
-  (not `draft`) and have **ready available > 0**. Draft and out-of-stock
-  products are omitted from the picker and refused on save/create. Campaign
-  covers do not pick a product. Depends on
-  [`add-grade10-inventory`](../add-grade10-inventory/proposal.md) for the
-  eligibility read model.
 - **Backend.** Extend the existing cover entity (`auctions` table / tRPC)
   with the `created` status and tightened attach eligibility; complete the
   admin client for update / cancel / get / create / setAuction. No parallel
@@ -73,10 +66,8 @@ campaign (or clears it) — with the auction admin section labeled Campaigns.
 ### Modified Capabilities
 
 - `grade10-auction/admin-listing`: Listing editor exposes optional campaign
-  selection among eligible campaigns; inventory product picker limited to
-  created, in-stock products; scenarios for attach, clear, refusal of
-  published or canceled campaigns, Campaign field labeling, and product
-  eligibility.
+  selection among eligible campaigns; scenarios for attach, clear, refusal of
+  published or canceled campaigns, and Campaign field labeling.
 
 ## Impact
 
@@ -86,13 +77,12 @@ campaign (or clears it) — with the auction admin section labeled Campaigns.
   `OPEN_AUCTION_STATES = ["draft", "created"]`.
 - **grade10-spec** — new `admin-campaign` capability; admin-listing delta; no
   new `@grade10/ui` export expected (compose `@grade10/design-system`).
-- **Out of scope / Non-goals:** store checkout “sale”; inventory intake /
-  vault / free-pool sold mutations (owned by inventory); campaign-level
-  clocks or money (listings keep their own windows and prices); requiring a
-  campaign to publish a listing; campaign hero media or scheduling fields;
-  coupling to finance or Shopify; attaching new listings to an already
-  `published` campaign; renaming the `auctions` persistence / wire
-  identifiers; putting a product picker on the campaign cover itself.
+- **Out of scope / Non-goals:** store checkout “sale”; inventory ledger or
+  “sold” stock; campaign-level clocks or money (listings keep their own
+  windows and prices); requiring a campaign to publish a listing; campaign
+  hero media or scheduling fields; coupling to finance or Shopify; attaching
+  new listings to an already `published` campaign; renaming the `auctions`
+  persistence / wire identifiers.
 
 ## Non-goals
 
@@ -101,6 +91,4 @@ campaign (or clears it) — with the auction admin section labeled Campaigns.
   not).
 - Storefront redesign of public campaign covers beyond what admin edits
   already purge/cache today.
-- Implementing the inventory ledger — only consuming its created /
-  ready-available eligibility for listing `productId` (see
-  `add-grade10-inventory`).
+- Overlap work owned by `add-grade10-inventory`.

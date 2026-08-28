@@ -36,14 +36,7 @@ and listing-editor wording first.
   published campaign`, `Canceled campaign rejects a title edit`, `Operator
   attaches a listing to a created campaign`, `Operator clears the campaign
   on a listing`, `Published campaign cannot receive a listing`).
-- [ ] 2.3 Make listing inventory product eligibility scenarios pass on
-  contracts/fixtures: picker options and save/create refusals for draft and
-  out-of-stock products (`Product picker omits draft inventory products`,
-  `Product picker omits out-of-stock inventory products`, `Draft product id
-  is refused on listing save`, `Out-of-stock product id is refused on listing
-  create`), stubbing inventory’s Auction eligibility list until that change
-  ships.
-- [ ] 2.4 Verify with `pnpm run typecheck`, `pnpm run lint`, and the focused
+- [ ] 2.3 Verify with `pnpm run typecheck`, `pnpm run lint`, and the focused
   contracts / admin-frontend fixture tests.
 
 ## 3. Migrate campaign status and verify authoritative lifecycle (grade10)
@@ -89,10 +82,7 @@ Depends on group 2. Builds on the Campaigns chrome from group 1.
   campaign id pass on draft save / create / setAuction (`Operator attaches
   a draft listing to a draft campaign`, `Operator attaches a listing to a
   created campaign`, `Operator clears the campaign on a listing`).
-- [ ] 4.3 Make listing productId eligibility pass against inventory’s
-  Auction-facing list (created + ready available > 0), including refusals
-  for draft and out-of-stock products.
-- [ ] 4.4 Verify `@grade10/auction-admin-frontend` with its focused module
+- [ ] 4.3 Verify `@grade10/auction-admin-frontend` with its focused module
   tests, `pnpm run typecheck`, and `pnpm run lint`.
 
 ## 5. Compose Grade10 admin campaign editor and listing picker (grade10)
@@ -114,9 +104,5 @@ Depends on groups 1 and 4. Fixtures, not a running backend.
   listing to a created campaign`, `Operator clears the campaign on a
   listing`, `Published and canceled campaigns are not offered in the
   picker`, `Listing without a campaign still creates`.
-- [ ] 5.4 Make listing editor inventory product picker scenarios pass:
-  `Product picker omits draft inventory products`, `Product picker omits
-  out-of-stock inventory products`, `Draft product id is refused on listing
-  save`, `Out-of-stock product id is refused on listing create`.
-- [ ] 5.5 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [ ] 5.4 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
   and `pnpm run build`.

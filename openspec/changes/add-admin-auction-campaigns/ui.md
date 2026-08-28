@@ -31,13 +31,6 @@ Assembly on the existing listing editor. One optional control selects a
 campaign or “on its own” (no campaign). Options are eligible campaigns only
 (`draft` or `created`). The control is labeled **Campaign**.
 
-### Admin listing editor — inventory product field
-
-Same listing editor. Product selection is a picker (not free text) of Grade10
-inventory products that are **`created`** and have **ready available > 0**.
-Draft and out-of-stock products are omitted. Campaign editors have no product
-field.
-
 ## Components
 
 From `@grade10/design-system` (existing exports — same set the listing
@@ -47,12 +40,12 @@ editor already uses):
 - `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`
 - `IconButton`, `Tooltip`, `TooltipContent`, `TooltipProvider`, `TooltipTrigger`
 
-**Campaign / product pickers:** no `Select` / `Combobox` export exists in the
-design system or `@grade10/ui` today. Compose a native `<select>` (or
-equivalent) with design-system label/`Text` messaging — same approach other
-admin forms use when no Select primitive ships. **Gap flagged:** a shared
-Select in grade10-spec is optional future work; **not** required for this
-change’s tasks.
+**Campaign picker:** no `Select` / `Combobox` export exists in the design
+system or `@grade10/ui` today. Compose a native `<select>` (or equivalent)
+with design-system label/`Text` messaging — same approach other admin forms
+use when no Select primitive ships. **Gap flagged:** a shared Select in
+grade10-spec is optional future work; **not** required for this change’s
+tasks.
 
 From `@grade10/ui`: **none.** No new shared compound export.
 
@@ -96,12 +89,3 @@ and
   picker`.
 - **Optional** — `Listing without a campaign still creates`.
 - **Label** — `Listing editor campaign field is labeled Campaign`.
-
-### Listing editor inventory product picker
-
-- **Omit draft** — `Product picker omits draft inventory products`.
-- **Omit out of stock** — `Product picker omits out-of-stock inventory
-  products`.
-- **Refuse draft on save** — `Draft product id is refused on listing save`.
-- **Refuse OOS on create** — `Out-of-stock product id is refused on listing
-  create`.
