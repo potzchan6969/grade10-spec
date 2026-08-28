@@ -14,6 +14,10 @@ import {
   PAST_ORDERS,
 } from "./order-history-content";
 import { STORE_FOOTER, STORE_NAV } from "./store-content";
+import {
+  navigateToStory,
+  ORDER_DETAILS_STORY_ID,
+} from "./workbench-account-nav";
 
 /**
  * Order History as a store assembles it: `Nav`, shared `OrderHistory`, and
@@ -40,7 +44,7 @@ function OrderHistoryPage({ empty = false }: { empty?: boolean }) {
           onTrackOrder={(orderId) => {
             window.open(`https://example.com/track/${orderId}`, "_blank");
           }}
-          onViewDetails={() => {}}
+          onViewDetails={() => navigateToStory(ORDER_DETAILS_STORY_ID)}
         />
       </div>
       <Footer {...STORE_FOOTER} />
