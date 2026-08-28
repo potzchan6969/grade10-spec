@@ -2,8 +2,8 @@
   {
     "label": "nav/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9937",
-    "classes": "@container flex w-full flex-col bg-background",
-    "note": "The set has no variant axes, so the one node is the whole contract. This entry exists because the fill was missing here and nothing caught it: the header drew no background at all while the frame fills Base/background, and every preview story sat on a gray-50 page that hid it."
+    "classes": "@container flex w-full flex-col border-b border-border bg-background",
+    "note": "The set has no variant axes, so the one node is the whole contract. This entry exists because the fill was missing here and nothing caught it: the header drew no background at all while the frame fills Base/background, and every preview story sat on a gray-50 page that hid it. It caught the second one the same way: the frame strokes Base/border along its bottom edge and the code drew no border at all, which a white page behind a white header shows as nothing."
   },
   {
     "label": "nav/promo",
