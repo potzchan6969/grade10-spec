@@ -174,7 +174,7 @@ This group depends on the end-to-end workflow in groups 4 and 5 passing.
   focused annotation tests, `pnpm run check:design-system`, `pnpm run test`,
   `pnpm run lint`, `pnpm run typecheck`, and `git diff --check`.
 
-## 7. Remove deprecated read-only workflow surfaces (grade10)
+## 7. Remove deprecated read-only workflow surfaces (grade10) (owner: @kinisworking)
 
 This group depends on group 5 passing and the governance update in group 6
 being available in the registered store.
