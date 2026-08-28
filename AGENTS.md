@@ -93,7 +93,7 @@ Run the appropriate checks before handoff:
 
 `AGENTS.md` is canonical. `AGENT.md`, `CLAUDE.md`, and `GEMINI.md` are compatibility aliases.
 
-`.cursor/skills/` is the source of truth for skills. `.codex/skills/` and `.claude/skills/` are generated copies, one per agent platform that reads project skills from its own directory, and all three must remain byte-for-byte identical. Edit a skill under `.cursor/skills/` and sync; an edit made directly in a generated leg is overwritten, and a leg-only file fails the check. Adding a platform is a new entry in the `legs` list in both parity scripts.
+`.claude/skills/` is canonical for skills. `.codex/skills/` and `.cursor/skills/` are symlinks to it, so every agent platform reads the same files. Edit skills under `.claude/skills/`; adding a platform means adding its symlink to the parity check and sync scripts.
 
 When agent-related files change, run:
 
