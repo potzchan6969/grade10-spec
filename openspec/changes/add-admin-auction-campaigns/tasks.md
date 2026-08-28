@@ -80,10 +80,13 @@ when contracts already pin the shapes.
   Save with product + quantity, `adjustReservation` on qty change,
   `changeReservationProduct` on product change, release on clear, effective
   available validation, and listing unchanged on inventory refusal
-  (`First explicit save with product and quantity reserves stock`, etc.).
+  (`First explicit save with product and quantity reserves stock`,
+  `Clearing quantity on Save releases the hold`, `Save with product but no
+  quantity creates no hold`, etc.).
 - [ ] 3.9 Make `listings.create` hold verification pass — refuse when hold
-  missing or mismatched; no inventory writes on create (`Create refused when
-  no hold exists`, `Create refused when hold quantity mismatches`).
+  missing, product mismatched, or quantity mismatched; no inventory writes
+  on create (`Create refused when no hold exists`, `Create refused when hold
+  product mismatches`, `Create refused when hold quantity mismatches`).
 - [ ] 3.10 Make listing cancel release the active inventory hold
   (`Cancel releases remaining stock`).
 - [ ] 3.11 Verify with `pnpm run typecheck`, `pnpm run lint`,
@@ -99,13 +102,15 @@ Depends on group 2. Builds on the Campaigns chrome from group 1.
   published campaign`, `Operator publishes a created campaign`, `Operator
   cancels a published campaign`), including query invalidation.
 - [ ] 4.2 Make listing feature scenarios for setting and clearing the
-  campaign id pass on draft save / create / setAuction (`Operator attaches
-  a draft listing to a draft campaign`, `Operator attaches a listing to a
-  created campaign`, `Operator clears the campaign on a listing`).
+  campaign id pass on explicit Save and `listings.setAuction` (`Operator
+  attaches a draft listing to a draft campaign`, `Operator attaches a listing
+  to a created campaign`, `Operator clears the campaign on a listing`).
 - [ ] 4.3 Make listing productId, quantity, and reservation-sync scenarios
   pass against inventory holder fixtures (`Picking a product does not reserve
-  stock until Save`, product-change confirmation, save error on product
-  change failure).
+  stock until Save`, `Clearing quantity on Save releases the hold`, `Save
+  with product but no quantity creates no hold`, product-change confirmation,
+  save error on product change failure, `Create refused when hold product
+  mismatches`).
 - [ ] 4.4 Verify `@grade10/auction-admin-frontend` with its focused module
   tests, `pnpm run typecheck`, and `pnpm run lint`.
 
@@ -131,8 +136,10 @@ Depends on groups 1 and 4. Fixtures, not a running backend.
 - [ ] 5.4 Make listing editor inventory product picker, **quantity** field,
   explicit **Save** (no auto-save), product-change confirmation dialog, and
   save-error scenarios pass (`Product picker omits draft inventory products`,
-  `Picking a product does not reserve stock until Save`, `Product change
-  prompts when a hold already exists`, `Save shows error when new product has
-  insufficient stock`, etc.).
+  `Picking a product does not reserve stock until Save`, `Clearing quantity
+  on Save releases the hold`, `Save with product but no quantity creates no
+  hold`, `Product change prompts when a hold already exists`, `Save shows
+  error when new product has insufficient stock`, `Create refused when hold
+  product mismatches`, etc.).
 - [ ] 5.5 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
   and `pnpm run build`.

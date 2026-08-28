@@ -11,11 +11,12 @@ stands alone. The picker SHALL list only campaigns that are `draft` or
 selectable option. Operator-visible labels for this control SHALL say
 **Campaign**, not **Sale**.
 
-Selecting a campaign SHALL persist through the same draft-save and create
-paths that write other catalogue fields, and on an editable listing that
-already exists SHALL update the listing’s campaign. Clearing the campaign
-SHALL store no campaign. Attaching a `published` or `canceled` campaign
-through the API SHALL be refused.
+Selecting a campaign SHALL persist when the operator clicks explicit **Save**
+alongside other catalogue fields. **`listings.create`** does not write campaign
+or inventory fields — only verifies holds when product and quantity are set.
+On an editable listing, **`listings.setAuction`** MAY attach or clear the
+campaign after create. Clearing the campaign SHALL store no campaign.
+Attaching a `published` or `canceled` campaign through the API SHALL be refused.
 
 An operator who may catalogue a listing SHALL be able to set or clear the
 campaign. The picker SHALL NOT block create or publish when no campaign is
@@ -25,7 +26,7 @@ chosen.
 
 - **GIVEN** a draft listing and a draft campaign titled "September Slabs"
 - **WHEN** an authorized operator selects that campaign in the listing
-  editor and saves
+  editor and clicks Save
 - **THEN** Grade10 stores the listing under that campaign
 - **AND** the listing remains a draft
 
@@ -33,14 +34,14 @@ chosen.
 
 - **GIVEN** a created listing and a created campaign
 - **WHEN** an authorized operator selects that campaign in the listing
-  editor and saves
+  editor and clicks Save
 - **THEN** Grade10 stores the listing under that campaign
 
 #### Scenario: Operator clears the campaign on a listing
 
 - **GIVEN** a draft listing attached to a draft campaign
 - **WHEN** an authorized operator clears the campaign in the listing editor
-  and saves
+  and clicks Save
 - **THEN** Grade10 stores the listing with no campaign
 - **AND** the listing remains a draft
 
@@ -267,6 +268,22 @@ field(s).
 - **AND** inventory **reserved** decreases by the hold's remaining
 - **AND** the listing stores no product id
 
+#### Scenario: Clearing quantity on Save releases the hold
+
+- **GIVEN** a draft listing with an active hold of quantity three
+- **WHEN** an authorized operator clears quantity and clicks Save
+- **THEN** Grade10 releases the hold
+- **AND** inventory **reserved** decreases by three
+- **AND** the listing stores no quantity
+
+#### Scenario: Save with product but no quantity creates no hold
+
+- **GIVEN** a draft listing with no active hold
+- **WHEN** an authorized operator sets a created product but clears quantity
+  and clicks Save
+- **THEN** Grade10 persists the product id
+- **AND** no inventory reservation is created
+
 ### Requirement: Create verifies an existing inventory hold
 
 `listings.create` SHALL move a listing from **`draft`** to **`created`** only
@@ -304,13 +321,22 @@ first so the hold already exists.
 - **THEN** Grade10 refuses the create
 - **AND** the listing remains **draft**
 
-### Requirement: Product change warns before releasing an existing hold
+#### Scenario: Create refused when hold product mismatches
+
+- **GIVEN** a draft listing stored with product B and quantity three
+- **AND** an active hold of quantity three on product A for this listing
+- **WHEN** an authorized operator attempts create
+- **THEN** Grade10 refuses the create
+- **AND** the listing remains **draft**
+
+### Requirement: Product change warns before moving an existing hold
 
 When an operator changes the catalogue **product** on a listing that already
 has an **active** inventory reservation from a prior explicit Save, the
 editor SHALL show a confirmation dialog before applying the new product to
-local form state. The dialog SHALL state that confirming will release the
-prior product's reserved stock when the operator next clicks Save.
+local form state. The dialog SHALL state that confirming and clicking Save
+will move the hold to the new product and free reserved stock on the prior
+product.
 
 The dialog SHALL NOT appear when:
 
@@ -325,8 +351,8 @@ Canceling the dialog SHALL leave the selected product unchanged in the form.
 
 - **GIVEN** a draft listing with an active hold on product A from a prior Save
 - **WHEN** an authorized operator selects product B in the picker
-- **THEN** the editor shows a confirmation dialog about releasing product A's
-  hold on Save
+- **THEN** the editor shows a confirmation dialog that Save will move the
+  hold to product B and free reserved stock on product A
 - **AND** no inventory mutation runs until Save
 
 #### Scenario: First product selection does not prompt

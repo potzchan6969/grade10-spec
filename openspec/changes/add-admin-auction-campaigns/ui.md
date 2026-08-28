@@ -55,7 +55,8 @@ editor already uses):
 
 **Product-change confirmation:** compose with existing `Card` / `Button` /
 `Text` — native dialog or modal pattern the listing editor already uses for
-destructive confirms. Warns that Save will release the prior product's hold.
+destructive confirms. Warns that Save will move the hold to the new product
+and free reserved stock on the prior product.
 
 **Campaign / product pickers:** no `Select` / `Combobox` export exists in the
 design system or `@grade10/ui` today. Compose a native `<select>` (or
@@ -118,10 +119,15 @@ Tied to spec scenarios in admin-campaign and admin-listing (delta).
 - **Refuse draft on save** — `Draft product id is refused on listing save`.
 - **Refuse OOS on save** — `Out-of-stock product id is refused on listing
   save` (no prior hold).
+- **Clear on Save** — `Clearing product on Save releases the hold`;
+  `Clearing quantity on Save releases the hold`.
+- **Product without quantity** — `Save with product but no quantity creates
+  no hold`.
 - **Product-change confirm** — `Product change prompts when a hold already
   exists`; `First product selection does not prompt`; `Canceling the
   product-change dialog keeps the prior product`.
 - **Save errors** — `Save shows error when new product has insufficient
   stock`.
-- **Create verify** — create button enabled only when hold matches (backend
-  enforces; UI may surface hold-mismatch refusal from create).
+- **Create verify** — `Create refused when hold product mismatches`; create
+  button enabled only when hold matches (backend enforces; UI may surface
+  hold-mismatch refusal from create).
