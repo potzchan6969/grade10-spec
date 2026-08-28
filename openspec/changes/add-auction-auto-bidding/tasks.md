@@ -1,6 +1,6 @@
 # Tasks: auto bidding
 
-## 1. Bid panel maximum slot (grade10-spec)
+## 1. Bid panel maximum slot (grade10-spec) (owner: @htonyl)
 
 Lands first: every other group consumes this through the submodule bump.
 
