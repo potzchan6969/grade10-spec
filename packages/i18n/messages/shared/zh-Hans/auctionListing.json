@@ -20,7 +20,7 @@
   "extensionMinutes": "{minutes, plural, other {# 分钟}}",
   "factCategory": "分类",
   "factLot": "拍品编号",
-  "factSale": "场次",
+  "factCampaign": "活动",
   "hideBidHistory": "隐藏出价记录",
   "highestBidder": "最高出价",
   "home": "首页",

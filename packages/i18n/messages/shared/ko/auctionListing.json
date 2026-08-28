@@ -20,7 +20,7 @@
   "extensionMinutes": "{minutes, plural, other {#분}}",
   "factCategory": "분류",
   "factLot": "로트",
-  "factSale": "경매",
+  "factCampaign": "캠페인",
   "hideBidHistory": "입찰 내역 숨기기",
   "highestBidder": "최고 입찰",
   "home": "홈",

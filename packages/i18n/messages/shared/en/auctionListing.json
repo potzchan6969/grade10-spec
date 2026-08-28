@@ -20,7 +20,7 @@
   "extensionMinutes": "{minutes, plural, one {# minute} other {# minutes}}",
   "factCategory": "Category",
   "factLot": "Lot",
-  "factSale": "Sale",
+  "factCampaign": "Campaign",
   "hideBidHistory": "Hide bid history",
   "highestBidder": "Highest Bid",
   "home": "Home",
