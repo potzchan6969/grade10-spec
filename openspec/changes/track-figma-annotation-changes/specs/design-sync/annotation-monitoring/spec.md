@@ -139,13 +139,16 @@ array position.
 
 The workflow SHALL distinguish verified no drift from evidence it could not
 read or validate. An inaccessible file, missing tool capability, insufficient
-permission, failed request, malformed response, unresolved registered root, or
-unresolved category SHALL make the affected evidence blocked and the run
-unsuccessful. A baseline node that no longer resolves SHALL be reported as an
-orphaned finding in complete, reviewable drift: it SHALL NOT make the run
-blocked or clean, and it SHALL remain selectable only with an explicit
-removal or replacement decision. Blocked/no-write is reserved for incomplete
-or malformed evidence.
+permission, failed request, malformed response, or unresolved category SHALL
+make the affected evidence blocked and the run unsuccessful. An unresolved
+registered root SHALL be skipped when at least one other registered root in
+the same file resolves; the skipped root SHALL be reported at the end of the
+run and SHALL NOT block acceptance of other findings. If every registered
+root in the file is unresolved, the observation SHALL be blocked. A baseline
+node that no longer resolves SHALL be reported as an orphaned finding in
+complete, reviewable drift: it SHALL NOT make the run blocked or clean, and
+it SHALL remain selectable only with an explicit removal or replacement
+decision. Blocked/no-write is reserved for incomplete or malformed evidence.
 
 #### Scenario: Figma Plugin API access is unavailable
 
@@ -153,6 +156,24 @@ or malformed evidence.
   equivalent MCP evidence
 - **THEN** the workflow reports the observation as blocked
 - **AND** it does not claim the baseline is current
+- **AND** it performs no repository write
+
+#### Scenario: Unresolved registered root is skipped
+
+- **GIVEN** a registered Figma file has more than one registered root
+- **AND** one registered root cannot be resolved
+- **AND** at least one other registered root resolves
+- **WHEN** the workflow observes the file
+- **THEN** it skips the unresolved root
+- **AND** it continues observing the resolved roots
+- **AND** it reports the skipped root at the end of the report
+- **AND** it does not block the run for that skipped root
+
+#### Scenario: Every registered root is unresolved
+
+- **GIVEN** no registered root in the file can be resolved
+- **WHEN** the workflow observes the file
+- **THEN** it reports the observation as blocked
 - **AND** it performs no repository write
 
 #### Scenario: Accepted node no longer resolves

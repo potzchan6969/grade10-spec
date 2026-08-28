@@ -91,12 +91,15 @@ will:
 5. return a normalized JSON observation to the invoking session.
 
 The observation contract will contain schema version, file identity, observed
-roots, exact node and ancestor evidence, category catalog metadata, canonical
-occurrences, blockers, and a digest over the normalized payload. A null
-category remains `Uncategorized`. A non-null ID missing from the catalog is a
-blocker. The skill will store the payload only in a newly created operating
-system temporary directory for the duration of the run and remove it when the
-session completes where the harness permits.
+roots, skipped registered roots, exact node and ancestor evidence, category
+catalog metadata, canonical occurrences, blockers, and a digest over the
+normalized payload. A registered root that cannot be resolved is skipped when
+another root in the same file resolves, and listed at the end of the report; it
+is not a blocker. If every registered root is unresolved, the observation is
+blocked. A null category remains `Uncategorized`. A non-null ID missing from
+the catalog is a blocker. The skill will store the payload only in a newly
+created operating-system temporary directory for the duration of the run and
+remove it when the session completes where the harness permits.
 
 No category call occurs per annotation. For a file with 127 occurrences, the
 cost is one catalog read plus the bounded node observation, followed by local

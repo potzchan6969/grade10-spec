@@ -16,6 +16,7 @@ import { baselineDigestFor } from "./annotation-core.mjs";
 import { runCli as runDiffCli } from "./annotation-diff.mjs";
 import {
   acceptSnapshot as acceptSnapshotImplementation,
+  renderHuman,
   scanSnapshot,
 } from "./annotation-reconciliation.mjs";
 import {
@@ -227,6 +228,49 @@ test("Annotation is outside registered surfaces", () => {
     result.files[0].nodes.map((node) => node.nodeId),
     ["2:1"],
   );
+});
+
+test("Unresolved registered root is skipped when another root resolves", () => {
+  const input = observation();
+  input.files[0].nodes[0].annotations = [];
+  input.files[0].skippedRoots = [
+    {
+      nodeId: "9:9",
+      name: "FilterChip",
+      source: {
+        kind: "code-connect",
+        path: "packages/design-system/src/components/forms/filter-chip.figma.ts",
+        component: "FilterChip",
+      },
+      reason: "registered root could not be resolved",
+    },
+  ];
+  const snapshot = normalizeObservation(input);
+  assert.deepEqual(
+    snapshot.files[0].skippedRoots.map((root) => root.nodeId),
+    ["9:9"],
+  );
+
+  const result = scanSnapshot({
+    baseline: { schemaVersion: 2, roots: [], entries: {} },
+    snapshot,
+  });
+  assert.equal(result.status, "clean");
+  assert.equal(result.blockers.length, 0);
+  assert.deepEqual(
+    result.skippedRoots.map((root) => ({
+      nodeId: root.nodeId,
+      reason: root.reason,
+    })),
+    [
+      {
+        nodeId: "9:9",
+        reason: "registered root could not be resolved",
+      },
+    ],
+  );
+  assert.match(renderHuman(result), /SKIPPED/);
+  assert.match(renderHuman(result), /FilterChip/);
 });
 
 test("a supplied digest must pin the normalized observation", () => {

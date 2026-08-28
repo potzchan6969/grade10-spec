@@ -149,6 +149,17 @@ function normalizeRoot(root, fileKey) {
   };
 }
 
+function normalizeSkippedRoot(root, fileKey) {
+  const normalized = normalizeRoot(root, fileKey);
+  return {
+    ...normalized,
+    reason: requiredString(
+      root.reason ?? "registered root could not be resolved",
+      "skipped root reason",
+    ),
+  };
+}
+
 function normalizeNode(node, roots, categoryMap) {
   if (!node || typeof node !== "object") fail("observed nodes must be objects");
   const nodeId = requiredString(
@@ -245,6 +256,20 @@ export function normalizeObservation(input) {
       const rootIds = new Set(roots.map((root) => root.nodeId));
       if (rootIds.size !== roots.length)
         fail(`file ${fileKey} has duplicate roots`);
+      const skippedRoots = Array.isArray(file.skippedRoots)
+        ? file.skippedRoots.map((root) => normalizeSkippedRoot(root, fileKey))
+        : file.skippedRoots === undefined
+          ? []
+          : fail(`file ${fileKey} skippedRoots must be an array`);
+      const skippedRootIds = new Set(skippedRoots.map((root) => root.nodeId));
+      if (skippedRootIds.size !== skippedRoots.length)
+        fail(`file ${fileKey} has duplicate skipped roots`);
+      for (const skippedRootId of skippedRootIds) {
+        if (rootIds.has(skippedRootId))
+          fail(
+            `file ${fileKey} skipped root ${skippedRootId} is also observed`,
+          );
+      }
       const categoryCatalog = normalizeCategoryCatalog(file.categoryCatalog);
       const categoryMap = new Map(
         categoryCatalog.map((category) => [category.id, category]),
@@ -278,6 +303,9 @@ export function normalizeObservation(input) {
         fileKey,
         fileUrl: requiredString(file.fileUrl, `file ${fileKey} fileUrl`),
         roots: roots.sort((left, right) =>
+          left.nodeId.localeCompare(right.nodeId),
+        ),
+        skippedRoots: skippedRoots.sort((left, right) =>
           left.nodeId.localeCompare(right.nodeId),
         ),
         categoryCatalog,

@@ -60,6 +60,7 @@ function blockedResult(
     baselineDigest,
     status: "blocked",
     scannedSources: [],
+    skippedRoots: [],
     blockers,
     findings: [],
   };
@@ -391,6 +392,7 @@ export function scanSnapshot({ baseline, snapshot } = {}) {
   const baselineBlockers = [];
   const entries = normaliseBaselineEntries(baseline, baselineBlockers);
   blockers.push(...baselineBlockers);
+  const skippedRoots = [];
   const filesByKey = new Map(
     normalized.files.map((file) => [file.fileKey, file]),
   );
@@ -429,6 +431,7 @@ export function scanSnapshot({ baseline, snapshot } = {}) {
         nodeName: source.name ?? "(unnamed node)",
       });
     }
+    skippedRoots.push(...file.skippedRoots);
     const nodes = new Map(file.nodes.map((node) => [node.nodeId, node]));
     const entriesForNode = new Map(
       fileEntries.map((entry) => [entry.nodeId, entry]),
@@ -486,6 +489,11 @@ export function scanSnapshot({ baseline, snapshot } = {}) {
     baselineDigest: baselineDigestFor(baseline),
     status,
     scannedSources,
+    skippedRoots: skippedRoots.sort((left, right) =>
+      `${left.fileKey}:${left.nodeId}`.localeCompare(
+        `${right.fileKey}:${right.nodeId}`,
+      ),
+    ),
     blockers,
     findings: findings.map((finding) => ({
       observationDigest: normalized.digest,
@@ -501,11 +509,15 @@ export function exitCodeFor(result) {
 }
 
 export function renderHuman(result) {
-  if (result.status === "clean") return "✓ No tracked annotations changed.";
+  const skippedRoots = result.skippedRoots ?? [];
+  if (result.status === "clean" && !skippedRoots.length)
+    return "✓ No tracked annotations changed.";
   const lines = [
     result.status === "blocked"
       ? `✗ Annotation scan blocked (${result.blockers.length} blocker(s)).`
-      : `✗ Annotation drift found (${result.findings.length} finding(s)).`,
+      : result.status === "clean"
+        ? "✓ No tracked annotations changed."
+        : `✗ Annotation drift found (${result.findings.length} finding(s)).`,
   ];
   for (const blocker of result.blockers ?? [])
     lines.push(
@@ -534,6 +546,19 @@ export function renderHuman(result) {
       );
     if (finding.ambiguity)
       lines.push(`    ambiguity: ${finding.ambiguity.kind}`);
+  }
+  if (skippedRoots.length) {
+    lines.push("Skipped registered roots:");
+    for (const root of skippedRoots) {
+      const name =
+        root.name ??
+        root.source?.component ??
+        root.source?.label ??
+        "registered root";
+      lines.push(
+        `  SKIPPED ${root.fileKey ?? ""} ${root.nodeId ?? ""} ${name} ${root.reason ?? ""}`.trim(),
+      );
+    }
   }
   return lines.join("\n");
 }

@@ -21,6 +21,7 @@ function blockedResult(reason, kind = "invalid-input") {
     observationDigest: null,
     status: "blocked",
     scannedSources: [],
+    skippedRoots: [],
     blockers: [{ kind, reason }],
     findings: [],
   };
