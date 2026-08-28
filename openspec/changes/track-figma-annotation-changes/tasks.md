@@ -87,7 +87,7 @@ and cleanup plan.
   catalog resolves many annotations`, `Content and Interaction labels are
   reported`, `Annotation has no category`, `Category evidence is incomplete`,
   and `Annotation is outside registered surfaces`.
-- [ ] 4.2 Refactor the existing REST-coupled monitor into a read-only snapshot
+- [x] 4.2 Refactor the existing REST-coupled monitor into a read-only snapshot
   diff command while retaining schema-version-2 normalization, stable finding
   IDs, complete-evidence exit states, and multiset matching. Migrate the current
   fixtures so `Annotation array order changes`, `One of several annotations
