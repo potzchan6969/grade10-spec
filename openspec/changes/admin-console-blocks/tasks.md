@@ -2,12 +2,12 @@
 
 ## 1. Console package grows the shared blocks (grade10) (owner: @sean)
 
-- [ ] 1.1 Bump `external/grade10-spec` to a `main` SHA carrying the design-system Table primitives; rebase the console package's table furniture onto `Table`/`TableHeader`/`TableBody`/`TableRow`/`TableHead`/`TableCell`, keying headings positionally, keeping its consumer surface unchanged so `console-blocks-SC-01` and `console-blocks-SC-02` hold
-- [ ] 1.2 Add `SectionHeader`, `StatusBadge`, and `Figure` with props types, ported from the surveyed markup, making `console-blocks-SC-03` and `console-blocks-SC-12` pass
-- [ ] 1.3 Add `OperatorIdentity` (email, roles, sign-out callback, failure line) with its props type, making `console-blocks-SC-03` and `console-blocks-SC-12` pass
-- [ ] 1.4 Add `CursorPager` composing `Pagination`/`PaginationPrevious`/`PaginationNext`, making `console-blocks-SC-14` pass
-- [ ] 1.5 Consolidate the refusal keeper and the ISO-code money formatter into the package beside `useDebounced`; compose the formatter in `Money` so `console-blocks-SC-13` passes
-- [ ] 1.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run check:submodules`
+- [x] 1.1 Bump `external/grade10-spec` to a `main` SHA carrying the design-system Table primitives; rebase the console package's table furniture onto `Table`/`TableHeader`/`TableBody`/`TableRow`/`TableHead`/`TableCell`, keying headings positionally, keeping its consumer surface unchanged so `console-blocks-SC-01` and `console-blocks-SC-02` hold
+- [x] 1.2 Add `SectionHeader`, `StatusBadge`, and `Figure` with props types, ported from the surveyed markup, making `console-blocks-SC-03` and `console-blocks-SC-12` pass
+- [x] 1.3 Add `OperatorIdentity` (email, roles, sign-out callback, failure line) with its props type, making `console-blocks-SC-03` and `console-blocks-SC-12` pass
+- [x] 1.4 Add `CursorPager` composing `Pagination`/`PaginationPrevious`/`PaginationNext`, making `console-blocks-SC-14` pass
+- [x] 1.5 Consolidate the refusal keeper and the ISO-code money formatter into the package beside `useDebounced`; compose the formatter in `Money` so `console-blocks-SC-13` passes
+- [x] 1.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run check:submodules`
 
 ## 2. The user directory moves in (grade10)
 
