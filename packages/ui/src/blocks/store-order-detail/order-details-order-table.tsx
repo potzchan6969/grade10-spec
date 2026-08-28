@@ -1,4 +1,7 @@
-import { Table, TableBody } from "@grade10/design-system/components/display/table";
+import {
+  Table,
+  TableBody,
+} from "@grade10/design-system/components/display/table";
 import { TableHead } from "@grade10/design-system/components/display/table-head";
 import { TableHeader } from "@grade10/design-system/components/display/table-header";
 import { cn } from "@grade10/design-system/lib/utils";
@@ -27,10 +30,7 @@ function OrderDetailsOrderTable({
   className,
 }: OrderDetailsOrderTableProps) {
   return (
-    <Table
-      className={cn(className)}
-      data-slot="order-details-order-table"
-    >
+    <Table className={cn(className)} data-slot="order-details-order-table">
       <TableHeader data-slot="order-details-order-table-header">
         <TableHead className="min-w-0 flex-1">{copy.items}</TableHead>
         <TableHead align="end" className="w-[88px] shrink-0">
