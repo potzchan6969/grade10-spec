@@ -14,7 +14,7 @@ https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4923
 
 - `Nav`, `Footer` — page chrome in `apps/preview`
 - `Breadcrumbs`, `BreadcrumbItem`, `BreadcrumbSeparator`
-- `Badge` — under `OrderHistoryStatus` (`outline` / `info` / `warning`; completed, canceled, and refunded share outline)
+- `Badge` — under `OrderHistoryStatus` (`outline` / `info` / `warning`; completed, canceled, and refunded share outline; shipped and pickup share info)
 - `Button` — Track (default + trailing `ArrowUpRight`), View Details (outline), Shop Now (secondary)
 - `EmptyState` — empty page body
 - Layout: `VStack` / `HStack`
@@ -41,6 +41,6 @@ https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4923
 
 **Documented Figma drift (do not implement):** Header description lists
 `paid` / `delivered` / `cancelled`; Status set is
-`completed` · `shipped` · `pending` · `canceled` · `refunded`. Empty-state
-Code Connect sample shows two buttons; the empty frame shows one Shop Now.
+`completed` · `shipped` · `processing` · `pickup` · `canceled` · `refunded`.
+Empty-state Code Connect sample shows two buttons; the empty frame shows one Shop Now.
 Breadcrumb Code Connect sample is unrelated; annotations say Account / Your Orders.

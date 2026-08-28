@@ -16,7 +16,8 @@ const ORDER_HISTORY_COPY: OrderHistoryCopy = {
   status: {
     completed: "Completed",
     shipped: "Shipped",
-    pending: "Pending",
+    processing: "Processing",
+    pickup: "Ready for Pickup",
     canceled: "Canceled",
     refunded: "Refunded",
   },

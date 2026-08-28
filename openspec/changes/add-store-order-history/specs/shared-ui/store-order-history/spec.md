@@ -9,7 +9,7 @@ one component source, supplying copy, imagery, formatted values, and callbacks.
 ## Feature set
 
 - Order status
-  - Status badge: Show fulfillment state with the five Status-set variants.
+  - Status badge: Show fulfillment state with the six Status-set variants.
 - Order line item
   - Product thumbnail and line copy: Show image, product×qty text, and line total.
 - Order card
@@ -68,23 +68,24 @@ components for the order history surface — `OrderHistoryStatus`,
 - **WHEN** an application renders the status, line item, card header, or card without `OrderHistory`
 - **THEN** it renders and behaves as specified, with no missing-context error
 
-### Requirement: Order status maps the five Status-set variants
+### Requirement: Order status maps the six Status-set variants
 
 `OrderHistoryStatus` SHALL accept exactly the statuses `completed`, `shipped`,
-`pending`, `canceled`, and `refunded`, and SHALL display the consumer-supplied
-label for that status. It SHALL NOT invent other status values.
+`processing`, `pickup`, `canceled`, and `refunded`, and SHALL display the
+consumer-supplied label for that status. It SHALL NOT invent other status values.
 
 | Status | Meaning |
 | --- | --- |
 | `completed` | Paid or picked up in store, or delivered for an online order |
 | `shipped` | Shipped and in transit (online) |
-| `pending` | Submitted but not yet shipped (online) |
+| `processing` | Submitted but not yet shipped (online) |
+| `pickup` | Ready for pickup in the physical store (online) |
 | `canceled` | Canceled (online) |
 | `refunded` | Payment refunded (in-store or online) |
 
 #### Scenario: store-order-history-SC-08 - Each status renders its label
 
-- **GIVEN** a status of `completed`, `shipped`, `pending`, `canceled`, or `refunded`
+- **GIVEN** a status of `completed`, `shipped`, `processing`, `pickup`, `canceled`, or `refunded`
 - **WHEN** `OrderHistoryStatus` renders with a label for that status
 - **THEN** that label is displayed
 
