@@ -156,7 +156,7 @@ submodule pointer.
 
 This group depends on the end-to-end workflow in groups 4 and 5 passing.
 
-- [ ] 6.1 Remove the annotation scan, annotation failure handling, and ephemeral
+- [x] 6.1 Remove the annotation scan, annotation failure handling, and ephemeral
   `annotation-monitor.json` from the existing design-sync workflow. Verify
   `Design-sync workflow still checks registered components`: preserve its
   triggers and component, rendered-value, token, audit, and Code Connect checks.
