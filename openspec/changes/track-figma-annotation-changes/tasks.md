@@ -152,7 +152,7 @@ submodule pointer.
   agent:check-parity`, `pnpm run lint`, `pnpm run typecheck`, `pnpm run test`,
   and `git diff --check`.
 
-## 6. Remove deprecated annotation automation (grade10-spec)
+## 6. Remove deprecated annotation automation (grade10-spec) (owner: @kinisworking)
 
 This group depends on the end-to-end workflow in groups 4 and 5 passing.
 
