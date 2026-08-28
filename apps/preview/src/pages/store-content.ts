@@ -173,12 +173,8 @@ const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
   imageSrc: IMAGE,
   imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
   price: "HK$105",
-  originalPrice: "HK$123",
-  saleLabel: "SALE",
-  cartLabel: "Add to cart",
-  ariaLabel: `Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item ${index + 1}`,
+  originalPrice: index === 0 ? "HK$123" : undefined,
   soldOut: index === 7,
-  soldOutLabel: index === 7 ? "SOLD OUT" : undefined,
 }));
 
 const INITIAL_SELECTION: FilterSelection = {
@@ -233,6 +229,10 @@ const STORE_HOME_PRODUCTS: ProductSummary[] = Array.from(
 
 const STORE_HOME_PRODUCT_CARD_COPY = {
   cart: "Add to cart",
+  decreaseQuantity: "Decrease quantity",
+  increaseQuantity: "Increase quantity",
+  removeFromCart: "Remove from cart",
+  adjustQuantity: "Adjust cart quantity",
   sale: "SALE",
 };
 
