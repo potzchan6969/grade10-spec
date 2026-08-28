@@ -25,7 +25,7 @@ Needs group 2 merged in grade10: the application repo re-points before this dele
 - [ ] 3.2 Drop the capability row from the shared-ui specs README and add the `admin-console` product bullet to the specs README
 - [ ] 3.3 Verify: `pnpm run lint`, `pnpm run typecheck`
 
-## 4. Audit and store consoles migrate (grade10)
+## 4. Audit and store consoles migrate (grade10) (owner: @sean)
 
 - [ ] 4.1 Move the audit trail section onto `Table`, `Status`, and `CursorPager`, making `console-blocks-SC-01`, `console-blocks-SC-05`–`SC-07`, and `console-blocks-SC-14` pass there
 - [ ] 4.2 Move the store orders table, POS switches card, and order-claims card onto `Table`, `Status`, `SectionHeader`, `StatusBadge`, and `Money`, making `console-blocks-SC-01`, `console-blocks-SC-05`–`SC-07`, and `console-blocks-SC-13` pass there
