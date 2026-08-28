@@ -144,7 +144,7 @@ submodule pointer.
   commit`, including unrelated and overlapping dirty-store changes, and prove
   the workflow never pushes, advances a submodule, opens a pull request, or
   modifies Figma.
-- [ ] 5.6 Replace the annotation entry on `/dev-help` with the new skill, restore
+- [x] 5.6 Replace the annotation entry on `/dev-help` with the new skill, restore
   `.claude/skills/` parity symlinks, and rehearse the same observation and
   report contract from representative Codex, Claude, Gemini, and Cursor-style
   harness inputs.
