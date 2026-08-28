@@ -43,7 +43,7 @@ Needs group 2 merged in grade10: the application repo re-points before this dele
 - [x] 6.2 Re-point vault's exported minor-unit formatter to the console package's formatter so `console-blocks-SC-13` passes with one implementation
 - [x] 6.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 7. Auction console migrates (grade10)
+## 7. Auction console migrates (grade10) (owner: @sean)
 
 - [ ] 7.1 Replace the five panel badge maps with `StatusBadge` and adopt `SectionHeader` where the post-sale panel passes the ignored justify value, making `console-blocks-SC-01` pass there
 - [ ] 7.2 Replace the post-sale panel's native confirms with the package's dialog confirmation, making `console-blocks-SC-08` and `console-blocks-SC-09` pass
