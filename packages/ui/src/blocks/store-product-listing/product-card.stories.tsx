@@ -1,11 +1,12 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
+import { PRODUCT_CARD_CART_COPY } from "./fixtures";
 import { ProductCard } from "./product-card";
 
 const IMAGE = new URL("./product-card.fixture.png", import.meta.url).href;
 
 /** The words every tile renders the same, supplied once. */
-const copy = { cart: "Add to cart", soldOut: "SOLD OUT", sale: "SALE" };
+const copy = PRODUCT_CARD_CART_COPY;
 
 const defaults = {
   copy,
@@ -14,7 +15,6 @@ const defaults = {
   tags: ["Pokémon", "M4", "JP"],
   name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
   price: "HK$105",
-  originalPrice: "HK$123",
   onClick: () => {},
 };
 
@@ -36,16 +36,29 @@ const well: Decorator[] = [
   ),
 ];
 
-/** Figma `soldOut=false` — available product with a discount. */
+/** Figma `soldOut=false` — available product at list price. */
 export const Default: Story = {
   decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.queryByRole("button", { name: /wishlist/i })).toBeNull();
-    expect(canvas.getByText("SALE")).toBeInTheDocument();
+    expect(canvas.queryByText("SALE")).not.toBeInTheDocument();
     expect(canvas.queryByText("Pokémon")).toBeNull();
     expect(canvas.queryByText("M4")).toBeNull();
     expect(canvas.queryByText("JP")).toBeNull();
+  },
+};
+
+/** Strikethrough original price and SALE badge when a discount is supplied. */
+export const OnSale: Story = {
+  args: { originalPrice: "HK$123" },
+  decorators: well,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("SALE")).toBeInTheDocument();
+    expect(canvas.getByText("HK$123")).toBeInTheDocument();
+    expect(canvas.getByText("HK$105").className).toContain("text-success");
+    expect(canvas.getByText("HK$105").className).toContain("font-medium");
   },
 };
 
@@ -58,13 +71,6 @@ export const SoldOut: Story = {
 /** Figma `inCart=true` — cart control with the supplied count. */
 export const InCart: Story = {
   args: { inCart: true, cartCount: "1" },
-  decorators: well,
-};
-
-/** `hasDiscount=false` — current price only, no strikethrough, no badge: the
- * discount treatment follows the original price rather than a second flag. */
-export const WithoutOriginalPrice: Story = {
-  args: { originalPrice: undefined },
   decorators: well,
 };
 
@@ -91,14 +97,8 @@ export const AddedToCart: Story = {
   decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("3")).toBeInTheDocument();
+    expect(canvas.getByText("×3")).toBeInTheDocument();
   },
-};
-
-/** `hasDiscount=false` — no badge and no strikethrough price. */
-export const WithoutDiscount: Story = {
-  args: { originalPrice: undefined },
-  decorators: well,
 };
 
 /** Boneyard capture target — keep `loading` at Figma's 260px card width. */
@@ -114,7 +114,7 @@ export const BoneyardCapture: Story = {
  */
 export const NamedOnce: Story = {
   decorators: well,
-  args: { onCartClick: () => {} },
+  args: { onCartQuantityChange: () => {} },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 

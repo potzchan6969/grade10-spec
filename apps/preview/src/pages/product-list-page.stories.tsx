@@ -201,7 +201,15 @@ function ProductListPage() {
           },
           results: {
             label: "Products",
-            card: { cart: "Add to cart", soldOut: "SOLD OUT", sale: "SALE" },
+            card: {
+              cart: "Add to cart",
+              decreaseQuantity: "Decrease quantity",
+              increaseQuantity: "Increase quantity",
+              removeFromCart: "Remove from cart",
+              adjustQuantity: "Adjust cart quantity",
+              soldOut: "SOLD OUT",
+              sale: "SALE",
+            },
           },
         }}
         groups={{ status: "ready", data: FILTER_GROUPS }}
@@ -210,11 +218,15 @@ function ProductListPage() {
         onClearFilters={() => setSelection({})}
         onFilterChange={handleFilterChange}
         onLoadMore={handleLoadMore}
-        onProductAction={(productId) =>
-          setCart((previous) => ({
-            ...previous,
-            [productId]: (previous[productId] ?? 0) + 1,
-          }))
+        onProductCartQuantityChange={(productId, quantity) =>
+          setCart((previous) => {
+            if (quantity <= 0) {
+              const next = { ...previous };
+              delete next[productId];
+              return next;
+            }
+            return { ...previous, [productId]: quantity };
+          })
         }
         onSearchChange={setSearch}
         onSearchClear={() => setSearch("")}

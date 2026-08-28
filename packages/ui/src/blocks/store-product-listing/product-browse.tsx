@@ -63,7 +63,7 @@ type ProductBrowseProps = {
   loadMoreSkeletonCount?: number;
 
   onProductClick?: (productId: string) => void;
-  onProductAction?: (productId: string) => void;
+  onProductCartQuantityChange?: (productId: string, quantity: number) => void;
 
   className?: string;
 };
@@ -105,7 +105,7 @@ function ProductBrowse({
   onLoadMore,
   loadMoreSkeletonCount,
   onProductClick,
-  onProductAction,
+  onProductCartQuantityChange,
   className,
 }: ProductBrowseProps) {
   const resultsBusy =
@@ -150,7 +150,7 @@ function ProductBrowse({
           loadMoreSkeletonCount={loadMoreSkeletonCount}
           loadingMore={loadingMore}
           onLoadMore={onLoadMore}
-          onProductAction={onProductAction}
+          onProductCartQuantityChange={onProductCartQuantityChange}
           onProductClick={onProductClick}
           results={results}
         />

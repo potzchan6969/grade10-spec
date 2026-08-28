@@ -31,7 +31,7 @@ type ProductListProps = {
   /** Skeleton count while loading more; defaults to 10. */
   loadMoreSkeletonCount?: number;
   onProductClick?: (productId: string) => void;
-  onProductAction?: (productId: string) => void;
+  onProductCartQuantityChange?: (productId: string, quantity: number) => void;
   /** Drives the staggered entrance after a `loading → ready` reload. */
   revealed?: boolean;
   revealStaggerMs?: number;
@@ -62,7 +62,7 @@ function ProductList({
   loadingMore = false,
   loadMoreSkeletonCount = DEFAULT_LOAD_MORE_SKELETON_COUNT,
   onProductClick,
-  onProductAction,
+  onProductCartQuantityChange,
   revealed = true,
   revealStaggerMs = 40,
   revealStaggerCap = 8,
@@ -126,9 +126,10 @@ function ProductList({
                   imageSrc={product.imageSrc}
                   inCart={product.inCart}
                   name={product.name}
-                  onCartClick={
-                    onProductAction
-                      ? () => onProductAction(product.id)
+                  onCartQuantityChange={
+                    onProductCartQuantityChange
+                      ? (quantity) =>
+                          onProductCartQuantityChange(product.id, quantity)
                       : undefined
                   }
                   onClick={
