@@ -8,7 +8,7 @@ Lands first: every other group consumes this through the submodule bump.
 - [x] 1.2 Cover the slot's states in colocated stories: leading with a maximum above the current bid, overtaken with the maximum unchanged, and no commitment, per `auto-bidding-SC-06`.
 - [x] 1.3 Verify with `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:stories:ui`.
 
-## 2. Auction and Stripe contracts (grade10)
+## 2. Auction and Stripe contracts (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Change the authenticated bid action to carry a committed maximum in the listing's currency as integer minor units, making `auto-bidding-SC-01` expressible over the contract.
 - [ ] 2.2 Add the viewer's own committed maximum and their leading state to authenticated listing facts, and keep it absent from public facts, per `auto-bidding-SC-07`.
