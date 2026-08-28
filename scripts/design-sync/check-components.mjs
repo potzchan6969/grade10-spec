@@ -117,6 +117,12 @@ function componentsFromDocument(doc) {
               stroke: v.strokes?.find(
                 (x) => x.visible !== false && x.type === "SOLID",
               ),
+              // A gradient or image fill paints the variant without resolving
+              // to one hex; omissions() reads this so it does not call that a
+              // missing fill.
+              fillUncomparable: (v.fills ?? []).some(
+                (f) => f.visible !== false && f.type !== "SOLID",
+              ),
               height: v.absoluteBoundingBox?.height,
               radius: v.cornerRadius,
               padX: v.paddingLeft,
@@ -712,6 +718,7 @@ function checkValues(comp, tpl, code, report) {
           stroke: variant.stroke
             ? toHex8(variant.stroke.color, variant.stroke.opacity)
             : null,
+          fillUncomparable: !variant.fill && variant.fillUncomparable,
         },
         resolveToken,
       )) {

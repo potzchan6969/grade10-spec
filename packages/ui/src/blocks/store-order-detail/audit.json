@@ -11,8 +11,9 @@
   },
   {
     "label": "order-details-delivery-status/header",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-6234",
-    "classes": "w-full border-b border-border bg-muted px-6 py-4"
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4863-8260",
+    "classes": "w-full border-b border-border bg-muted px-6 py-4",
+    "note": "The band is the published Product / Order / Order Item Header component. This entry named 5010-6234, the delivery-status component root, which is the same node as /root and draws none of this."
   },
   {
     "label": "order-details-order-item/root",
@@ -23,7 +24,10 @@
   {
     "label": "order-details-order-item/image",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-6447",
-    "classes": "relative size-12 shrink-0 overflow-hidden rounded-lg border border-border bg-gradient-to-b from-background-subtle to-muted"
+    "classes": "relative size-12 shrink-0 overflow-hidden rounded-lg border border-border bg-gradient-to-b from-background-subtle to-muted",
+    "diverges": {
+      "overflow-hidden": "Figma carries the photo as an image fill on the well, which is clipped by definition, so the frame itself does not clip. The code renders an <img> inside the well and has to clip it to keep the rounded corners. Same picture, drawn two ways."
+    }
   },
   {
     "label": "order-details-order-table/root",
@@ -40,7 +44,8 @@
   {
     "label": "order-details-sidebar/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5057-6908",
-    "classes": "w-full"
+    "classes": "w-full bg-background",
+    "note": "The component fills Base/background and so does the Card inside it, which covers the root on both sides — the fill shows nowhere today. The code carries it so the two agree on what the column is painted, rather than relying on a child that could stop covering it."
   },
   {
     "label": "order-details/body",
@@ -55,12 +60,15 @@
   {
     "label": "order-details-sidebar/loyalty",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5057-6834",
-    "classes": "gap-1 border-border bg-gradient-to-r from-background-subtle to-muted p-3"
+    "classes": "gap-1 border-border bg-gradient-to-r from-background-subtle to-muted p-3",
+    "diverges": {
+      "gap-1": "The instance root carries the padding; the 4px gap sits on the Card slot inside it, which is a node this entry cannot name. The spacing is drawn, one level down."
+    }
   },
   {
     "label": "order-details/root",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4835-1654",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4835-1683",
     "classes": "w-full max-w-7xl gap-12 overflow-hidden px-8 pt-8 pb-16",
-    "note": "Main frame of Order Details page; Nav/Footer excluded."
+    "note": "The Main frame of the Order Details page; Nav and Footer excluded, as the code root excludes them. This entry named 4835-1654, the page frame that contains all three."
   }
 ]

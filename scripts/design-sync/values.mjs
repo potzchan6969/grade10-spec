@@ -243,9 +243,17 @@ export function omissions(classString, values, resolveToken) {
     out.push(`${prefix}-transparent in code, ${values.fill} in Figma`);
   else if (fill === "unclaimed" && values.fill != null)
     out.push(`draws ${values.fill}, no ${prefix}-* class claims it`);
-  else if (fill === "opaque" && values.fill == null)
+  else if (fill === "opaque" && values.fill == null && !values.fillUncomparable)
     // A token-resolved class is already compared by expectations(); only the
     // arbitrary value it cannot resolve needs reporting here.
+    //
+    // `fillUncomparable` is the node saying it paints something this rail
+    // cannot read — a gradient or an image, which have no single hex to diff.
+    // Code that claims an equally unreadable paint agrees with it as far as
+    // anything here can tell, so reporting "no fill in Figma" against a
+    // gradient states the opposite of what the file draws. A node that paints
+    // one while the code claims nothing stays as silent as it is today; the
+    // rail cannot tell a deliberate gradient from a forgotten one.
     out.push(
       `${plain.find((c) => new RegExp(`^${prefix}-`).test(c))} in code, no fill in Figma`,
     );

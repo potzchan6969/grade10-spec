@@ -181,7 +181,7 @@ function Nav({
       <header
         data-slot="nav"
         className={cn(
-          "@container flex w-full flex-col bg-background",
+          "@container flex w-full flex-col border-b border-border bg-background",
           className,
         )}
         {...props}
