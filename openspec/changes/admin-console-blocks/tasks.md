@@ -9,7 +9,7 @@
 - [x] 1.5 Consolidate the refusal keeper and the ISO-code money formatter into the package beside `useDebounced`; compose the formatter in `Money` so `console-blocks-SC-13` passes
 - [x] 1.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run check:submodules`
 
-## 2. The user directory moves in (grade10)
+## 2. The user directory moves in (grade10) (owner: @sean)
 
 Needs group 1 landed: the ported table sits on the console package's furniture.
 
