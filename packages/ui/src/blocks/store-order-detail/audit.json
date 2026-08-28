@@ -17,8 +17,8 @@
   {
     "label": "order-details-order-item/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-6440",
-    "classes": "flex w-full items-center overflow-hidden border-b border-border last:border-b-0",
-    "note": "Composes design-system TableRow."
+    "classes": "",
+    "note": "The row box is drawn by design-system TableRow, which the block only composes; table-row/root audits those classes."
   },
   {
     "label": "order-details-order-item/image",
@@ -28,14 +28,14 @@
   {
     "label": "order-details-order-table/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-6293",
-    "classes": "flex w-full flex-col overflow-hidden rounded-3xl border border-border bg-background p-1",
-    "note": "Composes design-system Table; data-slot overrides table."
+    "classes": "",
+    "note": "The table box is drawn by design-system Table, which the block only composes; table/root audits those classes. data-slot overrides table."
   },
   {
     "label": "order-details-order-table/header",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4969-5009",
-    "classes": "flex w-full items-center overflow-hidden rounded-full bg-muted",
-    "note": "Composes design-system TableHeader."
+    "classes": "",
+    "note": "The header box is drawn by design-system TableHeader, which the block only composes; table-header/root audits those classes."
   },
   {
     "label": "order-details-sidebar/root",
