@@ -148,7 +148,7 @@ submodule pointer.
   `.claude/skills/` parity symlinks, and rehearse the same observation and
   report contract from representative Codex, Claude, Gemini, and Cursor-style
   harness inputs.
-- [ ] 5.7 Verify this group with focused skill and helper tests, `pnpm run
+- [x] 5.7 Verify this group with focused skill and helper tests, `pnpm run
   agent:check-parity`, `pnpm run lint`, `pnpm run typecheck`, `pnpm run test`,
   and `git diff --check`.
 
