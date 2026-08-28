@@ -36,7 +36,66 @@ const spoken = brandNames.flatMap((brand) =>
   localesOf(brand).map((locale) => ({ brand, locale })),
 );
 
+const AUCTION_BIDDING_HISTORY_KEYS = [
+  "title",
+  "active",
+  "completed",
+  "loading",
+  "emptyActive",
+  "emptyCompleted",
+  "loadFailed",
+  "retry",
+  "loadMore",
+  "historyLoading",
+  "historyLoadFailed",
+  "retryHistory",
+  "showHistory",
+  "hideHistory",
+  "openListing",
+  "bidAgain",
+  "latestActivity",
+  "currentPrice",
+  "finalPrice",
+  "amount",
+  "time",
+  "you",
+  "bidder",
+  "manual",
+  "automatic",
+  "standingPending",
+  "standingLeading",
+  "standingOutbid",
+  "standingWon",
+  "standingLost",
+  "standingCanceled",
+  "standingFailedOnly",
+  "youWereOutbid",
+  "bidRequested",
+  "bidRefused",
+  "acceptedPrice",
+  "automaticMaximumConfigured",
+  "automaticMaximumRaised",
+  "standingChanged",
+  "failureWindow",
+  "failureMinimum",
+  "failureAccount",
+  "failurePayment",
+  "failureStalePrice",
+  "failureUnavailable",
+].sort();
+
 describe("what a brand and a language answer between them", () => {
+  /* Scenario: Every supported language exposes the shared bidding-history
+     vocabulary through the assembled catalog. */
+  it.each(locales)("exposes auction bidding history in %s", (locale) => {
+    const namespace = layers(sharedCatalogs)[locale]?.auctionBiddingHistory;
+
+    expect(namespace).toEqual(expect.any(Object));
+    expect(Object.keys(namespace ?? {}).sort()).toEqual(
+      AUCTION_BIDDING_HISTORY_KEYS,
+    );
+  });
+
   /* Scenario: A brand leaves a key unanswered. Nothing renders a key: every
      one of them is answered brand-neutrally or by the brand itself. */
   it.each(spoken)(
