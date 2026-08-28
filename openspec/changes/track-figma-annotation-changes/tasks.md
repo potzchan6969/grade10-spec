@@ -94,7 +94,7 @@ and cleanup plan.
   changes text`, `Duplicate multiplicity decreases`, `Several unmatched
   siblings are ambiguous`, `Annotation structure changes`, and `Only
   line-ending representation differs` remain covered.
-- [ ] 4.3 Add an atomic selective-acceptance command that validates a pinned
+- [x] 4.3 Add an atomic selective-acceptance command that validates a pinned
   observation, selected finding IDs, and a complete decision document before
   writing. Cover `Existing text edit is accepted`, `Addition is confirmed`,
   `Only selected findings are accepted`, `Ambiguous duplicate is selected`,
