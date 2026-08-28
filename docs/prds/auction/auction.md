@@ -37,14 +37,17 @@ record in-house shipment after a listing is won.
 
 ## Non-goals
 
-- Auction Buy Now, carts, stock counts, fixed-price checkout, search, saved
-  searches, filters, related lots, and recent-sales data.
 - Auto-bidding is specified separately in [auto bidding](./auto-bidding.md).
-  Vault storage, global shipping rate shopping, carrier accounts, tracking
-  numbers, and a customer shipment-notification programme remain out of this
-  MVP.
 - Store favourites. Auction watching is specified separately in
   [watching a lot](./watchlist.md).
+- Watching is no longer a non-goal. It was previously excluded here under the
+  name **favourites**; that term is retired. A collector watching listings from
+  their own account is in scope and is decided in
+  [`account-auction-record.md`](account-auction-record.md).
+- Auction Buy Now, carts, stock counts, fixed-price checkout, search, saved
+  searches, filters, related lots, and recent-sales data.
+- Vault storage, global shipping rate shopping, carrier accounts, tracking
+  numbers, and a customer shipment-notification programme.
 - Customer-facing checkout, invoices, refunds, disputes, or a second payment
   provider.
 - Collecting a phone number Grade10 does not already hold.
@@ -83,6 +86,8 @@ Checkable requirements live in the capability specs, not here.
 
 - Browse and bid: `openspec/changes/add-grade10-auction/specs/grade10-auction/auction/spec.md`
 - Operator payment and shipment: `openspec/changes/add-auction-payment-fulfillment/specs/grade10-auction/post-sale/spec.md`
+- The collector's own record of watched and bid-on listings is a separate
+  decision: [`account-auction-record.md`](account-auction-record.md).
 
 ## Consuming applications and integration
 
@@ -119,6 +124,7 @@ Checkable requirements live in the capability specs, not here.
 | Wire transfer | Decided | A winner paying by wire sits in Awaiting wire so the operator contacts them. An operator records that request in this change; a winner-initiated request on the storefront is follow-on. Collection of the wire is Paid via Manual. | Product and finance |
 | Shipment | Decided | In-house and offline: operators record started then completed. No carrier, no tracking. | Operations |
 | Operator grants | Decided | Payment-processing and shipment-processing are different grants and different scoped roles (`finance` vs `staff`). `admin` holds both. Catalogue publishing is not shipment-processing. | Product |
+| Watching, formerly favourites | Decided | Watching a listing from the collector's own account is in scope, and the term **favourites** is retired across copy, specs, and analytics. The decision, its states, and its non-goals live in [`account-auction-record.md`](account-auction-record.md). | Product |
 | Winner phone | Decided | Not collected. Email is the primary contact; a delivery address is shown when held and can be recorded offline by shipment operators. | Product |
 
 ## Rollout and risks
