@@ -7,8 +7,8 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Funnel, MagnifyingGlass } from "@phosphor-icons/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { IMAGE } from "./fixtures";
 
 type AuctionListing = {
@@ -134,9 +134,7 @@ function AuctionListingCatalogue() {
     <main className="mx-auto w-full max-w-7xl px-8 py-6">
       <VStack gap="lg">
         <VStack gap="xs">
-          <h1 className="text-xl font-bold text-foreground">
-            September Slabs
-          </h1>
+          <h1 className="text-xl font-bold text-foreground">September Slabs</h1>
           <Text tone="secondary">
             Browse authenticated lots and place bids before the sale closes.
           </Text>

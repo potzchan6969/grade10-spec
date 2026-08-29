@@ -20,9 +20,7 @@ import {
   WonPaymentDueStanding,
   WonSettledStanding,
 } from "./fixtures";
-import {
-  ListingBidPanel as ListingBidPanelComponent,
-} from "./listing-bid-panel";
+import { ListingBidPanel as ListingBidPanelComponent } from "./listing-bid-panel";
 import { ListingDetails } from "./listing-details";
 import { ListingGallery } from "./listing-gallery";
 
