@@ -15,7 +15,7 @@ Lands first: every other group consumes this through the submodule bump.
 - [ ] 2.3 Change the Stripe bid authorization contract to carry the committed maximum rather than a bid amount, per `auto-bidding-SC-19`.
 - [ ] 2.4 Verify the contract fixtures express a refused raise that leaves the previous maximum standing, per `auto-bidding-SC-20`.
 
-## 3. Auto-bid resolution in the auction backend (grade10)
+## 3. Auto-bid resolution in the auction backend (grade10) (owner: @htonyl)
 
 Needs the contracts from group 2 landed.
 
