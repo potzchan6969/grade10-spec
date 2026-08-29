@@ -27,7 +27,7 @@ Needs the contracts from group 2 landed.
 - [x] 3.6 Make `auto-bidding-SC-22`, `auto-bidding-SC-23`, and `auto-bidding-SC-24` pass by treating a bid Grade10 places as an accepted bid under the existing extension rule and cap, once per accepted commitment.
 - [x] 3.7 Make `auto-bidding-SC-07` pass, and verify every scenario in this group through auction backend feature tests including concurrent commitments against one listing.
 
-## 4. Listing page (grade10)
+## 4. Listing page (grade10) (owner: @htonyl)
 
 Claimable against the contracts and fixtures from group 2; it does not need a running backend.
 
