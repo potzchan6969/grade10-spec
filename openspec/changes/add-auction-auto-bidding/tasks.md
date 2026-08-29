@@ -38,7 +38,7 @@ Claimable against the contracts and fixtures from group 2; it does not need a ru
 - [ ] 4.5 Add the panel's new copy to the `@grade10/i18n` catalogs for every locale the site answers.
 - [ ] 4.6 Verify the listing-page feature lane against the contract fixtures, including the refused-raise and unauthenticated-viewer states.
 
-## 5. Admin bid history (grade10)
+## 5. Admin bid history (grade10) (owner: @htonyl)
 
 Claimable against the contracts from group 2.
 
