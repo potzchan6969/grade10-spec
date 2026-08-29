@@ -10,11 +10,11 @@ Unblocked: `admin-console-blocks` archived as
 `2026-08-29-admin-console-blocks`, so the markup this change migrates has
 stopped moving and the submodule bump it depended on has landed.
 
-- [ ] 1.1 Add `@astryxdesign/core` and `@astryxdesign/theme-neutral` at exact `0.5.0` to both admin applications, no caret, leaving `tools/openspec-viewer` on its own workspace and version, so `visual-standard-SC-09` has a version it can hold
-- [ ] 1.2 Add `packages/admin-theme` exporting `grade10AdminTheme` via `defineTheme`, carrying the `themes/grade10.css` values as its literal input, with a test asserting each mapped token still resolves to the brand value it came from
-- [ ] 1.3 Import `reset.css`, `astryx.css`, and the theme sheet after the design-system imports in both `src/index.css`, so the single `--radius-full` overlap resolves to Astryx, and re-run the collision probe against `0.5.0` to confirm no other name is declared by both
-- [ ] 1.4 Render `<Theme>` at both application roots — `grade10AdminTheme` in the grade10 app, Astryx's base theme in zzz — so the two brands differ only by the applied theme (`visual-standard-SC-04`, `visual-standard-SC-05`)
-- [ ] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
+- [x] 1.1 Add `@astryxdesign/core` and `@astryxdesign/theme-neutral` at exact `0.5.0` to both admin applications, no caret, leaving `tools/openspec-viewer` on its own workspace and version, so `visual-standard-SC-09` has a version it can hold
+- [x] 1.2 Add `packages/admin-theme` exporting `grade10AdminTheme` via `defineTheme`, carrying the `themes/grade10.css` values as its literal input, with a test asserting each mapped token still resolves to the brand value it came from
+- [x] 1.3 Import `reset.css`, `astryx.css`, and the theme sheet after the design-system imports in both `src/index.css`, so the single `--radius-full` overlap resolves to Astryx, and re-run the collision probe against `0.5.0` to confirm no other name is declared by both
+- [x] 1.4 Render `<Theme>` at both application roots — `grade10AdminTheme` in the grade10 app, Astryx's base theme in zzz — so the two brands differ only by the applied theme (`visual-standard-SC-04`, `visual-standard-SC-05`)
+- [x] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
 
 ## 2. The shared two-factor surface proves the palette (grade10)
 
