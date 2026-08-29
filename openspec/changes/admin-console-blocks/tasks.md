@@ -45,10 +45,10 @@ Needs group 2 merged in grade10: the application repo re-points before this dele
 
 ## 7. Auction console migrates (grade10) (owner: @sean)
 
-- [ ] 7.1 Replace the five panel badge maps with `StatusBadge` and adopt `SectionHeader` where the post-sale panel passes the ignored justify value, making `console-blocks-SC-01` pass there
-- [ ] 7.2 Replace the post-sale panel's native confirms with the package's dialog confirmation, making `console-blocks-SC-08` and `console-blocks-SC-09` pass
-- [ ] 7.3 Move the bidders and fulfillment filters onto `SegmentedControl` (`console-blocks-SC-11`) and give the bidders queue a `CursorPager` (`console-blocks-SC-14`)
-- [ ] 7.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 7.1 Replace the five panel badge maps with `StatusBadge` and adopt `SectionHeader` where the post-sale panel passes the ignored justify value, making `console-blocks-SC-01` pass there
+- [x] 7.2 Replace the post-sale panel's native confirms with the package's dialog confirmation, making `console-blocks-SC-08` and `console-blocks-SC-09` pass
+- [x] 7.3 Move the bidders and fulfillment filters onto `SegmentedControl` (`console-blocks-SC-11`) and give the bidders queue a `CursorPager` (`console-blocks-SC-14`)
+- [x] 7.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 8. Admin applications migrate (grade10)
 
