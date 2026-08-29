@@ -10,49 +10,49 @@ Implementation starts only after automatic bidding and its authoritative
 action-group facts have landed. After group 1 lands, update the
 `external/grade10-spec` pin before editing its consumers.
 
-- [ ] 2.1 Make `Repeated activity is grouped under one listing`, `A failed-only listing remains explainable`, `Active and completed activity separate cleanly`, and `An account with no bidding activity has an empty index` pass by defining the storefront-neutral filter, standing, summary, money, image, cursor-page, and refusal schemas in `@grade10/auction-contracts`.
-- [ ] 2.2 Make `A manual bid is accepted`, `A server-evaluated bid fails`, `An automatic maximum is configured and raised`, `The engine bids for the collector`, `A competing bid visibly causes an outbid state`, and `An automatic response is attributed to You` pass by defining a closed discriminated history-item and safe-failure vocabulary that cannot represent private values on a public item.
-- [ ] 2.3 Make `A storefront account reads its own history`, `The same account id on another storefront is unrelated`, and `An anonymous reader cannot read private history` pass by extending the pinned Auction RPC contract with account-index and combined-listing-history page outcomes whose browser inputs cannot name an account or storefront.
-- [ ] 2.4 Verify the shared-contract group with `pnpm run typecheck` and `pnpm run test:backend`.
+- [x] 2.1 Make `Repeated activity is grouped under one listing`, `A failed-only listing remains explainable`, `Active and completed activity separate cleanly`, and `An account with no bidding activity has an empty index` pass by defining the storefront-neutral filter, standing, summary, money, image, cursor-page, and refusal schemas in `@grade10/auction-contracts`.
+- [x] 2.2 Make `A manual bid is accepted`, `A server-evaluated bid fails`, `An automatic maximum is configured and raised`, `The engine bids for the collector`, `A competing bid visibly causes an outbid state`, and `An automatic response is attributed to You` pass by defining a closed discriminated history-item and safe-failure vocabulary that cannot represent private values on a public item.
+- [x] 2.3 Make `A storefront account reads its own history`, `The same account id on another storefront is unrelated`, and `An anonymous reader cannot read private history` pass by extending the pinned Auction RPC contract with account-index and combined-listing-history page outcomes whose browser inputs cannot name an account or storefront.
+- [x] 2.4 Verify the shared-contract group with `pnpm run typecheck` and `pnpm run test:backend`.
 
 ## 3. Additive history persistence (grade10) (owner: @htonyl)
 
 This group depends on group 2's closed event and standing vocabularies.
 
-- [ ] 3.1 Make `A manual bid is accepted`, `A server-evaluated bid fails`, `An automatic maximum is configured and raised`, and `The engine bids for the collector` representable by adding append-only `bid_action_logs` and per-account/listing `bid_bidder_status` schema with field-combination checks, group uniqueness, storefront identity keys, and keyset-order indexes.
-- [ ] 3.2 Make `Repeated activity is grouped under one listing`, `Paging does not repeat or skip a listing`, and `Full retained history remains pageable` pass in migration fixtures by backfilling only authoritative retained bid and automatic-maximum facts and rebuilding one `bid_bidder_status` row per storefront account and listing without inventing historical failures.
-- [ ] 3.3 Make idempotent replay and rollback safe by proving the migration is additive, generated from the shared schema, repeatably rebuilds bidder status, and leaves existing bid and automatic-bid authority independent of the projection.
-- [ ] 3.4 Verify the persistence group with `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, `pnpm run typecheck`, and `pnpm run test:backend`; commit the generated Auction migration and metadata.
+- [x] 3.1 Make `A manual bid is accepted`, `A server-evaluated bid fails`, `An automatic maximum is configured and raised`, and `The engine bids for the collector` representable by adding append-only `bid_action_logs` and per-account/listing `bid_bidder_status` schema with field-combination checks, group uniqueness, storefront identity keys, and keyset-order indexes.
+- [x] 3.2 Make `Repeated activity is grouped under one listing`, `Paging does not repeat or skip a listing`, and `Full retained history remains pageable` pass in migration fixtures by backfilling only authoritative retained bid and automatic-maximum facts and rebuilding one `bid_bidder_status` row per storefront account and listing without inventing historical failures.
+- [x] 3.3 Make idempotent replay and rollback safe by proving the migration is additive, generated from the shared schema, repeatably rebuilds bidder status, and leaves existing bid and automatic-bid authority independent of the projection.
+- [x] 3.4 Verify the persistence group with `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, `pnpm run typecheck`, and `pnpm run test:backend`; commit the generated Auction migration and metadata.
 
 ## 4. Record authoritative bidding activity (grade10) (owner: @htonyl)
 
 This group depends on group 3's additive tables. It extends the already-landed
 automatic-bidding paths without changing their policy.
 
-- [ ] 4.1 Make `A manual bid is accepted`, `A server-evaluated bid fails`, and `Browser-only validation creates no Auction event` pass through the fixed `processBidActionGroup` input/output contract, assigning one stable group per authoritative transition and deduplicating complete-group replays inside the listing transaction.
-- [ ] 4.2 Make `An automatic maximum is configured and raised` and `The engine bids for the collector` pass by sending closed maximum and automatic-bid action variants through `processBidActionGroup` beside the existing automatic-bidding transitions, with no new bidding or payment decision in the processor.
-- [ ] 4.3 Make `A competing bid visibly causes an outbid state`, `A failed attempt sits beside the unchanged auction state`, and the pending/leading/outbid/won/lost/canceled standings in `Repeated activity is grouped under one listing` pass by grouping public movements and private transitions from one decision and returning the complete `bid_bidder_status` after-state on bid, provider, close, and cancellation paths.
-- [ ] 4.4 Verify every manual, automatic, refusal, provider, close, cancellation, and replay scenario in this group with `pnpm run typecheck` and `pnpm run test:backend`.
+- [x] 4.1 Make `A manual bid is accepted`, `A server-evaluated bid fails`, and `Browser-only validation creates no Auction event` pass through the fixed `processBidActionGroup` input/output contract, assigning one stable group per authoritative transition and deduplicating complete-group replays inside the listing transaction.
+- [x] 4.2 Make `An automatic maximum is configured and raised` and `The engine bids for the collector` pass by sending closed maximum and automatic-bid action variants through `processBidActionGroup` beside the existing automatic-bidding transitions, with no new bidding or payment decision in the processor.
+- [x] 4.3 Make `A competing bid visibly causes an outbid state`, `A failed attempt sits beside the unchanged auction state`, and the pending/leading/outbid/won/lost/canceled standings in `Repeated activity is grouped under one listing` pass by grouping public movements and private transitions from one decision and returning the complete `bid_bidder_status` after-state on bid, provider, close, and cancellation paths.
+- [x] 4.4 Verify every manual, automatic, refusal, provider, close, cancellation, and replay scenario in this group with `pnpm run typecheck` and `pnpm run test:backend`.
 
 ## 5. Private history reads and storefront APIs (grade10) (owner: @htonyl)
 
 This group depends on group 3's tables and can use seeded history facts while
 group 4 is implemented in parallel.
 
-- [ ] 5.1 Make `Repeated activity is grouped under one listing`, `A failed-only listing remains explainable`, `Active and completed activity separate cleanly`, `Paging does not repeat or skip a listing`, and `An account with no bidding activity has an empty index` pass through the fixed `listBidderBidStatuses` input/output contract and an index-backed read that joins current listing display facts.
-- [ ] 5.2 Make `A competing bid visibly causes an outbid state`, `An automatic response is attributed to You`, `A failed attempt sits beside the unchanged auction state`, and `Full retained history remains pageable` pass through the fixed `listCombinedBidHistory` contract by merging public and account rows, folding complete groups, mapping the caller to **You**, and keyset-paging the stable chronology.
-- [ ] 5.3 Make `A storefront account reads its own history`, `The same account id on another storefront is unrelated`, `An anonymous reader cannot read private history`, and `Reading history is inert` pass through the named Auction entrypoints and authenticated Grade10 and ZZZ Store procedure proxies, with public-contract tests proving the anonymous payload is unchanged.
-- [ ] 5.4 Verify the Auction service, both storefront bindings, Store routers, paging, privacy, and inert-read scenarios with `pnpm run typecheck` and `pnpm run test:backend`.
+- [x] 5.1 Make `Repeated activity is grouped under one listing`, `A failed-only listing remains explainable`, `Active and completed activity separate cleanly`, `Paging does not repeat or skip a listing`, and `An account with no bidding activity has an empty index` pass through the fixed `listBidderBidStatuses` input/output contract and an index-backed read that joins current listing display facts.
+- [x] 5.2 Make `A competing bid visibly causes an outbid state`, `An automatic response is attributed to You`, `A failed attempt sits beside the unchanged auction state`, and `Full retained history remains pageable` pass through the fixed `listCombinedBidHistory` contract by merging public and account rows, folding complete groups, mapping the caller to **You**, and keyset-paging the stable chronology.
+- [x] 5.3 Make `A storefront account reads its own history`, `The same account id on another storefront is unrelated`, `An anonymous reader cannot read private history`, and `Reading history is inert` pass through the named Auction entrypoints and authenticated Grade10 and ZZZ Store procedure proxies, with public-contract tests proving the anonymous payload is unchanged.
+- [x] 5.4 Verify the Auction service, both storefront bindings, Store routers, paging, privacy, and inert-read scenarios with `pnpm run typecheck` and `pnpm run test:backend`.
 
 ## 6. Auction history frontend slice (grade10) (owner: @htonyl)
 
 This group depends on group 2 only and uses fixture procedures; it does not
 need a running backend or groups 3–5.
 
-- [ ] 6.1 Make the page data for `A signed-in collector opens active bids`, `Active and completed activity separate cleanly`, and `Loading more preserves entries already shown` available by extending the structural Auction procedure client, decoding the shared page schemas in a `features/bidding/history` datasource, and exposing a shallow repository through its own DI module.
-- [ ] 6.2 Make `Expanding history preserves its summary while loading`, `A history failure preserves the listing summary`, `A competing bid visibly causes an outbid state`, `An automatic response is attributed to You`, and `A failed attempt sits beside the unchanged auction state` available through separate index and per-listing query hooks whose fixture tests load the real decode, repository, and DI graph.
-- [ ] 6.3 Make the history slice reachable without per-app wiring by publishing `@grade10/auction-frontend/history`, joining its module to `auctionModules`, and proving every token resolves with the package test harness.
-- [ ] 6.4 Verify the frontend-slice group with `pnpm run typecheck` and `pnpm run test`.
+- [x] 6.1 Make the page data for `A signed-in collector opens active bids`, `Active and completed activity separate cleanly`, and `Loading more preserves entries already shown` available by extending the structural Auction procedure client, decoding the shared page schemas in a `features/bidding/history` datasource, and exposing a shallow repository through its own DI module.
+- [x] 6.2 Make `Expanding history preserves its summary while loading`, `A history failure preserves the listing summary`, `A competing bid visibly causes an outbid state`, `An automatic response is attributed to You`, and `A failed attempt sits beside the unchanged auction state` available through separate index and per-listing query hooks whose fixture tests load the real decode, repository, and DI graph.
+- [x] 6.3 Make the history slice reachable without per-app wiring by publishing `@grade10/auction-frontend/history`, joining its module to `auctionModules`, and proving every token resolves with the package test harness.
+- [x] 6.4 Verify the frontend-slice group with `pnpm run typecheck` and `pnpm run test`.
 
 ## 7. Grade10 bidding-history page (grade10) (owner: @htonyl)
 
