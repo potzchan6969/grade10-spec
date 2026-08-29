@@ -29,14 +29,14 @@ Needs group 1 landed: the theme has to be applied before the block can be read a
 
 Needs group 2 landed: the theme is settled before the blocks are rebuilt on it.
 
-- [ ] 3.1 Rebuild `Table`, `Row`, `Cell`, `At`, `Money`, and `Status` on Astryx's `Table` and `Text`, exports and props unchanged, keeping the three distinguishable async states with refusal in the error tone (`visual-standard-SC-06`) and the ISO 4217 code on tabular amounts
-- [ ] 3.2 Rebuild `SectionHeader`, `StatusBadge`, `Figure`, and `OperatorIdentity` on Astryx's `Heading`, `Text`, `Badge`, and layout exports, props unchanged (`visual-standard-SC-01`)
-- [ ] 3.3 Rebuild `FormDialog` on Astryx's `Dialog`, keeping the confirmation a rendered dialog with the platform's own confirm uninvoked and cancel reporting nothing (`visual-standard-SC-08`)
-- [ ] 3.4 Rebuild `CursorPager` on Astryx's `Pagination`, keeping the way on and the way back on a queue longer than its page
-- [ ] 3.5 Rebuild `UserTable` and the three user-directory dialogs on the package's own furniture, keeping `user-directory-SC-01` through `user-directory-SC-10` passing from their existing tests
-- [ ] 3.6 Move each block test's design-system class and structure assertions onto the operator-visible fact the scenario names — tone, role, announced state — so the suites prove `visual-standard-SC-06` rather than a markup shape
-- [ ] 3.7 Drop `@grade10/design-system` from the console package's dependencies and its `@source` entry from both applications' `index.css`, proving no block reaches a second vocabulary (`visual-standard-SC-01`)
-- [ ] 3.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 3.1 Rebuild `Table`, `Row`, `Cell`, `At`, `Money`, and `Status` on Astryx's `Table` and `Text`, exports and props unchanged, keeping the three distinguishable async states with refusal in the error tone (`visual-standard-SC-06`) and the ISO 4217 code on tabular amounts
+- [x] 3.2 Rebuild `SectionHeader`, `StatusBadge`, `Figure`, and `OperatorIdentity` on Astryx's `Heading`, `Text`, `Badge`, and layout exports, props unchanged (`visual-standard-SC-01`)
+- [x] 3.3 Rebuild `FormDialog` on Astryx's `Dialog`, keeping the confirmation a rendered dialog with the platform's own confirm uninvoked and cancel reporting nothing (`visual-standard-SC-08`)
+- [x] 3.4 Rebuild `CursorPager` on Astryx's `Pagination`, keeping the way on and the way back on a queue longer than its page
+- [x] 3.5 Rebuild `UserTable` and the three user-directory dialogs on the package's own furniture, keeping `user-directory-SC-01` through `user-directory-SC-10` passing from their existing tests
+- [x] 3.6 Move each block test's design-system class and structure assertions onto the operator-visible fact the scenario names — tone, role, announced state — so the suites prove `visual-standard-SC-06` rather than a markup shape
+- [x] 3.7 Drop `@grade10/design-system` from the console package's dependencies and its `@source` entry from both applications' `index.css`, proving no block reaches a second vocabulary (`visual-standard-SC-01`)
+- [x] 3.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 4. Audit, store, and auth consoles migrate (grade10)
 
