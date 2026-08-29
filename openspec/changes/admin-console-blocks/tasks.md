@@ -52,10 +52,10 @@ Needs group 2 merged in grade10: the application repo re-points before this dele
 
 ## 8. Admin applications migrate (grade10) (owner: @sean)
 
-- [ ] 8.1 Move the grade10 admin app's rewards, invitations, members, vault, auction, appointments, and dashboard pages onto the blocks: tables and status (`console-blocks-SC-01`, `SC-05`–`SC-07`), the dashboard's refused read in the error tone (`console-blocks-SC-06`), members paging on `CursorPager` (`console-blocks-SC-14`), panel switches on `Tabs` (`console-blocks-SC-10`), the window filter on `SegmentedControl` (`console-blocks-SC-11`), and the shop picker on `Select`
-- [ ] 8.2 Replace the settings page's hand-built deactivation dialog with `FormDialog` (`console-blocks-SC-08`, `console-blocks-SC-09`) and its identity card, the gate page, and the app shell strips with `OperatorIdentity` (`console-blocks-SC-01`)
-- [ ] 8.3 Apply the same moves to the zzz admin app's pages and shell, including its dashboard's error tone (`console-blocks-SC-06`)
-- [ ] 8.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 8.1 Move the grade10 admin app's rewards, invitations, members, vault, auction, appointments, and dashboard pages onto the blocks: tables and status (`console-blocks-SC-01`, `SC-05`–`SC-07`), the dashboard's refused read in the error tone (`console-blocks-SC-06`), members paging on `CursorPager` (`console-blocks-SC-14`), panel switches on `Tabs` (`console-blocks-SC-10`), the window filter on `SegmentedControl` (`console-blocks-SC-11`), and the shop picker on `Select`
+- [x] 8.2 Replace the settings page's hand-built deactivation dialog with `FormDialog` (`console-blocks-SC-08`, `console-blocks-SC-09`) and its identity card, the gate page, and the app shell strips with `OperatorIdentity` (`console-blocks-SC-01`)
+- [x] 8.3 Apply the same moves to the zzz admin app's pages and shell, including its dashboard's error tone (`console-blocks-SC-06`)
+- [x] 8.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 9. Delivery (grade10)
 
