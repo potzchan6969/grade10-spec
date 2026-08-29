@@ -17,13 +17,13 @@ Needs group 1 landed: the ported table sits on the console package's furniture.
 - [x] 2.2 Re-point grade10-auth admin-frontend's directory imports to the console package (`user-directory-SC-01`), leaving the apps' two-factor imports on `@grade10/ui` (`console-blocks-SC-04`)
 - [x] 2.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 3. The shared UI package sheds the directory (grade10-spec)
+## 3. The shared UI package sheds the directory (grade10-spec) (owner: @sean)
 
 Needs group 2 merged in grade10: the application repo re-points before this deletes.
 
-- [ ] 3.1 Delete `packages/ui/src/blocks/auth-user-directory` and its public-entry exports so `console-blocks-SC-04` passes with the two-factor exports intact
-- [ ] 3.2 Drop the capability row from the shared-ui specs README and add the `admin-console` product bullet to the specs README
-- [ ] 3.3 Verify: `pnpm run lint`, `pnpm run typecheck`
+- [x] 3.1 Delete `packages/ui/src/blocks/auth-user-directory` and its public-entry exports so `console-blocks-SC-04` passes with the two-factor exports intact
+- [x] 3.2 Drop the capability row from the shared-ui specs README and add the `admin-console` product bullet to the specs README
+- [x] 3.3 Verify: `pnpm run lint`, `pnpm run typecheck`
 
 ## 4. Audit and store consoles migrate (grade10) (owner: @sean)
 
