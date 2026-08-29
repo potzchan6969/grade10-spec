@@ -16,7 +16,7 @@ stopped moving and the submodule bump it depended on has landed.
 - [x] 1.4 Render `<Theme>` at both application roots — `grade10AdminTheme` in the grade10 app, Astryx's base theme in zzz — so the two brands differ only by the applied theme (`visual-standard-SC-04`, `visual-standard-SC-05`)
 - [x] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
 
-## 2. The shared two-factor surface proves the palette (grade10)
+## 2. The shared two-factor surface proves the palette (grade10) (owner: @sean)
 
 Needs group 1 landed: the theme has to be applied before the block can be read against it.
 
