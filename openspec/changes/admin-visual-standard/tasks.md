@@ -20,10 +20,10 @@ stopped moving and the submodule bump it depended on has landed.
 
 Needs group 1 landed: the theme has to be applied before the block can be read against it.
 
-- [ ] 2.1 Move both applications' `pages/security/TwoFactorPage.tsx` onto Astryx for everything around the block, leaving `TwoFactorVerifyForm` and `TwoFactorEnrollment` imported unchanged from `@grade10/ui`, so one definition still serves the admin and the storefront (`visual-standard-SC-03`)
-- [ ] 2.2 Move `packages/grade10-auth/admin-frontend`'s `EnrollTwoFactor` view onto Astryx around its unchanged `@grade10/ui` block and `parseTotpUri` import (`visual-standard-SC-03`)
-- [ ] 2.3 Read the two-factor page beside a migrated console page in both brands; where the block reads as foreign, correct `grade10AdminTheme` rather than the block, keeping `visual-standard-SC-03` true by palette and not by a fork
-- [ ] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 2.1 Move both applications' `pages/security/TwoFactorPage.tsx` onto Astryx for everything around the block, leaving `TwoFactorVerifyForm` and `TwoFactorEnrollment` imported unchanged from `@grade10/ui`, so one definition still serves the admin and the storefront (`visual-standard-SC-03`)
+- [x] 2.2 Move `packages/grade10-auth/admin-frontend`'s `EnrollTwoFactor` view onto Astryx around its unchanged `@grade10/ui` block and `parseTotpUri` import (`visual-standard-SC-03`)
+- [x] 2.3 Read the two-factor page beside a migrated console page in both brands; where the block reads as foreign, correct `grade10AdminTheme` rather than the block, keeping `visual-standard-SC-03` true by palette and not by a fork
+- [x] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 3. The console blocks change vocabulary (grade10)
 
