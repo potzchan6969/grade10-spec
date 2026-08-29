@@ -1,7 +1,6 @@
 # admin-console/console-blocks Specification
 
 ## Purpose
-
 The admin console block package: the one home for the surfaces every
 operator console shares and no product owns — table furniture, async status,
 form dialog, section header, identity strip, status badge, figure list, and
@@ -9,70 +8,7 @@ cursor pager. It lives in the application repository, because admin surfaces
 carry no brand design; this capability governs what the package is, what it
 exports, and how its blocks behave, so nine consoles stop rebuilding the same
 shapes and drifting apart.
-
-## Feature set
-
-- One shared implementation
-  - Single source: each recurring console shape ships once from the console package, and every console renders it from there
-  - Exports contract: the package's public entry is the cross-repo contract consoles import against
-  - Out of shared UI: the shared UI package carries no admin-only component, so the home is never ambiguous
-- Built on the design system
-  - Unbranded composition: blocks compose design-system primitives and carry no brand; the consuming app's stylesheet themes them
-  - Props-only content: product state, copy, and behavior arrive as props, and every interaction reports through a callback
-- Honest async status
-  - Three distinct states: loading, failed, and empty never collapse into one another
-  - Failure reads as failure: a refused read renders in the error tone, never as an empty queue
-- Deliberate confirmations
-  - Dialog confirmations: an irreversible move confirms in a dialog the surface renders, never the browser's native confirm
-- Legible selection
-  - Panel switching: a control that switches the visible panel announces tab semantics
-  - Dataset narrowing: a filter over rows is a segmented choice whose selected option is announced
-- Tables tell the truth
-  - Currency named: a tabular amount is minor units plus an ISO 4217 code, rendered naming the code
-  - Queues are walkable: a queue longer than its page offers the way to the next page and back
-
-## User journeys
-
-### console-blocks-US-01: Operator distinguishes a failed read from an empty queue
-
-**As an** operator
-**I want** a queue that failed to load to say it failed
-**so that** I never mistake an outage for having nothing to do.
-
-**Accepted by:**
-
-- `console-blocks-SC-05` — A read is in flight
-- `console-blocks-SC-06` — A read is refused
-- `console-blocks-SC-07` — A read returns no rows
-
-### console-blocks-US-02: Operator confirms an irreversible move deliberately
-
-**As an** operator
-**I want** every irreversible move to pass through a confirmation that names it and can be cancelled
-**so that** a slip of the hand never commits something I cannot take back.
-
-**Accepted by:**
-
-- `console-blocks-SC-08` — An operator cancels a confirmation
-- `console-blocks-SC-09` — No move uses the native confirm
-
-### console-blocks-US-03: Operator narrows a queue with an announced control
-
-**As an** operator
-**I want** panel switches and row filters to announce what is selected
-**so that** I can tell where I am and what I am looking at, with or without sight of the toggled styling.
-
-**Accepted by:**
-
-- `console-blocks-SC-10` — A panel switch is announced as tabs
-- `console-blocks-SC-11` — A filter announces its selected option
-
-## ADDED Requirements
-
-### One shared implementation
-
----
-
+## Requirements
 ### Requirement: Console shapes ship once, from the console package
 
 Each shared console shape — data table, async status, form dialog, section
@@ -122,10 +58,6 @@ application also renders it.
 - **THEN** no admin-only console component is offered there
 - **AND** the two-factor components remain offered
 
-### Built on the design system
-
----
-
 ### Requirement: Blocks carry no brand and no product state
 
 A console block SHALL compose design-system primitives, SHALL receive all
@@ -141,10 +73,6 @@ application supplies.
 - **WHEN** each renders it under its own stylesheet
 - **THEN** every visual difference between the two comes from theme tokens
 - **AND** neither rendering fetched, persisted, or navigated from inside the block
-
-### Honest async status
-
----
 
 ### Requirement: The three async states never collapse
 
@@ -169,10 +97,6 @@ tone, distinct from the tone of secondary or empty text.
 - **WHEN** a console surface's read succeeds with nothing to show
 - **THEN** the surface says there is nothing, in the secondary tone, and renders no error
 
-### Deliberate confirmations
-
----
-
 ### Requirement: An irreversible move confirms in a dialog
 
 An operator move that cannot be undone SHALL confirm through a dialog the
@@ -190,10 +114,6 @@ offering cancel — and SHALL NOT use the platform's native confirmation.
 - **WHEN** any console surface asks an operator to confirm a move
 - **THEN** the confirmation is a dialog the surface renders
 - **AND** the platform's native confirmation is never invoked
-
-### Legible selection
-
----
 
 ### Requirement: Panel switching announces tab semantics
 
@@ -219,10 +139,6 @@ independent buttons distinguished only by styling.
 - **THEN** the options are announced as one choice
 - **AND** the selected option is announced as selected
 
-### Tables tell the truth
-
----
-
 ### Requirement: A tabular amount names its currency
 
 An amount a console table renders SHALL arrive as an integer count of minor
@@ -246,3 +162,4 @@ exist.
 - **WHEN** a console queue holds more rows than one page shows
 - **THEN** the surface offers moving to the older rows
 - **AND** from an older page, offers returning toward the newest
+

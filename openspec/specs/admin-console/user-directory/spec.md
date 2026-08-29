@@ -1,7 +1,6 @@
 # admin-console/user-directory Specification
 
 ## Purpose
-
 The operator's view of the identity directory: the table of accounts, and the
 three confirmations an operator passes through to change one — its roles, its
 standing, and where it is signed in. Both brands' consoles render this
@@ -11,55 +10,7 @@ What an operator is *allowed* to do is `shared-auth/users` and
 render and the contract they expose. It carries the requirements of
 `shared-ui/auth-user-directory` forward unchanged in behavior; only the home
 moved.
-
-## Feature set
-
-- The directory contract
-  - Console-package exports: the directory components and their types ship from the console package's public entry
-- Consumer-owned vocabulary
-  - Roles as props: the role vocabulary, each account's roles, and every date arrive already resolved by the console
-  - Ordered submission: a submitted role list keeps the offered order, and an empty selection submits as an empty list
-- Permitted moves only
-  - Gated actions: sessions is always offered; roles and delete appear only when the console supplies a handler
-  - Exclusive standing: a row offers ban or unban by the account's state, never both
-- Confirmations and sessions
-  - One moderation signature: one confirmation serves every moderation move, reason collected or empty
-  - No secrets: a session is named by a consumer-supplied identifier, never by what authenticates it
-
-## User journeys
-
-### user-directory-US-01: Operator moderates an account from the directory
-
-**As an** operator
-**I want** to change an account's roles or standing through a confirmation that speaks my console's words
-**so that** every change is deliberate and my console's own vocabulary is what I act in.
-
-**Accepted by:**
-
-- `user-directory-SC-02` — A console offers its own role vocabulary
-- `user-directory-SC-03` — A selection is submitted
-- `user-directory-SC-05` — An operator without elevated grants opens the directory
-- `user-directory-SC-06` — A banned account is shown
-- `user-directory-SC-09` — A move that collects a reason is confirmed
-- `user-directory-SC-10` — A move that collects no reason is confirmed
-
-### user-directory-US-02: Operator reviews where an account is signed in
-
-**As an** operator
-**I want** to see and end an account's sessions without ever seeing what authenticates them
-**so that** I can act on a compromised account without the console itself becoming the leak.
-
-**Accepted by:**
-
-- `user-directory-SC-07` — An operator reads where an account is signed in
-- `user-directory-SC-08` — An account holds no sessions
-
-## ADDED Requirements
-
-### The directory contract
-
----
-
+## Requirements
 ### Requirement: The user directory exports
 
 The console package SHALL export, from its public entry, exactly these
@@ -74,10 +25,6 @@ components for the user directory surface: `UserTable`, `UserRolesDialog`,
 
 - **WHEN** an admin application imports any export named above from the console package's public entry
 - **THEN** the import resolves without error
-
-### Consumer-owned vocabulary
-
----
 
 ### Requirement: The directory carries no identity vocabulary of its own
 
@@ -106,10 +53,6 @@ leaving any default-role decision to the consumer.
 - **THEN** it shows the joined date exactly as the consumer supplied it
 - **AND THEN** two consoles supplying different formats each render their own
 
-### Permitted moves only
-
----
-
 ### Requirement: The table offers only the moves the console permits
 
 `UserTable` SHALL offer the sessions action on every row. It SHALL offer the
@@ -129,10 +72,6 @@ never both.
 - **WHEN** the table renders an account that is banned
 - **THEN** that row offers unban and does not offer ban
 - **AND THEN** a row for an account that is not banned offers ban and does not offer unban
-
-### Confirmations and sessions
-
----
 
 ### Requirement: A session is named without its secret
 
@@ -170,3 +109,4 @@ collected — so a consumer reads one signature whichever move it asked for.
 - **WHEN** an operator confirms a move the consumer said collects no reason
 - **THEN** no reason field is rendered
 - **AND THEN** the dialog reports an empty reason
+
