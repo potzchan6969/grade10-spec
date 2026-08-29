@@ -38,7 +38,7 @@ Needs group 2 landed: the theme is settled before the blocks are rebuilt on it.
 - [x] 3.7 Drop `@grade10/design-system` from the console package's dependencies and its `@source` entry from both applications' `index.css`, proving no block reaches a second vocabulary (`visual-standard-SC-01`)
 - [x] 3.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 4. Audit, store, and auth consoles migrate (grade10)
+## 4. Audit, store, and auth consoles migrate (grade10) (owner: @sean)
 
 Needs group 3 landed. Groups 4 through 7 are independent of each other.
 
