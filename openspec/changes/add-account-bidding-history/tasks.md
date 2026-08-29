@@ -44,7 +44,7 @@ group 4 is implemented in parallel.
 - [ ] 5.3 Make `A storefront account reads its own history`, `The same account id on another storefront is unrelated`, `An anonymous reader cannot read private history`, and `Reading history is inert` pass through the named Auction entrypoints and authenticated Grade10 and ZZZ Store procedure proxies, with public-contract tests proving the anonymous payload is unchanged.
 - [ ] 5.4 Verify the Auction service, both storefront bindings, Store routers, paging, privacy, and inert-read scenarios with `pnpm run typecheck` and `pnpm run test:backend`.
 
-## 6. Auction history frontend slice (grade10)
+## 6. Auction history frontend slice (grade10) (owner: @htonyl)
 
 This group depends on group 2 only and uses fixture procedures; it does not
 need a running backend or groups 3–5.
