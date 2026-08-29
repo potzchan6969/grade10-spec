@@ -24,7 +24,7 @@ This group depends on group 2's closed event and standing vocabularies.
 - [ ] 3.3 Make idempotent replay and rollback safe by proving the migration is additive, generated from the shared schema, repeatably rebuilds bidder status, and leaves existing bid and automatic-bid authority independent of the projection.
 - [ ] 3.4 Verify the persistence group with `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, `pnpm run typecheck`, and `pnpm run test:backend`; commit the generated Auction migration and metadata.
 
-## 4. Record authoritative bidding activity (grade10)
+## 4. Record authoritative bidding activity (grade10) (owner: @htonyl)
 
 This group depends on group 3's additive tables. It extends the already-landed
 automatic-bidding paths without changing their policy.
