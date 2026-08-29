@@ -25,7 +25,7 @@ Needs group 1 landed: the theme has to be applied before the block can be read a
 - [x] 2.3 Read the two-factor page beside a migrated console page in both brands; where the block reads as foreign, correct `grade10AdminTheme` rather than the block, keeping `visual-standard-SC-03` true by palette and not by a fork
 - [x] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 3. The console blocks change vocabulary (grade10)
+## 3. The console blocks change vocabulary (grade10) (owner: @sean)
 
 Needs group 2 landed: the theme is settled before the blocks are rebuilt on it.
 
