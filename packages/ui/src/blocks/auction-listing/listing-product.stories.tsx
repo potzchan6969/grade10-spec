@@ -29,7 +29,7 @@ import { ListingGallery } from "./listing-gallery";
  * description below — a regular ecommerce layout.
  */
 const meta = {
-  title: "Auction Listing/Product page",
+  title: "Auction Listing/Pages",
   parameters: { layout: "padded" },
 } satisfies Meta;
 
@@ -130,7 +130,7 @@ export const PreAuction: Story = {
   },
 };
 
-export const Live: Story = {
+export const ListingBidPanel: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("img", { name: /Charizard/ })).toBeInTheDocument();
@@ -161,8 +161,8 @@ export const Live: Story = {
     ),
 };
 
-/** @deprecated Use Live — kept as alias for existing links. */
-export const Default: Story = Live;
+/** @deprecated Use ListingBidPanel — kept as alias for existing links. */
+export const Default: Story = ListingBidPanel;
 
 export const PostSold: Story = {
   render: () =>
