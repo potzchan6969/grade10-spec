@@ -10,22 +10,22 @@ Lands first: every other group consumes this through the submodule bump.
 
 ## 2. Auction and Stripe contracts (grade10) (owner: @htonyl)
 
-- [ ] 2.1 Change the authenticated bid action to carry a committed maximum in the listing's currency as integer minor units, making `auto-bidding-SC-01` expressible over the contract.
-- [ ] 2.2 Add the viewer's own committed maximum and their leading state to authenticated listing facts, and keep it absent from public facts, per `auto-bidding-SC-07`.
-- [ ] 2.3 Change the Stripe bid authorization contract to carry the committed maximum rather than a bid amount, per `auto-bidding-SC-19`.
-- [ ] 2.4 Verify the contract fixtures express a refused raise that leaves the previous maximum standing, per `auto-bidding-SC-20`.
+- [x] 2.1 Change the authenticated bid action to carry a committed maximum in the listing's currency as integer minor units, making `auto-bidding-SC-01` expressible over the contract.
+- [x] 2.2 Add the viewer's own committed maximum and their leading state to authenticated listing facts, and keep it absent from public facts, per `auto-bidding-SC-07`.
+- [x] 2.3 Change the Stripe bid authorization contract to carry the committed maximum rather than a bid amount, per `auto-bidding-SC-19`.
+- [x] 2.4 Verify the contract fixtures express a refused raise that leaves the previous maximum standing, per `auto-bidding-SC-20`.
 
 ## 3. Auto-bid resolution in the auction backend (grade10) (owner: @htonyl)
 
 Needs the contracts from group 2 landed.
 
-- [ ] 3.1 Store a committed maximum per bidder per listing with its Accepted At, and migrate each existing accepted bid to a maximum equal to its amount per `design.md`'s migration plan.
-- [ ] 3.2 Make `auto-bidding-SC-09`, `auto-bidding-SC-11`, `auto-bidding-SC-12`, `auto-bidding-SC-13`, `auto-bidding-SC-14`, `auto-bidding-SC-15`, `auto-bidding-SC-01`, and `auto-bidding-SC-16` pass by deriving leader and current bid from the two highest maxima using the listing's own increment.
-- [ ] 3.3 Make `auto-bidding-SC-17` and `auto-bidding-SC-18` pass by settling equal maxima on Accepted At order inside the existing serialized listing decision.
-- [ ] 3.4 Make `auto-bidding-SC-03`, `auto-bidding-SC-04`, and `auto-bidding-SC-02` pass on the commitment path.
-- [ ] 3.5 Make `auto-bidding-SC-19`, `auto-bidding-SC-20`, and `auto-bidding-SC-21` pass by authorizing the maximum and keeping one active authorization per bidder and listing. Outbid release stays `grade10-auction/auction`.
-- [ ] 3.6 Make `auto-bidding-SC-22`, `auto-bidding-SC-23`, and `auto-bidding-SC-24` pass by treating a bid Grade10 places as an accepted bid under the existing extension rule and cap, once per accepted commitment.
-- [ ] 3.7 Make `auto-bidding-SC-07` pass, and verify every scenario in this group through auction backend feature tests including concurrent commitments against one listing.
+- [x] 3.1 Store a committed maximum per bidder per listing with its Accepted At, and migrate each existing accepted bid to a maximum equal to its amount per `design.md`'s migration plan.
+- [x] 3.2 Make `auto-bidding-SC-09`, `auto-bidding-SC-11`, `auto-bidding-SC-12`, `auto-bidding-SC-13`, `auto-bidding-SC-14`, `auto-bidding-SC-15`, `auto-bidding-SC-01`, and `auto-bidding-SC-16` pass by deriving leader and current bid from the two highest maxima using the listing's own increment.
+- [x] 3.3 Make `auto-bidding-SC-17` and `auto-bidding-SC-18` pass by settling equal maxima on Accepted At order inside the existing serialized listing decision.
+- [x] 3.4 Make `auto-bidding-SC-03`, `auto-bidding-SC-04`, and `auto-bidding-SC-02` pass on the commitment path.
+- [x] 3.5 Make `auto-bidding-SC-19`, `auto-bidding-SC-20`, and `auto-bidding-SC-21` pass by authorizing the maximum and keeping one active authorization per bidder and listing. Outbid release stays `grade10-auction/auction`.
+- [x] 3.6 Make `auto-bidding-SC-22`, `auto-bidding-SC-23`, and `auto-bidding-SC-24` pass by treating a bid Grade10 places as an accepted bid under the existing extension rule and cap, once per accepted commitment.
+- [x] 3.7 Make `auto-bidding-SC-07` pass, and verify every scenario in this group through auction backend feature tests including concurrent commitments against one listing.
 
 ## 4. Listing page (grade10)
 
