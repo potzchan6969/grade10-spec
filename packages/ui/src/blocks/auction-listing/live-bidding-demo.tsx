@@ -3,7 +3,7 @@ import { List, ListItem } from "@grade10/design-system/components/display/list";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { FlowContainer } from "../shared/demo-flow";
+import { FlowContainer } from "../shared/flow-container";
 import { LiveActions, WatchingAction, WatchOnlyActions } from "./fixtures";
 import { ListingBidPanel } from "./listing-bid-panel";
 
@@ -149,6 +149,18 @@ const CASES: ReadonlyArray<readonly [string, DemoState]> = [
 /** Steps a live lot through rival bids so the panel's price, history, and standing update in place. */
 export function LiveBiddingDemo() {
   return (
-    <FlowContainer cases={CASES}>{(bids) => panelFor(bids)}</FlowContainer>
+    <FlowContainer
+      cases={CASES}
+      description={
+        <p>
+          The sequence covers a bidder moving from no participation to leading,
+          then being outbid, then leading again. Each transition must replace
+          the price, bid count, history, watch state, and standing together so a
+          stale status cannot encourage the wrong next action.
+        </p>
+      }
+    >
+      {(bids) => panelFor(bids)}
+    </FlowContainer>
   );
 }
