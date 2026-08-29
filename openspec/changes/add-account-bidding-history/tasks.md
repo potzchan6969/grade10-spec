@@ -15,7 +15,7 @@ action-group facts have landed. After group 1 lands, update the
 - [ ] 2.3 Make `A storefront account reads its own history`, `The same account id on another storefront is unrelated`, and `An anonymous reader cannot read private history` pass by extending the pinned Auction RPC contract with account-index and combined-listing-history page outcomes whose browser inputs cannot name an account or storefront.
 - [ ] 2.4 Verify the shared-contract group with `pnpm run typecheck` and `pnpm run test:backend`.
 
-## 3. Additive history persistence (grade10)
+## 3. Additive history persistence (grade10) (owner: @htonyl)
 
 This group depends on group 2's closed event and standing vocabularies.
 
