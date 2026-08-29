@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect, useState } from "react";
 import { expect, within } from "storybook/test";
 import {
   HighestBidderStanding,
@@ -283,48 +282,4 @@ export const Closed: Story = {
     extensionValue: undefined,
     actions: <PostAuctionActions />,
   },
-};
-
-function CountdownStory() {
-  const [now, setNow] = useState(() => Date.now());
-  const [end] = useState(() => Date.now() + 15 * 60 * 1000);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => setNow(Date.now()), 1000);
-    return () => window.clearInterval(timer);
-  }, []);
-
-  const seconds = Math.max(0, Math.floor((end - now) / 1000));
-  const days = Math.floor(seconds / 86400);
-  const hours = Math.floor((seconds % 86400) / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remaining = `${days}D ${hours}H ${minutes}M ${seconds % 60}S`;
-
-  return (
-    <ListingBidPanel
-      copy={{
-        ends: "Ends",
-        extension: "Extended bidding",
-        extensionTooltip: "Extended bidding rules",
-        maximum: "Your maximum",
-        price: "Current bid",
-      }}
-      actions={<LiveActions />}
-      bidCount="3 Bids"
-      deadline="15-minute Storybook countdown"
-      extensionTooltip="Bids placed in the final 30 minutes extend the auction by 30 minutes."
-      extensionValue="30 minutes"
-      history="Latest bids appear here."
-      kicker="Storybook countdown example"
-      price="HK$4,800.00"
-      remaining={remaining}
-      title="1999 Charizard, PSA 10"
-      watchAction={<WatchOnlyActions />}
-    />
-  );
-}
-
-/** Storybook-only proposal: tick a frozen end timestamp every second in the story wrapper. */
-export const LiveCountdown: Story = {
-  render: () => <CountdownStory />,
 };

@@ -21,10 +21,10 @@ import {
 
 import "./demo-flow.css";
 
-type DemoFlowMode = "transition" | "expanded";
-type DemoFlowLayout = "single" | "row";
+type FlowContainerMode = "transition" | "expanded";
+type FlowContainerLayout = "single" | "row";
 
-type DemoFlowProps<T> = {
+type FlowContainerProps<T> = {
   /** Insertion-ordered title → state pairs (`Map` or `[title, value][]`). */
   cases: Iterable<readonly [string, T]>;
   children: (value: T, title: string) => ReactNode;
@@ -154,7 +154,7 @@ function playConverge(
   );
 }
 
-function DemoFlowCase({
+function FlowContainerCase({
   title,
   children,
   layer,
@@ -191,10 +191,10 @@ function DemoFlowCase({
  * Storybook demo chrome: step one instance, or lay every case out in a row.
  * Forest ground is demo-only — not a product surface.
  */
-function DemoFlow<T>({ cases, children }: DemoFlowProps<T>) {
+function FlowContainer<T>({ cases, children }: FlowContainerProps<T>) {
   const items = useMemo(() => [...cases], [cases]);
-  const [mode, setMode] = useState<DemoFlowMode>("transition");
-  const [layout, setLayout] = useState<DemoFlowLayout>("single");
+  const [mode, setMode] = useState<FlowContainerMode>("transition");
+  const [layout, setLayout] = useState<FlowContainerLayout>("single");
   const [step, setStep] = useState(0);
   const [busy, setBusy] = useState(false);
   const last = Math.max(items.length - 1, 0);
@@ -255,7 +255,7 @@ function DemoFlow<T>({ cases, children }: DemoFlowProps<T>) {
     }
   }
 
-  function setView(next: DemoFlowMode) {
+  function setView(next: FlowContainerMode) {
     if (next === mode) {
       return;
     }
@@ -352,9 +352,9 @@ function DemoFlow<T>({ cases, children }: DemoFlowProps<T>) {
           ref={stageRef}
         >
           {layout === "single" && current ? (
-            <DemoFlowCase ref={originRef} title={current[0]}>
+            <FlowContainerCase ref={originRef} title={current[0]}>
               {children(current[1], current[0])}
-            </DemoFlowCase>
+            </FlowContainerCase>
           ) : (
             <HStack
               className={busy ? "w-full pb-2" : "w-full overflow-x-auto pb-2"}
@@ -362,7 +362,7 @@ function DemoFlow<T>({ cases, children }: DemoFlowProps<T>) {
               vAlign="start"
             >
               {items.map(([title, value], index) => (
-                <DemoFlowCase
+                <FlowContainerCase
                   key={title}
                   layer={items.length - index}
                   ref={(node) => {
@@ -371,7 +371,7 @@ function DemoFlow<T>({ cases, children }: DemoFlowProps<T>) {
                   title={title}
                 >
                   {children(value, title)}
-                </DemoFlowCase>
+                </FlowContainerCase>
               ))}
             </HStack>
           )}
@@ -381,5 +381,5 @@ function DemoFlow<T>({ cases, children }: DemoFlowProps<T>) {
   );
 }
 
-export type { DemoFlowMode, DemoFlowProps };
-export { DemoFlow };
+export type { FlowContainerMode, FlowContainerProps };
+export { FlowContainer };

@@ -20,7 +20,7 @@ import {
   WonPaymentDueStanding,
   WonSettledStanding,
 } from "./fixtures";
-import { ListingBidPanel } from "./listing-bid-panel";
+import { ListingBidPanel as ListingBidPanelComponent } from "./listing-bid-panel";
 import { ListingDetails } from "./listing-details";
 import { ListingGallery } from "./listing-gallery";
 
@@ -29,7 +29,7 @@ import { ListingGallery } from "./listing-gallery";
  * description below — a regular ecommerce layout.
  */
 const meta = {
-  title: "Auction Listing/Product page",
+  title: "Auction Listing/Pages",
   parameters: { layout: "padded" },
 } satisfies Meta;
 
@@ -46,7 +46,7 @@ const pageShell = (main: ReactNode, details: ReactNode) => (
 );
 
 const liveBidPanel = (
-  <ListingBidPanel
+  <ListingBidPanelComponent
     copy={{
       ends: "Ends",
       extension: "Extended bidding",
@@ -103,7 +103,7 @@ export const PreAuction: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
+        <ListingBidPanelComponent
           copy={{
             ends: "Opens",
             extension: "Extended bidding",
@@ -130,7 +130,7 @@ export const PreAuction: Story = {
   },
 };
 
-export const Live: Story = {
+export const ListingBidPanel: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("img", { name: /Charizard/ })).toBeInTheDocument();
@@ -161,8 +161,8 @@ export const Live: Story = {
     ),
 };
 
-/** @deprecated Use Live — kept as alias for existing links. */
-export const Default: Story = Live;
+/** @deprecated Use ListingBidPanel — kept as alias for existing links. */
+export const Default: Story = ListingBidPanel;
 
 export const PostSold: Story = {
   render: () =>
@@ -176,7 +176,7 @@ export const PostSold: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
+        <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
@@ -218,7 +218,7 @@ export const PostWonPaymentDue: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
+        <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
@@ -260,7 +260,7 @@ export const PostWonSettled: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
+        <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
@@ -303,7 +303,7 @@ export const PostLost: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
+        <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
@@ -346,7 +346,7 @@ export const PostUnsold: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
+        <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Result" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}

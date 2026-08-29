@@ -7,7 +7,7 @@ import { LiveBiddingDemo } from "./live-bidding-demo";
  * steps through bid standings; placing the first bid automatically watches it.
  */
 const meta = {
-  title: "Auction Listing/ListingBidPanel",
+  title: "Auction Listing/ListingBidPanel/Flows",
   component: LiveBiddingDemo,
   tags: ["autodocs"],
   parameters: {
@@ -19,10 +19,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const LiveBidding: Story = {};
+export const Bidding: Story = {};
 
-/** Hidden from the sidebar so opening Live Bidding is not left on the last bid. */
-export const LiveBiddingWalkthrough: Story = {
+/** Hidden from the sidebar so opening Bidding is not left on the last bid. */
+export const BiddingWalkthrough: Story = {
   tags: ["!dev"],
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
