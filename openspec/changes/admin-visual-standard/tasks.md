@@ -57,7 +57,7 @@ Needs group 3 landed.
 - [x] 5.3 Drop both packages' `@source` entries and `@grade10/design-system` dependencies
 - [x] 5.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 6. Vault console migrates (grade10)
+## 6. Vault console migrates (grade10) (owner: @sean)
 
 Needs group 3 landed.
 
