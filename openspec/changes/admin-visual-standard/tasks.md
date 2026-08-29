@@ -6,8 +6,9 @@ submodule bump and no grade10-spec group.
 
 ## 1. The runtime, the theme, and the stylesheets land (grade10)
 
-Blocked until `admin-console-blocks` archives — its groups 3 and 9 are open,
-and this change migrates the markup those groups are still moving.
+Unblocked: `admin-console-blocks` archived as
+`2026-08-29-admin-console-blocks`, so the markup this change migrates has
+stopped moving and the submodule bump it depended on has landed.
 
 - [ ] 1.1 Add `@astryxdesign/core` and `@astryxdesign/theme-neutral` at exact `0.5.0` to both admin applications, no caret, leaving `tools/openspec-viewer` on its own workspace and version, so `visual-standard-SC-09` has a version it can hold
 - [ ] 1.2 Add `packages/admin-theme` exporting `grade10AdminTheme` via `defineTheme`, carrying the `themes/grade10.css` values as its literal input, with a test asserting each mapped token still resolves to the brand value it came from

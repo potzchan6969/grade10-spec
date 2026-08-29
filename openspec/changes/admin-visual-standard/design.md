@@ -45,8 +45,9 @@ has to resolve, not defer":
   in grade10-spec and are rendered by customer surfaces too. Making them
   Astryx would push Astryx into the storefront, which the proposal rules out.
 
-`admin-console-blocks` is the precondition and is **not finished**: its
-groups 3 (the grade10-spec deletion) and 9 (delivery) are still open.
+`admin-console-blocks` was the precondition and is **finished**: its groups 3
+(the grade10-spec deletion) and 9 (delivery) closed and the change archived as
+`2026-08-29-admin-console-blocks`.
 
 ## Goals / Non-Goals
 
@@ -236,9 +237,9 @@ revert cost then grows with every file, and the route stops being describable.
 
 ## Migration Plan
 
-1. **Wait for `admin-console-blocks` to archive.** Its groups 3 and 9 are
-   open; starting before the submodule bump lands means migrating markup that
-   is still moving.
+1. **`admin-console-blocks` has archived.** Its groups 3 and 9 are closed and
+   the submodule bump has landed, so the markup this change migrates is no
+   longer moving underneath it. This step is done; group 1 can start.
 2. **Runtime, theme, and stylesheets land together, no surface change.** Both
    sheets at `:root`, Astryx last. Nothing renders differently yet.
 3. **The two-factor page first**, so the palette is proven before anything is
