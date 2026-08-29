@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DemoFlow } from "../shared/demo-flow";
+import { FlowContainer } from "../shared/demo-flow";
 import { LiveActions, WatchOnlyActions } from "./fixtures";
 import { ListingBidPanel } from "./listing-bid-panel";
 
@@ -100,9 +100,9 @@ function CountdownPreview({
 /** Steps through countdown boundaries, then lays them out for comparison. */
 function LiveCountdownDemo() {
   return (
-    <DemoFlow cases={SCENARIOS}>
+    <FlowContainer cases={SCENARIOS}>
       {(scenario, title) => <CountdownPreview key={title} {...scenario} />}
-    </DemoFlow>
+    </FlowContainer>
   );
 }
 
