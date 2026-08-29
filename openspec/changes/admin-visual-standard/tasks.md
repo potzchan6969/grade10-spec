@@ -66,7 +66,7 @@ Needs group 3 landed.
 - [x] 6.3 Drop the package's `@source` entry and `@grade10/design-system` dependency
 - [x] 6.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 7. Auction console migrates (grade10)
+## 7. Auction console migrates (grade10) (owner: @sean)
 
 Needs group 3 landed.
 
