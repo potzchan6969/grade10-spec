@@ -54,7 +54,7 @@ need a running backend or groups 3–5.
 - [ ] 6.3 Make the history slice reachable without per-app wiring by publishing `@grade10/auction-frontend/history`, joining its module to `auctionModules`, and proving every token resolves with the package test harness.
 - [ ] 6.4 Verify the frontend-slice group with `pnpm run typecheck` and `pnpm run test`.
 
-## 7. Grade10 bidding-history page (grade10)
+## 7. Grade10 bidding-history page (grade10) (owner: @htonyl)
 
 This group depends on groups 1, 2, and 6. Fixture procedures keep its unit
 tests independent from the backend delivery groups.
