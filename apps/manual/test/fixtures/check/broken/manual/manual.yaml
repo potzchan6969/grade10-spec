@@ -1,0 +1,6 @@
+storybookBase: https://storybook.example
+
+groups:
+  Products:
+    - demo-product
+    - ghost

@@ -1,0 +1,286 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Relative paths into the workspace package so the build resolves the
+ * generated theme CSS without exercising package exports. */
+@import "../../../packages/design-system/src/theme.css";
+@import "../../../packages/design-system/src/themes/grade10.css";
+
+/* Utilities for this app and for every package surface it renders. */
+@source "../src";
+@source "../../../packages/design-system/src";
+@source "../../../packages/ui/src";
+
+/* The design system ships a light palette only. A manual is a long reading
+ * surface, so this app owns its dark mapping over the same primitives. Only
+ * the tokens that carry a literal value are restated — the rest are declared
+ * as `var()` of these and follow on their own. */
+.dark {
+  --background: var(--gray-950);
+  --background-subtle: var(--gray-900);
+  --background-inverse: var(--gray-50);
+  --foreground: var(--gray-50);
+  --card: var(--gray-900);
+  --popover: var(--gray-900);
+  --input: var(--gray-900);
+  --control: var(--gray-900);
+  --control-hover: var(--slate-50-opacity-5);
+  --secondary: var(--gray-800);
+  --secondary-foreground: var(--gray-400);
+  --muted: var(--gray-800);
+  --muted-foreground: var(--gray-400);
+  --muted-hover: var(--slate-50-opacity-5);
+  --accent: var(--slate-50-opacity-10);
+  --border: var(--gray-800);
+  --border-subtle: var(--gray-900);
+  --border-strong: var(--gray-700);
+  --ring: var(--gray-600);
+  --switch-track: var(--slate-50-opacity-10);
+  --disabled: var(--gray-800);
+  --disabled-foreground: var(--gray-600);
+  --shadow-color: var(--gray-950);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* The header is sticky, so every deep-link target clears it. */
+  main [id] {
+    scroll-margin-top: 5.5rem;
+  }
+}
+
+@layer components {
+  /* Reading surface. Text columns stay near 70ch; tables, code and figures are
+     allowed the full measure and scroll inside themselves. */
+  .manual-prose {
+    color: var(--foreground);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
+
+  .manual-prose > p,
+  .manual-prose > ul,
+  .manual-prose > ol,
+  .manual-prose > blockquote,
+  .manual-prose > h2,
+  .manual-prose > h3 {
+    max-width: 70ch;
+  }
+
+  .manual-prose p {
+    margin: 1rem 0;
+  }
+
+  .manual-prose > :first-child {
+    margin-top: 0;
+  }
+
+  .manual-prose > :last-child {
+    margin-bottom: 0;
+  }
+
+  .manual-prose h2 {
+    margin: 2.25rem 0 0.75rem;
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .manual-prose h3 {
+    margin: 1.75rem 0 0.5rem;
+    font-family: var(--font-heading);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .manual-prose ul,
+  .manual-prose ol {
+    margin: 1rem 0;
+    padding-left: 1.25rem;
+  }
+
+  .manual-prose ul {
+    list-style: disc;
+  }
+
+  .manual-prose ol {
+    list-style: decimal;
+  }
+
+  .manual-prose li {
+    margin: 0.25rem 0;
+  }
+
+  .manual-prose li::marker {
+    color: var(--muted-foreground);
+  }
+
+  .manual-prose a {
+    color: var(--foreground);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 150ms ease-out;
+  }
+
+  .manual-prose a:hover {
+    text-decoration-color: var(--foreground);
+  }
+
+  .manual-prose strong {
+    font-weight: 600;
+  }
+
+  .manual-prose blockquote {
+    margin: 1.25rem 0;
+    border-left: 2px solid var(--border-strong);
+    padding-left: 1rem;
+    color: var(--secondary-foreground);
+  }
+
+  .manual-prose code {
+    background-color: var(--muted);
+    border-radius: var(--radius-sm);
+    padding: 0.1rem 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+  }
+
+  .manual-prose pre {
+    margin: 1.25rem 0;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background-color: var(--background-subtle);
+    padding: 1rem;
+    line-height: 1.6;
+  }
+
+  .manual-prose pre code {
+    background: none;
+    padding: 0;
+    font-size: 0.8125rem;
+  }
+
+  .manual-prose hr {
+    margin: 2rem 0;
+    border: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .manual-prose img {
+    max-width: 100%;
+    border-radius: var(--radius-xl);
+  }
+
+  /* A wide table scrolls in its own box; the page never does. */
+  .manual-table-scroll {
+    margin: 1.25rem 0;
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+  }
+
+  .manual-table-scroll table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  .manual-table-scroll th,
+  .manual-table-scroll td {
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .manual-table-scroll thead th {
+    background-color: var(--background-subtle);
+    font-weight: 600;
+  }
+
+  .manual-table-scroll tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .manual-prose-tight {
+    font-size: 0.875rem;
+    line-height: 1.65;
+  }
+
+  .manual-prose-tight p,
+  .manual-prose-tight ul,
+  .manual-prose-tight ol {
+    margin: 0.5rem 0;
+  }
+
+  /* Deep-link arrival: the row says where you landed, then settles. */
+  .hash-flash {
+    animation: hash-flash 1.8s ease-out;
+  }
+
+  @keyframes hash-flash {
+    0%,
+    35% {
+      background-color: var(--primary-muted);
+      box-shadow: 0 0 0 2px var(--primary-border);
+    }
+    100% {
+      background-color: transparent;
+      box-shadow: 0 0 0 2px transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hash-flash {
+      animation: none;
+    }
+  }
+
+  /* Flow diagrams: everything the current step does not claim recedes. */
+  .manual-flow-diagram svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .manual-flow-diagram [data-step] {
+    opacity: 0.3;
+    transition: opacity 200ms ease-out;
+  }
+
+  .manual-flow-diagram [data-step].data-step-active {
+    opacity: 1;
+  }
+
+  .manual-flow-diagram
+    [data-step].data-step-active
+    :is(path, rect, circle, ellipse, polygon) {
+    stroke: var(--primary);
+    stroke-width: 2;
+  }
+
+  .manual-flow-diagram [data-step].data-step-active text {
+    fill: var(--foreground);
+    font-weight: 600;
+  }
+}

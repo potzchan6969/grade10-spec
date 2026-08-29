@@ -1,0 +1,14 @@
+storybookBase: https://storybook.example
+
+groups:
+  Products:
+    - demo-product
+    - page-only
+  Platform:
+    - demo-shared
+
+platform:
+  - demo-topic
+
+guides:
+  - getting-started

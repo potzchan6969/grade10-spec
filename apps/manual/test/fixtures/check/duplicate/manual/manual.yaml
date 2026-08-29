@@ -1,0 +1,7 @@
+storybookBase: https://storybook.example
+
+groups:
+  Products:
+    - demo-product
+  Platform:
+    - demo-product

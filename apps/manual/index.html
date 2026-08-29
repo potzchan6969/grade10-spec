@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" class="theme-grade10">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grade10 Manual</title>
+    <!-- Inline so the tab carries a mark under any base path and nothing 404s:
+         a page of Grade10 gold lines on the app's own near-black. -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%230B0A0A'/%3E%3Cg%20fill='%23C4903D'%3E%3Crect%20x='7'%20y='9'%20width='18'%20height='3'%20rx='1.5'/%3E%3Crect%20x='7'%20y='15'%20width='18'%20height='3'%20rx='1.5'/%3E%3Crect%20x='7'%20y='21'%20width='11'%20height='3'%20rx='1.5'/%3E%3C/g%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="https://use.typekit.net/lnk7gwq.css" />
+    <script>
+      /* Pre-paint the stored mode so a reload does not flash. Key and values
+         match the ThemeProvider in src/app.tsx. */
+      try {
+        const stored = localStorage.getItem("manual-mode");
+        const dark =
+          stored === "dark" ||
+          ((!stored || stored === "system") &&
+            matchMedia("(prefers-color-scheme: dark)").matches);
+        if (dark) document.documentElement.classList.add("dark");
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
