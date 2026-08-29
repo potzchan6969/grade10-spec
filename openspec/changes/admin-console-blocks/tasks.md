@@ -57,10 +57,10 @@ Needs group 2 merged in grade10: the application repo re-points before this dele
 - [x] 8.3 Apply the same moves to the zzz admin app's pages and shell, including its dashboard's error tone (`console-blocks-SC-06`)
 - [x] 8.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 9. Delivery (grade10)
+## 9. Delivery (grade10) (owner: @sean)
 
 Needs group 3 merged in grade10-spec: the bump crosses the deletion.
 
-- [ ] 9.1 Re-point `external/grade10-spec` past the block deletion and pass `pnpm run check:submodules`, proving `console-blocks-SC-04`
-- [ ] 9.2 Record the console package as the admin block home in `docs/conventions/code-layout.md` and run `pnpm run check:handbook` for the reshaped package surface
-- [ ] 9.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
+- [x] 9.1 Re-point `external/grade10-spec` past the block deletion and pass `pnpm run check:submodules`, proving `console-blocks-SC-04`
+- [x] 9.2 Record the console package as the admin block home in `docs/conventions/code-layout.md` and run `pnpm run check:handbook` for the reshaped package surface
+- [x] 9.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
