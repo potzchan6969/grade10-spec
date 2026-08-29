@@ -42,11 +42,11 @@ Needs group 2 landed: the theme is settled before the blocks are rebuilt on it.
 
 Needs group 3 landed. Groups 4 through 7 are independent of each other.
 
-- [ ] 4.1 Move `packages/audit/admin-frontend`'s trail section onto the blocks and Astryx wherever it reaches a primitive directly (`visual-standard-SC-01`, `visual-standard-SC-06`)
-- [ ] 4.2 Move `packages/grade10-store/admin-frontend`'s order and till views onto the blocks and Astryx (`visual-standard-SC-01`, `visual-standard-SC-06`)
-- [ ] 4.3 Move the rest of `packages/grade10-auth/admin-frontend` onto the blocks and Astryx, leaving the two-factor feature as group 2 left it (`visual-standard-SC-01`)
-- [ ] 4.4 Drop the three packages' `@source` entries from both applications' `index.css` and their `@grade10/design-system` dependencies
-- [ ] 4.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 4.1 Move `packages/audit/admin-frontend`'s trail section onto the blocks and Astryx wherever it reaches a primitive directly (`visual-standard-SC-01`, `visual-standard-SC-06`)
+- [x] 4.2 Move `packages/grade10-store/admin-frontend`'s order and till views onto the blocks and Astryx (`visual-standard-SC-01`, `visual-standard-SC-06`)
+- [x] 4.3 Move the rest of `packages/grade10-auth/admin-frontend` onto the blocks and Astryx, leaving the two-factor feature as group 2 left it (`visual-standard-SC-01`)
+- [x] 4.4 Drop the three packages' `@source` entries from both applications' `index.css` and their `@grade10/design-system` dependencies
+- [x] 4.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 5. Loyalty and appointment consoles migrate (grade10)
 
