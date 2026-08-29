@@ -34,7 +34,7 @@ automatic-bidding paths without changing their policy.
 - [ ] 4.3 Make `A competing bid visibly causes an outbid state`, `A failed attempt sits beside the unchanged auction state`, and the pending/leading/outbid/won/lost/canceled standings in `Repeated activity is grouped under one listing` pass by grouping public movements and private transitions from one decision and returning the complete `bid_bidder_status` after-state on bid, provider, close, and cancellation paths.
 - [ ] 4.4 Verify every manual, automatic, refusal, provider, close, cancellation, and replay scenario in this group with `pnpm run typecheck` and `pnpm run test:backend`.
 
-## 5. Private history reads and storefront APIs (grade10)
+## 5. Private history reads and storefront APIs (grade10) (owner: @htonyl)
 
 This group depends on group 3's tables and can use seeded history facts while
 group 4 is implemented in parallel.
