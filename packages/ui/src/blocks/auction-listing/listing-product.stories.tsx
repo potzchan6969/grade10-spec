@@ -20,7 +20,9 @@ import {
   WonPaymentDueStanding,
   WonSettledStanding,
 } from "./fixtures";
-import { ListingBidPanel } from "./listing-bid-panel";
+import {
+  ListingBidPanel as ListingBidPanelComponent,
+} from "./listing-bid-panel";
 import { ListingDetails } from "./listing-details";
 import { ListingGallery } from "./listing-gallery";
 
@@ -46,7 +48,7 @@ const pageShell = (main: ReactNode, details: ReactNode) => (
 );
 
 const liveBidPanel = (
-  <ListingBidPanel
+  <ListingBidPanelComponent
     copy={{
       ends: "Ends",
       extension: "Extended bidding",
@@ -103,7 +105,7 @@ export const PreAuction: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
+        <ListingBidPanelComponent
           copy={{
             ends: "Opens",
             extension: "Extended bidding",
@@ -176,7 +178,7 @@ export const PostSold: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
+        <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
@@ -218,7 +220,7 @@ export const PostWonPaymentDue: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
+        <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
@@ -260,7 +262,7 @@ export const PostWonSettled: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
+        <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
@@ -303,7 +305,7 @@ export const PostLost: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
+        <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
@@ -346,7 +348,7 @@ export const PostUnsold: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
+        <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Result" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}

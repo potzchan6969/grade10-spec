@@ -36,7 +36,7 @@ function formatRemaining(seconds: number) {
   return `${days}D ${hours}H ${minutes}M ${seconds % 60}S`;
 }
 
-function Countdown({
+function CountdownPreview({
   initialSeconds,
   replayBelowSeconds = 0,
   extensionStarted = false,
@@ -93,18 +93,18 @@ function Countdown({
 
 /** A standard live-auction countdown. */
 export const Countdown: Story = {
-  render: () => <Countdown initialSeconds={15 * 60} />,
+  render: () => <CountdownPreview initialSeconds={15 * 60} />,
 };
 
 /** Starts within the 30-minute extension evaluation window. */
 export const CountdownFrom30m: Story = {
-  render: () => <Countdown initialSeconds={30 * 60} />,
+  render: () => <CountdownPreview initialSeconds={30 * 60} />,
 };
 
 /** Replays three seconds after the day value drops to zero. */
 export const CountdownFrom1d5s: Story = {
   render: () => (
-    <Countdown
+    <CountdownPreview
       initialSeconds={DAY_SECONDS + 5}
       replayBelowSeconds={DAY_SECONDS}
     />
@@ -114,7 +114,7 @@ export const CountdownFrom1d5s: Story = {
 /** Replays three seconds after the hour value drops to zero. */
 export const CountdownFrom1h5s: Story = {
   render: () => (
-    <Countdown
+    <CountdownPreview
       initialSeconds={HOUR_SECONDS + 5}
       replayBelowSeconds={HOUR_SECONDS}
     />
@@ -123,15 +123,15 @@ export const CountdownFrom1h5s: Story = {
 
 /** Replays three seconds after reaching zero. */
 export const CountdownFrom5s: Story = {
-  render: () => <Countdown initialSeconds={5} />,
+  render: () => <CountdownPreview initialSeconds={5} />,
 };
 
 /** A normal countdown after an extension has started. */
 export const CountdownFrom15mAfterExtension: Story = {
-  render: () => <Countdown initialSeconds={15 * 60} extensionStarted />,
+  render: () => <CountdownPreview initialSeconds={15 * 60} extensionStarted />,
 };
 
 /** Replays three seconds after zero during extended bidding. */
 export const CountdownFrom5sAfterExtension: Story = {
-  render: () => <Countdown initialSeconds={5} extensionStarted />,
+  render: () => <CountdownPreview initialSeconds={5} extensionStarted />,
 };
