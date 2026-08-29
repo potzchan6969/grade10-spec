@@ -48,7 +48,7 @@ Needs group 3 landed. Groups 4 through 7 are independent of each other.
 - [x] 4.4 Drop the three packages' `@source` entries from both applications' `index.css` and their `@grade10/design-system` dependencies
 - [x] 4.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 5. Loyalty and appointment consoles migrate (grade10)
+## 5. Loyalty and appointment consoles migrate (grade10) (owner: @sean)
 
 Needs group 3 landed.
 
