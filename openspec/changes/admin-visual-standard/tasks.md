@@ -4,7 +4,7 @@ Every group is in the `grade10` clone. Nothing here is work in grade10-spec:
 no design-system component, variant, or token changes, so there is no
 submodule bump and no grade10-spec group.
 
-## 1. The runtime, the theme, and the stylesheets land (grade10)
+## 1. The runtime, the theme, and the stylesheets land (grade10) (owner: @sean)
 
 Unblocked: `admin-console-blocks` archived as
 `2026-08-29-admin-console-blocks`, so the markup this change migrates has
