@@ -61,10 +61,10 @@ Needs group 3 landed.
 
 Needs group 3 landed.
 
-- [ ] 6.1 Move `packages/vault/admin-frontend`'s custody panels — case queue, timeline, payouts, documents — onto the blocks and Astryx (`visual-standard-SC-01`, `visual-standard-SC-06`)
-- [ ] 6.2 Move the custody surfaces' panel switches onto Astryx's `TabList` and their row filters onto `SegmentedControl`, keeping the panel announced as tabs and the selected filter option announced (`visual-standard-SC-07`)
-- [ ] 6.3 Drop the package's `@source` entry and `@grade10/design-system` dependency
-- [ ] 6.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 6.1 Move `packages/vault/admin-frontend`'s custody panels — case queue, timeline, payouts, documents — onto the blocks and Astryx (`visual-standard-SC-01`, `visual-standard-SC-06`)
+- [x] 6.2 Move the custody surfaces' panel switches onto Astryx's `TabList` and their row filters onto `SegmentedControl`, keeping the panel announced as tabs and the selected filter option announced (`visual-standard-SC-07`)
+- [x] 6.3 Drop the package's `@source` entry and `@grade10/design-system` dependency
+- [x] 6.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 7. Auction console migrates (grade10)
 
