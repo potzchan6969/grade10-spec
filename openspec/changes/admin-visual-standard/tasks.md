@@ -52,10 +52,10 @@ Needs group 3 landed. Groups 4 through 7 are independent of each other.
 
 Needs group 3 landed.
 
-- [ ] 5.1 Move `packages/loyalty/admin-frontend`'s programme surfaces onto the blocks and Astryx, keeping amounts naming their ISO 4217 code (`visual-standard-SC-01`, `visual-standard-SC-06`)
-- [ ] 5.2 Move `packages/appointment/admin-frontend`'s diary panels onto the blocks and Astryx (`visual-standard-SC-01`, `visual-standard-SC-06`)
-- [ ] 5.3 Drop both packages' `@source` entries and `@grade10/design-system` dependencies
-- [ ] 5.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 5.1 Move `packages/loyalty/admin-frontend`'s programme surfaces onto the blocks and Astryx, keeping amounts naming their ISO 4217 code (`visual-standard-SC-01`, `visual-standard-SC-06`)
+- [x] 5.2 Move `packages/appointment/admin-frontend`'s diary panels onto the blocks and Astryx (`visual-standard-SC-01`, `visual-standard-SC-06`)
+- [x] 5.3 Drop both packages' `@source` entries and `@grade10/design-system` dependencies
+- [x] 5.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 6. Vault console migrates (grade10)
 
