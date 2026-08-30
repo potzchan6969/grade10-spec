@@ -4,81 +4,69 @@ import { StatusIndicator } from "@grade10/design-system/components/display/statu
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { useEffect, useState } from "react";
-import { BidHistoryList } from "../bid-history-list";
-import {
-  appendSimulatedBid,
-  bidHistoryForState,
-  stateMeta,
-} from "../fixtures";
-import { auctionHeaderLabel } from "../state-utils";
-import type { BidHistoryRow, BidMode, BiddingState } from "../types";
 import {
   BidActions,
   PriceBlock,
+  StandingBanner,
   TimeBlock,
-} from "./shared-fields";
+  type ListingAuctionBidFieldsCopy,
+} from "./listing-auction-bid-fields";
+import { ListingBidHistoryList } from "./listing-bid-history-list";
+import type { ListingAuctionBidView, ListingBidHistoryRow } from "./types";
 
-const LIVE_BID_INTERVAL_MS = 8_000;
+type ListingAuctionBidCardCopy = ListingAuctionBidFieldsCopy & {
+  recentBids: string;
+  bidHistory: {
+    leading?: string;
+    you?: string;
+    empty?: string;
+  };
+};
 
-type AuctionBidCardProps = {
-  state: BiddingState;
-  bidMode: BidMode;
-  onBidModeChange: (mode: BidMode) => void;
+type ListingAuctionBidCardProps = {
+  copy: ListingAuctionBidCardCopy;
+  view: ListingAuctionBidView;
+  history: readonly ListingBidHistoryRow[];
+  historyResetKey?: string;
+  bidMode: "manual" | "auto";
+  onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
 };
 
-function AuctionBidCard({
-  state,
+function ListingAuctionBidCard({
+  copy,
+  view,
+  history,
+  historyResetKey,
   bidMode,
   onBidModeChange,
   onPlaceBid,
-}: AuctionBidCardProps) {
-  const meta = stateMeta(state);
-  const [history, setHistory] = useState<readonly BidHistoryRow[]>(() =>
-    bidHistoryForState(state),
-  );
-
-  useEffect(() => {
-    setHistory(bidHistoryForState(state));
-  }, [state]);
-
-  useEffect(() => {
-    if (!meta.live) return;
-
-    const timer = window.setInterval(() => {
-      setHistory((rows) => {
-        if (rows.length === 0) return rows;
-        return appendSimulatedBid(rows);
-      });
-    }, LIVE_BID_INTERVAL_MS);
-
-    return () => window.clearInterval(timer);
-  }, [meta.live]);
-
+}: ListingAuctionBidCardProps) {
   return (
-    <Card className="w-full gap-0" data-slot="auction-bid-card" padding={false}>
+    <Card className="w-full gap-0" data-slot="listing-auction-bid-card" padding={false}>
       <HStack
         className="w-full border-b border-border px-4 py-2"
         gap="sm"
         vAlign="center"
       >
-        {meta.live ? (
+        {view.live ? (
           <LiveAuctionDot />
         ) : (
           <StatusIndicator variant="default" />
         )}
         <Text size="sm" weight="medium">
-          {auctionHeaderLabel(state)}
+          {view.headerLabel}
         </Text>
       </HStack>
 
+      <StandingBanner copy={copy} view={view} />
+
       <div className="grid w-full grid-cols-2 border-b border-border">
         <div className="border-r border-border px-4 py-3">
-          <PriceBlock state={state} />
+          <PriceBlock copy={copy} view={view} />
         </div>
         <div className="px-4 py-3">
-          <TimeBlock state={state} />
+          <TimeBlock copy={copy} view={view} />
         </div>
       </div>
 
@@ -88,34 +76,36 @@ function AuctionBidCard({
           gap="sm"
         >
           <HStack gap="xs" vAlign="center">
-            <ChartLineUp
-              aria-hidden
-              className="text-secondary-foreground"
-              size={14}
-            />
+            <span className="text-secondary-foreground">
+              <ChartLineUp aria-hidden size={14} />
+            </span>
             <Text
               className="text-secondary-foreground"
               size="sm"
               tone="secondary"
               weight="medium"
             >
-              Recent Bids
+              {copy.recentBids}
             </Text>
           </HStack>
-          <BidHistoryList heading="" resetKey={state} rows={history} />
+          <ListingBidHistoryList
+            copy={copy.bidHistory}
+            heading=""
+            resetKey={historyResetKey}
+            rows={history}
+          />
         </VStack>
       ) : null}
-
 
       <div className="px-4 py-4">
         <BidActions
           bidMode={bidMode}
+          copy={copy}
           onBidModeChange={onBidModeChange}
           onPlaceBid={onPlaceBid}
-          state={state}
+          view={view}
         />
       </div>
-
     </Card>
   );
 }
@@ -134,4 +124,5 @@ function LiveAuctionDot() {
   );
 }
 
-export { AuctionBidCard };
+export type { ListingAuctionBidCardCopy, ListingAuctionBidCardProps };
+export { ListingAuctionBidCard };

@@ -4,16 +4,16 @@ import {
   avatarInitial,
 } from "@grade10/design-system/components/display/avatar";
 
-type BidderInitialAvatarProps = {
+type ListingBidderAvatarProps = {
   /** Email or display label — one uppercase initial is shown. */
   initials: string;
   size?: "sm" | "md";
 };
 
-function BidderInitialAvatar({
+function ListingBidderAvatar({
   initials,
   size = "sm",
-}: BidderInitialAvatarProps) {
+}: ListingBidderAvatarProps) {
   return (
     <Avatar size={size === "sm" ? "sm" : "md"}>
       <AvatarFallback aria-hidden>{avatarInitial(initials)}</AvatarFallback>
@@ -21,4 +21,5 @@ function BidderInitialAvatar({
   );
 }
 
-export { BidderInitialAvatar };
+export type { ListingBidderAvatarProps };
+export { ListingBidderAvatar };

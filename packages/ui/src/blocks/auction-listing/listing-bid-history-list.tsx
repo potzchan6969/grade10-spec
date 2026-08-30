@@ -4,25 +4,39 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { BidderInitialAvatar } from "./bidder-initial-avatar";
+import { ListingBidderAvatar } from "./listing-bidder-avatar";
 import { formatUsd } from "./format-usd";
-import type { BidHistoryRow } from "./types";
-import "./bid-history-list.css";
+import type { ListingBidHistoryRow } from "./types";
+import "./listing-bid-history-list.css";
 
-type BidHistoryListProps = {
-  rows: readonly BidHistoryRow[];
+type ListingBidHistoryListCopy = {
+  leading?: string;
+  you?: string;
+  empty?: string;
+};
+
+type ListingBidHistoryListProps = {
+  copy?: ListingBidHistoryListCopy;
+  rows: readonly ListingBidHistoryRow[];
   heading?: string;
   /** Resets entrance animation when the bidding lifecycle changes. */
   resetKey?: string;
 };
 
 type BidHistoryRowItemProps = {
-  row: BidHistoryRow;
+  copy: ListingBidHistoryListCopy;
+  row: ListingBidHistoryRow;
   animateEnter: boolean;
   useEnterWrapper: boolean;
 };
 
-function BidHistoryRowContent({ row }: { row: BidHistoryRow }) {
+function BidHistoryRowContent({
+  copy,
+  row,
+}: {
+  copy: ListingBidHistoryListCopy;
+  row: ListingBidHistoryRow;
+}) {
   return (
     <HStack
       className="w-full py-2"
@@ -31,16 +45,16 @@ function BidHistoryRowContent({ row }: { row: BidHistoryRow }) {
       vAlign="center"
     >
       <HStack gap="sm" vAlign="center">
-        <BidderInitialAvatar initials={row.initials} />
+        <ListingBidderAvatar initials={row.initials} />
         <Text size="sm">{formatUsd(row.amountMinor)}</Text>
         {row.leading ? (
           <Badge size="sm" variant="outline">
-            Leading
+            {copy.leading ?? "Leading"}
           </Badge>
         ) : null}
         {row.isViewer && !row.leading ? (
           <Badge size="sm" variant="outline">
-            You
+            {copy.you ?? "You"}
           </Badge>
         ) : null}
       </HStack>
@@ -52,6 +66,7 @@ function BidHistoryRowContent({ row }: { row: BidHistoryRow }) {
 }
 
 function BidHistoryRowItem({
+  copy,
   row,
   animateEnter,
   useEnterWrapper,
@@ -66,7 +81,7 @@ function BidHistoryRowItem({
   }, [animateEnter]);
 
   if (!useEnterWrapper) {
-    return <BidHistoryRowContent row={row} />;
+    return <BidHistoryRowContent copy={copy} row={row} />;
   }
 
   return (
@@ -77,18 +92,19 @@ function BidHistoryRowItem({
     >
       <div className="bid-history-enter__inner">
         <div className="bid-history-enter__content">
-          <BidHistoryRowContent row={row} />
+          <BidHistoryRowContent copy={copy} row={row} />
         </div>
       </div>
     </div>
   );
 }
 
-function BidHistoryList({
+function ListingBidHistoryList({
+  copy = {},
   rows,
   heading = "Recent bids",
   resetKey,
-}: BidHistoryListProps) {
+}: ListingBidHistoryListProps) {
   const knownIdsRef = useRef<Set<string>>(new Set());
   const skipEntranceRef = useRef(true);
   const [enteredIds, setEnteredIds] = useState<ReadonlySet<string>>(
@@ -128,7 +144,7 @@ function BidHistoryList({
   if (rows.length === 0) {
     return (
       <Text size="sm" tone="secondary">
-        No bids yet.
+        {copy.empty ?? "No bids yet."}
       </Text>
     );
   }
@@ -144,6 +160,7 @@ function BidHistoryList({
         {rows.map((row) => (
           <BidHistoryRowItem
             animateEnter={row.id === enteringId}
+            copy={copy}
             key={row.id}
             row={row}
             useEnterWrapper={enteredIds.has(row.id)}
@@ -154,4 +171,5 @@ function BidHistoryList({
   );
 }
 
-export { BidHistoryList };
+export type { ListingBidHistoryListCopy, ListingBidHistoryListProps };
+export { ListingBidHistoryList };

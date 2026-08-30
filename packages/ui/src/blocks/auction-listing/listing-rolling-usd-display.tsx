@@ -1,12 +1,12 @@
 import { useLayoutEffect, useRef } from "react";
-import { RollingDigit } from "./digit-pop-in";
+import { RollingDigit } from "./listing-countdown-digit";
 import { formatUsd, formatUsdNumeric } from "./format-usd";
 
-type RollingUsdDisplayProps = {
+type ListingRollingUsdDisplayProps = {
   amountMinor: number;
 };
 
-function RollingUsdDisplay({ amountMinor }: RollingUsdDisplayProps) {
+function ListingRollingUsdDisplay({ amountMinor }: ListingRollingUsdDisplayProps) {
   const prevMinorRef = useRef(amountMinor);
   const shouldAnimate = amountMinor > prevMinorRef.current;
   const formatted = formatUsdNumeric(amountMinor);
@@ -39,4 +39,5 @@ function RollingUsdDisplay({ amountMinor }: RollingUsdDisplayProps) {
   );
 }
 
-export { RollingUsdDisplay };
+export type { ListingRollingUsdDisplayProps };
+export { ListingRollingUsdDisplay };

@@ -22,7 +22,21 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { CaretDown } from "@phosphor-icons/react";
 import { useState } from "react";
 
-type AgeVerificationDialogProps = {
+type ListingAgeVerificationDialogCopy = {
+  title: string;
+  body: string;
+  monthPlaceholder: string;
+  dayPlaceholder: string;
+  yearPlaceholder: string;
+  birthMonthLabel: string;
+  birthDayLabel: string;
+  birthYearLabel: string;
+  cancel: string;
+  confirm: string;
+};
+
+type ListingAgeVerificationDialogProps = {
+  copy: ListingAgeVerificationDialogCopy;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
@@ -96,11 +110,12 @@ function DobCombobox({
   );
 }
 
-function AgeVerificationDialog({
+function ListingAgeVerificationDialog({
+  copy,
   open,
   onOpenChange,
   onConfirm,
-}: AgeVerificationDialogProps) {
+}: ListingAgeVerificationDialogProps) {
   const [month, setMonth] = useState<string | undefined>();
   const [day, setDay] = useState<string | undefined>();
   const [year, setYear] = useState<string | undefined>();
@@ -114,34 +129,31 @@ function AgeVerificationDialog({
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent showCloseButton>
         <DialogHeader showCloseButton={false}>
-          <DialogTitle>Verify your age</DialogTitle>
+          <DialogTitle>{copy.title}</DialogTitle>
         </DialogHeader>
         <DialogBody>
           <VStack gap="md">
-            <Text as="p">
-              You must be 18 or older to bid. Enter your date of birth to
-              continue.
-            </Text>
+            <Text as="p">{copy.body}</Text>
             <HStack className="w-full" gap="sm">
               <DobCombobox
-                aria-label="Birth month"
+                aria-label={copy.birthMonthLabel}
                 onValueChange={setMonth}
                 options={MONTHS}
-                placeholder="Month"
+                placeholder={copy.monthPlaceholder}
                 value={month}
               />
               <DobCombobox
-                aria-label="Birth day"
+                aria-label={copy.birthDayLabel}
                 onValueChange={setDay}
                 options={days}
-                placeholder="Day"
+                placeholder={copy.dayPlaceholder}
                 value={day}
               />
               <DobCombobox
-                aria-label="Birth year"
+                aria-label={copy.birthYearLabel}
                 onValueChange={setYear}
                 options={years}
-                placeholder="Year"
+                placeholder={copy.yearPlaceholder}
                 value={year}
               />
             </HStack>
@@ -149,7 +161,7 @@ function AgeVerificationDialog({
         </DialogBody>
         <DialogFooter>
           <Button onClick={() => onOpenChange(false)} variant="outline">
-            Cancel
+            {copy.cancel}
           </Button>
           <Button
             onClick={() => {
@@ -157,7 +169,7 @@ function AgeVerificationDialog({
               onOpenChange(false);
             }}
           >
-            Confirm
+            {copy.confirm}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -165,4 +177,8 @@ function AgeVerificationDialog({
   );
 }
 
-export { AgeVerificationDialog };
+export type {
+  ListingAgeVerificationDialogCopy,
+  ListingAgeVerificationDialogProps,
+};
+export { ListingAgeVerificationDialog };

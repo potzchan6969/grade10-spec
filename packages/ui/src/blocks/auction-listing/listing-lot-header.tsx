@@ -7,20 +7,37 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { Bell, BellSlash } from "@phosphor-icons/react";
-import { LOT } from "../fixtures";
 
-type SidebarHeaderProps = {
+type ListingLotHeaderCopy = {
+  auctionBreadcrumb: string;
+  lotBreadcrumb: string;
+  watch: string;
+  watching: string;
+  watchAriaLabel: string;
+  unwatchAriaLabel: string;
+};
+
+type ListingLotHeaderProps = {
+  copy: ListingLotHeaderCopy;
+  title: string;
+  auctionHref?: string;
   watched?: boolean;
   onWatchToggle?: () => void;
 };
 
-function SidebarHeader({ watched = false, onWatchToggle }: SidebarHeaderProps) {
+function ListingLotHeader({
+  copy,
+  title,
+  auctionHref = "#auction",
+  watched = false,
+  onWatchToggle,
+}: ListingLotHeaderProps) {
   return (
-    <VStack className="w-full" data-slot="lot-page-header" gap="md">
+    <VStack className="w-full" data-slot="listing-lot-header" gap="md">
       <Breadcrumbs>
-        <BreadcrumbItem href="#auction">Auction</BreadcrumbItem>
+        <BreadcrumbItem href={auctionHref}>{copy.auctionBreadcrumb}</BreadcrumbItem>
         <BreadcrumbSeparator />
-        <BreadcrumbItem current>Lot {LOT.listingNumber}</BreadcrumbItem>
+        <BreadcrumbItem current>{copy.lotBreadcrumb}</BreadcrumbItem>
       </Breadcrumbs>
       <HStack
         className="w-full"
@@ -29,10 +46,10 @@ function SidebarHeader({ watched = false, onWatchToggle }: SidebarHeaderProps) {
         vAlign="center"
       >
         <h1 className="min-w-0 text-3xl font-semibold leading-9 text-foreground">
-          {LOT.title}
+          {title}
         </h1>
         <Button
-          aria-label={watched ? "Unwatch this lot" : "Watch this lot"}
+          aria-label={watched ? copy.unwatchAriaLabel : copy.watchAriaLabel}
           className="shrink-0"
           leading={
             watched ? (
@@ -45,11 +62,12 @@ function SidebarHeader({ watched = false, onWatchToggle }: SidebarHeaderProps) {
           size="md"
           variant="outline"
         >
-          {watched ? "Watching" : "Watch"}
+          {watched ? copy.watching : copy.watch}
         </Button>
       </HStack>
     </VStack>
   );
 }
 
-export { SidebarHeader };
+export type { ListingLotHeaderCopy, ListingLotHeaderProps };
+export { ListingLotHeader };

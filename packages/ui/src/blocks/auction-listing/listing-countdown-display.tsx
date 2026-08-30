@@ -3,19 +3,17 @@ import {
   countdownParts,
   formatAccessibleText,
   RollingCountdown,
-} from "./digit-pop-in";
+} from "./listing-countdown-digit";
 
-type CountdownFormat = "short" | "long";
-
-type CountdownDisplayProps = {
+type ListingCountdownDisplayProps = {
   initialSeconds: number;
-  format?: CountdownFormat;
+  format?: "short" | "long";
 };
 
-function CountdownDisplay({
+function ListingCountdownDisplay({
   initialSeconds,
   format = "short",
-}: CountdownDisplayProps) {
+}: ListingCountdownDisplayProps) {
   const [seconds, setSeconds] = useState(initialSeconds);
 
   useEffect(() => {
@@ -40,4 +38,5 @@ function CountdownDisplay({
   );
 }
 
-export { CountdownDisplay };
+export type { ListingCountdownDisplayProps };
+export { ListingCountdownDisplay };

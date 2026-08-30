@@ -11,96 +11,108 @@ import {
   TooltipTrigger,
 } from "@grade10/design-system/components/overlays/tooltip";
 import { Info } from "@phosphor-icons/react";
-import type { BiddingState } from "../types";
+import { formatUsd } from "./format-usd";
+import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
+import { ListingCountdownDisplay } from "./listing-countdown-display";
 import {
-  AUTO_BIDDING_TOOLTIP,
-  BUYER_FEE_HINT,
-  LOT,
-  stateMeta,
-} from "../fixtures";
-import { formatUsd } from "../format-usd";
-import { RollingUsdDisplay } from "../rolling-usd-display";
-import { CountdownDisplay } from "../countdown-display";
-import { AutoBidReveal } from "../auto-bid-reveal";
-import {
-  AutoBidControls,
-  ManualBidControls,
-} from "./manual-bid-controls";
+  ListingAutoBidControls,
+  ListingManualBidControls,
+} from "./listing-manual-bid-controls";
+import { ListingRollingUsdDisplay } from "./listing-rolling-usd-display";
+import type { ListingAuctionBidView } from "./types";
 
-const AUTO_EXTENDED_TOOLTIP =
-  "Bids placed in the final 30 minutes extend the auction by 30 minutes.";
-
-type StandingBannerProps = {
-  state: BiddingState;
+type ListingAuctionBidFieldsCopy = {
+  auctionWon: string;
+  paymentDue: string;
+  paymentDueBody: string;
+  payInvoice: string;
+  didNotWin: string;
+  cardRelease: string;
+  outbid: string;
+  highestBid: string;
+  yourMaximum: string;
+  opensIn: string;
+  closed: string;
+  timeLeftAutoExtended: string;
+  autoExtendedTooltip: string;
+  placeBidSection: string;
+  placeBid: string;
+  enableAutoBidding: string;
+  autoBiddingTooltip: string;
+  buyerFeeHint: string;
+  bidCountZero: string;
 };
 
-function StandingBanner({ state }: StandingBannerProps) {
-  const meta = stateMeta(state);
+type StandingBannerProps = {
+  copy: ListingAuctionBidFieldsCopy;
+  view: ListingAuctionBidView;
+};
 
-  if (meta.isWinner && state === "closed-won-payment-due") {
+function StandingBanner({ copy, view }: StandingBannerProps) {
+  if (view.standing === "won-payment-due") {
     return (
       <VStack
         className="w-full border-b border-border bg-muted/50 px-4 py-4"
         gap="sm"
       >
-        <Badge variant="success">Auction won</Badge>
-        <Text weight="medium">Payment due</Text>
-        <Text size="sm" tone="secondary">
-          Please pay your invoice to complete this purchase.
-        </Text>
-        <Button onClick={() => undefined}>Pay Invoice</Button>
+        <Badge variant="success">{copy.auctionWon}</Badge>
+        <Text weight="medium">{copy.paymentDue}</Text>
+        <Text size="sm" tone="secondary">{copy.paymentDueBody}</Text>
+        <Button onClick={() => undefined}>{copy.payInvoice}</Button>
       </VStack>
     );
   }
 
-  if (meta.isWinner && state === "closed-won-settled") {
-    return <Badge variant="success">Auction won</Badge>;
+  if (view.standing === "won-settled") {
+    return <Badge variant="success">{copy.auctionWon}</Badge>;
   }
 
-  if (meta.isLoser) {
+  if (view.standing === "lost") {
     return (
       <VStack
         className="w-full border-b border-border bg-muted/50 px-4 py-4"
         gap="xs"
       >
-        <Badge variant="warning">Did not win</Badge>
-        <Text size="sm" tone="secondary">
-          Your card authorization will be released.
-        </Text>
+        <Badge variant="warning">{copy.didNotWin}</Badge>
+        <Text size="sm" tone="secondary">{copy.cardRelease}</Text>
       </VStack>
     );
   }
 
-  if (meta.isOutbid) {
+  if (view.standing === "outbid") {
     return (
       <HStack
         className="w-full border-b border-border px-4 py-3"
         hAlign="space-between"
         vAlign="center"
       >
-        <Text size="sm">Your maximum: {formatUsd(LOT.viewerMaximumMinor ?? 0)}</Text>
-        <Badge variant="warning">Outbid</Badge>
+        <Text size="sm">
+          {copy.yourMaximum}: {formatUsd(view.viewerMaximumMinor ?? 0)}
+        </Text>
+        <Badge variant="warning">{copy.outbid}</Badge>
       </HStack>
     );
   }
 
-  if (meta.isLeading && meta.showMaximum) {
+  if (view.standing === "leading-max") {
     return (
       <HStack
         className="w-full border-b border-border px-4 py-3"
         hAlign="space-between"
         vAlign="center"
       >
-        <Text size="sm">Your maximum: {formatUsd(LOT.viewerMaximumMinor ?? 0)}</Text>
-        <Badge variant="success">Highest bid</Badge>
+        <Text size="sm">
+          {copy.yourMaximum}: {formatUsd(view.viewerMaximumMinor ?? 0)}
+        </Text>
+        <Badge variant="success">{copy.highestBid}</Badge>
       </HStack>
     );
   }
 
-  if (meta.isLeading && state === "live-manual") {
+  if (view.standing === "leading-manual") {
     return (
       <div className="w-full border-b border-border px-4 py-3">
-        <Badge variant="success">Highest bid</Badge>
+        <Badge variant="success">{copy.highestBid}</Badge>
       </div>
     );
   }
@@ -109,12 +121,11 @@ function StandingBanner({ state }: StandingBannerProps) {
 }
 
 type PriceBlockProps = {
-  state: BiddingState;
+  copy: ListingAuctionBidFieldsCopy;
+  view: ListingAuctionBidView;
 };
 
-function PriceBlock({ state }: PriceBlockProps) {
-  const meta = stateMeta(state);
-
+function PriceBlock({ copy, view }: PriceBlockProps) {
   return (
     <VStack gap="xs">
       <Text
@@ -123,54 +134,49 @@ function PriceBlock({ state }: PriceBlockProps) {
         tone="secondary"
         weight="medium"
       >
-        {meta.priceLabel}
+        {view.priceLabel}
       </Text>
       <Text as="p" className="text-2xl font-medium leading-8">
-        {meta.isUnsold ? (
+        {view.isUnsold ? (
           "Unsold"
         ) : (
-          <RollingUsdDisplay amountMinor={meta.currentBidMinor} />
+          <ListingRollingUsdDisplay amountMinor={view.currentBidMinor} />
         )}
       </Text>
-      {meta.hasBids ? (
-        <Text size="xs" tone="secondary">
-          {meta.bidCount} bid{meta.bidCount === 1 ? "" : "s"}
-        </Text>
+      {view.hasBids ? (
+        <Text size="xs" tone="secondary">{view.bidCountLabel}</Text>
       ) : (
-        <Text size="xs" tone="secondary">
-          0 bids
-        </Text>
+        <Text size="xs" tone="secondary">{copy.bidCountZero}</Text>
       )}
     </VStack>
   );
 }
 
 type TimeBlockProps = {
-  state: BiddingState;
+  copy: ListingAuctionBidFieldsCopy;
+  view: ListingAuctionBidView;
 };
 
-function TimeBlock({ state }: TimeBlockProps) {
-  const meta = stateMeta(state);
-
+function TimeBlock({ copy, view }: TimeBlockProps) {
   return (
     <VStack gap="xs">
-      {meta.opens ? (
+      {view.opens ? (
         <Text
           className="text-secondary-foreground"
           size="sm"
           tone="secondary"
           weight="medium"
         >
-          Opens in
+          {copy.opensIn}
         </Text>
-      ) : meta.closed ? (
+      ) : view.closed ? (
         <Text
           className="text-secondary-foreground"
           size="sm"
           tone="secondary"
           weight="medium"
         >
-          Closed
+          {copy.closed}
         </Text>
       ) : (
         <HStack gap="xs" vAlign="center">
@@ -180,56 +186,59 @@ function TimeBlock({ state }: TimeBlockProps) {
             tone="secondary"
             weight="medium"
           >
-            Time left (auto-extended)
+            {copy.timeLeftAutoExtended}
           </Text>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger
-                aria-label="Auto-extended bidding rules"
+                aria-label={copy.autoExtendedTooltip}
                 className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
                 render={<Info aria-hidden size={12} />}
               />
-              <TooltipContent>{AUTO_EXTENDED_TOOLTIP}</TooltipContent>
+              <TooltipContent>{copy.autoExtendedTooltip}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </HStack>
       )}
       <Text as="p" className="text-2xl font-medium leading-8">
-        {meta.countdownSeconds != null ? (
-          <CountdownDisplay
-            format={meta.countdownFormat}
-            initialSeconds={meta.countdownSeconds}
+        {view.countdownSeconds != null ? (
+          <ListingCountdownDisplay
+            format={view.countdownFormat}
+            initialSeconds={view.countdownSeconds}
           />
         ) : (
-          meta.countdown
+          view.countdown
         )}
       </Text>
-      {meta.deadline ? (
-        <Text size="xs" tone="secondary">
-          {meta.deadline}
-        </Text>
+      {view.deadline ? (
+        <Text size="xs" tone="secondary">{view.deadline}</Text>
       ) : null}
     </VStack>
   );
 }
 
 type BidActionsProps = {
-  state: BiddingState;
+  copy: ListingAuctionBidFieldsCopy;
+  view: ListingAuctionBidView;
   bidMode: "manual" | "auto";
   onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
 };
 
 function BidActions({
-  state,
+  copy,
+  view,
   bidMode,
   onBidModeChange,
   onPlaceBid,
 }: BidActionsProps) {
-  const meta = stateMeta(state);
-  if (!meta.showBidActions) return null;
+  if (!view.showBidActions) return null;
 
   const autoBidEnabled = bidMode === "auto";
+  const manualCopy = {
+    bidAmountLabel: copy.placeBidSection,
+    maximumLabel: copy.yourMaximum,
+  };
 
   return (
     <VStack className="w-full" gap="md">
@@ -240,12 +249,17 @@ function BidActions({
           tone="secondary"
           weight="medium"
         >
-          Place a bid
+          {copy.placeBidSection}
         </Text>
         <HStack className="w-full" gap="sm" vAlign="start">
-          <ManualBidControls hideLabel state={state} />
+          <ListingManualBidControls
+            copy={manualCopy}
+            hideLabel
+            incrementMinor={view.incrementMinor}
+            minBidMinor={view.minBidMinor}
+          />
           <Button className="shrink-0" onClick={onPlaceBid} size="md">
-            Place Bid
+            {copy.placeBid}
           </Button>
         </HStack>
       </VStack>
@@ -259,33 +273,32 @@ function BidActions({
           size="sm"
         >
           <span className="inline-flex min-w-0 flex-1 items-center gap-1">
-            Enable auto-bidding
+            {copy.enableAutoBidding}
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger
-                  aria-label="Auto-bidding rules"
+                  aria-label={copy.autoBiddingTooltip}
                   className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
                   onPointerDown={(event) => event.preventDefault()}
                   render={<Info aria-hidden size={12} />}
                 />
-                <TooltipContent>{AUTO_BIDDING_TOOLTIP}</TooltipContent>
+                <TooltipContent>{copy.autoBiddingTooltip}</TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </span>
         </CheckboxListInput>
-        <AutoBidReveal open={autoBidEnabled}>
-          <AutoBidControls state={state} />
-        </AutoBidReveal>
+        <ListingAutoBidReveal open={autoBidEnabled}>
+          <ListingAutoBidControls
+            copy={{ maximumLabel: copy.yourMaximum }}
+            suggestedMaxMinor={view.suggestedMaxMinor}
+          />
+        </ListingAutoBidReveal>
       </VStack>
 
-      <Text size="xs" tone="secondary">{BUYER_FEE_HINT}</Text>
+      <Text size="xs" tone="secondary">{copy.buyerFeeHint}</Text>
     </VStack>
   );
 }
 
-export {
-  BidActions,
-  PriceBlock,
-  StandingBanner,
-  TimeBlock,
-};
+export type { ListingAuctionBidFieldsCopy };
+export { BidActions, PriceBlock, StandingBanner, TimeBlock };

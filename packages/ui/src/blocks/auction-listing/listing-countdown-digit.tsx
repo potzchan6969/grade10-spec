@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import "./digit-pop-in.css";
+import "./listing-countdown-digit.css";
 
 type CountdownPart = {
   value: number;

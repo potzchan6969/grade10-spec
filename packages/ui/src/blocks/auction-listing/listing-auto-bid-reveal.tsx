@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
-import "./auto-bid-reveal.css";
+import "./listing-auto-bid-reveal.css";
 
-type AutoBidRevealProps = {
+type ListingAutoBidRevealProps = {
   open: boolean;
   children: ReactNode;
 };
 
-function AutoBidReveal({ open, children }: AutoBidRevealProps) {
+function ListingAutoBidReveal({ open, children }: ListingAutoBidRevealProps) {
   return (
     <div className="auto-bid-reveal" data-open={open || undefined}>
       <div className="auto-bid-reveal-inner" inert={open ? undefined : true}>
@@ -16,4 +16,5 @@ function AutoBidReveal({ open, children }: AutoBidRevealProps) {
   );
 }
 
-export { AutoBidReveal };
+export type { ListingAutoBidRevealProps };
+export { ListingAutoBidReveal };
