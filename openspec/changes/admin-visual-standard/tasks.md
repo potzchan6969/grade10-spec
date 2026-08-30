@@ -88,8 +88,8 @@ Needs groups 4 through 7 landed: the pages compose migrated consoles before the 
 
 ## 9. The standard is closed and held (grade10) (owner: @sean)
 
-- [ ] 9.1 Narrow both `index.css` files to the design-system and `packages/ui` `@source` entries the two-factor block still needs, and confirm no other admin source is listed
-- [ ] 9.2 Add the lint rule allowing `@astryxdesign/*` imports only from `packages/frontend-console/src` and the two application roots, so no admin surface takes a dependency the revert route cannot undo (`visual-standard-SC-10`)
-- [ ] 9.3 Record the vocabulary, the pin, the theme mechanism, and the revert route in `docs/conventions/code-layout.md` and `docs/architecture/multi-product.md`, and run `pnpm run check:handbook` for the reshaped console package surface
-- [ ] 9.4 Confirm no admin surface renders a design-system component outside the two-factor block, closing `visual-standard-SC-01`
-- [ ] 9.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
+- [x] 9.1 Narrow both `index.css` files to the design-system and `packages/ui` `@source` entries the two-factor block still needs, and confirm no other admin source is listed
+- [x] 9.2 Add the lint rule allowing `@astryxdesign/*` imports only from `packages/frontend-console/src` and the two application roots, so no admin surface takes a dependency the revert route cannot undo (`visual-standard-SC-10`)
+- [x] 9.3 Record the vocabulary, the pin, the theme mechanism, and the revert route in `docs/conventions/code-layout.md` and `docs/architecture/multi-product.md`, and run `pnpm run check:handbook` for the reshaped console package surface
+- [x] 9.4 Confirm no admin surface renders a design-system component outside the two-factor block, closing `visual-standard-SC-01`
+- [x] 9.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
