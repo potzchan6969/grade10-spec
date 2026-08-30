@@ -33,9 +33,7 @@ function ListingCountdownDisplay({
   );
   const accessibleText = useMemo(() => formatAccessibleText(parts), [parts]);
 
-  return (
-    <RollingCountdown accessibleText={accessibleText} parts={parts} />
-  );
+  return <RollingCountdown accessibleText={accessibleText} parts={parts} />;
 }
 
 export type { ListingCountdownDisplayProps };

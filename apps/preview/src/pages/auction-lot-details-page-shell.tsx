@@ -1,9 +1,9 @@
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import type { ReactNode } from "react";
 import { LISTING_LOT_GRID_CLASS } from "@grade10/ui";
+import type { ReactNode } from "react";
+import { AUCTION_NAV } from "./auction-lot-details-content";
 import { STORE_FOOTER } from "./store-content";
 import { WorkbenchAccountNav } from "./workbench-account-nav";
-import { AUCTION_NAV } from "./auction-lot-details-content";
 
 type AuctionLotDetailsPageShellProps = {
   children: ReactNode;

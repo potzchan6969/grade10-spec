@@ -57,7 +57,9 @@ function StandingBanner({ copy, view }: StandingBannerProps) {
       >
         <Badge variant="success">{copy.auctionWon}</Badge>
         <Text weight="medium">{copy.paymentDue}</Text>
-        <Text size="sm" tone="secondary">{copy.paymentDueBody}</Text>
+        <Text size="sm" tone="secondary">
+          {copy.paymentDueBody}
+        </Text>
         <Button onClick={() => undefined}>{copy.payInvoice}</Button>
       </VStack>
     );
@@ -74,7 +76,9 @@ function StandingBanner({ copy, view }: StandingBannerProps) {
         gap="xs"
       >
         <Badge variant="warning">{copy.didNotWin}</Badge>
-        <Text size="sm" tone="secondary">{copy.cardRelease}</Text>
+        <Text size="sm" tone="secondary">
+          {copy.cardRelease}
+        </Text>
       </VStack>
     );
   }
@@ -144,9 +148,13 @@ function PriceBlock({ copy, view }: PriceBlockProps) {
         )}
       </Text>
       {view.hasBids ? (
-        <Text size="xs" tone="secondary">{view.bidCountLabel}</Text>
+        <Text size="xs" tone="secondary">
+          {view.bidCountLabel}
+        </Text>
       ) : (
-        <Text size="xs" tone="secondary">{copy.bidCountZero}</Text>
+        <Text size="xs" tone="secondary">
+          {copy.bidCountZero}
+        </Text>
       )}
     </VStack>
   );
@@ -211,7 +219,9 @@ function TimeBlock({ copy, view }: TimeBlockProps) {
         )}
       </Text>
       {view.deadline ? (
-        <Text size="xs" tone="secondary">{view.deadline}</Text>
+        <Text size="xs" tone="secondary">
+          {view.deadline}
+        </Text>
       ) : null}
     </VStack>
   );
@@ -295,7 +305,9 @@ function BidActions({
         </ListingAutoBidReveal>
       </VStack>
 
-      <Text size="xs" tone="secondary">{copy.buyerFeeHint}</Text>
+      <Text size="xs" tone="secondary">
+        {copy.buyerFeeHint}
+      </Text>
     </VStack>
   );
 }

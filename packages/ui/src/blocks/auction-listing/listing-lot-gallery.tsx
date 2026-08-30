@@ -1,7 +1,7 @@
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import type { ListingLotGalleryImage } from "./types";
 import { LISTING_LOT_GALLERY_CLASS } from "./listing-lot-layout";
+import type { ListingLotGalleryImage } from "./types";
 
 type ListingLotGalleryProps = {
   images: readonly ListingLotGalleryImage[];

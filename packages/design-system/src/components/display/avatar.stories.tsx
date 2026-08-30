@@ -3,11 +3,11 @@ import { CheckIcon } from "lucide-react";
 import {
   Avatar,
   AvatarBadge,
-  avatarInitial,
   AvatarFallback,
   AvatarGroup,
   AvatarGroupCount,
   AvatarImage,
+  avatarInitial,
 } from "./avatar";
 
 const SRC = "https://github.com/shadcn.png";

@@ -1,20 +1,20 @@
-import { useEffect, useState } from "react";
 import {
   ListingAgeVerificationDialog,
   ListingAuctionCardSidebar,
   ListingLotGallery,
   ListingLotHeader,
 } from "@grade10/ui";
+import { useEffect, useState } from "react";
 import {
   AUCTION_LOT,
   AUCTION_LOT_BADGES,
   AUCTION_LOT_DETAILS_COPY,
   appendSimulatedBid,
+  type BiddingState,
+  type BidMode,
   bidHistoryForState,
   bidModeForState,
   buildListingAuctionBidView,
-  type BidMode,
-  type BiddingState,
 } from "./auction-lot-details-content";
 import { AuctionLotDetailsPageShell } from "./auction-lot-details-page-shell";
 

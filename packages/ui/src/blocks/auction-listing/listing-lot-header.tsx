@@ -35,7 +35,9 @@ function ListingLotHeader({
   return (
     <VStack className="w-full" data-slot="listing-lot-header" gap="md">
       <Breadcrumbs>
-        <BreadcrumbItem href={auctionHref}>{copy.auctionBreadcrumb}</BreadcrumbItem>
+        <BreadcrumbItem href={auctionHref}>
+          {copy.auctionBreadcrumb}
+        </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem current>{copy.lotBreadcrumb}</BreadcrumbItem>
       </Breadcrumbs>
@@ -51,13 +53,7 @@ function ListingLotHeader({
         <Button
           aria-label={watched ? copy.unwatchAriaLabel : copy.watchAriaLabel}
           className="shrink-0"
-          leading={
-            watched ? (
-              <BellSlash aria-hidden />
-            ) : (
-              <Bell aria-hidden />
-            )
-          }
+          leading={watched ? <BellSlash aria-hidden /> : <Bell aria-hidden />}
           onClick={onWatchToggle}
           size="md"
           variant="outline"

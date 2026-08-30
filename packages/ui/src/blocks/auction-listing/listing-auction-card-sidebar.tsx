@@ -1,12 +1,17 @@
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { ListingAuctionBidCard } from "./listing-auction-bid-card";
 import type { ListingAuctionBidCardCopy } from "./listing-auction-bid-card";
-import { ListingLotMeta } from "./listing-lot-meta";
-import type { ListingLotMetaCopy } from "./listing-lot-meta";
+import { ListingAuctionBidCard } from "./listing-auction-bid-card";
 import { LISTING_LOT_SIDEBAR_CLASS } from "./listing-lot-layout";
-import type { ListingAuctionBidView, ListingBidHistoryRow, ListingLotMetaBadge } from "./types";
+import type { ListingLotMetaCopy } from "./listing-lot-meta";
+import { ListingLotMeta } from "./listing-lot-meta";
+import type {
+  ListingAuctionBidView,
+  ListingBidHistoryRow,
+  ListingLotMetaBadge,
+} from "./types";
 
-type ListingAuctionCardSidebarCopy = ListingAuctionBidCardCopy & ListingLotMetaCopy;
+type ListingAuctionCardSidebarCopy = ListingAuctionBidCardCopy &
+  ListingLotMetaCopy;
 
 type ListingAuctionCardSidebarProps = {
   copy: ListingAuctionCardSidebarCopy;
