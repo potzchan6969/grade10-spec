@@ -184,7 +184,7 @@ Two routes that need only a browser: the automated diff, and the published
 Storybook. Local Storybook is the fallback for a branch that is not on `main`.
 
 **Measure it in Storybook.** Open
-[https://grade10-storybook.memeland-qa.workers.dev](https://grade10-storybook.memeland-qa.workers.dev)
+[https://storybook.grade10-stg.com](https://storybook.grade10-stg.com)
 (the workbench published from `main` on every relevant push — same combined
 view as `pnpm storybook:workbench`). Open a component, then:
 

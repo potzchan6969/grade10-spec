@@ -1,18 +1,17 @@
 name: Storybook
 
 # Publishes the workbench Storybook (apps/preview/.storybook-workbench) to
-# workers.dev on the staging Cloudflare account. That config is the combined
-# view: preview page assemblies + @grade10/ui + @grade10/design-system.
+# the staging Cloudflare account. That config is the combined view: preview
+# page assemblies + @grade10/ui + @grade10/design-system.
 # Local equivalent: pnpm run storybook:workbench
 #
-# Typical URL:
-#   https://grade10-storybook.memeland-qa.workers.dev
+# URL:
+#   https://storybook.grade10-stg.com
 #
 # One-time ops:
 # - Repo secret CLOUDFLARE_API_TOKEN_QA must be available here (same staging
 #   token grade10 uses). Org secrets may need this repo added to their allowlist.
-# - Confirm Cloudflare Access covers this workers.dev host if you gate
-#   *.memeland-qa.workers.dev.
+# - Confirm Cloudflare Access covers this custom domain if you gate it.
 
 on:
   push:
@@ -77,13 +76,11 @@ jobs:
       - name: Summary
         run: |
           {
-            echo "## Storybook workbench → staging (workers.dev)"
+            echo "## Storybook workbench → staging"
             echo
-            echo "https://grade10-storybook.memeland-qa.workers.dev"
+            echo "https://storybook.grade10-stg.com"
             echo
             echo "Combined view: preview pages + UI + design-system (\`pnpm storybook:workbench\`)."
             echo
             echo "Ref: \`${{ github.sha }}\`"
-            echo
-            echo "Confirm the exact host in the Deploy step log if the account subdomain differs."
           } >> "$GITHUB_STEP_SUMMARY"

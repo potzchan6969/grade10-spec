@@ -42,7 +42,7 @@ Workflow schemas under `openspec/schemas/` govern how changes progress: `pm-plan
 Preview and review run through Storybook:
 
 - `pnpm storybook` — page assemblies in `apps/preview`
-- `pnpm storybook:workbench` — assemblies plus both packages' stories (published at https://grade10-storybook.memeland-qa.workers.dev)
+- `pnpm storybook:workbench` — assemblies plus both packages' stories (published at https://storybook.grade10-stg.com)
 - `pnpm storybook:design-system` / `pnpm storybook:ui` — focused single-package views
 
 Consuming applications add this repository as a Git submodule, pin a SHA, and implement their own routing, data, stores, and adapters against the shared contracts.
@@ -88,7 +88,7 @@ Consuming applications add this repository as a Git submodule, pin a SHA, and im
 | PRDs | `docs/prds/` |
 | Design system documentation | `packages/design-system/DESIGN.md` |
 | Token data | `packages/design-system/tokens.json` |
-| Published Storybook (workbench) | https://grade10-storybook.memeland-qa.workers.dev |
+| Published Storybook (workbench) | https://storybook.grade10-stg.com |
 | Governance guides | `docs/governance/` |
 | Agent instructions | `AGENTS.md` |
 
