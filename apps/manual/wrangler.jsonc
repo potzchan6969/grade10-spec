@@ -1,16 +1,16 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  // Static publish of the Grade10 Manual to workers.dev on the staging
-  // Cloudflare account. The build bakes the store snapshot into dist/api/*,
-  // so the site is pure static assets; dist/_headers gives those JSON their
-  // content type. SPA fallback keeps /p/... deep links working.
-  // URL: https://grade10-manual.<account-subdomain>.workers.dev
+  // Static publish of the Grade10 Manual at https://spec.grade10-stg.com on
+  // the staging Cloudflare account. The build bakes the store snapshot into
+  // dist/api/*, so the site is pure static assets; dist/_headers gives those
+  // JSON their content type. SPA fallback keeps /p/... deep links working.
   "name": "grade10-manual",
   "compatibility_date": "2026-08-01",
   "account_id": "de021143aac704ccbda9c3cd00be261d",
+  "routes": [{ "pattern": "spec.grade10-stg.com", "custom_domain": true }],
   "assets": {
     "directory": "./dist",
     "not_found_handling": "single-page-application"
   },
-  "workers_dev": true
+  "workers_dev": false
 }

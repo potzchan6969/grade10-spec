@@ -1,15 +1,15 @@
 name: Manual
 
-# Publishes the Grade10 Manual (apps/manual) to workers.dev on the staging
-# Cloudflare account. Every push to main rebuilds the snapshot from the store
-# and redeploys, so the hosted manual is exactly as fresh as the data — all
-# state lives in commits.
+# Publishes the Grade10 Manual (apps/manual) to https://spec.grade10-stg.com
+# on the staging Cloudflare account. Every push to main rebuilds the snapshot
+# from the store and redeploys, so the hosted manual is exactly as fresh as
+# the data — all state lives in commits.
 # Local equivalent: pnpm manual:build && wrangler deploy -c apps/manual/wrangler.jsonc
 #
 # One-time ops:
 # - Repo secret CLOUDFLARE_API_TOKEN_QA (same staging token Storybook uses).
-# - Confirm Cloudflare Access covers this workers.dev host if you gate
-#   *.memeland-qa.workers.dev.
+# - Confirm Cloudflare Access covers spec.grade10-stg.com if you gate
+#   the staging zone.
 
 on:
   push:
@@ -86,9 +86,9 @@ jobs:
       - name: Summary
         run: |
           {
-            echo "## Grade10 Manual → staging (workers.dev)"
+            echo "## Grade10 Manual → staging"
             echo
-            echo "https://grade10-manual.memeland-qa.workers.dev"
+            echo "https://spec.grade10-stg.com"
             echo
             echo "Snapshot baked from this commit's store state."
             echo

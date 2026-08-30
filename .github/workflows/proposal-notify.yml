@@ -22,7 +22,7 @@ concurrency:
 
 env:
   SLACK_NOTI_CHANNEL: C045K1QJVQT # web3-github
-  MANUAL_URL: https://grade10-manual.memeland-qa.workers.dev/planning
+  MANUAL_URL: https://spec.grade10-stg.com/planning
 
 jobs:
   notify:
