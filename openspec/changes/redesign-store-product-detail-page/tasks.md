@@ -8,9 +8,9 @@
 Depends on group 1 landing in the `grade10-spec` main branch and the
 `external/grade10-spec` pointer being updated before frontend copy is consumed.
 
-- [ ] 2.1 Make `product-page-SC-13` pass: carry nullable compare-at money from Shopify product variants through Shopify contracts, GraphQL selection, codecs, mappers, Store contracts, and Store API fixtures
-- [ ] 2.2 Make `product-page-SC-15` pass: carry ordered `type`, `world`, and `language` product badges from Shopify product metadata using the documented tag prefixes, omitting absent metadata without inventing labels
-- [ ] 2.3 Make `product-page-SC-13` and `product-page-SC-15` pass: extend provider and Store catalog tests so current price, compare-at price, optional badges, media, and availability remain decoded at the port
+- [x] 2.1 Make `product-page-SC-13` pass: carry nullable compare-at money from Shopify product variants through Shopify contracts, GraphQL selection, codecs, mappers, Store contracts, and Store API fixtures
+- [x] 2.2 Make `product-page-SC-15` pass: carry ordered `type`, `world`, and `language` product badges from Shopify product metadata using the documented tag prefixes, omitting absent metadata without inventing labels
+- [x] 2.3 Make `product-page-SC-13` and `product-page-SC-15` pass: extend provider and Store catalog tests so current price, compare-at price, optional badges, media, and availability remain decoded at the port
 - [ ] 2.4 Verify with `pnpm run typecheck`, `pnpm run lint`, and the affected Shopify and Store backend/frontend package tests
 
 ## 3. Product-detail presentation (grade10)
