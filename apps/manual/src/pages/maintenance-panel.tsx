@@ -15,6 +15,7 @@ const RULE_TITLES: Record<string, string> = {
   skeleton: "Capability pages missing their acceptance shelf",
   figma: "Figma links that point off figma.com",
   journeys: "Specs whose journeys no page shows",
+  ref: "References that resolve to nothing, or to two things",
 };
 
 function groupByRule(warnings: CheckWarning[]): [string, CheckWarning[]][] {

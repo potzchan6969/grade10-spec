@@ -16,8 +16,9 @@
  *        durable spec carrying a heading the fold would absorb, and a delta
  *        heading the fold would not find. Exits 1.
  * WARN = hygiene with no broken pointer behind it: a page committed before
- *        the specs it embeds, named requirement by requirement, a `::figma`
- *        link off figma.com, a spec whose journeys no page shows. Exits 0.
+ *        the specs it embeds, named requirement by requirement, a `[[ref]]`
+ *        in prose that names nothing, a `::figma` link off figma.com, a spec
+ *        whose journeys no page shows. Exits 0.
  *
  * The readers in apps/manual/src are the only parser — this script never
  * grows a second one, so the check and the app can never disagree.
@@ -30,6 +31,7 @@ import {
   parsePage,
   serializePage,
 } from "../apps/manual/src/content/grammar.ts";
+import { REF_PATTERN, resolveRef } from "../apps/manual/src/content/refs.ts";
 import {
   confine,
   readText,
@@ -86,6 +88,11 @@ const RULES = [
     level: "warn",
     title: "Capability pages missing their acceptance shelf",
   },
+  {
+    key: "ref",
+    level: "warn",
+    title: "Prose references naming nothing, or two things",
+  },
   { key: "figma", level: "warn", title: "Figma links" },
   {
     key: "journeys",
@@ -131,6 +138,8 @@ export async function runChecks(root, git) {
   const ctx = {
     root,
     specs,
+    // The slice of a snapshot `resolveRef` reads, built once for all pages.
+    snapshot: { specs: [...specs.values()] },
     changing: new Set(changes.flatMap((one) => one.deltas.map((d) => d.spec))),
     stories: readStoryIndex(root),
     referenced: new Set(),
@@ -154,6 +163,7 @@ export async function runChecks(root, git) {
     for (const block of everyBlock(page.ast.blocks)) {
       checkBlock(ctx, page.path, block);
     }
+    checkRefs(ctx, page);
   }
 
   if (!ctx.stories && ctx.storyIds.size > 0) {
@@ -382,6 +392,44 @@ function checkSkeleton(pages, add) {
       page.path,
       "has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
     );
+  }
+}
+
+const FENCE = /^(`{3,}|~{3,})/;
+const INLINE_CODE = /(`+)[\s\S]*?\1/g;
+
+/** Prose is verbatim text to the grammar, so `[[refs]]` are found here — with
+ * the grammar's own fence rule repeated, since a fenced block inside prose is
+ * documentation about the syntax, not a use of it. Inline code hides one too.
+ * A bare id resolves inside the page's own spec, the same scope the renderer
+ * gives it, through the one resolver both share. */
+function* proseRefs(markdown) {
+  let fence = null;
+  for (const line of markdown.split("\n")) {
+    if (fence !== null) {
+      if (line.startsWith(fence)) fence = null;
+      continue;
+    }
+    const opened = FENCE.exec(line);
+    if (opened) {
+      fence = opened[1];
+      continue;
+    }
+    for (const match of line.replace(INLINE_CODE, "").matchAll(REF_PATTERN)) {
+      yield match[1];
+    }
+  }
+}
+
+function checkRefs(ctx, page) {
+  const pageSpec = page.ast.frontmatter.spec;
+  for (const block of everyBlock(page.ast.blocks)) {
+    if (block.type !== "prose") continue;
+    for (const raw of proseRefs(block.markdown)) {
+      const resolved = resolveRef(raw, ctx.snapshot, pageSpec);
+      if (resolved.ok) continue;
+      ctx.add("ref", page.path, `\`[[${raw}]]\`: ${resolved.reason}`);
+    }
   }
 }
 

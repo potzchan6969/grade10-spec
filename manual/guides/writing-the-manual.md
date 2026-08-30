@@ -98,6 +98,23 @@ The next thing.
 :::
 ```
 
+## Citing the spec
+
+Prose can cite the store by id, and the reference stays honest when the
+store moves. Write the id in double brackets:
+
+```md
+Expiry is exact — [[loyalty-SC-12]] — and a balance is never negative
+([[grade10-store/loyalty#loyalty-SC-04]]).
+```
+
+A reference renders the target's current title as a link, so a renamed
+scenario can never orphan the prose that cites it. On a page with a `spec`
+in its frontmatter, a bare id resolves inside that spec; anywhere else —
+this guide, say — qualify it as `spec-id#item-id`, like
+[[grade10-store/loyalty#loyalty-SC-04]]. A reference that resolves to
+nothing renders as a marked dead link and draws a check warning.
+
 ## Canonical form
 
 There is exactly one correct text for any page, and committed pages are already
@@ -115,9 +132,12 @@ directive on this page renders as text instead of as a block: inside a fence,
 
 Running the manual locally, a commit bar appears as soon as the working tree has
 manual edits; pressing it stages `manual/` and commits. On the hosted site you
-paste a fine-grained GitHub token in settings, and the first write creates or
-reuses a branch named for your login *and* its pull request together, so an edit
-can never rot on a branch nobody opened. Without a token the site is read-only.
+paste a fine-grained GitHub token in settings and pick a mode. The default
+commits straight to main — the deploy listens on push, so your save is live in
+about a minute, and the header tells you when the site is behind main or a
+deploy failed. The other mode keeps a branch named for your login *and* its
+pull request together, so an edit can never rot on a branch nobody opened.
+Without a token the site is read-only.
 
 Each read carries a version — a content hash locally, the blob SHA on GitHub.
 If somebody saved before you, you get their version and yours side by side
