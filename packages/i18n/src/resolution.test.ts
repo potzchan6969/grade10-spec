@@ -48,6 +48,7 @@ const PRODUCT_DETAIL_KEYS = [
   "quantityLabel",
   "increaseQuantity",
   "decreaseQuantity",
+  "soldOutAction",
 ];
 
 const STORE_PRODUCT_DETAIL_KEYS = ["adding", "addedToCart"];

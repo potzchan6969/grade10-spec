@@ -14,6 +14,7 @@
   "showLess": "간략히",
   "showMore": "더 보기",
   "skuLabel": "상품 코드",
+  "soldOutAction": "품절",
   "soldOutSuffix": " — 품절",
   "notForSaleNote": "이 카드는 판매하지 않습니다."
 }

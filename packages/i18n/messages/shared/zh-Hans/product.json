@@ -14,6 +14,7 @@
   "showLess": "显示更少",
   "showMore": "显示更多",
   "skuLabel": "货号",
+  "soldOutAction": "已售罄",
   "soldOutSuffix": " — 已售罄",
   "notForSaleNote": "此卡暂不出售。"
 }
