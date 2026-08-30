@@ -14,6 +14,7 @@ import { NewPageAction } from "../editor/edit-actions";
 
 const FIXED_ENTRIES = [
   { to: "/", label: "Home" },
+  { to: "/recent", label: "Recent" },
   { to: "/planning", label: "Planning" },
   { to: "/qa", label: "QA" },
   { to: "/design", label: "Design" },
@@ -75,11 +76,14 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
                 onNavigate={onNavigate}
               />
             ))}
-            <FlatSection
-              items={index.topics}
-              onNavigate={onNavigate}
-              title="Cross-cutting"
-            />
+            {index.topicGroups.map((group) => (
+              <FlatSection
+                items={group.topics}
+                key={group.title}
+                onNavigate={onNavigate}
+                title={group.title}
+              />
+            ))}
             <FlatSection
               items={index.guides}
               onNavigate={onNavigate}

@@ -54,6 +54,7 @@ export function composeStore(
       specs,
       changes: readChanges(root, git),
       assets: readManualAssets(root),
+      history: git.history,
       warnings,
       ...(designSync ? { designSync } : {}),
     },

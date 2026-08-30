@@ -44,8 +44,30 @@ describe("manual.yaml", () => {
       { title: "Platform", products: ["demo-shared"] },
     ]);
     expect(config.storybookBase).toBe("https://storybook.example");
-    expect(config.platform).toEqual(["demo-topic"]);
+    expect(config.platform).toEqual([
+      { title: "Conventions", topics: ["demo-topic"] },
+    ]);
     expect(config.guides).toEqual(["getting-started"]);
+  });
+
+  /** Older stores wrote a bare list of topic ids; it stays readable, under a
+   * name, because a nav section with no heading is worse than a plain one. */
+  it("reads a flat platform list as one named group", () => {
+    const root = write({
+      "manual/manual.yaml":
+        "storybookBase: https://s.example\nplatform: [money-amounts]\n",
+    });
+    expect(readManualConfig(root).platform).toEqual([
+      { title: "Cross-cutting", topics: ["money-amounts"] },
+    ]);
+  });
+
+  it("throws when a topic is listed twice", () => {
+    const root = write({
+      "manual/manual.yaml":
+        "storybookBase: https://s.example\nplatform:\n  Conventions: [money]\n  Architecture: [money]\n",
+    });
+    expect(() => readManualConfig(root)).toThrow(/lists `money` twice/);
   });
 
   it("reads the array form of groups too", () => {

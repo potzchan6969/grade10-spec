@@ -20,6 +20,7 @@ import type {
   ChangeLane,
   DeltaKind,
   DeltaRequirement,
+  HistoryRef,
   ItemError,
   PageEntry,
   Snapshot,
@@ -58,6 +59,8 @@ export type NavProduct = NavItem & {
 
 export type NavGroup = { title: string; products: NavProduct[] };
 
+export type NavTopicGroup = { title: string; topics: NavItem[] };
+
 export type ManualIndex = {
   snapshot: Snapshot;
   pages: ParsedPage[];
@@ -74,6 +77,9 @@ export type ManualIndex = {
   /** Spec id → the route of the page that documents it. */
   routeBySpec: Map<string, string>;
   groups: NavGroup[];
+  topicGroups: NavTopicGroup[];
+  /** Every topic of every group, in nav order — what search and the platform
+   * pages ask for. */
   topics: NavItem[];
   guides: NavItem[];
   /** Delta-only capabilities whose product has no branch to sit under. */
@@ -153,13 +159,15 @@ function deriveIndex(snapshot: Snapshot): ManualIndex {
     proposalsBySpec: deriveProposalsBySpec(snapshot),
     routeBySpec,
     groups: [],
+    topicGroups: [],
     topics: [],
     guides: [],
     incubating: [],
   };
 
   index.groups = deriveGroups(index);
-  index.topics = deriveTopics(index);
+  index.topicGroups = deriveTopicGroups(index);
+  index.topics = index.topicGroups.flatMap((group) => group.topics);
   index.guides = deriveGuides(index);
   index.incubating = incubatingFor(
     index,
@@ -263,30 +271,41 @@ function deriveGroups(index: ManualIndex): NavGroup[] {
   return groups;
 }
 
-function deriveTopics(index: ManualIndex): NavItem[] {
-  const configured = index.snapshot.config.platform;
+function deriveTopicGroups(index: ManualIndex): NavTopicGroup[] {
   const onDisk = childPages(index, `${MANUAL_ROOT}/platform`);
   const byId = new Map(
     onDisk.map((page) => [page.path.slice(0, -3).split("/").pop() ?? "", page]),
   );
 
-  const ordered: NavItem[] = [];
-  for (const id of configured) {
-    const page = byId.get(id);
-    ordered.push(
-      page
-        ? navItem(page, id)
-        : {
-            id,
-            title: humanize(id),
-            to: `/platform/${id}`,
-            order: Number.MAX_SAFE_INTEGER,
-          },
-    );
-    byId.delete(id);
+  const groups: NavTopicGroup[] = [];
+  for (const group of index.snapshot.config.platform) {
+    const topics: NavItem[] = [];
+    for (const id of group.topics) {
+      const page = byId.get(id);
+      topics.push(
+        page
+          ? navItem(page, id)
+          : {
+              id,
+              title: humanize(id),
+              to: `/platform/${id}`,
+              order: Number.MAX_SAFE_INTEGER,
+            },
+      );
+      byId.delete(id);
+    }
+    groups.push({ title: group.title, topics });
   }
-  for (const [id, page] of byId) ordered.push(navItem(page, id));
-  return ordered;
+
+  // A topic on disk that manual.yaml never lists is a real gap; show it rather
+  // than dropping it silently.
+  if (byId.size > 0) {
+    groups.push({
+      title: "Not in manual.yaml",
+      topics: [...byId].map(([id, page]) => navItem(page, id)),
+    });
+  }
+  return groups;
 }
 
 function deriveGuides(index: ManualIndex): NavItem[] {
@@ -512,6 +531,57 @@ export function citeTarget(index: ManualIndex, id: string): CiteTarget {
     };
   }
   return { id, label: id };
+}
+
+/** What a commit touched, as a chip: a stable key, what to call it, and where
+ * it leads when it still leads anywhere. */
+export type FeedRef = {
+  key: string;
+  label: string;
+  to?: string;
+  kind: HistoryRef["kind"];
+};
+
+/**
+ * A history ref against today's store. A page deleted since, a change already
+ * archived, a file no reader claims — each keeps its label and loses its link,
+ * because the commit happened whatever became of what it touched.
+ */
+export function feedRef(index: ManualIndex, ref: HistoryRef): FeedRef {
+  const key = "id" in ref ? `${ref.kind}:${ref.id}` : `${ref.kind}:${ref.path}`;
+  return { key, kind: ref.kind, ...linked(index, ref) };
+}
+
+function linked(
+  index: ManualIndex,
+  ref: HistoryRef,
+): { label: string; to?: string } {
+  if (ref.kind === "page") {
+    const page = index.pageByPath.get(ref.path);
+    if (!page) return { label: ref.path };
+    return {
+      label: page.ast?.frontmatter.title ?? ref.path,
+      ...(page.route ? { to: page.route } : {}),
+    };
+  }
+  if (ref.kind === "spec") {
+    const route = index.routeBySpec.get(ref.id);
+    const page = route ? index.pageByRoute.get(route) : undefined;
+    return {
+      label: page?.ast?.frontmatter.title ?? ref.id,
+      ...(route ? { to: route } : {}),
+    };
+  }
+  // A change that is no longer in flight has archived: it has no card left to
+  // anchor to, so the board itself is all there is to point at.
+  if (ref.kind === "change") {
+    const change = index.changeById.get(ref.id);
+    return change
+      ? { label: change.title, to: `/planning#${ref.id}` }
+      : { label: ref.id, to: "/planning" };
+  }
+  if (ref.kind === "archived") return { label: ref.id, to: "/planning" };
+  return { label: ref.path };
 }
 
 /** One capability's acceptance, as a reviewer has to see it to pick the next

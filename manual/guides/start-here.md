@@ -1,7 +1,7 @@
 ---
 title: Start here
 summary: Five reading paths through the manual, one per job.
-order: 1
+order: 2
 ---
 
 Everything here is readable by everyone — that is the point of one manual. But

@@ -20,12 +20,15 @@ groups:
     - design-sync
 
 platform:
-  - money-amounts
-  - dates-and-times
-  - frontend-composition
-  - localization
+  Conventions:
+    - money-amounts
+    - dates-and-times
+    - localization
+  Architecture:
+    - frontend-composition
 
 guides:
+  - how-this-manual-works
   - start-here
   - how-we-plan
   - writing-the-manual

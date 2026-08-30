@@ -1,6 +1,7 @@
 import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
-import type { CommitInfo } from "../api/types.ts";
+import type { CommitInfo, HistoryEvent } from "../api/types.ts";
+import { refsOf } from "./history.mts";
 
 const run = promisify(execFile);
 
@@ -12,6 +13,8 @@ export type GitIndex = {
   /** Last commit touching any file under a directory. A change moves when any
    * of its files does — a plan with no tasks.md still moves. */
   newestUnder: (storeDir: string) => CommitInfo | undefined;
+  /** The newest commits of the same walk, newest first — the recent feed. */
+  history: HistoryEvent[];
   /** Files as they stood at a revision, keyed by the `<sha>:<path>` asked
    * for; a path that revision does not carry is absent from the map. One
    * process serves the whole request, for the same reason. */
@@ -22,11 +25,14 @@ export const NO_GIT: GitIndex = {
   head: "",
   commitOf: () => undefined,
   newestUnder: () => undefined,
+  history: [],
   readBlobs: async () => new Map(),
 };
 
-// sha1 today, sha256 in a repo that has moved on.
-const COMMIT_LINE = /^([0-9a-f]{40,64}) (\S+)$/;
+/** Enough to read a few weeks of the store; the feed is a feed, not an
+ * archive, and every event rides the snapshot. */
+const HISTORY_LIMIT = 100;
+
 // `<oid> <type> <size>`; anything else is `<ref> missing`, with no body.
 const BLOB_HEADER = /^[0-9a-f]{40,64} (?:blob|tree|commit|tag) (\d+)$/;
 
@@ -48,7 +54,7 @@ export async function readGitIndex(
   const head = (await git(root, ["rev-parse", "HEAD"])).trim();
   const log = await git(root, [
     "log",
-    "--format=%H %cI",
+    "--format=%H%x00%cI%x00%s",
     "--name-only",
     "--no-renames",
     "HEAD",
@@ -58,21 +64,41 @@ export async function readGitIndex(
 
   const commits = new Map<string, CommitInfo>();
   const dirs = new Map<string, CommitInfo>();
+  const history: HistoryEvent[] = [];
   let headers = 0;
   let current: CommitInfo | undefined;
+  let subject = "";
+  let touched: string[] = [];
+
+  // A commit that touched no listed file — a merge, mostly — is noise in a
+  // feed of what changed.
+  const closeEvent = () => {
+    if (current && touched.length > 0 && history.length < HISTORY_LIMIT) {
+      history.push({ ...current, subject, refs: refsOf(touched) });
+    }
+    touched = [];
+  };
+
   for (const line of log.split("\n")) {
     if (line === "") continue;
-    const header = COMMIT_LINE.exec(line);
-    if (header) {
+    // A path can never hold a NUL, so the separator alone tells a header from
+    // a file name — no pattern has to guess which it is looking at.
+    if (line.includes("\0")) {
+      closeEvent();
+      const [sha, date, said] = line.split("\0");
       headers += 1;
-      current = { sha: header[1], date: header[2] };
+      current = { sha, date };
+      subject = said;
       continue;
     }
+    if (!current) continue;
+    touched.push(line);
     // Newest first, so the first sighting of a path is its last commit.
-    if (!current || commits.has(line)) continue;
+    if (commits.has(line)) continue;
     commits.set(line, current);
     rollUp(dirs, line, current);
   }
+  closeEvent();
   // Commit info is decoration, not content — a log this reader cannot parse
   // costs dates, not pages, so say it out loud and carry on.
   if (headers === 0 && log.trim() !== "") warnUnparsed(root);
@@ -81,6 +107,7 @@ export async function readGitIndex(
     head,
     commitOf: (storePath) => commits.get(storePath),
     newestUnder: (storeDir) => dirs.get(storeDir),
+    history,
     readBlobs: (refs) => readBlobs(root, refs),
   };
 }

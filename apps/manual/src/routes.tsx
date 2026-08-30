@@ -8,6 +8,7 @@ import { PlanningPage } from "./pages/planning-page";
 import { PlatformPage } from "./pages/platform-page";
 import { ProductPage } from "./pages/product-page";
 import { QaPage } from "./pages/qa-page";
+import { RecentPage } from "./pages/recent-page";
 import { AppShell } from "./shell/app-shell";
 
 export const router = createBrowserRouter([
@@ -22,6 +23,7 @@ export const router = createBrowserRouter([
       { path: "planning", element: <PlanningPage /> },
       { path: "qa", element: <QaPage /> },
       { path: "design", element: <DesignPage /> },
+      { path: "recent", element: <RecentPage /> },
       { path: "*", element: <ManualPage /> },
     ],
   },

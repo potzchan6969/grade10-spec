@@ -5,8 +5,8 @@ export type ManualConfig = {
   storybookBase: string;
   /** Nav groups in order; each lists product ids in order. */
   groups: { title: string; products: string[] }[];
-  /** Cross-cutting topic ids, in nav order. */
-  platform: string[];
+  /** Cross-cutting topic groups in order; each lists topic ids in order. */
+  platform: { title: string; topics: string[] }[];
   /** Guide slugs, in nav order. */
   guides: string[];
 };
@@ -221,6 +221,24 @@ export type DesignSyncReport = {
   messages?: Record<string, string[]>;
 };
 
+/** What one commit touched, named the way the manual knows it. A path no
+ * reader claims stays a path — the commit happened either way. */
+export type HistoryRef =
+  | { kind: "page"; path: string }
+  | { kind: "spec"; id: string }
+  | { kind: "change"; id: string }
+  | { kind: "archived"; id: string }
+  | { kind: "file"; path: string };
+
+/** One commit of the store, as the recent feed reads it. */
+export type HistoryEvent = {
+  sha: string;
+  /** ISO commit date. */
+  date: string;
+  subject: string;
+  refs: HistoryRef[];
+};
+
 /** `/api/snapshot` — boots the app. */
 export type Snapshot = {
   generatedAt: string;
@@ -233,6 +251,9 @@ export type Snapshot = {
   changes: ChangeEntry[];
   /** Every file under `manual/assets/`, as `assets/<name>` paths. */
   assets: string[];
+  /** The newest commits of the store, newest first. Empty where the store is
+   * not a git checkout. */
+  history: HistoryEvent[];
   warnings: CheckWarning[];
   designSync?: DesignSyncReport;
 };

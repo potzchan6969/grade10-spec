@@ -1,7 +1,7 @@
 ---
 title: Writing the manual
 summary: The block palette, canonical form, and what happens when you save.
-order: 3
+order: 4
 ---
 
 Every page here is a markdown file in the spec store under `manual/`. Edit one

@@ -52,46 +52,76 @@ export function readManualConfig(root: string): ManualConfig {
   const config: ManualConfig = {
     storybookBase: requireString(fields, "storybookBase"),
     groups: readGroups(fields.groups),
-    platform: readIds(fields.platform, "platform"),
+    platform: readTopicGroups(fields.platform),
     guides: readIds(fields.guides, "guides"),
   };
 
-  const seen = new Set<string>();
-  for (const group of config.groups) {
-    for (const product of group.products) {
-      if (seen.has(product)) {
-        throw new Error(`manual/manual.yaml lists \`${product}\` twice`);
-      }
-      seen.add(product);
-    }
-  }
+  requireUnique(config.groups.flatMap((group) => group.products));
+  requireUnique(config.platform.flatMap((group) => group.topics));
   return config;
+}
+
+function requireUnique(ids: string[]): void {
+  const seen = new Set<string>();
+  for (const id of ids) {
+    if (seen.has(id)) {
+      throw new Error(`manual/manual.yaml lists \`${id}\` twice`);
+    }
+    seen.add(id);
+  }
 }
 
 /** Both forms are accepted: an ordered mapping of title → products, and the
  * artifact's own array of `{ title, products }`. */
 function readGroups(raw: unknown): ManualConfig["groups"] {
+  return readTitled(raw, "groups", "products").map(({ title, ids }) => ({
+    title,
+    products: ids,
+  }));
+}
+
+/** The same two forms, plus the bare list of ids an older store wrote — one
+ * group, named, because a nav section with no heading is worse than a plain
+ * one. */
+function readTopicGroups(raw: unknown): ManualConfig["platform"] {
+  if (Array.isArray(raw) && raw.every((entry) => typeof entry === "string")) {
+    return raw.length === 0 ? [] : [{ title: "Cross-cutting", topics: raw }];
+  }
+  return readTitled(raw, "platform", "topics").map(({ title, ids }) => ({
+    title,
+    topics: ids,
+  }));
+}
+
+function readTitled(
+  raw: unknown,
+  field: string,
+  member: string,
+): { title: string; ids: string[] }[] {
   if (raw === undefined || raw === null) return [];
   if (Array.isArray(raw)) {
     return raw.map((entry, index) => {
       if (typeof entry !== "object" || entry === null || Array.isArray(entry)) {
         throw new Error(
-          `manual/manual.yaml group ${index + 1} must be a mapping`,
+          `manual/manual.yaml \`${field}\` entry ${index + 1} must be a mapping`,
         );
       }
       const group = entry as Record<string, unknown>;
       return {
         title: requireString(group, "title"),
-        products: readIds(group.products, "products"),
+        ids: readIds(group[member], member),
       };
     });
   }
   if (typeof raw !== "object") {
-    throw new Error("manual/manual.yaml `groups` must be a mapping or a list");
+    throw new Error(
+      `manual/manual.yaml \`${field}\` must be a mapping or a list`,
+    );
   }
-  return Object.entries(raw as Record<string, unknown>).map(
-    ([title, products]) => ({ title, products: readIds(products, title) }),
-  );
+  return Object.entries(raw as Record<string, unknown>).map(([title, ids]) => ({
+    title,
+    ids: readIds(ids, title),
+  }));
 }
 
 function readIds(raw: unknown, field: string): string[] {
@@ -116,10 +146,15 @@ export function deriveTaxonomy(
   shape: SpecShape,
   config: ManualConfig,
 ): Taxonomy {
-  const listed = config.groups.flatMap((group) => group.products);
   return {
-    products: order(listed, shape.products),
-    topics: order(config.platform, shape.topics),
+    products: order(
+      config.groups.flatMap((group) => group.products),
+      shape.products,
+    ),
+    topics: order(
+      config.platform.flatMap((group) => group.topics),
+      shape.topics,
+    ),
   };
 }
 

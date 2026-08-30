@@ -4,6 +4,7 @@ import { IconButton } from "@grade10/design-system/components/forms/icon-button"
 import { List, X } from "@phosphor-icons/react";
 import { Link } from "react-router";
 import { HealthPip } from "./health-banner";
+import { RecentBell } from "./recent-bell";
 import { ManualSearch } from "./search";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -35,14 +36,17 @@ export function Header({ navOpen, onToggleNav, onNavigate }: HeaderProps) {
           to="/"
         >
           <G10LogoMono aria-hidden className="h-5 w-auto text-foreground" />
-          <Text as="span" size="sm" weight="bold">
+          {/* The mark alone carries the link on a narrow screen — search, bell
+              and theme have to fit beside it at 360px. */}
+          <Text as="span" className="max-sm:hidden" size="sm" weight="bold">
             Manual
           </Text>
         </Link>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-2 max-sm:gap-1">
           <HealthPip />
           <ManualSearch />
+          <RecentBell />
           <ThemeToggle />
         </div>
       </div>

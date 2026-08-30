@@ -45,7 +45,7 @@ export function checkTaxonomy(root, config, shape, paths, add) {
   }
 
   const topics = new Set(shape.topics);
-  for (const id of config.platform) {
+  for (const id of config.platform.flatMap((group) => group.topics)) {
     if (topics.has(id) || existsSync(join(root, topicPage(id)))) continue;
     add(
       "config",

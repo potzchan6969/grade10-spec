@@ -34,6 +34,22 @@ export function formatDate(iso: string): string {
   });
 }
 
+/** The separator a day of events sits under: today and yesterday by name, the
+ * date itself once it is neither. */
+export function dayLabel(iso: string, now: number = Date.now()): string {
+  const at = new Date(iso);
+  if (Number.isNaN(at.getTime())) return iso;
+
+  const days = Math.round((midnight(new Date(now)) - midnight(at)) / DAY);
+  if (days === 0) return "Today";
+  if (days === 1) return "Yesterday";
+  return formatDate(iso);
+}
+
+function midnight(at: Date): number {
+  return new Date(at.getFullYear(), at.getMonth(), at.getDate()).getTime();
+}
+
 export function monthKey(iso: string): string {
   const at = new Date(iso);
   if (Number.isNaN(at.getTime())) return "Undated";

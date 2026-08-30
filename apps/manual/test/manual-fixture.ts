@@ -60,6 +60,7 @@ export function snapshotOf(parts: Partial<Snapshot> = {}): Snapshot {
     specs: [],
     changes: [],
     assets: [],
+    history: [],
     warnings: [],
     ...parts,
   };

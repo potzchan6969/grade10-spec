@@ -30,6 +30,17 @@ Disk shape decides taxonomy, `manual.yaml` only orders: a directory under
 of capability directories is a Product. `manual.yaml` may add page-only
 products (vault) that have no specs yet.
 
+`groups:` and `platform:` take the same two forms — an ordered mapping of
+title → ids, or a list of `{ title, products }` / `{ title, topics }` — so
+products and topics both carry named nav groups. A bare list of topic ids
+still parses, as one group called Cross-cutting; an id listed twice fails
+the read, whichever group it sits in.
+
+Guides open with `how-this-manual-works` — what the store is, the loop from
+proposal to shipped truth, and how to work with an agent. Content pages carry
+no meta prose about reading the manual; that page holds it, and the home
+page's first-visit card is its one door.
+
 A page is YAML frontmatter plus a sequence of blocks. Frontmatter fields, in
 canonical order: `title` (required), `summary`, `spec` (the spec id this
 page documents — `product/capability`, or a bare topic id for platform
@@ -115,7 +126,7 @@ The builder emits two static artifacts, both pure functions of git state:
 
 - `/api/snapshot` — boots the app: `generatedAt`, `storeHead`, `config`
   (manual.yaml + derived taxonomy), `pages: [{ path, source, lastCommit }]`,
-  `specs`, `changes` (in-flight only).
+  `specs`, `changes` (in-flight only), `history`.
 - `/api/archive` — archived changes, fetched only by planning/timeline
   views, so years of archive never block first paint.
 
@@ -166,7 +177,15 @@ quiet checked chip, drift and a node id missing from the map (a frame
 deleted or renumbered in Figma) as loud ones — so a bare card reads as
 "not checked", never as "fine".
 
-The snapshot runs ~940&nbsp;KB today (~240&nbsp;KB gzipped), most of the
+`history` is the newest 100 commits of the same walk that dates every page,
+newest first: `{ sha, date, subject, refs }`, where a ref names what the
+commit touched — a page path, a spec id, a change id in flight or archived,
+or a plain file. A commit that touched no listed file (a merge) is left out;
+`refs` are deduped per commit. Classification is `store/history.mts`, the
+resolution to a label and a route is `api/derive.ts`, and nothing is stored:
+the feed is the log, read.
+
+The snapshot runs ~995&nbsp;KB today (~250&nbsp;KB gzipped), most of the
 growth being in-flight delta text; past ~1&nbsp;MB the lever is shipping
 delta text as its own lazy artifact beside `/api/archive`, not trimming
 what it says.
@@ -359,18 +378,21 @@ src/
   api/                          artifact fetch + types + derivations
   blocks/                       one component per block type, registry
   editor/                       block editor, ContentStore port + adapters
-  pages/                        Home, Product, Capability, Planning, Guide, Page
-  shell/                        nav sidebar, header, search, theme toggle
+  pages/                        Home, Product, Capability, Planning, Guide, Recent, Page
+  shell/                        nav sidebar, header, search, recent bell, theme toggle
 test/                           grammar round-trip table, reader fixtures
 ```
 
 Routes: `/` home, `/p/<product>`, `/p/<product>/<capability>`,
-`/platform/<topic>`, `/guides/<slug>`, `/planning`, `/qa`, `/design`.
-These are canonical — a raw manual path redirects to its canonical
-route, never renders beside it. `/qa` and `/design` are pure snapshot
-derivations: a review worklist (drafts, uncovered scenarios, suite
-errors, worst first) and every design card grouped by page with its
-nightly verdict.
+`/platform/<topic>`, `/guides/<slug>`, `/planning`, `/qa`, `/design`,
+`/recent`. These are canonical — a raw manual path redirects to its
+canonical route, never renders beside it. `/qa`, `/design` and `/recent`
+are pure snapshot derivations: a review worklist (drafts, uncovered
+scenarios, suite errors, worst first), every design card grouped by page
+with its nightly verdict, and the commit feed — a flat chronology with day
+separators, each row the commit's subject and chips for what it touched.
+A store that is not a git checkout says so instead of showing an empty
+list.
 
 Planning is a board of four lanes, not a product index: Proposed (a
 reason and its citations), Specified (deltas written — the queue a lead
@@ -394,9 +416,23 @@ control.
 
 Navigation is computed from disk taxonomy + `manual.yaml` order + page
 frontmatter, never hand-listed: group → product → capability, with a
-product's in-flight change count as a badge. Home groups products by
-audience and shows a what's-moving strip. Capability pages end with an
-archived-changes timeline derived from the archive artifact.
+product's in-flight change count as a badge, and one section per topic
+group. A product or topic on disk that `manual.yaml` never lists appears
+under "Not in manual.yaml" rather than vanishing. Home groups products by
+audience, gathers the topic groups under one Cross-cutting heading, and
+shows a what's-moving strip. Capability pages end with an archived-changes
+timeline derived from the archive artifact.
+
+The header carries a bell against `/recent`: the badge counts events newer
+than the marker this reader last stored, capped at 9+, and a reader with no
+marker yet gets the newest date written silently rather than a badge
+shouting the whole feed. Browser state is small and named once, in the
+`STORAGE` registry (`editor/config.ts`) — the token and its verdict, the
+write mode and PR, the staged drafts, the propose handle, the answered
+first-visit card (`manual.welcome`) and that seen marker
+(`manual.recent.seen`). Every read and write of it tolerates storage being
+switched off: a reader who cannot remember simply sees the card again and
+never sees a badge.
 
 ## Checks
 

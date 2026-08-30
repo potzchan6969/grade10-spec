@@ -1,7 +1,7 @@
 ---
 title: How we plan
 summary: Durable specs say what is true, changes say what is moving, git says what is done.
-order: 2
+order: 3
 ---
 
 Three artifacts, and nothing else to keep in sync.
