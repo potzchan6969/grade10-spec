@@ -76,7 +76,7 @@ Needs group 3 landed.
 - [x] 7.4 Drop the package's `@source` entry and `@grade10/design-system` dependency
 - [x] 7.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 8. Both application shells migrate (grade10)
+## 8. Both application shells migrate (grade10) (owner: @sean)
 
 Needs groups 4 through 7 landed: the pages compose migrated consoles before the shell around them changes.
 
