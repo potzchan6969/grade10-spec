@@ -1,9 +1,16 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
-import { NavigationLink } from "@grade10/design-system/components/layout/navigation-link";
-import { NavigationList } from "@grade10/design-system/components/layout/navigation-list";
 import { cn } from "@grade10/design-system/lib/utils";
-import { CaretDown, CaretRight } from "@phosphor-icons/react";
+import {
+  CaretDown,
+  CaretRight,
+  ClipboardText,
+  ClockCounterClockwise,
+  House,
+  type Icon,
+  Kanban,
+  PenNib,
+} from "@phosphor-icons/react";
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router";
 import type { Incubating, NavGroup, NavItem, NavProduct } from "../api/derive";
@@ -12,13 +19,18 @@ import { useSnapshot } from "../api/snapshot-provider";
 import { CapabilityPip } from "../blocks/capability-status";
 import { NewPageAction } from "../editor/edit-actions";
 
-const FIXED_ENTRIES = [
-  { to: "/", label: "Home" },
-  { to: "/recent", label: "Recent" },
-  { to: "/planning", label: "Planning" },
-  { to: "/qa", label: "QA" },
-  { to: "/design", label: "Design" },
+const FIXED_ENTRIES: { to: string; label: string; icon: Icon }[] = [
+  { to: "/", label: "Home", icon: House },
+  { to: "/recent", label: "Recent", icon: ClockCounterClockwise },
+  { to: "/planning", label: "Planning", icon: Kanban },
+  { to: "/qa", label: "QA", icon: ClipboardText },
+  { to: "/design", label: "Design", icon: PenNib },
 ];
+
+/** One row shape for everything in the rail — the fixed views, products and
+ * leaves differ in tone, never in geometry. */
+const ROW =
+  "flex h-8 items-center gap-2 rounded-(--radius-md) px-2 text-sm outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50";
 
 type SidebarProps = {
   open: boolean;
@@ -27,7 +39,6 @@ type SidebarProps = {
 
 export function Sidebar({ open, onNavigate }: SidebarProps) {
   const snapshot = useSnapshot();
-  const { pathname } = useLocation();
   const index =
     snapshot.status === "ready" ? buildIndex(snapshot.snapshot) : null;
 
@@ -35,6 +46,7 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
     <aside
       className={cn(
         "w-72 shrink-0 border-border border-r bg-sidebar",
+        "[scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]",
         // Below the header's z-50 so its close button stays reachable.
         "max-lg:fixed max-lg:inset-y-0 max-lg:left-0 max-lg:z-40 max-lg:pt-16 max-lg:transition-transform max-lg:duration-200 max-lg:ease-out",
         // `invisible` rather than a bare translate: an off-screen drawer must
@@ -47,28 +59,35 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
       data-slot="manual-sidebar"
     >
       <div className="flex flex-col gap-5 px-3 py-6">
-        <NavigationList
-          aria-label="Manual"
-          className="flex-col items-stretch gap-1"
-        >
-          {FIXED_ENTRIES.map((entry) => (
-            <NavigationLink
-              active={pathname === entry.to}
-              className="h-9 justify-start"
-              key={entry.to}
-              render={<NavLink onClick={onNavigate} to={entry.to} />}
-            >
-              {entry.label}
-            </NavigationLink>
-          ))}
-        </NavigationList>
+        <nav aria-label="Manual">
+          <ul className="space-y-0.5">
+            {FIXED_ENTRIES.map((entry) => (
+              <li key={entry.to}>
+                <NavLink
+                  className={({ isActive }: { isActive: boolean }) =>
+                    cn(ROW, isActive && "bg-muted font-medium")
+                  }
+                  end
+                  onClick={onNavigate}
+                  to={entry.to}
+                >
+                  <entry.icon aria-hidden size={16} />
+                  {entry.label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
 
         {index === null ? (
           <Text as="p" className="px-4" size="xs" tone="secondary">
             Navigation appears once the snapshot is in hand.
           </Text>
         ) : (
-          <nav aria-label="Manual contents" className="flex flex-col gap-5">
+          <nav
+            aria-label="Manual contents"
+            className="flex flex-col gap-5 border-border-subtle border-t pt-4"
+          >
             {index.groups.map((group) => (
               <GroupSection
                 group={group}
@@ -145,7 +164,7 @@ function GroupSection({
         title={group.title}
       />
       {collapsed ? null : (
-        <ul className="mt-1 space-y-0.5">
+        <ul className="mt-1 space-y-0.5 pl-5">
           {group.products.map((product) => (
             <ProductBranch
               key={product.id}
@@ -171,12 +190,28 @@ function ProductBranch({
     pathname === product.to || pathname.startsWith(`${product.to}/`);
   const [forced, setForced] = useState(false);
   const expanded = onRoute || forced;
-  const hasIncubating = product.incubating.length > 0;
+  const expandable =
+    product.capabilities.length > 0 || product.incubating.length > 0;
 
   return (
     <li>
       <div className="flex items-center gap-0.5">
-        {product.capabilities.length > 0 || hasIncubating ? (
+        <NavLink
+          className={({ isActive }: { isActive: boolean }) =>
+            cn(ROW, "min-w-0 flex-1", isActive && "bg-muted font-medium")
+          }
+          end
+          onClick={onNavigate}
+          to={product.to}
+        >
+          <span className="min-w-0 flex-1 truncate">{product.title}</span>
+          {product.changeCount > 0 ? (
+            <Badge className="tabular-nums" size="sm" variant="outline">
+              {product.changeCount}
+            </Badge>
+          ) : null}
+        </NavLink>
+        {expandable ? (
           <button
             aria-expanded={expanded}
             aria-label={`${expanded ? "Collapse" : "Expand"} ${product.title}`}
@@ -193,28 +228,9 @@ function ProductBranch({
         ) : (
           <span aria-hidden className="size-6 shrink-0" />
         )}
-
-        <NavLink
-          className={({ isActive }: { isActive: boolean }) =>
-            cn(
-              "flex h-8 min-w-0 flex-1 items-center gap-2 rounded-(--radius-md) px-2 text-sm outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50",
-              isActive && "bg-muted font-medium",
-            )
-          }
-          end
-          onClick={onNavigate}
-          to={product.to}
-        >
-          <span className="min-w-0 flex-1 truncate">{product.title}</span>
-          {product.changeCount > 0 ? (
-            <Badge size="sm" variant="warning">
-              {product.changeCount}
-            </Badge>
-          ) : null}
-        </NavLink>
       </div>
 
-      {expanded && (product.capabilities.length > 0 || hasIncubating) ? (
+      {expanded && expandable ? (
         <ul className="mt-0.5 ml-3 space-y-0.5 border-border-subtle border-l pl-2">
           {product.capabilities.map((capability) => (
             <li key={capability.id}>
@@ -246,7 +262,7 @@ function IncubatingLink({
 }) {
   return (
     <NavLink
-      className="flex h-8 items-center gap-2 rounded-(--radius-md) px-2 text-secondary-foreground text-sm outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
+      className={cn(ROW, "text-secondary-foreground hover:text-foreground")}
       onClick={onNavigate}
       title={`${incubating.specId} — introduced by ${incubating.change.title}`}
       to={`/planning#${incubating.change.id}`}
@@ -277,7 +293,7 @@ function FlatSection({
         title={title}
       />
       {collapsed ? null : (
-        <ul className="mt-1 ml-6 space-y-0.5">
+        <ul className="mt-1 space-y-0.5 pl-5">
           {items.map((item) => (
             <li key={item.id}>
               <LeafLink item={item} onNavigate={onNavigate} />
@@ -310,7 +326,7 @@ function IncubatingSection({
         title="Incubating"
       />
       {collapsed ? null : (
-        <ul className="mt-1 ml-6 space-y-0.5">
+        <ul className="mt-1 space-y-0.5 pl-5">
           {items.map((one) => (
             <li key={one.specId}>
               <IncubatingLink incubating={one} onNavigate={onNavigate} />
@@ -333,7 +349,8 @@ function LeafLink({
     <NavLink
       className={({ isActive }: { isActive: boolean }) =>
         cn(
-          "flex h-8 items-center gap-2 rounded-(--radius-md) px-2 text-secondary-foreground text-sm outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50",
+          ROW,
+          "text-secondary-foreground hover:text-foreground",
           isActive && "bg-muted font-medium text-foreground",
         )
       }
