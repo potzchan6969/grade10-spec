@@ -9,7 +9,7 @@
   ancestor IDs, and make the store the sole observation digest authority so
   `Observation changed before acceptance` distinguishes stale evidence without
   rejecting a complete producer payload.
-- [ ] 1.3 Expand every observed root into all registered-source records before
+- [x] 1.3 Expand every observed root into all registered-source records before
   comparison and reporting, including orphan and skipped-root evidence, making
   `Exact active change reference is found`, `Actionable findings are reported`,
   and `Unresolved registered root is skipped` retain both audit and Code Connect
