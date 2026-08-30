@@ -242,17 +242,19 @@ comparison, reporting, selection, reconciliation, verification, and optional
 commit as one guided workflow. The initial report phase SHALL be read-only.
 
 The default human report SHALL show all four ownership groups, including
-findings owned by others, without hiding their details. Each finding SHALL
-show a human-review block with the node name, category label and ID, the
-complete previous annotation body, and the complete current annotation body.
-A missing version SHALL be shown as `(none)`. Neither annotation body SHALL
-be truncated, summarized, excerpted, or JSON-escaped onto a single line.
-Each finding SHALL also show its stable ID, change kind, Figma file and node
-link, registered root and ancestor evidence, pinned properties, ambiguity,
-exact OpenSpec evidence, ownership group, and recommended next action. A
-compact owner summary SHALL be explicit opt-in only. The developer SHALL be
-able to select individual finding IDs; unselected findings SHALL remain
-drift.
+findings owned by others, without hiding their details. The report SHALL be
+structured chat markdown: one heading per finding, with each annotation
+body in its own fenced block. It SHALL NOT be emitted as one wrapping code
+fence. Each finding SHALL show a human-review block with the node name,
+category label and ID, the complete previous annotation body, and the
+complete current annotation body. A missing version SHALL be shown as
+`(none)`. Neither annotation body SHALL be truncated, summarized,
+excerpted, or JSON-escaped onto a single line. Each finding SHALL also
+show its stable ID, change kind, Figma file and node link, registered root
+and ancestor evidence, pinned properties, ambiguity, exact OpenSpec
+evidence, ownership group, and recommended next action. A compact owner
+summary SHALL be explicit opt-in only. The developer SHALL be able to
+select individual finding IDs; unselected findings SHALL remain drift.
 
 #### Scenario: Actionable findings are reported
 
@@ -273,6 +275,14 @@ drift.
   there is no current version
 - **AND** neither body is truncated, summarized, or JSON-escaped onto a
   single line
+
+#### Scenario: Human report is structured for reading
+
+- **WHEN** findings are reported
+- **THEN** each finding has its own heading with the node name
+- **AND** the previous and current annotation bodies are each in their own
+  fenced block
+- **AND** the report is chat markdown rather than one wrapping code fence
 
 #### Scenario: No tracked annotations changed
 
