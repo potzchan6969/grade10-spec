@@ -13,7 +13,7 @@ Depends on group 1 landing in the `grade10-spec` main branch and the
 - [x] 2.3 Make `product-page-SC-13` and `product-page-SC-15` pass: extend provider and Store catalog tests so current price, compare-at price, optional badges, media, and availability remain decoded at the port
 - [ ] 2.4 Verify with `pnpm run typecheck`, `pnpm run lint`, and the affected Shopify and Store backend/frontend package tests
 
-## 3. Product-detail presentation (grade10)
+## 3. Product-detail presentation (grade10) (owner: @kinisworking)
 
 Depends on group 2's contract and fixture fields being available.
 
