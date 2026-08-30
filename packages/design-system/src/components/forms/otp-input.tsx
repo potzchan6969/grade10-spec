@@ -194,7 +194,7 @@ function OtpInput({
           data-slot="input-label"
           htmlFor={inputId}
           className={cn(
-            "text-sm text-secondary-foreground",
+            "text-sm font-medium text-secondary-foreground",
             disabled && "opacity-50",
           )}
         >
