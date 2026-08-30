@@ -17,6 +17,8 @@ type TextInputProps = React.ComponentProps<"input"> & {
   status?: InputStatus;
   /** Puts a spinner in the trailing slot, replacing the status icon. */
   loading?: boolean;
+  /** Uneditable text before the value — currency symbol, etc. */
+  prefix?: ReactNode;
 };
 
 /**
@@ -37,6 +39,7 @@ function TextInput({
   status = "default",
   loading = false,
   disabled,
+  prefix,
   ...props
 }: TextInputProps) {
   // Presentation-only: the label and message have to reference the control,
@@ -54,6 +57,16 @@ function TextInput({
       disabled={disabled}
       htmlFor={inputId}
       messageId={messageId}
+      leading={
+        prefix ? (
+          <span
+            data-slot="input-prefix"
+            className="shrink-0 text-sm text-secondary-foreground"
+          >
+            {prefix}
+          </span>
+        ) : undefined
+      }
       trailing={<InputStatusIcon status={status} loading={loading} />}
     >
       <Input

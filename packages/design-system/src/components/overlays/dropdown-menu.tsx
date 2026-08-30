@@ -20,8 +20,8 @@ import {
  * ← closes it; Enter selects; typing jumps to the matching item (typeahead).
  * Disabled items are skipped by keyboard navigation and typeahead.
  *
- * Regular action items close on click; toggle and multi-select items stay open
- * and close only on explicit dismiss. Escape closes the innermost submenu first,
+ * Regular action items and single-select radio items close on click; toggle and
+ * multi-select items stay open and close only on explicit dismiss. Escape closes the innermost submenu first,
  * then root; clicking outside dismisses. Page scroll does not dismiss the menu.
  *
  * If the menu trigger is a button, rotate the chevron icon inside when
@@ -59,12 +59,23 @@ function DropdownMenuContent({
   alignOffset = 0,
   side = "bottom",
   sideOffset = 4,
+  collisionAvoidance,
+  collisionBoundary,
+  collisionPadding,
+  sticky,
   className,
   ...props
 }: MenuPrimitive.Popup.Props &
   Pick<
     MenuPrimitive.Positioner.Props,
-    "align" | "alignOffset" | "side" | "sideOffset"
+    | "align"
+    | "alignOffset"
+    | "collisionAvoidance"
+    | "collisionBoundary"
+    | "collisionPadding"
+    | "side"
+    | "sideOffset"
+    | "sticky"
   >) {
   return (
     <MenuPrimitive.Portal>
@@ -72,8 +83,12 @@ function DropdownMenuContent({
         className="isolate z-50 outline-none"
         align={align}
         alignOffset={alignOffset}
+        collisionAvoidance={collisionAvoidance}
+        collisionBoundary={collisionBoundary}
+        collisionPadding={collisionPadding}
         side={side}
         sideOffset={sideOffset}
+        sticky={sticky}
       >
         <MenuPrimitive.Popup
           data-slot="dropdown-menu-content"
@@ -220,6 +235,7 @@ function DropdownMenuRadioItem({
   children,
   inset,
   size = "sm",
+  closeOnClick = true,
   ...props
 }: MenuPrimitive.RadioItem.Props &
   VariantProps<typeof dropdownMenuItemVariants> & {
@@ -229,6 +245,7 @@ function DropdownMenuRadioItem({
     <MenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
       data-inset={inset}
+      closeOnClick={closeOnClick}
       className={cn(dropdownMenuItemVariants({ size }), className)}
       {...props}
     >

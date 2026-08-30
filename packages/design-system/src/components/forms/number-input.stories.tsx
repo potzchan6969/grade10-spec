@@ -53,3 +53,7 @@ export const WithoutMessage: Story = { args: { message: undefined } };
 /** The trailing slot holds one thing at a time: spinner, then status icon,
  * then the clear button. */
 export const WithClear: Story = { args: { onClear: () => {} } };
+
+export const WithPrefix: Story = {
+  args: { prefix: "US$", unit: undefined, defaultValue: "4,800" },
+};
