@@ -3,7 +3,7 @@
 - [x] 1.1 Make `product-page-SC-13`, `product-page-SC-15`, and `product-page-SC-16` pass: add the product-detail labels and pluralized low-inventory copy to the shared English product/store catalogs, preserving fallback behavior for other locales
 - [x] 1.2 Verify the i18n catalog resolution and type checks for the updated message vocabulary
 
-## 2. Catalogue contracts and provider projection (grade10)
+## 2. Catalogue contracts and provider projection (grade10) (owner: @kinisworking)
 
 Depends on group 1 landing in the `grade10-spec` main branch and the
 `external/grade10-spec` pointer being updated before frontend copy is consumed.
