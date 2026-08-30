@@ -1,14 +1,12 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
-import { ArrowSquareOut, CheckCircle } from "@phosphor-icons/react";
+import { CheckCircle } from "@phosphor-icons/react";
 import { Link } from "react-router";
 import { byLastMoved, taskTotals } from "../api/derive";
-import { changeSourceUrl } from "../api/paths";
 import { relativeTime } from "../api/time";
 import type { ChangeEntry } from "../api/types";
 import { useManualIndex } from "../api/use-manual-index";
 import { BrokenCard } from "./broken-card";
-import { ClampedText } from "./clamped-text";
 import { InlineMarkdown } from "./inline-markdown";
 
 type DeltaTone = "success" | "info" | "error" | "default";
@@ -83,11 +81,18 @@ export function DeltaKinds({ kinds }: { kinds: string[] }) {
 }
 
 /**
- * Who to name on a change. Owners come from the tasks' `(owner: @handle)` tags
- * and most changes carry none, so the proposal's author stands in — said
- * lighter, because proposing is not owning.
+ * Who to name on a change. Owners come from `.openspec.yaml` and the tasks'
+ * `(owner: @handle)` tags, and most changes carry none — so the proposal's
+ * author stands in, said lighter, because proposing is not owning. `claim`
+ * adds the word a review needs: nobody has picked this up.
  */
-export function Attribution({ change }: { change: ChangeEntry }) {
+export function Attribution({
+  change,
+  claim = false,
+}: {
+  change: ChangeEntry;
+  claim?: boolean;
+}) {
   if (change.owners.length > 0) {
     return (
       <Text as="span" className="font-mono" size="xs" tone="secondary">
@@ -98,13 +103,14 @@ export function Attribution({ change }: { change: ChangeEntry }) {
   if (change.author) {
     return (
       <Text as="span" size="xs" tone="secondary">
-        proposed by <span className="font-mono">@{change.author}</span>
+        {claim ? "unclaimed · " : ""}proposed by{" "}
+        <span className="font-mono">@{change.author}</span>
       </Text>
     );
   }
   return (
     <Text as="span" size="xs" tone="secondary">
-      unowned
+      unclaimed
     </Text>
   );
 }
@@ -148,15 +154,22 @@ export function ChangeChip({ change }: { change: ChangeEntry }) {
   );
 }
 
-/** The ribbon a spec page carries: what is moving against this spec, right now. */
+/**
+ * The ribbon a spec page carries: what is moving against this spec, right now,
+ * and what somebody has proposed about it. A proposal has no delta, so nothing
+ * else on the page would mention it — and it is not work in flight, so it never
+ * wears the same card.
+ */
 export function ChangeRibbon({
   changes,
+  proposals = [],
   specId,
 }: {
   changes: ChangeEntry[];
+  proposals?: ChangeEntry[];
   specId: string;
 }) {
-  if (changes.length === 0) {
+  if (changes.length === 0 && proposals.length === 0) {
     return (
       <div className="my-5 flex items-center gap-2 rounded-(--radius-xl) border border-border-subtle bg-background-subtle px-4 py-2.5">
         <span className="inline-flex text-success">
@@ -174,12 +187,47 @@ export function ChangeRibbon({
       aria-label={`Changes in flight against ${specId}`}
       className="my-5"
     >
-      <div className="grid gap-3 sm:grid-cols-2">
-        {[...changes].sort(byLastMoved).map((change) => (
-          <ChangeChip change={change} key={change.id} />
-        ))}
-      </div>
+      {changes.length > 0 ? (
+        <div className="grid gap-3 sm:grid-cols-2">
+          {[...changes].sort(byLastMoved).map((change) => (
+            <ChangeChip change={change} key={change.id} />
+          ))}
+        </div>
+      ) : null}
+      {proposals.length > 0 ? (
+        <ul className={changes.length > 0 ? "mt-2 space-y-1.5" : "space-y-1.5"}>
+          {[...proposals]
+            .sort((a, b) => b.created.localeCompare(a.created))
+            .map((change) => (
+              <li key={change.id}>
+                <ProposedChip change={change} />
+              </li>
+            ))}
+        </ul>
+      ) : null}
     </section>
+  );
+}
+
+/** Quieter than a change by a whole card: a proposal is a reason somebody
+ * wrote down, and reading it as work in flight would misfile a thought as a
+ * commitment. */
+function ProposedChip({ change }: { change: ChangeEntry }) {
+  return (
+    <Link
+      className="flex flex-wrap items-baseline gap-x-2 gap-y-1 rounded-(--radius-xl) border border-border-subtle border-dashed bg-background-subtle px-3 py-2 transition-colors hover:border-border-strong hover:bg-muted"
+      to={`/planning#${change.id}`}
+    >
+      <Badge size="sm" variant="outline">
+        proposed
+      </Badge>
+      <Text as="span" className="min-w-0 flex-1" size="sm">
+        <InlineMarkdown text={change.title} />
+      </Text>
+      <Text as="span" size="xs" tone="secondary">
+        no delta yet
+      </Text>
+    </Link>
   );
 }
 
@@ -188,7 +236,7 @@ export function ChangeRibbon({
  * yet — a delta may introduce the capability — and that reads as plain text
  * saying so, rather than as a link into a page that is not there.
  */
-function DeltaSpec({ spec }: { spec: string }) {
+export function DeltaSpec({ spec }: { spec: string }) {
   const route = useManualIndex().routeBySpec.get(spec);
   const label = <span className="font-mono text-xs">{spec}</span>;
 
@@ -206,77 +254,5 @@ function DeltaSpec({ spec }: { spec: string }) {
     >
       {label}
     </span>
-  );
-}
-
-/** The full card the planning board shows, anchored by change id. */
-export function ChangeCard({ change }: { change: ChangeEntry }) {
-  if (change.error) {
-    return <BrokenCard error={change.error} what={`Change ${change.id}`} />;
-  }
-  const { done, total } = taskTotals(change);
-
-  return (
-    <article
-      className="scroll-mt-24 rounded-(--radius-2xl) border border-border bg-card p-4"
-      id={change.id}
-    >
-      <div className="flex flex-wrap items-center gap-2">
-        <StatusBadge status={change.status} />
-        <Badge size="sm" variant="outline">
-          {change.schema}
-        </Badge>
-        <Text as="span" className="ml-auto" size="xs" tone="secondary">
-          {change.lastMoved
-            ? `moved ${relativeTime(change.lastMoved)}`
-            : `created ${change.created}`}
-        </Text>
-      </div>
-
-      <h3 className="mt-2 font-heading font-medium text-base">
-        <InlineMarkdown text={change.title} />
-      </h3>
-      <ClampedText className="mt-1" lines={4} text={change.why} />
-
-      <div className="mt-3 space-y-2">
-        {change.taskGroups.map((group) => (
-          <TaskProgress
-            done={group.done}
-            key={`${group.repo}/${group.title}`}
-            label={`${group.title} · ${group.repo}`}
-            total={group.total}
-          />
-        ))}
-        {change.taskGroups.length > 1 ? (
-          <TaskProgress done={done} label="All tasks" total={total} />
-        ) : null}
-        {change.taskGroups.length === 0 ? (
-          <Text as="p" size="xs" tone="secondary">
-            No task list yet.
-          </Text>
-        ) : null}
-      </div>
-
-      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 border-border-subtle border-t pt-3">
-        <Attribution change={change} />
-        <ul className="flex flex-wrap items-center gap-2">
-          {change.deltas.map((delta) => (
-            <li className="flex items-center gap-1" key={delta.spec}>
-              <DeltaSpec spec={delta.spec} />
-              <DeltaKinds kinds={delta.kinds} />
-            </li>
-          ))}
-        </ul>
-        <a
-          className="ml-auto inline-flex items-center gap-1 text-secondary-foreground text-xs hover:text-foreground"
-          href={changeSourceUrl(change.id)}
-          rel="noreferrer noopener"
-          target="_blank"
-        >
-          {change.id}
-          <ArrowSquareOut aria-hidden size={12} />
-        </a>
-      </div>
-    </article>
   );
 }

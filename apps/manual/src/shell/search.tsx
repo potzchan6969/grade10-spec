@@ -8,7 +8,12 @@ import {
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { groupResults, type SearchHit, searchIndexFor } from "../api/search";
+import {
+  groupResults,
+  runSearch,
+  type SearchHit,
+  searchIndexFor,
+} from "../api/search";
 import { useSnapshot } from "../api/snapshot-provider";
 import { useManualIndex } from "../api/use-manual-index";
 
@@ -83,11 +88,14 @@ function SearchDialog({
     [open, index],
   );
 
-  const groups = useMemo(
+  const found = useMemo(
     () =>
-      query.trim() === "" || !engine ? [] : groupResults(engine.search(query)),
+      query.trim() === "" || !engine
+        ? { hits: [], partial: false }
+        : runSearch(engine, query),
     [engine, query],
   );
+  const groups = useMemo(() => groupResults(found.hits), [found]);
 
   const flat = useMemo(() => groups.flatMap((group) => group.hits), [groups]);
 
@@ -150,39 +158,46 @@ function SearchDialog({
               Nothing matches “{query}”.
             </Text>
           ) : (
-            groups.map((group) => (
-              <section className="mb-3" key={group.kind}>
-                <Text
-                  as="p"
-                  className="px-2 py-1 uppercase tracking-wide"
-                  size="xs"
-                  tone="secondary"
-                  weight="medium"
-                >
-                  {group.label}
+            <>
+              {found.partial ? (
+                <Text as="p" className="px-2 pb-1" size="xs" tone="secondary">
+                  Nothing matches every word. These match some of it.
                 </Text>
-                <ul>
-                  {group.hits.map((hit) => {
-                    const position = flat.indexOf(hit);
-                    return (
-                      <li key={hit.id}>
-                        <button
-                          className={`flex w-full cursor-pointer flex-col items-start gap-0.5 rounded-(--radius-lg) px-2 py-1.5 text-left transition-colors hover:bg-muted ${position === cursor ? "bg-muted" : ""}`}
-                          onClick={() => go(hit)}
-                          onMouseEnter={() => setCursor(position)}
-                          type="button"
-                        >
-                          <span className="text-sm">{hit.title}</span>
-                          <span className="text-secondary-foreground text-xs">
-                            {hit.subtitle}
-                          </span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </section>
-            ))
+              ) : null}
+              {groups.map((group) => (
+                <section className="mb-3" key={group.kind}>
+                  <Text
+                    as="p"
+                    className="px-2 py-1 uppercase tracking-wide"
+                    size="xs"
+                    tone="secondary"
+                    weight="medium"
+                  >
+                    {group.label}
+                  </Text>
+                  <ul>
+                    {group.hits.map((hit) => {
+                      const position = flat.indexOf(hit);
+                      return (
+                        <li key={hit.id}>
+                          <button
+                            className={`flex w-full cursor-pointer flex-col items-start gap-0.5 rounded-(--radius-lg) px-2 py-1.5 text-left transition-colors hover:bg-muted ${position === cursor ? "bg-muted" : ""}`}
+                            onClick={() => go(hit)}
+                            onMouseEnter={() => setCursor(position)}
+                            type="button"
+                          >
+                            <span className="text-sm">{hit.title}</span>
+                            <span className="text-secondary-foreground text-xs">
+                              {hit.subtitle}
+                            </span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </section>
+              ))}
+            </>
           )}
         </div>
 

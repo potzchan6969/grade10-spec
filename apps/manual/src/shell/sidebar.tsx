@@ -6,7 +6,7 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { CaretDown, CaretRight } from "@phosphor-icons/react";
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router";
-import type { NavGroup, NavItem, NavProduct } from "../api/derive";
+import type { Incubating, NavGroup, NavItem, NavProduct } from "../api/derive";
 import { buildIndex } from "../api/derive";
 import { useSnapshot } from "../api/snapshot-provider";
 import { CapabilityPip } from "../blocks/capability-status";
@@ -15,6 +15,8 @@ import { NewPageAction } from "../editor/edit-actions";
 const FIXED_ENTRIES = [
   { to: "/", label: "Home" },
   { to: "/planning", label: "Planning" },
+  { to: "/qa", label: "QA" },
+  { to: "/design", label: "Design" },
 ];
 
 type SidebarProps = {
@@ -82,6 +84,10 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
               items={index.guides}
               onNavigate={onNavigate}
               title="Guides"
+            />
+            <IncubatingSection
+              items={index.incubating}
+              onNavigate={onNavigate}
             />
           </nav>
         )}
@@ -161,11 +167,12 @@ function ProductBranch({
     pathname === product.to || pathname.startsWith(`${product.to}/`);
   const [forced, setForced] = useState(false);
   const expanded = onRoute || forced;
+  const hasIncubating = product.incubating.length > 0;
 
   return (
     <li>
       <div className="flex items-center gap-0.5">
-        {product.capabilities.length > 0 ? (
+        {product.capabilities.length > 0 || hasIncubating ? (
           <button
             aria-expanded={expanded}
             aria-label={`${expanded ? "Collapse" : "Expand"} ${product.title}`}
@@ -203,16 +210,46 @@ function ProductBranch({
         </NavLink>
       </div>
 
-      {expanded && product.capabilities.length > 0 ? (
+      {expanded && (product.capabilities.length > 0 || hasIncubating) ? (
         <ul className="mt-0.5 ml-3 space-y-0.5 border-border-subtle border-l pl-2">
           {product.capabilities.map((capability) => (
             <li key={capability.id}>
               <LeafLink item={capability} onNavigate={onNavigate} />
             </li>
           ))}
+          {product.incubating.map((one) => (
+            <li key={one.specId}>
+              <IncubatingLink incubating={one} onNavigate={onNavigate} />
+            </li>
+          ))}
         </ul>
       ) : null}
     </li>
+  );
+}
+
+/**
+ * A capability that exists only as a delta. It has no page to link to, so this
+ * points at the change writing it — otherwise the only way to learn the
+ * capability is being built is to already know its change by name.
+ */
+function IncubatingLink({
+  incubating,
+  onNavigate,
+}: {
+  incubating: Incubating;
+  onNavigate: () => void;
+}) {
+  return (
+    <NavLink
+      className="flex h-8 items-center gap-2 rounded-(--radius-md) px-2 text-secondary-foreground text-sm outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
+      onClick={onNavigate}
+      title={`${incubating.specId} — introduced by ${incubating.change.title}`}
+      to={`/planning#${incubating.change.id}`}
+    >
+      <span className="min-w-0 flex-1 truncate italic">{incubating.title}</span>
+      <CapabilityPip status="incubating" />
+    </NavLink>
   );
 }
 
@@ -240,6 +277,39 @@ function FlatSection({
           {items.map((item) => (
             <li key={item.id}>
               <LeafLink item={item} onNavigate={onNavigate} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+/** The delta-only capabilities whose product has no branch of its own — an
+ * inventory nobody has written a page for yet is the easiest thing in the store
+ * to lose entirely. */
+function IncubatingSection({
+  items,
+  onNavigate,
+}: {
+  items: Incubating[];
+  onNavigate: () => void;
+}) {
+  const [collapsed, setCollapsed] = useState(false);
+  if (items.length === 0) return null;
+
+  return (
+    <div>
+      <SectionHeading
+        collapsed={collapsed}
+        onToggle={() => setCollapsed((on) => !on)}
+        title="Incubating"
+      />
+      {collapsed ? null : (
+        <ul className="mt-1 ml-6 space-y-0.5">
+          {items.map((one) => (
+            <li key={one.specId}>
+              <IncubatingLink incubating={one} onNavigate={onNavigate} />
             </li>
           ))}
         </ul>

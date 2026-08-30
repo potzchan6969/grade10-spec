@@ -2,31 +2,8 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { CaretRight, Wrench } from "@phosphor-icons/react";
 import { useState } from "react";
-import { Link } from "react-router";
-import { routeForPagePath } from "../api/paths";
-import type { CheckWarning } from "../api/types";
 import { useManualIndex } from "../api/use-manual-index";
-
-/** The check names its rules; the snapshot carries the key, and this is where
- * the key becomes a sentence. A rule this does not know still gets its own
- * group, under its key — a new rule shows up as itself rather than vanishing. */
-const RULE_TITLES: Record<string, string> = {
-  stale: "Pages older than the specs they embed",
-  skeleton: "Capability pages missing their acceptance shelf",
-  figma: "Figma links that point off figma.com",
-  journeys: "Specs whose journeys no page shows",
-  ref: "References that resolve to nothing, or to two things",
-};
-
-function groupByRule(warnings: CheckWarning[]): [string, CheckWarning[]][] {
-  const groups = new Map<string, CheckWarning[]>();
-  for (const warning of warnings) {
-    const list = groups.get(warning.rule) ?? [];
-    list.push(warning);
-    groups.set(warning.rule, list);
-  }
-  return [...groups].sort(([a], [b]) => a.localeCompare(b));
-}
+import { groupByRule, ruleTitle, WarningRow } from "./check-warnings";
 
 /**
  * What the last build's `check:manual` had to say. Warnings never fail a
@@ -79,7 +56,7 @@ export function MaintenancePanel() {
             {groupByRule(warnings).map(([rule, group]) => (
               <div key={rule}>
                 <Text as="p" className="mb-2" size="sm" weight="medium">
-                  {RULE_TITLES[rule] ?? rule}{" "}
+                  {ruleTitle(rule)}{" "}
                   <Text as="span" size="xs" tone="secondary">
                     {group.length}
                   </Text>
@@ -97,30 +74,5 @@ export function MaintenancePanel() {
         </div>
       </div>
     </section>
-  );
-}
-
-/** A warning about a page links to the page — the only useful next click. One
- * about a store file names the file, because there is no page to send anyone
- * to yet. */
-function WarningRow({ warning }: { warning: CheckWarning }) {
-  const route = warning.page ? routeForPagePath(warning.page) : null;
-
-  return (
-    <Text as="p" size="sm">
-      {route ? (
-        <Link className="font-medium hover:underline" to={route}>
-          {warning.page}
-        </Link>
-      ) : warning.page ? (
-        <span className="font-medium">{warning.page}</span>
-      ) : null}
-      {warning.page ? (
-        <span className="text-secondary-foreground"> — </span>
-      ) : null}
-      <Text as="span" size="sm" tone="secondary">
-        {warning.message}
-      </Text>
-    </Text>
   );
 }

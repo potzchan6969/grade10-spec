@@ -3,6 +3,7 @@ import {
   changesForSpec,
   type ManualIndex,
   type ParsedPage,
+  proposalsForSpec,
 } from "../api/derive";
 import { BlockScopeProvider } from "../blocks/block-scope";
 import { BlockView } from "../blocks/block-view";
@@ -12,6 +13,7 @@ import { PageActions } from "../editor/edit-actions";
 import { useEditMode } from "../editor/edit-mode";
 import { PageEditor } from "../editor/page-editor";
 import { ArchiveTimeline } from "./archive-timeline";
+import { PageWarnings, warningsForPage } from "./check-warnings";
 import { NotFoundPage } from "./not-found";
 import { PageHeading } from "./page-heading";
 import { useDocumentTitle } from "./use-document-title";
@@ -50,8 +52,13 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
         summary={frontmatter.summary}
         title={frontmatter.title}
       />
+      <PageWarnings warnings={warningsForPage(index.snapshot.warnings, path)} />
       {specId ? (
-        <ChangeRibbon changes={changesForSpec(index, specId)} specId={specId} />
+        <ChangeRibbon
+          changes={changesForSpec(index, specId)}
+          proposals={proposalsForSpec(index, specId)}
+          specId={specId}
+        />
       ) : null}
 
       <BlockScopeProvider value={{ index, pagePath: path }}>

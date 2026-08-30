@@ -105,7 +105,7 @@ export function SpecBlockView({ block }: { block: SpecBlock }) {
   }
 
   return (
-    <SpecFrame spec={spec}>
+    <SpecFrame full spec={spec}>
       <ul className="divide-y divide-border-subtle">
         {spec.requirements.map((requirement) => (
           <li key={requirement.name}>
@@ -125,9 +125,13 @@ export function SpecBlockView({ block }: { block: SpecBlock }) {
 function SpecFrame({
   spec,
   children,
+  full = false,
 }: {
   spec: SpecEntry;
   children: ReactNode;
+  /** The whole contract, rather than one row of it — the reading where the
+   * next permanent id gets picked. */
+  full?: boolean;
 }) {
   const count = spec.requirements.reduce(
     (sum, requirement) => sum + requirement.scenarios.length,
@@ -155,9 +159,45 @@ function SpecFrame({
           spec.md
           <ArrowSquareOut aria-hidden size={12} />
         </a>
+        {full ? <IdCeiling spec={spec} /> : null}
       </header>
       {children}
     </section>
+  );
+}
+
+const CEILING_KINDS = [
+  ["sc", "SC"],
+  ["us", "US"],
+  ["tc", "TC"],
+] as const;
+
+/**
+ * The highest permanent id this capability has issued, counting every in-flight
+ * delta and the archive. The durable file's own ceiling understates it — the
+ * fold discards a delta's journeys — so the most authoritative-looking screen
+ * is exactly where the wrong next id gets picked.
+ */
+function IdCeiling({ spec }: { spec: SpecEntry }) {
+  const issued = spec.issuedThrough;
+  if (!issued) return null;
+  const marks = CEILING_KINDS.flatMap(([key, label]) =>
+    issued[key] === undefined ? [] : [`${label}-${issued[key]}`],
+  );
+  if (marks.length === 0) return null;
+
+  return (
+    <Text
+      as="p"
+      className="w-full"
+      size="xs"
+      title="Counted over the durable spec, every in-flight delta and the archive. The next id has to clear it."
+      tone="secondary"
+    >
+      ids issued through{" "}
+      <span className="font-mono text-foreground">{marks.join(" · ")}</span> —
+      counting in-flight and archived work
+    </Text>
   );
 }
 

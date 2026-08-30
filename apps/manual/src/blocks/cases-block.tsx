@@ -1,5 +1,6 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
+import { useState } from "react";
 import { caseAnchor } from "../api/anchors";
 import type { SpecEntry, TestCaseStatus, TestSuiteStatus } from "../api/types";
 import type { CasesBlock } from "../content/grammar";
@@ -25,6 +26,16 @@ export function CasesBlockView({ block }: { block: CasesBlock }) {
   if (spec.error) {
     return <BrokenCard error={spec.error} what={`Spec ${spec.id}`} />;
   }
+  // The suite's break belongs to the suite. It is loud here and nowhere else
+  // — the requirements and journeys beside it keep rendering.
+  if (spec.testCasesError) {
+    return (
+      <BrokenCard
+        error={spec.testCasesError}
+        what={`Test cases for ${spec.id}`}
+      />
+    );
+  }
 
   const cases = spec.testCases ?? [];
   if (cases.length === 0) {
@@ -36,11 +47,13 @@ export function CasesBlockView({ block }: { block: CasesBlock }) {
   }
 
   const covered = new Set(cases.flatMap((testCase) => testCase.traces));
+  const exempt = new Set(spec.outOfSuite ?? []);
   const scenarios = spec.requirements.flatMap(
     (requirement) => requirement.scenarios,
   );
   const uncovered = scenarios.filter(
-    (scenario) => scenario.id && !covered.has(scenario.id),
+    (scenario) =>
+      scenario.id && !covered.has(scenario.id) && !exempt.has(scenario.id),
   ).length;
 
   return (
@@ -54,6 +67,7 @@ export function CasesBlockView({ block }: { block: CasesBlock }) {
           {cases.length} cases · {covered.size} scenarios traced
           {uncovered > 0 ? ` · ${uncovered} untraced` : ""}
         </Text>
+        <OutOfSuite ids={spec.outOfSuite ?? []} spec={spec} />
       </header>
       <ul className="divide-y divide-border-subtle">
         {cases.map((testCase) => (
@@ -90,6 +104,53 @@ export function CasesBlockView({ block }: { block: CasesBlock }) {
         ))}
       </ul>
     </section>
+  );
+}
+
+/**
+ * Scenarios the suite says it will not cover. Subtracted from the untraced
+ * count above, so what that number reports is always work — and named here,
+ * because a decision nobody can read is indistinguishable from a hole.
+ */
+function OutOfSuite({ ids, spec }: { ids: string[]; spec: SpecEntry }) {
+  const [open, setOpen] = useState(false);
+  if (ids.length === 0) return null;
+
+  return (
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+      <button
+        aria-expanded={open}
+        className="cursor-pointer text-secondary-foreground text-xs underline decoration-border-strong underline-offset-2 hover:text-foreground"
+        onClick={() => setOpen((on) => !on)}
+        title={`Scenarios the suite deliberately leaves uncovered: ${ids.join(", ")}`}
+        type="button"
+      >
+        {ids.length} out of suite
+      </button>
+      {open ? (
+        <ul className="flex w-full flex-wrap gap-1.5">
+          {ids.map((id) => (
+            <li key={id}>
+              <a
+                className="flex items-baseline gap-1.5 rounded-(--radius-lg) border border-border-subtle border-dashed px-2 py-0.5 text-xs transition-colors hover:border-border-strong hover:bg-muted"
+                href={`#${id}`}
+              >
+                <span className="font-mono text-secondary-foreground">
+                  {id}
+                </span>
+                <span className="min-w-0 leading-snug">
+                  {findScenario(spec, id)?.scenario.name ?? (
+                    <span className="text-destructive line-through">
+                      not in this spec
+                    </span>
+                  )}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
   );
 }
 

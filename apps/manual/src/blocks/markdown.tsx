@@ -25,6 +25,9 @@ type Target =
 const SAFE_PROTOCOL = /^(https?:|mailto:)/i;
 const ANY_PROTOCOL = /^[a-z][a-z0-9+.-]*:/i;
 const FILED_UNDER = ["docs/prds/", "docs/governance/"];
+/** The routes that are the app's own rather than a page's. Prose may link to
+ * any of them, and a route the app does not serve still reads as dead. */
+const APP_ROUTES = new Set(["/", "/planning", "/qa", "/design"]);
 
 export function classifyHref(
   href: string,
@@ -41,10 +44,7 @@ export function classifyHref(
   // An app-absolute path is a route link, checked against the routes that
   // actually exist so a typo still reads as dead.
   if (pathPart.startsWith("/")) {
-    const known =
-      pathPart === "/" ||
-      pathPart === "/planning" ||
-      index.pageByRoute.has(pathPart);
+    const known = APP_ROUTES.has(pathPart) || index.pageByRoute.has(pathPart);
     if (!known) return { kind: "dead", raw: href };
     return {
       kind: "route",

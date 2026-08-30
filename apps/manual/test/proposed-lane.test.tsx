@@ -118,13 +118,18 @@ describe("what a proposal is not part of", () => {
     expect(alone.groups[0].products[0].changeCount).toBe(0);
   });
 
-  it("stands outside the product groups on the board", () => {
+  it("stands in its own lane, never among the work in flight", () => {
     const html = render([planned, proposal]);
-    const groups = html.slice(0, html.indexOf("Proposed"));
+    const proposed = html.slice(
+      html.indexOf(">Proposed<"),
+      html.indexOf(">In progress<"),
+    );
 
-    expect(groups).toContain("Add the thing");
-    expect(groups).not.toContain("Loyalty points should expire");
-    expect(groups).toContain("1 change");
+    expect(proposed).toContain("Loyalty points should expire");
+    expect(proposed).not.toContain("Add the thing");
+    expect(html.slice(html.indexOf(">In progress<"))).toContain(
+      "Add the thing",
+    );
   });
 });
 
