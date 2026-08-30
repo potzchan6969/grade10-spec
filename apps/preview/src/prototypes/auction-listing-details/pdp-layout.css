@@ -1,0 +1,23 @@
+/* PDP two-column shell — explicit grid so Storybook iframes get the layout
+   even when Tailwind arbitrary grid utilities are not emitted. */
+.pdp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 3rem;
+}
+
+@media (min-width: 768px) {
+  .pdp-grid {
+    grid-template-columns: minmax(0, 1fr) 448px;
+  }
+
+  .pdp-sidebar {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .pdp-gallery {
+    grid-column: 1;
+    grid-row: 1;
+  }
+}
