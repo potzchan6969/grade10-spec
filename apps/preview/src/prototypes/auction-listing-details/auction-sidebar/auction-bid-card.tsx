@@ -1,24 +1,25 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
+import { ChartLineUp } from "@phosphor-icons/react";
 import { Card } from "@grade10/design-system/components/display/card";
 import { StatusIndicator } from "@grade10/design-system/components/display/status-indicator";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import type { SVGProps } from "react";
+import { useEffect, useState } from "react";
 import { BidHistoryList } from "../bid-history-list";
-import { bidHistoryForState, stateMeta } from "../fixtures";
-import { auctionHeaderLabel } from "../state-utils";
-import type { BidMode, BiddingState } from "../types";
 import {
-  AutoBidControls,
-  ManualBidControls,
-} from "./manual-bid-controls";
+  appendSimulatedBid,
+  bidHistoryForState,
+  stateMeta,
+} from "../fixtures";
+import { auctionHeaderLabel } from "../state-utils";
+import type { BidHistoryRow, BidMode, BiddingState } from "../types";
 import {
   BidActions,
   PriceBlock,
-  StandingBanner,
   TimeBlock,
 } from "./shared-fields";
+
+const LIVE_BID_INTERVAL_MS = 8_000;
 
 type AuctionBidCardProps = {
   state: BiddingState;
@@ -34,30 +35,42 @@ function AuctionBidCard({
   onPlaceBid,
 }: AuctionBidCardProps) {
   const meta = stateMeta(state);
-  const history = bidHistoryForState(state);
+  const [history, setHistory] = useState<readonly BidHistoryRow[]>(() =>
+    bidHistoryForState(state),
+  );
+
+  useEffect(() => {
+    setHistory(bidHistoryForState(state));
+  }, [state]);
+
+  useEffect(() => {
+    if (!meta.live) return;
+
+    const timer = window.setInterval(() => {
+      setHistory((rows) => {
+        if (rows.length === 0) return rows;
+        return appendSimulatedBid(rows);
+      });
+    }, LIVE_BID_INTERVAL_MS);
+
+    return () => window.clearInterval(timer);
+  }, [meta.live]);
 
   return (
-    <Card className="w-full" data-slot="auction-bid-card" padding={false}>
+    <Card className="w-full gap-0" data-slot="auction-bid-card" padding={false}>
       <HStack
         className="w-full border-b border-border px-4 py-2"
-        hAlign="space-between"
+        gap="sm"
         vAlign="center"
       >
-        <HStack gap="sm" vAlign="center">
-          <StatusIndicator
-            variant={meta.live ? "brand" : "default"}
-          />
-          <Text size="sm" weight="medium">
-            {auctionHeaderLabel(state)}
-          </Text>
-        </HStack>
-        <Badge
-          variant={
-            meta.opens ? "info" : meta.closed ? "default" : "success"
-          }
-        >
-          {meta.statusLabel}
-        </Badge>
+        {meta.live ? (
+          <LiveAuctionDot />
+        ) : (
+          <StatusIndicator variant="default" />
+        )}
+        <Text size="sm" weight="medium">
+          {auctionHeaderLabel(state)}
+        </Text>
       </HStack>
 
       <div className="grid w-full grid-cols-2 border-b border-border">
@@ -69,22 +82,30 @@ function AuctionBidCard({
         </div>
       </div>
 
-      <StandingBanner state={state} />
-
       {history.length > 0 ? (
         <VStack
           className="max-h-56 w-full overflow-y-auto border-b border-border px-4 py-4"
           gap="sm"
         >
           <HStack gap="xs" vAlign="center">
-            <ChartLineUpIcon className="size-3.5 text-muted-foreground" />
-            <Text size="sm" tone="secondary" weight="medium">
+            <ChartLineUp
+              aria-hidden
+              className="text-secondary-foreground"
+              size={14}
+            />
+            <Text
+              className="text-secondary-foreground"
+              size="sm"
+              tone="secondary"
+              weight="medium"
+            >
               Recent Bids
             </Text>
           </HStack>
-          <BidHistoryList rows={history} heading="" />
+          <BidHistoryList heading="" resetKey={state} rows={history} />
         </VStack>
       ) : null}
+
 
       <div className="px-4 py-4">
         <BidActions
@@ -92,23 +113,24 @@ function AuctionBidCard({
           onBidModeChange={onBidModeChange}
           onPlaceBid={onPlaceBid}
           state={state}
-        >
-          {bidMode === "manual" ? (
-            <ManualBidControls state={state} />
-          ) : (
-            <AutoBidControls state={state} />
-          )}
-        </BidActions>
+        />
       </div>
+
     </Card>
   );
 }
 
-function ChartLineUpIcon(props: SVGProps<SVGSVGElement>) {
+function LiveAuctionDot() {
   return (
-    <svg fill="currentColor" viewBox="0 0 256 256" {...props}>
-      <path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V48a8,8,0,0,1,16,0v94.37L89.86,98.12a8,8,0,0,1,10.3-.41l58.81,44.11L218.86,76a8,8,0,0,1,10.28,12.3l-64,56a8,8,0,0,1-10.29,0L96.14,117.23,40,163.31V200H224A8,8,0,0,1,232,208Z" />
-    </svg>
+    <span
+      aria-hidden
+      className="relative flex size-4 shrink-0 items-center justify-center"
+    >
+      <span
+        className="absolute size-2 rounded-full bg-success opacity-35 animate-ping motion-reduce:animate-none"
+      />
+      <span className="size-2 rounded-full bg-success" />
+    </span>
   );
 }
 

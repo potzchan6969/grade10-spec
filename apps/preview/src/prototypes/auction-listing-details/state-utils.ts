@@ -13,5 +13,5 @@ export function auctionHeaderLabel(state: BiddingState): string {
   const meta = stateMeta(state);
   if (meta.opens) return "Opens soon";
   if (meta.closed) return "Auction closed";
-  return "Live Auction";
+  return "Auction";
 }

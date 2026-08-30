@@ -5,20 +5,26 @@ import type { BiddingState } from "../types";
 
 type ManualBidControlsProps = {
   state: BiddingState;
+  hideLabel?: boolean;
 };
 
-function ManualBidControls({ state }: ManualBidControlsProps) {
+function ManualBidControls({ state, hideLabel = false }: ManualBidControlsProps) {
   const meta = stateMeta(state);
   const min = meta.hasBids
     ? meta.currentBidMinor + LOT.incrementMinor
     : LOT.startingBidMinor;
+  const message = hideLabel
+    ? `Min. bid: ${formatUsd(min)} (current + ${formatUsd(LOT.incrementMinor)})`
+    : undefined;
 
   return (
     <TextInput
       aria-label="Bid amount"
       className="min-w-0 flex-1"
       defaultValue={formatUsd(min).replace("US$", "")}
-      label="Place a bid"
+      label={hideLabel ? undefined : "Place a bid"}
+      message={message}
+      prefix="US$"
     />
   );
 }
@@ -39,6 +45,7 @@ function AutoBidControls({ state }: AutoBidControlsProps) {
       aria-label="Maximum bid"
       defaultValue={formatUsd(suggested).replace("US$", "")}
       label="Your maximum"
+      prefix="US$"
     />
   );
 }

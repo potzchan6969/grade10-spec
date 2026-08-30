@@ -1,5 +1,9 @@
 /* PDP two-column shell — explicit grid so Storybook iframes get the layout
-   even when Tailwind arbitrary grid utilities are not emitted. */
+   even when Tailwind arbitrary grid utilities are not emitted.
+
+   Sidebar uses sticky + self-start without a max-height scroll box so the page
+   is the only vertical scroll container — long sidebar content is not clipped
+   when the document scrolls. */
 .pdp-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

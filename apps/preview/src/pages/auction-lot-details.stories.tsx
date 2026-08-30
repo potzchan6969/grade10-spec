@@ -33,7 +33,7 @@ export const LiveAutoLeading: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("heading", { name: /Charizard/ })).toBeVisible();
-    expect(canvas.getByText("Live Auction")).toBeInTheDocument();
+    expect(canvas.getByText("Auction")).toBeInTheDocument();
     expect(canvas.getByRole("button", { name: "Place Bid" })).toBeVisible();
   },
 };

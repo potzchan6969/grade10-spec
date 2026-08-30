@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AgeVerificationDialog } from "../prototypes/auction-listing-details/age-verification-dialog";
 import { AuctionCardSidebar } from "../prototypes/auction-listing-details/auction-sidebar/auction-card-sidebar";
+import { SidebarHeader } from "../prototypes/auction-listing-details/auction-sidebar/sidebar-header";
 import { LOT } from "../prototypes/auction-listing-details/fixtures";
 import { LotGallery } from "../prototypes/auction-listing-details/lot-gallery";
 import { PageShell } from "../prototypes/auction-listing-details/page-shell";
@@ -23,15 +24,20 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
 
   return (
     <>
-      <PageShell>
+      <PageShell
+        header={
+          <SidebarHeader
+            onWatchToggle={() => setWatched((value) => !value)}
+            watched={watched}
+          />
+        }
+      >
         <LotGallery lot={LOT} />
         <AuctionCardSidebar
           bidMode={bidMode}
           onBidModeChange={setBidMode}
           onPlaceBid={() => setAgeVerifyOpen(true)}
-          onWatchToggle={() => setWatched((value) => !value)}
           state={state}
-          watched={watched}
         />
       </PageShell>
       <AgeVerificationDialog
