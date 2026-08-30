@@ -712,5 +712,255 @@
       "label": "Pages/Order Details/root"
     }
   ],
-  "entries": {}
+  "entries": {
+    "GW2WL6JcWok5ypUrUFi9bU:4006:985": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4006:985",
+      "sourceRoot": "4006:981",
+      "annotations": [
+        {
+          "annotationKey": "accepted:f574ff191a80379b:1",
+          "text": "product title",
+          "categoryId": "86:3",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "shared-ui/store-product-listing"
+          }
+        }
+      ]
+    },
+    "GW2WL6JcWok5ypUrUFi9bU:4098:2504": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4098:2504",
+      "sourceRoot": "4098:2423",
+      "annotations": [
+        {
+          "annotationKey": "accepted:7db7fe93612a5d1a:1",
+          "text": "**Product images:** provide descriptive `alt` text sourced from the CMS.",
+          "categoryId": "86:2",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "grade10-store/product-page"
+          }
+        }
+      ]
+    },
+    "GW2WL6JcWok5ypUrUFi9bU:4098:2512": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4098:2512",
+      "sourceRoot": "4098:2423",
+      "annotations": [
+        {
+          "annotationKey": "accepted:9d3d9c8b63a032a6:1",
+          "text": "Product title as `<h1>`",
+          "categoryId": "86:3",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "grade10-store/product-page"
+          }
+        }
+      ]
+    },
+    "GW2WL6JcWok5ypUrUFi9bU:4098:2515": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4098:2515",
+      "sourceRoot": "4098:2423",
+      "annotations": [
+        {
+          "annotationKey": "accepted:a27dbcaeae1ddc29:1",
+          "text": "**Floating price for non-graded products**\nSome products may be in floating pricing. Show Boneyard skeleton when fetching and updating the price.\n\n**Compare-at (strike-through) price:**\n1. Shown when the product is discounted (sale flag from Shopify CMS).\n2. Same logic as the `Product Card` component.",
+          "categoryId": "86:1",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "grade10-store/product-page"
+          }
+        }
+      ]
+    },
+    "GW2WL6JcWok5ypUrUFi9bU:4266:8638": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4266:8638",
+      "sourceRoot": "4098:2423",
+      "annotations": [
+        {
+          "annotationKey": "accepted:9dc887255f1e5e3f:1",
+          "text": "Sticky sidebar",
+          "categoryId": "86:1",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "grade10-store/product-page"
+          }
+        }
+      ]
+    },
+    "GW2WL6JcWok5ypUrUFi9bU:4288:14092": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4288:14092",
+      "sourceRoot": "4288:14117",
+      "annotations": [
+        {
+          "annotationKey": "accepted:45fa2927b32801c7:1",
+          "text": "Result count\n\nIf only 1 product, shows “1 Product”.\nIf no product, shows the empty state component.",
+          "categoryId": "86:3",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "shared-ui/store-product-listing"
+          }
+        }
+      ]
+    },
+    "GW2WL6JcWok5ypUrUFi9bU:4357:527": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4357:527",
+      "sourceRoot": "4357:527",
+      "annotations": [
+        {
+          "annotationKey": "accepted:7f35190b001ccd0f:1",
+          "text": "By default, displays all worlds and types (no checkbox are checked visually).\n\nClicking any checkbox to filter results. Results will be reloaded.\n\nSee all worlds:\nExpand the other checkboxes for worlds.\n\nSorting:\n1. Worlds: total number of products from the most to the least\n2. Types: Booster Box > Special Box > Graded Card > total no. of products from the most to the least.",
+          "categoryId": "86:1",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "shared-ui/store-product-listing"
+          }
+        }
+      ]
+    },
+    "GW2WL6JcWok5ypUrUFi9bU:4447:6009": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4447:6009",
+      "sourceRoot": "4098:2423",
+      "annotations": [
+        {
+          "annotationKey": "accepted:f657f3efe08bd2e3:1",
+          "text": "Scroll the whole page vertically to view the image(s).\n1. No zoom / lightbox — images are displayed at full size.\n2. Min. 1, max. 5 images per product.\n3. If the product has no image (edge case), show a placeholder image.",
+          "categoryId": "86:1",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "grade10-store/product-page"
+          }
+        }
+      ]
+    },
+    "GW2WL6JcWok5ypUrUFi9bU:4647:3188": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4647:3188",
+      "sourceRoot": "4098:2423",
+      "annotations": [
+        {
+          "annotationKey": "accepted:15984e0d6f39e195:1",
+          "text": "**SKU**: Display-only, not interactive. For customer reference when contacting support.",
+          "categoryId": "86:3",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "grade10-store/product-page"
+          }
+        }
+      ]
+    },
+    "GW2WL6JcWok5ypUrUFi9bU:4647:3226": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4647:3226",
+      "sourceRoot": "4098:2423",
+      "annotations": [
+        {
+          "annotationKey": "accepted:974e63f0070d459f:1",
+          "text": "**Link target (TBC):**\n1. Shipping fee: Shipping fee details webpage\n2. Hong Kong Grade10 Store: Store locator webpage or open in Google Maps",
+          "categoryId": "86:1",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "grade10-store/product-page"
+          }
+        }
+      ]
+    },
+    "GW2WL6JcWok5ypUrUFi9bU:4647:3264": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4647:3264",
+      "sourceRoot": "4098:2423",
+      "annotations": [
+        {
+          "annotationKey": "accepted:a8a1bf55ea1485d6:1",
+          "text": "**After adding to cart (ATC):**\n1. Disable stepper input.\n2. Change Add to cart button to loading state “Adding...”.\n3. Show the mini-cart overlay\n4. Reset the stepper input.\n5. Change Add button label to “Added to cart” if the product is in the cart.\n\n**Sold Out**\nIf the product is sold out (inventory qty = 0),\n1. Disable the stepper input.\n2. Change Add button to a disabled “Sold out” button without a leading icon.",
+          "categoryId": "86:1",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "grade10-store/product-page"
+          }
+        }
+      ]
+    },
+    "GW2WL6JcWok5ypUrUFi9bU:4647:3265": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4647:3265",
+      "sourceRoot": "4098:2423",
+      "annotations": [
+        {
+          "annotationKey": "accepted:2f01a015557e925f:1",
+          "text": "**Product Description**\nDescription is truncated to max. 3 lines with Show more link button by default.\n\nClick “Show more” to expand the full text, and changing “Show more” to “Show less” for collapsing / truncating the text back.",
+          "categoryId": "86:1",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "grade10-store/product-page"
+          }
+        },
+        {
+          "annotationKey": "accepted:8ce2a372240da1a2:1",
+          "text": "**Accessibility:**\n- \"Show more\" / \"Show less\": use `<button>` (not `<a>`), with `aria-expanded=\"false\"` / `\"true\"`.\n- The expanded text region should have an `id` referenced by `aria-controls` on the button.",
+          "categoryId": "86:2",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "grade10-store/product-page"
+          }
+        }
+      ]
+    },
+    "GW2WL6JcWok5ypUrUFi9bU:4647:3291": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4647:3291",
+      "sourceRoot": "4098:2423",
+      "annotations": [
+        {
+          "annotationKey": "accepted:1b5a5df42bdb4df0:1",
+          "text": "**Show badges for:**\n1. Product type\n2. IP (aka world)\n3. TCG card language\n*Badges are non-interactable.*",
+          "categoryId": "86:0",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "grade10-store/product-page"
+          }
+        }
+      ]
+    },
+    "GW2WL6JcWok5ypUrUFi9bU:4647:3296": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4647:3296",
+      "sourceRoot": "4098:2423",
+      "annotations": [
+        {
+          "annotationKey": "accepted:70db667ae2b7c473:1",
+          "text": "**Clicking breadcrumb navs**\n1. Home: Grade10 Store homepage\n2. Store: Product listing page\n3. Pokémon (optional): Collection page title. Appears if coming from a Collection page.",
+          "categoryId": "86:1",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "grade10-store/product-page"
+          }
+        }
+      ]
+    },
+    "GW2WL6JcWok5ypUrUFi9bU:4674:4558": {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4674:4558",
+      "sourceRoot": "4098:2423",
+      "annotations": [
+        {
+          "annotationKey": "accepted:5083701f5c7aa86f:1",
+          "text": "**Low inventory indicator:**\nWhen stock is low (threshold TBC), show \"Only X left\" text below the price.\nHides when inventory is above the threshold or when sold out.",
+          "categoryId": "86:3",
+          "pinnedProperties": [],
+          "associations": {
+            "capability": "grade10-store/product-page"
+          }
+        }
+      ]
+    }
+  }
 }
