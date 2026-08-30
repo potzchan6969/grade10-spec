@@ -1,12 +1,12 @@
+import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
+import { createElement } from "react";
+import { minNextBidMinor } from "../../../../packages/ui/src/blocks/auction-listing/format-usd";
 import type {
   ListingAuctionBidView,
   ListingAuctionStanding,
   ListingBidHistoryRow,
   ListingLotMetaBadge,
 } from "../../../../packages/ui/src/blocks/auction-listing/types";
-import { minNextBidMinor } from "../../../../packages/ui/src/blocks/auction-listing/format-usd";
-import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
-import { createElement } from "react";
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
@@ -207,7 +207,7 @@ export function stateMeta(state: BiddingState) {
       : opens
         ? 2 * DAY_SECONDS + 4 * HOUR_SECONDS + 12 * 60
         : 6 * 60 + 9,
-    countdownFormat: opens ? "long" as const : "short" as const,
+    countdownFormat: opens ? ("long" as const) : ("short" as const),
     deadline: closed
       ? undefined
       : opens
@@ -237,7 +237,9 @@ export function stateMeta(state: BiddingState) {
   };
 }
 
-export function bidHistoryForState(state: BiddingState): ListingBidHistoryRow[] {
+export function bidHistoryForState(
+  state: BiddingState,
+): ListingBidHistoryRow[] {
   if (!stateMeta(state).hasBids) return [];
 
   if (state === "live-auto-overtaken") {

@@ -28,7 +28,7 @@ function ListingManualBidControls({
       aria-label={copy.bidAmountLabel ?? "Bid amount"}
       className="min-w-0 flex-1"
       defaultValue={formatUsd(minBidMinor).replace("US$", "")}
-      label={hideLabel ? undefined : copy.bidAmountLabel ?? "Place a bid"}
+      label={hideLabel ? undefined : (copy.bidAmountLabel ?? "Place a bid")}
       message={message}
       prefix="US$"
     />

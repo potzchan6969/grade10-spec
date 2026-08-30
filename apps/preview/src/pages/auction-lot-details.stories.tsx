@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { AuctionLotDetailsPage } from "./auction-lot-details-page";
 import {
   BIDDING_STATE_LABELS,
   type BiddingState,
 } from "./auction-lot-details-content";
+import { AuctionLotDetailsPage } from "./auction-lot-details-page";
 
 const meta = {
   title: "Pages/Auction Lot Details",
@@ -35,7 +35,9 @@ export const LiveAutoLeading: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("heading", { name: /Charizard/ })).toBeVisible();
-    expect(canvas.getByText("Auction")).toBeInTheDocument();
+    expect(
+      canvas.getByRole("link", { name: "Auction", current: "page" }),
+    ).toBeVisible();
     expect(canvas.getByRole("button", { name: "Place Bid" })).toBeVisible();
   },
 };
@@ -43,7 +45,9 @@ export const LiveAutoLeading: Story = {
 export const Opens: Story = { args: { state: "opens" } };
 export const LiveNoBids: Story = { args: { state: "live-no-bids" } };
 export const LiveManual: Story = { args: { state: "live-manual" } };
-export const LiveAutoOvertaken: Story = { args: { state: "live-auto-overtaken" } };
+export const LiveAutoOvertaken: Story = {
+  args: { state: "live-auto-overtaken" },
+};
 export const ClosedSold: Story = { args: { state: "closed-sold" } };
 export const ClosedWonPaymentDue: Story = {
   args: { state: "closed-won-payment-due" },
@@ -52,6 +56,8 @@ export const ClosedWonPaymentDue: Story = {
     expect(canvas.getByRole("button", { name: "Pay Invoice" })).toBeVisible();
   },
 };
-export const ClosedWonSettled: Story = { args: { state: "closed-won-settled" } };
+export const ClosedWonSettled: Story = {
+  args: { state: "closed-won-settled" },
+};
 export const ClosedLost: Story = { args: { state: "closed-lost" } };
 export const ClosedUnsold: Story = { args: { state: "closed-unsold" } };

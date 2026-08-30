@@ -1,15 +1,19 @@
 import { useLayoutEffect, useRef } from "react";
-import { RollingDigit } from "./listing-countdown-digit";
 import { formatUsd, formatUsdNumeric } from "./format-usd";
+import { RollingDigit } from "./listing-countdown-digit";
 
 type ListingRollingUsdDisplayProps = {
   amountMinor: number;
 };
 
-function ListingRollingUsdDisplay({ amountMinor }: ListingRollingUsdDisplayProps) {
+function ListingRollingUsdDisplay({
+  amountMinor,
+}: ListingRollingUsdDisplayProps) {
   const prevMinorRef = useRef(amountMinor);
   const shouldAnimate = amountMinor > prevMinorRef.current;
-  const formatted = formatUsdNumeric(amountMinor);
+  const cells = formatUsdNumeric(amountMinor)
+    .split("")
+    .map((char, index, all) => ({ char, place: all.length - index }));
   const accessibleText = formatUsd(amountMinor);
 
   useLayoutEffect(() => {
@@ -22,15 +26,13 @@ function ListingRollingUsdDisplay({ amountMinor }: ListingRollingUsdDisplayProps
       <span aria-hidden="true" className="inline-flex items-baseline">
         <span>US$</span>
         <span className="inline-flex items-baseline tabular-nums">
-          {formatted.split("").map((char, index) =>
+          {cells.map(({ char, place }) =>
             /\d/.test(char) ? (
-              <RollingDigit
-                animate={shouldAnimate}
-                digit={char}
-                key={`d-${index}-${formatted.length}`}
-              />
+              <RollingDigit animate={shouldAnimate} digit={char} key={place} />
             ) : (
-              <span className="inline-block" key={`s-${index}`}>{char}</span>
+              <span className="inline-block" key={place}>
+                {char}
+              </span>
             ),
           )}
         </span>

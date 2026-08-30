@@ -56,12 +56,14 @@ function RollingDigit({
 }
 
 function RollingNumber({ value }: { value: number }) {
-  const digits = String(value).split("");
+  const digits = String(value)
+    .split("")
+    .map((digit, index, all) => ({ digit, place: all.length - index }));
 
   return (
     <span className="countdown-number">
-      {digits.map((digit, index) => (
-        <RollingDigit digit={digit} key={`${index}-${digits.length}`} />
+      {digits.map(({ digit, place }) => (
+        <RollingDigit digit={digit} key={place} />
       ))}
     </span>
   );
@@ -78,8 +80,8 @@ function RollingCountdown({
     <span className="countdown-display">
       <span className="sr-only">{accessibleText}</span>
       <span aria-hidden="true" className="countdown-segments">
-        {parts.map((part, index) => (
-          <span className="countdown-segment" key={`${part.unit}-${index}`}>
+        {parts.map((part) => (
+          <span className="countdown-segment" key={part.unit}>
             <RollingNumber value={part.value} />
             <span className="countdown-unit">{part.unit}</span>
           </span>

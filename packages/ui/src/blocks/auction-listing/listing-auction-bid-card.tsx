@@ -1,15 +1,15 @@
-import { ChartLineUp } from "@phosphor-icons/react";
 import { Card } from "@grade10/design-system/components/display/card";
 import { StatusIndicator } from "@grade10/design-system/components/display/status-indicator";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { ChartLineUp } from "@phosphor-icons/react";
 import {
   BidActions,
+  type ListingAuctionBidFieldsCopy,
   PriceBlock,
   StandingBanner,
   TimeBlock,
-  type ListingAuctionBidFieldsCopy,
 } from "./listing-auction-bid-fields";
 import { ListingBidHistoryList } from "./listing-bid-history-list";
 import type { ListingAuctionBidView, ListingBidHistoryRow } from "./types";
@@ -43,17 +43,17 @@ function ListingAuctionBidCard({
   onPlaceBid,
 }: ListingAuctionBidCardProps) {
   return (
-    <Card className="w-full gap-0" data-slot="listing-auction-bid-card" padding={false}>
+    <Card
+      className="w-full gap-0"
+      data-slot="listing-auction-bid-card"
+      padding={false}
+    >
       <HStack
         className="w-full border-b border-border px-4 py-2"
         gap="sm"
         vAlign="center"
       >
-        {view.live ? (
-          <LiveAuctionDot />
-        ) : (
-          <StatusIndicator variant="default" />
-        )}
+        {view.live ? <LiveAuctionDot /> : <StatusIndicator variant="default" />}
         <Text size="sm" weight="medium">
           {view.headerLabel}
         </Text>
@@ -116,9 +116,7 @@ function LiveAuctionDot() {
       aria-hidden
       className="relative flex size-4 shrink-0 items-center justify-center"
     >
-      <span
-        className="absolute size-2 rounded-full bg-success opacity-35 animate-ping motion-reduce:animate-none"
-      />
+      <span className="absolute size-2 rounded-full bg-success opacity-35 animate-ping motion-reduce:animate-none" />
       <span className="size-2 rounded-full bg-success" />
     </span>
   );
