@@ -201,9 +201,9 @@ being available in the registered store.
   of the final annotation is reported, and keep orphaned or replacement
   findings as selectable reviewable drift rather than blocked evidence.
 - [x] 8.2 Make the default human report actionable for every ownership group:
-  render stable ID, kind, category ID and label, Figma link, registered root
-  and ancestor evidence, old/current text, pinned properties, ambiguity,
-  exact OpenSpec evidence, ownership, and next action.
+  render name, category, complete previous and current annotation bodies,
+  stable ID, kind, Figma link, registered root and ancestor evidence, pinned
+  properties, ambiguity, exact OpenSpec evidence, ownership, and next action.
 - [x] 8.3 Restore `pnpm test` to the frontend lane, add the dedicated Node
   tooling lane and validation wiring, and rename/split scenario tests so all
   approved delta scenario names appear exactly in behavior-level test titles.
