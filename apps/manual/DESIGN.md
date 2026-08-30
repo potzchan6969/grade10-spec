@@ -52,7 +52,7 @@ start at `##`; raw HTML is never rendered). Directives sit at column 0:
 | `journeys` | `::journeys{id="grade10-store/loyalty"}` | the spec's user journeys, each story with its accepted-by scenarios |
 | `cases` | `::cases{id="grade10-store/loyalty"}` | the capability's test-case suite with coverage against its scenarios |
 | `changes` | `::changes{spec="grade10-store/loyalty"}` | ribbon of in-flight changes whose deltas touch that spec: status first, then tasks done/total, owners, last-moved age, link |
-| `figma` | `::figma{url="…" title="…"}` | titled card, embed loads on click, open-in-Figma link |
+| `figma` | `::figma{url="…" title="…" set="…"}` | titled card, embed loads on click, open-in-Figma link, design-sync verdict; optional `set` names the component set an assembly frame is about, validated against the report |
 | `story` | `::story{id="blocks-store-cart--default" title="…" height="480"}` | titled card, workbench Storybook iframe loads on click |
 | `image` | `::image{src="assets/…" alt="…" caption="…"}` | image from `manual/assets/`; missing `alt` is a parse error |
 | `children` | `::children` | cards for the child pages of this directory, from their frontmatter |
@@ -121,7 +121,11 @@ The builder emits two static artifacts, both pure functions of git state:
 
 Search needs no artifact: the client builds a minisearch index lazily over
 the snapshot on first use; the archive is searched only where it is already
-loaded.
+loaded. The index covers pages (design-card titles included), specs,
+test cases, and in-flight delta text — the work that exists only as a
+delta is findable, deep-linked to the board. Multi-word queries demand
+every word; when only some match, the palette says so instead of
+pretending.
 
 Spec entry shape:
 
@@ -131,36 +135,74 @@ Spec entry shape:
     scenarios: [{ id?, name, text }] }],
   journeys?:  [{ id, title, text, acceptedBy: [scenarioId] }],
   testCases?: [{ id, title, traces: [scenarioId], status }],
-  testCasesStatus? }
+  testCasesStatus?,
+  testCaseCitations?: [{ id, title }],   the suite's **Covers:** quotes
+  outOfSuite?: [scenarioId],             deliberately uncovered, named
+  issuedThrough?: { sc?, us?, tc? } }
 ```
 
 Test cases follow `docs/governance/specs-to-test-cases.md`: a case is
 `draft`, `actual`, or `deprecated`, the suite file `pending-review` or
 `approved`, and the cases block renders both — a draft must never wear an
-approved suite's authority.
+approved suite's authority, and the check now enforces that instead of
+asserting it. `issuedThrough` is the highest permanent id per kind,
+counted over durable text, every in-flight delta, and the archive —
+keyed by the id token, so two capabilities sharing a prefix (both
+`navigation`s) share one ceiling, which is the only answer that stops a
+new id colliding.
 
 The snapshot also carries `assets` (every file under `manual/assets/`),
 `warnings` (the `check:manual` warnings of the build that produced it —
-failures never deploy, so warnings are all it can carry), and optionally
-`designSync`, the nightly design-sync check's verdict per component set.
-The planning page renders the warnings as a maintenance list; `figma` and
-`story` cards badge a component set the report marks as drifting.
+failures never deploy, so warnings are all it can carry — plus a
+build-time `design` rule folded from the design-sync report: each
+drifting set with its message, each report key no card shows, and a
+report more than eight days old), and optionally `designSync`, the
+nightly report itself: `generatedAt`, the Figma `file` key, `sets`
+(verdict per component set), `nodes` (node id → the set it belongs to —
+the map that joins a `figma` frame to a verdict), and `messages` (a few
+lines per set saying what drifted). The planning page renders the
+warnings as a maintenance list. Every card wears its verdict: `ok` as a
+quiet checked chip, drift and a node id missing from the map (a frame
+deleted or renumbered in Figma) as loud ones — so a bare card reads as
+"not checked", never as "fine".
+
+The snapshot runs ~940&nbsp;KB today (~240&nbsp;KB gzipped), most of the
+growth being in-flight delta text; past ~1&nbsp;MB the lever is shipping
+delta text as its own lazy artifact beside `/api/archive`, not trimming
+what it says.
 
 Change entry shape:
 
 ```
-{ id, schema, status, owners, created, title, why,
-  taskGroups: [{ title, repo, done, total }],
-  lastMoved,                     last commit touching its tasks.md
+{ id, schema, status, owners, author?, created, title, why,
+  target?,                       .openspec.yaml target: date
+  dependsOn?: [changeId],        .openspec.yaml depends_on:
+  cites?: [id],                  the proposal's ## References, read back
+  taskGroups: [{ title, repo, done, total,
+    tasks?: [{ text, done, owner? }] }],
+  lastMoved,                     last commit touching ANY file of the change
   deltas: [{ spec, kinds,
-    requirements: [{ name, kind }] }] }
+    requirements: [{ name, kind, to?, text? }] }] }
 ```
 
+The heavy fields — `tasks` and `requirements[].text` — ride for in-flight
+changes only: the archive shares this type, its payload is the planning
+board's own fetch, and no reader needs an archived delta's full text.
+Owners come from `.openspec.yaml` first, task tags appended; `to` is a
+rename's destination heading. A change's lane is derived, never stored:
+`proposed` (no deltas) → `specified` (deltas, no task list) →
+`in-progress` (open tasks) → `complete` (done === total > 0, waiting on
+the archive). Dependencies resolve at derivation to blocking (in
+flight), satisfied (archived), or missing (a lie worth surfacing).
+
 A delta's `requirements` are the `### Requirement:` headings under its
-ADDED/MODIFIED/REMOVED/RENAMED sections — group headings (`### <name>`
-without the prefix) are legal in deltas and are never requirements. A
-rename is recorded under its FROM name, the row that exists until the
-change archives. The spec block badges a requirement row an in-flight
+ADDED/MODIFIED/REMOVED/RENAMED sections. A group heading (`### <name>`
+without the prefix) inside a delta section is a check failure — the fold
+copies it through verbatim and either aborts or corrupts the durable
+spec — and so is any `##` heading that is not a delta heading, Purpose,
+User journeys, or Feature set, because it silently ends the section and
+drops every requirement after it. A rename is recorded under its FROM
+name, the row that exists until the change archives. The spec block badges a requirement row an in-flight
 change touches (title, tasks done/total, link to planning), and a
 capability's status is derived, never stored: `changing` when an
 in-flight delta touches it, `incubating` when its spec exists
@@ -171,7 +213,11 @@ malformed input fails the build. Specs and changes are other people's
 files the manual mirrors: a malformed one becomes
 `{ id, error: { file, line, message } }` in the snapshot, renders as a loud
 broken card, and `check:manual` fails the PR that introduced it — the
-deployed site stays up and points at the break.
+deployed site stays up and points at the break. The split runs one level
+deeper than the store: a spec and the suite beside it are separate
+channels (`error` vs `testCasesError`), so a broken `test-cases.md`
+fails the PR naming its own file while the spec's requirements,
+journeys, and delta rules carry on.
 
 Node-only readers in `src/store/` (`read-specs.mts`, `read-changes.mts`,
 `read-manual.mts`, composed by `snapshot.mts`) parse the store from disk.
@@ -232,8 +278,16 @@ both transports:
   then tree → commit → a non-forced ref move, retried once if the ref
   advanced mid-flight. One push, one deploy.
 
-The hosted store needs a fine-grained PAT pasted in settings, held in
-localStorage; read-only without one. Two modes, chosen in settings:
+The hosted store needs a fine-grained PAT pasted in settings and
+verified before it counts: saving calls `/user` and a contents read of
+the repo, and the session stays read-only until both pass — each failure
+names its real cause, the unapproved-org-token 404 included. The verdict
+(login, expiry from GitHub's own header, warned within a week) is cached
+keyed to a fingerprint of the token, so a reload does not re-probe, and
+the first 401 tears it up. Read-only without one — but the propose
+control stays visible, wearing a lock and pointing at settings: hiding
+it hid the whole loop from the people who had not started it. Two modes,
+chosen in settings:
 
 - `main` (default): reads the base branch, and Push all lands on it —
   the deploy listens on push, so the batch is live in about a minute.
@@ -281,9 +335,11 @@ proposer's own words under `## Why`, citing the requirement and scenario
 ids the row knows. No delta and no tasks.md: the delta is what
 discussion is for, and a tasks.md would make the board read a thought as
 ready to implement. With no deltas the proposal flips no capability
-status, badges no row, and bumps no nav count — it simply appears on the
-planning page, whose "Proposed" lane collects every change without task
-groups. The write is one atomic commit (Trees API on GitHub, a confined
+status, badges no row, and bumps no nav count — it lands in the
+planning page's "Proposed" lane (the `proposed` lane of the four-lane
+derivation: no deltas yet), and the capabilities its `## References`
+cite can show it as a proposal before any delta exists. The write is one
+atomic commit (Trees API on GitHub, a confined
 endpoint in dev) behind an exact path allowlist that admits only a new
 change directory's own files — never `archive`, never an existing slug,
 never a durable spec — and the proposer can withdraw their own proposal
@@ -309,9 +365,27 @@ test/                           grammar round-trip table, reader fixtures
 ```
 
 Routes: `/` home, `/p/<product>`, `/p/<product>/<capability>`,
-`/platform/<topic>`, `/guides/<slug>`, `/planning`. These are canonical —
-a raw manual path redirects to its canonical route, never renders beside
-it.
+`/platform/<topic>`, `/guides/<slug>`, `/planning`, `/qa`, `/design`.
+These are canonical — a raw manual path redirects to its canonical
+route, never renders beside it. `/qa` and `/design` are pure snapshot
+derivations: a review worklist (drafts, uncovered scenarios, suite
+errors, worst first) and every design card grouped by page with its
+nightly verdict.
+
+Planning is a board of four lanes, not a product index: Proposed (a
+reason and its citations), Specified (deltas written — the queue a lead
+promotes), In progress, Complete (waiting on the archive). A card is the
+change detail: open task lines shown by name (done ones behind a
+toggle), owners stated honestly (`unclaimed`, never blank), target date,
+dependencies in three tones (blocking loud, satisfied quiet, missing
+destructive), and each delta requirement expandable — ADDED as the
+readable requirement it is, MODIFIED as a client-side diff against the
+durable block so a retyped block that drops content is reviewable,
+RENAMED saying what it becomes. Warnings render where they can be acted
+on: a page's own warnings as a strip on that page, store-file warnings
+in maintenance. Nav admits work that has no capability yet — delta-only
+capabilities appear as incubating rows linking to the change that
+introduces them.
 
 Deep links reach leaves: every rendered requirement row, scenario, journey,
 and flow step carries `id` (the store's permanent id where one exists), the
@@ -344,9 +418,31 @@ the lint workflow and run before every deploy of the manual:
   `## Requirements` — `openspec archive` absorbs a mid-section group
   heading into the preceding requirement's text, and this rule catches
   that at PR time instead of breaking the readers after the fold
-- an in-flight MODIFIED/REMOVED delta heading must resolve byte-for-byte
-  to a durable requirement heading, so an archive can never fail at the
-  fold on a heading that drifted
+- an in-flight MODIFIED/REMOVED delta heading (and a RENAMED FROM) must
+  resolve byte-for-byte to a durable requirement heading, an ADDED name
+  the durable spec already holds fails, and a MODIFIED block missing
+  scenarios the durable requirement currently carries fails naming them —
+  the same comparisons the fold makes, made while the delta is a delta
+- a delta refuses a group heading inside its sections and any `##`
+  heading that would silently end them (the fold aborts, corrupts, or
+  drops requirements on each)
+- two in-flight changes folding the same spec + requirement fail both
+  files — archiving them in sequence is a silent revert
+- permanent ids are issued once, ever: the universe is durable specs,
+  every in-flight delta, and every archived delta (the fold discards
+  journey sections, so archived ids stay reserved even when no durable
+  spec holds them)
+- a page selector naming a requirement an in-flight REMOVED delta deletes
+  or a RENAMED delta moves fails now, offering the new name — never
+  "archive green, main red"
+- a manifest's `depends_on` must name a change that exists, in flight or
+  archived — a board drawing edges from a lie would be worse than none
+- the `figma` family asserts the URL's file key and node id against the
+  design-sync report and validates `set=` against its keys — warnings,
+  since the report mirrors a file someone else owns
+- warning: a delta carrying `## User journeys` or `## Feature set` — the
+  fold discards both, so the archive workflow must carry them into the
+  durable spec by hand
 - warning: a page whose embedded specs changed after the page's last
   commit is flagged stale, naming which requirements changed (spec blob
   at the page's commit versus head, one `git cat-file --batch` pass); a
@@ -357,6 +453,14 @@ the lint workflow and run before every deploy of the manual:
 - warning: a `[[ref]]` in prose that resolves to nothing or to more than
   one thing, scanned with the grammar's fence tracking, inline code
   skipped
+- QA rules, asked of the spec directory and never of a page: a case
+  tracing a scenario the spec does not issue (fail), an `approved` suite
+  holding a `draft` case (fail), a journey accepted by a scenario its
+  own spec does not issue (fail); warnings for a suite no page shows,
+  scenarios no case traces minus the suite's `**Out of suite:**` list,
+  and a `**Covers:**` quote the spec's heading has moved away from
+- `manual.yaml` validation covers `platform:` as well as products, and a
+  malformed Storybook index is contained as a finding, never a crash
 
 Warnings do not live only in CI logs: the build embeds them in the
 snapshot and the planning page renders them as a maintenance list.
@@ -368,5 +472,8 @@ prose authors still type ids), table grid editing over GFM tables,
 paste-to-upload images, per-block staleness via blame (page-level resets
 on any edit today), a topology block once its data is regenerated by CI
 rather than committed by hand, porting the openspec-viewer board
-derivations (idle claims, collisions), `(verified: @qa)` acceptance tags,
-GitHub App auth replacing PATs.
+derivations (idle claims), `(verified: @qa)` acceptance tags,
+GitHub App auth replacing PATs, rename-proof deep links for requirements
+(needs permanent requirement ids, which archive's exact heading match
+rules out — page selectors get the fuse rule; raw copied links stay
+mortal).

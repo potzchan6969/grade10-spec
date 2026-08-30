@@ -6,8 +6,8 @@ description: Walk a QA reviewer through a pending test-cases.md suite one case a
 # Review a capability's test cases with QA
 
 Follow `docs/governance/specs-to-test-cases.md` — it defines the properties,
-the statuses, and why review comes before any Qase export. Read it in full
-before the first run in a session.
+the statuses, and what `approved` buys. Read it in full before the first run
+in a session.
 
 Invoke as `/tcs-review [<capability-or-change>]`. Generating or updating a
 suite is a different job: that is `/spec-to-tcs`
@@ -36,13 +36,14 @@ what they say.
 3. **Open the suite and its spec together.** Read the whole
    `test-cases.md` and the `spec.md` beside it, end to end, before the first
    question. You cannot answer "where does the spec say that?" from a
-   truncated read. Then orient the reviewer: the capability, the journeys,
-   how many cases each holds, and how many are `draft`.
+   truncated read. Then orient the reviewer: the capability, its sections
+   (journeys, or requirements where the spec is exempt from journeys), how
+   many cases each holds, and how many are `draft`.
 
-4. **Walk the `draft` cases one at a time,** in file order, journey by
-   journey. Cases already `actual` or `deprecated` are skipped unless the
+4. **Walk the `draft` cases one at a time,** in file order, section by
+   section. Cases already `actual` or `deprecated` are skipped unless the
    reviewer asks to revisit one. For each case, show:
-   - its id and title, and the journey it sits under;
+   - its id and title, and the section it sits under;
    - its description, preconditions, test data, and every step with its own
      expected result;
    - its nine properties;
@@ -71,20 +72,52 @@ what they say.
    | Approve | `**Status:** actual` on that case, unchanged otherwise. |
    | Change | Apply exactly the edit they asked for — wording, a property, a data row — then ask again; approve only on their yes. An edit that would add coverage the spec does not state goes to `spec.md` first, via `/spec-to-tcs`, not into the case. |
    | Defer | Leave `**Status:** draft` and note what they want resolved. |
-   | Retire | `**Status:** deprecated`, only when the spec no longer states that behaviour. Never delete the case, never renumber around it. |
+   | Retire | `**Status:** deprecated` plus a `- **Retired:** <why>` bullet under it. Never delete the case, never renumber around it. |
+
+   **Retiring covers two verdicts, and the reason says which** — the spec no
+   longer states the behaviour, or the reviewer finds the case redundant or
+   aimed at the wrong thing:
+
+   ```markdown
+   - **Status:** deprecated
+   - **Retired:** redundant with `loyalty-TC-12`, which covers the same clause
+   ```
+
+   Both are `deprecated`; neither is a reason to leave a case `draft` forever,
+   which was the only other place those verdicts had to go. The reason is its
+   own bullet, never a trailing clause on the `**Status:**` line: the store
+   reader takes the whole rest of that line as the status word and would
+   refuse the file (`apps/manual/src/store/read-specs.mts`).
+
+   A case tracing several scenarios where the spec dropped only some is not
+   retired. Retrace it to the ids that survive and review it again — half a
+   case is still a case.
 
 7. **Close the run.** When the last `draft` case has a verdict, or the
    reviewer stops:
    - If every case in the file is now `actual` or `deprecated`, set the
-     file's `**Status:**` to `approved` and say the suite is exportable.
+     file's `**Status:**` to `approved`. That is the end of the loop: the
+     suite is the reviewed record, and `check:manual` now holds it to that.
+     There is no export — `pnpm run qase:export` and
+     `openspec-export-qase-csv` do not exist, so never point at them.
    - If any case is still `draft`, leave `pending-review` and name what is
-     outstanding.
+     outstanding. Setting `approved` over a `draft` case **fails the build**
+     (`check:manual` rule `authority`), so it is never a shortcut.
    - Report: how many cases were approved, edited, deferred, retired; the
      gaps the review surfaced for the spec's author (a scenario no case
      covers, a case whose scenario has changed, a question the spec cannot
      answer); and any other suite still awaiting review.
-   - Point at `pnpm run qase:export` / `openspec-export-qase-csv` only when
-     the file actually reached `approved`.
+
+8. **What the build says about the file you just wrote.** Run
+   `pnpm run check:manual` when the review changed anything, and read its QA
+   rules as part of closing:
+
+   | Rule | Level | Says |
+   | --- | --- | --- |
+   | `authority` | fails | `approved` over a case still `draft`. |
+   | `trace` | fails | A case traces an id the spec issues nowhere — retrace it or retire it. |
+   | `coverage` | warns | A scenario no case traces. Close it deliberately with an `**Out of suite:**` line, or leave it as the hole it is; never invent a case to silence it. |
+   | `covers` | warns | A `**Covers:**` bullet quotes a scenario title the spec has since reworded. The id survived a rename by design, so this is the only signal that the words behind a signed-off case moved — re-review the cases under that bullet, or update the quote if the meaning did not change. |
 
 **Never do these things:**
 
@@ -96,7 +129,9 @@ what they say.
   traced scenario does not say, even when the reviewer asks — that is a spec
   change; say so and route it to `/spec-to-tcs` after the spec is fixed.
 - Never delete a case or a `test-cases.md` file. Retirement is
-  `deprecated`.
+  `deprecated`, and it always says why.
+- Never promise a Qase export, or point at `pnpm run qase:export` — neither
+  exists. `approved` is the record, not a handoff.
 - Never regenerate the suite from the spec mid-review. If it is badly out of
   date, stop and hand back to `/spec-to-tcs`.
 - Never review under `openspec/changes/archive/`.

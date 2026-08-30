@@ -69,15 +69,35 @@ traces scenario ids.
    `draft` themselves first; never do that for them, and never delete a
    `test-cases.md` file.
 
-3. **Digest the spec — and upgrade it if journeys are missing.** Read it
-   end to end from disk. Read the change's `proposal.md` when the target is
-   a delta (or when a linked change exists): its acceptance signal is what
-   makes a case's type `acceptance`.
+3. **Digest the spec, and settle what a missing journeys section means.**
+   Read it end to end from disk. Read the change's `proposal.md` when the
+   target is a delta (or when a linked change exists): its acceptance signal
+   is what makes a case's type `acceptance`.
 
-   If `## User journeys` is missing or empty, **do not stop.** First bring
-   the resolved `spec.md` in line with this store's specs rules in
-   `openspec/config.yaml` (`rules.specs`), then continue this skill on the
-   same target:
+   If `## User journeys` is missing or empty, do not reach for the same
+   answer twice. `openspec/config.yaml` **exempts** a capability no end user
+   reaches on its own — a cross-cutting policy every other spec inherits, a
+   package or composition contract, a backend convention. There the missing
+   section is correct, and adding journeys to it breaks the store's own rule
+   and edits a spec the PM owns. Ask who reaches this capability on their
+   own; when the answer is "another package", it is exempt.
+
+   **Exempt — derive the suite from the scenarios, and touch nothing in the
+   spec:**
+
+   1. One `## <Requirement name>` section per `### Requirement:`, in spec
+      order, carrying that requirement's `**Covers:**` bullets (`` `id` —
+      Scenario title ``). No `**As a**` / `**I want**` / `**so that**` lines
+      — there is no actor to write them about — and no invented `-US-` ids.
+   2. Cases as in step 5, numbered `<capability>-TC-<n>` across the whole
+      file, each tracing the scenario ids it proves.
+   3. One `**Out of suite:**` line listing the scenario ids no case covers —
+      the internal invariants nobody can exercise by hand. `check:manual`
+      subtracts them from coverage, so what it still reports is real work.
+      A scenario left out with no line is a hole, not a decision.
+
+   **Not exempt — the spec is unfinished, so upgrade it in place** and then
+   continue on the updated file:
 
    1. Re-read `openspec/config.yaml` specs rules in full (Purpose → Feature
       set → User journeys → requirements; INVEST stories; permanent
@@ -94,11 +114,11 @@ traces scenario ids.
       its deltas.
    3. Validate when the target is a change:
       `openspec validate <change-name> --strict`.
-   4. Report what you changed in the spec (journeys added, ids issued),
-      then **continue from step 4** on the updated file.
+   4. Report what you changed in the spec (journeys added, ids issued).
 
-   Only refuse when the file has no checkable scenarios at all (nothing to
-   hang a journey on). That gap goes to the author; do not invent behavior.
+   Either way, continue from step 4. Only refuse when the file has no
+   checkable scenarios at all — that gap goes to the author; do not invent
+   behavior.
 
 4. **Take the journeys as the suite's sections.** Each
    `### <capability>-US-<n>: …` under `## User journeys` becomes one
@@ -109,7 +129,8 @@ traces scenario ids.
    (operator, admin, collector, customer), never a developer, worker, or
    "the system". A scenario under no journey, or a journey listing an id the
    requirements never define, is reported in step 9 — never given an
-   invented home.
+   invented home. For an exempt spec the sections are its requirements
+   instead, exactly as step 3 sets out.
 
 5. **Write the test cases for each journey.** Number them
    `<capability>-TC-<n>` sequentially across the whole file, in journey
@@ -166,7 +187,9 @@ traces scenario ids.
 
 7. **Check the traceability both ways** before writing the file. Every case
    traces at least one scenario id (or legacy title), and every scenario in
-   the requirements is traced by at least one case.
+   the requirements is either traced by a case or named on an
+   `**Out of suite:**` line. A case tracing an id the spec does not issue
+   fails `check:manual`; an untraced scenario warns.
 
 8. **Write the file beside the resolved `spec.md`** — durable suite under
    `openspec/specs/.../test-cases.md`, or delta suite under
@@ -182,8 +205,12 @@ traces scenario ids.
      `draft`.
    - Add a case for every scenario no case traces, taking the next unused
      `TC` number — never reusing a retired one.
-   - Set `**Status:** deprecated` on any case whose scenario the spec no
-     longer has. Do not delete it and do not renumber around it.
+   - Set `**Status:** deprecated` on a case when the spec has dropped
+     **every** scenario it traces, and add the reason bullet under it:
+     `- **Retired:** the spec no longer states this behaviour`. Do not
+     delete it and do not renumber around it.
+   - A case tracing several scenarios where only some were dropped is not
+     retired: retrace it to the ids that survive and set it back to `draft`.
    - Leave `actual` cases `actual` unless their scenario actually changed.
    - Set the file's `**Status:**` back to `pending-review` whenever the run
      leaves at least one `draft` case.
@@ -195,8 +222,8 @@ traces scenario ids.
    any requirement whose prose states a rule no scenario covers, any
    scenario under no journey, and any journey listing an unknown scenario
    id — those are gaps for the spec's author. Point the user at
-   `/tcs-review` as the next step; do not tell them it is ready for Qase —
-   it isn't, until every case is `actual`.
+   `/tcs-review` as the next step. There is nowhere else to point them: no
+   Qase export exists, and `approved` is the record itself.
 
 **Never do these things:**
 
@@ -208,6 +235,9 @@ traces scenario ids.
   step, or a case that depends on another case having run.
 - Never invent a journey the upgraded spec does not justify from existing
   scenarios — step 3 may reshape the file, but it must not add behavior.
+- Never add `## User journeys` to a spec `openspec/config.yaml` exempts from
+  them. A package or composition contract has no actor; writing one in edits
+  a PM's spec to say something the store's own rules call wrong.
 - Never overwrite, regenerate, or delete an existing suite without showing
   it and asking first, and never at all when it holds an `actual` case or
   the file is `approved`.

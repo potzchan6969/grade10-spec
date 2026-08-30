@@ -10,10 +10,9 @@ A QA reviewer running a manual pass, a PM confirming acceptance before a
 change ships, or a support engineer reproducing a report needs that same
 coverage as numbered test cases: a short title, the journey it serves, what
 has to be true first, the steps to take, what should happen, and properties so
-a suite can be filtered, planned, and imported into Qase. This document
-defines that derivation — **spec journeys → classified test cases** — where
-the suites live, when they are generated, how they are reviewed, and the
-commands QA runs by hand.
+a suite can be filtered and planned. This document defines that derivation —
+**spec journeys → classified test cases** — where the suites live, when they
+are generated, how they are reviewed, and the commands QA runs by hand.
 
 The case components and the rules for writing them — an action-oriented
 title, a description, explicit preconditions, named test data, atomic steps
@@ -22,7 +21,9 @@ requirement — follow
 [Virtuoso QA's test case writing guide](https://www.virtuosoqa.com/post/test-cases),
 including its warnings: no vague steps, no missing expected results, no case
 that quietly depends on another having run first. The property vocabularies
-are Qase's own, so a suite exports without a translation step.
+are Qase's own, so the day an export is written it needs no translation step.
+**No export exists today** — see "Where an approved suite goes" below for what
+`approved` is for meanwhile.
 
 ## The rule
 
@@ -33,8 +34,9 @@ spec delta. Where the two disagree, `spec.md` is correct — regenerate the
 test case, never the other way round.
 
 Journeys are already in the spec, so this file does **not** invent flows.
-Every suite section is one `## User journeys` story; every test case traces
-one or more scenario ids (`<capability>-SC-<n>`). A case that traces nothing
+Every suite section is one `## User journeys` story — or, for a capability the
+store exempts from journeys, one requirement; every test case traces one or
+more scenario ids (`<capability>-SC-<n>`). A case that traces nothing
 is a new requirement in disguise and belongs back in `spec.md` first. A
 scenario id no case traces is a hole in the suite, reported — never quietly
 closed by inventing a case.
@@ -47,13 +49,13 @@ still come from the scenario's own clauses, in its own language.
 ## Naming
 
 Test cases use the same id shape as the spec they derive from, so a task, a
-review comment, and a Qase case can all name the same thing:
+review comment, and a test run can all name the same thing:
 
 | Id | Lives in | Example |
 | --- | --- | --- |
-| `<capability>-US-<n>` | `spec.md` user journey | `home-US-01` |
-| `<capability>-SC-<n>` | `spec.md` scenario | `home-SC-01` |
-| `<capability>-TC-<n>` | `test-cases.md` test case | `home-TC-01` |
+| `<capability>-US-<n>` | `spec.md` user journey | `loyalty-US-01` |
+| `<capability>-SC-<n>` | `spec.md` scenario | `loyalty-SC-01` |
+| `<capability>-TC-<n>` | `test-cases.md` test case | `loyalty-TC-01` |
 
 `<capability>` is the spec directory's own name (`home`, `admin-listing`).
 Number test cases sequentially across the whole file, in journey order,
@@ -78,11 +80,39 @@ carries the delta's `test-cases.md` into the durable location the same way
 it carries the delta `spec.md`.
 
 Write a suite for every capability whose spec (durable or delta) has
-checkable scenarios. When `## User journeys` is missing or empty,
-`/spec-to-tcs` first rewrites that `spec.md` to match `openspec/config.yaml`
-specs rules (Feature set, User journeys, permanent `US`/`SC` ids) from the
-behavior already there, then derives the suite. A file with no scenarios at
-all is not ready — finish the requirements first.
+checkable scenarios. A file with no scenarios at all is not ready — finish
+the requirements first.
+
+### A spec with no journeys
+
+Two different things look the same from here, and they take opposite actions.
+
+**The spec is exempt.** `openspec/config.yaml` says a capability no end user
+reaches on its own carries no `## User journeys` at all: a cross-cutting
+policy every other spec inherits, a package or composition contract, a backend
+convention. That is the correct shape, and a suite never edits a PM's spec to
+change it — inventing an actor to satisfy a rule the store deliberately waives
+is the one thing the rule forbids. Derive the cases from the scenarios
+directly:
+
+- One `## <Requirement name>` section per requirement, in spec order, with the
+  requirement's own `**Covers:**` bullets. No three-line story — there is no
+  actor to write one about.
+- Cases as usual, numbered `<capability>-TC-<n>` across the whole file, each
+  tracing the scenario ids it proves.
+- One `**Out of suite:**` line for the scenarios no case covers, so what
+  `check:manual` still reports as untraced is real work. An internal invariant
+  no person can exercise belongs there, not in an invented case.
+
+**The spec is unfinished.** A capability an end user does reach, whose spec
+simply never got its journeys, is missing them. There `/spec-to-tcs` upgrades
+the file first — Feature set and User journeys derived from the behaviour
+already there, permanent `US`/`SC` ids, **no new requirements** — and then
+derives the suite, reporting the rewrite in the same run.
+
+Which of the two it is is a judgment about the capability, not about the file:
+ask who reaches it on their own. When the answer is "another package", it is
+exempt.
 
 ## When suites are generated
 
@@ -94,9 +124,10 @@ When the `pm-planning` skill finishes the proposal and the delta specs, and
 delta with every case `draft` before the change is handed off for promotion.
 Generation is part of finishing the planning lane, not a later favour.
 
-A change that sets `skip_specs: true` has nothing to generate. A change
-whose deltas still lack `## User journeys` is upgraded in place by
-`/spec-to-tcs` before the suites are written — not left for a later pass.
+A change that sets `skip_specs: true` has nothing to generate. A delta that
+lacks `## User journeys` takes whichever branch above fits it: an exempt
+capability gets a journey-less suite, an unfinished one is upgraded in place
+before the suite is written — not left for a later pass.
 
 ### Manual — generate or extend by agent command
 
@@ -121,12 +152,10 @@ Examples:
 /spec-to-tcs grade10-auction/auto-bidding
 ```
 
-If the resolved `spec.md` has no `## User journeys` (or an empty one),
-`/spec-to-tcs` rewrites it to the shape in `openspec/config.yaml` specs
-rules — Purpose, Feature set, User journeys with INVEST stories and
-permanent `<capability>-US-<n>` / `<capability>-SC-<n>` ids — **without
-adding requirements**, then continues and writes `test-cases.md`. Report
-the spec rewrite in the same run.
+If the resolved `spec.md` has no `## User journeys` (or an empty one), take
+the branch that fits the capability — a journey-less suite for an exempt one,
+an in-place upgrade for an unfinished one — as "A spec with no journeys"
+above sets out.
 
 ### When a suite already exists
 
@@ -147,7 +176,7 @@ either is true:
 - the file's `**Status:**` is `approved`, or
 - any case in it has `**Status:** actual`.
 
-Those cases have a reviewer's name behind them and may already be in Qase.
+Those cases have a reviewer standing behind them.
 Update the suite in place instead — new scenarios become new `draft` cases,
 retired ones become `deprecated`, and reviewed cases keep their ids. A
 reviewer who genuinely wants a clean rewrite moves the affected cases back to
@@ -175,8 +204,8 @@ reviewer's questions ("why is this `critical`?", "where does the spec say
 20000?") are answered from the spec, quoting the clause — never from an
 assumption about how the product probably works. Approving sets that case's
 `**Status:**` to `actual`; deferring leaves it `draft`; retiring sets
-`deprecated`. When every case in the file is `actual` or `deprecated`, the
-file's `**Status:**` becomes `approved`, and only then does it export.
+`deprecated` with its one-line reason. When every case in the file is `actual`
+or `deprecated`, the file's `**Status:**` becomes `approved`.
 
 ## Step 1: digest the spec (upgrade journeys if missing)
 
@@ -185,14 +214,17 @@ Read the capability's `spec.md` end to end — `## Purpose`, `## Feature set`,
 from a truncated view. Read the change's `proposal.md` when one exists: its
 acceptance signal is what makes a case's type `acceptance`.
 
-If `## User journeys` is missing or empty, rewrite that `spec.md` first to
-match `openspec/config.yaml` `rules.specs`: keep every existing SHALL and
-scenario clause, add Feature set and User journeys derived from them, issue
-permanent story and scenario ids, and format each journey for a human reader
-(`**As a**` / `**I want**` / `**so that**`, then `**Accepted by:**` as
-`` `id` — title `` bullets — see `openspec/config.yaml` specs rules).
-Validate a change with `openspec validate <change> --strict`, then continue
-this document from Step 2 on the updated file.
+If `## User journeys` is missing or empty, settle which branch of "A spec with
+no journeys" applies before writing anything. An **exempt** capability keeps
+its shape untouched: skip to Step 2's journey-less section rule. An
+**unfinished** one is rewritten first to match `openspec/config.yaml`
+`rules.specs`: keep every existing SHALL and scenario clause, add Feature set
+and User journeys derived from them, issue permanent story and scenario ids,
+and format each journey for a human reader (`**As a**` / `**I want**` /
+`**so that**`, then `**Accepted by:**` as `` `id` — title `` bullets — see
+`openspec/config.yaml` specs rules). Validate a change with
+`openspec validate <change> --strict`, then continue this document from Step 2
+on the updated file.
 
 Confirm every journey heading carries a stable id
 (`### <capability>-US-<n>: …`) and lists the scenario ids that accept it,
@@ -218,6 +250,12 @@ hole — report it.
 Across a change, keep the journey count the specs already chose (at most
 five total). Splitting or merging journeys is a specs edit, not a test-case
 edit.
+
+**An exempt spec has no journeys to take.** Its sections are its requirements
+— one `## <Requirement name>` per `### Requirement:`, in spec order, carrying
+that requirement's `**Covers:**` bullets and no story lines — and the
+scenarios no case can reasonably exercise go under `**Out of suite:**` rather
+than into an invented flow. Everything after this step is the same.
 
 ## Step 3: write the test case
 
@@ -328,7 +366,8 @@ rather than leaving the field out.
 ## Step 5: classify the case
 
 Nine properties, in this order, every one of them on every case. The
-vocabularies are Qase's, so a suite exports without translation.
+vocabularies are Qase's, so the export nobody has written yet stays a
+formatting job.
 
 ### Severity
 
@@ -364,12 +403,33 @@ The case's own review state, distinct from the file's:
 
 | Value | Means |
 | --- | --- |
-| `draft` | Generated or edited since its last review. Not exported. |
-| `actual` | A reviewer read it against the scenarios it traces and stands behind it. Exports. |
-| `deprecated` | The spec no longer states this behaviour. Kept for history, never exported, never renumbered away. |
+| `draft` | Generated or edited since its last review. Not yet reviewed. |
+| `actual` | A reviewer read it against the scenarios it traces and stands behind it. |
+| `deprecated` | Retired: the spec no longer states this behaviour, or a reviewer found the case redundant or mis-scoped. Kept for history, never renumbered away. |
 
 Generation always writes `draft`. Only `/tcs-review` — with a human saying
 yes — writes `actual`.
+
+**Retiring a case says why.** `deprecated` covers two different verdicts —
+"the spec dropped this" and "this case is redundant or aimed at the wrong
+thing" — and a reader six months later cannot tell them apart from the status
+alone. A retired case carries its reason on its own bullet, immediately under
+the status:
+
+```markdown
+- **Status:** deprecated
+- **Retired:** redundant with `loyalty-TC-12`, which covers the same clause
+```
+
+The reason is a separate line rather than a trailing clause on the status
+because the store reader takes the whole rest of the `**Status:**` line as the
+status word (`apps/manual/src/store/read-specs.mts`) — `deprecated — why`
+would refuse the whole file. One line, one sentence, and name the case or the
+scenario it defers to.
+
+A case tracing several scenarios where the spec dropped only some is **not**
+retired: retrace it to the ids that survive and re-review it. Retire it only
+when nothing it traces is left.
 
 ### Behaviour
 
@@ -455,13 +515,36 @@ A case with no trace does not belong in the file.
 
 | Value | Means |
 | --- | --- |
-| `pending-review` | At least one case is still `draft`. Nothing in the file exports to Qase. |
+| `pending-review` | At least one case is still `draft`. |
 | `approved` | Every case is `actual` or `deprecated`; a reviewer stands behind the suite. |
 
 The file status is a summary of its cases, not an independent judgment.
 `/tcs-review` flips it to `approved` only when it has walked the last `draft`
 case with a human; generation never writes `approved`, and a suite that gains
 a new `draft` case goes back to `pending-review`.
+
+**`check:manual` enforces that summary,** so the status cannot drift from the
+cases under it:
+
+| Rule | Level | Says |
+| --- | --- | --- |
+| `authority` | fails the build | `**Status:** approved` over a case still `draft` — a draft wearing a reviewed suite's authority. |
+| `trace` | fails the build | A case traces an id the spec issues nowhere. |
+| `coverage` | warns | A scenario no case traces and no `**Out of suite:**` line excuses. |
+| `covers` | warns | A `**Covers:**` bullet quotes a title the spec has since reworded — the only signal that the words behind a signed-off case moved. |
+
+## Where an approved suite goes
+
+`approved` is the deploy-ready record: this capability's stated behaviour has
+been read, case by case, against the spec by a person, and the build now holds
+the file to it. That is the whole of what the state buys today.
+
+**The Qase export is not built.** `pnpm run qase:export` and
+`openspec-export-qase-csv` do not exist — no script, no command, nothing to
+run — and reaching `approved` sends nobody anywhere. The property vocabularies
+stay Qase's so the export, when someone writes it, is a formatting job and not
+a re-classification of every suite. Until then, an approved suite is read
+where it lives: the markdown in git, indexed by the capability's manual page.
 
 ## The format
 
@@ -480,6 +563,8 @@ a new `draft` case goes back to `pending-review`.
 
 - `<capability>-SC-<a>` — <scenario title>
 - `<capability>-SC-<b>` — <scenario title>
+
+**Out of suite:** `<capability>-SC-<c>`, `<capability>-SC-<d>`
 
 ### <capability>-TC-01: <actor> <action> <condition being verified>
 
@@ -507,6 +592,7 @@ a new `draft` case goes back to `pending-review`.
 - **Severity:** blocker | critical | major | normal | minor | trivial
 - **Priority:** high | medium | low
 - **Status:** draft | actual | deprecated
+- **Retired:** <why — deprecated cases only>
 - **Behaviour:** positive | negative | destructive
 - **Type:** functional | smoke | regression | acceptance | usability | security | performance | compatibility | integration | exploratory
 - **Layer:** e2e | api | unit
@@ -523,10 +609,17 @@ alike side by side.
 a table. Nothing else is optional: a case without a description, without
 preconditions, or with a step whose expected result is blank is not finished.
 
+`**Out of suite:**` is optional, and how a hole is closed on purpose: the
+scenario ids this suite deliberately does not cover, listed at column 0 beside
+`**Covers:**`. `check:manual` subtracts them from the coverage warning, so the
+untraced ids it does report are always work. An id listed there that a case
+also traces is itself reported.
+
+`**Retired:**` appears on `deprecated` cases and nowhere else.
+
 Execution belongs to the run, not to this file. There is no Actual result and
 no Pass/Fail column here — a suite is the authored artifact, and what happened
-on a given run lives in Qase (or wherever the pass is recorded) against the
-exported case.
+on a given run lives wherever the pass is recorded, against the case's id.
 
 ## Workflow summary
 
@@ -539,9 +632,10 @@ exported case.
 3. **Keep suites current** with the specs: when a delta adds, edits, or
    removes a scenario or journey, run `/spec-to-tcs` in the same PR and take
    the update path — new cases arrive `draft`, retired ones become
-   `deprecated`, reviewed ones keep their ids.
-4. Only `actual` cases in `approved` suites are exported by
-   `pnpm run qase:export` / `openspec-export-qase-csv`.
+   `deprecated` with a reason, reviewed ones keep their ids.
+4. **`approved` is where the loop ends today.** The suite is the reviewed
+   record and `check:manual` holds it to that; no export runs, because none is
+   built.
 
 ## What this is not
 
@@ -561,19 +655,25 @@ exported case.
 | `/spec-to-tcs <capability-or-change>` (`spec-to-tcs` skill) | If journeys are missing, rewrites the resolved `spec.md` to `openspec/config.yaml` specs rules, then derives suites under `openspec/specs/` or `openspec/changes/` and writes `test-cases.md` beside that `spec.md` with every new case `draft`. Shows an existing suite and asks before touching it; refuses to regenerate over `actual` cases or an `approved` file. Read `.cursor/skills/spec-to-tcs/SKILL.md`. |
 | `/tcs-review [<capability-or-change>]` (`tcs-review` skill) | Finds suites awaiting review, walks their `draft` cases with a human one at a time, answers questions from the spec, and records `actual` / `deprecated` / left-`draft`. Read `.cursor/skills/tcs-review/SKILL.md`. |
 | `pm-planning` skill | After proposal + specs validate, runs `/spec-to-tcs <change>` automatically. |
-| `pnpm run qase:export` / `openspec-export-qase-csv` | Exports the `actual` cases of every `approved` suite to a Qase-shaped CSV. Skips `pending-review` files, `draft` cases, and `deprecated` cases. |
+| `pnpm run check:manual` | Holds a suite to its own status: `approved` over a `draft` case and a case tracing an unissued id fail; an untraced scenario and a reworded `**Covers:**` quote warn. |
+| A Qase export | **Not built.** Nothing here exports; `approved` is the record, not a handoff. |
 
 ## Example
 
-[`openspec/specs/grade10-store/home/test-cases.md`](../../openspec/specs/grade10-store/home/test-cases.md)
-is the durable worked example: five collector journeys (`home-US-01` …
-`home-US-05`), twenty scenarios traced by id (`home-SC-01` …) across
-`home-TC-01` … `home-TC-18`, each with a description, its own preconditions,
-its test data, atomic steps carrying their own expected results, and the nine
-properties. Its sibling
-[`spec.md`](../../openspec/specs/grade10-store/home/spec.md) was upgraded to
-`openspec/config.yaml` Feature set / User journeys / permanent ids as part of
-`/spec-to-tcs grade10-store/home`.
+[`openspec/specs/grade10-store/loyalty/test-cases.md`](../../openspec/specs/grade10-store/loyalty/test-cases.md)
+is the durable worked example: five journeys (`loyalty-US-01` …
+`loyalty-US-05`, four a member's and one an operator's), sixty-four scenarios
+traced by id (`loyalty-SC-01` …) across `loyalty-TC-01` … `loyalty-TC-58`,
+each with a description, its own preconditions, its test data, atomic steps
+carrying their own expected results, and the nine properties. Its journey
+sections copy the story and the `**Covers:**` bullets straight from its
+sibling
+[`spec.md`](../../openspec/specs/grade10-store/loyalty/spec.md), which is
+where the journeys and the ids were issued.
+
+It is also the honest state of the practice: every case in it is still
+`draft`, so the file is `pending-review` and no reviewer has stood behind it
+yet. Read it for the format, not as a signed-off suite.
 
 Change deltas use the same format under
 `openspec/changes/<change>/specs/<product>/<capability>/test-cases.md`.
