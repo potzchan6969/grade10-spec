@@ -2,15 +2,20 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import {
   ArrowSquareOut,
+  CheckCircle,
   FigmaLogo,
   Play,
   WarningDiamond,
 } from "@phosphor-icons/react";
 import { type ReactNode, useState } from "react";
-import type { DesignSyncClass } from "../api/types";
 import type { FigmaBlock, StoryBlock } from "../content/grammar";
 import { useBlockScope } from "./block-scope";
-import { designSyncOf, isDrifting } from "./design-drift";
+import {
+  type DesignVerdict,
+  designSyncOf,
+  designSyncOfFrame,
+  isDrifting,
+} from "./design-drift";
 
 const DEFAULT_HEIGHT = 480;
 
@@ -22,7 +27,7 @@ type EmbedCardProps = {
   openUrl: string;
   openLabel: string;
   height: number;
-  badge?: ReactNode;
+  verdict?: DesignVerdict;
 };
 
 /**
@@ -37,9 +42,10 @@ function EmbedCard({
   openUrl,
   openLabel,
   height,
-  badge,
+  verdict,
 }: EmbedCardProps) {
   const [loaded, setLoaded] = useState(false);
+  const [why, setWhy] = useState(false);
 
   return (
     <figure className="my-6 overflow-hidden rounded-(--radius-2xl) border border-border bg-card">
@@ -51,7 +57,13 @@ function EmbedCard({
         <Text as="span" size="xs" tone="secondary">
           {kind}
         </Text>
-        {badge}
+        {verdict ? (
+          <DriftBadge
+            expanded={why}
+            onToggle={() => setWhy((open) => !open)}
+            verdict={verdict}
+          />
+        ) : null}
         <a
           className="ml-auto inline-flex items-center gap-1 text-secondary-foreground text-xs hover:text-foreground"
           href={openUrl}
@@ -62,6 +74,8 @@ function EmbedCard({
           <ArrowSquareOut aria-hidden size={12} />
         </a>
       </figcaption>
+
+      {verdict && why ? <DriftNote verdict={verdict} /> : null}
 
       {loaded ? (
         <iframe
@@ -93,10 +107,10 @@ function EmbedCard({
   );
 }
 
-/** No drift badge here: a card names a Figma node id, the design-sync report
- * names component sets, and only Figma maps one to the other. See
- * `design-drift.ts`. */
 export function FigmaBlockView({ block }: { block: FigmaBlock }) {
+  const { index } = useBlockScope();
+  const verdict = designSyncOfFrame(index.snapshot.designSync, block);
+
   return (
     <EmbedCard
       height={DEFAULT_HEIGHT}
@@ -106,29 +120,8 @@ export function FigmaBlockView({ block }: { block: FigmaBlock }) {
       openUrl={block.url}
       src={`https://www.figma.com/embed?embed_host=grade10&url=${encodeURIComponent(block.url)}`}
       title={block.title}
+      verdict={verdict}
     />
-  );
-}
-
-const DRIFT_TITLE: Record<"warn" | "fail", string> = {
-  warn: "The nightly design-sync check found this component set and its code disagreeing. It may be deliberate — someone has to settle it.",
-  fail: "The nightly design-sync check found an error on this component set: Dev Mode would emit wrong code, or the code renders a value Figma does not draw.",
-};
-
-/** No link out: the run that produced this is long gone by the time anyone
- * reads the page, and the title says what the verdict means. */
-function DriftBadge({ verdict }: { verdict: DesignSyncClass }) {
-  if (!isDrifting(verdict)) return null;
-  return (
-    <Badge
-      className="gap-1"
-      size="sm"
-      title={DRIFT_TITLE[verdict === "fail" ? "fail" : "warn"]}
-      variant={verdict === "fail" ? "error" : "warning"}
-    >
-      <WarningDiamond aria-hidden size={12} weight="fill" />
-      design drift
-    </Badge>
   );
 }
 
@@ -139,7 +132,6 @@ export function StoryBlockView({ block }: { block: StoryBlock }) {
 
   return (
     <EmbedCard
-      badge={verdict ? <DriftBadge verdict={verdict} /> : null}
       height={block.height ?? DEFAULT_HEIGHT}
       icon={<Play aria-hidden size={16} />}
       kind="Storybook story"
@@ -147,6 +139,112 @@ export function StoryBlockView({ block }: { block: StoryBlock }) {
       openUrl={`${base}/?path=/story/${encodeURIComponent(block.id)}`}
       src={`${base}/iframe.html?id=${encodeURIComponent(block.id)}&viewMode=story`}
       title={block.title ?? block.id}
+      verdict={verdict}
     />
+  );
+}
+
+const DRIFT_LABEL: Record<DesignVerdict["class"], string> = {
+  ok: "checked",
+  skipped: "not compared",
+  warn: "design drift",
+  fail: "design drift",
+  missing: "frame is gone",
+};
+
+const DRIFT_TITLE: Record<DesignVerdict["class"], string> = {
+  ok: "The nightly design-sync check compared this component set against the code and found them agreeing.",
+  skipped:
+    "The nightly design-sync check reached this component set and found nothing it could compare.",
+  warn: "The nightly design-sync check found this component set and its code disagreeing. It may be deliberate — someone has to settle it.",
+  fail: "The nightly design-sync check found an error on this component set: Dev Mode would emit wrong code, or the code renders a value Figma does not draw.",
+  missing:
+    "This frame is in no page, frame or component of the design file any more. Someone deleted or renumbered it, and this card points at nothing.",
+};
+
+/** `ok` and `skipped` wear the quietest rungs the badge has: they are there so
+ * that nothing is legible as "not checked", not to be read. */
+const DRIFT_VARIANT = {
+  ok: "outline",
+  skipped: "default",
+  warn: "warning",
+  fail: "error",
+  missing: "error",
+} as const;
+
+/**
+ * Every verdict says something, including the quiet ones. `ok` renders too:
+ * without it a page with no badges reads as "verified" when it usually means
+ * "outside the sweep", and coverage gaps are the thing a designer most needs
+ * to see. No link out — the run is long gone by the time anyone reads this —
+ * but the badge opens what the run actually said.
+ */
+function DriftBadge({
+  verdict,
+  expanded,
+  onToggle,
+}: {
+  verdict: DesignVerdict;
+  expanded: boolean;
+  onToggle: () => void;
+}) {
+  const loud = isDrifting(verdict.class);
+  return (
+    <Badge
+      aria-expanded={expanded}
+      className="cursor-pointer gap-1"
+      render={<button onClick={onToggle} type="button" />}
+      size="sm"
+      title={DRIFT_TITLE[verdict.class]}
+      variant={DRIFT_VARIANT[verdict.class]}
+    >
+      {loud ? (
+        <WarningDiamond aria-hidden size={12} weight="fill" />
+      ) : (
+        <CheckCircle aria-hidden size={12} weight="fill" />
+      )}
+      {DRIFT_LABEL[verdict.class]}
+    </Badge>
+  );
+}
+
+/** The same verdict where there is no frame to open — an index of cards rather
+ * than the card itself. */
+export function VerdictChip({ verdict }: { verdict: DesignVerdict }) {
+  return (
+    <Badge
+      className="gap-1"
+      size="sm"
+      title={DRIFT_TITLE[verdict.class]}
+      variant={DRIFT_VARIANT[verdict.class]}
+    >
+      {isDrifting(verdict.class) ? (
+        <WarningDiamond aria-hidden size={12} weight="fill" />
+      ) : (
+        <CheckCircle aria-hidden size={12} weight="fill" />
+      )}
+      {DRIFT_LABEL[verdict.class]}
+    </Badge>
+  );
+}
+
+const day = (iso: string) => iso.slice(0, 10);
+
+/** What the run said, in its own words. The check computes a precise diff and
+ * used to write it only to a job summary nobody keeps; this is where it lands
+ * for the person looking at the card. */
+function DriftNote({ verdict }: { verdict: DesignVerdict }) {
+  return (
+    <div className="space-y-1.5 border-border-subtle border-b bg-background-subtle px-4 py-3">
+      {verdict.messages.map((line) => (
+        <Text as="p" key={line} size="xs">
+          {line}
+        </Text>
+      ))}
+      <Text as="p" size="xs" tone="secondary">
+        {verdict.set ? `${verdict.set} · ` : ""}checked{" "}
+        {day(verdict.generatedAt)}
+      </Text>
+    </div>
   );
 }

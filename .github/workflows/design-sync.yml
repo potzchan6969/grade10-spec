@@ -15,9 +15,12 @@ on:
   workflow_dispatch:
 
 # The manual badges a card whose component set is drifting, and it reads that
-# from a committed report — so this workflow writes.
+# from a committed report — so this workflow writes. `actions: write` is for the
+# dispatch that follows the commit: a push made with GITHUB_TOKEN starts no
+# other workflow, so without it the report lands on main and rebuilds nothing.
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   # Keyed by event as well as ref: a scheduled run and a push to the default
@@ -84,27 +87,6 @@ jobs:
           FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
         run: pnpm run design-sync:check --report "$REPORT"
 
-      # Only from the default branch: a PR's report would be a verdict on a tree
-      # nobody deploys, and the manual reads one committed file. Keys are sorted
-      # set names, so a nightly that found nothing new commits nothing.
-      - name: Commit the design-sync report
-        if: >-
-          steps.components.outcome != 'skipped' &&
-          github.ref_name == github.event.repository.default_branch &&
-          github.actor != 'github-actions[bot]'
-        env:
-          COMMIT_MESSAGE: "chore(ci): record the design-sync verdict per component set"
-        run: |
-          if [ -z "$(git status --porcelain --untracked-files=all -- "$REPORT")" ]; then
-            exit 0
-          fi
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- "$REPORT"
-          git commit -m "$COMMIT_MESSAGE"
-          git push
-
       # A component with no variant axes has no component-set diff — its one
       # durable Figma-side check is the per-directory audit.json written at
       # conversion time. Sweeping them all here is what makes a designer-side
@@ -114,16 +96,66 @@ jobs:
       # lives in the design system, so a sweep of one package would leave it
       # checked by neither rail. A directory without an audit.json is listed as
       # uncovered, never as passing.
+      #
+      # Before the commit, and merging into the same report, so this rail
+      # reaches the manual at all: its half used to go to a job summary and
+      # nowhere else, which left the site chrome badging nothing on every page
+      # that shows it. `continue-on-error` for the same reason as above — the
+      # job goes red below, after the verdict is safely committed.
       - name: Audit component classnames against Figma
+        id: audit
         if: steps.token.outputs.available == 'true'
+        continue-on-error: true
         env:
           FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
-        run: pnpm run design-sync:audit --all-blocks
+        run: pnpm run design-sync:audit --all-blocks --report "$REPORT"
 
-      # Last, so the report is committed and both rails have reported before the
-      # job goes red on what the component check found.
+      # Only from the default branch: a PR's report would be a verdict on a tree
+      # nobody deploys, and the manual reads one committed file. Keys are sorted
+      # set names, so a nightly that found nothing new commits nothing.
+      - name: Commit the design-sync report
+        id: commit
+        if: >-
+          steps.components.outcome != 'skipped' &&
+          github.ref_name == github.event.repository.default_branch &&
+          github.actor != 'github-actions[bot]'
+        env:
+          COMMIT_MESSAGE: "chore(ci): record the design-sync verdict per component set"
+        run: |
+          if [ -z "$(git status --porcelain --untracked-files=all -- "$REPORT")" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "$REPORT"
+          git commit -m "$COMMIT_MESSAGE"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # The hop the verdict never used to make. A push made with the default
+      # GITHUB_TOKEN triggers no workflow, so the commit above lands on main and
+      # rebuilds nothing — badges appeared only on the next unrelated engineer
+      # push, which for a designer-only rename is whenever, or never. Only on a
+      # report that actually changed: dispatching on every nightly would rebuild
+      # and redeploy the site once a day to publish the same bytes.
+      - name: Rebuild the manual with the new verdict
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: gh workflow run manual.yml --ref "${{ github.event.repository.default_branch }}"
+
+      # Last, so the report is committed and the manual is already rebuilding
+      # before the job goes red on what either rail found.
       - name: Fail on component drift
         if: steps.components.outcome == 'failure'
         run: |
           echo "::error title=Design sync::Figma and the code disagree — see 'Check components against Figma' above."
+          exit 1
+
+      - name: Fail on audited-element drift
+        if: steps.audit.outcome == 'failure'
+        run: |
+          echo "::error title=Design sync::An audited element renders a value Figma does not draw — see 'Audit component classnames against Figma' above."
           exit 1

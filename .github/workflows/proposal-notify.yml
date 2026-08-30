@@ -1,0 +1,94 @@
+name: New proposal
+
+# A proposal lands in the Proposed lane on /planning and waits to be noticed.
+# Nothing notifies anybody, so the realistic answer to "who reads a new
+# proposal" is whoever happens to open the page. This is the first mile of that
+# loop: the store says out loud, once, that a proposal now exists.
+#
+# Adds only. A proposal is edited many times after it is written, and a ping per
+# edit is how a channel learns to ignore a bot.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "openspec/changes/*/proposal.md"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: proposal-notify-${{ github.sha }}
+
+env:
+  SLACK_NOTI_CHANNEL: C045K1QJVQT # web3-github
+  MANUAL_URL: https://grade10-manual.memeland-qa.workers.dev/planning
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Full history: a push can carry more than one commit, and this has to
+      # diff against where the branch actually was, not against HEAD's parent.
+      # It runs only when a proposal file changed, so the cost is rare.
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find the proposals this push added
+        id: added
+        env:
+          BEFORE: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          # A first push to a branch, or a force-push, leaves no usable
+          # `before`; the parent commit is the honest fallback.
+          base="$BEFORE"
+          if ! git cat-file -e "${base}^{commit}" 2>/dev/null; then
+            base="${HEAD_SHA}^"
+          fi
+
+          lines=""
+          while IFS= read -r file; do
+            id="$(basename "$(dirname "$file")")"
+            # The store's reader titles a change by its `# ` heading when it has
+            # one and by its humanized id when it does not. Same rule here.
+            title="$(sed -n 's/^# \(.*\)$/\1/p' "$file" | head -n 1)"
+            [ -n "$title" ] || title="${id//-/ }"
+            lines="${lines}• *${title}* (\`${id}\`)"$'\n'
+          done < <(git diff --name-only --diff-filter=A "$base" "$HEAD_SHA" \
+                     -- 'openspec/changes/*/proposal.md')
+
+          if [ -z "$lines" ]; then
+            echo "any=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          {
+            echo "any=true"
+            echo "text<<PROPOSALS"
+            printf '%s' "$lines"
+            echo "PROPOSALS"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Tell Slack
+        if: steps.added.outputs.any == 'true'
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          channel-id: ${{ env.SLACK_NOTI_CHANNEL }}
+          payload: |
+            {
+              "attachments": [
+                {
+                  "mrkdwn_in": ["text"],
+                  "color": "#0969da",
+                  "fallback": "A new proposal landed in the spec store.",
+                  "pretext": ":bulb: New proposal — it is in the Proposed lane until someone picks it up",
+                  "text": ${{ toJSON(steps.added.outputs.text) }},
+                  "footer": "<${{ env.MANUAL_URL }}|Planning> | <${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|the commit>"
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

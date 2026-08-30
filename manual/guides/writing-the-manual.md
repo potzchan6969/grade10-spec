@@ -57,12 +57,22 @@ changes. Author this block only to show a *different* spec's:
 ```
 
 Visuals. Figma URLs and Storybook ids are never invented — take them from the
-design record or the workbench. `alt` on an image is required:
+design record or the workbench, and the check now holds you to it: a url naming
+another Figma file, or a frame the nightly design sync no longer finds, is a
+warning. `alt` on an image is required:
 
 ```md
-::figma{url="https://www.figma.com/design/abc/Store" title="Cart, empty and filled"}
+::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493" title="Cart drawer"}
 ::story{id="blocks-store-cart--default" title="The cart block" height="480"}
 ::image{src="assets/tier-ladder.png" alt="The four tiers and their thresholds"}
+```
+
+A figma card badges what the nightly found for the component set behind it,
+joined by the frame's node id. An assembly frame answers to no set, so name one
+by hand — the check holds the value to the sets the report actually carries:
+
+```md
+::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4765-2301" title="Cart item, adjusted row" set="Product / Cart / Cart Item"}
 ```
 
 Child page cards, for a landing page that needs them somewhere other than the

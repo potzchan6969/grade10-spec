@@ -1,5 +1,6 @@
 import { runChecks } from "../../../../scripts/check-manual.mjs";
 import type { CheckWarning } from "../api/types.ts";
+import { designWarnings, readDesignSync } from "./design-sync.mts";
 import type { GitIndex } from "./git.mts";
 
 /**
@@ -10,13 +11,18 @@ import type { GitIndex } from "./git.mts";
  *
  * Failures are not carried: one fails the PR, so no snapshot with a failure in
  * it is ever deployed.
+ *
+ * The nightly design-sync report joins them under a `design` rule. It is not a
+ * `check:manual` rule and cannot be — it is a verdict on a Figma file, arriving
+ * on its own schedule — but it is a chore list of exactly the same kind, and
+ * before this it reached nothing but the cards that happened to match it.
  */
 export async function checkWarnings(
   root: string,
   git: GitIndex,
 ): Promise<CheckWarning[]> {
   const { findings } = await runChecks(root, git);
-  return findings
+  const warnings = findings
     .filter((one) => one.level === "warn")
     .map((one) => {
       const page = one.path.startsWith("manual/") ? one.path : undefined;
@@ -27,4 +33,6 @@ export async function checkWarnings(
       if (page) warning.page = page;
       return warning;
     });
+
+  return [...warnings, ...designWarnings(root, readDesignSync(root))];
 }

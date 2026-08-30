@@ -22,7 +22,15 @@ export type SpecBlock = {
 export type JourneysBlock = { type: "journeys"; id: string };
 export type CasesBlock = { type: "cases"; id: string };
 export type ChangesBlock = { type: "changes"; spec: string };
-export type FigmaBlock = { type: "figma"; url: string; title: string };
+export type FigmaBlock = {
+  type: "figma";
+  url: string;
+  title: string;
+  /** The Figma component set this frame is about, named by hand for an assembly
+   * frame whose own node id answers to no set. `check:manual` holds it to the
+   * design-sync report's own keys, so it cannot name a set nothing checks. */
+  set?: string;
+};
 export type StoryBlock = {
   type: "story";
   id: string;
@@ -132,6 +140,7 @@ export const BLOCK_SPECS: Record<string, BlockSpec> = {
     attrs: [
       { name: "url", required: true },
       { name: "title", required: true },
+      { name: "set" },
     ],
   },
   story: {

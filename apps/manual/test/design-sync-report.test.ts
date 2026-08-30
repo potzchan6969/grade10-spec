@@ -53,6 +53,30 @@ describe("the design-sync report", () => {
     expect(readDesignSync(root)?.sets["Product Card"]).toBe("fail");
   });
 
+  /** A chip reading "design drift" says nothing anyone can act on. These are
+   * the run's own lines — the same strings the console and the job summary
+   * print, so a card can never say something the run did not. */
+  it("carries why each set got its verdict, in the checker's own words", () => {
+    expect(readDesignSync(root)?.messages).toEqual({
+      "Nowhere / Ghost": [
+        "Nowhere / Ghost: no code component (looked for src/components/**/nowhereghost.tsx or ghost.tsx)",
+      ],
+      "Product Card": [
+        "packages/ui/src/blocks/store-product-listing/product-card.figma.ts: getEnum('soldOut') but Product Card has no such VARIANT property",
+      ],
+    });
+  });
+
+  /** A plugin dump carries no document, so this run cannot say which node ids
+   * exist. Writing an empty map would tell the manual every frame in the file
+   * had been deleted. */
+  it("says nothing about node ids when the source cannot say", () => {
+    const written = readDesignSync(root);
+
+    expect(written?.nodes).toBeUndefined();
+    expect(written?.file).toBeUndefined();
+  });
+
   it("writes it even on a run that ends in errors — that is the run worth badging", () => {
     expect(written.status).toBe(1);
   });
