@@ -70,11 +70,11 @@ Needs group 3 landed.
 
 Needs group 3 landed.
 
-- [ ] 7.1 Move `packages/grade10-auction/admin-frontend`'s catalog and post-sale panels onto the blocks and Astryx (`visual-standard-SC-01`, `visual-standard-SC-06`)
-- [ ] 7.2 Keep the post-sale confirmations on the package's `FormDialog` through the swap, with the platform's native confirm still uninvoked (`visual-standard-SC-08`)
-- [ ] 7.3 Move the bidders and fulfillment filters onto Astryx's `SegmentedControl` with the selected option announced, and the bidders queue's pager onto the rebuilt `CursorPager` (`visual-standard-SC-07`)
-- [ ] 7.4 Drop the package's `@source` entry and `@grade10/design-system` dependency
-- [ ] 7.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 7.1 Move `packages/grade10-auction/admin-frontend`'s catalog and post-sale panels onto the blocks and Astryx (`visual-standard-SC-01`, `visual-standard-SC-06`)
+- [x] 7.2 Keep the post-sale confirmations on the package's `FormDialog` through the swap, with the platform's native confirm still uninvoked (`visual-standard-SC-08`)
+- [x] 7.3 Move the bidders and fulfillment filters onto Astryx's `SegmentedControl` with the selected option announced, and the bidders queue's pager onto the rebuilt `CursorPager` (`visual-standard-SC-07`)
+- [x] 7.4 Drop the package's `@source` entry and `@grade10/design-system` dependency
+- [x] 7.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 8. Both application shells migrate (grade10)
 
