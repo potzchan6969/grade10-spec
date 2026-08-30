@@ -5,7 +5,7 @@
   and unchanged durable baseline registrations, making `One category catalog
   resolves many annotations`, `Unresolved registered root is skipped`, and
   `Every registered root is unresolved` pass for repeated registrations.
-- [ ] 1.2 Preserve nearest-parent-first ancestor chains, reject duplicate
+- [x] 1.2 Preserve nearest-parent-first ancestor chains, reject duplicate
   ancestor IDs, and make the store the sole observation digest authority so
   `Observation changed before acceptance` distinguishes stale evidence without
   rejecting a complete producer payload.
