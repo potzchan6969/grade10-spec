@@ -108,6 +108,7 @@ rules:
     - 'Phrase an implementation task as the spec scenario(s) it makes pass, naming them, so the scenario''s test is the evidence behind the checkmark. Never split "write the tests" into its own task or group - the engineer works test-first inside each task.'
     - Keep each task to something one engineer finishes in a session.
     - "Follow docs/governance/task-ownership.md for the group, task-id, and owner format. Write groups without owner tags - engineers claim them at pickup - and never renumber a group or task that is claimed or has checkmarks."
+    - "A change whose deltas touch a capability carries a task to update that capability's manual page (manual/ in this store, a grade10-spec group): the page tells the shipped story, and `pnpm check:manual` verifies it."
 
 # Per-operation guidance (optional)
 operations:
@@ -125,3 +126,4 @@ operations:
       - Archive only after engineering confirms the change is deployed, not when the code merges.
       - "Never archive a change that has a tasks.md with an unchecked task: finish it, or append its disposition (dropped, moved where, blocked on what) to the task text so the record stays honest. A pm-planning change has no tasks.md - archive it once engineering confirms the specs it carries are deployed."
       - Re-read the updated main specs afterward and confirm they describe the shipped behavior.
+      - "Update the capability's manual page to the shipped story before archiving and run `pnpm check:manual` - the archive folds the spec, and a page telling the pre-change story is drift the reader sees first."

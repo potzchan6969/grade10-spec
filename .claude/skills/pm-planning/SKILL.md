@@ -101,6 +101,7 @@ execute it is not.
 | Anything testable | The delta spec, and nowhere else |
 | Why this problem, for whom, what was ruled out, what will be measured | The PRD (`prd-authoring` skill) |
 | How it will be built | Not this lane — `design.md` at promotion |
+| The human story of the shipped capability | Its manual page (`manual/` in this store) — the in-flight change surfaces there automatically; the page itself is updated when the change ships |
 
 A testable statement left in a PRD or a proposal is the failure this lane
 exists to prevent: `docs/governance/prd-and-openspec.md` draws the boundary.
