@@ -81,6 +81,11 @@ const RULES = [
     level: "warn",
     title: "Pages older than the specs they embed",
   },
+  {
+    key: "skeleton",
+    level: "warn",
+    title: "Capability pages missing their acceptance shelf",
+  },
   { key: "figma", level: "warn", title: "Figma links" },
   {
     key: "journeys",
@@ -172,6 +177,7 @@ export async function runChecks(root, git) {
   }
 
   checkTaxonomy(root, config, shape, paths, add);
+  checkSkeleton(pages, add);
 
   const folded = checkSpecShape(root, shape, add);
   checkDeltas(changes, specs, add);
@@ -355,6 +361,27 @@ function checkTaxonomy(root, config, shape, paths, add) {
   }
   for (const slug of config.guides) {
     requirePage(add, root, `manual/guides/${slug}.md`, `guide \`${slug}\``);
+  }
+}
+
+const CAPABILITY_PAGE = /^manual\/products\/[^/]+\/(?!index\.md$)[^/]+\.md$/;
+
+/** The shelf every capability page keeps in the same order ends in acceptance,
+ * and a page that states a contract without it leaves QA nothing to read. A
+ * warning, never a failure: the shelf is a habit, not a pointer that rotted. */
+function checkSkeleton(pages, add) {
+  for (const page of pages) {
+    if (!CAPABILITY_PAGE.test(page.path)) continue;
+    if (page.ast.frontmatter.spec === undefined) continue;
+    const shelved = [...everyBlock(page.ast.blocks)].some(
+      (block) => block.type === "journeys" || block.type === "cases",
+    );
+    if (shelved) continue;
+    add(
+      "skeleton",
+      page.path,
+      "has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
+    );
   }
 }
 

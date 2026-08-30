@@ -2,7 +2,7 @@ import { join } from "node:path";
 import YAML from "yaml";
 import type { ManualConfig, PageEntry, Taxonomy } from "../api/types.ts";
 import { GrammarError, parsePage } from "../content/grammar.ts";
-import { readText, readTextIfExists, walkFiles } from "./disk.mts";
+import { readText, readTextIfExists, walkAll, walkFiles } from "./disk.mts";
 import type { GitIndex } from "./git.mts";
 import type { SpecShape } from "./read-specs.mts";
 
@@ -23,6 +23,14 @@ export function readManualPages(root: string, git: GitIndex): PageEntry[] {
     if (lastCommit) entry.lastCommit = lastCommit;
     return entry;
   });
+}
+
+/** `assets/<name>` — the path an `::image` block writes, not the store path,
+ * so the editor can validate a src against this list without rewriting it. */
+export function readManualAssets(root: string): string[] {
+  return walkAll(root, join(root, "manual", "assets")).map((path) =>
+    path.slice("manual/".length),
+  );
 }
 
 export function readManualConfig(root: string): ManualConfig {

@@ -62,13 +62,22 @@ export type Journey = {
   acceptedBy: string[];
 };
 
+/** Review state of one case (`docs/governance/specs-to-test-cases.md`):
+ * generation writes `draft`, only a human review writes `actual`. */
+export type TestCaseStatus = "draft" | "actual" | "deprecated";
+
 export type TestCase = {
   /** Permanent store id like `loyalty-TC-03`. */
   id: string;
   title: string;
   /** Scenario ids this case traces to. */
   traces: string[];
+  status: TestCaseStatus;
 };
+
+/** The suite file's own status — a summary of its cases, never an
+ * independent judgment. */
+export type TestSuiteStatus = "pending-review" | "approved";
 
 export type SpecEntry = {
   /** `product/capability`, or a bare topic id. */
@@ -79,6 +88,7 @@ export type SpecEntry = {
   requirements: Requirement[];
   journeys?: Journey[];
   testCases?: TestCase[];
+  testCasesStatus?: TestSuiteStatus;
   lastCommit?: CommitInfo;
   /** Set when the file was malformed; content fields may be incomplete. */
   error?: ItemError;
@@ -131,6 +141,24 @@ export type ChangeEntry = {
   error?: ItemError;
 };
 
+/** A `check:manual` warning the build ships so the app can show it —
+ * failures never reach a deploy, so warnings are all a snapshot carries. */
+export type CheckWarning = {
+  rule: string;
+  message: string;
+  /** `manual/…` path when the warning is about one page. */
+  page?: string;
+};
+
+/** One component set's verdict from the nightly design-sync check. */
+export type DesignSyncClass = "ok" | "warn" | "skipped" | "fail";
+
+export type DesignSyncReport = {
+  generatedAt: string;
+  /** Keyed by component-set name, as the checker names them. */
+  sets: Record<string, DesignSyncClass>;
+};
+
 /** `/api/snapshot` — boots the app. */
 export type Snapshot = {
   generatedAt: string;
@@ -141,6 +169,10 @@ export type Snapshot = {
   specs: SpecEntry[];
   /** In-flight only; archived changes live in `/api/archive`. */
   changes: ChangeEntry[];
+  /** Every file under `manual/assets/`, as `assets/<name>` paths. */
+  assets: string[];
+  warnings: CheckWarning[];
+  designSync?: DesignSyncReport;
 };
 
 /** `/api/archive` — fetched only by planning and timeline views. */

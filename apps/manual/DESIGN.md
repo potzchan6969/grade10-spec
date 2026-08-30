@@ -75,6 +75,13 @@ Grammar edge rules (each has a test):
   archived-changes timeline automatically; it only authors `::changes` to
   show another spec's.
 
+A capability page keeps one shelf order, so every role finds theirs in
+the same place on every page: what it is → how it looks (figma, stories)
+→ the contract (spec blocks) → acceptance (journeys, cases) → in flight
+→ history. The editor scaffolds a new capability page with that skeleton;
+a page with a `spec` but no journeys or cases block draws a warning,
+never a failure.
+
 ### Canonical form
 
 `src/content/grammar.ts` owns `parsePage` and `serializePage`, pure and
@@ -111,8 +118,21 @@ Spec entry shape:
   requirements: [{ name, text,
     scenarios: [{ id?, name, text }] }],
   journeys?:  [{ id, title, text, acceptedBy: [scenarioId] }],
-  testCases?: [{ id, title, traces: [scenarioId] }] }
+  testCases?: [{ id, title, traces: [scenarioId], status }],
+  testCasesStatus? }
 ```
+
+Test cases follow `docs/governance/specs-to-test-cases.md`: a case is
+`draft`, `actual`, or `deprecated`, the suite file `pending-review` or
+`approved`, and the cases block renders both — a draft must never wear an
+approved suite's authority.
+
+The snapshot also carries `assets` (every file under `manual/assets/`),
+`warnings` (the `check:manual` warnings of the build that produced it —
+failures never deploy, so warnings are all it can carry), and optionally
+`designSync`, the nightly design-sync check's verdict per component set.
+The planning page renders the warnings as a maintenance list; `figma` and
+`story` cards badge a component set the report marks as drifting.
 
 Change entry shape:
 
@@ -179,12 +199,30 @@ rendered conflict diff instead of a silent overwrite.
 
 - `LocalStore` (dev): posts to the Vite plugin; a commit bar appears once
   the working tree has manual edits.
-- `GithubStore` (hosted): a fine-grained PAT (`contents:write` +
-  `pull_requests:write`) pasted in settings, held in localStorage; first
-  write creates or reuses a `manual/<login>` branch AND its PR, so edits
-  never rot on an unopened branch. Read-only without a token. Raw HTML
-  stays off in the renderer — that is the XSS line that makes a stored PAT
-  tolerable until a GitHub App replaces it.
+- `GithubStore` (hosted): a fine-grained PAT pasted in settings, held in
+  localStorage; read-only without one. Two modes, chosen in settings:
+  - `main` (default): reads and writes the base branch directly — the
+    deploy listens on push, so a save is live in about a minute. Needs
+    `contents:write` only. Before a save the editor compares live main
+    against the snapshot's `storeHead` and warns when the page it loaded
+    is behind; a push refused by branch protection surfaces the refusal
+    and suggests PR mode, never a silent fallback.
+  - `branch + PR`: first write creates or reuses a `manual/<login>`
+    branch AND its PR, so edits never rot on an unopened branch. Also
+    needs `pull_requests:write`.
+  The mode picks the ref for read and write together — the editor never
+  loads one branch while claiming to edit another. Raw HTML stays off in
+  the renderer — that is the XSS line that makes a stored PAT tolerable
+  until a GitHub App replaces it; main mode is why the deploy workflow
+  notifies on failure and the header shows deployed `storeHead` against
+  live main with the last deploy's conclusion, so a frozen site is
+  visible in the tool itself.
+
+Saving validates client-side what the snapshot can prove: canonical form,
+spec and scenario ids, image paths against `assets`, and that the save
+does not drop a durable spec's last page reference. Story ids stay a
+build-side check — the browser cannot see the Storybook index, and does
+not pretend to.
 
 New pages are created from the editor (path picker constrained to the
 `manual/` tree); deleting a page is a dev-mode-only action.
@@ -252,6 +290,11 @@ the lint workflow and run before every deploy of the manual:
   at the page's commit versus head, one `git cat-file --batch` pass); a
   spec moved since that commit is reported as moved, never as an
   everything-changed diff; a page with no commit yet is skipped
+- warning: a capability page with a `spec` but no journeys or cases block
+  is missing its acceptance shelf
+
+Warnings do not live only in CI logs: the build embeds them in the
+snapshot and the planning page renders them as a maintenance list.
 
 ## Later, deliberately
 

@@ -8,6 +8,7 @@ import type { ChangeEntry } from "../api/types";
 import { useManualIndex } from "../api/use-manual-index";
 import { ChangeCard } from "../blocks/change-views";
 import { ArchiveTimeline } from "./archive-timeline";
+import { MaintenancePanel } from "./maintenance-panel";
 import { PageHeading } from "./page-heading";
 import { useDocumentTitle } from "./use-document-title";
 
@@ -101,6 +102,7 @@ export function PlanningPage() {
       )}
 
       <ArchiveTimeline title="Archive" />
+      <MaintenancePanel />
     </>
   );
 }

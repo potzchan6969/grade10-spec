@@ -59,6 +59,8 @@ export function snapshotOf(parts: Partial<Snapshot> = {}): Snapshot {
     pages: [],
     specs: [],
     changes: [],
+    assets: [],
+    warnings: [],
     ...parts,
   };
 }

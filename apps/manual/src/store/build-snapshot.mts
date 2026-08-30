@@ -39,7 +39,8 @@ const broken = [...snapshot.specs, ...snapshot.changes, ...archive.changes]
 
 console.info(
   `manual: ${snapshot.specs.length} specs, ${snapshot.changes.length} in-flight changes, ` +
-    `${archive.changes.length} archived, ${snapshot.pages.length} pages at ${snapshot.storeHead.slice(0, 8)}`,
+    `${archive.changes.length} archived, ${snapshot.pages.length} pages, ` +
+    `${snapshot.assets.length} assets, ${snapshot.warnings.length} warnings at ${snapshot.storeHead.slice(0, 8)}`,
 );
 if (broken.length > 0) {
   console.warn(`manual: ${broken.length} malformed store files`);

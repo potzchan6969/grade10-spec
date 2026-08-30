@@ -4,7 +4,6 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-// @ts-expect-error - the checker is a plain-JS CLI at the store root.
 import { formatReport, runChecks } from "../../../scripts/check-manual.mjs";
 import { NO_GIT, readGitIndex } from "../src/store/git.mts";
 import { writeStore } from "./tmp-store";
@@ -90,13 +89,20 @@ describe("a store that has drifted", () => {
     ]);
   });
 
-  it("warns rather than fails on a link and an unshown journey", async () => {
+  it("warns rather than fails on a link, an unshown journey and a bare shelf", async () => {
     const warnings = (await result).findings.filter(
       (one) => one.level === "warn",
     );
     expect(warnings.map((one) => one.rule).sort()).toEqual([
       "figma",
       "journeys",
+      "skeleton",
+    ]);
+  });
+
+  it("names the capability page whose spec has no acceptance shelf", async () => {
+    expect(lines(await result, "skeleton")).toEqual([
+      "manual/products/demo-product/alpha.md — has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
     ]);
   });
 
@@ -104,8 +110,8 @@ describe("a store that has drifted", () => {
     const root = fixture("broken");
     const report = formatReport(root, await result);
     expect(report.failures).toBe(9);
-    expect(report.warnings).toBe(2);
-    expect(report.text).toContain("9 failures, 2 warnings");
+    expect(report.warnings).toBe(3);
+    expect(report.text).toContain("9 failures, 3 warnings");
   });
 });
 
@@ -191,6 +197,73 @@ describe("a durable spec carrying a group heading", () => {
   it("says it once, not again as a file the readers refused", async () => {
     const result: Result = await runChecks(root, NO_GIT);
     expect(lines(result, "store")).toEqual([]);
+  });
+});
+
+/** The shelf warning is aimed at capability pages only, and either acceptance
+ * block answers it — including one nested inside a container. */
+describe("the acceptance shelf a capability page keeps", () => {
+  const shelved = (blocks: string) =>
+    `---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\nAlpha.\n\n${blocks}\n`;
+
+  const store = (alpha: string, extra: Record<string, string> = {}) =>
+    writeStore({
+      "manual/manual.yaml":
+        "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n",
+      "manual/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
+      "manual/products/demo-product/index.md":
+        "---\ntitle: Demo product\nspec: demo-product/alpha\n---\n\nThe landing.\n",
+      "manual/products/demo-product/alpha.md": alpha,
+      "openspec/specs/demo-product/alpha/spec.md": spec(
+        "Alpha",
+        requirement("Alpha does things", "alpha-SC-01", "the thing"),
+      ),
+      ...extra,
+    });
+
+  it("says nothing when the page shows its cases", async () => {
+    const root = store(shelved('::cases{id="demo-product/alpha"}'));
+    expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([]);
+  });
+
+  it("says nothing when the page shows its journeys", async () => {
+    const root = store(shelved('::journeys{id="demo-product/alpha"}'));
+    expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([]);
+  });
+
+  it("finds an acceptance block nested in a container", async () => {
+    const root = store(
+      shelved(
+        ':::callout{kind="note"}\nStill a shelf.\n\n::cases{id="demo-product/alpha"}\n:::',
+      ),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([]);
+  });
+
+  it("leaves a landing page and a platform page alone", async () => {
+    const root = store(shelved('::cases{id="demo-product/alpha"}'), {
+      "manual/platform/demo-topic.md":
+        "---\ntitle: Topic\nspec: demo-topic\n---\n\nA topic page.\n",
+      "openspec/specs/demo-topic/spec.md": spec(
+        "Topic",
+        requirement("Topic does things", "topic-SC-01", "the thing"),
+      ),
+    });
+    expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([]);
+  });
+
+  it("warns on a capability page carrying a spec and neither block", async () => {
+    const root = store(
+      "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\nAlpha, with no shelf.\n",
+    );
+    expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([
+      "manual/products/demo-product/alpha.md — has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
+    ]);
+  });
+
+  it("leaves a capability page with no spec alone", async () => {
+    const root = store("---\ntitle: Alpha\n---\n\nProse only, no contract.\n");
+    expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([]);
   });
 });
 

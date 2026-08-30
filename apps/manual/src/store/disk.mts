@@ -76,18 +76,38 @@ function named(name: string, ext: string): boolean {
   return ext.startsWith(".") ? name.endsWith(ext) : name === ext;
 }
 
-/** Every file under `dir` matching `ext`, store-relative, sorted. */
-export function walkFiles(root: string, dir: string, ext: string): string[] {
+function walk(
+  root: string,
+  dir: string,
+  keep: (name: string, isDirectory: boolean) => boolean,
+): string[] {
   if (!existsSync(dir)) return [];
   const found: string[] = [];
   for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) =>
     a.name < b.name ? -1 : 1,
   )) {
+    if (!keep(entry.name, entry.isDirectory())) continue;
     const child = join(dir, entry.name);
-    if (entry.isDirectory()) found.push(...walkFiles(root, child, ext));
-    else if (named(entry.name, ext)) found.push(storePath(root, child));
+    if (entry.isDirectory()) found.push(...walk(root, child, keep));
+    else found.push(storePath(root, child));
   }
   return found;
+}
+
+/** Every file under `dir` matching `ext`, store-relative, sorted. */
+export function walkFiles(root: string, dir: string, ext: string): string[] {
+  return walk(
+    root,
+    dir,
+    (name, isDirectory) => isDirectory || named(name, ext),
+  );
+}
+
+/** Every file under `dir`, store-relative, sorted, hidden entries skipped:
+ * `.gitkeep` only holds a directory open, and a machine's own `.DS_Store`
+ * would make an artifact differ from one machine to the next. */
+export function walkAll(root: string, dir: string): string[] {
+  return walk(root, dir, (name) => !name.startsWith("."));
 }
 
 /** Newest mtime under `dir`, so a snapshot can be memoized across polls. */

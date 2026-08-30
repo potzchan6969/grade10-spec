@@ -60,6 +60,19 @@ describe("the real store", () => {
     ).toBe(true);
   });
 
+  /** Both fields are required on the artifact, so an omission would ship a
+   * snapshot the client's own types say cannot exist. */
+  it("always carries an assets list and the build's own warnings", () => {
+    expect(Array.isArray(snapshot.assets)).toBe(true);
+    expect(snapshot.assets.every((one) => one.startsWith("assets/"))).toBe(
+      true,
+    );
+    expect(Array.isArray(snapshot.warnings)).toBe(true);
+    expect(
+      snapshot.warnings.every((one) => one.rule !== "" && one.message !== ""),
+    ).toBe(true);
+  });
+
   it("has no malformed store file", () => {
     const broken = [...snapshot.specs, ...snapshot.changes, ...archive.changes]
       .filter((entry) => entry.error)
