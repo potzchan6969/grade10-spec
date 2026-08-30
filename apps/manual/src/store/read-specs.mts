@@ -28,6 +28,7 @@ export type SpecShape = {
   dirs: Map<string, string>;
 };
 
+const REQUIREMENT = "Requirement:";
 const SCENARIO_ID = /[a-z0-9][a-z0-9-]*-SC-\d+/g;
 const SCENARIO_HEADING =
   /^Scenario:\s*(?:([a-z0-9][a-z0-9-]*-SC-\d+)\s+-\s+)?(.+)$/;
@@ -144,17 +145,46 @@ function readJourney(section: Section): Journey {
 }
 
 function readRequirement(section: Section): Requirement {
-  if (!section.heading.startsWith("Requirement:")) {
+  if (!section.heading.startsWith(REQUIREMENT)) {
     throw new StoreFileError(
       section.line,
       "a requirement heading is `### Requirement: <name>`",
     );
   }
   return {
-    name: section.heading.slice("Requirement:".length).trim(),
+    name: section.heading.slice(REQUIREMENT.length).trim(),
     text: section.body,
     scenarios: section.children.map(readScenario),
   };
+}
+
+/** `###` headings under `## Requirements` that name no requirement. Legal in a
+ * delta, fatal in a durable spec: `openspec archive` folds one into the
+ * requirement above it, and the fold writes a spec this reader refuses. */
+export function groupHeadings(text: string): Section[] {
+  return requirementSections(text).filter(
+    (section) =>
+      section.level === 3 && !section.heading.startsWith(REQUIREMENT),
+  );
+}
+
+/** Requirement name → the block as written, for comparing one revision of a
+ * spec against another. Reads without refusing: a historical blob is read to
+ * be compared, never to be rendered. */
+export function requirementBlocks(text: string): Map<string, string> {
+  const blocks = new Map<string, string>();
+  for (const section of requirementSections(text)) {
+    if (!section.heading.startsWith(REQUIREMENT)) continue;
+    blocks.set(section.heading.slice(REQUIREMENT.length).trim(), section.raw);
+  }
+  return blocks;
+}
+
+function requirementSections(text: string): Section[] {
+  const sections = outline(text).flatMap((section) =>
+    section.level === 1 ? section.children : [section],
+  );
+  return findSection(sections, "Requirements")?.children ?? [];
 }
 
 function readScenario(section: Section): Scenario {

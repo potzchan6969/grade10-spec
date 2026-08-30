@@ -1,9 +1,13 @@
+import { execFileSync } from "node:child_process";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 // @ts-expect-error - the checker is a plain-JS CLI at the store root.
 import { formatReport, runChecks } from "../../../scripts/check-manual.mjs";
-import type { CommitInfo } from "../src/api/types.ts";
-import { NO_GIT } from "../src/store/git.mts";
+import { NO_GIT, readGitIndex } from "../src/store/git.mts";
+import { writeStore } from "./tmp-store";
 
 type Finding = { rule: string; level: string; path: string; reason: string };
 type Result = { findings: Finding[]; notes: string[] };
@@ -16,18 +20,6 @@ const lines = (result: Result, rule: string) =>
     .filter((one) => one.rule === rule)
     .map((one) => `${one.path} — ${one.reason}`)
     .sort();
-
-/** Commit dates the fixture's own history cannot supply: every spec moves
- * after every page. */
-const SPECS_AHEAD = {
-  head: "0".repeat(40),
-  commitOf: (path: string): CommitInfo => ({
-    sha: "0".repeat(40),
-    date: path.endsWith("spec.md")
-      ? "2026-02-01T00:00:00+00:00"
-      : "2026-01-01T00:00:00+00:00",
-  }),
-};
 
 describe("a store that tells the truth", () => {
   it("finds nothing to say", async () => {
@@ -136,12 +128,209 @@ describe("a store with the workbench Storybook built", () => {
   });
 });
 
+const PURPOSE = "Alpha exists so a page has something to embed.";
+
+const requirement = (name: string, id: string, then: string) => [
+  `### Requirement: ${name}`,
+  "",
+  `Alpha SHALL ${then}.`,
+  "",
+  `#### Scenario: ${id} - it does the thing`,
+  "",
+  "- **WHEN** asked",
+  `- **THEN** it does ${then}`,
+];
+
+const spec = (title: string, ...requirements: string[][]) =>
+  [
+    `# ${title}`,
+    "",
+    "## Purpose",
+    "",
+    PURPOSE,
+    "",
+    "## Requirements",
+    "",
+    ...requirements.flatMap((one) => [...one, ""]),
+  ].join("\n");
+
+const proposal = (title: string) =>
+  `# ${title}\n\n## Why\n\nSomething had to move.\n`;
+
+/** `openspec archive` runs a delta's headings against the durable ones and
+ * throws on a name that drifted — with the change merged and the author gone.
+ * Both rules here are that failure, moved to PR time. */
+describe("a durable spec carrying a group heading", () => {
+  const GROUPED = [
+    "# Alpha",
+    "",
+    "## Purpose",
+    "",
+    PURPOSE,
+    "",
+    "## Requirements",
+    "",
+    ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+    "",
+    "### Doing more things",
+    "",
+    ...requirement("Alpha does more", "alpha-SC-02", "more"),
+    "",
+  ];
+  const root = writeStore({
+    "openspec/specs/demo-product/alpha/spec.md": GROUPED.join("\n"),
+  });
+
+  it("names the heading the fold would swallow", async () => {
+    const result: Result = await runChecks(root, NO_GIT);
+    expect(lines(result, "grouping")).toEqual([
+      `openspec/specs/demo-product/alpha/spec.md — line ${GROUPED.indexOf("### Doing more things") + 1}: \`### Doing more things\` names no requirement; \`openspec archive\` would fold it into the requirement above it`,
+    ]);
+  });
+
+  it("says it once, not again as a file the readers refused", async () => {
+    const result: Result = await runChecks(root, NO_GIT);
+    expect(lines(result, "store")).toEqual([]);
+  });
+});
+
+describe("in-flight deltas against the durable specs", () => {
+  const root = writeStore({
+    "openspec/specs/demo-product/alpha/spec.md": spec(
+      "Alpha",
+      requirement("Alpha does things", "alpha-SC-01", "the thing"),
+    ),
+    "openspec/changes/steady/proposal.md": proposal("Steady"),
+    "openspec/changes/steady/specs/demo-product/alpha/spec.md":
+      "## MODIFIED Requirements\n\n### Requirement: Alpha does things\n\nAlpha SHALL still do the thing.\n",
+    "openspec/changes/drifted/proposal.md": proposal("Drifted"),
+    "openspec/changes/drifted/specs/demo-product/alpha/spec.md": [
+      "## MODIFIED Requirements",
+      "",
+      "### Requirement: alpha does   things",
+      "",
+      "Alpha SHALL do the thing.",
+      "",
+      "## REMOVED Requirements",
+      "",
+      "### Requirement: Alpha never did this",
+      "",
+    ].join("\n"),
+    "openspec/changes/drifted/specs/demo-product/gamma/spec.md":
+      "## MODIFIED Requirements\n\n### Requirement: Gamma does things\n\nGamma SHALL do it.\n",
+  });
+
+  it("passes a heading the fold would find, and names the ones it would not", async () => {
+    const result: Result = await runChecks(root, NO_GIT);
+    expect(lines(result, "delta")).toEqual([
+      "openspec/changes/drifted/specs/demo-product/alpha/spec.md — MODIFIED `alpha does   things` spells `Alpha does things` differently, and the fold matches the heading exactly",
+      "openspec/changes/drifted/specs/demo-product/alpha/spec.md — REMOVED `Alpha never did this` names no requirement of `demo-product/alpha`",
+      "openspec/changes/drifted/specs/demo-product/gamma/spec.md — MODIFIED `Gamma does things`, but `demo-product/gamma` has no durable spec yet — a new spec can only ADD",
+    ]);
+  });
+});
+
+const WHO = {
+  GIT_AUTHOR_NAME: "manual",
+  GIT_AUTHOR_EMAIL: "manual@test",
+  GIT_COMMITTER_NAME: "manual",
+  GIT_COMMITTER_EMAIL: "manual@test",
+};
+
+const page = (title: string, id: string) =>
+  `---\ntitle: ${title}\nspec: ${id}\n---\n\n${title} is a demo capability.\n`;
+
+/** Staleness is the one check that reads history, so it is tested against a
+ * real repository: a spec edited under a page that stayed put, and a spec
+ * that was not at its current path when the page was written. */
+function stalenessRepo(): string {
+  const root = mkdtempSync(join(tmpdir(), "manual-stale-"));
+  const write = (path: string, text: string) => {
+    const file = join(root, path);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, text);
+  };
+  const git = (args: string[], date?: string) =>
+    execFileSync("git", args, {
+      cwd: root,
+      env: date
+        ? {
+            ...process.env,
+            ...WHO,
+            GIT_AUTHOR_DATE: date,
+            GIT_COMMITTER_DATE: date,
+          }
+        : { ...process.env, ...WHO },
+    });
+
+  git(["init", "--quiet", "."]);
+  write(
+    "manual/manual.yaml",
+    "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n",
+  );
+  write("manual/index.md", "---\ntitle: Demo\n---\n\nA store with a past.\n");
+  write(
+    "manual/products/demo-product/index.md",
+    "---\ntitle: Demo product\n---\n\nThe one product on disk.\n",
+  );
+  write(
+    "manual/products/demo-product/alpha.md",
+    page("Alpha", "demo-product/alpha"),
+  );
+  write(
+    "manual/products/demo-product/moved.md",
+    page("Moved", "demo-product/moved"),
+  );
+  write(
+    "openspec/specs/demo-product/alpha/spec.md",
+    spec(
+      "Alpha",
+      requirement("Alpha does things", "alpha-SC-01", "the thing"),
+      requirement("Alpha keeps a record", "alpha-SC-02", "write it down"),
+    ),
+  );
+  write(
+    "openspec/specs/demo-product/elsewhere/spec.md",
+    spec("Moved", requirement("Moved does things", "moved-SC-01", "the thing")),
+  );
+  git(["add", "-A"]);
+  git(["commit", "--quiet", "-m", "the pages"], "2026-01-01T00:00:00+00:00");
+
+  write(
+    "openspec/specs/demo-product/alpha/spec.md",
+    spec(
+      "Alpha",
+      requirement("Alpha does things", "alpha-SC-01", "the thing, and say so"),
+      requirement("Alpha does more", "alpha-SC-03", "more"),
+    ),
+  );
+  git([
+    "mv",
+    "openspec/specs/demo-product/elsewhere",
+    "openspec/specs/demo-product/moved",
+  ]);
+  git(["add", "-A"]);
+  git(["commit", "--quiet", "-m", "the specs"], "2026-02-01T00:00:00+00:00");
+
+  // Never committed, so it has no baseline to be stale against.
+  write(
+    "manual/products/demo-product/fresh.md",
+    page("Fresh", "demo-product/alpha"),
+  );
+  return root;
+}
+
 describe("a page committed before the specs it embeds", () => {
-  it("warns without failing", async () => {
-    const result: Result = await runChecks(fixture("clean"), SPECS_AHEAD);
+  it("names what changed, reports a moved spec as moved, and only warns", async () => {
+    const root = stalenessRepo();
+    const result: Result = await runChecks(
+      root,
+      await readGitIndex(root, ["openspec", "manual"]),
+    );
+
     expect(lines(result, "stale")).toEqual([
-      "manual/platform/demo-topic.md — last committed 2026-01-01; demo-topic changed after it",
-      "manual/products/demo-product/alpha.md — last committed 2026-01-01; demo-product/alpha changed after it",
+      "manual/products/demo-product/alpha.md — last committed 2026-01-01; `demo-product/alpha` has since added `Alpha does more`, changed `Alpha does things`, removed `Alpha keeps a record`",
+      "manual/products/demo-product/moved.md — last committed 2026-01-01; `demo-product/moved` spec moved since this page was committed",
     ]);
     expect(result.findings.every((one) => one.level === "warn")).toBe(true);
   });

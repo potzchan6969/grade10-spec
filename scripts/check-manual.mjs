@@ -11,11 +11,13 @@
  * FAIL = a page lies about the store: it does not parse, it is not the
  *        canonical text the editor would write back, a reference names
  *        nothing on disk, a durable spec has no page, a product or topic has
- *        no landing page, or a store file the readers could not parse.
- *        Exits 1.
+ *        no landing page, or a store file the readers could not parse. Two
+ *        of them are aimed at `openspec archive` rather than at a page: a
+ *        durable spec carrying a heading the fold would absorb, and a delta
+ *        heading the fold would not find. Exits 1.
  * WARN = hygiene with no broken pointer behind it: a page committed before
- *        the spec it embeds, a `::figma` link off figma.com, a spec whose
- *        journeys no page shows. Exits 0.
+ *        the specs it embeds, named requirement by requirement, a `::figma`
+ *        link off figma.com, a spec whose journeys no page shows. Exits 0.
  *
  * The readers in apps/manual/src are the only parser — this script never
  * grows a second one, so the check and the app can never disagree.
@@ -23,6 +25,7 @@
 import { existsSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { findRequirement } from "../apps/manual/src/api/requirements.ts";
 import {
   parsePage,
   serializePage,
@@ -37,7 +40,9 @@ import { readChanges } from "../apps/manual/src/store/read-changes.mts";
 import { readManualConfig } from "../apps/manual/src/store/read-manual.mts";
 import {
   discoverSpecs,
+  groupHeadings,
   readSpecs,
+  requirementBlocks,
 } from "../apps/manual/src/store/read-specs.mts";
 
 /** Report order, and which findings end the build. */
@@ -55,6 +60,16 @@ const RULES = [
     key: "store",
     level: "fail",
     title: "Store files the readers could not parse",
+  },
+  {
+    key: "grouping",
+    level: "fail",
+    title: "Durable specs holding a heading the archive would fold",
+  },
+  {
+    key: "delta",
+    level: "fail",
+    title: "Delta headings no durable requirement answers to",
   },
   {
     key: "story",
@@ -158,8 +173,13 @@ export async function runChecks(root, git) {
 
   checkTaxonomy(root, config, shape, paths, add);
 
+  const folded = checkSpecShape(root, shape, add);
+  checkDeltas(changes, specs, add);
+
   for (const entry of [...specs.values(), ...changes]) {
-    if (!entry.error) continue;
+    // A spec the fold rule named is refused by the reader for that same
+    // heading; one cause earns one finding.
+    if (!entry.error || folded.has(entry.error.file)) continue;
     const where = entry.error.line ? ` line ${entry.error.line}` : "";
     add(
       "store",
@@ -168,7 +188,7 @@ export async function runChecks(root, git) {
     );
   }
 
-  checkStale(pages, specs, add);
+  await checkStale(root, pages, specs, shape.dirs, index, add);
 
   return { findings, notes };
 }
@@ -205,7 +225,7 @@ function checkBlock(ctx, path, block) {
       }
       if (
         block.requirement !== undefined &&
-        !spec.requirements.some((one) => one.name === block.requirement)
+        !findRequirement(spec.requirements, block.requirement)
       ) {
         add(
           "reference",
@@ -338,23 +358,140 @@ function checkTaxonomy(root, config, shape, paths, add) {
   }
 }
 
-function checkStale(pages, specs, add) {
+/** A group heading between requirements is legal in a delta and fatal in a
+ * durable spec: `openspec archive` absorbs it into the requirement above it,
+ * and the spec that comes out of the fold is one the readers refuse. Failing
+ * here catches it while a delta is still a delta. */
+function checkSpecShape(root, shape, add) {
+  const named = new Set();
+  for (const dir of shape.dirs.values()) {
+    const file = `${dir}/spec.md`;
+    for (const section of groupHeadings(readText(join(root, file)))) {
+      named.add(file);
+      add(
+        "grouping",
+        file,
+        `line ${section.line}: \`### ${section.heading}\` names no requirement; \`openspec archive\` would fold it into the requirement above it`,
+      );
+    }
+  }
+  return named;
+}
+
+const FOLDED = new Set(["modified", "removed"]);
+
+/** What the fold will go looking for. `openspec archive` matches a delta
+ * heading against the durable heading exactly, so a name that drifted throws
+ * at archive time — with the change already merged and the author long gone.
+ * The same lookup, run at PR time. */
+function checkDeltas(changes, specs, add) {
+  for (const change of changes) {
+    for (const delta of change.deltas) {
+      const spec = specs.get(delta.spec);
+      // A spec the readers refused has no requirements to match against, and
+      // the store rule already names it.
+      if (spec?.error) continue;
+      const file = `openspec/changes/${change.id}/specs/${delta.spec}/spec.md`;
+      const durable = new Set(
+        (spec?.requirements ?? []).map((one) => one.name),
+      );
+
+      for (const requirement of delta.requirements) {
+        if (!FOLDED.has(requirement.kind) || durable.has(requirement.name)) {
+          continue;
+        }
+        const what = `${requirement.kind.toUpperCase()} \`${requirement.name}\``;
+        if (!spec) {
+          add(
+            "delta",
+            file,
+            `${what}, but \`${delta.spec}\` has no durable spec yet — a new spec can only ADD`,
+          );
+          continue;
+        }
+        const near = findRequirement(spec.requirements, requirement.name);
+        add(
+          "delta",
+          file,
+          near
+            ? `${what} spells \`${near.name}\` differently, and the fold matches the heading exactly`
+            : `${what} names no requirement of \`${delta.spec}\``,
+        );
+      }
+    }
+  }
+}
+
+/** Staleness names what moved. "A spec changed" is not an action; "these two
+ * requirements changed" is. The spec as it stood at the page's own commit
+ * comes from one `cat-file --batch` pass over every page at once. */
+async function checkStale(root, pages, specs, dirs, git, add) {
+  const wanted = [];
   for (const page of pages) {
     if (!page.lastCommit) continue;
     const at = Date.parse(page.lastCommit.date);
-    const newer = embeddedSpecs(page.ast)
-      .filter((id) => {
-        const date = specs.get(id)?.lastCommit?.date;
-        return date !== undefined && Date.parse(date) > at;
-      })
-      .sort();
-    if (newer.length === 0) continue;
+    for (const id of embeddedSpecs(page.ast)) {
+      const moved = specs.get(id)?.lastCommit?.date;
+      const dir = dirs.get(id);
+      if (moved === undefined || dir === undefined) continue;
+      if (Date.parse(moved) <= at) continue;
+      wanted.push({
+        page,
+        id,
+        file: `${dir}/spec.md`,
+        ref: `${page.lastCommit.sha}:${dir}/spec.md`,
+      });
+    }
+  }
+
+  // The ref carries the page's own commit, so pages that share one share the
+  // answer and the spec is diffed once however many pages embed it.
+  const blobs = await git.readBlobs([...new Set(wanted.map((one) => one.ref))]);
+  const said = new Map();
+  for (const one of wanted) {
+    if (!said.has(one.ref)) {
+      const before = blobs.get(one.ref);
+      said.set(
+        one.ref,
+        before === undefined
+          ? `\`${one.id}\` spec moved since this page was committed`
+          : `\`${one.id}\` has since ${changedSince(before, readText(join(root, one.file)))}`,
+      );
+    }
     add(
       "stale",
-      page.path,
-      `last committed ${page.lastCommit.date.slice(0, 10)}; ${newer.join(", ")} changed after it`,
+      one.page.path,
+      `last committed ${one.page.lastCommit.date.slice(0, 10)}; ${said.get(one.ref)}`,
     );
   }
+}
+
+function changedSince(before, after) {
+  const was = requirementBlocks(before);
+  const now = requirementBlocks(after);
+  const names = (verb, found) =>
+    found.length === 0
+      ? ""
+      : `${verb} ${found.map((name) => `\`${name}\``).join(", ")}`;
+  const parts = [
+    names(
+      "added",
+      [...now.keys()].filter((name) => !was.has(name)),
+    ),
+    names(
+      "changed",
+      [...now.keys()].filter(
+        (name) => was.has(name) && was.get(name) !== now.get(name),
+      ),
+    ),
+    names(
+      "removed",
+      [...was.keys()].filter((name) => !now.has(name)),
+    ),
+  ].filter(Boolean);
+  return parts.length === 0
+    ? "changed outside its requirements"
+    : parts.join(", ");
 }
 
 function requirePage(add, root, path, what) {
