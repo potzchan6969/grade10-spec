@@ -6,7 +6,15 @@ import {
   ownerOfSpec,
   routeForPagePath,
 } from "./paths";
-import type { ChangeEntry, PageEntry, Snapshot, SpecEntry } from "./types";
+import { findRequirement } from "./requirements";
+import type {
+  ChangeEntry,
+  DeltaKind,
+  DeltaRequirement,
+  PageEntry,
+  Snapshot,
+  SpecEntry,
+} from "./types";
 
 /** A page as the app reads it: parsed, or contained with the parse error. */
 export type ParsedPage = {
@@ -17,12 +25,17 @@ export type ParsedPage = {
   route: string | null;
 };
 
+/** Derived from the store, never stored: what shape a capability is in. */
+export type CapabilityStatus = "changing" | "incubating" | "stable";
+
 export type NavItem = {
   id: string;
   title: string;
   summary?: string;
   to: string;
   order: number;
+  /** Capability entries only — a guide has no spec to be changing. */
+  status?: CapabilityStatus;
 };
 
 export type NavProduct = NavItem & {
@@ -181,9 +194,10 @@ export function childPages(index: ManualIndex, dir: string): ParsedPage[] {
 function productNav(index: ManualIndex, id: string): NavProduct {
   const dir = `${MANUAL_ROOT}/products/${id}`;
   const landing = index.pageByPath.get(`${dir}/index.md`);
-  const capabilities = childPages(index, dir).map((page) =>
-    navItem(page, page.path.slice(dir.length + 1, -3)),
-  );
+  const capabilities = childPages(index, dir).map((page) => ({
+    ...navItem(page, page.path.slice(dir.length + 1, -3)),
+    status: capabilityStatus(index, page.ast?.frontmatter.spec),
+  }));
 
   return {
     id,
@@ -283,6 +297,62 @@ export function changesForOwner(
   owner: string,
 ): ChangeEntry[] {
   return index.changesByOwner.get(owner) ?? [];
+}
+
+/** One in-flight change touching a requirement row, and how it touches it. */
+export type RequirementChange = { change: ChangeEntry; kind: DeltaKind };
+
+/**
+ * The in-flight changes whose delta names this requirement, newest movement
+ * first. A rename is recorded under its FROM name — the row that exists until
+ * the change archives — so the badge lands on the row being read today.
+ */
+export function changesForRequirement(
+  index: ManualIndex,
+  specId: string,
+  requirementName: string,
+): RequirementChange[] {
+  const touching: RequirementChange[] = [];
+  for (const change of changesForSpec(index, specId)) {
+    const touched = deltaRequirement(change, specId, requirementName);
+    if (touched) touching.push({ change, kind: touched.kind });
+  }
+  return touching.sort((a, b) => byLastMoved(a.change, b.change));
+}
+
+function deltaRequirement(
+  change: ChangeEntry,
+  specId: string,
+  requirementName: string,
+): DeltaRequirement | undefined {
+  for (const delta of change.deltas) {
+    if (delta.spec !== specId) continue;
+    // A snapshot built before the reader named requirements carries none.
+    const touched = findRequirement(delta.requirements ?? [], requirementName);
+    if (touched) return touched;
+  }
+  return undefined;
+}
+
+/**
+ * A capability's status. Incubating is asked first: a spec that lives only as a
+ * delta is being changed by definition, and what matters about it is that it
+ * does not exist yet.
+ */
+export function capabilityStatus(
+  index: ManualIndex,
+  specId: string | undefined,
+): CapabilityStatus {
+  if (!specId || !index.specById.has(specId)) return "incubating";
+  return changesForSpec(index, specId).length > 0 ? "changing" : "stable";
+}
+
+/** Only a product's own children are capabilities; guides and topics are not. */
+export function isProductDir(dir: string): boolean {
+  const parts = dir.split("/");
+  return (
+    parts.length === 3 && parts[0] === MANUAL_ROOT && parts[1] === "products"
+  );
 }
 
 export function taskTotals(change: ChangeEntry): {

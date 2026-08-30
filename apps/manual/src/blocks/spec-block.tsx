@@ -1,18 +1,34 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
+import { cn } from "@grade10/design-system/lib/utils";
 import { ArrowSquareOut, CaretRight } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
+import { Link } from "react-router";
 import {
   journeyAnchor,
   requirementAnchor,
   scenarioAnchor,
 } from "../api/anchors";
+import {
+  changesForRequirement,
+  type RequirementChange,
+  taskTotals,
+} from "../api/derive";
 import { specDir, specSourceUrl, specTitle } from "../api/paths";
-import type { Journey, Requirement, Scenario, SpecEntry } from "../api/types";
+import { findRequirement } from "../api/requirements";
+import type {
+  ChangeEntry,
+  DeltaKind,
+  Journey,
+  Requirement,
+  Scenario,
+  SpecEntry,
+} from "../api/types";
 import type { SpecBlock } from "../content/grammar";
 import { AnchorLink, useHashTarget } from "./anchor";
 import { useBlockScope } from "./block-scope";
 import { BrokenCard, MissingCard } from "./broken-card";
+import { deltaTone } from "./change-views";
 import { MarkdownView } from "./markdown";
 import { ScenarioView } from "./scenario-view";
 
@@ -36,7 +52,7 @@ export function SpecBlockView({ block }: { block: SpecBlock }) {
   }
 
   if (block.requirement !== undefined) {
-    const requirement = findRequirement(spec, block.requirement);
+    const requirement = findRequirement(spec.requirements, block.requirement);
     return requirement ? (
       <SpecFrame spec={spec}>
         <RequirementRow alwaysOpen requirement={requirement} spec={spec} />
@@ -54,6 +70,14 @@ export function SpecBlockView({ block }: { block: SpecBlock }) {
           <Text as="p" className="mb-2" size="xs" tone="secondary">
             {found.requirement.name}
           </Text>
+          <ChangeBadges
+            className="mb-3"
+            touching={changesForRequirement(
+              index,
+              spec.id,
+              found.requirement.name,
+            )}
+          />
           <ScenarioView
             requirement={found.requirement}
             scenario={found.scenario}
@@ -150,6 +174,7 @@ function RequirementRow({
     scenarioAnchor(requirement, scenario),
   );
   const targeted = useHashTarget(id, ...scenarioIds);
+  const touching = changesForRequirement(index, spec.id, requirement.name);
   const [open, setOpen] = useState(alwaysOpen);
 
   useEffect(() => {
@@ -183,6 +208,8 @@ function RequirementRow({
         <AnchorLink id={id} label="Copy link to this requirement" />
       </div>
 
+      <ChangeBadges className="pr-2 pb-2 pl-9" touching={touching} />
+
       {expanded ? (
         <div className="space-y-3 px-4 pb-4">
           <MarkdownView
@@ -201,6 +228,57 @@ function RequirementRow({
         </div>
       ) : null}
     </div>
+  );
+}
+
+/**
+ * The row-level sibling of the page's change ribbon: which change in flight
+ * touches this one requirement, how, and how far along it is. Quieter than the
+ * ribbon on purpose — the row it hangs under is the thing being read.
+ */
+function ChangeBadges({
+  touching,
+  className,
+}: {
+  touching: RequirementChange[];
+  className?: string;
+}) {
+  if (touching.length === 0) return null;
+
+  return (
+    <div className={cn("flex flex-wrap items-center gap-1", className)}>
+      {touching.map(({ change, kind }) => (
+        <ChangeBadge change={change} key={change.id} kind={kind} />
+      ))}
+    </div>
+  );
+}
+
+function ChangeBadge({
+  change,
+  kind,
+}: {
+  change: ChangeEntry;
+  kind: DeltaKind;
+}) {
+  const { done, total } = taskTotals(change);
+
+  return (
+    <Link
+      className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-border-subtle bg-background-subtle py-0.5 pr-2 pl-0.5 transition-colors hover:border-border-strong hover:bg-muted"
+      title={`${change.title} — this requirement is ${kind}`}
+      to={`/planning#${change.id}`}
+    >
+      <Badge size="sm" variant={deltaTone(kind)}>
+        {kind}
+      </Badge>
+      <Text as="span" className="min-w-0 truncate" size="xs" tone="secondary">
+        {change.title}
+      </Text>
+      <Text as="span" className="shrink-0 font-mono" size="xs" tone="secondary">
+        {done}/{total}
+      </Text>
+    </Link>
   );
 }
 
@@ -305,16 +383,6 @@ function SelectorMiss({
         ? `That spec lists no ${kind}s at all.`
         : `The spec knows: ${known.slice(0, 6).join(", ")}${known.length > 6 ? `, and ${known.length - 6} more` : ""}.`}
     </MissingCard>
-  );
-}
-
-function findRequirement(
-  spec: SpecEntry,
-  name: string,
-): Requirement | undefined {
-  const wanted = name.trim().toLowerCase();
-  return spec.requirements.find(
-    (requirement) => requirement.name.trim().toLowerCase() === wanted,
   );
 }
 

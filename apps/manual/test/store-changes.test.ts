@@ -46,9 +46,16 @@ describe("in-flight changes", () => {
     ]);
   });
 
-  it("reads delta kinds per spec the change touches", () => {
+  it("reads delta kinds and the requirements each one touches", () => {
     expect(change.deltas).toEqual([
-      { spec: "demo-product/alpha", kinds: ["ADDED", "MODIFIED"] },
+      {
+        spec: "demo-product/alpha",
+        kinds: ["ADDED", "MODIFIED"],
+        requirements: [
+          { name: "The thing is watched", kind: "added" },
+          { name: "The thing happens once", kind: "modified" },
+        ],
+      },
     ]);
   });
 
@@ -89,6 +96,63 @@ describe("archived changes", () => {
   it("survives a change with no .openspec.yaml", () => {
     expect(archived[0].schema).toBe("");
     expect(archived[0].error).toBeUndefined();
+  });
+});
+
+/** `openspec/config.yaml` tells authors to group requirements under a plain
+ * `###` heading, and openspec ignores those when it folds. A reader that took
+ * them for requirements would badge a group name nobody wrote — and the
+ * durable reader, which refuses them, must never see one. */
+describe("a delta that groups, renames, and spaces its headings", () => {
+  const [entry] = readChanges(
+    writeStore({
+      "openspec/changes/group-thing/proposal.md":
+        "# Group thing\n\n## Why\n\nThe delta groups what it adds.\n",
+      "openspec/changes/group-thing/specs/demo-product/alpha/spec.md": [
+        "## ADDED Requirements",
+        "",
+        "### Product stock",
+        "",
+        "---",
+        "",
+        "### Requirement: Stock is counted",
+        "",
+        "The system SHALL count the stock.",
+        "",
+        "## MODIFIED Requirements",
+        "",
+        "### Requirement:   The thing   happens once  ",
+        "",
+        "The system SHALL do the thing exactly once.",
+        "",
+        "## RENAMED Requirements",
+        "",
+        "- FROM: `### Requirement: The thing is written down`",
+        "- TO: `### Requirement: The thing leaves a record`",
+        "",
+      ].join("\n"),
+    }),
+    NO_GIT,
+  );
+  const [delta] = entry.deltas;
+
+  it("names every kind the delta carries", () => {
+    expect(delta.kinds).toEqual(["ADDED", "MODIFIED", "RENAMED"]);
+    expect(entry.error).toBeUndefined();
+  });
+
+  it("skips the group heading and keeps the name as written", () => {
+    expect(delta.requirements).toEqual([
+      { name: "Stock is counted", kind: "added" },
+      { name: "The thing   happens once", kind: "modified" },
+      { name: "The thing is written down", kind: "renamed" },
+    ]);
+  });
+
+  it("records a rename under the name that still exists", () => {
+    expect(delta.requirements.map((one) => one.name)).not.toContain(
+      "The thing leaves a record",
+    );
   });
 });
 

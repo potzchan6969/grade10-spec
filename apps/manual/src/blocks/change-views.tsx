@@ -11,12 +11,19 @@ import { BrokenCard } from "./broken-card";
 import { ClampedText } from "./clamped-text";
 import { InlineMarkdown } from "./inline-markdown";
 
-const KIND_TONE: Record<string, "success" | "info" | "error" | "default"> = {
-  ADDED: "success",
-  MODIFIED: "info",
-  REMOVED: "error",
-  RENAMED: "default",
+type DeltaTone = "success" | "info" | "error" | "default";
+
+const KIND_TONE: Record<string, DeltaTone> = {
+  added: "success",
+  modified: "info",
+  removed: "error",
+  renamed: "default",
 };
+
+/** One hue per delta kind, wherever a kind is named — section or row. */
+export function deltaTone(kind: string): DeltaTone {
+  return KIND_TONE[kind.toLowerCase()] ?? "default";
+}
 
 export function TaskProgress({
   done,
@@ -67,7 +74,7 @@ export function DeltaKinds({ kinds }: { kinds: string[] }) {
   return (
     <>
       {kinds.map((kind) => (
-        <Badge key={kind} size="sm" variant={KIND_TONE[kind] ?? "default"}>
+        <Badge key={kind} size="sm" variant={deltaTone(kind)}>
           {kind.toLowerCase()}
         </Badge>
       ))}

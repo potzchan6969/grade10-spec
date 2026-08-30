@@ -1,9 +1,15 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { ArrowRight } from "@phosphor-icons/react";
 import { Link } from "react-router";
-import { childPages, type ManualIndex } from "../api/derive";
+import {
+  capabilityStatus,
+  childPages,
+  isProductDir,
+  type ManualIndex,
+} from "../api/derive";
 import { dirOf, humanize } from "../api/paths";
 import { useBlockScope } from "./block-scope";
+import { CapabilityWord } from "./capability-status";
 
 export function ChildrenBlockView() {
   const { index, pagePath } = useBlockScope();
@@ -19,6 +25,7 @@ export function ChildCards({
   dir: string;
 }) {
   const children = childPages(index, dir);
+  const capabilities = isProductDir(dir);
 
   if (children.length === 0) {
     return (
@@ -47,6 +54,12 @@ export function ChildCards({
                 <span className="inline-flex opacity-0 transition-opacity group-hover:opacity-60">
                   <ArrowRight aria-hidden size={14} />
                 </span>
+                {capabilities ? (
+                  <CapabilityWord
+                    className="ml-auto"
+                    status={capabilityStatus(index, page.ast?.frontmatter.spec)}
+                  />
+                ) : null}
               </span>
               {page.ast?.frontmatter.summary ? (
                 <Text as="span" size="sm" tone="secondary">

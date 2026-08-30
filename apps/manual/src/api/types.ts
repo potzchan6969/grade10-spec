@@ -91,11 +91,23 @@ export type TaskGroup = {
   total: number;
 };
 
+export type DeltaKind = "added" | "modified" | "removed" | "renamed";
+
+/** One requirement a delta touches. `name` is the durable heading the row
+ * matches on — for a rename, the FROM name, since that is the row that
+ * exists until the change archives. Group headings in a delta are not
+ * requirements and never appear here. */
+export type DeltaRequirement = {
+  name: string;
+  kind: DeltaKind;
+};
+
 export type Delta = {
   /** The spec id the delta touches. */
   spec: string;
   /** Delta headings, e.g. `ADDED`, `MODIFIED`. */
   kinds: string[];
+  requirements: DeltaRequirement[];
 };
 
 export type ChangeStatus = "in-flight" | "archived";

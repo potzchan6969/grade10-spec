@@ -5,6 +5,8 @@ import type {
   ChangeEntry,
   ChangeStatus,
   Delta,
+  DeltaKind,
+  DeltaRequirement,
   TaskGroup,
 } from "../api/types.ts";
 import {
@@ -23,6 +25,8 @@ const GROUP_HEADING = /^\d+\.\s*(.+)$/;
 const REPO_TAG = /\s*\(([^()@]+)\)\s*$/;
 const CHECKBOX = /^\s*-\s*\[( |x|X)\]/;
 const DELTA_HEADING = /^(ADDED|MODIFIED|REMOVED|RENAMED)\s+Requirements$/;
+const REQUIREMENT_HEADING = /^Requirement:\s*(.+?)\s*$/i;
+const RENAMED_FROM = /^\s*-?\s*FROM:\s*`?###\s*Requirement:\s*(.+?)`?\s*$/gm;
 const AUTHOR =
   /^\*\*Author:\*\*\s*@([A-Za-z0-9][A-Za-z0-9_-]*)(?:\s+-\s+(\d{4}-\d{2}-\d{2}))?\s*$/m;
 const ARCHIVE_PREFIX = /^(\d{4}-\d{2}-\d{2})-(.+)$/;
@@ -181,12 +185,18 @@ function readDeltas(
     const spec = file.slice(prefix.length, -"/spec.md".length);
     const text = readTextIfExists(join(root, file));
     if (text === undefined) continue;
-    const kinds = outline(text)
-      .flatMap((section) =>
-        section.level === 1 ? section.children : [section],
-      )
-      .map((section) => DELTA_HEADING.exec(section.heading)?.[1])
-      .filter((kind): kind is string => kind !== undefined);
+    const kinds: string[] = [];
+    const requirements: DeltaRequirement[] = [];
+    for (const section of outline(text).flatMap((one) =>
+      one.level === 1 ? one.children : [one],
+    )) {
+      const kind = DELTA_HEADING.exec(section.heading)?.[1];
+      if (kind === undefined) continue;
+      kinds.push(kind);
+      requirements.push(
+        ...deltaRequirements(section, kind.toLowerCase() as DeltaKind),
+      );
+    }
     if (kinds.length === 0) {
       fail(
         file,
@@ -196,9 +206,33 @@ function readDeltas(
         ),
       );
     }
-    deltas.push({ spec, kinds: [...new Set(kinds)] });
+    deltas.push({ spec, kinds: [...new Set(kinds)], requirements });
   }
   return deltas;
+}
+
+/** The requirements one delta section names. A delta groups its requirements
+ * under plain `### <group>` headings — openspec ignores those, and so does
+ * this, or every group name would become a requirement nobody wrote. RENAMED
+ * carries FROM:/TO: bullets instead of headings, and the FROM name is the row
+ * that exists until the change archives. */
+function deltaRequirements(
+  section: Section,
+  kind: DeltaKind,
+): DeltaRequirement[] {
+  if (kind === "renamed") {
+    return matchAll(section.raw, RENAMED_FROM).map((name) => ({ name, kind }));
+  }
+  const found: DeltaRequirement[] = [];
+  const visit = (sections: Section[]): void => {
+    for (const one of sections) {
+      const name = REQUIREMENT_HEADING.exec(one.heading)?.[1];
+      if (name !== undefined) found.push({ name, kind });
+      else visit(one.children);
+    }
+  };
+  visit(section.children);
+  return found;
 }
 
 function matchAll(text: string, pattern: RegExp): string[] {

@@ -120,8 +120,19 @@ Change entry shape:
 { id, schema, status, owners, created, title, why,
   taskGroups: [{ title, repo, done, total }],
   lastMoved,                     last commit touching its tasks.md
-  deltas: [{ spec, kinds }] }
+  deltas: [{ spec, kinds,
+    requirements: [{ name, kind }] }] }
 ```
+
+A delta's `requirements` are the `### Requirement:` headings under its
+ADDED/MODIFIED/REMOVED/RENAMED sections — group headings (`### <name>`
+without the prefix) are legal in deltas and are never requirements. A
+rename is recorded under its FROM name, the row that exists until the
+change archives. The spec block badges a requirement row an in-flight
+change touches (title, tasks done/total, link to planning), and a
+capability's status is derived, never stored: `changing` when an
+in-flight non-draft delta touches it, `incubating` when its spec exists
+only as a delta or the page has no spec, else `stable`.
 
 Error containment splits by ownership. `manual/` pages are this app's own:
 malformed input fails the build. Specs and changes are other people's
@@ -229,13 +240,24 @@ the lint workflow and run before every deploy of the manual:
   platform topic (by disk shape) has its page; `manual.yaml` lists each
   product exactly once
 - no spec or change entry in the snapshot carries an `error`
+- a durable spec refuses a non-`Requirement:` `###` heading under
+  `## Requirements` — `openspec archive` absorbs a mid-section group
+  heading into the preceding requirement's text, and this rule catches
+  that at PR time instead of breaking the readers after the fold
+- an in-flight MODIFIED/REMOVED delta heading must resolve byte-for-byte
+  to a durable requirement heading, so an archive can never fail at the
+  fold on a heading that drifted
 - warning: a page whose embedded specs changed after the page's last
-  commit is flagged stale
+  commit is flagged stale, naming which requirements changed (spec blob
+  at the page's commit versus head, one `git cat-file --batch` pass); a
+  spec moved since that commit is reported as moved, never as an
+  everything-changed diff; a page with no commit yet is skipped
 
 ## Later, deliberately
 
-Hosted deploy workflow (mirror `storybook.yml`), `[[ref]]` link syntax with
-an editor picker, table grid editing over GFM tables, paste-to-upload
-images, flow diagrams lighting the handbook's topology, porting the
-openspec-viewer board derivations (idle claims, collisions),
-`(verified: @qa)` acceptance tags, GitHub App auth replacing PATs.
+`[[ref]]` link syntax with an editor picker, table grid editing over GFM
+tables, paste-to-upload images, per-block staleness via blame (page-level
+resets on any edit today), a topology block once its data is regenerated
+by CI rather than committed by hand, porting the openspec-viewer board
+derivations (idle claims, collisions), `(verified: @qa)` acceptance tags,
+GitHub App auth replacing PATs.

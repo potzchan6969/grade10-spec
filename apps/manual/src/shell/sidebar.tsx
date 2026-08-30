@@ -9,6 +9,7 @@ import { NavLink, useLocation } from "react-router";
 import type { NavGroup, NavItem, NavProduct } from "../api/derive";
 import { buildIndex } from "../api/derive";
 import { useSnapshot } from "../api/snapshot-provider";
+import { CapabilityPip } from "../blocks/capability-status";
 import { NewPageAction } from "../editor/edit-actions";
 
 const FIXED_ENTRIES = [
@@ -258,14 +259,15 @@ function LeafLink({
     <NavLink
       className={({ isActive }: { isActive: boolean }) =>
         cn(
-          "flex h-8 items-center rounded-(--radius-md) px-2 text-secondary-foreground text-sm outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50",
+          "flex h-8 items-center gap-2 rounded-(--radius-md) px-2 text-secondary-foreground text-sm outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50",
           isActive && "bg-muted font-medium text-foreground",
         )
       }
       onClick={onNavigate}
       to={item.to}
     >
-      <span className="truncate">{item.title}</span>
+      <span className="min-w-0 flex-1 truncate">{item.title}</span>
+      <CapabilityPip status={item.status} />
     </NavLink>
   );
 }
