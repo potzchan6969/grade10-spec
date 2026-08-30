@@ -9,6 +9,9 @@ const run = promisify(execFile);
 export type GitIndex = {
   head: string;
   commitOf: (storePath: string) => CommitInfo | undefined;
+  /** Last commit touching any file under a directory. A change moves when any
+   * of its files does — a plan with no tasks.md still moves. */
+  newestUnder: (storeDir: string) => CommitInfo | undefined;
   /** Files as they stood at a revision, keyed by the `<sha>:<path>` asked
    * for; a path that revision does not carry is absent from the map. One
    * process serves the whole request, for the same reason. */
@@ -18,6 +21,7 @@ export type GitIndex = {
 export const NO_GIT: GitIndex = {
   head: "",
   commitOf: () => undefined,
+  newestUnder: () => undefined,
   readBlobs: async () => new Map(),
 };
 
@@ -53,6 +57,7 @@ export async function readGitIndex(
   ]);
 
   const commits = new Map<string, CommitInfo>();
+  const dirs = new Map<string, CommitInfo>();
   let headers = 0;
   let current: CommitInfo | undefined;
   for (const line of log.split("\n")) {
@@ -64,7 +69,9 @@ export async function readGitIndex(
       continue;
     }
     // Newest first, so the first sighting of a path is its last commit.
-    if (current && !commits.has(line)) commits.set(line, current);
+    if (!current || commits.has(line)) continue;
+    commits.set(line, current);
+    rollUp(dirs, line, current);
   }
   // Commit info is decoration, not content — a log this reader cannot parse
   // costs dates, not pages, so say it out loud and carry on.
@@ -73,8 +80,29 @@ export async function readGitIndex(
   return {
     head,
     commitOf: (storePath) => commits.get(storePath),
+    newestUnder: (storeDir) => dirs.get(storeDir),
     readBlobs: (refs) => readBlobs(root, refs),
   };
+}
+
+/** A file's commit answers for every directory above it. The walk is
+ * newest-first and a path sets all its ancestors at once, so an ancestor
+ * already claimed was claimed by a newer commit — and so was everything above
+ * it. */
+function rollUp(
+  dirs: Map<string, CommitInfo>,
+  path: string,
+  commit: CommitInfo,
+): void {
+  for (
+    let cut = path.lastIndexOf("/");
+    cut > 0;
+    cut = path.lastIndexOf("/", cut - 1)
+  ) {
+    const dir = path.slice(0, cut);
+    if (dirs.has(dir)) return;
+    dirs.set(dir, commit);
+  }
 }
 
 /** `cat-file --batch` answers in the order it was asked, and says nothing but

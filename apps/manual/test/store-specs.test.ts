@@ -2,6 +2,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { NO_GIT } from "../src/store/git.mts";
 import { discoverSpecs, readSpecs } from "../src/store/read-specs.mts";
+import { writeStore } from "./tmp-store";
 
 const FIXTURE = fileURLToPath(new URL("./fixtures/store", import.meta.url));
 
@@ -109,5 +110,120 @@ describe("error containment", () => {
 
   it("keeps whatever parsed before the break", () => {
     expect(broken?.title).toBe("demo-product/broken Specification");
+  });
+
+  it("carries the suite's own citations where it has them", () => {
+    expect(alpha?.testCaseCitations).toEqual([
+      { id: "alpha-SC-01", title: "The thing happens" },
+      { id: "alpha-SC-02", title: "The thing is refused a second time" },
+    ]);
+  });
+});
+
+const SPEC = "openspec/specs/demo-product/alpha/spec.md";
+const CASES = "openspec/specs/demo-product/alpha/test-cases.md";
+
+const written = (files: Record<string, string>) =>
+  readSpecs(writeStore(files), NO_GIT)[0];
+
+const specText = (...scenarios: string[]) =>
+  [
+    "# Alpha",
+    "",
+    "## Purpose",
+    "",
+    "Alpha exists so the reader has something to read.",
+    "",
+    "## Requirements",
+    "",
+    "### Requirement: Alpha does things",
+    "",
+    "Alpha SHALL do the thing.",
+    "",
+    ...scenarios.flatMap((one) => [
+      `#### Scenario: ${one}`,
+      "",
+      "- **WHEN** asked",
+      "- **THEN** it happens",
+      "",
+    ]),
+  ].join("\n");
+
+/** An id is issued once, ever: the ref resolves to one of the pair and the
+ * anchor lands on the other, so the file is refused where it was written. */
+describe("a spec issuing one id twice", () => {
+  it("refuses two scenarios wearing one id", () => {
+    const entry = written({
+      [SPEC]: specText("alpha-SC-01 - it happens", "alpha-SC-01 - it repeats"),
+    });
+    expect(entry.error?.message).toMatch(
+      /scenario `alpha-SC-01` is issued twice, at line 13 and line 18/,
+    );
+  });
+
+  it("refuses two journeys wearing one id", () => {
+    const entry = written({
+      [SPEC]: [
+        "# Alpha",
+        "",
+        "## Purpose",
+        "",
+        "Alpha exists.",
+        "",
+        "## User journeys",
+        "",
+        "### alpha-US-01: Someone does the thing",
+        "",
+        "**Accepted by:** alpha-SC-01",
+        "",
+        "### alpha-US-01: Someone does it again",
+        "",
+        "**Accepted by:** alpha-SC-01",
+        "",
+        "## Requirements",
+        "",
+        "### Requirement: Alpha does things",
+        "",
+        "Alpha SHALL do the thing.",
+        "",
+      ].join("\n"),
+    });
+    expect(entry.error?.message).toMatch(
+      /story `alpha-US-01` is issued twice, at line 9 and line 13/,
+    );
+  });
+
+  it("keeps the requirements that parsed before the refusal", () => {
+    const entry = written({
+      [SPEC]: specText("alpha-SC-01 - it happens", "alpha-SC-01 - it repeats"),
+    });
+    expect(entry.requirements.map((one) => one.name)).toEqual([
+      "Alpha does things",
+    ]);
+  });
+});
+
+/** One missing line in a QA file used to blank the engineering contract on
+ * every page that embeds the spec. The suite gets its own channel. */
+describe("a suite the reader refuses beside a spec that parsed", () => {
+  const entry = written({
+    [SPEC]: specText("alpha-SC-01 - it happens"),
+    [CASES]: "# Alpha test cases\n\n## alpha-US-01: Someone does the thing\n",
+  });
+
+  it("hangs the refusal on the suite, never on the spec", () => {
+    expect(entry.error).toBeUndefined();
+    expect(entry.testCasesError).toEqual({
+      file: CASES,
+      line: 1,
+      message:
+        "a test-case file states `**Status:** pending-review` or `approved` under its title",
+    });
+  });
+
+  it("leaves the spec's own content whole", () => {
+    expect(entry.requirements[0].scenarios[0].id).toBe("alpha-SC-01");
+    expect(entry.testCases).toBeUndefined();
+    expect(entry.testCasesStatus).toBeUndefined();
   });
 });

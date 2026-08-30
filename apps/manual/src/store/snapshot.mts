@@ -1,9 +1,18 @@
 import { join } from "node:path";
-import type { Archive, CheckWarning, Snapshot } from "../api/types.ts";
+import type {
+  Archive,
+  CheckWarning,
+  Snapshot,
+  SpecEntry,
+} from "../api/types.ts";
 import { DESIGN_SYNC_REPORT, readDesignSync } from "./design-sync.mts";
 import { newestMtime } from "./disk.mts";
 import { type GitIndex, readGitIndex } from "./git.mts";
-import { readArchivedChanges, readChanges } from "./read-changes.mts";
+import {
+  readArchivedChanges,
+  readChanges,
+  readIssuedIds,
+} from "./read-changes.mts";
 import {
   deriveTaxonomy,
   readManualAssets,
@@ -32,6 +41,8 @@ export function composeStore(
   const config = readManualConfig(root);
   const shape = discoverSpecs(root);
   const designSync = readDesignSync(root);
+  const specs = readSpecs(root, git);
+  markIssuedIds(root, specs);
 
   return {
     snapshot: {
@@ -40,7 +51,7 @@ export function composeStore(
       config,
       taxonomy: deriveTaxonomy(shape, config),
       pages: readManualPages(root, git),
-      specs: readSpecs(root, git),
+      specs,
       changes: readChanges(root, git),
       assets: readManualAssets(root),
       warnings,
@@ -52,6 +63,29 @@ export function composeStore(
       changes: readArchivedChanges(root, git),
     },
   };
+}
+
+/** What each capability has issued, counting the deltas nobody has folded yet.
+ * A capability page states the ceiling so the next author clears it instead of
+ * reusing an id the durable file cannot see. */
+function markIssuedIds(root: string, specs: SpecEntry[]): void {
+  const issued = readIssuedIds(root, durableIds(specs));
+  for (const spec of specs) {
+    const marks = issued.get(spec.id.split("/").pop() ?? spec.id);
+    if (marks) spec.issuedThrough = marks;
+  }
+}
+
+function* durableIds(specs: SpecEntry[]): Generator<string> {
+  for (const spec of specs) {
+    for (const requirement of spec.requirements) {
+      for (const scenario of requirement.scenarios) {
+        if (scenario.id) yield scenario.id;
+      }
+    }
+    for (const journey of spec.journeys ?? []) yield journey.id;
+    for (const one of spec.testCases ?? []) yield one.id;
+  }
 }
 
 /** Cheap enough to run on every poll; it changes whenever a file the store

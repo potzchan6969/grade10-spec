@@ -1,19 +1,30 @@
+import type {
+  Block,
+  BodyItem,
+  FigmaBlock,
+  StoryBlock,
+} from "../content/grammar";
 import { type PageAst, parsePage } from "../content/grammar";
+import { resolveRef } from "../content/refs";
 import {
   dirOf,
   humanize,
   MANUAL_ROOT,
   ownerOfSpec,
   routeForPagePath,
+  slugify,
 } from "./paths";
 import { findRequirement } from "./requirements";
 import type {
   ChangeEntry,
+  ChangeLane,
   DeltaKind,
   DeltaRequirement,
+  ItemError,
   PageEntry,
   Snapshot,
   SpecEntry,
+  TestSuiteStatus,
 } from "./types";
 
 /** A page as the app reads it: parsed, or contained with the parse error. */
@@ -40,6 +51,8 @@ export type NavItem = {
 
 export type NavProduct = NavItem & {
   capabilities: NavItem[];
+  /** Capabilities that exist only as a delta — no durable spec, no page. */
+  incubating: Incubating[];
   changeCount: number;
 };
 
@@ -54,11 +67,17 @@ export type ManualIndex = {
   changeById: Map<string, ChangeEntry>;
   changesBySpec: Map<string, ChangeEntry[]>;
   changesByOwner: Map<string, ChangeEntry[]>;
+  /** Spec id → the proposals whose `## References` name it, directly or
+   * through an id it issued. A proposal has no delta, so this is the only way
+   * a capability learns one is about it. */
+  proposalsBySpec: Map<string, ChangeEntry[]>;
   /** Spec id → the route of the page that documents it. */
   routeBySpec: Map<string, string>;
   groups: NavGroup[];
   topics: NavItem[];
   guides: NavItem[];
+  /** Delta-only capabilities whose product has no branch to sit under. */
+  incubating: Incubating[];
 };
 
 const cache = new WeakMap<Snapshot, ManualIndex>();
@@ -131,15 +150,24 @@ function deriveIndex(snapshot: Snapshot): ManualIndex {
     changeById,
     changesBySpec,
     changesByOwner,
+    proposalsBySpec: deriveProposalsBySpec(snapshot),
     routeBySpec,
     groups: [],
     topics: [],
     guides: [],
+    incubating: [],
   };
 
   index.groups = deriveGroups(index);
   index.topics = deriveTopics(index);
   index.guides = deriveGuides(index);
+  index.incubating = incubatingFor(
+    index,
+    undefined,
+    new Set(
+      index.groups.flatMap((group) => group.products.map((one) => one.id)),
+    ),
+  );
   return index;
 }
 
@@ -206,6 +234,7 @@ function productNav(index: ManualIndex, id: string): NavProduct {
     to: `/p/${id}`,
     order: landing?.ast?.frontmatter.order ?? Number.MAX_SAFE_INTEGER,
     capabilities,
+    incubating: incubatingFor(index, id),
     changeCount: index.changesByOwner.get(id)?.length ?? 0,
   };
 }
@@ -356,14 +385,279 @@ export function isProductDir(dir: string): boolean {
 }
 
 /**
- * A change nobody has planned yet: no task groups, so there is no delivery to
- * report on. A proposal drafted from a requirement row carries no deltas
- * either, which is why it flips no capability status, badges no row and bumps
- * no product's count — it collects on the planning board's own lane instead of
- * standing among the work in flight.
+ * Where a change stands, read off the artifacts it has written and nothing
+ * else. Deltas are what separates an idea from a specification; tasks are what
+ * separates a specification from work. A change that has finished its tasks is
+ * `complete` and waiting on the archive, not still in progress.
+ */
+export function laneOf(change: ChangeEntry): ChangeLane {
+  if (change.deltas.length === 0) return "proposed";
+  if (change.taskGroups.length === 0) return "specified";
+  const { done, total } = taskTotals(change);
+  return total > 0 && done === total ? "complete" : "in-progress";
+}
+
+/**
+ * A change that is still only a reason: no delta, so it flips no capability
+ * status, badges no row and bumps no product's count — it collects on the
+ * planning board's own lane instead of standing among the work in flight. A
+ * change that has written its deltas and no task list is `specified`, not
+ * this: the finished state of a planning change is a specification, and filing
+ * it as an unplanned thought hides the queue somebody has to promote.
  */
 export function isProposal(change: ChangeEntry): boolean {
-  return change.taskGroups.length === 0;
+  return laneOf(change) === "proposed";
+}
+
+/** How a `depends_on:` id resolved: still in flight and holding this change
+ * up, archived and therefore satisfied, or naming nothing at all. */
+export type DependencyState = "blocking" | "satisfied" | "missing";
+
+export type Dependency = {
+  id: string;
+  state: DependencyState;
+  /** The change the id resolved to, when it resolved to one. */
+  change?: ChangeEntry;
+};
+
+/**
+ * A change's dependencies against the two sets a change can live in. The
+ * archive is a separate artifact, so a caller that has not loaded it gets
+ * `missing` for a shipped dependency — pass it whenever the answer matters.
+ */
+export function dependenciesOf(
+  change: ChangeEntry,
+  index: ManualIndex,
+  archived: ChangeEntry[] = [],
+): Dependency[] {
+  const shipped = new Map(archived.map((one) => [one.id, one]));
+  return (change.dependsOn ?? []).map((id) => {
+    const inFlight = index.changeById.get(id);
+    if (inFlight) return { id, state: "blocking", change: inFlight };
+    const done = shipped.get(id);
+    return done
+      ? { id, state: "satisfied", change: done }
+      : { id, state: "missing" };
+  });
+}
+
+/** Proposals a capability page should show: they cite it, and they carry no
+ * delta yet, so nothing else on the page would mention them. */
+export function proposalsForSpec(
+  index: ManualIndex,
+  specId: string,
+): ChangeEntry[] {
+  return index.proposalsBySpec.get(specId) ?? [];
+}
+
+function deriveProposalsBySpec(snapshot: Snapshot): Map<string, ChangeEntry[]> {
+  const proposals = snapshot.changes.filter(isProposal);
+  const found = new Map<string, ChangeEntry[]>();
+  if (proposals.length === 0) return found;
+
+  const specsByCitedId = new Map<string, string[]>();
+  const name = (id: string, specId: string) => {
+    push(specsByCitedId, id, specId);
+  };
+  for (const spec of snapshot.specs) {
+    name(spec.id, spec.id);
+    for (const requirement of spec.requirements) {
+      name(requirement.name, spec.id);
+      for (const scenario of requirement.scenarios) {
+        if (scenario.id) name(scenario.id, spec.id);
+      }
+    }
+    for (const journey of spec.journeys ?? []) name(journey.id, spec.id);
+    for (const one of spec.testCases ?? []) name(one.id, spec.id);
+  }
+
+  for (const proposal of proposals) {
+    const about = new Set(
+      (proposal.cites ?? []).flatMap((id) => specsByCitedId.get(id) ?? []),
+    );
+    for (const specId of about) push(found, specId, proposal);
+  }
+  return found;
+}
+
+/** A cited id as somewhere to click. `to` is absent when the id names nothing
+ * the snapshot holds — a proposal may cite a capability that does not exist
+ * yet, and saying so is better than dropping the line. */
+export type CiteTarget = { id: string; label: string; to?: string };
+
+/**
+ * Where a proposal's `## References` id points. The `[[ref]]` resolver answers
+ * for spec ids and permanent ids; a requirement heading is the third thing a
+ * propose dialog writes, and it resolves by name against the row it came from.
+ */
+export function citeTarget(index: ManualIndex, id: string): CiteTarget {
+  const resolved = resolveRef(id, index.snapshot);
+  if (resolved.ok) {
+    const { target } = resolved;
+    const route = routeForSpec(index, target.spec);
+    return {
+      id,
+      label: target.title,
+      to: target.kind === "spec" ? route : `${route}#${target.id}`,
+    };
+  }
+
+  for (const spec of index.snapshot.specs) {
+    const requirement = findRequirement(spec.requirements, id);
+    if (!requirement) continue;
+    return {
+      id,
+      label: requirement.name,
+      to: `${routeForSpec(index, spec.id)}#req-${slugify(requirement.name)}`,
+    };
+  }
+  return { id, label: id };
+}
+
+/** One capability's acceptance, as a reviewer has to see it to pick the next
+ * job: what the suite claims, what it covers, and what it never mentions. */
+export type QaRow = {
+  spec: SpecEntry;
+  route: string;
+  /** The row's own shelf on that page — a case where there is a suite, the
+   * first journey otherwise. */
+  anchor?: string;
+  journeys: number;
+  suiteStatus?: TestSuiteStatus;
+  cases: { draft: number; actual: number; deprecated: number; total: number };
+  /** Scenarios a case traces, over the scenarios a case is owed — the
+   * deliberately uncovered ones subtracted from both. */
+  covered: number;
+  countable: number;
+  untraced: string[];
+  outOfSuite: string[];
+  error?: ItemError;
+};
+
+/** Every capability that has claimed acceptance of any kind. A spec with
+ * neither journeys nor a suite has nothing to review yet, and listing it would
+ * bury the ones that do. */
+export function qaRows(index: ManualIndex): QaRow[] {
+  const rows: QaRow[] = [];
+  for (const spec of index.snapshot.specs) {
+    const journeys = spec.journeys ?? [];
+    const cases = spec.testCases ?? [];
+    if (journeys.length === 0 && cases.length === 0 && !spec.testCasesError) {
+      continue;
+    }
+
+    const traced = new Set(cases.flatMap((one) => one.traces));
+    const exempt = new Set(spec.outOfSuite ?? []);
+    const issued = spec.requirements.flatMap((requirement) =>
+      requirement.scenarios.flatMap((scenario) =>
+        scenario.id ? [scenario.id] : [],
+      ),
+    );
+    const countable = issued.filter((id) => !exempt.has(id));
+
+    rows.push({
+      spec,
+      route: routeForSpec(index, spec.id),
+      anchor: cases[0]?.id ?? journeys[0]?.id,
+      journeys: journeys.length,
+      ...(spec.testCasesStatus ? { suiteStatus: spec.testCasesStatus } : {}),
+      cases: {
+        draft: cases.filter((one) => one.status === "draft").length,
+        actual: cases.filter((one) => one.status === "actual").length,
+        deprecated: cases.filter((one) => one.status === "deprecated").length,
+        total: cases.length,
+      },
+      covered: countable.filter((id) => traced.has(id)).length,
+      countable: countable.length,
+      untraced: countable.filter((id) => !traced.has(id)),
+      outOfSuite: [...exempt],
+      ...(spec.testCasesError ? { error: spec.testCasesError } : {}),
+    });
+  }
+  return rows.sort(byReviewFirst);
+}
+
+/** A suite nobody can read comes first — nothing else about it is knowable.
+ * Then the drafts somebody has to stand behind, then the holes. */
+function byReviewFirst(a: QaRow, b: QaRow): number {
+  return (
+    Number(Boolean(b.error)) - Number(Boolean(a.error)) ||
+    b.cases.draft - a.cases.draft ||
+    b.untraced.length - a.untraced.length ||
+    a.spec.id.localeCompare(b.spec.id)
+  );
+}
+
+/** A capability that exists only as a delta: no durable spec, no page, and no
+ * way into it but the change that is writing it. */
+export type Incubating = { specId: string; title: string; change: ChangeEntry };
+
+export function incubatingFor(
+  index: ManualIndex,
+  product: string | undefined,
+  homed: Set<string> = new Set(),
+): Incubating[] {
+  const found: Incubating[] = [];
+  for (const [specId, changes] of index.changesBySpec) {
+    if (index.specById.has(specId)) continue;
+    if (index.routeBySpec.has(specId)) continue;
+    const owner = ownerOfSpec(specId);
+    // Named product, or — with no product named — the leftovers no product
+    // branch is going to show, which are the easiest ones to lose.
+    if (product === undefined ? homed.has(owner) : owner !== product) continue;
+    const change = [...changes].sort(byLastMoved)[0];
+    if (!change) continue;
+    found.push({
+      specId,
+      title: humanize(specId.split("/").at(-1) ?? specId),
+      change,
+    });
+  }
+  return found.sort((a, b) => a.title.localeCompare(b.title));
+}
+
+/** Every block a page holds, container bodies included. */
+function* everyBlock(
+  blocks: (Block | BodyItem)[],
+): Generator<Block | BodyItem> {
+  for (const block of blocks) {
+    yield block;
+    if ("body" in block) yield* everyBlock(block.body);
+  }
+}
+
+export type DesignCard = FigmaBlock | StoryBlock;
+
+/** One page's visuals, in the order it shows them. */
+export type DesignShelf = {
+  page: ParsedPage;
+  route: string;
+  title: string;
+  cards: DesignCard[];
+};
+
+/**
+ * Every figma frame and story in the manual, by the page that shows it. Nav is
+ * group → product → capability and nothing groups by design file, so answering
+ * "which pages show my designs" meant opening every page by hand.
+ */
+export function designShelves(index: ManualIndex): DesignShelf[] {
+  const shelves: DesignShelf[] = [];
+  for (const page of index.pages) {
+    if (!page.ast || !page.route) continue;
+    const cards = [...everyBlock(page.ast.blocks)].filter(
+      (block): block is DesignCard =>
+        block.type === "figma" || block.type === "story",
+    );
+    if (cards.length === 0) continue;
+    shelves.push({
+      page,
+      route: page.route,
+      title: page.ast.frontmatter.title,
+      cards,
+    });
+  }
+  return shelves.sort((a, b) => a.title.localeCompare(b.title));
 }
 
 export function taskTotals(change: ChangeEntry): {

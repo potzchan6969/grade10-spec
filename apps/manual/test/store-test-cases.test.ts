@@ -92,6 +92,42 @@ describe("a suite in the governance format", () => {
   });
 });
 
+describe("what a suite says about the spec beside it", () => {
+  it("carries each `**Covers:**` bullet as an id and the wording quoted", () => {
+    const parsed = readTestCases(
+      suite("pending-review", testCase("alpha-TC-01", "It happens", "draft")),
+    );
+    expect(parsed.citations).toEqual([
+      { id: "alpha-SC-01", title: "The thing happens" },
+    ]);
+  });
+
+  it("reads the ids a suite leaves uncovered on purpose", () => {
+    const parsed = readTestCases(
+      [
+        "# demo-product/alpha Test Cases",
+        "",
+        "**Status:** pending-review",
+        "",
+        "**Out of suite:** alpha-SC-08, alpha-SC-09",
+        "",
+        "## alpha-US-01: Reader follows the thing end to end",
+        "",
+        testCase("alpha-TC-01", "It happens", "draft"),
+      ].join("\n"),
+    );
+    expect(parsed.outOfSuite).toEqual(["alpha-SC-08", "alpha-SC-09"]);
+  });
+
+  it("keeps a case's properties list out of both", () => {
+    const parsed = readTestCases(
+      suite("pending-review", testCase("alpha-TC-01", "It happens", "draft")),
+    );
+    expect(parsed.outOfSuite).toEqual([]);
+    expect(parsed.citations).toHaveLength(1);
+  });
+});
+
 /** A missing or unknown status is malformed per the governance doc, and a
  * default would let a generated draft wear a reviewed suite's authority. */
 describe("a suite that states no status", () => {
@@ -126,6 +162,22 @@ describe("a suite that states no status", () => {
       ),
     ).toThrow(
       /is `\*\*Status:\*\* ready`, which is not draft, actual or deprecated/,
+    );
+  });
+
+  /** A `TC` id is permanent, and a task, a review and a downstream test all
+   * point at it. Two cases wearing one splits all three without a word. */
+  it("refuses a case id the file issues twice, naming both lines", () => {
+    expect(() =>
+      readTestCases(
+        suite(
+          "pending-review",
+          testCase("alpha-TC-01", "It happens", "actual"),
+          testCase("alpha-TC-01", "It happens again", "actual"),
+        ),
+      ),
+    ).toThrow(
+      /test case `alpha-TC-01` is issued twice, at line 15 and line 43 — an id names one thing forever/,
     );
   });
 

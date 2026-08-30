@@ -39,15 +39,43 @@ describe("in-flight changes", () => {
   });
 
   it("counts a task group's checkboxes, nested ones included", () => {
-    expect(change.taskGroups).toEqual([
+    expect(
+      change.taskGroups.map(({ title, repo, done, total }) => ({
+        title,
+        repo,
+        done,
+        total,
+      })),
+    ).toEqual([
       { title: "Contracts", repo: "grade10-spec", done: 2, total: 3 },
       { title: "Surface", repo: "grade10", done: 0, total: 2 },
       { title: "Review", repo: "", done: 0, total: 0 },
     ]);
   });
 
+  /** "2 of 3" is only useful if it can say which one is open. */
+  it("carries every checkbox line, numbering and all", () => {
+    expect(change.taskGroups[0].tasks).toEqual([
+      { text: "1.1 Publish the contract.", done: true },
+      { text: "1.2 Adopt it.", done: false },
+      {
+        text: "1.3 A nested checkbox still counts toward this group.",
+        done: true,
+      },
+    ]);
+    expect(change.taskGroups[2].tasks).toEqual([]);
+  });
+
   it("reads delta kinds and the requirements each one touches", () => {
-    expect(change.deltas).toEqual([
+    expect(
+      change.deltas.map((delta) => ({
+        ...delta,
+        requirements: delta.requirements.map(({ name, kind }) => ({
+          name,
+          kind,
+        })),
+      })),
+    ).toEqual([
       {
         spec: "demo-product/alpha",
         kinds: ["ADDED", "MODIFIED"],
@@ -57,6 +85,18 @@ describe("in-flight changes", () => {
         ],
       },
     ]);
+  });
+
+  /** The delta block is the only place the app can read what a change will
+   * say — 157 of the store's in-flight delta requirements are ADDED, so
+   * without it they are rendered nowhere. */
+  it("carries each requirement's delta block, heading first", () => {
+    const [added, modified] = change.deltas[0].requirements;
+    expect(added.text).toContain("### Requirement: The thing is watched");
+    expect(added.text).toContain("#### Scenario:");
+    expect(
+      modified.text?.startsWith("### Requirement: The thing happens once"),
+    ).toBe(true);
   });
 
   /** `draft-spec.md` sits beside the delta in the fixture: a file that merely
@@ -142,17 +182,21 @@ describe("a delta that groups, renames, and spaces its headings", () => {
   });
 
   it("skips the group heading and keeps the name as written", () => {
-    expect(delta.requirements).toEqual([
+    expect(
+      delta.requirements.map(({ name, kind }) => ({ name, kind })),
+    ).toEqual([
       { name: "Stock is counted", kind: "added" },
       { name: "The thing   happens once", kind: "modified" },
       { name: "The thing is written down", kind: "renamed" },
     ]);
   });
 
-  it("records a rename under the name that still exists", () => {
+  it("records a rename under the name that still exists, and says where it lands", () => {
     expect(delta.requirements.map((one) => one.name)).not.toContain(
       "The thing leaves a record",
     );
+    expect(delta.requirements[2].to).toBe("The thing leaves a record");
+    expect(delta.requirements[2].text).toBeUndefined();
   });
 });
 

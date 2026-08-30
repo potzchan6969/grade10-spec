@@ -79,6 +79,14 @@ export type TestCase = {
  * independent judgment. */
 export type TestSuiteStatus = "pending-review" | "approved";
 
+/** A scenario the suite file cites with a quoted title (`**Covers:**`
+ * lines); the drift warn compares the quote against the spec's current
+ * heading — the only signal that a reviewed wording moved. */
+export type SuiteCitation = {
+  id: string;
+  title: string;
+};
+
 export type SpecEntry = {
   /** `product/capability`, or a bare topic id. */
   id: string;
@@ -89,9 +97,30 @@ export type SpecEntry = {
   journeys?: Journey[];
   testCases?: TestCase[];
   testCasesStatus?: TestSuiteStatus;
+  testCaseCitations?: SuiteCitation[];
+  /** Scenario ids the suite deliberately leaves uncovered
+   * (`**Out of suite:**`) — subtracted from coverage, so the untraced
+   * count that remains is always actionable. */
+  outOfSuite?: string[];
+  /** Highest permanent id issued per kind, counting durable text, every
+   * in-flight delta, and the archive — the number the next author must
+   * clear, which the durable file's own ceiling understates. */
+  issuedThrough?: { sc?: number; us?: number; tc?: number };
   lastCommit?: CommitInfo;
-  /** Set when the file was malformed; content fields may be incomplete. */
+  /** The spec file was malformed; content fields may be incomplete. */
   error?: ItemError;
+  /** The suite beside it was malformed — its own channel, so a broken
+   * test-cases.md never blanks the spec's requirements or takes down the
+   * pages that embed them. */
+  testCasesError?: ItemError;
+};
+
+/** One checkbox line of a task group. Carried for in-flight changes only —
+ * the archive shares this type and its board payload must stay light. */
+export type TaskLine = {
+  text: string;
+  done: boolean;
+  owner?: string;
 };
 
 export type TaskGroup = {
@@ -99,6 +128,7 @@ export type TaskGroup = {
   repo: string;
   done: number;
   total: number;
+  tasks?: TaskLine[];
 };
 
 export type DeltaKind = "added" | "modified" | "removed" | "renamed";
@@ -110,6 +140,12 @@ export type DeltaKind = "added" | "modified" | "removed" | "renamed";
 export type DeltaRequirement = {
   name: string;
   kind: DeltaKind;
+  /** For a rename, the heading the requirement moves to. */
+  to?: string;
+  /** The delta's full block — heading, prose, scenarios. In-flight only,
+   * so ADDED work is readable and MODIFIED can render as a diff against
+   * the durable block; the archive stays light. */
+  text?: string;
 };
 
 export type Delta = {
@@ -122,19 +158,36 @@ export type Delta = {
 
 export type ChangeStatus = "in-flight" | "archived";
 
+/** Where a change stands, derived and never stored: `proposed` has no
+ * deltas yet, `specified` has deltas and no task list, `in-progress` has
+ * open tasks, `complete` has finished them all and awaits the archive. */
+export type ChangeLane = "proposed" | "specified" | "in-progress" | "complete";
+
 export type ChangeEntry = {
   id: string;
   schema: string;
   status: ChangeStatus;
+  /** From `.openspec.yaml` `owner:`/`owners:`, merged with the
+   * `(owner: @handle)` task tags — so an unclaimed change can still be
+   * somebody's. */
   owners: string[];
   /** Handle from the proposal's `**Author:**` line — who proposed it, which
    * is not who owns it. Named only when no owner claimed a task. */
   author?: string;
   created: string;
+  /** Optional `target:` date from `.openspec.yaml`. */
+  target?: string;
+  /** Change ids from `.openspec.yaml` `depends_on:`; resolution against
+   * the in-flight and archived sets happens in derivation. */
+  dependsOn?: string[];
   title: string;
   why: string;
+  /** Ids the proposal's `## References` names, read back so the
+   * capability a proposal is about can show it before any delta exists. */
+  cites?: string[];
   taskGroups: TaskGroup[];
-  /** ISO date of the last commit touching the change's tasks.md. */
+  /** ISO date of the last commit touching any file of the change — a
+   * pm-planning change with no tasks.md still moves. */
   lastMoved?: string;
   deltas: Delta[];
   /** Set when a file was malformed; content fields may be incomplete. */
@@ -155,8 +208,17 @@ export type DesignSyncClass = "ok" | "warn" | "skipped" | "fail";
 
 export type DesignSyncReport = {
   generatedAt: string;
+  /** Figma file key the run read, when it read one over REST. */
+  file?: string;
   /** Keyed by component-set name, as the checker names them. */
   sets: Record<string, DesignSyncClass>;
+  /** Every node a link can name — components, pages, and the frames sitting on
+   * one — against the component set it belongs to. Keyed as a Figma URL writes
+   * an id (`4735-6493`). Absent when the run's source could not say, which is
+   * not the same as "no node exists". */
+  nodes?: Record<string, string>;
+  /** Why a set got its verdict, in the checker's own words. */
+  messages?: Record<string, string[]>;
 };
 
 /** `/api/snapshot` — boots the app. */

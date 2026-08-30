@@ -5,6 +5,7 @@ import type {
   Requirement,
   Scenario,
   SpecEntry,
+  SuiteCitation,
   TestCase,
   TestCaseStatus,
   TestSuiteStatus,
@@ -44,6 +45,12 @@ const SUITE_STATUS = /^\*\*Status:\*\*\s*(.+?)\s*$/m;
 const CASE_STATUS = /^\s*(?:[-*]\s+)?\*\*Status:\*\*\s*(.+?)\s*$/m;
 const SUITE_STATUSES = new Set(["pending-review", "approved"]);
 const CASE_STATUSES = new Set(["draft", "actual", "deprecated"]);
+/** A suite quotes the scenarios a journey covers, and lists the ones it
+ * deliberately leaves uncovered. Both are labelled lists at column 0. */
+const COVERS = /^\*\*Covers:\*\*/;
+const OUT_OF_SUITE = /^\*\*Out of suite:\*\*(.*)$/;
+const CITATION = /^\s*[-*]\s+`([a-z0-9][a-z0-9-]*-SC-\d+)`\s*[—–-]\s*(.+?)\s*$/;
+const BULLET = /^\s*[-*]\s+/;
 
 export function discoverSpecs(root: string): SpecShape {
   const specsDir = join(root, "openspec", "specs");
@@ -91,19 +98,25 @@ function readSpec(
 
   try {
     fillSpec(entry, readText(join(root, specPath)));
-    const casesPath = `${dir}/test-cases.md`;
-    const cases = readTextIfExists(join(root, casesPath));
-    if (cases !== undefined) {
-      try {
-        const suite = readTestCases(cases);
-        entry.testCases = suite.cases;
-        entry.testCasesStatus = suite.status;
-      } catch (cause) {
-        entry.error = toItemError(casesPath, cause);
-      }
-    }
   } catch (cause) {
     entry.error = toItemError(specPath, cause);
+  }
+
+  // The suite has its own channel: a `test-cases.md` nobody can parse is QA's
+  // file, and hanging it on the spec would blank the engineering contract on
+  // every page that embeds it — and blind every rule that reads requirements.
+  const casesPath = `${dir}/test-cases.md`;
+  const cases = readTextIfExists(join(root, casesPath));
+  if (cases !== undefined) {
+    try {
+      const suite = readTestCases(cases);
+      entry.testCases = suite.cases;
+      entry.testCasesStatus = suite.status;
+      if (suite.citations.length > 0) entry.testCaseCitations = suite.citations;
+      if (suite.outOfSuite.length > 0) entry.outOfSuite = suite.outOfSuite;
+    } catch (cause) {
+      entry.testCasesError = toItemError(casesPath, cause);
+    }
   }
   return entry;
 }
@@ -126,13 +139,56 @@ function fillSpec(entry: SpecEntry, text: string): void {
   if (featureSet) entry.featureSet = featureSet.body;
 
   const journeys = findSection(sections, "User journeys");
-  if (journeys) entry.journeys = journeys.children.map(readJourney);
+  if (journeys) {
+    entry.journeys = journeys.children.map(readJourney);
+    refuseRepeats("story", issuedIn(journeys.children, JOURNEY_HEADING));
+  }
 
   const requirements = findSection(sections, "Requirements");
   if (!requirements) {
     throw new StoreFileError(head.line, "spec has no `## Requirements`");
   }
   entry.requirements = requirements.children.map(readRequirement);
+  refuseRepeats(
+    "scenario",
+    issuedIn(
+      requirements.children.flatMap((one) => one.children),
+      SCENARIO_HEADING,
+    ),
+  );
+}
+
+/** The permanent id each of these sections heads a block with, in file
+ * order — the blocks that do not carry one are not issuing anything. */
+function issuedIn(
+  sections: Section[],
+  heading: RegExp,
+): { id: string; line: number }[] {
+  return sections.flatMap((section) => {
+    const id = heading.exec(section.heading)?.[1];
+    return id === undefined ? [] : [{ id, line: section.line }];
+  });
+}
+
+/** An id is issued once, ever. A file that issues one twice splits a
+ * scenario, story or case into two things wearing the same name — the ref
+ * resolves to one and the anchor lands on the other — so it is refused
+ * where it was written rather than rendered twice. */
+function refuseRepeats(
+  kind: string,
+  issued: { id: string; line: number }[],
+): void {
+  const seen = new Map<string, number>();
+  for (const one of issued) {
+    const first = seen.get(one.id);
+    if (first !== undefined) {
+      throw new StoreFileError(
+        one.line,
+        `${kind} \`${one.id}\` is issued twice, at line ${first} and line ${one.line} — an id names one thing forever`,
+      );
+    }
+    seen.set(one.id, one.line);
+  }
 }
 
 function readJourney(section: Section): Journey {
@@ -210,7 +266,15 @@ function readScenario(section: Section): Scenario {
   return scenario;
 }
 
-export type TestSuite = { status: TestSuiteStatus; cases: TestCase[] };
+export type TestSuite = {
+  status: TestSuiteStatus;
+  cases: TestCase[];
+  /** `**Covers:**` bullets: the id, and the wording the reviewer read. */
+  citations: SuiteCitation[];
+  /** `**Out of suite:**` ids — scenarios the suite leaves uncovered on
+   * purpose, so what remains untraced is always a real hole. */
+  outOfSuite: string[];
+};
 
 /** `docs/governance/specs-to-test-cases.md`: journeys are `##` sections,
  * cases are `###` sections under them, each closing with `**Trace:**`. Status
@@ -219,24 +283,79 @@ export type TestSuite = { status: TestSuiteStatus; cases: TestCase[] };
 export function readTestCases(text: string): TestSuite {
   const roots = outline(text);
   const status = suiteStatus(roots);
-  const cases: TestCase[] = [];
+  const found: { section: Section; id: string; title: string }[] = [];
   const visit = (sections: Section[]): void => {
     for (const section of sections) {
       const match = CASE_HEADING.exec(section.heading);
       if (match) {
-        cases.push({
-          id: match[1],
-          title: match[2],
-          traces: traces(section),
-          status: caseStatus(section),
-        });
+        found.push({ section, id: match[1], title: match[2] });
         continue;
       }
       visit(section.children);
     }
   };
   visit(roots);
-  return { status, cases };
+
+  const cases = found.map(
+    ({ section, id, title }): TestCase => ({
+      id,
+      title,
+      traces: traces(section),
+      status: caseStatus(section),
+    }),
+  );
+  refuseRepeats(
+    "test case",
+    found.map(({ section, id }) => ({ id, line: section.line })),
+  );
+
+  return { status, cases, ...labelledLists(text) };
+}
+
+/** The two labelled lists a suite carries beside its cases, read from the
+ * text rather than the outline: both sit inside a section's body, and both
+ * end at the blank line after their last entry. */
+function labelledLists(text: string): {
+  citations: SuiteCitation[];
+  outOfSuite: string[];
+} {
+  const citations: SuiteCitation[] = [];
+  const outOfSuite = new Set<string>();
+  let mode: "covers" | "out" | undefined;
+  let started = false;
+
+  for (const line of text.split("\n")) {
+    if (COVERS.test(line)) {
+      mode = "covers";
+      started = false;
+      continue;
+    }
+    const out = OUT_OF_SUITE.exec(line);
+    if (out) {
+      const ids = out[1].match(SCENARIO_ID) ?? [];
+      for (const id of ids) outOfSuite.add(id);
+      mode = "out";
+      started = ids.length > 0;
+      continue;
+    }
+    if (mode === undefined) continue;
+    if (line.trim() === "") {
+      if (started) mode = undefined;
+      continue;
+    }
+    if (!BULLET.test(line)) {
+      mode = undefined;
+      continue;
+    }
+    started = true;
+    if (mode === "out") {
+      for (const id of line.match(SCENARIO_ID) ?? []) outOfSuite.add(id);
+      continue;
+    }
+    const cite = CITATION.exec(line);
+    if (cite) citations.push({ id: cite[1], title: cite[2] });
+  }
+  return { citations, outOfSuite: [...outOfSuite] };
 }
 
 function suiteStatus(roots: Section[]): TestSuiteStatus {
