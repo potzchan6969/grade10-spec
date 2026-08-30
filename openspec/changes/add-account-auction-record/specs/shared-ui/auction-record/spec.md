@@ -22,9 +22,6 @@ application.
 
 ## ADDED Requirements
 
-### The record surface exports
----
-
 ### Requirement: The auction-record surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
@@ -51,9 +48,6 @@ Each of those components SHALL be renderable on its own, outside
   `AuctionRecordTabs`
 - **THEN** it renders and behaves as specified, with no missing-context error
   and no requirement to supply frame props
-
-### Content ownership
----
 
 ### Requirement: Every string on the surface is supplied by the application
 

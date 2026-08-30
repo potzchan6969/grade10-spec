@@ -76,10 +76,6 @@ catalog-SC-44, catalog-SC-45.
 
 ## ADDED Requirements
 
-### Product stock
-
----
-
 ### Requirement: Product record fields
 
 A product SHALL carry the fields below. Creating a product SHALL also seed
@@ -282,10 +278,6 @@ refresh product updated at.
 - **THEN** those fields match the input
 - **AND** status and inventory counts are unchanged
 - **AND** updated at advances
-
-### Application holds
-
----
 
 ### Requirement: Reservation record fields
 
@@ -646,10 +638,6 @@ become `closed`. Auction entrypoints SHALL NOT expose vault-from-reservation.
 - **WHEN** a caller uses the Auction entrypoint and attempts vault-from-reservation
 - **THEN** no vault-from-reservation method is exposed on that entrypoint
 
-### Change history
-
----
-
 ### Requirement: Change history fields identify every transition
 
 Every successful product or inventory mutation SHALL append one domain change
@@ -771,10 +759,6 @@ audit.
 - **AND** before and after show product A reserved decreasing by three and
   product B reserved increasing by three
 
-### Admin console
-
----
-
 ### Requirement: Operators manage aggregate inventory from the admin panel
 
 The Grade10 admin panel SHALL offer an Inventory section with:
@@ -819,10 +803,6 @@ Loading, empty, and error states SHALL be visible.
 - **WHEN** they create a product with a valid name
 - **THEN** they land on the new product page in status `draft`
 - **AND** the inventory snapshot shows zero counts
-
-### Access
-
----
 
 ### Requirement: Global inventory APIs and console are admin-only
 

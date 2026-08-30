@@ -85,9 +85,6 @@ did not win.
 
 ## ADDED Requirements
 
-### Watching a listing
----
-
 ### Requirement: A collector watches a listing from where it is shown
 
 Grade10 SHALL let a signed-in collector watch and unwatch a listing from that
@@ -163,9 +160,6 @@ design decision and is not fixed by this requirement.
 - **THEN** that listing is still listed
 - **AND** its state is Ended
 
-### The Watching page
----
-
 ### Requirement: Watching states
 
 A listing on the Watching page SHALL carry exactly one of these states. The
@@ -234,9 +228,6 @@ SHALL NOT remove it from the Bidding page.
 - **THEN** the listing is gone from their Watching page
 - **AND** it is still on their Bidding page with their standing unchanged
 
-### The Bidding page
----
-
 ### Requirement: A bidder's standing while a listing is open
 
 A listing on the Bidding page whose bidding window is open SHALL carry exactly
@@ -301,9 +292,6 @@ listing they bid on.
 - **GIVEN** a closed listing the collector bid on whose winner is someone else
 - **WHEN** they open their Bidding page
 - **THEN** that listing is under Didn't win
-
-### After a close
----
 
 ### Requirement: A winner reads their own payment and shipment state
 
@@ -389,9 +377,6 @@ win carrying the same statement about their authorization.
 - **WHEN** they open their Bidding page
 - **THEN** that listing is under Didn't win
 - **AND** the row says what happened to their authorization
-
-### Reaching the record
----
 
 ### Requirement: The record belongs to its owner alone
 

@@ -106,9 +106,6 @@ scheduled close,
 
 ## ADDED Requirements
 
-### Enrolment
----
-
 ### Requirement: A collector is enrolled by watching or by bidding
 
 A collector SHALL:
@@ -153,9 +150,6 @@ still enrolled for that message, SHALL still receive it.
 - **WHEN** they unwatch it
 - **AND** bidding opens on that lot
 - **THEN** Grade10 does not send them the bidding-has-opened message
-
-### Progress messages
----
 
 ### Requirement: Grade10 sends four messages about a lot's progress
 
@@ -213,9 +207,6 @@ message. This requirement does not remove it or change who receives it.
 - **GIVEN** a collector who has received the bidding-has-opened message for a lot
 - **WHEN** Grade10 evaluates that lot's mail again
 - **THEN** it does not send them that message a second time
-
-### Bid-activity messages
----
 
 ### Requirement: Grade10 sends two messages about bid activity
 
@@ -283,9 +274,6 @@ a listing that has stopped taking bids.
 - **WHEN** those messages go out
 - **THEN** that collector receives one new-bid message
 - **AND** that message is about the current leading bid
-
-### Delivery
----
 
 ### Requirement: Every message goes to the registered account email
 

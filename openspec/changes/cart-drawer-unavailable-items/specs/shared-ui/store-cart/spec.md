@@ -29,10 +29,6 @@ When a cart line's product has left the catalogue, the drawer drops it after ope
 
 ## ADDED Requirements
 
-### Cart refresh cleanup
-
----
-
 ### Requirement: Unavailable items are removed silently after open loading
 
 After the cart drawer finishes its open status-and-price loading, every line
@@ -64,10 +60,6 @@ sale). It is not `soldOut` and not `adjusted`.
 - **WHEN** the drawer applies post-loading cleanup
 - **THEN** no toast with the `unavailableItemsRemoved` message is shown
 - **AND** no item is removed solely for being unavailable
-
-### Cart item contract
-
----
 
 ### Requirement: Cart item status includes unavailable
 

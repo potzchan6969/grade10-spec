@@ -27,9 +27,6 @@ checkout and with inventory “sold” stock).
 
 ## ADDED Requirements
 
-### Rename Sales to Campaigns
----------------------------
-
 ### Requirement: Admin chrome uses Campaigns, not Sales
 
 The Grade10 auction admin SHALL rename the existing catalogue-cover **Sales**
@@ -72,12 +69,6 @@ domains.
 - **AND** they do not export `adminSale` / `AuctionAdminSale` aliases
 - **AND** the admin SPA exposes `CampaignsPanel` and `campaigns` modules, not
   `SalesPanel` or `sales` modules for this entity
-
-### Campaigns section
--------------------
-
-### Campaign editor
------------------
 
 ### Requirement: Operator opens a campaign as a draft
 

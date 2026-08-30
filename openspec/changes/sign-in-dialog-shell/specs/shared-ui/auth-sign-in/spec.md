@@ -14,10 +14,6 @@ The shared sign-in surface every application composes: a modal dialog over a scr
 
 ## ADDED Requirements
 
-### Sign-in surface contract
-
----
-
 ### Requirement: The sign-in surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
@@ -70,10 +66,6 @@ Escape key, and by activating the scrim. Each SHALL call `onOpenChange` with
 - **WHEN** the collector activates the close control, presses Escape, or activates the scrim
 - **THEN** `onOpenChange` is called with `false`
 - **AND** the collector is left on the page beneath with its state intact
-
-### Sign-in body composition
-
----
 
 ### Requirement: The provider slot renders above the divider
 

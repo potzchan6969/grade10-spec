@@ -51,10 +51,6 @@ capabilities.
 
 ## ADDED Requirements
 
-### One vocabulary, admin-wide
-
----
-
 ### Requirement: Every admin surface renders one component vocabulary
 
 Admin surfaces SHALL render their components from a single vocabulary, and an
@@ -91,10 +87,6 @@ whichever vocabulary the component happens to be written in.
 - **THEN** one definition serves both
 - **AND THEN** the admin rendering is not visibly foreign to the console around it
 
-### Brand identity survives
-
----
-
 ### Requirement: One mechanism carries a brand's identity into the admin
 
 A brand's identity SHALL reach admin surfaces through exactly one stated
@@ -115,10 +107,6 @@ supplies, never a value written into a block.
 - **WHEN** an admin application sets a brand's visual value
 - **THEN** exactly one mechanism sets it
 - **AND THEN** no second mechanism sets the same value to a different result
-
-### Nothing already won is lost
-
----
 
 ### Requirement: The console semantics survive the change of vocabulary
 
@@ -147,10 +135,6 @@ offering the way on and back.
 - **WHEN** an operator confirms an irreversible move after the vocabulary changed
 - **THEN** the confirmation is a dialog the surface renders
 - **AND THEN** the platform's native confirmation is not invoked
-
-### The runtime is held to terms
-
----
 
 ### Requirement: The admin runtime is pinned and its upgrades are deliberate
 

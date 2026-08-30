@@ -79,9 +79,6 @@ to buy.
 
 ## ADDED Requirements
 
-### Watching a listing
----
-
 ### Requirement: A signed-in collector watches and unwatches a lot
 
 A signed-in collector SHALL:
@@ -151,9 +148,6 @@ be the collector's user id, per `shared-auth/session`.
 - **THEN** each sees that lot listed once
 - **AND** neither sees the other's watch
 
-### Watch privacy
----
-
 ### Requirement: A watch is private and confers nothing
 
 A watch SHALL be visible only to the collector who made it. Grade10
@@ -194,9 +188,6 @@ a watch as a commitment to buy.
 - **GIVEN** a lot watched by two collectors on one brand and one collector on the other
 - **WHEN** an authorized operator reads that lot's watch count
 - **THEN** the count is 3
-
-### Watched list
----
 
 ### Requirement: A collector reads the lots they watch
 
