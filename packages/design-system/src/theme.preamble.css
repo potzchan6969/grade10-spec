@@ -63,6 +63,7 @@
   --color-foreground: var(--foreground);
   --color-background: var(--background);
   --color-background-subtle: var(--background-subtle);
+  --color-background-strong: var(--background-strong);
   --color-background-inverse: var(--background-inverse);
   --color-border-strong: var(--border-strong);
 

@@ -59,3 +59,7 @@ export const LoadingWithStatus: Story = {
 
 export const WithoutLabel: Story = { args: { label: undefined } };
 export const WithoutMessage: Story = { args: { message: undefined } };
+
+export const WithPrefix: Story = {
+  args: { prefix: "US$", defaultValue: "4,800" },
+};

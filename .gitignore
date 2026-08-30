@@ -37,3 +37,8 @@ scripts/tokens-sync/figma-plugins/build/
 .env
 .env.*
 !.env.example
+.cursor/agents/impeccable-asset-producer.md
+.cursor/agents/impeccable-documenter.md
+.cursor/agents/impeccable-finish-reviewer.md
+.cursor/agents/impeccable-manual-edit-applier.md
+.cursor/hooks.json

@@ -1,6 +1,28 @@
 /* Public entry: re-exports exactly the compound-component exports the
  * capability specs name. Populated as blocks land under src/blocks/. */
 
+export {
+  formatUsd,
+  formatUsdNumeric,
+  minNextBidMinor,
+} from "./blocks/auction-listing/format-usd";
+export {
+  ListingAgeVerificationDialog,
+  type ListingAgeVerificationDialogCopy,
+  type ListingAgeVerificationDialogProps,
+} from "./blocks/auction-listing/listing-age-verification-dialog";
+export {
+  ListingAuctionBidCard,
+  type ListingAuctionBidCardCopy,
+  type ListingAuctionBidCardProps,
+} from "./blocks/auction-listing/listing-auction-bid-card";
+export type { ListingAuctionBidFieldsCopy } from "./blocks/auction-listing/listing-auction-bid-fields";
+export {
+  ListingAuctionCardSidebar,
+  type ListingAuctionCardSidebarCopy,
+  type ListingAuctionCardSidebarProps,
+} from "./blocks/auction-listing/listing-auction-card-sidebar";
+export { ListingBidHistoryList } from "./blocks/auction-listing/listing-bid-history-list";
 // shared-ui/auction-listing
 export {
   ListingBidPanel,
@@ -20,6 +42,29 @@ export {
   type ListingGalleryImage,
   type ListingGalleryProps,
 } from "./blocks/auction-listing/listing-gallery";
+export { ListingLotGallery } from "./blocks/auction-listing/listing-lot-gallery";
+export {
+  ListingLotHeader,
+  type ListingLotHeaderCopy,
+  type ListingLotHeaderProps,
+} from "./blocks/auction-listing/listing-lot-header";
+export {
+  LISTING_LOT_GALLERY_CLASS,
+  LISTING_LOT_GRID_CLASS,
+  LISTING_LOT_SIDEBAR_CLASS,
+} from "./blocks/auction-listing/listing-lot-layout";
+export {
+  ListingLotMeta,
+  type ListingLotMetaCopy,
+  type ListingLotMetaProps,
+} from "./blocks/auction-listing/listing-lot-meta";
+export type {
+  ListingAuctionBidView,
+  ListingAuctionStanding,
+  ListingBidHistoryRow,
+  ListingLotGalleryImage,
+  ListingLotMetaBadge,
+} from "./blocks/auction-listing/types";
 // shared-ui/auth-sign-in
 export {
   SignInCard,

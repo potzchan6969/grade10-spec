@@ -27,29 +27,27 @@ Needs the contracts from group 2 landed.
 - [x] 3.6 Make `auto-bidding-SC-22`, `auto-bidding-SC-23`, and `auto-bidding-SC-24` pass by treating a bid Grade10 places as an accepted bid under the existing extension rule and cap, once per accepted commitment.
 - [x] 3.7 Make `auto-bidding-SC-07` pass, and verify every scenario in this group through auction backend feature tests including concurrent commitments against one listing.
 
-## 4. Listing page (grade10)
+## 4. Listing page (grade10) (owner: @htonyl)
 
 Claimable against the contracts and fixtures from group 2; it does not need a running backend.
 
-- [ ] 4.1 Produce the bid-panel Figma frame named in `ui.md` and link it there, so the layout has a source of truth before the panel is wired.
-- [ ] 4.2 Change the bid control to ask for a maximum, with a confirmation that states the hold covers the maximum, per `design.md`'s risk on a misread maximum.
-- [ ] 4.3 Make `auto-bidding-SC-05` and `auto-bidding-SC-06` pass on the listing page, rendering the maximum and the current bid as separate facts.
-- [ ] 4.4 Make `auto-bidding-SC-18` pass as an accepted, not-leading state rather than an error.
-- [ ] 4.5 Add the panel's new copy to the `@grade10/i18n` catalogs for every locale the site answers.
-- [ ] 4.6 Verify the listing-page feature lane against the contract fixtures, including the refused-raise and unauthenticated-viewer states.
+- [x] 4.2 Change the bid control to ask for a maximum, with a confirmation that states the hold covers the maximum, per `design.md`'s risk on a misread maximum.
+- [x] 4.3 Make `auto-bidding-SC-05` and `auto-bidding-SC-06` pass on the listing page, rendering the maximum and the current bid as separate facts.
+- [x] 4.4 Make `auto-bidding-SC-18` pass as an accepted, not-leading state rather than an error.
+- [x] 4.5 Add the panel's new copy to the `@grade10/i18n` catalogs for every locale the site answers.
+- [x] 4.6 Verify the listing-page feature lane against the contract fixtures, including the refused-raise and unauthenticated-viewer states.
 
-## 5. Admin bid history (grade10)
+## 5. Admin bid history (grade10) (owner: @htonyl)
 
 Claimable against the contracts from group 2.
 
-- [ ] 5.1 Produce the admin bid-history Figma frame named in `ui.md` and link it there.
-- [ ] 5.2 Make `auto-bidding-SC-08` pass by showing each commitment's bidder, maximum, and Accepted At, with amounts in the operator money shape.
-- [ ] 5.3 Show whether Grade10 placed a bid on a bidder's behalf, per `auto-bidding-SC-23`.
-- [ ] 5.4 Verify the admin auction feature lane.
+- [x] 5.2 Make `auto-bidding-SC-08` pass by showing each commitment's bidder, maximum, and Accepted At, with amounts in the operator money shape.
+- [x] 5.3 Show whether Grade10 placed a bid on a bidder's behalf, per `auto-bidding-SC-23`.
+- [x] 5.4 Verify the admin auction feature lane.
 
-## 6. Review (grade10-spec, grade10)
+## 6. Review (grade10-spec, grade10) (owner: @htonyl)
 
-- [ ] 6.1 Run the application repository's full check suite once every group above is green.
-- [ ] 6.2 Verify every scenario in this change, then run `openspec validate add-auction-auto-bidding --strict` and `openspec validate --specs`.
-- [ ] 6.3 Review the authorization path before staging: that a raise re-authorizes before it is accepted, that a failed raise changes nothing, and that no auto-bid step issues a card check.
+- [x] 6.1 Run the application repository's full check suite once every group above is green.
+- [x] 6.2 Verify every scenario in this change, then run `openspec validate add-auction-auto-bidding --strict` and `openspec validate --specs`.
+- [x] 6.3 Review the authorization path before staging: that a raise re-authorizes before it is accepted, that a failed raise changes nothing, and that no auto-bid step issues a card check.
 - [ ] 6.4 After rollout is confirmed, fold the accepted delta into `openspec/specs/grade10-auction/`, apply the reconciliation to `grade10-auction/auction` named in `proposal.md`, and archive this change.

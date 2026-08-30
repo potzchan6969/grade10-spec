@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlowContainer } from "../shared/demo-flow";
+import { FlowContainer } from "../shared/flow-container";
 import { LiveActions, WatchOnlyActions } from "./fixtures";
 import { ListingBidPanel } from "./listing-bid-panel";
 
@@ -100,7 +100,17 @@ function CountdownPreview({
 /** Steps through countdown boundaries, then lays them out for comparison. */
 function LiveCountdownDemo() {
   return (
-    <FlowContainer cases={SCENARIOS}>
+    <FlowContainer
+      cases={SCENARIOS}
+      description={
+        <p>
+          These cases guard the extension window, time-unit rollovers, auction
+          close, and an already-extended auction. The panel must show a valid
+          countdown through each boundary and restart the demonstration only
+          after the terminal value has been visible.
+        </p>
+      }
+    >
       {(scenario, title) => <CountdownPreview key={title} {...scenario} />}
     </FlowContainer>
   );

@@ -7,6 +7,7 @@ import {
   AvatarGroup,
   AvatarGroupCount,
   AvatarImage,
+  avatarInitial,
 } from "./avatar";
 
 const SRC = "https://github.com/shadcn.png";
@@ -22,7 +23,7 @@ const meta = {
   render: (args) => (
     <Avatar {...args}>
       <AvatarImage src={SRC} alt="@shadcn" />
-      <AvatarFallback>CN</AvatarFallback>
+      <AvatarFallback>U</AvatarFallback>
     </Avatar>
   ),
 } satisfies Meta<typeof Avatar>;
@@ -36,7 +37,16 @@ export const Default: Story = {};
 export const Fallback: Story = {
   render: (args) => (
     <Avatar {...args}>
-      <AvatarFallback>CN</AvatarFallback>
+      <AvatarFallback>U</AvatarFallback>
+    </Avatar>
+  ),
+};
+
+/** One character — first letter of the email local part. */
+export const FromEmail: Story = {
+  render: () => (
+    <Avatar>
+      <AvatarFallback>{avatarInitial("user@gmail.com")}</AvatarFallback>
     </Avatar>
   ),
 };
@@ -47,7 +57,7 @@ export const Sizes: Story = {
       {(["sm", "md", "lg", "xl"] as const).map((size) => (
         <Avatar key={size} size={size}>
           <AvatarImage src={SRC} alt="@shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarFallback>U</AvatarFallback>
         </Avatar>
       ))}
     </div>
@@ -61,7 +71,7 @@ export const WithBadge: Story = {
       {(["sm", "md", "lg", "xl"] as const).map((size) => (
         <Avatar key={size} size={size}>
           <AvatarImage src={SRC} alt="@shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarFallback>U</AvatarFallback>
           <AvatarBadge>
             <CheckIcon />
           </AvatarBadge>
@@ -74,11 +84,13 @@ export const WithBadge: Story = {
 export const Group: Story = {
   render: () => (
     <AvatarGroup>
-      {["CN", "AB", "JD"].map((initials) => (
-        <Avatar key={initials}>
-          <AvatarFallback>{initials}</AvatarFallback>
-        </Avatar>
-      ))}
+      {["user@gmail.com", "alice@example.com", "john@example.com"].map(
+        (email) => (
+          <Avatar key={email}>
+            <AvatarFallback>{avatarInitial(email)}</AvatarFallback>
+          </Avatar>
+        ),
+      )}
       <AvatarGroupCount>+3</AvatarGroupCount>
     </AvatarGroup>
   ),
