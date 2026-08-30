@@ -28,6 +28,8 @@ type FlowContainerProps<T> = {
   /** Insertion-ordered title → state pairs (`Map` or `[title, value][]`). */
   cases: Iterable<readonly [string, T]>;
   children: (value: T, title: string) => ReactNode;
+  /** Why these cases need review and what outcome each one protects. */
+  description?: ReactNode;
 };
 
 type MotionTimes = {
@@ -191,7 +193,11 @@ function FlowContainerCase({
  * Storybook demo chrome: step one instance, or lay every case out in a row.
  * Forest ground is demo-only — not a product surface.
  */
-function FlowContainer<T>({ cases, children }: FlowContainerProps<T>) {
+function FlowContainer<T>({
+  cases,
+  children,
+  description,
+}: FlowContainerProps<T>) {
   const items = useMemo(() => [...cases], [cases]);
   const [mode, setMode] = useState<FlowContainerMode>("transition");
   const [layout, setLayout] = useState<FlowContainerLayout>("single");
@@ -376,6 +382,11 @@ function FlowContainer<T>({ cases, children }: FlowContainerProps<T>) {
             </HStack>
           )}
         </div>
+        {description ? (
+          <div className="w-full text-left text-[var(--demo-flow-cream)]">
+            {description}
+          </div>
+        ) : null}
       </VStack>
     </div>
   );

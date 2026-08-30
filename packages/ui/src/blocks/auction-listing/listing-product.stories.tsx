@@ -25,11 +25,11 @@ import { ListingDetails } from "./listing-details";
 import { ListingGallery } from "./listing-gallery";
 
 /**
- * The three product-page panels together: photo left, bid box right,
- * description below — a regular ecommerce layout.
+ * The three listing blocks together. The preview app owns the complete page
+ * assembly, including its header and footer.
  */
 const meta = {
-  title: "Auction Listing/Pages",
+  title: "Auction Listing/Listing Product",
   parameters: { layout: "padded" },
 } satisfies Meta;
 

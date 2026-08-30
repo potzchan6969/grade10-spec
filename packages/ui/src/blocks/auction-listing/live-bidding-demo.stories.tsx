@@ -19,11 +19,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Bidding: Story = {};
-
-/** Hidden from the sidebar so opening Bidding is not left on the last bid. */
-export const BiddingWalkthrough: Story = {
-  tags: ["!dev"],
+export const Bidding: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getAllByText("Starting bid").length).toBeGreaterThan(0);
@@ -60,8 +56,6 @@ export const BiddingWalkthrough: Story = {
     expect(canvas.getAllByText("HK$1,600.00").length).toBeGreaterThan(0);
     expect(canvas.getAllByText("6 Bids").length).toBeGreaterThan(0);
 
-    /* Expanded lays every step out at once, so a step's caption and the panel
-       under it both say what the amount on show is. */
     await userEvent.click(canvas.getByRole("tab", { name: "Expanded" }));
     expect(canvas.getAllByText("Starting bid").length).toBeGreaterThan(0);
     expect(canvas.getAllByText("HK$1,400.00").length).toBeGreaterThan(0);
