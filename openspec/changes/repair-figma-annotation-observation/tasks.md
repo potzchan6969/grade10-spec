@@ -14,7 +14,7 @@
   `Exact active change reference is found`, `Actionable findings are reported`,
   and `Unresolved registered root is skipped` retain both audit and Code Connect
   provenance.
-- [ ] 1.4 Update design-sync governance for schema version 2, unique traversal
+- [x] 1.4 Update design-sync governance for schema version 2, unique traversal
   roots, ordered ancestors, store-generated digests, and compact complete
   evidence without changing baseline acceptance or transaction semantics.
 - [ ] 1.5 Verify the group with focused schema, multi-source, ancestor-order,
