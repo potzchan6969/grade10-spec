@@ -24,7 +24,12 @@ export function storePath(root: string, absolute: string): string {
 
 /** Resolves a path written against any suffix of `dir` — `manual/assets/x.png`,
  * `assets/x.png` and `x.png` all name the same file — and refuses anything
- * that escapes it. Every write the editor makes goes through here. */
+ * that escapes it. Every write the editor makes goes through here.
+ *
+ * A path that opens on another store directory is refused rather than
+ * re-rooted: `openspec/x` under `manual/` means someone wrote a store-relative
+ * path for the wrong tree, and answering with `manual/openspec/x` invents a
+ * file nobody asked for. */
 export function confine(
   root: string,
   dir: string,
@@ -39,6 +44,11 @@ export function confine(
   const file = resolve(base, prefix ? path.slice(prefix.length) : path);
   if (file === base || !file.startsWith(base + sep)) {
     return { error: `\`${path}\` resolves outside ${dir}/` };
+  }
+
+  const [first] = path.split("/");
+  if (!prefix && path.includes("/") && existsSync(join(root, first))) {
+    return { error: `\`${path}\` names the store's ${first}/, not ${dir}/` };
   }
   return file;
 }
