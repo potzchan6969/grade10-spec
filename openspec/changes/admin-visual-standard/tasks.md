@@ -86,7 +86,7 @@ Needs groups 4 through 7 landed: the pages compose migrated consoles before the 
 - [x] 8.4 Add each control that Astryx has no counterpart for to the console package, composed from Astryx, so no page reaches outside the vocabulary for it (`visual-standard-SC-02`)
 - [x] 8.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
 
-## 9. The standard is closed and held (grade10)
+## 9. The standard is closed and held (grade10) (owner: @sean)
 
 - [ ] 9.1 Narrow both `index.css` files to the design-system and `packages/ui` `@source` entries the two-factor block still needs, and confirm no other admin source is listed
 - [ ] 9.2 Add the lint rule allowing `@astryxdesign/*` imports only from `packages/frontend-console/src` and the two application roots, so no admin surface takes a dependency the revert route cannot undo (`visual-standard-SC-10`)
