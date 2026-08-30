@@ -17,7 +17,7 @@
 - [x] 1.4 Update design-sync governance for schema version 2, unique traversal
   roots, ordered ancestors, store-generated digests, and compact complete
   evidence without changing baseline acceptance or transaction semantics.
-- [ ] 1.5 Verify the group with focused schema, multi-source, ancestor-order,
+- [x] 1.5 Verify the group with focused schema, multi-source, ancestor-order,
   digest, orphan, and skipped-root fixtures; `pnpm test:design-sync`; `pnpm run
   lint`; `pnpm run typecheck`; and `git diff --check`.
 
