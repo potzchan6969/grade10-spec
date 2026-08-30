@@ -1,6 +1,6 @@
 ## 1. Normalize multi-source observation evidence (grade10-spec) (owner: @kinisworking)
 
-- [ ] 1.1 Add the temporary observation schema-version-2 root contract with
+- [x] 1.1 Add the temporary observation schema-version-2 root contract with
   unique node IDs, canonically ordered `sources`, matching skipped-root shape,
   and unchanged durable baseline registrations, making `One category catalog
   resolves many annotations`, `Unresolved registered root is skipped`, and
