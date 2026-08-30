@@ -23,6 +23,7 @@ function useHealth(): Health | null {
 }
 
 const FILL = {
+  unknown: "bg-muted-foreground/40",
   quiet: "bg-success",
   warn: "bg-warning",
   bad: "bg-destructive",
@@ -46,7 +47,8 @@ export function HealthPip() {
 
 export function HealthStrip() {
   const health = useHealth();
-  if (!health || health.level === "quiet") return null;
+  if (!health || health.level === "quiet" || health.level === "unknown")
+    return null;
 
   const bad = health.level === "bad";
   const shell = bad
@@ -95,6 +97,8 @@ function running(health: Health): string {
 /** Everything the pip stands for, in the one line a title can hold. */
 function summary(health: Health): string {
   const parts = [`Deployed ${relativeTime(health.generatedAt)}`];
+  if (health.level === "unknown")
+    parts.push("main's state unchecked — add a token in settings to see it");
   if (health.live) {
     parts.push(
       health.live.head === health.storeHead

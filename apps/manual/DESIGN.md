@@ -163,7 +163,7 @@ rename is recorded under its FROM name, the row that exists until the
 change archives. The spec block badges a requirement row an in-flight
 change touches (title, tasks done/total, link to planning), and a
 capability's status is derived, never stored: `changing` when an
-in-flight non-draft delta touches it, `incubating` when its spec exists
+in-flight delta touches it, `incubating` when its spec exists
 only as a delta or the page has no spec, else `stable`.
 
 Error containment splits by ownership. `manual/` pages are this app's own:
@@ -215,10 +215,11 @@ rendered conflict diff instead of a silent overwrite.
   localStorage; read-only without one. Two modes, chosen in settings:
   - `main` (default): reads and writes the base branch directly — the
     deploy listens on push, so a save is live in about a minute. Needs
-    `contents:write` only. Before a save the editor compares live main
-    against the snapshot's `storeHead` and warns when the page it loaded
-    is behind; a push refused by branch protection surfaces the refusal
-    and suggests PR mode, never a silent fallback.
+    `contents:write` only; `actions:read` additionally lets the header
+    show the last deploy's conclusion. Before a save the editor compares
+    live main against the snapshot's `storeHead` and warns when the page
+    it loaded is behind; a push refused by branch protection surfaces the
+    refusal and suggests PR mode, never a silent fallback.
   - `branch + PR`: first write creates or reuses a `manual/<login>`
     branch AND its PR, so edits never rot on an unopened branch. Also
     needs `pull_requests:write`.

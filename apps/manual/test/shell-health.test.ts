@@ -104,7 +104,7 @@ describe("probeHealth", () => {
   });
 
   it("drops the deploy piece a token cannot read, and keeps the rest", async () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const debug = vi.spyOn(console, "debug").mockImplementation(() => {});
     const { http } = github({
       "git/ref/heads/main": HEAD,
       [`compare/${SNAPSHOT}...${LIVE}`]: { status: 200, body: { ahead_by: 1 } },
@@ -119,9 +119,9 @@ describe("probeHealth", () => {
     expect(health.deploy).toBeNull();
     expect(health.live).toEqual({ head: LIVE, ahead: 1 });
     expect(health.level).toBe("warn");
-    // Silent on screen, never silent in the console.
-    expect(warn).toHaveBeenCalled();
-    warn.mockRestore();
+    // The expected scope gap is a debug note, not a warning on every load.
+    expect(debug).toHaveBeenCalled();
+    debug.mockRestore();
   });
 
   it("still says the branch moved when the compare refuses", async () => {

@@ -21,7 +21,7 @@ const MARK: Record<CapabilityStatus, Mark | null> = {
   },
   incubating: {
     word: "incubating",
-    title: "Incubating — no durable spec yet, only one in flight",
+    title: "Incubating — no durable spec behind this page yet",
     badge: "default",
   },
   stable: null,

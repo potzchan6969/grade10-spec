@@ -36,7 +36,10 @@ export type DeployRun = {
   at: string;
 };
 
-export type HealthLevel = "quiet" | "warn" | "bad";
+/** `unknown` is the un-probed state — no token, so nobody looked. It must
+ * never wear the all-clear: a frozen site behind a red deploy looks exactly
+ * like this to a tokenless reader. */
+export type HealthLevel = "unknown" | "quiet" | "warn" | "bad";
 
 export type Health = {
   key: string;
@@ -106,7 +109,7 @@ function start(
     storeHead: snapshot.storeHead,
     live: null,
     deploy: null,
-    level: "quiet",
+    level: "unknown",
   });
   if (!token) return;
 
@@ -198,7 +201,13 @@ async function lastDeploy(
   );
   const run = runOf(answer);
   if (answer.status !== 200) {
-    console.warn(`manual: cannot read ${WORKFLOW} runs`, answer);
+    // 403/404 is the expected answer for a contents-only token — the scope
+    // note in settings says how to see deploys; anything else is a surprise.
+    if (answer.status === 403 || answer.status === 404) {
+      console.debug(`manual: no actions:read — ${WORKFLOW} runs stay unseen`);
+    } else {
+      console.warn(`manual: cannot read ${WORKFLOW} runs`, answer);
+    }
     return null;
   }
   return run;

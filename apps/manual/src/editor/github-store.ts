@@ -262,7 +262,7 @@ export class GithubStore implements ContentStore {
     const proposal = await this.read(`${changeDir(slug)}/${PROPOSAL}`);
     const author = authorOf(proposal.source);
     const me = await this.whoami();
-    if (author !== me) {
+    if (author?.toLowerCase() !== me?.toLowerCase()) {
       throw new StoreError(
         403,
         `\`${slug}\` was proposed by ${author ? `@${author}` : "nobody named"} — only its author can withdraw it`,
@@ -433,7 +433,7 @@ export class GithubStore implements ContentStore {
     if (this.mode !== "main") return null;
     const said = messageOf(answer);
     const refused =
-      answer.status === 403 ||
+      (answer.status === 403 && !/rate limit|saml/i.test(said)) ||
       ((answer.status === 409 || answer.status === 422) &&
         PROTECTION.test(said));
     if (!refused) return null;

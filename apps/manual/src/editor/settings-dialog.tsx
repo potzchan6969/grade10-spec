@@ -23,7 +23,7 @@ const MODES: { value: WriteMode; title: string; needs: string; how: string }[] =
     {
       value: "main",
       title: `Straight to ${REPO.defaultBranch}`,
-      needs: "Contents: read and write",
+      needs: "Contents: read and write. Add Actions: read to see deploy status",
       how: "The deploy listens on push, so a save is live in about a minute.",
     },
     {

@@ -167,8 +167,8 @@ function ProposedLane({ changes }: { changes: ChangeEntry[] }) {
       >
         <div className="overflow-hidden" inert={!expanded}>
           <Text as="p" className="mt-3" size="sm" tone="secondary">
-            Reasons for a change, with no delta and no task list yet. The delta
-            is what the discussion is for.
+            Reasons for a change, with no task list yet. The delta is what the
+            discussion is for.
           </Text>
           <ul className="mt-4 space-y-3">
             {[...changes]
@@ -212,9 +212,11 @@ function ProposalCard({ change }: { change: ChangeEntry }) {
         <Text as="span" className="font-mono" size="xs" tone="secondary">
           {change.id}
         </Text>
-        <span className="ml-auto">
-          <WithdrawAction change={change} />
-        </span>
+        {change.deltas.length === 0 ? (
+          <span className="ml-auto">
+            <WithdrawAction change={change} />
+          </span>
+        ) : null}
       </div>
     </article>
   );
