@@ -18,6 +18,7 @@
     "test": "pnpm -r --if-present run test",
     "manual": "pnpm --dir apps/manual dev",
     "manual:build": "pnpm --dir apps/manual build",
+    "manual:deploy": "pnpm --dir apps/manual deploy",
     "check:manual": "node scripts/check-manual.mjs",
     "storybook": "node scripts/storybook/storybook.mjs",
     "storybook:workbench": "node scripts/storybook/storybook.mjs --dir apps/preview --config-dir .storybook-workbench",
