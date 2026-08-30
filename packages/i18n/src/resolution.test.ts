@@ -45,6 +45,9 @@ const PRODUCT_DETAIL_KEYS = [
   "showMore",
   "showLess",
   "skuLabel",
+  "quantityLabel",
+  "increaseQuantity",
+  "decreaseQuantity",
 ];
 
 const STORE_PRODUCT_DETAIL_KEYS = ["adding", "addedToCart"];
