@@ -274,8 +274,12 @@ describe("in-flight deltas against the durable specs", () => {
       requirement("Alpha does things", "alpha-SC-01", "the thing"),
     ),
     "openspec/changes/steady/proposal.md": proposal("Steady"),
-    "openspec/changes/steady/specs/demo-product/alpha/spec.md":
-      "## MODIFIED Requirements\n\n### Requirement: Alpha does things\n\nAlpha SHALL still do the thing.\n",
+    "openspec/changes/steady/specs/demo-product/alpha/spec.md": [
+      "## MODIFIED Requirements",
+      "",
+      ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+      "",
+    ].join("\n"),
     "openspec/changes/drifted/proposal.md": proposal("Drifted"),
     "openspec/changes/drifted/specs/demo-product/alpha/spec.md": [
       "## MODIFIED Requirements",
@@ -300,6 +304,410 @@ describe("in-flight deltas against the durable specs", () => {
       "openspec/changes/drifted/specs/demo-product/alpha/spec.md — REMOVED `Alpha never did this` names no requirement of `demo-product/alpha`",
       "openspec/changes/drifted/specs/demo-product/gamma/spec.md — MODIFIED `Gamma does things`, but `demo-product/gamma` has no durable spec yet — a new spec can only ADD",
     ]);
+  });
+});
+
+const ALPHA = spec(
+  "Alpha",
+  requirement("Alpha does things", "alpha-SC-01", "the thing"),
+  requirement("Alpha keeps a record", "alpha-SC-02", "write it down"),
+);
+
+/** One change, one delta file, against a durable Alpha. */
+const changing = (
+  id: string,
+  delta: string,
+  extra: Record<string, string> = {},
+) =>
+  writeStore({
+    "openspec/specs/demo-product/alpha/spec.md": ALPHA,
+    [`openspec/changes/${id}/proposal.md`]: proposal(id),
+    [`openspec/changes/${id}/specs/demo-product/alpha/spec.md`]: delta,
+    ...extra,
+  });
+
+/** `openspec archive` reads a delta by its headings and nothing else: a `###`
+ * that names no requirement lands in the durable spec verbatim, and a `##` it
+ * does not know ends the delta section it interrupts. */
+describe("a delta holding a heading the fold cannot carry", () => {
+  const LINES = [
+    "# Alpha delta",
+    "",
+    "## ADDED Requirements",
+    "",
+    "### Cart item contract",
+    "",
+    ...requirement("Alpha counts things", "alpha-SC-03", "count"),
+    "",
+    "## Gift card redemption flows",
+    "",
+    ...requirement("Alpha redeems things", "alpha-SC-04", "redeem"),
+    "",
+  ];
+  const at = (line: string) => LINES.indexOf(line) + 1;
+
+  it("names the group heading and the section heading, with their lines", async () => {
+    const root = changing("grouped", LINES.join("\n"));
+    expect(lines(await runChecks(root, NO_GIT), "heading")).toEqual([
+      `openspec/changes/grouped/specs/demo-product/alpha/spec.md — line ${at("## Gift card redemption flows")}: \`## Gift card redemption flows\` is no delta section, and every requirement under it falls outside the fold`,
+      `openspec/changes/grouped/specs/demo-product/alpha/spec.md — line ${at("### Cart item contract")}: \`### Cart item contract\` names no requirement; the fold copies it into the durable spec verbatim, or aborts on it`,
+    ]);
+  });
+
+  it("leaves a delta whose every heading the fold reads alone", async () => {
+    const root = changing(
+      "shaped",
+      [
+        "# Alpha delta",
+        "",
+        "## Purpose",
+        "",
+        "Alpha grows.",
+        "",
+        "## Feature set",
+        "",
+        "- counting",
+        "",
+        "## User journeys",
+        "",
+        "### alpha-US-01: Someone counts",
+        "",
+        "**Accepted by:** alpha-SC-03",
+        "",
+        "## ADDED Requirements",
+        "",
+        ...requirement("Alpha counts things", "alpha-SC-03", "count"),
+        "",
+        "## REMOVED Requirements",
+        "",
+        "### Requirement: Alpha keeps a record",
+        "",
+        "## RENAMED Requirements",
+        "",
+        "- FROM: `### Requirement: Alpha does things`",
+        "- TO: `### Requirement: Alpha does the thing`",
+        "",
+      ].join("\n"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "heading")).toEqual([]);
+    expect(lines(await runChecks(root, NO_GIT), "delta")).toEqual([]);
+  });
+});
+
+/** `buildSpecSkeleton` rebuilds a spec's head from Purpose alone, for a spec
+ * the change creates as much as one it updates. */
+describe("a delta carrying sections the fold discards", () => {
+  const root = changing(
+    "journeyed",
+    [
+      "## Feature set",
+      "",
+      "- counting",
+      "",
+      "## User journeys",
+      "",
+      "### alpha-US-07: Someone counts",
+      "",
+      "**Accepted by:** alpha-SC-03",
+      "",
+      "### alpha-US-08: Someone recounts",
+      "",
+      "**Accepted by:** alpha-SC-03",
+      "",
+      "## ADDED Requirements",
+      "",
+      ...requirement("Alpha counts things", "alpha-SC-03", "count"),
+      "",
+    ].join("\n"),
+  );
+
+  it("names the section and the ids it holds, and only warns", async () => {
+    const result: Result = await runChecks(root, NO_GIT);
+    expect(lines(result, "fold")).toEqual([
+      "openspec/changes/journeyed/specs/demo-product/alpha/spec.md — `## Feature set` — the fold carries Purpose and Requirements only, so archiving drops it",
+      "openspec/changes/journeyed/specs/demo-product/alpha/spec.md — `## User journeys` holding alpha-US-07, alpha-US-08 — the fold carries Purpose and Requirements only, so archiving drops it",
+    ]);
+    expect(
+      result.findings.filter(
+        (one) => one.rule === "fold" && one.level !== "warn",
+      ),
+    ).toEqual([]);
+  });
+
+  it("says nothing about a delta that is requirements only", async () => {
+    const plain = changing(
+      "plain",
+      `## ADDED Requirements\n\n${requirement("Alpha counts things", "alpha-SC-03", "count").join("\n")}\n`,
+    );
+    expect(lines(await runChecks(plain, NO_GIT), "fold")).toEqual([]);
+  });
+});
+
+/** The three lookups `openspec archive` runs that the check was blind to:
+ * a rename's source, a name that already exists, and the scenarios a MODIFIED
+ * block would replace away. */
+describe("the rest of what the fold refuses", () => {
+  it("fails a RENAMED FROM naming nothing and passes one that resolves", async () => {
+    const root = changing(
+      "renaming",
+      [
+        "## RENAMED Requirements",
+        "",
+        "- FROM: `### Requirement: Alpha does things`",
+        "- TO: `### Requirement: Alpha does the thing`",
+        "- FROM: `### Requirement: Alpha never did this`",
+        "- TO: `### Requirement: Alpha still does not`",
+        "",
+      ].join("\n"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "delta")).toEqual([
+      "openspec/changes/renaming/specs/demo-product/alpha/spec.md — RENAMED FROM `Alpha never did this` names no requirement of `demo-product/alpha`",
+    ]);
+  });
+
+  it("fails an ADDED name the durable spec already carries", async () => {
+    const root = changing(
+      "adding",
+      [
+        "## ADDED Requirements",
+        "",
+        ...requirement("Alpha does things", "alpha-SC-03", "the thing again"),
+        "",
+        ...requirement("Alpha counts things", "alpha-SC-04", "count"),
+        "",
+      ].join("\n"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "delta")).toEqual([
+      "openspec/changes/adding/specs/demo-product/alpha/spec.md — ADDED `Alpha does things` is already a requirement of `demo-product/alpha`, and the fold refuses to add a name that exists",
+    ]);
+  });
+
+  it("names the scenarios a MODIFIED block would drop, renamed ones included", async () => {
+    const root = changing(
+      "dropping",
+      [
+        "## MODIFIED Requirements",
+        "",
+        "### Requirement: Alpha does things",
+        "",
+        "Alpha SHALL do the thing.",
+        "",
+        "#### Scenario: alpha-SC-01 - it does the thing, briskly",
+        "",
+        "- **WHEN** asked",
+        "- **THEN** it does the thing",
+        "",
+        "### Requirement: Alpha keeps a record",
+        "",
+        "Alpha SHALL write it down.",
+        "",
+      ].join("\n"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "delta")).toEqual([
+      "openspec/changes/dropping/specs/demo-product/alpha/spec.md — MODIFIED `Alpha does things` drops alpha-SC-01 — a MODIFIED block replaces the whole requirement, so it has to restate every scenario",
+      "openspec/changes/dropping/specs/demo-product/alpha/spec.md — MODIFIED `Alpha keeps a record` drops alpha-SC-02 — a MODIFIED block replaces the whole requirement, so it has to restate every scenario",
+    ]);
+  });
+});
+
+/** Both changes archive cleanly; the second writes the first's text away. */
+describe("one requirement two changes both fold", () => {
+  it("fails both files, naming the other change and its kind", async () => {
+    const root = changing(
+      "first",
+      [
+        "## MODIFIED Requirements",
+        "",
+        ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+        "",
+      ].join("\n"),
+      {
+        "openspec/changes/second/proposal.md": proposal("Second"),
+        "openspec/changes/second/specs/demo-product/alpha/spec.md":
+          "## REMOVED Requirements\n\n### Requirement: Alpha does things\n",
+      },
+    );
+    expect(lines(await runChecks(root, NO_GIT), "overlap")).toEqual([
+      "openspec/changes/first/specs/demo-product/alpha/spec.md — MODIFIED `Alpha does things` is also folded by `second` (REMOVED) — whichever archives second reverts the first",
+      "openspec/changes/second/specs/demo-product/alpha/spec.md — REMOVED `Alpha does things` is also folded by `first` (MODIFIED) — whichever archives second reverts the first",
+    ]);
+  });
+
+  it("says nothing when two changes fold different requirements of one spec", async () => {
+    const root = changing(
+      "first",
+      [
+        "## MODIFIED Requirements",
+        "",
+        ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+        "",
+      ].join("\n"),
+      {
+        "openspec/changes/second/proposal.md": proposal("Second"),
+        "openspec/changes/second/specs/demo-product/alpha/spec.md": [
+          "## MODIFIED Requirements",
+          "",
+          ...requirement(
+            "Alpha keeps a record",
+            "alpha-SC-02",
+            "write it down",
+          ),
+          "",
+        ].join("\n"),
+      },
+    );
+    expect(lines(await runChecks(root, NO_GIT), "overlap")).toEqual([]);
+  });
+});
+
+/** An id is issued once, ever. The fold destroys a delta's journeys, so the
+ * archive folder is the only record that an archived change issued one. */
+describe("permanent ids across the whole store", () => {
+  const issuing = (id: string, ids: string[]) =>
+    [
+      "## ADDED Requirements",
+      "",
+      `### Requirement: ${id} does things`,
+      "",
+      `${id} SHALL do the thing.`,
+      "",
+      ...ids.flatMap((one) => [
+        `#### Scenario: ${one} - it does the thing`,
+        "",
+        "- **WHEN** asked",
+        "- **THEN** it does the thing",
+        "",
+      ]),
+    ].join("\n");
+
+  it("fails two in-flight changes issuing one id, on both files", async () => {
+    const root = changing("first", issuing("beta", ["beta-SC-01"]), {
+      "openspec/changes/second/proposal.md": proposal("Second"),
+      "openspec/changes/second/specs/demo-product/beta/spec.md": issuing(
+        "beta",
+        ["beta-SC-01"],
+      ),
+      "openspec/changes/first/specs/demo-product/alpha/spec.md": issuing(
+        "beta",
+        ["beta-SC-01"],
+      ),
+    });
+    expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
+      "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `beta-SC-01`, which `second` also issues — an id is issued once and never freed",
+      "openspec/changes/second/specs/demo-product/beta/spec.md — reuses `beta-SC-01`, which `first` also issues — an id is issued once and never freed",
+    ]);
+  });
+
+  it("fails an id an archived change issued, which the fold left nowhere else", async () => {
+    const root = changing("first", issuing("beta", ["beta-SC-01"]), {
+      "openspec/changes/archive/2026-01-01-add-beta/proposal.md":
+        proposal("Add beta"),
+      "openspec/changes/archive/2026-01-01-add-beta/specs/demo-product/beta/spec.md":
+        "## ADDED Requirements\n\n### Requirement: Beta was here\n\n**Accepted by:** beta-SC-01\n",
+    });
+    expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
+      "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `beta-SC-01`, which the archived `add-beta` also issues — an id is issued once and never freed",
+    ]);
+  });
+
+  it("fails an ADDED requirement issuing an id the durable spec issues", async () => {
+    const root = changing(
+      "reissuing",
+      [
+        "## ADDED Requirements",
+        "",
+        ...requirement("Alpha counts things", "alpha-SC-02", "count"),
+        "",
+      ].join("\n"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
+      "openspec/changes/reissuing/specs/demo-product/alpha/spec.md — ADDED `Alpha counts things` issues `alpha-SC-02`, which `demo-product/alpha` already issues — an id is issued once and never freed",
+    ]);
+  });
+
+  it("lets a MODIFIED block restate durable ids and a change repeat its own", async () => {
+    const root = changing(
+      "restating",
+      [
+        "## MODIFIED Requirements",
+        "",
+        ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+        "",
+        "## ADDED Requirements",
+        "",
+        ...requirement("Alpha counts things", "alpha-SC-03", "count"),
+        "",
+        "## User journeys",
+        "",
+        "### alpha-US-09: Someone counts",
+        "",
+        "**Accepted by:** alpha-SC-03, alpha-SC-03",
+        "",
+      ].join("\n"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([]);
+  });
+});
+
+/** A rename or a removal archives green and turns `main` red: the page still
+ * selects the old name, and `check:manual` gates the deploy. */
+describe("a page selecting a requirement a change is about to move", () => {
+  const paged = (delta: string) =>
+    changing("moving", delta, {
+      "manual/manual.yaml":
+        "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n",
+      "manual/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
+      "manual/products/demo-product/index.md":
+        "---\ntitle: Demo product\n---\n\nThe landing.\n",
+      "manual/products/demo-product/alpha.md": [
+        "---",
+        "title: Alpha",
+        "spec: demo-product/alpha",
+        "---",
+        "",
+        "Alpha.",
+        "",
+        '::spec{id="demo-product/alpha" requirement="Alpha keeps a record"}',
+        "",
+        '::journeys{id="demo-product/alpha"}',
+        "",
+      ].join("\n"),
+    });
+
+  it("fails a selector a REMOVED delta deletes", async () => {
+    const root = paged(
+      "## REMOVED Requirements\n\n### Requirement: Alpha keeps a record\n",
+    );
+    expect(lines(await runChecks(root, NO_GIT), "fuse")).toEqual([
+      'manual/products/demo-product/alpha.md — ::spec{id="demo-product/alpha"} selects `Alpha keeps a record`, which `moving` removes — the archive would leave this page naming nothing',
+    ]);
+  });
+
+  it("fails a selector a RENAMED delta moves, and offers the new name", async () => {
+    const root = paged(
+      [
+        "## RENAMED Requirements",
+        "",
+        "- FROM: `### Requirement: Alpha keeps a record`",
+        "- TO: `### Requirement: Alpha keeps the record`",
+        "",
+      ].join("\n"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "fuse")).toEqual([
+      'manual/products/demo-product/alpha.md — ::spec{id="demo-product/alpha"} selects `Alpha keeps a record`, which `moving` renames to `Alpha keeps the record` — point the selector at the new name',
+    ]);
+  });
+
+  it("leaves a selector a MODIFIED delta only rewrites alone", async () => {
+    const root = paged(
+      [
+        "## MODIFIED Requirements",
+        "",
+        ...requirement("Alpha keeps a record", "alpha-SC-02", "write it down"),
+        "",
+      ].join("\n"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "fuse")).toEqual([]);
   });
 });
 
@@ -406,5 +814,35 @@ describe("a page committed before the specs it embeds", () => {
       "manual/products/demo-product/moved.md — last committed 2026-01-01; `demo-product/moved` spec moved since this page was committed",
     ]);
     expect(result.findings.every((one) => one.level === "warn")).toBe(true);
+  });
+});
+
+describe("a manifest naming its blockers", () => {
+  const manifest = (dependsOn: string) =>
+    `schema: pm-planning\ncreated: 2026-08-01\ndepends_on:\n  - ${dependsOn}\n`;
+  const change = (why: string) => `# A change\n\n## Why\n\n${why}\n`;
+
+  it("fails a depends_on naming no change, in flight or archived", async () => {
+    const root = writeStore({
+      "openspec/changes/add-alpha/.openspec.yaml": manifest("add-ghost"),
+      "openspec/changes/add-alpha/proposal.md": change("Alpha."),
+    });
+    const result: Result = await runChecks(root, NO_GIT);
+    expect(lines(result, "depends")).toEqual([
+      "openspec/changes/add-alpha/.openspec.yaml — depends_on `add-ghost` names no change, in flight or archived",
+    ]);
+  });
+
+  it("is satisfied by an in-flight sibling or an archived change", async () => {
+    const root = writeStore({
+      "openspec/changes/add-alpha/.openspec.yaml": manifest("add-beta"),
+      "openspec/changes/add-alpha/proposal.md": change("Alpha."),
+      "openspec/changes/add-beta/.openspec.yaml": manifest("add-shipped"),
+      "openspec/changes/add-beta/proposal.md": change("Beta."),
+      "openspec/changes/archive/2026-07-01-add-shipped/proposal.md":
+        change("Shipped."),
+    });
+    const result: Result = await runChecks(root, NO_GIT);
+    expect(lines(result, "depends")).toEqual([]);
   });
 });

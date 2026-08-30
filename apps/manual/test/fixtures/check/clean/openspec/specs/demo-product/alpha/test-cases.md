@@ -4,6 +4,10 @@
 
 ## alpha-US-01: Someone does the thing
 
+**Covers:**
+
+- `alpha-SC-01` — it does the thing
+
 ### alpha-TC-01: It does the thing
 
 Ask alpha for the thing.
