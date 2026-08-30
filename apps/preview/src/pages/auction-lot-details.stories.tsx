@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { AuctionLotDetailsPage } from "./auction-lot-details-page";
-import type { BiddingState } from "../prototypes/auction-listing-details/types";
-import { BIDDING_STATE_LABELS } from "../prototypes/auction-listing-details/types";
+import {
+  BIDDING_STATE_LABELS,
+  type BiddingState,
+} from "./auction-lot-details-content";
 
 const meta = {
   title: "Pages/Auction Lot Details",
