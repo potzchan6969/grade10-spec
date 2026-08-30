@@ -646,6 +646,70 @@
       "kind": "code-connect",
       "path": "packages/ui/src/blocks/store-product-listing/product-list-header.figma.ts",
       "component": "ProductListHeader"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4098:2423",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4098-2423",
+      "kind": "layout",
+      "path": null,
+      "label": "Pages/Product Detail/root"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4098:1868",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4098-1868",
+      "kind": "layout",
+      "path": null,
+      "label": "Pages/Product List/root"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4171:9023",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9023",
+      "kind": "layout",
+      "path": null,
+      "label": "Pages/Store/root"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4674:3831",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4674-3831",
+      "kind": "layout",
+      "path": null,
+      "label": "Pages/Cart/root"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4799:6807",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4799-6807",
+      "kind": "layout",
+      "path": null,
+      "label": "Pages/Cart Empty/root"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4835:1534",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4835-1534",
+      "kind": "layout",
+      "path": null,
+      "label": "Pages/Order History/root"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4923:3424",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4923-3424",
+      "kind": "layout",
+      "path": null,
+      "label": "Pages/Order History Empty/root"
+    },
+    {
+      "fileKey": "GW2WL6JcWok5ypUrUFi9bU",
+      "nodeId": "4835:1654",
+      "fileUrl": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4835-1654",
+      "kind": "layout",
+      "path": null,
+      "label": "Pages/Order Details/root"
     }
   ],
   "entries": {}

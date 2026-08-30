@@ -27,26 +27,26 @@ This group depends on group 1 being available in the standalone registered
 `grade10-spec` store. It does not require an `external/grade10-spec` submodule
 update.
 
-- [ ] 2.1 Replace configured traversal roots with flat registrations and
+- [x] 2.1 Replace configured traversal roots with flat registrations and
   baseline-tracked node IDs, group registrations by file and normalized node
   ID, and resolve each unique root once, making `One category catalog resolves
   many annotations`, `Unresolved registered root is skipped`, and `Every
   registered root is unresolved` pass without losing source evidence.
-- [ ] 2.2 Merge nodes independently of root traversal, union their registered
+- [x] 2.2 Merge nodes independently of root traversal, union their registered
   root IDs, block inconsistent repeated evidence, and record each annotation
   occurrence once, making `Duplicate multiplicity decreases`, `Several
   unmatched siblings are ambiguous`, and `Annotation structure changes`
   operate on Figma multiplicity rather than traversal multiplicity.
-- [ ] 2.3 Emit only annotation-bearing and baseline-tracked nodes while keeping
+- [x] 2.3 Emit only annotation-bearing and baseline-tracked nodes while keeping
   tracked zero-annotation nodes and orphan evidence, making `Accepted node no
   longer resolves`, `Only line-ending representation differs`, and `No tracked
   annotations changed` preserve complete removal behavior in a bounded payload.
-- [ ] 2.4 Remove producer-side digest generation and unsupported all-page
+- [x] 2.4 Remove producer-side digest generation and unsupported all-page
   loading, require one complete file-level Plugin API capture, and block
   unavailable, inconsistent, or truncated evidence, making `Figma Plugin API
   access is unavailable` and `Observation changed before acceptance` use the
   registered store's canonical evidence.
-- [ ] 2.5 Render every source associated with findings and skipped roots, then
+- [x] 2.5 Render every source associated with findings and skipped roots, then
   update the portable adapter reference and skill guidance so `Human report is
   structured for reading`, `Actionable findings are reported`, and `A supported
   harness opens the annotation workflow` describe the schema-version-2 path.
