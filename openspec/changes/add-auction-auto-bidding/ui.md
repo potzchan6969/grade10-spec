@@ -2,16 +2,14 @@
 
 ## Screens
 
-**No Figma frame exists for this change yet.** The convention in this store is
-that a screen links its frame and is never described in prose, because the
-frame is the layout's source of truth. That frame has to be produced before
-the frontend group can be claimed; `tasks.md` carries it as the first task of
-that group rather than leaving it implied.
+The shared Storybook flows are the review source for this composition. They
+cover placing and raising a maximum in the listing bid panel, the overtaken
+state, and an accepted commitment that is not leading.
 
-| Screen | Frame | What is new on it |
+| Screen | Review source | What is new on it |
 | --- | --- | --- |
-| Auction listing page — bid panel | *to be produced* | The bid control asks for a maximum; the panel shows the viewer's own maximum and whether they lead. |
-| Admin listing — bid history | *to be produced* | Each row shows the committed maximum, the resulting current bid, Accepted At, and whether Grade10 placed the bid. |
+| Auction listing page — bid panel | `Auction Listing/ListingBidPanel/Flows` | The bid control asks for a maximum; the panel shows the viewer's own maximum and whether they lead. |
+| Admin listing — bid history | Grade10 admin auction tests | Each row shows the committed maximum, the resulting current bid, Accepted At, and whether Grade10 placed the bid. |
 
 ## Components
 

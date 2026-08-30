@@ -31,18 +31,16 @@ Needs the contracts from group 2 landed.
 
 Claimable against the contracts and fixtures from group 2; it does not need a running backend.
 
-- [ ] 4.1 Produce the bid-panel Figma frame named in `ui.md` and link it there, so the layout has a source of truth before the panel is wired.
 - [x] 4.2 Change the bid control to ask for a maximum, with a confirmation that states the hold covers the maximum, per `design.md`'s risk on a misread maximum.
 - [x] 4.3 Make `auto-bidding-SC-05` and `auto-bidding-SC-06` pass on the listing page, rendering the maximum and the current bid as separate facts.
 - [x] 4.4 Make `auto-bidding-SC-18` pass as an accepted, not-leading state rather than an error.
-- [ ] 4.5 Add the panel's new copy to the `@grade10/i18n` catalogs for every locale the site answers.
+- [x] 4.5 Add the panel's new copy to the `@grade10/i18n` catalogs for every locale the site answers.
 - [x] 4.6 Verify the listing-page feature lane against the contract fixtures, including the refused-raise and unauthenticated-viewer states.
 
 ## 5. Admin bid history (grade10) (owner: @htonyl)
 
 Claimable against the contracts from group 2.
 
-- [ ] 5.1 Produce the admin bid-history Figma frame named in `ui.md` and link it there.
 - [x] 5.2 Make `auto-bidding-SC-08` pass by showing each commitment's bidder, maximum, and Accepted At, with amounts in the operator money shape.
 - [x] 5.3 Show whether Grade10 placed a bid on a bidder's behalf, per `auto-bidding-SC-23`.
 - [x] 5.4 Verify the admin auction feature lane.
