@@ -3,6 +3,7 @@ import { Outlet } from "react-router";
 import { useSnapshot } from "../api/snapshot-provider";
 import { useHashFlash } from "../blocks/anchor";
 import { CommitBar } from "../editor/commit-bar";
+import { PendingBar } from "../editor/pending-bar";
 import { SnapshotFooter } from "./footer";
 import { Header } from "./header";
 import { HealthStrip } from "./health-banner";
@@ -74,7 +75,10 @@ export function AppShell() {
             <SnapshotFooter snapshot={snapshot.snapshot} />
           ) : null}
 
+          {/* One stage per transport, so only one of these ever has
+              something to say: the dev working tree, or this browser. */}
           <CommitBar />
+          {snapshot.status === "ready" ? <PendingBar /> : null}
         </div>
       </div>
     </div>

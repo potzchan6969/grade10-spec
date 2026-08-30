@@ -1,8 +1,12 @@
 /** The port every editor surface writes through. Two adapters implement it:
- * `LocalStore` (the dev API) and `GithubStore` (the contents API). `version`
+ * `LocalStore` (the dev API) and `GithubStore` (the Git Data API). `version`
  * is whatever that transport uses for optimistic concurrency — a content hash
  * in dev, the blob sha on GitHub — and is what turns two concurrent editors
- * into a rendered conflict instead of a silent overwrite. */
+ * into a rendered conflict instead of a silent overwrite.
+ *
+ * A save stages, it never pushes. The two transports stage in different
+ * places, so each implements its own half: dev writes the working tree and
+ * commits it, hosted stages in the browser and pushes the whole set at once. */
 
 import { allowedProposal, type ProposalFile } from "./propose";
 
@@ -20,9 +24,20 @@ export type CommitOutcome = { committed: boolean; sha?: string };
 
 export type StoreKind = "local" | "github";
 
-/** The branch a save lands on has moved past the snapshot the page was read
- * from — the page on screen may not be the page being written over. */
-export type Staleness = { head: string };
+/** A staged page, as the ref knows it: which page, and the blob the draft was
+ * read at. */
+export type StagedRef = { path: string; baseVersion: Version | null };
+
+/** One staged page, as the push writes it. */
+export type PushFile = StagedRef & { source: string };
+
+/** A staged page whose blob moved on the ref before the push. The push carries
+ * the other side back so the conflict can be read, not just reported. */
+export type PushConflict = { path: string; current: StoredFile | null };
+
+export type PushOutcome =
+  | { status: "ok"; head: string }
+  | { status: "conflicts"; conflicts: PushConflict[] };
 
 export type ContentStore = {
   readonly kind: StoreKind;
@@ -46,21 +61,32 @@ export type ContentStore = {
   /** The handle already known, asking nobody — null until something asked. */
   readonly author: string | null;
 
-  write(
+  /** Dev only: the working tree is the stage, so a save writes it. */
+  write?(
     path: string,
     source: string,
     baseVersion: Version | null,
   ): Promise<WriteOutcome>;
+
+  /**
+   * Hosted only: the staged set, as one commit. Every draft's base version is
+   * compared against the ref first — one page that moved makes the whole push
+   * a set of conflicts, and nothing at all is written.
+   */
+  push?(files: PushFile[], message: string): Promise<PushOutcome>;
+
+  /** Hosted only: which of these staged pages changed on the ref a push lands
+   * on since the draft was read. Asked when the head moves, so the pending bar
+   * can say it before a push turns it into a conflict. */
+  movedSince?(files: StagedRef[]): Promise<string[]>;
+
+  /** Immediate in both transports: a binary draft has no diff to review and no
+   * place in localStorage. */
   writeBinary(
     path: string,
     bytes: Uint8Array,
     baseVersion: Version | null,
   ): Promise<WriteOutcome>;
-
-  /** Asked once per save attempt, never polled: has the branch this store
-   * writes to moved past `storeHead`? Only a store saving to the branch the
-   * snapshot was built from can answer. */
-  staleness?(storeHead: string): Promise<Staleness | null>;
 
   /** Dev only: what the working tree is holding, and how to land it. */
   dirty?(): Promise<DirtyState>;

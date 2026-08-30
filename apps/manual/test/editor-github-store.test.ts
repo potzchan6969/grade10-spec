@@ -1,17 +1,30 @@
 import { describe, expect, it } from "vitest";
 import { REPO, STORAGE, type WriteMode } from "../src/editor/config";
 import { GithubStore, type KeyStore } from "../src/editor/github-store";
+import type { PushFile } from "../src/editor/store";
 
 /** The hosted transport against a mocked GitHub. Nothing here touches the
  * network; what is pinned is the shape of each mode's exchange — branch mode
- * cuts a branch and keeps a pull request, main mode does neither. */
+ * cuts a branch and keeps a pull request, main mode does neither — and that a
+ * push is one commit that either lands whole or writes nothing at all. */
 
 const REPO_API = `https://api.github.com/repos/${REPO.owner}/${REPO.repo}`;
 const BRANCH = "manual/echo";
-const PATH = "manual/products/demo/alpha.md";
+const DIR = "manual/products/demo";
+const PATH = `${DIR}/alpha.md`;
+const BETA = `${DIR}/beta.md`;
+const NEW = `${DIR}/gamma.md`;
 const MINE = "---\ntitle: Mine\n---\n";
 const THEIRS = "---\ntitle: Theirs\n---\n";
 const PR = "https://github.com/9gag/grade10-spec/pull/7";
+const MAIN_HEAD = "mainhead";
+const COMMIT = "newcommit";
+
+/** What the directory holds on the ref, as the contents listing answers it. */
+const LISTING = [
+  { name: "alpha.md", path: PATH, sha: "theirsha", type: "file" },
+  { name: "beta.md", path: BETA, sha: "betasha", type: "file" },
+];
 
 type Call = { url: string; method: string; body: Record<string, unknown> };
 type Answer = { status: number; body?: unknown };
@@ -31,6 +44,10 @@ function memoryStore(seed: Record<string, string> = {}): KeyStore {
 
 function contentsOf(source: string, sha: string) {
   return { content: btoa(source), encoding: "base64", sha };
+}
+
+function file(path: string, baseVersion: string | null): PushFile {
+  return { path, source: MINE, baseVersion };
 }
 
 function router(routes: (call: Call) => Answer) {
@@ -57,36 +74,63 @@ function router(routes: (call: Call) => Answer) {
 }
 
 /** A repo GitHub answers for, with the author's branch either gone or still
- * standing — the two states a session opens in. */
+ * standing — the two states a session opens in. It remembers what it is told:
+ * a branch that was just cut answers for its own head afterwards. */
 function repo(
   branch: "missing" | "standing",
   overrides: (call: Call) => Answer | null = () => null,
 ) {
-  // A repo remembers the PR it opened, so asking again finds it.
   let open: unknown[] = [];
+  let branchHead: string | null = branch === "standing" ? "branchhead" : null;
+  let blobs = 0;
+
   return router((call) => {
     const override = overrides(call);
     if (override) return override;
 
     if (call.url.endsWith("/user"))
       return { status: 200, body: { login: "echo" } };
+
     if (call.url === `${REPO_API}/git/ref/heads/${BRANCH}`) {
-      return branch === "missing"
+      return branchHead === null
         ? { status: 404 }
-        : { status: 200, body: { object: { sha: "branchhead" } } };
+        : { status: 200, body: { object: { sha: branchHead } } };
     }
     if (call.url === `${REPO_API}/git/ref/heads/main`) {
-      return { status: 200, body: { object: { sha: "mainhead" } } };
+      return { status: 200, body: { object: { sha: MAIN_HEAD } } };
     }
     if (call.url === `${REPO_API}/git/refs` && call.method === "POST") {
+      branchHead = String(call.body.sha);
       return { status: 201, body: {} };
     }
     if (
       call.url === `${REPO_API}/git/refs/heads/${BRANCH}` &&
       call.method === "PATCH"
     ) {
-      return { status: 200, body: { object: { sha: "mainhead" } } };
+      branchHead = String(call.body.sha);
+      return { status: 200, body: { object: { sha: branchHead } } };
     }
+    if (
+      call.url === `${REPO_API}/git/refs/heads/main` &&
+      call.method === "PATCH"
+    ) {
+      return { status: 200, body: { object: { sha: String(call.body.sha) } } };
+    }
+
+    if (call.url === `${REPO_API}/git/blobs` && call.method === "POST") {
+      blobs += 1;
+      return { status: 201, body: { sha: `blob${blobs}` } };
+    }
+    if (call.url === `${REPO_API}/git/trees` && call.method === "POST") {
+      return { status: 201, body: { sha: "newtree" } };
+    }
+    if (call.url === `${REPO_API}/git/commits` && call.method === "POST") {
+      return { status: 201, body: { sha: COMMIT } };
+    }
+    if (call.url.startsWith(`${REPO_API}/git/commits/`)) {
+      return { status: 200, body: { tree: { sha: "basetree" } } };
+    }
+
     if (call.method === "PUT") {
       return { status: 200, body: { content: { sha: "blob2" } } };
     }
@@ -95,6 +139,10 @@ function repo(
     if (call.url === `${REPO_API}/pulls` && call.method === "POST") {
       open = [{ html_url: PR }];
       return { status: 201, body: { html_url: PR } };
+    }
+
+    if (call.url.startsWith(`${REPO_API}/contents/${DIR}?`)) {
+      return { status: 200, body: LISTING };
     }
     if (call.url.startsWith(`${REPO_API}/contents/`)) {
       return { status: 200, body: contentsOf(THEIRS, "theirsha") };
@@ -126,22 +174,25 @@ function mainStoreOn(http: typeof fetch, token: string | null = "pat") {
 }
 
 describe("GithubStore, branch + PR mode", () => {
-  it("cuts the author's branch from main, writes, and opens the PR", async () => {
-    const { http, calls, seen } = freshRepo();
+  it("cuts the author's branch from main, pushes onto it, and opens the PR", async () => {
+    const { http, seen } = freshRepo();
     const store = storeOn(http);
 
-    const outcome = await store.write(PATH, MINE, "oldblob");
+    const outcome = await store.push([file(PATH, "theirsha")], "Update 1 page");
 
-    expect(outcome).toEqual({ status: "ok", version: "blob2" });
+    expect(outcome).toEqual({ status: "ok", head: COMMIT });
     expect(seen("POST", `${REPO_API}/git/refs`)[0].body).toEqual({
       ref: `refs/heads/${BRANCH}`,
-      sha: "mainhead",
+      sha: MAIN_HEAD,
     });
-
-    const put = calls.find((call) => call.method === "PUT");
-    expect(put?.url).toBe(`${REPO_API}/contents/${PATH}`);
-    expect(put?.body).toMatchObject({ branch: BRANCH, sha: "oldblob" });
-    expect(atob(String(put?.body.content))).toBe(MINE);
+    expect(seen("POST", `${REPO_API}/git/commits`)[0].body).toEqual({
+      message: "Update 1 page",
+      tree: "newtree",
+      parents: [MAIN_HEAD],
+    });
+    expect(
+      seen("PATCH", `${REPO_API}/git/refs/heads/${BRANCH}`).at(-1)?.body,
+    ).toEqual({ sha: COMMIT });
 
     expect(seen("POST", `${REPO_API}/pulls`)[0].body).toMatchObject({
       base: "main",
@@ -151,21 +202,40 @@ describe("GithubStore, branch + PR mode", () => {
     expect(store.label).toContain(BRANCH);
   });
 
-  it("creates the page when there is no blob to write against", async () => {
-    const { http, calls } = freshRepo();
+  it("pushes a page the ref does not carry yet", async () => {
+    const { http, seen } = freshRepo();
 
-    await storeOn(http).write(PATH, MINE, null);
+    const outcome = await storeOn(http).push([file(NEW, null)], "New page");
 
-    const put = calls.find((call) => call.method === "PUT");
-    expect(put?.body).not.toHaveProperty("sha");
+    expect(outcome).toEqual({ status: "ok", head: COMMIT });
+    expect(seen("POST", `${REPO_API}/git/trees`)[0].body).toMatchObject({
+      tree: [{ path: NEW, mode: "100644", type: "blob", sha: "blob1" }],
+    });
   });
 
-  it("reuses the branch and the PR on the next write", async () => {
+  it("adds a page the branch has not got, rather than calling it a conflict", async () => {
+    // The reader falls back to main for a page the branch does not carry, so
+    // the draft holds main's blob sha for a file this ref has never had.
+    const { http, seen } = repo("standing", (call) =>
+      call.url.startsWith(`${REPO_API}/contents/${DIR}?`)
+        ? { status: 200, body: [] }
+        : null,
+    );
+
+    const outcome = await storeOn(http).push([file(PATH, "theirsha")], "one");
+
+    expect(outcome).toEqual({ status: "ok", head: COMMIT });
+    expect(seen("POST", `${REPO_API}/git/trees`)[0].body).toMatchObject({
+      tree: [{ path: PATH, sha: "blob1" }],
+    });
+  });
+
+  it("reuses the branch and the PR on the next push", async () => {
     const { http, seen } = freshRepo();
     const store = storeOn(http);
 
-    await store.write(PATH, MINE, null);
-    await store.write(PATH, `${MINE}\nmore\n`, "blob2");
+    await store.push([file(NEW, null)], "one");
+    await store.push([file(NEW, null)], "two");
 
     expect(seen("POST", `${REPO_API}/git/refs`)).toHaveLength(1);
     expect(seen("POST", `${REPO_API}/pulls`)).toHaveLength(1);
@@ -179,7 +249,7 @@ describe("GithubStore, branch + PR mode", () => {
     );
     const store = storeOn(http);
 
-    await store.write(PATH, MINE, null);
+    await store.push([file(NEW, null)], "one");
 
     expect(seen("POST", `${REPO_API}/pulls`)).toHaveLength(0);
     expect(store.reviewUrl).toBe(PR);
@@ -189,36 +259,38 @@ describe("GithubStore, branch + PR mode", () => {
     const { http, calls, seen } = repo("standing");
     const store = storeOn(http);
 
-    await store.write(PATH, MINE, null);
+    await store.push([file(NEW, null)], "one");
 
-    const reset = seen("PATCH", `${REPO_API}/git/refs/heads/${BRANCH}`);
+    const moves = seen("PATCH", `${REPO_API}/git/refs/heads/${BRANCH}`);
+    const reset = moves.filter((call) => call.body.force === true);
     expect(reset).toHaveLength(1);
-    expect(reset[0].body).toEqual({ sha: "mainhead", force: true });
+    expect(reset[0].body).toEqual({ sha: MAIN_HEAD, force: true });
     expect(seen("POST", `${REPO_API}/git/refs`)).toHaveLength(0);
-    // The branch is main again before anything lands on it.
+    // The branch is main again before anything is built on it.
     expect(calls.indexOf(reset[0])).toBeLessThan(
-      calls.findIndex((call) => call.method === "PUT"),
+      calls.findIndex((call) => call.url === `${REPO_API}/git/trees`),
     );
     expect(seen("POST", `${REPO_API}/pulls`)).toHaveLength(1);
     expect(store.reviewUrl).toBe(PR);
   });
 
-  it("prepares the branch once, and opens one PR, when two saves race", async () => {
+  it("prepares the branch once, and opens one PR, when two pushes race", async () => {
     const { http, seen } = repo("standing");
     const store = storeOn(http);
 
     await Promise.all([
-      store.write(PATH, MINE, null),
-      store.write("manual/products/demo/beta.md", MINE, null),
+      store.push([file(NEW, null)], "one"),
+      store.push([file(BETA, "betasha")], "two"),
     ]);
 
-    expect(seen("PATCH", `${REPO_API}/git/refs/heads/${BRANCH}`)).toHaveLength(
-      1,
+    const reset = seen("PATCH", `${REPO_API}/git/refs/heads/${BRANCH}`).filter(
+      (call) => call.body.force === true,
     );
+    expect(reset).toHaveLength(1);
     expect(seen("POST", `${REPO_API}/pulls`)).toHaveLength(1);
   });
 
-  it("opens a new PR when the one it was writing to merged mid-session", async () => {
+  it("opens a new PR when the one it was pushing to merged mid-session", async () => {
     const merged = "https://github.com/9gag/grade10-spec/pull/6";
     let open: unknown[] = [{ html_url: merged }];
     const { http, seen } = repo("standing", (call) =>
@@ -228,11 +300,11 @@ describe("GithubStore, branch + PR mode", () => {
     );
     const store = storeOn(http);
 
-    await store.write(PATH, MINE, null);
+    await store.push([file(NEW, null)], "one");
     expect(store.reviewUrl).toBe(merged);
 
     open = [];
-    await store.write(PATH, `${MINE}\nmore\n`, "blob2");
+    await store.push([file(NEW, null)], "two");
 
     expect(seen("POST", `${REPO_API}/pulls`)).toHaveLength(1);
     expect(store.reviewUrl).toBe(PR);
@@ -248,40 +320,53 @@ describe("GithubStore, branch + PR mode", () => {
     const store = storeOn(http, "pat", storage);
     expect(store.reviewUrl).toBe(stale);
 
-    await store.write(PATH, MINE, null);
+    await store.push([file(NEW, null)], "one");
 
     expect(seen("GET", `${REPO_API}/pulls?`).length).toBeGreaterThan(0);
-    expect(seen("PATCH", `${REPO_API}/git/refs/heads/${BRANCH}`)).toHaveLength(
-      1,
-    );
     expect(seen("POST", `${REPO_API}/pulls`)).toHaveLength(1);
     expect(store.reviewUrl).toBe(PR);
     expect(storage.get(STORAGE.pr)).toBe(PR);
   });
 
-  it("creates a file the reset branch never had, rather than writing against main's sha", async () => {
-    const { http, calls } = repo("standing", (call) =>
-      call.url === `${REPO_API}/contents/${PATH}?ref=manual%2Fecho`
-        ? { status: 404 }
-        : null,
-    );
-    const store = storeOn(http);
+  it("pushes onto the author's own branch, never main", async () => {
+    const { http, seen } = repo("standing");
 
-    const file = await store.read(PATH);
-    await store.write(PATH, MINE, file.version);
+    await storeOn(http).push([file(NEW, null)], "one");
 
-    expect(file.version).toBe("theirsha");
-    const put = calls.find((call) => call.method === "PUT");
-    expect(put?.body).not.toHaveProperty("sha");
+    expect(seen("PATCH", `${REPO_API}/git/refs/heads/main`)).toHaveLength(0);
+    expect(
+      seen("PATCH", `${REPO_API}/git/refs/heads/${BRANCH}`).length,
+    ).toBeGreaterThan(0);
   });
 
-  it("keeps the sha for a file the reset branch does carry", async () => {
-    const { http, calls } = repo("standing");
+  it("checks a staged draft against the branch without cutting one", async () => {
+    const storage = memoryStore({ [STORAGE.login]: "echo" });
+    const { http, seen } = repo("standing");
 
-    await storeOn(http).write(PATH, MINE, "theirsha");
+    const moved = await storeOn(http, "pat", storage).movedSince([
+      { path: PATH, baseVersion: "readat" },
+      { path: BETA, baseVersion: "betasha" },
+    ]);
 
-    const put = calls.find((call) => call.method === "PUT");
-    expect(put?.body).toMatchObject({ sha: "theirsha" });
+    expect(moved).toEqual([PATH]);
+    expect(
+      seen("GET", `${REPO_API}/contents/${DIR}?ref=manual%2Fecho`),
+    ).toHaveLength(1);
+    expect(seen("POST", `${REPO_API}/git/refs`)).toHaveLength(0);
+    expect(seen("PATCH", `${REPO_API}/git/refs/heads/${BRANCH}`)).toHaveLength(
+      0,
+    );
+  });
+
+  it("does not call a page the branch has not got yet a page that moved", async () => {
+    const storage = memoryStore({ [STORAGE.login]: "echo" });
+    const { http } = repo("standing");
+
+    expect(
+      await storeOn(http, "pat", storage).movedSince([
+        { path: NEW, baseVersion: "fromMain" },
+      ]),
+    ).toEqual([]);
   });
 
   it.each([
@@ -289,55 +374,32 @@ describe("GithubStore, branch + PR mode", () => {
     "manual/../openspec/specs/demo/spec.md",
     "/etc/hosts",
     "manual/",
-  ])("refuses to send %s anywhere near the contents API", async (path) => {
+  ])("refuses to send %s anywhere near the API", async (path) => {
     const { http, calls } = freshRepo();
     const store = storeOn(http);
 
-    await expect(store.write(path, MINE, null)).rejects.toThrow(/manual\//);
+    await expect(store.push([file(path, null)], "m")).rejects.toThrow(
+      /manual\//,
+    );
     await expect(
       store.writeBinary(path, new Uint8Array([1]), null),
     ).rejects.toThrow(/manual\//);
     expect(calls).toHaveLength(0);
   });
 
-  it("turns a sha mismatch into a conflict carrying the other side", async () => {
-    const { http } = freshRepo((call) =>
-      call.method === "PUT"
-        ? { status: 409, body: { message: "does not match" } }
-        : null,
+  it("uploads an asset straight away — a binary has no draft to stage", async () => {
+    const { http, calls } = freshRepo();
+
+    const outcome = await storeOn(http).writeBinary(
+      "manual/assets/shot.png",
+      new Uint8Array([1, 2]),
+      null,
     );
 
-    const outcome = await storeOn(http).write(PATH, MINE, "stale");
-
-    expect(outcome).toEqual({
-      status: "conflict",
-      current: { source: THEIRS, version: "theirsha" },
-    });
-  });
-
-  it("treats GitHub's 422 on a stale sha the same way", async () => {
-    const { http } = freshRepo((call) =>
-      call.method === "PUT"
-        ? { status: 422, body: { message: "invalid sha" } }
-        : null,
-    );
-
-    expect(await storeOn(http).write(PATH, MINE, "stale")).toMatchObject({
-      status: "conflict",
-    });
-  });
-
-  it("says the file is gone when the conflict has no other side", async () => {
-    const { http } = freshRepo((call) => {
-      if (call.method === "PUT") return { status: 409, body: {} };
-      if (call.url.startsWith(`${REPO_API}/contents/`)) return { status: 404 };
-      return null;
-    });
-
-    expect(await storeOn(http).write(PATH, MINE, "stale")).toEqual({
-      status: "conflict",
-      current: null,
-    });
+    expect(outcome).toEqual({ status: "ok", version: "blob2" });
+    const put = calls.find((call) => call.method === "PUT");
+    expect(put?.url).toBe(`${REPO_API}/contents/manual/assets/shot.png`);
+    expect(put?.body).toMatchObject({ branch: BRANCH });
   });
 
   it("reads the branch first and falls back to main", async () => {
@@ -355,12 +417,15 @@ describe("GithubStore, branch + PR mode", () => {
     );
   });
 
-  it("is read-only without a token, and writes nothing", async () => {
+  it("is read-only without a token, and asks nothing", async () => {
     const { http, calls } = freshRepo();
     const store = storeOn(http, null);
 
     expect(store.readOnly).toMatch(/token/);
-    await expect(store.write(PATH, MINE, null)).rejects.toThrow(/token/);
+    await expect(store.push([file(PATH, null)], "m")).rejects.toThrow(/token/);
+    await expect(
+      store.movedSince([{ path: PATH, baseVersion: null }]),
+    ).rejects.toThrow(/token/);
     await expect(store.read(PATH)).rejects.toThrow(/token/);
     expect(calls).toHaveLength(0);
   });
@@ -372,30 +437,48 @@ describe("GithubStore, branch + PR mode", () => {
         : null,
     );
 
-    await expect(storeOn(http).write(PATH, MINE, null)).rejects.toThrow(
+    await expect(storeOn(http).push([file(PATH, null)], "m")).rejects.toThrow(
       /Bad credentials/,
     );
-  });
-
-  it("has no staleness to report — a personal branch is not the snapshot", async () => {
-    const { http, calls } = freshRepo();
-
-    expect(await storeOn(http).staleness("whatever")).toBeNull();
-    expect(calls).toHaveLength(0);
   });
 });
 
 describe("GithubStore, main mode", () => {
-  it("writes the default branch itself, cutting nothing and proposing nothing", async () => {
+  it("turns the staged set into one commit on the default branch", async () => {
+    const { http, seen } = freshRepo();
+    const store = mainStoreOn(http);
+
+    const outcome = await store.push(
+      [file(PATH, "theirsha"), file(BETA, "betasha")],
+      "Update 2 pages",
+    );
+
+    expect(outcome).toEqual({ status: "ok", head: COMMIT });
+    expect(seen("POST", `${REPO_API}/git/blobs`)).toHaveLength(2);
+    expect(seen("POST", `${REPO_API}/git/trees`)[0].body).toEqual({
+      base_tree: "basetree",
+      tree: [
+        { path: PATH, mode: "100644", type: "blob", sha: "blob1" },
+        { path: BETA, mode: "100644", type: "blob", sha: "blob2" },
+      ],
+    });
+    expect(seen("POST", `${REPO_API}/git/commits`)[0].body).toEqual({
+      message: "Update 2 pages",
+      tree: "newtree",
+      parents: [MAIN_HEAD],
+    });
+    // Not forced: a commit that landed between the check and the move is
+    // never what this push writes over.
+    expect(seen("PATCH", `${REPO_API}/git/refs/heads/main`)[0].body).toEqual({
+      sha: COMMIT,
+    });
+  });
+
+  it("cuts nothing and proposes nothing", async () => {
     const { http, calls, seen } = freshRepo();
     const store = mainStoreOn(http);
 
-    const outcome = await store.write(PATH, MINE, "oldblob");
-
-    expect(outcome).toEqual({ status: "ok", version: "blob2" });
-    const put = calls.find((call) => call.method === "PUT");
-    expect(put?.url).toBe(`${REPO_API}/contents/${PATH}`);
-    expect(put?.body).toMatchObject({ branch: "main", sha: "oldblob" });
+    await store.push([file(PATH, "theirsha")], "m");
 
     expect(seen("POST", `${REPO_API}/git/refs`)).toHaveLength(0);
     expect(seen("PATCH", `${REPO_API}/git/refs/heads/${BRANCH}`)).toHaveLength(
@@ -405,6 +488,50 @@ describe("GithubStore, main mode", () => {
     expect(calls.filter((call) => call.url.endsWith("/user"))).toHaveLength(0);
     expect(store.reviewUrl).toBeNull();
     expect(store.label).toContain("main");
+  });
+
+  it("asks one listing per directory rather than one read per page", async () => {
+    const { http, seen } = freshRepo();
+
+    const at = await mainStoreOn(http).versionsAt([PATH, BETA, NEW]);
+
+    expect(at.get(PATH)).toBe("theirsha");
+    expect(at.get(BETA)).toBe("betasha");
+    expect(at.get(NEW)).toBeNull();
+    expect(seen("GET", `${REPO_API}/contents/${DIR}?`)).toHaveLength(1);
+  });
+
+  it("hands back the pages that moved, with the other side, and writes nothing", async () => {
+    const { http, seen } = freshRepo();
+
+    const outcome = await mainStoreOn(http).push(
+      [file(PATH, "readat"), file(BETA, "betasha")],
+      "m",
+    );
+
+    expect(outcome).toEqual({
+      status: "conflicts",
+      conflicts: [
+        { path: PATH, current: { source: THEIRS, version: "theirsha" } },
+      ],
+    });
+    expect(seen("POST", `${REPO_API}/git/blobs`)).toHaveLength(0);
+    expect(seen("POST", `${REPO_API}/git/trees`)).toHaveLength(0);
+    expect(seen("POST", `${REPO_API}/git/commits`)).toHaveLength(0);
+    expect(seen("PATCH", `${REPO_API}/git/refs/heads/main`)).toHaveLength(0);
+  });
+
+  it("says the page is gone when the conflict has no other side", async () => {
+    const { http } = freshRepo((call) =>
+      call.url.startsWith(`${REPO_API}/contents/${PATH}`)
+        ? { status: 404 }
+        : null,
+    );
+
+    expect(await mainStoreOn(http).push([file(PATH, "readat")], "m")).toEqual({
+      status: "conflicts",
+      conflicts: [{ path: PATH, current: null }],
+    });
   });
 
   it("reads main, never a personal branch left standing from the other mode", async () => {
@@ -422,29 +549,54 @@ describe("GithubStore, main mode", () => {
     ]);
   });
 
-  it("still turns a stale blob sha into a conflict carrying the other side", async () => {
-    const { http } = freshRepo((call) =>
-      call.method === "PUT"
-        ? { status: 409, body: { message: "does not match" } }
-        : null,
-    );
-
-    expect(await mainStoreOn(http).write(PATH, MINE, "stale")).toEqual({
-      status: "conflict",
-      current: { source: THEIRS, version: "theirsha" },
+  it("reads the head again and retries once when the ref moved mid-push", async () => {
+    let refused = false;
+    const { http, seen } = freshRepo((call) => {
+      if (call.method !== "PATCH" || refused) return null;
+      refused = true;
+      return { status: 422, body: { message: "Update is not a fast forward" } };
     });
+
+    const outcome = await mainStoreOn(http).push([file(PATH, "theirsha")], "m");
+
+    expect(outcome).toEqual({ status: "ok", head: COMMIT });
+    expect(seen("GET", `${REPO_API}/git/ref/heads/main`)).toHaveLength(2);
+    expect(seen("PATCH", `${REPO_API}/git/refs/heads/main`)).toHaveLength(2);
   });
 
-  it("still reads GitHub's 422 on a stale sha as a conflict", async () => {
-    const { http } = freshRepo((call) =>
-      call.method === "PUT"
-        ? { status: 422, body: { message: "invalid sha" } }
+  it("re-checks every draft against the head it reads for the retry", async () => {
+    let refused = false;
+    const { http, seen } = freshRepo((call) => {
+      if (call.method === "PATCH" && !refused) {
+        refused = true;
+        return {
+          status: 422,
+          body: { message: "Update is not a fast forward" },
+        };
+      }
+      if (refused && call.url.startsWith(`${REPO_API}/contents/${DIR}?`)) {
+        return { status: 200, body: [{ path: PATH, sha: "movedsha" }] };
+      }
+      return null;
+    });
+
+    const outcome = await mainStoreOn(http).push([file(PATH, "theirsha")], "m");
+
+    expect(outcome).toMatchObject({ status: "conflicts" });
+    expect(seen("PATCH", `${REPO_API}/git/refs/heads/main`)).toHaveLength(1);
+  });
+
+  it("gives up after the second refusal, having moved nothing", async () => {
+    const { http, seen } = freshRepo((call) =>
+      call.method === "PATCH"
+        ? { status: 422, body: { message: "Update is not a fast forward" } }
         : null,
     );
 
-    expect(await mainStoreOn(http).write(PATH, MINE, "stale")).toMatchObject({
-      status: "conflict",
-    });
+    await expect(
+      mainStoreOn(http).push([file(PATH, "theirsha")], "m"),
+    ).rejects.toThrow(/main is moving/);
+    expect(seen("PATCH", `${REPO_API}/git/refs/heads/main`)).toHaveLength(2);
   });
 
   it.each([
@@ -454,25 +606,16 @@ describe("GithubStore, main mode", () => {
     "answers a %i push refusal by naming PR mode, never by falling back",
     async (status, message) => {
       const { http, seen } = freshRepo((call) =>
-        call.method === "PUT" ? { status, body: { message } } : null,
+        call.method === "PATCH" ? { status, body: { message } } : null,
       );
 
-      await expect(mainStoreOn(http).write(PATH, MINE, "blob")).rejects.toThrow(
-        /branch \+ PR mode/,
-      );
+      await expect(
+        mainStoreOn(http).push([file(PATH, "theirsha")], "m"),
+      ).rejects.toThrow(/branch \+ PR mode/);
       expect(seen("POST", `${REPO_API}/git/refs`)).toHaveLength(0);
       expect(seen("POST", `${REPO_API}/pulls`)).toHaveLength(0);
     },
   );
-
-  it("compares live main against the snapshot the page was loaded from", async () => {
-    const { http, seen } = freshRepo();
-    const store = mainStoreOn(http);
-
-    expect(await store.staleness("mainhead")).toBeNull();
-    expect(await store.staleness("olderhead")).toEqual({ head: "mainhead" });
-    expect(seen("GET", `${REPO_API}/git/ref/heads/main`)).toHaveLength(2);
-  });
 
   it("asks nothing without a token", async () => {
     const { http, calls } = freshRepo();
@@ -480,7 +623,7 @@ describe("GithubStore, main mode", () => {
 
     expect(store.readOnly).toMatch(/contents:write/);
     expect(store.readOnly).not.toMatch(/pull_requests/);
-    expect(await store.staleness("olderhead")).toBeNull();
+    await expect(store.push([file(PATH, null)], "m")).rejects.toThrow(/token/);
     await expect(store.read(PATH)).rejects.toThrow(/token/);
     expect(calls).toHaveLength(0);
   });

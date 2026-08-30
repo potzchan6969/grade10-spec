@@ -199,41 +199,74 @@ Frontmatter is a form. Save serializes to canonical text and hands it to the
 active `ContentStore`:
 
 ```
-read(path)                          -> { source, version }
-write(path, source, baseVersion)    -> ok | conflict { current }
-writeBinary(path, bytes, baseVersion?) -> same
-commit(message)                     -> dev only
+read(path)                            -> { source, version }
+write(path, source, baseVersion)      -> ok | conflict { current }
+                                         dev only: the working tree is the stage
+push(files: [{path, source, baseVersion}])
+                                      -> ok | conflicts [{path, current}]
+                                         hosted: the staged set, one commit
+writeBinary(path, bytes, baseVersion?) -> same as write
+commit(message)                       -> dev only
+propose(files) / withdraw(id)         -> their own atomic commits, never staged
 ```
 
-`version` is a content hash in dev and the blob SHA on GitHub — the GitHub
-contents API requires it, and it is what turns two concurrent editors into a
-rendered conflict diff instead of a silent overwrite.
+`version` is a content hash in dev and the blob SHA on GitHub — it is what
+turns two concurrent editors into a rendered conflict diff instead of a
+silent overwrite. Asset uploads stay immediate in both transports: a
+binary draft has no diff to review and no place in localStorage.
 
-- `LocalStore` (dev): posts to the Vite plugin; a commit bar appears once
-  the working tree has manual edits.
-- `GithubStore` (hosted): a fine-grained PAT pasted in settings, held in
-  localStorage; read-only without one. Two modes, chosen in settings:
-  - `main` (default): reads and writes the base branch directly — the
-    deploy listens on push, so a save is live in about a minute. Needs
-    `contents:write` only; `actions:read` additionally lets the header
-    show the last deploy's conclusion. Before a save the editor compares
-    live main against the snapshot's `storeHead` and warns when the page
-    it loaded is behind; a push refused by branch protection surfaces the
-    refusal and suggests PR mode, never a silent fallback.
-  - `branch + PR`: first write creates or reuses a `manual/<login>`
-    branch AND its PR, so edits never rot on an unopened branch. Also
-    needs `pull_requests:write`.
-  The mode picks the ref for read and write together — the editor never
-  loads one branch while claiming to edit another. Raw HTML stays off in
-  the renderer — that is the XSS line that makes a stored PAT tolerable
-  until a GitHub App replaces it; main mode is why the deploy workflow
-  notifies on failure and the header shows deployed `storeHead` against
-  live main with the last deploy's conclusion, so a frozen site is
-  visible in the tool itself.
+Saving never pushes. Everywhere, a save stages a draft, and a person
+decides when everything staged becomes one commit — the same rhythm in
+both transports:
 
-Saving validates client-side what the snapshot can prove: canonical form,
-spec and scenario ids, image paths against `assets`, and that the save
-does not drop a durable spec's last page reference. Story ids stay a
+- `LocalStore` (dev): a save writes the working tree; the commit bar
+  appears once the tree has manual edits and commits them all.
+- `GithubStore` (hosted): a save stages the draft in the browser
+  (localStorage, keyed by path, holding the canonical text and the blob
+  version it was read at — a reload keeps it, and the page renders its
+  draft with a visible draft marker). A pending bar lists every staged
+  page with discard per page; **Push all** turns the whole set into ONE
+  atomic Trees-API commit: read the target head, compare every draft's
+  base version against that head's blobs — any page that moved renders
+  the existing side-by-side conflict, and nothing at all is written —
+  then tree → commit → a non-forced ref move, retried once if the ref
+  advanced mid-flight. One push, one deploy.
+
+The hosted store needs a fine-grained PAT pasted in settings, held in
+localStorage; read-only without one. Two modes, chosen in settings:
+
+- `main` (default): reads the base branch, and Push all lands on it —
+  the deploy listens on push, so the batch is live in about a minute.
+  Needs `contents:write` only; `actions:read` additionally lets the
+  header show the last deploy's conclusion. A push refused by branch
+  protection surfaces the refusal and suggests PR mode, never a silent
+  fallback.
+- `branch + PR`: Push all lands one commit on a `manual/<login>` branch
+  and keeps its PR open, so edits never rot on an unopened branch. Also
+  needs `pull_requests:write`.
+
+The mode picks the ref for read and write together — the editor never
+loads one branch while claiming to edit another. Raw HTML stays off in
+the renderer — that is the XSS line that makes a stored PAT tolerable
+until a GitHub App replaces it; main mode is why the deploy workflow
+notifies on failure and the header shows deployed `storeHead` against
+live main with the last deploy's conclusion, so a frozen site is
+visible in the tool itself.
+
+Others' pushes reach you, not just your push failing: while the tab is
+visible the app re-asks the live head on an interval and on every
+return of focus (with a token; tokenless readers ask only on focus —
+unauthenticated rate limits are 60 an hour). When the head moves, the
+health strip says so, and every staged draft is checked against the
+moved head — a page that changed under your draft is marked on the
+pending bar before you ever push, not discovered inside the conflict.
+Polling stops while the tab is hidden; nothing notifies a tab nobody
+is looking at.
+
+Staging validates client-side what the snapshot can prove: canonical
+form, spec and scenario ids, image paths against `assets`, and that the
+batch does not drop a durable spec's last page reference — judged over
+the whole staged set, not one file at a time. Story ids stay a
 build-side check — the browser cannot see the Storybook index, and does
 not pretend to.
 

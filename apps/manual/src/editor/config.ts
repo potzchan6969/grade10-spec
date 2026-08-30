@@ -31,6 +31,8 @@ export const STORAGE = {
   login: "manual.github.login",
   pr: "manual.github.pr",
   mode: "manual.github.mode",
+  /** Hosted only: the staged set, keyed by page path. */
+  drafts: "manual.drafts",
   /** Dev only: the handle a proposal's author line carries. */
   handle: "manual.propose.handle",
 } as const;

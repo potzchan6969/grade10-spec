@@ -1,14 +1,7 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
-import {
-  ArrowSquareOut,
-  FloppyDisk,
-  Trash,
-  WarningCircle,
-} from "@phosphor-icons/react";
-import { shortSha } from "../api/time";
-import { REPO } from "./config";
-import type { ContentStore, Staleness } from "./store";
+import { ArrowSquareOut, FloppyDisk, Trash } from "@phosphor-icons/react";
+import type { ContentStore } from "./store";
 
 /** The bar that says where a save goes, and lets it go there. */
 
@@ -18,7 +11,7 @@ export function EditorChrome({
   problemCount,
   saving,
   canSave,
-  stale,
+  stages,
   onSave,
   onCancel,
   onDelete,
@@ -28,9 +21,9 @@ export function EditorChrome({
   problemCount: number;
   saving: boolean;
   canSave: boolean;
-  /** Set once the pre-save check found the branch ahead of the snapshot; the
-   * save button then asks for the second, deliberate click. */
-  stale?: Staleness | null;
+  /** Hosted: this save stages a draft in the browser and pushes nothing, so
+   * the button says which of the two it is. */
+  stages?: boolean;
   onSave: () => void;
   onCancel: () => void;
   onDelete?: () => void;
@@ -44,6 +37,7 @@ export function EditorChrome({
           </Text>
           <Text as="p" className="truncate" size="xs" tone="secondary">
             {store?.label ?? "Looking for a store…"}
+            {stages ? " · staged in this browser until Push all" : null}
             {store?.reviewUrl ? (
               <>
                 {" · "}
@@ -88,30 +82,12 @@ export function EditorChrome({
           loading={saving}
           onClick={onSave}
           size="sm"
-          variant={stale ? "outline" : "default"}
           type="button"
+          variant="default"
         >
-          {stale ? "Save anyway" : "Save"}
+          {stages ? "Save draft" : "Save"}
         </Button>
       </div>
-
-      {stale ? (
-        <div
-          className="mt-2 flex items-start gap-2 rounded-(--radius-xl) border border-warning-border bg-warning/10 px-3 py-2"
-          role="status"
-        >
-          <span className="mt-0.5 inline-flex text-warning-foreground">
-            <WarningCircle aria-hidden size={14} />
-          </span>
-          <Text as="p" size="xs" tone="secondary">
-            {REPO.defaultBranch} has moved past the snapshot this page was
-            loaded from — it is now at{" "}
-            <span className="font-mono">{shortSha(stale.head)}</span>. Saving
-            writes this page over whatever landed since. Click save again to go
-            ahead.
-          </Text>
-        </div>
-      ) : null}
     </div>
   );
 }

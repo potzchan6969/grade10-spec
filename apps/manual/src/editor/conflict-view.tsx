@@ -16,12 +16,18 @@ export function ConflictView({
   onRetry,
   onCancel,
   busy,
+  takeLabel = "Take theirs and re-edit",
+  retryLabel = "Retry over theirs",
 }: {
   conflict: Conflict;
   onTakeTheirs: () => void;
   onRetry: () => void;
   onCancel: () => void;
   busy: boolean;
+  /** The two ways out are the same either way — drop mine, or keep mine over
+   * theirs — but from the pending bar neither of them writes yet. */
+  takeLabel?: string;
+  retryLabel?: string;
 }) {
   const theirs = conflict.theirs;
 
@@ -56,7 +62,7 @@ export function ConflictView({
               type="button"
               variant="outline"
             >
-              Take theirs and re-edit
+              {takeLabel}
             </Button>
             <Button
               loading={busy}
@@ -65,7 +71,7 @@ export function ConflictView({
               type="button"
               variant="default"
             >
-              Retry over theirs
+              {retryLabel}
             </Button>
           </>
         ) : null}

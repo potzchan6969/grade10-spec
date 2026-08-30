@@ -7,6 +7,7 @@ import type {
   SpecEntry,
 } from "../src/api/types";
 import { draftFromSource } from "../src/editor/draft";
+import { createDraftStore, snapshotWithDrafts } from "../src/editor/drafts";
 import { checkReferences, REFERENCE_ID } from "../src/editor/validate";
 import { snapshotOf } from "./manual-fixture";
 
@@ -222,5 +223,53 @@ describe("save-time references", () => {
     const index = indexOf({ pages: [page(PAGE, "Prose.")] });
 
     expect(said(problemsFor(index, "Still prose."))).toEqual([]);
+  });
+});
+
+/** The same rules, asked of the whole staged set. A batch is what gets pushed,
+ * so a reference two staged pages hand between them is not a dropped one. */
+describe("references across the staged set", () => {
+  function stagedIndex(...staged: [string, string][]): ManualIndex {
+    const store = createDraftStore({ read: () => null, write: () => {} });
+    for (const [path, body] of staged) {
+      store.stage(path, page(path, body).source, null);
+    }
+    return buildIndex(
+      snapshotWithDrafts(
+        snapshotOf({
+          specs: [ALPHA],
+          changes: [CHANGING],
+          pages: [page(PAGE, '::spec{id="demo/alpha"}', "demo/alpha")],
+        }),
+        store.read(),
+      ),
+    );
+  }
+
+  it("allows a page to drop the spec another staged page picked up", () => {
+    const index = stagedIndex([OTHER, '::spec{id="demo/alpha"}']);
+
+    expect(said(problemsFor(index, "Prose only now."))).toEqual([]);
+  });
+
+  it("still refuses the drop when no page, staged or committed, names it", () => {
+    const index = stagedIndex([OTHER, "Unrelated prose."]);
+
+    expect(problemsFor(index, "Prose only now.").get(REFERENCE_ID)).toEqual([
+      {
+        message:
+          "this page is the only one that names `demo/alpha`; dropping it leaves a durable spec no page shows",
+      },
+    ]);
+  });
+
+  it("resolves an id against a page that is staged and not yet committed", () => {
+    const index = stagedIndex([
+      "manual/products/demo/gamma.md",
+      '::spec{id="demo/alpha"}',
+    ]);
+
+    expect(index.pageByPath.has("manual/products/demo/gamma.md")).toBe(true);
+    expect(said(problemsFor(index, "Prose only now."))).toEqual([]);
   });
 });

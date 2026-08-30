@@ -16,18 +16,21 @@ import {
   PAGE_ID,
   type Problems,
 } from "./draft";
+import { draftStore } from "./drafts";
 import { useEditMode } from "./edit-mode";
 import { EditorChrome } from "./editor-chrome";
 import { FrontmatterForm } from "./frontmatter-form";
+import { savePage } from "./save";
 import { noteWrite, useEditorSession } from "./session";
 import { SettingsDialog } from "./settings-dialog";
-import { describeCause, type Staleness, type Version } from "./store";
+import { describeCause, type Version } from "./store";
 import { checkReferences, REFERENCE_ID } from "./validate";
 
 /**
- * Edit mode for one page. It reads the page from the store on the way in —
- * never from the snapshot — so the version it holds is the version it later
- * writes against, and two editors become a rendered conflict.
+ * Edit mode for one page. It opens the staged draft when there is one, and
+ * otherwise reads the page from the store — never from the snapshot — so the
+ * version it holds is the version the push later writes against, and two
+ * editors become a rendered conflict.
  */
 
 const NO_PROBLEMS: Problems = new Map();
@@ -49,14 +52,9 @@ export function PageEditor({ path }: { path: string }) {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [leaving, setLeaving] = useState(false);
-  // Asked on the first save of this page and then held — never polled. The
-  // held answer is what the second, deliberate click confirms; asking again
-  // would be asking a different question of the same click.
-  const [freshness, setFreshness] = useState<{
-    moved: Staleness | null;
-  } | null>(null);
 
   const readOnly = store?.readOnly ?? null;
+  const stages = store?.push !== undefined;
   // A store that cannot write cannot always read either, so a read-only
   // editor shows what the snapshot already has. A writable one never does:
   // the version it saves against has to come from the store itself.
@@ -70,10 +68,15 @@ export function PageEditor({ path }: { path: string }) {
     // Another page, or another store: hold nothing from the last one.
     setLoaded(null);
     setFailure(null);
-    setFreshness(null);
 
-    const read: Promise<{ source: string; version: Version | null }> =
-      fallback === null
+    // A staged draft is what this page is right now, and it already carries
+    // the version it was read at — opening it asks the network nothing. Read
+    // it outside the subscription: staging is what a save does, and a save
+    // must not re-open the editor over itself.
+    const staged = draftStore().read().byPath.get(path);
+    const read: Promise<{ source: string; version: Version | null }> = staged
+      ? Promise.resolve({ source: staged.source, version: staged.baseVersion })
+      : fallback === null
         ? store.read(path)
         : Promise.resolve({ source: fallback, version: null });
 
@@ -140,22 +143,18 @@ export function PageEditor({ path }: { path: string }) {
     setSaving(true);
     setSaveError(null);
     try {
-      if (!freshness) {
-        const moved =
-          (await store.staleness?.(index.snapshot.storeHead)) ?? null;
-        setFreshness({ moved });
-        // A page loaded from a snapshot the branch has left is saved on
-        // purpose or not at all: the next click is the confirmation.
-        if (moved) return;
-      }
-      const outcome = await store.write(path, build.source, against);
+      const outcome = await savePage(store, path, build.source, against);
       if (outcome.status === "conflict") {
         setConflict({ mine: build.source, theirs: outcome.current });
         return;
       }
       setConflict(null);
-      noteWrite();
-      reload();
+      // A staged draft is already what the app renders; only a write to the
+      // working tree changes what the snapshot would say.
+      if (outcome.status === "ok") {
+        noteWrite();
+        reload();
+      }
       exit();
     } catch (cause) {
       console.error(`manual: saving ${path} failed`, cause);
@@ -218,7 +217,7 @@ export function PageEditor({ path }: { path: string }) {
         path={path}
         problemCount={problems.size}
         saving={saving}
-        stale={freshness?.moved ?? null}
+        stages={stages}
         store={store}
       />
 

@@ -1,6 +1,14 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { REPO } from "../src/editor/config";
-import { healthLevel, probeHealth, WORKFLOW } from "../src/shell/health";
+import {
+  healthLevel,
+  noteLiveHead,
+  onLiveHead,
+  POLL_MS,
+  probeHealth,
+  WORKFLOW,
+  watchHead,
+} from "../src/shell/health";
 
 /** What the header knows about the site it is being read on. Each of the
  * three questions degrades on its own, and a red deploy outranks everything —
@@ -149,5 +157,118 @@ describe("probeHealth", () => {
     });
 
     expect((await probeHealth(http, "pat", SNAPSHOT)).level).toBe("bad");
+  });
+});
+
+/** Others' pushes reach a tab somebody is looking at, and cost a tab nobody is
+ * looking at nothing at all. */
+describe("re-asking the live head", () => {
+  function watcher(polls: boolean, visible = { now: true }) {
+    const ask = vi.fn(async () => {});
+    let woke: (() => void) | null = null;
+    let watching = true;
+    const stop = watchHead({
+      ask,
+      polls,
+      visible: () => visible.now,
+      wake: (heard) => {
+        woke = heard;
+        return () => {
+          watching = false;
+        };
+      },
+    });
+    return {
+      ask,
+      stop,
+      visible,
+      wake: () => woke?.(),
+      watching: () => watching,
+    };
+  }
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("asks again on the interval while a token pays for it", () => {
+    const watch = watcher(true);
+
+    vi.advanceTimersByTime(POLL_MS * 2);
+
+    expect(watch.ask).toHaveBeenCalledTimes(2);
+    watch.stop();
+  });
+
+  it("never starts a timer for a tokenless reader — only the return of focus", () => {
+    const watch = watcher(false);
+
+    vi.advanceTimersByTime(POLL_MS * 5);
+    expect(watch.ask).not.toHaveBeenCalled();
+
+    watch.wake();
+
+    expect(watch.ask).toHaveBeenCalledTimes(1);
+    vi.advanceTimersByTime(POLL_MS * 5);
+    expect(watch.ask).toHaveBeenCalledTimes(1);
+    watch.stop();
+  });
+
+  it("starts no timer while the tab is hidden, and asks nothing", () => {
+    const watch = watcher(true, { now: false });
+
+    vi.advanceTimersByTime(POLL_MS * 3);
+
+    expect(watch.ask).not.toHaveBeenCalled();
+    watch.stop();
+  });
+
+  it("stops the timer when the tab is hidden, and starts it again on return", () => {
+    const watch = watcher(true);
+    vi.advanceTimersByTime(POLL_MS);
+    expect(watch.ask).toHaveBeenCalledTimes(1);
+
+    watch.visible.now = false;
+    watch.wake();
+    vi.advanceTimersByTime(POLL_MS * 4);
+    expect(watch.ask).toHaveBeenCalledTimes(1);
+
+    watch.visible.now = true;
+    watch.wake();
+    expect(watch.ask).toHaveBeenCalledTimes(2);
+    vi.advanceTimersByTime(POLL_MS);
+    expect(watch.ask).toHaveBeenCalledTimes(3);
+    watch.stop();
+  });
+
+  it("leaves no timer and no listener behind when it is torn down", () => {
+    const watch = watcher(true);
+
+    watch.stop();
+    vi.advanceTimersByTime(POLL_MS * 10);
+
+    expect(watch.ask).not.toHaveBeenCalled();
+    expect(watch.watching()).toBe(false);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+});
+
+describe("telling the draft layer the head moved", () => {
+  it("says it once per head, and stops saying it when nobody listens", () => {
+    const heard: string[] = [];
+    const stopListening = onLiveHead((head) => heard.push(head));
+
+    noteLiveHead(LIVE);
+    // The same head twice is not news.
+    noteLiveHead(LIVE);
+    noteLiveHead(SNAPSHOT);
+    stopListening();
+    noteLiveHead(LIVE);
+
+    expect(heard).toEqual([LIVE, SNAPSHOT]);
   });
 });

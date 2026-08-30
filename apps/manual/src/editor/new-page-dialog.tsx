@@ -12,6 +12,7 @@ import { useSnapshotReload } from "../api/snapshot-provider";
 import { useManualIndex } from "../api/use-manual-index";
 import { editHref } from "./edit-mode";
 import { SelectField, TextField } from "./fields";
+import { savePage } from "./save";
 import { newPageSource } from "./scaffold";
 import { noteWrite, useEditorSession } from "./session";
 import { describeCause } from "./store";
@@ -94,15 +95,16 @@ export function NewPageDialog({
       spec: known ? specId : undefined,
     });
 
-    store
-      .write(path, source, null)
+    savePage(store, path, source, null)
       .then((outcome) => {
         if (outcome.status === "conflict") {
           setError("a page already lives there");
           return;
         }
-        noteWrite();
-        reload();
+        if (outcome.status === "ok") {
+          noteWrite();
+          reload();
+        }
         onOpenChange(false);
         const route = routeForPagePath(path);
         if (route) navigate(editHref(route));

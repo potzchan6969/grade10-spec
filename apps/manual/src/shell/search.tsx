@@ -8,9 +8,9 @@ import {
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { buildIndex } from "../api/derive";
 import { groupResults, type SearchHit, searchIndexFor } from "../api/search";
 import { useSnapshot } from "../api/snapshot-provider";
+import { useManualIndex } from "../api/use-manual-index";
 
 export function ManualSearch() {
   const snapshot = useSnapshot();
@@ -62,7 +62,7 @@ function SearchDialog({
   open: boolean;
   onOpenChange: (next: boolean) => void;
 }) {
-  const snapshot = useSnapshot();
+  const index = useManualIndex();
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
@@ -76,13 +76,11 @@ function SearchDialog({
     setCursor(0);
   }, [open]);
 
-  // The index is built the first time the palette opens, never at boot.
+  // The index is built the first time the palette opens, never at boot, and
+  // over the pages as they stand — a staged draft included.
   const engine = useMemo(
-    () =>
-      open && snapshot.status === "ready"
-        ? searchIndexFor(buildIndex(snapshot.snapshot))
-        : null,
-    [open, snapshot],
+    () => (open ? searchIndexFor(index) : null),
+    [open, index],
   );
 
   const groups = useMemo(

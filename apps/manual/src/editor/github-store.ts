@@ -1,3 +1,4 @@
+import { dirOf } from "../api/paths";
 import {
   BRANCH_PREFIX,
   DEFAULT_WRITE_MODE,
@@ -28,7 +29,10 @@ import {
   assertProposal,
   base64FromBytes,
   type ContentStore,
-  type Staleness,
+  type PushConflict,
+  type PushFile,
+  type PushOutcome,
+  type StagedRef,
   type StoredFile,
   StoreError,
   textFromBase64,
@@ -40,10 +44,10 @@ import {
 /**
  * The hosted transport, in one of two modes chosen in settings.
  *
- * `main` writes the base branch the deploy listens on, so a save is live in
- * about a minute; nothing branches, nothing is proposed, and the freshness
- * check is what keeps it honest. `branch` writes `manual/<login>` and keeps
- * its pull request open, so edits never rot on an unopened branch.
+ * `main` pushes the base branch the deploy listens on, so a push is live in
+ * about a minute; nothing branches and nothing is proposed. `branch` pushes
+ * `manual/<login>` and keeps its pull request open, so edits never rot on an
+ * unopened branch.
  *
  * The mode picks the ref for read and write together: a main-mode session
  * never loads a leftover personal branch and calls it main.
@@ -91,6 +95,10 @@ function noToken(mode: WriteMode): string {
  * A sha mismatch never reads like this, so it stays a conflict. */
 const PROTECTION =
   /protect|refusing to allow|not authorized|required status check|approving review/i;
+
+/** The ref grew a commit between reading its head and moving it. Nothing is
+ * written — the push reads the head again and tries once more. */
+const FAST_FORWARD = /fast[ -]forward/i;
 
 export type GithubStoreOptions = {
   token: string | null;
@@ -177,15 +185,6 @@ export class GithubStore implements ContentStore {
     return onBranch.status === 404 ? this.contents(path) : onBranch;
   }
 
-  async write(
-    path: string,
-    source: string,
-    baseVersion: Version | null,
-  ): Promise<WriteOutcome> {
-    assertManualPath(path);
-    return this.put(path, utf8Bytes(source), baseVersion, `manual: ${path}`);
-  }
-
   async writeBinary(
     path: string,
     bytes: Uint8Array,
@@ -195,20 +194,154 @@ export class GithubStore implements ContentStore {
     return this.put(path, bytes, baseVersion, `manual: upload ${path}`);
   }
 
-  /** Live head of the branch a save lands on, against the head the deployed
-   * snapshot was built from. Only main mode has an answer: a personal branch
-   * is not what the snapshot came from. */
-  async staleness(storeHead: string): Promise<Staleness | null> {
-    if (this.mode !== "main" || !this.token) return null;
-    const head = await this.liveHead();
-    return head === storeHead ? null : { head };
+  /**
+   * The staged set, as one commit on the ref this mode writes.
+   *
+   * Reading the head first is what makes it atomic in the only sense that
+   * matters here: every draft's base version is checked against that head
+   * before a single blob is written, so a batch either lands whole or is
+   * handed back as conflicts with nothing written. The ref move is not forced,
+   * so a commit that landed between the check and the move cannot be lost —
+   * the push reads the head again and tries once more, and says so if the ref
+   * is moving faster than that.
+   */
+  async push(files: PushFile[], message: string): Promise<PushOutcome> {
+    if (!this.token) throw new StoreError(401, noToken(this.mode));
+    for (const file of files) assertManualPath(file.path);
+    if (files.length === 0) throw new StoreError(400, "nothing is staged");
+
+    const main = this.mode === "main";
+    const branch = main ? REPO.defaultBranch : await this.ensureBranch();
+
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      const head = await this.headOf(branch);
+      const conflicts = await this.mismatches(files, head);
+      if (conflicts.length > 0) return { status: "conflicts", conflicts };
+
+      const sha = await this.commitOn(
+        head,
+        files.map((file) => ({ path: file.path, content: file.source })),
+        message,
+      );
+      if ((await this.moveRef(branch, sha)) === "ok") {
+        if (!main) await this.ensurePullRequest(branch);
+        return { status: "ok", head: sha };
+      }
+    }
+
+    throw new StoreError(
+      409,
+      `${branch} is moving under this push — nothing was written. Try again.`,
+    );
   }
 
-  async liveHead(): Promise<string> {
-    const base = await this.call(refPath(REPO.defaultBranch));
-    const head = shaOfRef(base);
-    if (base.status !== 200 || head === null) {
-      throw this.failure(base, `cannot read ${REPO.defaultBranch}`);
+  /** Which staged pages changed on the ref a push lands on. The same question
+   * the push asks itself, asked in the background so the answer arrives before
+   * the push does. */
+  async movedSince(files: StagedRef[]): Promise<string[]> {
+    const ref = this.pushRef();
+    const at = await this.versionsAt(
+      files.map((file) => file.path),
+      ref,
+    );
+    return files
+      .filter((file) => this.hasMoved(file, at.get(file.path) ?? null))
+      .map((file) => file.path);
+  }
+
+  /**
+   * The draft was read at one blob and the ref carries another.
+   *
+   * A branch is a cut of main, and reads a page it has not got from main — so
+   * a page missing from a branch is one to add, never one that moved under the
+   * draft. On main itself, missing means deleted or renamed, which is worth
+   * stopping for.
+   */
+  private hasMoved(file: StagedRef, now: Version | null): boolean {
+    if (now === file.baseVersion) return false;
+    return now !== null || this.mode === "main";
+  }
+
+  /** Every staged page whose blob is no longer the one it was read at, with
+   * the other side in hand. */
+  private async mismatches(
+    files: PushFile[],
+    head: string,
+  ): Promise<PushConflict[]> {
+    const at = await this.versionsAt(
+      files.map((file) => file.path),
+      head,
+    );
+    const conflicts: PushConflict[] = [];
+    for (const file of files) {
+      if (!this.hasMoved(file, at.get(file.path) ?? null)) continue;
+      conflicts.push({
+        path: file.path,
+        current: await this.currentOf(file.path, head),
+      });
+    }
+    return conflicts;
+  }
+
+  /**
+   * The blob of each path on a ref, `null` for one the ref does not carry.
+   * One listing per directory rather than one read per file: a batch of pages
+   * shares a handful of directories, and a listing answers for every page in
+   * one at once — never more requests than reading them one by one, usually
+   * far fewer.
+   */
+  async versionsAt(
+    paths: string[],
+    ref?: string,
+  ): Promise<Map<string, Version | null>> {
+    if (!this.token) throw new StoreError(401, noToken(this.mode));
+    const at = ref ?? this.pushRef();
+
+    const byDir = new Map<string, string[]>();
+    for (const path of paths) {
+      const dir = dirOf(path);
+      const held = byDir.get(dir);
+      if (held) held.push(path);
+      else byDir.set(dir, [path]);
+    }
+
+    const found = new Map<string, Version | null>();
+    for (const [dir, held] of byDir) {
+      const answer = await this.contents(dir, at);
+      if (answer.status === 404) {
+        for (const path of held) found.set(path, null);
+        continue;
+      }
+      if (answer.status !== 200 || !Array.isArray(answer.body)) {
+        throw this.failure(answer, `cannot list ${dir}`);
+      }
+      const shas = new Map(
+        answer.body.map((entry) => {
+          const file = entry as Record<string, unknown>;
+          return [
+            String(file.path ?? ""),
+            typeof file.sha === "string" ? file.sha : null,
+          ] as const;
+        }),
+      );
+      for (const path of held) found.set(path, shas.get(path) ?? null);
+    }
+    return found;
+  }
+
+  /** The ref a push lands on, asked without preparing anything: a background
+   * check must never be what cuts or resets a branch. */
+  private pushRef(): string {
+    return this.mode === "main" || !this.login
+      ? REPO.defaultBranch
+      : `${BRANCH_PREFIX}${this.login}`;
+  }
+
+  private async headOf(branch: string): Promise<string> {
+    const ref = await this.call(refPath(branch));
+    const head = shaOfRef(ref);
+    if (ref.status !== 200 || head === null) {
+      throw this.failure(ref, `cannot read ${branch}`);
     }
     return head;
   }
@@ -296,23 +429,33 @@ export class GithubStore implements ContentStore {
   }
 
   /**
-   * One commit through the Git Data API: a blob per file written, a null sha
-   * per file removed, one tree on the branch's own, one commit, one ref move.
-   * Nothing is visible until the ref moves, so a failure halfway leaves the
-   * branch exactly as it was — which is what makes a two-file proposal land or
-   * not land, never half-land.
+   * One commit through the Git Data API, landed. Nothing is visible until the
+   * ref moves, so a failure halfway leaves the branch exactly as it was —
+   * which is what makes a two-file proposal land or not land, never half-land.
    */
   private async commitTree(
     branch: string,
     changes: { path: string; content: string | null }[],
     message: string,
   ): Promise<string> {
-    const ref = await this.call(refPath(branch));
-    const head = shaOfRef(ref);
-    if (ref.status !== 200 || head === null) {
-      throw this.failure(ref, `cannot read ${branch}`);
+    const head = await this.headOf(branch);
+    const sha = await this.commitOn(head, changes, message);
+    if ((await this.moveRef(branch, sha)) !== "ok") {
+      throw new StoreError(
+        409,
+        `${branch} moved first — nothing was written. Try again.`,
+      );
     }
+    return sha;
+  }
 
+  /** A blob per file written, a null sha per file removed, one tree on the
+   * head's own, one commit. None of it is on the branch until the ref moves. */
+  private async commitOn(
+    head: string,
+    changes: { path: string; content: string | null }[],
+    message: string,
+  ): Promise<string> {
     const base = await this.call(repoPath(`git/commits/${head}`));
     const tree = (base.body as Record<string, unknown>).tree as
       | Record<string, unknown>
@@ -353,17 +496,21 @@ export class GithubStore implements ContentStore {
     if (commit.status !== 201 || typeof sha !== "string") {
       throw this.failure(commit, "cannot make the commit");
     }
+    return sha;
+  }
 
-    const moved = await this.call(updateRefPath(branch), {
+  /** The ref move, never forced: `moved` means the branch grew a commit while
+   * this one was being built, and the caller decides whether to try again. */
+  private async moveRef(branch: string, sha: string): Promise<"ok" | "moved"> {
+    const answer = await this.call(updateRefPath(branch), {
       method: "PATCH",
       body: JSON.stringify({ sha }),
     });
-    const refused = this.protectionRefusal(moved);
+    const refused = this.protectionRefusal(answer);
     if (refused) throw refused;
-    if (moved.status !== 200) {
-      throw this.failure(moved, `cannot move ${branch} — nothing was written`);
-    }
-    return sha;
+    if (answer.status === 200) return "ok";
+    if (FAST_FORWARD.test(messageOf(answer))) return "moved";
+    throw this.failure(answer, `cannot move ${branch} — nothing was written`);
   }
 
   private async blob(content: string): Promise<string> {
@@ -515,7 +662,7 @@ export class GithubStore implements ContentStore {
     }
     if (existing.status === 200 && open) return branch;
 
-    const head = await this.liveHead();
+    const head = await this.headOf(REPO.defaultBranch);
     if (existing.status === 200) await this.resetBranch(branch, head);
     else await this.createBranch(branch, head);
     return branch;
