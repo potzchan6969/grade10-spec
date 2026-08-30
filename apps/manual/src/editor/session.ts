@@ -98,6 +98,16 @@ export function setGithubMode(mode: WriteMode): void {
   set({ status: "ready", ...github() });
 }
 
+/** The dev server writes as whoever is at the keyboard, and a proposal has to
+ * name someone — so the handle is asked for once and remembered here. */
+export function rememberedHandle(): string {
+  return browserKeyStore.get(STORAGE.handle) ?? "";
+}
+
+export function rememberHandle(handle: string): void {
+  if (handle !== "") browserKeyStore.set(STORAGE.handle, handle);
+}
+
 /** Anything that changed the working tree says so here; the commit bar looks
  * again when it hears it. */
 const writeListeners = new Set<() => void>();

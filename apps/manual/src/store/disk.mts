@@ -53,6 +53,25 @@ export function confine(
   return file;
 }
 
+/** Where a proposal's files go: inside one change directory under
+ * `openspec/changes/`, and nowhere else. What shape a slug and a file name may
+ * take is settled before this is called; what this adds is the refusal of
+ * anything that resolves out of the changes tree. */
+export function changeFile(
+  root: string,
+  slug: string,
+  name = "",
+): string | { error: string } {
+  const base = resolve(root, "openspec", "changes");
+  const dir = resolve(base, slug);
+  const file = name === "" ? dir : resolve(dir, name);
+  const inside = file === dir || file.startsWith(dir + sep);
+  if (dir === base || !dir.startsWith(base + sep) || !inside) {
+    return { error: `\`${slug}/${name}\` resolves outside openspec/changes/` };
+  }
+  return file;
+}
+
 export function readText(file: string): string {
   return readFileSync(file, "utf8");
 }

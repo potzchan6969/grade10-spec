@@ -2,6 +2,8 @@ import { createHash, randomUUID } from "node:crypto";
 import {
   existsSync,
   mkdirSync,
+  mkdtempSync,
+  readdirSync,
   readFileSync,
   renameSync,
   rmSync,
@@ -13,7 +15,13 @@ import { basename, dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Plugin } from "vite";
 import { GrammarError, parsePage, serializePage } from "../content/grammar.ts";
-import { confine, findStoreRoot, storePath } from "./disk.mts";
+import {
+  allowedProposal,
+  type ProposalFile,
+  slugProblem,
+  withdrawProblem,
+} from "../editor/propose.ts";
+import { changeFile, confine, findStoreRoot, storePath } from "./disk.mts";
 import { git } from "./git.mts";
 import { readStore, type Store, storeStamp } from "./snapshot.mts";
 
@@ -176,6 +184,8 @@ async function route(
   const body = await req.json();
   if (path === "/api/page") return writePage(root, body);
   if (path === "/api/asset") return writeAsset(root, body);
+  if (path === "/api/propose") return propose(root, body);
+  if (path === "/api/withdraw") return withdraw(root, body);
   if (path === "/api/commit") return commit(root, body);
   return reply(404, { error: `no such endpoint: ${path}` });
 }
@@ -326,6 +336,85 @@ function writeAsset(root: string, body: unknown): Reply {
     return reply(400, { error: "`base64` is not valid base64" });
   }
   return save(file, bytes, fields.baseVersion ?? null, false);
+}
+
+/**
+ * The one write that leaves `manual/`, and it leaves it for exactly one new
+ * change directory: the same allowlist the browser holds, applied again here,
+ * because this endpoint writes straight to the working tree.
+ *
+ * The directory is built beside the changes tree and moved into place in one
+ * rename, so a reader — the snapshot walk, the checker, git — sees a change
+ * with both its files or no change at all.
+ */
+function propose(root: string, body: unknown): Reply {
+  const files = proposalFiles(body);
+  if (!Array.isArray(files)) return reply(400, files);
+
+  const allowed = allowedProposal(files);
+  if ("error" in allowed) return reply(400, { error: allowed.error });
+  const { slug } = allowed;
+
+  const dir = changeFile(root, slug);
+  if (typeof dir !== "string") return reply(400, dir);
+  const targets: { name: string; content: string }[] = [];
+  for (const file of files) {
+    const name = file.path.split("/")[3];
+    const target = changeFile(root, slug, name);
+    if (typeof target !== "string") return reply(400, target);
+    targets.push({ name, content: file.content });
+  }
+  if (existsSync(dir)) {
+    return reply(409, { error: `a change \`${slug}\` already exists` });
+  }
+
+  mkdirSync(dirname(dir), { recursive: true });
+  const staging = mkdtempSync(join(dirname(dir), `.${slug}.`));
+  try {
+    for (const target of targets) {
+      writeFileSync(join(staging, target.name), target.content, "utf8");
+    }
+    renameSync(staging, dir);
+  } catch (cause) {
+    rmSync(staging, { recursive: true, force: true });
+    throw cause;
+  }
+  return reply(200, { id: slug });
+}
+
+/** Dev only: a proposal goes back out whole, and only while it is still just a
+ * proposal. Anything else in the directory means it has become a real change. */
+function withdraw(root: string, body: unknown): Reply {
+  const id = ((body ?? {}) as Record<string, unknown>).id;
+  if (typeof id !== "string" || id === "") {
+    return reply(400, { error: "`id` is required" });
+  }
+  const shape = slugProblem(id);
+  if (shape) return reply(400, { error: shape });
+
+  const dir = changeFile(root, id);
+  if (typeof dir !== "string") return reply(400, dir);
+  if (!existsSync(dir)) return reply(404, { error: `no change \`${id}\`` });
+
+  const problem = withdrawProblem(id, readdirSync(dir));
+  if (problem) return reply(409, { error: problem });
+
+  rmSync(dir, { recursive: true });
+  return reply(200, { withdrawn: true });
+}
+
+function proposalFiles(body: unknown): ProposalFile[] | { error: string } {
+  const sent = ((body ?? {}) as Record<string, unknown>).files;
+  if (!Array.isArray(sent)) return { error: "`files` is required" };
+  const files: ProposalFile[] = [];
+  for (const entry of sent) {
+    const file = (entry ?? {}) as Record<string, unknown>;
+    if (typeof file.path !== "string" || typeof file.content !== "string") {
+      return { error: "every file is a `path` and its `content`" };
+    }
+    files.push({ path: file.path, content: file.content });
+  }
+  return files;
 }
 
 /** Optimistic concurrency: `version` is the content hash the editor read, so

@@ -4,6 +4,8 @@
  * in dev, the blob sha on GitHub — and is what turns two concurrent editors
  * into a rendered conflict instead of a silent overwrite. */
 
+import { allowedProposal, type ProposalFile } from "./propose";
+
 export type Version = string;
 
 export type StoredFile = { source: string; version: Version };
@@ -32,6 +34,18 @@ export type ContentStore = {
   readonly reviewUrl: string | null;
 
   read(path: string): Promise<StoredFile>;
+
+  /** One new change directory, written as one commit. Refuses anything that
+   * is not a proposal's own two files, and a slug that is already taken. */
+  propose(files: ProposalFile[]): Promise<{ id: string }>;
+  /** Take a proposal back. The transport decides who may: on GitHub, the
+   * author named in `proposal.md`; in dev, whoever is at the keyboard. */
+  withdraw(id: string): Promise<void>;
+  /** Who is proposing, as the author line will name them. */
+  identity?(): Promise<string>;
+  /** The handle already known, asking nobody — null until something asked. */
+  readonly author: string | null;
+
   write(
     path: string,
     source: string,
@@ -78,6 +92,16 @@ export function assertManualPath(path: string): void {
   if (!path.startsWith(MANUAL)) refuse(`is not under ${MANUAL}`);
   if (path === MANUAL) refuse("names no file");
   if (path.split("/").includes("..")) refuse(`walks out of ${MANUAL}`);
+}
+
+/** The same confinement, for the other tree a write can name. A proposal
+ * writes one new change directory's own files, and the check happens here —
+ * before a path becomes a request — for both adapters, exactly as
+ * `assertManualPath` does for pages. */
+export function assertProposal(files: ProposalFile[]): string {
+  const answer = allowedProposal(files);
+  if ("error" in answer) throw new StoreError(400, answer.error);
+  return answer.slug;
 }
 
 export function describeCause(cause: unknown): string {

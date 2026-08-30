@@ -31,4 +31,6 @@ export const STORAGE = {
   login: "manual.github.login",
   pr: "manual.github.pr",
   mode: "manual.github.mode",
+  /** Dev only: the handle a proposal's author line carries. */
+  handle: "manual.propose.handle",
 } as const;

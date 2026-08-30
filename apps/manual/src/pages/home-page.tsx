@@ -1,6 +1,6 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Link } from "react-router";
-import { byLastMoved, taskTotals } from "../api/derive";
+import { byLastMoved, isProposal, taskTotals } from "../api/derive";
 import { MANUAL_ROOT } from "../api/paths";
 import { relativeTime } from "../api/time";
 import { useManualIndex } from "../api/use-manual-index";
@@ -80,9 +80,14 @@ export function HomePage() {
   );
 }
 
+/** What is moving is what someone is delivering; a proposal has moved nowhere
+ * yet, and it lives on the planning board's own lane. */
 function WhatsMoving() {
   const index = useManualIndex();
-  const moving = [...index.snapshot.changes].sort(byLastMoved).slice(0, 4);
+  const moving = index.snapshot.changes
+    .filter((change) => !isProposal(change))
+    .sort(byLastMoved)
+    .slice(0, 4);
 
   if (moving.length === 0) return null;
 

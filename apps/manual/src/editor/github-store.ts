@@ -16,7 +16,16 @@ import {
   updateRefPath,
 } from "./github-api";
 import {
+  authorOf,
+  changeDir,
+  PROPOSAL,
+  type ProposalFile,
+  proposalPaths,
+  withdrawProblem,
+} from "./propose";
+import {
   assertManualPath,
+  assertProposal,
   base64FromBytes,
   type ContentStore,
   type Staleness,
@@ -102,6 +111,7 @@ export class GithubStore implements ContentStore {
   private readonly onChange: () => void;
   private login: string | null;
   private pr: string | null;
+  private asking: Promise<string> | null = null;
   private prepared: Promise<string> | null = null;
   private opening: Promise<void> | null = null;
   private branchReset = false;
@@ -134,6 +144,15 @@ export class GithubStore implements ContentStore {
    * another mode's edits. */
   get reviewUrl(): string | null {
     return this.mode === "main" ? null : this.pr;
+  }
+
+  /** The handle this session already learned, asking GitHub nothing. */
+  get author(): string | null {
+    return this.login;
+  }
+
+  identity(): Promise<string> {
+    return this.whoami();
   }
 
   async read(path: string): Promise<StoredFile> {
@@ -192,6 +211,174 @@ export class GithubStore implements ContentStore {
       throw this.failure(base, `cannot read ${REPO.defaultBranch}`);
     }
     return head;
+  }
+
+  /**
+   * A proposal, as one commit on the ref this mode writes: main mode lands it
+   * on the base branch, where a draft change simply is what the store means by
+   * a proposal, and branch mode lands it on the author's branch and its PR.
+   *
+   * The slug is checked before anything is sent, and the directory is looked
+   * up before anything is built — a proposal never writes over a change that
+   * already exists, whoever wrote it.
+   */
+  async propose(files: ProposalFile[]): Promise<{ id: string }> {
+    const slug = assertProposal(files);
+    if (!this.token) throw new StoreError(401, noToken(this.mode));
+
+    const main = this.mode === "main";
+    const branch = main ? REPO.defaultBranch : await this.ensureBranch();
+    if ((await this.listing(branch, slug)) !== null) {
+      throw new StoreError(
+        409,
+        `\`${slug}\` already exists on ${branch} — pick another slug`,
+      );
+    }
+
+    await this.commitTree(
+      branch,
+      files.map((file) => ({ path: file.path, content: file.content })),
+      `manual: propose ${slug}`,
+    );
+    if (!main) await this.ensurePullRequest(branch);
+    return { id: slug };
+  }
+
+  /** A proposal comes back out the way it went in — one commit removing the
+   * two files it wrote. Only the author named in the proposal may, and only
+   * while the directory still holds nothing but a proposal. */
+  async withdraw(slug: string): Promise<void> {
+    if (!this.token) throw new StoreError(401, noToken(this.mode));
+    const branch =
+      this.mode === "main" ? REPO.defaultBranch : await this.ensureBranch();
+
+    const names = await this.listing(branch, slug);
+    if (names === null) {
+      throw new StoreError(404, `no change \`${slug}\` on ${branch}`);
+    }
+    const problem = withdrawProblem(slug, names);
+    if (problem) throw new StoreError(409, problem);
+
+    const proposal = await this.read(`${changeDir(slug)}/${PROPOSAL}`);
+    const author = authorOf(proposal.source);
+    const me = await this.whoami();
+    if (author !== me) {
+      throw new StoreError(
+        403,
+        `\`${slug}\` was proposed by ${author ? `@${author}` : "nobody named"} — only its author can withdraw it`,
+      );
+    }
+
+    await this.commitTree(
+      branch,
+      proposalPaths(slug)
+        .filter((path) => names.includes(path.split("/")[3]))
+        .map((path) => ({ path, content: null })),
+      `manual: withdraw ${slug}`,
+    );
+  }
+
+  /** What a change directory holds on this ref, or null when it holds nothing
+   * because it is not there. Anything else GitHub says is an error, not an
+   * empty directory — a proposal must never be written over a 500. */
+  private async listing(
+    branch: string,
+    slug: string,
+  ): Promise<string[] | null> {
+    const answer = await this.contents(changeDir(slug), branch);
+    if (answer.status === 404) return null;
+    if (answer.status !== 200 || !Array.isArray(answer.body)) {
+      throw this.failure(answer, `cannot look up ${changeDir(slug)}`);
+    }
+    return answer.body.map((entry) =>
+      String((entry as Record<string, unknown>).name ?? ""),
+    );
+  }
+
+  /**
+   * One commit through the Git Data API: a blob per file written, a null sha
+   * per file removed, one tree on the branch's own, one commit, one ref move.
+   * Nothing is visible until the ref moves, so a failure halfway leaves the
+   * branch exactly as it was — which is what makes a two-file proposal land or
+   * not land, never half-land.
+   */
+  private async commitTree(
+    branch: string,
+    changes: { path: string; content: string | null }[],
+    message: string,
+  ): Promise<string> {
+    const ref = await this.call(refPath(branch));
+    const head = shaOfRef(ref);
+    if (ref.status !== 200 || head === null) {
+      throw this.failure(ref, `cannot read ${branch}`);
+    }
+
+    const base = await this.call(repoPath(`git/commits/${head}`));
+    const tree = (base.body as Record<string, unknown>).tree as
+      | Record<string, unknown>
+      | undefined;
+    if (base.status !== 200 || typeof tree?.sha !== "string") {
+      throw this.failure(base, `cannot read the tree of ${head}`);
+    }
+
+    const entries: {
+      path: string;
+      mode: string;
+      type: string;
+      sha: string | null;
+    }[] = [];
+    for (const change of changes) {
+      entries.push({
+        path: change.path,
+        mode: "100644",
+        type: "blob",
+        sha: change.content === null ? null : await this.blob(change.content),
+      });
+    }
+
+    const made = await this.call(repoPath("git/trees"), {
+      method: "POST",
+      body: JSON.stringify({ base_tree: tree.sha, tree: entries }),
+    });
+    const treeSha = (made.body as Record<string, unknown>).sha;
+    if (made.status !== 201 || typeof treeSha !== "string") {
+      throw this.failure(made, "cannot build the tree");
+    }
+
+    const commit = await this.call(repoPath("git/commits"), {
+      method: "POST",
+      body: JSON.stringify({ message, tree: treeSha, parents: [head] }),
+    });
+    const sha = (commit.body as Record<string, unknown>).sha;
+    if (commit.status !== 201 || typeof sha !== "string") {
+      throw this.failure(commit, "cannot make the commit");
+    }
+
+    const moved = await this.call(updateRefPath(branch), {
+      method: "PATCH",
+      body: JSON.stringify({ sha }),
+    });
+    const refused = this.protectionRefusal(moved);
+    if (refused) throw refused;
+    if (moved.status !== 200) {
+      throw this.failure(moved, `cannot move ${branch} — nothing was written`);
+    }
+    return sha;
+  }
+
+  private async blob(content: string): Promise<string> {
+    const made = await this.call(repoPath("git/blobs"), {
+      method: "POST",
+      body: JSON.stringify({
+        content: base64FromBytes(utf8Bytes(content)),
+        encoding: "base64",
+      }),
+    });
+    const sha = (made.body as Record<string, unknown>).sha;
+    if (made.status !== 201 || typeof sha !== "string") {
+      throw this.failure(made, "cannot write the file");
+    }
+    return sha;
   }
 
   private async put(
@@ -273,8 +460,20 @@ export class GithubStore implements ContentStore {
     return { source: textFromBase64(body.content), version: body.sha };
   }
 
-  private async whoami(): Promise<string> {
-    if (this.login) return this.login;
+  /** Who the token belongs to, asked once a session however many surfaces
+   * want to know — a board full of proposals must not be a board full of
+   * identical requests. */
+  private whoami(): Promise<string> {
+    if (this.login) return Promise.resolve(this.login);
+    if (!this.asking) {
+      this.asking = this.askWhoami().finally(() => {
+        this.asking = null;
+      });
+    }
+    return this.asking;
+  }
+
+  private async askWhoami(): Promise<string> {
     if (!this.token) throw new StoreError(401, noToken(this.mode));
 
     const answer = await this.call("/user");

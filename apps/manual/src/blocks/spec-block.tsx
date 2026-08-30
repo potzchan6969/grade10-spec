@@ -25,6 +25,8 @@ import type {
   SpecEntry,
 } from "../api/types";
 import type { SpecBlock } from "../content/grammar";
+import { citesForRequirement } from "../editor/propose";
+import { ProposeRowAction } from "../editor/propose-actions";
 import { AnchorLink, useHashTarget } from "./anchor";
 import { useBlockScope } from "./block-scope";
 import { BrokenCard, MissingCard } from "./broken-card";
@@ -206,6 +208,11 @@ function RequirementRow({
           </Badge>
         </button>
         <AnchorLink id={id} label="Copy link to this requirement" />
+        <ProposeRowAction
+          cites={citesForRequirement(spec.id, requirement)}
+          label="Propose a change to this requirement"
+          spec={spec}
+        />
       </div>
 
       <ChangeBadges className="pr-2 pb-2 pl-9" touching={touching} />

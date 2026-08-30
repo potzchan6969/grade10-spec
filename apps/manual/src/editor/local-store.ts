@@ -1,5 +1,7 @@
+import type { ProposalFile } from "./propose";
 import {
   assertManualPath,
+  assertProposal,
   base64FromBytes,
   type CommitOutcome,
   type ContentStore,
@@ -82,6 +84,9 @@ export class LocalStore implements ContentStore {
   readonly label = "Dev server — writes straight to the working tree";
   readonly readOnly = null;
   readonly reviewUrl = null;
+  /** The dev server writes as whoever is at the keyboard; a proposal asks for
+   * the handle it should carry rather than guessing at one. */
+  readonly author = null;
 
   private readonly http: typeof fetch;
 
@@ -127,6 +132,26 @@ export class LocalStore implements ContentStore {
       base64: base64FromBytes(bytes),
       baseVersion,
     });
+  }
+
+  async propose(files: ProposalFile[]): Promise<{ id: string }> {
+    const slug = assertProposal(files);
+    const answer = await call(this.http, "/api/propose", json({ files }));
+    if (answer.status !== 200) {
+      throw new StoreError(answer.status, errorOf(answer, "proposal refused"));
+    }
+    const id = answer.body.id;
+    if (id !== slug) {
+      throw new StoreError(answer.status, "the store wrote another change");
+    }
+    return { id };
+  }
+
+  async withdraw(id: string): Promise<void> {
+    const answer = await call(this.http, "/api/withdraw", json({ id }));
+    if (answer.status !== 200) {
+      throw new StoreError(answer.status, errorOf(answer, "withdraw refused"));
+    }
   }
 
   private async save(endpoint: string, body: unknown): Promise<WriteOutcome> {

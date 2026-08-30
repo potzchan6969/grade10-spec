@@ -355,6 +355,17 @@ export function isProductDir(dir: string): boolean {
   );
 }
 
+/**
+ * A change nobody has planned yet: no task groups, so there is no delivery to
+ * report on. A proposal drafted from a requirement row carries no deltas
+ * either, which is why it flips no capability status, badges no row and bumps
+ * no product's count — it collects on the planning board's own lane instead of
+ * standing among the work in flight.
+ */
+export function isProposal(change: ChangeEntry): boolean {
+  return change.taskGroups.length === 0;
+}
+
 export function taskTotals(change: ChangeEntry): {
   done: number;
   total: number;
