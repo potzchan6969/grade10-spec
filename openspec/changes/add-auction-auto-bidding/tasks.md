@@ -45,9 +45,9 @@ Claimable against the contracts from group 2.
 - [x] 5.3 Show whether Grade10 placed a bid on a bidder's behalf, per `auto-bidding-SC-23`.
 - [x] 5.4 Verify the admin auction feature lane.
 
-## 6. Review (grade10-spec, grade10)
+## 6. Review (grade10-spec, grade10) (owner: @htonyl)
 
-- [ ] 6.1 Run the application repository's full check suite once every group above is green.
-- [ ] 6.2 Verify every scenario in this change, then run `openspec validate add-auction-auto-bidding --strict` and `openspec validate --specs`.
-- [ ] 6.3 Review the authorization path before staging: that a raise re-authorizes before it is accepted, that a failed raise changes nothing, and that no auto-bid step issues a card check.
+- [x] 6.1 Run the application repository's full check suite once every group above is green.
+- [x] 6.2 Verify every scenario in this change, then run `openspec validate add-auction-auto-bidding --strict` and `openspec validate --specs`.
+- [x] 6.3 Review the authorization path before staging: that a raise re-authorizes before it is accepted, that a failed raise changes nothing, and that no auto-bid step issues a card check.
 - [ ] 6.4 After rollout is confirmed, fold the accepted delta into `openspec/specs/grade10-auction/`, apply the reconciliation to `grade10-auction/auction` named in `proposal.md`, and archive this change.
