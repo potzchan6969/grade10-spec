@@ -1,4 +1,4 @@
-## 1. Normalize multi-source observation evidence (grade10-spec)
+## 1. Normalize multi-source observation evidence (grade10-spec) (owner: @kinisworking)
 
 - [ ] 1.1 Add the temporary observation schema-version-2 root contract with
   unique node IDs, canonically ordered `sources`, matching skipped-root shape,
