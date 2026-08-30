@@ -80,11 +80,11 @@ Needs group 3 landed.
 
 Needs groups 4 through 7 landed: the pages compose migrated consoles before the shell around them changes.
 
-- [ ] 8.1 Move the grade10 admin shell onto Astryx's `AppShell` and `SideNav`, entries and order unchanged, with its operator identity strip on the rebuilt `OperatorIdentity` (`visual-standard-SC-01`)
-- [ ] 8.2 Move the grade10 admin's 23 pages onto the blocks and Astryx, including the dashboard's refused read in the error tone (`visual-standard-SC-06`), panel switches on `TabList` and window filters on `SegmentedControl` (`visual-standard-SC-07`), and the settings deactivation on `FormDialog` (`visual-standard-SC-08`)
-- [ ] 8.3 Apply the same moves to the zzz admin shell and its 9 pages, including its dashboard's error tone (`visual-standard-SC-06`)
-- [ ] 8.4 Add each control that Astryx has no counterpart for to the console package, composed from Astryx, so no page reaches outside the vocabulary for it (`visual-standard-SC-02`)
-- [ ] 8.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
+- [x] 8.1 Move the grade10 admin shell onto Astryx's `AppShell` and `SideNav`, entries and order unchanged, with its operator identity strip on the rebuilt `OperatorIdentity` (`visual-standard-SC-01`)
+- [x] 8.2 Move the grade10 admin's 23 pages onto the blocks and Astryx, including the dashboard's refused read in the error tone (`visual-standard-SC-06`), panel switches on `TabList` and window filters on `SegmentedControl` (`visual-standard-SC-07`), and the settings deactivation on `FormDialog` (`visual-standard-SC-08`)
+- [x] 8.3 Apply the same moves to the zzz admin shell and its 9 pages, including its dashboard's error tone (`visual-standard-SC-06`)
+- [x] 8.4 Add each control that Astryx has no counterpart for to the console package, composed from Astryx, so no page reaches outside the vocabulary for it (`visual-standard-SC-02`)
+- [x] 8.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
 
 ## 9. The standard is closed and held (grade10)
 
