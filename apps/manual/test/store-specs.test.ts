@@ -68,25 +68,31 @@ describe("spec entries", () => {
     expect(journey?.acceptedBy).toEqual(["alpha-SC-01", "alpha-SC-02"]);
   });
 
-  it("reads a sibling test-cases.md into traced cases", () => {
+  it("reads a sibling test-cases.md into traced cases with their status", () => {
     expect(alpha?.testCases).toEqual([
       {
         id: "alpha-TC-01",
         title: "Reader asks for the thing and it happens",
         traces: ["alpha-SC-01"],
+        status: "draft",
       },
       {
         id: "alpha-TC-02",
         title: "Reader asks a second time and is refused",
         traces: ["alpha-SC-01", "alpha-SC-02"],
+        status: "draft",
       },
     ]);
   });
 
+  it("carries the suite file's own status", () => {
+    expect(alpha?.testCasesStatus).toBe("pending-review");
+  });
+
   it("leaves testCases unset where no suite exists", () => {
-    expect(
-      specs.find((spec) => spec.id === "demo-topic")?.testCases,
-    ).toBeUndefined();
+    const topic = specs.find((spec) => spec.id === "demo-topic");
+    expect(topic?.testCases).toBeUndefined();
+    expect(topic?.testCasesStatus).toBeUndefined();
   });
 });
 

@@ -6,6 +6,8 @@ import type {
   Scenario,
   SpecEntry,
   TestCase,
+  TestCaseStatus,
+  TestSuiteStatus,
 } from "../api/types.ts";
 import {
   readText,
@@ -36,6 +38,12 @@ const JOURNEY_HEADING = /^([a-z0-9][a-z0-9-]*-US-\d+):\s*(.+)$/;
 const CASE_HEADING = /^([a-z0-9][a-z0-9-]*-TC-\d+):\s*(.+)$/;
 const ACCEPTED_BY = /^\*\*Accepted by:\*\*\s*$/m;
 const TRACE = /^\s*(?:[-*]\s+)?\*\*Trace:\*\*(.*)$/m;
+/** The file's own status sits at column 0 under the title; a case's is a
+ * bullet in its properties list. */
+const SUITE_STATUS = /^\*\*Status:\*\*\s*(.+?)\s*$/m;
+const CASE_STATUS = /^\s*(?:[-*]\s+)?\*\*Status:\*\*\s*(.+?)\s*$/m;
+const SUITE_STATUSES = new Set(["pending-review", "approved"]);
+const CASE_STATUSES = new Set(["draft", "actual", "deprecated"]);
 
 export function discoverSpecs(root: string): SpecShape {
   const specsDir = join(root, "openspec", "specs");
@@ -87,7 +95,9 @@ function readSpec(
     const cases = readTextIfExists(join(root, casesPath));
     if (cases !== undefined) {
       try {
-        entry.testCases = readTestCases(cases);
+        const suite = readTestCases(cases);
+        entry.testCases = suite.cases;
+        entry.testCasesStatus = suite.status;
       } catch (cause) {
         entry.error = toItemError(casesPath, cause);
       }
@@ -200,22 +210,70 @@ function readScenario(section: Section): Scenario {
   return scenario;
 }
 
+export type TestSuite = { status: TestSuiteStatus; cases: TestCase[] };
+
 /** `docs/governance/specs-to-test-cases.md`: journeys are `##` sections,
- * cases are `###` sections under them, each closing with `**Trace:**`. */
-export function readTestCases(text: string): TestCase[] {
+ * cases are `###` sections under them, each closing with `**Trace:**`. Status
+ * is what keeps a generated draft from wearing a reviewed suite's authority,
+ * so a file that states none is refused rather than defaulted. */
+export function readTestCases(text: string): TestSuite {
+  const roots = outline(text);
+  const status = suiteStatus(roots);
   const cases: TestCase[] = [];
   const visit = (sections: Section[]): void => {
     for (const section of sections) {
       const match = CASE_HEADING.exec(section.heading);
       if (match) {
-        cases.push({ id: match[1], title: match[2], traces: traces(section) });
+        cases.push({
+          id: match[1],
+          title: match[2],
+          traces: traces(section),
+          status: caseStatus(section),
+        });
         continue;
       }
       visit(section.children);
     }
   };
-  visit(outline(text));
-  return cases;
+  visit(roots);
+  return { status, cases };
+}
+
+function suiteStatus(roots: Section[]): TestSuiteStatus {
+  const head = roots[0];
+  const line = head?.line ?? 1;
+  const found =
+    head?.level === 1 ? SUITE_STATUS.exec(head.body)?.[1] : undefined;
+  if (found === undefined) {
+    throw new StoreFileError(
+      line,
+      "a test-case file states `**Status:** pending-review` or `approved` under its title",
+    );
+  }
+  if (!SUITE_STATUSES.has(found)) {
+    throw new StoreFileError(
+      line,
+      `file \`**Status:** ${found}\` is neither \`pending-review\` nor \`approved\``,
+    );
+  }
+  return found as TestSuiteStatus;
+}
+
+function caseStatus(section: Section): TestCaseStatus {
+  const found = CASE_STATUS.exec(section.raw)?.[1];
+  if (found === undefined) {
+    throw new StoreFileError(
+      section.line,
+      `test case \`${section.heading}\` has no \`**Status:**\``,
+    );
+  }
+  if (!CASE_STATUSES.has(found)) {
+    throw new StoreFileError(
+      section.line,
+      `test case \`${section.heading}\` is \`**Status:** ${found}\`, which is not draft, actual or deprecated`,
+    );
+  }
+  return found as TestCaseStatus;
 }
 
 function traces(section: Section): string[] {

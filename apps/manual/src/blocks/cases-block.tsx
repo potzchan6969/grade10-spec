@@ -1,7 +1,7 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { caseAnchor } from "../api/anchors";
-import type { SpecEntry } from "../api/types";
+import type { SpecEntry, TestCaseStatus, TestSuiteStatus } from "../api/types";
 import type { CasesBlock } from "../content/grammar";
 import { AnchorLink } from "./anchor";
 import { useBlockScope } from "./block-scope";
@@ -45,10 +45,11 @@ export function CasesBlockView({ block }: { block: CasesBlock }) {
 
   return (
     <section className="my-6 overflow-hidden rounded-(--radius-2xl) border border-border bg-card">
-      <header className="flex flex-wrap items-center gap-x-3 border-border-subtle border-b bg-background-subtle px-4 py-2.5">
+      <header className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-border-subtle border-b bg-background-subtle px-4 py-2.5">
         <Text as="span" size="sm" weight="bold">
           Test cases
         </Text>
+        <SuiteStatus status={spec.testCasesStatus} />
         <Text as="span" size="xs" tone="secondary">
           {cases.length} cases · {covered.size} scenarios traced
           {uncovered > 0 ? ` · ${uncovered} untraced` : ""}
@@ -61,13 +62,23 @@ export function CasesBlockView({ block }: { block: CasesBlock }) {
             id={caseAnchor(testCase)}
             key={testCase.id}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Badge className="font-mono" size="sm" variant="outline">
                 {testCase.id}
               </Badge>
-              <Text as="span" size="sm" weight="medium">
+              <Text
+                as="span"
+                className={
+                  testCase.status === "deprecated"
+                    ? "text-secondary-foreground line-through"
+                    : undefined
+                }
+                size="sm"
+                weight="medium"
+              >
                 {testCase.title}
               </Text>
+              <CaseStatus status={testCase.status} />
               <AnchorLink
                 className="ml-auto"
                 id={caseAnchor(testCase)}
@@ -79,6 +90,63 @@ export function CasesBlockView({ block }: { block: CasesBlock }) {
         ))}
       </ul>
     </section>
+  );
+}
+
+/** The file's own review state, beside the suite it belongs to. `pending-review`
+ * never wears the approved colour — carrying the status is pointless if a draft
+ * suite can still read as signed off. */
+function SuiteStatus({ status }: { status?: TestSuiteStatus }) {
+  if (!status) return null;
+  return (
+    <Badge
+      size="sm"
+      title={
+        status === "approved"
+          ? "A reviewer stands behind every case in this suite."
+          : "At least one case here is still a draft; nothing in this file exports."
+      }
+      variant={status === "approved" ? "success" : "warning"}
+    >
+      {status}
+    </Badge>
+  );
+}
+
+/** `draft` has to read as unreviewed at a glance, and `deprecated` as history
+ * kept rather than behaviour claimed. */
+function CaseStatus({ status }: { status: TestCaseStatus }) {
+  if (status === "actual") {
+    return (
+      <Badge
+        size="sm"
+        title="A reviewer read this case against the scenarios it traces and stands behind it."
+        variant="success"
+      >
+        actual
+      </Badge>
+    );
+  }
+  if (status === "deprecated") {
+    return (
+      <Badge
+        className="line-through opacity-70"
+        size="sm"
+        title="The spec no longer states this behaviour. Kept for history, never exported."
+        variant="outline"
+      >
+        deprecated
+      </Badge>
+    );
+  }
+  return (
+    <Badge
+      size="sm"
+      title="Generated or edited since its last review. Nobody has stood behind it yet."
+      variant="warning"
+    >
+      draft
+    </Badge>
   );
 }
 
