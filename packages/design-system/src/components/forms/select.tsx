@@ -3,7 +3,7 @@
 import { Select as SelectPrimitive } from "@base-ui/react/select";
 import { cn } from "@grade10/design-system/lib/utils";
 import { CaretDown } from "@phosphor-icons/react";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import type * as React from "react";
 
@@ -60,9 +60,7 @@ function SelectTrigger({
       {...props}
     >
       {children}
-      <SelectPrimitive.Icon
-        render={<CaretDown aria-hidden size={16} />}
-      />
+      <SelectPrimitive.Icon render={<CaretDown aria-hidden size={16} />} />
     </SelectPrimitive.Trigger>
   );
 }

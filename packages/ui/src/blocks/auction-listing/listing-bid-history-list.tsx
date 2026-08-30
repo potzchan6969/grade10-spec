@@ -4,8 +4,8 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ListingBidderAvatar } from "./listing-bidder-avatar";
 import { formatUsd } from "./format-usd";
+import { ListingBidderAvatar } from "./listing-bidder-avatar";
 import type { ListingBidHistoryRow } from "./types";
 import "./listing-bid-history-list.css";
 
@@ -100,24 +100,23 @@ function BidHistoryRowItem({
 }
 
 function ListingBidHistoryList({
+  resetKey,
+  ...props
+}: ListingBidHistoryListProps) {
+  return <BidHistoryEntrances key={resetKey} {...props} />;
+}
+
+function BidHistoryEntrances({
   copy = {},
   rows,
   heading = "Recent bids",
-  resetKey,
-}: ListingBidHistoryListProps) {
+}: Omit<ListingBidHistoryListProps, "resetKey">) {
   const knownIdsRef = useRef<Set<string>>(new Set());
   const skipEntranceRef = useRef(true);
   const [enteredIds, setEnteredIds] = useState<ReadonlySet<string>>(
     () => new Set(),
   );
   const [enteringId, setEnteringId] = useState<string | null>(null);
-
-  useEffect(() => {
-    knownIdsRef.current = new Set();
-    skipEntranceRef.current = true;
-    setEnteredIds(new Set());
-    setEnteringId(null);
-  }, [resetKey]);
 
   useEffect(() => {
     if (skipEntranceRef.current) {
