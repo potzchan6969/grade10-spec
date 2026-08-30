@@ -14,8 +14,10 @@ on:
   # change, instead of waiting for the next scheduled run.
   workflow_dispatch:
 
+# The manual badges a card whose component set is drifting, and it reads that
+# from a committed report — so this workflow writes.
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   # Keyed by event as well as ref: a scheduled run and a push to the default
@@ -26,6 +28,9 @@ concurrency:
 
 env:
   NODE_VERSION: 24.14.1
+  # Generated, never authored, so it sits outside manual/ — the manual's build
+  # only reads it. apps/manual/src/store/design-sync.mts names the same path.
+  REPORT: .design-sync/report.json
 
 jobs:
   components:
@@ -68,11 +73,37 @@ jobs:
             exit 1
           fi
 
+      # `continue-on-error` so a drifting run still commits its report below —
+      # a failing check is the one the manual most needs to badge. The job still
+      # fails, in the step after the commit.
       - name: Check components against Figma
+        id: components
         if: steps.token.outputs.available == 'true'
+        continue-on-error: true
         env:
           FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
-        run: pnpm run design-sync:check
+        run: pnpm run design-sync:check --report "$REPORT"
+
+      # Only from the default branch: a PR's report would be a verdict on a tree
+      # nobody deploys, and the manual reads one committed file. Keys are sorted
+      # set names, so a nightly that found nothing new commits nothing.
+      - name: Commit the design-sync report
+        if: >-
+          steps.components.outcome != 'skipped' &&
+          github.ref_name == github.event.repository.default_branch &&
+          github.actor != 'github-actions[bot]'
+        env:
+          COMMIT_MESSAGE: "chore(ci): record the design-sync verdict per component set"
+        run: |
+          if [ -z "$(git status --porcelain --untracked-files=all -- "$REPORT")" ]; then
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "$REPORT"
+          git commit -m "$COMMIT_MESSAGE"
+          git push
 
       # A component with no variant axes has no component-set diff — its one
       # durable Figma-side check is the per-directory audit.json written at
@@ -88,3 +119,11 @@ jobs:
         env:
           FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
         run: pnpm run design-sync:audit --all-blocks
+
+      # Last, so the report is committed and both rails have reported before the
+      # job goes red on what the component check found.
+      - name: Fail on component drift
+        if: steps.components.outcome == 'failure'
+        run: |
+          echo "::error title=Design sync::Figma and the code disagree — see 'Check components against Figma' above."
+          exit 1

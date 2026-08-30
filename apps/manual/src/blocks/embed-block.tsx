@@ -1,8 +1,16 @@
+import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
-import { ArrowSquareOut, FigmaLogo, Play } from "@phosphor-icons/react";
+import {
+  ArrowSquareOut,
+  FigmaLogo,
+  Play,
+  WarningDiamond,
+} from "@phosphor-icons/react";
 import { type ReactNode, useState } from "react";
+import type { DesignSyncClass } from "../api/types";
 import type { FigmaBlock, StoryBlock } from "../content/grammar";
 import { useBlockScope } from "./block-scope";
+import { designSyncOf, isDrifting } from "./design-drift";
 
 const DEFAULT_HEIGHT = 480;
 
@@ -14,6 +22,7 @@ type EmbedCardProps = {
   openUrl: string;
   openLabel: string;
   height: number;
+  badge?: ReactNode;
 };
 
 /**
@@ -28,6 +37,7 @@ function EmbedCard({
   openUrl,
   openLabel,
   height,
+  badge,
 }: EmbedCardProps) {
   const [loaded, setLoaded] = useState(false);
 
@@ -41,6 +51,7 @@ function EmbedCard({
         <Text as="span" size="xs" tone="secondary">
           {kind}
         </Text>
+        {badge}
         <a
           className="ml-auto inline-flex items-center gap-1 text-secondary-foreground text-xs hover:text-foreground"
           href={openUrl}
@@ -82,6 +93,9 @@ function EmbedCard({
   );
 }
 
+/** No drift badge here: a card names a Figma node id, the design-sync report
+ * names component sets, and only Figma maps one to the other. See
+ * `design-drift.ts`. */
 export function FigmaBlockView({ block }: { block: FigmaBlock }) {
   return (
     <EmbedCard
@@ -96,12 +110,36 @@ export function FigmaBlockView({ block }: { block: FigmaBlock }) {
   );
 }
 
+const DRIFT_TITLE: Record<"warn" | "fail", string> = {
+  warn: "The nightly design-sync check found this component set and its code disagreeing. It may be deliberate — someone has to settle it.",
+  fail: "The nightly design-sync check found an error on this component set: Dev Mode would emit wrong code, or the code renders a value Figma does not draw.",
+};
+
+/** No link out: the run that produced this is long gone by the time anyone
+ * reads the page, and the title says what the verdict means. */
+function DriftBadge({ verdict }: { verdict: DesignSyncClass }) {
+  if (!isDrifting(verdict)) return null;
+  return (
+    <Badge
+      className="gap-1"
+      size="sm"
+      title={DRIFT_TITLE[verdict === "fail" ? "fail" : "warn"]}
+      variant={verdict === "fail" ? "error" : "warning"}
+    >
+      <WarningDiamond aria-hidden size={12} weight="fill" />
+      design drift
+    </Badge>
+  );
+}
+
 export function StoryBlockView({ block }: { block: StoryBlock }) {
   const { index } = useBlockScope();
   const base = index.snapshot.config.storybookBase.replace(/\/$/, "");
+  const verdict = designSyncOf(index.snapshot.designSync, block.id);
 
   return (
     <EmbedCard
+      badge={verdict ? <DriftBadge verdict={verdict} /> : null}
       height={block.height ?? DEFAULT_HEIGHT}
       icon={<Play aria-hidden size={16} />}
       kind="Storybook story"

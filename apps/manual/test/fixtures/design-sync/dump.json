@@ -1,0 +1,15 @@
+{
+  "meta": {
+    "components": {
+      "1:1": {
+        "id": "1:1",
+        "name": "Separator",
+        "properties": {},
+        "description": ""
+      },
+      "1:2": { "id": "1:2", "name": "Table Cell", "properties": {} },
+      "1:3": { "id": "1:3", "name": "Nowhere / Ghost", "properties": {} },
+      "4200:155": { "id": "4200:155", "name": "Product Card", "properties": {} }
+    }
+  }
+}
