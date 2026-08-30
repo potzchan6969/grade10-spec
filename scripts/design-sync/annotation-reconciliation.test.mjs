@@ -63,11 +63,13 @@ function observation(overrides = {}) {
             name: "Button",
             type: "COMPONENT_SET",
             ancestors: [{ nodeId: "0:0", name: "Document", type: "DOCUMENT" }],
-            source: {
-              kind: "code-connect",
-              path: "packages/design-system/src/components/forms/button.figma.ts",
-              component: "Button",
-            },
+            sources: [
+              {
+                kind: "code-connect",
+                path: "packages/design-system/src/components/forms/button.figma.ts",
+                component: "Button",
+              },
+            ],
           },
         ],
         categoryCatalog: [
@@ -168,6 +170,164 @@ test("One category catalog resolves many annotations", () => {
   ]);
 });
 
+test("Schema-version-2 roots preserve every source in canonical order", () => {
+  const input = observation();
+  input.files[0].roots[0].sources = [
+    {
+      kind: "code-connect",
+      path: "packages/design-system/src/components/forms/button.figma.ts",
+      component: "Button",
+    },
+    {
+      kind: "audit",
+      path: "packages/design-system/src/components/forms/audit.json",
+      label: "button/root",
+    },
+  ].reverse();
+
+  const result = normalizeObservation(input);
+
+  assert.deepEqual(
+    result.files[0].roots[0].sources.map(
+      ({ kind, path, label, component }) => ({ kind, path, label, component }),
+    ),
+    [
+      {
+        kind: "audit",
+        path: "packages/design-system/src/components/forms/audit.json",
+        label: "button/root",
+        component: null,
+      },
+      {
+        kind: "code-connect",
+        path: "packages/design-system/src/components/forms/button.figma.ts",
+        label: null,
+        component: "Button",
+      },
+    ],
+  );
+});
+
+test("Duplicate source registrations are malformed observation evidence", () => {
+  const input = observation();
+  input.files[0].roots[0].sources.push(input.files[0].roots[0].sources[0]);
+
+  assert.throws(() => normalizeObservation(input), /duplicate root source/i);
+});
+
+test("Findings expand one observed root to every registered source", () => {
+  const input = observation();
+  input.files[0].roots[0].sources = [
+    {
+      kind: "audit",
+      path: "packages/design-system/src/components/forms/audit.json",
+      label: "button/root",
+    },
+    {
+      kind: "code-connect",
+      path: "packages/design-system/src/components/forms/button.figma.ts",
+      component: "Button",
+    },
+  ];
+
+  const result = scanSnapshot({
+    baseline: { schemaVersion: 2, roots: [], entries: {} },
+    snapshot: input,
+  });
+
+  assert.equal(result.findings.length, 2);
+  assert.deepEqual(
+    result.findings[0].registeredSources.map(
+      ({ kind, path, label, component }) => ({ kind, path, label, component }),
+    ),
+    [
+      {
+        kind: "audit",
+        path: "packages/design-system/src/components/forms/audit.json",
+        label: "button/root",
+        component: null,
+      },
+      {
+        kind: "code-connect",
+        path: "packages/design-system/src/components/forms/button.figma.ts",
+        label: null,
+        component: "Button",
+      },
+    ],
+  );
+  assert.deepEqual(
+    result.findings[0].associationEvidence.map((evidence) => evidence.kind),
+    ["registered-component"],
+  );
+  assert.equal(result.scannedSources.length, 2);
+});
+
+test("Orphan findings retain every source for their registered root", () => {
+  const input = observation();
+  input.files[0].roots[0].sources = [
+    {
+      kind: "audit",
+      path: "packages/design-system/src/components/forms/audit.json",
+      label: "button/root",
+    },
+    {
+      kind: "code-connect",
+      path: "packages/design-system/src/components/forms/button.figma.ts",
+      component: "Button",
+    },
+  ];
+  const baseline = baselineWithAnnotations([
+    {
+      annotationKey: "orphan-note",
+      text: "The old node note.",
+      categoryId: null,
+      pinnedProperties: [],
+    },
+  ]);
+  baseline.entries[`${fileKey}:2:1`].nodeId = "8:8";
+  baseline.entries[`${fileKey}:8:8`] = baseline.entries[`${fileKey}:2:1`];
+  delete baseline.entries[`${fileKey}:2:1`];
+  input.files[0].nodes = [];
+
+  const orphan = scanSnapshot({ baseline, snapshot: input }).findings[0];
+
+  assert.equal(orphan.kind, "orphaned");
+  assert.equal(orphan.registeredSources.length, 2);
+  assert.deepEqual(
+    orphan.registeredSources.map((source) => source.kind),
+    ["audit", "code-connect"],
+  );
+});
+
+test("Ancestor evidence keeps nearest-parent-first order and rejects duplicates", () => {
+  const input = observation();
+  input.files[0].nodes[0].ancestors = [
+    { nodeId: "1:1", name: "Button", type: "COMPONENT_SET" },
+    { nodeId: "0:0", name: "Document", type: "DOCUMENT" },
+  ];
+  const result = normalizeObservation(input);
+  assert.deepEqual(
+    result.files[0].nodes[0].ancestors,
+    input.files[0].nodes[0].ancestors,
+  );
+
+  input.files[0].nodes[0].ancestors.push({ nodeId: "1-1" });
+  assert.throws(
+    () => normalizeObservation(input),
+    /duplicate ancestor nodeId/i,
+  );
+});
+
+test("Store digest changes when the ordered ancestor chain changes", () => {
+  const first = normalizeObservation(observation());
+  const reordered = observation();
+  reordered.files[0].nodes[0].ancestors.reverse();
+
+  const second = normalizeObservation(reordered);
+
+  assert.notEqual(first.digest, second.digest);
+});
+
 test("Content and Interaction labels are reported", () => {
   const result = normalizeObservation(categorizedFixture);
   assert.deepEqual(
@@ -237,11 +397,13 @@ test("Unresolved registered root is skipped when another root resolves", () => {
     {
       nodeId: "9:9",
       name: "FilterChip",
-      source: {
-        kind: "code-connect",
-        path: "packages/design-system/src/components/forms/filter-chip.figma.ts",
-        component: "FilterChip",
-      },
+      sources: [
+        {
+          kind: "code-connect",
+          path: "packages/design-system/src/components/forms/filter-chip.figma.ts",
+          component: "FilterChip",
+        },
+      ],
       reason: "registered root could not be resolved",
     },
   ];
@@ -271,6 +433,38 @@ test("Unresolved registered root is skipped when another root resolves", () => {
   );
   assert.match(renderHuman(result), /SKIPPED/);
   assert.match(renderHuman(result), /FilterChip/);
+});
+
+test("Skipped roots render every registered source", () => {
+  const input = observation();
+  input.files[0].skippedRoots = [
+    {
+      nodeId: "9:9",
+      name: "FilterChip",
+      sources: [
+        {
+          kind: "audit",
+          path: "packages/design-system/src/components/forms/audit.json",
+          label: "filter-chip/root",
+        },
+        {
+          kind: "code-connect",
+          path: "packages/design-system/src/components/forms/filter-chip.figma.ts",
+          component: "FilterChip",
+        },
+      ],
+      reason: "registered root could not be resolved",
+    },
+  ];
+  const result = scanSnapshot({
+    baseline: { schemaVersion: 2, roots: [], entries: {} },
+    snapshot: input,
+  });
+  const report = renderHuman(result);
+
+  assert.match(report, /filter-chip\/root/);
+  assert.match(report, /filter-chip\.figma\.ts/);
+  assert.match(report, /FilterChip/);
 });
 
 test("a supplied digest must pin the normalized observation", () => {
@@ -366,7 +560,7 @@ test("Final annotation removal remains removal when node resolves", () => {
 
 test("snapshot diff keeps an exact-surface addition untracked without an association", () => {
   const input = observation();
-  input.files[0].roots[0].source.component = null;
+  input.files[0].roots[0].sources[0].component = null;
   const result = scanSnapshot({
     baseline: { schemaVersion: 2, roots: [], entries: {} },
     snapshot: input,
@@ -469,8 +663,8 @@ test("One of several annotations changes text", () => {
   assert.equal(result.findings[0].currentCategoryIsPreset, true);
   assert.deepEqual(result.findings[0].currentPinnedProperties, ["width"]);
   assert.deepEqual(result.findings[0].ancestorEvidence, [
-    { nodeId: "0:0", name: "Document", type: "DOCUMENT" },
     { nodeId: "1:1", name: "Button", type: "COMPONENT_SET" },
+    { nodeId: "0:0", name: "Document", type: "DOCUMENT" },
   ]);
 });
 

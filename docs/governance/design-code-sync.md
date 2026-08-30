@@ -229,10 +229,14 @@ rendered-value, token, audit, and Code Connect checks remain in this workflow.
 
 The end-to-end flow is:
 
-1. The harness reads the registered engineering roots through the Figma Plugin
-   API and reads one category catalog per file. It resolves categories locally,
-   excludes exploratory areas, normalizes each occurrence, and keeps the
-   result as a temporary, digest-pinned snapshot.
+1. The harness reads the flat registered engineering sources through the Figma
+   Plugin API and reads one category catalog per file. It traverses each unique
+   Figma root once, keeps every associated source in the temporary
+   schema-version-2 root record, resolves categories locally, excludes
+   exploratory areas, and emits only annotation-bearing or baseline-tracked
+   nodes. Ancestor evidence remains in the nearest-parent-first order supplied
+   by Figma. The registered store canonicalizes this complete temporary
+   observation and generates the digest used by reporting and acceptance.
 2. The skill compares that snapshot with the reviewed
    `scripts/design-sync/annotation-baseline.json` and produces an
    ownership-aware report. The default human report renders every ownership

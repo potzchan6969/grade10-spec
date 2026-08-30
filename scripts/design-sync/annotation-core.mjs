@@ -18,6 +18,12 @@ function nodeKey(fileKey, nodeId) {
   return `${fileKey}:${normalizeNodeId(nodeId)}`;
 }
 
+function normalizeSourceRoot(sourceRoot) {
+  return sourceRoot === undefined || sourceRoot === null
+    ? null
+    : normalizeNodeId(sourceRoot);
+}
+
 function canonicalize(value) {
   if (Array.isArray(value)) return value.map(canonicalize);
   if (value && typeof value === "object") {
@@ -140,7 +146,7 @@ export function normalizeBaselineOccurrence(raw, blockers, entryKey, index) {
       categoryId,
       pinnedProperties: canonicalProperties,
     }),
-    sourceRoot: raw.sourceRoot ?? null,
+    sourceRoot: normalizeSourceRoot(raw.sourceRoot),
     associations: raw.associations ?? null,
     noImpactReason: raw.noImpactReason ?? null,
   };
@@ -213,7 +219,7 @@ export function normaliseBaselineEntries(baseline, blockers) {
         fileKey,
         nodeId,
         key: nodeKey(fileKey, nodeId),
-        sourceRoot: raw.sourceRoot ?? null,
+        sourceRoot: normalizeSourceRoot(raw.sourceRoot),
         annotations: [
           {
             annotationKey: "legacy-1",
@@ -229,7 +235,7 @@ export function normaliseBaselineEntries(baseline, blockers) {
               categoryId: null,
               pinnedProperties: [],
             }),
-            sourceRoot: raw.sourceRoot ?? null,
+            sourceRoot: normalizeSourceRoot(raw.sourceRoot),
             associations: raw.associations ?? null,
             noImpactReason: raw.noImpactReason ?? null,
           },
@@ -274,10 +280,11 @@ export function normaliseBaselineEntries(baseline, blockers) {
       fileKey,
       nodeId,
       key: nodeKey(fileKey, nodeId),
-      sourceRoot: raw.sourceRoot ?? null,
+      sourceRoot: normalizeSourceRoot(raw.sourceRoot),
       annotations: annotations.map((annotation) => ({
         ...annotation,
-        sourceRoot: annotation.sourceRoot ?? raw.sourceRoot ?? null,
+        sourceRoot:
+          annotation.sourceRoot ?? normalizeSourceRoot(raw.sourceRoot),
       })),
     });
   }

@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 
 import { normalizeNodeId, normalizeText } from "./annotation-core.mjs";
 
-export const ANNOTATION_OBSERVATION_SCHEMA_VERSION = 1;
+export const ANNOTATION_OBSERVATION_SCHEMA_VERSION = 2;
 
 export class ObservationValidationError extends Error {
   constructor(message, blockers = []) {
@@ -46,20 +46,23 @@ function canonicalPinnedProperties(properties, pinnedProperties) {
 function normalizeEvidence(evidence, label) {
   if (evidence === undefined) return [];
   if (!Array.isArray(evidence)) fail(`${label} must be an array`);
-  return evidence
-    .map((ancestor) => {
-      if (!ancestor || typeof ancestor !== "object")
-        fail(`${label} must contain objects`);
-      return {
-        nodeId: requiredString(
-          normalizeNodeId(ancestor.nodeId ?? ancestor.id),
-          `${label} nodeId`,
-        ),
-        name: optionalString(ancestor.name, `${label} name`),
-        type: optionalString(ancestor.type, `${label} type`),
-      };
-    })
-    .sort((left, right) => left.nodeId.localeCompare(right.nodeId));
+  const seen = new Set();
+  return evidence.map((ancestor) => {
+    if (!ancestor || typeof ancestor !== "object")
+      fail(`${label} must contain objects`);
+    const normalized = {
+      nodeId: requiredString(
+        normalizeNodeId(ancestor.nodeId ?? ancestor.id),
+        `${label} nodeId`,
+      ),
+      name: optionalString(ancestor.name, `${label} name`),
+      type: optionalString(ancestor.type, `${label} type`),
+    };
+    if (seen.has(normalized.nodeId))
+      fail(`duplicate ancestor nodeId ${normalized.nodeId}`);
+    seen.add(normalized.nodeId);
+    return normalized;
+  });
 }
 
 function normalizeCategoryCatalog(categories) {
@@ -121,8 +124,8 @@ function normalizeAnnotation(annotation, categoryMap) {
 }
 
 function normalizeSource(source) {
-  if (source === undefined || source === null) return null;
-  if (typeof source !== "object") fail("root source must be an object");
+  if (!source || typeof source !== "object" || Array.isArray(source))
+    fail("root source must be an object");
   return {
     kind: optionalString(source.kind, "root source kind"),
     path: optionalString(source.path, "root source path"),
@@ -130,6 +133,34 @@ function normalizeSource(source) {
     component: optionalString(source.component, "root source component"),
     covers: optionalString(source.covers, "root source covers"),
   };
+}
+
+function sourceSortKey(source) {
+  return JSON.stringify([
+    source.kind,
+    source.path,
+    source.label,
+    source.component,
+    source.covers,
+  ]);
+}
+
+function normalizeSources(root) {
+  if (!Array.isArray(root.sources))
+    fail("registered root sources must be an array");
+  if (!root.sources.length)
+    fail("registered root sources must contain at least one source");
+  const seen = new Set();
+  const sources = root.sources.map((source) => {
+    const normalized = normalizeSource(source);
+    const key = sourceSortKey(normalized);
+    if (seen.has(key)) fail("duplicate root source");
+    seen.add(key);
+    return normalized;
+  });
+  return sources.sort((left, right) =>
+    sourceSortKey(left).localeCompare(sourceSortKey(right)),
+  );
 }
 
 function normalizeRoot(root, fileKey) {
@@ -145,7 +176,7 @@ function normalizeRoot(root, fileKey) {
     name: optionalString(root.name, "registered root name"),
     type: optionalString(root.type, "registered root type"),
     ancestors: normalizeEvidence(root.ancestors, "registered root ancestors"),
-    source: normalizeSource(root.source),
+    sources: normalizeSources(root),
   };
 }
 

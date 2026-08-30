@@ -4,6 +4,7 @@ import {
   compareOccurrences,
   makeFinding,
   normaliseBaselineEntries,
+  normalizeNodeId,
 } from "./annotation-core.mjs";
 import {
   normalizeObservation,
@@ -14,17 +15,39 @@ import {
   validateAssociation,
 } from "./annotation-store.mjs";
 
-function sourceFromRoot(root, fileUrl) {
+function sourceFromRoot(root, fileUrl, source) {
   return {
-    ...(root.source ?? {}),
+    ...source,
     fileKey: root.fileKey,
     nodeId: root.nodeId,
     fileUrl,
-    kind: root.source?.kind ?? "registered-source",
+    kind: source.kind ?? "registered-source",
     name: root.name,
     type: root.type,
     ancestors: root.ancestors,
   };
+}
+
+function sourcesFromRoot(root, fileUrl) {
+  return root.sources.map((source) => sourceFromRoot(root, fileUrl, source));
+}
+
+function baselineSourcesForFile(baseline, fileKey) {
+  return (baseline?.roots ?? [])
+    .filter((root) => root?.fileKey === fileKey)
+    .map((root) => ({
+      fileKey,
+      nodeId: normalizeNodeId(root.nodeId),
+      fileUrl: root.fileUrl ?? null,
+      kind: root.kind ?? "registered-source",
+      path: root.path ?? null,
+      label: root.label ?? null,
+      component: root.component ?? null,
+      covers: root.covers ?? null,
+      name: root.name ?? null,
+      type: root.type ?? null,
+      ancestors: root.ancestors ?? [],
+    }));
 }
 
 function blockerForFile(fileKey, blocker) {
@@ -413,7 +436,16 @@ export function scanSnapshot({ baseline, snapshot } = {}) {
         }),
       );
       for (const entry of fileEntries) {
-        findings.push(...orphanFindings({ file: null, entry, sources: [] }));
+        const baselineSources = baselineSourcesForFile(baseline, fileKey);
+        findings.push(
+          ...orphanFindings({
+            file: null,
+            entry,
+            sources: baselineSources.filter(
+              (source) => source.nodeId === entry.sourceRoot,
+            ),
+          }),
+        );
       }
       continue;
     }
@@ -421,10 +453,16 @@ export function scanSnapshot({ baseline, snapshot } = {}) {
     blockers.push(
       ...file.blockers.map((blocker) => blockerForFile(fileKey, blocker)),
     );
-    const sources = file.roots.map((root) =>
-      sourceFromRoot(root, file.fileUrl),
+    const resolvedRootSources = file.roots.flatMap((root) =>
+      sourcesFromRoot(root, file.fileUrl),
     );
-    for (const source of sources) {
+    const sourcesByRoot = new Map(
+      [...file.roots, ...file.skippedRoots].map((root) => [
+        root.nodeId,
+        sourcesFromRoot(root, file.fileUrl),
+      ]),
+    );
+    for (const source of resolvedRootSources) {
       scannedSources.push({
         ...source,
         status: "scanned",
@@ -448,16 +486,14 @@ export function scanSnapshot({ baseline, snapshot } = {}) {
           ...orphanFindings({
             file,
             entry,
-            sources: sources.filter(
-              (source) => source.nodeId === entry.sourceRoot,
-            ),
+            sources: sourcesByRoot.get(entry.sourceRoot) ?? [],
           }),
         );
         continue;
       }
-      const nodeSources = node.rootIds
-        .map((rootId) => sources.find((source) => source.nodeId === rootId))
-        .filter(Boolean);
+      const nodeSources = node.rootIds.flatMap(
+        (rootId) => sourcesByRoot.get(rootId) ?? [],
+      );
       findings.push(
         ...compareOccurrences({
           oldOccurrences: entry?.annotations ?? [],
@@ -550,14 +586,20 @@ export function renderHuman(result) {
   if (skippedRoots.length) {
     lines.push("Skipped registered roots:");
     for (const root of skippedRoots) {
-      const name =
-        root.name ??
-        root.source?.component ??
-        root.source?.label ??
-        "registered root";
+      const name = root.name ?? "registered root";
       lines.push(
         `  SKIPPED ${root.fileKey ?? ""} ${root.nodeId ?? ""} ${name} ${root.reason ?? ""}`.trim(),
       );
+      for (const source of root.sources ?? []) {
+        const provenance = [
+          source.kind,
+          source.path,
+          source.label ?? source.component ?? source.covers,
+        ]
+          .filter(Boolean)
+          .join(" ");
+        lines.push(`    source: ${provenance}`.trim());
+      }
     }
   }
   return lines.join("\n");

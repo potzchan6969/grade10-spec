@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "files": [
     {
       "fileKey": "ABCDEFGHIJKLMNOPQRSTUV",
@@ -12,11 +12,13 @@
           "ancestors": [
             { "nodeId": "0:0", "name": "Document", "type": "DOCUMENT" }
           ],
-          "source": {
-            "kind": "code-connect",
-            "path": "packages/design-system/src/components/forms/button.figma.ts",
-            "component": "Button"
-          }
+          "sources": [
+            {
+              "kind": "code-connect",
+              "path": "packages/design-system/src/components/forms/button.figma.ts",
+              "component": "Button"
+            }
+          ]
         }
       ],
       "categoryCatalog": [
