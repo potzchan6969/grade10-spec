@@ -1,12 +1,34 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import type { ReactNode } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@grade10/design-system/components/overlays/tooltip";
+import { Info } from "@phosphor-icons/react";
 import type { BiddingState } from "../types";
-import { BUYER_FEE_HINT, LOT, stateMeta } from "../fixtures";
-import { formatUsd, minNextBidMinor } from "../format-usd";
+import {
+  AUTO_BIDDING_TOOLTIP,
+  BUYER_FEE_HINT,
+  LOT,
+  stateMeta,
+} from "../fixtures";
+import { formatUsd } from "../format-usd";
+import { RollingUsdDisplay } from "../rolling-usd-display";
+import { CountdownDisplay } from "../countdown-display";
+import { AutoBidReveal } from "../auto-bid-reveal";
+import {
+  AutoBidControls,
+  ManualBidControls,
+} from "./manual-bid-controls";
+
+const AUTO_EXTENDED_TOOLTIP =
+  "Bids placed in the final 30 minutes extend the auction by 30 minutes.";
 
 type StandingBannerProps = {
   state: BiddingState;
@@ -95,11 +117,20 @@ function PriceBlock({ state }: PriceBlockProps) {
 
   return (
     <VStack gap="xs">
-      <Text size="sm" tone="secondary" weight="medium">
+      <Text
+        className="text-secondary-foreground"
+        size="sm"
+        tone="secondary"
+        weight="medium"
+      >
         {meta.priceLabel}
       </Text>
-      <Text as="p" className="text-xl font-medium leading-7">
-        {meta.isUnsold ? "Unsold" : formatUsd(meta.currentBidMinor)}
+      <Text as="p" className="text-2xl font-medium leading-8">
+        {meta.isUnsold ? (
+          "Unsold"
+        ) : (
+          <RollingUsdDisplay amountMinor={meta.currentBidMinor} />
+        )}
       </Text>
       {meta.hasBids ? (
         <Text size="xs" tone="secondary">
@@ -123,43 +154,62 @@ function TimeBlock({ state }: TimeBlockProps) {
 
   return (
     <VStack gap="xs">
-      <Text size="sm" tone="secondary" weight="medium">
-        {meta.opens ? "Opens in" : meta.closed ? "Closed" : "Time left"}
-      </Text>
-      <Text as="p" className="text-xl font-medium leading-7">
-        {meta.countdown}
+      {meta.opens ? (
+        <Text
+          className="text-secondary-foreground"
+          size="sm"
+          tone="secondary"
+          weight="medium"
+        >
+          Opens in
+        </Text>
+      ) : meta.closed ? (
+        <Text
+          className="text-secondary-foreground"
+          size="sm"
+          tone="secondary"
+          weight="medium"
+        >
+          Closed
+        </Text>
+      ) : (
+        <HStack gap="xs" vAlign="center">
+          <Text
+            className="text-secondary-foreground"
+            size="sm"
+            tone="secondary"
+            weight="medium"
+          >
+            Time left (auto-extended)
+          </Text>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger
+                aria-label="Auto-extended bidding rules"
+                className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                render={<Info aria-hidden size={12} />}
+              />
+              <TooltipContent>{AUTO_EXTENDED_TOOLTIP}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </HStack>
+      )}
+      <Text as="p" className="text-2xl font-medium leading-8">
+        {meta.countdownSeconds != null ? (
+          <CountdownDisplay
+            format={meta.countdownFormat}
+            initialSeconds={meta.countdownSeconds}
+          />
+        ) : (
+          meta.countdown
+        )}
       </Text>
       {meta.deadline ? (
         <Text size="xs" tone="secondary">
           {meta.deadline}
         </Text>
       ) : null}
-      {!meta.closed && !meta.opens ? (
-        <Text size="xs" tone="secondary">Auto-extend</Text>
-      ) : null}
     </VStack>
-  );
-}
-
-type MinBidHintProps = {
-  state: BiddingState;
-};
-
-function MinBidHint({ state }: MinBidHintProps) {
-  const meta = stateMeta(state);
-  if (!meta.showBidActions) return null;
-
-  const min = minNextBidMinor(
-    meta.currentBidMinor,
-    LOT.incrementMinor,
-    meta.hasBids,
-    LOT.startingBidMinor,
-  );
-
-  return (
-    <Text size="xs" tone="secondary">
-      Min. bid: {formatUsd(min)} (current + {formatUsd(LOT.incrementMinor)})
-    </Text>
   );
 }
 
@@ -168,7 +218,6 @@ type BidActionsProps = {
   bidMode: "manual" | "auto";
   onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
-  children?: ReactNode;
 };
 
 function BidActions({
@@ -176,45 +225,59 @@ function BidActions({
   bidMode,
   onBidModeChange,
   onPlaceBid,
-  children,
 }: BidActionsProps) {
   const meta = stateMeta(state);
   if (!meta.showBidActions) return null;
 
+  const autoBidEnabled = bidMode === "auto";
+
   return (
-    <VStack className="w-full" gap="sm">
-      <HStack className="w-full" gap="sm">
-        <Button
-          onClick={() => onBidModeChange("manual")}
+    <VStack className="w-full" gap="md">
+      <VStack gap="sm">
+        <Text
+          className="text-secondary-foreground"
           size="sm"
-          variant={bidMode === "manual" ? "default" : "outline"}
+          tone="secondary"
+          weight="medium"
         >
-          Manual
-        </Button>
-        <Button
-          onClick={() => onBidModeChange("auto")}
-          size="sm"
-          variant={bidMode === "auto" ? "default" : "outline"}
-        >
-          Auto
-        </Button>
-      </HStack>
-      {bidMode === "manual" ? (
-        <HStack className="w-full" gap="sm" vAlign="end">
-          {children}
-          <Button className="shrink-0" onClick={onPlaceBid}>
+          Place a bid
+        </Text>
+        <HStack className="w-full" gap="sm" vAlign="start">
+          <ManualBidControls hideLabel state={state} />
+          <Button className="shrink-0" onClick={onPlaceBid} size="md">
             Place Bid
           </Button>
         </HStack>
-      ) : (
-        <>
-          {children}
-          <Button className="w-full" onClick={onPlaceBid}>
-            Place Bid
-          </Button>
-        </>
-      )}
-      <MinBidHint state={state} />
+      </VStack>
+
+      <VStack gap="sm">
+        <CheckboxListInput
+          checked={autoBidEnabled}
+          onCheckedChange={(next) =>
+            onBidModeChange(next === true ? "auto" : "manual")
+          }
+          size="sm"
+        >
+          <span className="inline-flex min-w-0 flex-1 items-center gap-1">
+            Enable auto-bidding
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger
+                  aria-label="Auto-bidding rules"
+                  className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                  onPointerDown={(event) => event.preventDefault()}
+                  render={<Info aria-hidden size={12} />}
+                />
+                <TooltipContent>{AUTO_BIDDING_TOOLTIP}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </span>
+        </CheckboxListInput>
+        <AutoBidReveal open={autoBidEnabled}>
+          <AutoBidControls state={state} />
+        </AutoBidReveal>
+      </VStack>
+
       <Text size="xs" tone="secondary">{BUYER_FEE_HINT}</Text>
     </VStack>
   );
@@ -222,7 +285,6 @@ function BidActions({
 
 export {
   BidActions,
-  MinBidHint,
   PriceBlock,
   StandingBanner,
   TimeBlock,

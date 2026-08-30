@@ -13,6 +13,8 @@ export type BiddingState =
 export type BidMode = "manual" | "auto";
 
 export type BidHistoryRow = {
+  id: string;
+  /** Email or display label — avatar shows one initial via `avatarInitial`. */
   initials: string;
   amountMinor: number;
   relativeTime: string;

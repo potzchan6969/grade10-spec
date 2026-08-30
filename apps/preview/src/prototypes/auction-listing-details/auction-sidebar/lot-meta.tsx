@@ -15,8 +15,11 @@ function LotMeta({ state }: LotMetaProps) {
 
   return (
     <VStack className="w-full" gap="lg">
-      <VStack gap="sm">
-        <Text weight="bold">About this lot</Text>
+      <VStack gap="md">
+        <VStack gap="sm">
+          <Text className="font-semibold">About this lot</Text>
+          <LotDescription />
+        </VStack>
         <HStack className="flex-wrap" gap="sm">
           <Badge>Listing {LOT.listingNumber}</Badge>
           <Badge>{LOT.category}</Badge>
@@ -24,27 +27,22 @@ function LotMeta({ state }: LotMetaProps) {
         </HStack>
       </VStack>
       <VStack gap="sm">
-        <Text weight="bold">Vault shipping</Text>
-        <Text size="sm" tone="secondary">
+        <Text className="font-semibold">Vault shipping</Text>
+        <Text size="base">
           Stored in Grade10 Vault — ships from our facility within 1 business
           day of payment.
         </Text>
       </VStack>
       <VStack gap="sm">
-        <Text weight="bold">Authentication</Text>
-        <Text size="sm" tone="secondary">
-          Authenticated by Grade10 Marketplace
-        </Text>
+        <Text className="font-semibold">Authentication</Text>
+        <Text size="base">Authenticated by Grade10 Marketplace</Text>
       </VStack>
       {meta.resultFact ? (
         <VStack gap="sm">
-          <Text weight="bold">Result</Text>
+          <Text className="font-semibold">Result</Text>
           <Text size="sm">{meta.resultFact}</Text>
         </VStack>
       ) : null}
-      <Text size="sm" tone="secondary">
-        Listing {LOT.listingNumber}
-      </Text>
     </VStack>
   );
 }
