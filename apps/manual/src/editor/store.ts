@@ -18,6 +18,10 @@ export type CommitOutcome = { committed: boolean; sha?: string };
 
 export type StoreKind = "local" | "github";
 
+/** The branch a save lands on has moved past the snapshot the page was read
+ * from — the page on screen may not be the page being written over. */
+export type Staleness = { head: string };
+
 export type ContentStore = {
   readonly kind: StoreKind;
   /** Named in the editor chrome, so an author always knows where a save goes. */
@@ -38,6 +42,11 @@ export type ContentStore = {
     bytes: Uint8Array,
     baseVersion: Version | null,
   ): Promise<WriteOutcome>;
+
+  /** Asked once per save attempt, never polled: has the branch this store
+   * writes to moved past `storeHead`? Only a store saving to the branch the
+   * snapshot was built from can answer. */
+  staleness?(storeHead: string): Promise<Staleness | null>;
 
   /** Dev only: what the working tree is holding, and how to land it. */
   dirty?(): Promise<DirtyState>;

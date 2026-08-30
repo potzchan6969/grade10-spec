@@ -21,7 +21,8 @@ import { EditorChrome } from "./editor-chrome";
 import { FrontmatterForm } from "./frontmatter-form";
 import { noteWrite, useEditorSession } from "./session";
 import { SettingsDialog } from "./settings-dialog";
-import { describeCause, type Version } from "./store";
+import { describeCause, type Staleness, type Version } from "./store";
+import { checkReferences, REFERENCE_ID } from "./validate";
 
 /**
  * Edit mode for one page. It reads the page from the store on the way in —
@@ -47,6 +48,13 @@ export function PageEditor({ path }: { path: string }) {
   const [conflict, setConflict] = useState<Conflict | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [leaving, setLeaving] = useState(false);
+  // Asked on the first save of this page and then held — never polled. The
+  // held answer is what the second, deliberate click confirms; asking again
+  // would be asking a different question of the same click.
+  const [freshness, setFreshness] = useState<{
+    moved: Staleness | null;
+  } | null>(null);
 
   const readOnly = store?.readOnly ?? null;
   // A store that cannot write cannot always read either, so a read-only
@@ -62,6 +70,7 @@ export function PageEditor({ path }: { path: string }) {
     // Another page, or another store: hold nothing from the last one.
     setLoaded(null);
     setFailure(null);
+    setFreshness(null);
 
     const read: Promise<{ source: string; version: Version | null }> =
       fallback === null
@@ -115,17 +124,30 @@ export function PageEditor({ path }: { path: string }) {
   }
 
   const build = buildPage(loaded.draft);
-  const problems = build.ok ? NO_PROBLEMS : build.problems;
+  // References are only worth resolving once the page is a page.
+  const references = build.ok
+    ? checkReferences(index, path, loaded.draft)
+    : NO_PROBLEMS;
+  const problems = build.ok ? references : build.problems;
   const changed = build.ok ? build.source !== loaded.source : true;
+  const canSave = build.ok && references.size === 0 && !readOnly && !saving;
 
   const setDraft = (draft: Draft) =>
     setLoaded((current) => (current ? { ...current, draft } : current));
 
   const save = async (against: Version | null) => {
-    if (!build.ok) return;
+    if (!build.ok || references.size > 0) return;
     setSaving(true);
     setSaveError(null);
     try {
+      if (!freshness) {
+        const moved =
+          (await store.staleness?.(index.snapshot.storeHead)) ?? null;
+        setFreshness({ moved });
+        // A page loaded from a snapshot the branch has left is saved on
+        // purpose or not at all: the next click is the confirmation.
+        if (moved) return;
+      }
       const outcome = await store.write(path, build.source, against);
       if (outcome.status === "conflict") {
         setConflict({ mine: build.source, theirs: outcome.current });
@@ -178,16 +200,14 @@ export function PageEditor({ path }: { path: string }) {
   };
 
   const cancel = () => {
-    if (changed && !window.confirm("Leave edit mode and lose these changes?")) {
-      return;
-    }
-    exit();
+    if (changed) setLeaving(true);
+    else exit();
   };
 
   return (
     <div data-editor="page" data-editor-path={path}>
       <EditorChrome
-        canSave={build.ok && !readOnly && !saving}
+        canSave={canSave}
         onCancel={cancel}
         onDelete={
           store.deletePage && loaded.version
@@ -198,6 +218,7 @@ export function PageEditor({ path }: { path: string }) {
         path={path}
         problemCount={problems.size}
         saving={saving}
+        stale={freshness?.moved ?? null}
         store={store}
       />
 
@@ -248,6 +269,18 @@ export function PageEditor({ path }: { path: string }) {
         </Notice>
       ))}
 
+      {problems.get(REFERENCE_ID)?.map((problem) => (
+        <Notice
+          key={problem.message}
+          title="This save would leave a spec unshown"
+          tone="error"
+        >
+          <Text as="p" size="sm" tone="secondary">
+            {problem.message}
+          </Text>
+        </Notice>
+      ))}
+
       <FrontmatterForm
         frontmatter={loaded.draft.frontmatter}
         onChange={(frontmatter) => setDraft({ ...loaded.draft, frontmatter })}
@@ -270,6 +303,14 @@ export function PageEditor({ path }: { path: string }) {
         onOpenChange={setDeleting}
         open={deleting}
         title="Delete this page?"
+      />
+      <ConfirmDialog
+        body="The edits on this page have not been saved anywhere."
+        confirmLabel="Discard them"
+        onConfirm={exit}
+        onOpenChange={setLeaving}
+        open={leaving}
+        title="Leave edit mode?"
       />
       <SettingsDialog onOpenChange={setSettingsOpen} open={settingsOpen} />
     </div>

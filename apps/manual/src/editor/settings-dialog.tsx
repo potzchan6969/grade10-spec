@@ -1,20 +1,38 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { RadioList } from "@grade10/design-system/components/forms/radio-list";
+import { RadioListItem } from "@grade10/design-system/components/forms/radio-list-item";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import { useState } from "react";
-import { REPO, TOKEN_SETTINGS_URL } from "./config";
+import { REPO, TOKEN_SETTINGS_URL, type WriteMode } from "./config";
 import { TextField } from "./fields";
-import { setGithubToken, useEditorSession } from "./session";
+import { setGithubMode, setGithubToken, useEditorSession } from "./session";
 
 /**
- * Where the hosted editor gets its credential. A fine-grained PAT is the
- * interim answer, and it is only tolerable because the renderer never renders
- * raw HTML — that is the XSS line a stored token sits behind.
+ * Where the hosted editor saves, and what it saves with. A fine-grained PAT is
+ * the interim credential, and it is only tolerable because the renderer never
+ * renders raw HTML — that is the XSS line a stored token sits behind.
  */
+
+const MODES: { value: WriteMode; title: string; needs: string; how: string }[] =
+  [
+    {
+      value: "main",
+      title: `Straight to ${REPO.defaultBranch}`,
+      needs: "Contents: read and write",
+      how: "The deploy listens on push, so a save is live in about a minute.",
+    },
+    {
+      value: "branch",
+      title: "Branch and pull request",
+      needs: "Contents plus Pull requests: read and write",
+      how: "Edits land on your own branch with its pull request kept open.",
+    },
+  ];
 
 export function SettingsDialog({
   open,
@@ -23,23 +41,35 @@ export function SettingsDialog({
   open: boolean;
   onOpenChange: (next: boolean) => void;
 }) {
-  const { token } = useEditorSession();
+  const { token, mode } = useEditorSession();
   const [draft, setDraft] = useState(token ?? "");
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent className="max-w-(--container-md)">
         <DialogTitle className="font-heading font-bold text-lg">
-          GitHub token
+          Saving to {REPO.owner}/{REPO.repo}
         </DialogTitle>
 
-        <Text as="p" size="sm" tone="secondary">
-          Edits are committed to a branch of {REPO.owner}/{REPO.repo} and opened
-          as a pull request. That needs a fine-grained token for this repository
-          with <strong>Contents: read and write</strong> and{" "}
-          <strong>Pull requests: read and write</strong>. It is kept in this
-          browser only.
-        </Text>
+        <RadioList
+          label="Where saves go"
+          onValueChange={(next) => setGithubMode(next as WriteMode)}
+          value={mode}
+        >
+          {MODES.map((choice) => (
+            <RadioListItem key={choice.value} value={choice.value}>
+              <span className="flex flex-col gap-0.5">
+                <Text as="span" size="sm" weight="medium">
+                  {choice.title}
+                </Text>
+                <Text as="span" size="xs" tone="secondary">
+                  {choice.how} Needs a fine-grained token for this repository
+                  with <strong>{choice.needs}</strong>.
+                </Text>
+              </span>
+            </RadioListItem>
+          ))}
+        </RadioList>
 
         <TextField
           label="Token"
@@ -47,6 +77,10 @@ export function SettingsDialog({
           placeholder="github_pat_…"
           value={draft}
         />
+
+        <Text as="p" size="xs" tone="secondary">
+          The token is kept in this browser only.
+        </Text>
 
         <div className="flex flex-wrap items-center gap-2">
           <a

@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import { STORAGE } from "./config";
+import { asWriteMode, STORAGE, type WriteMode } from "./config";
 import { browserKeyStore, GithubStore } from "./github-store";
 import { LocalStore, probeLocalStore } from "./local-store";
 import type { ContentStore, StoreKind } from "./store";
@@ -16,6 +16,9 @@ export type EditorSession = {
   store: ContentStore | null;
   kind: StoreKind | null;
   token: string | null;
+  /** Where a hosted save lands. Meaningless for the dev store, which only
+   * ever writes the working tree. */
+  mode: WriteMode;
 };
 
 let state: EditorSession = {
@@ -23,6 +26,7 @@ let state: EditorSession = {
   store: null,
   kind: null,
   token: browserKeyStore.get(STORAGE.token),
+  mode: asWriteMode(browserKeyStore.get(STORAGE.mode)),
 };
 
 const listeners = new Set<() => void>();
@@ -37,12 +41,14 @@ function bump(): void {
   set({});
 }
 
-function github(): Pick<EditorSession, "store" | "kind" | "token"> {
+function github(): Pick<EditorSession, "store" | "kind" | "token" | "mode"> {
   const token = browserKeyStore.get(STORAGE.token);
+  const mode = asWriteMode(browserKeyStore.get(STORAGE.mode));
   return {
     token,
+    mode,
     kind: "github",
-    store: new GithubStore({ token, onChange: bump }),
+    store: new GithubStore({ token, mode, onChange: bump }),
   };
 }
 
@@ -82,6 +88,13 @@ export function setGithubToken(token: string | null): void {
   // belong to the old one.
   browserKeyStore.remove(STORAGE.login);
   browserKeyStore.remove(STORAGE.pr);
+  set({ status: "ready", ...github() });
+}
+
+/** Switching mode builds a new store: the mode picks the ref for read and
+ * write together, so the old one cannot answer for the new mode. */
+export function setGithubMode(mode: WriteMode): void {
+  browserKeyStore.set(STORAGE.mode, mode);
   set({ status: "ready", ...github() });
 }
 

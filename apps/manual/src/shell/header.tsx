@@ -3,6 +3,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { List, X } from "@phosphor-icons/react";
 import { Link } from "react-router";
+import { HealthPip } from "./health-banner";
 import { ManualSearch } from "./search";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -40,6 +41,7 @@ export function Header({ navOpen, onToggleNav, onNavigate }: HeaderProps) {
         </Link>
 
         <div className="ml-auto flex items-center gap-2">
+          <HealthPip />
           <ManualSearch />
           <ThemeToggle />
         </div>

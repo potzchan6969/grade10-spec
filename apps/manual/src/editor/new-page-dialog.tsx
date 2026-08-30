@@ -10,9 +10,9 @@ import { useNavigate } from "react-router";
 import { MANUAL_ROOT, routeForPagePath, slugify } from "../api/paths";
 import { useSnapshotReload } from "../api/snapshot-provider";
 import { useManualIndex } from "../api/use-manual-index";
-import { serializePage } from "../content/grammar";
 import { editHref } from "./edit-mode";
 import { SelectField, TextField } from "./fields";
+import { newPageSource } from "./scaffold";
 import { noteWrite, useEditorSession } from "./session";
 import { describeCause } from "./store";
 
@@ -69,6 +69,12 @@ export function NewPageDialog({
   const path = pathFor(kind, product, effectiveSlug);
   const taken = index.pageByPath.has(path);
 
+  // A capability page documents the spec its own path names, and gets that
+  // spec's shelf — spec, journeys, cases — when the store already has one.
+  const capability = kind === "capability page";
+  const specId = capability ? `${product}/${effectiveSlug}` : undefined;
+  const known = specId !== undefined && index.specById.has(specId);
+
   const problem =
     title.trim() === ""
       ? "a title is required"
@@ -82,9 +88,10 @@ export function NewPageDialog({
     if (problem || !store) return;
     setBusy(true);
     setError(null);
-    const source = serializePage({
-      frontmatter: { title: title.trim() },
-      blocks: [],
+    const source = newPageSource({
+      title: title.trim(),
+      capability,
+      spec: known ? specId : undefined,
     });
 
     store
@@ -143,6 +150,13 @@ export function NewPageDialog({
           <Text as="p" className="font-mono" size="xs" tone="secondary">
             {path}
           </Text>
+          {capability ? (
+            <Text as="p" size="xs" tone="secondary">
+              {known
+                ? `Starts on the shelf for ${specId}: prose, spec, journeys, cases.`
+                : `No spec \`${specId}\` in the store yet — the page starts on prose alone.`}
+            </Text>
+          ) : null}
           {problem && title.trim() !== "" ? (
             <Text as="p" className="text-destructive" size="xs">
               {problem}

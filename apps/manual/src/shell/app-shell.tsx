@@ -5,6 +5,7 @@ import { useHashFlash } from "../blocks/anchor";
 import { CommitBar } from "../editor/commit-bar";
 import { SnapshotFooter } from "./footer";
 import { Header } from "./header";
+import { HealthStrip } from "./health-banner";
 import { PageRail } from "./page-rail";
 import { useScrollMemory } from "./scroll-memory";
 import { Sidebar } from "./sidebar";
@@ -31,6 +32,7 @@ export function AppShell() {
         onNavigate={closeNav}
         onToggleNav={() => setNavOpen((on) => !on)}
       />
+      <HealthStrip />
 
       {/* Scrim. The header's toggle is the named control, so this one stays out
           of the accessibility tree rather than answering to the same name. */}

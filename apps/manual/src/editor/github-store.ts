@@ -1,8 +1,25 @@
-import { BRANCH_PREFIX, GITHUB_API, REPO, STORAGE } from "./config";
+import {
+  BRANCH_PREFIX,
+  DEFAULT_WRITE_MODE,
+  REPO,
+  STORAGE,
+  type WriteMode,
+} from "./config";
+import {
+  type Answer,
+  encodePath,
+  githubCall,
+  messageOf,
+  refPath,
+  repoPath,
+  shaOfRef,
+  updateRefPath,
+} from "./github-api";
 import {
   assertManualPath,
   base64FromBytes,
   type ContentStore,
+  type Staleness,
   type StoredFile,
   StoreError,
   textFromBase64,
@@ -12,11 +29,15 @@ import {
 } from "./store";
 
 /**
- * The hosted transport. A fine-grained PAT writes to one branch per author —
- * `manual/<login>` — and the branch never rots: before the first write of a
- * session GitHub says whether a pull request from it is still open, and a
- * branch whose PR is gone starts again from the default branch. The first
- * successful write then makes sure a pull request exists.
+ * The hosted transport, in one of two modes chosen in settings.
+ *
+ * `main` writes the base branch the deploy listens on, so a save is live in
+ * about a minute; nothing branches, nothing is proposed, and the freshness
+ * check is what keeps it honest. `branch` writes `manual/<login>` and keeps
+ * its pull request open, so edits never rot on an unopened branch.
+ *
+ * The mode picks the ref for read and write together: a main-mode session
+ * never loads a leftover personal branch and calls it main.
  */
 
 export type KeyStore = {
@@ -49,13 +70,22 @@ export const browserKeyStore: KeyStore = {
   },
 };
 
-type Answer = { status: number; body: Record<string, unknown> | unknown[] };
+function noToken(mode: WriteMode): string {
+  const needs =
+    mode === "main"
+      ? "contents:write"
+      : "contents:write and pull_requests:write";
+  return `Read-only: no GitHub token. Add a fine-grained token with ${needs} to save.`;
+}
 
-const NO_TOKEN =
-  "Read-only: no GitHub token. Add a fine-grained token with contents:write and pull_requests:write to save.";
+/** A push GitHub refused on a rule rather than on the blob sha in hand.
+ * A sha mismatch never reads like this, so it stays a conflict. */
+const PROTECTION =
+  /protect|refusing to allow|not authorized|required status check|approving review/i;
 
 export type GithubStoreOptions = {
   token: string | null;
+  mode?: WriteMode;
   http?: typeof fetch;
   storage?: KeyStore;
   /** Called when the login or the pull request URL becomes known. */
@@ -64,6 +94,7 @@ export type GithubStoreOptions = {
 
 export class GithubStore implements ContentStore {
   readonly kind = "github" as const;
+  readonly mode: WriteMode;
 
   private readonly token: string | null;
   private readonly http: typeof fetch;
@@ -77,6 +108,7 @@ export class GithubStore implements ContentStore {
 
   constructor(options: GithubStoreOptions) {
     this.token = options.token;
+    this.mode = options.mode ?? DEFAULT_WRITE_MODE;
     this.http = options.http ?? fetch;
     this.storage = options.storage ?? browserKeyStore;
     this.onChange = options.onChange ?? (() => {});
@@ -85,24 +117,28 @@ export class GithubStore implements ContentStore {
   }
 
   get label(): string {
-    const where = this.login ? `${BRANCH_PREFIX}${this.login}` : "a branch";
+    const where =
+      this.mode === "main"
+        ? REPO.defaultBranch
+        : this.login
+          ? `${BRANCH_PREFIX}${this.login}`
+          : "a branch";
     return `GitHub — ${REPO.owner}/${REPO.repo}, ${where}`;
   }
 
   get readOnly(): string | null {
-    return this.token ? null : NO_TOKEN;
+    return this.token ? null : noToken(this.mode);
   }
 
+  /** A main-mode save has no pull request, and the remembered one belongs to
+   * another mode's edits. */
   get reviewUrl(): string | null {
-    return this.pr;
+    return this.mode === "main" ? null : this.pr;
   }
 
   async read(path: string): Promise<StoredFile> {
-    const login = await this.whoami();
-    const branch = `${BRANCH_PREFIX}${login}`;
-    const onBranch = await this.contents(path, branch);
-    const answer =
-      onBranch.status === 404 ? await this.contents(path) : onBranch;
+    if (!this.token) throw new StoreError(401, noToken(this.mode));
+    const answer = await this.readFrom(path);
     if (answer.status !== 200)
       throw this.failure(answer, `cannot read ${path}`);
 
@@ -111,6 +147,15 @@ export class GithubStore implements ContentStore {
       throw new StoreError(answer.status, `${path} is not a readable file`);
     }
     return { source: textFromBase64(body.content), version: body.sha };
+  }
+
+  /** Main mode reads the base branch and only the base branch. Branch mode
+   * prefers the author's own, falling back to a file it does not carry. */
+  private async readFrom(path: string): Promise<Answer> {
+    if (this.mode === "main") return this.contents(path, REPO.defaultBranch);
+    const branch = `${BRANCH_PREFIX}${await this.whoami()}`;
+    const onBranch = await this.contents(path, branch);
+    return onBranch.status === 404 ? this.contents(path) : onBranch;
   }
 
   async write(
@@ -131,29 +176,49 @@ export class GithubStore implements ContentStore {
     return this.put(path, bytes, baseVersion, `manual: upload ${path}`);
   }
 
+  /** Live head of the branch a save lands on, against the head the deployed
+   * snapshot was built from. Only main mode has an answer: a personal branch
+   * is not what the snapshot came from. */
+  async staleness(storeHead: string): Promise<Staleness | null> {
+    if (this.mode !== "main" || !this.token) return null;
+    const head = await this.liveHead();
+    return head === storeHead ? null : { head };
+  }
+
+  async liveHead(): Promise<string> {
+    const base = await this.call(refPath(REPO.defaultBranch));
+    const head = shaOfRef(base);
+    if (base.status !== 200 || head === null) {
+      throw this.failure(base, `cannot read ${REPO.defaultBranch}`);
+    }
+    return head;
+  }
+
   private async put(
     path: string,
     bytes: Uint8Array,
     baseVersion: Version | null,
     message: string,
   ): Promise<WriteOutcome> {
-    if (!this.token) throw new StoreError(401, NO_TOKEN);
-    const branch = await this.ensureBranch();
-    const sha = await this.baseOnBranch(path, branch, baseVersion);
+    if (!this.token) throw new StoreError(401, noToken(this.mode));
+    const main = this.mode === "main";
+    const branch = main ? REPO.defaultBranch : await this.ensureBranch();
+    const sha = main
+      ? baseVersion
+      : await this.baseOnBranch(path, branch, baseVersion);
 
-    const answer = await this.call(
-      `/repos/${REPO.owner}/${REPO.repo}/contents/${encodePath(path)}`,
-      {
-        method: "PUT",
-        body: JSON.stringify({
-          message,
-          content: base64FromBytes(bytes),
-          branch,
-          ...(sha ? { sha } : {}),
-        }),
-      },
-    );
+    const answer = await this.call(repoPath(`contents/${encodePath(path)}`), {
+      method: "PUT",
+      body: JSON.stringify({
+        message,
+        content: base64FromBytes(bytes),
+        branch,
+        ...(sha ? { sha } : {}),
+      }),
+    });
 
+    const refused = this.protectionRefusal(answer);
+    if (refused) throw refused;
     if (answer.status === 409 || answer.status === 422) {
       return {
         status: "conflict",
@@ -164,7 +229,7 @@ export class GithubStore implements ContentStore {
       throw this.failure(answer, `cannot write ${path}`);
     }
 
-    await this.ensurePullRequest(branch);
+    if (!main) await this.ensurePullRequest(branch);
     const content = (answer.body as Record<string, unknown>).content as
       | Record<string, unknown>
       | undefined;
@@ -173,6 +238,22 @@ export class GithubStore implements ContentStore {
       throw new StoreError(answer.status, "GitHub answered without a blob sha");
     }
     return { status: "ok", version };
+  }
+
+  /** Branch protection said no. There is no fallback to fall back to — the
+   * next move is the author's, and it is the other mode. */
+  private protectionRefusal(answer: Answer): StoreError | null {
+    if (this.mode !== "main") return null;
+    const said = messageOf(answer);
+    const refused =
+      answer.status === 403 ||
+      ((answer.status === 409 || answer.status === 422) &&
+        PROTECTION.test(said));
+    if (!refused) return null;
+    return new StoreError(
+      answer.status,
+      `${REPO.defaultBranch} refused this push: ${said} — switch to branch + PR mode in settings and this edit goes through a pull request instead.`,
+    );
   }
 
   /** A conflict is only useful with the other side in hand, so re-read it. */
@@ -194,7 +275,7 @@ export class GithubStore implements ContentStore {
 
   private async whoami(): Promise<string> {
     if (this.login) return this.login;
-    if (!this.token) throw new StoreError(401, NO_TOKEN);
+    if (!this.token) throw new StoreError(401, noToken(this.mode));
 
     const answer = await this.call("/user");
     const login = (answer.body as Record<string, unknown>).login;
@@ -235,21 +316,10 @@ export class GithubStore implements ContentStore {
     }
     if (existing.status === 200 && open) return branch;
 
-    const head = await this.defaultHead();
+    const head = await this.liveHead();
     if (existing.status === 200) await this.resetBranch(branch, head);
     else await this.createBranch(branch, head);
     return branch;
-  }
-
-  private async defaultHead(): Promise<string> {
-    const base = await this.call(refPath(REPO.defaultBranch));
-    const head = (base.body as Record<string, unknown>).object as
-      | Record<string, unknown>
-      | undefined;
-    if (base.status !== 200 || typeof head?.sha !== "string") {
-      throw this.failure(base, `cannot read ${REPO.defaultBranch}`);
-    }
-    return head.sha;
   }
 
   private async resetBranch(branch: string, head: string): Promise<void> {
@@ -264,7 +334,7 @@ export class GithubStore implements ContentStore {
   }
 
   private async createBranch(branch: string, head: string): Promise<void> {
-    const made = await this.call(`/repos/${REPO.owner}/${REPO.repo}/git/refs`, {
+    const made = await this.call(repoPath("git/refs"), {
       method: "POST",
       body: JSON.stringify({ ref: `refs/heads/${branch}`, sha: head }),
     });
@@ -292,7 +362,7 @@ export class GithubStore implements ContentStore {
    * URL outlives a merge, so it is never an answer on its own. */
   private async findOpenPr(branch: string): Promise<string | null> {
     const open = await this.call(
-      `/repos/${REPO.owner}/${REPO.repo}/pulls?state=open&head=${REPO.owner}:${branch}`,
+      repoPath(`pulls?state=open&head=${REPO.owner}:${branch}`),
     );
     const first = Array.isArray(open.body) ? open.body[0] : undefined;
     const found = (first as Record<string, unknown> | undefined)?.html_url;
@@ -320,7 +390,7 @@ export class GithubStore implements ContentStore {
   private async openPullRequest(branch: string): Promise<void> {
     if (await this.findOpenPr(branch)) return;
 
-    const made = await this.call(`/repos/${REPO.owner}/${REPO.repo}/pulls`, {
+    const made = await this.call(repoPath("pulls"), {
       method: "POST",
       body: JSON.stringify({
         title: `Manual edits from ${this.login}`,
@@ -357,51 +427,14 @@ export class GithubStore implements ContentStore {
 
   private contents(path: string, ref?: string): Promise<Answer> {
     const at = ref ? `?ref=${encodeURIComponent(ref)}` : "";
-    return this.call(
-      `/repos/${REPO.owner}/${REPO.repo}/contents/${encodePath(path)}${at}`,
-    );
+    return this.call(repoPath(`contents/${encodePath(path)}${at}`));
   }
 
-  private async call(path: string, init?: RequestInit): Promise<Answer> {
-    const headers: Record<string, string> = {
-      accept: "application/vnd.github+json",
-      "x-github-api-version": "2022-11-28",
-    };
-    if (this.token) headers.authorization = `Bearer ${this.token}`;
-    if (init?.body) headers["content-type"] = "application/json";
-
-    const response = await this.http(`${GITHUB_API}${path}`, {
-      ...init,
-      headers,
-    });
-    const text = await response.text();
-    let body: Answer["body"] = {};
-    if (text.trim() !== "") {
-      try {
-        body = JSON.parse(text) as Answer["body"];
-      } catch {
-        body = { message: text };
-      }
-    }
-    return { status: response.status, body };
+  private call(path: string, init?: RequestInit): Promise<Answer> {
+    return githubCall(this.http, this.token, path, init);
   }
 
   private failure(answer: Answer, what: string): StoreError {
-    const said = (answer.body as Record<string, unknown>).message;
-    const detail = typeof said === "string" ? said : `HTTP ${answer.status}`;
-    return new StoreError(answer.status, `${what}: ${detail}`);
+    return new StoreError(answer.status, `${what}: ${messageOf(answer)}`);
   }
-}
-
-function refPath(branch: string): string {
-  return `/repos/${REPO.owner}/${REPO.repo}/git/ref/heads/${encodePath(branch)}`;
-}
-
-/** Reading a ref is `git/ref`, moving one is `git/refs` — GitHub's spelling. */
-function updateRefPath(branch: string): string {
-  return `/repos/${REPO.owner}/${REPO.repo}/git/refs/heads/${encodePath(branch)}`;
-}
-
-function encodePath(path: string): string {
-  return path.split("/").map(encodeURIComponent).join("/");
 }

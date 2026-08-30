@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { REPO, STORAGE } from "../src/editor/config";
+import { REPO, STORAGE, type WriteMode } from "../src/editor/config";
 import { GithubStore, type KeyStore } from "../src/editor/github-store";
 
 /** The hosted transport against a mocked GitHub. Nothing here touches the
- * network; what is pinned is the shape of the exchange — branch, then write,
- * then a pull request that already exists or comes into being. */
+ * network; what is pinned is the shape of each mode's exchange — branch mode
+ * cuts a branch and keeps a pull request, main mode does neither. */
 
 const REPO_API = `https://api.github.com/repos/${REPO.owner}/${REPO.repo}`;
 const BRANCH = "manual/echo";
@@ -111,15 +111,21 @@ function freshRepo(overrides: (call: Call) => Answer | null = () => null) {
   return repo("missing", overrides);
 }
 
+/** Branch mode is the one with machinery, so it is the one these name. */
 function storeOn(
   http: typeof fetch,
   token: string | null = "pat",
   storage: KeyStore = memoryStore(),
+  mode: WriteMode = "branch",
 ) {
-  return new GithubStore({ token, http, storage });
+  return new GithubStore({ token, http, storage, mode });
 }
 
-describe("GithubStore", () => {
+function mainStoreOn(http: typeof fetch, token: string | null = "pat") {
+  return new GithubStore({ token, http, storage: memoryStore(), mode: "main" });
+}
+
+describe("GithubStore, branch + PR mode", () => {
   it("cuts the author's branch from main, writes, and opens the PR", async () => {
     const { http, calls, seen } = freshRepo();
     const store = storeOn(http);
@@ -369,5 +375,113 @@ describe("GithubStore", () => {
     await expect(storeOn(http).write(PATH, MINE, null)).rejects.toThrow(
       /Bad credentials/,
     );
+  });
+
+  it("has no staleness to report — a personal branch is not the snapshot", async () => {
+    const { http, calls } = freshRepo();
+
+    expect(await storeOn(http).staleness("whatever")).toBeNull();
+    expect(calls).toHaveLength(0);
+  });
+});
+
+describe("GithubStore, main mode", () => {
+  it("writes the default branch itself, cutting nothing and proposing nothing", async () => {
+    const { http, calls, seen } = freshRepo();
+    const store = mainStoreOn(http);
+
+    const outcome = await store.write(PATH, MINE, "oldblob");
+
+    expect(outcome).toEqual({ status: "ok", version: "blob2" });
+    const put = calls.find((call) => call.method === "PUT");
+    expect(put?.url).toBe(`${REPO_API}/contents/${PATH}`);
+    expect(put?.body).toMatchObject({ branch: "main", sha: "oldblob" });
+
+    expect(seen("POST", `${REPO_API}/git/refs`)).toHaveLength(0);
+    expect(seen("PATCH", `${REPO_API}/git/refs/heads/${BRANCH}`)).toHaveLength(
+      0,
+    );
+    expect(seen("POST", `${REPO_API}/pulls`)).toHaveLength(0);
+    expect(calls.filter((call) => call.url.endsWith("/user"))).toHaveLength(0);
+    expect(store.reviewUrl).toBeNull();
+    expect(store.label).toContain("main");
+  });
+
+  it("reads main, never a personal branch left standing from the other mode", async () => {
+    const { http, calls } = repo("standing", (call) =>
+      call.url === `${REPO_API}/contents/${PATH}?ref=manual%2Fecho`
+        ? { status: 200, body: contentsOf(MINE, "branchsha") }
+        : null,
+    );
+
+    const file = await mainStoreOn(http).read(PATH);
+
+    expect(file).toEqual({ source: THEIRS, version: "theirsha" });
+    expect(calls.map((call) => call.url)).toEqual([
+      `${REPO_API}/contents/${PATH}?ref=main`,
+    ]);
+  });
+
+  it("still turns a stale blob sha into a conflict carrying the other side", async () => {
+    const { http } = freshRepo((call) =>
+      call.method === "PUT"
+        ? { status: 409, body: { message: "does not match" } }
+        : null,
+    );
+
+    expect(await mainStoreOn(http).write(PATH, MINE, "stale")).toEqual({
+      status: "conflict",
+      current: { source: THEIRS, version: "theirsha" },
+    });
+  });
+
+  it("still reads GitHub's 422 on a stale sha as a conflict", async () => {
+    const { http } = freshRepo((call) =>
+      call.method === "PUT"
+        ? { status: 422, body: { message: "invalid sha" } }
+        : null,
+    );
+
+    expect(await mainStoreOn(http).write(PATH, MINE, "stale")).toMatchObject({
+      status: "conflict",
+    });
+  });
+
+  it.each([
+    [403, "resource not accessible by personal access token"],
+    [422, "main is a protected branch"],
+  ])(
+    "answers a %i push refusal by naming PR mode, never by falling back",
+    async (status, message) => {
+      const { http, seen } = freshRepo((call) =>
+        call.method === "PUT" ? { status, body: { message } } : null,
+      );
+
+      await expect(mainStoreOn(http).write(PATH, MINE, "blob")).rejects.toThrow(
+        /branch \+ PR mode/,
+      );
+      expect(seen("POST", `${REPO_API}/git/refs`)).toHaveLength(0);
+      expect(seen("POST", `${REPO_API}/pulls`)).toHaveLength(0);
+    },
+  );
+
+  it("compares live main against the snapshot the page was loaded from", async () => {
+    const { http, seen } = freshRepo();
+    const store = mainStoreOn(http);
+
+    expect(await store.staleness("mainhead")).toBeNull();
+    expect(await store.staleness("olderhead")).toEqual({ head: "mainhead" });
+    expect(seen("GET", `${REPO_API}/git/ref/heads/main`)).toHaveLength(2);
+  });
+
+  it("asks nothing without a token", async () => {
+    const { http, calls } = freshRepo();
+    const store = mainStoreOn(http, null);
+
+    expect(store.readOnly).toMatch(/contents:write/);
+    expect(store.readOnly).not.toMatch(/pull_requests/);
+    expect(await store.staleness("olderhead")).toBeNull();
+    await expect(store.read(PATH)).rejects.toThrow(/token/);
+    expect(calls).toHaveLength(0);
   });
 });
