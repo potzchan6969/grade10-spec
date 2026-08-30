@@ -41,6 +41,7 @@ export * from "./components/forms/segmented-control";
 export * from "./components/forms/segmented-control-item";
 export * from "./components/forms/select";
 export * from "./components/forms/stepper-input";
+export * from "./components/forms/switch";
 export * from "./components/forms/text-input";
 export * from "./components/layout/center";
 export * from "./components/layout/footer";
