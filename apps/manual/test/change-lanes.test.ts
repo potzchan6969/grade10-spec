@@ -7,7 +7,7 @@ import {
   laneOf,
   proposalsForSpec,
 } from "../src/api/derive";
-import type { ChangeEntry, Delta } from "../src/api/types";
+import type { Delta } from "../src/api/types";
 import { findStoreRoot } from "../src/store/disk.mts";
 import { readStore } from "../src/store/snapshot.mts";
 import { changeEntry, snapshotOf, specEntry } from "./manual-fixture";
@@ -155,20 +155,25 @@ describe("the proposals a capability should know about", () => {
   });
 });
 
-/** The store as it stands: no derivation earns its keep if the twenty changes
- * people actually wrote land somewhere unexpected. */
+/** The store as it stands: no derivation earns its keep if the changes
+ * people actually wrote land somewhere unexpected. The store moves under
+ * this suite on every merge, so it holds only the invariants a moving
+ * store keeps — never a census of today's counts. */
 describe("the real store's board", () => {
   const root = findStoreRoot(fileURLToPath(new URL(".", import.meta.url)));
 
-  it("puts every change in a lane, and none in the two empty ones", async () => {
+  it("puts every change in exactly one lane, misfiling none", async () => {
     const { snapshot, archive } = await readStore(root);
-    const counted = (lane: string, changes: ChangeEntry[]) =>
-      changes.filter((one) => laneOf(one) === lane).length;
+    const lanes = ["proposed", "specified", "in-progress", "complete"];
 
-    expect(counted("proposed", snapshot.changes)).toBe(0);
-    expect(counted("specified", snapshot.changes)).toBe(0);
-    expect(counted("in-progress", snapshot.changes)).toBe(17);
-    expect(counted("complete", snapshot.changes)).toBe(3);
+    for (const change of snapshot.changes) {
+      expect(lanes).toContain(laneOf(change));
+      // The misfile the board existed to fix: a change with deltas read
+      // as an unplanned thought. It is never a proposal.
+      if (change.deltas.length > 0) {
+        expect(laneOf(change)).not.toBe("proposed");
+      }
+    }
 
     expect(snapshot.changes.every((one) => one.lastMoved)).toBe(true);
     expect(
@@ -186,13 +191,20 @@ describe("the real store's board", () => {
       one.deltas.flatMap((delta) => delta.requirements),
     );
 
-    expect(requirements.length).toBeGreaterThan(150);
+    expect(requirements.length).toBeGreaterThan(0);
     expect(requirements.every((one) => one.text)).toBe(true);
+    const lines = snapshot.changes.flatMap((one) =>
+      one.taskGroups.flatMap((held) => held.tasks ?? []),
+    );
+    expect(lines.length).toBeGreaterThan(0);
     expect(
-      snapshot.changes.flatMap((one) =>
-        one.taskGroups.flatMap((held) => held.tasks ?? []),
-      ).length,
-    ).toBeGreaterThan(400);
+      snapshot.changes.every((one) =>
+        one.taskGroups.every(
+          (held) =>
+            (held.tasks ?? []).filter((t) => t.done).length === held.done,
+        ),
+      ),
+    ).toBe(true);
   });
 
   /** The durable file's own ceiling understates what has been issued: the
