@@ -3,10 +3,13 @@ import type { SpecEntry } from "../src/api/types";
 import {
   allowedProposal,
   authorOf,
+  citablesAcross,
   citablesOf,
   citesForRequirement,
   draftProblem,
   draftProposal,
+  figmaProblem,
+  issuedCeiling,
   type ProposalDraft,
   proposalPaths,
   slugOf,
@@ -247,6 +250,48 @@ describe("what a draft refuses to be", () => {
   });
 });
 
+describe("the Figma link a proposal may carry", () => {
+  it.each([
+    "https://www.figma.com/design/abc/Store?node-id=1-2",
+    "https://figma.com/file/abc",
+  ])("takes %s", (url) => {
+    expect(figmaProblem(url)).toBeNull();
+    expect(filesOf({ ...DRAFT, figma: url })[PROPOSAL]).toContain(
+      `- Figma: ${url}`,
+    );
+  });
+
+  it.each([
+    ["another host wearing the name", "https://figma.com.evil.test/design/a"],
+    ["a host it merely contains", "https://notfigma.com/design/a"],
+    ["plain http", "http://www.figma.com/design/a"],
+    ["a javascript url", "javascript:alert(1)"],
+    ["prose", "the frame in our file"],
+  ])("refuses %s", (_what, url) => {
+    expect(figmaProblem(url)).toMatch(/figma\.com/);
+    expect(draftProblem({ ...DRAFT, figma: url })).toMatch(/figma\.com/);
+    expect(() => draftProposal({ ...DRAFT, figma: url })).toThrow(/figma/);
+  });
+
+  it("is optional, and writes no References for a proposal with neither", () => {
+    expect(figmaProblem(undefined)).toBeNull();
+    expect(figmaProblem("  ")).toBeNull();
+    expect(filesOf({ ...DRAFT, cites: [], figma: "" })[PROPOSAL]).not.toContain(
+      "## References",
+    );
+  });
+
+  it("opens a References section for a link with no ids beside it", () => {
+    const text = filesOf({
+      ...DRAFT,
+      cites: [],
+      figma: "https://www.figma.com/design/abc/Store",
+    })[PROPOSAL];
+    expect(text).toContain("## References");
+    expect(text).toContain("- Figma: https://www.figma.com/design/abc/Store");
+  });
+});
+
 describe("what a proposal can cite", () => {
   const spec: SpecEntry = {
     id: "demo-product/alpha",
@@ -278,14 +323,62 @@ describe("what a proposal can cite", () => {
   it("offers every id the page's own spec issues, and the requirement names", () => {
     expect(citablesOf(spec)).toEqual([
       {
+        id: "demo-product/alpha",
+        title: "alpha",
+        kind: "spec",
+        spec: "demo-product/alpha",
+      },
+      {
         id: "Alpha does things",
         title: "Alpha does things",
         kind: "requirement",
+        spec: "demo-product/alpha",
       },
-      { id: "alpha-SC-01", title: "It happens", kind: "scenario" },
-      { id: "alpha-US-01", title: "Collector does it", kind: "journey" },
-      { id: "alpha-TC-01", title: "It is tested", kind: "case" },
+      {
+        id: "alpha-SC-01",
+        title: "It happens",
+        kind: "scenario",
+        spec: "demo-product/alpha",
+      },
+      {
+        id: "alpha-US-01",
+        title: "Collector does it",
+        kind: "journey",
+        spec: "demo-product/alpha",
+      },
+      {
+        id: "alpha-TC-01",
+        title: "It is tested",
+        kind: "case",
+        spec: "demo-product/alpha",
+      },
     ]);
+  });
+
+  it("searches every spec, the page's own first", () => {
+    const other: SpecEntry = {
+      id: "demo-product/beta",
+      title: "beta",
+      purpose: "",
+      requirements: [],
+    };
+
+    expect(citablesAcross([other, spec], spec).map((one) => one.spec)).toEqual([
+      ...Array(5).fill("demo-product/alpha"),
+      "demo-product/beta",
+    ]);
+    expect(citablesAcross([other, spec]).map((one) => one.spec)).toEqual([
+      "demo-product/beta",
+      ...Array(5).fill("demo-product/alpha"),
+    ]);
+  });
+
+  it("names the id ceiling the durable file understates", () => {
+    expect(issuedCeiling({ ...spec, issuedThrough: { sc: 149 } })).toBe(
+      "alpha has issued ids through SC-149",
+    );
+    expect(issuedCeiling(spec)).toBeNull();
+    expect(issuedCeiling(undefined)).toBeNull();
   });
 
   it("cites what a requirement row already knows about itself", () => {

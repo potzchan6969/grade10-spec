@@ -22,13 +22,25 @@ export function asWriteMode(value: string | null): WriteMode {
   return value === "branch" || value === "main" ? value : DEFAULT_WRITE_MODE;
 }
 
-/** Where a fine-grained PAT is minted, linked from the settings dialog. */
-export const TOKEN_SETTINGS_URL =
-  "https://github.com/settings/personal-access-tokens/new";
+/** Where a fine-grained PAT is minted, linked from the settings dialog with
+ * the two fields GitHub's own form reads from the URL. The repository and the
+ * permissions are not among them — the dialog spells those out instead. */
+export const TOKEN_SETTINGS_URL = `https://github.com/settings/personal-access-tokens/new?name=${encodeURIComponent(
+  "Grade10 Manual",
+)}&description=${encodeURIComponent(
+  `Editing ${REPO.owner}/${REPO.repo} from the Grade10 Manual`,
+)}`;
+
+/** Where a pending organization approval is seen, named in the refusal a
+ * 404 produces. */
+export const TOKEN_LIST_URL =
+  "https://github.com/settings/personal-access-tokens";
 
 export const STORAGE = {
   token: "manual.github.token",
-  login: "manual.github.login",
+  /** The verdict GitHub gave that token: who it belongs to, and that it
+   * reaches this repo. Written by verification alone. */
+  verified: "manual.github.verified",
   pr: "manual.github.pr",
   mode: "manual.github.mode",
   /** Hosted only: the staged set, keyed by page path. */

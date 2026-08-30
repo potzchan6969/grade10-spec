@@ -24,6 +24,9 @@ const RESERVED = new Set(["archive"]);
 
 const SLUG = /^[a-z0-9][a-z0-9-]*$/;
 const HANDLE = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
+/** A design lives in one place, and a proposal that points anywhere else is
+ * pointing at something this store cannot check. */
+const FIGMA_HOST = /^(?:[a-z0-9-]+\.)*figma\.com$/i;
 const HEADING = /^#{1,6}\s/m;
 const AUTHOR_LINE =
   /^\*\*Author:\*\*\s*@([A-Za-z0-9][A-Za-z0-9_-]*)(?:\s+-\s+(\d{4}-\d{2}-\d{2}))?\s*$/m;
@@ -40,6 +43,8 @@ export type ProposalDraft = {
   author: string;
   /** Requirement, scenario, journey or spec ids the proposal points at. */
   cites: string[];
+  /** Optional figma.com URL — the frame the proposal is arguing with. */
+  figma?: string;
   /** `YYYY-MM-DD`; the proposal's author line and the manifest share it. */
   date: string;
 };
@@ -148,6 +153,32 @@ export function withdrawProblem(slug: string, names: string[]): string | null {
   return null;
 }
 
+/**
+ * The Figma link, normalized, or "" for one that was not given. A designer's
+ * whole argument is often a frame, and the host allowlist is what keeps that
+ * from becoming an open redirect in a rendered proposal.
+ */
+export function figmaLink(url: string | undefined): string {
+  const wanted = (url ?? "").trim();
+  if (wanted === "") return "";
+  let parsed: URL;
+  try {
+    parsed = new URL(wanted);
+  } catch {
+    return "";
+  }
+  if (parsed.protocol !== "https:" || !FIGMA_HOST.test(parsed.hostname)) {
+    return "";
+  }
+  return parsed.toString();
+}
+
+export function figmaProblem(url: string | undefined): string | null {
+  const wanted = (url ?? "").trim();
+  if (wanted === "" || figmaLink(wanted) !== "") return null;
+  return "a Figma link is an https://…figma.com/… URL";
+}
+
 export function draftProblem(draft: ProposalDraft): string | null {
   const slug = slugProblem(draft.slug);
   if (slug) return slug;
@@ -162,7 +193,7 @@ export function draftProblem(draft: ProposalDraft): string | null {
     return "an author is a GitHub handle, without the @";
   }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(draft.date)) return "a date is YYYY-MM-DD";
-  return null;
+  return figmaProblem(draft.figma);
 }
 
 /**
@@ -176,6 +207,7 @@ export function draftProposal(draft: ProposalDraft): ProposalFile[] {
   if (problem) throw new Error(`cannot draft a proposal: ${problem}`);
 
   const cites = draft.cites.map(citation).filter((id) => id !== "");
+  const figma = figmaLink(draft.figma);
   const body = [
     `# ${draft.title.trim()}`,
     "",
@@ -185,8 +217,10 @@ export function draftProposal(draft: ProposalDraft): ProposalFile[] {
     "",
     normalize(draft.why),
   ];
-  if (cites.length > 0) {
-    body.push("", "## References", "", ...cites.map((id) => `- \`${id}\``));
+  if (cites.length > 0 || figma !== "") {
+    body.push("", "## References", "");
+    body.push(...cites.map((id) => `- \`${id}\``));
+    if (figma !== "") body.push(`- Figma: ${figma}`);
   }
 
   return [
@@ -219,40 +253,93 @@ function citation(id: string): string {
   return id.replace(/[`\r\n]/g, " ").trim();
 }
 
-export type CitableKind = "requirement" | "scenario" | "journey" | "case";
+export type CitableKind =
+  | "spec"
+  | "requirement"
+  | "scenario"
+  | "journey"
+  | "case";
 
 export type Citable = {
   id: string;
   title: string;
   kind: CitableKind;
+  /** Which capability issued it. The picker searches every spec, so a bare
+   * requirement name has to say where it lives. */
+  spec: string;
 };
 
 /**
- * Every id of a spec a proposal can point at, in the order they are read:
- * requirements by name (the store issues them no id), everything else by the
- * permanent id `refs.ts` resolves against.
+ * Every id of a spec a proposal can point at, in the order they are read: the
+ * capability itself, its requirements by name (the store issues them no id),
+ * everything else by the permanent id `refs.ts` resolves against.
  */
 export function citablesOf(spec: SpecEntry): Citable[] {
-  const found: Citable[] = [];
+  const found: Citable[] = [
+    { id: spec.id, title: spec.title, kind: "spec", spec: spec.id },
+  ];
   for (const requirement of spec.requirements) {
     found.push({
       id: requirement.name,
       title: requirement.name,
       kind: "requirement",
+      spec: spec.id,
     });
     for (const scenario of requirement.scenarios) {
       if (scenario.id) {
-        found.push({ id: scenario.id, title: scenario.name, kind: "scenario" });
+        found.push({
+          id: scenario.id,
+          title: scenario.name,
+          kind: "scenario",
+          spec: spec.id,
+        });
       }
     }
   }
   for (const journey of spec.journeys ?? []) {
-    found.push({ id: journey.id, title: journey.title, kind: "journey" });
+    found.push({
+      id: journey.id,
+      title: journey.title,
+      kind: "journey",
+      spec: spec.id,
+    });
   }
   for (const testCase of spec.testCases ?? []) {
-    found.push({ id: testCase.id, title: testCase.title, kind: "case" });
+    found.push({
+      id: testCase.id,
+      title: testCase.title,
+      kind: "case",
+      spec: spec.id,
+    });
   }
   return found;
+}
+
+/**
+ * Every id in the store, the page's own spec first. One idea crosses
+ * capabilities — a gift card touches loyalty and membership — and a picker
+ * that only offered the page's own spec made the second one uncitable, so the
+ * proposal never reached the capability it was half about.
+ */
+export function citablesAcross(
+  specs: SpecEntry[],
+  first?: SpecEntry,
+): Citable[] {
+  const rest = first ? specs.filter((one) => one.id !== first.id) : specs;
+  return (first ? [first, ...rest] : rest).flatMap(citablesOf);
+}
+
+/**
+ * The id ceiling the next author has to clear. The durable file's own highest
+ * number understates it — the in-flight deltas issued more, and picking the
+ * obvious next number collides with a change nobody reading this page can
+ * see.
+ */
+export function issuedCeiling(spec: SpecEntry | undefined): string | null {
+  const sc = spec?.issuedThrough?.sc;
+  if (!spec || !sc) return null;
+  const capability = spec.id.split("/").pop() ?? spec.id;
+  return `${capability} has issued ids through SC-${String(sc).padStart(2, "0")}`;
 }
 
 /** What a requirement row knows about itself: the spec it lives in, its own

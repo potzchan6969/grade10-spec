@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { REPO, STORAGE, type WriteMode } from "../src/editor/config";
 import { GithubStore, type KeyStore } from "../src/editor/github-store";
 import type { PushFile } from "../src/editor/store";
+import { fingerprintOf } from "../src/editor/verify";
 
 /** The hosted transport against a mocked GitHub. Nothing here touches the
  * network; what is pinned is the shape of each mode's exchange — branch mode
@@ -28,6 +29,18 @@ const LISTING = [
 
 type Call = { url: string; method: string; body: Record<string, unknown> };
 type Answer = { status: number; body?: unknown };
+
+/** A token GitHub has already answered for: the login rides on the verdict,
+ * so nothing here has to ask again who this is. */
+function verified(login = "echo", token = "pat"): Record<string, string> {
+  return {
+    [STORAGE.verified]: JSON.stringify({
+      fingerprint: fingerprintOf(token),
+      login,
+      expires: null,
+    }),
+  };
+}
 
 function memoryStore(seed: Record<string, string> = {}): KeyStore {
   const held = new Map<string, string>(Object.entries(seed));
@@ -312,10 +325,7 @@ describe("GithubStore, branch + PR mode", () => {
 
   it("re-verifies a remembered PR instead of trusting it", async () => {
     const stale = "https://github.com/9gag/grade10-spec/pull/1";
-    const storage = memoryStore({
-      [STORAGE.login]: "echo",
-      [STORAGE.pr]: stale,
-    });
+    const storage = memoryStore({ ...verified(), [STORAGE.pr]: stale });
     const { http, seen } = repo("standing");
     const store = storeOn(http, "pat", storage);
     expect(store.reviewUrl).toBe(stale);
@@ -340,7 +350,7 @@ describe("GithubStore, branch + PR mode", () => {
   });
 
   it("checks a staged draft against the branch without cutting one", async () => {
-    const storage = memoryStore({ [STORAGE.login]: "echo" });
+    const storage = memoryStore(verified());
     const { http, seen } = repo("standing");
 
     const moved = await storeOn(http, "pat", storage).movedSince([
@@ -359,7 +369,7 @@ describe("GithubStore, branch + PR mode", () => {
   });
 
   it("does not call a page the branch has not got yet a page that moved", async () => {
-    const storage = memoryStore({ [STORAGE.login]: "echo" });
+    const storage = memoryStore(verified());
     const { http } = repo("standing");
 
     expect(
@@ -440,6 +450,61 @@ describe("GithubStore, branch + PR mode", () => {
     await expect(storeOn(http).push([file(PATH, null)], "m")).rejects.toThrow(
       /Bad credentials/,
     );
+  });
+});
+
+describe("GithubStore, what a token has to have proved", () => {
+  it("is read-only until the token has been verified", () => {
+    const { http } = freshRepo();
+
+    expect(storeOn(http, "pat", memoryStore()).readOnly).toMatch(
+      /has not been checked/,
+    );
+    expect(storeOn(http, "pat", memoryStore(verified())).readOnly).toBeNull();
+  });
+
+  it("takes the verdict's login instead of asking GitHub again", async () => {
+    const { http, seen } = repo("standing");
+    const store = storeOn(http, "pat", memoryStore(verified("echo")));
+
+    expect(store.author).toBe("echo");
+    expect(await store.identity()).toBe("echo");
+    expect(seen("GET", "https://api.github.com/user")).toHaveLength(0);
+  });
+
+  it("refuses a verdict issued for another token", () => {
+    const { http } = freshRepo();
+    const storage = memoryStore(verified("echo", "an older pat"));
+
+    expect(storeOn(http, "pat", storage).readOnly).toMatch(
+      /has not been checked/,
+    );
+  });
+
+  it("tears the verdict up the first time GitHub answers 401", async () => {
+    const storage = memoryStore(verified());
+    let changed = 0;
+    const { http } = freshRepo((call) =>
+      call.url.startsWith(`${REPO_API}/contents/`)
+        ? { status: 401, body: { message: "Bad credentials" } }
+        : null,
+    );
+    const store = new GithubStore({
+      token: "pat",
+      http,
+      storage,
+      mode: "main",
+      onChange: () => {
+        changed += 1;
+      },
+    });
+    expect(store.readOnly).toBeNull();
+
+    await expect(store.read(PATH)).rejects.toThrow(/Bad credentials/);
+
+    expect(store.readOnly).toMatch(/has not been checked/);
+    expect(storage.get(STORAGE.verified)).toBeNull();
+    expect(changed).toBe(1);
   });
 });
 

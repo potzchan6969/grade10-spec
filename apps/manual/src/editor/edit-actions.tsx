@@ -14,6 +14,11 @@ import { NewPageDialog } from "./new-page-dialog";
 import { ProposePageAction } from "./propose-actions";
 import { useEditorSession } from "./session";
 import { SettingsDialog } from "./settings-dialog";
+import {
+  openSettings,
+  setSettingsOpen,
+  useSettingsOpen,
+} from "./settings-open";
 
 /** The three ways into the editor: edit this page, start a new one, or propose
  * a change to the spec this page documents. */
@@ -23,7 +28,9 @@ export function PageActions({ path }: { path: string }) {
   const index = useManualIndex();
   const { enter } = useEditMode();
   const staged = useDrafts().byPath.get(path);
-  const [settingsOpen, setSettingsOpen] = useState(false);
+  // The dialog is mounted here and opened from anywhere — a locked Propose
+  // control says "Settings" and has to mean this one.
+  const settingsOpen = useSettingsOpen();
 
   if (!store) return null;
 
@@ -42,7 +49,7 @@ export function PageActions({ path }: { path: string }) {
       {kind === "github" ? (
         <IconButton
           aria-label="GitHub token"
-          onClick={() => setSettingsOpen(true)}
+          onClick={openSettings}
           size="sm"
           variant="ghost"
         >

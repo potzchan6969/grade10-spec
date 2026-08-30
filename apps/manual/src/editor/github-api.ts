@@ -7,6 +7,9 @@ import { GITHUB_API, REPO } from "./config";
 export type Answer = {
   status: number;
   body: Record<string, unknown> | unknown[];
+  /** What GitHub sent back with it. Absent only where an answer is made up
+   * rather than received — the token's expiry is read from here. */
+  headers?: Headers;
 };
 
 export function encodePath(path: string): string {
@@ -49,7 +52,7 @@ export async function githubCall(
       body = { message: text };
     }
   }
-  return { status: response.status, body };
+  return { status: response.status, body, headers: response.headers };
 }
 
 /** What GitHub said went wrong, or the bare status when it said nothing. */

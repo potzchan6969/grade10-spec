@@ -3,6 +3,13 @@ import { asWriteMode, STORAGE, type WriteMode } from "./config";
 import { browserKeyStore, GithubStore } from "./github-store";
 import { LocalStore, probeLocalStore } from "./local-store";
 import type { ContentStore, StoreKind } from "./store";
+import {
+  readVerdict,
+  rememberVerdict,
+  type TokenVerdict,
+  type VerifyResult,
+  verifyToken,
+} from "./verify";
 
 /**
  * Which store is answering, and the token the hosted one needs. It is one
@@ -16,6 +23,9 @@ export type EditorSession = {
   store: ContentStore | null;
   kind: StoreKind | null;
   token: string | null;
+  /** What GitHub said about that token: who it belongs to and when it dies.
+   * Null until it passes, which is what keeps the session read-only. */
+  verdict: TokenVerdict | null;
   /** Where a hosted save lands. Meaningless for the dev store, which only
    * ever writes the working tree. */
   mode: WriteMode;
@@ -26,6 +36,7 @@ let state: EditorSession = {
   store: null,
   kind: null,
   token: browserKeyStore.get(STORAGE.token),
+  verdict: readVerdict(browserKeyStore, browserKeyStore.get(STORAGE.token)),
   mode: asWriteMode(browserKeyStore.get(STORAGE.mode)),
 };
 
@@ -36,17 +47,20 @@ function set(patch: Partial<EditorSession>): void {
   for (const listener of listeners) listener();
 }
 
-/** The GitHub adapter mutates as it learns its login and PR — republish then. */
+/** The GitHub adapter mutates as it learns its login and PR, and tears up the
+ * verdict when GitHub stops recognising the token — republish then, reading
+ * the verdict back from where the adapter left it. */
 function bump(): void {
-  set({});
+  set({ verdict: readVerdict(browserKeyStore, state.token) });
 }
 
-function github(): Pick<EditorSession, "store" | "kind" | "token" | "mode"> {
+function github(): Omit<EditorSession, "status"> {
   const token = browserKeyStore.get(STORAGE.token);
   const mode = asWriteMode(browserKeyStore.get(STORAGE.mode));
   return {
     token,
     mode,
+    verdict: readVerdict(browserKeyStore, token),
     kind: "github",
     store: new GithubStore({ token, mode, onChange: bump }),
   };
@@ -65,6 +79,7 @@ function probe(): void {
             store: new LocalStore(),
             kind: "local",
             token: null,
+            verdict: null,
           }
         : { status: "ready", ...github() },
     );
@@ -81,12 +96,30 @@ export function useEditorSession(): EditorSession {
   return useSyncExternalStore(subscribe, () => state);
 }
 
-export function setGithubToken(token: string | null): void {
-  if (token) browserKeyStore.set(STORAGE.token, token);
-  else browserKeyStore.remove(STORAGE.token);
-  // A different token can be a different person; the remembered login and PR
-  // belong to the old one.
-  browserKeyStore.remove(STORAGE.login);
+/**
+ * Save a token, once GitHub has answered for it. Nothing is stored on a
+ * refusal: an unverified token would buy nothing but a read-only session and
+ * a stale failure to explain later.
+ */
+export async function saveGithubToken(
+  token: string,
+  http: typeof fetch = fetch,
+): Promise<VerifyResult> {
+  const result = await verifyToken(token, http);
+  if (!result.ok) return result;
+
+  browserKeyStore.set(STORAGE.token, token);
+  rememberVerdict(browserKeyStore, result.verdict);
+  // A different token can be a different person; the remembered PR belongs to
+  // the old one.
+  browserKeyStore.remove(STORAGE.pr);
+  set({ status: "ready", ...github() });
+  return result;
+}
+
+export function forgetGithubToken(): void {
+  browserKeyStore.remove(STORAGE.token);
+  browserKeyStore.remove(STORAGE.verified);
   browserKeyStore.remove(STORAGE.pr);
   set({ status: "ready", ...github() });
 }

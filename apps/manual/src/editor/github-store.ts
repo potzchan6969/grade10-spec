@@ -40,6 +40,7 @@ import {
   type Version,
   type WriteOutcome,
 } from "./store";
+import { forgetVerdict, readVerdict, type TokenVerdict } from "./verify";
 
 /**
  * The hosted transport, in one of two modes chosen in settings.
@@ -83,12 +84,21 @@ export const browserKeyStore: KeyStore = {
   },
 };
 
+function needs(mode: WriteMode): string {
+  return mode === "main"
+    ? "contents:write"
+    : "contents:write and pull_requests:write";
+}
+
 function noToken(mode: WriteMode): string {
-  const needs =
-    mode === "main"
-      ? "contents:write"
-      : "contents:write and pull_requests:write";
-  return `Read-only: no GitHub token. Add a fine-grained token with ${needs} to save.`;
+  return `Read-only: no GitHub token. Add a fine-grained token with ${needs(mode)} in Settings to save.`;
+}
+
+/** A token nobody has checked is a string. Saving it in Settings asks GitHub
+ * who it belongs to and whether it reaches this repo, and write mode waits
+ * for both answers rather than finding out inside someone's first save. */
+function unverified(mode: WriteMode): string {
+  return `Read-only: this GitHub token has not been checked. Open Settings and save it again — it needs ${needs(mode)} on ${REPO.owner}/${REPO.repo}.`;
 }
 
 /** A push GitHub refused on a rule rather than on the blob sha in hand.
@@ -118,6 +128,7 @@ export class GithubStore implements ContentStore {
   private readonly storage: KeyStore;
   private readonly onChange: () => void;
   private login: string | null;
+  private verdict: TokenVerdict | null;
   private pr: string | null;
   private asking: Promise<string> | null = null;
   private prepared: Promise<string> | null = null;
@@ -130,7 +141,11 @@ export class GithubStore implements ContentStore {
     this.http = options.http ?? fetch;
     this.storage = options.storage ?? browserKeyStore;
     this.onChange = options.onChange ?? (() => {});
-    this.login = this.storage.get(STORAGE.login);
+    this.verdict = readVerdict(this.storage, this.token);
+    // Verification already asked GitHub who this is, so the author line, the
+    // branch name and the withdraw guard all read it from there rather than
+    // asking again.
+    this.login = this.verdict?.login ?? null;
     this.pr = this.storage.get(STORAGE.pr);
   }
 
@@ -145,7 +160,13 @@ export class GithubStore implements ContentStore {
   }
 
   get readOnly(): string | null {
-    return this.token ? null : noToken(this.mode);
+    if (!this.token) return noToken(this.mode);
+    return this.verdict ? null : unverified(this.mode);
+  }
+
+  /** What GitHub said about this token, once it has said it. */
+  get verified(): TokenVerdict | null {
+    return this.verdict;
   }
 
   /** A main-mode save has no pull request, and the remembered one belongs to
@@ -607,9 +628,10 @@ export class GithubStore implements ContentStore {
     return { source: textFromBase64(body.content), version: body.sha };
   }
 
-  /** Who the token belongs to, asked once a session however many surfaces
-   * want to know — a board full of proposals must not be a board full of
-   * identical requests. */
+  /** Who the token belongs to. A verified session already knows, from the
+   * verdict; an unverified one asks once however many surfaces want to know,
+   * because a board full of proposals must not be a board full of identical
+   * requests. */
   private whoami(): Promise<string> {
     if (this.login) return Promise.resolve(this.login);
     if (!this.asking) {
@@ -632,7 +654,6 @@ export class GithubStore implements ContentStore {
       );
     }
     this.login = login;
-    this.storage.set(STORAGE.login, login);
     this.onChange();
     return login;
   }
@@ -776,8 +797,22 @@ export class GithubStore implements ContentStore {
     return this.call(repoPath(`contents/${encodePath(path)}${at}`));
   }
 
-  private call(path: string, init?: RequestInit): Promise<Answer> {
-    return githubCall(this.http, this.token, path, init);
+  private async call(path: string, init?: RequestInit): Promise<Answer> {
+    const answer = await githubCall(this.http, this.token, path, init);
+    if (answer.status === 401) this.refused();
+    return answer;
+  }
+
+  /** GitHub has stopped recognising this token — expired, revoked, or
+   * replaced. The verdict it was given no longer holds, so the session drops
+   * back to read-only and says where to fix it, rather than failing again
+   * inside the next save. */
+  private refused(): void {
+    if (!this.verdict) return;
+    this.verdict = null;
+    this.login = null;
+    forgetVerdict(this.storage);
+    this.onChange();
   }
 
   private failure(answer: Answer, what: string): StoreError {
