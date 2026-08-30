@@ -1,7 +1,7 @@
 ## 1. Shared product copy (grade10-spec) (owner: @kinisworking)
 
-- [ ] 1.1 Make `product-page-SC-13`, `product-page-SC-15`, and `product-page-SC-16` pass: add the product-detail labels and pluralized low-inventory copy to the shared English product/store catalogs, preserving fallback behavior for other locales
-- [ ] 1.2 Verify the i18n catalog resolution and type checks for the updated message vocabulary
+- [x] 1.1 Make `product-page-SC-13`, `product-page-SC-15`, and `product-page-SC-16` pass: add the product-detail labels and pluralized low-inventory copy to the shared English product/store catalogs, preserving fallback behavior for other locales
+- [x] 1.2 Verify the i18n catalog resolution and type checks for the updated message vocabulary
 
 ## 2. Catalogue contracts and provider projection (grade10)
 
