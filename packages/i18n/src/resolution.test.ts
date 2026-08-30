@@ -36,6 +36,19 @@ const spoken = brandNames.flatMap((brand) =>
   localesOf(brand).map((locale) => ({ brand, locale })),
 );
 
+const PRODUCT_DETAIL_KEYS = [
+  "aboutThisItem",
+  "shippingAndPickup",
+  "shippingCalculatedAtCheckout",
+  "freePickupAt",
+  "onlyLeft",
+  "showMore",
+  "showLess",
+  "skuLabel",
+];
+
+const STORE_PRODUCT_DETAIL_KEYS = ["adding", "addedToCart"];
+
 const AUCTION_BIDDING_HISTORY_KEYS = [
   "title",
   "active",
@@ -85,6 +98,26 @@ const AUCTION_BIDDING_HISTORY_KEYS = [
 ].sort();
 
 describe("what a brand and a language answer between them", () => {
+  /* Scenario: The product detail surface has copy for its facts, fulfilment,
+     disclosure, and purchase states in every language it serves. */
+  it.each(spoken)(
+    "resolves product detail copy for $brand in $locale",
+    ({ brand, locale }) => {
+      const product = getMessages(brand, locale).product;
+      const store = getMessages(brand, locale).store;
+
+      for (const key of PRODUCT_DETAIL_KEYS) {
+        expect(product[key as keyof typeof product]).toEqual(
+          expect.any(String),
+        );
+      }
+
+      for (const key of STORE_PRODUCT_DETAIL_KEYS) {
+        expect(store[key as keyof typeof store]).toEqual(expect.any(String));
+      }
+    },
+  );
+
   /* Scenario: Every supported language exposes the shared bidding-history
      vocabulary through the assembled catalog. */
   it.each(locales)("exposes auction bidding history in %s", (locale) => {

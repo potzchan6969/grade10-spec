@@ -1,8 +1,16 @@
 {
+  "aboutThisItem": "About this item",
   "backToStore": "Back to the store",
+  "freePickupAt": "Free pick-up at our Hong Kong showroom",
   "forSale": "For sale",
   "notForSale": "Not for sale",
   "gradeLabel": "Grade",
+  "onlyLeft": "{count, plural, one {Only # left} other {Only # left}}",
+  "shippingAndPickup": "Shipping & pickup",
+  "shippingCalculatedAtCheckout": "Shipping calculated at checkout",
+  "showLess": "Show less",
+  "showMore": "Show more",
+  "skuLabel": "SKU",
   "soldOutSuffix": " — sold out",
   "notForSaleNote": "This card is not for sale."
 }

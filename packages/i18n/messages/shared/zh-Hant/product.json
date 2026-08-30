@@ -1,8 +1,16 @@
 {
+  "aboutThisItem": "商品資訊",
   "backToStore": "返回商店",
+  "freePickupAt": "可於我們的香港陳列室免費取貨",
   "forSale": "發售中",
   "notForSale": "非賣品",
   "gradeLabel": "評級",
+  "onlyLeft": "{count, plural, other {只剩 # 件}}",
+  "shippingAndPickup": "配送與取貨",
+  "shippingCalculatedAtCheckout": "運費將於結帳時計算",
+  "showLess": "顯示較少",
+  "showMore": "顯示更多",
+  "skuLabel": "貨號",
   "soldOutSuffix": " — 已售罄",
   "notForSaleNote": "此卡目前不作出售。"
 }
