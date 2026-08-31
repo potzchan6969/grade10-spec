@@ -5,14 +5,15 @@ import figma from "figma";
 
 const instance = figma.selectedInstance;
 
-// `size` is the set's only axis, and it now draws four rungs: sm (32), md (40),
-// lg (48) and xl (64). Every option must be listed — an unmapped one resolves
+// `size` is the set's only axis, and it now draws five rungs: xs (24), sm (32),
+// md (40), lg (48) and xl (64). Every option must be listed — an unmapped one resolves
 // to `undefined`, which Dev Mode emits as `size=""`.
 //
 // `lg` is the 48px rung and the component's default, so the prop is omitted for
 // it. Note the scale was renamed one step down when `md` arrived: the rung this
 // template used to call `default` is `lg`, and the one it called `lg` is `xl`.
 const size = instance.getEnum("size", {
+  xs: "xs",
   sm: "sm",
   md: "md",
   lg: "lg",
