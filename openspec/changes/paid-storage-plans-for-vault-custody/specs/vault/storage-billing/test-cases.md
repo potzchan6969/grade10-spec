@@ -43,7 +43,7 @@
 
 - **Severity:** major
 - **Priority:** high
-- **Status:** draft
+- **Status:** actual
 - **Behaviour:** positive
 - **Type:** smoke
 - **Layer:** api
@@ -71,7 +71,7 @@
 
 - **Severity:** major
 - **Priority:** high
-- **Status:** draft
+- **Status:** actual
 - **Behaviour:** positive
 - **Type:** functional
 - **Layer:** api
@@ -91,6 +91,7 @@
 
 | Field | Value |
 | --- | --- |
+| Storage-billable items | 1 |
 | Declared value | 5,000,000 minor units USD |
 
 **Steps:**
@@ -103,7 +104,7 @@
 
 - **Severity:** critical
 - **Priority:** high
-- **Status:** draft
+- **Status:** actual
 - **Behaviour:** positive
 - **Type:** regression
 - **Layer:** api
@@ -123,6 +124,7 @@
 
 | Field | Value |
 | --- | --- |
+| Storage-billable items | 3 |
 | Total declared value | Any — value does not affect the Free tier |
 
 **Steps:**
@@ -135,7 +137,7 @@
 
 - **Severity:** major
 - **Priority:** high
-- **Status:** draft
+- **Status:** actual
 - **Behaviour:** positive
 - **Type:** functional
 - **Layer:** api
@@ -168,7 +170,7 @@
 
 - **Severity:** critical
 - **Priority:** high
-- **Status:** draft
+- **Status:** actual
 - **Behaviour:** positive
 - **Type:** functional
 - **Layer:** api
