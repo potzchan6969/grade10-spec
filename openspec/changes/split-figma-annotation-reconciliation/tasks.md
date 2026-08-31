@@ -57,7 +57,7 @@ redesign observation or occurrence matching.
   catalog resolves many annotations`, `Unresolved registered root is skipped`,
   `Every registered root is unresolved`, and `Figma Plugin API access is
   unavailable` retain their verified behavior.
-- [ ] 2.2 Move the exact-association, ownership, complete-body, skipped-root,
+- [x] 2.2 Move the exact-association, ownership, complete-body, skipped-root,
   selection, decision-preview, verification, and commit-plan logic from
   `grade10/scripts/figma-annotation-report.mjs` and the remaining reconciliation
   helper exports into `scripts/design-sync/annotation-report.mjs`; add
