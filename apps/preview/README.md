@@ -10,6 +10,13 @@ pnpm storybook:workbench       # those assemblies plus both packages' stories
 pnpm test:stories:app          # the assemblies, in Chromium
 ```
 
+The workbench build is published on every push to `main` (and on demand) to
+**https://storybook.grade10-stg.com**. Locally:
+
+```bash
+pnpm run storybook:deploy:staging             # needs CLOUDFLARE_API_TOKEN
+```
+
 Two Storybook configs live here, and they differ only in which stories they
 load. `.storybook/` is the page assemblies alone. `.storybook-workbench/`
 extends it — same addons, same preview, re-exported rather than restated — with

@@ -11,7 +11,13 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Neutral chip for applied filters on the Product List page. */
 export const Default: Story = {};
+
+/** Brand-coloured chip with primary inner glow on hover. */
+export const Primary: Story = {
+  args: { variant: "primary" },
+};
 
 /** Longer applied-filter label from the Product List page. */
 export const AppliedFilter: Story = {

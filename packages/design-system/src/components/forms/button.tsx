@@ -4,34 +4,36 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { LoaderCircleIcon } from "lucide-react";
 import { isValidElement, type ReactNode } from "react";
 
-// Figma draws every disabled variant as that variant's own fill and text at
-// `Opacity/opacity-50` — node `86:3694` (primary), `86:3690` (secondary) and
-// `86:3592` (ghost) each bind their normal colour pair plus `Opacity/opacity-50`
-// and bind no grey. So disabled is one base rule, not a per-variant colour swap.
+// Figma set `Button` (`86:3459`). Every disabled variant keeps that variant's
+// own fill and text at `Opacity/opacity-50` — node `86:3694` (primary),
+// `86:3690` (secondary) and `86:3592` (ghost) each bind their normal colour
+// pair plus opacity and bind no grey. Disabled is one base rule, not a
+// per-variant colour swap.
 //
-// Every size binds `Radius/radius-full` (999) — the set is pills, not the
-// `radius-sm` / `radius-lg` rungs an earlier drawing used. Hover on
-// ghost/outline/secondary/destructive is `Custom/muted-hover`; primary hover
-// keeps `Base/primary` and adds the named inner glow. Secondary's fill is
-// `Base/muted`, not `Base/secondary`.
+// Every size binds `Radius/radius-full` (999) — the set is pills. Secondary
+// fills `Base/muted` with `Base/foreground` text (not `muted-foreground`);
+// ghost and outline also label in `Base/foreground`. Hover swaps fills rather
+// than tinting in place: secondary → `Base/background-subtle`, ghost →
+// `Base/muted`, outline → `Base/background-subtle` + `Base/border-strong`.
+// Destructive hover overlays `Custom/muted-hover`. Primary hover keeps
+// `Base/primary` and adds the named inner glow.
 //
 // Press is a 1px translate (same language as Pagination). Color and that
 // translate transition at 150ms ease-out — tens-of-times-a-day feedback, named
 // properties, no `transition-all`. Reduced motion keeps the color change and
 // drops the shift.
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 cursor-pointer items-center justify-center rounded-(--radius-full) border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-[background-color,border-color,color,box-shadow,transform,opacity] duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-[background-color,border-color,color,box-shadow,opacity] motion-reduce:active:translate-y-0 aria-invalid:border-destructive-border aria-invalid:ring-3 aria-invalid:ring-destructive-ring [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 cursor-pointer items-center justify-center rounded-(--radius-full) border border-transparent bg-clip-padding font-medium whitespace-nowrap [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] transition-[background-color,border-color,color,box-shadow,transform,opacity] duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-[background-color,border-color,color,box-shadow,opacity] motion-reduce:active:translate-y-0 aria-invalid:border-destructive-border aria-invalid:ring-3 aria-invalid:ring-destructive-ring [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
         default:
           "bg-primary text-primary-foreground hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)]",
         outline:
-          "border-border bg-control text-foreground hover:bg-muted-hover aria-expanded:bg-muted-hover",
+          "border-border bg-control text-foreground hover:border-border-strong hover:bg-background-subtle aria-expanded:border-border-strong aria-expanded:bg-background-subtle",
         secondary:
-          "bg-muted text-muted-foreground hover:shadow-[inset_0_0_0_100vmax_var(--muted-hover)] aria-expanded:shadow-[inset_0_0_0_100vmax_var(--muted-hover)]",
-        ghost:
-          "text-muted-foreground hover:bg-muted-hover aria-expanded:bg-muted-hover",
+          "bg-muted text-foreground hover:bg-background-subtle aria-expanded:bg-background-subtle",
+        ghost: "text-foreground hover:bg-muted aria-expanded:bg-muted",
         destructive:
           "bg-destructive text-destructive-foreground hover:shadow-[inset_0_0_0_100vmax_var(--muted-hover)]",
       },
@@ -126,6 +128,12 @@ function rendersNativeButton(
   return render.type === "button";
 }
 
+/**
+ * A flexible button component for triggering actions and navigation.
+ *
+ * The opening line is the Figma set's own description; no rail carries it, so
+ * this JSDoc is its only projection in code. Edit it in Figma first.
+ */
 function Button({
   className,
   variant = "default",

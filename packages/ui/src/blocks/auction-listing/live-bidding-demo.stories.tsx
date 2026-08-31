@@ -7,7 +7,7 @@ import { LiveBiddingDemo } from "./live-bidding-demo";
  * steps through bid standings; placing the first bid automatically watches it.
  */
 const meta = {
-  title: "Auction Listing/ListingBidPanel",
+  title: "Auction Listing/ListingBidPanel/Flows",
   component: LiveBiddingDemo,
   tags: ["autodocs"],
   parameters: {
@@ -19,11 +19,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const LiveBidding: Story = {};
-
-/** Hidden from the sidebar so opening Live Bidding is not left on the last bid. */
-export const LiveBiddingWalkthrough: Story = {
-  tags: ["!dev"],
+export const Bidding: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getAllByText("Starting bid").length).toBeGreaterThan(0);
@@ -60,8 +56,6 @@ export const LiveBiddingWalkthrough: Story = {
     expect(canvas.getAllByText("HK$1,600.00").length).toBeGreaterThan(0);
     expect(canvas.getAllByText("6 Bids").length).toBeGreaterThan(0);
 
-    /* Expanded lays every step out at once, so a step's caption and the panel
-       under it both say what the amount on show is. */
     await userEvent.click(canvas.getByRole("tab", { name: "Expanded" }));
     expect(canvas.getAllByText("Starting bid").length).toBeGreaterThan(0);
     expect(canvas.getAllByText("HK$1,400.00").length).toBeGreaterThan(0);

@@ -1,6 +1,11 @@
 {
   "codeConnect": {
     "include": ["src/**/*.figma.ts"],
+    "exclude": [
+      "src/blocks/store-home/store-collection-tile.figma.ts",
+      "src/blocks/store-home/store-home-hero.figma.ts",
+      "src/blocks/store-home/store-section-header.figma.ts"
+    ],
     "label": "React"
   }
 }

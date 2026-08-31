@@ -135,6 +135,39 @@ export const FallbackToSrc: Story = {
   },
 };
 
+const SAMPLE_VIDEO =
+  "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm";
+
+/** Scenario: Mixed images and videos — video plays without zoom. */
+export const MixedMedia: Story = {
+  args: {
+    images: [
+      {
+        kind: "video",
+        src: SAMPLE_VIDEO,
+        alt: "Lot walkthrough",
+        thumbLabel: "video",
+      },
+      {
+        src: IMAGE,
+        alt: "1999 Charizard, PSA 10",
+        thumbLabel: "front",
+      },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByLabelText("Lot walkthrough").tagName).toBe("VIDEO");
+    expect(canvas.queryByText("Click to zoom")).toBeNull();
+    expect(canvas.getByRole("button", { name: "Next image" })).toBeEnabled();
+    await userEvent.click(canvas.getByRole("button", { name: "Next image" }));
+    expect(canvas.getByText("Click to zoom")).toBeInTheDocument();
+    expect(
+      canvas.getByRole("img", { name: "1999 Charizard, PSA 10" }),
+    ).toBeInTheDocument();
+  },
+};
+
 /** Page shell before images arrive — no zoom hint or carets. */
 export const Loading: Story = {
   render: () => <ListingGalleryLoading />,

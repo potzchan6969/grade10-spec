@@ -59,13 +59,13 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 
 `packages/design-system` (`@grade10/design-system`) holds the theme tokens and the shadcn primitives this repository owns. `packages/i18n` (`@grade10/i18n`) holds the message catalogs. `packages/ui` (`@grade10/ui`) holds the shared compound components, composing the design-system primitives one way and never importing the message catalogs — all content reaches its components through props. These are the only packages here; do not add another without a recorded product decision.
 
-Use the `design-system-components` skill whenever creating or changing a primitive under `packages/design-system/src/components/`.
+Use the `design-system-primitives` skill whenever creating or changing a primitive under `packages/design-system/src/components/`.
 
 - The package is consumed from source: `exports` point at `src/`, there is no build step, and no `dist/` is committed.
 - Stories are colocated with each primitive. Run them with `pnpm run storybook:design-system`.
 - Token flow: `tokens.json` is the source of truth, `tokens.config.json` holds the engineer-owned projection rules, and Figma plus the theme CSS files are both projections. Read `packages/design-system/DESIGN.md` before touching any leg of that pipeline.
 - Read [`docs/governance/design-code-sync.md`](docs/governance/design-code-sync.md) before adding a primitive or changing one that has a Figma counterpart. A component may not offer a variant or size the Figma component set does not define; where code and design genuinely disagree, record it as an OpenSpec change rather than absorbing it into the Code Connect template.
-- The Figma legs (`tokens:pull`, `tokens:push`, `tokens:plugin`) require a human to run a plugin inside Figma; they have no unattended path.
+- The Figma legs (`tokens:import`, `tokens:push`, `tokens:plugin`) require a human to run a plugin inside Figma; they have no unattended path.
 
 ## Sharing with consuming apps
 
@@ -78,7 +78,7 @@ Pin the submodule SHA in the application repository; updates are normal pull req
 Run the appropriate checks before handoff:
 
 - `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
-- `pnpm run check:design-system` after a design-system primitive changes.
+- `pnpm run design-sync:check` after a design-system primitive changes.
 - `pnpm run tokens:build` after `tokens.json` or `tokens.config.json` changes; commit the regenerated theme CSS.
 - `pnpm run lint` for repository formatting and static checks.
 - `pnpm run typecheck` after any TypeScript change.
@@ -93,7 +93,7 @@ Run the appropriate checks before handoff:
 
 `AGENTS.md` is canonical. `AGENT.md`, `CLAUDE.md`, and `GEMINI.md` are compatibility aliases.
 
-`.cursor/skills/` is the source of truth for skills. `.codex/skills/` and `.claude/skills/` are generated copies, one per agent platform that reads project skills from its own directory, and all three must remain byte-for-byte identical. Edit a skill under `.cursor/skills/` and sync; an edit made directly in a generated leg is overwritten, and a leg-only file fails the check. Adding a platform is a new entry in the `legs` list in both parity scripts.
+`.claude/skills/` is canonical for skills. `.codex/skills/` and `.cursor/skills/` are symlinks to it, so every agent platform reads the same files. Edit skills under `.claude/skills/`; adding a platform means adding its symlink to the parity check and sync scripts.
 
 When agent-related files change, run:
 

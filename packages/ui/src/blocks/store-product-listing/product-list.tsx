@@ -16,6 +16,9 @@ const DEFAULT_SKELETON_COUNT = 8;
 /** Figma Product List annotation: ten items per fetch while scrolling. */
 const DEFAULT_LOAD_MORE_SKELETON_COUNT = 10;
 
+const APPEND_STAGGER_MS = 30;
+const APPEND_STAGGER_CAP = 6;
+
 type ProductListProps = {
   copy: ProductListCopy;
   products: readonly ProductSummary[];
@@ -28,11 +31,16 @@ type ProductListProps = {
   /** Skeleton count while loading more; defaults to 10. */
   loadMoreSkeletonCount?: number;
   onProductClick?: (productId: string) => void;
-  onProductAction?: (productId: string) => void;
+  onProductCartQuantityChange?: (productId: string, quantity: number) => void;
   /** Drives the staggered entrance after a `loading → ready` reload. */
   revealed?: boolean;
   revealStaggerMs?: number;
   revealStaggerCap?: number;
+  /**
+   * Tiles below this index stay settled. Appends animate from this index
+   * with the quieter load-more recipe.
+   */
+  revealFromIndex?: number;
   className?: string;
 };
 
@@ -54,15 +62,20 @@ function ProductList({
   loadingMore = false,
   loadMoreSkeletonCount = DEFAULT_LOAD_MORE_SKELETON_COUNT,
   onProductClick,
-  onProductAction,
+  onProductCartQuantityChange,
   revealed = true,
   revealStaggerMs = 40,
   revealStaggerCap = 8,
+  revealFromIndex = 0,
   className,
 }: ProductListProps) {
   const placeholderCount =
     skeletonCount ??
     (products.length > 0 ? products.length : DEFAULT_SKELETON_COUNT);
+  const isAppendReveal = revealFromIndex > 0;
+  const staggerMs = isAppendReveal ? APPEND_STAGGER_MS : revealStaggerMs;
+  const staggerCap = isAppendReveal ? APPEND_STAGGER_CAP : revealStaggerCap;
+  const durationClass = isAppendReveal ? "duration-300" : "duration-400";
 
   return (
     <div
@@ -81,42 +94,56 @@ function ProductList({
               price=""
             />
           ))
-        : products.map((product, index) => (
-            <div
-              className={cn(
-                "translate-y-3 opacity-0 blur-[3px]",
-                "transition-[opacity,transform,filter] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:blur-none motion-reduce:transition-none",
-                revealed && "translate-y-0 opacity-100 blur-none",
-              )}
-              key={product.id}
-              style={{
-                transitionDelay: revealed
-                  ? `${Math.min(index, revealStaggerCap) * revealStaggerMs}ms`
-                  : "0ms",
-              }}
-            >
-              <ProductCard
-                badges={product.badges}
-                cartCount={product.cartCount}
-                copy={copy.card}
-                imageAlt={product.imageAlt}
-                imageSrc={product.imageSrc}
-                inCart={product.inCart}
-                name={product.name}
-                onCartClick={
-                  onProductAction
-                    ? () => onProductAction(product.id)
-                    : undefined
-                }
-                onClick={
-                  onProductClick ? () => onProductClick(product.id) : undefined
-                }
-                originalPrice={product.originalPrice}
-                price={product.price}
-                soldOut={product.soldOut}
-              />
-            </div>
-          ))}
+        : products.map((product, index) => {
+            const isSettledTile = index < revealFromIndex;
+            const staggerIndex = index - revealFromIndex;
+            const showRevealed = isSettledTile || revealed;
+
+            return (
+              <div
+                className={cn(
+                  !isSettledTile &&
+                    "translate-y-3 opacity-0 blur-[3px] transition-[opacity,transform,filter] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:blur-none motion-reduce:transition-none",
+                  !isSettledTile && durationClass,
+                  isSettledTile && "translate-y-0 opacity-100 blur-none",
+                  showRevealed &&
+                    !isSettledTile &&
+                    "translate-y-0 opacity-100 blur-none",
+                )}
+                key={product.id}
+                style={{
+                  transitionDelay:
+                    showRevealed && !isSettledTile
+                      ? `${Math.min(staggerIndex, staggerCap) * staggerMs}ms`
+                      : "0ms",
+                }}
+              >
+                <ProductCard
+                  badges={product.badges}
+                  cartCount={product.cartCount}
+                  copy={copy.card}
+                  imageAlt={product.imageAlt}
+                  imageSrc={product.imageSrc}
+                  inCart={product.inCart}
+                  name={product.name}
+                  onCartQuantityChange={
+                    onProductCartQuantityChange
+                      ? (quantity) =>
+                          onProductCartQuantityChange(product.id, quantity)
+                      : undefined
+                  }
+                  onClick={
+                    onProductClick
+                      ? () => onProductClick(product.id)
+                      : undefined
+                  }
+                  originalPrice={product.originalPrice}
+                  price={product.price}
+                  soldOut={product.soldOut}
+                />
+              </div>
+            );
+          })}
       {loadingMore && !loading
         ? Array.from({ length: loadMoreSkeletonCount }, (_, index) => (
             <ProductCard

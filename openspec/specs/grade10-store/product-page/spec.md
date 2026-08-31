@@ -9,6 +9,92 @@ already addresses a product by. Every requirement of
 `grade10-site/crawlable-pages` binds it — it is a public surface, so its
 title, description, share metadata and sitemap entry are that capability's,
 per card rather than per page.
+
+## Feature set
+
+- Card page
+  - Server-rendered card: name, description and every variant's price in the
+    response HTML before any script runs
+  - One address, one card: two product addresses answer with their own card,
+    title and share metadata
+- Unknown handles
+  - Catalogue decides: whether a handle is a card is asked of the catalogue
+    when the address is asked for
+  - Not-found refusal: an address naming no card answers 404 and the site's
+    not-found surface, never an empty page
+- Reaching a card
+  - Grid entry: the storefront opens a card's own address from that card,
+    without a page load
+  - Sitemap honesty: the sitemap lists only addresses a collector can fetch,
+    never an unfilled pattern
+- Buying from the page
+  - Variant choice: the page opens on the variant it prices and adds whichever
+    one the collector chose
+  - Add in place: the collector stays on that card and what the site says the
+    cart holds accounts for the add
+  - One line per variant: adding the same variant again carries the quantity on
+    one line
+- Sold-out cards
+  - Per-variant availability: each variant reads as for sale or sold out on its
+    own, and only the ones for sale can be added
+  - Priced but unbuyable: a card nobody can buy keeps its prices and offers
+    nothing to press
+
+## User journeys
+
+### product-page-US-01: Collector reads a card at its own address
+
+**As a** collector,
+**I want** a product address to answer with that card's own page, and to refuse
+when the catalogue holds no such card,
+**so that** the page I read is the card the address names rather than an empty
+product page.
+
+**Accepted by:**
+
+- `product-page-SC-01` — A card answers whole
+- `product-page-SC-02` — Two cards, two pages
+- `product-page-SC-03` — A handle the catalogue has nothing for
+- `product-page-SC-04` — A card added to the catalogue answers
+
+### product-page-US-02: Collector opens a card from the storefront
+
+**As a** collector,
+**I want** to reach a card's own address from the grid without a page load,
+**so that** the card I opened is the one I land on, at an address that answers
+on its own.
+
+**Accepted by:**
+
+- `product-page-SC-05` — A card is opened from the grid
+- `product-page-SC-06` — The sitemap names no pattern
+
+### product-page-US-03: Collector adds a variant to the cart
+
+**As a** collector,
+**I want** to add the variant I chose from the card's own page,
+**so that** I can buy the grade I picked without leaving the card or returning
+to the grid.
+
+**Accepted by:**
+
+- `product-page-SC-07` — A collector adds the grade they chose
+- `product-page-SC-08` — A card with one thing to buy needs no choice
+- `product-page-SC-09` — The collector keeps their place
+- `product-page-SC-10` — The same card twice
+
+### product-page-US-04: Collector meets a card with nothing for sale
+
+**As a** collector,
+**I want** a card that cannot be bought to say so where the buying happens,
+still carrying its prices,
+**so that** I can tell a card that sold from a page that failed.
+
+**Accepted by:**
+
+- `product-page-SC-11` — Nothing on the card is for sale
+- `product-page-SC-12` — One grade sold, another still for sale
+
 ## Requirements
 ### Requirement: A card answers at its own address
 
@@ -19,13 +105,13 @@ bought — in the response HTML without any script executing.
 Two product addresses SHALL answer with their own card — the page a collector
 reads is the one the address names, not the catalogue it came from.
 
-#### Scenario: A card answers whole
+#### Scenario: product-page-SC-01 - A card answers whole
 
 - **WHEN** a product address is fetched and no script executes
 - **THEN** the response HTML contains that card's name, its description, and
   a price for every variant it lists
 
-#### Scenario: Two cards, two pages
+#### Scenario: product-page-SC-02 - Two cards, two pages
 
 - **WHEN** two product addresses are fetched
 - **THEN** each response carries its own card's name and price, and its own
@@ -38,13 +124,13 @@ address is asked for. An address under the store's products that names no
 card in the catalogue SHALL answer with status 404 and the site's not-found
 surface, never an empty product page.
 
-#### Scenario: A handle the catalogue has nothing for
+#### Scenario: product-page-SC-03 - A handle the catalogue has nothing for
 
 - **WHEN** an address under the store's products naming no card is fetched
 - **THEN** the response has status 404
 - **AND** a collector opening it sees the site's not-found surface
 
-#### Scenario: A card added to the catalogue answers
+#### Scenario: product-page-SC-04 - A card added to the catalogue answers
 
 - **GIVEN** a card the catalogue holds
 - **WHEN** its address is fetched
@@ -60,13 +146,13 @@ not one of them: which addresses the catalogue answers is not known when the
 site is built. It SHALL never list an address carrying an unfilled parameter
 in place of them.
 
-#### Scenario: A card is opened from the grid
+#### Scenario: product-page-SC-05 - A card is opened from the grid
 
 - **GIVEN** a collector on the storefront
 - **WHEN** they open a card in the grid
 - **THEN** that card's address is what they are on, showing that card's page
 
-#### Scenario: The sitemap names no pattern
+#### Scenario: product-page-SC-06 - The sitemap names no pattern
 
 - **WHEN** the sitemap is fetched
 - **THEN** every entry is an address a collector can fetch
@@ -85,26 +171,26 @@ chosen — never whichever the catalogue listed first.
 After a card is added the collector SHALL still be on that card, and what the
 site says the cart holds SHALL account for what was added.
 
-#### Scenario: A collector adds the grade they chose
+#### Scenario: product-page-SC-07 - A collector adds the grade they chose
 
 - **GIVEN** a card whose page lists more than one variant for sale
 - **WHEN** a collector chooses one that is not the one the page opened with,
   and adds it
 - **THEN** the cart holds that variant, and not the one the page opened with
 
-#### Scenario: A card with one thing to buy needs no choice
+#### Scenario: product-page-SC-08 - A card with one thing to buy needs no choice
 
 - **GIVEN** a card whose page lists one variant for sale
 - **WHEN** a collector adds it without choosing anything
 - **THEN** the cart holds that variant
 
-#### Scenario: The collector keeps their place
+#### Scenario: product-page-SC-09 - The collector keeps their place
 
 - **WHEN** a collector adds a card from its page
 - **THEN** they are still on that card's address, reading that card
 - **AND** what the site says the cart holds has changed to account for it
 
-#### Scenario: The same card twice
+#### Scenario: product-page-SC-10 - The same card twice
 
 - **GIVEN** a collector who has already added a variant from a card's page
 - **WHEN** they add the same variant again
@@ -122,7 +208,7 @@ A card listing some variants for sale and others not SHALL offer the ones for
 sale and refuse the ones not, each said per variant. A variant that cannot be
 bought SHALL NOT become what is added by being chosen.
 
-#### Scenario: Nothing on the card is for sale
+#### Scenario: product-page-SC-11 - Nothing on the card is for sale
 
 - **GIVEN** a card the catalogue lists with no variant for sale
 - **WHEN** a collector opens its page
@@ -130,7 +216,7 @@ bought SHALL NOT become what is added by being chosen.
 - **AND** every variant it lists is still priced
 - **AND** there is nothing to press that would add it
 
-#### Scenario: One grade sold, another still for sale
+#### Scenario: product-page-SC-12 - One grade sold, another still for sale
 
 - **GIVEN** a card listing one variant for sale and one sold out
 - **WHEN** a collector opens its page

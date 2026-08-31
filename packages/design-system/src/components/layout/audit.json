@@ -2,13 +2,14 @@
   {
     "label": "nav/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9937",
-    "classes": "@container flex w-full flex-col bg-background",
-    "note": "The set has no variant axes, so the one node is the whole contract. This entry exists because the fill was missing here and nothing caught it: the header drew no background at all while the frame fills Base/background, and every preview story sat on a gray-50 page that hid it."
+    "classes": "@container flex w-full flex-col border-b border-border bg-background",
+    "note": "The set has no variant axes, so the one node is the whole contract. This entry exists because the fill was missing here and nothing caught it: the header drew no background at all while the frame fills Base/background, and every preview story sat on a gray-50 page that hid it. It caught the second one the same way: the frame strokes Base/border along its bottom edge and the code drew no border at all, which a white page behind a white header shows as nothing."
   },
   {
     "label": "nav/promo",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9025",
-    "classes": "flex h-9 items-center justify-center overflow-hidden bg-secondary-foreground px-8"
+    "classes": "flex h-9 items-center justify-center overflow-hidden bg-secondary-foreground px-8",
+    "note": "Size/size-9 + Gap/gap-8. Fill resolves to #575757 in Figma (Grade10 secondary-foreground / gray-600), not Base/primary \u2014 get_variable_defs lists Base/primary on the node for other bindings; the audit fill is authoritative."
   },
   {
     "label": "nav/bar",
@@ -18,12 +19,18 @@
   {
     "label": "footer/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653",
-    "classes": "@container flex w-full flex-col bg-primary"
+    "classes": "@container flex w-full flex-col bg-background-inverse"
   },
   {
     "label": "footer/grid",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9564",
     "classes": "grid w-full grid-cols-1 gap-6 p-8 @xl:grid-cols-2 @3xl:grid-cols-4"
+  },
+  {
+    "label": "footer/logo",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4848-7593",
+    "classes": "flex h-9 items-center text-primary-foreground",
+    "note": "Logo Frame is Size/size-9; the g10-logo_mono instance inside is Size/size-5 and consumer-owned."
   },
   {
     "label": "footer/bar",
@@ -36,5 +43,10 @@
     "classes": "flex items-center justify-center gap-1",
     "covers": "NavigationList",
     "note": "Points at the Slot (4343:16420), not the NavigationList frame the .figma.ts names: Figma draws a frame containing a Slot, and the gap the code renders lives on the Slot. `covers` records that this is NavigationList's coverage all the same."
+  },
+  {
+    "label": "navigation-link/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4344-502",
+    "classes": "inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-(--radius-full) px-4 py-2 text-sm font-medium whitespace-nowrap text-foreground outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-disabled:hover:bg-transparent"
   }
 ]

@@ -1,6 +1,14 @@
 // url=https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9051
 // source=packages/ui/src/blocks/store-home/store-home-hero.tsx
 // component=StoreHomeHero
+//
+// Excluded from `code-connect:publish` in packages/ui/figma.config.json.
+//
+// `4171-9051` is a bare 1376x470 layout frame with no children of its own and
+// no published component anywhere in the file to stand in for it. Code Connect
+// resolves only published components, and one unresolvable node fails
+// validation for every template in the package, so this is held back until
+// design publishes a Hero component.
 import figma from "figma";
 
 const instance = figma.selectedInstance;

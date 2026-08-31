@@ -32,16 +32,19 @@ Three existing constraints shape everything below.
 
 Design-level only; the proposal owns product scope.
 
-- **Goal:** one source for what the account page shows, so `zzz` and the
-  admin panels inherit it rather than each composing session values.
+- **Goal:** one source for what the account page shows, so a second consumer
+  of `StoreProfile` inherits it rather than composing session values again.
+  None exists today — `zzz` has no account surface and the admin panels are
+  untouched, per the proposal — which is the point: the merge is settled before
+  there is a second place to get it wrong.
 - **Goal:** the smallest transport change that carries bytes — not a second
   HTTP client.
 - **Non-goal:** image transformation, thumbnails, or a CDN product. One stored
   object per collector.
 - **Non-goal:** an interactive cropper.
-- **Non-goal:** a `ui.md`. The surface has no Figma frames to link, and the
-  export contract that would carry the components section lives in the
-  `shared-ui/store-profile` delta instead.
+- **Non-goal:** Figma frames for this surface. `ui.md` records the states and
+  the components, and names the frames as absent; the layout is built from the
+  requirements.
 
 ## Decisions
 
@@ -49,19 +52,28 @@ Design-level only; the proposal owns product scope.
 
 `profile.get` stops returning null. It returns a view — display name, bio,
 avatar URL, email, member-since — composed from the row and the session:
-display name falls back to the session name, member-since is null before the
-first save. `profile.update` returns the same view. The row shape stays
-internal to the worker; `StoreProfile` in `@grade10/store-contracts` becomes
-that view.
+display name falls back to the session name and, when the session carries none,
+to the local part of its email address; member-since is null before the first
+save. `profile.update` returns the same view. The row shape stays internal to
+the worker; `StoreProfile` in `@grade10/store-contracts` becomes that view.
+
+The email fallback is not a nicety. Sign-in by emailed link or code collects no
+name (`shared-auth/sign-in`), so a large share of sessions carry none — which
+is why `ensureAccount` seeded `Member <first 8 of user id>` in the first place.
+Falling back to the session name alone would replace a generated identifier
+with an empty page heading and an empty initials circle.
 
 *Alternatives:* compose in the frontend feature — rejected, the session's name
-and email live behind the auth service and every consumer (grade10, zzz,
-admin) would repeat the merge. Create the row on read — rejected, it breaks
-account-data rule 7 and materializes an account from traffic alone.
+and email live behind the auth service and every consumer would repeat the
+merge. Create the row on read — rejected, it breaks account-data rule 7 and
+materializes an account from traffic alone. For the nameless session: a
+generated identifier — rejected, that is the placeholder this change removes;
+an empty heading — rejected, it fails `The profile page is never empty` in
+substance while passing it in form.
 
-Makes pass: `A collector who has never saved sees a profile`, `A read stores
-nothing`, `Saved values win over session defaults`, `Member-since is absent
-before the first save`, `The address shown is the one signed in with`.
+Makes pass: `A collector who has never saved sees a profile`, `A collector
+whose session carries no name`, `A read stores nothing`, `Saved values win over
+session defaults`, `The address shown is the one signed in with`.
 
 ### `display_name` becomes nullable, and the placeholder is backfilled away
 
@@ -77,6 +89,23 @@ read time — rejected, it makes a collector who genuinely typed that string
 invisible to themselves, and the comparison would live forever.
 
 Makes pass: `A display name the collector never chose is not shown as theirs`.
+
+### Member-since is a timestamp the first save writes
+
+`account_profile.created_at` records when the row appeared, and a row can
+appear from a webhook the collector never triggered, so it cannot answer "member
+since". A nullable `first_saved_at` is set by the first `profile.update` that
+succeeds and never rewritten; the view reads it, and null means the page shows
+no date.
+
+*Alternatives:* read `created_at` — rejected, it dates the store's bookkeeping
+rather than the collector, and it contradicts `Member-since is absent before the
+first save`. Infer the first save from `display_name IS NOT NULL` — rejected,
+it is true from the first save but carries no date, so the page would know that
+they joined and not when.
+
+Makes pass: `Member-since is absent before the first save`, `A record another
+part of the store created dates nothing`, `Every field is present`.
 
 ### Avatars are R2 objects served from an unguessable public path
 
@@ -118,6 +147,25 @@ Makes pass: `An accepted upload becomes the avatar`, `An unsupported image type
 is refused`, `An oversized image is refused`, `A new upload replaces the
 previous avatar`, `Removing an avatar restores the initials`.
 
+### The avatar and the text fields are two requests, and the page says so
+
+`ProfileForm` reports one set of values, but the avatar leaves on the byte
+route and the text on `profile.update`. The feature sends the avatar first and
+the text second, and reports each outcome on its own: an accepted avatar stands
+even when the text save is refused, and the form keeps the entered text for the
+retry. The text pair is still all-or-nothing — one procedure writes both.
+
+*Alternatives:* one multipart request carrying both — rejected, it puts image
+bytes through the mutation path every text-only save would then also carry, and
+the transport change in the previous decision exists precisely to avoid a second
+body format on `profile.update`. Roll the avatar back when the text save fails
+— rejected, it deletes an image the collector successfully chose to make a
+failed text edit look atomic.
+
+Makes pass: `An accepted avatar stands when the text save is refused`, `A save
+persists and is reflected immediately`, `A failed save keeps the collector's
+input`.
+
 ### The browser normalizes the image; the worker only judges it
 
 Before upload the SPA center-crops to a square and re-encodes at 512×512. The
@@ -142,6 +190,12 @@ the display name`, `No image source`, `An image that fails to load`.
 
 - **The avatar URL is a bearer handle** → an unguessable key, and replacement
   invalidates the old URL by changing it. Accepted under Q15.
+- **A replaced image outlives its replacement in caches** → the object is
+  deleted from R2 immediately, but the route serves it immutable and nothing
+  purges, so a cached copy answers the old address until its TTL expires. The
+  requirement is written as deletion from storage, and the proposal's Non-Goals
+  record the cached window. Shortening the TTL is the lever if that window ever
+  matters.
 - **`StoreProfile` changes shape, and both storefronts plus the store demo
   decode it** → the contract group lands first and the compiler names every
   consumer; nothing decodes the row shape after it.
@@ -162,10 +216,14 @@ the display name`, `No image source`, `An image that fails to load`.
 1. Shared components land in grade10-spec and the submodule is bumped in
    grade10 — the components tolerate an absent avatar and email, so the bump is
    safe before the backend ships.
-2. `drizzle:generate` produces the migration: `avatar_key` added,
-   `display_name` nullable, placeholder backfilled to NULL. Additive and
-   backward-compatible — the current worker ignores `avatar_key`, and it never
-   reads a NULL name because it only reads rows it wrote.
+2. `drizzle:generate` produces the migration: `avatar_key` and
+   `first_saved_at` added, `display_name` nullable, placeholder backfilled to
+   NULL. Additive and backward-compatible — the current worker ignores both new
+   columns, and it never reads a NULL name because it only reads rows it wrote.
+   Existing rows carry a NULL `first_saved_at`: a collector who saved before
+   this ships shows no member-since date until their next save. The alternative
+   — backfilling from `created_at` — would date them by the bookkeeping this
+   decision rejects.
 3. The `AVATARS` bucket is created per environment and bound in
    `wrangler.jsonc` before the worker deploys; the storage port fails loudly by
    binding name when it is missing.

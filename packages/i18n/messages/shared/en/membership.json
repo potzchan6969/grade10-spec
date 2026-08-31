@@ -1,0 +1,12 @@
+{
+  "card": {
+    "expired": "This code has expired",
+    "expiresIn": "Expires in",
+    "fallbackCode": "Or read this out",
+    "inStore": "in store",
+    "qrAlt": "Your member code, as a scannable square",
+    "refresh": "New code",
+    "secondsUnit": "s",
+    "used": "This code has already been used"
+  }
+}

@@ -10,7 +10,7 @@
 - [ ] 2.2 Add or document a lightweight fake-repository pattern for service tests that carries no Worker or database setup.
 - [ ] 2.3 Add a focused generated-query assertion helper or documented assertion style that checks material clauses and parameters without broad SQL snapshots.
 
-## 3. Adopt in persistent backends
+## 3. Adopt in persistent backends (owner: @htonyl)
 
 - [ ] 3.1 Inventory persistent use cases in every backend worker and backend package, identifying direct transport-to-database paths and their migration priority.
 - [ ] 3.2 Migrate one representative persistent use case in each affected product to the convention, including service, query-shape, and PGlite execution evidence.

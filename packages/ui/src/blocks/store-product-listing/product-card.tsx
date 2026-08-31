@@ -41,7 +41,7 @@ type ProductCardProps = {
    */
   inCart?: boolean;
   cartCount?: ReactNode;
-  onCartClick?: () => void;
+  onCartQuantityChange?: (quantity: number) => void;
   /**
    * Fires when the image surface is activated. No navigation target is wired
    * here — the consumer decides what happens (route, modal, etc.).
@@ -53,14 +53,20 @@ type ProductCardProps = {
 type ProductCardContentProps = Omit<ProductCardProps, "loading">;
 
 const SKELETON_FIXTURE_PROPS = {
-  copy: { cart: "Add to cart", sale: "SALE" },
+  copy: {
+    cart: "Add to cart",
+    decreaseQuantity: "Decrease quantity",
+    increaseQuantity: "Increase quantity",
+    removeFromCart: "Remove from cart",
+    adjustQuantity: "Adjust cart quantity",
+  },
   imageSrc: skeletonImage,
-  imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
-  name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+  imageAlt: "Abyss Eye Booster Box",
+  /** One-line name so the Boneyard capture matches the common single-line tile. */
+  name: "Abyss Eye Booster Box",
   price: "HK$105",
-  originalPrice: "HK$123",
   onClick: () => {},
-  onCartClick: () => {},
+  onCartQuantityChange: () => {},
 } satisfies Omit<ProductCardContentProps, "className">;
 
 /**
@@ -79,9 +85,11 @@ function ProductCardContent({
   soldOut = false,
   inCart = false,
   cartCount,
-  onCartClick,
+  onCartQuantityChange,
   onClick,
 }: ProductCardContentProps) {
+  const onSale = originalPrice != null && !soldOut;
+
   return (
     <VStack
       className={cn("group/product-card w-full", className)}
@@ -98,13 +106,13 @@ function ProductCardContent({
         imageSrc={imageSrc}
         inCart={inCart}
         name={name}
-        onCartClick={onCartClick}
+        onCartQuantityChange={onCartQuantityChange}
         onClick={onClick}
         soldOut={soldOut}
       />
 
       <VStack
-        className="min-w-0 gap-2 py-2"
+        className="min-w-0 gap-1 py-2"
         data-slot="product-card-content"
         gap="none"
       >
@@ -112,7 +120,16 @@ function ProductCardContent({
           {name}
         </p>
         <HStack gap="sm" vAlign="baseline">
-          <p className="text-base font-medium text-card-foreground">{price}</p>
+          <p
+            className={cn(
+              "text-base",
+              onSale
+                ? "font-medium text-success"
+                : "font-normal text-card-foreground",
+            )}
+          >
+            {price}
+          </p>
           {originalPrice != null ? (
             <p className="text-base font-normal text-secondary-foreground line-through">
               {originalPrice}
@@ -140,9 +157,9 @@ const PRODUCT_CARD_FIXTURE = <ProductCardContent {...SKELETON_FIXTURE_PROPS} />;
  *
  * Hover scales the photo inside the well. Product photos keep a white studio
  * fill; multiply against the gray-50→gray-100 well makes that fill read as
- * transparent. The cart action is `IconButton` `primary` `md` (Figma
- * `4274:10075`) and appears on hover, or stays visible with a quantity when
- * the product is already in the cart. Sold-out tiles are inert.
+ * transparent. The cart control morphs from a hover-revealed add affordance
+ * into an inline quantity stepper, collapsing to a quantity pill when in cart.
+ * Sold-out tiles are inert.
  */
 function ProductCard({
   loading = false,

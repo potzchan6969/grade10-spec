@@ -1,5 +1,7 @@
 {
+  "addedToCart": "장바구니에 담김",
   "addToCart": "장바구니에 담기",
+  "adding": "담는 중…",
   "cartCount": "장바구니에 {count, plural, other {#개}} 담겨 있습니다",
   "clearFilters": "필터 지우기",
   "collections": "컬렉션",

@@ -1,5 +1,7 @@
 {
+  "addedToCart": "已加入购物车",
   "addToCart": "加入购物车",
+  "adding": "正在加入…",
   "cartCount": "购物车内有 {count, plural, other {# 件商品}}",
   "clearFilters": "清除筛选",
   "collections": "系列",

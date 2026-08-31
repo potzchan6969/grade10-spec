@@ -1558,7 +1558,7 @@ test("Design-sync workflow still checks registered components", () => {
     new URL("../../.github/workflows/design-sync.yml", import.meta.url),
     "utf8",
   );
-  assert.match(workflow, /pnpm run check:design-system/);
-  assert.match(workflow, /pnpm run figma:audit --all-blocks/);
+  assert.match(workflow, /pnpm run design-sync:check/);
+  assert.match(workflow, /pnpm run design-sync:audit --all-blocks/);
   assert.doesNotMatch(workflow, /annotation-monitor|figma:annotations/);
 });

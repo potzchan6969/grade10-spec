@@ -37,6 +37,26 @@ export const Ready: Story = {
   },
 };
 
+export const Empty: Story = {
+  args: {
+    results: {
+      status: "empty",
+      message: "No products match these filters.",
+    },
+  },
+  play: async ({ canvasElement }) => {
+    await waitFor(() => {
+      const empty = canvasElement.querySelector(
+        '[data-slot="product-results-empty"]',
+      );
+      expect(empty?.getAttribute("data-revealed")).toBe("true");
+      expect(
+        Number(getComputedStyle(empty as HTMLElement).opacity),
+      ).toBeGreaterThan(0.9);
+    });
+  },
+};
+
 /**
  * The surface above rebuilds `results` on every render, and something else on
  * the page resolving is enough to cause one. The tiles are still shown: the

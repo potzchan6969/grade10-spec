@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
-import { expect, fn, within } from "storybook/test";
+import { expect, fn, waitFor, within } from "storybook/test";
 import {
   APPLIED_FILTERS,
   FILTER_GROUPS,
@@ -86,7 +86,7 @@ const meta = {
     hasMore: true,
     loadingMore: false,
     onLoadMore: fn(),
-    onProductAction: fn(),
+    onProductCartQuantityChange: fn(),
   },
 } satisfies Meta<typeof ProductBrowse>;
 
@@ -103,10 +103,12 @@ export const FiltersStartUnselected: Story = {
     expect(
       canvas.getByRole("checkbox", { name: /Booster Box/ }),
     ).not.toBeChecked();
-    expect(
-      canvas.getAllByText("Pokémon TCG Sealed Booster Box – Abyss Eye (M5)")
-        .length,
-    ).toBeGreaterThan(0);
+    await waitFor(() => {
+      expect(
+        canvas.getAllByText(/Pokémon TCG Sealed Booster Box – Abyss Eye \(M5\)/)
+          .length,
+      ).toBeGreaterThan(0);
+    });
   },
 };
 

@@ -1,14 +1,14 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@grade10/design-system/components/display/card";
 import { Divider } from "@grade10/design-system/components/display/divider";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
-import { VStack } from "@grade10/design-system/components/layout/vstack";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@grade10/design-system/components/overlays/dialog";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 
@@ -18,36 +18,59 @@ type SignInCardAction = { label: ReactNode; onAction: () => void };
 type SignInCardCopy = {
   title: string;
   description?: string;
-  /** Names the divider between the email flow and the providers. Required
+  /** Names the divider between the providers and the email flow. Required
    * whenever `providerSlot` is set — the card carries no English of its own. */
   providerDivider?: string;
+  /** Terms and privacy line, drawn as the last node of the dialog body. The
+   * consumer owns the wording and any links inside it. */
+  legal?: ReactNode;
 };
 
 type SignInCardProps = {
   copy: SignInCardCopy;
+  /** Whether the dialog is showing. Sign-in is an overlay over whatever the
+   * collector was already doing, so visibility is the consumer's state, not
+   * this component's — there is deliberately no uncontrolled fallback. */
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   /** The active step — a `SignInEmailForm`, a `SignInCodeForm`, or anything
    * else the consumer's flow needs. */
   children: ReactNode;
   /** Progress line under the step — "check your inbox". Not an error: field
    * errors travel on the step's own `error` prop. */
   message?: ReactNode;
-  /** External identity buttons (Google, passkeys…), rendered under the
-   * divider. The consumer owns the widget; this card only places it. */
+  /** External identity buttons (Google, passkeys…), rendered above the
+   * divider. The consumer owns the widget; this dialog only places it. */
   providerSlot?: ReactNode;
-  /** A way out of the flow — "back to home". */
+  /** A way out of the flow — "back to home". Distinct from dismissing the
+   * dialog, which the header's close control, Escape and the scrim all do. */
   exitAction?: SignInCardAction;
   className?: string;
 };
 
 /**
- * The sign-in surface's shell: heading, the active step, a status line, an
- * external-provider slot, and an exit.
+ * The sign-in surface's shell: heading, an external-provider slot, the active
+ * step, a status line, and an exit.
+ *
+ * A dialog rather than a page, because that is what Figma draws — the Auth
+ * Sign-In page holds `Login Dialog` (4666:1488) over `Login Dialog Overlay`
+ * (4666:1523) and no card-on-a-page layout at all. It matters beyond the
+ * pixels: a collector asked to sign in mid-flow keeps the page they were on
+ * mounted behind the scrim instead of losing it to a route change.
+ *
+ * `DialogContent` already carries every value the Figma frame specifies — 448
+ * wide, radius 32, padding 24, gap 24 — and `--overlay` already resolves to
+ * the `#0A0A0A4D` the scrim is drawn with, so nothing here restates them. The
+ * one local override is the body gap: the generic Dialog draws its body at 16
+ * and this surface at 24.
  *
  * Which step renders is the consumer's decision — the flow (magic link, code,
- * OAuth, or any mix) is product state, so the card holds no step machine.
+ * OAuth, or any mix) is product state, so the dialog holds no step machine.
  */
 function SignInCard({
   copy,
+  open,
+  onOpenChange,
   children,
   message,
   providerSlot,
@@ -55,35 +78,51 @@ function SignInCard({
   className,
 }: SignInCardProps) {
   return (
-    <Card className={cn("w-full max-w-sm", className)} data-slot="sign-in-card">
-      <CardHeader>
-        <CardTitle>{copy.title}</CardTitle>
-        {copy.description ? (
-          <CardDescription>{copy.description}</CardDescription>
-        ) : null}
-      </CardHeader>
-      <CardContent>
-        <VStack gap="md">
+    // Base UI calls its own onOpenChange with an event-details argument after
+    // the boolean. Narrowing it here keeps the prop's declared
+    // `(open: boolean) => void` true — passing the callback straight through
+    // would hand a consumer's two-parameter function a second argument it
+    // never asked for.
+    <Dialog onOpenChange={(next) => onOpenChange(next)} open={open}>
+      <DialogContent
+        className={cn(className)}
+        data-slot="sign-in-card"
+        aria-label={copy.title}
+      >
+        <DialogHeader>
+          <DialogTitle>{copy.title}</DialogTitle>
+        </DialogHeader>
+        {/* gap-6 is this surface's, not the primitive's: Figma draws the
+            generic Dialog body at 16 and the Login Dialog body at 24. */}
+        <DialogBody className="gap-6">
+          {copy.description ? (
+            <DialogDescription>{copy.description}</DialogDescription>
+          ) : null}
+          {providerSlot ? (
+            <>
+              {providerSlot}
+              <Divider label={copy.providerDivider} />
+            </>
+          ) : null}
           {children}
           {message ? (
             <Text data-slot="sign-in-message" size="sm" tone="success">
               {message}
             </Text>
           ) : null}
-          {providerSlot ? (
-            <>
-              <Divider label={copy.providerDivider} />
-              {providerSlot}
-            </>
-          ) : null}
           {exitAction ? (
             <Button onClick={exitAction.onAction} type="button" variant="ghost">
               {exitAction.label}
             </Button>
           ) : null}
-        </VStack>
-      </CardContent>
-    </Card>
+          {copy.legal ? (
+            <Text data-slot="sign-in-legal" size="sm" tone="secondary">
+              {copy.legal}
+            </Text>
+          ) : null}
+        </DialogBody>
+      </DialogContent>
+    </Dialog>
   );
 }
 

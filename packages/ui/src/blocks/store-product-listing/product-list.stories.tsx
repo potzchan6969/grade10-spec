@@ -39,7 +39,7 @@ export const LoadingMore: Story = {
 export const ActionIsReported: Story = {
   args: {
     products: [{ ...PRODUCTS[1], id: "reported", inCart: false }],
-    onProductAction: fn(),
+    onProductCartQuantityChange: fn(),
   },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -48,8 +48,11 @@ export const ActionIsReported: Story = {
     cart.focus();
     await userEvent.keyboard("{Enter}");
 
-    expect(args.onProductAction).toHaveBeenCalledTimes(1);
-    expect(args.onProductAction).toHaveBeenCalledWith("reported");
+    expect(args.onProductCartQuantityChange).toHaveBeenCalledTimes(1);
+    expect(args.onProductCartQuantityChange).toHaveBeenCalledWith(
+      "reported",
+      1,
+    );
     expect(
       canvas.getByRole("button", { name: "Add to cart" }),
     ).toBeInTheDocument();

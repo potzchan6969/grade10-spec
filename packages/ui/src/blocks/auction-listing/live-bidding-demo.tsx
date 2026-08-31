@@ -3,7 +3,7 @@ import { List, ListItem } from "@grade10/design-system/components/display/list";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { DemoFlow } from "../shared/demo-flow";
+import { FlowContainer } from "../shared/flow-container";
 import { LiveActions, WatchingAction, WatchOnlyActions } from "./fixtures";
 import { ListingBidPanel } from "./listing-bid-panel";
 
@@ -100,9 +100,13 @@ function historyOf(bids: readonly ScriptBid[]) {
 function captionOf(bids: readonly ScriptBid[]): string {
   const lead = bids.at(-1);
   if (!lead) return "Starting bid";
-  if (lead.bidder === YOU) return "Your bid · Highest Bid";
-  if (bids.some((bid) => bid.bidder === YOU)) return "Your bid · Outbid";
-  return "Current bid";
+  const standing =
+    lead.bidder === YOU
+      ? "Your bid · Highest Bid"
+      : bids.some((bid) => bid.bidder === YOU)
+        ? "Your bid · Outbid"
+        : "Current bid";
+  return `${standing} · ${lead.amount}`;
 }
 
 function panelFor({ bids, watching }: DemoState) {
@@ -114,6 +118,7 @@ function panelFor({ bids, watching }: DemoState) {
         ends: "Ends",
         extension: "Extended bidding",
         extensionTooltip: "Extended bidding rules",
+        maximum: "Your maximum",
       }}
       actions={<LiveActions />}
       bidCount={`${bids.length} ${bids.length === 1 ? "Bid" : "Bids"}`}
@@ -143,5 +148,19 @@ const CASES: ReadonlyArray<readonly [string, DemoState]> = [
 
 /** Steps a live lot through rival bids so the panel's price, history, and standing update in place. */
 export function LiveBiddingDemo() {
-  return <DemoFlow cases={CASES}>{(bids) => panelFor(bids)}</DemoFlow>;
+  return (
+    <FlowContainer
+      cases={CASES}
+      description={
+        <p>
+          The sequence covers a bidder moving from no participation to leading,
+          then being outbid, then leading again. Each transition must replace
+          the price, bid count, history, watch state, and standing together so a
+          stale status cannot encourage the wrong next action.
+        </p>
+      }
+    >
+      {(bids) => panelFor(bids)}
+    </FlowContainer>
+  );
 }

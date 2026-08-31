@@ -42,11 +42,11 @@ compiles. Nothing catches this for you — see "Known gaps".
 ## Creating a component
 
 1. **Publish the Figma component set first.** Code Connect only resolves published components, and `list_file_components_for_code_connect` only returns published ones.
-2. **Pull tokens** if the design introduced any (`pnpm tokens:sync`), and confirm the values you need exist in `src/themes/grade10.css`. Adding a component that binds a token the baseline `default` theme lacks will render it unstyled outside `.theme-grade10` — see "Theme coverage" below.
+2. **Pull tokens** if the design introduced any (`pnpm tokens:pull`), and confirm the values you need exist in `src/themes/grade10.css`. Adding a component that binds a token the baseline `default` theme lacks will render it unstyled outside `.theme-grade10` — see "Theme coverage" below.
 3. **Write `<name>.tsx`** with one cva option per Figma variant option, and nothing more.
 4. **Write `<name>.figma.ts`** with a `getEnum` covering *every* option of every VARIANT property. An unmapped option resolves to `undefined` and emits broken code.
 5. **Write `<name>.stories.tsx`** with a story per variant, plus disabled, loading, and any other state the contract has.
-6. **Run `pnpm run check:design-system`** and get to zero errors and zero *unexplained* warnings. A warning you intend to keep belongs in an OpenSpec change with a reason, not in the run log.
+6. **Run `pnpm run design-sync:check`** and get to zero errors and zero *unexplained* warnings. A warning you intend to keep belongs in an OpenSpec change with a reason, not in the run log.
 7. **Publish Code Connect** with `pnpm run code-connect:publish:design-system` (a block's templates publish with `code-connect:publish:ui` instead). A correct template that was never published leaves Dev Mode showing no connected code at all — verify with `get_code_connect_map`, which returns `{}` when nothing is published.
 
 Changing an existing component follows the same list from step 3, and step 4
@@ -72,24 +72,26 @@ The `include` glob is package-relative, which is why the second command exists a
 
 Append `--dry-run` to list what would be published and against which node, without writing anything — `pnpm run code-connect:publish:ui --dry-run`, with **no `--` before it**. These scripts forward through a second `pnpm`, and a literal `--` reaches the Figma CLI as an argument, which stops it parsing the rest: the flag is dropped and `--token` with it, so the run fails on `Couldn't find a Figma access token` while the token is sitting right there in the command. Do that first; it parses every template and then resolves each `url=` header against the API, so it catches a stale node ID before it reaches the file. It still needs a valid token for that second half — a dry run is not a token-free rehearsal.
 
-**The token is not the one the checker uses.** `check:design-system` reads `FIGMA_TOKEN` and needs only `files:read`. Publishing reads `FIGMA_ACCESS_TOKEN` (or `--token`) and needs **File content: read** plus **Code Connect: write**. A `files:read` token will parse fine and fail at the write.
+**The token is not the one the checker uses.** `design-sync:check` reads `FIGMA_TOKEN` and needs only `files:read`. Publishing reads `FIGMA_ACCESS_TOKEN` (or `--token`) and needs **File content: read** plus **Code Connect: write**. A `files:read` token will parse fine and fail at the write.
 
 Publishing is a write to a shared Figma file and has no unattended path in CI by design — it is a deliberate step at the end of a change, not something a merge triggers.
 
 ## What the checker enforces
 
-`pnpm run check:design-system` runs `scripts/design-sync/check-components.mjs`. It lives at the repository root rather than inside `packages/design-system`, because it reads both packages: a script that scans a sibling package from inside one of them has the dependency pointing the wrong way. The token data it resolves against is still the design system's, and it reads it from there.
+`pnpm run design-sync:check` runs `scripts/design-sync/check-components.mjs`. It lives at the repository root rather than inside `packages/design-system`, because it reads both packages: a script that scans a sibling package from inside one of them has the dependency pointing the wrong way. The token data it resolves against is still the design system's, and it reads it from there.
 
-**Source.** `FIGMA_TOKEN` is the default and needs only the `files:read` scope. Note the contrast with the token pull: `scripts/figma/pull.mjs` has no REST path because `/v1/files/:key/variables/local` requires `file_variables:read`, which Figma gates to Enterprise. That gate is specific to *variables*. Component property definitions live in the file document, so this check runs unattended even though the token pull cannot. `FIGMA_DUMP=<file.json>` remains as a manual fallback.
+**Source.** `FIGMA_TOKEN` is the default and needs only the `files:read` scope. Note the contrast with the token pull: `scripts/tokens-sync/figma-plugins/pull.mjs` has no REST path because `/v1/files/:key/variables/local` requires `file_variables:read`, which Figma gates to Enterprise. That gate is specific to *variables*. Component property definitions live in the file document, so this check runs unattended even though the token pull cannot. `FIGMA_DUMP=<file.json>` remains as a manual fallback.
 
 `tokens.config.json → figmaFile` names the target. Branch URLs (`/design/:key/branch/:branchKey/...`) resolve to the **branch** key, because a branch is a distinct file to the API.
 
-**Errors — exit 1, Dev Mode would emit wrong code:**
+**Errors — exit 1, Dev Mode would emit wrong code or the code renders a value Figma does not draw:**
 
 - A template's `node-id` is missing or no longer resolves.
 - A `getEnum` names a VARIANT property the component set does not have.
 - A `getEnum` omits an option, which would resolve to `undefined`. Dev Mode renders that as an empty attribute — `<Button size="">` — which reads as a blank value rather than a broken template, so it is easy to look straight past.
 - A `getEnum` emits a value the cva does not define.
+- A resolved value disagrees with the one Figma draws — a background, height, horizontal padding, gap, or corner radius.
+- A variant draws a fill or a stroke that no class mapped to it claims, or draws none where the code paints one.
 
 **Warnings — the two sides disagree, which may be deliberate:**
 
@@ -113,7 +115,7 @@ Publishing is a write to a shared Figma file and has no unattended path in CI by
 
 A separate, token-free check runs in the test suite. `vitest --project contracts` reads each `cva` config out of the component source and fails when an option no story renders — the option list comes from the cva itself rather than a restated list, because cva keeps its config in a closure and exposes nothing at runtime. It accepts both authoring styles in this package, `variant: "line"` in a story's `args` and `variant="line"` inside a `render`, and it treats a `defaultVariants` option as covered by any story that omits the prop. An `argTypes` `options` entry does not count; only a story does.
 
-**Values, not just names.** Every axis and option can line up perfectly while the colours, heights, and padding are all wrong — which is exactly what happened to Button, whose variants matched by name for months while `default` rendered a 10% tint against a design that specifies a solid fill. So each variant's own class string is resolved and compared against the variant Figma draws: `bg-*` through `tokens.json` to an 8-digit hex, and `h-*`, `px-*`, `gap-*`, and `rounded-*` to pixels. A mismatch is a warning, not an error — the component renders, it just does not render what was drawn.
+**Values, not just names.** Every axis and option can line up perfectly while the colours, heights, and padding are all wrong — which is exactly what happened to Button, whose variants matched by name for months while `default` rendered a 10% tint against a design that specifies a solid fill. So each variant's own class string is resolved and compared against the variant Figma draws: `bg-*` through `tokens.json` to an 8-digit hex, and `h-*`, `px-*`, `gap-*`, and `rounded-*` to pixels. A mismatch **fails the run**. It was a warning for as long as it took to learn that a rail which cannot fail is documentation: `default` shipped that tint for months while every run stayed green and the advice went unread. Failing says nothing about which side is wrong — the code may be right and the Figma file stale — only that somebody has to settle it before this merges.
 
 **Base states only.** The comparison reaches each axis's base option and nothing else, so every hover, disabled, and loading value is unchecked, as are label colour, icon size, and border. Verify those by hand with `get_variable_defs` on the state's own node, and compare the *rule* rather than the colour: a disabled state may be a fill swap or the variant's own colours at `Opacity/opacity-50`, and those are different code. An opacity-based state is doubly invisible here, because the `bg-*` token this check compares is unchanged by it.
 
@@ -178,22 +180,26 @@ Deleting or renaming a variant that instances already use leaves orphaned compon
 
 ### Checking the built component yourself
 
-Two routes. The automated diff needs only a browser; measuring in Storybook needs the repository checked out, so it is the one place here where you may need an engineer to start it for you.
+Two routes that need only a browser: the automated diff, and the published
+Storybook. Local Storybook is the fallback for a branch that is not on `main`.
 
-**Measure it in Storybook.** Run `pnpm run storybook:design-system` and open the address it prints. Open a component, then:
+**Measure it in Storybook.** Open
+[https://storybook.grade10-stg.com](https://storybook.grade10-stg.com)
+(the workbench published from `main` on every relevant push — same combined
+view as `pnpm storybook:workbench`). Open a component, then:
 
 1. Switch the **Theme** toolbar control to **Grade10**. It loads in `Default`, which is the baseline theme, not the designed one — comparing that against your Figma file will show differences that are not real. This is the single most common way to misread the page.
 2. Press <kbd>M</kbd> for **Measure**. Hovering any element overlays its real box model — width, height, padding and margin in rendered pixels. This is the direct answer to "is the padding what I drew".
 3. Press <kbd>O</kbd> for **Outline** to see every element boundary at once, which is faster for spotting a wrong gap or an unexpected wrapper.
 4. Use the **Controls** panel to switch variant, size and state, so you can measure the same rungs your component set defines.
 
-What you are measuring is the primitive as built, in a browser, at the real values — so a rung that is 24px in code and 32px in your Sizing collection is visible in about ten seconds.
+What you are measuring is the primitive as built, in a browser, at the real values — so a rung that is 24px in code and 32px in your Sizing collection is visible in about ten seconds. For a branch that is not yet on `main`, run `pnpm run storybook:workbench` from a checkout.
 
-**Read the automated diff.** The nightly design-sync run posts a summary table on its own run page — Actions → **Design sync** → the newest run. Each row is one disagreement, in the form `Button · size=sm · Height (h-8) · 32px in code · 24px in Figma`, covering background, height, horizontal padding, gap and corner radius. The same page states what the check does not cover, which is worth reading once: vertical padding, anything inside the component, and the hover, disabled and loading states are all unchecked, so a clean table is not proof the component matches.
+**Read the automated diff.** The nightly design-sync run posts a summary table on its own run page — Actions → **Design sync** → the newest run. Each row is one disagreement, in the form `Button · size=sm · Height (h-8) · 32px in code · 24px in Figma`, covering background, height, horizontal padding, gap and corner radius. A row here fails the run, so a table with rows in it is a red build waiting for someone — you or an engineer — to say which of the two numbers is right. The same page states what the check does not cover, which is worth reading once: vertical padding, anything inside the component, and the hover, disabled and loading states are all unchecked, so a clean table is not proof the component matches.
 
 ### What happens next
 
-`check:design-system` diffs your axes and options against the code on every push, and again nightly at 01:00 UTC — a Figma edit raises no event in this repository, so the scheduled run is what catches a change you make on a day nobody pushes code. A new option with no code counterpart is a warning; a renamed or removed option is an error. You do not need to run it — but it is why an unannounced rename surfaces as a failed build rather than a wrong button in production.
+`design-sync:check` diffs your axes and options against the code on every push, and again nightly at 01:00 UTC — a Figma edit raises no event in this repository, so the scheduled run is what catches a change you make on a day nobody pushes code. A new option with no code counterpart is a warning; a renamed or removed option is an error, and so is a value you change on a variant that the code still draws the old way. You do not need to run it — but it is why an unannounced rename surfaces as a failed build rather than a wrong button in production.
 
 Anyone with repository access can also run it on demand from the Actions tab (**Design sync → Run workflow**) rather than waiting for the next nightly run.
 

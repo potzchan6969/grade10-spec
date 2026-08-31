@@ -1,5 +1,5 @@
 import { cn } from "@grade10/design-system/lib/utils";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AsyncMessage } from "../shared/async-message";
 import type { ProductListCopy } from "./product-list";
 import { DEFAULT_LOAD_MORE_SKELETON_COUNT, ProductList } from "./product-list";
@@ -15,7 +15,7 @@ type ProductResultsPanelProps = {
   copy: ProductResultsPanelCopy;
   results: AsyncState<readonly ProductSummary[]>;
   onProductClick?: (productId: string) => void;
-  onProductAction?: (productId: string) => void;
+  onProductCartQuantityChange?: (productId: string, quantity: number) => void;
   /** When true, scrolling near the list end reports `onLoadMore`. */
   hasMore?: boolean;
   loadingMore?: boolean;
@@ -25,10 +25,18 @@ type ProductResultsPanelProps = {
   className?: string;
 };
 
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
 /**
  * Results grid with per-card Boneyard skeletons while `results` is loading and
  * a staggered blur-fade when ready tiles arrive. Replays on every
- * `loading → ready` transition, including the first paint.
+ * `loading → ready` transition, including the first paint. Load-more appends
+ * only animate newly added tiles (quieter stagger), leaving settled tiles still.
  *
  * When `hasMore` is supplied, a sentinel near the list bottom reports
  * `onLoadMore` once per approach. While `loadingMore` is true, skeleton tiles
@@ -38,7 +46,7 @@ function ProductResultsPanel({
   copy,
   results,
   onProductClick,
-  onProductAction,
+  onProductCartQuantityChange,
   hasMore = false,
   loadingMore = false,
   onLoadMore,
@@ -46,7 +54,11 @@ function ProductResultsPanel({
   className,
 }: ProductResultsPanelProps) {
   const [revealed, setRevealed] = useState(false);
+  const [revealFromIndex, setRevealFromIndex] = useState(0);
+  const [emptyRevealed, setEmptyRevealed] = useState(false);
   const [lastReadyCount, setLastReadyCount] = useState(0);
+  const settledCountRef = useRef(0);
+  const prevStatusRef = useRef(results.status);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const requestedAtCountRef = useRef<number | null>(null);
   const onLoadMoreRef = useRef(onLoadMore);
@@ -60,26 +72,63 @@ function ProductResultsPanel({
     }
   }, [readyCount]);
 
-  /* The entrance is keyed to the status alone. `results` is rebuilt on every
-     render of the surface above, so an effect that watched it would cancel
-     the frames this one is waiting on and leave the tiles at opacity 0. */
-  useEffect(() => {
+  /* Layout before paint so appends don't flash as fully revealed for a frame. */
+  useLayoutEffect(() => {
+    const prevStatus = prevStatusRef.current;
+    prevStatusRef.current = status;
+
     if (status !== "ready") {
       setRevealed(false);
+      if (status === "loading") {
+        settledCountRef.current = 0;
+        setRevealFromIndex(0);
+      }
       return;
     }
 
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
+    const count = readyCount ?? 0;
+    const append =
+      prevStatus === "ready" &&
+      settledCountRef.current > 0 &&
+      count > settledCountRef.current;
+
+    setRevealFromIndex(append ? settledCountRef.current : 0);
+    setRevealed(false);
+
+    if (prefersReducedMotion()) {
       setRevealed(true);
+      settledCountRef.current = count;
       return;
     }
 
     let second = 0;
     const first = requestAnimationFrame(() => {
-      second = requestAnimationFrame(() => setRevealed(true));
+      second = requestAnimationFrame(() => {
+        setRevealed(true);
+        settledCountRef.current = count;
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+    };
+  }, [status, readyCount]);
+
+  useEffect(() => {
+    if (status !== "empty") {
+      setEmptyRevealed(false);
+      return;
+    }
+
+    if (prefersReducedMotion()) {
+      setEmptyRevealed(true);
+      return;
+    }
+
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => setEmptyRevealed(true));
     });
 
     return () => {
@@ -125,13 +174,35 @@ function ProductResultsPanel({
     return () => observer.disconnect();
   }, [hasMore, loadingMore, readyCount, status]);
 
-  if (status === "empty" || status === "error") {
+  if (status === "empty") {
+    return (
+      <div
+        className={cn(
+          "translate-y-1 opacity-0",
+          "transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]",
+          "motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none",
+          emptyRevealed && "translate-y-0 opacity-100",
+          className,
+        )}
+        data-revealed={emptyRevealed || undefined}
+        data-slot="product-results-empty"
+      >
+        <AsyncMessage
+          action={results.action}
+          message={results.message}
+          slot="results-empty"
+        />
+      </div>
+    );
+  }
+
+  if (status === "error") {
     return (
       <AsyncMessage
         action={results.action}
         className={className}
         message={results.message}
-        slot={`results-${status}`}
+        slot="results-error"
       />
     );
   }
@@ -151,9 +222,10 @@ function ProductResultsPanel({
         loadMoreSkeletonCount={loadMoreSkeletonCount}
         loading={isLoading}
         loadingMore={loadingMore}
-        onProductAction={onProductAction}
+        onProductCartQuantityChange={onProductCartQuantityChange}
         onProductClick={onProductClick}
         products={status === "ready" ? results.data : []}
+        revealFromIndex={revealFromIndex}
         revealStaggerCap={REVEAL_STAGGER_CAP}
         revealStaggerMs={REVEAL_STAGGER_MS}
         revealed={!isLoading && revealed}

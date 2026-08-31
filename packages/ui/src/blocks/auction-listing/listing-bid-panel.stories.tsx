@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect, useState } from "react";
 import { expect, within } from "storybook/test";
 import {
   HighestBidderStanding,
@@ -23,6 +22,7 @@ const meta = {
   args: {
     copy: {
       price: "Current bid",
+      maximum: "Your maximum",
       ends: "Ends",
       extension: "Extended bidding",
       extensionTooltip: "Extended bidding rules",
@@ -64,7 +64,7 @@ export const Loading: Story = {
 
 export const PreAuction: Story = {
   args: {
-    copy: { price: "Starting bid", ends: "Opens" },
+    copy: { price: "Starting bid", maximum: "Your maximum", ends: "Opens" },
     price: "HK$1,200.00",
     bidCount: undefined,
     history: undefined,
@@ -95,9 +95,69 @@ export const Default: Story = {
   },
 };
 
+export const LeadingMaximum: Story = {
+  args: {
+    copy: {
+      ends: "Ends",
+      extension: "Extended bidding",
+      extensionTooltip: "Extended bidding rules",
+      maximum: "Your maximum",
+      price: "Current bid",
+    },
+    maximum: "HK$8,000.00",
+    price: "HK$4,800.00",
+    standing: <HighestBidderStanding />,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Your maximum")).toBeInTheDocument();
+    expect(canvas.getByText("HK$8,000.00")).toBeInTheDocument();
+    expect(canvas.getByText("Current bid")).toBeInTheDocument();
+    expect(canvas.getByText("HK$4,800.00")).toBeInTheDocument();
+  },
+};
+
+export const OvertakenMaximum: Story = {
+  args: {
+    copy: {
+      ends: "Ends",
+      extension: "Extended bidding",
+      extensionTooltip: "Extended bidding rules",
+      maximum: "Your maximum",
+      price: "Current bid",
+    },
+    maximum: "HK$8,000.00",
+    price: "HK$8,250.00",
+    standing: <OutbidStanding />,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Your maximum")).toBeInTheDocument();
+    expect(canvas.getByText("HK$8,000.00")).toBeInTheDocument();
+    expect(canvas.getByText("Outbid")).toBeInTheDocument();
+  },
+};
+
+export const NoMaximum: Story = {
+  args: {
+    copy: {
+      ends: "Ends",
+      extension: "Extended bidding",
+      extensionTooltip: "Extended bidding rules",
+      maximum: "Your maximum",
+      price: "Current bid",
+    },
+    maximum: undefined,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByText("Your maximum")).toBeNull();
+  },
+};
+
 export const LiveNoBids: Story = {
   args: {
-    copy: { price: "Starting bid", ends: "Ends" },
+    copy: { price: "Starting bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$1,200.00",
     bidCount: "0 Bids",
     history: "No bids yet.",
@@ -127,7 +187,7 @@ export const ShowsBidHistory: Story = {
 
 export const PostSold: Story = {
   args: {
-    copy: { price: "Winning bid", ends: "Ends" },
+    copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
@@ -145,7 +205,7 @@ export const PostSold: Story = {
 
 export const PostWonPaymentDue: Story = {
   args: {
-    copy: { price: "Winning bid", ends: "Ends" },
+    copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
@@ -162,7 +222,7 @@ export const PostWonPaymentDue: Story = {
 
 export const PostWonSettled: Story = {
   args: {
-    copy: { price: "Winning bid", ends: "Ends" },
+    copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
@@ -179,7 +239,7 @@ export const PostWonSettled: Story = {
 
 export const PostLost: Story = {
   args: {
-    copy: { price: "Winning bid", ends: "Ends" },
+    copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
@@ -195,7 +255,7 @@ export const PostLost: Story = {
 
 export const PostUnsold: Story = {
   args: {
-    copy: { price: "Result", ends: "Ends" },
+    copy: { price: "Result", maximum: "Your maximum", ends: "Ends" },
     price: "Unsold",
     bidCount: "0 Bids",
     history: "No bids yet.",
@@ -215,54 +275,11 @@ export const PostUnsold: Story = {
 /** @deprecated Use PostSold — kept as alias for existing links. */
 export const Closed: Story = {
   args: {
-    copy: { price: "Winning bid", ends: "Ends" },
+    copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
     remaining: "Closed 30 Aug 2026, 09:15 UTC",
     deadline: undefined,
     extensionValue: undefined,
     actions: <PostAuctionActions />,
   },
-};
-
-function CountdownStory() {
-  const [now, setNow] = useState(() => Date.now());
-  const [end] = useState(() => Date.now() + 15 * 60 * 1000);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => setNow(Date.now()), 1000);
-    return () => window.clearInterval(timer);
-  }, []);
-
-  const seconds = Math.max(0, Math.floor((end - now) / 1000));
-  const days = Math.floor(seconds / 86400);
-  const hours = Math.floor((seconds % 86400) / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remaining = `${days}D ${hours}H ${minutes}M ${seconds % 60}S`;
-
-  return (
-    <ListingBidPanel
-      copy={{
-        ends: "Ends",
-        extension: "Extended bidding",
-        extensionTooltip: "Extended bidding rules",
-        price: "Current bid",
-      }}
-      actions={<LiveActions />}
-      bidCount="3 Bids"
-      deadline="15-minute Storybook countdown"
-      extensionTooltip="Bids placed in the final 30 minutes extend the auction by 30 minutes."
-      extensionValue="30 minutes"
-      history="Latest bids appear here."
-      kicker="Storybook countdown example"
-      price="HK$4,800.00"
-      remaining={remaining}
-      title="1999 Charizard, PSA 10"
-      watchAction={<WatchOnlyActions />}
-    />
-  );
-}
-
-/** Storybook-only proposal: tick a frozen end timestamp every second in the story wrapper. */
-export const LiveCountdown: Story = {
-  render: () => <CountdownStory />,
 };

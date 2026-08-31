@@ -171,7 +171,7 @@ This group depends on the end-to-end workflow in groups 4 and 5 passing.
   that there is no CI snapshot, `annotation-current.json`, automatic push, or
   Figma write.
 - [x] 6.4 Verify this group with workflow syntax and design-sync checks, the
-  focused annotation tests, `pnpm run check:design-system`, `pnpm run test`,
+  focused annotation tests, `pnpm run design-sync:check`, `pnpm run test`,
   `pnpm run lint`, `pnpm run typecheck`, and `git diff --check`.
 
 ## 7. Remove deprecated read-only workflow surfaces (grade10) (owner: @kinisworking)

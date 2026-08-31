@@ -5,8 +5,12 @@
     "description": "在 Grade10 商店以定价购入评级卡，或竞投只出现一次的珍品。一个账户，承载你的个人资料、订单与出价。"
   },
   "store": {
-    "title": "商店 — Grade10",
-    "description": "以固定价格上架的评级卡，每张都标示评级。浏览 Grade10 商店，准备好即可结账。"
+    "title": "交易市集 — Grade10",
+    "description": "原封盒、单卡与评级卡，均已定价，随时发货。从系列开始浏览，或竞投只出现一次的珍品。"
+  },
+  "storeCollections": {
+    "title": "全部系列 — Grade10",
+    "description": "以固定价格上架的评级卡，每张都标示评级。浏览 Grade10 商店的所有系列，准备好即可结账。"
   },
   "auction": {
     "title": "拍卖 — Grade10",

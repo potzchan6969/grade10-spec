@@ -3,7 +3,7 @@
  * the component file its label names.
  *
  * The `classes` column is a snapshot of the component's own class strings,
- * taken at conversion time so `figma:audit` can diff the values against Figma
+ * taken at conversion time so `design-sync:audit` can diff the values against Figma
  * long after the converter is gone. Nothing else ties that snapshot to the
  * source: edit a block's classes without touching its audit entry and the
  * nightly keeps auditing a string the code no longer renders — which can both
@@ -34,7 +34,7 @@ function auditFiles(): Array<{ block: string; rows: AuditRow[] }> {
     try {
       raw = readFileSync(join(BLOCKS, entry.name, "audit.json"), "utf8");
     } catch {
-      continue; // No audit.json — figma:audit reports the block as uncovered.
+      continue; // No audit.json — design-sync:audit reports the block as uncovered.
     }
     out.push({ block: entry.name, rows: JSON.parse(raw) as AuditRow[] });
   }

@@ -47,7 +47,7 @@ function DialogOverlay({
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
       className={cn(
-        "fixed inset-0 isolate z-50 bg-overlay duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:animate-none motion-reduce:duration-0",
+        "fixed inset-0 isolate z-50 bg-overlay backdrop-blur-[calc(var(--blur-xl)/2)] duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:animate-none motion-reduce:duration-0",
         className,
       )}
       {...props}
@@ -111,11 +111,10 @@ function DialogContent({
 /**
  * The title row of a dialog, with a close control on the trailing edge.
  *
- * Figma's Dialog Header set (`2159:3156`) has no description — this is the
- * projection. Raise a description with the designer rather than leaving the
- * set as search keywords.
- *
- * The close control is `IconButton` outline/sm (the set's defaults) with
+ * Figma's Dialog Header (`2159:3156`) has no description — raise one with the
+ * designer rather than leaving the set empty. Layout is `Gap/gap-2`, items
+ * centered; the title is `text-lg/semibold` (`Base/foreground`) and the close
+ * control is `IconButton` outline/sm (the set's defaults) with
  * `aria-label="Close dialog"`. It is last in the header tab order; default
  * focus on open still moves to the footer's last button so Enter confirms.
  */
@@ -189,7 +188,7 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
     <DialogPrimitive.Title
       data-slot="dialog-title"
       className={cn(
-        "min-w-0 flex-1 truncate text-lg leading-7 font-bold text-foreground",
+        "min-w-0 flex-1 truncate text-lg leading-7 font-semibold text-foreground",
         className,
       )}
       {...props}

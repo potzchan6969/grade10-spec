@@ -40,7 +40,11 @@ import {
  * choice, and `disabled` is the native attribute. `status` and `size` are the
  * axes with code counterparts.
  */
-const stepperControlVariants = cva(
+// Disabled (`4623:336`) is `Opacity/opacity-50` on the whole field plus a fill
+// swap on the control to `Base/background-subtle` — same rule as Text /
+// Number / Search Input. Status tones the border only; the message stays
+// `Base/secondary-foreground`.
+const stepperInputControlVariants = cva(
   "w-full overflow-hidden rounded-(--radius-full) border bg-input transition-colors",
   {
     variants: {
@@ -67,7 +71,7 @@ const stepperControlVariants = cva(
   },
 );
 
-type StepperProps = Omit<
+type StepperInputProps = Omit<
   ComponentProps<"input">,
   | "value"
   | "defaultValue"
@@ -78,7 +82,7 @@ type StepperProps = Omit<
   | "max"
   | "step"
 > &
-  VariantProps<typeof stepperControlVariants> & {
+  VariantProps<typeof stepperInputControlVariants> & {
     /** Rendered above the field. Omit it and no label renders. */
     label?: ReactNode;
     /** Helper or validation text below the field. Figma's `message`. */
@@ -93,6 +97,16 @@ type StepperProps = Omit<
     step?: number;
     decrementLabel?: string;
     incrementLabel?: string;
+    /**
+     * When set, the decrement control stays enabled at `min` and runs this
+     * instead of stepping. Consumers supply the glyph via `decrementAtMinIcon`
+     * (e.g. cart trash). The primitive does not own product remove semantics.
+     */
+    onDecrementAtMin?: () => void;
+    /** Accessible name when `onDecrementAtMin` is active at min. */
+    decrementAtMinLabel?: string;
+    /** Icon shown at min when `onDecrementAtMin` is set. Defaults to Minus. */
+    decrementAtMinIcon?: ReactNode;
   };
 
 function sanitizeNumeric(raw: string, allowNegative: boolean) {
@@ -131,7 +145,7 @@ function stepDelta(
   return step;
 }
 
-function Stepper({
+function StepperInput({
   className,
   id,
   label,
@@ -148,8 +162,11 @@ function Stepper({
   placeholder,
   decrementLabel = "Decrease",
   incrementLabel = "Increase",
+  onDecrementAtMin,
+  decrementAtMinLabel,
+  decrementAtMinIcon,
   ...props
-}: StepperProps) {
+}: StepperInputProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const messageId = message ? `${inputId}-message` : undefined;
@@ -174,6 +191,7 @@ function Stepper({
   const atMin = numeric != null && min != null && numeric <= min;
   const atMax = numeric != null && max != null && numeric >= max;
   const allowNegative = min == null || min < 0;
+  const atMinAction = atMin && onDecrementAtMin != null;
 
   const commit = (next: number) => {
     const clamped = clamp(next, min, max);
@@ -194,6 +212,10 @@ function Stepper({
     modifiers: { shiftKey: boolean; altKey: boolean },
   ) => {
     if (disabled) return;
+    if (direction < 0 && atMin && onDecrementAtMin) {
+      onDecrementAtMin();
+      return;
+    }
     const from = numeric ?? min ?? 0;
     const next = commit(from + direction * stepDelta(step, modifiers));
     if (next !== from) playRoll(direction > 0 ? "up" : "down");
@@ -234,20 +256,26 @@ function Stepper({
         vAlign="center"
         data-slot="stepper-control"
         className={cn(
-          stepperControlVariants({
+          stepperInputControlVariants({
             status: disabled ? "default" : status,
             size,
           }),
           size === "lg" ? "h-12" : "h-10",
+          disabled && "bg-background-subtle",
         )}
       >
         <IconButton
-          aria-label={decrementLabel}
+          aria-label={
+            atMinAction
+              ? (decrementAtMinLabel ?? decrementLabel)
+              : decrementLabel
+          }
           className={cn(
             "text-secondary-foreground",
             disabled && "disabled:opacity-100",
           )}
-          disabled={disabled || atMin}
+          data-slot="stepper-decrement"
+          disabled={disabled || (atMin && !onDecrementAtMin)}
           onClick={(event) => stepBy(-1, event)}
           onPointerDown={(event) => event.preventDefault()}
           size={buttonSize}
@@ -255,7 +283,11 @@ function Stepper({
           type="button"
           variant="secondary"
         >
-          <Minus aria-hidden />
+          {atMinAction && decrementAtMinIcon ? (
+            decrementAtMinIcon
+          ) : (
+            <Minus aria-hidden />
+          )}
         </IconButton>
         <Input
           {...props}
@@ -314,6 +346,7 @@ function Stepper({
             "text-secondary-foreground",
             disabled && "disabled:opacity-100",
           )}
+          data-slot="stepper-increment"
           disabled={disabled || atMax}
           onClick={(event) => stepBy(1, event)}
           onPointerDown={(event) => event.preventDefault()}
@@ -340,5 +373,5 @@ function Stepper({
   );
 }
 
-export type { StepperProps };
-export { Stepper, stepperControlVariants };
+export type { StepperInputProps };
+export { StepperInput, stepperInputControlVariants };

@@ -1,0 +1,222 @@
+#!/usr/bin/env node
+/*
+ * PULL: Figma Variables -> canonical tokens.json (design -> code leg).
+ *
+ * Extracts Figma Variables and writes the canonical token DATA (not CSS);
+ * tokens:build then projects it to CSS. This is how a designer's Figma edits
+ * enter the git source of truth.
+ *
+ * EXTRACT source: FIGMA_DUMP=<path>, a JSON file shaped like the REST
+ * { meta } response. Produce it with the dump plugin — `pnpm tokens:plugin dump`,
+ * import it in Figma, hit Download.
+ *
+ * There is no REST path. GET /v1/files/:key/variables/local needs the
+ * file_variables:read scope, which Figma gates to Enterprise; on this plan the
+ * token request itself is rejected (403 Invalid scope(s)). The dump plugin reads
+ * the same data through the Plugin API, which has no such gate.
+ *
+ * Identity = the normalized CSS name (cssVar). Refs are emitted as {name},
+ * mirroring build-css/push. Primitives come from the Foundation default
+ * mode; each configured theme reads its Figma mode from the Semantic collection.
+ */
+import { readFile, writeFile } from "node:fs/promises";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
+// Token data and the CSS it projects to are the design system's and stay there;
+// only the tooling lives at the root. Same split as scripts/design-sync/.
+const dsDir = resolve(repoRoot, "packages/design-system");
+const cfg = JSON.parse(
+  await readFile(resolve(dsDir, "tokens.config.json"), "utf8"),
+);
+const die = (m) => {
+  console.error(`✗ ${m}`);
+  process.exit(1);
+};
+
+// ── EXTRACT ─────────────────────────────────────────────────────────────────
+if (!process.env.FIGMA_DUMP) {
+  die(`No dump given. Set FIGMA_DUMP=<file.json>, e.g.
+
+     pnpm tokens:plugin dump                     # build the plugin
+     # Figma → Plugins → Development → Import plugin from manifest…
+     #   scripts/tokens-sync/figma-plugins/build/dump/manifest.json
+     # run it, click Download
+     FIGMA_DUMP=~/Downloads/figma-dump.json pnpm tokens:pull`);
+}
+const meta = JSON.parse(
+  await readFile(resolve(repoRoot, process.env.FIGMA_DUMP), "utf8"),
+).meta;
+const { variables, variableCollections: collections } = meta;
+
+// ── helpers (same naming/value shape as build-css.mjs & push.mjs) ──────
+const toHex = ({ r, g, b, a = 1 }) => {
+  const h = (n) =>
+    Math.round(n * 255)
+      .toString(16)
+      .padStart(2, "0");
+  return (
+    a < 1 ? `#${h(r)}${h(g)}${h(b)}${h(a)}` : `#${h(r)}${h(g)}${h(b)}`
+  ).toUpperCase();
+};
+// Figma name -> canonical key (cssVar WITHOUT the leading "--")
+const key = (name) => {
+  let n = name;
+  if (/^color\//i.test(n)) n = n.slice(6);
+  else if (n.includes("/")) n = n.slice(n.indexOf("/") + 1);
+  return n
+    .replace(/[/\s]+/g, "-")
+    .replace(/[^a-zA-Z0-9-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .toLowerCase();
+};
+// A Figma FLOAT is a bare number; the CSS unit has to be inferred. Blanket
+// "px" is what produced `--opacity-50: 50px`, and it turns Typography's
+// `Typeset/weight-medium` (500) into `500px` — a font weight CSS discards.
+// Figma's own variable scopes answer this wherever a designer has set them, so
+// read those first and fall back to the token name. Anything unmatched stays
+// px, which is right for every size, gap, radius and line-height here.
+const FLOAT_UNITS = [
+  {
+    scope: "FONT_WEIGHT",
+    name: /^(font-)?weight-/,
+    unit: "",
+    type: "fontWeight",
+  },
+  // Figma stores these 0–100, which is a percentage; `50` alone would read as
+  // fully opaque-ish nonsense to CSS while `50%` is exactly what was drawn.
+  { scope: "OPACITY", name: /^opacity-/, unit: "%", type: "number" },
+];
+const floatRule = (v, k) =>
+  FLOAT_UNITS.find(
+    (r) => (v.scopes ?? []).includes(r.scope) || r.name.test(k),
+  ) ?? { unit: "px", type: "dimension" };
+
+const cssType = (v, k) => {
+  if (v.resolvedType === "COLOR") return "color";
+  if (v.resolvedType === "BOOLEAN") return "boolean";
+  if (v.resolvedType === "STRING")
+    return (v.scopes ?? []).includes("FONT_FAMILY") || /^family-/.test(k)
+      ? "fontFamily"
+      : "string";
+  return floatRule(v, k).type;
+};
+function emit(v, modeId, k) {
+  const value = v.valuesByMode[modeId];
+  if (value && value.type === "VARIABLE_ALIAS") {
+    const target = variables[value.id];
+    if (!target) die(`Dangling alias -> ${value.id}`);
+    return `{${key(target.name)}}`;
+  }
+  if (v.resolvedType === "COLOR") return toHex(value);
+  if (v.resolvedType === "FLOAT") return `${value}${floatRule(v, k).unit}`;
+  return String(value);
+}
+const findCollection = (name) =>
+  Object.values(collections).find((c) => c.name === name);
+// $description is the DTCG slot for Figma's variable Description field. Omitted
+// when blank so the diff stays quiet for the tokens nobody has documented.
+const token = (v, modeId, k) => ({
+  $type: cssType(v, k),
+  $value: emit(v, modeId, k),
+  ...(v.description ? { $description: v.description } : {}),
+});
+
+// ── NORMALIZE + EMIT ────────────────────────────────────────────────────────
+// `primitiveCollections` maps a tokens.json section to a Figma collection. The
+// singular `primitiveCollection` predates it and still means one section named
+// "primitives".
+const primitiveSections = Object.entries(
+  cfg.primitiveCollections ?? { primitives: cfg.primitiveCollection },
+);
+const available = () =>
+  Object.values(collections)
+    .map((c) => `"${c.name}"`)
+    .join(", ");
+const sem = findCollection(cfg.semanticCollection);
+if (!sem)
+  die(
+    `Semantic collection "${cfg.semanticCollection}" not found. Available: ${available()}`,
+  );
+for (const [section, name] of primitiveSections)
+  if (!findCollection(name))
+    die(
+      `Collection "${name}" (primitiveCollections.${section}) not found. Available: ${available()}`,
+    );
+
+// key() drops the group prefix, so two grouped Figma names can normalize to one token key
+// ("Base/card" + "Sidebar/card" -> "card"). Object.fromEntries would silently keep the last.
+//
+// `seen` is threaded across calls so the check also spans collections: every
+// primitive section lands in one :root, so Foundation's `Size/size-4` and a
+// Typography `Typeset/size-4` would be one CSS property with the loser silently
+// dropped. Refuse rather than pick.
+const keyed = (ids, modeId, where, seen = new Map()) => {
+  const out = {};
+  for (const id of ids) {
+    const name = variables[id].name;
+    const k = key(name);
+    if (seen.has(k))
+      die(
+        `Name collision in ${where}: "${seen.get(k)}" and "${name}" both normalize to "${k}". Rename one in Figma.`,
+      );
+    seen.set(k, name);
+    out[k] = token(variables[id], modeId, k);
+  }
+  return out;
+};
+
+const doc = {
+  "//": "Canonical design tokens — SOURCE OF TRUTH. Figma and CSS are projections of this file. Pull edits from Figma (tokens:import), build CSS (tokens:build), push code edits to Figma (tokens:push). Projection rules (slotMap, selectors, collections) live in tokens.config.json.",
+};
+// One shared `seen` across every primitive section — see keyed() above.
+const primSeen = new Map();
+for (const [section, name] of primitiveSections) {
+  const col = findCollection(name);
+  doc[section] = keyed(col.variableIds, col.defaultModeId, name, primSeen);
+}
+doc.themes = {};
+const modeIdByName = Object.fromEntries(
+  sem.modes.map((m) => [m.name, m.modeId]),
+);
+for (const [name, themeCfg] of Object.entries(cfg.themes)) {
+  const figmaMode = Object.keys(themeCfg.modes)[0];
+  const modeId = modeIdByName[figmaMode];
+  // Hard failure, not a warning. Skipping here writes `themes: {}`, and
+  // tokens:build then leaves the theme's CSS untouched on disk — so a renamed
+  // Figma mode silently strands a stale theme file against fresh primitives.
+  // Renaming a mode is normal designer behaviour; it must stop the pull.
+  if (modeId === undefined) {
+    die(
+      `theme "${name}": Figma mode "${figmaMode}" not found in the "${cfg.semanticCollection}" collection.
+     Available modes: ${sem.modes.map((m) => `"${m.name}"`).join(", ")}
+     Fix tokens.config.json (themes.${name}.modes) or rename the mode in Figma.`,
+    );
+  }
+  doc.themes[name] = {
+    figmaMode,
+    tokens: keyed(
+      sem.variableIds,
+      modeId,
+      `${cfg.semanticCollection} / ${figmaMode}`,
+    ),
+  };
+}
+
+await writeFile(
+  resolve(dsDir, "tokens.json"),
+  JSON.stringify(doc, null, 2) + "\n",
+  "utf8",
+);
+console.log(
+  `✓ ${primitiveSections
+    .map(
+      ([section, name]) =>
+        `${Object.keys(doc[section]).length} ${section} (${name})`,
+    )
+    .join(" + ")} + ${sem.variableIds.length} semantic tokens -> tokens.json`,
+);
+for (const [name, t] of Object.entries(doc.themes))
+  console.log(`  theme ${name} (Figma mode "${t.figmaMode}")`);

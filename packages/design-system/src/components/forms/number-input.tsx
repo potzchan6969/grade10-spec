@@ -4,7 +4,6 @@ import {
   type InputStatus,
   InputStatusIcon,
 } from "@grade10/design-system/components/forms/input";
-import { cn } from "@grade10/design-system/lib/utils";
 import { XIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useId } from "react";
@@ -16,6 +15,8 @@ type NumberInputProps = React.ComponentProps<"input"> & {
   message?: ReactNode;
   status?: InputStatus;
   loading?: boolean;
+  /** Uneditable text before the value — currency symbol, etc. */
+  prefix?: ReactNode;
   /** Trailing unit, sitting between the value and the icon slot — Figma's
    * `unit` TEXT property. */
   unit?: ReactNode;
@@ -39,6 +40,7 @@ function NumberInput({
   status = "default",
   loading = false,
   disabled,
+  prefix,
   unit,
   onClear,
   ...props
@@ -74,6 +76,16 @@ function NumberInput({
       disabled={disabled}
       htmlFor={inputId}
       messageId={messageId}
+      leading={
+        prefix ? (
+          <span
+            data-slot="input-prefix"
+            className="shrink-0 text-sm text-secondary-foreground"
+          >
+            {prefix}
+          </span>
+        ) : undefined
+      }
       trailing={trailing}
     >
       <Input
@@ -88,10 +100,7 @@ function NumberInput({
       {unit ? (
         <span
           data-slot="input-unit"
-          className={cn(
-            "shrink-0 text-sm text-secondary-foreground",
-            disabled && "text-disabled-foreground",
-          )}
+          className="shrink-0 text-sm text-secondary-foreground"
         >
           {unit}
         </span>

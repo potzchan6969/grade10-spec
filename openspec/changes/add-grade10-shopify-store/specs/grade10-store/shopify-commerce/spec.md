@@ -7,6 +7,91 @@ products and availability, receive a fifteen-minute finite-stock reservation
 before Shopify checkout, and later read their authenticated Store order
 projection derived from Shopify payment and fulfilment facts.
 
+## Feature set
+
+- Catalogue
+  - Shopify-authoritative: browse reads live products; a change invalidates cache; an outage is reported
+- Checkout identity
+  - Existing customer signs in: a known email must magic-link before handoff; a guest is linked after payment
+- Live checkout
+  - Fifteen-minute hold: price and inventory are live; backorders are refused; a retry returns one handoff
+- Orders
+  - Payment vs shipping: paid, partial fulfilment, and carrier confirmation are separate facts
+- Webhooks
+  - Idempotent: invalid and duplicate events change nothing; a miss is repaired
+
+## User journeys
+
+### shopify-commerce-US-01: Shopper browses the live Shopify catalogue
+
+**As a** shopper,
+**I want** the store catalogue to show current Shopify products and availability,
+**so that** a product change is not served from a stale cache, and an outage does not invent a price.
+
+**Accepted by:**
+
+- `shopify-commerce-SC-01` — A shopper browses a current Shopify catalogue
+- `shopify-commerce-SC-02` — A Shopify product change invalidates browsing data
+- `shopify-commerce-SC-03` — Shopify catalogue data is unavailable
+
+### shopify-commerce-US-02: Shopper checks out with a fifteen-minute hold
+
+**As a** shopper,
+**I want** checkout to use live price and inventory and hold finite stock for fifteen minutes,
+**so that** an unavailable variant cannot enter, a retry is one handoff, and an expired hold cannot be paid as reserved.
+
+**Accepted by:**
+
+- `shopify-commerce-SC-06` — An unavailable variant cannot enter checkout
+- `shopify-commerce-SC-07` — Checkout uses live Shopify price and inventory
+- `shopify-commerce-SC-08` — A retry returns one checkout handoff
+- `shopify-commerce-SC-09` — A finite-stock checkout holds inventory for fifteen minutes
+- `shopify-commerce-SC-10` — An expired reservation cannot be paid as held stock
+- `shopify-commerce-SC-11` — Backorders are refused
+- `shopify-commerce-SC-12` — A checkout URL is safe to follow
+
+### shopify-commerce-US-03: Shopper is signed in or linked after payment
+
+**As a** shopper,
+**I want** an existing Grade10 email to sign in before handoff, and a guest email to become an account after payment,
+**so that** I am not duplicated and I can read the order through magic-link sign-in.
+
+**Accepted by:**
+
+- `shopify-commerce-SC-04` — An existing Grade10 customer signs in before checkout
+- `shopify-commerce-SC-05` — A guest receives a linked Grade10 account after payment
+- `shopify-commerce-SC-19` — A paid buyer lands on their Grade10 order
+- `shopify-commerce-SC-23` — Integration configuration is incomplete
+
+### shopify-commerce-US-04: Customer reads their own orders
+
+**As a** signed-in customer,
+**I want** to list my orders and open one by its permanent URL,
+**so that** I cannot read another customer's order, and payment is shown apart from shipping.
+
+**Accepted by:**
+
+- `shopify-commerce-SC-13` — A paid order reports payment separately from shipping
+- `shopify-commerce-SC-14` — A partially fulfilled order shows every shipment
+- `shopify-commerce-SC-15` — Only carrier confirmation reports delivery
+- `shopify-commerce-SC-20` — A customer cannot read another customer's order
+- `shopify-commerce-SC-21` — A permanent order URL requires its account
+- `shopify-commerce-SC-22` — An account lists its orders
+- `shopify-commerce-SC-25` — A customer cannot start a dispute or refund request
+
+### shopify-commerce-US-05: Staff refund is reflected without a customer-started dispute
+
+**As a** staff operator,
+**I want** a refund I take in Shopify to show on the Grade10 order,
+**so that** a duplicate or invalid webhook cannot rewrite it, and a miss is repaired.
+
+**Accepted by:**
+
+- `shopify-commerce-SC-16` — An invalid webhook changes nothing
+- `shopify-commerce-SC-17` — A duplicate webhook is harmless
+- `shopify-commerce-SC-18` — A missed webhook is repaired
+- `shopify-commerce-SC-24` — A staff refund is reflected in payment status
+
 ## ADDED Requirements
 
 ### Requirement: Shopify is authoritative for catalogue and inventory
@@ -18,7 +103,7 @@ Catalogue responses MAY be edge-cached only for display; product-change events
 SHALL invalidate cached product/list responses and cache expiry SHALL bound a
 missed invalidation.
 
-#### Scenario: A shopper browses a current Shopify catalogue
+#### Scenario: shopify-commerce-SC-01 - A shopper browses a current Shopify catalogue
 
 - **GIVEN** Shopify has a published product with a purchasable variant
 - **WHEN** a shopper requests the Store catalogue
@@ -26,14 +111,14 @@ missed invalidation.
   variant price, currency, media, and availability
 - **AND** the response contains no Shopify credential or raw Admin API data
 
-#### Scenario: A Shopify product change invalidates browsing data
+#### Scenario: shopify-commerce-SC-02 - A Shopify product change invalidates browsing data
 
 - **GIVEN** a cached Store response contains a product
 - **WHEN** the Store receives a verified Shopify product-change event for it
 - **THEN** a later Store catalogue response does not serve that product from the
   invalidated cached response
 
-#### Scenario: Shopify catalogue data is unavailable
+#### Scenario: shopify-commerce-SC-03 - Shopify catalogue data is unavailable
 
 - **GIVEN** a shopper requests a catalogue response with no usable cached copy
 - **WHEN** Shopify cannot answer that catalogue request
@@ -55,7 +140,7 @@ payment, the Store SHALL create the Grade10 account when needed, link it
 one-to-one to that Shopify customer, and make its orders available through
 Grade10 email magic-link sign-in.
 
-#### Scenario: An existing Grade10 customer signs in before checkout
+#### Scenario: shopify-commerce-SC-04 - An existing Grade10 customer signs in before checkout
 
 - **GIVEN** a shopper begins checkout
 - **WHEN** they supply an email belonging to an existing Grade10 account
@@ -63,7 +148,7 @@ Grade10 email magic-link sign-in.
   a Shopify checkout handoff
 - **AND** it creates no additional Grade10 account or Shopify customer link
 
-#### Scenario: A guest receives a linked Grade10 account after payment
+#### Scenario: shopify-commerce-SC-05 - A guest receives a linked Grade10 account after payment
 
 - **GIVEN** a guest checkout email belongs to no Grade10 account
 - **WHEN** Shopify confirms payment for that checkout
@@ -79,7 +164,7 @@ from Shopify live, reject an unpublished, unavailable, or insufficient-quantity
 variant, and create its local order from the returned price/currency. A cached
 response or browser-supplied monetary value SHALL NOT determine an order amount.
 
-#### Scenario: An unavailable variant cannot enter checkout
+#### Scenario: shopify-commerce-SC-06 - An unavailable variant cannot enter checkout
 
 - **GIVEN** browsing previously showed a variant available
 - **WHEN** Shopify reports it unavailable or insufficient for the requested
@@ -87,7 +172,7 @@ response or browser-supplied monetary value SHALL NOT determine an order amount.
 - **THEN** the Store refuses checkout naming that item as unavailable
 - **AND** it creates no payable local order or Shopify draft order
 
-#### Scenario: Checkout uses live Shopify price and inventory
+#### Scenario: shopify-commerce-SC-07 - Checkout uses live Shopify price and inventory
 
 - **GIVEN** a shopper supplies a cached price for a variant
 - **WHEN** Shopify returns a different current price during checkout
@@ -109,7 +194,7 @@ Shopify checkout SHALL collect the shipping address, shipping option, tax,
 discount, and payment. The Store's pre-check line total SHALL NOT be represented
 as the final charged amount.
 
-#### Scenario: A retry returns one checkout handoff
+#### Scenario: shopify-commerce-SC-08 - A retry returns one checkout handoff
 
 - **GIVEN** the Store has accepted a checkout under an idempotency key
 - **WHEN** a shopper retries it with its original idempotency
@@ -118,7 +203,7 @@ as the final charged amount.
 - **AND** exactly one local order, Shopify draft order, and reservation exist
   for that request
 
-#### Scenario: A finite-stock checkout holds inventory for fifteen minutes
+#### Scenario: shopify-commerce-SC-09 - A finite-stock checkout holds inventory for fifteen minutes
 
 - **GIVEN** a shopper requests a purchasable finite-stock Shopify variant
 - **WHEN** the Store accepts that checkout
@@ -126,7 +211,7 @@ as the final charged amount.
 - **AND** that quantity is unavailable to another checkout for the reservation's
   lifetime
 
-#### Scenario: An expired reservation cannot be paid as held stock
+#### Scenario: shopify-commerce-SC-10 - An expired reservation cannot be paid as held stock
 
 - **GIVEN** a checkout reservation whose fifteen-minute window has elapsed
 - **WHEN** the buyer follows its Shopify checkout URL
@@ -134,7 +219,7 @@ as the final charged amount.
 - **AND** if Shopify cannot sell the requested quantity, the buyer is told to
   begin checkout again and the unavailable item is identified
 
-#### Scenario: Backorders are refused
+#### Scenario: shopify-commerce-SC-11 - Backorders are refused
 
 - **GIVEN** a shopper requests checkout with one or more items
 - **WHEN** Shopify cannot reserve the requested quantity of any checkout line
@@ -142,7 +227,7 @@ as the final charged amount.
 - **AND** it does not offer a backorder, create a payable draft order, or create
   a replacement reservation
 
-#### Scenario: A checkout URL is safe to follow
+#### Scenario: shopify-commerce-SC-12 - A checkout URL is safe to follow
 
 - **GIVEN** the Store has accepted a checkout
 - **WHEN** it returns the checkout handoff
@@ -164,7 +249,7 @@ Shopify-reported carrier, tracking number, tracking URL, and delivered state.
 The Store SHALL NOT invent a shipment, tracking value, delivery estimate, or
 delivery confirmation.
 
-#### Scenario: A paid order reports payment separately from shipping
+#### Scenario: shopify-commerce-SC-13 - A paid order reports payment separately from shipping
 
 - **GIVEN** a customer or authorized administrator reads an order
 - **WHEN** Shopify reports it paid but with no fulfilment
@@ -172,7 +257,7 @@ delivery confirmation.
   not-ready
 - **AND** it does not report the order shipped or delivered
 
-#### Scenario: A partially fulfilled order shows every shipment
+#### Scenario: shopify-commerce-SC-14 - A partially fulfilled order shows every shipment
 
 - **GIVEN** a customer or authorized administrator reads an order
 - **WHEN** Shopify reports two fulfilments, one shipped with tracking and one
@@ -181,7 +266,7 @@ delivery confirmation.
 - **AND** it exposes both fulfilments and the tracking facts only for the
   shipped fulfilment
 
-#### Scenario: Only carrier confirmation reports delivery
+#### Scenario: shopify-commerce-SC-15 - Only carrier confirmation reports delivery
 
 - **GIVEN** a customer or authorized administrator reads a tracked shipment
 - **WHEN** Shopify reports it without carrier delivery
@@ -199,7 +284,7 @@ not be required for correctness: an order read and scheduled reconciliation
 SHALL query Shopify by the recorded reference to repair a delayed or missed
 event.
 
-#### Scenario: An invalid webhook changes nothing
+#### Scenario: shopify-commerce-SC-16 - An invalid webhook changes nothing
 
 - **GIVEN** the Store receives a Shopify webhook request
 - **WHEN** its signature is missing or invalid
@@ -207,14 +292,14 @@ event.
 - **THEN** it rejects the request before parsing its payload
 - **AND** no order, payment, or shipping state changes
 
-#### Scenario: A duplicate webhook is harmless
+#### Scenario: shopify-commerce-SC-17 - A duplicate webhook is harmless
 
 - **GIVEN** the Store has already processed a verified Shopify event
 - **WHEN** Shopify delivers that same event again
 - **THEN** the Store records and applies it once
 - **AND** every later delivery returns without repeating a transition
 
-#### Scenario: A missed webhook is repaired
+#### Scenario: shopify-commerce-SC-18 - A missed webhook is repaired
 
 - **GIVEN** a pending Store order whose Shopify order is paid and fulfilled
 - **AND** its corresponding webhook was not processed
@@ -233,21 +318,21 @@ An absent required Shopify configuration, unsupported Shopify API response, or
 Shopify integration failure SHALL return an explicit failure that identifies the
 operation without exposing credentials or customer payment/address data.
 
-#### Scenario: A paid buyer lands on their Grade10 order
+#### Scenario: shopify-commerce-SC-19 - A paid buyer lands on their Grade10 order
 
 - **GIVEN** a shopper completes a Shopify checkout with a Grade10 order
 - **WHEN** Shopify confirms payment for it
 - **THEN** the buyer is returned to that order's permanent Grade10 URL
 - **AND** the order page is available only through the matching Grade10 account
 
-#### Scenario: A customer cannot read another customer's order
+#### Scenario: shopify-commerce-SC-20 - A customer cannot read another customer's order
 
 - **GIVEN** a customer is signed in to Grade10
 - **WHEN** they request an order belonging to another customer
 - **THEN** the Store refuses the request
 - **AND** it returns no payment, shipping, tracking, or address information
 
-#### Scenario: A permanent order URL requires its account
+#### Scenario: shopify-commerce-SC-21 - A permanent order URL requires its account
 
 - **GIVEN** a customer copies a permanent Grade10 order URL
 - **WHEN** anyone opens it without an authenticated session for that order's
@@ -255,14 +340,14 @@ operation without exposing credentials or customer payment/address data.
 - **THEN** the Store prompts Grade10 email magic-link sign-in
 - **AND** it returns no order, payment, shipping, tracking, or address information
 
-#### Scenario: An account lists its orders
+#### Scenario: shopify-commerce-SC-22 - An account lists its orders
 
 - **GIVEN** an authenticated customer has ongoing or past Grade10 orders
 - **WHEN** they open their Grade10 order history
 - **THEN** the Store lists that account's ongoing and past orders
 - **AND** it excludes every order belonging to another account
 
-#### Scenario: Integration configuration is incomplete
+#### Scenario: shopify-commerce-SC-23 - Integration configuration is incomplete
 
 - **GIVEN** the Store attempts an operation requiring Shopify configuration
 - **WHEN** it lacks a required credential or API-version setting
@@ -276,13 +361,13 @@ The Store SHALL NOT offer a customer dispute or refund-request action in this
 release. When staff initiate a refund through Shopify, the Store SHALL observe
 the Shopify-confirmed refund and update the order's payment status.
 
-#### Scenario: A staff refund is reflected in payment status
+#### Scenario: shopify-commerce-SC-24 - A staff refund is reflected in payment status
 
 - **GIVEN** Shopify confirms a refund initiated by staff for a paid order
 - **WHEN** the Store receives its event or reconciliation reads the order
 - **THEN** the Store reports the refund in that order's payment status
 
-#### Scenario: A customer cannot start a dispute or refund request
+#### Scenario: shopify-commerce-SC-25 - A customer cannot start a dispute or refund request
 
 - **GIVEN** a customer views an order in this release
 - **WHEN** they look for post-purchase actions

@@ -7,16 +7,16 @@
   {
     "label": "breadcrumb-separator/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4180-1276",
-    "classes": "inline-flex items-center justify-center text-sm font-normal text-secondary-foreground",
-    "note": "Re-exported from breadcrumbs.tsx; the classes are the ones that file applies."
+    "classes": "inline-flex items-center justify-center text-muted-foreground",
+    "note": "Re-exported from breadcrumbs.tsx; the classes are the ones that file applies. Default child is CaretRight at Size/size-3-5."
   },
   {
     "label": "breadcrumb-ellipsis/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4180-1291",
-    "classes": "inline-flex h-7 w-5 items-center justify-center text-secondary-foreground",
+    "classes": "inline-flex h-7 w-5 items-center justify-center text-muted-foreground",
     "note": "The audited element is the inner span, which carries the box; the <li> around it only holds inline-flex. Height and the rest compare; the width is a recorded divergence.",
     "diverges": {
-      "w-5": "Figma draws a 12px TEXT glyph; the code renders a 20px DotsThree icon, which needs a 20px box. A representation difference, not a width the code got wrong — resolving it means changing what is drawn, on one side or the other."
+      "w-5": "Figma draws a 12px TEXT glyph; the code renders a 20px DotsThree icon, which needs a 20px box. A representation difference, not a width the code got wrong \u2014 resolving it means changing what is drawn, on one side or the other."
     }
   },
   {
@@ -39,5 +39,88 @@
     "label": "pagination-ellipsis/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4181-1979",
     "classes": "inline-flex h-10 w-7 items-center justify-center text-foreground"
+  },
+  {
+    "label": "g10-logo-mono/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4848-7543",
+    "classes": "block h-[52px] w-auto",
+    "covers": "G10LogoMono",
+    "note": "Intrinsic viewBox size; consumers override with h-7 (nav) or h-5 (footer). Fill is currentColor, not a token class on the mark itself."
+  },
+  {
+    "label": "card/box",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-3934",
+    "classes": "group/card flex flex-col overflow-hidden rounded-(--radius-2xl) border border-border bg-card py-(--card-spacing) text-sm text-card-foreground [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[padding=false]:[--card-spacing:--spacing(0)] *:[img:first-child]:rounded-t-(--radius-2xl) *:[img:last-child]:rounded-b-(--radius-2xl)",
+    "covers": "Card",
+    "note": "Radius, fill and clipping on the component itself. The 16px gap the code renders lives on the Slot inside it, audited as card/slot below \u2014 the same split Figma draws for Dropdown Menu. Radius moved 24 -> 16 in Figma on 2026-08-27; this entry is what will catch the next move."
+  },
+  {
+    "label": "card/slot",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-3933",
+    "classes": "gap-4",
+    "covers": "Card",
+    "note": "The same element as card/box. Figma puts the card's own padding on the component and the gap between its children on the Slot; the code has one element carrying both."
+  },
+  {
+    "label": "empty-state/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2571-44",
+    "classes": "flex w-full flex-col items-center gap-4 rounded-2xl border border-dashed border-border bg-background-subtle",
+    "note": "isCompact=false, the cva default."
+  },
+  {
+    "label": "step-indicator/upcoming",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-5569",
+    "classes": "relative shrink-0 inline-flex",
+    "covers": "StepIndicator",
+    "note": "Visual is the nested Checkbox Button; audited at checkbox-button/control."
+  },
+  {
+    "label": "step-indicator/progress",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-5697",
+    "classes": "relative shrink-0 size-4",
+    "note": "Progress uses animate-ping on the outer ring instead of a static drop shadow."
+  },
+  {
+    "label": "step-indicator/completed",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-5568",
+    "classes": "relative shrink-0 inline-flex",
+    "covers": "StepIndicator",
+    "note": "Visual is the nested Checkbox Button; audited at checkbox-button/control."
+  },
+  {
+    "label": "step/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-5484",
+    "classes": "min-w-0 flex-1 py-2"
+  },
+  {
+    "label": "stepper/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-5637",
+    "classes": "flex w-full items-start"
+  },
+  {
+    "label": "table-cell/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4969-4888",
+    "classes": "flex min-h-12 items-center px-4 py-3 text-sm leading-5 text-foreground"
+  },
+  {
+    "label": "table-head/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4969-4912",
+    "classes": "flex min-h-12 min-w-0 items-center px-4 py-3 text-sm leading-5 font-medium text-secondary-foreground"
+  },
+  {
+    "label": "table-header/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4969-4927",
+    "classes": "flex w-full items-center overflow-hidden rounded-full bg-muted"
+  },
+  {
+    "label": "table-row/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4969-4960",
+    "classes": "flex w-full items-center overflow-hidden border-b border-border last:border-b-0"
+  },
+  {
+    "label": "table/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4969-4934",
+    "classes": "flex w-full flex-col overflow-hidden rounded-3xl border border-border bg-background p-1",
+    "note": "Composition frame, not a published component set."
   }
 ]

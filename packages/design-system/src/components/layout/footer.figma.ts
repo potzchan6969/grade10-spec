@@ -8,6 +8,8 @@ export default {
   // Every content prop is required and store-owned, so the snippet names the
   // values the consumer supplies rather than emitting one store's content —
   // the words as one `copy` object, the markup and the links beside it.
+  // `logoHref` is optional (homepage per the set annotation) and omitted here
+  // the same way Nav's template omits it.
   example: figma.code`<Footer
   copy={copy}
   logo={logo}

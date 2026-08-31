@@ -99,7 +99,7 @@ The conventions, each visible in the existing directories:
   (`product-browse.tsx`) lives flat in its capability directory like any
   other block.
 - **A block converted from Figma also carries one per-directory
-  `audit.json`** — the element↔node value audit that `pnpm run figma:audit`
+  `audit.json`** — the element↔node value audit that `pnpm run design-sync:audit`
   re-checks nightly. Its `classes` column is a snapshot of the component's
   own class strings, so changing a class in a block means updating its audit
   entry in the same edit; a token-free freshness test in the package's test

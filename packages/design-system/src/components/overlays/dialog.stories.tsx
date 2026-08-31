@@ -47,32 +47,13 @@ export const Default: Story = {
   ),
 };
 
-/** Open on mount so the Figma composition can be measured without a click. */
-export const Open: Story = {
-  render: () => (
-    <Dialog defaultOpen>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Title</DialogTitle>
-        </DialogHeader>
-        <DialogBody>
-          <DialogDescription>Dialog content here</DialogDescription>
-        </DialogBody>
-        <DialogFooter>
-          <DialogClose render={<Button variant="outline" size="md" />}>
-            Cancel
-          </DialogClose>
-          <DialogClose render={<Button size="md" />}>Confirm</DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  ),
-};
-
 /** Keep titles short and action-oriented; a long title truncates. */
 export const LongTitle: Story = {
   render: () => (
-    <Dialog defaultOpen>
+    <Dialog>
+      <DialogTrigger render={<Button variant="outline" />}>
+        Open dialog
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
@@ -183,7 +164,10 @@ export const WithoutCloseButton: Story = {
 /** Tall body content scrolls between the pinned header and footer. */
 export const ScrollableBody: Story = {
   render: () => (
-    <Dialog defaultOpen>
+    <Dialog>
+      <DialogTrigger render={<Button variant="outline" />}>
+        Open dialog
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Terms</DialogTitle>

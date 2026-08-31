@@ -12,20 +12,20 @@ What that means in practice is that "converting the component" is really three s
 
 | What travels | From → to | How | Automatic? |
 | --- | --- | --- | --- |
-| **Values** — colours, radii, spacing | Figma variables → `tokens.json` → theme CSS | `pnpm tokens:sync` | No. Needs a human to run a plugin in Figma. |
-| **Structure** — which variants, sizes, and states exist | Figma component set → a `cva` config in `<name>.tsx` | Written by hand, diffed by `check:design-system` | Written by hand; the diff runs nightly. |
+| **Values** — colours, radii, spacing | Figma variables → `tokens.json` → theme CSS | `pnpm tokens:pull` | No. Needs a human to run a plugin in Figma. |
+| **Structure** — which variants, sizes, and states exist | Figma component set → a `cva` config in `<name>.tsx` | Written by hand, diffed by `design-sync:check` | Written by hand; the diff runs nightly. |
 | **Usage** — the snippet that appears in Dev Mode | `<name>.figma.ts` → Figma | `code-connect:publish` | No. Deliberately a manual step. |
 
 Conflating them is the usual source of confusion. Publishing your component set does not move a value; running the token sync does not add a variant; and a perfect Code Connect template that was never published shows a developer nothing at all.
 
 ```
-   Figma component set  ──(read by check:design-system)──▶  button.tsx        (the contract, hand-written)
+   Figma component set  ──(read by design-sync:check)──▶  button.tsx        (the contract, hand-written)
             │                                                    │
             │                                              button.stories.tsx (proof each option renders)
             │                                                    │
             └───◀──(code-connect:publish)──  button.figma.ts  ◀───┘           (the name mapping)
 
-   Figma variables  ──tokens:pull──▶  tokens.json  ──tokens:build──▶  theme.css + themes/*.css
+   Figma variables  ──tokens:import──▶  tokens.json  ──tokens:build──▶  theme.css + themes/*.css
 ```
 
 ## The route, step by step
@@ -42,9 +42,9 @@ Ordered. Steps 1–4 and 11 are the designer's; 5–10 are the implementation st
 | 6 | Designer/Engineer | Write `src/components/<group>/<name>.tsx` with **one cva option per Figma option, and nothing more**. | The basename matches the set name; the checker resolves a set to code by that name alone. |
 | 7 | Designer/Engineer | Write `<name>.figma.ts` mapping every option of every variant property. | No option is left unmapped — an unmapped one resolves to `undefined` and emits broken code. |
 | 8 | Designer/Engineer | Write `<name>.stories.tsx` — one story per option, plus disabled, loading, and every contract state. | `pnpm run test:stories` passes; it fails on any cva option no story renders. |
-| 9 | Designer/Engineer | `pnpm run check:design-system` to zero errors and zero unexplained warnings. | Axes, options, colours, and box geometry all agree with the file. |
+| 9 | Designer/Engineer | `pnpm run design-sync:check` to zero errors and zero unexplained warnings. | Axes, options, colours, and box geometry all agree with the file. |
 | 10 | Designer/Engineer | `pnpm run code-connect:publish:design-system` — or `code-connect:publish:ui` for a block. Each package publishes its own templates; there is no command for both. | `get_code_connect_map` stops returning `{}` for the node. |
-| 11 | Designer | Verify: read the snippet in Dev Mode, and measure the built component in Storybook. | See ["Checking it yourself"](#checking-it-yourself-no-checkout-no-engineer) below. |
+| 11 | Designer | Verify: read the snippet in Dev Mode, and measure the built component in Storybook. | See ["Checking it yourself"](#checking-it-yourself) below. |
 
 Steps 3 and 10 are two different publishes, in that order, neither of which happens automatically.
 
@@ -146,7 +146,15 @@ Note what the template deliberately does *not* emit: `variant="default"` and `si
 
 **Read the snippet in Dev Mode.** Select an instance, open the Code section of the inspect panel. With the mapping published you get the `<Button …>` line above; with it unpublished you get a generated guess, however correct the template in the repository is. If you see no connected code, step 10 has not been run — that is the state [`design-code-sync.md`](design-code-sync.md#6-publish-the-set-and-publish-code-connect) records for this file.
 
-**Measure the built component in Storybook.** This is the one route that needs the repository checked out — the other two need only a browser. Run `pnpm run storybook:design-system` and open the address it prints. Switch the **Theme** toolbar control to **Grade10** first — it loads in `Default`, which is stock shadcn and not the designed theme, and comparing that against your file shows differences that are not real. Then press <kbd>M</kbd> for Measure to read the real box model, and <kbd>O</kbd> for Outline.
+**Measure the built component in Storybook.** Open
+[https://storybook.grade10-stg.com](https://storybook.grade10-stg.com)
+(the workbench Storybook published from `main`: preview pages + UI +
+design-system). Switch the **Theme** toolbar control to **Grade10** first —
+it loads in `Default`, which is stock shadcn and not the designed theme, and
+comparing that against your file shows differences that are not real. Then
+press <kbd>M</kbd> for Measure to read the real box model, and <kbd>O</kbd>
+for Outline. To measure a branch that is not yet on `main`, check out the
+repository and run `pnpm run storybook:workbench`.
 
 **Read the automated diff.** Actions → **Design sync** → the newest run posts a table of disagreements, one row per mismatch: `Button · size=md · Height (h-10) · 40px in code · 32px in Figma`. It runs nightly at 01:00 UTC and on demand via **Run workflow**. It covers background, height, horizontal padding, gap, and corner radius on each axis's base state only — vertical padding, anything inside the component, and the hover, disabled, and loading states are unchecked, so a clean table is not proof of a match.
 
@@ -161,9 +169,10 @@ Each has happened here, and each passes every check that does not specifically l
 
 ## Related reading
 
-- [`design-code-sync.md`](design-code-sync.md) — the ownership table, everything `check:design-system` enforces, and the rules for the Figma file.
-- [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) — the token pipeline: `tokens:pull`, `tokens:build`, `tokens:push`, and why every leg needs a human in Figma.
+- [`design-code-sync.md`](design-code-sync.md) — the ownership table, everything `design-sync:check` enforces, and the rules for the Figma file.
+- [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) — the token pipeline: `tokens:import`, `tokens:build`, `tokens:push`, and why every leg needs a human in Figma.
 - [`ui-component-contracts.md`](ui-component-contracts.md) — product components, which are specified here and implemented in the consuming application.
 - [`prompts/implement-page-from-figma.md`](prompts/implement-page-from-figma.md) — the page-level counterpart: converting a whole page frame by composing existing blocks and primitives, with a paste-ready prompt and a designer-run preflight.
-- `.cursor/skills/design-system-components/SKILL.md` — the working checklist an agent or engineer follows for steps 5–10.
+- `.cursor/skills/design-tokens/SKILL.md` — the working checklist for step 5, covering all three legs of the token pipeline.
+- `.cursor/skills/design-system-primitives/SKILL.md` — the working checklist an agent or engineer follows for steps 5–10.
 - `.cursor/skills/page-from-figma/SKILL.md` — the same for a page-level frame.

@@ -8,10 +8,10 @@
  * This script takes that mapping as input and makes the comparison
  * deterministic.
  *
- *   FIGMA_TOKEN=figd_… pnpm run figma:audit --node <url> --classes "h-10 gap-2 bg-primary"
- *   FIGMA_TOKEN=figd_… pnpm run figma:audit --map audit.json
- *   FIGMA_TOKEN=figd_… pnpm run figma:audit --all-blocks
- *   FIGMA_TOKEN=figd_… pnpm run figma:audit --node <url>          # dump the node's values
+ *   FIGMA_TOKEN=figd_… pnpm run design-sync:audit --node <url> --classes "h-10 gap-2 bg-primary"
+ *   FIGMA_TOKEN=figd_… pnpm run design-sync:audit --map audit.json
+ *   FIGMA_TOKEN=figd_… pnpm run design-sync:audit --all-blocks
+ *   FIGMA_TOKEN=figd_… pnpm run design-sync:audit --node <url>          # dump the node's values
  *
  * audit.json is the class-audit table the page-from-figma skill has the
  * converting agent emit: [{ "label": "hero/cta", "node": "<figma url>",
@@ -80,7 +80,7 @@ const die = (m) => {
   process.exit(1);
 };
 
-// `pnpm run figma:audit -- --all-blocks` is the habitual way to pass flags
+// `pnpm run design-sync:audit -- --all-blocks` is the habitual way to pass flags
 // through pnpm, and it leaves a literal `--` in argv that parseArgs would read
 // as the start of positionals and throw on. It is not needed any more — this
 // runs from the root with one hop — but tolerating it costs a filter, and the
@@ -280,14 +280,36 @@ for (const [key, ids] of byKey) {
     fetched.set(`${key}/${id}`, entry?.document ?? null);
 }
 
+// A GRID frame states no `itemSpacing` at all — its spacing lives in
+// `gridRowGap` and `gridColumnGap`. Reading only itemSpacing reported every
+// `gap-*` on a grid as a finding, which is the opposite of what "a property
+// the node may leave unstated is unchecked, not a finding" asks for: a grid is
+// not silent about its spacing, it says it somewhere else.
+//
+// `gap-N` sets both axes, so it is comparable only when the two agree. When
+// they differ, no single `gap-*` utility can express the node and the property
+// is left unstated deliberately, so it reports as unchecked and names what to
+// go and look at.
+const gridGap = (n) =>
+  n.layoutMode === "GRID" && n.gridRowGap === n.gridColumnGap
+    ? (n.gridRowGap ?? null)
+    : null;
+
 // The same properties check-components.mjs reads off a variant, plus width
 // and vertical padding, which a page audit meets and a variant diff never
 // needed. On a TEXT node the fill IS the text colour, so text-* is the class
 // that compares against it and bg-* stops being meaningful.
+
 function nodeValues(doc) {
   const fill = doc.fills?.find(
     (f) => f.visible !== false && f.type === "SOLID",
   );
+  // A gradient or an image paints the node without resolving to one hex, so
+  // `fill` stays null while the node is plainly painted. omissions() needs
+  // that difference to avoid reading a drawn gradient as a missing fill.
+  const fillUncomparable =
+    !fill &&
+    (doc.fills ?? []).some((f) => f.visible !== false && f.type !== "SOLID");
   // A stroke is read the same way as a fill and for the same reason: every
   // frame and component states `strokes`, so an empty array is the node
   // saying it draws no border, not the node declining to answer. Which edges
@@ -301,6 +323,7 @@ function nodeValues(doc) {
     type: doc.type,
     name: doc.name,
     fill: fill ? toHex8(fill.color, fill.opacity) : null,
+    fillUncomparable,
     stroke: stroke ? toHex8(stroke.color, stroke.opacity) : null,
     height: doc.absoluteBoundingBox?.height ?? null,
     width: doc.absoluteBoundingBox?.width ?? null,
@@ -309,7 +332,7 @@ function nodeValues(doc) {
     padXRight: doc.paddingRight ?? null,
     padY: doc.paddingTop ?? null,
     padYBottom: doc.paddingBottom ?? null,
-    gap: doc.itemSpacing ?? null,
+    gap: doc.itemSpacing ?? gridGap(doc),
     // Padding and item spacing exist only on an auto-layout frame. A frame
     // that positions its children absolutely insets them with offsets
     // instead, and states no padding at all — so a px-* on the element that
@@ -404,7 +427,7 @@ function auditExpectations(classString, v) {
 const figmaProp = {
   padX: "layoutMode, so no padding",
   padY: "layoutMode, so no padding",
-  gap: "layoutMode, so no itemSpacing",
+  gap: "layoutMode, or a GRID whose row and column gaps differ",
   clips: "clipsContent",
   sticky: "scrollBehavior",
   square: "targetAspectRatio",

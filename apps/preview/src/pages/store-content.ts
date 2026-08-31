@@ -1,3 +1,4 @@
+import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import type {
   AppliedFilter,
   FilterGroup,
@@ -6,6 +7,7 @@ import type {
   SortOption,
   UtilityLink,
 } from "@grade10/ui";
+import { createElement, type ReactNode } from "react";
 
 /* Content this workbench owns, exactly as a store application owns its own.
  * None of it lives in `@grade10/ui` or `@grade10/design-system`: both packages
@@ -16,10 +18,18 @@ const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 /** The workbench has every surface and navigates to none of them. */
 const noop = () => {};
 
+const NAV_LOGO: ReactNode = createElement(G10LogoMono, {
+  className: "h-7 w-auto",
+});
+const FOOTER_LOGO: ReactNode = createElement(G10LogoMono, {
+  className: "h-5 w-auto",
+});
+
 const STORE_NAV = {
   copy: { locale: "HKD" },
   promo: "PROMO UTILITY BAR",
-  logo: "Grade10",
+  logo: NAV_LOGO,
+  logoHref: "/",
   locales: [
     { value: "HK", label: "HKD" },
     { value: "KR", label: "KRW" },
@@ -48,7 +58,8 @@ const STORE_FOOTER = {
     copyright: "© 2026 Grade10. All rights reserved.",
     locale: "HONG KONG / HKD",
   },
-  logo: "Grade10 Marketplace",
+  logo: FOOTER_LOGO,
+  logoHref: "/",
   socialLinks: [
     { label: "INSTAGRAM", href: "#instagram" },
     { label: "YOUTUBE", href: "#youtube" },
@@ -162,12 +173,8 @@ const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
   imageSrc: IMAGE,
   imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
   price: "HK$105",
-  originalPrice: "HK$123",
-  saleLabel: "SALE",
-  cartLabel: "Add to cart",
-  ariaLabel: `Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item ${index + 1}`,
+  originalPrice: index === 0 ? "HK$123" : undefined,
   soldOut: index === 7,
-  soldOutLabel: index === 7 ? "SOLD OUT" : undefined,
 }));
 
 const INITIAL_SELECTION: FilterSelection = {
@@ -222,7 +229,40 @@ const STORE_HOME_PRODUCTS: ProductSummary[] = Array.from(
 
 const STORE_HOME_PRODUCT_CARD_COPY = {
   cart: "Add to cart",
+  decreaseQuantity: "Decrease quantity",
+  increaseQuantity: "Increase quantity",
+  removeFromCart: "Remove from cart",
+  adjustQuantity: "Adjust cart quantity",
   sale: "SALE",
+};
+
+/** Cart drawer copy owned by the workbench the same way nav and footer copy are. */
+const STORE_CART_COPY = {
+  header: {
+    title: "Cart",
+    closeCartLabel: "Close cart",
+  },
+  item: {
+    lowStockWarning: "Low stock. Quantity adjusted",
+    soldOutLabel: "Sold Out",
+    removeItemLabel: "Remove item",
+    decreaseQtyLabel: "Decrease quantity",
+    increaseQtyLabel: "Increase quantity",
+  },
+  footer: {
+    subtotalLabel: "Subtotal",
+    shippingLabel: "Shipping",
+    shippingValue: "TBD",
+    estimatedTotalLabel: "Estimated Total",
+    usePromoCode: "Use promo code",
+    applyPromo: "Apply",
+    promoPlaceholder: "Enter promo code",
+    removePromo: "Remove",
+    checkoutButton: "Proceed to Checkout",
+    checkoutRedirecting: "Redirecting...",
+  },
+  unavailableItemsRemoved:
+    "Some item(s) have been removed as they’re no longer available",
 };
 
 export {
@@ -231,6 +271,7 @@ export {
   INITIAL_SELECTION,
   PRODUCTS,
   SORT_OPTIONS,
+  STORE_CART_COPY,
   STORE_FOOTER,
   STORE_HOME_COLLECTIONS,
   STORE_HOME_HERO,

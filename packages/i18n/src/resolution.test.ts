@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { brandCatalogs, sharedCatalogs } from "./catalogs.ts";
 import type { Brand } from "./index.ts";
-import { brands, getMessages, localesOf } from "./index.ts";
+import { brands, getMessages, locales, localesOf } from "./index.ts";
 
 type Tree = { [key: string]: string | Tree };
 
@@ -36,7 +36,103 @@ const spoken = brandNames.flatMap((brand) =>
   localesOf(brand).map((locale) => ({ brand, locale })),
 );
 
+const PRODUCT_DETAIL_KEYS = [
+  "aboutThisItem",
+  "shippingAndPickup",
+  "shippingCalculatedAtCheckout",
+  "freePickupAt",
+  "onlyLeft",
+  "showMore",
+  "showLess",
+  "skuLabel",
+  "quantityLabel",
+  "increaseQuantity",
+  "decreaseQuantity",
+  "soldOutAction",
+];
+
+const STORE_PRODUCT_DETAIL_KEYS = ["adding", "addedToCart"];
+
+const AUCTION_BIDDING_HISTORY_KEYS = [
+  "title",
+  "active",
+  "completed",
+  "loading",
+  "emptyActive",
+  "emptyCompleted",
+  "loadFailed",
+  "retry",
+  "loadMore",
+  "historyLoading",
+  "historyLoadFailed",
+  "retryHistory",
+  "showHistory",
+  "hideHistory",
+  "openListing",
+  "bidAgain",
+  "latestActivity",
+  "currentPrice",
+  "finalPrice",
+  "amount",
+  "time",
+  "you",
+  "bidder",
+  "manual",
+  "automatic",
+  "standingPending",
+  "standingLeading",
+  "standingOutbid",
+  "standingWon",
+  "standingLost",
+  "standingCanceled",
+  "standingFailedOnly",
+  "youWereOutbid",
+  "bidRequested",
+  "bidRefused",
+  "acceptedPrice",
+  "automaticMaximumConfigured",
+  "automaticMaximumRaised",
+  "standingChanged",
+  "failureWindow",
+  "failureMinimum",
+  "failureAccount",
+  "failurePayment",
+  "failureStalePrice",
+  "failureUnavailable",
+].sort();
+
 describe("what a brand and a language answer between them", () => {
+  /* Scenario: The product detail surface has copy for its facts, fulfilment,
+     disclosure, and purchase states in every language it serves. */
+  it.each(spoken)(
+    "resolves product detail copy for $brand in $locale",
+    ({ brand, locale }) => {
+      const product = getMessages(brand, locale).product;
+      const store = getMessages(brand, locale).store;
+
+      for (const key of PRODUCT_DETAIL_KEYS) {
+        expect(product[key as keyof typeof product]).toEqual(
+          expect.any(String),
+        );
+      }
+
+      for (const key of STORE_PRODUCT_DETAIL_KEYS) {
+        expect(store[key as keyof typeof store]).toEqual(expect.any(String));
+      }
+    },
+  );
+
+  /* Scenario: Every supported language exposes the shared bidding-history
+     vocabulary through the assembled catalog. */
+  it.each(locales)("exposes auction bidding history in %s", (locale) => {
+    const namespace = layers(sharedCatalogs)[locale]?.auctionBiddingHistory;
+
+    expect(namespace).toEqual(expect.any(Object));
+    expect(Object.keys(namespace ?? {}).sort()).toEqual(
+      AUCTION_BIDDING_HISTORY_KEYS,
+    );
+  });
+
   /* Scenario: A brand leaves a key unanswered. Nothing renders a key: every
      one of them is answered brand-neutrally or by the brand itself. */
   it.each(spoken)(
@@ -135,19 +231,33 @@ describe("what each layer is answerable for", () => {
     expect(owed[0].keys.length).toBeLessThan(VOCABULARY.length / 4);
   });
 
-  /* A brand's default language has nothing behind it but the shared words, so
-     between them they answer everything — no key falls through to a language
-     the collector did not ask for. */
-  it.each(brandNames)(
-    "answers %s's own language without falling back",
-    (brand) => {
-      const locale = brands[brand].defaultLocale;
+  /* Scenario: a language is declared and nobody speaks it. The shipped list
+     is what the brands speak, so the pairs walked below are every language
+     the platform has — a second list cannot drift out from under them. */
+  it("ships exactly the languages the brands speak", () => {
+    const spokenLocales = [...new Set(spoken.map(({ locale }) => locale))];
+
+    expect([...locales].sort()).toEqual(spokenLocales.sort());
+  });
+
+  /* Scenario: a language is left half-written. Every language a brand speaks
+     answers the whole vocabulary from its own two layers, so nothing falls
+     through to English — a fallback that renders is a missing translation
+     nobody sees. */
+  it.each(spoken)(
+    "answers $brand in $locale without falling back",
+    ({ brand, locale }) => {
       const answered = new Set([
         ...keysIn(layers(sharedCatalogs)[locale] ?? {}),
         ...keysIn(layers(brandCatalogs[brand])[locale] ?? {}),
       ]);
+      const untranslated = VOCABULARY.filter((key) => !answered.has(key));
 
-      expect(VOCABULARY.filter((key) => !answered.has(key))).toEqual([]);
+      expect({ brand, locale, untranslated }).toEqual({
+        brand,
+        locale,
+        untranslated: [],
+      });
     },
   );
 });

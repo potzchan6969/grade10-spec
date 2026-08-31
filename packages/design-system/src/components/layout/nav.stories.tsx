@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
+import { G10LogoMono } from "../display/g10-logo-mono";
 import { Nav } from "./nav";
 
 /* Grade10's own chrome content. It lives here, in an example, rather than in
@@ -26,6 +27,8 @@ const LOCALES = [
 
 const CONTROLS = ["Account", "Cart"];
 
+const GRADE10_LOGO = <G10LogoMono className="h-7 w-auto" />;
+
 const meta = {
   title: "Components/Nav",
   component: Nav,
@@ -33,7 +36,8 @@ const meta = {
   parameters: { layout: "fullscreen" },
   args: {
     promo: "PROMO UTILITY BAR",
-    logo: "Grade10",
+    logo: GRADE10_LOGO,
+    logoHref: "/",
     utilityLinks: [],
     navItems: NAV_ITEMS,
     copy: { locale: "HKD" },
@@ -65,6 +69,10 @@ export const Default: Story = {
     expect(canvas.getByRole("link", { name: "Grade" })).not.toHaveAttribute(
       "aria-current",
     );
+    // Annotation: logo click redirects to the homepage.
+    expect(
+      canvasElement.querySelector('[data-slot="nav-logo"]'),
+    ).toHaveAttribute("href", "/");
   },
 };
 

@@ -1,0 +1,74 @@
+[
+  {
+    "label": "order-details-header/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5057-6691",
+    "classes": "w-full justify-center"
+  },
+  {
+    "label": "order-details-delivery-status/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-6234",
+    "classes": "w-full"
+  },
+  {
+    "label": "order-details-delivery-status/header",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4863-8260",
+    "classes": "w-full border-b border-border bg-muted px-6 py-4",
+    "note": "The band is the published Product / Order / Order Item Header component. This entry named 5010-6234, the delivery-status component root, which is the same node as /root and draws none of this."
+  },
+  {
+    "label": "order-details-order-item/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-6440",
+    "classes": "",
+    "note": "The row box is drawn by design-system TableRow, which the block only composes; table-row/root audits those classes."
+  },
+  {
+    "label": "order-details-order-item/image",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-6447",
+    "classes": "relative size-12 shrink-0 overflow-hidden rounded-lg border border-border bg-gradient-to-b from-background-subtle to-muted",
+    "diverges": {
+      "overflow-hidden": "Figma carries the photo as an image fill on the well, which is clipped by definition, so the frame itself does not clip. The code renders an <img> inside the well and has to clip it to keep the rounded corners. Same picture, drawn two ways."
+    }
+  },
+  {
+    "label": "order-details-order-table/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-6293",
+    "classes": "",
+    "note": "The table box is drawn by design-system Table, which the block only composes; table/root audits those classes. data-slot overrides table."
+  },
+  {
+    "label": "order-details-order-table/header",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4969-5009",
+    "classes": "",
+    "note": "The header box is drawn by design-system TableHeader, which the block only composes; table-header/root audits those classes."
+  },
+  {
+    "label": "order-details-sidebar/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5057-6908",
+    "classes": "w-full bg-background",
+    "note": "The component fills Base/background and so does the Card inside it, which covers the root on both sides — the fill shows nowhere today. The code carries it so the two agree on what the column is painted, rather than relying on a child that could stop covering it."
+  },
+  {
+    "label": "order-details/body",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4837-1879",
+    "classes": "grid w-full grid-cols-[minmax(0,2fr)_minmax(0,1fr)] items-start gap-12"
+  },
+  {
+    "label": "order-details-sidebar/summary",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5057-6766",
+    "classes": "w-full border-b border-border bg-background-subtle p-6"
+  },
+  {
+    "label": "order-details-sidebar/loyalty",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5057-6834",
+    "classes": "gap-1 border-border bg-gradient-to-r from-background-subtle to-muted p-3",
+    "diverges": {
+      "gap-1": "The instance root carries the padding; the 4px gap sits on the Card slot inside it, which is a node this entry cannot name. The spacing is drawn, one level down."
+    }
+  },
+  {
+    "label": "order-details/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4835-1683",
+    "classes": "w-full max-w-7xl gap-12 overflow-hidden px-8 pt-8 pb-16",
+    "note": "The Main frame of the Order Details page; Nav and Footer excluded, as the code root excludes them. This entry named 4835-1654, the page frame that contains all three."
+  }
+]

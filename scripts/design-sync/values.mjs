@@ -153,7 +153,22 @@ export function expectations(classString, resolveToken, resolveRadius) {
 // through the tokens to a hex is a class claiming a colour.
 const isColorClass = (cls, prefix, resolveToken) => {
   const m = new RegExp(`^${prefix}-(.+)$`).exec(cls);
-  return m ? !!resolveToken(m[1])?.startsWith("#") : false;
+  if (!m) return false;
+  // `bg-sidebar/95` is a token carrying an opacity modifier, and it claims the
+  // property as surely as the bare token does — reading the modifier as part
+  // of the name resolved nothing, so a glass surface audited as if it painted
+  // no background at all.
+  //
+  // The modifier is multiplied into whatever alpha the token ALREADY carries,
+  // so a token that is itself translucent is deliberately left unresolved and
+  // goes on being reported. `bg-overlay/30` over an `--overlay` that is itself
+  // 30% paints 9%: that is how the cart and dialog scrims shipped a third as
+  // dark as Figma draws them, and this rail is what surfaced it.
+  const slash = m[1].lastIndexOf("/");
+  const modified = slash > 0 && /^[\d.]+$/.test(m[1].slice(slash + 1));
+  const hex = resolveToken(modified ? m[1].slice(0, slash) : m[1]);
+  if (!hex?.startsWith("#")) return false;
+  return !modified || hex.length <= 7 || /ff$/i.test(hex);
 };
 
 /**
@@ -228,9 +243,17 @@ export function omissions(classString, values, resolveToken) {
     out.push(`${prefix}-transparent in code, ${values.fill} in Figma`);
   else if (fill === "unclaimed" && values.fill != null)
     out.push(`draws ${values.fill}, no ${prefix}-* class claims it`);
-  else if (fill === "opaque" && values.fill == null)
+  else if (fill === "opaque" && values.fill == null && !values.fillUncomparable)
     // A token-resolved class is already compared by expectations(); only the
     // arbitrary value it cannot resolve needs reporting here.
+    //
+    // `fillUncomparable` is the node saying it paints something this rail
+    // cannot read — a gradient or an image, which have no single hex to diff.
+    // Code that claims an equally unreadable paint agrees with it as far as
+    // anything here can tell, so reporting "no fill in Figma" against a
+    // gradient states the opposite of what the file draws. A node that paints
+    // one while the code claims nothing stays as silent as it is today; the
+    // rail cannot tell a deliberate gradient from a forgotten one.
     out.push(
       `${plain.find((c) => new RegExp(`^${prefix}-`).test(c))} in code, no fill in Figma`,
     );

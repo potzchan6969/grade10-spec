@@ -1,0 +1,73 @@
+import type { ReactNode } from "react";
+
+/**
+ * One reward on the redemption menu. Points are numbers because the programme
+ * counts them; every date and window is a string the consumer already
+ * formatted, because formatting needs a locale and a time zone this package is
+ * forbidden to know.
+ */
+type RewardMenuItem = {
+  id: string;
+  name: string;
+  /** Points for one redemption — or for one unit when the reward takes a quantity. */
+  pointCost: number;
+  /** Present when the reward is priced per unit: the per-redemption bound. */
+  maxQuantity?: number;
+  /** A physical reward's collection window, stated as supplied. */
+  collectionWindow?: string;
+  /** A money-off reward's code validity period, stated as supplied. */
+  validity?: string;
+};
+
+type CouponStatus = "open" | "spent" | "void";
+
+/** One issued discount code and what remains of it. */
+type CouponItem = {
+  id: string;
+  /** What the code takes off, already formatted. */
+  amount: string;
+  code: string;
+  /** What the coupon is for. */
+  description?: string;
+  /** When the code stops working, already formatted. */
+  expiry: string;
+  status: CouponStatus;
+  /** Consumer-owned control for this coupon — apply, copy, whatever the surface offers. */
+  action?: ReactNode;
+};
+
+/** One ledger entry, already translated into member-readable terms. */
+type ActivityEntry = {
+  id: string;
+  /** What happened, as the member reads it — never an operator reason or retry key. */
+  kind: string;
+  /** Signed points movement. */
+  delta: number;
+  /** Already formatted. */
+  date: string;
+  /** Running context under the entry — an order reference, a balance line. */
+  context?: ReactNode;
+};
+
+/** One redemption paid for and awaiting handover. */
+type PendingCollectionItem = {
+  id: string;
+  /** The reward's name — still readable after the reward is retired. */
+  name: string;
+  /** Points the redemption cost. */
+  pointsPaid: number;
+  /** When it was redeemed, already formatted. */
+  redeemedDate: string;
+  /** The window to collect it in, already formatted. */
+  collectBy: string;
+  /** The window has passed without a handover. */
+  expired?: boolean;
+};
+
+export type {
+  ActivityEntry,
+  CouponItem,
+  CouponStatus,
+  PendingCollectionItem,
+  RewardMenuItem,
+};

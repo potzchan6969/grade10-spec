@@ -8,5 +8,55 @@
     "label": "radio-list/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2213-392",
     "classes": "flex w-full flex-col justify-center gap-2"
+  },
+  {
+    "label": "chip/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4396-5318",
+    "classes": "inline-flex h-8 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-(--radius-full) border border-transparent bg-primary bg-clip-padding px-3 text-sm leading-5 font-medium text-primary-foreground whitespace-nowrap [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] outline-none select-none transition-[box-shadow,transform] duration-150 ease-out hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:translate-y-px motion-reduce:transition-[box-shadow] motion-reduce:active:translate-y-0 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0"
+  },
+  {
+    "label": "link/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=86-3524",
+    "classes": "group/link inline-flex w-fit cursor-pointer items-center justify-center gap-1 font-normal underline decoration-solid decoration-from-font transition-colors outline-none [text-underline-position:from-font] focus-visible:rounded-(--radius-sm) focus-visible:ring-3 focus-visible:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:text-disabled-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0",
+    "note": "variant=default, size=default, enabled \u2014 the cva's own defaults."
+  },
+  {
+    "label": "checkbox-button/box",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-4090",
+    "classes": "group/checkbox flex size-4 shrink-0 items-center justify-center rounded-(--radius-full) border border-border bg-background text-primary-foreground transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 data-checked:border-primary data-checked:bg-primary disabled:cursor-not-allowed disabled:opacity-50",
+    "note": "checked=false is the resting state the base string renders; Figma's set defaults to checked=true."
+  },
+  {
+    "label": "checkbox-list-input/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-3980",
+    "classes": "group/checkbox-item flex w-full items-start gap-2 has-data-disabled:text-disabled-foreground"
+  },
+  {
+    "label": "radio-list-item/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2213-143",
+    "classes": "group/radio-item flex w-full items-start gap-2 text-base text-foreground"
+  },
+  {
+    "label": "radio-button/dot",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2213-138",
+    "classes": "flex size-4 items-center justify-center rounded-full border border-border bg-input transition-colors group-focus-visible/radio:ring-3 group-focus-visible/radio:ring-ring/50 group-data-disabled/radio:bg-background-subtle",
+    "covers": "RadioButton",
+    "note": "Points at the Container ellipse, not the component root (2213:137). Figma draws a 16px ellipse inside a plain 24px frame; the code's outer wrapper is a transparent tap target and the inner box is what paints.",
+    "diverges": {
+      "rounded-full": "The node is an ELLIPSE, which is round by construction and states no cornerRadius. Nothing to compare, and the code cannot express the shape any other way."
+    }
+  },
+  {
+    "label": "input-otp-slot/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2595-140",
+    "classes": "bg-input border border-border",
+    "note": "Base string plus the status=default variant, which is where the border lives \u2014 the base alone left the node's stroke unclaimed."
+  },
+  {
+    "label": "stepper-input/control",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4637-248",
+    "classes": "w-full overflow-hidden rounded-(--radius-full) border bg-input transition-colors border-border",
+    "covers": "StepperInput",
+    "note": "Points at the control frame, not the component root (4623:318). Figma's root stacks label, control and message at gap 8; the cva base styles the control alone. The base string's `border` is an edge with no colour \u2014 border-border comes from status=default, which is the variant this node draws."
   }
 ]

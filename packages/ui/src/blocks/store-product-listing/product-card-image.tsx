@@ -1,17 +1,26 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
-import { StatusIndicator } from "@grade10/design-system/components/display/status-indicator";
-import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { cn } from "@grade10/design-system/lib/utils";
-import { ShoppingCartSimple } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
+import {
+  ProductCardCartControl,
+  parseCartQuantity,
+} from "./product-card-cart-control";
 
 /**
  * What the well says, whichever product is in it — supplied once for a whole
  * listing rather than restated per tile.
  */
 type ProductCardImageCopy = {
-  /** Accessible name for the cart control. */
+  /** Accessible name for the add-to-cart affordance. */
   cart: string;
+  /** Stepper decrement control. */
+  decreaseQuantity: string;
+  /** Stepper increment control. */
+  increaseQuantity: string;
+  /** Stepper decrement at minimum (remove). */
+  removeFromCart: string;
+  /** Collapsed in-cart control when the count is already shown. */
+  adjustQuantity: string;
   /** Shown in place of the sale badge when the product has sold out. */
   soldOut?: string;
   /** Badge on a discounted product. Omit it and no badge is drawn. */
@@ -27,7 +36,7 @@ type ProductCardImageProps = {
   soldOut?: boolean;
   inCart?: boolean;
   cartCount?: ReactNode;
-  onCartClick?: () => void;
+  onCartQuantityChange?: (quantity: number) => void;
   /** Tile activation for the photo well. Ignored when `soldOut`. */
   onClick?: () => void;
   /** The product's own name, which names the well for a screen reader. */
@@ -37,7 +46,8 @@ type ProductCardImageProps = {
 
 /**
  * Product photo well. Figma set `Product / Product Card Image` (`4274:10074`)
- * has `state` (hover, CSS), `inCart`, `soldOut`, and BOOLEAN `sale`.
+ * has `state` (hover, CSS) and `soldOut`, plus the BOOLEAN `sale`. In-cart
+ * chrome is an annotation on the set, not an axis, so `inCart` is code-only.
  *
  * Cart sits outside the well's activation target so nested buttons stay valid.
  * Hover and `:focus-within` reveal it when the product is available and not
@@ -52,17 +62,16 @@ function ProductCardImage({
   soldOut = false,
   inCart = false,
   cartCount,
-  onCartClick,
+  onCartQuantityChange,
   onClick,
   name,
 }: ProductCardImageProps) {
   const showCart = !soldOut;
-  const cartAlwaysVisible = showCart && inCart;
+  const quantity = parseCartQuantity(cartCount, inCart);
 
-  // Product photos ship with a white studio fill. Multiply knocks that white
-  // out onto the well's gradient (`isolate` keeps the blend inside the well).
   const photoClassName = cn(
-    "size-full object-cover mix-blend-multiply",
+    "size-full rounded-(--radius-3xl) object-cover mix-blend-multiply",
+    soldOut && "opacity-50",
     !soldOut &&
       "transition-transform duration-200 ease-[ease] motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:group-hover/product-card-image:scale-105",
   );
@@ -83,12 +92,20 @@ function ProductCardImage({
         ) : null}
       </div>
       {soldOut && copy.soldOut != null ? (
-        <Badge className="absolute top-3 left-3 z-10" size="sm">
+        <Badge
+          className="absolute top-3 left-3 z-10"
+          size="sm"
+          variant="outline"
+        >
           {copy.soldOut}
         </Badge>
       ) : null}
       {!soldOut && discounted && copy.sale != null ? (
-        <Badge className="absolute top-3 left-3 z-10" size="sm" variant="brand">
+        <Badge
+          className="absolute top-3 left-3 z-10"
+          size="sm"
+          variant="success"
+        >
           {copy.sale}
         </Badge>
       ) : null}
@@ -98,19 +115,25 @@ function ProductCardImage({
   return (
     <div
       data-slot="product-card-image"
+      data-discounted={(discounted && !soldOut) || undefined}
       data-sold-out={soldOut || undefined}
       data-in-cart={(!soldOut && inCart) || undefined}
       className={cn(
         "group/product-card-image relative aspect-square w-full rounded-(--radius-3xl)",
+        "[&:focus-within_.cart-control]:pointer-events-auto [&:focus-within_.cart-control]:opacity-100",
+        "[@media(hover:hover)_and_(pointer:fine)]:hover:[&_.cart-control]:pointer-events-auto",
+        "[@media(hover:hover)_and_(pointer:fine)]:hover:[&_.cart-control]:opacity-100",
         className,
       )}
     >
       {soldOut || !onClick ? (
-        <div className="absolute inset-0">{well}</div>
+        <div className="absolute inset-0 overflow-hidden rounded-(--radius-3xl)">
+          {well}
+        </div>
       ) : (
         <button
           aria-label={name}
-          className="absolute inset-0 cursor-pointer border-0 bg-transparent p-0 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="absolute inset-0 cursor-pointer overflow-hidden rounded-(--radius-3xl) border-0 bg-transparent p-0 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           onClick={onClick}
           type="button"
         >
@@ -118,32 +141,13 @@ function ProductCardImage({
         </button>
       )}
       {showCart ? (
-        <div
-          className={cn(
-            "absolute right-1 bottom-2 z-10 size-11",
-            !cartAlwaysVisible &&
-              "pointer-events-none opacity-0 group-focus-within/product-card-image:pointer-events-auto group-focus-within/product-card-image:opacity-100 group-hover/product-card-image:pointer-events-auto group-hover/product-card-image:opacity-100",
-          )}
-        >
-          <IconButton
-            aria-label={copy.cart}
-            className="absolute bottom-0 left-0"
-            onClick={onCartClick}
-            size="md"
-            variant="primary"
-          >
-            <ShoppingCartSimple aria-hidden size={14} weight="bold" />
-          </IconButton>
-          {inCart && cartCount != null ? (
-            <StatusIndicator
-              className="absolute top-0 right-0 z-10"
-              type="count"
-              variant="brand"
-            >
-              {cartCount}
-            </StatusIndicator>
-          ) : null}
-        </div>
+        <ProductCardCartControl
+          cartCount={cartCount}
+          copy={copy}
+          inCart={inCart}
+          onQuantityChange={onCartQuantityChange}
+          quantity={quantity}
+        />
       ) : null}
     </div>
   );

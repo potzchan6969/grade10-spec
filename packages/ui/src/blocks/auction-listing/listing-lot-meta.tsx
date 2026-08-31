@@ -1,0 +1,72 @@
+import { Badge } from "@grade10/design-system/components/display/badge";
+import { Text } from "@grade10/design-system/components/display/text";
+import { Link } from "@grade10/design-system/components/forms/link";
+import { HStack } from "@grade10/design-system/components/layout/hstack";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
+import type { ListingLotMetaBadge } from "./types";
+
+type ListingLotMetaCopy = {
+  aboutThisLot: string;
+  vaultShipping: string;
+  authentication: string;
+  result: string;
+  showMore: string;
+};
+
+type ListingLotMetaProps = {
+  copy: ListingLotMetaCopy;
+  badges: readonly ListingLotMetaBadge[];
+  description: string;
+  showMoreHref?: string;
+  vaultShippingBody: string;
+  authenticationBody: string;
+  resultFact?: string;
+};
+
+function ListingLotMeta({
+  copy,
+  badges,
+  description,
+  showMoreHref = "#description",
+  vaultShippingBody,
+  authenticationBody,
+  resultFact,
+}: ListingLotMetaProps) {
+  return (
+    <VStack className="w-full" data-slot="listing-lot-meta" gap="lg">
+      <VStack gap="md">
+        <VStack gap="sm">
+          <Text className="font-semibold">{copy.aboutThisLot}</Text>
+          <VStack gap="sm">
+            <Text as="p" className="line-clamp-3" size="base">
+              {description}
+            </Text>
+            <Link href={showMoreHref}>{copy.showMore}</Link>
+          </VStack>
+        </VStack>
+        <HStack className="flex-wrap" gap="sm">
+          {badges.map((badge) => (
+            <Badge key={badge.label}>{badge.label}</Badge>
+          ))}
+        </HStack>
+      </VStack>
+      <VStack gap="sm">
+        <Text className="font-semibold">{copy.vaultShipping}</Text>
+        <Text size="base">{vaultShippingBody}</Text>
+      </VStack>
+      <VStack gap="sm">
+        <Text className="font-semibold">{copy.authentication}</Text>
+        <Text size="base">{authenticationBody}</Text>
+      </VStack>
+      {resultFact ? (
+        <VStack gap="sm">
+          <Text className="font-semibold">{copy.result}</Text>
+          <Text size="sm">{resultFact}</Text>
+        </VStack>
+      ) : null}
+    </VStack>
+  );
+}
+
+export type { ListingLotMetaCopy, ListingLotMetaProps };
+export { ListingLotMeta };

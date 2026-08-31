@@ -20,16 +20,16 @@ import {
   WonPaymentDueStanding,
   WonSettledStanding,
 } from "./fixtures";
-import { ListingBidPanel } from "./listing-bid-panel";
+import { ListingBidPanel as ListingBidPanelComponent } from "./listing-bid-panel";
 import { ListingDetails } from "./listing-details";
 import { ListingGallery } from "./listing-gallery";
 
 /**
- * The three product-page panels together: photo left, bid box right,
- * description below — a regular ecommerce layout.
+ * The three listing blocks together. The preview app owns the complete page
+ * assembly, including its header and footer.
  */
 const meta = {
-  title: "Auction Listing/Product page",
+  title: "Auction Listing/Listing Product",
   parameters: { layout: "padded" },
 } satisfies Meta;
 
@@ -46,8 +46,13 @@ const pageShell = (main: ReactNode, details: ReactNode) => (
 );
 
 const liveBidPanel = (
-  <ListingBidPanel
-    copy={{ ends: "Ends", extension: "Extended bidding", price: "Current bid" }}
+  <ListingBidPanelComponent
+    copy={{
+      ends: "Ends",
+      extension: "Extended bidding",
+      maximum: "Your maximum",
+      price: "Current bid",
+    }}
     actions={<LiveActions />}
     watchAction={<WatchOnlyActions />}
     bidCount="1 Bid"
@@ -98,10 +103,11 @@ export const PreAuction: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
+        <ListingBidPanelComponent
           copy={{
             ends: "Opens",
             extension: "Extended bidding",
+            maximum: "Your maximum",
             price: "Opening bid",
           }}
           actions={null}
@@ -124,7 +130,7 @@ export const PreAuction: Story = {
   },
 };
 
-export const Live: Story = {
+export const ListingBidPanel: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("img", { name: /Charizard/ })).toBeInTheDocument();
@@ -155,8 +161,8 @@ export const Live: Story = {
     ),
 };
 
-/** @deprecated Use Live — kept as alias for existing links. */
-export const Default: Story = Live;
+/** @deprecated Use ListingBidPanel — kept as alias for existing links. */
+export const Default: Story = ListingBidPanel;
 
 export const PostSold: Story = {
   render: () =>
@@ -170,8 +176,8 @@ export const PostSold: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
-          copy={{ ends: "Ends", price: "Winning bid" }}
+        <ListingBidPanelComponent
+          copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
           bidCount="1 Bid"
@@ -212,8 +218,8 @@ export const PostWonPaymentDue: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
-          copy={{ ends: "Ends", price: "Winning bid" }}
+        <ListingBidPanelComponent
+          copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
           bidCount="1 Bid"
@@ -254,8 +260,8 @@ export const PostWonSettled: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
-          copy={{ ends: "Ends", price: "Winning bid" }}
+        <ListingBidPanelComponent
+          copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
           bidCount="1 Bid"
@@ -297,8 +303,8 @@ export const PostLost: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
-          copy={{ ends: "Ends", price: "Winning bid" }}
+        <ListingBidPanelComponent
+          copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
           bidCount="1 bid"
@@ -340,8 +346,8 @@ export const PostUnsold: Story = {
           }}
           images={[...GALLERY_IMAGES]}
         />
-        <ListingBidPanel
-          copy={{ ends: "Ends", price: "Result" }}
+        <ListingBidPanelComponent
+          copy={{ ends: "Ends", maximum: "Your maximum", price: "Result" }}
           actions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
           bidCount="0 Bids"

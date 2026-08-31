@@ -26,6 +26,11 @@ pnpm storybook:design-system       # design-system primitives alone
 pnpm storybook:ui                  # shared compound components alone
 ```
 
+The workbench Storybook on `main` (preview pages + UI + design-system) is
+published at
+[https://storybook.grade10-stg.com](https://storybook.grade10-stg.com).
+Locally that is `pnpm storybook:workbench`.
+
 For concurrent worktrees, install Playwright once before running browser tests:
 
 ```bash
@@ -39,7 +44,7 @@ Useful checks:
 
 ```bash
 pnpm run agent:check-parity
-pnpm run check:design-system
+pnpm run design-sync:check
 pnpm run tokens:build
 pnpm run typecheck
 pnpm run lint
