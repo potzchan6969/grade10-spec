@@ -16,6 +16,9 @@ repayment entirely, and goes to `accepted` straight from `under_valuation` on
 agreed custody terms.
 
 :::flow{title="Intake to release"}
+# Intake
+The item arrives as a request and gets on the diary.
+
 ## Open a draft
 The collector fills the request wizard — details, then photos, then send —
 saying what they have and whether they want a loan against it.
@@ -26,6 +29,9 @@ saying what they have and whether they want a loan against it.
 ## Book a visit
 On the case, or walk in. The appointment service is the source of truth and the
 case caches the booking for display. Every diary refusal collapses to one code.
+
+# Valuation and offer
+What the item is worth, and — financed lane — what Grade10 will lend against it.
 
 ## Start the valuation
 `submitted → under_valuation`, which also marks the booking completed if there
@@ -44,6 +50,9 @@ transaction. Staff can also dispute it back to `under_valuation`.
 storage lane arrives here from `under_valuation` instead. Either lane can exit at
 `under_valuation → declined` — the item is refused and nothing has been signed.
 
+# Signing and custody
+Who the collector is, what they sign, and where the item goes.
+
 ## Record the identity check
 A verification id is bound to the case. No name, birth date or document number is
 stored on the case, only the reference.
@@ -60,6 +69,10 @@ The collector reads every page on the iPad, consents per document, and signs.
 `signing → vaulted`, guarded on an executed packet holding every document the
 lane requires. A locker id is optional.
 
+# The loan
+Financed lane only. A storage case sits in the vault until the collector asks
+for it back.
+
 ## Pay out
 Financed lane: the treasurer records the payout — `vaulted → active`. The
 transfer already happened; this records it, and it must equal the accepted
@@ -69,6 +82,8 @@ offer's principal.
 Each repayment carries the caller's idempotency key and the balance the caller
 quoted; a disagreement is refused as a stale quote. When repayments satisfy what
 is due, `active → repaid`.
+
+# Release
 
 ## Ask for it back
 The collector's request records the ask and nothing else. The item leaves custody
