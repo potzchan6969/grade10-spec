@@ -11,8 +11,9 @@ import {
   TooltipTrigger,
 } from "@grade10/design-system/components/overlays/tooltip";
 import { Info } from "@phosphor-icons/react";
-import { formatUsd } from "./format-usd";
+import { formatUsd, minMaximumMinor } from "./format-usd";
 import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
+import "./listing-bid-mode-stack.css";
 import { ListingCountdownDisplay } from "./listing-countdown-display";
 import {
   ListingAutoBidControls,
@@ -33,14 +34,21 @@ type ListingAuctionBidFieldsCopy = {
   yourMaximum: string;
   opensIn: string;
   closed: string;
+  timeLeft: string;
   timeLeftAutoExtended: string;
   autoExtendedTooltip: string;
   placeBidSection: string;
   placeBid: string;
+  confirmMaximum: string;
+  raiseMaximum: string;
+  confirmMaximumTooltip: string;
+  confirmMaximumAriaLabel: string;
+  raiseMaximumAriaLabel: string;
   enableAutoBidding: string;
   autoBiddingTooltip: string;
+  minimumMaximum: string;
   buyerFeeHint: string;
-  bidCountZero: string;
+  noBidsYet: string;
 };
 
 type StandingBannerProps = {
@@ -153,7 +161,7 @@ function PriceBlock({ copy, view }: PriceBlockProps) {
         </Text>
       ) : (
         <Text size="xs" tone="secondary">
-          {copy.bidCountZero}
+          {copy.noBidsYet}
         </Text>
       )}
     </VStack>
@@ -194,7 +202,7 @@ function TimeBlock({ copy, view }: TimeBlockProps) {
             tone="secondary"
             weight="medium"
           >
-            {copy.timeLeftAutoExtended}
+            {view.extended ? copy.timeLeftAutoExtended : copy.timeLeft}
           </Text>
           <TooltipProvider>
             <Tooltip>
@@ -211,6 +219,7 @@ function TimeBlock({ copy, view }: TimeBlockProps) {
       <Text as="p" className="text-2xl font-medium leading-8">
         {view.countdownSeconds != null ? (
           <ListingCountdownDisplay
+            closesAtMs={view.closesAtMs}
             format={view.countdownFormat}
             initialSeconds={view.countdownSeconds}
           />
@@ -233,6 +242,7 @@ type BidActionsProps = {
   bidMode: "manual" | "auto";
   onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
+  onCommitMaximum: () => void;
 };
 
 function BidActions({
@@ -241,73 +251,130 @@ function BidActions({
   bidMode,
   onBidModeChange,
   onPlaceBid,
+  onCommitMaximum,
 }: BidActionsProps) {
   if (!view.showBidActions) return null;
 
   const autoBidEnabled = bidMode === "auto";
+  const hasCommittedMaximum = view.viewerMaximumMinor != null;
+  const floorMaximumMinor = minMaximumMinor(
+    view.minBidMinor,
+    view.viewerMaximumMinor,
+  );
+  const defaultMaximumMinor = hasCommittedMaximum
+    ? floorMaximumMinor
+    : view.suggestedMaxMinor;
   const manualCopy = {
     bidAmountLabel: copy.placeBidSection,
     maximumLabel: copy.yourMaximum,
   };
+  const autoCopy = {
+    maximumLabel: copy.yourMaximum,
+    minimumMaximum: copy.minimumMaximum,
+  };
 
   return (
-    <VStack className="w-full" gap="md">
-      <VStack gap="sm">
-        <Text
-          className="text-secondary-foreground"
-          size="sm"
-          tone="secondary"
-          weight="medium"
-        >
-          {copy.placeBidSection}
-        </Text>
-        <HStack className="w-full" gap="sm" vAlign="start">
-          <ListingManualBidControls
-            copy={manualCopy}
-            hideLabel
-            incrementMinor={view.incrementMinor}
-            minBidMinor={view.minBidMinor}
-          />
-          <Button className="shrink-0" onClick={onPlaceBid} size="md">
-            {copy.placeBid}
-          </Button>
-        </HStack>
-      </VStack>
+    <VStack className="w-full" gap="sm">
+      <CheckboxListInput
+        checked={autoBidEnabled}
+        onCheckedChange={(next) =>
+          onBidModeChange(next === true ? "auto" : "manual")
+        }
+        size="sm"
+      >
+        <span className="inline-flex min-w-0 flex-1 items-center gap-1">
+          {copy.enableAutoBidding}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger
+                aria-label={copy.autoBiddingTooltip}
+                className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                onPointerDown={(event) => event.preventDefault()}
+                render={<Info aria-hidden size={12} />}
+              />
+              <TooltipContent>{copy.autoBiddingTooltip}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </span>
+      </CheckboxListInput>
 
-      <VStack gap="sm">
-        <CheckboxListInput
-          checked={autoBidEnabled}
-          onCheckedChange={(next) =>
-            onBidModeChange(next === true ? "auto" : "manual")
-          }
-          size="sm"
-        >
-          <span className="inline-flex min-w-0 flex-1 items-center gap-1">
-            {copy.enableAutoBidding}
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger
-                  aria-label={copy.autoBiddingTooltip}
-                  className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                  onPointerDown={(event) => event.preventDefault()}
-                  render={<Info aria-hidden size={12} />}
-                />
-                <TooltipContent>{copy.autoBiddingTooltip}</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </span>
-        </CheckboxListInput>
-        <ListingAutoBidReveal open={autoBidEnabled}>
-          <ListingAutoBidControls
-            copy={{ maximumLabel: copy.yourMaximum }}
-            suggestedMaxMinor={view.suggestedMaxMinor}
-          />
+      <div className="bid-mode-stack w-full">
+        <ListingAutoBidReveal open={!autoBidEnabled}>
+          <VStack className="w-full" gap="sm">
+            <Text
+              className="text-secondary-foreground"
+              size="sm"
+              tone="secondary"
+              weight="medium"
+            >
+              {copy.placeBidSection}
+            </Text>
+            <HStack className="w-full" gap="sm" vAlign="start">
+              <ListingManualBidControls
+                copy={manualCopy}
+                hideLabel
+                incrementMinor={view.incrementMinor}
+                key={`manual-${view.minBidMinor}`}
+                minBidMinor={view.minBidMinor}
+              />
+              <Button className="shrink-0" onClick={onPlaceBid} size="md">
+                {copy.placeBid}
+              </Button>
+            </HStack>
+          </VStack>
         </ListingAutoBidReveal>
-      </VStack>
 
-      <Text size="xs" tone="secondary">
-        {copy.buyerFeeHint}
-      </Text>
+        <ListingAutoBidReveal open={autoBidEnabled}>
+          <VStack className="w-full" gap="sm">
+            <HStack gap="xs" vAlign="center">
+              <Text
+                className="text-secondary-foreground"
+                size="sm"
+                tone="secondary"
+                weight="medium"
+              >
+                {copy.yourMaximum}
+              </Text>
+              {!hasCommittedMaximum ? (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger
+                      aria-label={copy.confirmMaximumTooltip}
+                      className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                      onPointerDown={(event) => event.preventDefault()}
+                      render={<Info aria-hidden size={12} />}
+                    />
+                    <TooltipContent>{copy.confirmMaximumTooltip}</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ) : null}
+            </HStack>
+            <HStack className="w-full" gap="sm" vAlign="start">
+              <ListingAutoBidControls
+                copy={autoCopy}
+                defaultMaximumMinor={defaultMaximumMinor}
+                hideLabel
+                incrementMinor={view.incrementMinor}
+                key={`auto-${floorMaximumMinor}-${hasCommittedMaximum}`}
+                minMaximumMinor={floorMaximumMinor}
+                viewerMaximumMinor={view.viewerMaximumMinor}
+              />
+              <Button
+                aria-label={
+                  hasCommittedMaximum
+                    ? copy.raiseMaximumAriaLabel
+                    : copy.confirmMaximumAriaLabel
+                }
+                className="shrink-0"
+                onClick={onCommitMaximum}
+                size="md"
+              >
+                {hasCommittedMaximum ? copy.raiseMaximum : copy.confirmMaximum}
+              </Button>
+            </HStack>
+          </VStack>
+        </ListingAutoBidReveal>
+      </div>
     </VStack>
   );
 }
