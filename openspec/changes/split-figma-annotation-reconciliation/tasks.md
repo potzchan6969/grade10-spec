@@ -29,7 +29,7 @@ schema-version-2 observer and store contract are available in both repositories.
   `Only selected findings are accepted`, `Observation changed before
   acceptance`, and `Reconciliation verifies cleanly` pass independently for
   both scopes.
-- [ ] 1.4 Extend the no-write fixtures in
+- [x] 1.4 Extend the no-write fixtures in
   `scripts/design-sync/annotation-reconciliation.test.mjs` with one baseline
   containing both scopes; prove a spec snapshot cannot remove or orphan product
   entries, a product snapshot cannot remove or orphan spec entries, a mixed
