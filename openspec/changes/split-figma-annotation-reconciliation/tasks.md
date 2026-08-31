@@ -13,7 +13,7 @@ schema-version-2 observer and store contract are available in both repositories.
   entry, annotation key, association, or schema version, making `Annotation is
   outside registered surfaces` and `Accepted node no longer resolves` operate
   on one owning repository.
-- [ ] 1.2 Add `scripts/design-sync/annotation-inventory.mjs` and the
+- [x] 1.2 Add `scripts/design-sync/annotation-inventory.mjs` and the
   `figma:annotations:inventory` package script, returning schema-version-1 JSON
   with one requested scope, file metadata, flat registrations, and only the
   tracked node IDs derived from entries in that scope; cover duplicate source
