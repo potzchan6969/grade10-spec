@@ -19,7 +19,7 @@ schema-version-2 observer and store contract are available in both repositories.
   tracked node IDs derived from entries in that scope; cover duplicate source
   registrations, missing or conflicting scope, empty scope projections, and
   deterministic ordering in the design-sync suite before implementation.
-- [ ] 1.3 Require `--scope spec|product` in
+- [x] 1.3 Require `--scope spec|product` in
   `scripts/design-sync/annotation-cli.mjs`,
   `scripts/design-sync/annotation-diff.mjs`, and
   `scripts/design-sync/annotation-accept.mjs`; project comparison through
