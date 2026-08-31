@@ -123,6 +123,11 @@ test("creates a compact payload containing current affected page states only", (
     commitSha: "abc",
     commitUrl: "https://github.com/9gag/grade10-spec/commit/abc",
     index: INDEX,
+    mergedBranchName: "feat/product-list",
+    mergedBranchUrl:
+      "https://github.com/9gag/grade10-spec/compare/main...feat/product-list",
+    mergedPrTitle: "feat(store): add product list",
+    mergedPrUrl: "https://github.com/9gag/grade10-spec/pull/123",
     storybookUrl: "https://storybook.grade10-stg.com",
   });
 
@@ -130,7 +135,7 @@ test("creates a compact payload containing current affected page states only", (
     blocks: [
       {
         text: {
-          text: ":art: Storybook deployed · <https://github.com/9gag/grade10-spec/commit/abc|abc>",
+          text: ":art: Storybook deployed · <https://github.com/9gag/grade10-spec/commit/abc|abc> · <https://github.com/9gag/grade10-spec/pull/123|feat(store): add product list>",
           type: "mrkdwn",
         },
         type: "section",
@@ -142,6 +147,31 @@ test("creates a compact payload containing current affected page states only", (
         },
         type: "section",
       },
+      {
+        elements: [
+          {
+            text: "<https://github.com/9gag/grade10-spec/compare/main...feat/product-list|feat/product-list> → main",
+            type: "mrkdwn",
+          },
+        ],
+        type: "context",
+      },
     ],
+  });
+});
+
+test("omits merge metadata when it is unavailable", () => {
+  const payload = slackPayload({
+    affectedPages: ["apps/preview/src/pages/store.stories.tsx"],
+    index: INDEX,
+    storybookUrl: "https://storybook.grade10-stg.com",
+  });
+
+  assert.deepEqual(payload.blocks.at(-1), {
+    text: {
+      text: "• <https://storybook.grade10-stg.com/iframe.html?id=pages-store--default&viewMode=story|Pages/Store / Default>\n• <https://storybook.grade10-stg.com/iframe.html?id=pages-store--empty&viewMode=story|Pages/Store / Empty>",
+      type: "mrkdwn",
+    },
+    type: "section",
   });
 });

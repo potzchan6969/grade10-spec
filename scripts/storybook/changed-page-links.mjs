@@ -246,6 +246,10 @@ export function slackPayload({
   commitSha,
   commitUrl,
   index,
+  mergedBranchName,
+  mergedBranchUrl,
+  mergedPrTitle,
+  mergedPrUrl,
   storybookUrl,
 }) {
   const pages = new Set(affectedPages.map(storyPath));
@@ -257,6 +261,9 @@ export function slackPayload({
   const commit = commitUrl
     ? ` · <${commitUrl}|${commitSha?.slice(0, 7) ?? "commit"}>`
     : "";
+  const pullRequest = mergedPrTitle && mergedPrUrl
+    ? ` · <${mergedPrUrl}|${mergedPrTitle}>`
+    : "";
   const links = stories.map(
     (story) =>
       `• <${storybookUrl}/iframe.html?id=${story.id}&viewMode=story|${story.title} / ${story.name}>`,
@@ -264,10 +271,26 @@ export function slackPayload({
   return {
     blocks: [
       {
-        text: { text: `:art: Storybook deployed${commit}`, type: "mrkdwn" },
+        text: {
+          text: `:art: Storybook deployed${commit}${pullRequest}`,
+          type: "mrkdwn",
+        },
         type: "section",
       },
       ...textBlocks(links),
+      ...(mergedBranchName && mergedBranchUrl
+        ? [
+            {
+              elements: [
+                {
+                  text: `<${mergedBranchUrl}|${mergedBranchName}> → main`,
+                  type: "mrkdwn",
+                },
+              ],
+              type: "context",
+            },
+          ]
+        : []),
     ],
   };
 }
@@ -292,6 +315,10 @@ async function main() {
         default: "https://storybook.grade10-stg.com",
       },
       "commit-url": { type: "string" },
+      "merged-branch-name": { type: "string" },
+      "merged-branch-url": { type: "string" },
+      "merged-pr-title": { type: "string" },
+      "merged-pr-url": { type: "string" },
       "github-output": { type: "string" },
     },
   });
@@ -311,6 +338,10 @@ async function main() {
     commitSha: commitSha.trim(),
     commitUrl: values["commit-url"],
     index,
+    mergedBranchName: values["merged-branch-name"],
+    mergedBranchUrl: values["merged-branch-url"],
+    mergedPrTitle: values["merged-pr-title"],
+    mergedPrUrl: values["merged-pr-url"],
     storybookUrl: values["storybook-url"].replace(/\/$/, ""),
   });
 
