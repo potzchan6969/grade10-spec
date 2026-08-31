@@ -35,7 +35,7 @@ schema-version-2 observer and store contract are available in both repositories.
   entries, a product snapshot cannot remove or orphan spec entries, a mixed
   snapshot exits blocked, and cross-scope acceptance leaves the baseline and
   every related OpenSpec target byte-identical.
-- [ ] 1.5 Update `docs/governance/design-code-sync.md` with the ownership table,
+- [x] 1.5 Update `docs/governance/design-code-sync.md` with the ownership table,
   required command scope, shared-baseline concurrency behavior, and the rule
   that `packages/ui` belongs to `spec`; verify the group with `pnpm run
   test:design-sync`, `pnpm run lint`, `pnpm run typecheck`, and `git diff
