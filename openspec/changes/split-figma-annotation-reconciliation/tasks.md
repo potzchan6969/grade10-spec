@@ -41,7 +41,7 @@ schema-version-2 observer and store contract are available in both repositories.
   test:design-sync`, `pnpm run lint`, `pnpm run typecheck`, and `git diff
   --check`.
 
-## 2. Move the canonical workflow into the store (grade10-spec)
+## 2. Move the canonical workflow into the store (grade10-spec) (owner: @kinisworking)
 
 This group depends on group 1. It must preserve the observer behavior verified
 by `repair-figma-annotation-observation`; moving code is not permission to
