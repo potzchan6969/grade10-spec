@@ -26,6 +26,8 @@ If a statement is testable, it belongs in `openspec/specs/` and nowhere else. A 
 
 Read [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md) for the required maintenance lifecycle and a format-selection guide.
 
+Read [`docs/governance/design-system-workflows.md`](docs/governance/design-system-workflows.md) when you know the task but not the rail: it routes tokens, primitives, blocks, a page conversion, an audit finding, and the specification handoff to the command, skill, and governing document that own them, and records what each check does not cover.
+
 ## Product specification workflow
 
 Two workflow schemas exist under `openspec/schemas/`, both sharing the same proposal and spec templates. `full-planning` (the default: proposal → specs → design → ui → tasks) is for changes that carry their implementation plan here. `pm-planning` (proposal → specs) is for product planning that is complete once the requirements are specified — create one with `openspec new change <name> --schema pm-planning`. A change records its schema in its `.openspec.yaml` at creation.
