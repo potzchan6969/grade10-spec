@@ -50,7 +50,7 @@ update.
   update the portable adapter reference and skill guidance so `Human report is
   structured for reading`, `Actionable findings are reported`, and `A supported
   harness opens the annotation workflow` describe the schema-version-2 path.
-- [ ] 2.6 Verify the group with focused duplicate-registration,
+- [x] 2.6 Verify the group with focused duplicate-registration,
   overlapping-root, one-catalog-read, tracked-removal, inconsistent-node,
   unsupported-operation, report, and blocked-transport tests; run one read-only
   live registered-file capture in a single Plugin API invocation, materialize
