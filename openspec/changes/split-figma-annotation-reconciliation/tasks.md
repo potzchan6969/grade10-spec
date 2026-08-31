@@ -122,19 +122,19 @@ does not depend on an `external/grade10-spec` submodule bump.
 This group depends on all implementation groups. It is a read-only acceptance
 rehearsal; it must not select or accept findings.
 
-- [ ] 4.1 From `grade10`, resolve the standalone store and run one mixed fixture
+- [x] 4.1 From `grade10`, resolve the standalone store and run one mixed fixture
   through `figma:annotations:inventory`, observation, diff, and report once as
   `spec` and once as `product`; assert each run contains only its owning roots,
   tracked nodes, findings, and skipped roots, with zero cross-scope removals or
   orphans and unchanged stable IDs within each projection.
-- [ ] 4.2 Use the live read-only Figma Plugin API in two independent captures
+- [x] 4.2 Use the live read-only Figma Plugin API in two independent captures
   sourced from the same current baseline: invoke the `grade10-spec` skill for
   `spec`, then the `grade10` skill for `product`; preserve one category-catalog
   read per file, complete bodies and evidence, no mixed roots, and exit
   `0`/`1` rather than blocked when evidence is complete. Record counts and
   blockers, discard both temporary snapshots, and perform no acceptance or Git
   write.
-- [ ] 4.3 Re-run `pnpm run test:design-sync`, `pnpm run agent:check-parity`,
+- [x] 4.3 Re-run `pnpm run test:design-sync`, `pnpm run agent:check-parity`,
   `pnpm run lint`, and `pnpm run typecheck` in `grade10-spec`; re-run `pnpm run
   agent:check-parity`, `pnpm run lint`, and `pnpm run typecheck` in `grade10`;
   inspect both diffs and confirm only the plan's named paths changed before
