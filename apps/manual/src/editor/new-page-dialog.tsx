@@ -181,7 +181,7 @@ export function NewPageDialog({
             Cancel
           </Button>
           <Button
-            disabled={problem !== null || store?.readOnly !== null}
+            disabled={problem !== null}
             loading={busy}
             onClick={create}
             size="sm"

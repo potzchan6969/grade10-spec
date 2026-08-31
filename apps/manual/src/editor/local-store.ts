@@ -80,12 +80,7 @@ export async function probeLocalStore(
 }
 
 export class LocalStore implements ContentStore {
-  readonly kind = "local" as const;
   readonly label = "Dev server — writes straight to the working tree";
-  readonly readOnly = null;
-  /** The dev server writes as whoever is at the keyboard; a proposal asks for
-   * the handle it should carry rather than guessing at one. */
-  readonly author = null;
 
   private readonly http: typeof fetch;
 

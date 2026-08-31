@@ -161,16 +161,15 @@ directive on this page renders as text instead of as a block: inside a fence,
 
 ## Saving
 
-Running the manual locally, a commit bar appears as soon as the working tree has
-manual edits; pressing it stages `manual/` and commits. On the hosted site you
-sign in with GitHub once, from settings — no tokens to mint, nothing to approve.
-Saves commit straight to main — the deploy listens on push, so your save is
-live in about a minute, and the header tells you when the site is behind main
-or a deploy failed. Without a sign-in the site is read-only.
+The block editor only saves when the manual is running locally (`pnpm dev`):
+a commit bar appears as soon as the working tree has manual edits, and
+pressing it stages `manual/` and commits. Push and open a PR like any other
+change in the repo. The hosted site is a static build of the store and is
+always read-only.
 
-Each read carries a version — a content hash locally, the blob SHA on GitHub.
-If somebody saved before you, you get their version and yours side by side
-rather than a silent overwrite.
+Each read carries a version — a content hash of the file. If somebody saved
+before you, you get their version and yours side by side rather than a
+silent overwrite.
 
 ## What the check enforces
 

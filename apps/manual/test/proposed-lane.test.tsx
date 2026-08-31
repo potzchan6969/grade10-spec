@@ -24,7 +24,7 @@ const SPEC = "demo-product/alpha";
 
 const held = vi.hoisted(() => ({
   index: undefined as unknown,
-  session: { store: null as unknown, kind: "github" as string },
+  session: { store: null as unknown },
 }));
 
 vi.mock("../src/api/use-manual-index", () => ({
@@ -80,10 +80,7 @@ function snapshot(changes: ChangeEntry[]): Snapshot {
 
 function render(
   changes: ChangeEntry[],
-  session: { store: unknown; kind: string } = {
-    store: { readOnly: null, author: "echo" },
-    kind: "github",
-  },
+  session: { store: unknown } = { store: {} },
 ): string {
   held.index = buildIndex(snapshot(changes));
   held.session = session;
@@ -157,31 +154,12 @@ describe("the proposed lane", () => {
 });
 
 describe("who may withdraw one", () => {
-  it("offers it to the author", () => {
+  it("offers it to whoever is at the dev server's keyboard", () => {
     expect(render([proposal])).toContain("Withdraw");
   });
 
-  it("offers it to nobody else", () => {
-    const html = render([proposal], {
-      store: { readOnly: null, author: "someone" },
-      kind: "github",
-    });
-    expect(html).not.toContain("Withdraw");
-  });
-
-  it("offers it to whoever is at the dev server's keyboard", () => {
-    const html = render([proposal], {
-      store: { readOnly: null, author: null },
-      kind: "local",
-    });
-    expect(html).toContain("Withdraw");
-  });
-
-  it("offers it to nobody who cannot write", () => {
-    const html = render([proposal], {
-      store: { readOnly: "no token", author: "echo" },
-      kind: "github",
-    });
+  it("offers it to nobody when no store is answering", () => {
+    const html = render([proposal], { store: null });
     expect(html).not.toContain("Withdraw");
   });
 });

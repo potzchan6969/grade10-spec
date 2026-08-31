@@ -22,7 +22,7 @@ const delta = (requirements: Delta["requirements"] = []): Delta => ({
 
 const held = vi.hoisted(() => ({
   index: undefined as unknown,
-  session: { store: null as unknown, kind: "github" as string },
+  session: { store: null as unknown },
   archive: { status: "loading" } as unknown,
 }));
 
@@ -70,7 +70,7 @@ function snapshot(changes: ChangeEntry[]): Snapshot {
 
 function render(changes: ChangeEntry[], archived: ChangeEntry[] = []): string {
   held.index = buildIndex(snapshot(changes));
-  held.session = { store: { readOnly: null, author: "echo" }, kind: "github" };
+  held.session = { store: {} };
   held.archive =
     archived.length > 0
       ? {

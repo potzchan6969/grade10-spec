@@ -11,7 +11,6 @@ export function EditorChrome({
   problemCount,
   saving,
   canSave,
-  stages,
   onSave,
   onCancel,
   onDelete,
@@ -21,9 +20,6 @@ export function EditorChrome({
   problemCount: number;
   saving: boolean;
   canSave: boolean;
-  /** Hosted: this save stages a draft in the browser and pushes nothing, so
-   * the button says which of the two it is. */
-  stages?: boolean;
   onSave: () => void;
   onCancel: () => void;
   onDelete?: () => void;
@@ -37,7 +33,6 @@ export function EditorChrome({
           </Text>
           <Text as="p" className="truncate" size="xs" tone="secondary">
             {store?.label ?? "Looking for a store…"}
-            {stages ? " · staged in this browser until Push all" : null}
           </Text>
         </div>
 
@@ -71,7 +66,7 @@ export function EditorChrome({
           type="button"
           variant="default"
         >
-          {stages ? "Save draft" : "Save"}
+          Save
         </Button>
       </div>
     </div>

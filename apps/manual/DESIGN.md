@@ -3,7 +3,9 @@
 A product manual for the whole platform, served as a web app. PM, designers,
 QA, and engineers read the same pages: human-first prose up top, specs,
 in-flight changes, and visuals embedded as blocks. Pages are editable in the
-browser; every edit lands in git, because git is the only state this app has.
+browser when the manual is running locally, and every edit lands in git,
+because git is the only state this app has. The hosted deployment is
+always a plain static build — read-only, nothing more.
 
 The app never restates a fact that lives elsewhere. Requirements come from
 `openspec/specs`, progress from `tasks.md` checkboxes, visuals from Figma,
@@ -257,96 +259,42 @@ Two transports, one client code path:
 
 ## Editing
 
+The manual is edited locally only: `pnpm dev` runs a Vite plugin that
+answers the `/api/*` endpoints above, confined to `manual/`, and that
+presence is the only thing that turns editing on. The built, deployed site
+has no dev server behind it, so `useEditorSession` finds no store, and
+every editor surface — the Edit button, Propose, New page, asset upload —
+hides itself rather than rendering read-only. Nothing about the hosted
+site changes for this: it is a static build of the store, same as it was
+before any of this existed.
+
 The editor is block-level, not a rich-text surface. Edit mode turns each
 block into a card: prose gets a textarea with live preview, other blocks a
 form for their attributes; blocks can be added, reordered, deleted.
-Frontmatter is a form. Save serializes to canonical text and hands it to the
-active `ContentStore`:
+Frontmatter is a form. Save serializes to canonical text and hands it to
+the one `ContentStore`, `LocalStore`:
 
 ```
 read(path)                            -> { source, version }
 write(path, source, baseVersion)      -> ok | conflict { current }
-                                         dev only: the working tree is the stage
-push(files: [{path, source, baseVersion}])
-                                      -> ok | conflicts [{path, current}]
-                                         hosted: the staged set, one commit
 writeBinary(path, bytes, baseVersion?) -> same as write
-commit(message)                       -> dev only
+dirty() / commit(message)             -> the working tree's status, and landing it
 propose(files) / withdraw(id)         -> their own atomic commits, never staged
 ```
 
-`version` is a content hash in dev and the blob SHA on GitHub — it is what
-turns two concurrent editors into a rendered conflict diff instead of a
-silent overwrite. Asset uploads stay immediate in both transports: a
-binary draft has no diff to review and no place in localStorage.
-
-Saving never pushes. Everywhere, a save stages a draft, and a person
-decides when everything staged becomes one commit — the same rhythm in
-both transports:
-
-- `LocalStore` (dev): a save writes the working tree; the commit bar
-  appears once the tree has manual edits and commits them all.
-- `GithubStore` (hosted): a save stages the draft in the browser
-  (localStorage, keyed by path, holding the canonical text and the blob
-  version it was read at — a reload keeps it, and the page renders its
-  draft with a visible draft marker). A pending bar lists every staged
-  page with discard per page; **Push all** turns the whole set into ONE
-  atomic Trees-API commit: read the target head, compare every draft's
-  base version against that head's blobs — any page that moved renders
-  the existing side-by-side conflict, and nothing at all is written —
-  then tree → commit → a non-forced ref move, retried once if the ref
-  advanced mid-flight. One push, one deploy.
-
-The hosted store is signed into, not configured: nobody mints or pastes
-anything. A GitHub App is installed on the repository once, and
-`worker/auth.ts` — the one dynamic corner of an otherwise static site,
-reached only at `/auth/*` via `run_worker_first` — holds the app secret
-and does the OAuth exchanges the browser cannot: authorization code for
-a user token at sign-in, refresh token for the next one as it expires.
-The token lands in this browser only; the session renews it before a
-push when it is near its end (`editor/auth.ts`), and every sign-in is
-still verified before it counts: `/user` and a contents read of the
-repo, read-only until both pass, each failure naming its real cause —
-the app-not-installed 404 included. The verdict (login, expiry) is
-cached keyed to a fingerprint of the token, so a reload does not
-re-probe, and the first 401 tears it up. Read-only without a sign-in —
-but the propose control stays visible, wearing a lock and pointing at
-settings: hiding it hid the whole loop from the people who had not
-started it. A deployment whose app is not yet registered says so in
-settings (`/auth/config`) instead of showing a door that cannot open.
-
-There is one write mode: every read and every Push all is the base
-branch, and the deploy listens on push, so the batch is live in about a
-minute. The app's Contents permission is all a save needs; Actions read
-additionally lets the header show the last deploy's conclusion. A push
-refused by branch protection surfaces the refusal as a rule an admin has
-to lift — the editor never falls back to a branch, because an edit
-parked on a branch nobody reviews is how a save quietly becomes a lie.
-Raw HTML stays off in the renderer — that is the XSS line a browser-held
-token sits behind; writing straight to
-the base branch is why the deploy workflow notifies on failure and the
-header shows deployed `storeHead` against live main with the last
-deploy's conclusion, so a frozen site is visible in the tool itself.
-
-Others' pushes reach you, not just your push failing: while the tab is
-visible the app re-asks the live head on an interval and on every
-return of focus (with a token; tokenless readers ask only on focus —
-unauthenticated rate limits are 60 an hour). When the head moves, the
-health strip says so, and every staged draft is checked against the
-moved head — a page that changed under your draft is marked on the
-pending bar before you ever push, not discovered inside the conflict.
-Polling stops while the tab is hidden; nothing notifies a tab nobody
-is looking at.
+`version` is a content hash of the file — what turns two concurrent editors
+into a rendered conflict diff instead of a silent overwrite. A save writes
+the working tree directly; the commit bar appears once the tree has manual
+edits and commits them all in one go.
 
 Staging validates client-side what the snapshot can prove: canonical
-form, spec and scenario ids, image paths against `assets`, and that the
-batch does not drop a durable spec's last page reference — judged over
-the whole staged set, not one file at a time. Story ids stay a
+form, spec and scenario ids, image paths against `assets`, and that a
+save does not drop a durable spec's last page reference. Story ids stay a
 build-side check — the browser cannot see the Storybook index, and does
 not pretend to.
 
 New pages are created from the editor (path picker constrained to the
-`manual/` tree); deleting a page is a dev-mode-only action.
+`manual/` tree); deleting a page is offered the same way.
 
 Any requirement row or page header can propose a change: the browser
 drafts `openspec/changes/<slug>/` with exactly what the pm-planning
@@ -360,11 +308,10 @@ status, badges no row, and bumps no nav count — it lands in the
 planning page's "Proposed" lane (the `proposed` lane of the four-lane
 derivation: no deltas yet), and the capabilities its `## References`
 cite can show it as a proposal before any delta exists. The write is one
-atomic commit (Trees API on GitHub, a confined
-endpoint in dev) behind an exact path allowlist that admits only a new
-change directory's own files — never `archive`, never an existing slug,
-never a durable spec — and the proposer can withdraw their own proposal
-from the browser.
+atomic commit through the dev server's confined endpoint, behind an
+exact path allowlist that admits only a new change directory's own files
+— never `archive`, never an existing slug, never a durable spec — and
+the proposer can withdraw their own proposal from the browser.
 
 ## App
 
@@ -379,10 +326,9 @@ src/
   store/*.mts                   node-only store readers + vite plugin
   api/                          artifact fetch + types + derivations
   blocks/                       one component per block type, registry
-  editor/                       block editor, ContentStore port + adapters
+  editor/                       block editor, ContentStore port + LocalStore
   pages/                        Home, Product, Capability, Planning, Guide, Recent, Page
   shell/                        nav sidebar, header, search, recent bell, theme toggle
-worker/auth.ts                  the /auth/* sign-in worker (see Editing)
 test/                           grammar round-trip table, reader fixtures
 ```
 
@@ -430,8 +376,7 @@ The header carries a bell against `/recent`: the badge counts events newer
 than the marker this reader last stored, capped at 9+, and a reader with no
 marker yet gets the newest date written silently rather than a badge
 shouting the whole feed. Browser state is small and named once, in the
-`STORAGE` registry (`editor/config.ts`) — the token, its verdict and its
-renewal, the staged drafts, the propose handle, the answered
+`STORAGE` registry (`editor/config.ts`) — the propose handle, the answered
 first-visit card (`manual.welcome`) and that seen marker
 (`manual.recent.seen`). Every read and write of it tolerates storage being
 switched off: a reader who cannot remember simply sees the card again and

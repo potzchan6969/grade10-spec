@@ -8,12 +8,11 @@ import {
   DialogContent,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { useSnapshotReload } from "../api/snapshot-provider";
 import type { SpecEntry } from "../api/types";
 import { useManualIndex } from "../api/use-manual-index";
-import { REPO } from "./config";
 import { TextArea, TextField } from "./fields";
 import {
   type Citable,
@@ -27,24 +26,19 @@ import {
   today,
 } from "./propose";
 import {
-  ensureFreshSession,
   noteWrite,
   rememberedHandle,
   rememberHandle,
   useEditorSession,
 } from "./session";
-import { openSettings } from "./settings-open";
 import { describeCause } from "./store";
 
 /**
  * Proposing a change from the page you are reading. What lands is a proposal
  * and nothing else — the title, the proposer's own words, the ids it touches
  * and the frame it is arguing with — because the delta is what the discussion
- * after this is for.
- *
- * A read-only session sees all of it, and the one line that says what access
- * it would take. The picker reaches every spec in the store: an idea crosses
- * capabilities far more often than a page does.
+ * after this is for. The picker reaches every spec in the store: an idea
+ * crosses capabilities far more often than a page does.
  */
 
 const KIND_TONE: Record<
@@ -72,7 +66,7 @@ export function ProposeDialog({
    * the proposer is warned about. */
   spec?: SpecEntry;
 }) {
-  const { store, kind } = useEditorSession();
+  const { store } = useEditorSession();
   const index = useManualIndex();
   const reload = useSnapshotReload();
   const navigate = useNavigate();
@@ -86,26 +80,6 @@ export function ProposeDialog({
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const locked = store?.readOnly ?? null;
-
-  // The author line names a person, so the hosted store asks GitHub who the
-  // token belongs to rather than letting anyone type someone else's handle.
-  useEffect(() => {
-    if (!open || kind !== "github" || locked || !store?.identity) return;
-    let live = true;
-    store
-      .identity()
-      .then((login) => {
-        if (live) setAuthor(login);
-      })
-      .catch((cause: unknown) => {
-        if (live) setError(describeCause(cause));
-      });
-    return () => {
-      live = false;
-    };
-  }, [open, kind, locked, store]);
 
   const effective = slug.trim() === "" ? slugOf(title) : slug.trim();
   const draft = {
@@ -133,15 +107,10 @@ export function ProposeDialog({
     if (problem || !store) return;
     setBusy(true);
     setError(null);
-    // A renewal may swap the store out from under this closure, so the push
-    // asks for the session as it stands once the sign-in is fresh.
-    ensureFreshSession()
-      .then((session) => {
-        if (!session.store) throw new Error("no store is answering");
-        return session.store.propose(draftProposal(draft));
-      })
+    store
+      .propose(draftProposal(draft))
       .then(({ id }) => {
-        if (kind === "local") rememberHandle(draft.author);
+        rememberHandle(draft.author);
         noteWrite();
         reload();
         onOpenChange(false);
@@ -164,22 +133,16 @@ export function ProposeDialog({
           A proposal is the reason for a change and the ids it touches. No
           delta, no task list — that is what the discussion is for.
         </Text>
-        {locked ? (
-          <LockedNote onSettings={() => onOpenChange(false)} reason={locked} />
-        ) : null}
-
         <div className="flex max-h-[60vh] flex-col gap-3 overflow-y-auto *:shrink-0">
           <TextField label="title" onChange={setTitle} required value={title} />
           <TextArea label="why" onChange={setWhy} rows={5} value={why} />
-          {kind === "local" || locked ? (
-            <TextField
-              hint="Whose proposal this is; the author line carries it"
-              label="your GitHub handle"
-              onChange={setAuthor}
-              required
-              value={author}
-            />
-          ) : null}
+          <TextField
+            hint="Whose proposal this is; the author line carries it"
+            label="your GitHub handle"
+            onChange={setAuthor}
+            required
+            value={author}
+          />
           <TextField
             hint="Optional: the frame this is arguing with"
             label="Figma link"
@@ -276,9 +239,7 @@ export function ProposeDialog({
         </div>
 
         <Text as="p" size="xs" tone="secondary">
-          {kind === "local"
-            ? "Lands in the working tree; commit it with the rest of your edits."
-            : `Lands on ${REPO.defaultBranch}, and shows on Planning as soon as the deploy runs.`}
+          Lands in the working tree; commit it with the rest of your edits.
         </Text>
         {problem && started ? (
           <Text as="p" className="text-destructive" size="xs">
@@ -301,7 +262,7 @@ export function ProposeDialog({
             Cancel
           </Button>
           <Button
-            disabled={problem !== null || locked !== null}
+            disabled={problem !== null}
             loading={busy}
             onClick={propose}
             size="sm"
@@ -312,40 +273,6 @@ export function ProposeDialog({
         </div>
       </DialogContent>
     </Dialog>
-  );
-}
-
-/** The door is visible, and this is what is behind the lock. One line: what
- * proposing does, what it takes, and where to put it. */
-function LockedNote({
-  reason,
-  onSettings,
-}: {
-  reason: string;
-  onSettings: () => void;
-}) {
-  return (
-    <div className="rounded-(--radius-xl) border border-border-subtle bg-muted px-3 py-2">
-      <Text as="p" size="xs">
-        Proposing writes a new change to {REPO.owner}/{REPO.repo} — the reason
-        and the ids it touches, nothing more. It takes a GitHub sign-in, which
-        starts in{" "}
-        <button
-          className="cursor-pointer underline hover:text-foreground"
-          onClick={() => {
-            onSettings();
-            openSettings();
-          }}
-          type="button"
-        >
-          Settings
-        </button>
-        .
-      </Text>
-      <Text as="p" className="mt-1" size="xs" tone="secondary">
-        {reason}
-      </Text>
-    </div>
   );
 }
 

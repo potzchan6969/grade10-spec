@@ -16,20 +16,17 @@ import {
   PAGE_ID,
   type Problems,
 } from "./draft";
-import { draftStore } from "./drafts";
 import { useEditMode } from "./edit-mode";
 import { EditorChrome } from "./editor-chrome";
 import { FrontmatterForm } from "./frontmatter-form";
 import { savePage } from "./save";
 import { noteWrite, useEditorSession } from "./session";
-import { SettingsDialog } from "./settings-dialog";
 import { describeCause, type Version } from "./store";
 import { checkReferences, REFERENCE_ID } from "./validate";
 
 /**
- * Edit mode for one page. It opens the staged draft when there is one, and
- * otherwise reads the page from the store — never from the snapshot — so the
- * version it holds is the version the push later writes against, and two
+ * Edit mode for one page. It reads from the store, never from the snapshot,
+ * so the version it holds is the version a save writes against, and two
  * editors become a rendered conflict.
  */
 
@@ -49,18 +46,8 @@ export function PageEditor({ path }: { path: string }) {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [conflict, setConflict] = useState<Conflict | null>(null);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [leaving, setLeaving] = useState(false);
-
-  const readOnly = store?.readOnly ?? null;
-  const stages = store?.push !== undefined;
-  // A store that cannot write cannot always read either, so a read-only
-  // editor shows what the snapshot already has. A writable one never does:
-  // the version it saves against has to come from the store itself.
-  const fallback = readOnly
-    ? (index.pageByPath.get(path)?.entry.source ?? null)
-    : null;
 
   useEffect(() => {
     if (!store) return;
@@ -69,18 +56,8 @@ export function PageEditor({ path }: { path: string }) {
     setLoaded(null);
     setFailure(null);
 
-    // A staged draft is what this page is right now, and it already carries
-    // the version it was read at — opening it asks the network nothing. Read
-    // it outside the subscription: staging is what a save does, and a save
-    // must not re-open the editor over itself.
-    const staged = draftStore().read().byPath.get(path);
-    const read: Promise<{ source: string; version: Version | null }> = staged
-      ? Promise.resolve({ source: staged.source, version: staged.baseVersion })
-      : fallback === null
-        ? store.read(path)
-        : Promise.resolve({ source: fallback, version: null });
-
-    read
+    store
+      .read(path)
       .then((file) => {
         if (!live) return;
         setLoaded({
@@ -97,7 +74,7 @@ export function PageEditor({ path }: { path: string }) {
     return () => {
       live = false;
     };
-  }, [store, path, fallback]);
+  }, [store, path]);
 
   if (failure) {
     return (
@@ -133,7 +110,7 @@ export function PageEditor({ path }: { path: string }) {
     : NO_PROBLEMS;
   const problems = build.ok ? references : build.problems;
   const changed = build.ok ? build.source !== loaded.source : true;
-  const canSave = build.ok && references.size === 0 && !readOnly && !saving;
+  const canSave = build.ok && references.size === 0 && !saving;
 
   const setDraft = (draft: Draft) =>
     setLoaded((current) => (current ? { ...current, draft } : current));
@@ -149,12 +126,8 @@ export function PageEditor({ path }: { path: string }) {
         return;
       }
       setConflict(null);
-      // A staged draft is already what the app renders; only a write to the
-      // working tree changes what the snapshot would say.
-      if (outcome.status === "ok") {
-        noteWrite();
-        reload();
-      }
+      noteWrite();
+      reload();
       exit();
     } catch (cause) {
       console.error(`manual: saving ${path} failed`, cause);
@@ -182,7 +155,7 @@ export function PageEditor({ path }: { path: string }) {
   };
 
   const remove = async () => {
-    if (!store.deletePage || !loaded.version) return;
+    if (!loaded.version) return;
     setSaving(true);
     try {
       await store.deletePage(path, loaded.version);
@@ -208,35 +181,13 @@ export function PageEditor({ path }: { path: string }) {
       <EditorChrome
         canSave={canSave}
         onCancel={cancel}
-        onDelete={
-          store.deletePage && loaded.version
-            ? () => setDeleting(true)
-            : undefined
-        }
+        onDelete={loaded.version ? () => setDeleting(true) : undefined}
         onSave={() => save(loaded.version)}
         path={path}
         problemCount={problems.size}
         saving={saving}
-        stages={stages}
         store={store}
       />
-
-      {readOnly ? (
-        <Notice title="Read-only" tone="warning">
-          <Text as="p" size="sm" tone="secondary">
-            {readOnly}
-          </Text>
-          <Button
-            className="mt-3"
-            onClick={() => setSettingsOpen(true)}
-            size="sm"
-            type="button"
-            variant="outline"
-          >
-            Add a token
-          </Button>
-        </Notice>
-      ) : null}
 
       {saveError ? (
         <Notice title="The store refused this save" tone="error">
@@ -311,7 +262,6 @@ export function PageEditor({ path }: { path: string }) {
         open={leaving}
         title="Leave edit mode?"
       />
-      <SettingsDialog onOpenChange={setSettingsOpen} open={settingsOpen} />
     </div>
   );
 }

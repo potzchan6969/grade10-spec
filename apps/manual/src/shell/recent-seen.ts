@@ -1,6 +1,5 @@
 import type { HistoryEvent } from "../api/types";
-import { STORAGE } from "../editor/config";
-import { browserKeyStore } from "../editor/github-store";
+import { browserKeyStore, STORAGE } from "../editor/config";
 
 /** How much of the store has moved since this reader last looked. The marker
  * is the newest event date they have seen; a browser that cannot remember one

@@ -43,7 +43,7 @@ export function AssetUpload({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const disabled = !store || store.readOnly !== null;
+  const disabled = !store;
 
   return (
     <div className="flex flex-col gap-1">
