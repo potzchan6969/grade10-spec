@@ -259,7 +259,11 @@ export function slackPayload({
     .filter((entry) => entry.type === "story" && pages.has(entry.importPath))
     .map((entry) => ({
       ...entry,
-      status: changedPaths.get(entry.importPath.replace(/^\./, "apps/preview")) === "A" ? "🆕" : "",
+      status:
+        changedPaths.get(entry.importPath.replace(/^\./, "apps/preview")) ===
+        "A"
+          ? "🆕"
+          : "",
     }));
   const states = [...stories, ...removedStories];
   if (!states.length) return { blocks: [] };
@@ -267,9 +271,8 @@ export function slackPayload({
   const commit = commitUrl
     ? ` · <${commitUrl}|${commitSha?.slice(0, 7) ?? "commit"}>`
     : "";
-  const pullRequest = mergedPrTitle && mergedPrUrl
-    ? ` · <${mergedPrUrl}|${mergedPrTitle}>`
-    : "";
+  const pullRequest =
+    mergedPrTitle && mergedPrUrl ? ` · <${mergedPrUrl}|${mergedPrTitle}>` : "";
   const groups = new Map();
   for (const story of states) {
     const [root = "Stories", ...path] = story.title.split("/");
@@ -277,10 +280,10 @@ export function slackPayload({
     const item = story.id
       ? `<${storybookUrl}/iframe.html?id=${story.id}&viewMode=story|${label}>`
       : label;
-    groups.set(
-      root,
-      [...(groups.get(root) ?? []), `  • ${item}${story.status ? ` ${story.status}` : ""}`],
-    );
+    groups.set(root, [
+      ...(groups.get(root) ?? []),
+      `  • ${item}${story.status ? ` ${story.status}` : ""}`,
+    ]);
   }
   const links = [...groups]
     .sort(([left], [right]) => left.localeCompare(right))
@@ -360,10 +363,13 @@ async function deletedStoryStates(base, changed) {
           }
           if (
             ts.isVariableStatement(node) &&
-            node.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)
+            node.modifiers?.some(
+              (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword,
+            )
           ) {
             for (const declaration of node.declarationList.declarations) {
-              if (ts.isIdentifier(declaration.name)) names.push(declaration.name.text);
+              if (ts.isIdentifier(declaration.name))
+                names.push(declaration.name.text);
             }
           }
           ts.forEachChild(node, visit);
