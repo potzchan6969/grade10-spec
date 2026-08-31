@@ -2,7 +2,7 @@ Implementation starts only after
 `repair-figma-annotation-observation` task 2.6 is complete and its verified
 schema-version-2 observer and store contract are available in both repositories.
 
-## 1. Add repository-scoped store interfaces (grade10-spec)
+## 1. Add repository-scoped store interfaces (grade10-spec) (owner: @kinisworking)
 
 - [ ] 1.1 Create `scripts/design-sync/annotation-scope.mjs` with the fixed
   `spec | product` vocabulary, same-node scope agreement, entry-to-root scope
