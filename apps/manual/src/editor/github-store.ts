@@ -1,11 +1,5 @@
 import { dirOf } from "../api/paths";
-import {
-  BRANCH_PREFIX,
-  DEFAULT_WRITE_MODE,
-  REPO,
-  STORAGE,
-  type WriteMode,
-} from "./config";
+import { REPO } from "./config";
 import {
   type Answer,
   encodePath,
@@ -43,15 +37,10 @@ import {
 import { forgetVerdict, readVerdict, type TokenVerdict } from "./verify";
 
 /**
- * The hosted transport, in one of two modes chosen in settings.
- *
- * `main` pushes the base branch the deploy listens on, so a push is live in
- * about a minute; nothing branches and nothing is proposed. `branch` pushes
- * `manual/<login>` and keeps its pull request open, so edits never rot on an
- * unopened branch.
- *
- * The mode picks the ref for read and write together: a main-mode session
- * never loads a leftover personal branch and calls it main.
+ * The hosted transport. Every read and every write is the base branch the
+ * deploy listens on: a push is live in about a minute, nothing branches, and
+ * nothing is proposed for review — the health strip and the freshness checks
+ * are what keep that honest.
  */
 
 export type KeyStore = {
@@ -84,22 +73,12 @@ export const browserKeyStore: KeyStore = {
   },
 };
 
-function needs(mode: WriteMode): string {
-  return mode === "main"
-    ? "contents:write"
-    : "contents:write and pull_requests:write";
-}
-
-function noToken(mode: WriteMode): string {
-  return `Read-only: no GitHub token. Add a fine-grained token with ${needs(mode)} in Settings to save.`;
-}
+const NO_TOKEN = `Read-only: no GitHub token. Add a fine-grained token with contents:write in Settings to save.`;
 
 /** A token nobody has checked is a string. Saving it in Settings asks GitHub
  * who it belongs to and whether it reaches this repo, and write mode waits
  * for both answers rather than finding out inside someone's first save. */
-function unverified(mode: WriteMode): string {
-  return `Read-only: this GitHub token has not been checked. Open Settings and save it again — it needs ${needs(mode)} on ${REPO.owner}/${REPO.repo}.`;
-}
+const UNVERIFIED = `Read-only: this GitHub token has not been checked. Open Settings and save it again — it needs contents:write on ${REPO.owner}/${REPO.repo}.`;
 
 /** A push GitHub refused on a rule rather than on the blob sha in hand.
  * A sha mismatch never reads like this, so it stays a conflict. */
@@ -112,16 +91,14 @@ const FAST_FORWARD = /fast[ -]forward/i;
 
 export type GithubStoreOptions = {
   token: string | null;
-  mode?: WriteMode;
   http?: typeof fetch;
   storage?: KeyStore;
-  /** Called when the login or the pull request URL becomes known. */
+  /** Called when the verdict this session holds changes. */
   onChange?: () => void;
 };
 
 export class GithubStore implements ContentStore {
   readonly kind = "github" as const;
-  readonly mode: WriteMode;
 
   private readonly token: string | null;
   private readonly http: typeof fetch;
@@ -129,50 +106,31 @@ export class GithubStore implements ContentStore {
   private readonly onChange: () => void;
   private login: string | null;
   private verdict: TokenVerdict | null;
-  private pr: string | null;
   private asking: Promise<string> | null = null;
-  private prepared: Promise<string> | null = null;
-  private opening: Promise<void> | null = null;
-  private branchReset = false;
 
   constructor(options: GithubStoreOptions) {
     this.token = options.token;
-    this.mode = options.mode ?? DEFAULT_WRITE_MODE;
     this.http = options.http ?? fetch;
     this.storage = options.storage ?? browserKeyStore;
     this.onChange = options.onChange ?? (() => {});
     this.verdict = readVerdict(this.storage, this.token);
-    // Verification already asked GitHub who this is, so the author line, the
-    // branch name and the withdraw guard all read it from there rather than
-    // asking again.
+    // Verification already asked GitHub who this is, so the author line and
+    // the withdraw guard read it from there rather than asking again.
     this.login = this.verdict?.login ?? null;
-    this.pr = this.storage.get(STORAGE.pr);
   }
 
   get label(): string {
-    const where =
-      this.mode === "main"
-        ? REPO.defaultBranch
-        : this.login
-          ? `${BRANCH_PREFIX}${this.login}`
-          : "a branch";
-    return `GitHub — ${REPO.owner}/${REPO.repo}, ${where}`;
+    return `GitHub — ${REPO.owner}/${REPO.repo}, ${REPO.defaultBranch}`;
   }
 
   get readOnly(): string | null {
-    if (!this.token) return noToken(this.mode);
-    return this.verdict ? null : unverified(this.mode);
+    if (!this.token) return NO_TOKEN;
+    return this.verdict ? null : UNVERIFIED;
   }
 
   /** What GitHub said about this token, once it has said it. */
   get verified(): TokenVerdict | null {
     return this.verdict;
-  }
-
-  /** A main-mode save has no pull request, and the remembered one belongs to
-   * another mode's edits. */
-  get reviewUrl(): string | null {
-    return this.mode === "main" ? null : this.pr;
   }
 
   /** The handle this session already learned, asking GitHub nothing. */
@@ -185,8 +143,8 @@ export class GithubStore implements ContentStore {
   }
 
   async read(path: string): Promise<StoredFile> {
-    if (!this.token) throw new StoreError(401, noToken(this.mode));
-    const answer = await this.readFrom(path);
+    if (!this.token) throw new StoreError(401, NO_TOKEN);
+    const answer = await this.contents(path, REPO.defaultBranch);
     if (answer.status !== 200)
       throw this.failure(answer, `cannot read ${path}`);
 
@@ -195,15 +153,6 @@ export class GithubStore implements ContentStore {
       throw new StoreError(answer.status, `${path} is not a readable file`);
     }
     return { source: textFromBase64(body.content), version: body.sha };
-  }
-
-  /** Main mode reads the base branch and only the base branch. Branch mode
-   * prefers the author's own, falling back to a file it does not carry. */
-  private async readFrom(path: string): Promise<Answer> {
-    if (this.mode === "main") return this.contents(path, REPO.defaultBranch);
-    const branch = `${BRANCH_PREFIX}${await this.whoami()}`;
-    const onBranch = await this.contents(path, branch);
-    return onBranch.status === 404 ? this.contents(path) : onBranch;
   }
 
   async writeBinary(
@@ -216,7 +165,7 @@ export class GithubStore implements ContentStore {
   }
 
   /**
-   * The staged set, as one commit on the ref this mode writes.
+   * The staged set, as one commit on the base branch.
    *
    * Reading the head first is what makes it atomic in the only sense that
    * matters here: every draft's base version is checked against that head
@@ -227,13 +176,11 @@ export class GithubStore implements ContentStore {
    * is moving faster than that.
    */
   async push(files: PushFile[], message: string): Promise<PushOutcome> {
-    if (!this.token) throw new StoreError(401, noToken(this.mode));
+    if (!this.token) throw new StoreError(401, NO_TOKEN);
     for (const file of files) assertManualPath(file.path);
     if (files.length === 0) throw new StoreError(400, "nothing is staged");
 
-    const main = this.mode === "main";
-    const branch = main ? REPO.defaultBranch : await this.ensureBranch();
-
+    const branch = REPO.defaultBranch;
     for (let attempt = 0; attempt < 2; attempt += 1) {
       const head = await this.headOf(branch);
       const conflicts = await this.mismatches(files, head);
@@ -245,7 +192,6 @@ export class GithubStore implements ContentStore {
         message,
       );
       if ((await this.moveRef(branch, sha)) === "ok") {
-        if (!main) await this.ensurePullRequest(branch);
         return { status: "ok", head: sha };
       }
     }
@@ -256,31 +202,14 @@ export class GithubStore implements ContentStore {
     );
   }
 
-  /** Which staged pages changed on the ref a push lands on. The same question
-   * the push asks itself, asked in the background so the answer arrives before
+  /** Which staged pages changed on the base branch. The same question the
+   * push asks itself, asked in the background so the answer arrives before
    * the push does. */
   async movedSince(files: StagedRef[]): Promise<string[]> {
-    const ref = this.pushRef();
-    const at = await this.versionsAt(
-      files.map((file) => file.path),
-      ref,
-    );
+    const at = await this.versionsAt(files.map((file) => file.path));
     return files
-      .filter((file) => this.hasMoved(file, at.get(file.path) ?? null))
+      .filter((file) => hasMoved(file, at.get(file.path) ?? null))
       .map((file) => file.path);
-  }
-
-  /**
-   * The draft was read at one blob and the ref carries another.
-   *
-   * A branch is a cut of main, and reads a page it has not got from main — so
-   * a page missing from a branch is one to add, never one that moved under the
-   * draft. On main itself, missing means deleted or renamed, which is worth
-   * stopping for.
-   */
-  private hasMoved(file: StagedRef, now: Version | null): boolean {
-    if (now === file.baseVersion) return false;
-    return now !== null || this.mode === "main";
   }
 
   /** Every staged page whose blob is no longer the one it was read at, with
@@ -295,7 +224,7 @@ export class GithubStore implements ContentStore {
     );
     const conflicts: PushConflict[] = [];
     for (const file of files) {
-      if (!this.hasMoved(file, at.get(file.path) ?? null)) continue;
+      if (!hasMoved(file, at.get(file.path) ?? null)) continue;
       conflicts.push({
         path: file.path,
         current: await this.currentOf(file.path, head),
@@ -313,10 +242,9 @@ export class GithubStore implements ContentStore {
    */
   async versionsAt(
     paths: string[],
-    ref?: string,
+    ref: string = REPO.defaultBranch,
   ): Promise<Map<string, Version | null>> {
-    if (!this.token) throw new StoreError(401, noToken(this.mode));
-    const at = ref ?? this.pushRef();
+    if (!this.token) throw new StoreError(401, NO_TOKEN);
 
     const byDir = new Map<string, string[]>();
     for (const path of paths) {
@@ -328,7 +256,7 @@ export class GithubStore implements ContentStore {
 
     const found = new Map<string, Version | null>();
     for (const [dir, held] of byDir) {
-      const answer = await this.contents(dir, at);
+      const answer = await this.contents(dir, ref);
       if (answer.status === 404) {
         for (const path of held) found.set(path, null);
         continue;
@@ -350,14 +278,6 @@ export class GithubStore implements ContentStore {
     return found;
   }
 
-  /** The ref a push lands on, asked without preparing anything: a background
-   * check must never be what cuts or resets a branch. */
-  private pushRef(): string {
-    return this.mode === "main" || !this.login
-      ? REPO.defaultBranch
-      : `${BRANCH_PREFIX}${this.login}`;
-  }
-
   private async headOf(branch: string): Promise<string> {
     const ref = await this.call(refPath(branch));
     const head = shaOfRef(ref);
@@ -368,9 +288,8 @@ export class GithubStore implements ContentStore {
   }
 
   /**
-   * A proposal, as one commit on the ref this mode writes: main mode lands it
-   * on the base branch, where a draft change simply is what the store means by
-   * a proposal, and branch mode lands it on the author's branch and its PR.
+   * A proposal, as one commit on the base branch — a draft change simply is
+   * what the store means by a proposal.
    *
    * The slug is checked before anything is sent, and the directory is looked
    * up before anything is built — a proposal never writes over a change that
@@ -378,10 +297,9 @@ export class GithubStore implements ContentStore {
    */
   async propose(files: ProposalFile[]): Promise<{ id: string }> {
     const slug = assertProposal(files);
-    if (!this.token) throw new StoreError(401, noToken(this.mode));
+    if (!this.token) throw new StoreError(401, NO_TOKEN);
 
-    const main = this.mode === "main";
-    const branch = main ? REPO.defaultBranch : await this.ensureBranch();
+    const branch = REPO.defaultBranch;
     if ((await this.listing(branch, slug)) !== null) {
       throw new StoreError(
         409,
@@ -394,7 +312,6 @@ export class GithubStore implements ContentStore {
       files.map((file) => ({ path: file.path, content: file.content })),
       `manual: propose ${slug}`,
     );
-    if (!main) await this.ensurePullRequest(branch);
     return { id: slug };
   }
 
@@ -402,9 +319,8 @@ export class GithubStore implements ContentStore {
    * two files it wrote. Only the author named in the proposal may, and only
    * while the directory still holds nothing but a proposal. */
   async withdraw(slug: string): Promise<void> {
-    if (!this.token) throw new StoreError(401, noToken(this.mode));
-    const branch =
-      this.mode === "main" ? REPO.defaultBranch : await this.ensureBranch();
+    if (!this.token) throw new StoreError(401, NO_TOKEN);
+    const branch = REPO.defaultBranch;
 
     const names = await this.listing(branch, slug);
     if (names === null) {
@@ -555,12 +471,8 @@ export class GithubStore implements ContentStore {
     baseVersion: Version | null,
     message: string,
   ): Promise<WriteOutcome> {
-    if (!this.token) throw new StoreError(401, noToken(this.mode));
-    const main = this.mode === "main";
-    const branch = main ? REPO.defaultBranch : await this.ensureBranch();
-    const sha = main
-      ? baseVersion
-      : await this.baseOnBranch(path, branch, baseVersion);
+    if (!this.token) throw new StoreError(401, NO_TOKEN);
+    const branch = REPO.defaultBranch;
 
     const answer = await this.call(repoPath(`contents/${encodePath(path)}`), {
       method: "PUT",
@@ -568,7 +480,7 @@ export class GithubStore implements ContentStore {
         message,
         content: base64FromBytes(bytes),
         branch,
-        ...(sha ? { sha } : {}),
+        ...(baseVersion ? { sha: baseVersion } : {}),
       }),
     });
 
@@ -584,7 +496,6 @@ export class GithubStore implements ContentStore {
       throw this.failure(answer, `cannot write ${path}`);
     }
 
-    if (!main) await this.ensurePullRequest(branch);
     const content = (answer.body as Record<string, unknown>).content as
       | Record<string, unknown>
       | undefined;
@@ -595,10 +506,10 @@ export class GithubStore implements ContentStore {
     return { status: "ok", version };
   }
 
-  /** Branch protection said no. There is no fallback to fall back to — the
-   * next move is the author's, and it is the other mode. */
+  /** Branch protection said no. There is no fallback to fall back to: the
+   * manual writes the base branch or it writes nothing, so a rule that blocks
+   * it is an admin's to lift, and the refusal says so instead of retrying. */
   private protectionRefusal(answer: Answer): StoreError | null {
-    if (this.mode !== "main") return null;
     const said = messageOf(answer);
     const refused =
       (answer.status === 403 && !/rate limit|saml/i.test(said)) ||
@@ -607,7 +518,7 @@ export class GithubStore implements ContentStore {
     if (!refused) return null;
     return new StoreError(
       answer.status,
-      `${REPO.defaultBranch} refused this push: ${said} — switch to branch + PR mode in settings and this edit goes through a pull request instead.`,
+      `${REPO.defaultBranch} refused this push: ${said} — the manual saves straight to ${REPO.defaultBranch}, so a protection rule that blocks it has to allow this app or be lifted by an admin.`,
     );
   }
 
@@ -643,7 +554,7 @@ export class GithubStore implements ContentStore {
   }
 
   private async askWhoami(): Promise<string> {
-    if (!this.token) throw new StoreError(401, noToken(this.mode));
+    if (!this.token) throw new StoreError(401, NO_TOKEN);
 
     const answer = await this.call("/user");
     const login = (answer.body as Record<string, unknown>).login;
@@ -656,140 +567,6 @@ export class GithubStore implements ContentStore {
     this.login = login;
     this.onChange();
     return login;
-  }
-
-  /** The author's branch, ready to write on — prepared once a session, and
-   * once only: two saves at the same time must not both reset it. */
-  private ensureBranch(): Promise<string> {
-    if (!this.prepared) {
-      this.prepared = this.prepareBranch().catch((cause: unknown) => {
-        this.prepared = null;
-        throw cause;
-      });
-    }
-    return this.prepared;
-  }
-
-  /** GitHub says what state the branch is in: one with an open PR is being
-   * reviewed and keeps its commits; one whose PR merged or closed is rot, so
-   * it starts again from the default branch's current head rather than
-   * re-proposing what already landed; one that is gone is cut anew. */
-  private async prepareBranch(): Promise<string> {
-    const branch = `${BRANCH_PREFIX}${await this.whoami()}`;
-    const open = await this.findOpenPr(branch);
-    const existing = await this.call(refPath(branch));
-    if (existing.status !== 200 && existing.status !== 404) {
-      throw this.failure(existing, `cannot look up ${branch}`);
-    }
-    if (existing.status === 200 && open) return branch;
-
-    const head = await this.headOf(REPO.defaultBranch);
-    if (existing.status === 200) await this.resetBranch(branch, head);
-    else await this.createBranch(branch, head);
-    return branch;
-  }
-
-  private async resetBranch(branch: string, head: string): Promise<void> {
-    const reset = await this.call(updateRefPath(branch), {
-      method: "PATCH",
-      body: JSON.stringify({ sha: head, force: true }),
-    });
-    if (reset.status !== 200) {
-      throw this.failure(reset, `cannot reset ${branch}`);
-    }
-    this.branchReset = true;
-  }
-
-  private async createBranch(branch: string, head: string): Promise<void> {
-    const made = await this.call(repoPath("git/refs"), {
-      method: "POST",
-      body: JSON.stringify({ ref: `refs/heads/${branch}`, sha: head }),
-    });
-    // 422 means someone else just created it — that is the state we wanted.
-    if (made.status !== 201 && made.status !== 422) {
-      throw this.failure(made, `cannot create ${branch}`);
-    }
-  }
-
-  /** The blob sha to write against. A reader falls back to the default branch
-   * for a file the author's branch does not carry, so after that branch was
-   * reset the sha in hand may name a file that is not there — and GitHub
-   * answers a create-with-sha with a 422. Write it as a create instead. */
-  private async baseOnBranch(
-    path: string,
-    branch: string,
-    baseVersion: Version | null,
-  ): Promise<Version | null> {
-    if (baseVersion === null || !this.branchReset) return baseVersion;
-    const onBranch = await this.contents(path, branch);
-    return onBranch.status === 404 ? null : baseVersion;
-  }
-
-  /** The open PR for this branch as GitHub has it right now. The remembered
-   * URL outlives a merge, so it is never an answer on its own. */
-  private async findOpenPr(branch: string): Promise<string | null> {
-    const open = await this.call(
-      repoPath(`pulls?state=open&head=${REPO.owner}:${branch}`),
-    );
-    const first = Array.isArray(open.body) ? open.body[0] : undefined;
-    const found = (first as Record<string, unknown> | undefined)?.html_url;
-    if (typeof found === "string") {
-      this.rememberPr(found);
-      return found;
-    }
-    this.forgetPr();
-    return null;
-  }
-
-  /** The branch now has something to review, so see that a PR is open for it.
-   * GitHub is asked every save — the remembered URL outlives the merge that
-   * ends it, and a session outlives both — while two saves at once share the
-   * one attempt, so this opens a second PR for nobody. */
-  private ensurePullRequest(branch: string): Promise<void> {
-    if (!this.opening) {
-      this.opening = this.openPullRequest(branch).finally(() => {
-        this.opening = null;
-      });
-    }
-    return this.opening;
-  }
-
-  private async openPullRequest(branch: string): Promise<void> {
-    if (await this.findOpenPr(branch)) return;
-
-    const made = await this.call(repoPath("pulls"), {
-      method: "POST",
-      body: JSON.stringify({
-        title: `Manual edits from ${this.login}`,
-        head: branch,
-        base: REPO.defaultBranch,
-        body: "Pages edited in the Grade10 Manual.",
-      }),
-    });
-    const url = (made.body as Record<string, unknown>).html_url;
-    if (typeof url === "string") {
-      this.rememberPr(url);
-      return;
-    }
-    // A PR that cannot be opened is not a failed save — say so loudly instead.
-    console.warn("manual: the branch is written but no PR could be opened", {
-      status: made.status,
-      body: made.body,
-    });
-  }
-
-  private rememberPr(url: string): void {
-    if (this.pr === url) return;
-    this.pr = url;
-    this.storage.set(STORAGE.pr, url);
-    this.onChange();
-  }
-
-  private forgetPr(): void {
-    if (!this.pr) return;
-    this.pr = null;
-    this.storage.remove(STORAGE.pr);
-    this.onChange();
   }
 
   private contents(path: string, ref?: string): Promise<Answer> {
@@ -818,4 +595,12 @@ export class GithubStore implements ContentStore {
   private failure(answer: Answer, what: string): StoreError {
     return new StoreError(answer.status, `${what}: ${messageOf(answer)}`);
   }
+}
+
+/** The draft was read at one blob and the base branch carries another —
+ * including a page the branch no longer carries at all: on the branch every
+ * read comes from, missing means deleted or renamed, which is worth stopping
+ * for. */
+function hasMoved(file: StagedRef, now: Version | null): boolean {
+  return now !== file.baseVersion;
 }

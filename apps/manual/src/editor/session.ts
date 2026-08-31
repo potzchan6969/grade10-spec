@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import { asWriteMode, STORAGE, type WriteMode } from "./config";
+import { STORAGE } from "./config";
 import { browserKeyStore, GithubStore } from "./github-store";
 import { LocalStore, probeLocalStore } from "./local-store";
 import type { ContentStore, StoreKind } from "./store";
@@ -26,9 +26,6 @@ export type EditorSession = {
   /** What GitHub said about that token: who it belongs to and when it dies.
    * Null until it passes, which is what keeps the session read-only. */
   verdict: TokenVerdict | null;
-  /** Where a hosted save lands. Meaningless for the dev store, which only
-   * ever writes the working tree. */
-  mode: WriteMode;
 };
 
 let state: EditorSession = {
@@ -37,7 +34,6 @@ let state: EditorSession = {
   kind: null,
   token: browserKeyStore.get(STORAGE.token),
   verdict: readVerdict(browserKeyStore, browserKeyStore.get(STORAGE.token)),
-  mode: asWriteMode(browserKeyStore.get(STORAGE.mode)),
 };
 
 const listeners = new Set<() => void>();
@@ -56,13 +52,11 @@ function bump(): void {
 
 function github(): Omit<EditorSession, "status"> {
   const token = browserKeyStore.get(STORAGE.token);
-  const mode = asWriteMode(browserKeyStore.get(STORAGE.mode));
   return {
     token,
-    mode,
     verdict: readVerdict(browserKeyStore, token),
     kind: "github",
-    store: new GithubStore({ token, mode, onChange: bump }),
+    store: new GithubStore({ token, onChange: bump }),
   };
 }
 
@@ -110,9 +104,6 @@ export async function saveGithubToken(
 
   browserKeyStore.set(STORAGE.token, token);
   rememberVerdict(browserKeyStore, result.verdict);
-  // A different token can be a different person; the remembered PR belongs to
-  // the old one.
-  browserKeyStore.remove(STORAGE.pr);
   set({ status: "ready", ...github() });
   return result;
 }
@@ -120,14 +111,6 @@ export async function saveGithubToken(
 export function forgetGithubToken(): void {
   browserKeyStore.remove(STORAGE.token);
   browserKeyStore.remove(STORAGE.verified);
-  browserKeyStore.remove(STORAGE.pr);
-  set({ status: "ready", ...github() });
-}
-
-/** Switching mode builds a new store: the mode picks the ref for read and
- * write together, so the old one cannot answer for the new mode. */
-export function setGithubMode(mode: WriteMode): void {
-  browserKeyStore.set(STORAGE.mode, mode);
   set({ status: "ready", ...github() });
 }
 

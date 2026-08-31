@@ -305,26 +305,20 @@ names its real cause, the unapproved-org-token 404 included. The verdict
 keyed to a fingerprint of the token, so a reload does not re-probe, and
 the first 401 tears it up. Read-only without one — but the propose
 control stays visible, wearing a lock and pointing at settings: hiding
-it hid the whole loop from the people who had not started it. Two modes,
-chosen in settings:
+it hid the whole loop from the people who had not started it.
 
-- `main` (default): reads the base branch, and Push all lands on it —
-  the deploy listens on push, so the batch is live in about a minute.
-  Needs `contents:write` only; `actions:read` additionally lets the
-  header show the last deploy's conclusion. A push refused by branch
-  protection surfaces the refusal and suggests PR mode, never a silent
-  fallback.
-- `branch + PR`: Push all lands one commit on a `manual/<login>` branch
-  and keeps its PR open, so edits never rot on an unopened branch. Also
-  needs `pull_requests:write`.
-
-The mode picks the ref for read and write together — the editor never
-loads one branch while claiming to edit another. Raw HTML stays off in
-the renderer — that is the XSS line that makes a stored PAT tolerable
-until a GitHub App replaces it; main mode is why the deploy workflow
-notifies on failure and the header shows deployed `storeHead` against
-live main with the last deploy's conclusion, so a frozen site is
-visible in the tool itself.
+There is one write mode: every read and every Push all is the base
+branch, and the deploy listens on push, so the batch is live in about a
+minute. `contents:write` is all a save needs; `actions:read`
+additionally lets the header show the last deploy's conclusion. A push
+refused by branch protection surfaces the refusal as a rule an admin has
+to lift — the editor never falls back to a branch, because an edit
+parked on a branch nobody reviews is how a save quietly becomes a lie.
+Raw HTML stays off in the renderer — that is the XSS line that makes a
+stored PAT tolerable until a GitHub App replaces it; writing straight to
+the base branch is why the deploy workflow notifies on failure and the
+header shows deployed `storeHead` against live main with the last
+deploy's conclusion, so a frozen site is visible in the tool itself.
 
 Others' pushes reach you, not just your push failing: while the tab is
 visible the app re-asks the live head on an interval and on every
@@ -428,7 +422,7 @@ than the marker this reader last stored, capped at 9+, and a reader with no
 marker yet gets the newest date written silently rather than a badge
 shouting the whole feed. Browser state is small and named once, in the
 `STORAGE` registry (`editor/config.ts`) — the token and its verdict, the
-write mode and PR, the staged drafts, the propose handle, the answered
+staged drafts, the propose handle, the answered
 first-visit card (`manual.welcome`) and that seen marker
 (`manual.recent.seen`). Every read and write of it tolerates storage being
 switched off: a reader who cannot remember simply sees the card again and

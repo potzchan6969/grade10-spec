@@ -71,7 +71,7 @@ export function ProposeDialog({
    * the proposer is warned about. */
   spec?: SpecEntry;
 }) {
-  const { store, kind, mode } = useEditorSession();
+  const { store, kind } = useEditorSession();
   const index = useManualIndex();
   const reload = useSnapshotReload();
   const navigate = useNavigate();
@@ -272,9 +272,7 @@ export function ProposeDialog({
         <Text as="p" size="xs" tone="secondary">
           {kind === "local"
             ? "Lands in the working tree; commit it with the rest of your edits."
-            : mode === "main"
-              ? `Lands on ${REPO.defaultBranch}, and shows on Planning as soon as the deploy runs.`
-              : "Lands on your branch, on the pull request it keeps open."}
+            : `Lands on ${REPO.defaultBranch}, and shows on Planning as soon as the deploy runs.`}
         </Text>
         {problem && started ? (
           <Text as="p" className="text-destructive" size="xs">

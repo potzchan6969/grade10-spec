@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { REPO, type WriteMode } from "../src/editor/config";
+import { REPO } from "../src/editor/config";
 import { GithubStore, type KeyStore } from "../src/editor/github-store";
 import { draftProposal, type ProposalDraft } from "../src/editor/propose";
 
@@ -9,7 +9,6 @@ import { draftProposal, type ProposalDraft } from "../src/editor/propose";
  * either lands whole or leaves the branch as it was. */
 
 const API = `https://api.github.com/repos/${REPO.owner}/${REPO.repo}`;
-const BRANCH = "manual/echo";
 const SLUG = "expire-loyalty-points";
 const DIR = `openspec/changes/${SLUG}`;
 
@@ -50,7 +49,7 @@ function contentsOf(source: string, sha: string) {
 
 /**
  * A repo that answers the Git Data API. `holds` is what the change directory
- * carries — an empty array meaning it is not there at all.
+ * carries — null meaning it is not there at all.
  */
 function repo(
   holds: string[] | null = null,
@@ -58,7 +57,6 @@ function repo(
 ) {
   const calls: Call[] = [];
   let blobs = 0;
-  let open: unknown[] = [];
 
   const http = (async (input: string | URL | Request, init?: RequestInit) => {
     const call: Call = {
@@ -94,8 +92,6 @@ function repo(
     }
     if (call.url === `${API}/git/ref/heads/main`)
       return { status: 200, body: { object: { sha: "mainhead" } } };
-    if (call.url === `${API}/git/ref/heads/${BRANCH}`)
-      return { status: 200, body: { object: { sha: "mainhead" } } };
     if (call.url.startsWith(`${API}/git/commits/`) && call.method === "GET")
       return { status: 200, body: { tree: { sha: "basetree" } } };
     if (call.url === `${API}/git/blobs` && call.method === "POST") {
@@ -107,13 +103,6 @@ function repo(
     if (call.url === `${API}/git/commits` && call.method === "POST")
       return { status: 201, body: { sha: "newcommit" } };
     if (call.method === "PATCH") return { status: 200, body: {} };
-    if (call.url.startsWith(`${API}/pulls?`))
-      return { status: 200, body: open };
-    if (call.url === `${API}/pulls` && call.method === "POST") {
-      const url = "https://github.com/9gag/grade10-spec/pull/9";
-      open = [{ html_url: url }];
-      return { status: 201, body: { html_url: url } };
-    }
     return {
       status: 500,
       body: { message: `unrouted ${call.method} ${call.url}` },
@@ -125,12 +114,12 @@ function repo(
   return { http, calls, seen };
 }
 
-function storeOn(http: typeof fetch, mode: WriteMode = "main", token = "pat") {
-  return new GithubStore({ token, http, storage: memoryStore(), mode });
+function storeOn(http: typeof fetch, token = "pat") {
+  return new GithubStore({ token, http, storage: memoryStore() });
 }
 
-describe("proposing on main", () => {
-  it("lands both files as one commit, and moves the ref last", async () => {
+describe("proposing", () => {
+  it("lands both files as one commit on main, and moves the ref last", async () => {
     const { http, calls, seen } = repo();
 
     expect(await storeOn(http).propose(FILES)).toEqual({ id: SLUG });
@@ -210,7 +199,7 @@ describe("proposing on main", () => {
     expect(seen("POST", `${API}/pulls`)).toHaveLength(0);
   });
 
-  it("names PR mode when main refuses the push", async () => {
+  it("surfaces a protection refusal instead of falling back", async () => {
     const { http } = repo(null, (call) =>
       call.method === "PATCH"
         ? { status: 403, body: { message: "main is protected" } }
@@ -218,7 +207,7 @@ describe("proposing on main", () => {
     );
 
     await expect(storeOn(http).propose(FILES)).rejects.toThrow(
-      /branch \+ PR mode/,
+      /protection rule/,
     );
   });
 
@@ -238,35 +227,8 @@ describe("proposing on main", () => {
   it("writes nothing without a token", async () => {
     const { http, calls } = repo();
 
-    await expect(storeOn(http, "main", "").propose(FILES)).rejects.toThrow(
-      /token/,
-    );
+    await expect(storeOn(http, "").propose(FILES)).rejects.toThrow(/token/);
     expect(calls).toHaveLength(0);
-  });
-});
-
-describe("proposing on a branch", () => {
-  it("lands on the author's branch and keeps its pull request", async () => {
-    const { http, seen } = repo();
-    const store = storeOn(http, "branch");
-
-    expect(await store.propose(FILES)).toEqual({ id: SLUG });
-
-    const moved = seen("PATCH", `${API}/git/refs/heads/${BRANCH}`);
-    expect(moved.at(-1)?.body).toEqual({ sha: "newcommit" });
-    expect(seen("PATCH", `${API}/git/refs/heads/main`)).toHaveLength(0);
-    expect(seen("POST", `${API}/pulls`)).toHaveLength(1);
-    expect(store.reviewUrl).toMatch(/pull\/9/);
-  });
-
-  it("looks the directory up on the branch it is about to write", async () => {
-    const { http, seen } = repo();
-
-    await storeOn(http, "branch").propose(FILES);
-
-    expect(
-      seen("GET", `${API}/contents/${DIR}?ref=manual%2Fecho`),
-    ).toHaveLength(1);
   });
 });
 

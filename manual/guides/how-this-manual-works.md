@@ -68,7 +68,7 @@ whole loop once, end to end, in agent terms.
 ## Editing
 
 Every page is editable in the browser, and every edit lands in git — a commit
-when you run the manual locally; on the hosted site, straight to main or as a
-branch and pull request, as settings decide. Git is the only state this app
-has. [Writing the manual](/guides/writing-the-manual) covers the page grammar
-and the block palette.
+when you run the manual locally; on the hosted site, straight to main, where
+the deploy picks it up within the minute. Git is the only state this app has.
+[Writing the manual](/guides/writing-the-manual) covers the page grammar and
+the block palette.

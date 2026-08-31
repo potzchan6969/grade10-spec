@@ -1,6 +1,6 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
-import { ArrowSquareOut, FloppyDisk, Trash } from "@phosphor-icons/react";
+import { FloppyDisk, Trash } from "@phosphor-icons/react";
 import type { ContentStore } from "./store";
 
 /** The bar that says where a save goes, and lets it go there. */
@@ -38,20 +38,6 @@ export function EditorChrome({
           <Text as="p" className="truncate" size="xs" tone="secondary">
             {store?.label ?? "Looking for a store…"}
             {stages ? " · staged in this browser until Push all" : null}
-            {store?.reviewUrl ? (
-              <>
-                {" · "}
-                <a
-                  className="inline-flex items-center gap-1 underline hover:text-foreground"
-                  href={store.reviewUrl}
-                  rel="noreferrer noopener"
-                  target="_blank"
-                >
-                  pull request
-                  <ArrowSquareOut aria-hidden size={12} />
-                </a>
-              </>
-            ) : null}
           </Text>
         </div>
 

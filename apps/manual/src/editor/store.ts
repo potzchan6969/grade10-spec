@@ -45,8 +45,6 @@ export type ContentStore = {
   readonly label: string;
   /** Null when the store can save; the reason it cannot, otherwise. */
   readonly readOnly: string | null;
-  /** Where the edits end up for review, when that is a place — the PR. */
-  readonly reviewUrl: string | null;
 
   read(path: string): Promise<StoredFile>;
 

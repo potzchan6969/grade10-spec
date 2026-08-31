@@ -9,8 +9,8 @@ import {
 } from "../editor/github-api";
 
 /**
- * Whether the site you are reading is the store as it stands. Main-mode
- * editing writes a branch a workflow deploys, so three facts decide it: how
+ * Whether the site you are reading is the store as it stands. Editing writes
+ * a branch a workflow deploys, so three facts decide it: how
  * old the deployed snapshot is, whether the branch has moved past it, and how
  * the last deploy of it ended. The first is always known; the other two need
  * a token, and each degrades on its own — a token without `actions:read`

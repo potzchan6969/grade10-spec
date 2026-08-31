@@ -24,7 +24,6 @@ vi.mock("../src/editor/session", () => ({
     store: held.store,
     kind: "github",
     token: "pat",
-    mode: "main",
   }),
   noteWrite: () => {},
 }));

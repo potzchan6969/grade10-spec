@@ -8,9 +8,10 @@ import { useEditorSession } from "../editor/session";
 import { type Health, useManualHealth } from "./health";
 
 /**
- * Whether this site still speaks for the store. Main-mode editing is only
- * honest if a frozen site is visible in the tool that froze it, so the pip is
- * always there and the strip appears the moment it has something to say.
+ * Whether this site still speaks for the store. Editing straight to main is
+ * only honest if a frozen site is visible in the tool that froze it, so the
+ * pip is always there and the strip appears the moment it has something to
+ * say.
  */
 
 function useHealth(): Health | null {
