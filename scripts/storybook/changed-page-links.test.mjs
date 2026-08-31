@@ -123,11 +123,22 @@ test("creates a compact payload containing current affected page states only", (
     commitSha: "abc",
     commitUrl: "https://github.com/9gag/grade10-spec/commit/abc",
     index: INDEX,
+    changedPaths: new Map([
+      ["apps/preview/src/pages/store.stories.tsx", "M"],
+      ["apps/preview/src/pages/profile.stories.tsx", "A"],
+    ]),
     mergedBranchName: "feat/product-list",
     mergedBranchUrl:
       "https://github.com/9gag/grade10-spec/compare/main...feat/product-list",
     mergedPrTitle: "feat(store): add product list",
     mergedPrUrl: "https://github.com/9gag/grade10-spec/pull/123",
+    removedStories: [
+      {
+        name: "Countdown",
+        status: "❌",
+        title: "Auction Listing/ListingBidPanel/Flows",
+      },
+    ],
     storybookUrl: "https://storybook.grade10-stg.com",
   });
 
@@ -142,7 +153,7 @@ test("creates a compact payload containing current affected page states only", (
       },
       {
         text: {
-          text: "• <https://storybook.grade10-stg.com/iframe.html?id=pages-store--default&viewMode=story|Pages/Store / Default>\n• <https://storybook.grade10-stg.com/iframe.html?id=pages-store--empty&viewMode=story|Pages/Store / Empty>",
+          text: "• Auction Listing\n  • ❌ ListingBidPanel > Flows > Countdown\n• Pages\n  • 🟡 <https://storybook.grade10-stg.com/iframe.html?id=pages-store--default&viewMode=story|Store > Default>\n  • 🟡 <https://storybook.grade10-stg.com/iframe.html?id=pages-store--empty&viewMode=story|Store > Empty>",
           type: "mrkdwn",
         },
         type: "section",
@@ -169,7 +180,7 @@ test("omits merge metadata when it is unavailable", () => {
 
   assert.deepEqual(payload.blocks.at(-1), {
     text: {
-      text: "• <https://storybook.grade10-stg.com/iframe.html?id=pages-store--default&viewMode=story|Pages/Store / Default>\n• <https://storybook.grade10-stg.com/iframe.html?id=pages-store--empty&viewMode=story|Pages/Store / Empty>",
+      text: "• Pages\n  • 🟡 <https://storybook.grade10-stg.com/iframe.html?id=pages-store--default&viewMode=story|Store > Default>\n  • 🟡 <https://storybook.grade10-stg.com/iframe.html?id=pages-store--empty&viewMode=story|Store > Empty>",
       type: "mrkdwn",
     },
     type: "section",

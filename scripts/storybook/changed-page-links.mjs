@@ -243,6 +243,7 @@ function textBlocks(lines) {
 
 export function slackPayload({
   affectedPages,
+  changedPaths = new Map(),
   commitSha,
   commitUrl,
   index,
@@ -250,13 +251,18 @@ export function slackPayload({
   mergedBranchUrl,
   mergedPrTitle,
   mergedPrUrl,
+  removedStories = [],
   storybookUrl,
 }) {
   const pages = new Set(affectedPages.map(storyPath));
   const stories = Object.values(index.entries ?? {})
     .filter((entry) => entry.type === "story" && pages.has(entry.importPath))
-    .sort((a, b) => a.id.localeCompare(b.id));
-  if (!stories.length) return { blocks: [] };
+    .map((entry) => ({
+      ...entry,
+      status: changedPaths.get(entry.importPath.replace(/^\./, "apps/preview")) === "A" ? "🆕" : "🟡",
+    }));
+  const states = [...stories, ...removedStories];
+  if (!states.length) return { blocks: [] };
 
   const commit = commitUrl
     ? ` · <${commitUrl}|${commitSha?.slice(0, 7) ?? "commit"}>`
@@ -264,10 +270,18 @@ export function slackPayload({
   const pullRequest = mergedPrTitle && mergedPrUrl
     ? ` · <${mergedPrUrl}|${mergedPrTitle}>`
     : "";
-  const links = stories.map(
-    (story) =>
-      `• <${storybookUrl}/iframe.html?id=${story.id}&viewMode=story|${story.title} / ${story.name}>`,
-  );
+  const groups = new Map();
+  for (const story of states) {
+    const [root = "Stories", ...path] = story.title.split("/");
+    const label = [...path, story.name].filter(Boolean).join(" > ");
+    const item = story.id
+      ? `<${storybookUrl}/iframe.html?id=${story.id}&viewMode=story|${label}>`
+      : label;
+    groups.set(root, [...(groups.get(root) ?? []), `  • ${story.status} ${item}`]);
+  }
+  const links = [...groups]
+    .sort(([left], [right]) => left.localeCompare(right))
+    .flatMap(([root, items]) => [`• ${root}`, ...items.sort()]);
   return {
     blocks: [
       {
@@ -298,10 +312,67 @@ export function slackPayload({
 async function changedFiles(base, head) {
   const { stdout } = await exec(
     "git",
-    ["diff", "--name-only", "--diff-filter=ACMR", `${base}...${head}`],
+    ["diff", "--name-status", "--find-renames", `${base}...${head}`],
     { cwd: rootDirectory },
   );
-  return stdout.split("\n").filter(Boolean);
+  return stdout
+    .split("\n")
+    .filter(Boolean)
+    .flatMap((line) => {
+      const [status, ...paths] = line.split("\t");
+      if (status.startsWith("R")) {
+        return [
+          { path: paths[0], status: "D" },
+          { path: paths[1], status: "A" },
+        ];
+      }
+      return [{ path: paths[0], status: status[0] }];
+    });
+}
+
+async function deletedStoryStates(base, changed) {
+  return Promise.all(
+    changed
+      .filter(({ path, status }) => status === "D" && isPageStory(path))
+      .map(async ({ path }) => {
+        const { stdout } = await exec("git", ["show", `${base}:${path}`], {
+          cwd: rootDirectory,
+        });
+        const source = ts.createSourceFile(
+          path,
+          stdout,
+          ts.ScriptTarget.Latest,
+          true,
+        );
+        let title;
+        const names = [];
+        const visit = (node) => {
+          if (
+            ts.isPropertyAssignment(node) &&
+            ts.isIdentifier(node.name) &&
+            node.name.text === "title" &&
+            ts.isStringLiteral(node.initializer)
+          ) {
+            title = node.initializer.text;
+          }
+          if (
+            ts.isVariableStatement(node) &&
+            node.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)
+          ) {
+            for (const declaration of node.declarationList.declarations) {
+              if (ts.isIdentifier(declaration.name)) names.push(declaration.name.text);
+            }
+          }
+          ts.forEachChild(node, visit);
+        };
+        visit(source);
+        return names.map((name) => ({
+          name,
+          status: "❌",
+          title: title ?? "Pages",
+        }));
+      }),
+  ).then((states) => states.flat());
 }
 
 async function main() {
@@ -323,7 +394,9 @@ async function main() {
     },
   });
   const changed = await changedFiles(values.base, values.head);
-  const affectedPages = await affectedPageStories({ changedFiles: changed });
+  const affectedPages = await affectedPageStories({
+    changedFiles: changed.map(({ path }) => path),
+  });
   const index = JSON.parse(
     await readFile(
       join(rootDirectory, "apps/preview/storybook-static/index.json"),
@@ -335,6 +408,7 @@ async function main() {
   });
   const payload = slackPayload({
     affectedPages,
+    changedPaths: new Map(changed.map(({ path, status }) => [path, status])),
     commitSha: commitSha.trim(),
     commitUrl: values["commit-url"],
     index,
@@ -342,6 +416,7 @@ async function main() {
     mergedBranchUrl: values["merged-branch-url"],
     mergedPrTitle: values["merged-pr-title"],
     mergedPrUrl: values["merged-pr-url"],
+    removedStories: await deletedStoryStates(values.base, changed),
     storybookUrl: values["storybook-url"].replace(/\/$/, ""),
   });
 
