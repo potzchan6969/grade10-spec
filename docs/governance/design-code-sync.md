@@ -226,6 +226,49 @@ Deleting a variant that instances still use leaves an orphaned component behind 
 
 Be aware that the Storybook suite renders the **`default`** theme. It therefore exercises those baseline values, not the designed ones, and a passing run says nothing about how a component looks in Grade10. Review that in Storybook with the toolbar switched over.
 
+## Reconciling Figma annotations
+
+Annotations are design evidence, not automatically accepted requirements. Use
+the `reconcile-figma-annotations` project skill from a supported harness when
+you need to review them. It is the only annotation workflow; component,
+rendered-value, token, audit, and Code Connect checks remain in this workflow.
+
+The end-to-end flow is:
+
+1. The harness reads the flat registered engineering sources through the Figma
+   Plugin API and reads one category catalog per file. It traverses each unique
+   Figma root once, keeps every associated source in the temporary
+   schema-version-2 root record, resolves categories locally, excludes
+   exploratory areas, and emits only annotation-bearing or baseline-tracked
+   nodes. Ancestor evidence remains in the nearest-parent-first order supplied
+   by Figma. The registered store canonicalizes this complete temporary
+   observation and generates the digest used by reporting and acceptance.
+2. The skill compares that snapshot with the reviewed
+   `scripts/design-sync/annotation-baseline.json` and produces an
+   ownership-aware report. The default human report renders every ownership
+   group and every finding with its stable ID, kind, category ID and label,
+   Figma file/node link, registered root and ancestor evidence, previous/current
+   text, pinned properties, ambiguity, exact OpenSpec evidence, ownership, and
+   recommended next action. Missing or incomplete evidence is blocked, not
+   clean; a resolved orphan or replacement is reviewable drift that can be
+   explicitly accepted.
+3. Select individual finding IDs. Confirm an exact capability, change, or
+   task-group association for each selected occurrence, or give an explicit
+   `noImpactReason`. Similar prose and editor or Git identity are not evidence.
+4. After confirmation, the registered store's acceptance command validates the
+   observation digest and decisions, updates the selected baseline occurrences
+   atomically, prepares any exact related OpenSpec edits, and shows the Git
+   diff. Unselected, ambiguous, removed, replacement, and orphaned findings
+   remain for review unless explicitly resolved.
+5. The skill reruns the comparison against the same pinned snapshot and shows
+   all remaining drift. Only after a second explicit confirmation may it make
+   one local commit in `grade10-spec`, staging only the confirmed files.
+
+There is no annotation CI scan, CI snapshot artifact,
+`annotation-current.json`, or automatic push. The workflow never writes to
+Figma, advances the application repository's submodule, opens a pull request,
+or creates a scheduler.
+
 ## Known gaps
 
 Recorded so they are not mistaken for coverage:

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 2,
+  "files": [
+    {
+      "fileKey": "ABCDEFGHIJKLMNOPQRSTUV",
+      "fileUrl": "https://www.figma.com/design/ABCDEFGHIJKLMNOPQRSTUV/Grade10-DS-2026",
+      "roots": [
+        {
+          "nodeId": "1:1",
+          "name": "Button",
+          "type": "COMPONENT_SET",
+          "ancestors": [
+            { "nodeId": "0:0", "name": "Document", "type": "DOCUMENT" }
+          ],
+          "sources": [
+            {
+              "kind": "code-connect",
+              "path": "packages/design-system/src/components/forms/button.figma.ts",
+              "component": "Button"
+            }
+          ]
+        }
+      ],
+      "categoryCatalog": [
+        {
+          "id": "content",
+          "label": "Content",
+          "color": "#3366FF",
+          "isPreset": true
+        },
+        {
+          "id": "interaction",
+          "label": "Interaction",
+          "color": "#FF6633",
+          "isPreset": false
+        }
+      ],
+      "nodes": [
+        {
+          "nodeId": "2:1",
+          "name": "Button / default",
+          "type": "COMPONENT",
+          "rootIds": ["1:1"],
+          "ancestors": [
+            { "nodeId": "1:1", "name": "Button", "type": "COMPONENT_SET" },
+            { "nodeId": "0:0", "name": "Document", "type": "DOCUMENT" }
+          ],
+          "annotations": [
+            {
+              "labelMarkdown": "Keep the content contract.",
+              "categoryId": "content",
+              "properties": [{ "type": "width" }]
+            },
+            {
+              "label": "Review interaction states.",
+              "categoryId": "interaction",
+              "properties": [{ "type": "fills" }]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
