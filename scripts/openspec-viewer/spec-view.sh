@@ -7,12 +7,28 @@ cd "$root_dir"
 
 viewer="tools/openspec-viewer"
 
-# --remote checks out the tip of the branch .gitmodules names rather than the
-# commit this repository records, so every run serves the current viewer. The
-# pointer it leaves behind is a normal submodule bump: commit it to record the
-# version, or `git checkout -- tools/openspec-viewer` to drop it.
+# The viewer cuts releases as tags, so a run serves the newest one rather than
+# whatever the branch tip happens to hold. The pointer it leaves behind is a
+# normal submodule bump: commit it to record the version, or
+# `git checkout -- tools/openspec-viewer` to drop it.
 echo "Fetching the viewer:"
-git submodule update --init --remote --merge -- "$viewer"
+# Only a fresh clone needs the recorded pointer; past that the release tag
+# decides the checkout, so cloning to the pointer first would just churn.
+case "$(git submodule status -- "$viewer")" in
+  -*) git submodule update --init -- "$viewer" ;;
+esac
+git -C "$viewer" fetch --tags --force --quiet origin
+
+# versionsort.suffix ranks a prerelease under the release it precedes, so an
+# -rc tag never outranks the real thing.
+release="$(git -C "$viewer" -c versionsort.suffix=- for-each-ref \
+  --count=1 --sort=-v:refname --format='%(refname:strip=2)' 'refs/tags/v[0-9]*')"
+if [ -z "$release" ]; then
+  echo "  no release tag at $(git -C "$viewer" remote get-url origin)" >&2
+  exit 1
+fi
+
+git -C "$viewer" checkout --quiet "$release"
 git submodule status -- "$viewer" | sed 's/^/  /'
 
 # The submodule is its own pnpm root — its own pnpm-workspace.yaml, lockfile and
