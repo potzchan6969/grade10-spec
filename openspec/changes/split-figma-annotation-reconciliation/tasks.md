@@ -47,7 +47,7 @@ This group depends on group 1. It must preserve the observer behavior verified
 by `repair-figma-annotation-observation`; moving code is not permission to
 redesign observation or occurrence matching.
 
-- [ ] 2.1 Move the portable Plugin API adapter from
+- [x] 2.1 Move the portable Plugin API adapter from
   `grade10/scripts/reconcile-figma-annotations.mjs` into
   `scripts/design-sync/annotation-observation.mjs`, adapt it to consume the
   scoped inventory shape, and migrate its duplicate-registration,
