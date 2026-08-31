@@ -27,6 +27,7 @@
     "storybook:ui": "node scripts/storybook/storybook.mjs --dir packages/ui",
     "storybook:build:design-system": "pnpm --filter @grade10/design-system run build-storybook",
     "storybook:build:workbench": "pnpm --dir apps/preview run build-storybook:workbench",
+    "storybook:changed-pages": "node scripts/storybook/changed-page-links.mjs",
     "storybook:deploy:staging": "pnpm --dir apps/preview run deploy-storybook:staging",
     "test:stories": "pnpm run test:stories:design-system && pnpm run test:stories:ui && pnpm run test:stories:app",
     "test:stories:design-system": "pnpm --filter @grade10/design-system run test:stories",
@@ -44,6 +45,7 @@
     "lint:fix": "biome check --write ."
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.5"
+    "@biomejs/biome": "^2.5.5",
+    "typescript": "~6.0.2"
   }
 }
