@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reconcile Figma Annotations"
+  short_description: "Review and selectively reconcile spec-owned Figma annotation drift"
+  default_prompt: "Use $reconcile-figma-annotations to review spec-owned Figma annotation drift."

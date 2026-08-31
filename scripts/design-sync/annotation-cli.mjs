@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { normalizeScope } from "./annotation-scope.mjs";
 
 export const repoRoot = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -23,4 +24,9 @@ export async function readJson(path, label) {
 
 export function resolveRepoPath(path) {
   return resolve(repoRoot, path);
+}
+
+export function requiredScope(scope) {
+  if (scope === undefined) throw new Error("--scope is required");
+  return normalizeScope(scope);
 }

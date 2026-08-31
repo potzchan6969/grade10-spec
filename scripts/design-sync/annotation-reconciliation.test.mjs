@@ -14,11 +14,21 @@ import test from "node:test";
 import { runCli as runAcceptCli } from "./annotation-accept.mjs";
 import { baselineDigestFor } from "./annotation-core.mjs";
 import { runCli as runDiffCli } from "./annotation-diff.mjs";
+import { buildInventory } from "./annotation-inventory.mjs";
+import { runCli as runInventoryCli } from "./annotation-inventory-cli.mjs";
 import {
   acceptSnapshot as acceptSnapshotImplementation,
   renderHuman,
   scanSnapshot,
 } from "./annotation-reconciliation.mjs";
+import {
+  ANNOTATION_SCOPES,
+  buildScopeIndex,
+  normalizeScope,
+  projectBaseline,
+  scopeForEntry,
+  scopeForRoot,
+} from "./annotation-scope.mjs";
 import {
   ANNOTATION_OBSERVATION_SCHEMA_VERSION,
   normalizeObservation,
@@ -125,7 +135,7 @@ function snapshotWithAnnotations(annotations) {
 function baselineWithAnnotations(annotations) {
   return {
     schemaVersion: 2,
-    roots: [{ fileKey, nodeId: "1:1", fileUrl }],
+    roots: [{ fileKey, nodeId: "1:1", fileUrl, scope: "spec" }],
     entries: {
       [`${fileKey}:2:1`]: {
         fileKey,
@@ -136,6 +146,434 @@ function baselineWithAnnotations(annotations) {
     },
   };
 }
+
+test("annotation scope vocabulary is fixed", () => {
+  assert.deepEqual(ANNOTATION_SCOPES, ["product", "spec"]);
+  assert.equal(normalizeScope("spec"), "spec");
+  assert.equal(normalizeScope("product"), "product");
+  assert.throws(
+    () => normalizeScope("shared"),
+    /scope must be spec or product/i,
+  );
+});
+
+function scopedBaseline() {
+  return {
+    schemaVersion: 2,
+    roots: [
+      {
+        fileKey,
+        nodeId: "1:1",
+        fileUrl,
+        kind: "code-connect",
+        path: "packages/design-system/src/components/forms/button.figma.ts",
+        component: "Button",
+        scope: "spec",
+      },
+      {
+        fileKey,
+        nodeId: "2:1",
+        fileUrl,
+        kind: "layout",
+        label: "Pages/Checkout/root",
+        scope: "product",
+      },
+    ],
+    entries: {
+      [`${fileKey}:3:1`]: {
+        fileKey,
+        nodeId: "3:1",
+        sourceRoot: "1:1",
+        annotations: [
+          {
+            annotationKey: "spec-note",
+            text: "Spec-owned note.",
+            categoryId: null,
+            pinnedProperties: [],
+          },
+        ],
+      },
+      [`${fileKey}:4:1`]: {
+        fileKey,
+        nodeId: "4:1",
+        sourceRoot: "2:1",
+        annotations: [
+          {
+            annotationKey: "product-note",
+            text: "Product-owned note.",
+            categoryId: null,
+            pinnedProperties: [],
+          },
+        ],
+      },
+    },
+  };
+}
+
+function scopedSnapshot(rootId, nodeId) {
+  const input = observation();
+  input.files[0].roots[0].nodeId = rootId;
+  input.files[0].nodes[0].nodeId = nodeId;
+  input.files[0].nodes[0].rootIds = [rootId];
+  return normalizeObservation(input);
+}
+
+test("scope index resolves entries through their registered root and projects one owner", () => {
+  const baseline = scopedBaseline();
+  const index = buildScopeIndex(baseline);
+
+  assert.equal(scopeForRoot(index, fileKey, "1-1"), "spec");
+  assert.equal(
+    scopeForEntry(index, baseline.entries[`${fileKey}:3:1`]),
+    "spec",
+  );
+
+  const projected = projectBaseline(baseline, "spec");
+
+  assert.deepEqual(
+    projected.roots.map((root) => root.nodeId),
+    ["1:1"],
+  );
+  assert.deepEqual(Object.keys(projected.entries), [`${fileKey}:3:1`]);
+  assert.equal(projected.schemaVersion, baseline.schemaVersion);
+});
+
+test("same registered root cannot claim two repository scopes", () => {
+  const baseline = scopedBaseline();
+  baseline.roots.push({
+    ...baseline.roots[0],
+    nodeId: "1-1",
+    scope: "product",
+  });
+
+  assert.throws(() => buildScopeIndex(baseline), /conflicting scopes/i);
+});
+
+test("same registered root cannot repeat identical source evidence", () => {
+  const baseline = scopedBaseline();
+  baseline.roots.push({ ...baseline.roots[0] });
+
+  assert.throws(() => buildScopeIndex(baseline), /duplicate source/i);
+});
+
+test("scope projection rejects missing and unknown ownership evidence", () => {
+  const missing = scopedBaseline();
+  delete missing.roots[0].scope;
+  assert.throws(
+    () => buildScopeIndex(missing),
+    /scope must be spec or product/i,
+  );
+
+  const unknown = scopedBaseline();
+  unknown.roots[0].scope = "shared";
+  assert.throws(
+    () => buildScopeIndex(unknown),
+    /scope must be spec or product/i,
+  );
+
+  const index = buildScopeIndex(scopedBaseline());
+  assert.throws(
+    () => scopeForEntry(index, { fileKey, sourceRoot: "9:9" }),
+    /has no scope/i,
+  );
+});
+
+test("an owning scope may have an empty baseline projection", () => {
+  const baseline = scopedBaseline();
+  baseline.roots = baseline.roots.filter((root) => root.scope === "spec");
+  baseline.entries = {
+    [`${fileKey}:3:1`]: baseline.entries[`${fileKey}:3:1`],
+  };
+
+  const projected = projectBaseline(baseline, "product");
+
+  assert.deepEqual(projected.roots, []);
+  assert.deepEqual(projected.entries, {});
+});
+
+test("scoped diff ignores another repository's entries instead of orphaning them", () => {
+  const baseline = scopedBaseline();
+  const result = scanSnapshot({
+    baseline,
+    snapshot: scopedSnapshot("1:1", "3:1"),
+    scope: "spec",
+  });
+
+  assert.notEqual(result.status, "blocked");
+  assert.ok(result.findings.every((finding) => finding.nodeId !== "4:1"));
+});
+
+test("product-scoped diff ignores spec-owned entries instead of orphaning them", () => {
+  const baseline = scopedBaseline();
+  const result = scanSnapshot({
+    baseline,
+    snapshot: scopedSnapshot("2:1", "4:1"),
+    scope: "product",
+  });
+
+  assert.notEqual(result.status, "blocked");
+  assert.ok(result.findings.every((finding) => finding.nodeId !== "3:1"));
+});
+
+test("scoped diff blocks a root owned by another repository", () => {
+  const result = scanSnapshot({
+    baseline: scopedBaseline(),
+    snapshot: scopedSnapshot("2:1", "4:1"),
+    scope: "spec",
+  });
+
+  assert.equal(result.status, "blocked");
+  assert.ok(
+    result.blockers.some((blocker) => /out of scope/i.test(blocker.reason)),
+  );
+});
+
+test("mixed-scope snapshots are blocked before comparison", () => {
+  const input = scopedSnapshot("1:1", "3:1");
+  input.files[0].roots.push({
+    ...input.files[0].roots[0],
+    nodeId: "2:1",
+    sources: [
+      {
+        kind: "layout",
+        label: "Pages/Checkout/root",
+      },
+    ],
+  });
+  delete input.digest;
+  const mixed = normalizeObservation(input);
+
+  const result = scanSnapshot({
+    baseline: scopedBaseline(),
+    snapshot: mixed,
+    scope: "spec",
+  });
+
+  assert.equal(result.status, "blocked");
+  assert.equal(result.findings.length, 0);
+});
+
+test("scoped acceptance refuses a finding from another repository before writing", () => {
+  const baseline = scopedBaseline();
+  const before = JSON.stringify(baseline);
+  const crossScopeSnapshot = scopedSnapshot("2:1", "4:1");
+  const crossScopeFinding = scanSnapshot({
+    baseline,
+    snapshot: crossScopeSnapshot,
+  }).findings.find((finding) => finding.nodeId === "3:1");
+  assert.ok(crossScopeFinding, "fixture must contain a spec-owned finding");
+
+  assert.throws(
+    () =>
+      acceptSnapshot({
+        baseline,
+        snapshot: crossScopeSnapshot,
+        scope: "product",
+        ids: [crossScopeFinding.id],
+        decisions: {
+          observationDigest: crossScopeSnapshot.digest,
+          decisions: [
+            {
+              findingId: crossScopeFinding.id,
+              action: "remove",
+              noImpactReason: "Cross-scope acceptance must be refused.",
+            },
+          ],
+        },
+      }),
+    /unknown finding|blocked|scope/i,
+  );
+  assert.equal(JSON.stringify(baseline), before);
+});
+
+test("cross-scope CLI acceptance leaves related OpenSpec targets byte-identical", async () => {
+  const baseline = scopedBaseline();
+  const crossScopeSnapshot = scopedSnapshot("2:1", "4:1");
+  const crossScopeFinding = scanSnapshot({
+    baseline,
+    snapshot: crossScopeSnapshot,
+  }).findings.find((finding) => finding.nodeId === "3:1");
+  assert.ok(crossScopeFinding, "fixture must contain a spec-owned finding");
+
+  const directory = await mkdtemp(
+    join(tmpdir(), "grade10-annotation-cross-scope-"),
+  );
+  const baselinePath = join(directory, "baseline.json");
+  const snapshotPath = join(directory, "snapshot.json");
+  const decisionsPath = join(directory, "decisions.json");
+  const relatedPath = "openspec/changes/cross-scope/proposal.md";
+  const relatedAbsolutePath = join(directory, relatedPath);
+  const relatedContent = "# Cross-scope acceptance fixture\n";
+  try {
+    await mkdir(join(directory, "openspec/changes/cross-scope"), {
+      recursive: true,
+    });
+    await writeFile(baselinePath, `${JSON.stringify(baseline, null, 2)}\n`);
+    await writeFile(
+      snapshotPath,
+      `${JSON.stringify(crossScopeSnapshot, null, 2)}\n`,
+    );
+    await writeFile(relatedAbsolutePath, relatedContent);
+    await writeFile(
+      decisionsPath,
+      `${JSON.stringify(
+        {
+          observationDigest: crossScopeSnapshot.digest,
+          baselineDigest: baselineDigestFor(baseline),
+          relatedFiles: [
+            {
+              path: relatedPath,
+              content: "# Should never be written\n",
+              beforeDigest: contentDigest(relatedContent),
+            },
+          ],
+          decisions: [
+            {
+              findingId: crossScopeFinding.id,
+              action: "remove",
+              noImpactReason: "Cross-scope acceptance must be refused.",
+            },
+          ],
+        },
+        null,
+        2,
+      )}\n`,
+    );
+
+    const baselineBefore = await readFile(baselinePath, "utf8");
+    const relatedBefore = await readFile(relatedAbsolutePath, "utf8");
+    const originalLog = console.log;
+    console.log = () => {};
+    let exitCode;
+    try {
+      exitCode = await runAcceptCli({
+        storeRoot: directory,
+        argv: [
+          "--scope",
+          "product",
+          "--baseline",
+          baselinePath,
+          "--snapshot",
+          snapshotPath,
+          "--ids",
+          crossScopeFinding.id,
+          "--decisions",
+          decisionsPath,
+          "--json",
+        ],
+      });
+    } finally {
+      console.log = originalLog;
+    }
+    assert.equal(exitCode, 2);
+    assert.equal(await readFile(baselinePath, "utf8"), baselineBefore);
+    assert.equal(await readFile(relatedAbsolutePath, "utf8"), relatedBefore);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test("diff and acceptance CLIs require an explicit scope", async () => {
+  const originalLog = console.log;
+  const outputs = [];
+  console.log = (...args) => outputs.push(args.join(" "));
+  try {
+    assert.equal(await runDiffCli({ argv: ["--json"] }), 2);
+    assert.equal(await runAcceptCli({ argv: ["--json"] }), 2);
+    assert.ok(
+      outputs.every((output) =>
+        /scope/i.test(JSON.parse(output).blockers[0].reason),
+      ),
+    );
+  } finally {
+    console.log = originalLog;
+  }
+});
+
+test("registered baseline assigns every surface to its owning repository", () => {
+  const baseline = JSON.parse(
+    readFileSync(new URL("./annotation-baseline.json", import.meta.url)),
+  );
+
+  assert.equal(baseline.schemaVersion, 2);
+  assert.equal(baseline.roots.length, 85);
+  assert.ok(
+    baseline.roots.every((root) => ["spec", "product"].includes(root.scope)),
+  );
+  assert.ok(
+    baseline.roots
+      .filter((root) => root.path?.startsWith("packages/design-system/"))
+      .every((root) => root.scope === "spec"),
+  );
+  assert.ok(
+    baseline.roots
+      .filter((root) => root.path?.startsWith("packages/ui/"))
+      .every((root) => root.scope === "spec"),
+  );
+  assert.ok(
+    baseline.roots
+      .filter((root) => root.kind === "layout")
+      .every((root) => root.scope === "product"),
+  );
+});
+
+test("inventory returns deterministic scoped registrations and tracked nodes", () => {
+  const baseline = scopedBaseline();
+  baseline.roots.push({
+    ...baseline.roots[0],
+    kind: "audit",
+    path: "packages/design-system/src/components/forms/audit.json",
+    label: "button/root",
+    component: null,
+  });
+
+  const result = buildInventory({ baseline, scope: "spec" });
+
+  assert.deepEqual(result, {
+    schemaVersion: 1,
+    scope: "spec",
+    files: [
+      {
+        fileKey,
+        fileUrl: `https://www.figma.com/design/${fileKey}/Grade10-DS-2026`,
+        registrations: [
+          {
+            nodeId: "1:1",
+            kind: "audit",
+            path: "packages/design-system/src/components/forms/audit.json",
+            label: "button/root",
+            component: null,
+            covers: null,
+          },
+          {
+            nodeId: "1:1",
+            kind: "code-connect",
+            path: "packages/design-system/src/components/forms/button.figma.ts",
+            label: null,
+            component: "Button",
+            covers: null,
+          },
+        ],
+        trackedNodeIds: ["3:1"],
+      },
+    ],
+  });
+});
+
+test("inventory CLI requires an explicit scope", async () => {
+  const originalLog = console.log;
+  let output = "";
+  console.log = (...args) => {
+    output = args.join(" ");
+  };
+  try {
+    const exitCode = await runInventoryCli({ argv: ["--json"] });
+    assert.equal(exitCode, 2);
+    assert.match(JSON.parse(output).blockers[0].reason, /scope/i);
+  } finally {
+    console.log = originalLog;
+  }
+});
 
 test("One category catalog resolves many annotations", () => {
   const result = normalizeObservation(categorizedFixture);
@@ -982,7 +1420,7 @@ test("Addition is confirmed", () => {
 test("Association decision is missing", () => {
   const baseline = {
     schemaVersion: 2,
-    roots: [{ fileKey, nodeId: "1:1", fileUrl }],
+    roots: [{ fileKey, nodeId: "1:1", fileUrl, scope: "spec" }],
     entries: {},
   };
   const snapshot = normalizeObservation(observation());
@@ -1213,7 +1651,7 @@ test("Replacement node requires explicit old-to-new decision", () => {
 test("CLI acceptance writes one atomic baseline transaction", async () => {
   const baseline = {
     schemaVersion: 2,
-    roots: [{ fileKey, nodeId: "1:1", fileUrl }],
+    roots: [{ fileKey, nodeId: "1:1", fileUrl, scope: "spec" }],
     entries: {
       [`${fileKey}:2:1`]: {
         fileKey,
@@ -1265,6 +1703,8 @@ test("CLI acceptance writes one atomic baseline transaction", async () => {
       exitCode = await runAcceptCli({
         storeRoot: directory,
         argv: [
+          "--scope",
+          "spec",
           "--baseline",
           baselinePath,
           "--snapshot",
@@ -1328,6 +1768,8 @@ test("diff CLI is read-only and returns clean exit status for matching evidence"
     try {
       exitCode = await runDiffCli({
         argv: [
+          "--scope",
+          "spec",
           "--baseline",
           baselinePath,
           "--snapshot",

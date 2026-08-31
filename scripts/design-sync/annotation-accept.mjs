@@ -7,6 +7,7 @@ import {
   defaultBaselinePath,
   readJson,
   repoRoot,
+  requiredScope,
   resolveRepoPath,
 } from "./annotation-cli.mjs";
 import {
@@ -43,11 +44,13 @@ export async function runCli({
       ids: { type: "string" },
       json: { type: "boolean", default: false },
       snapshot: { type: "string" },
+      scope: { type: "string" },
     },
     strict: true,
   });
   let output;
   try {
+    const scope = requiredScope(values.scope);
     if (!values.snapshot) throw new Error("--snapshot is required");
     if (!values.ids) throw new Error("--ids is required");
     if (!values.decisions) throw new Error("--decisions is required");
@@ -60,6 +63,7 @@ export async function runCli({
     output = acceptSnapshot({
       baseline,
       snapshot,
+      scope,
       storeRoot,
       ids: values.ids
         .split(",")

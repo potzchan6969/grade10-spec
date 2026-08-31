@@ -9,23 +9,14 @@ import {
   requiredScope,
   resolveRepoPath,
 } from "./annotation-cli.mjs";
-import {
-  exitCodeFor,
-  renderHuman,
-  scanSnapshot,
-} from "./annotation-reconciliation.mjs";
+import { buildInventory } from "./annotation-inventory.mjs";
 
-function blockedResult(reason, kind = "invalid-input", scope = null) {
+function blockedResult(reason) {
   return {
-    schemaVersion: 2,
-    scope,
-    observationSchemaVersion: null,
-    observationDigest: null,
-    status: "blocked",
-    scannedSources: [],
-    skippedRoots: [],
-    blockers: [{ kind, reason }],
-    findings: [],
+    schemaVersion: 1,
+    scope: null,
+    files: [],
+    blockers: [{ kind: "invalid-input", reason }],
   };
 }
 
@@ -33,31 +24,33 @@ export async function runCli({ argv = process.argv.slice(2) } = {}) {
   const { values } = parseArgs({
     args: argv.filter((arg) => arg !== "--"),
     options: {
-      json: { type: "boolean", default: false },
       baseline: { type: "string", default: defaultBaselinePath },
-      snapshot: { type: "string" },
+      json: { type: "boolean", default: false },
       scope: { type: "string" },
     },
     strict: true,
   });
-  let result;
+  let output;
   try {
     const scope = requiredScope(values.scope);
-    if (!values.snapshot) throw new Error("--snapshot is required");
-    const [baseline, snapshot] = await Promise.all([
-      readJson(resolveRepoPath(values.baseline), "annotation baseline"),
-      readJson(resolveRepoPath(values.snapshot), "annotation snapshot"),
-    ]);
-    result = scanSnapshot({ baseline, snapshot, scope });
+    const baseline = await readJson(
+      resolveRepoPath(values.baseline),
+      "annotation baseline",
+    );
+    output = buildInventory({ baseline, scope });
   } catch (error) {
-    result = blockedResult(
+    output = blockedResult(
       error instanceof Error ? error.message : String(error),
-      "invalid-input",
     );
   }
-  if (values.json) console.log(JSON.stringify(result, null, 2));
-  else console.log(renderHuman(result));
-  return exitCodeFor(result);
+  if (values.json) console.log(JSON.stringify(output, null, 2));
+  else
+    console.log(
+      output.blockers?.length
+        ? `✗ Annotation inventory blocked: ${output.blockers[0].reason}`
+        : `✓ Annotation inventory ready for ${output.scope}.`,
+    );
+  return output.blockers?.length ? 2 : 0;
 }
 
 if (
