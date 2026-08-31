@@ -13,6 +13,7 @@
     "design-sync:audit": "node scripts/design-sync/audit-node.mjs",
     "figma:annotations:inventory": "node scripts/design-sync/annotation-inventory-cli.mjs",
     "figma:annotations:diff": "node scripts/design-sync/annotation-diff.mjs",
+    "figma:annotations:report": "node scripts/design-sync/annotation-report-cli.mjs",
     "figma:annotations:accept": "node scripts/design-sync/annotation-accept.mjs",
     "code-connect:publish:design-system": "pnpm --filter @grade10/design-system run code-connect:publish",
     "code-connect:publish:ui": "pnpm --filter @grade10/ui run code-connect:publish",
