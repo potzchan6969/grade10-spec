@@ -76,7 +76,7 @@ redesign observation or occurrence matching.
   and add the skill to `.claude/skills/dev-help/SKILL.md`, making `A supported
   harness opens the annotation workflow` expose one spec-owned path in this
   repository.
-- [ ] 2.4 Verify the relocated modules have no import or behavior dependency on
+- [x] 2.4 Verify the relocated modules have no import or behavior dependency on
   the `grade10` checkout, the skill contains no guessed store path or product
   scope fallback, and the product copies are still present until group 3; run
   the skill validator when available, `pnpm run test:design-sync`, `pnpm run
