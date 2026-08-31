@@ -29,7 +29,7 @@
   "extensionMinutes": "{minutes, plural, other {# 分鐘}}",
   "factCategory": "分類",
   "factLot": "拍品編號",
-  "factSale": "場次",
+  "factCampaign": "活動",
   "hideBidHistory": "隱藏出價紀錄",
   "highestBidder": "最高出價",
   "home": "首頁",
