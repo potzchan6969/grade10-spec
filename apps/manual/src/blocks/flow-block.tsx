@@ -1,49 +1,30 @@
 import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
-import { CaretLeft, CaretRight, FlowArrow } from "@phosphor-icons/react";
+import { FlowArrow } from "@phosphor-icons/react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useLocation } from "react-router";
 import type { FlowBlock } from "../content/grammar";
+import { AnchorLink } from "./anchor";
 import { BlockView } from "./block-view";
 import {
+  type FlowPhase,
   type FlowStep,
-  railScrollLeft,
-  splitSteps,
+  flowSteps,
+  splitFlow,
   stepTokens,
 } from "./flow-steps";
 import { sanitizeSvg } from "./sanitize-svg";
 
+/** Set while a step is pointed at, so a diagram can answer it. */
+type Point = (step: FlowStep | null) => void;
+
 export function FlowBlockView({ block }: { block: FlowBlock }) {
-  const steps = useMemo(() => splitSteps(block), [block]);
-  const [active, setActive] = useState(0);
-  const { hash } = useLocation();
-
-  useEffect(() => {
-    const target = decodeURIComponent(hash.replace(/^#/, ""));
-    const found = steps.findIndex((step) => step.id === target);
-    if (found >= 0) setActive(found);
-  }, [hash, steps]);
-
-  const move = (delta: number) => {
-    setActive((current) =>
-      Math.min(steps.length - 1, Math.max(0, current + delta)),
-    );
-  };
+  const phases = useMemo(() => splitFlow(block), [block]);
+  const steps = useMemo(() => flowSteps(phases), [phases]);
+  const [pointed, setPointed] = useState<FlowStep | null>(null);
 
   return (
     <section
-      aria-label={`${block.title} — step player`}
+      aria-label={block.title}
       className="my-6 overflow-hidden rounded-(--radius-2xl) border border-border bg-card"
-      onKeyDown={(event) => {
-        if (event.key === "ArrowRight") {
-          event.preventDefault();
-          move(1);
-        }
-        if (event.key === "ArrowLeft") {
-          event.preventDefault();
-          move(-1);
-        }
-      }}
     >
       <header className="flex items-center gap-2 border-border-subtle border-b bg-background-subtle px-4 py-2.5">
         <span className="inline-flex text-secondary-foreground">
@@ -52,149 +33,144 @@ export function FlowBlockView({ block }: { block: FlowBlock }) {
         <Text as="span" size="sm" weight="bold">
           {block.title}
         </Text>
-        <Text
-          as="span"
-          className="ml-auto font-mono"
-          size="xs"
-          tone="secondary"
-        >
-          {active + 1}/{steps.length}
+        <Text as="span" className="ml-auto" size="xs" tone="secondary">
+          {steps.length} {steps.length === 1 ? "step" : "steps"}
         </Text>
       </header>
 
       {block.diagram ? (
-        <FlowDiagram active={active} src={block.diagram} steps={steps} />
+        <FlowDiagram pointed={pointed} src={block.diagram} />
       ) : null}
 
-      <StepRail active={active} onSelect={setActive} steps={steps} />
-
-      <div
-        aria-live="polite"
-        className="px-4 py-4 [&>*:first-child]:mt-0 [&>*:last-child]:mb-0"
-        id={steps[active].id}
-      >
-        <Text as="p" className="mb-2" size="xs" tone="secondary">
-          Step {active + 1} · {steps[active].title}
-        </Text>
-        {steps[active].items.length === 0 ? (
-          <Text as="p" size="sm" tone="secondary">
-            This step carries no body.
-          </Text>
-        ) : (
-          steps[active].items.map((item, position) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
-            <BlockView block={item} key={`${item.type}-${position}`} />
-          ))
-        )}
+      <div className="divide-y divide-border-subtle">
+        {phases.map((phase) => (
+          <PhaseSection
+            key={phase.id}
+            onPoint={block.diagram ? setPointed : null}
+            phase={phase}
+          />
+        ))}
       </div>
-
-      <footer className="flex items-center justify-between gap-2 border-border-subtle border-t px-4 py-3">
-        <Button
-          disabled={active === 0}
-          leading={<CaretLeft aria-hidden />}
-          onClick={() => move(-1)}
-          size="sm"
-          variant="secondary"
-        >
-          Previous
-        </Button>
-        <Button
-          disabled={active === steps.length - 1}
-          onClick={() => move(1)}
-          size="sm"
-          trailing={<CaretRight aria-hidden />}
-          variant="secondary"
-        >
-          Next
-        </Button>
-      </footer>
     </section>
   );
 }
 
-function StepRail({
-  steps,
-  active,
-  onSelect,
+function PhaseSection({
+  phase,
+  onPoint,
 }: {
-  steps: FlowStep[];
-  active: number;
-  onSelect: (index: number) => void;
+  phase: FlowPhase;
+  onPoint: Point | null;
 }) {
-  const track = useRef<HTMLOListElement>(null);
-  const [edges, setEdges] = useState({ start: false, end: false });
-
-  const readEdges = () => {
-    const element = track.current;
-    if (!element) return;
-    const room = element.scrollWidth - element.clientWidth;
-    setEdges({
-      start: element.scrollLeft > 4,
-      end: room > 4 && element.scrollLeft < room - 4,
-    });
-  };
-
-  // The rail is the only thing that says how many steps there are, so the chip
-  // for the step being read comes to the reader rather than the other way round.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: steps.length is the trigger — a new flow re-measures its own edges.
-  useEffect(() => {
-    const element = track.current;
-    const chip = element?.children[active];
-    if (!element || !(chip instanceof HTMLElement)) return;
-    const left = railScrollLeft(element, chip);
-    if (left !== element.scrollLeft) {
-      element.scrollTo({ left, behavior: "smooth" });
-    }
-    readEdges();
-  }, [active, steps.length]);
+  const first = phase.steps[0];
+  const last = phase.steps[phase.steps.length - 1];
 
   return (
-    <div className="relative border-border-subtle border-b">
-      <ol
-        className="flex gap-2 overflow-x-auto px-4 py-3"
-        onScroll={readEdges}
-        ref={track}
-      >
-        {steps.map((step, position) => {
-          const current = position === active;
-          return (
-            <li key={step.id}>
-              <button
-                aria-current={current ? "step" : undefined}
-                className={`flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-full border px-3 py-1.5 text-xs transition-colors ${
-                  current
-                    ? "border-primary-border bg-primary-muted text-primary-muted-foreground"
-                    : "border-border bg-background-subtle text-secondary-foreground hover:border-border-strong hover:text-foreground"
-                }`}
-                onClick={() => onSelect(position)}
-                type="button"
-              >
-                <span
-                  className={`flex size-4 items-center justify-center rounded-full font-mono text-[0.625rem] ${current ? "bg-primary text-primary-foreground" : "bg-muted"}`}
-                >
-                  {position + 1}
-                </span>
-                {step.title}
-              </button>
-            </li>
-          );
-        })}
-      </ol>
+    <section className="px-4 py-4" id={phase.id}>
+      {phase.title === null ? null : (
+        <header className="mb-3 flex items-baseline gap-3">
+          <Text
+            as="h3"
+            className="uppercase tracking-wide"
+            size="xs"
+            weight="bold"
+          >
+            {phase.title}
+          </Text>
+          {first ? (
+            <Text as="span" className="ml-auto" size="xs" tone="secondary">
+              {first === last
+                ? `Step ${first.number}`
+                : `Steps ${first.number}–${last.number}`}
+            </Text>
+          ) : null}
+        </header>
+      )}
 
-      {/* There are more steps than fit. Say so at the edge they run off. */}
-      {edges.start ? (
+      {phase.lede.length === 0 ? null : (
+        <div className="manual-flow-body mb-4 text-secondary-foreground">
+          <Items items={phase.lede} />
+        </div>
+      )}
+
+      {first ? (
+        <ol start={first.number}>
+          {phase.steps.map((step, position) => (
+            <StepRow
+              key={step.id}
+              last={position === phase.steps.length - 1}
+              onPoint={onPoint}
+              step={step}
+            />
+          ))}
+        </ol>
+      ) : null}
+    </section>
+  );
+}
+
+function StepRow({
+  step,
+  last,
+  onPoint,
+}: {
+  step: FlowStep;
+  last: boolean;
+  onPoint: Point | null;
+}) {
+  const claim = onPoint
+    ? {
+        onBlur: () => onPoint(null),
+        onFocus: () => onPoint(step),
+        onMouseEnter: () => onPoint(step),
+        onMouseLeave: () => onPoint(null),
+      }
+    : {};
+
+  return (
+    <li
+      className="group/anchor relative flex gap-3 pb-5 last:pb-0"
+      id={step.id}
+      {...claim}
+    >
+      {last ? null : (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-card to-transparent"
+          className="-translate-x-1/2 absolute top-7 bottom-0 left-3 w-px bg-border"
         />
-      ) : null}
-      {edges.end ? (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-card to-transparent"
-        />
-      ) : null}
-    </div>
+      )}
+      <span className="flex size-6 shrink-0 items-center justify-center rounded-full border border-border bg-background font-mono text-[0.6875rem] text-secondary-foreground">
+        {step.number}
+      </span>
+      <div className="min-w-0 flex-1">
+        <div className="flex min-h-6 items-center gap-1">
+          <Text as="span" size="sm" weight="bold">
+            {step.title}
+          </Text>
+          <AnchorLink
+            className="shrink-0"
+            id={step.id}
+            label="Copy link to this step"
+          />
+        </div>
+        {step.items.length === 0 ? null : (
+          <div className="manual-flow-body mt-1">
+            <Items items={step.items} />
+          </div>
+        )}
+      </div>
+    </li>
+  );
+}
+
+function Items({ items }: { items: FlowStep["items"] }) {
+  return (
+    <>
+      {items.map((item, position) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
+        <BlockView block={item} key={`${item.type}-${position}`} />
+      ))}
+    </>
   );
 }
 
@@ -205,12 +181,10 @@ type DiagramState =
 
 function FlowDiagram({
   src,
-  steps,
-  active,
+  pointed,
 }: {
   src: string;
-  steps: FlowStep[];
-  active: number;
+  pointed: FlowStep | null;
 }) {
   const host = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<DiagramState>({ status: "loading" });
@@ -245,7 +219,7 @@ function FlowDiagram({
 
   useEffect(() => {
     if (state.status !== "ready") return;
-    const tokens = stepTokens(steps[active], active);
+    const tokens = pointed ? stepTokens(pointed) : null;
     for (const element of Array.from(
       host.current?.querySelectorAll("[data-step]") ?? [],
     )) {
@@ -254,14 +228,18 @@ function FlowDiagram({
         .filter(Boolean);
       element.classList.toggle(
         "data-step-active",
-        claimed.some((token) => tokens.has(token)),
+        tokens !== null && claimed.some((token) => tokens.has(token)),
       );
     }
-  }, [active, state.status, steps]);
+  }, [pointed, state.status]);
 
   return (
     <div className="border-border-subtle border-b bg-background-subtle px-4 py-4">
-      <div className="manual-flow-diagram mx-auto max-w-2xl" ref={host} />
+      <div
+        className="manual-flow-diagram mx-auto max-w-2xl"
+        data-seeking={pointed ? "" : undefined}
+        ref={host}
+      />
       {state.status === "unavailable" ? (
         <Text as="p" size="xs" title={state.reason} tone="secondary">
           {src} is not being served, so this flow runs as text. The steps read

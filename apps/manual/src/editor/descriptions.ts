@@ -39,7 +39,10 @@ const INFO: Record<string, BlockInfo> = {
     label: "Detail",
     hint: "Depth for one audience — collapsed, never hidden.",
   },
-  flow: { label: "Flow", hint: "A step player, one step per heading." },
+  flow: {
+    label: "Flow",
+    hint: "Steps in order: ## opens a step, # groups them into a phase.",
+  },
 };
 
 export function blockLabel(type: string): string {

@@ -257,18 +257,28 @@
     }
   }
 
-  /* Flow diagrams: everything the current step does not claim recedes. */
+  /* A step's body reads a size down: the card is not the page. */
+  .manual-flow-body .manual-prose {
+    font-size: 0.875rem;
+    line-height: 1.65;
+  }
+
+  /* Flow diagrams: whole and lit, until a step is pointed at — then everything
+     that step does not claim recedes. */
   .manual-flow-diagram svg {
     width: 100%;
     height: auto;
   }
 
   .manual-flow-diagram [data-step] {
-    opacity: 0.3;
     transition: opacity 200ms ease-out;
   }
 
-  .manual-flow-diagram [data-step].data-step-active {
+  .manual-flow-diagram[data-seeking] [data-step] {
+    opacity: 0.3;
+  }
+
+  .manual-flow-diagram[data-seeking] [data-step].data-step-active {
     opacity: 1;
   }
 

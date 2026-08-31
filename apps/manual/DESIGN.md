@@ -69,7 +69,7 @@ start at `##`; raw HTML is never rendered). Directives sit at column 0:
 | `children` | `::children` | cards for the child pages of this directory, from their frontmatter |
 | `callout` | `:::callout{kind="note"}` … `:::` | kinds: `note`, `decision`, `warning` |
 | `detail` | `:::detail{for="engineer" title="…"}` … `:::` | collapsed-but-present depth for one audience; searchable, deep-linkable, never hidden from the DOM |
-| `flow` | `:::flow{title="Checkout" diagram="assets/…"}` … `:::` | step player; each `##` in the body starts a step; optional SVG whose `data-step` elements light per step |
+| `flow` | `:::flow{title="Checkout" diagram="assets/…"}` … `:::` | steps read top to bottom, all open; `##` starts a step, `#` groups the steps under it into a phase, and numbering runs straight through; optional SVG whose `data-step` elements light while their step is pointed at |
 
 Unknown directives are a parse error, not a silent pass-through.
 

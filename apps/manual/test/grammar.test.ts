@@ -25,7 +25,7 @@ const canonical: { name: string; text: string }[] = [
   },
   {
     name: "containers with markdown and leaves",
-    text: `${fm}\n:::callout{kind="decision"}\nWe hold funds, we never charge early.\n:::\n\n:::detail{title="Ledger shape" for="engineer"}\nAppend-only rows.\n\n::image{src="assets/ledger.png" alt="Ledger diagram"}\n:::\n\n:::flow{title="Checkout" diagram="assets/checkout.svg"}\n## Shopper pays\n\nThe hold is placed.\n\n## Order settles\n\nPoints accrue.\n:::\n`,
+    text: `${fm}\n:::callout{kind="decision"}\nWe hold funds, we never charge early.\n:::\n\n:::detail{title="Ledger shape" for="engineer"}\nAppend-only rows.\n\n::image{src="assets/ledger.png" alt="Ledger diagram"}\n:::\n\n:::flow{title="Checkout" diagram="assets/checkout.svg"}\n# In the browser\n\n## Shopper pays\n\nThe hold is placed.\n\n# After the money\n\n## Order settles\n\nPoints accrue.\n:::\n`,
   },
   {
     name: "empty container",

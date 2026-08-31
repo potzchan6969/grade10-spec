@@ -97,7 +97,8 @@ The data shape, the architecture link, the thing a PM does not need.
 :::
 ```
 
-A flow is a step player. Each `##` in its body starts a step:
+A flow reads top to bottom with every step open. Each `##` in its body starts a
+step:
 
 ```md
 :::flow{title="Checkout"}
@@ -105,6 +106,25 @@ A flow is a step player. Each `##` in its body starts a step:
 What happens, in plain words.
 ## Payment is taken
 The next thing.
+:::
+```
+
+A long flow can say which steps belong together. Each `#` opens a phase, and
+whatever you write before its first step says what its scope is. Steps stay
+numbered straight through, so a link to step 5 still lands on step 5:
+
+```md
+:::flow{title="Intake to release"}
+# Intake
+The item arrives and gets on the diary.
+
+## Open a draft
+The collector fills the request wizard.
+
+# Valuation and offer
+
+## Start the valuation
+What it is worth.
 :::
 ```
 
@@ -134,7 +154,8 @@ inside its trimmed bounds. The editor writes canonical text on every save, so
 the rule only bites when you edit a file by hand.
 
 Two things people trip on. Prose headings start at `##`, never `#` — the page
-title is the `h1`. And the scanner tracks fenced code blocks, which is why every
+title is the `h1`, and `#` means a phase inside a flow and nothing anywhere
+else. And the scanner tracks fenced code blocks, which is why every
 directive on this page renders as text instead of as a block: inside a fence,
 `::` is just two colons.
 
