@@ -123,7 +123,7 @@ test("creates a compact payload containing current affected page states only", (
     commitSha: "abc",
     commitUrl: "https://github.com/9gag/grade10-spec/commit/abc",
     index: INDEX,
-    storybookUrl: "https://grade10-storybook.memeland-qa.workers.dev",
+    storybookUrl: "https://storybook.grade10-stg.com",
   });
 
   assert.deepEqual(payload, {
@@ -137,7 +137,7 @@ test("creates a compact payload containing current affected page states only", (
       },
       {
         text: {
-          text: "• <https://grade10-storybook.memeland-qa.workers.dev/iframe.html?id=pages-store--default&viewMode=story|Pages/Store / Default>\n• <https://grade10-storybook.memeland-qa.workers.dev/iframe.html?id=pages-store--empty&viewMode=story|Pages/Store / Empty>",
+          text: "• <https://storybook.grade10-stg.com/iframe.html?id=pages-store--default&viewMode=story|Pages/Store / Default>\n• <https://storybook.grade10-stg.com/iframe.html?id=pages-store--empty&viewMode=story|Pages/Store / Empty>",
           type: "mrkdwn",
         },
         type: "section",

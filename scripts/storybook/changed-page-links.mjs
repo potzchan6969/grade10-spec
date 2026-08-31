@@ -289,7 +289,7 @@ async function main() {
       head: { type: "string", default: "HEAD" },
       "storybook-url": {
         type: "string",
-        default: "https://grade10-storybook.memeland-qa.workers.dev",
+        default: "https://storybook.grade10-stg.com",
       },
       "commit-url": { type: "string" },
       "github-output": { type: "string" },
