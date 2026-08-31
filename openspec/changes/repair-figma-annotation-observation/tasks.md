@@ -21,7 +21,7 @@
   digest, orphan, and skipped-root fixtures; `pnpm test:design-sync`; `pnpm run
   lint`; `pnpm run typecheck`; and `git diff --check`.
 
-## 2. Capture unique and stable Plugin API evidence (grade10)
+## 2. Capture unique and stable Plugin API evidence (grade10) (owner: @kinisworking)
 
 This group depends on group 1 being available in the standalone registered
 `grade10-spec` store. It does not require an `external/grade10-spec` submodule
