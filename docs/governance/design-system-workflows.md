@@ -6,21 +6,25 @@ Nothing here restates a rule. Every row points at the document that owns it, and
 
 ## Pick your row
 
-| You want to | Go to |
-| --- | --- |
-| Add or change a theme, a mode, a token value | [Tokens](#tokens) |
-| Move values between Figma and the repository | [Tokens](#tokens) |
-| Know whether a thing is a primitive | [Primitives](#primitives) |
-| Implement a Figma component set as code | [Primitives](#primitives) |
-| Decide where a component or a view lives | [Blocks and views](#blocks-and-views) |
-| Turn a page frame into code | [A page from Figma](#a-page-from-figma) |
-| Check the built UI against the design, or triage a failing check | [Auditing](#auditing) |
-| Know whose call something is | [Who owns what](#who-owns-what) |
-| Fix what an audit found, and close it out | [Following up on a finding](#following-up-on-a-finding) |
+
+| You want to                                                      | Go to                                                   |
+| ---------------------------------------------------------------- | ------------------------------------------------------- |
+| Add or change a theme, a mode, a token value                     | [Tokens](#tokens)                                       |
+| Move values between Figma and the repository                     | [Tokens](#tokens)                                       |
+| Know whether a thing is a primitive                              | [Primitives](#primitives)                               |
+| Implement a Figma component set as code                          | [Primitives](#primitives)                               |
+| Decide where a component or a view lives                         | [Blocks and views](#blocks-and-views)                   |
+| Turn a page frame into code                                      | [A page from Figma](#a-page-from-figma)                 |
+| Check the built UI against the design, or triage a failing check | [Auditing](#auditing)                                   |
+| Know whose call something is                                     | [Who owns what](#who-owns-what)                         |
+| Fix what an audit found, and close it out                        | [Following up on a finding](#following-up-on-a-finding) |
+
 
 Run every command below **from the repository root**. The token and design-sync scripts live under `scripts/`, not in a package, and will not resolve from inside `packages/design-system`.
 
 ## Tokens
+
+
 
 ### Themes and modes
 
@@ -40,12 +44,14 @@ Two things routinely surprise people, and both are recorded in that file's own n
 
 ### Moving values
 
-| What moved | Command | Needs a human in Figma |
-| --- | --- | --- |
-| A designer changed variables in Figma | `pnpm tokens:pull` | Yes — runs the dump plugin |
-| `tokens.json` or `tokens.config.json` changed in the repository | `pnpm tokens:build` | No — the only unattended leg |
-| Repository values need to reach a Figma file, or a fresh file needs seeding | `pnpm tokens:push` | Yes — runs the generated script |
-| The plugin bundles need rebuilding | `pnpm tokens:plugin <dump\|push\|seed>` | — |
+
+| What moved                                                                  | Command                               | Needs a human in Figma          |
+| --------------------------------------------------------------------------- | ------------------------------------- | ------------------------------- |
+| A designer changed variables in Figma                                       | `pnpm tokens:pull`                    | Yes — runs the dump plugin      |
+| `tokens.json` or `tokens.config.json` changed in the repository             | `pnpm tokens:build`                   | No — the only unattended leg    |
+| Repository values need to reach a Figma file, or a fresh file needs seeding | `pnpm tokens:push`                    | Yes — runs the generated script |
+| The plugin bundles need rebuilding                                          | `pnpm tokens:plugin <dump\|push\|seed>` | —                               |
+
 
 The pull is `pnpm tokens:plugin dump` → import the manifest in the Figma desktop app → run **DS Token Dump** → download `figma-dump.json` → `FIGMA_DUMP=/absolute/path pnpm run tokens:pull`. Use an absolute path: `pull.mjs` resolves it against the repository root, not your shell's working directory.
 
@@ -56,7 +62,11 @@ Skill: `.cursor/skills/design-tokens/SKILL.md`. Procedure and failure table: [`f
 - **A green pull is not a whole file.** `pull.mjs` reads only the collections named in `tokens.config.json`; `Motion` and `Sizing` are in the Figma file and are silently ignored. Say what was skipped rather than reporting a clean sync.
 - Commit the regenerated CSS **with** the `tokens.json` diff. The two are one change.
 
+
+
 ## Primitives
+
+
 
 ### Which components are primitives
 
@@ -66,6 +76,8 @@ The assignment test is the three-layer table in [`ui-component-contracts.md`, "W
 
 - **"Is it compound?" is not the test.** A composite can be a primitive. `Nav` and `Footer` stay in the design system because they are store chrome, not a product item; a Figma set named `Product / …` is a block regardless of how display-ready its props are.
 - **A primitive ships no store's content.** No default, fallback, or built-in value for any prop carrying a store's brand, navigation, catalog, locale, copy, or corporate attribution — those props are required, so omitting one fails type checking. A default for a variant, size, layout, or accessible name is fine.
+
+
 
 ### Implementing one
 
@@ -87,11 +99,13 @@ The operative rule, from the ownership table: **a component may not offer a vari
 
 Three homes, and the first that fits is the answer:
 
-| It is | Home | Preview |
-| --- | --- | --- |
-| A primitive | `packages/design-system/src/components/<group>/` | `pnpm run storybook:design-system` |
-| A compound block a capability spec names | `packages/ui/src/blocks/<product-context>-<capability>/` | `pnpm run storybook:ui` |
-| An assembly — a page, put together once for one route | The **consuming application** | `apps/preview/src/pages`, via `pnpm run storybook:workbench` |
+
+| It is                                                 | Home                                                     | Preview                                                      |
+| ----------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------ |
+| A primitive                                           | `packages/design-system/src/components/<group>/`         | `pnpm run storybook:design-system`                           |
+| A compound block a capability spec names              | `packages/ui/src/blocks/<product-context>-<capability>/` | `pnpm run storybook:ui`                                      |
+| An assembly — a page, put together once for one route | The **consuming application**                            | `apps/preview/src/pages`, via `pnpm run storybook:workbench` |
+
 
 `packages/ui/src/blocks/` is one flat level of **capability** directories. The namespace is the capability, never the page: a page is an assembly, so its sections belong to the capabilities they express and the page itself never gets a directory. If the capability's directory exists, the block joins it; if the spec exists but no directory does, create one; if no spec exists, the spec comes first.
 
@@ -108,6 +122,8 @@ Conversion-readiness defects are reported, not compensated for: a detached insta
 Where the output lands depends on the checkout. In a consuming application it is the page. **In this repository it is at most new or changed blocks plus a composition snippet the application pastes** — pages are not implemented here.
 
 ## Auditing
+
+
 
 ### Two rails, and both are needed
 
@@ -143,14 +159,16 @@ Recorded so they are not mistaken for coverage. The full lists are in [`design-c
 
 ## Who owns what
 
-| Decision | Owner | Recorded in |
-| --- | --- | --- |
-| Which variants, states, and sizes exist | Designer | The Figma component set |
-| What the values are | Designer | `tokens.json` |
-| How the contract is implemented | Engineer | `<name>.tsx` |
-| The name mapping between the two | Engineer | `<name>.figma.ts` |
-| Proof each contract state renders | Engineer | `<name>.stories.tsx` |
-| The projection rules | Engineer | `tokens.config.json` |
+
+| Decision                                | Owner               | Recorded in             |
+| --------------------------------------- | ------------------- | ----------------------- |
+| Which variants, states, and sizes exist | Designer            | The Figma component set |
+| What the values are                     | Designer            | `tokens.json`           |
+| How the contract is implemented         | Designer / Engineer | `<name>.tsx`            |
+| The name mapping between the two        | Designer / Engineer | `<name>.figma.ts`       |
+| Proof each contract state renders       | Designer / Engineer | `<name>.stories.tsx`    |
+| The projection rules                    | Engineer            | `tokens.config.json`    |
+
 
 Each artifact is the sole authority over exactly one thing and no artifact owns two — the table in [`design-code-sync.md`, "Ownership"](design-code-sync.md#ownership), with the designer's pre-flight checklist at ["For designers: before you create or change a component"](design-code-sync.md#for-designers-before-you-create-or-change-a-component).
 
@@ -162,11 +180,13 @@ Owners are claimed at pickup, never assigned at planning time: `pnpm plan claim`
 
 **Settle which side is right before editing either.** A value row is not automatically a code bug; the code may be right and the Figma file stale.
 
-| The finding | What closes it |
-| --- | --- |
-| Code drifted from what Figma already draws | A plain commit reconciling the code |
-| Figma is wrong | A message to the designer — never a code edit that hides it |
+
+| The finding                                                              | What closes it                                                             |
+| ------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| Code drifted from what Figma already draws                               | A plain commit reconciling the code                                        |
+| Figma is wrong                                                           | A message to the designer — never a code edit that hides it                |
 | An option renamed or dropped, or a mismatch you are deliberately keeping | An OpenSpec change naming the exact exports and the consuming applications |
+
 
 Never resolve a mismatch by editing the `.figma.ts` template to agree with the code. The template maps names; papering over a disagreement there deletes the only evidence of it. A warning you intend to keep belongs in a change with a reason, not in the run log.
 
@@ -184,6 +204,8 @@ pnpm run test:stories
 pnpm run agent:check-parity       # after agent instructions, rules, or skills changed
 ```
 
+
+
 ## Related reading
 
 - [`figma-component-to-code.md`](figma-component-to-code.md) — the component route, step by step, with the owner of each step.
@@ -192,3 +214,4 @@ pnpm run agent:check-parity       # after agent instructions, rules, or skills c
 - [`figma-token-export.md`](figma-token-export.md) — the token pull, its setup, and its failure table.
 - [`prd-and-openspec.md`](prd-and-openspec.md) and [`task-ownership.md`](task-ownership.md) — where a requirement lives, and who is on it.
 - [`agent-workflow-example.md`](agent-workflow-example.md) — one feature walked through both repositories, end to end.
+
