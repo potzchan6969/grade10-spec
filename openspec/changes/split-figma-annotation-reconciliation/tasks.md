@@ -83,7 +83,7 @@ redesign observation or occurrence matching.
   agent:sync-parity`, `pnpm run agent:check-parity`, `pnpm run lint`, `pnpm run
   typecheck`, and `git diff --check`.
 
-## 3. Replace the mixed workflow with the page adapter (grade10) (owner: @kinisworking)
+## 3. Replace the mixed workflow with the page adapter (grade10)
 
 This group depends on groups 1 and 2 being merged to the registered
 `grade10-spec` store's `main`. It resolves that standalone store at runtime and
