@@ -89,7 +89,7 @@ This group depends on groups 1 and 2 being merged to the registered
 `grade10-spec` store's `main`. It resolves that standalone store at runtime and
 does not depend on an `external/grade10-spec` submodule bump.
 
-- [ ] 3.1 Rewrite
+- [x] 3.1 Rewrite
   `.claude/skills/reconcile-figma-annotations/SKILL.md` as a product adapter:
   resolve `grade10-spec` through `openspec list --json`, require the store's
   inventory/report/diff/accept interfaces, pass `--scope product` to every
@@ -98,7 +98,7 @@ does not depend on an `external/grade10-spec` submodule bump.
   `Annotation is outside registered surfaces`, `Actionable findings are
   reported`, and `A supported harness opens the annotation workflow` apply only
   to page-layout roots.
-- [ ] 3.2 Update
+- [x] 3.2 Update
   `.claude/skills/reconcile-figma-annotations/agents/openai.yaml` and
   `.claude/skills/dev-help/SKILL.md` to describe page-layout reconciliation;
   replace the duplicated Plugin API and teammate references under the product
@@ -106,13 +106,13 @@ does not depend on an `external/grade10-spec` submodule bump.
   approval pauses, exact-evidence rules, same-snapshot verification, separate
   store-commit confirmation, and prohibition on Figma, product-repo, submodule,
   push, and pull-request writes.
-- [ ] 3.3 After comparing the migrated store tests with every case in
+- [x] 3.3 After comparing the migrated store tests with every case in
   `scripts/reconcile-figma-annotations.test.mjs` and
   `scripts/reconcile-figma-annotations.report.test.mjs`, remove those tests,
   `scripts/reconcile-figma-annotations.mjs`,
   `scripts/figma-annotation-report.mjs`, and the now-empty `test:tooling` script
   from `package.json`; do not alter application, frontend, or submodule files.
-- [ ] 3.4 Verify the product skill has no primitive/shared-block route and no
+- [x] 3.4 Verify the product skill has no primitive/shared-block route and no
   fallback implementation, then run the skill validator when available,
   `pnpm run agent:sync-parity`, `pnpm run agent:check-parity`, `pnpm run lint`,
   `pnpm run typecheck`, and `git diff --check`.
