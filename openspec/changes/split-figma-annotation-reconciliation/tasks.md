@@ -117,7 +117,7 @@ does not depend on an `external/grade10-spec` submodule bump.
   `pnpm run agent:sync-parity`, `pnpm run agent:check-parity`, `pnpm run lint`,
   `pnpm run typecheck`, and `git diff --check`.
 
-## 4. Prove cross-repository isolation (grade10)
+## 4. Prove cross-repository isolation (grade10) (owner: @kinisworking)
 
 This group depends on all implementation groups. It is a read-only acceptance
 rehearsal; it must not select or accept findings.
