@@ -10,6 +10,9 @@ name: Manual
 # - Repo secret CLOUDFLARE_API_TOKEN_QA (same staging token Storybook uses).
 # - Confirm Cloudflare Access covers spec.grade10-stg.com if you gate
 #   the staging zone.
+# - Sign-in: register the GitHub App and set the worker's client id and
+#   secret — the steps live in apps/manual/worker/auth.ts. Until then the
+#   hosted site deploys read-only.
 
 on:
   push:

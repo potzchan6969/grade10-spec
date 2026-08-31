@@ -227,7 +227,7 @@ describe("proposing", () => {
   it("writes nothing without a token", async () => {
     const { http, calls } = repo();
 
-    await expect(storeOn(http, "").propose(FILES)).rejects.toThrow(/token/);
+    await expect(storeOn(http, "").propose(FILES)).rejects.toThrow(/signed in/);
     expect(calls).toHaveLength(0);
   });
 });

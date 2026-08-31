@@ -26,7 +26,7 @@ import {
   stageDraft,
   useDrafts,
 } from "./drafts";
-import { noteWrite, useEditorSession } from "./session";
+import { ensureFreshSession, noteWrite, useEditorSession } from "./session";
 import { describeCause, type PushConflict } from "./store";
 
 /**
@@ -84,8 +84,17 @@ export function PendingBar() {
       source,
       baseVersion,
     }));
-    push
-      .call(store, pushing, message.trim() === "" ? fallback : message.trim())
+    // A renewal may swap the store out from under this closure, so the push
+    // asks for the session as it stands once the sign-in is fresh.
+    ensureFreshSession()
+      .then((session) => {
+        const live = session.store;
+        if (!live?.push) throw new Error("no store can push right now");
+        return live.push(
+          pushing,
+          message.trim() === "" ? fallback : message.trim(),
+        );
+      })
       .then((outcome) => {
         if (outcome.status === "conflicts") {
           setConflicts(outcome.conflicts);

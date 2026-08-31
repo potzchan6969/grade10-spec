@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from "react";
 
 /**
- * Whether the token dialog is open, as one module-level value.
+ * Whether the sign-in dialog is open, as one module-level value.
  *
  * The dialog is mounted once, beside the page's own actions, and the things
  * that need it are elsewhere: a locked Propose control has to be able to say

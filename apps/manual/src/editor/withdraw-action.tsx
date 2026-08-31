@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useSnapshotReload } from "../api/snapshot-provider";
 import type { ChangeEntry } from "../api/types";
 import { ConfirmDialog } from "./confirm-dialog";
-import { noteWrite, useEditorSession } from "./session";
+import { ensureFreshSession, noteWrite, useEditorSession } from "./session";
 import { describeCause } from "./store";
 
 /**
@@ -38,8 +38,13 @@ export function WithdrawAction({ change }: { change: ChangeEntry }) {
   const withdraw = () => {
     setBusy(true);
     setError(null);
-    store
-      .withdraw(change.id)
+    // A renewal may swap the store out from under this closure, so the
+    // withdrawal asks for the session as it stands once the sign-in is fresh.
+    ensureFreshSession()
+      .then((session) => {
+        if (!session.store) throw new Error("no store is answering");
+        return session.store.withdraw(change.id);
+      })
       .then(() => {
         noteWrite();
         reload();

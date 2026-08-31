@@ -99,7 +99,7 @@ function running(health: Health): string {
 function summary(health: Health): string {
   const parts = [`Deployed ${relativeTime(health.generatedAt)}`];
   if (health.level === "unknown")
-    parts.push("main's state unchecked — add a token in settings to see it");
+    parts.push("main's state unchecked — sign in with GitHub to see it");
   if (health.live) {
     parts.push(
       health.live.head === health.storeHead

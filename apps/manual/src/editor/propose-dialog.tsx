@@ -27,6 +27,7 @@ import {
   today,
 } from "./propose";
 import {
+  ensureFreshSession,
   noteWrite,
   rememberedHandle,
   rememberHandle,
@@ -132,8 +133,13 @@ export function ProposeDialog({
     if (problem || !store) return;
     setBusy(true);
     setError(null);
-    store
-      .propose(draftProposal(draft))
+    // A renewal may swap the store out from under this closure, so the push
+    // asks for the session as it stands once the sign-in is fresh.
+    ensureFreshSession()
+      .then((session) => {
+        if (!session.store) throw new Error("no store is answering");
+        return session.store.propose(draftProposal(draft));
+      })
       .then(({ id }) => {
         if (kind === "local") rememberHandle(draft.author);
         noteWrite();
@@ -322,8 +328,8 @@ function LockedNote({
     <div className="rounded-(--radius-xl) border border-border-subtle bg-muted px-3 py-2">
       <Text as="p" size="xs">
         Proposing writes a new change to {REPO.owner}/{REPO.repo} — the reason
-        and the ids it touches, nothing more. It needs a GitHub token with write
-        access, which you add in{" "}
+        and the ids it touches, nothing more. It takes a GitHub sign-in, which
+        starts in{" "}
         <button
           className="cursor-pointer underline hover:text-foreground"
           onClick={() => {

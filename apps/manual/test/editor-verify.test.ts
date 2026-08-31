@@ -11,9 +11,9 @@ import {
   verifyToken,
 } from "../src/editor/verify";
 
-/** A pasted string is not access. These pin the two questions verification
- * asks, and — because GitHub answers "not yours" and "not approved yet" with
- * the same 404 — that the refusal names both. */
+/** A token in storage is not access. These pin the two questions every
+ * sign-in is asked, and — because GitHub answers "app not installed" and
+ * "repo not yours" with the same 404 — that the refusal names both. */
 
 const REPO_API = `https://api.github.com/repos/${REPO.owner}/${REPO.repo}`;
 const EXPIRES = "2026-09-29 12:00:00 UTC";
@@ -102,7 +102,7 @@ describe("verifying a token", () => {
     expect(seen).toEqual(["https://api.github.com/user"]);
   });
 
-  it("names both halves of a 404 — the wrong scope and the pending approval", async () => {
+  it("names both halves of a 404 — the app not installed and the repo out of reach", async () => {
     const { http } = github((url) =>
       url.endsWith("/user")
         ? { status: 200, body: { login: "echo" } }
@@ -114,8 +114,8 @@ describe("verifying a token", () => {
     expect(result.ok).toBe(false);
     const reason = result.ok ? "" : result.reason;
     expect(reason).toContain("404");
-    expect(reason).toContain("Only select repositories");
-    expect(reason).toMatch(/approved/);
+    expect(reason).toMatch(/not installed/);
+    expect(reason).toMatch(/cannot see/);
     expect(reason).toContain(REPO.owner);
   });
 

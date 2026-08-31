@@ -392,17 +392,19 @@ describe("GithubStore", () => {
     expect(put?.body).toMatchObject({ branch: "main" });
   });
 
-  it("is read-only without a token, and asks nothing", async () => {
+  it("is read-only without a sign-in, and asks nothing", async () => {
     const { http, calls } = repo();
     const store = storeOn(http, null);
 
-    expect(store.readOnly).toMatch(/token/);
-    expect(store.readOnly).toMatch(/contents:write/);
-    await expect(store.push([file(PATH, null)], "m")).rejects.toThrow(/token/);
+    expect(store.readOnly).toMatch(/not signed in/);
+    expect(store.readOnly).toMatch(/Sign in with GitHub/);
+    await expect(store.push([file(PATH, null)], "m")).rejects.toThrow(
+      /signed in/,
+    );
     await expect(
       store.movedSince([{ path: PATH, baseVersion: null }]),
-    ).rejects.toThrow(/token/);
-    await expect(store.read(PATH)).rejects.toThrow(/token/);
+    ).rejects.toThrow(/signed in/);
+    await expect(store.read(PATH)).rejects.toThrow(/signed in/);
     expect(calls).toHaveLength(0);
   });
 
@@ -422,7 +424,7 @@ describe("GithubStore, what a token has to have proved", () => {
     const { http } = repo();
 
     expect(storeOn(http, "pat", memoryStore()).readOnly).toMatch(
-      /has not been checked/,
+      /not confirmed/,
     );
     expect(storeOn(http, "pat", memoryStore(verified())).readOnly).toBeNull();
   });
@@ -440,9 +442,7 @@ describe("GithubStore, what a token has to have proved", () => {
     const { http } = repo();
     const storage = memoryStore(verified("echo", "an older pat"));
 
-    expect(storeOn(http, "pat", storage).readOnly).toMatch(
-      /has not been checked/,
-    );
+    expect(storeOn(http, "pat", storage).readOnly).toMatch(/not confirmed/);
   });
 
   it("tears the verdict up the first time GitHub answers 401", async () => {
@@ -465,7 +465,7 @@ describe("GithubStore, what a token has to have proved", () => {
 
     await expect(store.read(PATH)).rejects.toThrow(/Bad credentials/);
 
-    expect(store.readOnly).toMatch(/has not been checked/);
+    expect(store.readOnly).toMatch(/not confirmed/);
     expect(storage.get(STORAGE.verified)).toBeNull();
     expect(changed).toBe(1);
   });

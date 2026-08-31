@@ -1,16 +1,29 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  // Static publish of the Grade10 Manual at https://spec.grade10-stg.com on
-  // the staging Cloudflare account. The build bakes the store snapshot into
-  // dist/api/*, so the site is pure static assets; dist/_headers gives those
-  // JSON their content type. SPA fallback keeps /p/... deep links working.
+  // The Grade10 Manual at https://spec.grade10-stg.com on the staging
+  // Cloudflare account. The build bakes the store snapshot into dist/api/*,
+  // so the site is static assets — except /auth/*, where worker/auth.ts does
+  // the GitHub App sign-in exchanges that need the app secret. dist/_headers
+  // gives the JSON artifacts their content type; SPA fallback keeps /p/...
+  // deep links working.
+  //
+  // One-time setup for sign-in (steps in worker/auth.ts): put the GitHub
+  // App's client id below and `wrangler secret put GITHUB_OAUTH_CLIENT_SECRET`.
+  // Until both are set, /auth/config answers disabled and the site is
+  // read-only for everyone.
   "name": "grade10-manual",
+  "main": "worker/auth.ts",
   "compatibility_date": "2026-08-01",
   "account_id": "de021143aac704ccbda9c3cd00be261d",
   "routes": [{ "pattern": "spec.grade10-stg.com", "custom_domain": true }],
+  "vars": {
+    "GITHUB_OAUTH_CLIENT_ID": ""
+  },
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "single-page-application"
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/auth/*"]
   },
   "workers_dev": false
 }

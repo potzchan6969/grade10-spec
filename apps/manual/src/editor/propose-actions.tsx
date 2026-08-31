@@ -22,7 +22,7 @@ type ProposeProps = {
   spec?: SpecEntry;
 };
 
-const LOCKED = "Propose a change — needs a GitHub token with write access";
+const LOCKED = "Propose a change — sign in with GitHub first";
 
 export function ProposeRowAction({
   cites,

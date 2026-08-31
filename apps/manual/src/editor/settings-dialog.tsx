@@ -5,33 +5,24 @@ import {
   DialogContent,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
-import { useState } from "react";
-import { REPO, TOKEN_LIST_URL, TOKEN_SETTINGS_URL } from "./config";
-import { TextField } from "./fields";
-import {
-  forgetGithubToken,
-  saveGithubToken,
-  useEditorSession,
-} from "./session";
-import { describeCause } from "./store";
+import { useEffect, useState } from "react";
+import { authAvailability, readRenewal, signInPath } from "./auth";
+import { REPO } from "./config";
+import { browserKeyStore } from "./github-store";
+import { signOut, useEditorSession } from "./session";
 import { expiryNote } from "./verify";
 
 /**
- * What the hosted editor saves with. A fine-grained PAT is the interim
- * credential, and it is only tolerable because the renderer never renders raw
- * HTML — that is the XSS line a stored token sits behind. Saves land straight
- * on the base branch; the deploy listens on push, so an edit is live in about
- * a minute.
+ * Who is signed in, and the door for whoever is not. There is nothing to
+ * paste and nothing to configure per person: the GitHub App is installed on
+ * the repository once, sign-in is one redirect, and the token it lands stays
+ * in this browser only — renewed by the session itself while GitHub allows.
  *
- * Saving one is a verification, not a paste: GitHub is asked who the token
- * belongs to and whether it reaches this repository, and the answer — the
- * handle, the expiry, or the exact refusal — is what this dialog shows.
+ * Saves land straight on the base branch; the deploy listens on push, so an
+ * edit is live in about a minute.
  */
 
-type Check =
-  | { state: "idle" }
-  | { state: "checking" }
-  | { state: "refused"; reason: string };
+type Availability = "asking" | "enabled" | "disabled";
 
 export function SettingsDialog({
   open,
@@ -40,56 +31,48 @@ export function SettingsDialog({
   open: boolean;
   onOpenChange: (next: boolean) => void;
 }) {
-  const { token, verdict } = useEditorSession();
-  const [draft, setDraft] = useState(token ?? "");
-  const [check, setCheck] = useState<Check>({ state: "idle" });
+  const { token, verdict, problem } = useEditorSession();
+  const [auth, setAuth] = useState<Availability>("asking");
 
-  const expiry = expiryNote(verdict?.expires ?? null);
+  useEffect(() => {
+    if (!open) return;
+    let live = true;
+    void authAvailability().then((answer) => {
+      if (live) setAuth(answer.enabled ? "enabled" : "disabled");
+    });
+    return () => {
+      live = false;
+    };
+  }, [open]);
 
-  const save = () => {
-    setCheck({ state: "checking" });
-    saveGithubToken(draft.trim())
-      .then((result) => {
-        setCheck(
-          result.ok
-            ? { state: "idle" }
-            : { state: "refused", reason: result.reason },
-        );
-      })
-      .catch((cause: unknown) => {
-        setCheck({
-          state: "refused",
-          reason: `GitHub could not be reached: ${describeCause(cause)}`,
-        });
-      });
-  };
+  // A sign-in that renews itself has no expiry worth announcing; one that
+  // cannot renew wears the token's own end date.
+  const renewal = readRenewal(browserKeyStore);
+  const expiry = renewal?.refreshToken
+    ? null
+    : expiryNote(verdict?.expires ?? null);
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent className="max-w-(--container-md)">
         <DialogTitle className="font-heading font-bold text-lg">
-          Saving to {REPO.owner}/{REPO.repo}
+          Editing {REPO.owner}/{REPO.repo}
         </DialogTitle>
 
         <Text as="p" size="xs" tone="secondary">
           Saves land straight on <strong>{REPO.defaultBranch}</strong> — the
-          deploy listens on push, so an edit is live in about a minute.
+          deploy listens on push, so an edit is live in about a minute. Signing
+          in with GitHub is what turns editing on; the token it leaves stays in
+          this browser only.
         </Text>
-
-        <TextField
-          label="Token"
-          onChange={(next) => {
-            setDraft(next);
-            setCheck({ state: "idle" });
-          }}
-          placeholder="github_pat_…"
-          value={draft}
-        />
 
         {verdict ? (
           <Text as="p" size="xs">
             Signed in as <strong>@{verdict.login}</strong> · write access to{" "}
             {REPO.owner}/{REPO.repo}
+            {renewal?.refreshToken ? (
+              <span> · signs itself back in as the token expires</span>
+            ) : null}
             {expiry ? (
               <span className={expiry.urgent ? "text-destructive" : undefined}>
                 {" · "}
@@ -99,79 +82,66 @@ export function SettingsDialog({
           </Text>
         ) : null}
 
-        {check.state === "refused" ? (
+        {problem ? (
           <Text as="p" className="text-destructive" size="xs">
-            {check.reason}
+            {problem}
           </Text>
         ) : null}
 
-        <TokenGuide />
+        {!verdict && token && !problem ? (
+          <Text as="p" size="xs" tone="secondary">
+            Checking this sign-in with GitHub…
+          </Text>
+        ) : null}
 
-        <div className="flex flex-wrap items-center gap-2">
-          <a
-            className="text-secondary-foreground text-xs underline hover:text-foreground"
-            href={TOKEN_SETTINGS_URL}
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            Make one on GitHub
-          </a>
-          <div className="ml-auto flex gap-2">
-            {token ? (
-              <Button
-                onClick={() => {
-                  forgetGithubToken();
-                  setDraft("");
-                  setCheck({ state: "idle" });
-                  onOpenChange(false);
-                }}
-                size="sm"
-                type="button"
-                variant="ghost"
-              >
-                Forget it
-              </Button>
-            ) : null}
+        {!token && auth === "disabled" ? <SetupNote /> : null}
+
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          {token ? (
             <Button
-              disabled={draft.trim() === ""}
-              loading={check.state === "checking"}
-              onClick={save}
+              onClick={() => {
+                signOut();
+                onOpenChange(false);
+              }}
+              size="sm"
+              type="button"
+              variant="ghost"
+            >
+              Sign out
+            </Button>
+          ) : null}
+          {auth === "enabled" && (!token || problem) ? (
+            <Button
+              onClick={() => {
+                window.location.assign(signInPath(backPath()));
+              }}
               size="sm"
               type="button"
             >
-              Verify and save
+              Sign in with GitHub
             </Button>
-          </div>
+          ) : null}
         </div>
       </DialogContent>
     </Dialog>
   );
 }
 
-/** What to ask GitHub for, and the two things that go wrong afterwards. Short
- * on purpose: a manual nobody reads is worse than four sentences. */
-function TokenGuide() {
+/** The one state a reader cannot fix: the deployment has no GitHub App yet.
+ * Say what an admin does, and where the exact steps live. */
+function SetupNote() {
   return (
     <Text as="p" size="xs" tone="secondary">
-      Make a <strong>fine-grained</strong> token: Only select repositories →{" "}
-      <strong>
-        {REPO.owner}/{REPO.repo}
-      </strong>
-      , Repository permissions → <strong>Contents: read and write</strong> (add{" "}
-      <strong>Actions: read</strong> to see deploy status).{" "}
-      {REPO.owner} is an organization, so an owner may have to approve the token
-      — until they do it reads as no access at all, and it sits pending on{" "}
-      <a
-        className="underline hover:text-foreground"
-        href={TOKEN_LIST_URL}
-        rel="noreferrer noopener"
-        target="_blank"
-      >
-        your token list
-      </a>
-      . Fine-grained tokens expire — 30 days unless you pick otherwise — and
-      when this one does, saving stops until you paste the next one here. The
-      token is kept in this browser only.
+      Sign-in is not configured on this deployment, so the site is read-only for
+      everyone. An admin registers a GitHub App for {REPO.owner}/{REPO.repo} —
+      Contents: read and write, Actions: read, callback URL{" "}
+      <code>/auth/callback</code> on this host — installs it on the repository,
+      and gives the worker its client id and secret. The exact steps live in{" "}
+      <code>apps/manual/worker/auth.ts</code>.
     </Text>
   );
+}
+
+function backPath(): string {
+  return `${window.location.pathname}${window.location.search}`;
 }

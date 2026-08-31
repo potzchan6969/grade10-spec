@@ -48,7 +48,7 @@ export function PageActions({ path }: { path: string }) {
       />
       {kind === "github" ? (
         <IconButton
-          aria-label="GitHub token"
+          aria-label="GitHub sign-in"
           onClick={openSettings}
           size="sm"
           variant="ghost"

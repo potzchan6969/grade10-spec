@@ -73,12 +73,13 @@ export const browserKeyStore: KeyStore = {
   },
 };
 
-const NO_TOKEN = `Read-only: no GitHub token. Add a fine-grained token with contents:write in Settings to save.`;
+const NO_TOKEN =
+  "Read-only: not signed in. Sign in with GitHub in Settings to save.";
 
-/** A token nobody has checked is a string. Saving it in Settings asks GitHub
- * who it belongs to and whether it reaches this repo, and write mode waits
- * for both answers rather than finding out inside someone's first save. */
-const UNVERIFIED = `Read-only: this GitHub token has not been checked. Open Settings and save it again — it needs contents:write on ${REPO.owner}/${REPO.repo}.`;
+/** A token nobody has checked is a string. Signing in asks GitHub who it
+ * belongs to and whether it reaches this repo, and write mode waits for both
+ * answers rather than finding out inside someone's first save. */
+const UNVERIFIED = `Read-only: GitHub has not confirmed this sign-in yet — open Settings to see what it said about ${REPO.owner}/${REPO.repo}.`;
 
 /** A push GitHub refused on a rule rather than on the blob sha in hand.
  * A sha mismatch never reads like this, so it stays a conflict. */

@@ -163,10 +163,10 @@ directive on this page renders as text instead of as a block: inside a fence,
 
 Running the manual locally, a commit bar appears as soon as the working tree has
 manual edits; pressing it stages `manual/` and commits. On the hosted site you
-paste a fine-grained GitHub token in settings. Saves commit straight to main —
-the deploy listens on push, so your save is live in about a minute, and the
-header tells you when the site is behind main or a deploy failed. Without a
-token the site is read-only.
+sign in with GitHub once, from settings — no tokens to mint, nothing to approve.
+Saves commit straight to main — the deploy listens on push, so your save is
+live in about a minute, and the header tells you when the site is behind main
+or a deploy failed. Without a sign-in the site is read-only.
 
 Each read carries a version — a content hash locally, the blob SHA on GitHub.
 If somebody saved before you, you get their version and yours side by side

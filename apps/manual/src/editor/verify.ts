@@ -1,16 +1,15 @@
-import { REPO, STORAGE, TOKEN_LIST_URL } from "./config";
+import { REPO, STORAGE } from "./config";
 import { type Answer, githubCall, messageOf, repoPath } from "./github-api";
 import type { KeyStore } from "./github-store";
 
 /**
- * A pasted string is not access.
+ * A token in storage is not access.
  *
- * Saving a token asks GitHub two questions — who it belongs to, and whether
- * it can reach this repository's contents — and only both answers together
- * turn write mode on. Neither is guessable from the string, and the second is
- * the one that fails in practice: a fine-grained token on an organization's
- * repository sits unapproved, and GitHub answers that with the same 404 it
- * answers a typo with.
+ * Every sign-in is asked two questions of GitHub — who the token belongs to,
+ * and whether it can reach this repository's contents — and only both answers
+ * together turn write mode on. The second is the one that fails in practice:
+ * the GitHub App not installed on the repository, or a member the repository
+ * does not know, and GitHub answers both with the same 404.
  *
  * The verdict is kept beside the token so a reload does not ask again, keyed
  * to the token it was given for, and torn up the moment GitHub answers 401.
@@ -50,7 +49,7 @@ export async function verifyToken(
     return {
       ok: false,
       reason:
-        "GitHub refused this token (401). Paste it again — a fine-grained token is shown once, and an expired one reads exactly like a wrong one.",
+        "GitHub refused this sign-in (401) — it has expired or been revoked. Sign in with GitHub again.",
     };
   }
   const login = (who.body as Record<string, unknown>).login;
@@ -77,18 +76,18 @@ export async function verifyToken(
 
 /** Why the repository read did not prove contents access. A 404 is named for
  * both of the things it can mean, because GitHub gives no way to tell them
- * apart and one of them is a wait rather than a mistake. */
+ * apart and only one of them is the reader's own to fix. */
 function reachRefusal(answer: Answer): string | null {
   const repo = `${REPO.owner}/${REPO.repo}`;
   if (answer.status === 200) return null;
   if (answer.status === 404) {
-    return `No access to ${repo} (404), and GitHub says 404 for both of these: the token is not scoped to this repository (Only select repositories → ${repo}) or was copied wrong, or ${REPO.owner} is an organization and an owner has not approved this token yet — it stays pending on ${TOKEN_LIST_URL} until they do.`;
+    return `No access to ${repo} (404), and GitHub says 404 for both of these: the Grade10 Manual GitHub App is not installed on ${repo} — an owner of ${REPO.owner} installs it once — or your GitHub account cannot see that repository at all.`;
   }
   if (answer.status === 403) {
-    return `This token reaches ${repo} but not its contents (403): ${messageOf(answer)}. Give it Contents: read and write.`;
+    return `This sign-in reaches ${repo} but not its contents (403): ${messageOf(answer)}. The GitHub App needs Contents: read and write.`;
   }
   if (answer.status === 401) {
-    return "GitHub refused this token (401) on the repository read. Paste it again.";
+    return "GitHub refused this sign-in (401) on the repository read. Sign in with GitHub again.";
   }
   return `Cannot read ${repo}: ${messageOf(answer)}`;
 }
@@ -126,7 +125,7 @@ export function expiryNote(
   if (days <= 0) return { text: `expired on ${on}`, urgent: true };
   if (days <= EXPIRY_WARNING_DAYS) {
     return {
-      text: `expires on ${on}, in ${days} ${days === 1 ? "day" : "days"} — mint the next one before it does`,
+      text: `expires on ${on}, in ${days} ${days === 1 ? "day" : "days"} — sign in again before it does`,
       urgent: true,
     };
   }
@@ -134,7 +133,7 @@ export function expiryNote(
 }
 
 /** The verdict this token was given, or nothing. A verdict names the token it
- * was issued for, so a newly pasted one is unverified until it passes on its
+ * was issued for, so a newly landed one is unverified until it passes on its
  * own. */
 export function readVerdict(
   storage: KeyStore,

@@ -41,9 +41,7 @@ describe("the propose control a read-only session sees", () => {
     const markup = render(LOCKED);
 
     expect(markup).toContain("Propose");
-    expect(markup).toContain(
-      "Propose a change — needs a GitHub token with write access",
-    );
+    expect(markup).toContain("Propose a change — sign in with GitHub first");
   });
 
   it("renders them unlocked once the session can write", () => {
