@@ -68,7 +68,7 @@ redesign observation or occurrence matching.
   reference is found`, `Human report includes complete annotation bodies`,
   `Human report is structured for reading`, and `Current identity is
   unavailable` pass from the store-owned implementation.
-- [ ] 2.3 Create
+- [x] 2.3 Create
   `.claude/skills/reconcile-figma-annotations/{SKILL.md,agents/openai.yaml}` and
   its focused Plugin API and teammate references for `--scope spec`; keep the
   three confirmation pauses and all existing safety constraints, describe
