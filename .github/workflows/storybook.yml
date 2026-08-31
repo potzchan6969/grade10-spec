@@ -46,6 +46,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -72,6 +74,24 @@ jobs:
       - name: Deploy Storybook
         working-directory: apps/preview
         run: pnpm dlx wrangler@${{ env.WRANGLER_VERSION }} deploy -c wrangler.storybook.jsonc
+
+      - name: Find changed page stories
+        id: changed-pages
+        run: |
+          node scripts/storybook/changed-page-links.mjs \
+            --base "${{ github.event.before }}" \
+            --head "${{ github.sha }}" \
+            --commit-url "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Notify Slack about changed pages
+        if: steps.changed-pages.outputs.has-pages == 'true'
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          channel-id: ${{ vars.STORYBOOK_SLACK_CHANNEL_ID }}
+          payload: ${{ steps.changed-pages.outputs.payload }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
       - name: Summary
         run: |
