@@ -36,7 +36,11 @@ export type ListingAuctionBidView = {
   bidCount: number;
   countdown: string;
   countdownSeconds: number | null;
+  /** When set, the countdown ticks against this instant instead of decrementing locally. */
+  closesAtMs?: number | null;
   countdownFormat: "short" | "long";
+  /** Recorded close has moved past the listing's scheduled close. */
+  extended: boolean;
   deadline?: string;
   standing: ListingAuctionStanding;
   viewerMaximumMinor?: number;

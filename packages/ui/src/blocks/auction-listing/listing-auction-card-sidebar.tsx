@@ -21,6 +21,7 @@ type ListingAuctionCardSidebarProps = {
   bidMode: "manual" | "auto";
   onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
+  onCommitMaximum: () => void;
   badges: readonly ListingLotMetaBadge[];
   description: string;
   showMoreHref?: string;
@@ -36,6 +37,7 @@ function ListingAuctionCardSidebar({
   bidMode,
   onBidModeChange,
   onPlaceBid,
+  onCommitMaximum,
   badges,
   description,
   showMoreHref,
@@ -54,6 +56,7 @@ function ListingAuctionCardSidebar({
         history={history}
         historyResetKey={historyResetKey}
         onBidModeChange={onBidModeChange}
+        onCommitMaximum={onCommitMaximum}
         onPlaceBid={onPlaceBid}
         view={view}
       />

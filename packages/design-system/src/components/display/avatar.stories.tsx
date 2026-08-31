@@ -18,7 +18,7 @@ const meta = {
   tags: ["autodocs"],
   args: { size: "lg" },
   argTypes: {
-    size: { control: "inline-radio", options: ["sm", "md", "lg", "xl"] },
+    size: { control: "inline-radio", options: ["xs", "sm", "md", "lg", "xl"] },
   },
   render: (args) => (
     <Avatar {...args}>
@@ -54,7 +54,7 @@ export const FromEmail: Story = {
 export const Sizes: Story = {
   render: () => (
     <div className="flex items-end gap-3">
-      {(["sm", "md", "lg", "xl"] as const).map((size) => (
+      {(["xs", "sm", "md", "lg", "xl"] as const).map((size) => (
         <Avatar key={size} size={size}>
           <AvatarImage src={SRC} alt="@shadcn" />
           <AvatarFallback>U</AvatarFallback>
@@ -68,7 +68,7 @@ export const Sizes: Story = {
 export const WithBadge: Story = {
   render: () => (
     <div className="flex items-end gap-3">
-      {(["sm", "md", "lg", "xl"] as const).map((size) => (
+      {(["xs", "sm", "md", "lg", "xl"] as const).map((size) => (
         <Avatar key={size} size={size}>
           <AvatarImage src={SRC} alt="@shadcn" />
           <AvatarFallback>U</AvatarFallback>

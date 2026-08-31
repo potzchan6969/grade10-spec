@@ -20,3 +20,25 @@ export function minNextBidMinor(
 ): number {
   return hasBids ? currentBidMinor + incrementMinor : startingBidMinor;
 }
+
+/** Lowest valid committed maximum: at least the next bid, and above any standing maximum. */
+export function minMaximumMinor(
+  minBidMinor: number,
+  viewerMaximumMinor?: number,
+): number {
+  if (viewerMaximumMinor == null) return minBidMinor;
+  return Math.max(minBidMinor, viewerMaximumMinor + 1);
+}
+
+/** Input caption for auto-bid maximum floor — mirrors manual `Min. bid` parenthetical. */
+export function formatMinMaximumMessage(
+  minMaximumMinor: number,
+  incrementMinor: number,
+  viewerMaximumMinor?: number,
+): string {
+  if (viewerMaximumMinor != null) {
+    return `Min. maximum: ${formatUsd(minMaximumMinor)}`;
+  }
+
+  return `Min. maximum: ${formatUsd(minMaximumMinor)} (current + ${formatUsd(incrementMinor)})`;
+}
