@@ -233,6 +233,41 @@ the `reconcile-figma-annotations` project skill from a supported harness when
 you need to review them. It is the only annotation workflow; component,
 rendered-value, token, audit, and Code Connect checks remain in this workflow.
 
+### Repository ownership and scope
+
+The registered annotation inventory has one reviewed baseline, but every root
+belongs to exactly one repository:
+
+| Scope | Registered surfaces | Owning repository |
+| --- | --- | --- |
+| `spec` | `packages/design-system/**` primitives and `packages/ui/**` shared blocks | `grade10-spec` |
+| `product` | `kind: layout` application page roots | `grade10` |
+
+`packages/ui` is shared specification-owned UI, even when an application uses
+one of its blocks on a page. Scope follows the registered source root, not the
+visual complexity of the node or the repository that consumes it.
+
+The store commands require an explicit scope on every invocation:
+
+```bash
+pnpm run figma:annotations:inventory -- --scope spec
+pnpm run figma:annotations:diff -- --scope spec --snapshot path/to/snapshot.json
+pnpm run figma:annotations:accept -- --scope spec --snapshot path/to/snapshot.json --ids id --decisions path/to/decisions.json
+```
+
+Inventory projects only the requested roots and tracked nodes. Diff validates
+that every observed or skipped root belongs to that projection before it
+compares; out-of-scope baseline roots and entries cannot become removals or
+orphans. Acceptance recomputes the same scoped diff and refuses a finding from
+the other scope before it writes anything. Missing, unknown, or conflicting
+scope evidence is blocked.
+
+Both scopes share the same baseline and its complete baseline digest remains
+the optimistic-concurrency guard. A change in either scope makes an acceptance
+transaction prepared against an older digest stale, so it must be reported and
+reviewed again. Scoped projections are read-only views; they are not separate
+baseline files and never authorize concurrent writes.
+
 The end-to-end flow is:
 
 1. The harness reads the flat registered engineering sources through the Figma

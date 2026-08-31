@@ -7,6 +7,12 @@ import {
   normalizeNodeId,
 } from "./annotation-core.mjs";
 import {
+  buildScopeIndex,
+  normalizeScope,
+  projectBaseline,
+  scopeForRoot,
+} from "./annotation-scope.mjs";
+import {
   normalizeObservation,
   ObservationValidationError,
 } from "./annotation-snapshot.mjs";
@@ -75,9 +81,11 @@ function blockedResult(
   blockers,
   observationDigest = null,
   baselineDigest = null,
+  scope = null,
 ) {
   return {
     schemaVersion: ANNOTATION_SCHEMA_VERSION,
+    scope,
     observationSchemaVersion: null,
     observationDigest,
     baselineDigest,
@@ -87,6 +95,66 @@ function blockedResult(
     blockers,
     findings: [],
   };
+}
+
+function scopeBlocker({ fileKey, nodeId, scope, registeredScope, kind }) {
+  return {
+    kind,
+    fileKey,
+    nodeId,
+    scope,
+    registeredScope: registeredScope ?? null,
+    reason:
+      registeredScope === null || registeredScope === undefined
+        ? `observed root ${nodeId} is not registered for ${scope} scope`
+        : `observed root ${nodeId} is out of scope for ${scope}`,
+  };
+}
+
+function validateSnapshotScope(snapshot, scopeIndex, scope) {
+  const blockers = [];
+  const seen = new Set();
+  const checkRoot = (fileKey, nodeId, kind) => {
+    const normalizedNodeId = normalizeNodeId(nodeId);
+    const key = `${fileKey}:${normalizedNodeId}:${kind}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    let registeredScope;
+    try {
+      registeredScope = scopeForRoot(scopeIndex, fileKey, normalizedNodeId);
+    } catch {
+      blockers.push(
+        scopeBlocker({
+          fileKey,
+          nodeId: normalizedNodeId,
+          scope,
+          registeredScope: null,
+          kind,
+        }),
+      );
+      return;
+    }
+    if (registeredScope !== scope)
+      blockers.push(
+        scopeBlocker({
+          fileKey,
+          nodeId: normalizedNodeId,
+          scope,
+          registeredScope,
+          kind: "out-of-scope-root",
+        }),
+      );
+  };
+  for (const file of snapshot.files) {
+    for (const root of file.roots)
+      checkRoot(file.fileKey, root.nodeId, "out-of-scope-root");
+    for (const root of file.skippedRoots)
+      checkRoot(file.fileKey, root.nodeId, "out-of-scope-skipped-root");
+    for (const node of file.nodes)
+      for (const rootId of node.rootIds)
+        checkRoot(file.fileKey, rootId, "out-of-scope-node-root");
+  }
+  return blockers;
 }
 
 export class AcceptanceValidationError extends Error {
@@ -252,6 +320,7 @@ function currentOccurrenceFromFinding(finding) {
 export function acceptSnapshot({
   baseline,
   snapshot,
+  scope,
   ids = [],
   decisions,
   storeRoot,
@@ -262,7 +331,7 @@ export function acceptSnapshot({
     acceptanceError("selected finding IDs must be unique");
   if (!isRecord(decisions)) acceptanceError("decisions must be an object");
 
-  const diff = scanSnapshot({ baseline, snapshot });
+  const diff = scanSnapshot({ baseline, snapshot, scope });
   if (diff.blockers.length)
     acceptanceError("observation or baseline evidence is blocked");
   if (decisions.observationDigest !== diff.observationDigest)
@@ -393,27 +462,70 @@ export function acceptSnapshot({
     remaining: scanSnapshot({
       baseline: serializeBaseline(entries, baseline),
       snapshot,
+      scope,
     }),
   };
 }
 
-export function scanSnapshot({ baseline, snapshot } = {}) {
+export function scanSnapshot({ baseline, snapshot, scope } = {}) {
+  let requestedScope = null;
+  let comparisonBaseline = baseline;
+  let scopeIndex = null;
   let normalized;
   try {
+    if (scope !== undefined) {
+      requestedScope = normalizeScope(scope);
+      scopeIndex = buildScopeIndex(baseline);
+      comparisonBaseline = projectBaseline(baseline, requestedScope);
+    }
     normalized = normalizeObservation(snapshot);
   } catch (error) {
     const blockers =
       error instanceof ObservationValidationError
         ? error.blockers
-        : [{ kind: "malformed-observation", reason: String(error) }];
-    return blockedResult(blockers, null, baselineDigestFor(baseline));
+        : (error?.blockers ?? [
+            { kind: "malformed-observation", reason: String(error) },
+          ]);
+    return blockedResult(
+      blockers,
+      null,
+      baselineDigestFor(baseline),
+      requestedScope,
+    );
+  }
+
+  if (requestedScope) {
+    try {
+      const scopeBlockers = validateSnapshotScope(
+        normalized,
+        scopeIndex,
+        requestedScope,
+      );
+      if (scopeBlockers.length)
+        return blockedResult(
+          scopeBlockers,
+          normalized.digest,
+          baselineDigestFor(baseline),
+          requestedScope,
+        );
+    } catch (error) {
+      return blockedResult(
+        error?.blockers ?? [{ kind: "malformed-scope", reason: String(error) }],
+        normalized.digest,
+        baselineDigestFor(baseline),
+        requestedScope,
+      );
+    }
   }
 
   const blockers = [...normalized.blockers];
   const findings = [];
   const scannedSources = [];
   const baselineBlockers = [];
-  const entries = normaliseBaselineEntries(baseline, baselineBlockers);
+  const entries = normaliseBaselineEntries(
+    comparisonBaseline,
+    baselineBlockers,
+  );
   blockers.push(...baselineBlockers);
   const skippedRoots = [];
   const filesByKey = new Map(
@@ -422,7 +534,9 @@ export function scanSnapshot({ baseline, snapshot } = {}) {
   const fileKeys = new Set([
     ...filesByKey.keys(),
     ...entries.map((entry) => entry.fileKey),
-    ...(baseline?.roots ?? []).map((root) => root.fileKey).filter(Boolean),
+    ...(comparisonBaseline?.roots ?? [])
+      .map((root) => root.fileKey)
+      .filter(Boolean),
   ]);
 
   for (const fileKey of [...fileKeys].sort()) {
@@ -436,7 +550,10 @@ export function scanSnapshot({ baseline, snapshot } = {}) {
         }),
       );
       for (const entry of fileEntries) {
-        const baselineSources = baselineSourcesForFile(baseline, fileKey);
+        const baselineSources = baselineSourcesForFile(
+          comparisonBaseline,
+          fileKey,
+        );
         findings.push(
           ...orphanFindings({
             file: null,
@@ -521,6 +638,7 @@ export function scanSnapshot({ baseline, snapshot } = {}) {
   return {
     schemaVersion: ANNOTATION_SCHEMA_VERSION,
     observationSchemaVersion: normalized.schemaVersion,
+    scope: requestedScope,
     observationDigest: normalized.digest,
     baselineDigest: baselineDigestFor(baseline),
     status,

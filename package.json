@@ -11,6 +11,7 @@
     "cache:prime": "pnpm install --frozen-lockfile --prefer-offline",
     "design-sync:check": "node scripts/design-sync/check-components.mjs",
     "design-sync:audit": "node scripts/design-sync/audit-node.mjs",
+    "figma:annotations:inventory": "node scripts/design-sync/annotation-inventory-cli.mjs",
     "figma:annotations:diff": "node scripts/design-sync/annotation-diff.mjs",
     "figma:annotations:accept": "node scripts/design-sync/annotation-accept.mjs",
     "code-connect:publish:design-system": "pnpm --filter @grade10/design-system run code-connect:publish",
