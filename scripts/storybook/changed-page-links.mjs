@@ -259,7 +259,7 @@ export function slackPayload({
     .filter((entry) => entry.type === "story" && pages.has(entry.importPath))
     .map((entry) => ({
       ...entry,
-      status: changedPaths.get(entry.importPath.replace(/^\./, "apps/preview")) === "A" ? "🆕" : "🟡",
+      status: changedPaths.get(entry.importPath.replace(/^\./, "apps/preview")) === "A" ? "🆕" : "",
     }));
   const states = [...stories, ...removedStories];
   if (!states.length) return { blocks: [] };
@@ -277,7 +277,10 @@ export function slackPayload({
     const item = story.id
       ? `<${storybookUrl}/iframe.html?id=${story.id}&viewMode=story|${label}>`
       : label;
-    groups.set(root, [...(groups.get(root) ?? []), `  • ${story.status} ${item}`]);
+    groups.set(
+      root,
+      [...(groups.get(root) ?? []), `  • ${item}${story.status ? ` ${story.status}` : ""}`],
+    );
   }
   const links = [...groups]
     .sort(([left], [right]) => left.localeCompare(right))

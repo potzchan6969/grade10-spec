@@ -153,7 +153,7 @@ test("creates a compact payload containing current affected page states only", (
       },
       {
         text: {
-          text: "• Auction Listing\n  • ❌ ListingBidPanel > Flows > Countdown\n• Pages\n  • 🟡 <https://storybook.grade10-stg.com/iframe.html?id=pages-store--default&viewMode=story|Store > Default>\n  • 🟡 <https://storybook.grade10-stg.com/iframe.html?id=pages-store--empty&viewMode=story|Store > Empty>",
+          text: "• Auction Listing\n  • ListingBidPanel > Flows > Countdown ❌\n• Pages\n  • <https://storybook.grade10-stg.com/iframe.html?id=pages-store--default&viewMode=story|Store > Default>\n  • <https://storybook.grade10-stg.com/iframe.html?id=pages-store--empty&viewMode=story|Store > Empty>",
           type: "mrkdwn",
         },
         type: "section",
@@ -180,7 +180,7 @@ test("omits merge metadata when it is unavailable", () => {
 
   assert.deepEqual(payload.blocks.at(-1), {
     text: {
-      text: "• Pages\n  • 🟡 <https://storybook.grade10-stg.com/iframe.html?id=pages-store--default&viewMode=story|Store > Default>\n  • 🟡 <https://storybook.grade10-stg.com/iframe.html?id=pages-store--empty&viewMode=story|Store > Empty>",
+      text: "• Pages\n  • <https://storybook.grade10-stg.com/iframe.html?id=pages-store--default&viewMode=story|Store > Default>\n  • <https://storybook.grade10-stg.com/iframe.html?id=pages-store--empty&viewMode=story|Store > Empty>",
       type: "mrkdwn",
     },
     type: "section",
