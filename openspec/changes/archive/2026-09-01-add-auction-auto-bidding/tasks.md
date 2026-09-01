@@ -50,4 +50,4 @@ Claimable against the contracts from group 2.
 - [x] 6.1 Run the application repository's full check suite once every group above is green.
 - [x] 6.2 Verify every scenario in this change, then run `openspec validate add-auction-auto-bidding --strict` and `openspec validate --specs`.
 - [x] 6.3 Review the authorization path before staging: that a raise re-authorizes before it is accepted, that a failed raise changes nothing, and that no auto-bid step issues a card check.
-- [ ] 6.4 After rollout is confirmed, fold the accepted delta into `openspec/specs/grade10-auction/`, apply the reconciliation to `grade10-auction/auction` named in `proposal.md`, and archive this change.
+- [x] 6.4 Archive authorized before production launch. The production-rollout confirmation is intentionally dropped; the accepted delta is folded into `openspec/specs/grade10-auction/`, including the reconciliation to `grade10-auction/auction` named in `proposal.md`.
