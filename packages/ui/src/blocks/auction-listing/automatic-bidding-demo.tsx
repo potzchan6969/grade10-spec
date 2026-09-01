@@ -15,14 +15,14 @@ type AutomaticBiddingListingDemoMode =
 
 const copy = {
   automaticExplanation:
-    "We'll bid automatically only as needed, up to your maximum.",
+    "We’ll bid automatically only as needed, up to your maximum.",
   holdExplanation:
     "Your card hold covers the maximum. You may pay less if the auction ends below it.",
   maximumLabel: "Maximum amount",
   placeTitle: "Set your automatic maximum",
   raiseTitle: "Raise your automatic maximum",
-  placeAction: "Set maximum",
-  raiseAction: "Raise maximum",
+  placeAction: "Set Maximum",
+  raiseAction: "Raise Maximum",
   cancel: "Cancel",
   confirmation: (amount: string) =>
     `Your card hold covers ${amount}. You may pay less if the auction ends below your maximum.`,

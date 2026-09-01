@@ -22,7 +22,7 @@ const ROWS = [
 
 const OVERFLOW_ROWS = [
   {
-    item: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5) Collector's Edition",
+    item: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5) Collector’s Edition",
     total: "HK$1,770.00",
   },
   {
@@ -50,7 +50,7 @@ const OVERFLOW_ROWS = [
     total: "HK$95.00",
   },
   {
-    item: "Extended buyer's premium settlement adjustment for September Slabs",
+    item: "Extended buyer’s premium settlement adjustment for September Slabs",
     total: "HK$310.00",
   },
 ] as const;

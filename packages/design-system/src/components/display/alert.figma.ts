@@ -5,6 +5,11 @@ import figma from "figma";
 
 const instance = figma.selectedInstance;
 
+const layout = instance.getEnum("layout", {
+  block: "block",
+  inline: "inline",
+});
+
 const status = instance.getEnum("status", {
   default: "default",
   error: "error",
@@ -28,7 +33,7 @@ const iconCode =
     : null;
 
 export default {
-  example: figma.code`<Alert${status === "default" ? "" : figma.code` status="${status}"`}${iconCode ? figma.code` icon={${iconCode}}` : ""}${description ? figma.code` description="${description}"` : ""}${dismissible === false ? figma.code` dismissible={false}` : ""}${
+  example: figma.code`<Alert${layout === "block" ? "" : figma.code` layout="${layout}"`}${status === "default" ? "" : figma.code` status="${status}"`}${iconCode ? figma.code` icon={${iconCode}}` : ""}${layout === "block" && description ? figma.code` description="${description}"` : ""}${dismissible === false ? figma.code` dismissible={false}` : ""}${
     hasActions
       ? figma.code` actions={<>
   <Button size="sm" variant="outline">Button</Button>

@@ -3,7 +3,8 @@ export type ListingBidHistoryRow = {
   /** Email or display label — avatar shows one initial via `avatarInitial`. */
   initials: string;
   amountMinor: number;
-  relativeTime: string;
+  acceptedAtMs: number;
+  timeOverride?: string;
   isViewer?: boolean;
 };
 
@@ -12,7 +13,8 @@ export type ListingUserBidHistoryRow = {
   amountLabel: string;
   bidType: "manual" | "auto";
   bidTypeLabel: string;
-  timeLabel: string;
+  acceptedAtMs: number;
+  timeOverride?: string;
 };
 
 export type ListingLotGalleryImage = {
@@ -45,9 +47,12 @@ export type ListingAuctionBidView = {
   countdownSeconds: number | null;
   /** When set, the countdown ticks against this instant instead of decrementing locally. */
   closesAtMs?: number | null;
+  /** Instant for the collector deadline line under the countdown. */
+  deadlineAtMs?: number | null;
   countdownFormat: "short" | "long";
   /** Recorded close has moved past the listing's scheduled close. */
   extended: boolean;
+  /** @deprecated Prefer formatting from `deadlineAtMs` in the bid card. */
   deadline?: string;
   standing: ListingAuctionStanding;
   viewerMaximumMinor?: number;
@@ -57,6 +62,9 @@ export type ListingAuctionBidView = {
   bidCountLabel: string;
   resultFact?: string;
 };
+
+/** How far the collector has progressed through bid enrollment on this listing. */
+export type BidEnrollment = "signed-out" | "ready";
 
 export type ListingLotMetaBadge = {
   label: string;

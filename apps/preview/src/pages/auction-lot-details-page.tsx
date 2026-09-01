@@ -4,6 +4,9 @@ import {
   ListingLotGallery,
   ListingLotHeader,
   ListingUserBidHistory,
+  FIXTURE_ACTIVITY_TIME_COPY,
+  FIXTURE_SHIPPED_LOCALE,
+  FIXTURE_TIME_ZONE,
 } from "@grade10/ui";
 import { useEffect, useState } from "react";
 import {
@@ -125,15 +128,20 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
           description={AUCTION_LOT.description}
           history={history}
           historyResetKey={state}
+          locale={FIXTURE_SHIPPED_LOCALE}
           onBidModeChange={setBidMode}
           onCommitMaximum={requestBidAction}
           onPlaceBid={requestBidAction}
           recentBidsAccessory={
             <ListingUserBidHistory
+              activityTimeCopy={FIXTURE_ACTIVITY_TIME_COPY}
               copy={AUCTION_LOT_DETAILS_COPY.userBidHistory}
+              locale={FIXTURE_SHIPPED_LOCALE}
               rows={userBidHistoryForState(state)}
+              timeZone={FIXTURE_TIME_ZONE}
             />
           }
+          timeZone={FIXTURE_TIME_ZONE}
           vaultShippingBody={AUCTION_LOT_DETAILS_COPY.vaultShippingBody}
           view={view}
         />

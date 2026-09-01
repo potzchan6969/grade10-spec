@@ -30,7 +30,7 @@ export const ErrorState: Story = {
       hint: "One of the codes you stored at setup.",
       submit: "Verify",
     },
-    error: "That code didn't work.",
+    error: "That code didn’t work.",
   },
 };
 

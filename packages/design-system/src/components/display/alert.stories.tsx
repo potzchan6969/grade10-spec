@@ -21,6 +21,10 @@ const meta = {
     actions: defaultActions,
   },
   argTypes: {
+    layout: {
+      control: "inline-radio",
+      options: ["block", "inline"],
+    },
     status: {
       control: "select",
       options: ["default", "error", "warning", "success"],
@@ -39,7 +43,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Figma's neutral informational alert — `status=default`. */
+/** Figma's block layout — `layout=block`, `status=default`. */
 export const Default: Story = {};
 
 // biome-ignore lint/suspicious/noShadowRestrictedNames: Storybook export name matches Figma variant label.
@@ -53,6 +57,38 @@ export const Warning: Story = {
 
 export const Success: Story = {
   args: { status: "success" },
+};
+
+/** Figma's inline layout — icon, title, actions, and dismiss on one row. */
+export const Inline: Story = {
+  args: {
+    layout: "inline",
+    description: undefined,
+  },
+};
+
+export const InlineError: Story = {
+  args: {
+    layout: "inline",
+    status: "error",
+    description: undefined,
+  },
+};
+
+export const InlineWarning: Story = {
+  args: {
+    layout: "inline",
+    status: "warning",
+    description: undefined,
+  },
+};
+
+export const InlineSuccess: Story = {
+  args: {
+    layout: "inline",
+    status: "success",
+    description: undefined,
+  },
 };
 
 export const WithoutActions: Story = {

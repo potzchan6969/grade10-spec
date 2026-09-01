@@ -201,7 +201,7 @@ export function WonSettledStanding() {
 export function LostStanding() {
   return (
     <HStack gap="sm" vAlign="center">
-      <Badge variant="default">You didn't win</Badge>
+      <Badge variant="default">You didn’t win</Badge>
     </HStack>
   );
 }

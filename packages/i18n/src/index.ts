@@ -33,6 +33,10 @@ export type LocaleOf<B extends Brand> = (typeof brands)[B]["locales"][number];
 /** Every locale this package ships, across every brand. */
 export type Locale = LocaleOf<Brand>;
 
+export type ShippedLocale = Locale;
+
+export type ActivityTimeCopy = Messages["dates"];
+
 export const locales = [
   "en",
   "zh-Hant",
@@ -145,6 +149,13 @@ function merge(base: MessageTree, overlaid: MessageTree): MessageTree {
  * among the outcomes: whatever no layer answered is what the coverage test
  * refuses to let ship.
  */
+export function resolveShippedLocale<B extends Brand>(
+  brand: B,
+  input: string,
+): LocaleOf<B> {
+  return isLocale(brand, input) ? input : defaultLocaleOf(brand);
+}
+
 export function getMessages(brand: Brand, locale: string): Messages {
   const fallback = brands[brand].defaultLocale;
   const active = isLocale(brand, locale) ? locale : fallback;

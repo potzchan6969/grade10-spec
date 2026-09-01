@@ -21,7 +21,10 @@ export default defineConfig({
         test: {
           name: "audit",
           environment: "node",
-          include: ["src/__tests__/audit-freshness.test.ts"],
+          include: [
+            "src/__tests__/audit-freshness.test.ts",
+            "src/lib/format-datetime.test.ts",
+          ],
         },
       },
       {
