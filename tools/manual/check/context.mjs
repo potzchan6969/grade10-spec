@@ -89,11 +89,6 @@ export const RULES = [
   },
   { key: "figma", level: "warn", title: "Figma links" },
   {
-    key: "fold",
-    level: "warn",
-    title: "Delta sections the archive discards",
-  },
-  {
     key: "journeys",
     level: "warn",
     title: "Specs whose journeys no page shows",
@@ -122,11 +117,6 @@ export const RULES = [
     key: "signed",
     level: "warn",
     title: "Reviewed cases carrying no reviewer or date",
-  },
-  {
-    key: "callout",
-    level: "warn",
-    title: "Warning callouts carrying no author or date",
   },
 ];
 

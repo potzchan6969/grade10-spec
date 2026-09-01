@@ -95,7 +95,7 @@ start at `##`; raw HTML is never rendered). Directives sit at column 0:
 | `story` | `::story{id="blocks-store-cart--default" title="…" height="480"}` | titled card, workbench Storybook iframe loads on click |
 | `image` | `::image{src="assets/…" alt="…" caption="…"}` | image from `manual/assets/`; missing `alt` is a parse error |
 | `children` | `::children` | cards for the child pages of this directory, from their frontmatter |
-| `callout` | `:::callout{kind="note"}` … `:::` | kinds: `note`, `decision`, `warning` |
+| `callout` | `:::callout{kind="note"}` … `:::` | kinds: `note`, `decision`, `warning`; a `warning` shows a signature — `author`/`date` when written in, else who last changed it and when, derived from git at build |
 | `detail` | `:::detail{for="engineer" title="…"}` … `:::` | collapsed-but-present depth for one audience; searchable, deep-linkable, never hidden from the DOM |
 | `flow` | `:::flow{title="Checkout" diagram="assets/…"}` … `:::` | steps read top to bottom, all open; `##` starts a step, `#` groups the steps under it into a phase, and numbering runs straight through; optional SVG whose `data-step` elements light while their step is pointed at |
 
@@ -454,16 +454,17 @@ elsewhere can neither cause nor fix a hole in the store. The rules:
 - the `figma` family asserts the URL's file key and node id against the
   design-sync report and validates `set=` against its keys — warnings,
   since the report mirrors a file someone else owns
-- warning: a delta carrying `## User journeys` or `## Feature set` — the
-  fold discards both, so the archive workflow must carry them into the
-  durable spec by hand
+- a delta's `## User journeys` and `## Feature set` are not a rule here:
+  every well-formed delta carries them, and `archive:preflight` refuses
+  the archive until they reach the durable spec
 - warning: a page whose embedded specs changed after the page's last
   commit is flagged stale, naming which requirements changed (spec blob
   at the page's commit versus head, one `git cat-file --batch` pass); a
   spec moved since that commit is reported as moved, never as an
   everything-changed diff; a page with no commit yet is skipped
 - warning: a capability page with a `spec` but no journeys or cases block
-  is missing its acceptance shelf
+  is missing its acceptance shelf — asked only where the spec has
+  journeys or a suite to show, the same bar the QA board applies
 - warning: a `[[ref]]` in prose that resolves to nothing or to more than
   one thing, scanned with the grammar's fence tracking, inline code
   skipped

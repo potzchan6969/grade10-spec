@@ -4,16 +4,29 @@ spec: grade10-auction/bidding-history
 order: 9
 ---
 
-A collector can see where one listing stands, but cannot reconstruct what
-happened across their bids: which action succeeded, why one failed, when their
-private maximum changed, which competing bid left them outbid. That missing
-explanation turns an auditable money decision into a support question.
+The account keeps one retained record of everything bidding did, so an
+auditable money decision stays explainable without a support ticket. It lives
+at the account's bids address and belongs to the storefront account alone —
+no input a collector supplies reads anyone else's record, and there is no
+control to delete or hide an entry, because the record is the audit.
 
-The account keeps one retained bidding index: a scan-friendly list that opens
-into a single chronological explanation per listing, combining the public
-auction movements with that collector's own private events. Private facts stay
-private — another bidder's maximum never appears, only the public consequence
-that displaced them.
+## The index
+
+Every listing the account bid on — by hand or through an auto-bid — appears
+exactly once, ordered by its latest activity, carrying the listing's
+identity, its current or final price, and the collector's standing: pending,
+leading, outbid, won, lost, canceled, or failed-only, which means every
+attempt was refused and nothing was accepted. An Active filter keeps what is
+still running; Completed keeps what is done.
+
+## One listing's story
+
+An entry opens into a single chronological explanation of that listing.
+Every server-evaluated action the collector took leaves a private event — a
+bid accepted, a bid refused and why, a private maximum set or raised —
+interleaved with the public movements that changed their standing. Private
+facts stay private: another bidder's maximum never appears, only the public
+consequence that displaced them.
 
 ## Journeys
 

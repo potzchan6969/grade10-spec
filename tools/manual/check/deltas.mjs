@@ -1,11 +1,14 @@
 /*
  * RULES: what `openspec archive` will make of a delta, asked at PR time —
- * headings the fold cannot carry, sections it throws away, a durable
- * requirement it will not find, one requirement two changes both fold, an id
- * issued twice, and a page selector a fold is about to break.
+ * headings the fold cannot carry, a durable requirement it will not find,
+ * one requirement two changes both fold, an id issued twice, and a page
+ * selector a fold is about to break.
  *
  * Every one of these fails at archive time today, with the change merged and
  * the author gone; the delta file is the last place they are still cheap.
+ * The sections the fold discards — `## User journeys`, `## Feature set` —
+ * are not a rule here: every well-formed delta carries them by design, and
+ * `archive:preflight` refuses the archive until they reach the durable spec.
  */
 import { existsSync } from "node:fs";
 import { join } from "node:path";
@@ -24,9 +27,6 @@ import { everyBlock } from "./context.mjs";
 /** The only `## ` headings a delta may hold: the four the fold reads, plus
  * the three a spec's own head carries. */
 const CARRIED = new Set(["Purpose", "User journeys", "Feature set"]);
-/** Carried in the author's file and dropped by the fold, which rebuilds a
- * spec's head from Purpose alone. */
-const DISCARDED = ["User journeys", "Feature set"];
 const ISSUED_ID = /[a-z0-9][a-z0-9-]*-(?:SC|US|TC)-\d+/g;
 const LEADING_ID = /^([a-z0-9][a-z0-9-]*-SC-\d+)\b/;
 const SCENARIO_HEADING = /^Scenario:\s*/i;
@@ -36,7 +36,6 @@ export function checkDeltas(ctx, { changes, shape, pages }) {
   const files = readDeltaFiles(ctx.roots.store, changes);
   if (files.length === 0) return;
   checkShape(files, ctx.add);
-  checkDiscarded(files, ctx.add);
   checkFolded(ctx, files, shape);
   checkOverlap(files, ctx.add);
   checkIssued(ctx, files);
@@ -112,31 +111,6 @@ function checkShape(files, add) {
           `line ${child.line}: \`### ${child.heading}\` names no requirement; the fold copies it into the durable spec verbatim, or aborts on it`,
         );
       }
-    }
-  }
-}
-
-/** RULE `fold`: `buildSpecSkeleton` rebuilds a spec's head from Purpose
- * alone, for a spec it creates as much as one it updates, so journeys and the
- * feature set a delta writes never reach the durable spec — and the ids in
- * them are issued to nothing. A warning, because the archive workflow folds
- * these by hand. */
-function checkDiscarded(files, add) {
-  for (const { file, sections } of files) {
-    for (const heading of DISCARDED) {
-      const section = sections.find((one) => one.heading === heading);
-      if (!section) continue;
-      // The ids the section issues are the ones it heads a block with; the
-      // rest are `**Accepted by:**` citations of scenarios that do survive.
-      const ids = [
-        ...new Set(section.children.flatMap((one) => idsIn(one.heading))),
-      ];
-      const holds = ids.length > 0 ? ` holding ${ids.join(", ")}` : "";
-      add(
-        "fold",
-        file,
-        `\`## ${heading}\`${holds} — the fold carries Purpose and Requirements only, so archiving drops it`,
-      );
     }
   }
 }

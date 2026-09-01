@@ -1,7 +1,9 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { GitBranch, Info, Warning } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
+import { warningSignature } from "../api/derive";
 import type { CalloutBlock, CalloutKind } from "../content/grammar";
+import { useBlockScopeMaybe } from "./block-scope";
 import { BlockView } from "./block-view";
 
 /**
@@ -37,6 +39,16 @@ const STYLES: Record<
 
 export function CalloutBlockView({ block }: { block: CalloutBlock }) {
   const style = STYLES[block.kind];
+  const scope = useBlockScopeMaybe();
+  const page = scope?.index.pageByPath.get(scope.pagePath);
+  // A warning wears a signature: its own attributes when someone signed it by
+  // hand, otherwise the one the build derived from git.
+  const derived =
+    block.kind === "warning" && !(block.author && block.date) && page
+      ? warningSignature(page, block)
+      : undefined;
+  const author = block.author ?? derived?.author;
+  const date = block.date ?? derived?.date;
 
   return (
     <aside
@@ -52,13 +64,11 @@ export function CalloutBlockView({ block }: { block: CalloutBlock }) {
         >
           {style.label}
         </Text>
-        {block.author || block.date ? (
+        {author || date ? (
           <Text as="span" className="ml-auto" size="xs" tone="secondary">
-            {block.author ? (
-              <span className="font-mono">{block.author}</span>
-            ) : null}
-            {block.author && block.date ? " · " : ""}
-            {block.date ?? ""}
+            {author ? <span className="font-mono">{author}</span> : null}
+            {author && date ? " · " : ""}
+            {date ?? ""}
           </Text>
         ) : null}
       </div>

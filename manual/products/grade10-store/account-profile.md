@@ -4,18 +4,30 @@ spec: grade10-store/account-profile
 order: 7
 ---
 
-A collector who signs in has no identity in the product today. The account
-page asks them to create a profile before it shows them anything — the profile
-row only materializes when someone writes to it, so a first visit reads null
-and renders "You have no profile yet." Almost nobody fills a blank form for a
-page only they can see.
+The profile is the basic information a collector holds about themselves in
+the store — display name, bio, avatar, and the address they signed in with —
+read and edited on their own account page and shown to nobody else. It is
+resolved from the session alone: a signed-out request is refused, and no
+input selects another collector's profile.
 
-The profile exists from the first sign-in instead. Display name, avatar and
-bio are there to be edited, not created; the empty states say what a field
-does rather than that nothing exists. An absent profile and one deliberately
-left sparse stop looking identical in the data, which is what makes any of
-this measurable.
+## Always a profile
 
-The behavior that already ships — the field limits, the create and edit
-states, the `store-profile` block's exports — gets written down as the
-contract at the same time, because none of it is specified anywhere today.
+A collector who has never saved still sees a complete page: fields fall back
+to what the session already knows, the empty states say what a field does
+rather than that nothing exists, and reading stores nothing. A value the
+collector never chose is not presented as theirs, and member-since appears
+only once they have actually saved.
+
+## The fields
+
+Display name is required, trimmed, and at most 80 characters. Bio is
+optional, trimmed, and at most 500. The avatar is an uploaded image the
+collector can remove to fall back to initials. Email is the address they
+signed in with, shown and never editable here.
+
+## Saving
+
+Editing is explicit: a save carrying no field at all is refused, and so is
+one that would clear the display name. A failed read or save is reported
+rather than hidden, and a failed save keeps the collector's input so nothing
+typed is lost.

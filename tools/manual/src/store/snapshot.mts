@@ -27,6 +27,7 @@ import {
 } from "./read-manual.mts";
 import { discoverSpecs, readSpecs } from "./read-specs.mts";
 import type { Roots } from "./roots.mts";
+import { signWarningCallouts } from "./signatures.mts";
 import { checkWarnings } from "./warnings.mts";
 
 /** Both artifacts share one history walk — the only expensive part of a read. */
@@ -35,6 +36,7 @@ export type Store = { snapshot: Snapshot; archive: Archive };
 export async function readStore(roots: Roots): Promise<Store> {
   const index = await readRootsGitIndex(roots);
   const store = composeStore(roots, index, await checkWarnings(roots, index));
+  await signWarningCallouts(roots, store.snapshot.pages);
   await markMainStates(roots.store, store);
   return store;
 }

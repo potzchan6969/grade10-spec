@@ -5,19 +5,40 @@ audience: operator
 order: 13
 ---
 
-Bidding produces a winner and a card authorization; today the aftermath is
-split across catalogue, settlement-retry and fulfilment panels, the winner's
-contact is hidden from the people who must reach them, and Stripe capture is
-the only way a listing becomes paid. Won cards sit unpaid or unshipped.
+The queue works every listing from live through delivered in one place. Each
+row wears exactly one operator-facing outcome, the queue filters to one
+outcome at a time, and a row waiting on an operator — not on the clock —
+carries an extra highlight. A listing opens into its facts, its winner, its
+payment and shipment state, and a trail where status changes and comments
+share one history.
 
-The queue works one listing from live through delivered. Each row wears an
-operator-facing outcome — Live, Ending soon, Awaiting payment, Awaiting wire,
-Paid via Stripe, Paid via Manual, Shipped, Delivered, and the terminal labels
-around them — so the state of the aftermath is readable at a glance, and a
-wire or manual payment is as recordable as a capture.
+| Outcome | When |
+| --- | --- |
+| Draft · Scheduled · Live · Ending soon | The sale is still the auction's |
+| Unsold · Canceled | Ended with no winner; there is no aftermath |
+| Awaiting payment | Card capture is still trying |
+| Payment failed | Card capture gave up — an operator decides what next |
+| Awaiting wire | A payment operator parked it to collect by wire |
+| Paid via Stripe · Paid via Manual | The money is in, by capture or by record |
+| Shipped · Delivered | The card has left Grade10; the winner has it |
 
-Payment and shipping are separate grants. The person who may capture money is
-not necessarily the person who ships cards, and the queue keeps those moves
-apart. The number that moves when this works is the completed-auction payment
-rate — closed listings whose winner reaches paid, over closed listings with a
-winner.
+## Payment
+
+A listing with a winner reaches paid in exactly one of two ways, and the
+first successful record wins: a verified card capture becomes **Paid via
+Stripe**; a payment operator recording collection — a completed wire included
+— becomes **Paid via Manual**. The two never share a visual mark, because how
+the money arrived matters. Parking a listing at Awaiting wire, or recording
+manual collection, marks the card authorization for release and stops
+automatic capture — a winner who chose a wire is never also charged.
+Operators may email the winner to collect payment or arrange the wire, and
+every move lands on the listing's trail.
+
+## Shipping
+
+Shipment is its own grant, deliberately apart from payment: the person who
+may capture money is not necessarily the person who ships cards. It runs in
+one order — a delivery address recorded when obtained offline, started when
+the card leaves Grade10, completed when the winner has it — and recording it
+never rewrites who won or how they paid. The winner reads the same facts from
+their own side on [My Auctions](/p/grade10-auction/account-auction-record).

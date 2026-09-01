@@ -149,19 +149,9 @@ function checkBlock(ctx, path, block) {
       checkFigma(ctx, path, block);
       break;
     }
-    // A `warning` is the manual saying the store is wrong about itself —
-    // hand-written judgment that rots silently. A name and a date are what
-    // let a reader ask whether it is still true, and whose it is to settle.
-    case "callout": {
-      if (block.kind !== "warning") break;
-      if (block.author !== undefined && block.date !== undefined) break;
-      add(
-        "callout",
-        path,
-        'a `warning` callout carries who wrote it and when — `:::callout{kind="warning" author="@handle" date="YYYY-MM-DD"}`',
-      );
-      break;
-    }
+    // A `warning` callout needs no rule here: its signature — whose judgment,
+    // and when — is derived from git at build, and explicit `author`/`date`
+    // attributes are format-checked by the grammar itself.
     default:
       break;
   }
@@ -173,12 +163,17 @@ const CAPABILITY_PAGE = /^manual\/products\/[^/]+\/(?!index\.md$)[^/]+\.md$/;
  * and a page that states a contract without it leaves QA nothing to read. A
  * warning, never a failure: the shelf is a habit, not a pointer that rotted.
  * A page claiming a spec that is still a delta is exempt — the acceptance
- * blocks can only embed a durable spec, and the change carries its own suite. */
+ * blocks can only embed a durable spec, and the change carries its own suite.
+ * So is a page whose spec holds neither journeys nor a test suite: an empty
+ * shelf shows nothing, the same bar the QA board applies. */
 export function checkSkeleton(ctx, pages) {
   for (const page of pages) {
     if (!CAPABILITY_PAGE.test(page.path)) continue;
-    const spec = page.ast.frontmatter.spec;
-    if (spec === undefined || !ctx.specs.has(spec)) continue;
+    const spec = ctx.specs.get(page.ast.frontmatter.spec);
+    if (!spec) continue;
+    const showable =
+      spec.journeys?.length || spec.testCases?.length || spec.testCasesError;
+    if (!showable) continue;
     const shelved = [...everyBlock(page.ast.blocks)].some(
       (block) => block.type === "journeys" || block.type === "cases",
     );

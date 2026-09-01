@@ -206,6 +206,29 @@ describe("the acceptance shelf a capability page keeps", () => {
   const shelved = (blocks: string) =>
     `---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\nAlpha.\n\n${blocks}\n`;
 
+  const journeyed = [
+    "# Alpha",
+    "",
+    "## Purpose",
+    "",
+    PURPOSE,
+    "",
+    "## User journeys",
+    "",
+    "### alpha-US-01: Someone does the thing",
+    "",
+    "They open alpha and do the thing.",
+    "",
+    "**Accepted by:**",
+    "",
+    "- alpha-SC-01",
+    "",
+    "## Requirements",
+    "",
+    ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+    "",
+  ].join("\n");
+
   const store = (alpha: string, extra: Record<string, string> = {}) =>
     writeStore({
       "manual/manual.yaml":
@@ -214,10 +237,7 @@ describe("the acceptance shelf a capability page keeps", () => {
       "manual/products/demo-product/index.md":
         "---\ntitle: Demo product\nspec: demo-product/alpha\n---\n\nThe landing.\n",
       "manual/products/demo-product/alpha.md": alpha,
-      "openspec/specs/demo-product/alpha/spec.md": spec(
-        "Alpha",
-        requirement("Alpha does things", "alpha-SC-01", "the thing"),
-      ),
+      "openspec/specs/demo-product/alpha/spec.md": journeyed,
       ...extra,
     });
 
@@ -266,26 +286,29 @@ describe("the acceptance shelf a capability page keeps", () => {
     expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([]);
   });
 
-  /** A `warning` is hand-written judgment that rots silently; the name and
-   * date are what let a reader ask whether it is still true, and whose it is. */
-  it("warns on a warning callout nobody signed", async () => {
+  it("demands no shelf of a spec with nothing to put on it", async () => {
+    const root = store(
+      "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\nAlpha, no shelf.\n",
+      {
+        "openspec/specs/demo-product/alpha/spec.md": spec(
+          "Alpha",
+          requirement("Alpha does things", "alpha-SC-01", "the thing"),
+        ),
+      },
+    );
+    expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([]);
+  });
+
+  /** A `warning` signature is derived from git at build, so an unsigned one
+   * is not a finding — nothing hand-maintained is missing. */
+  it("raises no finding for an unsigned warning callout", async () => {
     const root = store(
       shelved(
         '::cases{id="demo-product/alpha"}\n\n:::callout{kind="warning"}\nDrifted.\n:::',
       ),
     );
-    expect(lines(await runChecks(root, NO_GIT), "callout")).toEqual([
-      'manual/products/demo-product/alpha.md — a `warning` callout carries who wrote it and when — `:::callout{kind="warning" author="@handle" date="YYYY-MM-DD"}`',
-    ]);
-  });
-
-  it("says nothing for a signed warning, or an unsigned note", async () => {
-    const root = store(
-      shelved(
-        '::cases{id="demo-product/alpha"}\n\n:::callout{kind="warning" author="@echo" date="2026-08-30"}\nDrifted, and owned.\n:::\n\n:::callout{kind="note"}\nJust an aside.\n:::',
-      ),
-    );
-    expect(lines(await runChecks(root, NO_GIT), "callout")).toEqual([]);
+    const { findings } = await runChecks(root, NO_GIT);
+    expect(findings.filter((one) => one.rule === "callout")).toEqual([]);
   });
 });
 
@@ -413,55 +436,6 @@ describe("a delta holding a heading the fold cannot carry", () => {
     );
     expect(lines(await runChecks(root, NO_GIT), "heading")).toEqual([]);
     expect(lines(await runChecks(root, NO_GIT), "delta")).toEqual([]);
-  });
-});
-
-/** `buildSpecSkeleton` rebuilds a spec's head from Purpose alone, for a spec
- * the change creates as much as one it updates. */
-describe("a delta carrying sections the fold discards", () => {
-  const root = changing(
-    "journeyed",
-    [
-      "## Feature set",
-      "",
-      "- counting",
-      "",
-      "## User journeys",
-      "",
-      "### alpha-US-07: Someone counts",
-      "",
-      "**Accepted by:** alpha-SC-03",
-      "",
-      "### alpha-US-08: Someone recounts",
-      "",
-      "**Accepted by:** alpha-SC-03",
-      "",
-      "## ADDED Requirements",
-      "",
-      ...requirement("Alpha counts things", "alpha-SC-03", "count"),
-      "",
-    ].join("\n"),
-  );
-
-  it("names the section and the ids it holds, and only warns", async () => {
-    const result: Result = await runChecks(root, NO_GIT);
-    expect(lines(result, "fold")).toEqual([
-      "openspec/changes/journeyed/specs/demo-product/alpha/spec.md — `## Feature set` — the fold carries Purpose and Requirements only, so archiving drops it",
-      "openspec/changes/journeyed/specs/demo-product/alpha/spec.md — `## User journeys` holding alpha-US-07, alpha-US-08 — the fold carries Purpose and Requirements only, so archiving drops it",
-    ]);
-    expect(
-      result.findings.filter(
-        (one) => one.rule === "fold" && one.level !== "warn",
-      ),
-    ).toEqual([]);
-  });
-
-  it("says nothing about a delta that is requirements only", async () => {
-    const plain = changing(
-      "plain",
-      `## ADDED Requirements\n\n${requirement("Alpha counts things", "alpha-SC-03", "count").join("\n")}\n`,
-    );
-    expect(lines(await runChecks(plain, NO_GIT), "fold")).toEqual([]);
   });
 });
 
