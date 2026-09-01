@@ -11,6 +11,11 @@
   "footer": {
     "shopHeading": "SHOP",
     "allCollections": "ALL COLLECTIONS",
-    "auction": "AUCTION"
+    "auction": "AUCTION",
+    "legalHeading": "LEGAL",
+    "privacyPolicy": "PRIVACY POLICY",
+    "termsOfService": "TERMS of SERVICE",
+    "privacy": "PRIVACY",
+    "terms": "TERMS"
   }
 }

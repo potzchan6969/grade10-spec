@@ -16,6 +16,14 @@
     "title": "拍賣 — Grade10",
     "description": "Grade10 每一場已公開的拍賣及其拍品，並列出各拍品的最高出價。瀏覽無需帳戶，出價則需要。"
   },
+  "terms": {
+    "title": "服務條款 — Grade10",
+    "description": "在 Grade10 買賣、競標、鑑定或寄存卡片時所同意的條款。"
+  },
+  "privacy": {
+    "title": "隱私權政策 — Grade10",
+    "description": "Grade10 記錄收藏者的哪些資料、為何保存，以及收藏者可以要求什麼。"
+  },
   "product": {
     "title": "{name} — Grade10",
     "description": "{name}，於 Grade10 商店上架。"

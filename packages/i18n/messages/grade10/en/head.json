@@ -16,6 +16,14 @@
     "title": "Auctions — Grade10",
     "description": "Every published Grade10 sale and the lots under it, with the top bid on each. Browsing needs no account; bidding does."
   },
+  "terms": {
+    "title": "Terms of Service — Grade10",
+    "description": "The terms you agree to when you buy, bid, grade or vault a card with Grade10."
+  },
+  "privacy": {
+    "title": "Privacy Policy — Grade10",
+    "description": "What Grade10 records about a collector, why it is kept, and what a collector can ask for it."
+  },
   "product": {
     "title": "{name} — Grade10",
     "description": "{name}, listed at the Grade10 store."

@@ -1,0 +1,20 @@
+{
+  "terms": {
+    "title": "Terms of Service",
+    "sections": {
+      "status": {
+        "heading": "Being prepared",
+        "body": "These terms are not published yet. This page will carry them in full once they are, together with the date they took effect."
+      }
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "sections": {
+      "status": {
+        "heading": "Being prepared",
+        "body": "This policy is not published yet. This page will carry it in full once it is, together with the date it took effect."
+      }
+    }
+  }
+}

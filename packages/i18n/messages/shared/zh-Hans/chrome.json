@@ -11,6 +11,11 @@
   "footer": {
     "shopHeading": "购买",
     "allCollections": "全部系列",
-    "auction": "拍卖"
+    "auction": "拍卖",
+    "legalHeading": "法律",
+    "privacyPolicy": "隐私政策",
+    "termsOfService": "服务条款",
+    "privacy": "隐私",
+    "terms": "条款"
   }
 }
