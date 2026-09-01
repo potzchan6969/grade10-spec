@@ -25,7 +25,7 @@
   `annotation-implementation-verification-SC-01` through
   `annotation-implementation-verification-SC-17` visible in focused skill
   tests without changing current observation or acceptance semantics.
-- [ ] 1.5 Verify the group with `pnpm run test:design-sync`, `pnpm run
+- [x] 1.5 Verify the group with `pnpm run test:design-sync`, `pnpm run
   agent:sync-parity`, `pnpm run agent:check-parity`, `pnpm run lint`, `pnpm run
   typecheck`, and `git diff --check`.
 
