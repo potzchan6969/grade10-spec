@@ -16,6 +16,7 @@ This repository is the versioned source of truth for product requirements and th
 | Durable requirements and component export contracts | `openspec/specs/<product>/<capability>/spec.md` | The single source of truth. An implementing engineer builds from this alone. Products are listed in `openspec/specs/README.md`. |
 | Product decision behind a requirement | `docs/prds/<product-area>/<feature>.md` | Problem, users, non-goals, measurement, rollout, rationale. Explanatory, never authoritative over a requirement. |
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
+| Test cases for a capability | `test-cases.md` beside its `spec.md` | A derived reading of that spec's user journeys, never a second source of truth. See `docs/governance/specs-to-test-cases.md`. |
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
 | User-facing copy and translations | `packages/i18n/messages/{shared,<brand>}/<locale>/<namespace>.json` | `shared/` answers every key no brand claims, once per language; a brand answers only what says something about itself, in every language it speaks. Assembled in `src/catalogs.ts`. Types refuse a key the vocabulary does not name; `pnpm run test` refuses layers that leave one unanswered, or answer one twice. |
 | Design-system primitive | `packages/design-system/src/components/` | shadcn primitives and their colocated stories. |
@@ -80,6 +81,7 @@ Pin the submodule SHA in the application repository; updates are normal pull req
 Run the appropriate checks before handoff:
 
 - `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
+- `pnpm run tcs:validate` after a `test-cases.md` changes; CI runs it on every push.
 - `pnpm run design-sync:check` after a design-system primitive changes.
 - `pnpm run tokens:build` after `tokens.json` or `tokens.config.json` changes; commit the regenerated theme CSS.
 - `pnpm run lint` for repository formatting and static checks.

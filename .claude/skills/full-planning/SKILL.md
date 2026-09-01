@@ -145,6 +145,29 @@ openspec validate <change-name> --strict
 openspec status --change <change-name>
 ```
 
+## Derive the test cases
+
+The specs are not finished until the suites beside them exist. As soon as
+`openspec validate <change-name> --strict` passes, run:
+
+```text
+/spec-to-tcs <change-name>
+```
+
+It writes a `test-cases.md` beside every delta `spec.md` that has
+`## User journeys`, with every case `draft`. Commit them to this branch as
+their own commit — `test(<domain>): derive test cases for <capability>` — so
+the requirements and their derived coverage land in the same pull request.
+
+Nobody is being asked to approve them here: a `draft` case carries no
+authority, and QA reviews them later in their own pull request with
+`/tcs-review`. What this step buys is that `main` never carries a journey with
+no suite, and that the traces were checked against the spec in the commit that
+introduced it. A change that sets `skip_specs: true`, or whose capabilities are
+cross-cutting and exempt from journeys, has nothing to generate.
+
+Read `docs/governance/specs-to-test-cases.md` for the full lifecycle.
+
 Then hand off: an engineer implements from the application repository with its
 `implement` skill, claiming one group at a time. Archive belongs to whoever
 owns the change, **after it is deployed** — not when the code merges.

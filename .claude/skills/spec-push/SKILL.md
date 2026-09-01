@@ -121,6 +121,15 @@ On the rebased commits, not the ones you started with:
   `packages/design-system/src/components/` changed.
 - `pnpm run test` — `packages/i18n` or `packages/ui` changed.
 - `pnpm run agent:check-parity` — agent instructions, rules, or skills changed.
+- `pnpm run tcs:validate` — always. It is cheap, it needs no install, and it
+  catches a suite whose header contradicts its cases or whose trace points at
+  an id the spec no longer issues.
+
+**A delta with journeys and no suite does not push.** If a `spec.md` on this
+branch has `## User journeys` and no `test-cases.md` beside it, stop and run
+`/spec-to-tcs <change-id>`, then commit the suites before pushing —
+`pnpm run tcs:validate --require-suites` names them. Generation belongs in the
+spec's own pull request; see `docs/governance/specs-to-test-cases.md`.
 
 A regenerated file is a commit, not a dirty tree left behind.
 
