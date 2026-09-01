@@ -17,7 +17,8 @@ count transition.
   - Terminal transitions: move available stock to sold or withdrawn; move
     reservation remaining to sold (Auction) or vaulted (Vault)
 - Application holds
-  - Reservation classified by `holder_kind` (`grade10-auction` | `grade10-vault`)
+  - Reservation classified by `holder_kind` (`grade10-auction` | `grade10-vault` |
+    `admin`)
   - Remaining quantity and adjustable hold size
   - Partial sell / vault / release against remaining
   - Re-reserve after close with the same kind + reference
@@ -28,8 +29,9 @@ count transition.
   - Every inventory or reservation quantity change appends one changelog
 - Admin console
   - Products list and product page
-  - Create/edit products (`draft` → `created`); intake, sell, withdraw, reserve;
-    read-only reservation oversight by `holder_kind`; history
+  - Create/edit products (`draft` → `created`); intake and admin reserve;
+    release admin holds from the product page; read-only oversight of Auction
+    and Vault holds by `holder_kind`; history
 
 ## User journeys
 
@@ -45,15 +47,16 @@ catalog-SC-52, catalog-SC-54.
 ### catalog-US-02: Oversee holds and settle them from holder apps
 
 As an inventory admin, I want to see Auction and Vault holds with remaining
-quantity on the product page, while adjust, release, sell-from-reservation,
-change-product, and vault-from-reservation run from the owning listing or Vault
-console, so that house stock is not over-promised and settlement stays with
-the application that owns the hold.
+quantity on the product page, reserve house stock under `admin` holds, release
+those admin holds when done, while adjust, release for Auction/Vault,
+sell-from-reservation, change-product, and vault-from-reservation run from the
+owning listing or Vault console, so that house stock is not over-promised and
+settlement stays with the application that owns the hold.
 
 Accepted by: catalog-SC-14, catalog-SC-17, catalog-SC-18, catalog-SC-22,
 catalog-SC-35, catalog-SC-36, catalog-SC-37, catalog-SC-38, catalog-SC-47,
 catalog-SC-48, catalog-SC-49, catalog-SC-50, catalog-SC-51, catalog-SC-53,
-catalog-SC-63, catalog-SC-64, catalog-SC-65.
+catalog-SC-59, catalog-SC-60, catalog-SC-63, catalog-SC-64, catalog-SC-65.
 
 ### catalog-US-03: Use inventory through a holder-kind boundary
 
@@ -82,8 +85,8 @@ A product SHALL carry the fields below. Creating a product SHALL also seed
 exactly one inventory snapshot with every stored count set to zero and status
 `draft`. An authorized inventory admin SHALL mark a `draft` product `created`.
 Marking `created` is one-way (`created` → `draft` is refused). Holder reserve
-and adjust-up SHALL require product status `created`. Intake and free-pool
-sell/withdraw SHALL require product status `created`.
+and adjust-up SHALL require product status `created`. Intake SHALL require
+product status `created`.
 
 | Field | Rules |
 | --- | --- |
@@ -223,11 +226,13 @@ product SHALL be refused.
 
 ### Requirement: Available stock moves to terminal counts
 
-An authorized inventory admin SHALL move a positive quantity of available
-stock to sold or withdrawn. A sale SHALL carry a positive integer total price
-in minor units and an ISO 4217 currency code. A withdrawal SHALL carry a
-non-empty reason. Either transition SHALL reduce stock and increase its
-terminal count by the same quantity, leaving derived ledger unchanged.
+Free-pool sell and withdraw are not offered on the inventory product page;
+settlement runs through holder consoles and elevated APIs. When invoked, a
+caller SHALL move a positive quantity of available stock to sold or withdrawn.
+A sale SHALL carry a positive integer total price in minor units and an ISO
+4217 currency code. A withdrawal SHALL carry a non-empty reason. Either
+transition SHALL reduce stock and increase its terminal count by the same
+quantity, leaving derived ledger unchanged.
 
 A sale or withdrawal exceeding available SHALL be refused. Reserved quantity
 SHALL be settled through the reservation before it can leave stock via these
@@ -236,21 +241,21 @@ free-pool transitions.
 #### Scenario: catalog-SC-10 - Operator records a sale
 
 - **GIVEN** an inventory with stock five and reserved one
-- **WHEN** an authorized inventory admin sells quantity two for 10000 minor units in HKD
+- **WHEN** an authorized caller sells quantity two for 10000 minor units in HKD
 - **THEN** stock decreases to three and sold increases by two
 - **AND** reserved and derived ledger are unchanged
 
 #### Scenario: catalog-SC-11 - Operator records a withdrawal
 
 - **GIVEN** an inventory with three available stock
-- **WHEN** an authorized inventory admin withdraws quantity one with a reason
+- **WHEN** an authorized caller withdraws quantity one with a reason
 - **THEN** stock decreases by one and withdrawn increases by one
 - **AND** derived ledger is unchanged
 
 #### Scenario: catalog-SC-12 - Terminal transition cannot consume reserved stock
 
 - **GIVEN** an inventory with stock three and reserved two
-- **WHEN** an authorized inventory admin sells or withdraws quantity two
+- **WHEN** an authorized caller sells or withdraws quantity two
 - **THEN** Grade10 refuses the transition for insufficient available stock
 - **AND** every count and active reservation is unchanged
 
@@ -282,17 +287,18 @@ refresh product updated at.
 ### Requirement: Reservation record fields
 
 A reservation SHALL be a **product-level** hold for one consumer classified by
-**`holder_kind`**. `holder_kind` SHALL be `grade10-auction` or `grade10-vault` and SHALL be an
-explicit stored field — Grade10 SHALL NOT infer kind from `holder_reference`.
-Each reservation belongs to the product's single inventory row.
+**`holder_kind`**. `holder_kind` SHALL be `grade10-auction`, `grade10-vault`,
+or `admin` and SHALL be an explicit stored field — Grade10 SHALL NOT infer kind
+from `holder_reference`. Each reservation belongs to the product's single
+inventory row.
 
 | Field | Rules |
 | --- | --- |
 | Id | Unique, system-minted, immutable |
 | Product id | Required and immutable |
 | Inventory id | Required; FK to the product's one inventory |
-| Holder kind | `grade10-auction` or `grade10-vault`, immutable |
-| Holder reference | Non-empty holder-owned business reference, immutable |
+| Holder kind | `grade10-auction`, `grade10-vault`, or `admin`, immutable |
+| Holder reference | Non-empty business reference, immutable; holder apps supply their own; admin reserves mint `admin-<uuid>` server-side |
 | Remarks | Trimmed text, may be empty |
 | Quantity | Current hold size; 1–500; changed only by adjust and set on reserve |
 | Remaining | Still reserved; active when > 0 |
@@ -308,10 +314,13 @@ remaining and inventory `reserved` SHALL stay equal under lock.
 
 When reserving, Grade10 SHALL refuse if the product's status is not `created`.
 While any reservation is `active` under the same `(holder_kind,
-holder_reference)`, that pair SHALL be unique. Retrying the same product and
-quantity under that active pair SHALL return the existing active reservation.
-A retry with a differing payload SHALL be refused. After the reservation is
-`closed`, the same kind and reference MAY create a new reservation.
+holder_reference)`, that pair SHALL be unique. For `grade10-auction` and
+`grade10-vault`, retrying the same product and quantity under that active pair
+SHALL return the existing active reservation; a retry with a differing payload
+SHALL be refused. For `admin`, each reserve SHALL mint a new unique
+`holder_reference` and SHALL create a new active reservation. After the
+reservation is `closed`, the same kind and reference MAY create a new
+reservation (holder apps only; admin references are not reused).
 
 #### Scenario: catalog-SC-14 - Auction reserves a quantity
 
@@ -769,13 +778,34 @@ The Grade10 admin panel SHALL offer an Inventory section with:
    mark `draft` → `created`, show the product's single inventory snapshot,
    reservations grouped by **`holder_kind`**, and change history.
 
-Operators SHALL intake, record free-pool sale or withdrawal, and reserve for
-Auction or Vault from the product page. Adjust, change reservation product,
-partial release, sell-from-reservation, and vault-from-reservation SHALL be
-triggered from the owning Auction listing or Vault console, not from the
-inventory product page. Reservation tables on the product page are read-only
-oversight.
-Loading, empty, and error states SHALL be visible.
+Operators SHALL intake stock and reserve admin holds from the product page.
+Admin reserve SHALL always use `holder_kind` `admin` and SHALL mint
+`holder_reference` server-side; operators supply quantity and optional remarks
+only. Operators SHALL release active `admin` holds from the reservations table
+on the product page. Free-pool sell and withdraw, adjust, change reservation
+product, partial release, sell-from-reservation, and vault-from-reservation for
+Auction and Vault holds SHALL be triggered from holder consoles or elevated APIs,
+not from the inventory product page. Auction and Vault reservation rows on the
+product page are read-only oversight. Loading, empty, and error states SHALL be
+visible.
+
+#### Scenario: catalog-SC-59 - Operator reserves admin hold from product page
+
+- **GIVEN** a created product with stock five and reserved zero
+- **WHEN** an authorized inventory admin reserves quantity two from the product
+  page with optional remarks
+- **THEN** one active reservation records `holder_kind` `admin`, a server-minted
+  `holder_reference`, quantity two, and the remarks
+- **AND** reserved increases by two while stock and derived ledger remain
+  unchanged
+
+#### Scenario: catalog-SC-60 - Operator releases admin hold from product page
+
+- **GIVEN** a created product with an active `admin` reservation of quantity two
+- **WHEN** an authorized inventory admin releases that hold from the product
+  page
+- **THEN** the reservation closes with `released` two and `remaining` zero
+- **AND** reserved decreases by two and available increases by two
 
 #### Scenario: catalog-SC-29 - Operator oversees inventory and holds on the product page
 

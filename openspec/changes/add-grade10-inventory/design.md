@@ -162,9 +162,10 @@ Elevated admin mutations also use the platform audit chain.
 Add `inventory:read` and `inventory:write`. Brand pages under
 `apps/admin/grade10/src/pages/inventory/` compose
 `@grade10/inventory-admin-frontend` (products list, product page). The product
-page is oversight plus free-pool mutations and reserve; adjust, release,
+page is oversight plus intake and admin reserve; operators MAY release active
+`admin` holds from the reservations table. Auction/Vault adjust, release,
 sell-from-reservation, change-product, and vault-from-reservation run from
-Auction listing and Vault consoles.
+holder consoles or elevated APIs.
 
 ## Flows
 
@@ -258,8 +259,8 @@ Product-level hold header on the product's single inventory row.
 | `id` | `text` | No | App-minted `res_<uuid>`, PK | Reservation identity |
 | `product_id` | `text` | No | FK → `products.id` | Product this hold is for |
 | `inventory_id` | `text` | No | FK → `inventories.id` | The product's one inventory row this hold scopes |
-| `holder_kind` | `text` | No | Check in `grade10-auction`, `grade10-vault` | Consumer classifier (explicit; not inferred from reference) |
-| `holder_reference` | `text` | No | Non-empty business key | Holder's idempotency / business id (e.g. listingId, caseId) |
+| `holder_kind` | `text` | No | Check in `grade10-auction`, `grade10-vault`, `admin` | Consumer classifier (explicit; not inferred from reference) |
+| `holder_reference` | `text` | No | Non-empty business key | Holder's idempotency / business id (listingId, caseId); admin reserves mint `admin-<uuid>` |
 | `remarks` | `text` | No | `''` | Optional operator or application note on why the hold exists |
 | `quantity` | `bigint` | No | 1–500; changes via adjust | Current hold size; `remaining + sold + vaulted + released` |
 | `remaining` | `bigint` | No | ≤ quantity | Still reserved |

@@ -165,9 +165,10 @@ Depends on group 3.
   `catalog-SC-34` pass through admin procedures and gateway routing.
   Worker routers and `trpc-access.test.ts` cover SC-32 and SC-34
   partially; no worker-level list/get/create E2E yet.
-- [ ] 4.2 Make intake/sell/withdraw and `catalog-SC-12` pass through admin
-  mutations and fixtures. Domain and admin-frontend fixture paths pass;
-  worker tRPC mutation E2E still open.
+- [ ] 4.2 Make intake and `catalog-SC-12` pass through admin mutations and
+  fixtures where applicable. Domain and admin-frontend fixture paths pass;
+  worker tRPC mutation E2E still open. Free-pool sell/withdraw are not on the
+  inventory product page.
 - [ ] 4.3 Make reserve, adjust, change-product, partial release,
   sell-from-reservation, vault-from-reservation, `catalog-SC-16`, and
   `catalog-SC-35`–`catalog-SC-40` pass through reservation admin and holder
@@ -189,13 +190,15 @@ Depends on groups 1 and 4. Fixtures, not a live worker.
   `catalog-SC-54`, `catalog-SC-57`, and `catalog-SC-58` pass on the product
   page (create/edit, draft→created, single inventory snapshot, reservations
   by `holder_kind`).
-- [x] 5.3 Make intake, free-pool sell/withdraw, and `catalog-SC-12` /
-  `catalog-SC-31` pass in dialogs on the product page (`productsViews.test.tsx`).
-- [x] 5.4 Make reserve, `catalog-SC-16`, and `catalog-SC-53` pass in the
-  product-page reserve dialog. Reservation adjust, change-product, partial
-  release, sell-from-reservation, and vault-from-reservation are out of scope
-  for the inventory product page — they ship from Auction listing and Vault
-  consoles instead (`productsViews.test.tsx`).
+- [x] 5.3 Make intake and `catalog-SC-31` pass in dialogs on the product page
+  (`productsViews.test.tsx`). Free-pool sell/withdraw and `catalog-SC-12` are
+  out of scope for the inventory product page.
+- [x] 5.4 Make admin reserve (`catalog-SC-59`), admin release on the product
+  page (`catalog-SC-60`), and `catalog-SC-53` pass in the product-page
+  dialogs. Auction/Vault reservation adjust, change-product, partial release,
+  sell-from-reservation, and vault-from-reservation are out of scope for the
+  inventory product page — they ship from Auction listing and Vault consoles
+  instead (`productsViews.test.tsx`).
 - [ ] 5.5 Make history badges pass for product-page mutations. Intake badge
   passes in RTL; reservation settlement badges are holder-console scope.
 - [ ] 5.6 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
