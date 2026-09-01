@@ -1,6 +1,6 @@
 ---
 title: Writing the manual
-summary: The block palette, canonical form, and what happens when you save.
+summary: The voice, the block palette, canonical form, and what happens when you save.
 order: 4
 ---
 
@@ -36,6 +36,17 @@ Everything between directives is prose — GitHub markdown, headings starting at
 `##`, no raw HTML. Directives sit at column 0: two colons open a leaf, three
 open a container that a bare three-colon line closes. Attribute values are
 double-quoted, and a quote character can never appear inside one.
+
+## Voice
+
+Pages follow the house style — `docs/governance/writing.md` in the store —
+and its application here is short. Define the thing flatly, in present
+tense, so a reader infers the rules from what it is; group one concern per
+`##` section; put enumerable facts in a table. Never recap the change that
+introduced a capability: today's gap, the intended fix, and the success
+metric belong to the proposal and rot the moment it archives. The one page
+allowed a future tense is a **planned** one, and even there the intended
+shape reads as a shape, not a pitch.
 
 ## The block palette
 
