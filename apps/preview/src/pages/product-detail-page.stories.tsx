@@ -6,20 +6,20 @@ import {
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { Link } from "@grade10/design-system/components/forms/link";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { RadioListItem } from "@grade10/design-system/components/forms/radio-list-item";
 import { StepperInput } from "@grade10/design-system/components/forms/stepper-input";
-import { Link } from "@grade10/design-system/components/forms/link";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
 import { useId, useState } from "react";
+import { expect, within } from "storybook/test";
 import {
   PRODUCT_DETAIL_PRODUCT,
-  SOLD_OUT_PRODUCT,
   type ProductDetailProduct,
+  SOLD_OUT_PRODUCT,
 } from "./product-detail-content";
 import { STORE_FOOTER, STORE_NAV } from "./store-content";
 import { WorkbenchAccountNav } from "./workbench-account-nav";
@@ -30,11 +30,7 @@ import { WorkbenchAccountNav } from "./workbench-account-nav";
  * live here so the page story exercises the same composition a real store
  * would own without importing the production app.
  */
-function ProductDetailPage({
-  product,
-}: {
-  product: ProductDetailProduct;
-}) {
+function ProductDetailPage({ product }: { product: ProductDetailProduct }) {
   const [selectedVariantId, setSelectedVariantId] = useState(
     product.variants[0]?.id ?? "",
   );
@@ -213,7 +209,11 @@ function ProductDetailPage({
                 disabled={!forSale}
                 onClick={() => setAdded(true)}
               >
-                {forSale ? (added ? "Added to cart" : "Add to cart") : "Sold out"}
+                {forSale
+                  ? added
+                    ? "Added to cart"
+                    : "Add to cart"
+                  : "Sold out"}
               </Button>
               {!forSale ? (
                 <Text size="sm" tone="secondary">
@@ -280,9 +280,7 @@ export const Default: Story = {
         name: PRODUCT_DETAIL_PRODUCT.title,
       }),
     ).toBeVisible();
-    expect(
-      canvas.getByRole("img", { name: /front view/ }),
-    ).toBeVisible();
+    expect(canvas.getByRole("img", { name: /front view/ })).toBeVisible();
     expect(canvas.getByText("Only 3 left")).toBeVisible();
     expect(canvas.getByRole("button", { name: "Add to cart" })).toBeVisible();
     expect(canvas.getByRole("contentinfo")).toBeInTheDocument();
