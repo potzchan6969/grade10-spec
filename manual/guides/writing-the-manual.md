@@ -9,11 +9,13 @@ in the browser or in your editor — the grammar is the same either way, and the
 same check refuses a page that breaks it.
 
 A page is YAML frontmatter followed by a sequence of blocks. Frontmatter has
-exactly four keys, always in this order. `title` is a short product-voiced name.
+exactly five keys, always in this order. `title` is a short product-voiced name.
 `summary` is one plain sentence and becomes the card subtitle. `spec` names the
-spec the page documents. `order` sorts it among its siblings. Any other key is a
-hard error, because an editor that silently drops a field you typed is worse
-than one that refuses to save.
+spec the page documents. `audience` is `operator` or absent — `operator` files
+the page under the Admin nav group, absent means the product's own users.
+`order` sorts it among its siblings. Any other key is a hard error, because an
+editor that silently drops a field you typed is worse than one that refuses to
+save.
 
 ```yaml
 ---
@@ -23,6 +25,12 @@ spec: grade10-store/loyalty
 order: 2
 ---
 ```
+
+`spec` may name a capability an in-flight change is still writing — that is
+how an incubating capability gets its page before it lands, and the check
+warns while any delta-introduced capability has none. A page with no `spec` at
+all wears the **planned** pip: it states an intended shape, and the propose
+action on it is where the requirements start.
 
 Everything between directives is prose — GitHub markdown, headings starting at
 `##`, no raw HTML. Directives sit at column 0: two colons open a leaf, three

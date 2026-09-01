@@ -2,6 +2,7 @@
 title: Where a person is signed in
 summary: Listing one account's sessions and ending one or all of them.
 spec: shared-auth/sessions
+audience: operator
 order: 6
 ---
 

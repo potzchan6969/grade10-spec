@@ -5,10 +5,9 @@ order: 5
 ---
 
 :::callout{kind="note"}
-Not yet covered by a spec. The Your Orders surface ships and its shared blocks are
-complete, but its requirements live in an in-flight change against
-`shared-ui/store-order-history` rather than in a durable `grade10-store`
-capability.
+Not yet covered by a spec of its own. The Your Orders surface ships, and its
+shared blocks are specified durably in `shared-ui/store-order-history` — but no
+`grade10-store` capability states the store's own requirements yet.
 :::
 
 Shopify takes the money; Grade10 keeps the order. That separation is the whole

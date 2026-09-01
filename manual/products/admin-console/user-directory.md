@@ -2,6 +2,7 @@
 title: The user directory surface
 summary: The account table both consoles render, and the three confirmations behind changing an account.
 spec: admin-console/user-directory
+audience: operator
 order: 2
 ---
 

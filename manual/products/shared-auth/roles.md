@@ -2,6 +2,7 @@
 title: Roles and permissions
 summary: A closed set of roles, and grants checked by permission rather than by role name.
 spec: shared-auth/roles
+audience: operator
 order: 4
 ---
 

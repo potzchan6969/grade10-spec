@@ -2,6 +2,7 @@
 title: The identity trail
 summary: Four operator moves recorded append-only, and an action that will not run if it cannot be recorded.
 spec: shared-auth/audit
+audience: operator
 order: 7
 ---
 

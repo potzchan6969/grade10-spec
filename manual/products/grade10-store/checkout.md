@@ -1,14 +1,14 @@
 ---
 title: Cart and checkout
 summary: The client-owned cart, live pricing against Shopify, and the order that exists before the buyer ever reaches a payment page.
+spec: grade10-store/shopify-commerce
 order: 4
 ---
 
 :::callout{kind="note"}
-Not yet covered by a spec. Cart and checkout ship today, but their requirements
-live in an in-flight change (`grade10-store/shopify-commerce`) and in the
-commerce architecture docs, not in a durable capability. Read this page as a
-description of what runs, not as a contract.
+Cart and checkout ship today, ahead of their contract: the spec is still being
+written by the change shown above. Read this page as a description of what
+runs.
 :::
 
 The cart belongs to the browser. Lines sit in `localStorage` under `cart.v1`

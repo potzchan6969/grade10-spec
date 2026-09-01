@@ -2,6 +2,7 @@
 title: The identity directory
 summary: Listing accounts, banning and unbanning one, and changing what someone may do.
 spec: shared-auth/users
+audience: operator
 order: 5
 ---
 

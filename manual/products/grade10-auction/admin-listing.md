@@ -2,6 +2,7 @@
 title: Drafting and publishing a listing
 summary: How an operator writes a lot, fills it in over time, and puts it in front of collectors.
 spec: grade10-auction/admin-listing
+audience: operator
 order: 1
 ---
 

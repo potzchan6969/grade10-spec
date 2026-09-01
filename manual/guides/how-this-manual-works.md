@@ -14,12 +14,22 @@ never held a copy in the first place.
 
 ## How it is organized
 
-Read it product first. A product's landing page says what it is and who it
-serves; under it sits a page per capability — one thing the product does, for
-one audience. Conventions every product inherits, like how money is written
-and which zone a date is stated in, have their own sidebar groups. How we
-work lives under Guides, and [Start here](/guides/start-here) lays a first
-hour's path for each job.
+Read it the way the platform is used, not the way the store is filed. The rail
+groups by brand first — Grade10's products, ZZZ's — with what both brands
+share beside them. **Admin** collects every operator-facing page in one place,
+grouped by the product it operates: a capability lives once in the store, and
+an `audience: operator` line in its page's frontmatter is all that files it
+under Admin instead. **Platform** holds the contracts only builders read — the
+shared blocks, the console kit, design sync — and conventions every product
+inherits, like how money is written, have their own groups below.
+
+Every capability has a page, whatever state its contract is in, and the pip
+beside it says which: **planned** (the page states an intended shape nothing
+carries yet), **incubating** (a change in flight is writing the spec),
+**changing** (a change touches a durable spec), or no pip at all — stable. A
+page whose spec is moving shows the delta itself, requirement by requirement,
+right under its in-flight ribbon. How we work lives under Guides, and
+[Start here](/guides/start-here) lays a first hour's path for each job.
 
 ## The loop
 

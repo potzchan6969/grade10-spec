@@ -1,19 +1,22 @@
 storybookBase: https://grade10-storybook.memeland-qa.workers.dev
 
 groups:
-  Products:
+  Grade10:
     - grade10-store
     - grade10-auction
     - vault
-    - grade10-site
-    - zzz
-  Services:
-    - shared-auth
     - appointment
     - e-kyc
     - doc-sign
-    - audit
     - finance
+    - grade10-site
+  ZZZ:
+    - zzz
+  Shared:
+    - shared-auth
+  Admin:
+    - audit
+    - grade10-inventory
   Platform:
     - shared-ui
     - admin-console
@@ -26,6 +29,7 @@ platform:
     - localization
   Architecture:
     - frontend-composition
+    - backend-service-repository
 
 guides:
   - how-this-manual-works
