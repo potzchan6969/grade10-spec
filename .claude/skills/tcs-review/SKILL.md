@@ -1,12 +1,13 @@
 ---
 name: tcs-review
-description: Walk a QA reviewer through a pending test-cases.md suite one case at a time, answering their questions from the spec and recording each verdict as actual, deprecated, or still draft. Use when QA asks to review, approve, or sign off test cases for a capability or an OpenSpec change. Invoke as /tcs-review [<capability-or-change>].
+description: Walk a QA reviewer through a pending test-cases.md suite one user journey at a time - every draft case in that journey together, with the spec's scenarios quoted on request - and record each verdict as actual, deprecated, or still draft. Use when QA asks to review, approve, or sign off test cases for a capability or an OpenSpec change. Invoke as /tcs-review [<capability-or-change>].
 ---
 
 # Review a capability's test cases with QA
 
 Follow `docs/governance/specs-to-test-cases.md` — it defines the properties,
-the statuses, and why review comes before any Qase export. Read it in full
+the statuses, and why review comes before anything downstream reads a suite.
+Read it in full
 before the first run in a session.
 
 Invoke as `/tcs-review [<capability-or-change>]`. Generating or updating a
@@ -70,21 +71,37 @@ of them: the phrasing they approve is the phrasing generation will copy.
    truncated read. Then orient the reviewer: the capability, the journeys,
    how many cases each holds, and how many are `draft`.
 
-4. **Walk the `draft` cases one at a time,** in file order, journey by
-   journey. Cases already `actual` or `deprecated` are skipped unless the
-   reviewer asks to revisit one. For each case, show:
-   - its id and title, and the journey it sits under;
-   - its nine classification properties, pre-conditions, test data (when it
-     has any), numbered steps, and expected-results list;
-   - the **full text of every scenario the case was built from**, quoted from
-     `spec.md`, so the reviewer compares the case against the requirement
-     rather than against your summary of it. A case traces its journey
-     (`<capability>-US-<n>`), so quote the scenarios that journey's
-     `**Accepted by:**` list names and that this case covers.
+4. **Walk the suite one journey at a time,** in file order. A journey is the
+   unit of review: a reviewer holds a whole user flow in their head at once
+   and judges its cases against each other — is anything missing, does the
+   negative case belong here, do two of these say the same thing — which
+   reading case by case makes impossible.
 
-   Then ask for that case's verdict — approve, change, defer, or retire —
-   and wait. One case per question. Do not batch several cases into one
-   approval, and do not carry a verdict forward to the next case.
+   Open the journey with its three-line story, then show **every `draft` case
+   under it, in full**: id and title, the nine classification properties,
+   pre-conditions, test data when it has any, numbered steps, and the
+   expected-results list. Cases already `actual` or `deprecated` are listed by
+   id and title only, so the reviewer sees the whole journey; they are not up
+   for a verdict unless the reviewer asks to revisit one.
+
+   **Do not quote the spec's scenarios unless asked.** The reviewer knows the
+   journey, and a wall of Gherkin before every case buries the cases
+   themselves. Close the journey by offering them instead — the scenario ids
+   that journey's `**Accepted by:**` list names, and an invitation to ask for
+   any of them, or for the scenarios behind one case. When they ask, quote the
+   **whole clause** from `spec.md`, never a summary of it.
+
+   Then ask for the journey's verdicts and wait. The reviewer answers however
+   suits them — "all good", "approve except TC3", "TC2: change the
+   pre-condition to …, rest fine". Two rules make that safe:
+
+   - **Echo before you write.** Repeat the exact case ids you are about to
+     mark and what each becomes, and write only what they named. A blanket
+     "approve all" approves the cases you just showed for *this* journey and
+     nothing else — never a case from another journey, and never one you have
+     not put in front of them.
+   - **A verdict never carries forward.** Finishing one journey says nothing
+     about the next. Ask again.
 
 5. **Answer their questions from the spec.** A reviewer will ask why a case
    is `critical`, where a number came from, why two scenarios share one case,
@@ -117,8 +134,8 @@ of them: the phrasing they approve is the phrasing generation will copy.
    is never a judgement you or the reviewer makes. `pnpm run tcs:validate`
    fails a file whose header and cases disagree.
 
-7. **Close the run — and land the work.** When the last `draft` case in scope
-   has a verdict, or the reviewer stops for the day:
+7. **Close the run — and land the work.** When the last journey in scope has
+   its verdicts, or the reviewer stops for the day:
 
    - Run `pnpm run tcs:validate` and fix anything it names before committing.
    - Commit the verdicts and push the branch. Ensure a draft pull request
@@ -134,7 +151,8 @@ of them: the phrasing they approve is the phrasing generation will copy.
 
    Then:
    - If every case in the file is now `actual` or `deprecated`, set the
-     file's `**Status:**` to `approved` and say the suite is exportable.
+     file's `**Status:**` to `approved` and say the suite is ready to hand on —
+     that is the bar every downstream reader waits for.
    - If any case is still `draft`, leave `pending-review` and name what is
      outstanding.
    - When the reviewer's edits repeated a theme — the same rewording asked
@@ -146,21 +164,22 @@ of them: the phrasing they approve is the phrasing generation will copy.
      gaps the review surfaced for the spec's author (a scenario no case
      covers, a case whose scenario has changed, a question the spec cannot
      answer); and any other suite still awaiting review.
-   - Point at `pnpm run qase:export` / `openspec-export-qase-csv` only when
-     the file actually reached `approved`.
 
 **Never do these things:**
 
 - Never mark a case `actual` — or a file `approved` — without the reviewer
-  saying yes to that specific case.
+  saying yes to a batch that case was in, having seen it in full.
+- Never widen a batch. An approval covers the journey you just showed; it
+  never reaches a case in another journey, one you skipped, or one the
+  reviewer excluded by name.
+- Never carry a journey's verdict into the next journey.
+- Never bury the cases under scenarios the reviewer did not ask for.
 - Never type a file status as a judgement. Recompute it from the cases after
   every verdict.
 - Never write verdicts on `main`, and never hold a finished journey off `main`
   because the rest of the suite is unreviewed.
 - Never refuse to open a suite because another branch or PR is touching it.
   Report it and let the reviewer decide.
-- Never approve the remaining cases in bulk because the reviewer approved
-  several in a row.
 - Never edit a step, precondition, or expected result into something the
   traced scenario does not say, even when the reviewer asks — that is a spec
   change; say so and route it to `/spec-to-tcs` after the spec is fixed.
