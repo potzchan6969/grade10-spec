@@ -11,7 +11,7 @@
   make `annotation-implementation-verification-SC-09`,
   `annotation-implementation-verification-SC-10`, and
   `annotation-implementation-verification-SC-14` pass.
-- [ ] 1.3 Add the read-only `figma:annotations:impact` command with required
+- [x] 1.3 Add the read-only `figma:annotations:impact` command with required
   scope, JSON report, selected IDs, and review inputs plus deterministic JSON
   and exit codes; prove blocked input performs no baseline, OpenSpec, Git, or
   Figma write for `annotation-implementation-verification-SC-04`,
