@@ -1,5 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { IMAGE, ORDER_DETAILS_COPY } from "./fixtures";
+import {
+  FIXTURE_CANCELED_MESSAGE,
+  FIXTURE_REFUND_MESSAGE,
+} from "../../lib/datetime-fixtures";
 import { OrderDetailsOrderItem } from "./order-details-order-item";
 
 const meta = {
@@ -26,7 +30,7 @@ export const WithLineIssue: Story = {
   args: {
     lineStatus: "refunded",
     statusLabel: ORDER_DETAILS_COPY.status.refunded,
-    statusMessage: "Out of stock. Refund issued on Aug 28",
+    statusMessage: FIXTURE_REFUND_MESSAGE,
     struckThrough: true,
   },
 };
@@ -35,7 +39,7 @@ export const Canceled: Story = {
   args: {
     lineStatus: "canceled",
     statusLabel: ORDER_DETAILS_COPY.status.canceled,
-    statusMessage: "Canceled by customer on Aug 28",
+    statusMessage: FIXTURE_CANCELED_MESSAGE,
     struckThrough: true,
   },
 };

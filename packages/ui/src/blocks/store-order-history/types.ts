@@ -26,7 +26,7 @@ type OrderHistoryOrderSummary = {
   /** Display order id, e.g. `Order #G10-10391`. */
   orderId: ReactNode;
   status: OrderHistoryFulfillmentStatus;
-  /** Pre-formatted placement date, e.g. `Placed on Aug 26, 2026`. */
+  /** Pre-formatted placement date, e.g. `Placed on 26 Aug 2026`. */
   date: ReactNode;
   /** Pre-formatted order total, e.g. `Total: HK$1,770`. */
   total: ReactNode;

@@ -1,4 +1,5 @@
 import type { OrderHistoryCopy, OrderHistoryOrderSummary } from "@grade10/ui";
+import { FIXTURE_PLACED_ON } from "../../../../packages/ui/src/lib/datetime-fixtures";
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
@@ -35,7 +36,7 @@ const ACTIVE_ORDERS: readonly OrderHistoryOrderSummary[] = [
     id: "ord-active-1",
     orderId: "Order #G10-10391",
     status: "shipped",
-    date: "Placed on Aug 26, 2026",
+    date: FIXTURE_PLACED_ON,
     total: "Total: HK$1,770",
     trackOrder: true,
     lines: [
@@ -51,7 +52,7 @@ const PAST_ORDERS: readonly OrderHistoryOrderSummary[] = [
     id: "ord-past-1",
     orderId: "Order #G10-10391",
     status: "completed",
-    date: "Placed on Aug 26, 2026",
+    date: FIXTURE_PLACED_ON,
     total: "Total: HK$1,770",
     lines: [{ id: "p1", ...LINE }],
   },
@@ -59,7 +60,7 @@ const PAST_ORDERS: readonly OrderHistoryOrderSummary[] = [
     id: "ord-past-2",
     orderId: "Order #G10-10391",
     status: "canceled",
-    date: "Placed on Aug 26, 2026",
+    date: FIXTURE_PLACED_ON,
     total: "Total: HK$1,770",
     lines: [
       { id: "p2a", ...LINE },

@@ -3,6 +3,7 @@ import type {
   OrderHistoryLineSummary,
   OrderHistoryOrderSummary,
 } from "./types";
+import { FIXTURE_PLACED_ON } from "../../lib/datetime-fixtures";
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
@@ -43,7 +44,7 @@ const ACTIVE_ORDER: OrderHistoryOrderSummary = {
   id: "ord-active-1",
   orderId: "Order #G10-10391",
   status: "shipped",
-  date: "Placed on Aug 26, 2026",
+  date: FIXTURE_PLACED_ON,
   total: "Total: HK$1,770",
   trackOrder: true,
   lines: [LINE_A, LINE_B, LINE_C],
@@ -53,7 +54,7 @@ const PAST_COMPLETED: OrderHistoryOrderSummary = {
   id: "ord-past-1",
   orderId: "Order #G10-10391",
   status: "completed",
-  date: "Placed on Aug 26, 2026",
+  date: FIXTURE_PLACED_ON,
   total: "Total: HK$1,770",
   lines: [LINE_A],
 };
@@ -62,7 +63,7 @@ const PAST_CANCELED: OrderHistoryOrderSummary = {
   id: "ord-past-2",
   orderId: "Order #G10-10391",
   status: "canceled",
-  date: "Placed on Aug 26, 2026",
+  date: FIXTURE_PLACED_ON,
   total: "Total: HK$1,770",
   lines: [LINE_A, LINE_B],
 };

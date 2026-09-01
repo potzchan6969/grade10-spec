@@ -4,6 +4,10 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { ListingBidPanel, ListingDetails, ListingGallery } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
+import {
+  FIXTURE_AUCTION_CLOSED,
+  FIXTURE_AUCTION_DEADLINE,
+} from "../../../../packages/ui/src/lib/datetime-fixtures";
 import { STORE_FOOTER, STORE_NAV } from "./store-content";
 import { WorkbenchAccountNav } from "./workbench-account-nav";
 
@@ -65,7 +69,7 @@ function AuctionListingPage({ state = "live" }: { state?: ListingState }) {
                         ? "Opening bid"
                         : "Current bid",
                 }}
-                deadline={closed ? undefined : "1 Sep 2026, 18:00 UTC"}
+                deadline={closed ? undefined : FIXTURE_AUCTION_DEADLINE}
                 extensionValue={closed ? undefined : "30 minutes"}
                 history={isUnsold ? "No bids yet." : "Bidder 3 · HK$4,800.00"}
                 kicker="Listing 12 · September Slabs"
@@ -79,7 +83,7 @@ function AuctionListingPage({ state = "live" }: { state?: ListingState }) {
                 priceHint="Buyer's premium is added at invoice."
                 remaining={
                   closed
-                    ? "Closed 30 Aug 2026, 09:15 UTC"
+                    ? FIXTURE_AUCTION_CLOSED
                     : isPreAuction
                       ? "2D 4H 12M 0S"
                       : "13D 11H 33M 47S"

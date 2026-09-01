@@ -3,6 +3,11 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
 import { expect, within } from "storybook/test";
 import {
+  FIXTURE_AUCTION_CLOSED,
+  FIXTURE_AUCTION_DEADLINE,
+  FIXTURE_AUCTION_OPENS_DEADLINE,
+} from "../../lib/datetime-fixtures";
+import {
   BASE_FACTS,
   DESCRIPTION,
   GALLERY_IMAGES,
@@ -56,7 +61,7 @@ const liveBidPanel = (
     actions={<LiveActions />}
     watchAction={<WatchOnlyActions />}
     bidCount="1 Bid"
-    deadline="1 Sep 2026, 18:00 UTC"
+    deadline={FIXTURE_AUCTION_DEADLINE}
     extensionValue="30 minutes"
     history="Bidder 3 · HK$4,800.00"
     kicker={KICKER}
@@ -112,7 +117,7 @@ export const PreAuction: Story = {
           }}
           actions={null}
           watchAction={<WatchOnlyActions />}
-          deadline="22 Aug 2026, 18:00 UTC"
+          deadline={FIXTURE_AUCTION_OPENS_DEADLINE}
           extensionValue="30 minutes"
           kicker={KICKER}
           price="HK$1,200.00"
@@ -185,7 +190,7 @@ export const PostSold: Story = {
           kicker={KICKER}
           price="HK$3,100.00"
           priceHint={PREMIUM_HINT}
-          remaining="Closed 30 Aug 2026, 09:15 UTC"
+          remaining={FIXTURE_AUCTION_CLOSED}
           title={TITLE}
         />
       </>,
@@ -227,7 +232,7 @@ export const PostWonPaymentDue: Story = {
           kicker={KICKER}
           price="HK$3,100.00"
           priceHint={PREMIUM_HINT}
-          remaining="Closed 30 Aug 2026, 09:15 UTC"
+          remaining={FIXTURE_AUCTION_CLOSED}
           standing={<WonPaymentDueStanding />}
           title={TITLE}
         />
@@ -269,7 +274,7 @@ export const PostWonSettled: Story = {
           kicker={KICKER}
           price="HK$3,100.00"
           priceHint={PREMIUM_HINT}
-          remaining="Closed 30 Aug 2026, 09:15 UTC"
+          remaining={FIXTURE_AUCTION_CLOSED}
           standing={<WonSettledStanding />}
           title={TITLE}
         />
@@ -312,7 +317,7 @@ export const PostLost: Story = {
           kicker={KICKER}
           price="HK$3,100.00"
           priceHint={PREMIUM_HINT}
-          remaining="Closed 30 Aug 2026, 09:15 UTC"
+          remaining={FIXTURE_AUCTION_CLOSED}
           standing={<LostStanding />}
           title={TITLE}
         />
@@ -355,7 +360,7 @@ export const PostUnsold: Story = {
           kicker={KICKER}
           price="Unsold"
           priceHint={PREMIUM_HINT}
-          remaining="Closed 30 Aug 2026, 09:15 UTC"
+          remaining={FIXTURE_AUCTION_CLOSED}
           title="1999 Blastoise, PSA 9"
         />
       </>,

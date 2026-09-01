@@ -14,6 +14,7 @@ import {
   ORDER_DETAILS_COPY,
   PICKUP_DELIVERY,
 } from "./fixtures";
+import { FIXTURE_PLACED_ON_WITH_PERIOD } from "../../lib/datetime-fixtures";
 import { OrderDetails } from "./order-details";
 
 const breadcrumbs = (
@@ -36,7 +37,7 @@ const meta = {
     breadcrumbs,
     orderId: "Order #G10-10482",
     status: "shipped",
-    placedOn: "Placed on Aug 26, 2026.",
+    placedOn: FIXTURE_PLACED_ON_WITH_PERIOD,
     placedOnDateTime: "2026-08-26",
     needHelp: { href: "#" },
     delivery: FILLED_DELIVERY,

@@ -144,6 +144,9 @@ importers:
       '@figma/code-connect':
         specifier: ^1.4.9
         version: 1.4.9(supports-color@7.2.0)
+      '@grade10/ui':
+        specifier: workspace:*
+        version: link:../ui
       '@storybook/addon-a11y':
         specifier: 10.5.4
         version: 10.5.4(storybook@10.5.4(@types/react@19.2.17)(prettier@2.8.8)(react@19.2.8))

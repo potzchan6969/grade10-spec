@@ -4,6 +4,11 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { FlowContainer } from "../shared/flow-container";
+import {
+  FIXTURE_AUCTION_DEADLINE,
+  FIXTURE_LIVE_BID_AT_MS,
+} from "../../lib/datetime-fixtures";
+import { formatMoment } from "../../lib/format-datetime";
 import { LiveActions, WatchingAction, WatchOnlyActions } from "./fixtures";
 import { ListingBidPanel } from "./listing-bid-panel";
 
@@ -25,12 +30,36 @@ type ScriptBid = {
  * everyone else is a rival. Each step is one new leading bid.
  */
 const SCRIPT: readonly ScriptBid[] = [
-  { bidder: "Bidder 2", amount: "HK$1,200.00", at: "21 Aug 2026, 11:00 UTC" },
-  { bidder: "Bidder 1", amount: "HK$1,250.00", at: "21 Aug 2026, 11:02 UTC" },
-  { bidder: YOU, amount: "HK$1,300.00", at: "21 Aug 2026, 11:04 UTC" },
-  { bidder: "Bidder 3", amount: "HK$1,400.00", at: "21 Aug 2026, 11:08 UTC" },
-  { bidder: YOU, amount: "HK$1,500.00", at: "21 Aug 2026, 11:12 UTC" },
-  { bidder: "Bidder 2", amount: "HK$1,600.00", at: "21 Aug 2026, 11:16 UTC" },
+  {
+    bidder: "Bidder 2",
+    amount: "HK$1,200.00",
+    at: formatMoment(FIXTURE_LIVE_BID_AT_MS[0]),
+  },
+  {
+    bidder: "Bidder 1",
+    amount: "HK$1,250.00",
+    at: formatMoment(FIXTURE_LIVE_BID_AT_MS[1]),
+  },
+  {
+    bidder: YOU,
+    amount: "HK$1,300.00",
+    at: formatMoment(FIXTURE_LIVE_BID_AT_MS[2]),
+  },
+  {
+    bidder: "Bidder 3",
+    amount: "HK$1,400.00",
+    at: formatMoment(FIXTURE_LIVE_BID_AT_MS[3]),
+  },
+  {
+    bidder: YOU,
+    amount: "HK$1,500.00",
+    at: formatMoment(FIXTURE_LIVE_BID_AT_MS[4]),
+  },
+  {
+    bidder: "Bidder 2",
+    amount: "HK$1,600.00",
+    at: formatMoment(FIXTURE_LIVE_BID_AT_MS[5]),
+  },
 ];
 
 function standingOf(bids: readonly ScriptBid[]) {
@@ -122,7 +151,7 @@ function panelFor({ bids, watching }: DemoState) {
       }}
       actions={<LiveActions />}
       bidCount={`${bids.length} ${bids.length === 1 ? "Bid" : "Bids"}`}
-      deadline="1 Sep 2026, 18:00 UTC"
+      deadline={FIXTURE_AUCTION_DEADLINE}
       extensionValue="30 minutes"
       extensionTooltip="Bids placed in the final 30 minutes extend the auction by 30 minutes."
       history={historyOf(bids)}

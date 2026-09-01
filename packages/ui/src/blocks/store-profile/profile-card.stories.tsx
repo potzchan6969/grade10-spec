@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, within } from "storybook/test";
+import { FIXTURE_MEMBER_SINCE } from "../../lib/datetime-fixtures";
 import { ProfileCard } from "./profile-card";
 import { ProfileDetails } from "./profile-details";
 import { ProfileForm } from "./profile-form";
@@ -21,7 +22,7 @@ const meta = {
           bio="Chasing PSA 10s since 2019."
           displayName="Collector"
           copy={{ edit: "Edit profile" }}
-          meta="Member since Mar 12, 2024"
+          meta={FIXTURE_MEMBER_SINCE}
           onEdit={fn()}
         />
       ),

@@ -1,4 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import {
+  FIXTURE_ORDER_PLACED_DAY,
+  FIXTURE_ORDER_SHIPPED_DAY,
+} from "@grade10/ui/lib/datetime-fixtures";
 import { Step } from "./step";
 import { Stepper } from "./stepper";
 
@@ -15,12 +19,12 @@ export const ThreeSteps: Story = {
   render: () => (
     <Stepper>
       <Step
-        description="Aug 26, 2026"
+        description={FIXTURE_ORDER_PLACED_DAY}
         label="Order Placed"
         showLeadingConnector={false}
         state="completed"
       />
-      <Step description="Aug 27, 2026" label="Shipped" state="progress" />
+      <Step description={FIXTURE_ORDER_SHIPPED_DAY} label="Shipped" state="progress" />
       <Step label="Completed" showTrailingConnector={false} state="upcoming" />
     </Stepper>
   ),
