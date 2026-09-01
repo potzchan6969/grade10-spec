@@ -1,6 +1,6 @@
 ## 1. Add the shared impact-review interface (grade10-spec) (owner: @kinisworking)
 
-- [ ] 1.1 Add the schema-version-1 impact document and pure validator beside
+- [x] 1.1 Add the schema-version-1 impact document and pure validator beside
   the store-owned report helpers, reusing stable selection and association
   validation to make `annotation-implementation-verification-SC-01` through
   `annotation-implementation-verification-SC-08` pass for complete, missing,
