@@ -32,6 +32,7 @@
     "catalog_unavailable": "The shop did not answer. Try again in a moment.",
     "payment_declined": "That payment was declined. Try again with another method.",
     "payment_error": "The payment could not be set up. Try again in a moment.",
-    "points_refused": "The programme would not put that many points against this basket. Choose a different amount."
+    "points_refused": "The programme would not put that many points against this basket. Choose a different amount.",
+    "coupon_refused": "That coupon cannot ride this basket. Remove it or change the basket and try again."
   }
 }
