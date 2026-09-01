@@ -1,4 +1,3 @@
-import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { selectTriggerVariants } from "@grade10/design-system/components/forms/select";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
@@ -7,6 +6,7 @@ import {
   Dialog,
   DialogBody,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -137,7 +137,7 @@ function ListingAgeVerificationFields({ copy }: ListingAgeVerificationFieldsProp
 
   return (
     <VStack gap="md">
-      <Text as="p">{copy.body}</Text>
+      <DialogDescription>{copy.body}</DialogDescription>
       <HStack className="w-full" gap="sm">
         <DobCombobox
           aria-label={copy.birthMonthLabel}
@@ -181,7 +181,7 @@ function ListingAgeVerificationDialog({
           <ListingAgeVerificationFields copy={copy} />
         </DialogBody>
         <DialogFooter>
-          <Button onClick={() => onOpenChange(false)} variant="outline">
+          <Button onClick={() => onOpenChange(false)} size="md" variant="outline">
             {copy.cancel}
           </Button>
           <Button
@@ -189,6 +189,7 @@ function ListingAgeVerificationDialog({
               onConfirm();
               onOpenChange(false);
             }}
+            size="md"
           >
             {copy.confirm}
           </Button>

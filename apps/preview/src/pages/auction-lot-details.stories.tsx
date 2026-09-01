@@ -14,7 +14,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Auction lot detail page (Auction Card sidebar) aligned to Figma Product Detail shell and Auction block. Synthetic fixture data; distinct from legacy ListingDetails / Listing Product stories.",
+          "Auction lot detail page (Auction Card sidebar) aligned to Figma Product Detail shell and Auction block. Synthetic fixture data; distinct from legacy ListingDetails / Listing Product stories. For bid-card-only enrollment (sign-in, age, payment), see Auction Listing → Bid Panel.",
       },
     },
   },
