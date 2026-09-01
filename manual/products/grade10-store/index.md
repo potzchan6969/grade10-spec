@@ -1,5 +1,5 @@
 ---
-title: Grade10
+title: Store
 ---
 
 The Grade10 store is the trading-card and collectibles shop at
