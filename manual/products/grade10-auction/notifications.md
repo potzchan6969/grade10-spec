@@ -1,6 +1,5 @@
 ---
-title: Auction email
-summary: Mail on opening, closing soon, outbid and won — how a collector plans around a close that moves.
+title: Notifications
 spec: grade10-auction/notifications
 order: 8
 ---

@@ -1,6 +1,5 @@
 ---
 title: Vault
-summary: Physical custody — an item really in a locker, valued at the counter, with an optional loan attached to the case.
 ---
 
 The vault is physical custody. A collector submits an item online, books a visit

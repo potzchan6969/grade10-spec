@@ -1,49 +1,43 @@
 ---
-title: Grade10 Store
-summary: The trading-card shop — a Shopify catalogue, Grade10's own order record, and a points programme riding on both.
+title: Grade10
 ---
 
-The Grade10 store is the trading-card and collectibles shop at `grade10.com/store`.
-A collector lands on a front door, browses a listing they can filter and sort,
-opens one card's own page, picks a grade and adds it to the cart. Checkout is
-Shopify's: Shopify owns the catalogue, prices its own checkout and takes the
-money, while Grade10 keeps its own order of record and shows the buyer every
+The Grade10 store is the trading-card and collectibles shop at
+`grade10.com/store`. A collector lands on the main page, filters and sorts the
+product listing, opens a product details page, picks a grade, adds it to the
+cart and checks out. Shopify owns the catalogue, prices the checkout and takes
+the money; Grade10 keeps its own order of record and shows the buyer every
 order they have placed.
 
-Riding on the same purchases is the loyalty programme — points, tiers and a
-reward menu. A member earns on qualifying spend, their tier changes the rate
-they earn at, and points buy things off a menu. The same points also spend at
-the counter of the physical shop.
+Purchases feed the points programme, which has its own section:
+[Membership](/p/membership).
 
 ## Who uses it
 
-- **Collectors** browse, buy, and run their own membership.
-- **Staff** work the till in the physical shop — attaching a member to a sale so
-  it earns, spending points on their behalf, handing over collected rewards —
-  and work the orders queue in the admin panel.
-- **Admins** run the programme from the console: adjusting points, granting and
-  revoking invitation tiers, editing the reward menu, reading liability, working
-  the fulfilment queue. Every operator move is permission-gated,
-  second-factor-gated, and appended to a tamper-evident trail.
+- **Collectors** browse and buy.
+- **Staff** work the orders queue in the admin panel and the till in the
+  physical shop.
+- **Admins** run the store from the console. Every operator move is
+  permission-gated, second-factor-gated, and appended to a tamper-evident
+  trail.
 
 ## How the pieces fit
 
-Shopify is authoritative for products, inventory and the money actually charged.
-The store keeps the order, its items and its events in its own database, and a
-settlement webhook is what moves an order from pending to paid — honoured only
-when the recorded checkout reference carries the event's cart token, because an
-order id on a webhook is a claim rather than proof.
+Shopify is authoritative for products, inventory and the money actually
+charged. The store keeps the order, its items and its events in its own
+database, and a settlement webhook is what moves an order from pending to paid
+— honoured only when the recorded checkout reference carries the event's cart
+token, because an order id on a webhook is a claim rather than proof.
 
-When an order settles, the store hands loyalty the goods amount over a service
-binding. Loyalty prices it into points and never learns who the buyer is beyond
-a user id: names and email addresses stay in the identity system behind that
-system's own permission.
+When an order settles, the store hands the goods amount to the membership
+programme over a service binding. The programme prices it into points and never
+learns who the buyer is beyond a user id: names and email addresses stay in the
+identity system behind that system's own permission.
 
-Four store surfaces carry a durable spec — the front door, the browse listing, a
-card's own page, and loyalty. Checkout and orders ship without one, and their
-pages here say so.
+Main Page, Product Listing and Product Details Page carry a durable spec.
+Cart, Checkout and Orders ship ahead of one, and their pages say so.
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9023" title="Store page — the front door assembly"}
+::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9023" title="Store page — the main page assembly"}
 
 :::detail{title="Where the code lives" for="engineer"}
 The storefront is `apps/frontend/grade10` composing `@grade10/ui` blocks; its

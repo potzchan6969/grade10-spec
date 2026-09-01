@@ -1,6 +1,5 @@
 ---
-title: Admin console
-summary: One operator console per brand, assembled from shared shapes that carry no brand and no product.
+title: Admin Console
 ---
 
 Every operator works in one console per brand, not one console per product.

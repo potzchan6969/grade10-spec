@@ -8,21 +8,21 @@ Every page here is a markdown file in the spec store under `manual/`. Edit one
 in the browser or in your editor — the grammar is the same either way, and the
 same check refuses a page that breaks it.
 
-A page is YAML frontmatter followed by a sequence of blocks. Frontmatter has
-exactly five keys, always in this order. `title` is a short product-voiced name.
-`summary` is one plain sentence and becomes the card subtitle. `spec` names the
-spec the page documents. `audience` is `operator` or absent — `operator` files
-the page under the Admin nav group, absent means the product's own users.
-`order` sorts it among its siblings. Any other key is a hard error, because an
-editor that silently drops a field you typed is worse than one that refuses to
-save.
+A page is YAML frontmatter followed by a sequence of blocks. Frontmatter keys
+come in this order. `title` is the surface's plain name — `Main Page`,
+`Product Listing`, `Checkout` — never a metaphor. `summary` is a card
+subtitle the house style leaves out: the title carries the weight, and the
+page shows the rest. `spec` names the spec the page documents. `audience` is
+`operator` or absent — `operator` files the page under the Admin nav group,
+absent means the product's own users. `order` sorts it among its siblings.
+Any other key is a hard error, because an editor that silently drops a field
+you typed is worse than one that refuses to save.
 
 ```yaml
 ---
-title: Loyalty
-summary: Points, tiers, and what a member gets back.
+title: Points and Rewards
 spec: grade10-store/loyalty
-order: 2
+order: 1
 ---
 ```
 
@@ -39,18 +39,13 @@ double-quoted, and a quote character can never appear inside one.
 
 ## The block palette
 
-Embed a spec whole, or select one piece of it. Scenario and story ids are
-permanent, so prefer them when a single requirement is making your point:
+The page itself carries the shape we want — plain prose and the visuals below.
+Requirement text stays in the store: cite it by id where one matters (see
+Citing the spec), and never embed the contract into the page.
 
-```md
-::spec{id="grade10-store/loyalty"}
-::spec{id="grade10-store/loyalty" scenario="loyalty-SC-04"}
-::spec{id="grade10-store/loyalty" story="loyalty-US-01"}
-::spec{id="grade10-store/loyalty" requirement="Exact heading text"}
-```
-
-Journeys and test cases come out of the same spec. Journeys are usually the
-best thing on a capability page — put them before the full contract:
+What a page does embed is acceptance. Journeys and test cases come out of the
+spec named in the frontmatter, and journeys are usually the best thing on a
+capability page:
 
 ```md
 ::journeys{id="grade10-store/loyalty"}
@@ -195,7 +190,7 @@ specs changed after the page's last commit is flagged stale — a warning, not a
 failure.
 
 :::callout{kind="note"}
-Write prose first and blocks second. Never retype a requirement in your own
-words: embed it. The page exists to connect and narrate; the spec block carries
-the contract, and only one of those two can go out of date.
+Write short and straight. The page states the desired shape and shows what it
+looks like; the spec store carries the contract, and a `[[ref]]` is how the
+two meet. A paragraph a figma card can replace is a paragraph to delete.
 :::

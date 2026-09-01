@@ -1,11 +1,10 @@
 ---
-title: Browse listing
-summary: The catalogue at an address of its own, and how an address narrows it to one collection.
+title: Product Listing
 spec: grade10-store/product-listing
 order: 2
 ---
 
-The browse listing is where a collector filters and sorts the whole catalogue. It
+The product listing is where a collector filters and sorts the whole catalogue. It
 lives at its own address beneath the store, with its own title, description and
 share metadata, and a document written for it in every language the site answers.
 What the listing shows and does did not change when it moved — only where it
@@ -18,8 +17,6 @@ already narrowed to it, one naming none lists everything, and one naming a
 collection the catalogue has nothing for lists everything as itself rather than
 refusing. That last case is deliberate — a way of narrowing that has gone empty
 is not a missing page.
-
-::spec{id="grade10-store/product-listing" scenario="product-listing-SC-05"}
 
 Narrowing from inside the page writes the collection into the address, so a
 collector can link to what they are looking at, and going back restores the
@@ -40,7 +37,3 @@ previous narrowing.
 ## Journeys
 
 ::journeys{id="grade10-store/product-listing"}
-
-## The contract
-
-::spec{id="grade10-store/product-listing"}

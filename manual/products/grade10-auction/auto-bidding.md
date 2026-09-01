@@ -1,6 +1,5 @@
 ---
-title: Auto-bidding
-summary: A hidden maximum Grade10 bids from, so a collector can compete after closing the tab.
+title: Auto-Bidding
 spec: grade10-auction/auto-bidding
 order: 6
 ---
@@ -22,7 +21,3 @@ never needs a fresh card check mid-auction.
 ## Journeys
 
 ::journeys{id="grade10-auction/auto-bidding"}
-
-## The contract
-
-::spec{id="grade10-auction/auto-bidding"}

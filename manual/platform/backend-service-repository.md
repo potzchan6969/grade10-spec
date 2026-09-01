@@ -1,6 +1,5 @@
 ---
-title: Services and repositories
-summary: One backend boundary — transport, service, repository — and the test evidence each seam owes.
+title: Services and Repositories
 spec: backend-service-repository
 ---
 

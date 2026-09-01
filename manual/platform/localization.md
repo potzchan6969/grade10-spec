@@ -1,6 +1,5 @@
 ---
 title: Localization
-summary: Which languages each brand speaks, and where every word on a page comes from.
 spec: localization
 order: 4
 ---
@@ -30,7 +29,3 @@ drafted by engineers with machine assistance and have never been read by a
 native speaker. Register and terminology are the risk. Get them reviewed before
 either language is promoted as a supported market.
 :::
-
-## The contract
-
-::spec{id="localization"}

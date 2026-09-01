@@ -1,6 +1,5 @@
 ---
-title: Dates and times
-summary: One instant in the database, one stated zone on screen, and four shapes to read it in.
+title: Dates and Times
 spec: dates-and-times
 order: 2
 ---
@@ -21,7 +20,3 @@ Traffic runs the other way in exactly one place: a calendar day an operator
 types into a filter. It carries no time and no zone, so it becomes the instants
 that day opens and closes — which is what makes a window cover both of its end
 days whole, and read back as the day that was typed from any machine.
-
-## The contract
-
-::spec{id="dates-and-times"}

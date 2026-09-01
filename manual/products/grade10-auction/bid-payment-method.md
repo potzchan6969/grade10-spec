@@ -1,6 +1,5 @@
 ---
-title: The card behind a bid
-summary: The payment-method step a first bid carries, and the one authorization that follows the maximum.
+title: Payment Method
 spec: grade10-auction/bid-payment-method
 order: 5
 ---

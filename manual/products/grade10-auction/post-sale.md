@@ -1,9 +1,8 @@
 ---
-title: The post-sale queue
-summary: Working a won listing from live through delivered, with payment and shipping split by grant.
+title: Post-Sale Queue
 spec: grade10-auction/post-sale
 audience: operator
-order: 12
+order: 13
 ---
 
 Bidding produces a winner and a card authorization; today the aftermath is

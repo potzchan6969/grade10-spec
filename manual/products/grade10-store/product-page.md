@@ -1,6 +1,5 @@
 ---
-title: Card page
-summary: One card at its own address — its grades, its prices, and the add that keeps the collector where they are.
+title: Product Details Page
 spec: grade10-store/product-page
 order: 3
 ---
@@ -25,11 +24,9 @@ A card nobody can buy still costs what it costs. It keeps its prices and offers
 nothing to press, and a card with one grade sold and another still for sale says
 so per grade.
 
-::spec{id="grade10-store/product-page" scenario="product-page-SC-11"}
-
 :::callout{kind="note"}
 No Figma frame exists for this page's buy box, and no `@grade10/ui` block covers
-it — the card page is composed in the app. The grid's product card, which is
+it — the page is composed in the app. The grid's product card, which is
 where a collector reaches this page from, is a shared block and does have frames.
 :::
 
@@ -38,7 +35,3 @@ where a collector reaches this page from, is a shared block and does have frames
 ## Journeys
 
 ::journeys{id="grade10-store/product-page"}
-
-## The contract
-
-::spec{id="grade10-store/product-page"}

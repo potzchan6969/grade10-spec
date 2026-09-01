@@ -1,6 +1,5 @@
 ---
 title: Appointments
-summary: The shared diary — shops, opening rules, and the seats a product books against a case.
 ---
 
 The appointment service is a diary and nothing more. It knows shops, when each

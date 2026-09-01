@@ -1,6 +1,5 @@
 ---
-title: Store order history
-summary: The shared blocks an Order History page assembles — status badge, line item, order card, and the page that splits Active from Past.
+title: Order History Blocks
 spec: shared-ui/store-order-history
 order: 7
 ---
@@ -22,7 +21,3 @@ needs just the badge or just a card takes that and no more.
 ## What a collector does
 
 ::journeys{id="shared-ui/store-order-history"}
-
-## The contract
-
-::spec{id="shared-ui/store-order-history"}

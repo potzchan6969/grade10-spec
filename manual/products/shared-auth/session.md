@@ -1,6 +1,5 @@
 ---
-title: Who the caller is
-summary: What a product learns about a signed-in person, and why the user id is the only key.
+title: Session
 spec: shared-auth/session
 order: 2
 ---
@@ -14,8 +13,6 @@ another are stored against it; an email is an attribute of the account, never
 the thing it is filed under. That is what makes changing an address a change of
 data rather than a migration.
 
-::spec{id="shared-auth/session" scenario="session-SC-05"}
-
 Signing in covers the brand. Every site of that brand sees the same person, and
 no site of another brand sees them at all.
 
@@ -27,7 +24,3 @@ is that product's business.
 ## What a collector does
 
 ::journeys{id="shared-auth/session"}
-
-## The contract
-
-::spec{id="shared-auth/session"}

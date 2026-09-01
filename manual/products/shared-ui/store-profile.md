@@ -1,6 +1,5 @@
 ---
-title: The profile blocks
-summary: The shared display and edit blocks behind the account profile, exported once for every store.
+title: Profile Blocks
 spec: shared-ui/store-profile
 order: 10
 ---

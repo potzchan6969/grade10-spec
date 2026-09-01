@@ -1,21 +1,13 @@
 ---
-title: Loyalty
-summary: Points on what you spend, tiers that pay a better rate, and a reward menu you spend them back on — online and at the counter.
+title: Points and Rewards
 spec: grade10-store/loyalty
-order: 6
+order: 1
 ---
 
-The membership programme runs on one idea: a member's balance is never a stored
-number. Behind every member is an append-only ledger of dated point lots, and a
-balance is a query over it. Nothing is edited, so nothing can quietly drift, and
-a mutation repeated under its own key answers once and records nothing twice.
-
-Three audiences touch it. **Members** join at `/join`, carry a member card in the
-app, and see tier, balance, what is expiring and their own history on one
-surface. **Staff** run a loyalty terminal inside Shopify POS at the till.
-**Operators** run the programme from the admin console — finding members,
-granting points, editing the reward menu, granting and revoking invitation tiers,
-unparking stuck fulfilments and reading what the programme still owes.
+The programme runs on one idea: a member's balance is never a stored number.
+Behind every member is an append-only ledger of dated point lots, and a balance
+is a query over it. Nothing is edited, so nothing can quietly drift, and a
+mutation repeated under its own key answers once and records nothing twice.
 
 The engine itself is brand-neutral and names no vendor anywhere. Everything
 Shopify — minting a discount code, the till gateway, the member panel — sits
@@ -41,12 +33,10 @@ ladder that is ambiguous about which tier a member holds stops the product at
 boot rather than at the moment a member is evaluated — a misconfigured ladder is
 found by the deploy, not by a customer.
 
-::spec{id="grade10-store/loyalty" requirement="Grade10's programme"}
-
 :::callout{kind="warning"}
 The tiers ship as **Silver** (base, 1×), **Gold** (1.2×, 500 qualifying points
 in a rolling twelve months) and **Black** (1.7×, invitation only), with persisted
-ids `silver`, `gold`, `black`. The durable spec above still calls the first two
+ids `silver`, `gold`, `black`. The durable spec still calls the first two
 Platinum and Diamond. The programme reference, the QA docs and the code all use
 Silver / Gold / Black, and the in-flight rules rewrite states that no record uses
 `platinum` or `diamond` — the spec is the pre-launch naming and has not caught up.
@@ -88,75 +78,6 @@ Their requirements sit in unarchived changes or in architecture docs.
 ::journeys{id="grade10-store/loyalty"}
 
 ::cases{id="grade10-store/loyalty"}
-
-## At the till
-
-Staff never handle registration. They point at the counter QR and the customer
-registers on their own phone; staff then attach that customer to the sale so it
-earns. One rule decides every branch of the till's behaviour: **the sale is
-happening whatever the programme thinks.** Nothing throws and nothing waits
-forever — every unhappy answer lands staff in a state that says carry on with a
-normal sale.
-
-Identification opens a short server-side session bound to the shop, the member
-and a ten-minute lifetime — never to the claimed staff label, which changes
-mid-transaction when staff switch by PIN. The member never confirms on their own
-device; a typed identification notifies them instantly as a receipt rather than a
-gate. A miss says only "no member found", never distinguishing an unpaired
-customer from one who does not exist.
-
-:::flow{title="Points at the till"}
-## Open the terminal
-Staff tap the loyalty tile on the POS home screen and open the modal.
-
-## Find the member
-Scan the QR on their member card, type the eight-character short code printed
-under it, or type the exact email on the account. A miss says only that no member
-was found.
-
-## Read their standing
-The panel shows tier, balances, window progress, renewal and points-active-until
-dates, recent activity, what they can afford, open codes and pending collections.
-
-## Attach them to the sale
-Staff set the customer on the cart through Shopify's own search. Spending stays
-disabled until the cart's customer matches the paired one, and each unmet
-condition says which one it is.
-
-## Preview the spend
-Tap "use max" or type an amount. The server computes the read-back and returns an
-intent that pins it.
-
-## Read it to the member
-Spend N, pay HKD X, balance after Y, earns about Z. Staff read the confirm screen
-facing the member and tap. A double-tap replays the same intent rather than
-spending twice.
-
-## Apply the discount
-The redemption mints a single-use money-off code and the discount lands on the
-cart, normally within the same tap. Past a server-side deadline it answers
-"preparing" — the points are spent and safe, the code follows in under a minute.
-
-## Undo, if they change their mind
-Before tender, staff cancel. The cart discount is removed first and confirmed
-gone, and only then does the gateway deactivate the code and credit the points
-back.
-:::
-
-Physical rewards are collected the same way: the pending redemption shows the
-reward, the points paid and the date; staff verify and confirm, and the staff
-label lands in loyalty's record. A second till trying the same collection gets a
-distinct refusal naming when and where it already happened.
-
-:::callout{kind="warning"}
-Two till capabilities are not what they look like. **Phone lookup is unshipped** —
-both phone flags default off, it cannot be exercised against the test fakes, and
-the vendor write ships in a later phase. And the **kill switches have no admin
-surface**: the flags exist and are enforced, but nothing flips them from a UI, so
-the thirty-second rehearsal flip has nothing to flip.
-:::
-
-::changes{spec="grade10-store/membership"}
 
 ## The member's own surface
 
@@ -200,13 +121,4 @@ Permissions split five ways — `loyalty:read`, `loyalty:adjust`, `loyalty:invit
 only; `admin` holds all of them; `loyalty:finance` is held by no scoped role at
 all. An adjustment earns no tier fuel and a bonus does: that pair is the whole
 difference between a correction and a campaign.
-
-The till authenticates the **shop**, not a person. Its principal sits outside the
-human role table holding exactly identify, redeem-for and collect, so no human
-role — admin included — can ever carry those grants. Staff and location ids ride
-along as labels for the audit trail, never as authorization.
 :::
-
-## The contract
-
-::spec{id="grade10-store/loyalty"}

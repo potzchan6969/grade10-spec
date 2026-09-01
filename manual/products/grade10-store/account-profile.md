@@ -1,8 +1,7 @@
 ---
-title: Account profile
-summary: A profile that exists from the first sign-in — name, avatar and bio, never a blank form first.
+title: Account Profile
 spec: grade10-store/account-profile
-order: 8
+order: 7
 ---
 
 A collector who signs in has no identity in the product today. The account

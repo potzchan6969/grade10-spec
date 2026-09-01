@@ -1,6 +1,5 @@
 ---
-title: Watching a lot
-summary: Registering interest without holding money on a card, and the signal auction mail fires on.
+title: Watchlist
 spec: grade10-auction/watchlist
 order: 7
 ---

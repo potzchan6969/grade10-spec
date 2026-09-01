@@ -1,6 +1,5 @@
 ---
-title: Bidding history
-summary: One private, chronological explanation of everything that happened across an account's bids.
+title: Bidding History
 spec: grade10-auction/bidding-history
 order: 9
 ---
@@ -19,7 +18,3 @@ that displaced them.
 ## Journeys
 
 ::journeys{id="grade10-auction/bidding-history"}
-
-## The contract
-
-::spec{id="grade10-auction/bidding-history"}

@@ -1,6 +1,5 @@
 ---
-title: The browse page
-summary: Sidebar, result header and product grid — a surface that reports everything and decides nothing.
+title: Product Listing Blocks
 spec: shared-ui/store-product-listing
 order: 4
 ---
@@ -63,7 +62,3 @@ The tile reports the quantity change and the application updates the cart.
 ::story{id="store-product-listing-productbrowse--empty-catalog" title="An empty catalogue, which is a different state"}
 
 ::story{id="store-product-listing-productcardimage--sold-out" title="A sold-out product tile"}
-
-## The contract
-
-::spec{id="shared-ui/store-product-listing"}

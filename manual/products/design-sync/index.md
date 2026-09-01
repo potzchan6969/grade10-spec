@@ -1,6 +1,5 @@
 ---
-title: Design sync
-summary: The rails that keep shipped components and the Figma file honest about each other.
+title: Design Sync
 ---
 
 Design sync is not a product surface. It is the set of rails that hold code and

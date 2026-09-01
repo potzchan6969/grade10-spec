@@ -1,6 +1,5 @@
 ---
-title: Annotation implementation verification
-summary: Acceptance proves traceability; this proves the behavior actually shipped.
+title: Annotation Implementation Verification
 spec: design-sync/annotation-implementation-verification
 order: 3
 ---

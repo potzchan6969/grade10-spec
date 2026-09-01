@@ -1,6 +1,5 @@
 ---
 title: ZZZ
-summary: The second brand — same code, separate world, and no loyalty programme.
 ---
 
 ZZZ is the platform's second brand. It runs on the same code as grade10 and is

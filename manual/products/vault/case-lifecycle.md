@@ -1,6 +1,5 @@
 ---
-title: Case lifecycle
-summary: One item, one case — from a draft in the request wizard to a locker, and back out again.
+title: Case Lifecycle
 order: 1
 ---
 

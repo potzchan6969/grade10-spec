@@ -1,6 +1,5 @@
 ---
-title: Your auctions
-summary: One account surface for every lot a collector touched — standing now, and the aftermath of a win or a loss.
+title: My Auctions
 spec: grade10-auction/account-auction-record
 order: 10
 ---

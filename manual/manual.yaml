@@ -3,6 +3,7 @@ storybookBase: https://storybook.grade10-stg.com
 groups:
   Grade10:
     - grade10-store
+    - membership
     - grade10-auction
     - vault
     - appointment

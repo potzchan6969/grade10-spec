@@ -1,9 +1,8 @@
 ---
-title: Drafting and publishing a listing
-summary: How an operator writes a lot, fills it in over time, and puts it in front of collectors.
+title: Listing Management
 spec: grade10-auction/admin-listing
 audience: operator
-order: 1
+order: 11
 ---
 
 Every lot starts as an operator's draft. The first save mints the auctionable
@@ -22,8 +21,6 @@ The slug is the key a collector opens the lot by, which is why its rules read
 oddly at first: two live listings can never share one, but a called-off
 listing gives its slug back, while a closed one keeps it forever.
 
-::spec{id="grade10-auction/admin-listing" scenario="admin-listing-SC-21"}
-
 An operator can withdraw a listing at any point before it closes — draft,
 created, or published with live bids on it. Once a lot has closed, this is no
 longer the place to change it; the sale is settled and fulfilled elsewhere.
@@ -40,7 +37,3 @@ the only one that moves money; neither is needed to run the catalogue. Every
 elevated move appends to a hash-chained trail and refuses to run at all if that
 record cannot be written.
 :::
-
-## The contract
-
-::spec{id="grade10-auction/admin-listing"}

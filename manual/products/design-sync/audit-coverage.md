@@ -1,6 +1,5 @@
 ---
-title: What the audit must find
-summary: The obligations of the unattended design-to-code run — omissions, coverage, honest reporting, and what fails it.
+title: Audit Coverage
 spec: design-sync/audit-coverage
 order: 1
 ---
@@ -18,8 +17,6 @@ claims the value, so splitting a div never hides an omission.
 
 The exception is narrow and deliberate: a property a node is permitted to leave
 unstated is reported as unchecked, not as a finding.
-
-::spec{id="design-sync/audit-coverage" requirement="A drawn value the code omits is a finding"}
 
 ## Everywhere, and honestly
 
@@ -54,7 +51,3 @@ mapping at all, so the whole lot page is outside the sweep. And the filter chip
 in the design system ships with no stories file, which leaves it invisible to
 the story-driven half of the checks.
 :::
-
-## The contract
-
-::spec{id="design-sync/audit-coverage"}

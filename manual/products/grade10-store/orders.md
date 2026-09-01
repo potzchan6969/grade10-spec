@@ -1,7 +1,6 @@
 ---
 title: Orders
-summary: Grade10's own record of what was bought — the order page after checkout, and every order in the account.
-order: 5
+order: 6
 ---
 
 :::callout{kind="note"}

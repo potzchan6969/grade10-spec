@@ -1,6 +1,5 @@
 ---
-title: Frontend composition
-summary: A product publishes its features as one list, and an application loads the list.
+title: Frontend Composition
 spec: frontend-composition
 order: 3
 ---
@@ -31,7 +30,3 @@ and
 [what a package exposes](https://github.com/9gag/grade10/blob/main/docs/conventions/packages.md)
 in the application repository.
 :::
-
-## The contract
-
-::spec{id="frontend-composition"}

@@ -1,10 +1,9 @@
 ---
 title: Shared UI
-summary: The blocks every storefront is built out of, drawn once and themed per brand.
 ---
 
 `shared-ui` is not a product a shopper opens. It is the component layer both
-storefronts are built out of — a site header and footer, a store front door, a
+storefronts are built out of — a site header and footer, a store main page, a
 browse page, a product card, a cart drawer, an auction lot page. Rather than
 each application drawing those again, they are drawn once and each application
 supplies its own words, images, catalogue and callbacks.
@@ -32,8 +31,8 @@ block was converted from, and an automated audit holds the two together.
 ## How the capabilities fit
 
 One capability is the rulebook for the package itself. The rest are surfaces, in
-the order a shopper meets them: the chrome around every page, the store front
-door, the browse page, the cart drawer, and the auction lot page.
+the order a shopper meets them: the chrome around every page, the store main
+page, the product listing, the cart drawer, and the auction lot page.
 
 :::callout{kind="note"}
 Admin console shapes used to live here and no longer do. They moved to their own

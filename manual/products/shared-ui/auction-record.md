@@ -1,6 +1,5 @@
 ---
-title: The auction record blocks
-summary: The shared blocks behind Your auctions — a collector's lots, standing and aftermath, all through props.
+title: Auction Record Blocks
 spec: shared-ui/auction-record
 order: 9
 ---

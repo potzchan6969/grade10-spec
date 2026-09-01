@@ -1,6 +1,5 @@
 ---
-title: Document signing
-summary: The in-house signing ceremony — read, consent, sign, sealed.
+title: Document Signing
 ---
 
 A customer sits at a counter with an iPad, reads the documents, draws a
