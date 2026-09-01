@@ -58,7 +58,8 @@ export const LiveNoBids: Story = {
     const noBidsYet = canvas
       .getAllByText("No bids yet")
       .find((element) => !element.closest("[inert]"));
-    expect(noBidsYet).toBeVisible();
+    expect(noBidsYet).toBeTruthy();
+    expect(noBidsYet as HTMLElement).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Your bid history" }),
     ).not.toBeInTheDocument();
