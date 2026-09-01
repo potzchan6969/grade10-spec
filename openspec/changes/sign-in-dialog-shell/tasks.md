@@ -1,6 +1,6 @@
 # Tasks — sign-in-dialog-shell
 
-## 1. Move the sign-in shell onto Dialog (grade10-spec)
+## 1. Move the sign-in shell onto Dialog (grade10-spec) (owner: @sean)
 
 - [ ] 1.1 Add required `open` and `onOpenChange` to `SignInCardProps` and add optional `legal` to `SignInCardCopy`, so a consumer that has not adapted fails to compile — satisfies *Visibility is the consumer's*
 - [ ] 1.2 Rebuild `SignInCard` on `Dialog` + `DialogContent` + `DialogHeader` + `DialogBody`, replacing the `Card` composition and dropping `max-w-sm` in favour of `DialogContent`'s own 448px — satisfies *The triggering page stays mounted*
