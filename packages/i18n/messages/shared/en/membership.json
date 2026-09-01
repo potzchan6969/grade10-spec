@@ -8,5 +8,128 @@
     "refresh": "New code",
     "secondsUnit": "s",
     "used": "This code has already been used"
+  },
+  "page": {
+    "title": "Membership",
+    "card": "Your member card",
+    "rewards": "Rewards",
+    "coupons": "Your codes",
+    "pending": "Waiting at the counter",
+    "activity": "Activity",
+    "spend": "Spend on your basket",
+    "cardUnavailable": "In-store identification is not switched on yet. Nothing to scan — ask a member of staff to look you up by email.",
+    "cardFailed": "That did not work. Try again in a moment.",
+    "refresh": "Get a code",
+    "loadFailed": "That did not load. Try again.",
+    "retry": "Try again",
+    "noRewards": "There is nothing on the menu right now.",
+    "noCoupons": "You are holding no codes.",
+    "noPending": "Nothing is waiting for you.",
+    "noExpiry": "No expiry",
+    "noActivity": "Nothing has happened on your account yet.",
+    "notAMember": "You have not joined the programme yet.",
+    "join": "Join the programme"
+  },
+  "collectWithin": "Collect in store within {days, plural, one {# day} other {# days}}",
+  "outcome": {
+    "preparing": "On its way",
+    "ready": "Code ready to use",
+    "spent": "Code used",
+    "void": "Code cancelled",
+    "awaitingCollection": "Waiting at the counter until {deadline}",
+    "collected": "Collected {day}",
+    "lapsed": "Not collected — the window closed {deadline}"
+  },
+  "summary": {
+    "title": "Membership",
+    "tier": "Tier",
+    "balance": "Points to spend",
+    "qualifying": "Points earned this year",
+    "renewal": "Tier renews",
+    "pointsActiveUntil": "Points active until"
+  },
+  "rewards": {
+    "label": "Rewards",
+    "redeem": "Redeem",
+    "points": "pts",
+    "atQuantityBound": "That is as many as one redemption takes.",
+    "insufficient": "Not enough points yet",
+    "decreaseQuantity": "One fewer",
+    "increaseQuantity": "One more"
+  },
+  "quantityRefusal": {
+    "wholeUnits": "{name} is redeemed in whole units.",
+    "oneAtATime": "{name} is redeemed one at a time.",
+    "atMost": "One redemption takes at most {max} {name}."
+  },
+  "coupons": {
+    "label": "Your codes",
+    "maskedCode": "••••••",
+    "spent": "Used",
+    "void": "Cancelled"
+  },
+  "undo": {
+    "action": "Give the points back",
+    "returned": "{points, plural, one {# point is} other {# points are}} back on your account.",
+    "codeUsed": "This code has already paid for something, so the points stay spent.",
+    "alreadyReturned": "Those points are already back on your account."
+  },
+  "spend": {
+    "lead": "Your basket comes to {basket}.",
+    "atCheckout": "Points come off at checkout now. Choose how many when you pay.",
+    "goToCheckout": "Go to checkout",
+    "empty": "Add something to your basket and you can spend points on it here.",
+    "offer": "{money} off for {points} points",
+    "confirm": "Spend {points} points for {money} off?",
+    "spendAction": "Spend points",
+    "confirmAction": "Yes, spend them",
+    "cancelAction": "Not now",
+    "working": "Getting your code…",
+    "issued": "Your code is {code}. Enter it at checkout to take the money off.",
+    "applied": "{money} is off your basket.",
+    "aborted": "Your basket would not take that code, so nothing was spent — your {points} points are back.",
+    "abortFailed": "Your basket would not take that code. We could not give the points back automatically; the code is still yours to use.",
+    "notMoneyOff": "That reward is not money off a purchase.",
+    "nothingToSpendOn": "Add something to your basket and you can spend points on it here.",
+    "biggerThanPurchase": "A {money} code needs a basket worth at least that much, so it would be refused. Nothing was spent.",
+    "notEnoughPoints": "You do not have enough points for that yet.",
+    "failed": "That did not work. Try again in a moment."
+  },
+  "activity": {
+    "label": "Activity"
+  },
+  "pending": {
+    "label": "Waiting at the counter",
+    "location": "Collect these in store.",
+    "expired": "Window passed",
+    "points": "pts"
+  },
+  "activityKind": {
+    "earn": "Points earned",
+    "redeem": "Points spent",
+    "pay": "Points put toward a purchase",
+    "expire": "Points expired",
+    "adjust_credit": "Points added",
+    "adjust_debit": "Points taken off",
+    "revoke": "Points revoked",
+    "reverse": "Points returned"
+  },
+  "join": {
+    "title": "Join the programme",
+    "lead": "Earn points on everything you buy, and spend them in store or at checkout.",
+    "action": "Join",
+    "joined": "You are in. Your card and the reward menu are on your membership page.",
+    "already": "You are already a member.",
+    "goToMembership": "Go to your membership",
+    "failed": "We could not enrol you just now. Try again — if it keeps failing, nothing has been charged and nothing is half-done.",
+    "phoneLabel": "Mobile number",
+    "phoneHint": "Staff look you up by it at the counter.",
+    "phoneRefusal": {
+      "phoneRequired": "Enter your mobile number to join.",
+      "phoneTaken": "That number is already on another account.",
+      "needsCountryCode": "Add the country code, like +852 9123 4567.",
+      "invalid": "That does not look like a mobile number.",
+      "rateLimited": "You just changed your number. Try again in a minute."
+    }
   }
 }

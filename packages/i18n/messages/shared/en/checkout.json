@@ -1,0 +1,37 @@
+{
+  "title": "Checkout",
+  "empty": "There is nothing in your basket.",
+  "browse": "Browse the store",
+  "subtotal": "Subtotal",
+  "quantity": "× {count}",
+  "pay": "Pay",
+  "paying": "Setting up your payment",
+  "leaving": "Taking you to pay",
+  "leavingWith": "{money} came off with {points} points. Taking you to pay.",
+  "settling": "Your order is being settled. There is nothing more to do here.",
+  "points": {
+    "label": "Points",
+    "field": "Points to use",
+    "balance": "You have {points} points.",
+    "ceiling": "Up to {points} points off this basket — {money}.",
+    "none": "Points cannot be used on this basket.",
+    "useMax": "Use max",
+    "clear": "No points",
+    "chosen": "{money} off with {points} points",
+    "goodsOnly": "Points pay for goods, never shipping or tax.",
+    "unit": "points"
+  },
+  "reason": {
+    "emptyCart": "There is nothing in your basket.",
+    "invalidQuantity": "One of these lines asks for a quantity the shop cannot sell.",
+    "unknownProduct": "The shop no longer lists one of these cards.",
+    "unknownVariant": "The shop no longer lists one of these grades.",
+    "unavailable": "One of these is no longer for sale.",
+    "quantityClamped": "The shop has fewer of one of these than your basket asks for.",
+    "currencyMismatch": "The shop is quoting a currency this store does not sell in. Nothing you can do here — tell us and we will fix it.",
+    "catalog_unavailable": "The shop did not answer. Try again in a moment.",
+    "payment_declined": "That payment was declined. Try again with another method.",
+    "payment_error": "The payment could not be set up. Try again in a moment.",
+    "points_refused": "The programme would not put that many points against this basket. Choose a different amount."
+  }
+}

@@ -1,21 +1,19 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   Avatar,
   AvatarFallback,
   avatarInitial,
 } from "@grade10/design-system/components/display/avatar";
+import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { CrownSimple } from "@phosphor-icons/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { formatUsd } from "./format-usd";
 import type { ListingBidHistoryRow } from "./types";
 import "./listing-bid-history-list.css";
 
 type ListingBidHistoryListCopy = {
-  leading?: string;
   you?: string;
   empty?: string;
 };
@@ -33,6 +31,7 @@ type ListingBidHistoryListProps = {
 type BidHistoryRowItemProps = {
   copy: ListingBidHistoryListCopy;
   row: ListingBidHistoryRow;
+  recessed: boolean;
   animateEnter: boolean;
   useEnterWrapper: boolean;
   entranceMode: "expand" | "fade";
@@ -41,42 +40,40 @@ type BidHistoryRowItemProps = {
 function BidHistoryRowContent({
   copy,
   row,
+  recessed,
 }: {
   copy: ListingBidHistoryListCopy;
   row: ListingBidHistoryRow;
+  recessed: boolean;
 }) {
   return (
     <HStack
-      className="w-full py-2"
+      className="w-full py-1.5"
       gap="sm"
       hAlign="space-between"
       vAlign="center"
     >
       <HStack gap="sm" vAlign="center">
-        <Avatar size="xs">
+        <Avatar className={recessed ? "opacity-80" : undefined} size="xs">
           <AvatarFallback aria-hidden>
             {avatarInitial(row.initials)}
           </AvatarFallback>
         </Avatar>
-        <Text className="inline-flex items-center gap-1.5" size="sm">
+        <Text
+          className="inline-flex items-center gap-1.5"
+          size="sm"
+          tone={recessed ? "secondary" : "primary"}
+          weight={recessed ? "regular" : "medium"}
+        >
           {formatUsd(row.amountMinor)}
-          {row.leading ? (
-            <span
-              aria-label={copy.leading ?? "Leading"}
-              className="bid-history-leading-crown shrink-0"
-              role="img"
-            >
-              <CrownSimple aria-hidden color="currentColor" weight="fill" />
-            </span>
-          ) : null}
         </Text>
-        {row.isViewer && !row.leading ? (
+        {row.isViewer ? (
           <Badge size="sm" variant="outline">
             {copy.you ?? "You"}
           </Badge>
         ) : null}
       </HStack>
-      <Text size="xs" tone="secondary">
+      <Text size="xs" tone={recessed ? "muted" : "secondary"}>
         {row.relativeTime}
       </Text>
     </HStack>
@@ -86,6 +83,7 @@ function BidHistoryRowContent({
 function BidHistoryRowItem({
   copy,
   row,
+  recessed,
   animateEnter,
   useEnterWrapper,
   entranceMode,
@@ -100,7 +98,7 @@ function BidHistoryRowItem({
   }, [animateEnter]);
 
   if (!useEnterWrapper) {
-    return <BidHistoryRowContent copy={copy} row={row} />;
+    return <BidHistoryRowContent copy={copy} recessed={recessed} row={row} />;
   }
 
   return (
@@ -115,7 +113,7 @@ function BidHistoryRowItem({
     >
       <div className="bid-history-enter__inner">
         <div className="bid-history-enter__content">
-          <BidHistoryRowContent copy={copy} row={row} />
+          <BidHistoryRowContent copy={copy} recessed={recessed} row={row} />
         </div>
       </div>
     </div>
@@ -180,12 +178,13 @@ function BidHistoryEntrances({
         </Text>
       ) : null}
       <VStack className="w-full divide-y divide-border" gap="none">
-        {rows.map((row) => (
+        {rows.map((row, index) => (
           <BidHistoryRowItem
             animateEnter={row.id === enteringId}
             copy={copy}
             entranceMode={entranceMode}
             key={row.id}
+            recessed={index > 0}
             row={row}
             useEnterWrapper={enteredIds.has(row.id)}
           />

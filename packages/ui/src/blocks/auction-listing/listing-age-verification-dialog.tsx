@@ -35,6 +35,21 @@ type ListingAgeVerificationDialogCopy = {
   confirm: string;
 };
 
+type ListingAgeVerificationFieldsCopy = Pick<
+  ListingAgeVerificationDialogCopy,
+  | "body"
+  | "monthPlaceholder"
+  | "dayPlaceholder"
+  | "yearPlaceholder"
+  | "birthMonthLabel"
+  | "birthDayLabel"
+  | "birthYearLabel"
+>;
+
+type ListingAgeVerificationFieldsProps = {
+  copy: ListingAgeVerificationFieldsCopy;
+};
+
 type ListingAgeVerificationDialogProps = {
   copy: ListingAgeVerificationDialogCopy;
   open: boolean;
@@ -110,12 +125,7 @@ function DobCombobox({
   );
 }
 
-function ListingAgeVerificationDialog({
-  copy,
-  open,
-  onOpenChange,
-  onConfirm,
-}: ListingAgeVerificationDialogProps) {
+function ListingAgeVerificationFields({ copy }: ListingAgeVerificationFieldsProps) {
   const [month, setMonth] = useState<string | undefined>();
   const [day, setDay] = useState<string | undefined>();
   const [year, setYear] = useState<string | undefined>();
@@ -126,38 +136,49 @@ function ListingAgeVerificationDialog({
   );
 
   return (
+    <VStack gap="md">
+      <Text as="p">{copy.body}</Text>
+      <HStack className="w-full" gap="sm">
+        <DobCombobox
+          aria-label={copy.birthMonthLabel}
+          onValueChange={setMonth}
+          options={MONTHS}
+          placeholder={copy.monthPlaceholder}
+          value={month}
+        />
+        <DobCombobox
+          aria-label={copy.birthDayLabel}
+          onValueChange={setDay}
+          options={days}
+          placeholder={copy.dayPlaceholder}
+          value={day}
+        />
+        <DobCombobox
+          aria-label={copy.birthYearLabel}
+          onValueChange={setYear}
+          options={years}
+          placeholder={copy.yearPlaceholder}
+          value={year}
+        />
+      </HStack>
+    </VStack>
+  );
+}
+
+function ListingAgeVerificationDialog({
+  copy,
+  open,
+  onOpenChange,
+  onConfirm,
+}: ListingAgeVerificationDialogProps) {
+  return (
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent showCloseButton>
         <DialogHeader showCloseButton={false}>
           <DialogTitle>{copy.title}</DialogTitle>
         </DialogHeader>
         <DialogBody>
-          <VStack gap="md">
-            <Text as="p">{copy.body}</Text>
-            <HStack className="w-full" gap="sm">
-              <DobCombobox
-                aria-label={copy.birthMonthLabel}
-                onValueChange={setMonth}
-                options={MONTHS}
-                placeholder={copy.monthPlaceholder}
-                value={month}
-              />
-              <DobCombobox
-                aria-label={copy.birthDayLabel}
-                onValueChange={setDay}
-                options={days}
-                placeholder={copy.dayPlaceholder}
-                value={day}
-              />
-              <DobCombobox
-                aria-label={copy.birthYearLabel}
-                onValueChange={setYear}
-                options={years}
-                placeholder={copy.yearPlaceholder}
-                value={year}
-              />
-            </HStack>
-          </VStack>
+          <ListingAgeVerificationFields copy={copy} />
         </DialogBody>
         <DialogFooter>
           <Button onClick={() => onOpenChange(false)} variant="outline">
@@ -180,5 +201,7 @@ function ListingAgeVerificationDialog({
 export type {
   ListingAgeVerificationDialogCopy,
   ListingAgeVerificationDialogProps,
+  ListingAgeVerificationFieldsCopy,
+  ListingAgeVerificationFieldsProps,
 };
-export { ListingAgeVerificationDialog };
+export { ListingAgeVerificationDialog, ListingAgeVerificationFields };

@@ -1,5 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
+import {
+  FIXTURE_POINTS_ACTIVE_UNTIL,
+  FIXTURE_TIER_RENEWAL_DAY,
+} from "../../lib/datetime-fixtures";
 import { MembershipSummary } from "./membership-summary";
 
 const meta = {
@@ -20,8 +24,8 @@ const meta = {
     balance: 1250,
     qualifyingPoints: 3200,
     qualifyingThreshold: 5000,
-    renewalDate: "Mar 1, 2027",
-    pointsActiveUntil: "Aug 18, 2027",
+    renewalDate: FIXTURE_TIER_RENEWAL_DAY,
+    pointsActiveUntil: FIXTURE_POINTS_ACTIVE_UNTIL,
   },
 } satisfies Meta<typeof MembershipSummary>;
 

@@ -4,8 +4,15 @@ export type ListingBidHistoryRow = {
   initials: string;
   amountMinor: number;
   relativeTime: string;
-  leading?: boolean;
   isViewer?: boolean;
+};
+
+export type ListingUserBidHistoryRow = {
+  id: string;
+  amountLabel: string;
+  bidType: "manual" | "auto";
+  bidTypeLabel: string;
+  timeLabel: string;
 };
 
 export type ListingLotGalleryImage = {

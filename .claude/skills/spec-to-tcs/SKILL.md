@@ -6,12 +6,9 @@ description: Derive a capability's classified test-cases.md from the user journe
 # Generate test cases from a capability's user journeys
 
 Follow `docs/governance/specs-to-test-cases.md` — this skill is that
-document's workflow, automated. Read it in full before the first run in a
-session; it defines the format, the property vocabularies, and the review
-lifecycle this skill produces.
+document's workflow, automated, ensuring strict traceability, NLP automation readiness, and comprehensive behavior coverage. Read it in full before the first run in a session; it defines the format, the property vocabularies, and the review lifecycle this skill produces.
 
-Invoke as `/spec-to-tcs <capability-or-change>`. Reviewing a suite is a
-different job: that is `/tcs-review` (`.cursor/skills/tcs-review/SKILL.md`).
+Invoke as `/spec-to-tcs <capability-or-change>`. Reviewing a suite and transitioning it to actual/approved is handled strictly by `/tcs-review` (`.cursor/skills/tcs-review/SKILL.md`). Manual "peer review" is deprecated.
 
 Works against **both** trees equally — durable specs and in-flight change
 deltas. The suite always lands beside the `spec.md` you resolved.
@@ -56,7 +53,7 @@ traces scenario ids.
 
    | Choice | Do |
    | --- | --- |
-   | Update this suite | Continue from step 3, in update mode (step 8). |
+   | Update this suite | Continue from step 3, in update mode (step 9). |
    | Work on another capability or change | Go back to step 1 with the new target. Leave this file untouched. |
    | Regenerate the whole suite | Only after the guard below, and only after an explicit second confirmation that review history will be lost. |
 
@@ -66,38 +63,38 @@ traces scenario ids.
    the update path instead: new scenarios become new `draft` cases, retired
    ones become `deprecated`, reviewed cases keep their ids and properties. A
    reviewer who truly wants a clean rewrite must move those cases back to
-   `draft` themselves first; never do that for them, and never delete a
+   `draft` themselves first via `/tcs-review`; never do that for them, and never delete a
    `test-cases.md` file.
 
-3. **Digest the spec, and settle what a missing journeys section means.**
-   Read it end to end from disk. Read the change's `proposal.md` when the
-   target is a delta (or when a linked change exists): its acceptance signal
-   is what makes a case's type `acceptance`.
+3. **Digest the spec and the store's context — and upgrade the spec if
+   journeys are missing.** Read the spec end to end from disk. Read the
+   change's `proposal.md` when the target is a delta (or when a linked change
+   exists): its acceptance signal is what makes a case's type `acceptance`.
 
-   If `## User journeys` is missing or empty, do not reach for the same
-   answer twice. `openspec/config.yaml` **exempts** a capability no end user
-   reaches on its own — a cross-cutting policy every other spec inherits, a
-   package or composition contract, a backend convention. There the missing
-   section is correct, and adding journeys to it breaks the store's own rule
-   and edits a spec the PM owns. Ask who reaches this capability on their
-   own; when the answer is "another package", it is exempt.
+   Then read what the capability assumes rather than states:
 
-   **Exempt — derive the suite from the scenarios, and touch nothing in the
-   spec:**
+   - **`openspec/config.yaml`'s `context`** — brands and their domains, the
+     products, the reader, and the conventions every spec inherits (money is
+     an integer count of minor units plus an ISO 4217 code). A case's
+     vocabulary comes from here: `<grade10 store url>`, not `<store front
+     door URL>`.
+   - **The cross-cutting specs this capability's Purpose names** — a public
+     surface says "every requirement of `grade10-site/crawlable-pages` binds
+     it"; `localization`, `money-amounts` and `dates-and-times` bind their
+     subjects the same way. They carry facts the capability never repeats:
+     every public address answers once per locale, the default unprefixed and
+     Traditional and Simplified Chinese under `/tc` and `/sc`; each surface
+     has its own title and description.
 
-   1. One `## <Requirement name>` section per `### Requirement:`, in spec
-      order, carrying that requirement's `**Covers:**` bullets (`` `id` —
-      Scenario title ``). No `**As a**` / `**I want**` / `**so that**` lines
-      — there is no actor to write them about — and no invented `-US-` ids.
-   2. Cases as in step 5, numbered `<capability>-TC-<n>` across the whole
-      file, each tracing the scenario ids it proves.
-   3. One `**Out of suite:**` line listing the scenario ids no case covers —
-      the internal invariants nobody can exercise by hand. `check:manual`
-      subtracts them from coverage, so what it still reports is real work.
-      A scenario left out with no line is a hole, not a decision.
+   Those are platform facts, not setups. Never write one as a pre-condition
+   ("the site answers in more than one language" is true, not something a
+   tester arranges) — check it where it matters instead: `URL contains
+   <lang>`.
 
-   **Not exempt — the spec is unfinished, so upgrade it in place** and then
-   continue on the updated file:
+   If `## User journeys` is missing or empty, **do not stop.** First bring
+   the resolved `spec.md` in line with this store's specs rules in
+   `openspec/config.yaml` (`rules.specs`), then continue this skill on the
+   same target:
 
    1. Re-read `openspec/config.yaml` specs rules in full (Purpose → Feature
       set → User journeys → requirements; INVEST stories; permanent
@@ -114,137 +111,433 @@ traces scenario ids.
       its deltas.
    3. Validate when the target is a change:
       `openspec validate <change-name> --strict`.
-   4. Report what you changed in the spec (journeys added, ids issued).
+   4. Report what you changed in the spec (journeys added, ids issued),
+      then **continue from step 4** on the updated file.
 
-   Either way, continue from step 4. Only refuse when the file has no
-   checkable scenarios at all — that gap goes to the author; do not invent
-   behavior.
+   Only refuse when the file has no checkable scenarios at all (nothing to
+   hang a journey on). That gap goes to the author; do not invent behavior.
 
-4. **Take the journeys as the suite's sections.** Each
+4. **Learn the house style from the cases QA has already approved.** Before
+   writing anything, read the store's approved corpus and let it settle the
+   questions this skill's prose can only answer generically. Scan
+   `openspec/specs/**/test-cases.md` and
+   `openspec/changes/*/specs/**/test-cases.md` (never `archive/`) and collect
+   every case whose `**Status:**` is `actual`. Those cases — and only those —
+   are evidence: a reviewer read each one against its spec and stood behind
+   it, including any wording they changed on the way. `draft` cases are your
+   own past output and prove nothing; `deprecated` cases are retired.
+
+   Weight the evidence: approved cases in the capability you are generating
+   for first, then the same product, then anywhere in the store. A pattern
+   counts as a convention when it holds across **three or more** approved
+   cases, or **two within the capability you are writing for**. Below that
+   it is a coincidence — ignore it and follow this skill's defaults. When
+   the corpus holds fewer than three approved cases in total, say so in the
+   report and generate from the defaults alone.
+
+   What to take from the corpus:
+
+   | Learn | Examples of what you are reading for |
+   | --- | --- |
+   | Title shape | How long, whether the actor leads, sentence case, the verbs reviewers kept |
+   | Pre-condition phrasing | How the setup is stated — the mocking, seeding and manipulation vocabulary this store approves |
+   | Step granularity | How many steps a case runs to, how the arrival step is worded, what counts as one action |
+   | Expected-result shape | How many bullets, how outcomes are phrased, when step numbers are named |
+   | Property calibration | Which severity / priority / type / layer / testability values reviewers approved for which kinds of case |
+   | Domain vocabulary | The store's own names for surfaces, controls and states, as reviewers left them |
+
+   **What you may never learn.** The corpus refines *how a case is written*,
+   never *what it claims*. It cannot add coverage the spec does not state,
+   loosen the rules in step 6's "line to hold", authorise inventing a label
+   without `e.g.`, or change any prohibition in this skill or in
+   `docs/governance/specs-to-test-cases.md`. Where an approved case appears
+   to contradict one of those, the case is not a new rule — report it in
+   step 10 as something for a human to resolve, and follow the written rule
+   this run.
+
+   **Apply what you learned to the drafts already in the resolved suite.**
+   Every case whose `**Status:**` is `draft` — the ones you are writing now
+   and the ones a previous run left behind — is brought to the learned
+   convention: reword it, bump its `<v>`, and leave it `draft`. Keep its id.
+   Never touch a case whose status is `actual` or `deprecated`, and never
+   change a case's coverage while restyling it — the steps, pre-conditions
+   and expected results still say exactly what the spec says, in the words
+   the corpus favours. List every draft you re-worded, and why, in step 10.
+
+5. **Take the journeys as the suite's sections.** Each
    `### <capability>-US-<n>: …` under `## User journeys` becomes one
-   `## <capability>-US-<n>: …` section, in spec order, carrying the same
-   three-line story (`**As a**` / `**I want**` / `**so that**`) and a
-   `**Covers:**` bullet list of the scenario ids and titles — the same shape
-   the spec uses. The actor is the role the story names — an end user
-   (operator, admin, collector, customer), never a developer, worker, or
-   "the system". A scenario under no journey, or a journey listing an id the
-   requirements never define, is reported in step 9 — never given an
-   invented home. For an exempt spec the sections are its requirements
-   instead, exactly as step 3 sets out.
+   `## <capability>-US<n>: …` section, in spec order — the journey id in its
+   compact form (hyphen after `US` dropped, no zero-pad: spec `home-US-01`
+   becomes section `## home-US1:`), the journey title copied unchanged.
+   **You must restate the user journey completely:** carry over the same
+   three-line story (`**As a**` / `**I want**` / `**so that**`) exactly as
+   the spec uses it. **Do not include a `Covers:` bullet list of scenario
+   ids**, a section description, or a case count. Separate one journey
+   section from the next with a `---` rule on its own line.
 
-5. **Write the test cases for each journey.** Number them
-   `<capability>-TC-<n>` sequentially across the whole file, in journey
-   order, from 01 — the same id shape as the spec's `-US-` and `-SC-` ids.
-   Positive path first, then negatives. Take every step and expected result
-   from the traced scenarios' own clauses, in their own words, per the
-   governance doc's clause mapping. Each case carries, in this order:
+   **User-Perspective Strictness:** The actor is the role the story names — an end user (operator, admin, collector, customer). If a traced scenario represents a purely technical requirement (e.g., database schema changes, backend cron jobs, internal system state) with no observable user-facing outcome, **do not generate a test case for it**. A scenario under no journey, a purely technical scenario, or a journey listing an id the requirements never define, is reported in step 10. Every case must map 1-to-N to a User Story. Orphaned test cases are strictly prohibited.
 
-   - **Title** — actor, action, and the condition being verified, in the
-     third person. "Collector opens a collection tile and reaches its
-     browse listing", never "Tile works" or "Test the grid".
-   - **Description** — one or two sentences saying what the case proves and
-     why it exists. Not a restatement of the title.
-   - **Preconditions** — a bullet per condition that must hold before step
-     1: the actor's state, the data the environment must hold, the
-     lifecycle state of the thing under test. `None.` only when the case
-     truly needs nothing.
-   - **Test data** — a `Field | Value` table of the values the case uses,
-     every one of them taken from a scenario, or the line
-     `None — the case takes no input.`
-   - **Steps** — a `| # | Action | Expected result |` table. One action per
-     row; a row whose expected result is blank is not finished. A check the
-     actor performs (reading a page, a log, a response) is its own row.
-   - **Properties** — the nine in step 6.
+6. **Write the test cases for each journey.** Number them
+   `<capability>-US<n>-TC<m>-<v>` per journey (no hyphen after `US`/`TC`, no
+   zero-pad — e.g. `product-listing-US1-TC1-1`). `n` is the journey number
+   from the matching spec `US` id; start `TC` at `1` under each journey;
+   start `<v>` at `1` and bump only when update mode re-words an existing
+   case. Positive / happy path first, then empty / missing / failure
+   (negative), then destructive only when the journey's scenarios state
+   cancel, remove, withdraw, or unwind behaviour.
 
-   Two rules the governance doc takes from the Virtuoso guide, both easy to
-   break: **atomicity** — "sign in, open settings, change the password" is
-   three rows, not one — and **independence** — a case never says "the
-   listing from `SC-10`" or leans on an earlier case's leftovers; it writes
-   that setup out in its own preconditions and test data, however much that
-   repeats.
+   Take substance from the traced scenarios' GIVEN / WHEN / THEN clauses,
+   written strictly from the user's perspective. Each case carries, in this
+   exact order:
 
-6. **Classify every case** with all nine properties, in this order (the
-   governance doc holds the full vocabulary and how to choose):
+   - **Title** — A short, clean, descriptive line — roughly five to twelve
+     words — naming the behaviour or condition under verification, in
+     sentence case: "Core navigation is accessible before scripts run",
+     "Collection missing cover image and title", "Recovering from a catalogue
+     service failure". Do not open with the actor unless the actor is the
+     point of the case, do not restate the journey title, and **never**
+     append a trailing bracketed tag like `(Negative)`.
+   - **Classification Block** — Immediately following the title, under the
+     label `**Classification:**` and a blank line, a bulleted list (`*`) of
+     all nine required properties (Severity, Priority, Status, Behaviour,
+     Type, Layer, Automation status, Testability, Trace). Nothing comes
+     between the title and this block — no description, no summary sentence.
+     See step 7 for the property vocabulary.
+   - **Pre-conditions** — Label exactly `**Pre-conditions:**`, with the
+     condition on the line below it. Write the **concrete setup a tester
+     performs** to put the system into the state the scenario's GIVEN names,
+     in the environment's own terms — not the spec's abstract phrasing of
+     that state. Four shapes cover almost everything: a manipulated
+     condition ("Network manipulation is applied to delay the catalogue
+     response by 5 seconds", "Client-side JavaScript execution is delayed or
+     disabled in the browser settings"), a stubbed upstream ("<The catalogue
+     endpoint> is mocked to return a `500 Internal Server Error`"), seeded
+     data ("The catalogue in <test environment> holds at least two active
+     collections"), or where the actor already is ("The collector is viewing
+     the collection tiles on the front door"). Never state that the feature
+     exists — a suite is written for a built site, so that is assumed; state
+     only what state it is in. One sentence where one will do, two when the
+     setup has a second half; short bullets when several conditions are
+     genuinely independent. `None.` only when the case truly needs
+     nothing.
+   - **Test data (Optional)** — A `Field | Value` table of the values the
+     case uses, taken from the scenario. Do not use hard-coded PII. When the
+     case takes no input, omit the whole section — no empty table, no "None"
+     line.
+   - **Steps** — Under `**Steps:**` and a blank line, a numbered list of
+     atomic actions the tester performs, in the order a person performs
+     them: **arrive, look, act**. The first step is almost always the
+     arrival (`Navigate to <store front door URL>`), because a case that
+     starts mid-surface cannot be run cold; then the looking (`Observe the
+     hero section area`, `Scroll to the collections section`, `Inspect the
+     page source for the metadata tags`) and the acting (`Click the
+     incomplete collection tile`, `Click the browser's Back button`, `Wait
+     for the catalogue request to fail`). One action per number, no expected
+     outcome on a step line, typically one to four steps and never more than
+     about 10–15.
+   - **Expected Results** — Under `**Expected Results:**` and a blank line, a
+     bulleted list (`*`) of one to three observable outcomes for the case as
+     a whole, each a full sentence: the thing that worked, and — where the
+     spec states it — the thing that must survive alongside it ("The core
+     navigation links remain visible and functional"). The first bullet may
+     confirm the surface came up ("The front door renders successfully"), so
+     a tester can tell "I could not get there" from "the behaviour is wrong";
+     a case whose expected results are *only* that arrival has nothing to
+     verify. When a multi-step flow
+     needs it, name which step produced which outcome ("Step 2 navigates
+     successfully to the item's detail page."). Every bullet is checkable by
+     looking. An empty list is not finished.
+
+   Write a case as the pass a tester actually makes, not as one scenario
+   transcribed. Related scenarios under the same journey that share a
+   condition belong in one case; a distinct way the same behaviour is
+   reached or broken — where the spec states what should happen when it is —
+   is its own case with its own pre-condition. A one-step case that restates
+   a single WHEN means the arrival and the observation were left out.
+
+   **The line to hold:** how the tester reaches the condition, where they
+   look and what they click is the case's own — invent it freely and
+   concretely, because the spec never states it. What must then be true is
+   the spec's, always. An expected result the traced scenarios do not state
+   is a new requirement, and a failure mode the spec says nothing about is
+   not a case at all — report it as a gap in step 10.
+
+   **Write for a site that is built.** Development here follows the specs and
+   a suite is run after the development is finished, so assume the surface
+   exists and is deployed — no conditionals about whether a page is there.
+   What such a pass needs but the spec leaves open — an address, an endpoint,
+   a record — gets an **angle-bracket placeholder** the tester substitutes
+   when they run: `Navigate to <store front door URL>`, `<the catalogue
+   endpoint> is mocked to return a 500`, `Click the tile for <a collection
+   holding cards>`. A placeholder is self-describing and uses the store's own
+   names (`<grade10 store url>`, not `<store front door URL>`; never
+   `<url1>`, never `<TBD>`; never a bare `<store url>` where the store runs
+   more than one brand), is the same in every case in the suite, never wraps
+   across a line and never takes a capital, may appear in pre-conditions,
+   steps and expected results alike, and is used only where the spec leaves
+   the value open — where the spec names a control, name the UI thing a
+   tester clicks (`Click the shop button in the hero`), not the spec's UX
+   term and not an invented label. Do not invent a
+   label and soften it with an `e.g.`; use `e.g.` only where the spec itself
+   gives the example.
+
+   **Name the UI event, not the spec's UX term.** Specs name a control by the
+   job it does ("shopping affordance") and a state by a product word
+   ("unscoped", "narrowing"). Cases name the click, the navigation, the URL,
+   or the listed cards a tester actually checks: `Click the shop button in
+   the hero`, `The browser navigates to <grade10 browse listing url>`, `The
+   listing URL names no collection`, `Cards from the whole catalogue are
+   listed`. Do not paste UX or HCI terms into steps or expected results —
+   affordance, unscoped, narrowing, way on, scoped — even when the spec uses
+   them.
+
+   **Say it in as few words as possible.** A tester reads a case while doing
+   something else. Ten words is plenty for an expected-result bullet; a step
+   is a short imperative. Cut "successfully", "as expected", "the
+   application", "the user is able to". One idea per bullet. Short is not
+   vague — `Hero is missing` is vague, `Hero collapses, page layout intact`
+   is short and checkable.
+
+   A finished case reads like this:
+
+   ```markdown
+   ### home-US1-TC3-1: Core navigation survives a failed stylesheet load
+
+   **Classification:**
+
+   * **Severity:** major
+   * **Priority:** medium
+   * **Status:** draft
+   * **Behaviour:** negative
+   * **Type:** functional
+   * **Layer:** e2e
+   * **Automation status:** manual
+   * **Testability:** automation, manual
+   * **Trace:** home-US-01
+
+   **Pre-conditions:**
+   Stylesheets blocked by network manipulation.
+
+   **Steps:**
+
+   1. Navigate to <grade10 store url>.
+   2. Check the unstyled page.
+   3. Click the shop button in the hero.
+
+   **Expected Results:**
+
+   * Front door renders unstyled, hero headline and both buttons readable.
+   * Step 3 opens <grade10 browse listing url>.
+   * The listing URL names no collection.
+   ```
+
+   Map scenario clauses into the case like this:
+
+   | Scenario clause | Lands in |
+   | --- | --- |
+   | `GIVEN` | **Pre-conditions**, or a test-data row when it carries a value |
+   | `WHEN` / `AND` after `WHEN` | Numbered **Steps** |
+   | `THEN` / `AND` after `THEN` | Bullets under **Expected Results** |
+
+   Three standing rules: **atomicity** (one intent per case — prefer
+   splitting when two scenarios verify unrelated behaviours), **independence** (a
+   case never leans on another case having run; write setup out in full),
+   and **NLP automation readiness** (standardized phrasing, no blank
+   expected results).
+
+7. **Classify every case** with all nine properties inside the Classification Block, using asterisks (`*`) for bullets, in this exact order:
    - **Severity** — `blocker`, `critical`, `major`, `normal`, `minor`,
-     `trivial`: how bad the failure is.
-   - **Priority** — `high`, `medium`, `low`: how soon it runs.
+     `trivial`. Usual shapes: a core positive path is `critical`, a
+     degradation the journey survives `major`, an empty state `normal`, a
+     presentational fallback `minor`.
+   - **Priority** — `high`, `medium`, `low`; `high` for the core paths,
+     `medium` for degradations and empty states, `low` for presentation.
    - **Status** — always `draft` on generation. Never write `actual`.
-   - **Behaviour** — `positive`, `negative`, or `destructive`.
-   - **Type** — exactly one of `functional`, `smoke`, `regression`,
-     `acceptance`, `usability`, `security`, `performance`, `compatibility`,
-     `integration`. At most one `smoke` per journey. Never write
-     `exploratory` — that is a reviewer's tag.
+   - **Behaviour** — `positive`, `negative`, or `destructive`. A case whose
+     pre-condition feeds the product something broken, missing, stubbed out
+     or cut off is `negative` even when the expected result is that it
+     carries on gracefully.
+   - **Type** — exactly one of `functional`, `smoke`, `regression`, `acceptance`, `usability`, `security`, `performance`, `compatibility`, `integration`.
    - **Layer** — `e2e`, `api`, or `unit`.
-   - **Automation status** — always `manual` on generation; engineering
-     flips it when a test lands.
-   - **Testability** — `automation`, `manual`, or both tags as
-     `manual, automation`.
-   - **Trace** — the `<capability>-SC-<n>` ids, comma-separated when a case
-     covers several. Fall back to `<requirement> / <scenario title>` only
-     when the spec has no scenario ids yet.
+   - **Automation status** — always `manual` on generation.
+   - **Testability** — `automation`, `manual`, or `automation, manual`.
+   - **Trace** — the journey this case derives from, in the spec's canonical
+     form: `<capability>-US-<n>` (`home-US-01`), even though the section
+     heading above it uses the compact `home-US1`. One journey per case. A
+     case with no trace does not belong in the file.
 
-   A journey whose cases are all positive is unfinished.
+   **Coverage shape:** A journey whose `Accepted by` list includes refusal,
+   empty-state, or failure scenarios must not ship with only `positive`
+   cases — add the matching `negative` (and `destructive` when the
+   scenarios state unwind behaviour). Do **not** invent destructive cases
+   the scenarios do not justify.
 
-7. **Check the traceability both ways** before writing the file. Every case
-   traces at least one scenario id (or legacy title), and every scenario in
-   the requirements is either traced by a case or named on an
-   `**Out of suite:**` line. A case tracing an id the spec does not issue
-   fails `check:manual`; an untraced scenario warns.
+8. **Check the coverage both ways** before writing the file. Every case
+   traces its journey and is built only from scenarios that accept that
+   journey, and every user-facing scenario accepting a journey is covered by
+   at least one of that journey's cases. Scenario ids are not written on the
+   case — the check happens here, and anything uncovered is reported in
+   step 10.
 
-8. **Write the file beside the resolved `spec.md`** — durable suite under
+9. **Write the file beside the resolved `spec.md`** — durable suite under
    `openspec/specs/.../test-cases.md`, or delta suite under
-   `openspec/changes/<change>/specs/.../test-cases.md` — with
-   `**Status:** pending-review` under the title and no preamble paragraph
-   between them, using the template in the governance doc.
+   `openspec/changes/<change>/specs/.../test-cases.md` — with its header lines
+   under the file title and no preamble paragraph between them.
+
+   **The header is computed, never chosen** (see "The file header" in
+   `docs/governance/specs-to-test-cases.md`):
+
+   - `**Status:**` is a function of the case statuses below it — `approved`
+     when no `draft` remains, `in-review` when at least one `actual` or
+     `deprecated` sits beside a `draft`, `pending-review` otherwise. A fresh
+     suite is `pending-review` because every case in it is `draft`; an update
+     that adds a `draft` to an approved suite recomputes to `in-review`, and
+     you write that rather than leaving a status that is now false.
+   - `**Drafts styled:** <today>, tcs-rules r<n>` goes on every file you leave
+     holding a `draft`, where `<n>` is `tcs_rules_rev` from that document's
+     frontmatter. Omit the line entirely when the run leaves no draft.
+   - `**Reviewed:**` is `/tcs-review`'s to write. Never write it, and never
+     write `**Status:** approved` — a suite reaches that only through a human.
+
+   Run `pnpm run tcs:validate` on what you wrote before reporting; it checks
+   the header against the cases, the ids, and every trace against the spec. **Output the file matching this exact Markdown template.
+   Do not invent your own structure or spacing:** a blank line follows every
+   `**Label:**` that heads a list, a blank line separates every part of a
+   case, and a `---` rule separates journey sections.
+
+   ````markdown
+   # <product>/<capability> Test Cases
+
+   **Status:** pending-review
+
+   ## <capability>-US<n>: <Journey Title>
+
+   **As a** <role>,
+   **I want** <goal>,
+   **so that** <reason>.
+
+   ### <capability>-US<n>-TC<m>-<v>: <Clean Descriptive Title>
+
+   **Classification:**
+
+   * **Severity:** …
+   * **Priority:** …
+   * **Status:** draft
+   * **Behaviour:** …
+   * **Type:** …
+   * **Layer:** …
+   * **Automation status:** manual
+   * **Testability:** …
+   * **Trace:** <capability>-US-<n>
+
+   **Pre-conditions:**
+   <from GIVEN, or None.>
+
+   **Test data:**
+
+   | Field | Value |
+   | --- | --- |
+   | <Key> | <Value> |
+
+   **Steps:**
+
+   1. <from WHEN>
+   2. <from the next AND>
+
+   **Expected Results:**
+
+   * <from THEN>
+   * <from AND following THEN>
+
+   ### <capability>-US<n>-TC<m+1>-<v>: <the next case under this journey>
+
+   …
+
+   ---
+
+   ## <capability>-US<n+1>: <the next journey>
+   ````
+
+   `**Test data:**` is the only section a case may leave out. Everything
+   else — the classification block with all nine bullets, the pre-conditions
+   line, at least one step, at least one expected result — is on every case.
 
    In **update mode** (a suite already existed and the user chose update):
-   - Keep every case whose traced scenarios are unchanged exactly as it is —
-     same id, same wording, same properties. A reviewed case is not re-tagged
-     unless the user asks.
-   - Re-word a case whose scenario changed, and set its `**Status:**` back to
-     `draft`.
-   - Add a case for every scenario no case traces, taking the next unused
-     `TC` number — never reusing a retired one.
-   - Set `**Status:** deprecated` on a case when the spec has dropped
-     **every** scenario it traces, and add the reason bullet under it:
-     `- **Retired:** the spec no longer states this behaviour`. Do not
-     delete it and do not renumber around it.
-   - A case tracing several scenarios where only some were dropped is not
-     retired: retrace it to the ids that survive and set it back to `draft`.
-   - Leave `actual` cases `actual` unless their scenario actually changed.
+   - Keep every `actual` and `deprecated` case exactly as it is, including
+     one still written in an older shape — never reformat a reviewed case to
+     match the template or the learned conventions.
+   - Keep the coverage of a `draft` case whose scenarios are unchanged, but
+     bring its wording to the conventions learned in step 4 (bump `<v>`,
+     leave it `draft`).
+   - Re-word a case whose scenarios changed, bump its `<v>`, set its
+     `**Status:**` back to `draft`, and write it in the shape above.
+   - Add a case for every user-facing scenario no case covers (next unused
+     `TC<m>` under that journey).
+   - Set `**Status:** deprecated` on any case whose scenario the spec no
+     longer has. Do not delete it and do not renumber around it.
    - Set the file's `**Status:**` back to `pending-review` whenever the run
      leaves at least one `draft` case.
 
-9. **Report** what you wrote: each `test-cases.md` path (and whether it is
+10. **Report** what you learned and what you wrote. Open with the corpus:
+   how many `actual` cases you read and from which capabilities, the
+   conventions you drew from them (each with the approved case ids that
+   justify it), the ones you rejected for want of evidence, and any approved
+   case that contradicts a written rule — named, and left for a human to
+   resolve. Say plainly when the corpus was too thin to learn from and the
+   defaults were used. Then report the drafts you re-worded to match, with
+   their old and new `<v>`.
+
+   Then report what you wrote: each `test-cases.md` path (and whether it is
    durable or a change delta), the journeys (US ids) and how many cases
    each holds, the ids added, re-worded, and deprecated, and — when step 3
    upgraded the spec — which `spec.md` paths you rewrote. Report separately
    any requirement whose prose states a rule no scenario covers, any
    scenario under no journey, and any journey listing an unknown scenario
    id — those are gaps for the spec's author. Point the user at
-   `/tcs-review` as the next step. There is nowhere else to point them: no
-   Qase export exists, and `approved` is the record itself.
+   `/tcs-review` as the next step; do not tell them it is ready for Qase —
+   it isn't, until every case is `actual`.
+
+   When the run was a **rules-revision update** — `pnpm run tcs:stale` named
+   this suite and you brought its drafts up — say so plainly: the revision it
+   moved from and to, and how many drafts were re-worded. Do not offer to work
+   through the rest of the stale list in one go; each capability is its own
+   run and its own pull request.
 
 **Never do these things:**
 
-- Never state a step, precondition, expected result, or data value the
-  traced scenario doesn't already say. Where the spec names a control by its
+- Never state a step, pre-condition, expected result, or data value the
+  traced scenarios don't already say. Where the spec names a control by its
   role rather than its label, say the same — do not invent the button text
   to make a step sound concrete.
-- Never write a step whose expected result is blank, several actions in one
-  step, or a case that depends on another case having run.
+- Never write a step that embeds its expected result, an empty **Expected
+  Results** list, several actions in one step, or a case that depends on
+  another case having run.
+- Never put a `**Description:**` paragraph, a `**Covers:**` list, or a
+  summary sentence into a generated case or journey section, never move the
+  nine properties to the end of the case under a `**Properties:**` heading,
+  and never write a `**Test data:**` section for a case that takes no
+  input.
 - Never invent a journey the upgraded spec does not justify from existing
   scenarios — step 3 may reshape the file, but it must not add behavior.
-- Never add `## User journeys` to a spec `openspec/config.yaml` exempts from
-  them. A package or composition contract has no actor; writing one in edits
-  a PM's spec to say something the store's own rules call wrong.
 - Never overwrite, regenerate, or delete an existing suite without showing
   it and asking first, and never at all when it holds an `actual` case or
   the file is `approved`.
-- Never write a case's `**Status:**` as `actual`, or a file's as `approved`.
-  Only `/tcs-review`, with a human answering, does that.
+- Never write a case's `**Status:**` as `actual`, a file's as `approved`, or a
+  `**Reviewed:**` line. Only `/tcs-review`, with a human answering, does that.
+- Never leave a file status that contradicts the cases under it, and never
+  treat the status as something to choose — it is derived, and
+  `pnpm run tcs:validate` fails a file where the two disagree.
+- Never sweep every stale suite in one run. `pnpm run tcs:stale` reports;
+  a human picks the capability, one pull request at a time.
 - Never write a QA-review (or any other) task into `tasks.md` for these
   suites — review state lives in the suite's own status lines.
 - Never write a durable suite when the user asked for a change delta, or a
   delta suite when they asked for durable — match the resolved tree.
 - Never write under `openspec/changes/archive/`.
+- Never write a case that hedges about whether the product exists, and never
+  invent a concrete URL, endpoint or label where a placeholder belongs.
+- Never treat a `draft` or `deprecated` case as evidence of house style, and
+  never let the approved corpus add coverage, soften a prohibition, or
+  overrule the spec — it teaches wording and calibration, nothing else.
+- Never restyle, renumber, or re-word a case whose `**Status:**` is `actual`
+  or `deprecated`, however far it sits from the current conventions.

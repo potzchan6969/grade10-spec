@@ -1,4 +1,5 @@
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import type { ReactNode } from "react";
 import type { ListingAuctionBidCardCopy } from "./listing-auction-bid-card";
 import { ListingAuctionBidCard } from "./listing-auction-bid-card";
 import { LISTING_LOT_SIDEBAR_CLASS } from "./listing-lot-layout";
@@ -27,6 +28,7 @@ type ListingAuctionCardSidebarProps = {
   showMoreHref?: string;
   vaultShippingBody: string;
   authenticationBody: string;
+  recentBidsAccessory?: ReactNode;
 };
 
 function ListingAuctionCardSidebar({
@@ -43,6 +45,7 @@ function ListingAuctionCardSidebar({
   showMoreHref,
   vaultShippingBody,
   authenticationBody,
+  recentBidsAccessory,
 }: ListingAuctionCardSidebarProps) {
   return (
     <VStack
@@ -58,6 +61,7 @@ function ListingAuctionCardSidebar({
         onBidModeChange={onBidModeChange}
         onCommitMaximum={onCommitMaximum}
         onPlaceBid={onPlaceBid}
+        recentBidsAccessory={recentBidsAccessory}
         view={view}
       />
       <ListingLotMeta

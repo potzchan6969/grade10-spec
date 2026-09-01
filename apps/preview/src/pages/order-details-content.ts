@@ -5,6 +5,12 @@ import type {
   OrderDetailsPayment,
   OrderDetailsSummary,
 } from "@grade10/ui";
+import {
+  FIXTURE_ORDER_PLACED_DAY,
+  FIXTURE_ORDER_SHIPPED_DAY,
+  FIXTURE_PLACED_ON_WITH_PERIOD,
+  FIXTURE_REFUND_MESSAGE,
+} from "../../../../packages/ui/src/lib/datetime-fixtures";
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
@@ -42,12 +48,12 @@ const ORDER_DETAILS_DELIVERY: OrderDetailsDelivery = {
   steps: [
     {
       label: "Order Placed",
-      date: "Aug 26, 2026",
+      date: FIXTURE_ORDER_PLACED_DAY,
       state: "completed",
     },
     {
       label: "Shipped",
-      date: "Aug 27, 2026",
+      date: FIXTURE_ORDER_SHIPPED_DAY,
       state: "current",
     },
     {
@@ -76,7 +82,7 @@ const ORDER_DETAILS_LINES: readonly OrderDetailsLineItem[] = [
     imageSrc: IMAGE,
     imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
     lineStatus: "refunded",
-    statusMessage: "Out of stock. Refund issued on Aug 28",
+    statusMessage: FIXTURE_REFUND_MESSAGE,
     struckThrough: true,
   },
   {
@@ -112,7 +118,7 @@ const ORDER_DETAILS_CONTENT = {
   copy: ORDER_DETAILS_COPY,
   orderId: "Order #G10-10482",
   status: "shipped" as const,
-  placedOn: "Placed on Aug 26, 2026.",
+  placedOn: FIXTURE_PLACED_ON_WITH_PERIOD,
   placedOnDateTime: "2026-08-26",
   needHelp: { href: "#" },
   delivery: ORDER_DETAILS_DELIVERY,

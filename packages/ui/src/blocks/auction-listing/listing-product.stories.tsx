@@ -3,6 +3,11 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
 import { expect, within } from "storybook/test";
 import {
+  FIXTURE_AUCTION_CLOSED,
+  FIXTURE_AUCTION_DEADLINE,
+  FIXTURE_AUCTION_OPENS_DEADLINE,
+} from "../../lib/datetime-fixtures";
+import {
   BASE_FACTS,
   DESCRIPTION,
   GALLERY_IMAGES,
@@ -13,7 +18,7 @@ import {
   LiveActions,
   LostStanding,
   PostAuctionActions,
-  PREMIUM_HINT,
+  BUYER_FEE_HINT,
   TITLE,
   VAULT_SECTION,
   WatchOnlyActions,
@@ -56,12 +61,12 @@ const liveBidPanel = (
     actions={<LiveActions />}
     watchAction={<WatchOnlyActions />}
     bidCount="1 Bid"
-    deadline="1 Sep 2026, 18:00 UTC"
+    deadline={FIXTURE_AUCTION_DEADLINE}
     extensionValue="30 minutes"
     history="Bidder 3 · HK$4,800.00"
     kicker={KICKER}
     price="HK$4,800.00"
-    priceHint={PREMIUM_HINT}
+    buyerFeeHint={BUYER_FEE_HINT}
     remaining="13D 11H 33M 47S"
     title={TITLE}
   />
@@ -112,11 +117,11 @@ export const PreAuction: Story = {
           }}
           actions={null}
           watchAction={<WatchOnlyActions />}
-          deadline="22 Aug 2026, 18:00 UTC"
+          deadline={FIXTURE_AUCTION_OPENS_DEADLINE}
           extensionValue="30 minutes"
           kicker={KICKER}
           price="HK$1,200.00"
-          priceHint={PREMIUM_HINT}
+          buyerFeeHint={BUYER_FEE_HINT}
           remaining="2D 4H 12M 0S"
           title={TITLE}
         />
@@ -184,8 +189,8 @@ export const PostSold: Story = {
           history="Bidder 1 · HK$3,100.00"
           kicker={KICKER}
           price="HK$3,100.00"
-          priceHint={PREMIUM_HINT}
-          remaining="Closed 30 Aug 2026, 09:15 UTC"
+          buyerFeeHint={BUYER_FEE_HINT}
+          remaining={FIXTURE_AUCTION_CLOSED}
           title={TITLE}
         />
       </>,
@@ -226,8 +231,8 @@ export const PostWonPaymentDue: Story = {
           history="Bidder 1 · HK$3,100.00"
           kicker={KICKER}
           price="HK$3,100.00"
-          priceHint={PREMIUM_HINT}
-          remaining="Closed 30 Aug 2026, 09:15 UTC"
+          buyerFeeHint={BUYER_FEE_HINT}
+          remaining={FIXTURE_AUCTION_CLOSED}
           standing={<WonPaymentDueStanding />}
           title={TITLE}
         />
@@ -268,8 +273,8 @@ export const PostWonSettled: Story = {
           history="Bidder 1 · HK$3,100.00"
           kicker={KICKER}
           price="HK$3,100.00"
-          priceHint={PREMIUM_HINT}
-          remaining="Closed 30 Aug 2026, 09:15 UTC"
+          buyerFeeHint={BUYER_FEE_HINT}
+          remaining={FIXTURE_AUCTION_CLOSED}
           standing={<WonSettledStanding />}
           title={TITLE}
         />
@@ -311,8 +316,8 @@ export const PostLost: Story = {
           history="Bidder 1 · HK$3,100.00"
           kicker={KICKER}
           price="HK$3,100.00"
-          priceHint={PREMIUM_HINT}
-          remaining="Closed 30 Aug 2026, 09:15 UTC"
+          buyerFeeHint={BUYER_FEE_HINT}
+          remaining={FIXTURE_AUCTION_CLOSED}
           standing={<LostStanding />}
           title={TITLE}
         />
@@ -354,8 +359,8 @@ export const PostUnsold: Story = {
           history="No bids yet."
           kicker={KICKER}
           price="Unsold"
-          priceHint={PREMIUM_HINT}
-          remaining="Closed 30 Aug 2026, 09:15 UTC"
+          buyerFeeHint={BUYER_FEE_HINT}
+          remaining={FIXTURE_AUCTION_CLOSED}
           title="1999 Blastoise, PSA 9"
         />
       </>,

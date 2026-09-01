@@ -1,7 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import {
+  FIXTURE_AUCTION_CLOSED,
+  FIXTURE_AUCTION_DEADLINE,
+  FIXTURE_AUCTION_OPENS_DEADLINE,
+} from "../../lib/datetime-fixtures";
+import {
   HighestBidderStanding,
+  BUYER_FEE_HINT,
   ListingBidPanelLoading,
   LiveActions,
   LostStanding,
@@ -31,11 +37,11 @@ const meta = {
     watching: false,
     kicker: "Listing 12 · September Slabs",
     price: "HK$4,800.00",
-    priceHint: "Buyer's premium is added at invoice.",
+    buyerFeeHint: BUYER_FEE_HINT,
     bidCount: "1 Bid",
     history: "Bidder 3 · HK$4,800.00",
     remaining: "13D 11H 33M 47S",
-    deadline: "1 Sep 2026, 18:00 UTC",
+    deadline: FIXTURE_AUCTION_DEADLINE,
     extensionValue: "30 minutes",
     extensionTooltip:
       "Bids placed in the final 30 minutes extend the auction by 30 minutes.",
@@ -69,7 +75,7 @@ export const PreAuction: Story = {
     bidCount: undefined,
     history: undefined,
     remaining: "2D 4H 12M 0S",
-    deadline: "22 Aug 2026, 18:00 UTC",
+    deadline: FIXTURE_AUCTION_OPENS_DEADLINE,
     standing: undefined,
     actions: null,
   },
@@ -189,7 +195,7 @@ export const PostSold: Story = {
   args: {
     copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
-    remaining: "Closed 30 Aug 2026, 09:15 UTC",
+    remaining: FIXTURE_AUCTION_CLOSED,
     deadline: undefined,
     extensionValue: undefined,
     standing: undefined,
@@ -207,7 +213,7 @@ export const PostWonPaymentDue: Story = {
   args: {
     copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
-    remaining: "Closed 30 Aug 2026, 09:15 UTC",
+    remaining: FIXTURE_AUCTION_CLOSED,
     deadline: undefined,
     extensionValue: undefined,
     standing: <WonPaymentDueStanding />,
@@ -224,7 +230,7 @@ export const PostWonSettled: Story = {
   args: {
     copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
-    remaining: "Closed 30 Aug 2026, 09:15 UTC",
+    remaining: FIXTURE_AUCTION_CLOSED,
     deadline: undefined,
     extensionValue: undefined,
     standing: <WonSettledStanding />,
@@ -241,7 +247,7 @@ export const PostLost: Story = {
   args: {
     copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
-    remaining: "Closed 30 Aug 2026, 09:15 UTC",
+    remaining: FIXTURE_AUCTION_CLOSED,
     deadline: undefined,
     extensionValue: undefined,
     standing: <LostStanding />,
@@ -259,7 +265,7 @@ export const PostUnsold: Story = {
     price: "Unsold",
     bidCount: "0 Bids",
     history: "No bids yet.",
-    remaining: "Closed 30 Aug 2026, 09:15 UTC",
+    remaining: FIXTURE_AUCTION_CLOSED,
     deadline: undefined,
     extensionValue: undefined,
     standing: undefined,
@@ -277,7 +283,7 @@ export const Closed: Story = {
   args: {
     copy: { price: "Winning bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$3,100.00",
-    remaining: "Closed 30 Aug 2026, 09:15 UTC",
+    remaining: FIXTURE_AUCTION_CLOSED,
     deadline: undefined,
     extensionValue: undefined,
     actions: <PostAuctionActions />,

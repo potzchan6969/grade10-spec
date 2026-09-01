@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { FIXTURE_PLACED_ON_WITH_PERIOD } from "../../lib/datetime-fixtures";
 import { ORDER_DETAILS_COPY } from "./fixtures";
 import { OrderDetailsHeader } from "./order-details-header";
 
@@ -10,7 +11,7 @@ const meta = {
     orderId: "Order #G10-10482",
     status: "shipped",
     statusLabel: ORDER_DETAILS_COPY.status.shipped,
-    placedOn: "Placed on Aug 26, 2026.",
+    placedOn: FIXTURE_PLACED_ON_WITH_PERIOD,
     placedOnDateTime: "2026-08-26",
     needHelp: { href: "#", label: ORDER_DETAILS_COPY.needHelp },
   },

@@ -1,0 +1,37 @@
+{
+  "title": "結帳",
+  "empty": "你的購物車是空的。",
+  "browse": "瀏覽商店",
+  "subtotal": "小計",
+  "quantity": "× {count}",
+  "pay": "付款",
+  "paying": "正在準備付款",
+  "leaving": "正前往付款頁面",
+  "leavingWith": "已用 {points} 分折 {money}，正前往付款頁面。",
+  "settling": "你的訂單正在結算，這裡不需要再做任何事。",
+  "points": {
+    "label": "積分",
+    "field": "要使用的積分",
+    "balance": "你有 {points} 分。",
+    "ceiling": "此購物車最多可用 {points} 分，折 {money}。",
+    "none": "此購物車不能使用積分。",
+    "useMax": "用到上限",
+    "clear": "不用積分",
+    "chosen": "{points} 分折 {money}",
+    "goodsOnly": "積分只可用於商品，不包括運費與稅項。",
+    "unit": "分"
+  },
+  "reason": {
+    "emptyCart": "你的購物車是空的。",
+    "invalidQuantity": "其中一項的數量超出商店可售的範圍。",
+    "unknownProduct": "商店已不再提供其中一款卡。",
+    "unknownVariant": "商店已不再提供其中一個評級。",
+    "unavailable": "其中一項已停售。",
+    "quantityClamped": "商店的其中一項存貨少於你購物車所需的數量。",
+    "currencyMismatch": "商店報價的貨幣並非本店銷售的貨幣。這裡無法處理——請告訴我們，我們會修正。",
+    "catalog_unavailable": "商店沒有回應，請稍後再試。",
+    "payment_declined": "付款被拒絕，請改用其他付款方式再試。",
+    "payment_error": "未能建立付款，請稍後再試。",
+    "points_refused": "計劃不接受在此購物車使用這麼多積分，請改用其他數量。"
+  }
+}

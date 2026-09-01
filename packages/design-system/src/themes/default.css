@@ -83,11 +83,14 @@
     transparent
   );
   --destructive-ring: color-mix(in oklab, var(--destructive) 40%, transparent);
+  --success-muted: color-mix(in oklab, var(--success) 10%, transparent);
+  --success-border: color-mix(in oklab, var(--success) 20%, transparent);
   --success-ring: color-mix(
     in oklab,
     var(--success-foreground) 40%,
     transparent
   );
+  --warning-muted: color-mix(in oklab, var(--warning) 10%, transparent);
   --disabled: var(--muted);
   --disabled-foreground: var(--muted-foreground);
 }
@@ -160,11 +163,14 @@
     transparent
   );
   --destructive-ring: color-mix(in oklab, var(--destructive) 40%, transparent);
+  --success-muted: color-mix(in oklab, var(--success) 10%, transparent);
+  --success-border: color-mix(in oklab, var(--success) 20%, transparent);
   --success-ring: color-mix(
     in oklab,
     var(--success-foreground) 40%,
     transparent
   );
+  --warning-muted: color-mix(in oklab, var(--warning) 10%, transparent);
   --disabled: var(--muted);
   --disabled-foreground: var(--muted-foreground);
 }

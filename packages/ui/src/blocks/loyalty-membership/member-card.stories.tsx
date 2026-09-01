@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { QRCodeSVG } from "qrcode.react";
 import { expect, fn, userEvent, within } from "storybook/test";
+import { FIXTURE_MEMBER_FIRST_USE_AT } from "../../lib/datetime-fixtures";
 import { FALLBACK_CODE, MEMBER_TOKEN } from "./fixtures";
 import { MemberCard } from "./member-card";
 
@@ -99,7 +100,7 @@ export const AlreadyUsed: Story = {
   args: {
     state: {
       status: "used",
-      firstUse: { place: "Causeway Bay", when: "24 Aug 2026, 20:41" },
+      firstUse: { place: "Causeway Bay", when: FIXTURE_MEMBER_FIRST_USE_AT },
     },
   },
   play: async ({ canvasElement }) => {
@@ -112,7 +113,7 @@ export const AlreadyUsed: Story = {
       said.getByText("This code has already been used"),
     ).toBeInTheDocument();
     expect(said.getByText(/Causeway Bay/)).toBeInTheDocument();
-    expect(said.getByText(/24 Aug 2026, 20:41/)).toBeInTheDocument();
+    expect(said.getByText(FIXTURE_MEMBER_FIRST_USE_AT)).toBeInTheDocument();
 
     expect(canvas.queryByText(/Expires in/)).not.toBeInTheDocument();
     expect(canvas.queryByText("This code has expired")).not.toBeInTheDocument();

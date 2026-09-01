@@ -5,6 +5,7 @@ import {
 } from "@grade10/design-system/components/display/breadcrumbs";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, waitFor, within } from "storybook/test";
+import { FIXTURE_PLACED_ON_WITH_PERIOD } from "../../lib/datetime-fixtures";
 import {
   FILLED_ADDRESS,
   FILLED_DELIVERY,
@@ -36,7 +37,7 @@ const meta = {
     breadcrumbs,
     orderId: "Order #G10-10482",
     status: "shipped",
-    placedOn: "Placed on Aug 26, 2026.",
+    placedOn: FIXTURE_PLACED_ON_WITH_PERIOD,
     placedOnDateTime: "2026-08-26",
     needHelp: { href: "#" },
     delivery: FILLED_DELIVERY,

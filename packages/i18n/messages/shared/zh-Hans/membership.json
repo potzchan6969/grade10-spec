@@ -1,12 +1,135 @@
 {
   "card": {
     "expired": "此码已过期",
-    "expiresIn": "尚余",
+    "expiresIn": "剩余",
     "fallbackCode": "或读出这组编号",
     "inStore": "门店",
-    "qrAlt": "你的会员码，可供扫描的方块",
+    "qrAlt": "你的会员码，可供扫描的方格",
     "refresh": "换一组新码",
     "secondsUnit": "秒",
     "used": "此码已被使用"
+  },
+  "page": {
+    "title": "会员",
+    "card": "你的会员卡",
+    "rewards": "奖励",
+    "coupons": "你的优惠码",
+    "pending": "门店待领",
+    "activity": "记录",
+    "spend": "用于购物车",
+    "cardUnavailable": "门店认证尚未开通，暂时没有可扫描的码——请门店店员用邮箱为你查询。",
+    "cardFailed": "未能完成，请稍后再试。",
+    "refresh": "获取优惠码",
+    "loadFailed": "未能加载，请再试一次。",
+    "retry": "再试一次",
+    "noRewards": "目前没有可兑换的奖励。",
+    "noCoupons": "你没有任何优惠码。",
+    "noPending": "没有待领的项目。",
+    "noExpiry": "没有期限",
+    "noActivity": "你的账户尚未有任何记录。",
+    "notAMember": "你尚未加入此计划。",
+    "join": "加入计划"
+  },
+  "collectWithin": "须在 {days} 天内到门店领取",
+  "outcome": {
+    "preparing": "处理中",
+    "ready": "优惠码可以使用",
+    "spent": "优惠码已使用",
+    "void": "优惠码已取消",
+    "awaitingCollection": "门店待领，至 {deadline} 止",
+    "collected": "已于 {day} 领取",
+    "lapsed": "未领取——期限已于 {deadline} 届满"
+  },
+  "summary": {
+    "title": "会员",
+    "tier": "等级",
+    "balance": "可用积分",
+    "qualifying": "本年度累计积分",
+    "renewal": "等级续期",
+    "pointsActiveUntil": "积分有效至"
+  },
+  "rewards": {
+    "label": "奖励",
+    "redeem": "兑换",
+    "points": "分",
+    "atQuantityBound": "单次兑换最多就是这个数量。",
+    "insufficient": "积分尚未足够",
+    "decreaseQuantity": "减少一件",
+    "increaseQuantity": "增加一件"
+  },
+  "quantityRefusal": {
+    "wholeUnits": "{name} 只能以整件兑换。",
+    "oneAtATime": "{name} 每次只能兑换一件。",
+    "atMost": "单次兑换最多 {max} 件{name}。"
+  },
+  "coupons": {
+    "label": "你的优惠码",
+    "maskedCode": "••••••",
+    "spent": "已使用",
+    "void": "已取消"
+  },
+  "undo": {
+    "action": "退回积分",
+    "returned": "{points} 分已退回你的账户。",
+    "codeUsed": "此优惠码已用于付款，积分不会退回。",
+    "alreadyReturned": "这些积分已经退回你的账户。"
+  },
+  "spend": {
+    "lead": "你的购物车金额为 {basket}。",
+    "atCheckout": "积分现在于结算时抵扣，付款时选择要用多少。",
+    "goToCheckout": "前往结算",
+    "empty": "先把商品放进购物车，才能在这里使用积分。",
+    "offer": "{points} 分可抵 {money}",
+    "confirm": "使用 {points} 分抵 {money}？",
+    "spendAction": "使用积分",
+    "confirmAction": "确定使用",
+    "cancelAction": "暂时不用",
+    "working": "正在获取优惠码…",
+    "issued": "你的优惠码是 {code}，结算时输入即可抵扣。",
+    "applied": "已为你的购物车抵扣 {money}。",
+    "aborted": "你的购物车无法使用该优惠码，所以没有动用积分——{points} 分已退回。",
+    "abortFailed": "你的购物车无法使用该优惠码。系统未能自动退回积分，该优惠码仍然属于你。",
+    "notMoneyOff": "该奖励并非购物抵扣。",
+    "nothingToSpendOn": "先把商品放进购物车，才能在这里使用积分。",
+    "biggerThanPurchase": "{money} 的优惠码需要金额不低于此数的购物车，否则会被拒绝，因此没有动用积分。",
+    "notEnoughPoints": "你的积分尚未足够。",
+    "failed": "未能完成，请稍后再试。"
+  },
+  "activity": {
+    "label": "记录"
+  },
+  "pending": {
+    "label": "门店待领",
+    "location": "请到门店领取。",
+    "expired": "期限已过",
+    "points": "分"
+  },
+  "activityKind": {
+    "earn": "赚取积分",
+    "redeem": "使用积分",
+    "pay": "积分用于付款",
+    "expire": "积分已过期",
+    "adjust_credit": "积分已增加",
+    "adjust_debit": "积分已扣除",
+    "revoke": "积分已撤回",
+    "reverse": "积分已退回"
+  },
+  "join": {
+    "title": "加入计划",
+    "lead": "所有消费都可赚取积分，并可在门店或结算时使用。",
+    "action": "加入",
+    "joined": "已为你登记。你的会员卡与奖励清单都在会员页面。",
+    "already": "你已经是会员。",
+    "failed": "暂时未能为你登记。请再试一次——即使一直失败，也不会有任何扣款或未完成的登记。",
+    "goToMembership": "前往会员页面",
+    "phoneLabel": "手机号码",
+    "phoneHint": "门店店员会以此为你查询。",
+    "phoneRefusal": {
+      "phoneRequired": "请输入手机号码以加入。",
+      "phoneTaken": "该号码已登记在另一个账户。",
+      "needsCountryCode": "请加上国家代码，例如 +852 9123 4567。",
+      "invalid": "这看起来不是有效的手机号码。",
+      "rateLimited": "你刚更改过号码，请一分钟后再试。"
+    }
   }
 }

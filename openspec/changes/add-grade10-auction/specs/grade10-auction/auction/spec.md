@@ -115,7 +115,7 @@ MAY define an extension cap; when it does, its close SHALL NOT exceed its
 scheduled close plus that cap. Grade10 SHALL apply this rule to every later
 valid bid until 30 minutes pass without a valid bid or the cap is reached.
 Grade10 SHALL display the current recorded close and, to an authenticated
-bidder, their highest accepted bid on that listing.
+bidder, their committed maximum on that listing.
 
 #### Scenario: auction-SC-04 - A bid must meet the next increment
 

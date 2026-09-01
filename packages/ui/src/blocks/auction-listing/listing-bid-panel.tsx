@@ -54,7 +54,10 @@ type ListingBidPanelProps = {
   price: ReactNode;
   /** Viewer’s own committed maximum. Omit when the viewer has no commitment. */
   maximum?: ReactNode;
+  /** Hint below the current bid when it clarifies what the amount means. */
   priceHint?: ReactNode;
+  /** Post-auction buyer-fee note for bidders, shown in the action footer. */
+  buyerFeeHint?: ReactNode;
   bidCount?: ReactNode;
   history?: ReactNode;
   remaining: ReactNode;
@@ -80,6 +83,7 @@ function ListingBidPanel({
   price,
   maximum,
   priceHint,
+  buyerFeeHint,
   bidCount,
   history,
   remaining,
@@ -230,6 +234,11 @@ function ListingBidPanel({
         <CardFooter className="items-stretch border-t bg-muted/20 p-5">
           <VStack className="w-full" gap="sm">
             {actions}
+            {buyerFeeHint ? (
+              <Text size="xs" tone="secondary">
+                {buyerFeeHint}
+              </Text>
+            ) : null}
           </VStack>
         </CardFooter>
       ) : null}

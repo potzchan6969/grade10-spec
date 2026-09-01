@@ -1,5 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
+import {
+  FIXTURE_COLLECT_BY_SEP_3,
+  FIXTURE_REDEEMED_ON,
+} from "../../lib/datetime-fixtures";
 import { PENDING_COLLECTIONS } from "./fixtures";
 import { PendingCollectionList } from "./pending-collection-list";
 
@@ -36,7 +40,7 @@ export const Default: Story = {
     expect(
       canvas.getByText("Collect at the Grade10 store, Causeway Bay"),
     ).toBeInTheDocument();
-    expect(canvas.getByText("Collect by Sep 3, 2026")).toBeInTheDocument();
+    expect(canvas.getByText(FIXTURE_COLLECT_BY_SEP_3)).toBeInTheDocument();
     expect(canvas.getAllByText("Expired")).toHaveLength(1);
   },
 };
@@ -54,8 +58,8 @@ export const WaitingReadsAsWaiting: Story = {
     const row = within(waiting as HTMLElement);
     expect(row.getByText("Grade10 card sleeves")).toBeInTheDocument();
     expect(row.getByText("240 pts")).toBeInTheDocument();
-    expect(row.getByText("Redeemed Aug 20, 2026")).toBeInTheDocument();
-    expect(row.getByText("Collect by Sep 3, 2026")).toBeInTheDocument();
+    expect(row.getByText(FIXTURE_REDEEMED_ON)).toBeInTheDocument();
+    expect(row.getByText(FIXTURE_COLLECT_BY_SEP_3)).toBeInTheDocument();
     expect(row.queryByText("Expired")).not.toBeInTheDocument();
 
     expect(

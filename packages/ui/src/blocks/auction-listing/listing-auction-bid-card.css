@@ -1,7 +1,7 @@
 .recent-bids-scroll-shell {
-  --recent-bid-row-height: 3rem;
-  --recent-bids-visible-rows: 4;
-  --recent-bids-fade-height: 1.25rem;
+  --recent-bid-row-height: 2.5rem;
+  --recent-bids-visible-rows: 3.5;
+  --recent-bids-fade-height: 1rem;
   position: relative;
   height: calc(var(--recent-bid-row-height) * var(--recent-bids-visible-rows));
   flex-shrink: 0;

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
+import { FIXTURE_MEMBER_SINCE } from "../../lib/datetime-fixtures";
 import { ProfileDetails } from "./profile-details";
 
 const meta = {
@@ -10,7 +11,7 @@ const meta = {
   args: {
     displayName: "Collector",
     bio: "Chasing PSA 10s since 2019.",
-    meta: "Member since Mar 12, 2024",
+    meta: FIXTURE_MEMBER_SINCE,
   },
 } satisfies Meta<typeof ProfileDetails>;
 

@@ -87,7 +87,10 @@
      not a utility, so button.tsx, link.tsx and badge.tsx rendered an inherited
      colour. The variables themselves have always existed in tokens.json. */
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success-muted: var(--success-muted);
+  --color-success-border: var(--success-border);
   --color-success-ring: var(--success-ring);
+  --color-warning-muted: var(--warning-muted);
   --color-focus-ring: var(--focus-ring);
   --color-menu-border: var(--menu-border);
   --color-menu-glass: var(--menu-glass);
@@ -128,26 +131,21 @@
 :root {
   /* primitives — Figma "Foundation" */
   --gray-50: #FAFAF9;
-  --gray-50-opacity-80: #FAFAF9CC;
   --gray-100: #F5F5F4;
   --gray-200: #E6E5E5;
   --gray-300: #D5D3D2;
   --gray-400: #9D9A97;
   --gray-500: #75726F;
-  --gray-500-opacity-20: #75726F33;
   --gray-600: #555350;
   --gray-700: #42403E;
   --gray-800: #282625;
   --gray-900: #1B1918;
   --gray-950: #0B0A0A;
-  --gray-950-opacity-4: #0A0A0A0A;
-  --gray-950-opacity-30: #0A0A0A4D;
   --orange-50: #F8F2E8;
   --orange-100: #F1E4D0;
   --orange-200: #E1C79D;
   --orange-300: #D3AC6E;
   --orange-400: #C4903D;
-  --orange-400-opacity-10: #C4903D1A;
   --orange-500: #A47832;
   --orange-600: #856128;
   --orange-700: #62481E;
@@ -159,10 +157,6 @@
   --yellow-200: #DDD097;
   --yellow-300: #CDB965;
   --yellow-400: #B19A3A;
-  --yellow-400-opacity-10: #B19A3A1A;
-  --yellow-400-opacity-20: #B19A3A33;
-  --yellow-400-opacity-30: #B19A3A4D;
-  --yellow-400-opacity-50: #B19A3A80;
   --yellow-500: #927F30;
   --yellow-600: #776827;
   --yellow-700: #584D1D;
@@ -175,9 +169,6 @@
   --red-300: #E39D91;
   --red-400: #DA7E6F;
   --red-500: #CF5844;
-  --red-500-opacity-10: #CF58441A;
-  --red-500-opacity-20: #CF584433;
-  --red-500-opacity-50: #CF584480;
   --red-600: #AE3F2D;
   --red-700: #822F21;
   --red-800: #592017;
@@ -218,12 +209,6 @@
   --purple-950: #12080F;
   --teal-50: #D9FCFB;
   --slate-50: #F8FAFC;
-  --slate-50-opacity-5: #F8FAFC0D;
-  --slate-50-opacity-10: #F8FAFC1A;
-  --slate-50-opacity-20: #F8FAFC33;
-  --slate-50-opacity-30: #F8FAFC4D;
-  --slate-50-opacity-50: #F8FAFC80;
-  --slate-50-opacity-80: #F8FAFCCC;
   --slate-100: #F1F5F9;
   --slate-200: #E2E8F0;
   --slate-300: #CAD5E2;
@@ -234,9 +219,6 @@
   --slate-800: #1D293D;
   --slate-900: #0F172B;
   --slate-950: #020618;
-  --slate-950-opacity-10: #0206181A;
-  --slate-950-opacity-50: #02061880;
-  --slate-950-opacity-70: #020618B2;
   --teal-100: #B4F9F6;
   --teal-200: #6DF3EE;
   --teal-300: #22ECE5;
@@ -342,15 +324,15 @@
   --container-3xl: 768px;
   --container-4xl: 896px;
   --container-5xl: 1024px;
-  --blur-sm: 4px;
   --container-7xl: 1280px;
+  --blur-sm: 4px;
   --blur: 8px;
   --blur-md: 12px;
   --blur-lg: 16px;
   --blur-xl: 24px;
   --blur-2xl: 40px;
   --blur-3xl: 64px;
-  --shadow-color: var(--gray-500-opacity-20); /* Color of dropdown shadow for popover elements. */
+  --shadow-color: color-mix(in oklab, var(--gray-500) 20%, transparent); /* Color of dropdown shadow for popover elements. */
 
   /* typography — Figma "Typography" */
   --family-sans: Gibson;

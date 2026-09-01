@@ -11,7 +11,15 @@ import {
   TooltipTrigger,
 } from "@grade10/design-system/components/overlays/tooltip";
 import { Info } from "@phosphor-icons/react";
-import { formatUsd, minMaximumMinor } from "./format-usd";
+import { useEffect, useState } from "react";
+import {
+  formatMinimumMaximumCaption,
+  formatUsd,
+  formatUsdNumeric,
+  isMaximumBelowFloor,
+  parseUsdInputToMinor,
+  resolveMaximumFloor,
+} from "./format-usd";
 import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
 import "./listing-bid-mode-stack.css";
 import { ListingCountdownDisplay } from "./listing-countdown-display";
@@ -32,6 +40,8 @@ type ListingAuctionBidFieldsCopy = {
   outbid: string;
   highestBid: string;
   yourMaximum: string;
+  setMaximumLabel: string;
+  setMaximumCurrentLabel: string;
   opensIn: string;
   closed: string;
   timeLeft: string;
@@ -46,8 +56,12 @@ type ListingAuctionBidFieldsCopy = {
   raiseMaximumAriaLabel: string;
   enableAutoBidding: string;
   autoBiddingTooltip: string;
-  minimumMaximum: string;
+  minimumMaximumFloor: string;
+  minimumMaximumLeadingNudge: string;
+  minimumMaximumLeadingIncrement: string;
+  maximumBelowMinimum: string;
   buyerFeeHint: string;
+  buyerFeeTooltip: string;
   noBidsYet: string;
 };
 
@@ -92,41 +106,36 @@ function StandingBanner({ copy, view }: StandingBannerProps) {
   }
 
   if (view.standing === "outbid") {
-    return (
-      <HStack
-        className="w-full border-b border-border px-4 py-3"
-        hAlign="space-between"
-        vAlign="center"
-      >
-        <Text size="sm">
-          {copy.yourMaximum}: {formatUsd(view.viewerMaximumMinor ?? 0)}
-        </Text>
-        <Badge variant="warning">{copy.outbid}</Badge>
-      </HStack>
-    );
+    return null;
   }
 
   if (view.standing === "leading-max") {
-    return (
-      <HStack
-        className="w-full border-b border-border px-4 py-3"
-        hAlign="space-between"
-        vAlign="center"
-      >
-        <Text size="sm">
-          {copy.yourMaximum}: {formatUsd(view.viewerMaximumMinor ?? 0)}
-        </Text>
-        <Badge variant="success">{copy.highestBid}</Badge>
-      </HStack>
-    );
+    return null;
   }
 
   if (view.standing === "leading-manual") {
-    return (
-      <div className="w-full border-b border-border px-4 py-3">
-        <Badge variant="success">{copy.highestBid}</Badge>
-      </div>
-    );
+    return null;
+  }
+
+  return null;
+}
+
+function StandingStatusBadge({
+  copy,
+  view,
+}: {
+  copy: ListingAuctionBidFieldsCopy;
+  view: ListingAuctionBidView;
+}) {
+  if (view.standing === "outbid") {
+    return <Badge variant="warning">{copy.outbid}</Badge>;
+  }
+
+  if (
+    view.standing === "leading-max" ||
+    view.standing === "leading-manual"
+  ) {
+    return <Badge variant="success">{copy.highestBid}</Badge>;
   }
 
   return null;
@@ -253,24 +262,65 @@ function BidActions({
   onPlaceBid,
   onCommitMaximum,
 }: BidActionsProps) {
-  if (!view.showBidActions) return null;
-
   const autoBidEnabled = bidMode === "auto";
   const hasCommittedMaximum = view.viewerMaximumMinor != null;
-  const floorMaximumMinor = minMaximumMinor(
-    view.minBidMinor,
-    view.viewerMaximumMinor,
-  );
+  const maximumFloor = resolveMaximumFloor({
+    minBidMinor: view.minBidMinor,
+    incrementMinor: view.incrementMinor,
+    viewerMaximumMinor: view.viewerMaximumMinor,
+    standing: view.standing,
+    currentBidMinor: view.currentBidMinor,
+  });
+  const floorMaximumMinor = maximumFloor.floorMinor;
   const defaultMaximumMinor = hasCommittedMaximum
     ? floorMaximumMinor
     : view.suggestedMaxMinor;
+  const [maximumInput, setMaximumInput] = useState(() =>
+    formatUsdNumeric(defaultMaximumMinor),
+  );
+  const [maximumFieldTouched, setMaximumFieldTouched] = useState(false);
+
+  useEffect(() => {
+    if (!autoBidEnabled) return;
+    setMaximumInput(formatUsdNumeric(defaultMaximumMinor));
+    setMaximumFieldTouched(false);
+  }, [autoBidEnabled, defaultMaximumMinor]);
+
+  if (!view.showBidActions) return null;
+
+  const maximumMinor = parseUsdInputToMinor(maximumInput);
+  const maximumInvalid = isMaximumBelowFloor(maximumMinor, floorMaximumMinor);
+  const showMaximumError = maximumFieldTouched && maximumInvalid;
+  const disableMaximumButton = maximumFieldTouched && maximumInvalid;
+  const maximumHelperMessage = formatMinimumMaximumCaption(
+    maximumFloor,
+    copy,
+    view.incrementMinor,
+  );
+  const maximumMessage = showMaximumError
+    ? copy.maximumBelowMinimum.replace("{amount}", formatUsd(floorMaximumMinor))
+    : maximumHelperMessage;
+  const maximumFieldLabel = hasCommittedMaximum
+    ? copy.setMaximumCurrentLabel.replace(
+        "{amount}",
+        formatUsd(view.viewerMaximumMinor ?? 0),
+      )
+    : copy.setMaximumLabel;
+
+  function handleCommitMaximum() {
+    if (maximumInvalid) {
+      setMaximumFieldTouched(true);
+      return;
+    }
+    onCommitMaximum();
+  }
+
   const manualCopy = {
     bidAmountLabel: copy.placeBidSection,
     maximumLabel: copy.yourMaximum,
   };
   const autoCopy = {
-    maximumLabel: copy.yourMaximum,
-    minimumMaximum: copy.minimumMaximum,
+    maximumLabel: maximumFieldLabel,
   };
 
   return (
@@ -333,7 +383,7 @@ function BidActions({
                 tone="secondary"
                 weight="medium"
               >
-                {copy.yourMaximum}
+                {maximumFieldLabel}
               </Text>
               {!hasCommittedMaximum ? (
                 <TooltipProvider>
@@ -344,7 +394,9 @@ function BidActions({
                       onPointerDown={(event) => event.preventDefault()}
                       render={<Info aria-hidden size={12} />}
                     />
-                    <TooltipContent>{copy.confirmMaximumTooltip}</TooltipContent>
+                    <TooltipContent>
+                      {copy.confirmMaximumTooltip}
+                    </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               ) : null}
@@ -352,12 +404,13 @@ function BidActions({
             <HStack className="w-full" gap="sm" vAlign="start">
               <ListingAutoBidControls
                 copy={autoCopy}
-                defaultMaximumMinor={defaultMaximumMinor}
                 hideLabel
-                incrementMinor={view.incrementMinor}
-                key={`auto-${floorMaximumMinor}-${hasCommittedMaximum}`}
+                message={maximumMessage}
                 minMaximumMinor={floorMaximumMinor}
-                viewerMaximumMinor={view.viewerMaximumMinor}
+                onBlur={() => setMaximumFieldTouched(true)}
+                onValueChange={setMaximumInput}
+                status={showMaximumError ? "error" : "default"}
+                value={maximumInput}
               />
               <Button
                 aria-label={
@@ -366,7 +419,8 @@ function BidActions({
                     : copy.confirmMaximumAriaLabel
                 }
                 className="shrink-0"
-                onClick={onCommitMaximum}
+                disabled={disableMaximumButton}
+                onClick={handleCommitMaximum}
                 size="md"
               >
                 {hasCommittedMaximum ? copy.raiseMaximum : copy.confirmMaximum}
@@ -379,5 +433,29 @@ function BidActions({
   );
 }
 
+function BuyerFeeHint({
+  copy,
+}: {
+  copy: Pick<ListingAuctionBidFieldsCopy, "buyerFeeHint" | "buyerFeeTooltip">;
+}) {
+  return (
+    <HStack gap="xs" vAlign="center">
+      <Text size="xs" tone="secondary">
+        {copy.buyerFeeHint}
+      </Text>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger
+            aria-label={copy.buyerFeeTooltip}
+            className="inline-flex shrink-0 cursor-pointer text-muted-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            render={<Info aria-hidden size={12} />}
+          />
+          <TooltipContent>{copy.buyerFeeTooltip}</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </HStack>
+  );
+}
+
 export type { ListingAuctionBidFieldsCopy };
-export { BidActions, PriceBlock, StandingBanner, TimeBlock };
+export { BidActions, BuyerFeeHint, PriceBlock, StandingBanner, StandingStatusBadge, TimeBlock };

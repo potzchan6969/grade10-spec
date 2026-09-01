@@ -3,14 +3,15 @@ import {
   ListingAuctionCardSidebar,
   ListingLotGallery,
   ListingLotHeader,
+  ListingUserBidHistory,
 } from "@grade10/ui";
 import { useEffect, useState } from "react";
 import {
   AUCTION_LOT,
   AUCTION_LOT_BADGES,
   AUCTION_LOT_DETAILS_COPY,
-  applyBidExtension,
   type AuctionTiming,
+  applyBidExtension,
   type BiddingState,
   type BidMode,
   bidHistoryForState,
@@ -18,8 +19,10 @@ import {
   buildListingAuctionBidView,
   createLiveAuctionTiming,
   initialLiveListingFacts,
+  liveBidSimulationOptions,
   type LiveListingFacts,
   simulateNextLiveBid,
+  userBidHistoryForState,
 } from "./auction-lot-details-content";
 import { AuctionLotDetailsPageShell } from "./auction-lot-details-page-shell";
 
@@ -84,13 +87,17 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
     const timer = window.setInterval(() => {
       setLiveSnapshot((snapshot) => {
         if (snapshot == null) return snapshot;
-        return simulateNextLiveBid(snapshot.history, snapshot.facts);
+        return simulateNextLiveBid(
+          snapshot.history,
+          snapshot.facts,
+          liveBidSimulationOptions(state),
+        );
       });
       setTiming((current) => applyBidExtension(current));
     }, LIVE_BID_INTERVAL_MS);
 
     return () => window.clearInterval(timer);
-  }, [view.live]);
+  }, [view.live, state]);
 
   function requestBidAction() {
     if (hasBidOnListing(view)) return;
@@ -121,6 +128,12 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
           onBidModeChange={setBidMode}
           onCommitMaximum={requestBidAction}
           onPlaceBid={requestBidAction}
+          recentBidsAccessory={
+            <ListingUserBidHistory
+              copy={AUCTION_LOT_DETAILS_COPY.userBidHistory}
+              rows={userBidHistoryForState(state)}
+            />
+          }
           vaultShippingBody={AUCTION_LOT_DETAILS_COPY.vaultShippingBody}
           view={view}
         />

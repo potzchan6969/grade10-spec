@@ -1,6 +1,7 @@
 import { Divider } from "@grade10/design-system/components/display/divider";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   Dialog,
   DialogBody,
@@ -21,8 +22,9 @@ type SignInCardCopy = {
   /** Names the divider between the providers and the email flow. Required
    * whenever `providerSlot` is set — the card carries no English of its own. */
   providerDivider?: string;
-  /** Terms and privacy line, drawn as the last node of the dialog body. The
-   * consumer owns the wording and any links inside it. */
+  /** Terms and privacy line, drawn centred as the last node of the dialog
+   * body. The consumer owns the wording and any links inside it; a link it
+   * carries belongs at `size="xs"`, matching the line around it. */
   legal?: ReactNode;
 };
 
@@ -40,7 +42,12 @@ type SignInCardProps = {
    * errors travel on the step's own `error` prop. */
   message?: ReactNode;
   /** External identity buttons (Google, passkeys…), rendered above the
-   * divider. The consumer owns the widget; this dialog only places it. */
+   * divider. The consumer owns the widget; this dialog only places it.
+   *
+   * A widget that a script fills in asynchronously should mark its container
+   * `data-slot="sign-in-provider"`: the divider hides for as long as that
+   * container is empty, so a script that never answers leaves no orphaned
+   * "or" behind. */
   providerSlot?: ReactNode;
   /** A way out of the flow — "back to home". Distinct from dismissing the
    * dialog, which the header's close control, Escape and the scrim all do. */
@@ -99,10 +106,19 @@ function SignInCard({
             <DialogDescription>{copy.description}</DialogDescription>
           ) : null}
           {providerSlot ? (
-            <>
+            /* The divider follows what actually drew. A widget that renders
+               asynchronously — Google's own button arrives from a script that
+               may never answer — marks its container `sign-in-provider`, and
+               while that container is empty the pair hides rather than
+               stranding an "or" over blank space. A widget that draws its own
+               markup marks nothing and is always shown. */
+            <VStack
+              className="w-full has-[[data-slot=sign-in-provider]:empty]:hidden"
+              gap="lg"
+            >
               {providerSlot}
               <Divider label={copy.providerDivider} />
-            </>
+            </VStack>
           ) : null}
           {children}
           {message ? (
@@ -116,7 +132,13 @@ function SignInCard({
             </Button>
           ) : null}
           {copy.legal ? (
-            <Text data-slot="sign-in-legal" size="sm" tone="secondary">
+            /* Figma draws this line centred across the body at 12/16 in the
+               foreground tone, not the muted one the status line uses. */
+            <Text
+              className="w-full text-center"
+              data-slot="sign-in-legal"
+              size="xs"
+            >
               {copy.legal}
             </Text>
           ) : null}

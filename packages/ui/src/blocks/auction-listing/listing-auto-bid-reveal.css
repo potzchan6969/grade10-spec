@@ -18,11 +18,11 @@
   transform: translateY(-6px);
   transition:
     opacity var(--acc-collapse, 250ms)
-      var(--acc-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+    var(--acc-ease, cubic-bezier(0.22, 1, 0.36, 1)),
     filter var(--acc-collapse, 250ms)
-      var(--acc-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+    var(--acc-ease, cubic-bezier(0.22, 1, 0.36, 1)),
     transform var(--acc-collapse, 250ms)
-      var(--acc-ease, cubic-bezier(0.22, 1, 0.36, 1));
+    var(--acc-ease, cubic-bezier(0.22, 1, 0.36, 1));
 }
 
 .auto-bid-reveal[data-open="true"] .auto-bid-reveal-inner {
@@ -31,11 +31,11 @@
   transform: translateY(0);
   transition:
     opacity var(--acc-expand, 250ms)
-      var(--acc-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+    var(--acc-ease, cubic-bezier(0.22, 1, 0.36, 1)),
     filter var(--acc-expand, 250ms)
-      var(--acc-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+    var(--acc-ease, cubic-bezier(0.22, 1, 0.36, 1)),
     transform var(--acc-expand, 250ms)
-      var(--acc-ease, cubic-bezier(0.22, 1, 0.36, 1));
+    var(--acc-ease, cubic-bezier(0.22, 1, 0.36, 1));
 }
 
 @media (prefers-reduced-motion: reduce) {

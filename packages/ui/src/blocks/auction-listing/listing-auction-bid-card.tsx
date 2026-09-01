@@ -1,16 +1,24 @@
 import { Card } from "@grade10/design-system/components/display/card";
-import { StatusIndicator } from "@grade10/design-system/components/display/status-indicator";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { ChartLineUp } from "@phosphor-icons/react";
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  type CSSProperties,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   BidActions,
   type ListingAuctionBidFieldsCopy,
+  BuyerFeeHint,
   PriceBlock,
   StandingBanner,
+  StandingStatusBadge,
   TimeBlock,
 } from "./listing-auction-bid-fields";
 import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
@@ -21,7 +29,6 @@ import "./listing-auction-bid-card.css";
 type ListingAuctionBidCardCopy = ListingAuctionBidFieldsCopy & {
   recentBids: string;
   bidHistory: {
-    leading?: string;
     you?: string;
     empty?: string;
   };
@@ -36,12 +43,19 @@ type ListingAuctionBidCardProps = {
   onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
   onCommitMaximum: () => void;
+  recentBidsAccessory?: ReactNode;
 };
+
+/** Full rows for short lists; a half-row peek when more bids exist below the fold. */
+function recentBidsVisibleRows(bidCount: number): number {
+  if (bidCount >= 4) return 3.5;
+  return Math.max(1, bidCount);
+}
 
 function RecentBidsScrollArea({
   children,
   contentKey,
-  visibleRows = 4,
+  visibleRows = 3.5,
 }: {
   children: ReactNode;
   contentKey: string;
@@ -64,6 +78,12 @@ function RecentBidsScrollArea({
     setShowBottomFade(overflow && !atBottom);
   }, []);
 
+  /**
+   * `contentKey` is a signal, not a read: a new list replaces the child this
+   * effect observes, so the subscription has to be rebuilt against the node
+   * that is there now.
+   */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: see above
   useEffect(() => {
     updateFade();
     const element = scrollRef.current;
@@ -125,6 +145,7 @@ function ListingAuctionBidCard({
   onBidModeChange,
   onPlaceBid,
   onCommitMaximum,
+  recentBidsAccessory,
 }: ListingAuctionBidCardProps) {
   const hasFooter = view.showBidActions;
   const showRecentBids = history.length > 0;
@@ -138,12 +159,16 @@ function ListingAuctionBidCard({
       <HStack
         className="w-full border-b border-border px-4 py-2"
         gap="sm"
+        hAlign="space-between"
         vAlign="center"
       >
-        {view.live ? <LiveAuctionDot /> : <StatusIndicator variant="default" />}
-        <Text size="sm" weight="medium">
-          {view.headerLabel}
-        </Text>
+        <HStack gap="sm" vAlign="center">
+          {view.live && !view.opens && !view.closed ? <LiveAuctionDot /> : null}
+          <Text size="sm" weight="medium">
+            {view.headerLabel}
+          </Text>
+        </HStack>
+        <StandingStatusBadge copy={copy} view={view} />
       </HStack>
 
       <StandingBanner copy={copy} view={view} />
@@ -164,25 +189,36 @@ function ListingAuctionBidCard({
 
       <ListingAutoBidReveal open={showRecentBids}>
         <VStack
-          className={cn("w-full px-4 py-4", hasFooter && "border-b border-border")}
+          className={cn(
+            "w-full px-4 py-3",
+            hasFooter && "border-b border-border",
+          )}
           gap="sm"
         >
-          <HStack gap="xs" vAlign="center">
-            <span className="text-secondary-foreground">
-              <ChartLineUp aria-hidden size={14} />
-            </span>
-            <Text
-              className="text-secondary-foreground"
-              size="sm"
-              tone="secondary"
-              weight="medium"
-            >
-              {copy.recentBids}
-            </Text>
+          <HStack
+            className="w-full"
+            gap="xs"
+            hAlign="space-between"
+            vAlign="center"
+          >
+            <HStack gap="xs" vAlign="center">
+              <span className="text-secondary-foreground">
+                <ChartLineUp aria-hidden size={14} />
+              </span>
+              <Text
+                className="text-secondary-foreground"
+                size="sm"
+                tone="secondary"
+                weight="medium"
+              >
+                {copy.recentBids}
+              </Text>
+            </HStack>
+            {recentBidsAccessory}
           </HStack>
           <RecentBidsScrollArea
             contentKey={`${historyResetKey ?? "live"}:${history.length}:${history[0]?.id ?? ""}`}
-            visibleRows={Math.min(4, Math.max(1, history.length))}
+            visibleRows={recentBidsVisibleRows(history.length)}
           >
             <ListingBidHistoryList
               copy={copy.bidHistory}
@@ -206,9 +242,7 @@ function ListingAuctionBidCard({
               onPlaceBid={onPlaceBid}
               view={view}
             />
-            <Text size="xs" tone="secondary">
-              {copy.buyerFeeHint}
-            </Text>
+            <BuyerFeeHint copy={copy} />
           </VStack>
         </div>
       ) : null}

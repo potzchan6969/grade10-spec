@@ -42,3 +42,4 @@ scripts/tokens-sync/figma-plugins/build/
 .cursor/agents/impeccable-finish-reviewer.md
 .cursor/agents/impeccable-manual-edit-applier.md
 .cursor/hooks.json
+DESIGN.md

@@ -8,7 +8,11 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
-    copy: { email: "Email", submit: "Send magic link" },
+    copy: {
+      email: "Email",
+      emailPlaceholder: "Enter your email",
+      submit: "Send magic link",
+    },
     email: "collector@example.com",
     onEmailChange: fn(),
     onSubmit: fn(),
@@ -144,5 +148,23 @@ export const SettledStepIsFree: Story = {
       canvas.getByRole("button", { name: "Send magic link" }),
     );
     expect(args.onSubmit).toHaveBeenCalledOnce();
+  },
+};
+
+/**
+ * Figma's `email-section` (4666:1475) draws a placeholder and nothing above
+ * it, so the field carries no visible label. `copy.email` is still its
+ * accessible name — the control stays named for a screen reader, which is
+ * what makes dropping the visible label a layout decision rather than an
+ * accessibility one.
+ */
+export const FieldIsLabelledWithoutVisibleText: Story = {
+  args: { email: "" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const field = canvas.getByRole("textbox", { name: "Email" });
+
+    expect(field).toHaveAttribute("placeholder", "Enter your email");
+    expect(canvas.queryByText("Email")).toBeNull();
   },
 };
