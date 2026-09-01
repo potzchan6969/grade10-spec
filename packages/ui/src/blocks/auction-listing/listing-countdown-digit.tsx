@@ -104,10 +104,10 @@ function countdownParts(
     const minutes = Math.floor((seconds % HOUR_SECONDS) / 60);
     const secs = seconds % 60;
     return [
-      { value: days, unit: "D" },
-      { value: hours, unit: "H" },
-      { value: minutes, unit: "M" },
-      { value: secs, unit: "S" },
+      { value: days, unit: "d" },
+      { value: hours, unit: "h" },
+      { value: minutes, unit: "m" },
+      { value: secs, unit: "s" },
     ];
   }
 

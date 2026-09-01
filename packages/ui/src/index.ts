@@ -22,8 +22,11 @@ export {
 } from "./lib/format-datetime";
 export {
   ListingAgeVerificationDialog,
+  ListingAgeVerificationFields,
   type ListingAgeVerificationDialogCopy,
   type ListingAgeVerificationDialogProps,
+  type ListingAgeVerificationFieldsCopy,
+  type ListingAgeVerificationFieldsProps,
 } from "./blocks/auction-listing/listing-age-verification-dialog";
 export {
   ListingAuctionBidCard,

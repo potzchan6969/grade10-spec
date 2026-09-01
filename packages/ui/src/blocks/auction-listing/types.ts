@@ -4,7 +4,6 @@ export type ListingBidHistoryRow = {
   initials: string;
   amountMinor: number;
   relativeTime: string;
-  leading?: boolean;
   isViewer?: boolean;
 };
 

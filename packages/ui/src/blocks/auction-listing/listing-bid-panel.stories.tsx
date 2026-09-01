@@ -7,6 +7,7 @@ import {
 } from "../../lib/datetime-fixtures";
 import {
   HighestBidderStanding,
+  BUYER_FEE_HINT,
   ListingBidPanelLoading,
   LiveActions,
   LostStanding,
@@ -36,7 +37,7 @@ const meta = {
     watching: false,
     kicker: "Listing 12 · September Slabs",
     price: "HK$4,800.00",
-    priceHint: "Buyer's premium is added at invoice.",
+    buyerFeeHint: BUYER_FEE_HINT,
     bidCount: "1 Bid",
     history: "Bidder 3 · HK$4,800.00",
     remaining: "13D 11H 33M 47S",

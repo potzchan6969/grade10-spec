@@ -157,7 +157,7 @@ function panelFor({ bids, watching }: DemoState) {
       history={historyOf(bids)}
       kicker="Listing 12 · September Slabs"
       price={lead?.amount ?? "HK$1,200.00"}
-      priceHint="Buyer's premium is added at invoice."
+      buyerFeeHint="Buyer fee is added on top of the winning bid"
       remaining="13D 11H 33M 47S"
       standing={standingOf(bids)}
       title="1999 Charizard, PSA 10"
