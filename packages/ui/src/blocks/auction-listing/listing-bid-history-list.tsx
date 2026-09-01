@@ -1,9 +1,9 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   Avatar,
   AvatarFallback,
   avatarInitial,
 } from "@grade10/design-system/components/display/avatar";
+import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";

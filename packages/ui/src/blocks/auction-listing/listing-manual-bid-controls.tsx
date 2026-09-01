@@ -1,5 +1,9 @@
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
-import { formatMinMaximumMessage, formatUsd, formatUsdNumeric } from "./format-usd";
+import {
+  formatMinMaximumMessage,
+  formatUsd,
+  formatUsdNumeric,
+} from "./format-usd";
 
 type ListingManualBidControlsCopy = {
   bidAmountLabel?: string;
