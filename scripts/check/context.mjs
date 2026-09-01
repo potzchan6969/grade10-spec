@@ -109,6 +109,11 @@ export const RULES = [
     title: "Scenarios no test case traces",
   },
   {
+    key: "unwritten",
+    level: "warn",
+    title: "Delta-introduced capabilities no page documents",
+  },
+  {
     key: "covers",
     level: "warn",
     title: "Suite citations whose wording moved",

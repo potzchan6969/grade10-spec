@@ -43,11 +43,13 @@ export function checkPages(ctx, pages) {
     const spec = page.ast.frontmatter.spec;
     if (spec !== undefined) {
       ctx.referenced.add(spec);
-      if (!ctx.specs.has(spec)) {
+      // A page may claim a capability an in-flight change is still writing —
+      // that is how an incubating capability gets a page before it lands.
+      if (!ctx.specs.has(spec) && !ctx.changing.has(spec)) {
         ctx.add(
           "reference",
           page.path,
-          `frontmatter \`spec: ${spec}\` names no spec on disk`,
+          `frontmatter \`spec: ${spec}\` names no spec on disk and no in-flight change`,
         );
       }
     }
@@ -175,16 +177,19 @@ const CAPABILITY_PAGE = /^manual\/products\/[^/]+\/(?!index\.md$)[^/]+\.md$/;
 
 /** The shelf every capability page keeps in the same order ends in acceptance,
  * and a page that states a contract without it leaves QA nothing to read. A
- * warning, never a failure: the shelf is a habit, not a pointer that rotted. */
-export function checkSkeleton(pages, add) {
+ * warning, never a failure: the shelf is a habit, not a pointer that rotted.
+ * A page claiming a spec that is still a delta is exempt — the acceptance
+ * blocks can only embed a durable spec, and the change carries its own suite. */
+export function checkSkeleton(ctx, pages) {
   for (const page of pages) {
     if (!CAPABILITY_PAGE.test(page.path)) continue;
-    if (page.ast.frontmatter.spec === undefined) continue;
+    const spec = page.ast.frontmatter.spec;
+    if (spec === undefined || !ctx.specs.has(spec)) continue;
     const shelved = [...everyBlock(page.ast.blocks)].some(
       (block) => block.type === "journeys" || block.type === "cases",
     );
     if (shelved) continue;
-    add(
+    ctx.add(
       "skeleton",
       page.path,
       "has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",

@@ -26,7 +26,8 @@
  *        in prose that names nothing, a `::figma` link off figma.com, a spec
  *        whose journeys or test cases no page shows, a scenario no case
  *        traces, a suite quoting wording the spec has since moved, a delta
- *        section the fold discards. Exits 0.
+ *        section the fold discards, a delta-introduced capability no page
+ *        documents. Exits 0.
  *
  * The readers in apps/manual/src are the only parser — this script never
  * grows a second one, so the check and the app can never disagree.
@@ -63,6 +64,7 @@ import {
   checkSpecShape,
   checkStoreErrors,
   checkTaxonomy,
+  checkUnwritten,
 } from "./check/shape.mjs";
 import { checkStale } from "./check/stale.mjs";
 
@@ -110,9 +112,10 @@ export async function runChecks(root, git) {
   }
 
   checkCoverage(ctx, shape);
+  checkUnwritten(ctx, changes, shape);
   checkAcceptance(ctx, shape);
   checkTaxonomy(root, config, shape, paths, add);
-  checkSkeleton(pages, add);
+  checkSkeleton(ctx, pages);
 
   const folded = checkSpecShape(root, shape, add);
   checkDeltas(ctx, { changes, shape, pages });

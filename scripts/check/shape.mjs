@@ -26,6 +26,27 @@ export function checkCoverage(ctx, shape) {
   }
 }
 
+/** A capability an in-flight change is introducing deserves its page before it
+ * lands — the rail otherwise shows it as an italic dead-end into the planning
+ * board. A warning, not a failure: the page is owed, not broken. */
+export function checkUnwritten(ctx, changes, shape) {
+  const seen = new Set();
+  for (const change of changes) {
+    for (const delta of change.deltas) {
+      const id = delta.spec;
+      if (shape.dirs.has(id) || ctx.referenced.has(id) || seen.has(id)) {
+        continue;
+      }
+      seen.add(id);
+      ctx.add(
+        "unwritten",
+        `openspec/changes/${change.id}/specs/${id}/spec.md`,
+        `no page names \`${id}\` — the capability shows only on the planning board`,
+      );
+    }
+  }
+}
+
 /** Disk shape decides what must have a page; `manual.yaml` may add a
  * page-only product or topic, but only one that actually has pages. */
 export function checkTaxonomy(root, config, shape, paths, add) {
