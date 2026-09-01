@@ -90,6 +90,32 @@ describe("a suite in the governance format", () => {
     );
     expect(approved.status).toBe("approved");
   });
+
+  /** A verdict carries its reviewer; the reader hands the signature over so
+   * the surfaces can show it and the check can miss it. */
+  it("reads the reviewer and date off a signed verdict", () => {
+    const signed = readTestCases(
+      suite(
+        "pending-review",
+        testCase("alpha-TC-01", "It happens", "actual").replace(
+          "- **Status:** actual",
+          "- **Status:** actual\n- **Reviewed by:** @quinn - 2026-09-01",
+        ),
+      ),
+    );
+
+    expect(signed.cases[0].reviewedBy).toBe("quinn");
+    expect(signed.cases[0].reviewedOn).toBe("2026-09-01");
+  });
+
+  it("leaves an unsigned case without an invented reviewer", () => {
+    const parsed = readTestCases(
+      suite("pending-review", testCase("alpha-TC-01", "It happens", "draft")),
+    );
+
+    expect(parsed.cases[0].reviewedBy).toBeUndefined();
+    expect(parsed.cases[0].reviewedOn).toBeUndefined();
+  });
 });
 
 describe("what a suite says about the spec beside it", () => {

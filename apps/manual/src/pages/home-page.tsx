@@ -15,6 +15,7 @@ import { browserKeyStore, STORAGE } from "../editor/config";
 import { PageActions } from "../editor/edit-actions";
 import { useEditMode } from "../editor/edit-mode";
 import { PageEditor } from "../editor/page-editor";
+import { useEditorSession } from "../editor/session";
 import { PageHeading } from "./page-heading";
 import { ProductCard } from "./product-card";
 import { useDocumentTitle } from "./use-document-title";
@@ -104,8 +105,11 @@ export function HomePage() {
 }
 
 /** One door to the tutorial, on a first visit only. It is chrome, not page
- * content: dismissing it or following it marks it answered for good. */
+ * content: dismissing it or following it marks it answered for good. The
+ * hosted build tells the truth about itself — its propose buttons are gone,
+ * so promising them to a first-time visitor would be the site's first lie. */
 function WelcomeCard() {
+  const { status, store } = useEditorSession();
   const [answered, setAnswered] = useState(
     () => browserKeyStore.get(STORAGE.welcome) !== null,
   );
@@ -116,6 +120,8 @@ function WelcomeCard() {
     setAnswered(true);
   };
 
+  const readOnly = status === "ready" && store === null;
+
   return (
     <div className="mb-8 flex items-start gap-3 rounded-(--radius-xl) border border-border bg-card p-4">
       <div className="min-w-0 flex-1">
@@ -123,8 +129,9 @@ function WelcomeCard() {
           First time here?
         </Text>
         <Text as="p" className="mt-1" size="sm" tone="secondary">
-          Every page here is a view over the spec store, and anyone can propose
-          a change from the page they are reading.
+          {readOnly
+            ? "Every page here is a view over the spec store. This hosted build is read-only; proposing a change from the page you are reading needs the locally-run manual."
+            : "Every page here is a view over the spec store, and anyone can propose a change from the page they are reading."}
         </Text>
         <Link
           className="mt-2 inline-flex text-sm underline underline-offset-2 hover:text-foreground"
@@ -175,7 +182,7 @@ function WhatsMoving() {
             <li key={change.id}>
               <Link
                 className="flex h-full flex-col gap-2 rounded-(--radius-xl) border border-border bg-card p-3.5 transition-colors hover:border-border-strong hover:bg-muted"
-                to={`/planning#${change.id}`}
+                to={`/planning/${change.id}`}
               >
                 <div className="flex items-baseline gap-2">
                   <Text

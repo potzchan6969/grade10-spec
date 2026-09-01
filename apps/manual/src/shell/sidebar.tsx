@@ -265,7 +265,7 @@ function IncubatingLink({
       className={cn(ROW, "text-secondary-foreground hover:text-foreground")}
       onClick={onNavigate}
       title={`${incubating.specId} — introduced by ${incubating.change.title}`}
-      to={`/planning#${incubating.change.id}`}
+      to={`/planning/${incubating.change.id}`}
     >
       <span className="min-w-0 flex-1 truncate italic">{incubating.title}</span>
       <CapabilityPip status="incubating" />

@@ -6,17 +6,22 @@ import { useManualIndex } from "../api/use-manual-index";
 import { useEditMode } from "./edit-mode";
 import { NewPageDialog } from "./new-page-dialog";
 import { ProposePageAction } from "./propose-actions";
+import { ReadOnlyNotice } from "./read-only-notice";
 import { useEditorSession } from "./session";
 
 /** The two ways into the editor: edit this page, or propose a change to the
- * spec this page documents. */
+ * spec this page documents. On the hosted build both are gone, and the notice
+ * stands where they would be — a promise the prose keeps making should not
+ * outlive its buttons silently. */
 
 export function PageActions({ path }: { path: string }) {
   const { store } = useEditorSession();
   const index = useManualIndex();
   const { enter } = useEditMode();
 
-  if (!store) return null;
+  if (!store) {
+    return <ReadOnlyNotice className="mb-3 text-right" />;
+  }
 
   // The header proposes about the page's own capability, so it cites the one
   // id the page names. A page without a spec proposes about nothing in

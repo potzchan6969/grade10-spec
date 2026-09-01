@@ -18,6 +18,7 @@ import { findRequirement } from "./requirements";
 import type {
   ChangeEntry,
   ChangeLane,
+  ChangeSuite,
   DeltaKind,
   DeltaRequirement,
   HistoryRef,
@@ -25,6 +26,7 @@ import type {
   PageEntry,
   Snapshot,
   SpecEntry,
+  TestCase,
   TestSuiteStatus,
 } from "./types";
 
@@ -577,7 +579,7 @@ function linked(
   if (ref.kind === "change") {
     const change = index.changeById.get(ref.id);
     return change
-      ? { label: change.title, to: `/planning#${ref.id}` }
+      ? { label: change.title, to: `/planning/${ref.id}` }
       : { label: ref.id, to: "/planning" };
   }
   if (ref.kind === "archived") return { label: ref.id, to: "/planning" };
@@ -616,7 +618,7 @@ export function qaRows(index: ManualIndex): QaRow[] {
       continue;
     }
 
-    const traced = new Set(cases.flatMap((one) => one.traces));
+    const traced = tracedBy(cases);
     const exempt = new Set(spec.outOfSuite ?? []);
     const issued = spec.requirements.flatMap((requirement) =>
       requirement.scenarios.flatMap((scenario) =>
@@ -645,6 +647,36 @@ export function qaRows(index: ManualIndex): QaRow[] {
     });
   }
   return rows.sort(byReviewFirst);
+}
+
+/** The scenarios living cases trace. A `deprecated` case is history, not
+ * coverage — counting its traces is how a scenario reads as covered after it
+ * loses its last case. */
+export function tracedBy(cases: TestCase[]): Set<string> {
+  return new Set(
+    cases
+      .filter((one) => one.status !== "deprecated")
+      .flatMap((one) => one.traces),
+  );
+}
+
+/** A suite riding an in-flight change, beside the change that carries it — the
+ * work `/qa`'s capability rows cannot see, because the capability may not
+ * exist durably yet. Drafts first: they are what a reviewer is here for. */
+export type ChangeSuiteRow = { change: ChangeEntry; suite: ChangeSuite };
+
+export function changeSuiteRows(index: ManualIndex): ChangeSuiteRow[] {
+  const rows: ChangeSuiteRow[] = [];
+  for (const change of index.snapshot.changes) {
+    for (const suite of change.suites ?? []) rows.push({ change, suite });
+  }
+  return rows.sort(
+    (a, b) =>
+      Number(Boolean(b.suite.error)) - Number(Boolean(a.suite.error)) ||
+      b.suite.cases.draft - a.suite.cases.draft ||
+      a.change.id.localeCompare(b.change.id) ||
+      a.suite.spec.localeCompare(b.suite.spec),
+  );
 }
 
 /** A suite nobody can read comes first — nothing else about it is knowable.

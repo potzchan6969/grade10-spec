@@ -1,7 +1,12 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Text } from "@grade10/design-system/components/display/text";
-import { ArrowSquareOut, FigmaLogo, Play } from "@phosphor-icons/react";
+import {
+  ArrowSquareOut,
+  FigmaLogo,
+  Play,
+  WarningDiamond,
+} from "@phosphor-icons/react";
 import { Link } from "react-router";
 import {
   type DesignCard,
@@ -13,6 +18,7 @@ import type { DesignSyncReport } from "../api/types";
 import { useManualIndex } from "../api/use-manual-index";
 import { designSyncOf, designSyncOfFrame } from "../blocks/design-drift";
 import { VerdictChip } from "../blocks/embed-block";
+import { ReadOnlyNotice } from "../editor/read-only-notice";
 import { PageHeading } from "./page-heading";
 import { useDocumentTitle } from "./use-document-title";
 
@@ -31,6 +37,7 @@ export function DesignPage() {
 
   return (
     <>
+      <ReadOnlyNotice className="mb-3 text-right" />
       <PageHeading
         summary="Every Figma frame and Storybook story the manual shows, and what the nightly check said about it."
         title="Design"
@@ -49,6 +56,7 @@ export function DesignPage() {
             {shelves.length === 1 ? "page" : "pages"}
             {report ? ` · last checked ${report.generatedAt.slice(0, 10)}` : ""}
           </Text>
+          {report ? null : <NoReportNotice />}
           <div className="mt-5 space-y-6">
             {shelves.map((shelf) => (
               <Shelf key={shelf.route} report={report} shelf={shelf} />
@@ -57,6 +65,31 @@ export function DesignPage() {
         </>
       )}
     </>
+  );
+}
+
+/**
+ * The page's own rule, applied to itself: a run that checked nothing must not
+ * look like a clean run. Without a report every card below renders no verdict,
+ * and that silence used to be indistinguishable from "checked and fine" — the
+ * exact failure the design-sync rail exists to prevent.
+ */
+function NoReportNotice() {
+  return (
+    <div className="mt-3 flex items-baseline gap-2 rounded-(--radius-xl) border border-warning/40 bg-warning/8 px-4 py-2.5">
+      <span className="inline-flex translate-y-0.5 text-warning">
+        <WarningDiamond aria-hidden size={14} weight="fill" />
+      </span>
+      <Text as="p" size="sm">
+        No nightly report found — nothing below has been checked, so a missing
+        badge means unchecked, not fine. The nightly design-sync run commits{" "}
+        <code className="font-mono text-xs">.design-sync/report.json</code>;{" "}
+        <code className="font-mono text-xs">
+          pnpm run design-sync:check --report .design-sync/report.json
+        </code>{" "}
+        writes one by hand.
+      </Text>
+    </div>
   );
 }
 

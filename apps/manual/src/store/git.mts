@@ -1,6 +1,6 @@
 import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
-import type { CommitInfo, HistoryEvent } from "../api/types.ts";
+import type { CommitInfo, HistoryEvent, MainState } from "../api/types.ts";
 import { refsOf } from "./history.mts";
 
 const run = promisify(execFile);
@@ -180,6 +180,92 @@ function catFile(root: string, refs: string[]): Promise<Buffer> {
     });
     child.stdin.end(`${refs.join("\n")}\n`);
   });
+}
+
+/** A git call whose empty answer is an answer — a ref that does not exist, a
+ * tree with nothing in it — rather than a reason to fail the build. */
+async function tryGit(root: string, args: string[]): Promise<string | null> {
+  try {
+    return await git(root, args);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The store's shared branch as a remote-tracking ref, read from `origin/HEAD`
+ * because which branch a store calls main is the store's decision. Null for a
+ * clone with no remote — there is then no shared branch to compare against.
+ */
+async function mainRef(root: string): Promise<string | null> {
+  const head = await tryGit(root, [
+    "symbolic-ref",
+    "--quiet",
+    "refs/remotes/origin/HEAD",
+  ]);
+  if (head?.trim()) return head.trim().replace(/^refs\/remotes\//, "");
+  const fallback = await tryGit(root, [
+    "rev-parse",
+    "--verify",
+    "--quiet",
+    "origin/main",
+  ]);
+  return fallback?.trim() ? "origin/main" : null;
+}
+
+const CHANGES_DIR = "openspec/changes";
+
+/**
+ * Where each in-flight change stands against the store's main — the terminal
+ * board prints this and the browser used to hide it, which left three of four
+ * "Complete" cards silently unarchivable. Same convention as the application
+ * repo's `plan.mjs`: `tasks.md` is excluded from the divergence count because
+ * claim and done churn it by design. Reads the refs the clone already has;
+ * fetching is `pnpm plan sync`'s job, not a build's.
+ */
+export async function readMainStates(
+  root: string,
+  ids: string[],
+): Promise<Map<string, MainState>> {
+  const states = new Map<string, MainState>();
+  if (ids.length === 0) return states;
+  const ref = await mainRef(root);
+  if (!ref) return states;
+
+  const onMain = new Set(
+    (
+      (await tryGit(root, [
+        "ls-tree",
+        "--name-only",
+        `${ref}:${CHANGES_DIR}`,
+      ])) ?? ""
+    )
+      .split("\n")
+      .filter(Boolean),
+  );
+  const ahead = [
+    await tryGit(root, ["diff", "--name-only", ref, "--", CHANGES_DIR]),
+    await tryGit(root, [
+      "ls-files",
+      "--others",
+      "--exclude-standard",
+      "--",
+      CHANGES_DIR,
+    ]),
+  ].flatMap((out) => (out ?? "").split("\n").filter(Boolean));
+
+  for (const id of ids) {
+    if (!onMain.has(id)) {
+      states.set(id, { state: "unmerged", ref });
+      continue;
+    }
+    const prefix = `${CHANGES_DIR}/${id}/`;
+    const files = ahead.filter(
+      (file) => file.startsWith(prefix) && file !== `${prefix}tasks.md`,
+    ).length;
+    if (files > 0) states.set(id, { state: "diverged", ref, files });
+  }
+  return states;
 }
 
 let warned = false;

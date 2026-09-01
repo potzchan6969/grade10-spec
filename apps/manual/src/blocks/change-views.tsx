@@ -27,10 +27,14 @@ export function TaskProgress({
   done,
   total,
   label,
+  owner,
 }: {
   done: number;
   total: number;
   label?: string;
+  /** Who claimed this group — `@handle`, or the word for nobody. Groups are
+   * what gets claimed, so the name belongs on the group's own row. */
+  owner?: string;
 }) {
   const share = total === 0 ? 0 : Math.round((done / total) * 100);
   return (
@@ -39,9 +43,16 @@ export function TaskProgress({
         <Text as="span" size="xs" tone="secondary">
           {label ?? "Tasks"}
         </Text>
-        <Text as="span" className="font-mono" size="xs" tone="secondary">
-          {done}/{total}
-        </Text>
+        <span className="flex items-baseline gap-2">
+          {owner ? (
+            <Text as="span" className="font-mono" size="xs" tone="secondary">
+              {owner}
+            </Text>
+          ) : null}
+          <Text as="span" className="font-mono" size="xs" tone="secondary">
+            {done}/{total}
+          </Text>
+        </span>
       </div>
       <div
         aria-label={`${done} of ${total} tasks done`}
@@ -84,7 +95,9 @@ export function DeltaKinds({ kinds }: { kinds: string[] }) {
  * Who to name on a change. Owners come from `.openspec.yaml` and the tasks'
  * `(owner: @handle)` tags, and most changes carry none — so the proposal's
  * author stands in, said lighter, because proposing is not owning. `claim`
- * adds the word a review needs: nobody has picked this up.
+ * adds the word a review needs: no group has been claimed. The promoter is
+ * named too — a promoted card that still read "unclaimed · proposed by" told
+ * its author nothing had happened.
  */
 export function Attribution({
   change,
@@ -93,24 +106,36 @@ export function Attribution({
   change: ChangeEntry;
   claim?: boolean;
 }) {
+  const planned =
+    change.promotedBy && !change.owners.includes(change.promotedBy) ? (
+      <>
+        {" "}
+        · planned by <span className="font-mono">@{change.promotedBy}</span>
+      </>
+    ) : null;
+
   if (change.owners.length > 0) {
     return (
-      <Text as="span" className="font-mono" size="xs" tone="secondary">
-        {change.owners.map((owner) => `@${owner}`).join(" ")}
+      <Text as="span" size="xs" tone="secondary">
+        <span className="font-mono">
+          {change.owners.map((owner) => `@${owner}`).join(" ")}
+        </span>
+        {planned}
       </Text>
     );
   }
   if (change.author) {
     return (
       <Text as="span" size="xs" tone="secondary">
-        {claim ? "unclaimed · " : ""}proposed by{" "}
+        {claim ? "no group claimed · " : ""}proposed by{" "}
         <span className="font-mono">@{change.author}</span>
+        {planned}
       </Text>
     );
   }
   return (
     <Text as="span" size="xs" tone="secondary">
-      unclaimed
+      unclaimed{planned}
     </Text>
   );
 }
@@ -135,7 +160,7 @@ export function ChangeChip({ change }: { change: ChangeEntry }) {
 
       <Link
         className="font-medium text-sm hover:underline"
-        to={`/planning#${change.id}`}
+        to={`/planning/${change.id}`}
       >
         <InlineMarkdown text={change.title} />
       </Link>
@@ -216,7 +241,7 @@ function ProposedChip({ change }: { change: ChangeEntry }) {
   return (
     <Link
       className="flex flex-wrap items-baseline gap-x-2 gap-y-1 rounded-(--radius-xl) border border-border-subtle border-dashed bg-background-subtle px-3 py-2 transition-colors hover:border-border-strong hover:bg-muted"
-      to={`/planning#${change.id}`}
+      to={`/planning/${change.id}`}
     >
       <Badge size="sm" variant="outline">
         proposed

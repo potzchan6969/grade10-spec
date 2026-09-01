@@ -2,12 +2,13 @@ import { join } from "node:path";
 import type {
   Archive,
   CheckWarning,
+  MainState,
   Snapshot,
   SpecEntry,
 } from "../api/types.ts";
 import { DESIGN_SYNC_REPORT, readDesignSync } from "./design-sync.mts";
 import { newestMtime } from "./disk.mts";
-import { type GitIndex, readGitIndex } from "./git.mts";
+import { type GitIndex, readGitIndex, readMainStates } from "./git.mts";
 import {
   readArchivedChanges,
   readChanges,
@@ -29,7 +30,24 @@ const TRACKED = ["openspec", "manual"];
 
 export async function readStore(root: string): Promise<Store> {
   const git = await readGitIndex(root, TRACKED);
-  return composeStore(root, git, await checkWarnings(root, git));
+  const store = composeStore(root, git, await checkWarnings(root, git));
+  await markMainStates(root, store);
+  return store;
+}
+
+/** Where each change stands against the store's main — async because it asks
+ * git, so the sync compose stays usable and a caller without a clone (tests,
+ * the preview server) simply carries no state. */
+async function markMainStates(root: string, store: Store): Promise<void> {
+  const changes = store.snapshot.changes;
+  const states: Map<string, MainState> = await readMainStates(
+    root,
+    changes.map((change) => change.id),
+  );
+  for (const change of changes) {
+    const state = states.get(change.id);
+    if (state) change.mainState = state;
+  }
 }
 
 export function composeStore(

@@ -1,9 +1,9 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter } from "react-router";
 import { describe, expect, it, vi } from "vitest";
-import { buildIndex, qaRows } from "../src/api/derive";
+import { buildIndex, changeSuiteRows, qaRows } from "../src/api/derive";
 import type { SpecEntry, TestCase } from "../src/api/types";
-import { pageEntry, snapshotOf } from "./manual-fixture";
+import { changeEntry, pageEntry, snapshotOf } from "./manual-fixture";
 
 /** The reviewer's worklist. A reviewer's only way to find work was knowing
  * which capability page to open; this is one derivation over the snapshot, and
@@ -171,6 +171,69 @@ describe("what the worklist is a list of", () => {
     );
 
     expect(qaRows(broken)[0].spec.id).toBe("demo/settled");
+  });
+});
+
+/** A retired case's traces are history, not coverage — the number has to be
+ * able to go down when a scenario loses its last living case. */
+describe("coverage after a retirement", () => {
+  it("stops counting a deprecated case's traces", () => {
+    const retired = buildIndex(
+      snapshotOf({
+        specs: [
+          spec("demo/holey", {
+            testCasesStatus: "pending-review",
+            testCases: [testCase("holey-TC-01", "deprecated", ["holey-SC-01"])],
+          }),
+        ],
+      }),
+    );
+    const row = qaRows(retired)[0];
+
+    expect(row.covered).toBe(0);
+    expect(row.untraced).toContain("holey-SC-01");
+  });
+});
+
+/** The suite riding an in-flight change was invisible on every QA surface —
+ * the one place a PM explicitly asks for a review had no worklist entry. */
+describe("suites riding in-flight changes", () => {
+  const carrying = changeEntry("add-storage-plans", [], {
+    title: "Paid storage plans",
+    suites: [
+      {
+        spec: "vault/storage-billing",
+        status: "pending-review",
+        cases: { draft: 14, actual: 5, deprecated: 0, total: 19 },
+      },
+    ],
+  });
+  const withChange = buildIndex(
+    snapshotOf({ specs: [settled], changes: [carrying] }),
+  );
+
+  it("lists each change suite with its counts, drafts first", () => {
+    const rows = changeSuiteRows(withChange);
+
+    expect(rows).toHaveLength(1);
+    expect(rows[0].suite.spec).toBe("vault/storage-billing");
+    expect(rows[0].change.id).toBe("add-storage-plans");
+  });
+
+  it("renders them on the page, linked to the change, with the review command", () => {
+    held.index = withChange;
+    const html = renderToStaticMarkup(
+      <MemoryRouter>
+        <QaPage />
+      </MemoryRouter>,
+    );
+    held.index = index;
+
+    expect(html).toContain("In flight");
+    expect(html).toContain('href="/planning/add-storage-plans"');
+    expect(html).toContain("14 draft");
+    expect(html).toContain("5 actual");
+    expect(html).toContain("/tcs-review add-storage-plans");
   });
 });
 

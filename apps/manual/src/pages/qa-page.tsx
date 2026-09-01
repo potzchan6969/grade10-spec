@@ -4,9 +4,16 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { ClipboardText, Warning } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Link } from "react-router";
-import { type QaRow, qaRows } from "../api/derive";
+import {
+  type ChangeSuiteRow,
+  changeSuiteRows,
+  type QaRow,
+  qaRows,
+} from "../api/derive";
 import { specTitle } from "../api/paths";
 import { useManualIndex } from "../api/use-manual-index";
+import { CopyableCommand } from "../blocks/change-detail";
+import { InlineMarkdown } from "../blocks/inline-markdown";
 import { PageHeading } from "./page-heading";
 import { useDocumentTitle } from "./use-document-title";
 
@@ -16,22 +23,25 @@ import { useDocumentTitle } from "./use-document-title";
  * screen answered before: what is pending across the platform, and which
  * capability do I open first.
  *
- * Order is the answer: a suite nobody can read, then drafts nobody has stood
+ * Order is the answer: the suites riding in-flight changes first — they are
+ * where a PM is actually waiting on a review, and no capability page can show
+ * them yet — then a suite nobody can read, then drafts nobody has stood
  * behind, then scenarios no case traces.
  */
 export function QaPage() {
   const index = useManualIndex();
   useDocumentTitle("QA");
   const rows = qaRows(index);
+  const inFlight = changeSuiteRows(index);
 
   return (
     <>
       <PageHeading
-        summary="Every capability that has claimed acceptance, hardest review first."
+        summary="Every suite awaiting review — riding a change or beside a durable capability — hardest review first."
         title="QA"
       />
 
-      {rows.length === 0 ? (
+      {rows.length === 0 && inFlight.length === 0 ? (
         <EmptyState
           description="No capability in this snapshot carries journeys or a test-case suite."
           icon={<ClipboardText aria-hidden />}
@@ -39,30 +49,151 @@ export function QaPage() {
         />
       ) : (
         <>
-          <Totals rows={rows} />
-          <ul className="mt-5 space-y-2.5">
-            {rows.map((row) => (
-              <li key={row.spec.id}>
-                <QaRowCard row={row} />
-              </li>
-            ))}
-          </ul>
+          <Totals inFlight={inFlight} rows={rows} />
+          <Text as="p" className="mt-1" size="xs" tone="secondary">
+            A review is the whole loop today: `approved` is the record the build
+            holds a suite to — no runner or export consumes it yet.
+          </Text>
+          <InFlightSuites rows={inFlight} />
+          {rows.length > 0 ? (
+            <>
+              <h2 className="mt-7 mb-2.5 font-heading font-bold text-base">
+                Capabilities
+              </h2>
+              <ul className="space-y-2.5">
+                {rows.map((row) => (
+                  <li key={row.spec.id}>
+                    <QaRowCard row={row} />
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null}
         </>
       )}
     </>
   );
 }
 
-function Totals({ rows }: { rows: QaRow[] }) {
-  const draft = rows.reduce((sum, row) => sum + row.cases.draft, 0);
-  const actual = rows.reduce((sum, row) => sum + row.cases.actual, 0);
+/**
+ * Suites sitting beside an in-flight change's deltas. The capability may not
+ * exist durably yet, so this is the one surface that can show them — without
+ * it, a 19-case suite a PM asked QA to review read as "1 suite" platform-wide.
+ */
+function InFlightSuites({ rows }: { rows: ChangeSuiteRow[] }) {
+  if (rows.length === 0) return null;
+
+  return (
+    <>
+      <h2 className="mt-7 mb-2.5 font-heading font-bold text-base">
+        In flight
+      </h2>
+      <ul className="space-y-2.5">
+        {rows.map(({ change, suite }) => (
+          <li key={`${change.id}/${suite.spec}`}>
+            <article className="rounded-(--radius-2xl) border border-border bg-card p-3.5">
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <Link
+                  className="font-medium text-sm hover:underline"
+                  to={`/planning/${change.id}`}
+                >
+                  <InlineMarkdown text={change.title} />
+                </Link>
+                <Text
+                  as="span"
+                  className="font-mono"
+                  size="xs"
+                  tone="secondary"
+                >
+                  {suite.spec}
+                </Text>
+                <span className="ml-auto">
+                  {suite.error ? (
+                    <Badge size="sm" variant="error">
+                      unreadable
+                    </Badge>
+                  ) : (
+                    <Badge
+                      size="sm"
+                      variant={
+                        suite.status === "approved" ? "success" : "warning"
+                      }
+                    >
+                      {suite.status}
+                    </Badge>
+                  )}
+                </span>
+              </div>
+
+              {suite.error ? (
+                <div className="mt-2 flex items-baseline gap-1.5 text-destructive">
+                  <Warning aria-hidden size={13} weight="fill" />
+                  <Text as="span" size="xs">
+                    {suite.error.file}
+                    {suite.error.line ? `:${suite.error.line}` : ""} —{" "}
+                    {suite.error.message}
+                  </Text>
+                </div>
+              ) : (
+                <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                  <Text as="span" size="xs" tone="secondary">
+                    {suite.cases.total}{" "}
+                    {suite.cases.total === 1 ? "case" : "cases"}
+                  </Text>
+                  {suite.cases.draft > 0 ? (
+                    <Badge size="sm" variant="warning">
+                      {suite.cases.draft} draft
+                    </Badge>
+                  ) : null}
+                  {suite.cases.actual > 0 ? (
+                    <Badge size="sm" variant="success">
+                      {suite.cases.actual} actual
+                    </Badge>
+                  ) : null}
+                  {suite.cases.deprecated > 0 ? (
+                    <Badge size="sm" variant="outline">
+                      {suite.cases.deprecated} deprecated
+                    </Badge>
+                  ) : null}
+                  {suite.cases.draft > 0 ? (
+                    <span className="ml-auto">
+                      <CopyableCommand command={`/tcs-review ${change.id}`} />
+                    </span>
+                  ) : null}
+                </div>
+              )}
+            </article>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+function Totals({
+  rows,
+  inFlight,
+}: {
+  rows: QaRow[];
+  inFlight: ChangeSuiteRow[];
+}) {
+  const draft =
+    rows.reduce((sum, row) => sum + row.cases.draft, 0) +
+    inFlight.reduce((sum, row) => sum + row.suite.cases.draft, 0);
+  const actual =
+    rows.reduce((sum, row) => sum + row.cases.actual, 0) +
+    inFlight.reduce((sum, row) => sum + row.suite.cases.actual, 0);
   const covered = rows.reduce((sum, row) => sum + row.covered, 0);
   const countable = rows.reduce((sum, row) => sum + row.countable, 0);
-  const suites = rows.filter((row) => row.cases.total > 0).length;
+  const suites =
+    rows.filter((row) => row.cases.total > 0).length + inFlight.length;
 
   return (
     <Text as="p" size="sm" tone="secondary">
-      {rows.length} capabilities · {suites} {suites === 1 ? "suite" : "suites"}{" "}
+      {rows.length} capabilities · {suites} {suites === 1 ? "suite" : "suites"}
+      {inFlight.length > 0
+        ? ` (${inFlight.length} riding ${inFlight.length === 1 ? "a change" : "changes"})`
+        : ""}{" "}
       · {draft} draft {draft === 1 ? "case" : "cases"} waiting on a review ·{" "}
       {actual} reviewed · {covered} of {countable} scenarios traced
     </Text>

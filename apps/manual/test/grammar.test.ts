@@ -32,6 +32,10 @@ const canonical: { name: string; text: string }[] = [
     text: `${fm}\n:::callout{kind="note"}\n:::\n`,
   },
   {
+    name: "signed warning callout",
+    text: `${fm}\n:::callout{kind="warning" author="@echo" date="2026-08-30"}\nWhat ships and what the spec says have parted company here.\n:::\n`,
+  },
+  {
     name: "fence hides directives",
     text: `${fm}\nThe grammar looks like:\n\n\`\`\`css\n::before { content: ""; }\n:::callout{kind="note"}\n\`\`\`\n`,
   },
@@ -185,6 +189,16 @@ const errors: { name: string; input: string; message: RegExp }[] = [
     name: "bad detail audience",
     input: `${fm}\n:::detail{title="X" for="cfo"}\n:::\n`,
     message: /one of pm, designer, qa, engineer, operator/,
+  },
+  {
+    name: "callout author without the @",
+    input: `${fm}\n:::callout{kind="warning" author="echo"}\n:::\n`,
+    message: /GitHub handle with the @/,
+  },
+  {
+    name: "callout date that is not a date",
+    input: `${fm}\n:::callout{kind="warning" author="@echo" date="yesterday"}\n:::\n`,
+    message: /`date` is `YYYY-MM-DD`/,
   },
   {
     name: "non-integer story height",

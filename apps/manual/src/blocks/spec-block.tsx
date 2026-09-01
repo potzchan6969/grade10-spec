@@ -314,7 +314,7 @@ function ChangeBadge({
     <Link
       className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-border-subtle bg-background-subtle py-0.5 pr-2 pl-0.5 transition-colors hover:border-border-strong hover:bg-muted"
       title={`${change.title} — this requirement is ${kind}`}
-      to={`/planning#${change.id}`}
+      to={`/planning/${change.id}`}
     >
       <Badge size="sm" variant={deltaTone(kind)}>
         {kind}

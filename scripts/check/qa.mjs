@@ -56,8 +56,11 @@ function checkSuite(ctx, spec, dir) {
   if (spec.testCasesError || !existsSync(join(ctx.root, file))) return;
   const suite = suiteOf(spec);
   const issued = scenarioIds(spec);
+  // Living cases only: a deprecated case is history, and counting its traces
+  // is how a scenario read as covered after it lost its last case.
   const traced = new Map();
   for (const test of suite.cases) {
+    if (test.status === "deprecated") continue;
     for (const trace of test.traces) traced.set(trace, test.id);
   }
 
@@ -65,6 +68,7 @@ function checkSuite(ctx, spec, dir) {
   checkAuthority(ctx, file, suite);
   checkCoverage(ctx, file, spec, suite, issued, traced);
   checkCovers(ctx, file, spec, suite);
+  checkSigned(ctx, file, suite);
 
   if (!ctx.cased.has(spec.id)) {
     ctx.add(
@@ -162,6 +166,22 @@ function checkCovers(ctx, file, spec, suite) {
       "covers",
       file,
       `\`**Covers:**\` quotes \`${cite.id}\` as “${cite.title}” and the spec now reads “${name}” — re-review the cases under it, or update the quote`,
+    );
+  }
+}
+
+/** RULE `signed`: a verdict is a person standing behind a case, so `actual`
+ * and `deprecated` carry who and when — `**Reviewed by:** @handle - date`.
+ * Without it, "who approved this" is unanswerable, which is the one question
+ * an audit of a sign-off consists of. */
+function checkSigned(ctx, file, suite) {
+  for (const test of suite.cases) {
+    if (test.status === "draft") continue;
+    if (test.reviewedBy && test.reviewedOn) continue;
+    ctx.add(
+      "signed",
+      file,
+      `${test.id} is \`${test.status}\` with no \`**Reviewed by:** @handle - YYYY-MM-DD\` — a verdict carries its reviewer`,
     );
   }
 }

@@ -73,6 +73,11 @@ export type TestCase = {
   /** Scenario ids this case traces to. */
   traces: string[];
   status: TestCaseStatus;
+  /** Handle from the case's `**Reviewed by:**` line — who stood behind the
+   * verdict, and when. A verdict without one is unsigned, and `check:manual`
+   * says so. */
+  reviewedBy?: string;
+  reviewedOn?: string;
 };
 
 /** The suite file's own status — a summary of its cases, never an
@@ -126,6 +131,9 @@ export type TaskLine = {
 export type TaskGroup = {
   title: string;
   repo: string;
+  /** Handle from the heading's `(owner: @handle)` tag — who claimed the
+   * group, which the card-level owner list cannot say. */
+  owner?: string;
   done: number;
   total: number;
   tasks?: TaskLine[];
@@ -158,6 +166,32 @@ export type Delta = {
 
 export type ChangeStatus = "in-flight" | "archived";
 
+/** A `test-cases.md` sitting beside one of a change's delta specs — the suite
+ * QA reviews while the change is still in flight, which no durable capability
+ * page can show yet. */
+export type ChangeSuite = {
+  /** The spec id the suite belongs to. */
+  spec: string;
+  status?: TestSuiteStatus;
+  cases: { draft: number; actual: number; deprecated: number; total: number };
+  error?: ItemError;
+};
+
+/**
+ * Where a change stands against the store's shared branch. The plan is read at
+ * `origin/main`, so a change that is not settled there cannot be claimed or
+ * archived — carried only when that is the case, read from the refs the clone
+ * already has (the build never fetches).
+ */
+export type MainState = {
+  state: "unmerged" | "diverged";
+  /** The remote-tracking ref compared against, e.g. `origin/main`. */
+  ref: string;
+  /** Diverged only: files of this change ahead of the ref, `tasks.md`
+   * excluded — claim and done churn it by design. */
+  files?: number;
+};
+
 /** Where a change stands, derived and never stored: `proposed` has no
  * deltas yet, `specified` has deltas and no task list, `in-progress` has
  * open tasks, `complete` has finished them all and awaits the archive. */
@@ -174,6 +208,9 @@ export type ChangeEntry = {
   /** Handle from the proposal's `**Author:**` line — who proposed it, which
    * is not who owns it. Named only when no owner claimed a task. */
   author?: string;
+  /** Handle from `.openspec.yaml` `promoted_by:` — the engineer who promoted
+   * a pm-planning change and wrote its delivery plan. */
+  promotedBy?: string;
   created: string;
   /** Optional `target:` date from `.openspec.yaml`. */
   target?: string;
@@ -190,6 +227,10 @@ export type ChangeEntry = {
    * pm-planning change with no tasks.md still moves. */
   lastMoved?: string;
   deltas: Delta[];
+  /** In-flight only: the suites sitting beside this change's deltas. */
+  suites?: ChangeSuite[];
+  /** Carried only when the change is not settled on the store's main. */
+  mainState?: MainState;
   /** Set when a file was malformed; content fields may be incomplete. */
   error?: ItemError;
 };

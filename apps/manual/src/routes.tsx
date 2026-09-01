@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import { CapabilityPage } from "./pages/capability-page";
+import { ChangePage } from "./pages/change-page";
 import { DesignPage } from "./pages/design-page";
 import { GuidePage } from "./pages/guide-page";
 import { HomePage } from "./pages/home-page";
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
       { path: "platform/:topic", element: <PlatformPage /> },
       { path: "guides/:slug", element: <GuidePage /> },
       { path: "planning", element: <PlanningPage /> },
+      { path: "planning/:change", element: <ChangePage /> },
       { path: "qa", element: <QaPage /> },
       { path: "design", element: <DesignPage /> },
       { path: "recent", element: <RecentPage /> },

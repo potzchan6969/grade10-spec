@@ -113,6 +113,16 @@ export const RULES = [
     level: "warn",
     title: "Suite citations whose wording moved",
   },
+  {
+    key: "signed",
+    level: "warn",
+    title: "Reviewed cases carrying no reviewer or date",
+  },
+  {
+    key: "callout",
+    level: "warn",
+    title: "Warning callouts carrying no author or date",
+  },
 ];
 
 const LEVEL = new Map(RULES.map((rule) => [rule.key, rule.level]));

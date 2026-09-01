@@ -4,6 +4,7 @@ import YAML from "yaml";
 import type {
   ChangeEntry,
   ChangeStatus,
+  ChangeSuite,
   Delta,
   DeltaKind,
   DeltaRequirement,
@@ -20,6 +21,7 @@ import {
 } from "./disk.mts";
 import type { GitIndex } from "./git.mts";
 import { leadingTitle, outline, type Section } from "./markdown.mts";
+import { readTestCases } from "./read-specs.mts";
 
 const OWNER = /\(owner:\s*@([A-Za-z0-9][A-Za-z0-9_-]*)\)/g;
 const OWNER_TAG = new RegExp(OWNER.source);
@@ -103,6 +105,8 @@ function readChange(
       }
       const fields = parsed as Record<string, unknown>;
       if (typeof fields.schema === "string") entry.schema = fields.schema;
+      const promoted = handles([fields.promoted_by])[0];
+      if (promoted) entry.promotedBy = promoted;
       const created = isoDate(fields.created);
       if (created) entry.created = created;
       const target = isoDate(fields.target);
@@ -151,7 +155,44 @@ function readChange(
   }
 
   entry.deltas = readDeltas(root, dir, detailed, fail);
+  if (detailed) {
+    const suites = readSuites(root, dir);
+    if (suites.length > 0) entry.suites = suites;
+  }
   return entry;
+}
+
+/** The `test-cases.md` beside each delta — the suite QA reviews while the
+ * change is in flight, invisible on every durable surface until archive day.
+ * A malformed one is its own channel, the same as a durable suite's. */
+function readSuites(root: string, dir: string): ChangeSuite[] {
+  const suites: ChangeSuite[] = [];
+  for (const { spec, file } of deltaFiles(root, dir)) {
+    const casesFile = file.replace(/spec\.md$/, "test-cases.md");
+    const text = readTextIfExists(join(root, casesFile));
+    if (text === undefined) continue;
+    try {
+      const suite = readTestCases(text);
+      suites.push({
+        spec,
+        status: suite.status,
+        cases: {
+          draft: suite.cases.filter((one) => one.status === "draft").length,
+          actual: suite.cases.filter((one) => one.status === "actual").length,
+          deprecated: suite.cases.filter((one) => one.status === "deprecated")
+            .length,
+          total: suite.cases.length,
+        },
+      });
+    } catch (cause) {
+      suites.push({
+        spec,
+        cases: { draft: 0, actual: 0, deprecated: 0, total: 0 },
+        error: toItemError(casesFile, cause),
+      });
+    }
+  }
+  return suites;
 }
 
 /** `YYYY-MM-DD`, however the yaml spelled it — a bare date is a `Date` by the
@@ -209,12 +250,14 @@ function readTaskGroups(text: string, detailed: boolean): TaskGroup[] {
         visit(section.children);
         continue;
       }
+      const owner = OWNER_TAG.exec(match[1])?.[1];
       const title = match[1].replace(OWNER, "").trimEnd();
       const repo = REPO_TAG.exec(title);
       const tasks = readTaskLines(section.raw);
       groups.push({
         title: repo ? title.slice(0, repo.index).trimEnd() : title,
         repo: repo ? repo[1].trim() : "",
+        ...(owner ? { owner } : {}),
         done: tasks.filter((task) => task.done).length,
         total: tasks.length,
         ...(detailed ? { tasks } : {}),

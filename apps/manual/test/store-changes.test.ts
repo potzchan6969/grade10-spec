@@ -200,6 +200,70 @@ describe("a delta that groups, renames, and spaces its headings", () => {
   });
 });
 
+describe("a promoted change carrying its suites", () => {
+  const [entry] = readChanges(
+    writeStore({
+      "openspec/changes/promoted-thing/.openspec.yaml":
+        "schema: full-planning\npromoted_by: '@devon'\ncreated: 2026-01-01\n",
+      "openspec/changes/promoted-thing/proposal.md":
+        "# Promoted thing\n\n**Author:** @priya - 2026-01-01\n\n## Why\n\nIt was time.\n",
+      "openspec/changes/promoted-thing/specs/demo-product/alpha/spec.md":
+        "## ADDED Requirements\n\n### Requirement: A\n\nThe system SHALL a.\n",
+      "openspec/changes/promoted-thing/specs/demo-product/alpha/test-cases.md":
+        [
+          "# Alpha test cases",
+          "",
+          "**Status:** pending-review",
+          "",
+          "### alpha-TC-01: It happens",
+          "",
+          "- **Status:** actual",
+          "- **Trace:** alpha-SC-01",
+          "",
+          "### alpha-TC-02: It happens again",
+          "",
+          "- **Status:** draft",
+          "- **Trace:** alpha-SC-01",
+          "",
+        ].join("\n"),
+    }),
+    NO_GIT,
+  );
+
+  it("names the promoter from .openspec.yaml", () => {
+    expect(entry.promotedBy).toBe("devon");
+  });
+
+  it("counts the suite beside each delta", () => {
+    expect(entry.suites).toEqual([
+      {
+        spec: "demo-product/alpha",
+        status: "pending-review",
+        cases: { draft: 1, actual: 1, deprecated: 0, total: 2 },
+      },
+    ]);
+  });
+
+  /** The suite is QA's file: one it cannot parse stays its own finding and
+   * never takes the change's card down. */
+  it("contains a malformed suite as the suite's own error", () => {
+    const [broken] = readChanges(
+      writeStore({
+        "openspec/changes/broken-suite/proposal.md":
+          "# Broken suite\n\n## Why\n\nStill readable.\n",
+        "openspec/changes/broken-suite/specs/demo-product/alpha/spec.md":
+          "## ADDED Requirements\n\n### Requirement: A\n\nThe system SHALL a.\n",
+        "openspec/changes/broken-suite/specs/demo-product/alpha/test-cases.md":
+          "# No status here\n",
+      }),
+      NO_GIT,
+    );
+
+    expect(broken.error).toBeUndefined();
+    expect(broken.suites?.[0].error?.message).toContain("**Status:**");
+  });
+});
+
 describe("an author line without a date", () => {
   const [entry] = readChanges(
     writeStore({

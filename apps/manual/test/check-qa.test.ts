@@ -58,7 +58,7 @@ const specText = ({
     ...scenarios.flatMap(([id, name]) => scenario(id, name)),
   ].join("\n");
 
-type CaseLine = [id: string, status: string, trace: string];
+type CaseLine = [id: string, status: string, trace: string, reviewed?: string];
 
 const suiteText = ({
   status = "pending-review",
@@ -84,12 +84,13 @@ const suiteText = ({
           "",
         ]
       : []),
-    ...cases.flatMap(([id, caseStatus, trace]) => [
+    ...cases.flatMap(([id, caseStatus, trace, reviewed]) => [
       `### ${id}: Alpha is asked`,
       "",
       "**Properties:**",
       "",
       `- **Status:** ${caseStatus}`,
+      ...(reviewed ? [`- **Reviewed by:** ${reviewed}`] : []),
       `- **Trace:** ${trace}`,
       "",
     ]),
@@ -264,6 +265,66 @@ describe("scenarios no case traces", () => {
     expect(lines(await check(root), "coverage")).toEqual([
       `${CASES_FILE} — \`alpha-SC-99\` is listed out of suite, and \`demo-product/alpha\` issues no such scenario`,
     ]);
+  });
+});
+
+/** A deprecated case is history, not coverage. A coverage number that cannot
+ * go down when a case is retired is decoration. */
+describe("coverage when a scenario loses its last living case", () => {
+  it("reopens the hole a retired case leaves", async () => {
+    const root = store({
+      cases: suiteText({
+        cases: [
+          ["alpha-TC-01", "deprecated", "alpha-SC-01", "@quinn - 2026-09-01"],
+        ],
+      }),
+    });
+    expect(lines(await check(root), "coverage")).toEqual([
+      `${CASES_FILE} — no case traces alpha-SC-01 — cover them, or list them under \`**Out of suite:**\``,
+    ]);
+  });
+
+  it("counts a living case beside a retired one", async () => {
+    const root = store({
+      cases: suiteText({
+        cases: [
+          ["alpha-TC-01", "deprecated", "alpha-SC-01", "@quinn - 2026-09-01"],
+          ["alpha-TC-02", "actual", "alpha-SC-01", "@quinn - 2026-09-01"],
+        ],
+      }),
+    });
+    expect(lines(await check(root), "coverage")).toEqual([]);
+  });
+});
+
+/** A verdict is a person standing behind a case; "who approved this and when"
+ * is the one question an audit of a sign-off consists of. */
+describe("a verdict nobody signed", () => {
+  it("warns on actual and deprecated cases without a reviewer line", async () => {
+    const root = store({
+      cases: suiteText({
+        cases: [
+          ["alpha-TC-01", "actual", "alpha-SC-01"],
+          ["alpha-TC-02", "deprecated", "alpha-SC-01"],
+          ["alpha-TC-03", "draft", "alpha-SC-01"],
+        ],
+      }),
+    });
+    expect(lines(await check(root), "signed")).toEqual([
+      `${CASES_FILE} — alpha-TC-01 is \`actual\` with no \`**Reviewed by:** @handle - YYYY-MM-DD\` — a verdict carries its reviewer`,
+      `${CASES_FILE} — alpha-TC-02 is \`deprecated\` with no \`**Reviewed by:** @handle - YYYY-MM-DD\` — a verdict carries its reviewer`,
+    ]);
+  });
+
+  it("says nothing for a signed verdict", async () => {
+    const root = store({
+      cases: suiteText({
+        cases: [
+          ["alpha-TC-01", "actual", "alpha-SC-01", "@quinn - 2026-09-01"],
+        ],
+      }),
+    });
+    expect(lines(await check(root), "signed")).toEqual([]);
   });
 });
 

@@ -71,6 +71,12 @@ export type Audience = (typeof AUDIENCES)[number];
 export type CalloutBlock = {
   type: "callout";
   kind: CalloutKind;
+  /** Who wrote the callout (`@handle`) and when (`YYYY-MM-DD`). Hand-written
+   * judgment rots silently, so a `warning` — the manual saying the store is
+   * wrong about itself — is expected to carry both; `check:manual` warns on
+   * one that does not. */
+  author?: string;
+  date?: string;
   body: BodyItem[];
 };
 export type DetailBlock = {
@@ -164,7 +170,23 @@ export const BLOCK_SPECS: Record<string, BlockSpec> = {
   children: { container: false, attrs: [] },
   callout: {
     container: true,
-    attrs: [{ name: "kind", required: true, oneOf: CALLOUT_KINDS }],
+    attrs: [
+      { name: "kind", required: true, oneOf: CALLOUT_KINDS },
+      { name: "author" },
+      { name: "date" },
+    ],
+    check: (a) => {
+      if (
+        a.author !== undefined &&
+        !/^@[A-Za-z0-9][A-Za-z0-9_-]*$/.test(String(a.author))
+      ) {
+        return "`author` is a GitHub handle with the @";
+      }
+      if (a.date !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(String(a.date))) {
+        return "`date` is `YYYY-MM-DD`";
+      }
+      return null;
+    },
   },
   detail: {
     container: true,

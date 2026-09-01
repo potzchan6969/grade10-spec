@@ -52,6 +52,15 @@ export function CalloutBlockView({ block }: { block: CalloutBlock }) {
         >
           {style.label}
         </Text>
+        {block.author || block.date ? (
+          <Text as="span" className="ml-auto" size="xs" tone="secondary">
+            {block.author ? (
+              <span className="font-mono">{block.author}</span>
+            ) : null}
+            {block.author && block.date ? " · " : ""}
+            {block.date ?? ""}
+          </Text>
+        ) : null}
       </div>
       <div className="mt-1.5 [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
         {block.body.map((item, position) => (

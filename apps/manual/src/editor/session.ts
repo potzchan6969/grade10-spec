@@ -42,7 +42,13 @@ function subscribe(listener: () => void): () => void {
 }
 
 export function useEditorSession(): EditorSession {
-  return useSyncExternalStore(subscribe, () => state);
+  // The server snapshot is the probing state: a render with no browser has no
+  // dev server to have probed, and every editor surface stays hidden.
+  return useSyncExternalStore(
+    subscribe,
+    () => state,
+    () => state,
+  );
 }
 
 /** The dev server writes as whoever is at the keyboard, and a proposal has to

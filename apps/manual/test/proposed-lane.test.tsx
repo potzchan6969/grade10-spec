@@ -7,7 +7,7 @@ import {
   changesForSpec,
   isProposal,
 } from "../src/api/derive";
-import { relativeTime } from "../src/api/time";
+import { formatDate } from "../src/api/time";
 import type { ChangeEntry, Snapshot } from "../src/api/types";
 import {
   changeEntry,
@@ -139,11 +139,13 @@ describe("the proposed lane", () => {
     expect(html).toContain("Loyalty points should expire");
   });
 
-  it("names the proposer, the age, the reason and the id", () => {
+  /** `created:` is a date, not a timestamp — rendered as an age, a proposal
+   * filed minutes ago already read "15 hours ago". */
+  it("names the proposer, the date, the reason and the id", () => {
     const html = render([proposal]);
 
     expect(html).toContain("@echo");
-    expect(html).toContain(relativeTime("2026-01-01"));
+    expect(html).toContain(`created ${formatDate("2026-01-01")}`);
     expect(html).toContain("Collectors hoard points they never spend.");
     expect(html).toContain("expire-loyalty-points");
   });

@@ -192,6 +192,90 @@ describe("what a card tells a review", () => {
   });
 });
 
+/** The loop's continuation used to live nowhere: its first casualty guessed a
+ * skill name off a badge. Every lane but in-progress names its next action. */
+describe("the loop's continuation on the card", () => {
+  it("hands a proposed pm-planning change to /pm-planning", () => {
+    const html = render([changeEntry("an-idea", [], {})]);
+    expect(html).toContain("/pm-planning an-idea");
+  });
+
+  it("hands a specified change to /full-planning", () => {
+    const html = render([changeEntry("written-up", [delta()], {})]);
+    expect(html).toContain("/full-planning written-up");
+  });
+
+  it("hands a complete change to /archive-change", () => {
+    const html = render([
+      changeEntry("finished", [delta()], {
+        taskGroups: [
+          { title: "Contracts", repo: "grade10-spec", done: 3, total: 3 },
+        ],
+      }),
+    ]);
+    expect(html).toContain("/archive-change finished");
+  });
+
+  it("offers /tcs-review while a suite holds drafts", () => {
+    const html = render([
+      changeEntry("specced", [delta()], {
+        suites: [
+          {
+            spec: SPEC,
+            status: "pending-review",
+            cases: { draft: 3, actual: 1, deprecated: 0, total: 4 },
+          },
+        ],
+      }),
+    ]);
+    expect(html).toContain("/tcs-review specced");
+    expect(html).toContain("3 draft");
+    expect(html).toContain("1 reviewed");
+  });
+});
+
+/** The terminal board always printed this; the browser hiding it left three of
+ * four "Complete" cards silently unarchivable. */
+describe("where the change stands against the store's main", () => {
+  it("says a complete change cannot archive off main", () => {
+    const html = render([
+      changeEntry("finished", [delta()], {
+        taskGroups: [
+          { title: "Contracts", repo: "grade10-spec", done: 3, total: 3 },
+        ],
+        mainState: { state: "unmerged", ref: "origin/main" },
+      }),
+    ]);
+    expect(html).toContain("not on origin/main");
+    expect(html).toContain("cannot be archived");
+  });
+
+  it("counts the artifacts a diverged change is ahead by", () => {
+    const html = render([
+      changeEntry("written-up", [delta()], {
+        mainState: { state: "diverged", ref: "origin/main", files: 2 },
+      }),
+    ]);
+    expect(html).toContain("2 artifact(s) ahead of origin/main");
+  });
+});
+
+/** A promoted card that still read "unclaimed · proposed by" told its author
+ * nothing had happened. */
+describe("who promoted it", () => {
+  it("names the promoter beside the proposer", () => {
+    const html = render([
+      changeEntry("written-up", [delta()], {
+        author: "priya",
+        promotedBy: "devon",
+      }),
+    ]);
+    expect(html).toContain("@priya");
+    expect(html).toContain("planned by");
+    expect(html).toContain("@devon");
+  });
+});
+
 describe("what a card says the change will change", () => {
   const modified = changeEntry("rewrite", [
     {

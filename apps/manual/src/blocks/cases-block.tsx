@@ -2,7 +2,13 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { useState } from "react";
 import { caseAnchor } from "../api/anchors";
-import type { SpecEntry, TestCaseStatus, TestSuiteStatus } from "../api/types";
+import { tracedBy } from "../api/derive";
+import type {
+  SpecEntry,
+  TestCase,
+  TestCaseStatus,
+  TestSuiteStatus,
+} from "../api/types";
 import type { CasesBlock } from "../content/grammar";
 import { AnchorLink } from "./anchor";
 import { useBlockScope } from "./block-scope";
@@ -46,7 +52,8 @@ export function CasesBlockView({ block }: { block: CasesBlock }) {
     );
   }
 
-  const covered = new Set(cases.flatMap((testCase) => testCase.traces));
+  // Living cases only — a retired case's traces are history, not coverage.
+  const covered = tracedBy(cases);
   const exempt = new Set(spec.outOfSuite ?? []);
   const scenarios = spec.requirements.flatMap(
     (requirement) => requirement.scenarios,
@@ -93,6 +100,7 @@ export function CasesBlockView({ block }: { block: CasesBlock }) {
                 {testCase.title}
               </Text>
               <CaseStatus status={testCase.status} />
+              <Reviewer testCase={testCase} />
               <AnchorLink
                 className="ml-auto"
                 id={caseAnchor(testCase)}
@@ -171,6 +179,19 @@ function SuiteStatus({ status }: { status?: TestSuiteStatus }) {
     >
       {status}
     </Badge>
+  );
+}
+
+/** The name behind a verdict, beside it. An unsigned `actual` claims a review
+ * nobody can be asked about; the reviewer's handle and date are what make the
+ * state auditable. */
+function Reviewer({ testCase }: { testCase: TestCase }) {
+  if (!testCase.reviewedBy) return null;
+  return (
+    <Text as="span" size="xs" tone="secondary">
+      <span className="font-mono">@{testCase.reviewedBy}</span>
+      {testCase.reviewedOn ? ` · ${testCase.reviewedOn}` : ""}
+    </Text>
   );
 }
 

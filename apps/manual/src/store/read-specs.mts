@@ -43,6 +43,11 @@ const TRACE = /^\s*(?:[-*]\s+)?\*\*Trace:\*\*(.*)$/m;
  * bullet in its properties list. */
 const SUITE_STATUS = /^\*\*Status:\*\*\s*(.+?)\s*$/m;
 const CASE_STATUS = /^\s*(?:[-*]\s+)?\*\*Status:\*\*\s*(.+?)\s*$/m;
+/** Who stood behind a verdict, and when — `- **Reviewed by:** @handle - date`.
+ * Written by `/tcs-review` at verdict time; a signed verdict is the one thing
+ * that makes `actual` auditable. */
+const REVIEWED_BY =
+  /^\s*(?:[-*]\s+)?\*\*Reviewed by:\*\*\s*@([A-Za-z0-9][A-Za-z0-9_-]*)(?:\s+-\s+(\d{4}-\d{2}-\d{2}))?\s*$/m;
 const SUITE_STATUSES = new Set(["pending-review", "approved"]);
 const CASE_STATUSES = new Set(["draft", "actual", "deprecated"]);
 /** A suite quotes the scenarios a journey covers, and lists the ones it
@@ -296,14 +301,17 @@ export function readTestCases(text: string): TestSuite {
   };
   visit(roots);
 
-  const cases = found.map(
-    ({ section, id, title }): TestCase => ({
+  const cases = found.map(({ section, id, title }): TestCase => {
+    const reviewed = REVIEWED_BY.exec(section.raw);
+    return {
       id,
       title,
       traces: traces(section),
       status: caseStatus(section),
-    }),
-  );
+      ...(reviewed?.[1] ? { reviewedBy: reviewed[1] } : {}),
+      ...(reviewed?.[2] ? { reviewedOn: reviewed[2] } : {}),
+    };
+  });
   refuseRepeats(
     "test case",
     found.map(({ section, id }) => ({ id, line: section.line })),

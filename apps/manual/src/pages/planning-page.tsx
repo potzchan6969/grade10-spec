@@ -14,6 +14,7 @@ import { useArchive } from "../api/use-archive";
 import { useManualIndex } from "../api/use-manual-index";
 import { useHashTarget } from "../blocks/anchor";
 import { ChangeCard } from "../blocks/change-detail";
+import { ReadOnlyNotice } from "../editor/read-only-notice";
 import { ArchiveTimeline } from "./archive-timeline";
 import { MaintenancePanel } from "./maintenance-panel";
 import { PageHeading } from "./page-heading";
@@ -40,7 +41,7 @@ const LANES: LaneSpec[] = [
     lane: "specified",
     title: "Specified",
     summary:
-      "Deltas written, no task list. This is the queue a lead promotes into work.",
+      "Deltas written, no task list. The engineer who picks one up promotes it — each card carries the command.",
     open: true,
   },
   {
@@ -74,6 +75,7 @@ export function PlanningPage() {
 
   return (
     <>
+      <ReadOnlyNotice className="mb-3 text-right" />
       <PageHeading
         summary="Every change in flight, in the lane its own artifacts put it in."
         title="Planning"

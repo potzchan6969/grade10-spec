@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { readGitIndex } from "../src/store/git.mts";
+import { readGitIndex, readMainStates } from "../src/store/git.mts";
 
 /** The git reader against real repositories, because both things it gets
  * wrong are things only git can show: how it prints a path, and how long a
@@ -60,6 +60,69 @@ describe.each(["sha1", "sha256"] as const)("a %s repository", (format) => {
         refs: [{ kind: "page", path: PAGE }],
       },
     ]);
+  });
+});
+
+/** The plan is read at the store's main; a change not settled there cannot be
+ * claimed or archived, and the board has to say so. The states are read off
+ * the refs the clone has — `origin/main` here is a plain remote-tracking ref,
+ * which is all the reader asks for. */
+describe("where a change stands against origin/main", () => {
+  function storeWith(): { root: string; run: Git } {
+    const root = mkdtempSync(join(tmpdir(), "manual-main-"));
+    const run = gitIn(root);
+    run("init", "--quiet", ".");
+    const write = (path: string, text: string) => {
+      const file = join(root, path);
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, text);
+    };
+    write(
+      "openspec/changes/settled/proposal.md",
+      "# Settled\n\n## Why\n\nA.\n",
+    );
+    write("openspec/changes/settled/tasks.md", "## 1. G\n\n- [ ] 1.1 T\n");
+    run("add", "-A");
+    run("commit", "--quiet", "-m", "on main");
+    run("update-ref", "refs/remotes/origin/main", "HEAD");
+    write("openspec/changes/branch-only/proposal.md", "# B\n\n## Why\n\nB.\n");
+    write("openspec/changes/settled/design.md", "## Context\n\nMoved on.\n");
+    write("openspec/changes/settled/tasks.md", "## 1. G\n\n- [x] 1.1 T\n");
+    run("add", "-A");
+    run("commit", "--quiet", "-m", "ahead of main");
+    return { root, run };
+  }
+
+  it("flags unmerged and diverged, and lets a checkmark churn tasks.md", async () => {
+    const { root } = storeWith();
+    const states = await readMainStates(root, ["settled", "branch-only"]);
+
+    expect(states.get("branch-only")).toEqual({
+      state: "unmerged",
+      ref: "origin/main",
+    });
+    // design.md counts; the flipped checkbox in tasks.md deliberately not.
+    expect(states.get("settled")).toEqual({
+      state: "diverged",
+      ref: "origin/main",
+      files: 1,
+    });
+  });
+
+  it("answers nothing at all for a clone with no shared branch", async () => {
+    const { root, run } = storeWith();
+    run("update-ref", "-d", "refs/remotes/origin/main");
+    const states = await readMainStates(root, ["settled", "branch-only"]);
+
+    expect(states.size).toBe(0);
+  });
+
+  it("says nothing once main has caught up", async () => {
+    const { root, run } = storeWith();
+    run("update-ref", "refs/remotes/origin/main", "HEAD");
+    const states = await readMainStates(root, ["settled", "branch-only"]);
+
+    expect(states.size).toBe(0);
   });
 });
 

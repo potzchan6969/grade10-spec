@@ -265,6 +265,28 @@ describe("the acceptance shelf a capability page keeps", () => {
     const root = store("---\ntitle: Alpha\n---\n\nProse only, no contract.\n");
     expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([]);
   });
+
+  /** A `warning` is hand-written judgment that rots silently; the name and
+   * date are what let a reader ask whether it is still true, and whose it is. */
+  it("warns on a warning callout nobody signed", async () => {
+    const root = store(
+      shelved(
+        '::cases{id="demo-product/alpha"}\n\n:::callout{kind="warning"}\nDrifted.\n:::',
+      ),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "callout")).toEqual([
+      'manual/products/demo-product/alpha.md — a `warning` callout carries who wrote it and when — `:::callout{kind="warning" author="@handle" date="YYYY-MM-DD"}`',
+    ]);
+  });
+
+  it("says nothing for a signed warning, or an unsigned note", async () => {
+    const root = store(
+      shelved(
+        '::cases{id="demo-product/alpha"}\n\n:::callout{kind="warning" author="@echo" date="2026-08-30"}\nDrifted, and owned.\n:::\n\n:::callout{kind="note"}\nJust an aside.\n:::',
+      ),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "callout")).toEqual([]);
+  });
 });
 
 describe("in-flight deltas against the durable specs", () => {
