@@ -42,9 +42,6 @@ concurrency:
 env:
   NODE_VERSION: 24.14.1
   WRANGLER_VERSION: 4.120.0
-  SLACK_NOTI_CHANNEL: C045K1QJVQT # web3-github
-  SLACK_NOTI_FOOTER: ${{ github.repository }} | ${{ github.head_ref || github.ref_name }} | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|view logs>
-  SLACK_NOTI_FOOTER_ICON: https://slack-imgs.com/?c=1&o1=wi32.he32.si&url=https%3A%2F%2Fslack.github.com%2Fstatic%2Fimg%2Ffavicon-neutral.png
 
 jobs:
   deploy:
@@ -97,28 +94,3 @@ jobs:
             echo
             echo "Ref: \`${{ github.sha }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
-
-      # Last, so it speaks for every step above it: a failed deploy freezes
-      # the site while the store moves on, and nobody watches the Actions tab
-      # for that.
-      - name: Notify Slack about a failed deploy
-        if: failure()
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          channel-id: ${{ env.SLACK_NOTI_CHANNEL }}
-          payload: |
-            {
-              "attachments": [
-                {
-                  "mrkdwn_in": ["text"],
-                  "color": "#d73a49",
-                  "fallback": "The Grade10 Manual deploy failed.",
-                  "pretext": ":rotating_light: The Grade10 Manual deploy failed — the hosted manual is frozen until it is green",
-                  "text": "Branch: *`${{ github.ref_name }}`*\nCommit: *`${{ github.sha }}`*",
-                  "footer": "${{ env.SLACK_NOTI_FOOTER }}",
-                  "footer_icon": "${{ env.SLACK_NOTI_FOOTER_ICON }}"
-                }
-              ]
-            }
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

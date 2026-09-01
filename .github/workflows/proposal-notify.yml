@@ -21,7 +21,6 @@ concurrency:
   group: proposal-notify-${{ github.sha }}
 
 env:
-  SLACK_NOTI_CHANNEL: C045K1QJVQT # web3-github
   MANUAL_URL: https://spec.grade10-stg.com/planning
 
 jobs:
@@ -71,24 +70,3 @@ jobs:
             printf '%s' "$lines"
             echo "PROPOSALS"
           } >> "$GITHUB_OUTPUT"
-
-      - name: Tell Slack
-        if: steps.added.outputs.any == 'true'
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          channel-id: ${{ env.SLACK_NOTI_CHANNEL }}
-          payload: |
-            {
-              "attachments": [
-                {
-                  "mrkdwn_in": ["text"],
-                  "color": "#0969da",
-                  "fallback": "A new proposal landed in the spec store.",
-                  "pretext": ":bulb: New proposal — it is in the Proposed lane until someone picks it up",
-                  "text": ${{ toJSON(steps.added.outputs.text) }},
-                  "footer": "<${{ env.MANUAL_URL }}|Planning> | <${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|the commit>"
-                }
-              ]
-            }
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
