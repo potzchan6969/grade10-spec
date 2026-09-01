@@ -255,7 +255,7 @@ export const PostLost: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText(/didn't win/i)).toBeInTheDocument();
+    expect(canvas.getByText(/didn’t win/i)).toBeInTheDocument();
   },
 };
 

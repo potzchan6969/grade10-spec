@@ -161,6 +161,21 @@ already derives the screen state hands the panel one `ListingBidPanelCopy`,
 worded. This is not an exception to composition; the copy object is still
 assembled once, above the component, by whoever knows enough to choose.
 
+### English copy
+
+English user-facing strings — in `@grade10/i18n` catalogs and in `@grade10/ui`
+demo or fixture copy until a feature is catalogued — follow one typographic and
+one locale rule:
+
+- **Typography** — use curly apostrophes (`’`, U+2019) and curly quotation
+  marks (`“` `”`, U+201C/U+201D) in rendered copy. Do not use straight ASCII
+  `'` or `"` for contractions or quoted speech.
+- **Locale** — use American English spelling and punctuation (for example
+  `authorized`, `color`, em dashes without spaces).
+
+See [`packages/i18n/README.md`](../../packages/i18n/README.md) for where
+catalogued copy lives and how layers merge.
+
 ### Model asynchronous content explicitly
 
 A discriminated `AsyncState<T>` is the default pattern for a visual boundary:

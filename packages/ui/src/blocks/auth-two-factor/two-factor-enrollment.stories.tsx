@@ -20,7 +20,7 @@ const meta = {
       backupCodesDescription:
         "Store these now — they are shown once, and each one signs you in if you lose your authenticator.",
       scanDescription:
-        "Point your phone's authenticator app at the code, or open it in the password manager on this device.",
+        "Point your phone’s authenticator app at the code, or open it in the password manager on this device.",
       verify: "Verification code",
       verifyHint: "Enter the code your authenticator shows now.",
       verifySubmit: "Turn on two-factor authentication",
@@ -55,7 +55,7 @@ export const Default: Story = {
 };
 
 export const ErrorState: Story = {
-  args: { error: "That code didn't work." },
+  args: { error: "That code didn’t work." },
 };
 
 export const Pending: Story = { args: { pending: true } };

@@ -1,7 +1,7 @@
 {
   "antiSnipe": "{minutes}-min anti-snipe extension",
   "auctionWon": "Auction won",
-  "automaticBidExplanation": "We'll bid automatically only as needed, up to your maximum.",
+  "automaticBidExplanation": "We’ll bid automatically only as needed, up to your maximum.",
   "automaticBidHoldExplanation": "Your card hold covers the maximum. You may pay less if the auction ends below it.",
   "automaticMaximum": "Your maximum",
   "automaticMaximumAmount": "Maximum amount",
@@ -88,7 +88,7 @@
   "watching": "Watching",
   "weeklyTerms": "Weekly Auction terms",
   "winningBid": "Winning bid",
-  "youDidntWin": "You didn't win",
+  "youDidntWin": "You didn’t win",
   "yourBid": "Your bid: {amount}",
   "yourBidLabel": "Your bid"
 }

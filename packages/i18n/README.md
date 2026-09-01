@@ -61,6 +61,24 @@ it is a move of `messages/zzz/` rather than a rewrite — and what moves is the
 twenty-odd keys ZZZ states, with the shared layer staying here as something
 that repository reads.
 
+## English copy
+
+Every `messages/**/en/**/*.json` value and any English demo copy in
+`packages/ui` follows two rules:
+
+| Rule | Example |
+| --- | --- |
+| Curly apostrophes and quotation marks in rendered text | `We’ll`, `You didn’t win`, `“Starting bid”` — not `We'll`, `didn't`, `"Starting bid"` |
+| American English spelling | `authorized`, not `authorised` |
+
+Contractions and possessives use `’` (U+2019). Quoted words or phrases inside a
+sentence use `“` and `”` (U+201C/U+201D). JSON file delimiters stay straight
+double quotes.
+
+Component `copy` props assembled in consuming applications must follow the same
+rules when the locale is English. See
+[`ui-component-contracts.md`](../../docs/governance/ui-component-contracts.md).
+
 ## Translations need native review
 
 `zh-Hant`, `zh-Hans` and `ko` were drafted by engineers, machine-assisted, and

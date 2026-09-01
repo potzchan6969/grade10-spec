@@ -24,7 +24,7 @@ export const Default: Story = {};
 
 /** The consumer supplies the failure copy. */
 export const ErrorState: Story = {
-  args: { code: "000000", error: "That code didn't work." },
+  args: { code: "000000", error: "That code didn’t work." },
 };
 
 /** Typing is reported keystroke by keystroke; the field shows only what the
