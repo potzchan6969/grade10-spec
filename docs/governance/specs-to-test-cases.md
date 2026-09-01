@@ -268,7 +268,10 @@ of somebody else's approved case.
 /tcs-review [<capability-or-change>]
 ```
 
-Review is a conversation, one case at a time, and only a human approves. The
+Review is a conversation, one **journey** at a time, and only a human approves.
+A reviewer judges a journey's cases against each other — what is missing, what
+is duplicated, whether the negative case belongs here — and that is not
+possible one case at a time. The
 `tcs-review` skill finds every suite awaiting review — any file holding a
 `draft` case, which is every file not marked `approved`:
 
@@ -277,10 +280,18 @@ Review is a conversation, one case at a time, and only a human approves. The
 - **More than one** → list the capabilities and changes with their pending
   counts and ask which to take.
 
-For each `draft` case the reviewer sees the case beside the scenario text it
-traces, and answers: approve it, change it, defer it, or retire it. The
-reviewer's questions ("why is this `critical`?", "where does the spec say
-20000?") are answered from the spec, quoting the clause — never from an
+A journey arrives whole: its story, then every `draft` case under it in full,
+with cases already `actual` or `deprecated` listed by id so the shape of the
+journey is visible. The spec's scenarios are **offered, not quoted** — the
+reviewer knows the flow, and a wall of Gherkin before every case buries the
+cases. Ask for the scenarios behind a case and they are quoted in full.
+
+The reviewer then answers for the journey: approve, change, defer, or retire,
+in whatever shape suits them ("all good", "approve except TC3"). Before
+anything is written the ids are echoed back, and only what was named is
+marked — an approval covers the journey just shown and never widens to a case
+nobody saw. Their questions ("why is this `critical`?", "where does the spec
+say 20000?") are answered from the spec, quoting the clause — never from an
 assumption about how the product probably works. Approving sets that case's
 `**Status:**` to `actual`; deferring leaves it `draft`; retiring sets
 `deprecated`. The file's own status follows from those verdicts without anyone
@@ -1018,8 +1029,8 @@ Two pull requests, two audiences.
    `draft`, retired ones become `deprecated`, reviewed ones keep their ids.
 5. When this document's wording rules change, bump `tcs_rules_rev`, then work
    `pnpm run tcs:stale` one capability at a time.
-6. Only `actual` cases in `approved` suites are exported, by
-   `pnpm run qase:export` — on demand, never automatically.
+6. Only `actual` cases in `approved` suites leave this repository, and only
+   when someone runs an export. Nothing exports on its own.
 
 ## What this is not
 
@@ -1037,12 +1048,11 @@ Two pull requests, two audiences.
 | Tool | Does |
 | --- | --- |
 | `/spec-to-tcs <capability-or-change>` (`spec-to-tcs` skill) | If journeys are missing, rewrites the resolved `spec.md` to `openspec/config.yaml` specs rules; learns this store's conventions from every `actual` case in the corpus; then derives suites under `openspec/specs/` or `openspec/changes/` and writes `test-cases.md` beside that `spec.md` with every new case `draft`, bringing the suite's existing drafts to the same conventions. Shows an existing suite and asks before touching it; refuses to regenerate over `actual` cases or an `approved` file. Read `.cursor/skills/spec-to-tcs/SKILL.md`. |
-| `/tcs-review [<capability-or-change>]` (`tcs-review` skill) | Finds suites awaiting review, walks their `draft` cases with a human one at a time, answers questions from the spec, and records `actual` / `deprecated` / left-`draft`. Every case it marks `actual`, edits included, becomes evidence the next `/spec-to-tcs` run learns from. Read `.cursor/skills/tcs-review/SKILL.md`. |
+| `/tcs-review [<capability-or-change>]` (`tcs-review` skill) | Finds suites awaiting review, walks their `draft` cases with a human one journey at a time, quotes the spec's scenarios on request, and records `actual` / `deprecated` / left-`draft`. Every case it marks `actual`, edits included, becomes evidence the next `/spec-to-tcs` run learns from. Read `.cursor/skills/tcs-review/SKILL.md`. |
 | `pm-planning` / `full-planning` skills | After proposal + specs validate, run `/spec-to-tcs <change>` automatically and commit the drafts to the spec's own branch. |
 | `spec-push` skill | Refuses a change whose deltas have journeys but no suite, and runs `pnpm run tcs:validate` with the other checks before pushing. |
 | `pnpm run tcs:validate` (`scripts/openspec/validate-test-cases.mjs`) | Checks every suite against this document: the header matches the cases below it, ids are unique and journey-scoped, a trace resolves against the `spec.md` beside it, no case ships with an empty Expected Results list. Errors fail; suites in older shapes warn. Runs in CI on every push. |
 | `pnpm run tcs:stale` | Lists the suites whose `draft` cases sit below the current `tcs_rules_rev`. A report, not a sweep. |
-| `pnpm run qase:export` / `openspec-export-qase-csv` | Exports the `actual` cases of every `approved` suite to a Qase-shaped CSV. Skips `pending-review` and `in-review` files, `draft` cases, and `deprecated` cases. Run when someone asks for it — nothing triggers it automatically. |
 
 Change deltas use the same format under
 `openspec/changes/<change>/specs/<product>/<capability>/test-cases.md`.

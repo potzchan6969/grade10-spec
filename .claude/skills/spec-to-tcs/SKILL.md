@@ -494,8 +494,8 @@ traces scenario ids.
    any requirement whose prose states a rule no scenario covers, any
    scenario under no journey, and any journey listing an unknown scenario
    id — those are gaps for the spec's author. Point the user at
-   `/tcs-review` as the next step; do not tell them it is ready for Qase —
-   it isn't, until every case is `actual`.
+   `/tcs-review` as the next step; do not tell them the suite is ready to hand
+   on — it isn't, until every case is `actual`.
 
    When the run was a **rules-revision update** — `pnpm run tcs:stale` named
    this suite and you brought its drafts up — say so plainly: the revision it
