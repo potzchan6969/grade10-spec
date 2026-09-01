@@ -186,8 +186,12 @@ function ListingGallery({ images, copy, className }: ListingGalleryProps) {
           })}
         </HStack>
       ) : null}
-      {item && !video ? (
-        <Dialog onOpenChange={setZoomOpen} open={zoomOpen}>
+      {/* Mounted only while zoomed, rather than held open with its content
+          shut: a dialog that outlives its own close keeps the last visit's
+          state, and this one would keep the image the collector zoomed two
+          photos ago. */}
+      {item && !video && zoomOpen ? (
+        <Dialog onOpenChange={setZoomOpen} open>
           <DialogContent className="sm:max-w-2xl">
             <DialogHeader>
               <DialogTitle>{copy.zoom}</DialogTitle>
