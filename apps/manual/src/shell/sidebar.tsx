@@ -11,12 +11,13 @@ import {
   Kanban,
   PenNib,
 } from "@phosphor-icons/react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router";
 import type { Incubating, NavGroup, NavItem, NavProduct } from "../api/derive";
 import { buildIndex } from "../api/derive";
 import { useSnapshot } from "../api/snapshot-provider";
 import { CapabilityPip } from "../blocks/capability-status";
+import { browserKeyStore, STORAGE } from "../editor/config";
 import { NewPageAction } from "../editor/edit-actions";
 
 const FIXED_ENTRIES: { to: string; label: string; icon: Icon }[] = [
@@ -32,6 +33,82 @@ const FIXED_ENTRIES: { to: string; label: string; icon: Icon }[] = [
 const ROW =
   "flex h-8 items-center gap-2 rounded-(--radius-md) px-2 text-sm outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50";
 
+/**
+ * What this reader holds open. The rail used to follow the route alone, so
+ * leaving a product — or following an incubating entry onto the planning
+ * board — snapped the branch shut under the reader. Now a branch opens when
+ * its own page is visited and stays as the reader last left it, across
+ * navigations and reloads.
+ */
+type NavMemory = { open: string[]; shut: string[] };
+
+function readMemory(): NavMemory {
+  try {
+    const parsed: unknown = JSON.parse(browserKeyStore.get(STORAGE.nav) ?? "");
+    if (typeof parsed === "object" && parsed !== null) {
+      const { open, shut } = parsed as Record<string, unknown>;
+      return { open: onlyStrings(open), shut: onlyStrings(shut) };
+    }
+  } catch {
+    /* a fresh browser, or storage switched off — start from the route */
+  }
+  return { open: [], shut: [] };
+}
+
+function onlyStrings(value: unknown): string[] {
+  return Array.isArray(value)
+    ? value.filter((one) => typeof one === "string")
+    : [];
+}
+
+function useNavMemory() {
+  const [memory, setMemory] = useState<NavMemory>(readMemory);
+
+  const write = useCallback(
+    (update: (prev: NavMemory) => NavMemory) =>
+      setMemory((prev) => {
+        const next = update(prev);
+        if (next !== prev) {
+          browserKeyStore.set(STORAGE.nav, JSON.stringify(next));
+        }
+        return next;
+      }),
+    [],
+  );
+
+  const openBranch = useCallback(
+    (key: string) =>
+      write((prev) =>
+        prev.open.includes(key) ? prev : { ...prev, open: [...prev.open, key] },
+      ),
+    [write],
+  );
+  const toggleBranch = useCallback(
+    (key: string) =>
+      write((prev) => ({
+        ...prev,
+        open: prev.open.includes(key)
+          ? prev.open.filter((one) => one !== key)
+          : [...prev.open, key],
+      })),
+    [write],
+  );
+  const toggleSection = useCallback(
+    (title: string) =>
+      write((prev) => ({
+        ...prev,
+        shut: prev.shut.includes(title)
+          ? prev.shut.filter((one) => one !== title)
+          : [...prev.shut, title],
+      })),
+    [write],
+  );
+
+  return { memory, openBranch, toggleBranch, toggleSection };
+}
+
+type Memory = ReturnType<typeof useNavMemory>;
+
 type SidebarProps = {
   open: boolean;
   onNavigate: () => void;
@@ -39,6 +116,7 @@ type SidebarProps = {
 
 export function Sidebar({ open, onNavigate }: SidebarProps) {
   const snapshot = useSnapshot();
+  const memory = useNavMemory();
   const index =
     snapshot.status === "ready" ? buildIndex(snapshot.snapshot) : null;
 
@@ -92,6 +170,7 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
               <GroupSection
                 group={group}
                 key={group.title}
+                memory={memory}
                 onNavigate={onNavigate}
               />
             ))}
@@ -99,17 +178,20 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
               <FlatSection
                 items={group.topics}
                 key={group.title}
+                memory={memory}
                 onNavigate={onNavigate}
                 title={group.title}
               />
             ))}
             <FlatSection
               items={index.guides}
+              memory={memory}
               onNavigate={onNavigate}
               title="Guides"
             />
             <IncubatingSection
               items={index.incubating}
+              memory={memory}
               onNavigate={onNavigate}
             />
           </nav>
@@ -149,25 +231,29 @@ function SectionHeading({
 
 function GroupSection({
   group,
+  memory,
   onNavigate,
 }: {
   group: NavGroup;
+  memory: Memory;
   onNavigate: () => void;
 }) {
-  const [collapsed, setCollapsed] = useState(false);
+  const collapsed = memory.memory.shut.includes(group.title);
 
   return (
     <div>
       <SectionHeading
         collapsed={collapsed}
-        onToggle={() => setCollapsed((on) => !on)}
+        onToggle={() => memory.toggleSection(group.title)}
         title={group.title}
       />
       {collapsed ? null : (
         <ul className="mt-1 space-y-0.5 pl-5">
           {group.products.map((product) => (
             <ProductBranch
+              branchKey={`${group.title}/${product.id}`}
               key={product.id}
+              memory={memory}
               onNavigate={onNavigate}
               product={product}
             />
@@ -180,16 +266,27 @@ function GroupSection({
 
 function ProductBranch({
   product,
+  branchKey,
+  memory,
   onNavigate,
 }: {
   product: NavProduct;
+  branchKey: string;
+  memory: Memory;
   onNavigate: () => void;
 }) {
   const { pathname } = useLocation();
-  const onRoute =
-    pathname === product.to || pathname.startsWith(`${product.to}/`);
-  const [forced, setForced] = useState(false);
-  const expanded = onRoute || forced;
+  const { openBranch } = memory;
+  // Only a page this branch itself lists pulls it open — a capability filed
+  // under Admin opens the Admin branch, not the product's own.
+  const holdsPage =
+    pathname === product.to ||
+    product.capabilities.some((one) => one.to === pathname);
+  useEffect(() => {
+    if (holdsPage) openBranch(branchKey);
+  }, [holdsPage, branchKey, openBranch]);
+
+  const expanded = memory.memory.open.includes(branchKey);
   const expandable =
     product.capabilities.length > 0 || product.incubating.length > 0;
 
@@ -216,7 +313,7 @@ function ProductBranch({
             aria-expanded={expanded}
             aria-label={`${expanded ? "Collapse" : "Expand"} ${product.title}`}
             className="flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-(--radius-md) text-secondary-foreground transition-colors hover:bg-muted hover:text-foreground"
-            onClick={() => setForced((on) => !on)}
+            onClick={() => memory.toggleBranch(branchKey)}
             type="button"
           >
             {expanded ? (
@@ -276,20 +373,22 @@ function IncubatingLink({
 function FlatSection({
   title,
   items,
+  memory,
   onNavigate,
 }: {
   title: string;
   items: NavItem[];
+  memory: Memory;
   onNavigate: () => void;
 }) {
-  const [collapsed, setCollapsed] = useState(false);
+  const collapsed = memory.memory.shut.includes(title);
   if (items.length === 0) return null;
 
   return (
     <div>
       <SectionHeading
         collapsed={collapsed}
-        onToggle={() => setCollapsed((on) => !on)}
+        onToggle={() => memory.toggleSection(title)}
         title={title}
       />
       {collapsed ? null : (
@@ -310,19 +409,21 @@ function FlatSection({
  * to lose entirely. */
 function IncubatingSection({
   items,
+  memory,
   onNavigate,
 }: {
   items: Incubating[];
+  memory: Memory;
   onNavigate: () => void;
 }) {
-  const [collapsed, setCollapsed] = useState(false);
+  const collapsed = memory.memory.shut.includes("Incubating");
   if (items.length === 0) return null;
 
   return (
     <div>
       <SectionHeading
         collapsed={collapsed}
-        onToggle={() => setCollapsed((on) => !on)}
+        onToggle={() => memory.toggleSection("Incubating")}
         title="Incubating"
       />
       {collapsed ? null : (

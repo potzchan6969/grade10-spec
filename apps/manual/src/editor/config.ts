@@ -5,6 +5,8 @@ export const STORAGE = {
   welcome: "manual.welcome",
   /** ISO date of the newest history event this reader has seen. */
   recentSeen: "manual.recent.seen",
+  /** Which rail branches and sections this reader holds open or shut. */
+  nav: "manual.nav",
 } as const;
 
 export type KeyStore = {
