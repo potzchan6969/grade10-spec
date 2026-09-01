@@ -2,12 +2,12 @@
 
 ## 1. Move the sign-in shell onto Dialog (grade10-spec) (owner: @sean)
 
-- [ ] 1.1 Add required `open` and `onOpenChange` to `SignInCardProps` and add optional `legal` to `SignInCardCopy`, so a consumer that has not adapted fails to compile — satisfies *Visibility is the consumer's*
-- [ ] 1.2 Rebuild `SignInCard` on `Dialog` + `DialogContent` + `DialogHeader` + `DialogBody`, replacing the `Card` composition and dropping `max-w-sm` in favour of `DialogContent`'s own 448px — satisfies *The triggering page stays mounted*
-- [ ] 1.3 Set `gap-6` on the `DialogBody` instance, per the design decision to override the body gap locally rather than widening the primitive
+- [x] 1.1 Add required `open` and `onOpenChange` to `SignInCardProps` and add optional `legal` to `SignInCardCopy`, so a consumer that has not adapted fails to compile — satisfies *Visibility is the consumer's*
+- [x] 1.2 Rebuild `SignInCard` on `Dialog` + `DialogContent` + `DialogHeader` + `DialogBody`, replacing the `Card` composition and dropping `max-w-sm` in favour of `DialogContent`'s own 448px — satisfies *The triggering page stays mounted*
+- [x] 1.3 Set `gap-6` on the `DialogBody` instance, per the design decision to override the body gap locally rather than widening the primitive
 - [ ] 1.4 Verify close control, Escape, and scrim activation each call `onOpenChange(false)` and leave the page beneath mounted — satisfies *Dismissing returns the collector to what they were doing*
-- [ ] 1.5 Reorder the body to provider slot → divider → step → message, and render neither slot nor divider when `providerSlot` is absent — satisfies *A provider widget is supplied* and *No provider widget*
-- [ ] 1.6 Render `copy.legal` as the body's last node when set and omit the node entirely when unset, supplying no wording from the block — satisfies *Legal copy is supplied* and *Legal copy is omitted*
+- [x] 1.5 Reorder the body to provider slot → divider → step → message, and render neither slot nor divider when `providerSlot` is absent — satisfies *A provider widget is supplied* and *No provider widget*
+- [x] 1.6 Render `copy.legal` as the body's last node when set and omit the node entirely when unset, supplying no wording from the block — satisfies *Legal copy is supplied* and *Legal copy is omitted*
 - [ ] 1.7 Run `pnpm run lint`, `pnpm run typecheck`, and `pnpm run test:stories:ui`
 
 ## 2. Cover the block against Figma (grade10-spec)
