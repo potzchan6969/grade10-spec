@@ -86,10 +86,12 @@ bottom:
 ```
 
 Containers hold markdown and, one level deep, leaf directives. A callout is
-`note`, `decision` or `warning`. A `warning` is signed — `author` and `date`
-say whose judgment it is and when it was written, because hand-written
-divergence prose is the one thing here that rots silently; `check:manual`
-warns on an unsigned one. A detail block is depth for one audience —
+`note`, `decision` or `warning`. A `warning` wears a signature — whose
+judgment it is and when it was last shaped — because hand-written divergence
+prose is the one thing here that rots silently. The build derives it from
+git, so writing one costs nothing; add `author` and `date` only to sign a
+judgment git cannot attribute, such as one recorded on someone's behalf. A
+detail block is depth for one audience —
 `pm`, `designer`, `qa`, `engineer` or `operator` — collapsed but never hidden,
 so it stays searchable and deep-linkable:
 

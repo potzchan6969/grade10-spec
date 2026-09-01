@@ -266,26 +266,16 @@ describe("the acceptance shelf a capability page keeps", () => {
     expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([]);
   });
 
-  /** A `warning` is hand-written judgment that rots silently; the name and
-   * date are what let a reader ask whether it is still true, and whose it is. */
-  it("warns on a warning callout nobody signed", async () => {
+  /** A `warning` signature is derived from git at build, so an unsigned one
+   * is not a finding — nothing hand-maintained is missing. */
+  it("raises no finding for an unsigned warning callout", async () => {
     const root = store(
       shelved(
         '::cases{id="demo-product/alpha"}\n\n:::callout{kind="warning"}\nDrifted.\n:::',
       ),
     );
-    expect(lines(await runChecks(root, NO_GIT), "callout")).toEqual([
-      'manual/products/demo-product/alpha.md — a `warning` callout carries who wrote it and when — `:::callout{kind="warning" author="@handle" date="YYYY-MM-DD"}`',
-    ]);
-  });
-
-  it("says nothing for a signed warning, or an unsigned note", async () => {
-    const root = store(
-      shelved(
-        '::cases{id="demo-product/alpha"}\n\n:::callout{kind="warning" author="@echo" date="2026-08-30"}\nDrifted, and owned.\n:::\n\n:::callout{kind="note"}\nJust an aside.\n:::',
-      ),
-    );
-    expect(lines(await runChecks(root, NO_GIT), "callout")).toEqual([]);
+    const { findings } = await runChecks(root, NO_GIT);
+    expect(findings.filter((one) => one.rule === "callout")).toEqual([]);
   });
 });
 

@@ -1,6 +1,7 @@
 import type {
   Block,
   BodyItem,
+  CalloutBlock,
   FigmaBlock,
   StoryBlock,
 } from "../content/grammar";
@@ -780,6 +781,42 @@ export function incubatingFor(
     });
   }
   return found.sort((a, b) => a.title.localeCompare(b.title));
+}
+
+/** A callout owning no signature of its own — the ones the build signs. */
+const unsignedWarning = (block: Block | BodyItem): block is CalloutBlock =>
+  block.type === "callout" &&
+  block.kind === "warning" &&
+  (block.author === undefined || block.date === undefined);
+
+const signatureCache = new WeakMap<
+  ParsedPage,
+  WeakMap<CalloutBlock, { author: string; date: string }>
+>();
+
+/**
+ * The derived signature for an unsigned warning callout: who last changed it
+ * and when, read from git at build time. The build lists signatures in
+ * document order for exactly the unsigned callouts, so zipping this parse's
+ * walk against that list pairs each block with its own. Undefined where git
+ * has not answered — an uncommitted callout, or a store without a repository.
+ */
+export function warningSignature(
+  page: ParsedPage,
+  block: CalloutBlock,
+): { author: string; date: string } | undefined {
+  let signed = signatureCache.get(page);
+  if (!signed) {
+    signed = new WeakMap();
+    const signatures = page.entry.warningSignatures ?? [];
+    const unsigned = (page.ast?.blocks ?? []).filter(unsignedWarning);
+    unsigned.forEach((one, at) => {
+      const signature = signatures[at];
+      if (signature) signed?.set(one, signature);
+    });
+    signatureCache.set(page, signed);
+  }
+  return signed.get(block);
 }
 
 /** Every block a page holds, container bodies included. */

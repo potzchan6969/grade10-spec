@@ -95,7 +95,7 @@ start at `##`; raw HTML is never rendered). Directives sit at column 0:
 | `story` | `::story{id="blocks-store-cart--default" title="…" height="480"}` | titled card, workbench Storybook iframe loads on click |
 | `image` | `::image{src="assets/…" alt="…" caption="…"}` | image from `manual/assets/`; missing `alt` is a parse error |
 | `children` | `::children` | cards for the child pages of this directory, from their frontmatter |
-| `callout` | `:::callout{kind="note"}` … `:::` | kinds: `note`, `decision`, `warning` |
+| `callout` | `:::callout{kind="note"}` … `:::` | kinds: `note`, `decision`, `warning`; a `warning` shows a signature — `author`/`date` when written in, else who last changed it and when, derived from git at build |
 | `detail` | `:::detail{for="engineer" title="…"}` … `:::` | collapsed-but-present depth for one audience; searchable, deep-linkable, never hidden from the DOM |
 | `flow` | `:::flow{title="Checkout" diagram="assets/…"}` … `:::` | steps read top to bottom, all open; `##` starts a step, `#` groups the steps under it into a phase, and numbering runs straight through; optional SVG whose `data-step` elements light while their step is pointed at |
 

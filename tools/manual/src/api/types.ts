@@ -38,7 +38,14 @@ export type PageEntry = {
   /** Raw page text; the client parses it. */
   source: string;
   lastCommit?: CommitInfo;
+  /** One entry per unsigned `warning` callout, in document order: who last
+   * changed it and when, derived from git at build. Null where git holds no
+   * committed line yet; absent when the page has nothing to sign. */
+  warningSignatures?: WarningSignature[];
 };
+
+/** A derived callout signature — git's answer to whose judgment and when. */
+export type WarningSignature = { author: string; date: string } | null;
 
 export type Scenario = {
   /** Permanent store id like `loyalty-SC-04`, when the spec carries one. */

@@ -27,6 +27,12 @@ export function useBlockScope(): BlockScope {
   return scope;
 }
 
+/** The scope where there is one — for a block that merely decorates itself
+ * with it, and still renders anywhere a scope was never mounted. */
+export function useBlockScopeMaybe(): BlockScope | null {
+  return use(ScopeContext);
+}
+
 /** The directory a page's own relative links resolve against. */
 export function usePageDir(): string {
   return dirOf(useBlockScope().pagePath);

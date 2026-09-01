@@ -149,19 +149,9 @@ function checkBlock(ctx, path, block) {
       checkFigma(ctx, path, block);
       break;
     }
-    // A `warning` is the manual saying the store is wrong about itself —
-    // hand-written judgment that rots silently. A name and a date are what
-    // let a reader ask whether it is still true, and whose it is to settle.
-    case "callout": {
-      if (block.kind !== "warning") break;
-      if (block.author !== undefined && block.date !== undefined) break;
-      add(
-        "callout",
-        path,
-        'a `warning` callout carries who wrote it and when — `:::callout{kind="warning" author="@handle" date="YYYY-MM-DD"}`',
-      );
-      break;
-    }
+    // A `warning` callout needs no rule here: its signature — whose judgment,
+    // and when — is derived from git at build, and explicit `author`/`date`
+    // attributes are format-checked by the grammar itself.
     default:
       break;
   }
