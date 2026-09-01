@@ -55,7 +55,10 @@ export const LiveNoBids: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Starting bid")).toBeVisible();
-    expect(canvas.getByText("No bids yet")).toBeVisible();
+    const noBidsYet = canvas
+      .getAllByText("No bids yet")
+      .find((element) => !element.closest("[inert]"));
+    expect(noBidsYet).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Your bid history" }),
     ).not.toBeInTheDocument();
