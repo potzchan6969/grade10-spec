@@ -37,16 +37,42 @@ history, component authorship, or node proximity.
    pinned properties, Figma link, registered-root and ancestor evidence,
    ambiguity, exact OpenSpec evidence, ownership, and next action.
 2. Select individual stable IDs. Selection is preparation, not permission to
-   write. Leave uncertain findings unselected.
-3. Record exactly one association or non-empty `noImpactReason` per selected
-   occurrence. Removed, ambiguous, replacement, and orphaned occurrences need
-   the explicit occurrence or old-to-new decision required by the store.
-4. Review and explicitly confirm the decision preview before acceptance. It
-   must pin the observation digest and list every exact file that may change.
-5. Rerun the scoped diff against the same observation. Accepted findings must
-   disappear, while unselected findings and blockers remain visible.
-6. Only after verification, separately decide whether to create one local
-   standalone-store commit. Declining leaves the verified diff uncommitted.
+   write or proof of implementation. Leave uncertain findings unselected.
+3. Before acceptance, create one temporary impact-review document for every
+   selected ID. Pin it to the report observation digest and record expected
+   behavior, `grade10-spec` implementation locations, focused test evidence,
+   runtime evidence, and exactly one outcome: `implemented`, `no-impact`,
+   `covered`, `gap`, or `blocked`. The store-owned command is the authority:
+
+   ```bash
+   pnpm run figma:annotations:impact -- --scope spec \
+     --report "$work_dir/report.json" --ids "id-a,id-b" \
+     --review "$work_dir/impact.json" --json
+   ```
+
+   An implemented outcome needs an exact association, successful focused test,
+   and runtime observation. A no-impact outcome needs a specific non-empty
+   reason. A covered outcome needs an active exact change or task group. Gaps
+   and blockers are never acceptance-eligible.
+4. Review the impact partition explicitly. Translate only
+   `implemented`, `no-impact`, and `covered` findings into the existing
+   decision preview. The preview must pin the observation digest and list
+   every exact file that acceptance may change.
+5. Before proposing a new change, inspect the current planning board and exact
+   OpenSpec evidence. Group related gaps by capability and delivery outcome.
+   Show finding IDs, expected behavior, capability path, proposed kebab-case
+   change name, planning lane, affected repositories, and non-goals. Require a
+   separate confirmation before invoking `/pm-planning` or `/full-planning`.
+   A declined or failed planning handoff creates no acceptance and leaves gaps
+   visible.
+6. Rerun the scoped diff against the same observation. Accepted findings must
+   disappear, while unselected findings and blockers remain visible. Planning
+   does not accept a gap; after planning starts, a later reconciliation must
+   take a fresh observation, report, selection, and impact review.
+7. Only after the eligible acceptance transaction is verified, separately
+   decide whether to create one local standalone-store commit. Declining leaves
+   the verified diff uncommitted. Planning, acceptance, commit, push, merge,
+   task claiming, and implementation remain independent permissions.
 
 ## Write boundary
 
