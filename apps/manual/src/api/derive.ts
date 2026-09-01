@@ -40,7 +40,7 @@ export type ParsedPage = {
 };
 
 /** Derived from the store, never stored: what shape a capability is in. */
-export type CapabilityStatus = "changing" | "incubating" | "stable";
+export type CapabilityStatus = "changing" | "incubating" | "planned" | "stable";
 
 export type NavItem = {
   id: string;
@@ -445,16 +445,20 @@ function deltaRequirement(
 }
 
 /**
- * A capability's status. Incubating is asked first: a spec that lives only as a
- * delta is being changed by definition, and what matters about it is that it
- * does not exist yet.
+ * A capability's status. A durable spec is stable or changing; a spec that
+ * lives only as a delta is incubating — being written right now. Everything
+ * else is planned: the page describes an intended shape that neither the
+ * durable store nor any change carries yet.
  */
 export function capabilityStatus(
   index: ManualIndex,
   specId: string | undefined,
 ): CapabilityStatus {
-  if (!specId || !index.specById.has(specId)) return "incubating";
-  return changesForSpec(index, specId).length > 0 ? "changing" : "stable";
+  if (specId && index.specById.has(specId)) {
+    return changesForSpec(index, specId).length > 0 ? "changing" : "stable";
+  }
+  if (specId && changesForSpec(index, specId).length > 0) return "incubating";
+  return "planned";
 }
 
 /** Only a product's own children are capabilities; guides and topics are not. */

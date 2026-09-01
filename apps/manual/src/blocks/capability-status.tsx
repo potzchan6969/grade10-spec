@@ -7,11 +7,11 @@ type Mark = {
   title: string;
   /** Fill for the pip; the primitive's own muted fill stands for incubating. */
   pip?: string;
-  badge: "warning" | "default";
+  badge: "warning" | "default" | "outline";
 };
 
 /** `stable` says nothing anywhere — a page wearing it on every entry is noise,
- * so absence is the signal and only the other two are drawn. */
+ * so absence is the signal and only the others are drawn. */
 const MARK: Record<CapabilityStatus, Mark | null> = {
   changing: {
     word: "changing",
@@ -21,8 +21,15 @@ const MARK: Record<CapabilityStatus, Mark | null> = {
   },
   incubating: {
     word: "incubating",
-    title: "Incubating — no durable spec behind this page yet",
+    title: "Incubating — a change in flight is writing this spec",
     badge: "default",
+  },
+  planned: {
+    word: "planned",
+    title:
+      "Planned — no spec or change carries this yet; the page states the intended shape",
+    pip: "border border-border-strong bg-transparent",
+    badge: "outline",
   },
   stable: null,
 };
