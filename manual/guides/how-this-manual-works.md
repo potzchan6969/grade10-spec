@@ -5,12 +5,12 @@ order: 1
 ---
 
 This site is a reading surface over the spec store — a git repository where
-every product spec, in-flight change, and page of prose lives as a file. The
-manual restates none of it. Requirements are embedded from the spec that
-governs them, work in flight shows up on the pages it touches with tasks done
-over total, and visuals come straight from Figma and the deployed Storybook.
-A page cannot quietly drift from what the platform actually does, because it
-never held a copy in the first place.
+every product spec, in-flight change, and page of prose lives as a file. A
+page states the shape we want in plain words and pictures; the evidence
+around it is live. Work in flight shows up on the pages it touches with
+tasks done over total, journeys and test cases are embedded from the spec
+named in the page's frontmatter, and visuals come straight from Figma and
+the deployed Storybook.
 
 ## How it is organized
 
@@ -59,8 +59,8 @@ Once the code is live, archiving folds the delta into the durable specs and
 files the change away. The spec now says in present tense what it used to
 promise.
 ## The manual already knows
-Every page embedding that spec shows the new truth on the next build. Nothing
-was copied, so nothing had to be caught up.
+Every page names its spec, so its acceptance shelf and its ribbon show the
+new truth on the next build.
 :::
 
 ## Working with an agent
@@ -72,8 +72,8 @@ make that work.
 Cite permanent ids — `loyalty-SC-04`, not "the expiry rule" — in proposals,
 bug reports, and prompts. Ids survive renames; prose does not.
 
-Never retype a requirement. Embed it or cite it; a copy is the one thing
-here that can go stale.
+Never retype a requirement into a proposal or a prompt. Cite its id; a copy
+is the one thing here that can go stale.
 
 The governance docs linked from [How we plan](/guides/how-we-plan) walk the
 whole loop once, end to end, in agent terms.

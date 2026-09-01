@@ -1,6 +1,5 @@
 ---
 title: Bidding
-summary: Card-backed bids on absolute listings, and a close that moves while bidding is alive.
 spec: grade10-auction/auction
 order: 4
 ---

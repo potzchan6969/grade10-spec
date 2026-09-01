@@ -1,6 +1,5 @@
 ---
-title: The identity trail
-summary: Four operator moves recorded append-only, and an action that will not run if it cannot be recorded.
+title: Audit Log
 spec: shared-auth/audit
 audience: operator
 order: 7
@@ -14,8 +13,6 @@ The trail is append-only and fail-closed, which is one sentence with two teeth.
 Nothing can rewrite an entry. And an action whose record cannot be written does
 not happen — the write is not a side effect of the move, it is a condition of
 it.
-
-::spec{id="shared-auth/audit" scenario="audit-SC-11"}
 
 An auditor holds the read grant and nothing else. They read the entries and run
 the consistency check, without seeing the proof and without seeing names or
@@ -32,7 +29,3 @@ auction and loyalty each keep their own trail; this one is identity's.
 ## What an operator and an auditor do
 
 ::journeys{id="shared-auth/audit"}
-
-## The contract
-
-::spec{id="shared-auth/audit"}

@@ -1,6 +1,5 @@
 ---
 title: Inventory
-summary: The house-owned stock ledger behind Auction, Vault and whatever sells physical stock next.
 ---
 
 Grade10 holds physical stock that more than one application wants to consume,

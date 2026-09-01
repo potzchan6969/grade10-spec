@@ -1,6 +1,5 @@
 ---
-title: The sign-in dialog
-summary: Sign-in as a modal over the page the collector is already on, never a navigation away from it.
+title: Sign-In Dialog
 spec: shared-ui/auth-sign-in
 order: 8
 ---

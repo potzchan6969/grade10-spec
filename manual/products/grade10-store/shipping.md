@@ -1,6 +1,5 @@
 ---
-title: Shipping and delivery
-summary: Where an order is between paid and in hand — planned, and not yet specified anywhere.
+title: Shipping
 order: 22
 ---
 

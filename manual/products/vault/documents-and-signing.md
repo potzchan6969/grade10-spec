@@ -1,6 +1,5 @@
 ---
-title: Documents and signing
-summary: The packet a collector signs in the shop, the one-time ticket that opens it, and how a signature is checked later.
+title: Documents and Signing
 order: 2
 ---
 

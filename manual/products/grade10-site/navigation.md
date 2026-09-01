@@ -1,6 +1,5 @@
 ---
-title: Moving around the site
-summary: Which surface an address resolves to, what the session corrects, and what a navigation preserves.
+title: Navigation
 spec: grade10-site/navigation
 order: 3
 ---
@@ -20,8 +19,6 @@ sign-in. Each answers with what the session allows, and a correction *replaces*
 the entry it corrects, so pressing back never returns a collector to the
 address that just bounced them. Nothing else waits for the session.
 
-::spec{id="grade10-site/navigation" scenario="navigation-SC-08"}
-
 Back and forward return the collector to the scroll position they left an entry
 at, while a navigation to a new entry starts at the top. And a surface costs
 only itself: opening one downloads no other surface's page code.
@@ -29,7 +26,3 @@ only itself: opening one downloads no other surface's page code.
 ## What a collector does
 
 ::journeys{id="grade10-site/navigation"}
-
-## The contract
-
-::spec{id="grade10-site/navigation"}

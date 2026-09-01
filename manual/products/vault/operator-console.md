@@ -1,6 +1,5 @@
 ---
-title: Operator console
-summary: The queue staff work, the four grants that split it, and the one thing only a treasurer may record.
+title: Operator Console
 audience: operator
 order: 3
 ---

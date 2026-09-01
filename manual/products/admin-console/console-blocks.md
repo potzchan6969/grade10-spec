@@ -1,6 +1,5 @@
 ---
-title: Console blocks
-summary: The shared operator furniture — tables, async states, dialogs, badges and pagers — written once.
+title: Console Blocks
 spec: admin-console/console-blocks
 order: 1
 ---
@@ -23,8 +22,6 @@ one. A surface that is still reading says so and offers no rows and no empty
 message; a refused read renders in the error tone; an empty result says there is
 nothing, in the secondary tone, with no error anywhere.
 
-::spec{id="admin-console/console-blocks" requirement="The three async states never collapse"}
-
 An irreversible move always confirms in a dialog the surface renders, naming the
 move in the console's own words and offering cancel — never the browser's native
 confirmation. Switching panels announces itself as tabs. Narrowing a dataset is
@@ -41,7 +38,3 @@ told it has more.
 This spec has no feature-set section, which the store's own authoring rules ask
 of every spec. It and the user directory are the only two on disk without one.
 :::
-
-## The contract
-
-::spec{id="admin-console/console-blocks"}

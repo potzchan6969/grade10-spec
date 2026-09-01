@@ -1,6 +1,5 @@
 ---
-title: The user directory surface
-summary: The account table both consoles render, and the three confirmations behind changing an account.
+title: User Directory
 spec: admin-console/user-directory
 audience: operator
 order: 2
@@ -22,8 +21,6 @@ roles and delete appear only when the console supplies a handler, so a console
 can withhold a move the operator's grants do not allow. A row offers ban or
 unban according to the account's standing, and never both.
 
-::spec{id="admin-console/user-directory" requirement="A session is named without its secret"}
-
 One confirmation serves every moderation move. The console supplies the words,
 the tone, and whether a reason is collected; the dialog reports back one
 signature either way, so a console reads the same result whichever move it
@@ -39,7 +36,3 @@ This surface used to live in the shared-UI package as `auth-user-directory`. It
 carries those requirements forward unchanged in behaviour; only its home moved,
 to where admin UI belongs.
 :::
-
-## The contract
-
-::spec{id="admin-console/user-directory"}

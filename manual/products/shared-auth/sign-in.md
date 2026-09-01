@@ -1,6 +1,5 @@
 ---
-title: Signing in
-summary: Emailed link, emailed code or Google — one intent, one request, one email.
+title: Sign-In
 spec: shared-auth/sign-in
 order: 1
 ---
@@ -15,8 +14,6 @@ request, and the link and code options refuse each other while either is in
 flight. Asking again within a minute is answered with a wait rather than a
 second message, and a new send invalidates the mail sent before it, so the
 newest email in an inbox is always the one that works.
-
-::spec{id="shared-auth/sign-in" scenario="sign-in-SC-29"}
 
 The first success for an address creates the account and the address becomes
 unique to it — letter case does not create a second account, though a plus-tag
@@ -49,7 +46,3 @@ what they were doing.
 ::journeys{id="shared-auth/sign-in"}
 
 ::cases{id="shared-auth/sign-in"}
-
-## The contract
-
-::spec{id="shared-auth/sign-in"}

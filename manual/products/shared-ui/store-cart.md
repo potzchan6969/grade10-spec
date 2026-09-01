@@ -1,6 +1,5 @@
 ---
-title: The cart drawer
-summary: A slide-out cart that keeps its shape, re-reads prices on open, and hands checkout to the application.
+title: Cart Drawer
 spec: shared-ui/store-cart
 order: 5
 ---
@@ -14,8 +13,6 @@ Opening it re-reads current status and price against the catalogue behind
 skeleton placeholders, because a cart is the one place a stale price is
 expensive. Sold-out lines are marked, and the count badge on the header ignores
 them, so the number a shopper sees is the number they can buy.
-
-::spec{id="shared-ui/store-cart" requirement="Item count badge excludes sold-out items"}
 
 It closes three ways — the close control, the dimmed backdrop, and Escape — and
 locks the page behind it while it is open. Pressing checkout puts the button
@@ -33,7 +30,3 @@ actually creates the checkout session.
 ## What a shopper does
 
 ::journeys{id="shared-ui/store-cart"}
-
-## The contract
-
-::spec{id="shared-ui/store-cart"}

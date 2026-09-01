@@ -1,6 +1,5 @@
 ---
-title: Sign-in and accounts
-summary: How a person gets into either brand, who they are once inside, and what an operator may do to an account.
+title: Accounts
 ---
 
 `shared-auth` is how a person gets into a brand's site or console, and what

@@ -1,6 +1,5 @@
 ---
-title: Signing out
-summary: One control, one place per surface, and never a tap that ends in silence.
+title: Sign-Out
 spec: shared-auth/sign-out
 order: 3
 ---
@@ -15,8 +14,6 @@ That is the whole contract, and it exists because the alternative is worse than
 a failure — a tap that appears to do nothing leaves someone believing they are
 signed out when they are not.
 
-::spec{id="shared-auth/sign-out" scenario="sign-out-SC-04"}
-
 Where the control sits and what a surface cleans up afterwards belong to the
 surface. On the grade10 site there is exactly one place: the profile. The header
 deliberately offers no second one.
@@ -24,7 +21,3 @@ deliberately offers no second one.
 ## What a collector or operator does
 
 ::journeys{id="shared-auth/sign-out"}
-
-## The contract
-
-::spec{id="shared-auth/sign-out"}

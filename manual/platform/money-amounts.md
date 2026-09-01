@@ -1,6 +1,5 @@
 ---
-title: Money amounts
-summary: Money is a whole number of minor units plus a currency code, and there are exactly two ways to show it.
+title: Money Amounts
 spec: money-amounts
 order: 1
 ---
@@ -18,7 +17,3 @@ symbol and their own locale's punctuation. An operator scanning a table that
 spans currencies wants the ISO code on every row, because a column of numbers
 where some are dollars and some are yen is a mistake waiting to be made. Two
 shapes, chosen by audience, and no third.
-
-## The contract
-
-::spec{id="money-amounts"}

@@ -1,9 +1,8 @@
 ---
 title: Campaigns
-summary: The auction catalogue covers operators author, edit after open, attach lots to, and call off.
 spec: grade10-auction/admin-campaign
 audience: operator
-order: 11
+order: 12
 ---
 
 A campaign is an auction catalogue cover — an event that many listings belong

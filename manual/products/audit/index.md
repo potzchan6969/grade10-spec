@@ -1,6 +1,5 @@
 ---
-title: Audit trail
-summary: A tamper-evident record of every operator action, read as one list.
+title: Audit Trail
 ---
 
 Every operator action across every product is written to a tamper-evident log,

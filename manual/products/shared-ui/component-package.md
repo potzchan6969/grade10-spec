@@ -1,6 +1,5 @@
 ---
-title: The package rulebook
-summary: What the shared component package is, how it is consumed, and what its components may never do.
+title: Package Rules
 spec: shared-ui/component-package
 order: 1
 ---
@@ -16,8 +15,6 @@ analytics and importing an application are all out of bounds. Words arrive as
 one typed copy group, so no store's sentence is hard-coded in a shared file, and
 styling resolves through design tokens one way, so a token-named utility always
 means that token's value.
-
-::spec{id="shared-ui/component-package" requirement="No shared component carries a store's content"}
 
 :::callout{kind="warning"}
 Seven block groups ship in the package without a durable spec. Three have no
@@ -38,7 +35,3 @@ and
 the component contract and testing rules are in the spec store's governance
 docs.
 :::
-
-## The contract
-
-::spec{id="shared-ui/component-package"}

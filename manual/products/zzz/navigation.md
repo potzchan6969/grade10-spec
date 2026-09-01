@@ -1,6 +1,5 @@
 ---
-title: Moving around ZZZ
-summary: How the ZZZ site resolves an address, corrects one the session decides, and keeps a collector's place.
+title: Navigation
 spec: zzz/navigation
 order: 1
 ---
@@ -17,8 +16,6 @@ public surface answers without it; ZZZ has no public surface yet, so each of its
 three answers with what the session allows. A correction replaces the history
 entry it corrects, so going back never returns to the address that bounced.
 
-::spec{id="zzz/navigation" scenario="navigation-SC-07"}
-
 Everything else matches grade10's navigation contract: moving between surfaces
 stays in the page, the browser's own clicks are left untouched, back and forward
 restore the scroll position the collector left, a new entry starts at the top,
@@ -31,7 +28,3 @@ whatever specs that surface will own it.
 ## What a collector does
 
 ::journeys{id="zzz/navigation"}
-
-## The contract
-
-::spec{id="zzz/navigation"}

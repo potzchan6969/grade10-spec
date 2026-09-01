@@ -1,6 +1,5 @@
 ---
-title: Roles and permissions
-summary: A closed set of roles, and grants checked by permission rather than by role name.
+title: Roles and Permissions
 spec: shared-auth/roles
 audience: operator
 order: 4
@@ -14,8 +13,6 @@ caller holds a *permission*, never whether their role string matches something.
 Roles stack when a person holds several, and no operator can widen what a role
 grants, because who holds a role is data in the database while what a role
 grants lives in reviewed code.
-
-::spec{id="shared-auth/roles" scenario="roles-SC-10"}
 
 That split is what makes a compromised operator account a limited problem: it
 can hold roles it should not, but it cannot invent a permission for one.
@@ -50,7 +47,3 @@ production to required. Two of the three are stale.
 ## What a collector and an operator hold
 
 ::journeys{id="shared-auth/roles"}
-
-## The contract
-
-::spec{id="shared-auth/roles"}

@@ -1,6 +1,5 @@
 ---
 title: Finance
-summary: Mortgage lending — deployed, wired, and empty.
 ---
 
 Finance is a scaffold. There is no lending product yet, and nobody uses it,

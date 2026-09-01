@@ -1,6 +1,5 @@
 ---
-title: The grade10 site
-summary: The shell, the first response, and the movement between pages that every grade10 surface inherits.
+title: Site
 ---
 
 `grade10-site` is not a product a collector thinks about — it is the site

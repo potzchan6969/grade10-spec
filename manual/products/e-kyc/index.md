@@ -1,6 +1,5 @@
 ---
-title: Identity store
-summary: One verified identity per person, held behind a wall no browser can reach.
+title: Identity Store
 ---
 
 The identity store holds the verified identity of a person — legal name, date of

@@ -1,11 +1,10 @@
 ---
-title: The store front door
-summary: The hero, section header and collection grid a store landing page is assembled from.
+title: Store Main Page Blocks
 spec: shared-ui/store-home
 order: 3
 ---
 
-Three blocks make a store's front door, between the site chrome and a row of
+Three blocks make a store's main page, between the site chrome and a row of
 products. A **hero** shows an eyebrow, title, description and image, with two
 actions it reports. A **section header** shows a title and, only when an address
 is given, a browse-all link. A **collection grid** lays one tile per supplied
@@ -25,7 +24,3 @@ lays out three tiles.
 ::story{id="store-home-storesectionheader--no-browse-link" title="A section header with no browse address"}
 
 ::story{id="store-home-storecollectiongrid--default" title="The bento collection grid"}
-
-## The contract
-
-::spec{id="shared-ui/store-home"}

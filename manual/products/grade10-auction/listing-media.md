@@ -1,8 +1,7 @@
 ---
-title: Listing gallery and images
-summary: The one ordered gallery a lot is photographed into, its alt text, and the sizes it is served at.
+title: Media Gallery
 spec: grade10-auction/listing-media
-order: 2
+order: 3
 ---
 
 A lot has one gallery, not a front slot and a back slot. It holds one to eight
@@ -20,8 +19,6 @@ characters. When there is none, the listing title is the accessible name, so an
 image is never nameless. Images and their alt stay editable while the listing
 is a draft, created, or published, and stop the moment it closes.
 
-::spec{id="grade10-auction/listing-media" scenario="listing-media-SC-17"}
-
 Every published image answers at exactly four named sizes — `card`, `detail`,
 `thumb` and `zoom`. An image already smaller than the size asked for is
 answered as it is, and a size name the service does not know reads as a missing
@@ -35,7 +32,3 @@ the gallery in order.
 ## What an operator and a collector do
 
 ::journeys{id="grade10-auction/listing-media"}
-
-## The contract
-
-::spec{id="grade10-auction/listing-media"}

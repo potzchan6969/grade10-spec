@@ -1,8 +1,7 @@
 ---
-title: The lot page
-summary: What one lot's own address serves, what a shared link unfurls as, and what happens when no such lot exists.
+title: Listing Details Page
 spec: grade10-auction/listing-page
-order: 3
+order: 2
 ---
 
 Every lot has an address of its own, and that address does the work before any
@@ -21,20 +20,14 @@ on screen is replaced by a loading placeholder, and a value that follows the
 clock — the countdown, the standing — carries on from what was served instead
 of contradicting it.
 
-::spec{id="grade10-auction/listing-page" scenario="listing-page-SC-07"}
-
 Lot addresses are absent from the sitemap on purpose: which lots the auction
 publishes is unknown when the site is built. Everything else about this page
 as a public surface — its title, description, share metadata and status codes —
 is [the site's crawlable-pages contract](/p/grade10-site/crawlable-pages),
 applied per lot.
 
-::story{id="auction-listing-pages--default" title="A live lot page, gallery and bid panel assembled"}
+::story{id="auction-listing-listing-product--default" title="A live lot page, gallery and bid panel assembled"}
 
 ## What a collector does
 
 ::journeys{id="grade10-auction/listing-page"}
-
-## The contract
-
-::spec{id="grade10-auction/listing-page"}

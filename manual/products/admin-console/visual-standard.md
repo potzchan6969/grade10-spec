@@ -1,6 +1,5 @@
 ---
-title: Visual standard
-summary: One component vocabulary for every console, one mechanism for a brand's identity, and the terms the runtime is held to.
+title: Visual Standard
 spec: admin-console/visual-standard
 order: 3
 ---
@@ -27,7 +26,3 @@ rediscovery.
 ## What an operator relies on
 
 ::journeys{id="admin-console/visual-standard"}
-
-## The contract
-
-::spec{id="admin-console/visual-standard"}

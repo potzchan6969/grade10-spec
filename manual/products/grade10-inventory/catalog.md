@@ -1,6 +1,5 @@
 ---
-title: Products and stock
-summary: A draft product with stock rows, intake, and holds that say who holds them and how much remains.
+title: Products and Stock
 spec: grade10-inventory/catalog
 order: 1
 ---

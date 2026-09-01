@@ -1,6 +1,5 @@
 ---
 title: Auction
-summary: Graded cards sold one lot at a time, where every bid is a hold on the bidder's card.
 ---
 
 Grade10 Auction sells graded cards one lot at a time. A collector browses the
@@ -66,7 +65,7 @@ received, and can cancel it.
 :::
 
 :::callout{kind="note"}
-No Figma frame exists for any auction surface — not the lot page, not the bid
+No Figma frame exists for any auction surface — not the listing details page, not the bid
 panel, not the admin queue. Every in-flight auction change says so in its own
 `ui.md` and names the screens still to be produced. The frames are being made;
 until they land, the shipped Storybook stories are the reference.

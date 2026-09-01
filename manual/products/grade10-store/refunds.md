@@ -1,6 +1,5 @@
 ---
-title: Refunds and returns
-summary: What happens when an order comes back — planned, and not yet specified anywhere.
+title: Refunds
 order: 21
 ---
 

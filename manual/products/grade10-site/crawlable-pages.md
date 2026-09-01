@@ -1,6 +1,5 @@
 ---
-title: What an address serves
-summary: Real content, share metadata and an honest status in the first response, before any script runs.
+title: Crawlable Pages
 spec: grade10-site/crawlable-pages
 order: 2
 ---
@@ -23,8 +22,6 @@ site was built, so a card the catalogue gained this morning is listed with no
 deploy behind it. It lists nothing session-gated, no unfilled pattern, and
 nothing that does not answer.
 
-::spec{id="grade10-site/crawlable-pages" scenario="crawlable-pages-SC-10"}
-
 An address answers with its true status. One nested under a surface answers 200
 as the deepest surface that names it; one the site does not hold answers 404 —
 and still shows the not-found surface rather than a bare error page.
@@ -42,7 +39,3 @@ An SPA's server-rendered half lives in its `src/serving/` directory; read
 before touching it. Per-locale addresses, alternates and the document language
 declaration bind the same surfaces and are the localization capability's.
 :::
-
-## The contract
-
-::spec{id="grade10-site/crawlable-pages"}

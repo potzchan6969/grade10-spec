@@ -1,6 +1,5 @@
 ---
-title: The page shell
-summary: The header, main region and footer every grade10 surface renders inside.
+title: Page Shell
 spec: grade10-site/page-shell
 order: 1
 ---
@@ -22,8 +21,6 @@ the site answers a cart, no search until there is a search surface, no link to
 a page the site does not hold. The header marks the item that owns the current
 address, and marks nothing when no item owns it.
 
-::spec{id="grade10-site/page-shell" scenario="page-shell-SC-05"}
-
 Sign-out has exactly one home — the profile. The header offers no way to do it,
 so a collector never has to guess which of two controls ended their session.
 
@@ -40,7 +37,3 @@ so a collector never has to guess which of two controls ended their session.
 ## What a collector does
 
 ::journeys{id="grade10-site/page-shell"}
-
-## The contract
-
-::spec{id="grade10-site/page-shell"}

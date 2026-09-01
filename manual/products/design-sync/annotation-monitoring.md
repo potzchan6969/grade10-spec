@@ -1,6 +1,5 @@
 ---
-title: Annotation monitoring
-summary: One reviewed workflow from a designer's annotation change to an accepted baseline, nothing silent.
+title: Annotation Monitoring
 spec: design-sync/annotation-monitoring
 order: 2
 ---

@@ -1,6 +1,5 @@
 ---
-title: The identity directory
-summary: Listing accounts, banning and unbanning one, and changing what someone may do.
+title: Users
 spec: shared-auth/users
 audience: operator
 order: 5
@@ -15,8 +14,6 @@ A ban is the blunt instrument, and it is meant to be: it ends every session that
 account holds, refuses new sign-ins, and stops money moving. An unban restores
 sign-in. Two moves are refused outright — banning yourself, and banning the last
 admin.
-
-::spec{id="shared-auth/users" scenario="users-SC-06"}
 
 Role changes are made by an operator holding the set-role grant, from the same
 directory. Clearing every operator role leaves a plain user, and an operator
@@ -66,7 +63,3 @@ stays in the directory, marked banned, so it can be found and unbanned later.
 ## What an operator does
 
 ::journeys{id="shared-auth/users"}
-
-## The contract
-
-::spec{id="shared-auth/users"}
