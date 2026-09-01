@@ -16,7 +16,7 @@
 - [x] 3.2 Preserve the existing payment-hold provider reference so `A selected payment method authorizes the maximum`, `Raising a maximum raises the authorization`, and `An outbid cancels the authorization` remain traceable and idempotent.
 - [x] 3.3 Verify: `pnpm run db:drizzle:generate` and `pnpm run check:migrations`.
 
-## 4. Auction and Store backend (grade10)
+## 4. Auction and Store backend (grade10) (owner: @htonyl)
 
 - [ ] 4.1 Make `A selected payment method authorizes the maximum`, `Payment authentication stays in the dialog`, and `A refused authorization does not place a bid` pass through manual-capture PaymentIntent confirmation and the serialized listing decision.
 - [ ] 4.2 Make `Raising a maximum raises the authorization` and `Provider outcomes remain idempotent` pass by updating the listing's existing PaymentIntent before accepting the raised bid, with webhook and reconciliation recovery.
