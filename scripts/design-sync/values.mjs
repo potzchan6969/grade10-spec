@@ -150,7 +150,14 @@ export function expectations(classString, resolveToken, resolveRadius) {
 }
 
 // `text-sm` is a size and `border-t` is an edge; only a value that resolves
-// through the tokens to a hex is a class claiming a colour.
+// through the tokens to a CSS colour is a class claiming a colour. Composed
+// semantic tokens intentionally use expressions such as `color-mix(...)`,
+// which are valid claims even though this static checker cannot reduce them to
+// one hex without a browser's computed-style engine.
+const isColorValue = (value) =>
+  typeof value === "string" &&
+  (value.startsWith("#") ||
+    /^(?:color-mix|hsl|hwb|lab|lch|oklch|rgb|var)\(/i.test(value.trim()));
 const isColorClass = (cls, prefix, resolveToken) => {
   const m = new RegExp(`^${prefix}-(.+)$`).exec(cls);
   if (!m) return false;
@@ -160,15 +167,14 @@ const isColorClass = (cls, prefix, resolveToken) => {
   // no background at all.
   //
   // The modifier is multiplied into whatever alpha the token ALREADY carries,
-  // so a token that is itself translucent is deliberately left unresolved and
-  // goes on being reported. `bg-overlay/30` over an `--overlay` that is itself
-  // 30% paints 9%: that is how the cart and dialog scrims shipped a third as
-  // dark as Figma draws them, and this rail is what surfaced it.
+  // so a token that is itself translucent cannot be reduced to a single static
+  // hex. It still claims the property; only the exact value comparison stays
+  // out of this static rail.
   const slash = m[1].lastIndexOf("/");
   const modified = slash > 0 && /^[\d.]+$/.test(m[1].slice(slash + 1));
-  const hex = resolveToken(modified ? m[1].slice(0, slash) : m[1]);
-  if (!hex?.startsWith("#")) return false;
-  return !modified || hex.length <= 7 || /ff$/i.test(hex);
+  const value = resolveToken(modified ? m[1].slice(0, slash) : m[1]);
+  if (!isColorValue(value)) return false;
+  return !modified || value.length <= 7 || /ff$/i.test(value);
 };
 
 /**
