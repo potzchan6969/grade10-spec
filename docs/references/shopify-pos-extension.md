@@ -2,9 +2,9 @@
 
 The staff-facing loyalty terminal at the till. The umbrella plan
 (`shopify-membership-pos.md`) owns the decisions this implements — notably
-the session model: identification by QR, short code, or email opens a
-short authorized terminal session, and spending only ever takes a
-session. Portal-minted
+the session model: identification by QR, short code, email, phone, or a
+customer already on the cart opens a short authorized terminal session,
+and spending only ever takes a session. Portal-minted
 discount codes validate inside the POS natively; the terminal can also
 apply a member's open codes and complete physical-reward collections.
 
@@ -117,6 +117,25 @@ construction, no KV, no second token format.
   off beside it. Same containment as email (claimed identity, uniform
   miss, rate-limited, audited) — and more enumerable than email, which
   is why the arm ships dark and its provenance tags every metric.
+- **Cart**: a customer already on the sale, by provider reference —
+  Shopify's own customer search, or the till's own `setCustomer` after an
+  earlier identify. No staff action: the till reads the cart when the
+  modal opens and watches it after, behind `pos_cart_identify`, dark by
+  default. Two switches, like phone: the arm identifies, and
+  `pos_cart_spend` — also dark — is what lets it spend. Without it a cart
+  session sees a balance and hands over rewards, and nothing more. The
+  second switch is the point: the till attaches the member to the sale on
+  every successful identify, so a one-switch cart arm would re-open a
+  phone or email member at full capability on the next cart edit, around
+  a spend switch the owner deliberately left off. It proves neither
+  presence (unlike a scan) nor a typed claim (unlike email or phone) —
+  the trust argument is that staff already found and tapped this exact
+  person in Shopify's own search. It never runs over a live session, and
+  it never writes to the cart: the customer is already there, so it
+  confirms rather than attaches. It is not throttled, because the
+  identifier is one the provider resolved rather than anyone guessing,
+  and because a cart miss is an ordinary non-member customer — pausing
+  the arm on that would stop a shop attributing its sales.
 - **Session**: opened by `identify` whichever way it was fed. One
   identification instantly authorizes the terminal to act for that member
   — panel, spend, cancel, applying codes, collection — for a short TTL
@@ -128,10 +147,10 @@ construction, no KV, no second token format.
   again needs no second scan. It is identification,
   not a per-action token: mutations inside it are idempotent on
   gateway-issued intents. No step ever asks the member to confirm on
-  their own device — but a typed identification (email or phone)
-  notifies the member instantly, a receipt one step earlier than the
-  spend receipt. Every session carries its provenance
-  (`qr` / `code` / `email` / `phone`) onto audit rows and every
+  their own device — but an identification the member did not present
+  for (email, phone, or cart) notifies them instantly, a receipt one
+  step earlier than the spend receipt. Every session carries its provenance
+  (`qr` / `code` / `email` / `phone` / `cart`) onto audit rows and every
   `store.pos.*` metric, and a **capability set** computed at identify
   (provenance × flags) is the one enforcement path for every arm: a
   spend-off session is refused `redeem`/`redeemCancel` server-side and
@@ -142,7 +161,9 @@ construction, no KV, no second token format.
   flag — on by default; phone-provenance spending is off until the owner
   turns it on (its sessions still serve lookup and attribution), and
   phone spend-off also refuses `markCollected` while email keeps it — a
-  per-arm capability value, owner-confirmable.
+  per-arm capability value, owner-confirmable. Cart-provenance carries
+  its own spend flag too, dark like phone's and for the same reason: the
+  arm proves nothing the shop chose.
   `redeem`, `redeemCancel`, `applyCode`, and `markCollected` take the
   session; nothing takes a user id.
 
@@ -159,6 +180,10 @@ idle ──scan QR / type code / type email──► panel
           └─ collections: verify → confirm → collected
 ```
 
+- **Or auto-attached.** A customer already on the sale — Shopify's own
+  search, not a scan — drops the modal straight into `panel`, whether
+  they were there when it opened or arrived after. Lookup only until
+  `pos_cart_spend` is on as well.
 - **Attach first.** Spend and apply stay disabled until `cart.customer`
   matches the paired ref; the spend action attaches on the way if needed.
   The modal reads `cart.cartDiscounts` before offering spend, so a staff
@@ -213,8 +238,8 @@ idle ──scan QR / type code / type email──► panel
 
 Served by a router `packages/loyalty/backend/src/shopify` exports; grade10's store
 app mounts it, zzz mounts nothing. Procedures: `config`, `identify`
-(`{qrToken} | {shortCode} | {email} | {phone}` → session + panel, shaped
-by the session's capability set), `spendPreview`
+(`{qrToken} | {shortCode} | {email} | {phone} | {customerId}` → session +
+panel, shaped by the session's capability set), `spendPreview`
 (`{session, points}` → the read-back numbers + the intent), `redeem`
 (`{session, intent}` — answers the code, or `preparing` after a
 config-bounded server-side deadline, so the client's timeout is never
@@ -254,7 +279,8 @@ gateway act, not a client-local one),
   admin panel in seconds (the flags admin surface is a named phase-3
   build item — the 30-second rehearsal flip needs a surface to flip).
   Registry: `pos_enabled: true`, `pos_email_spend: true`,
-  `pos_phone_identify: false`, `pos_phone_spend: false`. Enforced here
+  `pos_phone_identify: false`, `pos_phone_spend: false`,
+  `pos_cart_identify: false`, `pos_cart_spend: false`. Enforced here
   on every request through the session capability set; the modal reads
   the same flags only to render the unavailable states nicely; a row
   for a key the registry no longer declares surfaces loudly in admin.
