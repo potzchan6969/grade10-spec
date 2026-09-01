@@ -29,7 +29,7 @@
   agent:sync-parity`, `pnpm run agent:check-parity`, `pnpm run lint`, `pnpm run
   typecheck`, and `git diff --check`.
 
-## 2. Extend the product reconciliation adapter (grade10)
+## 2. Extend the product reconciliation adapter (grade10) (owner: @kinisworking)
 
 This group depends on group 1 being merged into the registered
 `grade10-spec` store's `main`; it must stop blocked when the impact command is
