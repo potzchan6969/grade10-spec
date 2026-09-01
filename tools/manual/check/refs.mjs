@@ -1,5 +1,5 @@
 /* RULE: `[[refs]]` written in prose name exactly one thing. */
-import { REF_PATTERN, resolveRef } from "../../apps/manual/src/content/refs.ts";
+import { REF_PATTERN, resolveRef } from "../src/content/refs.ts";
 import { everyBlock } from "./context.mjs";
 
 const FENCE = /^(`{3,}|~{3,})/;

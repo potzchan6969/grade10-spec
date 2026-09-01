@@ -4,17 +4,11 @@
  */
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { findRequirement } from "../../apps/manual/src/api/requirements.ts";
-import {
-  fileKeyOf,
-  nodeIdOf,
-} from "../../apps/manual/src/blocks/design-drift.ts";
-import {
-  parsePage,
-  serializePage,
-} from "../../apps/manual/src/content/grammar.ts";
-import { readDesignSync } from "../../apps/manual/src/store/design-sync.mts";
-import { confine, readText } from "../../apps/manual/src/store/disk.mts";
+import { findRequirement } from "../src/api/requirements.ts";
+import { fileKeyOf, nodeIdOf } from "../src/blocks/design-drift.ts";
+import { parsePage, serializePage } from "../src/content/grammar.ts";
+import { readDesignSync } from "../src/store/design-sync.mts";
+import { confine, readText } from "../src/store/disk.mts";
 import { everyBlock, message, scenarioIds } from "./context.mjs";
 import { checkRefs } from "./refs.mjs";
 

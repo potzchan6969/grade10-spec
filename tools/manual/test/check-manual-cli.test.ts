@@ -4,11 +4,11 @@ import { describe, expect, it } from "vitest";
 
 /** The other check-manual test calls the checker in-process, where vitest has
  * already transformed the TypeScript it imports. CI runs it as `node
- * scripts/check-manual.mjs`, which reaches those same files through Node's own
+ * tools/manual/check/check-manual.mjs`, which reaches those same files through Node's own
  * type stripping — so run it that way at least once. */
 
 const SCRIPT = fileURLToPath(
-  new URL("../../../scripts/check-manual.mjs", import.meta.url),
+  new URL("../check/check-manual.mjs", import.meta.url),
 );
 const CLEAN = fileURLToPath(new URL("./fixtures/check/clean", import.meta.url));
 

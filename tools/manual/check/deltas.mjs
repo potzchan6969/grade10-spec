@@ -9,20 +9,16 @@
  */
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { findRequirement } from "../../apps/manual/src/api/requirements.ts";
-import {
-  readText,
-  readTextIfExists,
-  walkFiles,
-} from "../../apps/manual/src/store/disk.mts";
-import { outline } from "../../apps/manual/src/store/markdown.mts";
+import { findRequirement } from "../src/api/requirements.ts";
+import { readText, readTextIfExists, walkFiles } from "../src/store/disk.mts";
+import { outline } from "../src/store/markdown.mts";
 import {
   deltaKindOf,
   deltaRequirementSections,
   deltaSections,
   renamedPairs,
-} from "../../apps/manual/src/store/read-changes.mts";
-import { requirementBlocks } from "../../apps/manual/src/store/read-specs.mts";
+} from "../src/store/read-changes.mts";
+import { requirementBlocks } from "../src/store/read-specs.mts";
 import { everyBlock } from "./context.mjs";
 
 /** The only `## ` headings a delta may hold: the four the fold reads, plus

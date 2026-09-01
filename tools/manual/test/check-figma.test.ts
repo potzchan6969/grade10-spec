@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { runChecks } from "../../../scripts/check-manual.mjs";
+import { runChecks } from "../check/check-manual.mjs";
 import { NO_GIT } from "../src/store/git.mts";
 import { writeStore } from "./tmp-store";
 

@@ -7,7 +7,7 @@
  */
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { readText } from "../../apps/manual/src/store/disk.mts";
+import { readText } from "../src/store/disk.mts";
 
 /** Report order, and which findings end the build. */
 export const RULES = [

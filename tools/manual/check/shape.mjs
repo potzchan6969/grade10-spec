@@ -6,8 +6,8 @@
  */
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { readText, subdirectories } from "../../apps/manual/src/store/disk.mts";
-import { groupHeadings } from "../../apps/manual/src/store/read-specs.mts";
+import { readText, subdirectories } from "../src/store/disk.mts";
+import { groupHeadings } from "../src/store/read-specs.mts";
 import { MANUAL_YAML, plural } from "./context.mjs";
 
 export function checkCoverage(ctx, shape) {

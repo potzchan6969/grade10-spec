@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { formatReport, runChecks } from "../../../scripts/check-manual.mjs";
+import { formatReport, runChecks } from "../check/check-manual.mjs";
 import { NO_GIT, readGitIndex } from "../src/store/git.mts";
 import { writeStore } from "./tmp-store";
 

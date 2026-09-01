@@ -17,70 +17,6 @@ importers:
         specifier: ~6.0.2
         version: 6.0.3
 
-  apps/manual:
-    dependencies:
-      '@grade10/design-system':
-        specifier: workspace:*
-        version: link:../../packages/design-system
-      '@grade10/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
-      '@phosphor-icons/react':
-        specifier: ^2.1.10
-        version: 2.1.10(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      minisearch:
-        specifier: ^7.2.0
-        version: 7.2.0
-      react:
-        specifier: ^19.2.7
-        version: 19.2.8
-      react-dom:
-        specifier: ^19.2.7
-        version: 19.2.8(react@19.2.8)
-      react-markdown:
-        specifier: ^10.1.0
-        version: 10.1.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0)
-      react-router:
-        specifier: ^7.18.3
-        version: 7.18.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      remark-gfm:
-        specifier: ^4.0.1
-        version: 4.0.1(supports-color@7.2.0)
-      yaml:
-        specifier: ^2.9.0
-        version: 2.9.0
-    devDependencies:
-      '@tailwindcss/vite':
-        specifier: ^4.3.3
-        version: 4.3.3(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
-      '@types/node':
-        specifier: ^24.13.2
-        version: 24.13.3
-      '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: ^19.2.3
-        version: 19.2.3(@types/react@19.2.17)
-      '@vitejs/plugin-react':
-        specifier: ^6.0.3
-        version: 6.0.4(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
-      tailwindcss:
-        specifier: ^4.3.3
-        version: 4.3.3
-      tw-animate-css:
-        specifier: ^1.4.0
-        version: 1.4.0
-      typescript:
-        specifier: ~6.0.2
-        version: 6.0.3
-      vite:
-        specifier: ^8.1.1
-        version: 8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0)
-      vitest:
-        specifier: ^4.1.10
-        version: 4.1.10(@types/node@24.13.3)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(jsdom@24.1.3)(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
-
   apps/preview:
     dependencies:
       '@grade10/design-system':
@@ -341,6 +277,70 @@ importers:
       storybook:
         specifier: 10.5.4
         version: 10.5.4(@types/react@19.2.17)(prettier@2.8.8)(react@19.2.8)
+      tailwindcss:
+        specifier: ^4.3.3
+        version: 4.3.3
+      tw-animate-css:
+        specifier: ^1.4.0
+        version: 1.4.0
+      typescript:
+        specifier: ~6.0.2
+        version: 6.0.3
+      vite:
+        specifier: ^8.1.1
+        version: 8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0)
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@types/node@24.13.3)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(jsdom@24.1.3)(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
+
+  tools/manual:
+    dependencies:
+      '@grade10/design-system':
+        specifier: workspace:*
+        version: link:../../packages/design-system
+      '@grade10/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@phosphor-icons/react':
+        specifier: ^2.1.10
+        version: 2.1.10(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      minisearch:
+        specifier: ^7.2.0
+        version: 7.2.0
+      react:
+        specifier: ^19.2.7
+        version: 19.2.8
+      react-dom:
+        specifier: ^19.2.7
+        version: 19.2.8(react@19.2.8)
+      react-markdown:
+        specifier: ^10.1.0
+        version: 10.1.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0)
+      react-router:
+        specifier: ^7.18.3
+        version: 7.18.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      remark-gfm:
+        specifier: ^4.0.1
+        version: 4.0.1(supports-color@7.2.0)
+      yaml:
+        specifier: ^2.9.0
+        version: 2.9.0
+    devDependencies:
+      '@tailwindcss/vite':
+        specifier: ^4.3.3
+        version: 4.3.3(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
+      '@types/node':
+        specifier: ^24.13.2
+        version: 24.13.3
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      '@vitejs/plugin-react':
+        specifier: ^6.0.3
+        version: 6.0.4(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3

@@ -1,10 +1,10 @@
 name: Manual
 
-# Publishes the Grade10 Manual (apps/manual) to https://spec.grade10-stg.com
+# Publishes the Grade10 Manual (tools/manual) to https://spec.grade10-stg.com
 # on the staging Cloudflare account. Every push to main rebuilds the snapshot
 # from the store and redeploys, so the hosted manual is exactly as fresh as
 # the data — all state lives in commits.
-# Local equivalent: pnpm manual:build && wrangler deploy -c apps/manual/wrangler.jsonc
+# Local equivalent: pnpm manual:build && wrangler deploy -c tools/manual/wrangler.jsonc
 #
 # One-time ops:
 # - Repo secret CLOUDFLARE_API_TOKEN_QA (same staging token Storybook uses).
@@ -18,7 +18,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "apps/manual/**"
+      - "tools/manual/**"
       - "manual/**"
       - "openspec/**"
       - "packages/design-system/**"
@@ -83,7 +83,7 @@ jobs:
         run: pnpm run manual:build
 
       - name: Deploy
-        working-directory: apps/manual
+        working-directory: tools/manual
         run: pnpm dlx wrangler@${{ env.WRANGLER_VERSION }} deploy -c wrangler.jsonc
 
       - name: Summary

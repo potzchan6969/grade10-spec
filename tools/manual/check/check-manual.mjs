@@ -29,23 +29,20 @@
  *        section the fold discards, a delta-introduced capability no page
  *        documents. Exits 0.
  *
- * The readers in apps/manual/src are the only parser — this script never
+ * The readers in ../src are the only parser — this script never
  * grows a second one, so the check and the app can never disagree.
  *
- * One rule family per module under `scripts/check/`; this file reads the
+ * One rule family per module in this directory; this file reads the
  * store once and hands the same context to each of them.
  */
 import { existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { walkFiles } from "../apps/manual/src/store/disk.mts";
-import { NO_GIT, readGitIndex } from "../apps/manual/src/store/git.mts";
-import { readChanges } from "../apps/manual/src/store/read-changes.mts";
-import { readManualConfig } from "../apps/manual/src/store/read-manual.mts";
-import {
-  discoverSpecs,
-  readSpecs,
-} from "../apps/manual/src/store/read-specs.mts";
+import { walkFiles } from "../src/store/disk.mts";
+import { NO_GIT, readGitIndex } from "../src/store/git.mts";
+import { readChanges } from "../src/store/read-changes.mts";
+import { readManualConfig } from "../src/store/read-manual.mts";
+import { discoverSpecs, readSpecs } from "../src/store/read-specs.mts";
 import {
   createContext,
   createReport,
@@ -54,10 +51,10 @@ import {
   plural,
   RULES,
   readStoryIndex,
-} from "./check/context.mjs";
-import { checkDeltas } from "./check/deltas.mjs";
-import { checkPages, checkSkeleton, readPages } from "./check/pages.mjs";
-import { checkAcceptance } from "./check/qa.mjs";
+} from "./context.mjs";
+import { checkDeltas } from "./deltas.mjs";
+import { checkPages, checkSkeleton, readPages } from "./pages.mjs";
+import { checkAcceptance } from "./qa.mjs";
 import {
   checkCoverage,
   checkDependencies,
@@ -65,8 +62,8 @@ import {
   checkStoreErrors,
   checkTaxonomy,
   checkUnwritten,
-} from "./check/shape.mjs";
-import { checkStale } from "./check/stale.mjs";
+} from "./shape.mjs";
+import { checkStale } from "./stale.mjs";
 
 const EMPTY_CONFIG = {
   storybookBase: "",
@@ -162,7 +159,7 @@ async function gitIndex(root) {
 if (import.meta.main) {
   const root = process.argv[2]
     ? resolve(process.argv[2])
-    : resolve(dirname(fileURLToPath(import.meta.url)), "..");
+    : resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
   const { text, failures } = formatReport(root, await runChecks(root));
   console.log(text);
   process.exitCode = failures > 0 ? 1 : 0;

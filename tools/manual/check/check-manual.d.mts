@@ -1,6 +1,6 @@
 /** Types for the plain-JS checker beside it, so the builder and the tests can
  * call it without pretending it is untyped. */
-import type { GitIndex } from "../apps/manual/src/store/git.mts";
+import type { GitIndex } from "../src/store/git.mts";
 
 export type CheckLevel = "fail" | "warn";
 

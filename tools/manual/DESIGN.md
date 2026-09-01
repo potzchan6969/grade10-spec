@@ -384,7 +384,7 @@ never sees a badge.
 
 ## Checks
 
-`scripts/check-manual.mjs` at the store root, wired as `check:manual` into
+`check/check-manual.mjs` beside the app, wired as `check:manual` into
 the lint workflow and run before every deploy of the manual:
 
 - every page parses and is canonical

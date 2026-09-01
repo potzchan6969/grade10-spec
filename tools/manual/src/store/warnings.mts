@@ -1,4 +1,4 @@
-import { runChecks } from "../../../../scripts/check-manual.mjs";
+import { runChecks } from "../../check/check-manual.mjs";
 import type { CheckWarning } from "../api/types.ts";
 import { designWarnings, readDesignSync } from "./design-sync.mts";
 import type { GitIndex } from "./git.mts";

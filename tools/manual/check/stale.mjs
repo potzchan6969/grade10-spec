@@ -1,7 +1,7 @@
 /* RULE: a page committed before the specs it embeds. */
 import { join } from "node:path";
-import { readText } from "../../apps/manual/src/store/disk.mts";
-import { requirementBlocks } from "../../apps/manual/src/store/read-specs.mts";
+import { readText } from "../src/store/disk.mts";
+import { requirementBlocks } from "../src/store/read-specs.mts";
 import { everyBlock } from "./context.mjs";
 
 /** Staleness names what moved. "A spec changed" is not an action; "these two

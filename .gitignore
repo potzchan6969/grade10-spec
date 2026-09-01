@@ -27,8 +27,8 @@ dist-ssr
 
 *storybook.log
 storybook-static
-!apps/manual/test/fixtures/**/storybook-static
-!apps/manual/test/fixtures/**/storybook-static/**
+!tools/manual/test/fixtures/**/storybook-static
+!tools/manual/test/fixtures/**/storybook-static/**
 
 # Generated Figma plugin bundles from the design-system token pipeline
 scripts/tokens-sync/figma-plugins/build/
