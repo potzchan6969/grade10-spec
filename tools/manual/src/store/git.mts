@@ -2,6 +2,7 @@ import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
 import type { CommitInfo, HistoryEvent, MainState } from "../api/types.ts";
 import { refsOf } from "./history.mts";
+import type { Roots } from "./roots.mts";
 
 const run = promisify(execFile);
 
@@ -45,6 +46,47 @@ export async function git(root: string, args: string[]): Promise<string> {
     maxBuffer: 256 * 1024 * 1024,
   });
   return stdout;
+}
+
+/** The git view over both roots. One repository, one walk — exactly the index
+ * a same-root store always had. Two repositories, one walk each, merged. */
+export async function readRootsGitIndex(roots: Roots): Promise<GitIndex> {
+  if (roots.own) return readGitIndex(roots.store, ["openspec", "manual"]);
+  const [store, content] = await Promise.all([
+    readGitIndex(roots.store, ["openspec"]),
+    readGitIndex(roots.content, ["manual"]),
+  ]);
+  return mergeGitIndexes(store, content);
+}
+
+/**
+ * Routes by the path itself: `manual/…` lives in the content repository,
+ * everything else in the store. The head is the store's — it stamps the
+ * snapshot the same way whichever repository the manual sits in. A blob ref
+ * pairs a commit with a path from the same repository (the stale check builds
+ * them that way), so the path decides where to ask; a cross-repository ref
+ * simply resolves to nothing, which its caller already treats as "moved".
+ */
+export function mergeGitIndexes(store: GitIndex, content: GitIndex): GitIndex {
+  const side = (path: string) =>
+    path === "manual" || path.startsWith("manual/") ? content : store;
+  return {
+    head: store.head,
+    commitOf: (path) => side(path).commitOf(path),
+    newestUnder: (dir) => side(dir).newestUnder(dir),
+    history: [...store.history, ...content.history]
+      .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
+      .slice(0, HISTORY_LIMIT),
+    readBlobs: async (refs) => {
+      const ofSide = (index: GitIndex) =>
+        refs.filter((ref) => side(ref.slice(ref.indexOf(":") + 1)) === index);
+      const answered = await Promise.all([
+        store.readBlobs(ofSide(store)),
+        content.readBlobs(ofSide(content)),
+      ]);
+      return new Map(answered.flatMap((found) => [...found]));
+    },
+  };
 }
 
 export async function readGitIndex(

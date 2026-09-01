@@ -141,19 +141,22 @@ function requireString(fields: Record<string, unknown>, key: string): string {
 }
 
 /** Disk decides what exists, `manual.yaml` decides the order and may add a
- * product that has no specs yet. */
+ * product that has no specs yet. Only the store's own manual owes the whole
+ * store: a manual mounted in another repository shows what it lists, so
+ * discovery adds nothing there. */
 export function deriveTaxonomy(
   shape: SpecShape,
   config: ManualConfig,
+  own = true,
 ): Taxonomy {
   return {
     products: order(
       config.groups.flatMap((group) => group.products),
-      shape.products,
+      own ? shape.products : [],
     ),
     topics: order(
       config.platform.flatMap((group) => group.topics),
-      shape.topics,
+      own ? shape.topics : [],
     ),
   };
 }

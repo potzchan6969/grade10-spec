@@ -2,6 +2,7 @@ import { runChecks } from "../../check/check-manual.mjs";
 import type { CheckWarning } from "../api/types.ts";
 import { designWarnings, readDesignSync } from "./design-sync.mts";
 import type { GitIndex } from "./git.mts";
+import type { Roots } from "./roots.mts";
 
 /**
  * The warnings the snapshot ships are the checker's own — it is the only place
@@ -18,10 +19,10 @@ import type { GitIndex } from "./git.mts";
  * before this it reached nothing but the cards that happened to match it.
  */
 export async function checkWarnings(
-  root: string,
+  roots: Roots,
   git: GitIndex,
 ): Promise<CheckWarning[]> {
-  const { findings } = await runChecks(root, git);
+  const { findings } = await runChecks(roots, git);
   const warnings = findings
     .filter((one) => one.level === "warn")
     .map((one) => {
@@ -34,5 +35,5 @@ export async function checkWarnings(
       return warning;
     });
 
-  return [...warnings, ...designWarnings(root, readDesignSync(root))];
+  return [...warnings, ...designWarnings(roots, readDesignSync(roots.store))];
 }

@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { draftProposal, type ProposalDraft } from "../src/editor/propose";
+import { rootsOf } from "../src/store/roots.mts";
 import {
   type Reply,
   type StoreRequest,
@@ -34,7 +35,7 @@ function store() {
     "openspec/specs/demo-product/alpha/spec.md": "# alpha\n",
     "openspec/changes/archive/2026-01-01-old/proposal.md": "# Old\n",
   });
-  const endpoints = storeEndpoints(root);
+  const endpoints = storeEndpoints(rootsOf(root));
   const api = async (request: StoreRequest) => body(await endpoints(request));
   return { root, api };
 }

@@ -48,8 +48,11 @@ export function checkUnwritten(ctx, changes, shape) {
 }
 
 /** Disk shape decides what must have a page; `manual.yaml` may add a
- * page-only product or topic, but only one that actually has pages. */
-export function checkTaxonomy(root, config, shape, paths, add) {
+ * page-only product or topic, but only one that actually has pages. Only the
+ * store's own manual owes the whole disk shape a page — a manual in another
+ * repository owes landing pages for exactly what it lists. */
+export function checkTaxonomy(roots, config, shape, paths, add) {
+  const root = roots.content;
   const listed = config.groups.flatMap((group) => group.products);
   const onDisk = new Set(shape.products);
   const hasPages = (id) =>
@@ -66,7 +69,8 @@ export function checkTaxonomy(root, config, shape, paths, add) {
   }
 
   const topics = new Set(shape.topics);
-  for (const id of config.platform.flatMap((group) => group.topics)) {
+  const listedTopics = config.platform.flatMap((group) => group.topics);
+  for (const id of listedTopics) {
     if (topics.has(id) || existsSync(join(root, topicPage(id)))) continue;
     add(
       "config",
@@ -75,7 +79,10 @@ export function checkTaxonomy(root, config, shape, paths, add) {
     );
   }
 
-  for (const id of new Set([...shape.products, ...pageOnly])) {
+  const owedProducts = roots.own
+    ? [...shape.products, ...pageOnly]
+    : listed.filter((id) => onDisk.has(id) || hasPages(id));
+  for (const id of new Set(owedProducts)) {
     requirePage(
       add,
       root,
@@ -83,7 +90,10 @@ export function checkTaxonomy(root, config, shape, paths, add) {
       `product \`${id}\``,
     );
   }
-  for (const id of shape.topics) {
+  const owedTopics = roots.own
+    ? shape.topics
+    : listedTopics.filter((id) => topics.has(id));
+  for (const id of owedTopics) {
     requirePage(add, root, topicPage(id), `topic \`${id}\``);
   }
   for (const slug of config.guides) {

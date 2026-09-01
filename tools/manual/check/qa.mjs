@@ -53,7 +53,7 @@ function suiteOf(spec) {
 
 function checkSuite(ctx, spec, dir) {
   const file = `${dir}/test-cases.md`;
-  if (spec.testCasesError || !existsSync(join(ctx.root, file))) return;
+  if (spec.testCasesError || !existsSync(join(ctx.roots.store, file))) return;
   const suite = suiteOf(spec);
   const issued = scenarioIds(spec);
   // Living cases only: a deprecated case is history, and counting its traces

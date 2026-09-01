@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { rootsOf } from "../src/store/roots.mts";
 import {
   type Reply,
   type StoreRequest,
@@ -20,7 +21,7 @@ function store() {
     "manual/manual.yaml": "products:\n  - demo-product\n",
     "manual/index.md": PAGE,
   });
-  const endpoints = storeEndpoints(root);
+  const endpoints = storeEndpoints(rootsOf(root));
   const api = async (request: StoreRequest) => body(await endpoints(request));
   return { root, api };
 }

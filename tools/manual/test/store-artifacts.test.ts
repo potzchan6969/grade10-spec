@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { NO_GIT } from "../src/store/git.mts";
+import { rootsOf } from "../src/store/roots.mts";
 import { composeStore } from "../src/store/snapshot.mts";
 import { checkWarnings } from "../src/store/warnings.mts";
 import { writeStore } from "./tmp-store";
@@ -54,7 +55,11 @@ const BASE = {
 };
 
 const snapshotOfStore = async (root: string) =>
-  composeStore(root, NO_GIT, await checkWarnings(root, NO_GIT)).snapshot;
+  composeStore(
+    rootsOf(root),
+    NO_GIT,
+    await checkWarnings(rootsOf(root), NO_GIT),
+  ).snapshot;
 
 describe("the assets the snapshot carries", () => {
   it("names every file under manual/assets as the path a page writes", async () => {
@@ -92,15 +97,15 @@ describe("the warnings the snapshot carries", () => {
 
     expect(warnings).toEqual([
       {
-        rule: "journeys",
-        message:
-          "openspec/specs/demo-product/alpha/spec.md: has 1 journey and no page shows them",
-      },
-      {
         rule: "skeleton",
         message:
           "has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
         page: "manual/products/demo-product/alpha.md",
+      },
+      {
+        rule: "journeys",
+        message:
+          "openspec/specs/demo-product/alpha/spec.md: has 1 journey and no page shows them",
       },
     ]);
   });

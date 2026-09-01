@@ -1,7 +1,7 @@
 import { cpSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { findStoreRoot } from "./disk.mts";
+import { resolveRoots } from "./roots.mts";
 import { readStore } from "./snapshot.mts";
 
 /**
@@ -10,11 +10,11 @@ import { readStore } from "./snapshot.mts";
  * `dist/` first.
  */
 const here = fileURLToPath(new URL(".", import.meta.url));
-const root = findStoreRoot(here);
+const roots = resolveRoots();
 const app = join(here, "..", "..");
 const dist = join(app, "dist");
 
-const { snapshot, archive } = await readStore(root);
+const { snapshot, archive } = await readStore(roots);
 
 mkdirSync(join(dist, "api"), { recursive: true });
 writeFileSync(join(dist, "api", "snapshot"), JSON.stringify(snapshot));
@@ -26,7 +26,7 @@ writeFileSync(
   "/api/*\n  content-type: application/json; charset=utf-8\n  cache-control: no-cache\n",
 );
 
-const assets = join(root, "manual", "assets");
+const assets = join(roots.content, "manual", "assets");
 if (existsSync(assets)) {
   cpSync(assets, join(dist, "assets"), { recursive: true });
 }

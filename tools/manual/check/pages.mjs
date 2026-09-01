@@ -122,7 +122,7 @@ function checkBlock(ctx, path, block) {
       break;
     }
     case "image": {
-      const file = confine(ctx.root, "manual/assets", block.src);
+      const file = confine(ctx.roots.content, "manual/assets", block.src);
       if (typeof file !== "string") {
         add("reference", path, `${label(block, "src")}: ${file.error}`);
       } else if (!existsSync(file)) {
@@ -258,7 +258,7 @@ function checkFigma(ctx, path, block) {
  * run the check leaves every figma card unchecked, which is what the note about
  * an unbuilt Storybook index does for story ids. */
 function designSync(ctx) {
-  if (!("designSync" in ctx)) ctx.designSync = readDesignSync(ctx.root);
+  if (!("designSync" in ctx)) ctx.designSync = readDesignSync(ctx.roots.store);
   return ctx.designSync;
 }
 

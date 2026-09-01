@@ -33,7 +33,7 @@ const SCENARIO_HEADING = /^Scenario:\s*/i;
 const ARCHIVE_DATE = /^\d{4}-\d{2}-\d{2}-/;
 
 export function checkDeltas(ctx, { changes, shape, pages }) {
-  const files = readDeltaFiles(ctx.root, changes);
+  const files = readDeltaFiles(ctx.roots.store, changes);
   if (files.length === 0) return;
   checkShape(files, ctx.add);
   checkDiscarded(files, ctx.add);
@@ -146,7 +146,7 @@ function checkDiscarded(files, add) {
  * a name that already exists, and refuses a MODIFIED block that drops a
  * scenario the durable one holds. The same three lookups, run at PR time. */
 function checkFolded(ctx, files, shape) {
-  const blocks = durableBlocks(ctx.root, shape);
+  const blocks = durableBlocks(ctx.roots.store, shape);
   for (const one of files) {
     const spec = ctx.specs.get(one.spec);
     // A spec the readers refused has no requirements to match against, and
@@ -245,7 +245,7 @@ function checkIssued(ctx, files) {
     for (const test of spec.testCases ?? []) durable.set(test.id, spec.id);
   }
 
-  const archived = archivedIds(ctx.root);
+  const archived = archivedIds(ctx.roots.store);
   const issuers = new Map();
   const claim = (id, change) => {
     if (durable.has(id)) return;

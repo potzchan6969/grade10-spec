@@ -2,6 +2,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { buildIndex } from "../src/api/derive";
 import { findStoreRoot } from "../src/store/disk.mts";
+import { rootsOf } from "../src/store/roots.mts";
 import { readStore } from "../src/store/snapshot.mts";
 import {
   changeEntry,
@@ -80,7 +81,7 @@ describe("the real store", () => {
    * must still show, and nothing shown may be stale. */
   it("gives every delta-only capability a way in", async () => {
     const root = findStoreRoot(fileURLToPath(new URL(".", import.meta.url)));
-    const live = buildIndex((await readStore(root)).snapshot);
+    const live = buildIndex((await readStore(rootsOf(root))).snapshot);
     const deltaOnly = [...live.changesBySpec.keys()].filter(
       (id) => !live.specById.has(id) && !live.routeBySpec.has(id),
     );

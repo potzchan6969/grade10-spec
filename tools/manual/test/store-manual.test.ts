@@ -121,4 +121,21 @@ describe("taxonomy", () => {
     expect(taxonomy.products).toEqual(["demo-product"]);
     expect(taxonomy.topics).toEqual(["demo-topic"]);
   });
+
+  /** A manual mounted in another repository shows what it lists — discovery
+   * would pull the whole store into a rail that documents none of it. */
+  it("adds nothing from disk when the manual is not the store's own", () => {
+    const taxonomy = deriveTaxonomy(
+      discoverSpecs(FIXTURE),
+      {
+        storybookBase: "https://s.example",
+        groups: [{ title: "Mine", products: ["page-only"] }],
+        platform: [],
+        guides: [],
+      },
+      false,
+    );
+    expect(taxonomy.products).toEqual(["page-only"]);
+    expect(taxonomy.topics).toEqual([]);
+  });
 });

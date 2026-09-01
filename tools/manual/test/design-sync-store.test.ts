@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { DesignSyncReport } from "../src/api/types";
 import { designWarnings, readDesignSync } from "../src/store/design-sync.mts";
+import { rootsOf } from "../src/store/roots.mts";
 import { writeStore } from "./tmp-store";
 
 const REPORT = ".design-sync/report.json";
@@ -74,7 +75,7 @@ describe("the report as maintenance rows", () => {
 
   const rowsFor = (report: unknown, pages: Record<string, string>, now: Date) =>
     designWarnings(
-      storeWith(report, pages),
+      rootsOf(storeWith(report, pages)),
       readDesignSync(storeWith(report, pages)) as DesignSyncReport,
       now,
     ).map((one) => one.message);
@@ -82,7 +83,7 @@ describe("the report as maintenance rows", () => {
   const FRESH = new Date("2026-08-31T01:00:00.000Z");
 
   it("says nothing at all when there is no report", () => {
-    expect(designWarnings(writeStore({}), undefined)).toEqual([]);
+    expect(designWarnings(rootsOf(writeStore({})), undefined)).toEqual([]);
   });
 
   it("names every drifting set, with what the run said", () => {
@@ -121,7 +122,7 @@ describe("the report as maintenance rows", () => {
     const root = storeWith(full);
 
     expect(
-      designWarnings(root, readDesignSync(root), FRESH).every(
+      designWarnings(rootsOf(root), readDesignSync(root), FRESH).every(
         (one) => one.rule === "design",
       ),
     ).toBe(true);

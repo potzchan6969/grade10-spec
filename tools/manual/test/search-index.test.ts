@@ -9,6 +9,7 @@ import {
   type SearchDoc,
 } from "../src/api/search";
 import { findStoreRoot } from "../src/store/disk.mts";
+import { rootsOf } from "../src/store/roots.mts";
 import { readStore } from "../src/store/snapshot.mts";
 import { pageEntry, snapshotOf, specEntry } from "./manual-fixture";
 
@@ -23,7 +24,7 @@ describe("the query that found nothing it was about", () => {
   const root = findStoreRoot(fileURLToPath(new URL(".", import.meta.url)));
 
   it("surfaces the changes that issue the gift-card scenarios, and little else", async () => {
-    const { snapshot } = await readStore(root);
+    const { snapshot } = await readStore(rootsOf(root));
     const engine = buildSearchIndex(buildIndex(snapshot));
     const { hits, partial } = runSearch(engine, "gift card");
     const where = hits.map((one) => hit(one).to);
@@ -39,7 +40,7 @@ describe("the query that found nothing it was about", () => {
 
   /** One common word must not carry a two-word query. */
   it("refuses to answer both words with either one of them", async () => {
-    const { snapshot } = await readStore(root);
+    const { snapshot } = await readStore(rootsOf(root));
     const engine = buildSearchIndex(buildIndex(snapshot));
 
     const card = runSearch(engine, "card").hits.length;
@@ -52,7 +53,7 @@ describe("the query that found nothing it was about", () => {
   /** Nothing matching every word is worth saying out loud, but it is not worth
    * showing an empty screen over. */
   it("says so when it falls back to the words it could match", async () => {
-    const { snapshot } = await readStore(root);
+    const { snapshot } = await readStore(rootsOf(root));
     const engine = buildSearchIndex(buildIndex(snapshot));
 
     expect(runSearch(engine, "gift zzzzznotaword").partial).toBe(true);

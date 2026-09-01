@@ -7,6 +7,7 @@ import type {
 import { type FrameCard, setsReached } from "../blocks/design-drift.ts";
 import { type Block, parsePage } from "../content/grammar.ts";
 import { readText, readTextIfExists, walkFiles } from "./disk.mts";
+import type { Roots } from "./roots.mts";
 
 /** Where `design-sync:check --report` leaves its verdict and where the nightly
  * workflow commits it. Generated, never authored, so it sits outside
@@ -105,7 +106,7 @@ export function readDesignSync(root: string): DesignSyncReport | undefined {
  * at once.
  */
 export function designWarnings(
-  root: string,
+  roots: Roots,
   report: DesignSyncReport | undefined,
   now = new Date(),
 ): CheckWarning[] {
@@ -121,7 +122,7 @@ export function designWarnings(
     });
   }
 
-  const { stories, frames } = cardsOf(root);
+  const { stories, frames } = cardsOf(roots.content);
   const reached = setsReached(report, stories, frames);
   for (const name of Object.keys(report.sets)) {
     if (reached.has(name)) continue;

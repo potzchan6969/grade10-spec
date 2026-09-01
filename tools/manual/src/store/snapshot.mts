@@ -8,7 +8,12 @@ import type {
 } from "../api/types.ts";
 import { DESIGN_SYNC_REPORT, readDesignSync } from "./design-sync.mts";
 import { newestMtime } from "./disk.mts";
-import { type GitIndex, readGitIndex, readMainStates } from "./git.mts";
+import {
+  type GitIndex,
+  readMainStates,
+  readRootsGitIndex,
+  git as runGit,
+} from "./git.mts";
 import {
   readArchivedChanges,
   readChanges,
@@ -21,17 +26,16 @@ import {
   readManualPages,
 } from "./read-manual.mts";
 import { discoverSpecs, readSpecs } from "./read-specs.mts";
+import type { Roots } from "./roots.mts";
 import { checkWarnings } from "./warnings.mts";
 
 /** Both artifacts share one history walk — the only expensive part of a read. */
 export type Store = { snapshot: Snapshot; archive: Archive };
 
-const TRACKED = ["openspec", "manual"];
-
-export async function readStore(root: string): Promise<Store> {
-  const git = await readGitIndex(root, TRACKED);
-  const store = composeStore(root, git, await checkWarnings(root, git));
-  await markMainStates(root, store);
+export async function readStore(roots: Roots): Promise<Store> {
+  const index = await readRootsGitIndex(roots);
+  const store = composeStore(roots, index, await checkWarnings(roots, index));
+  await markMainStates(roots.store, store);
   return store;
 }
 
@@ -51,27 +55,27 @@ async function markMainStates(root: string, store: Store): Promise<void> {
 }
 
 export function composeStore(
-  root: string,
+  roots: Roots,
   git: GitIndex,
   warnings: CheckWarning[] = [],
 ): Store {
   const generatedAt = new Date().toISOString();
-  const config = readManualConfig(root);
-  const shape = discoverSpecs(root);
-  const designSync = readDesignSync(root);
-  const specs = readSpecs(root, git);
-  markIssuedIds(root, specs);
+  const config = readManualConfig(roots.content);
+  const shape = discoverSpecs(roots.store);
+  const designSync = readDesignSync(roots.store);
+  const specs = readSpecs(roots.store, git);
+  markIssuedIds(roots.store, specs);
 
   return {
     snapshot: {
       generatedAt,
       storeHead: git.head,
       config,
-      taxonomy: deriveTaxonomy(shape, config),
-      pages: readManualPages(root, git),
+      taxonomy: deriveTaxonomy(shape, config, roots.own),
+      pages: readManualPages(roots.content, git),
       specs,
-      changes: readChanges(root, git),
-      assets: readManualAssets(root),
+      changes: readChanges(roots.store, git),
+      assets: readManualAssets(roots.content),
       history: git.history,
       warnings,
       ...(designSync ? { designSync } : {}),
@@ -79,7 +83,7 @@ export function composeStore(
     archive: {
       generatedAt,
       storeHead: git.head,
-      changes: readArchivedChanges(root, git),
+      changes: readArchivedChanges(roots.store, git),
     },
   };
 }
@@ -107,11 +111,24 @@ function* durableIds(specs: SpecEntry[]): Generator<string> {
   }
 }
 
+/** Every head a poll must notice moving: the store's, and the content
+ * repository's when the manual lives in its own. */
+export async function readHeads(roots: Roots): Promise<string> {
+  const head = (await runGit(roots.store, ["rev-parse", "HEAD"])).trim();
+  if (roots.own) return head;
+  const content = (await runGit(roots.content, ["rev-parse", "HEAD"])).trim();
+  return `${head}+${content}`;
+}
+
 /** Cheap enough to run on every poll; it changes whenever a file the store
  * reads is written or committed — the design-sync report included, so dev
  * re-reads it the moment the nightly lands. */
-export function storeStamp(root: string, head: string): string {
-  const watched = [...TRACKED, DESIGN_SYNC_REPORT.split("/")[0]];
-  const newest = watched.map((dir) => newestMtime(join(root, dir)));
-  return `${head}:${Math.max(...newest)}`;
+export function storeStamp(roots: Roots, heads: string): string {
+  const watched = [
+    join(roots.store, "openspec"),
+    join(roots.store, DESIGN_SYNC_REPORT.split("/")[0]),
+    join(roots.content, "manual"),
+  ];
+  const newest = watched.map((dir) => newestMtime(dir));
+  return `${heads}:${Math.max(...newest)}`;
 }

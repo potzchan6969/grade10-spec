@@ -145,9 +145,9 @@ export function createReport() {
   return { findings, notes, add };
 }
 
-export function createContext(root, report, { specs, changes, stories }) {
+export function createContext(roots, report, { specs, changes, stories }) {
   return {
-    root,
+    roots,
     specs,
     // The slice of a snapshot `resolveRef` reads, built once for all pages.
     snapshot: { specs: [...specs.values()] },

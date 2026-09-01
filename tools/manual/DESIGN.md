@@ -12,9 +12,35 @@ The app never restates a fact that lives elsewhere. Requirements come from
 Storybook, and images in `manual/assets/`. Manual pages add the narrative
 that connects them.
 
+## Roots
+
+The viewer reads from two directories, resolved once at startup
+(`src/store/roots.mts`). The **content root** holds the manual —
+`manual/manual.yaml` and the pages beside it. The **store root** holds the
+OpenSpec store — `openspec/specs` and `openspec/changes`. In this repository
+they are the same directory and everything behaves as one tree.
+
+Any repository can mount the viewer (it ships in this repo's
+`tools/manual`, and this repo ships as a submodule) and bring its own
+manual. The content root is found where the command ran — `MANUAL_ROOT`,
+else the nearest `manual/manual.yaml` above `INIT_CWD` or the working
+directory. The store is the content repository itself when it carries
+`openspec/specs`; otherwise the repository's `openspec/config.yaml` names a
+store id and the `openspec` CLI resolves it through the same per-machine
+registry `pnpm plan` uses — the registered clone at its own main, never a
+pinned submodule. `MANUAL_STORE` overrides that resolution.
+
+What follows from a split: nav taxonomy comes only from what the manual
+lists (discovery of unlisted store products is the store repo's own
+affordance), page and asset writes land in the content repository, a
+proposal still lands in the store's `openspec/changes/`, git history and
+commit info merge from both clones, and the checker holds the manual's own
+pages to every page rule while leaving store coverage to the store's own
+repository (see Checks).
+
 ## Content
 
-Pages live at the store root under `manual/`:
+Pages live at the content root under `manual/`:
 
 ```
 manual/
@@ -385,7 +411,11 @@ never sees a badge.
 ## Checks
 
 `check/check-manual.mjs` beside the app, wired as `check:manual` into
-the lint workflow and run before every deploy of the manual:
+the lint workflow and run before every deploy of the manual. Which rules
+run follows who can fix what they find: page rules run against any manual;
+the store families — coverage, suites, deltas, the fold — run only where
+the manual and the store share a repository, because a manual mounted
+elsewhere can neither cause nor fix a hole in the store. The rules:
 
 - every page parses and is canonical
 - every reference resolves: `spec` ids to a durable spec, `changes` ids to

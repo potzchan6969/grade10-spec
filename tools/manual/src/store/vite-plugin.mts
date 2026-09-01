@@ -12,7 +12,6 @@ import {
 } from "node:fs";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { basename, dirname, extname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import type { Plugin } from "vite";
 import { GrammarError, parsePage, serializePage } from "../content/grammar.ts";
 import {
@@ -21,40 +20,41 @@ import {
   slugProblem,
   withdrawProblem,
 } from "../editor/propose.ts";
-import { changeFile, confine, findStoreRoot, storePath } from "./disk.mts";
+import { changeFile, confine, storePath } from "./disk.mts";
 import { git } from "./git.mts";
-import { readStore, type Store, storeStamp } from "./snapshot.mts";
+import { type Roots, resolveRoots } from "./roots.mts";
+import { readHeads, readStore, type Store, storeStamp } from "./snapshot.mts";
 
 /**
- * Dev transport for the store. Both GETs are computed from the store root per
- * request — memoized on git HEAD plus the newest mtime, so an editor can poll
- * them — and every write is confined to `manual/`.
+ * Dev transport for the store. Both GETs are computed from the resolved roots
+ * per request — memoized on git heads plus the newest mtime, so an editor can
+ * poll them — and every write is confined to the content root's `manual/`,
+ * except a proposal, which goes to the store's `openspec/changes/`.
  */
 export function manualStorePlugin(): Plugin {
-  const root = findStoreRoot(fileURLToPath(new URL(".", import.meta.url)));
+  const roots = resolveRoots();
 
   return {
     name: "manual-store",
     configureServer(server) {
-      ensureAssetsDir(root);
-      server.middlewares.use(middleware(root, live(root)));
+      ensureAssetsDir(roots.content);
+      server.middlewares.use(middleware(roots, live(roots)));
     },
     configurePreviewServer(server) {
       const built = join(server.config.root, server.config.build.outDir);
-      server.middlewares.use(middleware(root, fromDist(built)));
+      server.middlewares.use(middleware(roots, fromDist(built)));
     },
   };
 }
 
 type Artifacts = () => Promise<Store>;
 
-function live(root: string): Artifacts {
+function live(roots: Roots): Artifacts {
   let cached: { stamp: string; store: Store } | undefined;
   return async () => {
-    const head = (await git(root, ["rev-parse", "HEAD"])).trim();
-    const stamp = storeStamp(root, head);
+    const stamp = storeStamp(roots, await readHeads(roots));
     if (cached?.stamp !== stamp) {
-      cached = { stamp, store: await readStore(root) };
+      cached = { stamp, store: await readStore(roots) };
     }
     return cached.store;
   };
@@ -96,11 +96,11 @@ export type StoreRequest = {
 };
 
 export function storeEndpoints(
-  root: string,
-  artifacts: Artifacts = live(root),
+  roots: Roots,
+  artifacts: Artifacts = live(roots),
 ): (request: StoreRequest) => Promise<Reply> {
   return (request) =>
-    route(root, artifacts, {
+    route(roots, artifacts, {
       method: request.method ?? "GET",
       url: new URL(request.path, "http://manual.local"),
       header: (name) => request.headers?.[name],
@@ -108,7 +108,7 @@ export function storeEndpoints(
     });
 }
 
-function middleware(root: string, artifacts: Artifacts) {
+function middleware(roots: Roots, artifacts: Artifacts) {
   return (
     req: IncomingMessage,
     res: ServerResponse,
@@ -120,7 +120,7 @@ function middleware(root: string, artifacts: Artifacts) {
       next();
       return;
     }
-    route(root, artifacts, incoming(req, url))
+    route(roots, artifacts, incoming(req, url))
       .catch((cause) => {
         console.error(`manual-store: ${path} failed`, cause);
         return reply(500, { error: describe(cause) });
@@ -142,7 +142,7 @@ function incoming(req: IncomingMessage, url: URL): Incoming {
 }
 
 async function route(
-  root: string,
+  roots: Roots,
   artifacts: Artifacts,
   req: Incoming,
 ): Promise<Reply> {
@@ -163,30 +163,35 @@ async function route(
   // Only `manual/assets/` is ours under /assets/; the bundler owns the rest.
   if (path.startsWith("/assets/")) {
     if (method !== "GET" && method !== "HEAD") return notAllowed(method);
-    return serveAsset(root, decodeURIComponent(path.slice("/assets/".length)));
+    return serveAsset(
+      roots.content,
+      decodeURIComponent(path.slice("/assets/".length)),
+    );
   }
 
   if (method === "GET") {
     if (path === "/api/snapshot")
       return reply(200, (await artifacts()).snapshot);
     if (path === "/api/archive") return reply(200, (await artifacts()).archive);
-    if (path === "/api/dirty") return reply(200, await readDirty(root));
+    if (path === "/api/dirty")
+      return reply(200, await readDirty(roots.content));
     if (path === "/api/page")
-      return readPage(root, url.searchParams.get("path"));
+      return readPage(roots.content, url.searchParams.get("path"));
     return reply(404, { error: `no such endpoint: ${path}` });
   }
   if (method === "DELETE") {
-    if (path === "/api/page") return deletePage(root, await req.json());
+    if (path === "/api/page")
+      return deletePage(roots.content, await req.json());
     return reply(404, { error: `no such endpoint: ${path}` });
   }
   if (method !== "POST") return notAllowed(method);
 
   const body = await req.json();
-  if (path === "/api/page") return writePage(root, body);
-  if (path === "/api/asset") return writeAsset(root, body);
-  if (path === "/api/propose") return propose(root, body);
-  if (path === "/api/withdraw") return withdraw(root, body);
-  if (path === "/api/commit") return commit(root, body);
+  if (path === "/api/page") return writePage(roots.content, body);
+  if (path === "/api/asset") return writeAsset(roots.content, body);
+  if (path === "/api/propose") return propose(roots.store, body);
+  if (path === "/api/withdraw") return withdraw(roots.store, body);
+  if (path === "/api/commit") return commit(roots.content, body);
   return reply(404, { error: `no such endpoint: ${path}` });
 }
 

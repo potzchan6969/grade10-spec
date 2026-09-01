@@ -9,6 +9,7 @@ import {
 } from "../src/api/derive";
 import type { Delta } from "../src/api/types";
 import { findStoreRoot } from "../src/store/disk.mts";
+import { rootsOf } from "../src/store/roots.mts";
 import { readStore } from "../src/store/snapshot.mts";
 import { changeEntry, snapshotOf, specEntry } from "./manual-fixture";
 
@@ -163,7 +164,7 @@ describe("the real store's board", () => {
   const root = findStoreRoot(fileURLToPath(new URL(".", import.meta.url)));
 
   it("puts every change in exactly one lane, misfiling none", async () => {
-    const { snapshot, archive } = await readStore(root);
+    const { snapshot, archive } = await readStore(rootsOf(root));
     const lanes = ["proposed", "specified", "in-progress", "complete"];
 
     for (const change of snapshot.changes) {
@@ -186,7 +187,7 @@ describe("the real store's board", () => {
   /** Delta blocks and task lines are what search has to index and the change
    * detail has to render; both reach the client on the snapshot. */
   it("carries every in-flight delta block and task line", async () => {
-    const { snapshot } = await readStore(root);
+    const { snapshot } = await readStore(rootsOf(root));
     const requirements = snapshot.changes.flatMap((one) =>
       one.deltas.flatMap((delta) => delta.requirements),
     );
@@ -211,7 +212,7 @@ describe("the real store's board", () => {
    * fold drops a delta's journeys, so nothing but the delta files remembers
    * them. */
   it("states an id ceiling no durable spec could reach alone", async () => {
-    const { snapshot } = await readStore(root);
+    const { snapshot } = await readStore(rootsOf(root));
     const loyalty = snapshot.specs.find(
       (one) => one.id === "grade10-store/loyalty",
     );

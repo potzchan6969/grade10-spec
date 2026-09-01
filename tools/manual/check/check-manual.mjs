@@ -36,13 +36,13 @@
  * store once and hands the same context to each of them.
  */
 import { existsSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join, resolve } from "node:path";
 import { walkFiles } from "../src/store/disk.mts";
-import { NO_GIT, readGitIndex } from "../src/store/git.mts";
+import { mergeGitIndexes, NO_GIT, readGitIndex } from "../src/store/git.mts";
 import { readChanges } from "../src/store/read-changes.mts";
 import { readManualConfig } from "../src/store/read-manual.mts";
 import { discoverSpecs, readSpecs } from "../src/store/read-specs.mts";
+import { resolveRoots, rootsOf } from "../src/store/roots.mts";
 import {
   createContext,
   createReport,
@@ -72,32 +72,45 @@ const EMPTY_CONFIG = {
   guides: [],
 };
 
-/** Pure over `root` and the git index; `git` is injectable so a fixture can
- * pin commit dates. */
-export async function runChecks(root, git) {
-  const index = git ?? (await gitIndex(root));
+/**
+ * Pure over the roots and the git index; `git` is injectable so a fixture can
+ * pin commit dates. `target` is the resolved roots, or one directory that is
+ * both — the store documenting itself.
+ *
+ * Which rules run follows who can fix what they find. Page rules — parse,
+ * canonical, every pointer resolves, staleness, the shelf — run everywhere:
+ * they are about this repository's own pages. Store rules — coverage, suites,
+ * deltas, the fold — run only where the manual and the store share a
+ * repository, because a manual mounted elsewhere can neither cause nor fix a
+ * hole in the store, and failing its PRs over one would gate the wrong door.
+ */
+export async function runChecks(target, git) {
+  const roots = typeof target === "string" ? rootsOf(target) : target;
+  const index = git ?? (await gitIndex(roots));
   const report = createReport();
   const { findings, notes, add } = report;
 
   let config = EMPTY_CONFIG;
   try {
-    config = readManualConfig(root);
+    config = readManualConfig(roots.content);
   } catch (cause) {
     // The reader names the file it refused; the path column already does.
     add("config", MANUAL_YAML, message(cause).replace(`${MANUAL_YAML} `, ""));
   }
 
-  const shape = discoverSpecs(root);
-  const specs = new Map(readSpecs(root, index).map((spec) => [spec.id, spec]));
-  const changes = readChanges(root, index);
+  const shape = discoverSpecs(roots.store);
+  const specs = new Map(
+    readSpecs(roots.store, index).map((spec) => [spec.id, spec]),
+  );
+  const changes = readChanges(roots.store, index);
 
-  const paths = walkFiles(root, join(root, "manual"), ".md");
-  const pages = readPages(root, paths, index, add);
+  const paths = walkFiles(roots.content, join(roots.content, "manual"), ".md");
+  const pages = readPages(roots.content, paths, index, add);
 
-  const ctx = createContext(root, report, {
+  const ctx = createContext(roots, report, {
     specs,
     changes,
-    stories: readStoryIndex(root, add),
+    stories: readStoryIndex(roots.store, add),
   });
 
   checkPages(ctx, pages);
@@ -108,24 +121,29 @@ export async function runChecks(root, git) {
     );
   }
 
-  checkCoverage(ctx, shape);
-  checkUnwritten(ctx, changes, shape);
-  checkAcceptance(ctx, shape);
-  checkTaxonomy(root, config, shape, paths, add);
+  checkTaxonomy(ctx.roots, config, shape, paths, add);
   checkSkeleton(ctx, pages);
+  await checkStale(roots.store, pages, specs, shape.dirs, index, add);
 
-  const folded = checkSpecShape(root, shape, add);
-  checkDeltas(ctx, { changes, shape, pages });
-  checkStoreErrors(specs, changes, folded, add);
-  checkDependencies(root, changes, add);
-
-  await checkStale(root, pages, specs, shape.dirs, index, add);
+  if (roots.own) {
+    checkCoverage(ctx, shape);
+    checkUnwritten(ctx, changes, shape);
+    checkAcceptance(ctx, shape);
+    const folded = checkSpecShape(roots.store, shape, add);
+    checkDeltas(ctx, { changes, shape, pages });
+    checkStoreErrors(specs, changes, folded, add);
+    checkDependencies(roots.store, changes, add);
+  } else {
+    notes.push(
+      `store rules not run — the store's own repository answers for ${roots.store}`,
+    );
+  }
 
   return { findings, notes };
 }
 
-export function formatReport(root, result) {
-  const lines = [`manual check — ${root}`];
+export function formatReport(target, result) {
+  const lines = [`manual check — ${label(target)}`];
   for (const rule of RULES) {
     const found = result.findings
       .filter((one) => one.rule === rule.key)
@@ -145,22 +163,36 @@ export function formatReport(root, result) {
   return { text: lines.join("\n"), failures, warnings };
 }
 
+function label(target) {
+  if (typeof target === "string") return target;
+  return target.own
+    ? target.content
+    : `${target.content} (store: ${target.store})`;
+}
+
 function byPathThenReason(a, b) {
   if (a.path !== b.path) return a.path < b.path ? -1 : 1;
   if (a.reason === b.reason) return 0;
   return a.reason < b.reason ? -1 : 1;
 }
 
-async function gitIndex(root) {
-  if (!existsSync(join(root, ".git"))) return NO_GIT;
-  return readGitIndex(root, ["openspec", "manual"]);
+/** Commit info is decoration here as everywhere: a root that is not a git
+ * repository checks fine, it just cannot date its pages. */
+async function gitIndex(roots) {
+  const at = (root, dirs) =>
+    existsSync(join(root, ".git")) ? readGitIndex(root, dirs) : NO_GIT;
+  if (roots.own) return at(roots.store, ["openspec", "manual"]);
+  return mergeGitIndexes(
+    await at(roots.store, ["openspec"]),
+    await at(roots.content, ["manual"]),
+  );
 }
 
 if (import.meta.main) {
-  const root = process.argv[2]
-    ? resolve(process.argv[2])
-    : resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-  const { text, failures } = formatReport(root, await runChecks(root));
+  const roots = process.argv[2]
+    ? rootsOf(resolve(process.argv[2]))
+    : resolveRoots();
+  const { text, failures } = formatReport(roots, await runChecks(roots));
   console.log(text);
   process.exitCode = failures > 0 ? 1 : 0;
 }
