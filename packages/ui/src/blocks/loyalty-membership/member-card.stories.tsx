@@ -114,7 +114,7 @@ export const AlreadyUsed: Story = {
     ).toBeInTheDocument();
     expect(said.getByText(/Causeway Bay/)).toBeInTheDocument();
     expect(
-      said.getByText(new RegExp(FIXTURE_MEMBER_FIRST_USE_AT)),
+      said.getByText(FIXTURE_MEMBER_FIRST_USE_AT, { exact: false }),
     ).toBeInTheDocument();
 
     expect(canvas.queryByText(/Expires in/)).not.toBeInTheDocument();
