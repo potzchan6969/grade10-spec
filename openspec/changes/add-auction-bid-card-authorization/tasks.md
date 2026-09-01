@@ -12,9 +12,9 @@
 
 ## 3. Data migration (grade10) (owner: @htonyl)
 
-- [ ] 3.1 Make `A later bid retains the listing's payment method` pass with the bidder/listing opaque payment-method binding and its uniqueness constraint.
-- [ ] 3.2 Preserve the existing payment-hold provider reference so `A selected payment method authorizes the maximum`, `Raising a maximum raises the authorization`, and `An outbid cancels the authorization` remain traceable and idempotent.
-- [ ] 3.3 Verify: `pnpm run db:drizzle:generate` and `pnpm run check:migrations`.
+- [x] 3.1 Make `A later bid retains the listing's payment method` pass with the bidder/listing opaque payment-method binding and its uniqueness constraint.
+- [x] 3.2 Preserve the existing payment-hold provider reference so `A selected payment method authorizes the maximum`, `Raising a maximum raises the authorization`, and `An outbid cancels the authorization` remain traceable and idempotent.
+- [x] 3.3 Verify: `pnpm run db:drizzle:generate` and `pnpm run check:migrations`.
 
 ## 4. Auction and Store backend (grade10)
 
