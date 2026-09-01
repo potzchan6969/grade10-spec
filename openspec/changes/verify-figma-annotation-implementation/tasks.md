@@ -17,7 +17,7 @@
   Figma write for `annotation-implementation-verification-SC-04`,
   `annotation-implementation-verification-SC-08`, and
   `annotation-implementation-verification-SC-16`.
-- [ ] 1.4 Extend the shared teammate reference and spec-scope
+- [x] 1.4 Extend the shared teammate reference and spec-scope
   `reconcile-figma-annotations` skill to capture implementation, focused-test,
   and runtime evidence in `grade10-spec`, preview validated outcomes, separate
   eligible acceptance from planning groups, invoke the confirmed existing
