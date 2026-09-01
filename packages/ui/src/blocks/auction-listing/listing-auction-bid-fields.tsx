@@ -141,10 +141,7 @@ function StandingStatusBadge({
     return <Badge variant="warning">{copy.outbid}</Badge>;
   }
 
-  if (
-    view.standing === "leading-max" ||
-    view.standing === "leading-manual"
-  ) {
+  if (view.standing === "leading-max" || view.standing === "leading-manual") {
     return <Badge variant="success">{copy.highestBid}</Badge>;
   }
 
@@ -539,4 +536,11 @@ function BuyerFeeHint({
 }
 
 export type { ListingAuctionBidFieldsCopy };
-export { BidActions, BuyerFeeHint, PriceBlock, StandingBanner, StandingStatusBadge, TimeBlock };
+export {
+  BidActions,
+  BuyerFeeHint,
+  PriceBlock,
+  StandingBanner,
+  StandingStatusBadge,
+  TimeBlock,
+};

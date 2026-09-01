@@ -49,11 +49,12 @@ const INITIAL_SESSION: ListingBidEnrollmentSession = {
 };
 
 function useListingBidEnrollment(listingId = "demo-lot") {
-  const [session, setSession] = useState<ListingBidEnrollmentSession>(
-    INITIAL_SESSION,
-  );
-  const [autoBidIntroAcknowledgedListingIds, setAutoBidIntroAcknowledgedListingIds] =
-    useState<ReadonlySet<string>>(() => new Set());
+  const [session, setSession] =
+    useState<ListingBidEnrollmentSession>(INITIAL_SESSION);
+  const [
+    autoBidIntroAcknowledgedListingIds,
+    setAutoBidIntroAcknowledgedListingIds,
+  ] = useState<ReadonlySet<string>>(() => new Set());
 
   const setupSteps = session.ageVerified
     ? (["payment"] as const)

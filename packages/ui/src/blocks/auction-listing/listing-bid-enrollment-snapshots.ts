@@ -1,5 +1,5 @@
-import type { ListingAuctionBidView } from "./types";
 import type { SetupSheetStep } from "./listing-bid-enrollment-prototypes";
+import type { ListingAuctionBidView } from "./types";
 
 export type ListingBidEnrollmentSnapshot = {
   bidMode: "manual" | "auto";

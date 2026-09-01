@@ -1,18 +1,18 @@
-import type { ListingAuctionBidCardCopy } from "./listing-auction-bid-card";
-import type { ListingAgeVerificationDialogCopy } from "./listing-age-verification-dialog";
-import { minNextBidMinor } from "./format-usd";
-import type {
-  ListingAuctionBidView,
-  ListingAuctionStanding,
-  ListingBidHistoryRow,
-  ListingUserBidHistoryRow,
-} from "./types";
 import {
   FIXTURE_AUCTION_CLOSED_AT_MS,
   FIXTURE_AUCTION_ENDS_AT_MS,
   FIXTURE_AUCTION_OPENS_AT_MS,
   FIXTURE_ACTIVITY_TIME_COPY,
 } from "../../lib/datetime-fixtures";
+import { minNextBidMinor } from "./format-usd";
+import type { ListingAgeVerificationDialogCopy } from "./listing-age-verification-dialog";
+import type { ListingAuctionBidCardCopy } from "./listing-auction-bid-card";
+import type {
+  ListingAuctionBidView,
+  ListingAuctionStanding,
+  ListingBidHistoryRow,
+  ListingUserBidHistoryRow,
+} from "./types";
 
 export type BiddingState =
   | "opens"
