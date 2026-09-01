@@ -1,0 +1,37 @@
+{
+  "title": "结算",
+  "empty": "你的购物车是空的。",
+  "browse": "浏览商店",
+  "subtotal": "小计",
+  "quantity": "× {count}",
+  "pay": "付款",
+  "paying": "正在准备付款",
+  "leaving": "正前往付款页面",
+  "leavingWith": "已用 {points} 分抵 {money}，正前往付款页面。",
+  "settling": "你的订单正在结算，这里不需要再做任何事。",
+  "points": {
+    "label": "积分",
+    "field": "要使用的积分",
+    "balance": "你有 {points} 分。",
+    "ceiling": "此购物车最多可用 {points} 分，抵 {money}。",
+    "none": "此购物车不能使用积分。",
+    "useMax": "用到上限",
+    "clear": "不用积分",
+    "chosen": "{points} 分抵 {money}",
+    "goodsOnly": "积分只可用于商品，不包括运费与税费。",
+    "unit": "分"
+  },
+  "reason": {
+    "emptyCart": "你的购物车是空的。",
+    "invalidQuantity": "其中一项的数量超出商店可售的范围。",
+    "unknownProduct": "商店已不再提供其中一款卡。",
+    "unknownVariant": "商店已不再提供其中一个评级。",
+    "unavailable": "其中一项已停售。",
+    "quantityClamped": "商店的其中一项库存少于你购物车所需的数量。",
+    "currencyMismatch": "商店报价的货币并非本店销售的货币。这里无法处理——请告诉我们，我们会修正。",
+    "catalog_unavailable": "商店没有响应，请稍后再试。",
+    "payment_declined": "付款被拒绝，请改用其他付款方式再试。",
+    "payment_error": "未能建立付款，请稍后再试。",
+    "points_refused": "计划不接受在此购物车使用这么多积分，请改用其他数量。"
+  }
+}

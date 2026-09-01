@@ -11,6 +11,7 @@
   "historyLoading": "Loading bid history…",
   "historyLoadFailed": "Could not load this bid history.",
   "retryHistory": "Try again",
+  "events": "Bid events",
   "showHistory": "Show bid history",
   "hideHistory": "Hide bid history",
   "openListing": "View listing",
@@ -24,13 +25,6 @@
   "bidder": "{label}",
   "manual": "Manual",
   "automatic": "Automatic",
-  "standingPending": "Pending",
-  "standingLeading": "Leading",
-  "standingOutbid": "Outbid",
-  "standingWon": "Won",
-  "standingLost": "Lost",
-  "standingCanceled": "Canceled",
-  "standingFailedOnly": "Failed-only",
   "youWereOutbid": "You were outbid",
   "bidRequested": "You submitted a bid of {amount}",
   "bidRefused": "Your bid of {amount} was not accepted",
@@ -38,10 +32,21 @@
   "automaticMaximumConfigured": "Automatic maximum set to {amount}",
   "automaticMaximumRaised": "Automatic maximum raised to {amount}",
   "standingChanged": "Standing changed to {standing}",
-  "failureWindow": "The bidding window is closed.",
-  "failureMinimum": "The bid did not meet the minimum amount.",
-  "failureAccount": "This account is not eligible to bid.",
-  "failurePayment": "Payment authorization did not succeed.",
-  "failureStalePrice": "Another bid made this amount out of date.",
-  "failureUnavailable": "Bidding could not be evaluated right now."
+  "standing": {
+    "pending": "Pending",
+    "leading": "Leading",
+    "outbid": "Outbid",
+    "won": "Won",
+    "lost": "Lost",
+    "canceled": "Canceled",
+    "failed_only": "Failed-only"
+  },
+  "failure": {
+    "window": "The bidding window is closed.",
+    "minimum": "The bid did not meet the minimum amount.",
+    "account": "This account is not eligible to bid.",
+    "payment": "Payment authorization did not succeed.",
+    "stale_price": "Another bid made this amount out of date.",
+    "unavailable": "Bidding could not be evaluated right now."
+  }
 }

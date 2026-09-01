@@ -11,6 +11,7 @@
   "historyLoading": "正在載入出價紀錄…",
   "historyLoadFailed": "無法載入這項出價紀錄。",
   "retryHistory": "再試一次",
+  "events": "出價事件",
   "showHistory": "顯示出價紀錄",
   "hideHistory": "隱藏出價紀錄",
   "openListing": "查看拍品",
@@ -24,13 +25,6 @@
   "bidder": "{label}",
   "manual": "手動",
   "automatic": "自動",
-  "standingPending": "待處理",
-  "standingLeading": "領先",
-  "standingOutbid": "已被超越",
-  "standingWon": "得標",
-  "standingLost": "未得標",
-  "standingCanceled": "已取消",
-  "standingFailedOnly": "僅有失敗出價",
   "youWereOutbid": "你已被超越",
   "bidRequested": "你提交了 {amount} 的出價",
   "bidRefused": "你的 {amount} 出價未獲接受",
@@ -38,10 +32,21 @@
   "automaticMaximumConfigured": "已設定自動出價上限 {amount}",
   "automaticMaximumRaised": "自動出價上限已提高至 {amount}",
   "standingChanged": "狀態已變更為{standing}",
-  "failureWindow": "出價時段已結束。",
-  "failureMinimum": "出價未達最低金額。",
-  "failureAccount": "此帳戶不符合出價資格。",
-  "failurePayment": "付款授權未成功。",
-  "failureStalePrice": "其他出價令此金額已過時。",
-  "failureUnavailable": "目前無法評估出價。"
+  "standing": {
+    "pending": "待處理",
+    "leading": "領先",
+    "outbid": "已被超越",
+    "won": "得標",
+    "lost": "未得標",
+    "canceled": "已取消",
+    "failed_only": "僅有失敗出價"
+  },
+  "failure": {
+    "window": "出價時段已結束。",
+    "minimum": "出價未達最低金額。",
+    "account": "此帳戶不符合出價資格。",
+    "payment": "付款授權未成功。",
+    "stale_price": "其他出價令此金額已過時。",
+    "unavailable": "目前無法評估出價。"
+  }
 }

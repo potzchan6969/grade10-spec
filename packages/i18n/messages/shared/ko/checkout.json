@@ -1,0 +1,37 @@
+{
+  "title": "결제",
+  "empty": "장바구니가 비어 있습니다.",
+  "browse": "스토어 둘러보기",
+  "subtotal": "소계",
+  "quantity": "× {count}",
+  "pay": "결제",
+  "paying": "결제를 준비하는 중",
+  "leaving": "결제 페이지로 이동합니다",
+  "leavingWith": "{points}포인트로 {money}가 차감되었습니다. 결제 페이지로 이동합니다.",
+  "settling": "주문을 정산하는 중입니다. 여기에서 더 하실 일은 없습니다.",
+  "points": {
+    "label": "포인트",
+    "field": "사용할 포인트",
+    "balance": "{points}포인트를 보유하고 있습니다.",
+    "ceiling": "이 장바구니에는 최대 {points}포인트, {money}까지 사용할 수 있습니다.",
+    "none": "이 장바구니에는 포인트를 사용할 수 없습니다.",
+    "useMax": "최대 사용",
+    "clear": "사용 안 함",
+    "chosen": "{points}포인트로 {money} 할인",
+    "goodsOnly": "포인트는 상품 금액에만 사용되며 배송비나 세금에는 적용되지 않습니다.",
+    "unit": "포인트"
+  },
+  "reason": {
+    "emptyCart": "장바구니가 비어 있습니다.",
+    "invalidQuantity": "이 중 한 항목의 수량이 판매 가능한 범위를 벗어났습니다.",
+    "unknownProduct": "이 중 한 카드는 더 이상 판매하지 않습니다.",
+    "unknownVariant": "이 중 한 등급은 더 이상 판매하지 않습니다.",
+    "unavailable": "이 중 한 항목은 더 이상 판매하지 않습니다.",
+    "quantityClamped": "이 중 한 항목의 재고가 장바구니 수량보다 적습니다.",
+    "currencyMismatch": "스토어가 제시한 통화는 이 매장에서 판매하는 통화가 아닙니다. 여기에서는 처리할 수 없으니 알려 주시면 수정하겠습니다.",
+    "catalog_unavailable": "스토어가 응답하지 않았습니다. 잠시 후 다시 시도해 주세요.",
+    "payment_declined": "결제가 거절되었습니다. 다른 수단으로 다시 시도해 주세요.",
+    "payment_error": "결제를 설정하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+    "points_refused": "이 장바구니에 그만큼의 포인트를 사용할 수 없습니다. 다른 금액을 선택해 주세요."
+  }
+}
