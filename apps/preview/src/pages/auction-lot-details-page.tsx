@@ -1,12 +1,12 @@
 import {
+  FIXTURE_ACTIVITY_TIME_COPY,
+  FIXTURE_SHIPPED_LOCALE,
+  FIXTURE_TIME_ZONE,
   ListingAgeVerificationDialog,
   ListingAuctionCardSidebar,
   ListingLotGallery,
   ListingLotHeader,
   ListingUserBidHistory,
-  FIXTURE_ACTIVITY_TIME_COPY,
-  FIXTURE_SHIPPED_LOCALE,
-  FIXTURE_TIME_ZONE,
 } from "@grade10/ui";
 import { useEffect, useState } from "react";
 import {

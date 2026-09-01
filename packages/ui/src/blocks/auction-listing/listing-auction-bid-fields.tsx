@@ -22,6 +22,11 @@ import {
 } from "./format-usd";
 import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
 import "./listing-bid-mode-stack.css";
+import {
+  formatCollectorDeadline,
+  formatLocalMoment,
+  type ShippedLocale,
+} from "../../lib/format-datetime";
 import { ListingCountdownDisplay } from "./listing-countdown-display";
 import {
   ListingAutoBidControls,
@@ -29,11 +34,6 @@ import {
 } from "./listing-manual-bid-controls";
 import { ListingRollingUsdDisplay } from "./listing-rolling-usd-display";
 import type { BidEnrollment, ListingAuctionBidView } from "./types";
-import {
-  formatCollectorDeadline,
-  formatLocalMoment,
-  type ShippedLocale,
-} from "../../lib/format-datetime";
 
 type ListingAuctionBidFieldsCopy = {
   auctionWon: string;

@@ -12,6 +12,10 @@ import {
   useRef,
   useState,
 } from "react";
+import type {
+  ActivityTimeCopy,
+  ShippedLocale,
+} from "../../lib/format-datetime";
 import {
   BidActions,
   BuyerFeeHint,
@@ -23,7 +27,6 @@ import {
 } from "./listing-auction-bid-fields";
 import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
 import { ListingBidHistoryList } from "./listing-bid-history-list";
-import type { ActivityTimeCopy, ShippedLocale } from "../../lib/format-datetime";
 import type {
   BidEnrollment,
   ListingAuctionBidView,
