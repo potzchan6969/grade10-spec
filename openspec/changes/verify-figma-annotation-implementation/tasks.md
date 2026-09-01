@@ -65,7 +65,7 @@ absent rather than adding a product-local validator.
   agent:sync-parity`, `pnpm run agent:check-parity`, `pnpm run lint`, `pnpm run
   typecheck`, and `git diff --check`.
 
-## 3. Prove the scoped handoff end to end (grade10-spec, grade10)
+## 3. Prove the scoped handoff end to end (grade10-spec, grade10) (owner: @kinisworking)
 
 This group depends on groups 1 and 2. It uses fixture or disposable planning
 targets and performs no real annotation acceptance, commit, push, merge, task
