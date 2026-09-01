@@ -84,7 +84,7 @@ claim, implementation, submodule advance, or Figma write.
   `annotation-implementation-verification-SC-11` through
   `annotation-implementation-verification-SC-17` and confirm the annotation
   baseline remains byte-identical.
-- [ ] 3.3 Run `pnpm run test:design-sync`, `pnpm run agent:check-parity`, `pnpm
+- [x] 3.3 Run `pnpm run test:design-sync`, `pnpm run agent:check-parity`, `pnpm
   run lint`, and `pnpm run typecheck` in `grade10-spec`; run `pnpm run
   test:agent`, `pnpm run agent:check-parity`, `pnpm run lint`, and `pnpm run
   typecheck` in `grade10`; run `openspec validate
