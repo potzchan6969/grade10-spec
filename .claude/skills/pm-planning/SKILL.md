@@ -70,10 +70,17 @@ execute it is not.
    ```bash
    openspec validate <change-name> --strict
    ```
-9. **Hand off by saying it needs promoting.** Both boards render a change with
-   no `tasks.md` as "still being planned", so it is indistinguishable from an
-   unfinished plan until an engineer promotes it. A promotion, not a message,
-   is what puts the work in front of someone.
+9. **Generate the QA suite — this is part of finishing the lane, not a later
+   favour.** Run `/spec-to-tcs <change-name>` (the `spec-to-tcs` skill) now,
+   so a `test-cases.md` lands beside each delta with every case `draft`.
+   `docs/governance/specs-to-test-cases.md` defines the derivation; a change
+   with `skip_specs: true` has nothing to generate. Without this step the
+   suite silently never exists, and QA finds out at archive day.
+10. **Hand off by saying it needs promoting.** Both boards render a change
+    with no `tasks.md` as "still being planned", so it is indistinguishable
+    from an unfinished plan until an engineer promotes it. A promotion, not a
+    message, is what puts the work in front of someone — and the suite from
+    step 9 is already on `/qa`'s in-flight list for a reviewer.
 
 ## Writing the deltas
 
