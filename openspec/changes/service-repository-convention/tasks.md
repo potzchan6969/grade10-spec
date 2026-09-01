@@ -4,7 +4,7 @@
 - [ ] 1.2 Add the service, query-shape, PGlite execution, and TDD scope definitions to the application repository's testing architecture guide.
 - [ ] 1.3 Add one small, representative backend example that shows an entrypoint, service, repository port, Drizzle implementation, and the three corresponding test types.
 
-## 2. Establish reusable test seams (owner: @devon)
+## 2. Establish reusable test seams
 
 - [ ] 2.1 Confirm the shared PGlite fixture exposes the migrated database and transaction handle repositories require without app-specific lifecycle hooks.
 - [ ] 2.2 Add or document a lightweight fake-repository pattern for service tests that carries no Worker or database setup.

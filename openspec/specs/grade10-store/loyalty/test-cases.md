@@ -69,7 +69,7 @@ this fails, nothing else in the journey is worth running.
 
 - **Severity:** critical
 - **Priority:** high
-- **Status:** actual
+- **Status:** draft
 - **Behaviour:** positive
 - **Type:** smoke
 - **Layer:** e2e
@@ -97,20 +97,20 @@ the case compares the two results explicitly.
 | At the earn rate | 9.5 points |
 | After the 1.2× multiplier | 11.4 points |
 | Floored once at the end | 11 points |
-| Incorrect result if floored at each step | 10 points |
+| Floored at each step, which must not happen | 10 points |
 
 **Steps:**
 
 | # | Action | Expected result |
 | --- | --- | --- |
 | 1 | Complete a HKD 95 purchase as the Diamond member. | The purchase completes. |
-| 2 | Read the member's balance. | It holds 11 points. A balance of 11 confirms a single floor; 10 means the floor was applied at each step. |
+| 2 | Read the member's balance. | It holds 11 points, not 10. |
 
 **Properties:**
 
 - **Severity:** major
 - **Priority:** medium
-- **Status:** actual
+- **Status:** draft
 - **Behaviour:** positive
 - **Type:** functional
 - **Layer:** unit
@@ -151,7 +151,7 @@ still reported as not joined.
 
 - **Severity:** major
 - **Priority:** medium
-- **Status:** actual
+- **Status:** draft
 - **Behaviour:** positive
 - **Type:** functional
 - **Layer:** api
@@ -194,7 +194,7 @@ counting the moment its window ends rather than when a scheduled pass gets to it
 
 - **Severity:** critical
 - **Priority:** high
-- **Status:** actual
+- **Status:** draft
 - **Behaviour:** positive
 - **Type:** functional
 - **Layer:** api
@@ -235,7 +235,7 @@ the debit — no point leaves the ledger unattributed.
 
 - **Severity:** critical
 - **Priority:** high
-- **Status:** actual
+- **Status:** draft
 - **Behaviour:** positive
 - **Type:** functional
 - **Layer:** api
@@ -279,7 +279,7 @@ processed — the two dates are deliberately different.
 
 - **Severity:** major
 - **Priority:** medium
-- **Status:** actual
+- **Status:** draft
 - **Behaviour:** positive
 - **Type:** functional
 - **Layer:** api
@@ -320,8 +320,7 @@ nothing.
 
 - **Severity:** critical
 - **Priority:** high
-- **Status:** deprecated
-- **Retired:** Mis-scoped: SC-10 is a property over all mutations; one hand-written instance gives false confidence. Covered concretely by loyalty-TC-08.
+- **Status:** draft
 - **Behaviour:** positive
 - **Type:** regression
 - **Layer:** api
@@ -360,7 +359,7 @@ programme is the party that must not double-grant, whatever the sender does.
 
 - **Severity:** critical
 - **Priority:** high
-- **Status:** actual
+- **Status:** draft
 - **Behaviour:** positive
 - **Type:** integration
 - **Layer:** api
