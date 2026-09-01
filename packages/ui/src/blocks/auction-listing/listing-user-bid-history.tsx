@@ -63,53 +63,59 @@ function ListingUserBidHistory({ copy, rows }: ListingUserBidHistoryProps) {
       >
         {copy.link}
       </Link>
-      <Dialog onOpenChange={setOpen} open={open}>
-        <DialogContent
-          className={cn(
-            "flex min-h-0 max-h-[min(640px,calc(100svh-2rem))] flex-col overflow-hidden",
-            showFullTime && "max-w-xl",
-          )}
-          showCloseButton
-        >
-          <DialogHeader showCloseButton={false}>
-            <DialogTitle>{copy.title}</DialogTitle>
-          </DialogHeader>
-          <DialogBody className="min-h-0 flex-1 overflow-hidden p-0">
-            <Table className="flex h-full min-h-0 flex-col overflow-hidden">
-              <TableHeader className="shrink-0">
-                <TableHead className="min-w-0 flex-1">{copy.amount}</TableHead>
-                <TableHead className={typeColumnClass}>{copy.type}</TableHead>
-                <TableHead align="end" className={timeColumnClass}>
-                  {copy.time}
-                </TableHead>
-              </TableHeader>
-              <TableBody
-                className="scroll-fade min-h-0 flex-1 overflow-y-auto overscroll-y-contain [&_[data-slot=table-row]]:shrink-0"
-                data-slot="listing-user-bid-history-scroll"
-              >
-                {rows.map((row) => (
-                  <TableRow className="shrink-0" key={row.id}>
-                    <TableCell className="min-w-0 flex-1">
-                      {row.amountLabel}
-                    </TableCell>
-                    <TableCell className={typeColumnClass}>
-                      <Badge
-                        size="sm"
-                        variant={bidTypeBadgeVariant(row.bidType)}
-                      >
-                        {row.bidTypeLabel}
-                      </Badge>
-                    </TableCell>
-                    <TableCell align="end" className={timeColumnClass}>
-                      {row.timeLabel}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </DialogBody>
-        </DialogContent>
-      </Dialog>
+      {/* Mounted only while it is open: bound, it would keep the last visit's
+          scroll position and hold the whole table off-screen between reads. */}
+      {open && (
+        <Dialog onOpenChange={setOpen} open>
+          <DialogContent
+            className={cn(
+              "flex min-h-0 max-h-[min(640px,calc(100svh-2rem))] flex-col overflow-hidden",
+              showFullTime && "max-w-xl",
+            )}
+            showCloseButton
+          >
+            <DialogHeader showCloseButton={false}>
+              <DialogTitle>{copy.title}</DialogTitle>
+            </DialogHeader>
+            <DialogBody className="min-h-0 flex-1 overflow-hidden p-0">
+              <Table className="flex h-full min-h-0 flex-col overflow-hidden">
+                <TableHeader className="shrink-0">
+                  <TableHead className="min-w-0 flex-1">
+                    {copy.amount}
+                  </TableHead>
+                  <TableHead className={typeColumnClass}>{copy.type}</TableHead>
+                  <TableHead align="end" className={timeColumnClass}>
+                    {copy.time}
+                  </TableHead>
+                </TableHeader>
+                <TableBody
+                  className="scroll-fade min-h-0 flex-1 overflow-y-auto overscroll-y-contain [&_[data-slot=table-row]]:shrink-0"
+                  data-slot="listing-user-bid-history-scroll"
+                >
+                  {rows.map((row) => (
+                    <TableRow className="shrink-0" key={row.id}>
+                      <TableCell className="min-w-0 flex-1">
+                        {row.amountLabel}
+                      </TableCell>
+                      <TableCell className={typeColumnClass}>
+                        <Badge
+                          size="sm"
+                          variant={bidTypeBadgeVariant(row.bidType)}
+                        >
+                          {row.bidTypeLabel}
+                        </Badge>
+                      </TableCell>
+                      <TableCell align="end" className={timeColumnClass}>
+                        {row.timeLabel}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </DialogBody>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 }
