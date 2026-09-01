@@ -41,7 +41,12 @@ type SignInCardProps = {
    * errors travel on the step's own `error` prop. */
   message?: ReactNode;
   /** External identity buttons (Google, passkeys…), rendered above the
-   * divider. The consumer owns the widget; this dialog only places it. */
+   * divider. The consumer owns the widget; this dialog only places it.
+   *
+   * A widget that a script fills in asynchronously should mark its container
+   * `data-slot="sign-in-provider"`: the divider hides for as long as that
+   * container is empty, so a script that never answers leaves no orphaned
+   * "or" behind. */
   providerSlot?: ReactNode;
   /** A way out of the flow — "back to home". Distinct from dismissing the
    * dialog, which the header's close control, Escape and the scrim all do. */
@@ -100,10 +105,16 @@ function SignInCard({
             <DialogDescription>{copy.description}</DialogDescription>
           ) : null}
           {providerSlot ? (
-            <>
+            /* The divider follows what actually drew. A widget that renders
+               asynchronously — Google's own button arrives from a script that
+               may never answer — marks its container `sign-in-provider`, and
+               while that container is empty the pair hides rather than
+               stranding an "or" over blank space. A widget that draws its own
+               markup marks nothing and is always shown. */
+            <div className="flex w-full flex-col gap-6 has-[[data-slot=sign-in-provider]:empty]:hidden">
               {providerSlot}
               <Divider label={copy.providerDivider} />
-            </>
+            </div>
           ) : null}
           {children}
           {message ? (

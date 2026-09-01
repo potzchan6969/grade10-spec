@@ -105,6 +105,50 @@ export const WithLegal: Story = {
 };
 
 /**
+ * A widget a script fills in later — Google's own button — marks its own
+ * container, and the divider waits for it. An "or" over blank space is what
+ * a collector sees when that script never answers, so the pair hides until
+ * something is actually there to divide.
+ */
+export const ProviderThatHasNotDrawnYet: Story = {
+  args: {
+    copy: { title: "Sign in to Acme Store", providerDivider: "or" },
+    providerSlot: <div data-slot="sign-in-provider" />,
+  },
+  play: async () => {
+    const dialog = within(document.body).getByRole("dialog");
+    const container = dialog.querySelector(
+      '[data-slot="sign-in-provider"]',
+    ) as HTMLElement;
+    const group = dialog.querySelector('[data-slot="divider"]')
+      ?.parentElement as HTMLElement;
+
+    expect(getComputedStyle(group).display).toBe("none");
+
+    container.appendChild(document.createElement("button"));
+
+    await waitFor(() =>
+      expect(getComputedStyle(group).display).not.toBe("none"),
+    );
+  },
+};
+
+/** A widget that draws its own markup marks no container, so it never waits. */
+export const ProviderThatDrawsItself: Story = {
+  args: {
+    copy: { title: "Sign in to Acme Store", providerDivider: "or" },
+    providerSlot: <button type="button">Continue with Acme ID</button>,
+  },
+  play: async () => {
+    const dialog = within(document.body).getByRole("dialog");
+    const group = dialog.querySelector('[data-slot="divider"]')
+      ?.parentElement as HTMLElement;
+
+    expect(getComputedStyle(group).display).not.toBe("none");
+  },
+};
+
+/**
  * Figma draws the legal line centred across the body at 12/16, not left with
  * the rest of the column — the one place this dialog centres anything.
  */
