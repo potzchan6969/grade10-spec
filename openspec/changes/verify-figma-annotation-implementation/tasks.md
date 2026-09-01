@@ -78,7 +78,7 @@ claim, implementation, submodule advance, or Figma write.
   `annotation-implementation-verification-SC-01` through
   `annotation-implementation-verification-SC-10` and
   `annotation-implementation-verification-SC-14`.
-- [ ] 3.2 Rehearse declined `pm-planning`, confirmed `pm-planning`, confirmed
+- [x] 3.2 Rehearse declined `pm-planning`, confirmed `pm-planning`, confirmed
   `full-planning`, incomplete planning, a dirty-store stop, and the required
   fresh reconciliation restart against disposable targets; verify
   `annotation-implementation-verification-SC-11` through
