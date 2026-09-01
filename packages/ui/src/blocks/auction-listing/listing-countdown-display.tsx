@@ -34,7 +34,9 @@ function ListingCountdownDisplay({
   useEffect(() => {
     const timer = window.setInterval(() => {
       setSeconds((value) =>
-        closesAtMs != null ? remainingSecondsUntil(closesAtMs) : Math.max(0, value - 1),
+        closesAtMs != null
+          ? remainingSecondsUntil(closesAtMs)
+          : Math.max(0, value - 1),
       );
     }, 1000);
     return () => window.clearInterval(timer);

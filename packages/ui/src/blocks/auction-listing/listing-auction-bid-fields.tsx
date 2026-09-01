@@ -344,7 +344,9 @@ function BidActions({
                       onPointerDown={(event) => event.preventDefault()}
                       render={<Info aria-hidden size={12} />}
                     />
-                    <TooltipContent>{copy.confirmMaximumTooltip}</TooltipContent>
+                    <TooltipContent>
+                      {copy.confirmMaximumTooltip}
+                    </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               ) : null}
