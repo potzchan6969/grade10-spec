@@ -1,3 +1,4 @@
+export * from "./components/display/alert";
 export * from "./components/display/avatar";
 export * from "./components/display/badge";
 export * from "./components/display/breadcrumbs";
