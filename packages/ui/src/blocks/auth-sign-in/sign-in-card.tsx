@@ -1,6 +1,7 @@
 import { Divider } from "@grade10/design-system/components/display/divider";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   Dialog,
   DialogBody,
@@ -111,10 +112,13 @@ function SignInCard({
                while that container is empty the pair hides rather than
                stranding an "or" over blank space. A widget that draws its own
                markup marks nothing and is always shown. */
-            <div className="flex w-full flex-col gap-6 has-[[data-slot=sign-in-provider]:empty]:hidden">
+            <VStack
+              className="w-full has-[[data-slot=sign-in-provider]:empty]:hidden"
+              gap="lg"
+            >
               {providerSlot}
               <Divider label={copy.providerDivider} />
-            </div>
+            </VStack>
           ) : null}
           {children}
           {message ? (
