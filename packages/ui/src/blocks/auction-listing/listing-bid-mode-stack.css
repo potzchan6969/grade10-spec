@@ -1,0 +1,10 @@
+.bid-mode-stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.bid-mode-stack > .auto-bid-reveal {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+}

@@ -9,5 +9,6 @@
   "codeLabel": "Verification code",
   "codeSentTo": "Code sent to {email}",
   "verifyLabel": "Verify code",
-  "verifyFailed": "That code didn't work."
+  "verifyFailed": "That code didn't work.",
+  "legal": "By continuing, you agree to our <terms>Terms of Service</terms> & <privacy>Privacy Policy</privacy>."
 }

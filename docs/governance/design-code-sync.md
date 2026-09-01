@@ -184,7 +184,7 @@ Two routes that need only a browser: the automated diff, and the published
 Storybook. Local Storybook is the fallback for a branch that is not on `main`.
 
 **Measure it in Storybook.** Open
-[https://grade10-storybook.memeland-qa.workers.dev](https://grade10-storybook.memeland-qa.workers.dev)
+[https://storybook.grade10-stg.com](https://storybook.grade10-stg.com)
 (the workbench published from `main` on every relevant push — same combined
 view as `pnpm storybook:workbench`). Open a component, then:
 
@@ -237,6 +237,84 @@ Deleting a variant that instances still use leaves an orphaned component behind 
 `src/themes/default.css` defines the `:root` baseline; `.theme-grade10` layers over it. The `Custom/*` extension tokens exist only in the grade10 theme, so a component binding one renders with an undefined custom property — no background at all — under the baseline theme. When a component adopts a `Custom/*` token, add a derived baseline value to `default.css`, in both `:root` and `.dark` so it re-resolves against whichever base slots are in scope.
 
 Be aware that the Storybook suite renders the **`default`** theme. It therefore exercises those baseline values, not the designed ones, and a passing run says nothing about how a component looks in Grade10. Review that in Storybook with the toolbar switched over.
+
+## Reconciling Figma annotations
+
+Annotations are design evidence, not automatically accepted requirements. Use
+the `reconcile-figma-annotations` project skill from a supported harness when
+you need to review them. It is the only annotation workflow; component,
+rendered-value, token, audit, and Code Connect checks remain in this workflow.
+
+### Repository ownership and scope
+
+The registered annotation inventory has one reviewed baseline, but every root
+belongs to exactly one repository:
+
+| Scope | Registered surfaces | Owning repository |
+| --- | --- | --- |
+| `spec` | `packages/design-system/**` primitives and `packages/ui/**` shared blocks | `grade10-spec` |
+| `product` | `kind: layout` application page roots | `grade10` |
+
+`packages/ui` is shared specification-owned UI, even when an application uses
+one of its blocks on a page. Scope follows the registered source root, not the
+visual complexity of the node or the repository that consumes it.
+
+The store commands require an explicit scope on every invocation:
+
+```bash
+pnpm run figma:annotations:inventory -- --scope spec
+pnpm run figma:annotations:diff -- --scope spec --snapshot path/to/snapshot.json
+pnpm run figma:annotations:accept -- --scope spec --snapshot path/to/snapshot.json --ids id --decisions path/to/decisions.json
+```
+
+Inventory projects only the requested roots and tracked nodes. Diff validates
+that every observed or skipped root belongs to that projection before it
+compares; out-of-scope baseline roots and entries cannot become removals or
+orphans. Acceptance recomputes the same scoped diff and refuses a finding from
+the other scope before it writes anything. Missing, unknown, or conflicting
+scope evidence is blocked.
+
+Both scopes share the same baseline and its complete baseline digest remains
+the optimistic-concurrency guard. A change in either scope makes an acceptance
+transaction prepared against an older digest stale, so it must be reported and
+reviewed again. Scoped projections are read-only views; they are not separate
+baseline files and never authorize concurrent writes.
+
+The end-to-end flow is:
+
+1. The harness reads the flat registered engineering sources through the Figma
+   Plugin API and reads one category catalog per file. It traverses each unique
+   Figma root once, keeps every associated source in the temporary
+   schema-version-2 root record, resolves categories locally, excludes
+   exploratory areas, and emits only annotation-bearing or baseline-tracked
+   nodes. Ancestor evidence remains in the nearest-parent-first order supplied
+   by Figma. The registered store canonicalizes this complete temporary
+   observation and generates the digest used by reporting and acceptance.
+2. The skill compares that snapshot with the reviewed
+   `scripts/design-sync/annotation-baseline.json` and produces an
+   ownership-aware report. The default human report renders every ownership
+   group and every finding with its stable ID, kind, category ID and label,
+   Figma file/node link, registered root and ancestor evidence, previous/current
+   text, pinned properties, ambiguity, exact OpenSpec evidence, ownership, and
+   recommended next action. Missing or incomplete evidence is blocked, not
+   clean; a resolved orphan or replacement is reviewable drift that can be
+   explicitly accepted.
+3. Select individual finding IDs. Confirm an exact capability, change, or
+   task-group association for each selected occurrence, or give an explicit
+   `noImpactReason`. Similar prose and editor or Git identity are not evidence.
+4. After confirmation, the registered store's acceptance command validates the
+   observation digest and decisions, updates the selected baseline occurrences
+   atomically, prepares any exact related OpenSpec edits, and shows the Git
+   diff. Unselected, ambiguous, removed, replacement, and orphaned findings
+   remain for review unless explicitly resolved.
+5. The skill reruns the comparison against the same pinned snapshot and shows
+   all remaining drift. Only after a second explicit confirmation may it make
+   one local commit in `grade10-spec`, staging only the confirmed files.
+
+There is no annotation CI scan, CI snapshot artifact,
+`annotation-current.json`, or automatic push. The workflow never writes to
+Figma, advances the application repository's submodule, opens a pull request,
+or creates a scheduler.
 
 ## Known gaps
 

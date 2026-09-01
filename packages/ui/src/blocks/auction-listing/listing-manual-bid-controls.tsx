@@ -1,9 +1,10 @@
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
-import { formatUsd } from "./format-usd";
+import { formatMinMaximumMessage, formatUsd, formatUsdNumeric } from "./format-usd";
 
 type ListingManualBidControlsCopy = {
   bidAmountLabel?: string;
   maximumLabel: string;
+  minimumMaximum?: string;
 };
 
 type ListingManualBidControlsProps = {
@@ -27,7 +28,7 @@ function ListingManualBidControls({
     <TextInput
       aria-label={copy.bidAmountLabel ?? "Bid amount"}
       className="min-w-0 flex-1"
-      defaultValue={formatUsd(minBidMinor).replace("US$", "")}
+      defaultValue={formatUsdNumeric(minBidMinor)}
       label={hideLabel ? undefined : (copy.bidAmountLabel ?? "Place a bid")}
       message={message}
       prefix="US$"
@@ -36,19 +37,45 @@ function ListingManualBidControls({
 }
 
 type ListingAutoBidControlsProps = {
-  copy: Pick<ListingManualBidControlsCopy, "maximumLabel">;
-  suggestedMaxMinor: number;
+  copy: Pick<ListingManualBidControlsCopy, "maximumLabel" | "minimumMaximum">;
+  minMaximumMinor: number;
+  incrementMinor: number;
+  viewerMaximumMinor?: number;
+  defaultMaximumMinor: number;
+  hideLabel?: boolean;
 };
 
 function ListingAutoBidControls({
   copy,
-  suggestedMaxMinor,
+  minMaximumMinor,
+  incrementMinor,
+  viewerMaximumMinor,
+  defaultMaximumMinor,
+  hideLabel = false,
 }: ListingAutoBidControlsProps) {
+  const message = hideLabel
+    ? formatMinMaximumMessage(
+        minMaximumMinor,
+        incrementMinor,
+        viewerMaximumMinor,
+      )
+    : copy.minimumMaximum != null
+      ? copy.minimumMaximum.replace("{amount}", formatUsd(minMaximumMinor))
+      : formatMinMaximumMessage(
+          minMaximumMinor,
+          incrementMinor,
+          viewerMaximumMinor,
+        );
+
   return (
     <TextInput
       aria-label={copy.maximumLabel}
-      defaultValue={formatUsd(suggestedMaxMinor).replace("US$", "")}
-      label={copy.maximumLabel}
+      className="min-w-0 flex-1"
+      defaultValue={formatUsdNumeric(defaultMaximumMinor)}
+      inputMode="decimal"
+      label={hideLabel ? undefined : copy.maximumLabel}
+      message={message}
+      min={minMaximumMinor / 100}
       prefix="US$"
     />
   );

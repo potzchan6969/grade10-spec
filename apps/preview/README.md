@@ -11,7 +11,7 @@ pnpm test:stories:app          # the assemblies, in Chromium
 ```
 
 The workbench build is published on every push to `main` (and on demand) to
-**https://grade10-storybook.memeland-qa.workers.dev**. Locally:
+**https://storybook.grade10-stg.com**. Locally:
 
 ```bash
 pnpm run storybook:deploy:staging             # needs CLOUDFLARE_API_TOKEN

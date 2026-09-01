@@ -1,5 +1,7 @@
 {
+  "addedToCart": "Added to cart",
   "addToCart": "Add to cart",
+  "adding": "Adding…",
   "cartCount": "{count, plural, one {# item} other {# items}} in your cart",
   "clearFilters": "Clear filters",
   "collections": "Collections",

@@ -39,6 +39,68 @@ export const BIDDING_STATE_LABELS: Record<BiddingState, string> = {
 
 const DAY_SECONDS = 24 * 60 * 60;
 const HOUR_SECONDS = 60 * 60;
+export const EXTENSION_WINDOW_MS = 30 * 60 * 1000;
+export const EXTENSION_DURATION_MS = 30 * 60 * 1000;
+export const LIVE_INITIAL_REMAINING_MS = (6 * 60 + 9) * 1000;
+
+export type AuctionTiming = {
+  closesAtMs: number;
+  extended: boolean;
+};
+
+export function remainingSecondsUntil(
+  closesAtMs: number,
+  nowMs = Date.now(),
+): number {
+  return Math.max(0, Math.floor((closesAtMs - nowMs) / 1000));
+}
+
+export function formatAuctionDeadline(closesAtMs: number): string {
+  const formatted = new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "UTC",
+  }).format(new Date(closesAtMs));
+
+  return `Ends ${formatted} UTC`;
+}
+
+export function shouldExtendClose(
+  closesAtMs: number,
+  nowMs = Date.now(),
+): boolean {
+  const remainingMs = closesAtMs - nowMs;
+  return remainingMs > 0 && remainingMs <= EXTENSION_WINDOW_MS;
+}
+
+export function extendRecordedClose(nowMs = Date.now()): number {
+  return nowMs + EXTENSION_DURATION_MS;
+}
+
+export function createLiveAuctionTiming(nowMs = Date.now()): AuctionTiming {
+  return {
+    closesAtMs: nowMs + LIVE_INITIAL_REMAINING_MS,
+    extended: false,
+  };
+}
+
+export function applyBidExtension(
+  timing: AuctionTiming,
+  nowMs = Date.now(),
+): AuctionTiming {
+  if (!shouldExtendClose(timing.closesAtMs, nowMs)) {
+    return timing;
+  }
+
+  return {
+    closesAtMs: extendRecordedClose(nowMs),
+    extended: true,
+  };
+}
 
 export const AUCTION_LOT = {
   title: "1999 Charizard, PSA 10",
@@ -141,16 +203,24 @@ export const AUCTION_LOT_DETAILS_COPY = {
     yourMaximum: "Your maximum",
     opensIn: "Opens in",
     closed: "Closed",
+    timeLeft: "Time left",
     timeLeftAutoExtended: "Time left (auto-extended)",
     autoExtendedTooltip:
-      "Bids placed in the final 30 minutes extend the auction by 30 minutes, up to the listing extension cap.",
+      "A bid in the last 30 minutes adds 30 minutes to the close. Repeats until 30 minutes pass with no bids, up to the listing cap.",
     placeBidSection: "Place bid",
     placeBid: "Place Bid",
+    confirmMaximum: "Confirm",
+    raiseMaximum: "Raise",
+    confirmMaximumTooltip:
+      "The most we'll bid for you. Authorizes a card hold for this amount—you may pay less if the auction ends below it.",
+    confirmMaximumAriaLabel: "Confirm maximum",
+    raiseMaximumAriaLabel: "Raise maximum",
     enableAutoBidding: "Enable auto-bidding",
     autoBiddingTooltip:
-      "We'll bid automatically only as needed, up to your maximum. Your card hold covers the maximum; you may pay less if the auction ends below it.",
+      "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
+    minimumMaximum: "Min. maximum: {amount}",
     buyerFeeHint: "Buyer’s premium is added at invoice.",
-    bidCountZero: "0 bids",
+    noBidsYet: "No bids yet",
     aboutThisLot: "About this lot",
     vaultShipping: "Vault shipping",
     authentication: "Authentication",
@@ -297,6 +367,31 @@ const SIMULATED_RIVALS = [
 
 const MAX_RECENT_BIDS = 5;
 
+export type LiveListingFacts = {
+  currentBidMinor: number;
+  bidCount: number;
+  hasBids: boolean;
+};
+
+export function initialLiveListingFacts(state: BiddingState): LiveListingFacts {
+  const meta = stateMeta(state);
+  const history = bidHistoryForState(state);
+
+  if (history.length > 0) {
+    return {
+      currentBidMinor: history[0].amountMinor,
+      bidCount: meta.bidCount,
+      hasBids: true,
+    };
+  }
+
+  return {
+    currentBidMinor: AUCTION_LOT.startingBidMinor,
+    bidCount: meta.bidCount,
+    hasBids: meta.hasBids,
+  };
+}
+
 export function appendSimulatedBid(
   rows: readonly ListingBidHistoryRow[],
 ): ListingBidHistoryRow[] {
@@ -320,6 +415,44 @@ export function appendSimulatedBid(
       leading: false,
     })),
   ].slice(0, MAX_RECENT_BIDS);
+}
+
+export function simulateNextLiveBid(
+  history: readonly ListingBidHistoryRow[],
+  facts: LiveListingFacts,
+): { history: ListingBidHistoryRow[]; facts: LiveListingFacts } {
+  if (history.length === 0) {
+    const rival =
+      SIMULATED_RIVALS[Math.floor(Math.random() * SIMULATED_RIVALS.length)];
+    const newBid: ListingBidHistoryRow = {
+      id: `bid-sim-${Date.now()}`,
+      initials: rival,
+      amountMinor: AUCTION_LOT.startingBidMinor,
+      relativeTime: "Just now",
+      leading: true,
+    };
+
+    return {
+      history: [newBid],
+      facts: {
+        currentBidMinor: AUCTION_LOT.startingBidMinor,
+        bidCount: 1,
+        hasBids: true,
+      },
+    };
+  }
+
+  const historyNext = appendSimulatedBid(history);
+  const top = historyNext[0];
+
+  return {
+    history: historyNext,
+    facts: {
+      currentBidMinor: top.amountMinor,
+      bidCount: facts.bidCount + 1,
+      hasBids: true,
+    },
+  };
 }
 
 export function bidModeForState(state: BiddingState): BidMode {
@@ -347,33 +480,58 @@ function listingAuctionStanding(state: BiddingState): ListingAuctionStanding {
   return "none";
 }
 
+function viewerMaximumForState(state: BiddingState): number | undefined {
+  if (state === "live-auto-leading" || state === "live-auto-overtaken") {
+    return AUCTION_LOT.viewerMaximumMinor;
+  }
+  return undefined;
+}
+
 export function buildListingAuctionBidView(
   state: BiddingState,
+  timing?: AuctionTiming,
+  liveFacts?: LiveListingFacts,
 ): ListingAuctionBidView {
   const meta = stateMeta(state);
+  const liveTiming = meta.live && timing != null ? timing : undefined;
+  const currentBidMinor = liveFacts?.currentBidMinor ?? meta.currentBidMinor;
+  const bidCount = liveFacts?.bidCount ?? meta.bidCount;
+  const hasBids = liveFacts?.hasBids ?? meta.hasBids;
+  const countdownSeconds =
+    liveTiming != null
+      ? remainingSecondsUntil(liveTiming.closesAtMs)
+      : meta.countdownSeconds;
+  const deadline =
+    meta.closed || meta.opens
+      ? meta.deadline
+      : liveTiming != null
+        ? formatAuctionDeadline(liveTiming.closesAtMs)
+        : meta.deadline;
 
   return {
     headerLabel: auctionHeaderLabel(state),
     live: meta.live,
     opens: meta.opens,
     closed: meta.closed,
-    hasBids: meta.hasBids,
+    hasBids,
     isUnsold: meta.isUnsold,
     showBidActions: meta.showBidActions,
     priceLabel: meta.priceLabel,
-    currentBidMinor: meta.currentBidMinor,
-    bidCount: meta.bidCount,
-    bidCountLabel: formatBidCountLabel(meta.bidCount),
+    currentBidMinor,
+    bidCount,
+    bidCountLabel: formatBidCountLabel(bidCount),
     countdown: meta.countdown,
-    countdownSeconds: meta.countdownSeconds,
+    countdownSeconds,
+    closesAtMs: liveTiming?.closesAtMs ?? null,
     countdownFormat: meta.countdownFormat,
-    deadline: meta.deadline,
+    extended: liveTiming?.extended ?? false,
+    deadline,
     standing: listingAuctionStanding(state),
-    viewerMaximumMinor: AUCTION_LOT.viewerMaximumMinor,
+    viewerMaximumMinor: viewerMaximumForState(state),
     minBidMinor: minNextBidMinor(
-      meta.currentBidMinor,
+      currentBidMinor,
       AUCTION_LOT.incrementMinor,
-      meta.hasBids,
+      hasBids,
       AUCTION_LOT.startingBidMinor,
     ),
     incrementMinor: AUCTION_LOT.incrementMinor,

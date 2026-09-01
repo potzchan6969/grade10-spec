@@ -25,8 +25,9 @@ The products are:
 - `grade10-auction` — Grade10's card-auction surfaces: collector browse and
   bid, and the operator queue that closes out a won listing.
 - `admin-console` — what every operator console shares regardless of the
-  product behind it: the blocks the consoles are built from, and the
-  identity directory that moved out of `shared-ui`.
+  product behind it: the blocks the consoles are built from, the visual
+  standard they render, and the identity directory that moved out of
+  `shared-ui`.
 
 A capability's OpenSpec ID is `<product>/<capability>` (for example `grade10-store/loyalty`); use that ID with `openspec show` and `openspec validate`. Adding a product is a new top-level directory here plus a bullet in this list.
 

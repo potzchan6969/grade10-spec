@@ -16,6 +16,8 @@ Read [`AGENTS.md`](AGENTS.md) before using an AI agent in this repository. It de
 
 [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md) explains why `openspec/specs/` is the single source of truth, what a PRD is still for, and how agents must keep the two aligned.
 
+[`docs/governance/design-system-workflows.md`](docs/governance/design-system-workflows.md) is the router for everything else: which command, skill, and governing document apply to tokens, primitives, blocks, a page conversion, an audit finding, and who owns each call.
+
 ## Quick start
 
 ```bash
@@ -28,7 +30,7 @@ pnpm storybook:ui                  # shared compound components alone
 
 The workbench Storybook on `main` (preview pages + UI + design-system) is
 published at
-[https://grade10-storybook.memeland-qa.workers.dev](https://grade10-storybook.memeland-qa.workers.dev).
+[https://storybook.grade10-stg.com](https://storybook.grade10-stg.com).
 Locally that is `pnpm storybook:workbench`.
 
 For concurrent worktrees, install Playwright once before running browser tests:

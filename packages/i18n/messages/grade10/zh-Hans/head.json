@@ -16,6 +16,14 @@
     "title": "拍卖 — Grade10",
     "description": "Grade10 每一场已公开的拍卖及其拍品，并列出各拍品的最高出价。浏览无需账户，出价则需要。"
   },
+  "terms": {
+    "title": "服务条款 — Grade10",
+    "description": "在 Grade10 买卖、竞拍、评级或寄存卡片时所同意的条款。"
+  },
+  "privacy": {
+    "title": "隐私政策 — Grade10",
+    "description": "Grade10 记录收藏者的哪些资料、为何保存，以及收藏者可以要求什么。"
+  },
   "product": {
     "title": "{name} — Grade10",
     "description": "{name}，于 Grade10 商店上架。"

@@ -9,5 +9,6 @@
   "codeLabel": "验证码",
   "codeSentTo": "验证码已发送至 {email}",
   "verifyLabel": "验证",
-  "verifyFailed": "验证码不正确。"
+  "verifyFailed": "验证码不正确。",
+  "legal": "继续即表示你同意我们的<terms>服务条款</terms>与<privacy>隐私政策</privacy>。"
 }

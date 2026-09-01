@@ -1,18 +1,17 @@
 name: Storybook
 
 # Publishes the workbench Storybook (apps/preview/.storybook-workbench) to
-# workers.dev on the staging Cloudflare account. That config is the combined
-# view: preview page assemblies + @grade10/ui + @grade10/design-system.
+# the staging Cloudflare account. That config is the combined view: preview
+# page assemblies + @grade10/ui + @grade10/design-system.
 # Local equivalent: pnpm run storybook:workbench
 #
-# Typical URL:
-#   https://grade10-storybook.memeland-qa.workers.dev
+# URL:
+#   https://storybook.grade10-stg.com
 #
 # One-time ops:
 # - Repo secret CLOUDFLARE_API_TOKEN_QA must be available here (same staging
 #   token grade10 uses). Org secrets may need this repo added to their allowlist.
-# - Confirm Cloudflare Access covers this workers.dev host if you gate
-#   *.memeland-qa.workers.dev.
+# - Confirm Cloudflare Access covers this custom domain if you gate it.
 
 on:
   push:
@@ -27,6 +26,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 concurrency:
   group: storybook-staging
@@ -47,6 +47,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -74,16 +76,57 @@ jobs:
         working-directory: apps/preview
         run: pnpm dlx wrangler@${{ env.WRANGLER_VERSION }} deploy -c wrangler.storybook.jsonc
 
+      - name: Find merged pull request
+        id: merged-pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pullRequests } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+            });
+            const pullRequest = pullRequests.find(({ merged_at }) => merged_at);
+            if (!pullRequest) return;
+
+            core.setOutput("title", pullRequest.title);
+            core.setOutput("url", pullRequest.html_url);
+            core.setOutput("branch", pullRequest.head.ref);
+            core.setOutput(
+              "branch-url",
+              `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/compare/main...${pullRequest.head.ref}`,
+            );
+
+      - name: Find changed page stories
+        id: changed-pages
+        run: |
+          node scripts/storybook/changed-page-links.mjs \
+            --base "${{ github.event.before }}" \
+            --head "${{ github.sha }}" \
+            --commit-url "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" \
+            --merged-pr-title "${{ steps.merged-pr.outputs.title }}" \
+            --merged-pr-url "${{ steps.merged-pr.outputs.url }}" \
+            --merged-branch-name "${{ steps.merged-pr.outputs.branch }}" \
+            --merged-branch-url "${{ steps.merged-pr.outputs.branch-url }}" \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Notify Slack about changed pages
+        if: steps.changed-pages.outputs.has-pages == 'true'
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          channel-id: ${{ vars.STORYBOOK_SLACK_CHANNEL_ID }}
+          payload: ${{ steps.changed-pages.outputs.payload }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
       - name: Summary
         run: |
           {
-            echo "## Storybook workbench → staging (workers.dev)"
+            echo "## Storybook workbench → staging"
             echo
-            echo "https://grade10-storybook.memeland-qa.workers.dev"
+            echo "https://storybook.grade10-stg.com"
             echo
             echo "Combined view: preview pages + UI + design-system (\`pnpm storybook:workbench\`)."
             echo
             echo "Ref: \`${{ github.sha }}\`"
-            echo
-            echo "Confirm the exact host in the Deploy step log if the account subdomain differs."
           } >> "$GITHUB_STEP_SUMMARY"

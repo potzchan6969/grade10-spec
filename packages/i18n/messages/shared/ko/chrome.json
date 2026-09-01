@@ -11,6 +11,11 @@
   "footer": {
     "shopHeading": "쇼핑",
     "allCollections": "전체 컬렉션",
-    "auction": "경매"
+    "auction": "경매",
+    "legalHeading": "법적 고지",
+    "privacyPolicy": "개인정보 처리방침",
+    "termsOfService": "이용약관",
+    "privacy": "개인정보",
+    "terms": "약관"
   }
 }

@@ -11,11 +11,16 @@
     "cache:prime": "pnpm install --frozen-lockfile --prefer-offline",
     "design-sync:check": "node scripts/design-sync/check-components.mjs",
     "design-sync:audit": "node scripts/design-sync/audit-node.mjs",
+    "figma:annotations:inventory": "node scripts/design-sync/annotation-inventory-cli.mjs",
+    "figma:annotations:diff": "node scripts/design-sync/annotation-diff.mjs",
+    "figma:annotations:report": "node scripts/design-sync/annotation-report-cli.mjs",
+    "figma:annotations:accept": "node scripts/design-sync/annotation-accept.mjs",
     "code-connect:publish:design-system": "pnpm --filter @grade10/design-system run code-connect:publish",
     "code-connect:publish:ui": "pnpm --filter @grade10/ui run code-connect:publish",
     "setup:browsers": "pnpm --dir apps/preview exec playwright install chromium",
     "setup:worktree": "pnpm install --frozen-lockfile --prefer-offline",
-    "test": "pnpm -r --if-present run test",
+    "test": "pnpm -r --if-present run test && pnpm run test:design-sync",
+    "test:design-sync": "node --test scripts/design-sync/*.test.mjs",
     "manual": "pnpm --dir apps/manual dev",
     "manual:build": "pnpm --dir apps/manual build",
     "manual:deploy": "pnpm --dir apps/manual deploy",
@@ -26,6 +31,7 @@
     "storybook:ui": "node scripts/storybook/storybook.mjs --dir packages/ui",
     "storybook:build:design-system": "pnpm --filter @grade10/design-system run build-storybook",
     "storybook:build:workbench": "pnpm --dir apps/preview run build-storybook:workbench",
+    "storybook:changed-pages": "node scripts/storybook/changed-page-links.mjs",
     "storybook:deploy:staging": "pnpm --dir apps/preview run deploy-storybook:staging",
     "test:stories": "pnpm run test:stories:design-system && pnpm run test:stories:ui && pnpm run test:stories:app",
     "test:stories:design-system": "pnpm --filter @grade10/design-system run test:stories",
@@ -44,6 +50,7 @@
     "lint:fix": "biome check --write ."
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.5"
+    "@biomejs/biome": "^2.5.5",
+    "typescript": "~6.0.2"
   }
 }

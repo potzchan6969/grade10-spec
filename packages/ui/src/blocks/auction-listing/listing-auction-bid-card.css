@@ -1,0 +1,58 @@
+.recent-bids-scroll-shell {
+  --recent-bid-row-height: 3rem;
+  --recent-bids-visible-rows: 4;
+  --recent-bids-fade-height: 1.25rem;
+  position: relative;
+  height: calc(var(--recent-bid-row-height) * var(--recent-bids-visible-rows));
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: height var(--acc-expand, 250ms)
+    var(--acc-ease, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+.recent-bids-scroll-viewport {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}
+
+.recent-bids-scroll-fade {
+  pointer-events: none;
+  position: absolute;
+  inset-inline: 0;
+  z-index: 1;
+  height: var(--recent-bids-fade-height);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.recent-bids-scroll-fade.is-visible {
+  opacity: 1;
+}
+
+.recent-bids-scroll-fade--top {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--card) 0%,
+    color-mix(in oklch, var(--card) 82%, transparent) 38%,
+    transparent 100%
+  );
+}
+
+.recent-bids-scroll-fade--bottom {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    var(--card) 0%,
+    color-mix(in oklch, var(--card) 82%, transparent) 38%,
+    transparent 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recent-bids-scroll-shell,
+  .recent-bids-scroll-fade {
+    transition: none;
+  }
+}

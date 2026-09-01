@@ -1,11 +1,16 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
+import {
+  Avatar,
+  AvatarFallback,
+  avatarInitial,
+} from "@grade10/design-system/components/display/avatar";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
+import { CrownSimple } from "@phosphor-icons/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { formatUsd } from "./format-usd";
-import { ListingBidderAvatar } from "./listing-bidder-avatar";
 import type { ListingBidHistoryRow } from "./types";
 import "./listing-bid-history-list.css";
 
@@ -21,6 +26,8 @@ type ListingBidHistoryListProps = {
   heading?: string;
   /** Resets entrance animation when the bidding lifecycle changes. */
   resetKey?: string;
+  /** `fade` keeps row height stable inside a fixed scroll slot. */
+  entranceMode?: "expand" | "fade";
 };
 
 type BidHistoryRowItemProps = {
@@ -28,6 +35,7 @@ type BidHistoryRowItemProps = {
   row: ListingBidHistoryRow;
   animateEnter: boolean;
   useEnterWrapper: boolean;
+  entranceMode: "expand" | "fade";
 };
 
 function BidHistoryRowContent({
@@ -45,13 +53,23 @@ function BidHistoryRowContent({
       vAlign="center"
     >
       <HStack gap="sm" vAlign="center">
-        <ListingBidderAvatar initials={row.initials} />
-        <Text size="sm">{formatUsd(row.amountMinor)}</Text>
-        {row.leading ? (
-          <Badge size="sm" variant="outline">
-            {copy.leading ?? "Leading"}
-          </Badge>
-        ) : null}
+        <Avatar size="xs">
+          <AvatarFallback aria-hidden>
+            {avatarInitial(row.initials)}
+          </AvatarFallback>
+        </Avatar>
+        <Text className="inline-flex items-center gap-1.5" size="sm">
+          {formatUsd(row.amountMinor)}
+          {row.leading ? (
+            <span
+              aria-label={copy.leading ?? "Leading"}
+              className="bid-history-leading-crown shrink-0"
+              role="img"
+            >
+              <CrownSimple aria-hidden color="currentColor" weight="fill" />
+            </span>
+          ) : null}
+        </Text>
         {row.isViewer && !row.leading ? (
           <Badge size="sm" variant="outline">
             {copy.you ?? "You"}
@@ -70,6 +88,7 @@ function BidHistoryRowItem({
   row,
   animateEnter,
   useEnterWrapper,
+  entranceMode,
 }: BidHistoryRowItemProps) {
   const enterRef = useRef<HTMLDivElement>(null);
 
@@ -87,7 +106,11 @@ function BidHistoryRowItem({
   return (
     <div
       ref={enterRef}
-      className={cn("bid-history-enter", !animateEnter && "is-shown")}
+      className={cn(
+        "bid-history-enter",
+        entranceMode === "fade" && "bid-history-enter--fade",
+        !animateEnter && "is-shown",
+      )}
       data-bid-row-id={row.id}
     >
       <div className="bid-history-enter__inner">
@@ -110,6 +133,7 @@ function BidHistoryEntrances({
   copy = {},
   rows,
   heading = "Recent bids",
+  entranceMode = "expand",
 }: Omit<ListingBidHistoryListProps, "resetKey">) {
   const knownIdsRef = useRef<Set<string>>(new Set());
   const skipEntranceRef = useRef(true);
@@ -160,6 +184,7 @@ function BidHistoryEntrances({
           <BidHistoryRowItem
             animateEnter={row.id === enteringId}
             copy={copy}
+            entranceMode={entranceMode}
             key={row.id}
             row={row}
             useEnterWrapper={enteredIds.has(row.id)}
