@@ -431,6 +431,20 @@ A case tracing several scenarios where the spec dropped only some is **not**
 retired: retrace it to the ids that survive and re-review it. Retire it only
 when nothing it traces is left.
 
+**Every verdict is signed.** An `actual` or `deprecated` case carries who
+stood behind the verdict and when, on its own bullet directly under the
+status (after `**Retired:**` where there is one):
+
+```markdown
+- **Status:** actual
+- **Reviewed by:** @quinn - 2026-09-01
+```
+
+`/tcs-review` writes the line with each verdict; `check:manual` warns on a
+verdict without one (rule `signed`). A `draft` case carries no reviewer —
+nobody has stood behind it yet. A re-reviewed case replaces the line: the
+current verdict has one signer.
+
 ### Behaviour
 
 | Value | Means |
@@ -530,8 +544,9 @@ cases under it:
 | --- | --- | --- |
 | `authority` | fails the build | `**Status:** approved` over a case still `draft` — a draft wearing a reviewed suite's authority. |
 | `trace` | fails the build | A case traces an id the spec issues nowhere. |
-| `coverage` | warns | A scenario no case traces and no `**Out of suite:**` line excuses. |
+| `coverage` | warns | A scenario no living case traces and no `**Out of suite:**` line excuses — a `deprecated` case's traces are history, not coverage, so retiring a scenario's last case reopens the hole. |
 | `covers` | warns | A `**Covers:**` bullet quotes a title the spec has since reworded — the only signal that the words behind a signed-off case moved. |
+| `signed` | warns | An `actual` or `deprecated` case with no `**Reviewed by:**` line — a verdict nobody's name stands behind. |
 
 ## Where an approved suite goes
 
@@ -593,6 +608,7 @@ where it lives: the markdown in git, indexed by the capability's manual page.
 - **Priority:** high | medium | low
 - **Status:** draft | actual | deprecated
 - **Retired:** <why — deprecated cases only>
+- **Reviewed by:** <@handle - YYYY-MM-DD — actual and deprecated cases only>
 - **Behaviour:** positive | negative | destructive
 - **Type:** functional | smoke | regression | acceptance | usability | security | performance | compatibility | integration | exploratory
 - **Layer:** e2e | api | unit
@@ -616,6 +632,8 @@ untraced ids it does report are always work. An id listed there that a case
 also traces is itself reported.
 
 `**Retired:**` appears on `deprecated` cases and nowhere else.
+`**Reviewed by:**` appears on `actual` and `deprecated` cases — the verdict's
+signer and date — and never on a `draft`.
 
 Execution belongs to the run, not to this file. There is no Actual result and
 no Pass/Fail column here — a suite is the authored artifact, and what happened

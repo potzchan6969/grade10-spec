@@ -40,6 +40,12 @@ what they say.
    (journeys, or requirements where the spec is exempt from journeys), how
    many cases each holds, and how many are `draft`.
 
+   **Establish who is signing.** Ask the reviewer's GitHub handle before the
+   first verdict — `git config openspec.handle` is a fair default to offer,
+   but confirm it. Every verdict below is recorded under that handle with
+   today's date; an unsigned verdict is the thing this review exists to
+   prevent, and `check:manual` warns on it (rule `signed`).
+
 4. **Walk the `draft` cases one at a time,** in file order, section by
    section. Cases already `actual` or `deprecated` are skipped unless the
    reviewer asks to revisit one. For each case, show:
@@ -69,10 +75,21 @@ what they say.
 
    | Verdict | Write |
    | --- | --- |
-   | Approve | `**Status:** actual` on that case, unchanged otherwise. |
+   | Approve | `**Status:** actual` on that case, plus the reviewer line below. Unchanged otherwise. |
    | Change | Apply exactly the edit they asked for — wording, a property, a data row — then ask again; approve only on their yes. An edit that would add coverage the spec does not state goes to `spec.md` first, via `/spec-to-tcs`, not into the case. |
    | Defer | Leave `**Status:** draft` and note what they want resolved. |
-   | Retire | `**Status:** deprecated` plus a `- **Retired:** <why>` bullet under it. Never delete the case, never renumber around it. |
+   | Retire | `**Status:** deprecated` plus a `- **Retired:** <why>` bullet under it, plus the reviewer line. Never delete the case, never renumber around it. |
+
+   **Every verdict is signed.** `actual` and `deprecated` carry, directly
+   under the status (and the `**Retired:**` bullet where there is one):
+
+   ```markdown
+   - **Reviewed by:** @quinn - 2026-09-01
+   ```
+
+   The handle is the reviewer's, never yours, and the date is the day the
+   verdict was given. A re-reviewed case gets the line replaced, not
+   appended — the current verdict has one signer.
 
    **Retiring covers two verdicts, and the reason says which** — the spec no
    longer states the behaviour, or the reviewer finds the case redundant or
@@ -116,13 +133,16 @@ what they say.
    | --- | --- | --- |
    | `authority` | fails | `approved` over a case still `draft`. |
    | `trace` | fails | A case traces an id the spec issues nowhere — retrace it or retire it. |
-   | `coverage` | warns | A scenario no case traces. Close it deliberately with an `**Out of suite:**` line, or leave it as the hole it is; never invent a case to silence it. |
+   | `coverage` | warns | A scenario no living case traces — a `deprecated` case's traces do not count. Close it deliberately with an `**Out of suite:**` line, or leave it as the hole it is; never invent a case to silence it. |
    | `covers` | warns | A `**Covers:**` bullet quotes a scenario title the spec has since reworded. The id survived a rename by design, so this is the only signal that the words behind a signed-off case moved — re-review the cases under that bullet, or update the quote if the meaning did not change. |
+   | `signed` | warns | An `actual` or `deprecated` case with no `**Reviewed by:**` line — a verdict nobody's name stands behind. |
 
 **Never do these things:**
 
 - Never mark a case `actual` — or a file `approved` — without the reviewer
   saying yes to that specific case.
+- Never record a verdict without its `**Reviewed by:**` line, and never sign
+  one with a handle the reviewer did not confirm as theirs.
 - Never approve the remaining cases in bulk because the reviewer approved
   several in a row.
 - Never edit a step, precondition, or expected result into something the
