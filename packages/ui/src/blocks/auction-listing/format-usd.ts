@@ -1,3 +1,5 @@
+import type { ListingAuctionStanding } from "./types";
+
 /** Format minor units as US$ with up to 2 decimals, no trailing zeros. */
 export function formatUsd(minorUnits: number): string {
   return `US$${formatUsdNumeric(minorUnits)}`;
@@ -21,19 +23,93 @@ export function minNextBidMinor(
   return hasBids ? currentBidMinor + incrementMinor : startingBidMinor;
 }
 
-/** Smallest raise step when increasing an existing auto-bid maximum ($1.00). */
+/** Smallest raise step when leading below cap on auto-bid ($1.00). */
 const MINIMUM_MAXIMUM_RAISE_MINOR = 100;
 
-/** Lowest valid committed maximum: at least the next bid, and at least $1 above any standing maximum. */
-export function minMaximumMinor(
-  minBidMinor: number,
-  viewerMaximumMinor?: number,
-): number {
-  if (viewerMaximumMinor == null) return minBidMinor;
-  return Math.max(
+export type MaximumFloorReason =
+  | "floor-bid"
+  | "leading-nudge"
+  | "leading-increment";
+
+export type MaximumFloor = {
+  floorMinor: number;
+  reason: MaximumFloorReason;
+};
+
+/** Lowest valid committed maximum, with the rule that drives the helper caption. */
+export function resolveMaximumFloor(input: {
+  minBidMinor: number;
+  incrementMinor: number;
+  viewerMaximumMinor?: number;
+  standing: ListingAuctionStanding;
+  currentBidMinor: number;
+}): MaximumFloor {
+  const {
     minBidMinor,
-    viewerMaximumMinor + MINIMUM_MAXIMUM_RAISE_MINOR,
-  );
+    incrementMinor,
+    viewerMaximumMinor,
+    standing,
+    currentBidMinor,
+  } = input;
+
+  if (viewerMaximumMinor == null) {
+    return { floorMinor: minBidMinor, reason: "floor-bid" };
+  }
+
+  if (standing === "outbid") {
+    return { floorMinor: minBidMinor, reason: "floor-bid" };
+  }
+
+  if (standing === "leading-max") {
+    const atCap = currentBidMinor >= viewerMaximumMinor;
+    if (atCap) {
+      const incrementRaiseFloor = viewerMaximumMinor + incrementMinor;
+      const floorMinor = Math.max(minBidMinor, incrementRaiseFloor);
+      const reason =
+        floorMinor === minBidMinor && minBidMinor > incrementRaiseFloor
+          ? "floor-bid"
+          : "leading-increment";
+      return { floorMinor, reason };
+    }
+    return {
+      floorMinor: Math.max(
+        minBidMinor,
+        viewerMaximumMinor + MINIMUM_MAXIMUM_RAISE_MINOR,
+      ),
+      reason: "leading-nudge",
+    };
+  }
+
+  return { floorMinor: minBidMinor, reason: "floor-bid" };
+}
+
+export type MinimumMaximumCaptionCopy = {
+  minimumMaximumFloor: string;
+  minimumMaximumLeadingNudge: string;
+  minimumMaximumLeadingIncrement: string;
+};
+
+/** Input caption for auto-bid maximum floor — mirrors manual `Min. bid` parenthetical. */
+export function formatMinimumMaximumCaption(
+  floor: MaximumFloor,
+  copy: MinimumMaximumCaptionCopy,
+  incrementMinor: number,
+): string {
+  const amount = formatUsd(floor.floorMinor);
+  const increment = formatUsd(incrementMinor);
+
+  switch (floor.reason) {
+    case "leading-nudge":
+      return copy.minimumMaximumLeadingNudge.replace("{amount}", amount);
+    case "leading-increment":
+      return copy.minimumMaximumLeadingIncrement
+        .replace("{amount}", amount)
+        .replace("{increment}", increment);
+    default:
+      return copy.minimumMaximumFloor
+        .replace("{amount}", amount)
+        .replace("{increment}", increment);
+  }
 }
 
 /** Parse a currency field value to minor units; null when empty or not a positive number. */
@@ -52,21 +128,4 @@ export function isMaximumBelowFloor(
   floorMaximumMinor: number,
 ): boolean {
   return valueMinor == null || valueMinor < floorMaximumMinor;
-}
-
-/** Input caption for auto-bid maximum floor — mirrors manual `Min. bid` parenthetical. */
-export function formatMinMaximumMessage(
-  minMaximumMinor: number,
-  incrementMinor: number,
-  viewerMaximumMinor?: number,
-): string {
-  if (viewerMaximumMinor != null) {
-    const raisedFloor = viewerMaximumMinor + MINIMUM_MAXIMUM_RAISE_MINOR;
-    if (minMaximumMinor > raisedFloor) {
-      return `Min. maximum: ${formatUsd(minMaximumMinor)} (current + ${formatUsd(incrementMinor)})`;
-    }
-    return `Min. maximum: ${formatUsd(minMaximumMinor)} (your maximum + US$1)`;
-  }
-
-  return `Min. maximum: ${formatUsd(minMaximumMinor)} (current + ${formatUsd(incrementMinor)})`;
 }

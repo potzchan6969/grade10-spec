@@ -24,7 +24,7 @@ export const IMAGE = new URL(
 export const TITLE = "1999 Charizard, PSA 10";
 export const KICKER = "Listing 12 · September Slabs";
 export const DESCRIPTION = "Shadowless 1st Ed. Authenticated and vaulted.";
-export const PREMIUM_HINT = "Buyer's premium is added at invoice.";
+export const BUYER_FEE_HINT = "Buyer fee is added on top of the winning bid";
 
 export const GALLERY_IMAGES = [
   { src: IMAGE, alt: TITLE, thumbLabel: "front" },

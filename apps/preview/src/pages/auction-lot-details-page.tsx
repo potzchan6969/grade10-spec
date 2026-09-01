@@ -19,6 +19,7 @@ import {
   buildListingAuctionBidView,
   createLiveAuctionTiming,
   initialLiveListingFacts,
+  liveBidSimulationOptions,
   type LiveListingFacts,
   simulateNextLiveBid,
   userBidHistoryForState,
@@ -86,13 +87,17 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
     const timer = window.setInterval(() => {
       setLiveSnapshot((snapshot) => {
         if (snapshot == null) return snapshot;
-        return simulateNextLiveBid(snapshot.history, snapshot.facts);
+        return simulateNextLiveBid(
+          snapshot.history,
+          snapshot.facts,
+          liveBidSimulationOptions(state),
+        );
       });
       setTiming((current) => applyBidExtension(current));
     }, LIVE_BID_INTERVAL_MS);
 
     return () => window.clearInterval(timer);
-  }, [view.live]);
+  }, [view.live, state]);
 
   function requestBidAction() {
     if (hasBidOnListing(view)) return;

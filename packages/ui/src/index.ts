@@ -8,8 +8,11 @@ export {
 } from "./blocks/auction-listing/format-usd";
 export {
   ListingAgeVerificationDialog,
+  ListingAgeVerificationFields,
   type ListingAgeVerificationDialogCopy,
   type ListingAgeVerificationDialogProps,
+  type ListingAgeVerificationFieldsCopy,
+  type ListingAgeVerificationFieldsProps,
 } from "./blocks/auction-listing/listing-age-verification-dialog";
 export {
   ListingAuctionBidCard,

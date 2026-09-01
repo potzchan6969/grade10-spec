@@ -26,7 +26,7 @@ export type BiddingState =
   | "live-no-bids"
   | "live-manual"
   | "live-auto-leading"
-  | "live-auto-overtaken"
+  | "live-auto-outbid"
   | "closed-sold"
   | "closed-won-payment-due"
   | "closed-won-settled"
@@ -40,7 +40,7 @@ export const BIDDING_STATE_LABELS: Record<BiddingState, string> = {
   "live-no-bids": "Live — no bids",
   "live-manual": "Live — manual",
   "live-auto-leading": "Live — auto leading",
-  "live-auto-overtaken": "Live — auto overtaken",
+  "live-auto-outbid": "Live — auto outbid",
   "closed-sold": "Closed — sold",
   "closed-won-payment-due": "Closed — won payment due",
   "closed-won-settled": "Closed — won settled",
@@ -124,13 +124,14 @@ export const AUCTION_LOT_BADGES: readonly ListingLotMetaBadge[] = [
   { label: AUCTION_LOT.saleName },
 ];
 
+const VIEWER_INITIALS = "john@example.com";
+
 const BID_HISTORY: ListingBidHistoryRow[] = [
   {
     id: "bid-john-480",
-    initials: "john@example.com",
+    initials: VIEWER_INITIALS,
     amountMinor: 480_000,
     relativeTime: "2 min ago",
-    leading: true,
     isViewer: true,
   },
   {
@@ -185,7 +186,6 @@ export const AUCTION_LOT_DETAILS_COPY = {
   sidebar: {
     recentBids: "Recent Bids",
     bidHistory: {
-      leading: "Leading",
       you: "You",
       empty: "No bids yet",
     },
@@ -198,6 +198,8 @@ export const AUCTION_LOT_DETAILS_COPY = {
     outbid: "Outbid",
     highestBid: "Highest bid",
     yourMaximum: "Your maximum",
+    setMaximumLabel: "Set maximum",
+    setMaximumCurrentLabel: "Set maximum (current: {amount})",
     opensIn: "Opens in",
     closed: "Closed",
     timeLeft: "Time left",
@@ -215,9 +217,16 @@ export const AUCTION_LOT_DETAILS_COPY = {
     enableAutoBidding: "Enable auto-bidding",
     autoBiddingTooltip:
       "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
-    minimumMaximum: "Min. maximum: {amount}",
+    minimumMaximumFloor:
+      "At least {amount} (current bid + {increment})",
+    minimumMaximumLeadingNudge:
+      "At least {amount} (your maximum + US$1)",
+    minimumMaximumLeadingIncrement:
+      "At least {amount} (your maximum + {increment})",
     maximumBelowMinimum: "Enter at least {amount}",
-    buyerFeeHint: "Buyer’s premium is added at invoice.",
+    buyerFeeHint: "Buyer fee is added on top of the winning bid",
+    buyerFeeTooltip:
+      "Winners pay a percentage of the hammer price as a buyer fee. The rate is confirmed at checkout.",
     noBidsYet: "No bids yet",
     aboutThisLot: "About this lot",
     vaultShipping: "Vault shipping",
@@ -291,7 +300,9 @@ export function stateMeta(state: BiddingState) {
     currentBidMinor:
       state === "closed-unsold"
         ? 0
-        : state === "live-auto-overtaken"
+        : state === "live-no-bids"
+          ? AUCTION_LOT.startingBidMinor
+        : state === "live-auto-outbid"
           ? 825_000
           : state === "closed-sold" ||
               state === "closed-won-payment-due" ||
@@ -317,14 +328,13 @@ export function bidHistoryForState(
 ): ListingBidHistoryRow[] {
   if (!stateMeta(state).hasBids) return [];
 
-  if (state === "live-auto-overtaken") {
+  if (state === "live-auto-outbid") {
     return [
       {
         id: "bid-mike-825",
         initials: "mike@example.com",
         amountMinor: 825_000,
         relativeTime: "1 min ago",
-        leading: true,
       },
       {
         id: "bid-john-800",
@@ -349,7 +359,6 @@ export function bidHistoryForState(
         initials: "mike@example.com",
         amountMinor: 310_000,
         relativeTime: "Closed",
-        leading: true,
       },
       {
         id: "bid-john-295",
@@ -407,7 +416,7 @@ export function userBidHistoryForState(
           timeLabel: "25 min ago",
         },
       ];
-    case "live-auto-overtaken":
+    case "live-auto-outbid":
       return [
         {
           id: "user-bid-auto-800",
@@ -490,44 +499,57 @@ export function initialLiveListingFacts(state: BiddingState): LiveListingFacts {
   };
 }
 
-export function appendSimulatedBid(
-  rows: readonly ListingBidHistoryRow[],
-): ListingBidHistoryRow[] {
-  if (rows.length === 0) return [...rows];
+export type LiveBidSimulationOptions = {
+  /** When set, a rival bid within this cap triggers an automatic viewer counter-bid. */
+  viewerMaximumMinor?: number;
+  viewerInitials?: string;
+};
 
-  const top = rows[0];
-  const rival =
-    SIMULATED_RIVALS[Math.floor(Math.random() * SIMULATED_RIVALS.length)];
-  const newBid: ListingBidHistoryRow = {
-    id: `bid-sim-${Date.now()}`,
-    initials: rival,
-    amountMinor: top.amountMinor + AUCTION_LOT.incrementMinor,
-    relativeTime: "Just now",
-    leading: true,
-  };
+export function liveBidSimulationOptions(
+  state: BiddingState,
+): LiveBidSimulationOptions {
+  if (state === "live-auto-leading") {
+    return {
+      viewerMaximumMinor: AUCTION_LOT.viewerMaximumMinor,
+      viewerInitials: VIEWER_INITIALS,
+    };
+  }
+  return {};
+}
 
-  return [
-    newBid,
-    ...rows.map((row) => ({
-      ...row,
-      leading: false,
-    })),
-  ].slice(0, MAX_RECENT_BIDS);
+function randomRivalInitials(): string {
+  return SIMULATED_RIVALS[
+    Math.floor(Math.random() * SIMULATED_RIVALS.length)
+  ];
+}
+
+function viewerAutoCounterAmount(
+  rivalAmountMinor: number,
+  viewerMaximumMinor: number,
+): number | null {
+  const counterAmount = Math.min(
+    rivalAmountMinor + AUCTION_LOT.incrementMinor,
+    viewerMaximumMinor,
+  );
+  if (counterAmount <= rivalAmountMinor) return null;
+  return counterAmount;
 }
 
 export function simulateNextLiveBid(
   history: readonly ListingBidHistoryRow[],
   facts: LiveListingFacts,
+  options: LiveBidSimulationOptions = {},
 ): { history: ListingBidHistoryRow[]; facts: LiveListingFacts } {
+  const viewerInitials = options.viewerInitials ?? VIEWER_INITIALS;
+  const viewerMaximumMinor = options.viewerMaximumMinor;
+
   if (history.length === 0) {
-    const rival =
-      SIMULATED_RIVALS[Math.floor(Math.random() * SIMULATED_RIVALS.length)];
+    const rivalInitials = randomRivalInitials();
     const newBid: ListingBidHistoryRow = {
       id: `bid-sim-${Date.now()}`,
-      initials: rival,
+      initials: rivalInitials,
       amountMinor: AUCTION_LOT.startingBidMinor,
       relativeTime: "Just now",
-      leading: true,
     };
 
     return {
@@ -540,13 +562,44 @@ export function simulateNextLiveBid(
     };
   }
 
-  const historyNext = appendSimulatedBid(history);
-  const top = historyNext[0];
+  const top = history[0];
+  const rivalAmount = top.amountMinor + AUCTION_LOT.incrementMinor;
+  const rivalBid: ListingBidHistoryRow = {
+    id: `bid-rival-${Date.now()}`,
+    initials: randomRivalInitials(),
+    amountMinor: rivalAmount,
+    relativeTime: "Just now",
+  };
+
+  if (viewerMaximumMinor != null) {
+    const counterAmount = viewerAutoCounterAmount(
+      rivalAmount,
+      viewerMaximumMinor,
+    );
+    if (counterAmount != null) {
+      const viewerBid: ListingBidHistoryRow = {
+        id: `bid-viewer-${Date.now()}`,
+        initials: viewerInitials,
+        amountMinor: counterAmount,
+        relativeTime: "Just now",
+        isViewer: true,
+      };
+
+      return {
+        history: [viewerBid, rivalBid, ...history].slice(0, MAX_RECENT_BIDS),
+        facts: {
+          currentBidMinor: counterAmount,
+          bidCount: facts.bidCount + 2,
+          hasBids: true,
+        },
+      };
+    }
+  }
 
   return {
-    history: historyNext,
+    history: [rivalBid, ...history].slice(0, MAX_RECENT_BIDS),
     facts: {
-      currentBidMinor: top.amountMinor,
+      currentBidMinor: rivalAmount,
       bidCount: facts.bidCount + 1,
       hasBids: true,
     },
@@ -555,7 +608,7 @@ export function simulateNextLiveBid(
 
 export function bidModeForState(state: BiddingState): BidMode {
   if (state === "live-manual") return "manual";
-  if (state === "live-auto-leading" || state === "live-auto-overtaken") {
+  if (state === "live-auto-leading" || state === "live-auto-outbid") {
     return "auto";
   }
   return "manual";
@@ -572,14 +625,31 @@ function listingAuctionStanding(state: BiddingState): ListingAuctionStanding {
   if (state === "closed-won-payment-due") return "won-payment-due";
   if (state === "closed-won-settled") return "won-settled";
   if (state === "closed-lost") return "lost";
-  if (state === "live-auto-overtaken") return "outbid";
+  if (state === "live-auto-outbid") return "outbid";
   if (state === "live-auto-leading") return "leading-max";
   if (state === "live-manual") return "leading-manual";
   return "none";
 }
 
+/** Reconcile static story state with live-simulated bid facts. */
+function resolveListingStanding(
+  state: BiddingState,
+  currentBidMinor: number,
+  viewerMaximumMinor?: number,
+): ListingAuctionStanding {
+  const standing = listingAuctionStanding(state);
+  if (
+    standing === "leading-max" &&
+    viewerMaximumMinor != null &&
+    currentBidMinor > viewerMaximumMinor
+  ) {
+    return "outbid";
+  }
+  return standing;
+}
+
 function viewerMaximumForState(state: BiddingState): number | undefined {
-  if (state === "live-auto-leading" || state === "live-auto-overtaken") {
+  if (state === "live-auto-leading" || state === "live-auto-outbid") {
     return AUCTION_LOT.viewerMaximumMinor;
   }
   return undefined;
@@ -605,6 +675,13 @@ export function buildListingAuctionBidView(
       : liveTiming != null
         ? formatListingEnds(liveTiming.closesAtMs)
         : meta.deadline;
+  const viewerMaximumMinor = viewerMaximumForState(state);
+  const priceLabel =
+    meta.closed || meta.isUnsold
+      ? meta.priceLabel
+      : hasBids
+        ? "Current Bid"
+        : "Starting bid";
 
   return {
     headerLabel: auctionHeaderLabel(state),
@@ -614,7 +691,7 @@ export function buildListingAuctionBidView(
     hasBids,
     isUnsold: meta.isUnsold,
     showBidActions: meta.showBidActions,
-    priceLabel: meta.priceLabel,
+    priceLabel,
     currentBidMinor,
     bidCount,
     bidCountLabel: formatBidCountLabel(bidCount),
@@ -624,8 +701,12 @@ export function buildListingAuctionBidView(
     countdownFormat: meta.countdownFormat,
     extended: liveTiming?.extended ?? false,
     deadline,
-    standing: listingAuctionStanding(state),
-    viewerMaximumMinor: viewerMaximumForState(state),
+    standing: resolveListingStanding(
+      state,
+      currentBidMinor,
+      viewerMaximumMinor,
+    ),
+    viewerMaximumMinor,
     minBidMinor: minNextBidMinor(
       currentBidMinor,
       AUCTION_LOT.incrementMinor,

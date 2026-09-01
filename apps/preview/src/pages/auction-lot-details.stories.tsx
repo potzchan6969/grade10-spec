@@ -36,20 +36,20 @@ export const LiveAutoLeading: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("heading", { name: /Charizard/ })).toBeVisible();
     expect(
-      canvas.getByRole("link", { name: "Auction", current: "page" }),
+      canvas.getByText("Set maximum (current: US$8,000)"),
     ).toBeVisible();
-    expect(canvas.getByRole("button", { name: "Place Bid" })).toBeVisible();
+    expect(
+      canvas.getByText(
+        "At least US$8,001 (your maximum + US$1)",
+      ),
+    ).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Your bid history" }),
     ).toBeVisible();
-    await canvas.getByRole("button", { name: "Your bid history" }).click();
-    expect(canvas.getByRole("dialog", { name: "Bid History" })).toBeVisible();
+    expect(canvas.getByText("You")).toBeVisible();
     expect(
-      canvas.getByRole("columnheader", { name: "Your bid" }),
-    ).toBeVisible();
-    expect(canvas.getByRole("columnheader", { name: "Type" })).toBeVisible();
-    expect(canvas.getByRole("columnheader", { name: "Time" })).toBeVisible();
-    expect(canvas.getByText("US$4,800")).toBeVisible();
+      canvas.queryByRole("dialog", { name: "Bid History" }),
+    ).not.toBeInTheDocument();
   },
 };
 
@@ -58,14 +58,24 @@ export const LiveNoBids: Story = {
   args: { state: "live-no-bids" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByText("Starting bid")).toBeVisible();
+    expect(canvas.getByText("No bids yet")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Your bid history" }),
     ).not.toBeInTheDocument();
   },
 };
 export const LiveManual: Story = { args: { state: "live-manual" } };
-export const LiveAutoOvertaken: Story = {
-  args: { state: "live-auto-overtaken" },
+export const LiveAutoOutbid: Story = {
+  args: { state: "live-auto-outbid" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByText(
+        "At least US$8,500 (current bid + US$250)",
+      ),
+    ).toBeVisible();
+  },
 };
 export const ClosedSold: Story = { args: { state: "closed-sold" } };
 export const ClosedWonPaymentDue: Story = {

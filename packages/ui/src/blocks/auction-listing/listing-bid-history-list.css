@@ -66,16 +66,3 @@
     transition: none;
   }
 }
-
-.bid-history-leading-crown {
-  display: inline-flex;
-  align-items: center;
-  color: var(--primary);
-  font-size: inherit;
-  line-height: 0;
-}
-
-.bid-history-leading-crown svg {
-  height: 1em;
-  width: 1em;
-}
