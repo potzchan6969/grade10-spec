@@ -10,7 +10,7 @@
 - [ ] 2.2 Make `Payment authentication stays in the dialog` and `A refused authorization does not place a bid` pass in contract fixtures without serializing card data or client secrets outside the intended browser response.
 - [ ] 2.3 Verify: `pnpm run typecheck`, `pnpm run lint`, and the Auction and Stripe contract tests.
 
-## 3. Data migration (grade10)
+## 3. Data migration (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Make `A later bid retains the listing's payment method` pass with the bidder/listing opaque payment-method binding and its uniqueness constraint.
 - [ ] 3.2 Preserve the existing payment-hold provider reference so `A selected payment method authorizes the maximum`, `Raising a maximum raises the authorization`, and `An outbid cancels the authorization` remain traceable and idempotent.
