@@ -25,5 +25,5 @@ Needs the submodule bump that carries groups 1 and 2.
 - [x] 3.1 Bump the `external/grade10-spec` submodule SHA
 - [x] 3.2 Own `open` state at each place sign-in is triggered and pass `open` / `onOpenChange`, replacing the navigation to the sign-in route
 - [x] 3.3 Delete the sign-in route and its page, and confirm a sign-in started from the cart returns to the cart with its state intact — satisfies *The triggering page stays mounted*
-- [ ] 3.4 Supply `copy.legal` from the message catalog if the surface shows the legal line design draws
+- [x] 3.4 Supply `copy.legal` from the message catalog if the surface shows the legal line design draws
 - [x] 3.5 Run the application's lint, typecheck, and test suites
