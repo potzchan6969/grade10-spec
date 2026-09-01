@@ -1029,8 +1029,8 @@ Two pull requests, two audiences.
    `draft`, retired ones become `deprecated`, reviewed ones keep their ids.
 5. When this document's wording rules change, bump `tcs_rules_rev`, then work
    `pnpm run tcs:stale` one capability at a time.
-6. Only `actual` cases in `approved` suites are exported, by
-   `pnpm run qase:export` — on demand, never automatically.
+6. Only `actual` cases in `approved` suites leave this repository, and only
+   when someone runs an export. Nothing exports on its own.
 
 ## What this is not
 
@@ -1053,7 +1053,6 @@ Two pull requests, two audiences.
 | `spec-push` skill | Refuses a change whose deltas have journeys but no suite, and runs `pnpm run tcs:validate` with the other checks before pushing. |
 | `pnpm run tcs:validate` (`scripts/openspec/validate-test-cases.mjs`) | Checks every suite against this document: the header matches the cases below it, ids are unique and journey-scoped, a trace resolves against the `spec.md` beside it, no case ships with an empty Expected Results list. Errors fail; suites in older shapes warn. Runs in CI on every push. |
 | `pnpm run tcs:stale` | Lists the suites whose `draft` cases sit below the current `tcs_rules_rev`. A report, not a sweep. |
-| `pnpm run qase:export` / `openspec-export-qase-csv` | Exports the `actual` cases of every `approved` suite to a Qase-shaped CSV. Skips `pending-review` and `in-review` files, `draft` cases, and `deprecated` cases. Run when someone asks for it — nothing triggers it automatically. |
 
 Change deltas use the same format under
 `openspec/changes/<change>/specs/<product>/<capability>/test-cases.md`.
