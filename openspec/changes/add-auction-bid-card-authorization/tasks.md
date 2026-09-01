@@ -4,7 +4,7 @@
 - [ ] 1.2 Make every `bid-payment-method` scenario pass as a reviewed capability contract and keep its UI state map aligned with the Figma frame.
 - [ ] 1.3 Verify: `openspec validate add-auction-bid-card-authorization --strict`.
 
-## 2. Shared interfaces (grade10)
+## 2. Shared interfaces (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Make `First bid requires a payment method`, `A selected payment method authorizes the maximum`, and `A later bid retains the listing's payment method` pass by extending the Auction and Stripe contracts with first-bid setup/confirmation and retained-method outcomes.
 - [ ] 2.2 Make `Payment authentication stays in the dialog` and `A refused authorization does not place a bid` pass in contract fixtures without serializing card data or client secrets outside the intended browser response.
