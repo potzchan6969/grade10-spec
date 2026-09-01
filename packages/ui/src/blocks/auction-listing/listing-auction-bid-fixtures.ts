@@ -11,12 +11,8 @@ import {
   FIXTURE_AUCTION_CLOSED_AT_MS,
   FIXTURE_AUCTION_ENDS_AT_MS,
   FIXTURE_AUCTION_OPENS_AT_MS,
+  FIXTURE_ACTIVITY_TIME_COPY,
 } from "../../lib/datetime-fixtures";
-import {
-  formatListingClosed,
-  formatListingEnds,
-  formatListingOpens,
-} from "../../lib/format-datetime";
 
 export type BiddingState =
   | "opens"
@@ -63,25 +59,29 @@ const DAY_SECONDS = 24 * 60 * 60;
 const HOUR_SECONDS = 60 * 60;
 const VIEWER_INITIALS = "john@example.com";
 
+function msAgo(minutes: number, nowMs = Date.now()): number {
+  return nowMs - minutes * 60_000;
+}
+
 const BID_HISTORY: ListingBidHistoryRow[] = [
   {
     id: "bid-john-480",
     initials: VIEWER_INITIALS,
     amountMinor: 480_000,
-    relativeTime: "2 min ago",
+    acceptedAtMs: msAgo(2),
     isViewer: true,
   },
   {
     id: "bid-mike-455",
     initials: "mike@example.com",
     amountMinor: 455_000,
-    relativeTime: "6 min ago",
+    acceptedAtMs: msAgo(6),
   },
   {
     id: "bid-alex-430",
     initials: "alex@example.com",
     amountMinor: 430_000,
-    relativeTime: "12 min ago",
+    acceptedAtMs: msAgo(12),
   },
 ];
 
@@ -129,6 +129,10 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   buyerFeeTooltip:
     "Winners pay a percentage of the hammer price as a buyer fee. The rate is confirmed at checkout.",
   noBidsYet: "No bids yet",
+  endsLabel: "Ends",
+  opensLabel: "Opens",
+  closedAt: "Closed {when}",
+  activityTimeCopy: FIXTURE_ACTIVITY_TIME_COPY,
 } satisfies Omit<
   ListingAuctionBidCardCopy,
   "aboutThisLot" | "vaultShipping" | "authentication" | "result" | "showMore"
@@ -178,7 +182,7 @@ export function stateMeta(state: BiddingState) {
           : "Winning bid"
         : "Current Bid",
     countdown: closed
-      ? formatListingClosed(FIXTURE_AUCTION_CLOSED_AT_MS)
+      ? "Closed"
       : opens
         ? "2D 4H 12M 0S"
         : "6m 9s",
@@ -188,11 +192,11 @@ export function stateMeta(state: BiddingState) {
         ? 2 * DAY_SECONDS + 4 * HOUR_SECONDS + 12 * 60
         : 6 * 60 + 9,
     countdownFormat: opens ? ("long" as const) : ("short" as const),
-    deadline: closed
-      ? undefined
+    deadlineAtMs: closed
+      ? FIXTURE_AUCTION_CLOSED_AT_MS
       : opens
-        ? formatListingOpens(FIXTURE_AUCTION_OPENS_AT_MS)
-        : formatListingEnds(FIXTURE_AUCTION_ENDS_AT_MS),
+        ? FIXTURE_AUCTION_OPENS_AT_MS
+        : FIXTURE_AUCTION_ENDS_AT_MS,
     currentBidMinor:
       state === "closed-unsold"
         ? 0
@@ -230,20 +234,20 @@ export function bidHistoryForState(
         id: "bid-mike-825",
         initials: "mike@example.com",
         amountMinor: 825_000,
-        relativeTime: "1 min ago",
+        acceptedAtMs: msAgo(1),
       },
       {
         id: "bid-john-800",
         initials: "john@example.com",
         amountMinor: 800_000,
-        relativeTime: "5 min ago",
+        acceptedAtMs: msAgo(5),
         isViewer: true,
       },
       {
         id: "bid-alex-775",
         initials: "alex@example.com",
         amountMinor: 775_000,
-        relativeTime: "10 min ago",
+        acceptedAtMs: msAgo(10),
       },
     ];
   }
@@ -254,13 +258,15 @@ export function bidHistoryForState(
         id: "bid-mike-310",
         initials: "mike@example.com",
         amountMinor: 310_000,
-        relativeTime: "Closed",
+        acceptedAtMs: msAgo(60),
+        timeOverride: "Closed",
       },
       {
         id: "bid-john-295",
         initials: "john@example.com",
         amountMinor: 295_000,
-        relativeTime: "Closed",
+        acceptedAtMs: msAgo(90),
+        timeOverride: "Closed",
         isViewer: state === "closed-lost",
       },
     ];
@@ -285,14 +291,14 @@ export function userBidHistoryForState(
           amountLabel: "US$4,800",
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
-          timeLabel: "2 min ago",
+          acceptedAtMs: msAgo(2),
         },
         {
           id: "user-bid-manual-455",
           amountLabel: "US$4,550",
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
-          timeLabel: "12 min ago",
+          acceptedAtMs: msAgo(12),
         },
       ];
     case "live-auto-leading":
@@ -302,14 +308,14 @@ export function userBidHistoryForState(
           amountLabel: "US$4,800",
           bidType: "auto",
           bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
-          timeLabel: "2 min ago",
+          acceptedAtMs: msAgo(2),
         },
         {
           id: "user-bid-manual-430",
           amountLabel: "US$4,300",
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
-          timeLabel: "25 min ago",
+          acceptedAtMs: msAgo(25),
         },
       ];
     case "live-auto-outbid":
@@ -319,14 +325,14 @@ export function userBidHistoryForState(
           amountLabel: "US$8,000",
           bidType: "auto",
           bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
-          timeLabel: "5 min ago",
+          acceptedAtMs: msAgo(5),
         },
         {
           id: "user-bid-manual-775",
           amountLabel: "US$7,750",
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
-          timeLabel: "18 min ago",
+          acceptedAtMs: msAgo(18),
         },
       ];
     case "closed-won-payment-due":
@@ -337,14 +343,16 @@ export function userBidHistoryForState(
           amountLabel: "US$3,100",
           bidType: "auto",
           bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
-          timeLabel: "Closed",
+          acceptedAtMs: msAgo(60),
+          timeOverride: "Closed",
         },
         {
           id: "user-bid-won-285",
           amountLabel: "US$2,850",
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
-          timeLabel: "Closed",
+          acceptedAtMs: msAgo(90),
+          timeOverride: "Closed",
         },
       ];
     case "closed-lost":
@@ -354,7 +362,8 @@ export function userBidHistoryForState(
           amountLabel: "US$2,950",
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
-          timeLabel: "Closed",
+          acceptedAtMs: msAgo(120),
+          timeOverride: "Closed",
         },
       ];
     default:
@@ -430,12 +439,12 @@ export function buildListingAuctionBidView(
     liveTiming != null
       ? remainingSecondsUntil(liveTiming.closesAtMs)
       : meta.countdownSeconds;
-  const deadline =
+  const deadlineAtMs =
     meta.closed || meta.opens
-      ? meta.deadline
+      ? meta.deadlineAtMs
       : liveTiming != null
-        ? formatListingEnds(liveTiming.closesAtMs)
-        : meta.deadline;
+        ? liveTiming.closesAtMs
+        : meta.deadlineAtMs;
   const viewerMaximumMinor = viewerMaximumForState(state);
   const priceLabel =
     meta.closed || meta.isUnsold
@@ -461,7 +470,7 @@ export function buildListingAuctionBidView(
     closesAtMs: liveTiming?.closesAtMs ?? null,
     countdownFormat: meta.countdownFormat,
     extended: liveTiming?.extended ?? false,
-    deadline,
+    deadlineAtMs,
     standing: resolveListingStanding(
       state,
       currentBidMinor,

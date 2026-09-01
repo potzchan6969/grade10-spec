@@ -222,7 +222,7 @@ export function simulateNextLiveBid(
       id: `bid-sim-${Date.now()}`,
       initials: rivalInitials,
       amountMinor: AUCTION_LOT.startingBidMinor,
-      relativeTime: "Just now",
+      acceptedAtMs: Date.now(),
     };
 
     return {
@@ -241,7 +241,7 @@ export function simulateNextLiveBid(
     id: `bid-rival-${Date.now()}`,
     initials: randomRivalInitials(),
     amountMinor: rivalAmount,
-    relativeTime: "Just now",
+    acceptedAtMs: Date.now(),
   };
 
   if (viewerMaximumMinor != null) {
@@ -254,7 +254,7 @@ export function simulateNextLiveBid(
         id: `bid-viewer-${Date.now()}`,
         initials: viewerInitials,
         amountMinor: counterAmount,
-        relativeTime: "Just now",
+        acceptedAtMs: Date.now(),
         isViewer: true,
       };
 

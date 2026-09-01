@@ -1,7 +1,11 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect } from "react";
-import { expect, within } from "storybook/test";
-import { formatMoment } from "../../lib/format-datetime";
+import { expect, userEvent, waitFor, within } from "storybook/test";
+import {
+  FIXTURE_ACTIVITY_TIME_COPY,
+  FIXTURE_SHIPPED_LOCALE,
+  FIXTURE_TIME_ZONE,
+} from "../../lib/datetime-fixtures";
 import { ListingUserBidHistory } from "./listing-user-bid-history";
 import type { ListingUserBidHistoryRow } from "./types";
 
@@ -13,44 +17,46 @@ const COPY = {
   time: "Time",
 } as const;
 
+const STORY_NOW_MS = Date.now();
+
 const SAMPLE_ROWS: ListingUserBidHistoryRow[] = [
   {
     id: "bid-1",
     amountLabel: "US$4,800",
     bidType: "auto",
     bidTypeLabel: "Automatic",
-    timeLabel: "2 min ago",
+    acceptedAtMs: STORY_NOW_MS - 2 * 60_000,
   },
   {
     id: "bid-2",
     amountLabel: "US$4,550",
     bidType: "manual",
     bidTypeLabel: "Manual",
-    timeLabel: "18 min ago",
+    acceptedAtMs: STORY_NOW_MS - 18 * 60_000,
   },
   {
     id: "bid-3",
     amountLabel: "US$4,300",
     bidType: "auto",
     bidTypeLabel: "Automatic",
-    timeLabel: "1 hr ago",
+    acceptedAtMs: STORY_NOW_MS - 60 * 60_000,
   },
 ];
 
 function createLongRows(count: number): ListingUserBidHistoryRow[] {
-  const baseMs = Date.UTC(2026, 7, 24, 18, 0);
+  const baseMs = STORY_NOW_MS;
 
   return Array.from({ length: count }, (_, index) => ({
     id: `bid-long-${index}`,
     amountLabel: `US$${(4_800 - index * 100).toLocaleString("en-US")}`,
     bidType: index % 2 === 0 ? "auto" : "manual",
     bidTypeLabel: index % 2 === 0 ? "Automatic" : "Manual",
-    timeLabel:
+    acceptedAtMs:
       index === 0
-        ? "Just now"
+        ? baseMs - 30_000
         : index < 8
-          ? `${index * 4} min ago`
-          : formatMoment(baseMs - index * 3_600_000),
+          ? baseMs - index * 4 * 60_000
+          : baseMs - (index + 1) * 24 * 60 * 60_000,
   }));
 }
 
@@ -80,6 +86,9 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     copy: COPY,
+    locale: FIXTURE_SHIPPED_LOCALE,
+    timeZone: FIXTURE_TIME_ZONE,
+    activityTimeCopy: FIXTURE_ACTIVITY_TIME_COPY,
   },
 } satisfies Meta<typeof ListingUserBidHistory>;
 
@@ -90,9 +99,14 @@ export const DialogOpen: Story = {
   args: { rows: SAMPLE_ROWS },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await canvas.getByRole("button", { name: "Your bid history" }).click();
-    expect(canvas.getByRole("dialog", { name: "Bid History" })).toBeVisible();
-    expect(canvas.getByText("US$4,800")).toBeVisible();
+    const page = within(document.body);
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Your bid history" }),
+    );
+    const dialog = await page.findByRole("dialog", { name: "Bid History" });
+    expect(dialog).toBeVisible();
+    expect(within(dialog).getByText("US$4,800")).toBeVisible();
+    expect(within(dialog).getByText("2 min ago")).toBeVisible();
   },
 };
 
@@ -107,19 +121,22 @@ export const LongHistory: Story = {
       },
     },
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const dialog = await canvas.findByRole("dialog", { name: "Bid History" });
+  play: async () => {
+    const page = within(document.body);
+    const dialog = await page.findByRole("dialog", { name: "Bid History" });
     const body = dialog.querySelector(
       '[data-slot="listing-user-bid-history-scroll"]',
     ) as HTMLElement;
 
     expect(body.scrollHeight).toBeGreaterThan(body.clientHeight);
 
-    const oldestBid = canvas.getByText(OLDEST_BID_LABEL);
+    const oldestBid = within(dialog).getByText(OLDEST_BID_LABEL);
     expect(oldestBid).not.toBeVisible();
 
     body.scrollTop = body.scrollHeight;
-    expect(oldestBid).toBeVisible();
+    oldestBid.scrollIntoView({ block: "end" });
+    await waitFor(() => {
+      expect(oldestBid).toBeVisible();
+    });
   },
 };

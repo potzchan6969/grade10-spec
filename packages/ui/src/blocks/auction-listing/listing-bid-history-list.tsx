@@ -9,6 +9,11 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  type ActivityTimeCopy,
+  formatActivityAt,
+  type ShippedLocale,
+} from "../../lib/format-datetime";
 import { formatUsd } from "./format-usd";
 import type { ListingBidHistoryRow } from "./types";
 import "./listing-bid-history-list.css";
@@ -22,6 +27,9 @@ type ListingBidHistoryListProps = {
   copy?: ListingBidHistoryListCopy;
   rows: readonly ListingBidHistoryRow[];
   heading?: string;
+  locale: ShippedLocale;
+  timeZone: string;
+  activityTimeCopy: ActivityTimeCopy;
   /** Resets entrance animation when the bidding lifecycle changes. */
   resetKey?: string;
   /** `fade` keeps row height stable inside a fixed scroll slot. */
@@ -35,17 +43,40 @@ type BidHistoryRowItemProps = {
   animateEnter: boolean;
   useEnterWrapper: boolean;
   entranceMode: "expand" | "fade";
+  locale: ShippedLocale;
+  timeZone: string;
+  activityTimeCopy: ActivityTimeCopy;
+  nowMs: number;
 };
+
+function formatRowTime(
+  row: ListingBidHistoryRow,
+  locale: ShippedLocale,
+  timeZone: string,
+  activityTimeCopy: ActivityTimeCopy,
+  nowMs: number,
+): string {
+  if (row.timeOverride) return row.timeOverride;
+  return formatActivityAt(row.acceptedAtMs, {
+    locale,
+    timeZone,
+    copy: activityTimeCopy,
+    now: nowMs,
+  });
+}
 
 function BidHistoryRowContent({
   copy,
   row,
   recessed,
-}: {
-  copy: ListingBidHistoryListCopy;
-  row: ListingBidHistoryRow;
-  recessed: boolean;
-}) {
+  locale,
+  timeZone,
+  activityTimeCopy,
+  nowMs,
+}: Omit<
+  BidHistoryRowItemProps,
+  "animateEnter" | "useEnterWrapper" | "entranceMode"
+>) {
   return (
     <HStack
       className="w-full py-1.5"
@@ -73,8 +104,8 @@ function BidHistoryRowContent({
           </Badge>
         ) : null}
       </HStack>
-      <Text size="xs" tone={recessed ? "muted" : "secondary"}>
-        {row.relativeTime}
+      <Text size="xs" tone="secondary">
+        {formatRowTime(row, locale, timeZone, activityTimeCopy, nowMs)}
       </Text>
     </HStack>
   );
@@ -87,6 +118,10 @@ function BidHistoryRowItem({
   animateEnter,
   useEnterWrapper,
   entranceMode,
+  locale,
+  timeZone,
+  activityTimeCopy,
+  nowMs,
 }: BidHistoryRowItemProps) {
   const enterRef = useRef<HTMLDivElement>(null);
 
@@ -98,7 +133,17 @@ function BidHistoryRowItem({
   }, [animateEnter]);
 
   if (!useEnterWrapper) {
-    return <BidHistoryRowContent copy={copy} recessed={recessed} row={row} />;
+    return (
+      <BidHistoryRowContent
+        activityTimeCopy={activityTimeCopy}
+        copy={copy}
+        locale={locale}
+        nowMs={nowMs}
+        recessed={recessed}
+        row={row}
+        timeZone={timeZone}
+      />
+    );
   }
 
   return (
@@ -113,7 +158,15 @@ function BidHistoryRowItem({
     >
       <div className="bid-history-enter__inner">
         <div className="bid-history-enter__content">
-          <BidHistoryRowContent copy={copy} recessed={recessed} row={row} />
+          <BidHistoryRowContent
+            activityTimeCopy={activityTimeCopy}
+            copy={copy}
+            locale={locale}
+            nowMs={nowMs}
+            recessed={recessed}
+            row={row}
+            timeZone={timeZone}
+          />
         </div>
       </div>
     </div>
@@ -127,12 +180,36 @@ function ListingBidHistoryList({
   return <BidHistoryEntrances key={resetKey} {...props} />;
 }
 
+function useActivityTimeTick(rows: readonly ListingBidHistoryRow[]): number {
+  const [nowMs, setNowMs] = useState(() => Date.now());
+
+  useLayoutEffect(() => {
+    setNowMs(Date.now());
+  }, [rows]);
+
+  useEffect(() => {
+    const hasRecentRow = rows.some((row) => {
+      if (row.timeOverride) return false;
+      return Date.now() - row.acceptedAtMs < 60_000;
+    });
+    const intervalMs = hasRecentRow ? 15_000 : 30_000;
+    const timer = window.setInterval(() => setNowMs(Date.now()), intervalMs);
+    return () => window.clearInterval(timer);
+  }, [rows]);
+
+  return nowMs;
+}
+
 function BidHistoryEntrances({
   copy = {},
   rows,
   heading = "Recent bids",
   entranceMode = "expand",
+  locale,
+  timeZone,
+  activityTimeCopy,
 }: Omit<ListingBidHistoryListProps, "resetKey">) {
+  const nowMs = useActivityTimeTick(rows);
   const knownIdsRef = useRef<Set<string>>(new Set());
   const skipEntranceRef = useRef(true);
   const [enteredIds, setEnteredIds] = useState<ReadonlySet<string>>(
@@ -180,12 +257,16 @@ function BidHistoryEntrances({
       <VStack className="w-full divide-y divide-border" gap="none">
         {rows.map((row, index) => (
           <BidHistoryRowItem
+            activityTimeCopy={activityTimeCopy}
             animateEnter={row.id === enteringId}
             copy={copy}
             entranceMode={entranceMode}
             key={row.id}
+            locale={locale}
+            nowMs={nowMs}
             recessed={index > 0}
             row={row}
+            timeZone={timeZone}
             useEnterWrapper={enteredIds.has(row.id)}
           />
         ))}

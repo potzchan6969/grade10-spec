@@ -120,9 +120,11 @@ function ListingBidEnrollmentCardPreview({
         copy={sidebarCopy}
         history={history}
         historyResetKey="enrollment-demo"
+        locale="en"
         onBidModeChange={setBidMode}
         onCommitMaximum={handleBidSubmit}
         onPlaceBid={handleBidSubmit}
+        timeZone="Asia/Hong_Kong"
         view={view}
       />
 

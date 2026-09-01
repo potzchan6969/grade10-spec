@@ -341,16 +341,33 @@ export {
 } from "./blocks/store-profile/profile-form";
 export type { ProfileFormValues } from "./blocks/store-profile/types";
 export {
+  ACTIVITY_RELATIVE_MAX_MS,
+  JUST_NOW_MAX_MS,
+  formatActivityAt,
   formatAuctionClosed,
   formatAuctionDeadline,
   formatAuctionMoment,
   formatAuctionOpens,
+  formatClosedAt,
+  formatCollectorDeadline,
   formatDay,
   formatDeadline,
   formatEvent,
   formatListingClosed,
   formatListingEnds,
   formatListingOpens,
+  formatLocalMoment,
   formatMoment,
-  isMomentLabel,
+  formatRelativeAt,
+  isPastActivityCap,
+  resolveActivityNow,
+  resolveShippedLocale,
+  type ActivityTimeCopy,
+  type ShippedLocale,
 } from "./lib/format-datetime";
+export {
+  FIXTURE_ACTIVITY_TIME_COPY,
+  FIXTURE_NOW_MS,
+  FIXTURE_SHIPPED_LOCALE,
+  FIXTURE_TIME_ZONE,
+} from "./lib/datetime-fixtures";

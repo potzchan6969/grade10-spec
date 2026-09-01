@@ -1,5 +1,6 @@
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { ReactNode } from "react";
+import type { ShippedLocale } from "../../lib/format-datetime";
 import type { ListingAuctionBidCardCopy } from "./listing-auction-bid-card";
 import { ListingAuctionBidCard } from "./listing-auction-bid-card";
 import { LISTING_LOT_SIDEBAR_CLASS } from "./listing-lot-layout";
@@ -31,6 +32,8 @@ type ListingAuctionCardSidebarProps = {
   vaultShippingBody: string;
   authenticationBody: string;
   recentBidsAccessory?: ReactNode;
+  locale: ShippedLocale;
+  timeZone: string;
 };
 
 function ListingAuctionCardSidebar({
@@ -49,6 +52,8 @@ function ListingAuctionCardSidebar({
   vaultShippingBody,
   authenticationBody,
   recentBidsAccessory,
+  locale,
+  timeZone,
 }: ListingAuctionCardSidebarProps) {
   return (
     <VStack
@@ -62,10 +67,12 @@ function ListingAuctionCardSidebar({
         copy={copy}
         history={history}
         historyResetKey={historyResetKey}
+        locale={locale}
         onBidModeChange={onBidModeChange}
         onCommitMaximum={onCommitMaximum}
         onPlaceBid={onPlaceBid}
         recentBidsAccessory={recentBidsAccessory}
+        timeZone={timeZone}
         view={view}
       />
       <ListingLotMeta

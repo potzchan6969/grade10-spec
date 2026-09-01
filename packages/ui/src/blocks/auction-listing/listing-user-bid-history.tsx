@@ -16,8 +16,14 @@ import {
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import { cn } from "@grade10/design-system/lib/utils";
-import { useState } from "react";
-import { isMomentLabel } from "../../lib/format-datetime";
+import { useEffect, useState } from "react";
+import {
+  type ActivityTimeCopy,
+  formatActivityAt,
+  isPastActivityCap,
+  resolveActivityNow,
+  type ShippedLocale,
+} from "../../lib/format-datetime";
 import type { ListingUserBidHistoryRow } from "./types";
 
 type ListingUserBidHistoryCopy = {
@@ -31,6 +37,9 @@ type ListingUserBidHistoryCopy = {
 type ListingUserBidHistoryProps = {
   copy: ListingUserBidHistoryCopy;
   rows: readonly ListingUserBidHistoryRow[];
+  locale: ShippedLocale;
+  timeZone: string;
+  activityTimeCopy: ActivityTimeCopy;
 };
 
 function bidTypeBadgeVariant(
@@ -39,9 +48,32 @@ function bidTypeBadgeVariant(
   return bidType === "manual" ? "outline" : "info";
 }
 
-function ListingUserBidHistory({ copy, rows }: ListingUserBidHistoryProps) {
+function ListingUserBidHistory({
+  copy,
+  rows,
+  locale,
+  timeZone,
+  activityTimeCopy,
+}: ListingUserBidHistoryProps) {
   const [open, setOpen] = useState(false);
-  const showFullTime = rows.some((row) => isMomentLabel(row.timeLabel));
+  const [nowMs, setNowMs] = useState(() => Date.now());
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNowMs(Date.now()), 30_000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const referenceNow = resolveActivityNow(
+    nowMs,
+    ...rows
+      .filter((row) => !row.timeOverride)
+      .map((row) => row.acceptedAtMs),
+  );
+  const showFullTime = rows.some(
+    (row) =>
+      !row.timeOverride &&
+      isPastActivityCap(row.acceptedAtMs, referenceNow),
+  );
   const typeColumnClass = "w-28 shrink-0";
   const timeColumnClass = cn(
     "shrink-0 whitespace-nowrap",
@@ -63,8 +95,6 @@ function ListingUserBidHistory({ copy, rows }: ListingUserBidHistoryProps) {
       >
         {copy.link}
       </Link>
-      {/* Mounted only while it is open: bound, it would keep the last visit's
-          scroll position and hold the whole table off-screen between reads. */}
       {open && (
         <Dialog onOpenChange={setOpen} open>
           <DialogContent
@@ -106,7 +136,13 @@ function ListingUserBidHistory({ copy, rows }: ListingUserBidHistoryProps) {
                         </Badge>
                       </TableCell>
                       <TableCell align="end" className={timeColumnClass}>
-                        {row.timeLabel}
+                        {row.timeOverride ??
+                          formatActivityAt(row.acceptedAtMs, {
+                            locale,
+                            timeZone,
+                            copy: activityTimeCopy,
+                            now: nowMs,
+                          })}
                       </TableCell>
                     </TableRow>
                   ))}

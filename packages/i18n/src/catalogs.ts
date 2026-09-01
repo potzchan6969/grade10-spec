@@ -50,6 +50,7 @@ import sharedEnAuctionListing from "../messages/shared/en/auctionListing.json";
 import sharedEnCheckout from "../messages/shared/en/checkout.json";
 import sharedEnChrome from "../messages/shared/en/chrome.json";
 import sharedEnCommon from "../messages/shared/en/common.json";
+import sharedEnDates from "../messages/shared/en/dates.json";
 import sharedEnEmail from "../messages/shared/en/email.json";
 import sharedEnLegal from "../messages/shared/en/legal.json";
 import sharedEnLocale from "../messages/shared/en/locale.json";
@@ -69,6 +70,7 @@ import sharedKoAuctionListing from "../messages/shared/ko/auctionListing.json";
 import sharedKoCheckout from "../messages/shared/ko/checkout.json";
 import sharedKoChrome from "../messages/shared/ko/chrome.json";
 import sharedKoCommon from "../messages/shared/ko/common.json";
+import sharedKoDates from "../messages/shared/ko/dates.json";
 import sharedKoEmail from "../messages/shared/ko/email.json";
 import sharedKoLegal from "../messages/shared/ko/legal.json";
 import sharedKoLocale from "../messages/shared/ko/locale.json";
@@ -88,6 +90,7 @@ import sharedZhHansAuctionListing from "../messages/shared/zh-Hans/auctionListin
 import sharedZhHansCheckout from "../messages/shared/zh-Hans/checkout.json";
 import sharedZhHansChrome from "../messages/shared/zh-Hans/chrome.json";
 import sharedZhHansCommon from "../messages/shared/zh-Hans/common.json";
+import sharedZhHansDates from "../messages/shared/zh-Hans/dates.json";
 import sharedZhHansEmail from "../messages/shared/zh-Hans/email.json";
 import sharedZhHansLegal from "../messages/shared/zh-Hans/legal.json";
 import sharedZhHansLocale from "../messages/shared/zh-Hans/locale.json";
@@ -107,6 +110,7 @@ import sharedZhHantAuctionListing from "../messages/shared/zh-Hant/auctionListin
 import sharedZhHantCheckout from "../messages/shared/zh-Hant/checkout.json";
 import sharedZhHantChrome from "../messages/shared/zh-Hant/chrome.json";
 import sharedZhHantCommon from "../messages/shared/zh-Hant/common.json";
+import sharedZhHantDates from "../messages/shared/zh-Hant/dates.json";
 import sharedZhHantEmail from "../messages/shared/zh-Hant/email.json";
 import sharedZhHantLegal from "../messages/shared/zh-Hant/legal.json";
 import sharedZhHantLocale from "../messages/shared/zh-Hant/locale.json";
@@ -139,6 +143,7 @@ export const sharedCatalogs = {
     checkout: sharedEnCheckout,
     chrome: sharedEnChrome,
     common: sharedEnCommon,
+    dates: sharedEnDates,
     email: sharedEnEmail,
     legal: sharedEnLegal,
     locale: sharedEnLocale,
@@ -160,6 +165,7 @@ export const sharedCatalogs = {
     checkout: sharedZhHantCheckout,
     chrome: sharedZhHantChrome,
     common: sharedZhHantCommon,
+    dates: sharedZhHantDates,
     email: sharedZhHantEmail,
     legal: sharedZhHantLegal,
     locale: sharedZhHantLocale,
@@ -181,6 +187,7 @@ export const sharedCatalogs = {
     checkout: sharedZhHansCheckout,
     chrome: sharedZhHansChrome,
     common: sharedZhHansCommon,
+    dates: sharedZhHansDates,
     email: sharedZhHansEmail,
     legal: sharedZhHansLegal,
     locale: sharedZhHansLocale,
@@ -202,6 +209,7 @@ export const sharedCatalogs = {
     checkout: sharedKoCheckout,
     chrome: sharedKoChrome,
     common: sharedKoCommon,
+    dates: sharedKoDates,
     email: sharedKoEmail,
     legal: sharedKoLegal,
     locale: sharedKoLocale,

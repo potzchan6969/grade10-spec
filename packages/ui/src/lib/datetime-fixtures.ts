@@ -1,3 +1,4 @@
+import type { ActivityTimeCopy } from "./format-datetime";
 import {
   formatDay,
   formatDeadline,
@@ -5,6 +6,18 @@ import {
   formatListingOpens,
   formatMoment,
 } from "./format-datetime";
+
+export const FIXTURE_SHIPPED_LOCALE = "en" as const;
+export const FIXTURE_TIME_ZONE = "Asia/Hong_Kong";
+export const FIXTURE_NOW_MS = Date.UTC(2026, 7, 21, 12, 0);
+
+export const FIXTURE_ACTIVITY_TIME_COPY: ActivityTimeCopy = {
+  justNow: "Just now",
+  secondsAgo: "{count, plural, one {# sec ago} other {# sec ago}}",
+  minutesAgo: "{count, plural, one {# min ago} other {# min ago}}",
+  hoursAgo: "{count, plural, one {# hr ago} other {# hr ago}}",
+  daysAgo: "{count, plural, one {# day ago} other {# days ago}}",
+};
 
 export const FIXTURE_AUCTION_ENDS_AT_MS = Date.UTC(2026, 8, 1, 18, 0);
 export const FIXTURE_AUCTION_OPENS_AT_MS = Date.UTC(2026, 7, 22, 18, 0);
