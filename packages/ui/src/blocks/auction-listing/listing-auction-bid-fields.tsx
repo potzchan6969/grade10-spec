@@ -29,6 +29,11 @@ import {
 } from "./listing-manual-bid-controls";
 import { ListingRollingUsdDisplay } from "./listing-rolling-usd-display";
 import type { BidEnrollment, ListingAuctionBidView } from "./types";
+import {
+  formatCollectorDeadline,
+  formatLocalMoment,
+  type ShippedLocale,
+} from "../../lib/format-datetime";
 
 type ListingAuctionBidFieldsCopy = {
   auctionWon: string;
@@ -65,6 +70,9 @@ type ListingAuctionBidFieldsCopy = {
   buyerFeeHint: string;
   buyerFeeTooltip: string;
   noBidsYet: string;
+  endsLabel: string;
+  opensLabel: string;
+  closedAt: string;
 };
 
 type StandingBannerProps = {
@@ -182,9 +190,50 @@ function PriceBlock({ copy, view }: PriceBlockProps) {
 type TimeBlockProps = {
   copy: ListingAuctionBidFieldsCopy;
   view: ListingAuctionBidView;
+  locale: ShippedLocale;
+  timeZone: string;
 };
 
-function TimeBlock({ copy, view }: TimeBlockProps) {
+function formatCollectorDeadlineLine(
+  view: ListingAuctionBidView,
+  copy: ListingAuctionBidFieldsCopy,
+  locale: ShippedLocale,
+  timeZone: string,
+): string | undefined {
+  const at = view.deadlineAtMs;
+  if (at == null) return view.deadline;
+
+  if (view.opens) {
+    return formatCollectorDeadline(at, {
+      locale,
+      timeZone,
+      prefix: copy.opensLabel,
+    });
+  }
+
+  if (view.closed) {
+    return undefined;
+  }
+
+  return formatCollectorDeadline(at, {
+    locale,
+    timeZone,
+    prefix: copy.endsLabel,
+  });
+}
+
+function TimeBlock({ copy, view, locale, timeZone }: TimeBlockProps) {
+  const deadlineLine = formatCollectorDeadlineLine(
+    view,
+    copy,
+    locale,
+    timeZone,
+  );
+  const closedCountdown =
+    view.closed && view.deadlineAtMs != null
+      ? formatLocalMoment(view.deadlineAtMs, { locale, timeZone })
+      : view.countdown;
+
   return (
     <VStack gap="xs">
       {view.opens ? (
@@ -235,12 +284,12 @@ function TimeBlock({ copy, view }: TimeBlockProps) {
             initialSeconds={view.countdownSeconds}
           />
         ) : (
-          view.countdown
+          closedCountdown
         )}
       </Text>
-      {view.deadline ? (
+      {deadlineLine ? (
         <Text size="xs" tone="secondary">
-          {view.deadline}
+          {deadlineLine}
         </Text>
       ) : null}
     </VStack>

@@ -23,6 +23,7 @@ import {
 } from "./listing-auction-bid-fields";
 import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
 import { ListingBidHistoryList } from "./listing-bid-history-list";
+import type { ActivityTimeCopy, ShippedLocale } from "../../lib/format-datetime";
 import type { BidEnrollment, ListingAuctionBidView, ListingBidHistoryRow } from "./types";
 import "./listing-auction-bid-card.css";
 
@@ -32,6 +33,7 @@ type ListingAuctionBidCardCopy = ListingAuctionBidFieldsCopy & {
     you?: string;
     empty?: string;
   };
+  activityTimeCopy: ActivityTimeCopy;
 };
 
 type ListingAuctionBidCardProps = {
@@ -41,6 +43,8 @@ type ListingAuctionBidCardProps = {
   historyResetKey?: string;
   bidMode: "manual" | "auto";
   bidEnrollment?: BidEnrollment;
+  locale: ShippedLocale;
+  timeZone: string;
   onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
   onCommitMaximum: () => void;
@@ -144,6 +148,8 @@ function ListingAuctionBidCard({
   historyResetKey,
   bidMode,
   bidEnrollment,
+  locale,
+  timeZone,
   onBidModeChange,
   onPlaceBid,
   onCommitMaximum,
@@ -185,7 +191,12 @@ function ListingAuctionBidCard({
           <PriceBlock copy={copy} view={view} />
         </div>
         <div className="px-4 py-3">
-          <TimeBlock copy={copy} view={view} />
+          <TimeBlock
+            copy={copy}
+            locale={locale}
+            timeZone={timeZone}
+            view={view}
+          />
         </div>
       </div>
 
@@ -223,11 +234,14 @@ function ListingAuctionBidCard({
             visibleRows={recentBidsVisibleRows(history.length)}
           >
             <ListingBidHistoryList
+              activityTimeCopy={copy.activityTimeCopy}
               copy={copy.bidHistory}
               entranceMode="fade"
               heading=""
+              locale={locale}
               resetKey={historyResetKey}
               rows={history}
+              timeZone={timeZone}
             />
           </RecentBidsScrollArea>
         </VStack>
