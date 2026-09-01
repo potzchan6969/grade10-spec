@@ -4,17 +4,26 @@ spec: shared-ui/auth-sign-in
 order: 8
 ---
 
-A collector asked to sign in mid-flow — adding a card to the cart, placing a
-bid — is currently taken out of that flow. `SignInCard` is a `Card`, a
-page-level surface, so the application navigates to a sign-in route and back,
-and whatever the collector was doing is gone when they return.
+Sign-in is a modal dialog over the page that asked for it, not a page of its
+own. The page beneath stays mounted while the dialog is open, so a collector
+asked to sign in mid-flow — adding a card to the cart, placing a bid — comes
+back to exactly what they were doing, on every surface of either brand.
+Leaving the dialog is always possible and lands them where they were.
 
-That is not what design drew. The Figma Auth Sign-In page contains a Login
-Dialog, an OTP Dialog, an overlay scrim and a Google icon — no card on a page
-anywhere. Sign-in has always been specified as a modal over the page the
-collector is on; the code has been a card since it was written, and nothing
-caught it because `auth-sign-in` carried no capability spec.
+## The shell
 
-The block becomes the dialog design drew, and the contract that matters is the
-return: a sign-in started from a mid-flow action puts the collector back in
-that action without a re-navigation, on every surface of either brand.
+The dialog holds no open state of its own: the application controls
+visibility through a required `open` prop and `onOpenChange` callback, which
+is what lets any surface summon sign-in and decide what happens after. The
+body renders in the order design draws it — the provider slot above the
+divider, the email step below it — and closes on a legal line the
+application supplies as the last node.
+
+## What it does not decide
+
+The dialog is the surface; what a successful sign-in creates is
+[the sign-in capability](/p/shared-auth/sign-in). Every word arrives through
+the copy props, and the email and code steps are their own exports for a
+surface that composes them differently.
+
+::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1488" title="Login Dialog"}

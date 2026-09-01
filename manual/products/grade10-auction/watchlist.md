@@ -4,18 +4,33 @@ spec: grade10-auction/watchlist
 order: 7
 ---
 
-Bidding is the only way to register interest in a lot today, and a bid holds
-money on a card. A collector who is still deciding either commits early or
-navigates away and finds the lot again by memory — against a close that moves.
-Watching fills that gap: one action that says "tell me about this lot" and
-costs nothing.
+A watch is one action on a lot that says "tell me about this" and costs
+nothing: no money is held, no standing in the sale is gained, and the sale
+never changes because somebody watches. Bidding is the other way to register
+interest, and that one holds money on a card — watching is the signal for
+everyone still deciding, and it is what the auction's mail fires on.
 
-The control already has a home. `ListingBidPanel` ships a `watchAction` slot
-and a `watching` flag that nothing fills; this capability fills them rather
-than removing them, because unlike the removed store wishlist there is a
-surface that needs the signal — the before-and-during-auction mail on the
-auction email page has no trigger without it.
+## Watching
 
-What the product measures is whether watching leads anywhere: the share of
-signed-in collectors who watch at least one lot, and the share of watched lots
-their watcher later bids on.
+Watching takes a signed-in collector; a signed-out viewer is offered sign-in
+rather than a watch the browser would forget. A watch follows the collector
+across devices, and watching the same lot twice leaves one watch with its
+original date. Both brands sell the same lots, so a lot accepts watches from
+collectors of either brand — each collector sees only their own.
+
+## The watched list
+
+The lots a collector watches read most recently watched first, and each entry
+carries enough to act on: the lot, its current bid, its close, and whether the
+sale is open, closed, or called off. A close or a call-off never removes a
+watch — the entry stays, honestly labelled, until its owner unwatches it. A
+collector watching nothing is told so rather than shown an error or an empty
+page.
+
+## Who sees a watch
+
+Only its owner. No public fact carries a watch count or a watcher's identity,
+and one collector never learns what another watches. The one other reader is
+an operator judging interest: they see how many collectors watch a lot,
+counted across both brands, and never a name — a watch is not a commitment to
+buy.
