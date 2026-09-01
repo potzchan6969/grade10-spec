@@ -1,4 +1,4 @@
-## 1. Add the shared impact-review interface (grade10-spec)
+## 1. Add the shared impact-review interface (grade10-spec) (owner: @kinisworking)
 
 - [ ] 1.1 Add the schema-version-1 impact document and pure validator beside
   the store-owned report helpers, reusing stable selection and association
