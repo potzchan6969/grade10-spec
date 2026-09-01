@@ -30,13 +30,16 @@ hand.
 
 :::flow{title="An idea becomes shipped truth"}
 ## Propose it where you read it
-Any requirement row or page header has a propose action. Say why in your own
-words — the ids travel along on their own. The proposal lands in
+On the locally-run manual, any requirement row or page header has a propose
+action — the hosted site is read-only, here as everywhere. Say why in your
+own words — the ids travel along on their own. The proposal lands in
 [Planning](/planning)'s Proposed lane.
 ## An agent drafts the change
-Someone points an agent at the proposal. It writes the change: the reasoning,
-and a delta against each spec it touches — never a rewritten copy of the
-file. People discuss the delta, because the delta is what there is to decide.
+Someone points an agent at the proposal — the card names the command to
+paste, `/pm-planning <change>` or `/full-planning <change>`. The agent writes
+the change: the reasoning, and a delta against each spec it touches — never a
+rewritten copy of the file. People discuss the delta, because the delta is
+what there is to decide.
 ## The work ticks in git
 A full change carries a task list, and a task is done when its box is ticked
 in a commit. Capability pages show the count the moment it moves. There is no

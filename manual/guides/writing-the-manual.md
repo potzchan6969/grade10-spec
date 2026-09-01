@@ -83,12 +83,15 @@ bottom:
 ```
 
 Containers hold markdown and, one level deep, leaf directives. A callout is
-`note`, `decision` or `warning`. A detail block is depth for one audience —
+`note`, `decision` or `warning`. A `warning` is signed — `author` and `date`
+say whose judgment it is and when it was written, because hand-written
+divergence prose is the one thing here that rots silently; `check:manual`
+warns on an unsigned one. A detail block is depth for one audience —
 `pm`, `designer`, `qa`, `engineer` or `operator` — collapsed but never hidden,
 so it stays searchable and deep-linkable:
 
 ```md
-:::callout{kind="warning"}
+:::callout{kind="warning" author="@echo" date="2026-08-30"}
 What ships and what the spec says have parted company here.
 :::
 

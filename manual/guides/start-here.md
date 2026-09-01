@@ -23,11 +23,23 @@ the first hour is different depending on what you came to do, so pick a path.
 
 ## If you are a designer
 
+Your job here has three surfaces, then the reading. [Design](/design) is
+every Figma frame and Storybook story the manual shows, with the nightly
+check's verdict per card — `ok` means checked and matching, `warn`/`fail`
+mean drift for someone to settle, `skipped` means nothing was compared, and a
+card with no badge was not checked at all; the page says so when no report
+exists. Token values live in `packages/design-system/tokens.json` — the CSS
+themes and Figma are both projections of it. And every requirement row has a
+propose action on the locally-run manual (the hosted site is read-only):
+proposing takes thirty seconds in the browser, and everything after it is an
+agent's job — the card on [Planning](/planning) names the command to hand
+over, or hand the change id to a PM or engineer.
+
 - [Component package](/p/shared-ui/component-package) — what the shared UI
   package owes a product, and what it refuses to hold.
 - [Site chrome](/p/shared-ui/site-chrome) and
-  [Store cart](/p/shared-ui/store-cart) — two blocks with real Figma and
-  Storybook links to compare against.
+  [Store cart](/p/shared-ui/store-cart) — two capability pages with real
+  Figma and Storybook links side by side.
 - [Design sync](/p/design-sync/audit-coverage) — the unattended rail that
   compares a shipped component against the Figma node it came from.
 - [Localization](/platform/localization) — which languages a layout has to
@@ -36,6 +48,17 @@ the first hour is different depending on what you came to do, so pick a path.
   on screen, before you invent a fifth.
 
 ## If you are in QA
+
+Your worklist is [QA](/qa): every suite awaiting review — the ones riding
+in-flight changes first, then the durable capabilities — with draft counts
+and untraced scenarios. Reviewing one is a conversation with an agent:
+`/tcs-review <capability-or-change>` walks the draft cases one at a time,
+quoting the spec behind each, and records your verdict — approve, change,
+defer, or retire — signed with your handle and the date.
+`approved` is the reviewed record and the build holds the suite to it; no
+runner or export consumes it yet. The whole derivation, spec journeys to
+classified cases, is
+[specs to test cases](https://github.com/9gag/grade10-spec/blob/main/docs/governance/specs-to-test-cases.md).
 
 - [Loyalty](/p/grade10-store/loyalty) — journeys, the scenarios that accept
   them, and the test cases tracing back.
