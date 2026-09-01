@@ -12,12 +12,9 @@ const alertVariants = cva(
     variants: {
       status: {
         default: "border-border bg-background",
-        error:
-          "border-[color-mix(in_oklab,var(--destructive)_20%,transparent)] bg-[color-mix(in_oklab,var(--destructive)_10%,transparent)]",
-        warning:
-          "border-[color-mix(in_oklab,var(--warning)_20%,transparent)] bg-[color-mix(in_oklab,var(--warning)_10%,transparent)]",
-        success:
-          "border-[color-mix(in_oklab,var(--success)_20%,transparent)] bg-[color-mix(in_oklab,var(--success)_10%,transparent)]",
+        error: "border-destructive-border bg-destructive-muted",
+        warning: "border-warning-border bg-warning-muted",
+        success: "border-success-border bg-success-muted",
       },
     },
     defaultVariants: {
