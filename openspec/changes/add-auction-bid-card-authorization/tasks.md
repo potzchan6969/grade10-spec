@@ -6,9 +6,9 @@
 
 ## 2. Shared interfaces (grade10) (owner: @htonyl)
 
-- [ ] 2.1 Make `First bid requires a payment method`, `A selected payment method authorizes the maximum`, and `A later bid retains the listing's payment method` pass by extending the Auction and Stripe contracts with first-bid setup/confirmation and retained-method outcomes.
-- [ ] 2.2 Make `Payment authentication stays in the dialog` and `A refused authorization does not place a bid` pass in contract fixtures without serializing card data or client secrets outside the intended browser response.
-- [ ] 2.3 Verify: `pnpm run typecheck`, `pnpm run lint`, and the Auction and Stripe contract tests.
+- [x] 2.1 Make `First bid requires a payment method`, `A selected payment method authorizes the maximum`, and `A later bid retains the listing's payment method` pass by extending the Auction and Stripe contracts with first-bid setup/confirmation and retained-method outcomes.
+- [x] 2.2 Make `Payment authentication stays in the dialog` and `A refused authorization does not place a bid` pass in contract fixtures without serializing card data or client secrets outside the intended browser response.
+- [x] 2.3 Verify: `pnpm run typecheck`, `pnpm run lint`, and the Auction and Stripe contract tests.
 
 ## 3. Data migration (grade10) (owner: @htonyl)
 
