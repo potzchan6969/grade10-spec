@@ -1,0 +1,11 @@
+{
+  "v": 5,
+  "entries": {
+    "blocks-demo--default": {
+      "id": "blocks-demo--default",
+      "title": "blocks/Demo",
+      "name": "Default",
+      "type": "story"
+    }
+  }
+}

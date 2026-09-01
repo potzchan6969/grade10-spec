@@ -3,10 +3,11 @@
 **Author:** @ecchochan - 2026-08-22
 
 Product context: [Grade10 loyalty programme](../../../docs/prds/loyalty/programme.md).
-The engineering design record is [`design.md`](design.md); the grade10 repo's
-`docs/references/shopify-membership-pos.md` and
-`docs/references/shopify-pos-extension.md` carry the longer working notes once
-they land on its mainline.
+The engineering design record is [`design.md`](design.md);
+[`docs/references/shopify-membership-pos.md`](../../../docs/references/shopify-membership-pos.md)
+and
+[`docs/references/shopify-pos-extension.md`](../../../docs/references/shopify-pos-extension.md)
+carry the longer working notes.
 
 Depends on `revise-loyalty-programme-rules`, which carries the programme's own
 rules — tier validity, the two counts, activity-based expiry, the earning order,

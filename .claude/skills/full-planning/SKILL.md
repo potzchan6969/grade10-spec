@@ -23,7 +23,10 @@ wrote. **Promote that change; never open a second one.** The implementing
 repository has no planning shape of its own — its `openspec/` resolves to this
 store — so delivery is planned here, by you.
 
-1. Set `schema: full-planning` in the change's `.openspec.yaml`.
+1. Set `schema: full-planning` in the change's `.openspec.yaml`, and add
+   `promoted_by: @your-handle` beside it. The board names the promoter from
+   that key — without it a promoted card still reads "proposed by" alone, and
+   the author never learns their change was picked up.
 2. Add `design.md` and `tasks.md`, plus `ui.md` when the change alters
    something a user sees.
 3. `openspec status --change <change-name>` then lists what is still missing.
@@ -129,6 +132,13 @@ tooling on both sides parses it.
   works test-first inside each task; a separate testing task invites the
   opposite.
 - **End every group with its verification step** — the checks that group runs.
+- **When a delta carries `## Feature set` or `## User journeys`, the store
+  group carries a task to copy them into the durable spec at archive time.**
+  The fold keeps `## Requirements` and nothing else, so those sections and
+  every `-US-` id in them die with the change unless someone carries them —
+  and the someone is decided here, at planning time, not discovered by
+  whoever archives. `pnpm run archive:preflight` refuses the archive while
+  they are uncarried.
 - Keep each task to something one engineer finishes in a session.
 - **Write groups without owner tags.** Engineers claim them at pickup with
   `pnpm plan claim`. Never renumber a group or task that is claimed or already

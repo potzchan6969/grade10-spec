@@ -1,0 +1,96 @@
+name: Manual
+
+# Publishes the Grade10 Manual (tools/manual) to https://spec.grade10-stg.com
+# on the staging Cloudflare account. Every push to main rebuilds the snapshot
+# from the store and redeploys, so the hosted manual is exactly as fresh as
+# the data — all state lives in commits.
+# Local equivalent: pnpm manual:build && wrangler deploy -c tools/manual/wrangler.jsonc
+#
+# One-time ops:
+# - Repo secret CLOUDFLARE_API_TOKEN_QA (same staging token Storybook uses).
+# - Confirm Cloudflare Access covers spec.grade10-stg.com if you gate
+#   the staging zone.
+#
+# The hosted site is static assets only, always read-only — editing happens
+# against a local dev server, never here.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tools/manual/**"
+      - "manual/**"
+      - "openspec/**"
+      - "packages/design-system/**"
+      - "packages/ui/**"
+      - ".design-sync/**"
+      - ".github/workflows/manual.yml"
+      - "package.json"
+  # Design sync dispatches this after committing a changed report. A push made
+  # with the default GITHUB_TOKEN triggers no workflow, so the paths entry above
+  # cannot carry the nightly's verdict on its own — that is what left a
+  # designer-side rename waiting for the next unrelated engineer push.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manual-staging
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 24.14.1
+  WRANGLER_VERSION: 4.120.0
+
+jobs:
+  deploy:
+    name: Deploy manual → staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_QA }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Require Cloudflare token
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN_QA is empty. Grant this repository the staging Cloudflare token (same secret Storybook uses)."
+            exit 1
+          fi
+
+      - name: Check the manual
+        run: pnpm run check:manual
+
+      - name: Build
+        run: pnpm run manual:build
+
+      - name: Deploy
+        working-directory: tools/manual
+        run: pnpm dlx wrangler@${{ env.WRANGLER_VERSION }} deploy -c wrangler.jsonc
+
+      - name: Summary
+        run: |
+          {
+            echo "## Grade10 Manual → staging"
+            echo
+            echo "https://spec.grade10-stg.com"
+            echo
+            echo "Snapshot baked from this commit's store state."
+            echo
+            echo "Ref: \`${{ github.sha }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"

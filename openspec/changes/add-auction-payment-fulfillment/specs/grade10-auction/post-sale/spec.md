@@ -81,9 +81,6 @@ separate jobs.
 
 ## ADDED Requirements
 
-### Listing queue
--------------
-
 ### Requirement: Listing outcomes
 
 Each listing SHALL show exactly one outcome from this set. The queue
@@ -143,9 +140,6 @@ an extra highlight.
 - **WHEN** an operator views the queue
 - **THEN** the Awaiting wire row carries the attention highlight
 - **AND** the Awaiting payment row does not
-
-### Listing detail
---------------
 
 ### Requirement: Operators work each listing from the queue through delivered
 
@@ -211,9 +205,6 @@ Grade10 SHALL refuse an empty comment.
 - **AND** it shows the comment with that operator, the text, and its
   timestamp
 - **AND** the two entries are ordered by time
-
-### Payment collection
-------------------
 
 ### Requirement: Winner fields
 
@@ -315,9 +306,6 @@ disabled. Grade10 SHALL refuse the same action on the server.
 - **THEN** the payment control is visible and disabled
 - **AND** Grade10 refuses the record
 - **AND** the listing is not Paid via Manual
-
-### In-house shipment
------------------
 
 ### Requirement: Shipment states
 

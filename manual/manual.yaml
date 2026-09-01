@@ -1,0 +1,39 @@
+storybookBase: https://storybook.grade10-stg.com
+
+groups:
+  Grade10:
+    - grade10-store
+    - membership
+    - grade10-auction
+    - vault
+    - appointment
+    - e-kyc
+    - doc-sign
+    - finance
+    - grade10-site
+  ZZZ:
+    - zzz
+  Shared:
+    - shared-auth
+  Admin:
+    - audit
+    - grade10-inventory
+  Platform:
+    - shared-ui
+    - admin-console
+    - design-sync
+
+platform:
+  Conventions:
+    - money-amounts
+    - dates-and-times
+    - localization
+  Architecture:
+    - frontend-composition
+    - backend-service-repository
+
+guides:
+  - how-this-manual-works
+  - start-here
+  - how-we-plan
+  - writing-the-manual

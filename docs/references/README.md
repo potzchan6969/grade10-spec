@@ -1,0 +1,24 @@
+# References
+
+Source material and working notes: what a PRD, a spec, or a change cites as
+its evidence — an owner's draft, competitor research, a vendor-integration
+design. A reference explains and preserves; it is never authoritative. Where
+one disagrees with a spec, the spec is correct, and a decision worth keeping
+moves into a PRD or a change rather than staying here.
+
+[`grade10-loyalty-program.md`](grade10-loyalty-program.md) is the standard for
+what a reference looks like:
+
+- Open by saying what the document is, its date, and which spec, PRD, or
+  change carries the decisions it led to.
+- State decided facts flatly. Mark an open item with ❓ and the question the
+  owner still has to answer — never silently pick.
+- Separate the contract from the configuration: a tunable value is named as
+  config, so a number changing does not rot the document.
+- Prefer a table for structured data and a worked example for arithmetic.
+
+The `shopify-*` set is the working notes behind the
+`add-shopify-membership-pos` change: the umbrella plan, the checkout identity
+flow, the POS extension, and the resilience test plan. Application code and
+its architecture records stay documented in the application repository; these
+documents may point at them by repository and path.

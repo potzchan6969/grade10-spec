@@ -1,0 +1,5 @@
+---
+title: Duplicated
+---
+
+Prose.

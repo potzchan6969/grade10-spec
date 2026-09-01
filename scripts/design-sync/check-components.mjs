@@ -9,6 +9,7 @@
  *
  *   FIGMA_TOKEN=figd_… pnpm run design-sync:check        # unattended, use this in CI
  *   FIGMA_DUMP=~/Downloads/dump.json pnpm run design-sync:check   # manual fallback
+ *   … pnpm run design-sync:check --report .design-sync/report.json   # also write the verdict per set
  *
  * Locally, put FIGMA_TOKEN in a .env at the repository root instead of
  * prefixing every invocation; see .env.example. CI passes it as a real
@@ -36,7 +37,13 @@
  * a state expressed as an opacity over the variant's own colours is invisible
  * here — the bg-* token this reads is unchanged by it.
  */
-import { appendFile, readdir, readFile } from "node:fs/promises";
+import {
+  appendFile,
+  mkdir,
+  readdir,
+  readFile,
+  writeFile,
+} from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -66,6 +73,17 @@ const die = (m) => {
   process.exit(1);
 };
 
+// ── --report <path> ─────────────────────────────────────────────────────────
+// The console below is for whoever ran the command and the job summary is for
+// the designer; neither reaches the manual, which badges a card whose component
+// set is drifting and cannot run this check in a browser. The flag is the only
+// way that verdict leaves this process, and without it nothing changes.
+const reportFlag = process.argv.indexOf("--report");
+if (reportFlag !== -1 && !process.argv[reportFlag + 1])
+  die("--report needs a path to write the verdict JSON to");
+const reportArg = reportFlag === -1 ? null : process.argv[reportFlag + 1];
+const reportPath = reportArg ? resolve(repoRoot, reportArg) : null;
+
 // ── where the Figma side comes from ─────────────────────────────────────────
 // Two sources, same normalized shape: { id -> { id, name, properties } }.
 //
@@ -83,8 +101,24 @@ function componentsFromDocument(doc) {
   // Every node, by id, so a template aimed at something that is not a
   // component can say what it actually hit instead of reporting a deletion.
   const nodes = {};
-  const visit = (node, parent) => {
+  // The subset a person can paste a link to, keyed the way a Figma URL writes
+  // an id, and valued by the component set the node belongs to — a variant
+  // answers with its set's name, so a card pointed at one variant still reads
+  // the set's verdict. Components, pages, and the frames sitting directly on a
+  // page or in a section: linking to a layer buried inside one of those is not
+  // a thing anyone does, and carrying every node would put the whole file in a
+  // committed file the browser downloads.
+  const linkable = {};
+  const visit = (node, parent, setName) => {
     nodes[node.id] = { type: node.type, name: node.name };
+    const set = node.type === "COMPONENT_SET" ? node.name : setName;
+    const pinnable =
+      node.type === "COMPONENT" ||
+      node.type === "COMPONENT_SET" ||
+      node.type === "CANVAS" ||
+      parent?.type === "CANVAS" ||
+      parent?.type === "SECTION";
+    if (pinnable) linkable[node.id.replace(/:/g, "-")] = set ?? node.name;
     // A COMPONENT_SET's children are its variants, so index the set and not
     // each variant. A COMPONENT found anywhere else is a standalone component
     // with no variant axes — List, List Item and Radio List are all drawn that
@@ -131,10 +165,10 @@ function componentsFromDocument(doc) {
           : [],
       };
     }
-    for (const child of node.children ?? []) visit(child, node);
+    for (const child of node.children ?? []) visit(child, node, set);
   };
-  visit(doc, null);
-  return { components: out, nodes };
+  visit(doc, null, undefined);
+  return { components: out, nodes, linkable };
 }
 
 async function loadFigmaComponents() {
@@ -149,8 +183,10 @@ async function loadFigmaComponents() {
       source: `dump ${process.env.FIGMA_DUMP}`,
       components: meta.components,
       // A plugin dump carries no document, so nothing can say what a stray
-      // node-id actually points at; those stay reported as absent.
+      // node-id actually points at; those stay reported as absent, and the
+      // report says nothing about node ids rather than claiming none exist.
       nodes: {},
+      linkable: {},
     };
   }
 
@@ -182,7 +218,7 @@ async function loadFigmaComponents() {
     );
   const json = await res.json();
   if (!json.document) die(`Figma REST returned no document for file ${key}.`);
-  const { components, nodes } = componentsFromDocument(json.document);
+  const { components, nodes, linkable } = componentsFromDocument(json.document);
   // Descriptions do not live on the document nodes — they sit in the sibling
   // `components` / `componentSets` maps of the same response, so the check
   // costs no second request and no extra scope.
@@ -198,7 +234,7 @@ async function loadFigmaComponents() {
         `file has none, or the response shape changed — failing rather than ` +
         `reporting "no drift".`,
     );
-  return { source: `REST ${key}`, components, nodes };
+  return { source: `REST ${key}`, file: key, components, nodes, linkable };
 }
 
 const cfg = JSON.parse(
@@ -206,8 +242,10 @@ const cfg = JSON.parse(
 );
 const {
   source: figmaSource,
+  file: figmaFileKey,
   components: figmaComponents,
   nodes: figmaNodes,
+  linkable: figmaLinkable,
 } = await loadFigmaComponents();
 
 // ── source scanning ─────────────────────────────────────────────────────────
@@ -824,6 +862,51 @@ const diffs = [];
 // warned one by one: this is a list for the designer who owns the file, and
 // most of the library is on it.
 const describedGaps = [];
+// One verdict per component set, the four the console already prints: ✗ error,
+// ⚠ warning, – nothing usable to compare, ✓ compared and matched. Recorded as
+// each set is walked rather than reconstructed from the message strings, which
+// would break the first time a message was reworded.
+const RANK = { ok: 0, skipped: 1, warn: 2, fail: 3 };
+const verdicts = new Map();
+// The lines that earned a set its verdict. A chip reading "design drift" says
+// nothing anyone can act on, and the diffs this run computes are otherwise
+// written to a job summary and dropped. Capped: a card holds a sentence or
+// three, not a log.
+const MESSAGES_PER_SET = 3;
+const messages = new Map();
+const verdict = (name, walked) => {
+  const { cls, lines } = walked;
+  const now = verdicts.get(name);
+  if (now === undefined || RANK[cls] > RANK[now]) verdicts.set(name, cls);
+  if (!lines.length) return;
+  const held = messages.get(name) ?? [];
+  for (const line of lines) {
+    if (held.length >= MESSAGES_PER_SET) break;
+    if (!held.includes(line)) held.push(line);
+  }
+  messages.set(name, held);
+};
+/** What was added to the three buckets while one set was walked, and the lines
+ * themselves — the same strings the console and the job summary print, so a
+ * badge can never say something the run did not. */
+const since = () => {
+  const at = {
+    errors: errors.length,
+    warns: warns.length,
+    gaps: describedGaps.length,
+  };
+  return () => ({
+    cls:
+      errors.length > at.errors
+        ? "fail"
+        : warns.length > at.warns
+          ? "warn"
+          : describedGaps.length > at.gaps
+            ? "skipped"
+            : "ok",
+    lines: [...errors.slice(at.errors), ...warns.slice(at.warns)],
+  });
+};
 const figma = Object.values(figmaComponents);
 const figmaById = Object.fromEntries(figma.map((c) => [c.id, c]));
 
@@ -837,6 +920,7 @@ if (figma.length && !figma.some((c) => c.variants?.length))
   );
 
 for (const comp of figma) {
+  const walked = since();
   const variantAxes = Object.fromEntries(
     Object.entries(comp.properties)
       .filter(([, d]) => d.type === "VARIANT")
@@ -850,6 +934,7 @@ for (const comp of figma) {
     warns.push(
       `${comp.name}: no code component (looked for src/components/**/${norm(comp.name)}.tsx or ${norm(local)}.tsx)`,
     );
+    verdict(comp.name, walked());
     continue;
   }
   // The description, which no rail carries: the JSDoc is its only projection.
@@ -929,6 +1014,7 @@ for (const comp of figma) {
   }
 
   checkValues(comp, tpl, code, { ok, warns, errors, diffs });
+  verdict(comp.name, walked());
 }
 
 for (const t of templates) {
@@ -956,6 +1042,7 @@ for (const t of templates) {
       );
     continue;
   }
+  const walked = since();
   ok.push(`${t.file}: node-id ${t.nodeId} -> ${comp.name}`);
   for (const [axis, mapped] of Object.entries(t.enums)) {
     const options = comp.properties[axis]?.variantOptions;
@@ -975,6 +1062,7 @@ for (const t of templates) {
         `${t.file}: getEnum('${axis}') covers all ${options.length} options`,
       );
   }
+  verdict(comp.name, walked());
 }
 
 // ── the props a template emits vs the component that must accept them ───────
@@ -984,8 +1072,14 @@ for (const t of templates) {
 // this exists for — a prop that was renamed or folded away entirely — while an
 // inherited DOM prop is skipped rather than guessed at.
 for (const t of templates) {
+  const named = figmaById[t.nodeId]?.name;
+  const walked = since();
+  const settle = () => {
+    if (named) verdict(named, walked());
+  };
   if (!t.source) {
     warns.push(`${t.file}: no // source= header, so its props went unchecked`);
+    settle();
     continue;
   }
   const base = t.source
@@ -997,6 +1091,7 @@ for (const t of templates) {
     warns.push(
       `${t.file}: source=${t.source} is not a component file this check can read`,
     );
+    settle();
     continue;
   }
   const missing = t.props.filter(
@@ -1011,6 +1106,7 @@ for (const t of templates) {
       `${t.file}: emits ${missing.join(", ")}, which ${code.file} does not name — the Dev Mode snippet would not compile`,
     );
   else ok.push(`${t.file}: every prop it emits exists in ${code.file}`);
+  settle();
 }
 
 // ── job summary ─────────────────────────────────────────────────────────────
@@ -1102,6 +1198,45 @@ async function writeSummary() {
   await appendFile(path, `${md.join("\n")}\n`);
 }
 
+// ── the report the manual reads ─────────────────────────────────────────────
+// Keys are the Figma set names this check already uses everywhere else, sorted,
+// so the file is a pure function of the run and a nightly that found nothing new
+// commits nothing. Written whatever the outcome — a failing run is the one the
+// manual most needs to badge.
+//
+// `nodes` is what lets a `::figma` card badge at all: the card names a node id
+// and the verdicts are keyed by set name, and this run is the only place that
+// holds both. A node id the map does not answer to is a frame that was deleted
+// or renumbered in Figma — the commonest designer-side drift there is, and
+// nothing anywhere noticed it before. Omitted entirely rather than written
+// empty when the source cannot say (a plugin dump carries no document), so
+// absence never reads as "every frame is gone".
+const sorted = (entries) =>
+  Object.fromEntries([...entries].sort(([a], [b]) => (a < b ? -1 : 1)));
+
+async function writeReport() {
+  if (!reportPath) return;
+  const sets = sorted(verdicts);
+  const report = {
+    generatedAt: new Date().toISOString(),
+    ...(figmaFileKey ? { file: figmaFileKey } : {}),
+    sets,
+    ...(Object.keys(figmaLinkable).length
+      ? { nodes: sorted(Object.entries(figmaLinkable)) }
+      : {}),
+    ...(messages.size ? { messages: sorted(messages) } : {}),
+  };
+  await mkdir(dirname(reportPath), { recursive: true });
+  await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);
+  const count = (cls) =>
+    Object.values(sets).filter((one) => one === cls).length;
+  console.log(
+    `\nreport: ${reportArg} — ${Object.keys(sets).length} set(s): ` +
+      `${count("ok")} ok, ${count("warn")} warn, ${count("skipped")} skipped, ${count("fail")} fail` +
+      `, ${Object.keys(figmaLinkable).length} linkable node(s)`,
+  );
+}
+
 // ── report ──────────────────────────────────────────────────────────────────
 console.log(
   `Source: ${figmaSource}\nFigma: ${figma.length} component(s) · code: ${codeComponents.size} · templates: ${templates.length}\n`,
@@ -1131,6 +1266,7 @@ if (describedGaps.length) {
   }
 }
 await writeSummary();
+await writeReport();
 if (errors.length) {
   console.error(
     `\n✗ ${errors.length} error(s) — Dev Mode will emit wrong code, or the code renders a value Figma does not draw:`,

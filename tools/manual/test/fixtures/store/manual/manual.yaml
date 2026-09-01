@@ -1,0 +1,15 @@
+storybookBase: https://storybook.example
+
+groups:
+  Products:
+    - demo-product
+    - page-only
+  Platform:
+    - demo-shared
+
+platform:
+  Conventions:
+    - demo-topic
+
+guides:
+  - getting-started

@@ -1,6 +1,9 @@
 packages:
   - "apps/*"
   - "packages/*"
+  # Exactly `tools/manual`, not `tools/*`: `tools/openspec-viewer` is a
+  # submodule with its own pnpm workspace and must not join this one.
+  - "tools/manual"
 allowBuilds:
   esbuild: true
 enableGlobalVirtualStore: true

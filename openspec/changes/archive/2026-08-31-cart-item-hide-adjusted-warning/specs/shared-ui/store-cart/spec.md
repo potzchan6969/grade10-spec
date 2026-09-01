@@ -24,10 +24,6 @@ When a cart line was reduced for low stock, the low-stock warning hides after th
 
 ## ADDED Requirements
 
-### Cart item low-stock warning
-
----
-
 ### Requirement: Low-stock adjustment warning hides after the shopper edits quantity
 
 When a cart line’s status is `adjusted`, `CartItem` SHALL show the

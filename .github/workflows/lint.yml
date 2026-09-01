@@ -96,3 +96,8 @@ jobs:
             }
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      # Last, so a manual page that has drifted never stops Biome from
+      # committing its own fixes first.
+      - name: Check manual
+        run: pnpm run check:manual

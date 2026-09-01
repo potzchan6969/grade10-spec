@@ -197,6 +197,18 @@ What you are measuring is the primitive as built, in a browser, at the real valu
 
 **Read the automated diff.** The nightly design-sync run posts a summary table on its own run page — Actions → **Design sync** → the newest run. Each row is one disagreement, in the form `Button · size=sm · Height (h-8) · 32px in code · 24px in Figma`, covering background, height, horizontal padding, gap and corner radius. A row here fails the run, so a table with rows in it is a red build waiting for someone — you or an engineer — to say which of the two numbers is right. The same page states what the check does not cover, which is worth reading once: vertical padding, anything inside the component, and the hover, disabled and loading states are all unchecked, so a clean table is not proof the component matches.
 
+**Read the badges in the manual.** The same run commits its verdict to `.design-sync/report.json` (`design-sync:check --report`), and the manual's [Design page](https://spec.grade10-stg.com/design) reads that file to badge every Figma frame and Storybook story it shows, with the last-checked date in the header. The badge vocabulary:
+
+| Badge | Means |
+| --- | --- |
+| `ok` | Checked, and code matched the Figma set. |
+| `warn` / `fail` | The two sides disagree — a `fail` is also a red nightly build. |
+| `skipped` | The set was seen but nothing was compared (no cva, no comparable variant). |
+| `frame is gone` | The card's node id is in no page, frame or component of the file — deleted or renumbered in Figma. |
+| *no badge* | The card was not checked: the report has no verdict that reaches it. Not the same as `ok`. |
+
+When no report file exists at all, the page says so rather than rendering sixty-five silent cards — a run that checked nothing must not look like a clean run. A report older than eight nights is a stopped clock, and the maintenance panel says that too.
+
 ### What happens next
 
 `design-sync:check` diffs your axes and options against the code on every push, and again nightly at 01:00 UTC — a Figma edit raises no event in this repository, so the scheduled run is what catches a change you make on a day nobody pushes code. A new option with no code counterpart is a warning; a renamed or removed option is an error, and so is a value you change on a variant that the code still draws the old way. You do not need to run it — but it is why an unannounced rename surfaces as a failed build rather than a wrong button in production.

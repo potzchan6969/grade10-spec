@@ -20,9 +20,6 @@ hide an undelivered requirement.
 
 ## ADDED Requirements
 
-### Impact review
----
-
 ### Requirement: Every selected finding receives an implementation-impact review
 
 After finding selection and before acceptance, the workflow SHALL review every
@@ -113,9 +110,6 @@ acceptance in the current run.
 - **THEN** it records `blocked` with the unresolved evidence
 - **AND** it does not create planning artifacts or accept the finding
 
-### Planning handoff
----
-
 ### Requirement: Gaps route through existing planning workflows
 
 Before proposing a new change, the workflow SHALL inspect the current planning
@@ -166,9 +160,6 @@ implementation gates.
 - **WHEN** the developer declines the planning write
 - **THEN** no planning artifact is created or modified
 - **AND** every gap remains visible and unaccepted
-
-### Safe continuation
----
 
 ### Requirement: Planning and annotation acceptance are separate transactions
 

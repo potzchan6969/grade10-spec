@@ -53,10 +53,6 @@ surface inventing which orders belong where.
 
 ## ADDED Requirements
 
-### Order status
-
----
-
 ### Requirement: The order history surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
@@ -104,10 +100,6 @@ consumer-supplied label for that status. It SHALL NOT invent other status values
 - **WHEN** `OrderHistoryStatus` renders with a label for that status
 - **THEN** that label is displayed
 
-### Order line item
-
----
-
 ### Requirement: A line item shows image, product text, and total
 
 `OrderHistoryLineItem` SHALL display a supplied product image (with accessible
@@ -119,10 +111,6 @@ quantity into a separate field and SHALL NOT navigate or fetch.
 
 - **WHEN** a line item renders with image, product text, and total
 - **THEN** all three are displayed
-
-### Order card
-
----
 
 ### Requirement: The card header shows metadata and actions
 
@@ -159,10 +147,6 @@ styling on the overflow edges. The card SHALL NOT fetch orders or navigate.
 - **WHEN** the card renders
 - **THEN** the header and each child line item appear
 - **AND** the body uses horizontal overflow with scroll-fade styling
-
-### Order history page
-
----
 
 ### Requirement: OrderHistory lists Active and Past or shows empty
 

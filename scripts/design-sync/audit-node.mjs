@@ -12,6 +12,12 @@
  *   FIGMA_TOKEN=figd_… pnpm run design-sync:audit --map audit.json
  *   FIGMA_TOKEN=figd_… pnpm run design-sync:audit --all-blocks
  *   FIGMA_TOKEN=figd_… pnpm run design-sync:audit --node <url>          # dump the node's values
+ *   … pnpm run design-sync:audit --all-blocks --report .design-sync/report.json
+ *
+ * --report merges this rail's verdicts into the file check-components.mjs
+ * writes, so the manual badges what this covers too — a component with no
+ * variant axes has no set diff over there, and the site chrome was reaching the
+ * manual as nothing at all.
  *
  * audit.json is the class-audit table the page-from-figma skill has the
  * converting agent emit: [{ "label": "hero/cta", "node": "<figma url>",
@@ -52,7 +58,8 @@
  * The in-session audit with get_variable_defs remains the stronger check;
  * this is the unattended, re-runnable one.
  */
-import { readdir, readFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
@@ -94,6 +101,9 @@ const { values: args } = parseArgs({
     map: { type: "string" },
     file: { type: "string" },
     "all-blocks": { type: "boolean" },
+    // Merged into the same file check-components.mjs writes: two rails, one
+    // verdict per thing, and the manual reads one report.
+    report: { type: "string" },
   },
 });
 
@@ -462,12 +472,25 @@ for (const c of candidates) {
 }
 
 let drift = 0;
+// One verdict and its reasons per audited element, for --report. This rail
+// covers exactly what the component check cannot — a component with no variant
+// axes has no set diff, so the site chrome was checked by neither rail and its
+// cards in the manual badged nothing at all.
+const audit = new Map();
+let faults = [];
+const fault = (line) => {
+  faults.push(line);
+  console.error(`  ✗ ${line}`);
+  drift += 1;
+};
+
 for (const e of entries) {
   const doc = fetched.get(`${e.ref.key}/${e.ref.id}`);
   console.log(`\n◆ ${e.label}`);
+  faults = [];
   if (!doc) {
-    console.error(`  ✗ node ${e.ref.id} not found in file ${e.ref.key}`);
-    drift++;
+    fault(`node ${e.ref.id} not found in file ${e.ref.key}`);
+    audit.set(e.label, { ref: e.ref, cls: "fail", lines: faults });
     continue;
   }
   const v = nodeValues(doc);
@@ -515,18 +538,12 @@ for (const e of entries) {
         `  – ${cls.padEnd(24)} unchecked (node states no ${figmaProp[prop] ?? prop})`,
       );
     } else if (actual == null) {
-      console.error(
-        `  ✗ ${cls.padEnd(24)} ${want} in code, but the node sets no ${prop}`,
-      );
-      drift++;
+      fault(`${cls.padEnd(24)} ${want} in code, but the node sets no ${prop}`);
       compared++;
     } else if (
       typeof want === "number" ? Math.abs(actual - want) > 0.5 : actual !== want
     ) {
-      console.error(
-        `  ✗ ${cls.padEnd(24)} ${want} in code, ${actual} in Figma`,
-      );
-      drift++;
+      fault(`${cls.padEnd(24)} ${want} in code, ${actual} in Figma`);
       compared++;
     } else {
       console.log(`  ✓ ${cls.padEnd(24)} ${actual}`);
@@ -543,8 +560,7 @@ for (const e of entries) {
       v,
       resolveToken,
     )) {
-      console.error(`  ✗ ${"(unstyled)".padEnd(24)} ${line}`);
-      drift++;
+      fault(`${"(unstyled)".padEnd(24)} ${line}`);
       compared++;
     }
   }
@@ -560,9 +576,58 @@ for (const e of entries) {
     nothingChecked.push(e.label);
     console.log("  ! nothing in this element could be checked against Figma");
   }
+  audit.set(e.label, {
+    ref: e.ref,
+    cls: faults.length ? "fail" : compared === 0 ? "skipped" : "ok",
+    lines: faults,
+  });
+}
+
+// ── the report the manual reads ─────────────────────────────────────────────
+// The same file check-components.mjs writes, merged rather than replaced: that
+// rail covers component sets, this one covers everything with no variant axes
+// to diff, and neither can see the other's half. Its verdicts win every
+// collision — it runs first, and a set's own diff says more about a set than
+// one element of it does — so this only ever fills gaps.
+async function writeAuditReport() {
+  if (!args.report) return;
+  const path = resolve(repoRoot, args.report);
+  const held = existsSync(path)
+    ? JSON.parse(await readFile(path, "utf8"))
+    : { generatedAt: new Date().toISOString(), sets: {} };
+
+  const sets = { ...held.sets };
+  const nodes = { ...(held.nodes ?? {}) };
+  const messages = { ...(held.messages ?? {}) };
+  let added = 0;
+  for (const [label, { ref, cls, lines }] of audit) {
+    if (held.file !== undefined && ref.key !== held.file) continue;
+    const id = ref.id.replace(/:/g, "-");
+    if (sets[label] !== undefined || nodes[id] !== undefined) continue;
+    sets[label] = cls;
+    nodes[id] = label;
+    if (lines.length) messages[label] = lines.slice(0, 3);
+    added += 1;
+  }
+
+  const sorted = (o) =>
+    Object.fromEntries(Object.entries(o).sort(([a], [b]) => (a < b ? -1 : 1)));
+  const merged = {
+    ...held,
+    generatedAt: new Date().toISOString(),
+    sets: sorted(sets),
+    ...(Object.keys(nodes).length ? { nodes: sorted(nodes) } : {}),
+    ...(Object.keys(messages).length ? { messages: sorted(messages) } : {}),
+  };
+  await mkdir(dirname(path), { recursive: true });
+  await writeFile(path, `${JSON.stringify(merged, null, 2)}\n`);
+  console.log(
+    `\nreport: ${args.report} — ${added} audited element(s) added to ${Object.keys(sets).length} entr(ies)`,
+  );
 }
 
 console.log("");
+await writeAuditReport();
 if (uncovered.length)
   for (const [root, names] of groupUncovered(uncovered))
     console.log(
