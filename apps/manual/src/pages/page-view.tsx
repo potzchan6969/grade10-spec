@@ -9,6 +9,7 @@ import { BlockScopeProvider } from "../blocks/block-scope";
 import { BlockView } from "../blocks/block-view";
 import { BrokenCard } from "../blocks/broken-card";
 import { ChangeRibbon } from "../blocks/change-views";
+import { SpecDeltas } from "../blocks/delta-view";
 import { PageActions } from "../editor/edit-actions";
 import { useEditMode } from "../editor/edit-mode";
 import { PageEditor } from "../editor/page-editor";
@@ -54,11 +55,14 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
       />
       <PageWarnings warnings={warningsForPage(index.snapshot.warnings, path)} />
       {specId ? (
-        <ChangeRibbon
-          changes={changesForSpec(index, specId)}
-          proposals={proposalsForSpec(index, specId)}
-          specId={specId}
-        />
+        <>
+          <ChangeRibbon
+            changes={changesForSpec(index, specId)}
+            proposals={proposalsForSpec(index, specId)}
+            specId={specId}
+          />
+          <SpecDeltas index={index} specId={specId} />
+        </>
       ) : null}
 
       <BlockScopeProvider value={{ index, pagePath: path }}>

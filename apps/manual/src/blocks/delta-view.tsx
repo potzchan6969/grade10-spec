@@ -2,18 +2,67 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { CaretRight } from "@phosphor-icons/react";
 import { useState } from "react";
+import { Link } from "react-router";
 import {
   blockBody,
   diffLines,
   diffTotals,
   durableBlock,
 } from "../api/delta-text";
-import type { ManualIndex } from "../api/derive";
+import { byLastMoved, changesForSpec, type ManualIndex } from "../api/derive";
 import { specDir } from "../api/paths";
 import { findRequirement } from "../api/requirements";
 import type { Delta, DeltaRequirement, Requirement } from "../api/types";
 import { deltaTone } from "./change-views";
+import { InlineMarkdown } from "./inline-markdown";
 import { MarkdownView } from "./markdown";
+
+/**
+ * The delta itself, on the page it is about. The ribbon says a change is in
+ * flight; this says what the change will do to this spec, requirement by
+ * requirement, without leaving for the planning board. Requirement rows open
+ * to the full text or the diff — the change page's own reading.
+ */
+export function SpecDeltas({
+  index,
+  specId,
+}: {
+  index: ManualIndex;
+  specId: string;
+}) {
+  const changes = changesForSpec(index, specId)
+    .filter((change) =>
+      change.deltas.some(
+        // A snapshot built before the reader named requirements carries none.
+        (delta) =>
+          delta.spec === specId && (delta.requirements ?? []).length > 0,
+      ),
+    )
+    .sort(byLastMoved);
+  if (changes.length === 0) return null;
+
+  return (
+    <section aria-label={`Deltas against ${specId}`} className="my-5 space-y-4">
+      {changes.map((change) => (
+        <div key={change.id}>
+          <Text as="p" size="xs" tone="secondary">
+            Delta from{" "}
+            <Link
+              className="font-medium text-foreground hover:underline"
+              to={`/planning/${change.id}`}
+            >
+              <InlineMarkdown text={change.title} />
+            </Link>
+          </Text>
+          <DeltaList
+            deltas={change.deltas.filter((delta) => delta.spec === specId)}
+            index={index}
+          />
+        </div>
+      ))}
+    </section>
+  );
+}
 
 /**
  * What a change will say, not just that it says something. ADDED reads as the
