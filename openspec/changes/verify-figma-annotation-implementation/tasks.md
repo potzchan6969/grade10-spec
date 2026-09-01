@@ -35,33 +35,33 @@ This group depends on group 1 being merged into the registered
 `grade10-spec` store's `main`; it must stop blocked when the impact command is
 absent rather than adding a product-local validator.
 
-- [ ] 2.1 Extend the product skill preflight and report phase to require
+- [x] 2.1 Extend the product skill preflight and report phase to require
   `figma:annotations:impact`, retain the same product-scoped report as temporary
   JSON, inspect only `grade10` implementation evidence for selected IDs, and
   validate the digest-pinned review through the store command, making
   `annotation-implementation-verification-SC-01` through
   `annotation-implementation-verification-SC-04` pass in the focused agent
   suite.
-- [ ] 2.2 Add the human impact preview and deterministic routing for
+- [x] 2.2 Add the human impact preview and deterministic routing for
   `implemented`, `no-impact`, `covered`, `gap`, and `blocked`; translate only
   eligible outcomes into the existing acceptance decisions and leave every gap
   or blocker visible, making `annotation-implementation-verification-SC-05`
   through `annotation-implementation-verification-SC-08` and
   `annotation-implementation-verification-SC-14` pass.
-- [ ] 2.3 Inspect the current planning board before grouping gaps, show the
+- [x] 2.3 Inspect the current planning board before grouping gaps, show the
   exact change/lane/artifact preview, require separate planning confirmation,
   run the existing `pm-planning` or `full-planning` skill sequentially, and end
   each gap's old reconciliation path, making
   `annotation-implementation-verification-SC-09` through
   `annotation-implementation-verification-SC-13` pass without duplicating
   planning rules.
-- [ ] 2.4 Add dirty-store, incomplete-planning, fresh-observation, and
+- [x] 2.4 Add dirty-store, incomplete-planning, fresh-observation, and
   independent-permission guards to the product skill; update `/dev-help` and
   focused agent tests so `annotation-implementation-verification-SC-15` through
   `annotation-implementation-verification-SC-17` pass without authorizing a
   commit, push, merge, task claim, implementation, submodule advance, or Figma
   write.
-- [ ] 2.5 Verify the group with `pnpm run test:agent`, `pnpm run
+- [x] 2.5 Verify the group with `pnpm run test:agent`, `pnpm run
   agent:sync-parity`, `pnpm run agent:check-parity`, `pnpm run lint`, `pnpm run
   typecheck`, and `git diff --check`.
 
