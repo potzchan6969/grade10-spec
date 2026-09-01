@@ -224,6 +224,14 @@ describe("the real store's board", () => {
     );
 
     expect(loyalty?.issuedThrough?.sc).toBeGreaterThan(durable);
-    expect(snapshot.specs.every((one) => one.issuedThrough)).toBe(true);
+    // A spec whose scenarios carry no permanent ids has issued nothing and
+    // owes no ceiling; every spec that has issued one states it.
+    const issuing = snapshot.specs.filter((one) =>
+      one.requirements.some((requirement) =>
+        requirement.scenarios.some((scenario) => scenario.id),
+      ),
+    );
+    expect(issuing.length).toBeGreaterThan(0);
+    expect(issuing.every((one) => one.issuedThrough)).toBe(true);
   });
 });

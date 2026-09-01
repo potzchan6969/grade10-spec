@@ -10,9 +10,9 @@ import {
   specEntry,
 } from "./manual-fixture";
 
-/** Eighteen capabilities exist only as an in-flight delta: no durable spec, no
- * page, and nothing in the nav. The only way to learn one is being built was to
- * already know the change by name. */
+/** A capability that exists only as an in-flight delta — no durable spec, no
+ * page — would otherwise be invisible: the only way to learn one is being
+ * built was to already know the change by name. */
 
 const index = buildIndex(
   snapshotOf({
@@ -75,6 +75,9 @@ describe("the capabilities that exist only as a delta", () => {
 });
 
 describe("the real store", () => {
+  /** The store now keeps a page for every delta-introduced capability, so the
+   * delta-only set is usually empty — but whatever slips back to delta-only
+   * must still show, and nothing shown may be stale. */
   it("gives every delta-only capability a way in", async () => {
     const root = findStoreRoot(fileURLToPath(new URL(".", import.meta.url)));
     const live = buildIndex((await readStore(root)).snapshot);
@@ -88,7 +91,6 @@ describe("the real store", () => {
       ...live.incubating,
     ].map((one) => one.specId);
 
-    expect(deltaOnly.length).toBeGreaterThan(0);
     expect([...shown].sort()).toEqual([...deltaOnly].sort());
   });
 });
