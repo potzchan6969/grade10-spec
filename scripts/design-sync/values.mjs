@@ -172,9 +172,8 @@ const isColorClass = (cls, prefix, resolveToken) => {
   // out of this static rail.
   const slash = m[1].lastIndexOf("/");
   const modified = slash > 0 && /^[\d.]+$/.test(m[1].slice(slash + 1));
-  const value = resolveToken(modified ? m[1].slice(0, slash) : m[1]);
-  if (!isColorValue(value)) return false;
-  return !modified || value.length <= 7 || /ff$/i.test(value);
+  const tokenName = modified ? m[1].slice(0, slash) : m[1];
+  return isColorValue(resolveToken(tokenName));
 };
 
 /**
