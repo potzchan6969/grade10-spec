@@ -454,16 +454,17 @@ elsewhere can neither cause nor fix a hole in the store. The rules:
 - the `figma` family asserts the URL's file key and node id against the
   design-sync report and validates `set=` against its keys — warnings,
   since the report mirrors a file someone else owns
-- warning: a delta carrying `## User journeys` or `## Feature set` — the
-  fold discards both, so the archive workflow must carry them into the
-  durable spec by hand
+- a delta's `## User journeys` and `## Feature set` are not a rule here:
+  every well-formed delta carries them, and `archive:preflight` refuses
+  the archive until they reach the durable spec
 - warning: a page whose embedded specs changed after the page's last
   commit is flagged stale, naming which requirements changed (spec blob
   at the page's commit versus head, one `git cat-file --batch` pass); a
   spec moved since that commit is reported as moved, never as an
   everything-changed diff; a page with no commit yet is skipped
 - warning: a capability page with a `spec` but no journeys or cases block
-  is missing its acceptance shelf
+  is missing its acceptance shelf — asked only where the spec has
+  journeys or a suite to show, the same bar the QA board applies
 - warning: a `[[ref]]` in prose that resolves to nothing or to more than
   one thing, scanned with the grammar's fence tracking, inline code
   skipped

@@ -89,11 +89,6 @@ export const RULES = [
   },
   { key: "figma", level: "warn", title: "Figma links" },
   {
-    key: "fold",
-    level: "warn",
-    title: "Delta sections the archive discards",
-  },
-  {
     key: "journeys",
     level: "warn",
     title: "Specs whose journeys no page shows",

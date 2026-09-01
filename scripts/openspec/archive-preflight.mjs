@@ -22,8 +22,7 @@
  *          refuses while they are not. `--journeys-copied` acknowledges a
  *          delta whose capability has no durable spec yet: the fold creates
  *          it, so the copy can only happen right after — the flag is a
- *          promise, and `pnpm check:manual` still reports the sections until
- *          it is kept.
+ *          promise, recorded in the archive commit message.
  *
  * Zero dependencies, no `openspec` call — the checks read the change's own
  * files, the same way `plan-preflight.mjs` does.
