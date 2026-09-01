@@ -10,7 +10,7 @@
 - [x] 1.6 Render `copy.legal` as the body's last node when set and omit the node entirely when unset, supplying no wording from the block — satisfies *Legal copy is supplied* and *Legal copy is omitted*
 - [ ] 1.7 Run `pnpm run lint`, `pnpm run typecheck`, and `pnpm run test:stories:ui`
 
-## 2. Cover the block against Figma (grade10-spec)
+## 2. Cover the block against Figma (grade10-spec) (owner: @sean)
 
 This group needs group 1's class strings to exist; claim it after 1.2 lands.
 
