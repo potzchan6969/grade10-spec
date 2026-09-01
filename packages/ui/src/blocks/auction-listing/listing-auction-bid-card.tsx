@@ -5,7 +5,14 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { ChartLineUp } from "@phosphor-icons/react";
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  type CSSProperties,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   BidActions,
   type ListingAuctionBidFieldsCopy,
@@ -64,6 +71,12 @@ function RecentBidsScrollArea({
     setShowBottomFade(overflow && !atBottom);
   }, []);
 
+  /**
+   * `contentKey` is a signal, not a read: a new list replaces the child this
+   * effect observes, so the subscription has to be rebuilt against the node
+   * that is there now.
+   */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: see above
   useEffect(() => {
     updateFade();
     const element = scrollRef.current;
@@ -164,7 +177,10 @@ function ListingAuctionBidCard({
 
       <ListingAutoBidReveal open={showRecentBids}>
         <VStack
-          className={cn("w-full px-4 py-4", hasFooter && "border-b border-border")}
+          className={cn(
+            "w-full px-4 py-4",
+            hasFooter && "border-b border-border",
+          )}
           gap="sm"
         >
           <HStack gap="xs" vAlign="center">

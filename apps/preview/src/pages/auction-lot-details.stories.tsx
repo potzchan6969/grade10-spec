@@ -38,7 +38,11 @@ export const LiveAutoLeading: Story = {
     expect(
       canvas.getByRole("link", { name: "Auction", current: "page" }),
     ).toBeVisible();
-    expect(canvas.getByRole("button", { name: "Place Bid" })).toBeVisible();
+    // Auto mode: both reveals stay mounted so the transition can play, so the
+    // manual action is present but collapsed, and raising the maximum is the
+    // action actually on offer.
+    expect(canvas.getByRole("button", { name: "Raise maximum" })).toBeVisible();
+    expect(canvas.getByRole("button", { name: "Place Bid" })).not.toBeVisible();
   },
 };
 
