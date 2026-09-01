@@ -29,8 +29,28 @@ platform:
     - dates-and-times
     - localization
   Architecture:
+    - multi-product
+    - serving
+    - cross-service
+    - account-data
+    - edge-cache
     - frontend-composition
     - backend-service-repository
+  Commerce:
+    - commerce
+    - checkout-domain
+    - content
+  Services:
+    - auction-service
+    - vault-custody
+    - loyalty-service
+  Operations:
+    - admin-access
+    - backup
+    - tracking
+  Testing:
+    - testing
+    - e2e
 
 guides:
   - how-this-manual-works

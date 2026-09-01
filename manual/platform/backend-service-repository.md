@@ -1,6 +1,7 @@
 ---
 title: Services and Repositories
 spec: backend-service-repository
+order: 7
 ---
 
 A backend change can be declared correct today when service tests prove a
