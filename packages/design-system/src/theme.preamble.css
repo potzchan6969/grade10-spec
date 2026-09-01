@@ -91,7 +91,10 @@
      not a utility, so button.tsx, link.tsx and badge.tsx rendered an inherited
      colour. The variables themselves have always existed in tokens.json. */
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success-muted: var(--success-muted);
+  --color-success-border: var(--success-border);
   --color-success-ring: var(--success-ring);
+  --color-warning-muted: var(--warning-muted);
   --color-focus-ring: var(--focus-ring);
   --color-menu-border: var(--menu-border);
   --color-menu-glass: var(--menu-glass);
