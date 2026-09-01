@@ -39,11 +39,30 @@ export const LiveAutoLeading: Story = {
       canvas.getByRole("link", { name: "Auction", current: "page" }),
     ).toBeVisible();
     expect(canvas.getByRole("button", { name: "Place Bid" })).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: "Your bid history" }),
+    ).toBeVisible();
+    await canvas.getByRole("button", { name: "Your bid history" }).click();
+    expect(canvas.getByRole("dialog", { name: "Bid History" })).toBeVisible();
+    expect(
+      canvas.getByRole("columnheader", { name: "Your bid" }),
+    ).toBeVisible();
+    expect(canvas.getByRole("columnheader", { name: "Type" })).toBeVisible();
+    expect(canvas.getByRole("columnheader", { name: "Time" })).toBeVisible();
+    expect(canvas.getByText("US$4,800")).toBeVisible();
   },
 };
 
 export const Opens: Story = { args: { state: "opens" } };
-export const LiveNoBids: Story = { args: { state: "live-no-bids" } };
+export const LiveNoBids: Story = {
+  args: { state: "live-no-bids" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.queryByRole("button", { name: "Your bid history" }),
+    ).not.toBeInTheDocument();
+  },
+};
 export const LiveManual: Story = { args: { state: "live-manual" } };
 export const LiveAutoOvertaken: Story = {
   args: { state: "live-auto-overtaken" },

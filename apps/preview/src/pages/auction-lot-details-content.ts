@@ -1,11 +1,22 @@
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import { createElement } from "react";
 import { minNextBidMinor } from "../../../../packages/ui/src/blocks/auction-listing/format-usd";
+import {
+  formatListingClosed,
+  formatListingEnds,
+  formatListingOpens,
+} from "../../../../packages/ui/src/lib/format-datetime";
+import {
+  FIXTURE_AUCTION_CLOSED_AT_MS,
+  FIXTURE_AUCTION_ENDS_AT_MS,
+  FIXTURE_AUCTION_OPENS_AT_MS,
+} from "../../../../packages/ui/src/lib/datetime-fixtures";
 import type {
   ListingAuctionBidView,
   ListingAuctionStanding,
   ListingBidHistoryRow,
   ListingLotMetaBadge,
+  ListingUserBidHistoryRow,
 } from "../../../../packages/ui/src/blocks/auction-listing/types";
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
@@ -53,20 +64,6 @@ export function remainingSecondsUntil(
   nowMs = Date.now(),
 ): number {
   return Math.max(0, Math.floor((closesAtMs - nowMs) / 1000));
-}
-
-export function formatAuctionDeadline(closesAtMs: number): string {
-  const formatted = new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone: "UTC",
-  }).format(new Date(closesAtMs));
-
-  return `Ends ${formatted} UTC`;
 }
 
 export function shouldExtendClose(
@@ -219,6 +216,7 @@ export const AUCTION_LOT_DETAILS_COPY = {
     autoBiddingTooltip:
       "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
     minimumMaximum: "Min. maximum: {amount}",
+    maximumBelowMinimum: "Enter at least {amount}",
     buyerFeeHint: "Buyer’s premium is added at invoice.",
     noBidsYet: "No bids yet",
     aboutThisLot: "About this lot",
@@ -242,11 +240,19 @@ export const AUCTION_LOT_DETAILS_COPY = {
     cancel: "Cancel",
     confirm: "Confirm",
   },
+  userBidHistory: {
+    link: "Your bid history",
+    title: "Bid History",
+    amount: "Your bid",
+    type: "Type",
+    time: "Time",
+  },
 };
 
 function formatBidCountLabel(count: number): string {
   return count === 1 ? `${count} bid` : `${count} bids`;
 }
+
 
 export function stateMeta(state: BiddingState) {
   const closed = state.startsWith("closed");
@@ -268,7 +274,7 @@ export function stateMeta(state: BiddingState) {
           : "Winning bid"
         : "Current Bid",
     countdown: closed
-      ? "Closed 30 Aug 2026, 09:15 UTC"
+      ? formatListingClosed(FIXTURE_AUCTION_CLOSED_AT_MS)
       : opens
         ? "2D 4H 12M 0S"
         : "6m 9s",
@@ -281,8 +287,8 @@ export function stateMeta(state: BiddingState) {
     deadline: closed
       ? undefined
       : opens
-        ? "Opens 22 Aug 2026, 18:00 UTC"
-        : "Ends 1 Sep 2026, 18:00 UTC",
+        ? formatListingOpens(FIXTURE_AUCTION_OPENS_AT_MS)
+        : formatListingEnds(FIXTURE_AUCTION_ENDS_AT_MS),
     currentBidMinor:
       state === "closed-unsold"
         ? 0
@@ -357,6 +363,99 @@ export function bidHistoryForState(
   }
 
   return BID_HISTORY;
+}
+
+const USER_BID_HISTORY_LABELS = {
+  manual: "Manual",
+  automatic: "Automatic",
+} as const;
+
+export function userBidHistoryForState(
+  state: BiddingState,
+): ListingUserBidHistoryRow[] {
+  switch (state) {
+    case "live-manual":
+      return [
+        {
+          id: "user-bid-manual-480",
+          amountLabel: "US$4,800",
+          bidType: "manual",
+          bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
+          timeLabel: "2 min ago",
+        },
+        {
+          id: "user-bid-manual-455",
+          amountLabel: "US$4,550",
+          bidType: "manual",
+          bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
+          timeLabel: "12 min ago",
+        },
+      ];
+    case "live-auto-leading":
+      return [
+        {
+          id: "user-bid-auto-480",
+          amountLabel: "US$4,800",
+          bidType: "auto",
+          bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
+          timeLabel: "2 min ago",
+        },
+        {
+          id: "user-bid-manual-430",
+          amountLabel: "US$4,300",
+          bidType: "manual",
+          bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
+          timeLabel: "25 min ago",
+        },
+      ];
+    case "live-auto-overtaken":
+      return [
+        {
+          id: "user-bid-auto-800",
+          amountLabel: "US$8,000",
+          bidType: "auto",
+          bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
+          timeLabel: "5 min ago",
+        },
+        {
+          id: "user-bid-manual-775",
+          amountLabel: "US$7,750",
+          bidType: "manual",
+          bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
+          timeLabel: "18 min ago",
+        },
+      ];
+    case "closed-won-payment-due":
+    case "closed-won-settled":
+      return [
+        {
+          id: "user-bid-won-310",
+          amountLabel: "US$3,100",
+          bidType: "auto",
+          bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
+          timeLabel: "Closed",
+        },
+        {
+          id: "user-bid-won-285",
+          amountLabel: "US$2,850",
+          bidType: "manual",
+          bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
+          timeLabel: "Closed",
+        },
+      ];
+    case "closed-lost":
+      return [
+        {
+          id: "user-bid-lost-295",
+          amountLabel: "US$2,950",
+          bidType: "manual",
+          bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
+          timeLabel: "Closed",
+        },
+      ];
+    default:
+      return [];
+  }
 }
 
 const SIMULATED_RIVALS = [
@@ -505,7 +604,7 @@ export function buildListingAuctionBidView(
     meta.closed || meta.opens
       ? meta.deadline
       : liveTiming != null
-        ? formatAuctionDeadline(liveTiming.closesAtMs)
+        ? formatListingEnds(liveTiming.closesAtMs)
         : meta.deadline;
 
   return {

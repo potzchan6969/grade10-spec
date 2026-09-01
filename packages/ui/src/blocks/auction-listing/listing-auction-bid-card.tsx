@@ -5,7 +5,14 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { ChartLineUp } from "@phosphor-icons/react";
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  type CSSProperties,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   BidActions,
   type ListingAuctionBidFieldsCopy,
@@ -36,6 +43,7 @@ type ListingAuctionBidCardProps = {
   onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
   onCommitMaximum: () => void;
+  recentBidsAccessory?: ReactNode;
 };
 
 function RecentBidsScrollArea({
@@ -125,6 +133,7 @@ function ListingAuctionBidCard({
   onBidModeChange,
   onPlaceBid,
   onCommitMaximum,
+  recentBidsAccessory,
 }: ListingAuctionBidCardProps) {
   const hasFooter = view.showBidActions;
   const showRecentBids = history.length > 0;
@@ -164,21 +173,32 @@ function ListingAuctionBidCard({
 
       <ListingAutoBidReveal open={showRecentBids}>
         <VStack
-          className={cn("w-full px-4 py-4", hasFooter && "border-b border-border")}
+          className={cn(
+            "w-full px-4 py-4",
+            hasFooter && "border-b border-border",
+          )}
           gap="sm"
         >
-          <HStack gap="xs" vAlign="center">
-            <span className="text-secondary-foreground">
-              <ChartLineUp aria-hidden size={14} />
-            </span>
-            <Text
-              className="text-secondary-foreground"
-              size="sm"
-              tone="secondary"
-              weight="medium"
-            >
-              {copy.recentBids}
-            </Text>
+          <HStack
+            className="w-full"
+            gap="xs"
+            hAlign="space-between"
+            vAlign="center"
+          >
+            <HStack gap="xs" vAlign="center">
+              <span className="text-secondary-foreground">
+                <ChartLineUp aria-hidden size={14} />
+              </span>
+              <Text
+                className="text-secondary-foreground"
+                size="sm"
+                tone="secondary"
+                weight="medium"
+              >
+                {copy.recentBids}
+              </Text>
+            </HStack>
+            {recentBidsAccessory}
           </HStack>
           <RecentBidsScrollArea
             contentKey={`${historyResetKey ?? "live"}:${history.length}:${history[0]?.id ?? ""}`}
