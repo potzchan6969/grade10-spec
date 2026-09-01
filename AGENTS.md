@@ -15,6 +15,7 @@ This repository is the versioned source of truth for product requirements and th
 | --- | --- | --- |
 | Durable requirements and component export contracts | `openspec/specs/<product>/<capability>/spec.md` | The single source of truth. An implementing engineer builds from this alone. Products are listed in `openspec/specs/README.md`. |
 | Product decision behind a requirement | `docs/prds/<product-area>/<feature>.md` | Problem, users, non-goals, measurement, rollout, rationale. Explanatory, never authoritative over a requirement. |
+| Source material behind a decision | `docs/references/<doc>.md` | Owner's drafts, competitor research, vendor-integration working notes — what a PRD or change cites as evidence. Explanatory, never authoritative. See `docs/references/README.md`. |
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
 | Test cases for a capability | `test-cases.md` beside its `spec.md` | A derived reading of that spec's user journeys, never a second source of truth. See `docs/governance/specs-to-test-cases.md`. |
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |

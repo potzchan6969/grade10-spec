@@ -62,6 +62,8 @@ Do not name a class, hook, function, table, or library. Do name the public compo
 
 Create one from [`docs/prds/_template.md`](../prds/_template.md) when a change turns on a product judgment that the requirement text will not preserve: why this problem, for whom, what was ruled out, what will be measured, what the risks are. Record assumptions as open questions rather than silently choosing product behavior.
 
+Source material behind the judgment — an owner's draft, competitor research, a vendor-integration reference — lives in [`docs/references/`](../references/README.md); a PRD links it as evidence and never defers to it.
+
 Update the PRD when the target user, problem, goal, non-goal, measurement, rollout, risk, or a recorded decision changes. Do not update it merely because a requirement changed — that is the spec's job.
 
 Keep the PRD readable as a standalone decision record. Replace superseded decisions and preserve the useful rationale in the Decisions and open questions table; link an archived change for detailed history rather than embedding task logs.
