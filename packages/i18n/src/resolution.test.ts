@@ -66,6 +66,7 @@ const AUCTION_BIDDING_HISTORY_KEYS = [
   "historyLoading",
   "historyLoadFailed",
   "retryHistory",
+  "events",
   "showHistory",
   "hideHistory",
   "openListing",
@@ -79,13 +80,13 @@ const AUCTION_BIDDING_HISTORY_KEYS = [
   "bidder",
   "manual",
   "automatic",
-  "standingPending",
-  "standingLeading",
-  "standingOutbid",
-  "standingWon",
-  "standingLost",
-  "standingCanceled",
-  "standingFailedOnly",
+  "standing.pending",
+  "standing.leading",
+  "standing.outbid",
+  "standing.won",
+  "standing.lost",
+  "standing.canceled",
+  "standing.failed_only",
   "youWereOutbid",
   "bidRequested",
   "bidRefused",
@@ -93,12 +94,12 @@ const AUCTION_BIDDING_HISTORY_KEYS = [
   "automaticMaximumConfigured",
   "automaticMaximumRaised",
   "standingChanged",
-  "failureWindow",
-  "failureMinimum",
-  "failureAccount",
-  "failurePayment",
-  "failureStalePrice",
-  "failureUnavailable",
+  "failure.window",
+  "failure.minimum",
+  "failure.account",
+  "failure.payment",
+  "failure.stale_price",
+  "failure.unavailable",
 ].sort();
 
 describe("what a brand and a language answer between them", () => {
@@ -128,7 +129,7 @@ describe("what a brand and a language answer between them", () => {
     const namespace = layers(sharedCatalogs)[locale]?.auctionBiddingHistory;
 
     expect(namespace).toEqual(expect.any(Object));
-    expect(Object.keys(namespace ?? {}).sort()).toEqual(
+    expect(Object.keys(flatten((namespace ?? {}) as Tree)).sort()).toEqual(
       AUCTION_BIDDING_HISTORY_KEYS,
     );
   });

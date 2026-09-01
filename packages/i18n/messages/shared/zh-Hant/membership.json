@@ -8,5 +8,128 @@
     "refresh": "換一組新碼",
     "secondsUnit": "秒",
     "used": "此碼已被使用"
+  },
+  "page": {
+    "title": "會員",
+    "card": "你的會員卡",
+    "rewards": "獎賞",
+    "coupons": "你的優惠碼",
+    "pending": "門市待領",
+    "activity": "紀錄",
+    "spend": "用於購物車",
+    "cardUnavailable": "門市認證尚未開通，暫時沒有可掃描的碼——請門市同事以電郵為你查閱。",
+    "cardFailed": "未能完成，請稍後再試。",
+    "refresh": "取得優惠碼",
+    "loadFailed": "未能載入，請再試一次。",
+    "retry": "再試一次",
+    "noRewards": "目前沒有可換的獎賞。",
+    "noCoupons": "你沒有任何優惠碼。",
+    "noPending": "沒有待領的項目。",
+    "noExpiry": "沒有期限",
+    "noActivity": "你的帳戶尚未有任何紀錄。",
+    "notAMember": "你尚未加入此計劃。",
+    "join": "加入計劃"
+  },
+  "collectWithin": "須於 {days} 天內到門市領取",
+  "outcome": {
+    "preparing": "處理中",
+    "ready": "優惠碼可以使用",
+    "spent": "優惠碼已使用",
+    "void": "優惠碼已取消",
+    "awaitingCollection": "門市待領，至 {deadline} 止",
+    "collected": "已於 {day} 領取",
+    "lapsed": "未領取——期限已於 {deadline} 屆滿"
+  },
+  "summary": {
+    "title": "會員",
+    "tier": "等級",
+    "balance": "可用積分",
+    "qualifying": "本年度累積積分",
+    "renewal": "等級續期",
+    "pointsActiveUntil": "積分有效至"
+  },
+  "rewards": {
+    "label": "獎賞",
+    "redeem": "兌換",
+    "points": "分",
+    "atQuantityBound": "單次兌換最多就是這個數量。",
+    "insufficient": "積分尚未足夠",
+    "decreaseQuantity": "減少一件",
+    "increaseQuantity": "增加一件"
+  },
+  "quantityRefusal": {
+    "wholeUnits": "{name} 只能以整件兌換。",
+    "oneAtATime": "{name} 每次只能兌換一件。",
+    "atMost": "單次兌換最多 {max} 件{name}。"
+  },
+  "coupons": {
+    "label": "你的優惠碼",
+    "maskedCode": "••••••",
+    "spent": "已使用",
+    "void": "已取消"
+  },
+  "undo": {
+    "action": "退回積分",
+    "returned": "{points} 分已退回你的帳戶。",
+    "codeUsed": "此優惠碼已用於付款，積分不會退回。",
+    "alreadyReturned": "這些積分已經退回你的帳戶。"
+  },
+  "spend": {
+    "lead": "你的購物車金額為 {basket}。",
+    "atCheckout": "積分現在於結帳時扣減，付款時選擇要用多少。",
+    "goToCheckout": "前往結帳",
+    "empty": "先把商品放進購物車，才能在這裡使用積分。",
+    "offer": "{points} 分可折 {money}",
+    "confirm": "使用 {points} 分折 {money}？",
+    "spendAction": "使用積分",
+    "confirmAction": "確定使用",
+    "cancelAction": "暫時不用",
+    "working": "正在取得優惠碼…",
+    "issued": "你的優惠碼是 {code}，結帳時輸入即可折扣。",
+    "applied": "已為你的購物車折 {money}。",
+    "aborted": "你的購物車無法使用該優惠碼，所以沒有動用積分——{points} 分已退回。",
+    "abortFailed": "你的購物車無法使用該優惠碼。系統未能自動退回積分，該優惠碼仍然屬於你。",
+    "notMoneyOff": "該獎賞並非購物折扣。",
+    "nothingToSpendOn": "先把商品放進購物車，才能在這裡使用積分。",
+    "biggerThanPurchase": "{money} 的優惠碼需要金額不低於此數的購物車，否則會被拒絕，因此沒有動用積分。",
+    "notEnoughPoints": "你的積分尚未足夠。",
+    "failed": "未能完成，請稍後再試。"
+  },
+  "activity": {
+    "label": "紀錄"
+  },
+  "pending": {
+    "label": "門市待領",
+    "location": "請到門市領取。",
+    "expired": "期限已過",
+    "points": "分"
+  },
+  "activityKind": {
+    "earn": "賺取積分",
+    "redeem": "使用積分",
+    "pay": "積分用於付款",
+    "expire": "積分已過期",
+    "adjust_credit": "積分已增加",
+    "adjust_debit": "積分已扣除",
+    "revoke": "積分已撤回",
+    "reverse": "積分已退回"
+  },
+  "join": {
+    "title": "加入計劃",
+    "lead": "所有消費都可賺取積分，並可於門市或結帳時使用。",
+    "action": "加入",
+    "joined": "已為你登記。你的會員卡與獎賞清單都在會員頁面。",
+    "already": "你已經是會員。",
+    "failed": "暫時未能為你登記。請再試一次——即使一直失敗，也不會有任何扣款或半完成的登記。",
+    "goToMembership": "前往會員頁面",
+    "phoneLabel": "手機號碼",
+    "phoneHint": "門市同事會以此為你查閱。",
+    "phoneRefusal": {
+      "phoneRequired": "請輸入手機號碼以加入。",
+      "phoneTaken": "該號碼已登記於另一個帳戶。",
+      "needsCountryCode": "請加上國碼，例如 +852 9123 4567。",
+      "invalid": "這看來不是有效的手機號碼。",
+      "rateLimited": "你剛更改過號碼，請一分鐘後再試。"
+    }
   }
 }

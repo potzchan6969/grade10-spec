@@ -11,6 +11,7 @@
   "historyLoading": "입찰 내역을 불러오는 중…",
   "historyLoadFailed": "이 입찰 내역을 불러오지 못했습니다.",
   "retryHistory": "다시 시도",
+  "events": "입찰 이벤트",
   "showHistory": "입찰 내역 보기",
   "hideHistory": "입찰 내역 숨기기",
   "openListing": "출품작 보기",
@@ -24,13 +25,6 @@
   "bidder": "{label}",
   "manual": "수동",
   "automatic": "자동",
-  "standingPending": "대기 중",
-  "standingLeading": "최고 입찰",
-  "standingOutbid": "상위 입찰 발생",
-  "standingWon": "낙찰",
-  "standingLost": "낙찰되지 않음",
-  "standingCanceled": "취소됨",
-  "standingFailedOnly": "실패한 입찰만 있음",
   "youWereOutbid": "상위 입찰이 발생했습니다",
   "bidRequested": "{amount}에 입찰했습니다",
   "bidRefused": "{amount} 입찰이 승인되지 않았습니다",
@@ -38,10 +32,21 @@
   "automaticMaximumConfigured": "자동 입찰 최대 금액을 {amount}(으)로 설정했습니다",
   "automaticMaximumRaised": "자동 입찰 최대 금액을 {amount}(으)로 올렸습니다",
   "standingChanged": "상태가 {standing}(으)로 변경되었습니다",
-  "failureWindow": "입찰 시간이 종료되었습니다.",
-  "failureMinimum": "입찰 금액이 최소 금액에 미치지 못했습니다.",
-  "failureAccount": "이 계정은 입찰할 수 없습니다.",
-  "failurePayment": "결제 승인이 완료되지 않았습니다.",
-  "failureStalePrice": "다른 입찰로 이 금액은 더 이상 유효하지 않습니다.",
-  "failureUnavailable": "지금은 입찰을 평가할 수 없습니다."
+  "standing": {
+    "pending": "대기 중",
+    "leading": "최고 입찰",
+    "outbid": "상위 입찰 발생",
+    "won": "낙찰",
+    "lost": "낙찰되지 않음",
+    "canceled": "취소됨",
+    "failed_only": "실패한 입찰만 있음"
+  },
+  "failure": {
+    "window": "입찰 시간이 종료되었습니다.",
+    "minimum": "입찰 금액이 최소 금액에 미치지 못했습니다.",
+    "account": "이 계정은 입찰할 수 없습니다.",
+    "payment": "결제 승인이 완료되지 않았습니다.",
+    "stale_price": "다른 입찰로 이 금액은 더 이상 유효하지 않습니다.",
+    "unavailable": "지금은 입찰을 평가할 수 없습니다."
+  }
 }
