@@ -9,5 +9,6 @@
   "codeLabel": "인증 코드",
   "codeSentTo": "{email}(으)로 인증 코드를 보냈습니다",
   "verifyLabel": "코드 확인",
-  "verifyFailed": "인증 코드가 올바르지 않습니다."
+  "verifyFailed": "인증 코드가 올바르지 않습니다.",
+  "legal": "계속하면 <terms>이용약관</terms> 및 <privacy>개인정보 처리방침</privacy>에 동의하는 것으로 봅니다."
 }

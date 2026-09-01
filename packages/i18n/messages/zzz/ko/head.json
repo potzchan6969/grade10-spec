@@ -16,6 +16,14 @@
     "title": "경매 — ZZZ Store",
     "description": "공개된 모든 ZZZ 경매와 그 아래의 출품 카드, 각 카드의 최고 입찰가까지. 둘러보는 데는 계정이 필요 없고, 입찰에는 필요합니다."
   },
+  "terms": {
+    "title": "이용약관 — ZZZ Store",
+    "description": "ZZZ 스토어에서 카드를 사고팔거나 입찰할 때 동의하는 약관입니다."
+  },
+  "privacy": {
+    "title": "개인정보 처리방침 — ZZZ Store",
+    "description": "ZZZ 스토어가 수집하는 정보와 보관 이유, 그리고 이용자가 요청할 수 있는 사항입니다."
+  },
   "product": {
     "title": "{name} — ZZZ Store",
     "description": "{name}, ZZZ 스토어에 등록된 카드입니다."
