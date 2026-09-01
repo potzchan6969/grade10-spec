@@ -1,4 +1,4 @@
-storybookBase: https://grade10-storybook.memeland-qa.workers.dev
+storybookBase: https://storybook.grade10-stg.com
 
 groups:
   Grade10:

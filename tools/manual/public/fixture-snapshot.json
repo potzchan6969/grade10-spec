@@ -2,7 +2,7 @@
   "generatedAt": "2026-08-30T09:12:00.000Z",
   "storeHead": "5f3a1c9e7b204d68af1c3e5079b2d4681ac9e037",
   "config": {
-    "storybookBase": "https://grade10-storybook.memeland-qa.workers.dev",
+    "storybookBase": "https://storybook.grade10-stg.com",
     "groups": [
       {
         "title": "Customer products",
