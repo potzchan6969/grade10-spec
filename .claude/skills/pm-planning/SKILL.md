@@ -70,7 +70,14 @@ execute it is not.
    ```bash
    openspec validate <change-name> --strict
    ```
-9. **Hand off by saying it needs promoting.** Both boards render a change with
+9. **Derive the test cases.** With the specs valid, run
+   `/spec-to-tcs <change-name>` and commit the suites it writes to this branch
+   as their own `test(<domain>): derive test cases for <capability>` commit.
+   Every case lands `draft`; QA approves them later in their own pull request
+   with `/tcs-review`, so this asks nothing of whoever reviews the specs. A
+   change with `skip_specs: true`, or with only cross-cutting capabilities,
+   has nothing to generate. See `docs/governance/specs-to-test-cases.md`.
+10. **Hand off by saying it needs promoting.** Both boards render a change with
    no `tasks.md` as "still being planned", so it is indistinguishable from an
    unfinished plan until an engineer promotes it. A promotion, not a message,
    is what puts the work in front of someone.

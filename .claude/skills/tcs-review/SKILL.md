@@ -17,6 +17,28 @@ This skill never decides a case is correct. The reviewer decides; you present
 the case beside the spec that justifies it, answer what they ask, and record
 what they say.
 
+What you record outlives this run. A case marked `actual` — with whatever
+wording the reviewer settled on — is the store's evidence of how a case
+should read, and the next `/spec-to-tcs` run learns its conventions from
+exactly those cases (see "What the approved suites teach the next one" in
+`docs/governance/specs-to-test-cases.md`). So when a reviewer reshapes a
+case's wording before approving it, write their words, not a tidied version
+of them: the phrasing they approve is the phrasing generation will copy.
+
+0. **Get on a review branch before the first verdict.** Verdicts are written
+   to disk as you go, so the branch has to exist before you start, not when you
+   stop.
+
+   | | |
+   | --- | --- |
+   | Branch | `test/tcs-<capability>` — add `-us<n>` when you are taking one journey of a large suite |
+   | Commits | `test(<domain>): approve <capability> US<n> test cases` |
+   | PR label | `documentation`, opened as a draft |
+
+   On `main`, create the branch first (`git switch -c`). Never write verdicts
+   on `main`. Above roughly fifteen `draft` cases, offer to split by journey
+   and take one journey per branch; below that, take the file.
+
 1. **Find the suites awaiting review.** Search both trees —
    `openspec/specs/**/test-cases.md` and
    `openspec/changes/*/specs/**/test-cases.md`, never
@@ -24,6 +46,15 @@ what they say.
    `**Status:**` is `pending-review`, or when any case in it has
    `**Status:** draft`. Narrow to the argument when one was given (a change
    name, a capability id, or a path).
+
+   Before opening a suite, check whether someone else is already in it:
+   `gh pr list --state open --search "<capability>"`, or
+   `git ls-remote --heads origin "test/tcs-<capability>*"`. Report what you
+   find — who, which journey — and let the reviewer decide. **This is
+   information, never a refusal.** Nothing reserves a suite: two reviewers on
+   different journeys of one file is a supported way to work, and the file's
+   status is derived precisely so the line they both touch merges without
+   judgement.
 
 2. **Pick one suite:**
 
@@ -43,12 +74,13 @@ what they say.
    journey. Cases already `actual` or `deprecated` are skipped unless the
    reviewer asks to revisit one. For each case, show:
    - its id and title, and the journey it sits under;
-   - its description, preconditions, test data, and every step with its own
-     expected result;
-   - its nine properties;
-   - the **full text of every scenario it traces**, quoted from `spec.md`,
-     so the reviewer compares the case against the requirement rather than
-     against your summary of it.
+   - its nine classification properties, pre-conditions, test data (when it
+     has any), numbered steps, and expected-results list;
+   - the **full text of every scenario the case was built from**, quoted from
+     `spec.md`, so the reviewer compares the case against the requirement
+     rather than against your summary of it. A case traces its journey
+     (`<capability>-US-<n>`), so quote the scenarios that journey's
+     `**Accepted by:**` list names and that this case covers.
 
    Then ask for that case's verdict — approve, change, defer, or retire —
    and wait. One case per question. Do not batch several cases into one
@@ -64,21 +96,52 @@ what they say.
    the case is wrong until the spec says otherwise.
 
 6. **Record each verdict in the file as you go,** so an interrupted review
-   is not lost:
+   is not lost. **Re-read the file from disk immediately before each write** —
+   a session runs for hours, another reviewer may have landed a verdict in
+   another journey, and writing back a copy held in memory would silently
+   revert their work.
 
    | Verdict | Write |
    | --- | --- |
-   | Approve | `**Status:** actual` on that case, unchanged otherwise. |
+   | Approve | `**Status:** actual` on that case, unchanged otherwise. It becomes house-style evidence from that moment. |
    | Change | Apply exactly the edit they asked for — wording, a property, a data row — then ask again; approve only on their yes. An edit that would add coverage the spec does not state goes to `spec.md` first, via `/spec-to-tcs`, not into the case. |
    | Defer | Leave `**Status:** draft` and note what they want resolved. |
    | Retire | `**Status:** deprecated`, only when the spec no longer states that behaviour. Never delete the case, never renumber around it. |
 
-7. **Close the run.** When the last `draft` case has a verdict, or the
-   reviewer stops:
+   Then **recompute the file's header** from the cases, every time:
+   `**Status:**` is `approved` when no `draft` remains, `in-review` when at
+   least one `actual` or `deprecated` sits beside a `draft`, `pending-review`
+   otherwise. Add `**Reviewed:** <today>` when — and only when — the file
+   reaches `approved`, and remove it if it ever falls back out. Drop the
+   `**Drafts styled:**` line once no draft is left. The status is derived; it
+   is never a judgement you or the reviewer makes. `pnpm run tcs:validate`
+   fails a file whose header and cases disagree.
+
+7. **Close the run — and land the work.** When the last `draft` case in scope
+   has a verdict, or the reviewer stops for the day:
+
+   - Run `pnpm run tcs:validate` and fix anything it names before committing.
+   - Commit the verdicts and push the branch. Ensure a draft pull request
+     exists (`/pr-push`), so a day's progress is visible even mid-review.
+   - **Merge at journey boundaries.** A finished journey is worth landing on
+     its own: mark the PR ready and merge it even while other journeys of the
+     same suite are still `draft`. The file lands as `in-review`, the approved
+     cases are banked on `main`, and an interrupted review leaves its work
+     where the next person will find it. Do not hold a whole 50-case suite on
+     one branch waiting for completeness.
+   - Say plainly what is left and where: which journeys still hold drafts, and
+     whether the branch continues tomorrow or a new one starts.
+
+   Then:
    - If every case in the file is now `actual` or `deprecated`, set the
      file's `**Status:**` to `approved` and say the suite is exportable.
    - If any case is still `draft`, leave `pending-review` and name what is
      outstanding.
+   - When the reviewer's edits repeated a theme — the same rewording asked
+     for on case after case — say so, and tell them those approved cases now
+     carry that convention into the next generation run. If they want it
+     written down as a rule rather than inferred, point at
+     `docs/governance/specs-to-test-cases.md` as the place to amend.
    - Report: how many cases were approved, edited, deferred, retired; the
      gaps the review surfaced for the spec's author (a scenario no case
      covers, a case whose scenario has changed, a question the spec cannot
@@ -90,6 +153,12 @@ what they say.
 
 - Never mark a case `actual` — or a file `approved` — without the reviewer
   saying yes to that specific case.
+- Never type a file status as a judgement. Recompute it from the cases after
+  every verdict.
+- Never write verdicts on `main`, and never hold a finished journey off `main`
+  because the rest of the suite is unreviewed.
+- Never refuse to open a suite because another branch or PR is touching it.
+  Report it and let the reviewer decide.
 - Never approve the remaining cases in bulk because the reviewer approved
   several in a row.
 - Never edit a step, precondition, or expected result into something the
