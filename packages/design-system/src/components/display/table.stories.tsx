@@ -90,8 +90,7 @@ export const OverflowingContent: Story = {
     },
   },
   render: () => {
-    const totalColumnClass =
-      "w-36 shrink-0 whitespace-nowrap tabular-nums";
+    const totalColumnClass = "w-36 shrink-0 whitespace-nowrap tabular-nums";
 
     return (
       <Table className="flex max-h-72 w-80 flex-col overflow-hidden">

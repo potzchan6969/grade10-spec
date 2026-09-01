@@ -1,16 +1,6 @@
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import { createElement } from "react";
 import { minNextBidMinor } from "../../../../packages/ui/src/blocks/auction-listing/format-usd";
-import {
-  formatListingClosed,
-  formatListingEnds,
-  formatListingOpens,
-} from "../../../../packages/ui/src/lib/format-datetime";
-import {
-  FIXTURE_AUCTION_CLOSED_AT_MS,
-  FIXTURE_AUCTION_ENDS_AT_MS,
-  FIXTURE_AUCTION_OPENS_AT_MS,
-} from "../../../../packages/ui/src/lib/datetime-fixtures";
 import type {
   ListingAuctionBidView,
   ListingAuctionStanding,
@@ -18,6 +8,16 @@ import type {
   ListingLotMetaBadge,
   ListingUserBidHistoryRow,
 } from "../../../../packages/ui/src/blocks/auction-listing/types";
+import {
+  FIXTURE_AUCTION_CLOSED_AT_MS,
+  FIXTURE_AUCTION_ENDS_AT_MS,
+  FIXTURE_AUCTION_OPENS_AT_MS,
+} from "../../../../packages/ui/src/lib/datetime-fixtures";
+import {
+  formatListingClosed,
+  formatListingEnds,
+  formatListingOpens,
+} from "../../../../packages/ui/src/lib/format-datetime";
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
@@ -252,7 +252,6 @@ export const AUCTION_LOT_DETAILS_COPY = {
 function formatBidCountLabel(count: number): string {
   return count === 1 ? `${count} bid` : `${count} bids`;
 }
-
 
 export function stateMeta(state: BiddingState) {
   const closed = state.startsWith("closed");

@@ -1,9 +1,3 @@
-import type {
-  ActivityEntry,
-  CouponItem,
-  PendingCollectionItem,
-  RewardMenuItem,
-} from "./types";
 import {
   FIXTURE_COLLECT_BY_SEP_3,
   FIXTURE_LOYALTY_ADJUST_DAY,
@@ -12,6 +6,12 @@ import {
   FIXTURE_REDEEMED_ON,
 } from "../../lib/datetime-fixtures";
 import { formatDay } from "../../lib/format-datetime";
+import type {
+  ActivityEntry,
+  CouponItem,
+  PendingCollectionItem,
+  RewardMenuItem,
+} from "./types";
 
 /* Grade10's own programme content, for the examples only. A consumer supplies
  * its own; nothing here is a default. */

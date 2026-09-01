@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { IMAGE, ORDER_DETAILS_COPY } from "./fixtures";
 import {
   FIXTURE_CANCELED_MESSAGE,
   FIXTURE_REFUND_MESSAGE,
 } from "../../lib/datetime-fixtures";
+import { IMAGE, ORDER_DETAILS_COPY } from "./fixtures";
 import { OrderDetailsOrderItem } from "./order-details-order-item";
 
 const meta = {

@@ -1,3 +1,8 @@
+import {
+  FIXTURE_ORDER_PLACED_DAY,
+  FIXTURE_ORDER_SHIPPED_DAY,
+  FIXTURE_REFUND_MESSAGE,
+} from "../../lib/datetime-fixtures";
 import type {
   OrderDetailsCopy,
   OrderDetailsDelivery,
@@ -5,11 +10,6 @@ import type {
   OrderDetailsLineItem,
   OrderDetailsSummary,
 } from "./types";
-import {
-  FIXTURE_ORDER_PLACED_DAY,
-  FIXTURE_ORDER_SHIPPED_DAY,
-  FIXTURE_REFUND_MESSAGE,
-} from "../../lib/datetime-fixtures";
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 

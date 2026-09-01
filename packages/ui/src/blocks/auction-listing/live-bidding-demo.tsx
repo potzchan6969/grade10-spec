@@ -3,12 +3,12 @@ import { List, ListItem } from "@grade10/design-system/components/display/list";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { FlowContainer } from "../shared/flow-container";
 import {
   FIXTURE_AUCTION_DEADLINE,
   FIXTURE_LIVE_BID_AT_MS,
 } from "../../lib/datetime-fixtures";
 import { formatMoment } from "../../lib/format-datetime";
+import { FlowContainer } from "../shared/flow-container";
 import { LiveActions, WatchingAction, WatchOnlyActions } from "./fixtures";
 import { ListingBidPanel } from "./listing-bid-panel";
 

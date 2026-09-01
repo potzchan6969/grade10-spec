@@ -7,20 +7,6 @@ export {
   minNextBidMinor,
 } from "./blocks/auction-listing/format-usd";
 export {
-  formatDay,
-  formatDeadline,
-  formatEvent,
-  formatListingClosed,
-  formatListingEnds,
-  formatListingOpens,
-  formatMoment,
-  isMomentLabel,
-  formatAuctionClosed,
-  formatAuctionDeadline,
-  formatAuctionMoment,
-  formatAuctionOpens,
-} from "./lib/format-datetime";
-export {
   ListingAgeVerificationDialog,
   type ListingAgeVerificationDialogCopy,
   type ListingAgeVerificationDialogProps,
@@ -333,3 +319,17 @@ export {
   type ProfileFormProps,
 } from "./blocks/store-profile/profile-form";
 export type { ProfileFormValues } from "./blocks/store-profile/types";
+export {
+  formatAuctionClosed,
+  formatAuctionDeadline,
+  formatAuctionMoment,
+  formatAuctionOpens,
+  formatDay,
+  formatDeadline,
+  formatEvent,
+  formatListingClosed,
+  formatListingEnds,
+  formatListingOpens,
+  formatMoment,
+  isMomentLabel,
+} from "./lib/format-datetime";

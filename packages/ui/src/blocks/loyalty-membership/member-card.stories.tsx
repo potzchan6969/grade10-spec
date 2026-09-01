@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { QRCodeSVG } from "qrcode.react";
 import { expect, fn, userEvent, within } from "storybook/test";
-import { FALLBACK_CODE, MEMBER_TOKEN } from "./fixtures";
 import { FIXTURE_MEMBER_FIRST_USE_AT } from "../../lib/datetime-fixtures";
+import { FALLBACK_CODE, MEMBER_TOKEN } from "./fixtures";
 import { MemberCard } from "./member-card";
 
 const meta = {

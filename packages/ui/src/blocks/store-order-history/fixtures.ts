@@ -1,9 +1,9 @@
+import { FIXTURE_PLACED_ON } from "../../lib/datetime-fixtures";
 import type {
   OrderHistoryFulfillmentStatus,
   OrderHistoryLineSummary,
   OrderHistoryOrderSummary,
 } from "./types";
-import { FIXTURE_PLACED_ON } from "../../lib/datetime-fixtures";
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 

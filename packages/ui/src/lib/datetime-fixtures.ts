@@ -1,9 +1,9 @@
 import {
   formatDay,
+  formatDeadline,
   formatListingClosed,
   formatListingOpens,
   formatMoment,
-  formatDeadline,
 } from "./format-datetime";
 
 export const FIXTURE_AUCTION_ENDS_AT_MS = Date.UTC(2026, 8, 1, 18, 0);
@@ -54,8 +54,12 @@ export const FIXTURE_COLLECT_BY_SEP_3 = `Collect by ${formatDay(FIXTURE_COLLECT_
 export const FIXTURE_LOYALTY_PURCHASE_DAY = formatDay(
   FIXTURE_LOYALTY_PURCHASE_AT_MS,
 );
-export const FIXTURE_LOYALTY_REDEEM_DAY = formatDay(FIXTURE_LOYALTY_REDEEM_AT_MS);
-export const FIXTURE_LOYALTY_ADJUST_DAY = formatDay(FIXTURE_LOYALTY_ADJUST_AT_MS);
+export const FIXTURE_LOYALTY_REDEEM_DAY = formatDay(
+  FIXTURE_LOYALTY_REDEEM_AT_MS,
+);
+export const FIXTURE_LOYALTY_ADJUST_DAY = formatDay(
+  FIXTURE_LOYALTY_ADJUST_AT_MS,
+);
 export const FIXTURE_REFUND_MESSAGE = `Out of stock. Refund issued on ${FIXTURE_REFUND_DAY}`;
 export const FIXTURE_CANCELED_MESSAGE = `Canceled by customer on ${FIXTURE_REFUND_DAY}`;
 

@@ -5,6 +5,7 @@ import {
 } from "@grade10/design-system/components/display/breadcrumbs";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, waitFor, within } from "storybook/test";
+import { FIXTURE_PLACED_ON_WITH_PERIOD } from "../../lib/datetime-fixtures";
 import {
   FILLED_ADDRESS,
   FILLED_DELIVERY,
@@ -14,7 +15,6 @@ import {
   ORDER_DETAILS_COPY,
   PICKUP_DELIVERY,
 } from "./fixtures";
-import { FIXTURE_PLACED_ON_WITH_PERIOD } from "../../lib/datetime-fixtures";
 import { OrderDetails } from "./order-details";
 
 const breadcrumbs = (

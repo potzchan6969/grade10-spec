@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
+import {
+  FIXTURE_COLLECT_BY_SEP_3,
+  FIXTURE_REDEEMED_ON,
+} from "../../lib/datetime-fixtures";
 import { PENDING_COLLECTIONS } from "./fixtures";
-import { FIXTURE_COLLECT_BY_SEP_3, FIXTURE_REDEEMED_ON } from "../../lib/datetime-fixtures";
 import { PendingCollectionList } from "./pending-collection-list";
 
 const meta = {
