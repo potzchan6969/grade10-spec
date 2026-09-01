@@ -43,6 +43,7 @@ type ListingAuctionBidCardProps = {
   onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
   onCommitMaximum: () => void;
+  recentBidsAccessory?: ReactNode;
 };
 
 function RecentBidsScrollArea({
@@ -138,6 +139,7 @@ function ListingAuctionBidCard({
   onBidModeChange,
   onPlaceBid,
   onCommitMaximum,
+  recentBidsAccessory,
 }: ListingAuctionBidCardProps) {
   const hasFooter = view.showBidActions;
   const showRecentBids = history.length > 0;
@@ -183,18 +185,26 @@ function ListingAuctionBidCard({
           )}
           gap="sm"
         >
-          <HStack gap="xs" vAlign="center">
-            <span className="text-secondary-foreground">
-              <ChartLineUp aria-hidden size={14} />
-            </span>
-            <Text
-              className="text-secondary-foreground"
-              size="sm"
-              tone="secondary"
-              weight="medium"
-            >
-              {copy.recentBids}
-            </Text>
+          <HStack
+            className="w-full"
+            gap="xs"
+            hAlign="space-between"
+            vAlign="center"
+          >
+            <HStack gap="xs" vAlign="center">
+              <span className="text-secondary-foreground">
+                <ChartLineUp aria-hidden size={14} />
+              </span>
+              <Text
+                className="text-secondary-foreground"
+                size="sm"
+                tone="secondary"
+                weight="medium"
+              >
+                {copy.recentBids}
+              </Text>
+            </HStack>
+            {recentBidsAccessory}
           </HStack>
           <RecentBidsScrollArea
             contentKey={`${historyResetKey ?? "live"}:${history.length}:${history[0]?.id ?? ""}`}

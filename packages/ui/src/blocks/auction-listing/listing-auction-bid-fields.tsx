@@ -11,7 +11,15 @@ import {
   TooltipTrigger,
 } from "@grade10/design-system/components/overlays/tooltip";
 import { Info } from "@phosphor-icons/react";
-import { formatUsd, minMaximumMinor } from "./format-usd";
+import { useEffect, useState } from "react";
+import {
+  formatMinMaximumMessage,
+  formatUsd,
+  formatUsdNumeric,
+  isMaximumBelowFloor,
+  minMaximumMinor,
+  parseUsdInputToMinor,
+} from "./format-usd";
 import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
 import "./listing-bid-mode-stack.css";
 import { ListingCountdownDisplay } from "./listing-countdown-display";
@@ -47,6 +55,7 @@ type ListingAuctionBidFieldsCopy = {
   enableAutoBidding: string;
   autoBiddingTooltip: string;
   minimumMaximum: string;
+  maximumBelowMinimum: string;
   buyerFeeHint: string;
   noBidsYet: string;
 };
@@ -253,8 +262,6 @@ function BidActions({
   onPlaceBid,
   onCommitMaximum,
 }: BidActionsProps) {
-  if (!view.showBidActions) return null;
-
   const autoBidEnabled = bidMode === "auto";
   const hasCommittedMaximum = view.viewerMaximumMinor != null;
   const floorMaximumMinor = minMaximumMinor(
@@ -264,6 +271,40 @@ function BidActions({
   const defaultMaximumMinor = hasCommittedMaximum
     ? floorMaximumMinor
     : view.suggestedMaxMinor;
+  const [maximumInput, setMaximumInput] = useState(() =>
+    formatUsdNumeric(defaultMaximumMinor),
+  );
+  const [maximumFieldTouched, setMaximumFieldTouched] = useState(false);
+
+  useEffect(() => {
+    if (!autoBidEnabled) return;
+    setMaximumInput(formatUsdNumeric(defaultMaximumMinor));
+    setMaximumFieldTouched(false);
+  }, [autoBidEnabled, defaultMaximumMinor]);
+
+  if (!view.showBidActions) return null;
+
+  const maximumMinor = parseUsdInputToMinor(maximumInput);
+  const maximumInvalid = isMaximumBelowFloor(maximumMinor, floorMaximumMinor);
+  const showMaximumError = maximumFieldTouched && maximumInvalid;
+  const disableMaximumButton = maximumFieldTouched && maximumInvalid;
+  const maximumHelperMessage = formatMinMaximumMessage(
+    floorMaximumMinor,
+    view.incrementMinor,
+    view.viewerMaximumMinor,
+  );
+  const maximumMessage = showMaximumError
+    ? copy.maximumBelowMinimum.replace("{amount}", formatUsd(floorMaximumMinor))
+    : maximumHelperMessage;
+
+  function handleCommitMaximum() {
+    if (maximumInvalid) {
+      setMaximumFieldTouched(true);
+      return;
+    }
+    onCommitMaximum();
+  }
+
   const manualCopy = {
     bidAmountLabel: copy.placeBidSection,
     maximumLabel: copy.yourMaximum,
@@ -354,12 +395,13 @@ function BidActions({
             <HStack className="w-full" gap="sm" vAlign="start">
               <ListingAutoBidControls
                 copy={autoCopy}
-                defaultMaximumMinor={defaultMaximumMinor}
                 hideLabel
-                incrementMinor={view.incrementMinor}
-                key={`auto-${floorMaximumMinor}-${hasCommittedMaximum}`}
+                message={maximumMessage}
                 minMaximumMinor={floorMaximumMinor}
-                viewerMaximumMinor={view.viewerMaximumMinor}
+                onBlur={() => setMaximumFieldTouched(true)}
+                onValueChange={setMaximumInput}
+                status={showMaximumError ? "error" : "default"}
+                value={maximumInput}
               />
               <Button
                 aria-label={
@@ -368,7 +410,8 @@ function BidActions({
                     : copy.confirmMaximumAriaLabel
                 }
                 className="shrink-0"
-                onClick={onCommitMaximum}
+                disabled={disableMaximumButton}
+                onClick={handleCommitMaximum}
                 size="md"
               >
                 {hasCommittedMaximum ? copy.raiseMaximum : copy.confirmMaximum}

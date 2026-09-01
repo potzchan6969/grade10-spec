@@ -14,6 +14,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { Eye } from "@phosphor-icons/react";
+import { FIXTURE_BID_LANDED_AT } from "../../lib/datetime-fixtures";
 
 export const IMAGE = new URL(
   "../store-product-listing/product-card.fixture.png",
@@ -150,7 +151,7 @@ export function HighestBidderStanding() {
       <VStack gap="xs">
         <Text size="sm">Your bid: HK$4,800.00</Text>
         <Text size="xs" tone="secondary">
-          21 Aug 2026, 11:16 UTC
+          {FIXTURE_BID_LANDED_AT}
         </Text>
       </VStack>
       <Badge variant="success">Highest Bid</Badge>
@@ -164,7 +165,7 @@ export function OutbidStanding() {
       <VStack gap="xs">
         <Text size="sm">Your bid: HK$4,800.00</Text>
         <Text size="xs" tone="secondary">
-          21 Aug 2026, 11:16 UTC
+          {FIXTURE_BID_LANDED_AT}
         </Text>
       </VStack>
       <Badge variant="warning">Outbid</Badge>

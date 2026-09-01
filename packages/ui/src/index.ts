@@ -7,6 +7,20 @@ export {
   minNextBidMinor,
 } from "./blocks/auction-listing/format-usd";
 export {
+  formatDay,
+  formatDeadline,
+  formatEvent,
+  formatListingClosed,
+  formatListingEnds,
+  formatListingOpens,
+  formatMoment,
+  isMomentLabel,
+  formatAuctionClosed,
+  formatAuctionDeadline,
+  formatAuctionMoment,
+  formatAuctionOpens,
+} from "./lib/format-datetime";
+export {
   ListingAgeVerificationDialog,
   type ListingAgeVerificationDialogCopy,
   type ListingAgeVerificationDialogProps,
@@ -58,12 +72,18 @@ export {
   type ListingLotMetaCopy,
   type ListingLotMetaProps,
 } from "./blocks/auction-listing/listing-lot-meta";
+export {
+  ListingUserBidHistory,
+  type ListingUserBidHistoryCopy,
+  type ListingUserBidHistoryProps,
+} from "./blocks/auction-listing/listing-user-bid-history";
 export type {
   ListingAuctionBidView,
   ListingAuctionStanding,
   ListingBidHistoryRow,
   ListingLotGalleryImage,
   ListingLotMetaBadge,
+  ListingUserBidHistoryRow,
 } from "./blocks/auction-listing/types";
 // shared-ui/auth-sign-in
 export {

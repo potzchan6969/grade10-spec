@@ -1,9 +1,6 @@
+import type { InputStatus } from "@grade10/design-system/components/forms/input";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
-import {
-  formatMinMaximumMessage,
-  formatUsd,
-  formatUsdNumeric,
-} from "./format-usd";
+import { formatUsd, formatUsdNumeric } from "./format-usd";
 
 type ListingManualBidControlsCopy = {
   bidAmountLabel?: string;
@@ -41,46 +38,39 @@ function ListingManualBidControls({
 }
 
 type ListingAutoBidControlsProps = {
-  copy: Pick<ListingManualBidControlsCopy, "maximumLabel" | "minimumMaximum">;
+  copy: Pick<ListingManualBidControlsCopy, "maximumLabel">;
   minMaximumMinor: number;
-  incrementMinor: number;
-  viewerMaximumMinor?: number;
-  defaultMaximumMinor: number;
+  value: string;
+  onValueChange: (value: string) => void;
+  onBlur: () => void;
+  status?: InputStatus;
+  message?: string;
   hideLabel?: boolean;
 };
 
 function ListingAutoBidControls({
   copy,
   minMaximumMinor,
-  incrementMinor,
-  viewerMaximumMinor,
-  defaultMaximumMinor,
+  value,
+  onValueChange,
+  onBlur,
+  status = "default",
+  message,
   hideLabel = false,
 }: ListingAutoBidControlsProps) {
-  const message = hideLabel
-    ? formatMinMaximumMessage(
-        minMaximumMinor,
-        incrementMinor,
-        viewerMaximumMinor,
-      )
-    : copy.minimumMaximum != null
-      ? copy.minimumMaximum.replace("{amount}", formatUsd(minMaximumMinor))
-      : formatMinMaximumMessage(
-          minMaximumMinor,
-          incrementMinor,
-          viewerMaximumMinor,
-        );
-
   return (
     <TextInput
       aria-label={copy.maximumLabel}
       className="min-w-0 flex-1"
-      defaultValue={formatUsdNumeric(defaultMaximumMinor)}
       inputMode="decimal"
       label={hideLabel ? undefined : copy.maximumLabel}
       message={message}
       min={minMaximumMinor / 100}
+      onBlur={onBlur}
+      onChange={(event) => onValueChange(event.target.value)}
       prefix="US$"
+      status={status}
+      value={value}
     />
   );
 }

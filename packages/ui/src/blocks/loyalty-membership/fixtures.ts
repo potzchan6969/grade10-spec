@@ -4,6 +4,14 @@ import type {
   PendingCollectionItem,
   RewardMenuItem,
 } from "./types";
+import {
+  FIXTURE_COLLECT_BY_SEP_3,
+  FIXTURE_LOYALTY_ADJUST_DAY,
+  FIXTURE_LOYALTY_PURCHASE_DAY,
+  FIXTURE_LOYALTY_REDEEM_DAY,
+  FIXTURE_REDEEMED_ON,
+} from "../../lib/datetime-fixtures";
+import { formatDay } from "../../lib/format-datetime";
 
 /* Grade10's own programme content, for the examples only. A consumer supplies
  * its own; nothing here is a default. */
@@ -38,7 +46,7 @@ const COUPONS: CouponItem[] = [
     amount: "HK$50",
     code: "GRD-50-7Q2M",
     description: "HK$50 off any order",
-    expiry: "Valid until Dec 31, 2026",
+    expiry: `Valid until ${formatDay(Date.UTC(2026, 11, 31))}`,
     status: "open",
   },
   {
@@ -46,14 +54,14 @@ const COUPONS: CouponItem[] = [
     amount: "HK$100",
     code: "GRD-100-XK4P",
     description: "HK$100 off any order",
-    expiry: "Valid until Oct 15, 2026",
+    expiry: `Valid until ${formatDay(Date.UTC(2026, 9, 15))}`,
     status: "spent",
   },
   {
     id: "coupon-void",
     amount: "HK$50",
     code: "GRD-50-9ZZT",
-    expiry: "Expired Jun 30, 2026",
+    expiry: `Expired ${formatDay(Date.UTC(2026, 5, 30))}`,
     status: "void",
   },
 ];
@@ -63,21 +71,21 @@ const ACTIVITY: ActivityEntry[] = [
     id: "entry-purchase",
     kind: "Purchase",
     delta: 105,
-    date: "Aug 18, 2026",
+    date: FIXTURE_LOYALTY_PURCHASE_DAY,
     context: "Order #10482",
   },
   {
     id: "entry-redeem",
     kind: "Redeemed HK$50 off",
     delta: -500,
-    date: "Aug 2, 2026",
+    date: FIXTURE_LOYALTY_REDEEM_DAY,
     context: "Balance: 1,250",
   },
   {
     id: "entry-adjustment",
     kind: "Points adjusted",
     delta: 120,
-    date: "Jul 28, 2026",
+    date: FIXTURE_LOYALTY_ADJUST_DAY,
   },
 ];
 
@@ -86,15 +94,15 @@ const PENDING_COLLECTIONS: PendingCollectionItem[] = [
     id: "pending-sleeves",
     name: "Grade10 card sleeves",
     pointsPaid: 240,
-    redeemedDate: "Redeemed Aug 20, 2026",
-    collectBy: "Collect by Sep 3, 2026",
+    redeemedDate: FIXTURE_REDEEMED_ON,
+    collectBy: FIXTURE_COLLECT_BY_SEP_3,
   },
   {
     id: "pending-stand",
     name: "Acrylic slab stand",
     pointsPaid: 4000,
-    redeemedDate: "Redeemed Jul 1, 2026",
-    collectBy: "Collect by Jul 31, 2026",
+    redeemedDate: `Redeemed ${formatDay(Date.UTC(2026, 6, 1))}`,
+    collectBy: `Collect by ${formatDay(Date.UTC(2026, 6, 31))}`,
     expired: true,
   },
 ];

@@ -3,6 +3,7 @@ import {
   ListingAuctionCardSidebar,
   ListingLotGallery,
   ListingLotHeader,
+  ListingUserBidHistory,
 } from "@grade10/ui";
 import { useEffect, useState } from "react";
 import {
@@ -20,6 +21,7 @@ import {
   initialLiveListingFacts,
   type LiveListingFacts,
   simulateNextLiveBid,
+  userBidHistoryForState,
 } from "./auction-lot-details-content";
 import { AuctionLotDetailsPageShell } from "./auction-lot-details-page-shell";
 
@@ -121,6 +123,12 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
           onBidModeChange={setBidMode}
           onCommitMaximum={requestBidAction}
           onPlaceBid={requestBidAction}
+          recentBidsAccessory={
+            <ListingUserBidHistory
+              copy={AUCTION_LOT_DETAILS_COPY.userBidHistory}
+              rows={userBidHistoryForState(state)}
+            />
+          }
           vaultShippingBody={AUCTION_LOT_DETAILS_COPY.vaultShippingBody}
           view={view}
         />

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
+import { FIXTURE_PLACED_ON } from "../../lib/datetime-fixtures";
 import { ORDER_HISTORY_COPY } from "./fixtures";
 import { OrderHistoryCardHeader } from "./order-history-card-header";
 
@@ -12,7 +13,7 @@ const meta = {
     orderId: "Order #G10-10391",
     status: "shipped",
     statusLabel: "Shipped",
-    date: "Placed on Aug 26, 2026",
+    date: FIXTURE_PLACED_ON,
     total: "Total: HK$1,770",
     trackOrder: true,
     onTrackOrder: fn(),

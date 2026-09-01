@@ -8,6 +8,14 @@ export type ListingBidHistoryRow = {
   isViewer?: boolean;
 };
 
+export type ListingUserBidHistoryRow = {
+  id: string;
+  amountLabel: string;
+  bidType: "manual" | "auto";
+  bidTypeLabel: string;
+  timeLabel: string;
+};
+
 export type ListingLotGalleryImage = {
   src: string;
   alt: string;
