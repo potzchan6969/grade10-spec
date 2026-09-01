@@ -58,6 +58,9 @@ export type ListingAuctionBidView = {
   resultFact?: string;
 };
 
+/** How far the collector has progressed through bid enrollment on this listing. */
+export type BidEnrollment = "signed-out" | "ready";
+
 export type ListingLotMetaBadge = {
   label: string;
 };

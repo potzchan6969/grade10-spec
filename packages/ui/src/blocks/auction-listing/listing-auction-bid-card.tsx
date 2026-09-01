@@ -23,7 +23,7 @@ import {
 } from "./listing-auction-bid-fields";
 import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
 import { ListingBidHistoryList } from "./listing-bid-history-list";
-import type { ListingAuctionBidView, ListingBidHistoryRow } from "./types";
+import type { BidEnrollment, ListingAuctionBidView, ListingBidHistoryRow } from "./types";
 import "./listing-auction-bid-card.css";
 
 type ListingAuctionBidCardCopy = ListingAuctionBidFieldsCopy & {
@@ -40,6 +40,7 @@ type ListingAuctionBidCardProps = {
   history: readonly ListingBidHistoryRow[];
   historyResetKey?: string;
   bidMode: "manual" | "auto";
+  bidEnrollment?: BidEnrollment;
   onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
   onCommitMaximum: () => void;
@@ -142,6 +143,7 @@ function ListingAuctionBidCard({
   history,
   historyResetKey,
   bidMode,
+  bidEnrollment,
   onBidModeChange,
   onPlaceBid,
   onCommitMaximum,
@@ -235,6 +237,7 @@ function ListingAuctionBidCard({
         <div className="px-4 py-4">
           <VStack className="w-full" gap="md">
             <BidActions
+              bidEnrollment={bidEnrollment}
               bidMode={bidMode}
               copy={copy}
               onBidModeChange={onBidModeChange}
@@ -242,7 +245,7 @@ function ListingAuctionBidCard({
               onPlaceBid={onPlaceBid}
               view={view}
             />
-            <BuyerFeeHint copy={copy} />
+            {bidEnrollment === "signed-out" ? null : <BuyerFeeHint copy={copy} />}
           </VStack>
         </div>
       ) : null}

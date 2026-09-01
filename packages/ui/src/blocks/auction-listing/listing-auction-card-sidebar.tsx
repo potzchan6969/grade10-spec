@@ -6,6 +6,7 @@ import { LISTING_LOT_SIDEBAR_CLASS } from "./listing-lot-layout";
 import type { ListingLotMetaCopy } from "./listing-lot-meta";
 import { ListingLotMeta } from "./listing-lot-meta";
 import type {
+  BidEnrollment,
   ListingAuctionBidView,
   ListingBidHistoryRow,
   ListingLotMetaBadge,
@@ -20,6 +21,7 @@ type ListingAuctionCardSidebarProps = {
   history: readonly ListingBidHistoryRow[];
   historyResetKey?: string;
   bidMode: "manual" | "auto";
+  bidEnrollment?: BidEnrollment;
   onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
   onCommitMaximum: () => void;
@@ -37,6 +39,7 @@ function ListingAuctionCardSidebar({
   history,
   historyResetKey,
   bidMode,
+  bidEnrollment,
   onBidModeChange,
   onPlaceBid,
   onCommitMaximum,
@@ -54,6 +57,7 @@ function ListingAuctionCardSidebar({
       gap="lg"
     >
       <ListingAuctionBidCard
+        bidEnrollment={bidEnrollment}
         bidMode={bidMode}
         copy={copy}
         history={history}

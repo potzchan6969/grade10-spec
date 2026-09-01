@@ -28,7 +28,7 @@ import {
   ListingManualBidControls,
 } from "./listing-manual-bid-controls";
 import { ListingRollingUsdDisplay } from "./listing-rolling-usd-display";
-import type { ListingAuctionBidView } from "./types";
+import type { BidEnrollment, ListingAuctionBidView } from "./types";
 
 type ListingAuctionBidFieldsCopy = {
   auctionWon: string;
@@ -49,6 +49,8 @@ type ListingAuctionBidFieldsCopy = {
   autoExtendedTooltip: string;
   placeBidSection: string;
   placeBid: string;
+  /** Signed-out CTA — `{amount}` is the minimum next bid. */
+  signInToBidAt: string;
   confirmMaximum: string;
   raiseMaximum: string;
   confirmMaximumTooltip: string;
@@ -249,15 +251,35 @@ type BidActionsProps = {
   copy: ListingAuctionBidFieldsCopy;
   view: ListingAuctionBidView;
   bidMode: "manual" | "auto";
+  bidEnrollment?: BidEnrollment;
   onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
   onCommitMaximum: () => void;
 };
 
+function SignedOutBidAction({
+  copy,
+  minBidMinor,
+  onPlaceBid,
+}: {
+  copy: ListingAuctionBidFieldsCopy;
+  minBidMinor: number;
+  onPlaceBid: () => void;
+}) {
+  const label = copy.signInToBidAt.replace("{amount}", formatUsd(minBidMinor));
+
+  return (
+    <Button className="w-full" onClick={onPlaceBid} size="md">
+      {label}
+    </Button>
+  );
+}
+
 function BidActions({
   copy,
   view,
   bidMode,
+  bidEnrollment = "ready",
   onBidModeChange,
   onPlaceBid,
   onCommitMaximum,
@@ -287,6 +309,16 @@ function BidActions({
   }, [autoBidEnabled, defaultMaximumMinor]);
 
   if (!view.showBidActions) return null;
+
+  if (bidEnrollment === "signed-out") {
+    return (
+      <SignedOutBidAction
+        copy={copy}
+        minBidMinor={view.minBidMinor}
+        onPlaceBid={onPlaceBid}
+      />
+    );
+  }
 
   const maximumMinor = parseUsdInputToMinor(maximumInput);
   const maximumInvalid = isMaximumBelowFloor(maximumMinor, floorMaximumMinor);

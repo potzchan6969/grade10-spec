@@ -15,6 +15,23 @@ export {
   type ListingAgeVerificationFieldsProps,
 } from "./blocks/auction-listing/listing-age-verification-dialog";
 export {
+  BIDDING_STATE_LABELS,
+  BID_FIXTURE_LOT,
+  LISTING_AUCTION_BID_AGE_VERIFICATION_COPY,
+  LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
+  auctionHeaderLabel,
+  bidHistoryForState,
+  bidModeForState,
+  buildListingAuctionBidView,
+  remainingSecondsUntil,
+  stateMeta,
+  userBidHistoryForState,
+  type AuctionTiming,
+  type BidMode,
+  type BiddingState,
+  type LiveListingFacts,
+} from "./blocks/auction-listing/listing-auction-bid-fixtures";
+export {
   ListingAuctionBidCard,
   type ListingAuctionBidCardCopy,
   type ListingAuctionBidCardProps,
@@ -67,6 +84,7 @@ export {
   type ListingUserBidHistoryProps,
 } from "./blocks/auction-listing/listing-user-bid-history";
 export type {
+  BidEnrollment,
   ListingAuctionBidView,
   ListingAuctionStanding,
   ListingBidHistoryRow,
