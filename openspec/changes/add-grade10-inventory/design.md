@@ -161,7 +161,10 @@ Elevated admin mutations also use the platform audit chain.
 
 Add `inventory:read` and `inventory:write`. Brand pages under
 `apps/admin/grade10/src/pages/inventory/` compose
-`@grade10/inventory-admin-frontend` (products list, product page).
+`@grade10/inventory-admin-frontend` (products list, product page). The product
+page is oversight plus free-pool mutations and reserve; adjust, release,
+sell-from-reservation, change-product, and vault-from-reservation run from
+Auction listing and Vault consoles.
 
 ## Flows
 
@@ -350,11 +353,11 @@ Routed through the API gateway to the inventory worker. Requires
 | `inventory.intake` | Stock up (catalog-SC-05, catalog-SC-06) |
 | `inventory.sell` | Free-pool sell (catalog-SC-10) |
 | `inventory.withdraw` | Free-pool withdraw (catalog-SC-11) |
-| `reservations.release` | Partial or full release; admin may act for any kind (catalog-SC-22, catalog-SC-35) |
-| `reservations.adjust` | `adjustReservation(id, newQuantity)` (catalog-SC-47–catalog-SC-50) |
-| `reservations.changeProduct` | `changeReservationProduct(id, newProductId, newQuantity)` (catalog-SC-51, catalog-SC-63–catalog-SC-65) |
-| `reservations.sellFromReservation` | Auction holds only (catalog-SC-36, catalog-SC-37) |
-| `reservations.vaultFromReservation` | Vault holds only (catalog-SC-38) |
+| `reservations.release` | Partial or full release; holder console or elevated admin API (catalog-SC-22, catalog-SC-35) |
+| `reservations.adjust` | `adjustReservation(id, newQuantity)` from listing console (catalog-SC-47–catalog-SC-50) |
+| `reservations.changeProduct` | `changeReservationProduct(id, newProductId, newQuantity)` from listing console (catalog-SC-51, catalog-SC-63–catalog-SC-65) |
+| `reservations.sellFromReservation` | Auction holds only; from listing console (catalog-SC-36, catalog-SC-37) |
+| `reservations.vaultFromReservation` | Vault holds only; from Vault console (catalog-SC-38) |
 | `changelogs.list` | Product-scoped history (catalog-SC-23–catalog-SC-28, catalog-SC-41–catalog-SC-44) |
 
 Admin fixture client mirrors every procedure above for frontend work without a

@@ -28,8 +28,8 @@ count transition.
   - Every inventory or reservation quantity change appends one changelog
 - Admin console
   - Products list and product page
-  - Create/edit products (`draft` → `created`); intake, sell, withdraw, reserve,
-    adjust, release, sell-from-reservation, vault-from-reservation; history
+  - Create/edit products (`draft` → `created`); intake, sell, withdraw, reserve;
+    read-only reservation oversight by `holder_kind`; history
 
 ## User journeys
 
@@ -42,13 +42,13 @@ Grade10 accepted.
 Accepted by: catalog-SC-01, catalog-SC-05, catalog-SC-06, catalog-SC-07,
 catalog-SC-52, catalog-SC-54.
 
-### catalog-US-02: Allocate, adjust, and partially settle holds
+### catalog-US-02: Oversee holds and settle them from holder apps
 
 As an inventory admin, I want to see Auction and Vault holds with remaining
-quantity, adjust a hold's quantity when a draft listing changes (e.g. 3 → 5 or
-5 → 2), and allow part of a hold to be sold, vaulted, or released, so that
-house stock is not over-promised and vaulted stock is counted separately from
-sold stock.
+quantity on the product page, while adjust, release, sell-from-reservation,
+change-product, and vault-from-reservation run from the owning listing or Vault
+console, so that house stock is not over-promised and settlement stays with
+the application that owns the hold.
 
 Accepted by: catalog-SC-14, catalog-SC-17, catalog-SC-18, catalog-SC-22,
 catalog-SC-35, catalog-SC-36, catalog-SC-37, catalog-SC-38, catalog-SC-47,
@@ -83,7 +83,7 @@ exactly one inventory snapshot with every stored count set to zero and status
 `draft`. An authorized inventory admin SHALL mark a `draft` product `created`.
 Marking `created` is one-way (`created` → `draft` is refused). Holder reserve
 and adjust-up SHALL require product status `created`. Intake and free-pool
-sell/withdraw MAY run while the product is still `draft`.
+sell/withdraw SHALL require product status `created`.
 
 | Field | Rules |
 | --- | --- |
@@ -769,10 +769,12 @@ The Grade10 admin panel SHALL offer an Inventory section with:
    mark `draft` → `created`, show the product's single inventory snapshot,
    reservations grouped by **`holder_kind`**, and change history.
 
-Operators SHALL intake, record free-pool sale or withdrawal, reserve for Auction
-or Vault, adjust active reservation quantity, change reservation product,
-partially release, sell-from-reservation, and vault-from-reservation from the
-product page.
+Operators SHALL intake, record free-pool sale or withdrawal, and reserve for
+Auction or Vault from the product page. Adjust, change reservation product,
+partial release, sell-from-reservation, and vault-from-reservation SHALL be
+triggered from the owning Auction listing or Vault console, not from the
+inventory product page. Reservation tables on the product page are read-only
+oversight.
 Loading, empty, and error states SHALL be visible.
 
 #### Scenario: catalog-SC-29 - Operator oversees inventory and holds on the product page
