@@ -5,7 +5,7 @@
   validation to make `annotation-implementation-verification-SC-01` through
   `annotation-implementation-verification-SC-08` pass for complete, missing,
   stale, cross-scope, no-impact, covered, gap, and blocked fixture evidence.
-- [ ] 1.2 Add gap-group and outcome-partition validation that returns exact
+- [x] 1.2 Add gap-group and outcome-partition validation that returns exact
   acceptance-eligible, planning, and blocked IDs; reject duplicate or omitted
   gaps, eligible findings in planning, invalid lanes, and duplicate changes to
   make `annotation-implementation-verification-SC-09`,
