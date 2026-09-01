@@ -1,4 +1,6 @@
 {
+  "googleActionLabel": "使用 Google 繼續",
+  "googleFailed": "無法連接 Google。",
   "emailLabel": "電郵地址",
   "emailPlaceholder": "請輸入電郵地址",
   "sendLinkLabel": "傳送登入連結",

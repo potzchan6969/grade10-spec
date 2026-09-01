@@ -1,4 +1,6 @@
 {
+  "googleActionLabel": "Continue with Google",
+  "googleFailed": "Could not reach Google.",
   "emailLabel": "Email",
   "emailPlaceholder": "Enter your email",
   "sendLinkLabel": "Send Magic Link",
