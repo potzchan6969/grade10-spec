@@ -5,8 +5,8 @@ The requirements derived from it are the `revise-loyalty-programme-rules` and
 `add-shopify-membership-pos` changes; until those archive, the main specs are
 still the older ones. The product decisions it led to are recorded in
 [the programme PRD](../prds/loyalty/programme.md). What engineering chose where
-this draft is silent is in the Decision record of the application repository's
-`docs/architecture/loyalty.md`. Values written as variables (rates, thresholds,
+this draft is silent is in the Decision record of
+[the loyalty service page](../../manual/platform/loyalty-service.md). Values written as variables (rates, thresholds,
 months) are program config, tunable per environment.
 
 ## 1. Program Structure & Tiers
