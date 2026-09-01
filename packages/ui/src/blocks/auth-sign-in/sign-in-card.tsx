@@ -21,8 +21,9 @@ type SignInCardCopy = {
   /** Names the divider between the providers and the email flow. Required
    * whenever `providerSlot` is set — the card carries no English of its own. */
   providerDivider?: string;
-  /** Terms and privacy line, drawn as the last node of the dialog body. The
-   * consumer owns the wording and any links inside it. */
+  /** Terms and privacy line, drawn centred as the last node of the dialog
+   * body. The consumer owns the wording and any links inside it; a link it
+   * carries belongs at `size="xs"`, matching the line around it. */
   legal?: ReactNode;
 };
 
@@ -116,7 +117,13 @@ function SignInCard({
             </Button>
           ) : null}
           {copy.legal ? (
-            <Text data-slot="sign-in-legal" size="sm" tone="secondary">
+            /* Figma draws this line centred across the body at 12/16 in the
+               foreground tone, not the muted one the status line uses. */
+            <Text
+              className="w-full text-center"
+              data-slot="sign-in-legal"
+              size="xs"
+            >
               {copy.legal}
             </Text>
           ) : null}

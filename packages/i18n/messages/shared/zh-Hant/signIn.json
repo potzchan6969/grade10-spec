@@ -1,10 +1,10 @@
 {
   "emailLabel": "電郵地址",
+  "emailPlaceholder": "請輸入電郵地址",
   "sendLinkLabel": "傳送登入連結",
   "sendLinkFailed": "無法傳送登入連結。",
   "sendWait": "請稍候一分鐘再要求另一封電郵。",
   "linkSentMessage": "請查看收件匣中的登入連結。",
-  "codeActionLabel": "改為傳送驗證碼",
   "sendCodeFailed": "無法傳送驗證碼。",
   "codeLabel": "驗證碼",
   "codeSentTo": "驗證碼已傳送至 {email}",

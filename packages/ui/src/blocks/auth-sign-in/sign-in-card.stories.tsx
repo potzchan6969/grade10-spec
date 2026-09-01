@@ -104,6 +104,30 @@ export const WithLegal: Story = {
   },
 };
 
+/**
+ * Figma draws the legal line centred across the body at 12/16, not left with
+ * the rest of the column — the one place this dialog centres anything.
+ */
+export const LegalIsCentred: Story = {
+  args: {
+    copy: {
+      title: "Sign In to Grade10",
+      legal:
+        "By continuing, you agree to our Terms of Service & Privacy Policy",
+    },
+  },
+  play: async ({ args }) => {
+    const body = within(document.body);
+    const legal = body
+      .getByText(String(args.copy.legal))
+      .closest('[data-slot="sign-in-legal"]') as HTMLElement;
+    const style = getComputedStyle(legal);
+
+    expect(style.textAlign).toBe("center");
+    expect(style.fontSize).toBe("12px");
+  },
+};
+
 /** Scenario: auth-sign-in-SC-08 - the block draws no legal node of its own,
  * so a consumer that supplies no wording gets none. */
 export const WithoutLegal: Story = {
