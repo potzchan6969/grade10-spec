@@ -71,7 +71,7 @@ This group depends on groups 1 and 2. It uses fixture or disposable planning
 targets and performs no real annotation acceptance, commit, push, merge, task
 claim, implementation, submodule advance, or Figma write.
 
-- [ ] 3.1 Run one mixed fixture through both repo-local skills and prove each
+- [x] 3.1 Run one mixed fixture through both repo-local skills and prove each
   scope produces the same complete outcome partitions while using only its
   owning implementation repository; cover implemented, no-impact, covered,
   gap, blocked, stale, and mixed-outcome selections for
