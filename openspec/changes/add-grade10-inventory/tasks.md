@@ -65,7 +65,7 @@ running worker.
   changelog changed-entity, non-null inventory reference, nullable reservation
   reference, action (including `adjust` and `change-product`), quantity, actor,
   action-detail, and snapshot contracts.
-- [ ] 1.7 Make `catalog-SC-32 - Unauthorized inventory read is refused` and
+- [x] 1.7 Make `catalog-SC-32 - Unauthorized inventory read is refused` and
   `catalog-SC-33 - Inventory section hidden without grants` pass by adding
   `inventory:read` / `inventory:write` to auth permission statements,
   granting them only through admin `ALL_PERMISSIONS`.
@@ -76,7 +76,7 @@ running worker.
 
 Depends on group 1.
 
-- [ ] 2.1 Make `catalog-SC-01`, `catalog-SC-03`, `catalog-SC-04`,
+- [x] 2.1 Make `catalog-SC-01`, `catalog-SC-03`, `catalog-SC-04`,
   `catalog-SC-05`, `catalog-SC-06`, `catalog-SC-10`, `catalog-SC-11`,
   `catalog-SC-52`, and `catalog-SC-54` pass structurally with the one-to-one
   product/inventory key (`UNIQUE product_id`), product **`status`** check
@@ -108,7 +108,7 @@ Depends on group 1.
   sell-from-reservation, vault-from-reservation),
   reservation/inventory foreign key, action-specific checks, history indexes,
   append-only guards, and shared per-worker `audit_logs`.
-- [ ] 2.4 Generate migration artifacts for
+- [x] 2.4 Generate migration artifacts for
   `apps/backend/grade10/inventory`, then run
   `pnpm run db:drizzle:generate`, `pnpm run check:migrations`,
   `pnpm run typecheck`, and `pnpm run test:backend`.
@@ -117,10 +117,10 @@ Depends on group 1.
 
 Depends on groups 1 and 2.
 
-- [ ] 3.1 Make `catalog-SC-01`, `catalog-SC-02`, `catalog-SC-04`,
+- [x] 3.1 Make `catalog-SC-01`, `catalog-SC-02`, `catalog-SC-04`,
   `catalog-SC-13`, `catalog-SC-52`, `catalog-SC-53`, `catalog-SC-54`, and
   `catalog-SC-57` pass through product and inventory services.
-- [ ] 3.2 Make `catalog-SC-05`, `catalog-SC-06`, `catalog-SC-08`,
+- [x] 3.2 Make `catalog-SC-05`, `catalog-SC-06`, `catalog-SC-08`,
   `catalog-SC-09`, `catalog-SC-10`, `catalog-SC-11`, and `catalog-SC-12`
   pass through snapshot mutations under inventory-row lock.
 - [ ] 3.3 Make `catalog-SC-14`, `catalog-SC-15`, `catalog-SC-16`,
@@ -168,9 +168,9 @@ Depends on group 3.
 
 Depends on groups 1 and 4. Fixtures, not a live worker.
 
-- [ ] 5.1 Make `catalog-SC-13`, `catalog-SC-30`, `catalog-SC-32`,
+- [x] 5.1 Make `catalog-SC-13`, `catalog-SC-30`, `catalog-SC-32`,
   `catalog-SC-33`, and `catalog-SC-58` pass on the products list.
-- [ ] 5.2 Make `catalog-SC-01`, `catalog-SC-29`, `catalog-SC-52`,
+- [x] 5.2 Make `catalog-SC-01`, `catalog-SC-29`, `catalog-SC-52`,
   `catalog-SC-54`, `catalog-SC-57`, and `catalog-SC-58` pass on the product
   page (create/edit, draft→created, single inventory snapshot, reservations
   by `holder_kind`).
