@@ -32,6 +32,7 @@
     "catalog_unavailable": "商店没有响应，请稍后再试。",
     "payment_declined": "付款被拒绝，请改用其他付款方式再试。",
     "payment_error": "未能建立付款，请稍后再试。",
-    "points_refused": "计划不接受在此购物车使用这么多积分，请改用其他数量。"
+    "points_refused": "计划不接受在此购物车使用这么多积分，请改用其他数量。",
+    "coupon_refused": "该优惠券不能用于此购物车。请移除优惠券或调整购物车后再试。"
   }
 }
