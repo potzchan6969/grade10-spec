@@ -71,7 +71,13 @@ function filled(type: string): DraftBlock {
 
 function pageOf(blocks: DraftBlock[]): Draft {
   return {
-    frontmatter: { title: "Round trip", summary: "", spec: "", order: "" },
+    frontmatter: {
+      title: "Round trip",
+      summary: "",
+      spec: "",
+      audience: "",
+      order: "",
+    },
     blocks,
   };
 }
@@ -179,7 +185,13 @@ describe("what the forms refuse", () => {
 
   it("refuses a title-less page", () => {
     const built = buildPage({
-      frontmatter: { title: "  ", summary: "", spec: "", order: "" },
+      frontmatter: {
+        title: "  ",
+        summary: "",
+        spec: "",
+        audience: "",
+        order: "",
+      },
       blocks: [],
     });
     expect(built.ok).toBe(false);
@@ -234,18 +246,19 @@ describe("what the forms keep", () => {
 });
 
 describe("frontmatter", () => {
-  it("writes the four fields in canonical order and omits the empty ones", () => {
+  it("writes the five fields in canonical order and omits the empty ones", () => {
     const built = buildPage({
       frontmatter: {
         title: "Loyalty",
         summary: "Points.",
         spec: "grade10-store/loyalty",
+        audience: "operator",
         order: "6",
       },
       blocks: [],
     });
     expect(built.ok && built.source).toBe(
-      "---\ntitle: Loyalty\nsummary: Points.\nspec: grade10-store/loyalty\norder: 6\n---\n",
+      "---\ntitle: Loyalty\nsummary: Points.\nspec: grade10-store/loyalty\naudience: operator\norder: 6\n---\n",
     );
   });
 });

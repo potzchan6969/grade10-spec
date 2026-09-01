@@ -50,6 +50,8 @@ export type NavItem = {
   order: number;
   /** Capability entries only — a guide has no spec to be changing. */
   status?: CapabilityStatus;
+  /** Capability entries only — who the page serves, from its frontmatter. */
+  audience?: "operator";
 };
 
 export type NavProduct = NavItem & {
@@ -232,10 +234,15 @@ export function childPages(index: ManualIndex, dir: string): ParsedPage[] {
 function productNav(index: ManualIndex, id: string): NavProduct {
   const dir = `${MANUAL_ROOT}/products/${id}`;
   const landing = index.pageByPath.get(`${dir}/index.md`);
-  const capabilities = childPages(index, dir).map((page) => ({
-    ...navItem(page, page.path.slice(dir.length + 1, -3)),
-    status: capabilityStatus(index, page.ast?.frontmatter.spec),
-  }));
+  const capabilities = childPages(index, dir).map((page) => {
+    const item: NavItem = {
+      ...navItem(page, page.path.slice(dir.length + 1, -3)),
+      status: capabilityStatus(index, page.ast?.frontmatter.spec),
+    };
+    const audience = page.ast?.frontmatter.audience;
+    if (audience) item.audience = audience;
+    return item;
+  });
 
   return {
     id,
@@ -249,15 +256,26 @@ function productNav(index: ManualIndex, id: string): NavProduct {
   };
 }
 
+/** The group that collects operator-facing pages, wherever their specs live. */
+export const ADMIN_GROUP = "Admin";
+
 function deriveGroups(index: ManualIndex): NavGroup[] {
   const listed = new Set<string>();
   const groups = index.snapshot.config.groups.map((group) => {
     for (const id of group.products) listed.add(id);
+    // A product listed under Admin is wholly operator-facing and keeps every
+    // capability; everywhere else the operator pages move to Admin instead.
+    const whole = group.title === ADMIN_GROUP;
     return {
       title: group.title,
-      products: group.products.map((id) => productNav(index, id)),
+      products: group.products.map((id) => {
+        const product = productNav(index, id);
+        return whole ? product : withoutOperators(product);
+      }),
     };
   });
+
+  appendOperatorBranches(index, groups);
 
   // A product on disk that manual.yaml never lists is a real gap; show it
   // rather than dropping it silently.
@@ -271,6 +289,48 @@ function deriveGroups(index: ManualIndex): NavGroup[] {
     });
   }
   return groups;
+}
+
+function withoutOperators(product: NavProduct): NavProduct {
+  return {
+    ...product,
+    capabilities: product.capabilities.filter(
+      (one) => one.audience !== "operator",
+    ),
+  };
+}
+
+/**
+ * Every `audience: operator` page, regrouped by the product it operates, under
+ * the one Admin group. The store's taxonomy stays put — the rail is the only
+ * thing that regroups — and a missing Admin group in manual.yaml is created
+ * rather than letting an operator page fall out of the rail entirely. The
+ * derived branch carries neither incubating entries nor a change count; the
+ * product's own branch already wears both.
+ */
+function appendOperatorBranches(index: ManualIndex, groups: NavGroup[]) {
+  const admin = groups.find((group) => group.title === ADMIN_GROUP);
+  const homed = new Set(admin?.products.map((one) => one.id) ?? []);
+
+  const branches: NavProduct[] = [];
+  for (const id of index.snapshot.taxonomy.products) {
+    if (homed.has(id)) continue;
+    const product = productNav(index, id);
+    const operators = product.capabilities.filter(
+      (one) => one.audience === "operator",
+    );
+    if (operators.length === 0) continue;
+    branches.push({
+      ...product,
+      capabilities: operators,
+      incubating: [],
+      changeCount: 0,
+    });
+  }
+  if (branches.length === 0) return;
+
+  if (admin) admin.products.push(...branches);
+  else groups.push({ title: ADMIN_GROUP, products: branches });
 }
 
 function deriveTopicGroups(index: ManualIndex): NavTopicGroup[] {

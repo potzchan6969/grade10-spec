@@ -12,7 +12,7 @@ const canonical: { name: string; text: string }[] = [
   { name: "frontmatter only", text: fm },
   {
     name: "full frontmatter",
-    text: "---\ntitle: Loyalty\nsummary: Points a shopper earns and spends.\nspec: grade10-store/loyalty\norder: 2\n---\n",
+    text: "---\ntitle: Loyalty\nsummary: Points a shopper earns and spends.\nspec: grade10-store/loyalty\naudience: operator\norder: 2\n---\n",
   },
   { name: "one prose block", text: `${fm}\nOne paragraph.\n` },
   {
@@ -134,6 +134,11 @@ const errors: { name: string; input: string; message: RegExp }[] = [
     name: "non-integer order",
     input: "---\ntitle: X\norder: 1.5\n---\n",
     message: /integer/,
+  },
+  {
+    name: "audience outside the one word it can be",
+    input: "---\ntitle: X\naudience: designer\n---\n",
+    message: /`audience` must be `operator`/,
   },
   {
     name: "unknown directive",

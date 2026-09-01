@@ -8,6 +8,9 @@ export type Frontmatter = {
   title: string;
   summary?: string;
   spec?: string;
+  /** Who a capability page serves. Absent means the product's own users;
+   * `operator` moves the page into the derived Admin nav group. */
+  audience?: "operator";
   order?: number;
 };
 
@@ -201,7 +204,13 @@ export const BLOCK_SPECS: Record<string, BlockSpec> = {
   },
 };
 
-const FRONTMATTER_KEYS = ["title", "summary", "spec", "order"] as const;
+const FRONTMATTER_KEYS = [
+  "title",
+  "summary",
+  "spec",
+  "audience",
+  "order",
+] as const;
 
 const LEAF_RE = /^::([a-z][a-z0-9-]*)(\{.*\})?\s*$/;
 const CONTAINER_OPEN_RE = /^:::([a-z][a-z0-9-]*)(\{.*\})?\s*$/;
@@ -252,6 +261,12 @@ function parseFrontmatter(lines: string[]): {
   if (entries.summary !== undefined)
     fm.summary = requireString(entries, "summary");
   if (entries.spec !== undefined) fm.spec = requireString(entries, "spec");
+  if (entries.audience !== undefined) {
+    if (entries.audience !== "operator") {
+      throw new GrammarError(1, "`audience` must be `operator` when present");
+    }
+    fm.audience = entries.audience;
+  }
   if (entries.order !== undefined) {
     if (typeof entries.order !== "number" || !Number.isInteger(entries.order)) {
       throw new GrammarError(1, "`order` must be an integer");

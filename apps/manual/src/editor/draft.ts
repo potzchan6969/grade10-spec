@@ -37,6 +37,7 @@ export type DraftFrontmatter = {
   title: string;
   summary: string;
   spec: string;
+  audience: string;
   order: string;
 };
 
@@ -109,6 +110,7 @@ export function draftFromAst(ast: PageAst): Draft {
       title: ast.frontmatter.title,
       summary: ast.frontmatter.summary ?? "",
       spec: ast.frontmatter.spec ?? "",
+      audience: ast.frontmatter.audience ?? "",
       order:
         ast.frontmatter.order === undefined
           ? ""
@@ -257,6 +259,12 @@ export function frontmatterProblems(fm: DraftFrontmatter): BlockProblem[] {
   if (fm.order.trim() !== "" && !Number.isInteger(Number(fm.order.trim()))) {
     problems.push({ attr: "order", message: "order is a whole number" });
   }
+  if (fm.audience.trim() !== "" && fm.audience.trim() !== "operator") {
+    problems.push({
+      attr: "audience",
+      message: "audience is `operator` or empty",
+    });
+  }
   return problems;
 }
 
@@ -264,6 +272,7 @@ function frontmatterOf(fm: DraftFrontmatter): Frontmatter {
   const built: Frontmatter = { title: fm.title.trim() };
   if (fm.summary.trim() !== "") built.summary = fm.summary.trim();
   if (fm.spec.trim() !== "") built.spec = fm.spec.trim();
+  if (fm.audience.trim() === "operator") built.audience = "operator";
   if (fm.order.trim() !== "") built.order = Number(fm.order.trim());
   return built;
 }

@@ -3,7 +3,7 @@ import type { BlockProblem, DraftFrontmatter } from "./draft";
 import { TextField } from "./fields";
 import { suggestionsFor } from "./suggestions";
 
-/** The four frontmatter fields, in the order the grammar prints them. */
+/** The five frontmatter fields, in the order the grammar prints them. */
 
 export function FrontmatterForm({
   frontmatter,
@@ -45,6 +45,14 @@ export function FrontmatterForm({
             value={frontmatter.summary}
           />
         </div>
+        <TextField
+          hint="`operator` files the page under Admin; empty serves the product's own users"
+          label="audience"
+          onChange={(audience) => onChange({ ...frontmatter, audience })}
+          problem={problemOf("audience")}
+          suggestions={["operator"]}
+          value={frontmatter.audience}
+        />
         <TextField
           hint="Nav sort; leave empty to sort by title"
           label="order"
