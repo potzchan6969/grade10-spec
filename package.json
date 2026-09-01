@@ -41,6 +41,8 @@
     "tokens:pull": "pnpm tokens:import && pnpm tokens:build",
     "typecheck": "pnpm --dir apps/preview exec tsc -b && pnpm --filter @grade10/design-system run typecheck && pnpm --filter @grade10/i18n run typecheck && pnpm --filter @grade10/ui run typecheck",
     "lint": "biome check .",
+    "tcs:stale": "node scripts/openspec/validate-test-cases.mjs --stale-report",
+    "tcs:validate": "node scripts/openspec/validate-test-cases.mjs",
     "plan:preflight": "node scripts/openspec/plan-preflight.mjs",
     "spec:view": "bash scripts/openspec-viewer/spec-view.sh",
     "lint:fix": "biome check --write ."

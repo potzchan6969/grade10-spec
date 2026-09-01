@@ -1,0 +1,577 @@
+#!/usr/bin/env node
+/**
+ * Validate every `test-cases.md` in the store against
+ * `docs/governance/specs-to-test-cases.md`.
+ *
+ *   pnpm run tcs:validate            # errors fail the run; warnings are printed
+ *   pnpm run tcs:validate -- --strict   # warnings fail too
+ *   pnpm run tcs:stale               # which suites' drafts are below the current rules rev
+ *
+ * A suite is a derived reading of the `spec.md` beside it, so almost everything
+ * here is a cross-check against that file rather than a taste judgement:
+ * a journey heading names a journey the spec defines, a case traces an id the
+ * spec still issues, and the file's own `**Status:**` is the value its case
+ * statuses imply — never an independent claim a reviewer typed.
+ *
+ * Two severities, deliberately:
+ *
+ *   error    the suite says something untrue (a status that contradicts its
+ *            cases, a trace to an id the spec never issued, a duplicate id, a
+ *            case with nothing to verify). CI fails on these.
+ *   warning  the suite is honest but written in an older shape (a `**Covers:**`
+ *            list, a `**Properties:**` block at the end of a case, a trace
+ *            carrying a scenario id where the journey id belongs). These are
+ *            printed, and `--strict` turns them into errors once the store has
+ *            no legacy suites left.
+ *
+ * Zero dependencies: Node built-ins only, matching the other scripts here.
+ */
+
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { basename, dirname, join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const ROOT = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+const GOVERNANCE = join(ROOT, "docs", "governance", "specs-to-test-cases.md");
+
+const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
+const c = (code, s) => (COLOR ? `\x1b[${code}m${s}\x1b[0m` : String(s));
+const bold = (s) => c("1", s);
+const dim = (s) => c("2", s);
+const red = (s) => c("31", s);
+const green = (s) => c("32", s);
+const yellow = (s) => c("33", s);
+const cyan = (s) => c("36", s);
+
+const FILE_STATUSES = ["pending-review", "in-review", "approved"];
+const CASE_STATUSES = ["draft", "actual", "deprecated"];
+const PROPERTIES = [
+  ["Severity", ["blocker", "critical", "major", "normal", "minor", "trivial"]],
+  ["Priority", ["high", "medium", "low"]],
+  ["Status", CASE_STATUSES],
+  ["Behaviour", ["positive", "negative", "destructive"]],
+  [
+    "Type",
+    [
+      "functional",
+      "smoke",
+      "regression",
+      "acceptance",
+      "usability",
+      "security",
+      "performance",
+      "compatibility",
+      "integration",
+    ],
+  ],
+  ["Layer", ["e2e", "api", "unit"]],
+  ["Automation status", ["manual", "automated", "to-be-automated"]],
+  ["Testability", ["automation", "manual", "automation, manual", "manual, automation"]],
+  ["Trace", null],
+];
+
+function help() {
+  console.log(`Usage: node scripts/openspec/validate-test-cases.mjs [<scope>] [flags]
+
+  <scope>   Only check suites whose repo-relative path contains this string.
+
+Flags:
+  --strict          Treat warnings as errors (legacy-shape suites fail too)
+  --stale-report    Skip validation; list suites whose drafts sit below the
+                    current tcs-rules rev, for a per-capability update run
+  --require-suites  Also report a spec.md that has journeys but no suite
+                    beside it (warning)
+  --help            Print this help and exit
+`);
+}
+
+function parseArgs(argv) {
+  const args = { strict: false, stale: false, requireSuites: false, scope: null };
+  const rest = [];
+  for (const a of argv) {
+    if (a === "--help" || a === "-h") {
+      help();
+      process.exit(0);
+    } else if (a === "--strict") args.strict = true;
+    else if (a === "--stale-report") args.stale = true;
+    else if (a === "--require-suites") args.requireSuites = true;
+    else rest.push(a);
+  }
+  args.scope = rest[0] ?? null;
+  return args;
+}
+
+/** The rules revision the store is currently written against. */
+function currentRulesRev() {
+  if (!existsSync(GOVERNANCE)) return null;
+  const m = readFileSync(GOVERNANCE, "utf8").match(/^tcs_rules_rev:\s*(\d+)\s*$/m);
+  return m ? Number(m[1]) : null;
+}
+
+/** The roots a suite or a spec may live under: openspec/specs and each
+ *  in-flight change's specs/ (archive is never a target). */
+function searchRoots(root) {
+  const roots = [join(root, "openspec", "specs")];
+  const changes = join(root, "openspec", "changes");
+  if (existsSync(changes)) {
+    for (const e of readdirSync(changes, { withFileTypes: true })) {
+      if (e.isDirectory() && e.name !== "archive") roots.push(join(changes, e.name, "specs"));
+    }
+  }
+  return roots;
+}
+
+/** Every directory under those roots holding the named file. */
+function dirsHolding(root, filename) {
+  const found = [];
+  const walk = (dir) => {
+    if (!existsSync(dir)) return;
+    let hit = false;
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, e.name);
+      if (e.isDirectory()) walk(full);
+      else if (e.name === filename) hit = true;
+    }
+    if (hit) found.push(dir);
+  };
+  searchRoots(root).forEach(walk);
+  return found;
+}
+
+/** Journey and scenario ids the spec issues, plus the journey titles. */
+function readSpecIds(specPath) {
+  if (!existsSync(specPath)) return null;
+  const text = readFileSync(specPath, "utf8");
+  const journeys = new Map();
+  const scenarios = new Set();
+  for (const line of text.split("\n")) {
+    const j = line.match(/^###\s+([\w-]+-US-\d+):\s*(.+?)\s*$/);
+    if (j) journeys.set(j[1], j[2]);
+    const s = line.match(/^####\s+Scenario:\s*([\w-]+-SC-\d+)\b/);
+    if (s) scenarios.add(s[1]);
+    const inline = line.match(/^\s*[-*]\s+`([\w-]+-SC-\d+)`/);
+    if (inline) scenarios.add(inline[1]);
+  }
+  return { journeys, scenarios, hasJourneySection: /^##\s+User journeys\s*$/m.test(text) };
+}
+
+/** Split a suite into its header, journey sections and cases. Current format only;
+ *  older shapes are detected and reported rather than parsed into silence. */
+function parseSuite(text) {
+  const lines = text.split("\n");
+  const suite = {
+    title: null,
+    status: null,
+    draftsStyled: null,
+    reviewed: null,
+    journeys: [],
+    legacy: new Set(),
+  };
+  let journey = null;
+  let tc = null;
+
+  const pushCase = () => {
+    if (tc && journey) journey.cases.push(tc);
+    tc = null;
+  };
+  const pushJourney = () => {
+    pushCase();
+    if (journey) suite.journeys.push(journey);
+    journey = null;
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    const h1 = line.match(/^#\s+(.+?)\s*$/);
+    if (h1 && suite.title === null) {
+      suite.title = h1[1];
+      continue;
+    }
+
+    if (tc === null && journey === null) {
+      const st = line.match(/^\*\*Status:\*\*\s*(\S+)\s*$/);
+      if (st) {
+        suite.status = st[1].toLowerCase();
+        continue;
+      }
+      const ds = line.match(/^\*\*Drafts styled:\*\*\s*(\d{4}-\d{2}-\d{2}),\s*tcs-rules r(\d+)\s*$/);
+      if (ds) {
+        suite.draftsStyled = { date: ds[1], rev: Number(ds[2]), line: i + 1 };
+        continue;
+      }
+      const rv = line.match(/^\*\*Reviewed:\*\*\s*(\d{4}-\d{2}-\d{2})\s*$/);
+      if (rv) {
+        suite.reviewed = rv[1];
+        continue;
+      }
+    }
+
+    const jh = line.match(/^##\s+(([\w-]+)-US-?(\d+)):\s*(.+?)\s*$/);
+    if (jh) {
+      pushJourney();
+      journey = {
+        capability: jh[2],
+        num: Number(jh[3]),
+        raw: jh[1],
+        hyphenated: /-US-\d+$/.test(jh[1]),
+        title: jh[4],
+        line: i + 1,
+        story: [],
+        cases: [],
+      };
+      continue;
+    }
+    if (/^##\s+(Journey|Flow|Requirement)\b/.test(line)) {
+      suite.legacy.add("pre-journey-id headings (`## Journey:` / `## Flow` / `## Requirement:`)");
+      pushJourney();
+      continue;
+    }
+
+    const ch = line.match(/^###\s+(\S+):\s*(.+?)\s*$/);
+    if (ch) {
+      pushCase();
+      const id = ch[1];
+      const journeyScoped = id.match(/^([\w-]+)-US-?(\d+)-TC-?(\d+)(?:-(\d+))?$/);
+      if (!journeyScoped) suite.legacy.add("case ids that are not `<capability>-US<n>-TC<m>-<v>`");
+      tc = {
+        id,
+        capability: journeyScoped?.[1] ?? null,
+        journeyNum: journeyScoped ? Number(journeyScoped[2]) : null,
+        tcNum: journeyScoped ? Number(journeyScoped[3]) : null,
+        version: journeyScoped?.[4] ? Number(journeyScoped[4]) : null,
+        journeyScoped: Boolean(journeyScoped),
+        hyphenated: /-US-\d+-TC-\d+/.test(id),
+        title: ch[2],
+        line: i + 1,
+        props: new Map(),
+        propOrder: [],
+        preconditions: "",
+        steps: 0,
+        expected: 0,
+      };
+      continue;
+    }
+
+    if (journey && !tc) {
+      const story = line.match(/^\*\*(As an?|I want|so that)\*\*/i);
+      if (story) journey.story.push(story[1].toLowerCase());
+      if (/^\*\*Covers:\*\*/.test(line)) suite.legacy.add("`**Covers:**` scenario lists");
+    }
+
+    if (tc) {
+      const prop = line.match(/^[-*]\s+\*\*([\w ]+?):\*\*\s*(.*?)\s*$/);
+      if (prop) {
+        const name = prop[1] === "Behavior" ? "Behaviour" : prop[1];
+        if (PROPERTIES.some(([p]) => p === name)) {
+          tc.props.set(name, prop[2]);
+          tc.propOrder.push(name);
+          if (line.startsWith("-")) suite.legacy.add("`-` property bullets (current format uses `*`)");
+        }
+        continue;
+      }
+      if (/^\*\*Description:\*\*/.test(line)) {
+        suite.legacy.add("`**Description:**` paragraphs");
+        continue;
+      }
+      if (/^\*\*Properties:\*\*/.test(line)) {
+        suite.legacy.add("`**Properties:**` blocks at the end of a case");
+        continue;
+      }
+      if (/^\*\*Pre-?conditions:\*\*/.test(line)) {
+        if (/^\*\*Preconditions:\*\*/.test(line)) suite.legacy.add("`**Preconditions:**` (no hyphen)");
+        const parts = [line.replace(/^\*\*Pre-?conditions:\*\*/, "").trim()];
+        let seenBlank = false;
+        for (let j = i + 1; j < lines.length; j++) {
+          const t = lines[j];
+          if (/^(\*\*|#{2,3}\s|---)/.test(t)) break;
+          if (t.trim() === "") {
+            if (parts.join("").trim() !== "") break;
+            if (seenBlank) break;
+            seenBlank = true;
+            continue;
+          }
+          parts.push(t.replace(/^[-*+]\s+/, "").trim());
+        }
+        tc.preconditions = parts.join(" ").trim();
+        continue;
+      }
+      if (/^\*\*Steps:\*\*/.test(line)) {
+        for (let j = i + 1; j < lines.length; j++) {
+          const t = lines[j];
+          if (/^(\*\*|#{2,3}\s|---)/.test(t)) break;
+          if (/^\s*\d+\.\s+\S/.test(t)) tc.steps++;
+          else if (/^\|\s*\d+\s*\|/.test(t.trim())) {
+            tc.steps++;
+            // a legacy step table carries its own expected result per row
+            if (t.trim().split("|").filter(Boolean).length >= 3) tc.expected++;
+            tc.stepTable = true;
+          }
+        }
+        continue;
+      }
+      if (/^[-*]?\s*\*\*Expected results?:\*\*/i.test(line.trim()) && !/^\*\*Expected Results:\*\*/.test(line)) {
+        if (line.replace(/^[-*]?\s*\*\*Expected results?:\*\*/i, "").trim()) tc.expected++;
+        for (let j = i + 1; j < lines.length; j++) {
+          if (/^(\*\*|#{2,3}\s|---)/.test(lines[j])) break;
+          if (/^[-*+]\s+\S/.test(lines[j])) tc.expected++;
+        }
+        continue;
+      }
+      if (/^\*\*Expected Results?:\*\*/.test(line)) {
+        for (let j = i + 1; j < lines.length; j++) {
+          if (/^(\*\*|#{2,3}\s|---)/.test(lines[j])) break;
+          if (/^[-*+]\s+\S/.test(lines[j])) tc.expected++;
+        }
+        continue;
+      }
+      if (/^\|\s*#\s*\|\s*Action/i.test(line)) {
+        suite.legacy.add("`| # | Action | Expected result |` step tables");
+        continue;
+      }
+    }
+  }
+  pushJourney();
+  return suite;
+}
+
+const problems = [];
+const record = (severity, file, line, message) =>
+  problems.push({ severity, file, line, message });
+
+function checkSuite(root, filePath, rulesRev) {
+  const rel = relative(root, filePath);
+  const text = readFileSync(filePath, "utf8");
+  const dir = dirname(filePath);
+  const capability = basename(dir);
+  const suite = parseSuite(text);
+  const spec = readSpecIds(join(dir, "spec.md"));
+  const err = (line, msg) => record("error", rel, line, msg);
+  const warn = (line, msg) => record("warning", rel, line, msg);
+
+  if (!spec) err(1, "no spec.md beside this suite — a suite is a reading of a spec, not a standalone file");
+
+  const cases = [];
+  for (const j of suite.journeys) for (const tc of j.cases) cases.push(tc);
+
+  // --- file header -------------------------------------------------------
+  if (!suite.status) err(1, "no `**Status:**` line");
+  else if (!FILE_STATUSES.includes(suite.status))
+    err(1, `file status \`${suite.status}\` is not one of ${FILE_STATUSES.join(", ")}`);
+
+  const counts = { draft: 0, actual: 0, deprecated: 0, unknown: 0 };
+  for (const tc of cases) {
+    const s = (tc.props.get("Status") ?? "").toLowerCase();
+    if (CASE_STATUSES.includes(s)) counts[s]++;
+    else counts.unknown++;
+  }
+  const derived =
+    cases.length === 0
+      ? "pending-review"
+      : counts.draft === 0
+        ? "approved"
+        : counts.actual + counts.deprecated === 0
+          ? "pending-review"
+          : "in-review";
+  if (suite.status && FILE_STATUSES.includes(suite.status) && suite.status !== derived)
+    err(
+      1,
+      `file status is \`${suite.status}\` but its cases imply \`${derived}\` ` +
+        `(${counts.draft} draft, ${counts.actual} actual, ${counts.deprecated} deprecated) — ` +
+        "the file status is derived, never chosen",
+    );
+
+  if (counts.draft > 0 && !suite.draftsStyled)
+    err(1, "has draft cases but no `**Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>` line");
+  if (counts.draft === 0 && suite.draftsStyled)
+    err(suite.draftsStyled.line, "carries a `**Drafts styled:**` line but holds no draft case — drop it");
+  if (suite.draftsStyled && rulesRev !== null && suite.draftsStyled.rev > rulesRev)
+    err(
+      suite.draftsStyled.line,
+      `claims tcs-rules r${suite.draftsStyled.rev}, but the store is at r${rulesRev}`,
+    );
+  if (derived === "approved" && !suite.reviewed)
+    err(1, "is approved but carries no `**Reviewed:** <YYYY-MM-DD>` line");
+  if (derived !== "approved" && suite.reviewed)
+    err(1, "carries a `**Reviewed:**` line but is not approved");
+
+  for (const shape of suite.legacy) warn(1, `written in an older shape: ${shape}`);
+
+  // --- journeys ----------------------------------------------------------
+  const seenJourneys = new Set();
+  for (const j of suite.journeys) {
+    if (j.hyphenated) warn(j.line, `journey heading \`${j.raw}\` uses the spec's hyphenated id; suite headings are compact (e.g. \`${j.capability}-US${j.num}\`)`);
+    if (j.capability !== capability)
+      err(j.line, `journey heading names capability \`${j.capability}\`, but this suite sits in \`${capability}/\``);
+    const canonical = `${j.capability}-US-${String(j.num).padStart(2, "0")}`;
+    const alternate = `${j.capability}-US-${j.num}`;
+    if (seenJourneys.has(j.num)) err(j.line, `journey ${j.num} appears more than once`);
+    seenJourneys.add(j.num);
+    if (spec && spec.journeys.size > 0 && !spec.journeys.has(canonical) && !spec.journeys.has(alternate))
+      err(j.line, `journey \`${canonical}\` is not defined in the spec beside it`);
+    const story = new Set(j.story);
+    if (!(story.has("as a") || story.has("as an")) || !story.has("i want") || !story.has("so that"))
+      err(j.line, "journey is missing its three-line story (`**As a**` / `**I want**` / `**so that**`)");
+    if (j.cases.length === 0) warn(j.line, `journey ${j.raw} holds no test case`);
+
+    const seenTc = new Set();
+    for (const tc of j.cases) {
+      const at = tc.line;
+      if (tc.journeyScoped) {
+      if (tc.hyphenated) warn(at, `case id \`${tc.id}\` uses the older hyphenated form; current is \`<capability>-US<n>-TC<m>-<v>\``);
+      if (tc.capability !== capability)
+        err(at, `case id \`${tc.id}\` names capability \`${tc.capability}\``);
+      if (tc.journeyNum !== j.num)
+        err(at, `case \`${tc.id}\` sits under journey ${j.num} but its id says US${tc.journeyNum}`);
+      if (seenTc.has(tc.tcNum)) err(at, `TC${tc.tcNum} appears more than once under ${j.raw}`);
+      seenTc.add(tc.tcNum);
+      if (tc.version === null) warn(at, `case \`${tc.id}\` carries no version suffix`);
+      else if (tc.version < 1) err(at, `case \`${tc.id}\` has version ${tc.version}`);
+      }
+
+      for (const [name, vocab] of PROPERTIES) {
+        const raw = tc.props.get(name);
+        if (raw === undefined) {
+          err(at, `case \`${tc.id}\` is missing its **${name}** property`);
+          continue;
+        }
+        const value = raw.trim().toLowerCase();
+        if (vocab && !vocab.includes(value))
+          err(at, `case \`${tc.id}\` has **${name}:** \`${raw}\` — expected one of ${vocab.join(", ")}`);
+      }
+      const order = tc.propOrder.filter((n) => PROPERTIES.some(([p]) => p === n));
+      const expectedOrder = PROPERTIES.map(([p]) => p).filter((p) => order.includes(p));
+      if (order.join("|") !== expectedOrder.join("|"))
+        warn(at, `case \`${tc.id}\` lists its properties out of order`);
+
+      const trace = (tc.props.get("Trace") ?? "").trim();
+      if (trace && spec) {
+        const ids = trace.split(/[,\s]+/).filter(Boolean);
+        for (const id of ids) {
+          if (spec.journeys.has(id)) continue;
+          if (spec.scenarios.has(id)) {
+            warn(at, `case \`${tc.id}\` traces scenario \`${id}\`; a trace carries the journey id (\`${capability}-US-<n>\`)`);
+            continue;
+          }
+          err(at, `case \`${tc.id}\` traces \`${id}\`, which the spec beside it does not define`);
+        }
+        if (ids.length > 1) warn(at, `case \`${tc.id}\` traces ${ids.length} ids — one journey per case`);
+      }
+
+      if (!tc.preconditions) err(at, `case \`${tc.id}\` has no pre-conditions line (use \`None.\` when it needs nothing)`);
+      if (tc.steps === 0) err(at, `case \`${tc.id}\` has no numbered steps`);
+      if (tc.expected === 0) err(at, `case \`${tc.id}\` has an empty Expected Results list — nothing to verify`);
+    }
+  }
+
+  if (spec) {
+    for (const [id] of spec.journeys) {
+      const num = Number(id.match(/-US-(\d+)$/)?.[1]);
+      if (!seenJourneys.has(num)) warn(1, `spec journey \`${id}\` has no section in this suite`);
+    }
+  }
+
+  return { rel, suite, counts, derived, cases: cases.length };
+}
+
+// ---------------------------------------------------------------------------
+
+const args = parseArgs(process.argv.slice(2));
+const rulesRev = currentRulesRev();
+const inScope = (d) => (args.scope ? relative(ROOT, d).includes(args.scope) : true);
+const suites = dirsHolding(ROOT, "test-cases.md").filter(inScope).map((d) => join(d, "test-cases.md")).sort();
+const specs = dirsHolding(ROOT, "spec.md").filter(inScope);
+
+if (args.stale) {
+  if (rulesRev === null) {
+    console.log(yellow("No `tcs_rules_rev` in docs/governance/specs-to-test-cases.md — nothing to compare against."));
+    process.exit(0);
+  }
+  console.log(`${bold("tcs-rules")} r${rulesRev}  ${dim("(docs/governance/specs-to-test-cases.md)")}\n`);
+  const rows = [];
+  for (const p of suites) {
+    const text = readFileSync(p, "utf8");
+    const suite = parseSuite(text);
+    const drafts = (text.match(/^\*\s+\*\*Status:\*\*\s*draft\s*$/gm) ?? []).length;
+    if (drafts === 0) continue;
+    const rev = suite.draftsStyled?.rev ?? null;
+    if (rev === rulesRev) continue;
+    rows.push({ rel: relative(ROOT, p), drafts, rev });
+  }
+  if (rows.length === 0) {
+    console.log(green("✓") + " every suite's drafts are at the current rev.");
+    process.exit(0);
+  }
+  const w = Math.max(...rows.map((r) => r.rel.length));
+  for (const r of rows) {
+    const at = r.rev === null ? "unstamped" : `r${r.rev}`;
+    console.log(`  ${r.rel.padEnd(w + 2)}${yellow(at.padEnd(11))}${dim(`${r.drafts} draft${r.drafts === 1 ? "" : "s"}`)}`);
+  }
+  console.log(
+    `\n${dim("Update one at a time:")} /spec-to-tcs <capability-or-change>  ${dim("— never in one sweep")}`,
+  );
+  process.exit(0);
+}
+
+if (suites.length === 0) {
+  console.log(dim("No test-cases.md found" + (args.scope ? ` for scope "${args.scope}"` : "") + "."));
+  process.exit(0);
+}
+
+const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
+
+if (args.requireSuites) {
+  for (const d of specs) {
+    if (existsSync(join(d, "test-cases.md"))) continue;
+    const spec = readSpecIds(join(d, "spec.md"));
+    if (spec?.hasJourneySection && spec.journeys.size > 0)
+      record("warning", relative(ROOT, join(d, "spec.md")), 1, "has user journeys but no test-cases.md beside it");
+  }
+}
+
+console.log(`${bold("Test-case suites")}  ${dim(`${suites.length} file${suites.length === 1 ? "" : "s"}, tcs-rules ${rulesRev === null ? "unversioned" : `r${rulesRev}`}`)}\n`);
+const w = Math.max(...summaries.map((s) => s.rel.length));
+for (const s of summaries) {
+  const tally = `${s.counts.draft} draft, ${s.counts.actual} actual, ${s.counts.deprecated} deprecated`;
+  console.log(`  ${s.rel.padEnd(w + 2)}${cyan(s.derived.padEnd(15))}${dim(tally)}`);
+}
+
+const errors = problems.filter((p) => p.severity === "error");
+const warnings = problems.filter((p) => p.severity === "warning");
+
+/** Collapse a run of the same complaint so one legacy suite cannot bury the rest. */
+const shape = (message) =>
+  message.replace(/`[^`]*`/g, "`…`").replace(/\b\d+\b/g, "#");
+
+const print = (list, label, paint) => {
+  if (list.length === 0) return;
+  console.log(`\n${paint(label)}`);
+  let file = null;
+  let seen = new Map();
+  for (const p of list) {
+    if (p.file !== file) {
+      file = p.file;
+      seen = new Map();
+      console.log(`\n  ${bold(file)}`);
+    }
+    const key = shape(p.message);
+    const n = (seen.get(key) ?? 0) + 1;
+    seen.set(key, n);
+    if (n <= 3) console.log(`    ${dim(`:${p.line}`)}  ${p.message}`);
+    else if (n === 4) console.log(`    ${dim("      … and more of the same; run with --scope to see them all")}`);
+  }
+};
+
+print(errors, `${errors.length} error${errors.length === 1 ? "" : "s"}`, red);
+print(warnings, `${warnings.length} warning${warnings.length === 1 ? "" : "s"}`, yellow);
+
+console.log("");
+if (errors.length > 0 || (args.strict && warnings.length > 0)) {
+  console.log(red("✗") + " suites do not match docs/governance/specs-to-test-cases.md");
+  process.exit(1);
+}
+if (warnings.length > 0) {
+  console.log(`${green("✓")} no errors  ${dim(`— ${warnings.length} warning${warnings.length === 1 ? "" : "s"}, not blocking (\`--strict\` fails on these)`)}`);
+} else {
+  console.log(`${green("✓")} every suite matches the governance format.`);
+}

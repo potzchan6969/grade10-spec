@@ -1,0 +1,33 @@
+name: Test cases
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-test-cases-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 24.14.1
+
+jobs:
+  suites:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # The validator is zero-dependency on purpose, so this job needs no install
+      # step and stays fast enough to run on every push.
+      - name: Validate test-case suites
+        run: node scripts/openspec/validate-test-cases.mjs --require-suites
