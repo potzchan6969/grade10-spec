@@ -57,8 +57,7 @@ as needed to lead, at the second-highest maximum plus the listing increment.
 
 ## Requirements
 
-Checkable requirements: `openspec/specs/grade10-auction/auto-bidding/spec.md`
-(in flight as the `add-auction-auto-bidding` delta until archived).
+Checkable requirements: `openspec/specs/grade10-auction/auto-bidding/spec.md`.
 
 ## Consuming applications and integration
 

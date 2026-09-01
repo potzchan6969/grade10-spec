@@ -14,8 +14,8 @@
 
 This group needs group 1's class strings to exist; claim it after 1.2 lands.
 
-- [ ] 2.1 Add `packages/ui/src/blocks/auth-sign-in/audit.json` covering the body gap override against `4666:1462`. It is the only class this block writes literally, and `audit-freshness.test.ts` refuses an entry naming classes that live in another module — the shell's own values are audited by the design system's `overlays/audit.json`
-- [ ] 2.2 Run `pnpm run design-sync:audit --all-blocks` and reconcile any value it reports, so `auth-sign-in` no longer lists as carrying no audit table
+- [x] 2.1 Add `packages/ui/src/blocks/auth-sign-in/audit.json` covering the body gap override against `4666:1462`. It is the only class this block writes literally, and `audit-freshness.test.ts` refuses an entry naming classes that live in another module — the shell's own values are audited by the design system's `overlays/audit.json`
+- [x] 2.2 Run `pnpm run design-sync:audit --all-blocks` and reconcile any value it reports, so `auth-sign-in` no longer lists as carrying no audit table
 - [ ] 2.3 Update `sign-in-card.stories.tsx` for the controlled dialog: an open story, a story with a provider slot, one without, and one carrying `legal`
 
 ## 3. Adopt the new shell (grade10) (owner: @sean)

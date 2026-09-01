@@ -90,9 +90,6 @@ the current bid,
 
 ## ADDED Requirements
 
-### Committing a maximum
----
-
 ### Requirement: A bidder commits a maximum
 
 A bidder SHALL:
@@ -195,9 +192,6 @@ operator SHALL see every committed maximum and its Accepted At.
 - **GIVEN** a listing with several committed maximums
 - **WHEN** an authorized operator reads its bid history
 - **THEN** each commitment shows its bidder, its maximum, and its Accepted At
-
-### Current bid
----
 
 ### Requirement: Two-maximum rule
 
@@ -322,9 +316,6 @@ displace the leader.
 - **THEN** their commitment is recorded as accepted
 - **AND** they are not the leader
 
-### Card authorization
----
-
 ### Requirement: The card authorization covers the committed maximum
 
 Grade10 SHALL hold a card authorization for a bidder's committed maximum,
@@ -364,9 +355,6 @@ further card check.
 - **THEN** Grade10 raises A's bid on their behalf without a further card authorization
 - **AND** the current bid is 32500 minor units
 - **AND** A's authorization remains 50000 minor units
-
-### Auto bid
----
 
 ### Requirement: A bid Grade10 places counts as a bid
 

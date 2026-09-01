@@ -72,6 +72,12 @@ function RecentBidsScrollArea({
     setShowBottomFade(overflow && !atBottom);
   }, []);
 
+  /**
+   * `contentKey` is a signal, not a read: a new list replaces the child this
+   * effect observes, so the subscription has to be rebuilt against the node
+   * that is there now.
+   */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: see above
   useEffect(() => {
     updateFade();
     const element = scrollRef.current;
