@@ -1,8 +1,8 @@
 # Shopify membership & POS
 
 Plan for physical-store membership on top of what is built: the store's order
-machine and the loyalty engine (the application repository's
-`docs/architecture/commerce.md` and `loyalty.md`), and the online checkout identity flow
+machine and the loyalty engine ([the commerce page](../../manual/platform/commerce.md)
+and [the loyalty service page](../../manual/platform/loyalty-service.md)), and the online checkout identity flow
 (`shopify-checkout-identity.md`). The program itself — tiers, earn math,
 expiry, in-store flows — is the owner's draft in
 `grade10-loyalty-program.md`; this document owns how it lands: the
@@ -427,8 +427,10 @@ shape, and what the rest of the system guarantees it:
   short-lived, one-time, so a replayed screenshot is dead by
   construction — or typing its 8-character short code consumes a one-time
   presentation; typing an email — or, flag permitting, a phone number —
-  looks the member up directly, and a typed identification notifies the
-  member instantly. The session binds server-side to the shop, the
+  looks the member up directly; a customer already attached to the
+  cart, however that happened, identifies too, behind
+  `pos_cart_identify`. Any identification the member did not present for
+  notifies them instantly. The session binds server-side to the shop, the
   member, and its TTL — never to the claimed staff label, which is
   attacker-chosen and changes mid-transaction when staff switch by PIN;
   the per-call label lands on every audit row instead. Each session
@@ -442,12 +444,17 @@ shape, and what the rest of the system guarantees it:
   session-taking, audited, member-notified — never a client-local act a
   flag cannot reach). `redeem` takes the session, and no surface takes a
   user id.
-- **Attribution rides Shopify's own customer search.** Staff attach the
-  paired customer to the sale; the extension's customer-details block
-  shows a read-only badge for whoever is attached — enough to attribute,
-  never enough to spend. Earning lands through the order webhook, matched
-  by customer id through pairing — stronger than match-by-email, because
-  it survives an email change.
+- **Cart attachment is attribution, and identification when paired.**
+  Attaching a customer to the sale — Shopify's own customer search or
+  the till's own identify — identifies the member with no re-scan and no
+  staff confirmation, behind `pos_cart_identify`. It buys lookup,
+  attribution, and reward handover; spending takes a second switch,
+  `pos_cart_spend`, because the arm proves neither presence nor a claim
+  and the till puts members on the cart itself. An unpaired or no
+  customer still shows only the customer-details block's read-only badge
+  — enough to attribute, never enough to spend. Earning lands through
+  the order webhook either way, matched by customer id through pairing —
+  stronger than match-by-email, because it survives an email change.
 - **`redeemFor`** is a new loyalty RPC: bounded input, its own
   `written_by`, refusing to run without an audit sink, deliberately
   trading the member's fresh-session step-up for terminal-session

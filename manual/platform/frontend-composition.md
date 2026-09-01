@@ -1,7 +1,7 @@
 ---
 title: Frontend Composition
 spec: frontend-composition
-order: 3
+order: 6
 ---
 
 A feature should reach every application that shows its product without anybody

@@ -7,10 +7,10 @@ Auction and Vault. Vault's real product story is custody (`vaulted` →
 [`grade10-inventory/catalog`](specs/grade10-inventory/catalog/spec.md).
 Screens: [ui.md](ui.md).
 
-This design follows `docs/conventions/packages.md`,
-`docs/conventions/backend.md`, `docs/architecture/cross-service.md`,
-`docs/architecture/multi-product.md`, and
-`docs/architecture/security.md` in the grade10 monorepo.
+This design follows `docs/conventions/packages.md` and
+`docs/conventions/backend.md` in the grade10 monorepo, and
+`manual/platform/cross-service.md`, `manual/platform/multi-product.md`,
+and `manual/platform/admin-access.md` here.
 
 ## Goals / Non-Goals
 
