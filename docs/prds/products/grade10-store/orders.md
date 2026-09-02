@@ -34,7 +34,7 @@ to track. An account with no orders gets an empty state rather than an empty lis
 
 ::story{id="store-order-history-orderhistory--empty" title="An account with no orders"}
 
-::story{id="store-order-detail-orderdetails--filled" title="One order, in detail"}
+::story{id="store-order-detail-orderdetails--item-coupon" title="One order, in detail"}
 
 :::callout{kind="warning"}
 The order detail block has no spec at all — durable or in flight — although it
