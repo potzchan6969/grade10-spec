@@ -1,9 +1,10 @@
 import {
-  ListingAgeVerificationDialog,
+  EnrollmentSetupSheet,
   ListingAuctionCardSidebar,
   ListingLotGallery,
   ListingLotHeader,
   ListingUserBidHistory,
+  PaymentMethodRow,
   FIXTURE_ACTIVITY_TIME_COPY,
   FIXTURE_SHIPPED_LOCALE,
   FIXTURE_TIME_ZONE,
@@ -13,6 +14,8 @@ import {
   AUCTION_LOT,
   AUCTION_LOT_BADGES,
   AUCTION_LOT_DETAILS_COPY,
+  AUCTION_LOT_LINKED_PAYMENT_METHOD,
+  auctionLotShowsLinkedPaymentMethod,
   type AuctionTiming,
   applyBidExtension,
   type BiddingState,
@@ -35,7 +38,7 @@ type AuctionLotDetailsPageProps = {
   state: BiddingState;
 };
 
-/** Age verification is owed only before the collector's first bid on this listing. */
+/** Enrollment is owed only before the collector's first bid on this listing. */
 function hasBidOnListing(view: {
   viewerMaximumMinor?: number;
   standing: string;
@@ -46,7 +49,8 @@ function hasBidOnListing(view: {
 function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
   const [bidMode, setBidMode] = useState<BidMode>(() => bidModeForState(state));
   const [watched, setWatched] = useState(false);
-  const [ageVerifyOpen, setAgeVerifyOpen] = useState(false);
+  const [paymentLinked, setPaymentLinked] = useState(false);
+  const [setupOpen, setSetupOpen] = useState(false);
   const [liveSnapshot, setLiveSnapshot] = useState<{
     history: ReturnType<typeof bidHistoryForState>;
     facts: LiveListingFacts;
@@ -82,6 +86,8 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
     if (state.startsWith("live")) {
       setTiming(createLiveAuctionTiming());
     }
+    setPaymentLinked(false);
+    setSetupOpen(false);
   }, [state]);
 
   useEffect(() => {
@@ -104,7 +110,14 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
 
   function requestBidAction() {
     if (hasBidOnListing(view)) return;
-    setAgeVerifyOpen(true);
+    if (!paymentLinked) {
+      setSetupOpen(true);
+    }
+  }
+
+  function completeEnrollment() {
+    setPaymentLinked(true);
+    setSetupOpen(false);
   }
 
   return (
@@ -113,7 +126,7 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
         header={
           <ListingLotHeader
             copy={AUCTION_LOT_DETAILS_COPY.header}
-            onWatchToggle={() => setWatched((value) => !value)}
+            onWatchToggle={() => setWatched(() => !watched)}
             title={AUCTION_LOT.title}
             watched={watched}
           />
@@ -123,6 +136,14 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
         <ListingAuctionCardSidebar
           authenticationBody={AUCTION_LOT_DETAILS_COPY.authenticationBody}
           badges={AUCTION_LOT_BADGES}
+          bidCardFooter={
+            auctionLotShowsLinkedPaymentMethod(state) && paymentLinked ? (
+              <PaymentMethodRow
+                brand={AUCTION_LOT_LINKED_PAYMENT_METHOD.brand}
+                maskedNumber={AUCTION_LOT_LINKED_PAYMENT_METHOD.maskedNumber}
+              />
+            ) : undefined
+          }
           bidMode={bidMode}
           copy={AUCTION_LOT_DETAILS_COPY.sidebar}
           description={AUCTION_LOT.description}
@@ -146,11 +167,10 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
           view={view}
         />
       </AuctionLotDetailsPageShell>
-      <ListingAgeVerificationDialog
-        copy={AUCTION_LOT_DETAILS_COPY.ageVerification}
-        onConfirm={() => undefined}
-        onOpenChange={setAgeVerifyOpen}
-        open={ageVerifyOpen}
+      <EnrollmentSetupSheet
+        onContinue={completeEnrollment}
+        onOpenChange={setSetupOpen}
+        open={setupOpen}
       />
     </>
   );

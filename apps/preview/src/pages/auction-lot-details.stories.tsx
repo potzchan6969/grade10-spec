@@ -60,6 +60,8 @@ export const LiveNoBids: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Starting bid")).toBeVisible();
     expect(canvas.getByText("No bids yet")).toBeVisible();
+    expect(canvas.getByText("Linked Card")).toBeVisible();
+    expect(canvas.getByText("•••• 4242")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Your bid history" }),
     ).not.toBeInTheDocument();
