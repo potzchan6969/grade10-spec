@@ -9,7 +9,7 @@ Read `docs/governance/writing.md` first. It is the standard, short enough to hol
 
 Before handoff, hold the draft to it:
 
-1. The opening is two sentences at most: what the document is and what the reader leaves with. Everything after it is an outline, a table, or a fenced tree — a paragraph appears only for reasoning an outline cannot carry.
+1. The opening is two sentences at most: what the document is and what the reader leaves with, and nothing the outline then repeats. Everything after it is an outline, a table, or a fenced tree — a paragraph appears only for reasoning an outline cannot carry.
 2. Every item leads with its key term in bold, as a fragment with no full stop; a step names its actor first in italics, then the action in bold, then how.
 3. Order and count use numbers, everything else bullets, nested at most three deep; a flow's phases are sub-headings and its steps number straight through.
 4. Numbers are bold with unit and range; hierarchy is a fenced tree with one annotation per line; an inventory reads `Name: verb, verb, verb`.

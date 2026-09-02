@@ -44,9 +44,9 @@ Pages follow the house style — `docs/governance/writing.md` in the store —
 and its application here is short:
 
 - **A prose block is an outline** — two sentences at most on what the
-  surface is, then items leading with their key term in bold, fragments
-  rather than paragraphs, one concern per `##` section, enumerable facts in
-  a table
+  surface is, none of which the items then repeat, then items leading with
+  their key term in bold, fragments rather than paragraphs, one concern per
+  `##` section, enumerable facts in a table
 - **Define the thing flatly**, in present tense, so a reader infers the
   rules from what it is
 - **A flow holds the steps** — each `#` phase named as the owner's notes

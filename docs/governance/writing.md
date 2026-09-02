@@ -16,7 +16,8 @@ review reply. Two documents demonstrate it:
 Outline first. A document is a heading and an outline, never an essay.
 
 - **Open in two sentences at most** — what the document is and what the
-  reader leaves with. Then the outline.
+  reader leaves with. Then the outline. The opening says nothing the
+  outline then repeats: a fact belongs in one of the two, never both.
 - **Numbered items** where order or count matters: phases, steps, ranked
   facts. **Bullets** everywhere else. Nest up to three levels; a fourth
   level is a new section.
