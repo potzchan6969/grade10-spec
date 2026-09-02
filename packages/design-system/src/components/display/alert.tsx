@@ -10,7 +10,7 @@ const alertVariants = cva("flex w-full min-w-0 rounded-2xl border p-4", {
   variants: {
     layout: {
       block: "flex-col gap-2",
-      inline: "flex-row items-center gap-1.5 overflow-clip",
+      inline: "flex-row items-center gap-2 overflow-clip",
     },
     status: {
       default: "border-border bg-background",
@@ -25,22 +25,8 @@ const alertVariants = cva("flex w-full min-w-0 rounded-2xl border p-4", {
   },
 });
 
-const alertBodyGapVariants = cva(
-  "grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-start",
-  {
-    variants: {
-      status: {
-        default: "gap-1.5",
-        error: "gap-2",
-        warning: "gap-2",
-        success: "gap-2",
-      },
-    },
-    defaultVariants: {
-      status: "default",
-    },
-  },
-);
+const alertBodyClasses =
+  "grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-2";
 
 const statusIcons = {
   default: Bell,
@@ -93,7 +79,7 @@ type AlertProps = Omit<ComponentProps<"div">, "title"> &
  * description at `text-sm/normal` in `Base/secondary-foreground`.
  *
  * **Inline** flows icon, title, actions, and dismiss on one row at
- * `Gap/gap-1.5`, vertically centred. The icon well is 20px with a 16px glyph;
+ * `Gap/gap-2`, vertically centred. The icon well is 20px with a 16px glyph;
  * title is `text-sm/medium` only — description is not drawn. Good for slim
  * page-top banners once there is room.
  *
@@ -199,10 +185,7 @@ function Alert({
         </>
       ) : (
         <>
-          <div
-            data-slot="alert-body"
-            className={alertBodyGapVariants({ status: resolvedStatus })}
-          >
+          <div data-slot="alert-body" className={alertBodyClasses}>
             {iconWell}
             <div
               data-slot="alert-content"

@@ -36,9 +36,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function enrollmentStory(
-  snapshot: ListingBidEnrollmentSnapshot,
-): Story {
+function enrollmentStory(snapshot: ListingBidEnrollmentSnapshot): Story {
   return {
     render: () => <ListingBidEnrollmentCardPreview snapshot={snapshot} />,
   };

@@ -23,7 +23,10 @@ function ListingBidEnrollmentInteractiveDemo() {
         </Text>
       </VStack>
 
-      <VStack className="rounded-lg border border-border bg-background p-6" gap="sm">
+      <VStack
+        className="rounded-lg border border-border bg-background p-6"
+        gap="sm"
+      >
         <Text size="sm" tone="secondary">
           {session.signedIn ? "Signed in" : "Signed out"}
           {session.signedIn && !session.paymentLinked ? " · setup needed" : ""}

@@ -35,13 +35,9 @@ export const LiveAutoLeading: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("heading", { name: /Charizard/ })).toBeVisible();
+    expect(canvas.getByText("Set maximum (current: US$8,000)")).toBeVisible();
     expect(
-      canvas.getByText("Set maximum (current: US$8,000)"),
-    ).toBeVisible();
-    expect(
-      canvas.getByText(
-        "At least US$8,001 (your maximum + US$1)",
-      ),
+      canvas.getByText("At least US$8,001 (your maximum + US$1)"),
     ).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Your bid history" }),
@@ -59,7 +55,11 @@ export const LiveNoBids: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Starting bid")).toBeVisible();
-    expect(canvas.getByText("No bids yet")).toBeVisible();
+    const noBidsYet = canvas
+      .getAllByText("No bids yet")
+      .find((element) => !element.closest("[inert]"));
+    expect(noBidsYet).toBeTruthy();
+    expect(noBidsYet as HTMLElement).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Your bid history" }),
     ).not.toBeInTheDocument();
@@ -71,9 +71,7 @@ export const LiveAutoOutbid: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByText(
-        "At least US$8,500 (current bid + US$250)",
-      ),
+      canvas.getByText("At least US$8,500 (current bid + US$250)"),
     ).toBeVisible();
   },
 };

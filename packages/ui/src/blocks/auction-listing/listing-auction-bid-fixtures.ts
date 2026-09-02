@@ -1,18 +1,18 @@
-import type { ListingAuctionBidCardCopy } from "./listing-auction-bid-card";
-import type { ListingAgeVerificationDialogCopy } from "./listing-age-verification-dialog";
+import {
+  FIXTURE_ACTIVITY_TIME_COPY,
+  FIXTURE_AUCTION_CLOSED_AT_MS,
+  FIXTURE_AUCTION_ENDS_AT_MS,
+  FIXTURE_AUCTION_OPENS_AT_MS,
+} from "../../lib/datetime-fixtures";
 import { minNextBidMinor } from "./format-usd";
+import type { ListingAgeVerificationDialogCopy } from "./listing-age-verification-dialog";
+import type { ListingAuctionBidCardCopy } from "./listing-auction-bid-card";
 import type {
   ListingAuctionBidView,
   ListingAuctionStanding,
   ListingBidHistoryRow,
   ListingUserBidHistoryRow,
 } from "./types";
-import {
-  FIXTURE_AUCTION_CLOSED_AT_MS,
-  FIXTURE_AUCTION_ENDS_AT_MS,
-  FIXTURE_AUCTION_OPENS_AT_MS,
-  FIXTURE_ACTIVITY_TIME_COPY,
-} from "../../lib/datetime-fixtures";
 
 export type BiddingState =
   | "opens"
@@ -181,11 +181,7 @@ export function stateMeta(state: BiddingState) {
           ? "Result"
           : "Winning bid"
         : "Current Bid",
-    countdown: closed
-      ? "Closed"
-      : opens
-        ? "2D 4H 12M 0S"
-        : "6m 9s",
+    countdown: closed ? "Closed" : opens ? "2D 4H 12M 0S" : "6m 9s",
     countdownSeconds: closed
       ? null
       : opens

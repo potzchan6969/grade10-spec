@@ -8,35 +8,35 @@ export {
 } from "./blocks/auction-listing/format-usd";
 export {
   ListingAgeVerificationDialog,
-  ListingAgeVerificationFields,
   type ListingAgeVerificationDialogCopy,
   type ListingAgeVerificationDialogProps,
+  ListingAgeVerificationFields,
   type ListingAgeVerificationFieldsCopy,
   type ListingAgeVerificationFieldsProps,
 } from "./blocks/auction-listing/listing-age-verification-dialog";
-export {
-  BIDDING_STATE_LABELS,
-  BID_FIXTURE_LOT,
-  LISTING_AUCTION_BID_AGE_VERIFICATION_COPY,
-  LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
-  auctionHeaderLabel,
-  bidHistoryForState,
-  bidModeForState,
-  buildListingAuctionBidView,
-  remainingSecondsUntil,
-  stateMeta,
-  userBidHistoryForState,
-  type AuctionTiming,
-  type BidMode,
-  type BiddingState,
-  type LiveListingFacts,
-} from "./blocks/auction-listing/listing-auction-bid-fixtures";
 export {
   ListingAuctionBidCard,
   type ListingAuctionBidCardCopy,
   type ListingAuctionBidCardProps,
 } from "./blocks/auction-listing/listing-auction-bid-card";
 export type { ListingAuctionBidFieldsCopy } from "./blocks/auction-listing/listing-auction-bid-fields";
+export {
+  type AuctionTiming,
+  auctionHeaderLabel,
+  BID_FIXTURE_LOT,
+  BIDDING_STATE_LABELS,
+  type BiddingState,
+  type BidMode,
+  bidHistoryForState,
+  bidModeForState,
+  buildListingAuctionBidView,
+  LISTING_AUCTION_BID_AGE_VERIFICATION_COPY,
+  LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
+  type LiveListingFacts,
+  remainingSecondsUntil,
+  stateMeta,
+  userBidHistoryForState,
+} from "./blocks/auction-listing/listing-auction-bid-fixtures";
 export {
   ListingAuctionCardSidebar,
   type ListingAuctionCardSidebarCopy,
@@ -341,8 +341,14 @@ export {
 } from "./blocks/store-profile/profile-form";
 export type { ProfileFormValues } from "./blocks/store-profile/types";
 export {
+  FIXTURE_ACTIVITY_TIME_COPY,
+  FIXTURE_NOW_MS,
+  FIXTURE_SHIPPED_LOCALE,
+  FIXTURE_TIME_ZONE,
+} from "./lib/datetime-fixtures";
+export {
   ACTIVITY_RELATIVE_MAX_MS,
-  JUST_NOW_MAX_MS,
+  type ActivityTimeCopy,
   formatActivityAt,
   formatAuctionClosed,
   formatAuctionDeadline,
@@ -360,14 +366,8 @@ export {
   formatMoment,
   formatRelativeAt,
   isPastActivityCap,
+  JUST_NOW_MAX_MS,
   resolveActivityNow,
   resolveShippedLocale,
-  type ActivityTimeCopy,
   type ShippedLocale,
 } from "./lib/format-datetime";
-export {
-  FIXTURE_ACTIVITY_TIME_COPY,
-  FIXTURE_NOW_MS,
-  FIXTURE_SHIPPED_LOCALE,
-  FIXTURE_TIME_ZONE,
-} from "./lib/datetime-fixtures";

@@ -73,7 +73,12 @@ function PaymentMethodRow({
         {LISTING_BID_ENROLLMENT_DEMO_COPY.paymentMethod}
       </Text>
       <Card className="gap-0 p-3" padding={false}>
-        <HStack className="w-full" gap="sm" hAlign="space-between" vAlign="center">
+        <HStack
+          className="w-full"
+          gap="sm"
+          hAlign="space-between"
+          vAlign="center"
+        >
           <HStack gap="sm" vAlign="center">
             <OrderDetailsPaymentLogo brand={brand} />
             <span aria-hidden className="h-5 w-px shrink-0 bg-border" />
@@ -206,7 +211,9 @@ function EnrollmentSetupSheet({
   if (presentation === "inline") {
     if (!open) return null;
     return (
-      <InlineOverlayPreview label={LISTING_BID_ENROLLMENT_DEMO_COPY.getReadyToBid}>
+      <InlineOverlayPreview
+        label={LISTING_BID_ENROLLMENT_DEMO_COPY.getReadyToBid}
+      >
         {body}
         <div className="mt-4">{footer}</div>
       </InlineOverlayPreview>
@@ -217,7 +224,9 @@ function EnrollmentSetupSheet({
     <Dialog onOpenChange={(next) => onOpenChange?.(next)} open={open}>
       <DialogContent showCloseButton>
         <DialogHeader>
-          <DialogTitle>{LISTING_BID_ENROLLMENT_DEMO_COPY.getReadyToBid}</DialogTitle>
+          <DialogTitle>
+            {LISTING_BID_ENROLLMENT_DEMO_COPY.getReadyToBid}
+          </DialogTitle>
         </DialogHeader>
         <DialogBody>{body}</DialogBody>
         <DialogFooter>{footer}</DialogFooter>
@@ -286,7 +295,9 @@ function AutoBidConfirmationDialog({
   if (presentation === "inline") {
     if (!open) return null;
     return (
-      <InlineOverlayPreview label={LISTING_BID_ENROLLMENT_DEMO_COPY.autoConfirmTitle}>
+      <InlineOverlayPreview
+        label={LISTING_BID_ENROLLMENT_DEMO_COPY.autoConfirmTitle}
+      >
         {body}
         <div className="mt-4">{footer}</div>
       </InlineOverlayPreview>
@@ -297,7 +308,9 @@ function AutoBidConfirmationDialog({
     <Dialog onOpenChange={(next) => onOpenChange?.(next)} open={open}>
       <DialogContent showCloseButton>
         <DialogHeader>
-          <DialogTitle>{LISTING_BID_ENROLLMENT_DEMO_COPY.autoConfirmTitle}</DialogTitle>
+          <DialogTitle>
+            {LISTING_BID_ENROLLMENT_DEMO_COPY.autoConfirmTitle}
+          </DialogTitle>
         </DialogHeader>
         <DialogBody>{body}</DialogBody>
         <DialogFooter>{footer}</DialogFooter>

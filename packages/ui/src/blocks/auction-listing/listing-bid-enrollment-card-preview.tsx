@@ -3,22 +3,22 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { useEffect, useMemo, useState } from "react";
 import { SignInCard } from "../auth-sign-in/sign-in-card";
 import { SignInEmailForm } from "../auth-sign-in/sign-in-email-form";
+import { ListingAuctionBidCard } from "./listing-auction-bid-card";
 import {
-  LISTING_AUCTION_BID_AGE_VERIFICATION_COPY,
-  LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
   bidHistoryForState,
   buildListingAuctionBidView,
+  LISTING_AUCTION_BID_AGE_VERIFICATION_COPY,
+  LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
 } from "./listing-auction-bid-fixtures";
-import { ListingAuctionBidCard } from "./listing-auction-bid-card";
 import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "./listing-bid-enrollment-copy";
 import {
   AutoBidConfirmationDialog,
   EnrollmentBanner,
   EnrollmentSetupSheet,
   InlineOverlayPreview,
+  type OverlayPresentation,
   PaymentMethodEmptyState,
   PaymentMethodRow,
-  type OverlayPresentation,
   type SetupSheetStep,
 } from "./listing-bid-enrollment-prototypes";
 import type { ListingBidEnrollmentSnapshot } from "./listing-bid-enrollment-snapshots";

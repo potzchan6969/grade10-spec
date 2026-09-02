@@ -124,16 +124,16 @@ export const LongHistory: Story = {
   play: async () => {
     const page = within(document.body);
     const dialog = await page.findByRole("dialog", { name: "Bid History" });
-    const body = dialog.querySelector(
+    const scrollBody = dialog.querySelector(
       '[data-slot="listing-user-bid-history-scroll"]',
     ) as HTMLElement;
 
-    expect(body.scrollHeight).toBeGreaterThan(body.clientHeight);
+    expect(scrollBody.scrollHeight).toBeGreaterThan(scrollBody.clientHeight);
 
     const oldestBid = within(dialog).getByText(OLDEST_BID_LABEL);
     expect(oldestBid).not.toBeVisible();
 
-    body.scrollTop = body.scrollHeight;
+    scrollBody.scrollTop = scrollBody.scrollHeight;
     oldestBid.scrollIntoView({ block: "end" });
     await waitFor(() => {
       expect(oldestBid).toBeVisible();

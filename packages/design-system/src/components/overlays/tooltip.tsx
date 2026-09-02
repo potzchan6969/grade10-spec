@@ -29,6 +29,7 @@ function TooltipArrowGraphic({
         fill="currentColor"
         viewBox={`0 0 ${TOOLTIP_ARROW_WIDTH} ${TOOLTIP_ARROW_HEIGHT}`}
       >
+        <title>Tooltip arrow</title>
         <path d={TOOLTIP_ARROW_DOWN} />
       </svg>
     );
@@ -42,6 +43,7 @@ function TooltipArrowGraphic({
         fill="currentColor"
         viewBox={`0 0 ${TOOLTIP_ARROW_WIDTH} ${TOOLTIP_ARROW_HEIGHT}`}
       >
+        <title>Tooltip arrow</title>
         <path d={TOOLTIP_ARROW_UP} />
       </svg>
     );
@@ -55,6 +57,7 @@ function TooltipArrowGraphic({
         fill="currentColor"
         viewBox={`0 0 ${TOOLTIP_ARROW_HEIGHT} ${TOOLTIP_ARROW_WIDTH}`}
       >
+        <title>Tooltip arrow</title>
         <path d={TOOLTIP_ARROW_RIGHT} />
       </svg>
     );
@@ -68,6 +71,7 @@ function TooltipArrowGraphic({
         fill="currentColor"
         viewBox={`0 0 ${TOOLTIP_ARROW_HEIGHT} ${TOOLTIP_ARROW_WIDTH}`}
       >
+        <title>Tooltip arrow</title>
         <path d={TOOLTIP_ARROW_LEFT} />
       </svg>
     );

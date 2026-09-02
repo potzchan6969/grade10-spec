@@ -125,7 +125,9 @@ function DobCombobox({
   );
 }
 
-function ListingAgeVerificationFields({ copy }: ListingAgeVerificationFieldsProps) {
+function ListingAgeVerificationFields({
+  copy,
+}: ListingAgeVerificationFieldsProps) {
   const [month, setMonth] = useState<string | undefined>();
   const [day, setDay] = useState<string | undefined>();
   const [year, setYear] = useState<string | undefined>();
@@ -181,7 +183,11 @@ function ListingAgeVerificationDialog({
           <ListingAgeVerificationFields copy={copy} />
         </DialogBody>
         <DialogFooter>
-          <Button onClick={() => onOpenChange(false)} size="md" variant="outline">
+          <Button
+            onClick={() => onOpenChange(false)}
+            size="md"
+            variant="outline"
+          >
             {copy.cancel}
           </Button>
           <Button

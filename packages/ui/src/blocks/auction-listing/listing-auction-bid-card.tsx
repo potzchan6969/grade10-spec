@@ -12,10 +12,14 @@ import {
   useRef,
   useState,
 } from "react";
+import type {
+  ActivityTimeCopy,
+  ShippedLocale,
+} from "../../lib/format-datetime";
 import {
   BidActions,
-  type ListingAuctionBidFieldsCopy,
   BuyerFeeHint,
+  type ListingAuctionBidFieldsCopy,
   PriceBlock,
   StandingBanner,
   StandingStatusBadge,
@@ -23,8 +27,11 @@ import {
 } from "./listing-auction-bid-fields";
 import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
 import { ListingBidHistoryList } from "./listing-bid-history-list";
-import type { ActivityTimeCopy, ShippedLocale } from "../../lib/format-datetime";
-import type { BidEnrollment, ListingAuctionBidView, ListingBidHistoryRow } from "./types";
+import type {
+  BidEnrollment,
+  ListingAuctionBidView,
+  ListingBidHistoryRow,
+} from "./types";
 import "./listing-auction-bid-card.css";
 
 type ListingAuctionBidCardCopy = ListingAuctionBidFieldsCopy & {
@@ -259,7 +266,9 @@ function ListingAuctionBidCard({
               onPlaceBid={onPlaceBid}
               view={view}
             />
-            {bidEnrollment === "signed-out" ? null : <BuyerFeeHint copy={copy} />}
+            {bidEnrollment === "signed-out" ? null : (
+              <BuyerFeeHint copy={copy} />
+            )}
           </VStack>
         </div>
       ) : null}
