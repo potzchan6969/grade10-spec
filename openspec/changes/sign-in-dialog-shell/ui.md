@@ -39,13 +39,13 @@ is not needed here — the provider widget reaches the dialog through
 
 | State | Spec scenario |
 | --- | --- |
-| Closed — nothing rendered, no scrim | [Visibility is the consumer's](specs/shared-ui/auth-sign-in/spec.md) |
-| Open over a live page | [The triggering page stays mounted](specs/shared-ui/auth-sign-in/spec.md) |
-| Dismissing by close control, Escape, or scrim | [Dismissing returns the collector to what they were doing](specs/shared-ui/auth-sign-in/spec.md) |
-| With a provider widget — provider above the divider, step below | [A provider widget is supplied](specs/shared-ui/auth-sign-in/spec.md) |
-| Without one — step alone, no divider | [No provider widget](specs/shared-ui/auth-sign-in/spec.md) |
-| With legal copy — last node in the body | [Legal copy is supplied](specs/shared-ui/auth-sign-in/spec.md) |
-| Without legal copy — no legal node | [Legal copy is omitted](specs/shared-ui/auth-sign-in/spec.md) |
+| Closed — nothing rendered, no scrim | [Visibility is the consumer's](specs/shared/ui/auth-sign-in/spec.md) |
+| Open over a live page | [The triggering page stays mounted](specs/shared/ui/auth-sign-in/spec.md) |
+| Dismissing by close control, Escape, or scrim | [Dismissing returns the collector to what they were doing](specs/shared/ui/auth-sign-in/spec.md) |
+| With a provider widget — provider above the divider, step below | [A provider widget is supplied](specs/shared/ui/auth-sign-in/spec.md) |
+| Without one — step alone, no divider | [No provider widget](specs/shared/ui/auth-sign-in/spec.md) |
+| With legal copy — last node in the body | [Legal copy is supplied](specs/shared/ui/auth-sign-in/spec.md) |
+| Without legal copy — no legal node | [Legal copy is omitted](specs/shared/ui/auth-sign-in/spec.md) |
 
 Step-level loading and error states are unchanged: they belong to
 `SignInEmailForm` and `SignInCodeForm` and travel on their own `pending` and

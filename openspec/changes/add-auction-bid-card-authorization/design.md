@@ -1,6 +1,6 @@
 ## Context
 
-See [the capability spec](specs/grade10-auction/bid-payment-method/spec.md).
+See [the capability spec](specs/grade10-site/auction/bid-payment-method/spec.md).
 Auction already persists a `payment_holds` row per provider PaymentIntent and
 offers manual-capture create, update, cancellation, webhook, and reconciliation
 paths. The storefront bid dialog currently stops at a `NOT_REGISTERED` result;

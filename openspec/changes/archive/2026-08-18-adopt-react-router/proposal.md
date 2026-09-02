@@ -70,14 +70,14 @@ were.
 
 ### New Capabilities
 
-- `grade10-site/navigation`: which surface an address resolves to, how the
+- `grade10-site/site/navigation`: which surface an address resolves to, how the
   session corrects a session-decided address, what a client-side navigation
   preserves, and what code a surface loads.
 
 ### Modified Capabilities
 
-None. `grade10-site/page-shell` keeps every requirement it has, and the
-in-flight `grade10-site/crawlable-pages` delta is untouched — only that
+None. `grade10-site/site/page-shell` keeps every requirement it has, and the
+in-flight `grade10-site/site/crawlable-pages` delta is untouched — only that
 change's delivery plan realigns.
 
 ## Impact

@@ -79,9 +79,9 @@ limits.
 ## Capabilities
 
 ### New Capabilities
-- `grade10-store/account-profile`: what a signed-in collector's account profile
+- `grade10-site/store/account-profile`: what a signed-in collector's account profile
   holds, how it is read and edited, and how the avatar is set and removed.
-- `shared-ui/store-profile`: the profile components `@grade10/ui` exports and
+- `shared/ui/store-profile`: the profile components `@grade10/ui` exports and
   what each one is responsible for. The block ships today with no spec; this
   change alters its exports, so the contract is written down here.
 

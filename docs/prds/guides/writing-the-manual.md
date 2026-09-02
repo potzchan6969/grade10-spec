@@ -22,7 +22,7 @@ you typed is worse than one that refuses to save.
 ```yaml
 ---
 title: Points and Rewards
-spec: grade10-store/loyalty
+spec: grade10-site/loyalty/programme
 order: 1
 ---
 ```
@@ -73,15 +73,15 @@ spec named in the frontmatter, and journeys are usually the best thing on a
 capability page:
 
 ```md
-::journeys{id="grade10-store/loyalty"}
-::cases{id="grade10-store/loyalty"}
+::journeys{id="grade10-site/loyalty/programme"}
+::cases{id="grade10-site/loyalty/programme"}
 ```
 
 A page that names a spec in its frontmatter already shows that spec's in-flight
 changes. Author this block only to show a *different* spec's:
 
 ```md
-::changes{spec="grade10-store/loyalty"}
+::changes{spec="grade10-site/loyalty/programme"}
 ```
 
 Visuals. Figma URLs and Storybook ids are never invented — take them from the
@@ -188,14 +188,14 @@ store moves. Write the id in double brackets:
 
 ```md
 Expiry is exact — [[loyalty-SC-12]] — and a balance is never negative
-([[grade10-store/loyalty#loyalty-SC-04]]).
+([[grade10-site/loyalty/programme#loyalty-SC-04]]).
 ```
 
 A reference renders the target's current title as a link, so a renamed
 scenario can never orphan the prose that cites it. On a page with a `spec`
 in its frontmatter, a bare id resolves inside that spec; anywhere else —
 this guide, say — qualify it as `spec-id#item-id`, like
-[[grade10-store/loyalty#loyalty-SC-04]]. A reference that resolves to
+[[grade10-site/loyalty/programme#loyalty-SC-04]]. A reference that resolves to
 nothing renders as a marked dead link and draws a check warning.
 
 ## Canonical form

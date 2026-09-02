@@ -42,4 +42,9 @@ scripts/tokens-sync/figma-plugins/build/
 .cursor/agents/impeccable-finish-reviewer.md
 .cursor/agents/impeccable-manual-edit-applier.md
 .cursor/hooks.json
-DESIGN.md
+
+# A local agent's scratch design note at the root. Anchored on purpose: this
+# repository sets core.ignorecase on macOS, so an unanchored `DESIGN.md` also
+# matches every `design.md` — including the one a full-planning change carries,
+# which would then be untracked and unmentioned by `git status`.
+/DESIGN.md

@@ -72,11 +72,11 @@ None.
 
 ### Modified Capabilities
 
-- `localization`: the requirement that a grade10 public address names its
+- `shared/localization`: the requirement that a grade10 public address names its
   language currently exempts a surface rendered when its address is asked for.
   That exemption goes: every public surface answers at one address per locale,
   and the memory redirects an unprefixed arrival on all of them.
-- `grade10-site/crawlable-pages`: the sitemap currently lists exactly the
+- `grade10-site/site/crawlable-pages`: the sitemap currently lists exactly the
   surfaces the build writes a document for and is forbidden from naming a card
   or a lot. It now names every one of them, per locale, read from the catalogue
   when the sitemap is fetched.
@@ -91,7 +91,7 @@ None.
   under that is delivery's to settle.
 - Existing unprefixed card and lot links keep working and keep their meaning:
   they are the English address, and the sitemap and the alternates say so.
-- `grade10-store/product-page` and `grade10-auction/listing-page` already defer
-  to `grade10-site/crawlable-pages` for share metadata and sitemap entries;
+- `grade10-site/store/product-page` and `grade10-site/auction/listing-page` already defer
+  to `grade10-site/site/crawlable-pages` for share metadata and sitemap entries;
   neither needs a requirement changed, and the product-page purpose's claim of
   a sitemap entry per card becomes true.

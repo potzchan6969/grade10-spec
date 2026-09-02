@@ -13,7 +13,7 @@ const spoken = (Object.keys(brands) as Brand[]).flatMap((brand) =>
 
 describe("what a store surface says it is", () => {
   /* Scenario: The store and the listing are two surfaces —
-     grade10-store/home. The front door and the browse listing are one
+     grade10-site/store/home. The front door and the browse listing are one
      address each, so a collector holding a tab of each can tell them
      apart. */
   it.each(spoken)(

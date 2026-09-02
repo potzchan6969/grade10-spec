@@ -77,12 +77,12 @@ from its catalogs, and a block's own type says what words it needs.
 
 ### Modified Capabilities
 
-- `shared-ui/component-package`: how a block's human-readable content is
+- `shared/ui/component-package`: how a block's human-readable content is
   shaped and typed — the rule every block follows, beside the app-neutrality
   it already states.
-- `shared-ui/store-product-listing`: the listing exports gain their copy types
+- `shared/ui/store-product-listing`: the listing exports gain their copy types
   and take them as one prop.
-- `shared-ui/site-chrome`: the same for `Nav` and `Footer`.
+- `shared/ui/site-chrome`: the same for `Nav` and `Footer`.
 
 ## Impact
 

@@ -69,7 +69,7 @@ person reading Figma, not by the rail built to find them. It should be 0.
 
 - **Moving `Nav` and `Footer` into `packages/ui`.** Their placement in the
   design system is a decision recorded in `docs/governance/ui-component-contracts.md`
-  and in the `shared-ui/site-chrome` export contract. Reopening it is a real
+  and in the `shared/ui/site-chrome` export contract. Reopening it is a real
   question and a separate one; deciding it as a side effect of a tooling change
   is how it would get decided by accident.
 - **Checking variable *names* rather than resolved values.** The REST API
@@ -87,13 +87,13 @@ person reading Figma, not by the rail built to find them. It should be 0.
 
 ### New Capabilities
 
-- `design-sync/audit-coverage`: what the design-to-code audit rail must detect
+- `shared/design-sync/coverage`: what the design-to-code audit rail must detect
   and which components it must reach — omission as well as drift, and the site
   chrome as well as the blocks.
 
 ### Modified Capabilities
 
-None. `shared-ui/site-chrome` governs the chrome's exports, controls, and
+None. `shared/ui/site-chrome` governs the chrome's exports, controls, and
 content ownership; it states nothing about the palette, and the `Footer`
 repaint brings the implementation to its already-recorded Figma source rather
 than changing a requirement.

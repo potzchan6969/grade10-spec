@@ -155,6 +155,11 @@ const spec = (title: string, ...requirements: string[][]) =>
     "",
     PURPOSE,
     "",
+    "## Feature set",
+    "",
+    "- Doing things",
+    "  - The thing: so the spec has a map above its requirements",
+    "",
     "## Requirements",
     "",
     ...requirements.flatMap((one) => [...one, ""]),
@@ -162,6 +167,33 @@ const spec = (title: string, ...requirements: string[][]) =>
 
 const proposal = (title: string) =>
   `# ${title}\n\n## Why\n\nSomething had to move.\n`;
+
+/** The fold carries `## Requirements` alone. A durable spec with requirements
+ * and no `## Feature set` is an archive that dropped the map and a hand copy
+ * nobody made. */
+describe("a durable spec with no feature set", () => {
+  const root = writeStore({
+    "openspec/specs/demo-product/alpha/spec.md": [
+      "# Alpha",
+      "",
+      "## Purpose",
+      "",
+      PURPOSE,
+      "",
+      "## Requirements",
+      "",
+      ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+      "",
+    ].join("\n"),
+  });
+
+  it("names the spec the fold left mapless", async () => {
+    const result: Result = await runChecks(root, NO_GIT);
+    expect(lines(result, "map")).toEqual([
+      "openspec/specs/demo-product/alpha/spec.md — no `## Feature set`: the fold carries `## Requirements` alone, so a delta's map reaches the durable spec only by hand",
+    ]);
+  });
+});
 
 /** `openspec archive` runs a delta's headings against the durable ones and
  * throws on a name that drifted — with the change merged and the author gone.

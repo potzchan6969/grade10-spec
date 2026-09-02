@@ -1,6 +1,6 @@
 # Design: reinstate a shared compound-component package
 
-Capability spec: [`shared-ui/component-package`](specs/shared-ui/component-package/spec.md)
+Capability spec: [`shared/ui/component-package`](specs/shared/ui/component-package/spec.md)
 (new).
 
 ## Package shape

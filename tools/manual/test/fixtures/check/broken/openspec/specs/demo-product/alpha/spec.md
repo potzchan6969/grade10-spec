@@ -4,6 +4,11 @@
 
 Alpha exists so the checker has a spec to point at.
 
+## Feature set
+
+- Doing the thing
+  - The thing: so the spec carries a map above its requirements
+
 ## User journeys
 
 ### alpha-US-01: Someone does the thing

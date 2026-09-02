@@ -4,7 +4,7 @@
 
 ## The rule
 
-Every checkable requirement and every cross-repository contract lives in `openspec/specs/<product>/<capability>/spec.md`. An engineer in a consuming application builds from that spec alone, without reading a PRD first.
+Every checkable requirement and every cross-repository contract lives in `openspec/specs/<product>/<domain>/<capability>/spec.md`. An engineer in a consuming application builds from that spec alone, without reading a PRD first.
 
 A PRD is `docs/prds/products/<product>/<capability>.md` — the page the manual renders for that capability, and the same file for a product's landing at `docs/prds/products/<product>/index.md`. Its prose states the shape of the product in plain words and pictures. What a requirement cannot carry — who it is for, what was deliberately excluded, what will be measured, the decisions made and why, the risks — sits on the same page in a `:::detail{title="Product decisions" for="pm"}` block: collapsed under the prose, never hidden from search or a deep link. The page names its spec in its frontmatter, so the requirements are embedded beside the record rather than duplicated into it.
 
@@ -52,7 +52,7 @@ If the spec and the page disagree, the spec is correct and the page is stale —
 
 ### 2. Write requirements into the capability spec
 
-A capability spec at `openspec/specs/<product>/<capability>/spec.md` contains:
+A capability spec at `openspec/specs/<product>/<domain>/<capability>/spec.md` contains:
 
 - a `## Purpose` naming what the capability is for and linking its page, when one exists;
 - `### Requirement:` entries written so an engineer in another repository can implement them without a follow-up question; and
@@ -110,7 +110,7 @@ Do not archive a change as a substitute for updating `openspec/specs/`. Archives
 
 ```text
 Is the statement testable — could a test or a manual pass decide it?
-├─ Yes → it belongs in openspec/specs/<product>/<capability>/spec.md,
+├─ Yes → it belongs in openspec/specs/<product>/<domain>/<capability>/spec.md,
 │        reached through an openspec/changes/ delta.
 └─ No  → Does it explain a product judgment that outlives this change?
          ├─ Yes → record it in the capability page's Product decisions block.

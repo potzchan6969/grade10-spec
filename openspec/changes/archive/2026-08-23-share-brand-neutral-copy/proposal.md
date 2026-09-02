@@ -58,7 +58,7 @@ translation of what that brand calls itself and nothing else.
 
 ### Modified Capabilities
 
-- `localization`: where a string's value is written, and what a brand is
+- `shared/localization`: where a string's value is written, and what a brand is
   required to answer. The vocabulary, the fallback between languages, and the
   rule that no raw key ever renders are unchanged.
 

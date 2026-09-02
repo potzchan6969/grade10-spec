@@ -13,7 +13,7 @@ assembly without changing the post-sale feature contract.
 
 **No Figma frame exists for the Grade10 admin Auction listing detail.** It is
 an app-owned assembly reached from the queue; the
-[post-sale capability](specs/grade10-auction/post-sale/spec.md) owns its
+[post-sale capability](specs/grade10-admin/auction/post-sale/spec.md) owns its
 behavior and [design.md](design.md) owns its data and security boundaries.
 
 ## Components

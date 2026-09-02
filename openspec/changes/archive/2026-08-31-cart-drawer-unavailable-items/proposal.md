@@ -47,7 +47,7 @@ None.
 
 ### Modified Capabilities
 
-- `shared-ui/store-cart`: after open loading ends, unavailable lines are
+- `shared/ui/store-cart`: after open loading ends, unavailable lines are
   removed silently with one toast; status and copy contracts updated.
 
 ## Impact

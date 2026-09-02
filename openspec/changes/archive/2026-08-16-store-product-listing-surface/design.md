@@ -1,8 +1,8 @@
 # Design: the store product-listing surface
 
-Capability spec: [`shared-ui/store-product-listing`](specs/shared-ui/store-product-listing/spec.md)
+Capability spec: [`shared/ui/store-product-listing`](specs/shared/ui/store-product-listing/spec.md)
 (new). Package contract delta:
-[`shared-ui/component-package`](specs/shared-ui/component-package/spec.md).
+[`shared/ui/component-package`](specs/shared/ui/component-package/spec.md).
 
 Design source: [Grade10-DS-2026](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026).
 Composed primitives:

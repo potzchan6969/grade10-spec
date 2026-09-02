@@ -66,41 +66,82 @@ export function routeForPagePath(
   if (rest === null || !rest.endsWith(".md")) return null;
   const parts = rest.slice(0, -3).split("/");
 
-  if (parts[0] === "products" && parts.length === 3) {
-    return parts[2] === "index"
-      ? `/p/${parts[1]}`
-      : `/p/${parts[1]}/${parts[2]}`;
+  // A product id is `<product>/<domain>` in a store that groups its specs by
+  // the application shipping them, and a single segment in one that does not.
+  // Both are read, so a page moving deeper keeps its route shape.
+  if (parts[0] === "products" && (parts.length === 3 || parts.length === 4)) {
+    const owner = parts.slice(1, -1).join("/");
+    const leaf = parts[parts.length - 1];
+    return leaf === "index" ? `/p/${owner}` : `/p/${owner}/${leaf}`;
   }
-  if (parts[0] === "platform" && parts.length === 2)
-    return `/platform/${parts[1]}`;
+  if (parts[0] === "platform" && (parts.length === 2 || parts.length === 3))
+    return `/platform/${parts.slice(1).join("/")}`;
   if (parts[0] === "guides" && parts.length === 2) return `/guides/${parts[1]}`;
   return null;
+}
+
+/**
+ * The store paths a route could name, best first. `/p/a/b` is the landing page
+ * of the product `a/b` where products carry a domain, and the capability `b`
+ * of the product `a` where they do not; only the store knows which, so both
+ * are offered and the caller keeps the one it holds.
+ */
+export function pagePathsForRoute(
+  manualDir: string,
+  pathname: string,
+): string[] {
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts.length === 0) return [pagePath(manualDir, "index.md")];
+  if (parts[0] === "p" && parts.length === 2) {
+    return [pagePath(manualDir, "products", parts[1], "index.md")];
+  }
+  if (parts[0] === "p" && parts.length === 3) {
+    return [
+      pagePath(manualDir, "products", parts[1], parts[2], "index.md"),
+      pagePath(manualDir, "products", parts[1], `${parts[2]}.md`),
+    ];
+  }
+  if (parts[0] === "p" && parts.length === 4) {
+    return [
+      pagePath(manualDir, "products", parts[1], parts[2], `${parts[3]}.md`),
+    ];
+  }
+  if (parts[0] === "platform" && (parts.length === 2 || parts.length === 3)) {
+    return [pagePath(manualDir, "platform", `${parts.slice(1).join("/")}.md`)];
+  }
+  if (parts[0] === "guides" && parts.length === 2) {
+    return [pagePath(manualDir, "guides", `${parts[1]}.md`)];
+  }
+  return [];
 }
 
 export function pagePathForRoute(
   manualDir: string,
   pathname: string,
 ): string | null {
-  const parts = pathname.split("/").filter(Boolean);
-  if (parts.length === 0) return pagePath(manualDir, "index.md");
-  if (parts[0] === "p" && parts.length === 2) {
-    return pagePath(manualDir, "products", parts[1], "index.md");
-  }
-  if (parts[0] === "p" && parts.length === 3) {
-    return pagePath(manualDir, "products", parts[1], `${parts[2]}.md`);
-  }
-  if (parts[0] === "platform" && parts.length === 2) {
-    return pagePath(manualDir, "platform", `${parts[1]}.md`);
-  }
-  if (parts[0] === "guides" && parts.length === 2) {
-    return pagePath(manualDir, "guides", `${parts[1]}.md`);
-  }
-  return null;
+  return pagePathsForRoute(manualDir, pathname)[0] ?? null;
 }
 
-/** The product (or platform topic) a spec id belongs to. */
-export function ownerOfSpec(specId: string): string {
-  return specId.split("/")[0];
+/**
+ * The product (or platform topic) a spec id belongs to. The taxonomy decides:
+ * the longest product that prefixes the id owns it, and a topic owns itself.
+ * A spec the taxonomy does not name yet — one only a change has written — is
+ * read off its own shape, giving its parent where it has one to give.
+ */
+export function ownerOfSpec(
+  specId: string,
+  taxonomy?: { products: string[]; topics: string[] },
+): string {
+  let owned = "";
+  for (const product of taxonomy?.products ?? []) {
+    if (specId.startsWith(`${product}/`) && product.length > owned.length) {
+      owned = product;
+    }
+  }
+  if (owned !== "") return owned;
+  if (taxonomy?.topics.includes(specId)) return specId;
+  const parts = specId.split("/");
+  return parts.length === 1 ? specId : parts.slice(0, -1).join("/");
 }
 
 /**

@@ -1,8 +1,8 @@
 # Design: Product pages
 
 Capability deltas:
-[`grade10-store/product-page`](specs/grade10-store/product-page/spec.md),
-[`grade10-site/crawlable-pages`](specs/grade10-site/crawlable-pages/spec.md).
+[`grade10-site/store/product-page`](specs/grade10-site/store/product-page/spec.md),
+[`grade10-site/site/crawlable-pages`](specs/grade10-site/site/crawlable-pages/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
 ## Context
@@ -178,7 +178,7 @@ thing `packages/app-env` exists to prevent.
   open a card by navigation rather than by anchor, which a crawler does not
   follow. A sitemap the worker renders is the way out, and it is its own
   change.
-- **Archive order.** `grade10-site/crawlable-pages` is modified here and added
+- **Archive order.** `grade10-site/site/crawlable-pages` is modified here and added
   by `add-crawlable-public-pages`, which must archive first. The branch stacks
   the same way, so the order cannot be taken by accident.
 

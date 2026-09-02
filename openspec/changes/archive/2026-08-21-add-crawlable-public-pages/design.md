@@ -1,7 +1,7 @@
 # Design: Crawlable public pages
 
 Capability delta:
-[`grade10-site/crawlable-pages`](specs/grade10-site/crawlable-pages/spec.md).
+[`grade10-site/site/crawlable-pages`](specs/grade10-site/site/crawlable-pages/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
 ## Context

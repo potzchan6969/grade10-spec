@@ -3,7 +3,7 @@
 The owner's notes for Grade10 Finance as of 2026-09: a loan against graded
 cards, its numbers, and the user flow from online request to repayment. No
 spec or change carries these yet; what is built is on
-[the finance page](../prds/products/finance/index.md). Read this as the shape
+[the finance page](../prds/products/grade10-site/finance/index.md). Read this as the shape
 the product starts from, not as its requirements.
 
 ## Background

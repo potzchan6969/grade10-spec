@@ -45,7 +45,7 @@ zero.
 
 ## Scope
 
-- **A new capability, `shared-ui/store-product-listing`.** The export contract
+- **A new capability, `shared/ui/store-product-listing`.** The export contract
   for the listing surface: a controlled root, a filter panel, a toolbar, and a
   product grid, all in `packages/ui` and consumed by both stores. These are the
   first components the package ships.
@@ -53,7 +53,7 @@ zero.
   `Footer` keep their Figma-defined shells and lose every default that names a
   store: logo, navigation, utility links, footer columns, social links, legal
   links, and locale label become consumer-supplied. Carried as a delta on
-  `shared-ui/component-package`.
+  `shared/ui/component-package`.
 - **Retiring `packages/design-system/src/pages/`.** The surface story moves to
   `packages/ui` alongside the components it now exercises, and the undocumented
   `pages/` directory in the design system goes away.
@@ -146,7 +146,7 @@ request.
 
 ## Sequencing
 
-The `shared-ui/component-package` delta assumes
+The `shared/ui/component-package` delta assumes
 [`reinstate-shared-ui-package`](../reinstate-shared-ui-package/proposal.md) is
 accepted; that change creates the capability this one adds a requirement to.
 Fold its deltas into `openspec/specs/` before folding these.

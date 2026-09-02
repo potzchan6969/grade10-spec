@@ -114,9 +114,29 @@ export function composeStore(
 function markIssuedIds(root: string, specs: SpecEntry[]): void {
   const issued = readIssuedIds(root, durableIds(specs));
   for (const spec of specs) {
-    const marks = issued.get(spec.id.split("/").pop() ?? spec.id);
+    const marks = issued.get(tokenOf(spec));
     if (marks) spec.issuedThrough = marks;
   }
+}
+
+/** The word a capability's permanent ids are built on. It is usually the last
+ * segment of the spec id, but an id is issued once and never reissued, so a
+ * capability that has since been renamed or regrouped keeps writing the token
+ * it started with — `grade10-site/loyalty/programme` still issues
+ * `loyalty-SC-12`. Its own ids are therefore the authority, and the path is
+ * only the fallback for a capability that has issued none yet. */
+function tokenOf(spec: SpecEntry): string {
+  for (const requirement of spec.requirements) {
+    for (const scenario of requirement.scenarios) {
+      const token = scenario.id?.replace(/-SC-\d+$/, "");
+      if (token) return token;
+    }
+  }
+  for (const journey of spec.journeys ?? []) {
+    const token = journey.id.replace(/-US-\d+$/, "");
+    if (token !== journey.id) return token;
+  }
+  return spec.id.split("/").pop() ?? spec.id;
 }
 
 function* durableIds(specs: SpecEntry[]): Generator<string> {

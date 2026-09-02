@@ -1,0 +1,137 @@
+---
+title: Membership
+---
+
+One points programme across every Grade10 door. A member earns on qualifying
+spend, their tier sets the rate they earn at, and points settle three ways:
+against a reward on the menu, as a single-use money-off code either checkout
+accepts, or straight off the bill at checkout. Grade10 runs in HKD on Hong Kong
+time: one point per HKD 10 of qualifying goods, and one point pays HKD 1 back.
+
+The engine is brand-neutral and names no vendor. Shopify is a channel — the
+online checkout and the POS at the counter — and never the source of truth for
+a balance, a tier or a code.
+
+| Page | What it holds |
+| --- | --- |
+| [Points Earning](/p/grade10-site/loyalty/points-earning) | The rate, what earns, how a purchase reaches the programme, refunds and expiry |
+| [Tiers](/p/grade10-site/loyalty/tiers) | Silver, Gold and Black — how a tier is reached, kept, lost and given |
+| [Rewards](/p/grade10-site/loyalty/rewards) | The menu, redemption, fulfilment, collection at the counter and paying with points |
+| [Coupons](/p/grade10-site/loyalty/coupons) | The money-off code a redemption mints, and its life |
+| [Profile](/p/grade10-site/loyalty/profile) | Joining, the membership page, the member card and the member's own histories |
+| [Shopify Integration](/p/grade10-site/loyalty/shopify-integration) | Customer pairing, the draft-order checkout, the POS extension, discounts and shipping |
+
+Three audiences touch it. **Members** join at `/join`, carry a member card at
+`/membership`, and read tier, balance, what is expiring and their own history
+on one surface. **Staff** run a loyalty terminal inside Shopify POS at the
+till. **Operators** run the programme from the admin console — finding
+members, granting points, editing the reward menu, granting and revoking
+invitation tiers, unparking stuck fulfilments, flipping the till's switches and
+reading what the programme still owes.
+
+:::detail{title="Product decisions" for="pm"}
+Repeat purchase is the cheapest revenue Grade10 has, and the physical store —
+the majority of card sales — sells to anonymous guests. The programme gives a
+returning buyer a visible, growing reason to buy again, makes the counter a
+member channel, lets the business run promotions and reward individual
+members without a deploy, and keeps what a purchase earns auditable. The
+owner's draft it implements is
+[the programme reference](/references/grade10-loyalty-program); the delivery
+plan for the counter is [the Shopify membership and POS
+notes](/references/shopify-membership-pos). The checkable rules are
+[[grade10-site/loyalty/programme]] and the in-flight
+`grade10-site/store/membership` capability.
+
+| User | Situation | Desired outcome |
+| --- | --- | --- |
+| Buyer | Has bought before, browsing again | Sees what they have accumulated and what it is nearly worth |
+| Buyer | Deciding between Grade10 and elsewhere | Knows this purchase moves them toward a better rate |
+| Buyer | At the counter | Registers, earns, spends points, and collects rewards without their own phone doing more than showing a code |
+| Store staff | Member at the counter | Identifies them in seconds and reads, spends, or hands over on their behalf |
+| Support operator | A buyer disputes a balance | Can read the member's history and correct it, on the record |
+| Marketing operator | Running a sign-up promotion | Can grant points that count toward tier, without a deploy |
+| Owner | Deciding who gets the top tier | Grants it deliberately, to a named person, with a reason |
+
+**Not in scope.** Paid membership — every tier is free, the top one is given.
+Earning outside Grade10 store and counter purchases, beyond operator-granted
+campaign points; auction wins and credit top-ups are later-phase candidates
+and earn nothing today. Redeeming against an auction — points and coupons buy
+nothing there, in any phase. SMS verification and wallet passes; the member
+card and email carry identification at the counter, and the phone arm ships
+dark. Tier-based discounts beyond the earn multiplier — no tier gets a
+percentage off or free shipping. Cross-brand membership — ZZZ buyers are a
+separate population with no programme.
+
+**Measurement.**
+
+| Signal | Definition | Owner |
+| --- | --- | --- |
+| Repeat purchase rate | Share of buyers with a second purchase within 90 days, members against non-members | Product |
+| Physical attribution | Share of physical-store transactions attributed to a member | Product |
+| Staff-assisted redemption | Staff-assisted redemptions completed per week | Product |
+| Tier progression | Members reaching Gold per month | Product |
+| Tier retention | Share of Gold members who earn the retention threshold inside their validity period | Product |
+| Point redemption | Share of earned points redeemed before the balance expires | Product |
+| Coupon usage | Share of issued codes used before their own validity ends | Product |
+| Points outstanding | Unexpired, unredeemed points, plus the money out in unused codes, as a liability | Finance |
+| Earning delivery | Money events awaiting delivery to the programme, and their age | Engineering |
+
+**Decisions.**
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Programme currency | Decided | The programme runs in HKD and the store sells in HKD. Earning is priced at HKD 10 per point and the programme keeps Hong Kong time; a store selling in another currency is refused every purchase, so the two are pinned together and checked at startup | Product |
+| Tier economics live in code | Decided | The earn rate, rounding order, expiry window, tier ladder, validity periods and retention thresholds are deployed and reviewed, not edited by an operator. An operator who can rewrite what a purchase earns can mint money; the reward menu is the intended lever and is editable | Engineering |
+| Silver, Gold, Black | Decided | Metal names read as status without implying a price. Persisted ids are `silver`, `gold`, `black`; no record uses the pre-launch names | Owner |
+| Gold at 500 points, earning 1.2×; Black at 1.7× | Decided | Roughly HKD 5,000 of spend at the entry rate reaches Gold. The step to Gold is small enough to be worth chasing; Black's is large because it is a gift, not a target. Both are integer percentages, so earning never computes on a float | Product |
+| A tier is valid for twelve months | Decided | A permanent tier pays 1.2× forever to a member who bought once and left. Re-qualification is measured on tier points earned in the period, so spending points never demotes anyone, and a retained term keeps its anniversary | Owner |
+| Retention threshold | ❓ Decided at 500, under review | The deployed programme sets no separate retention figure, so keeping Gold costs the same 500 that reaches it. A softer figure around 400 is one config value, but it changes the size of the first downgrade cohort | Owner |
+| Upgrade is immediate, the higher rate is not | Decided | A member is promoted the instant they cross the threshold, including on their first purchase. The rate applies from the next purchase, because the multiplier is read before the purchase is priced | Product |
+| Demotion resets tier progress | Decided | Earnings dated before a drop count toward nothing afterwards, so a demoted member is not re-promoted the next day out of the window that just lapsed | Owner |
+| Tier points and redeemable points are counted separately | Decided | Two counts derived from one append-only ledger: earning credits both, a redemption spends only the balance, and there is nothing to reconcile between them | Product |
+| Points expire on inactivity, not per purchase | Decided | The whole balance lapses after twelve months with no purchase or redemption; each of those resets the clock. A campaign grant does not | Owner |
+| Earning is priced on the after-discount, after-coupon value | Decided | Points earned on a coupon's face value would let a redemption earn back part of what it spent | Product |
+| Earning floors base points before the multiplier | Decided | HKD 139 at 1.2× earns 15, never 16. The floor's place is deployed configuration, and every earn records the base points and multiplier it was priced with | Owner |
+| Order-level discounts are apportioned by line | Decided | A whole-order discount splits across every line in proportion to line value, so it cannot be attributed to the non-earning part of a basket | Product |
+| Gift cards, top-ups and grading fees earn nothing | Decided | Excluded as products, by SKU prefix and by product type or tag, not as a tender. Shipping and tax never enter the basis at all | Product |
+| Exchange rate | Decided | A point is worth HKD 1 when it settles. With earning at a point per HKD 10 the programme returns 10% at Silver, 12% at Gold and 17% at Black — the number that sets the liability Finance reports | Owner |
+| How points settle | Decided | By what the reward is: a money-off code either checkout accepts, a physical item collected at the counter, or points straight off the bill at checkout. A physical reward is never dressed up as a code | Owner |
+| Members can undo an unused code; nobody can undo a used one | Decided | A code is money in a wallet, so the member's own surface offers the points back while the code is unused. A used code is never reversed. An operator reversal is the support remedy for anything else | Product |
+| An artifact left to expire stays spent | Decided | An unused code that reaches its own end date, or a collection window that closes, returns nothing by itself. What members forfeit is counted as breakage where Finance can read it | Owner |
+| Coupon validity is set per reward | Decided | A code's life is a property of what it buys, so the menu carries it per item and a redemption remembers the validity it was issued with | Product |
+| A claw-back re-evaluates the tier at once | Decided | Refunded spend is spend that never happened, so the tier it bought does not survive it | Owner |
+| In-store identification | Decided | A dynamic single-use code on the member card, its typed short code, or the member's exact email. One scan or lookup authorizes the till for ten minutes with no confirmation on the member's phone; the member is notified on every act they did not present for. An unrecognised member never blocks a sale | Owner |
+| Phone lookup at the till | ❓ Deferred | Grade10 asks for a mobile number at join and mirrors it to the Shopify customer, but the till's phone arm ships switched off until numbers are verified | Owner |
+| Points at the online checkout are a merchant discount, not a code | Decided | Every online checkout is a Shopify draft order, and the points come off as its one order-level fixed discount, chosen against the priced basket. Nothing is held until the invoice is paid | Engineering |
+| Points at the till are a cart discount, or a code | Decided | Which instrument the till uses is a per-shop switch: a fixed amount off the sale, or a customer-scoped single-use code. The code instrument is the default until the switch is flipped | Engineering |
+| One Shopify customer per member | Decided | Paired server-side behind the account, keyed on an opaque member id in a unique customer metafield. Pairing never blocks sign-up; it converges on retry or parks where an operator can see it. Erasure removes the vendor record irreversibly | Engineering |
+| Account deletion clears the membership | Decided | Balance, tier progress, coupons and pending collections end immediately; the ledger record survives for audit | Owner |
+| An operator can always remove a tier | Decided | A tier granted or reached in error is removable on the record, whatever its term says | Owner |
+| The loyalty engine is in-house | Decided | Built on Grade10 auth. Shopify and the POS are channels; the one Shopify-shaped piece of the loyalty product is the fulfiller that mints a code | Engineering |
+| Top tier by invitation | Decided | Black is given deliberately to a named member with a reason, is revocable, and is never reachable by spending | Owner |
+| Annual cap and approval on the top tier | ❓ Open | The draft caps it annually and requires CEO approval. Neither is fixed, and the programme enforces neither. An invitation granted with no end date holds until revoked | Owner |
+| Campaign points count toward tier | Decided | A campaign grant counts toward the next tier and toward retention. A correction does neither, and neither keeps the balance alive | Product |
+| Physical reward menu | ❓ Open | Which items, their point prices and the collection window's length. Per-unit quantities stay off until the per-redemption and per-day bounds are chosen | Product |
+| Welcome bonus | ❓ Open | The draft posts a welcome bonus at enrolment; the deployed programme grants none until the size is set | Owner |
+| Public names for the two counts | ❓ Open | The membership page says "Points to spend" and "Points earned this year"; whether those are the launch names is undecided | Product |
+| ZZZ has no programme | Decided | The second brand's loyalty product is retired rather than kept as an unused placeholder | Owner |
+
+**Risks.** Earning is delivered at least once and retried, so a member who
+buys during an outage still earns; the alternative is silent, uncorrectable
+point loss for real purchases. At HKD 1 per point the programme returns 10%
+of spend at the entry tier and 17% at the top — generous against retail
+norms, and the single input that decides whether the menu's prices and the
+reported liability are sustainable. Tier validity is running, so members
+lapse on their own schedule; the retention threshold has to be settled before
+the earliest of those dates. Activity-based expiry makes the outstanding
+balance stickier: a member who buys once a year never loses a point. The till
+degrades to a guest sale rather than blocking one — an unidentifiable member,
+a parked pairing, or an unreachable programme all end in a completed sale
+attributable afterwards. Staff act for members with no confirmation on the
+member's own device; the controls are the instant notification, the audit on
+every till act, the session's ten-minute life, and the per-shop switches. The
+top tier earns at 1.7× with no cap on how many exist and no forced end date;
+until the cap lands, the control is the operator log and who holds the
+invitation permission. A member's identity never enters the programme, so a
+leak of the loyalty database exposes balances and identifiers, not people.
+:::

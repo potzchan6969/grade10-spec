@@ -7,7 +7,7 @@ description: Create or revise the product record behind a capability — its man
 
 Use this skill when the request is to create, revise, review, or turn an idea into a PRD.
 
-A PRD is the capability's page in the manual: `docs/prds/products/<product>/<capability>.md`, or the product's `index.md` for a decision that spans its capabilities. It is not where requirements live. `openspec/specs/<product>/<capability>/spec.md` is the single source of truth for every checkable requirement and component export contract; the page states the shape in prose and records the product decision behind it in one `:::detail{title="Product decisions" for="pm"}` block.
+A PRD is the capability's page in the manual: `docs/prds/products/<product>/<capability>.md`, or the product's `index.md` for a decision that spans its capabilities. It is not where requirements live. `openspec/specs/<product>/<domain>/<capability>/spec.md` is the single source of truth for every checkable requirement and component export contract; the page states the shape in prose and records the product decision behind it in one `:::detail{title="Product decisions" for="pm"}` block.
 
 1. Read `AGENTS.md`, `docs/governance/prd-and-openspec.md`, the manual's own guide `docs/prds/guides/writing-the-manual.md`, the relevant capability in `openspec/specs/`, and active `openspec/changes/` records.
 2. Decide whether a decisions block is warranted. If stripping every testable statement from the intended record leaves nothing behind, write the capability spec instead and leave the page's prose to state the shape.

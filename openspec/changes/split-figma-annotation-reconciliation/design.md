@@ -2,7 +2,7 @@
 
 See [proposal.md](proposal.md) for motivation. The behavior remains governed by
 the active
-[`design-sync/annotation-monitoring`](../track-figma-annotation-changes/specs/design-sync/annotation-monitoring/spec.md)
+[`shared/design-sync/annotation-monitoring`](../track-figma-annotation-changes/specs/shared/design-sync/annotation-monitoring/spec.md)
 contract.
 
 The workflow is currently split at the wrong seam. `grade10` owns the portable

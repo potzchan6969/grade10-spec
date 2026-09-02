@@ -44,7 +44,7 @@ shop, and the vendor that makes a coupon real:
   extended.
 - The **auction** does not refuse points.
 
-Requirements: [`specs/grade10-store/loyalty/spec.md`](specs/grade10-store/loyalty/spec.md).
+Requirements: [`specs/grade10-site/loyalty/programme/spec.md`](specs/grade10-site/loyalty/programme/spec.md).
 The membership capability and the store channel belong to
 `add-shopify-membership-pos`.
 

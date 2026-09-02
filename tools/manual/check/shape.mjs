@@ -105,10 +105,12 @@ export function checkTaxonomy(roots, config, shape, paths, add) {
   }
 }
 
-/** A group heading between requirements is legal in a delta and fatal in a
+/** A group heading between requirements is tolerated in a delta and fatal in a
  * durable spec: `openspec archive` absorbs it into the requirement above it,
  * and the spec that comes out of the fold is one the readers refuse. Failing
- * here catches it while a delta is still a delta. */
+ * here catches it while a delta is still a delta. The spec rules in
+ * `openspec/config.yaml` forbid one on either side, so reading order in a
+ * durable spec is the order of its requirements and not a heading. */
 export function checkSpecShape(root, shape, add) {
   const named = new Set();
   for (const dir of shape.dirs.values()) {
@@ -123,6 +125,27 @@ export function checkSpecShape(root, shape, add) {
     }
   }
   return named;
+}
+
+/** `openspec archive` folds `## Requirements` and nothing else, so a delta's
+ * `## Feature set` — the spec's own map — reaches the durable spec only when
+ * someone copies it across by hand. A durable spec with requirements and no
+ * map is what that omission looks like once the change is gone, and by then
+ * the wording only survives in the archive. `pnpm run archive:preflight`
+ * refuses the archive that would cause it; this catches one that already
+ * happened, or a hand-written spec that never had a map at all. */
+export function checkSpecMap(root, shape, add) {
+  for (const dir of shape.dirs.values()) {
+    const file = `${dir}/spec.md`;
+    const text = readText(join(root, file));
+    if (!/^## Requirements\s*$/m.test(text)) continue;
+    if (/^## Feature set\s*$/m.test(text)) continue;
+    add(
+      "map",
+      file,
+      "no `## Feature set`: the fold carries `## Requirements` alone, so a delta's map reaches the durable spec only by hand",
+    );
+  }
 }
 
 /** Both channels a spec entry can carry a refusal on. The suite gets its own

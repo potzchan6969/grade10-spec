@@ -369,13 +369,25 @@ const problems = [];
 const record = (severity, file, line, message) =>
   problems.push({ severity, file, line, message });
 
+/** The prefix a capability issues, read off its spec rather than off its
+ * directory. A prefix is chosen with a capability's first ids and never moves
+ * again, so a renamed capability goes on issuing what it always issued:
+ * `grade10-site/loyalty/programme` issues `loyalty-*`, and a suite beside it
+ * names `loyalty-US1`, not `programme-US1`. Only a spec that issues no id at
+ * all falls back to the directory name. */
+function issuedPrefix(spec) {
+  if (!spec) return null;
+  const [id] = [...spec.journeys.keys(), ...spec.scenarios];
+  return id ? id.replace(/-(?:US|SC)-\d+$/, "") : null;
+}
+
 function checkSuite(root, filePath, rulesRev) {
   const rel = relative(root, filePath);
   const text = readFileSync(filePath, "utf8");
   const dir = dirname(filePath);
-  const capability = basename(dir);
   const suite = parseSuite(text);
   const spec = readSpecIds(join(dir, "spec.md"));
+  const capability = issuedPrefix(spec) ?? basename(dir);
   const err = (line, msg) => record("error", rel, line, msg);
   const warn = (line, msg) => record("warning", rel, line, msg);
 
@@ -460,7 +472,7 @@ function checkSuite(root, filePath, rulesRev) {
     if (j.capability !== capability)
       err(
         j.line,
-        `journey heading names capability \`${j.capability}\`, but this suite sits in \`${capability}/\``,
+        `journey heading names capability \`${j.capability}\`, but this spec issues \`${capability}-\``,
       );
     const canonical = `${j.capability}-US-${String(j.num).padStart(2, "0")}`;
     const alternate = `${j.capability}-US-${j.num}`;

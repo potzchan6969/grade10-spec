@@ -63,6 +63,7 @@ import { checkAcceptance } from "./qa.mjs";
 import {
   checkCoverage,
   checkDependencies,
+  checkSpecMap,
   checkSpecShape,
   checkStoreErrors,
   checkTaxonomy,
@@ -140,6 +141,7 @@ export async function runChecks(target, git) {
     checkUnwritten(ctx, changes, shape);
     checkAcceptance(ctx, shape);
     const folded = checkSpecShape(roots.store, shape, add);
+    checkSpecMap(roots.store, shape, add);
     checkDeltas(ctx, { changes, shape, pages });
     checkStoreErrors(specs, changes, folded, add);
     checkDependencies(roots.store, changes, add);

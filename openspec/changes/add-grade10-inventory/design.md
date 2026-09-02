@@ -4,7 +4,7 @@ Grade10 has no aggregate house-stock owner. Auction has a thin product identity
 and Shopify owns storefront quantities, but neither arbitrates stock shared by
 Auction and Vault. Vault's real product story is custody (`vaulted` →
 `released`), not sale. Capability:
-[`grade10-inventory/catalog`](specs/grade10-inventory/catalog/spec.md).
+[`grade10-admin/inventory/catalog`](specs/grade10-admin/inventory/catalog/spec.md).
 Screens: [ui.md](ui.md).
 
 This design follows `docs/conventions/packages.md` and

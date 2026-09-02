@@ -41,15 +41,19 @@ describe("the real store", () => {
   });
 
   it("classifies taxonomy by disk shape", () => {
-    expect(snapshot.taxonomy.products).toContain("grade10-store");
-    expect(snapshot.taxonomy.topics).toContain("money-amounts");
-    expect(snapshot.taxonomy.products).not.toContain("money-amounts");
-    expect(snapshot.taxonomy.topics).not.toContain("grade10-store");
+    // A product is the application-and-domain a capability directory sits in;
+    // a topic is a platform-wide format `shared` carries bare.
+    expect(snapshot.taxonomy.products).toContain("grade10-site/store");
+    expect(snapshot.taxonomy.topics).toContain("shared/money-amounts");
+    expect(snapshot.taxonomy.products).not.toContain("shared/money-amounts");
+    expect(snapshot.taxonomy.topics).not.toContain("grade10-site/store");
+    // The layer above a product names no capability of its own.
+    expect(snapshot.taxonomy.products).not.toContain("grade10-site");
   });
 
   it("carries permanent ids where the store has issued them", () => {
     const loyalty = snapshot.specs.find(
-      (spec) => spec.id === "grade10-store/loyalty",
+      (spec) => spec.id === "grade10-site/loyalty/programme",
     );
     const scenarios =
       loyalty?.requirements.flatMap((one) => one.scenarios) ?? [];

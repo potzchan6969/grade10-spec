@@ -34,7 +34,7 @@ not exist on these paths. And a field a worker renames arrives as `undefined`
 inside a panel rather than failing at the call, on a console that is routinely
 left open across a deploy.
 
-The capability spec did not stop any of it. `frontend-composition` governs what
+The capability spec did not stop any of it. `shared/frontend-composition` governs what
 a package publishes and what a composition root may load; it never says a
 product's browser data layer has to live in a package at all. Every one of
 these four surfaces is compliant with the spec as written.
@@ -70,7 +70,7 @@ per-brand duplicated data-layer files in the admin panels, 6 files and roughly
 
 ### Modified Capabilities
 
-- `frontend-composition`: extend it from what a package publishes to where a
+- `shared/frontend-composition`: extend it from what a package publishes to where a
   product's browser data layer is allowed to live, and what application page
   code may reach.
 

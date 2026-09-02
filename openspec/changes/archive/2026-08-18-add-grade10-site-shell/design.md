@@ -1,8 +1,8 @@
 # Design: The grade10 site shell
 
 Capability deltas:
-[`grade10-site/page-shell`](specs/grade10-site/page-shell/spec.md),
-[`shared-ui/site-chrome`](specs/shared-ui/site-chrome/spec.md).
+[`grade10-site/site/page-shell`](specs/grade10-site/site/page-shell/spec.md),
+[`shared/ui/site-chrome`](specs/shared/ui/site-chrome/spec.md).
 Screens and components: [ui.md](ui.md).
 Motivation: [proposal.md](proposal.md) — Why.
 

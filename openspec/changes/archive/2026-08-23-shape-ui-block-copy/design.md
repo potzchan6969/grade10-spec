@@ -1,9 +1,9 @@
 # Design: The words a block renders, shaped and typed as words
 
 Capability deltas:
-[`component-package`](specs/shared-ui/component-package/spec.md),
-[`store-product-listing`](specs/shared-ui/store-product-listing/spec.md),
-[`site-chrome`](specs/shared-ui/site-chrome/spec.md).
+[`component-package`](specs/shared/ui/component-package/spec.md),
+[`store-product-listing`](specs/shared/ui/store-product-listing/spec.md),
+[`site-chrome`](specs/shared/ui/site-chrome/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
 ## Context

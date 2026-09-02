@@ -1,7 +1,7 @@
 # Design: A card is bought where it is read
 
 Capability delta:
-[`grade10-store/product-page`](specs/grade10-store/product-page/spec.md).
+[`grade10-site/store/product-page`](specs/grade10-site/store/product-page/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
 ## Context

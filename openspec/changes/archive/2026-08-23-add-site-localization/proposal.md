@@ -67,7 +67,7 @@ collector on a Chinese-language grade10 page.
   already out of crawler scope and stay unprefixed. A card's page is public
   but rendered per address, so it gains no prefixed variant and no sitemap
   entry — an indexable Chinese address for one card is follow-up work wanting
-  a sitemap the worker renders, which `grade10-store/product-page` already
+  a sitemap the worker renders, which `grade10-site/store/product-page` already
   names and this change does not open.
 - **Translation tooling.** No translation-management system, no extraction
   pipeline. Translations land engineer-drafted, flagged for native review;
@@ -79,18 +79,18 @@ collector on a Chinese-language grade10 page.
 
 ### New Capabilities
 
-- `localization`: which languages each brand speaks, where every user-facing
+- `shared/localization`: which languages each brand speaks, where every user-facing
   string comes from, how a locale is resolved, remembered, and carried in
   public addresses, and which language the login email arrives in.
-  Cross-cutting, beside `dates-and-times` and `money-amounts`.
+  Cross-cutting, beside `shared/dates-and-times` and `shared/money-amounts`.
 
 ### Modified Capabilities
 
-None. `grade10-site/crawlable-pages` keeps every requirement it has — the
+None. `grade10-site/site/crawlable-pages` keeps every requirement it has — the
 localized public addresses extend its guarantees per locale rather than
-amending them. `grade10-store/product-page` keeps its sitemap requirement
+amending them. `grade10-site/store/product-page` keeps its sitemap requirement
 untouched, which is why the prefixes stop at the surfaces the build writes a
-document for. `shared-ui/site-chrome` already specifies the locale control
+document for. `shared/ui/site-chrome` already specifies the locale control
 this change finally wires.
 
 ## Impact

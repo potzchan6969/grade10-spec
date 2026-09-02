@@ -13,7 +13,7 @@ listed. Session list does not show the session secret.
 ### Identity trail
 
 Brand-owned admin view of the identity trail. Times use the event shape in
-`dates-and-times`. Other products' trails belong to those products. A
+`shared/dates-and-times`. Other products' trails belong to those products. A
 consistency check is yes or no.
 
 ## Components

@@ -14,7 +14,7 @@ This repository is the versioned source of truth for product requirements and th
 
 | Need | Canonical location | Notes |
 | --- | --- | --- |
-| Durable requirements and component export contracts | `openspec/specs/<product>/<capability>/spec.md` | The single source of truth. An implementing engineer builds from this alone. Products are listed in `openspec/specs/README.md`. |
+| Durable requirements and component export contracts | `openspec/specs/<product>/<domain>/<capability>/spec.md` | The single source of truth. An implementing engineer builds from this alone. The four applications - `grade10-site`, `grade10-admin`, `zzz-site`, `zzz-admin` - and the `shared` layer are listed in `openspec/specs/README.md`. |
 | The product record: a capability's page, and the decision behind its requirements | `docs/prds/products/<product>/<capability>.md` | The manual (`pnpm manual`) renders these pages; each names its spec and carries the shape in prose, with problem, users, non-goals, measurement and decisions in its `Product decisions` block. Explanatory, never authoritative over a requirement. Page grammar: `docs/prds/guides/writing-the-manual.md`. |
 | Source material behind a decision | `docs/references/<doc>.md` | Owner's drafts, competitor research, vendor-integration working notes — what a page or change cites as evidence; the manual renders them under References. Explanatory, never authoritative. See `docs/references/README.md`. |
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
@@ -40,7 +40,7 @@ A PM or designer writes the proposal and the specs and stops there; `design.md`,
 For a new product feature:
 
 1. Inspect the relevant capability in `openspec/specs/`, active OpenSpec changes, and any related PRD.
-2. Write the requirements as an OpenSpec change carrying deltas against `openspec/specs/<product>/<capability>/spec.md`. Its proposal must identify affected component exports and consumer apps.
+2. Write the requirements as an OpenSpec change carrying deltas against `openspec/specs/<product>/<domain>/<capability>/spec.md`. Its proposal must identify affected component exports and consumer apps.
 3. Use the `prd-authoring` skill when the feature turns on a product judgment the requirement text will not preserve — why this problem, for whom, what was ruled out, what will be measured. It lands in the capability page's `Product decisions` block; skip it when there is no such judgment.
 4. Keep task checkboxes accurate as work lands; fold accepted deltas into `openspec/specs/`, then archive under `openspec/changes/archive/YYYY-MM-DD-<change-name>/`.
 

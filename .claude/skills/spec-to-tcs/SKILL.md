@@ -25,7 +25,7 @@ traces scenario ids.
    | Argument | Resolves to |
    | --- | --- |
    | A change name (`add-auction-auto-bidding`) | Every delta `spec.md` under `openspec/changes/<change>/specs/` |
-   | A capability id (`grade10-auction/auto-bidding`) | That capability under `openspec/specs/` **and/or** any active delta — see below |
+   | A capability id (`grade10-site/auction/auto-bidding`) | That capability under `openspec/specs/` **and/or** any active delta — see below |
    | A path containing `openspec/specs/` or `openspec/changes/` | Exactly that tree; do not switch |
 
    When a capability id matches **both** a durable spec and an active delta:
@@ -79,7 +79,7 @@ traces scenario ids.
      vocabulary comes from here: `<grade10 store url>`, not `<store front
      door URL>`.
    - **The cross-cutting specs this capability's Purpose names** — a public
-     surface says "every requirement of `grade10-site/crawlable-pages` binds
+     surface says "every requirement of `grade10-site/site/crawlable-pages` binds
      it"; `localization`, `money-amounts` and `dates-and-times` bind their
      subjects the same way. They carry facts the capability never repeats:
      every public address answers once per locale, the default unprefixed and
@@ -406,7 +406,7 @@ traces scenario ids.
    case, and a `---` rule separates journey sections.
 
    ````markdown
-   # <product>/<capability> Test Cases
+   # <product>/<domain>/<capability> Test Cases
 
    **Status:** pending-review
 

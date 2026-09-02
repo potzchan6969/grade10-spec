@@ -80,8 +80,8 @@ first — never mint a directory ahead of its capability.
 The conventions, each visible in the existing directories:
 
 - **Directory: a globally unique `<product-context>-<capability>` kebab
-  slug.** `auth-sign-in` carries `shared-auth/sign-in`; `auction-listing`
-  carries `grade10-auction/listing-page`. Because `blocks/` is flat, the slug
+  slug.** `auth-sign-in` carries `shared/auth/sign-in`; `auction-listing`
+  carries `grade10-site/auction/listing-page`. Because `blocks/` is flat, the slug
   includes enough product context to read standalone — `sign-in` alone is
   ambiguous the day a second product grows one. No nesting, and no
   subdirectories inside a capability directory.
@@ -105,7 +105,7 @@ The conventions, each visible in the existing directories:
   entry in the same edit; a token-free freshness test in the package's test
   suite fails when the two diverge, naming the stale class.
 - **Exports go through the spec-named barrel group.** One commented group per
-  capability in `src/index.ts` (`// shared-ui/auction-listing`), exporting
+  capability in `src/index.ts` (`// shared/ui/auction-listing`), exporting
   exactly what the capability spec names — the component and its
   `Props`/`Copy` types. No per-directory `index.ts`; that is a second,
   uncontracted export surface. The `./blocks/*` subpath exists for direct
@@ -311,7 +311,7 @@ For a new or changed public component, reviewers should be able to answer yes to
 
 ## Applying the guide
 
-Use this guide for a new product UI component or a material public-contract change. When behavior, the consumer contract, or validation obligations change, carry the change as a delta against `openspec/specs/<product>/<capability>/spec.md`; update the capability's page in `docs/prds/` only if the product decision behind it changed. Keep feature-specific requirements in the capability spec; update this guide only for durable rules that should apply beyond one feature. Use the [interaction and motion testing scope](ui-component-testing.md) to choose the required browser coverage.
+Use this guide for a new product UI component or a material public-contract change. When behavior, the consumer contract, or validation obligations change, carry the change as a delta against `openspec/specs/<product>/<domain>/<capability>/spec.md`; update the capability's page in `docs/prds/` only if the product decision behind it changed. Keep feature-specific requirements in the capability spec; update this guide only for durable rules that should apply beyond one feature. Use the [interaction and motion testing scope](ui-component-testing.md) to choose the required browser coverage.
 
 Related records:
 

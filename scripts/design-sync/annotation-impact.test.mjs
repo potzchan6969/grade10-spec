@@ -63,7 +63,7 @@ function implementedFinding(
       check: "opened the rendered block",
       observed: "the reviewed behavior was visible",
     },
-    association: { capability: "design-sync/audit-coverage" },
+    association: { capability: "shared/design-sync/coverage" },
     observationDigest: digest,
   };
 }
@@ -209,7 +209,7 @@ test("accepts explicit no-impact, covered, gap, and blocked outcomes", () => {
   review.planningGroups = [
     {
       findingIds: ["gap"],
-      capabilityPath: "design-sync/annotation-implementation-verification",
+      capabilityPath: "shared/design-sync/annotation-verification",
       proposedChangeName: "implement-missing-annotation-behavior",
       planningLane: "full-planning",
       affectedRepositories: ["grade10-spec"],
@@ -271,7 +271,7 @@ function gapFinding(findingId) {
 function planningGroup(findingIds, overrides = {}) {
   return {
     findingIds,
-    capabilityPath: "design-sync/annotation-implementation-verification",
+    capabilityPath: "shared/design-sync/annotation-verification",
     proposedChangeName: "implement-missing-annotation-behavior",
     planningLane: "full-planning",
     affectedRepositories: ["grade10-spec"],

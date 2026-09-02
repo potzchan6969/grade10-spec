@@ -3,7 +3,7 @@
 `CartItem` already renders `copy.lowStockWarning` whenever
 `item.status === "adjusted"`. Status is consumer-owned; the shared row must not
 mutate cart product state. See `proposal.md` for motivation; behavior lives in
-[`shared-ui/store-cart`](../../specs/shared-ui/store-cart/spec.md) (delta).
+[`shared/ui/store-cart`](../../specs/shared/ui/store-cart/spec.md) (delta).
 
 ## Goals / Non-Goals
 

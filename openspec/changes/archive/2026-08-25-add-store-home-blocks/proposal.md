@@ -17,7 +17,7 @@ named exports.
 
 ## What Changes
 
-- **A new capability, `shared-ui/store-home`.** Export contract for the hero,
+- **A new capability, `shared/ui/store-home`.** Export contract for the hero,
   the section header (`title` + browse-all link), and the collection bento grid.
   Blocks live in `packages/ui/src/blocks/store-home/`.
 - **Preview page assembly.** `apps/preview` gains a Store Home page story
@@ -40,12 +40,12 @@ named exports.
 
 ### New Capabilities
 
-- `shared-ui/store-home`: hero, section header, and collection bento grid for
+- `shared/ui/store-home`: hero, section header, and collection bento grid for
   the store landing page.
 
 ### Modified Capabilities
 
-- `shared-ui/component-package`: names the new `@grade10/ui` exports.
+- `shared/ui/component-package`: names the new `@grade10/ui` exports.
 
 ## Impact
 

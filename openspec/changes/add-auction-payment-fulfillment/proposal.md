@@ -58,14 +58,14 @@ listings with a winner.
 
 ### New Capabilities
 
-- `grade10-auction/post-sale`: OpenSpec capability id (not a code module)
+- `grade10-admin/auction/post-sale`: OpenSpec capability id (not a code module)
   for the operator queue, listing outcome, winner contact, Stripe vs
   manual vs wire payment, manual shipment milestones, the listing trail
   of status changes and comments, and the split payment/shipment grants.
 
 ### Modified Capabilities
 
-- None. `grade10-auction/auction` is still the in-flight bidding contract
+- None. `grade10-site/auction/auction` is still the in-flight bidding contract
   and explicitly excluded capture and fulfilment; this change is that
   follow-on, as its own capability.
 

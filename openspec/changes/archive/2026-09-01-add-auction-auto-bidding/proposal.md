@@ -75,7 +75,7 @@ sets a maximum, closes the tab, and wins at less than that maximum.
 
 ### New Capabilities
 
-- `grade10-auction/auto-bidding`: a bidder commits a maximum and the platform
+- `grade10-site/auction/auto-bidding`: a bidder commits a maximum and the platform
   bids for them — the two-maximum rule, that the price is the second-highest
   plus one increment, who leads on a tie, when a maximum may be raised, what
   stays hidden, how the card hold relates to the maximum, and that an auto bid

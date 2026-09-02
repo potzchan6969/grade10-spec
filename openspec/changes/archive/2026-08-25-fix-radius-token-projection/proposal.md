@@ -25,7 +25,7 @@ that expression into the utility instead of emitting `var(--radius-xl)`, so
 `:root` value the token build emits. In `.theme-grade10`, `--radius` is
 `var(--radius-lg)` = 8px, and 8 × 1.4 = 11.2.
 
-This is not cosmetic drift. `shared-ui/component-package` already requires that
+This is not cosmetic drift. `shared/ui/component-package` already requires that
 "re-theming the token values re-brands the component without a source change" —
 and for radius it does not: a designer changing `radius-xl` in Figma, pulling,
 and rebuilding sees no change in anything using `rounded-xl`. The token is
@@ -48,7 +48,7 @@ that binds a radius.
   var(--radius-xl)`, and the unlayered `:root` block the token build writes
   wins the cascade over Tailwind's layered defaults. Every rung then resolves
   to its `tokens.json` value.
-- **A new requirement** on `shared-ui/component-package`: a utility named after
+- **A new requirement** on `shared/ui/component-package`: a utility named after
   a token resolves to that token's value, so the projection itself is testable
   rather than assumed.
 - **Rendered geometry changes** on every component using a named radius rung —
@@ -78,7 +78,7 @@ None.
 
 ### Modified Capabilities
 
-- `shared-ui/component-package`: add a requirement that a token-named utility
+- `shared/ui/component-package`: add a requirement that a token-named utility
   resolves to that token's value.
 
 ## Impact

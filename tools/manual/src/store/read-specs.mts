@@ -21,9 +21,14 @@ import {
 import type { GitIndex } from "./git.mts";
 import { findSection, outline, type Section } from "./markdown.mts";
 
-/** Disk shape is the taxonomy: a directory under `openspec/specs` holding
- * `spec.md` directly is a topic, a directory of capability directories is a
- * product. */
+/** Disk shape is the taxonomy. A directory holding `spec.md` is a capability;
+ * one holding only capability directories is the product they belong to. A
+ * directory that mixes the two is a layer rather than a product — `shared`
+ * groups `auth/*` and `ui/*` while carrying the platform-wide formats bare,
+ * because those belong to no group smaller than everything — so its bare
+ * capabilities are topics and its grouping children are read as products.
+ * That reads `openspec/specs/<product>/<domain>/<capability>` and the shallower
+ * `openspec/specs/<layer>/<topic>` off the same walk. */
 export type SpecShape = {
   products: string[];
   topics: string[];
@@ -58,29 +63,44 @@ const CITATION = /^\s*[-*]\s+`([a-z0-9][a-z0-9-]*-SC-\d+)`\s*[—–-]\s*(.+?)\s
 const BULLET = /^\s*[-*]\s+/;
 
 export function discoverSpecs(root: string): SpecShape {
-  const specsDir = join(root, "openspec", "specs");
   const shape: SpecShape = { products: [], topics: [], dirs: new Map() };
-
-  for (const name of subdirectories(specsDir)) {
-    const dir = join(specsDir, name);
-    if (existsSync(join(dir, "spec.md"))) {
-      shape.topics.push(name);
-      shape.dirs.set(name, storePath(root, dir));
-      continue;
-    }
-    const capabilities = subdirectories(dir).filter((capability) =>
-      existsSync(join(dir, capability, "spec.md")),
-    );
-    if (capabilities.length === 0) continue;
-    shape.products.push(name);
-    for (const capability of capabilities) {
-      shape.dirs.set(
-        `${name}/${capability}`,
-        storePath(root, join(dir, capability)),
-      );
-    }
-  }
+  collect(root, join(root, "openspec", "specs"), [], shape, true);
+  shape.products.sort();
+  shape.topics.sort();
   return shape;
+}
+
+/** Reads `dir`'s children, filing each capability under the product that owns
+ * it. `layer` marks a directory that cannot itself be a product — the specs
+ * root, and any directory that groups as well as specifies — whose bare
+ * capabilities are topics instead. */
+function collect(
+  root: string,
+  dir: string,
+  trail: string[],
+  shape: SpecShape,
+  layer: boolean,
+): void {
+  const children = subdirectories(dir).map((name) => ({
+    name,
+    path: join(dir, name),
+    capability: existsSync(join(dir, name, "spec.md")),
+  }));
+  const capabilities = children.filter((child) => child.capability);
+  const groups = children.filter((child) => !child.capability);
+  // A directory that only specifies is the product its capabilities belong to;
+  // one that also groups is a layer, and so is the root.
+  const product = !layer && groups.length === 0 && capabilities.length > 0;
+  if (product) shape.products.push(trail.join("/"));
+
+  for (const child of capabilities) {
+    const id = [...trail, child.name].join("/");
+    shape.dirs.set(id, storePath(root, child.path));
+    if (!product) shape.topics.push(id);
+  }
+  for (const child of groups) {
+    collect(root, child.path, [...trail, child.name], shape, false);
+  }
 }
 
 export function readSpecs(root: string, git: GitIndex): SpecEntry[] {
@@ -229,9 +249,11 @@ export function readRequirement(section: Section): Requirement {
   };
 }
 
-/** `###` headings under `## Requirements` that name no requirement. Legal in a
- * delta, fatal in a durable spec: `openspec archive` folds one into the
- * requirement above it, and the fold writes a spec this reader refuses. */
+/** `###` headings under `## Requirements` that name no requirement. Tolerated
+ * in a delta and fatal in a durable spec: `openspec archive` folds one into the
+ * requirement above it, and the fold writes a spec this reader refuses. Tolerated
+ * is not allowed - a delta's heading is what lands folded, so the spec rules in
+ * `openspec/config.yaml` forbid one on either side. */
 export function groupHeadings(text: string): Section[] {
   return requirementSections(text).filter(
     (section) =>

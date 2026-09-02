@@ -31,7 +31,7 @@ storefront's.
 - **A card answers at its own address.** `/store/products/<slug>` serves that
   card's name, grade, certificate, price and description in the response,
   before any script runs. Every requirement of
-  `grade10-site/crawlable-pages` binds it by being a public surface — its own
+  `grade10-site/site/crawlable-pages` binds it by being a public surface — its own
   title, its own description, its own `og:url`, its entry in the sitemap.
 - **A surface may be rendered when it is asked for.** A surface whose address
   carries a parameter has no one document to write, so the worker runs the
@@ -70,12 +70,12 @@ storefront's.
 
 ### New Capabilities
 
-- `grade10-store/product-page`: what one card's address serves — the card's
+- `grade10-site/store/product-page`: what one card's address serves — the card's
   own page, and the refusal when the catalogue has no such card.
 
 ### Modified Capabilities
 
-- `grade10-site/crawlable-pages`: an address nested under a public surface
+- `grade10-site/site/crawlable-pages`: an address nested under a public surface
   answers 200 with that surface's identity *unless the surface itself refuses
   it*. Written before any surface could refuse one, the requirement now reads
   as forbidding the 404 a missing card must answer with.

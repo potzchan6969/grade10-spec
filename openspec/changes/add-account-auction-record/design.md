@@ -3,8 +3,8 @@
 The auction service already owns listings, bids, payment holds, settlements,
 fulfilments, and a per-storefront `watches` relation. The store worker resolves
 the customer session and reaches that service through the storefront-pinned
-entrypoint. See the [account record spec](specs/grade10-auction/account-auction-record/spec.md)
-and [shared UI spec](specs/shared-ui/auction-record/spec.md) for the product
+entrypoint. See the [account record spec](specs/grade10-site/auction/account-record/spec.md)
+and [shared UI spec](specs/shared/ui/auction-record/spec.md) for the product
 contract.
 
 The existing own-list reads are deliberately narrow and ordered by creation

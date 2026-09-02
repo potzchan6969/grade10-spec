@@ -1,4 +1,4 @@
-/** Per-listing extension settings in seconds, aligned with grade10-auction/auction. */
+/** Per-listing extension settings in seconds, aligned with grade10-site/auction/auction. */
 export type ListingExtensionPolicy = {
   windowSeconds: number;
   durationSeconds: number;

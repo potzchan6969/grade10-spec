@@ -69,7 +69,7 @@ None.
 
 ### Modified Capabilities
 
-- `shared-ui/store-product-listing`: add `ProductCardImage`; rewrite the tile
+- `shared/ui/store-product-listing`: add `ProductCardImage`; rewrite the tile
   contract to the published card and card-image sets; drop category,
   description, Add, wishlist, and quantity-stepper from the tile.
 

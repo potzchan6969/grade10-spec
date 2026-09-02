@@ -144,7 +144,7 @@ function deriveIndex(snapshot: Snapshot): ManualIndex {
   for (const change of snapshot.changes) {
     for (const delta of change.deltas) {
       push(changesBySpec, delta.spec, change);
-      push(changesByOwner, ownerOfSpec(delta.spec), change);
+      push(changesByOwner, ownerOfSpec(delta.spec, snapshot.taxonomy), change);
     }
   }
   for (const list of [...changesBySpec.values(), ...changesByOwner.values()]) {
@@ -363,7 +363,11 @@ function deriveTopicGroups(index: ManualIndex): NavTopicGroup[] {
   for (const group of index.snapshot.config.platform) {
     const topics: NavItem[] = [];
     for (const id of group.topics) {
-      const page = byId.get(id);
+      // A topic is listed by its spec id — `shared/money-amounts` — while its
+      // page is a flat file named for the topic alone, because the layer above
+      // it holds nothing else the manual writes a page for.
+      const slug = id.split("/").pop() ?? id;
+      const page = byId.get(slug);
       topics.push(
         page
           ? navItem(page, id)
@@ -374,7 +378,7 @@ function deriveTopicGroups(index: ManualIndex): NavTopicGroup[] {
               order: Number.MAX_SAFE_INTEGER,
             },
       );
-      byId.delete(id);
+      byId.delete(slug);
     }
     groups.push({ title: group.title, topics });
   }
@@ -487,11 +491,15 @@ export function capabilityStatus(
   return "planned";
 }
 
-/** Only a product's own children are capabilities; guides and topics are not. */
+/** Only a product's own children are capabilities; guides and topics are not.
+ * A product directory sits one or two levels under `products/`, depending on
+ * whether the store groups its products by the application shipping them. */
 export function isProductDir(manualDir: string, dir: string): boolean {
   const prefix = pagePath(manualDir, "products");
+  if (!dir.startsWith(`${prefix}/`)) return false;
+  const rest = dir.slice(prefix.length + 1);
   return (
-    dir.startsWith(`${prefix}/`) && !dir.slice(prefix.length + 1).includes("/")
+    rest !== "" && rest.split("/").length <= 2
   );
 }
 
@@ -793,7 +801,7 @@ export function incubatingFor(
   for (const [specId, changes] of index.changesBySpec) {
     if (index.specById.has(specId)) continue;
     if (index.routeBySpec.has(specId)) continue;
-    const owner = ownerOfSpec(specId);
+    const owner = ownerOfSpec(specId, index.snapshot.taxonomy);
     // Named product, or — with no product named — the leftovers no product
     // branch is going to show, which are the easiest ones to lose.
     if (product === undefined ? homed.has(owner) : owner !== product) continue;
@@ -912,8 +920,9 @@ export function byLastMoved(a: ChangeEntry, b: ChangeEntry): number {
 export function routeForSpec(index: ManualIndex, specId: string): string {
   const known = index.routeBySpec.get(specId);
   if (known) return known;
-  const parts = specId.split("/");
-  return parts.length === 2
-    ? `/p/${parts[0]}/${parts[1]}`
-    : `/platform/${specId}`;
+  const owner = ownerOfSpec(specId, index.snapshot.taxonomy);
+  // A topic owns itself, and has no product route to sit under.
+  return owner === specId
+    ? `/platform/${specId}`
+    : `/p/${owner}/${specId.slice(owner.length + 1)}`;
 }

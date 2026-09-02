@@ -214,7 +214,7 @@ describe("the real store's board", () => {
   it("states an id ceiling no durable spec could reach alone", async () => {
     const { snapshot } = await readStore(rootsOf(root));
     const loyalty = snapshot.specs.find(
-      (one) => one.id === "grade10-store/loyalty",
+      (one) => one.id === "grade10-site/loyalty/programme",
     );
     const durable = Math.max(
       ...(loyalty?.requirements.flatMap((one) =>

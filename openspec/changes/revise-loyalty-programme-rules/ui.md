@@ -40,7 +40,7 @@ formatter — `MembershipSummary` renders that string rather than re-deriving it
 ## States
 
 Each state below exists because a scenario in
-[`specs/grade10-store/loyalty/spec.md`](specs/grade10-store/loyalty/spec.md)
+[`specs/grade10-site/loyalty/programme/spec.md`](specs/grade10-site/loyalty/programme/spec.md)
 defines it.
 
 | Surface | State | Scenario behind it |

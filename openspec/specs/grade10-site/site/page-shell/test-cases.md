@@ -1,0 +1,373 @@
+# grade10-site/site/page-shell Test Cases
+
+**Status:** pending-review
+**Drafts styled:** 2026-09-02, tcs-rules r1
+
+## page-shell-US1: Collector opens any surface inside the site shell
+
+**As a** collector,
+**I want** every address the site answers to render its surface between the
+header and the footer, at the width I browse at,
+**so that** I get the site around whatever I opened, and never a surface that
+shipped without it.
+
+### page-shell-US1-TC1-1: Every address is wrapped in header, main and footer
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** page-shell-US-01
+
+**Pre-conditions:**
+None.
+
+**Steps:**
+
+1. Navigate to <grade10 marketing url>.
+2. Check landmarks and chrome.
+3. Navigate to <an address the site does not recognize> and check the same.
+
+**Expected Results:**
+
+* Header and footer are present, with the surface between them.
+* The page carries exactly one banner, one main, and one contentinfo landmark, with the surface inside main.
+* The shell adds no heading, copy, or spacing of its own to that surface's content.
+
+### page-shell-US1-TC2-1: Narrow viewport reflows without clipping
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** page-shell-US-01
+
+**Pre-conditions:**
+A viewport 375 CSS pixels wide.
+
+**Steps:**
+
+1. Set the viewport to 375 CSS pixels wide.
+2. Navigate to <grade10 marketing url>.
+3. Check scrolling and controls.
+
+**Expected Results:**
+
+* The page scrolls vertically only.
+* No content is clipped and no control is unreachable.
+
+---
+
+## page-shell-US2: Collector sees the chrome before the session resolves
+
+**As a** collector,
+**I want** the header and the footer rendered before the session has resolved,
+and unchanged once it does,
+**so that** I can start navigating immediately without the chrome shifting
+under me.
+
+### page-shell-US2-TC1-1: Header and footer paint while the session resolves
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** page-shell-US-02
+
+**Pre-conditions:**
+Network manipulation holds the session from resolving.
+
+**Steps:**
+
+1. Navigate to <grade10 marketing url>.
+2. Check the chrome and the content region before the session resolves.
+
+**Expected Results:**
+
+* The header and the footer are already rendered.
+* The content region shows that the surface is loading.
+
+### page-shell-US2-TC2-1: Chrome does not shift when the session arrives
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** page-shell-US-02
+
+**Pre-conditions:**
+A page rendered while the session was resolving.
+
+**Steps:**
+
+1. Navigate to <grade10 marketing url> with the session still resolving.
+2. Wait until the session resolves.
+3. Check the chrome controls.
+
+**Expected Results:**
+
+* No chrome control appears, disappears, or moves.
+
+---
+
+## page-shell-US3: Collector reaches their account from the header
+
+**As a** collector,
+**I want** an account control that leads to my profile when I am signed in and
+to sign-in when I am not,
+**so that** one control in the header always takes me where I can go, and
+signing out has a single home.
+
+### page-shell-US3-TC1-1: Signed-in account control opens the profile
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** page-shell-US-03
+
+**Pre-conditions:**
+Signed in as a collector.
+
+**Steps:**
+
+1. Navigate to <grade10 marketing url>.
+2. Activate the account control.
+
+**Expected Results:**
+
+* They arrive at their profile.
+
+### page-shell-US3-TC2-1: Signed-out account control opens sign-in
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** page-shell-US-03
+
+**Pre-conditions:**
+The collector is not signed in.
+
+**Steps:**
+
+1. Navigate to <grade10 marketing url>.
+2. Activate the account control.
+
+**Expected Results:**
+
+* They arrive at sign-in.
+
+### page-shell-US3-TC3-1: Header offers no sign-out
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** page-shell-US-03
+
+**Pre-conditions:**
+Signed in as a collector.
+
+**Steps:**
+
+1. Navigate to <grade10 marketing url> and check the header.
+2. Navigate to <grade10 profile url>.
+
+**Expected Results:**
+
+* The header offers no way to sign out.
+* A signed-in collector can sign out from their profile.
+
+---
+
+## page-shell-US4: Collector follows only links the site answers
+
+**As a** collector,
+**I want** the chrome to show a control or a link only when the site answers
+its destination,
+**so that** nothing in the header or the footer leads me to a not-found page.
+
+### page-shell-US4-TC1-1: Header shows locale and account, not search or cart
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** page-shell-US-04
+
+**Pre-conditions:**
+The site does not yet answer search or cart.
+
+**Steps:**
+
+1. Navigate to <grade10 marketing url>.
+2. Check the header controls.
+
+**Expected Results:**
+
+* The header shows the locale label and the account control.
+* No search or cart control appears.
+
+### page-shell-US4-TC2-1: Navigation and footer link only to real surfaces
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** page-shell-US-04
+
+**Pre-conditions:**
+None.
+
+**Steps:**
+
+1. Navigate to <grade10 marketing url>.
+2. Check every header navigation item destination.
+3. Check every footer link destination.
+
+**Expected Results:**
+
+* Every navigation item leads to a surface the site answers.
+* Every footer link leads to a surface the site answers, and a column left with no reachable link is absent entirely.
+
+### page-shell-US4-TC3-1: Promo bar and utility row wait for their pages
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** page-shell-US-04
+
+**Pre-conditions:**
+The site answers none of the utility destinations.
+
+**Steps:**
+
+1. Navigate to <grade10 marketing url>.
+2. Check the header for the promotional bar and the utility row.
+
+**Expected Results:**
+
+* Neither the promotional bar nor the utility row appears.
+
+---
+
+## page-shell-US5: Collector locates the current surface in the navigation
+
+**As a** collector,
+**I want** the navigation item owning the address I am on to be marked, and
+none marked when no item owns it,
+**so that** I can tell where I am in the site without guessing.
+
+### page-shell-US5-TC1-1: Listed surface marks its navigation item
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** page-shell-US-05
+
+**Pre-conditions:**
+A collector is on a surface the navigation lists, or on any address beneath it.
+
+**Steps:**
+
+1. Navigate to <grade10 store url>.
+2. Check the header navigation.
+
+**Expected Results:**
+
+* That navigation item is marked as the current page.
+
+### page-shell-US5-TC2-1: Unlisted surface marks no navigation item
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** page-shell-US-05
+
+**Pre-conditions:**
+A collector is on the profile, sign-in, or an unrecognized address.
+
+**Steps:**
+
+1. Navigate to <grade10 profile url> while signed in.
+2. Check the header navigation.
+
+**Expected Results:**
+
+* No navigation item is marked as the current page.

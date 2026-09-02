@@ -53,13 +53,13 @@ The design is on a canvas:
 
 ### New Capabilities
 
-- `admin-console/api-docs`: the procedure record every backend already
+- `grade10-admin/console/api-docs`: the procedure record every backend already
   carries, rendered in the console and held to its routers.
 
 ### Modified Capabilities
 
 None. The surface composes the console's existing vocabulary
-(`admin-console/visual-standard`) and blocks (`admin-console/console-blocks`)
+(`shared/console/visual-standard`) and blocks (`shared/console/blocks`)
 and changes neither.
 
 ## Impact
@@ -69,6 +69,6 @@ and changes neither.
   check that fails on drift join the validation list. Which packages and
   scripts is the engineer's to decide at promotion.
 - This store: a manual page for the capability under
-  `docs/prds/products/admin-console/`, written at promotion.
+  `docs/prds/products/grade10-admin/console/`, written at promotion.
 - No backend behaviour changes. No shared UI export changes.
 - The ZZZ console is untouched; the generator reads the grade10 assembly.

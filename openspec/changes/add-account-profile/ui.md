@@ -9,8 +9,8 @@ requirements in the two deltas.
 
 | Screen | Frame | What is new on it |
 | --- | --- | --- |
-| Account profile — read view | *none; built from `shared-ui/store-profile`* | The avatar, the read-only email row, and the member-since line. The create-a-profile empty state is gone. |
-| Account profile — edit form | *none; built from `shared-ui/store-profile`* | The avatar control: choose a replacement, preview it, remove the current one. |
+| Account profile — read view | *none; built from `shared/ui/store-profile`* | The avatar, the read-only email row, and the member-since line. The create-a-profile empty state is gone. |
+| Account profile — edit form | *none; built from `shared/ui/store-profile`* | The avatar control: choose a replacement, preview it, remove the current one. |
 
 ## Components
 

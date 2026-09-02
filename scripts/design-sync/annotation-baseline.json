@@ -809,7 +809,7 @@
           "categoryId": "86:3",
           "pinnedProperties": [],
           "associations": {
-            "capability": "shared-ui/store-product-listing"
+            "capability": "shared/ui/store-product-listing"
           }
         }
       ]
@@ -825,7 +825,7 @@
           "categoryId": "86:2",
           "pinnedProperties": [],
           "associations": {
-            "capability": "grade10-store/product-page"
+            "capability": "grade10-site/store/product-page"
           }
         }
       ]
@@ -841,7 +841,7 @@
           "categoryId": "86:3",
           "pinnedProperties": [],
           "associations": {
-            "capability": "grade10-store/product-page"
+            "capability": "grade10-site/store/product-page"
           }
         }
       ]
@@ -857,7 +857,7 @@
           "categoryId": "86:1",
           "pinnedProperties": [],
           "associations": {
-            "capability": "grade10-store/product-page"
+            "capability": "grade10-site/store/product-page"
           }
         }
       ]
@@ -873,7 +873,7 @@
           "categoryId": "86:1",
           "pinnedProperties": [],
           "associations": {
-            "capability": "grade10-store/product-page"
+            "capability": "grade10-site/store/product-page"
           }
         }
       ]
@@ -889,7 +889,7 @@
           "categoryId": "86:3",
           "pinnedProperties": [],
           "associations": {
-            "capability": "shared-ui/store-product-listing"
+            "capability": "shared/ui/store-product-listing"
           }
         }
       ]
@@ -905,7 +905,7 @@
           "categoryId": "86:1",
           "pinnedProperties": [],
           "associations": {
-            "capability": "shared-ui/store-product-listing"
+            "capability": "shared/ui/store-product-listing"
           }
         }
       ]
@@ -921,7 +921,7 @@
           "categoryId": "86:1",
           "pinnedProperties": [],
           "associations": {
-            "capability": "grade10-store/product-page"
+            "capability": "grade10-site/store/product-page"
           }
         }
       ]
@@ -937,7 +937,7 @@
           "categoryId": "86:3",
           "pinnedProperties": [],
           "associations": {
-            "capability": "grade10-store/product-page"
+            "capability": "grade10-site/store/product-page"
           }
         }
       ]
@@ -953,7 +953,7 @@
           "categoryId": "86:1",
           "pinnedProperties": [],
           "associations": {
-            "capability": "grade10-store/product-page"
+            "capability": "grade10-site/store/product-page"
           }
         }
       ]
@@ -969,7 +969,7 @@
           "categoryId": "86:1",
           "pinnedProperties": [],
           "associations": {
-            "capability": "grade10-store/product-page"
+            "capability": "grade10-site/store/product-page"
           }
         }
       ]
@@ -985,7 +985,7 @@
           "categoryId": "86:1",
           "pinnedProperties": [],
           "associations": {
-            "capability": "grade10-store/product-page"
+            "capability": "grade10-site/store/product-page"
           }
         },
         {
@@ -994,7 +994,7 @@
           "categoryId": "86:2",
           "pinnedProperties": [],
           "associations": {
-            "capability": "grade10-store/product-page"
+            "capability": "grade10-site/store/product-page"
           }
         }
       ]
@@ -1010,7 +1010,7 @@
           "categoryId": "86:0",
           "pinnedProperties": [],
           "associations": {
-            "capability": "grade10-store/product-page"
+            "capability": "grade10-site/store/product-page"
           }
         }
       ]
@@ -1026,7 +1026,7 @@
           "categoryId": "86:1",
           "pinnedProperties": [],
           "associations": {
-            "capability": "grade10-store/product-page"
+            "capability": "grade10-site/store/product-page"
           }
         }
       ]
@@ -1042,7 +1042,7 @@
           "categoryId": "86:3",
           "pinnedProperties": [],
           "associations": {
-            "capability": "grade10-store/product-page"
+            "capability": "grade10-site/store/product-page"
           }
         }
       ]

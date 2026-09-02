@@ -34,7 +34,7 @@ authorized, accepted bid without a payment-method failure.
 
 ### New Capabilities
 
-- `grade10-auction/bid-payment-method`: The per-listing payment-method choice
+- `grade10-site/auction/bid-payment-method`: The per-listing payment-method choice
   and authorization lifecycle that makes a bid card-backed.
 
 ### Modified Capabilities

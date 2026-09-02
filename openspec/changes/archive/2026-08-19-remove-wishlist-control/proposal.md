@@ -25,9 +25,9 @@ to a working action should rise as a result.
 
 - **New Capabilities:** none
 - **Modified Capabilities:**
-  - `shared-ui/site-chrome`: wishlist is no longer a header control
-  - `shared-ui/store-product-listing`: a product tile has no wishlist action
-  - `grade10-site/page-shell`: the header's deferred-control list no longer
+  - `shared/ui/site-chrome`: wishlist is no longer a header control
+  - `shared/ui/store-product-listing`: a product tile has no wishlist action
+  - `grade10-site/site/page-shell`: the header's deferred-control list no longer
     includes wishlist
 
 ## Impact

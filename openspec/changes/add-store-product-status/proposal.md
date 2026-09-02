@@ -11,7 +11,7 @@ supplied sold-out boolean, a card's page says for sale or not, and the cart
 drawer keeps its own `CartItemStatus` vocabulary.
 
 The store already refuses a stale line at the last step.
-`grade10-store/shopify-commerce` prices every line live when a checkout is
+`grade10-site/store/shopify-commerce` prices every line live when a checkout is
 requested and refuses a variant the shop no longer sells or a quantity above
 what it counts. That refusal reaches the collector as one sentence on the
 checkout page, with no line named and nothing to press, for a problem the store
@@ -77,9 +77,9 @@ availability *means*; `cart-validation` governs when the store *acts* on it.
   fill short is refused rather than sold short, and a read that cannot complete
   blocks checkout rather than guessing.
 
-No component contract changes. `shared-ui/store-product-listing` takes
+No component contract changes. `shared/ui/store-product-listing` takes
 availability as a supplied condition and forbids deriving one;
-`shared-ui/store-cart` carries `default`, `adjusted`, `soldOut` and
+`shared/ui/store-cart` carries `default`, `adjusted`, `soldOut` and
 `unavailable` and reads status and price when the drawer opens. This change
 states what the store puts into them.
 
@@ -94,13 +94,14 @@ states what the store puts into them.
   about quantity. The cart's `adjusted` warning explains a quantity the store
   already changed; it is not a scarcity badge.
 - **Checkout order creation, draft orders, and the fifteen-minute reservation.**
-  Already `grade10-store/shopify-commerce`. This change stops at the handoff.
+  Already `grade10-site/store/shopify-commerce`. This change stops at the
+  handoff.
 - **Multi-location inventory.** Available quantity is read as one number.
 - **How money is formatted.** Already `money-amounts`; this change only requires
   that a price read be minor units plus an ISO 4217 code.
 - **Refresh cadence for browse surfaces.** Whether the listing reads live or
   from cache is engineering's, bounded by the invalidation
-  `grade10-store/shopify-commerce` requires. The two cart reads are not
+  `grade10-site/store/shopify-commerce` requires. The two cart reads are not
   cadence — they are stated moments, and they are live.
 - **Visual treatment.** Whether out of stock and unavailable are drawn alike is
   design's.
@@ -109,20 +110,21 @@ states what the store puts into them.
 
 ### New Capabilities
 
-- `grade10-store/product-status`: what availability means — the shop's answer
+- `grade10-site/store/product-status`: what availability means — the shop's answer
   for a variant, the answer for a requested quantity, the variant-to-card
   rollup, and what a browse surface communicates.
-- `grade10-store/cart-validation`: when the store re-reads availability and
+- `grade10-site/store/cart-validation`: when the store re-reads availability and
   price for the lines a collector holds, what it does to a line the read
   contradicts, and what the collector is told before and after the cart is
   offered for checkout.
 
 ### Modified Capabilities
 
-None. `shared-ui/store-product-listing` already takes a supplied condition and
-forbids deriving one, `shared-ui/store-cart` already carries the statuses and
-the open-time read these requirements feed, and `grade10-store/product-page`'s
-per-variant for-sale requirement is unchanged by stating where that condition
+None. `shared/ui/store-product-listing` already takes a supplied condition and
+forbids deriving one, `shared/ui/store-cart` already carries the statuses and
+the open-time read these requirements feed, and
+`grade10-site/store/product-page`'s per-variant for-sale requirement is
+unchanged by stating where that condition
 comes from.
 
 ## Impact
@@ -133,10 +135,11 @@ own pricing and the cart's open-time read both answer from, reported per line
 rather than stopping at the first refusal, and the storefront mapping those
 answers onto the statuses the drawer and the checkout page already render.
 
-Depends on `add-grade10-shopify-store` for `grade10-store/shopify-commerce`,
-which establishes the shop as authoritative for inventory and owns everything
+Depends on `add-grade10-shopify-store` for
+`grade10-site/store/shopify-commerce`, which establishes the shop as
+authoritative for inventory and owns everything
 from the handoff onward. The cart drawer's statuses and the low-stock warning's
-lifecycle are durable in `shared-ui/store-cart`; this change owns what the
+lifecycle are durable in `shared/ui/store-cart`; this change owns what the
 store puts into them. No Figma change.
 
 The change directory is named `add-store-product-status` and carries two

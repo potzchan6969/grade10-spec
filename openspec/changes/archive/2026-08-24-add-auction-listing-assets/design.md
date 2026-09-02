@@ -1,13 +1,13 @@
 # Design: Auction listing assets
 
 Capability deltas:
-[`grade10-auction/listing-images`](specs/grade10-auction/listing-images/spec.md),
-[`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
+[`grade10-site/auction/listing-media`](specs/grade10-site/auction/listing-media/spec.md),
+[`shared/ui/auction-listing`](specs/shared/ui/auction-listing/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
 Depends on the gallery shape in
-[`add-admin-auction-listing`](../add-admin-auction-listing/specs/grade10-auction/admin-listing/spec.md)
-(`grade10-auction/admin-listing`): at most eight ordered media items (image or
+[`add-admin-auction-listing`](../add-admin-auction-listing/specs/grade10-admin/auction/listing/spec.md)
+(`grade10-admin/auction/listing`): at most eight ordered media items (image or
 video), first item is the catalogue card, no physical-side identity.
 
 ## Context

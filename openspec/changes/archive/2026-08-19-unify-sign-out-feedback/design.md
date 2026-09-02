@@ -2,7 +2,7 @@
 
 ## Context
 
-Requirements: [`specs/shared-auth/sign-out/spec.md`](specs/shared-auth/sign-out/spec.md).
+Requirements: [`specs/shared/auth/sign-out/spec.md`](specs/shared/auth/sign-out/spec.md).
 
 The `grade10` repo's auth frontend package (`@grade10/auth-frontend`) already
 holds the shared sign-in slice behind a structural client port that each

@@ -1,7 +1,7 @@
 ## Context
 
 See [proposal.md](proposal.md) for motivation and the existing
-[annotation-monitoring specification](../track-figma-annotation-changes/specs/design-sync/annotation-monitoring/spec.md)
+[annotation-monitoring specification](../track-figma-annotation-changes/specs/shared/design-sync/annotation-monitoring/spec.md)
 for required behavior.
 
 The reviewed baseline stores one flat record per engineering registration. It

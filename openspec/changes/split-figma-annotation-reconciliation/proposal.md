@@ -47,7 +47,7 @@ None.
 
 ### Modified Capabilities
 
-None. The existing `design-sync/annotation-monitoring` behavior remains the
+None. The existing `shared/design-sync/annotation-monitoring` behavior remains the
 contract: registered evidence is observed, compared, selectively accepted,
 verified, and optionally committed through one guided workflow. This change
 only assigns registered surfaces and the repo-local workflow adapters to their

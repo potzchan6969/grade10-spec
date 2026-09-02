@@ -26,7 +26,7 @@ Constraints the approach has to respect:
   system depends on, declares both as optional peers for its date components.
   Neither is installed today — the peers are optional and nothing has needed
   them.
-- Requirements: [`dates-and-times`](specs/dates-and-times/spec.md).
+- Requirements: [`shared/dates-and-times`](specs/shared/dates-and-times/spec.md).
 
 ## Goals / Non-Goals
 
@@ -356,9 +356,9 @@ stop meaning what it says.
 
 ### The capability sits at the top level of `specs/`
 
-`dates-and-times` binds storefronts, admin panels, demos, and email across
+`shared/dates-and-times` binds storefronts, admin panels, demos, and email across
 both brands rather than belonging to one product, so it sits beside the
-product directories the way `money-amounts` does.
+product directories the way `shared/money-amounts` does.
 
 ### No `ui.md`
 

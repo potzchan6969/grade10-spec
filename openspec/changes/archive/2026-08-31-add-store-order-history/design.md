@@ -1,6 +1,6 @@
 ## Context
 
-See proposal.md — Why. No durable `shared-ui/store-order-history` capability
+See proposal.md — Why. No durable `shared/ui/store-order-history` capability
 exists; Product / Order Figma sets are published and used on the Order History
 frames. Site chrome (`Nav`, `Footer`) and `EmptyState` / `Badge` / `Button` /
 `Breadcrumbs` already ship from `@grade10/design-system`. Page assembly belongs

@@ -30,8 +30,8 @@ compose these exports as brand-owned view code; neither needs exports of its own
 ## States
 
 Each state below exists because a scenario in
-[`specs/grade10-store/membership/spec.md`](specs/grade10-store/membership/spec.md)
-or [`specs/grade10-store/loyalty/spec.md`](specs/grade10-store/loyalty/spec.md)
+[`specs/grade10-site/store/membership/spec.md`](specs/grade10-site/store/membership/spec.md)
+or [`specs/grade10-site/loyalty/programme/spec.md`](specs/grade10-site/loyalty/programme/spec.md)
 defines it.
 
 | Surface | State | Scenario behind it |

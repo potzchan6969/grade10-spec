@@ -47,7 +47,7 @@ None.
 
 ### Modified Capabilities
 
-- `grade10-store/product-page`: add the Figma-aligned product-detail
+- `grade10-site/store/product-page`: add the Figma-aligned product-detail
   presentation, metadata, gallery, quantity control, and accessible
   description states while preserving the existing page and cart contract.
 

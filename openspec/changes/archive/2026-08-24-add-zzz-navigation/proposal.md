@@ -12,7 +12,7 @@ Back leaves the site instead of stepping back to home; and no mail the site
 ever sends can link deeper than the front door.
 
 The grade10 site already answers addresses on the framework, and
-`grade10-site/navigation` specs what navigating between its surfaces does.
+`grade10-site/site/navigation` specs what navigating between its surfaces does.
 ZZZ is the second brand assembled from the same packages, about to grow the
 same kinds of surfaces, and today it has neither addresses nor a single
 capability recorded for its product. Giving its three views addresses on the
@@ -44,7 +44,7 @@ lands there, and a refresh mid sign-in stays on sign-in.
   sitemap, no per-view identity work, and no serving-side refusal: ZZZ keeps
   answering every address with the app shell, so an address the site does not
   answer renders not-found under a 200. If ZZZ wants what
-  `grade10-site/crawlable-pages` gives grade10, that is its own change
+  `grade10-site/site/crawlable-pages` gives grade10, that is its own change
   against these addresses.
 - **New surfaces or a storefront.** The three views the app has, plus the
   not-found view honesty requires. The day ZZZ grows a real storefront at
@@ -58,7 +58,7 @@ lands there, and a refresh mid sign-in stays on sign-in.
 
 ### New Capabilities
 
-- `zzz/navigation`: the first capability of the `zzz` product —
+- `zzz-site/site/navigation`: the first capability of the `zzz` product —
   which surface an address resolves to, how the session corrects a
   session-decided address, what a navigation preserves, and what code a
   surface loads.

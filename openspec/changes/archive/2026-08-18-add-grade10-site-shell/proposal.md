@@ -62,10 +62,10 @@ zero today, every surface once this lands, and the number that has to stay at
 ## Capabilities
 
 ### New Capabilities
-- `grade10-site/page-shell`: what every page of the grade10 site is wrapped
+- `grade10-site/site/page-shell`: what every page of the grade10 site is wrapped
   in — the chrome, the content region, and which controls and links a surface
   may show.
-- `shared-ui/site-chrome`: what the shared `Nav` and `Footer` components
+- `shared/ui/site-chrome`: what the shared `Nav` and `Footer` components
   render and what the application supplies, so both storefronts inherit one
   contract.
 

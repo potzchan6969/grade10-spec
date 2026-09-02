@@ -34,7 +34,7 @@ None.
 
 ### Modified Capabilities
 
-- `shared-ui/auction-listing`: export `ListingUserBidHistory` and optional
+- `shared/ui/auction-listing`: export `ListingUserBidHistory` and optional
   `recentBidsAccessory` on the auction bid card.
 
 ## Impact

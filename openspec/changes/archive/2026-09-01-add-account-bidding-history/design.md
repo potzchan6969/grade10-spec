@@ -3,7 +3,7 @@
 - See [proposal.md](proposal.md) for the collector problem and market
   references.
 - See
-  [`grade10-auction/bidding-history`](specs/grade10-auction/bidding-history/spec.md)
+  [`grade10-site/auction/bidding-history`](specs/grade10-site/auction/bidding-history/spec.md)
   for the observable contract.
 - The shared Auction service owns bid ordering and accepted bid state.
 - The current public listing read exposes only a recent bid window.

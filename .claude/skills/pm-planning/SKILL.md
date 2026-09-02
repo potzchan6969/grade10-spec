@@ -26,7 +26,7 @@ execute it is not.
    MODIFIED block copied from a stale spec silently reverts whatever landed in
    between, and an overlap scan against a stale `openspec/changes/` finds
    nothing. Then read: the capability under
-   `openspec/specs/<product>/<capability>/`, every active change in
+   `openspec/specs/<product>/<domain>/<capability>/`, every active change in
    `openspec/changes/` for overlap, and the capability's page under
    `docs/prds/` when one exists. Find facts yourself — bring only decisions to the author.
 2. **Interview the author.** Run the `grilling` skill's round-based frontier
@@ -34,6 +34,13 @@ execute it is not.
    empty and the author confirms shared understanding. The interview scales
    with the open questions, not the change's size: if reading left nothing
    open, say so and proceed.
+
+   A question settles three ways, not two: answered, accepted as recommended,
+   or **deferred** — the author saying they are not the right person for it.
+   A deferred question goes under the proposal's open questions with a note on
+   who should settle it, and does not hold the draft. Sizing, export names,
+   and what code a change touches are never the author's to answer: find them
+   yourself, or leave them to the engineer at promotion.
 3. **Create the change through the CLI.**
 
    ```bash
@@ -95,11 +102,17 @@ execute it is not.
   Purpose is edited in `openspec/specs/` directly.
 - Never name a class, function, hook, table, or library. That is design's job.
   Public component exports are the one exception — the export name is the
-  cross-repo contract, so name it, and keep the set in one requirement.
+  cross-repo contract, so name it, and keep the set in one requirement. Read
+  `packages/ui` and the capability's existing export requirement and propose
+  the set yourself; never ask the author for an export name. Say in the
+  proposal which exports do not exist yet, and the engineer confirms the set
+  at promotion.
 - `## MODIFIED Requirements` needs the **entire** requirement block copied from
   the main spec and then edited. Partial content loses detail at archive. When
   you are adding a concern rather than changing existing behavior, use `ADDED`.
-- Money is an integer count of minor units plus an ISO 4217 code, never a float.
+- Money is an integer count of minor units plus an ISO 4217 code, never a
+  float. Convert it yourself — the author says HKD 10, the spec says 1000 HKD
+  minor units.
 
 ## Where a statement belongs
 

@@ -56,7 +56,7 @@ None.
 
 ### Modified Capabilities
 
-- `grade10-store/product-page`: what a card's page offers beyond reading —
+- `grade10-site/store/product-page`: what a card's page offers beyond reading —
   choosing a grade, adding it, and how a card nobody can buy reads.
 
 ## Impact

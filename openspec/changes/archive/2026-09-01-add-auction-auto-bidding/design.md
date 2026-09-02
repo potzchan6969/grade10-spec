@@ -2,7 +2,7 @@
 
 - See [proposal.md](proposal.md) for the collector problem.
 - See
-  [`grade10-auction/auto-bidding`](specs/grade10-auction/auto-bidding/spec.md)
+  [`grade10-site/auction/auto-bidding`](specs/grade10-site/auction/auto-bidding/spec.md)
   for the observable contract.
 - `add-grade10-auction` already serializes every money transition on
   `SELECT … FOR UPDATE` of `auction_listings`. Bids are evaluated in one

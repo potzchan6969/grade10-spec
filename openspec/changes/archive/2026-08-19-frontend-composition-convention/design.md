@@ -1,6 +1,6 @@
 ## Context
 
-The requirements are in [`specs/frontend-composition/spec.md`](specs/frontend-composition/spec.md).
+The requirements are in [`specs/shared/frontend-composition/spec.md`](specs/shared/frontend-composition/spec.md).
 
 The application repository already composes with Inversify: each product frontend package owns a `src/core/` of ports and a core-module factory, each feature slice owns a `ContainerModule`, and an application's `src/di/container.ts` builds the clients and loads the modules. Four of the seven packages already publish a module list; the convention is half-built, not new.
 

@@ -32,5 +32,5 @@ committed documents, never a running backend.
 
 ## 5. Manual and archive (grade10-spec)
 
-- [ ] 5.1 Write the capability's manual page under `docs/prds/products/admin-console/` — the shape in prose, the canvas linked, a `Product decisions` block carrying the metric, the non-goals, and the generated-and-checked decision — and add it to the product's index. Verify with `pnpm check:manual`.
-- [ ] 5.2 At archive time, copy the delta's `## Feature set` and `## User journeys` into the durable `openspec/specs/admin-console/api-docs/spec.md`; the fold carries `## Requirements` only. Run `pnpm run archive:preflight`.
+- [ ] 5.1 Write the capability's manual page under `docs/prds/products/grade10-admin/console/` — the shape in prose, the canvas linked, a `Product decisions` block carrying the metric, the non-goals, and the generated-and-checked decision. The domain is new: write its `index.md` as well, and add `grade10-admin/console` to the Admin group in `docs/prds/manual.yaml`. Verify with `pnpm check:manual`.
+- [ ] 5.2 At archive time, copy the delta's `## Feature set` and `## User journeys` into the durable `openspec/specs/grade10-admin/console/api-docs/spec.md`; the fold carries `## Requirements` only. Run `pnpm run archive:preflight`.

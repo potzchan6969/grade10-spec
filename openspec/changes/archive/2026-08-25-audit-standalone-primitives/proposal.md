@@ -90,7 +90,7 @@ None.
 
 ### Modified Capabilities
 
-- `design-sync/audit-coverage`: adds requirements for standalone components
+- `shared/design-sync/coverage`: adds requirements for standalone components
   and for a rail that fails. Carried as `## ADDED Requirements`, not
   `MODIFIED` — nothing already required changes meaning.
 

@@ -1,6 +1,6 @@
 # Design: Copy a feature owns, written once
 
-Capability delta: [`localization`](specs/localization/spec.md).
+Capability delta: [`shared/localization`](specs/shared/localization/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
 ## Context

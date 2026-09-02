@@ -1,7 +1,7 @@
 ## Context
 
 See [proposal.md](proposal.md#why) for the product motivation and the
-[post-sale capability](specs/grade10-auction/post-sale/spec.md) for the
+[post-sale capability](specs/grade10-admin/auction/post-sale/spec.md) for the
 requirements.
 
 The Auction service already owns the listing row lock, winner settlement,

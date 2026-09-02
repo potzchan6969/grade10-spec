@@ -10,7 +10,7 @@ This change makes one convention out of the half of it that already works: a pro
 
 ## What Changes
 
-- Add the `frontend-composition` capability: what a product frontend package publishes for composition, and what an application's composition root may load.
+- Add the `shared/frontend-composition` capability: what a product frontend package publishes for composition, and what an application's composition root may load.
 - Require every product frontend package — user-facing and admin alike — to publish its feature DI modules as one list at a dedicated subpath, including a package with a single slice today.
 - Require an application's composition root to load those lists rather than an individual feature module, and keep the single-module load legal only for a test exercising one slice.
 - Require a core-module factory's exported name to carry its product, so a root composing several products reads unambiguously.
@@ -20,7 +20,7 @@ This change makes one convention out of the half of it that already works: a pro
 
 ### New Capabilities
 
-- `frontend-composition`: How a product's frontend features are published for composition and how an application assembles them.
+- `shared/frontend-composition`: How a product's frontend features are published for composition and how an application assembles them.
 
 ### Modified Capabilities
 

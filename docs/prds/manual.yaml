@@ -2,40 +2,41 @@ storybookBase: https://storybook.grade10-stg.com
 
 groups:
   Grade10:
-    - grade10-store
-    - membership
-    - grade10-auction
-    - vault
-    - appointment
-    - e-kyc
-    - doc-sign
-    - finance
-    - grade10-site
+    - grade10-site/store
+    - grade10-site/loyalty
+    - grade10-site/auction
+    - grade10-site/vault
+    - grade10-site/appointment
+    - grade10-site/e-kyc
+    - grade10-site/doc-sign
+    - grade10-site/finance
+    - grade10-site/site
   ZZZ:
-    - zzz
+    - zzz-site/site
   Shared:
-    - shared-auth
+    - shared/auth
   Admin:
-    - audit
-    - grade10-inventory
+    - grade10-admin/audit
+    - grade10-admin/inventory
+    - grade10-admin/auction
   Platform:
-    - shared-ui
-    - admin-console
-    - design-sync
+    - shared/ui
+    - shared/console
+    - shared/design-sync
 
 platform:
   Conventions:
-    - money-amounts
-    - dates-and-times
-    - localization
+    - shared/money-amounts
+    - shared/dates-and-times
+    - shared/localization
   Architecture:
     - multi-product
     - serving
     - cross-service
     - account-data
     - edge-cache
-    - frontend-composition
-    - backend-service-repository
+    - shared/frontend-composition
+    - shared/backend-service-repository
   Commerce:
     - commerce
     - checkout-domain

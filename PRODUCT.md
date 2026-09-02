@@ -28,7 +28,7 @@ Collaborators work across several artifact types with distinct authority:
 
 | Need | Canonical location |
 | --- | --- |
-| Durable requirements and component export contracts | `openspec/specs/<product>/<capability>/spec.md` |
+| Durable requirements and component export contracts | `openspec/specs/<product>/<domain>/<capability>/spec.md` |
 | Product record: a capability's manual page and the decision behind its requirements | `docs/prds/products/<product>/<capability>.md` |
 | Proposed implementation change | `openspec/changes/<change-name>/` |
 | Design token values | `packages/design-system/tokens.json` |
@@ -49,16 +49,13 @@ Consuming applications add this repository as a Git submodule, pin a SHA, and im
 
 ## Capabilities and Constraints
 
-**Products specified** (under `openspec/specs/`):
+**Applications specified** (under `openspec/specs/`):
 
-- `grade10-store` — Grade10 trading-card store surfaces
-- `grade10-auction` — card-auction browse, bid, and operator close-out
-- `grade10-site` — site shell and site-owned surfaces
-- `zzz` — ZZZ site surfaces
-- `shared-ui` — cross-product compound components and site chrome
-- `shared-auth` — cross-product session behavior
-- `admin-console` — operator console blocks and identity directory
-- `design-sync` — Figma ↔ code audit contracts (not a product surface)
+- `grade10-site` — the grade10 site: shell, addressing, and every collector-facing surface inside it (store, auction, loyalty)
+- `grade10-admin` — the grade10 admin site: auction listings and campaigns, close-out, and the stock count behind them
+- `zzz-site` — the ZZZ site
+- `zzz-admin` — the ZZZ admin site (no capability specified yet)
+- `shared` — not an application: the contracts binding two or more of the four (`auth/*`, `ui/*`, `console/*`, `design-sync/*`, and the platform-wide formats)
 
 **Repository constraints (non-negotiable):**
 

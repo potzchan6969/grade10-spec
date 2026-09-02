@@ -12,10 +12,10 @@ Three facts make this concrete rather than speculative:
 
 - There is no collector-facing account surface for auctions anywhere in this
   store. `grade10-auction` holds `admin-listing`, `listing-media`, and
-  `listing-page`; the account area holds `grade10-store/account-profile`, which
+  `listing-page`; the account area holds `grade10-site/store/account-profile`, which
   is profile fields alone. Nothing addresses a collector's own activity.
 - Every post-sale fact a winner needs already exists — as an operator-side
-  requirement. `grade10-auction/post-sale` records outcome, payment state, and
+  requirement. `grade10-admin/auction/post-sale` records outcome, payment state, and
   shipment state for the queue. The person those records are about cannot see
   any of them.
 - A losing bidder's card authorization is released asynchronously. Nothing tells
@@ -48,7 +48,7 @@ is [`docs/prds/products/grade10-auction/account-auction-record.md`](../../../doc
 - **Bidding groups a collector's listings** as Active, Won, and Didn't win, and
   says where they stand in each: leading, outbid, or the outcome of a close.
 - **A winner follows their own listing to delivery.** Payment and shipment
-  state, read-only, projected from the records `grade10-auction/post-sale`
+  state, read-only, projected from the records `grade10-admin/auction/post-sale`
   already keeps for the operator queue.
 - **A losing bidder is told about their card hold**, including while its release
   is still in flight.
@@ -74,7 +74,7 @@ No breaking changes. No existing requirement's behavior changes; the
 - **Retracting or editing a bid.** A placed bid is binding.
 - **Paying, requesting a wire, or arranging delivery from this surface.** The
   winner reads their state; every write stays the operator's under
-  `grade10-auction/post-sale`. A winner-initiated wire request remains
+  `grade10-admin/auction/post-sale`. A winner-initiated wire request remains
   follow-on.
 - **Invoices, receipts, refunds, and disputes.**
 - **A public watch list or public collector profile.** The record is owner-only.
@@ -88,20 +88,20 @@ No breaking changes. No existing requirement's behavior changes; the
 
 ### New Capabilities
 
-- `grade10-auction/account-auction-record`: a signed-in collector's own record
+- `grade10-site/auction/account-record`: a signed-in collector's own record
   of the listings they watch and the listings they have bid on — what it holds,
   how a watch is added and removed, the states each page distinguishes, and what
   a winner and a losing bidder are told after a close.
-- `shared-ui/auction-record`: the components `@grade10/ui` exports for the
+- `shared/ui/auction-record`: the components `@grade10/ui` exports for the
   surface and what each is responsible for. Content and product state reach them
   through props, as with every block in that package. Named `auction-record`,
   not `account-auction-record`, so its scenario ids cannot collide with the
-  `grade10-auction` capability's — the same reason `shared-ui/store-profile`
-  and `grade10-store/account-profile` carry different directory names.
+  `grade10-auction` capability's — the same reason `shared/ui/store-profile`
+  and `grade10-site/store/account-profile` carry different directory names.
 
 ### Modified Capabilities
 
-- `grade10-auction/listing-page`: a lot's own page gains a control that watches
+- `grade10-site/auction/listing-page`: a lot's own page gains a control that watches
   and unwatches it. Additive — no existing requirement of that capability
   changes.
 

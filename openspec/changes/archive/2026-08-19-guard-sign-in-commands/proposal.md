@@ -28,9 +28,9 @@ drop to zero.
 ## Capabilities
 
 - **New Capabilities:**
-  - `shared-auth/sign-in`: the in-flight contract for sign-in commands and
+  - `shared/auth/sign-in`: the in-flight contract for sign-in commands and
     the email step's one-command-at-a-time rule. Lands beside
-    `shared-auth/sign-out` (added by `unify-sign-out-feedback`, not yet
+    `shared/auth/sign-out` (added by `unify-sign-out-feedback`, not yet
     archived); the `shared-auth` README bullet arrives with whichever
     change archives first.
 - **Modified Capabilities:** none

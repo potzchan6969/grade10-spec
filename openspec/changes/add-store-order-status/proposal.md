@@ -27,7 +27,7 @@ they are where the mapping does the most work.
 
 ## What Changes
 
-- Introduces `grade10-store/order-status`: the mapping from an order's Shopify
+- Introduces `grade10-site/store/order-status`: the mapping from an order's Shopify
   facts to one customer-facing badge and an optional secondary note.
 - Defines five badges for this phase — Processing, Shipped, Completed, Canceled,
   Refunded — derived by an ordered rule that resolves **every** combination of
@@ -58,13 +58,13 @@ ordered rule specified here reproduces all thirty confirmed PRD rows.
 - **No custom badges** beyond the five, and no merchant-configurable thresholds.
 - **Completed does not mean delivered.** It means fulfilled, paid, and archived.
   Carrier-confirmed delivery remains outside what the Store may report, per
-  `grade10-store/shopify-commerce`.
+  `grade10-site/store/shopify-commerce`.
 
 ## Capabilities
 
 ### New Capabilities
 
-- `grade10-store/order-status`: how an order's Shopify payment, fulfilment, and
+- `grade10-site/store/order-status`: how an order's Shopify payment, fulfilment, and
   order facts resolve to one customer-facing badge and an optional secondary
   note, and the obligation on every surface that shows order status to use it.
 
@@ -82,8 +82,9 @@ component contract changes; what changes is which value the application passes.
 **A conflict to resolve at archive.** The in-flight `add-store-order-history`
 change defines its `completed` badge as "delivered for an online order". That
 wording contradicts this capability, where Completed means fulfilled, paid, and
-archived — never carrier-confirmed delivery. `shared-ui/store-order-history` is
-not yet in `openspec/specs/`, so this change cannot carry a delta against it.
+archived — never carrier-confirmed delivery. `shared/ui/store-order-history`
+is not yet in `openspec/specs/`, so this change cannot carry a delta against
+it.
 Whoever archives `add-store-order-history` should correct that definition.
 
 **Two open questions for delivery.** Neither blocks the requirements.

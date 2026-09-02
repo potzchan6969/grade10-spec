@@ -17,5 +17,5 @@
 ## 3. Preview and contract
 
 - [x] 3.1 Assemble the page story as `Nav`, `CollectionBanner`, `ProductBrowse`, `Footer`
-- [x] 3.2 Fold the export rename into `openspec/specs/shared-ui/store-product-listing/spec.md`
+- [x] 3.2 Fold the export rename into `openspec/specs/shared/ui/store-product-listing/spec.md`
 - [x] 3.3 Run `pnpm run lint`, `pnpm run typecheck`, `pnpm run check:design-system`, and the listing story tests

@@ -1,7 +1,7 @@
 ## Context
 
 See [proposal.md](proposal.md) for the problem and the
-[annotation-monitoring spec](specs/design-sync/annotation-monitoring/spec.md)
+[annotation-monitoring spec](specs/shared/design-sync/annotation-monitoring/spec.md)
 for required behavior.
 
 The existing implementation has useful deterministic occurrence matching and

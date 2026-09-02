@@ -26,7 +26,7 @@ in prototype and keeps cart edits on the listing surface.
 
 ### Modified Capabilities
 
-- `shared-ui/store-product-listing`: morphing cart control on the product card
+- `shared/ui/store-product-listing`: morphing cart control on the product card
   image; quantity stepper overlay; `onCartQuantityChange` contract.
 
 ## Impact

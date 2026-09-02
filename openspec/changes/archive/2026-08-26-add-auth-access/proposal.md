@@ -23,7 +23,7 @@ stays at zero.
 - Operators list a person's sessions and revoke one or all of them. The
   list does not include the session secret. Support cannot list or revoke
   an admin's sessions. Sign-out of the current surface stays with
-  `shared-auth/sign-out`.
+  `shared/auth/sign-out`.
 - A ban lasts until an unban. The banned person cannot sign in, is not
   signed in, and cannot complete a money-moving action. Money-moving
   re-checks identity. An operator cannot ban themselves; support cannot
@@ -39,13 +39,13 @@ stays at zero.
 | Owner | Governs |
 | --- | --- |
 | `add-auth-session` | Who a signed-in person is |
-| `shared-auth/sign-out` | Ending the current surface's session |
-| `dates-and-times` | Audit entries ordered to the second |
+| `shared/auth/sign-out` | Ending the current surface's session |
+| `shared/dates-and-times` | Audit entries ordered to the second |
 
 ## Non-Goals
 
 - Who a signed-in person is, how they sign in — `add-auth-session`.
-- Sign-out of the current surface — `shared-auth/sign-out`.
+- Sign-out of the current surface — `shared/auth/sign-out`.
 - A second factor.
 - Account deletion, email change.
 - Passwords, impersonation, operator-created passwords.
@@ -56,10 +56,10 @@ stays at zero.
 
 ### New Capabilities
 
-- `shared-auth/roles`: roles and permission grants.
-- `shared-auth/users`: the users directory — list, ban, unban, set-role.
-- `shared-auth/sessions`: list and revoke a person's sessions.
-- `shared-auth/audit`: the identity trail.
+- `shared/auth/roles`: roles and permission grants.
+- `shared/auth/users`: the users directory — list, ban, unban, set-role.
+- `shared/auth/sessions`: list and revoke a person's sessions.
+- `shared/auth/audit`: the identity trail.
 
 ### Modified Capabilities
 
