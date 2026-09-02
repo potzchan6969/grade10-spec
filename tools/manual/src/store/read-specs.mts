@@ -196,7 +196,7 @@ function refuseRepeats(
   }
 }
 
-function readJourney(section: Section): Journey {
+export function readJourney(section: Section): Journey {
   const match = JOURNEY_HEADING.exec(section.heading);
   if (!match) {
     throw new StoreFileError(
@@ -215,7 +215,7 @@ function readJourney(section: Section): Journey {
   };
 }
 
-function readRequirement(section: Section): Requirement {
+export function readRequirement(section: Section): Requirement {
   if (!section.heading.startsWith(REQUIREMENT)) {
     throw new StoreFileError(
       section.line,

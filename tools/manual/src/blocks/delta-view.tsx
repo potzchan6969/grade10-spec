@@ -251,7 +251,13 @@ const MARK = { added: "+", removed: "−", same: " " } as const;
  * dropped on both sides — a rewrap is not a change anyone reviews — so what is
  * left in red is content this block would delete.
  */
-function BlockDiff({ before, after }: { before: string; after: string }) {
+export function BlockDiff({
+  before,
+  after,
+}: {
+  before: string;
+  after: string;
+}) {
   const rows = diffLines(before, after);
   const { added, removed } = diffTotals(rows);
 

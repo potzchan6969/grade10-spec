@@ -1,6 +1,7 @@
 import { join } from "node:path";
 import type {
   Archive,
+  ChangeDocument,
   CheckWarning,
   MainState,
   Snapshot,
@@ -14,6 +15,7 @@ import {
   readRootsGitIndex,
   git as runGit,
 } from "./git.mts";
+import { readChangeDocuments } from "./read-change-documents.mts";
 import {
   readArchivedChanges,
   readChanges,
@@ -30,8 +32,13 @@ import type { Roots } from "./roots.mts";
 import { signWarningCallouts } from "./signatures.mts";
 import { checkWarnings } from "./warnings.mts";
 
-/** Both artifacts share one history walk — the only expensive part of a read. */
-export type Store = { snapshot: Snapshot; archive: Archive };
+/** The artifacts share one history walk — the only expensive part of a read.
+ * `documents` is one artifact per in-flight change, served on its own. */
+export type Store = {
+  snapshot: Snapshot;
+  archive: Archive;
+  documents: ChangeDocument[];
+};
 
 export async function readStore(roots: Roots): Promise<Store> {
   const index = await readRootsGitIndex(roots);
@@ -87,6 +94,7 @@ export function composeStore(
       storeHead: git.head,
       changes: readArchivedChanges(roots.store, git),
     },
+    documents: readChangeDocuments(roots.store, git),
   };
 }
 

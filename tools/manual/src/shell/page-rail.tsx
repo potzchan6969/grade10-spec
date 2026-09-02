@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { seekFrames } from "../blocks/seek";
 
-/** A page's own H2 sections, read from what it actually rendered. */
-export type RailSection = { id: string; title: string };
+/** A page's own sections, read from what it actually rendered: H2s, and the
+ * H3s under them one step in. */
+export type RailSection = { id: string; title: string; level: 2 | 3 };
 
 /** Below this many sections a rail is noise — the page already reads as one. */
 const MIN_SECTIONS = 3;
@@ -25,9 +26,16 @@ export function activeSection(tops: number[], line = ACTIVE_LINE): number {
 
 function scan(): RailSection[] {
   const found: RailSection[] = [];
-  for (const heading of document.querySelectorAll<HTMLElement>("main h2[id]")) {
+  for (const heading of document.querySelectorAll<HTMLElement>(
+    "main h2[id], main h3[id]",
+  )) {
     const title = (heading.textContent ?? "").trim();
-    if (title !== "") found.push({ id: heading.id, title });
+    if (title === "") continue;
+    found.push({
+      id: heading.id,
+      title,
+      level: heading.tagName === "H3" ? 3 : 2,
+    });
   }
   return found;
 }
@@ -35,12 +43,14 @@ function scan(): RailSection[] {
 /**
  * The page's headings, once they exist. The snapshot lands after first paint, so
  * the first look finds an empty page — this keeps looking until it does not.
+ * The search is a trigger too: a change page keeps its open tab there, and
+ * each tab is a different set of headings.
  */
 function useSections(ready: boolean): RailSection[] {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const [sections, setSections] = useState<RailSection[]>([]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: pathname is a trigger, not a read — a new page has new headings to find.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: pathname and search are triggers, not reads — a new page or tab has new headings to find.
   useEffect(() => {
     setSections([]);
     if (!ready) return;
@@ -48,7 +58,7 @@ function useSections(ready: boolean): RailSection[] {
       const found = scan();
       return found.length > 0 ? found : null;
     }, setSections);
-  }, [pathname, ready]);
+  }, [pathname, search, ready]);
 
   return sections;
 }
@@ -107,7 +117,7 @@ export function PageRail({ ready }: { ready: boolean }) {
             <li key={section.id}>
               <a
                 aria-current={section.id === active ? "location" : undefined}
-                className={`-ml-px block border-l py-1 pl-3 text-xs leading-snug transition-colors ${
+                className={`-ml-px block border-l py-1 text-xs leading-snug transition-colors ${section.level === 3 ? "pl-6" : "pl-3"} ${
                   section.id === active
                     ? "border-primary font-medium text-foreground"
                     : "border-transparent text-secondary-foreground hover:border-border-strong hover:text-foreground"

@@ -62,9 +62,17 @@ function live(roots: Roots): Artifacts {
 
 /** Preview serves what the build wrote, so a broken artifact shows up there. */
 function fromDist(outDir: string): Artifacts {
+  const api = join(outDir, "api");
+  const readJson = (name: string) =>
+    JSON.parse(readFileSync(join(api, name), "utf8"));
   return async () => ({
-    snapshot: JSON.parse(readFileSync(join(outDir, "api", "snapshot"), "utf8")),
-    archive: JSON.parse(readFileSync(join(outDir, "api", "archive"), "utf8")),
+    snapshot: readJson("snapshot"),
+    archive: readJson("archive"),
+    documents: existsSync(join(api, "change"))
+      ? readdirSync(join(api, "change")).map((id) =>
+          readJson(join("change", id)),
+        )
+      : [],
   });
 }
 
@@ -173,6 +181,13 @@ async function route(
     if (path === "/api/snapshot")
       return reply(200, (await artifacts()).snapshot);
     if (path === "/api/archive") return reply(200, (await artifacts()).archive);
+    if (path.startsWith("/api/change/")) {
+      const id = decodeURIComponent(path.slice("/api/change/".length));
+      const found = (await artifacts()).documents.find((one) => one.id === id);
+      return found
+        ? reply(200, found)
+        : reply(404, { error: `no change in flight: ${id}` });
+    }
     if (path === "/api/dirty")
       return reply(200, await readDirty(roots.content));
     if (path === "/api/page")
