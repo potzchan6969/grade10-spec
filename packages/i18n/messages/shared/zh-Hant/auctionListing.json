@@ -1,5 +1,4 @@
 {
-  "antiSnipe": "{minutes} 分鐘防狙擊延長",
   "auctionWon": "競投成功",
   "automaticBidExplanation": "我們只會在需要時自動出價，最高不超過你的最高出價金額。",
   "automaticBidHoldExplanation": "你的銀行卡預授權金額涵蓋最高出價金額。如果拍賣以低於最高出價金額的價格結束，你實際支付的金額可能較少。",
@@ -12,6 +11,7 @@
   "automaticMaximumRaiseTitle": "提高自動最高出價金額",
   "setMaximumCurrentLabel": "設定最高出價（目前：{amount}）",
   "setMaximumLabel": "設定最高出價",
+  "autoExtendedTooltip": "在最後 {windowMinutes, plural, other {# 分鐘}} 內出價，將把截止時間延長 {durationMinutes, plural, other {# 分鐘}}。若 {durationMinutes, plural, other {# 分鐘}} 內無人出價則停止延長，並受拍品上限約束。",
   "autoBidUnavailable": "自動出價功能尚未開放。",
   "backToAuctions": "返回拍賣",
   "bidCount": "{count, plural, other {# 次出價}}",
@@ -29,7 +29,7 @@
   "description": "描述",
   "endsLabel": "截止",
   "extendedBidding": "延長競投",
-  "extendedBiddingRules": "若在最後 30 分鐘內有人出價，拍賣會延長 30 分鐘。延長會持續到最後一段時間內再無出價為止。",
+  "extendedBiddingRules": "若在最後 {windowMinutes, plural, other {# 分鐘}} 內有人出價，拍賣會延長 {durationMinutes, plural, other {# 分鐘}}。延長會持續到最後一段時間內再無出價為止。",
   "extensionMinutes": "{minutes, plural, other {# 分鐘}}",
   "factCategory": "分類",
   "factLot": "拍品編號",

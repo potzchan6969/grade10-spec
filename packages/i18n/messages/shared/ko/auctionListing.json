@@ -1,5 +1,4 @@
 {
-  "antiSnipe": "{minutes}분 마감 연장",
   "auctionWon": "낙찰되었습니다",
   "automaticBidExplanation": "필요한 만큼만 최대 금액까지 자동으로 입찰합니다.",
   "automaticBidHoldExplanation": "카드 승인 보류 금액은 최대 금액입니다. 경매가 그보다 낮은 금액으로 끝나면 실제 결제 금액은 더 적을 수 있습니다.",
@@ -12,6 +11,7 @@
   "automaticMaximumRaiseTitle": "자동 최대 금액 올리기",
   "setMaximumCurrentLabel": "최대 금액 설정(현재: {amount})",
   "setMaximumLabel": "최대 금액 설정",
+  "autoExtendedTooltip": "마지막 {windowMinutes, plural, other {#분}} 안에 들어온 입찰은 마감 시간을 {durationMinutes, plural, other {#분}} 연장합니다. {durationMinutes, plural, other {#분}} 동안 입찰이 없을 때까지 반복되며, 목록 상한까지 적용됩니다.",
   "autoBidUnavailable": "자동 입찰은 아직 제공되지 않습니다.",
   "backToAuctions": "경매로 돌아가기",
   "bidCount": "{count, plural, other {입찰 #회}}",
@@ -29,7 +29,7 @@
   "description": "설명",
   "endsLabel": "마감",
   "extendedBidding": "연장 입찰",
-  "extendedBiddingRules": "마지막 30분 안에 입찰이 들어오면 경매가 30분 연장됩니다. 마지막 시간대에 입찰이 없을 때까지 연장은 계속됩니다.",
+  "extendedBiddingRules": "마지막 {windowMinutes, plural, other {#분}} 안에 입찰이 들어오면 경매가 {durationMinutes, plural, other {#분}} 연장됩니다. 마지막 시간대에 입찰이 없을 때까지 연장은 계속됩니다.",
   "extensionMinutes": "{minutes, plural, other {#분}}",
   "factCategory": "분류",
   "factLot": "로트",
