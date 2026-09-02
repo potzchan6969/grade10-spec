@@ -27,6 +27,10 @@ Outline first. A document is a heading and an outline, never an essay.
 - **Only what the page owns** — a fact a child page, a sibling, or a
   platform page states is a link away, never repeated; a product's index
   says what no capability page carries, and nothing true of every product
+- **What the reader asks, not what the spec enumerates** — a page says
+  what a surface is for, what it shows, where each thing leads, what its
+  URL looks like. The spec's cases and edge rules stay in the spec, a link
+  away; a page that walks the spec's feature set is the spec said twice.
 - **Numbered items** where order or count matters: phases, steps, ranked
   facts. **Bullets** everywhere else. Nest up to three levels; a fourth
   level is a new section.

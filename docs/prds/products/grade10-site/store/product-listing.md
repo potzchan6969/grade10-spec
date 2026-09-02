@@ -4,21 +4,15 @@ spec: grade10-site/store/product-listing
 order: 2
 ---
 
-The product listing is where a collector filters and sorts the whole
-catalogue, at its own URL beneath the store.
+The product listing is where a collector browses the catalogue and opens a
+product.
 
-- **URL** — its own title, description and share metadata, in every
-  language the site answers ([[product-listing-SC-01]])
-- **Collection in the URL** — a narrowing of this one listing, never a
-  page of its own; every collection opens the same document
-  1. **One the catalogue carries** — opens already narrowed
-     ([[product-listing-SC-03]])
-  2. **None** — lists everything ([[product-listing-SC-04]])
-  3. **One the catalogue has nothing for** — lists everything as itself, not
-     a missing page ([[product-listing-SC-05]])
-- **Narrowing inside the page** — writes the collection into the URL,
-  so what a collector sees can be linked ([[product-listing-SC-06]]); back
-  restores the previous narrowing ([[product-listing-SC-07]])
+- **Every product** — a card that opens its Product Details Page
+- **Filter and sort** — the filter bar narrows the catalogue and orders it
+- **URL** — the collection is in it, so a listing can be linked and shared
+  1. `grade10.com/store/collections` — the whole catalogue
+  2. `grade10.com/store/collections?collection=<handle>` — one collection
+  3. `grade10.com/store/products/<handle>` — a product's details page
 
 ## What it looks like
 
