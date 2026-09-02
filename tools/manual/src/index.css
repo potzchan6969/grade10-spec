@@ -132,6 +132,11 @@
     margin: 0.25rem 0;
   }
 
+  .manual-prose li > ul,
+  .manual-prose li > ol {
+    margin: 0.25rem 0;
+  }
+
   .manual-prose li::marker {
     color: var(--muted-foreground);
   }
