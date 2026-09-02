@@ -71,7 +71,7 @@ describe("what the index now holds", () => {
     },
   ];
 
-  const page = pageEntry("manual/products/demo-product/alpha.md", {
+  const page = pageEntry("docs/prds/products/demo-product/alpha.md", {
     title: "Alpha",
     spec: "demo-product/alpha",
   });

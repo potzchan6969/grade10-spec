@@ -1,12 +1,16 @@
 import type { HistoryRef } from "../api/types.ts";
+import { DEFAULT_MANUAL_DIR } from "./roots.mts";
 
 /** What a commit touched, read off its paths: the store's own layout is the
  * only thing that says whether a file is a page, a spec, or a change. */
-export function refsOf(paths: string[]): HistoryRef[] {
+export function refsOf(
+  paths: string[],
+  manual = DEFAULT_MANUAL_DIR,
+): HistoryRef[] {
   const refs: HistoryRef[] = [];
   const seen = new Set<string>();
   for (const path of paths) {
-    const ref = refOf(path);
+    const ref = refOf(path, manual);
     const key =
       "id" in ref ? `${ref.kind}:${ref.id}` : `${ref.kind}:${ref.path}`;
     if (seen.has(key)) continue;
@@ -18,9 +22,9 @@ export function refsOf(paths: string[]): HistoryRef[] {
 
 const ARCHIVE_STAMP = /^\d{4}-\d{2}-\d{2}-/;
 
-function refOf(path: string): HistoryRef {
+function refOf(path: string, manual: string): HistoryRef {
   const parts = path.split("/");
-  if (parts[0] === "manual" && parts.length > 1 && path.endsWith(".md")) {
+  if (path.startsWith(`${manual}/`) && path.endsWith(".md")) {
     return { kind: "page", path };
   }
   if (parts[0] === "openspec" && parts[1] === "specs") {

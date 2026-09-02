@@ -14,7 +14,7 @@ const lines = (result: Result, rule: string) =>
 
 const SPEC_FILE = "openspec/specs/demo-product/alpha/spec.md";
 const CASES_FILE = "openspec/specs/demo-product/alpha/test-cases.md";
-const PAGE = "manual/products/demo-product/alpha.md";
+const PAGE = "docs/prds/products/demo-product/alpha.md";
 
 const scenario = (id: string, name: string) => [
   `#### Scenario: ${id} - ${name}`,
@@ -122,10 +122,10 @@ const store = ({
   extra?: Record<string, string>;
 } = {}) =>
   writeStore({
-    "manual/manual.yaml":
+    "docs/prds/manual.yaml":
       "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n",
-    "manual/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
-    "manual/products/demo-product/index.md":
+    "docs/prds/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
+    "docs/prds/products/demo-product/index.md":
       "---\ntitle: Demo product\n---\n\nThe landing.\n",
     [PAGE]: page,
     [SPEC_FILE]: spec,
@@ -170,7 +170,7 @@ describe("a case tracing a scenario the spec no longer issues", () => {
         cases: dead,
         page: pageText([...shown, ...shown]),
         extra: {
-          "manual/products/demo-product/beta.md": pageText(),
+          "docs/prds/products/demo-product/beta.md": pageText(),
         },
       }),
     );
@@ -436,21 +436,21 @@ describe("manual.yaml naming a platform topic", () => {
   it("fails one that is neither a spec dir nor a page", async () => {
     const root = store({
       extra: {
-        "manual/manual.yaml":
+        "docs/prds/manual.yaml":
           "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n\nplatform:\n  - ghost-topic\n",
       },
     });
     expect(lines(await check(root), "config")).toEqual([
-      "manual/manual.yaml — `ghost-topic` is neither a spec-dir topic nor a page-only topic with a page at manual/platform/ghost-topic.md",
+      "docs/prds/manual.yaml — `ghost-topic` is neither a spec-dir topic nor a page-only topic with a page at docs/prds/platform/ghost-topic.md",
     ]);
   });
 
   it("accepts a page-only topic that has its page", async () => {
     const root = store({
       extra: {
-        "manual/manual.yaml":
+        "docs/prds/manual.yaml":
           "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n\nplatform:\n  - paged-topic\n",
-        "manual/platform/paged-topic.md":
+        "docs/prds/platform/paged-topic.md":
           "---\ntitle: Paged topic\n---\n\nA topic with a page and no spec yet.\n",
       },
     });

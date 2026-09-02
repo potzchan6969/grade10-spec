@@ -6,7 +6,7 @@ import type { Roots } from "../src/store/roots.mts";
 import { writeStore } from "./tmp-store";
 
 /**
- * A manual mounted in another repository: its own `manual/`, somebody else's
+ * A manual mounted in another repository: its own `docs/prds/`, somebody else's
  * store. Page rules still hold its pages to account; the store's own coverage
  * is not its PR gate to fail.
  */
@@ -16,6 +16,7 @@ const STORE = fileURLToPath(new URL("./fixtures/check/clean", import.meta.url));
 const satellite = (files: Record<string, string>): Roots => ({
   store: STORE,
   content: writeStore(files),
+  manual: "docs/prds",
   own: false,
 });
 
@@ -25,7 +26,10 @@ const PAGE = "---\ntitle: Handbook\n---\n\nWhat this repository builds.\n";
 describe("a manual over a store it does not own", () => {
   it("owes the store nothing it did not list", async () => {
     const { findings, notes } = await runChecks(
-      satellite({ "manual/manual.yaml": CONFIG, "manual/index.md": PAGE }),
+      satellite({
+        "docs/prds/manual.yaml": CONFIG,
+        "docs/prds/index.md": PAGE,
+      }),
       NO_GIT,
     );
     // In the store's own repository an empty manual fails coverage for every
@@ -39,8 +43,8 @@ describe("a manual over a store it does not own", () => {
   it("still holds its own pages to every page rule", async () => {
     const { findings } = await runChecks(
       satellite({
-        "manual/manual.yaml": CONFIG,
-        "manual/index.md":
+        "docs/prds/manual.yaml": CONFIG,
+        "docs/prds/index.md":
           '---\ntitle: Handbook\n---\n\n::spec{id="demo-product/alpha"}\n\n::spec{id="demo-product/gone"}\n',
       }),
       NO_GIT,
@@ -50,7 +54,7 @@ describe("a manual over a store it does not own", () => {
       {
         rule: "reference",
         level: "fail",
-        path: "manual/index.md",
+        path: "docs/prds/index.md",
         reason: '::spec{id="demo-product/gone"} names no spec on disk',
       },
     ]);
@@ -59,9 +63,9 @@ describe("a manual over a store it does not own", () => {
   it("owes a landing page for what it does list", async () => {
     const { findings } = await runChecks(
       satellite({
-        "manual/manual.yaml":
+        "docs/prds/manual.yaml":
           "storybookBase: https://storybook.example\ngroups:\n  Products:\n    - demo-product\n",
-        "manual/products/demo-product/alpha.md": PAGE,
+        "docs/prds/products/demo-product/alpha.md": PAGE,
       }),
       NO_GIT,
     );
@@ -69,7 +73,7 @@ describe("a manual over a store it does not own", () => {
       {
         rule: "page",
         level: "fail",
-        path: "manual/products/demo-product/index.md",
+        path: "docs/prds/products/demo-product/index.md",
         reason: "product `demo-product` has no page here",
       },
     ]);

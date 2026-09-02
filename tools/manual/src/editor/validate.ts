@@ -97,7 +97,7 @@ function blockProblems(index: ManualIndex, leaf: DraftLeaf): BlockProblem[] {
       const assets = index.snapshot.assets ?? [];
       const src = value("src");
       if (assets.length > 0 && !assets.includes(src)) {
-        said("src", `no file \`${src}\` under manual/assets`);
+        said("src", `no file \`${src}\` under assets/`);
       }
       break;
     }

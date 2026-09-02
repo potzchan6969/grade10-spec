@@ -280,8 +280,8 @@ describe("a delta the reader cannot parse", () => {
 
 describe("the document over the wire", () => {
   const root = writeStore({
-    "manual/manual.yaml": "storybookBase: https://storybook.example\n",
-    "manual/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
+    "docs/prds/manual.yaml": "storybookBase: https://storybook.example\n",
+    "docs/prds/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
     "openspec/changes/one/proposal.md": "# One\n\n## Why\n\nBecause.\n",
   });
   const artifacts = async () => composeStore(rootsOf(root), NO_GIT);

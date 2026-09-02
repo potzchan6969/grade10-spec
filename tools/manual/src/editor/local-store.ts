@@ -13,8 +13,8 @@ import {
 } from "./store";
 
 /** The dev transport: the Vite plugin's `/api` endpoints. Store paths go over
- * the wire as they are read — the plugin confines every one of them to
- * `manual/` itself. */
+ * the wire as they are read — the plugin confines every one of them to the
+ * manual's directory itself. */
 
 type Json = Record<string, unknown>;
 
@@ -83,8 +83,12 @@ export class LocalStore implements ContentStore {
   readonly label = "Dev server — writes straight to the working tree";
 
   private readonly http: typeof fetch;
+  /** The dev server confines every write to this directory; refusing a path
+   * outside it here keeps the request from being made at all. */
+  private readonly manualDir: string;
 
-  constructor(http: typeof fetch = fetch) {
+  constructor(manualDir: string, http: typeof fetch = fetch) {
+    this.manualDir = manualDir;
     this.http = http;
   }
 
@@ -111,7 +115,7 @@ export class LocalStore implements ContentStore {
     source: string,
     baseVersion: Version | null,
   ): Promise<WriteOutcome> {
-    assertManualPath(path);
+    assertManualPath(this.manualDir, path);
     return this.save("/api/page", { path, source, baseVersion });
   }
 
@@ -120,7 +124,7 @@ export class LocalStore implements ContentStore {
     bytes: Uint8Array,
     baseVersion: Version | null,
   ): Promise<WriteOutcome> {
-    assertManualPath(path);
+    assertManualPath(this.manualDir, path);
     return this.save("/api/asset", {
       path,
       base64: base64FromBytes(bytes),
@@ -186,7 +190,7 @@ export class LocalStore implements ContentStore {
   }
 
   async deletePage(path: string, baseVersion: Version): Promise<void> {
-    assertManualPath(path);
+    assertManualPath(this.manualDir, path);
     const answer = await call(this.http, "/api/page", {
       method: "DELETE",
       headers: { "content-type": "application/json" },

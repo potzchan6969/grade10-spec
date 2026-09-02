@@ -4,7 +4,7 @@ import { plainInline } from "../content/inline";
 import { requirementAnchor, scenarioAnchor } from "./anchors";
 import { type ManualIndex, routeForSpec } from "./derive";
 
-export type SearchKind = "page" | "spec" | "case" | "change";
+export type SearchKind = "page" | "spec" | "case" | "change" | "reference";
 
 export type SearchDoc = {
   id: string;
@@ -27,9 +27,16 @@ const GROUP_LABELS: Record<SearchKind, string> = {
   spec: "Requirements & scenarios",
   case: "Test cases",
   change: "In flight",
+  reference: "References",
 };
 
-const GROUP_ORDER: SearchKind[] = ["page", "spec", "case", "change"];
+const GROUP_ORDER: SearchKind[] = [
+  "page",
+  "spec",
+  "case",
+  "change",
+  "reference",
+];
 
 /** Markdown read as words: enough for an index, never re-rendered from here. */
 function plainText(markdown: string): string {
@@ -157,6 +164,19 @@ export function buildDocs(index: ManualIndex): SearchDoc[] {
         });
       }
     }
+  }
+
+  // A reference's text rides its own artifact, so it is found by its title
+  // and its file name — enough to reach the owner's draft by what it is called.
+  for (const reference of index.references) {
+    docs.push({
+      id: `reference:${reference.id}`,
+      kind: "reference",
+      title: reference.title,
+      subtitle: `docs/references/${reference.id}.md`,
+      body: reference.id.split("-").join(" "),
+      to: reference.to,
+    });
   }
 
   return docs;

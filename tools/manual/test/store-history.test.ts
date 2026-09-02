@@ -7,8 +7,8 @@ import { refsOf } from "../src/store/history.mts";
 
 describe("classifying a commit's paths", () => {
   it("names a manual page by its path", () => {
-    expect(refsOf(["manual/products/demo/alpha.md"])).toEqual([
-      { kind: "page", path: "manual/products/demo/alpha.md" },
+    expect(refsOf(["docs/prds/products/demo/alpha.md"])).toEqual([
+      { kind: "page", path: "docs/prds/products/demo/alpha.md" },
     ]);
   });
 
@@ -37,8 +37,8 @@ describe("classifying a commit's paths", () => {
   });
 
   it("keeps a path no reader claims as a path", () => {
-    expect(refsOf(["manual/manual.yaml", "docs/governance/qa.md"])).toEqual([
-      { kind: "file", path: "manual/manual.yaml" },
+    expect(refsOf(["docs/prds/manual.yaml", "docs/governance/qa.md"])).toEqual([
+      { kind: "file", path: "docs/prds/manual.yaml" },
       { kind: "file", path: "docs/governance/qa.md" },
     ]);
   });

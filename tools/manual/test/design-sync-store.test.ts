@@ -90,10 +90,10 @@ describe("the report as maintenance rows", () => {
     const rows = rowsFor(
       full,
       {
-        "manual/products/demo/alpha.md": page(
+        "docs/prds/products/demo/alpha.md": page(
           `::figma{url="${url("4735-6493")}" title="Cart drawer"}`,
         ),
-        "manual/products/demo/beta.md": page(
+        "docs/prds/products/demo/beta.md": page(
           '::story{id="components-nav--narrow"}',
         ),
       },

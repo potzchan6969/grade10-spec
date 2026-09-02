@@ -9,22 +9,28 @@ always a plain static build — read-only, nothing more.
 
 The app never restates a fact that lives elsewhere. Requirements come from
 `openspec/specs`, progress from `tasks.md` checkboxes, visuals from Figma,
-Storybook, and images in `manual/assets/`. Manual pages add the narrative
-that connects them.
+Storybook, and images in the manual's `assets/`. Manual pages add the
+narrative that connects them — and a capability's page is its PRD, which is
+why the store keeps the manual under `docs/prds/`.
 
 ## Roots
 
 The viewer reads from two directories, resolved once at startup
-(`src/store/roots.mts`). The **content root** holds the manual —
-`manual/manual.yaml` and the pages beside it. The **store root** holds the
-OpenSpec store — `openspec/specs` and `openspec/changes`. In this repository
-they are the same directory and everything behaves as one tree.
+(`src/store/roots.mts`). The **content root** holds the manual — a
+directory with `manual.yaml` and the pages beside it, `docs/prds` unless
+`MANUAL_DIR` names another (a relative path inside the repository). The
+**store root** holds the OpenSpec store — `openspec/specs`,
+`openspec/changes`, and `docs/references`. In this repository they are the
+same directory and everything behaves as one tree.
 
 Any repository can mount the viewer (it ships in this repo's
 `tools/manual`, and this repo ships as a submodule) and bring its own
-manual. The content root is found where the command ran — `MANUAL_ROOT`,
-else the nearest `manual/manual.yaml` above `INIT_CWD` or the working
-directory. The store is the content repository itself when it carries
+manual, wherever it keeps it — an engineering manual has no business under
+`docs/prds`, so the application repository sets `MANUAL_DIR=manual`. The
+content root is found where the command ran — `MANUAL_ROOT`, else the
+nearest `<MANUAL_DIR>/manual.yaml` above `INIT_CWD` or the working
+directory. The resolved directory rides the snapshot as `manualDir`, so
+the app builds every page path from it and names it nowhere. The store is the content repository itself when it carries
 `openspec/specs`; otherwise the repository's `openspec/config.yaml` names a
 store id and the `openspec` CLI resolves it through the same per-machine
 registry `pnpm plan` uses — the registered clone at its own main, never a
@@ -40,10 +46,10 @@ repository (see Checks).
 
 ## Content
 
-Pages live at the content root under `manual/`:
+Pages live at the content root under the manual's directory:
 
 ```
-manual/
+docs/prds/
   manual.yaml                 ordering, extra products, external base URLs
   assets/                     images referenced by ::image blocks
   index.md                    home page prose
@@ -160,6 +166,9 @@ The builder emits static artifacts, all pure functions of git state:
 - `/api/change/<id>` — one in-flight change's files, fetched only by its
   page (Change document, below), so the snapshot stays the size of the
   board.
+- `/api/reference/<slug>` — one document from the store's `docs/references/`,
+  as written, fetched only by its page; the snapshot lists them without
+  their text, so the boot payload does not grow with the evidence file.
 
 Search needs no artifact: the client builds a minisearch index lazily over
 the snapshot on first use; the archive is searched only where it is already
@@ -193,7 +202,9 @@ keyed by the id token, so two capabilities sharing a prefix (both
 `navigation`s) share one ceiling, which is the only answer that stops a
 new id colliding.
 
-The snapshot also carries `assets` (every file under `manual/assets/`),
+The snapshot also carries `assets` (every file under the manual's `assets/`),
+`references` (the store's `docs/references/*.md` — slug, path, title and
+last commit — with the README's text beside them as `referencesReadme`),
 `warnings` (the `check:manual` warnings of the build that produced it —
 failures never deploy, so warnings are all it can carry — plus a
 build-time `design` rule folded from the design-sync report: each
@@ -285,7 +296,7 @@ capability's status is derived, never stored: `changing` when an
 in-flight delta touches it, `incubating` when its spec exists
 only as a delta or the page has no spec, else `stable`.
 
-Error containment splits by ownership. `manual/` pages are this app's own:
+Error containment splits by ownership. Manual pages are this app's own:
 malformed input fails the build. Specs and changes are other people's
 files the manual mirrors: a malformed one becomes
 `{ id, error: { file, line, message } }` in the snapshot, renders as a loud
@@ -297,26 +308,30 @@ fails the PR naming its own file while the spec's requirements,
 journeys, and delta rules carry on.
 
 Node-only readers in `src/store/` (`read-specs.mts`, `read-changes.mts`,
-`read-manual.mts`, composed by `snapshot.mts`) parse the store from disk.
+`read-manual.mts`, `read-references.mts`, composed by `snapshot.mts`) parse
+the store from disk.
 Owners come from `(owner: @handle)` tags; scenario/story/test-case ids
 (`<capability>-SC-<n>`, `-US-<n>`, `-TC-<n>`) are captured when present.
 
 Relative markdown links inside spec text (`../../../../docs/prds/…`) are
-rewritten at render to store-relative routes; an unresolvable one renders as
+rewritten at render to the page or reference that shows the file; one to a
+store file no page shows opens on GitHub, and an unresolvable one renders as
 a marked dead link.
 
 Two transports, one client code path:
 
 - Dev: a Vite plugin serves the GET endpoints computed from the repo root
   per request, `POST /api/page` and `POST /api/asset` (paths confined to
-  `manual/`), `POST /api/commit` (git add manual/ + commit).
+  the manual's directory), `POST /api/commit` (git add of that directory +
+  commit).
 - Static build: `build-snapshot.mts` writes the artifacts — one file per
-  change under `api/change/`; the hosted site is static files only.
+  change under `api/change/`, one per reference under `api/reference/`; the
+  hosted site is static files only.
 
 ## Editing
 
 The manual is edited locally only: `pnpm dev` runs a Vite plugin that
-answers the `/api/*` endpoints above, confined to `manual/`, and that
+answers the `/api/*` endpoints above, confined to the manual's directory, and that
 presence is the only thing that turns editing on. The built, deployed site
 has no dev server behind it, so `useEditorSession` finds no store, and
 every editor surface — the Edit button, Propose, New page, asset upload —
@@ -350,7 +365,7 @@ build-side check — the browser cannot see the Storybook index, and does
 not pretend to.
 
 New pages are created from the editor (path picker constrained to the
-`manual/` tree); deleting a page is offered the same way.
+manual's tree); deleting a page is offered the same way.
 
 Any requirement row or page header can propose a change: the browser
 drafts `openspec/changes/<slug>/` with exactly what the pm-planning
@@ -383,7 +398,7 @@ src/
   api/                          artifact fetch + types + derivations
   blocks/                       one component per block type, registry
   editor/                       block editor, ContentStore port + LocalStore
-  pages/                        Home, Product, Capability, Planning, Change, Guide, Recent, Page
+  pages/                        Home, Product, Capability, Planning, Change, Guide, References, Recent, Page
   shell/                        nav sidebar, header, search, recent bell, theme toggle
 test/                           grammar round-trip table, reader fixtures
 ```

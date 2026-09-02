@@ -33,7 +33,7 @@ export type ItemError = {
 };
 
 export type PageEntry = {
-  /** Store-relative, e.g. `manual/products/grade10-store/loyalty.md`. */
+  /** Content-relative, e.g. `docs/prds/products/grade10-store/loyalty.md`. */
   path: string;
   /** Raw page text; the client parses it. */
   source: string;
@@ -316,7 +316,7 @@ export type ChangeDocument = {
 export type CheckWarning = {
   rule: string;
   message: string;
-  /** `manual/…` path when the warning is about one page. */
+  /** The page's path when the warning is about one page. */
   page?: string;
 };
 
@@ -356,18 +356,40 @@ export type HistoryEvent = {
   refs: HistoryRef[];
 };
 
+/** One document under `docs/references/`, as the nav and the landing list
+ * it. The text rides its own artifact. */
+export type ReferenceEntry = {
+  /** The file name without `.md`: `grade10-loyalty-program`. */
+  slug: string;
+  /** Store-relative: `docs/references/<slug>.md`. */
+  path: string;
+  /** The document's `#` heading, or the slug read out when it has none. */
+  title: string;
+  lastCommit?: CommitInfo;
+};
+
+/** `/api/reference/<slug>` — the document as written. */
+export type ReferenceDocument = ReferenceEntry & { text: string };
+
 /** `/api/snapshot` — boots the app. */
 export type Snapshot = {
   generatedAt: string;
   storeHead: string;
   config: ManualConfig;
   taxonomy: Taxonomy;
+  /** Where the pages sit, relative to their repository: `docs/prds` in the
+   * store's own. Every page path opens with it. */
+  manualDir: string;
   pages: PageEntry[];
   specs: SpecEntry[];
   /** In-flight only; archived changes live in `/api/archive`. */
   changes: ChangeEntry[];
-  /** Every file under `manual/assets/`, as `assets/<name>` paths. */
+  /** Every file under the manual's `assets/`, as `assets/<name>` paths. */
   assets: string[];
+  /** The store's `docs/references/`, in path order, without their text. The
+   * landing's own prose is `referencesReadme`. */
+  references: ReferenceEntry[];
+  referencesReadme?: string;
   /** The newest commits of the store, newest first. Empty where the store is
    * not a git checkout. */
   history: HistoryEvent[];

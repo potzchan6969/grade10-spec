@@ -27,14 +27,14 @@ const STALE: CheckWarning = {
   rule: "stale",
   message:
     "last committed 2026-01-01; `demo-product/alpha` has since changed `Alpha does things`",
-  page: "manual/products/demo-product/alpha.md",
+  page: "docs/prds/products/demo-product/alpha.md",
 };
 
 const SHELF: CheckWarning = {
   rule: "skeleton",
   message:
     "has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
-  page: "manual/products/demo-product/beta.md",
+  page: "docs/prds/products/demo-product/beta.md",
 };
 
 const UNSHOWN: CheckWarning = {
@@ -68,7 +68,7 @@ describe("the maintenance panel", () => {
     const html = render([STALE]);
 
     expect(html).toContain('href="/p/demo-product/alpha"');
-    expect(html).toContain("manual/products/demo-product/alpha.md");
+    expect(html).toContain("docs/prds/products/demo-product/alpha.md");
     expect(html).toContain("has since changed");
   });
 

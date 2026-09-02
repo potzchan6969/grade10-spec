@@ -18,7 +18,7 @@ export function ManualPage() {
     return <Navigate replace to={`${stored.route}${search}${hash}`} />;
   }
 
-  const path = pagePathForRoute(pathname);
+  const path = pagePathForRoute(index.manualDir, pathname);
   return path ? (
     <PageView index={index} path={path} />
   ) : (

@@ -227,7 +227,13 @@ function ArtifactPanel({
 }
 
 /** Where a file lives in the store, and when it last changed. */
-function FileMeta({ path, commit }: { path: string; commit?: CommitInfo }) {
+export function FileMeta({
+  path,
+  commit,
+}: {
+  path: string;
+  commit?: CommitInfo;
+}) {
   return (
     <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1">
       <a

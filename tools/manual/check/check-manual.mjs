@@ -38,7 +38,12 @@
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { walkFiles } from "../src/store/disk.mts";
-import { mergeGitIndexes, NO_GIT, readGitIndex } from "../src/store/git.mts";
+import {
+  mergeGitIndexes,
+  NO_GIT,
+  readGitIndex,
+  STORE_DIRS,
+} from "../src/store/git.mts";
 import { readChanges } from "../src/store/read-changes.mts";
 import { readManualConfig } from "../src/store/read-manual.mts";
 import { discoverSpecs, readSpecs } from "../src/store/read-specs.mts";
@@ -46,7 +51,7 @@ import { resolveRoots, rootsOf } from "../src/store/roots.mts";
 import {
   createContext,
   createReport,
-  MANUAL_YAML,
+  manualYaml,
   message,
   plural,
   RULES,
@@ -92,10 +97,11 @@ export async function runChecks(target, git) {
 
   let config = EMPTY_CONFIG;
   try {
-    config = readManualConfig(roots.content);
+    config = readManualConfig(roots);
   } catch (cause) {
     // The reader names the file it refused; the path column already does.
-    add("config", MANUAL_YAML, message(cause).replace(`${MANUAL_YAML} `, ""));
+    const named = manualYaml(roots);
+    add("config", named, message(cause).replace(`${named} `, ""));
   }
 
   const shape = discoverSpecs(roots.store);
@@ -104,7 +110,11 @@ export async function runChecks(target, git) {
   );
   const changes = readChanges(roots.store, index);
 
-  const paths = walkFiles(roots.content, join(roots.content, "manual"), ".md");
+  const paths = walkFiles(
+    roots.content,
+    join(roots.content, roots.manual),
+    ".md",
+  );
   const pages = readPages(roots.content, paths, index, add);
 
   const ctx = createContext(roots, report, {
@@ -180,11 +190,14 @@ function byPathThenReason(a, b) {
  * repository checks fine, it just cannot date its pages. */
 async function gitIndex(roots) {
   const at = (root, dirs) =>
-    existsSync(join(root, ".git")) ? readGitIndex(root, dirs) : NO_GIT;
-  if (roots.own) return at(roots.store, ["openspec", "manual"]);
+    existsSync(join(root, ".git"))
+      ? readGitIndex(root, dirs, roots.manual)
+      : NO_GIT;
+  if (roots.own) return at(roots.store, [...STORE_DIRS, roots.manual]);
   return mergeGitIndexes(
-    await at(roots.store, ["openspec"]),
-    await at(roots.content, ["manual"]),
+    await at(roots.store, STORE_DIRS),
+    await at(roots.content, [roots.manual]),
+    roots.manual,
   );
 }
 

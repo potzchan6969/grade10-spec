@@ -4,6 +4,7 @@ import type {
   ChangeDocument,
   CheckWarning,
   MainState,
+  ReferenceDocument,
   Snapshot,
   SpecEntry,
 } from "../api/types.ts";
@@ -27,17 +28,20 @@ import {
   readManualConfig,
   readManualPages,
 } from "./read-manual.mts";
+import { readReferences, readReferencesReadme } from "./read-references.mts";
 import { discoverSpecs, readSpecs } from "./read-specs.mts";
 import type { Roots } from "./roots.mts";
 import { signWarningCallouts } from "./signatures.mts";
 import { checkWarnings } from "./warnings.mts";
 
 /** The artifacts share one history walk — the only expensive part of a read.
- * `documents` is one artifact per in-flight change, served on its own. */
+ * `documents` is one artifact per in-flight change and `references` one per
+ * reference document, each served on its own. */
 export type Store = {
   snapshot: Snapshot;
   archive: Archive;
   documents: ChangeDocument[];
+  references: ReferenceDocument[];
 };
 
 export async function readStore(roots: Roots): Promise<Store> {
@@ -69,11 +73,13 @@ export function composeStore(
   warnings: CheckWarning[] = [],
 ): Store {
   const generatedAt = new Date().toISOString();
-  const config = readManualConfig(roots.content);
+  const config = readManualConfig(roots);
   const shape = discoverSpecs(roots.store);
   const designSync = readDesignSync(roots.store);
   const specs = readSpecs(roots.store, git);
   markIssuedIds(roots.store, specs);
+  const references = readReferences(roots.store, git);
+  const referencesReadme = readReferencesReadme(roots.store);
 
   return {
     snapshot: {
@@ -81,10 +87,13 @@ export function composeStore(
       storeHead: git.head,
       config,
       taxonomy: deriveTaxonomy(shape, config, roots.own),
-      pages: readManualPages(roots.content, git),
+      manualDir: roots.manual,
+      pages: readManualPages(roots, git),
       specs,
       changes: readChanges(roots.store, git),
-      assets: readManualAssets(roots.content),
+      assets: readManualAssets(roots),
+      references: references.map(({ text: _text, ...entry }) => entry),
+      ...(referencesReadme === undefined ? {} : { referencesReadme }),
       history: git.history,
       warnings,
       ...(designSync ? { designSync } : {}),
@@ -95,6 +104,7 @@ export function composeStore(
       changes: readArchivedChanges(roots.store, git),
     },
     documents: readChangeDocuments(roots.store, git),
+    references,
   };
 }
 
@@ -137,7 +147,8 @@ export function storeStamp(roots: Roots, heads: string): string {
   const watched = [
     join(roots.store, "openspec"),
     join(roots.store, DESIGN_SYNC_REPORT.split("/")[0]),
-    join(roots.content, "manual"),
+    join(roots.store, "docs", "references"),
+    join(roots.content, roots.manual),
   ];
   const newest = watched.map((dir) => newestMtime(dir));
   return `${heads}:${Math.max(...newest)}`;

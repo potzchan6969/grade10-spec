@@ -77,7 +77,7 @@ const quiet = spec("demo/quiet");
 const index = buildIndex(
   snapshotOf({
     pages: [
-      pageEntry("manual/products/demo/holey.md", {
+      pageEntry("docs/prds/products/demo/holey.md", {
         title: "Holey",
         spec: "demo/holey",
       }),

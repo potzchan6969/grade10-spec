@@ -3,7 +3,12 @@ import { type ComponentProps, type ReactNode, useMemo } from "react";
 import Markdown, { type Components } from "react-markdown";
 import { Link as RouterLink } from "react-router";
 import remarkGfm from "remark-gfm";
-import { type ManualIndex, routeForSpec } from "../api/derive";
+import {
+  type ManualIndex,
+  REFERENCES_ROUTE,
+  routeForReference,
+  routeForSpec,
+} from "../api/derive";
 import {
   GITHUB_BLOB,
   resolveRelative,
@@ -25,12 +30,19 @@ type Target =
 const SAFE_PROTOCOL = /^(https?:|mailto:)/i;
 const ANY_PROTOCOL = /^[a-z][a-z0-9+.-]*:/i;
 /** Store files the manual never renders: read them where they live. */
-const FILED_UNDER = ["docs/prds/", "docs/governance/", "docs/references/"];
+const FILED_UNDER = ["docs/governance/", "docs/references/"];
 const CHANGE_FILE = /^openspec\/changes\/([^/]+)\/(.+)$/;
 const SPEC_FILE = /^openspec\/specs\/(.+)\/(?:spec|test-cases)\.md$/;
+const REFERENCE_FILE = /^docs\/references\/(.+)\.md$/;
 /** The routes that are the app's own rather than a page's. Prose may link to
  * any of them, and a route the app does not serve still reads as dead. */
-const APP_ROUTES = new Set(["/", "/planning", "/qa", "/design"]);
+const APP_ROUTES = new Set([
+  "/",
+  "/planning",
+  "/qa",
+  "/design",
+  REFERENCES_ROUTE,
+]);
 
 export function classifyHref(
   href: string,
@@ -47,7 +59,10 @@ export function classifyHref(
   // An app-absolute path is a route link, checked against the routes that
   // actually exist so a typo still reads as dead.
   if (pathPart.startsWith("/")) {
-    const known = APP_ROUTES.has(pathPart) || index.pageByRoute.has(pathPart);
+    const known =
+      APP_ROUTES.has(pathPart) ||
+      index.pageByRoute.has(pathPart) ||
+      index.referenceByRoute.has(pathPart);
     if (!known) return { kind: "dead", raw: href };
     return {
       kind: "route",
@@ -70,7 +85,7 @@ export function classifyHref(
   }
 
   const page = index.pageByPath.get(resolved);
-  const route = page?.route ?? routeForPagePath(resolved);
+  const route = page?.route ?? routeForPagePath(index.manualDir, resolved);
   if (page && route) {
     return { kind: "route", to: hash === "" ? route : `${route}#${hash}` };
   }
@@ -80,8 +95,9 @@ export function classifyHref(
 /**
  * The page that shows a store file, where one does. A change's own artifacts
  * are its page's tabs — a proposal that says "see design.md" lands on the
- * design — and a durable spec is the capability page that embeds it. A change
- * that is not in flight, or a spec no page shows, is read where it lives.
+ * design — a durable spec is the capability page that embeds it, and a
+ * reference is its own page. A change that is not in flight, a spec no page
+ * shows, or a reference the snapshot does not list is read where it lives.
  */
 function routeForStoreFile(
   resolved: string,
@@ -100,6 +116,12 @@ function routeForStoreFile(
   }
   const spec = SPEC_FILE.exec(resolved);
   if (spec) return index.routeBySpec.get(spec[1]) ?? null;
+  const reference = REFERENCE_FILE.exec(resolved);
+  if (reference) {
+    if (reference[1] === "README") return REFERENCES_ROUTE;
+    const route = routeForReference(reference[1]);
+    return index.referenceByRoute.has(route) ? route : null;
+  }
   return null;
 }
 

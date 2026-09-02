@@ -1,8 +1,14 @@
-import type { Archive, ChangeDocument, Snapshot } from "./types";
+import type {
+  Archive,
+  ChangeDocument,
+  ReferenceDocument,
+  Snapshot,
+} from "./types";
 
 const STORE_URL = "/api/snapshot";
 const ARCHIVE_URL = "/api/archive";
 const CHANGE_URL = "/api/change";
+const REFERENCE_URL = "/api/reference";
 const FIXTURE_URL = "/fixture-snapshot.json";
 
 /** Where the snapshot in hand came from. The shell says so when it is not the store. */
@@ -76,23 +82,28 @@ export function loadArchive(): Promise<Archive> {
   return archivePromise;
 }
 
-const documentPromises = new Map<string, Promise<ChangeDocument>>();
-
 /**
- * `/api/change/<id>` — one change's files, fetched the first time its page
- * opens and kept after. A change that is not in flight has no document, and
- * the hosted site answers such a path with the app shell, which the JSON check
- * turns into an error rather than a blank page.
+ * One artifact per id under `base`, fetched the first time its page opens and
+ * kept after. An id nothing was written for has no artifact, and the hosted
+ * site answers such a path with the app shell, which the JSON check turns into
+ * an error rather than a blank page.
  */
-export function loadChangeDocument(id: string): Promise<ChangeDocument> {
-  let promise = documentPromises.get(id);
-  if (!promise) {
-    promise = fetchJson<ChangeDocument>(
-      `${CHANGE_URL}/${encodeURIComponent(id)}`,
-    );
-    // A failed fetch is not cached: the next visit asks again.
-    promise.catch(() => documentPromises.delete(id));
-    documentPromises.set(id, promise);
-  }
-  return promise;
+function lazyArtifacts<T>(base: string): (id: string) => Promise<T> {
+  const promises = new Map<string, Promise<T>>();
+  return (id) => {
+    let promise = promises.get(id);
+    if (!promise) {
+      promise = fetchJson<T>(`${base}/${encodeURIComponent(id)}`);
+      // A failed fetch is not cached: the next visit asks again.
+      promise.catch(() => promises.delete(id));
+      promises.set(id, promise);
+    }
+    return promise;
+  };
 }
+
+/** `/api/change/<id>` — one in-flight change's files. */
+export const loadChangeDocument = lazyArtifacts<ChangeDocument>(CHANGE_URL);
+
+/** `/api/reference/<slug>` — one reference document, as written. */
+export const loadReference = lazyArtifacts<ReferenceDocument>(REFERENCE_URL);

@@ -122,14 +122,15 @@ function checkBlock(ctx, path, block) {
       break;
     }
     case "image": {
-      const file = confine(ctx.roots.content, "manual/assets", block.src);
+      const assets = `${ctx.roots.manual}/assets`;
+      const file = confine(ctx.roots.content, assets, block.src);
       if (typeof file !== "string") {
         add("reference", path, `${label(block, "src")}: ${file.error}`);
       } else if (!existsSync(file)) {
         add(
           "reference",
           path,
-          `${label(block, "src")} names no file under manual/assets`,
+          `${label(block, "src")} names no file under ${assets}`,
         );
       }
       break;
@@ -157,7 +158,13 @@ function checkBlock(ctx, path, block) {
   }
 }
 
-const CAPABILITY_PAGE = /^manual\/products\/[^/]+\/(?!index\.md$)[^/]+\.md$/;
+/** `<manual>/products/<product>/<capability>.md` — a landing page is not one. */
+const capabilityPage = (manual, path) => {
+  const prefix = `${manual}/products/`;
+  if (!path.startsWith(prefix) || !path.endsWith(".md")) return false;
+  const rest = path.slice(prefix.length).split("/");
+  return rest.length === 2 && rest[1] !== "index.md";
+};
 
 /** The shelf every capability page keeps in the same order ends in acceptance,
  * and a page that states a contract without it leaves QA nothing to read. A
@@ -168,7 +175,7 @@ const CAPABILITY_PAGE = /^manual\/products\/[^/]+\/(?!index\.md$)[^/]+\.md$/;
  * shelf shows nothing, the same bar the QA board applies. */
 export function checkSkeleton(ctx, pages) {
   for (const page of pages) {
-    if (!CAPABILITY_PAGE.test(page.path)) continue;
+    if (!capabilityPage(ctx.roots.manual, page.path)) continue;
     const spec = ctx.specs.get(page.ast.frontmatter.spec);
     if (!spec) continue;
     const showable =

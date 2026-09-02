@@ -8,7 +8,7 @@ import { type DirtyState, describeCause } from "./store";
 
 /**
  * Dev only. The working tree is the only place a local edit lives until it is
- * committed, so the bar appears the moment `manual/` is dirty and stays until
+ * committed, so the bar appears the moment the manual is dirty and stays until
  * it is not.
  */
 
@@ -78,7 +78,7 @@ export function CommitBar() {
         <details className="min-w-0">
           <summary className="cursor-pointer text-secondary-foreground text-xs">
             {state.files.length} {state.files.length === 1 ? "file" : "files"}{" "}
-            changed under manual/
+            changed in the manual
           </summary>
           <ul className="mt-1 max-h-32 overflow-y-auto">
             {state.files.map((file) => (

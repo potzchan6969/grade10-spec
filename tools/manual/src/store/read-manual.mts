@@ -5,11 +5,14 @@ import { GrammarError, parsePage } from "../content/grammar.ts";
 import { readText, readTextIfExists, walkAll, walkFiles } from "./disk.mts";
 import type { GitIndex } from "./git.mts";
 import type { SpecShape } from "./read-specs.mts";
+import { MANUAL_CONFIG, manualConfigPath, type Roots } from "./roots.mts";
 
-/** `manual/` is this app's own content, so a malformed page fails the build
- * rather than becoming a contained error entry. */
-export function readManualPages(root: string, git: GitIndex): PageEntry[] {
-  return walkFiles(root, join(root, "manual"), ".md").map((path) => {
+/** The manual is this app's own content, so a malformed page fails the build
+ * rather than becoming a contained error entry. Paths are content-relative:
+ * `docs/prds/products/<product>/<capability>.md`. */
+export function readManualPages(roots: Roots, git: GitIndex): PageEntry[] {
+  const root = roots.content;
+  return walkFiles(root, join(root, roots.manual), ".md").map((path) => {
     const source = readText(join(root, path));
     try {
       parsePage(source);
@@ -27,45 +30,50 @@ export function readManualPages(root: string, git: GitIndex): PageEntry[] {
 
 /** `assets/<name>` — the path an `::image` block writes, not the store path,
  * so the editor can validate a src against this list without rewriting it. */
-export function readManualAssets(root: string): string[] {
-  return walkAll(root, join(root, "manual", "assets")).map((path) =>
-    path.slice("manual/".length),
+export function readManualAssets(roots: Roots): string[] {
+  const root = roots.content;
+  return walkAll(root, join(root, roots.manual, "assets")).map((path) =>
+    path.slice(roots.manual.length + 1),
   );
 }
 
-export function readManualConfig(root: string): ManualConfig {
-  const file = join(root, "manual", "manual.yaml");
+export function readManualConfig(roots: Roots): ManualConfig {
+  const named = manualConfigPath(roots.manual);
+  const file = join(roots.content, roots.manual, MANUAL_CONFIG);
   const text = readTextIfExists(file);
-  if (text === undefined) throw new Error(`manual/manual.yaml is missing`);
+  if (text === undefined) throw new Error(`${named} is missing`);
 
   let parsed: unknown;
   try {
     parsed = YAML.parse(text) ?? {};
   } catch (cause) {
-    throw new Error(`manual/manual.yaml is not valid YAML: ${describe(cause)}`);
+    throw new Error(`${named} is not valid YAML: ${describe(cause)}`);
   }
   if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
-    throw new Error("manual/manual.yaml must be a mapping");
+    throw new Error(`${named} must be a mapping`);
   }
   const fields = parsed as Record<string, unknown>;
 
-  const config: ManualConfig = {
-    storybookBase: requireString(fields, "storybookBase"),
-    groups: readGroups(fields.groups),
-    platform: readTopicGroups(fields.platform),
-    guides: readIds(fields.guides, "guides"),
-  };
-
-  requireUnique(config.groups.flatMap((group) => group.products));
-  requireUnique(config.platform.flatMap((group) => group.topics));
-  return config;
+  try {
+    const config: ManualConfig = {
+      storybookBase: requireString(fields, "storybookBase"),
+      groups: readGroups(fields.groups),
+      platform: readTopicGroups(fields.platform),
+      guides: readIds(fields.guides, "guides"),
+    };
+    requireUnique(config.groups.flatMap((group) => group.products));
+    requireUnique(config.platform.flatMap((group) => group.topics));
+    return config;
+  } catch (cause) {
+    throw new Error(`${named} ${describe(cause)}`, { cause });
+  }
 }
 
 function requireUnique(ids: string[]): void {
   const seen = new Set<string>();
   for (const id of ids) {
     if (seen.has(id)) {
-      throw new Error(`manual/manual.yaml lists \`${id}\` twice`);
+      throw new Error(`lists \`${id}\` twice`);
     }
     seen.add(id);
   }
@@ -102,9 +110,7 @@ function readTitled(
   if (Array.isArray(raw)) {
     return raw.map((entry, index) => {
       if (typeof entry !== "object" || entry === null || Array.isArray(entry)) {
-        throw new Error(
-          `manual/manual.yaml \`${field}\` entry ${index + 1} must be a mapping`,
-        );
+        throw new Error(`\`${field}\` entry ${index + 1} must be a mapping`);
       }
       const group = entry as Record<string, unknown>;
       return {
@@ -114,9 +120,7 @@ function readTitled(
     });
   }
   if (typeof raw !== "object") {
-    throw new Error(
-      `manual/manual.yaml \`${field}\` must be a mapping or a list`,
-    );
+    throw new Error(`\`${field}\` must be a mapping or a list`);
   }
   return Object.entries(raw as Record<string, unknown>).map(([title, ids]) => ({
     title,
@@ -127,7 +131,7 @@ function readTitled(
 function readIds(raw: unknown, field: string): string[] {
   if (raw === undefined || raw === null) return [];
   if (!Array.isArray(raw) || raw.some((id) => typeof id !== "string")) {
-    throw new Error(`manual/manual.yaml \`${field}\` must be a list of ids`);
+    throw new Error(`\`${field}\` must be a list of ids`);
   }
   return raw as string[];
 }
@@ -135,7 +139,7 @@ function readIds(raw: unknown, field: string): string[] {
 function requireString(fields: Record<string, unknown>, key: string): string {
   const value = fields[key];
   if (typeof value !== "string" || value.trim() === "") {
-    throw new Error(`manual/manual.yaml needs \`${key}\``);
+    throw new Error(`needs \`${key}\``);
   }
   return value;
 }

@@ -18,8 +18,8 @@ const PNG = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
 
 function store() {
   const root = writeStore({
-    "manual/manual.yaml": "products:\n  - demo-product\n",
-    "manual/index.md": PAGE,
+    "docs/prds/manual.yaml": "products:\n  - demo-product\n",
+    "docs/prds/index.md": PAGE,
   });
   const endpoints = storeEndpoints(rootsOf(root));
   const api = async (request: StoreRequest) => body(await endpoints(request));
@@ -57,7 +57,7 @@ async function versionOf(
 
 describe("what the page endpoint refuses", () => {
   it.each([
-    ["a path that climbs out", "manual/../escape.md"],
+    ["a path that climbs out", "docs/prds/../escape.md"],
     ["an absolute path", "/etc/hosts.md"],
     ["a path under another store directory", "../openspec/specs/x.md"],
   ])("refuses %s", async (_what, path) => {
@@ -66,7 +66,7 @@ describe("what the page endpoint refuses", () => {
     const answer = await api(post("/api/page", { path, source: PAGE }));
 
     expect(answer.status).toBe(400);
-    expect(String(answer.body.error)).toContain("outside manual/");
+    expect(String(answer.body.error)).toContain("outside docs/prds/");
     expect(existsSync(join(root, "..", "escape.md"))).toBe(false);
   });
 
@@ -74,7 +74,7 @@ describe("what the page endpoint refuses", () => {
     const { api } = store();
 
     const answer = await api(
-      post("/api/page", { path: "manual/index.txt", source: PAGE }),
+      post("/api/page", { path: "docs/prds/index.txt", source: PAGE }),
     );
 
     expect(answer).toEqual({
@@ -88,7 +88,7 @@ describe("what the page endpoint refuses", () => {
 
     const answer = await api(
       post("/api/page", {
-        path: "manual/index.md",
+        path: "docs/prds/index.md",
         source: '---\ntitle: Demo\n---\n\n::nonsense{id="a"}\n',
       }),
     );
@@ -103,7 +103,7 @@ describe("what the page endpoint refuses", () => {
     const loose = "---\ntitle: Demo\n---\n\n\nOne paragraph.\n";
 
     const answer = await api(
-      post("/api/page", { path: "manual/index.md", source: loose }),
+      post("/api/page", { path: "docs/prds/index.md", source: loose }),
     );
 
     expect(answer.status).toBe(400);
@@ -120,7 +120,7 @@ describe("what the page endpoint takes", () => {
 
     const answer = await api(
       post("/api/page", {
-        path: "manual/index.md",
+        path: "docs/prds/index.md",
         source: EDITED,
         baseVersion: null,
       }),
@@ -136,7 +136,7 @@ describe("what the page endpoint takes", () => {
 
     const answer = await api(
       post("/api/page", {
-        path: "manual/index.md",
+        path: "docs/prds/index.md",
         source: EDITED,
         baseVersion: "stale",
       }),
@@ -146,27 +146,29 @@ describe("what the page endpoint takes", () => {
     expect(answer.body.error).toBe("file changed since it was read");
     expect(answer.body.current).toEqual({
       source: PAGE,
-      version: await versionOf(api, "manual/index.md"),
+      version: await versionOf(api, "docs/prds/index.md"),
     });
   });
 
   it("writes the page aimed at the version on disk, and leaves no debris", async () => {
     const { root, api } = store();
-    const version = await versionOf(api, "manual/index.md");
+    const version = await versionOf(api, "docs/prds/index.md");
 
     const answer = await api(
       post("/api/page", {
-        path: "manual/index.md",
+        path: "docs/prds/index.md",
         source: EDITED,
         baseVersion: version,
       }),
     );
 
     expect(answer.status).toBe(200);
-    expect(answer.body.version).toBe(await versionOf(api, "manual/index.md"));
-    expect(readFileSync(join(root, "manual/index.md"), "utf8")).toBe(EDITED);
+    expect(answer.body.version).toBe(
+      await versionOf(api, "docs/prds/index.md"),
+    );
+    expect(readFileSync(join(root, "docs/prds/index.md"), "utf8")).toBe(EDITED);
     // Written through a temp file, so nothing half-written is left behind.
-    expect(readdirSync(join(root, "manual")).sort()).toEqual([
+    expect(readdirSync(join(root, "docs/prds")).sort()).toEqual([
       "index.md",
       "manual.yaml",
     ]);
@@ -174,12 +176,12 @@ describe("what the page endpoint takes", () => {
 
   it("deletes only the version it was shown", async () => {
     const { root, api } = store();
-    const page = join(root, "manual/index.md");
+    const page = join(root, "docs/prds/index.md");
 
     const stale = await api({
       method: "DELETE",
       path: "/api/page",
-      body: { path: "manual/index.md", baseVersion: "stale" },
+      body: { path: "docs/prds/index.md", baseVersion: "stale" },
     });
     expect(stale.status).toBe(409);
     expect(existsSync(page)).toBe(true);
@@ -188,8 +190,8 @@ describe("what the page endpoint takes", () => {
       method: "DELETE",
       path: "/api/page",
       body: {
-        path: "manual/index.md",
-        baseVersion: await versionOf(api, "manual/index.md"),
+        path: "docs/prds/index.md",
+        baseVersion: await versionOf(api, "docs/prds/index.md"),
       },
     });
     expect(gone).toEqual({ status: 200, body: { deleted: true } });
@@ -203,14 +205,14 @@ describe("the asset endpoint", () => {
 
     const answer = await api(
       post("/api/asset", {
-        path: "manual/assets/shot.png",
+        path: "docs/prds/assets/shot.png",
         base64: PNG.toString("base64"),
         baseVersion: null,
       }),
     );
 
     expect(answer.status).toBe(200);
-    expect(readFileSync(join(root, "manual/assets/shot.png"))).toEqual(PNG);
+    expect(readFileSync(join(root, "docs/prds/assets/shot.png"))).toEqual(PNG);
   });
 
   it("refuses base64 that is not the encoding of any bytes", async () => {
@@ -218,7 +220,7 @@ describe("the asset endpoint", () => {
 
     const answer = await api(
       post("/api/asset", {
-        path: "manual/assets/shot.png",
+        path: "docs/prds/assets/shot.png",
         base64: "not base64 at all!!",
         baseVersion: null,
       }),
@@ -226,10 +228,10 @@ describe("the asset endpoint", () => {
 
     expect(answer.status).toBe(400);
     expect(String(answer.body.error)).toContain("base64");
-    expect(existsSync(join(root, "manual/assets/shot.png"))).toBe(false);
+    expect(existsSync(join(root, "docs/prds/assets/shot.png"))).toBe(false);
   });
 
-  it("confines an asset to `manual/assets/` too", async () => {
+  it("confines an asset to `docs/prds/assets/` too", async () => {
     const { api } = store();
 
     const answer = await api(
@@ -241,14 +243,14 @@ describe("the asset endpoint", () => {
     );
 
     expect(answer.status).toBe(400);
-    expect(String(answer.body.error)).toContain("outside manual/assets/");
+    expect(String(answer.body.error)).toContain("outside docs/prds/assets/");
   });
 });
 
 describe("where a write is allowed to come from", () => {
   const write = (headers: Record<string, string>): StoreRequest => ({
     ...post("/api/page", {
-      path: "manual/index.md",
+      path: "docs/prds/index.md",
       source: EDITED,
       baseVersion: null,
     }),
@@ -262,7 +264,7 @@ describe("where a write is allowed to come from", () => {
 
     expect(answer.status).toBe(403);
     expect(String(answer.body.error)).toContain("cross-site");
-    expect(readFileSync(join(root, "manual/index.md"), "utf8")).toBe(PAGE);
+    expect(readFileSync(join(root, "docs/prds/index.md"), "utf8")).toBe(PAGE);
   });
 
   it.each(["same-origin", "none"])(
@@ -279,7 +281,7 @@ describe("where a write is allowed to come from", () => {
     const { api } = store();
 
     const answer = await api({
-      path: "/api/page?path=manual/index.md",
+      path: "/api/page?path=docs/prds/index.md",
       headers: { "sec-fetch-site": "cross-site" },
     });
 

@@ -57,15 +57,15 @@ const beta: SpecEntry = {
   ],
 };
 
-const ALPHA_PAGE = "manual/products/demo-product/alpha.md";
-const GUIDE_PAGE = "manual/guides/writing.md";
+const ALPHA_PAGE = "docs/prds/products/demo-product/alpha.md";
+const GUIDE_PAGE = "docs/prds/guides/writing.md";
 
 const index = buildIndex(
   snapshotOf({
     specs: [alpha, beta],
     pages: [
       pageEntry(ALPHA_PAGE, { title: "Alpha", spec: alpha.id }),
-      pageEntry("manual/products/demo-product/beta.md", {
+      pageEntry("docs/prds/products/demo-product/beta.md", {
         title: "Beta",
         spec: beta.id,
       }),

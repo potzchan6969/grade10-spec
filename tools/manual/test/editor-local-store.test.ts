@@ -29,7 +29,7 @@ function mockFetch(
   return { http, calls };
 }
 
-const PATH = "manual/products/demo/alpha.md";
+const PATH = "docs/prds/products/demo/alpha.md";
 const MINE = "---\ntitle: Mine\n---\n\nMy paragraph.\n";
 const THEIRS = "---\ntitle: Theirs\n---\n\nTheir paragraph.\n";
 
@@ -40,7 +40,7 @@ describe("LocalStore", () => {
       body: { source: MINE, version: "abc" },
     }));
 
-    const file = await new LocalStore(http).read(PATH);
+    const file = await new LocalStore("docs/prds", http).read(PATH);
 
     expect(file).toEqual({ source: MINE, version: "abc" });
     expect(calls[0].url).toBe(`/api/page?path=${encodeURIComponent(PATH)}`);
@@ -52,7 +52,11 @@ describe("LocalStore", () => {
       body: { version: "new" },
     }));
 
-    const outcome = await new LocalStore(http).write(PATH, MINE, "abc");
+    const outcome = await new LocalStore("docs/prds", http).write(
+      PATH,
+      MINE,
+      "abc",
+    );
 
     expect(outcome).toEqual({ status: "ok", version: "new" });
     expect(calls[0]).toMatchObject({
@@ -71,7 +75,11 @@ describe("LocalStore", () => {
       },
     }));
 
-    const outcome = await new LocalStore(http).write(PATH, MINE, "abc");
+    const outcome = await new LocalStore("docs/prds", http).write(
+      PATH,
+      MINE,
+      "abc",
+    );
 
     expect(outcome).toEqual({
       status: "conflict",
@@ -81,6 +89,7 @@ describe("LocalStore", () => {
 
   it("takes the write once it is aimed at the version on disk", async () => {
     const store = new LocalStore(
+      "docs/prds",
       mockFetch((call) => {
         const base = (call.body as { baseVersion: string }).baseVersion;
         return base === "theirs"
@@ -106,7 +115,9 @@ describe("LocalStore", () => {
       body: { error: "file no longer exists", current: null },
     }));
 
-    expect(await new LocalStore(http).write(PATH, MINE, "abc")).toEqual({
+    expect(
+      await new LocalStore("docs/prds", http).write(PATH, MINE, "abc"),
+    ).toEqual({
       status: "conflict",
       current: null,
     });
@@ -118,9 +129,9 @@ describe("LocalStore", () => {
       body: { error: "page is not canonical; serialize it before saving" },
     }));
 
-    await expect(new LocalStore(http).write(PATH, MINE, null)).rejects.toThrow(
-      /not canonical/,
-    );
+    await expect(
+      new LocalStore("docs/prds", http).write(PATH, MINE, null),
+    ).rejects.toThrow(/not canonical/);
   });
 
   it("creates an asset with no base version and reads back its version", async () => {
@@ -129,8 +140,8 @@ describe("LocalStore", () => {
       body: { version: "asset" },
     }));
 
-    const outcome = await new LocalStore(http).writeBinary(
-      "manual/assets/x.png",
+    const outcome = await new LocalStore("docs/prds", http).writeBinary(
+      "docs/prds/assets/x.png",
       new Uint8Array([1, 2, 3]),
       null,
     );
@@ -138,7 +149,11 @@ describe("LocalStore", () => {
     expect(outcome).toEqual({ status: "ok", version: "asset" });
     expect(calls[0]).toMatchObject({
       url: "/api/asset",
-      body: { path: "manual/assets/x.png", base64: "AQID", baseVersion: null },
+      body: {
+        path: "docs/prds/assets/x.png",
+        base64: "AQID",
+        baseVersion: null,
+      },
     });
   });
 
@@ -148,7 +163,7 @@ describe("LocalStore", () => {
       body: { deleted: true },
     }));
 
-    await new LocalStore(http).deletePage(PATH, "abc");
+    await new LocalStore("docs/prds", http).deletePage(PATH, "abc");
 
     expect(calls[0]).toMatchObject({
       url: "/api/page",
@@ -159,18 +174,18 @@ describe("LocalStore", () => {
 
   it.each([
     "openspec/specs/demo/spec.md",
-    "manual/../openspec/specs/demo/spec.md",
+    "docs/prds/../openspec/specs/demo/spec.md",
     "/etc/hosts",
-    "manual/",
+    "docs/prds/",
   ])("refuses to ask the dev server for %s at all", async (path) => {
     const { http, calls } = mockFetch(() => ({ status: 200, body: {} }));
-    const store = new LocalStore(http);
+    const store = new LocalStore("docs/prds", http);
 
-    await expect(store.write(path, MINE, null)).rejects.toThrow(/manual\//);
+    await expect(store.write(path, MINE, null)).rejects.toThrow(/docs\/prds\//);
     await expect(
       store.writeBinary(path, new Uint8Array([1]), null),
-    ).rejects.toThrow(/manual\//);
-    await expect(store.deletePage(path, "abc")).rejects.toThrow(/manual\//);
+    ).rejects.toThrow(/docs\/prds\//);
+    await expect(store.deletePage(path, "abc")).rejects.toThrow(/docs\/prds\//);
     expect(calls).toHaveLength(0);
   });
 
@@ -182,22 +197,22 @@ describe("LocalStore", () => {
         }),
     );
 
-    await expect(new LocalStore(http).read(PATH)).rejects.toBeInstanceOf(
-      StoreError,
-    );
+    await expect(
+      new LocalStore("docs/prds", http).read(PATH),
+    ).rejects.toBeInstanceOf(StoreError);
     expect(await probeLocalStore(http)).toBe(false);
   });
 
   it("is available when /api/dirty answers JSON", async () => {
     const { http } = mockFetch(() => ({
       status: 200,
-      body: { dirty: true, files: ["manual/index.md"] },
+      body: { dirty: true, files: ["docs/prds/index.md"] },
     }));
 
     expect(await probeLocalStore(http)).toBe(true);
-    expect(await new LocalStore(http).dirty()).toEqual({
+    expect(await new LocalStore("docs/prds", http).dirty()).toEqual({
       dirty: true,
-      files: ["manual/index.md"],
+      files: ["docs/prds/index.md"],
     });
   });
 });

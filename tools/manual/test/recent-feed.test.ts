@@ -9,7 +9,7 @@ import { changeEntry, pageEntry, snapshotOf } from "./manual-fixture";
 const index = buildIndex(
   snapshotOf({
     pages: [
-      pageEntry("manual/products/demo/alpha.md", {
+      pageEntry("docs/prds/products/demo/alpha.md", {
         title: "Alpha",
         spec: "demo/alpha",
       }),
@@ -21,9 +21,12 @@ const index = buildIndex(
 describe("a history ref as a chip", () => {
   it("gives a page its title and its route", () => {
     expect(
-      feedRef(index, { kind: "page", path: "manual/products/demo/alpha.md" }),
+      feedRef(index, {
+        kind: "page",
+        path: "docs/prds/products/demo/alpha.md",
+      }),
     ).toEqual({
-      key: "page:manual/products/demo/alpha.md",
+      key: "page:docs/prds/products/demo/alpha.md",
       label: "Alpha",
       to: "/p/demo/alpha",
       kind: "page",
@@ -32,10 +35,10 @@ describe("a history ref as a chip", () => {
 
   it("keeps a deleted page's path, with nowhere to click", () => {
     expect(
-      feedRef(index, { kind: "page", path: "manual/products/demo/gone.md" }),
+      feedRef(index, { kind: "page", path: "docs/prds/products/demo/gone.md" }),
     ).toEqual({
-      key: "page:manual/products/demo/gone.md",
-      label: "manual/products/demo/gone.md",
+      key: "page:docs/prds/products/demo/gone.md",
+      label: "docs/prds/products/demo/gone.md",
       kind: "page",
     });
   });
@@ -71,10 +74,10 @@ describe("a history ref as a chip", () => {
 
   it("leaves a plain file as a label", () => {
     expect(
-      feedRef(index, { kind: "file", path: "manual/manual.yaml" }),
+      feedRef(index, { kind: "file", path: "docs/prds/manual.yaml" }),
     ).toEqual({
-      key: "file:manual/manual.yaml",
-      label: "manual/manual.yaml",
+      key: "file:docs/prds/manual.yaml",
+      label: "docs/prds/manual.yaml",
       kind: "file",
     });
   });

@@ -1,4 +1,5 @@
-import { useSyncExternalStore } from "react";
+import { useCallback, useSyncExternalStore } from "react";
+import { useSnapshotIfAny } from "../api/snapshot-provider";
 import { browserKeyStore, STORAGE } from "./config";
 import { LocalStore, probeLocalStore } from "./local-store";
 import type { ContentStore } from "./store";
@@ -9,6 +10,9 @@ import type { ContentStore } from "./store";
  * sidebar, the propose dialog — asks this one module-level value rather than
  * being wrapped to find out. A deployed build has no dev server behind it, so
  * `store` stays null there and every editor surface hides itself.
+ *
+ * The probe waits for the snapshot: the store writes under the manual's
+ * directory, and only the snapshot says which directory that is.
  */
 
 export type EditorSession = {
@@ -27,25 +31,37 @@ function set(next: EditorSession): void {
 
 let probed = false;
 
-function probe(): void {
+function probe(manualDir: string): void {
   if (probed) return;
   probed = true;
   probeLocalStore().then((local) => {
-    set({ status: "ready", store: local ? new LocalStore() : null });
+    set({
+      status: "ready",
+      store: local ? new LocalStore(manualDir) : null,
+    });
   });
 }
 
-function subscribe(listener: () => void): () => void {
+function subscribe(listener: () => void, manualDir: string | null) {
   listeners.add(listener);
-  probe();
-  return () => listeners.delete(listener);
+  if (manualDir !== null) probe(manualDir);
+  return () => {
+    listeners.delete(listener);
+  };
 }
 
 export function useEditorSession(): EditorSession {
+  const snapshot = useSnapshotIfAny();
+  const manualDir =
+    snapshot?.status === "ready" ? snapshot.snapshot.manualDir : null;
+  const subscribeWith = useCallback(
+    (listener: () => void) => subscribe(listener, manualDir),
+    [manualDir],
+  );
   // The server snapshot is the probing state: a render with no browser has no
   // dev server to have probed, and every editor surface stays hidden.
   return useSyncExternalStore(
-    subscribe,
+    subscribeWith,
     () => state,
     () => state,
   );

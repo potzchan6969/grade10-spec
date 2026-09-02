@@ -50,7 +50,7 @@ function renderBlock(entry: SpecEntry, block: ReactNode): string {
   return renderToStaticMarkup(
     <MemoryRouter>
       <BlockScopeProvider
-        value={{ index, pagePath: "manual/products/demo-product/alpha.md" }}
+        value={{ index, pagePath: "docs/prds/products/demo-product/alpha.md" }}
       >
         {block}
       </BlockScopeProvider>

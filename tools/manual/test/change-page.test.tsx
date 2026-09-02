@@ -169,10 +169,10 @@ function snapshot(): Snapshot {
     },
     taxonomy: { products: ["demo-product"], topics: [] },
     pages: [
-      pageEntry("manual/products/demo-product/index.md", {
+      pageEntry("docs/prds/products/demo-product/index.md", {
         title: "Demo product",
       }),
-      pageEntry("manual/products/demo-product/alpha.md", {
+      pageEntry("docs/prds/products/demo-product/alpha.md", {
         title: "Alpha",
         spec: SPEC,
       }),

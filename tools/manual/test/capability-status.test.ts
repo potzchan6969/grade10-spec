@@ -71,17 +71,17 @@ describe("where the status is carried", () => {
     },
     taxonomy: { products: ["demo-product"], topics: [] },
     pages: [
-      pageEntry("manual/products/demo-product/index.md", { title: "Demo" }),
-      pageEntry("manual/products/demo-product/loyalty.md", {
+      pageEntry("docs/prds/products/demo-product/index.md", { title: "Demo" }),
+      pageEntry("docs/prds/products/demo-product/loyalty.md", {
         title: "Loyalty",
         spec: DURABLE,
         order: 1,
       }),
-      pageEntry("manual/products/demo-product/gift-cards.md", {
+      pageEntry("docs/prds/products/demo-product/gift-cards.md", {
         title: "Gift cards",
         order: 2,
       }),
-      pageEntry("manual/guides/writing-the-manual.md", { title: "Writing" }),
+      pageEntry("docs/prds/guides/writing-the-manual.md", { title: "Writing" }),
     ],
     specs: [specEntry(DURABLE, ["A rule"])],
     changes: [
@@ -108,8 +108,10 @@ describe("where the status is carried", () => {
   });
 
   it("counts only a product's own children as capabilities", () => {
-    expect(isProductDir("manual/products/demo-product")).toBe(true);
-    expect(isProductDir("manual/guides")).toBe(false);
-    expect(isProductDir("manual/products")).toBe(false);
+    const under = (dir: string) => isProductDir("docs/prds", dir);
+    expect(under("docs/prds/products/demo-product")).toBe(true);
+    expect(under("docs/prds/guides")).toBe(false);
+    expect(under("docs/prds/products")).toBe(false);
+    expect(under("docs/prds/products/demo-product/deeper")).toBe(false);
   });
 });

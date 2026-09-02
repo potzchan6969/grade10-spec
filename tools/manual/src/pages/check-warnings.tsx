@@ -3,6 +3,7 @@ import { Warning } from "@phosphor-icons/react";
 import { Link } from "react-router";
 import { routeForPagePath } from "../api/paths";
 import type { CheckWarning } from "../api/types";
+import { useManualIndex } from "../api/use-manual-index";
 
 /** The check names its rules; the snapshot carries the key, and this is where
  * the key becomes a sentence. A rule this does not know still gets its own
@@ -53,7 +54,8 @@ export function groupByRule(
  * about a store file names the file, because there is no page to send anyone
  * to yet. */
 export function WarningRow({ warning }: { warning: CheckWarning }) {
-  const route = warning.page ? routeForPagePath(warning.page) : null;
+  const { manualDir } = useManualIndex();
+  const route = warning.page ? routeForPagePath(manualDir, warning.page) : null;
 
   return (
     <Text as="p" size="sm">

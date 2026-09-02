@@ -31,8 +31,8 @@ concurrency:
 
 env:
   NODE_VERSION: 24.14.1
-  # Generated, never authored, so it sits outside manual/ — the manual's build
-  # only reads it. tools/manual/src/store/design-sync.mts names the same path.
+  # Generated, never authored, so it sits outside the manual's pages — the
+  # manual's build only reads it. tools/manual/src/store/design-sync.mts names the same path.
   REPORT: .design-sync/report.json
 
 jobs:
