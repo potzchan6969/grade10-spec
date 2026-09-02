@@ -49,6 +49,9 @@ and its application here is short:
   `##` section, enumerable facts in a table
 - **Define the thing flatly**, in present tense, so a reader infers the
   rules from what it is
+- **Answer the reader, not the spec** — what the surface is for, what it
+  shows, where each thing leads, what its URL looks like; the spec's cases
+  and edge rules stay in the spec, embedded below the prose
 - **A product's index holds only what no capability page carries** — the
   child cards beneath it already name the capabilities, and a flow or a rule
   that belongs to one of them lives on that page
