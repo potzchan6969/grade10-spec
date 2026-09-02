@@ -5,6 +5,111 @@ Lets a collector bid without staying on the page: they commit the most they
 will pay, and Grade10 bids for them only as far as needed to lead. The
 current bid is the second-highest maximum plus the listing increment.
 
+## Feature set
+
+- Commit a maximum
+  - First maximum opens bidding: an accepted cap takes the lead at the starting
+    price while the cap itself stays hidden
+  - Raise only: a leader may raise their maximum; lowering or withdrawing it is
+    refused
+  - Validity: a maximum below the listing's minimum next bid is refused
+- Own standing
+  - Own row: a bidder sees their maximum, the current bid, and whether they lead
+    as three distinct facts
+  - Maximum stays private: another bidder cannot read or derive the leader's
+    cap from public listing facts
+- Two-maximum price
+  - Current bid from two maxima: the price is the lesser of the leader's
+    maximum and the second-highest plus one increment
+  - Earlier commitment wins a tie: an equal later maximum is accepted and does
+    not displace the leader
+  - One resolution per commitment: Grade10 does not step through intermediate
+    increments
+- Card authorization
+  - Hold for the maximum: the authorization covers the committed cap, not the
+    current bid, and stays one active hold per bidder per listing
+  - Failed raise: a raise the card cannot cover leaves the maximum, leader, and
+    price unchanged
+- Auto-bid as a bid
+  - Counted and recorded: a bid Grade10 places counts in the bid count and
+    history as placed on that bidder's behalf
+  - Extension once: an auto-bid inside the extension window moves the close as a
+    manual bid would, and standing maxima do not keep bidding
+
+## User journeys
+
+### auto-bidding-US-01: Collector commits a maximum on an open listing
+
+**As a** collector,
+**I want** to commit the most I will pay and raise it later,
+**so that** Grade10 bids for me only as far as needed to lead.
+
+**Accepted by:**
+
+- `auto-bidding-SC-01` — A first maximum opens the bidding
+- `auto-bidding-SC-02` — A maximum below the minimum next bid is refused
+- `auto-bidding-SC-03` — A leader raises their own maximum
+- `auto-bidding-SC-04` — Lowering a maximum is refused
+
+### auto-bidding-US-02: Collector reads their own maximum and standing
+
+**As a** collector,
+**I want** to see my own maximum, the current bid, and whether I lead,
+**so that** I know where I stand without my cap being shown to anyone else.
+
+**Accepted by:**
+
+- `auto-bidding-SC-05` — A bidder reads their own commitment
+- `auto-bidding-SC-06` — An overtaken bidder sees that they no longer lead
+- `auto-bidding-SC-07` — A leader's maximum is not public
+- `auto-bidding-SC-18` — A tie is not a refusal
+
+### auto-bidding-US-03: Collector competes through two maxima
+
+**As a** collector,
+**I want** the current bid to come from the two highest maxima,
+**so that** I take the lead only when my maximum is higher, and a tie stays
+with whoever committed first.
+
+**Accepted by:**
+
+- `auto-bidding-SC-09` — A challenger below the leader's maximum raises the price only
+- `auto-bidding-SC-10` — A challenger raises again, still below
+- `auto-bidding-SC-11` — A challenger above the leader's maximum takes the lead
+- `auto-bidding-SC-12` — The first bidder is overtaken by a higher maximum
+- `auto-bidding-SC-13` — The overtaken bidder raises but stays below
+- `auto-bidding-SC-14` — The overtaken bidder raises past the leader
+- `auto-bidding-SC-15` — The step to lead cannot exceed the new leader's maximum
+- `auto-bidding-SC-16` — A challenge lands at the two-maximum price, not a ladder
+- `auto-bidding-SC-17` — A tie goes to the earlier commitment
+
+### auto-bidding-US-04: Operator traces every committed maximum
+
+**As an** operator,
+**I want** to read every committed maximum and when it was accepted,
+**so that** I can answer a dispute about who committed what.
+
+**Accepted by:**
+
+- `auto-bidding-SC-08` — An operator can answer a dispute
+
+### auto-bidding-US-05: Collector's auto-bid counts as a bid
+
+**As a** collector,
+**I want** the hold to cover my maximum and every bid Grade10 places for me to
+count as a bid,
+**so that** I am authorized once and still extend the close when I auto-bid in
+the window.
+
+**Accepted by:**
+
+- `auto-bidding-SC-19` — The hold is the maximum, not the price
+- `auto-bidding-SC-20` — A raise that cannot be authorized changes nothing
+- `auto-bidding-SC-21` — An auto-bid step needs no new card check
+- `auto-bidding-SC-22` — An auto bid in the extension window extends once
+- `auto-bidding-SC-23` — An auto bid is counted and recorded
+- `auto-bidding-SC-24` — Standing maxima do not keep bidding
+
 ## Requirements
 
 ### Requirement: A bidder commits a maximum
