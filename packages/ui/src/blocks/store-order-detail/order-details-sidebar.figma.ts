@@ -4,7 +4,7 @@
 import figma from "figma";
 
 export default {
-  example: figma.code`<OrderDetailsSidebar copy={copy} summary={summary} payment={payment} shippingAddress={shippingAddress} pickupAddress={pickupAddress} loyaltyPoints={loyaltyPoints} />`,
+  example: figma.code`<OrderDetailsSidebar copy={copy} summary={summary} payment={payment} status={status} shippingAddress={shippingAddress} pickupAddress={pickupAddress} loyaltyPoints={loyaltyPoints} />`,
   imports: ['import { OrderDetailsSidebar } from "@grade10/ui"'],
   id: "order-details-sidebar",
   metadata: { nestable: true },

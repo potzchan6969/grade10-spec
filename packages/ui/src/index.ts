@@ -244,6 +244,8 @@ export {
   OrderDetailsDeliveryStatus,
   type OrderDetailsDeliveryStatusProps,
 } from "./blocks/store-order-detail/order-details-delivery-status";
+export { resolveDeliverySteps } from "./blocks/store-order-detail/resolve-delivery-steps";
+export { loyaltyPointsHeading } from "./blocks/store-order-detail/loyalty-points-heading";
 export {
   OrderDetailsHeader,
   type OrderDetailsHeaderProps,

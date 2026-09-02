@@ -8,9 +8,10 @@ type OrderDetailsDeliveryStepState = "completed" | "current" | "upcoming";
 
 type OrderDetailsDeliveryStep = {
   label: ReactNode;
-  /** Omit on upcoming steps. */
+  /** Omit on upcoming steps and on steps that have not happened yet. */
   date?: ReactNode;
-  state: OrderDetailsDeliveryStepState;
+  /** Set by `resolveDeliverySteps` from status; omit when passing into `OrderDetails`. */
+  state?: OrderDetailsDeliveryStepState;
 };
 
 type OrderDetailsDelivery = {
@@ -33,6 +34,12 @@ type OrderDetailsLineItem = {
   statusMessage?: ReactNode;
   /** Strike through subtotal and total when flagged. */
   struckThrough?: boolean;
+  /**
+   * Item-level promo code for this line only. When set, `subtotal` and `total`
+   * are the discounted amounts and the same discount must not appear again in
+   * the order summary.
+   */
+  couponCode?: ReactNode;
 };
 
 type OrderDetailsSummaryRow = {
@@ -42,6 +49,8 @@ type OrderDetailsSummaryRow = {
 
 type OrderDetailsSummary = {
   subtotal: OrderDetailsSummaryRow;
+  /** Order-level promo only — omit when every discount is on its line. Label
+   *  should name the code, e.g. `Discount (WELCOME10)`. */
   discount?: OrderDetailsSummaryRow;
   refund?: OrderDetailsSummaryRow;
   shipping?: OrderDetailsSummaryRow;
@@ -65,6 +74,10 @@ type OrderDetailsPayment = {
 type OrderDetailsAddress = {
   name: ReactNode;
   lines: readonly ReactNode[];
+  /** When set, the address block links here (e.g. Google Maps). Pickup only. */
+  mapsHref?: string;
+  /** Store hours shown below a pickup address (e.g. `Open 11am – 9pm`). */
+  openingHours?: ReactNode;
 };
 
 type OrderDetailsTableCopy = {
@@ -79,7 +92,10 @@ type OrderDetailsSidebarCopy = {
   paymentMethod: string;
   shippingAddress: string;
   pickupAddress: string;
-  loyaltyPoints: string;
+  /** Title while the order is still open (processing, shipped, pickup). */
+  loyaltyPointsToEarn: string;
+  /** Title once the order is completed and points are granted. */
+  loyaltyPointsEarned: string;
 };
 
 type OrderDetailsDeliveryCopy = {

@@ -10,9 +10,11 @@ import {
   FILLED_ADDRESS,
   FILLED_DELIVERY,
   FILLED_LINES,
+  FILLED_LINES_ORDER_DISCOUNT,
   FILLED_PAYMENT,
   FILLED_PICKUP_ADDRESS,
   FILLED_SUMMARY,
+  FILLED_SUMMARY_ORDER_DISCOUNT,
   ORDER_DETAILS_COPY,
   PICKUP_DELIVERY,
 } from "./fixtures";
@@ -91,7 +93,7 @@ function orderDetailsRevealed(canvasElement: HTMLElement): boolean {
   return Number(getComputedStyle(sidebarWrapper).opacity) > 0.9;
 }
 
-export const Filled: Story = {
+export const ItemCoupon: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
@@ -101,8 +103,25 @@ export const Filled: Story = {
     expect(canvas.getByText("Delivery Status")).toBeVisible();
     expect(canvas.getByRole("button", { name: "Track Order" })).toBeVisible();
     expect(canvas.getByText("Order Summary")).toBeVisible();
-    expect(canvas.getByText("HK$1,538")).toBeVisible();
+    expect(canvas.getByText("SUMMER10")).toBeVisible();
+    expect(canvas.queryByText("Discount (WELCOME10)")).not.toBeInTheDocument();
+    expect(canvas.getByText("HK$1,704.50")).toBeVisible();
     expect(canvas.getByText("Refunded")).toBeVisible();
+  },
+};
+
+/** Order-wide promo in the summary; lines stay at list price. */
+export const OrderDiscount: Story = {
+  args: {
+    lines: FILLED_LINES_ORDER_DISCOUNT,
+    summary: FILLED_SUMMARY_ORDER_DISCOUNT,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
+    expect(canvas.getByText("Discount (WELCOME10)")).toBeVisible();
+    expect(canvas.queryByText("SUMMER10")).not.toBeInTheDocument();
+    expect(canvas.getByText("HK$1,538")).toBeVisible();
   },
 };
 
@@ -113,6 +132,7 @@ export const Pickup: Story = {
     summary: {
       ...FILLED_SUMMARY,
       shipping: undefined,
+      total: { label: "Total", value: "HK$1,654.50" },
     },
     shippingAddress: undefined,
     pickupAddress: FILLED_PICKUP_ADDRESS,
@@ -121,7 +141,22 @@ export const Pickup: Story = {
 
 export const InStore: Story = {
   args: {
+    status: "completed",
     delivery: undefined,
+    summary: {
+      ...FILLED_SUMMARY,
+      shipping: undefined,
+      total: { label: "Total", value: "HK$1,654.50" },
+    },
+    shippingAddress: undefined,
+    pickupAddress: undefined,
     onTrackOrder: undefined,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
+    expect(canvas.queryByText("Shipping Address")).not.toBeInTheDocument();
+    expect(canvas.queryByText("Pickup Address")).not.toBeInTheDocument();
+    expect(canvas.queryByText("Delivery Status")).not.toBeInTheDocument();
   },
 };

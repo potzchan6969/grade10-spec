@@ -1,4 +1,5 @@
 import { Card } from "@grade10/design-system/components/display/card";
+import { Link } from "@grade10/design-system/components/forms/link";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
@@ -6,15 +7,18 @@ import type { ReactNode } from "react";
 import { OrderDetailsPaymentLogo } from "./order-details-payment-logo";
 import type {
   OrderDetailsAddress,
+  OrderDetailsFulfillmentStatus,
   OrderDetailsPayment,
   OrderDetailsSidebarCopy,
   OrderDetailsSummary,
 } from "./types";
+import { loyaltyPointsHeading } from "./loyalty-points-heading";
 
 type OrderDetailsSidebarProps = {
   copy: OrderDetailsSidebarCopy;
   summary: OrderDetailsSummary;
   payment: OrderDetailsPayment;
+  status: OrderDetailsFulfillmentStatus;
   shippingAddress?: OrderDetailsAddress;
   pickupAddress?: OrderDetailsAddress;
   loyaltyPoints?: ReactNode;
@@ -57,13 +61,28 @@ function AddressSection({
       <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
         {heading}
       </h3>
-      <VStack className="w-full text-sm leading-5" gap="none">
+      <VStack className="w-full text-sm leading-5" gap="xs">
         <p className="font-medium text-foreground">{address.name}</p>
-        {address.lines.map((line) => (
-          <p className="text-foreground" key={String(line)}>
-            {line}
-          </p>
-        ))}
+        {address.lines.map((line) =>
+          address.mapsHref ? (
+            <Link
+              href={address.mapsHref}
+              key={String(line)}
+              rel="noopener noreferrer"
+              size="sm"
+              target="_blank"
+            >
+              {line}
+            </Link>
+          ) : (
+            <p className="text-foreground" key={String(line)}>
+              {line}
+            </p>
+          ),
+        )}
+        {address.openingHours != null ? (
+          <p className="text-secondary-foreground">{address.openingHours}</p>
+        ) : null}
       </VStack>
     </VStack>
   );
@@ -71,7 +90,7 @@ function AddressSection({
 
 /**
  * Order details sidebar displaying order summary, payment method, shipping or
- * pickup address, and loyalty points earned.
+ * pickup address, and loyalty points to earn or earned by status.
  *
  * Figma set `Product / Order / Order Details Sidebar` (`5057:6908`). Summary
  * rows are conditional: discount when present, refund when issued, shipping
@@ -84,11 +103,15 @@ function OrderDetailsSidebar({
   copy,
   summary,
   payment,
+  status,
   shippingAddress,
   pickupAddress,
   loyaltyPoints,
   className,
 }: OrderDetailsSidebarProps) {
+  const loyaltyHeading =
+    loyaltyPoints != null ? loyaltyPointsHeading(copy, status) : null;
+
   return (
     <div
       className={cn("w-full bg-background", className)}
@@ -172,14 +195,14 @@ function OrderDetailsSidebar({
               heading={copy.shippingAddress}
             />
           ) : null}
-          {loyaltyPoints != null ? (
+          {loyaltyHeading != null ? (
             <Card
               className="gap-1 border-border bg-gradient-to-r from-background-subtle to-muted p-3"
               padding={false}
             >
               <VStack className="w-full" gap="xs" hAlign="stretch">
                 <p className="text-sm leading-5 font-medium text-secondary-foreground">
-                  {copy.loyaltyPoints}
+                  {loyaltyHeading}
                 </p>
                 <div className="text-base leading-6 font-semibold text-foreground">
                   {loyaltyPoints}

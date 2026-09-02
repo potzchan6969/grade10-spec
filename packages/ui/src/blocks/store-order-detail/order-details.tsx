@@ -10,6 +10,7 @@ import {
   useFirstPaintReveal,
 } from "../shared/use-first-paint-reveal";
 import { OrderDetailsDeliveryStatus } from "./order-details-delivery-status";
+import { resolveDeliverySteps } from "./resolve-delivery-steps";
 import { OrderDetailsHeader } from "./order-details-header";
 import { OrderDetailsOrderTable } from "./order-details-order-table";
 import { OrderDetailsSidebar } from "./order-details-sidebar";
@@ -81,7 +82,8 @@ function RevealGroup({
  *
  * Figma frame `Order Details` (`4835:1654`). Site chrome (Nav/Footer) stays
  * outside this compound. Delivery status is hidden when `delivery` is omitted
- * (offline in-store payment orders).
+ * (offline in-store payment orders). Stepper states are derived from `status`
+ * and `delivery.variant` so a future milestone is not shown as current.
  *
  * First paint: header, delivery card (when present), table, and sidebar stagger
  * in (opacity + translateY). Settles immediately under reduced motion.
@@ -145,7 +147,7 @@ function OrderDetails({
             <RevealGroup revealed={revealed} staggerIndex={1}>
               <OrderDetailsDeliveryStatus
                 copy={copy.delivery}
-                steps={delivery.steps}
+                steps={resolveDeliverySteps(delivery, status)}
                 trackOrder={delivery.trackOrder}
                 onTrackOrder={onTrackOrder}
               />
@@ -170,6 +172,7 @@ function OrderDetails({
             payment={payment}
             pickupAddress={pickupAddress}
             shippingAddress={shippingAddress}
+            status={status}
             summary={summary}
           />
         </RevealGroup>

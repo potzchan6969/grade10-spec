@@ -10,7 +10,7 @@ const status = instance.getBoolean("status", false);
 export default {
   example: status
     ? figma.code`<OrderDetailsOrderItem product={product} subtotal={subtotal} quantity={quantity} total={total} lineStatus="refunded" statusLabel={statusLabel} statusMessage={statusMessage} struckThrough imageSrc={imageSrc} imageAlt={imageAlt} />`
-    : figma.code`<OrderDetailsOrderItem product={product} subtotal={subtotal} quantity={quantity} total={total} imageSrc={imageSrc} imageAlt={imageAlt} />`,
+    : figma.code`<OrderDetailsOrderItem product={product} subtotal={subtotal} quantity={quantity} total={total} couponCode={couponCode} imageSrc={imageSrc} imageAlt={imageAlt} />`,
   imports: ['import { OrderDetailsOrderItem } from "@grade10/ui"'],
   id: "order-details-order-item",
   metadata: { nestable: true },

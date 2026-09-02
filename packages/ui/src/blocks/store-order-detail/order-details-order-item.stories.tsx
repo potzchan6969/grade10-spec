@@ -25,6 +25,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
+export const WithItemCoupon: Story = {
+  args: {
+    subtotal: "HK$94.50",
+    total: "HK$94.50",
+    couponCode: "SUMMER10",
+  },
+};
+
 /** Line item flagged with a status issue (refund, cancel, or other problem). */
 export const WithLineIssue: Story = {
   args: {

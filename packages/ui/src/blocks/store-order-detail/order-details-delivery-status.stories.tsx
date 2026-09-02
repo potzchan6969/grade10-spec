@@ -6,6 +6,7 @@ import {
   PICKUP_DELIVERY,
 } from "./fixtures";
 import { OrderDetailsDeliveryStatus } from "./order-details-delivery-status";
+import { resolveDeliverySteps } from "./resolve-delivery-steps";
 
 const meta = {
   title: "Store Order Detail/OrderDetailsDeliveryStatus",
@@ -13,7 +14,7 @@ const meta = {
   tags: ["autodocs"],
   args: {
     copy: ORDER_DETAILS_COPY.delivery,
-    steps: FILLED_DELIVERY.steps,
+    steps: resolveDeliverySteps(FILLED_DELIVERY, "shipped"),
     trackOrder: true,
     onTrackOrder: fn(),
   },
@@ -33,10 +34,10 @@ export const ShippedDeliveryWithoutTrack: Story = {
   },
 };
 
-/** Order Placed → Ready for Pickup → Completed; no Track Order control. */
+/** Order Placed → Pickup → Completed; no Track Order control. */
 export const InStorePickup: Story = {
   args: {
-    steps: PICKUP_DELIVERY.steps,
+    steps: resolveDeliverySteps(PICKUP_DELIVERY, "pickup"),
     trackOrder: false,
     onTrackOrder: undefined,
   },

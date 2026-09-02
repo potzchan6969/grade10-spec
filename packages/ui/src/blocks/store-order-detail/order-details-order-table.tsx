@@ -20,8 +20,11 @@ type OrderDetailsOrderTableProps = {
  * Order line items table within Order Details.
  *
  * Figma set `Product / Order / Order Details Order Table` (`5010:6293`).
- * If an item needs partial processing (refund, cancel, or separate shipment),
- * the consumer splits it into a separate row with line status set.
+ * Item-level promos use `couponCode` on the line with discounted amounts on
+ * that row. Order-level promos use `summary.discount` with the code in the
+ * label; lines stay at list price. The same promotion is never shown in both
+ * places. If an item needs partial processing (refund, cancel, or separate
+ * shipment), the consumer splits it into a separate row with line status set.
  */
 function OrderDetailsOrderTable({
   copy,
@@ -62,6 +65,7 @@ function OrderDetailsOrderTable({
             struckThrough={line.struckThrough}
             subtotal={line.subtotal}
             total={line.total}
+            couponCode={line.couponCode}
           />
         ))}
       </TableBody>
