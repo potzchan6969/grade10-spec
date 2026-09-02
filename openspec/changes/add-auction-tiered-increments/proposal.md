@@ -43,9 +43,11 @@ an hour below the eventual close. **Acceptance signal:** a lot opened at HKD
   to it applies only to listings created afterwards.
 - **The minimum bid on an active listing** is the current bid plus the
   increment for the tier the **current bid** falls in.
-- **The first bid is the starting price, unchanged.** With no bid there is
-  nothing to step from, and the starting price is the number the lot
-  advertises.
+- **BREAKING for bidders: the first bid must clear the starting price by one
+  increment.** Today a lot opening at 20000 accepts a first bid of 20000. It
+  will require 22500. The amount stepped from is the amount a bidder must
+  beat, and before anyone has bid that is the starting price. This raises the
+  entry bar on every lot by one increment.
 - **The bottom tier reaches zero**, so no listing can be un-biddable however
   low it opens.
 - **Auto-bidding uses the table.** The `SHALL NOT use any price-banded
@@ -53,8 +55,14 @@ an hour below the eventual close. **Acceptance signal:** a lot opened at HKD
 
 ## Non-Goals
 
-- **Changing the starting price rule**, the extension rule, the extension cap,
-  or anything about how a listing's window works.
+- **Changing what a listing's starting price means**, the extension rule, the
+  extension cap, or anything about how a listing's window works. The starting
+  price is still the figure an operator sets and the figure a lot advertises;
+  only the first bid that clears it changes.
+- **Changing the price shown before anyone has bid.** With a single committed
+  maximum the current bid remains the starting price, as
+  `grade10-auction/auto-bidding` already specifies. Only the minimum bid
+  moves.
 - **Reserve prices.** Still removed.
 - **A different table per currency on one listing.** A listing has one
   currency and one table.
@@ -122,3 +130,19 @@ theirs.
   some are live with bids against them.
 - **The three scenarios named above must be updated, not worked around.** They
   are shipped results changing on purpose.
+
+## A consequence worth reviewing
+
+A lot advertising a starting price of 20000 will not accept a bid of 20000;
+the first bidder must offer 22500. The starting price becomes the figure
+bidding starts *above* rather than *at*.
+
+That is the intended change, and it matches how a live auction room opens a
+lot. It is recorded here because it is the kind of thing a collector notices,
+and because it makes the advertised number and the bid-able number differ. If
+operators would rather the advertised figure stay bid-able, the fix is to set
+the starting price one increment lower, not to change this rule.
+
+Note also that a listing's starting price is already required to be greater
+than zero by `grade10-auction/admin-listing`, so a lot cannot open at zero and
+a zero bid was never reachable under either rule.

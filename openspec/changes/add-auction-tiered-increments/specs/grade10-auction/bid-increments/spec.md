@@ -103,9 +103,14 @@ For a listing open for bids, Grade10 SHALL determine the **minimum bid** as
 follows:
 
 - WHEN the listing has no accepted bid, the minimum bid SHALL be its starting
-  price. The increment table SHALL NOT be consulted.
+  price plus the increment for the tier containing the **starting price**.
 - WHEN the listing has an accepted bid, the minimum bid SHALL be the current
   bid plus the increment for the tier containing the **current bid**.
+
+In both cases the amount stepped from is the amount a bidder must beat: the
+starting price before anyone has bid, the current bid afterwards. A listing's
+starting price is always greater than zero, so the minimum bid always stands
+above the starting price and can never be zero.
 
 Grade10 SHALL refuse a bid below the minimum bid and SHALL name the minimum
 bid when it does.
@@ -113,24 +118,25 @@ bid when it does.
 Grade10 SHALL publish the minimum bid as a fact of an open listing, so a
 bidder is told what will be accepted before they attempt it.
 
-#### Scenario: bid-increments-SC-10 - The first bid is the starting price
+#### Scenario: bid-increments-SC-10 - The first bid clears the starting price by one increment
 
-- **GIVEN** an open listing with a starting price of 20000 minor units and no accepted bid
+- **GIVEN** an open listing on the house default table with a starting price of 20000 minor units and no accepted bid
+- **AND** the tier containing 20000 minor units has an increment of 2500
 - **WHEN** a bidder reads its minimum bid
-- **THEN** the minimum bid is 20000 minor units
+- **THEN** the minimum bid is 22500 minor units
 
-#### Scenario: bid-increments-SC-11 - A first bid at the starting price is accepted
+#### Scenario: bid-increments-SC-11 - A first bid at the minimum is accepted
 
-- **GIVEN** an open listing with a starting price of 20000 minor units and no accepted bid
-- **WHEN** a bidder bids exactly 20000 minor units
+- **GIVEN** the listing from the previous scenario
+- **WHEN** a bidder bids exactly 22500 minor units
 - **THEN** Grade10 accepts the bid
 
-#### Scenario: bid-increments-SC-12 - A first bid below the starting price is refused
+#### Scenario: bid-increments-SC-12 - A first bid at the starting price is refused
 
-- **GIVEN** an open listing with a starting price of 20000 minor units and no accepted bid
-- **WHEN** a bidder bids 19000 minor units
+- **GIVEN** the listing from the previous scenario
+- **WHEN** a bidder bids exactly 20000 minor units
 - **THEN** Grade10 refuses the bid
-- **AND** it names 20000 minor units as the minimum bid
+- **AND** it names 22500 minor units as the minimum bid
 
 #### Scenario: bid-increments-SC-13 - The minimum bid steps by the current bid's tier
 
@@ -162,6 +168,13 @@ bidder is told what will be accepted before they attempt it.
 
 - **WHEN** a collector reads an open listing
 - **THEN** its facts carry the minimum bid as an integer count of minor units with the listing's ISO 4217 currency code
+
+#### Scenario: bid-increments-SC-22 - The first minimum uses the starting price's own tier
+
+- **GIVEN** an open listing on the house default table with a starting price of 60000 minor units and no accepted bid
+- **AND** the tier containing 60000 minor units has an increment of 5000
+- **WHEN** a bidder reads its minimum bid
+- **THEN** the minimum bid is 65000 minor units
 
 ### Requirement: A listing's table is seeded from the house default
 
