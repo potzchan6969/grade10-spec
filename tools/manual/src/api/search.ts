@@ -202,7 +202,21 @@ export function buildSearchIndex(index: ManualIndex): MiniSearch<SearchDoc> {
       // the query: `prefix: true` made a bare `a` match every token starting
       // with one, which is how a common word won a two-word search.
       prefix: (_term, position, terms) => position === terms.length - 1,
-      fuzzy: (term) => (term.length >= 4 ? 0.2 : false),
+      // Six, not four: below it one edit stops forgiving a typo and starts
+      // accepting a different word, and the words it reaches for are ones this
+      // store uses. `gift` is one edit from `git`, so `gift card` came back
+      // with the guides about git — every word landed, so the search called it
+      // an answer rather than a near miss. `card` is one edit from `cart`, and
+      // at five `carts` still reaches `cards`, which on this store is a
+      // hundred and twenty-six results for a shopping cart, twenty-six of them
+      // about something else entirely.
+      //
+      // The ratio never earned those edits; rounding granted them. 20% of four
+      // letters is 0.8 of an edit, rounded up to a whole one. Six is where a
+      // fifth of the word is genuinely a character, and it leaves the typo
+      // tolerance that matters: `membershp` and `checkut` still land, in any
+      // position in the query.
+      fuzzy: (term) => (term.length >= 6 ? 0.2 : false),
       boost: { title: 4, subtitle: 2 },
     },
   });
