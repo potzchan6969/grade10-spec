@@ -4,30 +4,32 @@ spec: grade10-site/store/account-profile
 order: 7
 ---
 
-The profile is the basic information a collector holds about themselves in
-the store — display name, bio, avatar, and the address they signed in with —
-read and edited on their own account page and shown to nobody else. It is
-resolved from the session alone: a signed-out request is refused, and no
-input selects another collector's profile.
+The profile is what a collector says about themselves in the store, on their
+own account page and shown to nobody else.
 
-## Always a profile
+- **Fields**
+  1. **Display name** — required, at most **80** characters; two collectors
+     may share one
+  2. **Bio** — optional, at most **500** characters
+  3. **Avatar** — a JPEG, PNG, or WebP up to **5 MB**; removed, the
+     initials of the display name stand in
+  4. **Email** — the address signed in with, shown and not editable here
+  5. **Member since** — the first save; absent until then
+- **Always a page** — a collector who has never saved still sees every
+  field, filled from what sign-in already knows, and an empty field says what
+  it is for
+- **Editing** — explicit: edit, then save or cancel; a save that would clear
+  the display name is refused, and a failed save keeps what was typed
+- **URL** — `grade10.com/profile`; signed out, it asks for sign-in
 
-A collector who has never saved still sees a complete page: fields fall back
-to what the session already knows, the empty states say what a field does
-rather than that nothing exists, and reading stores nothing. A value the
-collector never chose is not presented as theirs, and member-since appears
-only once they have actually saved.
+## What it looks like
 
-## The fields
+::story{id="store-profile-profilecard--default" title="The profile, read"}
 
-Display name is required, trimmed, and at most 80 characters. Bio is
-optional, trimmed, and at most 500. The avatar is an uploaded image the
-collector can remove to fall back to initials. Email is the address they
-signed in with, shown and never editable here.
+::story{id="store-profile-profilecard--editing-body" title="The profile, being edited"}
 
-## Saving
+::story{id="store-profile-profilecard--error-state" title="A read that failed"}
 
-Editing is explicit: a save carrying no field at all is refused, and so is
-one that would clear the display name. A failed read or save is reported
-rather than hidden, and a failed save keeps the collector's input so nothing
-typed is lost.
+## In flight
+
+::changes{spec="grade10-site/store/account-profile"}
