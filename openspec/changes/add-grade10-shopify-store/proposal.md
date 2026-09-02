@@ -2,7 +2,7 @@
 
 **Author:** @htonyl - 2026-08-17
 
-Product context: [Grade10 foundation](../../../docs/prds/grade10/foundation.md).
+Product context: [Grade10 foundation](../../../docs/prds/products/grade10-store/index.md).
 
 ## Why
 

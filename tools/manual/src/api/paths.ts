@@ -1,6 +1,11 @@
 /** Store paths, canonical routes, and the slugs that link the two. */
 
-export const MANUAL_ROOT = "manual";
+/** A page's content-relative path: the manual's directory, then the rest —
+ * `pagePath("docs/prds", "products", "vault", "index.md")`. The directory
+ * is the store's to choose, so it rides the snapshot and is never named here. */
+export function pagePath(manualDir: string, ...rest: string[]): string {
+  return [manualDir, ...rest].join("/");
+}
 
 /** The store's own repository — the one place it is named. */
 export const STORE_REPO = {
@@ -50,10 +55,13 @@ export function resolveRelative(baseDir: string, href: string): string | null {
 }
 
 /** The one canonical route for a page path; null for a path the routes do not claim. */
-export function routeForPagePath(path: string): string | null {
-  if (path === `${MANUAL_ROOT}/index.md`) return "/";
-  const rest = path.startsWith(`${MANUAL_ROOT}/`)
-    ? path.slice(MANUAL_ROOT.length + 1)
+export function routeForPagePath(
+  manualDir: string,
+  path: string,
+): string | null {
+  if (path === `${manualDir}/index.md`) return "/";
+  const rest = path.startsWith(`${manualDir}/`)
+    ? path.slice(manualDir.length + 1)
     : null;
   if (rest === null || !rest.endsWith(".md")) return null;
   const parts = rest.slice(0, -3).split("/");
@@ -69,20 +77,23 @@ export function routeForPagePath(path: string): string | null {
   return null;
 }
 
-export function pagePathForRoute(pathname: string): string | null {
+export function pagePathForRoute(
+  manualDir: string,
+  pathname: string,
+): string | null {
   const parts = pathname.split("/").filter(Boolean);
-  if (parts.length === 0) return `${MANUAL_ROOT}/index.md`;
+  if (parts.length === 0) return pagePath(manualDir, "index.md");
   if (parts[0] === "p" && parts.length === 2) {
-    return `${MANUAL_ROOT}/products/${parts[1]}/index.md`;
+    return pagePath(manualDir, "products", parts[1], "index.md");
   }
   if (parts[0] === "p" && parts.length === 3) {
-    return `${MANUAL_ROOT}/products/${parts[1]}/${parts[2]}.md`;
+    return pagePath(manualDir, "products", parts[1], `${parts[2]}.md`);
   }
   if (parts[0] === "platform" && parts.length === 2) {
-    return `${MANUAL_ROOT}/platform/${parts[1]}.md`;
+    return pagePath(manualDir, "platform", `${parts[1]}.md`);
   }
   if (parts[0] === "guides" && parts.length === 2) {
-    return `${MANUAL_ROOT}/guides/${parts[1]}.md`;
+    return pagePath(manualDir, "guides", `${parts[1]}.md`);
   }
   return null;
 }

@@ -9,22 +9,28 @@ always a plain static build — read-only, nothing more.
 
 The app never restates a fact that lives elsewhere. Requirements come from
 `openspec/specs`, progress from `tasks.md` checkboxes, visuals from Figma,
-Storybook, and images in `manual/assets/`. Manual pages add the narrative
-that connects them.
+Storybook, and images in the manual's `assets/`. Manual pages add the
+narrative that connects them — and a capability's page is its PRD, which is
+why the store keeps the manual under `docs/prds/`.
 
 ## Roots
 
 The viewer reads from two directories, resolved once at startup
-(`src/store/roots.mts`). The **content root** holds the manual —
-`manual/manual.yaml` and the pages beside it. The **store root** holds the
-OpenSpec store — `openspec/specs` and `openspec/changes`. In this repository
-they are the same directory and everything behaves as one tree.
+(`src/store/roots.mts`). The **content root** holds the manual — a
+directory with `manual.yaml` and the pages beside it, `docs/prds` unless
+`MANUAL_DIR` names another (a relative path inside the repository). The
+**store root** holds the OpenSpec store — `openspec/specs`,
+`openspec/changes`, and `docs/references`. In this repository they are the
+same directory and everything behaves as one tree.
 
 Any repository can mount the viewer (it ships in this repo's
 `tools/manual`, and this repo ships as a submodule) and bring its own
-manual. The content root is found where the command ran — `MANUAL_ROOT`,
-else the nearest `manual/manual.yaml` above `INIT_CWD` or the working
-directory. The store is the content repository itself when it carries
+manual, wherever it keeps it — an engineering manual has no business under
+`docs/prds`, so the application repository sets `MANUAL_DIR=manual`. The
+content root is found where the command ran — `MANUAL_ROOT`, else the
+nearest `<MANUAL_DIR>/manual.yaml` above `INIT_CWD` or the working
+directory. The resolved directory rides the snapshot as `manualDir`, so
+the app builds every page path from it and names it nowhere. The store is the content repository itself when it carries
 `openspec/specs`; otherwise the repository's `openspec/config.yaml` names a
 store id and the `openspec` CLI resolves it through the same per-machine
 registry `pnpm plan` uses — the registered clone at its own main, never a
@@ -40,10 +46,10 @@ repository (see Checks).
 
 ## Content
 
-Pages live at the content root under `manual/`:
+Pages live at the content root under the manual's directory:
 
 ```
-manual/
+docs/prds/
   manual.yaml                 ordering, extra products, external base URLs
   assets/                     images referenced by ::image blocks
   index.md                    home page prose
@@ -150,13 +156,19 @@ block's declared order; prose kept verbatim inside its trimmed bounds.
 
 ## Data
 
-The builder emits two static artifacts, both pure functions of git state:
+The builder emits static artifacts, all pure functions of git state:
 
 - `/api/snapshot` — boots the app: `generatedAt`, `storeHead`, `config`
   (manual.yaml + derived taxonomy), `pages: [{ path, source, lastCommit }]`,
   `specs`, `changes` (in-flight only), `history`.
 - `/api/archive` — archived changes, fetched only by planning/timeline
   views, so years of archive never block first paint.
+- `/api/change/<id>` — one in-flight change's files, fetched only by its
+  page (Change document, below), so the snapshot stays the size of the
+  board.
+- `/api/reference/<slug>` — one document from the store's `docs/references/`,
+  as written, fetched only by its page; the snapshot lists them without
+  their text, so the boot payload does not grow with the evidence file.
 
 Search needs no artifact: the client builds a minisearch index lazily over
 the snapshot on first use; the archive is searched only where it is already
@@ -190,7 +202,9 @@ keyed by the id token, so two capabilities sharing a prefix (both
 `navigation`s) share one ceiling, which is the only answer that stops a
 new id colliding.
 
-The snapshot also carries `assets` (every file under `manual/assets/`),
+The snapshot also carries `assets` (every file under the manual's `assets/`),
+`references` (the store's `docs/references/*.md` — slug, path, title and
+last commit — with the README's text beside them as `referencesReadme`),
 `warnings` (the `check:manual` warnings of the build that produced it —
 failures never deploy, so warnings are all it can carry — plus a
 build-time `design` rule folded from the design-sync report: each
@@ -235,6 +249,33 @@ Change entry shape:
 The heavy fields — `tasks` and `requirements[].text` — ride for in-flight
 changes only: the archive shares this type, its payload is the planning
 board's own fetch, and no reader needs an archived delta's full text.
+
+Change document shape (`/api/change/<id>`, in-flight only):
+
+```
+{ id, dir, schema, schemaKnown,
+  artifacts: [{ name, kind: doc | specs | tasks, path?, present,
+                text?, lastCommit? }],
+  deltas: [{ spec, path, text, title?, purpose?, featureSet?,
+             journeys?, sections: [{ kind, requirements, renames? }],
+             suite?: { status, cases, outOfSuite? }, suiteError?,
+             lastCommit?, error? }] }
+```
+
+The artifacts are the schema's, in the order it declares them — read from
+`openspec/schemas/<name>/schema.yaml`, `id` and `generates` per entry —
+each flagged present or not, and markdown files the schema never named
+come last. `kind` follows what the artifact generates, never its name:
+`specs/**` is the delta directory, `tasks.md` the checklist, anything else
+prose, which is the only kind that ships its text (tasks ride the entry).
+A schema the store does not define (`spec-driven` lives inside the CLI)
+sets `schemaKnown: false`: the files are listed in the usual order and
+nothing claims one is missing. Each delta is read twice over — its text as
+written, and the contract it proposes: the `# ` title, Purpose, Feature
+set, the journeys it issues, and each delta section's requirements with
+their scenarios, parsed by the same readers as a durable spec. A delta the
+reader cannot parse keeps its text and carries `error`; the suite beside it
+is its own channel, as it is durably.
 Owners come from `.openspec.yaml` first, task tags appended; `to` is a
 rename's destination heading. A change's lane is derived, never stored:
 `proposed` (no deltas) → `specified` (deltas, no task list) →
@@ -255,7 +296,7 @@ capability's status is derived, never stored: `changing` when an
 in-flight delta touches it, `incubating` when its spec exists
 only as a delta or the page has no spec, else `stable`.
 
-Error containment splits by ownership. `manual/` pages are this app's own:
+Error containment splits by ownership. Manual pages are this app's own:
 malformed input fails the build. Specs and changes are other people's
 files the manual mirrors: a malformed one becomes
 `{ id, error: { file, line, message } }` in the snapshot, renders as a loud
@@ -267,26 +308,30 @@ fails the PR naming its own file while the spec's requirements,
 journeys, and delta rules carry on.
 
 Node-only readers in `src/store/` (`read-specs.mts`, `read-changes.mts`,
-`read-manual.mts`, composed by `snapshot.mts`) parse the store from disk.
+`read-manual.mts`, `read-references.mts`, composed by `snapshot.mts`) parse
+the store from disk.
 Owners come from `(owner: @handle)` tags; scenario/story/test-case ids
 (`<capability>-SC-<n>`, `-US-<n>`, `-TC-<n>`) are captured when present.
 
 Relative markdown links inside spec text (`../../../../docs/prds/…`) are
-rewritten at render to store-relative routes; an unresolvable one renders as
+rewritten at render to the page or reference that shows the file; one to a
+store file no page shows opens on GitHub, and an unresolvable one renders as
 a marked dead link.
 
 Two transports, one client code path:
 
-- Dev: a Vite plugin serves the two GET endpoints computed from the repo
-  root per request, `POST /api/page` and `POST /api/asset` (paths confined
-  to `manual/`), `POST /api/commit` (git add manual/ + commit).
-- Static build: `build-snapshot.mts` writes the two artifacts; the hosted
-  site is static files only.
+- Dev: a Vite plugin serves the GET endpoints computed from the repo root
+  per request, `POST /api/page` and `POST /api/asset` (paths confined to
+  the manual's directory), `POST /api/commit` (git add of that directory +
+  commit).
+- Static build: `build-snapshot.mts` writes the artifacts — one file per
+  change under `api/change/`, one per reference under `api/reference/`; the
+  hosted site is static files only.
 
 ## Editing
 
 The manual is edited locally only: `pnpm dev` runs a Vite plugin that
-answers the `/api/*` endpoints above, confined to `manual/`, and that
+answers the `/api/*` endpoints above, confined to the manual's directory, and that
 presence is the only thing that turns editing on. The built, deployed site
 has no dev server behind it, so `useEditorSession` finds no store, and
 every editor surface — the Edit button, Propose, New page, asset upload —
@@ -320,7 +365,7 @@ build-side check — the browser cannot see the Storybook index, and does
 not pretend to.
 
 New pages are created from the editor (path picker constrained to the
-`manual/` tree); deleting a page is offered the same way.
+manual's tree); deleting a page is offered the same way.
 
 Any requirement row or page header can propose a change: the browser
 drafts `openspec/changes/<slug>/` with exactly what the pm-planning
@@ -353,14 +398,14 @@ src/
   api/                          artifact fetch + types + derivations
   blocks/                       one component per block type, registry
   editor/                       block editor, ContentStore port + LocalStore
-  pages/                        Home, Product, Capability, Planning, Guide, Recent, Page
+  pages/                        Home, Product, Capability, Planning, Change, Guide, References, Recent, Page
   shell/                        nav sidebar, header, search, recent bell, theme toggle
 test/                           grammar round-trip table, reader fixtures
 ```
 
 Routes: `/` home, `/p/<product>`, `/p/<product>/<capability>`,
-`/platform/<topic>`, `/guides/<slug>`, `/planning`, `/qa`, `/design`,
-`/recent`. These are canonical — a raw manual path redirects to its
+`/platform/<topic>`, `/guides/<slug>`, `/planning`, `/planning/<change>`,
+`/qa`, `/design`, `/recent`. These are canonical — a raw manual path redirects to its
 canonical route, never renders beside it. `/qa`, `/design` and `/recent`
 are pure snapshot derivations: a review worklist (drafts, uncovered
 scenarios, suite errors, worst first), every design card grouped by page
@@ -383,6 +428,33 @@ on: a page's own warnings as a strip on that page, store-file warnings
 in maintenance. Nav admits work that has no capability yet — delta-only
 capabilities appear as incubating rows linking to the change that
 introduces them.
+
+A change's page (`/planning/<change>`) is the change read as its files.
+The head carries the card's facts — lane, target, owners, dependencies,
+main state, suites, progress, next action — and the why in full; below it
+the Artifacts strip says which of the schema's artifacts exist and names
+the ones still to write, in writing order. Each present artifact is a tab,
+labelled for who reads it: Product (the PM-driven proposal), Requirements
+(the deltas — the detailed illustration of the proposal), Tech Design (the
+technical implementation's high-level design), UI (the visual plan), Tasks
+(the agent-driven implementation plan); an artifact a schema adds beyond
+these is labelled from its id. The open tab lives in `?tab=`, so a link
+carries the file it was written about, and a hash naming a permanent id —
+scenario, story, row, case — opens the requirements whatever tab the link
+was copied from. Prose tabs render the file with its leading `# ` title
+dropped and headings anchored under the artifact's name; a relative link
+to another of the change's files lands on that tab, one to a durable spec
+on its capability page, and one to `docs/` or a store file no page shows
+on GitHub. The Tasks tab is the groups with their open lines. The
+Requirements tab reads every delta three ways, switched at the top:
+Contract — purpose, feature set, journeys with the scenarios that accept
+them, then each delta section's rows, ADDED opening to prose and
+scenarios, MODIFIED offering the diff against the durable block, REMOVED
+showing what goes, RENAMED as FROM → TO pairs; Full — the file as
+written; Test plan — the suite beside the delta traced against the
+delta's own scenarios, or the `/spec-to-tcs` command that writes one. The
+rail lists a tab's H2s with its H3s one step in, and re-reads when the
+tab changes.
 
 Deep links reach leaves: every rendered requirement row, scenario, journey,
 and flow step carries `id` (the store's permanent id where one exists), the

@@ -20,7 +20,7 @@ const REPORT = {
   nodes: { "4735-6493": "Cart Drawer", "4171-9023": "Store" },
 };
 
-const PAGE = "manual/products/demo/alpha.md";
+const PAGE = "docs/prds/products/demo/alpha.md";
 
 async function figmaLines(cards: string[], report: unknown = REPORT) {
   const root = writeStore({

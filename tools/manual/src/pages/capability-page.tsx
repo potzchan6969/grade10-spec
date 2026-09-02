@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router";
 import { productTitle } from "../api/derive";
-import { MANUAL_ROOT } from "../api/paths";
+import { pagePath } from "../api/paths";
 import { useManualIndex } from "../api/use-manual-index";
 import { PageView } from "./page-view";
 
@@ -16,7 +16,7 @@ export function CapabilityPage() {
         </Link>
       }
       index={index}
-      path={`${MANUAL_ROOT}/products/${product}/${capability}.md`}
+      path={pagePath(index.manualDir, "products", product, `${capability}.md`)}
     />
   );
 }

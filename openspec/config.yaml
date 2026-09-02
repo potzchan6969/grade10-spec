@@ -4,7 +4,7 @@
 schema: full-planning
 
 # This repo is an OpenSpec store, and more besides: PM and design own the
-# proposals and specs under openspec/ and the PRDs under docs/prds/, engineering
+# proposals and specs under openspec/ and the manual under docs/prds/, engineering
 # writes the delivery plan - design, ui, tasks - on top of them, and
 # packages/design-system/ holds the components and tokens the applications
 # consume. Engineering reads and checks off the plan from grade10, which points
@@ -37,8 +37,9 @@ context: |
   with the shell every page renders in), and shared-ui (cross-product contracts
   for the shared components every store application consumes: packages/ui, and
   the site chrome the design system publishes). A capability's
-  ID is <product>/<capability>. docs/prds/ holds only the product decision behind a requirement - problem,
-  users, non-goals, measurement, rollout, rationale - and never restates one.
+  ID is <product>/<capability>. docs/prds/ is the manual - one page per capability,
+  and that page is the PRD: the product decision behind its requirements - problem,
+  users, non-goals, measurement, rationale - sits on it and never restates one.
   docs/governance/prd-and-openspec.md explains the boundary - follow it.
   Money is always an integer count of minor units plus an ISO 4217 currency
   code, never a float - specs must state amounts that way.

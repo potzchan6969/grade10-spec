@@ -29,7 +29,7 @@ Collaborators work across several artifact types with distinct authority:
 | Need | Canonical location |
 | --- | --- |
 | Durable requirements and component export contracts | `openspec/specs/<product>/<capability>/spec.md` |
-| Product decision behind a requirement | `docs/prds/<product-area>/<feature>.md` |
+| Product record: a capability's manual page and the decision behind its requirements | `docs/prds/products/<product>/<capability>.md` |
 | Proposed implementation change | `openspec/changes/<change-name>/` |
 | Design token values | `packages/design-system/tokens.json` |
 | User-facing copy and translations | `packages/i18n/messages/{shared,<brand>}/<locale>/<namespace>.json` |
@@ -85,7 +85,7 @@ Consuming applications add this repository as a Git submodule, pin a SHA, and im
 | --- | --- |
 | Durable specs | `openspec/specs/` |
 | Active change deltas | `openspec/changes/` |
-| PRDs | `docs/prds/` |
+| The manual — one page per capability, the PRD | `docs/prds/` |
 | Design system documentation | `packages/design-system/DESIGN.md` |
 | Token data | `packages/design-system/tokens.json` |
 | Published Storybook (workbench) | https://storybook.grade10-stg.com |

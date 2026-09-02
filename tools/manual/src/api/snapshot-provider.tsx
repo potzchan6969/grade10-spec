@@ -60,11 +60,17 @@ export function useSnapshotReload(): () => void {
 }
 
 export function useSnapshot(): SnapshotState {
-  const state = use(SnapshotContext);
+  const state = useSnapshotIfAny();
   if (!state) {
     throw new Error("useSnapshot must be used within a SnapshotProvider");
   }
   return state;
+}
+
+/** For a surface that may render with no provider around it at all — a
+ * story, a test — and treats that the same as a snapshot not yet in hand. */
+export function useSnapshotIfAny(): SnapshotState | null {
+  return use(SnapshotContext);
 }
 
 /** For anything the shell renders only once the snapshot is in hand. */

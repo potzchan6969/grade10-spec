@@ -22,14 +22,15 @@ export function storePath(root: string, absolute: string): string {
     .join("/");
 }
 
-/** Resolves a path written against any suffix of `dir` — `manual/assets/x.png`,
- * `assets/x.png` and `x.png` all name the same file — and refuses anything
- * that escapes it. Every write the editor makes goes through here.
+/** Resolves a path written against any suffix of `dir` —
+ * `docs/prds/assets/x.png`, `prds/assets/x.png`, `assets/x.png` and `x.png`
+ * all name the same file — and refuses anything that escapes it. Every write
+ * the editor makes goes through here.
  *
  * A path that opens on another store directory is refused rather than
- * re-rooted: `openspec/x` under `manual/` means someone wrote a store-relative
- * path for the wrong tree, and answering with `manual/openspec/x` invents a
- * file nobody asked for. */
+ * re-rooted: `openspec/x` under the manual means someone wrote a
+ * store-relative path for the wrong tree, and answering with
+ * `docs/prds/openspec/x` invents a file nobody asked for. */
 export function confine(
   root: string,
   dir: string,

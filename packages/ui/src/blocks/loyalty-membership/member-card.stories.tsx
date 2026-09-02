@@ -113,7 +113,9 @@ export const AlreadyUsed: Story = {
       said.getByText("This code has already been used"),
     ).toBeInTheDocument();
     expect(said.getByText(/Causeway Bay/)).toBeInTheDocument();
-    expect(said.getByText(FIXTURE_MEMBER_FIRST_USE_AT)).toBeInTheDocument();
+    expect(
+      said.getByText(FIXTURE_MEMBER_FIRST_USE_AT, { exact: false }),
+    ).toBeInTheDocument();
 
     expect(canvas.queryByText(/Expires in/)).not.toBeInTheDocument();
     expect(canvas.queryByText("This code has expired")).not.toBeInTheDocument();

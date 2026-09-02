@@ -25,8 +25,8 @@ import {
   buildListingAuctionBidView,
   createLiveAuctionTiming,
   initialLiveListingFacts,
-  liveBidSimulationOptions,
   type LiveListingFacts,
+  liveBidSimulationOptions,
   simulateNextLiveBid,
   userBidHistoryForState,
 } from "./auction-lot-details-content";

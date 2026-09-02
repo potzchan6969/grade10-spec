@@ -38,7 +38,7 @@ function render(node: React.ReactNode, designSync?: DesignSyncReport): string {
   return renderToStaticMarkup(
     <MemoryRouter>
       <BlockScopeProvider
-        value={{ index, pagePath: "manual/products/demo-product/alpha.md" }}
+        value={{ index, pagePath: "docs/prds/products/demo-product/alpha.md" }}
       >
         {node}
       </BlockScopeProvider>

@@ -230,7 +230,11 @@ function ListingAgeVerificationDialog({
           />
         </DialogBody>
         <DialogFooter>
-          <Button onClick={() => onOpenChange(false)} size="md" variant="outline">
+          <Button
+            onClick={() => onOpenChange(false)}
+            size="md"
+            variant="outline"
+          >
             {copy.cancel}
           </Button>
           <Button disabled={!complete} onClick={handleConfirm} size="md">

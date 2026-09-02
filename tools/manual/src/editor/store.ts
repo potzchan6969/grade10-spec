@@ -59,18 +59,18 @@ export class StoreError extends Error {
   }
 }
 
-const MANUAL = "manual/";
-
-/** Every write names a file under `manual/`; the dev server confines its own
- * writes, but the check happens here too, before a path becomes a request. */
-export function assertManualPath(path: string): void {
+/** Every write names a file under the manual's directory; the dev server
+ * confines its own writes, but the check happens here too, before a path
+ * becomes a request. */
+export function assertManualPath(manualDir: string, path: string): void {
+  const under = `${manualDir}/`;
   const refuse = (why: string) => {
     throw new StoreError(400, `\`${path}\` ${why}`);
   };
   // A leading `/` is an absolute path, and fails this first.
-  if (!path.startsWith(MANUAL)) refuse(`is not under ${MANUAL}`);
-  if (path === MANUAL) refuse("names no file");
-  if (path.split("/").includes("..")) refuse(`walks out of ${MANUAL}`);
+  if (!path.startsWith(under)) refuse(`is not under ${under}`);
+  if (path === under) refuse("names no file");
+  if (path.split("/").includes("..")) refuse(`walks out of ${under}`);
 }
 
 /** The same confinement, for the other tree a write can name. A proposal

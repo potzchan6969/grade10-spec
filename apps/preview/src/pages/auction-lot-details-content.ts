@@ -1,29 +1,27 @@
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
-import { createElement } from "react";
+import type { ListingBidHistoryRow, ListingLotMetaBadge } from "@grade10/ui";
 import {
+  type AuctionTiming,
   BID_FIXTURE_LOT,
   LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
-  bidHistoryForState,
-  stateMeta,
-  type AuctionTiming,
-  type BiddingState,
   type LiveListingFacts,
+  stateMeta,
 } from "@grade10/ui";
-import type { ListingBidHistoryRow, ListingLotMetaBadge } from "@grade10/ui";
+import { createElement } from "react";
 
 export {
-  BIDDING_STATE_LABELS,
+  type AuctionTiming,
   auctionHeaderLabel,
+  BIDDING_STATE_LABELS,
+  type BiddingState,
+  type BidMode,
   bidHistoryForState,
   bidModeForState,
   buildListingAuctionBidView,
+  type LiveListingFacts,
   remainingSecondsUntil,
   stateMeta,
   userBidHistoryForState,
-  type AuctionTiming,
-  type BidMode,
-  type BiddingState,
-  type LiveListingFacts,
 } from "@grade10/ui";
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
@@ -201,9 +199,7 @@ export function liveBidSimulationOptions(
 }
 
 function randomRivalInitials(): string {
-  return SIMULATED_RIVALS[
-    Math.floor(Math.random() * SIMULATED_RIVALS.length)
-  ];
+  return SIMULATED_RIVALS[Math.floor(Math.random() * SIMULATED_RIVALS.length)];
 }
 
 function viewerAutoCounterAmount(

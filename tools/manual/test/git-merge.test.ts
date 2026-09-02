@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { CommitInfo } from "../src/api/types";
 import { type GitIndex, mergeGitIndexes } from "../src/store/git.mts";
 
-/** Two repositories, one index: `manual/…` answers from the content clone,
+/** Two repositories, one index: `docs/prds/…` answers from the content clone,
  * everything else from the store, and the snapshot is stamped with the
  * store's head either way. */
 
@@ -21,7 +21,7 @@ const indexOf = (sha: string, blobs: Record<string, string>): GitIndex => ({
 });
 
 const store = indexOf("store-11", { "s:openspec/specs/a/spec.md": "spec" });
-const content = indexOf("content-20", { "c:manual/index.md": "page" });
+const content = indexOf("content-20", { "c:docs/prds/index.md": "page" });
 const merged = mergeGitIndexes(store, content);
 
 describe("the merged git index", () => {
@@ -30,9 +30,9 @@ describe("the merged git index", () => {
   });
 
   it("routes paths to the repository that holds them", () => {
-    expect(merged.commitOf("manual/index.md")?.sha).toBe("content-20");
+    expect(merged.commitOf("docs/prds/index.md")?.sha).toBe("content-20");
     expect(merged.commitOf("openspec/specs/a/spec.md")?.sha).toBe("store-11");
-    expect(merged.newestUnder("manual")?.sha).toBe("content-20");
+    expect(merged.newestUnder("docs/prds")?.sha).toBe("content-20");
     expect(merged.newestUnder("openspec/changes/x")?.sha).toBe("store-11");
   });
 
@@ -45,14 +45,14 @@ describe("the merged git index", () => {
 
   it("asks each repository only for the refs whose paths it holds", async () => {
     const blobs = await merged.readBlobs([
-      "c:manual/index.md",
+      "c:docs/prds/index.md",
       "s:openspec/specs/a/spec.md",
-      "s:manual/index.md",
+      "s:docs/prds/index.md",
     ]);
-    expect(blobs.get("c:manual/index.md")).toBe("page");
+    expect(blobs.get("c:docs/prds/index.md")).toBe("page");
     expect(blobs.get("s:openspec/specs/a/spec.md")).toBe("spec");
     // A ref pairing a store commit with a content path resolves to nothing —
     // the stale check reads that as "moved", never as somebody else's file.
-    expect(blobs.has("s:manual/index.md")).toBe(false);
+    expect(blobs.has("s:docs/prds/index.md")).toBe(false);
   });
 });

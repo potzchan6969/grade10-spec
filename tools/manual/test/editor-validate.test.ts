@@ -14,8 +14,8 @@ import { snapshotOf } from "./manual-fixture";
  * proven by the snapshot alone — which is why `::story` ids are absent: the
  * browser cannot see the Storybook index. */
 
-const PAGE = "manual/products/demo/alpha.md";
-const OTHER = "manual/products/demo/beta.md";
+const PAGE = "docs/prds/products/demo/alpha.md";
+const OTHER = "docs/prds/products/demo/beta.md";
 
 const ALPHA: SpecEntry = {
   id: "demo/alpha",
@@ -170,7 +170,7 @@ describe("save-time references", () => {
 
     expect(
       said(problemsFor(index, '::image{src="assets/gone.png" alt="x"}')),
-    ).toEqual(["no file `assets/gone.png` under manual/assets"]);
+    ).toEqual(["no file `assets/gone.png` under assets/"]);
   });
 
   it("says nothing about images when the snapshot lists no assets", () => {

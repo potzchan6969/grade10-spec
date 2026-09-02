@@ -19,7 +19,8 @@ on:
     branches: [main]
     paths:
       - "tools/manual/**"
-      - "manual/**"
+      - "docs/prds/**"
+      - "docs/references/**"
       - "openspec/**"
       - "packages/design-system/**"
       - "packages/ui/**"

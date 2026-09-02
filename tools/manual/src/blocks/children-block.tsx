@@ -25,7 +25,7 @@ export function ChildCards({
   dir: string;
 }) {
   const children = childPages(index, dir);
-  const capabilities = isProductDir(dir);
+  const capabilities = isProductDir(index.manualDir, dir);
 
   if (children.length === 0) {
     return (

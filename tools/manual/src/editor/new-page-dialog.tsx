@@ -7,7 +7,7 @@ import {
 } from "@grade10/design-system/components/overlays/dialog";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { MANUAL_ROOT, routeForPagePath, slugify } from "../api/paths";
+import { pagePath, routeForPagePath, slugify } from "../api/paths";
 import { useSnapshotReload } from "../api/snapshot-provider";
 import { useManualIndex } from "../api/use-manual-index";
 import { editHref } from "./edit-mode";
@@ -17,7 +17,7 @@ import { newPageSource } from "./scaffold";
 import { noteWrite, useEditorSession } from "./session";
 import { describeCause } from "./store";
 
-/** New pages are created inside the `manual/` tree and nowhere else: the
+/** New pages are created inside the manual's tree and nowhere else: the
  * picker offers the three places routes exist for, and builds the path. */
 
 const KINDS = [
@@ -31,15 +31,22 @@ type Kind = (typeof KINDS)[number];
 
 const SLUG_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
-function pathFor(kind: Kind, product: string, slug: string): string {
+function pathFor(
+  manualDir: string,
+  kind: Kind,
+  product: string,
+  slug: string,
+): string {
   if (kind === "product landing") {
-    return `${MANUAL_ROOT}/products/${product}/index.md`;
+    return pagePath(manualDir, "products", product, "index.md");
   }
   if (kind === "capability page") {
-    return `${MANUAL_ROOT}/products/${product}/${slug}.md`;
+    return pagePath(manualDir, "products", product, `${slug}.md`);
   }
-  if (kind === "platform topic") return `${MANUAL_ROOT}/platform/${slug}.md`;
-  return `${MANUAL_ROOT}/guides/${slug}.md`;
+  if (kind === "platform topic") {
+    return pagePath(manualDir, "platform", `${slug}.md`);
+  }
+  return pagePath(manualDir, "guides", `${slug}.md`);
 }
 
 export function NewPageDialog({
@@ -67,7 +74,7 @@ export function NewPageDialog({
 
   const needsSlug = kind !== "product landing";
   const effectiveSlug = slug.trim() === "" ? slugify(title) : slug.trim();
-  const path = pathFor(kind, product, effectiveSlug);
+  const path = pathFor(index.manualDir, kind, product, effectiveSlug);
   const taken = index.pageByPath.has(path);
 
   // A capability page documents the spec its own path names, and gets that
@@ -95,7 +102,7 @@ export function NewPageDialog({
       spec: known ? specId : undefined,
     });
 
-    savePage(store, path, source, null)
+    savePage(store, index.manualDir, path, source, null)
       .then((outcome) => {
         if (outcome.status === "conflict") {
           setError("a page already lives there");
@@ -106,7 +113,7 @@ export function NewPageDialog({
           reload();
         }
         onOpenChange(false);
-        const route = routeForPagePath(path);
+        const route = routeForPagePath(index.manualDir, path);
         if (route) navigate(editHref(route));
       })
       .catch((cause: unknown) => {

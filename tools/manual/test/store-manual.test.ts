@@ -7,6 +7,7 @@ import {
   readManualPages,
 } from "../src/store/read-manual.mts";
 import { discoverSpecs } from "../src/store/read-specs.mts";
+import { rootsOf } from "../src/store/roots.mts";
 import { writeStore as write } from "./tmp-store";
 
 const FIXTURE = fileURLToPath(new URL("./fixtures/store", import.meta.url));
@@ -18,25 +19,25 @@ const DUPLICATE = fileURLToPath(
 );
 
 describe("manual pages", () => {
-  const pages = readManualPages(FIXTURE, NO_GIT);
+  const pages = readManualPages(rootsOf(FIXTURE), NO_GIT);
 
-  it("walks manual/**/*.md into store-relative entries", () => {
+  it("walks docs/prds/**/*.md into store-relative entries", () => {
     expect(pages.map((page) => page.path)).toEqual([
-      "manual/index.md",
-      "manual/products/demo-product/index.md",
+      "docs/prds/index.md",
+      "docs/prds/products/demo-product/index.md",
     ]);
     expect(pages[0].source).toContain("title: Demo manual");
   });
 
   it("throws on a page the grammar refuses, naming file and line", () => {
-    expect(() => readManualPages(BROKEN_PAGE, NO_GIT)).toThrow(
-      /manual\/bad\.md:5: line 5: unknown directive `nope`/,
+    expect(() => readManualPages(rootsOf(BROKEN_PAGE), NO_GIT)).toThrow(
+      /docs\/prds\/bad\.md:5: line 5: unknown directive `nope`/,
     );
   });
 });
 
 describe("manual.yaml", () => {
-  const config = readManualConfig(FIXTURE);
+  const config = readManualConfig(rootsOf(FIXTURE));
 
   it("reads the mapping form of groups in order", () => {
     expect(config.groups).toEqual([
@@ -54,46 +55,50 @@ describe("manual.yaml", () => {
    * name, because a nav section with no heading is worse than a plain one. */
   it("reads a flat platform list as one named group", () => {
     const root = write({
-      "manual/manual.yaml":
+      "docs/prds/manual.yaml":
         "storybookBase: https://s.example\nplatform: [money-amounts]\n",
     });
-    expect(readManualConfig(root).platform).toEqual([
+    expect(readManualConfig(rootsOf(root)).platform).toEqual([
       { title: "Cross-cutting", topics: ["money-amounts"] },
     ]);
   });
 
   it("throws when a topic is listed twice", () => {
     const root = write({
-      "manual/manual.yaml":
+      "docs/prds/manual.yaml":
         "storybookBase: https://s.example\nplatform:\n  Conventions: [money]\n  Architecture: [money]\n",
     });
-    expect(() => readManualConfig(root)).toThrow(/lists `money` twice/);
+    expect(() => readManualConfig(rootsOf(root))).toThrow(
+      /lists `money` twice/,
+    );
   });
 
   it("reads the array form of groups too", () => {
     const root = write({
-      "manual/manual.yaml":
+      "docs/prds/manual.yaml":
         "storybookBase: https://s.example\ngroups:\n  - title: Products\n    products: [a, b]\n",
     });
-    expect(readManualConfig(root).groups).toEqual([
+    expect(readManualConfig(rootsOf(root)).groups).toEqual([
       { title: "Products", products: ["a", "b"] },
     ]);
   });
 
   it("throws when a product is listed twice", () => {
-    expect(() => readManualConfig(DUPLICATE)).toThrow(
+    expect(() => readManualConfig(rootsOf(DUPLICATE))).toThrow(
       /lists `demo-product` twice/,
     );
   });
 
   it("throws on malformed yaml", () => {
-    const root = write({ "manual/manual.yaml": "groups: [unclosed\n" });
-    expect(() => readManualConfig(root)).toThrow(/not valid YAML/);
+    const root = write({ "docs/prds/manual.yaml": "groups: [unclosed\n" });
+    expect(() => readManualConfig(rootsOf(root))).toThrow(/not valid YAML/);
   });
 
   it("throws when storybookBase is missing", () => {
-    const root = write({ "manual/manual.yaml": "groups: {}\n" });
-    expect(() => readManualConfig(root)).toThrow(/needs `storybookBase`/);
+    const root = write({ "docs/prds/manual.yaml": "groups: {}\n" });
+    expect(() => readManualConfig(rootsOf(root))).toThrow(
+      /needs `storybookBase`/,
+    );
   });
 });
 
@@ -101,7 +106,7 @@ describe("taxonomy", () => {
   it("orders by manual.yaml and keeps page-only products", () => {
     const taxonomy = deriveTaxonomy(
       discoverSpecs(FIXTURE),
-      readManualConfig(FIXTURE),
+      readManualConfig(rootsOf(FIXTURE)),
     );
     expect(taxonomy.products).toEqual([
       "demo-product",

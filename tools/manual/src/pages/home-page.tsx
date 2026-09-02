@@ -4,7 +4,7 @@ import { X } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Link } from "react-router";
 import { byLastMoved, isProposal, taskTotals } from "../api/derive";
-import { MANUAL_ROOT } from "../api/paths";
+import { pagePath } from "../api/paths";
 import { relativeTime } from "../api/time";
 import { useManualIndex } from "../api/use-manual-index";
 import { BlockScopeProvider } from "../blocks/block-scope";
@@ -20,19 +20,18 @@ import { PageHeading } from "./page-heading";
 import { ProductCard } from "./product-card";
 import { useDocumentTitle } from "./use-document-title";
 
-const HOME_PATH = `${MANUAL_ROOT}/index.md`;
-
 export function HomePage() {
   const index = useManualIndex();
-  const home = index.pageByPath.get(HOME_PATH);
+  const homePath = pagePath(index.manualDir, "index.md");
+  const home = index.pageByPath.get(homePath);
   useDocumentTitle(home?.ast?.frontmatter.title);
   const { editing } = useEditMode();
 
-  if (editing && home) return <PageEditor path={HOME_PATH} />;
+  if (editing && home) return <PageEditor path={homePath} />;
 
   return (
     <>
-      <PageActions path={HOME_PATH} />
+      <PageActions path={homePath} />
       <PageHeading
         summary={home?.ast?.frontmatter.summary}
         title={home?.ast?.frontmatter.title ?? "Grade10 Manual"}
@@ -41,7 +40,7 @@ export function HomePage() {
       <WelcomeCard />
 
       {home?.ast ? (
-        <BlockScopeProvider value={{ index, pagePath: HOME_PATH }}>
+        <BlockScopeProvider value={{ index, pagePath: homePath }}>
           {home.ast.blocks.map((block, position) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
             <BlockView block={block} key={`${block.type}-${position}`} />

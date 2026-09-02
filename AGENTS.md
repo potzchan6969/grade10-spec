@@ -15,8 +15,8 @@ This repository is the versioned source of truth for product requirements and th
 | Need | Canonical location | Notes |
 | --- | --- | --- |
 | Durable requirements and component export contracts | `openspec/specs/<product>/<capability>/spec.md` | The single source of truth. An implementing engineer builds from this alone. Products are listed in `openspec/specs/README.md`. |
-| Product decision behind a requirement | `docs/prds/<product-area>/<feature>.md` | Problem, users, non-goals, measurement, rollout, rationale. Explanatory, never authoritative over a requirement. |
-| Source material behind a decision | `docs/references/<doc>.md` | Owner's drafts, competitor research, vendor-integration working notes — what a PRD or change cites as evidence. Explanatory, never authoritative. See `docs/references/README.md`. |
+| The product record: a capability's page, and the decision behind its requirements | `docs/prds/products/<product>/<capability>.md` | The manual (`pnpm manual`) renders these pages; each names its spec and carries the shape in prose, with problem, users, non-goals, measurement and decisions in its `Product decisions` block. Explanatory, never authoritative over a requirement. Page grammar: `docs/prds/guides/writing-the-manual.md`. |
+| Source material behind a decision | `docs/references/<doc>.md` | Owner's drafts, competitor research, vendor-integration working notes — what a page or change cites as evidence; the manual renders them under References. Explanatory, never authoritative. See `docs/references/README.md`. |
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
 | Test cases for a capability | `test-cases.md` beside its `spec.md` | A derived reading of that spec's user journeys, never a second source of truth. See `docs/governance/specs-to-test-cases.md`. |
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
@@ -25,7 +25,7 @@ This repository is the versioned source of truth for product requirements and th
 | Product component implementation | `packages/ui/src/blocks/` | Shared compound components, one directory per capability; the capability spec remains the export contract. |
 | Task group and owner format in `tasks.md` | `docs/governance/task-ownership.md` | Parsed independently by tooling in this repository and in the application repository. |
 
-If a statement is testable, it belongs in `openspec/specs/` and nowhere else. A PRD holds only what a requirement cannot carry, and links its capability spec rather than restating it. Where the two disagree, the spec is correct.
+If a statement is testable, it belongs in `openspec/specs/` and nowhere else. A PRD is the capability's manual page: it holds only what a requirement cannot carry, and names its capability spec rather than restating it. Where the two disagree, the spec is correct.
 
 Read [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md) for the required maintenance lifecycle and a format-selection guide.
 
@@ -41,12 +41,12 @@ For a new product feature:
 
 1. Inspect the relevant capability in `openspec/specs/`, active OpenSpec changes, and any related PRD.
 2. Write the requirements as an OpenSpec change carrying deltas against `openspec/specs/<product>/<capability>/spec.md`. Its proposal must identify affected component exports and consumer apps.
-3. Use the `prd-authoring` skill when the feature turns on a product judgment the requirement text will not preserve — why this problem, for whom, what was ruled out, what will be measured. Skip the PRD when there is no such judgment.
+3. Use the `prd-authoring` skill when the feature turns on a product judgment the requirement text will not preserve — why this problem, for whom, what was ruled out, what will be measured. It lands in the capability page's `Product decisions` block; skip it when there is no such judgment.
 4. Keep task checkboxes accurate as work lands; fold accepted deltas into `openspec/specs/`, then archive under `openspec/changes/archive/YYYY-MM-DD-<change-name>/`.
 
 Read [`docs/governance/agent-workflow-example.md`](docs/governance/agent-workflow-example.md) for one feature walked through both repositories, from `openspec new change` to archive.
 
-Ask only questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or in the PRD's Decisions and open questions section when one exists.
+Ask only questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the capability page's decisions table when one exists.
 
 ## Product UI component contracts
 
@@ -74,7 +74,7 @@ Use the `design-system-primitives` skill whenever creating or changing a primiti
 
 ## Sharing with consuming apps
 
-Consumers add this repository as a Git submodule and build from `openspec/specs/`, reading the PRDs for rationale and the design tokens for values. Shared compound components are consumed from `@grade10/ui` directly from source — no build step, no published artifact — so a shared component change lands once here and reaches every application through a submodule bump. Application-owned state, adapters, and wiring remain implementation work in each application.
+Consumers add this repository as a Git submodule and build from `openspec/specs/`, reading the manual's pages for rationale and the design tokens for values. Shared compound components are consumed from `@grade10/ui` directly from source — no build step, no published artifact — so a shared component change lands once here and reaches every application through a submodule bump. Application-owned state, adapters, and wiring remain implementation work in each application.
 
 Pin the submodule SHA in the application repository; updates are normal pull requests that move that SHA. Do not use git submodules inside this repository; this repository itself is the reusable submodule.
 

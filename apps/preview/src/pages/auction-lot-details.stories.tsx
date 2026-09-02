@@ -35,13 +35,9 @@ export const LiveAutoLeading: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("heading", { name: /Charizard/ })).toBeVisible();
+    expect(canvas.getByText("Set maximum (current: US$8,000)")).toBeVisible();
     expect(
-      canvas.getByText("Set maximum (current: US$8,000)"),
-    ).toBeVisible();
-    expect(
-      canvas.getByText(
-        "At least US$8,001 (your maximum + US$1)",
-      ),
+      canvas.getByText("At least US$8,001 (your maximum + US$1)"),
     ).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Your bid history" }),
@@ -73,9 +69,7 @@ export const LiveAutoOutbid: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByText(
-        "At least US$8,500 (current bid + US$250)",
-      ),
+      canvas.getByText("At least US$8,500 (current bid + US$250)"),
     ).toBeVisible();
   },
 };

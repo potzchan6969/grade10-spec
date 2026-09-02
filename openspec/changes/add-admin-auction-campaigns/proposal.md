@@ -1,6 +1,6 @@
 **Author:** @mason5991 - 2026-08-26
 
-Product context: [Grade10 Auction](../../../docs/prds/auction/auction.md).
+Product context: [Grade10 Auction](../../../docs/prds/products/grade10-auction/index.md).
 Distinct from [`add-grade10-inventory`](../add-grade10-inventory/proposal.md)
 (house stock ledger). A **campaign** here is an auction catalogue cover /
 event that **multiple listings** may belong to — not a store checkout and not

@@ -7,25 +7,25 @@ const ROOT = "/store";
 
 describe("confine", () => {
   it("accepts a store-relative path", () => {
-    expect(confine(ROOT, "manual", "manual/products/a.md")).toBe(
-      join(ROOT, "manual/products/a.md"),
+    expect(confine(ROOT, "docs/prds", "docs/prds/products/a.md")).toBe(
+      join(ROOT, "docs/prds/products/a.md"),
     );
   });
 
   it("accepts a path relative to the directory itself", () => {
-    expect(confine(ROOT, "manual", "products/a.md")).toBe(
-      join(ROOT, "manual/products/a.md"),
+    expect(confine(ROOT, "docs/prds", "products/a.md")).toBe(
+      join(ROOT, "docs/prds/products/a.md"),
     );
   });
 
   it("accepts any suffix of a nested directory", () => {
     for (const path of [
-      "manual/assets/a.png",
+      "docs/prds/assets/a.png",
       "assets/a.png",
       "a.png",
     ] as const) {
-      expect(confine(ROOT, "manual/assets", path)).toBe(
-        join(ROOT, "manual/assets/a.png"),
+      expect(confine(ROOT, "docs/prds/assets", path)).toBe(
+        join(ROOT, "docs/prds/assets/a.png"),
       );
     }
   });
@@ -33,11 +33,11 @@ describe("confine", () => {
   it("refuses traversal, an absolute path, and the directory itself", () => {
     for (const path of [
       "../../etc/passwd",
-      "manual/../../etc/passwd",
+      "docs/prds/../../etc/passwd",
       "/etc/passwd",
       "",
     ]) {
-      expect(confine(ROOT, "manual", path)).toHaveProperty("error");
+      expect(confine(ROOT, "docs/prds", path)).toHaveProperty("error");
     }
   });
 });
@@ -49,50 +49,54 @@ describe("confine against a store that exists", () => {
   const STORE = writeStore({
     "openspec/specs/demo/spec.md": "# demo\n",
     "docs/note.md": "note\n",
-    "manual/assets/a.png": "",
+    "docs/prds/assets/a.png": "",
   });
 
   it("refuses a path that opens on another store directory", () => {
-    expect(confine(STORE, "manual", "openspec/specs/demo/spec.md")).toEqual({
+    expect(confine(STORE, "docs/prds", "openspec/specs/demo/spec.md")).toEqual({
       error:
-        "`openspec/specs/demo/spec.md` names the store's openspec/, not manual/",
+        "`openspec/specs/demo/spec.md` names the store's openspec/, not docs/prds/",
     });
-    expect(confine(STORE, "manual", "docs/note.md")).toEqual({
-      error: "`docs/note.md` names the store's docs/, not manual/",
+    expect(confine(STORE, "docs/prds", "docs/note.md")).toEqual({
+      error: "`docs/note.md` names the store's docs/, not docs/prds/",
     });
-    expect(confine(STORE, "manual/assets", "manual/products/a.png")).toEqual({
+    expect(
+      confine(STORE, "docs/prds/assets", "docs/prds/products/a.png"),
+    ).toEqual({
       error:
-        "`manual/products/a.png` names the store's manual/, not manual/assets/",
+        "`docs/prds/products/a.png` names the store's docs/, not docs/prds/assets/",
     });
   });
 
   it("keeps the three forms a page may write", () => {
-    for (const path of ["manual/assets/a.png", "assets/a.png", "a.png"]) {
-      expect(confine(STORE, "manual/assets", path)).toBe(
-        join(STORE, "manual/assets/a.png"),
+    for (const path of ["docs/prds/assets/a.png", "assets/a.png", "a.png"]) {
+      expect(confine(STORE, "docs/prds/assets", path)).toBe(
+        join(STORE, "docs/prds/assets/a.png"),
       );
     }
-    expect(confine(STORE, "manual", "products/a.md")).toBe(
-      join(STORE, "manual/products/a.md"),
+    expect(confine(STORE, "docs/prds", "products/a.md")).toBe(
+      join(STORE, "docs/prds/products/a.md"),
     );
   });
 
   it("still names a single file that shares a store directory's name", () => {
-    expect(confine(STORE, "manual", "docs")).toBe(join(STORE, "manual/docs"));
+    expect(confine(STORE, "docs/prds", "docs")).toBe(
+      join(STORE, "docs/prds/docs"),
+    );
   });
 });
 
 describe("store paths", () => {
   it("finds the root by the openspec directory above it", () => {
     const root = findStoreRoot(
-      join(import.meta.dirname, "fixtures/store/manual"),
+      join(import.meta.dirname, "fixtures/store/docs/prds"),
     );
     expect(root).toBe(join(import.meta.dirname, "fixtures/store"));
   });
 
   it("writes store-relative paths with forward slashes", () => {
-    expect(storePath(ROOT, join(ROOT, "manual", "index.md"))).toBe(
-      "manual/index.md",
+    expect(storePath(ROOT, join(ROOT, "docs/prds", "index.md"))).toBe(
+      "docs/prds/index.md",
     );
   });
 });

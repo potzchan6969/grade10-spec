@@ -47,10 +47,10 @@ const ALPHA_SPEC = [
 ].join("\n");
 
 const BASE = {
-  "manual/manual.yaml": CONFIG,
-  "manual/index.md": HOME,
-  "manual/products/demo-product/index.md": LANDING,
-  "manual/products/demo-product/alpha.md": ALPHA_PAGE,
+  "docs/prds/manual.yaml": CONFIG,
+  "docs/prds/index.md": HOME,
+  "docs/prds/products/demo-product/index.md": LANDING,
+  "docs/prds/products/demo-product/alpha.md": ALPHA_PAGE,
   "openspec/specs/demo-product/alpha/spec.md": ALPHA_SPEC,
 };
 
@@ -62,11 +62,11 @@ const snapshotOfStore = async (root: string) =>
   ).snapshot;
 
 describe("the assets the snapshot carries", () => {
-  it("names every file under manual/assets as the path a page writes", async () => {
+  it("names every file under docs/prds/assets as the path a page writes", async () => {
     const root = writeStore({
       ...BASE,
-      "manual/assets/shot.svg": "<svg />",
-      "manual/assets/nested/deep.png": "png",
+      "docs/prds/assets/shot.svg": "<svg />",
+      "docs/prds/assets/nested/deep.png": "png",
     });
 
     expect((await snapshotOfStore(root)).assets).toEqual([
@@ -78,9 +78,9 @@ describe("the assets the snapshot carries", () => {
   it("skips the dotfiles that would make it differ per machine", async () => {
     const root = writeStore({
       ...BASE,
-      "manual/assets/.gitkeep": "",
-      "manual/assets/.DS_Store": "junk",
-      "manual/assets/shot.svg": "<svg />",
+      "docs/prds/assets/.gitkeep": "",
+      "docs/prds/assets/.DS_Store": "junk",
+      "docs/prds/assets/shot.svg": "<svg />",
     });
 
     expect((await snapshotOfStore(root)).assets).toEqual(["assets/shot.svg"]);
@@ -100,7 +100,7 @@ describe("the warnings the snapshot carries", () => {
         rule: "skeleton",
         message:
           "has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
-        page: "manual/products/demo-product/alpha.md",
+        page: "docs/prds/products/demo-product/alpha.md",
       },
       {
         rule: "journeys",
@@ -113,7 +113,7 @@ describe("the warnings the snapshot carries", () => {
   it("carries nothing a failure would have stopped the deploy for", async () => {
     const root = writeStore({
       ...BASE,
-      "manual/products/demo-product/alpha.md": ALPHA_PAGE.replace(
+      "docs/prds/products/demo-product/alpha.md": ALPHA_PAGE.replace(
         "Alpha is a demo capability.",
         '::journeys{id="demo-product/alpha"}',
       ),

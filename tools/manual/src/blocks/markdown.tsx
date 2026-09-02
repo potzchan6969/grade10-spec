@@ -3,7 +3,12 @@ import { type ComponentProps, type ReactNode, useMemo } from "react";
 import Markdown, { type Components } from "react-markdown";
 import { Link as RouterLink } from "react-router";
 import remarkGfm from "remark-gfm";
-import { type ManualIndex, routeForSpec } from "../api/derive";
+import {
+  type ManualIndex,
+  REFERENCES_ROUTE,
+  routeForReference,
+  routeForSpec,
+} from "../api/derive";
 import {
   GITHUB_BLOB,
   resolveRelative,
@@ -24,10 +29,20 @@ type Target =
 
 const SAFE_PROTOCOL = /^(https?:|mailto:)/i;
 const ANY_PROTOCOL = /^[a-z][a-z0-9+.-]*:/i;
-const FILED_UNDER = ["docs/prds/", "docs/governance/"];
+/** Store files the manual never renders: read them where they live. */
+const FILED_UNDER = ["docs/governance/", "docs/references/"];
+const CHANGE_FILE = /^openspec\/changes\/([^/]+)\/(.+)$/;
+const SPEC_FILE = /^openspec\/specs\/(.+)\/(?:spec|test-cases)\.md$/;
+const REFERENCE_FILE = /^docs\/references\/(.+)\.md$/;
 /** The routes that are the app's own rather than a page's. Prose may link to
  * any of them, and a route the app does not serve still reads as dead. */
-const APP_ROUTES = new Set(["/", "/planning", "/qa", "/design"]);
+const APP_ROUTES = new Set([
+  "/",
+  "/planning",
+  "/qa",
+  "/design",
+  REFERENCES_ROUTE,
+]);
 
 export function classifyHref(
   href: string,
@@ -44,7 +59,10 @@ export function classifyHref(
   // An app-absolute path is a route link, checked against the routes that
   // actually exist so a typo still reads as dead.
   if (pathPart.startsWith("/")) {
-    const known = APP_ROUTES.has(pathPart) || index.pageByRoute.has(pathPart);
+    const known =
+      APP_ROUTES.has(pathPart) ||
+      index.pageByRoute.has(pathPart) ||
+      index.referenceByRoute.has(pathPart);
     if (!known) return { kind: "dead", raw: href };
     return {
       kind: "route",
@@ -55,16 +73,56 @@ export function classifyHref(
   const resolved = resolveRelative(baseDir, pathPart);
   if (resolved === null) return { kind: "dead", raw: href };
 
-  if (FILED_UNDER.some((prefix) => resolved.startsWith(prefix))) {
+  const store = routeForStoreFile(resolved, index);
+  if (store)
+    return { kind: "route", to: hash === "" ? store : `${store}#${hash}` };
+
+  if (
+    FILED_UNDER.some((prefix) => resolved.startsWith(prefix)) ||
+    resolved.startsWith("openspec/")
+  ) {
     return { kind: "github", href: `${GITHUB_BLOB}/${resolved}` };
   }
 
   const page = index.pageByPath.get(resolved);
-  const route = page?.route ?? routeForPagePath(resolved);
+  const route = page?.route ?? routeForPagePath(index.manualDir, resolved);
   if (page && route) {
     return { kind: "route", to: hash === "" ? route : `${route}#${hash}` };
   }
   return { kind: "dead", raw: href };
+}
+
+/**
+ * The page that shows a store file, where one does. A change's own artifacts
+ * are its page's tabs — a proposal that says "see design.md" lands on the
+ * design — a durable spec is the capability page that embeds it, and a
+ * reference is its own page. A change that is not in flight, a spec no page
+ * shows, or a reference the snapshot does not list is read where it lives.
+ */
+function routeForStoreFile(
+  resolved: string,
+  index: ManualIndex,
+): string | null {
+  const change = CHANGE_FILE.exec(resolved);
+  if (change) {
+    const [, id, rest] = change;
+    if (!index.changeById.has(id)) return null;
+    const tab = rest.startsWith("specs/")
+      ? "specs"
+      : rest.endsWith(".md") && !rest.includes("/")
+        ? rest.slice(0, -3)
+        : null;
+    return tab === null ? null : `/planning/${id}?tab=${tab}`;
+  }
+  const spec = SPEC_FILE.exec(resolved);
+  if (spec) return index.routeBySpec.get(spec[1]) ?? null;
+  const reference = REFERENCE_FILE.exec(resolved);
+  if (reference) {
+    if (reference[1] === "README") return REFERENCES_ROUTE;
+    const route = routeForReference(reference[1]);
+    return index.referenceByRoute.has(route) ? route : null;
+  }
+  return null;
 }
 
 function textOf(node: ReactNode): string {
@@ -193,6 +251,9 @@ type MarkdownViewProps = {
   index: ManualIndex;
   /** Headings get slug ids and a copy-link. Off where ids would collide. */
   anchors?: boolean;
+  /** Prefix for those ids, where two documents with the same headings share
+   * a page — every delta has a Purpose. */
+  anchorPrefix?: string;
   /** Manual-page prose only. Spec text mirrored from the store is quoted, not
    * authored here, so its brackets stay brackets. */
   refs?: boolean;
@@ -210,6 +271,7 @@ export function MarkdownView({
   baseDir,
   index,
   anchors = false,
+  anchorPrefix,
   refs = false,
   pageSpec,
   className,
@@ -254,17 +316,17 @@ export function MarkdownView({
         );
       },
       h1: ({ children }: ComponentProps<"h1">) => (
-        <Heading anchors={anchors} level={2}>
+        <Heading anchors={anchors} level={2} prefix={anchorPrefix}>
           {children}
         </Heading>
       ),
       h2: ({ children }: ComponentProps<"h2">) => (
-        <Heading anchors={anchors} level={2}>
+        <Heading anchors={anchors} level={2} prefix={anchorPrefix}>
           {children}
         </Heading>
       ),
       h3: ({ children }: ComponentProps<"h3">) => (
-        <Heading anchors={anchors} level={3}>
+        <Heading anchors={anchors} level={3} prefix={anchorPrefix}>
           {children}
         </Heading>
       ),
@@ -281,7 +343,7 @@ export function MarkdownView({
         />
       ),
     }),
-    [anchors, baseDir, index, pageSpec],
+    [anchors, anchorPrefix, baseDir, index, pageSpec],
   );
 
   return (
@@ -300,13 +362,16 @@ export function MarkdownView({
 function Heading({
   level,
   anchors,
+  prefix,
   children,
 }: {
   level: 2 | 3;
   anchors: boolean;
+  prefix?: string;
   children: ReactNode;
 }) {
-  const id = anchors ? slugify(textOf(children)) : undefined;
+  const slug = anchors ? slugify(textOf(children)) : undefined;
+  const id = slug && prefix ? `${prefix}-${slug}` : slug;
   const Tag = level === 2 ? "h2" : "h3";
   return (
     <Tag className="group/anchor flex scroll-mt-24 items-center gap-1" id={id}>

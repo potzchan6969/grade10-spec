@@ -15,7 +15,7 @@ data: `account_profile` (`user_id`, `display_name`, `bio`, timestamps) behind
 
 Three existing constraints shape everything below.
 
-- **A read creates nothing** (`manual/platform/account-data.md` rule 7). The
+- **A read creates nothing** (`docs/prds/platform/account-data.md` rule 7). The
   row appears when a *writer* calls `ensureAccount`, which is session-free by
   contract — it runs from webhooks and tasks — so it seeds
   `display_name` with `Member <first 8 of user id>`. A collector can therefore

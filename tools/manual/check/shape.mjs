@@ -8,7 +8,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { readText, subdirectories } from "../src/store/disk.mts";
 import { groupHeadings } from "../src/store/read-specs.mts";
-import { MANUAL_YAML, plural } from "./context.mjs";
+import { manualYaml, plural } from "./context.mjs";
 
 export function checkCoverage(ctx, shape) {
   for (const [id, dir] of shape.dirs) {
@@ -53,29 +53,33 @@ export function checkUnwritten(ctx, changes, shape) {
  * repository owes landing pages for exactly what it lists. */
 export function checkTaxonomy(roots, config, shape, paths, add) {
   const root = roots.content;
+  const manual = roots.manual;
+  const configPath = manualYaml(roots);
   const listed = config.groups.flatMap((group) => group.products);
   const onDisk = new Set(shape.products);
   const hasPages = (id) =>
-    paths.some((path) => path.startsWith(`manual/products/${id}/`));
+    paths.some((path) => path.startsWith(`${manual}/products/${id}/`));
 
   const pageOnly = listed.filter((id) => !onDisk.has(id) && hasPages(id));
   for (const id of listed) {
     if (onDisk.has(id) || hasPages(id)) continue;
     add(
       "config",
-      MANUAL_YAML,
-      `\`${id}\` is neither a spec-dir product nor a page-only product with pages under manual/products/${id}/`,
+      configPath,
+      `\`${id}\` is neither a spec-dir product nor a page-only product with pages under ${manual}/products/${id}/`,
     );
   }
 
   const topics = new Set(shape.topics);
   const listedTopics = config.platform.flatMap((group) => group.topics);
   for (const id of listedTopics) {
-    if (topics.has(id) || existsSync(join(root, topicPage(id)))) continue;
+    if (topics.has(id) || existsSync(join(root, topicPage(manual, id)))) {
+      continue;
+    }
     add(
       "config",
-      MANUAL_YAML,
-      `\`${id}\` is neither a spec-dir topic nor a page-only topic with a page at ${topicPage(id)}`,
+      configPath,
+      `\`${id}\` is neither a spec-dir topic nor a page-only topic with a page at ${topicPage(manual, id)}`,
     );
   }
 
@@ -86,7 +90,7 @@ export function checkTaxonomy(roots, config, shape, paths, add) {
     requirePage(
       add,
       root,
-      `manual/products/${id}/index.md`,
+      `${manual}/products/${id}/index.md`,
       `product \`${id}\``,
     );
   }
@@ -94,10 +98,10 @@ export function checkTaxonomy(roots, config, shape, paths, add) {
     ? shape.topics
     : listedTopics.filter((id) => topics.has(id));
   for (const id of owedTopics) {
-    requirePage(add, root, topicPage(id), `topic \`${id}\``);
+    requirePage(add, root, topicPage(manual, id), `topic \`${id}\``);
   }
   for (const slug of config.guides) {
-    requirePage(add, root, `manual/guides/${slug}.md`, `guide \`${slug}\``);
+    requirePage(add, root, `${manual}/guides/${slug}.md`, `guide \`${slug}\``);
   }
 }
 
@@ -167,7 +171,7 @@ export function checkDependencies(root, changes, add) {
   }
 }
 
-const topicPage = (id) => `manual/platform/${id}.md`;
+const topicPage = (manual, id) => `${manual}/platform/${id}.md`;
 
 function requirePage(add, root, path, what) {
   if (!existsSync(join(root, path)))

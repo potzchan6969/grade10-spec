@@ -825,7 +825,7 @@ menu is the intended lever and is editable.
 
 Why these numbers, and what is still open about the top tier and the retention
 threshold:
-[Grade10 loyalty programme](../../../../docs/prds/loyalty/programme.md).
+[Grade10 loyalty programme](../../../../docs/prds/products/membership/index.md).
 
 #### Scenario: loyalty-SC-23 - A purchase earns at the member's rate
 

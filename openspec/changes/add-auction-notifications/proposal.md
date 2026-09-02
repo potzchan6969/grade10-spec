@@ -2,7 +2,7 @@
 
 **Author:** @jeffffej0909 - 2026-08-24
 
-Product context: [Auction notifications](../../../docs/prds/auction/notifications.md).
+Product context: [Auction notifications](../../../docs/prds/products/grade10-auction/notifications.md).
 Depends on [`add-auction-watchlist`](../add-auction-watchlist/proposal.md):
 the before-and-during-auction mail fires on a watch, which does not exist yet.
 

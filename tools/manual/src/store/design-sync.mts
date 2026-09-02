@@ -11,7 +11,7 @@ import type { Roots } from "./roots.mts";
 
 /** Where `design-sync:check --report` leaves its verdict and where the nightly
  * workflow commits it. Generated, never authored, so it sits outside
- * `manual/` — the manual only reads it. */
+ * the manual directory — the manual only reads it. */
 export const DESIGN_SYNC_REPORT = ".design-sync/report.json";
 
 const CLASSES = new Set<string>(["ok", "warn", "skipped", "fail"]);
@@ -122,7 +122,7 @@ export function designWarnings(
     });
   }
 
-  const { stories, frames } = cardsOf(roots.content);
+  const { stories, frames } = cardsOf(roots);
   const reached = setsReached(report, stories, frames);
   for (const name of Object.keys(report.sets)) {
     if (reached.has(name)) continue;
@@ -151,10 +151,11 @@ export function designWarnings(
 
 /** Every card a verdict could land on, read straight off the pages. A page the
  * grammar refuses is `check:manual`'s finding, never this one's. */
-function cardsOf(root: string) {
+function cardsOf(roots: Roots) {
+  const root = roots.content;
   const stories: string[] = [];
   const frames: FrameCard[] = [];
-  for (const path of walkFiles(root, join(root, "manual"), ".md")) {
+  for (const path of walkFiles(root, join(root, roots.manual), ".md")) {
     let blocks: Block[];
     try {
       blocks = parsePage(readText(join(root, path))).blocks;

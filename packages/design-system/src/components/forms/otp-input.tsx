@@ -17,6 +17,7 @@ import {
   useEffect,
   useId,
   useRef,
+  useState,
 } from "react";
 
 const slotKeys = [
@@ -173,6 +174,7 @@ function OtpInput({
   const inputRef = useRef<HTMLInputElement>(null);
   const placeholderValue = placeholder ? placeholder.repeat(length) : undefined;
   const isControlled = value !== undefined;
+  const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
   const initialFocusedIndex = focusedIndex ?? defaultFocusedIndex;
 
   useEffect(() => {
@@ -209,7 +211,10 @@ function OtpInput({
         pattern={REGEXP_ONLY_DIGITS}
         placeholder={placeholderValue}
         disabled={disabled}
-        onChange={onChange}
+        onChange={(nextValue: string) => {
+          if (!isControlled) setUncontrolledValue(nextValue);
+          onChange?.(nextValue);
+        }}
         onComplete={onComplete}
         containerClassName={cn(
           "relative flex w-full gap-2",
@@ -219,7 +224,7 @@ function OtpInput({
         className="disabled:cursor-not-allowed"
         aria-invalid={status === "error" || undefined}
         aria-describedby={messageId}
-        {...(isControlled ? { value } : { defaultValue })}
+        value={isControlled ? value : uncontrolledValue}
         {...rest}
       >
         <OtpInputSlots

@@ -4,9 +4,9 @@ The owner's draft, and the decided reference for the program as of 2026-08.
 The requirements derived from it are the `revise-loyalty-programme-rules` and
 `add-shopify-membership-pos` changes; until those archive, the main specs are
 still the older ones. The product decisions it led to are recorded in
-[the programme PRD](../prds/loyalty/programme.md). What engineering chose where
+[the programme PRD](../prds/products/membership/index.md). What engineering chose where
 this draft is silent is in the Decision record of
-[the loyalty service page](../../manual/platform/loyalty-service.md). Values written as variables (rates, thresholds,
+[the loyalty service page](../prds/platform/loyalty-service.md). Values written as variables (rates, thresholds,
 months) are program config, tunable per environment.
 
 ## 1. Program Structure & Tiers

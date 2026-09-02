@@ -26,7 +26,9 @@ export async function checkWarnings(
   const warnings = findings
     .filter((one) => one.level === "warn")
     .map((one) => {
-      const page = one.path.startsWith("manual/") ? one.path : undefined;
+      const page = one.path.startsWith(`${roots.manual}/`)
+        ? one.path
+        : undefined;
       const warning: CheckWarning = {
         rule: one.rule,
         message: page ? one.reason : `${one.path}: ${one.reason}`,

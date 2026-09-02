@@ -10,8 +10,8 @@ import { resolveRef } from "../content/refs";
 import {
   dirOf,
   humanize,
-  MANUAL_ROOT,
   ownerOfSpec,
+  pagePath,
   routeForPagePath,
   slugify,
 } from "./paths";
@@ -68,6 +68,8 @@ export type NavTopicGroup = { title: string; topics: NavItem[] };
 
 export type ManualIndex = {
   snapshot: Snapshot;
+  /** `snapshot.manualDir`, at hand wherever a page path is built. */
+  manualDir: string;
   pages: ParsedPage[];
   pageByPath: Map<string, ParsedPage>;
   pageByRoute: Map<string, ParsedPage>;
@@ -87,6 +89,9 @@ export type ManualIndex = {
    * pages ask for. */
   topics: NavItem[];
   guides: NavItem[];
+  /** The store's references, in path order; each `to` is `/references/<slug>`. */
+  references: NavItem[];
+  referenceByRoute: Map<string, NavItem>;
   /** Delta-only capabilities whose product has no branch to sit under. */
   incubating: Incubating[];
 };
@@ -101,14 +106,15 @@ export function buildIndex(snapshot: Snapshot): ManualIndex {
   return index;
 }
 
-function parse(entry: PageEntry): ParsedPage {
+function parse(manualDir: string, entry: PageEntry): ParsedPage {
+  const route = routeForPagePath(manualDir, entry.path);
   try {
     return {
       path: entry.path,
       entry,
       ast: parsePage(entry.source),
       error: null,
-      route: routeForPagePath(entry.path),
+      route,
     };
   } catch (cause) {
     return {
@@ -116,13 +122,14 @@ function parse(entry: PageEntry): ParsedPage {
       entry,
       ast: null,
       error: cause instanceof Error ? cause.message : String(cause),
-      route: routeForPagePath(entry.path),
+      route,
     };
   }
 }
 
 function deriveIndex(snapshot: Snapshot): ManualIndex {
-  const pages = snapshot.pages.map(parse);
+  const manualDir = snapshot.manualDir;
+  const pages = snapshot.pages.map((entry) => parse(manualDir, entry));
   const pageByPath = new Map(pages.map((page) => [page.path, page]));
   const pageByRoute = new Map(
     pages.flatMap((page) => (page.route ? [[page.route, page] as const] : [])),
@@ -154,6 +161,7 @@ function deriveIndex(snapshot: Snapshot): ManualIndex {
 
   const index: ManualIndex = {
     snapshot,
+    manualDir,
     pages,
     pageByPath,
     pageByRoute,
@@ -167,6 +175,8 @@ function deriveIndex(snapshot: Snapshot): ManualIndex {
     topicGroups: [],
     topics: [],
     guides: [],
+    references: [],
+    referenceByRoute: new Map(),
     incubating: [],
   };
 
@@ -174,6 +184,15 @@ function deriveIndex(snapshot: Snapshot): ManualIndex {
   index.topicGroups = deriveTopicGroups(index);
   index.topics = index.topicGroups.flatMap((group) => group.topics);
   index.guides = deriveGuides(index);
+  index.references = snapshot.references.map((one, order) => ({
+    id: one.slug,
+    title: one.title,
+    to: routeForReference(one.slug),
+    order,
+  }));
+  index.referenceByRoute = new Map(
+    index.references.map((item) => [item.to, item]),
+  );
   index.incubating = incubatingFor(
     index,
     undefined,
@@ -233,7 +252,7 @@ export function childPages(index: ManualIndex, dir: string): ParsedPage[] {
 }
 
 function productNav(index: ManualIndex, id: string): NavProduct {
-  const dir = `${MANUAL_ROOT}/products/${id}`;
+  const dir = pagePath(index.manualDir, "products", id);
   const landing = index.pageByPath.get(`${dir}/index.md`);
   const capabilities = childPages(index, dir).map((page) => {
     const item: NavItem = {
@@ -335,7 +354,7 @@ function appendOperatorBranches(index: ManualIndex, groups: NavGroup[]) {
 }
 
 function deriveTopicGroups(index: ManualIndex): NavTopicGroup[] {
-  const onDisk = childPages(index, `${MANUAL_ROOT}/platform`);
+  const onDisk = childPages(index, pagePath(index.manualDir, "platform"));
   const byId = new Map(
     onDisk.map((page) => [page.path.slice(0, -3).split("/").pop() ?? "", page]),
   );
@@ -372,7 +391,7 @@ function deriveTopicGroups(index: ManualIndex): NavTopicGroup[] {
 }
 
 function deriveGuides(index: ManualIndex): NavItem[] {
-  const onDisk = childPages(index, `${MANUAL_ROOT}/guides`);
+  const onDisk = childPages(index, pagePath(index.manualDir, "guides"));
   const byId = new Map(
     onDisk.map((page) => [page.path.slice(0, -3).split("/").pop() ?? "", page]),
   );
@@ -388,10 +407,16 @@ function deriveGuides(index: ManualIndex): NavItem[] {
   return [...ordered, ...rest.sort(byOrderThenTitle)];
 }
 
+export const REFERENCES_ROUTE = "/references";
+
+export function routeForReference(slug: string): string {
+  return `${REFERENCES_ROUTE}/${slug}`;
+}
+
 /** The title a product wears everywhere: its landing page's, or its id read out. */
 export function productTitle(index: ManualIndex, id: string): string {
   const landing = index.pageByPath.get(
-    `${MANUAL_ROOT}/products/${id}/index.md`,
+    pagePath(index.manualDir, "products", id, "index.md"),
   );
   return landing?.ast?.frontmatter.title ?? humanize(id);
 }
@@ -463,10 +488,10 @@ export function capabilityStatus(
 }
 
 /** Only a product's own children are capabilities; guides and topics are not. */
-export function isProductDir(dir: string): boolean {
-  const parts = dir.split("/");
+export function isProductDir(manualDir: string, dir: string): boolean {
+  const prefix = pagePath(manualDir, "products");
   return (
-    parts.length === 3 && parts[0] === MANUAL_ROOT && parts[1] === "products"
+    dir.startsWith(`${prefix}/`) && !dir.slice(prefix.length + 1).includes("/")
   );
 }
 

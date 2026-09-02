@@ -24,7 +24,7 @@ const FRAME = "https://www.figma.com/design/KEY/Store?node-id=4735-6493";
 
 const snapshot: Snapshot = snapshotOf({
   pages: [
-    page("manual/products/demo-product/alpha.md", "Alpha", [
+    page("docs/prds/products/demo-product/alpha.md", "Alpha", [
       `::figma{url="${FRAME}" title="Order history, empty"}`,
       "",
       ':::detail{for="designer" title="Behind the fold"}',
@@ -33,7 +33,7 @@ const snapshot: Snapshot = snapshotOf({
       "",
       ":::",
     ]),
-    page("manual/products/demo-product/beta.md", "Beta", ["Just prose."]),
+    page("docs/prds/products/demo-product/beta.md", "Beta", ["Just prose."]),
   ],
   designSync: {
     generatedAt: "2026-08-28T02:00:00.000Z",

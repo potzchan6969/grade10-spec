@@ -6,8 +6,8 @@ import {
   FIXTURE_AUCTION_OPENS_DEADLINE,
 } from "../../lib/datetime-fixtures";
 import {
-  HighestBidderStanding,
   BUYER_FEE_HINT,
+  HighestBidderStanding,
   ListingBidPanelLoading,
   LiveActions,
   LostStanding,

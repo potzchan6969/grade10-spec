@@ -9,6 +9,7 @@ import {
 } from "../../lib/datetime-fixtures";
 import {
   BASE_FACTS,
+  BUYER_FEE_HINT,
   DESCRIPTION,
   GALLERY_IMAGES,
   KICKER,
@@ -18,7 +19,6 @@ import {
   LiveActions,
   LostStanding,
   PostAuctionActions,
-  BUYER_FEE_HINT,
   TITLE,
   VAULT_SECTION,
   WatchOnlyActions,
