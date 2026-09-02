@@ -34,6 +34,7 @@ const ORDER_DETAILS_COPY: OrderDetailsCopy = {
     orderSummary: "Order Summary",
     paymentMethod: "Payment Method",
     shippingAddress: "Shipping Address",
+    pickupAddress: "Pickup Address",
     loyaltyPoints: "Loyalty Points",
   },
   delivery: {
@@ -154,11 +155,17 @@ const FILLED_ADDRESS = {
   ],
 };
 
+const FILLED_PICKUP_ADDRESS = {
+  name: "Hong Kong Grade10 Store",
+  lines: ["13 Pak Sha Road, Causeway Bay, Hong Kong"],
+};
+
 export {
   FILLED_ADDRESS,
   FILLED_DELIVERY,
   FILLED_LINES,
   FILLED_PAYMENT,
+  FILLED_PICKUP_ADDRESS,
   FILLED_SUMMARY,
   IMAGE,
   ORDER_DETAILS_COPY,

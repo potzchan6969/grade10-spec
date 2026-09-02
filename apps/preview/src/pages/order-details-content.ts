@@ -26,6 +26,7 @@ const ORDER_DETAILS_COPY: OrderDetailsCopy = {
     orderSummary: "Order Summary",
     paymentMethod: "Payment Method",
     shippingAddress: "Shipping Address",
+    pickupAddress: "Pickup Address",
     loyaltyPoints: "Loyalty Points",
   },
   delivery: {

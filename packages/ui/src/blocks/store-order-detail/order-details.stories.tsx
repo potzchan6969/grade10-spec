@@ -11,6 +11,7 @@ import {
   FILLED_DELIVERY,
   FILLED_LINES,
   FILLED_PAYMENT,
+  FILLED_PICKUP_ADDRESS,
   FILLED_SUMMARY,
   ORDER_DETAILS_COPY,
   PICKUP_DELIVERY,
@@ -107,12 +108,14 @@ export const Filled: Story = {
 
 export const Pickup: Story = {
   args: {
+    status: "pickup",
     delivery: PICKUP_DELIVERY,
     summary: {
       ...FILLED_SUMMARY,
       shipping: undefined,
     },
     shippingAddress: undefined,
+    pickupAddress: FILLED_PICKUP_ADDRESS,
   },
 };
 

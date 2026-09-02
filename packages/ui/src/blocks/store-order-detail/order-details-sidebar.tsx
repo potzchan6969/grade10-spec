@@ -16,6 +16,7 @@ type OrderDetailsSidebarProps = {
   summary: OrderDetailsSummary;
   payment: OrderDetailsPayment;
   shippingAddress?: OrderDetailsAddress;
+  pickupAddress?: OrderDetailsAddress;
   loyaltyPoints?: ReactNode;
   className?: string;
 };
@@ -44,9 +45,33 @@ function SummaryRow({
   );
 }
 
+function AddressSection({
+  heading,
+  address,
+}: {
+  heading: ReactNode;
+  address: OrderDetailsAddress;
+}) {
+  return (
+    <VStack className="w-full" gap="sm" hAlign="stretch">
+      <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+        {heading}
+      </h3>
+      <VStack className="w-full text-sm leading-5" gap="none">
+        <p className="font-medium text-foreground">{address.name}</p>
+        {address.lines.map((line) => (
+          <p className="text-foreground" key={String(line)}>
+            {line}
+          </p>
+        ))}
+      </VStack>
+    </VStack>
+  );
+}
+
 /**
- * Order details sidebar displaying order summary, payment method, shipping
- * address, and loyalty points earned.
+ * Order details sidebar displaying order summary, payment method, shipping or
+ * pickup address, and loyalty points earned.
  *
  * Figma set `Product / Order / Order Details Sidebar` (`5057:6908`). Summary
  * rows are conditional: discount when present, refund when issued, shipping
@@ -60,6 +85,7 @@ function OrderDetailsSidebar({
   summary,
   payment,
   shippingAddress,
+  pickupAddress,
   loyaltyPoints,
   className,
 }: OrderDetailsSidebarProps) {
@@ -135,22 +161,16 @@ function OrderDetailsSidebar({
               </HStack>
             </Card>
           </VStack>
-          {shippingAddress ? (
-            <VStack className="w-full" gap="sm" hAlign="stretch">
-              <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
-                {copy.shippingAddress}
-              </h3>
-              <VStack className="w-full text-sm leading-5" gap="none">
-                <p className="font-medium text-foreground">
-                  {shippingAddress.name}
-                </p>
-                {shippingAddress.lines.map((line) => (
-                  <p className="text-foreground" key={String(line)}>
-                    {line}
-                  </p>
-                ))}
-              </VStack>
-            </VStack>
+          {pickupAddress ? (
+            <AddressSection
+              address={pickupAddress}
+              heading={copy.pickupAddress}
+            />
+          ) : shippingAddress ? (
+            <AddressSection
+              address={shippingAddress}
+              heading={copy.shippingAddress}
+            />
           ) : null}
           {loyaltyPoints != null ? (
             <Card

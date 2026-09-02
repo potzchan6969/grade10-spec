@@ -40,6 +40,7 @@ type OrderDetailsProps = {
   summary: OrderDetailsSummary;
   payment: OrderDetailsPayment;
   shippingAddress?: OrderDetailsAddress;
+  pickupAddress?: OrderDetailsAddress;
   loyaltyPoints?: ReactNode;
   onTrackOrder?: () => void;
   className?: string;
@@ -98,6 +99,7 @@ function OrderDetails({
   summary,
   payment,
   shippingAddress,
+  pickupAddress,
   loyaltyPoints,
   onTrackOrder,
   className,
@@ -166,6 +168,7 @@ function OrderDetails({
             copy={copy.sidebar}
             loyaltyPoints={loyaltyPoints}
             payment={payment}
+            pickupAddress={pickupAddress}
             shippingAddress={shippingAddress}
             summary={summary}
           />

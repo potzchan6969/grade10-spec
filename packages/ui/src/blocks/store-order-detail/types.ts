@@ -78,6 +78,7 @@ type OrderDetailsSidebarCopy = {
   orderSummary: string;
   paymentMethod: string;
   shippingAddress: string;
+  pickupAddress: string;
   loyaltyPoints: string;
 };
 

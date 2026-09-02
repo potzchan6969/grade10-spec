@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   FILLED_ADDRESS,
   FILLED_PAYMENT,
+  FILLED_PICKUP_ADDRESS,
   FILLED_SUMMARY,
   ORDER_DETAILS_COPY,
 } from "./fixtures";
@@ -38,6 +39,17 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Full: Story = {};
+
+export const Pickup: Story = {
+  args: {
+    shippingAddress: undefined,
+    pickupAddress: FILLED_PICKUP_ADDRESS,
+    summary: {
+      ...FILLED_SUMMARY,
+      shipping: undefined,
+    },
+  },
+};
 
 export const ApplePay: Story = {
   args: {
