@@ -3,9 +3,6 @@ import type { ListingBidHistoryRow, ListingLotMetaBadge } from "@grade10/ui";
 import {
   type AuctionTiming,
   BID_FIXTURE_LOT,
-  type BiddingState,
-  bidHistoryForState,
-  LISTING_AUCTION_BID_AGE_VERIFICATION_COPY,
   LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
   type LiveListingFacts,
   stateMeta,
@@ -87,6 +84,18 @@ export const AUCTION_LOT_BADGES: readonly ListingLotMetaBadge[] = [
   { label: AUCTION_LOT.saleName },
 ];
 
+/** Demo linked card — matches Auction Listing → Bid Panel → Ready. */
+export const AUCTION_LOT_LINKED_PAYMENT_METHOD = {
+  brand: "visa",
+  maskedNumber: "•••• 4242",
+} as const;
+
+export function auctionLotShowsLinkedPaymentMethod(
+  state: BiddingState,
+): boolean {
+  return state.startsWith("live");
+}
+
 const VIEWER_INITIALS = "john@example.com";
 
 const noop = () => {};
@@ -135,7 +144,6 @@ export const AUCTION_LOT_DETAILS_COPY = {
   vaultShippingBody:
     "Stored in Grade10 Vault — ships from our facility within 1 business day of payment.",
   authenticationBody: "Authenticated by Grade10 Marketplace",
-  ageVerification: LISTING_AUCTION_BID_AGE_VERIFICATION_COPY,
   userBidHistory: {
     link: "Your bid history",
     title: "Bid History",

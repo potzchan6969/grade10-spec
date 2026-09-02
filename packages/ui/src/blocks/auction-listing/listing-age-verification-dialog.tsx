@@ -1,3 +1,4 @@
+import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { selectTriggerVariants } from "@grade10/design-system/components/forms/select";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
@@ -20,7 +21,14 @@ import {
 } from "@grade10/design-system/components/overlays/dropdown-menu";
 import { cn } from "@grade10/design-system/lib/utils";
 import { CaretDown } from "@phosphor-icons/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  isListingAgeVerificationAdult,
+  isListingAgeVerificationComplete,
+  LISTING_AGE_VERIFICATION_MONTHS,
+  listingAgeVerificationYearOptions,
+  type ListingAgeVerificationDob,
+} from "./listing-age-verification-form";
 
 type ListingAgeVerificationDialogCopy = {
   title: string;
@@ -31,6 +39,7 @@ type ListingAgeVerificationDialogCopy = {
   birthMonthLabel: string;
   birthDayLabel: string;
   birthYearLabel: string;
+  underAgeError: string;
   cancel: string;
   confirm: string;
 };
@@ -44,10 +53,14 @@ type ListingAgeVerificationFieldsCopy = Pick<
   | "birthMonthLabel"
   | "birthDayLabel"
   | "birthYearLabel"
+  | "underAgeError"
 >;
 
 type ListingAgeVerificationFieldsProps = {
   copy: ListingAgeVerificationFieldsCopy;
+  value?: ListingAgeVerificationDob;
+  onValueChange?: (value: ListingAgeVerificationDob) => void;
+  error?: string;
 };
 
 type ListingAgeVerificationDialogProps = {
@@ -57,27 +70,13 @@ type ListingAgeVerificationDialogProps = {
   onConfirm: () => void;
 };
 
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
 type DobComboboxProps = {
   "aria-label": string;
   placeholder: string;
   value?: string;
   onValueChange: (value: string) => void;
   options: readonly string[];
+  invalid?: boolean;
 };
 
 function DobCombobox({
@@ -86,10 +85,12 @@ function DobCombobox({
   value,
   onValueChange,
   options,
+  invalid = false,
 }: DobComboboxProps) {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger
+        aria-invalid={invalid || undefined}
         aria-label={ariaLabel}
         className={cn(selectTriggerVariants(), "flex-1")}
       >
@@ -127,15 +128,19 @@ function DobCombobox({
 
 function ListingAgeVerificationFields({
   copy,
+  value: valueProp,
+  onValueChange,
+  error,
 }: ListingAgeVerificationFieldsProps) {
-  const [month, setMonth] = useState<string | undefined>();
-  const [day, setDay] = useState<string | undefined>();
-  const [year, setYear] = useState<string | undefined>();
-
-  const days = Array.from({ length: 31 }, (_, i) => String(i + 1));
-  const years = Array.from({ length: 80 }, (_, i) =>
-    String(new Date().getFullYear() - 18 - i),
+  const [internalValue, setInternalValue] = useState<ListingAgeVerificationDob>(
+    {},
   );
+  const value = valueProp ?? internalValue;
+  const setValue = onValueChange ?? setInternalValue;
+
+  const days = Array.from({ length: 31 }, (_, index) => String(index + 1));
+  const years = listingAgeVerificationYearOptions();
+  const showError = Boolean(error);
 
   return (
     <VStack gap="md">
@@ -143,26 +148,34 @@ function ListingAgeVerificationFields({
       <HStack className="w-full" gap="sm">
         <DobCombobox
           aria-label={copy.birthMonthLabel}
-          onValueChange={setMonth}
-          options={MONTHS}
+          invalid={showError}
+          onValueChange={(month) => setValue({ ...value, month })}
+          options={LISTING_AGE_VERIFICATION_MONTHS}
           placeholder={copy.monthPlaceholder}
-          value={month}
+          value={value.month}
         />
         <DobCombobox
           aria-label={copy.birthDayLabel}
-          onValueChange={setDay}
+          invalid={showError}
+          onValueChange={(day) => setValue({ ...value, day })}
           options={days}
           placeholder={copy.dayPlaceholder}
-          value={day}
+          value={value.day}
         />
         <DobCombobox
           aria-label={copy.birthYearLabel}
-          onValueChange={setYear}
+          invalid={showError}
+          onValueChange={(year) => setValue({ ...value, year })}
           options={years}
           placeholder={copy.yearPlaceholder}
-          value={year}
+          value={value.year}
         />
       </HStack>
+      {error ? (
+        <Text role="alert" size="sm" tone="error">
+          {error}
+        </Text>
+      ) : null}
     </VStack>
   );
 }
@@ -173,6 +186,35 @@ function ListingAgeVerificationDialog({
   onOpenChange,
   onConfirm,
 }: ListingAgeVerificationDialogProps) {
+  const [dob, setDob] = useState<ListingAgeVerificationDob>({});
+  const [error, setError] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (!open) {
+      setDob({});
+      setError(undefined);
+    }
+  }, [open]);
+
+  const complete = isListingAgeVerificationComplete(dob);
+
+  function handleConfirm() {
+    if (!complete) return;
+
+    if (!isListingAgeVerificationAdult(dob)) {
+      setError(copy.underAgeError);
+      return;
+    }
+
+    onConfirm();
+    onOpenChange(false);
+  }
+
+  function handleValueChange(nextValue: ListingAgeVerificationDob) {
+    setDob(nextValue);
+    if (error) setError(undefined);
+  }
+
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent showCloseButton>
@@ -180,7 +222,12 @@ function ListingAgeVerificationDialog({
           <DialogTitle>{copy.title}</DialogTitle>
         </DialogHeader>
         <DialogBody>
-          <ListingAgeVerificationFields copy={copy} />
+          <ListingAgeVerificationFields
+            copy={copy}
+            error={error}
+            onValueChange={handleValueChange}
+            value={dob}
+          />
         </DialogBody>
         <DialogFooter>
           <Button
@@ -190,13 +237,7 @@ function ListingAgeVerificationDialog({
           >
             {copy.cancel}
           </Button>
-          <Button
-            onClick={() => {
-              onConfirm();
-              onOpenChange(false);
-            }}
-            size="md"
-          >
+          <Button disabled={!complete} onClick={handleConfirm} size="md">
             {copy.confirm}
           </Button>
         </DialogFooter>

@@ -1,15 +1,20 @@
 import { useCallback, useMemo, useState } from "react";
-import type { SetupSheetStep } from "./listing-bid-enrollment-prototypes";
-import type { ListingBidEnrollmentSnapshot } from "./listing-bid-enrollment-snapshots";
+import {
+  ENROLLMENT_DEMO_SAVED_PAYMENT,
+  type ListingBidEnrollmentSnapshot,
+  type LinkedPaymentMethod,
+} from "./listing-bid-enrollment-snapshots";
 
 type ListingBidEnrollmentSession = {
   signedIn: boolean;
-  ageVerified: boolean;
   paymentLinked: boolean;
+  hasAccountPayment: boolean;
+  hasPlacedBid: boolean;
   bidMode: "manual" | "auto";
   signInOpen: boolean;
   setupOpen: boolean;
-  setupStepIndex: number;
+  setupRequiresIframeLink: boolean;
+  setupChangingPayment: boolean;
   autoConfirmOpen: boolean;
 };
 
@@ -17,21 +22,19 @@ type ListingBidEnrollmentActions = {
   setBidMode: (mode: "manual" | "auto") => void;
   setSignInOpen: (open: boolean) => void;
   setSetupOpen: (open: boolean) => void;
-  setSetupStepIndex: (index: number) => void;
   setAutoConfirmOpen: (open: boolean) => void;
   confirmAutoBidIntro: () => void;
   reset: () => void;
-  pretendAgeVerifiedElsewhere: () => void;
   handleBidSubmit: () => void;
   completeSignIn: () => void;
   handleSetupContinue: () => void;
-  openSetupFromBanner: () => void;
+  openSetup: () => void;
+  openChangePayment: () => void;
 };
 
 type UseListingBidEnrollmentResult = {
   session: ListingBidEnrollmentSession;
   actions: ListingBidEnrollmentActions;
-  setupSteps: readonly SetupSheetStep[];
   needsSetup: boolean;
   ready: boolean;
   snapshot: ListingBidEnrollmentSnapshot;
@@ -39,14 +42,23 @@ type UseListingBidEnrollmentResult = {
 
 const INITIAL_SESSION: ListingBidEnrollmentSession = {
   signedIn: false,
-  ageVerified: false,
   paymentLinked: false,
+  hasAccountPayment: true,
+  hasPlacedBid: false,
   bidMode: "manual",
   signInOpen: false,
   setupOpen: false,
-  setupStepIndex: 0,
+  setupRequiresIframeLink: true,
+  setupChangingPayment: false,
   autoConfirmOpen: false,
 };
+
+function accountLinkedPayment(editable: boolean): LinkedPaymentMethod {
+  return {
+    ...ENROLLMENT_DEMO_SAVED_PAYMENT,
+    editable,
+  };
+}
 
 function useListingBidEnrollment(listingId = "demo-lot") {
   const [session, setSession] =
@@ -55,10 +67,6 @@ function useListingBidEnrollment(listingId = "demo-lot") {
     autoBidIntroAcknowledgedListingIds,
     setAutoBidIntroAcknowledgedListingIds,
   ] = useState<ReadonlySet<string>>(() => new Set());
-
-  const setupSteps = session.ageVerified
-    ? (["payment"] as const)
-    : (["age", "payment"] as const);
 
   const needsSetup = session.signedIn && !session.paymentLinked;
   const ready = session.signedIn && session.paymentLinked;
@@ -74,11 +82,8 @@ function useListingBidEnrollment(listingId = "demo-lot") {
       next.add(listingId);
       return next;
     });
+    setSession((current) => ({ ...current, hasPlacedBid: true }));
   }, [listingId]);
-
-  const pretendAgeVerifiedElsewhere = useCallback(() => {
-    setSession((current) => ({ ...current, ageVerified: true }));
-  }, []);
 
   const setBidMode = useCallback((bidMode: "manual" | "auto") => {
     setSession((current) => ({ ...current, bidMode }));
@@ -89,22 +94,33 @@ function useListingBidEnrollment(listingId = "demo-lot") {
   }, []);
 
   const setSetupOpen = useCallback((setupOpen: boolean) => {
-    setSession((current) => ({ ...current, setupOpen }));
-  }, []);
-
-  const setSetupStepIndex = useCallback((setupStepIndex: number) => {
-    setSession((current) => ({ ...current, setupStepIndex }));
+    setSession((current) => ({
+      ...current,
+      setupOpen,
+      setupChangingPayment: setupOpen ? current.setupChangingPayment : false,
+      setupRequiresIframeLink: setupOpen ? current.setupRequiresIframeLink : true,
+    }));
   }, []);
 
   const setAutoConfirmOpen = useCallback((autoConfirmOpen: boolean) => {
     setSession((current) => ({ ...current, autoConfirmOpen }));
   }, []);
 
-  const openSetupFromBanner = useCallback(() => {
+  const openSetup = useCallback(() => {
     setSession((current) => ({
       ...current,
-      setupStepIndex: 0,
       setupOpen: true,
+      setupChangingPayment: false,
+      setupRequiresIframeLink: !current.hasAccountPayment,
+    }));
+  }, []);
+
+  const openChangePayment = useCallback(() => {
+    setSession((current) => ({
+      ...current,
+      setupOpen: true,
+      setupChangingPayment: true,
+      setupRequiresIframeLink: true,
     }));
   }, []);
 
@@ -114,7 +130,12 @@ function useListingBidEnrollment(listingId = "demo-lot") {
         return { ...current, signInOpen: true };
       }
       if (current.signedIn && !current.paymentLinked) {
-        return { ...current, setupStepIndex: 0, setupOpen: true };
+        return {
+          ...current,
+          setupOpen: true,
+          setupChangingPayment: false,
+          setupRequiresIframeLink: !current.hasAccountPayment,
+        };
       }
       if (
         current.bidMode === "auto" &&
@@ -122,6 +143,9 @@ function useListingBidEnrollment(listingId = "demo-lot") {
         !autoBidIntroAcknowledgedListingIds.has(listingId)
       ) {
         return { ...current, autoConfirmOpen: true };
+      }
+      if (current.paymentLinked) {
+        return { ...current, hasPlacedBid: true };
       }
       return current;
     });
@@ -132,54 +156,43 @@ function useListingBidEnrollment(listingId = "demo-lot") {
       ...current,
       signedIn: true,
       signInOpen: false,
-      setupStepIndex: 0,
       setupOpen: true,
+      setupChangingPayment: false,
+      setupRequiresIframeLink: !current.hasAccountPayment,
     }));
   }, []);
 
   const handleSetupContinue = useCallback(() => {
-    setSession((current) => {
-      const step = setupSteps[current.setupStepIndex];
-      if (step === "age") {
-        return {
-          ...current,
-          ageVerified: true,
-          setupStepIndex: 0,
-        };
-      }
-      return {
-        ...current,
-        paymentLinked: true,
-        setupOpen: false,
-        setupStepIndex: 0,
-      };
-    });
-  }, [setupSteps]);
+    setSession((current) => ({
+      ...current,
+      paymentLinked: true,
+      setupOpen: false,
+      setupChangingPayment: false,
+      setupRequiresIframeLink: true,
+    }));
+  }, []);
 
   const snapshot = useMemo((): ListingBidEnrollmentSnapshot => {
     return {
       bidMode: session.bidMode,
       submitUsesSignInLabel: !session.signedIn,
-      setupBanner:
-        needsSetup && !session.setupOpen && !session.ageVerified
-          ? "age"
-          : undefined,
+      fixtureState: !session.signedIn ? "live-manual" : undefined,
       paymentEmptyState:
-        needsSetup && !session.setupOpen && session.ageVerified
-          ? true
-          : undefined,
-      paymentMethod: ready
-        ? { brand: "visa", maskedNumber: "•••• 4242" }
+        needsSetup && !session.setupOpen ? true : undefined,
+      linkedPaymentMethod: ready
+        ? accountLinkedPayment(!session.hasPlacedBid)
         : undefined,
       setupSheet: session.setupOpen
         ? {
-            steps: setupSteps,
-            stepIndex: session.setupStepIndex,
-            showIframe: session.ageVerified,
+            requiresIframeLink: session.setupRequiresIframeLink,
+            iframeLinkedPayment: session.setupChangingPayment
+              ? ENROLLMENT_DEMO_SAVED_PAYMENT
+              : undefined,
+            defaultAgeAttested: session.setupChangingPayment || undefined,
           }
         : undefined,
     };
-  }, [needsSetup, ready, session, setupSteps]);
+  }, [needsSetup, ready, session]);
 
   return {
     session,
@@ -187,17 +200,15 @@ function useListingBidEnrollment(listingId = "demo-lot") {
       setBidMode,
       setSignInOpen,
       setSetupOpen,
-      setSetupStepIndex,
       setAutoConfirmOpen,
       confirmAutoBidIntro,
       reset,
-      pretendAgeVerifiedElsewhere,
       handleBidSubmit,
       completeSignIn,
       handleSetupContinue,
-      openSetupFromBanner,
+      openSetup,
+      openChangePayment,
     },
-    setupSteps,
     needsSetup,
     ready,
     snapshot,

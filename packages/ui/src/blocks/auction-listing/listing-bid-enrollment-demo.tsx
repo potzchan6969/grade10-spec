@@ -6,22 +6,13 @@ import { useListingBidEnrollment } from "./use-listing-bid-enrollment";
 
 /** Click-through sign-in → setup → bid orchestration (demo chrome only). */
 function ListingBidEnrollmentInteractiveDemo() {
-  const { session, actions, setupSteps, ready, snapshot } =
-    useListingBidEnrollment();
+  const { session, actions, ready, snapshot } = useListingBidEnrollment();
 
   return (
     <VStack className="w-full" gap="lg">
-      <VStack gap="sm">
-        <Text as="h2" size="lg" weight="bold">
-          Interactive enrollment walkthrough
-        </Text>
-        <Text size="sm" tone="secondary">
-          Tap <strong>Sign In to Bid US$1,200</strong> on the card, then use{" "}
-          <strong>Continue (Demo)</strong> in the sign-in dialog. After sign-in
-          you get the full bid form, setup sheet, and optional auto-bid
-          confirmation.
-        </Text>
-      </VStack>
+      <Text as="h2" size="lg" weight="bold">
+        Interactive enrollment walkthrough
+      </Text>
 
       <VStack
         className="rounded-lg border border-border bg-background p-6"
@@ -31,18 +22,10 @@ function ListingBidEnrollmentInteractiveDemo() {
           {session.signedIn ? "Signed in" : "Signed out"}
           {session.signedIn && !session.paymentLinked ? " · setup needed" : ""}
           {ready ? " · ready to bid" : ""}
-          {session.ageVerified ? " · age verified" : ""}
         </Text>
         <div className="flex flex-wrap gap-2">
           <Button onClick={actions.reset} size="sm" variant="outline">
             Reset
-          </Button>
-          <Button
-            onClick={actions.pretendAgeVerifiedElsewhere}
-            size="sm"
-            variant="ghost"
-          >
-            Pretend age verified elsewhere
           </Button>
         </div>
       </VStack>
@@ -52,7 +35,8 @@ function ListingBidEnrollmentInteractiveDemo() {
         bidMode={session.bidMode}
         onAutoBidConfirm={actions.confirmAutoBidIntro}
         onAutoConfirmOpenChange={actions.setAutoConfirmOpen}
-        onBannerComplete={actions.openSetupFromBanner}
+        onChangePayment={actions.openChangePayment}
+        onLinkPayment={actions.openSetup}
         onBidModeChange={actions.setBidMode}
         onBidSubmit={actions.handleBidSubmit}
         onSetupContinue={actions.handleSetupContinue}
@@ -60,8 +44,7 @@ function ListingBidEnrollmentInteractiveDemo() {
         onSignInComplete={actions.completeSignIn}
         onSignInOpenChange={actions.setSignInOpen}
         setupOpen={session.setupOpen}
-        setupStepIndex={session.setupStepIndex}
-        setupSteps={setupSteps}
+        setupRequiresIframeLink={session.setupRequiresIframeLink}
         signInOpen={session.signInOpen}
         snapshot={snapshot}
       />
