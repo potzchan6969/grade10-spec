@@ -45,7 +45,7 @@
   "minAmount": "최소: {amount}",
   "minimumMaximumFloor": "최소 {amount}(현재 입찰가 + {increment})",
   "minimumMaximumLeadingIncrement": "최소 {amount}(최고 입찰가 + {increment})",
-  "minimumMaximumLeadingNudge": "최소 {amount}(최고 입찰가 + US$1)",
+  "minimumMaximumLeadingNudge": "최소 {amount}(최고 입찰가 + {increment})",
   "minimumBidIs": "최소 입찰가는 {amount}입니다.",
   "nextImage": "다음 이미지",
   "nextLot": "다음 로트",

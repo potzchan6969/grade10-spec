@@ -45,7 +45,7 @@
   "minAmount": "最低：{amount}",
   "minimumMaximumFloor": "至少 {amount}（当前出价 + {increment}）",
   "minimumMaximumLeadingIncrement": "至少 {amount}（你的最高出价 + {increment}）",
-  "minimumMaximumLeadingNudge": "至少 {amount}（你的最高出价 + US$1）",
+  "minimumMaximumLeadingNudge": "至少 {amount}（你的最高出价 + {increment}）",
   "minimumBidIs": "最低出价为 {amount}。",
   "nextImage": "下一张图片",
   "nextLot": "下一件拍品",
