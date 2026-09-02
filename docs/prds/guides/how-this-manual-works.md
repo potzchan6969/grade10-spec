@@ -35,9 +35,10 @@ Every capability has a page, whatever state its contract is in, and the pip
 beside it says which: **planned** (the page states an intended shape nothing
 carries yet), **incubating** (a change in flight is writing the spec),
 **changing** (a change touches a durable spec), or no pip at all — stable. A
-page whose spec is moving shows the delta itself, requirement by requirement,
-right under its in-flight ribbon. How we work lives under Guides, and
-[Start here](/guides/start-here) lays a first hour's path for each job.
+page whose spec is moving carries the change in its in-flight ribbon; the
+delta itself, requirement by requirement, is read on the change's own page.
+How we work lives under Guides, and [Start here](/guides/start-here) lays a
+first hour's path for each job.
 
 ## The loop
 
