@@ -1,7 +1,8 @@
 import { execFileSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { NO_GIT } from "../src/store/git.mts";
 import { readIdleClaims } from "../src/store/idle.mts";
@@ -23,6 +24,18 @@ import { writeStore } from "./tmp-store";
  * same way. Restating its edges here would be a second suite to disagree with
  * the first.
  */
+
+/**
+ * The reading is optional by design: `idle.mts` returns nothing at all when
+ * the viewer submodule is not initialised, and the manual renders exactly what
+ * it rendered before. So the tests that assert a real age skip themselves
+ * rather than fail in a clone that has not run `git submodule update`. CI
+ * checks the submodule out, which is what stops this skipping quietly forever.
+ */
+const VIEWER = fileURLToPath(
+  new URL("../../openspec-viewer/lib/store.mjs", import.meta.url),
+);
+const withViewer = describe.skipIf(!existsSync(VIEWER));
 
 const DAY = 86_400_000;
 const CHANGE = "add-gift-cards";
@@ -77,7 +90,7 @@ function storeWithHistory(
   return root;
 }
 
-describe("dating a claim", () => {
+withViewer("dating a claim", () => {
   it("dates it from the newest checkmark, and says so", () => {
     // Claimed nine days ago, last checkmark four days ago.
     const root = storeWithHistory([
@@ -149,7 +162,7 @@ describe("when the reading is unavailable", () => {
   });
 });
 
-describe("what the change carries", () => {
+withViewer("what the change carries", () => {
   it("hands the age to the group whose number it was read against", () => {
     const root = storeWithHistory([
       ["dana", 0, 9],
