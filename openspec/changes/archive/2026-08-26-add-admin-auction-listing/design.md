@@ -73,7 +73,7 @@ existing graded permissions, audits, and purges affected public cache tags.
 The admin form performs the same required-field check before it sends create,
 but its result is advisory: the API is authoritative.
 
-Catalogue-only updates remain available to `auction:write`; draft save,
+Catalogue-only updates remain available to `auction:catalog`; draft save,
 create, publish, and timing/pricing writes use `auction:operate`; cancel stays
 at `auction:settle` because it releases live authorizations. A single generic
 PATCH route was rejected because it would make each transition's permission,
