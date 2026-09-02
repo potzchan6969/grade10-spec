@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-09-02T01:21:29.593Z",
+  "generatedAt": "2026-09-02T02:34:30.532Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
-    "Alert": "fail",
+    "Alert": "warn",
     "Auction": "warn",
     "Avatar": "skipped",
     "Badge": "skipped",
@@ -101,8 +101,9 @@
     "layout: nav/promo": "ok",
     "layout: navigation-list/root": "ok",
     "overlays: dropdown-menu-content/items": "ok",
+    "overlays: tooltip-content/body": "ok",
     "store-cart: cart-drawer/body": "ok",
-    "store-cart: cart-drawer/overlay": "fail",
+    "store-cart: cart-drawer/overlay": "skipped",
     "store-home: store-collection-tile/featured": "ok",
     "store-home: store-collection-tile/standard": "ok",
     "store-home: store-home-hero/root": "ok",
@@ -766,6 +767,7 @@
     "5303-2": "Closed - lost",
     "5304-2": "Closed - unsold",
     "5742-2377": "Avatar",
+    "5896-3940": "overlays: tooltip-content/body",
     "5896-4115": "Alert",
     "5896-4393": "Alert",
     "5896-4416": "Alert",
@@ -805,9 +807,7 @@
       "AccordionItem: no code component (looked for src/components/**/accordionitem.tsx or accordionitem.tsx)"
     ],
     "Alert": [
-      "Alert layout=block: the variant draws #FFFFFFFF, no bg-* class claims it",
-      "Alert layout=block: the variant strokes #E6E5E5FF, no border-* class claims it",
-      "Alert layout=inline: gap-1.5 is 6 in code but 8 in Figma"
+      "packages/design-system/src/components/display/alert.figma.ts: emits variant, which packages/design-system/src/components/display/alert.tsx does not name — the Dev Mode snippet would not compile"
     ],
     "Auction": [
       "Auction: no code component (looked for src/components/**/auction.tsx or auction.tsx)"
@@ -892,9 +892,6 @@
     ],
     "Toast": [
       "Toast: no code component (looked for src/components/**/toast.tsx or toast.tsx)"
-    ],
-    "store-cart: cart-drawer/overlay": [
-      "(unstyled)               draws #0B0A0A4D, no bg-* class claims it"
     ]
   }
 }
