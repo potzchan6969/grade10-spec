@@ -4,7 +4,7 @@ spec: grade10-site/store/home
 order: 1
 ---
 
-The store's own address is the front door: a hero, a grid of collections, one
+`grade10.com/store` is the front door: a hero, a grid of collections, one
 row of cards. Links people already hold still land here.
 
 1. **Hero** — a small label, headline, copy, image, two ways on

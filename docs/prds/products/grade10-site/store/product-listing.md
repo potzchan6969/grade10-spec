@@ -5,18 +5,18 @@ order: 2
 ---
 
 The product listing is where a collector filters and sorts the whole
-catalogue, at its own address beneath the store.
+catalogue, at its own URL beneath the store.
 
-- **Address** — its own title, description and share metadata, in every
+- **URL** — its own title, description and share metadata, in every
   language the site answers ([[product-listing-SC-01]])
-- **Collection in the address** — a narrowing of this one listing, never a
+- **Collection in the URL** — a narrowing of this one listing, never a
   page of its own; every collection opens the same document
   1. **One the catalogue carries** — opens already narrowed
      ([[product-listing-SC-03]])
   2. **None** — lists everything ([[product-listing-SC-04]])
   3. **One the catalogue has nothing for** — lists everything as itself, not
      a missing page ([[product-listing-SC-05]])
-- **Narrowing inside the page** — writes the collection into the address,
+- **Narrowing inside the page** — writes the collection into the URL,
   so what a collector sees can be linked ([[product-listing-SC-06]]); back
   restores the previous narrowing ([[product-listing-SC-07]])
 
