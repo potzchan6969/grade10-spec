@@ -12,7 +12,7 @@ A PRD is the capability's page in the manual: `docs/prds/products/<product>/<cap
 1. Read `AGENTS.md`, `docs/governance/prd-and-openspec.md`, the manual's own guide `docs/prds/guides/writing-the-manual.md`, the relevant capability in `openspec/specs/`, and active `openspec/changes/` records.
 2. Decide whether a decisions block is warranted. If stripping every testable statement from the intended record leaves nothing behind, write the capability spec instead and leave the page's prose to state the shape.
 3. Create the page, or open the existing one, and put the record in its `Product decisions` block — the page grammar and canonical form are the guide's; `pnpm check:manual` refuses a page that breaks them.
-4. Open the block with the user problem, stated flatly in the present tense, and the intended outcome. Name the non-goals so engineering knows the edges.
+4. Open the block with the user problem, stated flatly in the present tense, and the intended outcome. Name the non-goals so engineering knows the edges. The page's prose and the block both take the house shape from `docs/governance/writing.md`: an outline whose items lead with the key term in bold, never an essay.
 5. Never restate a requirement, a state behavior, an accessibility obligation, or an export contract — the page's `spec:` frontmatter already embeds the spec; cite an id with `[[...]]` where one matters.
 6. Record users and their jobs, measurement, and explicit decisions as tables; assumptions and unresolved questions as rows marked ❓. Do not bury uncertainty in prose.
 7. Cite source material by linking it — a reference under `docs/references/` renders in the manual at `/references/<slug>`.

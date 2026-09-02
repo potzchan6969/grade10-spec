@@ -41,13 +41,23 @@ double-quoted, and a quote character can never appear inside one.
 ## Voice
 
 Pages follow the house style — `docs/governance/writing.md` in the store —
-and its application here is short. Define the thing flatly, in present
-tense, so a reader infers the rules from what it is; group one concern per
-`##` section; put enumerable facts in a table. Never recap the change that
-introduced a capability: today's gap, the intended fix, and the success
-metric belong to the proposal and rot the moment it archives. The one page
-allowed a future tense is a **planned** one, and even there the intended
-shape reads as a shape, not a pitch.
+and its application here is short:
+
+- **A prose block is an outline** — two sentences at most on what the
+  surface is, then items leading with their key term in bold, fragments
+  rather than paragraphs, one concern per `##` section, enumerable facts in
+  a table
+- **Define the thing flatly**, in present tense, so a reader infers the
+  rules from what it is
+- **A flow holds the steps** — each `#` phase named as the owner's notes
+  name one (`Phase 1 — Online connection`), each `##` step naming its actor
+  first, then the action (`User — Book a time slot`), with a line or a short
+  outline beneath, never a paragraph
+- **Never recap the change** that introduced a capability — today's gap, the
+  intended fix, and the success metric belong to the proposal and rot the
+  moment it archives
+- **Future tense only on a planned page**, and even there the intended
+  shape reads as a shape, not a pitch
 
 ## The block palette
 

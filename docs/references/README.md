@@ -8,8 +8,12 @@ moves into the capability's page under `docs/prds/` or a change rather than
 staying here. The manual renders every document here under References, so a
 page cites one by linking it.
 
-[`grade10-loyalty-program.md`](grade10-loyalty-program.md) is the standard for
-what a reference looks like:
+Two documents are the standard for what a reference looks like.
+[`grade10-finance.md`](grade10-finance.md) is the shape — a heading, then an
+outline whose every line leads with its key term in bold, steps naming their
+actor first, phases as sub-headings.
+[`grade10-loyalty-program.md`](grade10-loyalty-program.md) is the voice of a
+longer one, with tables and worked examples. Both:
 
 - Open by saying what the document is, its date, and which spec, PRD, or
   change carries the decisions it led to.

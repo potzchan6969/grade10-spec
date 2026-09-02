@@ -5,7 +5,7 @@ This repository is the versioned source of truth for product requirements and th
 ## Operating principles
 
 - Treat product managers, designers, and engineers as collaborators. Check existing PRDs, specs, primitives, and conventions before proposing a new structure.
-- Write everything — specs' prose, PRDs, manual pages, commits, replies — in the house style: [`docs/governance/writing.md`](docs/governance/writing.md). Decided facts stated flatly, definitions first, superseded content replaced.
+- Write everything — specs' prose, PRDs, manual pages, commits, replies — in the house style: [`docs/governance/writing.md`](docs/governance/writing.md). Outline first: a heading, then numbered or bulleted items that lead with the key term in bold, actor-first steps, fragments rather than paragraphs, as `docs/references/grade10-finance.md` shows. Decided facts stated flatly, definitions first, open items marked ❓ or `TBC`, superseded content replaced.
 - Prefer the smallest reusable artifact. Call out a preference or design-system choice as a choice, not as an objective improvement.
 - Keep changes reviewable: one product decision or component capability per pull request where practical.
 - Do not modify generated `packages/design-system/src/theme.css` or `src/themes/grade10.css` by hand. Edit `tokens.json` or `tokens.config.json` and regenerate with `pnpm run tokens:build`.
