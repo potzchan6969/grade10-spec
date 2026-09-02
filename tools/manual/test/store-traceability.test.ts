@@ -147,6 +147,7 @@ describe("what the archive is spared", () => {
   it("counts its tasks without carrying the lines", () => {
     expect(archived.taskGroups).toEqual([
       {
+        num: "1",
         title: "Contracts",
         repo: "grade10-spec",
         owner: "tagged",
