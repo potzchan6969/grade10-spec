@@ -91,11 +91,6 @@ jobs:
 
             core.setOutput("title", pullRequest.title);
             core.setOutput("url", pullRequest.html_url);
-            core.setOutput("branch", pullRequest.head.ref);
-            core.setOutput(
-              "branch-url",
-              `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/compare/main...${pullRequest.head.ref}`,
-            );
 
       - name: Find changed page stories
         id: changed-pages
@@ -106,8 +101,6 @@ jobs:
             --commit-url "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" \
             --merged-pr-title "${{ steps.merged-pr.outputs.title }}" \
             --merged-pr-url "${{ steps.merged-pr.outputs.url }}" \
-            --merged-branch-name "${{ steps.merged-pr.outputs.branch }}" \
-            --merged-branch-url "${{ steps.merged-pr.outputs.branch-url }}" \
             --github-output "$GITHUB_OUTPUT"
 
       - name: Notify Slack about changed pages

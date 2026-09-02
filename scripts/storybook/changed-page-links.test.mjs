@@ -127,9 +127,6 @@ test("creates a compact payload containing current affected page states only", (
       ["apps/preview/src/pages/store.stories.tsx", "M"],
       ["apps/preview/src/pages/profile.stories.tsx", "A"],
     ]),
-    mergedBranchName: "feat/product-list",
-    mergedBranchUrl:
-      "https://github.com/9gag/grade10-spec/compare/main...feat/product-list",
     mergedPrTitle: "feat(store): add product list",
     mergedPrUrl: "https://github.com/9gag/grade10-spec/pull/123",
     removedStories: [
@@ -146,14 +143,14 @@ test("creates a compact payload containing current affected page states only", (
     blocks: [
       {
         text: {
-          text: ":art: Storybook deployed · <https://github.com/9gag/grade10-spec/commit/abc|abc> · <https://github.com/9gag/grade10-spec/pull/123|feat(store): add product list>",
+          text: ":art: Storybook deployed",
           type: "mrkdwn",
         },
         type: "section",
       },
       {
         text: {
-          text: "• Auction Listing\n  • ListingBidPanel > Flows > Countdown ❌\n• Pages\n  • <https://storybook.grade10-stg.com/iframe.html?id=pages-store--default&viewMode=story|Store > Default>\n  • <https://storybook.grade10-stg.com/iframe.html?id=pages-store--empty&viewMode=story|Store > Empty>",
+          text: `- Auction Listing\n${"\u00a0".repeat(4)}- ListingBidPanel > Flows > Countdown ❌\n- Pages\n${"\u00a0".repeat(4)}- Store > <https://storybook.grade10-stg.com/?path=/story/pages-store--default|Default>\n${"\u00a0".repeat(4)}- Store > <https://storybook.grade10-stg.com/?path=/story/pages-store--empty|Empty>`,
           type: "mrkdwn",
         },
         type: "section",
@@ -161,7 +158,7 @@ test("creates a compact payload containing current affected page states only", (
       {
         elements: [
           {
-            text: "<https://github.com/9gag/grade10-spec/compare/main...feat/product-list|feat/product-list> → main",
+            text: "PR merged → <https://github.com/9gag/grade10-spec/pull/123|feat(store): add product list> (<https://github.com/9gag/grade10-spec/commit/abc|abc>)",
             type: "mrkdwn",
           },
         ],
@@ -180,7 +177,7 @@ test("omits merge metadata when it is unavailable", () => {
 
   assert.deepEqual(payload.blocks.at(-1), {
     text: {
-      text: "• Pages\n  • <https://storybook.grade10-stg.com/iframe.html?id=pages-store--default&viewMode=story|Store > Default>\n  • <https://storybook.grade10-stg.com/iframe.html?id=pages-store--empty&viewMode=story|Store > Empty>",
+      text: `- Pages\n${"\u00a0".repeat(4)}- Store > <https://storybook.grade10-stg.com/?path=/story/pages-store--default|Default>\n${"\u00a0".repeat(4)}- Store > <https://storybook.grade10-stg.com/?path=/story/pages-store--empty|Empty>`,
       type: "mrkdwn",
     },
     type: "section",

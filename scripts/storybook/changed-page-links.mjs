@@ -241,14 +241,37 @@ function textBlocks(lines) {
   return blocks;
 }
 
+function storyItem(story, storybookUrl) {
+  const [root = "Stories", ...path] = story.title.split("/");
+  const segments = [...path, story.name].filter(Boolean);
+  const last = segments.pop() ?? "";
+  const linked = story.id
+    ? `<${storybookUrl}/?path=/story/${story.id}|${last}>`
+    : last;
+  const item = [...segments, linked].join(" > ");
+  return {
+    item: `${item}${story.status ? ` ${story.status}` : ""}`,
+    root,
+  };
+}
+
+function mergedLine({ commitSha, commitUrl, mergedPrTitle, mergedPrUrl }) {
+  if (!mergedPrTitle) return "";
+  const title = mergedPrUrl
+    ? `<${mergedPrUrl}|${mergedPrTitle}>`
+    : mergedPrTitle;
+  const sha = commitSha?.slice(0, 7);
+  if (!sha) return `PR merged → ${title}`;
+  const commit = commitUrl ? `<${commitUrl}|${sha}>` : sha;
+  return `PR merged → ${title} (${commit})`;
+}
+
 export function slackPayload({
   affectedPages,
   changedPaths = new Map(),
   commitSha,
   commitUrl,
   index,
-  mergedBranchName,
-  mergedBranchUrl,
   mergedPrTitle,
   mergedPrUrl,
   removedStories = [],
@@ -268,45 +291,35 @@ export function slackPayload({
   const states = [...stories, ...removedStories];
   if (!states.length) return { blocks: [] };
 
-  const commit = commitUrl
-    ? ` · <${commitUrl}|${commitSha?.slice(0, 7) ?? "commit"}>`
-    : "";
-  const pullRequest =
-    mergedPrTitle && mergedPrUrl ? ` · <${mergedPrUrl}|${mergedPrTitle}>` : "";
   const groups = new Map();
   for (const story of states) {
-    const [root = "Stories", ...path] = story.title.split("/");
-    const label = [...path, story.name].filter(Boolean).join(" > ");
-    const item = story.id
-      ? `<${storybookUrl}/iframe.html?id=${story.id}&viewMode=story|${label}>`
-      : label;
-    groups.set(root, [
-      ...(groups.get(root) ?? []),
-      `  • ${item}${story.status ? ` ${story.status}` : ""}`,
-    ]);
+    const { item, root } = storyItem(story, storybookUrl);
+    groups.set(root, [...(groups.get(root) ?? []), item]);
   }
+  const nested = `${"\u00a0".repeat(4)}- `;
   const links = [...groups]
     .sort(([left], [right]) => left.localeCompare(right))
-    .flatMap(([root, items]) => [`• ${root}`, ...items.sort()]);
+    .flatMap(([root, items]) => [
+      `- ${root}`,
+      ...items.sort().map((item) => `${nested}${item}`),
+    ]);
+  const merged = mergedLine({
+    commitSha,
+    commitUrl,
+    mergedPrTitle,
+    mergedPrUrl,
+  });
   return {
     blocks: [
       {
-        text: {
-          text: `:art: Storybook deployed${commit}${pullRequest}`,
-          type: "mrkdwn",
-        },
+        text: { text: ":art: Storybook deployed", type: "mrkdwn" },
         type: "section",
       },
       ...textBlocks(links),
-      ...(mergedBranchName && mergedBranchUrl
+      ...(merged
         ? [
             {
-              elements: [
-                {
-                  text: `<${mergedBranchUrl}|${mergedBranchName}> → main`,
-                  type: "mrkdwn",
-                },
-              ],
+              elements: [{ text: merged, type: "mrkdwn" }],
               type: "context",
             },
           ]
@@ -395,8 +408,6 @@ async function main() {
         default: "https://storybook.grade10-stg.com",
       },
       "commit-url": { type: "string" },
-      "merged-branch-name": { type: "string" },
-      "merged-branch-url": { type: "string" },
       "merged-pr-title": { type: "string" },
       "merged-pr-url": { type: "string" },
       "github-output": { type: "string" },
@@ -421,8 +432,6 @@ async function main() {
     commitSha: commitSha.trim(),
     commitUrl: values["commit-url"],
     index,
-    mergedBranchName: values["merged-branch-name"],
-    mergedBranchUrl: values["merged-branch-url"],
     mergedPrTitle: values["merged-pr-title"],
     mergedPrUrl: values["merged-pr-url"],
     removedStories: await deletedStoryStates(values.base, changed),
