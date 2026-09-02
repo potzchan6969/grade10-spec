@@ -1,20 +1,29 @@
 import { useLayoutEffect, useRef } from "react";
-import { formatUsd, formatUsdNumeric } from "./format-usd";
+import {
+  formatMoney,
+  formatMoneyNumeric,
+  formatMoneyPrefix,
+} from "../../lib/format-money";
 import { RollingDigit } from "./listing-countdown-digit";
 
-type ListingRollingUsdDisplayProps = {
+type ListingRollingMoneyDisplayProps = {
   amountMinor: number;
+  currency: string;
+  locale?: string;
 };
 
-function ListingRollingUsdDisplay({
+function ListingRollingMoneyDisplay({
   amountMinor,
-}: ListingRollingUsdDisplayProps) {
+  currency,
+  locale,
+}: ListingRollingMoneyDisplayProps) {
   const prevMinorRef = useRef(amountMinor);
   const shouldAnimate = amountMinor > prevMinorRef.current;
-  const cells = formatUsdNumeric(amountMinor)
+  const prefix = formatMoneyPrefix(currency, { locale });
+  const cells = formatMoneyNumeric(amountMinor, currency, locale)
     .split("")
     .map((char, index, all) => ({ char, place: all.length - index }));
-  const accessibleText = formatUsd(amountMinor);
+  const accessibleText = formatMoney(amountMinor, currency, { locale });
 
   useLayoutEffect(() => {
     prevMinorRef.current = amountMinor;
@@ -24,7 +33,7 @@ function ListingRollingUsdDisplay({
     <span className="countdown-display">
       <span className="sr-only">{accessibleText}</span>
       <span aria-hidden="true" className="inline-flex items-baseline">
-        <span>US$</span>
+        <span>{prefix}</span>
         <span className="inline-flex items-baseline tabular-nums">
           {cells.map(({ char, place }) =>
             /\d/.test(char) ? (
@@ -41,5 +50,5 @@ function ListingRollingUsdDisplay({
   );
 }
 
-export type { ListingRollingUsdDisplayProps };
-export { ListingRollingUsdDisplay };
+export type { ListingRollingMoneyDisplayProps };
+export { ListingRollingMoneyDisplay };

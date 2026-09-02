@@ -198,7 +198,7 @@ function ListingAuctionBidCard({
         )}
       >
         <div className="border-r border-border px-4 py-3">
-          <PriceBlock copy={copy} view={view} />
+          <PriceBlock copy={copy} locale={locale} view={view} />
         </div>
         <div className="px-4 py-3">
           <TimeBlock
@@ -241,6 +241,7 @@ function ListingAuctionBidCard({
             <ListingBidHistoryList
               activityTimeCopy={copy.activityTimeCopy}
               copy={copy.bidHistory}
+              currency={view.currency}
               entranceMode="fade"
               heading=""
               locale={locale}
@@ -259,6 +260,7 @@ function ListingAuctionBidCard({
               bidEnrollment={bidEnrollment}
               bidMode={bidMode}
               copy={copy}
+              locale={locale}
               onBidModeChange={onBidModeChange}
               onCommitMaximum={onCommitMaximum}
               onPlaceBid={onPlaceBid}
