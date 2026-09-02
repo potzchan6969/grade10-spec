@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
-import { FILLED_DELIVERY, ORDER_DETAILS_COPY } from "./fixtures";
+import {
+  FILLED_DELIVERY,
+  ORDER_DETAILS_COPY,
+  PICKUP_DELIVERY,
+} from "./fixtures";
 import { OrderDetailsDeliveryStatus } from "./order-details-delivery-status";
 
 const meta = {
@@ -18,10 +22,21 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const WithTrackOrder: Story = {};
+/** Order Placed → Shipped → Completed, with Track Order. */
+export const ShippedDelivery: Story = {};
 
-export const WithoutTrackOrder: Story = {
+/** Order Placed → Shipped → Completed, past the tracking window. */
+export const ShippedDeliveryWithoutTrack: Story = {
   args: {
+    trackOrder: false,
+    onTrackOrder: undefined,
+  },
+};
+
+/** Order Placed → Ready for Pickup → Completed; no Track Order control. */
+export const InStorePickup: Story = {
+  args: {
+    steps: PICKUP_DELIVERY.steps,
     trackOrder: false,
     onTrackOrder: undefined,
   },
