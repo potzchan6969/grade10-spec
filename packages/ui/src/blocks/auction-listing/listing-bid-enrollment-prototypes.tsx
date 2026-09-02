@@ -1,7 +1,7 @@
-import { Alert } from "@grade10/design-system/components/display/alert";
 import { Card } from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
@@ -14,42 +14,12 @@ import {
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import { CreditCard } from "@phosphor-icons/react";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { OrderDetailsPaymentLogo } from "../store-order-detail/order-details-payment-logo";
 import type { OrderDetailsPaymentBrand } from "../store-order-detail/types";
-import {
-  ListingAgeVerificationFields,
-  type ListingAgeVerificationFieldsCopy,
-} from "./listing-age-verification-dialog";
 import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "./listing-bid-enrollment-copy";
 
 type OverlayPresentation = "modal" | "inline";
-
-type EnrollmentBannerProps = {
-  message: string;
-  actionLabel: string;
-  onAction?: () => void;
-};
-
-function EnrollmentBanner({
-  message,
-  actionLabel,
-  onAction,
-}: EnrollmentBannerProps) {
-  return (
-    <Alert
-      actions={
-        <Button onClick={onAction} size="sm" variant="outline">
-          {actionLabel}
-        </Button>
-      }
-      dismissible={false}
-      layout="inline"
-      status="warning"
-      title={message}
-    />
-  );
-}
 
 type PaymentMethodRowProps = {
   brand: OrderDetailsPaymentBrand;
@@ -134,47 +104,86 @@ function PaymentMethodEmptyState({ onLink }: PaymentMethodEmptyStateProps) {
   );
 }
 
-type SetupSheetStep = "age" | "payment";
+function CardLinkIframePlaceholder({
+  onSimulateComplete,
+  showsLinkedCard = false,
+}: {
+  onSimulateComplete?: () => void;
+  showsLinkedCard?: boolean;
+}) {
+  const className =
+    "flex h-32 w-full items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-secondary-foreground";
+
+  const label = showsLinkedCard
+    ? LISTING_BID_ENROLLMENT_DEMO_COPY.iframeLinkedCardPlaceholder
+    : LISTING_BID_ENROLLMENT_DEMO_COPY.iframePlaceholder;
+
+  if (onSimulateComplete) {
+    return (
+      <button
+        aria-label={label}
+        className={`${className} cursor-pointer transition-colors hover:bg-muted/60`}
+        onClick={onSimulateComplete}
+        type="button"
+      >
+        {label}
+      </button>
+    );
+  }
+
+  return (
+    <div aria-label={label} className={className} role="group">
+      {label}
+    </div>
+  );
+}
 
 type EnrollmentSetupSheetProps = {
   open: boolean;
   onOpenChange?: (open: boolean) => void;
   onContinue?: () => void;
   presentation?: OverlayPresentation;
-  steps: readonly SetupSheetStep[];
-  stepIndex: number;
-  ageCopy: ListingAgeVerificationFieldsCopy;
-  showIframe?: boolean;
+  /** When false, a card is already on file and only attestation is required. */
+  requiresIframeLink?: boolean;
+  /** Stripe iframe prefilled with an account card (change-card flow). */
+  iframeLinkedPayment?: {
+    brand: OrderDetailsPaymentBrand;
+    maskedNumber: string;
+  };
+  /** Age attestation already given on a prior lot. */
+  defaultAgeAttested?: boolean;
 };
 
 function SetupSheetBody({
-  steps,
-  stepIndex,
-  ageCopy,
-  showIframe = false,
-}: Pick<
-  EnrollmentSetupSheetProps,
-  "steps" | "stepIndex" | "ageCopy" | "showIframe"
->) {
-  const step = steps[stepIndex];
-
+  ageAttested,
+  iframeLinkedPayment,
+  onAgeAttestedChange,
+  onSimulateCardLinkComplete,
+}: {
+  ageAttested: boolean;
+  iframeLinkedPayment?: {
+    brand: OrderDetailsPaymentBrand;
+    maskedNumber: string;
+  };
+  onAgeAttestedChange: (checked: boolean) => void;
+  onSimulateCardLinkComplete?: () => void;
+}) {
   return (
     <VStack className="w-full" gap="md">
-      {step === "age" ? <ListingAgeVerificationFields copy={ageCopy} /> : null}
-      {step === "payment" ? (
-        <VStack gap="md">
-          <DialogDescription>
-            {LISTING_BID_ENROLLMENT_DEMO_COPY.linkCardDescription}
-          </DialogDescription>
-          {showIframe ? (
-            <div className="flex h-32 w-full items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-secondary-foreground">
-              {LISTING_BID_ENROLLMENT_DEMO_COPY.iframePlaceholder}
-            </div>
-          ) : (
-            <PaymentMethodRow brand="visa" maskedNumber="•••• 4242" />
-          )}
-        </VStack>
-      ) : null}
+      <DialogDescription>
+        {LISTING_BID_ENROLLMENT_DEMO_COPY.linkCardDescription}
+      </DialogDescription>
+      <CardLinkIframePlaceholder
+        onSimulateComplete={onSimulateCardLinkComplete}
+        showsLinkedCard={iframeLinkedPayment != null}
+      />
+      <CheckboxListInput
+        checked={ageAttested}
+        onCheckedChange={(checked) => onAgeAttestedChange(checked === true)}
+        size="sm"
+      >
+        {LISTING_BID_ENROLLMENT_DEMO_COPY.ageAttestation}
+      </CheckboxListInput>
     </VStack>
   );
 }
@@ -184,21 +193,53 @@ function EnrollmentSetupSheet({
   onOpenChange,
   onContinue,
   presentation = "modal",
-  steps,
-  stepIndex,
-  ageCopy,
-  showIframe = false,
+  requiresIframeLink = true,
+  iframeLinkedPayment,
+  defaultAgeAttested = false,
 }: EnrollmentSetupSheetProps) {
+  const [ageAttested, setAgeAttested] = useState(defaultAgeAttested);
+  const [iframeLinked, setIframeLinked] = useState(iframeLinkedPayment != null);
+
+  const cardReady = requiresIframeLink ? iframeLinked : true;
+
+  useEffect(() => {
+    if (open) {
+      setAgeAttested(defaultAgeAttested);
+      setIframeLinked(iframeLinkedPayment != null);
+      return;
+    }
+    setAgeAttested(false);
+    setIframeLinked(false);
+  }, [defaultAgeAttested, iframeLinkedPayment, open]);
+
+  function handleSimulateCardLinkComplete() {
+    setIframeLinked(true);
+  }
+
+  function handleContinue() {
+    if (!cardReady || !ageAttested) return;
+    onContinue?.();
+  }
+
   const body = (
     <SetupSheetBody
-      ageCopy={ageCopy}
-      showIframe={showIframe}
-      stepIndex={stepIndex}
-      steps={steps}
+      ageAttested={ageAttested}
+      iframeLinkedPayment={iframeLinkedPayment}
+      onAgeAttestedChange={setAgeAttested}
+      onSimulateCardLinkComplete={
+        requiresIframeLink && iframeLinkedPayment == null
+          ? handleSimulateCardLinkComplete
+          : undefined
+      }
     />
   );
   const footer = (
-    <Button onClick={onContinue} size="md" type="button">
+    <Button
+      disabled={!cardReady || !ageAttested}
+      onClick={handleContinue}
+      size="md"
+      type="button"
+    >
       {LISTING_BID_ENROLLMENT_DEMO_COPY.continue}
     </Button>
   );
@@ -323,10 +364,9 @@ function InlineOverlayPreview({
   );
 }
 
-export type { OverlayPresentation, SetupSheetStep };
+export type { OverlayPresentation };
 export {
   AutoBidConfirmationDialog,
-  EnrollmentBanner,
   EnrollmentSetupSheet,
   InlineOverlayPreview,
   PaymentMethodEmptyState,

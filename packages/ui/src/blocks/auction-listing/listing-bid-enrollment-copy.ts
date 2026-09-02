@@ -1,14 +1,12 @@
 export const LISTING_BID_ENROLLMENT_DEMO_COPY = {
   signInToBid: "Sign In to Bid",
-  signInToBidAt: "Sign In to Bid {amount}",
-  setupBannerAge: "Verify your age to bid on this lot.",
-  verifyAge: "Verify",
   paymentMethod: "Linked Card",
   linkCardEmptyState: "Link a card to place a bid.",
   changeCard: "Change",
   getReadyToBid: "Get Ready to Bid",
   linkCardDescription:
     "Link a card to bid on this lot. You are only charged if you win this lot.",
+  ageAttestation: "I confirm I am 18 years of age or older.",
   continue: "Continue",
   staleFloorNotice: "The minimum bid is now {amount}.",
   autoConfirmTitle: "Confirm Auto-Bidding",
@@ -20,5 +18,7 @@ export const LISTING_BID_ENROLLMENT_DEMO_COPY = {
   autoConfirmAction: "Confirm Maximum",
   autoConfirmCancel: "Cancel",
   iframePlaceholder: "Stripe card link (iframe)",
+  iframeLinkedCardPlaceholder:
+    "Stripe card form (iframe) — linked card on file",
   signInDemoSubmit: "Continue (Demo)",
 } as const;

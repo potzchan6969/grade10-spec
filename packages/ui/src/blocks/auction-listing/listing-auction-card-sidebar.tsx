@@ -32,6 +32,8 @@ type ListingAuctionCardSidebarProps = {
   vaultShippingBody: string;
   authenticationBody: string;
   recentBidsAccessory?: ReactNode;
+  /** Renders directly under the bid card (e.g. linked payment method). */
+  bidCardFooter?: ReactNode;
   locale: ShippedLocale;
   timeZone: string;
 };
@@ -52,6 +54,7 @@ function ListingAuctionCardSidebar({
   vaultShippingBody,
   authenticationBody,
   recentBidsAccessory,
+  bidCardFooter,
   locale,
   timeZone,
 }: ListingAuctionCardSidebarProps) {
@@ -61,20 +64,25 @@ function ListingAuctionCardSidebar({
       data-variant="auction-card"
       gap="lg"
     >
-      <ListingAuctionBidCard
-        bidEnrollment={bidEnrollment}
-        bidMode={bidMode}
-        copy={copy}
-        history={history}
-        historyResetKey={historyResetKey}
-        locale={locale}
-        onBidModeChange={onBidModeChange}
-        onCommitMaximum={onCommitMaximum}
-        onPlaceBid={onPlaceBid}
-        recentBidsAccessory={recentBidsAccessory}
-        timeZone={timeZone}
-        view={view}
-      />
+      <VStack className="w-full" gap="sm">
+        <ListingAuctionBidCard
+          bidEnrollment={bidEnrollment}
+          bidMode={bidMode}
+          copy={copy}
+          history={history}
+          historyResetKey={historyResetKey}
+          locale={locale}
+          onBidModeChange={onBidModeChange}
+          onCommitMaximum={onCommitMaximum}
+          onPlaceBid={onPlaceBid}
+          recentBidsAccessory={recentBidsAccessory}
+          timeZone={timeZone}
+          view={view}
+        />
+        {bidCardFooter ? (
+          <div className="mt-1">{bidCardFooter}</div>
+        ) : null}
+      </VStack>
       <ListingLotMeta
         authenticationBody={authenticationBody}
         badges={badges}

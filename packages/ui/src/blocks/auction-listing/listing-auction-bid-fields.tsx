@@ -54,8 +54,7 @@ type ListingAuctionBidFieldsCopy = {
   autoExtendedTooltip: string;
   placeBidSection: string;
   placeBid: string;
-  /** Signed-out CTA — `{amount}` is the minimum next bid. */
-  signInToBidAt: string;
+  signInToBid: string;
   confirmMaximum: string;
   raiseMaximum: string;
   confirmMaximumTooltip: string;
@@ -78,9 +77,22 @@ type ListingAuctionBidFieldsCopy = {
 type StandingBannerProps = {
   copy: ListingAuctionBidFieldsCopy;
   view: ListingAuctionBidView;
+  bidEnrollment?: BidEnrollment;
 };
 
-function StandingBanner({ copy, view }: StandingBannerProps) {
+function viewerHasAuctionStanding(
+  view: ListingAuctionBidView,
+  bidEnrollment: BidEnrollment = "ready",
+): boolean {
+  if (bidEnrollment === "signed-out") return false;
+  return view.standing !== "none";
+}
+
+function StandingBanner({ copy, view, bidEnrollment = "ready" }: StandingBannerProps) {
+  if (!viewerHasAuctionStanding(view, bidEnrollment)) {
+    return null;
+  }
+
   if (view.standing === "won-payment-due") {
     return (
       <VStack
@@ -133,10 +145,16 @@ function StandingBanner({ copy, view }: StandingBannerProps) {
 function StandingStatusBadge({
   copy,
   view,
+  bidEnrollment = "ready",
 }: {
   copy: ListingAuctionBidFieldsCopy;
   view: ListingAuctionBidView;
+  bidEnrollment?: BidEnrollment;
 }) {
+  if (!viewerHasAuctionStanding(view, bidEnrollment)) {
+    return null;
+  }
+
   if (view.standing === "outbid") {
     return <Badge variant="warning">{copy.outbid}</Badge>;
   }
@@ -308,18 +326,14 @@ type BidActionsProps = {
 
 function SignedOutBidAction({
   copy,
-  minBidMinor,
   onPlaceBid,
 }: {
   copy: ListingAuctionBidFieldsCopy;
-  minBidMinor: number;
   onPlaceBid: () => void;
 }) {
-  const label = copy.signInToBidAt.replace("{amount}", formatUsd(minBidMinor));
-
   return (
     <Button className="w-full" onClick={onPlaceBid} size="md">
-      {label}
+      {copy.signInToBid}
     </Button>
   );
 }
@@ -361,11 +375,7 @@ function BidActions({
 
   if (bidEnrollment === "signed-out") {
     return (
-      <SignedOutBidAction
-        copy={copy}
-        minBidMinor={view.minBidMinor}
-        onPlaceBid={onPlaceBid}
-      />
+      <SignedOutBidAction copy={copy} onPlaceBid={onPlaceBid} />
     );
   }
 

@@ -110,7 +110,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
     "A bid in the last 30 minutes adds 30 minutes to the close. Repeats until 30 minutes pass with no bids, up to the listing cap.",
   placeBidSection: "Place bid",
   placeBid: "Place Bid",
-  signInToBidAt: "Sign In to Bid {amount}",
+  signInToBid: "Sign In to Bid",
   confirmMaximum: "Confirm",
   raiseMaximum: "Raise",
   confirmMaximumTooltip:
@@ -147,6 +147,7 @@ export const LISTING_AUCTION_BID_AGE_VERIFICATION_COPY = {
   birthMonthLabel: "Birth month",
   birthDayLabel: "Birth day",
   birthYearLabel: "Birth year",
+  underAgeError: "You must be 18 or older to bid.",
   cancel: "Cancel",
   confirm: "Confirm",
 } satisfies ListingAgeVerificationDialogCopy;

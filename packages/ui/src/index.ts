@@ -43,6 +43,10 @@ export {
   type ListingAuctionCardSidebarProps,
 } from "./blocks/auction-listing/listing-auction-card-sidebar";
 export { ListingBidHistoryList } from "./blocks/auction-listing/listing-bid-history-list";
+export {
+  EnrollmentSetupSheet,
+  PaymentMethodRow,
+} from "./blocks/auction-listing/listing-bid-enrollment-prototypes";
 // shared-ui/auction-listing
 export {
   ListingBidPanel,

@@ -4,22 +4,20 @@ import { useEffect, useMemo, useState } from "react";
 import { SignInCard } from "../auth-sign-in/sign-in-card";
 import { SignInEmailForm } from "../auth-sign-in/sign-in-email-form";
 import {
-  LISTING_AUCTION_BID_AGE_VERIFICATION_COPY,
   LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
   bidHistoryForState,
   buildListingAuctionBidView,
+  type BiddingState,
 } from "./listing-auction-bid-fixtures";
 import { ListingAuctionBidCard } from "./listing-auction-bid-card";
 import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "./listing-bid-enrollment-copy";
 import {
   AutoBidConfirmationDialog,
-  EnrollmentBanner,
   EnrollmentSetupSheet,
   InlineOverlayPreview,
   PaymentMethodEmptyState,
   PaymentMethodRow,
   type OverlayPresentation,
-  type SetupSheetStep,
 } from "./listing-bid-enrollment-prototypes";
 import type { ListingBidEnrollmentSnapshot } from "./listing-bid-enrollment-snapshots";
 
@@ -34,10 +32,10 @@ type ListingBidEnrollmentCardPreviewProps = {
   onBidSubmit?: () => void;
   setupOpen?: boolean;
   onSetupOpenChange?: (open: boolean) => void;
-  setupSteps?: readonly SetupSheetStep[];
-  setupStepIndex?: number;
   onSetupContinue?: () => void;
-  onBannerComplete?: () => void;
+  onLinkPayment?: () => void;
+  onChangePayment?: () => void;
+  setupRequiresIframeLink?: boolean;
   autoConfirmOpen?: boolean;
   onAutoConfirmOpenChange?: (open: boolean) => void;
   onAutoBidConfirm?: () => void;
@@ -54,10 +52,10 @@ function ListingBidEnrollmentCardPreview({
   onBidSubmit,
   setupOpen: setupOpenProp,
   onSetupOpenChange,
-  setupSteps: setupStepsProp,
-  setupStepIndex: setupStepIndexProp,
   onSetupContinue,
-  onBannerComplete,
+  onLinkPayment,
+  onChangePayment,
+  setupRequiresIframeLink,
   autoConfirmOpen: autoConfirmOpenProp,
   onAutoConfirmOpenChange,
   onAutoBidConfirm,
@@ -75,7 +73,8 @@ function ListingBidEnrollmentCardPreview({
     }
   }, [signInOpen]);
 
-  const baseView = buildListingAuctionBidView("live-no-bids");
+  const fixtureState: BiddingState = snapshot.fixtureState ?? "live-no-bids";
+  const baseView = buildListingAuctionBidView(fixtureState);
   const view = {
     ...baseView,
     ...snapshot.viewOverride,
@@ -84,19 +83,17 @@ function ListingBidEnrollmentCardPreview({
   const sidebarCopy = useMemo(() => {
     const copy = { ...LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY };
     if (snapshot.submitUsesSignInLabel) {
-      copy.signInToBidAt = LISTING_BID_ENROLLMENT_DEMO_COPY.signInToBidAt;
+      copy.signInToBid = LISTING_BID_ENROLLMENT_DEMO_COPY.signInToBid;
     }
     return copy;
   }, [snapshot.submitUsesSignInLabel]);
 
-  const history = bidHistoryForState("live-no-bids");
+  const history = bidHistoryForState(fixtureState).map((row) =>
+    snapshot.submitUsesSignInLabel ? { ...row, isViewer: false } : row,
+  );
   const maximumLabel = "US$5,000";
 
   const setupOpen = setupOpenProp ?? snapshot.setupSheet != null;
-  const setupSteps =
-    setupStepsProp ?? snapshot.setupSheet?.steps ?? (["payment"] as const);
-  const setupStepIndex =
-    setupStepIndexProp ?? snapshot.setupSheet?.stepIndex ?? 0;
   const autoConfirmOpen =
     autoConfirmOpenProp ?? snapshot.autoConfirmOpen ?? false;
 
@@ -106,14 +103,6 @@ function ListingBidEnrollmentCardPreview({
 
   return (
     <VStack className="w-full max-w-md" gap="sm">
-      {snapshot.setupBanner === "age" ? (
-        <EnrollmentBanner
-          actionLabel={LISTING_BID_ENROLLMENT_DEMO_COPY.verifyAge}
-          message={LISTING_BID_ENROLLMENT_DEMO_COPY.setupBannerAge}
-          onAction={onBannerComplete}
-        />
-      ) : null}
-
       <ListingAuctionBidCard
         bidEnrollment={snapshot.submitUsesSignInLabel ? "signed-out" : "ready"}
         bidMode={bidMode}
@@ -128,17 +117,20 @@ function ListingBidEnrollmentCardPreview({
         view={view}
       />
 
-      {snapshot.paymentMethod ? (
+      {snapshot.linkedPaymentMethod ? (
         <div className="mt-1">
           <PaymentMethodRow
-            brand={snapshot.paymentMethod.brand}
-            maskedNumber={snapshot.paymentMethod.maskedNumber}
+            brand={snapshot.linkedPaymentMethod.brand}
+            maskedNumber={snapshot.linkedPaymentMethod.maskedNumber}
+            onChange={
+              snapshot.linkedPaymentMethod.editable ? onChangePayment : undefined
+            }
           />
         </div>
       ) : null}
       {snapshot.paymentEmptyState ? (
         <div className="mt-1">
-          <PaymentMethodEmptyState onLink={onBannerComplete} />
+          <PaymentMethodEmptyState onLink={onLinkPayment} />
         </div>
       ) : null}
 
@@ -153,14 +145,17 @@ function ListingBidEnrollmentCardPreview({
 
       {setupOpen ? (
         <EnrollmentSetupSheet
-          ageCopy={LISTING_AUCTION_BID_AGE_VERIFICATION_COPY}
+          defaultAgeAttested={snapshot.setupSheet?.defaultAgeAttested}
+          iframeLinkedPayment={snapshot.setupSheet?.iframeLinkedPayment}
           onContinue={onSetupContinue}
           onOpenChange={onSetupOpenChange}
           open
           presentation={overlayPresentation}
-          showIframe={snapshot.setupSheet?.showIframe}
-          stepIndex={setupStepIndex}
-          steps={setupSteps}
+          requiresIframeLink={
+            setupRequiresIframeLink ??
+            snapshot.setupSheet?.requiresIframeLink ??
+            true
+          }
         />
       ) : null}
 

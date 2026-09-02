@@ -3,7 +3,6 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { ChartLineUp } from "@phosphor-icons/react";
 import {
   type CSSProperties,
   type ReactNode,
@@ -176,10 +175,14 @@ function ListingAuctionBidCard({
             {view.headerLabel}
           </Text>
         </HStack>
-        <StandingStatusBadge copy={copy} view={view} />
+        <StandingStatusBadge
+          bidEnrollment={bidEnrollment}
+          copy={copy}
+          view={view}
+        />
       </HStack>
 
-      <StandingBanner copy={copy} view={view} />
+      <StandingBanner bidEnrollment={bidEnrollment} copy={copy} view={view} />
 
       <div
         className={cn(
@@ -214,19 +217,14 @@ function ListingAuctionBidCard({
             hAlign="space-between"
             vAlign="center"
           >
-            <HStack gap="xs" vAlign="center">
-              <span className="text-secondary-foreground">
-                <ChartLineUp aria-hidden size={14} />
-              </span>
-              <Text
-                className="text-secondary-foreground"
-                size="sm"
-                tone="secondary"
-                weight="medium"
-              >
-                {copy.recentBids}
-              </Text>
-            </HStack>
+            <Text
+              className="text-secondary-foreground"
+              size="sm"
+              tone="secondary"
+              weight="medium"
+            >
+              {copy.recentBids}
+            </Text>
             {recentBidsAccessory}
           </HStack>
           <RecentBidsScrollArea
