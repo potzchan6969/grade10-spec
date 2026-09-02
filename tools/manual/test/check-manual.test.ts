@@ -47,17 +47,17 @@ describe("a store that has drifted", () => {
 
   it("names the first line a page differs from its canonical form", async () => {
     expect(lines(await result, "canonical")).toEqual([
-      'manual/index.md — line 5: is "", canonical is "Demo manual, with one blank line too many."',
+      'docs/prds/index.md — line 5: is "", canonical is "Demo manual, with one blank line too many."',
     ]);
   });
 
   it("names every reference that resolves to nothing", async () => {
     expect(lines(await result, "reference")).toEqual([
-      'manual/products/demo-product/alpha.md — ::changes{spec="demo-product/nowhere"} names no spec on disk and no in-flight change',
-      'manual/products/demo-product/alpha.md — ::image{src="assets/missing.svg"} names no file under manual/assets',
-      'manual/products/demo-product/alpha.md — ::spec{id="demo-product/alpha"} has no requirement `Alpha does nothing`',
-      'manual/products/demo-product/alpha.md — ::spec{id="demo-product/alpha"} issues no scenario `alpha-SC-99`',
-      'manual/products/demo-product/alpha.md — ::spec{id="demo-product/gamma"} names no spec on disk',
+      'docs/prds/products/demo-product/alpha.md — ::changes{spec="demo-product/nowhere"} names no spec on disk and no in-flight change',
+      'docs/prds/products/demo-product/alpha.md — ::image{src="assets/missing.svg"} names no file under docs/prds/assets',
+      'docs/prds/products/demo-product/alpha.md — ::spec{id="demo-product/alpha"} has no requirement `Alpha does nothing`',
+      'docs/prds/products/demo-product/alpha.md — ::spec{id="demo-product/alpha"} issues no scenario `alpha-SC-99`',
+      'docs/prds/products/demo-product/alpha.md — ::spec{id="demo-product/gamma"} names no spec on disk',
     ]);
   });
 
@@ -79,13 +79,13 @@ describe("a store that has drifted", () => {
 
   it("names the product landing that is missing", async () => {
     expect(lines(await result, "page")).toEqual([
-      "manual/products/demo-product/index.md — product `demo-product` has no page here",
+      "docs/prds/products/demo-product/index.md — product `demo-product` has no page here",
     ]);
   });
 
   it("refuses a listed product that is neither on disk nor paged", async () => {
     expect(lines(await result, "config")).toEqual([
-      "manual/manual.yaml — `ghost` is neither a spec-dir product nor a page-only product with pages under manual/products/ghost/",
+      "docs/prds/manual.yaml — `ghost` is neither a spec-dir product nor a page-only product with pages under docs/prds/products/ghost/",
     ]);
   });
 
@@ -102,7 +102,7 @@ describe("a store that has drifted", () => {
 
   it("names the capability page whose spec has no acceptance shelf", async () => {
     expect(lines(await result, "skeleton")).toEqual([
-      "manual/products/demo-product/alpha.md — has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
+      "docs/prds/products/demo-product/alpha.md — has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
     ]);
   });
 
@@ -119,7 +119,7 @@ describe("a manual.yaml that lists a product twice", () => {
   it("fails on the duplicate and reads no further config", async () => {
     const result: Result = await runChecks(fixture("duplicate"), NO_GIT);
     expect(lines(result, "config")).toEqual([
-      "manual/manual.yaml — lists `demo-product` twice",
+      "docs/prds/manual.yaml — lists `demo-product` twice",
     ]);
   });
 });
@@ -128,7 +128,7 @@ describe("a store with the workbench Storybook built", () => {
   it("checks story ids against the index and says nothing about it", async () => {
     const result: Result = await runChecks(fixture("stories"), NO_GIT);
     expect(lines(result, "story")).toEqual([
-      'manual/index.md — ::story{id="blocks-demo--gone"} is not in apps/preview/storybook-static/index.json',
+      'docs/prds/index.md — ::story{id="blocks-demo--gone"} is not in apps/preview/storybook-static/index.json',
     ]);
     expect(result.notes).toEqual([]);
   });
@@ -231,12 +231,12 @@ describe("the acceptance shelf a capability page keeps", () => {
 
   const store = (alpha: string, extra: Record<string, string> = {}) =>
     writeStore({
-      "manual/manual.yaml":
+      "docs/prds/manual.yaml":
         "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n",
-      "manual/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
-      "manual/products/demo-product/index.md":
+      "docs/prds/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
+      "docs/prds/products/demo-product/index.md":
         "---\ntitle: Demo product\nspec: demo-product/alpha\n---\n\nThe landing.\n",
-      "manual/products/demo-product/alpha.md": alpha,
+      "docs/prds/products/demo-product/alpha.md": alpha,
       "openspec/specs/demo-product/alpha/spec.md": journeyed,
       ...extra,
     });
@@ -262,7 +262,7 @@ describe("the acceptance shelf a capability page keeps", () => {
 
   it("leaves a landing page and a platform page alone", async () => {
     const root = store(shelved('::cases{id="demo-product/alpha"}'), {
-      "manual/platform/demo-topic.md":
+      "docs/prds/platform/demo-topic.md":
         "---\ntitle: Topic\nspec: demo-topic\n---\n\nA topic page.\n",
       "openspec/specs/demo-topic/spec.md": spec(
         "Topic",
@@ -277,7 +277,7 @@ describe("the acceptance shelf a capability page keeps", () => {
       "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\nAlpha, with no shelf.\n",
     );
     expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([
-      "manual/products/demo-product/alpha.md — has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
+      "docs/prds/products/demo-product/alpha.md — has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
     ]);
   });
 
@@ -650,12 +650,12 @@ describe("permanent ids across the whole store", () => {
 describe("a page selecting a requirement a change is about to move", () => {
   const paged = (delta: string) =>
     changing("moving", delta, {
-      "manual/manual.yaml":
+      "docs/prds/manual.yaml":
         "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n",
-      "manual/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
-      "manual/products/demo-product/index.md":
+      "docs/prds/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
+      "docs/prds/products/demo-product/index.md":
         "---\ntitle: Demo product\n---\n\nThe landing.\n",
-      "manual/products/demo-product/alpha.md": [
+      "docs/prds/products/demo-product/alpha.md": [
         "---",
         "title: Alpha",
         "spec: demo-product/alpha",
@@ -675,7 +675,7 @@ describe("a page selecting a requirement a change is about to move", () => {
       "## REMOVED Requirements\n\n### Requirement: Alpha keeps a record\n",
     );
     expect(lines(await runChecks(root, NO_GIT), "fuse")).toEqual([
-      'manual/products/demo-product/alpha.md — ::spec{id="demo-product/alpha"} selects `Alpha keeps a record`, which `moving` removes — the archive would leave this page naming nothing',
+      'docs/prds/products/demo-product/alpha.md — ::spec{id="demo-product/alpha"} selects `Alpha keeps a record`, which `moving` removes — the archive would leave this page naming nothing',
     ]);
   });
 
@@ -690,7 +690,7 @@ describe("a page selecting a requirement a change is about to move", () => {
       ].join("\n"),
     );
     expect(lines(await runChecks(root, NO_GIT), "fuse")).toEqual([
-      'manual/products/demo-product/alpha.md — ::spec{id="demo-product/alpha"} selects `Alpha keeps a record`, which `moving` renames to `Alpha keeps the record` — point the selector at the new name',
+      'docs/prds/products/demo-product/alpha.md — ::spec{id="demo-product/alpha"} selects `Alpha keeps a record`, which `moving` renames to `Alpha keeps the record` — point the selector at the new name',
     ]);
   });
 
@@ -742,20 +742,23 @@ function stalenessRepo(): string {
 
   git(["init", "--quiet", "."]);
   write(
-    "manual/manual.yaml",
+    "docs/prds/manual.yaml",
     "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n",
   );
-  write("manual/index.md", "---\ntitle: Demo\n---\n\nA store with a past.\n");
   write(
-    "manual/products/demo-product/index.md",
+    "docs/prds/index.md",
+    "---\ntitle: Demo\n---\n\nA store with a past.\n",
+  );
+  write(
+    "docs/prds/products/demo-product/index.md",
     "---\ntitle: Demo product\n---\n\nThe one product on disk.\n",
   );
   write(
-    "manual/products/demo-product/alpha.md",
+    "docs/prds/products/demo-product/alpha.md",
     page("Alpha", "demo-product/alpha"),
   );
   write(
-    "manual/products/demo-product/moved.md",
+    "docs/prds/products/demo-product/moved.md",
     page("Moved", "demo-product/moved"),
   );
   write(
@@ -791,7 +794,7 @@ function stalenessRepo(): string {
 
   // Never committed, so it has no baseline to be stale against.
   write(
-    "manual/products/demo-product/fresh.md",
+    "docs/prds/products/demo-product/fresh.md",
     page("Fresh", "demo-product/alpha"),
   );
   return root;
@@ -802,12 +805,12 @@ describe("a page committed before the specs it embeds", () => {
     const root = stalenessRepo();
     const result: Result = await runChecks(
       root,
-      await readGitIndex(root, ["openspec", "manual"]),
+      await readGitIndex(root, ["openspec", "docs/prds"]),
     );
 
     expect(lines(result, "stale")).toEqual([
-      "manual/products/demo-product/alpha.md — last committed 2026-01-01; `demo-product/alpha` has since added `Alpha does more`, changed `Alpha does things`, removed `Alpha keeps a record`",
-      "manual/products/demo-product/moved.md — last committed 2026-01-01; `demo-product/moved` spec moved since this page was committed",
+      "docs/prds/products/demo-product/alpha.md — last committed 2026-01-01; `demo-product/alpha` has since added `Alpha does more`, changed `Alpha does things`, removed `Alpha keeps a record`",
+      "docs/prds/products/demo-product/moved.md — last committed 2026-01-01; `demo-product/moved` spec moved since this page was committed",
     ]);
     expect(result.findings.every((one) => one.level === "warn")).toBe(true);
   });

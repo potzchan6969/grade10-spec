@@ -2,12 +2,11 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { UploadSimple } from "@phosphor-icons/react";
 import { useRef, useState } from "react";
 import { slugify } from "../api/paths";
+import { useManualIndex } from "../api/use-manual-index";
 import { useEditorSession } from "./session";
 import { type ContentStore, describeCause } from "./store";
 
-/** Uploads into `manual/assets/` and hands back the `src` a block wants. */
-
-const ASSET_DIR = "manual/assets";
+/** Uploads into the manual's `assets/` and hands back the `src` a block wants. */
 
 function assetName(fileName: string, attempt: number): string {
   const dot = fileName.lastIndexOf(".");
@@ -17,20 +16,21 @@ function assetName(fileName: string, attempt: number): string {
   return attempt === 0 ? `${slug}${ext}` : `${slug}-${attempt + 1}${ext}`;
 }
 
-async function upload(store: ContentStore, file: File): Promise<string> {
+async function upload(
+  store: ContentStore,
+  manualDir: string,
+  file: File,
+): Promise<string> {
+  const assetDir = `${manualDir}/assets`;
   const bytes = new Uint8Array(await file.arrayBuffer());
   // A name already taken is not an error — take the next one rather than
   // overwriting a file this editor never read.
   for (let attempt = 0; attempt < 20; attempt += 1) {
     const name = assetName(file.name, attempt);
-    const outcome = await store.writeBinary(
-      `${ASSET_DIR}/${name}`,
-      bytes,
-      null,
-    );
+    const outcome = await store.writeBinary(`${assetDir}/${name}`, bytes, null);
     if (outcome.status === "ok") return `assets/${name}`;
   }
-  throw new Error(`no free name for ${file.name} under ${ASSET_DIR}/`);
+  throw new Error(`no free name for ${file.name} under ${assetDir}/`);
 }
 
 export function AssetUpload({
@@ -39,6 +39,7 @@ export function AssetUpload({
   onUploaded: (src: string) => void;
 }) {
   const { store } = useEditorSession();
+  const { manualDir } = useManualIndex();
   const input = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,7 +57,7 @@ export function AssetUpload({
           if (!file || !store) return;
           setBusy(true);
           setError(null);
-          upload(store, file)
+          upload(store, manualDir, file)
             .then(onUploaded)
             .catch((cause: unknown) => {
               console.error("manual: upload failed", cause);

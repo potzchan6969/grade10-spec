@@ -190,7 +190,7 @@ Owners are claimed at pickup, never assigned at planning time: `pnpm plan claim`
 
 Never resolve a mismatch by editing the `.figma.ts` template to agree with the code. The template maps names; papering over a disagreement there deletes the only evidence of it. A warning you intend to keep belongs in a change with a reason, not in the run log.
 
-Then the normal loop: if the statement is testable it belongs in `openspec/specs/<product>/<capability>/spec.md`, reached through an `openspec/changes/` delta; if it explains a product judgment that outlives the change, it belongs in a PRD ([`prd-and-openspec.md`, "Fast decision guide"](prd-and-openspec.md#fast-decision-guide)). Implement with `.cursor/skills/openspec-apply-change/SKILL.md`, keep the checkboxes honest, derive QA coverage with `/spec-to-tcs` and `/tcs-review` ([`specs-to-test-cases.md`](specs-to-test-cases.md)), and close out with `.cursor/skills/openspec-archive-change/SKILL.md` into `openspec/changes/archive/YYYY-MM-DD-<change-name>/`.
+Then the normal loop: if the statement is testable it belongs in `openspec/specs/<product>/<capability>/spec.md`, reached through an `openspec/changes/` delta; if it explains a product judgment that outlives the change, it belongs in the capability page's `Product decisions` block ([`prd-and-openspec.md`, "Fast decision guide"](prd-and-openspec.md#fast-decision-guide)). Implement with `.cursor/skills/openspec-apply-change/SKILL.md`, keep the checkboxes honest, derive QA coverage with `/spec-to-tcs` and `/tcs-review` ([`specs-to-test-cases.md`](specs-to-test-cases.md)), and close out with `.cursor/skills/openspec-archive-change/SKILL.md` into `openspec/changes/archive/YYYY-MM-DD-<change-name>/`.
 
 Before handing off:
 

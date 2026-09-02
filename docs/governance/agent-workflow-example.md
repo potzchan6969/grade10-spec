@@ -110,9 +110,9 @@ not write design.md, ui.md, or tasks.md — the engineer who picks this up
 promotes the change.
 
 Before drafting, read the relevant capability in openspec/specs/, any active
-change touching it, and the related PRD. Identify affected component exports
+change touching it, and the capability's page in `docs/prds/`. Identify affected component exports
 and consumer apps in the proposal. Keep every requirement testable; rationale
-that isn't testable is PRD material, not spec material.
+that isn't testable belongs in the page's Product decisions block, not the spec.
 ```
 
 **Full planning from scratch.** When the author is the engineer who will also

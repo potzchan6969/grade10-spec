@@ -4,7 +4,9 @@ Source material and working notes: what a PRD, a spec, or a change cites as
 its evidence — an owner's draft, competitor research, a vendor-integration
 design. A reference explains and preserves; it is never authoritative. Where
 one disagrees with a spec, the spec is correct, and a decision worth keeping
-moves into a PRD or a change rather than staying here.
+moves into the capability's page under `docs/prds/` or a change rather than
+staying here. The manual renders every document here under References, so a
+page cites one by linking it.
 
 [`grade10-loyalty-program.md`](grade10-loyalty-program.md) is the standard for
 what a reference looks like:

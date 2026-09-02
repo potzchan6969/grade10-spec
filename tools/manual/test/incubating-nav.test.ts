@@ -25,8 +25,8 @@ const index = buildIndex(
     },
     taxonomy: { products: ["demo-product"], topics: [] },
     pages: [
-      pageEntry("manual/products/demo-product/index.md", { title: "Demo" }),
-      pageEntry("manual/products/demo-product/alpha.md", {
+      pageEntry("docs/prds/products/demo-product/index.md", { title: "Demo" }),
+      pageEntry("docs/prds/products/demo-product/alpha.md", {
         title: "Alpha",
         spec: "demo-product/alpha",
       }),

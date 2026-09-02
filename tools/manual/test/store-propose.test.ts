@@ -30,8 +30,8 @@ const FILES = draftProposal(DRAFT);
 
 function store() {
   const root = writeStore({
-    "manual/manual.yaml": "products:\n  - demo-product\n",
-    "manual/index.md": "---\ntitle: Demo\n---\n\nOne paragraph.\n",
+    "docs/prds/manual.yaml": "products:\n  - demo-product\n",
+    "docs/prds/index.md": "---\ntitle: Demo\n---\n\nOne paragraph.\n",
     "openspec/specs/demo-product/alpha/spec.md": "# alpha\n",
     "openspec/changes/archive/2026-01-01-old/proposal.md": "# Old\n",
   });
@@ -108,7 +108,7 @@ describe("what the propose endpoint refuses", () => {
     ["a durable spec", "openspec/specs/demo-product/alpha/spec.md"],
     ["a delta", `${DIR}/specs/demo-product/alpha/spec.md`],
     ["a task list", `${DIR}/tasks.md`],
-    ["a manual page", "manual/index.md"],
+    ["a manual page", "docs/prds/index.md"],
     ["a path that climbs out", "openspec/changes/../../escape.md"],
     ["the archive", "openspec/changes/archive/proposal.md"],
   ])("refuses %s, and writes nothing", async (_what, path) => {
@@ -119,9 +119,9 @@ describe("what the propose endpoint refuses", () => {
     expect(answer.status).toBe(400);
     expect(existsSync(join(root, path))).toBe(
       path === "openspec/specs/demo-product/alpha/spec.md" ||
-        path === "manual/index.md",
+        path === "docs/prds/index.md",
     );
-    expect(readFileSync(join(root, "manual/index.md"), "utf8")).toContain(
+    expect(readFileSync(join(root, "docs/prds/index.md"), "utf8")).toContain(
       "One paragraph",
     );
   });
@@ -178,7 +178,7 @@ describe("withdrawing in dev", () => {
       expect((await api(post("/api/withdraw", { id }))).status).toBe(400);
     }
     expect(existsSync(join(root, "openspec/changes/archive"))).toBe(true);
-    expect(existsSync(join(root, "manual"))).toBe(true);
+    expect(existsSync(join(root, "docs/prds"))).toBe(true);
   });
 
   it("says so when there is no such change", async () => {

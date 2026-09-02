@@ -74,7 +74,6 @@ export function ChangeCard({
 
   const lane = laneOf(change);
   const { done, total } = taskTotals(change);
-  const dependencies = dependenciesOf(change, index, archived);
   const cites = change.cites ?? [];
   const shown = expanded || open || targeted;
 
@@ -135,34 +134,12 @@ export function ChangeCard({
       </h3>
       <ClampedText className="mt-1" lines={3} text={change.why} />
 
-      <BlockedBy dependencies={dependencies} />
-      <MainStateNote change={change} />
-
-      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-        <Attribution change={change} claim />
-        <ul className="flex flex-wrap items-center gap-2">
-          {change.deltas.map((delta) => (
-            <li className="flex items-center gap-1" key={delta.spec}>
-              <DeltaSpec spec={delta.spec} />
-              <DeltaKinds kinds={delta.kinds} />
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <SuiteLines change={change} />
-
-      {total > 0 && !shown ? (
-        <div className="mt-3">
-          <TaskProgress
-            done={done}
-            label={`${change.taskGroups.length} ${change.taskGroups.length === 1 ? "group" : "groups"}`}
-            total={total}
-          />
-        </div>
-      ) : null}
-
-      <NextAction change={change} />
+      <ChangeFacts
+        archived={archived}
+        change={change}
+        index={index}
+        progress={!shown}
+      />
 
       <div
         className={`grid transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none ${shown ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
@@ -216,6 +193,62 @@ export function ChangeCard({
         </div>
       </div>
     </article>
+  );
+}
+
+/**
+ * What a review reads off a change at a glance, wherever the change is shown:
+ * what it is waiting on, where it stands against main, who owns it and which
+ * specs it touches, the suites riding it, how far the tasks are, and the next
+ * action. The board's card and the change page share it, so the two never
+ * disagree about a fact.
+ */
+export function ChangeFacts({
+  index,
+  change,
+  archived = [],
+  progress = false,
+}: {
+  index: ManualIndex;
+  change: ChangeEntry;
+  archived?: ChangeEntry[];
+  /** Show the task bar here — where the task groups are not laid out below. */
+  progress?: boolean;
+}) {
+  const { done, total } = taskTotals(change);
+  const dependencies = dependenciesOf(change, index, archived);
+
+  return (
+    <>
+      <BlockedBy dependencies={dependencies} />
+      <MainStateNote change={change} />
+
+      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+        <Attribution change={change} claim />
+        <ul className="flex flex-wrap items-center gap-2">
+          {change.deltas.map((delta) => (
+            <li className="flex items-center gap-1" key={delta.spec}>
+              <DeltaSpec spec={delta.spec} />
+              <DeltaKinds kinds={delta.kinds} />
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <SuiteLines change={change} />
+
+      {total > 0 && progress ? (
+        <div className="mt-3">
+          <TaskProgress
+            done={done}
+            label={`${change.taskGroups.length} ${change.taskGroups.length === 1 ? "group" : "groups"}`}
+            total={total}
+          />
+        </div>
+      ) : null}
+
+      <NextAction change={change} />
+    </>
   );
 }
 
@@ -441,7 +474,7 @@ const FIRST_OPEN = 4;
  * can act on; the open lines are the work, so they are what the card shows
  * without being asked — the finished ones wait behind the toggle.
  */
-function TaskGroupView({ group }: { group: TaskGroup }) {
+export function TaskGroupView({ group }: { group: TaskGroup }) {
   const [all, setAll] = useState(false);
   const tasks = group.tasks ?? [];
   const open = tasks.filter((task) => !task.done);
@@ -510,7 +543,13 @@ function TaskRow({ task }: { task: TaskLine }) {
 
 /** The ids a proposal's `## References` names, as the deep links they were
  * written to be — the row somebody was reading when they proposed it. */
-function Cites({ index, cites }: { index: ManualIndex; cites: string[] }) {
+export function Cites({
+  index,
+  cites,
+}: {
+  index: ManualIndex;
+  cites: string[];
+}) {
   return (
     <div className="mt-3">
       <Text as="p" className="mb-1.5" size="xs" tone="secondary">

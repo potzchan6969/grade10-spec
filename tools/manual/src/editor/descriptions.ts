@@ -26,7 +26,7 @@ const INFO: Record<string, BlockInfo> = {
   },
   figma: { label: "Figma", hint: "A titled frame that embeds on click." },
   story: { label: "Story", hint: "A Storybook story from the workbench." },
-  image: { label: "Image", hint: "A picture from manual/assets." },
+  image: { label: "Image", hint: "A picture from the manual's assets/." },
   children: {
     label: "Children",
     hint: "Cards for the pages under this directory.",

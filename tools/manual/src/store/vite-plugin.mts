@@ -28,7 +28,7 @@ import { readHeads, readStore, type Store, storeStamp } from "./snapshot.mts";
 /**
  * Dev transport for the store. Both GETs are computed from the resolved roots
  * per request — memoized on git heads plus the newest mtime, so an editor can
- * poll them — and every write is confined to the content root's `manual/`,
+ * poll them — and every write is confined to the content root's manual,
  * except a proposal, which goes to the store's `openspec/changes/`.
  */
 export function manualStorePlugin(): Plugin {
@@ -37,7 +37,7 @@ export function manualStorePlugin(): Plugin {
   return {
     name: "manual-store",
     configureServer(server) {
-      ensureAssetsDir(roots.content);
+      ensureAssetsDir(roots);
       server.middlewares.use(middleware(roots, live(roots)));
     },
     configurePreviewServer(server) {
@@ -62,10 +62,20 @@ function live(roots: Roots): Artifacts {
 
 /** Preview serves what the build wrote, so a broken artifact shows up there. */
 function fromDist(outDir: string): Artifacts {
+  const api = join(outDir, "api");
+  const readJson = (name: string) =>
+    JSON.parse(readFileSync(join(api, name), "utf8"));
   return async () => ({
-    snapshot: JSON.parse(readFileSync(join(outDir, "api", "snapshot"), "utf8")),
-    archive: JSON.parse(readFileSync(join(outDir, "api", "archive"), "utf8")),
+    snapshot: readJson("snapshot"),
+    archive: readJson("archive"),
+    documents: readAll("change"),
+    references: readAll("reference"),
   });
+  function readAll(kind: string) {
+    return existsSync(join(api, kind))
+      ? readdirSync(join(api, kind)).map((id) => readJson(join(kind, id)))
+      : [];
+  }
 }
 
 export type Reply =
@@ -160,38 +170,49 @@ async function route(
     }
   }
 
-  // Only `manual/assets/` is ours under /assets/; the bundler owns the rest.
+  // Only the manual's `assets/` is ours under /assets/; the bundler owns the rest.
   if (path.startsWith("/assets/")) {
     if (method !== "GET" && method !== "HEAD") return notAllowed(method);
-    return serveAsset(
-      roots.content,
-      decodeURIComponent(path.slice("/assets/".length)),
-    );
+    return serveAsset(roots, decodeURIComponent(path.slice("/assets/".length)));
   }
 
   if (method === "GET") {
     if (path === "/api/snapshot")
       return reply(200, (await artifacts()).snapshot);
     if (path === "/api/archive") return reply(200, (await artifacts()).archive);
-    if (path === "/api/dirty")
-      return reply(200, await readDirty(roots.content));
+    if (path.startsWith("/api/change/")) {
+      const id = decodeURIComponent(path.slice("/api/change/".length));
+      const found = (await artifacts()).documents.find((one) => one.id === id);
+      return found
+        ? reply(200, found)
+        : reply(404, { error: `no change in flight: ${id}` });
+    }
+    if (path.startsWith("/api/reference/")) {
+      const slug = decodeURIComponent(path.slice("/api/reference/".length));
+      const found = (await artifacts()).references.find(
+        (one) => one.slug === slug,
+      );
+      return found
+        ? reply(200, found)
+        : reply(404, { error: `no reference: ${slug}` });
+    }
+    if (path === "/api/dirty") return reply(200, await readDirty(roots));
     if (path === "/api/page")
-      return readPage(roots.content, url.searchParams.get("path"));
+      return readPage(roots, url.searchParams.get("path"));
     return reply(404, { error: `no such endpoint: ${path}` });
   }
   if (method === "DELETE") {
-    if (path === "/api/page")
-      return deletePage(roots.content, await req.json());
+    if (path === "/api/page") return deletePage(roots, await req.json());
     return reply(404, { error: `no such endpoint: ${path}` });
   }
   if (method !== "POST") return notAllowed(method);
 
   const body = await req.json();
-  if (path === "/api/page") return writePage(roots.content, body);
-  if (path === "/api/asset") return writeAsset(roots.content, body);
+  if (path === "/api/page") return writePage(roots, body);
+  if (path === "/api/asset") return writeAsset(roots, body);
   if (path === "/api/propose") return propose(roots.store, body);
   if (path === "/api/withdraw") return withdraw(roots.store, body);
-  if (path === "/api/commit") return commit(roots.content, body);
+  if (path === "/api/commit") return commit(roots, body);
   return reply(404, { error: `no such endpoint: ${path}` });
 }
 
@@ -199,15 +220,15 @@ async function route(
 
 /** What the commit bar watches: the manual edits sitting in the working tree. */
 async function readDirty(
-  root: string,
+  roots: Roots,
 ): Promise<{ dirty: boolean; files: string[] }> {
-  const status = await git(root, [
+  const status = await git(roots.content, [
     "status",
     "--porcelain",
     "--untracked-files=all",
     "-z",
     "--",
-    "manual",
+    roots.manual,
   ]);
   const records = status.split("\0").filter((record) => record !== "");
   const files: string[] = [];
@@ -223,11 +244,11 @@ async function readDirty(
 /** The page as it sits on disk, with the version a later write must match.
  * The snapshot carries the source too, but not the version — and it is the
  * version that makes a save safe. */
-function readPage(root: string, path: string | null): Reply {
+function readPage(roots: Roots, path: string | null): Reply {
   if (path === null || path === "") {
     return reply(400, { error: "`path` is required" });
   }
-  const file = confine(root, "manual", path);
+  const file = confine(roots.content, roots.manual, path);
   if (typeof file !== "string") return reply(400, file);
   if (!existsSync(file) || !statSync(file).isFile()) {
     return reply(404, { error: `no such page: ${path}` });
@@ -249,8 +270,8 @@ const MIME: Record<string, string> = {
   ".webp": "image/webp",
 };
 
-function serveAsset(root: string, name: string): Reply {
-  const file = confine(root, "manual/assets", name);
+function serveAsset(roots: Roots, name: string): Reply {
+  const file = confine(roots.content, `${roots.manual}/assets`, name);
   if (typeof file !== "string") return reply(400, file);
   if (!existsSync(file) || !statSync(file).isFile()) return PASS;
   return {
@@ -262,7 +283,7 @@ function serveAsset(root: string, name: string): Reply {
 
 // --- writes --------------------------------------------------------------
 
-function writePage(root: string, body: unknown): Reply {
+function writePage(roots: Roots, body: unknown): Reply {
   const fields = (body ?? {}) as Record<string, unknown>;
   const path = fields.path;
   const source = fields.source;
@@ -272,7 +293,7 @@ function writePage(root: string, body: unknown): Reply {
   if (!path.endsWith(".md")) {
     return reply(400, { error: "a page path ends in `.md`" });
   }
-  const file = confine(root, "manual", path);
+  const file = confine(roots.content, roots.manual, path);
   if (typeof file !== "string") return reply(400, file);
 
   try {
@@ -300,13 +321,13 @@ function writePage(root: string, body: unknown): Reply {
 
 /** Dev only, and version-checked like every write here: the page nobody else
  * touched since it was read is the only page that goes. */
-function deletePage(root: string, body: unknown): Reply {
+function deletePage(roots: Roots, body: unknown): Reply {
   const fields = (body ?? {}) as Record<string, unknown>;
   const path = fields.path;
   if (typeof path !== "string" || !path.endsWith(".md")) {
     return reply(400, { error: "a page path ends in `.md`" });
   }
-  const file = confine(root, "manual", path);
+  const file = confine(roots.content, roots.manual, path);
   if (typeof file !== "string") return reply(400, file);
   if (!existsSync(file)) return reply(404, { error: `no such page: ${path}` });
 
@@ -322,14 +343,14 @@ function deletePage(root: string, body: unknown): Reply {
   return reply(200, { deleted: true });
 }
 
-function writeAsset(root: string, body: unknown): Reply {
+function writeAsset(roots: Roots, body: unknown): Reply {
   const fields = (body ?? {}) as Record<string, unknown>;
   const path = fields.path;
   const base64 = fields.base64;
   if (typeof path !== "string" || typeof base64 !== "string") {
     return reply(400, { error: "`path` and `base64` are required" });
   }
-  const file = confine(root, "manual/assets", path);
+  const file = confine(roots.content, `${roots.manual}/assets`, path);
   if (typeof file !== "string") return reply(400, file);
 
   // Node decodes base64 by skipping whatever is not base64, so a damaged
@@ -344,7 +365,7 @@ function writeAsset(root: string, body: unknown): Reply {
 }
 
 /**
- * The one write that leaves `manual/`, and it leaves it for exactly one new
+ * The one write that leaves the manual, and it leaves it for exactly one new
  * change directory: the same allowlist the browser holds, applied again here,
  * because this endpoint writes straight to the working tree.
  *
@@ -473,22 +494,23 @@ function writeAtomically(file: string, bytes: Buffer): void {
   }
 }
 
-async function commit(root: string, body: unknown): Promise<Reply> {
+async function commit(roots: Roots, body: unknown): Promise<Reply> {
   const message = ((body ?? {}) as Record<string, unknown>).message;
   if (typeof message !== "string" || message.trim() === "") {
     return reply(400, { error: "`message` is required" });
   }
-  await git(root, ["add", "-A", "--", "manual"]);
+  const root = roots.content;
+  await git(root, ["add", "-A", "--", roots.manual]);
   const staged = await git(root, [
     "diff",
     "--cached",
     "--name-only",
     "--",
-    "manual",
+    roots.manual,
   ]);
   if (staged.trim() === "") return reply(200, { committed: false });
 
-  await git(root, ["commit", "-m", message, "--", "manual"]);
+  await git(root, ["commit", "-m", message, "--", roots.manual]);
   const sha = (await git(root, ["rev-parse", "HEAD"])).trim();
   return reply(200, {
     committed: true,
@@ -499,12 +521,12 @@ async function commit(root: string, body: unknown): Promise<Reply> {
 
 // --- plumbing ------------------------------------------------------------
 
-function ensureAssetsDir(root: string): void {
-  const dir = join(root, "manual", "assets");
+function ensureAssetsDir(roots: Roots): void {
+  const dir = join(roots.content, roots.manual, "assets");
   if (existsSync(dir)) return;
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, ".gitkeep"), "");
-  console.info(`manual-store: created ${storePath(root, dir)}/`);
+  console.info(`manual-store: created ${storePath(roots.content, dir)}/`);
 }
 
 function send(

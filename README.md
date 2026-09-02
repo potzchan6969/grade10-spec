@@ -5,7 +5,7 @@ Versioned product requirements and the design system for Grade10 applications.
 ## What belongs here
 
 - Durable requirements and component export contracts live in [`openspec/specs/`](openspec/README.md); implementation deltas live alongside them in `openspec/changes/`.
-- Product managers and designers record the decision behind a requirement — problem, users, non-goals, measurement, rollout — in [`docs/prds/`](docs/prds/README.md).
+- Product managers and designers write the manual in [`docs/prds/`](docs/prds/index.md): one page per capability, the shape in prose with the decision behind its requirements — problem, users, non-goals, measurement — on the same page. `pnpm manual` serves it; `docs/references/` holds the source material it cites.
 - Theme tokens and shadcn primitives live in [`packages/design-system/`](packages/design-system/DESIGN.md), including the two-way Figma token pipeline.
 - Shared compound components live in [`packages/ui/`](packages/ui/), one directory per capability, consumed from source.
 - [`apps/preview/`](apps/preview/) is the cross-package preview app, where whole pages are assembled from both packages; it is not a production application.
@@ -14,7 +14,7 @@ A compound component named by a capability spec is implemented once here, in `pa
 
 Read [`AGENTS.md`](AGENTS.md) before using an AI agent in this repository. It defines the source-of-truth boundaries and the requirements for component contracts.
 
-[`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md) explains why `openspec/specs/` is the single source of truth, what a PRD is still for, and how agents must keep the two aligned.
+[`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md) explains why `openspec/specs/` is the single source of truth, what a capability's page is still for, and how agents must keep the two aligned.
 
 [`docs/governance/design-system-workflows.md`](docs/governance/design-system-workflows.md) is the router for everything else: which command, skill, and governing document apply to tokens, primitives, blocks, a page conversion, an audit finding, and who owns each call.
 
@@ -60,4 +60,4 @@ In a consuming app repository, add this repository at a stable vendor path:
 git submodule add git@github.com:9gag/grade10-spec.git vendor/grade10-spec
 ```
 
-The app reads the PRDs, the OpenSpec changes, and the design tokens from that path, and implements the components itself. Pin the submodule SHA in the app repository; updates are normal pull requests that move that SHA.
+The app reads the manual's pages, the OpenSpec changes, and the design tokens from that path, and implements the components itself. Pin the submodule SHA in the app repository; updates are normal pull requests that move that SHA.

@@ -9,8 +9,8 @@ Screens: [ui.md](ui.md).
 
 This design follows `docs/conventions/packages.md` and
 `docs/conventions/backend.md` in the grade10 monorepo, and
-`manual/platform/cross-service.md`, `manual/platform/multi-product.md`,
-and `manual/platform/admin-access.md` here.
+`docs/prds/platform/cross-service.md`, `docs/prds/platform/multi-product.md`,
+and `docs/prds/platform/admin-access.md` here.
 
 ## Goals / Non-Goals
 

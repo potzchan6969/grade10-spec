@@ -7,10 +7,11 @@ import {
 
 export function savePage(
   store: ContentStore,
+  manualDir: string,
   path: string,
   source: string,
   baseVersion: Version | null,
 ): Promise<WriteOutcome> {
-  assertManualPath(path);
+  assertManualPath(manualDir, path);
   return store.write(path, source, baseVersion);
 }

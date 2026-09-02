@@ -5,8 +5,9 @@ import { resolveRoots } from "./roots.mts";
 import { readStore } from "./snapshot.mts";
 
 /**
- * Writes the two artifacts and the images they point at into `dist/`, so the
- * hosted site is static files only. Runs after `vite build`, which empties
+ * Writes the artifacts — the snapshot, the archive, one document per in-flight
+ * change, one per reference — and the images they point at into `dist/`, so
+ * the hosted site is static files only. Runs after `vite build`, which empties
  * `dist/` first.
  */
 const here = fileURLToPath(new URL(".", import.meta.url));
@@ -14,11 +15,24 @@ const roots = resolveRoots();
 const app = join(here, "..", "..");
 const dist = join(app, "dist");
 
-const { snapshot, archive } = await readStore(roots);
+const { snapshot, archive, documents, references } = await readStore(roots);
 
-mkdirSync(join(dist, "api"), { recursive: true });
+mkdirSync(join(dist, "api", "change"), { recursive: true });
+mkdirSync(join(dist, "api", "reference"), { recursive: true });
 writeFileSync(join(dist, "api", "snapshot"), JSON.stringify(snapshot));
 writeFileSync(join(dist, "api", "archive"), JSON.stringify(archive));
+for (const document of documents) {
+  writeFileSync(
+    join(dist, "api", "change", document.id),
+    JSON.stringify(document),
+  );
+}
+for (const reference of references) {
+  writeFileSync(
+    join(dist, "api", "reference", reference.slug),
+    JSON.stringify(reference),
+  );
+}
 
 // The artifacts carry no extension, so the host has to be told what they are.
 writeFileSync(
@@ -26,7 +40,7 @@ writeFileSync(
   "/api/*\n  content-type: application/json; charset=utf-8\n  cache-control: no-cache\n",
 );
 
-const assets = join(roots.content, "manual", "assets");
+const assets = join(roots.content, roots.manual, "assets");
 if (existsSync(assets)) {
   cpSync(assets, join(dist, "assets"), { recursive: true });
 }
@@ -38,8 +52,8 @@ const broken = [...snapshot.specs, ...snapshot.changes, ...archive.changes]
   );
 
 console.info(
-  `manual: ${snapshot.specs.length} specs, ${snapshot.changes.length} in-flight changes, ` +
-    `${archive.changes.length} archived, ${snapshot.pages.length} pages, ` +
+  `manual: ${snapshot.specs.length} specs, ${snapshot.changes.length} in-flight changes (${documents.length} documents), ` +
+    `${archive.changes.length} archived, ${snapshot.pages.length} pages, ${references.length} references, ` +
     `${snapshot.assets.length} assets, ${snapshot.warnings.length} warnings at ${snapshot.storeHead.slice(0, 8)}`,
 );
 if (broken.length > 0) {

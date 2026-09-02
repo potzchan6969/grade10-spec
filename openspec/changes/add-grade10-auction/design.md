@@ -1,7 +1,7 @@
 # Design: Grade10 Auction
 
 Capability delta: [`grade10-auction/auction`](specs/grade10-auction/auction/spec.md).
-Product context: [Grade10 Auction](../../../docs/prds/auction/auction.md).
+Product context: [Grade10 Auction](../../../docs/prds/products/grade10-auction/index.md).
 
 ## Authority and data flow
 

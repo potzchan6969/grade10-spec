@@ -2,7 +2,7 @@
 
 **Author:** @echo - 2026-08-18
 
-Product context: [Grade10 loyalty programme](../../../docs/prds/loyalty/programme.md).
+Product context: [Grade10 loyalty programme](../../../docs/prds/products/membership/index.md).
 
 The physical shop is a separate change, `add-shopify-membership-pos`, which
 builds on this one.

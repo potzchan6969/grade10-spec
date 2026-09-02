@@ -4,30 +4,48 @@ import { dirname, join, resolve } from "node:path";
 
 /**
  * The two directories everything here reads from. `content` holds the manual —
- * `manual/manual.yaml` and the pages beside it. `store` holds the OpenSpec
- * store — `openspec/specs` and `openspec/changes`. In the store's own
- * repository they are the same directory; a repository that mounts this viewer
- * carries its own `manual/` and points at the store it plans against, so every
- * reader has to say which of the two it means.
+ * `manual.yaml` and the pages beside it, in the directory `manual` names,
+ * relative to the content root. `store` holds the OpenSpec store —
+ * `openspec/specs` and `openspec/changes`. In the store's own repository they
+ * are the same directory; a repository that mounts this viewer carries its
+ * own manual and points at the store it plans against, so every reader has
+ * to say which of the two it means.
  */
-export type Roots = { store: string; content: string; own: boolean };
+export type Roots = {
+  store: string;
+  content: string;
+  /** Where the pages sit under `content`, e.g. `docs/prds`. */
+  manual: string;
+  own: boolean;
+};
 
-const MANUAL_CONFIG = join("manual", "manual.yaml");
+/** The store keeps its manual with its product record: one page per
+ * capability is the PRD, so the pages live where PRDs are looked for. */
+export const DEFAULT_MANUAL_DIR = "docs/prds";
+
+export const MANUAL_CONFIG = "manual.yaml";
+
+/** The store-relative path of the manual's config: `docs/prds/manual.yaml`. */
+export function manualConfigPath(manual: string): string {
+  return `${manual}/${MANUAL_CONFIG}`;
+}
 
 /** The one-repository shape: the manual documents the store it lives in. */
-export function rootsOf(root: string): Roots {
+export function rootsOf(root: string, manual = DEFAULT_MANUAL_DIR): Roots {
   const dir = resolve(root);
-  return { store: dir, content: dir, own: true };
+  return { store: dir, content: dir, manual, own: true };
 }
 
 /**
  * Where the manual and its store are, worked out once at startup.
  *
- * The content root is the nearest directory holding `manual/manual.yaml`,
- * looked for where the person ran the command (`INIT_CWD` under pnpm, else
- * the working directory) — never where this file happens to sit, because a
- * consuming repository runs the viewer out of a submodule and walking up from
- * here would land on the store's own manual instead of theirs.
+ * The manual directory is `MANUAL_DIR`, relative to the content root, or
+ * `docs/prds`. The content root is the nearest directory holding that
+ * directory's `manual.yaml`, looked for where the person ran the command
+ * (`INIT_CWD` under pnpm, else the working directory) — never where this
+ * file happens to sit, because a consuming repository runs the viewer out of
+ * a submodule and walking up from here would land on the store's own manual
+ * instead of theirs.
  *
  * The store is the content repository itself when it carries `openspec/specs`.
  * Otherwise `openspec/config.yaml` names a store id and the `openspec` CLI
@@ -38,31 +56,51 @@ export function rootsOf(root: string): Roots {
  * loudly on a directory that does not hold what they promise.
  */
 export function resolveRoots(env: NodeJS.ProcessEnv = process.env): Roots {
-  const content = contentRoot(env);
+  const manual = manualDir(env);
+  const content = contentRoot(manual, env);
   const store = storeRoot(content, env);
   return {
     store,
     content,
+    manual,
     own: realpathSync(store) === realpathSync(content),
   };
 }
 
-function contentRoot(env: NodeJS.ProcessEnv): string {
+function manualDir(env: NodeJS.ProcessEnv): string {
+  const set = env.MANUAL_DIR;
+  if (set === undefined || set === "") return DEFAULT_MANUAL_DIR;
+  const dir = set.replace(/\/+$/, "");
+  const segments = dir.split("/");
+  if (
+    dir === "" ||
+    dir.startsWith("/") ||
+    segments.some((segment) => segment === "" || segment === "..")
+  ) {
+    throw new Error(
+      `MANUAL_DIR=${set} is not a directory inside the repository — a relative path like \`docs/prds\``,
+    );
+  }
+  return dir;
+}
+
+function contentRoot(manual: string, env: NodeJS.ProcessEnv): string {
+  const marker = manualConfigPath(manual);
   const set = env.MANUAL_ROOT;
   if (set) {
     const dir = resolve(set);
-    if (!existsSync(join(dir, MANUAL_CONFIG))) {
-      throw new Error(`MANUAL_ROOT=${set} holds no ${MANUAL_CONFIG}`);
+    if (!existsSync(join(dir, marker))) {
+      throw new Error(`MANUAL_ROOT=${set} holds no ${marker}`);
     }
     return dir;
   }
   for (const from of [env.INIT_CWD, process.cwd()]) {
     if (!from) continue;
-    const found = climbTo(resolve(from), MANUAL_CONFIG);
+    const found = climbTo(resolve(from), marker);
     if (found) return found;
   }
   throw new Error(
-    `no ${MANUAL_CONFIG} at or above ${process.cwd()} — run from a repository that has a manual, or set MANUAL_ROOT`,
+    `no ${marker} at or above ${process.cwd()} — run from a repository that has a manual, or set MANUAL_ROOT (and MANUAL_DIR when the pages are not under ${DEFAULT_MANUAL_DIR})`,
   );
 }
 

@@ -12,7 +12,7 @@ import {
  * inside a collapsed panel on another route. The person who can act on it is
  * the one reading the page it is about. */
 
-const PAGE = "manual/products/shared-ui/store-cart.md";
+const PAGE = "docs/prds/products/shared-ui/store-cart.md";
 
 const stale: CheckWarning = {
   rule: "stale",
@@ -24,7 +24,7 @@ const stale: CheckWarning = {
 const elsewhere: CheckWarning = {
   rule: "skeleton",
   message: "missing its acceptance shelf",
-  page: "manual/products/demo-product/beta.md",
+  page: "docs/prds/products/demo-product/beta.md",
 };
 
 const storeFile: CheckWarning = {

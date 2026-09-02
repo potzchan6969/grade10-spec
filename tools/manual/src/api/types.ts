@@ -33,7 +33,7 @@ export type ItemError = {
 };
 
 export type PageEntry = {
-  /** Store-relative, e.g. `manual/products/grade10-store/loyalty.md`. */
+  /** Content-relative, e.g. `docs/prds/products/grade10-store/loyalty.md`. */
   path: string;
   /** Raw page text; the client parses it. */
   source: string;
@@ -242,12 +242,81 @@ export type ChangeEntry = {
   error?: ItemError;
 };
 
+/** How a change's artifact renders: a prose document, the directory of
+ * spec deltas, or the task checklist — from what the schema says the
+ * artifact generates, never from its name. */
+export type ChangeArtifactKind = "doc" | "specs" | "tasks";
+
+/** One artifact a change's schema asks for, or a file the change carries that
+ * the schema never named. Present or not, in the schema's own order. */
+export type ChangeArtifact = {
+  /** The schema's artifact id — `proposal`, `specs`, `design`, `ui`,
+   * `tasks` — or an undeclared file's name without its extension. */
+  name: string;
+  kind: ChangeArtifactKind;
+  /** Store-relative path of the file, for a file artifact. */
+  path?: string;
+  present: boolean;
+  /** Prose artifacts only, when present: the file as written. Specs and
+   * tasks are read structurally and ride the document elsewhere. */
+  text?: string;
+  lastCommit?: CommitInfo;
+};
+
+/** One delta section of a change's spec file, read as the requirements it
+ * will become. A RENAMED section carries FROM/TO pairs instead of rows. */
+export type DeltaSection = {
+  kind: DeltaKind;
+  requirements: Requirement[];
+  renames?: { from: string; to: string }[];
+};
+
+/** One `specs/<spec>/spec.md` of a change, whole: the raw text for a full
+ * reading, the delta parsed as the contract it proposes, and the suite QA
+ * wrote beside it. A malformed delta keeps its text and carries `error`. */
+export type ChangeDeltaDocument = {
+  spec: string;
+  /** Store-relative path of the delta file. */
+  path: string;
+  text: string;
+  /** The file's `# ` title, when it opens with one. */
+  title?: string;
+  purpose?: string;
+  featureSet?: string;
+  journeys?: Journey[];
+  sections: DeltaSection[];
+  /** The `test-cases.md` beside the delta, when QA has written one. */
+  suite?: {
+    status: TestSuiteStatus;
+    cases: TestCase[];
+    outOfSuite?: string[];
+  };
+  suiteError?: ItemError;
+  lastCommit?: CommitInfo;
+  error?: ItemError;
+};
+
+/** `/api/change/<id>` — one in-flight change's files, fetched only by the
+ * change page. The snapshot's `ChangeEntry` stays the board's light row; this
+ * is the reading. */
+export type ChangeDocument = {
+  id: string;
+  /** Store-relative change directory. */
+  dir: string;
+  schema: string;
+  /** False when the schema is not one this store defines, so nothing can say
+   * which artifacts are still to write. */
+  schemaKnown: boolean;
+  artifacts: ChangeArtifact[];
+  deltas: ChangeDeltaDocument[];
+};
+
 /** A `check:manual` warning the build ships so the app can show it —
  * failures never reach a deploy, so warnings are all a snapshot carries. */
 export type CheckWarning = {
   rule: string;
   message: string;
-  /** `manual/…` path when the warning is about one page. */
+  /** The page's path when the warning is about one page. */
   page?: string;
 };
 
@@ -287,18 +356,40 @@ export type HistoryEvent = {
   refs: HistoryRef[];
 };
 
+/** One document under `docs/references/`, as the nav and the landing list
+ * it. The text rides its own artifact. */
+export type ReferenceEntry = {
+  /** The file name without `.md`: `grade10-loyalty-program`. */
+  slug: string;
+  /** Store-relative: `docs/references/<slug>.md`. */
+  path: string;
+  /** The document's `#` heading, or the slug read out when it has none. */
+  title: string;
+  lastCommit?: CommitInfo;
+};
+
+/** `/api/reference/<slug>` — the document as written. */
+export type ReferenceDocument = ReferenceEntry & { text: string };
+
 /** `/api/snapshot` — boots the app. */
 export type Snapshot = {
   generatedAt: string;
   storeHead: string;
   config: ManualConfig;
   taxonomy: Taxonomy;
+  /** Where the pages sit, relative to their repository: `docs/prds` in the
+   * store's own. Every page path opens with it. */
+  manualDir: string;
   pages: PageEntry[];
   specs: SpecEntry[];
   /** In-flight only; archived changes live in `/api/archive`. */
   changes: ChangeEntry[];
-  /** Every file under `manual/assets/`, as `assets/<name>` paths. */
+  /** Every file under the manual's `assets/`, as `assets/<name>` paths. */
   assets: string[];
+  /** The store's `docs/references/`, in path order, without their text. The
+   * landing's own prose is `referencesReadme`. */
+  references: ReferenceEntry[];
+  referencesReadme?: string;
   /** The newest commits of the store, newest first. Empty where the store is
    * not a git checkout. */
   history: HistoryEvent[];

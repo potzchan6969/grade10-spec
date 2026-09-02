@@ -17,20 +17,22 @@ const config = {
 };
 
 const pages = [
-  pageEntry("manual/products/demo-product/index.md", { title: "Demo" }),
-  pageEntry("manual/products/demo-product/loyalty.md", {
+  pageEntry("docs/prds/products/demo-product/index.md", { title: "Demo" }),
+  pageEntry("docs/prds/products/demo-product/loyalty.md", {
     title: "Loyalty",
     spec: "demo-product/loyalty",
     order: 1,
   }),
-  pageEntry("manual/products/demo-product/queue.md", {
+  pageEntry("docs/prds/products/demo-product/queue.md", {
     title: "The queue",
     spec: "demo-product/queue",
     audience: "operator",
     order: 2,
   }),
-  pageEntry("manual/products/back-office/index.md", { title: "Back office" }),
-  pageEntry("manual/products/back-office/ledger.md", {
+  pageEntry("docs/prds/products/back-office/index.md", {
+    title: "Back office",
+  }),
+  pageEntry("docs/prds/products/back-office/ledger.md", {
     title: "Ledger",
     audience: "operator",
     order: 1,

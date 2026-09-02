@@ -6,7 +6,7 @@ import {
   type ManualIndex,
   productTitle,
 } from "../api/derive";
-import { MANUAL_ROOT } from "../api/paths";
+import { pagePath } from "../api/paths";
 import { useManualIndex } from "../api/use-manual-index";
 import { ChangeChip } from "../blocks/change-views";
 import { ChildCards } from "../blocks/children-block";
@@ -17,7 +17,7 @@ import { useDocumentTitle } from "./use-document-title";
 export function ProductPage() {
   const { product = "" } = useParams();
   const index = useManualIndex();
-  const dir = `${MANUAL_ROOT}/products/${product}`;
+  const dir = pagePath(index.manualDir, "products", product);
   const page = index.pageByPath.get(`${dir}/index.md`);
 
   if (!page) return <ProductWithoutLanding id={product} index={index} />;
@@ -50,7 +50,10 @@ function ProductWithoutLanding({
         summary="No landing page has been written for this product yet — what exists is below."
         title={title}
       />
-      <ChildCards dir={`${MANUAL_ROOT}/products/${id}`} index={index} />
+      <ChildCards
+        dir={pagePath(index.manualDir, "products", id)}
+        index={index}
+      />
       <ProductChanges id={id} index={index} />
     </>
   );

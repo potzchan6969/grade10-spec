@@ -122,7 +122,8 @@ export const RULES = [
 
 const LEVEL = new Map(RULES.map((rule) => [rule.key, rule.level]));
 
-export const MANUAL_YAML = "manual/manual.yaml";
+/** The config's content-relative path, for the report's path column. */
+export const manualYaml = (roots) => `${roots.manual}/manual.yaml`;
 
 /** The sink, opened before the readers run so a reader that refuses a file can
  * report it. */

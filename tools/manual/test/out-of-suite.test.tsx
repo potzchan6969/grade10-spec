@@ -93,7 +93,7 @@ describe("what the cases block says about it", () => {
       <BlockScopeProvider
         value={{
           index: buildIndex(snapshotOf({ specs: [readAlpha()] })),
-          pagePath: "manual/products/demo-product/alpha.md",
+          pagePath: "docs/prds/products/demo-product/alpha.md",
         }}
       >
         <CasesBlockView block={{ type: "cases", id: SPEC }} />

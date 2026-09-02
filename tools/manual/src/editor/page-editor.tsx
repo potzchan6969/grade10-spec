@@ -120,7 +120,13 @@ export function PageEditor({ path }: { path: string }) {
     setSaving(true);
     setSaveError(null);
     try {
-      const outcome = await savePage(store, path, build.source, against);
+      const outcome = await savePage(
+        store,
+        index.manualDir,
+        path,
+        build.source,
+        against,
+      );
       if (outcome.status === "conflict") {
         setConflict({ mine: build.source, theirs: outcome.current });
         return;

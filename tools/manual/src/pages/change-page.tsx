@@ -1,18 +1,38 @@
+import { Badge } from "@grade10/design-system/components/display/badge";
 import { EmptyState } from "@grade10/design-system/components/display/empty-state";
+import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { Text } from "@grade10/design-system/components/display/text";
-import { Kanban } from "@phosphor-icons/react";
+import { ArrowSquareOut, CalendarBlank, Kanban } from "@phosphor-icons/react";
 import { Link, useParams } from "react-router";
+import { laneOf } from "../api/derive";
+import { changeSourceUrl } from "../api/paths";
+import { formatDate, relativeTime } from "../api/time";
+import type { ChangeEntry, ChangeLane } from "../api/types";
 import { useArchive } from "../api/use-archive";
+import { useChangeDocument } from "../api/use-change-document";
 import { useManualIndex } from "../api/use-manual-index";
-import { ChangeCard } from "../blocks/change-detail";
+import { BrokenCard } from "../blocks/broken-card";
+import { ChangeFacts, Cites } from "../blocks/change-detail";
+import { ArtifactStrip, ChangeTabs } from "../blocks/change-document";
+import { InlineMarkdown } from "../blocks/inline-markdown";
+import { MarkdownView } from "../blocks/markdown";
+import { WithdrawAction } from "../editor/withdraw-action";
 import { PageHeading } from "./page-heading";
 import { useDocumentTitle } from "./use-document-title";
 
+const LANE_LABEL: Record<ChangeLane, string> = {
+  proposed: "proposed",
+  specified: "specified",
+  "in-progress": "in progress",
+  complete: "complete",
+};
+
 /**
- * One change as a page of its own. The board renders every change at once,
- * which is the wrong shape for a link handed to a colleague — "look at this
- * change" used to mean an anchor thirty screens into `/planning`, and the
- * guessable URL 404'd.
+ * One change as a page of its own: the facts a review reads off the board's
+ * card, then the change read as its files — which artifacts its schema asks
+ * for and which exist, and each present one under its own tab. The board
+ * renders every change at once, which is the wrong shape for a link handed to
+ * a colleague; this is where "look at this change" lands.
  */
 export function ChangePage() {
   const { change: id = "" } = useParams();
@@ -64,14 +84,123 @@ export function ChangePage() {
           ← Planning
         </Link>
       </Text>
-      <ChangeCard
+      <ChangeHeader change={change} />
+      {change.error ? (
+        <BrokenCard error={change.error} what={`Change ${change.id}`} />
+      ) : (
+        <ChangeBody change={change} />
+      )}
+    </>
+  );
+}
+
+function ChangeHeader({ change }: { change: ChangeEntry }) {
+  const lane = laneOf(change);
+
+  return (
+    <PageHeading
+      eyebrow={
+        <span className="flex flex-wrap items-center gap-2">
+          <span>Planning</span>
+          <Badge
+            size="sm"
+            variant={lane === "complete" ? "success" : "outline"}
+          >
+            {LANE_LABEL[lane]}
+          </Badge>
+          {change.target ? (
+            <Badge size="sm" variant="info">
+              <CalendarBlank aria-hidden size={12} />
+              {formatDate(change.target)}
+            </Badge>
+          ) : null}
+        </span>
+      }
+      title={<InlineMarkdown text={change.title} />}
+    >
+      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+        <Text as="span" className="font-mono" size="xs" tone="secondary">
+          openspec/changes/{change.id}
+        </Text>
+        <a
+          aria-label={`Open ${change.id} on GitHub`}
+          className="inline-flex items-center gap-1 text-secondary-foreground text-xs hover:text-foreground"
+          href={changeSourceUrl(change.id)}
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          source
+          <ArrowSquareOut aria-hidden size={12} />
+        </a>
+        <Text as="span" size="xs" tone="secondary">
+          {change.lastMoved
+            ? `moved ${relativeTime(change.lastMoved)}`
+            : change.created
+              ? `created ${formatDate(change.created)}`
+              : "undated"}
+        </Text>
+        {change.deltas.length === 0 ? (
+          <span className="ml-auto">
+            <WithdrawAction change={change} />
+          </span>
+        ) : null}
+      </div>
+    </PageHeading>
+  );
+}
+
+function ChangeBody({ change }: { change: ChangeEntry }) {
+  const index = useManualIndex();
+  const archive = useArchive();
+  const document = useChangeDocument(change.id);
+  const cites = change.cites ?? [];
+
+  return (
+    <>
+      <section aria-label="Why" className="mb-2">
+        <MarkdownView
+          baseDir={`openspec/changes/${change.id}`}
+          className="manual-prose"
+          index={index}
+          text={change.why}
+        />
+      </section>
+      <ChangeFacts
         archived={
           archive.status === "ready" ? archive.archive.changes : undefined
         }
         change={change}
-        expanded
         index={index}
+        progress
       />
+      {cites.length > 0 ? <Cites cites={cites} index={index} /> : null}
+
+      {document.status === "loading" ? (
+        <div aria-busy="true" className="my-5 space-y-3">
+          <Skeleton className="h-12 w-full rounded-(--radius-2xl)" />
+          <Skeleton className="h-8 w-2/3" />
+          <Skeleton className="h-40 w-full rounded-(--radius-2xl)" />
+        </div>
+      ) : null}
+      {document.status === "unavailable" ? (
+        <div className="my-5">
+          <EmptyState
+            compact
+            description={`The change's files could not be read: ${document.reason}. The board's card above still says where it stands.`}
+            title="Files unavailable"
+          />
+        </div>
+      ) : null}
+      {document.status === "ready" ? (
+        <>
+          <ArtifactStrip document={document.document} />
+          <ChangeTabs
+            change={change}
+            document={document.document}
+            index={index}
+          />
+        </>
+      ) : null}
     </>
   );
 }

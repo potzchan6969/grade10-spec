@@ -27,8 +27,8 @@ execute it is not.
    between, and an overlap scan against a stale `openspec/changes/` finds
    nothing. Then read: the capability under
    `openspec/specs/<product>/<capability>/`, every active change in
-   `openspec/changes/` for overlap, and the PRD under `docs/prds/` when one
-   exists. Find facts yourself — bring only decisions to the author.
+   `openspec/changes/` for overlap, and the capability's page under
+   `docs/prds/` when one exists. Find facts yourself — bring only decisions to the author.
 2. **Interview the author.** Run the `grilling` skill's round-based frontier
    interview before drafting. Do not write the proposal until the frontier is
    empty and the author confirms shared understanding. The interview scales
@@ -106,10 +106,10 @@ execute it is not.
 | Statement | Home |
 | --- | --- |
 | Anything testable | The delta spec, and nowhere else |
-| Why this problem, for whom, what was ruled out, what will be measured | The PRD (`prd-authoring` skill) |
+| Why this problem, for whom, what was ruled out, what will be measured | The capability page's `Product decisions` block (`prd-authoring` skill) |
 | How it will be built | Not this lane — `design.md` at promotion |
 
-A testable statement left in a PRD or a proposal is the failure this lane
+A testable statement left on a page or in a proposal is the failure this lane
 exists to prevent: `docs/governance/prd-and-openspec.md` draws the boundary.
 
 ## Related

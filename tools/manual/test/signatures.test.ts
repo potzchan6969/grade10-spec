@@ -54,7 +54,7 @@ const commit = (root: string, subject: string, author: string, date: string) =>
     { GIT_AUTHOR_DATE: date, GIT_COMMITTER_DATE: date },
   );
 
-const PAGE_PATH = "manual/products/demo/alpha.md";
+const PAGE_PATH = "docs/prds/products/demo/alpha.md";
 
 function repoWith(source: string): string {
   const root = mkdtempSync(join(tmpdir(), "manual-signatures-"));

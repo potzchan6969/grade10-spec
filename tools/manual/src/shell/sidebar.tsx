@@ -2,6 +2,7 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
+  BookOpenText,
   CaretDown,
   CaretRight,
   ClipboardText,
@@ -14,7 +15,7 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router";
 import type { Incubating, NavGroup, NavItem, NavProduct } from "../api/derive";
-import { buildIndex } from "../api/derive";
+import { buildIndex, REFERENCES_ROUTE } from "../api/derive";
 import { useSnapshot } from "../api/snapshot-provider";
 import { CapabilityPip } from "../blocks/capability-status";
 import { browserKeyStore, STORAGE } from "../editor/config";
@@ -188,6 +189,13 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
               memory={memory}
               onNavigate={onNavigate}
               title="Guides"
+            />
+            <FlatSection
+              items={index.references}
+              memory={memory}
+              onNavigate={onNavigate}
+              title="References"
+              to={REFERENCES_ROUTE}
             />
             <IncubatingSection
               items={index.incubating}
@@ -370,16 +378,19 @@ function IncubatingLink({
   );
 }
 
+/** `to` gives the section a landing of its own, listed first. */
 function FlatSection({
   title,
   items,
   memory,
   onNavigate,
+  to,
 }: {
   title: string;
   items: NavItem[];
   memory: Memory;
   onNavigate: () => void;
+  to?: string;
 }) {
   const collapsed = memory.memory.shut.includes(title);
   if (items.length === 0) return null;
@@ -393,6 +404,21 @@ function FlatSection({
       />
       {collapsed ? null : (
         <ul className="mt-1 space-y-0.5 pl-5">
+          {to ? (
+            <li>
+              <NavLink
+                className={({ isActive }: { isActive: boolean }) =>
+                  cn(ROW, isActive && "bg-muted font-medium")
+                }
+                end
+                onClick={onNavigate}
+                to={to}
+              >
+                <BookOpenText aria-hidden size={16} />
+                What a reference is
+              </NavLink>
+            </li>
+          ) : null}
           {items.map((item) => (
             <li key={item.id}>
               <LeafLink item={item} onNavigate={onNavigate} />

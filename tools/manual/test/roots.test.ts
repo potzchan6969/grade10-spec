@@ -10,30 +10,32 @@ import { writeStore } from "./tmp-store";
 
 const CONFIG = "storybookBase: https://s.example\ngroups: {}\n";
 
-const contentOnly = () => writeStore({ "manual/manual.yaml": CONFIG });
+const contentOnly = () => writeStore({ "docs/prds/manual.yaml": CONFIG });
 
 const wholeStore = () =>
   writeStore({
-    "manual/manual.yaml": CONFIG,
+    "docs/prds/manual.yaml": CONFIG,
     "openspec/specs/.gitkeep": "",
   });
 
 describe("resolving the two roots", () => {
   it("treats one directory holding both as the store documenting itself", () => {
     const root = wholeStore();
-    expect(resolveRoots({ MANUAL_ROOT: root })).toEqual({
+    const roots = {
       store: root,
       content: root,
+      manual: "docs/prds",
       own: true,
-    });
-    expect(rootsOf(root)).toEqual({ store: root, content: root, own: true });
+    };
+    expect(resolveRoots({ MANUAL_ROOT: root })).toEqual(roots);
+    expect(rootsOf(root)).toEqual(roots);
   });
 
   it("splits them when MANUAL_STORE points elsewhere", () => {
     const content = contentOnly();
     const store = wholeStore();
     expect(resolveRoots({ MANUAL_ROOT: content, MANUAL_STORE: store })).toEqual(
-      { store, content, own: false },
+      { store, content, manual: "docs/prds", own: false },
     );
   });
 
@@ -49,7 +51,34 @@ describe("resolving the two roots", () => {
   it("refuses a MANUAL_ROOT with no manual in it", () => {
     expect(() =>
       resolveRoots({ MANUAL_ROOT: writeStore({ "readme.md": "" }) }),
-    ).toThrow(/holds no manual\/manual\.yaml/);
+    ).toThrow(/holds no docs\/prds\/manual\.yaml/);
+  });
+
+  /** A repository that mounts the viewer keeps its pages where it likes — an
+   * engineering manual has no business under `docs/prds`. */
+  it("reads the pages from MANUAL_DIR when one is set", () => {
+    const root = writeStore({
+      "manual/manual.yaml": CONFIG,
+      "openspec/specs/.gitkeep": "",
+    });
+    expect(
+      resolveRoots({ MANUAL_ROOT: root, MANUAL_DIR: "manual/" }).manual,
+    ).toBe("manual");
+    expect(
+      resolveRoots({ INIT_CWD: join(root, "manual"), MANUAL_DIR: "manual" })
+        .content,
+    ).toBe(root);
+    expect(() => resolveRoots({ MANUAL_ROOT: root })).toThrow(
+      /holds no docs\/prds\/manual\.yaml/,
+    );
+  });
+
+  it("refuses a MANUAL_DIR that is not a directory inside the repository", () => {
+    for (const dir of ["/abs", "../up", "a//b"]) {
+      expect(() => resolveRoots({ MANUAL_DIR: dir })).toThrow(
+        /not a directory inside the repository/,
+      );
+    }
   });
 
   it("refuses a MANUAL_STORE with no specs in it", () => {

@@ -156,7 +156,7 @@ describe("the path allowlist", () => {
     ["a durable spec", "openspec/specs/grade10-store/loyalty/spec.md"],
     ["a delta", "openspec/changes/expire-loyalty-points/specs/x/spec.md"],
     ["a task list", "openspec/changes/expire-loyalty-points/tasks.md"],
-    ["a manual page", "manual/products/grade10-store/loyalty.md"],
+    ["a manual page", "docs/prds/products/grade10-store/loyalty.md"],
     ["a path that climbs", "openspec/changes/../specs/x/spec.md"],
     ["the archive", "openspec/changes/archive/proposal.md"],
     [

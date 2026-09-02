@@ -1,6 +1,6 @@
 **Author:** @htonyl - 2026-08-20
 
-Product context: [Grade10 Auction](../../../docs/prds/auction/auction.md).
+Product context: [Grade10 Auction](../../../docs/prds/products/grade10-auction/index.md).
 
 ## Why
 

@@ -43,6 +43,16 @@ export function CasesBlockView({ block }: { block: CasesBlock }) {
     );
   }
 
+  return <SuiteView spec={spec} />;
+}
+
+/**
+ * A suite against the scenarios it traces. `spec` is whatever holds the
+ * cases and the scenarios they name: a durable capability, or a delta read
+ * as the spec it will become, with the durable rows behind it so a trace to
+ * an unchanged scenario still resolves.
+ */
+export function SuiteView({ spec }: { spec: SpecEntry }) {
   const cases = spec.testCases ?? [];
   if (cases.length === 0) {
     return (

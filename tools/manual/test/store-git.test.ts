@@ -9,7 +9,7 @@ import { readGitIndex, readMainStates } from "../src/store/git.mts";
  * wrong are things only git can show: how it prints a path, and how long a
  * sha is. */
 
-const PAGE = "manual/pägé.md";
+const PAGE = "docs/prds/pägé.md";
 
 type Git = (...args: string[]) => void;
 
@@ -42,7 +42,7 @@ describe.each(["sha1", "sha256"] as const)("a %s repository", (format) => {
   it("still names the commit a page last moved in", async () => {
     const root = repoWith(PAGE, format);
 
-    const index = await readGitIndex(root, ["manual"]);
+    const index = await readGitIndex(root, ["docs/prds"]);
     const commit = index.commitOf(PAGE);
 
     expect(commit?.sha).toBe(index.head);
@@ -50,7 +50,7 @@ describe.each(["sha1", "sha256"] as const)("a %s repository", (format) => {
   });
 
   it("reads the subject and the file that commit touched", async () => {
-    const index = await readGitIndex(repoWith(PAGE, format), ["manual"]);
+    const index = await readGitIndex(repoWith(PAGE, format), ["docs/prds"]);
 
     expect(index.history).toEqual([
       {
@@ -130,7 +130,7 @@ describe("where a change stands against origin/main", () => {
  * nothing about what changed. */
 describe("a repository with a merge", () => {
   it("keeps the commits that touched a file and drops the merge", async () => {
-    const root = repoWith("manual/a.md", "sha1");
+    const root = repoWith("docs/prds/a.md", "sha1");
     const run = gitIn(root);
     const commitPage = (page: string, said: string) => {
       writePage(root, page);
@@ -138,12 +138,12 @@ describe("a repository with a merge", () => {
       run("commit", "--quiet", "-m", said);
     };
     run("checkout", "--quiet", "-b", "side");
-    commitPage("manual/b.md", "the second page");
+    commitPage("docs/prds/b.md", "the second page");
     run("checkout", "--quiet", "-");
-    commitPage("manual/c.md", "the third page");
+    commitPage("docs/prds/c.md", "the third page");
     run("merge", "--no-ff", "--quiet", "side", "-m", "merge side");
 
-    const index = await readGitIndex(root, ["manual"]);
+    const index = await readGitIndex(root, ["docs/prds"]);
     const subjects = index.history.map((event) => event.subject);
 
     expect(subjects).toHaveLength(3);

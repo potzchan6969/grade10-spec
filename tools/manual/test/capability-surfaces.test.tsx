@@ -50,7 +50,7 @@ const planned = changeEntry(
 const index = buildIndex(
   snapshotOf({
     pages: [
-      pageEntry("manual/products/demo-product/alpha.md", {
+      pageEntry("docs/prds/products/demo-product/alpha.md", {
         title: "Alpha",
         spec: SPEC,
       }),
@@ -120,7 +120,7 @@ describe("the ceiling a new id has to clear", () => {
         <BlockScopeProvider
           value={{
             index: buildIndex(snapshotOf({ specs: [entry] })),
-            pagePath: "manual/products/demo-product/alpha.md",
+            pagePath: "docs/prds/products/demo-product/alpha.md",
           }}
         >
           <SpecBlockView block={block} />

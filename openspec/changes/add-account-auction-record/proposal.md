@@ -32,7 +32,7 @@ bidding window opened. It has no baseline today because neither the watch nor
 the surface exists; this change establishes it.
 
 The product decision behind this change, including what was ruled out and why,
-is [`docs/prds/auction/account-auction-record.md`](../../../docs/prds/auction/account-auction-record.md).
+is [`docs/prds/products/grade10-auction/account-auction-record.md`](../../../docs/prds/products/grade10-auction/account-auction-record.md).
 
 ## What Changes
 
