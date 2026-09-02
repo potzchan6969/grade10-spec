@@ -67,6 +67,9 @@ copy. Its application here is short:
   does, in the present tense; never a note that its spec is still being
   written, never a pitch. The in-flight cards beneath say what has not
   shipped, and a page with no `spec` yet wears the planned pip for it
+- **The owner's roadmap, not the delta's** — an in-flight spec is one
+  author's proposal; where it promises what the code does not do, ask
+  before the page states it
 
 ## The block palette
 

@@ -15,7 +15,7 @@ Before handoff, hold the draft to it:
 4. The page answers the reader — what the surface is for, what it shows, where each thing leads, what its URL looks like — and never walks the spec's feature set or its edge cases. It holds only what it owns: nothing a child page, a sibling, or a platform page states, and nothing true of every product — a product index says what no capability page carries.
 5. Order and count use numbers, everything else bullets, nested at most three deep; a flow's phases are sub-headings and its steps number straight through.
 6. Numbers are bold with unit and range; hierarchy is a fenced tree with one annotation per line; an inventory reads `Name: verb, verb, verb`.
-7. Every decided fact reads flat and present-tense, a planned one included — the manual describes the roadmap, so no note that a spec is still being written; every open item wears ❓ at the start of its line or `TBC` after the missing value.
+7. Every decided fact reads flat and present-tense, a planned one included — the manual describes the roadmap, so no note that a spec is still being written, and an in-flight delta that promises what the code does not do is a question for the owner, not a fact; every open item wears ❓ at the start of its line or `TBC` after the missing value.
 8. Nothing recaps the change that produced the text — no today's gap, intended fix, or success metric outside a change proposal.
 9. Nothing restates a testable statement from `openspec/specs/`; the prose distills and links.
 10. Superseded content is replaced, never annotated, and nothing points at "above" or "below" — it names or links the thing.

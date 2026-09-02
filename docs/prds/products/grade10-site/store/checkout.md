@@ -12,14 +12,10 @@ to Grade10.
 # Leaving the store
 
 ## Collector — Press checkout
-In the cart drawer.
-
-## Store — Ask for an email
-A known email signs in by magic link. Any other continues as a guest.
+In the cart drawer, signed in with Google or a magic link.
 
 ## Store — Read every line live
 Current price and stock, from Shopify. A line that moved comes back named.
-Stock is held for **15 minutes**.
 
 # On Shopify's page
 
@@ -28,26 +24,25 @@ Address, shipping option, discount code, payment. Shipping and tax are added
 here, so the cart's subtotal is not the charge.
 
 ## Shopify — Take the payment
-A hold that ran out sends the collector back to start again, with the item
-named.
+An item that sold out in the meantime is refused, with the item named.
 
 # Back at Grade10
 
 ## Shopify — Tell the store
 The order moves from pending to paid within seconds.
 
+## Collector — Press Continue shopping
+On Shopify's confirmation page, back to the store.
+
 ## Collector — Find the order
-In Your Orders. A guest gets an account on the email they paid with, opened
-by magic link.
+In Your Orders.
 :::
 
+- **Members only** — checkout is signed in; guest checkout is in the code,
+  launching with it `TBC`
 - **The cart** — kept while the collector is at Shopify; cleared once the
   order is paid
 - **A second press** — returns the same checkout, never a second order
-- ❓ **Back after paying** — whether Shopify sends the collector to the order
-  page, or they open Your Orders themselves
-- ❓ **Guest checkout** — the spec lets a guest pay and links an account after;
-  the store's architecture doc says signed-in only
 
 :::detail{title="For engineers" for="engineer"}
 - **The pages** — [storefront checkout](https://github.com/9gag/grade10/blob/main/docs/architecture/storefront-checkout.md): five outcome kinds, one treatment per kind
