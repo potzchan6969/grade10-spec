@@ -4,9 +4,10 @@ summary: The voice, the block palette, canonical form, and what happens when you
 order: 4
 ---
 
-Every page here is a markdown file in the spec store under `manual/`. Edit one
-in the browser or in your editor — the grammar is the same either way, and the
-same check refuses a page that breaks it.
+Every page here is a markdown file in the spec store under `docs/prds/` — a
+capability's page is its PRD, which is why the manual lives where PRDs are
+looked for. Edit one in the browser or in your editor — the grammar is the
+same either way, and the same check refuses a page that breaks it.
 
 A page is YAML frontmatter followed by a sequence of blocks. Frontmatter keys
 come in this order. `title` is the surface's plain name — `Main Page`,
@@ -116,6 +117,26 @@ The data shape, the architecture link, the thing a PM does not need.
 :::
 ```
 
+The product record — who a capability is for, what it rules out, what it is
+measured on, the decisions behind its requirements and the risks — is a
+`detail` for the `pm` audience, titled `Product decisions`, at the end of the
+page. Users, measurement and decisions read as tables; an open item is a row
+marked ❓; the problem is stated flatly in the present tense, never as today's
+gap. Source material is linked, and a reference under `docs/references/` is
+read here at `/references/<slug>`:
+
+```md
+:::detail{title="Product decisions" for="pm"}
+A watch is the cheap, private mark that closes the gap between browsing and
+bidding. The owner's brief is [the draft](/references/grade10-loyalty-program).
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Privacy | Decided | A watch is visible only to its owner. | Product |
+| List placement | ❓ Open | Header vs account area. | Design |
+:::
+```
+
 A flow reads top to bottom with every step open. Each `##` in its body starts a
 step:
 
@@ -182,7 +203,7 @@ directive on this page renders as text instead of as a block: inside a fence,
 
 The block editor only saves when the manual is running locally (`pnpm dev`):
 a commit bar appears as soon as the working tree has manual edits, and
-pressing it stages `manual/` and commits. Push and open a PR like any other
+pressing it stages `docs/prds/` and commits. Push and open a PR like any other
 change in the repo. The hosted site is a static build of the store and is
 always read-only.
 

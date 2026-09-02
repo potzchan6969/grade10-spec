@@ -40,7 +40,7 @@ Two things a queued consumer must get right, and the compiler holds it to both: 
 
 The consumer's cron claims; the producer stamps as it hands over. At most once by design, so it is paired with a durable second channel or the loss is accepted. `claimDuePushNotifications` is the live one: the storefront owns the origin, the keypair and the subscriptions, and the auction owns none of them ([Auction Service](/platform/auction-service)).
 
-The reason is not that a cycle is impossible — store and loyalty are one, and it is declared (`external/grade10-spec/docs/references/shopify-membership-pos.md`). It is that a cycle costs a deploy-order coupling, and pulling also makes the brand split structural: a storefront that never calls gets nothing, with no flag naming it.
+The reason is not that a cycle is impossible — store and loyalty are one, and it is declared in [the membership and POS plan](/references/shopify-membership-pos). It is that a cycle costs a deploy-order coupling, and pulling also makes the brand split structural: a storefront that never calls gets nothing, with no flag naming it.
 
 ## The same call, opposite policies
 

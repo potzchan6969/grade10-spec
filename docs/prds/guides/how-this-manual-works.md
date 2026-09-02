@@ -22,6 +22,14 @@ an `audience: operator` line in its page's frontmatter is all that files it
 under Admin instead. **Platform** holds the contracts only builders read — the
 shared blocks, the console kit, design sync — and conventions every product
 inherits, like how money is written, have their own groups below.
+**References** is the store's evidence — the owner's drafts, competitor
+research, vendor working notes — read here as written, never edited here.
+
+A capability's page is its PRD. The prose states the shape; the
+`Product decisions` detail at the end of the page carries who it is for,
+what it rules out, what it is measured on and the decisions behind its
+requirements, so there is one place to read a capability and nothing beside
+it to keep in step.
 
 Every capability has a page, whatever state its contract is in, and the pip
 beside it says which: **planned** (the page states an intended shape nothing

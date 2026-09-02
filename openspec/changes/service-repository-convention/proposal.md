@@ -26,7 +26,7 @@ This change establishes one backend convention so every product can add and chan
 ## Impact
 
 - Affected consumer: the Grade10 application repository, especially `apps/backend/**` and backend packages under `packages/**`.
-- Durable guidance will be added to `docs/conventions/backend.md` in the application repository and `manual/platform/testing.md` here.
+- Durable guidance will be added to `docs/conventions/backend.md` in the application repository and `docs/prds/platform/testing.md` here.
 - Persistent workers and libraries will gradually adopt explicit services, repositories, unit fakes, query-shape tests, and PGlite execution tests. API gateways, log forwarding, and other stateless paths follow the transport/service boundary where relevant but do not gain artificial repositories.
 - No public API, database engine, deployment topology, or frontend contract changes.
 

@@ -79,6 +79,68 @@ release retries, and the manual fulfilment ladder those two files describe are
 therefore not operator-reachable today — the queue replaced them.
 :::
 
+:::detail{title="Product decisions" for="pm"}
+Grade10 owns the catalogue and the bid outcome; Stripe supplies card
+authorization. What the auction is for, who it serves, what it leaves out and
+what it is measured on are recorded here; the checkable rules are the
+capability specs. Auto-bidding, watching and mail are decided on their own
+pages: [Auto-Bidding](/p/grade10-auction/auto-bidding),
+[Watchlist](/p/grade10-auction/watchlist),
+[Notifications](/p/grade10-auction/notifications), and the collector's own
+record in [My Auctions](/p/grade10-auction/account-auction-record).
+
+| User | Situation | Desired outcome |
+| --- | --- | --- |
+| Collector | Considering or following a card auction | See reliable listing facts, bid safely, and know whether they won. |
+| Finance operator | A listing has a winner whose card capture stalled, who will pay by wire, or who paid outside Stripe | Contact the winner when a wire is coming, record the listing paid without being able to mark it shipped, and without rewriting who won. |
+| Shipment operator | A listing is paid and the card will leave in-house | Reach the winner, record shipment started then completed, without being able to record payment. |
+
+**Not in scope.** Auction Buy Now, carts, stock counts, fixed-price checkout,
+search, saved searches, filters, related lots and recent-sales data. Vault
+storage, global shipping rate shopping, carrier accounts, tracking numbers and
+a customer shipment-notification programme. Customer-facing checkout,
+invoices, refunds, disputes, or a second payment provider. Collecting a phone
+number Grade10 does not already hold. Store favourites — the term is retired;
+watching an auction lot is its own capability.
+
+**Measurement.**
+
+| Signal | Definition | Owner |
+| --- | --- | --- |
+| Completed-auction payment rate | Closed listings whose winner reaches paid state, divided by closed listings with a winner. | Product and finance |
+| Time to ship | Elapsed time from paid to shipment started, for listings that reach shipped. | Operations |
+| Bid integrity incidents | Accepted bid outcomes later found to conflict with the recorded close or highest valid bid. | Engineering and operations |
+
+**Decisions.**
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Auction unit | Decided | A **listing** is one unit of auction lot and is the sole term used by this capability, including the operator queue. | Product |
+| Buy Now | Decided | Excluded, including browse-only Buy Now listings. | Product |
+| Hold model | Decided | One Stripe authorization hold exists per bidder per active listing; an outbid hold enters asynchronous release immediately and is later reconciled to completion. | Product |
+| Extended close | Decided | A valid bid in the final 30 minutes moves the close to 30 minutes after that bid; this repeats until 30 minutes pass without a valid bid, subject to an optional listing extension cap. | Product |
+| Buyer-premium rate | ❓ Deferred | The applicable policy-derived buyer fee is displayed; a fixed rate is not defined. | Product and finance |
+| Operator outcome labels | Decided | Queue labels are Draft, Scheduled, Live, Ending soon, Unsold, Canceled, Awaiting payment, Payment failed, Awaiting wire, Paid via Stripe, Paid via Manual, Shipped, Delivered. There is no single "Paid" label. "Ending soon" is the last 60 minutes of the recorded close. Payment failed, Awaiting wire, both paid outcomes, and Shipped are highlighted as waiting on an operator. | Product |
+| Payment source | Decided | Card capture becomes Paid via Stripe. Operator-recorded collection (including a completed wire) becomes Paid via Manual. The first successful paid wins; neither path changes who won. Manual paid and Awaiting wire release an open authorization rather than capturing it. | Product and finance |
+| Wire transfer | Decided | A winner paying by wire sits in Awaiting wire so the operator contacts them. An operator records that request; a winner-initiated request on the storefront is follow-on. Collection of the wire is Paid via Manual. | Product and finance |
+| Shipment | Decided | In-house and offline: operators record started then completed. No carrier, no tracking. | Operations |
+| Operator grants | Decided | Payment-processing and shipment-processing are different grants and different scoped roles (`finance` vs `staff`). `admin` holds both. Catalogue publishing is not shipment-processing. | Product |
+| Watching, formerly favourites | Decided | Watching a listing from the collector's own account is in scope, and the term **favourites** is retired across copy, specs, and analytics. | Product |
+| Winner phone | Decided | Not collected. Email is the primary contact; a delivery address is shown when held and can be recorded offline by shipment operators. | Product |
+
+**Risks.** Stripe authorization windows, increment behaviour and capture
+eligibility are proved in the chosen Stripe configuration before card-backed
+bidding is enabled in production. Auction acceptance is a concurrency
+boundary: durable, serialized bid evaluation and idempotent provider-event
+handling come before the customer surface. Shipping is manual, so
+customer-facing copy never claims carrier tracking or delivery confirmation
+Grade10 does not hold. Manual paid or Awaiting wire while a card
+authorization is still open is a double-charge risk if capture is not
+suppressed; release-not-capture is the decision that closes it. Winner email
+and delivery address on the operator detail are operational contact, not a
+reason to put those values on the platform-wide audit hashes.
+:::
+
 :::detail{title="Where the lifecycle is written down" for="engineer"}
 The three capabilities here cover the operator's listing, its media, and the
 public lot page. What a bid must clear, how a hold moves, and when a close

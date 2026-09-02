@@ -2,7 +2,7 @@
 
 **Author:** @jeffffej0909 - 2026-08-24
 
-Product context: [Watching a lot](../../../docs/prds/auction/watchlist.md).
+Product context: [Watching a lot](../../../docs/prds/products/grade10-auction/watchlist.md).
 Prerequisite for [`add-auction-notifications`](../add-auction-notifications/proposal.md),
 whose before-and-during-auction mail has no trigger without it.
 

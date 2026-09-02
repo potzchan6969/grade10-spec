@@ -108,7 +108,7 @@ The design record is
 and the metrics. Pre-production audit state is
 [the loyalty QA record](https://github.com/9gag/grade10/blob/main/docs/qa/loyalty.md);
 the owner's decided reference is
-[the programme reference](https://github.com/9gag/grade10-spec/blob/main/docs/references/grade10-loyalty-program.md).
+[the programme reference](/references/grade10-loyalty-program).
 
 Append-only is enforced by Postgres, not by application code: update and delete
 triggers guard the audit log, consumptions, tier changes and mutation results,
