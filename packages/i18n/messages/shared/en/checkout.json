@@ -33,6 +33,21 @@
     "payment_declined": "That payment was declined. Try again with another method.",
     "payment_error": "The payment could not be set up. Try again in a moment.",
     "points_refused": "The programme would not put that many points against this basket. Choose a different amount.",
-    "coupon_refused": "That coupon cannot ride this basket. Remove it or change the basket and try again."
+    "coupon_refused": "That coupon cannot ride this basket. Remove it or change the basket and try again.",
+    "contradicted": "The shop's answer changed your basket. Fix the marked lines and try again."
+  },
+  "review": {
+    "checking": "Checking your basket with the shop…",
+    "failed": "The shop did not answer, so your basket is unconfirmed. Try again.",
+    "retry": "Check again",
+    "blocked": "Fix the marked lines before paying.",
+    "remove": "Remove"
+  },
+  "line": {
+    "soldOut": "Sold out",
+    "unavailable": "No longer sold",
+    "adjusted": "Only {count} left — quantity adjusted",
+    "repriced": "Was {was}",
+    "unreviewed": "Not yet confirmed with the shop"
   }
 }

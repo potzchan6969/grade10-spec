@@ -33,6 +33,21 @@
     "payment_declined": "付款被拒绝，请改用其他付款方式再试。",
     "payment_error": "未能建立付款，请稍后再试。",
     "points_refused": "计划不接受在此购物车使用这么多积分，请改用其他数量。",
-    "coupon_refused": "该优惠券不能用于此购物车。请移除优惠券或调整购物车后再试。"
+    "coupon_refused": "该优惠券不能用于此购物车。请移除优惠券或调整购物车后再试。",
+    "contradicted": "商店的回复改变了你的购物车。请修正标记的项目后再试。"
+  },
+  "review": {
+    "checking": "正在向商店确认你的购物车…",
+    "failed": "商店没有响应，购物车尚未确认。请再试一次。",
+    "retry": "再次确认",
+    "blocked": "付款前请先修正标记的项目。",
+    "remove": "移除"
+  },
+  "line": {
+    "soldOut": "已售罄",
+    "unavailable": "已停售",
+    "adjusted": "仅剩 {count} 件，已调整数量",
+    "repriced": "原价 {was}",
+    "unreviewed": "尚未向商店确认"
   }
 }
