@@ -5,10 +5,15 @@ title: Store
 The Grade10 store is the trading-card and collectibles shop at
 `grade10.com/store`.
 
-- **Shopify owns** — the catalogue, inventory, checkout pricing, the money
-  charged
-- **Grade10 owns** — the order of record, its items and its events, in its
-  own database; the buyer sees every order they have placed
+- **Shopify owns**
+  1. Product catalog
+  2. Inventory
+  3. Orders
+  4. Shipping
+- **Grade10 owns**
+  1. Account system
+  2. Membership and loyalty program
+  3. Rewards
 
 ## Who uses it
 

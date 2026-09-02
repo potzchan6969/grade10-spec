@@ -15,6 +15,12 @@ review reply. Two documents demonstrate it:
 
 Outline first. A document is a heading and an outline, never an essay.
 
+- **Pick the format that beats words** — a list for items, a table for rows
+  that share attributes, a fenced tree or a diagram for structure, a flow
+  for steps. Words only where no format carries the meaning better, and
+  then one short paragraph.
+- **Order by hierarchy, then by time** — the whole before its parts, the
+  first thing that happens first. That is the order a reader perceives in.
 - **Open in two sentences at most** — what the document is and what the
   reader leaves with. Then the outline. The opening says nothing the
   outline then repeats: a fact belongs in one of the two, never both.
@@ -59,10 +65,8 @@ Outline first. A document is a heading and an outline, never an essay.
 - **Numbers stay visible** — bold, with unit and range, `~` for an
   estimate: `**~40% loan to value**`, `**1.5% to 2.5% interest**`.
 - **A table** when every row carries the same three or more attributes —
-  tiers, statuses, messages. Reasoning stays in prose, and a cell that needs
-  a paragraph belongs outside the table.
-- **Prose only for reasoning an outline cannot carry**, and then one short
-  paragraph, not three.
+  tiers, statuses, messages. A cell that needs a paragraph belongs outside
+  the table.
 - **Open items wear a mark** — ❓ at the start of the line with the
   question, or `TBC` after the value still missing. Never blur a decided
   fact to sit beside an undecided one.
@@ -78,8 +82,9 @@ Outline first. A document is a heading and an outline, never an essay.
   restating.
 - Important things first. The opening line says what the document is; the
   first item is the one the reader most needs.
-- Simple words. Write for the least-context reader who must act on the
-  text, not for its author.
+- Fewest words. Short lines, common words picked for the exact meaning, so
+  a reader takes a line in at a glance. Write for the least-context reader
+  who must act on the text, not for its author.
 - Group one concern per section; the heading names the concern in plain
   words.
 
