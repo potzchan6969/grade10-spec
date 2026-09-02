@@ -3,8 +3,8 @@
 Shared groundwork every later group reads. Lands first; groups 2 and 3 can
 then be claimed in parallel.
 
-- [ ] 1.1 Record the caller on the shared ladder: `authedProcedure` → `session`, `freshAuthedProcedure` → `fresh`, `elevatedProcedure` → `elevated` beside its grants, `publicProcedure` unrecorded. Test-first in the worker library's ladder suite: meta survives a chained `.meta()`, and every rung reports its word — the evidence behind `api-docs-SC-09` and `api-docs-SC-10`.
-- [ ] 1.2 Add `VITE_BUILD_COMMIT` to the shared Vite define beside `VITE_DEPLOY_ENV`: `GITHUB_SHA`, else `git rev-parse HEAD`, else `development`. Cover the three sources in the app-env node suite (`api-docs-SC-12`).
+- [x] 1.1 Record the caller on the shared ladder: `authedProcedure` → `session`, `freshAuthedProcedure` → `fresh`, `elevatedProcedure` → `elevated` beside its grants, `publicProcedure` unrecorded. Test-first in the worker library's ladder suite: meta survives a chained `.meta()`, and every rung reports its word — the evidence behind `api-docs-SC-09` and `api-docs-SC-10`.
+- [x] 1.2 Add `VITE_BUILD_COMMIT` to the shared Vite define beside `VITE_DEPLOY_ENV`: `GITHUB_SHA`, else `git rev-parse HEAD`, else `development`. Cover the three sources in the app-env node suite (`api-docs-SC-12`).
 - [ ] 1.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, `pnpm run test`.
 
 ## 2. The document and its generator (grade10)
