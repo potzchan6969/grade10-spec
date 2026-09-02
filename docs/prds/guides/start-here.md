@@ -9,9 +9,9 @@ the first hour is different depending on what you came to do, so pick a path.
 
 ## If you are a product manager
 
-- [Points and Rewards](/p/membership/points-and-rewards) — the deepest spec we
+- [Points Earning](/p/membership/points-earning) — the deepest spec we
   have, and the one written most nearly in product language. Read its journeys
-  first.
+  first, then the rest of [Membership](/p/membership).
 - [Main Page](/p/grade10-store/home) and
   [Product Details Page](/p/grade10-store/product-page) — what a collector
   actually meets.
@@ -61,7 +61,7 @@ runner or export consumes it yet. The whole derivation, spec journeys to
 classified cases, is
 [specs to test cases](https://github.com/9gag/grade10-spec/blob/main/docs/governance/specs-to-test-cases.md).
 
-- [Points and Rewards](/p/membership/points-and-rewards) — journeys, the
+- [Points Earning](/p/membership/points-earning) — journeys, the
   scenarios that accept them, and the test cases tracing back.
 - [Sign-In](/p/shared-auth/sign-in) and [Sessions](/p/shared-auth/sessions) —
   the flows every other product sits on.
