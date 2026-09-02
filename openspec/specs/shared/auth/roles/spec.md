@@ -104,7 +104,7 @@ The mapping from role to permissions SHALL be:
 
 - `user`: none
 - `staff`: `store:read`, `store:write`, `loyalty:read`, `auction:read`,
-  `auction:catalog`, `auction:operate`
+  `auction:write`, `auction:operate`
 - `support`: `user:list`, `user:ban`, `session:list`, `session:revoke`
 - `auditor`: `audit:read`
 - `admin`: every permission any role grants, including `user:set-role`,
