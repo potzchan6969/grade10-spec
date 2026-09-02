@@ -1,13 +1,13 @@
 ---
-description: Maintain versioned PRDs and OpenSpec change records without duplicating sources of truth
+description: Maintain the manual's capability pages and OpenSpec change records without duplicating sources of truth
 globs: '{docs/prds/**,openspec/**}'
 alwaysApply: false
 ---
 
 # Product specification rules
 
-- `docs/prds/` holds full product requirement documents; use `_template.md` for new PRDs.
+- `docs/prds/` is the manual: one page per capability, and that page is the PRD. Its prose states the shape; its `:::detail{title="Product decisions" for="pm"}` block records the decision behind the requirements. The page grammar is `docs/prds/guides/writing-the-manual.md`, and `pnpm check:manual` holds every page to it.
 - `openspec/specs/` contains current durable requirement contracts. `openspec/changes/` contains only the delta needed to implement a proposed change.
-- Link the PRD from every proposal rather than duplicating it.
-- Capture user flow, all visible states, accessibility, measurement, non-goals, public component contract, and consuming-app impact.
-- A PRD is implementation-ready only when acceptance criteria are observable and open questions are explicit.
+- Link the capability's page from every proposal rather than duplicating it.
+- On the page, capture users and jobs, non-goals, measurement, decisions with open items marked ❓, and risks. User flow, visible states, accessibility, and the public component contract are the spec's.
+- A decision record is complete only when its open questions are explicit and nothing in it could be decided by a test.

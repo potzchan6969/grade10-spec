@@ -45,7 +45,7 @@ Keep durable, cross-worktree knowledge in this order:
 2. `docs/governance/` for durable development and component policies.
 3. `openspec/specs/` for durable requirements and component export contracts.
 4. Active `openspec/changes/` for approved, in-flight delivery decisions.
-5. `docs/prds/` for the product decision behind a requirement.
+5. `docs/prds/` — the manual's pages — for the shape of a capability and the product decision behind its requirements.
 
 Keep temporary task notes in the task or chat that owns them. Do not add a shared scratch file to Git: concurrent worktrees would create unnecessary merge conflicts.
 
