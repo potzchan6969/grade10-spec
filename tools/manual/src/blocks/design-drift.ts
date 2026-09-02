@@ -19,9 +19,11 @@ import type { DesignSyncClass, DesignSyncReport } from "../api/types.ts";
  * A `::figma` card carries a node id, and the report now carries the node map
  * the checker always held in memory — every node a link can name, against the
  * set it belongs to. So a frame badges exactly, and a node id the map does not
- * answer to is a frame deleted or renumbered in Figma, which is its own
- * verdict. Where a frame is an assembly rather than a set, `set=` on the block
- * names the set by hand and `check:manual` holds it to the report's own keys.
+ * answer to says nothing, the same as a frame that is there but not a checked
+ * set — a card is never told its own frame is gone from the file, only ever
+ * that it was or was not compared. Where a frame is an assembly rather than a
+ * set, `set=` on the block names the set by hand and `check:manual` holds it
+ * to the report's own keys.
  */
 
 const norm = (text: string) => text.replace(/[^a-z0-9]/gi, "").toLowerCase();
@@ -39,11 +41,9 @@ const RANK: Record<DesignSyncClass, number> = {
   fail: 3,
 };
 
-/** A card's verdict. `missing` is this side's own reading of the report rather
- * than a class the checker emits: the run knew every node a link can name, and
- * this card's is not one of them. */
+/** A card's verdict. */
 export type DesignVerdict = {
-  class: DesignSyncClass | "missing";
+  class: DesignSyncClass;
   /** The component set the card joined to, when it joined to one. */
   set?: string;
   /** Why, in the checker's own words. */
@@ -159,8 +159,10 @@ export function designSyncOfFrame(
     return undefined;
 
   const set = report.nodes[id];
-  if (set === undefined)
-    return { class: "missing", messages: [], generatedAt: report.generatedAt };
+  // A node the map does not answer to says nothing: it may be a frame deleted
+  // or renumbered in Figma, or simply outside this run's scope, and a badge
+  // cannot tell those apart honestly.
+  if (set === undefined) return undefined;
   const cls = report.sets[set];
   // The node is there; it is a frame or a page rather than a checked component
   // set, so there is no verdict to carry — only the node's own name.
@@ -187,8 +189,7 @@ export function setsReached(
 }
 
 /** Only a disagreement is worth a loud badge: `ok` matched and `skipped` means
- * nothing was compared. A frame the file no longer holds is the loudest of the
- * three — the card points at nothing. */
+ * nothing was compared. */
 export function isDrifting(cls: DesignVerdict["class"] | undefined): boolean {
-  return cls === "warn" || cls === "fail" || cls === "missing";
+  return cls === "warn" || cls === "fail";
 }

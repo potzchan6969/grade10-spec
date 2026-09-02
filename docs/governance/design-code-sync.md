@@ -204,8 +204,7 @@ What you are measuring is the primitive as built, in a browser, at the real valu
 | `ok` | Checked, and code matched the Figma set. |
 | `warn` / `fail` | The two sides disagree — a `fail` is also a red nightly build. |
 | `skipped` | The set was seen but nothing was compared (no cva, no comparable variant). |
-| `frame is gone` | The card's node id is in no page, frame or component of the file — deleted or renumbered in Figma. |
-| *no badge* | The card was not checked: the report has no verdict that reaches it. Not the same as `ok`. |
+| *no badge* | The card was not checked, or its node id is in no page, frame or component of the file any more — deleted or renumbered in Figma. The report has no verdict that reaches it either way. Not the same as `ok`. |
 
 When no report file exists at all, the page says so rather than rendering sixty-five silent cards — a run that checked nothing must not look like a clean run. A report older than eight nights is a stopped clock, and the maintenance panel says that too.
 

@@ -163,12 +163,12 @@ describe("the set a figma frame belongs to", () => {
     ).toBe("Product / Cart / Cart Item");
   });
 
-  /** The commonest designer-side drift there is, and nothing anywhere noticed
-   * it before the report carried the node map. */
-  it("calls a node the file no longer holds missing", () => {
+  /** A node the map does not answer to says nothing — deleted, renumbered, or
+   * simply never in scope, and a badge cannot tell those apart honestly. */
+  it("says nothing about a node the file no longer holds", () => {
     expect(
-      designSyncOfFrame(full, { url: `${FILE}?node-id=9999-1` })?.class,
-    ).toBe("missing");
+      designSyncOfFrame(full, { url: `${FILE}?node-id=9999-1` }),
+    ).toBeUndefined();
   });
 
   it("says nothing about a frame that is there but is not a checked set", () => {
@@ -238,14 +238,13 @@ describe("what the report checks that no card shows", () => {
 });
 
 describe("what earns a loud badge", () => {
-  it("badges a disagreement and a frame that is gone", () => {
+  it("badges a disagreement", () => {
     expect([
       isDrifting("fail"),
       isDrifting("warn"),
-      isDrifting("missing"),
       isDrifting("skipped"),
       isDrifting("ok"),
       isDrifting(undefined),
-    ]).toEqual([true, true, true, false, false, false]);
+    ]).toEqual([true, true, false, false, false]);
   });
 });

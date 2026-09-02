@@ -103,8 +103,10 @@ describe("the drift badge on a figma card", () => {
     expect(html).toContain("bg-destructive");
   });
 
-  it("says a frame the design file no longer holds is gone", () => {
-    expect(render(card("9999-1"), built)).toContain("frame is gone");
+  it("shows no badge for a node the design file no longer holds", () => {
+    const html = render(card("9999-1"), built);
+    expect(html).not.toContain("design drift");
+    expect(html).not.toContain("frame is gone");
   });
 
   it("badges an assembly frame through the set it names by hand", () => {
