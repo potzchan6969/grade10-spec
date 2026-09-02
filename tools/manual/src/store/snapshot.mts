@@ -140,16 +140,22 @@ export async function readHeads(roots: Roots): Promise<string> {
   return `${head}+${content}`;
 }
 
-/** Cheap enough to run on every poll; it changes whenever a file the store
- * reads is written or committed — the design-sync report included, so dev
- * re-reads it the moment the nightly lands. */
-export function storeStamp(roots: Roots, heads: string): string {
-  const watched = [
+/** Every directory an artifact is read from. The stamp measures these and the
+ * dev server watches these, from one list, so a file that changes what the
+ * manual says can never be one the two disagree about. */
+export function storeDirs(roots: Roots): string[] {
+  return [
     join(roots.store, "openspec"),
     join(roots.store, DESIGN_SYNC_REPORT.split("/")[0]),
     join(roots.store, "docs", "references"),
     join(roots.content, roots.manual),
   ];
-  const newest = watched.map((dir) => newestMtime(dir));
+}
+
+/** Cheap enough to run on every poll; it changes whenever a file the store
+ * reads is written or committed — the design-sync report included, so dev
+ * re-reads it the moment the nightly lands. */
+export function storeStamp(roots: Roots, heads: string): string {
+  const newest = storeDirs(roots).map((dir) => newestMtime(dir));
   return `${heads}:${Math.max(...newest)}`;
 }

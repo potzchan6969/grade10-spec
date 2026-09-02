@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { loadArchive } from "./snapshot";
+import { useArtifactReaders } from "./snapshot-provider";
 import type { Archive } from "./types";
 
 export type ArchiveState =
@@ -7,14 +7,16 @@ export type ArchiveState =
   | { status: "ready"; archive: Archive }
   | { status: "unavailable"; reason: string };
 
-/** Lazy: the fetch starts when a timeline first mounts, and is cached after. */
+/** Lazy: the fetch starts when a timeline first mounts, and is cached until
+ * the store is read again. */
 export function useArchive(enabled = true): ArchiveState {
   const [state, setState] = useState<ArchiveState>({ status: "loading" });
+  const load = useArtifactReaders().archive;
 
   useEffect(() => {
     if (!enabled) return;
     let live = true;
-    loadArchive()
+    load()
       .then((archive) => {
         if (live) setState({ status: "ready", archive });
       })
@@ -28,7 +30,7 @@ export function useArchive(enabled = true): ArchiveState {
     return () => {
       live = false;
     };
-  }, [enabled]);
+  }, [enabled, load]);
 
   return state;
 }
