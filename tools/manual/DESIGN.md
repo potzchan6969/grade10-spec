@@ -431,9 +431,13 @@ introduces them.
 
 A change's page (`/planning/<change>`) is the change read as its files.
 The head carries the card's facts — lane, target, owners, dependencies,
-main state, suites, progress, next action — and the why in full; below it
-the Artifacts strip says which of the schema's artifacts exist and names
-the ones still to write, in writing order. Each present artifact is a tab,
+main state, suites, progress, next action — and the Artifacts strip
+follows straight after, saying which of the schema's artifacts exist and
+naming the ones still to write, in writing order. The why is read once,
+in the Product tab where the proposal that carries it is: repeating it
+in the head put a screen of prose between the facts and the strip. Files
+the page cannot read are the exception — the why goes in the body there,
+because no tab can open to carry it. Each present artifact is a tab,
 labelled for who reads it: Product (the PM-driven proposal), Requirements
 (the deltas — the detailed illustration of the proposal), Tech Design (the
 technical implementation's high-level design), UI (the visual plan), Tasks

@@ -206,9 +206,12 @@ describe("the page's head", () => {
     expect(html).toContain(">in progress<");
   });
 
-  it("keeps the board's facts — who, and the why in full", () => {
+  it("keeps the board's facts and leaves the why to the Product tab", () => {
     expect(html).toContain("@echo");
-    expect(html).toContain("Collectors who buy in the shop");
+    expect(html.match(/Collectors who buy in the shop/g)).toHaveLength(1);
+    expect(html.indexOf("Collectors who buy in the shop")).toBeGreaterThan(
+      html.indexOf('aria-label="Artifacts of this change"'),
+    );
   });
 });
 
@@ -341,7 +344,7 @@ describe("while the files are not in hand", () => {
     expect(html).not.toContain("Artifacts");
   });
 
-  it("says when they could not be read", () => {
+  it("says when they could not be read, and still reads the why", () => {
     const html = render("/planning/pos", {
       status: "unavailable",
       reason: "/api/change/pos answered 404 Not Found",
@@ -349,6 +352,7 @@ describe("while the files are not in hand", () => {
 
     expect(html).toContain("Files unavailable");
     expect(html).toContain("answered 404");
+    expect(html).toContain("Collectors who buy in the shop");
   });
 });
 

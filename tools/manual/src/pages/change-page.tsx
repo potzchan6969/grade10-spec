@@ -157,14 +157,6 @@ function ChangeBody({ change }: { change: ChangeEntry }) {
 
   return (
     <>
-      <section aria-label="Why" className="mb-2">
-        <MarkdownView
-          baseDir={`openspec/changes/${change.id}`}
-          className="manual-prose"
-          index={index}
-          text={change.why}
-        />
-      </section>
       <ChangeFacts
         archived={
           archive.status === "ready" ? archive.archive.changes : undefined
@@ -183,12 +175,22 @@ function ChangeBody({ change }: { change: ChangeEntry }) {
         </div>
       ) : null}
       {document.status === "unavailable" ? (
-        <div className="my-5">
+        <div className="my-5 space-y-4">
           <EmptyState
             compact
-            description={`The change's files could not be read: ${document.reason}. The board's card above still says where it stands.`}
+            description={`The change's files could not be read: ${document.reason}. The facts above and the proposer's own why below are what the board already knew.`}
             title="Files unavailable"
           />
+          {/* The only place the why is read outside the Product tab: with no
+              files in hand, the tab that carries it cannot open. */}
+          <section aria-label="Why">
+            <MarkdownView
+              baseDir={`openspec/changes/${change.id}`}
+              className="manual-prose"
+              index={index}
+              text={change.why}
+            />
+          </section>
         </div>
       ) : null}
       {document.status === "ready" ? (
