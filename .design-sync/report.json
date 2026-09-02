@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-02T10:26:19.642Z",
+  "generatedAt": "2026-09-02T10:54:31.957Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -55,7 +55,7 @@
     "Product / Order / Order Details Header": "ok",
     "Product / Order / Order Details Order Item": "warn",
     "Product / Order / Order Details Order Table": "ok",
-    "Product / Order / Order Details Sidebar": "ok",
+    "Product / Order / Order Details Sidebar": "warn",
     "Product / Order / Order Item": "warn",
     "Product / Order / Order Item Header": "warn",
     "Product / Order / Order Status": "warn",
@@ -859,6 +859,9 @@
     ],
     "Product / Order / Order Details Order Item": [
       "Product / Order / Order Details Order Item.status: no getEnum('status') in any template — this Figma axis reaches no code prop"
+    ],
+    "Product / Order / Order Details Sidebar": [
+      "Product / Order / Order Details Sidebar: description \"Order details sidebar displaying order summary, payment method, shipping address, and loyalty points earned.\" is not in packages/ui/src/blocks/store-order-detail/order-details-sidebar.tsx — carry it into the JSDoc, or fix the description in Figma"
     ],
     "Product / Order / Order Item": [
       "Product / Order / Order Item: no code component (looked for src/components/**/productorderorderitem.tsx or orderitem.tsx)"
