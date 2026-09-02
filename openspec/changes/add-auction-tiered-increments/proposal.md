@@ -82,33 +82,14 @@ an hour below the eventual close. **Acceptance signal:** a lot opened at HKD
 
 ## The house default table
 
-Grade10's default, in HKD. Ranges are stated here in major units for reading;
-the spec states them in integer minor units.
+Grade10's default is stated once, in integer minor units, in the requirement
+*A listing's table is seeded from the house default*. It is not restated here:
+the spec is the source of truth for those numbers.
 
-| Range | Increment |
-| --- | --- |
-| $0 – $49 | $2 |
-| $50 – $99 | $5 |
-| $100 – $199 | $10 |
-| $200 – $499 | $25 |
-| $500 – $999 | $50 |
-| $1,000 – $2,499 | $100 |
-| $2,500 – $4,999 | $250 |
-| $5,000 – $9,999 | $500 |
-| $10,000 – $19,999 | $1,000 |
-| $20,000 – $29,999 | $2,000 |
-| $30,000 – $49,999 | $3,000 |
-| $50,000 – $99,999 | $5,000 |
-| $100,000 – $199,999 | $10,000 |
-| $200,000 – $299,999 | $20,000 |
-| $300,000 – $599,999 | $25,000 |
-| $600,000 – $999,999 | $50,000 |
-| $1,000,000 – $1,499,999 | $50,000 |
-| $1,500,000 and up | $100,000 |
-
-The first row extends down to zero rather than starting at $10. The
-$600,000–999,999 and $1,000,000–1,499,999 rows carry the same increment; that
-is deliberate and preserved from the source table.
+It is the table from the source document with two changes. The first row
+extends down to zero rather than starting at $10, so a lot opened at any price
+has a step. The $600,000–999,999 and $1,000,000–1,499,999 rows carry the same
+increment; that is deliberate and preserved from the source.
 
 ## Impact
 
@@ -118,8 +99,8 @@ is deliberate and preserved from the source table.
 | `@grade10/auction-contracts` | **BREAKING:** the listing's single increment is replaced by the table, and listing facts gain the minimum next bid. |
 | `apps/admin/grade10` | The increment field becomes a table editor, and a house-default table editor is added. |
 | `apps/frontend/grade10`, `apps/frontend/zzz` | Show the minimum next bid, which now moves as the price crosses a tier. |
-| `@grade10/ui` `ListingBidPanel` | May need a slot for the minimum next bid; see `ui.md`. |
-| `add-grade10-auction` (unarchived) | Its sentence *a valid bid SHALL meet or exceed the current bid plus the listing's configured increment* is superseded by this change's minimum-bid requirement. It must be reconciled at that change's archive; recorded in `design.md`. |
+| `@grade10/ui` `ListingBidPanel` | May need a slot for the minimum next bid, if the existing price-hint slot is not the right home for it. That is a delivery decision at promotion. |
+| `add-grade10-auction` (unarchived) | Its sentence *a valid bid SHALL meet or exceed the current bid plus the listing's configured increment* is superseded by this change's minimum-bid requirement. It must be reconciled at that change's archive. |
 
 **Shipped scenarios whose numbers change.** `auto-bidding-SC-11`, `SC-14`, and
 `SC-16` currently resolve to a current bid of 52500 minor units. Under the
@@ -127,3 +108,17 @@ default table they resolve to 55000, because the amount being stepped over is
 50000, which sits in the HKD 500–999 tier with a 5000 increment. The two
 worked-example tables in that requirement change with them. No other shipped
 scenario changes value.
+
+## Constraints on delivery
+
+These bound the delivery plan an engineer writes at promotion; the mechanism is
+theirs.
+
+- **Listings that already exist must not change behaviour.** A listing holding
+  a single increment must go on stepping by exactly that amount. One tier
+  starting at zero reproduces a flat increment exactly, so this costs nothing.
+- **The house default must not be retro-fitted onto any listing that already
+  exists**, including drafts. Those lots have been priced by an operator, and
+  some are live with bids against them.
+- **The three scenarios named above must be updated, not worked around.** They
+  are shipped results changing on purpose.
