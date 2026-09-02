@@ -2,8 +2,12 @@
 
 ### Listing bid — payment method
 
-*Figma frame to be produced.* It is the source of truth for the payment-method
-step inserted into the existing listing bid dialog.
+The Storybook component
+`auction-listing-listingbidpanel--default` is the source of truth for the
+payment-method step inserted into the existing listing bid dialog. It opens
+from Place Bid and keeps the provider-hosted field, pending state, and refusal
+in the same dialog. `PaymentAuthorizationPending` and
+`PaymentAuthorizationRefused` show those latter two states directly.
 
 ## Components
 
