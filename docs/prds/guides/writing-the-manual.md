@@ -41,7 +41,8 @@ double-quoted, and a quote character can never appear inside one.
 ## Voice
 
 Pages follow the house style — `docs/governance/writing.md` in the store —
-and its application here is short:
+and [Product Listing](/p/grade10-site/store/product-listing) is the page to
+copy. Its application here is short:
 
 - **A prose block is an outline** — two sentences at most on what the
   surface is, none of which the items then repeat, then items leading with

@@ -5,7 +5,7 @@ description: The house writing style for every piece of prose in this repository
 
 # Writing style
 
-Read `docs/governance/writing.md` first. It is the standard, short enough to hold whole. Its shape is `docs/references/grade10-finance.md` — a heading, then an outline — and its voice is `docs/references/grade10-loyalty-program.md`.
+Read `docs/governance/writing.md` first. It is the standard, short enough to hold whole. Then read the exemplar nearest your task and keep it open while you draft: `docs/references/grade10-finance.md` for the shape of any document, `docs/prds/products/grade10-site/store/product-listing.md` for a capability page, `docs/references/grade10-loyalty-program.md` for the voice of a long one. A draft that would look out of place beside its exemplar is not done.
 
 Before handoff, hold the draft to it:
 
