@@ -1,5 +1,4 @@
 import { Text } from "@grade10/design-system/components/display/text";
-import { useParams } from "react-router";
 import {
   byLastMoved,
   changesForOwner,
@@ -14,8 +13,7 @@ import { PageHeading } from "./page-heading";
 import { PageView } from "./page-view";
 import { useDocumentTitle } from "./use-document-title";
 
-export function ProductPage() {
-  const { product = "" } = useParams();
+export function ProductPage({ product }: { product: string }) {
   const index = useManualIndex();
   const dir = pagePath(index.manualDir, "products", product);
   const page = index.pageByPath.get(`${dir}/index.md`);

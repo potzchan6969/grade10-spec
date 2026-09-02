@@ -491,6 +491,32 @@ export function capabilityStatus(
   return "planned";
 }
 
+/**
+ * What a `/p/...` route names. `/p/a/b` is the product `a/b` where the store
+ * groups its products by the application shipping them, and the capability `b`
+ * of the product `a` where it does not; the taxonomy and the landing pages held
+ * decide, longest product first. A route naming nothing the store holds is
+ * read the flat way, so the page it would render says what is missing.
+ */
+export function splitProductRoute(
+  index: ManualIndex,
+  parts: string[],
+): { product: string; capability?: string } | null {
+  if (parts.length === 0 || parts.length > 3) return null;
+  for (let n = Math.min(parts.length, 2); n >= 1; n -= 1) {
+    const rest = parts.slice(n);
+    if (rest.length > 1) continue;
+    const product = parts.slice(0, n).join("/");
+    const known =
+      index.snapshot.taxonomy.products.includes(product) ||
+      index.pageByPath.has(
+        pagePath(index.manualDir, "products", product, "index.md"),
+      );
+    if (known) return { product, capability: rest[0] };
+  }
+  return parts.length <= 2 ? { product: parts[0], capability: parts[1] } : null;
+}
+
 /** Only a product's own children are capabilities; guides and topics are not.
  * A product directory sits one or two levels under `products/`, depending on
  * whether the store groups its products by the application shipping them. */
@@ -498,9 +524,7 @@ export function isProductDir(manualDir: string, dir: string): boolean {
   const prefix = pagePath(manualDir, "products");
   if (!dir.startsWith(`${prefix}/`)) return false;
   const rest = dir.slice(prefix.length + 1);
-  return (
-    rest !== "" && rest.split("/").length <= 2
-  );
+  return rest !== "" && rest.split("/").length <= 2;
 }
 
 /**
