@@ -85,6 +85,9 @@ Outline first. A document is a heading and an outline, never an essay.
 - Fewest words. Short lines, common words picked for the exact meaning, so
   a reader takes a line in at a glance. Write for the least-context reader
   who must act on the text, not for its author.
+- The reader's word, not the code's or the designer's. A page says "a small
+  label above the headline" even where the component and the spec call it
+  an eyebrow; the term belongs to the spec, the plain word to the page.
 - Group one concern per section; the heading names the concern in plain
   words.
 

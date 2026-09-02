@@ -4,16 +4,20 @@ spec: grade10-site/store/home
 order: 1
 ---
 
-The store's own address serves a marketing hero, a grid of collections into the
-catalogue, and one row of cards from whichever collection the shop lists first.
-Links people already hold still land here.
+`grade10.com/store` is the front door: a hero, a grid of collections, one
+row of cards. Links people already hold still land here.
 
-The hero is in the response HTML before any script runs, and renders whether or
-not the catalogue answers. Which collections appear, in what order, and which
-one leads is the shop's to decide, not the application's — a collection added
-there arrives with no deploy. Each section under the hero says it is loading,
-or that the read failed and can be retried without a full page load, or is
-absent when there is nothing to show; a titled empty row is never the answer.
+1. **Hero** — a small label, headline, copy, image, two ways on
+   - In the response HTML before any script runs, whether or not the
+     catalogue answers ([[home-SC-15]])
+2. **Catalogue sections** — read from the shop after the hero; each says it
+   is loading, or that the read failed and can be retried without a full
+   page load, or is absent when there is nothing to show, never a titled
+   empty row ([[home-SC-17]])
+   1. **Collection grid** — one tile per collection, in catalogue order; a
+      collection added to the shop arrives with no deploy ([[home-SC-06]])
+   2. **Merchandised row** — cards from whichever collection the shop lists
+      first ([[home-SC-11]])
 
 ## What it looks like
 
