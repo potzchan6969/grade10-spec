@@ -1,5 +1,5 @@
+import type { ListingAuctionBidView } from "@grade10/ui";
 import type { BiddingState } from "./listing-auction-bid-fixtures";
-import type { ListingAuctionBidView } from "./types";
 
 export type EnrollmentPaymentMethod = {
   brand: "visa";

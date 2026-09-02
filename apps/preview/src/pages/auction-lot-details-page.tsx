@@ -1,23 +1,24 @@
 import {
   EnrollmentSetupSheet,
+  FIXTURE_ACTIVITY_TIME_COPY,
+  FIXTURE_SHIPPED_LOCALE,
+  FIXTURE_TIME_ZONE,
   ListingAuctionCardSidebar,
   ListingLotGallery,
   ListingLotHeader,
   ListingUserBidHistory,
   PaymentMethodRow,
-  FIXTURE_ACTIVITY_TIME_COPY,
-  FIXTURE_SHIPPED_LOCALE,
-  FIXTURE_TIME_ZONE,
 } from "@grade10/ui";
 import { useEffect, useState } from "react";
+import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "../auction-listing/listing-bid-enrollment-copy";
 import {
   AUCTION_LOT,
   AUCTION_LOT_BADGES,
   AUCTION_LOT_DETAILS_COPY,
   AUCTION_LOT_LINKED_PAYMENT_METHOD,
-  auctionLotShowsLinkedPaymentMethod,
   type AuctionTiming,
   applyBidExtension,
+  auctionLotShowsLinkedPaymentMethod,
   type BiddingState,
   type BidMode,
   bidHistoryForState,
@@ -140,6 +141,7 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
             auctionLotShowsLinkedPaymentMethod(state) && paymentLinked ? (
               <PaymentMethodRow
                 brand={AUCTION_LOT_LINKED_PAYMENT_METHOD.brand}
+                copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
                 maskedNumber={AUCTION_LOT_LINKED_PAYMENT_METHOD.maskedNumber}
               />
             ) : undefined
@@ -168,6 +170,7 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
         />
       </AuctionLotDetailsPageShell>
       <EnrollmentSetupSheet
+        copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
         onContinue={completeEnrollment}
         onOpenChange={setSetupOpen}
         open={setupOpen}

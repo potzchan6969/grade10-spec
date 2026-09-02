@@ -79,3 +79,49 @@ content.
   content
 - **WHEN** the card renders
 - **THEN** the outbid standing badge is shown
+
+## MODIFIED Requirements
+
+### Requirement: The listing surface exports
+
+The shared UI package SHALL export, from its public entry, these components
+for the listing product page — `ListingGallery`, `ListingAuctionBidCard`, and
+`ListingDetails` — and these types: `ListingGalleryImage`,
+`ListingGalleryProps`, `ListingGalleryCopy`, `ListingAuctionBidCardProps`,
+`ListingAuctionBidCardCopy`, `ListingDetailsFact`, `ListingDetailsSection`,
+`ListingDetailsProps`, and `ListingDetailsCopy`.
+
+Each of those components SHALL be renderable on its own, so a later surface can
+reuse the gallery without the bid card.
+
+#### Scenario: auction-listing-SC-01 - An application imports the surface
+
+- **WHEN** an application imports each name above from the shared UI package's
+  public entry
+- **THEN** every import resolves
+
+#### Scenario: auction-listing-SC-02 - A part is reused alone
+
+- **WHEN** an application renders `ListingGallery` without `ListingAuctionBidCard`
+  or `ListingDetails`
+- **THEN** it renders and behaves as specified, with no missing-context error
+
+### Requirement: Extension explanation copy reflects the listing policy
+
+`ListingAuctionBidCard` and `ListingAuctionCardSidebar` SHALL receive extension
+explanation copy from the consumer. They SHALL NOT hardcode extension window
+or duration minutes.
+
+When extension is armed on a listing, the consumer SHALL supply copy for the
+Time left explanation and any extended-bidding row that names that listing's
+extension window and extension duration. The shared components SHALL render
+the supplied strings as given.
+
+#### Scenario: auction-listing-SC-14 - Extension copy comes from the consumer
+
+- **GIVEN** a live listing whose extension window is 300 seconds and extension
+  duration is 900 seconds
+- **WHEN** an application renders the bid card with copy naming a 5-minute
+  window and a 15-minute extension
+- **THEN** the Time left explanation shows those values
+- **AND** no hardcoded "30 minutes" appears in that slot

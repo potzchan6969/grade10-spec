@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 import {
   ENROLLMENT_DEMO_SAVED_PAYMENT,
-  type ListingBidEnrollmentSnapshot,
   type LinkedPaymentMethod,
+  type ListingBidEnrollmentSnapshot,
 } from "./listing-bid-enrollment-snapshots";
 
 type ListingBidEnrollmentSession = {
@@ -98,7 +98,9 @@ function useListingBidEnrollment(listingId = "demo-lot") {
       ...current,
       setupOpen,
       setupChangingPayment: setupOpen ? current.setupChangingPayment : false,
-      setupRequiresIframeLink: setupOpen ? current.setupRequiresIframeLink : true,
+      setupRequiresIframeLink: setupOpen
+        ? current.setupRequiresIframeLink
+        : true,
     }));
   }, []);
 
@@ -177,8 +179,7 @@ function useListingBidEnrollment(listingId = "demo-lot") {
       bidMode: session.bidMode,
       submitUsesSignInLabel: !session.signedIn,
       fixtureState: !session.signedIn ? "live-manual" : undefined,
-      paymentEmptyState:
-        needsSetup && !session.setupOpen ? true : undefined,
+      paymentEmptyState: needsSetup && !session.setupOpen ? true : undefined,
       linkedPaymentMethod: ready
         ? accountLinkedPayment(!session.hasPlacedBid)
         : undefined,
