@@ -15,8 +15,9 @@ lower bid can never displace a higher one, however the network reorders them —
 the contract is written against races, because the last minutes of an auction
 are nothing but races.
 
-The close is a deadline that moves. A valid bid inside the last 30 minutes
-pushes the close 30 minutes out from that bid, again and again, until one full
-30-minute interval passes with no valid bid — subject to an optional cap the
-listing sets. Sniping buys nothing; the auction ends when bidding actually
-stops.
+The close is a deadline that moves. Each listing carries an extension window
+and an extension duration (default 30 minutes each). A valid bid inside the
+extension window pushes the close out by the extension duration from that bid,
+again and again, until one full extension duration passes with no valid bid —
+subject to an optional cap the listing sets. Sniping buys nothing; the auction
+ends when bidding actually stops.

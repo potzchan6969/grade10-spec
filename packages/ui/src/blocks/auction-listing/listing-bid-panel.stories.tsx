@@ -19,6 +19,12 @@ import {
   WonSettledStanding,
 } from "./fixtures";
 import { ListingBidPanel } from "./listing-bid-panel";
+import {
+  DEFAULT_LISTING_EXTENSION_POLICY,
+  formatExtendedBiddingRules,
+  formatExtensionDurationValue,
+  SHORT_WINDOW_EXTENSION_POLICY,
+} from "./listing-extension-policy";
 
 const meta = {
   title: "Auction Listing/ListingBidPanel",
@@ -42,9 +48,12 @@ const meta = {
     history: "Bidder 3 · HK$4,800.00",
     remaining: "13D 11H 33M 47S",
     deadline: FIXTURE_AUCTION_DEADLINE,
-    extensionValue: "30 minutes",
-    extensionTooltip:
-      "Bids placed in the final 30 minutes extend the auction by 30 minutes.",
+    extensionValue: formatExtensionDurationValue(
+      DEFAULT_LISTING_EXTENSION_POLICY,
+    ),
+    extensionTooltip: formatExtendedBiddingRules(
+      DEFAULT_LISTING_EXTENSION_POLICY,
+    ),
     watchAction: <WatchOnlyActions />,
     actions: <LiveActions />,
   },
@@ -176,6 +185,14 @@ export const HighestBidder: Story = {
     standing: <HighestBidderStanding />,
     watchAction: <WatchingAction />,
     watching: true,
+  },
+};
+
+export const CustomExtensionPolicy: Story = {
+  args: {
+    extensionValue: formatExtensionDurationValue(SHORT_WINDOW_EXTENSION_POLICY),
+    extensionTooltip: formatExtendedBiddingRules(SHORT_WINDOW_EXTENSION_POLICY),
+    kicker: "Listing 12 · 5-minute window · 15-minute extension",
   },
 };
 

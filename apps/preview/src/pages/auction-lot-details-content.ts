@@ -5,8 +5,12 @@ import {
   BID_FIXTURE_LOT,
   type BiddingState,
   bidHistoryForState,
+  DEFAULT_LISTING_EXTENSION_POLICY,
+  extendRecordedCloseAt,
+  formatAutoExtendedTooltip,
   LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
   type LiveListingFacts,
+  shouldExtendCloseAt,
   stateMeta,
 } from "@grade10/ui";
 import { createElement } from "react";
@@ -28,20 +32,23 @@ export {
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
-export const EXTENSION_WINDOW_MS = 30 * 60 * 1000;
-export const EXTENSION_DURATION_MS = 30 * 60 * 1000;
+export const AUCTION_LOT_EXTENSION_POLICY = DEFAULT_LISTING_EXTENSION_POLICY;
+
 export const LIVE_INITIAL_REMAINING_MS = (6 * 60 + 9) * 1000;
 
 export function shouldExtendClose(
   closesAtMs: number,
+  policy = AUCTION_LOT_EXTENSION_POLICY,
   nowMs = Date.now(),
 ): boolean {
-  const remainingMs = closesAtMs - nowMs;
-  return remainingMs > 0 && remainingMs <= EXTENSION_WINDOW_MS;
+  return shouldExtendCloseAt(closesAtMs, policy, nowMs);
 }
 
-export function extendRecordedClose(nowMs = Date.now()): number {
-  return nowMs + EXTENSION_DURATION_MS;
+export function extendRecordedClose(
+  policy = AUCTION_LOT_EXTENSION_POLICY,
+  nowMs = Date.now(),
+): number {
+  return extendRecordedCloseAt(policy, nowMs);
 }
 
 export function createLiveAuctionTiming(nowMs = Date.now()): AuctionTiming {
@@ -53,14 +60,15 @@ export function createLiveAuctionTiming(nowMs = Date.now()): AuctionTiming {
 
 export function applyBidExtension(
   timing: AuctionTiming,
+  policy = AUCTION_LOT_EXTENSION_POLICY,
   nowMs = Date.now(),
 ): AuctionTiming {
-  if (!shouldExtendClose(timing.closesAtMs, nowMs)) {
+  if (!shouldExtendClose(timing.closesAtMs, policy, nowMs)) {
     return timing;
   }
 
   return {
-    closesAtMs: extendRecordedClose(nowMs),
+    closesAtMs: extendRecordedClose(policy, nowMs),
     extended: true,
   };
 }
@@ -137,6 +145,9 @@ export const AUCTION_LOT_DETAILS_COPY = {
   },
   sidebar: {
     ...LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
+    autoExtendedTooltip: formatAutoExtendedTooltip(
+      AUCTION_LOT_EXTENSION_POLICY,
+    ),
     aboutThisLot: "About this lot",
     vaultShipping: "Vault shipping",
     authentication: "Authentication",

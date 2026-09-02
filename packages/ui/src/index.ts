@@ -38,6 +38,16 @@ export {
   userBidHistoryForState,
 } from "./blocks/auction-listing/listing-auction-bid-fixtures";
 export {
+  DEFAULT_LISTING_EXTENSION_POLICY,
+  extendRecordedCloseAt,
+  formatAutoExtendedTooltip,
+  formatExtendedBiddingRules,
+  formatExtensionDurationValue,
+  type ListingExtensionPolicy,
+  SHORT_WINDOW_EXTENSION_POLICY,
+  shouldExtendCloseAt,
+} from "./blocks/auction-listing/listing-extension-policy";
+export {
   ListingAuctionCardSidebar,
   type ListingAuctionCardSidebarCopy,
   type ListingAuctionCardSidebarProps,

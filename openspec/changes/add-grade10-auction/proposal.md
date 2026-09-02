@@ -16,9 +16,10 @@ payment-provider events that can race a closing auction.
   and extension terminology.
 - A valid card-backed bid is accepted once, advances the highest valid bid
   atomically, and cannot be displaced by a delayed lower bid.
-- A valid bid within the last 30 minutes repeatedly extends closing by 30
-  minutes from that bid until a full 30-minute interval has no valid bid,
-  subject to an optional listing extension cap.
+- A valid bid inside a listing's extension window repeatedly extends closing
+  by that listing's extension duration from that bid until a full extension
+  duration passes with no valid bid, subject to an optional listing extension
+  cap. Omitted at create, window and duration default to 30 minutes each.
 
 ## Scope
 
@@ -28,7 +29,7 @@ payment-provider events that can race a closing auction.
   and from `anti-snipe` to `extension`, without changing the current UI.
 - Scheduled auction windows, starting price, bid increments, buyer-fee
   disclosure, live bid count/current bid/customer highest bid, and continuous
-  30-minute late-bid extension.
+  per-listing late-bid extension (default 30-minute window and duration).
 - Stripe bid authorizations, verified webhook processing, asynchronous release
   after outbid or an unsuccessful close, and concurrency-safe bid acceptance.
 

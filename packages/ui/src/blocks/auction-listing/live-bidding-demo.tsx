@@ -11,6 +11,11 @@ import { formatMoment } from "../../lib/format-datetime";
 import { FlowContainer } from "../shared/flow-container";
 import { LiveActions, WatchingAction, WatchOnlyActions } from "./fixtures";
 import { ListingBidPanel } from "./listing-bid-panel";
+import {
+  DEFAULT_LISTING_EXTENSION_POLICY,
+  formatExtendedBiddingRules,
+  formatExtensionDurationValue,
+} from "./listing-extension-policy";
 
 const YOU = "You";
 
@@ -152,8 +157,12 @@ function panelFor({ bids, watching }: DemoState) {
       actions={<LiveActions />}
       bidCount={`${bids.length} ${bids.length === 1 ? "Bid" : "Bids"}`}
       deadline={FIXTURE_AUCTION_DEADLINE}
-      extensionValue="30 minutes"
-      extensionTooltip="Bids placed in the final 30 minutes extend the auction by 30 minutes."
+      extensionValue={formatExtensionDurationValue(
+        DEFAULT_LISTING_EXTENSION_POLICY,
+      )}
+      extensionTooltip={formatExtendedBiddingRules(
+        DEFAULT_LISTING_EXTENSION_POLICY,
+      )}
       history={historyOf(bids)}
       kicker="Listing 12 · September Slabs"
       price={lead?.amount ?? "HK$1,200.00"}

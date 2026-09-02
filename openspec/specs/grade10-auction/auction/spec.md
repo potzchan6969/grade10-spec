@@ -1,4 +1,4 @@
-# Grade10 Auction — delta
+# grade10-auction/auction Specification
 
 ## Purpose
 
@@ -66,13 +66,12 @@ customer-facing term for one auctioned card.
 - `auction-SC-14` — Stripe configuration is incomplete
 - `auction-SC-15` — A missed authorization webhook is repaired
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Auction listing facts are available
 
 Grade10 SHALL publish a catalogue of Auction listings. It SHALL NOT publish or
-represent Auction Buy Now listings in this capability. This change SHALL NOT
-alter the current customer-facing Auction browse composition.
+represent Auction Buy Now listings in this capability.
 
 Auction listings SHALL be absolute: when a listing closes with accepted bids,
 the highest accepted bid wins. Grade10 SHALL NOT configure, store, return, or

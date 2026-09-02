@@ -118,7 +118,7 @@ watching an auction lot is its own capability.
 | Auction unit | Decided | A **listing** is one unit of auction lot and is the sole term used by this capability, including the operator queue. | Product |
 | Buy Now | Decided | Excluded, including browse-only Buy Now listings. | Product |
 | Hold model | Decided | One Stripe authorization hold exists per bidder per active listing; an outbid hold enters asynchronous release immediately and is later reconciled to completion. | Product |
-| Extended close | Decided | A valid bid in the final 30 minutes moves the close to 30 minutes after that bid; this repeats until 30 minutes pass without a valid bid, subject to an optional listing extension cap. | Product |
+| Extended close | Decided | Each listing has an extension window and extension duration (default 30 minutes each). A valid bid inside the window moves the close to the extension duration after that bid; this repeats until the extension duration passes without a valid bid, subject to an optional listing extension cap. | Product |
 | Buyer-premium rate | ❓ Deferred | The applicable policy-derived buyer fee is displayed; a fixed rate is not defined. | Product and finance |
 | Operator outcome labels | Decided | Queue labels are Draft, Scheduled, Live, Ending soon, Unsold, Canceled, Awaiting payment, Payment failed, Awaiting wire, Paid via Stripe, Paid via Manual, Shipped, Delivered. There is no single "Paid" label. "Ending soon" is the last 60 minutes of the recorded close. Payment failed, Awaiting wire, both paid outcomes, and Shipped are highlighted as waiting on an operator. | Product |
 | Payment source | Decided | Card capture becomes Paid via Stripe. Operator-recorded collection (including a completed wire) becomes Paid via Manual. The first successful paid wins; neither path changes who won. Manual paid and Awaiting wire release an open authorization rather than capturing it. | Product and finance |
@@ -143,9 +143,8 @@ reason to put those values on the platform-wide audit hashes.
 
 :::detail{title="Where the lifecycle is written down" for="engineer"}
 The three capabilities here cover the operator's listing, its media, and the
-public lot page. What a bid must clear, how a hold moves, and when a close
-extends are not yet a durable spec — they live in the in-flight change
-`add-grade10-auction` and, in more detail, in
+public lot page. What a bid must clear, how a hold moves, and when a close extends live in
+`grade10-auction/auction` and, in more detail, in
 [docs/architecture/auction.md](https://github.com/9gag/grade10/blob/main/docs/architecture/auction.md),
 which carries the full state tables, the money invariants and the sweeps.
 [docs/architecture/auction-gaps.md](https://github.com/9gag/grade10/blob/main/docs/architecture/auction-gaps.md)

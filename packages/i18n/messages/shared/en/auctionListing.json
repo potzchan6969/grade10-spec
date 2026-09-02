@@ -1,5 +1,4 @@
 {
-  "antiSnipe": "{minutes}-min anti-snipe extension",
   "auctionWon": "Auction won",
   "automaticBidExplanation": "We’ll bid automatically only as needed, up to your maximum.",
   "automaticBidHoldExplanation": "Your card hold covers the maximum. You may pay less if the auction ends below it.",
@@ -12,6 +11,7 @@
   "automaticMaximumRaiseTitle": "Raise your automatic maximum",
   "setMaximumCurrentLabel": "Set maximum (current: {amount})",
   "setMaximumLabel": "Set maximum",
+  "autoExtendedTooltip": "A bid in the last {windowMinutes, plural, one {# minute} other {# minutes}} adds {durationMinutes, plural, one {# minute} other {# minutes}} to the close. Repeats until {durationMinutes, plural, one {# minute} other {# minutes}} pass with no bids, up to the listing cap.",
   "autoBidUnavailable": "Auto-bidding is not available yet.",
   "backToAuctions": "Back to auctions",
   "bidCount": "{count, plural, one {# Bid} other {# Bids}}",
@@ -29,7 +29,7 @@
   "description": "Description",
   "endsLabel": "Ends",
   "extendedBidding": "Extended bidding",
-  "extendedBiddingRules": "If a bid is placed during the final 30 minutes, the auction extends by 30 minutes. Extensions continue until no bid is placed in the final window.",
+  "extendedBiddingRules": "If a bid is placed during the final {windowMinutes, plural, one {# minute} other {# minutes}}, the auction extends by {durationMinutes, plural, one {# minute} other {# minutes}}. Extensions continue until no bid is placed in the final window.",
   "extensionMinutes": "{minutes, plural, one {# minute} other {# minutes}}",
   "factCategory": "Category",
   "factLot": "Lot",

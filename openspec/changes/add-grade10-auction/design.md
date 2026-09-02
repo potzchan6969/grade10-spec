@@ -33,12 +33,13 @@ Bid acceptance runs in a serialized listing decision. The decision reads the
 current accepted bid and the recorded close; it accepts only an amount meeting
 the listing's minimum next amount while bidding is open. It stores one accepted
 bid record, updates current price/count/highest bidder, and applies an
-extension in that same decision. A bid arriving when 30 minutes or less remain
-sets close to exactly 30 minutes after its accepted timestamp. When the listing
-has an extension cap, that close cannot exceed its scheduled close plus the
-cap; without a cap, every eligible bid extends the close. The listing closes
-only after its recorded close, so one later lower bid can neither replace an
-accepted higher bid nor reopen a closed listing.
+extension in that same decision. A bid arriving inside the listing's extension
+window sets close to exactly the extension duration after its accepted
+timestamp. When the listing has an extension cap, that close cannot exceed its
+scheduled close plus the cap; without a cap, every eligible bid extends the
+close. When both extension window and duration are zero, late bids do not move
+the close. The listing closes only after its recorded close, so one later lower
+bid can neither replace an accepted higher bid nor reopen a closed listing.
 
 ## Card authorization and settlement
 
@@ -91,7 +92,7 @@ listing decision; Stripe confirmation proves funds, not auction precedence.
 ### Close at the original end time after a late bid
 
 Rejected: it permits last-second sniping. Moving the close from each valid
-late bid gives every bidder the agreed 30-minute response window.
+late bid gives every bidder the listing's configured response window.
 
 ### Treat payment as shipping
 
@@ -103,7 +104,8 @@ give winners and operators an accurate, supportable status.
 Use Stripe fixtures behind real Auction and Stripe adapters. Exercise bid
 acceptance under concurrent requests, duplicate requests, duplicate and
 reordered webhook delivery, and a confirmed authorization that becomes stale
-before it can land. Exercise the 30-minute boundary and repeated extension
-against a controllable clock. Run Auction backend, customer frontend, and
+before it can land. Exercise extension window and duration boundaries,
+including unequal values, against a controllable clock. Run Auction backend,
+customer frontend, and
 admin feature lanes against contracts and fixtures, then the OpenSpec checks
 named in the proposal.

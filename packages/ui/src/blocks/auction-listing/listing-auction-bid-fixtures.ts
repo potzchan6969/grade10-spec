@@ -7,6 +7,10 @@ import {
 import { minNextBidMinor } from "./format-usd";
 import type { ListingAgeVerificationDialogCopy } from "./listing-age-verification-dialog";
 import type { ListingAuctionBidCardCopy } from "./listing-auction-bid-card";
+import {
+  DEFAULT_LISTING_EXTENSION_POLICY,
+  formatAutoExtendedTooltip,
+} from "./listing-extension-policy";
 import type {
   ListingAuctionBidView,
   ListingAuctionStanding,
@@ -106,8 +110,9 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   closed: "Closed",
   timeLeft: "Time left",
   timeLeftAutoExtended: "Time left (auto-extended)",
-  autoExtendedTooltip:
-    "A bid in the last 30 minutes adds 30 minutes to the close. Repeats until 30 minutes pass with no bids, up to the listing cap.",
+  autoExtendedTooltip: formatAutoExtendedTooltip(
+    DEFAULT_LISTING_EXTENSION_POLICY,
+  ),
   placeBidSection: "Place bid",
   placeBid: "Place Bid",
   signInToBid: "Sign In to Bid",

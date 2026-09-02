@@ -85,6 +85,7 @@ while it has not closed. Named image sizes and optional alt live in
 - `admin-listing-SC-24` — Operator corrects a created listing's starting price
 - `admin-listing-SC-26` — Scheduled close at in the past is refused at create
 - `admin-listing-SC-27` — Extension window without a duration is refused
+- `admin-listing-SC-27a` — Omitted extension fields default to 30 minutes
 - `admin-listing-SC-28` — Sandbox cannot change after create
 
 ### admin-listing-US-04: Operator puts a listing in front of collectors
@@ -207,7 +208,7 @@ Required at create:
 
 Optional fields, when omitted at create, take these defaults: currency
 `HKD`; sort index `0`; copy empty; no sale; no categories; extension window
-and extension duration both `0` (extension off); no extension cap; no
+and extension duration both `1800` (30 minutes); no extension cap; no
 publish at; sandbox `false`.
 
 The admin form SHALL prevent submitting create while a required field is
@@ -421,7 +422,7 @@ to set:
   inside the extension window of the close moves the close to now plus the
   extension duration. The extension window MUST NOT be greater than the
   extension duration. Empty on draft is allowed. Omitted at create SHALL
-  store both as `0`.
+  store both as `1800`. Both zero together means extension off.
 - **Extension cap (seconds)** — optional whole number ≥ 0, or absent for an
   uncapped listing. The close MUST NOT move past scheduled close at plus
   this cap. A cap below the extension duration is a hard final deadline,
@@ -464,6 +465,14 @@ be refused.
   extension duration of 0
 - **THEN** Grade10 refuses the write
 - **AND** the listing's extension settings are unchanged
+
+#### Scenario: admin-listing-SC-27a - Omitted extension fields default to 30 minutes
+
+- **GIVEN** a draft listing with every required field set and no extension
+  window or duration supplied
+- **WHEN** an authorized operator creates the listing
+- **THEN** Grade10 stores extension window 1800 seconds and extension duration
+  1800 seconds
 
 #### Scenario: admin-listing-SC-28 - Sandbox cannot change after create
 

@@ -111,3 +111,23 @@ It SHALL NOT supply default user-visible copy for those slots.
 - **WHEN** it renders
 - **THEN** those strings are the accessible names and visible zoom hint
 - **AND** no other language appears in those slots
+
+### Requirement: Extension explanation copy reflects the listing policy
+
+`ListingAuctionBidCard`, `ListingAuctionCardSidebar`, and
+`ListingBidPanel` SHALL receive extension explanation copy from the
+consumer. They SHALL NOT hardcode extension window or duration minutes.
+
+When extension is armed on a listing, the consumer SHALL supply copy for the
+Time left explanation and any extended-bidding row that names that listing's
+extension window and extension duration. The shared components SHALL render
+the supplied strings as given.
+
+#### Scenario: auction-listing-SC-14 - Extension copy comes from the consumer
+
+- **GIVEN** a live listing whose extension window is 300 seconds and extension
+  duration is 900 seconds
+- **WHEN** an application renders the bid card with copy naming a 5-minute
+  window and a 15-minute extension
+- **THEN** the Time left explanation shows those values
+- **AND** no hardcoded "30 minutes" appears in that slot
