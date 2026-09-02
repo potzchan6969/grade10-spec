@@ -149,7 +149,6 @@ const DRIFT_LABEL: Record<DesignVerdict["class"], string> = {
   skipped: "not compared",
   warn: "design drift",
   fail: "design drift",
-  missing: "frame is gone",
 };
 
 const DRIFT_TITLE: Record<DesignVerdict["class"], string> = {
@@ -158,8 +157,6 @@ const DRIFT_TITLE: Record<DesignVerdict["class"], string> = {
     "The nightly design-sync check reached this component set and found nothing it could compare.",
   warn: "The nightly design-sync check found this component set and its code disagreeing. It may be deliberate — someone has to settle it.",
   fail: "The nightly design-sync check found an error on this component set: Dev Mode would emit wrong code, or the code renders a value Figma does not draw.",
-  missing:
-    "This frame is in no page, frame or component of the design file any more. Someone deleted or renumbered it, and this card points at nothing.",
 };
 
 /** `ok` and `skipped` wear the quietest rungs the badge has: they are there so
@@ -169,7 +166,6 @@ const DRIFT_VARIANT = {
   skipped: "default",
   warn: "warning",
   fail: "error",
-  missing: "error",
 } as const;
 
 /**
