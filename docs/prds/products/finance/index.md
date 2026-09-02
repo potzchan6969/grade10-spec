@@ -41,8 +41,9 @@ Treat every plan that names finance as unbuilt. It carries a chain and a
 gateway path so it is visible from day one, and the other services already list
 it as a product they could serve — the diary and the identity store both name it
 in their vocabulary — but none of them has an entrypoint for it, because there
-is no feature that books a visit or checks an identity. There is also no design
-doc for the lending product.
+is no feature that books a visit or checks an identity. The owner's notes for
+the lending product are [the finance reference](/references/grade10-finance);
+no spec carries them yet.
 :::
 
 :::callout{kind="note"}
