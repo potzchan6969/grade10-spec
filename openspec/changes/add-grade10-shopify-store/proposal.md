@@ -31,7 +31,7 @@ browser's price, payment, or shipping claim as authoritative.
   shipping-status behavior.
 - Read-only Shopify Storefront API catalogue and availability reads, with
   cache-safe browsing and live revalidation before checkout.
-- Shopify checkout creation with no inventory hold, server-side order
+- Shopify draft-order checkout with no inventory hold, server-side order
   creation, and Continue shopping back to the store after hosted checkout.
 - Verified Shopify Admin API reads and webhooks for payment, cancellation,
   refund, fulfilment, tracking, and shipment state; reconciliation repairs
@@ -47,7 +47,7 @@ browser's price, payment, or shipping claim as authoritative.
 | `apps/frontend/grade10-store` | Uses the Store catalogue, checkout, and order-status contracts; it never calls Shopify directly. |
 | `apps/backend/grade10-site/store` | Owns the Store API, local orders, webhook endpoint, and reconciliation schedule; it binds Shopify credentials server-side. |
 | `apps/admin/grade10` | Reads the same Store order and shipping-status projection for support; it does not edit Shopify inventory, payment, or fulfilment data. |
-| `@grade10/shopify-contracts` / `@grade10/shopify-backend` | Adds the typed Shopify product, customer, checkout, payment, and fulfilment reads needed by the Store boundary. |
+| `@grade10/shopify-contracts` / `@grade10/shopify-backend` | Adds the typed Shopify product, customer, draft-order, payment, and fulfilment reads needed by the Store boundary. |
 | `@grade10/store-contracts` / `@grade10/store-backend` | Exposes the Store-facing catalogue, checkout, and order-status contract while preserving provider-neutral order state. |
 
 No shared UI or design-system export changes are proposed.
@@ -73,7 +73,7 @@ No shared UI or design-system export changes are proposed.
 The new Store routes are additive. Existing locally recorded orders retain
 their provider and state; they are not silently reinterpreted as Shopify
 orders. A deployment requires a per-environment Shopify custom app with the
-least scopes needed for catalogue reads, customer association, checkouts,
+least scopes needed for catalogue reads, customer association, draft orders,
 payment, and fulfilment reads, plus separate Storefront, Admin, and webhook
 credentials. Missing or invalid credentials fail Store integration reads loudly
 rather than falling back to a different source.

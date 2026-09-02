@@ -170,7 +170,7 @@ response or browser-supplied monetary value SHALL NOT determine an order amount.
 - **WHEN** Shopify reports it unavailable or insufficient for the requested
   quantity during checkout
 - **THEN** the Store refuses checkout naming that item as unavailable
-- **AND** it creates no payable local order or Shopify checkout
+- **AND** it creates no payable local order or Shopify draft order
 
 #### Scenario: shopify-commerce-SC-07 - Checkout uses live Shopify price and inventory
 
@@ -182,11 +182,12 @@ response or browser-supplied monetary value SHALL NOT determine an order amount.
 ### Requirement: Checkout hands the shopper to Shopify once
 
 For an accepted checkout, the Store SHALL create one pending local order and
-one Shopify checkout containing its live-validated lines, stamped with the
-local order identifier. It SHALL record the returned Shopify checkout reference
-before returning the Shopify-hosted checkout URL. Repeating the same checkout
+one Shopify draft order containing its live-validated lines as variant and
+quantity only, naming the buyer's paired Shopify customer and carrying every
+discount the order earns. It SHALL record the draft order reference before
+returning the draft's Shopify-hosted invoice URL. Repeating the same checkout
 request under its idempotency key SHALL return the original handoff and SHALL
-NOT create another order or Shopify checkout.
+NOT create another order or draft order.
 
 The Store SHALL NOT hold or reserve inventory for a checkout. Stock is
 Shopify's to sell until payment, and an item that sold out in between is
@@ -202,7 +203,7 @@ as the final charged amount.
 - **WHEN** a shopper retries it with its original idempotency
   key and identical input
 - **THEN** the Store returns the same pending order and Shopify checkout URL
-- **AND** exactly one local order and one Shopify checkout exist for that
+- **AND** exactly one local order and one Shopify draft order exist for that
   request
 
 #### Scenario: shopify-commerce-SC-10 - An item that sold out before payment is named
@@ -220,7 +221,7 @@ as the final charged amount.
 - **GIVEN** a shopper requests checkout with one or more items
 - **WHEN** Shopify reports a quantity it cannot sell on any checkout line
 - **THEN** the Store refuses checkout naming that item as unavailable
-- **AND** it does not offer a backorder or create a payable Shopify checkout
+- **AND** it does not offer a backorder or create a payable draft order
 
 #### Scenario: shopify-commerce-SC-12 - A checkout URL is safe to follow
 

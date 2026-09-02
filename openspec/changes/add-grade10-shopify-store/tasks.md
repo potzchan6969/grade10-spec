@@ -2,7 +2,7 @@
 
 ## 1. Shopify contracts and feasibility
 
-- [ ] 1.1 Define the Storefront catalogue/variant availability outcomes and the Admin customer, checkout, order-payment, fulfilment, and tracking outcomes using the pinned Shopify API version.
+- [ ] 1.1 Define the Storefront catalogue/variant availability outcomes and the Admin customer, draft-order, order-payment, fulfilment, and tracking outcomes using the pinned Shopify API version.
 - [ ] 1.2 Make `A paid buyer returns to the store` pass against the selected Shopify plan, proving Continue shopping lands on the store before dependent checkout work begins.
 - [ ] 1.3 Make `Integration configuration is incomplete` pass for the shop domain, API version, Storefront token, Admin token/scopes, and webhook secret, exposing no credential to a browser.
 - [ ] 1.4 Verify transport fixtures identify a failed Shopify operation and keep business outcomes typed.
@@ -14,7 +14,7 @@ Task 2.5 depends on the contracts in group 1; it uses fixtures rather than a run
 - [ ] 2.1 Make `A shopper browses a current Shopify catalogue` and `Shopify catalogue data is unavailable` pass through the Store public catalogue contract.
 - [ ] 2.2 Make `A Shopify product change invalidates browsing data` pass with tagged cache invalidation and bounded expiry.
 - [ ] 2.3 Make `A shopper checks out signed in` and `A guest receives a linked Grade10 account after payment` pass through the Grade10 session and one-to-one Shopify customer association behavior.
-- [ ] 2.4 Make `Checkout uses live Shopify price and inventory`, `An item that sold out before payment is named`, `Backorders are refused`, and `A retry returns one checkout handoff` pass with one local order and one Shopify checkout.
+- [ ] 2.4 Make `Checkout uses live Shopify price and inventory`, `An item that sold out before payment is named`, `Backorders are refused`, and `A retry returns one checkout handoff` pass with one local order and one Shopify draft order.
 - [ ] 2.5 Make `A checkout URL is safe to follow`, `A permanent order URL requires its account`, and `An account lists its orders` pass in the Grade10 storefront against Store contracts and fixtures.
 - [ ] 2.6 Verify every catalogue, identity, checkout, and order-access scenario in this group through the Store backend and storefront feature lanes.
 
