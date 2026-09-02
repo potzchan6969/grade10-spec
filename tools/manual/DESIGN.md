@@ -311,7 +311,7 @@ Node-only readers in `src/store/` (`read-specs.mts`, `read-changes.mts`,
 `read-manual.mts`, `read-references.mts`, composed by `snapshot.mts`) parse
 the store from disk.
 Owners come from `(owner: @handle)` tags; scenario/story/test-case ids
-(`<capability>-SC-<n>`, `-US-<n>`, `-TC-<n>`) are captured when present.
+(`<capability>-SC-<n>`, `-US-<n>`, `<capability>-US<n>-TC<m>-<v>`) are captured when present.
 
 Relative markdown links inside spec text (`../../../../docs/prds/…`) are
 rewritten at render to the page or reference that shows the file; one to a

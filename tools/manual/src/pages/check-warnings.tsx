@@ -18,7 +18,6 @@ const RULE_TITLES: Record<string, string> = {
   journeys: "Specs whose journeys no page shows",
   suite: "Specs whose test cases no page shows",
   coverage: "Scenarios no test case traces",
-  covers: "Suite citations whose wording moved",
   ref: "References that resolve to nothing, or to two things",
 };
 

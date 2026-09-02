@@ -64,7 +64,7 @@ describe("what the strip says", () => {
   });
 });
 
-/** Four warn rules could reach the snapshot with no words behind them, so the
+/** Warn rules could reach the snapshot with no words behind them, so the
  * panel grouped them under a bare key. */
 describe("the rules the app can now name", () => {
   it("has words for every rule the check can warn about", () => {
@@ -77,7 +77,6 @@ describe("the rules the app can now name", () => {
       "journeys",
       "suite",
       "coverage",
-      "covers",
       "design",
     ]) {
       expect(ruleTitle(rule)).not.toBe(rule);

@@ -8,11 +8,6 @@
 **I want** the thing to happen once and leave a record,
 **so that** I can tell whether it already happened.
 
-**Covers:**
-
-- `alpha-SC-01` — The thing happens
-- `alpha-SC-02` — The thing is refused a second time
-
 ### alpha-TC-01: Reader asks for the thing and it happens
 
 **Description:** Proves the thing happens on a first ask.

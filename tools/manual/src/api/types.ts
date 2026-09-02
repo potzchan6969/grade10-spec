@@ -74,30 +74,21 @@ export type Journey = {
 export type TestCaseStatus = "draft" | "actual" | "deprecated";
 
 export type TestCase = {
-  /** Permanent store id like `loyalty-TC-03`. */
+  /** Permanent store id like `loyalty-US1-TC3-1`, or the flat
+   * `loyalty-TC-03` an older suite issued. */
   id: string;
   title: string;
-  /** Scenario ids this case traces to. */
+  /** Ids this case traces to, as written: the journey it walks
+   * (`loyalty-US-01`), or a scenario id where an older suite named those. A
+   * journey trace reaches the scenarios its `Accepted by` lists. */
   traces: string[];
   status: TestCaseStatus;
-  /** Handle from the case's `**Reviewed by:**` line — who stood behind the
-   * verdict, and when. A verdict without one is unsigned, and `check:manual`
-   * says so. */
-  reviewedBy?: string;
-  reviewedOn?: string;
 };
 
-/** The suite file's own status — a summary of its cases, never an
- * independent judgment. */
-export type TestSuiteStatus = "pending-review" | "approved";
-
-/** A scenario the suite file cites with a quoted title (`**Covers:**`
- * lines); the drift warn compares the quote against the spec's current
- * heading — the only signal that a reviewed wording moved. */
-export type SuiteCitation = {
-  id: string;
-  title: string;
-};
+/** The suite file's own status — derived from its cases, never chosen:
+ * `pending-review` while every case is a draft, `in-review` from the first
+ * verdict, `approved` once no draft is left. */
+export type TestSuiteStatus = "pending-review" | "in-review" | "approved";
 
 export type SpecEntry = {
   /** `product/capability`, or a bare topic id. */
@@ -109,7 +100,6 @@ export type SpecEntry = {
   journeys?: Journey[];
   testCases?: TestCase[];
   testCasesStatus?: TestSuiteStatus;
-  testCaseCitations?: SuiteCitation[];
   /** Scenario ids the suite deliberately leaves uncovered
    * (`**Out of suite:**`) — subtracted from coverage, so the untraced
    * count that remains is always actionable. */
