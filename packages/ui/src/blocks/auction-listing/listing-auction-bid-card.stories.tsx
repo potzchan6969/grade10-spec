@@ -5,6 +5,7 @@ import {
   FIXTURE_SHIPPED_LOCALE,
   FIXTURE_TIME_ZONE,
 } from "../../lib/datetime-fixtures";
+import { DEFAULT_LISTING_CURRENCY } from "../../lib/format-money";
 import { ListingAuctionBidCard } from "./listing-auction-bid-card";
 import {
   DEFAULT_LISTING_EXTENSION_POLICY,
@@ -105,6 +106,7 @@ function liveView(
     incrementMinor: 25_000,
     suggestedMaxMinor: 800_000,
     ...overrides,
+    currency: overrides.currency ?? DEFAULT_LISTING_CURRENCY,
   };
 }
 
