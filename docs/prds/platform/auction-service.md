@@ -89,7 +89,9 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 - A bid wins only if its hold is confirmed before `ends_at`; `recordHoldCapturable` guards on the clock, not on sweep timing, so the outcome never depends on when the cron ran
 - The extension (applied at bid insert, under the lock) is what gives a last-minute hold time to confirm
 - `snipe_window_seconds` is the trigger and `extension_seconds` is the reach: a bid landing that close to the end moves `ends_at` to now plus the reach, so a short window can buy a long tail
+- Omitted at create, both default to 1800 seconds (30 minutes); both zero together means extension off
 - Every late bid extends again — the tail is continuous — until `scheduled_ends_at + extension_cap_seconds`, which truncates rather than rejects, so a cap below the reach is how you spell a hard final deadline
+- Listing state carries the extension policy (`snipe_window_seconds`, `extension_seconds`, optional `extension_cap_seconds`) and the latest the listing could possibly close, so a countdown can say why it moved rather than jumping unexplained
 - The window narrows and never widens; row checks keep it inside the reach and keep an armed listing from carrying a cap of zero — either shape would accept late bids and silently never extend
 - Only the extension moves a live listing's clock; an admin can reschedule a `draft` and nothing else
 
