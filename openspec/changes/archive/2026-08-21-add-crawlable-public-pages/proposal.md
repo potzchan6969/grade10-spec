@@ -69,13 +69,13 @@ surface unfurls with that page's own title and description.
 
 ### New Capabilities
 
-- `grade10-site/crawlable-pages`: what a public address serves before any
+- `grade10-site/site/crawlable-pages`: what a public address serves before any
   script runs — page identity, share metadata, the crawler directory, and
   honest statuses.
 
 ### Modified Capabilities
 
-None. `grade10-site/page-shell` keeps every requirement it has; this change
+None. `grade10-site/site/page-shell` keeps every requirement it has; this change
 adds what the response contains, not what the shell renders.
 
 ## Impact

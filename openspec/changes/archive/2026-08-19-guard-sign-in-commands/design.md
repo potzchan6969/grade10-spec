@@ -2,7 +2,7 @@
 
 ## Context
 
-Requirements: [`specs/shared-auth/sign-in/spec.md`](specs/shared-auth/sign-in/spec.md).
+Requirements: [`specs/shared/auth/sign-in/spec.md`](specs/shared/auth/sign-in/spec.md).
 
 Sign-in commands live in the `grade10` repo's auth frontend package as the
 mutation shape (`run` + `pending`) over `useState`; the email step's form is

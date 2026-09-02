@@ -60,7 +60,7 @@ the public auction movements and that collector's private events.
 
 ### New Capabilities
 
-- `grade10-auction/bidding-history`: The private account index and per-listing
+- `grade10-site/auction/bidding-history`: The private account index and per-listing
   combined history, its privacy boundary, retained chronology, filters, states,
   and Grade10 screen.
 

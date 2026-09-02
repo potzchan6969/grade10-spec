@@ -42,7 +42,7 @@ intact.
   by close control, Escape, and scrim click.
 - **`SignInCardCopy` gains `legal`.** Figma draws a legal line as the last node
   in the body; the code has no slot for it. Optional, so **not breaking**.
-- **`shared-ui/auth-sign-in` is specified for the first time.** The three
+- **`shared/ui/auth-sign-in` is specified for the first time.** The three
   exports have shipped since `add-auth-session` with no capability spec naming
   them.
 
@@ -67,7 +67,7 @@ intact.
 
 ### New Capabilities
 
-- `shared-ui/auth-sign-in`: the sign-in surface's export contract, its dialog
+- `shared/ui/auth-sign-in`: the sign-in surface's export contract, its dialog
   shell and scrim, its body composition order, and its dismissal behavior.
 
 ### Modified Capabilities

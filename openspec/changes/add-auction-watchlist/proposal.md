@@ -61,7 +61,7 @@ watched list without searching.
 
 ### New Capabilities
 
-- `grade10-auction/watchlist`: a signed-in collector marks an auction lot to
+- `grade10-site/auction/watchlist`: a signed-in collector marks an auction lot to
   come back to — what watching means, who can see it, what it does and does
   not confer, how the watched list is ordered, and what happens to a watch
   when its lot closes.
@@ -75,7 +75,7 @@ shared UI contract does not change; see Impact.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/backend/grade10/auction` | Owns the watch record: collector, listing, and Watched At. Shared across both brands, like the listings themselves. |
+| `apps/backend/grade10-site/auction/auction` | Owns the watch record: collector, listing, and Watched At. Shared across both brands, like the listings themselves. |
 | `@grade10/auction-contracts` | Gains watch and unwatch actions, the viewer's watching state on authenticated listing facts, and a watched-lots read. Additive; nothing breaks. |
 | `apps/frontend/grade10` | Fills `ListingBidPanel`'s existing `watchAction` slot and passes `watching`; adds a watch control to the catalogue tile and a watched-lots surface. |
 | `apps/frontend/zzz` | Same, on the ZZZ auction surface. |

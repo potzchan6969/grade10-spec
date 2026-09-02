@@ -30,7 +30,7 @@ sign-out taps (the dead-end retry signal) fall to noise.
 ## Capabilities
 
 - **New Capabilities:**
-  - `shared-auth/sign-out`: the sign-out contract every signed-in surface
+  - `shared/auth/sign-out`: the sign-out contract every signed-in surface
     shares — one new product directory, `shared-auth`, for cross-product
     session behavior (add its bullet to `openspec/specs/README.md` when the
     accepted delta is synced at archive time).

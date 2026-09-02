@@ -6,7 +6,7 @@ or controlled `loading`), shows Boneyard skeletons while loading, and treats
 respond to `onRemoveItem`. The design-system ships `Toaster` (Sonner wrapper);
 stories today import `toast` from `sonner` directly. See `proposal.md` for
 motivation; behavior lives in
-[`shared-ui/store-cart`](../../specs/shared-ui/store-cart/spec.md) (delta).
+[`shared/ui/store-cart`](../../specs/shared/ui/store-cart/spec.md) (delta).
 
 ## Goals / Non-Goals
 

@@ -2,7 +2,7 @@
 
 - See [proposal.md](proposal.md) for the collector problem.
 - See
-  [`grade10-auction/notifications`](specs/grade10-auction/notifications/spec.md)
+  [`grade10-site/auction/notifications`](specs/grade10-site/auction/notifications/spec.md)
   for the observable contract.
 - Auction already mails eight kinds through one letter, one `EmailPort`,
   and a claim–send–stamp ladder: 30s doubling to an hour, eight

@@ -67,7 +67,7 @@ export {
   EnrollmentSetupSheet,
   PaymentMethodRow,
 } from "./blocks/auction-listing/listing-bid-enrollment-prototypes";
-// shared-ui/auction-listing
+// shared/ui/auction-listing
 export {
   ListingBidPanel,
   type ListingBidPanelCopy,
@@ -116,7 +116,7 @@ export type {
   ListingLotMetaBadge,
   ListingUserBidHistoryRow,
 } from "./blocks/auction-listing/types";
-// shared-ui/auth-sign-in
+// shared/ui/auth-sign-in
 export {
   SignInCard,
   type SignInCardAction,
@@ -190,7 +190,7 @@ export type {
 } from "./blocks/loyalty-membership/types";
 // shared cross-capability types
 export type { AsyncAction, AsyncState } from "./blocks/shared/async";
-// shared-ui/store-cart
+// shared/ui/store-cart
 export {
   CartDrawer,
   CartDrawerBody,
@@ -214,7 +214,7 @@ export type {
   CartItemSummary,
   PromoState,
 } from "./blocks/store-cart/types";
-// shared-ui/store-home
+// shared/ui/store-home
 export {
   StoreCollectionGrid,
   type StoreCollectionGridProps,
@@ -276,7 +276,7 @@ export type {
   OrderDetailsPaymentBrand,
   OrderDetailsSummary,
 } from "./blocks/store-order-detail/types";
-// shared-ui/store-order-history
+// shared/ui/store-order-history
 export {
   OrderHistory,
   type OrderHistoryCopy,
@@ -304,7 +304,7 @@ export type {
   OrderHistoryLineSummary,
   OrderHistoryOrderSummary,
 } from "./blocks/store-order-history/types";
-// shared-ui/store-product-listing
+// shared/ui/store-product-listing
 export {
   FilterPanel,
   type FilterPanelCopy,
@@ -349,7 +349,7 @@ export type {
   SortOption,
   UtilityLink,
 } from "./blocks/store-product-listing/types";
-// shared-ui/store-profile
+// shared/ui/store-profile
 export {
   ProfileCard,
   type ProfileCardCopy,

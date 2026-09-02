@@ -107,7 +107,7 @@ None. Every change lands on the existing loyalty capability.
 
 ### Modified Capabilities
 
-- `grade10-store/loyalty`: tier validity and downgrade replace the permanent
+- `grade10-site/loyalty/programme`: tier validity and downgrade replace the permanent
   tier; demotion resets progress and a claw-back re-evaluates at once;
   activity-based balance expiry replaces per-credit expiry; tier points and
   redeemable points separate; earning gains a defined basis, scope and rounding

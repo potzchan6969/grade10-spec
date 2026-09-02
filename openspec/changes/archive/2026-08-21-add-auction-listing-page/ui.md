@@ -8,7 +8,7 @@ and what the document carries, not what is on it. No Figma frame is linked for
 it in this store; if one is drawn later it replaces nothing planned here.
 
 The not-found surface a refused lot shows is the site's existing one, owned by
-`grade10-site/page-shell`.
+`grade10-site/site/page-shell`.
 
 ## Components
 

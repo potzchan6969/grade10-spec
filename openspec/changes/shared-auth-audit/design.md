@@ -1,8 +1,8 @@
 ## Context
 
 See [proposal.md](./proposal.md) for why. Requirements live in
-[shared-auth/audit](./specs/shared-auth/audit/spec.md) and
-[admin-console/audit](./specs/admin-console/audit/spec.md).
+[shared/auth/audit](./specs/shared/auth/audit/spec.md) and
+[shared/console/audit](./specs/shared/console/audit/spec.md).
 
 Identity trail today: ban / unban / set-role / revoke append **before** the
 mutation (`FAIL_CLOSED_PERMISSION` in `createSecurityHooks`). 2FA enable
@@ -48,7 +48,7 @@ Genesis already uses `actorId: "system"`, `actorRoles: ""`.
 
 ### Identity writes land in the account functions, actor `"system"`
 
-[shared-auth/audit](./specs/shared-auth/audit/spec.md) already requires a
+[shared/auth/audit](./specs/shared/auth/audit/spec.md) already requires a
 trusted-product create/verify on the trail, actor the system, subject the
 user id, outcome `created` only when a new `users.id` is minted, and no
 append on `already-unverified` / `already-verified`.
@@ -78,7 +78,7 @@ Rejected:
 
 ### Fail-closed create/verify: one transaction, compensating delete if the adapter commits early
 
-[audit-SC-27](./specs/shared-auth/audit/spec.md) / `audit-SC-28` require the
+[audit-SC-27](./specs/shared/auth/audit/spec.md) / `audit-SC-28` require the
 account write not to take effect if the trail cannot accept the entry.
 
 Mutation order inside `db.transaction`:
@@ -125,7 +125,7 @@ Worked example — verify flip (`audit-SC-19`):
 
 ### Regenerating recovery codes is fail-closed before the handler
 
-[audit-SC-21](./specs/shared-auth/audit/spec.md) / `audit-SC-26` /
+[audit-SC-21](./specs/shared/auth/audit/spec.md) / `audit-SC-26` /
 `audit-SC-29`. Enable already appends after the first live verify
 (`auth.two-factor.enable`); enrollment start `/two-factor/enable` already
 does not. Disable appends after `/two-factor/disable`.
@@ -149,7 +149,7 @@ Rejected:
 
 ### One deletion row: in-transaction `auth.account.delete`
 
-[audit-SC-25](./specs/shared-auth/audit/spec.md) / `audit-SC-34` are already
+[audit-SC-25](./specs/shared/auth/audit/spec.md) / `audit-SC-34` are already
 met by `deleteAccount`'s transaction. The elevated after-hook then writes
 `users.deleteAccount` for the same click.
 
@@ -166,7 +166,7 @@ Rejected:
 
 ### List filters are additive fields on the existing page query
 
-[admin-console/audit](./specs/admin-console/audit/spec.md) requires
+[shared/console/audit](./specs/shared/console/audit/spec.md) requires
 combinable filters, time sort, and jump-to-seq. Product is which chain the
 console calls, not a column on the row.
 

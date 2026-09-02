@@ -4,7 +4,7 @@
 
 An auditor who holds `audit:read` cannot answer how a `users.id` appeared when
 checkout created the account, or whether recovery codes were replaced after a
-stolen session already had a step-up stamp. `shared-auth/audit` only requires
+stolen session already had a step-up stamp. `shared/auth/audit` only requires
 ban, unban, set-role, and revoke on the identity trail. A trusted product
 creating an account or flipping one to verified is a write, not a directory
 read, and is not on that trail. Regenerating recovery codes overwrites them
@@ -46,9 +46,9 @@ filter, without paging past other products.
 - Mixpanel Signed In / Signed Out / Account Created / `/engage` / Page Viewed
   (a later, store-owned change; auth must not talk to Mixpanel).
 - Datadog counts (sibling `shared-auth-datadog`).
-- Scheduling the audit-chain walk (that is `shared-auth/datadog`).
+- Scheduling the audit-chain walk (that is `shared/auth/datadog`).
 - Collector sign-in or sign-out on the identity trail.
-- Inventing `grade10-store/analytics`.
+- Inventing `grade10-site/store/analytics`.
 - Export or CSV of the trail.
 - Live tail or auto-refresh.
 - Searching the trail by email, or showing email on a row.
@@ -58,12 +58,12 @@ filter, without paging past other products.
 
 ### New Capabilities
 
-- `admin-console/audit`: the auditor's merged trail on both brands' consoles
+- `shared/console/audit`: the auditor's merged trail on both brands' consoles
   — filters, sort, row inspection, and jump to a chain break.
 
 ### Modified Capabilities
 
-- `shared-auth/audit`: trusted-product create that creates a new user id,
+- `shared/auth/audit`: trusted-product create that creates a new user id,
   verify that flips, delete, and second-factor enable/disable/regen;
   fail-closed and no-email still apply; already-existed finds, collector
   sign-in, and product reads stay off the trail.

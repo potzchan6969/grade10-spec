@@ -28,7 +28,7 @@ Both are design-system exports and neither gains, loses, or renames a prop:
 - `Nav`, `NavProps`, `NavItem`, `NavLink`, `NavCopy`
 - `Footer`, `FooterProps`, `FooterColumn`, `FooterLink`, `FooterCopy`
 
-The export contract is `openspec/specs/shared-ui/site-chrome/spec.md` and is
+The export contract is `openspec/specs/shared/ui/site-chrome/spec.md` and is
 untouched — see proposal.md, Modified Capabilities.
 
 Tokens the repaint moves `Footer` onto, all of which exist today in
@@ -49,7 +49,7 @@ token value.
 
 The footer has no loading or error state. Its variable states are the absent
 sections, each already owned by a scenario in
-`openspec/specs/shared-ui/site-chrome/spec.md`:
+`openspec/specs/shared/ui/site-chrome/spec.md`:
 
 | State | Scenario that defines it |
 | --- | --- |

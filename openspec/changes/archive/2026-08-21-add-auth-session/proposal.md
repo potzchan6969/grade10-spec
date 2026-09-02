@@ -6,7 +6,7 @@
 
 A collector who signs in on one Grade10 or ZZZ site should already be that
 person on every other site of the same brand, and every product should name
-them by user id. Almost none of that is written down. `shared-auth/sign-in` today
+them by user id. Almost none of that is written down. `shared/auth/sign-in` today
 covers only in-flight duplication.
 
 **Metric:** products that key a person by email, not user id, stays at zero.
@@ -32,9 +32,9 @@ covers only in-flight duplication.
 
 | Owner | Governs |
 | --- | --- |
-| `shared-auth/sign-out` | Leaving a session |
-| `grade10-site/page-shell` | Header account control |
-| `grade10-site/navigation` | Profile ↔ sign-in redirect |
+| `shared/auth/sign-out` | Leaving a session |
+| `grade10-site/site/page-shell` | Header account control |
+| `grade10-site/site/navigation` | Profile ↔ sign-in redirect |
 | `add-auth-access` | Roles, the users directory, the identity trail |
 | `add-account-profile` | Store profile fields |
 | `add-grade10-shopify-store` | When checkout creates or signs in the buyer |
@@ -56,12 +56,12 @@ covers only in-flight duplication.
 
 ### New Capabilities
 
-- `shared-auth/session`: who a signed-in person is, that user id keys identity, and
+- `shared/auth/session`: who a signed-in person is, that user id keys identity, and
   how analytics names a visitor.
 
 ### Modified Capabilities
 
-- `shared-auth/sign-in`: which methods exist, first success creates the account, a
+- `shared/auth/sign-in`: which methods exist, first success creates the account, a
   product that has verified an email may create or sign in, one sign-in email
   per address per minute, a new send replacing earlier unused mail, expiry,
   case-folded uniqueness without alias folding, Google only from a verified

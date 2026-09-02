@@ -1,9 +1,9 @@
 # Design: remove wishlist control
 
 Capability specs:
-[`shared-ui/site-chrome`](../../specs/shared-ui/site-chrome/spec.md),
-[`shared-ui/store-product-listing`](../../specs/shared-ui/store-product-listing/spec.md),
-[`grade10-site/page-shell`](../../specs/grade10-site/page-shell/spec.md).
+[`shared/ui/site-chrome`](../../specs/shared/ui/site-chrome/spec.md),
+[`shared/ui/store-product-listing`](../../specs/shared/ui/store-product-listing/spec.md),
+[`grade10-site/site/page-shell`](../../specs/grade10-site/site/page-shell/spec.md).
 See proposal.md for motivation.
 
 ## Context

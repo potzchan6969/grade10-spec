@@ -53,7 +53,7 @@ leave the reconciliation workflow.
 
 ### New Capabilities
 
-- `design-sync/annotation-implementation-verification`: Evidence-complete
+- `shared/design-sync/annotation-verification`: Evidence-complete
   implementation review and safe planning handoff for selected Figma annotation
   findings.
 
@@ -68,7 +68,7 @@ None.
   agent parity.
 - `grade10`: product-scope skill orchestration, workflow-map guidance, focused
   agent tests, and planning handoff into the registered store.
-- Existing `design-sync/annotation-monitoring` observation, matching,
+- Existing `shared/design-sync/annotation-monitoring` observation, matching,
   acceptance, baseline, and commit semantics remain unchanged.
 - No production dependency, product API, database, deployment, credential,
   design token, component export, or user-facing UI is introduced.

@@ -1,7 +1,7 @@
 ## Context
 
 See [proposal.md](proposal.md) for the problem and the
-[annotation implementation verification spec](specs/design-sync/annotation-implementation-verification/spec.md)
+[annotation implementation verification spec](specs/shared/design-sync/annotation-verification/spec.md)
 for required behavior.
 
 The existing annotation workflow already has the correct evidence and write

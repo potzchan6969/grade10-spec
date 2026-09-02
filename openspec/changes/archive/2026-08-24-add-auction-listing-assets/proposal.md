@@ -20,7 +20,7 @@ gallery shows every gallery image at the size named for that slot.
 
 ## What Changes
 
-- Gallery identity follows `grade10-auction/admin-listing`: at most eight
+- Gallery identity follows `grade10-admin/auction/listing`: at most eight
   ordered media items (image or video), no physical-side keys. This change
   adds optional alt on image items, preview-and-confirm before image bytes
   upload from the admin photo manager, and named public sizes for images.
@@ -39,7 +39,7 @@ gallery shows every gallery image at the size named for that slot.
 ## Non-Goals
 
 - **Defining the eight-item gallery, reorder, or video playback.** Those
-  requirements live in `grade10-auction/admin-listing` (`add-admin-auction-listing`).
+  requirements live in `grade10-admin/auction/listing` (`add-admin-auction-listing`).
 - **Physical sides.** There is no `front`/`back`/… identity for uploads.
 - **Creating listings in admin.** Owned by admin-listing.
 - **Required alt text or a publish gate on images.** Alt falls back to the
@@ -54,11 +54,11 @@ gallery shows every gallery image at the size named for that slot.
 
 ### New Capabilities
 
-- `grade10-auction/listing-images`: how gallery images get optional alt text
+- `grade10-site/auction/listing-media`: how gallery images get optional alt text
   and named public sizes, how the admin photo manager previews before upload,
   and how the catalogue and details page consume sized paths — on top of the
   ordered gallery from admin-listing.
-- `shared-ui/auction-listing`: the listing product-page blocks `@grade10/ui`
+- `shared/ui/auction-listing`: the listing product-page blocks `@grade10/ui`
   already exports (`ListingGallery`, `ListingBidPanel`, `ListingDetails`) and
   the gallery's distinct sources for thumbnail, main frame, and zoom. The
   blocks ship today with no spec; this change alters the gallery contract, so
@@ -67,7 +67,7 @@ gallery shows every gallery image at the size named for that slot.
 ### Modified Capabilities
 
 None. Photo/image delivery is a separate capability from bidding.
-`grade10-auction/admin-listing` owns the gallery shape this change sits on.
+`grade10-admin/auction/listing` owns the gallery shape this change sits on.
 
 ## Impact
 

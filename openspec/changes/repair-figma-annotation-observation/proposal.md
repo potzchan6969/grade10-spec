@@ -48,7 +48,7 @@ None.
 
 ### Modified Capabilities
 
-None. The existing `design-sync/annotation-monitoring` requirements already
+None. The existing `shared/design-sync/annotation-monitoring` requirements already
 require complete scoped observations, exact registered-root and ancestor
 evidence, digest-pinned reconciliation, and blocked handling for incomplete
 evidence. This change repairs the implementation against that contract.

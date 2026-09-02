@@ -46,6 +46,11 @@ export const RULES = [
     title: "Durable specs holding a heading the archive would fold",
   },
   {
+    key: "map",
+    level: "fail",
+    title: "Durable specs the fold left without their map",
+  },
+  {
     key: "heading",
     level: "fail",
     title: "Deltas holding a heading the archive cannot fold",

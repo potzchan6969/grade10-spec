@@ -80,21 +80,21 @@ their maximum before the lot closes.
 
 ### New Capabilities
 
-- `grade10-auction/notifications`: which auction emails Grade10 sends, what
+- `grade10-site/auction/notifications`: which auction emails Grade10 sends, what
   each one fires on, who receives it, how a collector is enrolled, what
   suppresses a message, the shared letter shape, send failure, and the
   operator send log.
 
 ### Modified Capabilities
 
-None. `grade10-auction/watchlist` supplies the watch this change reads; it is
+None. `grade10-site/auction/watchlist` supplies the watch this change reads; it is
 a separate in-flight change and is not modified here.
 
 ## Impact
 
 | Consumer | Change |
 | --- | --- |
-| `apps/backend/grade10/auction` | Emits the six events. Owns which collectors are enrolled on a lot. Owns the send log. |
+| `apps/backend/grade10-site/auction/auction` | Emits the six events. Owns which collectors are enrolled on a lot. Owns the send log. |
 | `@grade10/auction-contracts` | Gains the notification events. Additive. |
 | `@grade10/email` | Renders and talks to the provider. Classifies temporary vs permanent send failure. Does not own the log. |
 | `@grade10/i18n` | **No change.** Sent messages are English; nothing enters the locale catalogs. |

@@ -1,7 +1,7 @@
 # Design: align product listing tiles
 
 Capability delta:
-[`shared-ui/store-product-listing`](specs/shared-ui/store-product-listing/spec.md).
+[`shared/ui/store-product-listing`](specs/shared/ui/store-product-listing/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
 Figma sources are linked in [ui.md](ui.md).

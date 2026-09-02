@@ -38,8 +38,8 @@ payment-provider events that can race a closing auction.
 | Consumer | Change |
 | --- | --- |
 | `apps/frontend/grade10` | Preserves its current Auction UI while adopting renamed Auction contracts. |
-| `apps/backend/grade10/store` | Resolves the Grade10 customer session and calls the pinned Grade10 Auction service entrypoint for bids. |
-| `apps/backend/grade10/auction` | Owns listing/bid persistence, reserve removal, serialized bid decisions, Stripe webhooks, and reconciliation. |
+| `apps/backend/grade10-site/store` | Resolves the Grade10 customer session and calls the pinned Grade10 Auction service entrypoint for bids. |
+| `apps/backend/grade10-site/auction/auction` | Owns listing/bid persistence, reserve removal, serialized bid decisions, Stripe webhooks, and reconciliation. |
 | `apps/backend/grade10/api` | Routes anonymous Auction catalogue and listing reads to the Auction service. |
 | `apps/backend/zzz/store` | Keeps its separately pinned shared-Auction-service entrypoint compatible with Auction contract changes. |
 | `@grade10/auction-contracts` / `@grade10/auction-frontend` / `@grade10/auction-demo` | Extends existing Auction contracts, anonymous browse feature, and contract-proving demo. |

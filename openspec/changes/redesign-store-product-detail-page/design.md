@@ -2,7 +2,7 @@
 
 ## Context
 
-The archived `grade10-store/product-page` change already supplies a
+The archived `grade10-site/store/product-page` change already supplies a
 server-rendered product route, a catalogue-backed product read, variant
 selection, and cart-line semantics. The current `ProductPage` only composes a
 vertical title, one image, a price, and the existing buy box. The supplied

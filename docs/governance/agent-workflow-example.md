@@ -196,7 +196,7 @@ agent at it if it cannot find the skill by name.
 
 **4. The agent writes two things.** `proposal.md` — author line, the collector
 problem and its evidence, a metric that would move, non-goals, the capabilities
-touched — and `specs/grade10-store/account-settings/spec.md`, where every
+touched — and `specs/grade10-site/store-account-settings/spec.md`, where every
 requirement carries at least one `#### Scenario:` a test or a manual pass can
 decide.
 

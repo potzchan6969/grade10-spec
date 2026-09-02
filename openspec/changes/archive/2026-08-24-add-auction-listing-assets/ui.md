@@ -52,8 +52,8 @@ Nothing new in the design system. No new `@grade10/ui` listing card.
 
 ## States
 
-Tied to [`grade10-auction/listing-images`](specs/grade10-auction/listing-images/spec.md)
-and [`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
+Tied to [`grade10-site/auction/listing-media`](specs/grade10-site/auction/listing-media/spec.md)
+and [`shared/ui/auction-listing`](specs/shared/ui/auction-listing/spec.md).
 
 ### Catalogue
 

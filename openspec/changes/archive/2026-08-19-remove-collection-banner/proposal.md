@@ -30,7 +30,7 @@ longer meet a banner the surface has dropped.
 
 - **New Capabilities:** none
 - **Modified Capabilities:**
-  - `shared-ui/store-product-listing`: the listing surface no longer exports
+  - `shared/ui/store-product-listing`: the listing surface no longer exports
     or requires a collection banner
 
 ## Impact

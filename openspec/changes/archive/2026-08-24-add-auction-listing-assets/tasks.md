@@ -11,7 +11,7 @@ in group 3.
 
 ## 1. Gallery sources (grade10-spec) (owner: @mason5991)
 
-- [x] 1.1 Make `An application imports the surface` and `A part is reused alone` pass by recording `ListingGallery`, `ListingBidPanel`, `ListingDetails`, and their listed types (including `*Copy`) as the `shared-ui/auction-listing` exports on the package entry.
+- [x] 1.1 Make `An application imports the surface` and `A part is reused alone` pass by recording `ListingGallery`, `ListingBidPanel`, `ListingDetails`, and their listed types (including `*Copy`) as the `shared/ui/auction-listing` exports on the package entry.
 - [x] 1.2 Make `Distinct sources are used in each slot` and `Omitted sources fall back to src` pass on `ListingGalleryImage` via optional `thumbSrc` and `zoomSrc`.
 - [x] 1.3 Make `Several photos show a strip`, `One photo has no strip`, `No photos`, and `Labels come from the consumer` pass in the gallery stories (consumer `copy`), then run this repository's `pnpm run typecheck`, `pnpm run lint`, and the block's story tests.
 

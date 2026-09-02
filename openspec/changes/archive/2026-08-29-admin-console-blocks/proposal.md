@@ -93,18 +93,18 @@ with every one rendered from the console package.
 
 ### New Capabilities
 
-- `admin-console/console-blocks`: what the admin console block package is —
+- `shared/console/blocks`: what the admin console block package is —
   where it lives, what it exports, how its blocks behave (honest async
   status, dialog confirmations, legible selection, money naming its
   currency) — and the rule that a console renders these shapes from the
   package rather than keeping a copy.
-- `admin-console/user-directory`: the user-directory surface's contract,
+- `shared/console/user-directory`: the user-directory surface's contract,
   carried over from `shared-ui/auth-user-directory` unchanged in behavior,
   re-homed to the console package.
 
 ### Removed Capabilities
 
-- `shared-ui/auth-user-directory`: moved to `admin-console/user-directory`.
+- `shared-ui/auth-user-directory`: moved to `shared/console/user-directory`.
   The shared UI package stops exporting the directory components.
 
 ## Impact

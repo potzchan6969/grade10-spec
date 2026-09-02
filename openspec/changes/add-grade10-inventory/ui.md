@@ -8,7 +8,7 @@ adds frames: the live Grade10 admin auction listings panel and listing editor
 app-local table parts.
 
 Assembly in `apps/admin/grade10` composing `@grade10/inventory-admin-frontend`.
-Behavior: [`grade10-inventory/catalog`](specs/grade10-inventory/catalog/spec.md).
+Behavior: [`grade10-admin/inventory/catalog`](specs/grade10-admin/inventory/catalog/spec.md).
 
 No collector or public inventory UI is part of this change.
 

@@ -73,10 +73,10 @@ and copy, and its title differs from the listing's.
 
 ### New Capabilities
 
-- `grade10-store/home`: what the store's own address serves — the hero it
+- `grade10-site/store/home`: what the store's own address serves — the hero it
   answers with before scripts run, the collections it offers as ways in, the
   merchandised row, and what each of them reaches.
-- `grade10-store/product-listing`: the browse listing's own address beneath
+- `grade10-site/store/product-listing`: the browse listing's own address beneath
   the store, and an address that scopes it to one collection.
 
 ## Impact

@@ -15,7 +15,7 @@ The cost is not aesthetic. An operator moves between nine consoles in a shift,
 and every surface that arranges the same facts differently is a surface they
 read more slowly. It is also a governance gap with no owner: the design system
 covers the storefronts through Figma sync, a token pipeline, and the
-`design-sync/audit-coverage` rail, and all three deliberately exclude the
+`shared/design-sync/coverage` rail, and all three deliberately exclude the
 admin — that exclusion is the premise `admin-console-blocks` was built on. The
 admin is the one product surface where a visual decision has no home.
 
@@ -77,13 +77,13 @@ zero, and each is testable today.
 
 ### New Capabilities
 
-- `admin-console/visual-standard`: what an operator console looks like, which
+- `shared/console/visual-standard`: what an operator console looks like, which
   vocabulary renders it, how brand identity reaches it, and the terms the
   third-party runtime is held to.
 
 ### Modified Capabilities
 
-None. `admin-console/console-blocks` governs what the blocks *are* and what
+None. `shared/console/blocks` governs what the blocks *are* and what
 they export; this change governs what they *look like* and what renders them,
 and does not alter a requirement there. That capability also does not exist in
 `openspec/specs/` yet — it lands when `admin-console-blocks` archives, which

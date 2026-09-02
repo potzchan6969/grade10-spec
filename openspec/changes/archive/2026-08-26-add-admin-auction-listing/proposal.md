@@ -151,17 +151,17 @@ live money, so the house can rehearse a sale.
 
 ### New Capabilities
 
-- `grade10-auction/admin-listing`: an authorized operator drafts, creates,
+- `grade10-admin/auction/listing`: an authorized operator drafts, creates,
   and publishes an Auction listing from the Grade10 admin section — which
   fields they may write, when required fields are enforced, when a listing
   may be called off, slug lookup at `/auction/listings/<slug>`, the cancel
   rewrite that frees a slug, scheduled publish, and the ordered one-to-eight
   image-or-video gallery (originals stored and served as uploaded).
-- `grade10-auction/listing-media`: optional alt on gallery images, named
+- `grade10-site/auction/listing-media`: optional alt on gallery images, named
   public sizes (`card`, `detail`, `thumb`, `zoom`), admin media-manager
   preview-before-upload and card/zoom review, and catalogue/details
   consumption of sized paths — on the gallery from admin-listing.
-- `shared-ui/auction-listing`: the listing product-page blocks `@grade10/ui`
+- `shared/ui/auction-listing`: the listing product-page blocks `@grade10/ui`
   already exports (`ListingGallery`, `ListingBidPanel`, `ListingDetails`) and
   the gallery's distinct sources for thumbnail, main frame, and zoom. The
   blocks ship today with no durable spec; this change alters the gallery

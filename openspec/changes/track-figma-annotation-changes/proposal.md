@@ -61,7 +61,7 @@ while no unselected, ambiguous, or blocked finding is silently accepted.
 
 ### New Capabilities
 
-- `design-sync/annotation-monitoring`: Category-aware observation, deterministic
+- `shared/design-sync/annotation-monitoring`: Category-aware observation, deterministic
   drift detection, exact engineering traceability, and selective reconciliation
   of Figma annotation occurrences.
 

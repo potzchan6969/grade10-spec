@@ -70,17 +70,17 @@ already is.
 
 ### New Capabilities
 
-- `grade10-auction/listing-page`: what one lot's address serves — the lot's own
+- `grade10-site/auction/listing-page`: what one lot's address serves — the lot's own
   page before scripts run, what a shared link unfurls as, the refusal when the
   auction holds no such lot, and how a lot is reached from the catalogue.
 
 ### Modified Capabilities
 
-- `grade10-site/crawlable-pages`: a nested surface takes precedence over the
+- `grade10-site/site/crawlable-pages`: a nested surface takes precedence over the
   surface above it, so the nested-address requirement no longer resolves a lot
   link to the auction; and the sitemap lists the surfaces the build writes a
   document for rather than every public surface.
-- `grade10-site/navigation`: the same precedence for address resolution in the
+- `grade10-site/site/navigation`: the same precedence for address resolution in the
   browser — a deeper address answers as the nested surface that names it, not
   the surface above.
 

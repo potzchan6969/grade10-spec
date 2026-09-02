@@ -1,7 +1,7 @@
 # Design: sync Product List page
 
 Capability spec:
-[`shared-ui/store-product-listing`](../../specs/shared-ui/store-product-listing/spec.md).
+[`shared/ui/store-product-listing`](../../specs/shared/ui/store-product-listing/spec.md).
 See proposal.md for motivation.
 
 ## Context

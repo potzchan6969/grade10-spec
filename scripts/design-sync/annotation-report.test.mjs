@@ -82,7 +82,7 @@ function change({
     proposalAuthor: author,
     artifacts: [
       {
-        path: "specs/design-sync/annotation-monitoring/spec.md",
+        path: "specs/shared/design-sync/annotation-monitoring/spec.md",
         references: nodeIds.map((nodeId) => ({ fileKey, nodeId })),
       },
     ],

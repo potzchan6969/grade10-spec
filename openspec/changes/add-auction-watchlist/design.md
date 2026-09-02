@@ -2,7 +2,7 @@
 
 - See [proposal.md](proposal.md) for the collector problem.
 - See
-  [`grade10-auction/watchlist`](specs/grade10-auction/watchlist/spec.md)
+  [`grade10-site/auction/watchlist`](specs/grade10-site/auction/watchlist/spec.md)
   for the observable contract.
 - Auction listings are shared across Grade10 and ZZZ. Bidder identity is
   `(storefront, user_id)`. Each storefront backend is the identity oracle;

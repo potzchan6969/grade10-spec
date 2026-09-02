@@ -1,10 +1,10 @@
 # Design: Who may act
 
 Capability deltas:
-[`shared-auth/roles`](specs/shared-auth/roles/spec.md),
-[`shared-auth/users`](specs/shared-auth/users/spec.md),
-[`shared-auth/sessions`](specs/shared-auth/sessions/spec.md),
-[`shared-auth/audit`](specs/shared-auth/audit/spec.md).
+[`shared/auth/roles`](specs/shared/auth/roles/spec.md),
+[`shared/auth/users`](specs/shared/auth/users/spec.md),
+[`shared/auth/sessions`](specs/shared/auth/sessions/spec.md),
+[`shared/auth/audit`](specs/shared/auth/audit/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
 ## Context
@@ -51,7 +51,7 @@ rejected. Email as the directory key — rejected (`account-data.md`).
 
 Support lists one account's sessions by user id and revokes one or all of
 them. The list does not include the secret that authenticates a session.
-Sign-out of the current surface stays with `shared-auth/sign-out`. Support
+Sign-out of the current surface stays with `shared/auth/sign-out`. Support
 cannot list or revoke an admin's sessions. Revoke is recorded; list is not.
 
 *Alternatives:* only a ban ends sessions — rejected, a stolen device should

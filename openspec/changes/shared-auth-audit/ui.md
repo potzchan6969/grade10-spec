@@ -44,7 +44,7 @@ No `@grade10/ui` audit block. Readable action labels are copy in
 
 ## States
 
-Tied to [admin-console/audit](./specs/admin-console/audit/spec.md). Loading
+Tied to [shared/console/audit](./specs/shared/console/audit/spec.md). Loading
 and a refused/unreachable chain are already the section's; they stay.
 
 | State | When | Scenario |

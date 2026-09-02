@@ -1,7 +1,7 @@
 ## Screens
 
 There are no Figma frames for the admin, by decision
-(`docs/prds/products/admin-console/index.md`). The layout's source of truth is
+(`docs/prds/products/shared/console/index.md`). The layout's source of truth is
 the design canvas:
 
 - **API docs surface** —
@@ -17,7 +17,7 @@ and the vocabulary below disagree on a badge tone, the vocabulary wins.
 ## Components
 
 Everything composes `@grade10/frontend-console`, the admin's single supplier
-(`admin-console/visual-standard`). No design-system primitive is rendered
+(`shared/console/visual-standard`). No design-system primitive is rendered
 directly, and nothing new is needed in `grade10-spec`.
 
 | Region | Exports |

@@ -10,8 +10,8 @@ and the admin client only wires `list` / `create` / `publish` — not
 collides with store checkout and inventory “sold”.
 
 Capability specs:
-[`grade10-auction/admin-campaign`](specs/grade10-auction/admin-campaign/spec.md),
-[`grade10-auction/admin-listing`](specs/grade10-auction/admin-listing/spec.md)
+[`grade10-admin/auction/campaign`](specs/grade10-admin/auction/campaign/spec.md),
+[`grade10-admin/auction/listing`](specs/grade10-admin/auction/listing/spec.md)
 (delta).
 
 Inventory eligibility and reservation sync for listing `productId` and
@@ -164,7 +164,7 @@ dialog when changing product on a listing that already has an active hold.
 
 ### Packages and ownership
 
-All work under `@grade10/auction-*` and `apps/admin/grade10` auction pages.
+All work under `@grade10-site/auction/*` and `apps/admin/grade10` auction pages.
 Compose existing `@grade10/design-system` primitives only.
 
 ## Flows

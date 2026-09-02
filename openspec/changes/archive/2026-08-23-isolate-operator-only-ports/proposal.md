@@ -2,7 +2,7 @@
 
 ## Why
 
-The `frontend-composition` capability says a composition root MUST NOT name an
+The `shared/frontend-composition` capability says a composition root MUST NOT name an
 individual feature slice's dependency-injection module. Both merged admin
 panels do exactly that today, and have since the convention was recorded:
 `apps/admin/grade10/src/di/container.ts` and its ZZZ sibling each load the
@@ -36,7 +36,7 @@ two-factor client on the auth product's shared core module — and zero after.
 
 ## What Changes
 
-- Add a requirement to `frontend-composition`: a client port a
+- Add a requirement to `shared/frontend-composition`: a client port a
   collector-facing surface cannot satisfy lives in the product's
   operator-facing frontend package, and a shared core module never declares a
   port optional to accommodate one.
@@ -74,7 +74,7 @@ two-factor client on the auth product's shared core module — and zero after.
 
 ### Modified Capabilities
 
-- `frontend-composition`: adds where an operator-only client port lives, and
+- `shared/frontend-composition`: adds where an operator-only client port lives, and
   forbids the optional-port escape that let a composition root name a slice
   module directly.
 

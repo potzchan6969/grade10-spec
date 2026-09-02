@@ -6,7 +6,7 @@ one rendered when its address is asked for. A lot's address was the single
 route that table did not carry — it was matched by a pattern kept beside the
 table, and served as an address nested inside the prerendered auction.
 
-`grade10-store/product-page` already solved the same problem for a card, and
+`grade10-site/store/product-page` already solved the same problem for a card, and
 this change follows it rather than inventing a second shape. What a lot is,
 how bidding works on it and what the catalogue publishes are settled in
 `grade10-auction/auction` and do not move here.

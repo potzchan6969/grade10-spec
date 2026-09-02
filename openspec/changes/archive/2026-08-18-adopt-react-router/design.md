@@ -1,7 +1,7 @@
 # Design: Adopt React Router
 
 Capability delta:
-[`grade10-site/navigation`](specs/grade10-site/navigation/spec.md).
+[`grade10-site/site/navigation`](specs/grade10-site/site/navigation/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
 ## Context

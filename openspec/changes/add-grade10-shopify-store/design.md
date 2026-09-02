@@ -1,6 +1,6 @@
 # Design: Shopify-backed Grade10 Store
 
-Capability delta: [`grade10-store/shopify-commerce`](specs/grade10-store/shopify-commerce/spec.md).
+Capability delta: [`grade10-site/store/shopify-commerce`](specs/grade10-site/store/shopify-commerce/spec.md).
 Product context: [Grade10 foundation](../../../docs/prds/products/grade10-store/index.md).
 
 ## Authority and data flow

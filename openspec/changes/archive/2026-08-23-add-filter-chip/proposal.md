@@ -9,7 +9,7 @@ This change began as `sync-product-list-header`: a redesign of
 and a series dropdown. `sync-product-list-page` replaced that layout with a
 sort dropdown and applied-filter chips, and shipped it. The header this change
 described no longer exists in Figma or in code, and the durable
-`shared-ui/store-product-listing` requirement already describes the header
+`shared/ui/store-product-listing` requirement already describes the header
 that does.
 
 One piece outlived the redesign. The published `Filter Chip` set

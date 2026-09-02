@@ -89,8 +89,8 @@ trees are first-class targets for `/spec-to-tcs`:
 
 | Spec location | Suite location |
 | --- | --- |
-| Durable: `openspec/specs/<product>/<capability>/spec.md` | `openspec/specs/<product>/<capability>/test-cases.md` |
-| In-flight change: `openspec/changes/<change>/specs/<product>/<capability>/spec.md` | `openspec/changes/<change>/specs/<product>/<capability>/test-cases.md` |
+| Durable: `openspec/specs/<product>/<domain>/<capability>/spec.md` | `openspec/specs/<product>/<domain>/<capability>/test-cases.md` |
+| In-flight change: `openspec/changes/<change>/specs/<product>/<domain>/<capability>/spec.md` | `openspec/changes/<change>/specs/<product>/<domain>/<capability>/test-cases.md` |
 
 `/spec-to-tcs` resolves whichever tree the argument names and writes only
 there. When a capability exists in both, ask which one — do not prefer the
@@ -145,15 +145,15 @@ want:
 | Argument | Resolves to |
 | --- | --- |
 | A change name (`add-auction-auto-bidding`) | Every delta under `openspec/changes/<change>/specs/` |
-| A capability id (`grade10-store/home`) | The durable `openspec/specs/<product>/<capability>/spec.md`, or — if an active delta also exists — ask which tree |
+| A capability id (`grade10-site/store/home`) | The durable `openspec/specs/<product>/<domain>/<capability>/spec.md`, or — if an active delta also exists — ask which tree |
 | An explicit path under `openspec/specs/` or `openspec/changes/` | Exactly that path's tree |
 
 Examples:
 
 ```text
-/spec-to-tcs grade10-store/home
+/spec-to-tcs grade10-site/store/home
 /spec-to-tcs add-auction-auto-bidding
-/spec-to-tcs grade10-auction/auto-bidding
+/spec-to-tcs grade10-site/auction/auto-bidding
 ```
 
 If the resolved `spec.md` has no `## User journeys` (or an empty one),
@@ -339,7 +339,7 @@ Then read the store's own context, because a capability spec assumes it:
   url>`, not `<store front door URL>`, because the store has more than one
   brand and the tester needs to know which one.
 - **The cross-cutting specs the Purpose names.** A public surface says so
-  outright — "every requirement of `grade10-site/crawlable-pages` binds it" —
+  outright — "every requirement of `grade10-site/site/crawlable-pages` binds it" —
   and `localization`, `money-amounts` and `dates-and-times` bind their
   subjects the same way. Read them. They carry facts the capability spec
   never repeats: that every public address answers once per locale, that the
@@ -846,7 +846,7 @@ A suite carries at most three lines under its title, and every one of them is
 computed rather than chosen:
 
 ```markdown
-# <product>/<capability> Test Cases
+# <product>/<domain>/<capability> Test Cases
 
 **Status:** in-review
 **Drafts styled:** 2026-09-05, tcs-rules r1
@@ -921,7 +921,7 @@ pre-conditions, optional test data, numbered steps, and an expected-results
 list — in that order, a blank line between each part:
 
 ````markdown
-# <product>/<capability> Test Cases
+# <product>/<domain>/<capability> Test Cases
 
 **Status:** pending-review
 **Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>
@@ -1055,7 +1055,7 @@ Two pull requests, two audiences.
 | `pnpm run tcs:stale` | Lists the suites whose `draft` cases sit below the current `tcs_rules_rev`. A report, not a sweep. |
 
 Change deltas use the same format under
-`openspec/changes/<change>/specs/<product>/<capability>/test-cases.md`.
+`openspec/changes/<change>/specs/<product>/<domain>/<capability>/test-cases.md`.
 
 ## See also
 

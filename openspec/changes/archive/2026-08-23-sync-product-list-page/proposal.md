@@ -69,7 +69,7 @@ layout the file has now left.
 
 ### Modified Capabilities
 
-- `shared-ui/store-product-listing`: sidebar filter groups replace the
+- `shared/ui/store-product-listing`: sidebar filter groups replace the
   collection menu; the list header shows applied filters and a sort dropdown;
   the grid gap and tile badges match the page.
 

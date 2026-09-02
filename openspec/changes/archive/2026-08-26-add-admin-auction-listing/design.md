@@ -8,9 +8,9 @@ operator listing lifecycle and sized gallery delivery (formerly split across
 `add-admin-auction-listing` and `add-auction-listing-assets`).
 
 Capability deltas:
-[`grade10-auction/admin-listing`](specs/grade10-auction/admin-listing/spec.md),
-[`grade10-auction/listing-media`](specs/grade10-auction/listing-media/spec.md),
-[`shared-ui/auction-listing`](specs/shared-ui/auction-listing/spec.md).
+[`grade10-admin/auction/listing`](specs/grade10-admin/auction/listing/spec.md),
+[`grade10-site/auction/listing-media`](specs/grade10-site/auction/listing-media/spec.md),
+[`shared/ui/auction-listing`](specs/shared/ui/auction-listing/spec.md).
 
 The worker is the authority for listing state, its Postgres schema, object
 store media, public routes, cache invalidation, and cron sweeps. The Grade10

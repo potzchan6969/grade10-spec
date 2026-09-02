@@ -34,7 +34,7 @@ Beyond the proposal's scope:
   visible.
 - **Non-goal:** a shared "store home" React component. The page is assembly —
   destinations, reads and copy — which is application-owned by
-  `frontend-composition`. What is reusable is already in `@grade10/ui`.
+  `shared/frontend-composition`. What is reusable is already in `@grade10/ui`.
 - **Non-goal:** touching the catalog slice's ports. Every read the front door
   makes exists: `useCollections` for the bento and `useCollection` for the
   merchandised row.

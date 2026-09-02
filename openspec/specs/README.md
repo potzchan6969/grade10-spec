@@ -1,34 +1,53 @@
 # Durable specifications
 
-Specs are grouped by product, one capability directory per durable product contract:
+Specs are grouped by the application that ships them, one capability directory
+per durable contract:
 
 ```text
-openspec/specs/<product>/<capability>/spec.md
+openspec/specs/<product>/<domain>/<capability>/spec.md
 ```
 
-The products are:
+Grade10 ships four applications, and they are the four product directories:
 
-- `grade10-store` — the Grade10 trading-card store surfaces (all pre-existing capabilities live here).
-- `zzz` — the ZZZ site's own surfaces, starting with how it answers an address.
-- `grade10-site` — the grade10 application's own surfaces: the shell every page
-  renders in, and anything belonging to the site rather than to a product inside
-  it.
-- `shared-ui` — cross-product contracts for the shared components every store
-  application consumes: the compound components in `packages/ui`, and the site
-  chrome the design system publishes.
-- `shared-auth` — cross-product session behavior, entering a session and
-  leaving one, shared by every surface of either brand regardless of which
-  application renders it.
-- `design-sync` — the rails that hold code and the Figma file to each other:
-  what the design-to-code audit must detect, and which components it must
-  reach. Not a product surface; a contract the tooling owes every product.
-- `grade10-auction` — Grade10's card-auction surfaces: collector browse and
-  bid, and the operator queue that closes out a won listing.
-- `admin-console` — what every operator console shares regardless of the
-  product behind it: the blocks the consoles are built from, the visual
-  standard they render, and the identity directory that moved out of
-  `shared-ui`.
+- `grade10-site` — the grade10 site: the shell every page renders in, how it answers
+  an address, and every collector-facing surface inside it — the store, the
+  auction, and the loyalty programme.
+- `grade10-admin` — the grade10 admin site: the operator surfaces that draft and
+  publish auction listings and campaigns, close out a won listing, and hold the
+  stock count behind them.
+- `zzz-site` — the ZZZ site: the ZZZ brand's own collector-facing surfaces.
+- `zzz-admin` — the ZZZ admin site. No capability is specified yet; add its
+  first as `openspec/specs/zzz-admin/<domain>/<capability>/spec.md`.
 
-A capability's OpenSpec ID is `<product>/<capability>` (for example `grade10-store/loyalty`); use that ID with `openspec show` and `openspec validate`. Adding a product is a new top-level directory here plus a bullet in this list.
+A fifth directory is not an application:
 
-These specs hold current requirements. An active change may contain a focused delta spec under `openspec/changes/<change>/specs/<product>/<capability>/`; sync the accepted delta into this directory before archiving the change.
+- `shared` — the contracts that bind more than one of the four. A capability
+  lives here only when two or more applications are held to it: session and
+  identity behavior (`auth/*`), the shared component package and its surfaces
+  (`ui/*`), the admin console vocabulary both admin sites render (`console/*`),
+  the Figma-to-code audit rails (`design-sync/*`), and the platform-wide
+  formats every surface renders (`dates-and-times`, `money-amounts`,
+  `localization`, `frontend-composition`).
+
+Inside a product, capabilities are grouped one level further by the domain they
+belong to, so a product with twenty capabilities reads as four groups rather than
+one alphabetical run: `grade10-site/site/*`, `grade10-site/store/*`, `grade10-site/auction/*`,
+`grade10-site/loyalty/*`. The `shared` layer groups the same way — `shared/auth/*`,
+`shared/ui/*`, `shared/console/*`, `shared/design-sync/*` — except for the
+platform-wide formats, which sit bare because they belong to no group smaller
+than everything.
+
+A capability's OpenSpec ID is its path: `grade10-site/auction/listing-page`,
+`shared/auth/sign-in`, `shared/money-amounts`. Use that ID with `openspec show`
+and `openspec validate`, both of which accept the extra level.
+
+Where a capability belongs is decided by who is held to it, not by what it is
+about. An auction surface a collector uses is `grade10-site/auction/*`; the operator
+surface that publishes it is `grade10-admin/auction-*`; a component both brands
+render is `shared/ui-*`. Adding a fifth application means a new top-level
+directory here plus a bullet in this list — and that is a product decision, not
+a filing one.
+
+These specs hold current requirements. An active change may contain a focused
+delta spec under `openspec/changes/<change>/specs/<product>/<domain>/<capability>/`; sync
+the accepted delta into this directory before archiving the change.

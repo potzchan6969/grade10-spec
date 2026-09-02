@@ -45,7 +45,7 @@ module, 6 → 0.
 
 ## What Changes
 
-- Add a `money-amounts` capability: how an amount converts between minor
+- Add a `shared/money-amounts` capability: how an amount converts between minor
   units and a decimal amount, what happens to an unknown currency, and the
   two display shapes the platform uses — one for collectors, one for
   operators.
@@ -63,7 +63,7 @@ module, 6 → 0.
 
 ### New Capabilities
 
-- `money-amounts`: How a money amount is converted and displayed on every
+- `shared/money-amounts`: How a money amount is converted and displayed on every
   Grade10 surface — backend, storefront, admin, and email.
 
 ### Modified Capabilities

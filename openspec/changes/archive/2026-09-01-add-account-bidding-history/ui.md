@@ -10,7 +10,7 @@ No design-system appearance, token, variant, or size changes are proposed.
 ### ZZZ
 
 No screen. See `ZZZ receives no bidding-history page` in
-[`grade10-auction/bidding-history`](specs/grade10-auction/bidding-history/spec.md).
+[`grade10-site/auction/bidding-history`](specs/grade10-site/auction/bidding-history/spec.md).
 
 ## Components
 

@@ -10,8 +10,8 @@ What does not exist today: no member has a commerce customer, the shop is not a
 caller at all, no order arrives from a physical till, and a redeemed reward has
 no state meaning "paid for, not yet collected".
 
-Requirements: [`specs/grade10-store/membership/spec.md`](specs/grade10-store/membership/spec.md)
-and [`specs/grade10-store/loyalty/spec.md`](specs/grade10-store/loyalty/spec.md).
+Requirements: [`specs/grade10-site/store/membership/spec.md`](specs/grade10-site/store/membership/spec.md)
+and [`specs/grade10-site/loyalty/programme/spec.md`](specs/grade10-site/loyalty/programme/spec.md).
 
 ## Decisions
 

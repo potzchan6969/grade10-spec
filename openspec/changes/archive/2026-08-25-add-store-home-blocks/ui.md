@@ -22,7 +22,7 @@
 | --- | --- |
 | Store Home page story | `apps/preview/src/pages/store-home-page.stories.tsx` |
 
-Reuses `ProductCard` from `shared-ui/store-product-listing` for the product
+Reuses `ProductCard` from `shared/ui/store-product-listing` for the product
 row — not a new export.
 
 ## Contract checks

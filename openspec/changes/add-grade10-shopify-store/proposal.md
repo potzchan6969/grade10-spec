@@ -27,7 +27,7 @@ browser's price, payment, or shipping claim as authoritative.
 
 ## Scope
 
-- A new `grade10-store/shopify-commerce` capability defining catalogue,
+- A new `grade10-site/store/shopify-commerce` capability defining catalogue,
   availability, account association, reserved checkout handoff, payment, and
   shipping-status behavior.
 - Read-only Shopify Storefront API catalogue and availability reads, with
@@ -46,7 +46,7 @@ browser's price, payment, or shipping claim as authoritative.
 | Consumer | Change |
 | --- | --- |
 | `apps/frontend/grade10-store` | Uses the Store catalogue, checkout, and order-status contracts; it never calls Shopify directly. |
-| `apps/backend/grade10/store` | Owns the Store API, local orders, webhook endpoint, and reconciliation schedule; it binds Shopify credentials server-side. |
+| `apps/backend/grade10-site/store` | Owns the Store API, local orders, webhook endpoint, and reconciliation schedule; it binds Shopify credentials server-side. |
 | `apps/admin/grade10` | Reads the same Store order and shipping-status projection for support; it does not edit Shopify inventory, payment, or fulfilment data. |
 | `@grade10/shopify-contracts` / `@grade10/shopify-backend` | Adds the typed Shopify product, customer, draft-order, payment, and fulfilment reads needed by the Store boundary. |
 | `@grade10/store-contracts` / `@grade10/store-backend` | Exposes the Store-facing catalogue, checkout, and order-status contract while preserving provider-neutral order state. |

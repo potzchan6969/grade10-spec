@@ -42,18 +42,18 @@ reach a bid-ready panel without abandoning setup.
 
 ### New Capabilities
 
-- `grade10-auction/bid-panel-enrollment`: Collector-facing enrollment
+- `grade10-site/auction/bid-panel-enrollment`: Collector-facing enrollment
   states and trigger moments on the listing bid panel.
 
 ### Modified Capabilities
 
-- `shared-ui/auction-listing`: Export contracts for enrollment presentation
+- `shared/ui/auction-listing`: Export contracts for enrollment presentation
   blocks and the bid card's enrollment signal.
 
 ## Impact
 
-- `openspec/specs/grade10-auction/bid-panel-enrollment/spec.md` (new).
-- `openspec/specs/shared-ui/auction-listing/spec.md` (enrollment exports).
+- `openspec/specs/grade10-site/auction/bid-panel-enrollment/spec.md` (new).
+- `openspec/specs/shared/ui/auction-listing/spec.md` (enrollment exports).
 - `@grade10/ui`: enrollment blocks already prototyped under
   `packages/ui/src/blocks/auction-listing/`; this change records the
   contract they must satisfy.

@@ -1,8 +1,8 @@
 # Design: Who is signed in
 
 Capability deltas:
-[`shared-auth/session`](specs/shared-auth/session/spec.md),
-[`shared-auth/sign-in`](specs/shared-auth/sign-in/spec.md).
+[`shared/auth/session`](specs/shared/auth/session/spec.md),
+[`shared/auth/sign-in`](specs/shared/auth/sign-in/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
 ## Context

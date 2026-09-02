@@ -11,8 +11,8 @@ this change does not block on it.
 
 Assembly in `apps/admin/grade10` composing `@grade10/auction-admin-frontend`.
 Behavior:
-[`grade10-auction/admin-campaign`](specs/grade10-auction/admin-campaign/spec.md),
-[`grade10-auction/admin-listing`](specs/grade10-auction/admin-listing/spec.md)
+[`grade10-admin/auction/campaign`](specs/grade10-admin/auction/campaign/spec.md),
+[`grade10-admin/auction/listing`](specs/grade10-admin/auction/listing/spec.md)
 (delta).
 
 ### Rename first — existing Sales tab becomes Campaigns

@@ -67,8 +67,8 @@ section labeled Campaigns.
   cancel / get / create / setAuction.
 - **Change id.** This change is `add-admin-auction-campaigns` (renamed from
   `add-admin-auction-sales`) so the planning name matches operator language.
-- **Specs.** New durable capability `grade10-auction/admin-campaign` for
-  campaign CRUD, lifecycle, and admin rename. `grade10-auction/admin-listing`
+- **Specs.** New durable capability `grade10-admin/auction/campaign` for
+  campaign CRUD, lifecycle, and admin rename. `grade10-admin/auction/listing`
   gains editor scenarios for campaign selection and inventory product
   eligibility.
 
@@ -76,13 +76,13 @@ section labeled Campaigns.
 
 ### New Capabilities
 
-- `grade10-auction/admin-campaign`: Operator create / edit / publish / cancel
+- `grade10-admin/auction/campaign`: Operator create / edit / publish / cancel
   of auction campaigns in the Grade10 admin panel, including status rules,
   authorization, and Campaigns section naming.
 
 ### Modified Capabilities
 
-- `grade10-auction/admin-listing`: Listing editor exposes optional campaign
+- `grade10-admin/auction/listing`: Listing editor exposes optional campaign
   selection; inventory product picker and **quantity**; explicit Save with
   reservation sync; create verifies hold; product-change confirmation;
   cancel releases hold; scenarios for attach, eligibility, save sync, and

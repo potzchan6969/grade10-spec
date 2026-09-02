@@ -58,7 +58,7 @@ app-local — the day the zzz panel grows a date filter, it gets copied.
 
 ## What Changes
 
-- Add a `dates-and-times` capability: the shapes a stored instant takes on
+- Add a `shared/dates-and-times` capability: the shapes a stored instant takes on
   screen, when a rendering must name its time zone, and how a calendar day an
   operator types becomes an instant.
 - Adopt date-fns v4 and `@date-fns/tz` as the platform's date library, and
@@ -82,7 +82,7 @@ app-local — the day the zzz panel grows a date filter, it gets copied.
 
 ### New Capabilities
 
-- `dates-and-times`: How a stored instant becomes text a person reads, and
+- `shared/dates-and-times`: How a stored instant becomes text a person reads, and
   how a calendar day a person types becomes an instant — across storefronts,
   admin panels, demos, and email.
 

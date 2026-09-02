@@ -35,7 +35,7 @@ _(none)_
 
 ### Modified Capabilities
 
-- `shared-ui/store-cart`: Low-stock adjustment warning lifecycle on `CartItem`
+- `shared/ui/store-cart`: Low-stock adjustment warning lifecycle on `CartItem`
   — show while `adjusted` until the shopper changes quantity; re-show only on
   a new `adjusted` status.
 

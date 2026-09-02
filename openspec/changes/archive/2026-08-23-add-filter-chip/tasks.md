@@ -26,7 +26,7 @@ two groups below were never started and are not deferred:
 - **Header contract** — a required `title`, sort options as chips with a
   paired second activation, `chipFilters`, and `selectFilters`. The shipped
   header has no title prop, one sort dropdown, and dismissible applied-filter
-  chips, all covered by the durable `shared-ui/store-product-listing`
+  chips, all covered by the durable `shared/ui/store-product-listing`
   requirement.
 - **Preview assembly** — supplying `title` and wiring header filter groups.
   Nothing to wire.

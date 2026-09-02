@@ -51,7 +51,7 @@ an hour below the eventual close. **Acceptance signal:** a lot opened at HKD
 - **The bottom tier reaches zero**, so no listing can be un-biddable however
   low it opens.
 - **Auto-bidding uses the table.** The `SHALL NOT use any price-banded
-  increment schedule` shipped in `grade10-auction/auto-bidding` is removed.
+  increment schedule` shipped in `grade10-site/auction/auto-bidding` is removed.
 
 ## Non-Goals
 
@@ -61,7 +61,7 @@ an hour below the eventual close. **Acceptance signal:** a lot opened at HKD
   only the first bid that clears it changes.
 - **Changing the price shown before anyone has bid.** With a single committed
   maximum the current bid remains the starting price, as
-  `grade10-auction/auto-bidding` already specifies. Only the minimum bid
+  `grade10-site/auction/auto-bidding` already specifies. Only the minimum bid
   moves.
 - **Reserve prices.** Still removed.
 - **A different table per currency on one listing.** A listing has one
@@ -76,16 +76,16 @@ an hour below the eventual close. **Acceptance signal:** a lot opened at HKD
 
 ### New Capabilities
 
-- `grade10-auction/bid-increments`: the increment table itself — its shape,
-  what makes one valid, how a tier is looked up, the house default, and the
-  minimum bid it produces on an active listing.
+- `grade10-site/auction/bid-increments`: the increment table itself — its
+  shape, what makes one valid, how a tier is looked up, the house default, and
+  the minimum bid it produces on an active listing.
 
 ### Modified Capabilities
 
-- `grade10-auction/auto-bidding`: the two-maximum rule sizes its step from the
-  table instead of a single increment, and no longer forbids a banded
+- `grade10-site/auction/auto-bidding`: the two-maximum rule sizes its step
+  from the table instead of a single increment, and no longer forbids a banded
   schedule.
-- `grade10-auction/admin-listing`: the **Minimum increment** field becomes the
+- `grade10-admin/auction/listing`: the **Minimum increment** field becomes the
   increment table, in the draft, create, and pre-publish write requirements.
 
 ## The house default table
@@ -144,5 +144,5 @@ operators would rather the advertised figure stay bid-able, the fix is to set
 the starting price one increment lower, not to change this rule.
 
 Note also that a listing's starting price is already required to be greater
-than zero by `grade10-auction/admin-listing`, so a lot cannot open at zero and
+than zero by `grade10-admin/auction/listing`, so a lot cannot open at zero and
 a zero bid was never reachable under either rule.

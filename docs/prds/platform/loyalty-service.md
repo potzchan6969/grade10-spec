@@ -289,7 +289,7 @@ The program implements the owner's 2026-08 draft ([the programme reference](/ref
 The `grade10-spec` store still carries the superseded requirements — they describe the program before this rebuild. When it is next updated it owes:
 
 - **Spec deltas**: expiry on a member activity clock; tier validity, retention and the review sweep; the redemption fulfilment lifecycle; and the refund basis — a claw-back prices the goods that came back, at the rate the earn used.
-- **Product decision rows** on [Membership](/p/membership): the exchange rate; how a member's identity binds to a Shopify customer; whether Wave POS honours a code minted here; the retention threshold (500 or 400); Black's annual cap, parked; verification that the excluded categories — shipping, grading fees, gift cards — are what the catalog actually excludes; and who funds POS ingestion.
+- **Product decision rows** on [Membership](/p/grade10-site/loyalty): the exchange rate; how a member's identity binds to a Shopify customer; whether Wave POS honours a code minted here; the retention threshold (500 or 400); Black's annual cap, parked; verification that the excluded categories — shipping, grading fees, gift cards — are what the catalog actually excludes; and who funds POS ingestion.
 
 ## Q & A
 

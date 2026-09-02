@@ -1,6 +1,6 @@
 ## Context
 
-`frontend-composition` already fixes what a composition root may load and what
+`shared/frontend-composition` already fixes what a composition root may load and what
 a frontend package must publish. It does not say where a port lives when only
 some surfaces can satisfy it, and that omission is what the auth product ran
 into: one better-auth client kind carries the two-factor plugin and the other

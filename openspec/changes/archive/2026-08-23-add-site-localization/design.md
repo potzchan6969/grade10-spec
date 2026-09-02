@@ -1,6 +1,6 @@
 # Design: Site localization
 
-Capability delta: [`localization`](specs/localization/spec.md).
+Capability delta: [`shared/localization`](specs/shared/localization/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
 ## Context
@@ -14,14 +14,14 @@ Three seams already exist and the design leans on all of them.
   locale for that email from a `locale` cookie no page sets today.
 - The site chrome's `Nav` already ships the whole locale switcher —
   `localeLabel`, `locales`, `locale`, `onLocaleChange` — and `Footer` a
-  locale slot; `shared-ui/site-chrome` specifies both. No component work
+  locale slot; `shared/ui/site-chrome` specifies both. No component work
   exists in this change.
 - The grade10 site runs React Router in framework mode, and
-  `grade10-site/crawlable-pages` — landed and durable — gives each public
+  `grade10-site/site/crawlable-pages` — landed and durable — gives each public
   route module an identity record that drives its `meta`, its prerendered
   document, and the sitemap. The localized addresses extend that machinery
   per locale rather than adding a second one.
-- A public surface is one of two kinds since `grade10-store/product-page`
+- A public surface is one of two kinds since `grade10-site/store/product-page`
   landed: one the build writes a document for (marketing, store, auction),
   and one the worker renders when its address is asked for (a card's page,
   `/store/products/:slug`). Only the first kind can be enumerated at build
@@ -119,7 +119,7 @@ unprefixed.
 
 A rendered public surface is the third case, and it gets no prefix. Giving a
 card's page one would mean either a sitemap the worker renders — which
-`grade10-store/product-page` deliberately does not have — or prefixed
+`grade10-site/store/product-page` deliberately does not have — or prefixed
 addresses absent from the sitemap, indexable by nothing. So its address stays
 as it is and the worker reads the locale off the request it is already
 handling: the cookie when one is carried, the brand default when none is.

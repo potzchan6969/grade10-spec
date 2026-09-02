@@ -9,8 +9,8 @@ grade10 (`Table`/`Row`/`Cell`/`At`/`Money`/`Status`, `FormDialog`,
 `useDebounced` — 305 lines, four of seven packages depend on it, one uses its
 table), the `auth-user-directory` block in `@grade10/ui`, and twelve inline
 copies. Requirements live in
-[`admin-console/console-blocks`](specs/admin-console/console-blocks/spec.md)
-and [`admin-console/user-directory`](specs/admin-console/user-directory/spec.md).
+[`shared/console/blocks`](specs/shared/console/blocks/spec.md)
+and [`shared/console/user-directory`](specs/shared/console/user-directory/spec.md).
 
 Two facts constrain the plan:
 

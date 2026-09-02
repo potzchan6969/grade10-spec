@@ -74,7 +74,7 @@ available stock.
 
 ### New Capabilities
 
-- `grade10-inventory/catalog`: products (`draft` | `created`), one inventory
+- `grade10-admin/inventory/catalog`: products (`draft` | `created`), one inventory
   row per product, quantity intake and terminal transitions, application
   reservations with remaining/sold/vaulted/released tracking, vaulted stock
   partition, derived ledger/available, scoped visibility, change history, and

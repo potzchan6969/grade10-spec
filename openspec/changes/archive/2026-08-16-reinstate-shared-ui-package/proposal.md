@@ -35,7 +35,7 @@ one per application per component.
 - **A new workspace package, `packages/ui`.** One shared component set,
   organized by capability, consumed from source through the submodule exactly
   as the design system is. No build step, no committed artifact. Requirements
-  are carried in the new `shared-ui/component-package` capability delta.
+  are carried in the new `shared/ui/component-package` capability delta.
 - **The package starts empty.** The former featured-markets capability was
   retired as a product decision: its spec, PRD, and design file are removed
   from this repository, and no export is carried forward. The first shared

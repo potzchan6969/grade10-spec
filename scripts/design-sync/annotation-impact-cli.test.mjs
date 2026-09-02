@@ -58,7 +58,7 @@ function review() {
           check: "opened the rendered block",
           observed: "the reviewed behavior was visible",
         },
-        association: { capability: "design-sync/audit-coverage" },
+        association: { capability: "shared/design-sync/coverage" },
       },
     ],
     planningGroups: [],
@@ -160,7 +160,7 @@ test("impact CLI returns exit 1 for a validated planning gap", async () => {
     gapReview.planningGroups = [
       {
         findingIds: ["implemented"],
-        capabilityPath: "design-sync/annotation-implementation-verification",
+        capabilityPath: "shared/design-sync/annotation-verification",
         proposedChangeName: "implement-missing-annotation-behavior",
         planningLane: "pm-planning",
         affectedRepositories: ["grade10-spec"],

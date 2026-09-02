@@ -4,6 +4,11 @@
 
 A cross-cutting topic every product leans on.
 
+## Feature set
+
+- Doing the thing
+  - The thing: so the spec carries a map above its requirements
+
 ## Requirements
 
 ### Requirement: The topic holds

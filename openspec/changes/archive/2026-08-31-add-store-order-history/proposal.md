@@ -43,7 +43,7 @@ No breaking changes — new exports only.
 
 ### New Capabilities
 
-- `shared-ui/store-order-history`: the order-history components `@grade10/ui`
+- `shared/ui/store-order-history`: the order-history components `@grade10/ui`
   exports and what each is responsible for.
 
 ### Modified Capabilities

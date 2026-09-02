@@ -21,7 +21,7 @@ already ships, wired for the first time.
 
 All existing; nothing new to build in this repository.
 
-- `Nav` (design system, `shared-ui/site-chrome`): the grade10 site supplies
+- `Nav` (design system, `shared/ui/site-chrome`): the grade10 site supplies
   `localeLabel`, `locales` (three entries — labels `English`, `繁體中文`,
   `简体中文`), `locale`, and `onLocaleChange`. The ZZZ site supplies
   `localeLabel` (`한국어`) and no handler — the display-only state the

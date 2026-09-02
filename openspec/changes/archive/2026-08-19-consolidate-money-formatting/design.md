@@ -15,7 +15,7 @@ Constraints the approach has to respect:
 - `@grade10/utils` already exists for exactly this shape of code, and both
   ends already depend on it: workers, backend and frontend packages, and one
   demo.
-- Requirements: [`money-amounts`](specs/money-amounts/spec.md).
+- Requirements: [`shared/money-amounts`](specs/shared/money-amounts/spec.md).
 
 ## Goals / Non-Goals
 
@@ -166,7 +166,7 @@ exists because six people each wrote the obvious four lines.
 
 ### The capability sits at the top level of `specs/`
 
-`money-amounts` is not a product's capability — it binds storefronts, admin
+`shared/money-amounts` is not a product's capability — it binds storefronts, admin
 panels, and email across both brands — so it sits beside the product
 directories rather than inside one, the way `backend-service-repository` does.
 

@@ -1,8 +1,8 @@
 # Design: Account profile with basic information
 
 Capability deltas:
-[`grade10-store/account-profile`](specs/grade10-store/account-profile/spec.md),
-[`shared-ui/store-profile`](specs/shared-ui/store-profile/spec.md).
+[`grade10-site/store/account-profile`](specs/grade10-site/store/account-profile/spec.md),
+[`shared/ui/store-profile`](specs/shared/ui/store-profile/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
 ## Context
@@ -58,7 +58,7 @@ save. `profile.update` returns the same view. The row shape stays internal to
 the worker; `StoreProfile` in `@grade10/store-contracts` becomes that view.
 
 The email fallback is not a nicety. Sign-in by emailed link or code collects no
-name (`shared-auth/sign-in`), so a large share of sessions carry none — which
+name (`shared/auth/sign-in`), so a large share of sessions carry none — which
 is why `ensureAccount` seeded `Member <first 8 of user id>` in the first place.
 Falling back to the session name alone would replace a generated identifier
 with an empty page heading and an empty initials circle.

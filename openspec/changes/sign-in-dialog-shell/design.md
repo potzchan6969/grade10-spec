@@ -31,7 +31,7 @@ No data model, no wire, no migration: this change is one block's composition.
 ### Keep the export name; change what it renders
 
 The spec governs that `SignInCard` renders as a modal
-([Sign-in renders as a modal dialog over a scrim](specs/shared-ui/auth-sign-in/spec.md)).
+([Sign-in renders as a modal dialog over a scrim](specs/shared/ui/auth-sign-in/spec.md)).
 It stays named `SignInCard` and stays at its current import path, so consuming
 applications change props without changing imports.
 

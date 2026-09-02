@@ -112,6 +112,9 @@ describe("where the status is carried", () => {
     expect(under("docs/prds/products/demo-product")).toBe(true);
     expect(under("docs/prds/guides")).toBe(false);
     expect(under("docs/prds/products")).toBe(false);
-    expect(under("docs/prds/products/demo-product/deeper")).toBe(false);
+    // Two levels is a product too: a store that groups its products by the
+    // application shipping them files a capability one level deeper.
+    expect(under("docs/prds/products/demo-product/deeper")).toBe(true);
+    expect(under("docs/prds/products/a/b/c")).toBe(false);
   });
 });

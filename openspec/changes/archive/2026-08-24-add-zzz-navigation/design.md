@@ -1,7 +1,7 @@
 # Design: ZZZ site navigation
 
 Capability delta:
-[`zzz/navigation`](specs/zzz/navigation/spec.md).
+[`zzz-site/site/navigation`](specs/zzz-site/site/navigation/spec.md).
 Motivation: [proposal.md](proposal.md) — Why.
 
 ## Context
@@ -18,7 +18,7 @@ framework with `ssr: true` behind a worker of its own: one address table
 read, a written document for every surface that answers at one address, an
 address per language, and a status that says what happened.
 `docs/architecture/serving.md` and the `frontend-structure` skill are where
-that shape is written down, and `grade10-site/navigation` is what the
+that shape is written down, and `grade10-site/site/navigation` is what the
 navigating half of it promises.
 
 ZZZ takes the navigating half and leaves the serving half. What is
@@ -38,7 +38,7 @@ rather than re-decided.
 - **Non-goal:** crawlability, and the honest statuses that come with it. ZZZ
   keeps answering every address with the app shell, so an address the site
   does not answer renders not-found under a 200; a ZZZ change that wants
-  what `grade10-site/crawlable-pages` promises owns both.
+  what `grade10-site/site/crawlable-pages` promises owns both.
 - **Non-goal:** a `ui.md`. The one new view — not-found — is the smallest
   honest statement built from existing design-system primitives over copy the
   platform already ships; no Figma frame exists or is needed, and nothing
@@ -121,7 +121,7 @@ what is shared is the requirement's shape and the copy, not the component.
 
 ### Feature packages stay router-free
 
-The rule `grade10-site/navigation` already holds the grade10 app to, now
+The rule `grade10-site/site/navigation` already holds the grade10 app to, now
 load-bearing from both sides: `@grade10/store-frontend` and
 `@grade10/auth-frontend` serve both brands, so a router import in either
 would bind the two apps' routing choices together. Views read the address and
