@@ -6,8 +6,8 @@ export type ArtifactState<T> =
   | { status: "unavailable"; reason: string };
 
 /** Lazy, per id: the fetch starts when the page mounts, and the artifact is
- * kept after. A new id starts over rather than showing the last one's content
- * under this one's title. */
+ * kept after. A new id — or a new reading of the store — starts over rather
+ * than showing what was fetched before under this title. */
 export function useArtifact<T>(
   load: (id: string) => Promise<T>,
   id: string,

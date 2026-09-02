@@ -7,7 +7,12 @@ import {
   useRef,
   useState,
 } from "react";
-import { type LoadedSnapshot, loadSnapshot } from "./snapshot";
+import {
+  type ArtifactReaders,
+  artifactReaders,
+  type LoadedSnapshot,
+  loadSnapshot,
+} from "./snapshot";
 import type { Snapshot } from "./types";
 
 export type SnapshotState =
@@ -21,13 +26,20 @@ const SnapshotContext = createContext<SnapshotState | null>(null);
  * just saved is the page the app shows. */
 const ReloadContext = createContext<() => void>(() => {});
 
+/** The lazy artifacts, as of the current reading. A re-read publishes a new
+ * set, which is what makes a page already open ask again rather than keep
+ * what it fetched before the edit. A surface with no provider around it — a
+ * story, a test — reads from a set of its own. */
+const ReadersContext = createContext<ArtifactReaders>(artifactReaders());
+
 export function SnapshotProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<SnapshotState>({ status: "loading" });
+  const [readers, setReaders] = useState(artifactReaders);
   // Only the newest load may land, so a reload racing the first one cannot
   // put a stale snapshot on screen.
   const newest = useRef(0);
 
-  const reload = useCallback(() => {
+  const read = useCallback(() => {
     newest.current += 1;
     const mine = newest.current;
     loadSnapshot()
@@ -41,22 +53,33 @@ export function SnapshotProvider({ children }: { children: ReactNode }) {
       });
   }, []);
 
+  const reload = useCallback(() => {
+    setReaders(artifactReaders());
+    read();
+  }, [read]);
+
   useEffect(() => {
-    reload();
+    read();
     return () => {
       newest.current += 1;
     };
-  }, [reload]);
+  }, [read]);
 
   return (
     <ReloadContext value={reload}>
-      <SnapshotContext value={state}>{children}</SnapshotContext>
+      <ReadersContext value={readers}>
+        <SnapshotContext value={state}>{children}</SnapshotContext>
+      </ReadersContext>
     </ReloadContext>
   );
 }
 
 export function useSnapshotReload(): () => void {
   return use(ReloadContext);
+}
+
+export function useArtifactReaders(): ArtifactReaders {
+  return use(ReadersContext);
 }
 
 export function useSnapshot(): SnapshotState {

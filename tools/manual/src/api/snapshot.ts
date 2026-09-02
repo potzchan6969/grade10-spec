@@ -70,25 +70,41 @@ export async function loadSnapshot(
   }
 }
 
-let archivePromise: Promise<Archive> | null = null;
+export type ArtifactReaders = {
+  archive: () => Promise<Archive>;
+  change: (id: string) => Promise<ChangeDocument>;
+  reference: (slug: string) => Promise<ReferenceDocument>;
+};
 
 /**
- * `/api/archive` — years of shipped changes, so it is fetched once, only by the
- * views that show a timeline. There is no fixture fallback: an archive nobody
- * serves is a missing section, not a broken page.
- */
-export function loadArchive(): Promise<Archive> {
-  archivePromise ??= fetchJson<Archive>(ARCHIVE_URL);
-  return archivePromise;
-}
-
-/**
- * One artifact per id under `base`, fetched the first time its page opens and
- * kept after. An id nothing was written for has no artifact, and the hosted
+ * One reading of the artifacts that are fetched lazily. Each memoizes what it
+ * has already answered, and a re-read of the store replaces the whole set —
+ * so no page is left holding one artifact from before an edit and one from
+ * after, and nothing outlives the reading it belongs to.
+ *
+ * `archive` is `/api/archive`: years of shipped changes, fetched once and only
+ * by the views that show a timeline. There is no fixture fallback — an archive
+ * nobody serves is a missing section, not a broken page.
+ *
+ * `change` and `reference` are one artifact per id, fetched the first time its
+ * page opens. An id nothing was written for has no artifact, and the hosted
  * site answers such a path with the app shell, which the JSON check turns into
  * an error rather than a blank page.
  */
-function lazyArtifacts<T>(base: string): (id: string) => Promise<T> {
+export function artifactReaders(): ArtifactReaders {
+  return {
+    archive: once(() => fetchJson<Archive>(ARCHIVE_URL)),
+    change: perId<ChangeDocument>(CHANGE_URL),
+    reference: perId<ReferenceDocument>(REFERENCE_URL),
+  };
+}
+
+function once<T>(fetch: () => Promise<T>): () => Promise<T> {
+  let promise: Promise<T> | null = null;
+  return () => (promise ??= fetch());
+}
+
+function perId<T>(base: string): (id: string) => Promise<T> {
   const promises = new Map<string, Promise<T>>();
   return (id) => {
     let promise = promises.get(id);
@@ -101,9 +117,3 @@ function lazyArtifacts<T>(base: string): (id: string) => Promise<T> {
     return promise;
   };
 }
-
-/** `/api/change/<id>` — one in-flight change's files. */
-export const loadChangeDocument = lazyArtifacts<ChangeDocument>(CHANGE_URL);
-
-/** `/api/reference/<slug>` — one reference document, as written. */
-export const loadReference = lazyArtifacts<ReferenceDocument>(REFERENCE_URL);
