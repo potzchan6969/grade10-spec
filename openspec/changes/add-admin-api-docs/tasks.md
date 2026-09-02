@@ -7,7 +7,7 @@ then be claimed in parallel.
 - [x] 1.2 Add `VITE_BUILD_COMMIT` to the shared Vite define beside `VITE_DEPLOY_ENV`: `GITHUB_SHA`, else `git rev-parse HEAD`, else `development`. Cover the three sources in the app-env node suite (`api-docs-SC-12`).
 - [x] 1.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, `pnpm run test`.
 
-## 2. The document and its generator (grade10)
+## 2. The document and its generator (grade10) (owner: @sean)
 
 - [ ] 2.1 Create `packages/api-docs` (`@grade10/api-docs`, backend lane): the document type — services → procedures → path, kind, caller, grants, principal, input schema, output schema — and a `.` loader over `generated/`. A Handbook card and `pnpm run check:handbook` come with the package.
 - [ ] 2.2 Write the walker under `./generate`: enumerate a router's mounted procedures, convert each validator to JSON Schema, refuse a validator with no schema AST, sort paths and keys, serialise. Test-first against a fixture router: every mounted procedure and nothing else (`api-docs-SC-01`); two runs are byte-identical (`api-docs-SC-13`).
