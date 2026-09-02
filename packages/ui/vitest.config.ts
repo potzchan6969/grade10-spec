@@ -24,6 +24,7 @@ export default defineConfig({
           include: [
             "src/__tests__/audit-freshness.test.ts",
             "src/lib/format-datetime.test.ts",
+            "src/blocks/auction-listing/listing-age-verification-form.test.ts",
           ],
         },
       },
