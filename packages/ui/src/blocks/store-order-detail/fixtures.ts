@@ -34,7 +34,9 @@ const ORDER_DETAILS_COPY: OrderDetailsCopy = {
     orderSummary: "Order Summary",
     paymentMethod: "Payment Method",
     shippingAddress: "Shipping Address",
-    loyaltyPoints: "Loyalty Points",
+    pickupAddress: "Pickup Address",
+    loyaltyPointsToEarn: "Points to Earn",
+    loyaltyPointsEarned: "Points Earned",
   },
   delivery: {
     title: "Delivery Status",
@@ -47,16 +49,13 @@ const DELIVERY_STEPS: OrderDetailsDelivery["steps"] = [
   {
     label: "Order Placed",
     date: FIXTURE_ORDER_PLACED_DAY,
-    state: "completed",
   },
   {
     label: "Shipped",
     date: FIXTURE_ORDER_SHIPPED_DAY,
-    state: "current",
   },
   {
     label: "Completed",
-    state: "upcoming",
   },
 ];
 
@@ -64,16 +63,13 @@ const PICKUP_STEPS: OrderDetailsDelivery["steps"] = [
   {
     label: "Order Placed",
     date: FIXTURE_ORDER_PLACED_DAY,
-    state: "completed",
   },
   {
-    label: "Ready for Pickup",
+    label: "Pickup",
     date: FIXTURE_ORDER_SHIPPED_DAY,
-    state: "current",
   },
   {
     label: "Completed",
-    state: "upcoming",
   },
 ];
 
@@ -89,13 +85,15 @@ const PICKUP_DELIVERY: OrderDetailsDelivery = {
   trackOrder: false,
 };
 
+/** Line item with an item-level coupon; discounted amounts are on the row only. */
 const FILLED_LINES: readonly OrderDetailsLineItem[] = [
   {
     id: "line-1",
     product: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
-    subtotal: "HK$105",
+    subtotal: "HK$94.50",
     quantity: "1",
-    total: "HK$105",
+    total: "HK$94.50",
+    couponCode: "SUMMER10",
     imageSrc: IMAGE,
     imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
   },
@@ -131,9 +129,33 @@ const FILLED_LINES: readonly OrderDetailsLineItem[] = [
   },
 ];
 
+/** Same lines at list price for an order-level discount story. */
+const FILLED_LINES_ORDER_DISCOUNT: readonly OrderDetailsLineItem[] = [
+  {
+    id: "line-1",
+    product: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+    subtotal: "HK$105",
+    quantity: "1",
+    total: "HK$105",
+    imageSrc: IMAGE,
+    imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+  },
+  ...FILLED_LINES.slice(1),
+];
+
+/** Subtotal matches the sum of line totals; item promo is not repeated in discount. */
 const FILLED_SUMMARY: OrderDetailsSummary = {
+  subtotal: { label: "Subtotal", value: "HK$1,759.50" },
+  refund: { label: "Refund", value: "−HK$105" },
+  shipping: { label: "Shipping", value: "HK$50" },
+  tax: { label: "Tax", value: "HK$0" },
+  total: { label: "Total", value: "HK$1,704.50" },
+};
+
+/** List-price lines; order promo appears once in the summary with its code. */
+const FILLED_SUMMARY_ORDER_DISCOUNT: OrderDetailsSummary = {
   subtotal: { label: "Subtotal", value: "HK$1,770" },
-  discount: { label: "Discount", value: "−HK$177" },
+  discount: { label: "Discount (WELCOME10)", value: "−HK$177" },
   refund: { label: "Refund", value: "−HK$105" },
   shipping: { label: "Shipping", value: "HK$50" },
   tax: { label: "Tax", value: "HK$0" },
@@ -154,12 +176,23 @@ const FILLED_ADDRESS = {
   ],
 };
 
+const FILLED_PICKUP_ADDRESS = {
+  name: "Hong Kong Grade10 Store",
+  lines: ["13 Pak Sha Road, Causeway Bay, Hong Kong"],
+  mapsHref:
+    "https://www.google.com/maps/search/?api=1&query=13+Pak+Sha+Road,+Causeway+Bay,+Hong+Kong",
+  openingHours: "Open 11am – 9pm",
+};
+
 export {
   FILLED_ADDRESS,
   FILLED_DELIVERY,
   FILLED_LINES,
+  FILLED_LINES_ORDER_DISCOUNT,
   FILLED_PAYMENT,
+  FILLED_PICKUP_ADDRESS,
   FILLED_SUMMARY,
+  FILLED_SUMMARY_ORDER_DISCOUNT,
   IMAGE,
   ORDER_DETAILS_COPY,
   PICKUP_DELIVERY,

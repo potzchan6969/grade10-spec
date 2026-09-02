@@ -23,7 +23,7 @@ function toStepIndicatorState(
   state: OrderDetailsDeliveryStep["state"],
 ): StepIndicatorState {
   if (state === "current") return "progress";
-  return state;
+  return state ?? "upcoming";
 }
 
 /**
@@ -34,7 +34,7 @@ function toStepIndicatorState(
  * Shown for online orders (delivery and in-store pickup via online purchase);
  * hidden for offline store payment orders. Step labels swap by order type:
  * delivery (`Order Placed → Shipped → Completed`) vs pickup
- * (`Order Placed → Ready for Pickup → Completed`). The stepper is
+ * (`Order Placed → Pickup → Completed`). The stepper is
  * display-only — steps are not interactive.
  */
 function OrderDetailsDeliveryStatus({

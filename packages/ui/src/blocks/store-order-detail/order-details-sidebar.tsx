@@ -1,4 +1,5 @@
 import { Card } from "@grade10/design-system/components/display/card";
+import { Link } from "@grade10/design-system/components/forms/link";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
@@ -6,16 +7,20 @@ import type { ReactNode } from "react";
 import { OrderDetailsPaymentLogo } from "./order-details-payment-logo";
 import type {
   OrderDetailsAddress,
+  OrderDetailsFulfillmentStatus,
   OrderDetailsPayment,
   OrderDetailsSidebarCopy,
   OrderDetailsSummary,
 } from "./types";
+import { loyaltyPointsHeading } from "./loyalty-points-heading";
 
 type OrderDetailsSidebarProps = {
   copy: OrderDetailsSidebarCopy;
   summary: OrderDetailsSummary;
   payment: OrderDetailsPayment;
+  status: OrderDetailsFulfillmentStatus;
   shippingAddress?: OrderDetailsAddress;
+  pickupAddress?: OrderDetailsAddress;
   loyaltyPoints?: ReactNode;
   className?: string;
 };
@@ -44,9 +49,48 @@ function SummaryRow({
   );
 }
 
+function AddressSection({
+  heading,
+  address,
+}: {
+  heading: ReactNode;
+  address: OrderDetailsAddress;
+}) {
+  return (
+    <VStack className="w-full" gap="sm" hAlign="stretch">
+      <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+        {heading}
+      </h3>
+      <VStack className="w-full text-sm leading-5" gap="xs">
+        <p className="font-medium text-foreground">{address.name}</p>
+        {address.lines.map((line) =>
+          address.mapsHref ? (
+            <Link
+              href={address.mapsHref}
+              key={String(line)}
+              rel="noopener noreferrer"
+              size="sm"
+              target="_blank"
+            >
+              {line}
+            </Link>
+          ) : (
+            <p className="text-foreground" key={String(line)}>
+              {line}
+            </p>
+          ),
+        )}
+        {address.openingHours != null ? (
+          <p className="text-secondary-foreground">{address.openingHours}</p>
+        ) : null}
+      </VStack>
+    </VStack>
+  );
+}
+
 /**
- * Order details sidebar displaying order summary, payment method, shipping
- * address, and loyalty points earned.
+ * Order details sidebar displaying order summary, payment method, shipping or
+ * pickup address, and loyalty points to earn or earned by status.
  *
  * Figma set `Product / Order / Order Details Sidebar` (`5057:6908`). Summary
  * rows are conditional: discount when present, refund when issued, shipping
@@ -59,10 +103,15 @@ function OrderDetailsSidebar({
   copy,
   summary,
   payment,
+  status,
   shippingAddress,
+  pickupAddress,
   loyaltyPoints,
   className,
 }: OrderDetailsSidebarProps) {
+  const loyaltyHeading =
+    loyaltyPoints != null ? loyaltyPointsHeading(copy, status) : null;
+
   return (
     <div
       className={cn("w-full bg-background", className)}
@@ -135,31 +184,25 @@ function OrderDetailsSidebar({
               </HStack>
             </Card>
           </VStack>
-          {shippingAddress ? (
-            <VStack className="w-full" gap="sm" hAlign="stretch">
-              <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
-                {copy.shippingAddress}
-              </h3>
-              <VStack className="w-full text-sm leading-5" gap="none">
-                <p className="font-medium text-foreground">
-                  {shippingAddress.name}
-                </p>
-                {shippingAddress.lines.map((line) => (
-                  <p className="text-foreground" key={String(line)}>
-                    {line}
-                  </p>
-                ))}
-              </VStack>
-            </VStack>
+          {pickupAddress ? (
+            <AddressSection
+              address={pickupAddress}
+              heading={copy.pickupAddress}
+            />
+          ) : shippingAddress ? (
+            <AddressSection
+              address={shippingAddress}
+              heading={copy.shippingAddress}
+            />
           ) : null}
-          {loyaltyPoints != null ? (
+          {loyaltyHeading != null ? (
             <Card
               className="gap-1 border-border bg-gradient-to-r from-background-subtle to-muted p-3"
               padding={false}
             >
               <VStack className="w-full" gap="xs" hAlign="stretch">
                 <p className="text-sm leading-5 font-medium text-secondary-foreground">
-                  {copy.loyaltyPoints}
+                  {loyaltyHeading}
                 </p>
                 <div className="text-base leading-6 font-semibold text-foreground">
                   {loyaltyPoints}

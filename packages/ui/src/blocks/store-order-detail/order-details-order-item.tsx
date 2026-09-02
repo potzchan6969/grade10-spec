@@ -3,6 +3,7 @@ import { TableRow } from "@grade10/design-system/components/display/table-row";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
+import { Tag } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import { OrderHistoryStatus } from "../store-order-history/order-history-status";
 import type { OrderDetailsFulfillmentStatus } from "./types";
@@ -18,6 +19,7 @@ type OrderDetailsOrderItemProps = {
   statusLabel?: ReactNode;
   statusMessage?: ReactNode;
   struckThrough?: boolean;
+  couponCode?: ReactNode;
   className?: string;
 };
 
@@ -25,10 +27,12 @@ type OrderDetailsOrderItemProps = {
  * A single line item row in the Order Details table.
  *
  * Figma set `Product / Order / Order Details Order Item` (`5010:6440`).
- * Default rows show product thumbnail, name, subtotal, qty, and total.
- * Flagged rows (`status=true` in Figma) show a status badge with a custom
- * message and strike through subtotal and total. Qty on a split row reflects
- * the partial quantity being refunded/canceled.
+ * Default rows show product thumbnail, name, subtotal, qty, and total. Rows
+ * with an item-level coupon show the code under the title; subtotal and total
+ * are the discounted amounts and that promo must not also appear in the order
+ * summary. Flagged rows (`status=true` in Figma) show a status badge with a custom message and strike through subtotal
+ * and total. Qty on a split row reflects the partial quantity being
+ * refunded/canceled.
  */
 function OrderDetailsOrderItem({
   product,
@@ -41,6 +45,7 @@ function OrderDetailsOrderItem({
   statusLabel,
   statusMessage,
   struckThrough = false,
+  couponCode,
   className,
 }: OrderDetailsOrderItemProps) {
   const priceClass = struckThrough
@@ -71,21 +76,36 @@ function OrderDetailsOrderItem({
               />
             ) : null}
           </div>
-          {lineStatus != null ? (
+          {lineStatus != null || couponCode != null ? (
             <VStack className="min-w-0 flex-1" gap="xs" hAlign="stretch">
               <p className="w-full text-sm leading-5 font-medium text-foreground">
                 {product}
               </p>
-              <HStack className="w-full flex-wrap" gap="xs" vAlign="center">
-                <OrderHistoryStatus status={lineStatus}>
-                  {statusLabel}
-                </OrderHistoryStatus>
-                {statusMessage ? (
-                  <p className="min-w-0 flex-1 text-xs leading-4 text-secondary-foreground">
-                    {statusMessage}
-                  </p>
-                ) : null}
-              </HStack>
+              {couponCode != null ? (
+                <HStack className="w-full" gap="xs" vAlign="center">
+                  <span
+                    aria-hidden
+                    className="shrink-0 text-secondary-foreground"
+                  >
+                    <Tag size={14} weight="bold" />
+                  </span>
+                  <span className="text-xs leading-4 text-secondary-foreground">
+                    {couponCode}
+                  </span>
+                </HStack>
+              ) : null}
+              {lineStatus != null ? (
+                <HStack className="w-full flex-wrap" gap="xs" vAlign="center">
+                  <OrderHistoryStatus status={lineStatus}>
+                    {statusLabel}
+                  </OrderHistoryStatus>
+                  {statusMessage ? (
+                    <p className="min-w-0 flex-1 text-xs leading-4 text-secondary-foreground">
+                      {statusMessage}
+                    </p>
+                  ) : null}
+                </HStack>
+              ) : null}
             </VStack>
           ) : (
             <p className="min-w-0 flex-1 text-sm leading-5 font-medium text-foreground">
