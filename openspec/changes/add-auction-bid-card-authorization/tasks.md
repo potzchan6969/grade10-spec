@@ -1,8 +1,8 @@
 ## 1. Contract and UI source (grade10-spec)
 
-- [ ] 1.1 Provide the Listing bid — payment method Figma frame referenced by `ui.md`, using the existing dialog primitives for `bid-payment-method-SC-01`, `bid-payment-method-SC-03`, and `bid-payment-method-SC-04`.
-- [ ] 1.2 Make every `bid-payment-method` scenario pass as a reviewed capability contract and keep its UI state map aligned with the Figma frame.
-- [ ] 1.3 Verify: `openspec validate add-auction-bid-card-authorization --strict`.
+- [x] 1.1 Expand `auction-listing-listingbidpanel--default` with the Listing bid — payment method dialog referenced by `ui.md`, using the existing dialog primitives for `bid-payment-method-SC-01`, `bid-payment-method-SC-03`, and `bid-payment-method-SC-04`.
+- [ ] 1.2 Make every `bid-payment-method` scenario pass as a reviewed capability contract and keep its UI state map aligned with the Storybook source.
+- [x] 1.3 Verify: `openspec validate add-auction-bid-card-authorization --strict`.
 
 ## 2. Shared interfaces (grade10) (owner: @htonyl)
 
