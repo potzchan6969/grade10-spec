@@ -28,12 +28,13 @@ running worker.
   `catalog-SC-15 - Same active reference retries idempotently`,
   `catalog-SC-16 - Closed reference may reserve again`,
   `catalog-SC-22 - Vault releases a full remaining hold`,
-  `catalog-SC-35 - Partial release leaves remaining active`, and
-  `catalog-SC-47` through `catalog-SC-50`, `catalog-SC-51`, and `catalog-SC-63`
-  through `catalog-SC-65` pass with reservation fields
-  (`holder_kind`, remaining/sold/vaulted/released, status active/closed,
-  adjustable quantity), inputs, outputs, actor stamps, and the 1–500
-  boundary.
+  `catalog-SC-35 - Partial release leaves remaining active`, `catalog-SC-59`,
+  `catalog-SC-67`, and `catalog-SC-47` through `catalog-SC-50`, `catalog-SC-51`,
+  and `catalog-SC-63` through `catalog-SC-65` pass with reservation fields
+  (`holder_kind` including `admin`, remaining/sold/vaulted/released, status
+  active/closed, adjustable quantity), `adminReservationsByHolderKind` (`admin`
+  bucket on `products.get`), `adminReservationsReserveInput` (no holder fields),
+  outputs, actor stamps, and the 1–500 boundary.
 - [x] 1.4 Make `catalog-SC-36 - Auction partially sells from a reservation`,
   `catalog-SC-37 - Partial sell then release closes the reservation`,
   `catalog-SC-38 - Vault partially vaults from a reservation`,
@@ -102,9 +103,10 @@ Depends on group 1.
   `catalog-SC-48 - Decrease listing reservation 5 to 2 frees remaining`,
   `catalog-SC-49 - Increase refused when not enough available stock`, and
   `catalog-SC-50 - Cannot adjust below sold plus vaulted plus released`
-  pass with reservation headers (no allocation table), `holder_kind`,
-  partial-unique active `(holder_kind, holder_reference)`, active/closed
-  checks, and indexes.
+  pass with reservation headers (no allocation table), `holder_kind` (including
+  `admin` via a schema migration expanding the check constraint),
+  partial-unique active `(holder_kind, holder_reference)`, active/closed checks,
+  and indexes.
 - [x] 2.3 Make `catalog-SC-07`, `catalog-SC-23`, `catalog-SC-24`,
   `catalog-SC-25`, `catalog-SC-26`, `catalog-SC-27`, `catalog-SC-28`,
   `catalog-SC-41`, `catalog-SC-42`, `catalog-SC-43`, `catalog-SC-44`, and
@@ -114,9 +116,9 @@ Depends on group 1.
   reservation/inventory foreign key, action-specific checks, history indexes,
   append-only guards, and shared per-worker `audit_logs`.
 - [x] 2.4 Generate migration artifacts for
-  `apps/backend/grade10/inventory`, then run
-  `pnpm run db:drizzle:generate`, `pnpm run check:migrations`,
-  `pnpm run typecheck`, and `pnpm run test:backend`.
+  `apps/backend/grade10/inventory` (including a migration to add `admin` to
+  `reservations.holder_kind`), then run `pnpm run db:drizzle:generate`,
+  `pnpm run check:migrations`, `pnpm run typecheck`, and `pnpm run test:backend`.
 
 ## 3. Implement inventory domain services (grade10)
 
@@ -129,8 +131,11 @@ Depends on groups 1 and 2.
   `catalog-SC-09`, `catalog-SC-10`, `catalog-SC-11`, and `catalog-SC-12`
   pass through snapshot mutations under inventory-row lock.
 - [x] 3.3 Make `catalog-SC-14`, `catalog-SC-15`, `catalog-SC-16`,
-  `catalog-SC-19`, `catalog-SC-22`, and `catalog-SC-35` pass through
-  transactional reserve/release services with remaining tracking.
+  `catalog-SC-19`, `catalog-SC-22`, `catalog-SC-35`, `catalog-SC-60`, and admin
+  reserve (`catalog-SC-59`, `catalog-SC-67`) pass through transactional
+  reserve/release services with remaining tracking
+  (`createReservationService("admin")` + `mintAdminHolderReference()` for
+  elevated reserve).
 - [x] 3.4 Make `catalog-SC-17` and `catalog-SC-18` pass with two real
   entrypoints and `SELECT … FOR UPDATE` serialization.
 - [x] 3.5 Make `catalog-SC-36`, `catalog-SC-37`, and `catalog-SC-38` pass
@@ -164,19 +169,22 @@ Depends on group 3.
 - [ ] 4.1 Make `catalog-SC-01`, `catalog-SC-13`, `catalog-SC-32`, and
   `catalog-SC-34` pass through admin procedures and gateway routing.
   Worker routers and `trpc-access.test.ts` cover SC-32 and SC-34
-  partially; no worker-level list/get/create E2E yet.
+  partially; `reservations.reserve` is implemented but not yet asserted in
+  `trpc-access.test.ts`; no worker-level list/get/create E2E yet.
 - [ ] 4.2 Make intake and `catalog-SC-12` pass through admin mutations and
   fixtures where applicable. Domain and admin-frontend fixture paths pass;
   worker tRPC mutation E2E still open. Free-pool sell/withdraw are not on the
   inventory product page.
-- [ ] 4.3 Make reserve, adjust, change-product, partial release,
+- [x] 4.3 Make elevated `reservations.reserve` and admin
+  `reservations.release` (`catalog-SC-59`, `catalog-SC-60`, `catalog-SC-67`)
+  pass through the inventory worker (`admin-reserve.test.ts`).
+- [ ] 4.4 Make holder reserve, adjust, change-product, partial release,
   sell-from-reservation, vault-from-reservation, `catalog-SC-16`, and
-  `catalog-SC-35`–`catalog-SC-40` pass through reservation admin and holder
-  entrypoints. Same gap as 4.2 — domain and fixtures pass, worker/holder RPC
-  E2E still open.
-- [ ] 4.4 Make history scenarios including `catalog-SC-43`, `catalog-SC-44`,
+  `catalog-SC-35`–`catalog-SC-40` pass through holder entrypoints. Domain and
+  fixtures pass; holder RPC E2E still open.
+- [ ] 4.5 Make history scenarios including `catalog-SC-43`, `catalog-SC-44`,
   and `catalog-SC-45` pass through read models.
-- [ ] 4.5 Verify with `pnpm run typecheck`, `pnpm run lint`,
+- [ ] 4.6 Verify with `pnpm run typecheck`, `pnpm run lint`,
   `pnpm run test:backend`, and `pnpm run build` for the inventory worker /
   API wiring.
 
@@ -189,18 +197,20 @@ Depends on groups 1 and 4. Fixtures, not a live worker.
 - [x] 5.2 Make `catalog-SC-01`, `catalog-SC-29`, `catalog-SC-52`,
   `catalog-SC-54`, `catalog-SC-57`, and `catalog-SC-58` pass on the product
   page (create/edit, draft→created, single inventory snapshot, reservations
-  by `holder_kind`).
+  by `holder_kind` including `admin`, combined reservations table).
 - [x] 5.3 Make intake and `catalog-SC-31` pass in dialogs on the product page
   (`productsViews.test.tsx`). Free-pool sell/withdraw and `catalog-SC-12` are
   out of scope for the inventory product page.
-- [x] 5.4 Make admin reserve (`catalog-SC-59`), admin release on the product
-  page (`catalog-SC-60`), and `catalog-SC-53` pass in the product-page
-  dialogs. Auction/Vault reservation adjust, change-product, partial release,
-  sell-from-reservation, and vault-from-reservation are out of scope for the
-  inventory product page — they ship from Auction listing and Vault consoles
-  instead (`productsViews.test.tsx`).
-- [ ] 5.5 Make history badges pass for product-page mutations. Intake badge
-  passes in RTL; reservation settlement badges are holder-console scope.
+- [x] 5.4 Make admin reserve (`catalog-SC-59`, `catalog-SC-67`), admin release
+  on the product page (`catalog-SC-60`, partial per `catalog-SC-35`),
+  admin-only release actions (`catalog-SC-68`), and `catalog-SC-53` pass in the
+  product-page dialogs. Auction/Vault reservation adjust, change-product,
+  release, sell-from-reservation, and vault-from-reservation are out of scope
+  for the inventory product page — they ship from Auction listing and Vault
+  consoles instead (`productsViews.test.tsx`).
+- [ ] 5.5 Make history badges pass for product-page mutations. Intake,
+  reserve, and release badges pass in RTL (`productsViews.test.tsx`);
+  reservation settlement badges are holder-console scope.
 - [ ] 5.6 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
   and `pnpm run build` for the admin app slice. Package typecheck and tests
   pass; full admin-app build not yet recorded on this change.

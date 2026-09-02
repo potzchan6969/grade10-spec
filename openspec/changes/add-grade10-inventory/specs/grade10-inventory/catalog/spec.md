@@ -21,7 +21,8 @@ count transition.
     `admin`)
   - Remaining quantity and adjustable hold size
   - Partial sell / vault / release against remaining
-  - Re-reserve after close with the same kind + reference
+  - Re-reserve after close with the same kind + reference (holder apps;
+    `admin` mints a new reference on each reserve)
   - Conservation: active remaining cannot exceed available
   - Scoped access: expose availability and only the calling kind's holds
 - Change history
@@ -56,7 +57,8 @@ settlement stays with the application that owns the hold.
 Accepted by: catalog-SC-14, catalog-SC-17, catalog-SC-18, catalog-SC-22,
 catalog-SC-35, catalog-SC-36, catalog-SC-37, catalog-SC-38, catalog-SC-47,
 catalog-SC-48, catalog-SC-49, catalog-SC-50, catalog-SC-51, catalog-SC-53,
-catalog-SC-59, catalog-SC-60, catalog-SC-63, catalog-SC-64, catalog-SC-65.
+catalog-SC-59, catalog-SC-60, catalog-SC-63, catalog-SC-64, catalog-SC-65,
+catalog-SC-67, catalog-SC-68.
 
 ### catalog-US-03: Use inventory through a holder-kind boundary
 
@@ -122,11 +124,17 @@ product status `created`.
 - **AND** updated at advances
 - **AND** one `product-update` history entry records the transition
 
-#### Scenario: catalog-SC-53 - Holder cannot reserve a draft product
+#### Scenario: catalog-SC-53 - Reserve requires a created product
 
 - **GIVEN** a draft product whose inventory has available stock
 - **WHEN** Auction reserves quantity one
 - **THEN** Grade10 refuses because the product is not created
+- **AND** no reservation is written
+
+- **GIVEN** the same draft product
+- **WHEN** an authorized inventory admin reserves quantity one from the product
+  page or through `reservations.reserve`
+- **THEN** Grade10 refuses for the same reason
 - **AND** no reservation is written
 
 #### Scenario: catalog-SC-54 - Created to draft is refused
@@ -781,13 +789,14 @@ The Grade10 admin panel SHALL offer an Inventory section with:
 Operators SHALL intake stock and reserve admin holds from the product page.
 Admin reserve SHALL always use `holder_kind` `admin` and SHALL mint
 `holder_reference` server-side; operators supply quantity and optional remarks
-only. Operators SHALL release active `admin` holds from the reservations table
-on the product page. Free-pool sell and withdraw, adjust, change reservation
-product, partial release, sell-from-reservation, and vault-from-reservation for
-Auction and Vault holds SHALL be triggered from holder consoles or elevated APIs,
-not from the inventory product page. Auction and Vault reservation rows on the
-product page are read-only oversight. Loading, empty, and error states SHALL be
-visible.
+only. Operators SHALL release active `admin` holds from the reservations table on
+the product page (partial or full, per catalog-SC-35). Free-pool sell and
+withdraw, adjust, change reservation product, release,
+sell-from-reservation, and vault-from-reservation for Auction and Vault holds
+SHALL be triggered from holder consoles or elevated APIs, not from the inventory
+product page. Auction and Vault reservation rows on the product page are
+read-only oversight; only `admin` rows MAY offer Release on this page
+(catalog-SC-68). Loading, empty, and error states SHALL be visible.
 
 #### Scenario: catalog-SC-59 - Operator reserves admin hold from product page
 
@@ -802,17 +811,33 @@ visible.
 #### Scenario: catalog-SC-60 - Operator releases admin hold from product page
 
 - **GIVEN** a created product with an active `admin` reservation of quantity two
-- **WHEN** an authorized inventory admin releases that hold from the product
-  page
+  and remaining two
+- **WHEN** an authorized inventory admin releases the full remaining quantity
+  from the product page
 - **THEN** the reservation closes with `released` two and `remaining` zero
 - **AND** reserved decreases by two and available increases by two
 
+- **GIVEN** the same product with an active `admin` reservation of quantity five
+  and remaining five
+- **WHEN** an authorized inventory admin releases quantity two from the product
+  page
+- **THEN** remaining is three, released is two, and status stays `active`
+- **AND** reserved decreases by two
+
+#### Scenario: catalog-SC-68 - Product page release is limited to admin holds
+
+- **GIVEN** a created product with active Auction, Vault, and `admin`
+  reservations on the product page
+- **WHEN** an authorized inventory admin views the reservations table
+- **THEN** only `admin` rows offer a Release action
+- **AND** Auction and Vault rows show no settlement actions on this page
+
 #### Scenario: catalog-SC-29 - Operator oversees inventory and holds on the product page
 
-- **GIVEN** a created product with Auction and Vault reservations and prior
-  vaulted and sold transitions
+- **GIVEN** a created product with Auction, Vault, and `admin` reservations and
+  prior vaulted and sold transitions
 - **WHEN** an authorized inventory admin opens that product page
-- **THEN** all counts including vaulted, both kinds' reservations with
+- **THEN** all counts including vaulted, each holder kind's reservations with
   remaining, and change history appear
 - **AND** both count equations reconcile
 
@@ -835,6 +860,31 @@ visible.
 - **WHEN** they create a product with a valid name
 - **THEN** they land on the new product page in status `draft`
 - **AND** the inventory snapshot shows zero counts
+
+### Requirement: Elevated admin reservation mutations
+
+The inventory worker's elevated `reservations.reserve` and `reservations.release`
+procedures SHALL implement the same `admin` hold semantics as the product page
+(`catalog-SC-59`, `catalog-SC-60`). `reservations.reserve` SHALL NOT accept
+`holder_kind` or `holder_reference` from the caller; it SHALL always create
+`holder_kind` `admin` with a server-minted `holder_reference`. Each call SHALL
+create a new active reservation (no idempotent retry on reference).
+
+#### Scenario: catalog-SC-67 - Elevated admin reserve mints holder reference
+
+- **GIVEN** a created product with stock five and reserved zero
+- **WHEN** an authorized inventory admin calls `reservations.reserve` with
+  `productId`, quantity two, and optional remarks
+- **THEN** one active reservation records `holder_kind` `admin`, a
+  server-minted `holder_reference`, quantity two, and the remarks
+- **AND** reserved increases by two while stock and derived ledger remain
+  unchanged
+
+- **GIVEN** the same product after one successful admin reserve
+- **WHEN** the admin calls `reservations.reserve` again with quantity one
+- **THEN** a second active reservation is created with a different
+  `holder_reference`
+- **AND** reserved increases by one
 
 ### Requirement: Global inventory APIs and console are admin-only
 

@@ -19,7 +19,9 @@ and `manual/platform/admin-access.md` here.
 - Ship one inventory snapshot per product (`UNIQUE(product_id)`).
 - Serialize every count transition on that snapshot under row lock.
 - Reserve quantities for consumers classified by explicit `holder_kind`
-  (`grade10-auction` | `grade10-vault`), with remaining / sold / vaulted / released tracking.
+  (`grade10-auction` | `grade10-vault` | `admin`), with remaining / sold /
+  vaulted / released tracking. `admin` holds are operator-only; holder apps bind
+  to auction or vault entrypoints only.
 - Allow reservation quantity adjust and **product change** with inventory
   `reserved` sync and changelog.
 - Support partial sell-from-reservation (Auction), partial
@@ -354,7 +356,8 @@ Routed through the API gateway to the inventory worker. Requires
 | `inventory.intake` | Stock up (catalog-SC-05, catalog-SC-06) |
 | `inventory.sell` | Free-pool sell (catalog-SC-10) |
 | `inventory.withdraw` | Free-pool withdraw (catalog-SC-11) |
-| `reservations.release` | Partial or full release; holder console or elevated admin API (catalog-SC-22, catalog-SC-35) |
+| `reservations.reserve` | Admin hold only; server-mints `holder_reference`; input is `productId`, `quantity`, optional `remarks` (catalog-SC-59, catalog-SC-67) |
+| `reservations.release` | Partial or full release; holder console or elevated admin API (catalog-SC-22, catalog-SC-35, catalog-SC-60) |
 | `reservations.adjust` | `adjustReservation(id, newQuantity)` from listing console (catalog-SC-47–catalog-SC-50) |
 | `reservations.changeProduct` | `changeReservationProduct(id, newProductId, newQuantity)` from listing console (catalog-SC-51, catalog-SC-63–catalog-SC-65) |
 | `reservations.sellFromReservation` | Auction holds only; from listing console (catalog-SC-36, catalog-SC-37) |
