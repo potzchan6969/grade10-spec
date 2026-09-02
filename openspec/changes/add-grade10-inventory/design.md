@@ -19,7 +19,9 @@ and `manual/platform/admin-access.md` here.
 - Ship one inventory snapshot per product (`UNIQUE(product_id)`).
 - Serialize every count transition on that snapshot under row lock.
 - Reserve quantities for consumers classified by explicit `holder_kind`
-  (`grade10-auction` | `grade10-vault`), with remaining / sold / vaulted / released tracking.
+  (`grade10-auction` | `grade10-vault` | `admin`), with remaining / sold /
+  vaulted / released tracking. `admin` holds are operator-only; holder apps bind
+  to auction or vault entrypoints only.
 - Allow reservation quantity adjust and **product change** with inventory
   `reserved` sync and changelog.
 - Support partial sell-from-reservation (Auction), partial
@@ -161,7 +163,11 @@ Elevated admin mutations also use the platform audit chain.
 
 Add `inventory:read` and `inventory:write`. Brand pages under
 `apps/admin/grade10/src/pages/inventory/` compose
-`@grade10/inventory-admin-frontend` (products list, product page).
+`@grade10/inventory-admin-frontend` (products list, product page). The product
+page is oversight plus intake and admin reserve; operators MAY release active
+`admin` holds from the reservations table. Auction/Vault adjust, release,
+sell-from-reservation, change-product, and vault-from-reservation run from
+holder consoles or elevated APIs.
 
 ## Flows
 
@@ -255,8 +261,8 @@ Product-level hold header on the product's single inventory row.
 | `id` | `text` | No | App-minted `res_<uuid>`, PK | Reservation identity |
 | `product_id` | `text` | No | FK → `products.id` | Product this hold is for |
 | `inventory_id` | `text` | No | FK → `inventories.id` | The product's one inventory row this hold scopes |
-| `holder_kind` | `text` | No | Check in `grade10-auction`, `grade10-vault` | Consumer classifier (explicit; not inferred from reference) |
-| `holder_reference` | `text` | No | Non-empty business key | Holder's idempotency / business id (e.g. listingId, caseId) |
+| `holder_kind` | `text` | No | Check in `grade10-auction`, `grade10-vault`, `admin` | Consumer classifier (explicit; not inferred from reference) |
+| `holder_reference` | `text` | No | Non-empty business key | Holder's idempotency / business id (listingId, caseId); admin reserves mint `admin-<uuid>` |
 | `remarks` | `text` | No | `''` | Optional operator or application note on why the hold exists |
 | `quantity` | `bigint` | No | 1–500; changes via adjust | Current hold size; `remaining + sold + vaulted + released` |
 | `remaining` | `bigint` | No | ≤ quantity | Still reserved |
@@ -350,11 +356,12 @@ Routed through the API gateway to the inventory worker. Requires
 | `inventory.intake` | Stock up (catalog-SC-05, catalog-SC-06) |
 | `inventory.sell` | Free-pool sell (catalog-SC-10) |
 | `inventory.withdraw` | Free-pool withdraw (catalog-SC-11) |
-| `reservations.release` | Partial or full release; admin may act for any kind (catalog-SC-22, catalog-SC-35) |
-| `reservations.adjust` | `adjustReservation(id, newQuantity)` (catalog-SC-47–catalog-SC-50) |
-| `reservations.changeProduct` | `changeReservationProduct(id, newProductId, newQuantity)` (catalog-SC-51, catalog-SC-63–catalog-SC-65) |
-| `reservations.sellFromReservation` | Auction holds only (catalog-SC-36, catalog-SC-37) |
-| `reservations.vaultFromReservation` | Vault holds only (catalog-SC-38) |
+| `reservations.reserve` | Admin hold only; server-mints `holder_reference`; input is `productId`, `quantity`, optional `remarks` (catalog-SC-59, catalog-SC-67) |
+| `reservations.release` | Partial or full release; holder console or elevated admin API (catalog-SC-22, catalog-SC-35, catalog-SC-60) |
+| `reservations.adjust` | `adjustReservation(id, newQuantity)` from listing console (catalog-SC-47–catalog-SC-50) |
+| `reservations.changeProduct` | `changeReservationProduct(id, newProductId, newQuantity)` from listing console (catalog-SC-51, catalog-SC-63–catalog-SC-65) |
+| `reservations.sellFromReservation` | Auction holds only; from listing console (catalog-SC-36, catalog-SC-37) |
+| `reservations.vaultFromReservation` | Vault holds only; from Vault console (catalog-SC-38) |
 | `changelogs.list` | Product-scoped history (catalog-SC-23–catalog-SC-28, catalog-SC-41–catalog-SC-44) |
 
 Admin fixture client mirrors every procedure above for frontend work without a
