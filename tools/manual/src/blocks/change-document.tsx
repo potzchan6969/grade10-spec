@@ -9,7 +9,17 @@ import {
 import { Text } from "@grade10/design-system/components/display/text";
 import { SegmentedControl } from "@grade10/design-system/components/forms/segmented-control";
 import { SegmentedControlItem } from "@grade10/design-system/components/forms/segmented-control-item";
-import { ArrowSquareOut, CaretRight, FileText } from "@phosphor-icons/react";
+import {
+  ArrowSquareOut,
+  Blueprint,
+  CaretRight,
+  CheckSquare,
+  FileText,
+  type Icon,
+  Layout,
+  Lightbulb,
+  ListChecks,
+} from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { requirementAnchor, scenarioAnchor } from "../api/anchors";
@@ -50,61 +60,38 @@ import { JourneyCard } from "./spec-block";
 /**
  * A change read as the files it is made of. The schema a change was created
  * under says which artifacts it has and in what order they are written; the
- * strip says which of those exist, and each present one is a tab. The tabs
+ * row says which of those exist, and each present one is a tab. The tabs
  * are the change's own files — two changes in one store can sit on different
  * schemas, so no tab is guaranteed to be there.
  */
 
-/** Which of the artifacts the schema asks for exist. Missing ones are named
- * in writing order — each is built on the one before, and engineering cannot
- * start from a change with no tasks. */
-export function ArtifactStrip({ document }: { document: ChangeDocument }) {
-  const missing = missingArtifacts(document);
+const ICONS: Record<string, Icon> = {
+  proposal: Lightbulb,
+  specs: ListChecks,
+  design: Blueprint,
+  ui: Layout,
+  tasks: CheckSquare,
+};
 
-  return (
-    <section
-      aria-label="Artifacts"
-      className="my-5 rounded-(--radius-2xl) border border-border bg-card px-4 py-3"
-    >
-      <div className="flex flex-wrap items-center gap-2">
-        <Text as="span" size="sm" weight="bold">
-          Artifacts
-        </Text>
-        {document.artifacts.map((artifact) => (
-          <Badge
-            key={artifact.name}
-            size="sm"
-            title={artifactMeaning(artifact.name)}
-            variant={artifact.present ? "success" : "warning"}
-          >
-            {artifactLabel(artifact.name)}
-            {artifact.present ? null : (
-              <span className="opacity-70">missing</span>
-            )}
-          </Badge>
-        ))}
-        <Badge className="ml-auto font-mono" size="sm" variant="outline">
-          {document.schema || "no schema"}
-        </Badge>
-      </div>
-      {document.schemaKnown ? null : (
-        <Text as="p" className="mt-2" size="xs" tone="secondary">
-          {document.schema === ""
-            ? "The change names no schema in its `.openspec.yaml`"
-            : `Schema \`${document.schema}\` is not one this store defines`}
-          , so nothing here can say what is still to write. The files it has are
-          listed in the usual order.
-        </Text>
-      )}
-      {missing.length > 0 ? (
-        <Text as="p" className="mt-2" size="xs" tone="secondary">
-          Still to write:{" "}
-          {missing.map((artifact) => fileName(artifact)).join(", ")}. The schema
-          declares them in writing order, each built on the one before.
-        </Text>
-      ) : null}
-    </section>
-  );
+function ArtifactIcon({ name }: { name: string }) {
+  const Glyph = ICONS[name] ?? FileText;
+  return <Glyph aria-hidden size={16} />;
+}
+
+/** What a tab can say about its file before it is opened: how many deltas
+ * the requirements carry, how far the plan has come. */
+function artifactCount(
+  artifact: ChangeArtifact,
+  change: ChangeEntry,
+  document: ChangeDocument,
+): string | null {
+  if (artifact.kind === "specs")
+    return document.deltas.length > 0 ? String(document.deltas.length) : null;
+  if (artifact.kind === "tasks") {
+    const { done, total } = taskTotals(change);
+    return total > 0 ? `${done}/${total}` : null;
+  }
+  return null;
 }
 
 function fileName(artifact: ChangeArtifact): string {
@@ -112,9 +99,12 @@ function fileName(artifact: ChangeArtifact): string {
 }
 
 /**
- * One tab per artifact the change has, in schema order. The open tab lives in
- * the URL, so a link carries the file it was written about; a hash naming a
- * permanent id opens the requirements, whatever tab the link was copied from.
+ * One tab per artifact the schema asks for, in writing order. A written one
+ * opens; one nobody has written yet sits in its place, disabled and marked,
+ * so a single row says what the change has and what is still to come. The
+ * open tab lives in the URL, so a link carries the file it was written
+ * about; a hash naming a permanent id opens the requirements, whatever tab
+ * the link was copied from.
  */
 export function ChangeTabs({
   change,
@@ -134,21 +124,21 @@ export function ChangeTabs({
 
   if (present.length === 0 || active === null) {
     return (
-      <EmptyState
-        compact
-        description={`No markdown in ${document.dir}. A change starts as an empty directory and its schema says what goes in it.`}
-        icon={<FileText aria-hidden />}
-        title="Nothing written yet"
-      />
+      <div className="my-5 space-y-3">
+        <EmptyState
+          compact
+          description={`No markdown in ${document.dir}. A change starts as an empty directory and its schema says what goes in it.`}
+          icon={<FileText aria-hidden />}
+          title="Nothing written yet"
+        />
+        <ArtifactNotes document={document} />
+      </div>
     );
   }
 
   return (
     <Tabs
-      // The primitive stacks a horizontal set through a `data-horizontal`
-      // variant no stylesheet here defines; said plainly, the list sits above
-      // the panel.
-      className="flex-col"
+      className="my-5"
       onValueChange={(value) => {
         if (typeof value !== "string") return;
         // The hash names a row in the tab being left; carrying it along would
@@ -162,22 +152,45 @@ export function ChangeTabs({
       }}
       value={active}
     >
-      <TabsList
-        aria-label="Artifacts of this change"
-        className="w-full border-border-subtle border-b pb-1"
-        variant="line"
-      >
-        {present.map((artifact) => (
-          <TabsTrigger
-            className="flex-none px-2"
-            key={artifact.name}
-            title={artifactMeaning(artifact.name)}
-            value={artifact.name}
-          >
-            {artifactLabel(artifact.name)}
-          </TabsTrigger>
-        ))}
-      </TabsList>
+      <div className="flex items-end justify-between gap-3 border-border border-b">
+        <TabsList
+          aria-label="Artifacts of this change"
+          className="-mb-px min-w-0 justify-start gap-0 overflow-x-auto p-0 group-data-horizontal/tabs:h-auto"
+          variant="line"
+        >
+          {document.artifacts.map((artifact) => (
+            <TabsTrigger
+              className="h-10 flex-none gap-1.5 rounded-none px-3 group-data-horizontal/tabs:after:bottom-0"
+              disabled={!artifact.present}
+              key={artifact.name}
+              title={
+                artifact.present
+                  ? artifactMeaning(artifact.name)
+                  : `${fileName(artifact)} is still to write`
+              }
+              value={artifact.name}
+            >
+              <ArtifactIcon name={artifact.name} />
+              {artifactLabel(artifact.name)}
+              {artifact.present ? (
+                <TabCount text={artifactCount(artifact, change, document)} />
+              ) : (
+                <span className="rounded-full bg-warning px-1.5 py-px font-medium text-[10px] text-warning-foreground uppercase tracking-wide">
+                  missing
+                </span>
+              )}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        <Badge
+          className="mb-2.5 shrink-0 font-mono"
+          size="sm"
+          variant="outline"
+        >
+          {document.schema || "no schema"}
+        </Badge>
+      </div>
+      <ArtifactNotes document={document} />
       {present.map((artifact) => (
         <TabsContent className="pt-2" key={artifact.name} value={artifact.name}>
           <Meaning name={artifact.name} />
@@ -190,6 +203,42 @@ export function ChangeTabs({
         </TabsContent>
       ))}
     </Tabs>
+  );
+}
+
+function TabCount({ text }: { text: string | null }) {
+  if (text === null) return null;
+  return (
+    <span className="rounded-full bg-muted px-1.5 py-px font-mono text-[11px] text-secondary-foreground tabular-nums">
+      {text}
+    </span>
+  );
+}
+
+/** What the row cannot say on its own: that the schema is one the store does
+ * not define, or which files are still to write and why in that order. */
+function ArtifactNotes({ document }: { document: ChangeDocument }) {
+  const missing = missingArtifacts(document);
+  if (document.schemaKnown && missing.length === 0) return null;
+  return (
+    <Text as="p" size="xs" tone="secondary">
+      {document.schemaKnown ? null : (
+        <>
+          {document.schema === ""
+            ? "The change names no schema in its `.openspec.yaml`"
+            : `Schema \`${document.schema}\` is not one this store defines`}
+          , so nothing here can say what is still to write. The files it has are
+          listed in the usual order.
+        </>
+      )}
+      {missing.length > 0 ? (
+        <>
+          Still to write:{" "}
+          {missing.map((artifact) => fileName(artifact)).join(", ")}. The schema
+          declares them in writing order, each built on the one before.
+        </>
+      ) : null}
+    </Text>
   );
 }
 

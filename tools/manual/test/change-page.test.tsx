@@ -11,9 +11,9 @@ import {
 } from "./manual-fixture";
 
 /**
- * One change as a page: the artifacts its schema asks for, one tab per file it
- * has, and the delta read as the contract it proposes. What used to be a board
- * card thirty screens into `/planning`.
+ * One change as a page: one tab per artifact its schema asks for, the written
+ * ones open, and the delta read as the contract it proposes. What used to be
+ * a board card thirty screens into `/planning`.
  */
 
 const SPEC = "demo-product/alpha";
@@ -212,15 +212,38 @@ describe("the page's head", () => {
   });
 });
 
-describe("the artifacts strip", () => {
+describe("the artifacts row", () => {
   const html = render("/planning/pos");
+  const tabs = [
+    ...html.matchAll(/role="tab"[^>]*>(?:<svg.*?<\/svg>)?([^<]+)/g),
+  ].map((match) => match[1]);
 
-  it("names every artifact the schema asks for, and which is missing", () => {
-    expect(html).toContain("Artifacts");
-    expect(html).toContain("Product");
-    expect(html).toContain("Tech Design");
-    expect(html).toMatch(/UI<span[^>]*>missing/);
+  it("names every artifact the schema asks for, in writing order", () => {
+    expect(html).toContain('aria-label="Artifacts of this change"');
+    expect(tabs).toEqual([
+      "Product",
+      "Requirements",
+      "Tech Design",
+      "UI",
+      "Tasks",
+    ]);
+  });
+
+  it("keeps the missing one in its place, disabled and marked", () => {
+    expect(html).toMatch(
+      /aria-disabled="true"[^>]*role="tab"[^>]*>(?:<svg.*?<\/svg>)?UI<span[^>]*>missing/,
+    );
+    expect(html).toContain("ui.md is still to write");
     expect(html).toContain("Still to write: ui.md");
+  });
+
+  it("counts what the requirements and the plan carry", () => {
+    expect(html).toMatch(/Requirements<span[^>]*>1</);
+    expect(html).toMatch(/Tasks<span[^>]*>1\/2</);
+  });
+
+  it("wears the schema the change was created under", () => {
+    expect(html).toContain(">full-planning<");
   });
 
   it("says when the schema cannot say what is missing", () => {
@@ -244,7 +267,6 @@ describe("one tab per file the change has", () => {
     expect(html).toContain(">Requirements<");
     expect(html).toContain(">Tech Design<");
     expect(html).toContain(">Tasks<");
-    expect(html).not.toMatch(/role="tab"[^>]*>UI</);
     expect(html).toContain("PM-driven proposal");
   });
 

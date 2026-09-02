@@ -13,7 +13,7 @@ import { useChangeDocument } from "../api/use-change-document";
 import { useManualIndex } from "../api/use-manual-index";
 import { BrokenCard } from "../blocks/broken-card";
 import { ChangeFacts, Cites } from "../blocks/change-detail";
-import { ArtifactStrip, ChangeTabs } from "../blocks/change-document";
+import { ChangeTabs } from "../blocks/change-document";
 import { InlineMarkdown } from "../blocks/inline-markdown";
 import { MarkdownView } from "../blocks/markdown";
 import { WithdrawAction } from "../editor/withdraw-action";
@@ -192,14 +192,11 @@ function ChangeBody({ change }: { change: ChangeEntry }) {
         </div>
       ) : null}
       {document.status === "ready" ? (
-        <>
-          <ArtifactStrip document={document.document} />
-          <ChangeTabs
-            change={change}
-            document={document.document}
-            index={index}
-          />
-        </>
+        <ChangeTabs
+          change={change}
+          document={document.document}
+          index={index}
+        />
       ) : null}
     </>
   );
