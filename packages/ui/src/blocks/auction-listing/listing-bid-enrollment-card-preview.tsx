@@ -18,7 +18,6 @@ import {
   type OverlayPresentation,
   PaymentMethodEmptyState,
   PaymentMethodRow,
-  type OverlayPresentation,
 } from "./listing-bid-enrollment-prototypes";
 import type { ListingBidEnrollmentSnapshot } from "./listing-bid-enrollment-snapshots";
 
