@@ -83,7 +83,7 @@ function CountdownPreview({
         maximum: "Your maximum",
         price: "Current bid",
       }}
-      actions={<LiveActions />}
+      bidActions={<LiveActions />}
       bidCount="3 Bids"
       deadline="Storybook countdown"
       extensionTooltip={formatExtendedBiddingRules(
@@ -92,7 +92,14 @@ function CountdownPreview({
       extensionValue={formatExtensionDurationValue(
         DEFAULT_LISTING_EXTENSION_POLICY,
       )}
-      history="Latest bids appear here."
+      historyRows={[
+        {
+          id: "latest-bid",
+          bidder: "Bidder 3",
+          amount: "HK$4,800.00",
+          time: "21 Aug 2026, 11:08 UTC",
+        },
+      ]}
       kicker={
         extensionStarted
           ? "Extended bidding in progress"

@@ -59,7 +59,15 @@ const meta = {
     price: "HK$4,800.00",
     buyerFeeHint: BUYER_FEE_HINT,
     bidCount: "1 Bid",
-    history: "Bidder 3 · HK$4,800.00",
+    historyRows: [
+      {
+        id: "bidder-3-4800",
+        bidder: "Bidder 3",
+        amount: "HK$4,800.00",
+        time: "21 Aug 2026, 11:08 UTC",
+      },
+    ],
+    historyLabel: "Bid history",
     remaining: "13D 11H 33M 47S",
     deadline: FIXTURE_AUCTION_DEADLINE,
     extensionValue: formatExtensionDurationValue(
@@ -69,7 +77,7 @@ const meta = {
       DEFAULT_LISTING_EXTENSION_POLICY,
     ),
     watchAction: <WatchOnlyActions />,
-    actions: <LiveActions />,
+    bidActions: <LiveActions />,
   },
   decorators: [
     (Story) => (
@@ -168,7 +176,7 @@ function PaymentMethodBidPanel({
     <>
       <ListingBidPanel
         {...meta.args}
-        actions={
+        bidActions={
           <LiveActions onPlaceBid={() => setDialogState(initialState)} />
         }
       />
@@ -200,7 +208,7 @@ export const PreAuction: Story = {
     remaining: "2D 4H 12M 0S",
     deadline: FIXTURE_AUCTION_OPENS_DEADLINE,
     standing: undefined,
-    actions: null,
+    bidActions: null,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -222,6 +230,10 @@ export const Default: Story = {
     expect(
       canvas.getByRole("button", { name: "Place Bid" }),
     ).toBeInTheDocument();
+    expect(
+      canvas.getByRole("list", { name: "Bid history" }),
+    ).toBeInTheDocument();
+    expect(canvas.getByText("Bidder 3")).toBeInTheDocument();
     await userEvent.click(canvas.getByRole("button", { name: "Place Bid" }));
     expect(
       within(document.body).getByRole("dialog", {
@@ -307,8 +319,9 @@ export const LiveNoBids: Story = {
     copy: { price: "Starting bid", maximum: "Your maximum", ends: "Ends" },
     price: "HK$1,200.00",
     bidCount: "0 Bids",
-    history: "No bids yet.",
-    actions: <LiveActions />,
+    historyRows: [],
+    historyEmpty: "No bids yet.",
+    bidActions: <LiveActions />,
   },
 };
 
@@ -348,7 +361,7 @@ export const PostSold: Story = {
     deadline: undefined,
     extensionValue: undefined,
     standing: undefined,
-    actions: <PostAuctionActions />,
+    bidActions: <PostAuctionActions />,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -366,7 +379,7 @@ export const PostWonPaymentDue: Story = {
     deadline: undefined,
     extensionValue: undefined,
     standing: <WonPaymentDueStanding />,
-    actions: <PostAuctionActions />,
+    bidActions: <PostAuctionActions />,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -383,7 +396,7 @@ export const PostWonSettled: Story = {
     deadline: undefined,
     extensionValue: undefined,
     standing: <WonSettledStanding />,
-    actions: <PostAuctionActions />,
+    bidActions: <PostAuctionActions />,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -400,7 +413,7 @@ export const PostLost: Story = {
     deadline: undefined,
     extensionValue: undefined,
     standing: <LostStanding />,
-    actions: <PostAuctionActions />,
+    bidActions: <PostAuctionActions />,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -413,12 +426,13 @@ export const PostUnsold: Story = {
     copy: { price: "Result", maximum: "Your maximum", ends: "Ends" },
     price: "Unsold",
     bidCount: "0 Bids",
-    history: "No bids yet.",
+    historyRows: [],
+    historyEmpty: "No bids yet.",
     remaining: FIXTURE_AUCTION_CLOSED,
     deadline: undefined,
     extensionValue: undefined,
     standing: undefined,
-    actions: <PostAuctionActions />,
+    bidActions: <PostAuctionActions />,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -435,6 +449,6 @@ export const Closed: Story = {
     remaining: FIXTURE_AUCTION_CLOSED,
     deadline: undefined,
     extensionValue: undefined,
-    actions: <PostAuctionActions />,
+    bidActions: <PostAuctionActions />,
   },
 };

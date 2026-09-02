@@ -54,6 +54,24 @@ const pageShell = (main: ReactNode, details: ReactNode) => (
   </VStack>
 );
 
+const LIVE_HISTORY_ROWS = [
+  {
+    id: "bidder-3-4800",
+    bidder: "Bidder 3",
+    amount: "HK$4,800.00",
+    time: "21 Aug 2026, 11:08 UTC",
+  },
+] as const;
+
+const SOLD_HISTORY_ROWS = [
+  {
+    id: "bidder-1-3100",
+    bidder: "Bidder 1",
+    amount: "HK$3,100.00",
+    time: "30 Aug 2026, 09:15 UTC",
+  },
+] as const;
+
 const liveBidPanel = (
   <ListingBidPanelComponent
     copy={{
@@ -62,14 +80,14 @@ const liveBidPanel = (
       maximum: "Your maximum",
       price: "Current bid",
     }}
-    actions={<LiveActions />}
+    bidActions={<LiveActions />}
     watchAction={<WatchOnlyActions />}
     bidCount="1 Bid"
     deadline={FIXTURE_AUCTION_DEADLINE}
     extensionValue={formatExtensionDurationValue(
       DEFAULT_LISTING_EXTENSION_POLICY,
     )}
-    history="Bidder 3 · HK$4,800.00"
+    historyRows={LIVE_HISTORY_ROWS}
     kicker={KICKER}
     price="HK$4,800.00"
     buyerFeeHint={BUYER_FEE_HINT}
@@ -121,7 +139,7 @@ export const PreAuction: Story = {
             maximum: "Your maximum",
             price: "Opening bid",
           }}
-          actions={null}
+          bidActions={null}
           watchAction={<WatchOnlyActions />}
           deadline={FIXTURE_AUCTION_OPENS_DEADLINE}
           extensionValue={formatExtensionDurationValue(
@@ -191,10 +209,10 @@ export const PostSold: Story = {
         />
         <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
-          actions={<PostAuctionActions />}
+          bidActions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
           bidCount="1 Bid"
-          history="Bidder 1 · HK$3,100.00"
+          historyRows={SOLD_HISTORY_ROWS}
           kicker={KICKER}
           price="HK$3,100.00"
           buyerFeeHint={BUYER_FEE_HINT}
@@ -233,10 +251,10 @@ export const PostWonPaymentDue: Story = {
         />
         <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
-          actions={<PostAuctionActions />}
+          bidActions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
           bidCount="1 Bid"
-          history="Bidder 1 · HK$3,100.00"
+          historyRows={SOLD_HISTORY_ROWS}
           kicker={KICKER}
           price="HK$3,100.00"
           buyerFeeHint={BUYER_FEE_HINT}
@@ -275,10 +293,10 @@ export const PostWonSettled: Story = {
         />
         <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
-          actions={<PostAuctionActions />}
+          bidActions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
           bidCount="1 Bid"
-          history="Bidder 1 · HK$3,100.00"
+          historyRows={SOLD_HISTORY_ROWS}
           kicker={KICKER}
           price="HK$3,100.00"
           buyerFeeHint={BUYER_FEE_HINT}
@@ -318,10 +336,10 @@ export const PostLost: Story = {
         />
         <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Winning bid" }}
-          actions={<PostAuctionActions />}
+          bidActions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
           bidCount="1 bid"
-          history="Bidder 1 · HK$3,100.00"
+          historyRows={SOLD_HISTORY_ROWS}
           kicker={KICKER}
           price="HK$3,100.00"
           buyerFeeHint={BUYER_FEE_HINT}
@@ -361,10 +379,11 @@ export const PostUnsold: Story = {
         />
         <ListingBidPanelComponent
           copy={{ ends: "Ends", maximum: "Your maximum", price: "Result" }}
-          actions={<PostAuctionActions />}
+          bidActions={<PostAuctionActions />}
           watchAction={<WatchOnlyActions />}
           bidCount="0 Bids"
-          history="No bids yet."
+          historyRows={[]}
+          historyEmpty="No bids yet."
           kicker={KICKER}
           price="Unsold"
           buyerFeeHint={BUYER_FEE_HINT}

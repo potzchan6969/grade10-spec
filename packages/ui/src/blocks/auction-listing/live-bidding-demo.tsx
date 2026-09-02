@@ -1,5 +1,4 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
-import { List, ListItem } from "@grade10/design-system/components/display/list";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
@@ -104,31 +103,16 @@ function standingOf(bids: readonly ScriptBid[]) {
 
 function historyOf(bids: readonly ScriptBid[]) {
   if (bids.length === 0) return null;
-  const newestFirst = [...bids].reverse().slice(0, 3);
-  return (
-    <List aria-label="Bid history">
-      {newestFirst.map((bid) => (
-        <ListItem
-          className="t-bid-reveal p-0 py-1"
-          divider={false}
-          key={`${bid.bidder}-${bid.amount}`}
-        >
-          <HStack className="w-full" gap="sm" hAlign="space-between">
-            <Text size="xs" tone="secondary">
-              {bid.bidder}
-            </Text>
-            <Text
-              className="text-right tabular-nums"
-              size="xs"
-              tone="secondary"
-            >
-              {bid.amount}
-            </Text>
-          </HStack>
-        </ListItem>
-      ))}
-    </List>
-  );
+  return [...bids]
+    .reverse()
+    .slice(0, 3)
+    .map((bid, index) => ({
+      id: `${bid.bidder}-${bid.amount}-${index}`,
+      bidder: bid.bidder,
+      amount: bid.amount,
+      time: bid.at,
+      isViewer: bid.bidder === YOU,
+    }));
 }
 
 function captionOf(bids: readonly ScriptBid[]): string {
@@ -154,7 +138,7 @@ function panelFor({ bids, watching }: DemoState) {
         extensionTooltip: "Extended bidding rules",
         maximum: "Your maximum",
       }}
-      actions={<LiveActions />}
+      bidActions={<LiveActions />}
       bidCount={`${bids.length} ${bids.length === 1 ? "Bid" : "Bids"}`}
       deadline={FIXTURE_AUCTION_DEADLINE}
       extensionValue={formatExtensionDurationValue(
@@ -163,7 +147,7 @@ function panelFor({ bids, watching }: DemoState) {
       extensionTooltip={formatExtendedBiddingRules(
         DEFAULT_LISTING_EXTENSION_POLICY,
       )}
-      history={historyOf(bids)}
+      historyRows={historyOf(bids) ?? undefined}
       kicker="Listing 12 · September Slabs"
       price={lead?.amount ?? "HK$1,200.00"}
       buyerFeeHint="Buyer fee is added on top of the winning bid"

@@ -69,6 +69,7 @@ export {
 } from "./blocks/auction-listing/listing-bid-enrollment-prototypes";
 // shared/ui/auction-listing
 export {
+  type ListingBidHistoryRow,
   ListingBidPanel,
   type ListingBidPanelCopy,
   type ListingBidPanelProps,

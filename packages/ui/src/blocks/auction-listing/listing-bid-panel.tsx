@@ -5,6 +5,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@grade10/design-system/components/display/card";
+import { List, ListItem } from "@grade10/design-system/components/display/list";
 import { Separator } from "@grade10/design-system/components/display/separator";
 import { Text } from "@grade10/design-system/components/display/text";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
@@ -18,10 +19,16 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Info } from "@phosphor-icons/react";
-import type { ReactNode } from "react";
+import type { ReactElement } from "react";
+import { useState } from "react";
 import { popInValue } from "./digit-pop-in";
 
 import "./listing-bid-panel.css";
+
+type PanelValue = ReactElement | string;
+type PanelSlot = ReactElement | null;
+type BidActionControls = { openBidDialog: () => void };
+type PanelActions = PanelSlot | ((controls: BidActionControls) => PanelSlot);
 
 /**
  * The words the panel says. What the lot currently costs, how long is left,
@@ -43,30 +50,53 @@ type ListingBidPanelCopy = {
 
 type ListingBidPanelProps = {
   copy: ListingBidPanelCopy;
-  title: ReactNode;
-  kicker?: ReactNode;
+  title: PanelValue;
+  kicker?: PanelValue;
   /** Highest-bidder / outbid / won banner. The consumer owns the content. */
-  standing?: ReactNode;
+  standing?: PanelSlot;
   /** Watch control rendered in the top-right card action slot. */
-  watchAction?: ReactNode;
+  watchAction?: PanelSlot;
   /** Whether the current viewer is watching this listing. */
   watching?: boolean;
-  price: ReactNode;
+  price: PanelValue;
   /** Viewer’s own committed maximum. Omit when the viewer has no commitment. */
-  maximum?: ReactNode;
+  maximum?: PanelValue;
   /** Hint below the current bid when it clarifies what the amount means. */
-  priceHint?: ReactNode;
+  priceHint?: PanelValue;
   /** Post-auction buyer-fee note for bidders, shown in the action footer. */
-  buyerFeeHint?: ReactNode;
-  bidCount?: ReactNode;
-  history?: ReactNode;
-  remaining: ReactNode;
-  deadline?: ReactNode;
-  extensionValue?: ReactNode;
-  extensionTooltip?: ReactNode;
-  /** Place bid, watch, share — the consumer owns the controls. */
-  actions: ReactNode;
+  buyerFeeHint?: PanelValue;
+  bidCount?: PanelValue;
+  /** Typed recent bids; formatting remains the consumer's responsibility. */
+  historyRows?: readonly ListingBidHistoryRow[];
+  historyLabel?: string;
+  historyEmpty?: PanelValue;
+  /** @deprecated Pass historyRows so the panel owns the history structure. */
+  history?: PanelValue;
+  remaining: PanelValue;
+  deadline?: PanelValue;
+  extensionValue?: PanelValue;
+  extensionTooltip?: PanelValue;
+  /** Enrollment controls such as sign-in, age, or payment setup. */
+  enrollment?: {
+    /** Supplied by the backend; false until age consent is available. */
+    ageConsent: boolean;
+    content: PanelSlot;
+  };
+  /** Place-bid controls; the consumer owns all state and interactions. */
+  bidActions?: PanelActions;
+  /** Creates the domain-owned bid dialog after the panel opens it. */
+  bidDialog?: (onClose: () => void) => ReactElement;
+  /** @deprecated Pass bidActions instead. */
+  actions?: PanelActions;
   className?: string;
+};
+
+type ListingBidHistoryRow = {
+  id: string;
+  bidder: string;
+  amount: string;
+  time?: string;
+  isViewer?: boolean;
 };
 
 /**
@@ -85,17 +115,38 @@ function ListingBidPanel({
   priceHint,
   buyerFeeHint,
   bidCount,
+  historyRows,
+  historyLabel = "Bid history",
+  historyEmpty,
   history,
   remaining,
   deadline,
   extensionValue,
   extensionTooltip,
+  enrollment,
+  bidActions,
+  bidDialog,
   actions,
   className,
 }: ListingBidPanelProps) {
+  const [bidDialogOpen, setBidDialogOpen] = useState(false);
+  const actionInput = bidActions ?? actions;
+  const actionControls = {
+    openBidDialog: () => setBidDialogOpen(true),
+  } satisfies BidActionControls;
+  const resolvedActions =
+    typeof actionInput === "function"
+      ? actionInput(actionControls)
+      : actionInput;
+
   return (
     <Card
       className={cn("min-w-0 w-full overflow-hidden", className)}
+      data-age-consent={
+        enrollment?.ageConsent == null
+          ? undefined
+          : String(enrollment.ageConsent)
+      }
       data-slot="listing-bid-panel"
       data-watching={watching == null ? undefined : watching}
     >
@@ -166,9 +217,23 @@ function ListingBidPanel({
                 className="min-h-24 min-w-0 overflow-hidden rounded-xl border border-border/60 bg-muted/20 p-4"
                 gap="xs"
               >
-                {history}
+                {historyRows ? (
+                  historyRows.length > 0 ? (
+                    <BidHistoryRows label={historyLabel} rows={historyRows} />
+                  ) : (
+                    historyEmpty
+                  )
+                ) : (
+                  history
+                )}
               </VStack>
             </div>
+          ) : historyRows ? (
+            historyRows.length > 0 ? (
+              <BidHistoryRows label={historyLabel} rows={historyRows} />
+            ) : (
+              historyEmpty
+            )
           ) : history != null ? (
             history
           ) : null}
@@ -230,10 +295,11 @@ function ListingBidPanel({
           </VStack>
         </VStack>
       </CardContent>
-      {actions ? (
+      {enrollment?.content || resolvedActions ? (
         <CardFooter className="items-stretch border-t bg-muted/20 p-5">
           <VStack className="w-full" gap="sm">
-            {actions}
+            {enrollment?.content}
+            {resolvedActions}
             {buyerFeeHint ? (
               <Text size="xs" tone="secondary">
                 {buyerFeeHint}
@@ -242,9 +308,53 @@ function ListingBidPanel({
           </VStack>
         </CardFooter>
       ) : null}
+      {bidDialog && bidDialogOpen
+        ? bidDialog(() => setBidDialogOpen(false))
+        : null}
     </Card>
   );
 }
 
-export type { ListingBidPanelCopy, ListingBidPanelProps };
+function BidHistoryRows({
+  label,
+  rows,
+}: {
+  label: string;
+  rows: readonly ListingBidHistoryRow[];
+}) {
+  return (
+    <List aria-label={label}>
+      {rows.map((row) => (
+        <ListItem
+          className="t-bid-reveal p-0"
+          data-viewer={row.isViewer || undefined}
+          divider={false}
+          key={row.id}
+        >
+          <HStack className="w-full" gap="sm" hAlign="space-between">
+            <VStack gap="xs">
+              <Text size="xs" tone="secondary">
+                {row.bidder}
+              </Text>
+              {row.time ? (
+                <Text size="xs" tone="secondary">
+                  {row.time}
+                </Text>
+              ) : null}
+            </VStack>
+            <Text
+              className="text-right tabular-nums"
+              size="xs"
+              tone="secondary"
+            >
+              {row.amount}
+            </Text>
+          </HStack>
+        </ListItem>
+      ))}
+    </List>
+  );
+}
+
+export type { ListingBidHistoryRow, ListingBidPanelCopy, ListingBidPanelProps };
 export { ListingBidPanel };

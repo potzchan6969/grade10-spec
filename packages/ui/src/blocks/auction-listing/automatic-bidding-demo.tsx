@@ -190,7 +190,7 @@ function AutomaticBiddingListingDemo({
   return (
     <div className="mx-auto w-full max-w-md">
       <ListingBidPanel
-        actions={actions}
+        bidActions={actions}
         copy={{
           ends: "Ends",
           maximum: "Your maximum",
