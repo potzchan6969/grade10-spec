@@ -3,9 +3,9 @@
 ## Purpose
 
 What a collector is told about buying a variant, derived once from the store's
-inventory facts and said the same way wherever the variant appears — the
-listing, the card's own page, and the cart. The derivation lives here so no
-surface invents its own.
+inventory facts and said the same way wherever the variant appears. The
+derivation lives here so no surface invents its own; when the store acts on it
+for a cart is `grade10-store/cart-validation`'s.
 
 ## ADDED Requirements
 
@@ -55,27 +55,70 @@ purchasable on any surface.
 - **WHEN** a variant's available quantity is below 0
 - **THEN** it is out of stock
 
-### Requirement: Quantity is not communicated beyond whether a variant can be bought
+### Requirement: Availability is also answerable for a requested quantity
 
-A surface SHALL communicate whether a variant can be bought and nothing more
-about how much of it remains. It SHALL NOT display a remaining count, a
-scarcity treatment, or any label that distinguishes one available variant from
-another by quantity.
+Where a quantity is requested — a cart line, or a line offered for checkout —
+the store SHALL answer availability for the variant and that quantity together,
+as one of three outcomes: the request is fillable when the available quantity
+is at least the requested quantity; it is fillable in part when the available
+quantity is at least one but below it; and it is not fillable when the variant
+is out of stock.
 
-Availability SHALL be the only fact the store derives from quantity, so that
-two available variants are offered identically however far apart their
-quantities are.
+Fillable in part SHALL name the quantity that can be filled. A request that is
+fillable in part SHALL NOT be reported as simply available, and SHALL NOT be
+reported as out of stock: the variant can still be bought, but not in the
+quantity asked for.
+
+Requesting a quantity SHALL NOT change a variant's own availability. A variant
+available for a request of 1 SHALL remain available when a request for 50
+cannot be filled.
+
+#### Scenario: The request can be filled
+
+- **WHEN** 3 are requested of a variant whose available quantity is 12
+- **THEN** the request is fillable
+
+#### Scenario: The request can be filled exactly
+
+- **WHEN** 12 are requested of a variant whose available quantity is 12
+- **THEN** the request is fillable
+
+#### Scenario: More is asked for than remains
+
+- **WHEN** 5 are requested of a variant whose available quantity is 2
+- **THEN** the request is fillable in part, naming 2 as the quantity that can be
+  filled
+- **AND** the variant is still available
+
+#### Scenario: Nothing remains to fill the request
+
+- **WHEN** 5 are requested of a variant whose available quantity is 0
+- **THEN** the request is not fillable
+- **AND** the variant is out of stock
+
+### Requirement: A browse surface communicates no quantity beyond whether a variant can be bought
+
+The listing and a card's own page SHALL communicate whether a variant can be
+bought and nothing more about how much remains. Neither SHALL display a
+remaining count, a scarcity treatment, or any label that distinguishes one
+available variant from another by quantity, so two available variants are
+offered identically however far apart their quantities are.
+
+This binds the surfaces a collector browses on. What the cart tells a collector
+about a line it could not fill in full is `grade10-store/cart-validation`'s,
+and is told at the moment the store acts on the quantity rather than as a cue
+to buy sooner.
 
 #### Scenario: A scarce variant is offered as any other
 
 - **GIVEN** one variant with an available quantity of 1 and another with 400
-- **WHEN** a collector sees each of them
+- **WHEN** a collector sees each of them on the listing
 - **THEN** both read available, with the same treatment and the same controls
 - **AND** neither shows a remaining count or a scarcity label
 
-#### Scenario: No count reaches the collector
+#### Scenario: No count reaches the collector while browsing
 
-- **WHEN** any surface communicates a variant's availability
+- **WHEN** the listing or a card's page communicates a variant's availability
 - **THEN** it names no remaining quantity
 
 ### Requirement: A card's availability is that of its most available variant
@@ -134,47 +177,16 @@ NOT offer a purchase control that cannot be used.
 - **THEN** the variant is still priced
 - **AND** no usable purchase control is offered for it
 
-### Requirement: A cart line reports what changed since it was added
-
-When the cart refreshes a line's availability, a line whose variant has become
-out of stock SHALL read out of stock and SHALL NOT be purchasable, and a line
-whose product is no longer published to the sales channel SHALL be reported as
-unavailable.
-
-Out of stock and unavailable SHALL be reported as distinct conditions: a
-collector whose card sold out is told something different from one whose card
-was withdrawn from sale.
-
-A line whose variant is still available SHALL be reported as available and
-SHALL NOT carry a warning, however little of it remains.
-
-#### Scenario: The card sold out while it sat in the cart
-
-- **GIVEN** a cart line for a variant available when it was added
-- **WHEN** the cart refreshes and that variant's quantity is 0
-- **THEN** the line reads out of stock
-- **AND** it cannot be checked out
-
-#### Scenario: The product was withdrawn from sale
-
-- **GIVEN** a cart line for a product published when it was added
-- **WHEN** the cart refreshes and that product is no longer published to the
-  sales channel
-- **THEN** the line is reported as unavailable, and not as out of stock
-
-#### Scenario: A scarce line carries no warning
-
-- **GIVEN** a cart line for a variant whose quantity is 2
-- **WHEN** the cart refreshes
-- **THEN** the line reads available and can be checked out
-- **AND** no warning is shown on it
-
-### Requirement: Unavailable is reported for a cart line and nowhere else
+### Requirement: An unpublished product is absent from browsing rather than marked
 
 A product not published to the sales channel SHALL NOT appear in the listing,
 and its address SHALL answer as `grade10-store/product-page` already requires
-rather than rendering an unavailable card. Unavailable SHALL be reported only
-for a cart line whose product ceased to be published after it was added.
+rather than rendering a card marked unavailable. Unavailable SHALL NOT be an
+availability a browse surface communicates.
+
+Where a collector still meets an unpublished product — a cart line whose
+product ceased to be published after it was added — is
+`grade10-store/cart-validation`'s.
 
 #### Scenario: An unpublished product is not listed
 

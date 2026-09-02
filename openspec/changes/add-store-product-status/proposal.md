@@ -2,101 +2,133 @@
 
 ## Why
 
-A collector cannot tell from the storefront whether a card is one they can
-still buy, and the three surfaces that answer do not agree. The listing draws a
-tile as sold out or not, the card's page says for sale or not for sale, and the
-cart drawer refreshes on open and marks a line sold out — three vocabularies,
-each derived ad hoc from whatever the consuming application decided a Shopify
-inventory read meant.
+Grade10 runs its own storefront rather than Shopify's, so the cart is ours. A
+line sits in it holding whatever availability and price it recorded when the
+collector added it, and nothing in `openspec/specs/` says when the store must
+go and look again, or what it owes the collector when the answer has moved.
+Three surfaces answer availability today and none of them from a stated rule:
+the listing draws a tile from a supplied sold-out boolean, a card's page says
+for sale or not for sale, and the cart drawer keeps its own `CartItemStatus`
+vocabulary.
 
-The evidence is the shape of the existing contracts: `ProductCard` takes a
-boolean sold-out condition, `CartItemStatus` takes its own separate vocabulary,
-and neither is derived from a stated rule. Nothing in `openspec/specs/` says
-what an inventory field means to a collector, so every surface is free to
-answer differently. The cost lands at checkout, where
-`grade10-store/shopify-commerce` validates against live Shopify and refuses a
-line the collector had every reason to believe was fine.
+Owning the cart puts the whole cost of that silence on us. Shopify sees the
+order only when we hand it one, and `grade10-store/shopify-commerce` validates
+against live Shopify at that moment and refuses an unpublished, unavailable or
+insufficient line. Everything before the handoff is the store's to get right,
+and today the store may confidently carry a line for a card that sold out an
+hour ago, or a quantity larger than anything left, all the way to the last
+step — where the collector meets a refusal for a problem the store could have
+told them about when they opened the cart.
 
-**Metric:** share of checkout attempts refused for an item that browsing had
-shown as buyable. A stated derivation applied identically on all three surfaces
+**Metric:** share of checkout attempts refused by Shopify for an item or
+quantity the store had shown as fine. A stated derivation plus a stated re-read
 should move that toward zero; today it is unmeasured, so the first delivery
 establishes the baseline. *(Assumption — the source PRD names no metric.)*
 
-**Acceptance signal:** the same variant, at the same instant, reads the same on
-its tile, on its card page, and on its cart line.
+**Acceptance signal:** a collector who opens the cart is told about every line
+that moved, before they press checkout rather than after.
 
 ## What Changes
 
-- **One stated derivation from inventory to what a collector sees.** Available
+Two capabilities, split by what they answer. `product-status` defines what
+availability *means*; `cart-validation` governs when the store *acts* on it.
+
+**The definition —**
+
+- **One derivation from inventory to what a collector sees.** Available
   quantity alone decides it: at or below zero the variant is out of stock,
-  above zero it is available. `inventoryPolicy` is not read for MVP, so a
-  variant set to `continue` with no stock reads out of stock and cannot be
-  bought — the store never offers what it does not hold.
-- **Availability is the only fact derived from quantity.** A surface says
-  whether a variant can be bought and nothing more about how much remains: no
-  count, no scarcity treatment, no label separating one available variant from
-  another. A variant with one left is offered exactly as one with four hundred.
-- **Unavailable is a cart-line condition only.** A product not published to the
-  sales channel is absent from the listing and its address already answers 404
-  under `grade10-store/product-page`. The only place a collector meets it is a
-  cart line whose product was delisted mid-session, reported distinctly from
-  out of stock.
-- **A card's tile reflects its most available variant.** Available beats out of
-  stock; a card is out of stock only when every variant on it is. Per-variant
-  availability stays on the card's page.
+  above zero it is available. `inventoryPolicy` is not read, so a variant set
+  to `continue` with no stock reads out of stock and cannot be bought.
+- **Availability is also answerable for a requested quantity.** A request is
+  fillable, fillable in part naming what can be filled, or not fillable — so a
+  cart line asking for 5 when 2 remain is a stated outcome rather than an
+  unhandled case that surfaces at checkout.
+- **A card's tile reflects its most available variant.** Out of stock only when
+  every variant on it is; per-variant availability stays on the card's page.
+- **Browse surfaces communicate no quantity.** No remaining count, no scarcity
+  treatment, no label separating one available variant from another. Scoped to
+  browsing, so the cart can still explain a quantity it changed.
+- **Unavailable is not a browse condition.** An unpublished product is absent
+  from the listing and its address already answers 404.
+
+**The validation —**
+
+- **The store re-reads availability and price at two moments:** when the cart
+  opens, and again before the cart is offered for checkout. What a line
+  recorded when it was added is never enough.
+- **A line that cannot be filled in full is reduced to what remains** and
+  reported as adjusted; one that cannot be filled at all is reported out of
+  stock and left for the collector to remove. A line is never grown.
+- **A withdrawn product is reported as unavailable,** distinctly from out of
+  stock.
+- **A repriced line is shown at the current price** and the change disclosed
+  before checkout, rising as plainly as falling. No browser-supplied or
+  recorded price ever reaches a checkout order.
+- **A cart the re-read contradicts is not handed off.** Every contradicted line
+  is named at once and the collector returns to the cart to resolve it.
+- **The store's read is advisory; Shopify remains the authority.** A refusal
+  after a passing read is reported with the lines named, and a read that cannot
+  complete blocks checkout rather than guessing.
 
 No component contract changes. The listing already takes availability as a
-supplied condition and already refuses to derive one itself; this change states
-what the store must put into it.
+supplied condition and forbids deriving one; `CartItemStatus` already carries
+`adjusted` and `soldOut`, and `cart-drawer-unavailable-items` is adding
+`unavailable`. This change states what the store must put into them.
 
 ## Non-Goals
 
-- **Low stock, scarcity cues, and remaining counts.** Deliberately removed
-  rather than deferred: the change now states that quantity produces
-  availability and nothing else, so a surface cannot reintroduce a scarcity
-  treatment without a change that says so. A later change may revisit it.
-- **Pre-order.** `inventoryPolicy: continue` is deliberately not honoured as a
-  sellable condition. Taking an order for stock the store does not hold is a
-  product decision with its own fulfilment, payment-timing and cancellation
-  consequences, and it needs its own change.
+- **Low stock as a cue to buy.** Removed rather than deferred: browse surfaces
+  state availability and nothing about quantity. The cart's existing `adjusted`
+  warning is untouched — it explains a quantity the store already changed, and
+  is not a scarcity badge. `cart-item-hide-adjusted-warning` owns its lifecycle.
+- **Pre-order.** `inventoryPolicy: continue` is deliberately not honoured.
+  Taking an order for stock the store does not hold carries its own fulfilment,
+  payment-timing and cancellation consequences, and needs its own change.
+- **Checkout order creation, draft orders, and the fifteen-minute reservation.**
+  Already `grade10-store/shopify-commerce`. This change stops at the handoff.
 - **Multi-location inventory.** Single-location assumption; available quantity
   is read as one number.
-- **Refresh cadence.** Whether a surface reads availability live or from cache
-  is engineering's, bounded by the invalidation
-  `grade10-store/shopify-commerce` already requires.
+- **How money is formatted.** Already `money-amounts`; this change only requires
+  that a price read be minor units plus an ISO 4217 code.
+- **Refresh cadence for browse surfaces.** Whether the listing reads live or
+  from cache is engineering's, bounded by the invalidation
+  `grade10-store/shopify-commerce` already requires. The two cart re-reads are
+  not cadence — they are stated moments.
 - **Visual treatment.** Whether out-of-stock and unavailable are drawn alike is
-  design's; this change fixes only what each surface must communicate.
-- **`CartItemStatus`'s own values.** The cart drawer's status vocabulary is
-  being changed right now by `cart-drawer-unavailable-items`, which adds
-  `unavailable`. This change states what the store must put into that type, and
-  does not touch the type itself.
-- **Checkout refusal.** Already `grade10-store/shopify-commerce`.
+  design's.
 
 ## Capabilities
 
 ### New Capabilities
 
-- `grade10-store/product-status`: the single derivation from inventory facts to
-  what a collector is told about buying a variant, the variant-to-product
-  rollup, and what the listing, the card page and the cart must each
-  communicate.
+- `grade10-store/product-status`: what availability means — the derivation from
+  quantity, the answer for a requested quantity, the variant-to-product rollup,
+  and what a browse surface may communicate.
+- `grade10-store/cart-validation`: when the store re-reads inventory and price
+  for the lines a collector holds, what it does to a line the read contradicts,
+  and what the collector is told before the cart is offered for checkout.
 
 ### Modified Capabilities
 
 None. No existing requirement changes: `shared-ui/store-product-listing`
-already takes a supplied sold-out condition and already forbids deriving one,
-and `grade10-store/product-page`'s per-variant for-sale requirement is
-unchanged by stating where that condition comes from.
+already takes a supplied condition and forbids deriving one,
+`shared-ui/store-cart` already carries the statuses these requirements set, and
+`grade10-store/product-page`'s per-variant for-sale requirement is unchanged by
+stating where that condition comes from.
 
 ## Impact
 
-No change to `packages/ui` or `packages/i18n` — the listing's supplied
-condition and the existing `soldOutSuffix` and `notForSaleNote` copy already
-carry everything this change requires a surface to say. The work is in the
-consuming store applications, which must derive the supplied condition from the
-stated rule rather than from one of their own.
+No change to `packages/ui` or `packages/i18n`. The work is in the storefront
+application: derive the supplied conditions from the stated rule, and perform
+the two re-reads with the outcomes these requirements name.
 
 Depends on `add-grade10-shopify-store` for `grade10-store/shopify-commerce`,
-which establishes Shopify as authoritative for inventory. Overlaps
-`cart-drawer-unavailable-items` on the cart line; that change owns the
-component contract, this one owns what the store puts into it. No Figma change.
+which establishes Shopify as authoritative for inventory and owns everything
+from the handoff onward. Adjoins `cart-drawer-unavailable-items` and
+`cart-item-hide-adjusted-warning` on the cart line: those changes own the
+component contract and the warning's lifecycle, this one owns what the store
+puts into them. No Figma change.
+
+The change directory is still named `add-store-product-status`; it now carries
+two capabilities, and the name is left alone so the open pull request keeps its
+history.
