@@ -8,7 +8,7 @@ Product context: [Grade10 foundation](../../../docs/prds/products/grade10-store/
 ```text
 Grade10 Store browser
   -> Store API -> Shopify Storefront API: catalogue, variant availability
-  -> Store API -> Shopify Admin API: customer association, draft-order checkout URL, 15-minute reservation
+  -> Store API -> Shopify: customer association, checkout URL, no reservation
   -> Store API -> Store Postgres: local order, customer-visible lifecycle
   -> Shopify hosted checkout
 Shopify Admin API + verified webhooks -> Store API -> local order events/status
@@ -21,7 +21,7 @@ auditable projection of those external facts. It never becomes a catalogue,
 inventory, payment, or shipping database.
 
 The Storefront API is used for shopper-safe reads. The Admin API is server-only
-and used for customer association, draft-order creation, order/payment and
+and used for customer association, checkout creation, order/payment and
 fulfilment reads, staff refunds, webhook registration, and reconciliation.
 Neither token can reach the browser.
 
@@ -39,28 +39,29 @@ or unavailable variant is omitted or marked unavailable in browsing, and is
 always refused at checkout. Shopify API/shape failures are explicit unavailable
 or integration failures, never fabricated stock or price data.
 
-## Checkout, reservation, and order identity
+## Checkout and order identity
 
-Before hosted checkout, the browser supplies an email, variant identifiers, and
-quantities. If the email is already attached to a Grade10 account, the Store
-requires Grade10 magic-link sign-in before handoff and uses the existing linked
-Shopify customer. Otherwise it creates one guest Shopify customer before
-checkout, after confirming that no Grade10 account uses that email, then creates
-one idempotent Shopify draft order with a fifteen-minute inventory reservation.
-Every finite-stock line must reserve successfully; the Store does not support
-backorders or extend an expired reservation.
+Checkout runs on the Grade10 session, reached through Google or email magic
+link. The browser supplies variant identifiers and quantities; the Store
+re-prices them live, opens the pending order for the signed-in account, and
+creates one idempotent Shopify checkout stamped with that order id. Nothing is
+reserved: Shopify sells the stock until payment, and the Store does not support
+backorders.
 
-The Store records the local order and Shopify draft-order reference before it
+Guest checkout by a typed email is built beside it: a known email is answered
+with sign-in required, and any other gets one Shopify customer before checkout
+and a Grade10 account linked to it after payment. Whether the storefront
+offers it at launch is `TBC`.
+
+The Store records the local order and Shopify checkout reference before it
 returns Shopify's secure hosted checkout URL. Shopify revalidates stock and
-payment at checkout. A reservation expires automatically after fifteen minutes;
-the buyer must start checkout again, and the Store reports an unavailable item
-if it can no longer reserve it.
+payment at its page; an item that sold out in between is refused there, named,
+and the buyer starts again.
 
-After Shopify confirms payment, the Store creates and links the Grade10 account
-for that guest Shopify customer when needed, sends Grade10's email magic link,
-and returns the buyer to that account's order page. The permanent order URL is
-only an address: it grants no access without the matching Grade10 authenticated
-session. Shopify owns shipping-address collection, shipping options, tax,
+After Shopify confirms payment, its confirmation page offers Continue shopping,
+which returns the buyer to the store; the order waits in Your Orders. The
+permanent order URL is only an address: it grants no access without the
+matching Grade10 authenticated session. Shopify owns shipping-address collection, shipping options, tax,
 discounts, and final totals. The Store's pre-check total is never represented
 as the amount paid.
 
@@ -97,9 +98,9 @@ capabilities.
 - API version, shop domain, Storefront token, Admin token, and webhook secret
   are environment-specific configuration. Startup/configuration validation
   names an absent setting and prevents a partial integration.
-- The checkout-return mechanism is verified against the selected Shopify plan
-  and enabled checkout capabilities before release; a Shopify-hosted success
-  page must not leave a paid buyer without the Grade10 order-page route.
+- Shopify's hosted checkout does not redirect on its own: Continue shopping on
+  its confirmation page is the way back, so a paid order must be findable from
+  Your Orders without a redirect.
 
 ## Alternatives considered
 
@@ -127,12 +128,12 @@ Rejected: payment and fulfilment are independently reported facts. Combining
 them misleads customers and removes support's ability to diagnose a paid but
 unfulfilled order.
 
-### Use a Storefront cart for finite-stock checkout
+### Hold finite stock for fifteen minutes through a draft order
 
-Rejected: a cart describes intended merchandise but does not make the required
-fifteen-minute finite-stock hold. A Shopify draft order supplies a reservation
-expiry and secure hosted checkout link, so it makes the hold explicit and
-recoverable.
+Rejected: a draft order would make a hold explicit, but no hold is wanted, and
+the code does not do one easily. A Storefront cart stamped with the order id
+gives the hosted checkout link, and Shopify's own check at payment is the last
+word on stock.
 
 ## Validation approach
 

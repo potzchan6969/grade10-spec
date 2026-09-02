@@ -3,18 +3,18 @@
 ## Purpose
 
 The Grade10 Store's boundary to Shopify: shoppers browse Shopify-authoritative
-products and availability, receive a fifteen-minute finite-stock reservation
-before Shopify checkout, and later read their authenticated Store order
-projection derived from Shopify payment and fulfilment facts.
+products and availability, hand a signed-in cart to Shopify checkout, and
+later read their authenticated Store order projection derived from Shopify
+payment and fulfilment facts.
 
 ## Feature set
 
 - Catalogue
   - Shopify-authoritative: browse reads live products; a change invalidates cache; an outage is reported
 - Checkout identity
-  - Existing customer signs in: a known email must magic-link before handoff; a guest is linked after payment
+  - Signed in: checkout runs on the Grade10 session, Google or magic link; guest checkout by email is built, launching with it `TBC`
 - Live checkout
-  - Fifteen-minute hold: price and inventory are live; backorders are refused; a retry returns one handoff
+  - No hold: price and inventory are live at handoff and at payment; backorders are refused; a retry returns one handoff
 - Orders
   - Payment vs shipping: paid, partial fulfilment, and carrier confirmation are separate facts
 - Webhooks
@@ -34,33 +34,32 @@ projection derived from Shopify payment and fulfilment facts.
 - `shopify-commerce-SC-02` — A Shopify product change invalidates browsing data
 - `shopify-commerce-SC-03` — Shopify catalogue data is unavailable
 
-### shopify-commerce-US-02: Shopper checks out with a fifteen-minute hold
+### shopify-commerce-US-02: Shopper checks out on live price and stock
 
 **As a** shopper,
-**I want** checkout to use live price and inventory and hold finite stock for fifteen minutes,
-**so that** an unavailable variant cannot enter, a retry is one handoff, and an expired hold cannot be paid as reserved.
+**I want** checkout to use live price and inventory, with nothing held for me,
+**so that** an unavailable variant cannot enter, a retry is one handoff, and an item that sold out before I paid is named.
 
 **Accepted by:**
 
 - `shopify-commerce-SC-06` — An unavailable variant cannot enter checkout
 - `shopify-commerce-SC-07` — Checkout uses live Shopify price and inventory
 - `shopify-commerce-SC-08` — A retry returns one checkout handoff
-- `shopify-commerce-SC-09` — A finite-stock checkout holds inventory for fifteen minutes
-- `shopify-commerce-SC-10` — An expired reservation cannot be paid as held stock
+- `shopify-commerce-SC-10` — An item that sold out before payment is named
 - `shopify-commerce-SC-11` — Backorders are refused
 - `shopify-commerce-SC-12` — A checkout URL is safe to follow
 
-### shopify-commerce-US-03: Shopper is signed in or linked after payment
+### shopify-commerce-US-03: Shopper checks out as a member and finds the order after
 
 **As a** shopper,
-**I want** an existing Grade10 email to sign in before handoff, and a guest email to become an account after payment,
-**so that** I am not duplicated and I can read the order through magic-link sign-in.
+**I want** to check out on the account I am signed in to and come back to the store once I have paid,
+**so that** I am not duplicated and the order is in my account when I look.
 
 **Accepted by:**
 
-- `shopify-commerce-SC-04` — An existing Grade10 customer signs in before checkout
+- `shopify-commerce-SC-04` — A shopper checks out signed in
 - `shopify-commerce-SC-05` — A guest receives a linked Grade10 account after payment
-- `shopify-commerce-SC-19` — A paid buyer lands on their Grade10 order
+- `shopify-commerce-SC-19` — A paid buyer returns to the store
 - `shopify-commerce-SC-23` — Integration configuration is incomplete
 
 ### shopify-commerce-US-04: Customer reads their own orders
@@ -126,31 +125,32 @@ missed invalidation.
   the failed read
 - **AND** it does not report invented availability or price
 
-### Requirement: Existing customers sign in and guests gain a linked account after payment
+### Requirement: Checkout runs on the Grade10 session
 
-Before checkout handoff, the Store SHALL ask for the shopper's email. When the
-email belongs to an existing Grade10 account, the Store SHALL require that
-customer to sign in through Grade10 email magic link before handoff and SHALL
-use that account's one-to-one Shopify customer association. It SHALL NOT create
-another Grade10 account or Shopify customer association for that email.
+Checkout SHALL require a signed-in Grade10 session, reached through Google or
+email magic link. The Store SHALL create the order for that account and SHALL
+use the account's one-to-one Shopify customer association. It SHALL NOT create
+another Grade10 account or Shopify customer association for that shopper.
 
-When the email belongs to no Grade10 account, the Store SHALL permit guest
-checkout and create one Shopify customer before checkout. After Shopify confirms
-payment, the Store SHALL create the Grade10 account when needed, link it
-one-to-one to that Shopify customer, and make its orders available through
-Grade10 email magic-link sign-in.
+Guest checkout by a typed email is built: when the email belongs to an existing
+Grade10 account the Store SHALL answer that sign-in is required, and otherwise
+it SHALL create one Shopify customer before checkout and, after Shopify
+confirms payment, create the Grade10 account when needed and link it
+one-to-one to that Shopify customer. Whether the storefront offers guest
+checkout at launch is `TBC`.
 
-#### Scenario: shopify-commerce-SC-04 - An existing Grade10 customer signs in before checkout
+#### Scenario: shopify-commerce-SC-04 - A shopper checks out signed in
 
-- **GIVEN** a shopper begins checkout
-- **WHEN** they supply an email belonging to an existing Grade10 account
-- **THEN** the Store prompts Grade10 email magic-link sign-in before it creates
-  a Shopify checkout handoff
+- **GIVEN** a shopper requests checkout
+- **WHEN** they hold a Grade10 session
+- **THEN** the Store creates the pending order for that account before it
+  creates a Shopify checkout handoff
 - **AND** it creates no additional Grade10 account or Shopify customer link
 
 #### Scenario: shopify-commerce-SC-05 - A guest receives a linked Grade10 account after payment
 
-- **GIVEN** a guest checkout email belongs to no Grade10 account
+- **GIVEN** guest checkout is offered and the typed email belongs to no Grade10
+  account
 - **WHEN** Shopify confirms payment for that checkout
 - **THEN** the Store creates or links exactly one Grade10 account to that
   Shopify customer
@@ -170,7 +170,7 @@ response or browser-supplied monetary value SHALL NOT determine an order amount.
 - **WHEN** Shopify reports it unavailable or insufficient for the requested
   quantity during checkout
 - **THEN** the Store refuses checkout naming that item as unavailable
-- **AND** it creates no payable local order or Shopify draft order
+- **AND** it creates no payable local order or Shopify checkout
 
 #### Scenario: shopify-commerce-SC-07 - Checkout uses live Shopify price and inventory
 
@@ -181,14 +181,16 @@ response or browser-supplied monetary value SHALL NOT determine an order amount.
 
 ### Requirement: Checkout hands the shopper to Shopify once
 
-For an accepted checkout, the Store SHALL create one pending local order and a
-Shopify draft order containing its live-validated lines. For every line with
-finite Shopify inventory, it SHALL reserve the requested quantity for exactly
-fifteen minutes. It SHALL record the local order identifier on the draft order
-and record the returned Shopify draft-order and checkout reference before
-returning the Shopify-hosted checkout URL. Repeating the same checkout request
-under its idempotency key SHALL return the original handoff and SHALL NOT create
-another order, draft order, or reservation.
+For an accepted checkout, the Store SHALL create one pending local order and
+one Shopify checkout containing its live-validated lines, stamped with the
+local order identifier. It SHALL record the returned Shopify checkout reference
+before returning the Shopify-hosted checkout URL. Repeating the same checkout
+request under its idempotency key SHALL return the original handoff and SHALL
+NOT create another order or Shopify checkout.
+
+The Store SHALL NOT hold or reserve inventory for a checkout. Stock is
+Shopify's to sell until payment, and an item that sold out in between is
+refused at Shopify's page, named.
 
 Shopify checkout SHALL collect the shipping address, shipping option, tax,
 discount, and payment. The Store's pre-check line total SHALL NOT be represented
@@ -200,32 +202,25 @@ as the final charged amount.
 - **WHEN** a shopper retries it with its original idempotency
   key and identical input
 - **THEN** the Store returns the same pending order and Shopify checkout URL
-- **AND** exactly one local order, Shopify draft order, and reservation exist
-  for that request
+- **AND** exactly one local order and one Shopify checkout exist for that
+  request
 
-#### Scenario: shopify-commerce-SC-09 - A finite-stock checkout holds inventory for fifteen minutes
+#### Scenario: shopify-commerce-SC-10 - An item that sold out before payment is named
 
-- **GIVEN** a shopper requests a purchasable finite-stock Shopify variant
-- **WHEN** the Store accepts that checkout
-- **THEN** Shopify reserves the requested quantity for fifteen minutes
-- **AND** that quantity is unavailable to another checkout for the reservation's
-  lifetime
-
-#### Scenario: shopify-commerce-SC-10 - An expired reservation cannot be paid as held stock
-
-- **GIVEN** a checkout reservation whose fifteen-minute window has elapsed
-- **WHEN** the buyer follows its Shopify checkout URL
-- **THEN** the Store does not extend or recreate the reservation automatically
-- **AND** if Shopify cannot sell the requested quantity, the buyer is told to
-  begin checkout again and the unavailable item is identified
+- **GIVEN** the Store has accepted a checkout
+- **WHEN** Shopify cannot sell the requested quantity of a line by the time
+  the buyer pays
+- **THEN** the buyer is told to begin checkout again and the unavailable item
+  is identified
+- **AND** the Store holds nothing back for them and creates no replacement
+  checkout on its own
 
 #### Scenario: shopify-commerce-SC-11 - Backorders are refused
 
 - **GIVEN** a shopper requests checkout with one or more items
-- **WHEN** Shopify cannot reserve the requested quantity of any checkout line
+- **WHEN** Shopify reports a quantity it cannot sell on any checkout line
 - **THEN** the Store refuses checkout naming that item as unavailable
-- **AND** it does not offer a backorder, create a payable draft order, or create
-  a replacement reservation
+- **AND** it does not offer a backorder or create a payable Shopify checkout
 
 #### Scenario: shopify-commerce-SC-12 - A checkout URL is safe to follow
 
@@ -318,12 +313,14 @@ An absent required Shopify configuration, unsupported Shopify API response, or
 Shopify integration failure SHALL return an explicit failure that identifies the
 operation without exposing credentials or customer payment/address data.
 
-#### Scenario: shopify-commerce-SC-19 - A paid buyer lands on their Grade10 order
+#### Scenario: shopify-commerce-SC-19 - A paid buyer returns to the store
 
 - **GIVEN** a shopper completes a Shopify checkout with a Grade10 order
 - **WHEN** Shopify confirms payment for it
-- **THEN** the buyer is returned to that order's permanent Grade10 URL
-- **AND** the order page is available only through the matching Grade10 account
+- **THEN** Shopify's confirmation page offers Continue shopping, which returns
+  the buyer to the store
+- **AND** the order is readable in Your Orders, only through the matching
+  Grade10 account
 
 #### Scenario: shopify-commerce-SC-20 - A customer cannot read another customer's order
 
