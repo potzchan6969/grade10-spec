@@ -6,6 +6,7 @@ import {
   formatMoney,
   InlineOverlayPreview,
   ListingAuctionBidCard,
+  type ListingBidHistoryRow,
   type OverlayPresentation,
   PaymentMethodEmptyState,
   PaymentMethodRow,
@@ -40,6 +41,8 @@ type ListingBidEnrollmentCardPreviewProps = {
   autoConfirmOpen?: boolean;
   onAutoConfirmOpenChange?: (open: boolean) => void;
   onAutoBidConfirm?: () => void;
+  history?: readonly ListingBidHistoryRow[];
+  historyResetKey?: string;
 };
 
 function ListingBidEnrollmentCardPreview({
@@ -60,6 +63,8 @@ function ListingBidEnrollmentCardPreview({
   autoConfirmOpen: autoConfirmOpenProp,
   onAutoConfirmOpenChange,
   onAutoBidConfirm,
+  history: historyProp,
+  historyResetKey = "enrollment-demo",
 }: ListingBidEnrollmentCardPreviewProps) {
   const [bidModeInternal, setBidModeInternal] = useState(snapshot.bidMode);
   const [signInEmail, setSignInEmail] = useState("");
@@ -89,10 +94,16 @@ function ListingBidEnrollmentCardPreview({
     return copy;
   }, [snapshot.submitUsesSignInLabel]);
 
-  const history = bidHistoryForState(fixtureState).map((row) =>
-    snapshot.submitUsesSignInLabel ? { ...row, isViewer: false } : row,
+  const history =
+    historyProp ??
+    bidHistoryForState(fixtureState).map((row) =>
+      snapshot.submitUsesSignInLabel ? { ...row, isViewer: false } : row,
+    );
+  const maximumLabel = formatMoney(
+    view.viewerMaximumMinor ?? view.suggestedMaxMinor ?? 500_000,
+    view.currency,
+    { locale: "en-HK" },
   );
-  const maximumLabel = formatMoney(500_000, view.currency, { locale: "en-HK" });
 
   const setupOpen = setupOpenProp ?? snapshot.setupSheet != null;
   const autoConfirmOpen =
@@ -109,7 +120,7 @@ function ListingBidEnrollmentCardPreview({
         bidMode={bidMode}
         copy={sidebarCopy}
         history={history}
-        historyResetKey="enrollment-demo"
+        historyResetKey={historyResetKey}
         locale="en"
         onBidModeChange={setBidMode}
         onCommitMaximum={handleBidSubmit}

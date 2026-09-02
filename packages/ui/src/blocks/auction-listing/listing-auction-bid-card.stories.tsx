@@ -116,7 +116,15 @@ const meta = {
   title: "Auction Listing/ListingAuctionBidCard",
   component: ListingAuctionBidCard,
   tags: ["autodocs"],
-  parameters: { layout: "padded" },
+  parameters: {
+    layout: "padded",
+    docs: {
+      description: {
+        component:
+          "The listing bid card. The consumer owns product state and every action. Enrollment states, countdown, bidding flows, and callback contracts live on [Bid Panel Docs](?path=/docs/auction-listing-bid-panel--docs).",
+      },
+    },
+  },
   args: {
     copy: COPY,
     history: HISTORY,
@@ -128,6 +136,41 @@ const meta = {
     onCommitMaximum: noop,
     onPlaceBid: noop,
     view: liveView(),
+  },
+  argTypes: {
+    copy: { table: { disable: true } },
+    view: { table: { disable: true } },
+    history: { table: { disable: true } },
+    historyResetKey: { table: { disable: true } },
+    recentBidsAccessory: { table: { disable: true } },
+    locale: { table: { disable: true } },
+    timeZone: { table: { disable: true } },
+    bidEnrollment: {
+      control: "select",
+      options: ["signed-out", "ready"],
+      description:
+        "signed-out replaces Place Bid with Sign In to Bid and hides standing.",
+    },
+    bidMode: {
+      control: "select",
+      options: ["manual", "auto"],
+      description: "Manual bid row or auto-bid maximum field.",
+    },
+    onPlaceBid: {
+      control: false,
+      description:
+        "Fires on Place Bid, or Sign In to Bid when signed out. The consumer submits the bid or opens sign-in.",
+    },
+    onCommitMaximum: {
+      control: false,
+      description:
+        "Fires on Confirm or Raise. The consumer validates the maximum, takes the hold, and writes the cap.",
+    },
+    onBidModeChange: {
+      control: false,
+      description:
+        "Fires when Enable auto-bidding is toggled. The consumer updates bidMode.",
+    },
   },
   decorators: [
     (Story) => (

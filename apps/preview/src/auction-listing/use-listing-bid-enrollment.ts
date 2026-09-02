@@ -60,9 +60,14 @@ function accountLinkedPayment(editable: boolean): LinkedPaymentMethod {
   };
 }
 
-function useListingBidEnrollment(listingId = "demo-lot") {
-  const [session, setSession] =
-    useState<ListingBidEnrollmentSession>(INITIAL_SESSION);
+function useListingBidEnrollment(
+  listingId = "demo-lot",
+  initialSession: Partial<ListingBidEnrollmentSession> = {},
+) {
+  const [session, setSession] = useState<ListingBidEnrollmentSession>(() => ({
+    ...INITIAL_SESSION,
+    ...initialSession,
+  }));
   const [
     autoBidIntroAcknowledgedListingIds,
     setAutoBidIntroAcknowledgedListingIds,
