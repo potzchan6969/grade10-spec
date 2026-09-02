@@ -10,14 +10,14 @@ row of cards. Links people already hold still land here.
 1. **Hero** — eyebrow, headline, copy, image, two ways on
    - In the response HTML before any script runs, whether or not the
      catalogue answers ([[home-SC-15]])
-2. **Collection grid** — one tile per catalogue collection, in catalogue order
-   - The shop decides which collections appear and in what order; a
-     collection added there arrives with no deploy ([[home-SC-06]])
-3. **Merchandised row** — cards from whichever collection the shop lists
-   first ([[home-SC-11]])
-4. **Every section under the hero** — says it is loading, or that the read
-   failed and can be retried without a full page load, or is absent when
-   there is nothing to show; never a titled empty row ([[home-SC-17]])
+2. **Catalogue sections** — read from the shop after the hero; each says it
+   is loading, or that the read failed and can be retried without a full
+   page load, or is absent when there is nothing to show, never a titled
+   empty row ([[home-SC-17]])
+   1. **Collection grid** — one tile per collection, in catalogue order; a
+      collection added to the shop arrives with no deploy ([[home-SC-06]])
+   2. **Merchandised row** — cards from whichever collection the shop lists
+      first ([[home-SC-11]])
 
 ## What it looks like
 
