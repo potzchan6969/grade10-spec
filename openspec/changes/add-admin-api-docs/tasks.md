@@ -1,4 +1,4 @@
-## 1. Ladder meta and build provenance (grade10)
+## 1. Ladder meta and build provenance (grade10) (owner: @sean)
 
 Shared groundwork every later group reads. Lands first; groups 2 and 3 can
 then be claimed in parallel.
