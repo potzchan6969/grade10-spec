@@ -7,7 +7,7 @@ order: 1
 The store's own address is the front door: a hero, a grid of collections, one
 row of cards. Links people already hold still land here.
 
-1. **Hero** — eyebrow, headline, copy, image, two ways on
+1. **Hero** — a small label, headline, copy, image, two ways on
    - In the response HTML before any script runs, whether or not the
      catalogue answers ([[home-SC-15]])
 2. **Catalogue sections** — read from the shop after the hero; each says it

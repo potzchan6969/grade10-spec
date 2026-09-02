@@ -10,7 +10,7 @@ Read `docs/governance/writing.md` first. It is the standard, short enough to hol
 Before handoff, hold the draft to it:
 
 1. The opening is two sentences at most: what the document is and what the reader leaves with, and nothing the outline then repeats. Everything after it takes the format that beats words — list, table, fenced tree, flow — and a paragraph appears only where no format carries the meaning better.
-2. Items run in hierarchy first, then in time: the whole before its parts, the first thing that happens first. Every line uses the fewest words that carry its exact meaning.
+2. Items run in hierarchy first, then in time: the whole before its parts, the first thing that happens first. Every line uses the fewest words that carry its exact meaning, in the reader's words — a page says label, not eyebrow, whatever the component or the spec calls it.
 3. Every item leads with its key term in bold, as a fragment with no full stop; siblings put the same thing in the same place; a step names its actor first in italics, then the action in bold, then how; a role is named by what it does and where, never an umbrella such as Staff.
 4. The page holds only what it owns: nothing a child page, a sibling, or a platform page states, and nothing true of every product — a product index says what no capability page carries.
 5. Order and count use numbers, everything else bullets, nested at most three deep; a flow's phases are sub-headings and its steps number straight through.
