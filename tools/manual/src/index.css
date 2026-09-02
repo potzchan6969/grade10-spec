@@ -1,5 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+/* The base-ui primitives style themselves through the `data-horizontal`,
+ * `data-active` and sibling variants this sheet defines; without it a tab
+ * has no underline and a switch no checked state. */
+@import "shadcn/tailwind.css";
 
 /* Relative paths into the workspace package so the build resolves the
  * generated theme CSS without exercising package exports. */
