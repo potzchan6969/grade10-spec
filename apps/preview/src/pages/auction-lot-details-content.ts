@@ -3,6 +3,8 @@ import type { ListingBidHistoryRow, ListingLotMetaBadge } from "@grade10/ui";
 import {
   type AuctionTiming,
   BID_FIXTURE_LOT,
+  type BiddingState,
+  bidHistoryForState,
   LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
   type LiveListingFacts,
   stateMeta,
