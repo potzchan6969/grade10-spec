@@ -12,14 +12,13 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { Info } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
+import { formatMoney, formatMoneyNumeric } from "../../lib/format-money";
 import {
   formatMinimumMaximumCaption,
-  formatUsd,
-  formatUsdNumeric,
   isMaximumBelowFloor,
-  parseUsdInputToMinor,
+  parseMoneyInputToMinor,
   resolveMaximumFloor,
-} from "./format-usd";
+} from "./listing-bid-money";
 import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
 import "./listing-bid-mode-stack.css";
 import {
@@ -32,7 +31,7 @@ import {
   ListingAutoBidControls,
   ListingManualBidControls,
 } from "./listing-manual-bid-controls";
-import { ListingRollingUsdDisplay } from "./listing-rolling-usd-display";
+import { ListingRollingMoneyDisplay } from "./listing-rolling-money-display";
 import type { BidEnrollment, ListingAuctionBidView } from "./types";
 
 type ListingAuctionBidFieldsCopy = {
@@ -170,9 +169,10 @@ function StandingStatusBadge({
 type PriceBlockProps = {
   copy: ListingAuctionBidFieldsCopy;
   view: ListingAuctionBidView;
+  locale: ShippedLocale;
 };
 
-function PriceBlock({ copy, view }: PriceBlockProps) {
+function PriceBlock({ copy, view, locale }: PriceBlockProps) {
   return (
     <VStack gap="xs">
       <Text
@@ -187,7 +187,11 @@ function PriceBlock({ copy, view }: PriceBlockProps) {
         {view.isUnsold ? (
           "Unsold"
         ) : (
-          <ListingRollingUsdDisplay amountMinor={view.currentBidMinor} />
+          <ListingRollingMoneyDisplay
+            amountMinor={view.currentBidMinor}
+            currency={view.currency}
+            locale={locale}
+          />
         )}
       </Text>
       {view.hasBids ? (
@@ -317,6 +321,7 @@ type BidActionsProps = {
   view: ListingAuctionBidView;
   bidMode: "manual" | "auto";
   bidEnrollment?: BidEnrollment;
+  locale: ShippedLocale;
   onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
   onCommitMaximum: () => void;
@@ -341,6 +346,7 @@ function BidActions({
   view,
   bidMode,
   bidEnrollment = "ready",
+  locale,
   onBidModeChange,
   onPlaceBid,
   onCommitMaximum,
@@ -359,15 +365,15 @@ function BidActions({
     ? floorMaximumMinor
     : view.suggestedMaxMinor;
   const [maximumInput, setMaximumInput] = useState(() =>
-    formatUsdNumeric(defaultMaximumMinor),
+    formatMoneyNumeric(defaultMaximumMinor, view.currency, locale),
   );
   const [maximumFieldTouched, setMaximumFieldTouched] = useState(false);
 
   useEffect(() => {
     if (!autoBidEnabled) return;
-    setMaximumInput(formatUsdNumeric(defaultMaximumMinor));
+    setMaximumInput(formatMoneyNumeric(defaultMaximumMinor, view.currency, locale));
     setMaximumFieldTouched(false);
-  }, [autoBidEnabled, defaultMaximumMinor]);
+  }, [autoBidEnabled, defaultMaximumMinor, locale, view.currency]);
 
   if (!view.showBidActions) return null;
 
@@ -377,7 +383,7 @@ function BidActions({
     );
   }
 
-  const maximumMinor = parseUsdInputToMinor(maximumInput);
+  const maximumMinor = parseMoneyInputToMinor(maximumInput, view.currency);
   const maximumInvalid = isMaximumBelowFloor(maximumMinor, floorMaximumMinor);
   const showMaximumError = maximumFieldTouched && maximumInvalid;
   const disableMaximumButton = maximumFieldTouched && maximumInvalid;
@@ -385,14 +391,19 @@ function BidActions({
     maximumFloor,
     copy,
     view.incrementMinor,
+    view.currency,
+    locale,
   );
   const maximumMessage = showMaximumError
-    ? copy.maximumBelowMinimum.replace("{amount}", formatUsd(floorMaximumMinor))
+    ? copy.maximumBelowMinimum.replace(
+        "{amount}",
+        formatMoney(floorMaximumMinor, view.currency, { locale }),
+      )
     : maximumHelperMessage;
   const maximumFieldLabel = hasCommittedMaximum
     ? copy.setMaximumCurrentLabel.replace(
         "{amount}",
-        formatUsd(view.viewerMaximumMinor ?? 0),
+        formatMoney(view.viewerMaximumMinor ?? 0, view.currency, { locale }),
       )
     : copy.setMaximumLabel;
 
@@ -451,9 +462,11 @@ function BidActions({
             <HStack className="w-full" gap="sm" vAlign="start">
               <ListingManualBidControls
                 copy={manualCopy}
+                currency={view.currency}
                 hideLabel
                 incrementMinor={view.incrementMinor}
                 key={`manual-${view.minBidMinor}`}
+                locale={locale}
                 minBidMinor={view.minBidMinor}
               />
               <Button className="shrink-0" onClick={onPlaceBid} size="md">
@@ -493,7 +506,9 @@ function BidActions({
             <HStack className="w-full" gap="sm" vAlign="start">
               <ListingAutoBidControls
                 copy={autoCopy}
+                currency={view.currency}
                 hideLabel
+                locale={locale}
                 message={maximumMessage}
                 minMaximumMinor={floorMaximumMinor}
                 onBlur={() => setMaximumFieldTouched(true)}

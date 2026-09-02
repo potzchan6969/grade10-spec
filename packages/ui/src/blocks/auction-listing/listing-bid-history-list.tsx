@@ -14,7 +14,7 @@ import {
   formatActivityAt,
   type ShippedLocale,
 } from "../../lib/format-datetime";
-import { formatUsd } from "./format-usd";
+import { formatMoney } from "../../lib/format-money";
 import type { ListingBidHistoryRow } from "./types";
 import "./listing-bid-history-list.css";
 
@@ -27,6 +27,7 @@ type ListingBidHistoryListProps = {
   copy?: ListingBidHistoryListCopy;
   rows: readonly ListingBidHistoryRow[];
   heading?: string;
+  currency: string;
   locale: ShippedLocale;
   timeZone: string;
   activityTimeCopy: ActivityTimeCopy;
@@ -39,6 +40,7 @@ type ListingBidHistoryListProps = {
 type BidHistoryRowItemProps = {
   copy: ListingBidHistoryListCopy;
   row: ListingBidHistoryRow;
+  currency: string;
   recessed: boolean;
   animateEnter: boolean;
   useEnterWrapper: boolean;
@@ -68,6 +70,7 @@ function formatRowTime(
 function BidHistoryRowContent({
   copy,
   row,
+  currency,
   recessed,
   locale,
   timeZone,
@@ -96,7 +99,7 @@ function BidHistoryRowContent({
           tone={recessed ? "secondary" : "primary"}
           weight={recessed ? "regular" : "medium"}
         >
-          {formatUsd(row.amountMinor)}
+          {formatMoney(row.amountMinor, currency, { locale })}
         </Text>
         {row.isViewer ? (
           <Badge size="sm" variant="outline">
@@ -114,6 +117,7 @@ function BidHistoryRowContent({
 function BidHistoryRowItem({
   copy,
   row,
+  currency,
   recessed,
   animateEnter,
   useEnterWrapper,
@@ -137,6 +141,7 @@ function BidHistoryRowItem({
       <BidHistoryRowContent
         activityTimeCopy={activityTimeCopy}
         copy={copy}
+        currency={currency}
         locale={locale}
         nowMs={nowMs}
         recessed={recessed}
@@ -161,6 +166,7 @@ function BidHistoryRowItem({
           <BidHistoryRowContent
             activityTimeCopy={activityTimeCopy}
             copy={copy}
+            currency={currency}
             locale={locale}
             nowMs={nowMs}
             recessed={recessed}
@@ -205,6 +211,7 @@ function BidHistoryEntrances({
   rows,
   heading = "Recent bids",
   entranceMode = "expand",
+  currency,
   locale,
   timeZone,
   activityTimeCopy,
@@ -260,6 +267,7 @@ function BidHistoryEntrances({
             activityTimeCopy={activityTimeCopy}
             animateEnter={row.id === enteringId}
             copy={copy}
+            currency={currency}
             entranceMode={entranceMode}
             key={row.id}
             locale={locale}

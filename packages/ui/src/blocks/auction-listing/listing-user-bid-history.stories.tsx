@@ -22,21 +22,21 @@ const STORY_NOW_MS = Date.now();
 const SAMPLE_ROWS: ListingUserBidHistoryRow[] = [
   {
     id: "bid-1",
-    amountLabel: "US$4,800",
+    amountLabel: "HK$4,800",
     bidType: "auto",
     bidTypeLabel: "Automatic",
     acceptedAtMs: STORY_NOW_MS - 2 * 60_000,
   },
   {
     id: "bid-2",
-    amountLabel: "US$4,550",
+    amountLabel: "HK$4,550",
     bidType: "manual",
     bidTypeLabel: "Manual",
     acceptedAtMs: STORY_NOW_MS - 18 * 60_000,
   },
   {
     id: "bid-3",
-    amountLabel: "US$4,300",
+    amountLabel: "HK$4,300",
     bidType: "auto",
     bidTypeLabel: "Automatic",
     acceptedAtMs: STORY_NOW_MS - 60 * 60_000,
@@ -48,7 +48,7 @@ function createLongRows(count: number): ListingUserBidHistoryRow[] {
 
   return Array.from({ length: count }, (_, index) => ({
     id: `bid-long-${index}`,
-    amountLabel: `US$${(4_800 - index * 100).toLocaleString("en-US")}`,
+    amountLabel: `HK$${(4_800 - index * 100).toLocaleString("en-HK")}`,
     bidType: index % 2 === 0 ? "auto" : "manual",
     bidTypeLabel: index % 2 === 0 ? "Automatic" : "Manual",
     acceptedAtMs:
@@ -117,7 +117,7 @@ export const LongHistory: Story = {
     docs: {
       description: {
         story:
-          "Twenty-eight accepted bids exceed the dialog body height. The pinned title stays visible while older bids scroll into view — the oldest entry (US$2,100) sits below the fold until you scroll.",
+          "Twenty-eight accepted bids exceed the dialog body height. The pinned title stays visible while older bids scroll into view — the oldest entry (HK$2,100) sits below the fold until you scroll.",
       },
     },
   },

@@ -1,18 +1,11 @@
+import {
+  DEFAULT_LISTING_CURRENCY,
+  formatMoney,
+  parseMoneyInputToMinor,
+} from "../../lib/format-money";
 import type { ListingAuctionStanding } from "./types";
 
-/** Format minor units as US$ with up to 2 decimals, no trailing zeros. */
-export function formatUsd(minorUnits: number): string {
-  return `US$${formatUsdNumeric(minorUnits)}`;
-}
-
-/** Numeric portion only — thousands separators, no currency prefix. */
-export function formatUsdNumeric(minorUnits: number): string {
-  const major = minorUnits / 100;
-  return major.toLocaleString("en-US", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  });
-}
+export { DEFAULT_LISTING_CURRENCY };
 
 export function minNextBidMinor(
   currentBidMinor: number,
@@ -23,7 +16,7 @@ export function minNextBidMinor(
   return hasBids ? currentBidMinor + incrementMinor : startingBidMinor;
 }
 
-/** Smallest raise step when leading below cap on auto-bid ($1.00). */
+/** Smallest raise step when leading below cap — one major unit (100 minor for exponent 2). */
 const MINIMUM_MAXIMUM_RAISE_MINOR = 100;
 
 export type MaximumFloorReason =
@@ -94,13 +87,20 @@ export function formatMinimumMaximumCaption(
   floor: MaximumFloor,
   copy: MinimumMaximumCaptionCopy,
   incrementMinor: number,
+  currency: string,
+  locale?: string,
 ): string {
-  const amount = formatUsd(floor.floorMinor);
-  const increment = formatUsd(incrementMinor);
+  const amount = formatMoney(floor.floorMinor, currency, { locale });
+  const increment = formatMoney(incrementMinor, currency, { locale });
+  const minimumRaise = formatMoney(MINIMUM_MAXIMUM_RAISE_MINOR, currency, {
+    locale,
+  });
 
   switch (floor.reason) {
     case "leading-nudge":
-      return copy.minimumMaximumLeadingNudge.replace("{amount}", amount);
+      return copy.minimumMaximumLeadingNudge
+        .replace("{amount}", amount)
+        .replace("{increment}", minimumRaise);
     case "leading-increment":
       return copy.minimumMaximumLeadingIncrement
         .replace("{amount}", amount)
@@ -112,20 +112,11 @@ export function formatMinimumMaximumCaption(
   }
 }
 
-/** Parse a currency field value to minor units; null when empty or not a positive number. */
-export function parseUsdInputToMinor(value: string): number | null {
-  const normalized = value.replaceAll(",", "").trim();
-  if (!normalized) return null;
-
-  const major = Number(normalized);
-  if (!Number.isFinite(major) || major <= 0) return null;
-
-  return Math.round(major * 100);
-}
-
 export function isMaximumBelowFloor(
   valueMinor: number | null,
   floorMaximumMinor: number,
 ): boolean {
   return valueMinor == null || valueMinor < floorMaximumMinor;
 }
+
+export { parseMoneyInputToMinor };

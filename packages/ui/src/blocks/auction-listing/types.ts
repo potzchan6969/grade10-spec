@@ -33,6 +33,8 @@ export type ListingAuctionStanding =
 
 /** Normalized bid-panel presentation the consumer derives from product state. */
 export type ListingAuctionBidView = {
+  /** ISO 4217 currency for every amount on this listing. */
+  currency: string;
   headerLabel: string;
   live: boolean;
   opens: boolean;

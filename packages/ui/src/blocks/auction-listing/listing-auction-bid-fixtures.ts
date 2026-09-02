@@ -4,7 +4,11 @@ import {
   FIXTURE_AUCTION_ENDS_AT_MS,
   FIXTURE_AUCTION_OPENS_AT_MS,
 } from "../../lib/datetime-fixtures";
-import { minNextBidMinor } from "./format-usd";
+import { formatMoney } from "../../lib/format-money";
+import {
+  DEFAULT_LISTING_CURRENCY,
+  minNextBidMinor,
+} from "./listing-bid-money";
 import type { ListingAgeVerificationDialogCopy } from "./listing-age-verification-dialog";
 import type { ListingAuctionBidCardCopy } from "./listing-auction-bid-card";
 import {
@@ -52,12 +56,21 @@ export const BIDDING_STATE_LABELS: Record<BiddingState, string> = {
 
 /** Numeric lot facts shared by bid-card fixtures and preview page content. */
 export const BID_FIXTURE_LOT = {
+  currency: DEFAULT_LISTING_CURRENCY,
   startingBidMinor: 120_000,
   currentBidMinor: 480_000,
   incrementMinor: 25_000,
   bidCount: 6,
   viewerMaximumMinor: 800_000,
 } as const;
+
+const FIXTURE_LOCALE = "en-HK";
+
+function fixtureAmount(minor: number): string {
+  return formatMoney(minor, BID_FIXTURE_LOT.currency, {
+    locale: FIXTURE_LOCALE,
+  });
+}
 
 const DAY_SECONDS = 24 * 60 * 60;
 const HOUR_SECONDS = 60 * 60;
@@ -126,7 +139,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   autoBiddingTooltip:
     "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
   minimumMaximumFloor: "At least {amount} (current bid + {increment})",
-  minimumMaximumLeadingNudge: "At least {amount} (your maximum + US$1)",
+  minimumMaximumLeadingNudge: "At least {amount} (your maximum + {increment})",
   minimumMaximumLeadingIncrement:
     "At least {amount} (your maximum + {increment})",
   maximumBelowMinimum: "Enter at least {amount}",
@@ -220,7 +233,7 @@ export function stateMeta(state: BiddingState) {
       state === "closed-unsold"
         ? "Unsold"
         : closed && !state.includes("unsold")
-          ? "Sold · US$3,100"
+          ? `Sold · ${fixtureAmount(310_000)}`
           : undefined,
   };
 }
@@ -290,14 +303,14 @@ export function userBidHistoryForState(
       return [
         {
           id: "user-bid-manual-480",
-          amountLabel: "US$4,800",
+          amountLabel: fixtureAmount(480_000),
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(2),
         },
         {
           id: "user-bid-manual-455",
-          amountLabel: "US$4,550",
+          amountLabel: fixtureAmount(455_000),
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(12),
@@ -307,14 +320,14 @@ export function userBidHistoryForState(
       return [
         {
           id: "user-bid-auto-480",
-          amountLabel: "US$4,800",
+          amountLabel: fixtureAmount(480_000),
           bidType: "auto",
           bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
           acceptedAtMs: msAgo(2),
         },
         {
           id: "user-bid-manual-430",
-          amountLabel: "US$4,300",
+          amountLabel: fixtureAmount(430_000),
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(25),
@@ -324,14 +337,14 @@ export function userBidHistoryForState(
       return [
         {
           id: "user-bid-auto-800",
-          amountLabel: "US$8,000",
+          amountLabel: fixtureAmount(800_000),
           bidType: "auto",
           bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
           acceptedAtMs: msAgo(5),
         },
         {
           id: "user-bid-manual-775",
-          amountLabel: "US$7,750",
+          amountLabel: fixtureAmount(775_000),
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(18),
@@ -342,7 +355,7 @@ export function userBidHistoryForState(
       return [
         {
           id: "user-bid-won-310",
-          amountLabel: "US$3,100",
+          amountLabel: fixtureAmount(310_000),
           bidType: "auto",
           bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
           acceptedAtMs: msAgo(60),
@@ -350,7 +363,7 @@ export function userBidHistoryForState(
         },
         {
           id: "user-bid-won-285",
-          amountLabel: "US$2,850",
+          amountLabel: fixtureAmount(285_000),
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(90),
@@ -361,7 +374,7 @@ export function userBidHistoryForState(
       return [
         {
           id: "user-bid-lost-295",
-          amountLabel: "US$2,950",
+          amountLabel: fixtureAmount(295_000),
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(120),
@@ -456,6 +469,7 @@ export function buildListingAuctionBidView(
         : "Starting bid";
 
   return {
+    currency: BID_FIXTURE_LOT.currency,
     headerLabel: auctionHeaderLabel(state),
     live: meta.live,
     opens: meta.opens,

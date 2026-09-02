@@ -45,7 +45,7 @@
   "minAmount": "Min: {amount}",
   "minimumMaximumFloor": "At least {amount} (current bid + {increment})",
   "minimumMaximumLeadingIncrement": "At least {amount} (your maximum + {increment})",
-  "minimumMaximumLeadingNudge": "At least {amount} (your maximum + US$1)",
+  "minimumMaximumLeadingNudge": "At least {amount} (your maximum + {increment})",
   "minimumBidIs": "Minimum bid is {amount}.",
   "nextImage": "Next image",
   "nextLot": "Next lot",

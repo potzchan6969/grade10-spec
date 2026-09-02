@@ -85,7 +85,7 @@ export const AUCTION_LOT = {
     { src: IMAGE, alt: "1999 Charizard, PSA 10 — back" },
   ],
   ...BID_FIXTURE_LOT,
-  currency: "USD",
+  currency: "HKD",
 };
 
 export const AUCTION_LOT_BADGES: readonly ListingLotMetaBadge[] = [

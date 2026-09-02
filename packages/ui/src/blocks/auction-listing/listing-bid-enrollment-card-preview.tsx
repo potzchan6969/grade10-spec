@@ -1,6 +1,7 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { useEffect, useMemo, useState } from "react";
+import { formatMoney } from "../../lib/format-money";
 import { SignInCard } from "../auth-sign-in/sign-in-card";
 import { SignInEmailForm } from "../auth-sign-in/sign-in-email-form";
 import { ListingAuctionBidCard } from "./listing-auction-bid-card";
@@ -91,7 +92,7 @@ function ListingBidEnrollmentCardPreview({
   const history = bidHistoryForState(fixtureState).map((row) =>
     snapshot.submitUsesSignInLabel ? { ...row, isViewer: false } : row,
   );
-  const maximumLabel = "US$5,000";
+  const maximumLabel = formatMoney(500_000, view.currency, { locale: "en-HK" });
 
   const setupOpen = setupOpenProp ?? snapshot.setupSheet != null;
   const autoConfirmOpen =
@@ -138,7 +139,7 @@ function ListingBidEnrollmentCardPreview({
         <Text className="px-4" size="sm" tone="secondary">
           {LISTING_BID_ENROLLMENT_DEMO_COPY.staleFloorNotice.replace(
             "{amount}",
-            "US$5,050",
+            formatMoney(505_000, view.currency, { locale: "en-HK" }),
           )}
         </Text>
       ) : null}
