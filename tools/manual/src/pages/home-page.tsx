@@ -153,7 +153,7 @@ function WelcomeCard() {
 }
 
 /** What is moving is what someone is delivering; a proposal has moved nowhere
- * yet, and it lives on the planning board's own lane. */
+ * yet, and it lives on the In Flight board's own lane. */
 function WhatsMoving() {
   const index = useManualIndex();
   const moving = index.snapshot.changes
@@ -171,7 +171,7 @@ function WhatsMoving() {
           className="text-secondary-foreground text-sm hover:underline"
           to="/in-flight"
         >
-          All planning
+          All in flight
         </Link>
       </div>
       <ul className="grid gap-3 sm:grid-cols-2">

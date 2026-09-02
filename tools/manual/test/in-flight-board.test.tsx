@@ -37,7 +37,7 @@ vi.mock("../src/api/use-archive", () => ({
   useArchive: () => held.archive,
 }));
 
-const { PlanningPage } = await import("../src/pages/planning-page");
+const { InFlightPage } = await import("../src/pages/in-flight-page");
 
 const alpha = specEntry(SPEC, ["Points expire"]);
 alpha.requirements[0].text = "Points last a year.";
@@ -84,7 +84,7 @@ function render(changes: ChangeEntry[], archived: ChangeEntry[] = []): string {
       : { status: "loading" };
   return renderToStaticMarkup(
     <MemoryRouter>
-      <PlanningPage />
+      <InFlightPage />
     </MemoryRouter>,
   );
 }

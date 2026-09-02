@@ -34,7 +34,7 @@ const ROW =
 
 /**
  * What this reader holds open. The rail used to follow the route alone, so
- * leaving a product — or following an incubating entry onto the planning
+ * leaving a product — or following an incubating entry onto the In Flight
  * board — snapped the branch shut under the reader. Now a branch opens when
  * its own page is visited and stays as the reader last left it, across
  * navigations and reloads.

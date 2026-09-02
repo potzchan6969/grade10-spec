@@ -140,7 +140,7 @@ export function Attribution({
   );
 }
 
-/** Compact card: the shape the ribbon repeats. Links into the planning board. */
+/** Compact card: the shape the ribbon repeats. Links into the In Flight board. */
 export function ChangeChip({ change }: { change: ChangeEntry }) {
   if (change.error) {
     return <BrokenCard error={change.error} what={`Change ${change.id}`} />;

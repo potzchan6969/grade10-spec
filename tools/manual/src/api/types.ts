@@ -397,7 +397,7 @@ export type Snapshot = {
   designSync?: DesignSyncReport;
 };
 
-/** `/api/archive` — fetched only by planning and timeline views. */
+/** `/api/archive` — fetched only by the In Flight and timeline views. */
 export type Archive = {
   generatedAt: string;
   storeHead: string;

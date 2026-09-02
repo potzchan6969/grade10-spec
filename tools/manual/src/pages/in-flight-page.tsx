@@ -58,9 +58,9 @@ const LANES: LaneSpec[] = [
   },
 ];
 
-export function PlanningPage() {
+export function InFlightPage() {
   const index = useManualIndex();
-  useDocumentTitle("Planning");
+  useDocumentTitle("In Flight");
   // The archive answers whether a dependency shipped; without it a shipped one
   // would read as missing, which is the one answer worth avoiding.
   const archive = useArchive();
@@ -78,7 +78,7 @@ export function PlanningPage() {
       <ReadOnlyNotice className="mb-3 text-right" />
       <PageHeading
         summary="Every change in flight, in the lane its own artifacts put it in."
-        title="Planning"
+        title="In Flight"
       />
 
       {index.snapshot.changes.length === 0 ? (

@@ -511,7 +511,7 @@ export function laneOf(change: ChangeEntry): ChangeLane {
 /**
  * A change that is still only a reason: no delta, so it flips no capability
  * status, badges no row and bumps no product's count — it collects on the
- * planning board's own lane instead of standing among the work in flight. A
+ * In Flight board's own lane instead of standing among the work in flight. A
  * change that has written its deltas and no task list is `specified`, not
  * this: the finished state of a planning change is a specification, and filing
  * it as an unplanned thought hides the queue somebody has to promote.

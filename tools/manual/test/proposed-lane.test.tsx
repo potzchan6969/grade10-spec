@@ -16,7 +16,7 @@ import {
   specEntry,
 } from "./manual-fixture";
 
-/** The planning board's own lane. A proposal has no deltas and no tasks, so
+/** The In Flight board's own lane. A proposal has no deltas and no tasks, so
  * everything derived from either has to keep ignoring it — the counts below
  * are the pin on that. */
 
@@ -35,7 +35,7 @@ vi.mock("../src/editor/session", () => ({
   noteWrite: () => {},
 }));
 
-const { PlanningPage } = await import("../src/pages/planning-page");
+const { InFlightPage } = await import("../src/pages/in-flight-page");
 
 const planned = changeEntry(
   "add-thing",
@@ -86,7 +86,7 @@ function render(
   held.session = session;
   return renderToStaticMarkup(
     <MemoryRouter>
-      <PlanningPage />
+      <InFlightPage />
     </MemoryRouter>,
   );
 }
