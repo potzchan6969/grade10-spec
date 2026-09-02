@@ -105,7 +105,8 @@ export const Filled: Story = {
     expect(canvas.getByText("Delivery Status")).toBeVisible();
     expect(canvas.getByRole("button", { name: "Track Order" })).toBeVisible();
     expect(canvas.getByText("Order Summary")).toBeVisible();
-    expect(canvas.getByText("HK$1,538")).toBeVisible();
+    expect(canvas.getByText("SUMMER10")).toBeVisible();
+    expect(canvas.getByText("HK$1,704.50")).toBeVisible();
     expect(
       canvas.getByText("Pokémon TCG Sealed Booster Box – Ninja Spinner (M4)"),
     ).toBeVisible();

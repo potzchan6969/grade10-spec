@@ -27,7 +27,8 @@ const ORDER_DETAILS_COPY: OrderDetailsCopy = {
     paymentMethod: "Payment Method",
     shippingAddress: "Shipping Address",
     pickupAddress: "Pickup Address",
-    loyaltyPoints: "Loyalty Points",
+    loyaltyPointsToEarn: "Points to Earn",
+    loyaltyPointsEarned: "Points Earned",
   },
   delivery: {
     title: "Delivery Status",
@@ -50,16 +51,13 @@ const ORDER_DETAILS_DELIVERY: OrderDetailsDelivery = {
     {
       label: "Order Placed",
       date: FIXTURE_ORDER_PLACED_DAY,
-      state: "completed",
     },
     {
       label: "Shipped",
       date: FIXTURE_ORDER_SHIPPED_DAY,
-      state: "current",
     },
     {
       label: "Completed",
-      state: "upcoming",
     },
   ],
 };
@@ -68,9 +66,10 @@ const ORDER_DETAILS_LINES: readonly OrderDetailsLineItem[] = [
   {
     id: "line-1",
     product: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
-    subtotal: "HK$105",
+    subtotal: "HK$94.50",
     quantity: "1",
-    total: "HK$105",
+    total: "HK$94.50",
+    couponCode: "SUMMER10",
     imageSrc: IMAGE,
     imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
   },
@@ -107,12 +106,11 @@ const ORDER_DETAILS_LINES: readonly OrderDetailsLineItem[] = [
 ];
 
 const ORDER_DETAILS_SUMMARY: OrderDetailsSummary = {
-  subtotal: { label: "Subtotal", value: "HK$1,770" },
-  discount: { label: "Discount", value: "−HK$177" },
+  subtotal: { label: "Subtotal", value: "HK$1,759.50" },
   refund: { label: "Refund", value: "−HK$105" },
   shipping: { label: "Shipping", value: "HK$50" },
   tax: { label: "Tax", value: "HK$0" },
-  total: { label: "Total", value: "HK$1,538" },
+  total: { label: "Total", value: "HK$1,704.50" },
 };
 
 const ORDER_DETAILS_CONTENT = {
