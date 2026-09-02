@@ -4,23 +4,21 @@ spec: grade10-site/store/product-listing
 order: 2
 ---
 
-The product listing is where a collector filters and sorts the whole catalogue. It
-lives at its own address beneath the store, with its own title, description and
-share metadata, and a document written for it in every language the site answers.
-What the listing shows and does did not change when it moved — only where it
-answers.
+The product listing is where a collector filters and sorts the whole
+catalogue, at its own address beneath the store.
 
-The interesting part is the collection in the address. A collection is a
-narrowing of this one listing, not a surface of its own, so every collection
-opens the same document: an address naming one the catalogue carries opens
-already narrowed to it, one naming none lists everything, and one naming a
-collection the catalogue has nothing for lists everything as itself rather than
-refusing. That last case is deliberate — a way of narrowing that has gone empty
-is not a missing page.
-
-Narrowing from inside the page writes the collection into the address, so a
-collector can link to what they are looking at, and going back restores the
-previous narrowing.
+- **Address** — its own title, description and share metadata, in every
+  language the site answers ([[product-listing-SC-01]])
+- **Collection in the address** — a narrowing of this one listing, never a
+  page of its own; every collection opens the same document
+  1. **One the catalogue carries** — opens already narrowed
+     ([[product-listing-SC-03]])
+  2. **None** — lists everything ([[product-listing-SC-04]])
+  3. **One the catalogue has nothing for** — lists everything as itself, not
+     a missing page ([[product-listing-SC-05]])
+- **Narrowing inside the page** — writes the collection into the address,
+  so what a collector sees can be linked ([[product-listing-SC-06]]); back
+  restores the previous narrowing ([[product-listing-SC-07]])
 
 ## What it looks like
 
