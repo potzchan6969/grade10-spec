@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { STORE_CHANGED } from "./live";
 import {
   type ArtifactReaders,
   artifactReaders,
@@ -64,6 +65,15 @@ export function SnapshotProvider({ children }: { children: ReactNode }) {
       newest.current += 1;
     };
   }, [read]);
+
+  // Dev only, and tree-shaken out of the build: the store's files are not
+  // modules, so the plugin says on the HMR socket what Vite cannot work out.
+  useEffect(() => {
+    const hot = import.meta.hot;
+    if (!hot) return;
+    hot.on(STORE_CHANGED, reload);
+    return () => hot.off(STORE_CHANGED, reload);
+  }, [reload]);
 
   return (
     <ReloadContext value={reload}>

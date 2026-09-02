@@ -11,8 +11,9 @@ import {
   writeFileSync,
 } from "node:fs";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { basename, dirname, extname, join } from "node:path";
-import type { Plugin } from "vite";
+import { basename, dirname, extname, join, sep } from "node:path";
+import type { Plugin, ViteDevServer } from "vite";
+import { STORE_CHANGED } from "../api/live.ts";
 import { GrammarError, parsePage, serializePage } from "../content/grammar.ts";
 import {
   allowedProposal,
@@ -23,7 +24,13 @@ import {
 import { changeFile, confine, storePath } from "./disk.mts";
 import { git } from "./git.mts";
 import { type Roots, resolveRoots } from "./roots.mts";
-import { readHeads, readStore, type Store, storeStamp } from "./snapshot.mts";
+import {
+  readHeads,
+  readStore,
+  type Store,
+  storeDirs,
+  storeStamp,
+} from "./snapshot.mts";
 
 /**
  * Dev transport for the store. Both GETs are computed from the resolved roots
@@ -38,6 +45,7 @@ export function manualStorePlugin(): Plugin {
     name: "manual-store",
     configureServer(server) {
       ensureAssetsDir(roots);
+      watchStore(server, roots);
       server.middlewares.use(middleware(roots, live(roots)));
     },
     configurePreviewServer(server) {
@@ -45,6 +53,29 @@ export function manualStorePlugin(): Plugin {
       server.middlewares.use(middleware(roots, fromDist(built)));
     },
   };
+}
+
+/**
+ * The store is outside the module graph, so editing a page moves nothing Vite
+ * watches. Watch what the artifacts are read from and say so on the socket;
+ * the app re-reads the artifacts rather than reloading, which keeps the reader
+ * on the page and at the scroll position they were already at.
+ */
+export function watchStore(server: ViteDevServer, roots: Roots): void {
+  const dirs = storeDirs(roots);
+  server.watcher.add(dirs);
+
+  let pending: NodeJS.Timeout | undefined;
+  const announce = (file: string) => {
+    if (!dirs.some((dir) => file.startsWith(`${dir}${sep}`))) return;
+    // An editor saves as several events, and a git checkout as thousands.
+    // One announcement per burst, after the burst.
+    clearTimeout(pending);
+    pending = setTimeout(() => server.hot.send(STORE_CHANGED), 80);
+  };
+  for (const event of ["add", "change", "unlink"] as const) {
+    server.watcher.on(event, announce);
+  }
 }
 
 type Artifacts = () => Promise<Store>;
