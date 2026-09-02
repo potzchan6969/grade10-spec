@@ -11,7 +11,7 @@ import type * as React from "react";
 // paint `Base/muted` (node `2121:1414`). Disabled is `Opacity/opacity-50` over
 // the item's own colours (node `2121:1400`), not a grey swap.
 const dropdownMenuItemVariants = cva(
-  "group/dropdown-menu-item relative flex cursor-default items-center gap-2 rounded-full px-3 py-2 font-medium text-popover-foreground outline-hidden select-none hover:bg-muted data-highlighted:bg-muted data-inset:pl-7 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:*:[svg]:text-destructive",
+  "group/dropdown-menu-item relative flex cursor-default items-center gap-2 rounded-full px-3 py-2 font-normal text-popover-foreground outline-hidden select-none hover:bg-muted data-highlighted:bg-muted data-inset:pl-7 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:*:[svg]:text-destructive",
   {
     variants: {
       size: {
@@ -68,7 +68,9 @@ function DropdownMenuItem({
       aria-current={selected ? "true" : undefined}
     >
       {leading}
-      <span className="min-w-0 flex-1 whitespace-nowrap">{children}</span>
+      <span className="min-w-0 flex-1 whitespace-nowrap font-normal">
+        {children}
+      </span>
       {trailing ? (
         <span
           data-slot="dropdown-menu-item-trailing"
