@@ -40,6 +40,7 @@ role is data; what a role grants is not.
 - `roles-SC-05` — Staff cannot list or ban users
 - `roles-SC-06` — An unknown permission grants nothing
 - `roles-SC-07` — Staff can operate the store and auction catalog
+- `roles-SC-07a` — Staff can write the auction catalogue
 - `roles-SC-08` — Auditor reads the trail and nothing else
 - `roles-SC-09` — Combined roles stack
 - `roles-SC-10` — An operator cannot widen a role's grants
@@ -104,7 +105,7 @@ The mapping from role to permissions SHALL be:
 
 - `user`: none
 - `staff`: `store:read`, `store:write`, `loyalty:read`, `auction:read`,
-  `auction:catalog`, `auction:operate`
+  `auction:write`, `auction:operate`
 - `support`: `user:list`, `user:ban`, `session:list`, `session:revoke`
 - `auditor`: `audit:read`
 - `admin`: every permission any role grants, including `user:set-role`,
@@ -119,6 +120,12 @@ what a role grants.
 
 - **GIVEN** a person with the `staff` role
 - **WHEN** they take a store write or an auction operate action
+- **THEN** the system allows it
+
+#### Scenario: roles-SC-07a - Staff can write the auction catalogue
+
+- **GIVEN** a person with the `staff` role
+- **WHEN** they take an auction write action
 - **THEN** the system allows it
 
 #### Scenario: roles-SC-08 - Auditor reads the trail and nothing else

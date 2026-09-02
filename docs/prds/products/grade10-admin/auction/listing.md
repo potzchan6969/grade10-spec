@@ -31,7 +31,7 @@ longer the place to change it; the sale is settled and fulfilled elsewhere.
 
 :::detail{title="Grants and the trail" for="operator"}
 Catalogue work — drafting, editing, publishing, calling off — sits behind
-`auction:catalog` and `auction:operate`, which `staff` hold. `auction:reserve`
+`auction:write` and `auction:operate`, which `staff` hold. `auction:reserve`
 is the only grant that exposes a seller's secret floor and `auction:settle` is
 the only one that moves money; neither is needed to run the catalogue. Every
 elevated move appends to a hash-chained trail and refuses to run at all if that
