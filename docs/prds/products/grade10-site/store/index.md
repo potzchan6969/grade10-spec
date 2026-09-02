@@ -24,8 +24,6 @@ The Grade10 store is the trading-card and collectibles shop at
 - **Admins** — manage store-wide configuration in the admin panel: account
   suspension, discount promotions, the coupon catalog
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9023" title="Store page — the main page assembly"}
-
 :::detail{title="Where the code lives" for="engineer"}
 - **Storefront** — `apps/frontend/grade10`, composing `@grade10/ui` blocks
 - **Data layers** — `packages/grade10-store/frontend`
