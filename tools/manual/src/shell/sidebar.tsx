@@ -6,7 +6,6 @@ import {
   CaretDown,
   CaretRight,
   ClipboardText,
-  ClockCounterClockwise,
   House,
   type Icon,
   Kanban,
@@ -23,8 +22,7 @@ import { NewPageAction } from "../editor/edit-actions";
 
 const FIXED_ENTRIES: { to: string; label: string; icon: Icon }[] = [
   { to: "/", label: "Home", icon: House },
-  { to: "/recent", label: "Recent", icon: ClockCounterClockwise },
-  { to: "/planning", label: "Planning", icon: Kanban },
+  { to: "/in-flight", label: "In Flight", icon: Kanban },
   { to: "/qa", label: "QA", icon: ClipboardText },
   { to: "/design", label: "Design", icon: PenNib },
 ];
@@ -370,7 +368,7 @@ function IncubatingLink({
       className={cn(ROW, "text-secondary-foreground hover:text-foreground")}
       onClick={onNavigate}
       title={`${incubating.specId} — introduced by ${incubating.change.title}`}
-      to={`/planning/${incubating.change.id}`}
+      to={`/in-flight/${incubating.change.id}`}
     >
       <span className="min-w-0 flex-1 truncate italic">{incubating.title}</span>
       <CapabilityPip status="incubating" />

@@ -69,7 +69,7 @@ export function ChangePage() {
           title={shipped ? "In the archive" : "Not on the board"}
         />
         <Text as="p" className="mt-4" size="sm">
-          <Link className="underline underline-offset-2" to="/planning">
+          <Link className="underline underline-offset-2" to="/in-flight">
             Open the planning board
           </Link>
         </Text>
@@ -80,7 +80,7 @@ export function ChangePage() {
   return (
     <>
       <Text as="p" className="mb-4" size="sm" tone="secondary">
-        <Link className="hover:underline" to="/planning">
+        <Link className="hover:underline" to="/in-flight">
           ← Planning
         </Link>
       </Text>

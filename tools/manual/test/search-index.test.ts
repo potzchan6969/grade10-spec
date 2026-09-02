@@ -31,8 +31,8 @@ describe("the query that found nothing it was about", () => {
 
     expect(partial).toBe(false);
     expect(where.slice(0, 2)).toEqual([
-      "/planning/revise-loyalty-programme-rules",
-      "/planning/add-shopify-membership-pos",
+      "/in-flight/revise-loyalty-programme-rules",
+      "/in-flight/add-shopify-membership-pos",
     ]);
     // The whole point: not eighteen pages that merely say "card".
     expect(hits.length).toBeLessThan(6);
@@ -129,7 +129,7 @@ describe("what the index now holds", () => {
     );
 
     expect(found?.kind).toBe("change");
-    expect(found?.to).toBe("/planning/add-gift-cards");
+    expect(found?.to).toBe("/in-flight/add-gift-cards");
     expect(found?.body).toContain("500 and 1000");
   });
 

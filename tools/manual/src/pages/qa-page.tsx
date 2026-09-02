@@ -95,7 +95,7 @@ function InFlightSuites({ rows }: { rows: ChangeSuiteRow[] }) {
               <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                 <Link
                   className="font-medium text-sm hover:underline"
-                  to={`/planning/${change.id}`}
+                  to={`/in-flight/${change.id}`}
                 >
                   <InlineMarkdown text={change.title} />
                 </Link>

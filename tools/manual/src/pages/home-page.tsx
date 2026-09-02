@@ -169,7 +169,7 @@ function WhatsMoving() {
         <h2 className="font-heading font-bold text-lg">What's moving</h2>
         <Link
           className="text-secondary-foreground text-sm hover:underline"
-          to="/planning"
+          to="/in-flight"
         >
           All planning
         </Link>
@@ -181,7 +181,7 @@ function WhatsMoving() {
             <li key={change.id}>
               <Link
                 className="flex h-full flex-col gap-2 rounded-(--radius-xl) border border-border bg-card p-3.5 transition-colors hover:border-border-strong hover:bg-muted"
-                to={`/planning/${change.id}`}
+                to={`/in-flight/${change.id}`}
               >
                 <div className="flex items-baseline gap-2">
                   <Text

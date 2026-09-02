@@ -13,7 +13,7 @@ import {
 /**
  * One change as a page: one tab per artifact its schema asks for, the written
  * ones open, and the delta read as the contract it proposes. What used to be
- * a board card thirty screens into `/planning`.
+ * a board card thirty screens into `/in-flight`.
  */
 
 const SPEC = "demo-product/alpha";
@@ -191,14 +191,14 @@ function render(
   return renderToStaticMarkup(
     <MemoryRouter initialEntries={[url]}>
       <Routes>
-        <Route element={<ChangePage />} path="planning/:change" />
+        <Route element={<ChangePage />} path="in-flight/:change" />
       </Routes>
     </MemoryRouter>,
   );
 }
 
 describe("the page's head", () => {
-  const html = render("/planning/pos");
+  const html = render("/in-flight/pos");
 
   it("wears the change's title, id, and lane", () => {
     expect(html).toContain("Point of sale");
@@ -213,7 +213,7 @@ describe("the page's head", () => {
 });
 
 describe("the artifacts row", () => {
-  const html = render("/planning/pos");
+  const html = render("/in-flight/pos");
   const tabs = [
     ...html.matchAll(/role="tab"[^>]*>(?:<svg.*?<\/svg>)?([^<]+)/g),
   ].map((match) => match[1]);
@@ -247,7 +247,7 @@ describe("the artifacts row", () => {
   });
 
   it("says when the schema cannot say what is missing", () => {
-    const loose = render("/planning/pos", {
+    const loose = render("/in-flight/pos", {
       status: "ready",
       document: { ...document, schema: "spec-driven", schemaKnown: false },
     });
@@ -258,7 +258,7 @@ describe("the artifacts row", () => {
 
 describe("one tab per file the change has", () => {
   it("opens on the proposal, without its own title, and names the others", () => {
-    const html = render("/planning/pos");
+    const html = render("/in-flight/pos");
 
     expect(html).toContain("Staff spend points");
     expect(html).not.toContain('id="proposal-point-of-sale"');
@@ -271,7 +271,7 @@ describe("one tab per file the change has", () => {
   });
 
   it("opens the tab the URL names", () => {
-    const html = render("/planning/pos?tab=design");
+    const html = render("/in-flight/pos?tab=design");
 
     expect(html).toContain("The till never blocks a sale.");
     expect(html).not.toContain("Staff spend points");
@@ -279,11 +279,11 @@ describe("one tab per file the change has", () => {
   });
 
   it("falls back to the first tab for one the change lacks", () => {
-    expect(render("/planning/pos?tab=ui")).toContain("Staff spend points");
+    expect(render("/in-flight/pos?tab=ui")).toContain("Staff spend points");
   });
 
   it("shows the plan group by group, open lines first", () => {
-    const html = render("/planning/pos?tab=tasks");
+    const html = render("/in-flight/pos?tab=tasks");
 
     expect(html).toContain("Contracts · grade10-spec");
     expect(html).toContain("1.2 Wire the till");
@@ -293,7 +293,7 @@ describe("one tab per file the change has", () => {
 });
 
 describe("the delta as the contract it proposes", () => {
-  const html = render("/planning/pos?tab=specs");
+  const html = render("/in-flight/pos?tab=specs");
 
   it("reads purpose, feature set and journeys under the delta's title", () => {
     expect(html).toContain("Alpha — delta");
@@ -325,7 +325,7 @@ describe("the delta as the contract it proposes", () => {
 
 describe("a deep link into a delta", () => {
   it("opens the requirements whatever tab the link was copied from", () => {
-    const html = render("/planning/pos?tab=proposal#alpha-SC-65");
+    const html = render("/in-flight/pos?tab=proposal#alpha-SC-65");
 
     expect(html).toContain("ADDED Requirements");
     expect(html).not.toContain("Staff spend points");
@@ -334,7 +334,7 @@ describe("a deep link into a delta", () => {
 
 describe("while the files are not in hand", () => {
   it("still shows the board's facts and says it is loading", () => {
-    const html = render("/planning/pos", { status: "loading" });
+    const html = render("/in-flight/pos", { status: "loading" });
 
     expect(html).toContain("Point of sale");
     expect(html).toContain('aria-busy="true"');
@@ -342,7 +342,7 @@ describe("while the files are not in hand", () => {
   });
 
   it("says when they could not be read", () => {
-    const html = render("/planning/pos", {
+    const html = render("/in-flight/pos", {
       status: "unavailable",
       reason: "/api/change/pos answered 404 Not Found",
     });
@@ -354,7 +354,7 @@ describe("while the files are not in hand", () => {
 
 describe("a change that is not in flight", () => {
   it("says so rather than rendering an empty page", () => {
-    const html = render("/planning/never");
+    const html = render("/in-flight/never");
 
     expect(html).toContain("No such change");
     expect(html).toContain("never");

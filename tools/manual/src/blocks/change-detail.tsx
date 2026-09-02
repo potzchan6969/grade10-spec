@@ -170,7 +170,7 @@ export function ChangeCard({
           <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 border-border-subtle border-t pt-3">
             <Link
               className="text-secondary-foreground text-xs hover:text-foreground"
-              to={`/planning/${change.id}`}
+              to={`/in-flight/${change.id}`}
             >
               {change.id}
             </Link>
@@ -458,7 +458,7 @@ function DependencyPill({ dependency }: { dependency: Dependency }) {
 
   const blocking = dependency.state === "blocking";
   return (
-    <Link title={label} to={`/planning#${dependency.id}`}>
+    <Link title={label} to={`/in-flight#${dependency.id}`}>
       <Badge size="sm" variant={blocking ? "warning" : "outline"}>
         <span className="max-w-56 truncate">{dependency.id}</span>
         <span className="opacity-70">{blocking ? "in flight" : "shipped"}</span>

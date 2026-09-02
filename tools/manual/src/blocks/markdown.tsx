@@ -38,7 +38,7 @@ const REFERENCE_FILE = /^docs\/references\/(.+)\.md$/;
  * any of them, and a route the app does not serve still reads as dead. */
 const APP_ROUTES = new Set([
   "/",
-  "/planning",
+  "/in-flight",
   "/qa",
   "/design",
   REFERENCES_ROUTE,
@@ -112,7 +112,7 @@ function routeForStoreFile(
       : rest.endsWith(".md") && !rest.includes("/")
         ? rest.slice(0, -3)
         : null;
-    return tab === null ? null : `/planning/${id}?tab=${tab}`;
+    return tab === null ? null : `/in-flight/${id}?tab=${tab}`;
   }
   const spec = SPEC_FILE.exec(resolved);
   if (spec) return index.routeBySpec.get(spec[1]) ?? null;

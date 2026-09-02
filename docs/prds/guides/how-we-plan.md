@@ -45,4 +45,4 @@ up the work.
 - [An agent workflow, end to end](https://github.com/9gag/grade10-spec/blob/main/docs/governance/agent-workflow-example.md)
   — the whole loop worked through once.
 
-[Planning](/planning) is the live view of all of it.
+[In Flight](/in-flight) is the live view of all of it.

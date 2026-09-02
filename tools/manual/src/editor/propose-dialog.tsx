@@ -114,7 +114,7 @@ export function ProposeDialog({
         noteWrite();
         reload();
         onOpenChange(false);
-        navigate(`/planning/${id}`);
+        navigate(`/in-flight/${id}`);
       })
       .catch((cause: unknown) => {
         console.error(`manual: cannot propose ${effective}`, cause);

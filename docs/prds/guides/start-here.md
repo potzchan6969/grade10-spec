@@ -17,7 +17,7 @@ the first hour is different depending on what you came to do, so pick a path.
   actually meets.
 - [The vault](/p/vault) — the most involved product, where custody, identity
   and signing all meet.
-- [Planning](/planning) — everything in flight across the platform, with tasks
+- [In Flight](/in-flight) — every change moving across the platform, with tasks
   done over total, straight out of git.
 - [How we plan](/guides/how-we-plan) — where a proposal stops and a spec
   starts.
@@ -33,7 +33,7 @@ exists. Token values live in `packages/design-system/tokens.json` — the CSS
 themes and Figma are both projections of it. And every requirement row has a
 propose action on the locally-run manual (the hosted site is read-only):
 proposing takes thirty seconds in the browser, and everything after it is an
-agent's job — the card on [Planning](/planning) names the command to hand
+agent's job — the card on [In Flight](/in-flight) names the command to hand
 over, or hand the change id to a PM or engineer.
 
 - [Package Rules](/p/shared-ui/component-package) — what the shared UI
@@ -69,7 +69,7 @@ classified cases, is
   a bug report should quote.
 - [Audit trail](/p/audit) — how to prove an operator action was recorded, and
   what a passing verification does not claim.
-- [Planning](/planning) — what is moving, so a test plan is written against the
+- [In Flight](/in-flight) — what is moving, so a test plan is written against the
   right version.
 
 ## If you are an engineer

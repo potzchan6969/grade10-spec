@@ -669,10 +669,10 @@ function linked(
   if (ref.kind === "change") {
     const change = index.changeById.get(ref.id);
     return change
-      ? { label: change.title, to: `/planning/${ref.id}` }
-      : { label: ref.id, to: "/planning" };
+      ? { label: change.title, to: `/in-flight/${ref.id}` }
+      : { label: ref.id, to: "/in-flight" };
   }
-  if (ref.kind === "archived") return { label: ref.id, to: "/planning" };
+  if (ref.kind === "archived") return { label: ref.id, to: "/in-flight" };
   return { label: ref.path };
 }
 

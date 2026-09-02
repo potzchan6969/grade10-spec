@@ -149,7 +149,7 @@ export function buildDocs(index: ManualIndex): SearchDoc[] {
         plainText(change.why),
         ...change.deltas.map((delta) => delta.spec),
       ].join(" "),
-      to: `/planning/${change.id}`,
+      to: `/in-flight/${change.id}`,
     });
 
     for (const delta of change.deltas) {
@@ -160,7 +160,7 @@ export function buildDocs(index: ManualIndex): SearchDoc[] {
           title: requirement.name,
           subtitle: `${title} · ${requirement.kind} ${delta.spec}`,
           body: plainText(requirement.text ?? ""),
-          to: `/planning/${change.id}`,
+          to: `/in-flight/${change.id}`,
         });
       }
     }

@@ -56,7 +56,7 @@ describe("a history ref as a chip", () => {
     expect(feedRef(index, { kind: "change", id: "add-beta" })).toEqual({
       key: "change:add-beta",
       label: "Change add-beta",
-      to: "/planning/add-beta",
+      to: "/in-flight/add-beta",
       kind: "change",
     });
   });
@@ -67,7 +67,7 @@ describe("a history ref as a chip", () => {
     expect(feedRef(index, { kind: "archived", id: "add-alpha" })).toEqual({
       key: "archived:add-alpha",
       label: "add-alpha",
-      to: "/planning",
+      to: "/in-flight",
       kind: "archived",
     });
   });

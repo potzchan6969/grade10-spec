@@ -76,7 +76,7 @@ describe("a proposal reaching the capability it is about", () => {
 
   it("shows up in the ribbon, linked to the board", () => {
     expect(html).toContain("Gift cards in the store");
-    expect(html).toContain('href="/planning/gift-cards"');
+    expect(html).toContain('href="/in-flight/gift-cards"');
   });
 
   it("reads as a proposal, never as work in flight", () => {

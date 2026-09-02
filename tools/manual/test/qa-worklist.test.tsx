@@ -230,7 +230,7 @@ describe("suites riding in-flight changes", () => {
     held.index = index;
 
     expect(html).toContain("In flight");
-    expect(html).toContain('href="/planning/add-storage-plans"');
+    expect(html).toContain('href="/in-flight/add-storage-plans"');
     expect(html).toContain("14 draft");
     expect(html).toContain("5 actual");
     expect(html).toContain("/tcs-review add-storage-plans");

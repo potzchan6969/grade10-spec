@@ -160,7 +160,7 @@ export function ChangeChip({ change }: { change: ChangeEntry }) {
 
       <Link
         className="font-medium text-sm hover:underline"
-        to={`/planning/${change.id}`}
+        to={`/in-flight/${change.id}`}
       >
         <InlineMarkdown text={change.title} />
       </Link>
@@ -241,7 +241,7 @@ function ProposedChip({ change }: { change: ChangeEntry }) {
   return (
     <Link
       className="flex flex-wrap items-baseline gap-x-2 gap-y-1 rounded-(--radius-xl) border border-border-subtle border-dashed bg-background-subtle px-3 py-2 transition-colors hover:border-border-strong hover:bg-muted"
-      to={`/planning/${change.id}`}
+      to={`/in-flight/${change.id}`}
     >
       <Badge size="sm" variant="outline">
         proposed
