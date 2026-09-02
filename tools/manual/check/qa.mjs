@@ -46,7 +46,6 @@ function suiteOf(spec) {
   return {
     status: spec.testCasesStatus,
     cases: spec.testCases ?? [],
-    citations: spec.testCaseCitations ?? [],
     outOfSuite: spec.outOfSuite ?? [],
   };
 }
@@ -56,19 +55,24 @@ function checkSuite(ctx, spec, dir) {
   if (spec.testCasesError || !existsSync(join(ctx.roots.store, file))) return;
   const suite = suiteOf(spec);
   const issued = scenarioIds(spec);
+  // A case traces the journey it walks, and reaches the scenarios that
+  // journey is accepted by; an older case names a scenario outright.
+  const accepted = new Map(
+    (spec.journeys ?? []).map((one) => [one.id, one.acceptedBy]),
+  );
   // Living cases only: a deprecated case is history, and counting its traces
   // is how a scenario read as covered after it lost its last case.
   const traced = new Map();
   for (const test of suite.cases) {
     if (test.status === "deprecated") continue;
-    for (const trace of test.traces) traced.set(trace, test.id);
+    for (const trace of test.traces) {
+      for (const id of accepted.get(trace) ?? [trace]) traced.set(id, test.id);
+    }
   }
 
-  checkTraces(ctx, file, spec, suite, issued);
+  checkTraces(ctx, file, spec, suite, issued, accepted);
   checkAuthority(ctx, file, suite);
   checkCoverage(ctx, file, spec, suite, issued, traced);
-  checkCovers(ctx, file, spec, suite);
-  checkSigned(ctx, file, suite);
 
   if (!ctx.cased.has(spec.id)) {
     ctx.add(
@@ -80,11 +84,12 @@ function checkSuite(ctx, spec, dir) {
 }
 
 /** RULE `trace`: the id is the only thread between a case and the behaviour
- * it proves. One that names no scenario is a case standing behind nothing. */
-function checkTraces(ctx, file, spec, suite, issued) {
+ * it proves. One that names no journey or scenario of the spec's own is a
+ * case standing behind nothing. */
+function checkTraces(ctx, file, spec, suite, issued, accepted) {
   for (const test of suite.cases) {
     for (const trace of test.traces) {
-      if (issued.has(trace)) continue;
+      if (issued.has(trace) || accepted.has(trace)) continue;
       ctx.add(
         "trace",
         file,
@@ -138,52 +143,6 @@ function checkCoverage(ctx, file, spec, suite, issued, traced) {
     file,
     `no case traces ${untraced.join(", ")} — cover them, or list them under \`**Out of suite:**\``,
   );
-}
-
-/** RULE `covers`: the quoted title is what the reviewer read. An id survives
- * a rename by design, so the quote is the only thing that can say the words
- * behind a signed-off case moved. */
-function checkCovers(ctx, file, spec, suite) {
-  const names = new Map();
-  for (const requirement of spec.requirements) {
-    for (const scenario of requirement.scenarios) {
-      if (scenario.id) names.set(scenario.id, scenario.name);
-    }
-  }
-
-  for (const cite of suite.citations) {
-    const name = names.get(cite.id);
-    if (name === undefined) {
-      ctx.add(
-        "covers",
-        file,
-        `\`**Covers:**\` names \`${cite.id}\`, which \`${spec.id}\` issues nowhere`,
-      );
-      continue;
-    }
-    if (name.trim() === cite.title.trim()) continue;
-    ctx.add(
-      "covers",
-      file,
-      `\`**Covers:**\` quotes \`${cite.id}\` as “${cite.title}” and the spec now reads “${name}” — re-review the cases under it, or update the quote`,
-    );
-  }
-}
-
-/** RULE `signed`: a verdict is a person standing behind a case, so `actual`
- * and `deprecated` carry who and when — `**Reviewed by:** @handle - date`.
- * Without it, "who approved this" is unanswerable, which is the one question
- * an audit of a sign-off consists of. */
-function checkSigned(ctx, file, suite) {
-  for (const test of suite.cases) {
-    if (test.status === "draft") continue;
-    if (test.reviewedBy && test.reviewedOn) continue;
-    ctx.add(
-      "signed",
-      file,
-      `${test.id} is \`${test.status}\` with no \`**Reviewed by:** @handle - YYYY-MM-DD\` — a verdict carries its reviewer`,
-    );
-  }
 }
 
 const draftList = (drafts) =>

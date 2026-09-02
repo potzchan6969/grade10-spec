@@ -5,7 +5,6 @@ import type {
   Requirement,
   Scenario,
   SpecEntry,
-  SuiteCitation,
   TestCase,
   TestCaseStatus,
   TestSuiteStatus,
@@ -41,25 +40,31 @@ const SCENARIO_ID = /[a-z0-9][a-z0-9-]*-SC-\d+/g;
 const SCENARIO_HEADING =
   /^Scenario:\s*(?:([a-z0-9][a-z0-9-]*-SC-\d+)\s+-\s+)?(.+)$/;
 const JOURNEY_HEADING = /^([a-z0-9][a-z0-9-]*-US-\d+):\s*(.+)$/;
-const CASE_HEADING = /^([a-z0-9][a-z0-9-]*-TC-\d+):\s*(.+)$/;
+/** A case id is journey-scoped, `<capability>-US<n>-TC<m>-<v>`
+ * (`docs/governance/specs-to-test-cases.md`, Naming). Older suites still
+ * carry the hyphenated `-US-<n>-TC-<m>` and the flat `<capability>-TC-<n>`,
+ * and both stay readable: an issued id is permanent, so a suite is never
+ * renumbered to a newer shape. */
+const CASE_HEADING =
+  /^([a-z0-9][a-z0-9-]*?-(?:US-?\d+-)?TC-?\d+(?:-\d+)?):\s*(.+)$/;
 const ACCEPTED_BY = /^\*\*Accepted by:\*\*\s*$/m;
 const TRACE = /^\s*(?:[-*]\s+)?\*\*Trace:\*\*(.*)$/m;
+/** What a `**Trace:**` names: the journey the case walks, in the spec's
+ * canonical `-US-<n>` form. A scenario id is the older shape, and still
+ * resolves — the suite beside a spec that predates journeys traces those. */
+const TRACE_ID = /[a-z0-9][a-z0-9-]*-(?:US|SC)-\d+/g;
 /** The file's own status sits at column 0 under the title; a case's is a
  * bullet in its properties list. */
 const SUITE_STATUS = /^\*\*Status:\*\*\s*(.+?)\s*$/m;
 const CASE_STATUS = /^\s*(?:[-*]\s+)?\*\*Status:\*\*\s*(.+?)\s*$/m;
-/** Who stood behind a verdict, and when — `- **Reviewed by:** @handle - date`.
- * Written by `/tcs-review` at verdict time; a signed verdict is the one thing
- * that makes `actual` auditable. */
-const REVIEWED_BY =
-  /^\s*(?:[-*]\s+)?\*\*Reviewed by:\*\*\s*@([A-Za-z0-9][A-Za-z0-9_-]*)(?:\s+-\s+(\d{4}-\d{2}-\d{2}))?\s*$/m;
-const SUITE_STATUSES = new Set(["pending-review", "approved"]);
+/** Derived from the cases, never chosen: every case `draft` is
+ * `pending-review`, a first verdict makes it `in-review`, and no `draft`
+ * left makes it `approved`. */
+const SUITE_STATUSES = new Set(["pending-review", "in-review", "approved"]);
 const CASE_STATUSES = new Set(["draft", "actual", "deprecated"]);
-/** A suite quotes the scenarios a journey covers, and lists the ones it
- * deliberately leaves uncovered. Both are labelled lists at column 0. */
-const COVERS = /^\*\*Covers:\*\*/;
+/** The scenarios a suite deliberately leaves uncovered: a labelled list at
+ * column 0, inline after the label or as bullets beneath it. */
 const OUT_OF_SUITE = /^\*\*Out of suite:\*\*(.*)$/;
-const CITATION = /^\s*[-*]\s+`([a-z0-9][a-z0-9-]*-SC-\d+)`\s*[—–-]\s*(.+?)\s*$/;
 const BULLET = /^\s*[-*]\s+/;
 
 export function discoverSpecs(root: string): SpecShape {
@@ -137,7 +142,6 @@ function readSpec(
       const suite = readTestCases(cases);
       entry.testCases = suite.cases;
       entry.testCasesStatus = suite.status;
-      if (suite.citations.length > 0) entry.testCaseCitations = suite.citations;
       if (suite.outOfSuite.length > 0) entry.outOfSuite = suite.outOfSuite;
     } catch (cause) {
       entry.testCasesError = toItemError(casesPath, cause);
@@ -296,17 +300,16 @@ function readScenario(section: Section): Scenario {
 export type TestSuite = {
   status: TestSuiteStatus;
   cases: TestCase[];
-  /** `**Covers:**` bullets: the id, and the wording the reviewer read. */
-  citations: SuiteCitation[];
   /** `**Out of suite:**` ids — scenarios the suite leaves uncovered on
    * purpose, so what remains untraced is always a real hole. */
   outOfSuite: string[];
 };
 
 /** `docs/governance/specs-to-test-cases.md`: journeys are `##` sections,
- * cases are `###` sections under them, each closing with `**Trace:**`. Status
- * is what keeps a generated draft from wearing a reviewed suite's authority,
- * so a file that states none is refused rather than defaulted. */
+ * cases are `###` sections under them, each carrying a `**Trace:**` in its
+ * classification list. Status is what keeps a generated draft from wearing
+ * a reviewed suite's authority, so a file that states none is refused rather
+ * than defaulted. */
 export function readTestCases(text: string): TestSuite {
   const roots = outline(text);
   const status = suiteStatus(roots);
@@ -323,69 +326,52 @@ export function readTestCases(text: string): TestSuite {
   };
   visit(roots);
 
-  const cases = found.map(({ section, id, title }): TestCase => {
-    const reviewed = REVIEWED_BY.exec(section.raw);
-    return {
+  const cases = found.map(
+    ({ section, id, title }): TestCase => ({
       id,
       title,
       traces: traces(section),
       status: caseStatus(section),
-      ...(reviewed?.[1] ? { reviewedBy: reviewed[1] } : {}),
-      ...(reviewed?.[2] ? { reviewedOn: reviewed[2] } : {}),
-    };
-  });
+    }),
+  );
   refuseRepeats(
     "test case",
     found.map(({ section, id }) => ({ id, line: section.line })),
   );
 
-  return { status, cases, ...labelledLists(text) };
+  return { status, cases, outOfSuite: outOfSuite(text) };
 }
 
-/** The two labelled lists a suite carries beside its cases, read from the
- * text rather than the outline: both sit inside a section's body, and both
- * end at the blank line after their last entry. */
-function labelledLists(text: string): {
-  citations: SuiteCitation[];
-  outOfSuite: string[];
-} {
-  const citations: SuiteCitation[] = [];
-  const outOfSuite = new Set<string>();
-  let mode: "covers" | "out" | undefined;
+/** The `**Out of suite:**` list, read from the text rather than the outline:
+ * it sits inside a section's body, and ends at the blank line after its last
+ * entry. */
+function outOfSuite(text: string): string[] {
+  const ids = new Set<string>();
+  let listing = false;
   let started = false;
 
   for (const line of text.split("\n")) {
-    if (COVERS.test(line)) {
-      mode = "covers";
-      started = false;
-      continue;
-    }
     const out = OUT_OF_SUITE.exec(line);
     if (out) {
-      const ids = out[1].match(SCENARIO_ID) ?? [];
-      for (const id of ids) outOfSuite.add(id);
-      mode = "out";
-      started = ids.length > 0;
+      const inline = out[1].match(SCENARIO_ID) ?? [];
+      for (const id of inline) ids.add(id);
+      listing = true;
+      started = inline.length > 0;
       continue;
     }
-    if (mode === undefined) continue;
+    if (!listing) continue;
     if (line.trim() === "") {
-      if (started) mode = undefined;
+      if (started) listing = false;
       continue;
     }
     if (!BULLET.test(line)) {
-      mode = undefined;
+      listing = false;
       continue;
     }
     started = true;
-    if (mode === "out") {
-      for (const id of line.match(SCENARIO_ID) ?? []) outOfSuite.add(id);
-      continue;
-    }
-    const cite = CITATION.exec(line);
-    if (cite) citations.push({ id: cite[1], title: cite[2] });
+    for (const id of line.match(SCENARIO_ID) ?? []) ids.add(id);
   }
-  return { citations, outOfSuite: [...outOfSuite] };
+  return [...ids];
 }
 
 function suiteStatus(roots: Section[]): TestSuiteStatus {
@@ -396,13 +382,13 @@ function suiteStatus(roots: Section[]): TestSuiteStatus {
   if (found === undefined) {
     throw new StoreFileError(
       line,
-      "a test-case file states `**Status:** pending-review` or `approved` under its title",
+      "a test-case file states `**Status:** pending-review`, `in-review` or `approved` under its title",
     );
   }
   if (!SUITE_STATUSES.has(found)) {
     throw new StoreFileError(
       line,
-      `file \`**Status:** ${found}\` is neither \`pending-review\` nor \`approved\``,
+      `file \`**Status:** ${found}\` is not \`pending-review\`, \`in-review\` or \`approved\``,
     );
   }
   return found as TestSuiteStatus;
@@ -433,11 +419,11 @@ function traces(section: Section): string[] {
       `test case \`${section.heading}\` has no \`**Trace:**\``,
     );
   }
-  const ids = [...new Set(line[1].match(SCENARIO_ID) ?? [])];
+  const ids = [...new Set(line[1].match(TRACE_ID) ?? [])];
   if (ids.length === 0) {
     throw new StoreFileError(
       section.line,
-      `test case \`${section.heading}\` traces no scenario id`,
+      `test case \`${section.heading}\` traces no journey or scenario id`,
     );
   }
   return ids;

@@ -58,11 +58,10 @@ const specText = ({
     ...scenarios.flatMap(([id, name]) => scenario(id, name)),
   ].join("\n");
 
-type CaseLine = [id: string, status: string, trace: string, reviewed?: string];
+type CaseLine = [id: string, status: string, trace: string];
 
 const suiteText = ({
   status = "pending-review",
-  covers = [] as [string, string][],
   outOfSuite = [] as string[],
   cases = [["alpha-TC-01", "draft", "alpha-SC-01"]] as CaseLine[],
 } = {}) =>
@@ -74,24 +73,15 @@ const suiteText = ({
     ...(outOfSuite.length > 0
       ? [`**Out of suite:** ${outOfSuite.join(", ")}`, ""]
       : []),
-    "## alpha-US-01: Someone does the thing",
+    "## alpha-US1: Someone does the thing",
     "",
-    ...(covers.length > 0
-      ? [
-          "**Covers:**",
-          "",
-          ...covers.map(([id, title]) => `- \`${id}\` — ${title}`),
-          "",
-        ]
-      : []),
-    ...cases.flatMap(([id, caseStatus, trace, reviewed]) => [
+    ...cases.flatMap(([id, caseStatus, trace]) => [
       `### ${id}: Alpha is asked`,
       "",
-      "**Properties:**",
+      "**Classification:**",
       "",
-      `- **Status:** ${caseStatus}`,
-      ...(reviewed ? [`- **Reviewed by:** ${reviewed}`] : []),
-      `- **Trace:** ${trace}`,
+      `* **Status:** ${caseStatus}`,
+      `* **Trace:** ${trace}`,
       "",
     ]),
   ].join("\n");
@@ -268,15 +258,67 @@ describe("scenarios no case traces", () => {
   });
 });
 
+/** A case traces the journey it walks, and reaches every scenario that
+ * journey is accepted by — the suite never has to name a scenario twice. */
+describe("a case tracing the journey it walks", () => {
+  const two = specText({
+    scenarios: [
+      ["alpha-SC-01", "it does the thing"],
+      ["alpha-SC-02", "it says so"],
+    ],
+    journeys: [journey("alpha-US-01", ["alpha-SC-01", "alpha-SC-02"])],
+  });
+
+  it("lands, and covers what the journey is accepted by", async () => {
+    const root = store({
+      spec: two,
+      cases: suiteText({
+        cases: [["alpha-US1-TC1-1", "actual", "alpha-US-01"]],
+      }),
+    });
+    const result = await check(root);
+    expect(lines(result, "trace")).toEqual([]);
+    expect(lines(result, "coverage")).toEqual([]);
+  });
+
+  it("fails on a journey the spec never told", async () => {
+    const root = store({
+      spec: two,
+      cases: suiteText({
+        cases: [["alpha-US1-TC1-1", "actual", "alpha-US-09"]],
+      }),
+    });
+    expect(lines(await check(root), "trace")).toEqual([
+      `${CASES_FILE} — alpha-US1-TC1-1 traces \`alpha-US-09\`, which \`demo-product/alpha\` issues nowhere — retrace it or retire the case`,
+    ]);
+  });
+
+  it("leaves a scenario no journey reaches for the coverage rule", async () => {
+    const root = store({
+      spec: specText({
+        scenarios: [
+          ["alpha-SC-01", "it does the thing"],
+          ["alpha-SC-02", "it says so"],
+        ],
+        journeys: [journey("alpha-US-01", ["alpha-SC-01"])],
+      }),
+      cases: suiteText({
+        cases: [["alpha-US1-TC1-1", "actual", "alpha-US-01"]],
+      }),
+    });
+    expect(lines(await check(root), "coverage")).toEqual([
+      `${CASES_FILE} — no case traces alpha-SC-02 — cover them, or list them under \`**Out of suite:**\``,
+    ]);
+  });
+});
+
 /** A deprecated case is history, not coverage. A coverage number that cannot
  * go down when a case is retired is decoration. */
 describe("coverage when a scenario loses its last living case", () => {
   it("reopens the hole a retired case leaves", async () => {
     const root = store({
       cases: suiteText({
-        cases: [
-          ["alpha-TC-01", "deprecated", "alpha-SC-01", "@quinn - 2026-09-01"],
-        ],
+        cases: [["alpha-TC-01", "deprecated", "alpha-SC-01"]],
       }),
     });
     expect(lines(await check(root), "coverage")).toEqual([
@@ -288,72 +330,12 @@ describe("coverage when a scenario loses its last living case", () => {
     const root = store({
       cases: suiteText({
         cases: [
-          ["alpha-TC-01", "deprecated", "alpha-SC-01", "@quinn - 2026-09-01"],
-          ["alpha-TC-02", "actual", "alpha-SC-01", "@quinn - 2026-09-01"],
+          ["alpha-TC-01", "deprecated", "alpha-SC-01"],
+          ["alpha-TC-02", "actual", "alpha-SC-01"],
         ],
       }),
     });
     expect(lines(await check(root), "coverage")).toEqual([]);
-  });
-});
-
-/** A verdict is a person standing behind a case; "who approved this and when"
- * is the one question an audit of a sign-off consists of. */
-describe("a verdict nobody signed", () => {
-  it("warns on actual and deprecated cases without a reviewer line", async () => {
-    const root = store({
-      cases: suiteText({
-        cases: [
-          ["alpha-TC-01", "actual", "alpha-SC-01"],
-          ["alpha-TC-02", "deprecated", "alpha-SC-01"],
-          ["alpha-TC-03", "draft", "alpha-SC-01"],
-        ],
-      }),
-    });
-    expect(lines(await check(root), "signed")).toEqual([
-      `${CASES_FILE} — alpha-TC-01 is \`actual\` with no \`**Reviewed by:** @handle - YYYY-MM-DD\` — a verdict carries its reviewer`,
-      `${CASES_FILE} — alpha-TC-02 is \`deprecated\` with no \`**Reviewed by:** @handle - YYYY-MM-DD\` — a verdict carries its reviewer`,
-    ]);
-  });
-
-  it("says nothing for a signed verdict", async () => {
-    const root = store({
-      cases: suiteText({
-        cases: [
-          ["alpha-TC-01", "actual", "alpha-SC-01", "@quinn - 2026-09-01"],
-        ],
-      }),
-    });
-    expect(lines(await check(root), "signed")).toEqual([]);
-  });
-});
-
-/** An id survives a rename by design, so the quoted title is the only thing
- * that can say the words a reviewer approved have moved. */
-describe("a suite quoting wording the spec has since changed", () => {
-  it("warns with both wordings", async () => {
-    const root = store({
-      cases: suiteText({ covers: [["alpha-SC-01", "it did the thing"]] }),
-    });
-    expect(lines(await check(root), "covers")).toEqual([
-      `${CASES_FILE} — \`**Covers:**\` quotes \`alpha-SC-01\` as “it did the thing” and the spec now reads “it does the thing” — re-review the cases under it, or update the quote`,
-    ]);
-  });
-
-  it("says nothing while the quote still matches", async () => {
-    const root = store({
-      cases: suiteText({ covers: [["alpha-SC-01", "it does the thing"]] }),
-    });
-    expect(lines(await check(root), "covers")).toEqual([]);
-  });
-
-  it("warns on a citation naming a scenario the spec does not issue", async () => {
-    const root = store({
-      cases: suiteText({ covers: [["alpha-SC-77", "it does the thing"]] }),
-    });
-    expect(lines(await check(root), "covers")).toEqual([
-      `${CASES_FILE} — \`**Covers:**\` names \`alpha-SC-77\`, which \`demo-product/alpha\` issues nowhere`,
-    ]);
   });
 });
 
@@ -414,7 +396,7 @@ describe("a suite the reader could not parse", () => {
 
   it("names the suite file, not the spec", async () => {
     expect(lines(await check(root), "store")).toEqual([
-      `${CASES_FILE} — demo-product/alpha line 1: a test-case file states \`**Status:** pending-review\` or \`approved\` under its title`,
+      `${CASES_FILE} — demo-product/alpha line 1: a test-case file states \`**Status:** pending-review\`, \`in-review\` or \`approved\` under its title`,
     ]);
   });
 
@@ -426,7 +408,7 @@ describe("a suite the reader could not parse", () => {
 
   it("asks nothing else of a suite it could not read", async () => {
     const result = await check(root);
-    for (const rule of ["trace", "authority", "coverage", "covers", "suite"]) {
+    for (const rule of ["trace", "authority", "coverage", "suite"]) {
       expect(lines(result, rule)).toEqual([]);
     }
   });

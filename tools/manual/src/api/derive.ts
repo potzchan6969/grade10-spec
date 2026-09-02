@@ -24,6 +24,7 @@ import type {
   DeltaRequirement,
   HistoryRef,
   ItemError,
+  Journey,
   PageEntry,
   Snapshot,
   SpecEntry,
@@ -498,9 +499,7 @@ export function isProductDir(manualDir: string, dir: string): boolean {
   const prefix = pagePath(manualDir, "products");
   if (!dir.startsWith(`${prefix}/`)) return false;
   const rest = dir.slice(prefix.length + 1);
-  return (
-    rest !== "" && rest.split("/").length <= 2
-  );
+  return rest !== "" && rest.split("/").length <= 2;
 }
 
 /**
@@ -716,7 +715,7 @@ export function qaRows(index: ManualIndex): QaRow[] {
       continue;
     }
 
-    const traced = tracedBy(cases);
+    const traced = tracedBy(cases, journeys);
     const exempt = new Set(spec.outOfSuite ?? []);
     const issued = spec.requirements.flatMap((requirement) =>
       requirement.scenarios.flatMap((scenario) =>
@@ -747,14 +746,21 @@ export function qaRows(index: ManualIndex): QaRow[] {
   return rows.sort(byReviewFirst);
 }
 
-/** The scenarios living cases trace. A `deprecated` case is history, not
- * coverage — counting its traces is how a scenario reads as covered after it
- * loses its last case. */
-export function tracedBy(cases: TestCase[]): Set<string> {
+/** The scenarios living cases trace. A case traces the journey it walks, and
+ * reaches every scenario that journey's `Accepted by` lists; an older case
+ * names a scenario outright, and reaches that one. A `deprecated` case is
+ * history, not coverage — counting its traces is how a scenario reads as
+ * covered after it loses its last case. */
+export function tracedBy(
+  cases: TestCase[],
+  journeys: Journey[] = [],
+): Set<string> {
+  const accepted = new Map(journeys.map((one) => [one.id, one.acceptedBy]));
   return new Set(
     cases
       .filter((one) => one.status !== "deprecated")
-      .flatMap((one) => one.traces),
+      .flatMap((one) => one.traces)
+      .flatMap((trace) => accepted.get(trace) ?? [trace]),
   );
 }
 

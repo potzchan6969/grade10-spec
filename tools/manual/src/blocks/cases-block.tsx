@@ -3,12 +3,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { useState } from "react";
 import { caseAnchor } from "../api/anchors";
 import { tracedBy } from "../api/derive";
-import type {
-  SpecEntry,
-  TestCase,
-  TestCaseStatus,
-  TestSuiteStatus,
-} from "../api/types";
+import type { SpecEntry, TestCaseStatus, TestSuiteStatus } from "../api/types";
 import type { CasesBlock } from "../content/grammar";
 import { AnchorLink } from "./anchor";
 import { useBlockScope } from "./block-scope";
@@ -63,7 +58,7 @@ export function SuiteView({ spec }: { spec: SpecEntry }) {
   }
 
   // Living cases only — a retired case's traces are history, not coverage.
-  const covered = tracedBy(cases);
+  const covered = tracedBy(cases, spec.journeys);
   const exempt = new Set(spec.outOfSuite ?? []);
   const scenarios = spec.requirements.flatMap(
     (requirement) => requirement.scenarios,
@@ -110,7 +105,6 @@ export function SuiteView({ spec }: { spec: SpecEntry }) {
                 {testCase.title}
               </Text>
               <CaseStatus status={testCase.status} />
-              <Reviewer testCase={testCase} />
               <AnchorLink
                 className="ml-auto"
                 id={caseAnchor(testCase)}
@@ -172,36 +166,27 @@ function OutOfSuite({ ids, spec }: { ids: string[]; spec: SpecEntry }) {
   );
 }
 
-/** The file's own review state, beside the suite it belongs to. `pending-review`
- * never wears the approved colour — carrying the status is pointless if a draft
- * suite can still read as signed off. */
+const SUITE_STATUS_TITLES: Record<TestSuiteStatus, string> = {
+  "pending-review":
+    "Every case here is still a draft; nothing in this file exports.",
+  "in-review":
+    "A reviewer has started, and at least one case is still a draft; nothing in this file exports.",
+  approved: "A reviewer stands behind every case in this suite.",
+};
+
+/** The file's own review state, beside the suite it belongs to. Only
+ * `approved` wears the approved colour — carrying the status is pointless if
+ * a suite still holding a draft can read as signed off. */
 function SuiteStatus({ status }: { status?: TestSuiteStatus }) {
   if (!status) return null;
   return (
     <Badge
       size="sm"
-      title={
-        status === "approved"
-          ? "A reviewer stands behind every case in this suite."
-          : "At least one case here is still a draft; nothing in this file exports."
-      }
+      title={SUITE_STATUS_TITLES[status]}
       variant={status === "approved" ? "success" : "warning"}
     >
       {status}
     </Badge>
-  );
-}
-
-/** The name behind a verdict, beside it. An unsigned `actual` claims a review
- * nobody can be asked about; the reviewer's handle and date are what make the
- * state auditable. */
-function Reviewer({ testCase }: { testCase: TestCase }) {
-  if (!testCase.reviewedBy) return null;
-  return (
-    <Text as="span" size="xs" tone="secondary">
-      <span className="font-mono">@{testCase.reviewedBy}</span>
-      {testCase.reviewedOn ? ` · ${testCase.reviewedOn}` : ""}
-    </Text>
   );
 }
 
@@ -253,30 +238,33 @@ function TraceList({ spec, traces }: { spec: SpecEntry; traces: string[] }) {
 
   return (
     <ul className="mt-2 flex flex-wrap gap-1.5">
-      {traces.map((trace) => {
-        const found = findScenario(spec, trace);
-        return (
-          <li key={trace}>
-            <a
-              className="flex items-baseline gap-1.5 rounded-(--radius-lg) border border-border bg-background-subtle px-2 py-1 text-xs transition-colors hover:border-border-strong hover:bg-muted"
-              href={`#${trace}`}
-            >
-              <span className="shrink-0 font-mono text-secondary-foreground">
-                {trace}
-              </span>
-              <span className="min-w-0 leading-snug">
-                {found ? (
-                  found.scenario.name
-                ) : (
-                  <span className="text-destructive line-through">
-                    not in this spec
-                  </span>
-                )}
-              </span>
-            </a>
-          </li>
-        );
-      })}
+      {traces.map((trace) => (
+        <li key={trace}>
+          <a
+            className="flex items-baseline gap-1.5 rounded-(--radius-lg) border border-border bg-background-subtle px-2 py-1 text-xs transition-colors hover:border-border-strong hover:bg-muted"
+            href={`#${trace}`}
+          >
+            <span className="shrink-0 font-mono text-secondary-foreground">
+              {trace}
+            </span>
+            <span className="min-w-0 leading-snug">
+              {tracedTitle(spec, trace) ?? (
+                <span className="text-destructive line-through">
+                  not in this spec
+                </span>
+              )}
+            </span>
+          </a>
+        </li>
+      ))}
     </ul>
   );
+}
+
+/** What a trace lands on: the journey a case walks, or — in an older suite —
+ * the scenario it named outright. */
+function tracedTitle(spec: SpecEntry, trace: string): string | undefined {
+  const journey = spec.journeys?.find((one) => one.id === trace);
+  if (journey) return journey.title;
+  return findScenario(spec, trace)?.scenario.name;
 }
