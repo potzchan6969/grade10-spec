@@ -49,6 +49,9 @@ and its application here is short:
   `##` section, enumerable facts in a table
 - **Define the thing flatly**, in present tense, so a reader infers the
   rules from what it is
+- **A product's index holds only what no capability page carries** — the
+  child cards beneath it already name the capabilities, and a flow or a rule
+  that belongs to one of them lives on that page
 - **A flow holds the steps** — each `#` phase named as the owner's notes
   name one (`Phase 1 — Online connection`), each `##` step naming its actor
   first, then the action (`User — Book a time slot`), with a line or a short

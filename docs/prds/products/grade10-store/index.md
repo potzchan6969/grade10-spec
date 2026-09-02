@@ -9,56 +9,34 @@ The Grade10 store is the trading-card and collectibles shop at
   charged
 - **Grade10 owns** — the order of record, its items and its events, in its
   own database; the buyer sees every order they have placed
-- **Points** — purchases feed the programme, which has its own section:
-  [Membership](/p/membership)
-- **Specs** — Main Page, Product Listing and Product Details Page carry a
-  durable spec; Cart, Checkout and Orders ship ahead of one, and their pages
-  say so
 
 ## Who uses it
 
 - **Collectors** — browse and buy
-- **Staff** — work the orders queue in the admin panel and the till in the
-  physical shop
-- **Admins** — run the store from the console; every operator move is
-  permission-gated, second-factor-gated, and appended to a tamper-evident
-  trail
-
-## How a purchase moves
-
-:::flow{title="From landing to points"}
-## Collector — Finds a card
-Lands on the main page, filters and sorts the product listing, opens a product
-details page, picks a grade.
-
-## Collector — Adds it to the cart and checks out
-Shopify prices the checkout and takes the money.
-
-## Shopify — Settles the order
-- **Settlement webhook** — moves the order from pending to paid
-- **Honoured only** when the recorded checkout reference carries the event's
-  cart token (an order id on a webhook is a claim, not proof)
-
-## Store — Prices the goods into points
-- **Goods amount** — handed to the membership programme over a service binding
-- **Buyer identity** — the programme learns a user id and nothing more; names
-  and email addresses stay in the identity system behind its own permission
-:::
+- **Shopkeepers** — sell at the till in the physical shop, through the
+  Shopify app on an iPad
+- **Stock keepers** — manage inventory in the Shopify dashboard
+- **Admins** — manage store-wide configuration in the admin panel: account
+  suspension, discount promotions, the coupon catalog
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9023" title="Store page — the main page assembly"}
 
 :::detail{title="Where the code lives" for="engineer"}
-- **Storefront** — `apps/frontend/grade10`, composing `@grade10/ui` blocks;
-  data layers in `packages/grade10-store/frontend`
-- **Backend** — grade10's `store` worker, which also mounts the till gateway
-  and the loyalty programme's Shopify half
-- **Operator surfaces** — `@grade10/store-admin-frontend` and
-  `@grade10/loyalty-admin-frontend`, rendered by the merged grade10 admin
+- **Storefront** — `apps/frontend/grade10`, composing `@grade10/ui` blocks
+- **Data layers** — `packages/grade10-store/frontend`
+- **Backend** — grade10's `store` worker, also mounting the till gateway and
+  the loyalty programme's Shopify half
+- **Store admin** — `@grade10/store-admin-frontend`, rendered by the merged
+  grade10 admin panel
+- **Loyalty admin** — `@grade10/loyalty-admin-frontend`, rendered by the same
   panel
-- [Commerce architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
-  — Shopify, the order machine, the recovery ladder, refunds
-- [Loyalty architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md)
-  — ledger, tiers, expiry, claw-back, the fulfilment drain
-- [Checkout domain](https://github.com/9gag/grade10/blob/main/docs/architecture/checkout-domain.md)
-  — hosting Shopify's checkout under our own name
+- **Commerce architecture** —
+  [docs/architecture/commerce.md](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md):
+  Shopify, the order machine, the recovery ladder, refunds
+- **Loyalty architecture** —
+  [docs/architecture/loyalty.md](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md):
+  ledger, tiers, expiry, claw-back, the fulfilment drain
+- **Checkout domain** —
+  [docs/architecture/checkout-domain.md](https://github.com/9gag/grade10/blob/main/docs/architecture/checkout-domain.md):
+  hosting Shopify's checkout under our own name
 :::

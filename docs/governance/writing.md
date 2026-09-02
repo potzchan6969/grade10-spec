@@ -18,12 +18,20 @@ Outline first. A document is a heading and an outline, never an essay.
 - **Open in two sentences at most** — what the document is and what the
   reader leaves with. Then the outline. The opening says nothing the
   outline then repeats: a fact belongs in one of the two, never both.
+- **Only what the page owns** — a fact a child page, a sibling, or a
+  platform page states is a link away, never repeated; a product's index
+  says what no capability page carries, and nothing true of every product
 - **Numbered items** where order or count matters: phases, steps, ranked
   facts. **Bullets** everywhere else. Nest up to three levels; a fourth
   level is a new section.
 - **Lead every item with its key term in bold**, then the plain words —
   `**Timeline** — shop opens mid Oct (~23rd)`. Reading only the bold gives
   the outline of the outline.
+- **Siblings share one form** — every item in a list puts the same thing
+  in the same place: term, dash, path or value, then the note
+- **Roles are named by what they do and where** — `**Shopkeepers** — sell
+  at the till through the Shopify app on an iPad` — never an umbrella such
+  as Staff
 - **Fragments, not sentences.** No full stop on a fragment. A parenthesis
   carries the mechanism, the reason, or the exception —
   `(the choice is required for legal)`.
