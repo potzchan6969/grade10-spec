@@ -1,10 +1,11 @@
 # shared-auth/audit Specification
 
 ## Purpose
-How identity operator actions on either brand are recorded: what an entry
-names, that it cannot be rewritten, that a failed write stops the action,
-and who may read or check the trail. Store, auction, and loyalty trails
-belong to those products.
+How identity writes on either brand are recorded: operator acts, a trusted
+product creating or verifying an account, second-factor changes, and account
+deletion; what an entry names, that it cannot be rewritten, that a failed
+write stops the action, and who may read or check the trail. Store, auction,
+and loyalty trails belong to those products.
 
 ## Feature set
 
