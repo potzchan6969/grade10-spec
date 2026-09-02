@@ -6,8 +6,8 @@ import { writeStore } from "./tmp-store";
 /**
  * A figma.com host was the only thing this rule asserted, which let a made-up
  * link ship as a real card. Where the nightly design-sync report exists it
- * knows the file it read, every node a link can name in it, and every set it
- * checked — so the same rule now holds a card to all three.
+ * knows the file it read and every set it checked — so the same rule now
+ * holds a card to both.
  */
 const FILE = "GW2WL6JcWok5ypUrUFi9bU";
 const url = (node?: string) =>
@@ -41,14 +41,10 @@ describe("a figma card against the design-sync report", () => {
     ).toEqual([]);
   });
 
-  /** The one drift a designer causes most often, and nothing anywhere noticed
-   * it before: the host was all this rule ever asserted. */
-  it("names a frame the design file no longer holds", async () => {
-    const lines = await figmaLines([
-      `::figma{url="${url("9999-1")}" title="Gone"}`,
-    ]);
-
-    expect(lines[0]).toContain("node 9999-1 is in no page, frame or component");
+  it("says nothing about a node the design file no longer holds", async () => {
+    expect(
+      await figmaLines([`::figma{url="${url("9999-1")}" title="Gone"}`]),
+    ).toEqual([]);
   });
 
   it("names a url pointing into some other Figma file", async () => {

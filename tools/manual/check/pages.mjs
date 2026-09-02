@@ -5,7 +5,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { findRequirement } from "../src/api/requirements.ts";
-import { fileKeyOf, nodeIdOf } from "../src/blocks/design-drift.ts";
+import { fileKeyOf } from "../src/blocks/design-drift.ts";
 import { parsePage, serializePage } from "../src/content/grammar.ts";
 import { readDesignSync } from "../src/store/design-sync.mts";
 import { confine, readText } from "../src/store/disk.mts";
@@ -209,10 +209,12 @@ function isFigma(url) {
 
 /**
  * A figma.com host was the only thing asserted here, which let a made-up link
- * ship as a real card. The nightly design-sync report knows the file it read,
- * every node a link can name in it, and every set it checked — so where there
- * is a report, a card's url and its `set=` are checkable against it, the same
- * way a `::story` id is checkable against the Storybook index.
+ * ship as a real card. The nightly design-sync report knows the file it read
+ * and every set it checked — so where there is a report, a card's url and its
+ * `set=` are checkable against it, the same way a `::story` id is checkable
+ * against the Storybook index. A node id the report does not know is not
+ * flagged here: Figma's own embed still renders it, and a card cannot tell a
+ * frame that moved from one this run never reached.
  *
  * Warnings, never failures: the report is a snapshot of a file someone else
  * owns, and a frame that moved this morning is not a broken page.
@@ -241,17 +243,6 @@ function checkFigma(ctx, path, block) {
       "figma",
       path,
       `${label(block, "url")} is in Figma file ${file}, not ${report.file} — the one every mapping points into`,
-    );
-    return;
-  }
-
-  const node = nodeIdOf(block.url);
-  if (node === undefined || report.nodes === undefined) return;
-  if (report.nodes[node] === undefined) {
-    add(
-      "figma",
-      path,
-      `${label(block, "url")}: node ${node} is in no page, frame or component of ${report.file ?? "the design file"} — it was deleted or renumbered`,
     );
   }
 }
