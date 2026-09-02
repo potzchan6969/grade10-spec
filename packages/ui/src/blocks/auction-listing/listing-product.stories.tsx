@@ -27,6 +27,10 @@ import {
 } from "./fixtures";
 import { ListingBidPanel as ListingBidPanelComponent } from "./listing-bid-panel";
 import { ListingDetails } from "./listing-details";
+import {
+  DEFAULT_LISTING_EXTENSION_POLICY,
+  formatExtensionDurationValue,
+} from "./listing-extension-policy";
 import { ListingGallery } from "./listing-gallery";
 
 /**
@@ -62,7 +66,9 @@ const liveBidPanel = (
     watchAction={<WatchOnlyActions />}
     bidCount="1 Bid"
     deadline={FIXTURE_AUCTION_DEADLINE}
-    extensionValue="30 minutes"
+    extensionValue={formatExtensionDurationValue(
+      DEFAULT_LISTING_EXTENSION_POLICY,
+    )}
     history="Bidder 3 · HK$4,800.00"
     kicker={KICKER}
     price="HK$4,800.00"
@@ -118,7 +124,9 @@ export const PreAuction: Story = {
           actions={null}
           watchAction={<WatchOnlyActions />}
           deadline={FIXTURE_AUCTION_OPENS_DEADLINE}
-          extensionValue="30 minutes"
+          extensionValue={formatExtensionDurationValue(
+            DEFAULT_LISTING_EXTENSION_POLICY,
+          )}
           kicker={KICKER}
           price="HK$1,200.00"
           buyerFeeHint={BUYER_FEE_HINT}

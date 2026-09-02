@@ -51,6 +51,7 @@ type ListingAuctionBidFieldsCopy = {
   closed: string;
   timeLeft: string;
   timeLeftAutoExtended: string;
+  /** Resolved copy naming this listing's extension window and duration. */
   autoExtendedTooltip: string;
   placeBidSection: string;
   placeBid: string;

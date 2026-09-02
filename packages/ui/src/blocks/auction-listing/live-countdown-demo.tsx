@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { FlowContainer } from "../shared/flow-container";
 import { LiveActions, WatchOnlyActions } from "./fixtures";
 import { ListingBidPanel } from "./listing-bid-panel";
+import {
+  DEFAULT_LISTING_EXTENSION_POLICY,
+  formatExtendedBiddingRules,
+  formatExtensionDurationValue,
+} from "./listing-extension-policy";
 
 const DAY_SECONDS = 24 * 60 * 60;
 const HOUR_SECONDS = 60 * 60;
@@ -81,8 +86,12 @@ function CountdownPreview({
       actions={<LiveActions />}
       bidCount="3 Bids"
       deadline="Storybook countdown"
-      extensionTooltip="Bids placed in the final 30 minutes extend the auction by 30 minutes."
-      extensionValue="30 minutes"
+      extensionTooltip={formatExtendedBiddingRules(
+        DEFAULT_LISTING_EXTENSION_POLICY,
+      )}
+      extensionValue={formatExtensionDurationValue(
+        DEFAULT_LISTING_EXTENSION_POLICY,
+      )}
       history="Latest bids appear here."
       kicker={
         extensionStarted
