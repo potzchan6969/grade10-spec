@@ -13,13 +13,13 @@ import {
 import { Info } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { formatMoney, formatMoneyNumeric } from "../../lib/format-money";
+import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
 import {
   formatMinimumMaximumCaption,
   isMaximumBelowFloor,
   parseMoneyInputToMinor,
   resolveMaximumFloor,
 } from "./listing-bid-money";
-import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
 import "./listing-bid-mode-stack.css";
 import {
   formatCollectorDeadline,
@@ -88,7 +88,11 @@ function viewerHasAuctionStanding(
   return view.standing !== "none";
 }
 
-function StandingBanner({ copy, view, bidEnrollment = "ready" }: StandingBannerProps) {
+function StandingBanner({
+  copy,
+  view,
+  bidEnrollment = "ready",
+}: StandingBannerProps) {
   if (!viewerHasAuctionStanding(view, bidEnrollment)) {
     return null;
   }
@@ -371,16 +375,16 @@ function BidActions({
 
   useEffect(() => {
     if (!autoBidEnabled) return;
-    setMaximumInput(formatMoneyNumeric(defaultMaximumMinor, view.currency, locale));
+    setMaximumInput(
+      formatMoneyNumeric(defaultMaximumMinor, view.currency, locale),
+    );
     setMaximumFieldTouched(false);
   }, [autoBidEnabled, defaultMaximumMinor, locale, view.currency]);
 
   if (!view.showBidActions) return null;
 
   if (bidEnrollment === "signed-out") {
-    return (
-      <SignedOutBidAction copy={copy} onPlaceBid={onPlaceBid} />
-    );
+    return <SignedOutBidAction copy={copy} onPlaceBid={onPlaceBid} />;
   }
 
   const maximumMinor = parseMoneyInputToMinor(maximumInput, view.currency);

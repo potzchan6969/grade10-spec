@@ -116,7 +116,9 @@ function formatPluralMessage(template: string, count: number): string {
   const oneBranch = branches.match(/one \{([^}]*)\}/)?.[1];
   const otherBranch = branches.match(/other \{([^}]*)\}/)?.[1];
   const chosen =
-    count === 1 && oneBranch != null ? oneBranch : (otherBranch ?? String(count));
+    count === 1 && oneBranch != null
+      ? oneBranch
+      : (otherBranch ?? String(count));
   return chosen.replaceAll("#", String(count));
 }
 
@@ -164,10 +166,7 @@ export function formatDeadline(
 /** Collector local moment: `24 Aug 2026, 18:00` with no zone suffix. */
 export function formatLocalMoment(
   at: Date | number,
-  {
-    locale = "en",
-    timeZone,
-  }: { locale?: ShippedLocale; timeZone: string },
+  { locale = "en", timeZone }: { locale?: ShippedLocale; timeZone: string },
 ): string {
   const date = parseInstant(at);
   const { day, month, year, hours, minutes } = localParts(

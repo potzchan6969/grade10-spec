@@ -186,35 +186,55 @@ const BID_PANEL_STATE_RESPONSES = {
     scenarioId: "bid-panel/closed-sold",
     source: "query",
     operation: "getBidPanel",
-    state: { bidMode: "manual", submitUsesSignInLabel: false, fixtureState: "closed-sold" },
+    state: {
+      bidMode: "manual",
+      submitUsesSignInLabel: false,
+      fixtureState: "closed-sold",
+    },
     expectedText: "Winning bid",
   },
   closedWonPaymentDue: {
     scenarioId: "bid-panel/closed-won-payment-due",
     source: "query",
     operation: "getBidPanel",
-    state: { bidMode: "manual", submitUsesSignInLabel: false, fixtureState: "closed-won-payment-due" },
+    state: {
+      bidMode: "manual",
+      submitUsesSignInLabel: false,
+      fixtureState: "closed-won-payment-due",
+    },
     expectedText: "Pay Invoice",
   },
   closedWonSettled: {
     scenarioId: "bid-panel/closed-won-settled",
     source: "query",
     operation: "getBidPanel",
-    state: { bidMode: "manual", submitUsesSignInLabel: false, fixtureState: "closed-won-settled" },
+    state: {
+      bidMode: "manual",
+      submitUsesSignInLabel: false,
+      fixtureState: "closed-won-settled",
+    },
     expectedText: "Auction won",
   },
   closedLost: {
     scenarioId: "bid-panel/closed-lost",
     source: "query",
     operation: "getBidPanel",
-    state: { bidMode: "manual", submitUsesSignInLabel: false, fixtureState: "closed-lost" },
+    state: {
+      bidMode: "manual",
+      submitUsesSignInLabel: false,
+      fixtureState: "closed-lost",
+    },
     expectedText: "Did not win",
   },
   closedUnsold: {
     scenarioId: "bid-panel/closed-unsold",
     source: "query",
     operation: "getBidPanel",
-    state: { bidMode: "manual", submitUsesSignInLabel: false, fixtureState: "closed-unsold" },
+    state: {
+      bidMode: "manual",
+      submitUsesSignInLabel: false,
+      fixtureState: "closed-unsold",
+    },
     expectedText: "Unsold",
   },
   signInSucceeded: {
@@ -243,14 +263,22 @@ const BID_PANEL_STATE_RESPONSES = {
     scenarioId: "bid-panel/linked-card-editable",
     source: "query",
     operation: "getBidPanel",
-    state: { bidMode: "manual", submitUsesSignInLabel: false, linkedPaymentMethod: linkedCard(true) },
+    state: {
+      bidMode: "manual",
+      submitUsesSignInLabel: false,
+      linkedPaymentMethod: linkedCard(true),
+    },
     expectedText: "Change",
   },
   linkedCardLocked: {
     scenarioId: "bid-panel/linked-card-locked",
     source: "query",
     operation: "getBidPanel",
-    state: { bidMode: "manual", submitUsesSignInLabel: false, linkedPaymentMethod: linkedCard(false) },
+    state: {
+      bidMode: "manual",
+      submitUsesSignInLabel: false,
+      linkedPaymentMethod: linkedCard(false),
+    },
     expectedText: "•••• 4242",
   },
   setupRequired: {
@@ -286,7 +314,11 @@ const BID_PANEL_STATE_RESPONSES = {
     scenarioId: "bid-panel/stale-floor",
     source: "mutation",
     operation: "placeBid",
-    state: { bidMode: "manual", submitUsesSignInLabel: false, staleFloor: true },
+    state: {
+      bidMode: "manual",
+      submitUsesSignInLabel: false,
+      staleFloor: true,
+    },
     expectedText: "The minimum bid is now HK$5,050.",
   },
   manualBidAccepted: {
@@ -342,11 +374,12 @@ const PAYMENT_AUTHORIZATION_STATE_RESPONSES = {
 
 type PaymentAuthorizationStateResponse =
   (typeof PAYMENT_AUTHORIZATION_STATE_RESPONSES)[keyof typeof PAYMENT_AUTHORIZATION_STATE_RESPONSES];
-type PaymentAuthorizationResponseState = PaymentAuthorizationStateResponse["state"];
+type PaymentAuthorizationResponseState =
+  PaymentAuthorizationStateResponse["state"];
 
 export type {
-  BidPanelState,
   BidPanelScenarioId,
+  BidPanelState,
   BidPanelStateResponse,
   BidPanelViewState,
   PaymentAuthorizationResponseState,

@@ -2,21 +2,6 @@
  * capability specs name. Populated as blocks land under src/blocks/. */
 
 export {
-  currencyExponent,
-  DEFAULT_LISTING_CURRENCY,
-  formatMoney,
-  formatMoneyNumeric,
-  formatMoneyPrefix,
-  fromMinorUnits,
-  parseMoneyInputToMinor,
-  toMinorUnits,
-} from "./lib/format-money";
-export {
-  isMaximumBelowFloor,
-  minNextBidMinor,
-  resolveMaximumFloor,
-} from "./blocks/auction-listing/listing-bid-money";
-export {
   ListingAgeVerificationDialog,
   type ListingAgeVerificationDialogCopy,
   type ListingAgeVerificationDialogProps,
@@ -52,6 +37,11 @@ export {
   type PaymentMethodRowProps,
 } from "./blocks/auction-listing/listing-bid-enrollment";
 export { ListingBidHistoryList } from "./blocks/auction-listing/listing-bid-history-list";
+export {
+  isMaximumBelowFloor,
+  minNextBidMinor,
+  resolveMaximumFloor,
+} from "./blocks/auction-listing/listing-bid-money";
 // shared/ui/auction-listing
 export {
   ListingDetails,
@@ -224,6 +214,7 @@ export {
   type StoreSectionHeaderProps,
 } from "./blocks/store-home/store-section-header";
 export type { StoreCollectionSummary } from "./blocks/store-home/types";
+export { loyaltyPointsHeading } from "./blocks/store-order-detail/loyalty-points-heading";
 // shared-ui/store-order-detail
 export {
   OrderDetails,
@@ -234,8 +225,6 @@ export {
   OrderDetailsDeliveryStatus,
   type OrderDetailsDeliveryStatusProps,
 } from "./blocks/store-order-detail/order-details-delivery-status";
-export { resolveDeliverySteps } from "./blocks/store-order-detail/resolve-delivery-steps";
-export { loyaltyPointsHeading } from "./blocks/store-order-detail/loyalty-points-heading";
 export {
   OrderDetailsHeader,
   type OrderDetailsHeaderProps,
@@ -256,6 +245,7 @@ export {
   OrderDetailsSidebar,
   type OrderDetailsSidebarProps,
 } from "./blocks/store-order-detail/order-details-sidebar";
+export { resolveDeliverySteps } from "./blocks/store-order-detail/resolve-delivery-steps";
 export type {
   OrderDetailsAddress,
   OrderDetailsDelivery,
@@ -387,3 +377,13 @@ export {
   resolveShippedLocale,
   type ShippedLocale,
 } from "./lib/format-datetime";
+export {
+  currencyExponent,
+  DEFAULT_LISTING_CURRENCY,
+  formatMoney,
+  formatMoneyNumeric,
+  formatMoneyPrefix,
+  fromMinorUnits,
+  parseMoneyInputToMinor,
+  toMinorUnits,
+} from "./lib/format-money";

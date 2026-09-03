@@ -79,9 +79,7 @@ function ListingAuctionCardSidebar({
           timeZone={timeZone}
           view={view}
         />
-        {bidCardFooter ? (
-          <div className="mt-1">{bidCardFooter}</div>
-        ) : null}
+        {bidCardFooter ? <div className="mt-1">{bidCardFooter}</div> : null}
       </VStack>
       <ListingLotMeta
         authenticationBody={authenticationBody}
