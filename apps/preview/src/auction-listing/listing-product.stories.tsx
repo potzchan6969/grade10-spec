@@ -127,7 +127,9 @@ export const Default: Story = {
     ).toBeInTheDocument();
     expect(canvas.getByText("Set your private maximum")).toBeInTheDocument();
     expect(canvas.getByText("Min. bid")).toBeInTheDocument();
-    expect(canvas.getByRole("button", { name: /^Place Bid/ })).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: /^Place Bid/ }),
+    ).toBeInTheDocument();
   },
   render: () => lotPage("live-manual"),
 };
