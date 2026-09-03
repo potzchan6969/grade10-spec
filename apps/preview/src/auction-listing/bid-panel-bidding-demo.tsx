@@ -357,4 +357,4 @@ function BidPanelBiddingDemo() {
   );
 }
 
-export { BidPanelBiddingDemo };
+export { BIDDING_CASES, BidPanelBiddingDemo };

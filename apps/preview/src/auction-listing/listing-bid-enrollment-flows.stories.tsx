@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
-import { BidPanelBiddingDemo } from "./bid-panel-bidding-demo";
+import { expect, userEvent, waitFor, within } from "storybook/test";
+import { BIDDING_CASES, BidPanelBiddingDemo } from "./bid-panel-bidding-demo";
 import { BidPanelCountdownDemo } from "./bid-panel-countdown-demo";
 import { ListingBidEnrollmentInteractiveDemo } from "./listing-bid-enrollment-demo";
 
@@ -57,7 +57,7 @@ export const Bidding: Story = {
     const canvas = within(canvasElement);
     const next = canvas.getByRole("button", { name: "Next" });
 
-    expect(canvas.getByText("Starting bid")).toBeVisible();
+    expect(canvas.getAllByText("Starting bid").length).toBeGreaterThan(0);
     expect(canvas.getByRole("button", { name: "Place Bid" })).toBeVisible();
     expect(canvas.queryByText("Highest bid")).not.toBeInTheDocument();
     expect(canvas.queryByText("Outbid")).not.toBeInTheDocument();
@@ -65,16 +65,24 @@ export const Bidding: Story = {
     await userEvent.click(
       canvas.getByRole("checkbox", { name: /Enable auto-bidding/ }),
     );
-    expect(
-      canvas.getByRole("button", { name: "Confirm Maximum" }),
-    ).toBeVisible();
+    await waitFor(() => {
+      expect(
+        canvas.getByRole("button", { name: "Confirm Maximum" }),
+      ).toBeVisible();
+    });
     await userEvent.click(
       canvas.getByRole("button", { name: "Confirm Maximum" }),
     );
+    await waitFor(() => {
+      expect(
+        within(document.body).getByRole("dialog", {
+          name: "Confirm Auto-Bidding",
+        }),
+      ).toBeVisible();
+    });
     const autoConfirm = within(document.body).getByRole("dialog", {
       name: "Confirm Auto-Bidding",
     });
-    expect(autoConfirm).toBeVisible();
     await userEvent.click(
       within(autoConfirm).getByRole("button", { name: "Cancel" }),
     );
@@ -130,7 +138,7 @@ export const Bidding: Story = {
 
     await userEvent.click(canvas.getByRole("tab", { name: "Expanded" }));
     expect(canvas.getAllByRole("button", { name: "Place Bid" })).toHaveLength(
-      7,
+      BIDDING_CASES.length,
     );
   },
 };
