@@ -22,7 +22,9 @@ lands on the order through the same Shopify draft order.
   1. **Nothing is held** — points stay spendable until an order is paid; a
      checkout walked away from costs nothing, and a newer checkout replaces
      the older one
-  2. **Where it is on** — development and staging; production `TBC`
+  2. **Where it is on** — the till, wherever the programme's POS is switched
+     on; the online checkout in development and staging, switched off in
+     production by the brand's switch
 - **Together** — a sale price, product coupons, a gift, one order code, and
   points ride on one order
 
