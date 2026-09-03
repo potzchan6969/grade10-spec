@@ -47,7 +47,7 @@ backend.
 Depends on group 2's new procedures for the Test tab.
 Frontend builds against fixtures for the Listings editor path.
 
-- [x] 3.1 Make `admin-listing-SC-56`, `admin-listing-SC-57`, and
+- [x] 3.1 Make `admin-listing-SC-68`, `admin-listing-SC-69`, and
   `admin-listing-SC-63` pass — add a Plus `IconButton` labeled "Create
   listing" to `ListingsPanel`'s heading row, shown when `mayOperate` is true;
   activate opens `ListingEditor` with no `defaultCampaignId`.
