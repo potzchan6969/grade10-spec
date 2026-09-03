@@ -219,6 +219,14 @@ be refused.
 - **THEN** Grade10 refuses the write
 - **AND** the listing's extension settings are unchanged
 
+#### Scenario: admin-listing-SC-27a - Omitted extension fields default to 30 minutes
+
+- **GIVEN** a draft listing with every required field set and no extension
+  window or duration supplied
+- **WHEN** an authorized operator creates the listing
+- **THEN** Grade10 stores extension window 0 seconds and extension duration
+  0 seconds
+
 #### Scenario: admin-listing-SC-28 - Sandbox cannot change after create
 
 - **GIVEN** a created listing that was drafted as sandbox
