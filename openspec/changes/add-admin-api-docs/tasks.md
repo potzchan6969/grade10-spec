@@ -30,7 +30,7 @@ committed documents, never a running backend.
 
 ## 4. Documentation (grade10) (owner: @sean)
 
-- [ ] 4.1 Add `pnpm run test:backend` as the drift check to the Validation list in `AGENTS.md` beside the drizzle generate/check pair, and describe `generate` in the package's Handbook card.
+- [x] 4.1 Add `pnpm run test:backend` as the drift check to the Validation list in `AGENTS.md` beside the drizzle generate/check pair, and describe `generate` in the package's Handbook card.
 
 ## 5. Manual and archive (grade10-spec)
 
