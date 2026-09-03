@@ -24,7 +24,7 @@ committed documents, never a running backend.
 - [x] 3.2 Build the page under `src/pages/api-docs/` from the console vocabulary per `ui.md`: `SectionHeader` naming the build commit (`api-docs-SC-12`); the services rail with counts and unfolding routers (`api-docs-SC-03`); the procedure table with kind, caller, input and output summaries (`api-docs-SC-06`). Documents load lazily behind the route.
 - [x] 3.3 Build the detail panel and the schema renderer for the subset `design.md` names: wire path, caller badges, field tables with required, type and constraints, alternatives named by discriminator (`api-docs-SC-07`); elevated with its grant (`api-docs-SC-09`); `session` apart from `session · fresh` (`api-docs-SC-10`); the undeclared-output `Notice` and per-service count (`api-docs-SC-11`); raw schema behind `InfoDialog` and `Payload`.
 - [x] 3.4 Add the filter: narrows every service by dotted path or grant, counts follow, empty copy when nothing matches (`api-docs-SC-08`).
-- [ ] 3.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build` for the admin app, `pnpm run check:frontend-layers`.
+- [x] 3.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build` for the admin app, `pnpm run check:frontend-layers`.
 
 ## 4. Documentation (grade10)
 
