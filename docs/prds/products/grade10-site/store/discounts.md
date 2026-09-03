@@ -10,25 +10,21 @@ lands on the order through the same Shopify draft order.
   the cart show the price and, struck through, the price it was
 - **Discount code** — typed in the cart drawer; the total shows the cut, and a
   code the shop refuses stops the checkout with the code named
-- **Coupons** — minted by the store, or by a member spending points
+- **Coupons** — minted by the store
   1. **Order coupon** — an amount off the whole order; a single-use code
      `PREFIX-XXXXXXXX` with an expiry, typed like any discount code
   2. **Product coupon** — an amount off each unit of named products
   3. **Gift** — an item added free once the goods pass a threshold
-  4. **Membership coupon** — an order coupon a member buys with points at
-     **HKD 1** a point, listed on their membership page:
-     [Coupons](/p/grade10-site/loyalty/coupons), earned as
-     [Points Earning](/p/grade10-site/loyalty/points-earning) says, bought on
-     the [Rewards](/p/grade10-site/loyalty/rewards) menu
-- **Points as credits** — at checkout, points come straight off the goods at
-  **HKD 1** a point, capped at the balance and at the goods after coupons,
-  never at shipping or tax
+- **Points as credits** — the one way membership takes money off: at
+  checkout, points come straight off the goods at **HKD 1** a point, capped
+  at the balance and at the goods after coupons, never at shipping or tax;
+  earned as [Points Earning](/p/grade10-site/loyalty/points-earning) says
   1. **Nothing is held** — points stay spendable until an order is paid; a
      checkout walked away from costs nothing, and a newer checkout replaces
      the older one
   2. **Where it is on** — development and staging; production `TBC`
-- **Together** — a sale price, product coupons, a gift, and one order code
-  ride on one order; ❓ points beside an order code on the same order
+- **Together** — a sale price, product coupons, a gift, one order code, and
+  points ride on one order
 
 ## What it looks like
 
