@@ -13,7 +13,7 @@ then be claimed in parallel.
 - [x] 2.2 Write the walker under `./generate`: enumerate a router's mounted procedures, convert each validator to JSON Schema, refuse a validator with no schema AST, sort paths and keys, serialise. Test-first against a fixture router: every mounted procedure and nothing else (`api-docs-SC-01`); two runs are byte-identical (`api-docs-SC-13`).
 - [x] 2.3 Add the service table: store (session ladder plus the till router built with the loyalty acts as the grade10 assembly mounts it), auction, auth, loyalty, vault, appointment, finance. A `generate` package script writes `generated/<service>.json`; commit the first documents.
 - [x] 2.4 Write the drift test: regenerate every service in memory and assert byte equality with `generated/`, failing with the service and the first differing procedure path and the instruction to run `generate` (`api-docs-SC-02`). Also assert every procedure carrying grants reports caller `elevated`, and list the distinct JSON Schema keywords seen so a new one is a visible diff.
-- [ ] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, `pnpm run check:handbook`, `pnpm run check:libs`.
+- [x] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, `pnpm run check:handbook`, `pnpm run check:libs`.
 
 ## 3. The surface in the Grade10 console (grade10)
 
