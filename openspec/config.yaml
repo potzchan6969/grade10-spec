@@ -3,8 +3,9 @@
 schema: grade10-planning
 
 # This repo is an OpenSpec store, and more besides: PM and design own the
-# proposals and specs under openspec/ and the manual under docs/prds/, engineering
-# writes the delivery plan - design, ui, tasks - on top of them, and
+# proposals, specs and journeys under openspec/ and the manual under docs/prds/,
+# QA derives the test cases beside them, engineering writes the delivery plan -
+# ui-design, tech-design, tasks - on top of them, and
 # packages/design-system/ holds the components and tokens the applications
 # consume. Engineering reads and checks off the plan from grade10, which points
 # here with `store: grade10-spec`.
@@ -24,10 +25,11 @@ context: |
   artifact: `@grade10/design-system` for the tokens and primitives,
   `@grade10/ui` for the shared compound components a capability spec names, and
   `@grade10/i18n` for the message catalogs.
-  Audience for these artifacts: a PM or designer writing the proposal and the
-  specs and stopping there, an engineer writing the design, ui, and tasks when
-  delivery is planned, and an engineer in the application repo reading all of
-  it as the only source of truth for what to build.
+  Audience for these artifacts: a PM or designer writing the proposal, the
+  specs and the journeys and stopping there, QA deriving the test cases, a
+  designer writing the ui design, an engineer writing the tech design and the
+  tasks when delivery is planned, and an engineer in the application repo
+  reading all of it as the only source of truth for what to build.
   openspec/specs/ is the single source of truth for every checkable requirement
   and component export contract; a change under openspec/ is the delta against
   it. Specs are grouped by the application that ships them, as
