@@ -7,7 +7,7 @@ The `grade10-spec` group is documentation only; groups 2 and 3 can proceed in
 parallel once group 1 lands. Frontend builds against fixtures, not a running
 backend.
 
-## 1. Update the listing manual page (grade10-spec)
+## 1. Update the listing manual page (grade10-spec) (owner: @mason5991)
 
 - [ ] 1.1 Update `docs/prds/products/grade10-admin/auction/listing.md` to
   record that an operator can create a listing from the Listings section with
