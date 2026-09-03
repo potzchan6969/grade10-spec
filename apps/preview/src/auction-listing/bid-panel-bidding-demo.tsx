@@ -27,7 +27,6 @@ type ScriptBid = {
 };
 
 type BiddingCase = {
-  bidMode: "manual" | "auto";
   history: readonly ListingBidHistoryRow[];
   view: ListingAuctionBidView;
 };
@@ -171,7 +170,6 @@ function liveCaption(bids: readonly ScriptBid[]): string {
 function liveCase(bids: readonly ScriptBid[]): BiddingCase {
   const lead = bids.at(-1);
   return {
-    bidMode: "manual",
     history: historyOf(bids),
     view: liveView({
       hasBids: bids.length > 0,
@@ -197,7 +195,6 @@ function autoCase({
   incrementMinor?: number;
 }): BiddingCase {
   return {
-    bidMode: "auto",
     history,
     view: liveView({
       hasBids: history.length > 0,
@@ -288,33 +285,26 @@ const BIDDING_CASES: ReadonlyArray<readonly [string, BiddingCase]> = [
 ];
 
 function BiddingPreview({
-  bidMode: caseBidMode,
   history,
   view,
   title,
 }: BiddingCase & { title: string }) {
   const hasPlacedBid =
     view.viewerMaximumMinor != null || history.some((row) => row.isViewer);
-  const { session, actions, snapshot } = useListingBidEnrollment(
-    `bidding:${title}`,
-    {
-      bidMode: caseBidMode,
-      hasAccountPayment: true,
-      hasPlacedBid,
-      paymentLinked: true,
-      signedIn: true,
-    },
-  );
+  const { session, actions, snapshot } = useListingBidEnrollment(`bidding:`, {
+    hasAccountPayment: true,
+    hasPlacedBid,
+    paymentLinked: true,
+    signedIn: true,
+  });
 
   return (
     <ListingBidEnrollmentCardPreview
       autoConfirmOpen={session.autoConfirmOpen}
-      bidMode={session.bidMode}
       history={history}
-      historyResetKey={`${title}:${view.standing}:${view.currentBidMinor}`}
+      historyResetKey={`::`}
       onAutoBidConfirm={actions.confirmAutoBidIntro}
       onAutoConfirmOpenChange={actions.setAutoConfirmOpen}
-      onBidModeChange={actions.setBidMode}
       onBidSubmit={actions.handleBidSubmit}
       onChangePayment={actions.openChangePayment}
       onLinkPayment={actions.openSetup}
@@ -344,9 +334,9 @@ function BidPanelBiddingDemo() {
           overtaken maximum, and a maximum that was accepted without taking the
           lead. Each card must replace price, history, standing, and the safe
           next action together so a private maximum is never mistaken for the
-          current bid or a guarantee of winning. Enable auto-bidding, Place Bid,
-          Confirm, and Raise are live: they use the same enrollment session as
-          Bid Panel Interactive, including auto-bid confirmation.
+          current bid or a guarantee of winning. Quick-maximum presets and
+          Review maximum are live: they use the same enrollment session as Bid
+          Panel Interactive, including auto-bid confirmation.
         </p>
       }
     >

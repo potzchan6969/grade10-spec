@@ -17,7 +17,6 @@ export const ENROLLMENT_DEMO_SAVED_PAYMENT: EnrollmentPaymentMethod = {
 };
 
 export type ListingBidEnrollmentSnapshot = {
-  bidMode: "manual" | "auto";
   /** Override place/confirm button via sidebar copy */
   submitUsesSignInLabel: boolean;
   /** Fixture lot state for bid card view and recent-bids history. */
@@ -40,20 +39,17 @@ export type ListingBidEnrollmentSnapshot = {
 };
 
 export const ENROLLMENT_SNAPSHOT_SIGNED_OUT: ListingBidEnrollmentSnapshot = {
-  bidMode: "manual",
   submitUsesSignInLabel: true,
   fixtureState: "live-manual",
 };
 
 export const ENROLLMENT_SNAPSHOT_NEEDS_PAYMENT: ListingBidEnrollmentSnapshot = {
-  bidMode: "manual",
   submitUsesSignInLabel: false,
   paymentEmptyState: true,
 };
 
 export const ENROLLMENT_SNAPSHOT_LINKED_CARD_EDITABLE: ListingBidEnrollmentSnapshot =
   {
-    bidMode: "manual",
     submitUsesSignInLabel: false,
     linkedPaymentMethod: {
       ...ENROLLMENT_DEMO_SAVED_PAYMENT,
@@ -62,7 +58,6 @@ export const ENROLLMENT_SNAPSHOT_LINKED_CARD_EDITABLE: ListingBidEnrollmentSnaps
   };
 
 export const ENROLLMENT_SNAPSHOT_LINKED_CARD: ListingBidEnrollmentSnapshot = {
-  bidMode: "manual",
   submitUsesSignInLabel: false,
   linkedPaymentMethod: {
     ...ENROLLMENT_DEMO_SAVED_PAYMENT,
@@ -71,14 +66,12 @@ export const ENROLLMENT_SNAPSHOT_LINKED_CARD: ListingBidEnrollmentSnapshot = {
 };
 
 export const ENROLLMENT_SNAPSHOT_SETUP_SHEET: ListingBidEnrollmentSnapshot = {
-  bidMode: "manual",
   submitUsesSignInLabel: false,
   paymentSetup: { requiresIframeLink: true },
 };
 
 export const ENROLLMENT_SNAPSHOT_SETUP_SHEET_FROM_CHANGE: ListingBidEnrollmentSnapshot =
   {
-    bidMode: "manual",
     submitUsesSignInLabel: false,
     linkedPaymentMethod: {
       ...ENROLLMENT_DEMO_SAVED_PAYMENT,
@@ -92,7 +85,6 @@ export const ENROLLMENT_SNAPSHOT_SETUP_SHEET_FROM_CHANGE: ListingBidEnrollmentSn
   };
 
 export const ENROLLMENT_SNAPSHOT_READY: ListingBidEnrollmentSnapshot = {
-  bidMode: "manual",
   submitUsesSignInLabel: false,
   linkedPaymentMethod: {
     ...ENROLLMENT_DEMO_SAVED_PAYMENT,
@@ -102,7 +94,6 @@ export const ENROLLMENT_SNAPSHOT_READY: ListingBidEnrollmentSnapshot = {
 
 export const ENROLLMENT_SNAPSHOT_AUTO_BID_CONFIRM: ListingBidEnrollmentSnapshot =
   {
-    bidMode: "auto",
     submitUsesSignInLabel: false,
     linkedPaymentMethod: {
       ...ENROLLMENT_DEMO_SAVED_PAYMENT,

@@ -38,6 +38,7 @@ export {
 } from "./blocks/auction-listing/listing-bid-enrollment";
 export { ListingBidHistoryList } from "./blocks/auction-listing/listing-bid-history-list";
 export {
+  formatMinimumMaximumCaption,
   isMaximumBelowFloor,
   minNextBidMinor,
   resolveMaximumFloor,
@@ -79,6 +80,7 @@ export {
 } from "./blocks/auction-listing/listing-lot-layout";
 export {
   ListingLotMeta,
+  type ListingLotMarketComps,
   type ListingLotMetaCopy,
   type ListingLotMetaProps,
 } from "./blocks/auction-listing/listing-lot-meta";

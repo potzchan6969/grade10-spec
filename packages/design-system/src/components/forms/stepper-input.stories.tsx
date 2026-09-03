@@ -82,6 +82,29 @@ export const AtBounds: Story = {
   render: () => <BoundedExample />,
 };
 
+/** Step size on ± buttons; middle value uses grouping separators. */
+export const WithStepAmount: Story = {
+  args: {
+    label: "Private maximum",
+    message: "Min.: Current bid + HK$250",
+    min: 11_950,
+    step: 250,
+    defaultValue: 11_950,
+    stepAmountLabel: "$250",
+    formatValue: (value: number) =>
+      value.toLocaleString("en-HK", { maximumFractionDigits: 0 }),
+    decrementLabel: "Decrease by $250",
+    incrementLabel: "Increase by $250",
+  },
+  decorators: [
+    (Story) => (
+      <div className="w-80">
+        <Story />
+      </div>
+    ),
+  ],
+};
+
 /** At `min`, decrement stays enabled and runs a custom action (e.g. remove). */
 export const AtMinAction: Story = {
   render: function AtMinActionExample() {

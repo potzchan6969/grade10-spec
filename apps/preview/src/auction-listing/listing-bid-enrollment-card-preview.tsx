@@ -26,8 +26,6 @@ import type { ListingBidEnrollmentSnapshot } from "./listing-bid-enrollment-snap
 type ListingBidEnrollmentCardPreviewProps = {
   snapshot: ListingBidEnrollmentSnapshot;
   overlayPresentation?: OverlayPresentation;
-  bidMode?: "manual" | "auto";
-  onBidModeChange?: (mode: "manual" | "auto") => void;
   signInOpen?: boolean;
   onSignInOpenChange?: (open: boolean) => void;
   onSignInComplete?: () => void;
@@ -46,8 +44,6 @@ type ListingBidEnrollmentCardPreviewProps = {
 function ListingBidEnrollmentCardPreview({
   snapshot,
   overlayPresentation = "modal",
-  bidMode: bidModeProp,
-  onBidModeChange,
   signInOpen: signInOpenProp,
   onSignInOpenChange,
   onSignInComplete,
@@ -62,10 +58,7 @@ function ListingBidEnrollmentCardPreview({
   history: historyProp,
   historyResetKey = "enrollment-demo",
 }: ListingBidEnrollmentCardPreviewProps) {
-  const [bidModeInternal, setBidModeInternal] = useState(snapshot.bidMode);
   const [signInEmail, setSignInEmail] = useState("");
-  const bidMode = bidModeProp ?? bidModeInternal;
-  const setBidMode = onBidModeChange ?? setBidModeInternal;
 
   const signInOpen = signInOpenProp ?? snapshot.signInOpen ?? false;
 
@@ -104,7 +97,7 @@ function ListingBidEnrollmentCardPreview({
   const autoConfirmOpen =
     autoConfirmOpenProp ?? snapshot.autoConfirmOpen ?? false;
 
-  function handleBidSubmit() {
+  function handleBidSubmit(_amountMinor?: number) {
     onBidSubmit?.();
   }
 
@@ -112,12 +105,10 @@ function ListingBidEnrollmentCardPreview({
     <VStack className="w-full max-w-md" gap="sm">
       <ListingAuctionBidCard
         bidEnrollment={snapshot.submitUsesSignInLabel ? "signed-out" : "ready"}
-        bidMode={bidMode}
         copy={sidebarCopy}
         history={history}
         historyResetKey={historyResetKey}
         locale="en"
-        onBidModeChange={setBidMode}
         onCommitMaximum={handleBidSubmit}
         onPlaceBid={handleBidSubmit}
         timeZone="Asia/Hong_Kong"

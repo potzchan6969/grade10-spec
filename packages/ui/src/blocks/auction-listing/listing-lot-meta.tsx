@@ -13,6 +13,11 @@ type ListingLotMetaCopy = {
   showMore: string;
 };
 
+type ListingLotMarketComps = {
+  title: string;
+  range: string;
+};
+
 type ListingLotMetaProps = {
   copy: ListingLotMetaCopy;
   badges: readonly ListingLotMetaBadge[];
@@ -21,6 +26,8 @@ type ListingLotMetaProps = {
   vaultShippingBody: string;
   authenticationBody: string;
   resultFact?: string;
+  /** Comparable sales, shown as a section under About this lot. */
+  marketComps?: ListingLotMarketComps;
 };
 
 function ListingLotMeta({
@@ -31,6 +38,7 @@ function ListingLotMeta({
   vaultShippingBody,
   authenticationBody,
   resultFact,
+  marketComps,
 }: ListingLotMetaProps) {
   return (
     <VStack className="w-full" data-slot="listing-lot-meta" gap="lg">
@@ -50,6 +58,12 @@ function ListingLotMeta({
           ))}
         </HStack>
       </VStack>
+      {marketComps ? (
+        <VStack gap="sm">
+          <Text className="font-semibold">{marketComps.title}</Text>
+          <Text size="base">{marketComps.range}</Text>
+        </VStack>
+      ) : null}
       <VStack gap="sm">
         <Text className="font-semibold">{copy.vaultShipping}</Text>
         <Text size="base">{vaultShippingBody}</Text>
@@ -68,5 +82,9 @@ function ListingLotMeta({
   );
 }
 
-export type { ListingLotMetaCopy, ListingLotMetaProps };
+export type {
+  ListingLotMarketComps,
+  ListingLotMetaCopy,
+  ListingLotMetaProps,
+};
 export { ListingLotMeta };
