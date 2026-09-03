@@ -28,7 +28,7 @@ committed documents, never a running backend.
 - [x] 3.4 Add the filter: narrows every service by dotted path or grant, counts follow, empty copy when nothing matches (`api-docs-SC-08`).
 - [x] 3.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build` for the admin app, `pnpm run check:frontend-layers`.
 
-## 4. Documentation (grade10)
+## 4. Documentation (grade10) (owner: @sean)
 
 - [ ] 4.1 Add `pnpm run test:backend` as the drift check to the Validation list in `AGENTS.md` beside the drizzle generate/check pair, and describe `generate` in the package's Handbook card.
 
