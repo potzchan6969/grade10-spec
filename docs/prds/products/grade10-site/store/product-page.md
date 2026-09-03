@@ -16,8 +16,9 @@ the button to buy it.
 - **Shipping and pickup** — shown on the card where the catalogue provides
   them
 - **Shared link** — unfurls with the card's first picture, fitted whole into
-  the box a preview fetcher lays out and padded white; a card the catalogue
-  pictures no way unfurls without a picture
+  the wide box a preview fetcher lays out and padded white, and says it is the
+  wide card; a card the catalogue pictures no way unfurls without a picture,
+  and asks for the small one
 - **URL** — `grade10.com/store/products/<handle>`; a handle that is not a
   card answers 404 with the site's not-found page
 
@@ -62,7 +63,7 @@ auction lot's address.
 | Pad colour | Decided | White, fixed. Product photographs sit on white, so the pad reads as more of the same rather than as a colour of ours. | Design |
 | No picture, no tag | Decided | A card the catalogue pictures no way unfurls without a picture. A fetcher's own placeholder beats a broken image. | Product |
 | One sizing rail | Decided | The size is asked of the shop's CDN by address, so one catalogue image serves the preview, the grid and the gallery. | Engineering |
-| Large card on X | ❓ Open | The response names no Twitter card, so X draws the small square rather than the wide one the picture is sized for. | Product |
-| Originals under the box | ❓ Open | The CDN never enlarges, so a picture narrower than the box is served smaller than the response declares. | Product |
+| Large card on X | Decided | The response names the card shape, because X sizes the card from that name alone and defaults to the small square. Wide with a picture, small without. | Product |
+| Originals under the box | Decided | A picture narrower than the box is enlarged to fill it, so it reads soft rather than small, and the declared size is always the delivered one. | Product |
 | Lot previews | ❓ Open | An auction lot's address unfurls with no picture; its images are the auction's, not the shop's. | Product |
 :::
