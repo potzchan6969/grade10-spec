@@ -208,7 +208,7 @@ Depends on groups 1 and 4. Fixtures, not a live worker.
   release, sell-from-reservation, and vault-from-reservation are out of scope
   for the inventory product page — they ship from Auction listing and Vault
   consoles instead (`productsViews.test.tsx`).
-- [ ] 5.5 Make history badges pass for product-page mutations. Intake,
+- [x] 5.5 Make history badges pass for product-page mutations. Intake,
   reserve, and release badges pass in RTL (`productsViews.test.tsx`);
   reservation settlement badges are holder-console scope.
 - [ ] 5.6 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
