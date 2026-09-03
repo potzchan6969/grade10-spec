@@ -25,6 +25,10 @@ sets the baseline. *(Assumption — no source PRD names a metric.)*
 - **A card the catalogue pictures no way carries no `og:image`.** A fetcher
   draws its own placeholder for a missing image; a broken one it draws as
   broken.
+- **The response names the card shape.** X reads Open Graph for the picture
+  but sizes the card from `twitter:card` alone, defaulting to the small
+  square — so every surface says which shape it wants, wide where it hands
+  over a picture and small where it does not.
 
 ## Non-Goals
 
@@ -52,12 +56,16 @@ None.
 
 - `apps/frontend/grade10/src/routes/store-product.tsx` hands the product's
   share image to `addressHead`, which gains an optional image and writes the
-  four `og:image` tags from it.
+  four `og:image` tags from it, plus `twitter:card` and `og:type` for every
+  surface it builds a head for.
 - `@grade10/store-frontend/product` gains `sizedImageUrl` — one product image
   URL at a size the Shopify CDN answers — and `shareImage`, the first image at
   the preview box. The listing grid and the gallery can size their images
   through the same function later; this change does not touch them.
 - The served-document reading (`documentFacts`) and the serving lab report
-  `og:image`; the build check over prerendered surfaces is unchanged, because
-  no prerendered surface carries a picture.
+  `og:image` and the card shape. That reader returned markup verbatim, so it
+  read an address spelled with `&amp;` — a different picture from the CDN — and
+  a name spelled with `&#x27;`; it now decodes what it reads. The build check
+  over prerendered surfaces is unchanged: it compares two readings against each
+  other, and no prerendered surface carries a picture.
 - No Storefront API query, codec, contract or backend changes.

@@ -9,6 +9,7 @@
   - Padded, not cropped: the card is fitted inside the box and the rest is
     filled white
   - Honest absence: a card with no image carries no `og:image`
+  - Named shape: the response says which card shape the picture is drawn in
 
 ## User journeys
 
@@ -39,6 +40,11 @@ image's own, or the card's name when the shop gave the image none.
 A product address whose card the catalogue pictures no way SHALL carry no
 `og:image`.
 
+The response SHALL name the card shape a preview is drawn in, because a
+fetcher that reads the picture may still size the card from that name alone:
+the wide shape where the response carries a picture, and the small shape where
+it carries none.
+
 #### Scenario: product-page-SC-19 - A preview fetcher reads the card's picture
 
 - **GIVEN** a card the catalogue pictures
@@ -47,6 +53,7 @@ A product address whose card the catalogue pictures no way SHALL carry no
   1200 by 630 pixels, padded white
 - **AND** `og:image:width` is `1200`, `og:image:height` is `630`, and
   `og:image:alt` is the image's alt text or the card's name
+- **AND** `twitter:card` is `summary_large_image`
 
 #### Scenario: product-page-SC-20 - A card with no picture unfurls without one
 
@@ -54,3 +61,4 @@ A product address whose card the catalogue pictures no way SHALL carry no
 - **WHEN** its product address is fetched and no script executes
 - **THEN** the response carries its title, description and `og:url`
 - **AND** no `og:image`
+- **AND** `twitter:card` is `summary`
