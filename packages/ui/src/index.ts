@@ -79,8 +79,8 @@ export {
   LISTING_LOT_SIDEBAR_CLASS,
 } from "./blocks/auction-listing/listing-lot-layout";
 export {
-  ListingLotMeta,
   type ListingLotMarketComps,
+  ListingLotMeta,
   type ListingLotMetaCopy,
   type ListingLotMetaProps,
 } from "./blocks/auction-listing/listing-lot-meta";
