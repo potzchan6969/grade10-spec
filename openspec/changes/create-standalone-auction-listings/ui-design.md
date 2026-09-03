@@ -48,21 +48,21 @@ From `@grade10/ui`: **none new.**
 
 ### Listings section
 
-- **Create offered** — `admin-listing-SC-68`: heading row shows Plus button
+- **Create offered** — `grade10-admin-auction-listing-SC-68`: heading row shows Plus button
   for `auction:operate`.
-- **Create not offered** — `admin-listing-SC-63`: Plus button absent.
-- **Editor opens empty** — `admin-listing-SC-69`: Campaign control blank.
-- **Draft / create / publish with no campaign** — `admin-listing-SC-58`,
-  `admin-listing-SC-59`, `admin-listing-SC-60`.
-- **Unattached row** — `admin-listing-SC-62`: campaign column shows "on its
+- **Create not offered** — `grade10-admin-auction-listing-SC-63`: Plus button absent.
+- **Editor opens empty** — `grade10-admin-auction-listing-SC-69`: Campaign control blank.
+- **Draft / create / publish with no campaign** — `grade10-admin-auction-listing-SC-58`,
+  `grade10-admin-auction-listing-SC-59`, `grade10-admin-auction-listing-SC-60`.
+- **Unattached row** — `grade10-admin-auction-listing-SC-62`: campaign column shows "on its
   own".
 
 ### Test panel Listings tab
 
-- **Tab visible** — `admin-listing-SC-64`.
-- **Seed success** — `admin-listing-SC-65`: notice text, instance counts
+- **Tab visible** — `grade10-admin-auction-listing-SC-64`.
+- **Seed success** — `grade10-admin-auction-listing-SC-65`: notice text, instance counts
   update; `campaignId` absent from result.
-- **No standalone listings yet** — `admin-listing-SC-67` pre-state: select
+- **No standalone listings yet** — `grade10-admin-auction-listing-SC-67` pre-state: select
   absent, message shown.
-- **Drop success** — `admin-listing-SC-67`: notice text, listing removed from
+- **Drop success** — `grade10-admin-auction-listing-SC-67`: notice text, listing removed from
   drop select.

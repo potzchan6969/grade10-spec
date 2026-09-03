@@ -15,40 +15,6 @@
   - Drop standalone fixtures: a developer removes standalone fixture listings
     and releases their inventory holds from the same tab
 
-## User journeys
-
-### admin-listing-US-06: Operator creates and publishes a listing with no campaign
-
-**As an** auction operator,
-**I want** to start a listing from the Listings section without picking a
-campaign,
-**so that** a one-off lot can go live without inventing a cover I do not need.
-
-**Accepted by:**
-
-- `admin-listing-SC-68` — Create listing is offered on the Listings section
-- `admin-listing-SC-69` — Listing editor opens with no campaign selected
-- `admin-listing-SC-58` — Draft saves with the campaign left empty
-- `admin-listing-SC-59` — Listing creates with no campaign
-- `admin-listing-SC-60` — Listing publishes with no campaign
-- `admin-listing-SC-61` — Collector opens the published listing by slug
-- `admin-listing-SC-62` — Listings table shows an unattached listing
-- `admin-listing-SC-63` — Create listing is not offered to an unauthorized operator
-
-### admin-listing-US-07: Developer seeds and drops standalone fixture listings
-
-**As a** developer running the auction service locally,
-**I want** to seed fixture listings with no campaign from the Test panel,
-**so that** I can test the standalone listing lifecycle without a campaign
-cover.
-
-**Accepted by:**
-
-- `admin-listing-SC-64` — Listings tab is present in the Test panel
-- `admin-listing-SC-65` — Developer seeds fixture listings with no campaign
-- `admin-listing-SC-66` — Seeded standalone listings appear in the Listings section with no campaign
-- `admin-listing-SC-67` — Developer drops standalone fixture listings
-
 ## ADDED Requirements
 
 ### Requirement: Listings section creates an independent listing
@@ -69,27 +35,27 @@ own when it has no campaign.
 An operator without the `auction:operate` grant SHALL NOT be offered Create
 listing. A draft save sent without that grant SHALL be refused.
 
-#### Scenario: admin-listing-SC-68 - Create listing is offered on the Listings section
+#### Scenario: grade10-admin-auction-listing-SC-68 - Create listing is offered on the Listings section
 
 - **GIVEN** an authorized operator on the Grade10 auction Listings section
 - **WHEN** they read the section heading row
 - **THEN** a Create listing action is present
 
-#### Scenario: admin-listing-SC-69 - Listing editor opens with no campaign selected
+#### Scenario: grade10-admin-auction-listing-SC-69 - Listing editor opens with no campaign selected
 
 - **GIVEN** an authorized operator who activates Create listing on the
   Listings section
 - **WHEN** the listing editor opens
 - **THEN** the Campaign control has no campaign selected
 
-#### Scenario: admin-listing-SC-58 - Draft saves with the campaign left empty
+#### Scenario: grade10-admin-auction-listing-SC-58 - Draft saves with the campaign left empty
 
 - **GIVEN** a new listing opened from the Listings section with no campaign
 - **WHEN** an authorized operator saves a draft with a title and no campaign
 - **THEN** Grade10 persists a draft listing with no campaign
 - **AND** the listing is absent from the public catalogue
 
-#### Scenario: admin-listing-SC-59 - Listing creates with no campaign
+#### Scenario: grade10-admin-auction-listing-SC-59 - Listing creates with no campaign
 
 - **GIVEN** a draft listing with every required create field set and no campaign
 - **WHEN** an authorized operator creates the listing
@@ -97,28 +63,28 @@ listing. A draft save sent without that grant SHALL be refused.
 - **AND** the listing has no campaign
 - **AND** it is still absent from the public catalogue
 
-#### Scenario: admin-listing-SC-60 - Listing publishes with no campaign
+#### Scenario: grade10-admin-auction-listing-SC-60 - Listing publishes with no campaign
 
 - **GIVEN** a created listing with no campaign and no publish at
 - **WHEN** an authorized operator publishes it
 - **THEN** Grade10 moves it to `published`
 - **AND** the listing still has no campaign
 
-#### Scenario: admin-listing-SC-61 - Collector opens the published listing by slug
+#### Scenario: grade10-admin-auction-listing-SC-61 - Collector opens the published listing by slug
 
 - **GIVEN** a published listing with no campaign whose slug is
   `standalone-lot-1`
 - **WHEN** a collector opens `/auction/listings/standalone-lot-1`
 - **THEN** Grade10 returns that listing
 
-#### Scenario: admin-listing-SC-62 - Listings table shows an unattached listing
+#### Scenario: grade10-admin-auction-listing-SC-62 - Listings table shows an unattached listing
 
 - **GIVEN** a listing with no campaign
 - **WHEN** an authorized operator reads the Listings section table
 - **THEN** that row's campaign column shows the listing stands on its own
 - **AND** it does not display a campaign id as a label
 
-#### Scenario: admin-listing-SC-63 - Create listing is not offered to an unauthorized operator
+#### Scenario: grade10-admin-auction-listing-SC-63 - Create listing is not offered to an unauthorized operator
 
 - **GIVEN** a signed-in operator without the `auction:operate` grant
 - **WHEN** they read the Grade10 auction Listings section
@@ -148,13 +114,13 @@ standalone fixture slug pattern and whose `campaign_id` is null.
 This surface and its backend procedures SHALL NOT be reachable outside a
 locally enabled dev environment (`assertDevEndpointsAllowed`).
 
-#### Scenario: admin-listing-SC-64 - Listings tab is present in the Test panel
+#### Scenario: grade10-admin-auction-listing-SC-64 - Listings tab is present in the Test panel
 
 - **GIVEN** the Grade10 auction Test panel with `LOCAL_FIXTURES_ENABLED` true
 - **WHEN** a developer opens the Test panel
 - **THEN** a Listings tab is present beside the Campaign tab
 
-#### Scenario: admin-listing-SC-65 - Developer seeds fixture listings with no campaign
+#### Scenario: grade10-admin-auction-listing-SC-65 - Developer seeds fixture listings with no campaign
 
 - **GIVEN** the Listings tab in the Test panel
 - **WHEN** a developer selects one or more fixture ids and clicks Add listings
@@ -162,14 +128,14 @@ locally enabled dev environment (`assertDevEndpointsAllowed`).
 - **AND** each listing has a reserved inventory product and a media item
 - **AND** the instance counts on the tab update
 
-#### Scenario: admin-listing-SC-66 - Seeded standalone listings appear in the Listings section with no campaign
+#### Scenario: grade10-admin-auction-listing-SC-66 - Seeded standalone listings appear in the Listings section with no campaign
 
 - **GIVEN** a fixture listing seeded from the Test panel Listings tab
 - **WHEN** an authorized operator reads the Listings section
 - **THEN** that listing appears in the table
 - **AND** its campaign column shows it stands on its own
 
-#### Scenario: admin-listing-SC-67 - Developer drops standalone fixture listings
+#### Scenario: grade10-admin-auction-listing-SC-67 - Developer drops standalone fixture listings
 
 - **GIVEN** one or more standalone fixture listings seeded from the Listings tab
 - **WHEN** a developer selects one and clicks Drop listing

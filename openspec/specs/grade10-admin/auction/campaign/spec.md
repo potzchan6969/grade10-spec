@@ -8,6 +8,22 @@ clocks or money on the campaign itself. Operator language is **Campaign** /
 **Campaigns**, not Sale / Sales (those labels confuse this cover with store
 checkout and with inventory “sold” stock).
 
+## Feature set
+
+- Rename Sales to Campaigns
+  - Admin tab and page: existing Sales tab, section heading, and empty states become Campaigns
+  - Editor and field labels: campaign editor chrome and listing Campaign field never say Sale
+  - Code identifiers: admin contracts, feature modules, app panels, and auction-service catalogue-cover helpers use campaign names, not sale
+- Campaigns section
+  - Campaign list: operators browse and open campaigns from that section
+- Campaign editor
+  - Open draft: start a campaign with title and optional copy
+  - Create: move draft to created before it can publish
+  - Edit cover: change title and copy while the campaign is open
+  - Publish: make the catalogue cover public without publishing listings under it
+  - Cancel: call a campaign off and cancel listings that still belong under it
+  - Read-only canceled: canceled campaigns show title and copy with no writes
+
 ## Requirements
 
 ### Requirement: Admin chrome uses Campaigns, not Sales
