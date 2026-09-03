@@ -5,7 +5,7 @@ exports. Once group 1 lands, groups 2–4 are sequential on schema and domain
 code; group 5 builds against contracts and fixtures from groups 1 and 4, not a
 running worker.
 
-## 1. Share aggregate inventory contracts (grade10)
+## 1. Share aggregate inventory contracts (grade10) (owner: @htonyl)
 
 - [x] 1.1 Make `catalog-SC-01 - Operator creates a draft product with empty
   inventory`, `catalog-SC-02 - Product create without a name is refused`,
