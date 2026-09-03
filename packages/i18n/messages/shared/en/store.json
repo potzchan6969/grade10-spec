@@ -25,5 +25,6 @@
   "sortPopular": "Popularity",
   "sortPriceAsc": "Lowest price",
   "sortPriceDesc": "Highest price",
-  "title": "Store"
+  "title": "Store",
+  "cartFull": "Your basket already holds {max} different items."
 }

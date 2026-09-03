@@ -3,7 +3,6 @@
   "empty": "장바구니가 비어 있습니다.",
   "browse": "스토어 둘러보기",
   "subtotal": "소계",
-  "quantity": "× {count}",
   "pay": "결제",
   "paying": "결제를 준비하는 중",
   "leaving": "결제 페이지로 이동합니다",
@@ -39,13 +38,11 @@
     "retry": "다시 확인",
     "blocked": "결제 전에 표시된 항목을 고쳐 주세요.",
     "removed": "상점에서 더 이상 판매하지 않는 {count}개 항목이 장바구니에서 제거되었습니다.",
-    "remove": "삭제"
+    "remove": "삭제",
+    "writeFailed": "변경 사항이 스토어에 반영되지 않았습니다. 다시 시도해 주세요."
   },
   "line": {
     "soldOut": "품절",
-    "unavailable": "더 이상 판매하지 않음",
-    "adjusted": "{count}개만 남아 수량을 조정했습니다",
-    "repriced": "이전 가격 {was}",
-    "unreviewed": "아직 스토어에 확인하지 않음"
+    "adjusted": "{count}개만 남아 수량을 조정했습니다"
   }
 }

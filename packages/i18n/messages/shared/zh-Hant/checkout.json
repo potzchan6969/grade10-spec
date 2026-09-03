@@ -3,7 +3,6 @@
   "empty": "你的購物車是空的。",
   "browse": "瀏覽商店",
   "subtotal": "小計",
-  "quantity": "× {count}",
   "pay": "付款",
   "paying": "正在準備付款",
   "leaving": "正前往付款頁面",
@@ -38,14 +37,12 @@
     "failed": "商店沒有回應，購物車尚未確認。請再試一次。",
     "retry": "再次確認",
     "blocked": "付款前請先修正標記的項目。",
-    "removed": "商店已不再販售的 {count} 項已從購物籃中移除。",
-    "remove": "移除"
+    "removed": "商店已不再販售的 {count} 項已從購物車中移除。",
+    "remove": "移除",
+    "writeFailed": "你的更改沒有送達商店。請再試一次。"
   },
   "line": {
     "soldOut": "已售罄",
-    "unavailable": "已停售",
-    "adjusted": "僅剩 {count} 件，已調整數量",
-    "repriced": "原價 {was}",
-    "unreviewed": "尚未向商店確認"
+    "adjusted": "僅剩 {count} 件，已調整數量"
   }
 }

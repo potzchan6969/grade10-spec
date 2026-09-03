@@ -25,5 +25,6 @@
   "sortPopular": "인기순",
   "sortPriceAsc": "낮은 가격순",
   "sortPriceDesc": "높은 가격순",
-  "title": "스토어"
+  "title": "스토어",
+  "cartFull": "장바구니에는 서로 다른 상품을 최대 {max}종류까지 담을 수 있습니다."
 }

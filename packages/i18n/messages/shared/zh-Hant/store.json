@@ -25,5 +25,6 @@
   "sortPopular": "熱門程度",
   "sortPriceAsc": "價格由低至高",
   "sortPriceDesc": "價格由高至低",
-  "title": "商店"
+  "title": "商店",
+  "cartFull": "購物車最多只能放 {max} 種不同商品。"
 }

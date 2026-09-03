@@ -3,7 +3,6 @@
   "empty": "There is nothing in your basket.",
   "browse": "Browse the store",
   "subtotal": "Subtotal",
-  "quantity": "× {count}",
   "pay": "Pay",
   "paying": "Setting up your payment",
   "leaving": "Taking you to pay",
@@ -39,13 +38,11 @@
     "retry": "Check again",
     "blocked": "Fix the marked lines before paying.",
     "removed": "{count} line(s) the shop no longer sells came out of your basket.",
-    "remove": "Remove"
+    "remove": "Remove",
+    "writeFailed": "Your change did not reach the shop. Try again."
   },
   "line": {
     "soldOut": "Sold out",
-    "unavailable": "No longer sold",
-    "adjusted": "Only {count} left — quantity adjusted",
-    "repriced": "Was {was}",
-    "unreviewed": "Not yet confirmed with the shop"
+    "adjusted": "Only {count} left — quantity adjusted"
   }
 }
