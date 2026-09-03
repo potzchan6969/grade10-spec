@@ -15,22 +15,6 @@ Grade10-owned schedule for each supported auction currency.
     being beaten
   - Flexible offer: a bidder may exceed, but not fall below, the minimum
 
-## User journeys
-
-### bid-increments-US-01: Collector places a bid across a price tier
-
-**As a** collector,
-**I want** the minimum next bid to scale with the lot's price,
-**so that** I can enter an affordable opening bid and a sensible later bid.
-
-**Accepted by:**
-
-- `bid-increments-SC-01` — A first bid clears the starting-price tier
-- `bid-increments-SC-02` — A boundary selects the higher tier
-- `bid-increments-SC-03` — A bid may exceed the minimum
-- `bid-increments-SC-04` — A bid below the minimum is refused
-- `bid-increments-SC-05` — An open listing publishes its next minimum
-
 ## ADDED Requirements
 
 ### Requirement: Grade10 owns the supported-currency schedules
@@ -65,31 +49,31 @@ Grade10 SHALL select the tier with the greatest Price from that does not exceed
 the amount being raised from. It SHALL NOT retain a per-listing increment or
 apply a USD, HKD, or JPY schedule to another currency.
 
-#### Scenario: bid-increments-SC-01 - A first bid clears the starting-price tier
+#### Scenario: grade10-site-auction-bid-increments-SC-01 - A first bid clears the starting-price tier
 
 - **GIVEN** an open HKD listing with a starting price of 20000 minor units and no accepted bid
 - **WHEN** a collector reads its minimum bid
 - **THEN** Grade10 reports 21000 minor units
 
-#### Scenario: bid-increments-SC-02 - A boundary selects the higher tier
+#### Scenario: grade10-site-auction-bid-increments-SC-02 - A boundary selects the higher tier
 
 - **GIVEN** an open USD listing whose current bid is 10000 minor units
 - **WHEN** Grade10 calculates its minimum bid
 - **THEN** the minimum bid is 10500 minor units
 
-#### Scenario: bid-increments-SC-03 - A bid may exceed the minimum
+#### Scenario: grade10-site-auction-bid-increments-SC-03 - A bid may exceed the minimum
 
 - **GIVEN** an open USD listing whose minimum bid is 10500 minor units
 - **WHEN** a collector bids 12000 minor units
 - **THEN** Grade10 accepts the bid
 
-#### Scenario: bid-increments-SC-04 - A bid below the minimum is refused
+#### Scenario: grade10-site-auction-bid-increments-SC-04 - A bid below the minimum is refused
 
 - **GIVEN** an open USD listing whose minimum bid is 10500 minor units
 - **WHEN** a collector bids 10499 minor units
 - **THEN** Grade10 refuses the bid and names 10500 minor units as the minimum
 
-#### Scenario: bid-increments-SC-05 - An open listing publishes its next minimum
+#### Scenario: grade10-site-auction-bid-increments-SC-05 - An open listing publishes its next minimum
 
 - **WHEN** a collector reads an open listing
 - **THEN** its facts include the minimum next amount as integer minor units in the listing currency
@@ -105,7 +89,7 @@ the result at the leader's maximum. The result is the minimum next amount.
 Grade10 SHALL accept any whole amount at or above the minimum next amount and
 refuse an amount below it. It SHALL not create intermediate bids.
 
-#### Scenario: bid-increments-SC-07 - A manual floor uses the current public price
+#### Scenario: grade10-site-auction-bid-increments-SC-07 - A manual floor uses the current public price
 
 - **GIVEN** an open HKD listing whose current public price is 800000 minor units
 - **WHEN** Grade10 calculates the next minimum
@@ -117,7 +101,7 @@ Grade10 SHALL refuse an attempt to create, update, or schedule an Auction
 listing in a currency other than USD, HKD, or JPY. The refusal SHALL leave the
 listing and its schedule-derived pricing facts unchanged.
 
-#### Scenario: bid-increments-SC-06 - An unsupported currency cannot be scheduled
+#### Scenario: grade10-site-auction-bid-increments-SC-06 - An unsupported currency cannot be scheduled
 
 - **GIVEN** a complete draft listing
 - **WHEN** an operator sets its currency to EUR and schedules it

@@ -19,7 +19,7 @@ No design-system token, primitive, or `@grade10/ui` export changes are needed.
 
 | State | Spec scenario | UI behavior |
 | --- | --- | --- |
-| Supported currency | `admin-listing-SC-06` | The editor permits the selected USD, HKD, or JPY value. |
-| Unsupported currency | `admin-listing-SC-03`, `admin-listing-SC-09`, `bid-increments-SC-06` | The form names currency as invalid; a direct API refusal preserves the form's stored listing state. |
-| Tier boundary | `bid-increments-SC-02` | The displayed next minimum and quick-bid suggestions use the higher tier. |
-| Below minimum | `bid-increments-SC-04` | Existing bid refusal presents the authoritative minimum next amount. |
+| Supported currency | `grade10-admin-auction-listing-SC-06` | The editor permits the selected USD, HKD, or JPY value. |
+| Unsupported currency | `grade10-admin-auction-listing-SC-03`, `grade10-admin-auction-listing-SC-09`, `grade10-site-auction-bid-increments-SC-06` | The form names currency as invalid; a direct API refusal preserves the form's stored listing state. |
+| Tier boundary | `grade10-site-auction-bid-increments-SC-02` | The displayed next minimum and quick-bid suggestions use the higher tier. |
+| Below minimum | `grade10-site-auction-bid-increments-SC-04` | Existing bid refusal presents the authoritative minimum next amount. |
