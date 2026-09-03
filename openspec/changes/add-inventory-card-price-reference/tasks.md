@@ -16,7 +16,7 @@ and fixtures, never a running worker.
 - [ ] 1.3 Verify with `pnpm check:manual`, `openspec validate
   add-inventory-card-price-reference --strict`, and `pnpm run archive:preflight`.
 
-## 2. Share card-reference contracts (grade10)
+## 2. Share card-reference contracts (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Make card-price-SC-01, card-price-SC-02, and card-price-SC-09 pass
   with collectible-type, kind-less reusable-tag, three controlled-role, and complete product
