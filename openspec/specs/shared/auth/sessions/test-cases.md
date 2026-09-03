@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## sessions-US1: Operator lists a person's sessions
+## shared-auth-sessions-US1: Operator lists a person's sessions
 
 **As an** operator who can list sessions,
 **I want** to see one account's sessions without their secrets,
 **so that** I can tell which device is signed in without becoming that person.
 
-### sessions-US1-TC1-1: Granted operator lists one account's sessions without secrets
+### shared-auth-sessions-US1-TC1-1: Granted operator lists one account's sessions without secrets
 
 **Classification:**
 
@@ -21,7 +21,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sessions-US-01
+* **Trace:** shared-auth-sessions-US-01
 
 **Pre-conditions:**
 Signed in as an operator who holds `session:list`. <a subject user id> has at least one session.
@@ -36,7 +36,7 @@ Signed in as an operator who holds `session:list`. <a subject user id> has at le
 * That account's sessions are listed.
 * No session secret is in the result.
 
-### sessions-US1-TC2-1: Caller without the list grant is refused
+### shared-auth-sessions-US1-TC2-1: Caller without the list grant is refused
 
 **Classification:**
 
@@ -48,7 +48,7 @@ Signed in as an operator who holds `session:list`. <a subject user id> has at le
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sessions-US-01
+* **Trace:** shared-auth-sessions-US-01
 
 **Pre-conditions:**
 Signed in as a person who does not hold `session:list`.
@@ -62,7 +62,7 @@ Signed in as a person who does not hold `session:list`.
 * The system refuses the request.
 * No sessions are returned.
 
-### sessions-US1-TC3-1: Support cannot list an admin's sessions
+### shared-auth-sessions-US1-TC3-1: Support cannot list an admin's sessions
 
 **Classification:**
 
@@ -74,7 +74,7 @@ Signed in as a person who does not hold `session:list`.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sessions-US-01
+* **Trace:** shared-auth-sessions-US-01
 
 **Pre-conditions:**
 Signed in as an operator whose role is `support`. <an admin user id> holds `admin`.
@@ -90,13 +90,13 @@ Signed in as an operator whose role is `support`. <an admin user id> holds `admi
 
 ---
 
-## sessions-US2: Operator ends a session
+## shared-auth-sessions-US2: Operator ends a session
 
 **As an** operator who can revoke,
 **I want** to end one session or every session of an account,
 **so that** a stolen device is signed out, including my own if I revoke the current one.
 
-### sessions-US2-TC1-1: Revoked session is no longer signed in
+### shared-auth-sessions-US2-TC1-1: Revoked session is no longer signed in
 
 **Classification:**
 
@@ -108,7 +108,7 @@ Signed in as an operator whose role is `support`. <an admin user id> holds `admi
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sessions-US-02
+* **Trace:** shared-auth-sessions-US-02
 
 **Pre-conditions:**
 Signed in as an operator who holds `session:revoke`. <a subject user id> has a session other than the operator's.
@@ -123,7 +123,7 @@ Signed in as an operator who holds `session:revoke`. <a subject user id> has a s
 
 * A product reading who is calling on that session reports no person.
 
-### sessions-US2-TC2-1: Every session of an account can be revoked
+### shared-auth-sessions-US2-TC2-1: Every session of an account can be revoked
 
 **Classification:**
 
@@ -135,7 +135,7 @@ Signed in as an operator who holds `session:revoke`. <a subject user id> has a s
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sessions-US-02
+* **Trace:** shared-auth-sessions-US-02
 
 **Pre-conditions:**
 Signed in as an operator who holds `session:revoke`. <a subject user id> has more than one session.
@@ -149,7 +149,7 @@ Signed in as an operator who holds `session:revoke`. <a subject user id> has mor
 
 * None of that account's sessions is signed in.
 
-### sessions-US2-TC3-1: Caller without the revoke grant is refused
+### shared-auth-sessions-US2-TC3-1: Caller without the revoke grant is refused
 
 **Classification:**
 
@@ -161,7 +161,7 @@ Signed in as an operator who holds `session:revoke`. <a subject user id> has mor
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sessions-US-02
+* **Trace:** shared-auth-sessions-US-02
 
 **Pre-conditions:**
 Signed in as an operator who does not hold `session:revoke`. <a subject user id> has a live session.
@@ -175,7 +175,7 @@ Signed in as an operator who does not hold `session:revoke`. <a subject user id>
 * The system refuses the request.
 * The session remains signed in.
 
-### sessions-US2-TC4-1: Support cannot revoke an admin's session
+### shared-auth-sessions-US2-TC4-1: Support cannot revoke an admin's session
 
 **Classification:**
 
@@ -187,7 +187,7 @@ Signed in as an operator who does not hold `session:revoke`. <a subject user id>
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sessions-US-02
+* **Trace:** shared-auth-sessions-US-02
 
 **Pre-conditions:**
 Signed in as an operator whose role is `support`. <an admin user id> holds `admin` and has a live session.
@@ -201,7 +201,7 @@ Signed in as an operator whose role is `support`. <an admin user id> holds `admi
 * The system refuses the request.
 * The session remains signed in.
 
-### sessions-US2-TC5-1: Revoking the current session signs the operator out
+### shared-auth-sessions-US2-TC5-1: Revoking the current session signs the operator out
 
 **Classification:**
 
@@ -213,7 +213,7 @@ Signed in as an operator whose role is `support`. <an admin user id> holds `admi
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sessions-US-02
+* **Trace:** shared-auth-sessions-US-02
 
 **Pre-conditions:**
 Signed in as an operator who holds `session:revoke`.

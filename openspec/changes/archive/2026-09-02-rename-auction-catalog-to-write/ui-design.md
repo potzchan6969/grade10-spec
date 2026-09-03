@@ -14,4 +14,4 @@ controls on the campaigns panel are unchanged.
 ## States
 
 None. Visibility of write actions still follows whether the signed-in
-operator holds the write grant (`roles-SC-07a`).
+operator holds the write grant (`shared-auth-roles-SC-07a`).

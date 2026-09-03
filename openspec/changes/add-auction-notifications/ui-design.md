@@ -44,18 +44,18 @@ is content, and each variation is tied to the scenario that defines it.
 
 | Variation | Scenario |
 | --- | --- |
-| A lot whose close has moved past its scheduled close | `notifications-SC-08` — the warning states the scheduled close |
-| Start letter, listing + start instant, unsubscribe | `notifications-SC-05`, `notifications-SC-19` |
-| Has-started letter, unsubscribe | `notifications-SC-07` |
-| Close-in-24h letter; unsubscribe only if they never bid | `notifications-SC-08`; `notifications-SC-03` for a participant who unwatched |
-| Extended-bidding letter; unsubscribe only if they never bid | `notifications-SC-09` |
-| Outbid letter, own amount + new lead, no unsubscribe | `notifications-SC-12`, `notifications-SC-20` |
-| New-bid letter, listing, no unsubscribe | `notifications-SC-11` |
-| Same heading / body / button / footer on two kinds | `notifications-SC-18` |
-| A recipient enrolled by both watching and bidding | `notifications-SC-02` — one message |
-| The send log filtered to one collector | `notifications-SC-26` |
-| A log row for a sent message | `notifications-SC-25` — type, email, listing, Sent At; no body |
-| No letter | `notifications-SC-04`, `notifications-SC-15`, `notifications-SC-23`, `notifications-SC-27`, `notifications-SC-28` |
+| A lot whose close has moved past its scheduled close | `grade10-site-auction-notifications-SC-08` — the warning states the scheduled close |
+| Start letter, listing + start instant, unsubscribe | `grade10-site-auction-notifications-SC-05`, `grade10-site-auction-notifications-SC-19` |
+| Has-started letter, unsubscribe | `grade10-site-auction-notifications-SC-07` |
+| Close-in-24h letter; unsubscribe only if they never bid | `grade10-site-auction-notifications-SC-08`; `grade10-site-auction-notifications-SC-03` for a participant who unwatched |
+| Extended-bidding letter; unsubscribe only if they never bid | `grade10-site-auction-notifications-SC-09` |
+| Outbid letter, own amount + new lead, no unsubscribe | `grade10-site-auction-notifications-SC-12`, `grade10-site-auction-notifications-SC-20` |
+| New-bid letter, listing, no unsubscribe | `grade10-site-auction-notifications-SC-11` |
+| Same heading / body / button / footer on two kinds | `grade10-site-auction-notifications-SC-18` |
+| A recipient enrolled by both watching and bidding | `grade10-site-auction-notifications-SC-02` — one message |
+| The send log filtered to one collector | `grade10-site-auction-notifications-SC-26` |
+| A log row for a sent message | `grade10-site-auction-notifications-SC-25` — type, email, listing, Sent At; no body |
+| No letter | `grade10-site-auction-notifications-SC-04`, `grade10-site-auction-notifications-SC-15`, `grade10-site-auction-notifications-SC-23`, `grade10-site-auction-notifications-SC-27`, `grade10-site-auction-notifications-SC-28` |
 
 Every message states the lot it concerns. None recommends another lot, per the
 proposal's non-goal on marketing mail.

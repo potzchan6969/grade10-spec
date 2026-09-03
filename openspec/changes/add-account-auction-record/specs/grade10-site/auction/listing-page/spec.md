@@ -13,12 +13,12 @@ carries.
 What a watch is, who may hold one, how many, and where watched lots are read
 belong to `grade10-site/auction/account-record`.
 
-Scenario ids in this capability start at `listing-page-SC-10`: the nine
+Scenario ids in this capability start at `grade10-site-auction-listing-page-SC-10`: the nine
 scenarios this capability already carries were written before ids were
-required, and `listing-page-SC-01` through `listing-page-SC-09` are reserved
+required, and `grade10-site-auction-listing-page-SC-01` through `grade10-site-auction-listing-page-SC-09` are reserved
 for them.
 
-#### Scenario: listing-page-SC-10 - A collector watches the lot they are reading
+#### Scenario: grade10-site-auction-listing-page-SC-10 - A collector watches the lot they are reading
 
 - **GIVEN** a signed-in collector on a published lot's own page who does not
   watch it
@@ -26,13 +26,13 @@ for them.
 - **THEN** the page shows the lot as watched
 - **AND** they are still on that lot's page
 
-#### Scenario: listing-page-SC-11 - The control acts on the addressed lot
+#### Scenario: grade10-site-auction-listing-page-SC-11 - The control acts on the addressed lot
 
 - **GIVEN** two published lots with their own addresses
 - **WHEN** a collector watches the lot from one of those addresses
 - **THEN** only the lot that address names is watched
 
-#### Scenario: listing-page-SC-12 - Watching changes nothing else on the page
+#### Scenario: grade10-site-auction-listing-page-SC-12 - Watching changes nothing else on the page
 
 - **GIVEN** a signed-in collector on a live lot's page
 - **WHEN** they watch it

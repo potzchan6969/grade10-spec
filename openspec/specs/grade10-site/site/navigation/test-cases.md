@@ -3,7 +3,7 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## navigation-US1: Collector reaches the surface an address names
+## grade10-site-site-navigation-US1: Collector reaches the surface an address names
 
 **As a** collector,
 **I want** every address to resolve to one surface — the deepest one naming
@@ -11,7 +11,7 @@ it, or the not-found surface,
 **so that** a link I open lands me on the surface that owns it, and tells me
 which address failed when none does.
 
-### navigation-US1-TC1-1: Nested address answers as its parent surface
+### grade10-site-site-navigation-US1-TC1-1: Nested address answers as its parent surface
 
 **Classification:**
 
@@ -23,7 +23,7 @@ which address failed when none does.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-01
+* **Trace:** grade10-site-site-navigation-US-01
 
 **Pre-conditions:**
 None.
@@ -37,7 +37,7 @@ None.
 
 * That parent surface renders.
 
-### navigation-US1-TC2-1: Nested lot address renders the lot, not the auction
+### grade10-site-site-navigation-US1-TC2-1: Nested lot address renders the lot, not the auction
 
 **Classification:**
 
@@ -49,7 +49,7 @@ None.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-01
+* **Trace:** grade10-site-site-navigation-US-01
 
 **Pre-conditions:**
 The catalogue publishes <a published lot>.
@@ -63,7 +63,7 @@ The catalogue publishes <a published lot>.
 
 * The nested lot surface renders, not the auction above it.
 
-### navigation-US1-TC3-1: Unknown address resolves to not-found naming it
+### grade10-site-site-navigation-US1-TC3-1: Unknown address resolves to not-found naming it
 
 **Classification:**
 
@@ -75,7 +75,7 @@ The catalogue publishes <a published lot>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-01
+* **Trace:** grade10-site-site-navigation-US-01
 
 **Pre-conditions:**
 None.
@@ -91,7 +91,7 @@ None.
 
 ---
 
-## navigation-US2: Collector moves between surfaces without a page load
+## grade10-site-site-navigation-US2: Collector moves between surfaces without a page load
 
 **As a** collector,
 **I want** an in-app link, the chrome's included, to navigate in place while
@@ -99,7 +99,7 @@ my own click modifiers and other origins stay the browser's,
 **so that** moving around the site is immediate without taking away the
 browser behavior I asked for.
 
-### navigation-US2-TC1-1: Chrome link navigates in place
+### grade10-site-site-navigation-US2-TC1-1: Chrome link navigates in place
 
 **Classification:**
 
@@ -111,7 +111,7 @@ browser behavior I asked for.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-02
+* **Trace:** grade10-site-site-navigation-US-02
 
 **Pre-conditions:**
 A collector is on any surface.
@@ -125,7 +125,7 @@ A collector is on any surface.
 
 * The destination surface renders without a full document load.
 
-### navigation-US2-TC2-1: Modified click stays the browser's
+### grade10-site-site-navigation-US2-TC2-1: Modified click stays the browser's
 
 **Classification:**
 
@@ -137,7 +137,7 @@ A collector is on any surface.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** navigation-US-02
+* **Trace:** grade10-site-site-navigation-US-02
 
 **Pre-conditions:**
 None.
@@ -151,7 +151,7 @@ None.
 
 * The browser's own behavior happens, unaltered.
 
-### navigation-US2-TC3-1: Other-origin link is a normal page load
+### grade10-site-site-navigation-US2-TC3-1: Other-origin link is a normal page load
 
 **Classification:**
 
@@ -163,7 +163,7 @@ None.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-02
+* **Trace:** grade10-site-site-navigation-US-02
 
 **Pre-conditions:**
 A surface shows a link to another origin.
@@ -179,7 +179,7 @@ A surface shows a link to another origin.
 
 ---
 
-## navigation-US3: Collector asks for a session-decided address
+## grade10-site-site-navigation-US3: Collector asks for a session-decided address
 
 **As a** collector,
 **I want** the profile and sign-in addresses to answer with what my session
@@ -187,7 +187,7 @@ allows, replacing the entry they correct,
 **so that** I land on the surface I am actually allowed, and going back never
 bounces me forward again.
 
-### navigation-US3-TC1-1: Signed-out profile address corrects to sign-in
+### grade10-site-site-navigation-US3-TC1-1: Signed-out profile address corrects to sign-in
 
 **Classification:**
 
@@ -199,7 +199,7 @@ bounces me forward again.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-03
+* **Trace:** grade10-site-site-navigation-US-03
 
 **Pre-conditions:**
 The collector is not signed in.
@@ -214,7 +214,7 @@ The collector is not signed in.
 * The sign-in surface renders.
 * The address reads as sign-in.
 
-### navigation-US3-TC2-1: Signed-in sign-in address corrects to the profile
+### grade10-site-site-navigation-US3-TC2-1: Signed-in sign-in address corrects to the profile
 
 **Classification:**
 
@@ -226,7 +226,7 @@ The collector is not signed in.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-03
+* **Trace:** grade10-site-site-navigation-US-03
 
 **Pre-conditions:**
 Signed in as a collector.
@@ -241,7 +241,7 @@ Signed in as a collector.
 * Their profile renders.
 * The address reads as the profile.
 
-### navigation-US3-TC3-1: Back never returns to a corrected address
+### grade10-site-site-navigation-US3-TC3-1: Back never returns to a corrected address
 
 **Classification:**
 
@@ -253,7 +253,7 @@ Signed in as a collector.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** navigation-US-03
+* **Trace:** grade10-site-site-navigation-US-03
 
 **Pre-conditions:**
 A collector whose navigation was just corrected.
@@ -268,7 +268,7 @@ A collector whose navigation was just corrected.
 
 * They arrive where they were before asking, never at the address that corrected them forward.
 
-### navigation-US3-TC4-1: Public surface does not wait for the session
+### grade10-site-site-navigation-US3-TC4-1: Public surface does not wait for the session
 
 **Classification:**
 
@@ -280,7 +280,7 @@ A collector whose navigation was just corrected.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** navigation-US-03
+* **Trace:** grade10-site-site-navigation-US-03
 
 **Pre-conditions:**
 The session has not yet resolved.
@@ -296,7 +296,7 @@ The session has not yet resolved.
 
 ---
 
-## navigation-US4: Collector resumes a surface where they left it
+## grade10-site-site-navigation-US4: Collector resumes a surface where they left it
 
 **As a** collector,
 **I want** back and forward to return me to the scroll position I left an
@@ -304,7 +304,7 @@ entry at, and a new entry to start at the top,
 **so that** I keep my place in a surface I return to instead of finding it
 from the beginning.
 
-### navigation-US4-TC1-1: Back returns to the left scroll position
+### grade10-site-site-navigation-US4-TC1-1: Back returns to the left scroll position
 
 **Classification:**
 
@@ -316,7 +316,7 @@ from the beginning.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** navigation-US-04
+* **Trace:** grade10-site-site-navigation-US-04
 
 **Pre-conditions:**
 A collector who scrolled partway down a surface and followed a link from there.
@@ -331,7 +331,7 @@ A collector who scrolled partway down a surface and followed a link from there.
 
 * The surface is scrolled to where they left it.
 
-### navigation-US4-TC2-1: New surface starts at the top
+### grade10-site-site-navigation-US4-TC2-1: New surface starts at the top
 
 **Classification:**
 
@@ -343,7 +343,7 @@ A collector who scrolled partway down a surface and followed a link from there.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** navigation-US-04
+* **Trace:** grade10-site-site-navigation-US-04
 
 **Pre-conditions:**
 A collector scrolled partway down a surface.
@@ -359,7 +359,7 @@ A collector scrolled partway down a surface.
 
 ---
 
-## navigation-US5: Collector downloads only the surface they open
+## grade10-site-site-navigation-US5: Collector downloads only the surface they open
 
 **As a** collector,
 **I want** a surface to cost only its own page code, loaded when I navigate to
@@ -367,7 +367,7 @@ it,
 **so that** opening one surface does not make me pay for the ones I did not
 open.
 
-### navigation-US5-TC1-1: Cold marketing visit downloads no store or auction page code
+### grade10-site-site-navigation-US5-TC1-1: Cold marketing visit downloads no store or auction page code
 
 **Classification:**
 
@@ -379,7 +379,7 @@ open.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** navigation-US-05
+* **Trace:** grade10-site-site-navigation-US-05
 
 **Pre-conditions:**
 A cold browser with an empty cache.
@@ -394,7 +394,7 @@ A cold browser with an empty cache.
 
 * No script containing the store's or the auction's page code is downloaded.
 
-### navigation-US5-TC2-1: Store page code loads on arrival
+### grade10-site-site-navigation-US5-TC2-1: Store page code loads on arrival
 
 **Classification:**
 
@@ -406,7 +406,7 @@ A cold browser with an empty cache.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** navigation-US-05
+* **Trace:** grade10-site-site-navigation-US-05
 
 **Pre-conditions:**
 A collector is on the marketing page.

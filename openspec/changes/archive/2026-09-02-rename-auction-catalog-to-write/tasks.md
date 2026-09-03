@@ -6,7 +6,7 @@ delta. Group 3 updates the operator PRD after the vocabulary is settled.
 ## 1. Vocabulary and grants (grade10)
 
 - [x] 1.1 Make `Each role grants a fixed set of permissions` and
-      `roles-SC-07a - Staff can write the auction catalogue` pass: replace
+      `shared-auth-roles-SC-07a - Staff can write the auction catalogue` pass: replace
       `auction:catalog` with `auction:write` in
       `PERMISSION_STATEMENTS.auction` and in staff / admin grant lists.
 - [x] 1.2 Point every elevated catalogue procedure at `auction:write`

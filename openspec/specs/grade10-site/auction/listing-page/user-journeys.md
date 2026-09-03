@@ -1,6 +1,6 @@
 ## User journeys
 
-### listing-page-US-01: Collector opens a lot at its own address
+### grade10-site-auction-listing-page-US-01: Collector opens a lot at its own address
 
 **As a** collector,
 **I want** a lot's address to answer with that lot's own page in the response
@@ -10,11 +10,11 @@ without waiting for a script to run.
 
 **Accepted by:**
 
-- `listing-page-SC-01` — A lot answers whole
-- `listing-page-SC-02` — Two lots, two pages
-- `listing-page-SC-05` — A lot the catalogue publishes answers
+- `grade10-site-auction-listing-page-SC-01` — A lot answers whole
+- `grade10-site-auction-listing-page-SC-02` — Two lots, two pages
+- `grade10-site-auction-listing-page-SC-05` — A lot the catalogue publishes answers
 
-### listing-page-US-02: Collector shares a lot link
+### grade10-site-auction-listing-page-US-02: Collector shares a lot link
 
 **As a** collector,
 **I want** a lot link to unfurl as that lot and its own canonical address,
@@ -23,9 +23,9 @@ catalogue.
 
 **Accepted by:**
 
-- `listing-page-SC-03` — A preview fetcher reads a lot
+- `grade10-site-auction-listing-page-SC-03` — A preview fetcher reads a lot
 
-### listing-page-US-03: Collector opens an address that names no lot
+### grade10-site-auction-listing-page-US-03: Collector opens an address that names no lot
 
 **As a** collector,
 **I want** an address under the auction's lots that names no published lot to
@@ -34,10 +34,10 @@ answer with the site's not-found surface,
 
 **Accepted by:**
 
-- `listing-page-SC-04` — An id the catalogue publishes no lot for
-- `listing-page-SC-05` — A lot the catalogue publishes answers
+- `grade10-site-auction-listing-page-SC-04` — An id the catalogue publishes no lot for
+- `grade10-site-auction-listing-page-SC-05` — A lot the catalogue publishes answers
 
-### listing-page-US-04: Collector reads a live lot while scripts load
+### grade10-site-auction-listing-page-US-04: Collector reads a live lot while scripts load
 
 **As a** collector,
 **I want** the lot I was served to stay on screen once scripts finish loading,
@@ -46,10 +46,10 @@ disagrees with what the document carried.
 
 **Accepted by:**
 
-- `listing-page-SC-06` — The served lot stays on screen
-- `listing-page-SC-07` — A value that follows the clock carries on
+- `grade10-site-auction-listing-page-SC-06` — The served lot stays on screen
+- `grade10-site-auction-listing-page-SC-07` — A value that follows the clock carries on
 
-### listing-page-US-05: Collector reaches a lot from the catalogue
+### grade10-site-auction-listing-page-US-05: Collector reaches a lot from the catalogue
 
 **As a** collector,
 **I want** to open a lot's own address from the catalogue without a page load,
@@ -57,5 +57,5 @@ disagrees with what the document carried.
 
 **Accepted by:**
 
-- `listing-page-SC-08` — A lot is opened from the catalogue
-- `listing-page-SC-09` — The sitemap names no lot
+- `grade10-site-auction-listing-page-SC-08` — A lot is opened from the catalogue
+- `grade10-site-auction-listing-page-SC-09` — The sitemap names no lot

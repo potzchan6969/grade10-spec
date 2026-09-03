@@ -56,20 +56,31 @@ so a task, a review comment, and a Qase case can all name the same thing:
 
 | Id | Lives in | Example |
 | --- | --- | --- |
-| `<capability>-US-<n>` | `spec.md` user journey | `product-listing-US-01` |
-| `<capability>-SC-<n>` | `spec.md` scenario | `product-listing-SC-01` |
-| `<capability>-US<n>` | `test-cases.md` journey section heading | `product-listing-US1` |
-| `<capability>-US<n>-TC<m>-<v>` | `test-cases.md` test case | `product-listing-US1-TC1-1` |
+| `<capability>-US-<n>` | `user-journeys.md` story | `grade10-site-store-product-listing-US-01` |
+| `<capability>-SC-<n>` | `spec.md` scenario | `grade10-site-store-product-listing-SC-01` |
+| `<capability>-US<n>` | `test-cases.md` journey section heading | `grade10-site-store-product-listing-US1` |
+| `<capability>-US<n>-TC<m>-<v>` | `test-cases.md` test case | `grade10-site-store-product-listing-US1-TC1-1` |
 
-`<capability>` is the spec directory's own name (`home`, `product-listing`).
+`<capability>` is the capability's full path with slashes as hyphens —
+`<product>-<domain>-<capability>`, so `grade10-site/store/product-listing`
+issues `grade10-site-store-product-listing-*`. The path form is what keeps
+two capabilities of the same name apart: `grade10-site/site/navigation` and
+`zzz-site/site/navigation` would otherwise both issue `navigation-*`, and no
+reader could say which a bare `navigation-SC-01` meant.
+
+A prefix is fixed at a capability's first ids and never moves again. One that
+is later renamed or moved goes on issuing what it always issued — an issued id
+is permanent, and every task, review comment and case naming one would
+otherwise be repointed silently. Read the ids that exist before issuing a new
+one; only a capability issuing its first derives the prefix from its path.
 
 Inside `test-cases.md` a journey id is written in its compact form — the
 hyphen after `US` dropped, the number not zero-padded — so a section heading
 and the case ids under it read as one family: spec journey
-`product-listing-US-01` becomes the section `## product-listing-US1: …`,
-holding `product-listing-US1-TC1-1`, `product-listing-US1-TC2-1`, …. The
-spec keeps the canonical `<capability>-US-<n>` form, and that canonical form
-is what a case's `**Trace:**` line carries.
+`grade10-site-store-product-listing-US-01` becomes the section `## grade10-site-store-product-listing-US1: …`,
+holding `grade10-site-store-product-listing-US1-TC1-1`, `grade10-site-store-product-listing-US1-TC2-1`, …. The
+journeys file keeps the canonical `<capability>-US-<n>` form, and that canonical
+form is what a case's `**Trace:**` line carries.
 
 Number cases per journey from `1`. The trailing `<v>` is the case version
 (starts at `1`; bump only when update mode re-words an existing case). Treat
@@ -78,9 +89,9 @@ is marked `deprecated`, never renumbered away, and a new case takes the next
 unused `TC<m>` under that journey.
 
 Older suites may still use flat `<capability>-TC-<n>` ids
-(`product-listing-TC-01`), hyphenated journey-scoped case ids, or
-`## <capability>-US-<n>:` section headings; the exporter accepts them. New
-generation writes the compact heading and `<capability>-US<n>-TC<m>-<v>`.
+(`grade10-site-store-product-listing-TC-01`), hyphenated journey-scoped case
+ids, or `## <capability>-US-<n>:` section headings; the exporter accepts them.
+New generation writes the compact heading and `<capability>-US<n>-TC<m>-<v>`.
 
 ## Where it lives
 
@@ -827,8 +838,8 @@ pass carries both tags:
 ### Trace
 
 The journey this case derives from, in the spec's canonical form —
-`<capability>-US-<n>` (`home-US-01`) — even though the section heading above
-it uses the compact `home-US1`. One journey per case: a case that would have
+`<capability>-US-<n>` (`grade10-site-store-home-US-01`) — even though the section heading above
+it uses the compact `grade10-site-store-home-US1`. One journey per case: a case that would have
 to trace two journeys is two cases, or belongs to a journey the spec has not
 written yet. Fall back to `<requirement> / <journey title>` only when the
 spec has no ids yet.

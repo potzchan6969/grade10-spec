@@ -38,13 +38,13 @@ components for the order history surface — `OrderHistoryStatus`,
 `OrderHistoryCard` SHALL each be renderable on their own, outside
 `OrderHistory`.
 
-#### Scenario: store-order-history-SC-06 - An application imports the surface
+#### Scenario: shared-ui-store-order-history-SC-06 - An application imports the surface
 
 - **WHEN** an application imports each name above from the shared UI package's public entry
 - **THEN** every import resolves
 - **AND** no other component or type is exported for this surface
 
-#### Scenario: store-order-history-SC-07 - A part is reused alone
+#### Scenario: shared-ui-store-order-history-SC-07 - A part is reused alone
 
 - **WHEN** an application renders the status, line item, card header, or card without `OrderHistory`
 - **THEN** it renders and behaves as specified, with no missing-context error
@@ -64,7 +64,7 @@ consumer-supplied label for that status. It SHALL NOT invent other status values
 | `canceled` | Canceled (online) |
 | `refunded` | Payment refunded (in-store or online) |
 
-#### Scenario: store-order-history-SC-08 - Each status renders its label
+#### Scenario: shared-ui-store-order-history-SC-08 - Each status renders its label
 
 - **GIVEN** a status of `completed`, `shipped`, `processing`, `pickup`, `canceled`, or `refunded`
 - **WHEN** `OrderHistoryStatus` renders with a label for that status
@@ -77,7 +77,7 @@ name), the consumer-formatted product text that already includes quantity
 (e.g. `Name × 2`), and the consumer-formatted line total. It SHALL NOT split
 quantity into a separate field and SHALL NOT navigate or fetch.
 
-#### Scenario: store-order-history-SC-09 - Line item displays supplied fields
+#### Scenario: shared-ui-store-order-history-SC-09 - Line item displays supplied fields
 
 - **WHEN** a line item renders with image, product text, and total
 - **THEN** all three are displayed
@@ -90,14 +90,14 @@ true, and SHALL report Track and View Details through named callbacks. It SHALL
 NOT open URLs itself except by calling the Track callback the application
 supplies.
 
-#### Scenario: store-order-history-SC-03 - Track Order appears only when enabled
+#### Scenario: shared-ui-store-order-history-SC-03 - Track Order appears only when enabled
 
 - **GIVEN** a card header with `trackOrder` true and Track copy
 - **WHEN** the header renders
 - **THEN** the Track Order control appears
 - **AND** activating it reports through the Track callback
 
-#### Scenario: store-order-history-SC-10 - Track Order is hidden when disabled
+#### Scenario: shared-ui-store-order-history-SC-10 - Track Order is hidden when disabled
 
 - **GIVEN** a card header with `trackOrder` false
 - **WHEN** the header renders
@@ -111,7 +111,7 @@ summary props and SHALL render its children as the horizontally scrollable body
 slot. When line items overflow the body, the body SHALL apply scroll-fade mask
 styling on the overflow edges. The card SHALL NOT fetch orders or navigate.
 
-#### Scenario: store-order-history-SC-04 - Card lists supplied line items
+#### Scenario: shared-ui-store-order-history-SC-04 - Card lists supplied line items
 
 - **GIVEN** an order card with header props and one or more line item children
 - **WHEN** the card renders
@@ -135,14 +135,14 @@ Empty state SHALL use the design-system empty placeholder with consumer-supplied
 title, description, icon, and a Shop Now action that reports through a named
 callback.
 
-#### Scenario: store-order-history-SC-01 - Active and Past both render when non-empty
+#### Scenario: shared-ui-store-order-history-SC-01 - Active and Past both render when non-empty
 
 - **GIVEN** a non-empty active list and a non-empty past list
 - **WHEN** `OrderHistory` renders
 - **THEN** both section headings and their order cards appear
 - **AND** the empty state does not appear
 
-#### Scenario: store-order-history-SC-02 - An empty section is omitted
+#### Scenario: shared-ui-store-order-history-SC-02 - An empty section is omitted
 
 - **GIVEN** a non-empty active list and an empty past list
 - **WHEN** `OrderHistory` renders
@@ -150,7 +150,7 @@ callback.
 - **AND** the Past Orders heading does not appear
 - **AND** the empty state does not appear
 
-#### Scenario: store-order-history-SC-05 - Zero orders shows empty state
+#### Scenario: shared-ui-store-order-history-SC-05 - Zero orders shows empty state
 
 - **GIVEN** empty active and past lists
 - **WHEN** `OrderHistory` renders

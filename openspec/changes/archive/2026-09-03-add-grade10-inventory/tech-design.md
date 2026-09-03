@@ -348,21 +348,21 @@ Routed through the API gateway to the inventory worker. Requires
 
 | Procedure | Purpose |
 | --- | --- |
-| `products.list` | Every product with status and snapshot counts (catalog-SC-13) |
-| `products.get` | One product, its single inventory snapshot, reservations by `holderKind`, changelogs (catalog-SC-29) |
-| `products.create` | Draft product + zeroed inventory (catalog-SC-01) |
-| `products.update` | Name, description, remarks only (catalog-SC-57) |
-| `products.markCreated` | One-way `draft` → `created` (catalog-SC-52, catalog-SC-54) |
-| `inventory.intake` | Stock up (catalog-SC-05, catalog-SC-06) |
-| `inventory.sell` | Free-pool sell (catalog-SC-10) |
-| `inventory.withdraw` | Free-pool withdraw (catalog-SC-11) |
-| `reservations.reserve` | Admin hold only; server-mints `holder_reference`; input is `productId`, `quantity`, optional `remarks` (catalog-SC-59, catalog-SC-67) |
-| `reservations.release` | Partial or full release; holder console or elevated admin API (catalog-SC-22, catalog-SC-35, catalog-SC-60) |
-| `reservations.adjust` | `adjustReservation(id, newQuantity)` from listing console (catalog-SC-47–catalog-SC-50) |
-| `reservations.changeProduct` | `changeReservationProduct(id, newProductId, newQuantity)` from listing console (catalog-SC-51, catalog-SC-63–catalog-SC-65) |
-| `reservations.sellFromReservation` | Auction holds only; from listing console (catalog-SC-36, catalog-SC-37) |
-| `reservations.vaultFromReservation` | Vault holds only; from Vault console (catalog-SC-38) |
-| `changelogs.list` | Product-scoped history (catalog-SC-23–catalog-SC-28, catalog-SC-41–catalog-SC-44) |
+| `products.list` | Every product with status and snapshot counts (grade10-admin-inventory-catalog-SC-13) |
+| `products.get` | One product, its single inventory snapshot, reservations by `holderKind`, changelogs (grade10-admin-inventory-catalog-SC-29) |
+| `products.create` | Draft product + zeroed inventory (grade10-admin-inventory-catalog-SC-01) |
+| `products.update` | Name, description, remarks only (grade10-admin-inventory-catalog-SC-57) |
+| `products.markCreated` | One-way `draft` → `created` (grade10-admin-inventory-catalog-SC-52, grade10-admin-inventory-catalog-SC-54) |
+| `inventory.intake` | Stock up (grade10-admin-inventory-catalog-SC-05, grade10-admin-inventory-catalog-SC-06) |
+| `inventory.sell` | Free-pool sell (grade10-admin-inventory-catalog-SC-10) |
+| `inventory.withdraw` | Free-pool withdraw (grade10-admin-inventory-catalog-SC-11) |
+| `reservations.reserve` | Admin hold only; server-mints `holder_reference`; input is `productId`, `quantity`, optional `remarks` (grade10-admin-inventory-catalog-SC-59, grade10-admin-inventory-catalog-SC-67) |
+| `reservations.release` | Partial or full release; holder console or elevated admin API (grade10-admin-inventory-catalog-SC-22, grade10-admin-inventory-catalog-SC-35, grade10-admin-inventory-catalog-SC-60) |
+| `reservations.adjust` | `adjustReservation(id, newQuantity)` from listing console (grade10-admin-inventory-catalog-SC-47–grade10-admin-inventory-catalog-SC-50) |
+| `reservations.changeProduct` | `changeReservationProduct(id, newProductId, newQuantity)` from listing console (grade10-admin-inventory-catalog-SC-51, grade10-admin-inventory-catalog-SC-63–grade10-admin-inventory-catalog-SC-65) |
+| `reservations.sellFromReservation` | Auction holds only; from listing console (grade10-admin-inventory-catalog-SC-36, grade10-admin-inventory-catalog-SC-37) |
+| `reservations.vaultFromReservation` | Vault holds only; from Vault console (grade10-admin-inventory-catalog-SC-38) |
+| `changelogs.list` | Product-scoped history (grade10-admin-inventory-catalog-SC-23–grade10-admin-inventory-catalog-SC-28, grade10-admin-inventory-catalog-SC-41–grade10-admin-inventory-catalog-SC-44) |
 
 Admin fixture client mirrors every procedure above for frontend work without a
 running worker.
@@ -378,7 +378,7 @@ bound entrypoint — never an RPC input.
 | `VaultInventoryService` | `grade10-vault` | `getAvailability`, `reserve`, `adjustReservation`, `changeReservationProduct`, `release`, `vaultFromReservation`, `listOwnReservations` |
 
 `listEligibleProducts` returns only products with **`status = created`** and
-**available > 0** (catalog-SC-61, catalog-SC-62). Consumed by Auction and by
+**available > 0** (grade10-admin-inventory-catalog-SC-61, grade10-admin-inventory-catalog-SC-62). Consumed by Auction and by
 the admin listing editor via fixtures until inventory ships.
 
 **Rejected:** caller-supplied `holderKind`. **Rejected:** Vault exposing

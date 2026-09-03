@@ -113,9 +113,16 @@ using the exact existing path for a modified capability.
 - Money is an integer count of minor units plus an ISO 4217 code, never a
   float. Convert it yourself — the author says HKD 10, the spec says 1000 HKD
   minor units.
-- Ids are permanent. Number from 01 within a capability, using the prefix that
-  capability already issues, and never renumber one that exists — a task, a
-  review, a journey's `Accepted by`, and a downstream test all point at it.
+- **A capability's id prefix is its path with slashes as hyphens** —
+  `grade10-site/store/product-listing` issues
+  `grade10-site-store-product-listing-SC-01`. The path form is what keeps two
+  capabilities of the same name apart: `grade10-site/site/navigation` and
+  `zzz-site/site/navigation` would otherwise both issue `navigation-*`.
+- Ids are permanent. Number from 01 within a capability and never renumber one
+  that exists — a task, a review, a journey's `Accepted by`, and a downstream
+  test all point at it. A capability that is later renamed or moved goes on
+  issuing what it always issued, so read the ids that exist before adding one;
+  only a capability issuing its first derives the prefix from its path.
 
 ## user-journeys.md
 

@@ -29,44 +29,44 @@ read that trail and to check whether it is internally consistent. That
 check SHALL report whether the trail is consistent, and SHALL NOT return
 the proof. A caller without that grant SHALL NOT.
 
-#### Scenario: audit-SC-01 - A ban is on the trail
+#### Scenario: shared-auth-audit-SC-01 - A ban is on the trail
 
 - **WHEN** an operator bans an account
 - **THEN** the identity audit trail records that actor, that subject, and
   the ban
 
-#### Scenario: audit-SC-02 - A refused ban is on the trail
+#### Scenario: shared-auth-audit-SC-02 - A refused ban is on the trail
 
 - **WHEN** a caller who cannot ban tries to ban an account
 - **THEN** the identity audit trail records that attempt
 - **AND** records that it did not succeed
 
-#### Scenario: audit-SC-03 - A revoke is on the trail
+#### Scenario: shared-auth-audit-SC-03 - A revoke is on the trail
 
 - **WHEN** an operator revokes a session
 - **THEN** the identity audit trail records that actor, that subject, and
   the revoke
 
-#### Scenario: audit-SC-04 - A trail entry names people by user id
+#### Scenario: shared-auth-audit-SC-04 - A trail entry names people by user id
 
 - **WHEN** an identity operator action is recorded
 - **THEN** the entry names the actor and the subject by user id
 - **AND** it does not name them by email
 
-#### Scenario: audit-SC-05 - An auditor can read the trail
+#### Scenario: shared-auth-audit-SC-05 - An auditor can read the trail
 
 - **GIVEN** a person who holds `audit:read`
 - **WHEN** they read the identity audit trail
 - **THEN** they receive the recorded identity actions
 
-#### Scenario: audit-SC-06 - An auditor can check the trail is consistent
+#### Scenario: shared-auth-audit-SC-06 - An auditor can check the trail is consistent
 
 - **GIVEN** a person who holds `audit:read`
 - **WHEN** they check the identity audit trail
 - **THEN** they receive whether it is internally consistent
 - **AND** they do not receive the proof of that check
 
-#### Scenario: audit-SC-07 - A caller without audit read is refused
+#### Scenario: shared-auth-audit-SC-07 - A caller without audit read is refused
 
 - **GIVEN** a person who does not hold `audit:read`
 - **WHEN** they try to read or check the identity audit trail
@@ -77,12 +77,12 @@ the proof. A caller without that grant SHALL NOT.
 A ban entry SHALL keep the operator's reason when one was given. An entry
 SHALL NOT keep secrets or fields that are not the reason for the action.
 
-#### Scenario: audit-SC-08 - A ban reason is on the trail
+#### Scenario: shared-auth-audit-SC-08 - A ban reason is on the trail
 
 - **WHEN** an operator bans an account with a reason
 - **THEN** the trail entry keeps that reason
 
-#### Scenario: audit-SC-09 - Secrets stay off the trail
+#### Scenario: shared-auth-audit-SC-09 - Secrets stay off the trail
 
 - **WHEN** an identity operator action is recorded
 - **THEN** the entry does not keep a secret
@@ -94,28 +94,28 @@ WHEN the trail cannot accept an entry, the operator action SHALL NOT take
 effect. Listing or searching the directory, and listing sessions, SHALL
 NOT write an entry.
 
-#### Scenario: audit-SC-10 - An entry cannot be rewritten
+#### Scenario: shared-auth-audit-SC-10 - An entry cannot be rewritten
 
 - **GIVEN** an identity action already on the trail
 - **WHEN** anyone tries to edit or remove that entry
 - **THEN** the entry is unchanged
 
-#### Scenario: audit-SC-11 - An unrecorded action does not run
+#### Scenario: shared-auth-audit-SC-11 - An unrecorded action does not run
 
 - **WHEN** the identity trail cannot accept an entry for a ban
 - **THEN** the account is not banned
 
-#### Scenario: audit-SC-12 - A directory list is not on the trail
+#### Scenario: shared-auth-audit-SC-12 - A directory list is not on the trail
 
 - **WHEN** an operator lists accounts
 - **THEN** no identity trail entry is written for that list
 
-#### Scenario: audit-SC-13 - A session list is not on the trail
+#### Scenario: shared-auth-audit-SC-13 - A session list is not on the trail
 
 - **WHEN** an operator lists a person's sessions
 - **THEN** no identity trail entry is written for that list
 
-#### Scenario: audit-SC-14 - An unrecorded revoke does not run
+#### Scenario: shared-auth-audit-SC-14 - An unrecorded revoke does not run
 
 - **WHEN** the identity trail cannot accept an entry for a revoke
 - **THEN** the session remains signed in

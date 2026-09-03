@@ -78,7 +78,7 @@ The store is the agent's memory as much as yours: point it at a change or a
 capability by id and it reads the same files this site renders. Two habits
 make that work.
 
-Cite permanent ids — `loyalty-SC-04`, not "the expiry rule" — in proposals,
+Cite permanent ids — `grade10-site-loyalty-programme-SC-04`, not "the expiry rule" — in proposals,
 bug reports, and prompts. Ids survive renames; prose does not.
 
 Never retype a requirement into a proposal or a prompt. Cite its id; a copy

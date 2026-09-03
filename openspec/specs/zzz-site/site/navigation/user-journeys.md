@@ -1,6 +1,6 @@
 ## User journeys
 
-### navigation-US-01: Collector opens a ZZZ address directly
+### zzz-site-site-navigation-US-01: Collector opens a ZZZ address directly
 
 **As a** collector,
 **I want** sign-in and the profile to answer at addresses of their own, and an
@@ -10,11 +10,11 @@ than at home.
 
 **Accepted by:**
 
-- `navigation-SC-01` — Each view has an address
-- `navigation-SC-02` — A refresh keeps the collector's place
-- `navigation-SC-03` — An unknown address resolves to not-found
+- `zzz-site-site-navigation-SC-01` — Each view has an address
+- `zzz-site-site-navigation-SC-02` — A refresh keeps the collector's place
+- `zzz-site-site-navigation-SC-03` — An unknown address resolves to not-found
 
-### navigation-US-02: Collector asks for a session-decided address
+### zzz-site-site-navigation-US-02: Collector asks for a session-decided address
 
 **As a** collector,
 **I want** home, sign-in, and the profile to answer with what my session
@@ -24,13 +24,13 @@ bounces me forward again.
 
 **Accepted by:**
 
-- `navigation-SC-04` — A signed-in collector lands on home
-- `navigation-SC-05` — A signed-in collector asks for sign-in
-- `navigation-SC-06` — A signed-out collector asks for the profile
-- `navigation-SC-07` — Back never returns to a corrected address
-- `navigation-SC-08` — Not-found does not wait
+- `zzz-site-site-navigation-SC-04` — A signed-in collector lands on home
+- `zzz-site-site-navigation-SC-05` — A signed-in collector asks for sign-in
+- `zzz-site-site-navigation-SC-06` — A signed-out collector asks for the profile
+- `zzz-site-site-navigation-SC-07` — Back never returns to a corrected address
+- `zzz-site-site-navigation-SC-08` — Not-found does not wait
 
-### navigation-US-03: Collector moves between surfaces without a page load
+### zzz-site-site-navigation-US-03: Collector moves between surfaces without a page load
 
 **As a** collector,
 **I want** movement between the site's surfaces to stay in the page, with
@@ -40,12 +40,12 @@ browser behavior I asked for.
 
 **Accepted by:**
 
-- `navigation-SC-09` — Sign-in opens in place
-- `navigation-SC-10` — Back steps back into the site
-- `navigation-SC-11` — A modified click is the browser's
-- `navigation-SC-12` — Another origin is the browser's
+- `zzz-site-site-navigation-SC-09` — Sign-in opens in place
+- `zzz-site-site-navigation-SC-10` — Back steps back into the site
+- `zzz-site-site-navigation-SC-11` — A modified click is the browser's
+- `zzz-site-site-navigation-SC-12` — Another origin is the browser's
 
-### navigation-US-04: Collector resumes a surface where they left it
+### zzz-site-site-navigation-US-04: Collector resumes a surface where they left it
 
 **As a** collector,
 **I want** back and forward to return me to the scroll position I left an
@@ -55,10 +55,10 @@ from the beginning.
 
 **Accepted by:**
 
-- `navigation-SC-13` — Back returns to where they were
-- `navigation-SC-14` — A new surface starts at the top
+- `zzz-site-site-navigation-SC-13` — Back returns to where they were
+- `zzz-site-site-navigation-SC-14` — A new surface starts at the top
 
-### navigation-US-05: Collector downloads only the surface they open
+### zzz-site-site-navigation-US-05: Collector downloads only the surface they open
 
 **As a** collector,
 **I want** a surface to cost only its own page code, loaded when I move to it,
@@ -67,5 +67,5 @@ open.
 
 **Accepted by:**
 
-- `navigation-SC-15` — The first visit pays for one surface
-- `navigation-SC-16` — The destination loads on arrival
+- `zzz-site-site-navigation-SC-15` — The first visit pays for one surface
+- `zzz-site-site-navigation-SC-16` — The destination loads on arrival

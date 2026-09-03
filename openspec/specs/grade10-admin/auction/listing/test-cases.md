@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-01, tcs-rules r1
 
-## admin-listing-US1: Operator saves an unfinished listing and comes back to it
+## grade10-admin-auction-listing-US1: Operator saves an unfinished listing and comes back to it
 
 **As an** auction operator,
 **I want** to save a listing before I know every fact about the card,
 **so that** I can start from the item in front of me and finish once the rest arrives.
 
-### admin-listing-US1-TC1-1: Operator saves an empty draft
+### grade10-admin-auction-listing-US1-TC1-1: Operator saves an empty draft
 
 **Classification:**
 
@@ -21,7 +21,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-01
+* **Trace:** grade10-admin-auction-listing-US-01
 
 **Pre-conditions:**
 An authorized operator on the Grade10 auction listings section.
@@ -37,7 +37,7 @@ An authorized operator on the Grade10 auction listings section.
 * Grade10 persists a draft listing with those fields empty.
 * The listing is absent from the public catalogue.
 
-### admin-listing-US1-TC2-1: Operator saves a partial draft
+### grade10-admin-auction-listing-US1-TC2-1: Operator saves a partial draft
 
 **Classification:**
 
@@ -49,7 +49,7 @@ An authorized operator on the Grade10 auction listings section.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-01
+* **Trace:** grade10-admin-auction-listing-US-01
 
 **Pre-conditions:**
 An authorized operator.
@@ -65,7 +65,7 @@ An authorized operator.
 * The listing remains a draft.
 * Starting price stays empty.
 
-### admin-listing-US1-TC3-1: Draft rejects a malformed price
+### grade10-admin-auction-listing-US1-TC3-1: Draft rejects a malformed price
 
 **Classification:**
 
@@ -77,7 +77,7 @@ An authorized operator.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-01
+* **Trace:** grade10-admin-auction-listing-US-01
 
 **Pre-conditions:**
 A draft listing.
@@ -93,7 +93,7 @@ A draft listing.
 * Grade10 refuses the write.
 * Starting price is unchanged.
 
-### admin-listing-US1-TC4-1: Draft rejects a malformed slug
+### grade10-admin-auction-listing-US1-TC4-1: Draft rejects a malformed slug
 
 **Classification:**
 
@@ -105,7 +105,7 @@ A draft listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-01
+* **Trace:** grade10-admin-auction-listing-US-01
 
 **Pre-conditions:**
 A draft listing.
@@ -127,7 +127,7 @@ A draft listing.
 * Grade10 refuses the write.
 * The slug is unchanged.
 
-### admin-listing-US1-TC5-1: Unauthorized draft save is refused
+### grade10-admin-auction-listing-US1-TC5-1: Unauthorized draft save is refused
 
 **Classification:**
 
@@ -139,7 +139,7 @@ A draft listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-01
+* **Trace:** grade10-admin-auction-listing-US-01
 
 **Pre-conditions:**
 A signed-in operator who may not set an auction's prices and window.
@@ -156,13 +156,13 @@ A signed-in operator who may not set an auction's prices and window.
 
 ---
 
-## admin-listing-US2: Operator puts a gallery on a listing
+## grade10-admin-auction-listing-US2: Operator puts a gallery on a listing
 
 **As an** auction operator,
 **I want** to attach, order, and replace the photographs and video of a card,
 **so that** a collector judges the item from the images without asking me for more.
 
-### admin-listing-US2-TC1-1: Operator uploads an eighth file
+### grade10-admin-auction-listing-US2-TC1-1: Operator uploads an eighth file
 
 **Classification:**
 
@@ -174,7 +174,7 @@ A signed-in operator who may not set an auction's prices and window.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-02
+* **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
 A draft listing with seven media items. An authorized operator.
@@ -189,7 +189,7 @@ A draft listing with seven media items. An authorized operator.
 
 * Grade10 stores eight media items in the operator's order.
 
-### admin-listing-US2-TC2-1: Ninth file is refused
+### grade10-admin-auction-listing-US2-TC2-1: Ninth file is refused
 
 **Classification:**
 
@@ -201,7 +201,7 @@ A draft listing with seven media items. An authorized operator.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-02
+* **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
 A draft listing with eight media items.
@@ -217,7 +217,7 @@ A draft listing with eight media items.
 * Grade10 refuses the upload.
 * The gallery still has eight items.
 
-### admin-listing-US2-TC3-1: Mixed images and videos are accepted
+### grade10-admin-auction-listing-US2-TC3-1: Mixed images and videos are accepted
 
 **Classification:**
 
@@ -229,7 +229,7 @@ A draft listing with eight media items.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-02
+* **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
 A draft listing with no media. An authorized operator.
@@ -248,7 +248,7 @@ A draft listing with no media. An authorized operator.
 * A collector reading the published listing receives the JPEG, the MP4, and the WebP in that order.
 * The MP4 plays as video from the uploaded bytes.
 
-### admin-listing-US2-TC4-1: Upload is stored without processing
+### grade10-admin-auction-listing-US2-TC4-1: Upload is stored without processing
 
 **Classification:**
 
@@ -260,7 +260,7 @@ A draft listing with no media. An authorized operator.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** admin-listing-US-02
+* **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
 A draft listing.
@@ -283,7 +283,7 @@ A draft listing.
 * Grade10 stores and serves that same body and type as the item's original.
 * Any named-size paths for the image come from `grade10-site/auction/listing-media`, not from a second stored object written at upload.
 
-### admin-listing-US2-TC5-1: Unsupported type is refused
+### grade10-admin-auction-listing-US2-TC5-1: Unsupported type is refused
 
 **Classification:**
 
@@ -295,7 +295,7 @@ A draft listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-02
+* **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
 A draft listing.
@@ -311,7 +311,7 @@ A draft listing.
 * Grade10 refuses the upload.
 * The gallery is unchanged.
 
-### admin-listing-US2-TC6-1: File over 100 mebibytes is refused
+### grade10-admin-auction-listing-US2-TC6-1: File over 100 mebibytes is refused
 
 **Classification:**
 
@@ -323,7 +323,7 @@ A draft listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-02
+* **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
 A draft listing.
@@ -345,7 +345,7 @@ A draft listing.
 * Grade10 refuses the upload.
 * The gallery is unchanged.
 
-### admin-listing-US2-TC7-1: Operator reorders and removes media
+### grade10-admin-auction-listing-US2-TC7-1: Operator reorders and removes media
 
 **Classification:**
 
@@ -357,7 +357,7 @@ A draft listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-02
+* **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
 A published listing with three images in order A, B, C.
@@ -374,7 +374,7 @@ A published listing with three images in order A, B, C.
 * The gallery is C, A.
 * A collector's catalogue card is C.
 
-### admin-listing-US2-TC8-1: Last media item cannot be removed after create
+### grade10-admin-auction-listing-US2-TC8-1: Last media item cannot be removed after create
 
 **Classification:**
 
@@ -386,7 +386,7 @@ A published listing with three images in order A, B, C.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-02
+* **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
 A published listing with one JPEG.
@@ -404,13 +404,13 @@ A published listing with one JPEG.
 
 ---
 
-## admin-listing-US3: Operator creates a listing that is ready to sell
+## grade10-admin-auction-listing-US3: Operator creates a listing that is ready to sell
 
 **As an** auction operator,
 **I want** the listing checked against everything an auction needs at the moment I create it,
 **so that** nothing incomplete can reach a bidder.
 
-### admin-listing-US3-TC1-1: Operator creates a filled draft
+### grade10-admin-auction-listing-US3-TC1-1: Operator creates a filled draft
 
 **Classification:**
 
@@ -422,7 +422,7 @@ A published listing with one JPEG.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A draft listing with a title, slug `charizard-psa-9`, a starting price of 100000 minor units, a minimum increment of 5000 minor units, currency `HKD`, a start in the future, a scheduled close at after that start, and one JPEG.
@@ -448,7 +448,7 @@ A draft listing with a title, slug `charizard-psa-9`, a starting price of 100000
 * Grade10 moves it to `created`.
 * The listing is still absent from the public catalogue.
 
-### admin-listing-US3-TC2-1: Create without a title is refused on the form and the API
+### grade10-admin-auction-listing-US3-TC2-1: Create without a title is refused on the form and the API
 
 **Classification:**
 
@@ -460,7 +460,7 @@ A draft listing with a title, slug `charizard-psa-9`, a starting price of 100000
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A draft listing with no title and every other required field set.
@@ -478,7 +478,7 @@ A draft listing with no title and every other required field set.
 * A create sent to the API without a title is refused.
 * The listing remains a draft.
 
-### admin-listing-US3-TC3-1: Create without a slug is refused
+### grade10-admin-auction-listing-US3-TC3-1: Create without a slug is refused
 
 **Classification:**
 
@@ -490,7 +490,7 @@ A draft listing with no title and every other required field set.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A draft listing with every required field set except slug.
@@ -506,7 +506,7 @@ A draft listing with every required field set except slug.
 * Grade10 refuses the create.
 * The listing remains a draft.
 
-### admin-listing-US3-TC4-1: Create without a starting price is refused
+### grade10-admin-auction-listing-US3-TC4-1: Create without a starting price is refused
 
 **Classification:**
 
@@ -518,7 +518,7 @@ A draft listing with every required field set except slug.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A draft listing with a title, a window, and no starting price.
@@ -534,7 +534,7 @@ A draft listing with a title, a window, and no starting price.
 * Grade10 refuses the create.
 * The listing remains a draft.
 
-### admin-listing-US3-TC5-1: Create without media is refused
+### grade10-admin-auction-listing-US3-TC5-1: Create without media is refused
 
 **Classification:**
 
@@ -546,7 +546,7 @@ A draft listing with a title, a window, and no starting price.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A draft listing with every required field set except media.
@@ -562,7 +562,7 @@ A draft listing with every required field set except media.
 * Grade10 refuses the create.
 * The listing remains a draft.
 
-### admin-listing-US3-TC6-1: Created listing cannot clear a required field
+### grade10-admin-auction-listing-US3-TC6-1: Created listing cannot clear a required field
 
 **Classification:**
 
@@ -574,7 +574,7 @@ A draft listing with every required field set except media.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A created listing with a title.
@@ -590,7 +590,7 @@ A created listing with a title.
 * Grade10 refuses the write.
 * The title is unchanged.
 
-### admin-listing-US3-TC7-1: Create of a published listing is refused
+### grade10-admin-auction-listing-US3-TC7-1: Create of a published listing is refused
 
 **Classification:**
 
@@ -602,7 +602,7 @@ A created listing with a title.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A published listing.
@@ -618,7 +618,7 @@ A published listing.
 * Grade10 refuses the create.
 * The listing remains published.
 
-### admin-listing-US3-TC8-1: Two categories from one taxonomy are refused
+### grade10-admin-auction-listing-US3-TC8-1: Two categories from one taxonomy are refused
 
 **Classification:**
 
@@ -630,7 +630,7 @@ A published listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A taxonomy with categories Pokémon and Sport. A listing the operator can write categories on.
@@ -646,7 +646,7 @@ A taxonomy with categories Pokémon and Sport. A listing the operator can write 
 * Grade10 refuses the write.
 * The listing's categories are unchanged.
 
-### admin-listing-US3-TC9-1: Canceled sale cannot receive a listing
+### grade10-admin-auction-listing-US3-TC9-1: Canceled sale cannot receive a listing
 
 **Classification:**
 
@@ -658,7 +658,7 @@ A taxonomy with categories Pokémon and Sport. A listing the operator can write 
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A canceled sale. A draft listing.
@@ -674,7 +674,7 @@ A canceled sale. A draft listing.
 * Grade10 refuses the write.
 * The listing's sale is unchanged.
 
-### admin-listing-US3-TC10-1: Duplicate slug is refused
+### grade10-admin-auction-listing-US3-TC10-1: Duplicate slug is refused
 
 **Classification:**
 
@@ -686,7 +686,7 @@ A canceled sale. A draft listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A listing that is not canceled whose slug is `charizard-psa-9`. A second listing.
@@ -708,7 +708,7 @@ A listing that is not canceled whose slug is `charizard-psa-9`. A second listing
 * Grade10 refuses the write.
 * The second listing's slug is unchanged.
 
-### admin-listing-US3-TC11-1: Two drafts cannot share a slug
+### grade10-admin-auction-listing-US3-TC11-1: Two drafts cannot share a slug
 
 **Classification:**
 
@@ -720,7 +720,7 @@ A listing that is not canceled whose slug is `charizard-psa-9`. A second listing
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A draft whose slug is `charizard-psa-9`. A second draft.
@@ -742,7 +742,7 @@ A draft whose slug is `charizard-psa-9`. A second draft.
 * Grade10 refuses the write.
 * The second draft's slug is unchanged.
 
-### admin-listing-US3-TC12-1: Empty slugs on drafts are not a collision
+### grade10-admin-auction-listing-US3-TC12-1: Empty slugs on drafts are not a collision
 
 **Classification:**
 
@@ -754,7 +754,7 @@ A draft whose slug is `charizard-psa-9`. A second draft.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A draft with no slug. An authorized operator.
@@ -769,7 +769,7 @@ A draft with no slug. An authorized operator.
 * Grade10 accepts the save.
 * Neither draft occupies a slug.
 
-### admin-listing-US3-TC13-1: Create can reuse a canceled listing's original slug
+### grade10-admin-auction-listing-US3-TC13-1: Create can reuse a canceled listing's original slug
 
 **Classification:**
 
@@ -781,7 +781,7 @@ A draft with no slug. An authorized operator.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A canceled listing that previously used slug `charizard-psa-9`. A draft with every required field set, including slug `charizard-psa-9`.
@@ -804,7 +804,7 @@ A canceled listing that previously used slug `charizard-psa-9`. A draft with eve
 * Grade10 moves the draft to `created`.
 * The canceled listing still does not hold `charizard-psa-9`.
 
-### admin-listing-US3-TC14-1: Create cannot reuse a closed listing's slug
+### grade10-admin-auction-listing-US3-TC14-1: Create cannot reuse a closed listing's slug
 
 **Classification:**
 
@@ -816,7 +816,7 @@ A canceled listing that previously used slug `charizard-psa-9`. A draft with eve
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A closed listing whose slug is `charizard-psa-9`. A draft with every required field set, including slug `charizard-psa-9`.
@@ -840,7 +840,7 @@ A closed listing whose slug is `charizard-psa-9`. A draft with every required fi
 * The draft remains a draft.
 * `/auction/listings/charizard-psa-9` still returns the closed listing.
 
-### admin-listing-US3-TC15-1: Operator corrects a created listing's starting price
+### grade10-admin-auction-listing-US3-TC15-1: Operator corrects a created listing's starting price
 
 **Classification:**
 
@@ -852,7 +852,7 @@ A closed listing whose slug is `charizard-psa-9`. A draft with every required fi
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A created listing with starting price 100000 minor units `HKD`.
@@ -875,7 +875,7 @@ A created listing with starting price 100000 minor units `HKD`.
 * Grade10 stores 150000 minor units `HKD`.
 * The listing remains created.
 
-### admin-listing-US3-TC16-1: Scheduled close at in the past is refused at create
+### grade10-admin-auction-listing-US3-TC16-1: Scheduled close at in the past is refused at create
 
 **Classification:**
 
@@ -887,7 +887,7 @@ A created listing with starting price 100000 minor units `HKD`.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A draft listing whose scheduled close at is not after now.
@@ -903,7 +903,7 @@ A draft listing whose scheduled close at is not after now.
 * Grade10 refuses the create.
 * The listing remains a draft.
 
-### admin-listing-US3-TC17-1: Extension window without a duration is refused
+### grade10-admin-auction-listing-US3-TC17-1: Extension window without a duration is refused
 
 **Classification:**
 
@@ -915,7 +915,7 @@ A draft listing whose scheduled close at is not after now.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A created listing.
@@ -938,7 +938,7 @@ A created listing.
 * Grade10 refuses the write.
 * The listing's extension settings are unchanged.
 
-### admin-listing-US3-TC18-1: Sandbox cannot change after create
+### grade10-admin-auction-listing-US3-TC18-1: Sandbox cannot change after create
 
 **Classification:**
 
@@ -950,7 +950,7 @@ A created listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-03
+* **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 A created listing that was drafted as sandbox.
@@ -968,13 +968,13 @@ A created listing that was drafted as sandbox.
 
 ---
 
-## admin-listing-US4: Operator puts a listing in front of collectors
+## grade10-admin-auction-listing-US4: Operator puts a listing in front of collectors
 
 **As an** auction operator,
 **I want** to publish a listing now or at a time I set in advance,
 **so that** a lot opens at the hour the sale was announced for and reads at its own public address from then on.
 
-### admin-listing-US4-TC1-1: Operator publishes a created listing immediately
+### grade10-admin-auction-listing-US4-TC1-1: Operator publishes a created listing immediately
 
 **Classification:**
 
@@ -986,7 +986,7 @@ A created listing that was drafted as sandbox.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-04
+* **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
 A created listing with no publish at. An authorized operator.
@@ -1003,7 +1003,7 @@ A created listing with no publish at. An authorized operator.
 * Grade10 moves it to `published`.
 * A collector can read it on the public catalogue.
 
-### admin-listing-US4-TC2-1: Created listing publishes at the scheduled time
+### grade10-admin-auction-listing-US4-TC2-1: Created listing publishes at the scheduled time
 
 **Classification:**
 
@@ -1015,7 +1015,7 @@ A created listing with no publish at. An authorized operator.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-04
+* **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
 A created listing whose publish at is in the future.
@@ -1032,7 +1032,7 @@ A created listing whose publish at is in the future.
 * A collector can read it on the public catalogue.
 * No further operator action was required.
 
-### admin-listing-US4-TC3-1: Collector opens a listing by slug
+### grade10-admin-auction-listing-US4-TC3-1: Collector opens a listing by slug
 
 **Classification:**
 
@@ -1044,7 +1044,7 @@ A created listing whose publish at is in the future.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-04
+* **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
 A published listing whose slug is `charizard-psa-9`.
@@ -1063,7 +1063,7 @@ A published listing whose slug is `charizard-psa-9`.
 
 * Grade10 returns that listing.
 
-### admin-listing-US4-TC4-1: Unknown slug is not found
+### grade10-admin-auction-listing-US4-TC4-1: Unknown slug is not found
 
 **Classification:**
 
@@ -1075,7 +1075,7 @@ A published listing whose slug is `charizard-psa-9`.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-04
+* **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
 No published, closed, or settled listing with slug `no-such-lot`.
@@ -1094,7 +1094,7 @@ No published, closed, or settled listing with slug `no-such-lot`.
 
 * Grade10 answers as not found.
 
-### admin-listing-US4-TC5-1: Operator updates copy on a published listing
+### grade10-admin-auction-listing-US4-TC5-1: Operator updates copy on a published listing
 
 **Classification:**
 
@@ -1106,7 +1106,7 @@ No published, closed, or settled listing with slug `no-such-lot`.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-04
+* **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
 A published listing titled "Charizard 1st Edition".
@@ -1131,7 +1131,7 @@ A published listing titled "Charizard 1st Edition".
 * A collector reading the listing sees the new copy.
 * The title, prices, and window are unchanged.
 
-### admin-listing-US4-TC6-1: Published slug cannot change
+### grade10-admin-auction-listing-US4-TC6-1: Published slug cannot change
 
 **Classification:**
 
@@ -1143,7 +1143,7 @@ A published listing titled "Charizard 1st Edition".
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-04
+* **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
 A published listing whose slug is `charizard-psa-9`.
@@ -1166,7 +1166,7 @@ A published listing whose slug is `charizard-psa-9`.
 * Grade10 refuses the write.
 * `/auction/listings/charizard-psa-9` still returns that listing.
 
-### admin-listing-US4-TC7-1: Published listing refuses a price change
+### grade10-admin-auction-listing-US4-TC7-1: Published listing refuses a price change
 
 **Classification:**
 
@@ -1178,7 +1178,7 @@ A published listing whose slug is `charizard-psa-9`.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-04
+* **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
 A published listing with starting price 100000 minor units.
@@ -1200,7 +1200,7 @@ A published listing with starting price 100000 minor units.
 * Grade10 refuses the write.
 * The starting price remains 100000 minor units.
 
-### admin-listing-US4-TC8-1: A publish at in the past is refused
+### grade10-admin-auction-listing-US4-TC8-1: A publish at in the past is refused
 
 **Classification:**
 
@@ -1212,7 +1212,7 @@ A published listing with starting price 100000 minor units.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-04
+* **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
 A created listing.
@@ -1228,7 +1228,7 @@ A created listing.
 * Grade10 refuses the write.
 * The listing remains created and unpublished.
 
-### admin-listing-US4-TC9-1: Create with a past publish at is refused
+### grade10-admin-auction-listing-US4-TC9-1: Create with a past publish at is refused
 
 **Classification:**
 
@@ -1240,7 +1240,7 @@ A created listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-04
+* **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
 A draft listing with every required field set and publish at in the past.
@@ -1258,7 +1258,7 @@ A draft listing with every required field set and publish at in the past.
 * The listing remains a draft.
 * It stays absent from the public catalogue.
 
-### admin-listing-US4-TC10-1: Draft is not published when publish at arrives
+### grade10-admin-auction-listing-US4-TC10-1: Draft is not published when publish at arrives
 
 **Classification:**
 
@@ -1270,7 +1270,7 @@ A draft listing with every required field set and publish at in the past.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-04
+* **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
 A draft listing with a publish at that has arrived and a missing title.
@@ -1287,7 +1287,7 @@ A draft listing with a publish at that has arrived and a missing title.
 * It remains a draft.
 * It stays absent from the public catalogue.
 
-### admin-listing-US4-TC11-1: Manual publish of a draft is refused
+### grade10-admin-auction-listing-US4-TC11-1: Manual publish of a draft is refused
 
 **Classification:**
 
@@ -1299,7 +1299,7 @@ A draft listing with a publish at that has arrived and a missing title.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-04
+* **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
 A draft listing.
@@ -1315,7 +1315,7 @@ A draft listing.
 * Grade10 refuses the publish.
 * The listing remains a draft.
 
-### admin-listing-US4-TC12-1: Publish at cannot change after publish
+### grade10-admin-auction-listing-US4-TC12-1: Publish at cannot change after publish
 
 **Classification:**
 
@@ -1327,7 +1327,7 @@ A draft listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-04
+* **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
 A published listing.
@@ -1343,7 +1343,7 @@ A published listing.
 * Grade10 refuses the write.
 * The listing remains published.
 
-### admin-listing-US4-TC13-1: First item is the catalogue card
+### grade10-admin-auction-listing-US4-TC13-1: First item is the catalogue card
 
 **Classification:**
 
@@ -1355,7 +1355,7 @@ A published listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-04
+* **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
 A published listing whose gallery is a video then a JPEG.
@@ -1372,13 +1372,13 @@ A published listing whose gallery is a video then a JPEG.
 
 ---
 
-## admin-listing-US5: Operator calls a listing off before it closes
+## grade10-admin-auction-listing-US5: Operator calls a listing off before it closes
 
 **As an** auction operator,
 **I want** to withdraw a lot at any point up to its close,
 **so that** a consignor who pulls out or a card that fails authentication leaves the sale cleanly.
 
-### admin-listing-US5-TC1-1: Operator calls off a draft
+### grade10-admin-auction-listing-US5-TC1-1: Operator calls off a draft
 
 **Classification:**
 
@@ -1390,7 +1390,7 @@ A published listing whose gallery is a video then a JPEG.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-05
+* **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
 A draft listing. An authorized operator.
@@ -1407,7 +1407,7 @@ A draft listing. An authorized operator.
 * Grade10 moves it to `canceled`.
 * It stays absent from the public catalogue.
 
-### admin-listing-US5-TC2-1: Operator calls off a created listing before publish at
+### grade10-admin-auction-listing-US5-TC2-1: Operator calls off a created listing before publish at
 
 **Classification:**
 
@@ -1419,7 +1419,7 @@ A draft listing. An authorized operator.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-05
+* **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
 A created listing with a publish at still in the future. An authorized operator.
@@ -1438,7 +1438,7 @@ A created listing with a publish at still in the future. An authorized operator.
 * When that publish at arrives, Grade10 does not publish it.
 * It stays absent from the public catalogue.
 
-### admin-listing-US5-TC3-1: Operator calls off a published listing that has bids
+### grade10-admin-auction-listing-US5-TC3-1: Operator calls off a published listing that has bids
 
 **Classification:**
 
@@ -1450,7 +1450,7 @@ A created listing with a publish at still in the future. An authorized operator.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-05
+* **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
 A published listing with accepted bids and live authorizations. An authorized operator.
@@ -1468,7 +1468,7 @@ A published listing with accepted bids and live authorizations. An authorized op
 * It releases every live authorization standing against it.
 * It is absent from the public catalogue.
 
-### admin-listing-US5-TC4-1: Closed listing cannot be called off
+### grade10-admin-auction-listing-US5-TC4-1: Closed listing cannot be called off
 
 **Classification:**
 
@@ -1480,7 +1480,7 @@ A published listing with accepted bids and live authorizations. An authorized op
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-05
+* **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
 A closed listing.
@@ -1496,7 +1496,7 @@ A closed listing.
 * Grade10 refuses the cancel.
 * The listing remains closed.
 
-### admin-listing-US5-TC5-1: Settled listing cannot be called off
+### grade10-admin-auction-listing-US5-TC5-1: Settled listing cannot be called off
 
 **Classification:**
 
@@ -1508,7 +1508,7 @@ A closed listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-05
+* **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
 A settled listing.
@@ -1524,7 +1524,7 @@ A settled listing.
 * Grade10 refuses the cancel.
 * The listing remains settled.
 
-### admin-listing-US5-TC6-1: Already canceled listing cannot be called off again
+### grade10-admin-auction-listing-US5-TC6-1: Already canceled listing cannot be called off again
 
 **Classification:**
 
@@ -1536,7 +1536,7 @@ A settled listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-05
+* **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
 A canceled listing.
@@ -1552,7 +1552,7 @@ A canceled listing.
 * Grade10 refuses the cancel.
 * The listing remains canceled.
 
-### admin-listing-US5-TC7-1: Cancel rewrites the slug and frees the original
+### grade10-admin-auction-listing-US5-TC7-1: Cancel rewrites the slug and frees the original
 
 **Classification:**
 
@@ -1564,7 +1564,7 @@ A canceled listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-05
+* **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
 A published listing whose id is `auc_550e8400-e29b-41d4-a716-446655440000` and whose slug is `charizard-psa-9`. An authorized operator.
@@ -1589,7 +1589,7 @@ A published listing whose id is `auc_550e8400-e29b-41d4-a716-446655440000` and w
 * `/auction/listings/charizard-psa-9` does not return that listing.
 * A later listing may be created with slug `charizard-psa-9`.
 
-### admin-listing-US5-TC8-1: Cancel of a draft with no slug does not invent one
+### grade10-admin-auction-listing-US5-TC8-1: Cancel of a draft with no slug does not invent one
 
 **Classification:**
 
@@ -1601,7 +1601,7 @@ A published listing whose id is `auc_550e8400-e29b-41d4-a716-446655440000` and w
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-05
+* **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
 A draft listing with no slug. An authorized operator.
@@ -1617,7 +1617,7 @@ A draft listing with no slug. An authorized operator.
 * Grade10 moves it to `canceled`.
 * The listing still has no slug.
 
-### admin-listing-US5-TC9-1: Unauthorized cancel is refused
+### grade10-admin-auction-listing-US5-TC9-1: Unauthorized cancel is refused
 
 **Classification:**
 
@@ -1629,7 +1629,7 @@ A draft listing with no slug. An authorized operator.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-05
+* **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
 A published listing. A signed-in operator who may not call a listing off.
@@ -1646,7 +1646,7 @@ A published listing. A signed-in operator who may not call a listing off.
 * The listing remains published.
 * Its slug is unchanged.
 
-### admin-listing-US5-TC10-1: Closed listing rejects a title edit
+### grade10-admin-auction-listing-US5-TC10-1: Closed listing rejects a title edit
 
 **Classification:**
 
@@ -1658,7 +1658,7 @@ A published listing. A signed-in operator who may not call a listing off.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-05
+* **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
 A closed listing.
@@ -1674,7 +1674,7 @@ A closed listing.
 * Grade10 refuses the write.
 * The title is unchanged.
 
-### admin-listing-US5-TC11-1: Closed listing rejects a media upload
+### grade10-admin-auction-listing-US5-TC11-1: Closed listing rejects a media upload
 
 **Classification:**
 
@@ -1686,7 +1686,7 @@ A closed listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-05
+* **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
 A closed listing.

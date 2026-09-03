@@ -48,12 +48,12 @@ components for the store cart surface: `CartDrawer`, `CartDrawerHeader`,
 `CartDrawerCopy` SHALL include `unavailableItemsRemoved` for the toast shown
 when unavailable lines are cleared after open loading.
 
-#### Scenario: store-cart-SC-01 - An application imports the cart drawer
+#### Scenario: shared-ui-store-cart-SC-01 - An application imports the cart drawer
 
 - **WHEN** an application imports any export named above from the shared UI package's public entry
 - **THEN** the import resolves without error
 
-#### Scenario: store-cart-SC-13 - Drawer copy carries the unavailable-removal toast message
+#### Scenario: shared-ui-store-cart-SC-13 - Drawer copy carries the unavailable-removal toast message
 
 - **WHEN** a consumer supplies `CartDrawerCopy`
 - **THEN** the copy includes `unavailableItemsRemoved`
@@ -70,7 +70,7 @@ when unavailable lines are cleared after open loading.
 | `soldOut` | Variant has no stock; row stays visible with sold-out treatment |
 | `unavailable` | Product is no longer in the store catalogue; removed after open loading |
 
-#### Scenario: store-cart-SC-12 - Status values are the four named states
+#### Scenario: shared-ui-store-cart-SC-12 - Status values are the four named states
 
 - **WHEN** a consumer assigns `CartItemStatus` on a cart line
 - **THEN** the allowed values are only `default`, `adjusted`, `soldOut`, and
@@ -83,19 +83,19 @@ When the cart holds fewer than 5 items, `CartDrawer` SHALL render empty
 When the cart holds 5 or more items, `CartDrawer` SHALL NOT render empty slot
 placeholders and SHALL scroll all items.
 
-#### Scenario: store-cart-SC-02 - Fewer than 5 items
+#### Scenario: shared-ui-store-cart-SC-02 - Fewer than 5 items
 
 - **GIVEN** a cart with 2 items
 - **WHEN** `CartDrawer` renders
 - **THEN** it renders the 2 items followed by 3 `CartItemSlot` placeholders
 
-#### Scenario: store-cart-SC-03 - 5 or more items
+#### Scenario: shared-ui-store-cart-SC-03 - 5 or more items
 
 - **GIVEN** a cart with 6 items
 - **WHEN** `CartDrawer` renders
 - **THEN** all 6 items render and no `CartItemSlot` placeholders are shown
 
-#### Scenario: store-cart-SC-04 - Empty cart
+#### Scenario: shared-ui-store-cart-SC-04 - Empty cart
 
 - **GIVEN** a cart with 0 items
 - **WHEN** `CartDrawer` renders
@@ -108,7 +108,7 @@ placeholders and SHALL scroll all items.
 `CartDrawerHeader` SHALL display the count of active items in the cart and
 SHALL NOT count sold-out items towards the badge total.
 
-#### Scenario: store-cart-SC-05 - Sold out item present
+#### Scenario: shared-ui-store-cart-SC-05 - Sold out item present
 
 - **GIVEN** a cart with 1 active item and 1 sold-out item
 - **WHEN** `CartDrawer` renders
@@ -120,7 +120,7 @@ SHALL NOT count sold-out items towards the badge total.
 dimmed backdrop overlay, or presses the <kbd>Escape</kbd> key. When open,
 background body scrolling SHALL be prevented.
 
-#### Scenario: store-cart-SC-06 - Backdrop tap or Escape key
+#### Scenario: shared-ui-store-cart-SC-06 - Backdrop tap or Escape key
 
 - **GIVEN** an open cart drawer
 - **WHEN** the backdrop overlay is clicked or the Escape key is pressed
@@ -131,7 +131,7 @@ background body scrolling SHALL be prevented.
 When cart items exceed the visible body container, `CartDrawerBody` SHALL display
 shadcn scroll-fade mask styling at the top and bottom edges to indicate scrollable content.
 
-#### Scenario: store-cart-SC-07 - Overflowing items hint scrollability
+#### Scenario: shared-ui-store-cart-SC-07 - Overflowing items hint scrollability
 
 - **GIVEN** a cart with overflowing items
 - **WHEN** `CartDrawerBody` renders
@@ -145,7 +145,7 @@ badge, subtotal, discount amount, and estimated total SHALL render in a Boneyard
 skeleton loading state. Empty `CartItemSlot` placeholders SHALL NOT render while
 loading, and the checkout button SHALL be disabled.
 
-#### Scenario: store-cart-SC-08 - Cart opened in loading state
+#### Scenario: shared-ui-store-cart-SC-08 - Cart opened in loading state
 
 - **GIVEN** an opening or loading cart drawer
 - **WHEN** `CartDrawer` renders while `loading` is true
@@ -166,7 +166,7 @@ SHALL NOT show that toast.
 `unavailable` means the product is no longer in the store catalogue (taken off
 sale). It is not `soldOut` and not `adjusted`.
 
-#### Scenario: store-cart-SC-10 - Delisted items clear after loading with one toast
+#### Scenario: shared-ui-store-cart-SC-10 - Delisted items clear after loading with one toast
 
 - **GIVEN** an open cart drawer whose status-and-price loading has finished
 - **AND** the cart includes at least one item with status `unavailable` and at
@@ -177,7 +177,7 @@ sale). It is not `soldOut` and not `adjusted`.
 - **AND** exactly one toast appears with the `unavailableItemsRemoved` message
 - **AND** non-unavailable items remain in the cart
 
-#### Scenario: store-cart-SC-11 - No unavailable items means no removal toast
+#### Scenario: shared-ui-store-cart-SC-11 - No unavailable items means no removal toast
 
 - **GIVEN** an open cart drawer whose status-and-price loading has finished
 - **AND** no cart item has status `unavailable`
@@ -195,7 +195,7 @@ and redirecting (for example to Shopify Checkout). While redirecting, the
 button SHALL remain in the loading state until navigation occurs or `onCheckout`
 rejects, in which case the button SHALL return to its enabled label.
 
-#### Scenario: store-cart-SC-09 - Shopper proceeds to checkout
+#### Scenario: shared-ui-store-cart-SC-09 - Shopper proceeds to checkout
 
 - **GIVEN** an enabled checkout button
 - **WHEN** the shopper activates it
@@ -215,13 +215,13 @@ When the line’s status leaves `adjusted` and later becomes `adjusted` again,
 `adjusted`, it SHALL show the warning (a remount with status still `adjusted`
 shows the warning again).
 
-#### Scenario: store-cart-SC-14 - Adjusted line shows the low-stock warning
+#### Scenario: shared-ui-store-cart-SC-14 - Adjusted line shows the low-stock warning
 
 - **GIVEN** a cart line with status `adjusted`
 - **WHEN** `CartItem` renders
 - **THEN** the low-stock warning copy is visible
 
-#### Scenario: store-cart-SC-15 - Quantity change hides the warning
+#### Scenario: shared-ui-store-cart-SC-15 - Quantity change hides the warning
 
 - **GIVEN** a cart line with status `adjusted` showing the low-stock warning
 - **AND** the stepper can change quantity without removing the line
@@ -229,7 +229,7 @@ shows the warning again).
 - **THEN** the low-stock warning is no longer visible
 - **AND** `onQuantityChange` is invoked with the new quantity
 
-#### Scenario: store-cart-SC-16 - New adjusted status shows the warning again
+#### Scenario: shared-ui-store-cart-SC-16 - New adjusted status shows the warning again
 
 - **GIVEN** a cart line that was `adjusted` and whose warning was hidden after
   a quantity change

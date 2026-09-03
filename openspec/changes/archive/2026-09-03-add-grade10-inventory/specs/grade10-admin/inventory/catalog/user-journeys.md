@@ -1,15 +1,15 @@
 ## User journeys
 
-### catalog-US-01: Record received stock
+### grade10-admin-inventory-catalog-US-01: Record received stock
 
 As an inventory admin, I want to create a product and intake quantity into its
 inventory, so that the snapshot and derived lifetime ledger reflect what
 Grade10 accepted.
 
-Accepted by: catalog-SC-01, catalog-SC-05, catalog-SC-06, catalog-SC-07,
-catalog-SC-52, catalog-SC-54.
+Accepted by: grade10-admin-inventory-catalog-SC-01, grade10-admin-inventory-catalog-SC-05, grade10-admin-inventory-catalog-SC-06, grade10-admin-inventory-catalog-SC-07,
+grade10-admin-inventory-catalog-SC-52, grade10-admin-inventory-catalog-SC-54.
 
-### catalog-US-02: Oversee holds and settle them from holder apps
+### grade10-admin-inventory-catalog-US-02: Oversee holds and settle them from holder apps
 
 As an inventory admin, I want to see Auction and Vault holds with remaining
 quantity on the product page, reserve house stock under `admin` holds, release
@@ -18,27 +18,27 @@ sell-from-reservation, change-product, and vault-from-reservation run from the
 owning listing or Vault console, so that house stock is not over-promised and
 settlement stays with the application that owns the hold.
 
-Accepted by: catalog-SC-14, catalog-SC-17, catalog-SC-18, catalog-SC-22,
-catalog-SC-35, catalog-SC-36, catalog-SC-37, catalog-SC-38, catalog-SC-47,
-catalog-SC-48, catalog-SC-49, catalog-SC-50, catalog-SC-51, catalog-SC-53,
-catalog-SC-59, catalog-SC-60, catalog-SC-63, catalog-SC-64, catalog-SC-65,
-catalog-SC-67, catalog-SC-68.
+Accepted by: grade10-admin-inventory-catalog-SC-14, grade10-admin-inventory-catalog-SC-17, grade10-admin-inventory-catalog-SC-18, grade10-admin-inventory-catalog-SC-22,
+grade10-admin-inventory-catalog-SC-35, grade10-admin-inventory-catalog-SC-36, grade10-admin-inventory-catalog-SC-37, grade10-admin-inventory-catalog-SC-38, grade10-admin-inventory-catalog-SC-47,
+grade10-admin-inventory-catalog-SC-48, grade10-admin-inventory-catalog-SC-49, grade10-admin-inventory-catalog-SC-50, grade10-admin-inventory-catalog-SC-51, grade10-admin-inventory-catalog-SC-53,
+grade10-admin-inventory-catalog-SC-59, grade10-admin-inventory-catalog-SC-60, grade10-admin-inventory-catalog-SC-63, grade10-admin-inventory-catalog-SC-64, grade10-admin-inventory-catalog-SC-65,
+grade10-admin-inventory-catalog-SC-67, grade10-admin-inventory-catalog-SC-68.
 
-### catalog-US-03: Use inventory through a holder-kind boundary
+### grade10-admin-inventory-catalog-US-03: Use inventory through a holder-kind boundary
 
 As a consuming application, I want to reserve, adjust, partially settle, and
 release my quantity without seeing another kind's holds, so that I can safely
 use my hold. Auction sells; Vault vaults.
 
-Accepted by: catalog-SC-15, catalog-SC-16, catalog-SC-19, catalog-SC-20,
-catalog-SC-21, catalog-SC-39, catalog-SC-40, catalog-SC-61, catalog-SC-62,
-catalog-SC-66.
+Accepted by: grade10-admin-inventory-catalog-SC-15, grade10-admin-inventory-catalog-SC-16, grade10-admin-inventory-catalog-SC-19, grade10-admin-inventory-catalog-SC-20,
+grade10-admin-inventory-catalog-SC-21, grade10-admin-inventory-catalog-SC-39, grade10-admin-inventory-catalog-SC-40, grade10-admin-inventory-catalog-SC-61, grade10-admin-inventory-catalog-SC-62,
+grade10-admin-inventory-catalog-SC-66.
 
-### catalog-US-04: Reconstruct stock changes
+### grade10-admin-inventory-catalog-US-04: Reconstruct stock changes
 
 As an inventory admin, I want every stock and reservation transition recorded,
 so that I can explain how the latest snapshot was reached.
 
-Accepted by: catalog-SC-23, catalog-SC-24, catalog-SC-25, catalog-SC-26,
-catalog-SC-27, catalog-SC-28, catalog-SC-41, catalog-SC-42, catalog-SC-43,
-catalog-SC-44, catalog-SC-45.
+Accepted by: grade10-admin-inventory-catalog-SC-23, grade10-admin-inventory-catalog-SC-24, grade10-admin-inventory-catalog-SC-25, grade10-admin-inventory-catalog-SC-26,
+grade10-admin-inventory-catalog-SC-27, grade10-admin-inventory-catalog-SC-28, grade10-admin-inventory-catalog-SC-41, grade10-admin-inventory-catalog-SC-42, grade10-admin-inventory-catalog-SC-43,
+grade10-admin-inventory-catalog-SC-44, grade10-admin-inventory-catalog-SC-45.

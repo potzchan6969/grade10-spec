@@ -34,14 +34,14 @@ Each tied to the scenario that defines it.
 
 | State | Scenario |
 | --- | --- |
-| Not watching | `watchlist-SC-02` — the resting state after unwatching |
-| Watching | `watchlist-SC-01` |
-| Signed out | `watchlist-SC-04` — the control offers sign-in, and is not hidden |
-| Watched list, populated | `watchlist-SC-11` |
-| Watched list, entry facts | `watchlist-SC-15` — identity, current bid, close with its time zone |
-| Watched list, empty | `watchlist-SC-12` — an explanation, never a bare page or an error |
-| Watched entry, lot closed | `watchlist-SC-16` |
-| Watched entry, lot called off | `watchlist-SC-17` |
+| Not watching | `grade10-site-auction-watchlist-SC-02` — the resting state after unwatching |
+| Watching | `grade10-site-auction-watchlist-SC-01` |
+| Signed out | `grade10-site-auction-watchlist-SC-04` — the control offers sign-in, and is not hidden |
+| Watched list, populated | `grade10-site-auction-watchlist-SC-11` |
+| Watched list, entry facts | `grade10-site-auction-watchlist-SC-15` — identity, current bid, close with its time zone |
+| Watched list, empty | `grade10-site-auction-watchlist-SC-12` — an explanation, never a bare page or an error |
+| Watched entry, lot closed | `grade10-site-auction-watchlist-SC-16` |
+| Watched entry, lot called off | `grade10-site-auction-watchlist-SC-17` |
 
 A viewer who is not signed in never sees another collector's watch state, per
-`watchlist-SC-08`.
+`grade10-site-auction-watchlist-SC-08`.

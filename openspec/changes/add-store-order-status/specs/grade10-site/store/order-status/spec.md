@@ -44,7 +44,7 @@ resolving.
 The mapping SHALL NOT read carrier tracking, delivery estimates, line-item
 quantities, monetary amounts, or elapsed time.
 
-#### Scenario: order-status-SC-01 - An unrecognised Shopify value is indeterminate
+#### Scenario: grade10-site-store-order-status-SC-01 - An unrecognised Shopify value is indeterminate
 
 - **GIVEN** an order whose payment state is a value outside the accepted set
 - **WHEN** its order status is resolved
@@ -75,47 +75,47 @@ reported ahead of fulfilment progress. Rule 3's exclusion of `on_hold` and
 `scheduled` SHALL keep an order that is still in progress reported as
 `processing`, even when part of it has been refunded.
 
-#### Scenario: order-status-SC-02 - A cancelled order reports Canceled
+#### Scenario: grade10-site-store-order-status-SC-02 - A cancelled order reports Canceled
 
 - **GIVEN** an order whose order state is `cancelled`
 - **WHEN** its order status is resolved
 - **THEN** the badge is `canceled`
 - **AND** the badge is `canceled` for every payment and fulfilment state
 
-#### Scenario: order-status-SC-03 - A voided payment reports Canceled
+#### Scenario: grade10-site-store-order-status-SC-03 - A voided payment reports Canceled
 
 - **GIVEN** an order whose order state is `open` and whose payment state is `voided`
 - **WHEN** its order status is resolved
 - **THEN** the badge is `canceled`
 - **AND** the badge is not `processing`
 
-#### Scenario: order-status-SC-04 - A refund outranks fulfilment progress
+#### Scenario: grade10-site-store-order-status-SC-04 - A refund outranks fulfilment progress
 
 - **GIVEN** an order whose payment state is `partially_refunded` and whose fulfilment state is `fulfilled`
 - **WHEN** its order status is resolved
 - **THEN** the badge is `refunded`
 - **AND** the badge is neither `shipped` nor `completed`
 
-#### Scenario: order-status-SC-05 - A held order carrying a partial refund stays Processing
+#### Scenario: grade10-site-store-order-status-SC-05 - A held order carrying a partial refund stays Processing
 
 - **GIVEN** an order whose order state is `open`, whose fulfilment state is `on_hold`, and whose payment state is `partially_refunded`
 - **WHEN** its order status is resolved
 - **THEN** the badge is `processing`
 - **AND** the badge is not `refunded`
 
-#### Scenario: order-status-SC-06 - A fulfilled and archived order reports Completed
+#### Scenario: grade10-site-store-order-status-SC-06 - A fulfilled and archived order reports Completed
 
 - **GIVEN** an order whose order state is `closed`, fulfilment state is `fulfilled`, and payment state is `paid`
 - **WHEN** its order status is resolved
 - **THEN** the badge is `completed`
 
-#### Scenario: order-status-SC-07 - A partially fulfilled order reports Shipped
+#### Scenario: grade10-site-store-order-status-SC-07 - A partially fulfilled order reports Shipped
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `partially_fulfilled`, and payment state is `paid`
 - **WHEN** its order status is resolved
 - **THEN** the badge is `shipped`
 
-#### Scenario: order-status-SC-08 - Every remaining combination reports Processing
+#### Scenario: grade10-site-store-order-status-SC-08 - Every remaining combination reports Processing
 
 - **GIVEN** an order matching none of rules 1 through 5
 - **WHEN** its order status is resolved
@@ -159,21 +159,21 @@ The mapping SHALL emit a note **identifier**, never display text. Translated
 copy for each identifier SHALL be answered by the message catalogs, so that a
 note is not pinned to one language or one brand.
 
-#### Scenario: order-status-SC-09 - A confirmed combination carries its note
+#### Scenario: grade10-site-store-order-status-SC-09 - A confirmed combination carries its note
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `unfulfilled`, and payment state is `partially_refunded`
 - **WHEN** its order status is resolved
 - **THEN** the badge is `refunded`
 - **AND** the note identifier is `partial-refund-unshipped`
 
-#### Scenario: order-status-SC-10 - An unconfirmed combination carries no note
+#### Scenario: grade10-site-store-order-status-SC-10 - An unconfirmed combination carries no note
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `in_progress`, and payment state is `paid`
 - **WHEN** its order status is resolved
 - **THEN** the badge is `processing`
 - **AND** no note identifier is emitted
 
-#### Scenario: order-status-SC-11 - The mapping emits no display copy
+#### Scenario: grade10-site-store-order-status-SC-11 - The mapping emits no display copy
 
 - **GIVEN** any order that resolves to a note
 - **WHEN** its order status is resolved
@@ -188,7 +188,7 @@ resolving it SHALL NOT require a delivery fact.
 
 No badge SHALL assert that a shipment reached the collector.
 
-#### Scenario: order-status-SC-12 - Completed does not assert delivery
+#### Scenario: grade10-site-store-order-status-SC-12 - Completed does not assert delivery
 
 - **GIVEN** an order that resolves to the `completed` badge
 - **WHEN** the order has no carrier delivery confirmation
@@ -206,7 +206,7 @@ This requirement SHALL NOT remove a pickup rung from any shared component or
 design-system contract; withholding the value is a mapping decision, not a
 component change.
 
-#### Scenario: order-status-SC-13 - Pickup is never emitted in this phase
+#### Scenario: grade10-site-store-order-status-SC-13 - Pickup is never emitted in this phase
 
 - **GIVEN** any combination of the accepted vocabulary
 - **WHEN** its order status is resolved
@@ -223,7 +223,7 @@ that contradicts the one this mapping resolves for the same order.
 A surface MAY choose not to display the secondary note. A surface SHALL NOT
 display a note the mapping did not emit for that order.
 
-#### Scenario: order-status-SC-14 - Two surfaces report one order identically
+#### Scenario: grade10-site-store-order-status-SC-14 - Two surfaces report one order identically
 
 - **GIVEN** one order read by two surfaces that both show its status
 - **WHEN** both resolve its order status from the same four facts

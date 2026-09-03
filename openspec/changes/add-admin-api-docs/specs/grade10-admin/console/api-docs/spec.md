@@ -41,21 +41,21 @@ Producing the document SHALL be deterministic: the same routers give
 byte-identical output, so a difference between two documents is always a
 difference between two routers.
 
-#### Scenario: api-docs-SC-01 - Every mounted procedure appears, and nothing else
+#### Scenario: grade10-admin-console-api-docs-SC-01 - Every mounted procedure appears, and nothing else
 
 - **GIVEN** a service whose router mounts a known set of procedures
 - **WHEN** its document is produced
 - **THEN** the document lists exactly that set, by dotted path
 - **AND** each entry carries its kind and its caller
 
-#### Scenario: api-docs-SC-02 - A changed router fails the check until regenerated
+#### Scenario: grade10-admin-console-api-docs-SC-02 - A changed router fails the check until regenerated
 
 - **GIVEN** a committed document for a service
 - **WHEN** a procedure's input shape, output shape, kind, or grant changes in the router and the document is not regenerated
 - **THEN** the repository's check fails, naming the service and the procedure
 - **AND** regenerating the document makes the check pass
 
-#### Scenario: api-docs-SC-13 - Reading the same routers twice gives one document
+#### Scenario: grade10-admin-console-api-docs-SC-13 - Reading the same routers twice gives one document
 
 - **WHEN** a service's document is produced twice from unchanged routers
 - **THEN** the two documents are identical byte for byte
@@ -77,7 +77,7 @@ have every ladder in its document, named apart.
 | Finance | The elevated ladder |
 | Inventory | The elevated ladder |
 
-#### Scenario: api-docs-SC-03 - The rail names every service with its count
+#### Scenario: grade10-admin-console-api-docs-SC-03 - The rail names every service with its count
 
 - **WHEN** an engineer opens the surface
 - **THEN** the rail names each service in the table above
@@ -90,14 +90,14 @@ its own address. A production build SHALL carry neither the address nor the
 page behind it. In a build that carries it, the surface SHALL need no grant
 beyond what opens the console.
 
-#### Scenario: api-docs-SC-04 - A production build carries no API docs address
+#### Scenario: grade10-admin-console-api-docs-SC-04 - A production build carries no API docs address
 
 - **GIVEN** the Grade10 console built for production
 - **WHEN** an operator opens the API docs address
 - **THEN** the console answers with its not-found surface
 - **AND** the Dev heading offers no API docs entry
 
-#### Scenario: api-docs-SC-05 - A non-production build lists the surface under Dev
+#### Scenario: grade10-admin-console-api-docs-SC-05 - A non-production build lists the surface under Dev
 
 - **GIVEN** the Grade10 console built for staging or local development
 - **WHEN** an operator who can open the console signs in
@@ -119,21 +119,21 @@ whether it accepts null. A nested object SHALL show its own fields beneath
 it. A shape that is one of several alternatives SHALL show each alternative,
 named by the value that tells them apart where there is one.
 
-#### Scenario: api-docs-SC-06 - A router's procedures are listed with kind and caller
+#### Scenario: grade10-admin-console-api-docs-SC-06 - A router's procedures are listed with kind and caller
 
 - **GIVEN** a service picked in the rail
 - **WHEN** the engineer picks one of its routers
 - **THEN** every procedure of that router is listed
 - **AND** each row shows its kind, its caller, a summary of its input fields, and a summary of its output
 
-#### Scenario: api-docs-SC-07 - A procedure's detail shows its wire path and fields
+#### Scenario: grade10-admin-console-api-docs-SC-07 - A procedure's detail shows its wire path and fields
 
 - **WHEN** the engineer picks a procedure that declares an input of three fields, one of them bounded
 - **THEN** the detail shows the dotted path and the wire path the call lands on
 - **AND** the input table lists the three fields with required, type, and the bound
 - **AND** the output table lists the declared output's fields, each alternative apart where there are several
 
-#### Scenario: api-docs-SC-08 - A filter narrows every service by path or grant
+#### Scenario: grade10-admin-console-api-docs-SC-08 - A filter narrows every service by path or grant
 
 - **WHEN** the engineer types a grant into the filter
 - **THEN** every service's list narrows to the procedures requiring that grant
@@ -155,13 +155,13 @@ An elevated caller SHALL always carry its grant beside the word.
 A call made by a service principal rather than a person SHALL be named as
 such, with the principal's kind, in place of the four words.
 
-#### Scenario: api-docs-SC-09 - An elevated procedure names its grant
+#### Scenario: grade10-admin-console-api-docs-SC-09 - An elevated procedure names its grant
 
 - **WHEN** the engineer reads a procedure that requires an operator grant
 - **THEN** its caller reads elevated
 - **AND** the grant it requires is shown beside it, in the grant's own spelling
 
-#### Scenario: api-docs-SC-10 - A fresh-session call is told apart from a session call
+#### Scenario: grade10-admin-console-api-docs-SC-10 - A fresh-session call is told apart from a session call
 
 - **GIVEN** two procedures on one router, one accepting any signed-in session and one requiring a recently proven session
 - **WHEN** both are listed
@@ -174,7 +174,7 @@ detail and in its list row. Each service SHALL show how many of its
 procedures declare no output. The document SHALL NOT infer an output shape
 from anything other than the declaration.
 
-#### Scenario: api-docs-SC-11 - An undeclared output is said, not invented
+#### Scenario: grade10-admin-console-api-docs-SC-11 - An undeclared output is said, not invented
 
 - **WHEN** the engineer picks a procedure that declares no output shape
 - **THEN** its output panel says the output is not declared
@@ -190,7 +190,7 @@ service SHALL say so once above its list; a procedure's detail SHALL say it
 beside the caller. A procedure whose worker does its own work SHALL carry no
 such note.
 
-#### Scenario: api-docs-SC-14 - A forwarded procedure names the service that does its work
+#### Scenario: grade10-admin-console-api-docs-SC-14 - A forwarded procedure names the service that does its work
 
 - **GIVEN** the store's `auction` router, every procedure of which forwards to the auction service
 - **WHEN** the engineer picks that router
@@ -203,7 +203,7 @@ such note.
 The surface SHALL name the commit its documents were read from, so a reader
 can tell whether the page describes the backend in front of them.
 
-#### Scenario: api-docs-SC-12 - The page names the commit it was read from
+#### Scenario: grade10-admin-console-api-docs-SC-12 - The page names the commit it was read from
 
 - **WHEN** an engineer opens the surface
 - **THEN** the page names the commit the documents were produced from

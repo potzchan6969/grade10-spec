@@ -18,7 +18,7 @@ activity-time rules unless `timeOverride` is set.
 and `timeZone` and SHALL thread them to bid history and the collector deadline
 line.
 
-#### Scenario: auction-listing-SC-13 - Recent bids show localized activity time
+#### Scenario: shared-ui-auction-listing-SC-13 - Recent bids show localized activity time
 
 - **GIVEN** a bid card with history rows carrying `acceptedAtMs`
 - **WHEN** it renders with a shipped locale and time zone

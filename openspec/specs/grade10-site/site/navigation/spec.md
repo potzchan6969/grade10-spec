@@ -47,19 +47,19 @@ nested one renders. Where more than one surface could own an address, the
 deepest one naming it SHALL be the one that renders. An address under no
 surface SHALL resolve to the not-found surface.
 
-#### Scenario: navigation-SC-01 - A nested address answers as its surface
+#### Scenario: grade10-site-site-navigation-SC-01 - A nested address answers as its surface
 
 - **WHEN** a collector opens an address beneath a surface that no surface of
   its own names, such as an address beneath the store
 - **THEN** that surface renders
 
-#### Scenario: navigation-SC-02 - A nested surface renders for itself
+#### Scenario: grade10-site-site-navigation-SC-02 - A nested surface renders for itself
 
 - **WHEN** a collector opens an address a nested surface names, such as a
   mailed lot link beneath the auction
 - **THEN** the nested surface renders, not the surface above it
 
-#### Scenario: navigation-SC-03 - An unknown address resolves to not-found
+#### Scenario: grade10-site-site-navigation-SC-03 - An unknown address resolves to not-found
 
 - **WHEN** a collector opens an address under no surface the site answers
 - **THEN** the not-found surface renders, naming the address that failed
@@ -71,19 +71,19 @@ renders — SHALL navigate without a full document load. A click the collector
 modifies, a link that opens elsewhere by its own declaration, and a
 destination on another origin SHALL be left to the browser untouched.
 
-#### Scenario: navigation-SC-04 - A chrome link navigates in place
+#### Scenario: grade10-site-site-navigation-SC-04 - A chrome link navigates in place
 
 - **GIVEN** a collector on any surface
 - **WHEN** they click a header or footer link to another surface
 - **THEN** the destination surface renders without a full document load
 
-#### Scenario: navigation-SC-05 - A modified click is the browser's
+#### Scenario: grade10-site-site-navigation-SC-05 - A modified click is the browser's
 
 - **WHEN** a collector clicks an in-app link with a modifier held, such as
   the one that opens a new tab
 - **THEN** the browser's own behavior happens, unaltered
 
-#### Scenario: navigation-SC-06 - Another origin is the browser's
+#### Scenario: grade10-site-site-navigation-SC-06 - Another origin is the browser's
 
 - **WHEN** a collector clicks a link to another origin
 - **THEN** the browser follows it as a normal page load
@@ -97,26 +97,26 @@ correction SHALL move the address to the surface shown, replacing the
 history entry it corrects. Only these two addresses SHALL wait for the
 session to resolve.
 
-#### Scenario: navigation-SC-07 - A signed-out collector asks for the profile
+#### Scenario: grade10-site-site-navigation-SC-07 - A signed-out collector asks for the profile
 
 - **GIVEN** a collector who is not signed in
 - **WHEN** they open the profile address
 - **THEN** the sign-in surface renders and the address reads as sign-in
 
-#### Scenario: navigation-SC-08 - Back never returns to a corrected address
+#### Scenario: grade10-site-site-navigation-SC-08 - Back never returns to a corrected address
 
 - **GIVEN** a collector whose navigation was just corrected
 - **WHEN** they go back
 - **THEN** they arrive where they were before asking, never at the address
   that corrected them forward
 
-#### Scenario: navigation-SC-09 - A signed-in collector asks for sign-in
+#### Scenario: grade10-site-site-navigation-SC-09 - A signed-in collector asks for sign-in
 
 - **GIVEN** a signed-in collector
 - **WHEN** they open the sign-in address
 - **THEN** their profile renders and the address reads as the profile
 
-#### Scenario: navigation-SC-10 - A public surface does not wait
+#### Scenario: grade10-site-site-navigation-SC-10 - A public surface does not wait
 
 - **GIVEN** the session has not yet resolved
 - **WHEN** a collector opens any address other than the profile or sign-in
@@ -127,14 +127,14 @@ session to resolve.
 Going back or forward SHALL return the collector to the scroll position they
 left that entry at. A navigation to a new entry SHALL start at the top.
 
-#### Scenario: navigation-SC-11 - Back returns to where they were
+#### Scenario: grade10-site-site-navigation-SC-11 - Back returns to where they were
 
 - **GIVEN** a collector who scrolled partway down a surface and followed a
   link from there
 - **WHEN** they go back
 - **THEN** the surface is scrolled to where they left it
 
-#### Scenario: navigation-SC-12 - A new surface starts at the top
+#### Scenario: grade10-site-site-navigation-SC-12 - A new surface starts at the top
 
 - **GIVEN** a collector scrolled partway down a surface
 - **WHEN** they follow a link to another surface
@@ -145,13 +145,13 @@ left that entry at. A navigation to a new entry SHALL start at the top.
 Opening a surface SHALL NOT download another surface's page code. Navigating
 to a surface SHALL load that surface's code then.
 
-#### Scenario: navigation-SC-13 - The first visit pays for one surface
+#### Scenario: grade10-site-site-navigation-SC-13 - The first visit pays for one surface
 
 - **WHEN** a collector opens the marketing page cold
 - **THEN** no script containing the store's or the auction's page code is
   downloaded
 
-#### Scenario: navigation-SC-14 - The destination loads on arrival
+#### Scenario: grade10-site-site-navigation-SC-14 - The destination loads on arrival
 
 - **GIVEN** a collector on the marketing page
 - **WHEN** they navigate to the store

@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## session-US1: Collector is named on every surface they use
+## shared-auth-session-US1: Collector is named on every surface they use
 
 **As a** collector,
 **I want** a signed-in read to report my id, email, name, and roles, and a signed-out read to report nobody,
 **so that** every surface of this brand knows it is me, or that I have not signed in.
 
-### session-US1-TC1-1: Signed-in read names id, email, name and roles
+### shared-auth-session-US1-TC1-1: Signed-in read names id, email, name and roles
 
 **Classification:**
 
@@ -21,7 +21,7 @@
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** session-US-01
+* **Trace:** shared-auth-session-US-01
 
 **Pre-conditions:**
 Signed in as a collector on Grade10.
@@ -34,7 +34,7 @@ Signed in as a collector on Grade10.
 
 * The product receives that person's user id, email, name, and roles.
 
-### session-US1-TC2-1: Signed-out read reports no person
+### shared-auth-session-US1-TC2-1: Signed-out read reports no person
 
 **Classification:**
 
@@ -46,7 +46,7 @@ Signed in as a collector on Grade10.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** session-US-01
+* **Trace:** shared-auth-session-US-01
 
 **Pre-conditions:**
 The caller is not signed in.
@@ -59,7 +59,7 @@ The caller is not signed in.
 
 * The product receives no person.
 
-### session-US1-TC3-1: Another person is asked for by user id
+### shared-auth-session-US1-TC3-1: Another person is asked for by user id
 
 **Classification:**
 
@@ -71,7 +71,7 @@ The caller is not signed in.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** session-US-01
+* **Trace:** shared-auth-session-US-01
 
 **Pre-conditions:**
 A product must show another person's name.
@@ -84,7 +84,7 @@ A product must show another person's name.
 
 * The product asks for that person by user id.
 
-### session-US1-TC4-1: Client cannot claim a user on an anonymous event
+### shared-auth-session-US1-TC4-1: Client cannot claim a user on an anonymous event
 
 **Classification:**
 
@@ -96,7 +96,7 @@ A product must show another person's name.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** session-US-01
+* **Trace:** shared-auth-session-US-01
 
 **Pre-conditions:**
 The caller is not signed in.
@@ -111,13 +111,13 @@ The caller is not signed in.
 
 ---
 
-## session-US2: Collector stays signed in across the brand
+## shared-auth-session-US2: Collector stays signed in across the brand
 
 **As a** collector,
 **I want** one sign-in to cover every site of this brand and none of another,
 **so that** I do not sign in twice on the same brand or leak into the other.
 
-### session-US2-TC1-1: One sign-in covers every site of the brand
+### shared-auth-session-US2-TC1-1: One sign-in covers every site of the brand
 
 **Classification:**
 
@@ -129,7 +129,7 @@ The caller is not signed in.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** session-US-02
+* **Trace:** shared-auth-session-US-02
 
 **Pre-conditions:**
 Signed in on one Grade10 site.
@@ -142,7 +142,7 @@ Signed in on one Grade10 site.
 
 * They are signed in as the same person.
 
-### session-US2-TC2-1: Sign-in does not cross brands
+### shared-auth-session-US2-TC2-1: Sign-in does not cross brands
 
 **Classification:**
 
@@ -154,7 +154,7 @@ Signed in on one Grade10 site.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** session-US-02
+* **Trace:** shared-auth-session-US-02
 
 **Pre-conditions:**
 Signed in on Grade10.
@@ -169,13 +169,13 @@ Signed in on Grade10.
 
 ---
 
-## session-US3: Collector's visits are named as them, not as a device
+## shared-auth-session-US3: Collector's visits are named as them, not as a device
 
 **As a** collector,
 **I want** a signed-in event to name me and an anonymous event to name the device,
 **so that** analytics does not mix my account with a browser I have not signed in on.
 
-### session-US3-TC1-1: Signed-in event is attributed to the user id
+### shared-auth-session-US3-TC1-1: Signed-in event is attributed to the user id
 
 **Classification:**
 
@@ -187,7 +187,7 @@ Signed in on Grade10.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** session-US-03
+* **Trace:** shared-auth-session-US-03
 
 **Pre-conditions:**
 Signed in as a collector.
@@ -200,7 +200,7 @@ Signed in as a collector.
 
 * The event is attributed to that person's user id.
 
-### session-US3-TC2-1: Anonymous event is attributed to the device
+### shared-auth-session-US3-TC2-1: Anonymous event is attributed to the device
 
 **Classification:**
 
@@ -212,7 +212,7 @@ Signed in as a collector.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** session-US-03
+* **Trace:** shared-auth-session-US-03
 
 **Pre-conditions:**
 The caller is not signed in.
@@ -226,7 +226,7 @@ The caller is not signed in.
 * The event is attributed to the device.
 * It is not attributed to a user id.
 
-### session-US3-TC3-1: Sign-in links the device to the person
+### shared-auth-session-US3-TC3-1: Sign-in links the device to the person
 
 **Classification:**
 
@@ -238,7 +238,7 @@ The caller is not signed in.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** session-US-03
+* **Trace:** shared-auth-session-US-03
 
 **Pre-conditions:**
 Analytics events were recorded against this device while unsigned.

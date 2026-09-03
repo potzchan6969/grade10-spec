@@ -51,18 +51,41 @@ describe("the real store", () => {
     expect(snapshot.taxonomy.products).not.toContain("grade10-site");
   });
 
+  /** An id's prefix is the capability's path with slashes as hyphens, so two
+   * capabilities of the same name — `grade10-site/site/navigation` and
+   * `zzz-site/site/navigation` — cannot both issue `navigation-SC-01`. */
   it("carries permanent ids where the store has issued them", () => {
     const loyalty = snapshot.specs.find(
       (spec) => spec.id === "grade10-site/loyalty/programme",
     );
+    const prefix = "grade10-site-loyalty-programme";
     const scenarios =
       loyalty?.requirements.flatMap((one) => one.scenarios) ?? [];
-    expect(scenarios.some((one) => one.id?.startsWith("loyalty-SC-"))).toBe(
+    expect(scenarios.some((one) => one.id?.startsWith(`${prefix}-SC-`))).toBe(
       true,
     );
     expect(
-      loyalty?.journeys?.some((one) => one.id.startsWith("loyalty-US-")),
+      loyalty?.journeys?.some((one) => one.id.startsWith(`${prefix}-US-`)),
     ).toBe(true);
+  });
+
+  it("keeps the two navigation capabilities' ids apart", () => {
+    const idsOf = (id: string) =>
+      snapshot.specs
+        .find((spec) => spec.id === id)
+        ?.requirements.flatMap((one) => one.scenarios)
+        .flatMap((one) => (one.id ? [one.id] : [])) ?? [];
+    const site = idsOf("grade10-site/site/navigation");
+    const zzz = idsOf("zzz-site/site/navigation");
+    expect(site.length).toBeGreaterThan(0);
+    expect(zzz.length).toBeGreaterThan(0);
+    expect(
+      site.every((one) => one.startsWith("grade10-site-site-navigation-")),
+    ).toBe(true);
+    expect(
+      zzz.every((one) => one.startsWith("zzz-site-site-navigation-")),
+    ).toBe(true);
+    expect(site.filter((one) => zzz.includes(one))).toEqual([]);
   });
 
   /** Both fields are required on the artifact, so an omission would ship a

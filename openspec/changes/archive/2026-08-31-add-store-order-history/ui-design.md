@@ -33,11 +33,11 @@ https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4923
 
 | State | Spec scenario | Notes |
 | --- | --- | --- |
-| Filled, both sections | store-order-history-SC-01 | Active + Past |
-| One section omitted | store-order-history-SC-02 | Empty list → hide section |
-| Empty (zero orders) | store-order-history-SC-05 | `EmptyState` + Shop Now |
-| Track visible | store-order-history-SC-03 | `trackOrder` true (shipped) |
-| Track hidden | store-order-history-SC-10 | Past / non-shipped cards |
+| Filled, both sections | shared-ui-store-order-history-SC-01 | Active + Past |
+| One section omitted | shared-ui-store-order-history-SC-02 | Empty list → hide section |
+| Empty (zero orders) | shared-ui-store-order-history-SC-05 | `EmptyState` + Shop Now |
+| Track visible | shared-ui-store-order-history-SC-03 | `trackOrder` true (shipped) |
+| Track hidden | shared-ui-store-order-history-SC-10 | Past / non-shipped cards |
 
 **Documented Figma drift (do not implement):** Header description lists
 `paid` / `delivered` / `cancelled`; Status set is

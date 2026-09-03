@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## sign-in-US1: Collector asks for and follows a sign-in link
+## shared-auth-sign-in-US1: Collector asks for and follows a sign-in link
 
 **As a** collector,
 **I want** a link emailed to the address I submit to sign me in once,
 **so that** I reach my account without a password, and a used or expired link cannot.
 
-### sign-in-US1-TC1-1: Activating again during flight starts no second request
+### shared-auth-sign-in-US1-TC1-1: Activating again during flight starts no second request
 
 **Classification:**
 
@@ -21,7 +21,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-in-US-01
+* **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
 A sign-in command whose request is in flight. Network manipulation holds that request.
@@ -36,7 +36,7 @@ A sign-in command whose request is in flight. Network manipulation holds that re
 * No second request reaches the auth service.
 * Both activations settle with the one request's outcome.
 
-### sign-in-US1-TC2-1: Email step runs one command and only that one looks busy
+### shared-auth-sign-in-US1-TC2-1: Email step runs one command and only that one looks busy
 
 **Classification:**
 
@@ -48,7 +48,7 @@ A sign-in command whose request is in flight. Network manipulation holds that re
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-in-US-01
+* **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
 A collector on the email step whose send-link request is in flight.
@@ -64,7 +64,7 @@ A collector on the email step whose send-link request is in flight.
 * No code request starts and no second email is sent.
 * Only the running command shows its busy state.
 
-### sign-in-US1-TC3-1: Settled request frees the email step
+### shared-auth-sign-in-US1-TC3-1: Settled request frees the email step
 
 **Classification:**
 
@@ -76,7 +76,7 @@ A collector on the email step whose send-link request is in flight.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-01
+* **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
 An email step whose in-flight request has settled.
@@ -90,7 +90,7 @@ An email step whose in-flight request has settled.
 
 * That command starts normally.
 
-### sign-in-US1-TC4-1: Valid unused link creates a session
+### shared-auth-sign-in-US1-TC4-1: Valid unused link creates a session
 
 **Classification:**
 
@@ -102,7 +102,7 @@ An email step whose in-flight request has settled.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-in-US-01
+* **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
 A person who asked for a sign-in link at an email address.
@@ -115,7 +115,7 @@ A person who asked for a sign-in link at an email address.
 
 * They are signed in as the account for that address.
 
-### sign-in-US1-TC5-1: Used link does not sign in again
+### shared-auth-sign-in-US1-TC5-1: Used link does not sign in again
 
 **Classification:**
 
@@ -127,7 +127,7 @@ A person who asked for a sign-in link at an email address.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-01
+* **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
 A sign-in link that has already created a session.
@@ -140,7 +140,7 @@ A sign-in link that has already created a session.
 
 * No new session is created.
 
-### sign-in-US1-TC6-1: Expired link does not sign in
+### shared-auth-sign-in-US1-TC6-1: Expired link does not sign in
 
 **Classification:**
 
@@ -152,7 +152,7 @@ A sign-in link that has already created a session.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-01
+* **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
 A sign-in link whose time to live has ended.
@@ -165,7 +165,7 @@ A sign-in link whose time to live has ended.
 
 * No session is created.
 
-### sign-in-US1-TC7-1: Failed send is reported and does not sign in
+### shared-auth-sign-in-US1-TC7-1: Failed send is reported and does not sign in
 
 **Classification:**
 
@@ -177,7 +177,7 @@ A sign-in link whose time to live has ended.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-in-US-01
+* **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
 <The sign-in link send endpoint> is mocked to fail.
@@ -192,7 +192,7 @@ A sign-in link whose time to live has ended.
 * The surface states that the link was not sent.
 * The person is not signed in.
 
-### sign-in-US1-TC8-1: First send does not disclose whether the address is new
+### shared-auth-sign-in-US1-TC8-1: First send does not disclose whether the address is new
 
 **Classification:**
 
@@ -204,7 +204,7 @@ A sign-in link whose time to live has ended.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-in-US-01
+* **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
 An email that has never signed in.
@@ -219,7 +219,7 @@ An email that has never signed in.
 * The surface treats it as a sent link.
 * It does not state that no account exists.
 
-### sign-in-US1-TC9-1: New link kills the earlier unused link
+### shared-auth-sign-in-US1-TC9-1: New link kills the earlier unused link
 
 **Classification:**
 
@@ -231,7 +231,7 @@ An email that has never signed in.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-01
+* **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
 An unused unexpired sign-in link for an address.
@@ -247,13 +247,13 @@ An unused unexpired sign-in link for an address.
 
 ---
 
-## sign-in-US2: Collector signs in with an emailed code
+## shared-auth-sign-in-US2: Collector signs in with an emailed code
 
 **As a** collector,
 **I want** a code emailed to the address I submit to sign me in,
 **so that** I can finish on the same device, and a wrong or spent code cannot.
 
-### sign-in-US2-TC1-1: Correct unused code creates a session
+### shared-auth-sign-in-US2-TC1-1: Correct unused code creates a session
 
 **Classification:**
 
@@ -265,7 +265,7 @@ An unused unexpired sign-in link for an address.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-in-US-02
+* **Trace:** shared-auth-sign-in-US-02
 
 **Pre-conditions:**
 A person who asked for a sign-in code at an email address.
@@ -279,7 +279,7 @@ A person who asked for a sign-in code at an email address.
 
 * They are signed in as the account for that address.
 
-### sign-in-US2-TC2-1: Incorrect code is refused
+### shared-auth-sign-in-US2-TC2-1: Incorrect code is refused
 
 **Classification:**
 
@@ -291,7 +291,7 @@ A person who asked for a sign-in code at an email address.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-in-US-02
+* **Trace:** shared-auth-sign-in-US-02
 
 **Pre-conditions:**
 A person on the code step for an address that has an unused code.
@@ -305,7 +305,7 @@ A person on the code step for an address that has an unused code.
 * The surface states that the code did not work.
 * They are not signed in.
 
-### sign-in-US2-TC3-1: Expired code is refused
+### shared-auth-sign-in-US2-TC3-1: Expired code is refused
 
 **Classification:**
 
@@ -317,7 +317,7 @@ A person on the code step for an address that has an unused code.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-02
+* **Trace:** shared-auth-sign-in-US-02
 
 **Pre-conditions:**
 A sign-in code whose time to live has ended.
@@ -331,7 +331,7 @@ A sign-in code whose time to live has ended.
 * The surface states that the code did not work.
 * They are not signed in.
 
-### sign-in-US2-TC4-1: Three wrong submits kill the unused code
+### shared-auth-sign-in-US2-TC4-1: Three wrong submits kill the unused code
 
 **Classification:**
 
@@ -343,7 +343,7 @@ A sign-in code whose time to live has ended.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-02
+* **Trace:** shared-auth-sign-in-US-02
 
 **Pre-conditions:**
 A person who has submitted three incorrect codes for the unused code sent to an address.
@@ -356,7 +356,7 @@ A person who has submitted three incorrect codes for the unused code sent to an 
 
 * They are not signed in.
 
-### sign-in-US2-TC5-1: New code kills the earlier unused link
+### shared-auth-sign-in-US2-TC5-1: New code kills the earlier unused link
 
 **Classification:**
 
@@ -368,7 +368,7 @@ A person who has submitted three incorrect codes for the unused code sent to an 
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-02
+* **Trace:** shared-auth-sign-in-US-02
 
 **Pre-conditions:**
 An unused unexpired sign-in link for an address.
@@ -384,13 +384,13 @@ An unused unexpired sign-in link for an address.
 
 ---
 
-## sign-in-US3: Collector signs in with Google when the brand offers it
+## shared-auth-sign-in-US3: Collector signs in with Google when the brand offers it
 
 **As a** collector,
 **I want** Google sign-in when this brand offers it,
 **so that** I can use an account I already have, and a brand that does not offer it does not show it.
 
-### sign-in-US3-TC1-1: Brand with Google offers it and a verified email signs in
+### shared-auth-sign-in-US3-TC1-1: Brand with Google offers it and a verified email signs in
 
 **Classification:**
 
@@ -402,7 +402,7 @@ An unused unexpired sign-in link for an address.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-in-US-03
+* **Trace:** shared-auth-sign-in-US-03
 
 **Pre-conditions:**
 A brand that has Google sign-in.
@@ -417,7 +417,7 @@ A brand that has Google sign-in.
 * The Google control is present.
 * Completing Google sign-in with a verified email signs them in as the account for that address.
 
-### sign-in-US3-TC2-1: Unverified Google email does not sign in
+### shared-auth-sign-in-US3-TC2-1: Unverified Google email does not sign in
 
 **Classification:**
 
@@ -429,7 +429,7 @@ A brand that has Google sign-in.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-03
+* **Trace:** shared-auth-sign-in-US-03
 
 **Pre-conditions:**
 A brand that has Google sign-in.
@@ -444,7 +444,7 @@ A brand that has Google sign-in.
 * No account is created from that request.
 * They are not signed in.
 
-### sign-in-US3-TC3-1: Brand without Google hides the control
+### shared-auth-sign-in-US3-TC3-1: Brand without Google hides the control
 
 **Classification:**
 
@@ -456,7 +456,7 @@ A brand that has Google sign-in.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-in-US-03
+* **Trace:** shared-auth-sign-in-US-03
 
 **Pre-conditions:**
 A brand that does not have Google sign-in.
@@ -471,13 +471,13 @@ A brand that does not have Google sign-in.
 
 ---
 
-## sign-in-US4: Collector keeps one account for one verified address
+## shared-auth-sign-in-US4: Collector keeps one account for one verified address
 
 **As a** collector,
 **I want** every successful sign-in at an address to be the same person,
 **so that** a later visit, a product-created account, or letter case does not split me.
 
-### sign-in-US4-TC1-1: First visit creates the account
+### shared-auth-sign-in-US4-TC1-1: First visit creates the account
 
 **Classification:**
 
@@ -489,7 +489,7 @@ A brand that does not have Google sign-in.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-in-US-04
+* **Trace:** shared-auth-sign-in-US-04
 
 **Pre-conditions:**
 An email address that has never signed in.
@@ -503,7 +503,7 @@ An email address that has never signed in.
 * An account exists for that address.
 * The person is signed in as it.
 
-### sign-in-US4-TC2-1: Later visit by another method is the same account
+### shared-auth-sign-in-US4-TC2-1: Later visit by another method is the same account
 
 **Classification:**
 
@@ -515,7 +515,7 @@ An email address that has never signed in.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-04
+* **Trace:** shared-auth-sign-in-US-04
 
 **Pre-conditions:**
 An account that signed in with an emailed link.
@@ -528,7 +528,7 @@ An account that signed in with an emailed link.
 
 * They enter the same account, not a second one.
 
-### sign-in-US4-TC3-1: Letter case does not create a second account
+### shared-auth-sign-in-US4-TC3-1: Letter case does not create a second account
 
 **Classification:**
 
@@ -540,7 +540,7 @@ An account that signed in with an emailed link.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-04
+* **Trace:** shared-auth-sign-in-US-04
 
 **Pre-conditions:**
 An account that signed in at `Collector@example.com`.
@@ -553,7 +553,7 @@ An account that signed in at `Collector@example.com`.
 
 * They enter the same account, not a second one.
 
-### sign-in-US4-TC4-1: Plus-tag is a different address
+### shared-auth-sign-in-US4-TC4-1: Plus-tag is a different address
 
 **Classification:**
 
@@ -565,7 +565,7 @@ An account that signed in at `Collector@example.com`.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-04
+* **Trace:** shared-auth-sign-in-US-04
 
 **Pre-conditions:**
 An account at `collector@example.com`.
@@ -578,7 +578,7 @@ An account at `collector@example.com`.
 
 * A second account exists for that plus-tag address.
 
-### sign-in-US4-TC5-1: Trusted product creates or enters by verified email
+### shared-auth-sign-in-US4-TC5-1: Trusted product creates or enters by verified email
 
 **Classification:**
 
@@ -590,7 +590,7 @@ An account at `collector@example.com`.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-04
+* **Trace:** shared-auth-sign-in-US-04
 
 **Pre-conditions:**
 A product of this brand that has verified an email.
@@ -607,7 +607,7 @@ A product of this brand that has verified an email.
 * A known verified email returns the same account, not a second one.
 * The person is signed in as that account on this brand.
 
-### sign-in-US4-TC6-1: Client cannot claim an email
+### shared-auth-sign-in-US4-TC6-1: Client cannot claim an email
 
 **Classification:**
 
@@ -619,7 +619,7 @@ A product of this brand that has verified an email.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-04
+* **Trace:** shared-auth-sign-in-US-04
 
 **Pre-conditions:**
 None.
@@ -633,7 +633,7 @@ None.
 * No account is created from that request.
 * The person is not signed in.
 
-### sign-in-US4-TC7-1: Sign-in after a product-created account is the same person
+### shared-auth-sign-in-US4-TC7-1: Sign-in after a product-created account is the same person
 
 **Classification:**
 
@@ -645,7 +645,7 @@ None.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-04
+* **Trace:** shared-auth-sign-in-US-04
 
 **Pre-conditions:**
 An account created when a product verified an email.
@@ -660,13 +660,13 @@ An account created when a product verified an email.
 
 ---
 
-## sign-in-US5: Collector is not spammed or sent off-brand
+## shared-auth-sign-in-US5: Collector is not spammed or sent off-brand
 
 **As a** collector,
 **I want** a second email within a minute to wait, and a return only to this brand,
 **so that** I am not flooded and not delivered to an untrusted address.
 
-### sign-in-US5-TC1-1: Second link send in a minute is told to wait
+### shared-auth-sign-in-US5-TC1-1: Second link send in a minute is told to wait
 
 **Classification:**
 
@@ -678,7 +678,7 @@ An account created when a product verified an email.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-in-US-05
+* **Trace:** shared-auth-sign-in-US-05
 
 **Pre-conditions:**
 A sign-in-link email already sent to one address in the last sixty seconds.
@@ -693,7 +693,7 @@ A sign-in-link email already sent to one address in the last sixty seconds.
 * The surface tells them to wait.
 * It does not state that the link was not sent.
 
-### sign-in-US5-TC2-1: Second code send in a minute is told to wait
+### shared-auth-sign-in-US5-TC2-1: Second code send in a minute is told to wait
 
 **Classification:**
 
@@ -705,7 +705,7 @@ A sign-in-link email already sent to one address in the last sixty seconds.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-05
+* **Trace:** shared-auth-sign-in-US-05
 
 **Pre-conditions:**
 A sign-in-code email already sent to one address in the last sixty seconds.
@@ -720,7 +720,7 @@ A sign-in-code email already sent to one address in the last sixty seconds.
 * The surface tells them to wait.
 * It does not state that the code was not sent.
 
-### sign-in-US5-TC3-1: Code send after a link in a minute is told to wait
+### shared-auth-sign-in-US5-TC3-1: Code send after a link in a minute is told to wait
 
 **Classification:**
 
@@ -732,7 +732,7 @@ A sign-in-code email already sent to one address in the last sixty seconds.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-05
+* **Trace:** shared-auth-sign-in-US-05
 
 **Pre-conditions:**
 A sign-in-link email already sent to one address in the last sixty seconds.
@@ -746,7 +746,7 @@ A sign-in-link email already sent to one address in the last sixty seconds.
 * No code email is sent.
 * The surface tells them to wait.
 
-### sign-in-US5-TC4-1: Untrusted redirect is ignored
+### shared-auth-sign-in-US5-TC4-1: Untrusted redirect is ignored
 
 **Classification:**
 
@@ -758,7 +758,7 @@ A sign-in-link email already sent to one address in the last sixty seconds.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-in-US-05
+* **Trace:** shared-auth-sign-in-US-05
 
 **Pre-conditions:**
 A sign-in that names a location off this brand.
@@ -772,7 +772,7 @@ A sign-in that names a location off this brand.
 * They are on this brand.
 * They are not sent to that location.
 
-### sign-in-US5-TC5-1: Missing redirect stays on the brand
+### shared-auth-sign-in-US5-TC5-1: Missing redirect stays on the brand
 
 **Classification:**
 
@@ -784,7 +784,7 @@ A sign-in that names a location off this brand.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** sign-in-US-05
+* **Trace:** shared-auth-sign-in-US-05
 
 **Pre-conditions:**
 A sign-in that names no location.

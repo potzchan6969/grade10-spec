@@ -48,7 +48,7 @@ export type PageEntry = {
 export type WarningSignature = { author: string; date: string } | null;
 
 export type Scenario = {
-  /** Permanent store id like `loyalty-SC-04`, when the spec carries one. */
+  /** Permanent store id like `grade10-site-loyalty-programme-SC-04`, when the spec carries one. */
   id?: string;
   name: string;
   text: string;
@@ -61,7 +61,7 @@ export type Requirement = {
 };
 
 export type Journey = {
-  /** Permanent store id like `loyalty-US-01`. */
+  /** Permanent store id like `grade10-site-loyalty-programme-US-01`. */
   id: string;
   title: string;
   text: string;
@@ -74,12 +74,12 @@ export type Journey = {
 export type TestCaseStatus = "draft" | "actual" | "deprecated";
 
 export type TestCase = {
-  /** Permanent store id like `loyalty-US1-TC3-1`, or the flat
-   * `loyalty-TC-03` an older suite issued. */
+  /** Permanent store id like `grade10-site-loyalty-programme-US1-TC3-1`, or the flat
+   * `grade10-site-loyalty-programme-TC-03` an older suite issued. */
   id: string;
   title: string;
   /** Ids this case traces to, as written: the journey it walks
-   * (`loyalty-US-01`), or a scenario id where an older suite named those. A
+   * (`grade10-site-loyalty-programme-US-01`), or a scenario id where an older suite named those. A
    * journey trace reaches the scenarios its `Accepted by` lists. */
   traces: string[];
   status: TestCaseStatus;

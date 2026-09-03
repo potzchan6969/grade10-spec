@@ -3,7 +3,7 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-03, tcs-rules r1
 
-## card-price-US1: Inventory admin classifies a card product
+## grade10-admin-inventory-card-price-reference-US1: Inventory admin classifies a card product
 
 **As an** inventory admin,
 **I want** to create or edit a collectible-card product with its required tags
@@ -11,7 +11,7 @@ and a confirmed PriceCharting match,
 **so that** the catalogue identifies the card consistently and can retrieve the
 right price reference.
 
-### card-price-US1-TC1-1: Create a classified collectible card
+### grade10-admin-inventory-card-price-reference-US1-TC1-1: Create a classified collectible card
 
 **Classification:**
 
@@ -23,7 +23,7 @@ right price reference.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** card-price-US-01
+* **Trace:** grade10-admin-inventory-card-price-reference-US-01
 
 **Pre-conditions:**
 An inventory admin can access <grade10 admin inventory product URL>.
@@ -49,7 +49,7 @@ An inventory admin can access <grade10 admin inventory product URL>.
 * The product is created with Collectible Cards as its type.
 * The product shows the IP, Item, and Category tags.
 
-### card-price-US1-TC2-2: Refuse incomplete card taxonomy
+### grade10-admin-inventory-card-price-reference-US1-TC2-2: Refuse incomplete card taxonomy
 
 **Classification:**
 
@@ -61,7 +61,7 @@ An inventory admin can access <grade10 admin inventory product URL>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** card-price-US-01
+* **Trace:** grade10-admin-inventory-card-price-reference-US-01
 
 **Pre-conditions:**
 An existing classified card product is open in <grade10 admin inventory product URL>.
@@ -76,7 +76,7 @@ An existing classified card product is open in <grade10 admin inventory product 
 * The product update is refused for its missing controlled role.
 * The product retains its prior classification.
 
-### card-price-US1-TC3-1: Reuse an inline matching tag
+### grade10-admin-inventory-card-price-reference-US1-TC3-1: Reuse an inline matching tag
 
 **Classification:**
 
@@ -88,7 +88,7 @@ An existing classified card product is open in <grade10 admin inventory product 
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** card-price-US-01
+* **Trace:** grade10-admin-inventory-card-price-reference-US-01
 
 **Pre-conditions:**
 The inventory catalogue already has the IP tag `Pokémon`.
@@ -112,7 +112,7 @@ The inventory catalogue already has the IP tag `Pokémon`.
 * The saved product shows the existing Pokémon IP tag.
 * The catalogue has no second IP tag differing only by letter case.
 
-### card-price-US1-TC4-1: Confirm a PriceCharting card match
+### grade10-admin-inventory-card-price-reference-US1-TC4-1: Confirm a PriceCharting card match
 
 **Classification:**
 
@@ -124,7 +124,7 @@ The inventory catalogue already has the IP tag `Pokémon`.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** card-price-US-01
+* **Trace:** grade10-admin-inventory-card-price-reference-US-01
 
 **Pre-conditions:**
 A classified Collectible Cards product is open, and PriceCharting search has a
@@ -142,7 +142,7 @@ matching card result for <a valid PriceCharting card URL>.
 * The product shows its confirmed PriceCharting reference.
 * Later price reads use the selected provider identity.
 
-### card-price-US1-TC5-1: Refuse a non-card PriceCharting reference
+### grade10-admin-inventory-card-price-reference-US1-TC5-1: Refuse a non-card PriceCharting reference
 
 **Classification:**
 
@@ -154,7 +154,7 @@ matching card result for <a valid PriceCharting card URL>.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** card-price-US-01
+* **Trace:** grade10-admin-inventory-card-price-reference-US-01
 
 **Pre-conditions:**
 A future inventory type-vocabulary release has seeded a non-card product.
@@ -170,7 +170,7 @@ A future inventory type-vocabulary release has seeded a non-card product.
 
 ---
 
-## card-price-US2: Inventory admin reads a current card reference
+## grade10-admin-inventory-card-price-reference-US2: Inventory admin reads a current card reference
 
 **As an** inventory admin,
 **I want** to see the current PSA-focused PriceCharting reference and its
@@ -178,7 +178,7 @@ freshness,
 **so that** I can use an attributable market signal without mistaking it for
 permanent product value or PSA certification data.
 
-### card-price-US2-TC1-1: Read a fresh PSA-focused reference
+### grade10-admin-inventory-card-price-reference-US2-TC1-1: Read a fresh PSA-focused reference
 
 **Classification:**
 
@@ -190,7 +190,7 @@ permanent product value or PSA certification data.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** card-price-US-02
+* **Trace:** grade10-admin-inventory-card-price-reference-US-02
 
 **Pre-conditions:**
 A matched Collectible Cards product has a successful PriceCharting result less
@@ -208,7 +208,7 @@ than 24 hours old with an ungraded baseline and PSA-oriented values.
 * The ungraded baseline and supplied PSA-oriented grades show in USD.
 * Missing grades show as unavailable rather than zero.
 
-### card-price-US2-TC2-1: Refresh an expired regular cache
+### grade10-admin-inventory-card-price-reference-US2-TC2-1: Refresh an expired regular cache
 
 **Classification:**
 
@@ -220,7 +220,7 @@ than 24 hours old with an ungraded baseline and PSA-oriented values.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** card-price-US-02
+* **Trace:** grade10-admin-inventory-card-price-reference-US-02
 
 **Pre-conditions:**
 A matched Collectible Cards product has a successful price result more than 24
@@ -235,7 +235,7 @@ hours old, and PriceCharting is configured to return a current result.
 * Grade10 requests a current provider result before answering.
 * The returned reference replaces the expired values and is fresh.
 
-### card-price-US2-TC3-1: Preserve stale prices after refresh failure
+### grade10-admin-inventory-card-price-reference-US2-TC3-1: Preserve stale prices after refresh failure
 
 **Classification:**
 
@@ -247,7 +247,7 @@ hours old, and PriceCharting is configured to return a current result.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** card-price-US-02
+* **Trace:** grade10-admin-inventory-card-price-reference-US-02
 
 **Pre-conditions:**
 A matched Collectible Cards product has cached values, and its eligible
@@ -264,14 +264,14 @@ PriceCharting refresh is configured to fail.
 
 ---
 
-## card-price-US3: Inventory admin imports card products
+## grade10-admin-inventory-card-price-reference-US3: Inventory admin imports card products
 
 **As an** inventory admin,
 **I want** to preview and confirm a CSV of classified card products,
 **so that** I can add a large collection without creating partial or
 misidentified catalogue data.
 
-### card-price-US3-TC1-1: Preview a valid card CSV
+### grade10-admin-inventory-card-price-reference-US3-TC1-1: Preview a valid card CSV
 
 **Classification:**
 
@@ -283,7 +283,7 @@ misidentified catalogue data.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** card-price-US-03
+* **Trace:** grade10-admin-inventory-card-price-reference-US-03
 
 **Pre-conditions:**
 PriceCharting search is configured to return one candidate for each row in
@@ -310,7 +310,7 @@ PriceCharting search is configured to return one candidate for each row in
 * Every row shows one PriceCharting candidate for confirmation.
 * No imported product, inventory snapshot, or confirmed reference exists yet.
 
-### card-price-US3-TC2-1: Block an invalid CSV row
+### grade10-admin-inventory-card-price-reference-US3-TC2-1: Block an invalid CSV row
 
 **Classification:**
 
@@ -322,7 +322,7 @@ PriceCharting search is configured to return one candidate for each row in
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** card-price-US-03
+* **Trace:** grade10-admin-inventory-card-price-reference-US-03
 
 **Pre-conditions:**
 <an invalid card import CSV> contains a row with a missing required tag or an
@@ -341,7 +341,7 @@ unmatched PriceCharting link.
 * The preview cannot be confirmed.
 * No product from the CSV exists.
 
-### card-price-US3-TC3-1: Confirm every imported card candidate
+### grade10-admin-inventory-card-price-reference-US3-TC3-1: Confirm every imported card candidate
 
 **Classification:**
 
@@ -353,7 +353,7 @@ unmatched PriceCharting link.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** card-price-US-03
+* **Trace:** grade10-admin-inventory-card-price-reference-US-03
 
 **Pre-conditions:**
 A valid card import preview is open with a PriceCharting candidate for each row.
@@ -369,7 +369,7 @@ A valid card import preview is open with a PriceCharting candidate for each row.
 * The preview becomes ready for commit only after every candidate is confirmed.
 * Each row retains its selected canonical link and provider identity.
 
-### card-price-US3-TC4-1: Commit an entire reviewed import
+### grade10-admin-inventory-card-price-reference-US3-TC4-1: Commit an entire reviewed import
 
 **Classification:**
 
@@ -381,7 +381,7 @@ A valid card import preview is open with a PriceCharting candidate for each row.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** card-price-US-03
+* **Trace:** grade10-admin-inventory-card-price-reference-US-03
 
 **Pre-conditions:**
 A ready import preview contains two valid, confirmed card rows.
@@ -396,7 +396,7 @@ A ready import preview contains two valid, confirmed card rows.
 * Both imported products appear with their required tags.
 * Each product has one empty inventory snapshot and a confirmed PriceCharting reference.
 
-### card-price-US3-TC5-1: Roll back a conflicted import
+### grade10-admin-inventory-card-price-reference-US3-TC5-1: Roll back a conflicted import
 
 **Classification:**
 
@@ -408,7 +408,7 @@ A ready import preview contains two valid, confirmed card rows.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** card-price-US-03
+* **Trace:** grade10-admin-inventory-card-price-reference-US-03
 
 **Pre-conditions:**
 A ready import preview contains two valid confirmed rows, and one provider

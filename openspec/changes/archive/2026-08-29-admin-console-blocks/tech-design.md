@@ -71,14 +71,14 @@ package's own furniture, dissolving the third table home. grade10-auth's
 admin frontend re-points its imports in the same repo. Only then does this
 repo delete `packages/ui/src/blocks/auth-user-directory` and its entry
 exports. The `auth-two-factor` blocks stay: customer surfaces share them
-(`console-blocks-SC-04`).
+(`shared-console-blocks-SC-04`).
 
 ### Selector mapping uses existing primitives, not a new block
 
-- Panel switching (`console-blocks-SC-10`): `Tabs`/`TabsList`/`TabsTrigger`/
+- Panel switching (`shared-console-blocks-SC-10`): `Tabs`/`TabsList`/`TabsTrigger`/
   `TabsContent` — the sites are the grade10 admin app's vault, auction, and
   appointments pages; two sites already use Tabs and prove the fit.
-- Dataset narrowing (`console-blocks-SC-11`): `SegmentedControl`/
+- Dataset narrowing (`shared-console-blocks-SC-11`): `SegmentedControl`/
   `SegmentedControlItem` — auction's bidders and fulfillment filters, both
   dashboards' window selectors.
 - Long pickers (appointments' shop picker): `Select`, as post-sale already
@@ -101,7 +101,7 @@ nothing.
 Newest/older cursor paging (audit's and the members page's hand-written
 pair) becomes one block on `Pagination`/`PaginationPrevious`/
 `PaginationNext`. It also closes auction's dead-end bidders footer
-(`console-blocks-SC-14`). The auth directory's offset pager ("1–25 of 340")
+(`shared-console-blocks-SC-14`). The auth directory's offset pager ("1–25 of 340")
 is a genuinely different control and stays inside `UserTable` as ported.
 
 ### Utilities consolidate beside `useDebounced`

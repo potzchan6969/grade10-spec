@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-01, tcs-rules r1
 
-## bidding-history-US1: Collector reads their bidding index
+## grade10-site-auction-bidding-history-US1: Collector reads their bidding index
 
 **As a** collector,
 **I want** every listing I bid on in one private index,
 **so that** I can see my standing without hunting through the catalogue.
 
-### bidding-history-US1-TC1-1: Repeated activity is grouped under one listing
+### grade10-site-auction-bidding-history-US1-TC1-1: Repeated activity is grouped under one listing
 
 **Classification:**
 
@@ -21,7 +21,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-01
+* **Trace:** grade10-site-auction-bidding-history-US-01
 
 **Pre-conditions:**
 A signed-in collector has submitted manual bids, configured an automatic maximum, and raised that maximum on one listing.
@@ -36,7 +36,7 @@ A signed-in collector has submitted manual bids, configured an automatic maximum
 * That listing appears once at the position of its latest activity.
 * Its summary carries the collector's current standing rather than one row per action.
 
-### bidding-history-US1-TC2-1: Failed-only listing remains explainable
+### grade10-site-auction-bidding-history-US1-TC2-1: Failed-only listing remains explainable
 
 **Classification:**
 
@@ -48,7 +48,7 @@ A signed-in collector has submitted manual bids, configured an automatic maximum
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-01
+* **Trace:** grade10-site-auction-bidding-history-US-01
 
 **Pre-conditions:**
 A collector's server-evaluated bid attempts on a listing all failed. No manual or automatic bid was accepted for that account.
@@ -64,7 +64,7 @@ A collector's server-evaluated bid attempts on a listing all failed. No manual o
 * The listing appears with failed-only standing.
 * The collector can open its history to read each safe failure reason.
 
-### bidding-history-US1-TC3-1: Active and completed activity separate cleanly
+### grade10-site-auction-bidding-history-US1-TC3-1: Active and completed activity separate cleanly
 
 **Classification:**
 
@@ -76,7 +76,7 @@ A collector's server-evaluated bid attempts on a listing all failed. No manual o
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-01
+* **Trace:** grade10-site-auction-bidding-history-US-01
 
 **Pre-conditions:**
 A signed-in collector has activity on one open listing, one closed listing, and one canceled listing.
@@ -92,7 +92,7 @@ A signed-in collector has activity on one open listing, one closed listing, and 
 * Step 2 shows only the open listing.
 * Step 3 shows the closed and canceled listings.
 
-### bidding-history-US1-TC4-1: Paging does not repeat or skip a listing
+### grade10-site-auction-bidding-history-US1-TC4-1: Paging does not repeat or skip a listing
 
 **Classification:**
 
@@ -104,7 +104,7 @@ A signed-in collector has activity on one open listing, one closed listing, and 
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** bidding-history-US-01
+* **Trace:** grade10-site-auction-bidding-history-US-01
 
 **Pre-conditions:**
 A signed-in collector has more bidding listings than one page holds. No newer activity is added during the pass.
@@ -118,7 +118,7 @@ A signed-in collector has more bidding listings than one page holds. No newer ac
 
 * Every matching listing appears exactly once in latest-activity order.
 
-### bidding-history-US1-TC5-1: Account with no bidding activity has an empty index
+### grade10-site-auction-bidding-history-US1-TC5-1: Account with no bidding activity has an empty index
 
 **Classification:**
 
@@ -130,7 +130,7 @@ A signed-in collector has more bidding listings than one page holds. No newer ac
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-01
+* **Trace:** grade10-site-auction-bidding-history-US-01
 
 **Pre-conditions:**
 A signed-in storefront account with no retained bid attempt or automatic-bid activity.
@@ -146,14 +146,14 @@ A signed-in storefront account with no retained bid attempt or automatic-bid act
 
 ---
 
-## bidding-history-US2: Collector audits every retained bidding action
+## grade10-site-auction-bidding-history-US2: Collector audits every retained bidding action
 
 **As a** collector,
 **I want** every bid Grade10 evaluated for me kept as a private event,
 **so that** I can see what was accepted, refused, or placed automatically without
 exposing my maximum to a rival.
 
-### bidding-history-US2-TC1-1: Accepted manual bid is recorded once
+### grade10-site-auction-bidding-history-US2-TC1-1: Accepted manual bid is recorded once
 
 **Classification:**
 
@@ -165,7 +165,7 @@ exposing my maximum to a rival.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-02
+* **Trace:** grade10-site-auction-bidding-history-US-02
 
 **Pre-conditions:**
 A signed-in collector is on <an open listing url> that accepts a manual bid.
@@ -182,7 +182,7 @@ A signed-in collector is on <an open listing url> that accepts a manual bid.
 * The collector's history records the submitted amount and accepted outcome at their authoritative times.
 * The same action replayed idempotently adds no duplicate event.
 
-### bidding-history-US2-TC2-1: Refused bid records a safe reason privately
+### grade10-site-auction-bidding-history-US2-TC2-1: Refused bid records a safe reason privately
 
 **Classification:**
 
@@ -194,7 +194,7 @@ A signed-in collector is on <an open listing url> that accepts a manual bid.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-02
+* **Trace:** grade10-site-auction-bidding-history-US-02
 
 **Pre-conditions:**
 A signed-in collector can submit a bid Auction will refuse after evaluating it.
@@ -210,7 +210,7 @@ A signed-in collector can submit a bid Auction will refuse after evaluating it.
 * The collector's history records the attempted amount, failure time, and safe reason category.
 * The failed attempt does not appear in the anonymous auction log or accepted bid count.
 
-### bidding-history-US2-TC3-1: Browser-only validation creates no Auction event
+### grade10-site-auction-bidding-history-US2-TC3-1: Browser-only validation creates no Auction event
 
 **Classification:**
 
@@ -222,7 +222,7 @@ A signed-in collector can submit a bid Auction will refuse after evaluating it.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-02
+* **Trace:** grade10-site-auction-bidding-history-US-02
 
 **Pre-conditions:**
 A signed-in collector is on <an open listing url>.
@@ -237,7 +237,7 @@ A signed-in collector is on <an open listing url>.
 
 * That local validation failure is absent from the Auction history.
 
-### bidding-history-US2-TC4-1: Automatic maximum is recorded and stays private
+### grade10-site-auction-bidding-history-US2-TC4-1: Automatic maximum is recorded and stays private
 
 **Classification:**
 
@@ -249,7 +249,7 @@ A signed-in collector is on <an open listing url>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-02
+* **Trace:** grade10-site-auction-bidding-history-US-02
 
 **Pre-conditions:**
 A signed-in collector can configure and raise an automatic-bid maximum on <an open listing url>. A rival account also has activity on that listing.
@@ -266,7 +266,7 @@ A signed-in collector can configure and raise an automatic-bid maximum on <an op
 * The collector's private history records both resulting maximums in order.
 * Neither maximum appears in any rival's history or anonymous read.
 
-### bidding-history-US2-TC5-1: Engine bid is labeled automatic
+### grade10-site-auction-bidding-history-US2-TC5-1: Engine bid is labeled automatic
 
 **Classification:**
 
@@ -278,7 +278,7 @@ A signed-in collector can configure and raise an automatic-bid maximum on <an op
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-02
+* **Trace:** grade10-site-auction-bidding-history-US-02
 
 **Pre-conditions:**
 A collector has an active automatic-bid maximum.
@@ -297,13 +297,13 @@ A collector has an active automatic-bid maximum.
 
 ---
 
-## bidding-history-US3: Collector reads one listing's combined history
+## grade10-site-auction-bidding-history-US3: Collector reads one listing's combined history
 
 **As a** collector,
 **I want** one chronology of public price movement and my private standing,
 **so that** I can see how I was outbid without seeing anyone's maximum.
 
-### bidding-history-US3-TC1-1: Competing bid shows You were outbid
+### grade10-site-auction-bidding-history-US3-TC1-1: Competing bid shows You were outbid
 
 **Classification:**
 
@@ -315,7 +315,7 @@ A collector has an active automatic-bid maximum.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-03
+* **Trace:** grade10-site-auction-bidding-history-US-03
 
 **Pre-conditions:**
 The collector is leading a listing.
@@ -332,7 +332,7 @@ The collector is leading a listing.
 * The same step marks **You were outbid** at the resulting public price.
 * It reveals neither account's private maximum.
 
-### bidding-history-US3-TC2-1: Automatic response is attributed to You
+### grade10-site-auction-bidding-history-US3-TC2-1: Automatic response is attributed to You
 
 **Classification:**
 
@@ -344,7 +344,7 @@ The collector is leading a listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-03
+* **Trace:** grade10-site-auction-bidding-history-US-03
 
 **Pre-conditions:**
 A rival bid causes the collector's automatic maximum to advance the public price.
@@ -359,7 +359,7 @@ A rival bid causes the collector's automatic maximum to advance the public price
 * The resulting accepted movement is attributed to **You** and marked as automatic.
 * The private automatic event is not rendered as a contradictory second accepted bid.
 
-### bidding-history-US3-TC3-1: Failed attempt sits beside unchanged auction state
+### grade10-site-auction-bidding-history-US3-TC3-1: Failed attempt sits beside unchanged auction state
 
 **Classification:**
 
@@ -371,7 +371,7 @@ A rival bid causes the collector's automatic maximum to advance the public price
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-03
+* **Trace:** grade10-site-auction-bidding-history-US-03
 
 **Pre-conditions:**
 A collector's attempt fails while another bidder remains leading.
@@ -387,7 +387,7 @@ A collector's attempt fails while another bidder remains leading.
 * The failed private event appears at its authoritative time with its safe reason.
 * The auction's accepted price and leading pseudonym remain unchanged.
 
-### bidding-history-US3-TC4-1: Full retained history remains pageable
+### grade10-site-auction-bidding-history-US3-TC4-1: Full retained history remains pageable
 
 **Classification:**
 
@@ -399,7 +399,7 @@ A collector's attempt fails while another bidder remains leading.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** bidding-history-US-03
+* **Trace:** grade10-site-auction-bidding-history-US-03
 
 **Pre-conditions:**
 One listing has more public and private events than one page holds. No new event is added during the pass.
@@ -416,14 +416,14 @@ One listing has more public and private events than one page holds. No new event
 
 ---
 
-## bidding-history-US4: Collector's bidding history stays on their storefront account
+## grade10-site-auction-bidding-history-US4: Collector's bidding history stays on their storefront account
 
 **As a** collector,
 **I want** only my Grade10 account's history,
 **so that** another storefront or an unsigned visitor cannot read my maxima or
 failed attempts.
 
-### bidding-history-US4-TC1-1: Storefront account reads its own history
+### grade10-site-auction-bidding-history-US4-TC1-1: Storefront account reads its own history
 
 **Classification:**
 
@@ -435,7 +435,7 @@ failed attempts.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-04
+* **Trace:** grade10-site-auction-bidding-history-US-04
 
 **Pre-conditions:**
 A Grade10 storefront session for account A.
@@ -449,7 +449,7 @@ A Grade10 storefront session for account A.
 
 * Auction returns only A's Grade10 activity and the public movements that belong in its combined histories.
 
-### bidding-history-US4-TC2-1: Same account id on another storefront is unrelated
+### grade10-site-auction-bidding-history-US4-TC2-1: Same account id on another storefront is unrelated
 
 **Classification:**
 
@@ -461,7 +461,7 @@ A Grade10 storefront session for account A.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-04
+* **Trace:** grade10-site-auction-bidding-history-US-04
 
 **Pre-conditions:**
 Grade10 and ZZZ each have an account with the same account id. Grade10 holds private bidding events for that id.
@@ -476,7 +476,7 @@ Grade10 and ZZZ each have an account with the same account id. Grade10 holds pri
 * It receives only activity created through the ZZZ-pinned entrypoint.
 * No Grade10 private event or maximum is returned.
 
-### bidding-history-US4-TC3-1: Anonymous reader cannot read private history
+### grade10-site-auction-bidding-history-US4-TC3-1: Anonymous reader cannot read private history
 
 **Classification:**
 
@@ -488,7 +488,7 @@ Grade10 and ZZZ each have an account with the same account id. Grade10 holds pri
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** bidding-history-US-04
+* **Trace:** grade10-site-auction-bidding-history-US-04
 
 **Pre-conditions:**
 No storefront session.
@@ -503,7 +503,7 @@ No storefront session.
 * Grade10 refuses the request.
 * The anonymous public auction response gains no private field.
 
-### bidding-history-US4-TC4-1: Reading history is inert
+### grade10-site-auction-bidding-history-US4-TC4-1: Reading history is inert
 
 **Classification:**
 
@@ -515,7 +515,7 @@ No storefront session.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** bidding-history-US-04
+* **Trace:** grade10-site-auction-bidding-history-US-04
 
 **Pre-conditions:**
 Any retained bidding history. Note the bid, maximum, hold, listing standing, and auction close first.
@@ -532,14 +532,14 @@ Any retained bidding history. Note the bid, maximum, hold, listing standing, and
 
 ---
 
-## bidding-history-US5: Collector opens their bids at /bids
+## grade10-site-auction-bidding-history-US5: Collector opens their bids at /bids
 
 **As a** collector,
 **I want** `/bids` to show my active and completed summaries and expand each
 listing's history,
 **so that** I can audit standing without leaving the page.
 
-### bidding-history-US5-TC1-1: Signed-in collector opens active bids
+### grade10-site-auction-bidding-history-US5-TC1-1: Signed-in collector opens active bids
 
 **Classification:**
 
@@ -551,7 +551,7 @@ listing's history,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-05
+* **Trace:** grade10-site-auction-bidding-history-US-05
 
 **Pre-conditions:**
 A signed-in Grade10 collector with active and completed bidding activity.
@@ -567,7 +567,7 @@ A signed-in Grade10 collector with active and completed bidding activity.
 * The page shows the Active summaries inside the existing site chrome.
 * The collector can switch to Completed without a document reload.
 
-### bidding-history-US5-TC2-1: Outbid summary leads to its explanation and listing
+### grade10-site-auction-bidding-history-US5-TC2-1: Outbid summary leads to its explanation and listing
 
 **Classification:**
 
@@ -579,7 +579,7 @@ A signed-in Grade10 collector with active and completed bidding activity.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-05
+* **Trace:** grade10-site-auction-bidding-history-US-05
 
 **Pre-conditions:**
 An open listing on which the collector is outbid.
@@ -594,7 +594,7 @@ An open listing on which the collector is outbid.
 * The combined history identifies the public movement that outbid **You**.
 * The page offers a route to the still-open listing.
 
-### bidding-history-US5-TC3-1: Signed-out visitor preserves the destination
+### grade10-site-auction-bidding-history-US5-TC3-1: Signed-out visitor preserves the destination
 
 **Classification:**
 
@@ -606,7 +606,7 @@ An open listing on which the collector is outbid.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-05
+* **Trace:** grade10-site-auction-bidding-history-US-05
 
 **Pre-conditions:**
 The visitor is signed out.
@@ -621,7 +621,7 @@ The visitor is signed out.
 * The Grade10 site starts its existing sign-in flow.
 * Successful sign-in returns the collector to `/bids`.
 
-### bidding-history-US5-TC4-1: Empty filter is explicit
+### grade10-site-auction-bidding-history-US5-TC4-1: Empty filter is explicit
 
 **Classification:**
 
@@ -633,7 +633,7 @@ The visitor is signed out.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-05
+* **Trace:** grade10-site-auction-bidding-history-US-05
 
 **Pre-conditions:**
 A signed-in collector with no entries in the selected filter.
@@ -649,7 +649,7 @@ A signed-in collector with no entries in the selected filter.
 * The page names that the selected bidding history is empty.
 * It does not show a loading placeholder or failure message.
 
-### bidding-history-US5-TC5-1: Initial loading reserves the bidding list
+### grade10-site-auction-bidding-history-US5-TC5-1: Initial loading reserves the bidding list
 
 **Classification:**
 
@@ -661,7 +661,7 @@ A signed-in collector with no entries in the selected filter.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-05
+* **Trace:** grade10-site-auction-bidding-history-US-05
 
 **Pre-conditions:**
 A signed-in collector. <the bidding index endpoint> delayed so the selected index page has not answered yet.
@@ -676,7 +676,7 @@ A signed-in collector. <the bidding index endpoint> delayed so the selected inde
 * The page shows a labeled bidding-history loading state inside the site chrome.
 * It does not claim that the selected filter is empty or failed.
 
-### bidding-history-US5-TC6-1: Index failure is retryable
+### grade10-site-auction-bidding-history-US5-TC6-1: Index failure is retryable
 
 **Classification:**
 
@@ -688,7 +688,7 @@ A signed-in collector. <the bidding index endpoint> delayed so the selected inde
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-05
+* **Trace:** grade10-site-auction-bidding-history-US-05
 
 **Pre-conditions:**
 A signed-in collector. <the bidding index endpoint> mocked to fail for the selected index page.
@@ -703,7 +703,7 @@ A signed-in collector. <the bidding index endpoint> mocked to fail for the selec
 * The page shows a retryable bidding-history error.
 * It does not claim that the selected filter is empty.
 
-### bidding-history-US5-TC7-1: Expanding history preserves its summary while loading
+### grade10-site-auction-bidding-history-US5-TC7-1: Expanding history preserves its summary while loading
 
 **Classification:**
 
@@ -715,7 +715,7 @@ A signed-in collector. <the bidding index endpoint> mocked to fail for the selec
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-05
+* **Trace:** grade10-site-auction-bidding-history-US-05
 
 **Pre-conditions:**
 A visible bidding summary. <the combined history endpoint> delayed so it has not answered yet.
@@ -730,7 +730,7 @@ A visible bidding summary. <the combined history endpoint> delayed so it has not
 * That summary stays visible with a labeled history-loading state.
 * The page does not show an empty history or failure message.
 
-### bidding-history-US5-TC8-1: Loading more preserves entries already shown
+### grade10-site-auction-bidding-history-US5-TC8-1: Loading more preserves entries already shown
 
 **Classification:**
 
@@ -742,7 +742,7 @@ A visible bidding summary. <the combined history endpoint> delayed so it has not
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-05
+* **Trace:** grade10-site-auction-bidding-history-US-05
 
 **Pre-conditions:**
 A visible index or combined history page with a further cursor.
@@ -757,7 +757,7 @@ A visible index or combined history page with a further cursor.
 * The entries already shown remain visible while the next page loads.
 * The control cannot submit the same next-page request twice.
 
-### bidding-history-US5-TC9-1: History failure preserves the listing summary
+### grade10-site-auction-bidding-history-US5-TC9-1: History failure preserves the listing summary
 
 **Classification:**
 
@@ -769,7 +769,7 @@ A visible index or combined history page with a further cursor.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-05
+* **Trace:** grade10-site-auction-bidding-history-US-05
 
 **Pre-conditions:**
 The bidding index is visible. <the combined history endpoint> for one expanded listing is mocked to fail.
@@ -784,7 +784,7 @@ The bidding index is visible. <the combined history endpoint> for one expanded l
 * That summary remains visible with a retryable history error.
 * Other summaries and their histories remain usable.
 
-### bidding-history-US5-TC10-1: ZZZ receives no bidding-history page
+### grade10-site-auction-bidding-history-US5-TC10-1: ZZZ receives no bidding-history page
 
 **Classification:**
 
@@ -796,7 +796,7 @@ The bidding index is visible. <the combined history endpoint> for one expanded l
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bidding-history-US-05
+* **Trace:** grade10-site-auction-bidding-history-US-05
 
 **Pre-conditions:**
 None.

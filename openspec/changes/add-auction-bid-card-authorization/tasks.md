@@ -1,6 +1,6 @@
 ## 1. Contract and UI source (grade10-spec)
 
-- [x] 1.1 Expand `auction-listing-bid-panel--payment-authorization` with the Listing bid — payment method dialog referenced by `ui-design.md`, using the existing dialog primitives for `bid-payment-method-SC-01`, `bid-payment-method-SC-03`, and `bid-payment-method-SC-04`.
+- [x] 1.1 Expand `auction-listing-bid-panel--payment-authorization` with the Listing bid — payment method dialog referenced by `ui-design.md`, using the existing dialog primitives for `grade10-site-auction-bid-payment-method-SC-01`, `grade10-site-auction-bid-payment-method-SC-03`, and `grade10-site-auction-bid-payment-method-SC-04`.
 - [ ] 1.2 Make every `bid-payment-method` scenario pass as a reviewed capability contract and keep its UI state map aligned with the Storybook source.
 - [x] 1.3 Verify: `openspec validate add-auction-bid-card-authorization --strict`.
 

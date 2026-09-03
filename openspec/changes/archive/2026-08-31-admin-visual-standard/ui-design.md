@@ -19,7 +19,7 @@ Two surfaces change in a way an operator can point at:
 - **The two two-factor pages** (`apps/admin/*/src/pages/security/TwoFactorPage.tsx`)
   render the unchanged `@grade10/ui` block against the brand palette the admin
   theme also carries, so it reads as part of the console rather than as a
-  visitor from the storefront (`visual-standard-SC-03`).
+  visitor from the storefront (`shared-console-visual-standard-SC-03`).
 
 ## Components
 
@@ -44,7 +44,7 @@ what keeps the revert route open:
 `UserTable`, `UserRolesDialog`, `UserModerationDialog`, `UserSessionsDialog`,
 `keepRefusal`, `formatMinor`, `useDebounced`, and their prop and copy types.
 
-Added by this change: only whatever `visual-standard-SC-02` turns up — a
+Added by this change: only whatever `shared-console-visual-standard-SC-02` turns up — a
 control an admin surface needs that Astryx does not offer is added here,
 composed from Astryx. None is known in advance; the migration groups find
 them.
@@ -72,22 +72,22 @@ The async, confirmation, and selection states are the ones
 accountable for them surviving. Each is owned by a console-package block, so
 each is re-established once rather than per surface.
 
-- **Loading** — `visual-standard-SC-06`: `Status` renders a loading line
+- **Loading** — `shared-console-visual-standard-SC-06`: `Status` renders a loading line
   distinguishable from both empty and refused.
-- **Refused** — `visual-standard-SC-06`: `Status` renders the failure in the
+- **Refused** — `shared-console-visual-standard-SC-06`: `Status` renders the failure in the
   error tone, distinguishable from the empty state at a glance.
-- **Empty** — `visual-standard-SC-06`: `Status` renders the nothing-here line
+- **Empty** — `shared-console-visual-standard-SC-06`: `Status` renders the nothing-here line
   in a non-error tone.
-- **Panel switch** — `visual-standard-SC-07`: announced as tabs, active panel
+- **Panel switch** — `shared-console-visual-standard-SC-07`: announced as tabs, active panel
   announced as selected.
-- **Row filter** — `visual-standard-SC-07`: announced as one segmented choice,
+- **Row filter** — `shared-console-visual-standard-SC-07`: announced as one segmented choice,
   selected option announced as selected.
-- **Confirmation, open and cancelled** — `visual-standard-SC-08`: `FormDialog`
+- **Confirmation, open and cancelled** — `shared-console-visual-standard-SC-08`: `FormDialog`
   renders the confirmation; the platform's own confirm is not invoked, and
   cancelling reports nothing and returns to the surface.
 - **Tabular amount** — carried by `Money` and `formatMinor`: an amount names
   its ISO 4217 code.
 - **Queue longer than its page** — carried by `CursorPager`: the way on and
   the way back are both offered.
-- **Brand** — `visual-standard-SC-04`: the same console under the two brands
+- **Brand** — `shared-console-visual-standard-SC-04`: the same console under the two brands
   differs only by the applied Astryx theme; no block carries a brand value.

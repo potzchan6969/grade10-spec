@@ -105,7 +105,7 @@ displays "their highest accepted bid" to an authenticated bidder. Under auto
 bidding a bidder's highest accepted bid and their committed maximum are
 different numbers, and the useful one is the maximum. When that change folds
 into `openspec/specs/`, that sentence needs updating to match
-`auto-bidding-SC-05`. Recorded here so it is not lost.
+`grade10-site-auction-auto-bidding-SC-05`. Recorded here so it is not lost.
 
 **Ordering.** Independent of `add-auction-watchlist` and
 `add-auction-notifications`. It shares no capability with either and can land

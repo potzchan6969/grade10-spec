@@ -3,14 +3,14 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## loyalty-US1: Member earns points on qualifying spend
+## grade10-site-loyalty-programme-US1: Member earns points on qualifying spend
 
 **As a** member,
 **I want** my balance to follow the money I spend and keep spent, priced once
 at my tier's rate in the programme's own currency,
 **so that** what I can redeem is exactly what my qualifying spend earned.
 
-### loyalty-US1-TC1-1: Activity precedes joining
+### grade10-site-loyalty-programme-US1-TC1-1: Activity precedes joining
 
 **Classification:**
 
@@ -22,7 +22,7 @@ at my tier's rate in the programme's own currency,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** loyalty-US-01
+* **Trace:** grade10-site-loyalty-programme-US-01
 
 **Pre-conditions:**
 A user who has never joined.
@@ -37,7 +37,7 @@ A user who has never joined.
 * A member record exists and holds those points.
 * The member is reported as not joined until they join.
 
-### loyalty-US1-TC2-1: Balance counts only unspent unexpired credits and never goes negative
+### grade10-site-loyalty-programme-US1-TC2-1: Balance counts only unspent unexpired credits and never goes negative
 
 **Classification:**
 
@@ -49,7 +49,7 @@ A user who has never joined.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-01
+* **Trace:** grade10-site-loyalty-programme-US-01
 
 **Pre-conditions:**
 A member with a mix of unspent, spent, and expired credits.
@@ -64,7 +64,7 @@ A member with a mix of unspent, spent, and expired credits.
 * The balance counts only credits that are unspent and unexpired at that instant.
 * The debit draws only on credits that have points remaining, and the member is never below zero.
 
-### loyalty-US1-TC3-1: Diamond purchase of HKD 1,000 earns 120 points, floored once
+### grade10-site-loyalty-programme-US1-TC3-1: Diamond purchase of HKD 1,000 earns 120 points, floored once
 
 **Classification:**
 
@@ -76,7 +76,7 @@ A member with a mix of unspent, spent, and expired credits.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** loyalty-US-01
+* **Trace:** grade10-site-loyalty-programme-US-01
 
 **Pre-conditions:**
 A Diamond member.
@@ -91,7 +91,7 @@ A Diamond member.
 * They earn 120 points.
 * The point total is floored once after applying the rate and the multiplier, not at each step.
 
-### loyalty-US1-TC4-1: Foreign currency spend is refused
+### grade10-site-loyalty-programme-US1-TC4-1: Foreign currency spend is refused
 
 **Classification:**
 
@@ -103,7 +103,7 @@ A Diamond member.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-01
+* **Trace:** grade10-site-loyalty-programme-US-01
 
 **Pre-conditions:**
 None.
@@ -117,7 +117,7 @@ None.
 * It is refused as invalid, naming both currencies.
 * No ledger entry is written.
 
-### loyalty-US1-TC5-1: Backdated spend keeps its own date
+### grade10-site-loyalty-programme-US1-TC5-1: Backdated spend keeps its own date
 
 **Classification:**
 
@@ -129,7 +129,7 @@ None.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-01
+* **Trace:** grade10-site-loyalty-programme-US-01
 
 **Pre-conditions:**
 A member whose current tier is known.
@@ -144,7 +144,7 @@ A member whose current tier is known.
 * Expiry and tier contribution follow that date.
 * The multiplier applied is the tier the member holds when it is processed.
 
-### loyalty-US1-TC6-1: Future-dated spend is refused
+### grade10-site-loyalty-programme-US1-TC6-1: Future-dated spend is refused
 
 **Classification:**
 
@@ -156,7 +156,7 @@ A member whose current tier is known.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-01
+* **Trace:** grade10-site-loyalty-programme-US-01
 
 **Pre-conditions:**
 None.
@@ -169,7 +169,7 @@ None.
 
 * It is refused as invalid.
 
-### loyalty-US1-TC7-1: Retry under the same key records nothing twice
+### grade10-site-loyalty-programme-US1-TC7-1: Retry under the same key records nothing twice
 
 **Classification:**
 
@@ -181,7 +181,7 @@ None.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-01
+* **Trace:** grade10-site-loyalty-programme-US-01
 
 **Pre-conditions:**
 A caller that already used a mutation key.
@@ -196,7 +196,7 @@ A caller that already used a mutation key.
 * The original answer is returned and no new entry is recorded.
 * The differing input is refused as a conflict.
 
-### loyalty-US1-TC8-1: Expired credit stops counting immediately
+### grade10-site-loyalty-programme-US1-TC8-1: Expired credit stops counting immediately
 
 **Classification:**
 
@@ -208,7 +208,7 @@ A caller that already used a mutation key.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-01
+* **Trace:** grade10-site-loyalty-programme-US-01
 
 **Pre-conditions:**
 A member with a credit whose expiry instant is about to pass.
@@ -222,7 +222,7 @@ A member with a credit whose expiry instant is about to pass.
 
 * It stops counting toward the balance immediately.
 
-### loyalty-US1-TC9-1: Refunds claw back only what that money still holds
+### grade10-site-loyalty-programme-US1-TC9-1: Refunds claw back only what that money still holds
 
 **Classification:**
 
@@ -234,7 +234,7 @@ A member with a credit whose expiry instant is about to pass.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-01
+* **Trace:** grade10-site-loyalty-programme-US-01
 
 **Pre-conditions:**
 A member with a completed purchase that earned points.
@@ -253,7 +253,7 @@ A member with a completed purchase that earned points.
 * A refund before earning is refused as not found, and a later retry claws back once earning lands.
 * Tier contribution of the earning is reduced by the same amount and leaves the qualifying window with that earning.
 
-### loyalty-US1-TC10-1: Purchase still completes when loyalty is unreachable, and grants once
+### grade10-site-loyalty-programme-US1-TC10-1: Purchase still completes when loyalty is unreachable, and grants once
 
 **Classification:**
 
@@ -265,7 +265,7 @@ A member with a completed purchase that earned points.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-01
+* **Trace:** grade10-site-loyalty-programme-US-01
 
 **Pre-conditions:**
 The programme is unreachable. A completed purchase is later delivered more than once, including a partial refund path.
@@ -283,7 +283,7 @@ The programme is unreachable. A completed purchase is later delivered more than 
 * Points are granted once.
 * Each refund claws back only the points its own amount earned.
 
-### loyalty-US1-TC11-1: Currency mismatch stops the product from starting
+### grade10-site-loyalty-programme-US1-TC11-1: Currency mismatch stops the product from starting
 
 **Classification:**
 
@@ -295,7 +295,7 @@ The programme is unreachable. A completed purchase is later delivered more than 
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-01
+* **Trace:** grade10-site-loyalty-programme-US-01
 
 **Pre-conditions:**
 A product configured to sell in a currency the programme does not run in.
@@ -308,7 +308,7 @@ A product configured to sell in a currency the programme does not run in.
 
 * The product fails to start, naming both currencies.
 
-### loyalty-US1-TC12-1: Refused recording is reported, not swallowed
+### grade10-site-loyalty-programme-US1-TC12-1: Refused recording is reported, not swallowed
 
 **Classification:**
 
@@ -320,7 +320,7 @@ A product configured to sell in a currency the programme does not run in.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-01
+* **Trace:** grade10-site-loyalty-programme-US-01
 
 **Pre-conditions:**
 The programme will refuse a recording.
@@ -337,7 +337,7 @@ The programme will refuse a recording.
 
 ---
 
-## loyalty-US2: Member advances through the tier ladder
+## grade10-site-loyalty-programme-US2: Member advances through the tier ladder
 
 **As a** member,
 **I want** my tier derived from what I earned and kept when those points
@@ -345,7 +345,7 @@ expire,
 **so that** the rate I earn at reflects the standing I reached rather than what
 my balance happens to be today.
 
-### loyalty-US2-TC1-1: Earned tier holds after those points expire
+### grade10-site-loyalty-programme-US2-TC1-1: Earned tier holds after those points expire
 
 **Classification:**
 
@@ -357,7 +357,7 @@ my balance happens to be today.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** loyalty-US-02
+* **Trace:** grade10-site-loyalty-programme-US-02
 
 **Pre-conditions:**
 A member who reached a tier by earning.
@@ -371,7 +371,7 @@ A member who reached a tier by earning.
 
 * The member keeps that tier.
 
-### loyalty-US2-TC2-1: Invitation lapse drops the tier when next evaluated
+### grade10-site-loyalty-programme-US2-TC2-1: Invitation lapse drops the tier when next evaluated
 
 **Classification:**
 
@@ -383,7 +383,7 @@ A member who reached a tier by earning.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-02
+* **Trace:** grade10-site-loyalty-programme-US-02
 
 **Pre-conditions:**
 A member holding a dated invitation that is about to end.
@@ -398,7 +398,7 @@ A member holding a dated invitation that is about to end.
 * The member stops holding that tier from that instant.
 * The drop is recorded the next time that member is evaluated.
 
-### loyalty-US2-TC3-1: Tier history records each move
+### grade10-site-loyalty-programme-US2-TC3-1: Tier history records each move
 
 **Classification:**
 
@@ -410,7 +410,7 @@ A member holding a dated invitation that is about to end.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-02
+* **Trace:** grade10-site-loyalty-programme-US-02
 
 **Pre-conditions:**
 A member whose effective tier is about to change.
@@ -424,7 +424,7 @@ A member whose effective tier is about to change.
 
 * One entry records the move and what caused it.
 
-### loyalty-US2-TC4-1: Invalid ladder stops the product from starting
+### grade10-site-loyalty-programme-US2-TC4-1: Invalid ladder stops the product from starting
 
 **Classification:**
 
@@ -436,7 +436,7 @@ A member whose effective tier is about to change.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-02
+* **Trace:** grade10-site-loyalty-programme-US-02
 
 **Pre-conditions:**
 A ladder that repeats a tier identifier, or has other than exactly one entry tier, or whose entry tier is not first, or whose higher earned tier is cheaper, or whose earned tiers use different windows, or whose time zone is not a real IANA zone.
@@ -450,7 +450,7 @@ A ladder that repeats a tier identifier, or has other than exactly one entry tie
 * The product fails to start, naming the identifier, how many entry tiers it found, both amounts, the periods, or the zone as the ladder is wrong.
 * No member can hold a tier they skipped past.
 
-### loyalty-US2-TC5-1: 500 qualifying points reach Diamond, not Black
+### grade10-site-loyalty-programme-US2-TC5-1: 500 qualifying points reach Diamond, not Black
 
 **Classification:**
 
@@ -462,7 +462,7 @@ A ladder that repeats a tier identifier, or has other than exactly one entry tie
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** loyalty-US-02
+* **Trace:** grade10-site-loyalty-programme-US-02
 
 **Pre-conditions:**
 A member who can earn.
@@ -479,7 +479,7 @@ A member who can earn.
 
 ---
 
-## loyalty-US3: Member redeems points for a reward
+## grade10-site-loyalty-programme-US3: Member redeems points for a reward
 
 **As a** member,
 **I want** to spend my points on a reward at the price it carried when I
@@ -487,7 +487,7 @@ redeemed it,
 **so that** a later reprice, a sell-out or a reversal never changes what that
 redemption cost me.
 
-### loyalty-US3-TC1-1: Repricing does not rewrite an earlier redemption
+### grade10-site-loyalty-programme-US3-TC1-1: Repricing does not rewrite an earlier redemption
 
 **Classification:**
 
@@ -499,7 +499,7 @@ redemption cost me.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** loyalty-US-03
+* **Trace:** grade10-site-loyalty-programme-US-03
 
 **Pre-conditions:**
 A member who redeemed a reward.
@@ -513,7 +513,7 @@ A member who redeemed a reward.
 
 * The earlier redemption still records the price the member paid.
 
-### loyalty-US3-TC2-1: Last unit is not oversold
+### grade10-site-loyalty-programme-US3-TC2-1: Last unit is not oversold
 
 **Classification:**
 
@@ -525,7 +525,7 @@ A member who redeemed a reward.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-03
+* **Trace:** grade10-site-loyalty-programme-US-03
 
 **Pre-conditions:**
 A limited reward with one unit left. Two members redeem at once.
@@ -538,7 +538,7 @@ A limited reward with one unit left. Two members redeem at once.
 
 * Exactly one succeeds and the other is refused as out of stock.
 
-### loyalty-US3-TC3-1: Reward outside its window cannot be redeemed
+### grade10-site-loyalty-programme-US3-TC3-1: Reward outside its window cannot be redeemed
 
 **Classification:**
 
@@ -550,7 +550,7 @@ A limited reward with one unit left. Two members redeem at once.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-03
+* **Trace:** grade10-site-loyalty-programme-US-03
 
 **Pre-conditions:**
 A reward that is archived, or outside its live window.
@@ -563,7 +563,7 @@ A reward that is archived, or outside its live window.
 
 * The redemption is refused.
 
-### loyalty-US3-TC4-1: Public menu shows only live unarchived rewards
+### grade10-site-loyalty-programme-US3-TC4-1: Public menu shows only live unarchived rewards
 
 **Classification:**
 
@@ -575,7 +575,7 @@ A reward that is archived, or outside its live window.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** loyalty-US-03
+* **Trace:** grade10-site-loyalty-programme-US-03
 
 **Pre-conditions:**
 The caller is not signed in.
@@ -589,7 +589,7 @@ The caller is not signed in.
 * It lists only live, unarchived rewards.
 * It does not disclose stock counts or edit history.
 
-### loyalty-US3-TC5-1: Reversal restores original expiry and returns stock only when consumed
+### grade10-site-loyalty-programme-US3-TC5-1: Reversal restores original expiry and returns stock only when consumed
 
 **Classification:**
 
@@ -601,7 +601,7 @@ The caller is not signed in.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-03
+* **Trace:** grade10-site-loyalty-programme-US-03
 
 **Pre-conditions:**
 A member who redeemed a limited reward and another who redeemed an unlimited reward.
@@ -616,7 +616,7 @@ A member who redeemed a limited reward and another who redeemed an unlimited rew
 * Each restored credit expires when the credit it came from would have.
 * No stock is returned for the unlimited reward.
 
-### loyalty-US3-TC6-1: Double redemption costs one
+### grade10-site-loyalty-programme-US3-TC6-1: Double redemption costs one
 
 **Classification:**
 
@@ -628,7 +628,7 @@ A member who redeemed a limited reward and another who redeemed an unlimited rew
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** loyalty-US-03
+* **Trace:** grade10-site-loyalty-programme-US-03
 
 **Pre-conditions:**
 A signed-in member who can redeem.
@@ -643,7 +643,7 @@ A signed-in member who can redeem.
 
 ---
 
-## loyalty-US4: Member runs their membership from one surface
+## grade10-site-loyalty-programme-US4: Member runs their membership from one surface
 
 **As a** member,
 **I want** my tier, balance, progress and expiring points on one surface, in
@@ -651,7 +651,7 @@ the programme's own dates,
 **so that** I can join and read my own activity without being shown the
 operating record behind it.
 
-### loyalty-US4-TC1-1: Joining twice leaves the first join date
+### grade10-site-loyalty-programme-US4-TC1-1: Joining twice leaves the first join date
 
 **Classification:**
 
@@ -663,7 +663,7 @@ operating record behind it.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-04
+* **Trace:** grade10-site-loyalty-programme-US-04
 
 **Pre-conditions:**
 A member who can join.
@@ -676,7 +676,7 @@ A member who can join.
 
 * The first join date stands and later attempts change nothing.
 
-### loyalty-US4-TC2-1: Never-joined member is invited and still sees points
+### grade10-site-loyalty-programme-US4-TC2-1: Never-joined member is invited and still sees points
 
 **Classification:**
 
@@ -688,7 +688,7 @@ A member who can join.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** loyalty-US-04
+* **Trace:** grade10-site-loyalty-programme-US-04
 
 **Pre-conditions:**
 A member with recorded activity but no join date.
@@ -702,7 +702,7 @@ A member with recorded activity but no join date.
 
 * They are shown how to join, and their existing points.
 
-### loyalty-US4-TC3-1: Member activity hides operator reasons, retry keys and pricing
+### grade10-site-loyalty-programme-US4-TC3-1: Member activity hides operator reasons, retry keys and pricing
 
 **Classification:**
 
@@ -714,7 +714,7 @@ A member with recorded activity but no join date.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** loyalty-US-04
+* **Trace:** grade10-site-loyalty-programme-US-04
 
 **Pre-conditions:**
 An operator has corrected this member's balance with a written reason.
@@ -730,7 +730,7 @@ An operator has corrected this member's balance with a written reason.
 * No entry carries a retry key, a request record, or the tier and money arithmetic the entry was priced from.
 * The archived-reward entry still names that reward.
 
-### loyalty-US4-TC4-1: Dates read in the programme's time zone
+### grade10-site-loyalty-programme-US4-TC4-1: Dates read in the programme's time zone
 
 **Classification:**
 
@@ -742,7 +742,7 @@ An operator has corrected this member's balance with a written reason.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-04
+* **Trace:** grade10-site-loyalty-programme-US-04
 
 **Pre-conditions:**
 A member whose browser is not in Asia/Hong_Kong.
@@ -758,14 +758,14 @@ A member whose browser is not in Asia/Hong_Kong.
 
 ---
 
-## loyalty-US5: Operator runs the programme from one console
+## grade10-site-loyalty-programme-US5: Operator runs the programme from one console
 
 **As an** operator,
 **I want** to find a member and act on their loyalty under my own permissions,
 **so that** I can correct, reward and invite without holding powers I was not
 given, and every change I made stays provable.
 
-### loyalty-US5-TC1-1: Live grants can be listed; unknown and entry tiers are refused
+### grade10-site-loyalty-programme-US5-TC1-1: Live grants can be listed; unknown and entry tiers are refused
 
 **Classification:**
 
@@ -777,7 +777,7 @@ given, and every change I made stays provable.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** loyalty-US-05
+* **Trace:** grade10-site-loyalty-programme-US-05
 
 **Pre-conditions:**
 Signed in as an operator who can grant invitations. Live grants exist.
@@ -795,7 +795,7 @@ Signed in as an operator who can grant invitations. Live grants exist.
 * An unknown tier is refused as not found and nothing is recorded.
 * An entry-tier grant is refused as invalid.
 
-### loyalty-US5-TC2-1: Action without permission is refused and stays recorded
+### grade10-site-loyalty-programme-US5-TC2-1: Action without permission is refused and stays recorded
 
 **Classification:**
 
@@ -807,7 +807,7 @@ Signed in as an operator who can grant invitations. Live grants exist.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-05
+* **Trace:** grade10-site-loyalty-programme-US-05
 
 **Pre-conditions:**
 Signed in as an operator without the action's permission. The operator log can accept entries.
@@ -824,7 +824,7 @@ Signed in as an operator without the action's permission. The operator log can a
 * Verifying the log reports the position at which a rewrite breaks.
 * An unrecordable action is refused rather than run unrecorded.
 
-### loyalty-US5-TC3-1: Correction does not move a member up; campaign grant does
+### grade10-site-loyalty-programme-US5-TC3-1: Correction does not move a member up; campaign grant does
 
 **Classification:**
 
@@ -836,7 +836,7 @@ Signed in as an operator without the action's permission. The operator log can a
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** loyalty-US-05
+* **Trace:** grade10-site-loyalty-programme-US-05
 
 **Pre-conditions:**
 Signed in as an operator who can move points. A member below Diamond.
@@ -851,7 +851,7 @@ Signed in as an operator who can move points. A member below Diamond.
 * Corrected points are spendable and progress toward the next tier is unchanged.
 * Campaign or sign-up points count toward the next tier.
 
-### loyalty-US5-TC4-1: Console sections match permissions and a missing second factor opens the gate
+### grade10-site-loyalty-programme-US5-TC4-1: Console sections match permissions and a missing second factor opens the gate
 
 **Classification:**
 
@@ -863,7 +863,7 @@ Signed in as an operator who can move points. A member below Diamond.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** loyalty-US-05
+* **Trace:** grade10-site-loyalty-programme-US-05
 
 **Pre-conditions:**
 An operator holding only the loyalty read permission. A second operator whose role allows an action but whose session has no verified second factor.
@@ -880,7 +880,7 @@ An operator holding only the loyalty read permission. A second operator whose ro
 * The same member opens for the recipient of the shared address.
 * The console takes the second operator to verify, and the action completes afterwards.
 
-### loyalty-US5-TC5-1: Stale console reports the failed decode
+### grade10-site-loyalty-programme-US5-TC5-1: Stale console reports the failed decode
 
 **Classification:**
 
@@ -892,7 +892,7 @@ An operator holding only the loyalty read permission. A second operator whose ro
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-05
+* **Trace:** grade10-site-loyalty-programme-US-05
 
 **Pre-conditions:**
 The console reads a response whose shape it does not recognise.
@@ -906,7 +906,7 @@ The console reads a response whose shape it does not recognise.
 
 * It reports which call failed to decode, rather than showing missing values.
 
-### loyalty-US5-TC6-1: Loyalty permission alone shows no identities
+### grade10-site-loyalty-programme-US5-TC6-1: Loyalty permission alone shows no identities
 
 **Classification:**
 
@@ -918,7 +918,7 @@ The console reads a response whose shape it does not recognise.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** loyalty-US-05
+* **Trace:** grade10-site-loyalty-programme-US-05
 
 **Pre-conditions:**
 Signed in as an operator holding loyalty permissions but not the identity permission.
@@ -932,7 +932,7 @@ Signed in as an operator holding loyalty permissions but not the identity permis
 * The member's loyalty state is shown.
 * No name or email address is shown.
 
-### loyalty-US5-TC7-1: Service connection cannot read identities; a failed read does not blank them
+### grade10-site-loyalty-programme-US5-TC7-1: Service connection cannot read identities; a failed read does not blank them
 
 **Classification:**
 
@@ -944,7 +944,7 @@ Signed in as an operator holding loyalty permissions but not the identity permis
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** loyalty-US-05
+* **Trace:** grade10-site-loyalty-programme-US-05
 
 **Pre-conditions:**
 A service holding a connection to the identity system, with no operator session carrying the identity permission.

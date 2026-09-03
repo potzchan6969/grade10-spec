@@ -7,16 +7,16 @@ which is this change's premise — and this change adds no screen. Every page
 keeps its current rendering; the code as it stands is the layout's source of
 truth. The visible deltas are exactly the spec's fixes:
 
-- A refused read renders in the error tone (`console-blocks-SC-06`) — both
+- A refused read renders in the error tone (`shared-console-blocks-SC-06`) — both
   brands' store dashboards change from secondary-tone text.
 - Irreversible auction post-sale moves and the settings deactivation confirm
   in a dialog instead of the browser's native confirm
-  (`console-blocks-SC-08`, `console-blocks-SC-09`).
+  (`shared-console-blocks-SC-08`, `shared-console-blocks-SC-09`).
 - Panel switches render as tabs and row filters as segmented controls
-  (`console-blocks-SC-10`, `console-blocks-SC-11`) on the seven surveyed
+  (`shared-console-blocks-SC-10`, `shared-console-blocks-SC-11`) on the seven surveyed
   sites.
 - The auction bidders queue gains a working pager where it now dead-ends
-  (`console-blocks-SC-14`).
+  (`shared-console-blocks-SC-14`).
 
 ## Components
 
@@ -36,20 +36,20 @@ needed in grade10-spec: `Table`, `TableHeader`, `TableBody`, `TableRow`,
 
 `@grade10/ui` keeps `TwoFactorVerifyForm`, `TwoFactorEnrollment`, and
 `parseTotpUri` — the admin apps continue importing those
-(`console-blocks-SC-04`).
+(`shared-console-blocks-SC-04`).
 
 ## States
 
-- Loading — `console-blocks-SC-05`: secondary-tone loading line, no rows, no
+- Loading — `shared-console-blocks-SC-05`: secondary-tone loading line, no rows, no
   empty message.
-- Failed — `console-blocks-SC-06`: error-tone message, distinguishable from
+- Failed — `shared-console-blocks-SC-06`: error-tone message, distinguishable from
   empty at a glance.
-- Empty — `console-blocks-SC-07`: secondary-tone "nothing here" line, no
+- Empty — `shared-console-blocks-SC-07`: secondary-tone "nothing here" line, no
   error.
-- Confirmation open/cancelled — `console-blocks-SC-08`: cancel reports
+- Confirmation open/cancelled — `shared-console-blocks-SC-08`: cancel reports
   nothing and returns to the surface.
-- Paged — `console-blocks-SC-14`: older offered when more rows exist, newest
+- Paged — `shared-console-blocks-SC-14`: older offered when more rows exist, newest
   offered from an older page.
-- Directory states carry over unchanged — `user-directory-SC-05` (gated
-  actions), `user-directory-SC-06` (ban/unban), `user-directory-SC-08` (no
+- Directory states carry over unchanged — `shared-console-user-directory-SC-05` (gated
+  actions), `shared-console-user-directory-SC-06` (ban/unban), `shared-console-user-directory-SC-08` (no
   sessions).

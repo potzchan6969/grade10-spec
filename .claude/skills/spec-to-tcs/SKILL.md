@@ -168,8 +168,8 @@ each case traces scenario ids.
 5. **Take the journeys as the suite's sections.** Each
    `### <capability>-US-<n>: …` in `user-journeys.md` becomes one
    `## <capability>-US<n>: …` section, in spec order — the journey id in its
-   compact form (hyphen after `US` dropped, no zero-pad: spec `home-US-01`
-   becomes section `## home-US1:`), the journey title copied unchanged.
+   compact form (hyphen after `US` dropped, no zero-pad: spec `grade10-site-store-home-US-01`
+   becomes section `## grade10-site-store-home-US1:`), the journey title copied unchanged.
    **You must restate the user journey completely:** carry over the same
    three-line story (`**As a**` / `**I want**` / `**so that**`) exactly as
    the spec uses it. **Do not include a `Covers:` bullet list of scenario
@@ -180,7 +180,7 @@ each case traces scenario ids.
 
 6. **Write the test cases for each journey.** Number them
    `<capability>-US<n>-TC<m>-<v>` per journey (no hyphen after `US`/`TC`, no
-   zero-pad — e.g. `product-listing-US1-TC1-1`). `n` is the journey number
+   zero-pad — e.g. `grade10-site-store-product-listing-US1-TC1-1`). `n` is the journey number
    from the matching spec `US` id; start `TC` at `1` under each journey;
    start `<v>` at `1` and bump only when update mode re-words an existing
    case. Positive / happy path first, then empty / missing / failure
@@ -302,7 +302,7 @@ each case traces scenario ids.
    A finished case reads like this:
 
    ```markdown
-   ### home-US1-TC3-1: Core navigation survives a failed stylesheet load
+   ### grade10-site-store-home-US1-TC3-1: Core navigation survives a failed stylesheet load
 
    **Classification:**
 
@@ -314,7 +314,7 @@ each case traces scenario ids.
    * **Layer:** e2e
    * **Automation status:** manual
    * **Testability:** automation, manual
-   * **Trace:** home-US-01
+   * **Trace:** grade10-site-store-home-US-01
 
    **Pre-conditions:**
    Stylesheets blocked by network manipulation.
@@ -363,8 +363,8 @@ each case traces scenario ids.
    - **Automation status** — always `manual` on generation.
    - **Testability** — `automation`, `manual`, or `automation, manual`.
    - **Trace** — the journey this case derives from, in the spec's canonical
-     form: `<capability>-US-<n>` (`home-US-01`), even though the section
-     heading above it uses the compact `home-US1`. One journey per case. A
+     form: `<capability>-US-<n>` (`grade10-site-store-home-US-01`), even though the section
+     heading above it uses the compact `grade10-site-store-home-US1`. One journey per case. A
      case with no trace does not belong in the file.
 
    **Coverage shape:** A journey whose `Accepted by` list includes refusal,

@@ -43,17 +43,17 @@ console package, because one surface renders it.
 
 | Screen | State | Spec scenario |
 | --- | --- | --- |
-| Surface | Absent in a production build; not-found surface answers the address | `api-docs-SC-04` |
-| Surface | Present under Dev in staging and development; needs no grant | `api-docs-SC-05` |
-| Rail | Every service with its count; routers unfold with theirs | `api-docs-SC-03` |
-| Procedure list | Rows with kind, caller, input and output summaries | `api-docs-SC-06` |
-| Procedure list | Filter narrows every service; counts follow | `api-docs-SC-08` |
-| Procedure list | Filter matches nothing: counts read zero, list renders the empty copy | `api-docs-SC-08` |
-| Detail | Wire path, caller, field tables; alternatives named by discriminator | `api-docs-SC-07` |
-| Detail | Elevated caller with grant beside it | `api-docs-SC-09` |
-| Detail | `session` and `session · fresh` told apart | `api-docs-SC-10` |
-| Detail | Output not declared: `Notice`, no fields, service count | `api-docs-SC-11` |
-| Section | Header names the build commit | `api-docs-SC-12` |
+| Surface | Absent in a production build; not-found surface answers the address | `grade10-admin-console-api-docs-SC-04` |
+| Surface | Present under Dev in staging and development; needs no grant | `grade10-admin-console-api-docs-SC-05` |
+| Rail | Every service with its count; routers unfold with theirs | `grade10-admin-console-api-docs-SC-03` |
+| Procedure list | Rows with kind, caller, input and output summaries | `grade10-admin-console-api-docs-SC-06` |
+| Procedure list | Filter narrows every service; counts follow | `grade10-admin-console-api-docs-SC-08` |
+| Procedure list | Filter matches nothing: counts read zero, list renders the empty copy | `grade10-admin-console-api-docs-SC-08` |
+| Detail | Wire path, caller, field tables; alternatives named by discriminator | `grade10-admin-console-api-docs-SC-07` |
+| Detail | Elevated caller with grant beside it | `grade10-admin-console-api-docs-SC-09` |
+| Detail | `session` and `session · fresh` told apart | `grade10-admin-console-api-docs-SC-10` |
+| Detail | Output not declared: `Notice`, no fields, service count | `grade10-admin-console-api-docs-SC-11` |
+| Section | Header names the build commit | `grade10-admin-console-api-docs-SC-12` |
 
 Loading and refused states do not arise: the document is a static import
 carried by the build, and the surface makes no call.

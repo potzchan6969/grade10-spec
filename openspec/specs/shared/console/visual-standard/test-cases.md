@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## visual-standard-US1: Operator moves between consoles in one shift
+## shared-console-visual-standard-US1: Operator moves between consoles in one shift
 
 **As an** operator,
 **I want** every console I open to arrange the same kinds of fact the same way,
 **so that** moving between nine of them costs me no re-reading.
 
-### visual-standard-US1-TC1-1: Two consoles render the same control the same way
+### shared-console-visual-standard-US1-TC1-1: Two consoles render the same control the same way
 
 **Classification:**
 
@@ -21,7 +21,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** visual-standard-US-01
+* **Trace:** shared-console-visual-standard-US-01
 
 **Pre-conditions:**
 Signed in as an operator who can open <grade10 admin console url> and <a second admin console url>.
@@ -36,7 +36,7 @@ Signed in as an operator who can open <grade10 admin console url> and <a second 
 * Both consoles render that control from the same vocabulary.
 * No admin surface mixes a second vocabulary for it.
 
-### visual-standard-US1-TC2-1: Shared customer component matches the console around it
+### shared-console-visual-standard-US1-TC2-1: Shared customer component matches the console around it
 
 **Classification:**
 
@@ -48,7 +48,7 @@ Signed in as an operator who can open <grade10 admin console url> and <a second 
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** visual-standard-US-01
+* **Trace:** shared-console-visual-standard-US-01
 
 **Pre-conditions:**
 An admin console renders a component that customer surfaces also render.
@@ -63,7 +63,7 @@ An admin console renders a component that customer surfaces also render.
 * One definition serves the admin and customer surfaces.
 * The admin rendering is not visibly foreign to the console around it.
 
-### visual-standard-US1-TC3-1: Refused read stays distinguishable after the swap
+### shared-console-visual-standard-US1-TC3-1: Refused read stays distinguishable after the swap
 
 **Classification:**
 
@@ -75,7 +75,7 @@ An admin console renders a component that customer surfaces also render.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** visual-standard-US-01
+* **Trace:** shared-console-visual-standard-US-01
 
 **Pre-conditions:**
 <The console read endpoint> is mocked to refuse the request.
@@ -92,13 +92,13 @@ An admin console renders a component that customer surfaces also render.
 
 ---
 
-## visual-standard-US2: Operator recognises which brand they are administering
+## shared-console-visual-standard-US2: Operator recognises which brand they are administering
 
 **As an** operator who administers both brands,
 **I want** each console to look like the brand it belongs to,
 **so that** I never act on one brand's data believing it is the other's.
 
-### visual-standard-US2-TC1-1: Two brands differ only by the brand mechanism
+### shared-console-visual-standard-US2-TC1-1: Two brands differ only by the brand mechanism
 
 **Classification:**
 
@@ -110,7 +110,7 @@ An admin console renders a component that customer surfaces also render.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** visual-standard-US-02
+* **Trace:** shared-console-visual-standard-US-02
 
 **Pre-conditions:**
 Signed in as an operator who can open both brands' admin consoles.
@@ -125,7 +125,7 @@ Signed in as an operator who can open both brands' admin consoles.
 * Every visual difference between the two comes from the brand mechanism.
 * Neither rendering carries a brand value written into a block.
 
-### visual-standard-US2-TC2-1: A brand visual value has one source
+### shared-console-visual-standard-US2-TC2-1: A brand visual value has one source
 
 **Classification:**
 
@@ -137,7 +137,7 @@ Signed in as an operator who can open both brands' admin consoles.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** visual-standard-US-02
+* **Trace:** shared-console-visual-standard-US-02
 
 **Pre-conditions:**
 Signed in as an operator on <grade10 admin console url>.

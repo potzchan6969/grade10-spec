@@ -23,13 +23,13 @@ When the line’s status leaves `adjusted` and later becomes `adjusted` again,
 `adjusted`, it SHALL show the warning (a remount with status still `adjusted`
 shows the warning again).
 
-#### Scenario: store-cart-SC-14 - Adjusted line shows the low-stock warning
+#### Scenario: shared-ui-store-cart-SC-14 - Adjusted line shows the low-stock warning
 
 - **GIVEN** a cart line with status `adjusted`
 - **WHEN** `CartItem` renders
 - **THEN** the low-stock warning copy is visible
 
-#### Scenario: store-cart-SC-15 - Quantity change hides the warning
+#### Scenario: shared-ui-store-cart-SC-15 - Quantity change hides the warning
 
 - **GIVEN** a cart line with status `adjusted` showing the low-stock warning
 - **AND** the stepper can change quantity without removing the line
@@ -37,7 +37,7 @@ shows the warning again).
 - **THEN** the low-stock warning is no longer visible
 - **AND** `onQuantityChange` is invoked with the new quantity
 
-#### Scenario: store-cart-SC-16 - New adjusted status shows the warning again
+#### Scenario: shared-ui-store-cart-SC-16 - New adjusted status shows the warning again
 
 - **GIVEN** a cart line that was `adjusted` and whose warning was hidden after
   a quantity change

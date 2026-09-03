@@ -59,26 +59,26 @@ While a read is in flight the store SHALL NOT present the lines it is checking
 as confirmed, and SHALL NOT let the cart be offered for checkout on the strength
 of the previous read.
 
-#### Scenario: cart-validation-SC-01 - The cart is opened
+#### Scenario: grade10-site-store-cart-validation-SC-01 - The cart is opened
 
 - **WHEN** a collector opens the cart
 - **THEN** availability and price are re-read for every line it holds
 - **AND** no line's recorded availability or price is shown as current until
   that read returns
 
-#### Scenario: cart-validation-SC-02 - Checkout is requested
+#### Scenario: grade10-site-store-cart-validation-SC-02 - Checkout is requested
 
 - **WHEN** a collector offers the cart for checkout
 - **THEN** availability and price are re-read for every line before any
   checkout order is created
 
-#### Scenario: cart-validation-SC-03 - A read is still in flight
+#### Scenario: grade10-site-store-cart-validation-SC-03 - A read is still in flight
 
 - **GIVEN** a collector who opened the cart and whose re-read has not returned
 - **THEN** the lines being checked are not presented as confirmed
 - **AND** the cart cannot be offered for checkout until the read returns
 
-#### Scenario: cart-validation-SC-04 - A browse cache is not the answer
+#### Scenario: grade10-site-store-cart-validation-SC-04 - A browse cache is not the answer
 
 - **GIVEN** a variant the shop stopped offering a moment ago, whose listing
   tile still reads available from a cached read
@@ -98,27 +98,27 @@ SHALL be able to remove it themselves.
 The store SHALL NOT increase a line's quantity on a re-read, whatever count has
 since become available. A collector asked for what they asked for.
 
-#### Scenario: cart-validation-SC-05 - More was in the cart than remains
+#### Scenario: grade10-site-store-cart-validation-SC-05 - More was in the cart than remains
 
 - **GIVEN** a cart line requesting 5 of a variant the shop now counts at 2
 - **WHEN** the store re-reads it
 - **THEN** the line's quantity becomes 2
 - **AND** the line is reported as adjusted, saying the quantity changed
 
-#### Scenario: cart-validation-SC-06 - The line sold out entirely
+#### Scenario: grade10-site-store-cart-validation-SC-06 - The line sold out entirely
 
 - **GIVEN** a cart line requesting 5 of a variant the shop no longer offers
 - **WHEN** the store re-reads it
 - **THEN** the line is reported as out of stock
 - **AND** the line is still shown, and the collector can remove it
 
-#### Scenario: cart-validation-SC-07 - A line is never grown
+#### Scenario: grade10-site-store-cart-validation-SC-07 - A line is never grown
 
 - **GIVEN** a cart line requesting 2 of a variant whose count has risen to 40
 - **WHEN** the store re-reads it
 - **THEN** the line still requests 2
 
-#### Scenario: cart-validation-SC-08 - A line that is still fillable
+#### Scenario: grade10-site-store-cart-validation-SC-08 - A line that is still fillable
 
 - **GIVEN** a cart line requesting 2 of a variant the shop counts at 30
 - **WHEN** the store re-reads it
@@ -131,13 +131,13 @@ on the store's sales channel, the store SHALL report that line as unavailable,
 distinctly from out of stock. A collector whose card sold out SHALL be told
 something different from one whose card was withdrawn from sale.
 
-#### Scenario: cart-validation-SC-09 - The product was withdrawn from sale
+#### Scenario: grade10-site-store-cart-validation-SC-09 - The product was withdrawn from sale
 
 - **GIVEN** a cart line for a product published when it was added
 - **WHEN** the store re-reads it and that product is no longer on the channel
 - **THEN** the line is reported as unavailable, and not as out of stock
 
-#### Scenario: cart-validation-SC-10 - Sold out and withdrawn are told apart
+#### Scenario: grade10-site-store-cart-validation-SC-10 - Sold out and withdrawn are told apart
 
 - **GIVEN** a cart holding one line whose variant the shop stopped offering and
   one line whose product was unpublished
@@ -158,7 +158,7 @@ returns the same price confirms the line rather than reporting it again.
 The store SHALL NOT create a checkout order from a price a browser supplied, a
 price a line recorded when it was added, or a price whose read did not return.
 
-#### Scenario: cart-validation-SC-11 - A price rose while the line sat in the cart
+#### Scenario: grade10-site-store-cart-validation-SC-11 - A price rose while the line sat in the cart
 
 - **GIVEN** a cart line showing 10500 minor units `HKD`
 - **WHEN** the store re-reads it and the current price is 12300 minor units
@@ -166,7 +166,7 @@ price a line recorded when it was added, or a price whose read did not return.
 - **THEN** the line shows 12300 minor units `HKD`
 - **AND** the collector is told the price changed before checkout is offered
 
-#### Scenario: cart-validation-SC-12 - A price fell while the line sat in the cart
+#### Scenario: grade10-site-store-cart-validation-SC-12 - A price fell while the line sat in the cart
 
 - **GIVEN** a cart line showing 12300 minor units `HKD`
 - **WHEN** the store re-reads it and the current price is 10500 minor units
@@ -174,7 +174,7 @@ price a line recorded when it was added, or a price whose read did not return.
 - **THEN** the line shows 10500 minor units `HKD`
 - **AND** the collector is told the price changed
 
-#### Scenario: cart-validation-SC-13 - A disclosed price is the line's price
+#### Scenario: grade10-site-store-cart-validation-SC-13 - A disclosed price is the line's price
 
 - **GIVEN** a cart line repriced to 12300 minor units `HKD` when the cart
   opened, and disclosed
@@ -182,7 +182,7 @@ price a line recorded when it was added, or a price whose read did not return.
   12300 minor units `HKD`
 - **THEN** the line is confirmed and no price change is reported
 
-#### Scenario: cart-validation-SC-14 - A supplied price decides nothing
+#### Scenario: grade10-site-store-cart-validation-SC-14 - A supplied price decides nothing
 
 - **GIVEN** a checkout request carrying a price for a line
 - **WHEN** the store creates the checkout order
@@ -204,26 +204,26 @@ said — every contradicted line at once, not the first one found.
 The collector SHALL be able to proceed once the cart holds only lines the read
 confirmed, without rebuilding it from nothing.
 
-#### Scenario: cart-validation-SC-15 - One line blocks the handoff
+#### Scenario: grade10-site-store-cart-validation-SC-15 - One line blocks the handoff
 
 - **GIVEN** a cart of three lines, one of which the read finds out of stock
 - **WHEN** the collector offers the cart for checkout
 - **THEN** no checkout order is created
 - **AND** the collector is returned to the cart with that line identified
 
-#### Scenario: cart-validation-SC-16 - Every contradicted line is named at once
+#### Scenario: grade10-site-store-cart-validation-SC-16 - Every contradicted line is named at once
 
 - **GIVEN** a cart in which one line is unavailable and another was repriced
 - **WHEN** the collector offers the cart for checkout
 - **THEN** both lines are identified, each saying what happened to it
 
-#### Scenario: cart-validation-SC-17 - The collector proceeds after resolving
+#### Scenario: grade10-site-store-cart-validation-SC-17 - The collector proceeds after resolving
 
 - **GIVEN** a collector who removed the line that blocked their checkout
 - **WHEN** they offer the cart again and the read confirms every line
 - **THEN** the checkout order is created from the confirmed lines
 
-#### Scenario: cart-validation-SC-18 - An earlier read does not carry a checkout
+#### Scenario: grade10-site-store-cart-validation-SC-18 - An earlier read does not carry a checkout
 
 - **GIVEN** a cart whose open-time read confirmed every line
 - **AND** a variant on it the shop stopped offering since
@@ -246,21 +246,21 @@ When the read itself cannot be completed, the store SHALL NOT invent
 availability or price, SHALL NOT fall back to what a line recorded, and SHALL
 NOT create a checkout order.
 
-#### Scenario: cart-validation-SC-19 - The shop refuses what the store had confirmed
+#### Scenario: grade10-site-store-cart-validation-SC-19 - The shop refuses what the store had confirmed
 
 - **GIVEN** a cart whose re-read confirmed every line
 - **WHEN** the shop refuses the checkout for a line it can no longer sell
 - **THEN** the collector is told which line was refused
 - **AND** the cart is theirs to resolve, with the other lines intact
 
-#### Scenario: cart-validation-SC-20 - The shop would fill a line short
+#### Scenario: grade10-site-store-cart-validation-SC-20 - The shop would fill a line short
 
 - **GIVEN** a cart line requesting 3 of a variant the store's read confirmed
 - **WHEN** the shop accepts 2 of it at checkout
 - **THEN** no checkout order is created
 - **AND** the line is identified with 2 as the quantity the shop would fill
 
-#### Scenario: cart-validation-SC-21 - The read cannot be completed
+#### Scenario: grade10-site-store-cart-validation-SC-21 - The read cannot be completed
 
 - **GIVEN** a collector offering the cart for checkout
 - **WHEN** the store cannot complete its availability and price read

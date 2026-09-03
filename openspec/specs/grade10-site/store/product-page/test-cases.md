@@ -3,7 +3,7 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## product-page-US1: Collector reads a card at its own address
+## grade10-site-store-product-page-US1: Collector reads a card at its own address
 
 **As a** collector,
 **I want** a product address to answer with that card's own page, and to refuse
@@ -11,7 +11,7 @@ when the catalogue holds no such card,
 **so that** the page I read is the card the address names rather than an empty
 product page.
 
-### product-page-US1-TC1-1: Card answers whole before scripts run
+### grade10-site-store-product-page-US1-TC1-1: Card answers whole before scripts run
 
 **Classification:**
 
@@ -23,7 +23,7 @@ product page.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-page-US-01
+* **Trace:** grade10-site-store-product-page-US-01
 
 **Pre-conditions:**
 The catalogue holds <a published card>. JavaScript disabled in the browser.
@@ -40,7 +40,7 @@ The catalogue holds <a published card>. JavaScript disabled in the browser.
 * URL contains <lang>.
 * Page source carries that card's name, description, and a price for every variant it lists.
 
-### product-page-US1-TC2-1: Two cards answer as two pages
+### grade10-site-store-product-page-US1-TC2-1: Two cards answer as two pages
 
 **Classification:**
 
@@ -52,7 +52,7 @@ The catalogue holds <a published card>. JavaScript disabled in the browser.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** product-page-US-01
+* **Trace:** grade10-site-store-product-page-US-01
 
 **Pre-conditions:**
 The catalogue holds two cards.
@@ -67,7 +67,7 @@ The catalogue holds two cards.
 * Each response carries its own card's name and price.
 * Each response carries its own title, meta description and `og:url`.
 
-### product-page-US1-TC3-1: Unknown handle answers 404 with not-found
+### grade10-site-store-product-page-US1-TC3-1: Unknown handle answers 404 with not-found
 
 **Classification:**
 
@@ -79,7 +79,7 @@ The catalogue holds two cards.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-page-US-01
+* **Trace:** grade10-site-store-product-page-US-01
 
 **Pre-conditions:**
 None.
@@ -94,7 +94,7 @@ None.
 * Response status is 404.
 * The site's not-found surface is shown, not an empty product page.
 
-### product-page-US1-TC4-1: Card added to the catalogue answers
+### grade10-site-store-product-page-US1-TC4-1: Card added to the catalogue answers
 
 **Classification:**
 
@@ -106,7 +106,7 @@ None.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** product-page-US-01
+* **Trace:** grade10-site-store-product-page-US-01
 
 **Pre-conditions:**
 The catalogue holds <a newly added card>.
@@ -121,14 +121,14 @@ The catalogue holds <a newly added card>.
 
 ---
 
-## product-page-US2: Collector opens a card from the storefront
+## grade10-site-store-product-page-US2: Collector opens a card from the storefront
 
 **As a** collector,
 **I want** to reach a card's own address from the grid without a page load,
 **so that** the card I opened is the one I land on, at an address that answers
 on its own.
 
-### product-page-US2-TC1-1: Card opens from the grid at its own address
+### grade10-site-store-product-page-US2-TC1-1: Card opens from the grid at its own address
 
 **Classification:**
 
@@ -140,7 +140,7 @@ on its own.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-page-US-02
+* **Trace:** grade10-site-store-product-page-US-02
 
 **Pre-conditions:**
 A collector is on the storefront. The catalogue holds <a published card>.
@@ -155,7 +155,7 @@ A collector is on the storefront. The catalogue holds <a published card>.
 * That card's address is what they are on, showing that card's page.
 * The destination renders without a full document load.
 
-### product-page-US2-TC2-1: Sitemap names no unfilled product pattern
+### grade10-site-store-product-page-US2-TC2-1: Sitemap names no unfilled product pattern
 
 **Classification:**
 
@@ -167,7 +167,7 @@ A collector is on the storefront. The catalogue holds <a published card>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** product-page-US-02
+* **Trace:** grade10-site-store-product-page-US-02
 
 **Pre-conditions:**
 None.
@@ -184,14 +184,14 @@ None.
 
 ---
 
-## product-page-US3: Collector adds a variant to the cart
+## grade10-site-store-product-page-US3: Collector adds a variant to the cart
 
 **As a** collector,
 **I want** to add the variant I chose from the card's own page,
 **so that** I can buy the grade I picked without leaving the card or returning
 to the grid.
 
-### product-page-US3-TC1-1: Chosen grade is added, not the opening variant
+### grade10-site-store-product-page-US3-TC1-1: Chosen grade is added, not the opening variant
 
 **Classification:**
 
@@ -203,7 +203,7 @@ to the grid.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-page-US-03
+* **Trace:** grade10-site-store-product-page-US-03
 
 **Pre-conditions:**
 A card whose page lists more than one variant for sale.
@@ -220,7 +220,7 @@ A card whose page lists more than one variant for sale.
 * The collector is still on that card's address.
 * What the site says the cart holds has changed to account for it.
 
-### product-page-US3-TC2-1: Single-variant card needs no choice
+### grade10-site-store-product-page-US3-TC2-1: Single-variant card needs no choice
 
 **Classification:**
 
@@ -232,7 +232,7 @@ A card whose page lists more than one variant for sale.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-page-US-03
+* **Trace:** grade10-site-store-product-page-US-03
 
 **Pre-conditions:**
 A card whose page lists one variant for sale.
@@ -247,7 +247,7 @@ A card whose page lists one variant for sale.
 * The cart holds that variant.
 * The collector is still on that card's address.
 
-### product-page-US3-TC3-1: Same variant twice is one line
+### grade10-site-store-product-page-US3-TC3-1: Same variant twice is one line
 
 **Classification:**
 
@@ -259,7 +259,7 @@ A card whose page lists one variant for sale.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** product-page-US-03
+* **Trace:** grade10-site-store-product-page-US-03
 
 **Pre-conditions:**
 A collector has already added a variant from a card's page.
@@ -275,14 +275,14 @@ A collector has already added a variant from a card's page.
 
 ---
 
-## product-page-US4: Collector meets a card with nothing for sale
+## grade10-site-store-product-page-US4: Collector meets a card with nothing for sale
 
 **As a** collector,
 **I want** a card that cannot be bought to say so where the buying happens,
 still carrying its prices,
 **so that** I can tell a card that sold from a page that failed.
 
-### product-page-US4-TC1-1: Sold-out card keeps prices and offers no add
+### grade10-site-store-product-page-US4-TC1-1: Sold-out card keeps prices and offers no add
 
 **Classification:**
 
@@ -294,7 +294,7 @@ still carrying its prices,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-page-US-04
+* **Trace:** grade10-site-store-product-page-US-04
 
 **Pre-conditions:**
 A card the catalogue lists with no variant for sale.
@@ -310,7 +310,7 @@ A card the catalogue lists with no variant for sale.
 * Every variant it lists is still priced.
 * There is nothing to press that would add it.
 
-### product-page-US4-TC2-1: Mixed availability is said per variant
+### grade10-site-store-product-page-US4-TC2-1: Mixed availability is said per variant
 
 **Classification:**
 
@@ -322,7 +322,7 @@ A card the catalogue lists with no variant for sale.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-page-US-04
+* **Trace:** grade10-site-store-product-page-US-04
 
 **Pre-conditions:**
 A card listing one variant for sale and one sold out.

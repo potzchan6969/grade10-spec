@@ -5,6 +5,10 @@
      spec-to-tcs skill, review it with tcs-review, and check it with
      `pnpm run tcs:validate`. -->
 
+<!-- <capability> is the capability's path with slashes as hyphens:
+     grade10-site/store/product-listing issues
+     grade10-site-store-product-listing-SC-01, -US-01, -US1-TC1-1. -->
+
 # <product>/<domain>/<capability> Test Cases
 
 **Status:** pending-review

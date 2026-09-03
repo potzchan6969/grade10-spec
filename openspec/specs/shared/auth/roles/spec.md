@@ -22,13 +22,13 @@ A signed-in person SHALL hold one or more of: `user`, `staff`, `support`,
 `auditor`, `admin`. A person with no operator role SHALL hold `user` only.
 Unknown role names SHALL be ignored.
 
-#### Scenario: roles-SC-01 - A collector is a user
+#### Scenario: shared-auth-roles-SC-01 - A collector is a user
 
 - **GIVEN** a person who has never been granted an operator role
 - **WHEN** a product reads who is calling
 - **THEN** their roles are `user` only
 
-#### Scenario: roles-SC-02 - An unknown role is dropped
+#### Scenario: shared-auth-roles-SC-02 - An unknown role is dropped
 
 - **GIVEN** a person whose roles include a name that is not in the closed set
 - **WHEN** a product reads who is calling
@@ -42,26 +42,26 @@ the caller holds a particular role name. A person whose only role is `user`
 SHALL hold no operator permission. A permission name that is not in the
 vocabulary SHALL grant nothing.
 
-#### Scenario: roles-SC-03 - A user cannot act as an operator
+#### Scenario: shared-auth-roles-SC-03 - A user cannot act as an operator
 
 - **GIVEN** a person whose only role is `user`
 - **WHEN** that person requests an operator action
 - **THEN** the system refuses it
 
-#### Scenario: roles-SC-04 - Support cannot set roles
+#### Scenario: shared-auth-roles-SC-04 - Support cannot set roles
 
 - **GIVEN** a person whose operator role is `support`
 - **WHEN** that person tries to set another person's roles
 - **THEN** the system refuses it
 - **AND** they can still list users, ban, and list and revoke sessions
 
-#### Scenario: roles-SC-05 - Staff cannot list or ban users
+#### Scenario: shared-auth-roles-SC-05 - Staff cannot list or ban users
 
 - **GIVEN** a person whose operator role is `staff`
 - **WHEN** that person tries to list or ban users
 - **THEN** the system refuses it
 
-#### Scenario: roles-SC-06 - An unknown permission grants nothing
+#### Scenario: shared-auth-roles-SC-06 - An unknown permission grants nothing
 
 - **GIVEN** a product that checks a permission name that is not in the
   vocabulary
@@ -85,32 +85,32 @@ A person who holds several operator roles SHALL receive the union of those
 roles' grants. Operators SHALL change who holds a role, and SHALL NOT change
 what a role grants.
 
-#### Scenario: roles-SC-07 - Staff can operate the store and auction catalog
+#### Scenario: shared-auth-roles-SC-07 - Staff can operate the store and auction catalog
 
 - **GIVEN** a person with the `staff` role
 - **WHEN** they take a store write or an auction operate action
 - **THEN** the system allows it
 
-#### Scenario: roles-SC-07a - Staff can write the auction catalogue
+#### Scenario: shared-auth-roles-SC-07a - Staff can write the auction catalogue
 
 - **GIVEN** a person with the `staff` role
 - **WHEN** they take an auction write action
 - **THEN** the system allows it
 
-#### Scenario: roles-SC-08 - Auditor reads the trail and nothing else
+#### Scenario: shared-auth-roles-SC-08 - Auditor reads the trail and nothing else
 
 - **GIVEN** a person whose only operator role is `auditor`
 - **WHEN** they read the audit trail
 - **THEN** the system allows it
 - **AND** a ban, a store write, or a role change is refused
 
-#### Scenario: roles-SC-09 - Combined roles stack
+#### Scenario: shared-auth-roles-SC-09 - Combined roles stack
 
 - **GIVEN** a person holding `support` and `staff`
 - **WHEN** they list users and write to the store
 - **THEN** both actions are allowed
 
-#### Scenario: roles-SC-10 - An operator cannot widen a role's grants
+#### Scenario: shared-auth-roles-SC-10 - An operator cannot widen a role's grants
 
 - **GIVEN** an operator who holds `user:set-role`
 - **WHEN** they use the users directory

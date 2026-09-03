@@ -28,14 +28,14 @@ required in `grade10-spec`:
 States continue to be defined by the durable
 [`shared-ui/store-cart` capability](../../specs/shared-ui/store-cart/spec.md):
 
-- Open-time refresh loading and disabled checkout — `store-cart-SC-08`.
-- Populated five-slot baseline and overflow — `store-cart-SC-02`,
-  `store-cart-SC-03`, and `store-cart-SC-07`.
+- Open-time refresh loading and disabled checkout — `shared-ui-store-cart-SC-08`.
+- Populated five-slot baseline and overflow — `shared-ui-store-cart-SC-02`,
+  `shared-ui-store-cart-SC-03`, and `shared-ui-store-cart-SC-07`.
 - Empty drawer with five placeholders, hidden badge, and hidden footer —
-  `store-cart-SC-04`.
-- Close button, backdrop, Escape, and scroll lock — `store-cart-SC-06`.
+  `shared-ui-store-cart-SC-04`.
+- Close button, backdrop, Escape, and scroll lock — `shared-ui-store-cart-SC-06`.
 - Quantity edits, removals, and provisional checkout handoff —
-  `store-cart-SC-09`.
+  `shared-ui-store-cart-SC-09`.
 
 The initial application refresh uses only the existing browser-cart projection;
 live availability, repricing, and calculation states remain the future

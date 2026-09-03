@@ -376,11 +376,12 @@ const record = (severity, file, line, message) =>
   problems.push({ severity, file, line, message });
 
 /** The prefix a capability issues, read off its spec rather than off its
- * directory. A prefix is chosen with a capability's first ids and never moves
- * again, so a renamed capability goes on issuing what it always issued:
- * `grade10-site/loyalty/programme` issues `loyalty-*`, and a suite beside it
- * names `loyalty-US1`, not `programme-US1`. Only a spec that issues no id at
- * all falls back to the directory name. */
+ * directory. A new capability takes its path form -
+ * `grade10-site/loyalty/programme` issues `grade10-site-loyalty-programme-*` -
+ * but the prefix is still read from the ids themselves, because an issued id
+ * is permanent: a capability that later moves goes on issuing what it always
+ * issued rather than invalidating every task, review and case that names one.
+ * Only a spec that issues no id at all falls back to the directory name. */
 function issuedPrefix(spec) {
   if (!spec) return null;
   const [id] = [...spec.journeys.keys(), ...spec.scenarios];

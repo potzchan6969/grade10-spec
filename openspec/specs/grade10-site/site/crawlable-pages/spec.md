@@ -50,20 +50,20 @@ Once scripts run, the surface SHALL be the same one the HTML carried: the
 served content stays, and the page becomes interactive without rendering from
 blank.
 
-#### Scenario: crawlable-pages-SC-01 - The marketing page answers whole
+#### Scenario: grade10-site-site-crawlable-pages-SC-01 - The marketing page answers whole
 
 - **WHEN** the marketing address is fetched and no script executes
 - **THEN** the response HTML contains the marketing page's title, meta
   description, headline, and its static copy
 
-#### Scenario: crawlable-pages-SC-02 - A catalogue answers its identity
+#### Scenario: grade10-site-site-crawlable-pages-SC-02 - A catalogue answers its identity
 
 - **WHEN** the store or auction address is fetched and no script executes
 - **THEN** the response HTML contains that surface's title, meta description,
   headline, and static copy
 - **AND** the listings themselves may be absent until scripts run
 
-#### Scenario: crawlable-pages-SC-03 - Scripts only add to the page
+#### Scenario: grade10-site-site-crawlable-pages-SC-03 - Scripts only add to the page
 
 - **GIVEN** a public surface served with its content in the HTML
 - **WHEN** scripts finish loading
@@ -76,12 +76,12 @@ Each public surface SHALL carry its own title and meta description, distinct
 from every other surface's. The document title SHALL follow client-side
 navigation, including a navigation the session forces.
 
-#### Scenario: crawlable-pages-SC-04 - Two surfaces, two names
+#### Scenario: grade10-site-site-crawlable-pages-SC-04 - Two surfaces, two names
 
 - **WHEN** any two public surfaces are compared
 - **THEN** their titles differ and their meta descriptions differ
 
-#### Scenario: crawlable-pages-SC-05 - The title follows navigation
+#### Scenario: grade10-site-site-crawlable-pages-SC-05 - The title follows navigation
 
 - **GIVEN** a collector on one public surface
 - **WHEN** they navigate to another without a page load
@@ -92,7 +92,7 @@ navigation, including a navigation the session forces.
 Each public surface SHALL carry Open Graph title, description, and URL
 matching that surface, readable without executing scripts.
 
-#### Scenario: crawlable-pages-SC-06 - A preview fetcher reads the surface
+#### Scenario: grade10-site-site-crawlable-pages-SC-06 - A preview fetcher reads the surface
 
 - **WHEN** a public address is fetched and no script executes
 - **THEN** the response HTML carries `og:title`, `og:description`, and
@@ -112,13 +112,13 @@ being listed. The sitemap SHALL never list an address carrying an unfilled
 parameter in place of a card or a lot, and SHALL name no address the site
 would refuse.
 
-#### Scenario: crawlable-pages-SC-07 - robots points at the sitemap
+#### Scenario: grade10-site-site-crawlable-pages-SC-07 - robots points at the sitemap
 
 - **WHEN** robots.txt is fetched
 - **THEN** it permits crawling the public surfaces and names the sitemap's
   absolute URL
 
-#### Scenario: crawlable-pages-SC-08 - The sitemap is exact
+#### Scenario: grade10-site-site-crawlable-pages-SC-08 - The sitemap is exact
 
 - **WHEN** the sitemap is fetched
 - **THEN** it lists every public surface the build writes a document for, and
@@ -126,20 +126,20 @@ would refuse.
   serving environment
 - **AND** neither the profile nor sign-in appears
 
-#### Scenario: crawlable-pages-SC-09 - The sitemap names no pattern
+#### Scenario: grade10-site-site-crawlable-pages-SC-09 - The sitemap names no pattern
 
 - **WHEN** the sitemap is fetched
 - **THEN** every entry is an address a collector can fetch
 - **AND** none of them carries an unfilled parameter in place of a card or a
   lot
 
-#### Scenario: crawlable-pages-SC-10 - The catalogue decides what is listed
+#### Scenario: grade10-site-site-crawlable-pages-SC-10 - The catalogue decides what is listed
 
 - **GIVEN** a card the catalogue did not hold when the site was built
 - **WHEN** the sitemap is fetched after the catalogue gains it
 - **THEN** that card's address appears, with no deploy in between
 
-#### Scenario: crawlable-pages-SC-11 - Every listed address answers
+#### Scenario: grade10-site-site-crawlable-pages-SC-11 - Every listed address answers
 
 - **WHEN** each address the sitemap names is fetched
 - **THEN** each response has status 200
@@ -154,27 +154,27 @@ holds SHALL answer 404 when it holds no such thing. An address the site does
 not answer SHALL return status 404, while still showing the site's not-found
 surface to a collector.
 
-#### Scenario: crawlable-pages-SC-12 - A nested address belongs to its surface
+#### Scenario: grade10-site-site-crawlable-pages-SC-12 - A nested address belongs to its surface
 
 - **WHEN** an address beneath the store — one no surface of its own names — is
   fetched
 - **THEN** the response has status 200 and carries the store's identity
 
-#### Scenario: crawlable-pages-SC-13 - A nested surface answers for itself
+#### Scenario: grade10-site-site-crawlable-pages-SC-13 - A nested surface answers for itself
 
 - **WHEN** an address beneath the auction that a lot surface names — a mailed
   lot link — is fetched
 - **THEN** the response has status 200 and carries that lot's identity, not
   the auction's
 
-#### Scenario: crawlable-pages-SC-14 - A surface refuses an address of its own
+#### Scenario: grade10-site-site-crawlable-pages-SC-14 - A surface refuses an address of its own
 
 - **WHEN** an address beneath a surface that names one thing is fetched, and
   the site holds no such thing
 - **THEN** the response has status 404
 - **AND** a collector opening it still sees the site's not-found surface
 
-#### Scenario: crawlable-pages-SC-15 - An unknown address is refused honestly
+#### Scenario: grade10-site-site-crawlable-pages-SC-15 - An unknown address is refused honestly
 
 - **WHEN** an address under no surface the site answers is fetched
 - **THEN** the response has status 404

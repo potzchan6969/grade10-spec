@@ -94,7 +94,7 @@ Alternatives:
   non-goal, and a large blast radius for a problem that turns out not to
   exist.
 - *Let import order fall where it may.* Leaves `--radius-full` decided by a
-  line's position in a file nobody reads. `visual-standard-SC-05` asks that
+  line's position in a file nobody reads. `shared-console-visual-standard-SC-05` asks that
   exactly one mechanism set a value; stating the order is what satisfies it.
 
 ### The shared block matches by palette, not by a token bridge
@@ -105,7 +105,7 @@ read as part of the console because the admin's Astryx theme and the design
 system's brand sheet carry **the same brand values** — the agreement is
 authored, not adapted at runtime.
 
-That is the mechanism `visual-standard-SC-03` asks to be stated. It is checked
+That is the mechanism `shared-console-visual-standard-SC-03` asks to be stated. It is checked
 by looking at the two-factor page beside another console page, which is a task
 in group 2, before anything else depends on the palette being right.
 
@@ -130,7 +130,7 @@ Alternatives:
 
 - *Adopt Astryx's `tailwind-theme.css` bridge and keep writing utility classes
   in admin code.* Rejected: it makes "which vocabulary is this file in"
-  unanswerable by looking at it, and `visual-standard-SC-01` is a rule about
+  unanswerable by looking at it, and `shared-console-visual-standard-SC-01` is a rule about
   surfaces.
 - *Drop Tailwind entirely.* Requires forking the two-factor block.
 
@@ -139,7 +139,7 @@ Alternatives:
 Both admin applications depend on `@astryxdesign/core` and the theme package
 at `0.5.0` exactly — no caret. Astryx is public on npm, `latest` is `0.5.0`,
 and its 0.x line carries breaking changes in minors. An exact pin is what
-makes `visual-standard-SC-09` checkable: a version moves only in a change that
+makes `shared-console-visual-standard-SC-09` checkable: a version moves only in a change that
 re-runs this capability's scenarios.
 
 `tools/openspec-viewer` keeps its own `^0.1.9` — it is a separate pnpm
@@ -173,7 +173,7 @@ Alternatives:
   hand-written mapping table anyway — a pipeline to maintain on top of the
   mapping it was meant to avoid.
 - *Give ZZZ an authored admin theme too.* Invents a brand decision that
-  nobody has made; `visual-standard-SC-04` only asks that the difference come
+  nobody has made; `shared-console-visual-standard-SC-04` only asks that the difference come
   from the mechanism, and "base theme" is an answer that mechanism gives.
 
 ### Blocks first, then products, then shells
@@ -186,7 +186,7 @@ primitive directly. This is the reason the proposal makes archiving a
 precondition rather than a courtesy.
 
 Where a page needs a control Astryx has no counterpart for, the console
-package gains it composed from Astryx — `visual-standard-SC-02` — rather than
+package gains it composed from Astryx — `shared-console-visual-standard-SC-02` — rather than
 the page reaching for a design-system primitive.
 
 ### The revert route is the console package's entry
@@ -198,7 +198,7 @@ dependency. It stays possible only if no admin surface imports
 blocks, not the runtime. One lint rule enforces it: `@astryxdesign/*` is
 importable from `packages/frontend-console/src` and the two application roots
 (for `<Theme>`) and nowhere else. That rule is what makes
-`visual-standard-SC-10` a property of the code rather than a promise.
+`shared-console-visual-standard-SC-10` a property of the code rather than a promise.
 
 Alternative: *let any admin file import Astryx.* Simpler to write, but the
 revert cost then grows with every file, and the route stops being describable.
@@ -207,7 +207,7 @@ revert cost then grows with every file, and the route stops being describable.
 
 - **An Astryx upgrade widens the one-name overlap into a real collision.** →
   The collision probe is a script, not a memory: re-run it in the upgrade
-  change that `visual-standard-SC-09` already requires, and if the overlap
+  change that `shared-console-visual-standard-SC-09` already requires, and if the overlap
   grows, scope the design system's sheet to a wrapper around the two-factor
   block — the alternative costed above, held in reserve.
 - **Brand drift between the storefront palette and the admin theme.** Two

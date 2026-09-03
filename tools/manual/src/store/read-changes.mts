@@ -402,7 +402,7 @@ export type IssuedMarks = { sc?: number; us?: number; tc?: number };
 
 /**
  * The ceiling a new id has to clear, keyed by the token an id spells itself
- * with (`loyalty` in `loyalty-SC-89`) rather than by spec — two capabilities
+ * with (`loyalty` in `grade10-site-loyalty-programme-SC-89`) rather than by spec — two capabilities
  * sharing a token share the ceiling, which is the only answer that keeps them
  * from colliding.
  *

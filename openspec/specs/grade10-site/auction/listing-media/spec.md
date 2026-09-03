@@ -59,7 +59,7 @@ vocabulary (`front`, `back`, and the rest) as identity. A listing SHALL NOT
 invent empty slots for unused positions. This capability SHALL NOT introduce
 a second gallery keyed by side.
 
-#### Scenario: listing-media-SC-01 - A listing may hold fewer than eight items
+#### Scenario: grade10-site-auction-listing-media-SC-01 - A listing may hold fewer than eight items
 
 - **GIVEN** a draft listing with only one JPEG in the gallery
 - **WHEN** an operator publishes it (after create)
@@ -67,7 +67,7 @@ a second gallery keyed by side.
 - **AND** the details page shows that one image
 - **AND** no empty gallery slots are invented
 
-#### Scenario: listing-media-SC-02 - A ninth media item is refused by the gallery cap
+#### Scenario: grade10-site-auction-listing-media-SC-02 - A ninth media item is refused by the gallery cap
 
 - **GIVEN** a draft listing with eight media items
 - **WHEN** an operator uploads a ninth image
@@ -84,7 +84,7 @@ characters with the upload. Unsupported image types and oversize bodies
 SHALL be refused. Video attach and playback stay under admin-listing; this
 requirement covers image items and their alt.
 
-#### Scenario: listing-media-SC-03 - An accepted upload becomes a gallery image
+#### Scenario: grade10-site-auction-listing-media-SC-03 - An accepted upload becomes a gallery image
 
 - **GIVEN** a draft listing with fewer than eight media items and an operator
   with catalogue grant
@@ -92,14 +92,14 @@ requirement covers image items and their alt.
 - **THEN** that image is stored in gallery order
 - **AND** the admin listings surface can show it on that listing
 
-#### Scenario: listing-media-SC-04 - An unsupported type is refused
+#### Scenario: grade10-site-auction-listing-media-SC-04 - An unsupported type is refused
 
 - **GIVEN** a draft listing
 - **WHEN** an operator uploads a PDF as gallery media
 - **THEN** the system refuses the upload
 - **AND** the gallery is unchanged
 
-#### Scenario: listing-media-SC-05 - An oversized image is refused
+#### Scenario: grade10-site-auction-listing-media-SC-05 - An oversized image is refused
 
 - **GIVEN** a draft listing
 - **WHEN** an operator uploads an image larger than 104857600 bytes
@@ -116,14 +116,14 @@ that slot unchanged. Discarding the preview SHALL clear the preview, leave
 the gallery unchanged, and SHALL NOT upload. Confirm applies to both adding
 an item and replacing a draft item.
 
-#### Scenario: listing-media-SC-06 - Choosing a file shows a preview without uploading
+#### Scenario: grade10-site-auction-listing-media-SC-06 - Choosing a file shows a preview without uploading
 
 - **GIVEN** a draft listing with an empty gallery slot the operator is filling
 - **WHEN** an operator selects a JPEG under the media size bound
 - **THEN** the admin media manager shows a preview of that file
 - **AND** the listing still has no new stored image for that slot
 
-#### Scenario: listing-media-SC-07 - Confirming the preview stores the image
+#### Scenario: grade10-site-auction-listing-media-SC-07 - Confirming the preview stores the image
 
 - **GIVEN** an operator has selected a JPEG for a draft listing gallery slot
   and sees its preview
@@ -131,7 +131,7 @@ an item and replacing a draft item.
 - **THEN** that slot holds the image
 - **AND** the preview is cleared
 
-#### Scenario: listing-media-SC-08 - Discarding the preview leaves the gallery unchanged
+#### Scenario: grade10-site-auction-listing-media-SC-08 - Discarding the preview leaves the gallery unchanged
 
 - **GIVEN** an operator has selected an image for a draft listing gallery
   slot and sees its preview
@@ -151,13 +151,13 @@ image at zoom size in a preview at least three-quarters of the viewport
 height. Leaving the control SHALL hide the zoom preview. The magnify control
 SHALL NOT require a click to reveal zoom.
 
-#### Scenario: listing-media-SC-09 - The admin media manager shows card size
+#### Scenario: grade10-site-auction-listing-media-SC-09 - The admin media manager shows card size
 
 - **GIVEN** a draft listing with a stored gallery image
 - **WHEN** an operator opens the media manager for that listing
 - **THEN** that image shows at card size
 
-#### Scenario: listing-media-SC-10 - Hovering the magnify control shows zoom size
+#### Scenario: grade10-site-auction-listing-media-SC-10 - Hovering the magnify control shows zoom size
 
 - **GIVEN** a draft listing with a stored gallery image open in the media
   manager
@@ -165,7 +165,7 @@ SHALL NOT require a click to reveal zoom.
 - **THEN** a zoom-size preview of that image is shown
 - **AND** that preview is at least three-quarters of the viewport height
 
-#### Scenario: listing-media-SC-11 - Leaving the magnify control hides zoom
+#### Scenario: grade10-site-auction-listing-media-SC-11 - Leaving the magnify control hides zoom
 
 - **GIVEN** the zoom-size preview is visible from hovering the magnify control
 - **WHEN** the operator moves the pointer off the control
@@ -179,21 +179,21 @@ Replace and remove of gallery images SHALL follow
 closed-listing refusals. A closed, settled, or canceled listing SHALL refuse
 every image mutation from this surface.
 
-#### Scenario: listing-media-SC-12 - Replacing a gallery image on a published listing
+#### Scenario: grade10-site-auction-listing-media-SC-12 - Replacing a gallery image on a published listing
 
 - **GIVEN** a published listing with a gallery image at a position
 - **WHEN** an operator replaces that image (allowed by admin-listing)
 - **THEN** that position holds the new image
 - **AND** other gallery items are unchanged
 
-#### Scenario: listing-media-SC-13 - Removing the last image after create is refused
+#### Scenario: grade10-site-auction-listing-media-SC-13 - Removing the last image after create is refused
 
 - **GIVEN** a published listing with one JPEG
 - **WHEN** an operator removes that JPEG
 - **THEN** the system refuses the removal
 - **AND** the gallery still has that JPEG
 
-#### Scenario: listing-media-SC-14 - A draft gallery image can be replaced and removed
+#### Scenario: grade10-site-auction-listing-media-SC-14 - A draft gallery image can be replaced and removed
 
 - **GIVEN** a draft listing with one gallery image
 - **WHEN** an operator replaces it, then removes it
@@ -205,7 +205,7 @@ The system SHALL accept an additional image while the listing is `draft`,
 `created`, or `published` and the gallery has fewer than eight items. Once
 the listing has closed, settled, or been canceled, an add SHALL be refused.
 
-#### Scenario: listing-media-SC-15 - A published listing can gain another image
+#### Scenario: grade10-site-auction-listing-media-SC-15 - A published listing can gain another image
 
 - **GIVEN** a published listing with one gallery image and room under the
   eight-item cap
@@ -213,7 +213,7 @@ the listing has closed, settled, or been canceled, an add SHALL be refused.
 - **THEN** the details page shows both images in gallery order
 - **AND** the first image is unchanged
 
-#### Scenario: listing-media-SC-16 - Adding after close is refused
+#### Scenario: grade10-site-auction-listing-media-SC-16 - Adding after close is refused
 
 - **GIVEN** a closed listing with one gallery image
 - **WHEN** an operator uploads another image
@@ -230,28 +230,28 @@ replacing the image while the listing is a draft, created, or published.
 After close, an alt-only edit SHALL be refused. Video items are outside this
 alt requirement.
 
-#### Scenario: listing-media-SC-17 - Missing alt uses the listing title
+#### Scenario: grade10-site-auction-listing-media-SC-17 - Missing alt uses the listing title
 
 - **GIVEN** a published listing titled "1999 Charizard, PSA 10" whose first
   gallery image has no alt text
 - **WHEN** a collector opens the listing
 - **THEN** that image's accessible name is "1999 Charizard, PSA 10"
 
-#### Scenario: listing-media-SC-18 - Supplied alt is shown
+#### Scenario: grade10-site-auction-listing-media-SC-18 - Supplied alt is shown
 
 - **GIVEN** a published listing whose first gallery image has alt text "Holo
   Charizard, front of slab"
 - **WHEN** a collector opens the listing
 - **THEN** that image's accessible name is "Holo Charizard, front of slab"
 
-#### Scenario: listing-media-SC-19 - Alt can be edited on a published listing
+#### Scenario: grade10-site-auction-listing-media-SC-19 - Alt can be edited on a published listing
 
 - **GIVEN** a published listing with a gallery image
 - **WHEN** an operator changes only that image's alt text
 - **THEN** the image bytes are unchanged
 - **AND** the details page uses the new alt text
 
-#### Scenario: listing-media-SC-20 - Over-length alt is refused
+#### Scenario: grade10-site-auction-listing-media-SC-20 - Over-length alt is refused
 
 - **GIVEN** a draft listing
 - **WHEN** an operator sets alt text longer than 200 characters
@@ -269,13 +269,13 @@ upscale it. An unknown size name SHALL be indistinguishable from a missing
 image. Video gallery items SHALL keep their original public path from
 admin-listing; named sizes apply to images only.
 
-#### Scenario: listing-media-SC-21 - The catalogue uses card size for an image card
+#### Scenario: grade10-site-auction-listing-media-SC-21 - The catalogue uses card size for an image card
 
 - **GIVEN** a published listing whose first gallery item is an image
 - **WHEN** a collector opens the auction catalogue
 - **THEN** that listing's card image is requested at size `card`
 
-#### Scenario: listing-media-SC-22 - The details gallery uses thumb, detail, and zoom
+#### Scenario: grade10-site-auction-listing-media-SC-22 - The details gallery uses thumb, detail, and zoom
 
 - **GIVEN** a published listing with two gallery images
 - **WHEN** a collector opens that listing
@@ -283,7 +283,7 @@ admin-listing; named sizes apply to images only.
 - **AND** the main frame requests size `detail`
 - **AND** zoom requests size `zoom`
 
-#### Scenario: listing-media-SC-23 - An unknown size is not found
+#### Scenario: grade10-site-auction-listing-media-SC-23 - An unknown size is not found
 
 - **GIVEN** a published gallery image
 - **WHEN** a browser requests it at a size other than `card`, `detail`,
@@ -298,14 +298,14 @@ is not an image, the listing SHALL still appear; this capability SHALL NOT
 invent a placeholder image. Which item is first is gallery order from
 admin-listing, not a physical side named `front`.
 
-#### Scenario: listing-media-SC-24 - A listing with a first gallery image shows it on the catalogue
+#### Scenario: grade10-site-auction-listing-media-SC-24 - A listing with a first gallery image shows it on the catalogue
 
 - **GIVEN** a published listing whose gallery is image A then image B
 - **WHEN** a collector opens the auction catalogue
 - **THEN** the listing row shows image A at card size
 - **AND** it does not show image B on the card
 
-#### Scenario: listing-media-SC-25 - A listing without a catalogue image still lists
+#### Scenario: grade10-site-auction-listing-media-SC-25 - A listing without a catalogue image still lists
 
 - **GIVEN** a published listing with no gallery images
 - **WHEN** a collector opens the auction catalogue
@@ -322,21 +322,21 @@ with no images SHALL render the rest of the page. Video items in the gallery
 remain admin-listing's concern for playback; this requirement covers the
 sized image slots passed into the shared gallery.
 
-#### Scenario: listing-media-SC-26 - Several images appear in gallery order
+#### Scenario: grade10-site-auction-listing-media-SC-26 - Several images appear in gallery order
 
 - **GIVEN** a published listing with three gallery images uploaded in order
   A, B, C
 - **WHEN** a collector opens that listing
 - **THEN** the gallery shows three images in the order A, B, C
 
-#### Scenario: listing-media-SC-27 - One image has no strip
+#### Scenario: grade10-site-auction-listing-media-SC-27 - One image has no strip
 
 - **GIVEN** a published listing with only one gallery image
 - **WHEN** a collector opens that listing
 - **THEN** the gallery shows that image
 - **AND** it does not show a thumbnail strip
 
-#### Scenario: listing-media-SC-28 - No images still shows the listing
+#### Scenario: grade10-site-auction-listing-media-SC-28 - No images still shows the listing
 
 - **GIVEN** a published listing with no gallery images
 - **WHEN** a collector opens that listing

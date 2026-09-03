@@ -22,7 +22,7 @@ Payment Element is an application integration, not a design-system or
 
 ## States
 
-- **First bid, method required** — `bid-payment-method-SC-01`.
-- **Authentication or authorization pending** — `bid-payment-method-SC-03`.
-- **Authorization refused** — `bid-payment-method-SC-04`.
-- **Later bid, retained method** — `bid-payment-method-SC-05`.
+- **First bid, method required** — `grade10-site-auction-bid-payment-method-SC-01`.
+- **Authentication or authorization pending** — `grade10-site-auction-bid-payment-method-SC-03`.
+- **Authorization refused** — `grade10-site-auction-bid-payment-method-SC-04`.
+- **Later bid, retained method** — `grade10-site-auction-bid-payment-method-SC-05`.

@@ -67,13 +67,13 @@ separate act from having activity recorded.
 The member record SHALL hold no personal data beyond the user identity. Names,
 email addresses and every other identity attribute stay in the identity system.
 
-#### Scenario: loyalty-SC-01 - Activity precedes joining
+#### Scenario: grade10-site-loyalty-programme-SC-01 - Activity precedes joining
 
 - **WHEN** points are recorded for a user who has never joined
 - **THEN** a member record exists and holds those points
 - **AND** the member is reported as not joined until they join
 
-#### Scenario: loyalty-SC-02 - Joining is idempotent
+#### Scenario: grade10-site-loyalty-programme-SC-02 - Joining is idempotent
 
 - **WHEN** a member joins more than once
 - **THEN** the first join date stands and later attempts change nothing
@@ -84,18 +84,18 @@ Every point movement SHALL be recorded as a dated entry that is never edited or
 deleted. A balance SHALL be derived by asking the ledger, never stored as a
 running total.
 
-#### Scenario: loyalty-SC-03 - Balance excludes expired and spent points
+#### Scenario: grade10-site-loyalty-programme-SC-03 - Balance excludes expired and spent points
 
 - **WHEN** a balance is asked for at a given instant
 - **THEN** it counts only credits that are unspent and unexpired at that instant
 
-#### Scenario: loyalty-SC-04 - A balance never goes negative
+#### Scenario: grade10-site-loyalty-programme-SC-04 - A balance never goes negative
 
 - **WHEN** any debit is recorded
 - **THEN** it draws only on credits that have points remaining
 - **AND** no sequence of recorded activity can drive a member below zero
 
-#### Scenario: loyalty-SC-05 - Every debit is fully accounted
+#### Scenario: grade10-site-loyalty-programme-SC-05 - Every debit is fully accounted
 
 - **WHEN** a debit is recorded
 - **THEN** the credits it drew from, and how much it took from each, are recorded
@@ -109,25 +109,25 @@ the member's tier multiplier, rounded down once at the end of the calculation.
 A spend recorded in a currency other than the programme's SHALL be refused as
 invalid rather than converted.
 
-#### Scenario: loyalty-SC-06 - Rounding happens once
+#### Scenario: grade10-site-loyalty-programme-SC-06 - Rounding happens once
 
 - **WHEN** a spend is priced at a tier multiplier
 - **THEN** the point total is floored once after applying the rate and the multiplier,
   not at each step
 
-#### Scenario: loyalty-SC-07 - A foreign currency is refused
+#### Scenario: grade10-site-loyalty-programme-SC-07 - A foreign currency is refused
 
 - **WHEN** a spend arrives in a currency the programme does not run in
 - **THEN** it is refused as invalid, naming both currencies
 - **AND** no ledger entry is written
 
-#### Scenario: loyalty-SC-08 - Backdated activity keeps its own date
+#### Scenario: grade10-site-loyalty-programme-SC-08 - Backdated activity keeps its own date
 
 - **WHEN** a spend carries a date in the past
 - **THEN** its expiry and its tier contribution follow that date
 - **AND** the multiplier applied is the tier the member holds when it is processed
 
-#### Scenario: loyalty-SC-09 - Future-dated activity is refused
+#### Scenario: grade10-site-loyalty-programme-SC-09 - Future-dated activity is refused
 
 - **WHEN** a spend carries a date more than five minutes ahead of now
 - **THEN** it is refused as invalid
@@ -139,12 +139,12 @@ A retry under the same key SHALL return the original answer without recording
 anything again. The same key carrying different input SHALL be refused as a
 conflict.
 
-#### Scenario: loyalty-SC-10 - A retry is free
+#### Scenario: grade10-site-loyalty-programme-SC-10 - A retry is free
 
 - **WHEN** a caller repeats a mutation under a key it already used
 - **THEN** the original answer is returned and no new entry is recorded
 
-#### Scenario: loyalty-SC-11 - A reused key with new input is refused
+#### Scenario: grade10-site-loyalty-programme-SC-11 - A reused key with new input is refused
 
 - **WHEN** a caller repeats a key with input that differs from the first call
 - **THEN** the call is refused as a conflict
@@ -155,12 +155,12 @@ Credits SHALL expire after the programme's expiry window, measured from the date
 of the activity that earned them. An expired credit SHALL stop counting toward a
 balance at the instant it expires, without waiting for any scheduled process.
 
-#### Scenario: loyalty-SC-12 - Expiry needs no sweep
+#### Scenario: grade10-site-loyalty-programme-SC-12 - Expiry needs no sweep
 
 - **WHEN** a credit's expiry instant passes
 - **THEN** it stops counting toward the balance immediately
 
-#### Scenario: loyalty-SC-13 - A partial sweep converges
+#### Scenario: grade10-site-loyalty-programme-SC-13 - A partial sweep converges
 
 - **WHEN** a scheduled expiry pass stops before reaching every member
 - **THEN** it reports how many members it did not reach
@@ -173,18 +173,18 @@ programme's qualifying window, the highest tier their own earning ever reached,
 and any live invitation. A tier reached by earning SHALL NOT be lost when those
 points later expire.
 
-#### Scenario: loyalty-SC-14 - Earned tier holds after points expire
+#### Scenario: grade10-site-loyalty-programme-SC-14 - Earned tier holds after points expire
 
 - **WHEN** the points that qualified a member for a tier expire
 - **THEN** the member keeps that tier
 
-#### Scenario: loyalty-SC-15 - An invitation lapse is observed, not scheduled
+#### Scenario: grade10-site-loyalty-programme-SC-15 - An invitation lapse is observed, not scheduled
 
 - **WHEN** a dated invitation passes its end
 - **THEN** the member stops holding that tier from that instant
 - **AND** the drop is recorded the next time that member is evaluated
 
-#### Scenario: loyalty-SC-16 - Tier history records each move
+#### Scenario: grade10-site-loyalty-programme-SC-16 - Tier history records each move
 
 - **WHEN** a member's effective tier changes
 - **THEN** one entry records the move and what caused it
@@ -199,33 +199,33 @@ Tier identifiers SHALL be unique. Each earned tier SHALL ask more qualifying
 points than the tier below it, and every earned tier SHALL measure them over
 the same window. The programme's time zone SHALL name a real zone.
 
-#### Scenario: loyalty-SC-17 - Two tiers share an identifier
+#### Scenario: grade10-site-loyalty-programme-SC-17 - Two tiers share an identifier
 
 - **WHEN** a ladder repeats a tier identifier
 - **THEN** the product fails to start, naming the identifier
 
-#### Scenario: loyalty-SC-18 - No entry tier, or more than one
+#### Scenario: grade10-site-loyalty-programme-SC-18 - No entry tier, or more than one
 
 - **WHEN** a ladder has other than exactly one tier every member starts on
 - **THEN** the product fails to start, saying how many it found
 
-#### Scenario: loyalty-SC-19 - The entry tier is not the lowest rung
+#### Scenario: grade10-site-loyalty-programme-SC-19 - The entry tier is not the lowest rung
 
 - **WHEN** the tier every member starts on is not first in the ladder
 - **THEN** the product fails to start
 
-#### Scenario: loyalty-SC-20 - A higher tier is cheaper than the one below it
+#### Scenario: grade10-site-loyalty-programme-SC-20 - A higher tier is cheaper than the one below it
 
 - **WHEN** an earned tier asks no more qualifying points than the tier beneath it
 - **THEN** the product fails to start, naming both amounts
 - **AND** no member can hold a tier they skipped past
 
-#### Scenario: loyalty-SC-21 - Earned tiers measure over different windows
+#### Scenario: grade10-site-loyalty-programme-SC-21 - Earned tiers measure over different windows
 
 - **WHEN** two earned tiers count qualifying points over different periods
 - **THEN** the product fails to start, naming the periods
 
-#### Scenario: loyalty-SC-22 - The programme names a zone that does not exist
+#### Scenario: grade10-site-loyalty-programme-SC-22 - The programme names a zone that does not exist
 
 - **WHEN** the programme's time zone is not a real IANA zone
 - **THEN** the product fails to start, naming it
@@ -252,17 +252,17 @@ menu is the intended lever and is editable.
 Why these numbers, and what is still open about the top tier:
 [Grade10 loyalty programme](../../../../../docs/prds/products/membership/index.md).
 
-#### Scenario: loyalty-SC-23 - A purchase earns at the member's rate
+#### Scenario: grade10-site-loyalty-programme-SC-23 - A purchase earns at the member's rate
 
 - **WHEN** a Diamond member completes a HKD 1,000 purchase
 - **THEN** they earn 120 points
 
-#### Scenario: loyalty-SC-24 - The second tier is reached by spending
+#### Scenario: grade10-site-loyalty-programme-SC-24 - The second tier is reached by spending
 
 - **WHEN** a member's qualifying points inside the rolling twelve months reach 500
 - **THEN** they hold Diamond
 
-#### Scenario: loyalty-SC-25 - The top tier cannot be bought
+#### Scenario: grade10-site-loyalty-programme-SC-25 - The top tier cannot be bought
 
 - **WHEN** a member earns any number of points
 - **THEN** they never reach Black by earning alone
@@ -277,17 +277,17 @@ An operator SHALL be able to list live invitations, so a grant can be found and
 revoked, and SHALL be able to read which tiers the programme defines rather than
 naming one from memory.
 
-#### Scenario: loyalty-SC-26 - A grant names an unknown tier
+#### Scenario: grade10-site-loyalty-programme-SC-26 - A grant names an unknown tier
 
 - **WHEN** a grant names a tier the programme does not define
 - **THEN** it is refused as not found and nothing is recorded
 
-#### Scenario: loyalty-SC-27 - A grant names the entry tier
+#### Scenario: grade10-site-loyalty-programme-SC-27 - A grant names the entry tier
 
 - **WHEN** a grant names the tier every member starts on
 - **THEN** it is refused as invalid
 
-#### Scenario: loyalty-SC-28 - Live grants can be found
+#### Scenario: grade10-site-loyalty-programme-SC-28 - Live grants can be found
 
 - **WHEN** an operator lists invitations
 - **THEN** every live grant is listed with its member, tier, reason and end date
@@ -301,22 +301,22 @@ what an earlier redemption cost.
 
 A member SHALL be able to list what they have redeemed and the state of each.
 
-#### Scenario: loyalty-SC-29 - Repricing does not rewrite history
+#### Scenario: grade10-site-loyalty-programme-SC-29 - Repricing does not rewrite history
 
 - **WHEN** a reward's point cost changes after a member redeemed it
 - **THEN** the earlier redemption still records the price the member paid
 
-#### Scenario: loyalty-SC-30 - Stock is not oversold
+#### Scenario: grade10-site-loyalty-programme-SC-30 - Stock is not oversold
 
 - **WHEN** two members redeem the last unit of a limited reward at once
 - **THEN** exactly one succeeds and the other is refused as out of stock
 
-#### Scenario: loyalty-SC-31 - A reward outside its window cannot be redeemed
+#### Scenario: grade10-site-loyalty-programme-SC-31 - A reward outside its window cannot be redeemed
 
 - **WHEN** a member redeems a reward that is archived, or outside its live window
 - **THEN** the redemption is refused
 
-#### Scenario: loyalty-SC-32 - The public menu shows only what a member can buy
+#### Scenario: grade10-site-loyalty-programme-SC-32 - The public menu shows only what a member can buy
 
 - **WHEN** the reward menu is read without signing in
 - **THEN** it lists only live, unarchived rewards
@@ -329,12 +329,12 @@ carrying that credit's original expiry, so a reversal never extends the life of
 a point. Stock SHALL be returned only when the redemption actually consumed a
 unit.
 
-#### Scenario: loyalty-SC-33 - Restored points keep their original expiry
+#### Scenario: grade10-site-loyalty-programme-SC-33 - Restored points keep their original expiry
 
 - **WHEN** a redemption is reversed
 - **THEN** each restored credit expires when the credit it came from would have
 
-#### Scenario: loyalty-SC-34 - An unlimited reward returns no stock
+#### Scenario: grade10-site-loyalty-programme-SC-34 - An unlimited reward returns no stock
 
 - **WHEN** a redemption of a reward that had unlimited stock is reversed
 - **THEN** no stock is returned
@@ -348,24 +348,24 @@ member still holds from that money.
 Splitting a refund into several parts SHALL claw back exactly what one refund
 for the whole sum would have.
 
-#### Scenario: loyalty-SC-35 - A split refund matches a single refund
+#### Scenario: grade10-site-loyalty-programme-SC-35 - A split refund matches a single refund
 
 - **WHEN** a refund is recorded in two parts
 - **THEN** the total clawed back equals what one refund of the combined amount removes
 
-#### Scenario: loyalty-SC-36 - A member who already spent the points is not driven negative
+#### Scenario: grade10-site-loyalty-programme-SC-36 - A member who already spent the points is not driven negative
 
 - **WHEN** a refund exceeds what the member still holds from that money
 - **THEN** the shortfall is recorded and counted by cause
 - **AND** the member's balance does not go below zero
 
-#### Scenario: loyalty-SC-37 - A refund before its earning is not lost
+#### Scenario: grade10-site-loyalty-programme-SC-37 - A refund before its earning is not lost
 
 - **WHEN** a refund names money that has not yet earned anything
 - **THEN** it is refused as not found and nothing is recorded
 - **AND** a later retry claws back once the earning lands
 
-#### Scenario: loyalty-SC-38 - A claw-back cancels the tier contribution it removes
+#### Scenario: grade10-site-loyalty-programme-SC-38 - A claw-back cancels the tier contribution it removes
 
 - **WHEN** points are clawed back
 - **THEN** the tier contribution of the earning they came from is reduced by the same amount
@@ -384,34 +384,34 @@ The product's selling currency SHALL match the programme's currency, and a
 mismatch SHALL be detected when the product starts, not when a member buys
 something.
 
-#### Scenario: loyalty-SC-39 - Points survive an outage
+#### Scenario: grade10-site-loyalty-programme-SC-39 - Points survive an outage
 
 - **WHEN** a purchase completes while the programme is unreachable
 - **THEN** the purchase still completes for the buyer
 - **AND** the points are granted once the programme is reachable again, without anyone re-entering them
 
-#### Scenario: loyalty-SC-40 - A repeated delivery grants nothing twice
+#### Scenario: grade10-site-loyalty-programme-SC-40 - A repeated delivery grants nothing twice
 
 - **WHEN** the same money event is delivered to the programme more than once
 - **THEN** the points are granted once
 
-#### Scenario: loyalty-SC-41 - One money event, one identity
+#### Scenario: grade10-site-loyalty-programme-SC-41 - One money event, one identity
 
 - **WHEN** a purchase reaches its completed state through any path — a payment
   notification, a scheduled reconciliation, or a read that repairs it
 - **THEN** exactly one money event is recorded for it, carrying an identity stable across retries
 
-#### Scenario: loyalty-SC-42 - A partial refund claws back only its own part
+#### Scenario: grade10-site-loyalty-programme-SC-42 - A partial refund claws back only its own part
 
 - **WHEN** part of a purchase is refunded, and later another part
 - **THEN** each refund claws back only the points its own amount earned
 
-#### Scenario: loyalty-SC-43 - A currency mismatch stops the product from starting
+#### Scenario: grade10-site-loyalty-programme-SC-43 - A currency mismatch stops the product from starting
 
 - **WHEN** a product sells in a currency the programme does not run in
 - **THEN** the product fails to start, naming both currencies
 
-#### Scenario: loyalty-SC-44 - A refused recording is reported, not swallowed
+#### Scenario: grade10-site-loyalty-programme-SC-44 - A refused recording is reported, not swallowed
 
 - **WHEN** the programme refuses a recording
 - **THEN** the refusal is logged and counted by its reason
@@ -428,17 +428,17 @@ Operator permissions SHALL separate reading a member's loyalty state, moving
 points, granting invitations, and editing the reward menu, so an operator can
 hold one without the others.
 
-#### Scenario: loyalty-SC-45 - A permission is required per action
+#### Scenario: grade10-site-loyalty-programme-SC-45 - A permission is required per action
 
 - **WHEN** an operator without the action's permission attempts it
 - **THEN** the action is refused
 
-#### Scenario: loyalty-SC-46 - The record survives an attempt to rewrite it
+#### Scenario: grade10-site-loyalty-programme-SC-46 - The record survives an attempt to rewrite it
 
 - **WHEN** any recorded operator action is altered or removed
 - **THEN** verifying the log reports the position at which it breaks
 
-#### Scenario: loyalty-SC-47 - An action with no place to record it does not run
+#### Scenario: grade10-site-loyalty-programme-SC-47 - An action with no place to record it does not run
 
 - **WHEN** an operator action would change something but has nowhere to record it
 - **THEN** the action is refused rather than run unrecorded
@@ -449,13 +449,13 @@ An operator SHALL be able both to correct a balance without affecting tier
 progress, and to grant points that count toward tier progress. Each SHALL carry
 a reason and SHALL be recorded in the operator log.
 
-#### Scenario: loyalty-SC-48 - A correction does not move a member up
+#### Scenario: grade10-site-loyalty-programme-SC-48 - A correction does not move a member up
 
 - **WHEN** an operator corrects a balance
 - **THEN** the points are spendable
 - **AND** the member's progress toward the next tier is unchanged
 
-#### Scenario: loyalty-SC-49 - A campaign grant moves a member up
+#### Scenario: grade10-site-loyalty-programme-SC-49 - A campaign grant moves a member up
 
 - **WHEN** an operator grants campaign or sign-up points
 - **THEN** those points count toward the next tier
@@ -476,23 +476,23 @@ what is allowed cannot disagree.
 Where a second factor is required and missing, the console SHALL take the
 operator to enrol or verify rather than reporting a refusal.
 
-#### Scenario: loyalty-SC-50 - Sections match permissions
+#### Scenario: grade10-site-loyalty-programme-SC-50 - Sections match permissions
 
 - **WHEN** an operator holding only the loyalty read permission opens the console
 - **THEN** they can find and read members
 - **AND** no section offering point movement, invitations, rewards or the operator log is shown
 
-#### Scenario: loyalty-SC-51 - A missing second factor opens the gate
+#### Scenario: grade10-site-loyalty-programme-SC-51 - A missing second factor opens the gate
 
 - **WHEN** an operator attempts an action their role allows but their session has no verified second factor
 - **THEN** the console takes them to verify, and the action completes afterwards
 
-#### Scenario: loyalty-SC-52 - A stale console reports what broke
+#### Scenario: grade10-site-loyalty-programme-SC-52 - A stale console reports what broke
 
 - **WHEN** the console reads a response whose shape it does not recognise
 - **THEN** it reports which call failed to decode, rather than showing missing values
 
-#### Scenario: loyalty-SC-53 - A member can be found again later
+#### Scenario: grade10-site-loyalty-programme-SC-53 - A member can be found again later
 
 - **WHEN** an operator opens a member and shares the address of that view
 - **THEN** the same member opens for the recipient
@@ -512,29 +512,29 @@ Identity read SHALL NOT be stored in the programme, cached by any shared cache,
 or written into the operator log; the log SHALL record which records were read,
 by whom, and how many.
 
-#### Scenario: loyalty-SC-54 - A loyalty permission alone shows no identities
+#### Scenario: grade10-site-loyalty-programme-SC-54 - A loyalty permission alone shows no identities
 
 - **WHEN** an operator holding loyalty permissions but not the identity permission finds a member
 - **THEN** the member's loyalty state is shown
 - **AND** no name or email address is shown
 
-#### Scenario: loyalty-SC-55 - A service connection is not an authorisation
+#### Scenario: grade10-site-loyalty-programme-SC-55 - A service connection is not an authorisation
 
 - **WHEN** a service holding a connection to the identity system requests identities without an operator session carrying the identity permission
 - **THEN** the request is refused
 
-#### Scenario: loyalty-SC-56 - Identity is never served from a shared cache
+#### Scenario: grade10-site-loyalty-programme-SC-56 - Identity is never served from a shared cache
 
 - **WHEN** a response carrying identity is returned
 - **THEN** it is marked as belonging to that caller alone and is not stored in a shared cache
 
-#### Scenario: loyalty-SC-57 - An identity read is recorded without copying the identities
+#### Scenario: grade10-site-loyalty-programme-SC-57 - An identity read is recorded without copying the identities
 
 - **WHEN** an operator reads member identities
 - **THEN** the log records who read, which records, and how many
 - **AND** it does not record the names or email addresses themselves
 
-#### Scenario: loyalty-SC-58 - A failed identity read does not degrade to blanks
+#### Scenario: grade10-site-loyalty-programme-SC-58 - A failed identity read does not degrade to blanks
 
 - **WHEN** the identity system cannot be reached
 - **THEN** the console reports the failure
@@ -548,18 +548,18 @@ NOT disclose operator reasons, retry keys, or the internal pricing of an entry.
 
 Each activity entry SHALL name what it was for in terms the member can read.
 
-#### Scenario: loyalty-SC-59 - An operator's reason stays out of a member's view
+#### Scenario: grade10-site-loyalty-programme-SC-59 - An operator's reason stays out of a member's view
 
 - **WHEN** an operator corrects a member's balance with a written reason
 - **THEN** that reason does not appear anywhere in what the member can read
 
-#### Scenario: loyalty-SC-60 - Retry keys and internal pricing stay out of a member's view
+#### Scenario: grade10-site-loyalty-programme-SC-60 - Retry keys and internal pricing stay out of a member's view
 
 - **WHEN** a member reads their activity
 - **THEN** no entry carries a retry key, a request record, or the tier and
   money arithmetic the entry was priced from
 
-#### Scenario: loyalty-SC-61 - A retired reward is still readable in history
+#### Scenario: grade10-site-loyalty-programme-SC-61 - A retired reward is still readable in history
 
 - **WHEN** a member reads an activity entry for a reward that has since been archived
 - **THEN** the entry still names that reward
@@ -573,17 +573,17 @@ activity; browse the reward menu; redeem; and see what they have redeemed.
 Redeeming twice by accident SHALL cost nothing, including when the member
 reloads between attempts.
 
-#### Scenario: loyalty-SC-62 - A member who never joined is invited to
+#### Scenario: grade10-site-loyalty-programme-SC-62 - A member who never joined is invited to
 
 - **WHEN** a member with recorded activity but no join date opens the surface
 - **THEN** they are shown how to join, and their existing points
 
-#### Scenario: loyalty-SC-63 - A double redemption costs one
+#### Scenario: grade10-site-loyalty-programme-SC-63 - A double redemption costs one
 
 - **WHEN** a member submits the same redemption twice, with or without a reload in between
 - **THEN** exactly one redemption is recorded
 
-#### Scenario: loyalty-SC-64 - Dates read in the programme's time zone
+#### Scenario: grade10-site-loyalty-programme-SC-64 - Dates read in the programme's time zone
 
 - **WHEN** a member reads a date the programme computed
 - **THEN** it reads the same wherever the member is, in the programme's time zone

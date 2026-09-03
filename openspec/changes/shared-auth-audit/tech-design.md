@@ -78,7 +78,7 @@ Rejected:
 
 ### Fail-closed create/verify: one transaction, compensating delete if the adapter commits early
 
-[audit-SC-27](./specs/shared/auth/audit/spec.md) / `audit-SC-28` require the
+[shared-auth-audit-SC-27](./specs/shared/auth/audit/spec.md) / `shared-auth-audit-SC-28` require the
 account write not to take effect if the trail cannot accept the entry.
 
 Mutation order inside `db.transaction`:
@@ -105,7 +105,7 @@ Rejected:
 - Record a failed create with `ok: false` and leave the user row — that is
   an unrecorded account.
 
-Worked example — mint (`audit-SC-15`):
+Worked example — mint (`shared-auth-audit-SC-15`):
 
 | | `users` | `audit_logs` head |
 | --- | --- | --- |
@@ -114,7 +114,7 @@ Worked example — mint (`audit-SC-15`):
 | After (ok) | `{ id: "usr_1", email: "checkout@example.com", emailVerified: false }` | `seq = 10`, `actorId = "system"`, `action = "auth.account.create-unverified"`, `subjectId = "usr_1"`, `details = '{"outcome":"created"}'`, `ok = true` |
 | After (append fails) | no new row | still `seq = 9` |
 
-Worked example — verify flip (`audit-SC-19`):
+Worked example — verify flip (`shared-auth-audit-SC-19`):
 
 | | `users.emailVerified` | trail |
 | --- | --- | --- |
@@ -125,8 +125,8 @@ Worked example — verify flip (`audit-SC-19`):
 
 ### Regenerating recovery codes is fail-closed before the handler
 
-[audit-SC-21](./specs/shared/auth/audit/spec.md) / `audit-SC-26` /
-`audit-SC-29`. Enable already appends after the first live verify
+[shared-auth-audit-SC-21](./specs/shared/auth/audit/spec.md) / `shared-auth-audit-SC-26` /
+`shared-auth-audit-SC-29`. Enable already appends after the first live verify
 (`auth.two-factor.enable`); enrollment start `/two-factor/enable` already
 does not. Disable appends after `/two-factor/disable`.
 
@@ -135,11 +135,11 @@ does not. Disable appends after `/two-factor/disable`.
   session user id, then run the handler. Codes are absent from
   `AUDITED_BODY_VALUES`, so they land as withheld names, never values.
 - Move `/two-factor/disable` to fail-closed-before, same as ban: an
-  unrecorded disable must not remove the factor (`audit-SC-36`).
+  unrecorded disable must not remove the factor (`shared-auth-audit-SC-36`).
 - Enable cannot append before the verify — the flip is inside better-auth.
   Keep the after-hook that fires only on `false → true`. If that append
   throws, set `users.twoFactorEnabled` back to `false` for that id and
-  rethrow (`audit-SC-35`).
+  rethrow (`shared-auth-audit-SC-35`).
 
 Rejected:
 
@@ -149,7 +149,7 @@ Rejected:
 
 ### One deletion row: in-transaction `auth.account.delete`
 
-[audit-SC-25](./specs/shared/auth/audit/spec.md) / `audit-SC-34` are already
+[shared-auth-audit-SC-25](./specs/shared/auth/audit/spec.md) / `shared-auth-audit-SC-34` are already
 met by `deleteAccount`'s transaction. The elevated after-hook then writes
 `users.deleteAccount` for the same click.
 
@@ -189,9 +189,9 @@ actor or subject in one request.
 Rejected:
 
 - Multi-column sort — spec is time only.
-- Email as a list parameter — the trail never holds it (`console-audit-SC-06`).
+- Email as a list parameter — the trail never holds it (`shared-console-audit-SC-06`).
 - Client-side filter of a merged unfiltered page — silent other products
-  would still freeze paging (`console-audit-SC-09`).
+  would still freeze paging (`shared-console-audit-SC-09`).
 
 ### Console asks only the selected chains; incomplete freeze follows that set
 
@@ -204,7 +204,7 @@ Oldest-first: reverse `compareAuditRows` (earlier `at` first; ties chain id
 ascending, then `seq` ascending). Per-chain cursors still advance to the
 last row of that chain that made the window.
 
-Jump (`console-audit-SC-16`): set product to the broken chain, `atSeq` to
+Jump (`shared-console-audit-SC-16`): set product to the broken chain, `atSeq` to
 `brokenAtSeq`, `order` newest-first so that row is first. Location holds
 those keys.
 
@@ -215,7 +215,7 @@ The Audit surface's search string holds: `product`, `action`,
 newest-first omits `order`. There is no email filter and no directory
 read from this surface.
 
-Directory link (`console-audit-SC-14`): `/users?user=<id>` (ZZZ: `/?user=<id>`).
+Directory link (`shared-console-audit-SC-14`): `/users?user=<id>` (ZZZ: `/?user=<id>`).
 Users already searches by id first. Pass `user` into
 `UserDirectorySection` as the initial search. Offer `Link` only when the
 operator holds `user:list`. Copy uses `IconButton` + clipboard; ids remain
@@ -240,7 +240,7 @@ Rejected:
 
 - Keep two copies — subject column, filters, and jump would drift.
 - Reach past the console package to Astryx or the design system — admin
-  surfaces compose `@grade10/frontend-console` only (`visual-standard-SC-10`).
+  surfaces compose `@grade10/frontend-console` only (`shared-console-visual-standard-SC-10`).
 
 ## Database Schema
 

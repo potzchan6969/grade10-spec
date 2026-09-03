@@ -14,8 +14,8 @@ No collector or public inventory UI is part of this change.
 
 ### Products list
 
-Route: Inventory section root. Behavior: catalog-SC-13, catalog-SC-30,
-catalog-SC-32, catalog-SC-33, catalog-SC-58.
+Route: Inventory section root. Behavior: grade10-admin-inventory-catalog-SC-13, grade10-admin-inventory-catalog-SC-30,
+grade10-admin-inventory-catalog-SC-32, grade10-admin-inventory-catalog-SC-33, grade10-admin-inventory-catalog-SC-58.
 
 Columns: name, **status** (`draft` | `created`), stock, available, reserved,
 vaulted, sold, withdrawn, derived ledger. Primary action: create product. Row
@@ -23,11 +23,11 @@ opens the product page.
 
 ### Product page
 
-Route: product detail / create. Behavior: catalog-SC-01, catalog-SC-02,
-catalog-SC-29, catalog-SC-52, catalog-SC-54, catalog-SC-57, catalog-SC-58,
-plus reservation and history scenarios (catalog-SC-14–catalog-SC-22,
-catalog-SC-35–catalog-SC-38, catalog-SC-47–catalog-SC-51, catalog-SC-63–catalog-SC-65,
-catalog-SC-23–catalog-SC-28, catalog-SC-41–catalog-SC-45).
+Route: product detail / create. Behavior: grade10-admin-inventory-catalog-SC-01, grade10-admin-inventory-catalog-SC-02,
+grade10-admin-inventory-catalog-SC-29, grade10-admin-inventory-catalog-SC-52, grade10-admin-inventory-catalog-SC-54, grade10-admin-inventory-catalog-SC-57, grade10-admin-inventory-catalog-SC-58,
+plus reservation and history scenarios (grade10-admin-inventory-catalog-SC-14–grade10-admin-inventory-catalog-SC-22,
+grade10-admin-inventory-catalog-SC-35–grade10-admin-inventory-catalog-SC-38, grade10-admin-inventory-catalog-SC-47–grade10-admin-inventory-catalog-SC-51, grade10-admin-inventory-catalog-SC-63–grade10-admin-inventory-catalog-SC-65,
+grade10-admin-inventory-catalog-SC-23–grade10-admin-inventory-catalog-SC-28, grade10-admin-inventory-catalog-SC-41–grade10-admin-inventory-catalog-SC-45).
 
 Shows:
 
@@ -73,29 +73,29 @@ Nothing new is required from `@grade10/ui` or the design system.
 ### Products list
 
 - **Loading** — product list in flight.
-- **Empty** — catalog-SC-30.
-- **Populated** — catalog-SC-13 (includes status and vaulted).
-- **Create product** — catalog-SC-58 / catalog-SC-01 / catalog-SC-02.
+- **Empty** — grade10-admin-inventory-catalog-SC-30.
+- **Populated** — grade10-admin-inventory-catalog-SC-13 (includes status and vaulted).
+- **Create product** — grade10-admin-inventory-catalog-SC-58 / grade10-admin-inventory-catalog-SC-01 / grade10-admin-inventory-catalog-SC-02.
 - **Error** — list refusal or transport failure; authorization refusal is
-  catalog-SC-32.
-- **Section hidden** — catalog-SC-33.
+  grade10-admin-inventory-catalog-SC-32.
+- **Section hidden** — grade10-admin-inventory-catalog-SC-33.
 
 ### Product page
 
-- **Create / edit product** — catalog-SC-01, catalog-SC-02, catalog-SC-57.
-- **Draft vs created** — catalog-SC-52, catalog-SC-54; holder reserve blocked
-  while draft is catalog-SC-53.
-- **Oversight** — catalog-SC-29 (vaulted and reservations by kind).
-- **Intake success** — catalog-SC-05 and catalog-SC-31.
-- **Intake validation error** — catalog-SC-08 and catalog-SC-09.
-- **Sale success** — catalog-SC-10.
-- **Withdrawal success** — catalog-SC-11.
-- **Insufficient available stock** — catalog-SC-12 and catalog-SC-19.
-- **Reserve success / idempotent active retry** — catalog-SC-14–catalog-SC-15.
-- **Re-reserve after close** — catalog-SC-16.
-- **Partial / full release** — catalog-SC-22 and catalog-SC-35.
-- **Adjust reservation quantity** — catalog-SC-47–catalog-SC-50.
-- **Change reservation product** — catalog-SC-51, catalog-SC-63–catalog-SC-65.
-- **Sell-from-reservation** — catalog-SC-36 and catalog-SC-37.
-- **Vault-from-reservation** — catalog-SC-38.
-- **Change history** — catalog-SC-23–catalog-SC-28, catalog-SC-41–catalog-SC-45.
+- **Create / edit product** — grade10-admin-inventory-catalog-SC-01, grade10-admin-inventory-catalog-SC-02, grade10-admin-inventory-catalog-SC-57.
+- **Draft vs created** — grade10-admin-inventory-catalog-SC-52, grade10-admin-inventory-catalog-SC-54; holder reserve blocked
+  while draft is grade10-admin-inventory-catalog-SC-53.
+- **Oversight** — grade10-admin-inventory-catalog-SC-29 (vaulted and reservations by kind).
+- **Intake success** — grade10-admin-inventory-catalog-SC-05 and grade10-admin-inventory-catalog-SC-31.
+- **Intake validation error** — grade10-admin-inventory-catalog-SC-08 and grade10-admin-inventory-catalog-SC-09.
+- **Sale success** — grade10-admin-inventory-catalog-SC-10.
+- **Withdrawal success** — grade10-admin-inventory-catalog-SC-11.
+- **Insufficient available stock** — grade10-admin-inventory-catalog-SC-12 and grade10-admin-inventory-catalog-SC-19.
+- **Reserve success / idempotent active retry** — grade10-admin-inventory-catalog-SC-14–grade10-admin-inventory-catalog-SC-15.
+- **Re-reserve after close** — grade10-admin-inventory-catalog-SC-16.
+- **Partial / full release** — grade10-admin-inventory-catalog-SC-22 and grade10-admin-inventory-catalog-SC-35.
+- **Adjust reservation quantity** — grade10-admin-inventory-catalog-SC-47–grade10-admin-inventory-catalog-SC-50.
+- **Change reservation product** — grade10-admin-inventory-catalog-SC-51, grade10-admin-inventory-catalog-SC-63–grade10-admin-inventory-catalog-SC-65.
+- **Sell-from-reservation** — grade10-admin-inventory-catalog-SC-36 and grade10-admin-inventory-catalog-SC-37.
+- **Vault-from-reservation** — grade10-admin-inventory-catalog-SC-38.
+- **Change history** — grade10-admin-inventory-catalog-SC-23–grade10-admin-inventory-catalog-SC-28, grade10-admin-inventory-catalog-SC-41–grade10-admin-inventory-catalog-SC-45.

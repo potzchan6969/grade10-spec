@@ -48,25 +48,25 @@ An available variant SHALL be purchasable wherever the surface offers
 purchasing, whatever count remains. An out-of-stock variant SHALL NOT be
 purchasable on any surface.
 
-#### Scenario: product-status-SC-01 - The shop offers the variant
+#### Scenario: grade10-site-store-product-status-SC-01 - The shop offers the variant
 
 - **GIVEN** a variant the shop offers for sale with a count of 12
 - **THEN** it is available
 - **AND** it can be added to the cart
 
-#### Scenario: product-status-SC-02 - The shop no longer offers the variant
+#### Scenario: grade10-site-store-product-status-SC-02 - The shop no longer offers the variant
 
 - **GIVEN** a variant the shop stopped offering when its count reached 0
 - **THEN** it is out of stock
 - **AND** it cannot be added to the cart
 
-#### Scenario: product-status-SC-03 - The shop sells past zero
+#### Scenario: grade10-site-store-product-status-SC-03 - The shop sells past zero
 
 - **GIVEN** a variant the shop still offers for sale at a count of 0
 - **THEN** it is available
 - **AND** it can be added to the cart, exactly as a variant with 12 can
 
-#### Scenario: product-status-SC-04 - The shop exposes no count
+#### Scenario: grade10-site-store-product-status-SC-04 - The shop exposes no count
 
 - **GIVEN** a variant the shop offers for sale and exposes no count for
 - **THEN** it is available
@@ -92,28 +92,28 @@ for what it can deliver.
 Requesting a quantity SHALL NOT change a variant's availability. A variant that
 is fillable in part for a request of 50 SHALL remain available.
 
-#### Scenario: product-status-SC-05 - The request can be filled
+#### Scenario: grade10-site-store-product-status-SC-05 - The request can be filled
 
 - **WHEN** 3 are requested of an available variant with a count of 12
 - **THEN** the request is fillable
 
-#### Scenario: product-status-SC-06 - The request can be filled exactly
+#### Scenario: grade10-site-store-product-status-SC-06 - The request can be filled exactly
 
 - **WHEN** 12 are requested of an available variant with a count of 12
 - **THEN** the request is fillable
 
-#### Scenario: product-status-SC-07 - More is asked for than the count
+#### Scenario: grade10-site-store-product-status-SC-07 - More is asked for than the count
 
 - **WHEN** 5 are requested of an available variant with a count of 2
 - **THEN** the request is fillable in part, naming 2
 - **AND** the variant is still available
 
-#### Scenario: product-status-SC-08 - Nothing remains to fill the request
+#### Scenario: grade10-site-store-product-status-SC-08 - Nothing remains to fill the request
 
 - **WHEN** 5 are requested of an out-of-stock variant
 - **THEN** the request is not fillable
 
-#### Scenario: product-status-SC-09 - An unbounded variant fills any request
+#### Scenario: grade10-site-store-product-status-SC-09 - An unbounded variant fills any request
 
 - **GIVEN** an available variant the shop exposes no count for, and another the
   shop still offers at a count of 0
@@ -134,7 +134,7 @@ about a line it could not fill in full is
 acts on the quantity rather than as a cue
 to buy sooner.
 
-#### Scenario: product-status-SC-10 - A scarce variant is offered as any other
+#### Scenario: grade10-site-store-product-status-SC-10 - A scarce variant is offered as any other
 
 - **GIVEN** one available variant with a count of 1 and another with a count of
   400
@@ -142,7 +142,7 @@ to buy sooner.
 - **THEN** both read available, with the same treatment and the same controls
 - **AND** neither shows a remaining count or a scarcity label
 
-#### Scenario: product-status-SC-11 - No count reaches the collector while browsing
+#### Scenario: grade10-site-store-product-status-SC-11 - No count reaches the collector while browsing
 
 - **WHEN** the listing or a card's page communicates a variant's availability
 - **THEN** it names no remaining quantity
@@ -157,14 +157,14 @@ The listing SHALL communicate each card's rolled-up availability on that card's
 tile. A card's own page SHALL communicate availability per variant, for every
 variant it lists, rather than for the card as a whole.
 
-#### Scenario: product-status-SC-12 - One grade left, another sold out
+#### Scenario: grade10-site-store-product-status-SC-12 - One grade left, another sold out
 
 - **GIVEN** a card listing one available variant and one out-of-stock variant
 - **THEN** the card's tile reads available
 - **AND** the card's page reads the first as available and the second as out of
   stock
 
-#### Scenario: product-status-SC-13 - Nothing left on the card
+#### Scenario: grade10-site-store-product-status-SC-13 - Nothing left on the card
 
 - **GIVEN** a card whose every listed variant is out of stock
 - **THEN** the card's tile reads out of stock
@@ -178,14 +178,14 @@ same variant, read at the same moment, the three SHALL agree.
 A surface SHALL NOT hide a price because a variant is out of stock, and SHALL
 NOT offer a purchase control that cannot be used.
 
-#### Scenario: product-status-SC-14 - Three surfaces, one answer
+#### Scenario: grade10-site-store-product-status-SC-14 - Three surfaces, one answer
 
 - **GIVEN** a variant the shop stopped offering
 - **WHEN** a collector sees it on the listing, on its card's page, and as a
   line in the cart, each read at the same moment
 - **THEN** all three read it as out of stock
 
-#### Scenario: product-status-SC-15 - An out-of-stock variant keeps its price
+#### Scenario: grade10-site-store-product-status-SC-15 - An out-of-stock variant keeps its price
 
 - **GIVEN** an out-of-stock variant
 - **WHEN** a collector opens the card's page
@@ -205,7 +205,7 @@ Where a collector still meets an unpublished product — a cart line whose
 product ceased to be published after it was added — is
 `grade10-site/store/cart-validation`'s.
 
-#### Scenario: product-status-SC-16 - An unpublished product is not listed
+#### Scenario: grade10-site-store-product-status-SC-16 - An unpublished product is not listed
 
 - **GIVEN** a product not published to the store's sales channel
 - **WHEN** a collector opens the listing

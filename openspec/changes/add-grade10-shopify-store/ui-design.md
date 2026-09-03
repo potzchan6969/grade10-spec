@@ -41,13 +41,13 @@ change adds no shared UI implementation work. The existing durable contract is
 
 | State | Spec scenario |
 | --- | --- |
-| Filled, Active and Past both present | `shopify-commerce-SC-22`; `store-order-history-SC-01` |
-| One section omitted when its list is empty | `store-order-history-SC-02` |
-| Empty account with zero orders and Shop Now | `store-order-history-SC-05` |
-| Track Order visible for a trackable shipment | `shopify-commerce-SC-14`; `store-order-history-SC-03` |
-| Track Order hidden for a non-trackable or past order | `shopify-commerce-SC-13`; `store-order-history-SC-10` |
-| Payment and shipping remain distinct in order status | `shopify-commerce-SC-13`, `shopify-commerce-SC-14`, `shopify-commerce-SC-15` |
-| Another customer's order is refused and a permanent URL requires sign-in | `shopify-commerce-SC-20`, `shopify-commerce-SC-21` |
+| Filled, Active and Past both present | `grade10-site-store-shopify-commerce-SC-22`; `shared-ui-store-order-history-SC-01` |
+| One section omitted when its list is empty | `shared-ui-store-order-history-SC-02` |
+| Empty account with zero orders and Shop Now | `shared-ui-store-order-history-SC-05` |
+| Track Order visible for a trackable shipment | `grade10-site-store-shopify-commerce-SC-14`; `shared-ui-store-order-history-SC-03` |
+| Track Order hidden for a non-trackable or past order | `grade10-site-store-shopify-commerce-SC-13`; `shared-ui-store-order-history-SC-10` |
+| Payment and shipping remain distinct in order status | `grade10-site-store-shopify-commerce-SC-13`, `grade10-site-store-shopify-commerce-SC-14`, `grade10-site-store-shopify-commerce-SC-15` |
+| Another customer's order is refused and a permanent URL requires sign-in | `grade10-site-store-shopify-commerce-SC-20`, `grade10-site-store-shopify-commerce-SC-21` |
 
 The shared `OrderHistory` compound has no loading or error branch; those states
 remain application-owned and are not drawn by the supplied Figma frames.

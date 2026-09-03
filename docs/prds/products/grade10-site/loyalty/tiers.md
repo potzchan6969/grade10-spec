@@ -9,8 +9,8 @@ the member has earned, the term they hold it for, and any live invitation —
 never stored as a decision — so a term that ran out a second ago already
 reads as Silver before any sweep runs. A ladder that is ambiguous stops the
 product at boot rather than at the moment a member is evaluated
-([[loyalty-SC-17]], [[loyalty-SC-18]], [[loyalty-SC-19]], [[loyalty-SC-20]],
-[[loyalty-SC-21]]).
+([[grade10-site-loyalty-programme-SC-17]], [[grade10-site-loyalty-programme-SC-18]], [[grade10-site-loyalty-programme-SC-19]], [[grade10-site-loyalty-programme-SC-20]],
+[[grade10-site-loyalty-programme-SC-21]]).
 
 ## The ladder
 
@@ -18,7 +18,7 @@ product at boot rather than at the moment a member is evaluated
 | --- | --- | --- | --- |
 | Silver | 1× | Every member starts here | — |
 | Gold | 1.2× | 500 tier points inside a rolling twelve months | 500 tier points inside the twelve-month term |
-| Black | 1.7× | Invitation only ([[loyalty-SC-25]]) | Until the invitation ends or is revoked |
+| Black | 1.7× | Invitation only ([[grade10-site-loyalty-programme-SC-25]]) | Until the invitation ends or is revoked |
 
 These are deployed values, changed by a deploy and never by an operator.
 
@@ -61,11 +61,11 @@ A nightly review walks every term that has ended, records the drop or the
 retention in the tier history, and counts who fell and who re-earned. It
 writes history; it decides nothing, because every read already resolved the
 tier live. Each move a member makes is one row in that history, with its
-cause ([[loyalty-SC-16]]).
+cause ([[grade10-site-loyalty-programme-SC-16]]).
 
 :::callout{kind="warning"}
 The durable spec describes a tier that ratchets up and never drops
-([[loyalty-SC-14]]), and names the first two rungs Platinum and Diamond. What
+([[grade10-site-loyalty-programme-SC-14]]), and names the first two rungs Platinum and Diamond. What
 runs is the twelve-month term above, with persisted ids `silver`, `gold` and
 `black`. The rewrite is in flight under `revise-loyalty-programme-rules`.
 :::
@@ -74,12 +74,12 @@ runs is the twelve-month term above, with persisted ids `silver`, `gold` and
 
 Black is held only through an operator's grant, which names who granted it,
 why, and optionally when it ends; it can be revoked, and a member holds at
-most one live invitation per tier ([[loyalty-SC-26]], [[loyalty-SC-27]],
-[[loyalty-SC-28]]). Every evaluation runs twice, once ignoring invitations
+most one live invitation per tier ([[grade10-site-loyalty-programme-SC-26]], [[grade10-site-loyalty-programme-SC-27]],
+[[grade10-site-loyalty-programme-SC-28]]). Every evaluation runs twice, once ignoring invitations
 and once with them, so a Gold earned while invited survives losing the
 invitation, and an invitation never becomes the earned floor nor extends a
 term. An invitation whose end date passes is observed, not scheduled
-([[loyalty-SC-15]]).
+([[grade10-site-loyalty-programme-SC-15]]).
 
 An invitation granted with no end date holds until it is revoked. The annual
 cap and the approval step the owner's draft asks for are not enforced.

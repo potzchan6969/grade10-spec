@@ -31,7 +31,7 @@ Catalogue responses MAY be edge-cached only for display; product-change events
 SHALL invalidate cached product/list responses and cache expiry SHALL bound a
 missed invalidation.
 
-#### Scenario: shopify-commerce-SC-01 - A shopper browses a current Shopify catalogue
+#### Scenario: grade10-site-store-shopify-commerce-SC-01 - A shopper browses a current Shopify catalogue
 
 - **GIVEN** Shopify has a published product with a purchasable variant
 - **WHEN** a shopper requests the Store catalogue
@@ -39,14 +39,14 @@ missed invalidation.
   variant price, currency, media, and availability
 - **AND** the response contains no Shopify credential or raw Admin API data
 
-#### Scenario: shopify-commerce-SC-02 - A Shopify product change invalidates browsing data
+#### Scenario: grade10-site-store-shopify-commerce-SC-02 - A Shopify product change invalidates browsing data
 
 - **GIVEN** a cached Store response contains a product
 - **WHEN** the Store receives a verified Shopify product-change event for it
 - **THEN** a later Store catalogue response does not serve that product from the
   invalidated cached response
 
-#### Scenario: shopify-commerce-SC-03 - Shopify catalogue data is unavailable
+#### Scenario: grade10-site-store-shopify-commerce-SC-03 - Shopify catalogue data is unavailable
 
 - **GIVEN** a shopper requests a catalogue response with no usable cached copy
 - **WHEN** Shopify cannot answer that catalogue request
@@ -68,7 +68,7 @@ confirms payment, create the Grade10 account when needed and link it
 one-to-one to that Shopify customer. Whether the storefront offers guest
 checkout at launch is `TBC`.
 
-#### Scenario: shopify-commerce-SC-04 - A shopper checks out signed in
+#### Scenario: grade10-site-store-shopify-commerce-SC-04 - A shopper checks out signed in
 
 - **GIVEN** a shopper requests checkout
 - **WHEN** they hold a Grade10 session
@@ -76,7 +76,7 @@ checkout at launch is `TBC`.
   creates a Shopify checkout handoff
 - **AND** it creates no additional Grade10 account or Shopify customer link
 
-#### Scenario: shopify-commerce-SC-05 - A guest receives a linked Grade10 account after payment
+#### Scenario: grade10-site-store-shopify-commerce-SC-05 - A guest receives a linked Grade10 account after payment
 
 - **GIVEN** guest checkout is offered and the typed email belongs to no Grade10
   account
@@ -93,7 +93,7 @@ from Shopify live, reject an unpublished, unavailable, or insufficient-quantity
 variant, and create its local order from the returned price/currency. A cached
 response or browser-supplied monetary value SHALL NOT determine an order amount.
 
-#### Scenario: shopify-commerce-SC-06 - An unavailable variant cannot enter checkout
+#### Scenario: grade10-site-store-shopify-commerce-SC-06 - An unavailable variant cannot enter checkout
 
 - **GIVEN** browsing previously showed a variant available
 - **WHEN** Shopify reports it unavailable or insufficient for the requested
@@ -101,7 +101,7 @@ response or browser-supplied monetary value SHALL NOT determine an order amount.
 - **THEN** the Store refuses checkout naming that item as unavailable
 - **AND** it creates no payable local order or Shopify draft order
 
-#### Scenario: shopify-commerce-SC-07 - Checkout uses live Shopify price and inventory
+#### Scenario: grade10-site-store-shopify-commerce-SC-07 - Checkout uses live Shopify price and inventory
 
 - **GIVEN** a shopper supplies a cached price for a variant
 - **WHEN** Shopify returns a different current price during checkout
@@ -126,7 +126,7 @@ Shopify checkout SHALL collect the shipping address, shipping option, tax,
 discount, and payment. The Store's pre-check line total SHALL NOT be represented
 as the final charged amount.
 
-#### Scenario: shopify-commerce-SC-08 - A retry returns one checkout handoff
+#### Scenario: grade10-site-store-shopify-commerce-SC-08 - A retry returns one checkout handoff
 
 - **GIVEN** the Store has accepted a checkout under an idempotency key
 - **WHEN** a shopper retries it with its original idempotency
@@ -135,7 +135,7 @@ as the final charged amount.
 - **AND** exactly one local order and one Shopify draft order exist for that
   request
 
-#### Scenario: shopify-commerce-SC-10 - An item that sold out before payment is named
+#### Scenario: grade10-site-store-shopify-commerce-SC-10 - An item that sold out before payment is named
 
 - **GIVEN** the Store has accepted a checkout
 - **WHEN** Shopify cannot sell the requested quantity of a line by the time
@@ -145,14 +145,14 @@ as the final charged amount.
 - **AND** the Store holds nothing back for them and creates no replacement
   checkout on its own
 
-#### Scenario: shopify-commerce-SC-11 - Backorders are refused
+#### Scenario: grade10-site-store-shopify-commerce-SC-11 - Backorders are refused
 
 - **GIVEN** a shopper requests checkout with one or more items
 - **WHEN** Shopify reports a quantity it cannot sell on any checkout line
 - **THEN** the Store refuses checkout naming that item as unavailable
 - **AND** it does not offer a backorder or create a payable draft order
 
-#### Scenario: shopify-commerce-SC-12 - A checkout URL is safe to follow
+#### Scenario: grade10-site-store-shopify-commerce-SC-12 - A checkout URL is safe to follow
 
 - **GIVEN** the Store has accepted a checkout
 - **WHEN** it returns the checkout handoff
@@ -174,7 +174,7 @@ Shopify-reported carrier, tracking number, tracking URL, and delivered state.
 The Store SHALL NOT invent a shipment, tracking value, delivery estimate, or
 delivery confirmation.
 
-#### Scenario: shopify-commerce-SC-13 - A paid order reports payment separately from shipping
+#### Scenario: grade10-site-store-shopify-commerce-SC-13 - A paid order reports payment separately from shipping
 
 - **GIVEN** a customer or authorized administrator reads an order
 - **WHEN** Shopify reports it paid but with no fulfilment
@@ -182,7 +182,7 @@ delivery confirmation.
   not-ready
 - **AND** it does not report the order shipped or delivered
 
-#### Scenario: shopify-commerce-SC-14 - A partially fulfilled order shows every shipment
+#### Scenario: grade10-site-store-shopify-commerce-SC-14 - A partially fulfilled order shows every shipment
 
 - **GIVEN** a customer or authorized administrator reads an order
 - **WHEN** Shopify reports two fulfilments, one shipped with tracking and one
@@ -191,7 +191,7 @@ delivery confirmation.
 - **AND** it exposes both fulfilments and the tracking facts only for the
   shipped fulfilment
 
-#### Scenario: shopify-commerce-SC-15 - Only carrier confirmation reports delivery
+#### Scenario: grade10-site-store-shopify-commerce-SC-15 - Only carrier confirmation reports delivery
 
 - **GIVEN** a customer or authorized administrator reads a tracked shipment
 - **WHEN** Shopify reports it without carrier delivery
@@ -209,7 +209,7 @@ not be required for correctness: an order read and scheduled reconciliation
 SHALL query Shopify by the recorded reference to repair a delayed or missed
 event.
 
-#### Scenario: shopify-commerce-SC-16 - An invalid webhook changes nothing
+#### Scenario: grade10-site-store-shopify-commerce-SC-16 - An invalid webhook changes nothing
 
 - **GIVEN** the Store receives a Shopify webhook request
 - **WHEN** its signature is missing or invalid
@@ -217,14 +217,14 @@ event.
 - **THEN** it rejects the request before parsing its payload
 - **AND** no order, payment, or shipping state changes
 
-#### Scenario: shopify-commerce-SC-17 - A duplicate webhook is harmless
+#### Scenario: grade10-site-store-shopify-commerce-SC-17 - A duplicate webhook is harmless
 
 - **GIVEN** the Store has already processed a verified Shopify event
 - **WHEN** Shopify delivers that same event again
 - **THEN** the Store records and applies it once
 - **AND** every later delivery returns without repeating a transition
 
-#### Scenario: shopify-commerce-SC-18 - A missed webhook is repaired
+#### Scenario: grade10-site-store-shopify-commerce-SC-18 - A missed webhook is repaired
 
 - **GIVEN** a pending Store order whose Shopify order is paid and fulfilled
 - **AND** its corresponding webhook was not processed
@@ -243,7 +243,7 @@ An absent required Shopify configuration, unsupported Shopify API response, or
 Shopify integration failure SHALL return an explicit failure that identifies the
 operation without exposing credentials or customer payment/address data.
 
-#### Scenario: shopify-commerce-SC-19 - A paid buyer returns to the store
+#### Scenario: grade10-site-store-shopify-commerce-SC-19 - A paid buyer returns to the store
 
 - **GIVEN** a shopper completes a Shopify checkout with a Grade10 order
 - **WHEN** Shopify confirms payment for it
@@ -252,14 +252,14 @@ operation without exposing credentials or customer payment/address data.
 - **AND** the order is readable in Your Orders, only through the matching
   Grade10 account
 
-#### Scenario: shopify-commerce-SC-20 - A customer cannot read another customer's order
+#### Scenario: grade10-site-store-shopify-commerce-SC-20 - A customer cannot read another customer's order
 
 - **GIVEN** a customer is signed in to Grade10
 - **WHEN** they request an order belonging to another customer
 - **THEN** the Store refuses the request
 - **AND** it returns no payment, shipping, tracking, or address information
 
-#### Scenario: shopify-commerce-SC-21 - A permanent order URL requires its account
+#### Scenario: grade10-site-store-shopify-commerce-SC-21 - A permanent order URL requires its account
 
 - **GIVEN** a customer copies a permanent Grade10 order URL
 - **WHEN** anyone opens it without an authenticated session for that order's
@@ -267,14 +267,14 @@ operation without exposing credentials or customer payment/address data.
 - **THEN** the Store prompts Grade10 email magic-link sign-in
 - **AND** it returns no order, payment, shipping, tracking, or address information
 
-#### Scenario: shopify-commerce-SC-22 - An account lists its orders
+#### Scenario: grade10-site-store-shopify-commerce-SC-22 - An account lists its orders
 
 - **GIVEN** an authenticated customer has ongoing or past Grade10 orders
 - **WHEN** they open their Grade10 order history
 - **THEN** the Store lists that account's ongoing and past orders
 - **AND** it excludes every order belonging to another account
 
-#### Scenario: shopify-commerce-SC-23 - Integration configuration is incomplete
+#### Scenario: grade10-site-store-shopify-commerce-SC-23 - Integration configuration is incomplete
 
 - **GIVEN** the Store attempts an operation requiring Shopify configuration
 - **WHEN** it lacks a required credential or API-version setting
@@ -288,13 +288,13 @@ The Store SHALL NOT offer a customer dispute or refund-request action in this
 release. When staff initiate a refund through Shopify, the Store SHALL observe
 the Shopify-confirmed refund and update the order's payment status.
 
-#### Scenario: shopify-commerce-SC-24 - A staff refund is reflected in payment status
+#### Scenario: grade10-site-store-shopify-commerce-SC-24 - A staff refund is reflected in payment status
 
 - **GIVEN** Shopify confirms a refund initiated by staff for a paid order
 - **WHEN** the Store receives its event or reconciliation reads the order
 - **THEN** the Store reports the refund in that order's payment status
 
-#### Scenario: shopify-commerce-SC-25 - A customer cannot start a dispute or refund request
+#### Scenario: grade10-site-store-shopify-commerce-SC-25 - A customer cannot start a dispute or refund request
 
 - **GIVEN** a customer views an order in this release
 - **WHEN** they look for post-purchase actions

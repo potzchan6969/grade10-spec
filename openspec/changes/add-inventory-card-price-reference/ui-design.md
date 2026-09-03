@@ -51,23 +51,23 @@ No new `@grade10/ui` or design-system export is required.
 
 ### Product classification and matching
 
-- **Required taxonomy** — card-price-SC-01 and card-price-SC-02.
-- **Reusable inline tag** — card-price-SC-09.
-- **Match candidate selection** — card-price-SC-03.
-- **Unsupported product type** — card-price-SC-04.
+- **Required taxonomy** — grade10-admin-inventory-card-price-reference-SC-01 and grade10-admin-inventory-card-price-reference-SC-02.
+- **Reusable inline tag** — grade10-admin-inventory-card-price-reference-SC-09.
+- **Match candidate selection** — grade10-admin-inventory-card-price-reference-SC-03.
+- **Unsupported product type** — grade10-admin-inventory-card-price-reference-SC-04.
 
 ### Current price reference
 
-- **Fresh result** — card-price-SC-05.
-- **Refresh in progress** — card-price-SC-06.
-- **Stale fallback** — card-price-SC-07.
-- **Unavailable** — card-price-SC-07 when no successful cached result exists.
-- **Auction refresh request** — card-price-SC-08; this is background state,
+- **Fresh result** — grade10-admin-inventory-card-price-reference-SC-05.
+- **Refresh in progress** — grade10-admin-inventory-card-price-reference-SC-06.
+- **Stale fallback** — grade10-admin-inventory-card-price-reference-SC-07.
+- **Unavailable** — grade10-admin-inventory-card-price-reference-SC-07 when no successful cached result exists.
+- **Auction refresh request** — grade10-admin-inventory-card-price-reference-SC-08; this is background state,
   not a separate operator control.
 
 ### Bulk card import
 
-- **Valid preview** — card-price-SC-10.
-- **Row validation failure** — card-price-SC-11.
-- **Candidate confirmation** — card-price-SC-12.
-- **Atomic completion or refusal** — card-price-SC-13.
+- **Valid preview** — grade10-admin-inventory-card-price-reference-SC-10.
+- **Row validation failure** — grade10-admin-inventory-card-price-reference-SC-11.
+- **Candidate confirmation** — grade10-admin-inventory-card-price-reference-SC-12.
+- **Atomic completion or refusal** — grade10-admin-inventory-card-price-reference-SC-13.

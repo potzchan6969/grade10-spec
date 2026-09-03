@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## roles-US1: Collector holds the user role only
+## shared-auth-roles-US1: Collector holds the user role only
 
 **As a** collector who has never been granted an operator role,
 **I want** my roles to be `user` only,
 **so that** I cannot act as staff by accident.
 
-### roles-US1-TC1-1: Collector without an operator grant is user only
+### shared-auth-roles-US1-TC1-1: Collector without an operator grant is user only
 
 **Classification:**
 
@@ -21,7 +21,7 @@
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** roles-US-01
+* **Trace:** shared-auth-roles-US-01
 
 **Pre-conditions:**
 Signed in as a collector who has never been granted an operator role.
@@ -34,7 +34,7 @@ Signed in as a collector who has never been granted an operator role.
 
 * The caller's roles are `user` only.
 
-### roles-US1-TC2-1: Unknown role name is dropped
+### shared-auth-roles-US1-TC2-1: Unknown role name is dropped
 
 **Classification:**
 
@@ -46,7 +46,7 @@ Signed in as a collector who has never been granted an operator role.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** roles-US-01
+* **Trace:** shared-auth-roles-US-01
 
 **Pre-conditions:**
 A signed-in person whose stored roles include a name that is not in the closed set.
@@ -59,7 +59,7 @@ A signed-in person whose stored roles include a name that is not in the closed s
 
 * That unknown name is not among the roles.
 
-### roles-US1-TC3-1: User role cannot take an operator action
+### shared-auth-roles-US1-TC3-1: User role cannot take an operator action
 
 **Classification:**
 
@@ -71,7 +71,7 @@ A signed-in person whose stored roles include a name that is not in the closed s
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** roles-US-01
+* **Trace:** shared-auth-roles-US-01
 
 **Pre-conditions:**
 Signed in as a person whose only role is `user`.
@@ -86,13 +86,13 @@ Signed in as a person whose only role is `user`.
 
 ---
 
-## roles-US2: Operator's grants follow the closed vocabulary
+## shared-auth-roles-US2: Operator's grants follow the closed vocabulary
 
 **As an** operator,
 **I want** each action allowed only when my role grants that permission,
 **so that** support cannot set roles, staff cannot ban, and an unknown permission grants nothing.
 
-### roles-US2-TC1-1: Support cannot set roles but can still list and ban
+### shared-auth-roles-US2-TC1-1: Support cannot set roles but can still list and ban
 
 **Classification:**
 
@@ -104,7 +104,7 @@ Signed in as a person whose only role is `user`.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** roles-US-02
+* **Trace:** shared-auth-roles-US-02
 
 **Pre-conditions:**
 Signed in as an operator whose role is `support`.
@@ -119,7 +119,7 @@ Signed in as an operator whose role is `support`.
 * Setting roles is refused.
 * Listing users, banning, and listing and revoking sessions still work.
 
-### roles-US2-TC2-1: Staff cannot list or ban users
+### shared-auth-roles-US2-TC2-1: Staff cannot list or ban users
 
 **Classification:**
 
@@ -131,7 +131,7 @@ Signed in as an operator whose role is `support`.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** roles-US-02
+* **Trace:** shared-auth-roles-US-02
 
 **Pre-conditions:**
 Signed in as an operator whose role is `staff`.
@@ -145,7 +145,7 @@ Signed in as an operator whose role is `staff`.
 
 * Both requests are refused.
 
-### roles-US2-TC3-1: Unknown permission grants nothing
+### shared-auth-roles-US2-TC3-1: Unknown permission grants nothing
 
 **Classification:**
 
@@ -157,7 +157,7 @@ Signed in as an operator whose role is `staff`.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** roles-US-02
+* **Trace:** shared-auth-roles-US-02
 
 **Pre-conditions:**
 A product checks a permission name that is not in the vocabulary.
@@ -170,7 +170,7 @@ A product checks a permission name that is not in the vocabulary.
 
 * The system refuses it.
 
-### roles-US2-TC4-1: Staff can write the store and operate the auction catalog
+### shared-auth-roles-US2-TC4-1: Staff can write the store and operate the auction catalog
 
 **Classification:**
 
@@ -182,7 +182,7 @@ A product checks a permission name that is not in the vocabulary.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** roles-US-02
+* **Trace:** shared-auth-roles-US-02
 
 **Pre-conditions:**
 Signed in as an operator whose role is `staff`.
@@ -196,7 +196,7 @@ Signed in as an operator whose role is `staff`.
 
 * Both actions are allowed.
 
-### roles-US2-TC5-1: Auditor reads the trail and nothing else
+### shared-auth-roles-US2-TC5-1: Auditor reads the trail and nothing else
 
 **Classification:**
 
@@ -208,7 +208,7 @@ Signed in as an operator whose role is `staff`.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** roles-US-02
+* **Trace:** shared-auth-roles-US-02
 
 **Pre-conditions:**
 Signed in as a person whose only operator role is `auditor`.
@@ -223,7 +223,7 @@ Signed in as a person whose only operator role is `auditor`.
 * Reading the trail is allowed.
 * The ban, store write, and role change are refused.
 
-### roles-US2-TC6-1: Combined roles stack their grants
+### shared-auth-roles-US2-TC6-1: Combined roles stack their grants
 
 **Classification:**
 
@@ -235,7 +235,7 @@ Signed in as a person whose only operator role is `auditor`.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** roles-US-02
+* **Trace:** shared-auth-roles-US-02
 
 **Pre-conditions:**
 Signed in as a person holding `support` and `staff`.
@@ -249,7 +249,7 @@ Signed in as a person holding `support` and `staff`.
 
 * Both actions are allowed.
 
-### roles-US2-TC7-1: Operator cannot widen what a role grants
+### shared-auth-roles-US2-TC7-1: Operator cannot widen what a role grants
 
 **Classification:**
 
@@ -261,7 +261,7 @@ Signed in as a person holding `support` and `staff`.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** roles-US-02
+* **Trace:** shared-auth-roles-US-02
 
 **Pre-conditions:**
 Signed in as an operator who holds `user:set-role`.
