@@ -21,6 +21,13 @@ The slug is the key a collector opens the lot by, which is why its rules read
 oddly at first: two live listings can never share one, but a called-off
 listing gives its slug back, while a closed one keeps it forever.
 
+A campaign is a cover a lot may sit under, never a thing it needs. An operator
+starts a listing from the Listings section itself and leaves the Campaign
+field empty; draft, create, publish and the collector's slug all work with no
+campaign attached, and the Listings table says such a row stands on its own.
+Campaigns remain the way to sell a set together — a make-good, a rehearsal, or
+a single lot arriving on its own asks for no cover to be invented for it.
+
 An operator can withdraw a listing at any point before it closes — draft,
 created, or published with live bids on it. Once a lot has closed, this is no
 longer the place to change it; the sale is settled and fulfilled elsewhere.
@@ -36,4 +43,14 @@ is the only grant that exposes a seller's secret floor and `auction:settle` is
 the only one that moves money; neither is needed to run the catalogue. Every
 elevated move appends to a hash-chained trail and refuses to run at all if that
 record cannot be written.
+:::
+
+:::detail{title="Seeding lots locally" for="engineer"}
+The Test panel — local dev only — seeds fixtures from two tabs. **Campaign**
+opens a campaign and attaches the chosen fixtures to it. **Listings** seeds the
+same fixtures with no campaign at all: each still gets a reserved inventory
+product and a media item, so the campaign-free lifecycle can be exercised
+end to end. Its Drop listing control removes one standalone fixture and
+releases the hold it kept, and it reaches only listings the seed created —
+a lot an operator authored carries a slug the pattern does not match.
 :::

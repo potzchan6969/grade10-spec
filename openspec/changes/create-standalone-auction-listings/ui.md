@@ -48,10 +48,10 @@ From `@grade10/ui`: **none new.**
 
 ### Listings section
 
-- **Create offered** — `admin-listing-SC-56`: heading row shows Plus button
+- **Create offered** — `admin-listing-SC-68`: heading row shows Plus button
   for `auction:operate`.
 - **Create not offered** — `admin-listing-SC-63`: Plus button absent.
-- **Editor opens empty** — `admin-listing-SC-57`: Campaign control blank.
+- **Editor opens empty** — `admin-listing-SC-69`: Campaign control blank.
 - **Draft / create / publish with no campaign** — `admin-listing-SC-58`,
   `admin-listing-SC-59`, `admin-listing-SC-60`.
 - **Unattached row** — `admin-listing-SC-62`: campaign column shows "on its

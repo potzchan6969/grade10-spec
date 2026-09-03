@@ -26,8 +26,8 @@ campaign,
 
 **Accepted by:**
 
-- `admin-listing-SC-56` — Create listing is offered on the Listings section
-- `admin-listing-SC-57` — Listing editor opens with no campaign selected
+- `admin-listing-SC-68` — Create listing is offered on the Listings section
+- `admin-listing-SC-69` — Listing editor opens with no campaign selected
 - `admin-listing-SC-58` — Draft saves with the campaign left empty
 - `admin-listing-SC-59` — Listing creates with no campaign
 - `admin-listing-SC-60` — Listing publishes with no campaign
@@ -69,13 +69,13 @@ own when it has no campaign.
 An operator without the `auction:operate` grant SHALL NOT be offered Create
 listing. A draft save sent without that grant SHALL be refused.
 
-#### Scenario: admin-listing-SC-56 - Create listing is offered on the Listings section
+#### Scenario: admin-listing-SC-68 - Create listing is offered on the Listings section
 
 - **GIVEN** an authorized operator on the Grade10 auction Listings section
 - **WHEN** they read the section heading row
 - **THEN** a Create listing action is present
 
-#### Scenario: admin-listing-SC-57 - Listing editor opens with no campaign selected
+#### Scenario: admin-listing-SC-69 - Listing editor opens with no campaign selected
 
 - **GIVEN** an authorized operator who activates Create listing on the
   Listings section
