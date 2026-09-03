@@ -13,8 +13,8 @@
 - `placeBid` currently inserts a watch in the same listing-lock
   transaction as the bid, so "watched it or bid on it" is one predicate
   for ending-soon mail.
-- `ListingBidPanel` already ships `watchAction` and `watching`. This
-  change fills those slots; it does not add an export.
+- `ListingLotHeader` already ships watch and unwatch. This
+  change fills those props; it does not add an export.
 - Screens and Figma sources belong in [ui.md](ui.md).
 
 ## Goals / Non-Goals
@@ -85,7 +85,7 @@
 
 ### The catalogue control stays application-owned
 
-- The lot page fills `ListingBidPanel`'s existing slot. The catalogue
+- The lot page fills `ListingLotHeader`'s existing watch control. The catalogue
   tile's control is built in each application.
 - Alternatives rejected:
   - Adding a watch control to the shared auction tile now — a second

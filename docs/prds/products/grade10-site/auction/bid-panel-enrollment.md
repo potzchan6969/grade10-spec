@@ -14,6 +14,6 @@ Auto-bid confirmation belongs to [Auto bidding](/p/grade10-site/auction/auto-bid
 
 ::story{id="auction-listing-bid-panel--signed-out" title="Signed out"}
 ::story{id="auction-listing-bid-panel--need-card" title="Need card"}
-::story{id="auction-listing-bid-panel--setup-modal" title="Setup modal"}
+::story{id="auction-listing-bid-panel-dialogs--setup-modal" title="Setup modal"}
 ::story{id="auction-listing-bid-panel--linked-card-editable" title="Linked card with change"}
 ::story{id="auction-listing-bid-panel--linked-card" title="Linked card after first bid"}

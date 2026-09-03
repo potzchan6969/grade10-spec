@@ -133,7 +133,7 @@ test("creates a compact payload containing current affected page states only", (
       {
         name: "Countdown",
         status: "❌",
-        title: "Auction Listing/ListingBidPanel/Flows",
+        title: "Auction Listing/Bid Panel/Flows",
       },
     ],
     storybookUrl: "https://storybook.grade10-stg.com",
@@ -150,7 +150,7 @@ test("creates a compact payload containing current affected page states only", (
       },
       {
         text: {
-          text: `- Auction Listing\n${"\u00a0".repeat(4)}- ListingBidPanel > Flows > Countdown ❌\n- Pages\n${"\u00a0".repeat(4)}- Store > <https://storybook.grade10-stg.com/?path=/story/pages-store--default|Default>\n${"\u00a0".repeat(4)}- Store > <https://storybook.grade10-stg.com/?path=/story/pages-store--empty|Empty>`,
+          text: `- Auction Listing\n${"\u00a0".repeat(4)}- Bid Panel > Flows > Countdown ❌\n- Pages\n${"\u00a0".repeat(4)}- Store > <https://storybook.grade10-stg.com/?path=/story/pages-store--default|Default>\n${"\u00a0".repeat(4)}- Store > <https://storybook.grade10-stg.com/?path=/story/pages-store--empty|Empty>`,
           type: "mrkdwn",
         },
         type: "section",

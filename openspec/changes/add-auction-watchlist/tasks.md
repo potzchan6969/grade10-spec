@@ -14,7 +14,7 @@
 Claimable against the contracts and fixtures from group 1; it does not need a running backend.
 
 - [ ] 2.1 Produce the bid-panel and catalogue-tile Figma frames named in `ui.md` and link them there.
-- [ ] 2.2 Fill `ListingBidPanel`'s existing `watchAction` and `watching` props on the lot page, making `watchlist-SC-01` and `watchlist-SC-02` pass there.
+- [ ] 2.2 Fill `ListingLotHeader`'s existing `watched` and `onWatchToggle` props on the lot page, making `watchlist-SC-01` and `watchlist-SC-02` pass there.
 - [ ] 2.3 Add a watch control to the catalogue tile, so watching is available wherever a lot is shown.
 - [ ] 2.4 Make `watchlist-SC-04` pass on both surfaces, offering sign-in rather than hiding the control.
 - [ ] 2.5 Add watch and unwatch copy to the `@grade10/i18n` catalogs for every locale the site answers, keeping it free of words that imply the lot is held or reserved.

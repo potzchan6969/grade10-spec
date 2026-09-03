@@ -1,0 +1,15 @@
+{
+  "name": "@grade10/test",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --project tsconfig.json --noEmit"
+  },
+  "exports": {
+    "./bid-panel-states": "./src/bid-panel-states.ts"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.2"
+  }
+}
