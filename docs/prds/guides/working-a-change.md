@@ -38,6 +38,67 @@ the thing it acts on.
 Write your part and stop. An artifact invented ahead of the person who owns
 it is worse than a missing one.
 
+## What to say to the agent
+
+The skill carries the rules. You carry the feature. A whole prompt is the
+skill, the change id, and a sentence of what you want:
+
+```text
+/planning-pm add-store-gift-receipt
+
+A gift receipt on a store order — a printable slip with no prices on it.
+```
+
+**QA's is shorter still**, and usually the whole prompt: the journeys are the
+input, and they are already in the change.
+
+```text
+/planning-qa add-store-gift-receipt
+```
+
+**A designer adds the frames**, because a Figma URL is the one thing no skill
+can read off the repository.
+
+```text
+/planning-design add-store-gift-receipt
+
+Two surfaces: the print action on the order page, and the slip itself.
+Frames: <paste the Figma links>
+```
+
+**An engineer adds their handle**, which the skill would otherwise stop to ask
+for — it goes in `.openspec.yaml` as `promoted_by`.
+
+```text
+/planning-dev add-store-gift-receipt
+
+Picking this up as @my-handle. Print rendering is server-side, so it earns a
+tech design.
+```
+
+Read the capability first, create the change through the CLI, run the
+interview, work from `openspec instructions`, stop where your hand stops — all
+of that is in the skills already. A prompt that repeats it is a second copy of
+the rules to keep in step, and the one that goes stale first. If you ever have
+to write "do not write tasks.md", the skill should have said it; fix the skill.
+
+Four things the skill cannot know, so say them when they are true:
+
+- **The decisions are already made** — "skip the interview, draft from what
+  I've given you". Otherwise expect to be questioned before a word is written
+- **You are two hands** — "I'm the engineer as well, carry it through to
+  tasks.md". Each skill stops at its own edge, which is the point; going
+  further is something you ask for
+- **Which capability you mean**, when a name is ambiguous — the full path,
+  `grade10-site/store/gift-receipt`, not `gift-receipt`
+- **You are in `grade10`** — most skills live in the store clone and are not
+  installed there. `openspec instructions <artifact> --change <id>` returns the
+  same rules the skill would have applied; ask the agent to follow its output,
+  and give it the store clone with `/add-dir` before it tries to write. [An
+  agent workflow, end to
+  end](https://github.com/9gag/grade10-spec/blob/main/docs/governance/agent-workflow-example.md)
+  has both, with prompts written for that lane
+
 ## The example, end to end
 
 :::flow{title="add-store-gift-receipt"}
