@@ -7,7 +7,6 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { Funnel, MagnifyingGlass } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { IMAGE } from "./fixtures";
 
@@ -142,11 +141,7 @@ function AuctionListingCatalogue() {
         <div className="flex gap-16 max-lg:flex-col lg:items-start">
           <aside className="w-full shrink-0 lg:w-64">
             <VStack gap="md">
-              <Button
-                className="w-full justify-start"
-                leading={<MagnifyingGlass aria-hidden />}
-                variant="secondary"
-              >
+              <Button className="w-full justify-start" variant="secondary">
                 Search lots
               </Button>
               <VStack gap="sm">
@@ -170,9 +165,7 @@ function AuctionListingCatalogue() {
                   42 lots
                 </Text>
                 <HStack gap="sm">
-                  <Button leading={<Funnel aria-hidden />} variant="ghost">
-                    All lots
-                  </Button>
+                  <Button variant="ghost">All lots</Button>
                   <Button variant="ghost">Ending soon</Button>
                 </HStack>
               </HStack>

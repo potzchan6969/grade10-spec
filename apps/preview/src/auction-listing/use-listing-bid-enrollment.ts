@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 import {
   ENROLLMENT_DEMO_SAVED_PAYMENT,
-  type ListingBidEnrollmentSnapshot,
   type LinkedPaymentMethod,
+  type ListingBidEnrollmentSnapshot,
 } from "./listing-bid-enrollment-snapshots";
 
 type ListingBidEnrollmentSession = {
@@ -12,16 +12,14 @@ type ListingBidEnrollmentSession = {
   hasPlacedBid: boolean;
   bidMode: "manual" | "auto";
   signInOpen: boolean;
-  setupOpen: boolean;
-  setupRequiresIframeLink: boolean;
-  setupChangingPayment: boolean;
+  paymentSetup: "none" | "required" | "change-required";
   autoConfirmOpen: boolean;
 };
 
 type ListingBidEnrollmentActions = {
   setBidMode: (mode: "manual" | "auto") => void;
   setSignInOpen: (open: boolean) => void;
-  setSetupOpen: (open: boolean) => void;
+  dismissPaymentSetup: () => void;
   setAutoConfirmOpen: (open: boolean) => void;
   confirmAutoBidIntro: () => void;
   reset: () => void;
@@ -47,9 +45,7 @@ const INITIAL_SESSION: ListingBidEnrollmentSession = {
   hasPlacedBid: false,
   bidMode: "manual",
   signInOpen: false,
-  setupOpen: false,
-  setupRequiresIframeLink: true,
-  setupChangingPayment: false,
+  paymentSetup: "none",
   autoConfirmOpen: false,
 };
 
@@ -60,9 +56,14 @@ function accountLinkedPayment(editable: boolean): LinkedPaymentMethod {
   };
 }
 
-function useListingBidEnrollment(listingId = "demo-lot") {
-  const [session, setSession] =
-    useState<ListingBidEnrollmentSession>(INITIAL_SESSION);
+function useListingBidEnrollment(
+  listingId = "demo-lot",
+  initialSession: Partial<ListingBidEnrollmentSession> = {},
+) {
+  const [session, setSession] = useState<ListingBidEnrollmentSession>(() => ({
+    ...INITIAL_SESSION,
+    ...initialSession,
+  }));
   const [
     autoBidIntroAcknowledgedListingIds,
     setAutoBidIntroAcknowledgedListingIds,
@@ -93,12 +94,10 @@ function useListingBidEnrollment(listingId = "demo-lot") {
     setSession((current) => ({ ...current, signInOpen }));
   }, []);
 
-  const setSetupOpen = useCallback((setupOpen: boolean) => {
+  const dismissPaymentSetup = useCallback(() => {
     setSession((current) => ({
       ...current,
-      setupOpen,
-      setupChangingPayment: setupOpen ? current.setupChangingPayment : false,
-      setupRequiresIframeLink: setupOpen ? current.setupRequiresIframeLink : true,
+      paymentSetup: "none",
     }));
   }, []);
 
@@ -109,18 +108,14 @@ function useListingBidEnrollment(listingId = "demo-lot") {
   const openSetup = useCallback(() => {
     setSession((current) => ({
       ...current,
-      setupOpen: true,
-      setupChangingPayment: false,
-      setupRequiresIframeLink: !current.hasAccountPayment,
+      paymentSetup: "required",
     }));
   }, []);
 
   const openChangePayment = useCallback(() => {
     setSession((current) => ({
       ...current,
-      setupOpen: true,
-      setupChangingPayment: true,
-      setupRequiresIframeLink: true,
+      paymentSetup: "change-required",
     }));
   }, []);
 
@@ -132,9 +127,7 @@ function useListingBidEnrollment(listingId = "demo-lot") {
       if (current.signedIn && !current.paymentLinked) {
         return {
           ...current,
-          setupOpen: true,
-          setupChangingPayment: false,
-          setupRequiresIframeLink: !current.hasAccountPayment,
+          paymentSetup: "required",
         };
       }
       if (
@@ -156,9 +149,7 @@ function useListingBidEnrollment(listingId = "demo-lot") {
       ...current,
       signedIn: true,
       signInOpen: false,
-      setupOpen: true,
-      setupChangingPayment: false,
-      setupRequiresIframeLink: !current.hasAccountPayment,
+      paymentSetup: "required",
     }));
   }, []);
 
@@ -166,9 +157,7 @@ function useListingBidEnrollment(listingId = "demo-lot") {
     setSession((current) => ({
       ...current,
       paymentLinked: true,
-      setupOpen: false,
-      setupChangingPayment: false,
-      setupRequiresIframeLink: true,
+      paymentSetup: "none",
     }));
   }, []);
 
@@ -178,17 +167,21 @@ function useListingBidEnrollment(listingId = "demo-lot") {
       submitUsesSignInLabel: !session.signedIn,
       fixtureState: !session.signedIn ? "live-manual" : undefined,
       paymentEmptyState:
-        needsSetup && !session.setupOpen ? true : undefined,
+        needsSetup && session.paymentSetup === "none" ? true : undefined,
       linkedPaymentMethod: ready
         ? accountLinkedPayment(!session.hasPlacedBid)
         : undefined,
-      setupSheet: session.setupOpen
+      paymentSetup: session.paymentSetup !== "none"
         ? {
-            requiresIframeLink: session.setupRequiresIframeLink,
-            iframeLinkedPayment: session.setupChangingPayment
+            requiresIframeLink:
+              session.paymentSetup === "change-required" ||
+              !session.hasAccountPayment,
+            iframeLinkedPayment:
+              session.paymentSetup === "change-required"
               ? ENROLLMENT_DEMO_SAVED_PAYMENT
               : undefined,
-            defaultAgeAttested: session.setupChangingPayment || undefined,
+            defaultAgeAttested:
+              session.paymentSetup === "change-required" || undefined,
           }
         : undefined,
     };
@@ -199,7 +192,7 @@ function useListingBidEnrollment(listingId = "demo-lot") {
     actions: {
       setBidMode,
       setSignInOpen,
-      setSetupOpen,
+      dismissPaymentSetup,
       setAutoConfirmOpen,
       confirmAutoBidIntro,
       reset,

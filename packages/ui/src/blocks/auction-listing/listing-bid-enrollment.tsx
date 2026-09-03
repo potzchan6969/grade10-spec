@@ -17,17 +17,23 @@ import { CreditCard } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
 import { OrderDetailsPaymentLogo } from "../store-order-detail/order-details-payment-logo";
 import type { OrderDetailsPaymentBrand } from "../store-order-detail/types";
-import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "./listing-bid-enrollment-copy";
 
 type OverlayPresentation = "modal" | "inline";
 
+type PaymentMethodRowCopy = {
+  paymentMethod: string;
+  changeCard: string;
+};
+
 type PaymentMethodRowProps = {
+  copy: PaymentMethodRowCopy;
   brand: OrderDetailsPaymentBrand;
   maskedNumber: string;
   onChange?: () => void;
 };
 
 function PaymentMethodRow({
+  copy,
   brand,
   maskedNumber,
   onChange,
@@ -40,7 +46,7 @@ function PaymentMethodRow({
         tone="secondary"
         weight="medium"
       >
-        {LISTING_BID_ENROLLMENT_DEMO_COPY.paymentMethod}
+        {copy.paymentMethod}
       </Text>
       <Card className="gap-0 p-3" padding={false}>
         <HStack
@@ -58,7 +64,7 @@ function PaymentMethodRow({
           </HStack>
           {onChange ? (
             <Button onClick={onChange} size="sm" variant="ghost">
-              {LISTING_BID_ENROLLMENT_DEMO_COPY.changeCard}
+              {copy.changeCard}
             </Button>
           ) : null}
         </HStack>
@@ -67,11 +73,20 @@ function PaymentMethodRow({
   );
 }
 
+type PaymentMethodEmptyStateCopy = {
+  paymentMethod: string;
+  linkCardEmptyState: string;
+};
+
 type PaymentMethodEmptyStateProps = {
+  copy: PaymentMethodEmptyStateCopy;
   onLink?: () => void;
 };
 
-function PaymentMethodEmptyState({ onLink }: PaymentMethodEmptyStateProps) {
+function PaymentMethodEmptyState({
+  copy,
+  onLink,
+}: PaymentMethodEmptyStateProps) {
   return (
     <VStack className="w-full" gap="sm">
       <Text
@@ -80,10 +95,10 @@ function PaymentMethodEmptyState({ onLink }: PaymentMethodEmptyStateProps) {
         tone="secondary"
         weight="medium"
       >
-        {LISTING_BID_ENROLLMENT_DEMO_COPY.paymentMethod}
+        {copy.paymentMethod}
       </Text>
       <button
-        aria-label={LISTING_BID_ENROLLMENT_DEMO_COPY.linkCardEmptyState}
+        aria-label={copy.linkCardEmptyState}
         className="w-full cursor-pointer rounded-2xl text-left transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
         onClick={onLink}
         type="button"
@@ -100,7 +115,7 @@ function PaymentMethodEmptyState({ onLink }: PaymentMethodEmptyStateProps) {
               <CreditCard size={16} weight="bold" />
             </span>
             <Text size="sm" tone="secondary">
-              {LISTING_BID_ENROLLMENT_DEMO_COPY.linkCardEmptyState}
+              {copy.linkCardEmptyState}
             </Text>
           </HStack>
         </Card>
@@ -109,10 +124,21 @@ function PaymentMethodEmptyState({ onLink }: PaymentMethodEmptyStateProps) {
   );
 }
 
+type EnrollmentSetupSheetCopy = {
+  getReadyToBid: string;
+  linkCardDescription: string;
+  ageAttestation: string;
+  continue: string;
+  iframePlaceholder: string;
+  iframeLinkedCardPlaceholder: string;
+};
+
 function CardLinkIframePlaceholder({
+  copy,
   onSimulateComplete,
   showsLinkedCard = false,
 }: {
+  copy: EnrollmentSetupSheetCopy;
   onSimulateComplete?: () => void;
   showsLinkedCard?: boolean;
 }) {
@@ -120,8 +146,8 @@ function CardLinkIframePlaceholder({
     "flex h-32 w-full items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-secondary-foreground";
 
   const label = showsLinkedCard
-    ? LISTING_BID_ENROLLMENT_DEMO_COPY.iframeLinkedCardPlaceholder
-    : LISTING_BID_ENROLLMENT_DEMO_COPY.iframePlaceholder;
+    ? copy.iframeLinkedCardPlaceholder
+    : copy.iframePlaceholder;
 
   if (onSimulateComplete) {
     return (
@@ -136,14 +162,11 @@ function CardLinkIframePlaceholder({
     );
   }
 
-  return (
-    <div aria-label={label} className={className} role="group">
-      {label}
-    </div>
-  );
+  return <div className={className}>{label}</div>;
 }
 
 type EnrollmentSetupSheetProps = {
+  copy: EnrollmentSetupSheetCopy;
   open: boolean;
   onOpenChange?: (open: boolean) => void;
   onContinue?: () => void;
@@ -160,11 +183,13 @@ type EnrollmentSetupSheetProps = {
 };
 
 function SetupSheetBody({
+  copy,
   ageAttested,
   iframeLinkedPayment,
   onAgeAttestedChange,
   onSimulateCardLinkComplete,
 }: {
+  copy: EnrollmentSetupSheetCopy;
   ageAttested: boolean;
   iframeLinkedPayment?: {
     brand: OrderDetailsPaymentBrand;
@@ -175,10 +200,9 @@ function SetupSheetBody({
 }) {
   return (
     <VStack className="w-full" gap="md">
-      <DialogDescription>
-        {LISTING_BID_ENROLLMENT_DEMO_COPY.linkCardDescription}
-      </DialogDescription>
+      <DialogDescription>{copy.linkCardDescription}</DialogDescription>
       <CardLinkIframePlaceholder
+        copy={copy}
         onSimulateComplete={onSimulateCardLinkComplete}
         showsLinkedCard={iframeLinkedPayment != null}
       />
@@ -187,13 +211,14 @@ function SetupSheetBody({
         onCheckedChange={(checked) => onAgeAttestedChange(checked === true)}
         size="sm"
       >
-        {LISTING_BID_ENROLLMENT_DEMO_COPY.ageAttestation}
+        {copy.ageAttestation}
       </CheckboxListInput>
     </VStack>
   );
 }
 
 function EnrollmentSetupSheet({
+  copy,
   open,
   onOpenChange,
   onContinue,
@@ -229,6 +254,7 @@ function EnrollmentSetupSheet({
   const body = (
     <SetupSheetBody
       ageAttested={ageAttested}
+      copy={copy}
       iframeLinkedPayment={iframeLinkedPayment}
       onAgeAttestedChange={setAgeAttested}
       onSimulateCardLinkComplete={
@@ -245,16 +271,14 @@ function EnrollmentSetupSheet({
       size="md"
       type="button"
     >
-      {LISTING_BID_ENROLLMENT_DEMO_COPY.continue}
+      {copy.continue}
     </Button>
   );
 
   if (presentation === "inline") {
     if (!open) return null;
     return (
-      <InlineOverlayPreview
-        label={LISTING_BID_ENROLLMENT_DEMO_COPY.getReadyToBid}
-      >
+      <InlineOverlayPreview label={copy.getReadyToBid}>
         {body}
         <div className="mt-4">{footer}</div>
       </InlineOverlayPreview>
@@ -265,9 +289,7 @@ function EnrollmentSetupSheet({
     <Dialog onOpenChange={(next) => onOpenChange?.(next)} open={open}>
       <DialogContent showCloseButton>
         <DialogHeader>
-          <DialogTitle>
-            {LISTING_BID_ENROLLMENT_DEMO_COPY.getReadyToBid}
-          </DialogTitle>
+          <DialogTitle>{copy.getReadyToBid}</DialogTitle>
         </DialogHeader>
         <DialogBody>{body}</DialogBody>
         <DialogFooter>{footer}</DialogFooter>
@@ -276,7 +298,18 @@ function EnrollmentSetupSheet({
   );
 }
 
+type AutoBidConfirmationDialogCopy = {
+  autoConfirmTitle: string;
+  autoConfirmIntro: string;
+  autoConfirmActive: string;
+  autoConfirmRaiseOnly: string;
+  autoConfirmMaximum: string;
+  autoConfirmAction: string;
+  autoConfirmCancel: string;
+};
+
 type AutoBidConfirmationDialogProps = {
+  copy: AutoBidConfirmationDialogCopy;
   open: boolean;
   onOpenChange?: (open: boolean) => void;
   onConfirm?: () => void;
@@ -284,32 +317,38 @@ type AutoBidConfirmationDialogProps = {
   maximumLabel: string;
 };
 
-function AutoBidConfirmationBody({ maximumLabel }: { maximumLabel: string }) {
+function AutoBidConfirmationBody({
+  copy,
+  maximumLabel,
+}: {
+  copy: AutoBidConfirmationDialogCopy;
+  maximumLabel: string;
+}) {
   return (
     <VStack className="w-full" gap="md">
       <div className="flex flex-col gap-4 text-sm leading-5 font-normal text-foreground">
-        <p>{LISTING_BID_ENROLLMENT_DEMO_COPY.autoConfirmIntro}</p>
-        <p>{LISTING_BID_ENROLLMENT_DEMO_COPY.autoConfirmActive}</p>
-        <p>{LISTING_BID_ENROLLMENT_DEMO_COPY.autoConfirmRaiseOnly}</p>
+        <p>{copy.autoConfirmIntro}</p>
+        <p>{copy.autoConfirmActive}</p>
+        <p>{copy.autoConfirmRaiseOnly}</p>
       </div>
       <p className="w-full rounded-md border border-border bg-muted/30 p-3 text-sm font-medium text-foreground">
-        {LISTING_BID_ENROLLMENT_DEMO_COPY.autoConfirmMaximum.replace(
-          "{amount}",
-          maximumLabel,
-        )}
+        {copy.autoConfirmMaximum.replace("{amount}", maximumLabel)}
       </p>
     </VStack>
   );
 }
 
 function AutoBidConfirmationDialog({
+  copy,
   open,
   onOpenChange,
   onConfirm,
   presentation = "modal",
   maximumLabel,
 }: AutoBidConfirmationDialogProps) {
-  const body = <AutoBidConfirmationBody maximumLabel={maximumLabel} />;
+  const body = (
+    <AutoBidConfirmationBody copy={copy} maximumLabel={maximumLabel} />
+  );
   const footer = (
     <HStack gap="sm" hAlign="end">
       <Button
@@ -318,7 +357,7 @@ function AutoBidConfirmationDialog({
         type="button"
         variant="outline"
       >
-        {LISTING_BID_ENROLLMENT_DEMO_COPY.autoConfirmCancel}
+        {copy.autoConfirmCancel}
       </Button>
       <Button
         onClick={() => {
@@ -328,7 +367,7 @@ function AutoBidConfirmationDialog({
         size="md"
         type="button"
       >
-        {LISTING_BID_ENROLLMENT_DEMO_COPY.autoConfirmAction}
+        {copy.autoConfirmAction}
       </Button>
     </HStack>
   );
@@ -336,9 +375,7 @@ function AutoBidConfirmationDialog({
   if (presentation === "inline") {
     if (!open) return null;
     return (
-      <InlineOverlayPreview
-        label={LISTING_BID_ENROLLMENT_DEMO_COPY.autoConfirmTitle}
-      >
+      <InlineOverlayPreview label={copy.autoConfirmTitle}>
         {body}
         <div className="mt-4">{footer}</div>
       </InlineOverlayPreview>
@@ -349,9 +386,7 @@ function AutoBidConfirmationDialog({
     <Dialog onOpenChange={(next) => onOpenChange?.(next)} open={open}>
       <DialogContent showCloseButton>
         <DialogHeader>
-          <DialogTitle>
-            {LISTING_BID_ENROLLMENT_DEMO_COPY.autoConfirmTitle}
-          </DialogTitle>
+          <DialogTitle>{copy.autoConfirmTitle}</DialogTitle>
         </DialogHeader>
         <DialogBody>{body}</DialogBody>
         <DialogFooter>{footer}</DialogFooter>
@@ -377,7 +412,17 @@ function InlineOverlayPreview({
   );
 }
 
-export type { OverlayPresentation };
+export type {
+  AutoBidConfirmationDialogCopy,
+  AutoBidConfirmationDialogProps,
+  EnrollmentSetupSheetCopy,
+  EnrollmentSetupSheetProps,
+  OverlayPresentation,
+  PaymentMethodEmptyStateCopy,
+  PaymentMethodEmptyStateProps,
+  PaymentMethodRowCopy,
+  PaymentMethodRowProps,
+};
 export {
   AutoBidConfirmationDialog,
   EnrollmentSetupSheet,

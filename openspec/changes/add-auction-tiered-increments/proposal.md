@@ -107,7 +107,7 @@ increment; that is deliberate and preserved from the source.
 | `@grade10/auction-contracts` | **BREAKING:** the listing's single increment is replaced by the table, and listing facts gain the minimum next bid. |
 | `apps/admin/grade10` | The increment field becomes a table editor, and a house-default table editor is added. |
 | `apps/frontend/grade10`, `apps/frontend/zzz` | Show the minimum next bid, which now moves as the price crosses a tier. |
-| `@grade10/ui` `ListingBidPanel` | May need a slot for the minimum next bid, if the existing price-hint slot is not the right home for it. That is a delivery decision at promotion. |
+| `@grade10/ui` `ListingAuctionBidCard` | May need a slot for the minimum next bid, if the existing price label is not the right home for it. That is a delivery decision at promotion. |
 | `add-grade10-auction` (unarchived) | Its sentence *a valid bid SHALL meet or exceed the current bid plus the listing's configured increment* is superseded by this change's minimum-bid requirement. It must be reconciled at that change's archive. |
 
 **Shipped scenarios whose numbers change.** `auto-bidding-SC-11`, `SC-14`, and

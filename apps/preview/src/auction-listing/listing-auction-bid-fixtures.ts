@@ -1,26 +1,22 @@
 import {
+  DEFAULT_LISTING_CURRENCY,
+  DEFAULT_LISTING_EXTENSION_POLICY,
+  formatAutoExtendedTooltip,
+  formatMoney,
+  type ListingAgeVerificationDialogCopy,
+  type ListingAuctionBidCardCopy,
+  type ListingAuctionBidView,
+  type ListingAuctionStanding,
+  type ListingBidHistoryRow,
+  type ListingUserBidHistoryRow,
+  minNextBidMinor,
+} from "@grade10/ui";
+import {
   FIXTURE_ACTIVITY_TIME_COPY,
   FIXTURE_AUCTION_CLOSED_AT_MS,
   FIXTURE_AUCTION_ENDS_AT_MS,
   FIXTURE_AUCTION_OPENS_AT_MS,
-} from "../../lib/datetime-fixtures";
-import { formatMoney } from "../../lib/format-money";
-import {
-  DEFAULT_LISTING_CURRENCY,
-  minNextBidMinor,
-} from "./listing-bid-money";
-import type { ListingAgeVerificationDialogCopy } from "./listing-age-verification-dialog";
-import type { ListingAuctionBidCardCopy } from "./listing-auction-bid-card";
-import {
-  DEFAULT_LISTING_EXTENSION_POLICY,
-  formatAutoExtendedTooltip,
-} from "./listing-extension-policy";
-import type {
-  ListingAuctionBidView,
-  ListingAuctionStanding,
-  ListingBidHistoryRow,
-  ListingUserBidHistoryRow,
-} from "./types";
+} from "@grade10/ui/lib/datetime-fixtures";
 
 export type BiddingState =
   | "opens"

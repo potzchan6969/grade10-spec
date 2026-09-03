@@ -40,11 +40,9 @@ function ListingBidEnrollmentInteractiveDemo() {
         onBidModeChange={actions.setBidMode}
         onBidSubmit={actions.handleBidSubmit}
         onSetupContinue={actions.handleSetupContinue}
-        onSetupOpenChange={actions.setSetupOpen}
+        onPaymentSetupDismissed={actions.dismissPaymentSetup}
         onSignInComplete={actions.completeSignIn}
         onSignInOpenChange={actions.setSignInOpen}
-        setupOpen={session.setupOpen}
-        setupRequiresIframeLink={session.setupRequiresIframeLink}
         signInOpen={session.signInOpen}
         snapshot={snapshot}
       />

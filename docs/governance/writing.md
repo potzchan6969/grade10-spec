@@ -2,11 +2,16 @@
 
 How everything here is written — a spec's prose, a PRD, a reference, a
 proposal, a manual page, a governance doc, a commit message, a PR body, a
-review reply. Two documents demonstrate it:
+review reply. Three documents demonstrate it; read the one nearest your
+task before drafting, and hold the draft beside it:
 
 - **Shape** — `docs/references/grade10-finance.md`: a heading, then an
   outline the eye scans in seconds, every line leading with the term that
   matters
+- **A capability page** —
+  `docs/prds/products/grade10-site/store/product-listing.md`: what the
+  surface shows, where each thing leads, what its URL looks like, and
+  nothing the spec beneath it already says
 - **Voice** — `docs/references/grade10-loyalty-program.md`: a reader learns
   the product from definitions and infers the rules; nothing asks them to
   reconstruct how the text came to be
@@ -27,6 +32,10 @@ Outline first. A document is a heading and an outline, never an essay.
 - **Only what the page owns** — a fact a child page, a sibling, or a
   platform page states is a link away, never repeated; a product's index
   says what no capability page carries, and nothing true of every product
+- **What the reader asks, not what the spec enumerates** — a page says
+  what a surface is for, what it shows, where each thing leads, what its
+  URL looks like. The spec's cases and edge rules stay in the spec, a link
+  away; a page that walks the spec's feature set is the spec said twice.
 - **Numbered items** where order or count matters: phases, steps, ranked
   facts. **Bullets** everywhere else. Nest up to three levels; a fourth
   level is a new section.
@@ -118,6 +127,22 @@ Outline shape, which a reader scans:
 >   hourly cron, the session and permission ladder
 > - **Not built** — any business logic: no lending tables, repositories,
 >   services, customer or operator surface, admin section
+
+Spec voice, which says the spec twice:
+
+> The interesting part is the collection in the address. A collection is a
+> narrowing of this one listing, not a surface of its own, so every
+> collection opens the same document: an address naming one the catalogue
+> carries opens already narrowed to it, one naming none lists everything,
+> and one naming a collection the catalogue has nothing for lists
+> everything as itself rather than refusing.
+
+Reader voice, which answers what they came to ask:
+
+> - **Every product** — a card that opens its Product Details Page
+> - **URL** — the collection is in it, so a listing can be linked and shared
+>   1. `grade10.com/store/collections` — the whole catalogue
+>   2. `grade10.com/store/collections?collection=<handle>` — one collection
 
 Proposal voice, which rots:
 

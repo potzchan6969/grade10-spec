@@ -44,7 +44,7 @@
     "tokens:push": "node scripts/tokens-sync/figma-plugins/push.mjs",
     "tokens:plugin": "node scripts/tokens-sync/figma-plugins/build-plugin.mjs",
     "tokens:pull": "pnpm tokens:import && pnpm tokens:build",
-    "typecheck": "pnpm --dir tools/manual exec tsc -b && pnpm --dir apps/preview exec tsc -b && pnpm --filter @grade10/design-system run typecheck && pnpm --filter @grade10/i18n run typecheck && pnpm --filter @grade10/ui run typecheck",
+    "typecheck": "pnpm --dir tools/manual exec tsc -b && pnpm --dir apps/preview exec tsc -b && pnpm --filter @grade10/design-system run typecheck && pnpm --filter @grade10/i18n run typecheck && pnpm --filter @grade10/test run typecheck && pnpm --filter @grade10/ui run typecheck",
     "lint": "biome check .",
     "tcs:stale": "node scripts/openspec/validate-test-cases.mjs --stale-report",
     "tcs:validate": "node scripts/openspec/validate-test-cases.mjs",

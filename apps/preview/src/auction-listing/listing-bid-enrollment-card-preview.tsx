@@ -1,25 +1,26 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { useEffect, useMemo, useState } from "react";
-import { formatMoney } from "../../lib/format-money";
-import { SignInCard } from "../auth-sign-in/sign-in-card";
-import { SignInEmailForm } from "../auth-sign-in/sign-in-email-form";
-import { ListingAuctionBidCard } from "./listing-auction-bid-card";
-import {
-  LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
-  bidHistoryForState,
-  buildListingAuctionBidView,
-  type BiddingState,
-} from "./listing-auction-bid-fixtures";
-import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "./listing-bid-enrollment-copy";
 import {
   AutoBidConfirmationDialog,
   EnrollmentSetupSheet,
+  formatMoney,
   InlineOverlayPreview,
+  ListingAuctionBidCard,
+  type ListingBidHistoryRow,
   type OverlayPresentation,
   PaymentMethodEmptyState,
   PaymentMethodRow,
-} from "./listing-bid-enrollment-prototypes";
+  SignInCard,
+  SignInEmailForm,
+} from "@grade10/ui";
+import { useEffect, useMemo, useState } from "react";
+import {
+  type BiddingState,
+  bidHistoryForState,
+  buildListingAuctionBidView,
+  LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
+} from "./listing-auction-bid-fixtures";
+import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "./listing-bid-enrollment-copy";
 import type { ListingBidEnrollmentSnapshot } from "./listing-bid-enrollment-snapshots";
 
 type ListingBidEnrollmentCardPreviewProps = {
@@ -31,15 +32,15 @@ type ListingBidEnrollmentCardPreviewProps = {
   onSignInOpenChange?: (open: boolean) => void;
   onSignInComplete?: () => void;
   onBidSubmit?: () => void;
-  setupOpen?: boolean;
-  onSetupOpenChange?: (open: boolean) => void;
   onSetupContinue?: () => void;
+  onPaymentSetupDismissed?: () => void;
   onLinkPayment?: () => void;
   onChangePayment?: () => void;
-  setupRequiresIframeLink?: boolean;
   autoConfirmOpen?: boolean;
   onAutoConfirmOpenChange?: (open: boolean) => void;
   onAutoBidConfirm?: () => void;
+  history?: readonly ListingBidHistoryRow[];
+  historyResetKey?: string;
 };
 
 function ListingBidEnrollmentCardPreview({
@@ -51,15 +52,15 @@ function ListingBidEnrollmentCardPreview({
   onSignInOpenChange,
   onSignInComplete,
   onBidSubmit,
-  setupOpen: setupOpenProp,
-  onSetupOpenChange,
   onSetupContinue,
+  onPaymentSetupDismissed,
   onLinkPayment,
   onChangePayment,
-  setupRequiresIframeLink,
   autoConfirmOpen: autoConfirmOpenProp,
   onAutoConfirmOpenChange,
   onAutoBidConfirm,
+  history: historyProp,
+  historyResetKey = "enrollment-demo",
 }: ListingBidEnrollmentCardPreviewProps) {
   const [bidModeInternal, setBidModeInternal] = useState(snapshot.bidMode);
   const [signInEmail, setSignInEmail] = useState("");
@@ -89,12 +90,17 @@ function ListingBidEnrollmentCardPreview({
     return copy;
   }, [snapshot.submitUsesSignInLabel]);
 
-  const history = bidHistoryForState(fixtureState).map((row) =>
-    snapshot.submitUsesSignInLabel ? { ...row, isViewer: false } : row,
+  const history =
+    historyProp ??
+    bidHistoryForState(fixtureState).map((row) =>
+      snapshot.submitUsesSignInLabel ? { ...row, isViewer: false } : row,
+    );
+  const maximumLabel = formatMoney(
+    view.viewerMaximumMinor ?? view.suggestedMaxMinor ?? 500_000,
+    view.currency,
+    { locale: "en-HK" },
   );
-  const maximumLabel = formatMoney(500_000, view.currency, { locale: "en-HK" });
 
-  const setupOpen = setupOpenProp ?? snapshot.setupSheet != null;
   const autoConfirmOpen =
     autoConfirmOpenProp ?? snapshot.autoConfirmOpen ?? false;
 
@@ -109,7 +115,7 @@ function ListingBidEnrollmentCardPreview({
         bidMode={bidMode}
         copy={sidebarCopy}
         history={history}
-        historyResetKey="enrollment-demo"
+        historyResetKey={historyResetKey}
         locale="en"
         onBidModeChange={setBidMode}
         onCommitMaximum={handleBidSubmit}
@@ -122,16 +128,22 @@ function ListingBidEnrollmentCardPreview({
         <div className="mt-1">
           <PaymentMethodRow
             brand={snapshot.linkedPaymentMethod.brand}
+            copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
             maskedNumber={snapshot.linkedPaymentMethod.maskedNumber}
             onChange={
-              snapshot.linkedPaymentMethod.editable ? onChangePayment : undefined
+              snapshot.linkedPaymentMethod.editable
+                ? onChangePayment
+                : undefined
             }
           />
         </div>
       ) : null}
       {snapshot.paymentEmptyState ? (
         <div className="mt-1">
-          <PaymentMethodEmptyState onLink={onLinkPayment} />
+          <PaymentMethodEmptyState
+            copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
+            onLink={onLinkPayment}
+          />
         </div>
       ) : null}
 
@@ -144,21 +156,18 @@ function ListingBidEnrollmentCardPreview({
         </Text>
       ) : null}
 
-      {setupOpen ? (
-        <EnrollmentSetupSheet
-          defaultAgeAttested={snapshot.setupSheet?.defaultAgeAttested}
-          iframeLinkedPayment={snapshot.setupSheet?.iframeLinkedPayment}
-          onContinue={onSetupContinue}
-          onOpenChange={onSetupOpenChange}
-          open
-          presentation={overlayPresentation}
-          requiresIframeLink={
-            setupRequiresIframeLink ??
-            snapshot.setupSheet?.requiresIframeLink ??
-            true
-          }
-        />
-      ) : null}
+      <EnrollmentSetupSheet
+        copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
+        defaultAgeAttested={snapshot.paymentSetup?.defaultAgeAttested}
+        iframeLinkedPayment={snapshot.paymentSetup?.iframeLinkedPayment}
+        onContinue={onSetupContinue}
+        onOpenChange={(open) => {
+          if (!open) onPaymentSetupDismissed?.();
+        }}
+        open={Boolean(snapshot.paymentSetup)}
+        presentation={overlayPresentation}
+        requiresIframeLink={snapshot.paymentSetup?.requiresIframeLink ?? true}
+      />
 
       {signInOpen ? (
         overlayPresentation === "inline" ? (
@@ -203,6 +212,7 @@ function ListingBidEnrollmentCardPreview({
 
       {autoConfirmOpen ? (
         <AutoBidConfirmationDialog
+          copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
           maximumLabel={maximumLabel}
           onConfirm={onAutoBidConfirm}
           onOpenChange={onAutoConfirmOpenChange}

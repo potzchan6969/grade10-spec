@@ -1,6 +1,8 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
+import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import {
+  ArrowClockwise,
   ArrowSquareOut,
   CheckCircle,
   FigmaLogo,
@@ -32,7 +34,10 @@ type EmbedCardProps = {
 
 /**
  * Third-party frames cost a network round trip and a lot of main thread, so a
- * page full of them loads none of them: the frame arrives on click.
+ * page full of them loads none of them: the frame arrives on click. A frame
+ * that arrived broken — Storybook still building, Figma timing out — reloads
+ * from its own header without a full page load; remounting the iframe is the
+ * one way to make a cross-origin frame fetch again.
  */
 function EmbedCard({
   title,
@@ -45,7 +50,13 @@ function EmbedCard({
   verdict,
 }: EmbedCardProps) {
   const [loaded, setLoaded] = useState(false);
+  const [generation, setGeneration] = useState(0);
   const [why, setWhy] = useState(false);
+
+  const reload = () => {
+    setLoaded(true);
+    setGeneration((current) => current + 1);
+  };
 
   return (
     <figure className="my-6 overflow-hidden rounded-(--radius-2xl) border border-border bg-card">
@@ -64,15 +75,26 @@ function EmbedCard({
             verdict={verdict}
           />
         ) : null}
-        <a
-          className="ml-auto inline-flex items-center gap-1 text-secondary-foreground text-xs hover:text-foreground"
-          href={openUrl}
-          rel="noreferrer noopener"
-          target="_blank"
-        >
-          {openLabel}
-          <ArrowSquareOut aria-hidden size={12} />
-        </a>
+        <span className="ml-auto flex items-center gap-2">
+          <IconButton
+            aria-label={`Reload ${kind}`}
+            onClick={reload}
+            size="xs"
+            title={`Reload ${kind}`}
+            variant="ghost"
+          >
+            <ArrowClockwise aria-hidden />
+          </IconButton>
+          <a
+            className="inline-flex items-center gap-1 text-secondary-foreground text-xs hover:text-foreground"
+            href={openUrl}
+            rel="noreferrer noopener"
+            target="_blank"
+          >
+            {openLabel}
+            <ArrowSquareOut aria-hidden size={12} />
+          </a>
+        </span>
       </figcaption>
 
       {verdict && why ? <DriftNote verdict={verdict} /> : null}
@@ -82,6 +104,7 @@ function EmbedCard({
           allowFullScreen
           className="w-full border-0 bg-background"
           height={height}
+          key={generation}
           src={src}
           title={title}
         />

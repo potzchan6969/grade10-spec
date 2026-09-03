@@ -8,7 +8,7 @@ them as the first task of each surface group.
 
 | Screen | Frame | What is new on it |
 | --- | --- | --- |
-| Auction lot page — bid panel | *to be produced* | The watch control, filling the panel's existing action slot. |
+| Auction lot page — header | *to be produced* | The watch control, filling the lot header's existing slot. |
 | Auction catalogue — lot tile | *to be produced* | A watch control on the tile. |
 | Watched lots | *to be produced* | The collector's watched lots, most recent first, with the empty state. |
 
@@ -16,8 +16,8 @@ them as the first task of each surface group.
 
 | Export | Change |
 | --- | --- |
-| `ListingBidPanel` | **No change.** It already accepts `watchAction` (the control) and `watching` (whether the viewer watches). This change fills them. |
-| `ListingBidPanelProps` | **No change.** |
+| `ListingLotHeader` | **No change.** It already accepts `watched` and `onWatchToggle`. This change fills them. |
+| `ListingLotHeaderProps` | **No change.** |
 
 No new `@grade10/ui` export and no new design-system primitive are proposed.
 The catalogue tile's control and the watched-lots surface are

@@ -3,8 +3,8 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { CheckCircle } from "@phosphor-icons/react";
 import { Link } from "react-router";
 import { byLastMoved, taskTotals } from "../api/derive";
-import { relativeTime } from "../api/time";
-import type { ChangeEntry } from "../api/types";
+import { formatDate, relativeTime } from "../api/time";
+import type { ChangeEntry, IdleClaim } from "../api/types";
 import { useManualIndex } from "../api/use-manual-index";
 import { BrokenCard } from "./broken-card";
 import { InlineMarkdown } from "./inline-markdown";
@@ -23,11 +23,47 @@ export function deltaTone(kind: string): DeltaTone {
   return KIND_TONE[kind.toLowerCase()] ?? "default";
 }
 
+/**
+ * Past three days a claim is worth asking about; past seven it is worth
+ * handing back. The thresholds `openspec-viewer` applies on its own board,
+ * mirrored here so the two tools cannot call the same claim stale and fine.
+ */
+const QUIET_DAYS = 3;
+const STALE_DAYS = 7;
+
+const IDLE_WORD = {
+  claim: "claimed, nothing checked off since",
+  progress: "last checkmark",
+} as const;
+
+/**
+ * How long a claim has sat still, where that is long enough to act on.
+ *
+ * Nothing under three days: most claimed groups are simply being worked on,
+ * and a badge on every one of them would bury the two that need an answer.
+ * The exact date and which clock won ride in the tooltip, because "7d" is the
+ * prompt and the date is what you check before nudging anyone.
+ */
+export function IdleBadge({ idle }: { idle?: IdleClaim }) {
+  if (!idle || idle.days < QUIET_DAYS) return null;
+  const stale = idle.days >= STALE_DAYS;
+  return (
+    <Badge
+      size="sm"
+      title={`${IDLE_WORD[idle.source]} ${formatDate(idle.since)}`}
+      variant={stale ? "error" : "warning"}
+    >
+      {stale ? "idle" : "quiet"} {idle.days}d
+    </Badge>
+  );
+}
+
 export function TaskProgress({
   done,
   total,
   label,
   owner,
+  idle,
 }: {
   done: number;
   total: number;
@@ -35,6 +71,8 @@ export function TaskProgress({
   /** Who claimed this group — `@handle`, or the word for nobody. Groups are
    * what gets claimed, so the name belongs on the group's own row. */
   owner?: string;
+  /** Set only for a group whose claim git can date. */
+  idle?: IdleClaim;
 }) {
   const share = total === 0 ? 0 : Math.round((done / total) * 100);
   return (
@@ -44,6 +82,7 @@ export function TaskProgress({
           {label ?? "Tasks"}
         </Text>
         <span className="flex items-baseline gap-2">
+          <IdleBadge idle={idle} />
           {owner ? (
             <Text as="span" className="font-mono" size="xs" tone="secondary">
               {owner}

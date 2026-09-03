@@ -1,7 +1,19 @@
+import { Skeleton } from "@grade10/design-system/components/display/skeleton";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { BASE_FACTS, ListingDetailsLoading, VAULT_SECTION } from "./fixtures";
 import { ListingDetails } from "./listing-details";
+
+const BASE_FACTS = [
+  { label: "Lot", value: "12" },
+  { label: "Sale", value: "September Slabs" },
+  { label: "Category", value: "Pokémon" },
+] as const;
+
+const VAULT_SECTION = {
+  heading: "Vault shipping",
+  body: "Stored in Grade10 Vault — ships from our facility within 1 business day of payment.",
+} as const;
 
 const meta = {
   title: "Auction Listing/ListingDetails",
@@ -49,7 +61,25 @@ export const BodyOnly: Story = {
 };
 
 export const Loading: Story = {
-  render: () => <ListingDetailsLoading />,
+  render: () => (
+    <VStack className="w-full" gap="md">
+      <VStack gap="sm">
+        <Skeleton className="h-6 w-32" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-2/3" />
+      </VStack>
+      <VStack gap="sm">
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-full" />
+      </VStack>
+      <VStack gap="sm">
+        <Skeleton className="h-5 w-40" />
+        <Skeleton className="h-4 w-full" />
+      </VStack>
+    </VStack>
+  ),
 };
 
 export const PostSold: Story = {

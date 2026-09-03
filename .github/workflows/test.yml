@@ -46,6 +46,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # The manual's tests cover the claim ages it reads out of the
+          # viewer's published entry in tools/openspec-viewer. They skip
+          # themselves without it, so leaving it out would pass by not asking.
+          submodules: true
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4

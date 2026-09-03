@@ -485,6 +485,7 @@ export function TaskGroupView({ group }: { group: TaskGroup }) {
     <div>
       <TaskProgress
         done={group.done}
+        idle={group.idle}
         label={group.repo ? `${group.title} · ${group.repo}` : group.title}
         owner={group.owner ? `@${group.owner}` : "unclaimed"}
         total={group.total}

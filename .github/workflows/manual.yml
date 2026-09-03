@@ -54,6 +54,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # The snapshot reads how long each claim has sat still out of the
+          # viewer's published entry, which lives in tools/openspec-viewer.
+          # Without it the build succeeds and quietly ships no ages at all,
+          # which is the one failure nothing downstream would report.
+          submodules: true
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4

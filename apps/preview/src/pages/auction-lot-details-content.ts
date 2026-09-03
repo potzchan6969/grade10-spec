@@ -1,19 +1,22 @@
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
-import type { ListingBidHistoryRow, ListingLotMetaBadge } from "@grade10/ui";
+import {
+  DEFAULT_LISTING_EXTENSION_POLICY,
+  extendRecordedCloseAt,
+  formatAutoExtendedTooltip,
+  type ListingBidHistoryRow,
+  type ListingLotMetaBadge,
+  shouldExtendCloseAt,
+} from "@grade10/ui";
+import { createElement } from "react";
 import {
   type AuctionTiming,
   BID_FIXTURE_LOT,
   type BiddingState,
   bidHistoryForState,
-  DEFAULT_LISTING_EXTENSION_POLICY,
-  extendRecordedCloseAt,
-  formatAutoExtendedTooltip,
   LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
   type LiveListingFacts,
-  shouldExtendCloseAt,
   stateMeta,
-} from "@grade10/ui";
-import { createElement } from "react";
+} from "../auction-listing/listing-auction-bid-fixtures";
 
 export {
   type AuctionTiming,
@@ -28,7 +31,7 @@ export {
   remainingSecondsUntil,
   stateMeta,
   userBidHistoryForState,
-} from "@grade10/ui";
+} from "../auction-listing/listing-auction-bid-fixtures";
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
