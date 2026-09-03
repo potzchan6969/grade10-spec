@@ -42,7 +42,7 @@ backend.
   `pnpm run test:backend` focused on dev fixtures and null-campaign listing
   writes.
 
-## 3. Listings create control and Test panel Listings tab (grade10)
+## 3. Listings create control and Test panel Listings tab (grade10) (owner: @mason5991)
 
 Depends on group 2's new procedures for the Test tab.
 Frontend builds against fixtures for the Listings editor path.
