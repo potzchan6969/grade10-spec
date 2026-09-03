@@ -1,3 +1,4 @@
+import { PAYMENT_AUTHORIZATION_STATE_RESPONSES } from "@grade10/test/bid-panel-states";
 import {
   FIXTURE_SHIPPED_LOCALE,
   FIXTURE_TIME_ZONE,
@@ -308,6 +309,7 @@ export const Interactive: Story = {
 };
 
 export const PaymentAuthorization: Story = {
+  name: "bid-panel/payment-authorization-started",
   parameters: SNAPSHOT_DOCS,
   render: () => <PaymentAuthorizationPreview />,
   play: async ({ canvasElement }) => {
@@ -322,15 +324,41 @@ export const PaymentAuthorization: Story = {
     expect(
       within(document.body).getByText("Secure payment field"),
     ).toBeInTheDocument();
+    await userEvent.click(
+      within(document.body).getByRole("button", { name: /Authorize HK\$/ }),
+    );
+    expect(
+      within(document.body).getByRole("button", {
+        name: "Authorizing payment method",
+      }),
+    ).toBeDisabled();
   },
 };
 
 export const PaymentAuthorizationPending: Story = {
+  name: PAYMENT_AUTHORIZATION_STATE_RESPONSES.pending.scenarioId,
   parameters: SNAPSHOT_DOCS,
   render: () => <PaymentAuthorizationPreview initialState="pending" />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Place Bid" }));
+    expect(
+      within(document.body).getByRole("button", {
+        name: "Authorizing payment method",
+      }),
+    ).toBeDisabled();
+  },
 };
 
 export const PaymentAuthorizationRefused: Story = {
+  name: PAYMENT_AUTHORIZATION_STATE_RESPONSES.refused.scenarioId,
   parameters: SNAPSHOT_DOCS,
   render: () => <PaymentAuthorizationPreview initialState="refused" />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Place Bid" }));
+    expect(within(document.body).getByRole("alert")).toHaveTextContent(
+      "Your payment method was declined.",
+    );
+  },
 };

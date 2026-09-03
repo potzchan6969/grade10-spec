@@ -11,13 +11,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
+import type { PaymentAuthorizationResponseState } from "@grade10/test/bid-panel-states";
 import { formatMoney } from "@grade10/ui";
 import { type ReactNode, useState } from "react";
 import { BID_FIXTURE_LOT } from "./listing-auction-bid-fixtures";
 import { ListingBidEnrollmentCardPreview } from "./listing-bid-enrollment-card-preview";
 import { ENROLLMENT_SNAPSHOT_READY } from "./listing-bid-enrollment-snapshots";
 
-type PaymentMethodState = "method" | "pending" | "refused";
+type PaymentMethodState = "method" | PaymentAuthorizationResponseState;
 
 function PaymentMethodDialog({
   state,
@@ -122,5 +123,7 @@ function PaymentAuthorizationPreview({
   );
 }
 
-export { PaymentAuthorizationPreview };
-export type { PaymentMethodState };
+export {
+  PaymentAuthorizationPreview,
+  type PaymentMethodState,
+};
