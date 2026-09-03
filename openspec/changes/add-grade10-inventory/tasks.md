@@ -120,7 +120,7 @@ Depends on group 1.
   `reservations.holder_kind`), then run `pnpm run db:drizzle:generate`,
   `pnpm run check:migrations`, `pnpm run typecheck`, and `pnpm run test:backend`.
 
-## 3. Implement inventory domain services (grade10)
+## 3. Implement inventory domain services (grade10) (owner: @htonyl)
 
 Depends on groups 1 and 2.
 
