@@ -162,7 +162,7 @@ test("impact CLI returns exit 1 for a validated planning gap", async () => {
         findingIds: ["implemented"],
         capabilityPath: "shared/design-sync/annotation-verification",
         proposedChangeName: "implement-missing-annotation-behavior",
-        planningLane: "pm-planning",
+        planningLane: "grade10-planning",
         affectedRepositories: ["grade10-spec"],
         nonGoals: ["Do not accept the gap in this run."],
       },

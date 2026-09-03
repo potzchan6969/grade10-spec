@@ -486,7 +486,7 @@
   "changes": [
     {
       "id": "rotate-session-keys",
-      "schema": "full-planning",
+      "schema": "grade10-planning",
       "status": "in-flight",
       "owners": ["@echo"],
       "created": "2026-08-14",
@@ -520,7 +520,7 @@
     },
     {
       "id": "tiered-loyalty",
-      "schema": "full-planning",
+      "schema": "grade10-planning",
       "status": "in-flight",
       "owners": ["@echo", "@mira"],
       "created": "2026-08-12",
@@ -556,7 +556,7 @@
     },
     {
       "id": "express-checkout",
-      "schema": "full-planning",
+      "schema": "grade10-planning",
       "status": "in-flight",
       "owners": ["@dana"],
       "created": "2026-08-05",
@@ -580,7 +580,7 @@
     },
     {
       "id": "auction-auto-bidding",
-      "schema": "pm-planning",
+      "schema": "grade10-planning",
       "status": "in-flight",
       "owners": ["@sam"],
       "created": "2026-07-22",
@@ -597,7 +597,7 @@
     },
     {
       "id": "manual-authoring",
-      "schema": "full-planning",
+      "schema": "grade10-planning",
       "status": "in-flight",
       "owners": ["@echo"],
       "created": "2026-08-26",

@@ -35,7 +35,7 @@ const ALPHA: SpecEntry = {
 
 const CHANGING: ChangeEntry = {
   id: "add-gamma",
-  schema: "pm-planning",
+  schema: "grade10-planning",
   status: "in-flight",
   owners: [],
   created: "2026-01-01",

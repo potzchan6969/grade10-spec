@@ -19,9 +19,9 @@ If a statement is testable, it belongs in the spec. If removing every testable s
 | Authority | Canonical. Wins any conflict. | Explanatory. Never authoritative over a requirement. | Canonical for the in-flight delta only, until archived. |
 | Lifespan | Durable; edited in place as the product changes | Durable; edited when the product or the decision changes | Archived after delivery |
 | Typical content | Requirements, scenarios, state behavior, accessibility obligations, content ownership, named component exports | The shape in prose, journeys and cases embedded from the spec, visuals; then users and jobs, non-goals, measurement, decisions, risks | Proposal, design, requirement deltas, tasks |
-| Content to keep out | Class, hook, or library names — those are `design.md`'s job | Anything testable; today's gap and the intended fix, which belong to the proposal | The full product narrative |
+| Content to keep out | Class, hook, or library names — those are `tech-design.md`'s job | Anything testable; today's gap and the intended fix, which belong to the proposal | The full product narrative |
 
-Public component exports are the exception to "no names in a spec": the export name *is* the contract between this repository and the application that implements it, so specs name it. Internal structure still belongs in `design.md`.
+Public component exports are the exception to "no names in a spec": the export name *is* the contract between this repository and the application that implements it, so specs name it. Internal structure still belongs in `tech-design.md`.
 
 Source material behind a decision — an owner's draft, competitor research, a vendor-integration reference — lives in [`docs/references/`](../references/README.md), which the manual renders under References; a page cites it as evidence and never defers to it.
 
@@ -73,15 +73,18 @@ Keep the block readable as a standalone decision record. Replace superseded deci
 For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 
 - `proposal.md` — scope, why now, consumer impact, non-goals, and a link to the capability's page when one exists;
-- `design.md` — implementation choices, interfaces, compatibility, and validation approach;
-- `tasks.md` — small, checkable delivery steps; and
-- `specs/` — only the requirement deltas against `openspec/specs/`.
+- `specs/<capability>/spec.md` — only the requirement deltas against `openspec/specs/`;
+- `specs/<capability>/user-journeys.md` — the stories those requirements accept, unless nobody walks the capability;
+- `specs/<capability>/test-cases.md` — QA's derived suite, when the journeys are worth walking;
+- `ui-design.md` — screens, exports and states, when the change alters something a user sees;
+- `tech-design.md` — implementation choices, interfaces, compatibility, and validation approach; and
+- `tasks.md` — small, checkable delivery steps.
 
 Update the active change when you learn an implementation constraint, split delivery, change a component export, or add or remove a validation step. Update the page too only if that constraint changed a recorded product decision.
 
-A change created with `--schema pm-planning` carries only `proposal.md` and `specs/`, for planning that is complete once the requirements are. It is **promoted** to `full-planning` when someone is ready to build it: set `schema: full-planning` in the change's `.openspec.yaml`, then add `design.md`, `tasks.md`, and `ui.md` when the change alters something a user sees. The proposal and the deltas carry over untouched.
+Only the first three are always written. A change is finished as far as its author is concerned once the requirements and their journeys are right; the engineer who picks it up adds `ui-design.md`, `tech-design.md` and `tasks.md` **to that same change**, and adds `promoted_by: @handle` to its `.openspec.yaml` so the board names them. The proposal and the deltas carry over untouched — never send them back to their author for a task list.
 
-Promotion is how the work reaches an engineer. The application repository has no planning shape of its own — its `openspec/` is config-only and resolves to this store — so nobody opens a change there, and a change with no `tasks.md` shows on the engineer's board as still being planned. A finished pm-planning change that is never promoted is therefore invisible as ready work, however complete its specs are.
+That is how the work reaches an engineer. The application repository has no planning shape of its own — its `openspec/` is config-only and resolves to this store — so nobody opens a change there, and a change with no `tasks.md` shows on the engineer's board as still being planned. A change whose requirements are finished but which nobody picks up is therefore invisible as ready work, however complete its specs are.
 
 ### 5. Keep component contracts aligned
 

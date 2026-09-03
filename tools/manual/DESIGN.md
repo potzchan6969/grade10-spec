@@ -391,9 +391,9 @@ New pages are created from the editor (path picker constrained to the
 manual's tree); deleting a page is offered the same way.
 
 Any requirement row or page header can propose a change: the browser
-drafts `openspec/changes/<slug>/` with exactly what the pm-planning
+drafts `openspec/changes/<slug>/` with exactly what a proposal
 schema needs and nothing that misfiles it — `.openspec.yaml`
-(`schema: pm-planning`), `proposal.md` with the author line and the
+(`schema: grade10-planning`), `proposal.md` with the author line and the
 proposer's own words under `## Why`, citing the requirement and scenario
 ids the row knows. No delta and no tasks.md: the delta is what
 discussion is for, and a tasks.md would make the board read a thought as

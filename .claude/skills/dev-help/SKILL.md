@@ -20,8 +20,7 @@ sentence.
 
 | Invoke | When | Here | Example |
 | --- | --- | --- | --- |
-| `/pm-planning` | Requirements only: proposal and spec deltas. No design, no tasks. | Same. | "Write the requirements for watchlist notifications — specs only, no tasks." |
-| `/full-planning` | Delivery plan: design, ui, tasks. Promote a pm-planning change, or plan one you will implement. A change with no `tasks.md` is not ready to `/implement`. | Same. | "Promote `auction-auto-bidding` to full planning; I am implementing it." |
+| `/grade10-planning` | Any part of a change: proposal, specs and journeys from the PM; ui-design, tech-design and tasks from whoever plans delivery. Write your part and stop. A change with no `tasks.md` is not ready to `/implement`. | Same. | "Write the requirements for watchlist notifications — specs only, no tasks." |
 | `/implement` | A change with tasks, or tickets with no OpenSpec store. Runs through `/tdd`. Stops at the group boundary. | `/openspec-apply-change`. | "Implement the tasks in `auction-auto-bidding`." |
 | `/implement-then-review` | Same as `/implement`, then `/review-changes` when the last slice is green. | No equivalent; `/openspec-apply-change`, then review by hand. | `/implement-then-review auction-auto-bidding` |
 | `/tdd` | The red → green loop. `/implement` already runs the work through it; invoke when you want the loop on its own. | Same. | "Build the bid-increment helper test-first." |
@@ -43,7 +42,7 @@ Off the delivery line, and not a sequence — pick by what you are touching. All
 | `/design-tokens` | A token value moved — pull a designer's change in, rebuild the theme CSS, push values back. Never hand-edit the generated CSS. | "Design moved the primary colour — pull it in and rebuild the theme CSS." |
 | `/design-sync-check` | `design-sync:check` failed, the nightly reported drift, or Dev Mode is emitting something wrong. Triage what it printed. | "`design-sync:check` is failing — triage what it printed." |
 
-A contract change found this way is still an OpenSpec change: name the exact exports and the consuming applications, then rejoin at `/full-planning`.
+A contract change found this way is still an OpenSpec change: name the exact exports and the consuming applications, then rejoin at `/grade10-planning`.
 
 ## Suggest
 

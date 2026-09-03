@@ -869,7 +869,7 @@ describe("a page committed before the specs it embeds", () => {
 
 describe("a manifest naming its blockers", () => {
   const manifest = (dependsOn: string) =>
-    `schema: pm-planning\ncreated: 2026-08-01\ndepends_on:\n  - ${dependsOn}\n`;
+    `schema: grade10-planning\ncreated: 2026-08-01\ndepends_on:\n  - ${dependsOn}\n`;
   const change = (why: string) => `# A change\n\n## Why\n\n${why}\n`;
 
   it("fails a depends_on naming no change, in flight or archived", async () => {

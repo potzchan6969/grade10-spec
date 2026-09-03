@@ -204,7 +204,7 @@ describe("a promoted change carrying its suites", () => {
   const [entry] = readChanges(
     writeStore({
       "openspec/changes/promoted-thing/.openspec.yaml":
-        "schema: full-planning\npromoted_by: '@devon'\ncreated: 2026-01-01\n",
+        "schema: grade10-planning\npromoted_by: '@devon'\ncreated: 2026-01-01\n",
       "openspec/changes/promoted-thing/proposal.md":
         "# Promoted thing\n\n**Author:** @priya - 2026-01-01\n\n## Why\n\nIt was time.\n",
       "openspec/changes/promoted-thing/specs/demo-product/alpha/spec.md":

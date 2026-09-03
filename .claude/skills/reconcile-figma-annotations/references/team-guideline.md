@@ -62,7 +62,7 @@ history, component authorship, or node proximity.
    OpenSpec evidence. Group related gaps by capability and delivery outcome.
    Show finding IDs, expected behavior, capability path, proposed kebab-case
    change name, planning lane, affected repositories, and non-goals. Require a
-   separate confirmation before invoking `/pm-planning` or `/full-planning`.
+   separate confirmation before invoking `/grade10-planning`.
    A declined or failed planning handoff creates no acceptance and leaves gaps
    visible.
 6. Rerun the scoped diff against the same observation. Accepted findings must

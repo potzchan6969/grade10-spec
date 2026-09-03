@@ -29,7 +29,7 @@ observation.
   association semantics.
 - Make every outcome and planning handoff machine-checkable without pretending
   a deterministic script can judge arbitrary product behavior.
-- Reuse `pm-planning` and `full-planning` rather than copying their artifact or
+- Reuse `grade10-planning` rather than copying its artifact or
   validation rules into reconciliation.
 - Preserve the existing observation, acceptance, commit, and repository-scope
   guarantees.
@@ -138,8 +138,8 @@ Each `findings[]` entry contains:
 | `blockers` | Unresolved evidence used only for `blocked`. |
 
 Every `gap` appears in exactly one `planningGroups[]` entry. A group contains
-finding IDs, capability path, proposed kebab-case change name, `pm-planning` or
-`full-planning`, affected clone names, and non-goals. The validator rejects a
+finding IDs, capability path, proposed kebab-case change name, how far the
+change is planned, affected clone names, and non-goals. The validator rejects a
 gap omitted from planning, an eligible finding included in planning, a finding
 in two groups, a stale digest, or an outcome with the wrong evidence fields.
 
@@ -187,8 +187,8 @@ After eligible acceptance is finished, the skill shows each validated planning
 group and asks a separate planning question. On confirmation it loads and runs
 the existing lane skill with the impact group as intake:
 
-- `pm-planning` when the requested outcome ends with proposal and requirements;
-- `full-planning` when design and implementation tasks are part of the handoff.
+- stop at proposal, specs and journeys when that is the requested outcome;
+- continue to tech design and tasks when delivery is part of the handoff.
 
 The invoked skill owns its interview, artifact instructions, validation, and
 handoff. Reconciliation does not write OpenSpec files directly and does not
@@ -203,7 +203,7 @@ after product decisions or spec files changed.
 
 Alternatives considered:
 
-- Always use `full-planning`: rejected because requirements-only intake is a
+- Always plan delivery: rejected because requirements-only intake is a
   supported team handoff and must not invent delivery tasks.
 - Auto-create every suggested change without a preview: rejected because
   grouping and lane choice are product and delivery decisions.

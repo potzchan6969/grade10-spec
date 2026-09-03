@@ -118,11 +118,12 @@ SHALL group remaining gaps by coherent capability and delivery outcome rather
 than by annotation count.
 
 For every proposed group, the workflow SHALL preview the selected finding IDs,
-expected behavior, capability path, proposed change name, recommended planning
-lane, affected repositories, and non-goals. It SHALL require explicit
-confirmation before starting planning. It SHALL use `pm-planning` when work ends
-at requirements and `full-planning` when delivery is being planned. The
-planning workflow SHALL retain its own validation, commit, push, merge, and
+expected behavior, capability path, proposed change name, how far the change is
+to be planned, affected repositories, and non-goals. It SHALL require explicit
+confirmation before starting planning. It SHALL hand the group to
+`grade10-planning`, stopping at the requirements when that is where the work
+ends and continuing to the delivery plan when it does not. The planning
+workflow SHALL retain its own validation, commit, push, merge, and
 implementation gates.
 
 #### Scenario: annotation-implementation-verification-SC-09 - Active task group already owns the gap
@@ -144,15 +145,15 @@ implementation gates.
 
 - **GIVEN** a confirmed gap is intended to proceed toward implementation
 - **WHEN** the developer confirms the planning preview
-- **THEN** the workflow routes the grouped evidence to `full-planning`
-- **AND** the resulting change includes proposal, spec, design, and task artifacts as required by that lane
+- **THEN** the workflow routes the grouped evidence to `grade10-planning`
+- **AND** the resulting change carries proposal, specs, journeys, tech design, and tasks
 
 #### Scenario: annotation-implementation-verification-SC-12 - Requirements-only planning is requested
 
 - **GIVEN** a confirmed gap is intended to stop after its requirements are settled
 - **WHEN** the developer confirms the planning preview
-- **THEN** the workflow routes the grouped evidence to `pm-planning`
-- **AND** it does not invent delivery tasks
+- **THEN** the workflow routes the grouped evidence to `grade10-planning`
+- **AND** the resulting change stops at its specs and journeys, inventing no delivery tasks
 
 #### Scenario: annotation-implementation-verification-SC-13 - Developer declines planning
 

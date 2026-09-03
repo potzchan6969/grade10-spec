@@ -5,10 +5,10 @@ tcs_rules_rev: 1
 # Deriving test cases from a capability's spec
 
 A capability's `spec.md` is written for an implementing engineer: feature set,
-user journeys, then requirements with Given/When/Then scenarios. The journeys
-are the product's own answer to *who is doing what, start to finish* — named
-and id'd in the spec under `## User journeys`, at most five across every
-delta a change touches (see `openspec/config.yaml` specs rules).
+then requirements with Given/When/Then scenarios. Beside it, `user-journeys.md`
+is the product's own answer to *who is doing what, start to finish* — named and
+id'd under its one `## User journeys` heading, at most five across every
+capability a change touches (see `openspec/config.yaml`, `rules.user-journeys`).
 
 A QA reviewer running a manual pass, a PM confirming acceptance before a
 change ships, or a support engineer reproducing a report needs that same
@@ -36,8 +36,8 @@ state as a scenario, and a change proposal never links it in place of a
 spec delta. Where the two disagree, `spec.md` is correct — regenerate the
 test case, never the other way round.
 
-Journeys are already in the spec, so this file does **not** invent flows.
-Every suite section is one `## User journeys` story, and every test case
+Journeys are already written, so this file does **not** invent flows.
+Every suite section is one `user-journeys.md` story, and every test case
 traces the journey it sits under (`<capability>-US-<n>`) and is built only
 from the scenarios that accept that journey. A case built from no scenario is
 a new requirement in disguise and belongs back in `spec.md` first. A scenario
@@ -87,10 +87,10 @@ generation writes the compact heading and `<capability>-US<n>-TC<m>-<v>`.
 `test-cases.md` always sits beside the `spec.md` it was derived from. Both
 trees are first-class targets for `/spec-to-tcs`:
 
-| Spec location | Suite location |
+| Capability location | Suite location |
 | --- | --- |
-| Durable: `openspec/specs/<product>/<domain>/<capability>/spec.md` | `openspec/specs/<product>/<domain>/<capability>/test-cases.md` |
-| In-flight change: `openspec/changes/<change>/specs/<product>/<domain>/<capability>/spec.md` | `openspec/changes/<change>/specs/<product>/<domain>/<capability>/test-cases.md` |
+| Durable: `openspec/specs/<product>/<domain>/<capability>/` | `.../test-cases.md`, beside that directory's `spec.md` and `user-journeys.md` |
+| In-flight change: `openspec/changes/<change>/specs/<product>/<domain>/<capability>/` | `.../test-cases.md`, beside the same two |
 
 `/spec-to-tcs` resolves whichever tree the argument names and writes only
 there. When a capability exists in both, ask which one — do not prefer the
@@ -99,18 +99,18 @@ carries the delta's `test-cases.md` into the durable location the same way
 it carries the delta `spec.md`.
 
 Write a suite for every capability whose spec (durable or delta) has
-checkable scenarios. When `## User journeys` is missing or empty,
-`/spec-to-tcs` first rewrites that `spec.md` to match `openspec/config.yaml`
-specs rules (Feature set, User journeys, permanent `US`/`SC` ids) from the
-behavior already there, then derives the suite. A file with no scenarios at
-all is not ready — finish the requirements first.
+checkable scenarios. When `user-journeys.md` is missing or empty,
+`/spec-to-tcs` first writes it from the behavior already in `spec.md`, to
+match `openspec/config.yaml` (`rules.specs` and `rules.user-journeys`), then
+derives the suite. A capability with no scenarios at all is not ready — finish
+the requirements first.
 
 ## When suites are generated
 
 ### Automatic — in the spec's own pull request
 
-When `pm-planning` or `full-planning` finishes the proposal and the delta
-specs, and `openspec validate <change> --strict` passes, it **immediately**
+When `grade10-planning` finishes the proposal, the delta specs and their
+journeys, and `openspec validate <change> --strict` passes, it **immediately**
 runs `/spec-to-tcs <change>` against that change. The suites land beside each
 delta with every case `draft`, committed to the same branch as its own
 `test(<domain>): derive test cases for <capability>` commit. Generation is part
@@ -125,13 +125,13 @@ asked to stand behind one here. Standing behind them is review, it needs a
 human with time, and it gets its own pull request later (see **The review
 lane**).
 
-`/spec-push` refuses to push a change whose deltas have `## User journeys` but
-no `test-cases.md` beside them, and runs `pnpm run tcs:validate` alongside the
-other checks.
+`/spec-push` refuses to push a change whose capabilities have a
+`user-journeys.md` but no `test-cases.md` beside it, and runs
+`pnpm run tcs:validate` alongside the other checks.
 
-A change that sets `skip_specs: true` has nothing to generate. A change
-whose deltas still lack `## User journeys` is upgraded in place by
-`/spec-to-tcs` before the suites are written — not left for a later pass.
+A change that sets `skip_specs: true` has nothing to generate. A capability
+that still lacks a `user-journeys.md` gets one from `/spec-to-tcs` before the
+suites are written — not left for a later pass.
 
 ### Manual — generate or extend by agent command
 
@@ -156,12 +156,12 @@ Examples:
 /spec-to-tcs grade10-site/auction/auto-bidding
 ```
 
-If the resolved `spec.md` has no `## User journeys` (or an empty one),
-`/spec-to-tcs` rewrites it to the shape in `openspec/config.yaml` specs
-rules — Purpose, Feature set, User journeys with INVEST stories and
-permanent `<capability>-US-<n>` / `<capability>-SC-<n>` ids — **without
-adding requirements**, then continues and writes `test-cases.md`. Report
-the spec rewrite in the same run.
+If the resolved capability has no `user-journeys.md` (or an empty one),
+`/spec-to-tcs` writes one to the shape in `openspec/config.yaml` — INVEST
+stories with permanent `<capability>-US-<n>` ids, each accepted by the
+`<capability>-SC-<n>` scenarios already in `spec.md` — **without adding
+requirements**, then continues and writes `test-cases.md`. Report the new
+journeys file in the same run.
 
 ### When a suite already exists
 
@@ -323,11 +323,11 @@ one**: `draft` cases are re-worded, `<v>` bumped, ids kept, status still
 This is transitional machinery, and it should decay. If the rules are still
 churning after a year of review, the problem is the rules.
 
-## Step 1: digest the spec (upgrade journeys if missing)
+## Step 1: digest the capability (upgrade journeys if missing)
 
-Read the capability's `spec.md` end to end — `## Purpose`, `## Feature set`,
-`## User journeys`, then the requirements and their scenarios. Do not work
-from a truncated view. Read the change's `proposal.md` when one exists: its
+Read the capability end to end — `spec.md`'s `## Purpose`, `## Feature set`
+and requirements with their scenarios, then `user-journeys.md` beside it. Do
+not work from a truncated view. Read the change's `proposal.md` when one exists: its
 acceptance signal is what makes a case's type `acceptance`.
 
 Then read the store's own context, because a capability spec assumes it:
@@ -352,28 +352,28 @@ never as a pre-condition. "The site answers in more than one language" is not
 a setup a tester performs; it is true. Where it matters, check it: `URL
 contains <lang>`.
 
-If `## User journeys` is missing or empty, rewrite that `spec.md` first to
-match `openspec/config.yaml` `rules.specs`: keep every existing SHALL and
-scenario clause, add Feature set and User journeys derived from them, issue
-permanent story and scenario ids, and format each journey for a human reader
-(`**As a**` / `**I want**` / `**so that**`, then `**Accepted by:**` as
-`` `id` — title `` bullets — see `openspec/config.yaml` specs rules).
-Validate a change with `openspec validate <change> --strict`, then continue
-this document from Step 2 on the updated file.
+If `user-journeys.md` is missing or empty, write it first to match
+`openspec/config.yaml` `rules.user-journeys`: keep every existing SHALL and
+scenario clause in `spec.md` as it stands, adding a Feature set there if it
+has none, and derive the journeys from them. Issue permanent story and
+scenario ids, and format each journey for a human reader (`**As a**` /
+`**I want**` / `**so that**`, then `**Accepted by:**` as `` `id` — title ``
+bullets). Validate a change with `openspec validate <change> --strict`, then
+continue this document from Step 2 on the updated capability.
 
 Confirm every journey heading carries a stable id
 (`### <capability>-US-<n>: …`) and lists the scenario ids that accept it,
-and every scenario heading carries its id
-(`#### Scenario: <capability>-SC-<n> - …`). Specs that already have journeys
-but predate these ids get the same upgrade pass for ids only.
+and every scenario heading in `spec.md` carries its id
+(`#### Scenario: <capability>-SC-<n> - …`). Capabilities that already have
+journeys but predate these ids get the same upgrade pass for ids only.
 
 ## Step 2: take the journeys as the suite's sections
 
-Do not invent flows. Each `### <capability>-US-<n>` under `## User journeys`
+Do not invent flows. Each `### <capability>-US-<n>` in `user-journeys.md`
 becomes one `## <capability>-US<n>: <journey title>` section in
 `test-cases.md` — the compact heading id from Naming, the journey's title
-copied unchanged — in the order the spec states them, carrying the same
-three-line story the spec carries. **Do not include a `Covers:` bullet list
+copied unchanged — in the order that file states them, carrying the same
+three-line story it carries. **Do not include a `Covers:` bullet list
 of scenario ids**, and do not add a section description, a summary, or a
 case count. The actor is the role the story names — an end user of the
 product (operator, admin, collector, customer), never a developer, worker,
@@ -1007,9 +1007,9 @@ Two pull requests, two audiences.
 
 **The spec PR** — written by whoever owns the requirements:
 
-1. `pm-planning` or `full-planning` writes proposal + specs (Feature set, User
-   journeys, id'd scenarios) → `openspec validate --strict` →
-   **auto-generates** `test-cases.md` for every delta that has journeys via
+1. `grade10-planning` writes proposal + specs (Feature set, id'd scenarios)
+   and the `user-journeys.md` beside each → `openspec validate --strict` →
+   **auto-generates** `test-cases.md` for every capability that has journeys via
    `/spec-to-tcs <change>`, every case `draft`, as its own commit on the same
    branch.
 2. `/spec-push` validates (including `pnpm run tcs:validate`), pushes, and
@@ -1047,11 +1047,11 @@ Two pull requests, two audiences.
 
 | Tool | Does |
 | --- | --- |
-| `/spec-to-tcs <capability-or-change>` (`spec-to-tcs` skill) | If journeys are missing, rewrites the resolved `spec.md` to `openspec/config.yaml` specs rules; learns this store's conventions from every `actual` case in the corpus; then derives suites under `openspec/specs/` or `openspec/changes/` and writes `test-cases.md` beside that `spec.md` with every new case `draft`, bringing the suite's existing drafts to the same conventions. Shows an existing suite and asks before touching it; refuses to regenerate over `actual` cases or an `approved` file. Read `.cursor/skills/spec-to-tcs/SKILL.md`. |
+| `/spec-to-tcs <capability-or-change>` (`spec-to-tcs` skill) | If journeys are missing, writes the `user-journeys.md` beside the resolved `spec.md` to `openspec/config.yaml`'s rules; learns this store's conventions from every `actual` case in the corpus; then derives suites under `openspec/specs/` or `openspec/changes/` and writes `test-cases.md` beside that `spec.md` with every new case `draft`, bringing the suite's existing drafts to the same conventions. Shows an existing suite and asks before touching it; refuses to regenerate over `actual` cases or an `approved` file. Read `.cursor/skills/spec-to-tcs/SKILL.md`. |
 | `/tcs-review [<capability-or-change>]` (`tcs-review` skill) | Finds suites awaiting review, walks their `draft` cases with a human one journey at a time, quotes the spec's scenarios on request, and records `actual` / `deprecated` / left-`draft`. Every case it marks `actual`, edits included, becomes evidence the next `/spec-to-tcs` run learns from. Read `.cursor/skills/tcs-review/SKILL.md`. |
-| `pm-planning` / `full-planning` skills | After proposal + specs validate, run `/spec-to-tcs <change>` automatically and commit the drafts to the spec's own branch. |
-| `spec-push` skill | Refuses a change whose deltas have journeys but no suite, and runs `pnpm run tcs:validate` with the other checks before pushing. |
-| `pnpm run tcs:validate` (`scripts/openspec/validate-test-cases.mjs`) | Checks every suite against this document: the header matches the cases below it, ids are unique and journey-scoped, a trace resolves against the `spec.md` beside it, no case ships with an empty Expected Results list. Errors fail; suites in older shapes warn. Runs in CI on every push. |
+| `grade10-planning` skill | After the proposal, specs and journeys validate, runs `/spec-to-tcs <change>` automatically and commits the drafts to the spec's own branch. |
+| `spec-push` skill | Refuses a change whose capabilities have journeys but no suite, and runs `pnpm run tcs:validate` with the other checks before pushing. |
+| `pnpm run tcs:validate` (`scripts/openspec/validate-test-cases.mjs`) | Checks every suite against this document: the header matches the cases below it, ids are unique and journey-scoped, a trace resolves against the `spec.md` and `user-journeys.md` beside it, no case ships with an empty Expected Results list. Errors fail; suites in older shapes warn. Runs in CI on every push. |
 | `pnpm run tcs:stale` | Lists the suites whose `draft` cases sit below the current `tcs_rules_rev`. A report, not a sweep. |
 
 Change deltas use the same format under
@@ -1063,5 +1063,5 @@ Change deltas use the same format under
   source of truth
 - [`ui-component-testing.md`](ui-component-testing.md) — the separate
   automated coverage obligation for UI components
-- `openspec/config.yaml` — Feature set, User journeys, and id rules this
+- `openspec/config.yaml` — Feature set, user-journeys, and id rules this
   derivation assumes

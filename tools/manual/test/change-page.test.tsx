@@ -58,7 +58,7 @@ const change: ChangeEntry = changeEntry(
     },
   ],
   {
-    schema: "full-planning",
+    schema: "grade10-planning",
     title: "Point of sale",
     why: "Collectors who buy in the shop are anonymous guests.",
     author: "echo",

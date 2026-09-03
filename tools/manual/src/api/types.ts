@@ -237,7 +237,7 @@ export type ChangeEntry = {
    * is not who owns it. Named only when no owner claimed a task. */
   author?: string;
   /** Handle from `.openspec.yaml` `promoted_by:` — the engineer who promoted
-   * a pm-planning change and wrote its delivery plan. */
+   * a change somebody else specified and wrote its delivery plan. */
   promotedBy?: string;
   created: string;
   /** Optional `target:` date from `.openspec.yaml`. */
@@ -252,7 +252,7 @@ export type ChangeEntry = {
   cites?: string[];
   taskGroups: TaskGroup[];
   /** ISO date of the last commit touching any file of the change — a
-   * pm-planning change with no tasks.md still moves. */
+   * change with no tasks.md still moves. */
   lastMoved?: string;
   deltas: Delta[];
   /** In-flight only: the suites sitting beside this change's deltas. */

@@ -50,7 +50,7 @@ absent rather than adding a product-local validator.
   `annotation-implementation-verification-SC-14` pass.
 - [x] 2.3 Inspect the current planning board before grouping gaps, show the
   exact change/lane/artifact preview, require separate planning confirmation,
-  run the existing `pm-planning` or `full-planning` skill sequentially, and end
+  run the existing `grade10-planning` skill sequentially, and end
   each gap's old reconciliation path, making
   `annotation-implementation-verification-SC-09` through
   `annotation-implementation-verification-SC-13` pass without duplicating
@@ -78,8 +78,8 @@ claim, implementation, submodule advance, or Figma write.
   `annotation-implementation-verification-SC-01` through
   `annotation-implementation-verification-SC-10` and
   `annotation-implementation-verification-SC-14`.
-- [x] 3.2 Rehearse declined `pm-planning`, confirmed `pm-planning`, confirmed
-  `full-planning`, incomplete planning, a dirty-store stop, and the required
+- [x] 3.2 Rehearse declined planning, a confirmed requirements-only handoff, a
+  confirmed delivery handoff, incomplete planning, a dirty-store stop, and the required
   fresh reconciliation restart against disposable targets; verify
   `annotation-implementation-verification-SC-11` through
   `annotation-implementation-verification-SC-17` and confirm the annotation

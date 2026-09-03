@@ -55,7 +55,7 @@ own words — the ids travel along on their own. The proposal lands in
 [In Flight](/in-flight)'s Proposed lane.
 ## An agent drafts the change
 Someone points an agent at the proposal — the card names the command to
-paste, `/pm-planning <change>` or `/full-planning <change>`. The agent writes
+paste, `/grade10-planning <change>`. The agent writes
 the change: the reasoning, and a delta against each spec it touches — never a
 rewritten copy of the file. People discuss the delta, because the delta is
 what there is to decide.

@@ -1,6 +1,6 @@
 ---
 name: spec-to-tcs
-description: Derive a capability's classified test-cases.md from the user journeys in its spec under openspec/specs/ or openspec/changes/. Use when QA or a PM asks to turn a durable capability or an OpenSpec change into test cases, or when pm-planning finishes specs and auto-generates suites. Invoke as /spec-to-tcs <capability-or-change>.
+description: Derive a capability's classified test-cases.md from the user-journeys.md beside its spec under openspec/specs/ or openspec/changes/. Use when QA or a PM asks to turn a durable capability or an OpenSpec change into test cases, or when a change's specs are finished and auto-generate suites. Invoke as /spec-to-tcs <capability-or-change>.
 ---
 
 # Generate test cases from a capability's user journeys
@@ -11,13 +11,14 @@ document's workflow, automated, ensuring strict traceability, NLP automation rea
 Invoke as `/spec-to-tcs <capability-or-change>`. Reviewing a suite and transitioning it to actual/approved is handled strictly by `/tcs-review` (`.cursor/skills/tcs-review/SKILL.md`). Manual "peer review" is deprecated.
 
 Works against **both** trees equally — durable specs and in-flight change
-deltas. The suite always lands beside the `spec.md` you resolved.
+deltas. The suite always lands beside the `spec.md` you resolved, next to the
+`user-journeys.md` it derives from.
 
 The output is **not** a one-to-one transcription of scenarios, and it does
-**not** invent flows. Specs already name journeys under `## User journeys`
-(with `<capability>-US-<n>` ids and the `<capability>-SC-<n>` scenario ids
-that accept each story). Each journey becomes one suite section; each case
-traces scenario ids.
+**not** invent flows. The journeys are already named in `user-journeys.md`
+beside the spec (with `<capability>-US-<n>` ids and the `<capability>-SC-<n>`
+scenario ids that accept each story). Each journey becomes one suite section;
+each case traces scenario ids.
 
 1. **Resolve the target.** The user names a change, a capability, or a path.
    Both locations are valid; pick from what they asked for:
@@ -91,24 +92,24 @@ traces scenario ids.
    tester arranges) — check it where it matters instead: `URL contains
    <lang>`.
 
-   If `## User journeys` is missing or empty, **do not stop.** First bring
-   the resolved `spec.md` in line with this store's specs rules in
-   `openspec/config.yaml` (`rules.specs`), then continue this skill on the
-   same target:
+   If there is no `user-journeys.md` beside the spec, or it is empty, **do
+   not stop.** First bring the capability in line with this store's rules in
+   `openspec/config.yaml` (`rules.specs` and `rules.user-journeys`), then
+   continue this skill on the same target:
 
-   1. Re-read `openspec/config.yaml` specs rules in full (Purpose → Feature
-      set → User journeys → requirements; INVEST stories; permanent
+   1. Re-read those rules in full (Purpose → Feature set → requirements in
+      `spec.md`; INVEST stories in `user-journeys.md`; permanent
       `<capability>-US-<n>` / `<capability>-SC-<n>` ids; at most five
-      journeys across every file a change touches).
-   2. Rewrite the resolved `spec.md` into that shape **without inventing
+      journeys across every capability a change touches).
+   2. Write `user-journeys.md` beside the spec **without inventing
       requirements**. Keep every existing SHALL and every existing scenario
-      clause; add Feature set and User journeys derived from them; give
-      every story and scenario a stable id; under each story write the
-      story on three labeled lines (`**As a**`, `**I want**`, `**so that**`)
-      and an `**Accepted by:**` bullet list of `` `id` — Scenario title ``
-      (never a comma dump); number ids from 01 and never reuse a retired
-      number. For a multi-file change, keep the journey cap across all of
-      its deltas.
+      clause in `spec.md`, adding a Feature set there if it has none; derive
+      the journeys from what is already written; give every story and
+      scenario a stable id; write each story on three labeled lines
+      (`**As a**`, `**I want**`, `**so that**`) and an `**Accepted by:**`
+      bullet list of `` `id` — Scenario title `` (never a comma dump);
+      number ids from 01 and never reuse a retired number. For a multi-file
+      change, keep the journey cap across all of its capabilities.
    3. Validate when the target is a change:
       `openspec validate <change-name> --strict`.
    4. Report what you changed in the spec (journeys added, ids issued),
@@ -165,7 +166,7 @@ traces scenario ids.
    the corpus favours. List every draft you re-worded, and why, in step 10.
 
 5. **Take the journeys as the suite's sections.** Each
-   `### <capability>-US-<n>: …` under `## User journeys` becomes one
+   `### <capability>-US-<n>: …` in `user-journeys.md` becomes one
    `## <capability>-US<n>: …` section, in spec order — the journey id in its
    compact form (hyphen after `US` dropped, no zero-pad: spec `home-US-01`
    becomes section `## home-US1:`), the journey title copied unchanged.

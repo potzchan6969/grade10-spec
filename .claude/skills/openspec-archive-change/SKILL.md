@@ -6,7 +6,7 @@ description: Finalize a completed OpenSpec change and preserve its decision hist
 # Archive an OpenSpec change
 
 1. Read `tasks.md` and confirm every required task is complete; call out any intentional exception.
-2. Run the gate: `pnpm run archive:preflight <change> --deployed-at <sha>` (or `--deploy-waived "<who, why>"` on an owner's explicit say-so). It refuses while the change's `## Feature set` / `## User journeys` sections are not carried into the durable spec — the fold keeps `## Requirements` only — and it prints the `Deployed-at:` / `Deploy-waived:` line the archive commit message must carry.
+2. Run the gate: `pnpm run archive:preflight <change> --deployed-at <sha>` (or `--deploy-waived "<who, why>"` on an owner's explicit say-so). It refuses while the change's `## Feature set` and its `user-journeys.md` are not carried across to the durable capability — the fold keeps `## Requirements` only — and it prints the `Deployed-at:` / `Deploy-waived:` line the archive commit message must carry.
 3. Fold accepted delta requirements from `openspec/changes/<change>/specs/` into `openspec/specs/`, then re-read the capability spec and confirm it describes the shipped behavior. It is the only record consuming applications build from.
 4. Run `openspec validate --specs`.
 5. Bring the capability's page in `docs/prds/` to the shipped story, confirm its `Product decisions` block still matches what shipped, and run `pnpm check:manual`. Leave requirements out of it.
