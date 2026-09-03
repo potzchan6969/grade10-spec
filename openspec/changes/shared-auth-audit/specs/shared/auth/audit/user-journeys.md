@@ -34,5 +34,6 @@
 - `shared-auth-audit-SC-24` — Disabling a second factor is on the trail
 - `shared-auth-audit-SC-26` — Recovery codes stay off the trail
 - `shared-auth-audit-SC-29` — An unrecorded regenerate does not replace the codes
-- `shared-auth-audit-SC-35` — An unrecorded enable does not make the factor live
+- `shared-auth-audit-SC-35` — A failed enable record leaves the factor active
 - `shared-auth-audit-SC-36` — An unrecorded disable does not remove the factor
+- `shared-auth-audit-SC-37` — A later proof records a missing enable

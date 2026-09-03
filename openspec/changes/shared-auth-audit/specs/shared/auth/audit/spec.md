@@ -6,7 +6,7 @@
   - Account delete: removing an account is on the trail
   - Unchanged find: an already-unverified or already-verified find with no data change is not on the trail
 - Second-factor writes
-  - Factor enable: the factor first going live is on the trail; starting enrollment is not
+  - Factor enable: the factor first going live is on the trail; starting enrollment is not; a failed record leaves the factor active and a later proof writes the missing enable
   - Factor disable: removing the factor is on the trail
   - Recovery regen: replacing recovery codes is on the trail; the codes are not
 
@@ -83,11 +83,15 @@ request.
 
 WHEN a second factor first becomes active, the identity trail SHALL append
 an entry for that write. Starting enrollment SHALL NOT be recorded as the
-factor going live. WHEN a second factor is removed, the identity trail
-SHALL append an entry for that write. WHEN recovery codes are regenerated,
-the identity trail SHALL append an entry for that write. The actor and the
-subject SHALL be named by user id. The entry SHALL NOT name an email. The
-entry SHALL NOT keep the codes.
+factor going live. WHEN a second factor is active and the trail has no
+enable after the last disable for that account (or no enable at all), a
+successful proof SHALL append that enable. WHEN the trail already has an
+enable after the last disable, a successful proof SHALL NOT append another.
+WHEN a second factor is removed, the identity trail SHALL append an entry
+for that write. WHEN recovery codes are regenerated, the identity trail
+SHALL append an entry for that write. The actor and the subject SHALL be
+named by user id. The entry SHALL NOT name an email. The entry SHALL NOT
+keep the codes. A failed enable record SHALL NOT reverse the factor.
 
 #### Scenario: shared-auth-audit-SC-21 - Regenerating recovery codes is on the trail
 
@@ -108,6 +112,13 @@ entry SHALL NOT keep the codes.
 
 - **WHEN** a second factor is removed from an account
 - **THEN** the identity trail records that actor, that subject, and the disable
+
+#### Scenario: shared-auth-audit-SC-37 - A later proof records a missing enable
+
+- **GIVEN** a second factor is active
+- **AND** the identity trail has no enable after the last disable for that account
+- **WHEN** a later successful proof completes
+- **THEN** the identity trail records exactly one enable for that going live
 
 ## MODIFIED Requirements
 
@@ -136,10 +147,12 @@ for the action. An entry SHALL NOT keep an email.
 
 An identity trail entry SHALL NOT be edited or removed after it is written.
 WHEN the trail cannot accept an entry for a write this capability records,
-that write SHALL NOT take effect. Listing or searching the directory,
-listing sessions, a trusted product reading whether an account exists or
-reading a session, and collector sign-in or sign-out, SHALL NOT write an
-entry.
+that write SHALL NOT take effect, except a second factor becoming active:
+the factor SHALL remain active, the request SHALL fail, and a later
+successful proof SHALL record the enable if it is still missing. Listing
+or searching the directory, listing sessions, a trusted product reading
+whether an account exists or reading a session, and collector sign-in or
+sign-out, SHALL NOT write an entry.
 
 #### Scenario: shared-auth-audit-SC-10 - An entry cannot be rewritten
 
@@ -203,10 +216,11 @@ entry.
 - **WHEN** the identity trail cannot accept an entry for deleting an account
 - **THEN** the account remains
 
-#### Scenario: shared-auth-audit-SC-35 - An unrecorded enable does not make the factor live
+#### Scenario: shared-auth-audit-SC-35 - A failed enable record leaves the factor active
 
 - **WHEN** the identity trail cannot accept an entry for a second factor first becoming active
-- **THEN** the factor is not active
+- **THEN** the factor remains active
+- **AND** the request does not succeed
 
 #### Scenario: shared-auth-audit-SC-36 - An unrecorded disable does not remove the factor
 
