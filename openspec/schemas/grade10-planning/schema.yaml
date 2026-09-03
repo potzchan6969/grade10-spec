@@ -1,0 +1,499 @@
+name: grade10-planning
+version: 1
+description: >-
+  Grade10 planning workflow - proposal → specs → user journeys → test cases → ui
+  design → tech design → tasks. One lane for every hand a change passes through.
+artifacts:
+  - id: proposal
+    generates: proposal.md
+    description: Why this change is needed, what changes, and what it will not do
+    template: proposal.md
+    instruction: >
+      Written by the product manager. Establishes WHY this change is needed.
+
+
+      Sections:
+
+      - **Why**: 1-2 sentences on the problem or opportunity. Open with the
+      collector problem and the evidence for it, not the solution.
+
+      - **What Changes**: Bullet list of changes. Be specific about new
+      capabilities, modifications, or removals. Mark breaking changes with
+      **BREAKING**.
+
+      - **Non-Goals**: What this change deliberately does not do, so the people
+      downstream know the edges.
+
+      - **Capabilities**: Which specs will be created or modified:
+        - **New Capabilities**: Each becomes a new `specs/<capability-path>/spec.md`. Use kebab-case for path segments you introduce (e.g. `user-auth` or `identity/user-auth`) and follow the project's existing spec organization.
+        - **Modified Capabilities**: Existing capabilities whose REQUIREMENTS are changing. Only include if spec-level behavior changes, not implementation details. Each needs a delta spec file. Use the exact existing path under `openspec/specs/`. Leave empty if no requirement changes.
+      - **Impact**: Affected code, APIs, dependencies, or systems.
+
+
+      IMPORTANT: The Capabilities section is the contract between this artifact
+
+      and the specs. Research existing specs before filling it in. Each
+
+      capability listed here needs a corresponding spec file.
+
+
+      Every change must either declare at least one capability (new or
+
+      modified) or explicitly opt out of specs: `openspec validate` rejects a
+
+      change with zero deltas unless the change's `.openspec.yaml` sets
+
+      `skip_specs: true`. Use `skip_specs: true` only when no spec-level
+
+      behavior changes (pure refactor, tooling, docs) - specs describe
+
+      behavior, so if behavior does not change, no spec should change either.
+
+      Do not invent a requirement just to satisfy validation.
+
+
+      Keep it concise (1-2 pages). Focus on the "why" not the "how" -
+
+      implementation details belong in tech-design.md.
+
+
+      This is the foundation - everything after it builds on this.
+    requires: []
+  - id: specs
+    generates: specs/**/spec.md
+    description: The requirement deltas each capability's spec will fold in
+    template: spec.md
+    instruction: >
+      Written by the product manager. Defines WHAT the system should do.
+
+
+      A spec is a behavior contract, not an implementation plan.
+
+
+      Good spec content:
+
+      - Observable behavior users or downstream systems rely on
+
+      - Inputs, outputs, and error conditions
+
+      - External constraints (security, privacy, reliability, compatibility)
+
+      - Scenarios that can be tested or explicitly validated
+
+
+      Avoid in specs:
+
+      - Internal class/function names
+
+      - Library or framework choices
+
+      - Step-by-step implementation details
+
+      - Detailed execution plans (those belong in tech-design.md)
+
+
+      Quick test: if the implementation can change without changing externally
+
+      visible behavior, it likely does not belong in the spec.
+
+
+      Create one spec file per capability listed in the proposal's Capabilities
+      section.
+
+      `<capability-path>` is the spec directory relative to `specs/` (for
+      example,
+
+      `user-auth` or `identity/user-auth`). Preserve the full path:
+
+      - New capabilities: use the exact path from the proposal at
+      `specs/<capability-path>/spec.md`. Any path segment newly introduced in
+      the proposal must be kebab-case. Follow the project's existing
+      organization; do not add a new domain level when the project uses a flat
+      layout.
+
+      - Modified capabilities: use the exact existing path from
+      `openspec/specs/<capability-path>/` when creating the delta at
+      `specs/<capability-path>/spec.md`. Do not move or rename the capability.
+
+
+      There must be at least one spec file unless the change's `.openspec.yaml`
+
+      sets `skip_specs: true` (no spec-level behavior change) - `openspec
+      validate`
+
+      rejects a zero-delta change without that marker. If the proposal lists no
+
+      capabilities and `skip_specs` is not set, revisit the proposal first.
+
+
+      The user journeys live beside this file in `user-journeys.md`, never in
+
+      it. A `## User journeys` section written here is dropped by every reader
+
+      in this store.
+
+
+      Delta operations (use ## headers):
+
+      - **ADDED Requirements**: New capabilities
+
+      - **MODIFIED Requirements**: Changed behavior - MUST include full updated
+      content
+
+      - **REMOVED Requirements**: Deprecated features - MUST include **Reason**
+      and **Migration**
+
+      - **RENAMED Requirements**: Name changes only - use FROM:/TO: format
+
+
+      Format requirements:
+
+      - Each requirement: `### Requirement: <name>` followed by description
+
+      - Use SHALL/MUST for normative requirements (avoid should/may)
+
+      - Each scenario: `#### Scenario: <name>` with WHEN/THEN format
+
+      - **CRITICAL**: Scenarios MUST use exactly 4 hashtags (`####`). Using 3
+      hashtags or bullets will fail silently.
+
+      - Every requirement MUST have at least one scenario.
+
+
+      New capabilities only: start the delta spec with a `## Purpose` section -
+
+      one or two sentences (50+ characters, or `openspec validate --strict`
+
+      reports it as too brief) describing what the capability is for. Archive
+
+      copies it into the main spec it creates; without it the new main spec is
+
+      left with a `TBD ... Update Purpose after archive` placeholder to fill in
+
+      by hand. Do NOT add `## Purpose` to a delta for an existing capability -
+
+      that spec already has one and the delta's is ignored. To change an
+
+      existing capability's Purpose - including a leftover `TBD` placeholder -
+
+      edit `openspec/specs/<capability-path>/spec.md` directly.
+
+
+      MODIFIED requirements workflow:
+
+      1. Locate the existing requirement in
+      openspec/specs/<capability-path>/spec.md
+
+      2. Copy the ENTIRE requirement block (from `### Requirement:` through all
+      scenarios)
+
+      3. Paste under `## MODIFIED Requirements` and edit to reflect new behavior
+
+      4. Ensure header text matches exactly (whitespace-insensitive)
+
+
+      Common pitfall: Using MODIFIED with partial content loses detail at
+      archive time.
+
+      If adding new concerns without changing existing behavior, use ADDED
+      instead.
+
+
+      Specs should be testable - each scenario is a potential test case.
+    requires:
+      - proposal
+  - id: user-journeys
+    generates: specs/**/user-journeys.md
+    description: The user stories each capability's scenarios accept, one file per capability
+    template: user-journeys.md
+    instruction: >
+      Written by the product manager, one file beside each `spec.md` the change
+      touches: `specs/<capability-path>/user-journeys.md`.
+
+
+      A journey is one actor pursuing one goal from start to finish - an
+
+      operator publishes a listing; a collector bids and wins. A name that
+
+      needs an `and` is two journeys. At most five journeys across every
+
+      capability the change touches; a change that wants a sixth is two
+
+      changes.
+
+
+      Title a journey the way a test analyst titles a case: lead with the
+
+      actor, then the action, in the third person - `Collector enters the
+
+      catalogue through a collection`, `Operator traces who committed what`.
+
+      Not a bare verb phrase, not the first person, and never so vague that two
+
+      journeys could share the title.
+
+
+      Write each journey as one user story from the actor's side, never the
+
+      system's, broken onto three labeled lines:
+
+
+      ```
+
+      ### <capability>-US-01: Operator saves an unfinished listing and comes
+      back to it
+
+
+      **As an** auction operator,
+
+      **I want** to save a listing before I know every fact about the card,
+
+      **so that** I can start from the item in front of me and finish once the
+      rest arrives.
+
+
+      **Accepted by:**
+
+
+      - `<capability>-SC-01` — Operator saves an empty draft
+
+      - `<capability>-SC-02` — Operator saves a partial draft
+
+      ```
+
+
+      The role is an end user the spec already names, and the benefit is one
+
+      the requirements or the proposal already justify - a story never
+
+      introduces either. Every `**Accepted by:**` line names a scenario that
+
+      exists in the `spec.md` beside this file.
+
+
+      Hold every story to the four criteria its author owns: Independent,
+
+      Negotiable, Valuable, Testable. A story that fails one of the four is
+
+      split or reworded, never widened to fit. Estimable and Small are sizing
+
+      judgements and belong to the engineer who plans delivery.
+
+
+      A capability no end user reaches on its own writes no file at all: a
+
+      cross-cutting policy every other spec inherits (money amounts, dates and
+
+      times, localization), a package or composition contract, a backend
+
+      convention. Never invent an actor to satisfy the artifact - the journeys
+
+      live in the capability the reader actually reaches, which inherits the
+
+      policy.
+    requires:
+      - specs
+  - id: test-cases
+    generates: specs/**/test-cases.md
+    description: The QA suite derived from each capability's journeys, one file per capability
+    template: test-cases.md
+    instruction: >
+      Written by QA, one file beside each `spec.md` whose journeys are worth
+
+      walking: `specs/<capability-path>/test-cases.md`. Optional - a change
+
+      whose capabilities carry no journeys has nothing to derive.
+
+
+      A suite is a derived reading of the `spec.md` and `user-journeys.md`
+
+      beside it, never a second source of truth. Its shape - the journey
+
+      headings, the case ids, the classification block, and the `**Trace:**`
+
+      line - is governed by `docs/governance/specs-to-test-cases.md`. Follow
+
+      that document; do not restate its rules here or invent a variant.
+
+
+      Generate the first draft with the `spec-to-tcs` skill rather than by
+
+      hand, then review it with `tcs-review`.
+
+
+      `pnpm run tcs:validate` checks every suite in the store against that
+
+      governance document, and CI runs it on every push.
+    requires:
+      - user-journeys
+  - id: ui-design
+    generates: ui-design.md
+    description: The visual plan - screens, component exports, and states
+    template: ui-design.md
+    instruction: >
+      Written by the designer. Maps every user-facing surface the change
+
+      touches to its sources of truth. Optional: a change with no user-facing
+
+      surface does not create the file, and nothing downstream waits on it.
+
+
+      Sections:
+
+      - **Screens**: One subsection per surface. Link the Figma frame - the
+      frame is the layout's source of truth, so never describe a screen in
+      prose.
+
+      - **Components**: The design-system primitives and `packages/ui` exports
+      each screen composes. Name exports exactly - the export name is the
+      cross-repo contract. A component, variant, or token that does not exist
+      yet is work in this repo; flag it so tasks can carry it.
+
+      - **States**: Loading, empty, error, and edge states per screen, each
+      tied to the spec scenario that defines it.
+
+
+      Link, never restate: the capability spec owns behavior, tech-design.md
+
+      owns technical decisions, Figma owns layout. If a section would only
+
+      repeat one of them, point to it instead.
+    requires:
+      - specs
+  - id: tech-design
+    generates: tech-design.md
+    description: The technical implementation's high-level design
+    template: tech-design.md
+    instruction: >
+      Written by the engineer who picks the change up. Explains HOW to
+
+      implement it. Optional - create it only if any of these apply:
+
+      - Cross-cutting change (multiple services/modules) or new architectural
+      pattern
+
+      - New external dependency or significant data model changes
+
+      - Security, performance, or migration complexity
+
+      - Ambiguity that benefits from technical decisions before coding
+
+
+      Sections:
+
+      - **Context**: Only the current state and constraints needed to explain
+      the approach. Reference the proposal for motivation instead of restating
+      it (e.g. "See proposal.md - Why").
+
+      - **Goals / Non-Goals**: What this design achieves and explicitly
+      excludes. Don't restate the proposal's scope - add only design-level
+      boundaries.
+
+      - **Decisions**: Key technical choices with rationale (why X over Y?).
+      Include alternatives considered for each decision.
+
+      - **Risks / Trade-offs**: Known limitations, things that could go wrong.
+      Format: [Risk] → Mitigation
+
+      - **Migration Plan**: Steps to deploy, rollback strategy (if applicable)
+
+      - **Open Questions**: Unknowns that can safely be answered later without
+        changing the specs, the approach, or the task breakdown. Omit if none.
+
+      Open questions are for genuinely deferrable unknowns, not decisions you
+
+      skipped. If a question would change the specs, the chosen approach, or
+
+      the task breakdown, resolve it now - ask instead of guessing.
+
+
+      Focus on architecture and approach, not line-by-line implementation. The
+
+      proposal covers why and what; this covers how. Reference the proposal for
+
+      motivation and the specs for requirements - if a section would only
+
+      restate them, point to them instead.
+    requires:
+      - specs
+  - id: tasks
+    generates: tasks.md
+    description: The implementation plan, claimed group by group
+    template: tasks.md
+    instruction: >
+      Written by the engineer who picks the change up, and the artifact that
+
+      moves the change off the planning board: until it exists, the change
+
+      reads as still being planned.
+
+
+      Before writing tasks, check tech-design.md for Open Questions. If any of
+
+      them would change what gets built, resolve them first - do not bake an
+
+      unstated assumption into the task list.
+
+
+      **IMPORTANT: Follow the template exactly.** The apply phase parses
+
+      checkbox format to track progress. Tasks not using `- [ ]` won't be
+      tracked.
+
+
+      Guidelines:
+
+      - Group related tasks under ## numbered headings
+
+      - Each task MUST be a checkbox: `- [ ] X.Y Task description`
+
+      - Tasks should be small enough to complete in one session
+
+      - Order tasks by dependency (what must be done first?)
+
+      - Group ownership follows `docs/governance/task-ownership.md`, which
+      tooling in this repository and in the application repository both parse.
+
+
+      Example:
+
+      ```
+
+      ## 1. Setup
+
+
+      - [ ] 1.1 Create new module structure
+
+      - [ ] 1.2 Add dependencies to package.json
+
+
+      ## 2. Core Implementation
+
+
+      - [ ] 2.1 Implement data export function
+
+      - [ ] 2.2 Add CSV formatting utilities
+
+      ```
+
+
+      Reference specs for what needs to be built, user-journeys for who walks
+      it, tech-design for how to build it, and ui-design, when the change ships
+      one, for the screens, components, and states the frontend work names.
+
+      Each task should be verifiable - you know when it's done.
+    requires:
+      - specs
+apply:
+  requires:
+    - tasks
+  tracks: tasks.md
+  instruction: |
+    Read context files, work through pending tasks, mark complete as you go.
+    Pause if you hit blockers or need clarification.
+
+    A change with no tasks.md is not ready to apply: planning stopped at the
+    requirements, and the engineer who picks it up writes the plan. Add
+    tech-design.md when the change earns one, ui-design.md when it alters
+    something a user sees, and tasks.md always.
+    `openspec status --change <change-name>` lists what is still missing.
