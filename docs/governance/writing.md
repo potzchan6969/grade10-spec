@@ -99,6 +99,9 @@ Outline first. A document is a heading and an outline, never an essay.
   an eyebrow; the term belongs to the spec, the plain word to the page.
 - Group one concern per section; the heading names the concern in plain
   words.
+- The roadmap, stated as the product. A decided plan reads in the present
+  tense as though shipped; where it stands is a status card or a ❓, never
+  an apology in the prose that a spec is still being written.
 
 ## One source of truth
 

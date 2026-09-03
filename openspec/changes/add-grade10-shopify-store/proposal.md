@@ -15,10 +15,9 @@ browser's price, payment, or shipping claim as authoritative.
 ## Expected outcome
 
 - A shopper can browse Shopify products, see their current availability, and
-  begin a Shopify-hosted checkout with their finite-stock items reserved for
-  fifteen minutes.
-- A shopper lands on an authenticated Grade10 order page after payment and can
-  later browse every current and historic order in their Grade10 account.
+  begin a Shopify-hosted checkout on the account they are signed in to.
+- A shopper returns to the store through Continue shopping after payment and
+  can browse every current and historic order in their Grade10 account.
 - The Store renders its order lifecycle from Shopify's payment and shipping
   facts, including when webhooks are delayed or lost.
 - Shopify remains the source of truth for products, inventory, charged money,
@@ -28,18 +27,18 @@ browser's price, payment, or shipping claim as authoritative.
 ## Scope
 
 - A new `grade10-site/store/shopify-commerce` capability defining catalogue,
-  availability, account association, reserved checkout handoff, payment, and
+  availability, account association, checkout handoff, payment, and
   shipping-status behavior.
 - Read-only Shopify Storefront API catalogue and availability reads, with
   cache-safe browsing and live revalidation before checkout.
-- Shopify draft-order checkout creation with a fifteen-minute reservation for
-  finite stock, server-side order creation, and a return to the Store's
-  authenticated order page after hosted checkout.
+- Shopify draft-order checkout with no inventory hold, server-side order
+  creation, and Continue shopping back to the store after hosted checkout.
 - Verified Shopify Admin API reads and webhooks for payment, cancellation,
   refund, fulfilment, tracking, and shipment state; reconciliation repairs
   missed events.
-- Guest and signed-in checkout identity handling, customer-facing order
-  history/detail, and the Grade10 admin order view.
+- Signed-in checkout identity, guest checkout by email (launching with it
+  `TBC`), customer-facing order history/detail, and the Grade10 admin order
+  view.
 
 ## Affected consumer applications and contracts
 
@@ -56,12 +55,11 @@ No shared UI or design-system export changes are proposed.
 ## Non-goals
 
 - Customer profile synchronization beyond the one-to-one account association,
-  or a new sign-in method beyond Grade10 email magic links.
+  or a new sign-in method beyond Grade10's Google and email magic-link sign-in.
 - A product, inventory, price, payment, or shipping mirror in Postgres.
 - Embedded Shopify checkout, saved cards, manual payment capture, or a second
   payment provider in this delivery.
-- Backorders, inventory holds longer than fifteen minutes, or a customer ability
-  to extend a reservation.
+- Backorders, or an inventory hold of any length before payment.
 - Customer-submitted disputes, dispute adjudication, returns, exchanges, or a
   customer ability to request a refund. Staff may initiate refunds in Shopify;
   the Store observes and displays their result.
@@ -88,7 +86,7 @@ rather than falling back to a different source.
 
 ## Validation
 
-- Feature tests cover catalogue availability, reservation creation/expiry,
+- Feature tests cover catalogue availability,
   stale-price/stock rejection, checkout handoff, account association, webhook
   verification and deduplication, and reconciliation.
 - Customer and admin tests cover pending, paid, cancelled, refunded,

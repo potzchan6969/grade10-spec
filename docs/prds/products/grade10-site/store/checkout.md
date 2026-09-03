@@ -4,77 +4,48 @@ spec: grade10-site/store/shopify-commerce
 order: 5
 ---
 
-:::callout{kind="note"}
-Checkout ships ahead of its contract: the spec is still being written by the
-change shown above. Read this page as a description of what runs.
+Checkout is Shopify's page, under `checkout.grade10.com`. The store hands it
+the cart, Shopify takes the address and the money, and the order comes back
+to Grade10.
+
+:::flow{title="From the cart to the order"}
+# Leaving the store
+
+## Collector — Press checkout
+In the cart drawer, signed in with Google or a magic link.
+
+## Store — Read every line live
+Current price and stock, from Shopify. A line that moved comes back named.
+
+# On Shopify's page
+
+## Collector — Fill in shipping and pay
+Address, shipping option, discount code, payment. Shipping and tax are added
+here, so the cart's subtotal is not the charge.
+
+## Shopify — Take the payment
+An item that sold out in the meantime is refused, with the item named.
+
+# Back at Grade10
+
+## Shopify — Tell the store
+The order moves from pending to paid within seconds.
+
+## Collector — Press Continue shopping
+On Shopify's confirmation page, back to the store.
+
+## Collector — Find the order
+In Your Orders.
 :::
 
-Checkout is Shopify's, and money is never something a client supplies. The store
-prices every line live against Shopify at the moment of checkout; the browser
-sends variants, quantities and site-relative redirect paths, and nothing else. A
-cache never sets a charge. Availability is checked in the same pass, so a cart
-asking for more than exists is refused before an order exists to refuse.
-
-The order is Grade10's own record, written in one transaction before the checkout
-is created at Shopify under a deterministic key derived from the order id. What
-the buyer was charged and what the store quoted are kept as two different numbers,
-because they are two different facts.
-
-:::flow{title="Checkout, end to end"}
-## Add to the cart
-The collector opens a card, picks a grade and adds it. The cart is the browser's
-until checkout needs otherwise.
-
-## Open the drawer
-Every line is re-read against the catalogue: current price, current status.
-Sold-out lines are marked, delisted lines leave.
-
-## Price it live
-The store asks Shopify what each line costs right now. A variant that does not
-sell rejects; a quantity beyond what is available rejects.
-
-## Write the order
-A payment customer is created if the buyer has none, and the order and its items
-are inserted in one transaction. Only then is the checkout created at Shopify.
-
-## Pay at Shopify
-The buyer is redirected to Shopify's hosted checkout, served under
-`checkout.grade10.com` so it carries our name.
-
-## Settle
-A webhook arrives and is honoured only when the recorded checkout reference
-carries the event's cart token. The order moves pending, processing, paid.
-
-## Earn
-The order event drains, and the goods amount out of the charge is what the
-membership programme prices into points.
-
-## Land on the order
-The buyer arrives at a Grade10 order page. A just-placed order reads `pending` —
-neither an error nor an empty page. The page polls.
-:::
-
-Order statuses run `pending → processing → paid | failed | canceled | expired`,
-plus `paid → refunded` and `expired → paid`.
-
-:::callout{kind="warning"}
-The docs disagree about guest checkout. The commerce architecture doc says the
-store is signed-in only; a live `checkout.createCheckoutWithEmail` procedure
-writes an order with no owner and defers the account to the payment. The
-architecture doc does not describe that path at all.
-:::
+- **Members only** — checkout is signed in; guest checkout is in the code,
+  launching with it `TBC`
+- **The cart** — kept while the collector is at Shopify; cleared once the
+  order is paid
+- **A second press** — returns the same checkout, never a second order
 
 :::detail{title="For engineers" for="engineer"}
-The checkout pages themselves are described in
-[storefront checkout](https://github.com/9gag/grade10/blob/main/docs/architecture/storefront-checkout.md)
-— ten answers and five outcome kinds — and that doc records the pages as waiting
-on design. The order machine, the recovery ladder and refunds are in
-[commerce](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md).
-
-Operators get a checkout test page under an **Overrider** nav heading, in
-development and staging only: a production build carries neither the page, its
-route, its nav entry, nor the heading above it. It drives the real `checkout.*`
-procedures against a real Shopify shop, and offers both **Buy as me** and **Buy
-with this email**, the second answering `signInRequired` for an address an
-account already holds.
+- **The pages** — [storefront checkout](https://github.com/9gag/grade10/blob/main/docs/architecture/storefront-checkout.md): five outcome kinds, one treatment per kind
+- **The order machine, recovery, refunds** — [commerce](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
+- **Test page** — under an **Overrider** nav heading, development and staging only; drives the real checkout procedures against a real shop, as the signed-in buyer or with a typed email
 :::

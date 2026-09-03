@@ -63,8 +63,13 @@ copy. Its application here is short:
 - **Never recap the change** that introduced a capability — today's gap, the
   intended fix, and the success metric belong to the proposal and rot the
   moment it archives
-- **Future tense only on a planned page**, and even there the intended
-  shape reads as a shape, not a pitch
+- **The page describes the roadmap** — a decided plan reads as the product
+  does, in the present tense; never a note that its spec is still being
+  written, never a pitch. The in-flight cards beneath say what has not
+  shipped, and a page with no `spec` yet wears the planned pip for it
+- **The owner's roadmap, not the delta's** — an in-flight spec is one
+  author's proposal; where it promises what the code does not do, ask
+  before the page states it
 
 ## The block palette
 

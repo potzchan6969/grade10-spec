@@ -1,19 +1,24 @@
 ---
 title: Cart
+spec: grade10-site/store/cart-validation
 order: 4
 ---
 
-:::callout{kind="note"}
-Ships ahead of a contract of its own: the commerce spec is still being written
-by the change shown below. The drawer's shared blocks are specified durably in
-`shared-ui/store-cart`.
-:::
+The cart is a drawer over the page: what is in it, what it costs, and the
+button to check out.
 
-The cart belongs to the browser. Lines sit in `localStorage` under `cart.v1`
-until a pricing rule needs a server cart, which is why adding to it is instant
-and why the drawer re-reads the catalogue every time it opens — marking lines
-that sold out, and dropping lines the store no longer sells with one toast
-saying so.
+- **Add** — from a product's details page; the cart is kept in this browser,
+  so no sign-in to fill it, a reload keeps it, another device starts empty
+- **Lines** — name, grade, price, quantity; change the quantity or remove the
+  line; the badge on the cart button counts the lines that can still be bought
+- **Opens on today's prices** — every line is re-read as the drawer opens
+  1. **Sold out** — marked, and stays for the collector to remove
+  2. **Fewer left** — drops to what the shop can fill, and says so
+  3. **Gone from the store** — leaves, with one toast
+  4. **Repriced** — shows the new price, once
+- **Promo code** — entered in the drawer; the total shows the discount
+- **Checkout** — the button hands the cart to Shopify; every line is checked
+  again on the way, and a line that moved comes back named
 
 ## What it looks like
 
@@ -29,4 +34,4 @@ saying so.
 
 ## In flight
 
-::changes{spec="grade10-site/store/shopify-commerce"}
+::changes{spec="grade10-site/store/cart-validation"}
