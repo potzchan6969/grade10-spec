@@ -13,7 +13,6 @@
     "title": "멤버십",
     "card": "회원 카드",
     "rewards": "리워드",
-    "coupons": "보유 코드",
     "pending": "매장 수령 대기",
     "activity": "내역",
     "spend": "장바구니에 사용",
@@ -23,7 +22,6 @@
     "loadFailed": "불러오지 못했습니다. 다시 시도해 주세요.",
     "retry": "다시 시도",
     "noRewards": "지금은 교환할 리워드가 없습니다.",
-    "noCoupons": "보유한 코드가 없습니다.",
     "noPending": "대기 중인 항목이 없습니다.",
     "noExpiry": "유효기간 없음",
     "noActivity": "계정에 아직 내역이 없습니다.",
@@ -62,38 +60,9 @@
     "oneAtATime": "{name}은(는) 한 번에 하나씩만 교환할 수 있습니다.",
     "atMost": "1회 교환으로 {name}은(는) 최대 {max}개까지 가능합니다."
   },
-  "coupons": {
-    "label": "보유 코드",
-    "maskedCode": "••••••",
-    "spent": "사용함",
-    "void": "취소됨"
-  },
-  "undo": {
-    "action": "포인트 돌려받기",
-    "returned": "{points}포인트가 계정으로 돌아왔습니다.",
-    "codeUsed": "이 코드는 이미 결제에 사용되어 포인트는 반환되지 않습니다.",
-    "alreadyReturned": "해당 포인트는 이미 계정으로 돌아왔습니다."
-  },
   "spend": {
-    "lead": "장바구니 금액은 {basket}입니다.",
     "atCheckout": "이제 포인트는 결제 시 차감됩니다. 결제할 때 사용할 만큼 선택하세요.",
-    "goToCheckout": "결제로 이동",
-    "empty": "장바구니에 상품을 담으면 여기에서 포인트를 사용할 수 있습니다.",
-    "offer": "{points}포인트로 {money} 할인",
-    "confirm": "{points}포인트를 사용해 {money}를 할인받으시겠습니까?",
-    "spendAction": "포인트 사용",
-    "confirmAction": "네, 사용합니다",
-    "cancelAction": "다음에 하기",
-    "working": "코드를 가져오는 중…",
-    "issued": "코드는 {code}입니다. 결제 시 입력하면 금액이 차감됩니다.",
-    "applied": "장바구니에서 {money}가 할인되었습니다.",
-    "aborted": "장바구니가 이 코드를 받지 않아 아무것도 사용되지 않았습니다 — {points}포인트가 돌아왔습니다.",
-    "abortFailed": "장바구니가 이 코드를 받지 않았습니다. 포인트를 자동으로 돌려주지 못했으며, 코드는 그대로 사용할 수 있습니다.",
-    "notMoneyOff": "그 리워드는 구매 할인이 아닙니다.",
-    "nothingToSpendOn": "장바구니에 상품을 담으면 여기에서 포인트를 사용할 수 있습니다.",
-    "biggerThanPurchase": "{money} 코드는 그 이상 금액의 장바구니가 필요해 거절됩니다. 아무것도 사용되지 않았습니다.",
-    "notEnoughPoints": "아직 포인트가 부족합니다.",
-    "failed": "처리하지 못했습니다. 잠시 후 다시 시도해 주세요."
+    "goToCheckout": "결제로 이동"
   },
   "activity": {
     "label": "내역"

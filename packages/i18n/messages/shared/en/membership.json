@@ -13,7 +13,6 @@
     "title": "Membership",
     "card": "Your member card",
     "rewards": "Rewards",
-    "coupons": "Your codes",
     "pending": "Waiting at the counter",
     "activity": "Activity",
     "spend": "Spend on your basket",
@@ -23,7 +22,6 @@
     "loadFailed": "That did not load. Try again.",
     "retry": "Try again",
     "noRewards": "There is nothing on the menu right now.",
-    "noCoupons": "You are holding no codes.",
     "noPending": "Nothing is waiting for you.",
     "noExpiry": "No expiry",
     "noActivity": "Nothing has happened on your account yet.",
@@ -62,38 +60,9 @@
     "oneAtATime": "{name} is redeemed one at a time.",
     "atMost": "One redemption takes at most {max} {name}."
   },
-  "coupons": {
-    "label": "Your codes",
-    "maskedCode": "••••••",
-    "spent": "Used",
-    "void": "Cancelled"
-  },
-  "undo": {
-    "action": "Give the points back",
-    "returned": "{points, plural, one {# point is} other {# points are}} back on your account.",
-    "codeUsed": "This code has already paid for something, so the points stay spent.",
-    "alreadyReturned": "Those points are already back on your account."
-  },
   "spend": {
-    "lead": "Your basket comes to {basket}.",
-    "atCheckout": "Points come off at checkout now. Choose how many when you pay.",
-    "goToCheckout": "Go to checkout",
-    "empty": "Add something to your basket and you can spend points on it here.",
-    "offer": "{money} off for {points} points",
-    "confirm": "Spend {points} points for {money} off?",
-    "spendAction": "Spend points",
-    "confirmAction": "Yes, spend them",
-    "cancelAction": "Not now",
-    "working": "Getting your code…",
-    "issued": "Your code is {code}. Enter it at checkout to take the money off.",
-    "applied": "{money} is off your basket.",
-    "aborted": "Your basket would not take that code, so nothing was spent — your {points} points are back.",
-    "abortFailed": "Your basket would not take that code. We could not give the points back automatically; the code is still yours to use.",
-    "notMoneyOff": "That reward is not money off a purchase.",
-    "nothingToSpendOn": "Add something to your basket and you can spend points on it here.",
-    "biggerThanPurchase": "A {money} code needs a basket worth at least that much, so it would be refused. Nothing was spent.",
-    "notEnoughPoints": "You do not have enough points for that yet.",
-    "failed": "That did not work. Try again in a moment."
+    "atCheckout": "Points come off at checkout. Choose how many when you pay.",
+    "goToCheckout": "Go to checkout"
   },
   "activity": {
     "label": "Activity"
