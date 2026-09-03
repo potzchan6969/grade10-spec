@@ -48,20 +48,17 @@ const COPY = {
     "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
   setPrivateMaximum: "Set your private maximum",
   raisePrivateMaximum: "Raise your private maximum (current: {amount})",
-  chooseAnotherAmount: "Choose another amount",
-  backToQuickAmounts: "Back to quick amounts",
-  reviewMaximum: "Place Bid",
+  reviewMaximum: "Place Bid · {amount}",
+  raiseMaximumReview: "Raise maximum · {amount}",
   privateMaximumTooltip:
     "Your maximum is the most you are willing to pay before buyer fees. We place the lowest bid needed to keep you in the lead. Other bidders cannot see your maximum.",
-  stepperMessage: "Min.: Current bid + {increment}",
+  customAmountPlaceholder: "Custom amount (min. {amount})",
+  stepperMessage: "Min.: {amount}",
+  useMinimum: "Use minimum",
   bidImmediate: "Bid {amount}",
   bidUpTo: "Bid up to {amount}",
-  nextEligibleBid: "Next eligible bid",
-  twoIncrementsAboveCurrent: "2 increments above current",
-  fourIncrementsAboveCurrent: "4 increments above current",
-  minimumRaise: "Minimum raise",
-  oneIncrementAboveMinimum: "1 increment above minimum",
-  threeIncrementsAboveMinimum: "3 increments above minimum",
+  nextEligibleBid: "Min. bid",
+  amountAboveCurrent: "{amount} vs current",
   minimumMaximumFloor: "At least {amount} (current bid + {increment})",
   minimumMaximumLeadingNudge: "At least {amount} (your maximum + {increment})",
   minimumMaximumLeadingIncrement:
@@ -173,7 +170,7 @@ const meta = {
     onCommitMaximum: {
       control: false,
       description:
-        "Fires when a preset or Review maximum commits an amount. The consumer validates the maximum, takes the hold, and writes the cap.",
+        "Fires when Place Bid / Raise maximum commits the selected preset or custom amount. The consumer validates the maximum, takes the hold, and writes the cap.",
     },
   },
   decorators: [
@@ -193,7 +190,16 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Current Bid")).toBeInTheDocument();
     expect(canvas.getByText("Set your private maximum")).toBeInTheDocument();
-    expect(canvas.getByText("Choose another amount")).toBeInTheDocument();
+    expect(canvas.getByText("Min. bid")).toBeInTheDocument();
+    expect(
+      canvas.getByPlaceholderText(/Custom amount \(min\./),
+    ).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: /^Place Bid ·/ }),
+    ).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: /^Bid /, pressed: true }),
+    ).toBeInTheDocument();
     expect(canvas.getByText("Recent Bids")).toBeInTheDocument();
   },
 };
@@ -208,7 +214,7 @@ export const SignedOut: Story = {
     expect(
       canvas.getByRole("button", { name: "Sign In to Bid" }),
     ).toBeInTheDocument();
-    expect(canvas.queryByText("Choose another amount")).not.toBeInTheDocument();
+    expect(canvas.queryByText("Min. bid")).not.toBeInTheDocument();
     expect(canvas.queryByText("Highest bid")).not.toBeInTheDocument();
     expect(canvas.queryByText("Outbid")).not.toBeInTheDocument();
   },
@@ -242,6 +248,10 @@ export const Leading: Story = {
     expect(
       canvas.getByText(/Raise your private maximum \(current: HK\$8,000\)/),
     ).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: /^Raise maximum ·/ }),
+    ).toBeInTheDocument();
+    expect(canvas.getByText(/vs current/)).toBeInTheDocument();
   },
 };
 
