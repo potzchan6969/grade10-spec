@@ -20,11 +20,13 @@ const [document] = readChangeDocuments(FIXTURE, NO_GIT);
 
 describe("the artifacts a change has", () => {
   it("reads the schema's artifacts in the order it declares them", () => {
-    expect(schemaArtifacts(FIXTURE, "full-planning")).toEqual([
+    expect(schemaArtifacts(FIXTURE, "grade10-planning")).toEqual([
       { id: "proposal", generates: "proposal.md" },
-      { id: "specs", generates: "specs/**/*.md" },
-      { id: "design", generates: "design.md" },
-      { id: "ui", generates: "ui.md" },
+      { id: "specs", generates: "specs/**/spec.md" },
+      { id: "user-journeys", generates: "specs/**/user-journeys.md" },
+      { id: "test-cases", generates: "specs/**/test-cases.md" },
+      { id: "ui-design", generates: "ui-design.md" },
+      { id: "tech-design", generates: "tech-design.md" },
       { id: "tasks", generates: "tasks.md" },
     ]);
     expect(schemaArtifacts(FIXTURE, "spec-driven")).toBeUndefined();
@@ -33,7 +35,7 @@ describe("the artifacts a change has", () => {
   it("lists every declared artifact, present or not, in schema order", () => {
     expect(document.id).toBe("add-thing");
     expect(document.dir).toBe("openspec/changes/add-thing");
-    expect(document.schema).toBe("full-planning");
+    expect(document.schema).toBe("grade10-planning");
     expect(document.schemaKnown).toBe(true);
     expect(
       document.artifacts.map(({ name, kind, present }) => ({
@@ -44,8 +46,10 @@ describe("the artifacts a change has", () => {
     ).toEqual([
       { name: "proposal", kind: "doc", present: true },
       { name: "specs", kind: "specs", present: true },
-      { name: "design", kind: "doc", present: false },
-      { name: "ui", kind: "doc", present: false },
+      { name: "user-journeys", kind: "journeys", present: false },
+      { name: "test-cases", kind: "cases", present: false },
+      { name: "ui-design", kind: "doc", present: false },
+      { name: "tech-design", kind: "doc", present: false },
       { name: "tasks", kind: "tasks", present: true },
     ]);
   });
@@ -54,14 +58,12 @@ describe("the artifacts a change has", () => {
     const proposal = document.artifacts[0];
     expect(proposal.path).toBe("openspec/changes/add-thing/proposal.md");
     expect(proposal.text).toContain("## Why");
-    expect(document.artifacts[4].path).toBe(
-      "openspec/changes/add-thing/tasks.md",
-    );
-    expect(document.artifacts[4].text).toBeUndefined();
-    expect(document.artifacts[2].path).toBe(
-      "openspec/changes/add-thing/design.md",
-    );
-    expect(document.artifacts[2].text).toBeUndefined();
+    const tasks = document.artifacts.find((one) => one.name === "tasks");
+    expect(tasks?.path).toBe("openspec/changes/add-thing/tasks.md");
+    expect(tasks?.text).toBeUndefined();
+    const design = document.artifacts.find((one) => one.name === "tech-design");
+    expect(design?.path).toBe("openspec/changes/add-thing/tech-design.md");
+    expect(design?.text).toBeUndefined();
   });
 });
 
@@ -117,7 +119,7 @@ describe("a change the schema cannot account for", () => {
     "openspec/changes/loose/.openspec.yaml": "schema: spec-driven\n",
     "openspec/changes/loose/proposal.md": "# Loose\n\n## Why\n\nBecause.\n",
     "openspec/changes/loose/README.md": "# Read me\n\nA note.\n",
-    "openspec/changes/loose/design.md": "# Design\n\nA sketch.\n",
+    "openspec/changes/loose/tech-design.md": "# Design\n\nA sketch.\n",
     "openspec/changes/bare/proposal.md": "# Bare\n\n## Why\n\nBecause.\n",
   });
   const documents = readChangeDocuments(root, NO_GIT);
@@ -132,8 +134,10 @@ describe("a change the schema cannot account for", () => {
     ).toEqual([
       "proposal:true",
       "specs:false",
-      "design:true",
-      "ui:false",
+      "user-journeys:false",
+      "test-cases:false",
+      "ui-design:false",
+      "tech-design:true",
       "tasks:false",
       "README:true",
     ]);
@@ -170,16 +174,6 @@ describe("a delta with a title, journeys, and a suite beside it", () => {
       "",
       "- Watching",
       "",
-      "## User journeys",
-      "",
-      "### beta-US-01: A reader watches",
-      "",
-      "**As a** reader, **I want** to watch.",
-      "",
-      "**Accepted by:**",
-      "",
-      "- `beta-SC-01` — It is watched",
-      "",
       "## ADDED Requirements",
       "",
       "### Group of rows",
@@ -197,6 +191,18 @@ describe("a delta with a title, journeys, and a suite beside it", () => {
       "",
       "- FROM: `### Requirement: Old name`",
       "- TO: `### Requirement: New name`",
+      "",
+    ].join("\n"),
+    "openspec/changes/rich/specs/demo-product/beta/user-journeys.md": [
+      "## User journeys",
+      "",
+      "### beta-US-01: A reader watches",
+      "",
+      "**As a** reader, **I want** to watch.",
+      "",
+      "**Accepted by:**",
+      "",
+      "- `beta-SC-01` — It is watched",
       "",
     ].join("\n"),
     "openspec/changes/rich/specs/demo-product/beta/test-cases.md": [

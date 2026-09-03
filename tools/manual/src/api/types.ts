@@ -115,6 +115,9 @@ export type SpecEntry = {
    * test-cases.md never blanks the spec's requirements or takes down the
    * pages that embed them. */
   testCasesError?: ItemError;
+  /** The journeys beside it were malformed — its own channel for the same
+   * reason: a broken user-journeys.md is the PM's file, not the contract. */
+  journeysError?: ItemError;
 };
 
 /** One checkbox line of a task group. Carried for in-flight changes only —
@@ -261,15 +264,23 @@ export type ChangeEntry = {
 };
 
 /** How a change's artifact renders: a prose document, the directory of
- * spec deltas, or the task checklist — from what the schema says the
- * artifact generates, never from its name. */
-export type ChangeArtifactKind = "doc" | "specs" | "tasks";
+ * spec deltas, the stories or the suites beside them, or the task
+ * checklist — from what the schema says the artifact generates, never from
+ * its name. The three spec-directory kinds are all per-capability, so each
+ * reads out of the deltas rather than out of a file of its own. */
+export type ChangeArtifactKind =
+  | "doc"
+  | "specs"
+  | "journeys"
+  | "cases"
+  | "tasks";
 
 /** One artifact a change's schema asks for, or a file the change carries that
  * the schema never named. Present or not, in the schema's own order. */
 export type ChangeArtifact = {
-  /** The schema's artifact id — `proposal`, `specs`, `design`, `ui`,
-   * `tasks` — or an undeclared file's name without its extension. */
+  /** The schema's artifact id — `proposal`, `specs`, `user-journeys`,
+   * `test-cases`, `ui-design`, `tech-design`, `tasks` — or an undeclared
+   * file's name without its extension. */
   name: string;
   kind: ChangeArtifactKind;
   /** Store-relative path of the file, for a file artifact. */
@@ -302,6 +313,8 @@ export type ChangeDeltaDocument = {
   purpose?: string;
   featureSet?: string;
   journeys?: Journey[];
+  /** The `user-journeys.md` beside the delta was malformed. */
+  journeysError?: ItemError;
   sections: DeltaSection[];
   /** The `test-cases.md` beside the delta, when QA has written one. */
   suite?: {

@@ -6,9 +6,10 @@
  *
  * Every one of these fails at archive time today, with the change merged and
  * the author gone; the delta file is the last place they are still cheap.
- * The sections the fold discards — `## User journeys`, `## Feature set` —
- * are not a rule here: every well-formed delta carries them by design, and
- * `archive:preflight` refuses the archive until they reach the durable spec.
+ * What the fold discards — `## Feature set`, and the `user-journeys.md`
+ * beside the delta — is not a rule here: every well-formed change carries
+ * them by design, and `archive:preflight` refuses the archive until they
+ * reach the durable capability.
  */
 import { existsSync } from "node:fs";
 import { join } from "node:path";
@@ -25,8 +26,10 @@ import { requirementBlocks } from "../src/store/read-specs.mts";
 import { everyBlock } from "./context.mjs";
 
 /** The only `## ` headings a delta may hold: the four the fold reads, plus
- * the three a spec's own head carries. */
-const CARRIED = new Set(["Purpose", "User journeys", "Feature set"]);
+ * the two a spec's own head carries. `User journeys` is not among them — the
+ * stories are their own file beside the delta, and one written here is read
+ * by nothing. */
+const CARRIED = new Set(["Purpose", "Feature set"]);
 const ISSUED_ID = /[a-z0-9][a-z0-9-]*-(?:SC|US|TC)-\d+/g;
 const LEADING_ID = /^([a-z0-9][a-z0-9-]*-SC-\d+)\b/;
 const SCENARIO_HEADING = /^Scenario:\s*/i;
@@ -58,6 +61,10 @@ function readDeltaFiles(root, changes) {
         file,
         text,
         sections,
+        // The stories live beside the delta now, so the ids a change issues
+        // are the two files' together — scanning spec.md alone would let a
+        // `-US-` number be handed out twice.
+        ids: [...idsIn(text), ...idsIn(journeysBeside(root, file))],
         requirements: deltaRequirements(sections),
       });
     }
@@ -228,14 +235,14 @@ function checkIssued(ctx, files) {
     issuers.set(id, held);
   };
   for (const one of files) {
-    for (const id of new Set(idsIn(one.text))) claim(id, one.change);
+    for (const id of new Set(one.ids)) claim(id, one.change);
   }
   for (const [change, ids] of archived) {
     for (const id of ids) claim(id, change);
   }
 
   for (const one of files) {
-    for (const id of new Set(idsIn(one.text))) {
+    for (const id of new Set(one.ids)) {
       const others = [...(issuers.get(id) ?? [])].filter(
         (change) => change !== one.change,
       );
@@ -321,8 +328,9 @@ function durableBlocks(root, shape) {
   };
 }
 
-/** Ids every archived change issues, by change id. The fold leaves no durable
- * trace of a delta's journeys, so this is the only record they exist. */
+/** Ids every archived change issues, by change id — its deltas and the
+ * stories beside them. The fold leaves no durable trace of a delta's
+ * journeys, so this is the only record they exist. */
 function archivedIds(root) {
   const dir = join(root, "openspec", "changes", "archive");
   const byChange = new Map();
@@ -331,12 +339,19 @@ function archivedIds(root) {
     const name = file.split("/")[3].replace(ARCHIVE_DATE, "");
     const held = byChange.get(name) ?? new Set();
     for (const id of idsIn(readText(join(root, file)))) held.add(id);
+    for (const id of idsIn(journeysBeside(root, file))) held.add(id);
     byChange.set(name, held);
   }
   return byChange;
 }
 
 const idsIn = (text) => text.match(ISSUED_ID) ?? [];
+
+/** The `user-journeys.md` beside a delta, as written — empty when the
+ * capability is one nobody walks. */
+const journeysBeside = (root, file) =>
+  readTextIfExists(join(root, file.replace(/spec\.md$/, "user-journeys.md"))) ??
+  "";
 
 /** `#### Scenario:` headings of one requirement block, whole — a MODIFIED
  * block that renames a scenario drops it exactly as one that deletes it. */

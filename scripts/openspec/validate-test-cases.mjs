@@ -82,7 +82,7 @@ Flags:
   --strict          Treat warnings as errors (legacy-shape suites fail too)
   --stale-report    Skip validation; list suites whose drafts sit below the
                     current tcs-rules rev, for a per-capability update run
-  --require-suites  Also report a spec.md that has journeys but no suite
+  --require-suites  Also report a capability that has journeys but no suite
                     beside it (warning)
   --help            Print this help and exit
 `);
@@ -149,13 +149,19 @@ function dirsHolding(root, filename) {
   return found;
 }
 
-/** Journey and scenario ids the spec issues, plus the journey titles. */
+/** Journey and scenario ids the capability issues, plus the journey titles.
+ * The stories are their own file beside the spec, so both are read: the
+ * scenarios come from `spec.md` and the journeys from `user-journeys.md`. */
 function readSpecIds(specPath) {
   if (!existsSync(specPath)) return null;
   const text = readFileSync(specPath, "utf8");
+  const journeysPath = specPath.replace(/spec\.md$/, "user-journeys.md");
+  const stories = existsSync(journeysPath)
+    ? readFileSync(journeysPath, "utf8")
+    : "";
   const journeys = new Map();
   const scenarios = new Set();
-  for (const line of text.split("\n")) {
+  for (const line of `${text}\n${stories}`.split("\n")) {
     const j = line.match(/^###\s+([\w-]+-US-\d+):\s*(.+?)\s*$/);
     if (j) journeys.set(j[1], j[2]);
     const s = line.match(/^####\s+Scenario:\s*([\w-]+-SC-\d+)\b/);
@@ -166,7 +172,7 @@ function readSpecIds(specPath) {
   return {
     journeys,
     scenarios,
-    hasJourneySection: /^##\s+User journeys\s*$/m.test(text),
+    hasJourneySection: /^##\s+User journeys\s*$/m.test(stories),
   };
 }
 
@@ -670,7 +676,7 @@ if (args.requireSuites) {
     if (spec?.hasJourneySection && spec.journeys.size > 0)
       record(
         "warning",
-        relative(ROOT, join(d, "spec.md")),
+        relative(ROOT, join(d, "user-journeys.md")),
         1,
         "has user journeys but no test-cases.md beside it",
       );

@@ -245,6 +245,13 @@ describe("the acceptance shelf a capability page keeps", () => {
     "",
     PURPOSE,
     "",
+    "## Requirements",
+    "",
+    ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+    "",
+  ].join("\n");
+
+  const STORIES = [
     "## User journeys",
     "",
     "### alpha-US-01: Someone does the thing",
@@ -254,10 +261,6 @@ describe("the acceptance shelf a capability page keeps", () => {
     "**Accepted by:**",
     "",
     "- alpha-SC-01",
-    "",
-    "## Requirements",
-    "",
-    ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
     "",
   ].join("\n");
 
@@ -270,6 +273,7 @@ describe("the acceptance shelf a capability page keeps", () => {
         "---\ntitle: Demo product\nspec: demo-product/alpha\n---\n\nThe landing.\n",
       "docs/prds/products/demo-product/alpha.md": alpha,
       "openspec/specs/demo-product/alpha/spec.md": journeyed,
+      "openspec/specs/demo-product/alpha/user-journeys.md": STORIES,
       ...extra,
     });
 
@@ -326,6 +330,8 @@ describe("the acceptance shelf a capability page keeps", () => {
           "Alpha",
           requirement("Alpha does things", "alpha-SC-01", "the thing"),
         ),
+        "openspec/specs/demo-product/alpha/user-journeys.md":
+          "## User journeys\n",
       },
     );
     expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([]);
@@ -395,11 +401,18 @@ const changing = (
   id: string,
   delta: string,
   extra: Record<string, string> = {},
+  journeys?: string,
 ) =>
   writeStore({
     "openspec/specs/demo-product/alpha/spec.md": ALPHA,
     [`openspec/changes/${id}/proposal.md`]: proposal(id),
     [`openspec/changes/${id}/specs/demo-product/alpha/spec.md`]: delta,
+    ...(journeys === undefined
+      ? {}
+      : {
+          [`openspec/changes/${id}/specs/demo-product/alpha/user-journeys.md`]:
+            journeys,
+        }),
     ...extra,
   });
 
@@ -445,12 +458,6 @@ describe("a delta holding a heading the fold cannot carry", () => {
         "",
         "- counting",
         "",
-        "## User journeys",
-        "",
-        "### alpha-US-01: Someone counts",
-        "",
-        "**Accepted by:** alpha-SC-03",
-        "",
         "## ADDED Requirements",
         "",
         ...requirement("Alpha counts things", "alpha-SC-03", "count"),
@@ -463,6 +470,15 @@ describe("a delta holding a heading the fold cannot carry", () => {
         "",
         "- FROM: `### Requirement: Alpha does things`",
         "- TO: `### Requirement: Alpha does the thing`",
+        "",
+      ].join("\n"),
+      {},
+      [
+        "## User journeys",
+        "",
+        "### alpha-US-01: Someone counts",
+        "",
+        "**Accepted by:** alpha-SC-03",
         "",
       ].join("\n"),
     );
@@ -665,6 +681,9 @@ describe("permanent ids across the whole store", () => {
         "",
         ...requirement("Alpha counts things", "alpha-SC-03", "count"),
         "",
+      ].join("\n"),
+      {},
+      [
         "## User journeys",
         "",
         "### alpha-US-09: Someone counts",

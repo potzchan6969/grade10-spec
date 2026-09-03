@@ -19,7 +19,7 @@ describe("in-flight changes", () => {
   });
 
   it("takes schema and created from .openspec.yaml", () => {
-    expect(change.schema).toBe("full-planning");
+    expect(change.schema).toBe("grade10-planning");
     expect(change.created).toBe("2026-01-01");
   });
 

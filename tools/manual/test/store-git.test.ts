@@ -101,7 +101,7 @@ describe("where a change stands against origin/main", () => {
       state: "unmerged",
       ref: "origin/main",
     });
-    // design.md counts; the flipped checkbox in tasks.md deliberately not.
+    // tech-design.md counts; the flipped checkbox in tasks.md deliberately not.
     expect(states.get("settled")).toEqual({
       state: "diverged",
       ref: "origin/main",

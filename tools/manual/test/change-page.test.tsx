@@ -80,7 +80,7 @@ const change: ChangeEntry = changeEntry(
 const document: ChangeDocument = {
   id: "pos",
   dir: "openspec/changes/pos",
-  schema: "full-planning",
+  schema: "grade10-planning",
   schemaKnown: true,
   artifacts: [
     {
@@ -91,18 +91,20 @@ const document: ChangeDocument = {
       text: "# Point of sale\n\n## Why\n\nCollectors who buy in the shop are anonymous guests.\n\n## What Changes\n\n- **Staff spend points** on a member's behalf.\n",
     },
     { name: "specs", kind: "specs", present: true },
+    { name: "user-journeys", kind: "journeys", present: true },
+    { name: "test-cases", kind: "cases", present: false },
     {
-      name: "design",
+      name: "ui-design",
       kind: "doc",
-      path: "openspec/changes/pos/design.md",
-      present: true,
-      text: "# Design\n\n## Decisions\n\nThe till never blocks a sale.\n",
+      path: "openspec/changes/pos/ui-design.md",
+      present: false,
     },
     {
-      name: "ui",
+      name: "tech-design",
       kind: "doc",
-      path: "openspec/changes/pos/ui.md",
-      present: false,
+      path: "openspec/changes/pos/tech-design.md",
+      present: true,
+      text: "# Design\n\n## Decisions\n\nThe till never blocks a sale.\n",
     },
     {
       name: "tasks",
@@ -226,8 +228,10 @@ describe("the artifacts row", () => {
     expect(tabs).toEqual([
       "Product",
       "Requirements",
-      "Tech Design",
+      "Journeys",
+      "Test Cases",
       "UI",
+      "Tech Design",
       "Tasks",
     ]);
   });
@@ -236,8 +240,8 @@ describe("the artifacts row", () => {
     expect(html).toMatch(
       /aria-disabled="true"[^>]*role="tab"[^>]*>(?:<svg.*?<\/svg>)?UI<span[^>]*>missing/,
     );
-    expect(html).toContain("ui.md is still to write");
-    expect(html).toContain("Still to write: ui.md");
+    expect(html).toContain("ui-design.md is still to write");
+    expect(html).toContain("Still to write: test-cases.md, ui-design.md");
   });
 
   it("counts what the requirements and the plan carry", () => {
@@ -246,7 +250,7 @@ describe("the artifacts row", () => {
   });
 
   it("wears the schema the change was created under", () => {
-    expect(html).toContain(">full-planning<");
+    expect(html).toContain(">grade10-planning<");
   });
 
   it("says when the schema cannot say what is missing", () => {
@@ -268,13 +272,14 @@ describe("one tab per file the change has", () => {
     expect(html).toContain('id="proposal-why"');
     expect(html).toContain(">Product<");
     expect(html).toContain(">Requirements<");
+    expect(html).toContain(">Journeys<");
     expect(html).toContain(">Tech Design<");
     expect(html).toContain(">Tasks<");
     expect(html).toContain("PM-driven proposal");
   });
 
   it("opens the tab the URL names", () => {
-    const html = render("/in-flight/pos?tab=design");
+    const html = render("/in-flight/pos?tab=tech-design");
 
     expect(html).toContain("The till never blocks a sale.");
     expect(html).not.toContain("Staff spend points");
@@ -282,7 +287,9 @@ describe("one tab per file the change has", () => {
   });
 
   it("falls back to the first tab for one the change lacks", () => {
-    expect(render("/in-flight/pos?tab=ui")).toContain("Staff spend points");
+    expect(render("/in-flight/pos?tab=ui-design")).toContain(
+      "Staff spend points",
+    );
   });
 
   it("shows the plan group by group, open lines first", () => {
@@ -298,13 +305,18 @@ describe("one tab per file the change has", () => {
 describe("the delta as the contract it proposes", () => {
   const html = render("/in-flight/pos?tab=specs");
 
-  it("reads purpose, feature set and journeys under the delta's title", () => {
+  it("reads purpose and feature set under the delta's title", () => {
     expect(html).toContain("Alpha — delta");
     expect(html).toContain("The redemption mechanics the shop needs.");
     expect(html).toContain("Per-unit rewards");
-    expect(html).toContain("alpha-US-06");
-    expect(html).toContain("Member redeems a per-unit reward");
-    expect(html).toContain("One redemption, one debit");
+  });
+
+  it("leaves the stories to the journeys tab", () => {
+    expect(html).not.toContain("Member redeems a per-unit reward");
+    const stories = render("/in-flight/pos?tab=user-journeys");
+    expect(stories).toContain("alpha-US-06");
+    expect(stories).toContain("Member redeems a per-unit reward");
+    expect(stories).toContain("One redemption, one debit");
   });
 
   it("lists each section's rows with their kind", () => {
@@ -315,10 +327,9 @@ describe("the delta as the contract it proposes", () => {
     expect(html).toContain(">modified<");
   });
 
-  it("offers the three readings", () => {
+  it("offers the two readings", () => {
     expect(html).toContain(">Contract<");
     expect(html).toContain(">Full<");
-    expect(html).toContain(">Test plan<");
   });
 
   it("counts what the delta carries", () => {
