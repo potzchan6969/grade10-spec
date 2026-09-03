@@ -10,10 +10,10 @@ import {
   useFirstPaintReveal,
 } from "../shared/use-first-paint-reveal";
 import { OrderDetailsDeliveryStatus } from "./order-details-delivery-status";
-import { resolveDeliverySteps } from "./resolve-delivery-steps";
 import { OrderDetailsHeader } from "./order-details-header";
 import { OrderDetailsOrderTable } from "./order-details-order-table";
 import { OrderDetailsSidebar } from "./order-details-sidebar";
+import { resolveDeliverySteps } from "./resolve-delivery-steps";
 import type {
   OrderDetailsAddress,
   OrderDetailsCopy,

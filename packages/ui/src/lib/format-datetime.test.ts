@@ -1,13 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { FIXTURE_ACTIVITY_TIME_COPY, FIXTURE_NOW_MS } from "./datetime-fixtures";
+import {
+  FIXTURE_ACTIVITY_TIME_COPY,
+  FIXTURE_NOW_MS,
+} from "./datetime-fixtures";
 import {
   ACTIVITY_RELATIVE_MAX_MS,
-  JUST_NOW_MAX_MS,
   formatActivityAt,
   formatCollectorDeadline,
   formatLocalMoment,
   formatRelativeAt,
   isPastActivityCap,
+  JUST_NOW_MAX_MS,
   resolveActivityNow,
   resolveShippedLocale,
 } from "./format-datetime";
@@ -19,15 +22,15 @@ const DAY_MS = 24 * HOUR_MS;
 
 describe("formatRelativeAt", () => {
   it("returns justNow below 45 seconds", () => {
-    expect(
-      formatRelativeAt(NOW - 44_000, { copy: COPY, now: NOW }),
-    ).toBe("Just now");
+    expect(formatRelativeAt(NOW - 44_000, { copy: COPY, now: NOW })).toBe(
+      "Just now",
+    );
   });
 
   it("enters seconds tier at 45 seconds", () => {
-    expect(
-      formatRelativeAt(NOW - 45_000, { copy: COPY, now: NOW }),
-    ).toBe("45 sec ago");
+    expect(formatRelativeAt(NOW - 45_000, { copy: COPY, now: NOW })).toBe(
+      "45 sec ago",
+    );
   });
 
   it("floors minutes", () => {

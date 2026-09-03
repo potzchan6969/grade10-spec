@@ -4,6 +4,7 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
+import { loyaltyPointsHeading } from "./loyalty-points-heading";
 import { OrderDetailsPaymentLogo } from "./order-details-payment-logo";
 import type {
   OrderDetailsAddress,
@@ -12,7 +13,6 @@ import type {
   OrderDetailsSidebarCopy,
   OrderDetailsSummary,
 } from "./types";
-import { loyaltyPointsHeading } from "./loyalty-points-heading";
 
 type OrderDetailsSidebarProps = {
   copy: OrderDetailsSidebarCopy;

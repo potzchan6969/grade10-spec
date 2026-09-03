@@ -1,8 +1,8 @@
-import { describe, expect, test } from "vitest";
 import {
   BID_PANEL_STATE_RESPONSES,
   PAYMENT_AUTHORIZATION_STATE_RESPONSES,
 } from "@grade10/test/bid-panel-states";
+import { describe, expect, test } from "vitest";
 
 describe("Bid Panel normalized API response shapes", () => {
   test("enumerates unique query and mutation scenario IDs", () => {
@@ -11,9 +11,9 @@ describe("Bid Panel normalized API response shapes", () => {
     );
 
     expect(scenarioIds).toHaveLength(new Set(scenarioIds).size);
-    expect(scenarioIds.every((scenarioId) => scenarioId.startsWith("bid-panel/"))).toBe(
-      true,
-    );
+    expect(
+      scenarioIds.every((scenarioId) => scenarioId.startsWith("bid-panel/")),
+    ).toBe(true);
   });
 
   test.each(Object.values(BID_PANEL_STATE_RESPONSES))(

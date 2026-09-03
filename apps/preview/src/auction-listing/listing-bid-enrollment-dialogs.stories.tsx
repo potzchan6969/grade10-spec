@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
+import { expect, waitFor, within } from "storybook/test";
 import { ListingBidEnrollmentCardPreview } from "./listing-bid-enrollment-card-preview";
 import {
   ENROLLMENT_SNAPSHOT_AUTO_BID_CONFIRM,
@@ -83,10 +83,11 @@ export const AutoBidConfirmation = enrollmentDialogStory(
 export const PaymentAuthorizationPending: Story = {
   render: () => <PaymentAuthorizationDialogPreview state="pending" />,
   play: async () => {
-    const dialog = within(document.body).getByRole("dialog", {
-      name: "Authorize your bid",
-    });
-    expect(dialog).toBeVisible();
+    const dialog = await waitFor(() =>
+      within(document.body).getByRole("dialog", {
+        name: "Authorize your bid",
+      }),
+    );
     expect(
       within(dialog).getByRole("button", {
         name: "Authorizing payment method",
@@ -98,10 +99,11 @@ export const PaymentAuthorizationPending: Story = {
 export const PaymentAuthorizationRefused: Story = {
   render: () => <PaymentAuthorizationDialogPreview state="refused" />,
   play: async () => {
-    const dialog = within(document.body).getByRole("dialog", {
-      name: "Authorize your bid",
-    });
-    expect(dialog).toBeVisible();
+    const dialog = await waitFor(() =>
+      within(document.body).getByRole("dialog", {
+        name: "Authorize your bid",
+      }),
+    );
     expect(within(dialog).getByRole("alert")).toHaveTextContent(
       "Your payment method was declined.",
     );

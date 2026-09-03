@@ -2,6 +2,7 @@ name: Design sync
 
 on:
   push:
+    branches: [main]
   pull_request:
   # A Figma edit produces no event in this repository, so the push and
   # pull_request triggers only ever catch drift that a code change happens to

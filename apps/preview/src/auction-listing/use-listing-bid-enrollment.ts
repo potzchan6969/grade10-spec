@@ -171,19 +171,20 @@ function useListingBidEnrollment(
       linkedPaymentMethod: ready
         ? accountLinkedPayment(!session.hasPlacedBid)
         : undefined,
-      paymentSetup: session.paymentSetup !== "none"
-        ? {
-            requiresIframeLink:
-              session.paymentSetup === "change-required" ||
-              !session.hasAccountPayment,
-            iframeLinkedPayment:
-              session.paymentSetup === "change-required"
-              ? ENROLLMENT_DEMO_SAVED_PAYMENT
-              : undefined,
-            defaultAgeAttested:
-              session.paymentSetup === "change-required" || undefined,
-          }
-        : undefined,
+      paymentSetup:
+        session.paymentSetup !== "none"
+          ? {
+              requiresIframeLink:
+                session.paymentSetup === "change-required" ||
+                !session.hasAccountPayment,
+              iframeLinkedPayment:
+                session.paymentSetup === "change-required"
+                  ? ENROLLMENT_DEMO_SAVED_PAYMENT
+                  : undefined,
+              defaultAgeAttested:
+                session.paymentSetup === "change-required" || undefined,
+            }
+          : undefined,
     };
   }, [needsSetup, ready, session]);
 

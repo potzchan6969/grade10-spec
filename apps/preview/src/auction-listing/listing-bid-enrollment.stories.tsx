@@ -285,11 +285,13 @@ NeedCard.play = async ({ canvasElement }) => {
     canvas.queryByRole("button", { name: "Sign In to Bid" }),
   ).not.toBeInTheDocument();
   await userEvent.click(canvas.getByRole("button", { name: "Place Bid" }));
-  expect(
-    within(document.body).getByRole("dialog", {
-      name: "Get Ready to Bid",
-    }),
-  ).toBeVisible();
+  await waitFor(() => {
+    expect(
+      within(document.body).getByRole("dialog", {
+        name: "Get Ready to Bid",
+      }),
+    ).toBeVisible();
+  });
   await dismissDialog("Get Ready to Bid");
   expect(
     canvas.getByRole("button", { name: "Link a card to place a bid." }),

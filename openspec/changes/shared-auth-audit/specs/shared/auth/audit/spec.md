@@ -51,10 +51,6 @@
 
 ## ADDED Requirements
 
-### Account lifecycle
-
----
-
 ### Requirement: Account create, verify-flip, and delete are recorded
 
 WHEN a trusted product's create creates a new user id, the identity trail
@@ -121,10 +117,6 @@ request.
 - **GIVEN** a verified account
 - **WHEN** a trusted product marks that email verified
 - **THEN** no identity trail entry is written for that request
-
-### Second-factor writes
-
----
 
 ### Requirement: Second-factor enable, disable, and recovery-code regenerate are recorded
 

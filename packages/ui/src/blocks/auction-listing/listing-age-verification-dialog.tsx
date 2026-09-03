@@ -26,8 +26,8 @@ import {
   isListingAgeVerificationAdult,
   isListingAgeVerificationComplete,
   LISTING_AGE_VERIFICATION_MONTHS,
-  listingAgeVerificationYearOptions,
   type ListingAgeVerificationDob,
+  listingAgeVerificationYearOptions,
 } from "./listing-age-verification-form";
 
 type ListingAgeVerificationDialogCopy = {
