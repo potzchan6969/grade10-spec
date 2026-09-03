@@ -18,7 +18,7 @@ backend.
 - [ ] 1.3 Verify with `pnpm check:manual` and
   `openspec validate create-standalone-auction-listings --strict`.
 
-## 2. Standalone fixture seed and drop on the auction service (grade10)
+## 2. Standalone fixture seed and drop on the auction service (grade10) (owner: @mason5991)
 
 - [ ] 2.1 Make `admin-listing-SC-65` pass on the backend — extend
   `seedDevListing` to accept `campaignId: null` (skip `createSeedCampaign`,
