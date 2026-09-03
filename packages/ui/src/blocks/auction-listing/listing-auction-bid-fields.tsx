@@ -19,7 +19,6 @@ import { ListingCountdownDisplay } from "./listing-countdown-display";
 import {
   ListingQuickMaximumBidActions,
   type ListingQuickMaximumBidActionsCopy,
-  type MarketComps,
 } from "./listing-quick-maximum-bid-actions";
 import { ListingRollingMoneyDisplay } from "./listing-rolling-money-display";
 import type { BidEnrollment, ListingAuctionBidView } from "./types";
@@ -315,7 +314,6 @@ type BidActionsProps = {
   view: ListingAuctionBidView;
   bidEnrollment?: BidEnrollment;
   locale: ShippedLocale;
-  marketComps?: MarketComps;
   onPlaceBid: () => void;
   onCommitMaximum: (amountMinor: number) => void;
 };
@@ -339,7 +337,6 @@ function BidActions({
   view,
   bidEnrollment = "ready",
   locale,
-  marketComps,
   onPlaceBid,
   onCommitMaximum,
 }: BidActionsProps) {
@@ -353,7 +350,6 @@ function BidActions({
     <ListingQuickMaximumBidActions
       copy={copy}
       locale={locale}
-      marketComps={marketComps}
       onCommitMaximum={onCommitMaximum}
       view={view}
     />

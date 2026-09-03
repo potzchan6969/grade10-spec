@@ -10,11 +10,17 @@ import {
   TooltipTrigger,
 } from "@grade10/design-system/components/overlays/tooltip";
 import { Info } from "@phosphor-icons/react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ShippedLocale } from "../../lib/format-datetime";
-import { currencyExponent, formatMoney } from "../../lib/format-money";
+import {
+  currencyExponent,
+  formatMoney,
+  formatMoneyNumeric,
+} from "../../lib/format-money";
+import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
 import { isMaximumBelowFloor, resolveMaximumFloor } from "./listing-bid-money";
 import type { ListingAuctionBidView } from "./types";
+import "./listing-bid-mode-stack.css";
 
 const PRESET_INCREMENTS = [
   { multiples: 1, captionKey: "nextEligible" as const },
@@ -28,7 +34,6 @@ type ListingQuickMaximumBidActionsCopy = {
   chooseAnotherAmount: string;
   backToQuickAmounts: string;
   reviewMaximum: string;
-  privateMaximumExplainer: string;
   privateMaximumTooltip: string;
   stepperMessage: string;
   bidImmediate: string;
@@ -41,16 +46,10 @@ type ListingQuickMaximumBidActionsCopy = {
   threeIncrementsAboveMinimum: string;
 };
 
-type MarketComps = {
-  title: string;
-  range: string;
-};
-
 type ListingQuickMaximumBidActionsProps = {
   copy: ListingQuickMaximumBidActionsCopy;
   view: ListingAuctionBidView;
   locale: ShippedLocale;
-  marketComps?: MarketComps;
   onCommitMaximum: (amountMinor: number) => void;
 };
 
@@ -66,7 +65,6 @@ function ListingQuickMaximumBidActions({
   copy,
   view,
   locale,
-  marketComps,
   onCommitMaximum,
 }: ListingQuickMaximumBidActionsProps) {
   const hasCommittedMaximum = view.viewerMaximumMinor != null;
@@ -152,15 +150,20 @@ function ListingQuickMaximumBidActions({
 
   const maximumMinor = toMinor(maximumMajor, view.currency);
   const maximumInvalid = isMaximumBelowFloor(maximumMinor, floorMaximumMinor);
-  const stepperMessage = copy.stepperMessage
-    .replace(
-      "{increment}",
-      formatMoney(view.incrementMinor, view.currency, { locale }),
-    )
-    .replace(
-      "{amount}",
-      formatMoney(floorMaximumMinor, view.currency, { locale }),
-    );
+  const stepAmountLabel = `$${formatMoneyNumeric(
+    view.incrementMinor,
+    view.currency,
+    locale,
+  )}`;
+  const formatMaximumMajor = useCallback(
+    (major: number) =>
+      formatMoneyNumeric(toMinor(major, view.currency), view.currency, locale),
+    [locale, view.currency],
+  );
+  const stepperMessage = copy.stepperMessage.replace(
+    "{increment}",
+    formatMoney(view.incrementMinor, view.currency, { locale }),
+  );
 
   const heading = hasCommittedMaximum
     ? copy.raisePrivateMaximum.replace(
@@ -206,87 +209,83 @@ function ListingQuickMaximumBidActions({
         </TooltipProvider>
       </HStack>
 
-      {customOpen ? (
-        <VStack className="w-full" gap="sm">
-          <StepperInput
-            aria-label={heading}
-            decrementLabel="Decrease maximum"
-            incrementLabel="Increase maximum"
-            message={stepperMessage}
-            min={floorMajor}
-            onValueChange={setMaximumMajor}
-            size="md"
-            status={maximumInvalid ? "error" : "default"}
-            step={incrementMajor}
-            value={maximumMajor}
-          />
-          {marketComps ? (
-            <VStack className="w-full" gap="xs">
-              <Text size="xs" tone="secondary" weight="medium">
-                {marketComps.title}
-              </Text>
-              <Text size="sm" tone="secondary">
-                {marketComps.range}
-              </Text>
-            </VStack>
-          ) : null}
-          <Button
-            className="w-full"
-            disabled={maximumInvalid}
-            onClick={handleReviewMaximum}
-            size="md"
-          >
-            {copy.reviewMaximum}
-          </Button>
-          <Button
-            className="w-full"
-            onClick={() => setCustomOpen(false)}
-            size="md"
-            variant="ghost"
-          >
-            {copy.backToQuickAmounts}
-          </Button>
-        </VStack>
-      ) : (
-        <VStack className="w-full" gap="sm">
-          {presets.map((preset) => {
-            const amountLabel = formatMoney(preset.amountMinor, view.currency, {
-              locale,
-            });
-            const labelTemplate = preset.immediate
-              ? copy.bidImmediate
-              : copy.bidUpTo;
-            return (
-              <Button
-                className="h-auto w-full flex-col items-start gap-0.5 px-4 py-3 text-left whitespace-normal"
-                key={preset.key}
-                onClick={() => onCommitMaximum(preset.amountMinor)}
+      <div className="bid-mode-stack w-full">
+        <ListingAutoBidReveal open={!customOpen}>
+          <VStack className="w-full" gap="sm">
+            {presets.map((preset) => {
+              const amountLabel = formatMoney(
+                preset.amountMinor,
+                view.currency,
+                { locale },
+              );
+              const labelTemplate = preset.immediate
+                ? copy.bidImmediate
+                : copy.bidUpTo;
+              return (
+                <Button
+                  className="h-auto w-full flex-col items-start gap-0.5 px-4 py-3 text-left whitespace-normal"
+                  key={preset.key}
+                  onClick={() => onCommitMaximum(preset.amountMinor)}
+                  size="md"
+                  variant="outline"
+                >
+                  <span className="text-sm font-medium">
+                    {labelTemplate.replace("{amount}", amountLabel)}
+                  </span>
+                  <span className="text-xs font-normal text-secondary-foreground">
+                    {preset.caption}
+                  </span>
+                </Button>
+              );
+            })}
+            <Button
+              className="w-full"
+              onClick={openCustom}
+              size="md"
+              variant="secondary"
+            >
+              {copy.chooseAnotherAmount}
+            </Button>
+          </VStack>
+        </ListingAutoBidReveal>
+        <ListingAutoBidReveal open={customOpen}>
+          <VStack className="w-full" gap="sm">
+            <HStack className="w-full" gap="sm" vAlign="start">
+              <StepperInput
+                aria-label={heading}
+                className="min-w-0 flex-1"
+                decrementLabel={`Decrease by ${stepAmountLabel}`}
+                formatValue={formatMaximumMajor}
+                incrementLabel={`Increase by ${stepAmountLabel}`}
+                message={stepperMessage}
+                min={floorMajor}
+                onValueChange={setMaximumMajor}
                 size="md"
-                variant="outline"
+                status={maximumInvalid ? "error" : "default"}
+                step={incrementMajor}
+                stepAmountLabel={stepAmountLabel}
+                value={maximumMajor}
+              />
+              <Button
+                className="shrink-0"
+                disabled={maximumInvalid}
+                onClick={handleReviewMaximum}
+                size="md"
               >
-                <span className="text-sm font-medium">
-                  {labelTemplate.replace("{amount}", amountLabel)}
-                </span>
-                <span className="text-xs font-normal text-secondary-foreground">
-                  {preset.caption}
-                </span>
+                {copy.reviewMaximum}
               </Button>
-            );
-          })}
-          <Button
-            className="w-full"
-            onClick={openCustom}
-            size="md"
-            variant="ghost"
-          >
-            {copy.chooseAnotherAmount}
-          </Button>
-        </VStack>
-      )}
-
-      <Text size="xs" tone="secondary">
-        {copy.privateMaximumExplainer}
-      </Text>
+            </HStack>
+            <Button
+              className="w-full"
+              onClick={() => setCustomOpen(false)}
+              size="md"
+              variant="secondary"
+            >
+              {copy.backToQuickAmounts}
+            </Button>
+          </VStack>
+        </ListingAutoBidReveal>
+      </div>
     </VStack>
   );
 }
@@ -294,6 +293,5 @@ function ListingQuickMaximumBidActions({
 export type {
   ListingQuickMaximumBidActionsCopy,
   ListingQuickMaximumBidActionsProps,
-  MarketComps,
 };
 export { ListingQuickMaximumBidActions };

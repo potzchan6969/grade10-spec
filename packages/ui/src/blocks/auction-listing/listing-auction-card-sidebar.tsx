@@ -4,9 +4,11 @@ import type { ShippedLocale } from "../../lib/format-datetime";
 import type { ListingAuctionBidCardCopy } from "./listing-auction-bid-card";
 import { ListingAuctionBidCard } from "./listing-auction-bid-card";
 import { LISTING_LOT_SIDEBAR_CLASS } from "./listing-lot-layout";
-import type { ListingLotMetaCopy } from "./listing-lot-meta";
+import type {
+  ListingLotMarketComps,
+  ListingLotMetaCopy,
+} from "./listing-lot-meta";
 import { ListingLotMeta } from "./listing-lot-meta";
-import type { MarketComps } from "./listing-quick-maximum-bid-actions";
 import type {
   BidEnrollment,
   ListingAuctionBidView,
@@ -33,7 +35,7 @@ type ListingAuctionCardSidebarProps = {
   recentBidsAccessory?: ReactNode;
   /** Renders directly under the bid card (e.g. linked payment method). */
   bidCardFooter?: ReactNode;
-  marketComps?: MarketComps;
+  marketComps?: ListingLotMarketComps;
   locale: ShippedLocale;
   timeZone: string;
 };
@@ -70,7 +72,6 @@ function ListingAuctionCardSidebar({
           history={history}
           historyResetKey={historyResetKey}
           locale={locale}
-          marketComps={marketComps}
           onCommitMaximum={onCommitMaximum}
           onPlaceBid={onPlaceBid}
           recentBidsAccessory={recentBidsAccessory}
@@ -84,6 +85,7 @@ function ListingAuctionCardSidebar({
         badges={badges}
         copy={copy}
         description={description}
+        marketComps={marketComps}
         resultFact={view.resultFact}
         showMoreHref={showMoreHref}
         vaultShippingBody={vaultShippingBody}

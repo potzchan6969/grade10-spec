@@ -141,7 +141,6 @@ around it.
     recentBidsAccessory: { table: { disable: true } },
     locale: { table: { disable: true } },
     timeZone: { table: { disable: true } },
-    marketComps: { table: { disable: true } },
     bidEnrollment: {
       control: "select",
       options: ["signed-out", "ready"],

@@ -138,12 +138,10 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   raisePrivateMaximum: "Raise your private maximum (current: {amount})",
   chooseAnotherAmount: "Choose another amount",
   backToQuickAmounts: "Back to quick amounts",
-  reviewMaximum: "Review maximum",
-  privateMaximumExplainer:
-    "Every bid is a private maximum. We’ll bid only as much as needed to keep you leading, up to your amount.",
+  reviewMaximum: "Place Bid",
   privateMaximumTooltip:
     "Your maximum is the most you are willing to pay before buyer fees. We place the lowest bid needed to keep you in the lead. Other bidders cannot see your maximum.",
-  stepperMessage: "Steps of {increment} · min {amount}",
+  stepperMessage: "Min.: Current bid + {increment}",
   bidImmediate: "Bid {amount}",
   bidUpTo: "Bid up to {amount}",
   nextEligibleBid: "Next eligible bid",

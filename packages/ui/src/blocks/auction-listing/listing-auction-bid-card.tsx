@@ -26,7 +26,6 @@ import {
 } from "./listing-auction-bid-fields";
 import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
 import { ListingBidHistoryList } from "./listing-bid-history-list";
-import type { MarketComps } from "./listing-quick-maximum-bid-actions";
 import type {
   BidEnrollment,
   ListingAuctionBidView,
@@ -51,17 +50,10 @@ type ListingAuctionBidCardProps = {
   bidEnrollment?: BidEnrollment;
   locale: ShippedLocale;
   timeZone: string;
-  marketComps?: MarketComps;
   onPlaceBid: () => void;
   onCommitMaximum: (amountMinor: number) => void;
   recentBidsAccessory?: ReactNode;
 };
-
-/** Full rows for short lists; a half-row peek when more bids exist below the fold. */
-function recentBidsVisibleRows(bidCount: number): number {
-  if (bidCount >= 4) return 3.5;
-  return Math.max(1, bidCount);
-}
 
 function RecentBidsScrollArea({
   children,
@@ -70,6 +62,7 @@ function RecentBidsScrollArea({
 }: {
   children: ReactNode;
   contentKey: string;
+  /** Fixed viewport height in row units — keeps the section stable as bids arrive. */
   visibleRows?: number;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -155,7 +148,6 @@ function ListingAuctionBidCard({
   bidEnrollment,
   locale,
   timeZone,
-  marketComps,
   onPlaceBid,
   onCommitMaximum,
   recentBidsAccessory,
@@ -235,7 +227,6 @@ function ListingAuctionBidCard({
           </HStack>
           <RecentBidsScrollArea
             contentKey={`${historyResetKey ?? "live"}:${history.length}:${history[0]?.id ?? ""}`}
-            visibleRows={recentBidsVisibleRows(history.length)}
           >
             <ListingBidHistoryList
               activityTimeCopy={copy.activityTimeCopy}
@@ -259,7 +250,6 @@ function ListingAuctionBidCard({
               bidEnrollment={bidEnrollment}
               copy={copy}
               locale={locale}
-              marketComps={marketComps}
               onCommitMaximum={onCommitMaximum}
               onPlaceBid={onPlaceBid}
               view={view}
