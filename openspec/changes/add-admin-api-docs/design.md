@@ -12,10 +12,13 @@ Two facts, verified in the application repository, make the spec cheap:
 - The input and output validators a procedure holds at runtime are the Effect
   schemas themselves — `toStandardSchemaV1` mutates and returns its argument —
   so their AST survives and converts to JSON Schema. Every schema the eight
-  routers declare converts but three, which are hand-written parsers rather
-  than schemas (the auth worker's erasure inputs) and are recorded as
-  declared-and-unreadable. 217 procedures across the eight routers enumerate,
-  and the till's nine beside them.
+  routers declare converts. The auth worker's three erasure inputs were
+  hand-written parsers, the one kind of validator tRPC accepts that carries no
+  AST; they take Effect schemas now, and the document keeps a
+  declared-and-unreadable marker for any parser a router grows later, so a
+  procedure that takes something never reads as one that takes nothing. 217
+  procedures across the eight routers enumerate, and the till's nine beside
+  them.
 
   They load under Vite's node loader rather than under node itself: the
   routers are TypeScript sources with bundler-resolved imports, and the
