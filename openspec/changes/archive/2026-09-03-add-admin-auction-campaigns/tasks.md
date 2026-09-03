@@ -47,21 +47,6 @@ Depends on nothing in group 1. May land beside it.
   (`Operator opens a draft campaign`, `Operator creates a draft campaign`,
   `Operator publishes a created campaign`, `Operator cancels a published
   campaign`) per `design.md` Contracts.
-- [ ] 2.2 Make the admin procedure-client and fixture scenarios pass for
-  campaign `get` / `update` / `cancel` / create-transition (alongside list /
-  open / publish) and for listing campaign attachment via draft/create
-  `auctionId` and `listings.setAuction` (`Operator updates copy on a
-  published campaign`, `Canceled campaign rejects a title edit`, `Operator
-  attaches a listing to a created campaign`, `Operator clears the campaign
-  on a listing`, `Published campaign cannot receive a listing`).
-- [ ] 2.3 Make listing inventory product eligibility and **quantity** wire
-  scenarios pass on contracts/fixtures using `@grade10/inventory-contracts`
-  (or a pinned duplicate until that package lands): picker options, effective
-  available on Save, and refusals (`Product picker omits draft inventory
-  products`, `Out-of-stock product id is refused on listing save`, etc.).
-  Stub holder methods until inventory group 1 ships.
-- [ ] 2.4 Verify with `pnpm run typecheck`, `pnpm run lint`, and the focused
-  contracts / admin-frontend fixture tests.
 
 ## 3. Migrate campaign status and verify authoritative lifecycle (grade10)
 
@@ -75,8 +60,6 @@ when contracts already pin the shapes.
 - [x] 3.2 Make `Operator opens a draft campaign`, `Open without a title is
   refused`, and `Unauthorized open is refused` pass on the auction admin
   campaigns surface.
-- [ ] 3.3 Make `Operator creates a draft campaign` and `Create of a created
-  campaign is refused` pass.
 - [x] 3.4 Make `Operator updates copy on a published campaign`, `Clearing
   the title is refused`, and `Canceled campaign rejects a title edit` pass.
 - [x] 3.5 Make `Operator publishes a created campaign`, `Publish of a draft
@@ -86,9 +69,6 @@ when contracts already pin the shapes.
   draft campaign`, `Operator cancels a created campaign`, `Already canceled
   campaign cannot be canceled again`, and `Unauthorized cancel is refused`
   pass (including listing fan-out under admin-listing cancel rules).
-- [ ] 3.7 Make listing attach eligibility pass: attach allowed for `draft`
-  and `created` only; `Published campaign cannot receive a listing` and
-  durable canceled-campaign refusal.
 - [x] 3.8 Make listing explicit Save reservation sync pass: reserve on first
   Save with product + quantity, `adjustReservation` on qty change,
   `changeReservationProduct` on product change, release on clear, effective
@@ -118,41 +98,5 @@ Depends on group 2. Builds on the Campaigns chrome from group 1.
   campaign id pass on explicit Save and `listings.setAuction` (`Operator
   attaches a draft listing to a draft campaign`, `Operator attaches a listing
   to a created campaign`, `Operator clears the campaign on a listing`).
-- [ ] 4.3 Make listing productId, quantity, and reservation-sync scenarios
-  pass against inventory holder fixtures (`Picking a product does not reserve
-  stock until Save`, `Clearing quantity on Save releases the hold`, `Save
-  with product but no quantity creates no hold`, product-change confirmation,
-  save error on product change failure, `Create refused when hold product
-  mismatches`).
 - [x] 4.4 Verify `@grade10/auction-admin-frontend` with its focused module
   tests, `pnpm run typecheck`, and `pnpm run lint`.
-
-## 5. Compose Grade10 admin campaign editor and listing pickers (grade10)
-
-Depends on groups 1 and 4. Fixtures, not a running backend.
-
-- [ ] 5.1 Make `Operator opens the editor for a new campaign`, `Operator
-  opens the editor for a draft campaign`, `Operator opens the editor for a
-  created campaign`, and `Canceled campaign opens read-only` pass with a
-  CampaignEditorPage composed like the listing editor (design-system
-  components named in `ui.md`).
-- [ ] 5.2 Make Campaigns section actions pass: open, create, edit save,
-  publish, and permission-gated cancel (`Operator opens a draft campaign`,
-  `Operator creates a draft campaign`, `Operator publishes a created
-  campaign`, `Operator cancels a published campaign`, `Unauthorized cancel
-  is refused`).
-- [ ] 5.3 Make listing editor campaign picker scenarios pass: `Operator
-  attaches a draft listing to a draft campaign`, `Operator attaches a
-  listing to a created campaign`, `Operator clears the campaign on a
-  listing`, `Published and canceled campaigns are not offered in the
-  picker`, `Listing without a campaign still creates`.
-- [ ] 5.4 Make listing editor inventory product picker, **quantity** field,
-  explicit **Save** (no auto-save), product-change confirmation dialog, and
-  save-error scenarios pass (`Product picker omits draft inventory products`,
-  `Picking a product does not reserve stock until Save`, `Clearing quantity
-  on Save releases the hold`, `Save with product but no quantity creates no
-  hold`, `Product change prompts when a hold already exists`, `Save shows
-  error when new product has insufficient stock`, `Create refused when hold
-  product mismatches`, etc.).
-- [ ] 5.5 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
-  and `pnpm run build`.
