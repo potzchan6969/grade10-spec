@@ -162,7 +162,7 @@ Depends on groups 1 and 2.
 - [x] 3.10 Verify with `pnpm run typecheck`, `pnpm run lint`, and
   `pnpm run test:backend`.
 
-## 4. Expose admin and holder RPC surfaces (grade10)
+## 4. Expose admin and holder RPC surfaces (grade10) (owner: @htonyl)
 
 Depends on group 3.
 
