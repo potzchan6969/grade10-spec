@@ -3,17 +3,25 @@
 Every Grade10 backend builds its procedures on one ladder factory in the
 shared worker library: `publicProcedure`, `authedProcedure`,
 `freshAuthedProcedure`, and `elevatedProcedure(...grants)`. The till adds a
-second factory with its own `posProcedure` / `posSessionProcedure`. Seven
+second factory with its own `posProcedure` / `posSessionProcedure`. Eight
 services mount a router on the first (store, auction, auth, loyalty, vault,
-appointment, finance); the store mounts the till's as well.
+appointment, finance, inventory); the store mounts the till's as well.
 
 Two facts, verified in the application repository, make the spec cheap:
 
 - The input and output validators a procedure holds at runtime are the Effect
   schemas themselves — `toStandardSchemaV1` mutates and returns its argument —
-  so their AST survives and converts to JSON Schema. 126 of 126 schemas across
-  store and auction convert; 187 procedures across the seven routers import
-  and enumerate under plain node.
+  so their AST survives and converts to JSON Schema. Every schema the eight
+  routers declare converts but three, which are hand-written parsers rather
+  than schemas (the auth worker's erasure inputs) and are recorded as
+  declared-and-unreadable. 217 procedures across the eight routers enumerate,
+  and the till's nine beside them.
+
+  They load under Vite's node loader rather than under node itself: the
+  routers are TypeScript sources with bundler-resolved imports, and the
+  auction's seed images among them. It is the loader the suite runs on, so
+  what the generator writes and what the drift check reads cannot come out of
+  two different resolutions.
 - `elevatedProcedure` already writes its grants to procedure meta, and the till
   ladder writes `principal`. Nothing else about the ladder is recorded: at
   runtime `public`, `session`, and `session · fresh` are indistinguishable.
@@ -47,7 +55,7 @@ See `proposal.md` for why.
 ### The caller is recorded on the ladder, as meta
 
 The spec requires four caller words. The ladder factory is the one place all
-seven services build from, so each rung records itself:
+eight services build from, so each rung records itself:
 `authedProcedure` sets `meta.caller = "session"`, `freshAuthedProcedure`
 `"fresh"`, `elevatedProcedure` `"elevated"` beside the grants it already
 records, and `publicProcedure` records nothing — absence is `public`. tRPC

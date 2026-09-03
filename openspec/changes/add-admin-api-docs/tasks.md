@@ -6,12 +6,13 @@ then be claimed in parallel.
 - [x] 1.1 Record the caller on the shared ladder: `authedProcedure` → `session`, `freshAuthedProcedure` → `fresh`, `elevatedProcedure` → `elevated` beside its grants, `publicProcedure` unrecorded. Test-first in the worker library's ladder suite: meta survives a chained `.meta()`, and every rung reports its word — the evidence behind `api-docs-SC-09` and `api-docs-SC-10`.
 - [x] 1.2 Add `VITE_BUILD_COMMIT` to the shared Vite define beside `VITE_DEPLOY_ENV`: `GITHUB_SHA`, else `git rev-parse HEAD`, else `development`. Cover the three sources in the app-env node suite (`api-docs-SC-12`).
 - [x] 1.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, `pnpm run test`.
+- [x] 1.4 Record `forwardsTo` on the ladder's meta and set it on the store's `auction.*`, the one router that fronts another worker. The walker carries it, the page says it once above a forwarding router's list and as a badge in the detail (`api-docs-SC-14`).
 
 ## 2. The document and its generator (grade10) (owner: @sean)
 
 - [x] 2.1 Create `packages/api-docs` (`@grade10/api-docs`, backend lane): the document type — services → procedures → path, kind, caller, grants, principal, input schema, output schema — and a `.` loader over `generated/`. A Handbook card and `pnpm run check:handbook` come with the package.
 - [x] 2.2 Write the walker under `./generate`: enumerate a router's mounted procedures, convert each validator to JSON Schema, refuse a validator with no schema AST, sort paths and keys, serialise. Test-first against a fixture router: every mounted procedure and nothing else (`api-docs-SC-01`); two runs are byte-identical (`api-docs-SC-13`).
-- [x] 2.3 Add the service table: store (session ladder plus the till router built with the loyalty acts as the grade10 assembly mounts it), auction, auth, loyalty, vault, appointment, finance. A `generate` package script writes `generated/<service>.json`; commit the first documents.
+- [x] 2.3 Add the service table: store (session ladder plus the till router built with the loyalty acts as the grade10 assembly mounts it), auction, auth, loyalty, vault, appointment, finance, inventory. A `generate` package script writes `generated/<service>.json`; commit the first documents.
 - [x] 2.4 Write the drift test: regenerate every service in memory and assert byte equality with `generated/`, failing with the service and the first differing procedure path and the instruction to run `generate` (`api-docs-SC-02`). Also assert every procedure carrying grants reports caller `elevated`, and list the distinct JSON Schema keywords seen so a new one is a visible diff.
 - [x] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, `pnpm run check:handbook`, `pnpm run check:libs`.
 

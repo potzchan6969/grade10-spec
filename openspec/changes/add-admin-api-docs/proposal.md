@@ -5,7 +5,7 @@
 An engineer wiring a console feature, or a QA reviewer checking what a role
 unlocks, has one way to learn what a backend call needs — its caller, its
 grant, the shape it takes and gives back: open the router source. Grade10's
-backends answer over a hundred procedures across seven services (store and
+backends answer over two hundred procedures across eight services (store and
 auction alone mount 101), every one of them already declaring its input
 shape and, where elevated, its grant. That record exists; nobody can read it
 without a checkout.

@@ -23,6 +23,7 @@ non-production builds, composed from the console's own vocabulary
 - Honesty of the record
   - Caller in four words: public, session, session · fresh, elevated with its grant
   - Undeclared output: a procedure with no output shape says so, and the service counts how many do
+  - Forwarded work: a procedure whose worker only fronts the call names the service that does the work
   - Provenance: the page names the commit its document was read from
 
 ## User journeys
@@ -41,6 +42,7 @@ non-production builds, composed from the console's own vocabulary
 - `api-docs-SC-07` — A procedure's detail shows its wire path and fields
 - `api-docs-SC-09` — An elevated procedure names its grant
 - `api-docs-SC-10` — A fresh-session call is told apart from a session call
+- `api-docs-SC-14` — A forwarded procedure names the service that does its work
 
 ### api-docs-US-02: QA reviewer traces what a grant unlocks
 
@@ -125,6 +127,7 @@ have every ladder in its document, named apart.
 | Vault | The elevated ladder |
 | Appointment | The elevated ladder |
 | Finance | The elevated ladder |
+| Inventory | The elevated ladder |
 
 #### Scenario: api-docs-SC-03 - The rail names every service with its count
 
@@ -228,6 +231,24 @@ from anything other than the declaration.
 - **WHEN** the engineer picks a procedure that declares no output shape
 - **THEN** its output panel says the output is not declared
 - **AND** the service's heading shows how many of its procedures are in that state
+
+### Requirement: A forwarded procedure names the service that does its work
+
+A procedure whose worker only fronts the call — resolving the caller and
+handing the work to another service over a binding, as the store's
+`auction.*` hands bidding to the auction worker — SHALL name that service, as
+the router declares it. A router whose every procedure forwards to one
+service SHALL say so once above its list; a procedure's detail SHALL say it
+beside the caller. A procedure whose worker does its own work SHALL carry no
+such note.
+
+#### Scenario: api-docs-SC-14 - A forwarded procedure names the service that does its work
+
+- **GIVEN** the store's `auction` router, every procedure of which forwards to the auction service
+- **WHEN** the engineer picks that router
+- **THEN** the list says its calls are handed to the auction worker over a service binding
+- **AND** picking one of its procedures shows the auction named beside the caller
+- **AND** a procedure of the checkout router shows no such note
 
 ### Requirement: The page names what it was read from
 
