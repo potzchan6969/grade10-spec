@@ -59,7 +59,7 @@ reach a bid-ready panel without abandoning setup.
   contract they must satisfy.
 - `apps/preview` and Storybook: static stories under
   `Auction Listing/Bid Panel` become the review surface once an engineer
-  promotes this change and writes `ui.md`.
+  promotes this change and writes `ui-design.md`.
 - `@grade10/auction-frontend` (consumer): owns session, enrollment
   completion, and when each state is passed into the shared blocks.
 - `add-auction-bid-card-authorization`: its non-goal on card replacement

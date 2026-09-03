@@ -29,7 +29,7 @@ corrected scale up on the next submodule bump without a source change.
 - [x] 1.5 Run `pnpm run typecheck` (pass) and `pnpm run lint` (0 errors, 4
       pre-existing warnings, none in the touched files).
 - [x] 1.6 Run `pnpm run test:stories` — 526 tests pass, unchanged from before.
-      Recorded in design.md as a coverage gap, not as evidence: no story
+      Recorded in tech-design.md as a coverage gap, not as evidence: no story
       asserts a border-radius, so nothing here would have caught the drift.
 
 ## 2. Verification left to a human

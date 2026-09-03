@@ -20,7 +20,7 @@ Independent of groups 2–7.
 
 Needs group 2 for the kind names the columns serve.
 
-- [ ] 3.1 Add nullable `opens_in_24h_notified_at`, `opened_notified_at`, `closes_in_24h_notified_at`, `extended_notified_at`, and `new_bid_told_bid_id` on watches, plus `closes_in_24h_notified_at`, `extended_notified_at`, and `new_bid_told_bid_id` on bids for the participant fallback, and create `auction.mail_sends` per `design.md`; generate and commit the Drizzle migration.
+- [ ] 3.1 Add nullable `opens_in_24h_notified_at`, `opened_notified_at`, `closes_in_24h_notified_at`, `extended_notified_at`, and `new_bid_told_bid_id` on watches, plus `closes_in_24h_notified_at`, `extended_notified_at`, and `new_bid_told_bid_id` on bids for the participant fallback, and create `auction.mail_sends` per `tech-design.md`; generate and commit the Drizzle migration.
 - [ ] 3.2 Run `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`.
 
 ## 4. Enrolment, fanout, and coalescing (grade10)
@@ -53,8 +53,8 @@ Claimable against the events from group 4, independently of group 5. Same email 
 
 Needs group 3.
 
-- [ ] 7.1 Produce the admin send-log Figma frame named in `ui.md` and link it there.
-- [ ] 7.2 Make `notifications-SC-24`, `notifications-SC-25`, and `notifications-SC-26` pass: type, sent-to email, listing, and Sent At; no body; distinguishing sent from attempted per `design.md`.
+- [ ] 7.1 Produce the admin send-log Figma frame named in `ui-design.md` and link it there.
+- [ ] 7.2 Make `notifications-SC-24`, `notifications-SC-25`, and `notifications-SC-26` pass: type, sent-to email, listing, and Sent At; no body; distinguishing sent from attempted per `tech-design.md`.
 - [ ] 7.3 Verify the admin auction feature lane.
 
 ## 8. Review (grade10)
@@ -63,5 +63,5 @@ Needs groups 4–7.
 
 - [ ] 8.1 Run the application repository's full check suite once every group above is green.
 - [ ] 8.2 Verify every scenario in this change, then run `openspec validate add-auction-notifications --strict` and `openspec validate --specs`.
-- [ ] 8.3 Review message volume on a lot with two active maximums before staging, per `design.md`'s snipe-war coalescing.
+- [ ] 8.3 Review message volume on a lot with two active maximums before staging, per `tech-design.md`'s snipe-war coalescing.
 - [ ] 8.4 After rollout is confirmed, fold the accepted delta into `openspec/specs/grade10-auction/` and archive this change.

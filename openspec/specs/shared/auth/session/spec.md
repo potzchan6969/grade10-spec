@@ -18,45 +18,6 @@ that product.
 - Analytics identity
   - Signed-in is the user: a signed-in event names the person; anonymous names the device
 
-## User journeys
-
-### session-US-01: Collector is named on every surface they use
-
-**As a** collector,
-**I want** a signed-in read to report my id, email, name, and roles, and a signed-out read to report nobody,
-**so that** every surface of this brand knows it is me, or that I have not signed in.
-
-**Accepted by:**
-
-- `session-SC-01` — Signed in
-- `session-SC-02` — Signed out
-- `session-SC-05` — Account data is keyed by user id
-- `session-SC-06` — Another person is shown by user id
-- `session-SC-09` — A client cannot claim a user
-
-### session-US-02: Collector stays signed in across the brand
-
-**As a** collector,
-**I want** one sign-in to cover every site of this brand and none of another,
-**so that** I do not sign in twice on the same brand or leak into the other.
-
-**Accepted by:**
-
-- `session-SC-03` — One sign-in covers the brand
-- `session-SC-04` — Sign-in does not cross brands
-
-### session-US-03: Collector's visits are named as them, not as a device
-
-**As a** collector,
-**I want** a signed-in event to name me and an anonymous event to name the device,
-**so that** analytics does not mix my account with a browser I have not signed in on.
-
-**Accepted by:**
-
-- `session-SC-07` — A signed-in event is the user
-- `session-SC-08` — An anonymous event is the device
-- `session-SC-10` — Sign-in links the device to the person
-
 ## Requirements
 
 ### Requirement: A signed-in person is named by id, email, name, and roles

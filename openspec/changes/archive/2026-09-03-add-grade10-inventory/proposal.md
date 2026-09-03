@@ -83,7 +83,7 @@ available stock.
 ### Modified Capabilities
 
 - (none) — RBAC vocabulary growth for `inventory:read` / `inventory:write`
-  is delivery detail in `design.md`.
+  is delivery detail in `tech-design.md`.
 
 ## Impact
 

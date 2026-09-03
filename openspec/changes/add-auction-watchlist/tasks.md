@@ -13,7 +13,7 @@
 
 Claimable against the contracts and fixtures from group 1; it does not need a running backend.
 
-- [ ] 2.1 Produce the bid-panel and catalogue-tile Figma frames named in `ui.md` and link them there.
+- [ ] 2.1 Produce the bid-panel and catalogue-tile Figma frames named in `ui-design.md` and link them there.
 - [ ] 2.2 Fill `ListingLotHeader`'s existing `watched` and `onWatchToggle` props on the lot page, making `watchlist-SC-01` and `watchlist-SC-02` pass there.
 - [ ] 2.3 Add a watch control to the catalogue tile, so watching is available wherever a lot is shown.
 - [ ] 2.4 Make `watchlist-SC-04` pass on both surfaces, offering sign-in rather than hiding the control.
@@ -24,7 +24,7 @@ Claimable against the contracts and fixtures from group 1; it does not need a ru
 
 Claimable against the contracts and fixtures from group 1.
 
-- [ ] 3.1 Produce the watched-lots Figma frame named in `ui.md` and link it there.
+- [ ] 3.1 Produce the watched-lots Figma frame named in `ui-design.md` and link it there.
 - [ ] 3.2 Make `watchlist-SC-11`, `watchlist-SC-15`, and `watchlist-SC-13` pass, rendering the close with its time zone.
 - [ ] 3.3 Make `watchlist-SC-12` pass as an explained empty state, not an error.
 - [ ] 3.4 Make `watchlist-SC-16`, `watchlist-SC-17`, and `watchlist-SC-14` pass.

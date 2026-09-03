@@ -16,7 +16,7 @@ running worker.
   `catalog-SC-54 - Created to draft is refused`, and
   `catalog-SC-57 - Operator edits product fields` pass with product
   (`status` draft|created), snapshot (including vaulted), count, and admin
-  procedure-client schemas from `design.md` Contracts.
+  procedure-client schemas from `tech-design.md` Contracts.
 - [x] 1.2 Make `catalog-SC-05 - Operator intakes three`, `catalog-SC-06 -
   Repeated intakes accumulate in one inventory`, `catalog-SC-08 - Invalid
   intake quantity is refused`, `catalog-SC-09 - Intake for unknown product
@@ -89,7 +89,7 @@ Depends on group 1.
   (`draft` | `created`), stored bigint counts (`stock`, `reserved`, `vaulted`,
   `sold`, `withdrawn` — no `ledger` column and no inventory `status` column),
   derived ledger identity (`stock + sold + withdrawn + vaulted`), and monotonic
-  triggers for sold / withdrawn / vaulted from `design.md`.
+  triggers for sold / withdrawn / vaulted from `tech-design.md`.
 - [x] 2.2 Make `catalog-SC-14 - Auction reserves a quantity`,
   `catalog-SC-16 - Closed reference may reserve again`,
   `catalog-SC-17 - Auction and Vault reserve the same product`,

@@ -8,20 +8,6 @@ When a cart line was reduced for low stock, the low-stock warning hides after th
   - Shown when adjusted: the consumer-supplied warning is visible on an adjusted line
   - Hidden after edit: a quantity change hides it for the rest of that mount
 
-## User journeys
-
-### store-cart-US-07: Shopper edits a low-stock line and the warning quiets
-
-**As a** shopper,
-**I want** the low-stock warning to hide after I change that line's quantity,
-**so that** it does not keep shouting after I have acted, and it returns if the line is adjusted again.
-
-**Accepted by:**
-
-- `store-cart-SC-14` — Adjusted line shows the low-stock warning
-- `store-cart-SC-15` — Quantity change hides the warning
-- `store-cart-SC-16` — New adjusted status shows the warning again
-
 ## ADDED Requirements
 
 ### Requirement: Low-stock adjustment warning hides after the shopper edits quantity

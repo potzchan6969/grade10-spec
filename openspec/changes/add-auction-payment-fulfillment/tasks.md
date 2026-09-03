@@ -1,7 +1,7 @@
 # Tasks: Auction payment and fulfillment
 
 Every implementation group lands in the `grade10` repository. Nothing changes
-in `grade10-spec` packages: `ui.md` names only existing design-system exports
+in `grade10-spec` packages: `ui-design.md` names only existing design-system exports
 and no `@grade10/ui` contract.
 
 Group 1 is the shared interface boundary. Group 2 lands the additive database

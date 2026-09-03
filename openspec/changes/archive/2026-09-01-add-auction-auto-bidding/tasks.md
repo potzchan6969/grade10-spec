@@ -19,7 +19,7 @@ Lands first: every other group consumes this through the submodule bump.
 
 Needs the contracts from group 2 landed.
 
-- [x] 3.1 Store a committed maximum per bidder per listing with its Accepted At, and migrate each existing accepted bid to a maximum equal to its amount per `design.md`'s migration plan.
+- [x] 3.1 Store a committed maximum per bidder per listing with its Accepted At, and migrate each existing accepted bid to a maximum equal to its amount per `tech-design.md`'s migration plan.
 - [x] 3.2 Make `auto-bidding-SC-09`, `auto-bidding-SC-11`, `auto-bidding-SC-12`, `auto-bidding-SC-13`, `auto-bidding-SC-14`, `auto-bidding-SC-15`, `auto-bidding-SC-01`, and `auto-bidding-SC-16` pass by deriving leader and current bid from the two highest maxima using the listing's own increment.
 - [x] 3.3 Make `auto-bidding-SC-17` and `auto-bidding-SC-18` pass by settling equal maxima on Accepted At order inside the existing serialized listing decision.
 - [x] 3.4 Make `auto-bidding-SC-03`, `auto-bidding-SC-04`, and `auto-bidding-SC-02` pass on the commitment path.
@@ -31,7 +31,7 @@ Needs the contracts from group 2 landed.
 
 Claimable against the contracts and fixtures from group 2; it does not need a running backend.
 
-- [x] 4.2 Change the bid control to ask for a maximum, with a confirmation that states the hold covers the maximum, per `design.md`'s risk on a misread maximum.
+- [x] 4.2 Change the bid control to ask for a maximum, with a confirmation that states the hold covers the maximum, per `tech-design.md`'s risk on a misread maximum.
 - [x] 4.3 Make `auto-bidding-SC-05` and `auto-bidding-SC-06` pass on the listing page, rendering the maximum and the current bid as separate facts.
 - [x] 4.4 Make `auto-bidding-SC-18` pass as an accepted, not-leading state rather than an error.
 - [x] 4.5 Add the panel's new copy to the `@grade10/i18n` catalogs for every locale the site answers.

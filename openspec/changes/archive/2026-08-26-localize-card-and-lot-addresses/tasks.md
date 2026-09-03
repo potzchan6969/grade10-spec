@@ -1,7 +1,7 @@
 # Tasks: Card and lot addresses name their language
 
 Every group lands in grade10; nothing here is work in grade10-spec, and there
-is no `ui.md` because every screen, component and state this change touches
+is no `ui-design.md` because every screen, component and state this change touches
 already exists unchanged. Group 1 is the seam — the split between "answers at
 one address per locale" and "the build wrote a document" — and groups 2 and 3
 both need it landed. Those two depend on nothing in each other.
