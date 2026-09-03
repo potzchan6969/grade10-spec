@@ -42,7 +42,7 @@ running worker.
   `catalog-SC-40 - Auction cannot vault from reservation` pass with
   sell-from-reservation / vault-from-reservation contracts and entrypoint
   surface narrowing.
-- [ ] 1.5 Make `catalog-SC-20 - Vault cannot see Auction reservations`,
+- [x] 1.5 Make `catalog-SC-20 - Vault cannot see Auction reservations`,
   `catalog-SC-21 - Another kind cannot release a reservation`,
   `catalog-SC-34 - Public caller cannot reach holder methods`,
   `catalog-SC-61 - Auction eligibility list omits draft and out-of-stock`,
