@@ -184,9 +184,6 @@ Depends on group 3.
   fixtures pass; holder RPC E2E still open.
 - [x] 4.5 Make history scenarios including `catalog-SC-43`, `catalog-SC-44`,
   and `catalog-SC-45` pass through read models.
-- [ ] 4.6 Verify with `pnpm run typecheck`, `pnpm run lint`,
-  `pnpm run test:backend`, and `pnpm run build` for the inventory worker /
-  API wiring.
 
 ## 5. Compose Grade10 inventory admin UI (grade10) (owner: @htonyl)
 
