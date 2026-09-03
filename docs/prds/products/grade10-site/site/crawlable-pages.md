@@ -14,7 +14,10 @@ redrawing it from blank.
 Each surface names itself. Its title and description belong to it and no other
 surface, and on an in-page navigation the document title becomes the
 destination's. A shared link unfurls from Open Graph tags a preview fetcher can
-read without running scripts.
+read without running scripts. A surface with a picture of its own — a store
+card's page — hands it over already at the box a preview lays out and says the
+dimensions, so the preview is drawn before the picture has been fetched. A
+surface with no picture carries no image tag rather than a broken one.
 
 Crawlers are told what to fetch: `robots.txt` permits the public surfaces and
 says where the sitemap is. The sitemap is read when it is fetched, not when the

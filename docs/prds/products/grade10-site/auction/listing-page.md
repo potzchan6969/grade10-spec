@@ -10,10 +10,11 @@ the first response. A collector on a slow phone can read the lot immediately,
 and a crawler sees the same thing they do.
 
 Sharing the link unfurls as that lot — its own title, description and canonical
-address, never the catalogue's. Whether an id names a published lot is asked of
-the catalogue at the moment the address is requested, so an address naming no
-lot answers an honest 404 with the site's not-found surface rather than an
-empty lot page.
+address, never the catalogue's. It carries no picture: a lot's images are the
+auction's own, and the sizing a store card's preview picture rests on is the
+shop CDN's. Whether an id names a published lot is asked of the catalogue at
+the moment the address is requested, so an address naming no lot answers an
+honest 404 with the site's not-found surface rather than an empty lot page.
 
 When scripts do load, they take over the page that was already served. Nothing
 on screen is replaced by a loading placeholder, and a value that follows the
