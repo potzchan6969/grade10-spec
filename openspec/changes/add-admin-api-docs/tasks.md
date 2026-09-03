@@ -15,6 +15,7 @@ then be claimed in parallel.
 - [x] 2.3 Add the service table: store (session ladder plus the till router built with the loyalty acts as the grade10 assembly mounts it), auction, auth, loyalty, vault, appointment, finance, inventory. A `generate` package script writes `generated/<service>.json`; commit the first documents.
 - [x] 2.4 Write the drift test: regenerate every service in memory and assert byte equality with `generated/`, failing with the service and the first differing procedure path and the instruction to run `generate` (`api-docs-SC-02`). Also assert every procedure carrying grants reports caller `elevated`, and list the distinct JSON Schema keywords seen so a new one is a visible diff.
 - [x] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, `pnpm run check:handbook`, `pnpm run check:libs`.
+- [x] 2.6 Declare the auth worker's three erasure inputs as Effect schemas, the only validators across every router the walker could not read, and guard it twice: the api-docs census fails on any opaque validator anywhere, and the auth backend's own suite refuses a router input without a schema AST.
 
 ## 3. The surface in the Grade10 console (grade10) (owner: @sean)
 
