@@ -188,7 +188,7 @@ Depends on group 3.
   `pnpm run test:backend`, and `pnpm run build` for the inventory worker /
   API wiring.
 
-## 5. Compose Grade10 inventory admin UI (grade10)
+## 5. Compose Grade10 inventory admin UI (grade10) (owner: @htonyl)
 
 Depends on groups 1 and 4. Fixtures, not a live worker.
 
