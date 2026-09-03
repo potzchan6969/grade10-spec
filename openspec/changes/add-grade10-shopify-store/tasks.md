@@ -2,10 +2,10 @@
 
 ## 1. Shopify contracts and feasibility (grade10) (owner: @kinisworking)
 
-- [ ] 1.1 Define the Storefront catalogue/variant availability outcomes and the Admin customer, draft-order reservation, order-payment, fulfilment, and tracking outcomes using the pinned Shopify API version.
-- [ ] 1.2 Make `A paid buyer lands on their Grade10 order` pass against the selected Shopify plan and enabled checkout capabilities, proving the post-payment return mechanism before dependent checkout work begins.
-- [ ] 1.3 Make `Integration configuration is incomplete` pass for the shop domain, API version, Storefront token, Admin token/scopes, checkout-return capability, and webhook secret, exposing no credential to a browser.
-- [ ] 1.4 Verify transport fixtures identify a failed Shopify operation and keep business outcomes typed.
+- [x] 1.1 Define the Storefront catalogue/variant availability outcomes and the Admin customer, draft-order reservation, order-payment, fulfilment, and tracking outcomes using the pinned Shopify API version.
+- [x] 1.2 Make `A paid buyer lands on their Grade10 order` pass against the selected Shopify plan and enabled checkout capabilities, proving the post-payment return mechanism before dependent checkout work begins.
+- [x] 1.3 Make `Integration configuration is incomplete` pass for the shop domain, API version, Storefront token, Admin token/scopes, checkout-return capability, and webhook secret, exposing no credential to a browser.
+- [x] 1.4 Verify transport fixtures identify a failed Shopify operation and keep business outcomes typed.
 
 ## 2. Catalogue, identity, and reserved checkout (grade10)
 
