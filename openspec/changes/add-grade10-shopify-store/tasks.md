@@ -1,6 +1,6 @@
 # Tasks: Shopify-backed Grade10 Store
 
-## 1. Shopify contracts and feasibility (grade10)
+## 1. Shopify contracts and feasibility (grade10) (owner: @kinisworking)
 
 - [ ] 1.1 Define the Storefront catalogue/variant availability outcomes and the Admin customer, draft-order reservation, order-payment, fulfilment, and tracking outcomes using the pinned Shopify API version.
 - [ ] 1.2 Make `A paid buyer lands on their Grade10 order` pass against the selected Shopify plan and enabled checkout capabilities, proving the post-payment return mechanism before dependent checkout work begins.
