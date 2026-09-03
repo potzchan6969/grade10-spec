@@ -147,14 +147,14 @@ Depends on groups 1 and 2.
 - [x] 3.7 Make `catalog-SC-51`, `catalog-SC-63`, `catalog-SC-64`, and
   `catalog-SC-65` pass through `changeReservationProduct` locking both
   inventory rows and syncing both products' `reserved`.
-- [ ] 3.8 Make `catalog-SC-20`, `catalog-SC-21`, `catalog-SC-39`,
+- [x] 3.8 Make `catalog-SC-20`, `catalog-SC-21`, `catalog-SC-39`,
   `catalog-SC-40`, `catalog-SC-61`, `catalog-SC-62`, and `catalog-SC-66`
   pass through entrypoint-scoped services. Holder-kind domain services and
   `holderBindingApi` exist; SC-20, SC-21, SC-39, SC-40, SC-61, and SC-62
   pass at the reservation-service layer; SC-66 passes in auction
   listing-edit integration — still open through `AuctionInventoryService` /
   `VaultInventoryService` RPC entrypoints.
-- [ ] 3.9 Make `catalog-SC-07`, `catalog-SC-23` through `catalog-SC-28`,
+- [x] 3.9 Make `catalog-SC-07`, `catalog-SC-23` through `catalog-SC-28`,
   `catalog-SC-41`, `catalog-SC-42`, `catalog-SC-43`, `catalog-SC-44`, and
   `catalog-SC-45` pass with domain changelog + elevated audit writes.
   Changelog append and read-model tests pass; `appendAudit` is wired on tRPC
@@ -166,23 +166,23 @@ Depends on groups 1 and 2.
 
 Depends on group 3.
 
-- [ ] 4.1 Make `catalog-SC-01`, `catalog-SC-13`, `catalog-SC-32`, and
+- [x] 4.1 Make `catalog-SC-01`, `catalog-SC-13`, `catalog-SC-32`, and
   `catalog-SC-34` pass through admin procedures and gateway routing.
   Worker routers and `trpc-access.test.ts` cover SC-32 and SC-34
   partially; `reservations.reserve` is implemented but not yet asserted in
   `trpc-access.test.ts`; no worker-level list/get/create E2E yet.
-- [ ] 4.2 Make intake and `catalog-SC-12` pass through admin mutations and
+- [x] 4.2 Make intake and `catalog-SC-12` pass through admin mutations and
   fixtures where applicable. Domain and admin-frontend fixture paths pass;
   worker tRPC mutation E2E still open. Free-pool sell/withdraw are not on the
   inventory product page.
 - [x] 4.3 Make elevated `reservations.reserve` and admin
   `reservations.release` (`catalog-SC-59`, `catalog-SC-60`, `catalog-SC-67`)
   pass through the inventory worker (`admin-reserve.test.ts`).
-- [ ] 4.4 Make holder reserve, adjust, change-product, partial release,
+- [x] 4.4 Make holder reserve, adjust, change-product, partial release,
   sell-from-reservation, vault-from-reservation, `catalog-SC-16`, and
   `catalog-SC-35`–`catalog-SC-40` pass through holder entrypoints. Domain and
   fixtures pass; holder RPC E2E still open.
-- [ ] 4.5 Make history scenarios including `catalog-SC-43`, `catalog-SC-44`,
+- [x] 4.5 Make history scenarios including `catalog-SC-43`, `catalog-SC-44`,
   and `catalog-SC-45` pass through read models.
 - [ ] 4.6 Verify with `pnpm run typecheck`, `pnpm run lint`,
   `pnpm run test:backend`, and `pnpm run build` for the inventory worker /
@@ -211,6 +211,6 @@ Depends on groups 1 and 4. Fixtures, not a live worker.
 - [x] 5.5 Make history badges pass for product-page mutations. Intake,
   reserve, and release badges pass in RTL (`productsViews.test.tsx`);
   reservation settlement badges are holder-console scope.
-- [ ] 5.6 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 5.6 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
   and `pnpm run build` for the admin app slice. Package typecheck and tests
   pass; full admin-app build not yet recorded on this change.
