@@ -948,6 +948,24 @@ export function byLastMoved(a: ChangeEntry, b: ChangeEntry): number {
   return right - left || a.id.localeCompare(b.id);
 }
 
+/** The day a change shipped: its archive directory's date prefix, with the
+ * last commit behind it for a directory nobody dated. */
+export function shippedDate(change: ChangeEntry): string | undefined {
+  return change.shippedOn ?? change.lastMoved ?? (change.created || undefined);
+}
+
+/** Newest shipped first, for the archive. Not `byLastMoved`: the timeline
+ * shows the shipped day, and an order read off anything else puts a change
+ * under a heading that disagrees with its own date. */
+export function byShipped(a: ChangeEntry, b: ChangeEntry): number {
+  const left = Date.parse(shippedDate(a) ?? "");
+  const right = Date.parse(shippedDate(b) ?? "");
+  return (
+    (Number.isNaN(right) ? 0 : right) - (Number.isNaN(left) ? 0 : left) ||
+    a.id.localeCompare(b.id)
+  );
+}
+
 /** Route to a spec's page, falling back to the route its id implies. */
 export function routeForSpec(index: ManualIndex, specId: string): string {
   const known = index.routeBySpec.get(specId);

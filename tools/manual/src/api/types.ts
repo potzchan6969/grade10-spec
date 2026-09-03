@@ -254,6 +254,10 @@ export type ChangeEntry = {
   /** ISO date of the last commit touching any file of the change — a
    * change with no tasks.md still moves. */
   lastMoved?: string;
+  /** Archived only: the day the change shipped, from the `YYYY-MM-DD-` prefix
+   * of its archive directory. `openspec archive` writes that prefix once and a
+   * rebase cannot move it, which the commit dates under it cannot promise. */
+  shippedOn?: string;
   deltas: Delta[];
   /** In-flight only: the suites sitting beside this change's deltas. */
   suites?: ChangeSuite[];

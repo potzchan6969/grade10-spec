@@ -116,9 +116,10 @@ describe("in-flight changes", () => {
 describe("archived changes", () => {
   const archived = readArchivedChanges(FIXTURE, NO_GIT);
 
-  it("strips the archive date prefix from the id", () => {
+  it("strips the archive date prefix from the id, and keeps it as the shipped day", () => {
     expect(archived.map((one) => one.id)).toEqual(["old-thing"]);
     expect(archived[0].status).toBe("archived");
+    expect(archived[0].shippedOn).toBe("2026-01-02");
   });
 
   it("falls back to the author line for created, and the id for a title", () => {

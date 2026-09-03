@@ -24,8 +24,23 @@ function plural(count: number, unit: string): string {
   return `${count} ${unit}${count === 1 ? "" : "s"} ago`;
 }
 
+/**
+ * A date the reader can see, as the day it names.
+ *
+ * `new Date("2026-09-01")` is UTC midnight, which is still August west of
+ * Greenwich — so a calendar day read back through the local calendar can slip
+ * a day, and with it a month heading. A date-only string is a day, not an
+ * instant; a full timestamp is one, and passes through untouched.
+ */
+function asDate(iso: string): Date {
+  const day = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  return day
+    ? new Date(Number(day[1]), Number(day[2]) - 1, Number(day[3]))
+    : new Date(iso);
+}
+
 export function formatDate(iso: string): string {
-  const at = new Date(iso);
+  const at = asDate(iso);
   if (Number.isNaN(at.getTime())) return iso;
   return at.toLocaleDateString(undefined, {
     year: "numeric",
@@ -37,7 +52,7 @@ export function formatDate(iso: string): string {
 /** The separator a day of events sits under: today and yesterday by name, the
  * date itself once it is neither. */
 export function dayLabel(iso: string, now: number = Date.now()): string {
-  const at = new Date(iso);
+  const at = asDate(iso);
   if (Number.isNaN(at.getTime())) return iso;
 
   const days = Math.round((midnight(new Date(now)) - midnight(at)) / DAY);
@@ -51,7 +66,7 @@ function midnight(at: Date): number {
 }
 
 export function monthKey(iso: string): string {
-  const at = new Date(iso);
+  const at = asDate(iso);
   if (Number.isNaN(at.getTime())) return "Undated";
   return at.toLocaleDateString(undefined, { year: "numeric", month: "long" });
 }

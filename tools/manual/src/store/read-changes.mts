@@ -49,6 +49,15 @@ export function readChanges(root: string, git: GitIndex): ChangeEntry[] {
     .map((name) => readChange(root, join(dir, name), name, "in-flight", git));
 }
 
+/**
+ * The archive, dated by its directory names.
+ *
+ * `openspec archive` writes the day it ran into the `YYYY-MM-DD-` prefix, and
+ * that is the day the change shipped. The commits under the directory are not:
+ * a rebase, a migration, or a bulk reformat rewrites every one of them, and a
+ * timeline keyed to those reads years of shipped work as having landed this
+ * morning. The prefix is what survives, so it is what the archive is dated by.
+ */
 export function readArchivedChanges(
   root: string,
   git: GitIndex,
@@ -63,6 +72,7 @@ export function readArchivedChanges(
       "archived",
       git,
     );
+    if (dated) entry.shippedOn = dated[1];
     if (entry.created === "" && dated) entry.created = dated[1];
     return entry;
   });
