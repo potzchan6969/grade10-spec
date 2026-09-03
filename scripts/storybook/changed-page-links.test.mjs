@@ -42,6 +42,20 @@ const INDEX = {
       title: "Pages/Profile",
       type: "story",
     },
+    "auction-listing-bid-panel--default": {
+      id: "auction-listing-bid-panel--default",
+      importPath: "./src/auction-listing/bid-panel.stories.tsx",
+      name: "Default",
+      title: "Auction Listing/Bid Panel",
+      type: "story",
+    },
+    "blocks-auction-listing-card--default": {
+      id: "blocks-auction-listing-card--default",
+      importPath: "../packages/ui/src/blocks/auction-listing/card.stories.tsx",
+      name: "Default",
+      title: "Auction Listing/Bid Card",
+      type: "story",
+    },
   },
 };
 
@@ -117,6 +131,87 @@ test("treats workbench configuration as affecting every page", async () => {
   );
 });
 
+test("does not treat a workspace barrel rewrite as affecting every page", async () => {
+  const root = await workspace();
+
+  assert.deepEqual(
+    await affectedPageStories({
+      changedFiles: ["packages/ui/src/index.ts"],
+      root,
+    }),
+    [],
+  );
+  assert.deepEqual(
+    await affectedPageStories({
+      changedFiles: [
+        "packages/ui/src/index.ts",
+        "packages/ui/src/blocks/store.tsx",
+      ],
+      root,
+    }),
+    ["apps/preview/src/pages/store.stories.tsx"],
+  );
+});
+
+test("does not treat package or vite config as affecting every page", async () => {
+  const root = await workspace();
+
+  assert.deepEqual(
+    await affectedPageStories({
+      changedFiles: [
+        "package.json",
+        "apps/preview/package.json",
+        "apps/preview/vite.config.ts",
+      ],
+      root,
+    }),
+    [],
+  );
+});
+
+test("includes workbench stories outside Pages/", async () => {
+  const root = await workspace();
+  const bidPanel = join(
+    root,
+    "apps/preview/src/auction-listing/bid-panel.stories.tsx",
+  );
+  const card = join(
+    root,
+    "packages/ui/src/blocks/auction-listing/card.stories.tsx",
+  );
+  await mkdir(join(bidPanel, ".."), { recursive: true });
+  await mkdir(join(card, ".."), { recursive: true });
+  await writeFile(
+    bidPanel,
+    'import { Profile } from "@grade10/ui"; export const Default = {};',
+  );
+  await writeFile(card, "export const Default = {};");
+
+  assert.deepEqual(
+    await affectedPageStories({
+      changedFiles: ["packages/ui/src/blocks/profile.tsx"],
+      root,
+    }),
+    [
+      "apps/preview/src/auction-listing/bid-panel.stories.tsx",
+      "apps/preview/src/pages/profile.stories.tsx",
+    ],
+  );
+  assert.deepEqual(
+    await affectedPageStories({
+      changedFiles: [
+        "apps/preview/src/auction-listing/bid-panel.stories.tsx",
+        "packages/ui/src/blocks/auction-listing/card.stories.tsx",
+      ],
+      root,
+    }),
+    [
+      "apps/preview/src/auction-listing/bid-panel.stories.tsx",
+      "packages/ui/src/blocks/auction-listing/card.stories.tsx",
+    ],
+  );
+});
+
 test("creates a compact payload containing current affected page states only", () => {
   const payload = slackPayload({
     affectedPages: ["apps/preview/src/pages/store.stories.tsx"],
@@ -178,6 +273,29 @@ test("omits merge metadata when it is unavailable", () => {
   assert.deepEqual(payload.blocks.at(-1), {
     text: {
       text: `- Pages\n${"\u00a0".repeat(4)}- Store > <https://storybook.grade10-stg.com/?path=/story/pages-store--default|Default>\n${"\u00a0".repeat(4)}- Store > <https://storybook.grade10-stg.com/?path=/story/pages-store--empty|Empty>`,
+      type: "mrkdwn",
+    },
+    type: "section",
+  });
+});
+
+test("links added workbench stories outside Pages/", () => {
+  const payload = slackPayload({
+    affectedPages: [
+      "apps/preview/src/auction-listing/bid-panel.stories.tsx",
+      "packages/ui/src/blocks/auction-listing/card.stories.tsx",
+    ],
+    changedPaths: new Map([
+      ["apps/preview/src/auction-listing/bid-panel.stories.tsx", "A"],
+      ["packages/ui/src/blocks/auction-listing/card.stories.tsx", "A"],
+    ]),
+    index: INDEX,
+    storybookUrl: "https://storybook.grade10-stg.com",
+  });
+
+  assert.deepEqual(payload.blocks.at(-1), {
+    text: {
+      text: `- Auction Listing\n${"\u00a0".repeat(4)}- Bid Card > <https://storybook.grade10-stg.com/?path=/story/blocks-auction-listing-card--default|Default> 🆕\n${"\u00a0".repeat(4)}- Bid Panel > <https://storybook.grade10-stg.com/?path=/story/auction-listing-bid-panel--default|Default> 🆕`,
       type: "mrkdwn",
     },
     type: "section",
