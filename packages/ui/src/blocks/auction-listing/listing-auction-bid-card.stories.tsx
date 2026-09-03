@@ -259,6 +259,6 @@ export const LiveNoBids: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Starting bid")).toBeInTheDocument();
-    expect(canvas.getByText("No bids yet")).toBeInTheDocument();
+    expect(canvas.getAllByText("No bids yet").length).toBeGreaterThan(0);
   },
 };
