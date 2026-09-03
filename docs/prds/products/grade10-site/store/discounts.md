@@ -10,21 +10,37 @@ lands on the order through the same Shopify draft order.
   the cart show the price and, struck through, the price it was
 - **Discount code** — typed in the cart drawer; the total shows the cut, and a
   code the shop refuses stops the checkout with the code named
-- **Coupons** — minted by the store
+- **Rewards** — redeemed by points, or from speical events (e.g. birthday),
+  selected to use in cart OR auto-applied
   1. **Order coupon** — an amount off the whole order; a single-use code
-     `PREFIX-XXXXXXXX` with an expiry, typed like any discount code
-  2. **Product coupon** — an amount off each unit of named products
-  3. **Gift** — an item added free once the goods pass a threshold
-- **Points as credits** — the one way membership takes money off: at
-  checkout, points come straight off the goods at **HKD 1** a point, capped
-  at the balance and at the goods after coupons, never at shipping or tax;
-  earned as [Points Earning](/p/grade10-site/loyalty/points-earning) says
+     `PREFIX-XXXXXXXX` with an expiry, bind to a Shopify Discount
+  2. **Product coupon** — an amount off each unit of named products,
+     custom per-product discount on the draft order, NOT bind to Shopify
+     Discount
+  3. **Gift** — an item added free once the goods pass a threshold,
+     custom per-item discount on the draft order, NOT bind to Shopify
+     Discount
+- **Points as credits** — **HKD 1** per point
   1. **Nothing is held** — points stay spendable until an order is paid; a
      checkout walked away from costs nothing, and a newer checkout replaces
      the older one
   2. **Where it is on** — development and staging; production `TBC`
-- **Together** — a sale price, product coupons, a gift, one order code, and
-  points ride on one order
+
+
+## Online Draft Order Mechanism
+
+A Draft Order is created for each checkout, with the following discounts (if any):
+- Discount code (Shopify Discount code)
+- Order coupon (Shopify Discount code)
+- Per-product coupon (per-product custom discount)
+- Points as credits (order-wise discount)
+- Gift (per-item 100% off custom discount)
+- [Shipping](/p/grade10-site/store/shipping) fee is determined by custom carrier service API, conditionally free
+
+
+## On-site Mechanism
+
+TBC
 
 ## What it looks like
 
@@ -35,25 +51,6 @@ lands on the order through the same Shopify draft order.
 ::story{id="store-order-detail-orderdetails--order-discount" title="An order with an order coupon"}
 
 :::detail{title="How the draft order carries it" for="engineer"}
-- **One draft order per checkout** — never a Storefront cart; a line carries
-  variant and quantity only, so the shop prices at payment and nothing is
-  locked or reserved
-- **Customer** — the draft's purchasing entity is the member's paired Shopify
-  customer, so a customer-scoped code evaluates
-- **Points** — one order-level fixed applied discount titled Points; nothing
-  is held, a newer checkout deletes the older draft, and points spent
-  elsewhere first capture short at settlement
-- **Order coupon** — a single-use shop discount code, prefix and an
-  eight-character suffix, minted with its expiry when the coupon is issued
-  and sent in the draft's discount codes; a code the shop drops deletes the
-  draft and refuses the checkout
-- **Product coupon** — a fixed per-unit applied discount on the line, titled
-  Coupon
-- **Gift** — a line added at live price with its whole value taken off, by
-  the same per-line discount
-- **Shipping** — a carrier service callback quotes the flat rule from the
-  pre-discount goods, [Shipping](/p/grade10-site/store/shipping); ❓ the
-  staging shop's plan refuses to register it
 - **Where** — `packages/grade10-store/backend/src/services/coupons`,
   `services/pointsTender.ts`, `adapters/shopify/shopifyProvider.ts`,
   `services/shipping/rates.ts`, `worker/routes/carrier.ts`
