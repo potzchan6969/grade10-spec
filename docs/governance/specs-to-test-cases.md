@@ -109,7 +109,7 @@ the requirements first.
 
 ### Automatic — in the spec's own pull request
 
-When `grade10-planning` finishes the proposal, the delta specs and their
+When `/planning-pm` finishes the proposal, the delta specs and their
 journeys, and `openspec validate <change> --strict` passes, it **immediately**
 runs `/spec-to-tcs <change>` against that change. The suites land beside each
 delta with every case `draft`, committed to the same branch as its own
@@ -1007,7 +1007,7 @@ Two pull requests, two audiences.
 
 **The spec PR** — written by whoever owns the requirements:
 
-1. `grade10-planning` writes proposal + specs (Feature set, id'd scenarios)
+1. `/planning-pm` writes proposal + specs (Feature set, id'd scenarios)
    and the `user-journeys.md` beside each → `openspec validate --strict` →
    **auto-generates** `test-cases.md` for every capability that has journeys via
    `/spec-to-tcs <change>`, every case `draft`, as its own commit on the same
@@ -1049,7 +1049,8 @@ Two pull requests, two audiences.
 | --- | --- |
 | `/spec-to-tcs <capability-or-change>` (`spec-to-tcs` skill) | If journeys are missing, writes the `user-journeys.md` beside the resolved `spec.md` to `openspec/config.yaml`'s rules; learns this store's conventions from every `actual` case in the corpus; then derives suites under `openspec/specs/` or `openspec/changes/` and writes `test-cases.md` beside that `spec.md` with every new case `draft`, bringing the suite's existing drafts to the same conventions. Shows an existing suite and asks before touching it; refuses to regenerate over `actual` cases or an `approved` file. Read `.cursor/skills/spec-to-tcs/SKILL.md`. |
 | `/tcs-review [<capability-or-change>]` (`tcs-review` skill) | Finds suites awaiting review, walks their `draft` cases with a human one journey at a time, quotes the spec's scenarios on request, and records `actual` / `deprecated` / left-`draft`. Every case it marks `actual`, edits included, becomes evidence the next `/spec-to-tcs` run learns from. Read `.cursor/skills/tcs-review/SKILL.md`. |
-| `grade10-planning` skill | After the proposal, specs and journeys validate, runs `/spec-to-tcs <change>` automatically and commits the drafts to the spec's own branch. |
+| `planning-pm` skill | After the proposal, specs and journeys validate, runs `/spec-to-tcs <change>` automatically and commits the drafts to the spec's own branch. |
+| `planning-qa` skill | QA's own entry point: routes to `/spec-to-tcs` and `/tcs-review`, and says what a suite owes its capability. |
 | `spec-push` skill | Refuses a change whose capabilities have journeys but no suite, and runs `pnpm run tcs:validate` with the other checks before pushing. |
 | `pnpm run tcs:validate` (`scripts/openspec/validate-test-cases.mjs`) | Checks every suite against this document: the header matches the cases below it, ids are unique and journey-scoped, a trace resolves against the `spec.md` and `user-journeys.md` beside it, no case ships with an empty Expected Results list. Errors fail; suites in older shapes warn. Runs in CI on every push. |
 | `pnpm run tcs:stale` | Lists the suites whose `draft` cases sit below the current `tcs_rules_rev`. A report, not a sweep. |

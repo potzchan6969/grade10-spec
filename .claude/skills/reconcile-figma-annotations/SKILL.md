@@ -165,7 +165,7 @@ review guidance.
    name, affected repositories, and
    non-goals. Ask a separate planning-confirmation question. A decline leaves
    every gap visible and creates no planning artifact. On confirmation, invoke
-   the existing `/grade10-planning` workflow for that group; it
+   the existing `/planning-pm` workflow for that group; it
    owns its interview, artifact validation, commit, push, and merge gates.
    Finish or stop the eligible acceptance transaction first, and stop if the
    registered store is dirty rather than mixing acceptance and planning

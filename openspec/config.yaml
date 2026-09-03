@@ -1,5 +1,6 @@
 # The one workflow every change in this store records. AGENTS.md documents it,
-# and the `grade10-planning` skill drafts each artifact in turn.
+# and four role skills draft it - planning-pm, planning-qa, planning-design,
+# planning-dev - one per hand the change passes through.
 schema: grade10-planning
 
 # This repo is an OpenSpec store, and more besides: PM and design own the

@@ -208,5 +208,5 @@ Then say the handoff out loud: the change is on `main`, so an engineer can
 ## Related
 
 - `/pr-push` — opens the PR this one lands.
-- `/grade10-planning`, `/openspec-propose` — where the change was
+- `/planning-pm`, `/planning-dev`, `/openspec-propose` — where the change was
   written.

@@ -272,12 +272,12 @@ function NextAction({ change }: { change: ChangeEntry }) {
   const action =
     lane === "proposed"
       ? {
-          command: `/grade10-planning ${change.id}`,
+          command: `/planning-pm ${change.id}`,
           note: "point an agent at the proposal — it interviews the author, then writes the deltas",
         }
       : lane === "specified"
         ? {
-            command: `/grade10-planning ${change.id}`,
+            command: `/planning-dev ${change.id}`,
             note: "the engineer picking this up writes the delivery plan",
           }
         : {

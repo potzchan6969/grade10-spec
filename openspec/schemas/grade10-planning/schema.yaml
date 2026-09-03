@@ -9,7 +9,8 @@ artifacts:
     description: Why this change is needed, what changes, and what it will not do
     template: proposal.md
     instruction: >
-      Written by the product manager. Establishes WHY this change is needed.
+      Written by the product manager, with the `planning-pm` skill.
+      Establishes WHY this change is needed.
 
 
       Sections:
@@ -64,7 +65,8 @@ artifacts:
     description: The requirement deltas each capability's spec will fold in
     template: spec.md
     instruction: >
-      Written by the product manager. Defines WHAT the system should do.
+      Written by the product manager, with the `planning-pm` skill.
+      Defines WHAT the system should do.
 
 
       A spec is a behavior contract, not an implementation plan.
@@ -207,7 +209,8 @@ artifacts:
     description: The user stories each capability's scenarios accept, one file per capability
     template: user-journeys.md
     instruction: >
-      Written by the product manager, one file beside each `spec.md` the change
+      Written by the product manager, with the `planning-pm` skill, one file
+      beside each `spec.md` the change
       touches: `specs/<capability-path>/user-journeys.md`.
 
 
@@ -298,7 +301,8 @@ artifacts:
     description: The QA suite derived from each capability's journeys, one file per capability
     template: test-cases.md
     instruction: >
-      Written by QA, one file beside each `spec.md` whose journeys are worth
+      Written by QA, with the `planning-qa` skill, one file beside each
+      `spec.md` whose journeys are worth
 
       walking: `specs/<capability-path>/test-cases.md`. Optional - a change
 
@@ -331,7 +335,8 @@ artifacts:
     description: The visual plan - screens, component exports, and states
     template: ui-design.md
     instruction: >
-      Written by the designer. Maps every user-facing surface the change
+      Written by the designer, with the `planning-design` skill. Maps every
+      user-facing surface the change
 
       touches to its sources of truth. Optional: a change with no user-facing
 
@@ -365,7 +370,8 @@ artifacts:
     description: The technical implementation's high-level design
     template: tech-design.md
     instruction: >
-      Written by the engineer who picks the change up. Explains HOW to
+      Written by the engineer who picks the change up, with the
+      `planning-dev` skill. Explains HOW to
 
       implement it. Optional - create it only if any of these apply:
 
@@ -421,7 +427,8 @@ artifacts:
     description: The implementation plan, claimed group by group
     template: tasks.md
     instruction: >
-      Written by the engineer who picks the change up, and the artifact that
+      Written by the engineer who picks the change up, with the
+      `planning-dev` skill, and the artifact that
 
       moves the change off the planning board: until it exists, the change
 

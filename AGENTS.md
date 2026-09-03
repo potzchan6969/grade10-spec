@@ -36,15 +36,15 @@ Read [`docs/governance/design-system-workflows.md`](docs/governance/design-syste
 
 One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the whole lifecycle in seven artifacts. `openspec new change <name>` records it in the change's `.openspec.yaml`.
 
-| # | Artifact | Written by | Required |
-| --- | --- | --- | --- |
-| 1 | `proposal.md` | Product manager | Always |
-| 2 | `specs/<capability>/spec.md` | Product manager | Always |
-| 3 | `specs/<capability>/user-journeys.md` | Product manager | Unless nobody walks the capability |
-| 4 | `specs/<capability>/test-cases.md` | QA | Optional |
-| 5 | `ui-design.md` | Designer | Optional |
-| 6 | `tech-design.md` | Engineer | Optional |
-| 7 | `tasks.md` | Engineer | Before the change can be applied |
+| # | Artifact | Written by | Skill | Required |
+| --- | --- | --- | --- | --- |
+| 1 | `proposal.md` | Product manager | `planning-pm` | Always |
+| 2 | `specs/<capability>/spec.md` | Product manager | `planning-pm` | Always |
+| 3 | `specs/<capability>/user-journeys.md` | Product manager | `planning-pm` | Unless nobody walks the capability |
+| 4 | `specs/<capability>/test-cases.md` | QA | `planning-qa` | Optional |
+| 5 | `ui-design.md` | Designer | `planning-design` | Optional |
+| 6 | `tech-design.md` | Engineer | `planning-dev` | Optional |
+| 7 | `tasks.md` | Engineer | `planning-dev` | Before the change can be applied |
 
 Each hand writes its own artifacts on the one change and stops: a PM finishes at the journeys, QA derives the suites, a designer writes `ui-design.md`, and the engineer who picks the work up adds `tech-design.md` and `tasks.md` to the same change rather than opening a second one. That is the only route, because engineering never opens a change in the application repository: that repository's `openspec/` is config-only and resolves to this store, and until a change has a `tasks.md` it shows on the engineer's board as still being planned.
 

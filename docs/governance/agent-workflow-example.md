@@ -6,10 +6,10 @@ visible in one place. Every command here is real; nothing is illustrative.
 
 | Artifact | Written by | Where |
 | --- | --- | --- |
-| `proposal.md`, `specs/<capability>/spec.md`, `specs/<capability>/user-journeys.md` | PM or designer | this store |
-| `specs/<capability>/test-cases.md` | QA | this store |
-| `ui-design.md` | Designer | this store |
-| `tech-design.md`, `tasks.md` | The engineer planning the delivery | this store |
+| `proposal.md`, `specs/<capability>/spec.md`, `specs/<capability>/user-journeys.md` | PM — `/planning-pm` | this store |
+| `specs/<capability>/test-cases.md` | QA — `/planning-qa` | this store |
+| `ui-design.md` | Designer — `/planning-design` | this store |
+| `tech-design.md`, `tasks.md` | The engineer planning the delivery — `/planning-dev` | this store |
 | Owner tags, checkmarks | The engineer doing the work | `grade10`, writing through to this store |
 
 ## Where you run this
@@ -30,13 +30,13 @@ returns the same project context, the same per-artifact rules (the grilling
 interview among them), and the same template the skill would have applied. Ask
 your agent to follow that output.
 
-The lane skill is the exception. `/grade10-planning` exists in both
-repositories, and the two are not copies of each other: the store's carries
-every artifact's rules, and `grade10`'s carries what is specific to picking
-work up there — planning delivery on a change that has no `tasks.md`, and the
-verification steps its own task groups end with. Each points at the other for
-the half it does not hold, so neither is a second source of truth for the same
-thing.
+The role skills are the exception. `/planning-pm` and `/planning-dev` exist in
+both repositories, and the two copies are not the same file: the store's
+carries every artifact's rules, and `grade10`'s carries what is specific to
+picking work up there — planning delivery on a change that has no `tasks.md`,
+and the verification steps its own task groups end with. Each points at the
+other for the half it does not hold, so neither is a second source of truth for
+the same thing.
 Nothing syncs skills between the repositories, so keep it that way: a rule
 about what an artifact must contain belongs in the store's copy only.
 
@@ -181,7 +181,7 @@ openspec instructions proposal --change account-setting-page
 ```
 
 This is what stands in for `/openspec-propose`, which is not installed in
-`grade10` — though `/grade10-planning` there will run it for you and read the
+`grade10` — though `/planning-pm` there will run it for you and read the
 store's own copy of the lane instructions. It returns the store's project context, the
 proposal rules, and the template. Before writing anything, the agent should read the relevant capability
 in `openspec/specs/`, any active change touching it, and the PRD — facts are the
