@@ -253,7 +253,7 @@ SignedOut.play = async ({ canvasElement }) => {
   expect(canvas.queryByText("Highest bid")).not.toBeInTheDocument();
   expect(canvas.queryByText("Outbid")).not.toBeInTheDocument();
   expect(
-    canvas.queryByRole("button", { name: "Place Bid" }),
+    canvas.queryByRole("button", { name: /^Place Bid/ }),
   ).not.toBeInTheDocument();
 };
 
@@ -267,11 +267,11 @@ NeedCard.play = async ({ canvasElement }) => {
     canvas.getByRole("button", { name: "Link a card to place a bid." }),
   ).toBeVisible();
   expect(canvas.getByText("Linked Card")).toBeVisible();
-  expect(canvas.getByText("Next eligible bid")).toBeVisible();
+  expect(canvas.getByText("Min. bid")).toBeVisible();
   expect(
     canvas.queryByRole("button", { name: "Sign In to Bid" }),
   ).not.toBeInTheDocument();
-  await userEvent.click(canvas.getByRole("button", { name: /^Bid HK\$/ }));
+  await userEvent.click(canvas.getByRole("button", { name: /^Place Bid/ }));
   await waitFor(() => {
     expect(
       within(document.body).getByRole("dialog", {
@@ -283,7 +283,7 @@ NeedCard.play = async ({ canvasElement }) => {
   expect(
     canvas.getByRole("button", { name: "Link a card to place a bid." }),
   ).toBeVisible();
-  expect(canvas.getByText("Next eligible bid")).toBeVisible();
+  expect(canvas.getByText("Min. bid")).toBeVisible();
 };
 
 export const LinkedCardEditable: Story = {
@@ -336,8 +336,8 @@ export const PaymentAuthorization: Story = {
   render: () => <PaymentAuthorizationPreview />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Next eligible bid")).toBeVisible();
-    await userEvent.click(canvas.getByRole("button", { name: /^Bid HK\$/ }));
+    expect(canvas.getByText("Min. bid")).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: /^Place Bid/ }));
     expect(
       within(document.body).getByRole("dialog", {
         name: "Authorize your bid",
@@ -355,6 +355,6 @@ export const PaymentAuthorization: Story = {
       }),
     ).toBeDisabled();
     await dismissDialog("Authorize your bid");
-    expect(canvas.getByText("Next eligible bid")).toBeVisible();
+    expect(canvas.getByText("Min. bid")).toBeVisible();
   },
 };
