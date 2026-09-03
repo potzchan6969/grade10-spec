@@ -2,238 +2,124 @@
 
 ## Purpose
 
-How far a bid must clear the one before it. A listing carries a table of price
-ranges, each with the increment that applies inside it, so a lot steps in small
-amounts when it is cheap and large amounts once it is not. This capability owns
-the table, what makes one valid, how a tier is found, and the minimum bid the
-table produces on an active listing.
+Makes the next auction bid proportionate to the price being beaten, using one
+Grade10-owned schedule for each supported auction currency.
+
+## Feature set
+
+- Currency schedules
+  - Fixed policy: Grade10 owns the USD, HKD, and JPY tiers
+  - Currency boundary: unsupported currencies cannot price an auction
+- Minimum bid
+  - One lookup rule: manual and proxy bidding select the tier from the amount
+    being beaten
+  - Flexible offer: a bidder may exceed, but not fall below, the minimum
+
+## User journeys
+
+### bid-increments-US-01: Collector places a bid across a price tier
+
+**As a** collector,
+**I want** the minimum next bid to scale with the lot's price,
+**so that** I can enter an affordable opening bid and a sensible later bid.
+
+**Accepted by:**
+
+- `bid-increments-SC-01` — A first bid clears the starting-price tier
+- `bid-increments-SC-02` — A boundary selects the higher tier
+- `bid-increments-SC-03` — A bid may exceed the minimum
+- `bid-increments-SC-04` — A bid below the minimum is refused
+- `bid-increments-SC-05` — An open listing publishes its next minimum
 
 ## ADDED Requirements
 
-### Requirement: A listing carries an increment table
+### Requirement: Grade10 owns the supported-currency schedules
 
-Every Auction listing SHALL carry an **increment table**: an ordered list of
-one or more tiers. Each tier SHALL state the amount it starts at and the
-increment that applies inside it, both as integer counts of minor units in the
-listing's currency.
+Grade10 SHALL price Auction listings only in `USD`, `HKD`, or `JPY`. The
+schedule for a currency is an ordered set of lower-inclusive price tiers. The
+last tier has no upper bound. Every amount is an integer count of minor units
+paired with that ISO 4217 currency.
 
-A table SHALL be valid only when all of the following hold:
+| Currency | Price from (minor units) | Increment (minor units) |
+| --- | ---: | ---: |
+| USD | 0 | 100 |
+| USD | 10000 | 500 |
+| USD | 50000 | 1000 |
+| USD | 100000 | 2500 |
+| USD | 500000 | 5000 |
+| USD | 1000000 | 10000 |
+| HKD | 0 | 1000 |
+| HKD | 80000 | 4000 |
+| HKD | 400000 | 8000 |
+| HKD | 800000 | 20000 |
+| HKD | 4000000 | 40000 |
+| HKD | 8000000 | 80000 |
+| JPY | 0 | 100 |
+| JPY | 15000 | 500 |
+| JPY | 75000 | 1000 |
+| JPY | 150000 | 4000 |
+| JPY | 750000 | 8000 |
+| JPY | 1500000 | 15000 |
 
-- The first tier starts at zero.
-- Each later tier starts above the tier before it.
-- The last tier has no upper bound.
-- Every increment is greater than zero.
+Grade10 SHALL select the tier with the greatest Price from that does not exceed
+the amount being raised from. It SHALL NOT retain a per-listing increment or
+apply a USD, HKD, or JPY schedule to another currency.
 
-Tiers SHALL be contiguous: a tier runs from the amount it starts at up to, but
-not including, the amount the next tier starts at. There SHALL be no gap and no
-overlap, and no amount from zero upward SHALL fall outside the table.
+#### Scenario: bid-increments-SC-01 - A first bid clears the starting-price tier
 
-Grade10 SHALL refuse a table that is not valid, and SHALL name the tier that
-fails.
+- **GIVEN** an open HKD listing with a starting price of 20000 minor units and no accepted bid
+- **WHEN** a collector reads its minimum bid
+- **THEN** Grade10 reports 21000 minor units
 
-#### Scenario: bid-increments-SC-01 - A table covers every amount from zero
+#### Scenario: bid-increments-SC-02 - A boundary selects the higher tier
 
-- **GIVEN** a listing whose increment table starts at zero and whose last tier has no upper bound
-- **WHEN** Grade10 looks up any amount from zero upward
-- **THEN** exactly one tier contains it
+- **GIVEN** an open USD listing whose current bid is 10000 minor units
+- **WHEN** Grade10 calculates its minimum bid
+- **THEN** the minimum bid is 10500 minor units
 
-#### Scenario: bid-increments-SC-02 - A table not starting at zero is refused
+#### Scenario: bid-increments-SC-03 - A bid may exceed the minimum
 
-- **GIVEN** a proposed increment table whose first tier starts at 1000 minor units
-- **WHEN** an operator saves it
-- **THEN** Grade10 refuses it
-- **AND** it names the first tier as the one that fails
-
-#### Scenario: bid-increments-SC-03 - A table with a zero increment is refused
-
-- **GIVEN** a proposed increment table with a tier whose increment is 0 minor units
-- **WHEN** an operator saves it
-- **THEN** Grade10 refuses it
-- **AND** it names that tier
-
-#### Scenario: bid-increments-SC-04 - A table whose tiers do not ascend is refused
-
-- **GIVEN** a proposed increment table whose third tier starts at or below its second
-- **WHEN** an operator saves it
-- **THEN** Grade10 refuses it
-- **AND** it names that tier
-
-#### Scenario: bid-increments-SC-05 - A single-tier table is valid
-
-- **GIVEN** a proposed increment table of one tier starting at zero with an increment of 2500 minor units
-- **WHEN** an operator saves it
-- **THEN** Grade10 accepts it
-- **AND** every amount from zero upward takes an increment of 2500 minor units
-
-### Requirement: A tier is found by the amount it contains
-
-Grade10 SHALL find an amount's tier as the tier whose start is the greatest
-start not above that amount. The increment for an amount SHALL be that tier's
-increment.
-
-An amount equal to a tier's start SHALL fall in that tier, not the one below.
-
-#### Scenario: bid-increments-SC-06 - An amount inside a tier
-
-- **GIVEN** the house default table, where the tier starting at 20000 minor units has an increment of 2500
-- **WHEN** Grade10 finds the increment for 22500 minor units
-- **THEN** the increment is 2500 minor units
-
-#### Scenario: bid-increments-SC-07 - An amount on a tier boundary takes the higher tier
-
-- **GIVEN** the house default table, where a tier starts at 50000 minor units with an increment of 5000, and the tier below it starts at 20000 with an increment of 2500
-- **WHEN** Grade10 finds the increment for exactly 50000 minor units
-- **THEN** the increment is 5000 minor units
-
-#### Scenario: bid-increments-SC-08 - An amount below every other tier
-
-- **GIVEN** the house default table, whose first tier starts at zero with an increment of 200 minor units
-- **WHEN** Grade10 finds the increment for 100 minor units
-- **THEN** the increment is 200 minor units
-
-#### Scenario: bid-increments-SC-09 - An amount above every tier start
-
-- **GIVEN** the house default table, whose last tier starts at 150000000 minor units with an increment of 10000000
-- **WHEN** Grade10 finds the increment for 900000000 minor units
-- **THEN** the increment is 10000000 minor units
-
-### Requirement: The minimum bid on an active listing
-
-For a listing open for bids, Grade10 SHALL determine the **minimum bid** as
-follows:
-
-- WHEN the listing has no accepted bid, the minimum bid SHALL be its starting
-  price plus the increment for the tier containing the **starting price**.
-- WHEN the listing has an accepted bid, the minimum bid SHALL be the current
-  bid plus the increment for the tier containing the **current bid**.
-
-In both cases the amount stepped from is the amount a bidder must beat: the
-starting price before anyone has bid, the current bid afterwards. A listing's
-starting price is always greater than zero, so the minimum bid always stands
-above the starting price and can never be zero.
-
-Grade10 SHALL refuse a bid below the minimum bid and SHALL name the minimum
-bid when it does.
-
-Grade10 SHALL publish the minimum bid as a fact of an open listing, so a
-bidder is told what will be accepted before they attempt it.
-
-#### Scenario: bid-increments-SC-10 - The first bid clears the starting price by one increment
-
-- **GIVEN** an open listing on the house default table with a starting price of 20000 minor units and no accepted bid
-- **AND** the tier containing 20000 minor units has an increment of 2500
-- **WHEN** a bidder reads its minimum bid
-- **THEN** the minimum bid is 22500 minor units
-
-#### Scenario: bid-increments-SC-11 - A first bid at the minimum is accepted
-
-- **GIVEN** the listing from the previous scenario
-- **WHEN** a bidder bids exactly 22500 minor units
+- **GIVEN** an open USD listing whose minimum bid is 10500 minor units
+- **WHEN** a collector bids 12000 minor units
 - **THEN** Grade10 accepts the bid
 
-#### Scenario: bid-increments-SC-12 - A first bid at the starting price is refused
+#### Scenario: bid-increments-SC-04 - A bid below the minimum is refused
 
-- **GIVEN** the listing from the previous scenario
-- **WHEN** a bidder bids exactly 20000 minor units
-- **THEN** Grade10 refuses the bid
-- **AND** it names 22500 minor units as the minimum bid
+- **GIVEN** an open USD listing whose minimum bid is 10500 minor units
+- **WHEN** a collector bids 10499 minor units
+- **THEN** Grade10 refuses the bid and names 10500 minor units as the minimum
 
-#### Scenario: bid-increments-SC-13 - The minimum bid steps by the current bid's tier
-
-- **GIVEN** an open listing on the house default table whose current bid is 22500 minor units
-- **WHEN** a bidder reads its minimum bid
-- **THEN** the minimum bid is 25000 minor units
-
-#### Scenario: bid-increments-SC-14 - The minimum bid crosses into a higher tier
-
-- **GIVEN** an open listing on the house default table whose current bid is 49900 minor units, in the tier starting at 20000 with an increment of 2500
-- **WHEN** a bidder reads its minimum bid
-- **THEN** the minimum bid is 52400 minor units
-- **AND** that amount lies in the tier starting at 50000, which is permitted
-
-#### Scenario: bid-increments-SC-15 - A bid below the minimum is refused by name
-
-- **GIVEN** an open listing on the house default table whose current bid is 22500 minor units
-- **WHEN** a bidder bids 24000 minor units
-- **THEN** Grade10 refuses the bid
-- **AND** it names 25000 minor units as the minimum bid
-
-#### Scenario: bid-increments-SC-16 - A bid above the minimum is accepted
-
-- **GIVEN** an open listing on the house default table whose current bid is 22500 minor units
-- **WHEN** a bidder bids 40000 minor units
-- **THEN** Grade10 accepts the bid
-
-#### Scenario: bid-increments-SC-17 - The minimum bid is published
+#### Scenario: bid-increments-SC-05 - An open listing publishes its next minimum
 
 - **WHEN** a collector reads an open listing
-- **THEN** its facts carry the minimum bid as an integer count of minor units with the listing's ISO 4217 currency code
+- **THEN** its facts include the minimum next amount as integer minor units in the listing currency
 
-#### Scenario: bid-increments-SC-22 - The first minimum uses the starting price's own tier
+### Requirement: The minimum uses the amount being beaten
 
-- **GIVEN** an open listing on the house default table with a starting price of 60000 minor units and no accepted bid
-- **AND** the tier containing 60000 minor units has an increment of 5000
-- **WHEN** a bidder reads its minimum bid
-- **THEN** the minimum bid is 65000 minor units
+Before any accepted bid, Grade10 SHALL add the starting-price tier increment
+to the starting price. After an accepted manual bid, it SHALL add the current
+public-price tier increment to that price. With two or more proxy maxima, it
+SHALL add the second-highest maximum's tier increment to that maximum and cap
+the result at the leader's maximum. The result is the minimum next amount.
 
-### Requirement: A listing's table is seeded from the house default
+Grade10 SHALL accept any whole amount at or above the minimum next amount and
+refuse an amount below it. It SHALL not create intermediate bids.
 
-Grade10 SHALL hold a **house default increment table** per currency it sells
-in. When a listing is created without a table of its own, Grade10 SHALL copy
-the house default for that listing's currency onto the listing.
+#### Scenario: bid-increments-SC-07 - A manual floor uses the current public price
 
-The copy SHALL be a copy. A later change to the house default SHALL NOT alter
-a listing that already holds a table.
+- **GIVEN** an open HKD listing whose current public price is 800000 minor units
+- **WHEN** Grade10 calculates the next minimum
+- **THEN** the minimum is 820000 minor units
 
-An authorized operator SHALL be able to change the house default table. Doing
-so SHALL be refused when the proposed table is not valid.
+### Requirement: Unsupported currencies are refused before auctioning
 
-Grade10's house default table for `HKD` SHALL be the tiers below, stated as
-the amount each starts at and its increment, in minor units:
+Grade10 SHALL refuse an attempt to create, update, or schedule an Auction
+listing in a currency other than USD, HKD, or JPY. The refusal SHALL leave the
+listing and its schedule-derived pricing facts unchanged.
 
-| Starts at | Increment |
-| --- | --- |
-| 0 | 200 |
-| 5000 | 500 |
-| 10000 | 1000 |
-| 20000 | 2500 |
-| 50000 | 5000 |
-| 100000 | 10000 |
-| 250000 | 25000 |
-| 500000 | 50000 |
-| 1000000 | 100000 |
-| 2000000 | 200000 |
-| 3000000 | 300000 |
-| 5000000 | 500000 |
-| 10000000 | 1000000 |
-| 20000000 | 2000000 |
-| 30000000 | 2500000 |
-| 60000000 | 5000000 |
-| 100000000 | 5000000 |
-| 150000000 | 10000000 |
+#### Scenario: bid-increments-SC-06 - An unsupported currency cannot be scheduled
 
-#### Scenario: bid-increments-SC-18 - A created listing takes the house default
-
-- **GIVEN** an operator creating an `HKD` listing without setting an increment table
-- **WHEN** Grade10 creates it
-- **THEN** the listing holds the house default `HKD` table
-- **AND** its tier starting at 20000 minor units has an increment of 2500
-
-#### Scenario: bid-increments-SC-19 - Changing the house default leaves existing listings alone
-
-- **GIVEN** a created listing holding a copy of the house default table
-- **WHEN** an authorized operator changes the house default table
-- **THEN** the listing's own table is unchanged
-
-#### Scenario: bid-increments-SC-20 - An invalid house default is refused
-
-- **GIVEN** an authorized operator editing the house default table
-- **WHEN** they save a table whose first tier does not start at zero
-- **THEN** Grade10 refuses the change
-- **AND** the house default table is unchanged
-
-#### Scenario: bid-increments-SC-21 - An unauthorized operator cannot change the house default
-
-- **GIVEN** a signed-in operator who may not set an auction's prices
-- **WHEN** they change the house default table
-- **THEN** Grade10 refuses the change
+- **GIVEN** a complete draft listing
+- **WHEN** an operator sets its currency to EUR and schedules it
+- **THEN** Grade10 refuses the request
+- **AND** the listing remains unscheduled
