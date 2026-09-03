@@ -1,7 +1,7 @@
 ---
 title: Writing the manual
 summary: The voice, the block palette, canonical form, and what happens when you save.
-order: 4
+order: 5
 ---
 
 Every page here is a markdown file in the spec store under `docs/prds/` — a
