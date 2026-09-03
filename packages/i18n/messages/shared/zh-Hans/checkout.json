@@ -24,9 +24,6 @@
   "reason": {
     "emptyCart": "你的购物车是空的。",
     "invalidQuantity": "其中一项的数量超出商店可售的范围。",
-    "unknownProduct": "商店已不再提供其中一款卡。",
-    "unknownVariant": "商店已不再提供其中一个评级。",
-    "unavailable": "其中一项已停售。",
     "quantityClamped": "商店的其中一项库存少于你购物车所需的数量。",
     "currencyMismatch": "商店报价的货币并非本店销售的货币。这里无法处理——请告诉我们，我们会修正。",
     "catalog_unavailable": "商店没有响应，请稍后再试。",
@@ -41,6 +38,7 @@
     "failed": "商店没有响应，购物车尚未确认。请再试一次。",
     "retry": "再次确认",
     "blocked": "付款前请先修正标记的项目。",
+    "removed": "商店已不再销售的 {count} 项已从购物篮中移除。",
     "remove": "移除"
   },
   "line": {

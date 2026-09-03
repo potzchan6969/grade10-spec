@@ -24,9 +24,6 @@
   "reason": {
     "emptyCart": "There is nothing in your basket.",
     "invalidQuantity": "One of these lines asks for a quantity the shop cannot sell.",
-    "unknownProduct": "The shop no longer lists one of these cards.",
-    "unknownVariant": "The shop no longer lists one of these grades.",
-    "unavailable": "One of these is no longer for sale.",
     "quantityClamped": "The shop has fewer of one of these than your basket asks for.",
     "currencyMismatch": "The shop is quoting a currency this store does not sell in. Nothing you can do here — tell us and we will fix it.",
     "catalog_unavailable": "The shop did not answer. Try again in a moment.",
@@ -41,6 +38,7 @@
     "failed": "The shop did not answer, so your basket is unconfirmed. Try again.",
     "retry": "Check again",
     "blocked": "Fix the marked lines before paying.",
+    "removed": "{count} line(s) the shop no longer sells came out of your basket.",
     "remove": "Remove"
   },
   "line": {
