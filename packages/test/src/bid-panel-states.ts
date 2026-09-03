@@ -46,7 +46,8 @@ type BidPanelState = {
   };
   autoConfirmOpen?: boolean;
   staleFloor?: boolean;
-  setupSheet?: {
+  /** Rendering this state opens the payment-setup dialog. */
+  paymentSetup?: {
     requiresIframeLink?: boolean;
     iframeLinkedPayment?: {
       brand: "visa";
@@ -256,7 +257,11 @@ const BID_PANEL_STATE_RESPONSES = {
     scenarioId: "bid-panel/setup-required",
     source: "mutation",
     operation: "openPaymentSetup",
-    state: { bidMode: "manual", submitUsesSignInLabel: false, setupSheet: { requiresIframeLink: true } },
+    state: {
+      bidMode: "manual",
+      submitUsesSignInLabel: false,
+      paymentSetup: { requiresIframeLink: true },
+    },
     dialogName: "Get Ready to Bid",
     expectedText: "Stripe card link (iframe)",
   },
@@ -268,7 +273,7 @@ const BID_PANEL_STATE_RESPONSES = {
       bidMode: "manual",
       submitUsesSignInLabel: false,
       linkedPaymentMethod: linkedCard(true),
-      setupSheet: {
+      paymentSetup: {
         requiresIframeLink: true,
         iframeLinkedPayment: SAVED_PAYMENT,
         defaultAgeAttested: true,
@@ -340,8 +345,8 @@ type PaymentAuthorizationStateResponse =
 type PaymentAuthorizationResponseState = PaymentAuthorizationStateResponse["state"];
 
 export type {
-  BidPanelScenarioId,
   BidPanelState,
+  BidPanelScenarioId,
   BidPanelStateResponse,
   BidPanelViewState,
   PaymentAuthorizationResponseState,

@@ -1,25 +1,22 @@
-import { PAYMENT_AUTHORIZATION_STATE_RESPONSES } from "@grade10/test/bid-panel-states";
 import {
   FIXTURE_SHIPPED_LOCALE,
   FIXTURE_TIME_ZONE,
   ListingAuctionBidCard,
 } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { useState } from "react";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import {
   bidHistoryForState,
   buildListingAuctionBidView,
   LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
 } from "./listing-auction-bid-fixtures";
 import { ListingBidEnrollmentCardPreview } from "./listing-bid-enrollment-card-preview";
-import { ListingBidEnrollmentInteractiveDemo } from "./listing-bid-enrollment-demo";
 import {
-  ENROLLMENT_SNAPSHOT_AUTO_BID_CONFIRM,
   ENROLLMENT_SNAPSHOT_LINKED_CARD,
   ENROLLMENT_SNAPSHOT_LINKED_CARD_EDITABLE,
   ENROLLMENT_SNAPSHOT_NEEDS_PAYMENT,
   ENROLLMENT_SNAPSHOT_READY,
-  ENROLLMENT_SNAPSHOT_SETUP_SHEET,
   ENROLLMENT_SNAPSHOT_SETUP_SHEET_FROM_CHANGE,
   ENROLLMENT_SNAPSHOT_SIGNED_OUT,
   type ListingBidEnrollmentSnapshot,
@@ -29,8 +26,9 @@ import { PaymentAuthorizationPreview } from "./payment-authorization-demo";
 /**
  * Bid Panel (`ListingAuctionBidCard` plus enrollment chrome).
  *
- * States live as stories under this title and under Bid Panel / Flows.
- * Controls in this Docs page are the card's `onX` callbacks.
+ * States live as stories under this title and under Bid Panel / Dialogs,
+ * Flows, and State Tests. Controls in this Docs page are the card's `onX`
+ * callbacks.
  */
 const meta = {
   title: "Auction Listing/Bid Panel",
@@ -55,14 +53,20 @@ sits around the card in the preview. The full lot page is
 | --- | --- | --- |
 | Signed out | [Signed Out](?path=/story/auction-listing-bid-panel--signed-out) | \`bidEnrollment="signed-out"\`. Sign In to Bid. Standing is hidden. |
 | Need a card | [Need Card](?path=/story/auction-listing-bid-panel--need-card) | Empty linked-card slot. Place Bid is visible; linking is the next step. |
-| Setup | [Setup Modal](?path=/story/auction-listing-bid-panel--setup-modal) | Card-link iframe and age attestation. Continue stays disabled until both are done. |
-| Setup from Change | [Setup Modal From Change](?path=/story/auction-listing-bid-panel--setup-modal-from-change) | Same sheet after Change. Age attestation stays checked when already given. |
 | Linked card, editable | [Linked Card Editable](?path=/story/auction-listing-bid-panel--linked-card-editable) | Masked card with Change, before the first bid on this lot. |
 | Linked card, locked | [Linked Card](?path=/story/auction-listing-bid-panel--linked-card) | Masked card without Change, after the first bid. |
 | Ready | [Ready](?path=/story/auction-listing-bid-panel--ready) | Enrollment complete. Place Bid, or Confirm / Raise a maximum. |
-| Auto-bid confirm | [Auto Bid Confirmation](?path=/story/auction-listing-bid-panel--auto-bid-confirmation) | First auto-bid on a listing asks the collector to confirm the hold. |
-| Payment authorization | [Payment Authorization](?path=/story/auction-listing-bid-panel--payment-authorization) | Place Bid opens the authorize-your-bid dialog. Pending and refused variants sit beside it. |
-| Interactive | [Interactive](?path=/story/auction-listing-bid-panel--interactive) | Walks sign-in → card link → ready on one card. |
+| Payment authorization | [Payment Authorization](?path=/story/auction-listing-bid-panel--payment-authorization) | Place Bid opens the authorize-your-bid dialog. |
+
+## Dialogs
+
+| State | Story | What it shows |
+| --- | --- | --- |
+| Setup | [Setup Modal](?path=/story/auction-listing-bid-panel-dialogs--setup-modal) | Card-link iframe and age attestation. Continue stays disabled until both are done. |
+| Setup from Change | [Setup Modal From Change](?path=/story/auction-listing-bid-panel-dialogs--setup-modal-from-change) | Same sheet after Change. Age attestation stays checked when already given. |
+| Auto-bid confirm | [Auto Bid Confirmation](?path=/story/auction-listing-bid-panel-dialogs--auto-bid-confirmation) | First auto-bid on a listing asks the collector to confirm the hold. |
+| Payment authorization pending | [Payment Authorization Pending](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-pending) | Authorize-your-bid dialog while Stripe is authorizing. |
+| Payment authorization refused | [Payment Authorization Refused](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-refused) | Authorize-your-bid dialog after the method is declined. |
 
 ## Bidding and standing
 
@@ -75,6 +79,7 @@ sits around the card in the preview. The full lot page is
 | Leading with a maximum | [Leading](?path=/story/auction-listing-listingauctionbidcard--leading) | \`standing="leading-max"\`. Highest bid. Raise is the next action. |
 | Outbid | [Outbid](?path=/story/auction-listing-listingauctionbidcard--outbid) | \`standing="outbid"\`. Current bid is above the viewer's maximum. |
 | Live sequence + auto cases | [Flows / Bidding](?path=/story/auction-listing-bid-panel-flows--bidding) | Manual bids through leading and outbid, then first maximum, leading maximum, overtaken, and accepted without leading. Enable auto-bidding, Place Bid, Confirm, and Raise are live and open the enrollment dialogs. |
+| Interactive enrollment | [Flows / Interactive](?path=/story/auction-listing-bid-panel-flows--interactive) | Walks sign-in → card link → ready on one card. |
 | Closed / won / lost | [Auction Lot Details](?path=/story/pages-auction-lot-details--closed-won-payment-due) | Payment due, settled, lost, sold, and unsold on the lot page. |
 
 ## Countdown
@@ -193,6 +198,61 @@ function enrollmentStory(snapshot: ListingBidEnrollmentSnapshot): Story {
   };
 }
 
+async function dismissDialog(name: string) {
+  const dialog = within(document.body).getByRole("dialog", { name });
+  await userEvent.click(
+    within(dialog).getAllByRole("button", { name: "Close dialog" })[0],
+  );
+  await waitFor(() => {
+    expect(
+      within(document.body).queryByRole("dialog", { name }),
+    ).not.toBeInTheDocument();
+  });
+}
+
+function NeedCardPreview() {
+  const [state, setState] = useState<ListingBidEnrollmentSnapshot>(
+    ENROLLMENT_SNAPSHOT_NEEDS_PAYMENT,
+  );
+
+  function requirePaymentSetup() {
+    setState({
+      ...state,
+      paymentEmptyState: undefined,
+      paymentSetup: { requiresIframeLink: true },
+    });
+  }
+
+  return (
+    <ListingBidEnrollmentCardPreview
+      onBidSubmit={requirePaymentSetup}
+      onLinkPayment={requirePaymentSetup}
+      onPaymentSetupDismissed={() =>
+        setState(ENROLLMENT_SNAPSHOT_NEEDS_PAYMENT)
+      }
+      snapshot={state}
+    />
+  );
+}
+
+function LinkedCardEditablePreview() {
+  const [state, setState] = useState<ListingBidEnrollmentSnapshot>(
+    ENROLLMENT_SNAPSHOT_LINKED_CARD_EDITABLE,
+  );
+
+  return (
+    <ListingBidEnrollmentCardPreview
+      onChangePayment={() =>
+        setState(ENROLLMENT_SNAPSHOT_SETUP_SHEET_FROM_CHANGE)
+      }
+      onPaymentSetupDismissed={() =>
+        setState(ENROLLMENT_SNAPSHOT_LINKED_CARD_EDITABLE)
+      }
+      snapshot={state}
+    />
+  );
+}
+
 /** Ready card used by Bid Panel Docs. Controls toggle enrollment and bid mode. */
 export const Overview: Story = {
   tags: ["!dev"],
@@ -210,7 +270,10 @@ SignedOut.play = async ({ canvasElement }) => {
   ).not.toBeInTheDocument();
 };
 
-export const NeedCard = enrollmentStory(ENROLLMENT_SNAPSHOT_NEEDS_PAYMENT);
+export const NeedCard: Story = {
+  parameters: SNAPSHOT_DOCS,
+  render: () => <NeedCardPreview />,
+};
 NeedCard.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
   expect(
@@ -221,14 +284,43 @@ NeedCard.play = async ({ canvasElement }) => {
   expect(
     canvas.queryByRole("button", { name: "Sign In to Bid" }),
   ).not.toBeInTheDocument();
+  await userEvent.click(canvas.getByRole("button", { name: "Place Bid" }));
+  expect(
+    within(document.body).getByRole("dialog", {
+      name: "Get Ready to Bid",
+    }),
+  ).toBeVisible();
+  await dismissDialog("Get Ready to Bid");
+  expect(
+    canvas.getByRole("button", { name: "Link a card to place a bid." }),
+  ).toBeVisible();
+  expect(canvas.getByRole("button", { name: "Place Bid" })).toBeVisible();
 };
 
-export const LinkedCardEditable = enrollmentStory(
-  ENROLLMENT_SNAPSHOT_LINKED_CARD_EDITABLE,
-);
+export const LinkedCardEditable: Story = {
+  parameters: SNAPSHOT_DOCS,
+  render: () => <LinkedCardEditablePreview />,
+};
 LinkedCardEditable.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
   expect(canvas.getByText("•••• 4242")).toBeVisible();
+  expect(canvas.getByRole("button", { name: "Change" })).toBeVisible();
+  await userEvent.click(canvas.getByRole("button", { name: "Change" }));
+  await waitFor(() => {
+    expect(
+      within(document.body).getByRole("dialog", {
+        name: "Get Ready to Bid",
+      }),
+    ).toBeVisible();
+  });
+  expect(
+    within(
+      within(document.body).getByRole("dialog", {
+        name: "Get Ready to Bid",
+      }),
+    ).getByText("Stripe card form (iframe) — linked card on file"),
+  ).toBeVisible();
+  await dismissDialog("Get Ready to Bid");
   expect(canvas.getByRole("button", { name: "Change" })).toBeVisible();
 };
 
@@ -241,49 +333,6 @@ LinkedCard.play = async ({ canvasElement }) => {
   ).not.toBeInTheDocument();
 };
 
-export const SetupModal = enrollmentStory(ENROLLMENT_SNAPSHOT_SETUP_SHEET);
-SetupModal.play = async () => {
-  const dialog = within(document.body).getByRole("dialog", {
-    name: "Get Ready to Bid",
-  });
-  expect(
-    within(dialog).getByText("Stripe card link (iframe)"),
-  ).toBeInTheDocument();
-  expect(
-    within(dialog).getByText(
-      "Link a card to bid on this lot. You are only charged if you win this lot.",
-    ),
-  ).toBeInTheDocument();
-  expect(
-    within(dialog).getByRole("button", { name: "Continue" }),
-  ).toBeDisabled();
-};
-
-export const SetupModalFromChange = enrollmentStory(
-  ENROLLMENT_SNAPSHOT_SETUP_SHEET_FROM_CHANGE,
-);
-SetupModalFromChange.play = async () => {
-  const dialog = within(document.body).getByRole("dialog", {
-    name: "Get Ready to Bid",
-  });
-  expect(
-    within(dialog).getByText("Stripe card form (iframe) — linked card on file"),
-  ).toBeInTheDocument();
-  expect(
-    within(dialog).getByText(
-      "Link a card to bid on this lot. You are only charged if you win this lot.",
-    ),
-  ).toBeInTheDocument();
-  expect(
-    within(dialog).getByRole("checkbox", {
-      name: "I confirm I am 18 years of age or older.",
-    }),
-  ).toBeChecked();
-  expect(
-    within(dialog).getByRole("button", { name: "Continue" }),
-  ).toBeEnabled();
-};
-
 export const Ready = enrollmentStory(ENROLLMENT_SNAPSHOT_READY);
 Ready.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
@@ -293,23 +342,7 @@ Ready.play = async ({ canvasElement }) => {
   ).not.toBeInTheDocument();
 };
 
-export const AutoBidConfirmation = enrollmentStory(
-  ENROLLMENT_SNAPSHOT_AUTO_BID_CONFIRM,
-);
-
-export const Interactive: Story = {
-  parameters: SNAPSHOT_DOCS,
-  render: () => <ListingBidEnrollmentInteractiveDemo />,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("button", { name: "Sign In to Bid" }),
-    ).toBeVisible();
-  },
-};
-
 export const PaymentAuthorization: Story = {
-  name: "bid-panel/payment-authorization-started",
   parameters: SNAPSHOT_DOCS,
   render: () => <PaymentAuthorizationPreview />,
   play: async ({ canvasElement }) => {
@@ -332,33 +365,7 @@ export const PaymentAuthorization: Story = {
         name: "Authorizing payment method",
       }),
     ).toBeDisabled();
-  },
-};
-
-export const PaymentAuthorizationPending: Story = {
-  name: PAYMENT_AUTHORIZATION_STATE_RESPONSES.pending.scenarioId,
-  parameters: SNAPSHOT_DOCS,
-  render: () => <PaymentAuthorizationPreview initialState="pending" />,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("button", { name: "Place Bid" }));
-    expect(
-      within(document.body).getByRole("button", {
-        name: "Authorizing payment method",
-      }),
-    ).toBeDisabled();
-  },
-};
-
-export const PaymentAuthorizationRefused: Story = {
-  name: PAYMENT_AUTHORIZATION_STATE_RESPONSES.refused.scenarioId,
-  parameters: SNAPSHOT_DOCS,
-  render: () => <PaymentAuthorizationPreview initialState="refused" />,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("button", { name: "Place Bid" }));
-    expect(within(document.body).getByRole("alert")).toHaveTextContent(
-      "Your payment method was declined.",
-    );
+    await dismissDialog("Authorize your bid");
+    expect(canvas.getByRole("button", { name: "Place Bid" })).toBeVisible();
   },
 };

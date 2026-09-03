@@ -95,11 +95,7 @@ function PaymentMethodDialog({
   );
 }
 
-function PaymentAuthorizationPreview({
-  initialState = "method",
-}: {
-  initialState?: PaymentMethodState;
-}) {
+function PaymentAuthorizationPreview() {
   const [dialogState, setDialogState] = useState<PaymentMethodState | null>(
     null,
   );
@@ -107,7 +103,7 @@ function PaymentAuthorizationPreview({
   return (
     <>
       <ListingBidEnrollmentCardPreview
-        onBidSubmit={() => setDialogState(initialState)}
+        onBidSubmit={() => setDialogState("method")}
         onChangePayment={() => undefined}
         onLinkPayment={() => undefined}
         snapshot={ENROLLMENT_SNAPSHOT_READY}
@@ -123,7 +119,26 @@ function PaymentAuthorizationPreview({
   );
 }
 
+function PaymentAuthorizationDialogPreview({
+  state,
+}: {
+  state: Exclude<PaymentMethodState, "method">;
+}) {
+  const [open, setOpen] = useState(true);
+
+  if (!open) return null;
+
+  return (
+    <PaymentMethodDialog
+      onAuthorize={() => undefined}
+      onClose={() => setOpen(false)}
+      state={state}
+    />
+  );
+}
+
 export {
+  PaymentAuthorizationDialogPreview,
   PaymentAuthorizationPreview,
   type PaymentMethodState,
 };

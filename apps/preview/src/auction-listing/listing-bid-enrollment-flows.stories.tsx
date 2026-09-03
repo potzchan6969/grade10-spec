@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 import { BidPanelBiddingDemo } from "./bid-panel-bidding-demo";
 import { BidPanelCountdownDemo } from "./bid-panel-countdown-demo";
+import { ListingBidEnrollmentInteractiveDemo } from "./listing-bid-enrollment-demo";
 
 const meta = {
   title: "Auction Listing/Bid Panel/Flows",
@@ -131,5 +132,20 @@ export const Bidding: Story = {
     expect(canvas.getAllByRole("button", { name: "Place Bid" })).toHaveLength(
       7,
     );
+  },
+};
+
+export const Interactive: Story = {
+  render: () => (
+    <div className="mx-auto w-full max-w-md p-8">
+      <ListingBidEnrollmentInteractiveDemo />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("button", { name: "Sign In to Bid" }),
+    ).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
   },
 };

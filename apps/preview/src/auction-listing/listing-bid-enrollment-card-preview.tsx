@@ -32,12 +32,10 @@ type ListingBidEnrollmentCardPreviewProps = {
   onSignInOpenChange?: (open: boolean) => void;
   onSignInComplete?: () => void;
   onBidSubmit?: () => void;
-  setupOpen?: boolean;
-  onSetupOpenChange?: (open: boolean) => void;
   onSetupContinue?: () => void;
+  onPaymentSetupDismissed?: () => void;
   onLinkPayment?: () => void;
   onChangePayment?: () => void;
-  setupRequiresIframeLink?: boolean;
   autoConfirmOpen?: boolean;
   onAutoConfirmOpenChange?: (open: boolean) => void;
   onAutoBidConfirm?: () => void;
@@ -54,12 +52,10 @@ function ListingBidEnrollmentCardPreview({
   onSignInOpenChange,
   onSignInComplete,
   onBidSubmit,
-  setupOpen: setupOpenProp,
-  onSetupOpenChange,
   onSetupContinue,
+  onPaymentSetupDismissed,
   onLinkPayment,
   onChangePayment,
-  setupRequiresIframeLink,
   autoConfirmOpen: autoConfirmOpenProp,
   onAutoConfirmOpenChange,
   onAutoBidConfirm,
@@ -105,7 +101,6 @@ function ListingBidEnrollmentCardPreview({
     { locale: "en-HK" },
   );
 
-  const setupOpen = setupOpenProp ?? snapshot.setupSheet != null;
   const autoConfirmOpen =
     autoConfirmOpenProp ?? snapshot.autoConfirmOpen ?? false;
 
@@ -161,22 +156,18 @@ function ListingBidEnrollmentCardPreview({
         </Text>
       ) : null}
 
-      {setupOpen ? (
-        <EnrollmentSetupSheet
-          copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
-          defaultAgeAttested={snapshot.setupSheet?.defaultAgeAttested}
-          iframeLinkedPayment={snapshot.setupSheet?.iframeLinkedPayment}
-          onContinue={onSetupContinue}
-          onOpenChange={onSetupOpenChange}
-          open
-          presentation={overlayPresentation}
-          requiresIframeLink={
-            setupRequiresIframeLink ??
-            snapshot.setupSheet?.requiresIframeLink ??
-            true
-          }
-        />
-      ) : null}
+      <EnrollmentSetupSheet
+        copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
+        defaultAgeAttested={snapshot.paymentSetup?.defaultAgeAttested}
+        iframeLinkedPayment={snapshot.paymentSetup?.iframeLinkedPayment}
+        onContinue={onSetupContinue}
+        onOpenChange={(open) => {
+          if (!open) onPaymentSetupDismissed?.();
+        }}
+        open={Boolean(snapshot.paymentSetup)}
+        presentation={overlayPresentation}
+        requiresIframeLink={snapshot.paymentSetup?.requiresIframeLink ?? true}
+      />
 
       {signInOpen ? (
         overlayPresentation === "inline" ? (

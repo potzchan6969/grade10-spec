@@ -2,6 +2,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import {
   BID_PANEL_STATE_RESPONSES,
+  type BidPanelState,
   type BidPanelStateResponse,
 } from "@grade10/test/bid-panel-states";
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -15,6 +16,7 @@ function BidPanelStateResponsePreview({
   response: BidPanelStateResponse;
 }) {
   const [applied, setApplied] = useState(false);
+  const [state, setState] = useState<BidPanelState>(response.state);
 
   return (
     <div className="w-full max-w-md space-y-4">
@@ -26,8 +28,24 @@ function BidPanelStateResponsePreview({
       </Button>
       {applied ? (
         <ListingBidEnrollmentCardPreview
-          onChangePayment={() => undefined}
-          snapshot={response.state}
+          onChangePayment={() => {
+            setState((current) => ({
+              ...current,
+              paymentSetup: {
+                requiresIframeLink: true,
+                iframeLinkedPayment: current.linkedPaymentMethod,
+                defaultAgeAttested: true,
+              },
+            }));
+          }}
+          onPaymentSetupDismissed={() => {
+            setState((current) => ({
+              ...current,
+              paymentEmptyState: current.linkedPaymentMethod ? undefined : true,
+              paymentSetup: undefined,
+            }));
+          }}
+          snapshot={state}
         />
       ) : (
         <Text size="sm">Waiting for a response</Text>
@@ -37,7 +55,7 @@ function BidPanelStateResponsePreview({
 }
 
 const meta = {
-  title: "Auction Listing/Bid Panel/API response shapes",
+  title: "Auction Listing/Bid Panel/State Tests",
   component: BidPanelStateResponsePreview,
   parameters: { layout: "padded" },
 } satisfies Meta<typeof BidPanelStateResponsePreview>;
@@ -66,6 +84,29 @@ function responseStory(response: BidPanelStateResponse): Story {
         expect(
           within(document.body).getByText(response.expectedText),
         ).toBeVisible();
+        if (response.state.paymentSetup) {
+          await userEvent.click(
+            within(
+              within(document.body).getByRole("dialog", {
+                name: response.dialogName,
+              }),
+            ).getAllByRole("button", { name: "Close dialog" })[0],
+          );
+          await waitFor(() => {
+            expect(
+              within(document.body).queryByRole("dialog", {
+                name: response.dialogName,
+              }),
+            ).not.toBeInTheDocument();
+          });
+          expect(
+            response.state.linkedPaymentMethod
+              ? canvas.getByRole("button", { name: "Change" })
+              : canvas.getByRole("button", {
+                  name: "Link a card to place a bid.",
+                }),
+          ).toBeVisible();
+        }
         return;
       }
 

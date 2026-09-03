@@ -25,6 +25,13 @@ describe("Bid Panel normalized API response shapes", () => {
     },
   );
 
+  test("derives payment-setup dialog visibility from the response state", () => {
+    const { state } = BID_PANEL_STATE_RESPONSES.setupRequired;
+
+    expect(state.paymentSetup).toBeDefined();
+    expect("open" in (state.paymentSetup ?? {})).toBe(false);
+  });
+
   test.each(Object.values(PAYMENT_AUTHORIZATION_STATE_RESPONSES))(
     "$scenarioId is an enumerated payment-authorization mutation state",
     (response) => {

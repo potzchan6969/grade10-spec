@@ -319,11 +319,9 @@ function BiddingPreview({
       onChangePayment={actions.openChangePayment}
       onLinkPayment={actions.openSetup}
       onSetupContinue={actions.handleSetupContinue}
-      onSetupOpenChange={actions.setSetupOpen}
+      onPaymentSetupDismissed={actions.dismissPaymentSetup}
       onSignInComplete={actions.completeSignIn}
       onSignInOpenChange={actions.setSignInOpen}
-      setupOpen={session.setupOpen}
-      setupRequiresIframeLink={session.setupRequiresIframeLink}
       signInOpen={session.signInOpen}
       snapshot={{
         ...snapshot,

@@ -25,7 +25,8 @@ export type ListingBidEnrollmentSnapshot = {
   /** No account card on file — show the empty linked-card slot. */
   paymentEmptyState?: boolean;
   linkedPaymentMethod?: LinkedPaymentMethod;
-  setupSheet?: {
+  /** Rendering this state opens the payment-setup dialog. */
+  paymentSetup?: {
     requiresIframeLink?: boolean;
     /** Stripe iframe prefilled with an account card (change-card flow). */
     iframeLinkedPayment?: EnrollmentPaymentMethod;
@@ -72,7 +73,7 @@ export const ENROLLMENT_SNAPSHOT_LINKED_CARD: ListingBidEnrollmentSnapshot = {
 export const ENROLLMENT_SNAPSHOT_SETUP_SHEET: ListingBidEnrollmentSnapshot = {
   bidMode: "manual",
   submitUsesSignInLabel: false,
-  setupSheet: { requiresIframeLink: true },
+  paymentSetup: { requiresIframeLink: true },
 };
 
 export const ENROLLMENT_SNAPSHOT_SETUP_SHEET_FROM_CHANGE: ListingBidEnrollmentSnapshot =
@@ -83,7 +84,7 @@ export const ENROLLMENT_SNAPSHOT_SETUP_SHEET_FROM_CHANGE: ListingBidEnrollmentSn
       ...ENROLLMENT_DEMO_SAVED_PAYMENT,
       editable: true,
     },
-    setupSheet: {
+    paymentSetup: {
       requiresIframeLink: true,
       iframeLinkedPayment: ENROLLMENT_DEMO_SAVED_PAYMENT,
       defaultAgeAttested: true,
