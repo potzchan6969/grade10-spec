@@ -15,7 +15,7 @@ then be claimed in parallel.
 - [x] 2.4 Write the drift test: regenerate every service in memory and assert byte equality with `generated/`, failing with the service and the first differing procedure path and the instruction to run `generate` (`api-docs-SC-02`). Also assert every procedure carrying grants reports caller `elevated`, and list the distinct JSON Schema keywords seen so a new one is a visible diff.
 - [x] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, `pnpm run check:handbook`, `pnpm run check:libs`.
 
-## 3. The surface in the Grade10 console (grade10)
+## 3. The surface in the Grade10 console (grade10) (owner: @sean)
 
 Depends on group 2's package for the document type; builds against the
 committed documents, never a running backend.
