@@ -181,12 +181,16 @@ function StepperInput({
   decrementAtMinIcon,
   stepAmountLabel,
   formatValue,
+  onBlur,
+  onFocus,
   ...props
 }: StepperInputProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const messageId = message ? `${inputId}-message` : undefined;
   const inputRef = useRef<HTMLInputElement>(null);
+  /** ± commit then focuses the field; skip stripping format on that focus. */
+  const skipFormatDraftRef = useRef(false);
 
   const isControlled = valueProp !== undefined;
   const [uncontrolled, setUncontrolled] = useState(defaultValue);
@@ -241,6 +245,7 @@ function StepperInput({
     const from = numeric ?? min ?? 0;
     const next = commit(from + direction * stepDelta(step, modifiers));
     if (next !== from) playRoll(direction > 0 ? "up" : "down");
+    if (formatValue) skipFormatDraftRef.current = true;
     inputRef.current?.focus();
   };
 
@@ -345,16 +350,15 @@ function StepperInput({
           id={inputId}
           inputMode="numeric"
           onAnimationEnd={() => setRoll(null)}
-          onBlur={() => {
+          onBlur={(event) => {
             if (text === "") {
               commit(min ?? 0);
-              return;
-            }
-            if (numeric == null) {
+            } else if (numeric == null) {
               commit(min ?? 0);
-              return;
+            } else {
+              commit(numeric);
             }
-            commit(numeric);
+            onBlur?.(event);
           }}
           onChange={(event) => {
             const next = sanitizeNumeric(event.target.value, allowNegative);
@@ -367,11 +371,17 @@ function StepperInput({
               onValueChange?.(clamped);
             }
           }}
-          onFocus={() => {
-            if (!formatValue) return;
-            setDraft(true);
-            const raw = numeric ?? value;
-            setText(raw == null ? "" : String(raw));
+          onFocus={(event) => {
+            if (formatValue) {
+              if (skipFormatDraftRef.current) {
+                skipFormatDraftRef.current = false;
+              } else {
+                setDraft(true);
+                const raw = value ?? numeric;
+                setText(raw == null ? "" : String(raw));
+              }
+            }
+            onFocus?.(event);
           }}
           onKeyDown={onKeyDown}
           placeholder={placeholder}

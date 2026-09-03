@@ -86,7 +86,7 @@ export const AtBounds: Story = {
 export const WithStepAmount: Story = {
   args: {
     label: "Private maximum",
-    message: "Min.: Current bid + HK$250",
+    message: "Min.: HK$11,950",
     min: 11_950,
     step: 250,
     defaultValue: 11_950,
