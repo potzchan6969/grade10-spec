@@ -1,6 +1,8 @@
+import { Skeleton } from "@grade10/design-system/components/display/skeleton";
+import { HStack } from "@grade10/design-system/components/layout/hstack";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
-import { ListingGalleryLoading } from "./fixtures";
 import { ListingGallery } from "./listing-gallery";
 
 const IMAGE = new URL(
@@ -170,7 +172,16 @@ export const MixedMedia: Story = {
 
 /** Page shell before images arrive — no zoom hint or carets. */
 export const Loading: Story = {
-  render: () => <ListingGalleryLoading />,
+  render: () => (
+    <VStack className="w-full" gap="sm">
+      <Skeleton className="aspect-square w-full rounded-lg" />
+      <HStack gap="sm">
+        <Skeleton className="h-16 w-12 rounded-sm" />
+        <Skeleton className="h-16 w-12 rounded-sm" />
+        <Skeleton className="h-16 w-12 rounded-sm" />
+      </HStack>
+    </VStack>
+  ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.queryByText("Click to zoom")).toBeNull();

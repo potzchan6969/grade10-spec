@@ -92,7 +92,7 @@ jobs:
             core.setOutput("title", pullRequest.title);
             core.setOutput("url", pullRequest.html_url);
 
-      - name: Find changed page stories
+      - name: Find changed stories
         id: changed-pages
         run: |
           node scripts/storybook/changed-page-links.mjs \

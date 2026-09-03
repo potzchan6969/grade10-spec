@@ -68,7 +68,5 @@ export function isListingAgeVerificationAdult(
 
 export function listingAgeVerificationYearOptions(now = new Date()): string[] {
   const currentYear = now.getFullYear();
-  return Array.from({ length: 101 }, (_, index) =>
-    String(currentYear - index),
-  );
+  return Array.from({ length: 101 }, (_, index) => String(currentYear - index));
 }

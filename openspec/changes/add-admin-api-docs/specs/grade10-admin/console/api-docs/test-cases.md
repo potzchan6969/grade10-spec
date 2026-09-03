@@ -185,6 +185,36 @@ The store checkout router is listed on <grade10 staging admin url>.
 
 ---
 
+### api-docs-US1-TC7-1: Forwarded router names the worker that does its work
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** api-docs-US-01
+
+**Pre-conditions:**
+The API docs surface is open on <grade10 staging admin url>.
+
+**Steps:**
+
+1. Click the store service, then the auction.* router.
+2. Read the line above the procedure table.
+3. Click the placeBid row and read the badges in the detail header.
+4. Click the checkout.* router, then any row, and read the detail header.
+
+**Expected Results:**
+
+* Step 2 says each call is handed to the auction worker over a service binding.
+* Step 3 shows a badge reading forwards to auction beside the caller.
+* Step 4 shows no forwards badge.
+
 ## api-docs-US2: QA reviewer traces what a grant unlocks
 
 **As a** QA reviewer planning a pass for one operator role,
@@ -215,7 +245,7 @@ The API docs surface is open on <grade10 staging admin url>.
 
 **Expected Results:**
 
-* Rail names store, auction, auth, loyalty, vault, appointment and finance, each with a procedure count.
+* Rail names store, auction, auth, loyalty, vault, appointment, finance and inventory, each with a procedure count.
 * Store unfolds its routers, each with its own count, the till ladder named apart.
 
 ### api-docs-US2-TC2-1: Grant filter narrows every service and the counts follow

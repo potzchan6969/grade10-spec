@@ -74,30 +74,21 @@ export type Journey = {
 export type TestCaseStatus = "draft" | "actual" | "deprecated";
 
 export type TestCase = {
-  /** Permanent store id like `loyalty-TC-03`. */
+  /** Permanent store id like `loyalty-US1-TC3-1`, or the flat
+   * `loyalty-TC-03` an older suite issued. */
   id: string;
   title: string;
-  /** Scenario ids this case traces to. */
+  /** Ids this case traces to, as written: the journey it walks
+   * (`loyalty-US-01`), or a scenario id where an older suite named those. A
+   * journey trace reaches the scenarios its `Accepted by` lists. */
   traces: string[];
   status: TestCaseStatus;
-  /** Handle from the case's `**Reviewed by:**` line — who stood behind the
-   * verdict, and when. A verdict without one is unsigned, and `check:manual`
-   * says so. */
-  reviewedBy?: string;
-  reviewedOn?: string;
 };
 
-/** The suite file's own status — a summary of its cases, never an
- * independent judgment. */
-export type TestSuiteStatus = "pending-review" | "approved";
-
-/** A scenario the suite file cites with a quoted title (`**Covers:**`
- * lines); the drift warn compares the quote against the spec's current
- * heading — the only signal that a reviewed wording moved. */
-export type SuiteCitation = {
-  id: string;
-  title: string;
-};
+/** The suite file's own status — derived from its cases, never chosen:
+ * `pending-review` while every case is a draft, `in-review` from the first
+ * verdict, `approved` once no draft is left. */
+export type TestSuiteStatus = "pending-review" | "in-review" | "approved";
 
 export type SpecEntry = {
   /** `product/capability`, or a bare topic id. */
@@ -109,7 +100,6 @@ export type SpecEntry = {
   journeys?: Journey[];
   testCases?: TestCase[];
   testCasesStatus?: TestSuiteStatus;
-  testCaseCitations?: SuiteCitation[];
   /** Scenario ids the suite deliberately leaves uncovered
    * (`**Out of suite:**`) — subtracted from coverage, so the untraced
    * count that remains is always actionable. */
@@ -135,7 +125,33 @@ export type TaskLine = {
   owner?: string;
 };
 
+/**
+ * How long a claimed, unfinished group has sat without progress — the later of
+ * when the current owner's unbroken hold began and the newest commit that
+ * raised its checked count.
+ *
+ * Derived from the git history of one `tasks.md` by `openspec-viewer`'s
+ * published `lib/store`, at build time. Absent wherever there is no honest
+ * number: an unclaimed group, a finished one, a history that cannot account for
+ * the current owner, a store that is not a git checkout, or a checkout with no
+ * viewer submodule. An age invented from missing history would aim the nudge at
+ * the wrong person.
+ */
+export type IdleClaim = {
+  /** ISO date the clock started from. */
+  since: string;
+  /** Whole days from `since` to the build. */
+  days: number;
+  /** Which of the two dates won — a claim nobody has moved, or the last
+   * checkmark against it. */
+  source: "claim" | "progress";
+};
+
 export type TaskGroup = {
+  /** The integer its `## <n>. <title>` heading carries. The convention makes
+   * this the group's address: an owner is recorded against it, and a task id
+   * is written under it. */
+  num: string;
   title: string;
   repo: string;
   /** Handle from the heading's `(owner: @handle)` tag — who claimed the
@@ -144,6 +160,8 @@ export type TaskGroup = {
   done: number;
   total: number;
   tasks?: TaskLine[];
+  /** In-flight only, and only where git can date it. */
+  idle?: IdleClaim;
 };
 
 export type DeltaKind = "added" | "modified" | "removed" | "renamed";

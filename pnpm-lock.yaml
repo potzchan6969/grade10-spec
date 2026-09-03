@@ -22,6 +22,9 @@ importers:
       '@grade10/design-system':
         specifier: workspace:*
         version: link:../../packages/design-system
+      '@grade10/test':
+        specifier: workspace:*
+        version: link:../../packages/test
       '@grade10/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -213,6 +216,12 @@ importers:
       vitest:
         specifier: ^4.1.10
         version: 4.1.10(@types/node@24.13.3)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(jsdom@24.1.3)(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
+
+  packages/test:
+    devDependencies:
+      typescript:
+        specifier: ~6.0.2
+        version: 6.0.3
 
   packages/ui:
     dependencies:

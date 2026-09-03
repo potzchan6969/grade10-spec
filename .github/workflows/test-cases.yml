@@ -2,6 +2,7 @@ name: Test cases
 
 on:
   push:
+    branches: [main]
   pull_request:
 
 permissions:

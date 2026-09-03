@@ -24,7 +24,7 @@ directly, and nothing new is needed in `grade10-spec`.
 | --- | --- |
 | Section | `Stack` (`gap="lg"`) opening with `SectionHeader` — title `API docs`, description, `actions` holding the build commit as `Text` and a `Button` (`Copy JSON`) |
 | Services rail | `Panel` holding `Search` (the filter), then the services as a list: each service and router a `Button`-styled row is not in the vocabulary, so rows are `Inline` with `Text` and the count as `Badge` (`tone="default"`); the selected row marks itself the way the nav marks a selected item |
-| Procedure list | `Panel` (title `<service> · <router>`, description carrying the mount path and the `superjson` note) holding `Table` / `Row` / `Cell`; kind and caller as `Badge`; summaries as `Text color="secondary"` |
+| Procedure list | `Panel` (title `<service> · <router>`, description carrying the mount path and the `superjson` note) holding `Table` / `Row` / `Cell`; kind and caller as `Badge`; summaries as `Text color="secondary"`; a router that forwards every call to another worker says so in one `Text` line above the table, and a forwarding procedure carries `forwards to <service>` as a `Badge` in its detail |
 | Procedure detail | `Panel` (title is the dotted path, `titleAfter` the kind and caller badges, `actions` the copy buttons) holding a two-column `Grid` of field tables (`Table` / `Row` / `Cell`); raw schema behind `InfoDialog` rendering `Payload` |
 | Undeclared output | `Notice` (`tone="warning"`) in the output column, with the count on the panel description |
 

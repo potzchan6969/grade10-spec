@@ -47,21 +47,13 @@ type ListingAuctionBidCardProps = {
   view: ListingAuctionBidView;
   history: readonly ListingBidHistoryRow[];
   historyResetKey?: string;
-  bidMode: "manual" | "auto";
   bidEnrollment?: BidEnrollment;
   locale: ShippedLocale;
   timeZone: string;
-  onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
-  onCommitMaximum: () => void;
+  onCommitMaximum: (amountMinor: number) => void;
   recentBidsAccessory?: ReactNode;
 };
-
-/** Full rows for short lists; a half-row peek when more bids exist below the fold. */
-function recentBidsVisibleRows(bidCount: number): number {
-  if (bidCount >= 4) return 3.5;
-  return Math.max(1, bidCount);
-}
 
 function RecentBidsScrollArea({
   children,
@@ -70,6 +62,7 @@ function RecentBidsScrollArea({
 }: {
   children: ReactNode;
   contentKey: string;
+  /** Fixed viewport height in row units — keeps the section stable as bids arrive. */
   visibleRows?: number;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -152,11 +145,9 @@ function ListingAuctionBidCard({
   view,
   history,
   historyResetKey,
-  bidMode,
   bidEnrollment,
   locale,
   timeZone,
-  onBidModeChange,
   onPlaceBid,
   onCommitMaximum,
   recentBidsAccessory,
@@ -236,7 +227,6 @@ function ListingAuctionBidCard({
           </HStack>
           <RecentBidsScrollArea
             contentKey={`${historyResetKey ?? "live"}:${history.length}:${history[0]?.id ?? ""}`}
-            visibleRows={recentBidsVisibleRows(history.length)}
           >
             <ListingBidHistoryList
               activityTimeCopy={copy.activityTimeCopy}
@@ -258,10 +248,8 @@ function ListingAuctionBidCard({
           <VStack className="w-full" gap="md">
             <BidActions
               bidEnrollment={bidEnrollment}
-              bidMode={bidMode}
               copy={copy}
               locale={locale}
-              onBidModeChange={onBidModeChange}
               onCommitMaximum={onCommitMaximum}
               onPlaceBid={onPlaceBid}
               view={view}

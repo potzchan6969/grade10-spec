@@ -189,9 +189,9 @@ actor or subject in one request.
 Rejected:
 
 - Multi-column sort — spec is time only.
-- Email as a list parameter — the trail never holds it (`audit-SC-06`).
+- Email as a list parameter — the trail never holds it (`console-audit-SC-06`).
 - Client-side filter of a merged unfiltered page — silent other products
-  would still freeze paging (`audit-SC-09`).
+  would still freeze paging (`console-audit-SC-09`).
 
 ### Console asks only the selected chains; incomplete freeze follows that set
 
@@ -204,7 +204,7 @@ Oldest-first: reverse `compareAuditRows` (earlier `at` first; ties chain id
 ascending, then `seq` ascending). Per-chain cursors still advance to the
 last row of that chain that made the window.
 
-Jump (`audit-SC-16`): set product to the broken chain, `atSeq` to
+Jump (`console-audit-SC-16`): set product to the broken chain, `atSeq` to
 `brokenAtSeq`, `order` newest-first so that row is first. Location holds
 those keys.
 
@@ -215,7 +215,7 @@ The Audit surface's search string holds: `product`, `action`,
 newest-first omits `order`. There is no email filter and no directory
 read from this surface.
 
-Directory link (`audit-SC-14`): `/users?user=<id>` (ZZZ: `/?user=<id>`).
+Directory link (`console-audit-SC-14`): `/users?user=<id>` (ZZZ: `/?user=<id>`).
 Users already searches by id first. Pass `user` into
 `UserDirectorySection` as the initial search. Offer `Link` only when the
 operator holds `user:list`. Copy uses `IconButton` + clipboard; ids remain

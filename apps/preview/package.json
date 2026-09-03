@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@grade10/design-system": "workspace:*",
+    "@grade10/test": "workspace:*",
     "@grade10/ui": "workspace:*",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"

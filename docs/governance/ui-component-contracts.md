@@ -87,7 +87,7 @@ The conventions, each visible in the existing directories:
   subdirectories inside a capability directory.
 - **The component name carries the namespace.** `src/index.ts` is a single
   flat export surface, so PascalCase names take a capability prefix:
-  `ListingBidPanel`, `SignInCard`, `TwoFactorVerifyForm`. The test: the name
+  `ListingAuctionBidCard`, `SignInCard`, `TwoFactorVerifyForm`. The test: the name
   reads unambiguously in a consumer's import statement with the path out of
   sight. Never a generic name (`Card`, `Panel`, `Header`) — it collides
   across capabilities and shadows the primitive it composes.
@@ -157,7 +157,7 @@ consumer and an adapter folds one copy object out of it. A lot's bid panel
 labels the same slot "Starting bid", "Current bid", "Winning bid", or
 "Result", according to where the lot is in its life — which the panel must not
 know. So the four words live on the slice's copy type and the function that
-already derives the screen state hands the panel one `ListingBidPanelCopy`,
+already derives the screen state hands the panel one `ListingAuctionBidCardCopy`,
 worded. This is not an exception to composition; the copy object is still
 assembled once, above the component, by whoever knows enough to choose.
 

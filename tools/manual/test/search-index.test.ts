@@ -25,7 +25,8 @@ describe("the query that found nothing it was about", () => {
 
   it("surfaces the changes that issue the gift-card scenarios, and little else", async () => {
     const { snapshot } = await readStore(rootsOf(root));
-    const engine = buildSearchIndex(buildIndex(snapshot));
+    const index = buildIndex(snapshot);
+    const engine = buildSearchIndex(index);
     const { hits, partial } = runSearch(engine, "gift card");
     const where = hits.map((one) => hit(one).to);
 
@@ -34,8 +35,21 @@ describe("the query that found nothing it was about", () => {
       "/in-flight/revise-loyalty-programme-rules",
       "/in-flight/add-shopify-membership-pos",
     ]);
-    // The whole point: not eighteen pages that merely say "card".
-    expect(hits.length).toBeLessThan(6);
+
+    // The whole point: not eighteen pages that merely say "card". Stated as
+    // the property rather than a count, because a count is a fact about how
+    // much of this store is about gift cards today — it was under six, it is
+    // seven now, and a number that moves with the content cannot say whether
+    // what moved was the content or the search. Every document that comes
+    // back has to hold the rarer word; anything matching "card" alone is the
+    // failure, however many of them there are.
+    const byId = new Map(buildDocs(index).map((doc) => [doc.id, doc]));
+    const missing = hits
+      .map((one) => byId.get(String(one.id)))
+      .filter(
+        (doc) => !/gift/i.test(`${doc?.title} ${doc?.subtitle} ${doc?.body}`),
+      );
+    expect(missing).toEqual([]);
   });
 
   /** One common word must not carry a two-word query. */
@@ -57,6 +71,65 @@ describe("the query that found nothing it was about", () => {
     const engine = buildSearchIndex(buildIndex(snapshot));
 
     expect(runSearch(engine, "gift zzzzznotaword").partial).toBe(true);
+  });
+});
+
+/**
+ * The rule behind that guard, pinned to a fixture so it holds whatever the
+ * store grows into. Every pair here is two real words of this vocabulary one
+ * edit apart, which is what made a short fuzzy match a wrong answer rather
+ * than a forgiving one.
+ */
+describe("a short word is not a near miss for a different one", () => {
+  const page = (path: string, title: string, prose: string) => {
+    const entry = pageEntry(path, { title });
+    entry.source = `---\ntitle: ${title}\n---\n\n${prose}\n`;
+    return entry;
+  };
+
+  const engine = buildSearchIndex(
+    buildIndex(
+      snapshotOf({
+        pages: [
+          page(
+            "docs/prds/guides/how-this-manual-works.md",
+            "How this manual works",
+            "Every edit lands in git, because git is the only state this app has.",
+          ),
+          page(
+            "docs/prds/platform/commerce.md",
+            "Commerce",
+            "A gift card is bought at a listed denomination.",
+          ),
+          page(
+            "docs/prds/products/demo-product/cart.md",
+            "Cart",
+            "The cart holds one line item per distinct product.",
+          ),
+        ],
+      }),
+    ),
+  );
+
+  const titles = (query: string) =>
+    runSearch(engine, query).hits.map((one) => hit(one).title);
+
+  it("does not answer gift with git", () => {
+    expect(titles("gift")).toEqual(["Commerce"]);
+  });
+
+  it("does not answer card with cart", () => {
+    expect(titles("card")).toEqual(["Commerce"]);
+  });
+
+  it("does not answer cart with card", () => {
+    expect(titles("cart")).toEqual(["Cart"]);
+  });
+
+  /** The tolerance the floor is there to keep: a word long enough that a
+   * fifth of it really is one character. */
+  it("still forgives a typo in a word long enough to have one", () => {
+    expect(titles("denominaton")).toEqual(["Commerce"]);
   });
 });
 

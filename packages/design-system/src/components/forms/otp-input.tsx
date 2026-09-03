@@ -31,8 +31,15 @@ const slotKeys = [
 
 type OtpInputProps = Omit<
   React.ComponentProps<typeof OTPInput>,
-  "maxLength" | "render" | "children" | "containerClassName" | "placeholder"
+  | "maxLength"
+  | "render"
+  | "children"
+  | "containerClassName"
+  | "placeholder"
+  | "defaultValue"
 > & {
+  /** The digits an uncontrolled field starts with. */
+  defaultValue?: string;
   /** Rendered above the row. Omit it and no label renders — Figma's
    * `showLabel`, expressed as the absence of a value. */
   label?: ReactNode;

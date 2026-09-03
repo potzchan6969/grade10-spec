@@ -65,14 +65,11 @@ function ListingUserBidHistory({
 
   const referenceNow = resolveActivityNow(
     nowMs,
-    ...rows
-      .filter((row) => !row.timeOverride)
-      .map((row) => row.acceptedAtMs),
+    ...rows.filter((row) => !row.timeOverride).map((row) => row.acceptedAtMs),
   );
   const showFullTime = rows.some(
     (row) =>
-      !row.timeOverride &&
-      isPastActivityCap(row.acceptedAtMs, referenceNow),
+      !row.timeOverride && isPastActivityCap(row.acceptedAtMs, referenceNow),
   );
   const typeColumnClass = "w-28 shrink-0";
   const timeColumnClass = cn(

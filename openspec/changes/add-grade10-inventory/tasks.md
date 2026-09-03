@@ -5,7 +5,7 @@ exports. Once group 1 lands, groups 2–4 are sequential on schema and domain
 code; group 5 builds against contracts and fixtures from groups 1 and 4, not a
 running worker.
 
-## 1. Share aggregate inventory contracts (grade10)
+## 1. Share aggregate inventory contracts (grade10) (owner: @htonyl)
 
 - [x] 1.1 Make `catalog-SC-01 - Operator creates a draft product with empty
   inventory`, `catalog-SC-02 - Product create without a name is refused`,
@@ -42,7 +42,7 @@ running worker.
   `catalog-SC-40 - Auction cannot vault from reservation` pass with
   sell-from-reservation / vault-from-reservation contracts and entrypoint
   surface narrowing.
-- [ ] 1.5 Make `catalog-SC-20 - Vault cannot see Auction reservations`,
+- [x] 1.5 Make `catalog-SC-20 - Vault cannot see Auction reservations`,
   `catalog-SC-21 - Another kind cannot release a reservation`,
   `catalog-SC-34 - Public caller cannot reach holder methods`,
   `catalog-SC-61 - Auction eligibility list omits draft and out-of-stock`,
@@ -188,7 +188,7 @@ Depends on group 3.
   `pnpm run test:backend`, and `pnpm run build` for the inventory worker /
   API wiring.
 
-## 5. Compose Grade10 inventory admin UI (grade10)
+## 5. Compose Grade10 inventory admin UI (grade10) (owner: @htonyl)
 
 Depends on groups 1 and 4. Fixtures, not a live worker.
 
@@ -208,7 +208,7 @@ Depends on groups 1 and 4. Fixtures, not a live worker.
   release, sell-from-reservation, and vault-from-reservation are out of scope
   for the inventory product page — they ship from Auction listing and Vault
   consoles instead (`productsViews.test.tsx`).
-- [ ] 5.5 Make history badges pass for product-page mutations. Intake,
+- [x] 5.5 Make history badges pass for product-page mutations. Intake,
   reserve, and release badges pass in RTL (`productsViews.test.tsx`);
   reservation settlement badges are holder-console scope.
 - [ ] 5.6 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,

@@ -6,13 +6,13 @@ groups run against contracts and fixtures, never a running backend.
 
 ## 1. Shared audit list contract (grade10) (owner: @rita-liu)
 
-- [ ] 1.1 Extend `auditListInput` and `AuditPagePayload` with `order`, `after`, `actorId`, `subjectId`, `personId`, `action`, `ok`, `from`, `to`, and `atSeq` so `audit-SC-01`, `audit-SC-02`, `audit-SC-04`, `audit-SC-06`, and `audit-SC-16` are expressible on the wire without an email field
-- [ ] 1.2 Extend `AuditPageQuery` to the same shape so `listAuditPage` can apply those filters; default remains newest-first unfiltered (`audit-SC-03`)
+- [ ] 1.1 Extend `auditListInput` and `AuditPagePayload` with `order`, `after`, `actorId`, `subjectId`, `personId`, `action`, `ok`, `from`, `to`, and `atSeq` so `console-audit-SC-01`, `console-audit-SC-02`, `console-audit-SC-04`, `console-audit-SC-06`, and `console-audit-SC-16` are expressible on the wire without an email field
+- [ ] 1.2 Extend `AuditPageQuery` to the same shape so `listAuditPage` can apply those filters; default remains newest-first unfiltered (`console-audit-SC-03`)
 - [ ] 1.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test` on `@grade10/audit-contracts` and `@grade10/postgres`
 
 ## 2. Audit list indexes (grade10) (owner: @rita-liu)
 
-- [ ] 2.1 Add `idx_audit_logs_actor_at_seq`, `idx_audit_logs_subject_at_seq` (`subject_id IS NOT NULL`), and `idx_audit_logs_action_at_seq` on `createAuditLogsTable`, with `-- lock:` on the generated `CREATE INDEX` statements, so filtered `audit-SC-01` reads do not seq-scan `audit_logs`
+- [ ] 2.1 Add `idx_audit_logs_actor_at_seq`, `idx_audit_logs_subject_at_seq` (`subject_id IS NOT NULL`), and `idx_audit_logs_action_at_seq` on `createAuditLogsTable`, with `-- lock:` on the generated `CREATE INDEX` statements, so filtered `console-audit-SC-01` reads do not seq-scan `audit_logs`
 - [ ] 2.2 Verify: `pnpm run db:drizzle:generate`, `pnpm run check:migrations`
 
 ## 3. Identity-trail writes (grade10) (owner: @rita-liu)
@@ -28,25 +28,25 @@ groups run against contracts and fixtures, never a running backend.
 
 Needs group 1 landed.
 
-- [ ] 4.1 Apply the new `AuditPageQuery` fields in `listAuditPage` (AND filters, `personId` as actor-or-subject, inclusive `from`/`to`, `order`, `after`, inclusive `atSeq`) so `audit-SC-01`, `audit-SC-02`, `audit-SC-03`, `audit-SC-04`, and `audit-SC-16` pass on one chain
-- [ ] 4.2 Pass the extended `audit.list` input through every worker that already mounts the audit router; add no email parameter, so `audit-SC-06` cannot search the trail by email
+- [ ] 4.1 Apply the new `AuditPageQuery` fields in `listAuditPage` (AND filters, `personId` as actor-or-subject, inclusive `from`/`to`, `order`, `after`, inclusive `atSeq`) so `console-audit-SC-01`, `console-audit-SC-02`, `console-audit-SC-03`, `console-audit-SC-04`, and `console-audit-SC-16` pass on one chain
+- [ ] 4.2 Pass the extended `audit.list` input through every worker that already mounts the audit router; add no email parameter, so `console-audit-SC-06` cannot search the trail by email
 - [ ] 4.3 Verify: `pnpm run typecheck`, `pnpm run test:backend` for postgres audit paging and each brand's auth `audit.list`
 
 ## 5. Audit trail frontend (grade10) (owner: @rita-liu)
 
 Needs group 1 landed. Claimable against fixtures; no running backend.
 
-- [ ] 5.1 Thread filters, sort, `personId`, and `atSeq` through `AuditTrailRepository`, `mergeAuditPages`, and `useAuditTrail`; requesting only the selected chains so `audit-SC-01`, `audit-SC-03`, `audit-SC-04`, and `audit-SC-09` pass, and unfiltered silence still freezes paging
-- [ ] 5.2 Lift the Audit table into `@grade10/audit-admin-frontend` with a subject column, readable action map, expand, copy, and jump-to-`atSeq`, so `audit-SC-10`, `audit-SC-11`, `audit-SC-12`, `audit-SC-13`, `audit-SC-15`, and `audit-SC-16` pass against fixture chains
-- [ ] 5.3 Distinguish empty trail from filtered no-matches (`audit-SC-08`) and keep email and hashes off the row (`audit-SC-15`)
+- [ ] 5.1 Thread filters, sort, `personId`, and `atSeq` through `AuditTrailRepository`, `mergeAuditPages`, and `useAuditTrail`; requesting only the selected chains so `console-audit-SC-01`, `console-audit-SC-03`, `console-audit-SC-04`, and `console-audit-SC-09` pass, and unfiltered silence still freezes paging
+- [ ] 5.2 Lift the Audit table into `@grade10/audit-admin-frontend` with a subject column, readable action map, expand, copy, and jump-to-`atSeq`, so `console-audit-SC-10`, `console-audit-SC-11`, `console-audit-SC-12`, `console-audit-SC-13`, `console-audit-SC-15`, and `console-audit-SC-16` pass against fixture chains
+- [ ] 5.3 Distinguish empty trail from filtered no-matches (`console-audit-SC-08`) and keep email and hashes off the row (`console-audit-SC-15`)
 - [ ] 5.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test` for `@grade10/audit-admin-frontend`
-- [ ] 5.5 Collapse the chain strip to one line when every requested chain is reading, and a `Notice` per product that is not, so `audit-SC-17` and `audit-SC-16` pass
+- [ ] 5.5 Collapse the chain strip to one line when every requested chain is reading, and a `Notice` per product that is not, so `console-audit-SC-17` and `console-audit-SC-16` pass
 
 ## 6. Admin Audit section (grade10) (owner: @rita-liu)
 
 Needs group 5 landed. Claimable against fixtures.
 
-- [ ] 6.1 Wire both brands' Audit pages through the shared section, putting filters and sort in the location (never email) so `audit-SC-07` passes
-- [ ] 6.2 Do not offer an email filter or read the directory from Audit (`audit-SC-05`, `audit-SC-06`); `Link` actor/subject to `/users?user=` only with `user:list` (`audit-SC-14`)
-- [ ] 6.3 Convert the date fields with `startOfDay` / `endOfDay` and ignore a start day after the end day, so `audit-SC-02` holds on the surface
+- [ ] 6.1 Wire both brands' Audit pages through the shared section, putting filters and sort in the location (never email) so `console-audit-SC-07` passes
+- [ ] 6.2 Do not offer an email filter or read the directory from Audit (`console-audit-SC-05`, `console-audit-SC-06`); `Link` actor/subject to `/users?user=` only with `user:list` (`console-audit-SC-14`)
+- [ ] 6.3 Convert the date fields with `startOfDay` / `endOfDay` and ignore a start day after the end day, so `console-audit-SC-02` holds on the surface
 - [ ] 6.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`

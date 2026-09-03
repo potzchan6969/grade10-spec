@@ -113,16 +113,6 @@ export const RULES = [
     level: "warn",
     title: "Delta-introduced capabilities no page documents",
   },
-  {
-    key: "covers",
-    level: "warn",
-    title: "Suite citations whose wording moved",
-  },
-  {
-    key: "signed",
-    level: "warn",
-    title: "Reviewed cases carrying no reviewer or date",
-  },
 ];
 
 const LEVEL = new Map(RULES.map((rule) => [rule.key, rule.level]));
@@ -190,7 +180,7 @@ export function readStoryIndex(root, add) {
   return null;
 }
 
-/** Every permanent scenario id a spec issues — what a trace, a citation and a
+/** Every permanent scenario id a spec issues — what a scenario trace and a
  * journey's accepted-by all have to land in. */
 export const scenarioIds = (spec) =>
   new Set(

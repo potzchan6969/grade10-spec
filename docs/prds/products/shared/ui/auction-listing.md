@@ -20,7 +20,7 @@ does, and what it must clear, belongs to [the auction](/p/grade10-site/auction).
 
 ::story{id="auction-listing-listinggallery--single-image" title="A single-image gallery, with no strip"}
 
-::story{id="auction-listing-listingbidpanel--outbid" title="The bid panel after being outbid"}
+::story{id="auction-listing-listingauctionbidcard--outbid" title="The bid panel after being outbid"}
 
 ::story{id="auction-listing-listingdetails--default" title="The details section"}
 

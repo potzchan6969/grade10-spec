@@ -35,14 +35,15 @@ export const LiveAutoLeading: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("heading", { name: /Charizard/ })).toBeVisible();
-    expect(canvas.getByText("Set maximum (current: HK$8,000)")).toBeVisible();
     expect(
-      canvas.getByText("At least HK$8,001 (your maximum + HK$1)"),
+      canvas.getByText(/Raise your private maximum \(current: HK\$8,000\)/),
     ).toBeVisible();
+    expect(canvas.getByText("Choose another amount")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Your bid history" }),
     ).toBeVisible();
     expect(canvas.getByText("You")).toBeVisible();
+    expect(canvas.queryByText("Enable auto-bidding")).not.toBeInTheDocument();
     expect(
       canvas.queryByRole("dialog", { name: "Bid History" }),
     ).not.toBeInTheDocument();
@@ -55,9 +56,10 @@ export const LiveNoBids: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Starting bid")).toBeVisible();
-    expect(canvas.getByText("No bids yet")).toBeVisible();
-    expect(canvas.getByText("Linked Card")).toBeVisible();
-    expect(canvas.getByText("•••• 4242")).toBeVisible();
+    expect(canvas.getAllByText("No bids yet").length).toBeGreaterThan(0);
+    expect(canvas.getByText("Set your private maximum")).toBeVisible();
+    expect(canvas.getByText("Next eligible bid")).toBeVisible();
+    expect(canvas.getByText("Choose another amount")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Your bid history" }),
     ).not.toBeInTheDocument();
@@ -68,9 +70,8 @@ export const LiveAutoOutbid: Story = {
   args: { state: "live-auto-outbid" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByText("At least HK$8,500 (current bid + HK$250)"),
-    ).toBeVisible();
+    expect(canvas.getByText("Choose another amount")).toBeVisible();
+    expect(canvas.getByText(/Bid up to/)).toBeVisible();
   },
 };
 export const ClosedSold: Story = { args: { state: "closed-sold" } };

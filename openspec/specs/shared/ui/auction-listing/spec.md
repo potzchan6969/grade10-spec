@@ -24,10 +24,10 @@ and zoom.
 ### Requirement: The listing surface exports
 
 The shared UI package SHALL export, from its public entry, these components
-for the listing product page — `ListingGallery`, `ListingBidPanel`, and
+for the listing product page — `ListingGallery`, `ListingAuctionBidCard`, and
 `ListingDetails` — and these types: `ListingGalleryImage`,
-`ListingGalleryProps`, `ListingGalleryCopy`, `ListingBidPanelProps`,
-`ListingBidPanelCopy`, `ListingDetailsFact`, `ListingDetailsSection`,
+`ListingGalleryProps`, `ListingGalleryCopy`, `ListingAuctionBidCardProps`,
+`ListingAuctionBidCardCopy`, `ListingDetailsFact`, `ListingDetailsSection`,
 `ListingDetailsProps`, and `ListingDetailsCopy`.
 
 Each of those components SHALL be renderable on its own, so a later surface can
@@ -41,7 +41,7 @@ reuse the gallery without the bid panel.
 
 #### Scenario: auction-listing-SC-02 - A part is reused alone
 
-- **WHEN** an application renders `ListingGallery` without `ListingBidPanel`
+- **WHEN** an application renders `ListingGallery` without `ListingAuctionBidCard`
   or `ListingDetails`
 - **THEN** it renders and behaves as specified, with no missing-context error
 
@@ -114,8 +114,7 @@ It SHALL NOT supply default user-visible copy for those slots.
 
 ### Requirement: Extension explanation copy reflects the listing policy
 
-`ListingAuctionBidCard`, `ListingAuctionCardSidebar`, and
-`ListingBidPanel` SHALL receive extension explanation copy from the
+`ListingAuctionBidCard` and `ListingAuctionCardSidebar` SHALL receive extension explanation copy from the
 consumer. They SHALL NOT hardcode extension window or duration minutes.
 
 When extension is armed on a listing, the consumer SHALL supply copy for the

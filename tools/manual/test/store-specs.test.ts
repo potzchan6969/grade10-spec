@@ -111,13 +111,6 @@ describe("error containment", () => {
   it("keeps whatever parsed before the break", () => {
     expect(broken?.title).toBe("demo-product/broken Specification");
   });
-
-  it("carries the suite's own citations where it has them", () => {
-    expect(alpha?.testCaseCitations).toEqual([
-      { id: "alpha-SC-01", title: "The thing happens" },
-      { id: "alpha-SC-02", title: "The thing is refused a second time" },
-    ]);
-  });
 });
 
 const SPEC = "openspec/specs/demo-product/alpha/spec.md";
@@ -217,7 +210,7 @@ describe("a suite the reader refuses beside a spec that parsed", () => {
       file: CASES,
       line: 1,
       message:
-        "a test-case file states `**Status:** pending-review` or `approved` under its title",
+        "a test-case file states `**Status:** pending-review`, `in-review` or `approved` under its title",
     });
   });
 

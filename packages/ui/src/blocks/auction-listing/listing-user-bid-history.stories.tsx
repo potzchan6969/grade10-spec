@@ -63,6 +63,12 @@ function createLongRows(count: number): ListingUserBidHistoryRow[] {
 const LONG_ROWS = createLongRows(28);
 const OLDEST_BID_LABEL = LONG_ROWS.at(-1)?.amountLabel ?? "";
 
+function isWithinVerticalPort(element: Element, port: Element) {
+  const elRect = element.getBoundingClientRect();
+  const portRect = port.getBoundingClientRect();
+  return elRect.bottom > portRect.top && elRect.top < portRect.bottom;
+}
+
 const openDialogDecorator: Decorator = (Story) => {
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -104,8 +110,10 @@ export const DialogOpen: Story = {
       canvas.getByRole("button", { name: "Your bid history" }),
     );
     const dialog = await page.findByRole("dialog", { name: "Bid History" });
-    expect(dialog).toBeVisible();
-    expect(within(dialog).getByText("US$4,800")).toBeVisible();
+    await waitFor(() => {
+      expect(dialog).toBeVisible();
+    });
+    expect(within(dialog).getByText("HK$4,800")).toBeVisible();
     expect(within(dialog).getByText("2 min ago")).toBeVisible();
   },
 };
@@ -124,6 +132,9 @@ export const LongHistory: Story = {
   play: async () => {
     const page = within(document.body);
     const dialog = await page.findByRole("dialog", { name: "Bid History" });
+    await waitFor(() => {
+      expect(dialog).toBeVisible();
+    });
     const scrollBody = dialog.querySelector(
       '[data-slot="listing-user-bid-history-scroll"]',
     ) as HTMLElement;
@@ -131,12 +142,12 @@ export const LongHistory: Story = {
     expect(scrollBody.scrollHeight).toBeGreaterThan(scrollBody.clientHeight);
 
     const oldestBid = within(dialog).getByText(OLDEST_BID_LABEL);
-    expect(oldestBid).not.toBeVisible();
+    expect(isWithinVerticalPort(oldestBid, scrollBody)).toBe(false);
 
     scrollBody.scrollTop = scrollBody.scrollHeight;
     oldestBid.scrollIntoView({ block: "end" });
     await waitFor(() => {
-      expect(oldestBid).toBeVisible();
+      expect(isWithinVerticalPort(oldestBid, scrollBody)).toBe(true);
     });
   },
 };

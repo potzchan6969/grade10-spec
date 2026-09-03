@@ -23,14 +23,15 @@ try {
     "typescript",
   );
 }
-const PAGE_DIRECTORY = "apps/preview/src/pages";
+const STORY_ROOTS = [
+  "apps/preview/src",
+  "packages/ui/src",
+  "packages/design-system/src",
+];
 const SOURCE_EXTENSIONS = [".ts", ".tsx", ".js", ".jsx", ".css", ".json"];
 const GLOBAL_INPUTS = [
-  "package.json",
   "apps/preview/.storybook/",
   "apps/preview/.storybook-workbench/",
-  "apps/preview/vite.config.ts",
-  "apps/preview/package.json",
   "packages/design-system/src/theme.css",
   "packages/design-system/src/themes/",
 ];
@@ -39,9 +40,9 @@ function repositoryPath(root, file) {
   return normalize(relative(root, file));
 }
 
-function isPageStory(path) {
+function isWorkbenchStory(path) {
   return (
-    path.startsWith(`${PAGE_DIRECTORY}/`) &&
+    STORY_ROOTS.some((root) => path.startsWith(`${root}/`)) &&
     /\.stories\.[cm]?[jt]sx?$/.test(path)
   );
 }
@@ -110,11 +111,15 @@ function importNames(clause) {
 }
 
 function isBarrel(source) {
-  return source.statements.every(
-    (statement) =>
-      ts.isExportDeclaration(statement) ||
-      ts.isEmptyStatement(statement) ||
-      ts.isImportDeclaration(statement),
+  const statements = source.statements;
+  return (
+    statements.some((statement) => ts.isExportDeclaration(statement)) &&
+    statements.every(
+      (statement) =>
+        ts.isExportDeclaration(statement) ||
+        ts.isEmptyStatement(statement) ||
+        ts.isImportDeclaration(statement),
+    )
   );
 }
 
@@ -172,13 +177,22 @@ function moduleReferences(source, requested) {
   return references;
 }
 
-async function pageStories(root) {
-  const directory = join(root, PAGE_DIRECTORY);
-  const entries = await readdir(directory, { recursive: true });
-  return entries
-    .filter((entry) => isPageStory(normalize(join(PAGE_DIRECTORY, entry))))
-    .map((entry) => normalize(join(PAGE_DIRECTORY, entry)))
-    .sort();
+async function workbenchStories(root) {
+  const stories = [];
+  for (const directory of STORY_ROOTS) {
+    let entries;
+    try {
+      entries = await readdir(join(root, directory), { recursive: true });
+    } catch (error) {
+      if (error.code === "ENOENT") continue;
+      throw error;
+    }
+    for (const entry of entries) {
+      const path = normalize(join(directory, entry));
+      if (isWorkbenchStory(path)) stories.push(path);
+    }
+  }
+  return stories.sort();
 }
 
 async function dependencies(root, entry) {
@@ -189,7 +203,6 @@ async function dependencies(root, entry) {
     const key = `${path}\0${requested ? [...requested].sort().join(",") : "*"}`;
     if (visited.has(key)) return;
     visited.add(key);
-    found.add(repositoryPath(root, path));
 
     const source = ts.createSourceFile(
       path,
@@ -197,6 +210,7 @@ async function dependencies(root, entry) {
       ts.ScriptTarget.Latest,
       true,
     );
+    if (!isBarrel(source)) found.add(repositoryPath(root, path));
     for (const reference of moduleReferences(source, requested)) {
       const target = await resolveImport(root, path, reference.specifier);
       if (target) await visit(target, reference.names);
@@ -212,7 +226,7 @@ export async function affectedPageStories({
   root = rootDirectory,
 }) {
   const changed = new Set(changedFiles.map((path) => normalize(path)));
-  const pages = await pageStories(root);
+  const pages = await workbenchStories(root);
   if ([...changed].some(isGlobalInput)) return pages;
 
   const affected = [];
@@ -223,8 +237,11 @@ export async function affectedPageStories({
   return affected;
 }
 
-function storyPath(path) {
-  return `.${path.slice("apps/preview".length)}`;
+function storyImportPaths(path) {
+  if (path.startsWith("apps/preview/")) {
+    return [`.${path.slice("apps/preview".length)}`];
+  }
+  return [`../${path}`, `../../${path}`, `../../../${path}`];
 }
 
 function textBlocks(lines) {
@@ -277,16 +294,17 @@ export function slackPayload({
   removedStories = [],
   storybookUrl,
 }) {
-  const pages = new Set(affectedPages.map(storyPath));
+  const pages = new Set(affectedPages.flatMap(storyImportPaths));
+  const added = new Set(
+    [...changedPaths]
+      .filter(([, status]) => status === "A")
+      .flatMap(([path]) => storyImportPaths(path)),
+  );
   const stories = Object.values(index.entries ?? {})
     .filter((entry) => entry.type === "story" && pages.has(entry.importPath))
     .map((entry) => ({
       ...entry,
-      status:
-        changedPaths.get(entry.importPath.replace(/^\./, "apps/preview")) ===
-        "A"
-          ? "🆕"
-          : "",
+      status: added.has(entry.importPath) ? "🆕" : "",
     }));
   const states = [...stories, ...removedStories];
   if (!states.length) return { blocks: [] };
@@ -352,7 +370,7 @@ async function changedFiles(base, head) {
 async function deletedStoryStates(base, changed) {
   return Promise.all(
     changed
-      .filter(({ path, status }) => status === "D" && isPageStory(path))
+      .filter(({ path, status }) => status === "D" && isWorkbenchStory(path))
       .map(async ({ path }) => {
         const { stdout } = await exec("git", ["show", `${base}:${path}`], {
           cwd: rootDirectory,

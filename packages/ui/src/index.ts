@@ -2,21 +2,6 @@
  * capability specs name. Populated as blocks land under src/blocks/. */
 
 export {
-  currencyExponent,
-  DEFAULT_LISTING_CURRENCY,
-  formatMoney,
-  formatMoneyNumeric,
-  formatMoneyPrefix,
-  fromMinorUnits,
-  parseMoneyInputToMinor,
-  toMinorUnits,
-} from "./lib/format-money";
-export {
-  isMaximumBelowFloor,
-  minNextBidMinor,
-  resolveMaximumFloor,
-} from "./blocks/auction-listing/listing-bid-money";
-export {
   ListingAgeVerificationDialog,
   type ListingAgeVerificationDialogCopy,
   type ListingAgeVerificationDialogProps,
@@ -31,22 +16,41 @@ export {
 } from "./blocks/auction-listing/listing-auction-bid-card";
 export type { ListingAuctionBidFieldsCopy } from "./blocks/auction-listing/listing-auction-bid-fields";
 export {
-  type AuctionTiming,
-  auctionHeaderLabel,
-  BID_FIXTURE_LOT,
-  BIDDING_STATE_LABELS,
-  type BiddingState,
-  type BidMode,
-  bidHistoryForState,
-  bidModeForState,
-  buildListingAuctionBidView,
-  LISTING_AUCTION_BID_AGE_VERIFICATION_COPY,
-  LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
-  type LiveListingFacts,
-  remainingSecondsUntil,
-  stateMeta,
-  userBidHistoryForState,
-} from "./blocks/auction-listing/listing-auction-bid-fixtures";
+  ListingAuctionCardSidebar,
+  type ListingAuctionCardSidebarCopy,
+  type ListingAuctionCardSidebarProps,
+} from "./blocks/auction-listing/listing-auction-card-sidebar";
+export {
+  AutoBidConfirmationDialog,
+  type AutoBidConfirmationDialogCopy,
+  type AutoBidConfirmationDialogProps,
+  EnrollmentSetupSheet,
+  type EnrollmentSetupSheetCopy,
+  type EnrollmentSetupSheetProps,
+  InlineOverlayPreview,
+  type OverlayPresentation,
+  PaymentMethodEmptyState,
+  type PaymentMethodEmptyStateCopy,
+  type PaymentMethodEmptyStateProps,
+  PaymentMethodRow,
+  type PaymentMethodRowCopy,
+  type PaymentMethodRowProps,
+} from "./blocks/auction-listing/listing-bid-enrollment";
+export { ListingBidHistoryList } from "./blocks/auction-listing/listing-bid-history-list";
+export {
+  formatMinimumMaximumCaption,
+  isMaximumBelowFloor,
+  minNextBidMinor,
+  resolveMaximumFloor,
+} from "./blocks/auction-listing/listing-bid-money";
+// shared/ui/auction-listing
+export {
+  ListingDetails,
+  type ListingDetailsCopy,
+  type ListingDetailsFact,
+  type ListingDetailsProps,
+  type ListingDetailsSection,
+} from "./blocks/auction-listing/listing-details";
 export {
   DEFAULT_LISTING_EXTENSION_POLICY,
   extendRecordedCloseAt,
@@ -57,29 +61,6 @@ export {
   SHORT_WINDOW_EXTENSION_POLICY,
   shouldExtendCloseAt,
 } from "./blocks/auction-listing/listing-extension-policy";
-export {
-  ListingAuctionCardSidebar,
-  type ListingAuctionCardSidebarCopy,
-  type ListingAuctionCardSidebarProps,
-} from "./blocks/auction-listing/listing-auction-card-sidebar";
-export { ListingBidHistoryList } from "./blocks/auction-listing/listing-bid-history-list";
-export {
-  EnrollmentSetupSheet,
-  PaymentMethodRow,
-} from "./blocks/auction-listing/listing-bid-enrollment-prototypes";
-// shared/ui/auction-listing
-export {
-  ListingBidPanel,
-  type ListingBidPanelCopy,
-  type ListingBidPanelProps,
-} from "./blocks/auction-listing/listing-bid-panel";
-export {
-  ListingDetails,
-  type ListingDetailsCopy,
-  type ListingDetailsFact,
-  type ListingDetailsProps,
-  type ListingDetailsSection,
-} from "./blocks/auction-listing/listing-details";
 export {
   ListingGallery,
   type ListingGalleryCopy,
@@ -99,6 +80,7 @@ export {
 } from "./blocks/auction-listing/listing-lot-layout";
 export {
   ListingLotMeta,
+  type ListingLotMarketComps,
   type ListingLotMetaCopy,
   type ListingLotMetaProps,
 } from "./blocks/auction-listing/listing-lot-meta";
@@ -234,6 +216,7 @@ export {
   type StoreSectionHeaderProps,
 } from "./blocks/store-home/store-section-header";
 export type { StoreCollectionSummary } from "./blocks/store-home/types";
+export { loyaltyPointsHeading } from "./blocks/store-order-detail/loyalty-points-heading";
 // shared-ui/store-order-detail
 export {
   OrderDetails,
@@ -244,8 +227,6 @@ export {
   OrderDetailsDeliveryStatus,
   type OrderDetailsDeliveryStatusProps,
 } from "./blocks/store-order-detail/order-details-delivery-status";
-export { resolveDeliverySteps } from "./blocks/store-order-detail/resolve-delivery-steps";
-export { loyaltyPointsHeading } from "./blocks/store-order-detail/loyalty-points-heading";
 export {
   OrderDetailsHeader,
   type OrderDetailsHeaderProps,
@@ -266,6 +247,7 @@ export {
   OrderDetailsSidebar,
   type OrderDetailsSidebarProps,
 } from "./blocks/store-order-detail/order-details-sidebar";
+export { resolveDeliverySteps } from "./blocks/store-order-detail/resolve-delivery-steps";
 export type {
   OrderDetailsAddress,
   OrderDetailsDelivery,
@@ -397,3 +379,13 @@ export {
   resolveShippedLocale,
   type ShippedLocale,
 } from "./lib/format-datetime";
+export {
+  currencyExponent,
+  DEFAULT_LISTING_CURRENCY,
+  formatMoney,
+  formatMoneyNumeric,
+  formatMoneyPrefix,
+  fromMinorUnits,
+  parseMoneyInputToMinor,
+  toMinorUnits,
+} from "./lib/format-money";

@@ -3,22 +3,19 @@ import { StoreFileError } from "../src/store/disk.mts";
 import { readTestCases } from "../src/store/read-specs.mts";
 
 /** The format block of `docs/governance/specs-to-test-cases.md`, kept whole:
- * the nine properties in their stated order, a journey section above them, and
- * the file's own status under the title. */
+ * the file's own status under the title, a compact journey section above the
+ * cases, and each case's nine classification properties in their stated
+ * order, closing with a `**Trace:**` to the journey. */
 const suite = (fileStatus: string, ...cases: string[]) =>
   [
     "# demo-product/alpha Test Cases",
     "",
     ...(fileStatus === "" ? [] : [`**Status:** ${fileStatus}`, ""]),
-    "## alpha-US-01: Reader follows the thing end to end",
+    "## alpha-US1: Reader follows the thing end to end",
     "",
     "**As a** reader,",
     "**I want** the thing to happen once,",
     "**so that** I can tell whether it already happened.",
-    "",
-    "**Covers:**",
-    "",
-    "- `alpha-SC-01` — The thing happens",
     "",
     ...cases,
   ].join("\n");
@@ -27,107 +24,130 @@ const testCase = (
   id: string,
   title: string,
   status: string,
-  trace = "alpha-SC-01",
+  trace = "alpha-US-01",
 ) =>
   [
     `### ${id}: ${title}`,
     "",
-    "**Description:** Proves the thing happens on a first ask.",
+    "**Classification:**",
     "",
-    "**Preconditions:**",
+    "* **Severity:** major",
+    "* **Priority:** high",
+    ...(status === "" ? [] : [`* **Status:** ${status}`]),
+    "* **Behaviour:** positive",
+    "* **Type:** smoke",
+    "* **Layer:** e2e",
+    "* **Automation status:** manual",
+    "* **Testability:** automation",
+    `* **Trace:** ${trace}`,
     "",
-    "- The thing has not happened.",
-    "",
-    "**Test data:** None — the case takes no input.",
+    "**Pre-conditions:**",
+    "The thing has not happened.",
     "",
     "**Steps:**",
     "",
-    "| # | Action | Expected result |",
-    "| --- | --- | --- |",
-    "| 1 | Ask for the thing. | The thing happens. |",
+    "1. Ask for the thing.",
     "",
-    "**Properties:**",
+    "**Expected Results:**",
     "",
-    "- **Severity:** major",
-    "- **Priority:** high",
-    ...(status === "" ? [] : [`- **Status:** ${status}`]),
-    "- **Behaviour:** positive",
-    "- **Type:** smoke",
-    "- **Layer:** e2e",
-    "- **Automation status:** manual",
-    "- **Testability:** automation",
-    `- **Trace:** ${trace}`,
+    "* The thing happens.",
     "",
   ].join("\n");
 
 describe("a suite in the governance format", () => {
   const parsed = readTestCases(
     suite(
-      "pending-review",
-      testCase("alpha-TC-01", "Reader asks and it happens", "draft"),
-      testCase("alpha-TC-02", "Reader asks again", "actual"),
-      testCase("alpha-TC-03", "Reader asks the old way", "deprecated"),
+      "in-review",
+      testCase("alpha-US1-TC1-1", "Reader asks and it happens", "draft"),
+      testCase("alpha-US1-TC2-1", "Reader asks again", "actual"),
+      testCase("alpha-US1-TC3-2", "Reader asks the old way", "deprecated"),
     ),
   );
 
   it("takes the file's own status", () => {
-    expect(parsed.status).toBe("pending-review");
+    expect(parsed.status).toBe("in-review");
   });
 
-  it("takes each case's status from its properties list", () => {
+  it("reads each journey-scoped case, its status and the journey it traces", () => {
     expect(parsed.cases.map((one) => [one.id, one.status, one.traces])).toEqual(
       [
-        ["alpha-TC-01", "draft", ["alpha-SC-01"]],
-        ["alpha-TC-02", "actual", ["alpha-SC-01"]],
-        ["alpha-TC-03", "deprecated", ["alpha-SC-01"]],
+        ["alpha-US1-TC1-1", "draft", ["alpha-US-01"]],
+        ["alpha-US1-TC2-1", "actual", ["alpha-US-01"]],
+        ["alpha-US1-TC3-2", "deprecated", ["alpha-US-01"]],
       ],
     );
   });
 
   it("reads an approved file as approved", () => {
     const approved = readTestCases(
-      suite("approved", testCase("alpha-TC-01", "It happens", "actual")),
+      suite("approved", testCase("alpha-US1-TC1-1", "It happens", "actual")),
     );
     expect(approved.status).toBe("approved");
   });
 
-  /** A verdict carries its reviewer; the reader hands the signature over so
-   * the surfaces can show it and the check can miss it. */
-  it("reads the reviewer and date off a signed verdict", () => {
-    const signed = readTestCases(
+  it("reads a pending-review file as pending-review", () => {
+    const pending = readTestCases(
       suite(
         "pending-review",
-        testCase("alpha-TC-01", "It happens", "actual").replace(
-          "- **Status:** actual",
-          "- **Status:** actual\n- **Reviewed by:** @quinn - 2026-09-01",
-        ),
+        testCase("alpha-US1-TC1-1", "It happens", "draft"),
       ),
     );
-
-    expect(signed.cases[0].reviewedBy).toBe("quinn");
-    expect(signed.cases[0].reviewedOn).toBe("2026-09-01");
+    expect(pending.status).toBe("pending-review");
   });
+});
 
-  it("leaves an unsigned case without an invented reviewer", () => {
+/** An issued id is permanent, so a suite written before the compact
+ * journey-scoped id is never renumbered to it — the reader keeps reading
+ * what those files issued. */
+describe("a suite in an older shape", () => {
+  it("reads the flat `<capability>-TC-<n>` id", () => {
     const parsed = readTestCases(
       suite("pending-review", testCase("alpha-TC-01", "It happens", "draft")),
     );
+    expect(parsed.cases.map((one) => one.id)).toEqual(["alpha-TC-01"]);
+  });
 
-    expect(parsed.cases[0].reviewedBy).toBeUndefined();
-    expect(parsed.cases[0].reviewedOn).toBeUndefined();
+  it("reads the hyphenated journey-scoped id", () => {
+    const parsed = readTestCases(
+      suite(
+        "pending-review",
+        testCase("alpha-US-01-TC-01", "It happens", "draft"),
+      ),
+    );
+    expect(parsed.cases.map((one) => one.id)).toEqual(["alpha-US-01-TC-01"]);
+  });
+
+  it("reads a trace that names scenarios outright", () => {
+    const parsed = readTestCases(
+      suite(
+        "pending-review",
+        testCase(
+          "alpha-TC-01",
+          "It happens",
+          "draft",
+          "alpha-SC-01, alpha-SC-02",
+        ),
+      ),
+    );
+    expect(parsed.cases[0].traces).toEqual(["alpha-SC-01", "alpha-SC-02"]);
+  });
+
+  it("reads `-` property bullets the way it reads `*`", () => {
+    const parsed = readTestCases(
+      suite(
+        "pending-review",
+        testCase("alpha-TC-01", "It happens", "actual").replaceAll(
+          "\n* ",
+          "\n- ",
+        ),
+      ),
+    );
+    expect(parsed.cases[0].status).toBe("actual");
+    expect(parsed.cases[0].traces).toEqual(["alpha-US-01"]);
   });
 });
 
 describe("what a suite says about the spec beside it", () => {
-  it("carries each `**Covers:**` bullet as an id and the wording quoted", () => {
-    const parsed = readTestCases(
-      suite("pending-review", testCase("alpha-TC-01", "It happens", "draft")),
-    );
-    expect(parsed.citations).toEqual([
-      { id: "alpha-SC-01", title: "The thing happens" },
-    ]);
-  });
-
   it("reads the ids a suite leaves uncovered on purpose", () => {
     const parsed = readTestCases(
       [
@@ -137,20 +157,42 @@ describe("what a suite says about the spec beside it", () => {
         "",
         "**Out of suite:** alpha-SC-08, alpha-SC-09",
         "",
-        "## alpha-US-01: Reader follows the thing end to end",
+        "## alpha-US1: Reader follows the thing end to end",
         "",
-        testCase("alpha-TC-01", "It happens", "draft"),
+        testCase("alpha-US1-TC1-1", "It happens", "draft"),
       ].join("\n"),
     );
     expect(parsed.outOfSuite).toEqual(["alpha-SC-08", "alpha-SC-09"]);
   });
 
-  it("keeps a case's properties list out of both", () => {
+  it("reads the out-of-suite ids off bullets beneath the label", () => {
     const parsed = readTestCases(
-      suite("pending-review", testCase("alpha-TC-01", "It happens", "draft")),
+      [
+        "# demo-product/alpha Test Cases",
+        "",
+        "**Status:** pending-review",
+        "",
+        "**Out of suite:**",
+        "",
+        "- `alpha-SC-08` — nobody reaches it",
+        "- `alpha-SC-09` — package contract",
+        "",
+        "## alpha-US1: Reader follows the thing end to end",
+        "",
+        testCase("alpha-US1-TC1-1", "It happens", "draft"),
+      ].join("\n"),
+    );
+    expect(parsed.outOfSuite).toEqual(["alpha-SC-08", "alpha-SC-09"]);
+  });
+
+  it("keeps a case's properties list out of it", () => {
+    const parsed = readTestCases(
+      suite(
+        "pending-review",
+        testCase("alpha-US1-TC1-1", "It happens", "draft"),
+      ),
     );
     expect(parsed.outOfSuite).toEqual([]);
-    expect(parsed.citations).toHaveLength(1);
   });
 });
 
@@ -159,36 +201,54 @@ describe("what a suite says about the spec beside it", () => {
 describe("a suite that states no status", () => {
   it("refuses a file with no `**Status:**` under its title", () => {
     expect(() =>
-      readTestCases(suite("", testCase("alpha-TC-01", "It happens", "draft"))),
+      readTestCases(
+        suite("", testCase("alpha-US1-TC1-1", "It happens", "draft")),
+      ),
     ).toThrow(
-      /a test-case file states `\*\*Status:\*\* pending-review` or `approved`/,
+      /a test-case file states `\*\*Status:\*\* pending-review`, `in-review` or `approved`/,
     );
   });
 
   it("refuses a file status outside the vocabulary", () => {
     expect(() =>
       readTestCases(
-        suite("in-review", testCase("alpha-TC-01", "It happens", "draft")),
+        suite("draft", testCase("alpha-US1-TC1-1", "It happens", "draft")),
       ),
-    ).toThrow(/neither `pending-review` nor `approved`/);
+    ).toThrow(/is not `pending-review`, `in-review` or `approved`/);
   });
 
   it("refuses a case with no `**Status:**`", () => {
     expect(() =>
       readTestCases(
-        suite("pending-review", testCase("alpha-TC-01", "It happens", "")),
+        suite("pending-review", testCase("alpha-US1-TC1-1", "It happens", "")),
       ),
-    ).toThrow(/test case `alpha-TC-01: It happens` has no `\*\*Status:\*\*`/);
+    ).toThrow(
+      /test case `alpha-US1-TC1-1: It happens` has no `\*\*Status:\*\*`/,
+    );
   });
 
   it("refuses a case status outside the vocabulary", () => {
     expect(() =>
       readTestCases(
-        suite("pending-review", testCase("alpha-TC-01", "It happens", "ready")),
+        suite(
+          "pending-review",
+          testCase("alpha-US1-TC1-1", "It happens", "ready"),
+        ),
       ),
     ).toThrow(
       /is `\*\*Status:\*\* ready`, which is not draft, actual or deprecated/,
     );
+  });
+
+  it("refuses a case whose trace names no id", () => {
+    expect(() =>
+      readTestCases(
+        suite(
+          "pending-review",
+          testCase("alpha-US1-TC1-1", "It happens", "draft", "the journey"),
+        ),
+      ),
+    ).toThrow(/traces no journey or scenario id/);
   });
 
   /** A `TC` id is permanent, and a task, a review and a downstream test all
@@ -198,18 +258,20 @@ describe("a suite that states no status", () => {
       readTestCases(
         suite(
           "pending-review",
-          testCase("alpha-TC-01", "It happens", "actual"),
-          testCase("alpha-TC-01", "It happens again", "actual"),
+          testCase("alpha-US1-TC1-1", "It happens", "actual"),
+          testCase("alpha-US1-TC1-1", "It happens again", "actual"),
         ),
       ),
     ).toThrow(
-      /test case `alpha-TC-01` is issued twice, at line 15 and line 43 — an id names one thing forever/,
+      /test case `alpha-US1-TC1-1` is issued twice, at line 11 and line 36 — an id names one thing forever/,
     );
   });
 
   it("points at the line, so the error entry can name it", () => {
     try {
-      readTestCases(suite("", testCase("alpha-TC-01", "It happens", "draft")));
+      readTestCases(
+        suite("", testCase("alpha-US1-TC1-1", "It happens", "draft")),
+      );
       expect.unreachable("the reader should have refused");
     } catch (cause) {
       expect(cause).toBeInstanceOf(StoreFileError);

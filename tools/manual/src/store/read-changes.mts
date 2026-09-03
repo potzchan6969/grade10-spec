@@ -8,6 +8,7 @@ import type {
   Delta,
   DeltaKind,
   DeltaRequirement,
+  IdleClaim,
   TaskGroup,
   TaskLine,
 } from "../api/types.ts";
@@ -20,13 +21,14 @@ import {
   walkFiles,
 } from "./disk.mts";
 import type { GitIndex } from "./git.mts";
+import { readIdleClaims } from "./idle.mts";
 import { leadingTitle, outline, type Section } from "./markdown.mts";
 import { readTestCases } from "./read-specs.mts";
 
 const OWNER = /\(owner:\s*@([A-Za-z0-9][A-Za-z0-9_-]*)\)/g;
 const OWNER_TAG = new RegExp(OWNER.source);
 const HANDLE = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
-const GROUP_HEADING = /^\d+\.\s*(.+)$/;
+const GROUP_HEADING = /^(\d+)\.\s*(.+)$/;
 const REPO_TAG = /\s*\(([^()@]+)\)\s*$/;
 const CHECKBOX = /^\s*-\s*\[( |x|X)\]\s?(.*)$/;
 const BULLET = /^\s*[-*]\s+(.+?)\s*$/;
@@ -148,7 +150,14 @@ function readChange(
   if (tasks !== undefined) {
     entry.owners = [...new Set([...declared, ...matchAll(tasks, OWNER)])];
     try {
-      entry.taskGroups = readTaskGroups(tasks, detailed);
+      entry.taskGroups = readTaskGroups(
+        tasks,
+        detailed,
+        // Only for work still in flight: an archived change is finished, and
+        // its groups are the record of who did it rather than a claim anyone
+        // could still be sitting on.
+        detailed ? readIdleClaims(root, id) : new Map(),
+      );
     } catch (cause) {
       fail(`${rel}/tasks.md`, cause);
     }
@@ -241,7 +250,11 @@ function readCitations(sections: Section[]): string[] {
 /** `detailed` carries the checkbox lines themselves, so "5 of 6" can say which
  * one is open. In-flight only: the archive shares this type and its board
  * payload has no reader for the lines. */
-function readTaskGroups(text: string, detailed: boolean): TaskGroup[] {
+function readTaskGroups(
+  text: string,
+  detailed: boolean,
+  idle: Map<string, IdleClaim>,
+): TaskGroup[] {
   const groups: TaskGroup[] = [];
   const visit = (sections: Section[]): void => {
     for (const section of sections) {
@@ -250,17 +263,21 @@ function readTaskGroups(text: string, detailed: boolean): TaskGroup[] {
         visit(section.children);
         continue;
       }
-      const owner = OWNER_TAG.exec(match[1])?.[1];
-      const title = match[1].replace(OWNER, "").trimEnd();
+      const num = match[1];
+      const owner = OWNER_TAG.exec(match[2])?.[1];
+      const title = match[2].replace(OWNER, "").trimEnd();
       const repo = REPO_TAG.exec(title);
       const tasks = readTaskLines(section.raw);
+      const claim = idle.get(num);
       groups.push({
+        num,
         title: repo ? title.slice(0, repo.index).trimEnd() : title,
         repo: repo ? repo[1].trim() : "",
         ...(owner ? { owner } : {}),
         done: tasks.filter((task) => task.done).length,
         total: tasks.length,
         ...(detailed ? { tasks } : {}),
+        ...(claim ? { idle: claim } : {}),
       });
     }
   };

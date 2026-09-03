@@ -405,12 +405,16 @@ listing's public address `/auction/listings/<slug>`.
 While a listing is `draft` or `created`, an authorized operator SHALL be able
 to set:
 
-- **Currency** — an ISO 4217 three-letter code. Empty on draft is allowed.
-  Omitted at create SHALL store Grade10's store currency (`HKD`).
+- **Currency** — an operator chooses an ISO 4217 three-letter code from the
+  platform's supported currency list. Omitted at create SHALL store Grade10's
+  store currency (`HKD`).
 - **Starting price** — integer minor units greater than zero when set. Empty
   is allowed only while `draft`.
 - **Minimum increment** — integer minor units greater than zero when set.
   Empty is allowed only while `draft`.
+- The form SHALL show each entered minor-unit price as a separately formatted
+  decimal amount in the selected currency, so an operator can verify its
+  decimal placement before saving.
 - **Starts at** — the scheduled bidding open. Empty is allowed only while
   `draft`.
 - **Scheduled close at** — the published close. Empty is allowed only while

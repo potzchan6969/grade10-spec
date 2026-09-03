@@ -91,23 +91,34 @@ export function toMinorUnits(decimal: string, code: string): number {
 
   const parts = normalized.split(".");
   if (parts.length > 2) {
-    throw new Error(`Invalid decimal amount for ${code.toUpperCase()}: ${decimal}`);
+    throw new Error(
+      `Invalid decimal amount for ${code.toUpperCase()}: ${decimal}`,
+    );
   }
 
   const [wholePart = "0", fractionPart = ""] = parts;
-  if (!/^\d+$/.test(wholePart) || (fractionPart && !/^\d+$/.test(fractionPart))) {
-    throw new Error(`Invalid decimal amount for ${code.toUpperCase()}: ${decimal}`);
+  if (
+    !/^\d+$/.test(wholePart) ||
+    (fractionPart && !/^\d+$/.test(fractionPart))
+  ) {
+    throw new Error(
+      `Invalid decimal amount for ${code.toUpperCase()}: ${decimal}`,
+    );
   }
 
   if (fractionPart.length > exponent) {
-    throw new Error(`Invalid decimal amount for ${code.toUpperCase()}: ${decimal}`);
+    throw new Error(
+      `Invalid decimal amount for ${code.toUpperCase()}: ${decimal}`,
+    );
   }
 
   const paddedFraction = fractionPart.padEnd(exponent, "0");
   const minorText = `${wholePart}${paddedFraction}`.replace(/^0+(?=\d)/, "");
   const minor = Number(minorText || "0");
   if (!Number.isSafeInteger(minor)) {
-    throw new Error(`Invalid decimal amount for ${code.toUpperCase()}: ${decimal}`);
+    throw new Error(
+      `Invalid decimal amount for ${code.toUpperCase()}: ${decimal}`,
+    );
   }
   return minor;
 }
@@ -147,7 +158,9 @@ export function formatMoneyPrefix(
   const locale = resolveLocale(options.locale);
   const currencyDisplay = options.currencyDisplay ?? "symbol";
   const parts = getFormatter(locale, code, currencyDisplay).formatToParts(0);
-  return parts.find((part) => part.type === "currency")?.value ?? code.toUpperCase();
+  return (
+    parts.find((part) => part.type === "currency")?.value ?? code.toUpperCase()
+  );
 }
 
 export function splitFormattedMoney(
@@ -158,7 +171,9 @@ export function splitFormattedMoney(
   const resolvedLocale = resolveLocale(locale);
   const exponent = currencyExponent(code);
   const major = minor / 10 ** exponent;
-  const parts = getFormatter(resolvedLocale, code, "symbol").formatToParts(major);
+  const parts = getFormatter(resolvedLocale, code, "symbol").formatToParts(
+    major,
+  );
 
   let prefix = "";
   let amount = "";
@@ -167,7 +182,12 @@ export function splitFormattedMoney(
       prefix += part.value;
       continue;
     }
-    if (part.type === "integer" || part.type === "group" || part.type === "decimal" || part.type === "fraction") {
+    if (
+      part.type === "integer" ||
+      part.type === "group" ||
+      part.type === "decimal" ||
+      part.type === "fraction"
+    ) {
       amount += part.value;
       continue;
     }

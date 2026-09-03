@@ -14,12 +14,8 @@ a bid holds money on a card — so the collector who is still deciding either
 commits early or navigates away and finds the lot again by memory. Lots close
 on a moving deadline, so "find it again later" frequently means not finding it.
 
-There is already a hole shaped like this feature. `ListingBidPanel` ships a
-`watchAction` slot and a `watching` flag, and nothing in the product fills
-them. That is the same dead end the removed wishlist heart was: a control that
-saves nothing. This change fills it rather than removing it, because unlike
-the store wishlist there is a surface that needs the signal — auction mail
-fires on watching, and a lot's close is a deadline worth being told about.
+There is already a hole shaped like this feature. `ListingLotHeader` ships
+watch and unwatch controls, and the lot page in preview already fills them.
 
 **Metric:** the share of signed-in collectors who watch at least one lot, and
 the share of watched lots their watcher later bids on. **Acceptance signal:**
@@ -68,7 +64,7 @@ watched list without searching.
 
 ### Modified Capabilities
 
-None. `ListingBidPanel` already exposes `watchAction` and `watching`, so the
+None. `ListingLotHeader` already exposes watch and unwatch, so the
 shared UI contract does not change; see Impact.
 
 ## Impact
@@ -77,9 +73,9 @@ shared UI contract does not change; see Impact.
 | --- | --- |
 | `apps/backend/grade10-site/auction/auction` | Owns the watch record: collector, listing, and Watched At. Shared across both brands, like the listings themselves. |
 | `@grade10/auction-contracts` | Gains watch and unwatch actions, the viewer's watching state on authenticated listing facts, and a watched-lots read. Additive; nothing breaks. |
-| `apps/frontend/grade10` | Fills `ListingBidPanel`'s existing `watchAction` slot and passes `watching`; adds a watch control to the catalogue tile and a watched-lots surface. |
+| `apps/frontend/grade10` | Fills `ListingLotHeader`'s existing watch control and `watched` / `onWatchToggle`; adds a watch control to the catalogue tile and a watched-lots surface. |
+| `@grade10/ui` | **No export change.** `ListingLotHeader` already has watch and unwatch. The catalogue tile's control is application-owned until a second consumer needs it. |
 | `apps/frontend/zzz` | Same, on the ZZZ auction surface. |
-| `@grade10/ui` | **No export change.** `ListingBidPanel` already has `watchAction` and `watching`. The catalogue tile's control is application-owned until a second consumer needs it. |
 | `@grade10/i18n` | Watch, unwatch, and watched-list copy for every locale the sites answer. |
 
 **Ordering.** `add-auction-notifications` depends on this change; its §9.1 and

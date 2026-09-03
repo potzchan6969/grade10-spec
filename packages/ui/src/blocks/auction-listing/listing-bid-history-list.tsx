@@ -189,6 +189,11 @@ function ListingBidHistoryList({
 function useActivityTimeTick(rows: readonly ListingBidHistoryRow[]): number {
   const [nowMs, setNowMs] = useState(() => Date.now());
 
+  /**
+   * `rows` is a signal, not a read: a replaced list needs a fresh now so
+   * relative times start from the moment the new rows arrived.
+   */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: see above
   useLayoutEffect(() => {
     setNowMs(Date.now());
   }, [rows]);

@@ -107,6 +107,17 @@ type StepperInputProps = Omit<
     decrementAtMinLabel?: string;
     /** Icon shown at min when `onDecrementAtMin` is set. Defaults to Minus. */
     decrementAtMinIcon?: ReactNode;
+    /**
+     * When set, each stepper button shows this label beside the ± glyph so the
+     * step size is visible (e.g. `"$250"`). Omitted on the at-min remove action.
+     */
+    stepAmountLabel?: ReactNode;
+    /**
+     * Formats the committed display (grouping separators, etc.). While the
+     * field is focused the raw digits stay editable; blur and stepper presses
+     * re-apply this. Defaults to `String(value)`.
+     */
+    formatValue?: (value: number) => string;
   };
 
 function sanitizeNumeric(raw: string, allowNegative: boolean) {
@@ -118,10 +129,17 @@ function sanitizeNumeric(raw: string, allowNegative: boolean) {
   return `${minus}${digits}.${fraction.join("").replace(/\D/g, "")}`;
 }
 
-function parseNumeric(raw: string): number | undefined {
-  if (raw === "" || raw === "-" || raw === "." || raw === "-.")
+function parseNumeric(raw: string, allowNegative = true): number | undefined {
+  const sanitized = sanitizeNumeric(raw, allowNegative);
+  if (
+    sanitized === "" ||
+    sanitized === "-" ||
+    sanitized === "." ||
+    sanitized === "-."
+  ) {
     return undefined;
-  const next = Number(raw);
+  }
+  const next = Number(sanitized);
   return Number.isFinite(next) ? next : undefined;
 }
 
@@ -130,10 +148,6 @@ function clamp(value: number, min?: number, max?: number) {
   if (min != null && next < min) next = min;
   if (max != null && next > max) next = max;
   return next;
-}
-
-function formatCommitted(value: number) {
-  return String(value);
 }
 
 function stepDelta(
@@ -165,6 +179,8 @@ function StepperInput({
   onDecrementAtMin,
   decrementAtMinLabel,
   decrementAtMinIcon,
+  stepAmountLabel,
+  formatValue,
   ...props
 }: StepperInputProps) {
   const generatedId = useId();
@@ -176,6 +192,9 @@ function StepperInput({
   const [uncontrolled, setUncontrolled] = useState(defaultValue);
   const value = isControlled ? valueProp : uncontrolled;
 
+  const formatCommitted = (next: number) =>
+    formatValue ? formatValue(next) : String(next);
+
   const [text, setText] = useState(() =>
     value == null ? "" : formatCommitted(value),
   );
@@ -184,14 +203,17 @@ function StepperInput({
 
   useEffect(() => {
     if (draft) return;
-    setText(value == null ? "" : formatCommitted(value));
-  }, [value, draft]);
+    setText(
+      value == null ? "" : formatValue ? formatValue(value) : String(value),
+    );
+  }, [value, draft, formatValue]);
 
-  const numeric = parseNumeric(text);
+  const allowNegative = min == null || min < 0;
+  const numeric = parseNumeric(text, allowNegative);
   const atMin = numeric != null && min != null && numeric <= min;
   const atMax = numeric != null && max != null && numeric >= max;
-  const allowNegative = min == null || min < 0;
   const atMinAction = atMin && onDecrementAtMin != null;
+  const showStepAmount = stepAmountLabel != null;
 
   const commit = (next: number) => {
     const clamped = clamp(next, min, max);
@@ -233,6 +255,12 @@ function StepperInput({
   };
 
   const buttonSize = size === "lg" ? "md" : "sm";
+  const widenForStep = (withStepLabel: boolean) =>
+    cn(
+      "text-secondary-foreground",
+      disabled && "disabled:opacity-100",
+      withStepLabel && "h-8 w-auto min-w-8 gap-1 px-2",
+    );
 
   return (
     <VStack
@@ -270,10 +298,7 @@ function StepperInput({
               ? (decrementAtMinLabel ?? decrementLabel)
               : decrementLabel
           }
-          className={cn(
-            "text-secondary-foreground",
-            disabled && "disabled:opacity-100",
-          )}
+          className={widenForStep(showStepAmount && !atMinAction)}
           data-slot="stepper-decrement"
           disabled={disabled || (atMin && !onDecrementAtMin)}
           onClick={(event) => stepBy(-1, event)}
@@ -286,7 +311,14 @@ function StepperInput({
           {atMinAction && decrementAtMinIcon ? (
             decrementAtMinIcon
           ) : (
-            <Minus aria-hidden />
+            <>
+              <Minus aria-hidden />
+              {showStepAmount ? (
+                <span className="text-xs font-medium tabular-nums">
+                  {stepAmountLabel}
+                </span>
+              ) : null}
+            </>
           )}
         </IconButton>
         <Input
@@ -328,12 +360,18 @@ function StepperInput({
             const next = sanitizeNumeric(event.target.value, allowNegative);
             setDraft(true);
             setText(next);
-            const parsed = parseNumeric(next);
+            const parsed = parseNumeric(next, allowNegative);
             if (parsed != null) {
               const clamped = clamp(parsed, min, max);
               if (!isControlled) setUncontrolled(clamped);
               onValueChange?.(clamped);
             }
+          }}
+          onFocus={() => {
+            if (!formatValue) return;
+            setDraft(true);
+            const raw = numeric ?? value;
+            setText(raw == null ? "" : String(raw));
           }}
           onKeyDown={onKeyDown}
           placeholder={placeholder}
@@ -342,10 +380,7 @@ function StepperInput({
         />
         <IconButton
           aria-label={incrementLabel}
-          className={cn(
-            "text-secondary-foreground",
-            disabled && "disabled:opacity-100",
-          )}
+          className={widenForStep(showStepAmount)}
           data-slot="stepper-increment"
           disabled={disabled || atMax}
           onClick={(event) => stepBy(1, event)}
@@ -356,6 +391,11 @@ function StepperInput({
           variant="secondary"
         >
           <Plus aria-hidden />
+          {showStepAmount ? (
+            <span className="text-xs font-medium tabular-nums">
+              {stepAmountLabel}
+            </span>
+          ) : null}
         </IconButton>
       </HStack>
       {message ? (

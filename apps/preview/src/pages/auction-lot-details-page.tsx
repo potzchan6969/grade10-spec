@@ -1,27 +1,26 @@
 import {
   EnrollmentSetupSheet,
+  FIXTURE_ACTIVITY_TIME_COPY,
+  FIXTURE_SHIPPED_LOCALE,
+  FIXTURE_TIME_ZONE,
   ListingAuctionCardSidebar,
   ListingLotGallery,
   ListingLotHeader,
   ListingUserBidHistory,
   PaymentMethodRow,
-  FIXTURE_ACTIVITY_TIME_COPY,
-  FIXTURE_SHIPPED_LOCALE,
-  FIXTURE_TIME_ZONE,
 } from "@grade10/ui";
 import { useEffect, useState } from "react";
+import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "../auction-listing/listing-bid-enrollment-copy";
 import {
   AUCTION_LOT,
   AUCTION_LOT_BADGES,
   AUCTION_LOT_DETAILS_COPY,
   AUCTION_LOT_LINKED_PAYMENT_METHOD,
-  auctionLotShowsLinkedPaymentMethod,
   type AuctionTiming,
   applyBidExtension,
+  auctionLotShowsLinkedPaymentMethod,
   type BiddingState,
-  type BidMode,
   bidHistoryForState,
-  bidModeForState,
   buildListingAuctionBidView,
   createLiveAuctionTiming,
   initialLiveListingFacts,
@@ -33,6 +32,11 @@ import {
 import { AuctionLotDetailsPageShell } from "./auction-lot-details-page-shell";
 
 const LIVE_BID_INTERVAL_MS = 8_000;
+
+const AUCTION_LOT_MARKET_COMPS = {
+  title: "Recent verified PSA 10 sales",
+  range: "HK$14,600–HK$16,200",
+};
 
 type AuctionLotDetailsPageProps = {
   state: BiddingState;
@@ -47,7 +51,6 @@ function hasBidOnListing(view: {
 }
 
 function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
-  const [bidMode, setBidMode] = useState<BidMode>(() => bidModeForState(state));
   const [watched, setWatched] = useState(false);
   const [paymentLinked, setPaymentLinked] = useState(false);
   const [setupOpen, setSetupOpen] = useState(false);
@@ -74,7 +77,6 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
   );
 
   useEffect(() => {
-    setBidMode(bidModeForState(state));
     setLiveSnapshot(
       state.startsWith("live")
         ? {
@@ -108,7 +110,7 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
     return () => window.clearInterval(timer);
   }, [view.live, state]);
 
-  function requestBidAction() {
+  function requestBidAction(_amountMinor?: number) {
     if (hasBidOnListing(view)) return;
     if (!paymentLinked) {
       setSetupOpen(true);
@@ -140,17 +142,17 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
             auctionLotShowsLinkedPaymentMethod(state) && paymentLinked ? (
               <PaymentMethodRow
                 brand={AUCTION_LOT_LINKED_PAYMENT_METHOD.brand}
+                copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
                 maskedNumber={AUCTION_LOT_LINKED_PAYMENT_METHOD.maskedNumber}
               />
             ) : undefined
           }
-          bidMode={bidMode}
           copy={AUCTION_LOT_DETAILS_COPY.sidebar}
           description={AUCTION_LOT.description}
           history={history}
           historyResetKey={state}
           locale={FIXTURE_SHIPPED_LOCALE}
-          onBidModeChange={setBidMode}
+          marketComps={AUCTION_LOT_MARKET_COMPS}
           onCommitMaximum={requestBidAction}
           onPlaceBid={requestBidAction}
           recentBidsAccessory={
@@ -168,6 +170,7 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
         />
       </AuctionLotDetailsPageShell>
       <EnrollmentSetupSheet
+        copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
         onContinue={completeEnrollment}
         onOpenChange={setSetupOpen}
         open={setupOpen}
