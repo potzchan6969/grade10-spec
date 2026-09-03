@@ -32,12 +32,10 @@ function ListingBidEnrollmentInteractiveDemo() {
 
       <ListingBidEnrollmentCardPreview
         autoConfirmOpen={session.autoConfirmOpen}
-        bidMode={session.bidMode}
         onAutoBidConfirm={actions.confirmAutoBidIntro}
         onAutoConfirmOpenChange={actions.setAutoConfirmOpen}
         onChangePayment={actions.openChangePayment}
         onLinkPayment={actions.openSetup}
-        onBidModeChange={actions.setBidMode}
         onBidSubmit={actions.handleBidSubmit}
         onSetupContinue={actions.handleSetupContinue}
         onPaymentSetupDismissed={actions.dismissPaymentSetup}

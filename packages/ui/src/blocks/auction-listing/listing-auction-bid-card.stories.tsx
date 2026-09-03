@@ -46,6 +46,24 @@ const COPY = {
   enableAutoBidding: "Enable auto-bidding",
   autoBiddingTooltip:
     "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
+  setPrivateMaximum: "Set your private maximum",
+  raisePrivateMaximum: "Raise your private maximum (current: {amount})",
+  chooseAnotherAmount: "Choose another amount",
+  backToQuickAmounts: "Back to quick amounts",
+  reviewMaximum: "Review maximum",
+  privateMaximumExplainer:
+    "Every bid is a private maximum. We’ll bid only as much as needed to keep you leading, up to your amount.",
+  privateMaximumTooltip:
+    "Your maximum is the most you are willing to pay before buyer fees. We place the lowest bid needed to keep you in the lead. Other bidders cannot see your maximum.",
+  stepperMessage: "Steps of {increment} · min {amount}",
+  bidImmediate: "Bid {amount}",
+  bidUpTo: "Bid up to {amount}",
+  nextEligibleBid: "Next eligible bid",
+  twoIncrementsAboveCurrent: "2 increments above current",
+  fourIncrementsAboveCurrent: "4 increments above current",
+  minimumRaise: "Minimum raise",
+  oneIncrementAboveMinimum: "1 increment above minimum",
+  threeIncrementsAboveMinimum: "3 increments above minimum",
   minimumMaximumFloor: "At least {amount} (current bid + {increment})",
   minimumMaximumLeadingNudge: "At least {amount} (your maximum + {increment})",
   minimumMaximumLeadingIncrement:
@@ -130,9 +148,7 @@ const meta = {
     history: HISTORY,
     locale: FIXTURE_SHIPPED_LOCALE,
     timeZone: FIXTURE_TIME_ZONE,
-    bidMode: "manual",
     bidEnrollment: "ready",
-    onBidModeChange: noop,
     onCommitMaximum: noop,
     onPlaceBid: noop,
     view: liveView(),
@@ -145,31 +161,22 @@ const meta = {
     recentBidsAccessory: { table: { disable: true } },
     locale: { table: { disable: true } },
     timeZone: { table: { disable: true } },
+    marketComps: { table: { disable: true } },
     bidEnrollment: {
       control: "select",
       options: ["signed-out", "ready"],
       description:
         "signed-out replaces Place Bid with Sign In to Bid and hides standing.",
     },
-    bidMode: {
-      control: "select",
-      options: ["manual", "auto"],
-      description: "Manual bid row or auto-bid maximum field.",
-    },
     onPlaceBid: {
       control: false,
       description:
-        "Fires on Place Bid, or Sign In to Bid when signed out. The consumer submits the bid or opens sign-in.",
+        "Fires on Sign In to Bid when signed out. The consumer opens sign-in.",
     },
     onCommitMaximum: {
       control: false,
       description:
-        "Fires on Confirm or Raise. The consumer validates the maximum, takes the hold, and writes the cap.",
-    },
-    onBidModeChange: {
-      control: false,
-      description:
-        "Fires when Enable auto-bidding is toggled. The consumer updates bidMode.",
+        "Fires when a preset or Review maximum commits an amount. The consumer validates the maximum, takes the hold, and writes the cap.",
     },
   },
   decorators: [
@@ -188,9 +195,8 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Current Bid")).toBeInTheDocument();
-    expect(
-      canvas.getByRole("button", { name: "Place Bid" }),
-    ).toBeInTheDocument();
+    expect(canvas.getByText("Set your private maximum")).toBeInTheDocument();
+    expect(canvas.getByText("Choose another amount")).toBeInTheDocument();
     expect(canvas.getByText("Recent Bids")).toBeInTheDocument();
   },
 };
@@ -205,9 +211,7 @@ export const SignedOut: Story = {
     expect(
       canvas.getByRole("button", { name: "Sign In to Bid" }),
     ).toBeInTheDocument();
-    expect(
-      canvas.queryByRole("button", { name: "Place Bid" }),
-    ).not.toBeInTheDocument();
+    expect(canvas.queryByText("Choose another amount")).not.toBeInTheDocument();
     expect(canvas.queryByText("Highest bid")).not.toBeInTheDocument();
     expect(canvas.queryByText("Outbid")).not.toBeInTheDocument();
   },
@@ -215,7 +219,6 @@ export const SignedOut: Story = {
 
 export const Outbid: Story = {
   args: {
-    bidMode: "auto",
     view: liveView({
       standing: "outbid",
       currentBidMinor: 825_000,
@@ -231,7 +234,6 @@ export const Outbid: Story = {
 
 export const Leading: Story = {
   args: {
-    bidMode: "auto",
     view: liveView({
       standing: "leading-max",
       viewerMaximumMinor: 800_000,
@@ -240,6 +242,9 @@ export const Leading: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Highest bid")).toBeInTheDocument();
+    expect(
+      canvas.getByText(/Raise your private maximum \(current: HK\$8,000\)/),
+    ).toBeInTheDocument();
   },
 };
 

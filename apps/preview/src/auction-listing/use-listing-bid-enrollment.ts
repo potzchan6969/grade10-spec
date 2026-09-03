@@ -10,14 +10,12 @@ type ListingBidEnrollmentSession = {
   paymentLinked: boolean;
   hasAccountPayment: boolean;
   hasPlacedBid: boolean;
-  bidMode: "manual" | "auto";
   signInOpen: boolean;
   paymentSetup: "none" | "required" | "change-required";
   autoConfirmOpen: boolean;
 };
 
 type ListingBidEnrollmentActions = {
-  setBidMode: (mode: "manual" | "auto") => void;
   setSignInOpen: (open: boolean) => void;
   dismissPaymentSetup: () => void;
   setAutoConfirmOpen: (open: boolean) => void;
@@ -43,7 +41,6 @@ const INITIAL_SESSION: ListingBidEnrollmentSession = {
   paymentLinked: false,
   hasAccountPayment: true,
   hasPlacedBid: false,
-  bidMode: "manual",
   signInOpen: false,
   paymentSetup: "none",
   autoConfirmOpen: false,
@@ -86,10 +83,6 @@ function useListingBidEnrollment(
     setSession((current) => ({ ...current, hasPlacedBid: true }));
   }, [listingId]);
 
-  const setBidMode = useCallback((bidMode: "manual" | "auto") => {
-    setSession((current) => ({ ...current, bidMode }));
-  }, []);
-
   const setSignInOpen = useCallback((signInOpen: boolean) => {
     setSession((current) => ({ ...current, signInOpen }));
   }, []);
@@ -131,7 +124,6 @@ function useListingBidEnrollment(
         };
       }
       if (
-        current.bidMode === "auto" &&
         current.paymentLinked &&
         !autoBidIntroAcknowledgedListingIds.has(listingId)
       ) {
@@ -163,7 +155,6 @@ function useListingBidEnrollment(
 
   const snapshot = useMemo((): ListingBidEnrollmentSnapshot => {
     return {
-      bidMode: session.bidMode,
       submitUsesSignInLabel: !session.signedIn,
       fixtureState: !session.signedIn ? "live-manual" : undefined,
       paymentEmptyState:
@@ -191,7 +182,6 @@ function useListingBidEnrollment(
   return {
     session,
     actions: {
-      setBidMode,
       setSignInOpen,
       dismissPaymentSetup,
       setAutoConfirmOpen,

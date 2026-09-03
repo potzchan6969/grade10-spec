@@ -58,21 +58,12 @@ export const Bidding: Story = {
     const next = canvas.getByRole("button", { name: "Next" });
 
     expect(canvas.getAllByText("Starting bid").length).toBeGreaterThan(0);
-    expect(canvas.getByRole("button", { name: "Place Bid" })).toBeVisible();
+    expect(canvas.getByText("Set your private maximum")).toBeVisible();
+    expect(canvas.getByText("Next eligible bid")).toBeVisible();
     expect(canvas.queryByText("Highest bid")).not.toBeInTheDocument();
     expect(canvas.queryByText("Outbid")).not.toBeInTheDocument();
 
-    await userEvent.click(
-      canvas.getByRole("checkbox", { name: /Enable auto-bidding/ }),
-    );
-    await waitFor(() => {
-      expect(
-        canvas.getByRole("button", { name: "Confirm Maximum" }),
-      ).toBeVisible();
-    });
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Confirm Maximum" }),
-    );
+    await userEvent.click(canvas.getByRole("button", { name: /^Bid HK\$/ }));
     await waitFor(() => {
       expect(
         within(document.body).getByRole("dialog", {
@@ -118,15 +109,13 @@ export const Bidding: Story = {
 
     await userEvent.click(next);
     expect(canvas.getByText("Set a first maximum")).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: "Confirm Maximum" }),
-    ).toBeVisible();
-    expect(canvas.getByText("Enable auto-bidding")).toBeVisible();
+    expect(canvas.getByText("Set your private maximum")).toBeVisible();
+    expect(canvas.getByText("Choose another amount")).toBeVisible();
 
     await userEvent.click(next);
     expect(canvas.getByText("Leading with a maximum")).toBeVisible();
     expect(canvas.getByText("Highest bid")).toBeVisible();
-    expect(canvas.getByRole("button", { name: "Raise Maximum" })).toBeVisible();
+    expect(canvas.getByText(/Raise your private maximum/)).toBeVisible();
 
     await userEvent.click(next);
     expect(canvas.getByText("Maximum overtaken")).toBeVisible();
@@ -137,7 +126,7 @@ export const Bidding: Story = {
     expect(canvas.getByText("Outbid")).toBeVisible();
 
     await userEvent.click(canvas.getByRole("tab", { name: "Expanded" }));
-    expect(canvas.getAllByRole("button", { name: "Place Bid" })).toHaveLength(
+    expect(canvas.getAllByText("Choose another amount")).toHaveLength(
       BIDDING_CASES.length,
     );
   },

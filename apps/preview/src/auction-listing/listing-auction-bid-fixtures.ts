@@ -134,6 +134,24 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   enableAutoBidding: "Enable auto-bidding",
   autoBiddingTooltip:
     "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
+  setPrivateMaximum: "Set your private maximum",
+  raisePrivateMaximum: "Raise your private maximum (current: {amount})",
+  chooseAnotherAmount: "Choose another amount",
+  backToQuickAmounts: "Back to quick amounts",
+  reviewMaximum: "Review maximum",
+  privateMaximumExplainer:
+    "Every bid is a private maximum. We’ll bid only as much as needed to keep you leading, up to your amount.",
+  privateMaximumTooltip:
+    "Your maximum is the most you are willing to pay before buyer fees. We place the lowest bid needed to keep you in the lead. Other bidders cannot see your maximum.",
+  stepperMessage: "Steps of {increment} · min {amount}",
+  bidImmediate: "Bid {amount}",
+  bidUpTo: "Bid up to {amount}",
+  nextEligibleBid: "Next eligible bid",
+  twoIncrementsAboveCurrent: "2 increments above current",
+  fourIncrementsAboveCurrent: "4 increments above current",
+  minimumRaise: "Minimum raise",
+  oneIncrementAboveMinimum: "1 increment above minimum",
+  threeIncrementsAboveMinimum: "3 increments above minimum",
   minimumMaximumFloor: "At least {amount} (current bid + {increment})",
   minimumMaximumLeadingNudge: "At least {amount} (your maximum + {increment})",
   minimumMaximumLeadingIncrement:

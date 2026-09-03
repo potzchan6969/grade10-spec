@@ -1,7 +1,6 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
-import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
@@ -11,16 +10,6 @@ import {
   TooltipTrigger,
 } from "@grade10/design-system/components/overlays/tooltip";
 import { Info } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
-import { formatMoney, formatMoneyNumeric } from "../../lib/format-money";
-import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
-import {
-  formatMinimumMaximumCaption,
-  isMaximumBelowFloor,
-  parseMoneyInputToMinor,
-  resolveMaximumFloor,
-} from "./listing-bid-money";
-import "./listing-bid-mode-stack.css";
 import {
   formatCollectorDeadline,
   formatLocalMoment,
@@ -28,13 +17,14 @@ import {
 } from "../../lib/format-datetime";
 import { ListingCountdownDisplay } from "./listing-countdown-display";
 import {
-  ListingAutoBidControls,
-  ListingManualBidControls,
-} from "./listing-manual-bid-controls";
+  ListingQuickMaximumBidActions,
+  type ListingQuickMaximumBidActionsCopy,
+  type MarketComps,
+} from "./listing-quick-maximum-bid-actions";
 import { ListingRollingMoneyDisplay } from "./listing-rolling-money-display";
 import type { BidEnrollment, ListingAuctionBidView } from "./types";
 
-type ListingAuctionBidFieldsCopy = {
+type ListingAuctionBidFieldsCopy = ListingQuickMaximumBidActionsCopy & {
   auctionWon: string;
   paymentDue: string;
   paymentDueBody: string;
@@ -323,12 +313,11 @@ function TimeBlock({ copy, view, locale, timeZone }: TimeBlockProps) {
 type BidActionsProps = {
   copy: ListingAuctionBidFieldsCopy;
   view: ListingAuctionBidView;
-  bidMode: "manual" | "auto";
   bidEnrollment?: BidEnrollment;
   locale: ShippedLocale;
-  onBidModeChange: (mode: "manual" | "auto") => void;
+  marketComps?: MarketComps;
   onPlaceBid: () => void;
-  onCommitMaximum: () => void;
+  onCommitMaximum: (amountMinor: number) => void;
 };
 
 function SignedOutBidAction({
@@ -348,196 +337,26 @@ function SignedOutBidAction({
 function BidActions({
   copy,
   view,
-  bidMode,
   bidEnrollment = "ready",
   locale,
-  onBidModeChange,
+  marketComps,
   onPlaceBid,
   onCommitMaximum,
 }: BidActionsProps) {
-  const autoBidEnabled = bidMode === "auto";
-  const hasCommittedMaximum = view.viewerMaximumMinor != null;
-  const maximumFloor = resolveMaximumFloor({
-    minBidMinor: view.minBidMinor,
-    incrementMinor: view.incrementMinor,
-    viewerMaximumMinor: view.viewerMaximumMinor,
-    standing: view.standing,
-    currentBidMinor: view.currentBidMinor,
-  });
-  const floorMaximumMinor = maximumFloor.floorMinor;
-  const defaultMaximumMinor = hasCommittedMaximum
-    ? floorMaximumMinor
-    : view.suggestedMaxMinor;
-  const [maximumInput, setMaximumInput] = useState(() =>
-    formatMoneyNumeric(defaultMaximumMinor, view.currency, locale),
-  );
-  const [maximumFieldTouched, setMaximumFieldTouched] = useState(false);
-
-  useEffect(() => {
-    if (!autoBidEnabled) return;
-    setMaximumInput(
-      formatMoneyNumeric(defaultMaximumMinor, view.currency, locale),
-    );
-    setMaximumFieldTouched(false);
-  }, [autoBidEnabled, defaultMaximumMinor, locale, view.currency]);
-
   if (!view.showBidActions) return null;
 
   if (bidEnrollment === "signed-out") {
     return <SignedOutBidAction copy={copy} onPlaceBid={onPlaceBid} />;
   }
 
-  const maximumMinor = parseMoneyInputToMinor(maximumInput, view.currency);
-  const maximumInvalid = isMaximumBelowFloor(maximumMinor, floorMaximumMinor);
-  const showMaximumError = maximumFieldTouched && maximumInvalid;
-  const disableMaximumButton = maximumFieldTouched && maximumInvalid;
-  const maximumHelperMessage = formatMinimumMaximumCaption(
-    maximumFloor,
-    copy,
-    view.incrementMinor,
-    view.currency,
-    locale,
-  );
-  const maximumMessage = showMaximumError
-    ? copy.maximumBelowMinimum.replace(
-        "{amount}",
-        formatMoney(floorMaximumMinor, view.currency, { locale }),
-      )
-    : maximumHelperMessage;
-  const maximumFieldLabel = hasCommittedMaximum
-    ? copy.setMaximumCurrentLabel.replace(
-        "{amount}",
-        formatMoney(view.viewerMaximumMinor ?? 0, view.currency, { locale }),
-      )
-    : copy.setMaximumLabel;
-
-  function handleCommitMaximum() {
-    if (maximumInvalid) {
-      setMaximumFieldTouched(true);
-      return;
-    }
-    onCommitMaximum();
-  }
-
-  const manualCopy = {
-    bidAmountLabel: copy.placeBidSection,
-    maximumLabel: copy.yourMaximum,
-  };
-  const autoCopy = {
-    maximumLabel: maximumFieldLabel,
-  };
-
   return (
-    <VStack className="w-full" gap="sm">
-      <CheckboxListInput
-        checked={autoBidEnabled}
-        onCheckedChange={(next) =>
-          onBidModeChange(next === true ? "auto" : "manual")
-        }
-        size="sm"
-      >
-        <span className="inline-flex min-w-0 flex-1 items-center gap-1">
-          {copy.enableAutoBidding}
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger
-                aria-label={copy.autoBiddingTooltip}
-                className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                onPointerDown={(event) => event.preventDefault()}
-                render={<Info aria-hidden size={12} />}
-              />
-              <TooltipContent>{copy.autoBiddingTooltip}</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </span>
-      </CheckboxListInput>
-
-      <div className="bid-mode-stack w-full">
-        <ListingAutoBidReveal open={!autoBidEnabled}>
-          <VStack className="w-full" gap="sm">
-            <Text
-              className="text-secondary-foreground"
-              size="sm"
-              tone="secondary"
-              weight="medium"
-            >
-              {copy.placeBidSection}
-            </Text>
-            <HStack className="w-full" gap="sm" vAlign="start">
-              <ListingManualBidControls
-                copy={manualCopy}
-                currency={view.currency}
-                hideLabel
-                incrementMinor={view.incrementMinor}
-                key={`manual-${view.minBidMinor}`}
-                locale={locale}
-                minBidMinor={view.minBidMinor}
-              />
-              <Button className="shrink-0" onClick={onPlaceBid} size="md">
-                {copy.placeBid}
-              </Button>
-            </HStack>
-          </VStack>
-        </ListingAutoBidReveal>
-
-        <ListingAutoBidReveal open={autoBidEnabled}>
-          <VStack className="w-full" gap="sm">
-            <HStack gap="xs" vAlign="center">
-              <Text
-                className="text-secondary-foreground"
-                size="sm"
-                tone="secondary"
-                weight="medium"
-              >
-                {maximumFieldLabel}
-              </Text>
-              {!hasCommittedMaximum ? (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger
-                      aria-label={copy.confirmMaximumTooltip}
-                      className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                      onPointerDown={(event) => event.preventDefault()}
-                      render={<Info aria-hidden size={12} />}
-                    />
-                    <TooltipContent>
-                      {copy.confirmMaximumTooltip}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              ) : null}
-            </HStack>
-            <HStack className="w-full" gap="sm" vAlign="start">
-              <ListingAutoBidControls
-                copy={autoCopy}
-                currency={view.currency}
-                hideLabel
-                locale={locale}
-                message={maximumMessage}
-                minMaximumMinor={floorMaximumMinor}
-                onBlur={() => setMaximumFieldTouched(true)}
-                onValueChange={setMaximumInput}
-                status={showMaximumError ? "error" : "default"}
-                value={maximumInput}
-              />
-              <Button
-                aria-label={
-                  hasCommittedMaximum
-                    ? copy.raiseMaximumAriaLabel
-                    : copy.confirmMaximumAriaLabel
-                }
-                className="shrink-0"
-                disabled={disableMaximumButton}
-                onClick={handleCommitMaximum}
-                size="md"
-              >
-                {hasCommittedMaximum ? copy.raiseMaximum : copy.confirmMaximum}
-              </Button>
-            </HStack>
-          </VStack>
-        </ListingAutoBidReveal>
-      </div>
-    </VStack>
+    <ListingQuickMaximumBidActions
+      copy={copy}
+      locale={locale}
+      marketComps={marketComps}
+      onCommitMaximum={onCommitMaximum}
+      view={view}
+    />
   );
 }
 

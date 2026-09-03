@@ -26,6 +26,7 @@ import {
 } from "./listing-auction-bid-fields";
 import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
 import { ListingBidHistoryList } from "./listing-bid-history-list";
+import type { MarketComps } from "./listing-quick-maximum-bid-actions";
 import type {
   BidEnrollment,
   ListingAuctionBidView,
@@ -47,13 +48,12 @@ type ListingAuctionBidCardProps = {
   view: ListingAuctionBidView;
   history: readonly ListingBidHistoryRow[];
   historyResetKey?: string;
-  bidMode: "manual" | "auto";
   bidEnrollment?: BidEnrollment;
   locale: ShippedLocale;
   timeZone: string;
-  onBidModeChange: (mode: "manual" | "auto") => void;
+  marketComps?: MarketComps;
   onPlaceBid: () => void;
-  onCommitMaximum: () => void;
+  onCommitMaximum: (amountMinor: number) => void;
   recentBidsAccessory?: ReactNode;
 };
 
@@ -152,11 +152,10 @@ function ListingAuctionBidCard({
   view,
   history,
   historyResetKey,
-  bidMode,
   bidEnrollment,
   locale,
   timeZone,
-  onBidModeChange,
+  marketComps,
   onPlaceBid,
   onCommitMaximum,
   recentBidsAccessory,
@@ -258,10 +257,9 @@ function ListingAuctionBidCard({
           <VStack className="w-full" gap="md">
             <BidActions
               bidEnrollment={bidEnrollment}
-              bidMode={bidMode}
               copy={copy}
               locale={locale}
-              onBidModeChange={onBidModeChange}
+              marketComps={marketComps}
               onCommitMaximum={onCommitMaximum}
               onPlaceBid={onPlaceBid}
               view={view}

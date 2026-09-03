@@ -6,6 +6,7 @@ import { ListingAuctionBidCard } from "./listing-auction-bid-card";
 import { LISTING_LOT_SIDEBAR_CLASS } from "./listing-lot-layout";
 import type { ListingLotMetaCopy } from "./listing-lot-meta";
 import { ListingLotMeta } from "./listing-lot-meta";
+import type { MarketComps } from "./listing-quick-maximum-bid-actions";
 import type {
   BidEnrollment,
   ListingAuctionBidView,
@@ -21,11 +22,9 @@ type ListingAuctionCardSidebarProps = {
   view: ListingAuctionBidView;
   history: readonly ListingBidHistoryRow[];
   historyResetKey?: string;
-  bidMode: "manual" | "auto";
   bidEnrollment?: BidEnrollment;
-  onBidModeChange: (mode: "manual" | "auto") => void;
   onPlaceBid: () => void;
-  onCommitMaximum: () => void;
+  onCommitMaximum: (amountMinor: number) => void;
   badges: readonly ListingLotMetaBadge[];
   description: string;
   showMoreHref?: string;
@@ -34,6 +33,7 @@ type ListingAuctionCardSidebarProps = {
   recentBidsAccessory?: ReactNode;
   /** Renders directly under the bid card (e.g. linked payment method). */
   bidCardFooter?: ReactNode;
+  marketComps?: MarketComps;
   locale: ShippedLocale;
   timeZone: string;
 };
@@ -43,9 +43,7 @@ function ListingAuctionCardSidebar({
   view,
   history,
   historyResetKey,
-  bidMode,
   bidEnrollment,
-  onBidModeChange,
   onPlaceBid,
   onCommitMaximum,
   badges,
@@ -55,6 +53,7 @@ function ListingAuctionCardSidebar({
   authenticationBody,
   recentBidsAccessory,
   bidCardFooter,
+  marketComps,
   locale,
   timeZone,
 }: ListingAuctionCardSidebarProps) {
@@ -67,12 +66,11 @@ function ListingAuctionCardSidebar({
       <VStack className="w-full" gap="sm">
         <ListingAuctionBidCard
           bidEnrollment={bidEnrollment}
-          bidMode={bidMode}
           copy={copy}
           history={history}
           historyResetKey={historyResetKey}
           locale={locale}
-          onBidModeChange={onBidModeChange}
+          marketComps={marketComps}
           onCommitMaximum={onCommitMaximum}
           onPlaceBid={onPlaceBid}
           recentBidsAccessory={recentBidsAccessory}

@@ -40,8 +40,8 @@ const meta = {
       description: {
         component: `
 The listing bid panel is \`ListingAuctionBidCard\`. The consumer owns product
-state and every action. The card presents \`view\`, \`history\`,
-\`bidEnrollment\`, and \`bidMode\`.
+state and every action. The card presents \`view\`, \`history\`, and
+\`bidEnrollment\`. Every live bid action commits a private maximum.
 
 Enrollment chrome (linked card, setup sheet, auto-bid confirmation, sign-in)
 sits around the card in the preview. The full lot page is
@@ -52,11 +52,11 @@ sits around the card in the preview. The full lot page is
 | State | Story | What it shows |
 | --- | --- | --- |
 | Signed out | [Signed Out](?path=/story/auction-listing-bid-panel--signed-out) | \`bidEnrollment="signed-out"\`. Sign In to Bid. Standing is hidden. |
-| Need a card | [Need Card](?path=/story/auction-listing-bid-panel--need-card) | Empty linked-card slot. Place Bid is visible; linking is the next step. |
+| Need a card | [Need Card](?path=/story/auction-listing-bid-panel--need-card) | Empty linked-card slot. Quick-maximum presets are visible; linking is the next step. |
 | Linked card, editable | [Linked Card Editable](?path=/story/auction-listing-bid-panel--linked-card-editable) | Masked card with Change, before the first bid on this lot. |
 | Linked card, locked | [Linked Card](?path=/story/auction-listing-bid-panel--linked-card) | Masked card without Change, after the first bid. |
-| Ready | [Ready](?path=/story/auction-listing-bid-panel--ready) | Enrollment complete. Place Bid, or Confirm / Raise a maximum. |
-| Payment authorization | [Payment Authorization](?path=/story/auction-listing-bid-panel--payment-authorization) | Place Bid opens the authorize-your-bid dialog. |
+| Ready | [Ready](?path=/story/auction-listing-bid-panel--ready) | Enrollment complete. Quick-maximum presets and Review maximum. |
+| Payment authorization | [Payment Authorization](?path=/story/auction-listing-bid-panel--payment-authorization) | Committing a maximum opens the authorize-your-bid dialog. |
 
 ## Dialogs
 
@@ -71,14 +71,15 @@ sits around the card in the preview. The full lot page is
 ## Bidding and standing
 
 \`view.standing\` is \`none\`, \`outbid\`, \`leading-max\`, \`leading-manual\`,
-\`won-payment-due\`, \`won-settled\`, or \`lost\`. Auto vs manual is \`bidMode\`.
+\`won-payment-due\`, \`won-settled\`, or \`lost\`. Every commitment is a private
+maximum; there is no manual vs auto mode toggle.
 
 | State | Story | What it shows |
 | --- | --- | --- |
 | Live, no bids | [Live No Bids](?path=/story/auction-listing-listingauctionbidcard--live-no-bids) | Starting bid, empty history. |
-| Leading with a maximum | [Leading](?path=/story/auction-listing-listingauctionbidcard--leading) | \`standing="leading-max"\`. Highest bid. Raise is the next action. |
+| Leading with a maximum | [Leading](?path=/story/auction-listing-listingauctionbidcard--leading) | \`standing="leading-max"\`. Highest bid. Raise presets are the next action. |
 | Outbid | [Outbid](?path=/story/auction-listing-listingauctionbidcard--outbid) | \`standing="outbid"\`. Current bid is above the viewer's maximum. |
-| Live sequence + auto cases | [Flows / Bidding](?path=/story/auction-listing-bid-panel-flows--bidding) | Manual bids through leading and outbid, then first maximum, leading maximum, overtaken, and accepted without leading. Enable auto-bidding, Place Bid, Confirm, and Raise are live and open the enrollment dialogs. |
+| Live sequence + auto cases | [Flows / Bidding](?path=/story/auction-listing-bid-panel-flows--bidding) | Bids through leading and outbid, then first maximum, leading maximum, overtaken, and accepted without leading. Preset and Review maximum actions open the enrollment dialogs. |
 | Interactive enrollment | [Flows / Interactive](?path=/story/auction-listing-bid-panel-flows--interactive) | Walks sign-in → card link → ready on one card. |
 | Closed / won / lost | [Auction Lot Details](?path=/story/pages-auction-lot-details--closed-won-payment-due) | Payment due, settled, lost, sold, and unsold on the lot page. |
 
@@ -100,9 +101,8 @@ Use Controls on this page; calls appear in the Actions panel.
 
 | Callback | Fires when | Consumer owns |
 | --- | --- | --- |
-| \`onPlaceBid\` | Place Bid, or Sign In to Bid when signed out | Submitting the manual bid, or opening sign-in when \`bidEnrollment\` is \`signed-out\`. |
-| \`onCommitMaximum\` | Confirm or Raise on the auto-bid maximum field | Validating the entered maximum, taking the hold, and writing the new cap. |
-| \`onBidModeChange\` | Enable auto-bidding is toggled | The next \`bidMode\`, \`"manual"\` or \`"auto"\`. |
+| \`onPlaceBid\` | Sign In to Bid when signed out | Opening sign-in when \`bidEnrollment\` is \`signed-out\`. |
+| \`onCommitMaximum\` | A quick-maximum preset or Review maximum | Validating the entered maximum, taking the hold, and writing the new cap. |
 
 ## Enrollment callbacks
 
@@ -127,11 +127,9 @@ around it.
     copy: LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
     view: buildListingAuctionBidView("live-manual"),
     history: bidHistoryForState("live-manual"),
-    bidMode: "manual",
     bidEnrollment: "ready",
     locale: FIXTURE_SHIPPED_LOCALE,
     timeZone: FIXTURE_TIME_ZONE,
-    onBidModeChange: fn(),
     onPlaceBid: fn(),
     onCommitMaximum: fn(),
   },
@@ -143,32 +141,22 @@ around it.
     recentBidsAccessory: { table: { disable: true } },
     locale: { table: { disable: true } },
     timeZone: { table: { disable: true } },
+    marketComps: { table: { disable: true } },
     bidEnrollment: {
       control: "select",
       options: ["signed-out", "ready"],
       description:
         "How far the collector has progressed through bid enrollment. signed-out replaces Place Bid with Sign In to Bid and hides standing.",
     },
-    bidMode: {
-      control: "select",
-      options: ["manual", "auto"],
-      description:
-        "Whether the action row is a manual bid or an auto-bid maximum. The consumer stores this; the card only presents it.",
-    },
     onPlaceBid: {
       control: false,
       description:
-        "Fires on Place Bid, or on Sign In to Bid when bidEnrollment is signed-out. The consumer submits the manual bid or opens sign-in.",
+        "Fires on Sign In to Bid when bidEnrollment is signed-out. The consumer opens sign-in.",
     },
     onCommitMaximum: {
       control: false,
       description:
-        "Fires on Confirm or Raise for the auto-bid maximum. The consumer validates the amount, takes the hold, and writes the cap.",
-    },
-    onBidModeChange: {
-      control: false,
-      description:
-        "Fires when Enable auto-bidding is toggled. Argument is the next mode, manual or auto. The consumer updates bidMode.",
+        "Fires when a preset or Review maximum commits an amount. The consumer validates the amount, takes the hold, and writes the cap.",
     },
   },
   decorators: [
@@ -280,11 +268,11 @@ NeedCard.play = async ({ canvasElement }) => {
     canvas.getByRole("button", { name: "Link a card to place a bid." }),
   ).toBeVisible();
   expect(canvas.getByText("Linked Card")).toBeVisible();
-  expect(canvas.getByRole("button", { name: "Place Bid" })).toBeVisible();
+  expect(canvas.getByText("Next eligible bid")).toBeVisible();
   expect(
     canvas.queryByRole("button", { name: "Sign In to Bid" }),
   ).not.toBeInTheDocument();
-  await userEvent.click(canvas.getByRole("button", { name: "Place Bid" }));
+  await userEvent.click(canvas.getByRole("button", { name: /^Bid HK\$/ }));
   await waitFor(() => {
     expect(
       within(document.body).getByRole("dialog", {
@@ -296,7 +284,7 @@ NeedCard.play = async ({ canvasElement }) => {
   expect(
     canvas.getByRole("button", { name: "Link a card to place a bid." }),
   ).toBeVisible();
-  expect(canvas.getByRole("button", { name: "Place Bid" })).toBeVisible();
+  expect(canvas.getByText("Next eligible bid")).toBeVisible();
 };
 
 export const LinkedCardEditable: Story = {
@@ -349,8 +337,8 @@ export const PaymentAuthorization: Story = {
   render: () => <PaymentAuthorizationPreview />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Place Bid" })).toBeVisible();
-    await userEvent.click(canvas.getByRole("button", { name: "Place Bid" }));
+    expect(canvas.getByText("Next eligible bid")).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: /^Bid HK\$/ }));
     expect(
       within(document.body).getByRole("dialog", {
         name: "Authorize your bid",
@@ -368,6 +356,6 @@ export const PaymentAuthorization: Story = {
       }),
     ).toBeDisabled();
     await dismissDialog("Authorize your bid");
-    expect(canvas.getByRole("button", { name: "Place Bid" })).toBeVisible();
+    expect(canvas.getByText("Next eligible bid")).toBeVisible();
   },
 };

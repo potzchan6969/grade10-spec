@@ -19,7 +19,6 @@ import {
 import {
   type BiddingState,
   bidHistoryForState,
-  bidModeForState,
   buildListingAuctionBidView,
   LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
 } from "./listing-auction-bid-fixtures";
@@ -56,11 +55,9 @@ const pageShell = (main: ReactNode, details: ReactNode) => (
 function bidCard(state: BiddingState) {
   return (
     <ListingAuctionBidCard
-      bidMode={bidModeForState(state)}
       copy={LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY}
       history={bidHistoryForState(state)}
       locale="en"
-      onBidModeChange={noop}
       onCommitMaximum={noop}
       onPlaceBid={noop}
       timeZone="Asia/Hong_Kong"
@@ -128,9 +125,8 @@ export const Default: Story = {
     expect(
       canvas.getByRole("heading", { name: "Description" }),
     ).toBeInTheDocument();
-    expect(
-      canvas.getByRole("button", { name: "Place Bid" }),
-    ).toBeInTheDocument();
+    expect(canvas.getByText("Set your private maximum")).toBeInTheDocument();
+    expect(canvas.getByText("Choose another amount")).toBeInTheDocument();
   },
   render: () => lotPage("live-manual"),
 };
