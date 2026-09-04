@@ -34,7 +34,7 @@ Task 2.5 depends on the contracts in group 1; it uses fixtures rather than a run
 - [ ] 4.4 Record the staging rollout evidence needed by the documentation and archive handoff without checking off implementation tasks before the relevant code is deployed.
 - [ ] 4.5 After rollout is confirmed, fold the accepted delta into `openspec/specs/grade10-store/`, update the Grade10 foundation PRD if its recorded decision changed, and archive this change.
 
-## 5. Documentation and archive handoff
+## 5. Documentation and archive handoff (owner: @kinisworking)
 
 This group follows the deployed Grade10 implementation; it does not authorize
 product-code changes in the spec store.
