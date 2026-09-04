@@ -77,7 +77,7 @@ Rejected:
   learn an address the directory withholds.
 - After-the-fact HTTP hooks around `createUser` — that API does not run them.
 
-### Fail-closed create/verify: one transaction, compensating delete if the adapter commits early
+### Fail-closed create/verify: one transaction
 
 [shared-auth-audit-SC-27](./specs/shared/auth/audit/spec.md) / `shared-auth-audit-SC-28` require the
 account write not to take effect if the trail cannot accept the entry.
@@ -93,11 +93,10 @@ Mutation order inside `db.transaction`:
 4. On already-verified / already-unverified with no data change: commit
    nothing, no append.
 
-If `createUser` writes on a connection that ignores the transaction (the
-adapter committing before return), the fail-closed test will see a `users`
-row with no trail row. Then: delete that `users.id` before rethrowing so
-the request leaves no account. Unique-email loser of a race still reads
-back the winner and returns the existing outcome with no append.
+The pg adapter insert uses that handle (`insert` + `returning`), so an
+append throw rolls the mint back with the transaction. Unique-email loser
+of a race still reads back the winner and returns the existing outcome
+with no append.
 
 Rejected:
 
@@ -105,6 +104,9 @@ Rejected:
   until create returns.
 - Record a failed create with `ok: false` and leave the user row — that is
   an unrecorded account.
+- Compensating `users` delete after `createUser` returns — same crash-unsafe
+  reverse as the old enable rollback. If an adapter ever ignores the handle,
+  the fail-closed test fails and the fix is the adapter, not a second DELETE.
 
 Worked example — mint (`shared-auth-audit-SC-15`):
 
@@ -324,11 +326,10 @@ chain must not join).
 - **Input:** canonical email. **Output:** existing outcome union; errors
   throw.
 - **Txn:** one auth-DB transaction covering user insert/update + append.
-  Compensating user delete if `createUser` committed outside it.
 - **Idempotency:** unique email. Loser of the insert race returns the
   existing outcome, no second append.
-- **Faults:** append throw rolls back (or compensating delete) and fails
-  the request. Directory reads (`accountExists`, `accountByEmail`) stay
+- **Faults:** append throw rolls the transaction back and fails the
+  request. Directory reads (`accountExists`, `accountByEmail`) stay
   write-free.
 
 ### `deleteAccount`
@@ -368,10 +369,9 @@ Output row shape unchanged (still no hashes). `audit.verify` unchanged.
 ## Risks / Trade-offs
 
 - **[Risk]** `createUser` commits outside the drizzle transaction → an
-  unrecorded account until compensating delete runs; a concurrent reader
-  could see the id in that window. → Fail-closed test asserts no leftover
-  row; compensating delete is in the same request before return; unique
-  email makes a retry land on empty or the winner.
+  unrecorded account. The pg adapter insert uses the passed handle, so this
+  is the fail-closed test failing, not a catch-and-delete. Unique email
+  makes a retry land on empty or the winner.
 - **[Risk]** Enable append runs after better-auth has already committed
   `twoFactorEnabled`. A worker death between those writes leaves the
   factor live with no enable row until the next successful proof.
