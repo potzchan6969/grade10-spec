@@ -7,7 +7,7 @@
 - [x] 1.3 Make `Integration configuration is incomplete` pass for the shop domain, API version, Storefront token, Admin token/scopes, checkout-return capability, and webhook secret, exposing no credential to a browser.
 - [x] 1.4 Verify transport fixtures identify a failed Shopify operation and keep business outcomes typed.
 
-## 2. Catalogue, identity, and checkout
+## 2. Catalogue, identity, and checkout (owner: @kinisworking)
 
 Task 2.5 depends on the contracts in group 1; it uses fixtures rather than a running backend.
 
