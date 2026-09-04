@@ -14,10 +14,10 @@ The handle for everything. `add-store-gift-receipt` — kebab-case, a verb and
 the thing it acts on.
 
 - **Chosen once**, by whoever creates the change, and never renamed — the id
-  is in the branch, the commits, the board, and every command below
-- **Created by the CLI**, never by hand — `openspec new change <id>` writes
-  the `.openspec.yaml` that records the schema; a directory made by hand
-  records nothing
+  is in the branch, the commits, the board, and every prompt below
+- **Opened through the tooling**, never by hand — ask for the change and the
+  `.openspec.yaml` recording its schema comes with it; a directory you make
+  yourself records nothing
 - **The whole address** — `openspec/changes/add-store-gift-receipt/` holds
   every artifact, and no second change is ever opened for the same work
 - **Not the capability** — `grade10-site/store/gift-receipt` is what the
@@ -89,17 +89,17 @@ one you send from `grade10`:
 A gift receipt on a store order — a printable slip with no prices on it.
 
 I'm in grade10, with the store clone as the second folder in this workspace.
-Run `openspec instructions <artifact> --change add-store-gift-receipt` before
-each file and work from what it returns — grade10's copy of this skill carries
-picking work up, not what an artifact must contain. Write into the store
-clone, never into external/grade10-spec.
+Read the store's own rules for each artifact before you write it — the copy of
+this skill here covers picking work up, not what an artifact must contain.
+Write into the store clone, never into external/grade10-spec.
 ```
 
-Read the capability first, create the change through the CLI, run the
-interview, work from `openspec instructions`, stop where your hand stops — all
-of that is in the skills already. A prompt that repeats it is a second copy of
-the rules to keep in step, and the one that goes stale first. If you ever have
-to write "do not write tasks.md", the skill should have said it; fix the skill.
+Read the capability first, open the change, run the interview, work from the
+store's rules for each artifact, validate before handing over, stop where your
+hand stops — all of that is in the skills already, and each runs the commands
+it needs. A prompt that repeats any of it is a second copy of the rules to keep
+in step, and the one that goes stale first. If you ever have to write "do not
+write tasks.md", the skill should have said it; fix the skill.
 
 Four things the skill cannot know, so say them when they are true:
 
@@ -111,21 +111,21 @@ Four things the skill cannot know, so say them when they are true:
 - **Which capability you mean**, when a name is ambiguous — the full path,
   `grade10-site/store/gift-receipt`, not `gift-receipt`
 - **You are in `grade10`** — most skills live in the store clone and are not
-  installed there. `openspec instructions <artifact> --change <id>` returns the
-  same rules the skill would have applied; ask the agent to follow its output,
-  and give it the store clone before it tries to write — `/add-dir` in Claude
-  Code, a second workspace folder in Cursor. [An
+  installed there. Ask the agent to read the store's rules for each artifact
+  and follow them; they are the same rules the skill would have applied. Give
+  it the store clone before it tries to write — `/add-dir` in Claude Code, a
+  second workspace folder in Cursor. [An
   agent workflow, end to
   end](https://github.com/9gag/grade10-spec/blob/main/docs/governance/agent-workflow-example.md)
-  has both, with prompts written for that lane
+  has both, with the commands written out for that lane
 
 ## The example, end to end
 
 :::flow{title="add-store-gift-receipt"}
 # Product manager
 
-*PM* — **Create the change** — `openspec new change add-store-gift-receipt`,
-then `/planning-pm add-store-gift-receipt`
+*PM* — **Open the change** — `/planning-pm add-store-gift-receipt`, and a
+sentence saying what the feature is
 
 ## Get interviewed
 
@@ -143,8 +143,9 @@ each accepted by scenarios that exist.
 
 ## Hand over
 
-`openspec validate add-store-gift-receipt --strict`, then say the change
-needs picking up. The board already shows it as still being planned.
+The skill validates the change strictly before it stops. Fix what that names,
+then say the change needs picking up — the board already shows it as still
+being planned.
 
 # QA
 
@@ -188,14 +189,14 @@ A variant, a token, or a block that has to be built is work in
 
 # Engineer
 
-*Engineer* — **Plan delivery on the same change** — `/planning-dev`
+*Engineer* — **Plan delivery on the same change** —
+`/planning-dev add-store-gift-receipt`
 
 ## Take it in hand
 
-`pnpm run plan:preflight add-store-gift-receipt`, then add
-`promoted_by: @your-handle` to the change's `.openspec.yaml`. Without it the
-card still reads "proposed by" alone and the author never learns it was
-picked up.
+Say you are picking it up as @your-handle, and `promoted_by` lands in the
+change's `.openspec.yaml`. Without it the card still reads "proposed by" alone
+and the author never learns it was picked up.
 
 ## Write the plan
 
@@ -206,13 +207,13 @@ unclaimed so an engineer claims one at pickup.
 ## Carry the archive debt
 
 The fold keeps `## Requirements` and nothing else, so `tasks.md` carries a
-task to copy the feature set and `user-journeys.md` across.
-`pnpm run archive:preflight` refuses the archive while they are uncarried.
+task to copy the feature set and `user-journeys.md` across. The archive
+refuses to close while either is uncarried.
 
 ## Build, then archive
 
-Claim a group in `grade10` with `pnpm plan claim`, work test-first, and
-archive only once the code is **deployed** — not when the branch merges.
+Claim a group in `grade10`, work test-first, and archive only once the code is
+**deployed** — not when the branch merges.
 :::
 
 ## How you know it is your turn
@@ -228,7 +229,7 @@ Nobody sends a message. The files themselves are the signal.
 | No `tasks.md` | Still being planned — the only handover signal there is | Engineer |
 | Every box ticked | Waiting on a deploy, then the archive | Whoever owns it |
 
-`openspec status --change <id>` prints this for one change;
+Ask the agent where a change stands to read this for one of them;
 [In Flight](/in-flight) shows it for all of them.
 
 ## The ids inside the change
