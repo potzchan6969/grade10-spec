@@ -176,6 +176,18 @@ const SIMULATED_RIVALS = [
 ] as const;
 
 const MAX_RECENT_BIDS = 5;
+/** Demo spacing so rapid simulate-next clicks still read as aged history. */
+const DEMO_BID_STAGGER_MS = 2 * 60_000;
+
+function withStaggeredAcceptedAt(
+  rows: readonly ListingBidHistoryRow[],
+  nowMs = Date.now(),
+): ListingBidHistoryRow[] {
+  return rows.map((row, index) => ({
+    ...row,
+    acceptedAtMs: nowMs - index * DEMO_BID_STAGGER_MS,
+  }));
+}
 
 export function initialLiveListingFacts(state: BiddingState): LiveListingFacts {
   const meta = stateMeta(state);
@@ -248,7 +260,7 @@ export function simulateNextLiveBid(
     };
 
     return {
-      history: [newBid],
+      history: withStaggeredAcceptedAt([newBid]),
       facts: {
         currentBidMinor: AUCTION_LOT.startingBidMinor,
         bidCount: 1,
@@ -281,7 +293,9 @@ export function simulateNextLiveBid(
       };
 
       return {
-        history: [viewerBid, rivalBid, ...history].slice(0, MAX_RECENT_BIDS),
+        history: withStaggeredAcceptedAt(
+          [viewerBid, rivalBid, ...history].slice(0, MAX_RECENT_BIDS),
+        ),
         facts: {
           currentBidMinor: counterAmount,
           bidCount: facts.bidCount + 2,
@@ -292,7 +306,9 @@ export function simulateNextLiveBid(
   }
 
   return {
-    history: [rivalBid, ...history].slice(0, MAX_RECENT_BIDS),
+    history: withStaggeredAcceptedAt(
+      [rivalBid, ...history].slice(0, MAX_RECENT_BIDS),
+    ),
     facts: {
       currentBidMinor: rivalAmount,
       bidCount: facts.bidCount + 1,
