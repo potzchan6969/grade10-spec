@@ -16,8 +16,8 @@ happened to the money and to the goods.
   - Manual settlement: money taken outside the invoice flow, recorded against a confirmed address
   - Cancellation: the end of an order and the return of the lot
 - Audit trail
-  - Invoice history: every event against the money, including the attempts that failed
-  - Fulfilment history: every event against the goods, with the address as it stood at each one
+  - Invoice log: every log entry against the money, including the attempts that failed
+  - Fulfilment log: every log entry against the goods, with the address as it stood at each one
   - Retention: append-only, kept for the life of the account
 - Grants
   - Payment processing: recording money is a grant catalogue work does not carry
@@ -142,7 +142,7 @@ require this sequence.
 
 1. The operator opens the unpaid order and selects settle manually.
 2. Grade10 shows the delivery address currently on the order, whether it came
-   from the profile, from the winner, or is absent.
+   from the platform address book, from the winner, or is absent.
 3. The operator confirms or updates that address. Confirmation is mandatory
    and SHALL be required even where the address is unchanged.
 4. On an update, Grade10 recalculates shipping, insurance and tax against the
@@ -166,7 +166,7 @@ method, and the external reference.
 #### Scenario: grade10-admin-auction-post-sale-SC-26 - Settlement cannot proceed without confirming the address
 
 - **GIVEN** an unpaid auction order whose delivery address is unchanged from
-  the profile default
+  the account default shipping address
 - **WHEN** an operator selects settle manually and attempts to commit without
   confirming that address
 - **THEN** Grade10 refuses the settlement
@@ -262,27 +262,27 @@ On cancellation Grade10 SHALL:
 - **THEN** Grade10 makes that bidder no offer
 - **AND** they acquire no right to the lot
 
-### Requirement: Invoice record history
+### Requirement: Invoice log history
 
 Every change to an auction order's money SHALL be written as an append-only
-event, never as a field overwrite. The order's detail SHALL show these events
-in chronological order.
+invoice log entry, never as a field overwrite. The order's detail SHALL show
+these log entries in chronological order.
 
 | Field | Notes |
 | --- | --- |
-| Event type | Issued, reissued, paid, manually settled, cancelled, refunded, payment attempt failed |
+| Log type | Issued, reissued, paid, manually settled, cancelled, refunded, payment attempt failed |
 | Timestamp | Stored in UTC, displayed in the operator's own timezone |
-| Invoice status after the event | |
-| Final amount at the event | Captures amount changes across address amendments and reissues |
-| Amount delta | Where the amount changed from the prior event |
-| Payment deadline at the event | The deadline trail across reissues |
-| Reissue sequence number | Where the event is a reissue |
+| Invoice status after the log entry | |
+| Final amount at the log entry | Captures amount changes across address amendments and reissues |
+| Amount delta | Where the amount changed from the prior log entry |
+| Payment deadline at the log entry | The deadline trail across reissues |
+| Reissue sequence number | Where the log entry is a reissue |
 | Actor | The buyer, the system, or a named operator |
 | Settlement method and external reference | Manual settlements only |
-| Reason | Mandatory on an operator-initiated event |
+| Reason | Mandatory on an operator-initiated log entry |
 | Payment-provider reference | Where one applies |
 
-Grade10 SHALL record failed payment attempts as events. A buyer who tried
+Grade10 SHALL record failed payment attempts in the invoice log. A buyer who tried
 three times with a declining card is a different case from one who never
 engaged, and the difference SHALL be visible to whoever decides on
 reinstatement.
@@ -304,17 +304,18 @@ reinstatement.
 - **THEN** it shows the reissued event at 316000 minor units in HKD
 - **AND** the delta from the prior event
 
-### Requirement: Fulfilment record history
+### Requirement: Fulfilment log history
 
 Every change to an auction order's goods SHALL be written as an append-only
-event. The order's detail SHALL show these events in chronological order.
+fulfilment log entry. The order's detail SHALL show these log entries in
+chronological order.
 
 | Field | Notes |
 | --- | --- |
-| Event type | Created, address confirmed, address amended, dispatched, delivery confirmed, delivery exception |
+| Log type | Created, address confirmed, address amended, dispatched, delivery confirmed, delivery exception |
 | Timestamp | Stored in UTC |
-| Fulfilment status after the event | |
-| Delivery address at the event | A full snapshot, never a pointer — the address at dispatch SHALL remain reconstructable after a later edit |
+| Fulfilment status after the log entry | |
+| Delivery address at the log entry | A full snapshot, never a pointer — the address at dispatch SHALL remain reconstructable after a later edit |
 | Actor | The buyer, the warehouse, the carrier, or a named operator |
 | Carrier and tracking number | From dispatch onward |
 | Delivery proof | Timestamp, signature, proof-of-delivery image, as the carrier provided |
@@ -344,7 +345,7 @@ An auction order's detail SHALL show:
 - The reissue count for this order.
 - The winner's account suspension state and its reason.
 - The winner's reissue history across all of their orders.
-- The full invoice history and the full fulfilment history.
+- The full invoice log and the full fulfilment log.
 - A link to the source lot and its bid history.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-37 - The detail explains the status it derived
@@ -409,8 +410,8 @@ Grade10 SHALL retain every invoice and fulfilment history record for the life
 of the account, whatever the order's outcome, including cancelled orders
 whose lots have been relisted. No record SHALL be deleted or edited in place.
 
-Every operator-initiated event SHALL carry a named operator and a reason. A
-system-initiated event SHALL record the event that triggered it.
+Every operator-initiated log entry SHALL carry a named operator and a reason.
+A system-initiated log entry SHALL record the event that triggered it.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-42 - A relisted lot's cancelled order is retained
 
@@ -425,4 +426,4 @@ system-initiated event SHALL record the event that triggered it.
 - **GIVEN** an operator holding payment-processing
 - **WHEN** they attempt to reissue an invoice without giving a reason
 - **THEN** Grade10 refuses the action
-- **AND** writes no history event
+- **AND** writes no history log entry
