@@ -76,9 +76,10 @@ earned**.
   asks for `lineItems.nodes.id` and `discountAllocations`, so the fallback is a
   sweep and a re-pricing rather than a loss. What no sweep undoes is a refund
   already priced from the estimate and a coupon already spent on it.
-- **Schema** — one table of settled lines, keyed by order and the provider's own
-  line handle. The refund and coupon totals already on `orders` and
-  `order_coupons` stay as they are.
+- **Schema** — settled lines keyed by order and the provider's own line handle,
+  and what each named discount allocated to them beside it. What a welded
+  coupon put on a line is already `order_coupon_cuts`; the refund totals on
+  `orders` stay as they are.
 - **Wire** — the Shopify webhook and Admin decoders keep `line_items[].id`,
   `discount_allocations[].amount`, `discount_codes[].amount`, and
   `refund_line_items[].line_item_id`, all of which are read and discarded today.
