@@ -9,11 +9,13 @@
     "secondsUnit": "s",
     "used": "This code has already been used",
     "walletAdd": "Add to {wallet}",
-    "walletEnd": "End this pass",
+    "walletEndOne": "End your {wallet} pass",
     "walletFailed": "That did not go through. Try again.",
     "walletHeading": "Carry your card on your phone",
     "walletHeld": "You are carrying a pass in {wallet}",
-    "walletName": "Google Wallet"
+    "walletGoogle": "Google Wallet",
+    "walletApple": "Apple Wallet",
+    "walletAppleNote": "Identifies you at the counter. Points are spent from this page."
   },
   "page": {
     "title": "Membership",

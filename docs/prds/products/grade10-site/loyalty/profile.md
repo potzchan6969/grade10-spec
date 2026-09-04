@@ -59,18 +59,25 @@ shop.
 
 ## In a phone wallet
 
-The same card, added to Google Wallet, so it opens from a lock screen instead
-of a sign-in.
+The same card, in Google Wallet or Apple Wallet, so it opens from a lock screen
+instead of a sign-in.
 
-- **The code** — made on the phone itself, so a pass is scannable where there is
-  no signal, and it changes on its own rather than being fetched
-- **Beside it** — the member's name, the tier they hold, and the points they can
-  spend, following their standing without them opening anything
+- **Beside the code** — the member's name, the tier they hold, and the points
+  they can spend, following their standing without them opening anything
+- **Google's code** — made on the phone itself, so it is scannable where there
+  is no signal, changes on its own rather than being fetched, and identifies
+  once
+- **Apple's code** — made by Grade10 and printed into the pass, because Apple
+  has no way for a phone to make one. So it never changes, and it scans on
+  every visit whatever the signal
+- **What an Apple pass may do** — identify, and nothing else. It cannot spend
+  points and cannot collect a reward, because a code that never changes is a
+  code anybody who photographs it keeps. A member doing either opens the card
+  on the site, exactly as they do today
+- **Holding both** — one pass per wallet, each ended on its own
 - **Ending one** — the member ends a pass whenever they like and adds another.
   Ending it *for* somebody who has lost the phone is an operator act nobody can
   perform yet
-- **Apple Wallet** — not offered. Apple has no rotating code, so an Apple pass
-  would mean carrying one permanent code, which is a different decision
 
 :::detail{title="Standing up the wallet" for="operator"}
 Nobody can be offered a pass until Google says so, and none of it is
@@ -90,8 +97,8 @@ same-day. In this order, because each step needs the one above it:
 5. *Operations* — **Create the class** and carry it from draft through review
    to approved. A draft class issues to nobody real
 6. *Engineering* — **Create the service account**, grant it the wallet issuer
-   scope, and take its key as PKCS#8. Anything else needs ciphers the workers
-   do not carry
+   scope, and take its key as unencrypted PKCS#8. The workers refuse PKCS#1 and
+   an encrypted key by name rather than as an opaque import error
 7. *Engineering* — **Set the two secrets** with `pnpm run secrets`:
    `WALLET_GOOGLE_SERVICE_ACCOUNT_KEY`, and `WALLET_PASS_KEY`, which is this
    platform's own and seals every pass secret at rest
@@ -100,6 +107,45 @@ same-day. In this order, because each step needs the one above it:
    every save link a member opens. Half a configuration offers nothing: the
    member's surface asks whether a wallet exists before it offers anything, so
    until the issuer and the key are both set no save action is drawn
+
+**Apple**, in this order. Only `WALLET_PASS_KEY` is shared with Google — a
+brand carrying both wallets seals both their secrets under the one key:
+
+1. *Operations* — **Enrol in the Apple Developer Program** in the organisation's
+   name. A pass type identifier belongs to a team, and the enrolment is the slow
+   step: a D-U-N-S number and a legal-entity check, weeks rather than days
+2. *Operations* — **Name the account's owner by role, not by person.** Only the
+   Account Holder and Admins can create certificates, so a personal Apple ID
+   here is a yearly rotation nobody can perform after a departure
+3. *Operations* — **Register two pass type identifiers**, staging and
+   production. Sharing one means a staging push updates a production member's
+   pass, and there is no sandbox to separate them: pass pushes are
+   production-only
+4. *Design* — **Give the pass its artwork and words**: the icon and logo at
+   every scale, the programme's name, and the background and label colours.
+   A pass with none of these is what a member sees on their lock screen
+5. *Engineering* — **Fix the pass web service's hostname before the first pass
+   exists.** It is written into every pass and cannot be changed afterwards, so
+   a pass issued against the wrong name can never be updated again
+6. *Engineering* — **Take the certificate and its key**, converting the key to
+   unencrypted PKCS#8 — the only form these workers import, and the one they
+   refuse anything else by name — and keep both where they can be retrieved,
+   because Workers secrets are write-only and a lost key means starting over
+7. *Engineering* — **Create the APNs key** for the same team and record its key
+   id. It never expires, and it is team-wide: rotating it for another app takes
+   the wallet down as collateral. A brand pushing by client certificate instead
+   sets no key and binds `WALLET_APPLE_APNS` for mTLS
+8. *Engineering* — **Set the secrets** with `pnpm run secrets`:
+   `WALLET_APPLE_PASS_CERT`, `WALLET_APPLE_PASS_KEY`, `WALLET_APPLE_APNS_KEY`,
+   `WALLET_PASS_AUTH_KEY` — which derives every pass's authentication token —
+   and `WALLET_PASS_KEY`, shared with Google. Then **record the pass type
+   identifier, the team id, the APNs key id and the organisation name Wallet
+   shows as the issuer** in `packages/app-env`. Half a configuration offers
+   nothing, the same way Google's does: a certificate with no
+   `WALLET_PASS_AUTH_KEY` draws no save action at all
+9. *Engineering* — **Prove it on a physical iPhone.** The Simulator takes no
+   push token, never registers, and never receives an update. Name whose phone,
+   and where it lives
 
 **Standing obligations.**
 
@@ -114,6 +160,82 @@ same-day. In this order, because each step needs the one above it:
   arms and reports both: what is stale, and what a member's ending or erasure
   still owes the vendor. Depth and age go together, and the age is the one to
   alarm on. An erasure names the debt until Google confirms it
+- **An Apple erasure has nobody to confirm it** — Apple keeps no copy, so the
+  debt is discharged by the pass identifying nobody and the devices it reached
+  being forgotten. Nothing is left owed, because there is nothing left to ask
+- **The Apple certificate expires yearly, and its expiry is silent** — passes
+  already on phones keep scanning, because the code is durable and the counter
+  reads the pass's own secret. What stops is signing: every device fetch and
+  every member's save answer 503, counted as
+  `store.wallet.apple.{fetch,saved}{outcome:unsignable}`, while the pushes that
+  woke those devices still answer 200. A 503 rather than a 401, because the
+  device's token is perfectly good and a refusal that blames it is one a renewal
+  may not undo. The remaining life is on the
+  `store.wallet.apple.cert_days_left` gauge every sweep lap, because nothing
+  else would say
+- **Pushes with no fetches is the alarm worth waking somebody for** — APNs
+  answers 200 for a device that then does nothing, so it is which
+  `store.wallet.apple.*` counter stops that names the fault:
+  - **`push{outcome:delivered}` climbing, `list` flat** — the pass web service
+    is unreachable, or its hostname is not the one written into the passes
+  - **`fetch{outcome:refused}` climbing** — the `reason:` tag names it:
+    `token` is a rotated `WALLET_PASS_AUTH_KEY`, `unconfigured` a missing
+    `WALLET_PASS_KEY`, `pass_type` a deployment answering for passes that are
+    not its own
+  - **`fetch{outcome:unsignable}` climbing** — the certificate is past its own
+    expiry, or its key or artwork will not load, and every fetch answers 503. A
+    pass served and then discarded by the phone is a broken chain instead
+  - **`push{outcome:refused}` or `{outcome:gone}`** — the topic, the provider
+    key, or a dead device token, each named on the tag. A wrong topic deletes
+    every registration it touches, after which the pushes stop too
+  - **The list is the one that stays quiet** — its refusals are all the same
+    204, deliberately, so a scanner cannot tell an unknown device from a
+    foreign pass type. Read it against the fetch rather than on its own
+- **`WALLET_PASS_AUTH_KEY` has no rotation** — Apple forbids ever changing a
+  pass's authentication token, and the token is derived from this key, so a new
+  one locks every phone out of the four addresses its pass comes back to.
+  Registering, updating and fetching all 401, silently. The only remedy the
+  format leaves is a new serial for everybody
+- **The pass type identifier, the team id and the web service host have no
+  rotation either** — each is written into every pass and changing one strands
+  every pass issued. There is only a re-issue for everybody
+:::
+
+:::detail{title="Product decisions" for="pm"}
+A member at the counter unlocks their phone, signs in, opens the membership
+page and reads a code against a countdown with a queue behind them. The problem
+is distribution rather than the code: a code that has to be fetched cannot live
+on a lock screen, and a card shop with a metal roof does not always have signal.
+
+Apple was ruled out once, on the ground that a pass there would mean a permanent
+code. That ground is accepted rather than argued away — Apple genuinely has no
+way for a phone to make a code, and Wallet disables automatic updates for a pass
+that refreshes too often, so freshness is not ours to control. What changed is
+the answer: the code stays durable, and it is made safe by what a session opened
+from it may not do.
+
+| User | Situation | Desired outcome |
+| --- | --- | --- |
+| Member with an iPhone | At the counter, no signal | Scans from the lock screen and is identified, every visit. |
+| Member spending points | Wants a reward at the till | Opens the card on the site; the Apple pass identifies but never spends. |
+| Someone holding a photograph of a pass | At a counter | Is identified as that member and can move nothing. |
+| Member carrying both wallets | Ends one | Keeps the other. |
+
+**Not in scope.** Spending or collecting from an Apple pass — both stay behind a
+switch that is off. NFC at the counter, in either wallet: no certified reader,
+and Apple needs an entitlement besides. Offers, stamps or messages on a pass. A
+pass for ZZZ, which runs no till. Any change to the card on the site.
+
+**Measurement.** Share of counter identifications made from a pass, by wallet.
+Identifications that expire or replay before staff scan them, which a Google
+pass drives to zero. Apple identifications followed by a spend on the site's
+card in the same visit — what the durable code costs a member, and the number
+that would reopen this decision.
+
+**Risk.** An Apple pass that identifies but cannot spend is a worse pass than
+Google's, and a member who does not know that reads it as broken. The surface
+has to say what each pass is for rather than offering two identical-looking
+buttons. ❓ who writes that line.
 :::
 
 ## Histories
@@ -146,16 +268,23 @@ lives in the identity system and never in the programme, which holds only an
 opaque user id.
 
 :::callout{kind="warning"}
-Three things decided for this surface are not built, and one is built but not
-switched on.
+One thing decided for this surface is built and offered to nobody, one is being
+built, and five are not built.
 
-- **The wallet pass** — the member's pass, its rotating code, the counter that
-  reads it and the sweep that keeps it current are built, and offered to
-  nobody: the issuer account, its class and its key do not exist yet. Three
-  parts are not built at all — an operator cannot end a pass for a member who
-  lost the phone; a spend at a counter reaches the pass on the daily floor
-  rather than inside five minutes; and the welcome message carries no save
-  action (`add-google-wallet-member-card`)
+- **The Google pass** — the pass, its rotating code, the counter that reads it
+  and the sweep that keeps it current are built, and offered to nobody: the
+  issuer account, its class and its key do not exist yet
+- **The Apple pass** — specified and being built, and offered to nobody: the
+  Developer Program enrolment, the pass type identifiers and the signing
+  certificate do not exist yet
+- **A spend reaching the pass** — nothing wakes the sweep when a member's
+  standing moves, so a counter spend reaches a pass on the daily floor rather
+  than inside the five minutes this page promises. It costs a Google pass a
+  stale balance; an Apple code is durable, so it costs that one nothing
+- **Ending a pass for a member** — an operator cannot end a pass for somebody
+  who lost their phone
+- **The welcome message** — carries no save action, for either wallet
+  (`add-google-wallet-member-card`)
 - **The welcome bonus** — the deployed programme grants none
   (`revise-loyalty-programme-rules`)
 - **Account deletion** — the ledger has no account-deletion pass

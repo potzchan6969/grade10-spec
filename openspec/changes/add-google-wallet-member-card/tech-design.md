@@ -1,4 +1,4 @@
-# Google Wallet member card — technical design
+# Phone wallet member card — technical design
 
 How the wallet pass lands on the till gateway that already exists. The
 motivation is in [`proposal.md`](proposal.md); this holds the choices an
@@ -200,6 +200,108 @@ leaves the member's next scan working.
   requires
 
 Nothing else on the wire changes.
+
+## The Apple pass
+
+### Its code is durable, and the arm is what makes that safe
+
+PassKit has no rotating barcode and no prospect of one: `barcodes[].message` is
+a fixed string, `semantics` and `relevantDates` only decide when a pass
+surfaces, and NFC's message is static too. A pass changes only by fetching a
+new one over the network — and Wallet **throttles a pass that updates too
+often and disables its automatic updates**, which a member may also switch off
+per pass. So code freshness is not ours to control, and a design resting on it
+would be dishonest for some share of the fleet.
+
+The consequence that decides everything: **a code's lifetime and a member's
+offline window are one number.** Shorten the code's life and you refuse a
+member whose phone has not caught up — at a counter, which is where the pass
+exists to work.
+
+So the code is durable, exactly as the reversed non-goal feared, and the fear is
+answered by removing the right rather than by claiming freshness. An Apple
+session reads the panel; it spends nothing and collects nothing. `collect` is
+excluded deliberately and is the sharper of the two — `markCollected` hands over
+a reward the member has already paid points for, and the pending collections
+arrive in the identify answer itself, so leaving it would make theft self-serve
+in one round trip.
+
+### The payload names its scheme, and the scheme is checked against the row
+
+Apple's payload is `G10A.<reference>.<mac>` — three fields, where
+`mac = base64url(HMAC(passSecret, reference)[0..16])`. A pure function of the
+row's id and its secret, so it never moves, and a reference leaked from a log or
+a support screenshot is still not a credential.
+
+The prefix selects **the parse and only the parse**. The verification policy
+comes from the row's `platform` after the lookup, and a payload whose scheme
+disagrees with its row is refused. Without that rule the two schemes are
+interchangeable — both call the same `passCodeFor`, so a photographed Google
+payload retyped under the other prefix would skip the clock gate and replay
+forever, since `lastPeriod` only advances on real spends.
+
+Google keeps its cheap pre-lookup clock gate: the prefix makes the scheme
+unambiguous, so nothing is given up.
+
+### `spendPassCode` is not called for an Apple pass
+
+Its monotonic guard is the single-use guarantee, and a durable code presents the
+same value every visit — so calling it would refuse the member's second scan
+ever. Apple is off that path by construction, not by a flag.
+
+### The pass web service ships now, because `webServiceURL` is or-never
+
+A pass with no `webServiceURL` can never be updated, and there is no channel to
+deliver the fix over. But with a durable code nothing about the service is
+safety-critical: it carries display freshness, so APNs down for a day is a stale
+card rather than exposure.
+
+Five endpoints, and their **auth is asymmetric**: register, unregister and
+get-pass carry `Authorization: ApplePass`; the list endpoint and `/v1/log` carry
+none — the list spans passes with different tokens, so the device library
+identifier is the only shared secret it has. Requiring a token there makes
+Wallet 401 at the list step and never reach the pass fetch, while APNs keeps
+answering 200.
+
+`passesUpdatedSince` is our own opaque tag, so it is drawn from one Postgres
+sequence: `greatest(pass.updated_seq, registration.created_seq)`. A timestamp
+loses ties, a per-pass counter cannot be maxed, and a max over pass rows alone
+hides a pass a device has only just registered.
+
+### `authenticationToken` is derived, because it can never be rotated
+
+Apple permits updating anything on a pass **except** the authentication token
+and the serial number. So it is derived rather than stored —
+`HMAC(WALLET_PASS_AUTH_KEY, "apple-pass-v1:" + passTypeId + ":" + serial)` —
+which leaves no second source of truth, nothing extra for erasure to clear, and
+no way for a staging token to authenticate a production pass. The remedy for a
+suspected leak is to end the pass and issue a new serial.
+
+### Signing is ours, and it is proven
+
+A `.pkpass` is a ZIP carrying `pass.json`, images, a **SHA-1** `manifest.json`
+and a detached PKCS#7/CMS signature over it. Workers' WebCrypto has no CMS, and
+node-forge and pkijs are both hostile to the runtime, so the DER is built here —
+about 180 lines, WebCrypto only, verified against `openssl cms -verify`,
+tamper-detecting, with the WWDR intermediate embedded as Apple requires. The ZIP
+is store-only at about 70 lines; deflate would be equally valid, and this is a
+choice rather than a format rule.
+
+### Transport: token auth first, and the seam is a `Fetcher`
+
+Apple documents pushing with the certificate that signed the pass; Apple's token
+docs say a team key covers every topic in a team; nothing states which governs a
+pass type id. So build the `.p8` path first — it is one secret — and keep the
+certificate path as the fallback, which needs an mTLS binding in every
+environment block of every brand.
+
+The seam is a **`Fetcher`**, not a function: Cloudflare's mTLS binding exposes
+`fetch(request) => Promise<Response>`, which is global `fetch`'s own signature,
+so the whole credential difference is one field plus one optional header.
+
+The provider JWT lives in a one-row table with a guarded update and a module
+cache in front, because APNs refuses a token minted more than once per twenty
+minutes and the store cron ticks every five.
 
 ## Risks / Trade-offs
 

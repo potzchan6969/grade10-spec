@@ -12,7 +12,10 @@ physical-store orders earning through attribution.
 
 - The wallet pass
   - Added from the membership surface: carries name, tier, balance and a code
-  - Rotating code: made on the device, current with no signal, used once
+  - Google's code: made on the device, current with no signal, used once
+  - Apple's code: made by the programme, durable, and identifies only —
+    it spends nothing and collects nothing
+  - One pass per wallet: ending or adding in one leaves the other alone
   - Ending one: immediate, by the member or an operator
   - Staying current: a change reaches it within **5 minutes**, a burst costs one update
 
@@ -62,19 +65,78 @@ membership.
 - **WHEN** a member deletes the pass from their wallet
 - **THEN** their membership, balance, tier and member card are unchanged
 
+### Requirement: A member carries their card in Apple Wallet
+
+The membership surface SHALL offer to add the member card to Apple Wallet, and
+the message that welcomes a new member SHALL carry the same offer. The pass
+SHALL carry the member's display name, the tier they hold, the points they can
+spend, and a scannable code.
+
+The pass's code SHALL be made by the programme and carried on the pass, so a
+pass identifies with no network of its own and needs nothing of the phone at
+the counter. The code SHALL be durable: it does not change, a second
+presentation is not refused, and a member's tenth visit scans as their first.
+
+Because the code is durable, it SHALL identify and nothing more. A session
+opened from an Apple pass SHALL read the member's panel and SHALL NOT spend
+points or collect a reward, whoever presents it. A member who wants either
+SHALL be served by the card on the site, as they are today.
+
+Removing a pass SHALL change nothing about the membership.
+
+#### Scenario: grade10-site-store-membership-SC-63 - A member adds their card to Apple Wallet
+
+- **WHEN** a member opens their card on the membership surface
+- **THEN** they are offered the pass, and adding it carries their name, tier,
+  points to spend and a scannable code
+
+#### Scenario: grade10-site-store-membership-SC-64 - An Apple pass identifies every time
+
+- **GIVEN** a member whose phone has no network
+- **WHEN** they present the same pass on two visits
+- **THEN** a session opens both times
+
+#### Scenario: grade10-site-store-membership-SC-65 - An Apple pass cannot move value
+
+- **WHEN** a session is opened from an Apple pass
+- **THEN** the member's panel is read
+- **AND** spending points and collecting a reward are refused, not hidden
+
+### Requirement: A member holds one pass per wallet
+
+A member SHALL hold at most one live pass in each wallet. Adding or ending a
+pass in one wallet SHALL leave what they hold in the other untouched, and the
+membership surface SHALL say which passes they are carrying.
+
+#### Scenario: grade10-site-store-membership-SC-66 - Adding one wallet's pass leaves the other alive
+
+- **GIVEN** a member carrying a pass in one wallet
+- **WHEN** they add a pass in the other
+- **THEN** both identify them
+
+#### Scenario: grade10-site-store-membership-SC-67 - Ending one wallet's pass leaves the other alive
+
+- **GIVEN** a member carrying a pass in each wallet
+- **WHEN** they end one
+- **THEN** the other still identifies them
+- **AND** the surface still offers the action that ends it
+
 ### Requirement: A pass identification is recorded as its own kind
 
 The programme SHALL record that a member was identified from a wallet pass,
 apart from every other way a member reaches the counter, so how members arrive
-is countable rather than inferred. A pass identification SHALL carry the same
-rights as the card on the site, and SHALL be one of the ways that prove the
-member's own device was present.
+is countable rather than inferred, and SHALL record which wallet it came from.
+
+A pass whose code the member's own device made SHALL carry the same rights as
+the card on the site, and SHALL be one of the ways that prove the member's own
+device was present. A pass whose code the programme made SHALL prove only that
+the pass reached a device once, and SHALL be neither.
 
 #### Scenario: grade10-site-store-membership-SC-49 - Arriving by pass is countable
 
 - **WHEN** members are identified, some from a pass and some from the site's card
 - **THEN** the two are counted apart
-- **AND** each opens a session with the same rights
+- **AND** a pass identification says which wallet it came from
 
 ### Requirement: A member ends a pass, and ending it ends what it can do
 
@@ -148,10 +210,14 @@ current.
 ### Requirement: Erasing a member erases their pass
 
 Erasing a member SHALL strip every fact about them from the pass and put it
-beyond use, SHALL be retried until the wallet confirms it, and SHALL be
-reported as still owed until it is done. A pass already on a member's phone
-SHALL identify nobody from the moment the erasure begins, whatever the phone
-still shows.
+beyond use. A pass already on a member's phone SHALL identify nobody from the
+moment the erasure begins, whatever the phone still shows.
+
+What discharges the erasure SHALL follow the wallet. A wallet that keeps its
+own copy SHALL be retried until it confirms, and SHALL be reported as still
+owed until it does. A wallet that keeps none SHALL be discharged by the pass
+identifying nobody and the devices it was sent to being forgotten, with no
+acknowledgement to wait for.
 
 #### Scenario: grade10-site-store-membership-SC-56 - An erased member's pass identifies nobody
 
@@ -160,19 +226,34 @@ still shows.
 
 #### Scenario: grade10-site-store-membership-SC-57 - An erasure the wallet has not confirmed is still owed
 
-- **WHEN** the wallet cannot be reached while a member is being erased
+- **GIVEN** a wallet that keeps its own copy of the pass
+- **WHEN** it cannot be reached while a member is being erased
 - **THEN** the erasure is retried until the wallet confirms it
 - **AND** it is reported as still owed until then
+
+#### Scenario: grade10-site-store-membership-SC-62 - An erasure with no wallet to confirm it is still discharged
+
+- **GIVEN** a wallet that keeps no copy, holding only what a member's own
+  device was sent
+- **WHEN** a member is erased
+- **THEN** the pass identifies nobody and the devices it was sent to are forgotten
+- **AND** nothing is reported as owed, because there is nothing left to ask
 
 ### Requirement: The wallet pass's exports
 
 The shared UI package SHALL export, from its public entry, exactly these
-components for adding a pass — `WalletPassLinks` — with its props, copy, offer
+components for adding a pass — `WalletPassLinks` — with its props, copy, wallet
 and state types. It SHALL receive every word it shows and every address it
 points at from its consumer, and SHALL hold no wallet, no member and no product
-state of its own. Each offer SHALL carry its own whole label rather than a word
+state of its own. Each wallet SHALL carry its own whole labels rather than words
 the component joins to a wallet's name, so a language that orders its verb
-differently is not assembled out of order.
+differently is not assembled out of order. Each SHALL be named to the component
+by an identifier the consumer owns and the component never shows, so an action
+is answered by identity rather than by a display name a translation moves.
+
+A wallet the member holds SHALL NOT hide what is offered in another, and an
+address already answered SHALL stand until the member has used it — a pass
+recorded is not a pass installed.
 
 The consuming application is the Grade10 site.
 
@@ -182,15 +263,16 @@ The consuming application is the Grade10 site.
 - **THEN** the action that adds the pass is offered beside it
 - **AND** every word it shows came from the application
 
-#### Scenario: grade10-site-store-membership-SC-59 - A deployment with no wallet offers nothing
+#### Scenario: grade10-site-store-membership-SC-59 - A deployment offers only the wallets it carries
 
-- **WHEN** a member opens their card on a deployment that has no wallet issuer
-- **THEN** no action to add a pass is offered
-- **AND** nothing is asked of the wallet to find that out
+- **WHEN** a member opens their card on a deployment configured for one wallet
+  and not the other
+- **THEN** only the configured wallet is offered
+- **AND** nothing is asked of either wallet to find that out
 
-#### Scenario: grade10-site-store-membership-SC-60 - A member who returns still finds the pass they hold
+#### Scenario: grade10-site-store-membership-SC-60 - A member who returns still finds the passes they hold
 
 - **GIVEN** a member added a pass on an earlier visit
 - **WHEN** they open their card again
-- **THEN** the surface says they are carrying one
-- **AND** the action that ends it is offered
+- **THEN** the surface says which wallets they are carrying a pass in
+- **AND** the action that ends each is offered

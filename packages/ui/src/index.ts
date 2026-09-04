@@ -176,8 +176,8 @@ export {
   WalletPassLinks,
   type WalletPassLinksCopy,
   type WalletPassLinksProps,
-  type WalletPassOffer,
   type WalletPassState,
+  type WalletPassWallet,
 } from "./blocks/loyalty-membership/wallet-pass-links";
 // shared cross-capability types
 export type { AsyncAction, AsyncState } from "./blocks/shared/async";

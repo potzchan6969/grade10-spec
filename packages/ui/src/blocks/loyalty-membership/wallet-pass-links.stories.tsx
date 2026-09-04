@@ -4,93 +4,230 @@ import { WalletPassLinks } from "./wallet-pass-links";
 
 const copy = {
   heading: "Carry your card on your phone",
-  end: "End this pass",
-  held: "You are carrying a pass in Google Wallet",
   failed: "That did not go through. Try again.",
 };
 
-const offers = [{ wallet: "Google Wallet", addLabel: "Add to Google Wallet" }];
+const google = {
+  id: "google",
+  addLabel: "Add to Google Wallet",
+};
+
+const apple = {
+  id: "apple",
+  addLabel: "Add to Apple Wallet",
+};
 
 const meta = {
   title: "Loyalty membership/WalletPassLinks",
   component: WalletPassLinks,
-  args: { copy, offers, onAdd: fn(), onEnd: fn() },
+  args: {
+    copy,
+    wallets: [google, apple],
+    state: { status: "read" },
+    onAdd: fn(),
+    onEnd: fn(),
+  },
 } satisfies Meta<typeof WalletPassLinks>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-/** Nothing held yet: the offer, and the action that mints it. */
+/** Nothing held yet: both wallets, and the actions that mint them. */
 export const Default: Story = {
-  args: { state: { status: "none" } },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    const add = canvas.getByRole("button", { name: "Add to Google Wallet" });
-    await userEvent.click(add);
-    await expect(args.onAdd).toHaveBeenCalledWith("Google Wallet");
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Add to Apple Wallet" }),
+    );
+    // The consumer's own name for the wallet, never the words on the button.
+    await expect(args.onAdd).toHaveBeenCalledWith("apple");
   },
 };
 
-/** The mint is in flight. The block owns this state, so no second control exists. */
-export const Adding: Story = {
-  args: { state: { status: "adding" } },
+/** One mint in flight. Only that wallet's control waits. */
+export const AddingOne: Story = {
+  args: { wallets: [{ ...google, adding: true }, apple] },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(
+      canvas.getByRole("button", { name: "Add to Apple Wallet" }),
+    ).toBeEnabled();
+  },
 };
 
 /** Minted: the address is a credential, so it arrives only after the tap. */
 export const Saveable: Story = {
   args: {
-    state: { status: "none" },
-    offers: [{ ...offers[0], saveUrl: "https://pay.google.com/gp/v/save/x" }],
+    wallets: [
+      { ...google, saveUrl: "https://pay.google.com/gp/v/save/x" },
+      apple,
+    ],
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const link = canvas.getByRole("link", { name: "Add to Google Wallet" });
-    await expect(link).toHaveAttribute(
-      "href",
-      "https://pay.google.com/gp/v/save/x",
-    );
-  },
-};
-
-/** Carrying one: the offer gives way to the control that ends it. */
-export const Held: Story = {
-  args: { state: { status: "held", wallet: "Google Wallet" } },
-  play: async ({ args, canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.click(
-      canvas.getByRole("button", { name: "End this pass" }),
-    );
-    await expect(args.onEnd).toHaveBeenCalledTimes(1);
+    await expect(
+      canvas.getByRole("link", { name: "Add to Google Wallet" }),
+    ).toHaveAttribute("href", "https://pay.google.com/gp/v/save/x");
   },
 };
 
 /**
- * Held on a deployment that offers nothing new — a wallet withdrawn after the
- * member saved one. The ending must survive it, or somebody who lost a phone
- * has no way to say so.
+ * The address survives the member being recorded as holding one.
+ *
+ * A row existing is not a pass installed: the member has tapped Add and has
+ * not yet opened the link, and taking it away there would leave them holding
+ * a pass they cannot install and cannot ask for again.
  */
-export const HeldWithNothingOffered: Story = {
-  args: { offers: [], state: { status: "held", wallet: "Google Wallet" } },
+export const SaveableWhileHeld: Story = {
+  args: {
+    wallets: [
+      {
+        ...google,
+        saveUrl: "https://pay.google.com/gp/v/save/x",
+        heldLabel: "You are carrying a pass in Google Wallet",
+        endLabel: "End your Google Wallet pass",
+      },
+      apple,
+    ],
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(
-      canvas.getByRole("button", { name: "End this pass" }),
-    ).toBeVisible();
+      canvas.getByRole("link", { name: "Add to Google Wallet" }),
+    ).toBeInTheDocument();
+    await expect(
+      canvas.getByRole("button", { name: "End your Google Wallet pass" }),
+    ).toBeInTheDocument();
   },
 };
 
-/** An add or an ending that did not complete. Said out loud, and retryable. */
-export const Failed: Story = {
-  args: { state: { status: "failed" } },
+/** Carrying one, offered the other: each is its own row. */
+export const HeldOneOfferedTheOther: Story = {
+  args: {
+    wallets: [
+      {
+        ...google,
+        addLabel: undefined,
+        heldLabel: "You are carrying a pass in Google Wallet",
+        endLabel: "End your Google Wallet pass",
+      },
+      apple,
+    ],
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    // The wallet they hold does not hide the one they do not.
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Add to Apple Wallet" }),
+    );
+    await expect(args.onAdd).toHaveBeenCalledWith("apple");
+  },
 };
 
-/** Not read yet: nothing, rather than an offer that may not be true. */
+/** Carrying both: one row each, and each ends on its own. */
+export const HeldBothEndsEach: Story = {
+  args: {
+    wallets: [
+      {
+        ...google,
+        addLabel: undefined,
+        heldLabel: "You are carrying a pass in Google Wallet",
+        endLabel: "End your Google Wallet pass",
+      },
+      {
+        ...apple,
+        addLabel: undefined,
+        heldLabel: "You are carrying a pass in Apple Wallet",
+        endLabel: "End your Apple Wallet pass",
+      },
+    ],
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: "End your Apple Wallet pass" }),
+    );
+    await expect(args.onEnd).toHaveBeenCalledWith("apple");
+    await expect(args.onEnd).not.toHaveBeenCalledWith("google");
+  },
+};
+
+/** One ending in flight. The other row is untouched. */
+export const EndingOne: Story = {
+  args: {
+    wallets: [
+      {
+        ...google,
+        addLabel: undefined,
+        heldLabel: "You are carrying a pass in Google Wallet",
+        endLabel: "End your Google Wallet pass",
+        ending: true,
+      },
+      {
+        ...apple,
+        addLabel: undefined,
+        heldLabel: "You are carrying a pass in Apple Wallet",
+        endLabel: "End your Apple Wallet pass",
+      },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(
+      canvas.getByRole("button", { name: "End your Apple Wallet pass" }),
+    ).toBeEnabled();
+  },
+};
+
+/**
+ * A brand that has withdrawn its offer still owes a member who holds one the
+ * control that ends it.
+ */
+export const HeldWithNothingOffered: Story = {
+  args: {
+    wallets: [
+      {
+        id: "google",
+        heldLabel: "You are carrying a pass in Google Wallet",
+        endLabel: "End your Google Wallet pass",
+      },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(
+      canvas.queryByRole("button", { name: /^Add to/ }),
+    ).not.toBeInTheDocument();
+    await expect(
+      canvas.getByRole("button", { name: "End your Google Wallet pass" }),
+    ).toBeInTheDocument();
+  },
+};
+
+/** A deployment carrying no wallet draws nothing at all. */
+export const NoneOffered: Story = {
+  args: { wallets: [] },
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeEmptyDOMElement();
+  },
+};
+
+/** Not read yet: nothing is claimed either way. */
 export const Unknown: Story = {
   args: { state: { status: "unknown" } },
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeEmptyDOMElement();
+  },
 };
 
-/** A brand with no wallet, and nothing held. */
-export const NoWalletOffered: Story = {
-  args: { offers: [], state: { status: "none" } },
+/** An add or an ending that did not complete, said once. */
+export const Failed: Story = {
+  args: { state: { status: "read", failed: true } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(
+      canvas.getByText("That did not go through. Try again."),
+    ).toBeInTheDocument();
+  },
 };
