@@ -301,6 +301,21 @@ the capability at hand. Below that threshold the pattern is a coincidence and
 the defaults in this document stand. A corpus with fewer than three approved
 cases teaches nothing, and the run says so.
 
+**Only cases approved under the current rules revision teach.** A reviewer's
+yes is a yes to the rules as they stood that day, so a suite approved under
+r1 goes on carrying r1's wording — correctly, because nothing re-words an
+approved case for style alone. It must not teach r2. The `**Reviewed:**` line
+therefore records the revision alongside the date, and the corpus is filtered
+to suites whose revision equals `tcs_rules_rev`; everything older is read for
+nothing and reported as such. When the filtered corpus falls below the
+threshold — which is what a rules bump does to it — the defaults in this
+document stand, and the run says the corpus was too thin rather than reaching
+for stale evidence.
+
+This is what keeps a rules change from being undone one generated suite at a
+time. The corpus re-forms as suites are reviewed under the new revision, and
+until it does, this document is the only teacher.
+
 **The corpus refines how a case is written, never what it claims.** It cannot
 add coverage a spec does not state, loosen "mechanism is yours, coverage is
 the spec's", licence an invented label in place of a placeholder, or overrule any
@@ -1051,8 +1066,8 @@ computed rather than chosen:
 # <product>/<domain>/<capability> Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-09-05, tcs-rules r1
-**Reviewed:** 2026-09-12
+**Drafts styled:** 2026-09-05, tcs-rules r2
+**Reviewed:** 2026-09-12, tcs-rules r2
 ```
 
 ### Status is derived, never claimed
@@ -1106,14 +1121,20 @@ typo. `pnpm run tcs:stale` then lists the suites whose drafts sit below it.
 ### Reviewed
 
 ```markdown
-**Reviewed:** 2026-09-12
+**Reviewed:** 2026-09-12, tcs-rules r2
 ```
 
-The date the file last reached `approved`, written by `/tcs-review` on that
-transition and removed if the file falls back out of `approved`. Present
-exactly when the status is `approved`. No reviewer name: git already records
-who, and a name in the file goes stale the moment a second person touches the
-suite.
+The date the file last reached `approved` and the revision of this document
+its cases were approved under, written by `/tcs-review` on that transition and
+removed if the file falls back out of `approved`. Present exactly when the
+status is `approved`. No reviewer name: git already records who, and a name in
+the file goes stale the moment a second person touches the suite.
+
+The revision is what makes the approved corpus usable as evidence: a suite
+approved under an older revision keeps its wording and stops teaching, rather
+than quietly propagating rules the store has moved on from. A file approved
+before the revision was recorded carries a bare date; it teaches nothing until
+someone reviews it again.
 
 ## The format
 

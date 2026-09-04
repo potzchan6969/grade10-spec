@@ -232,9 +232,13 @@ function parseSuite(text) {
         suite.draftsStyled = { date: ds[1], rev: Number(ds[2]), line: i + 1 };
         continue;
       }
-      const rv = line.match(/^\*\*Reviewed:\*\*\s*(\d{4}-\d{2}-\d{2})\s*$/);
+      const rv = line.match(
+        /^\*\*Reviewed:\*\*\s*(\d{4}-\d{2}-\d{2})(?:,\s*tcs-rules r(\d+))?\s*$/,
+      );
       if (rv) {
         suite.reviewed = rv[1];
+        suite.reviewedRev = rv[2] === undefined ? null : Number(rv[2]);
+        suite.reviewedLine = i + 1;
         continue;
       }
     }
@@ -501,7 +505,26 @@ function checkSuite(root, filePath, rulesRev) {
       `claims tcs-rules r${suite.draftsStyled.rev}, but the store is at r${rulesRev}`,
     );
   if (derived === "approved" && !suite.reviewed)
-    err(1, "is approved but carries no `**Reviewed:** <YYYY-MM-DD>` line");
+    err(
+      1,
+      "is approved but carries no `**Reviewed:** <YYYY-MM-DD>, tcs-rules r<n>` line",
+    );
+  if (derived === "approved" && suite.reviewed && suite.reviewedRev === null)
+    warn(
+      suite.reviewedLine ?? 1,
+      "was approved before the rules revision was recorded — its cases keep their wording, " +
+        "and `/spec-to-tcs` does not learn from them until it is reviewed again",
+    );
+  if (
+    suite.reviewedRev !== null &&
+    suite.reviewedRev !== undefined &&
+    rulesRev !== null &&
+    suite.reviewedRev > rulesRev
+  )
+    err(
+      suite.reviewedLine ?? 1,
+      `claims it was approved under tcs-rules r${suite.reviewedRev}, but the store is at r${rulesRev}`,
+    );
   if (derived !== "approved" && suite.reviewed)
     err(1, "carries a `**Reviewed:**` line but is not approved");
 

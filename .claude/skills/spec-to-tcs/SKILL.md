@@ -165,18 +165,27 @@ each case traces scenario ids.
    questions this skill's prose can only answer generically. Scan
    `openspec/specs/**/test-cases.md` and
    `openspec/changes/*/specs/**/test-cases.md` (never `archive/`) and collect
-   every case whose `**Status:**` is `actual`. Those cases — and only those —
-   are evidence: a reviewer read each one against its spec and stood behind
-   it, including any wording they changed on the way. `draft` cases are your
-   own past output and prove nothing; `deprecated` cases are retired.
+   every case whose `**Status:**` is `actual` **in a file whose
+   `**Reviewed:**` line names the current `tcs_rules_rev`**. Those cases — and
+   only those — are evidence: a reviewer read each one against its spec and
+   stood behind it, including any wording they changed on the way. `draft`
+   cases are your own past output and prove nothing; `deprecated` cases are
+   retired.
+
+   A suite approved under an older revision, or before the revision was
+   recorded at all, is **not** evidence. Its wording was right for the rules
+   of its day and nothing re-words an approved case for style alone, so
+   learning from it would undo the rules change one generated suite at a time.
+   Read it for nothing, and name it in the report as approved-but-stale.
 
    Weight the evidence: approved cases in the capability you are generating
    for first, then the same product, then anywhere in the store. A pattern
    counts as a convention when it holds across **three or more** approved
    cases, or **two within the capability you are writing for**. Below that
    it is a coincidence — ignore it and follow this skill's defaults. When
-   the corpus holds fewer than three approved cases in total, say so in the
-   report and generate from the defaults alone.
+   the corpus holds fewer than three approved cases at the current revision,
+   say so in the report and generate from the defaults alone — which is the
+   expected state right after a rules bump, not a problem to work around.
 
    What to take from the corpus:
 
