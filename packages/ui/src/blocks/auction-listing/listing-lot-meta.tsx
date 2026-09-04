@@ -5,7 +5,13 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { CaretDown } from "@phosphor-icons/react";
-import { useId, useLayoutEffect, useRef, useState, type TransitionEvent } from "react";
+import {
+  type TransitionEvent,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import type { ListingLotMetaBadge } from "./types";
 
 type ListingLotMetaCopy = {
@@ -66,9 +72,7 @@ function ListingLotMeta({
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const [descriptionOverflows, setDescriptionOverflows] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [animatedHeight, setAnimatedHeight] = useState<number | "auto">(
-    "auto",
-  );
+  const [animatedHeight, setAnimatedHeight] = useState<number | "auto">("auto");
 
   useLayoutEffect(() => {
     setDescriptionExpanded(false);
@@ -77,7 +81,7 @@ function ListingLotMeta({
     setAnimatedHeight("auto");
     collapsedHeightRef.current = null;
     collapsePendingRef.current = false;
-  }, [description]);
+  }, []);
 
   useLayoutEffect(() => {
     const element = descriptionRef.current;
@@ -92,7 +96,7 @@ function ListingLotMeta({
     const resizeObserver = new ResizeObserver(updateOverflow);
     resizeObserver.observe(element);
     return () => resizeObserver.disconnect();
-  }, [description, descriptionExpanded, isAnimating]);
+  }, [descriptionExpanded, isAnimating]);
 
   const toggleDescription = () => {
     const element = descriptionRef.current;

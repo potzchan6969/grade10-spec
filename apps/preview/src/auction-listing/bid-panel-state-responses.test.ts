@@ -64,18 +64,15 @@ describe("Bid Panel normalized API response shapes", () => {
         rendersAs: string;
       } => "rendersAs" in response && response.rendersAs != null,
     ),
-  )(
-    "$scenarioId aliases the same panel state as $rendersAs",
-    (response) => {
-      const target = byScenarioId(response.rendersAs);
-      expect(target).toBeDefined();
-      expect(
-        target && "rendersAs" in target ? target.rendersAs : undefined,
-      ).toBeUndefined();
-      expect(response.state).toEqual(target?.state);
-      expect(response.expectedText).toBe(target?.expectedText);
-    },
-  );
+  )("$scenarioId aliases the same panel state as $rendersAs", (response) => {
+    const target = byScenarioId(response.rendersAs);
+    expect(target).toBeDefined();
+    expect(
+      target && "rendersAs" in target ? target.rendersAs : undefined,
+    ).toBeUndefined();
+    expect(response.state).toEqual(target?.state);
+    expect(response.expectedText).toBe(target?.expectedText);
+  });
 
   test("derives payment-setup dialog visibility from the response state", () => {
     const { state } = BID_PANEL_STATE_RESPONSES.setupRequired;
