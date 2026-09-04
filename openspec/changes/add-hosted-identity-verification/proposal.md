@@ -65,8 +65,8 @@ rate, which the booking outcomes already produce.
 - **The counter stays, and stays reachable — but an override is recorded.** A
   collector with no smartphone, an unreadable document, a provider outage: all
   served by the counter check, ungated. A counter check on a case the provider
-  *declined* is an override, carrying a reason, taking the grant that approves
-  rather than the grant that operates.
+  *declined* is an override: it carries a reason, names who gave it, and is
+  refused without one.
 - **A verified identity says who performed it.** Every record already carries a
   provider and the provider's own reference; today both are constant. They start
   meaning something.
@@ -94,6 +94,11 @@ vendor: they describe a hosted check, so a replacement is a delivery decision.
   a keyed digest.
 - **Setting Grade10's own retention windows.** Every window in the platform is
   unset; this change sets the provider's, not ours.
+- **Serving the collector's page in Chinese.** The customer notification
+  catalogue is English-only today while the site serves traditional and
+  simplified Chinese; carrying both across is a change of its own.
+- **Inviting a collector by anything but email.** Email is the only channel the
+  vault has built; a case reachable only by mobile is reported, not invited.
 
 ## Capabilities
 
@@ -131,8 +136,11 @@ flow that records one, and `vault:approve` covers what an action can cost.
 - **The provider integration** — a raised check, a signed verdict, an evidence
   fetch, a redaction command, and a retention policy read back and checked.
 - **No ZZZ surface.** ZZZ runs auth and store only, and verifies nobody.
-- **No new permission.** `kyc:read`, `vault:operate` and `vault:approve` already
-  carry this change's grants. Separately, `shared/auth/roles` describes neither
+- **No new permission, and no grant separates an override.** `kyc:read` and
+  `vault:operate` carry this change's grants. `staff` holds `vault:approve`
+  wherever it holds `vault:operate`, so no grant can tell an override from an
+  ordinary counter check until the role set changes; the override is a recorded
+  reason instead. Separately, `shared/auth/roles` describes neither
   those grants nor the `treasurer` role the code ships — a divergence older than
   this change, and not its to close.
 
@@ -144,10 +152,15 @@ flow that records one, and `vault:approve` covers what an action can cost.
 - ❓ **What a declined verdict tells the collector.** A repeated reason teaches a
   fraudster what to fix, and the collector and the operator may not see the same
   words. *Owner: Compliance, with Product.*
-- ❓ **Which cases must hold an approved hosted check before their documents are
-  prepared.** The requirement exists; until Compliance names the class, no case
-  is in it, and the counter override is the only control on a decline. *Owner:
-  Compliance.*
+- ❓ **Whether any case must hold an approved hosted check before its documents
+  are prepared.** No requirement carries this: a gate nobody can name a case for
+  does nothing, so it stays unwritten until Compliance names the class. Until
+  then the recorded override is the only control on a decline, and naming the
+  class is a change of its own. *Owner: Compliance.*
+- ❓ **Whether an override should take a grant an ordinary counter check does
+  not.** No operator role separates `vault:operate` from `vault:approve`, so a
+  four-eyes override needs a `shared/auth/roles` change before a grant could
+  refuse anybody. *Owner: whoever owns operator provisioning.*
 - ❓ **The lawful basis for the biometric processing.** A face match run by a
   processor on Grade10's instruction is special-category processing whichever
   way the image is stored. Explicit consent or a substantial-public-interest

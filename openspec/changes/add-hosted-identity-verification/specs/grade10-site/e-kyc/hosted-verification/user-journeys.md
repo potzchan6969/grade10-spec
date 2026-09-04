@@ -15,6 +15,7 @@ document problem reaches me while I can still do something about it.
 - `grade10-site-e-kyc-hosted-verification-SC-23` — A second device cannot continue an invitation
 - `grade10-site-e-kyc-hosted-verification-SC-24` — The invitation's secret is left nowhere it can be read
 - `grade10-site-e-kyc-hosted-verification-SC-09` — Asking twice does not invite twice
+- `grade10-site-e-kyc-hosted-verification-SC-27` — A check that cannot be raised invites nobody and is reported
 - `grade10-site-e-kyc-hosted-verification-SC-11` — An unproven verdict changes nothing and is not recorded
 - `grade10-site-e-kyc-hosted-verification-SC-12` — A verdict for a check nobody raised changes nothing
 - `grade10-site-e-kyc-hosted-verification-SC-13` — A repeated verdict is applied once
@@ -43,3 +44,5 @@ minute.
 - `grade10-site-e-kyc-hosted-verification-SC-20` — A counter check after a decline is recorded as an override
 - `grade10-site-e-kyc-hosted-verification-SC-21` — A provider outage does not stop a visit
 - `grade10-site-e-kyc-hosted-verification-SC-22` — A check the provider never decides is stalled rather than lost
+- `grade10-site-e-kyc-hosted-verification-SC-25` — A check the provider never settles stops being live
+- `grade10-site-e-kyc-hosted-verification-SC-26` — An operator clears a check that is going nowhere

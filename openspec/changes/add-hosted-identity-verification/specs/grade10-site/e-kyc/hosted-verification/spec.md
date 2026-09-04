@@ -49,6 +49,10 @@ verdict is about; only the identifier Grade10 recorded at step 1 SHALL resolve
 it. The collector SHALL NOT be asked for any detail the provider itself
 collects.
 
+A check that cannot be raised with the provider SHALL invite nobody, SHALL leave
+the case holding no live check, and SHALL be reported to an operator rather than
+leaving the case reading as a check nobody answered.
+
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-01 - A collector completes the check before arriving
 
 - **GIVEN** a case that has asked for an identity check
@@ -60,8 +64,18 @@ collects.
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-02 - Grade10 asks for nothing the provider collects
 
 - **WHEN** a collector walks the hosted check
-- **THEN** no Grade10 surface asks them for their document number, its expiry or
-  an image of it
+- **THEN** the collector's verification surface asks them for no document number,
+  no expiry and no image of the document
+
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-27 - A check that cannot be raised invites nobody and is reported
+
+- **GIVEN** a case with nothing to reuse and a verification provider that cannot
+  be reached
+- **WHEN** a check is asked for
+- **THEN** no invitation is sent, the case holds no live check, and an operator
+  is told the check could not be raised
+- **AND** asking again once the provider answers raises one check and sends one
+  invitation
 
 ### Requirement: An invitation names one person and one case
 
@@ -74,10 +88,13 @@ the provider. The first device that opens an invitation SHALL be the only device
 that may continue it. What a link-holder can read SHALL be the state and what to
 do next, and SHALL carry no identity field and no reason a check was refused.
 
-An invitation SHALL expire 14 days after it is issued, and a check the collector
-has opened SHALL expire 24 hours later. ❓ Both windows are `TBC` — they await
-Product (the proposal's first open question), and no other value may be built
-until they are set.
+An invitation SHALL expire 14 days after it is issued. A check the collector has
+opened and not yet submitted SHALL expire 24 hours after it was opened or when
+the invitation's own life runs out, whichever comes first — a started check
+SHALL NOT outlive the invitation that carried it. A submitted check SHALL NOT
+expire on either clock. ❓ Both windows are `TBC` — they await Product (the
+proposal's first open question), and no other value may be built until they are
+set.
 
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-03 - An invitation opens the check it names
 
@@ -122,7 +139,7 @@ show the collector and the case which.
 | Invited | The collector has been asked and has not started | Started, Expired, Withdrawn |
 | Started | The collector opened the check and has not finished it | Submitted, Expired, Withdrawn |
 | Submitted | The collector finished; the provider has not decided | Approved, Declined, Stalled, Withdrawn |
-| Stalled | The provider has not decided within the time it usually takes | Approved, Declined, Withdrawn |
+| Stalled | The provider has not decided within the time it usually takes | Approved, Declined, Expired, Withdrawn |
 | Approved | The provider vouched, and Grade10's own refusals passed | — |
 | Declined | The provider refused, Grade10's own refusals did, or the case could not take the verdict | — |
 | Expired | The invitation or the started check ran out of time | — |
@@ -132,7 +149,13 @@ Approved, Declined, Expired and Withdrawn SHALL be final: a collector who needs
 another chance is invited again, as a new check. A check in Submitted SHALL NOT
 expire on its own — a verdict may still arrive — and SHALL become Stalled
 instead, so an operator can see the difference between a check that is arriving
-and one that is not coming.
+and one that is not coming. A check in Stalled SHALL become Expired once reading
+it back from the provider has failed for a stated period, so no check stays live
+for ever on a provider that never answers.
+
+❓ The time a verdict usually takes, and the period a stalled read-back is given
+before the check expires, are both `TBC` — *Owner: Product*, with the two windows
+above.
 
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-06 - An unopened invitation expires
 
@@ -162,13 +185,22 @@ and one that is not coming.
   arriving, and the check is read back from the provider and settled from what
   it says
 
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-25 - A check the provider never settles stops being live
+
+- **GIVEN** a check in Stalled whose read-back has failed for the stated period
+- **WHEN** that period passes
+- **THEN** the check is Expired, the case shows it as lapsed, and the case can be
+  invited again
+
 ### Requirement: A case has one live check at a time
 
 The system SHALL allow a case at most one check in Invited, Started, Submitted
 or Stalled, and SHALL make that a constraint rather than a question asked before
 writing, so two requests arriving together cannot both raise one. Asking for a
 check while one is live SHALL answer with the live check rather than issue a
-second, and withdrawing the live check SHALL be what precedes issuing a new one.
+second. An operator holding `vault:operate` SHALL be able to withdraw a case's
+live check at any time before custody begins, and asking for a check after a
+withdrawal SHALL issue a new one with its own invitation.
 
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-09 - Asking twice does not invite twice
 
@@ -183,6 +215,13 @@ second, and withdrawing the live check SHALL be what precedes issuing a new one.
 - **WHEN** the check is withdrawn and a new one asked for
 - **THEN** the old invitation no longer starts a check, and the new one does
 
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-26 - An operator clears a check that is going nowhere
+
+- **GIVEN** a case whose check is Invited, Started, Submitted or Stalled
+- **WHEN** an operator holding `vault:operate` withdraws it
+- **THEN** the check is Withdrawn, the collector's invitation starts no check,
+  and the case holds no live check
+
 ### Requirement: A verdict is trusted only as the provider's, about the case's live check, once
 
 The system SHALL act on a verdict only when it is proven to come from the
@@ -195,8 +234,10 @@ leave the same result as the first.
 
 A verdict whose signature cannot be proven SHALL change nothing and SHALL be
 counted rather than written to any durable record. A verdict that is proven but
-names no check Grade10 raised, or names a check that is no longer live, SHALL
-change nothing and SHALL be recorded against the check it names.
+names no check Grade10 raised SHALL change nothing, and SHALL be counted as
+rejected — there is no check to record it against. A verdict naming a check that
+is no longer that case's live check SHALL change nothing, and SHALL be recorded
+against the check it names.
 
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-11 - An unproven verdict changes nothing and is not recorded
 
@@ -208,7 +249,7 @@ change nothing and SHALL be recorded against the check it names.
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-12 - A verdict for a check nobody raised changes nothing
 
 - **WHEN** a proven verdict names a check Grade10 did not raise
-- **THEN** nothing is created, and the attempt is recorded as rejected
+- **THEN** nothing is created, and the attempt is counted as rejected
 
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-13 - A repeated verdict is applied once
 
@@ -247,8 +288,18 @@ refusal it was to the operator.
 ### Requirement: The collector is told where their check stands
 
 The system SHALL show the collector the state of their check whenever they open
-their invitation, and SHALL tell them what to do next for every state — start
-it, carry on, wait, ask to be invited again, or bring the document to the store.
+their invitation, and SHALL tell them what to do next for every state.
+
+| State | What the collector is told to do |
+| --- | --- |
+| Invited | Start the check |
+| Started | Carry on where they left off |
+| Submitted | Wait; nothing is needed from them |
+| Stalled | Wait; nothing is needed from them |
+| Approved | Nothing further; their identity is on file |
+| Declined | Bring the document to the store |
+| Expired | Ask to be invited again |
+| Withdrawn | Ask to be invited again |
 
 ❓ What a declined collector is told awaits Compliance (the proposal's second
 open question); the words are `TBC` and the collector and the operator may not
@@ -278,17 +329,14 @@ withdraw the hosted check.
 
 A counter check recorded on a case whose last hosted check was Declined SHALL be
 an override: it SHALL carry a reason, SHALL name the staff member who gave it,
-SHALL take `vault:approve` rather than `vault:operate`, and SHALL show on the
-case beside the declined check.
-
-The system SHALL support requiring an approved hosted check before a case's
-documents are prepared, for a class of case policy defines, and SHALL record any
-waiver of that requirement and who granted it. ❓ Which cases fall in that class
-awaits Compliance; until they set it, no case is in it.
+and SHALL show on the case beside the declined check. A counter check offered
+without a reason on such a case SHALL be refused. Which grant an override takes
+is the consumer's to say, and `grade10-site/vault/identity-check` says it.
 
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-19 - Staff record a check while a hosted one is live
 
-- **GIVEN** a case with a check in Invited, Started, Submitted or Stalled
+- **GIVEN** a pre-custody case with a check in Invited, Started, Submitted or
+  Stalled
 - **WHEN** staff record an identity check at the counter
 - **THEN** the case holds the identity staff recorded
 - **AND** the hosted check is Withdrawn, so the collector's old invitation no
@@ -300,6 +348,7 @@ awaits Compliance; until they set it, no case is in it.
 - **WHEN** staff record an identity check at the counter
 - **THEN** it is accepted on the case's own rules, and is recorded as an
   override carrying a reason and the staff member who gave it
+- **AND** the same check offered with no reason is refused
 - **AND** the declined check stays on record beside it
 
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-21 - A provider outage does not stop a visit

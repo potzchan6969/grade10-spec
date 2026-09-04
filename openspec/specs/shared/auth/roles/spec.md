@@ -9,25 +9,18 @@ role is data; what a role grants is not.
 ## Feature set
 
 - Closed role set
-  - Named roles: user, staff, support, treasurer, auditor, admin; unknown names are dropped
+  - Named roles: user, staff, support, auditor, admin; unknown names are dropped
 - Permission checks
   - Grants not names: a product checks permission, never the role string at the call site
   - Stacking: combined roles stack; an operator cannot widen what a role grants
-- The vocabulary
-  - Resources and actions: a closed list every product shares, so a permission nobody declared grants nothing
-- What a role holds
-  - Split by cost: whoever agrees what something costs is not whoever moves the money
-  - Identity documents: reached by a grant of their own, never by running a flow
-- Machines
-  - Outside the vocabulary: a service principal's grants belong to no role, admin included
 
 ## Requirements
 
 ### Requirement: A person holds roles from a closed set
 
 A signed-in person SHALL hold one or more of: `user`, `staff`, `support`,
-`treasurer`, `auditor`, `admin`. A person with no operator role SHALL hold
-`user` only. Unknown role names SHALL be ignored.
+`auditor`, `admin`. A person with no operator role SHALL hold `user` only.
+Unknown role names SHALL be ignored.
 
 #### Scenario: shared-auth-roles-SC-01 - A collector is a user
 
@@ -75,57 +68,18 @@ vocabulary SHALL grant nothing.
 - **WHEN** any person requests that action
 - **THEN** the system refuses it
 
-### Requirement: The permission vocabulary is a closed set of resources and actions
-
-A permission SHALL be a resource and an action, written `resource:action`, drawn
-from this list and no other.
-
-| Resource | Actions |
-| --- | --- |
-| `user` | `create`, `list`, `ban`, `set-role`, `delete` |
-| `session` | `list`, `revoke` |
-| `store` | `read`, `write` |
-| `loyalty` | `read`, `adjust`, `invite`, `catalog`, `finance` |
-| `auction` | `read`, `write`, `operate`, `reserve`, `moderate`, `settle`, `payment`, `shipment` |
-| `vault` | `read`, `operate`, `approve`, `payout` |
-| `finance` | `read`, `operate`, `approve`, `payout` |
-| `kyc` | `read` |
-| `appointment` | `read`, `manage` |
-| `inventory` | `read`, `write` |
-| `audit` | `read` |
-
-Where a product splits its actions by what one can cost, `operate` SHALL run the
-flow, `approve` SHALL set what something costs, and `payout` SHALL be the only
-action that moves money. `kyc:read` SHALL be a resource of its own rather than an
-action on the product that collected the document: an identity document and the
-agreement printed from it outlive the case, they are the same evidence whichever
-product holds them, and reading a case SHALL NOT be a reason to see them. There
-SHALL be no `kyc:write` — recording a verification stays with the flow that needs
-it.
-
-#### Scenario: shared-auth-roles-SC-11 - Reading a case is not reading its identity document
-
-- **GIVEN** a person holding `vault:read` and not `kyc:read`
-- **WHEN** they open a vault case and ask for the identity document behind it
-- **THEN** the case is shown and the document is refused
-
 ### Requirement: Each role grants a fixed set of permissions
 
 The mapping from role to permissions SHALL be:
 
-| Role | Grants |
-| --- | --- |
-| `user` | none |
-| `staff` | `store:read`, `store:write`, `loyalty:read`, `auction:read`, `auction:write`, `auction:operate`, `auction:shipment`, `vault:read`, `vault:operate`, `vault:approve`, `finance:read`, `finance:operate`, `finance:approve`, `kyc:read`, `appointment:read`, `appointment:manage`, `inventory:read`, `inventory:write` |
-| `support` | `user:list`, `user:ban`, `session:list`, `session:revoke` |
-| `treasurer` | `auction:read`, `auction:payment`, `vault:read`, `vault:payout`, `finance:read`, `finance:payout` |
-| `auditor` | `audit:read` |
-| `admin` | every permission in the vocabulary |
-
-`staff` and `treasurer` SHALL be disjoint on every action that moves money, so a
-payout takes two people. `treasurer` SHALL NOT hold `kyc:read`: a person
-provisioned to type bank references has no business in a customer's identity
-document.
+- `user`: none
+- `staff`: `store:read`, `store:write`, `loyalty:read`, `auction:read`,
+  `auction:write`, `auction:operate`
+- `support`: `user:list`, `user:ban`, `session:list`, `session:revoke`
+- `auditor`: `audit:read`
+- `admin`: every permission any role grants, including `user:set-role`,
+  `loyalty:adjust`, `loyalty:invite`, `loyalty:catalog`, `loyalty:finance`,
+  `auction:reserve`, `auction:moderate`, and `auction:settle`
 
 A person who holds several operator roles SHALL receive the union of those
 roles' grants. Operators SHALL change who holds a role, and SHALL NOT change
@@ -162,38 +116,3 @@ what a role grants.
 - **WHEN** they use the users directory
 - **THEN** they can change who holds a role
 - **AND** they cannot change what that role grants
-
-#### Scenario: shared-auth-roles-SC-12 - Staff run a case and cannot pay against it
-
-- **GIVEN** a person whose only operator role is `staff`
-- **WHEN** they run a vault or lending case and then try to record a payout, a
-  repayment, or an auction payment
-- **THEN** the case actions are allowed and every money action is refused
-
-#### Scenario: shared-auth-roles-SC-13 - A treasurer moves money and sees no identity document
-
-- **GIVEN** a person whose only operator role is `treasurer`
-- **WHEN** they read a vault case and record its payout
-- **THEN** both are allowed
-- **AND** the identity document behind that case, and running the case itself,
-  are refused
-
-### Requirement: A machine's grants are outside the role vocabulary
-
-A service principal — a till, a storefront's own drain — SHALL hold grants that
-are not in the permission vocabulary, so no role SHALL be able to hold them,
-`admin` included. What a principal may do at a given moment MAY be narrower than
-what its kind grants.
-
-#### Scenario: shared-auth-roles-SC-14 - No role holds a machine's grant
-
-- **GIVEN** a person holding `admin`
-- **WHEN** they request an action a service principal is granted
-- **THEN** the system refuses it, because the grant is in no role's set
-
-#### Scenario: shared-auth-roles-SC-15 - A till acts for a member without being one
-
-- **GIVEN** a till authenticated as a service principal
-- **WHEN** it identifies a member and spends that member's points at the counter
-- **THEN** the system allows it
-- **AND** the same actions are refused to every signed-in person

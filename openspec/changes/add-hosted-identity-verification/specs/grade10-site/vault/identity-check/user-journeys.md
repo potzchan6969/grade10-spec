@@ -11,7 +11,7 @@ whether a check is on file, still out, or refused.
 **Accepted by:**
 
 - `grade10-site-vault-identity-check-SC-01` — Booking an intake visit invites the collector
-- `grade10-site-vault-identity-check-SC-19` — A case with no contact details is reported, not left silently unchecked
+- `grade10-site-vault-identity-check-SC-19` — A case nobody can be invited on is reported, not left silently unchecked
 - `grade10-site-vault-identity-check-SC-02` — A collector already verified is not asked again
 - `grade10-site-vault-identity-check-SC-04` — A case with a check out is not shown as unverified, and nothing waits on it
 - `grade10-site-vault-identity-check-SC-05` — A verified case names who performed the check
@@ -33,7 +33,7 @@ and a check that overrides a refusal says so on the case.
 - `grade10-site-vault-identity-check-SC-03` — An operator asks for a check on a case that needs one
 - `grade10-site-vault-identity-check-SC-14` — Staff verify a collector who arrives unverified
 - `grade10-site-vault-identity-check-SC-15` — A counter check is refused once the item is in custody
-- `grade10-site-vault-identity-check-SC-17` — An override of a refused check takes `vault:approve`
+- `grade10-site-vault-identity-check-SC-17` — An override of a refused check carries a reason
 
 ### grade10-site-vault-identity-check-US-03: Operator settles a verdict that lands after the case has moved
 

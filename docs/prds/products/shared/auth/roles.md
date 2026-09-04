@@ -6,8 +6,7 @@ order: 4
 ---
 
 A person's roles come from one closed set — `user`, `staff`, `support`,
-`treasurer`, `auditor`, `admin` — and a name outside it is dropped rather than
-honoured.
+`auditor`, `admin` — and a name outside it is dropped rather than honoured.
 
 The rule that matters most is how a grant is checked. A product asks whether the
 caller holds a *permission*, never whether their role string matches something.
@@ -28,15 +27,13 @@ refuses to run. A raw byte route — an identity capture, a sealed document, an
 item photo — climbs the same ladder.
 :::
 
-`treasurer` exists because a payout takes two people: whoever agrees what a loan
-costs is not whoever moves the money, so `staff` and `treasurer` share no action
-that pays. A treasurer reads the case they are paying against and nothing of the
-person in it — an identity document is reached by a grant of its own, never by
-running a flow.
-
-A machine is not a person. A till's grants sit outside the role vocabulary
-entirely, so no role holds them, `admin` included: a shopkeeper's till can spend
-a member's points at the counter and nobody signed into an admin panel can.
+:::callout{kind="warning"}
+The code and the architecture docs use a sixth role, `treasurer`, that this
+spec's closed set does not name. It is a real role: the vault's grants table
+depends on it, and it is deliberately disjoint from what `staff` hold so that a
+payout takes two people. Either the spec or the code is out of date, and it is
+the spec.
+:::
 
 :::callout{kind="warning"}
 Two-factor is the second of the three gates and no capability covers it at all,

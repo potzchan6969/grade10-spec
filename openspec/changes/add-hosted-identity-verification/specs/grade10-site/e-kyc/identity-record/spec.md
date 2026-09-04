@@ -7,7 +7,8 @@ is, so the same human is never asked for the same document twice.
 
 A **consumer** is a Grade10 service that records identity checks and binds them
 to its own cases: the vault today. A **person** is the account
-`shared/auth/users` identifies. A date of birth and a document expiry are
+`shared/auth/users` identifies, or, where a consumer's case names no account,
+the case itself — and a record made for such a case is reusable only by it. A date of birth and a document expiry are
 calendar days as `shared/dates-and-times` defines them, judged in the
 platform's UTC day.
 
@@ -35,7 +36,8 @@ platform's UTC day.
 ### Requirement: A verified identity holds one person's checked details
 
 The system SHALL hold a verified identity as a record of one identity check,
-carrying these fields and no free-text copy of the person beyond them.
+carrying these fields. An operator's own note about the check MAY be held
+beside them and SHALL NOT be returned to any consumer.
 
 | Field | Meaning |
 | --- | --- |
@@ -48,11 +50,12 @@ carrying these fields and no free-text copy of the person beyond them.
 | Document expiry | The day the document stops being valid, or absent for one that never expires |
 | Evidence | One image of the document, held by Grade10 |
 | Recorded by consumer | Which consumer's surface the check was made on |
+| Method | Whether the document was seen in person or as an uploaded scan |
 | Provider | Who performed the check — Grade10 staff, or a named verification provider |
 | Provider reference | The provider's own identifier for the check, absent for a check Grade10 staff performed |
 | Performed by | The staff member who checked, or, for a provider's check, the person who asked for it |
 | Performed at | When the check was decided — the staff member's clock, or the provider's decision instant |
-| Provider findings | What a provider checked and what each check found, in Grade10's own words; absent for a check Grade10 staff performed |
+| Provider findings | What a provider checked and what each check found; absent for a check Grade10 staff performed |
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-01 - A staff check names the staff member who made it
 
@@ -73,8 +76,21 @@ carrying these fields and no free-text copy of the person beyond them.
 
 The system SHALL derive a mask and a keyed digest from a document number and
 retain neither the number itself nor anything it can be recovered from. The mask
-SHALL show the last four characters of the number and replace every earlier
-character with a fixed masking character. The number SHALL NOT be stored,
+SHALL keep a stated number of characters at each end of the number, decided by
+document type, and replace every character between them with a fixed masking
+character. A number too short for its rule to hide at least half of itself SHALL
+be masked whole, so a rule never reveals more than it hides.
+
+| Document type | Kept at the start | Kept at the end |
+| --- | --- | --- |
+| Passport | 2 | 1 |
+| National ID | 1 | 3 |
+| Driving licence | 0 | 4 |
+| Residence permit | 1 | 2 |
+
+The digest SHALL be derived from the document type and the number together, so
+the same number recorded under two document types is two documents and not one.
+The number SHALL NOT be stored,
 returned to any caller, or written to any log or audit entry, whoever supplied
 it — a member of staff, a collector, or a verification provider — and a verdict
 carrying one SHALL NOT be retained in the form it arrived in.
@@ -82,16 +98,21 @@ carrying one SHALL NOT be retained in the form it arrived in.
 #### Scenario: grade10-site-e-kyc-identity-record-SC-03 - A recorded check answers with a mask
 
 - **WHEN** an identity check is recorded from a document number
-- **THEN** what is stored and returned is a mask showing the last four
-  characters, every earlier character replaced, and a keyed digest
+- **THEN** what is stored and returned is a mask keeping only that document
+  type's stated characters at each end, every character between them replaced,
+  and a keyed digest
+- **AND** a number too short for its rule to hide half of itself is masked whole
 - **AND** no stored record, response, log or audit entry written while recording
   the check holds any other character of the number
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-04 - The same document is recognisable across two records
 
-- **GIVEN** two verified identities recorded from the same document number
+- **GIVEN** two verified identities recorded from the same document type and
+  number
 - **WHEN** their digests are compared
 - **THEN** they match, so a repeated document can be found
+- **AND** the same number recorded under a different document type does not
+  match
 - **AND** the digest is derived with a secret the identity store holds, so the
   same number digested without that secret does not match
 
@@ -124,7 +145,9 @@ The system SHALL allow a case to hold one verified identity at a time. Binding
 an identity to a case that already holds one SHALL replace the binding rather
 than add a second, SHALL leave the displaced identity on file, and SHALL name
 the displaced identity to the caller so the owning consumer decides whether it is
-evidence to restore or a leftover to discard.
+evidence to restore or a leftover to discard. A bind carrying a request key SHALL
+be applied once; a repeat of that key SHALL answer with the first attempt's
+result rather than binding again.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-07 - Re-recording a case replaces its identity
 
@@ -146,9 +169,10 @@ evidence to restore or a leftover to discard.
 
 The system SHALL refuse to record or bind a verified identity when the person
 had not reached 18 years of age, or when the document had expired, judged at the
-instant the check is applied — the staff member's clock at the counter, and the
-instant a verdict is read for a provider's check, never the instant the collector
-submitted or the provider decided. A document with no expiry SHALL be treated as
+instant the check is applied — the staff member's clock at the counter, the
+instant a verdict is read for a provider's check, and the instant a stored
+identity is bound to a further case — never the instant the collector submitted
+or the provider decided. A document with no expiry SHALL be treated as
 valid. Both refusals SHALL be applied to a verification provider's verdict as
 they are to a check Grade10 staff performed, on Grade10's own reading of the date
 of birth and expiry rather than on the provider's verdict.
@@ -195,16 +219,19 @@ fetched into that store before the identity becomes readable. The capture of the
 person's face SHALL NOT be fetched or stored by Grade10.
 
 A verdict whose document image cannot be fetched SHALL create no verified
-identity and SHALL be retried; when retrying stops helping, the check SHALL
-become visible to an operator rather than retried indefinitely. A verdict whose
+identity and SHALL be retried a stated number of times, and SHALL then become
+visible to an operator rather than retried indefinitely. ❓ How many attempts a
+fetch is given is `TBC` — *Owner: Product*. A verdict whose
 image the evidence store may not hold — the wrong kind of file, or one larger
 than the store accepts — SHALL leave the check declined rather than retried.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-14 - A read never answers before the evidence is stored
 
-- **WHEN** a consumer reads a verified identity at any time after it is recorded
-- **THEN** it is answered only once that identity's document image is
-  retrievable from Grade10's evidence store
+- **GIVEN** a verified identity a provider performed, whose document image
+  Grade10 has not yet fetched
+- **WHEN** a consumer reads it
+- **THEN** it is not answered until that image is retrievable from Grade10's
+  evidence store
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-15 - A provider verdict whose image cannot be fetched creates nothing
 
@@ -266,6 +293,11 @@ The command SHALL be issued for every check whose document image Grade10 fetched
 whatever the check's ending — declined, expired, withdrawn, refused on landing,
 or displaced by another check — not only for a released identity.
 
+Erasing a consumer's own data SHALL also end any check still live for that case
+and purge what that check holds about the person, so no invitation outlives the
+erasure and no identifier of an erased person is left on a check nobody will
+finish.
+
 #### Scenario: grade10-site-e-kyc-identity-record-SC-17 - The last release purges the record and commands the provider
 
 - **GIVEN** a verified identity bound to one case
@@ -301,6 +333,14 @@ or displaced by another check — not only for a released identity.
 - **WHEN** the refusal is read
 - **THEN** the refusal and its reason are recorded against the outstanding
   command, and a completion report names it as outstanding at the provider
+
+#### Scenario: grade10-site-e-kyc-identity-record-SC-27 - An erased person's live check stops being live
+
+- **GIVEN** a case holding a check that has been invited or started, and no
+  verified identity
+- **WHEN** that case's personal data is erased
+- **THEN** the check is ended, its invitation opens nothing, and the check keeps
+  no identifier of the person it was about
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-25 - A check that never became an identity is still commanded away
 
