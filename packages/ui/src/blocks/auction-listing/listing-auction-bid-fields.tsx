@@ -12,11 +12,17 @@ import {
 import { Info } from "@phosphor-icons/react";
 import {
   formatCollectorDeadline,
+  formatLocalDay,
   formatLocalMoment,
+  formatLocalTime,
   type ShippedLocale,
 } from "../../lib/format-datetime";
 import { formatMoney } from "../../lib/format-money";
 import { ListingCountdownDisplay } from "./listing-countdown-display";
+import {
+  elapsedDurationParts,
+  formatAccessibleText,
+} from "./listing-countdown-digit";
 import {
   ListingQuickMaximumBidActions,
   type ListingQuickMaximumBidActionsCopy,
@@ -71,6 +77,11 @@ type ListingAuctionBidFieldsCopy = ListingQuickMaximumBidActionsCopy & {
   endsLabel: string;
   opensLabel: string;
   closedAt: string;
+  /**
+   * Closed-lot subtext with clock and duration, e.g.
+   * "Closed at {time}. Ran {duration}".
+   */
+  closedSummary: string;
 };
 
 type StandingBannerProps = {
@@ -305,10 +316,36 @@ function TimeBlock({ copy, view, locale, timeZone }: TimeBlockProps) {
     locale,
     timeZone,
   );
-  const closedCountdown =
+  const closedDay =
     view.closed && view.deadlineAtMs != null
+      ? formatLocalDay(view.deadlineAtMs, { locale, timeZone })
+      : null;
+  const closedTime =
+    view.closed && view.deadlineAtMs != null
+      ? formatLocalTime(view.deadlineAtMs, { locale, timeZone })
+      : null;
+  const ranDuration =
+    view.closed && view.opensAtMs != null && view.deadlineAtMs != null
+      ? formatAccessibleText(
+          elapsedDurationParts(
+            Math.max(
+              0,
+              Math.floor((view.deadlineAtMs - view.opensAtMs) / 1000),
+            ),
+          ),
+        )
+      : null;
+  const closedSubtext =
+    closedTime != null && ranDuration != null
+      ? copy.closedSummary
+          .replace("{time}", closedTime)
+          .replace("{duration}", ranDuration)
+      : null;
+  const closedPrimary =
+    closedDay ??
+    (view.deadlineAtMs != null
       ? formatLocalMoment(view.deadlineAtMs, { locale, timeZone })
-      : view.countdown;
+      : view.countdown);
 
   return (
     <VStack gap="xs">
@@ -360,10 +397,14 @@ function TimeBlock({ copy, view, locale, timeZone }: TimeBlockProps) {
             initialSeconds={view.countdownSeconds}
           />
         ) : (
-          closedCountdown
+          closedPrimary
         )}
       </Text>
-      {deadlineLine ? (
+      {view.closed && closedSubtext != null ? (
+        <Text size="xs" tone="secondary">
+          {closedSubtext}
+        </Text>
+      ) : deadlineLine ? (
         <Text size="xs" tone="secondary">
           {deadlineLine}
         </Text>

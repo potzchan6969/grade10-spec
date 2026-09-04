@@ -52,7 +52,7 @@ const COPY = {
     "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
   setPrivateMaximum: "Set your private maximum",
   raisePrivateMaximum: "Raise your private maximum",
-  currentMaximum: "Current: {amount}",
+  currentMaximum: "Max: {amount}",
   reviewMaximum: "Set maximum to {amount}",
   raiseMaximumReview: "Raise maximum to {amount}",
   bidNowReview: "Bid now at {amount}",
@@ -68,6 +68,7 @@ const COPY = {
   bidUpTo: "Maximum {amount}",
   nextEligibleBid: "Min. bid",
   amountAboveCurrent: "{amount} vs current",
+  amountAboveMaximum: "{amount} vs max",
   minimumMaximumFloor: "At least {amount} (current bid + {increment})",
   minimumMaximumLeadingNudge: "At least {amount} (your maximum + {increment})",
   minimumMaximumLeadingIncrement:
@@ -80,6 +81,7 @@ const COPY = {
   endsLabel: "Ends",
   opensLabel: "Opens",
   closedAt: "Closed {when}",
+  closedSummary: "Closed at {time}. Ran {duration}",
   activityTimeCopy: FIXTURE_ACTIVITY_TIME_COPY,
 } as const;
 
@@ -255,11 +257,13 @@ export const Leading: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText(/Leading · HK\$58,000/)).toBeInTheDocument();
     expect(canvas.getByText("Raise your private maximum")).toBeInTheDocument();
-    expect(canvas.getByText(/Current: HK\$95,000/)).toBeInTheDocument();
+    expect(canvas.getByText(/Max: HK\$95,000/)).toBeInTheDocument();
+    expect(canvas.queryByText("Min. bid")).not.toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: /^Raise maximum to/ }),
     ).toBeInTheDocument();
-    expect(canvas.getAllByText(/vs current/)).toHaveLength(2);
+    expect(canvas.getAllByText(/vs max/)).toHaveLength(3);
+    expect(canvas.queryByText(/vs current/)).not.toBeInTheDocument();
   },
 };
 

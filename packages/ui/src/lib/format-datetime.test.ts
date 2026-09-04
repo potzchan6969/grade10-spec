@@ -7,7 +7,9 @@ import {
   ACTIVITY_RELATIVE_MAX_MS,
   formatActivityAt,
   formatCollectorDeadline,
+  formatLocalDay,
   formatLocalMoment,
+  formatLocalTime,
   formatRelativeAt,
   isPastActivityCap,
   JUST_NOW_MAX_MS,
@@ -99,6 +101,19 @@ describe("formatLocalMoment", () => {
     });
     expect(hongKong).not.toBe(newYork);
     expect(newYork).toBe("23 Aug 2026, 22:00");
+  });
+});
+
+describe("formatLocalDay and formatLocalTime", () => {
+  const at = Date.UTC(2026, 7, 30, 9, 15);
+
+  it("splits the collector moment into day and clock", () => {
+    expect(
+      formatLocalDay(at, { locale: "en", timeZone: "Asia/Hong_Kong" }),
+    ).toBe("30 Aug 2026");
+    expect(
+      formatLocalTime(at, { locale: "en", timeZone: "Asia/Hong_Kong" }),
+    ).toBe("17:15");
   });
 });
 
