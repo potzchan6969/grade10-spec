@@ -24,7 +24,7 @@ listing gives its slug back, while a closed one keeps it forever.
 A campaign is a cover a lot may sit under, never a thing it needs. An operator
 starts a listing from the Listings section itself and leaves the Campaign
 field empty; draft, create, publish and the collector's slug all work with no
-campaign attached, and the Listings table says such a row stands on its own.
+campaign attached, and the Listings table shows "-" for such a row.
 Campaigns remain the way to sell a set together — a make-good, a rehearsal, or
 a single lot arriving on its own asks for no cover to be invented for it.
 

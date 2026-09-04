@@ -124,7 +124,7 @@ A listing with no campaign exists. An authorized operator is on <grade10 auction
 
 **Expected Results:**
 
-* The column shows the listing stands on its own.
+* The column shows "-".
 * A campaign id is not the only label shown for that row.
 
 ### grade10-admin-auction-listing-US6-TC5-1: Create listing is withheld from an unauthorized operator
