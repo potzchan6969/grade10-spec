@@ -76,25 +76,6 @@ Picking this up as @my-handle. Print rendering is server-side, so it earns a
 tech design.
 ```
 
-**Cursor types the same slash commands.** It reads skills from
-`.cursor/skills`, which is this repository's `.claude/skills` under another
-name, so every prompt above goes into the agent panel unchanged. What Cursor
-has no equivalent for is `/add-dir` — the store clone reaches it as a second
-workspace folder, and that is the prompt worth writing down, because it is the
-one you send from `grade10`:
-
-```text
-/planning-pm add-store-gift-receipt
-
-A gift receipt on a store order — a printable slip with no prices on it.
-
-I'm in grade10, with the store clone as the second folder in this workspace.
-Run `openspec instructions <artifact> --change add-store-gift-receipt` before
-each file and work from what it returns — grade10's copy of this skill carries
-picking work up, not what an artifact must contain. Write into the store
-clone, never into external/grade10-spec.
-```
-
 Read the capability first, create the change through the CLI, run the
 interview, work from `openspec instructions`, stop where your hand stops — all
 of that is in the skills already. A prompt that repeats it is a second copy of
@@ -113,8 +94,7 @@ Four things the skill cannot know, so say them when they are true:
 - **You are in `grade10`** — most skills live in the store clone and are not
   installed there. `openspec instructions <artifact> --change <id>` returns the
   same rules the skill would have applied; ask the agent to follow its output,
-  and give it the store clone before it tries to write — `/add-dir` in Claude
-  Code, a second workspace folder in Cursor. [An
+  and give it the store clone with `/add-dir` before it tries to write. [An
   agent workflow, end to
   end](https://github.com/9gag/grade10-spec/blob/main/docs/governance/agent-workflow-example.md)
   has both, with prompts written for that lane
