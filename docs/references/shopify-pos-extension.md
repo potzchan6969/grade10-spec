@@ -54,7 +54,7 @@ argument in exchange for nothing.
   `addCartCodeDiscount`, `removeCartDiscount` — the Cart API has no per-code
   removal, so the port names the non-targeted call the platform offers,
   deterministic here because our codes refuse other order discounts — plus
-  `onScan` and `toast`.
+  `onScan`, `scannerSources` and `toast`.
 - `extensions/till/` is the thin CLI half: the TOML, three target entry files,
   Polaris web-component rendering (API 2026-07 — the React
   `retail-ui-extensions` model is deprecated; copy no sample using `useApi()`).
@@ -98,6 +98,13 @@ construction, no KV, no second token format.
   or typing it consumes it; the consuming location and time are recorded,
   a second till gets a distinct `presentation_already_used` refusal naming
   them, and the member's own card shows "used at [location] [time]".
+- **Reading the QR**: whatever the counter has. POS reports its sources —
+  `camera`, `external`, `embedded` — and all three arrive on one stream, so a
+  scanner beside the terminal or built into it reads a card with nobody
+  touching the screen, from any screen of the modal. The camera is an overlay
+  a button opens: the fallback where the device also has a scanner, the way in
+  where it is the only reader, and absent where there is no camera at all. A
+  POS too old to report its sources offers both.
 - **Short code**: the 22 digit-free Crockford base32 letters, 8
   characters (~2^35.7 — an all-numeric code at 10^8 would be
   brute-forceable, and confusable digits are folded out of staff
@@ -105,7 +112,7 @@ construction, no KV, no second token format.
   minutes pauses code entry for that shop (keyed on the authenticated
   shop, never the staff label), counted and alerted — against that cap,
   attempts-to-first-hit is unreachable. It exists to defeat
-  the most likely daily failure — a camera that won't read a dim screen.
+  the most likely daily failure — a scanner that won't read a dim screen.
 - **Email**: an exact address typed by staff — no prefix search, no
   browsing; a miss says only "no member found", never distinguishing
   unpaired from nonexistent. It proves nothing about who is standing at
@@ -320,7 +327,7 @@ gateway act, not a client-local one),
 
 ## Launch
 
-- **Paper**: a laminated card per till — camera won't scan → type the
+- **Paper**: a laminated card per till — card won't scan → type the
   8-character code; no phone at all → ask for the email on their account,
   and confirm the panel's name matches the person before reading anything
   aloud; "already used at …" → ask them to refresh their card; code slow →
@@ -333,9 +340,9 @@ gateway act, not a client-local one),
   phone number is printed on it.
 - **Rehearsal on real hardware** before first activation: scanning a dim
   screen behind a screen protector, the email path end to end, the
-  manual-discount case through to tender, the covered-camera short-code
-  path, a collection with confirmation, and the kill switch flipped from
-  admin in under 30 seconds.
+  manual-discount case through to tender, the short-code path with the
+  scanner blocked, a collection with confirmation, and the kill switch
+  flipped from admin in under 30 seconds.
 - **Rollout**: dev shop → staging shop → one production location, watching
   server-derived apply-confirmations (from the order webhook carrying the
   code — truth at tender) against redeems, split by session provenance;
