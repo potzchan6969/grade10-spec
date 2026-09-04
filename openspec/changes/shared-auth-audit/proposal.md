@@ -32,7 +32,9 @@ filter, without paging past other products.
   accept the entry, the write does not take effect.
 - Regenerating second-factor recovery codes appends. The codes themselves
   are not kept. Enabling (the factor first going live) and disabling
-  append; starting enrollment is not enable.
+  append; starting enrollment is not enable. A failed enable record does
+  not reverse the factor; a later successful proof writes the missing
+  enable if it is still missing.
 - Account deletion appends.
 - The Audit section on both brands' consoles: combinable filters (product,
   action, actor id, subject id, result, date range), newest/oldest sort,

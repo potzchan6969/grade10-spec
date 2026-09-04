@@ -27,8 +27,9 @@ Genesis already uses `actorId: "system"`, `actorRoles: ""`.
 **Goals:**
 
 - Append identity writes at the functions that mutate (`createUnverifiedAccount`,
-  `ensureVerifiedAccount`, regenerate, delete), fail-closed with the same
-  transaction or a compensating reverse, never via a second observer.
+  `ensureVerifiedAccount`, regenerate, delete). Fail-closed in the same
+  transaction when this repo owns the write. A second factor going live is
+  recorded as evidence of the binding, never reversed to satisfy the trail.
 - Extend the existing `audit.list` input and `listAuditPage` so every product
   chain filters and sorts the same way. Product filter stays a console choice
   of which chains to call.
@@ -76,7 +77,7 @@ Rejected:
   learn an address the directory withholds.
 - After-the-fact HTTP hooks around `createUser` — that API does not run them.
 
-### Fail-closed create/verify: one transaction, compensating delete if the adapter commits early
+### Fail-closed create/verify: one transaction
 
 [shared-auth-audit-SC-27](./specs/shared/auth/audit/spec.md) / `shared-auth-audit-SC-28` require the
 account write not to take effect if the trail cannot accept the entry.
@@ -92,11 +93,10 @@ Mutation order inside `db.transaction`:
 4. On already-verified / already-unverified with no data change: commit
    nothing, no append.
 
-If `createUser` writes on a connection that ignores the transaction (the
-adapter committing before return), the fail-closed test will see a `users`
-row with no trail row. Then: delete that `users.id` before rethrowing so
-the request leaves no account. Unique-email loser of a race still reads
-back the winner and returns the existing outcome with no append.
+The pg adapter insert uses that handle (`insert` + `returning`), so an
+append throw rolls the mint back with the transaction. Unique-email loser
+of a race still reads back the winner and returns the existing outcome
+with no append.
 
 Rejected:
 
@@ -104,6 +104,9 @@ Rejected:
   until create returns.
 - Record a failed create with `ok: false` and leave the user row — that is
   an unrecorded account.
+- Compensating `users` delete after `createUser` returns — same crash-unsafe
+  reverse as the old enable rollback. If an adapter ever ignores the handle,
+  the fail-closed test fails and the fix is the adapter, not a second DELETE.
 
 Worked example — mint (`shared-auth-audit-SC-15`):
 
@@ -126,9 +129,8 @@ Worked example — verify flip (`shared-auth-audit-SC-19`):
 ### Regenerating recovery codes is fail-closed before the handler
 
 [shared-auth-audit-SC-21](./specs/shared/auth/audit/spec.md) / `shared-auth-audit-SC-26` /
-`shared-auth-audit-SC-29`. Enable already appends after the first live verify
-(`auth.two-factor.enable`); enrollment start `/two-factor/enable` already
-does not. Disable appends after `/two-factor/disable`.
+`shared-auth-audit-SC-29`. Enrollment start `/two-factor/enable` does not
+record enable.
 
 - Add `/two-factor/generate-backup-codes` to the fail-closed-before set.
   Append `auth.two-factor.generate-backup-codes` with actor/subject the
@@ -136,16 +138,32 @@ does not. Disable appends after `/two-factor/disable`.
   `AUDITED_BODY_VALUES`, so they land as withheld names, never values.
 - Move `/two-factor/disable` to fail-closed-before, same as ban: an
   unrecorded disable must not remove the factor (`shared-auth-audit-SC-36`).
-- Enable cannot append before the verify — the flip is inside better-auth.
-  Keep the after-hook that fires only on `false → true`. If that append
-  throws, set `users.twoFactorEnabled` back to `false` for that id and
-  rethrow (`shared-auth-audit-SC-35`).
 
 Rejected:
 
 - After-handler append for regenerate — a thrown append would leave new
   codes live and unrecorded.
 - Storing a hash of the codes — the spec forbids keeping them.
+
+### Enable is recorded as evidence of the binding
+
+[shared-auth-audit-SC-22](./specs/shared/auth/audit/spec.md) / `shared-auth-audit-SC-23` /
+`shared-auth-audit-SC-35` / `shared-auth-audit-SC-37`. Enable cannot append
+before the verify — the flip is inside better-auth, so the after-hook is
+the first place that knows the factor is live.
+
+- Append `auth.two-factor.enable` when the account is live and the trail
+  has no enable after the last disable (or no enable at all), then stamp
+  step-up.
+- If that append throws, rethrow; leave `twoFactorEnabled` as the plugin
+  committed it (`shared-auth-audit-SC-35`).
+- A later successful proof writes the missing row (`shared-auth-audit-SC-37`).
+
+Rejected:
+
+- Compensating reverse of `twoFactorEnabled` when the enable append throws
+  — crash-unsafe, incomplete (secrets and stamp stay), and it fights the
+  binding the authenticator already holds.
 
 ### One deletion row: in-transaction `auth.account.delete`
 
@@ -308,11 +326,10 @@ chain must not join).
 - **Input:** canonical email. **Output:** existing outcome union; errors
   throw.
 - **Txn:** one auth-DB transaction covering user insert/update + append.
-  Compensating user delete if `createUser` committed outside it.
 - **Idempotency:** unique email. Loser of the insert race returns the
   existing outcome, no second append.
-- **Faults:** append throw rolls back (or compensating delete) and fails
-  the request. Directory reads (`accountExists`, `accountByEmail`) stay
+- **Faults:** append throw rolls the transaction back and fails the
+  request. Directory reads (`accountExists`, `accountByEmail`) stay
   write-free.
 
 ### `deleteAccount`
@@ -352,14 +369,15 @@ Output row shape unchanged (still no hashes). `audit.verify` unchanged.
 ## Risks / Trade-offs
 
 - **[Risk]** `createUser` commits outside the drizzle transaction → an
-  unrecorded account until compensating delete runs; a concurrent reader
-  could see the id in that window. → Fail-closed test asserts no leftover
-  row; compensating delete is in the same request before return; unique
-  email makes a retry land on empty or the winner.
-- **[Risk]** Enable compensating reverse (`twoFactorEnabled` back to false)
-  races with a verify that already stamped step-up. → Reverse runs in the
-  same after-hook before the response; step-up stamp for that verify can
-  stay (it proves a factor that is no longer live; next admin call re-gates).
+  unrecorded account. The pg adapter insert uses the passed handle, so this
+  is the fail-closed test failing, not a catch-and-delete. Unique email
+  makes a retry land on empty or the winner.
+- **[Risk]** Enable append runs after better-auth has already committed
+  `twoFactorEnabled`. A worker death between those writes leaves the
+  factor live with no enable row until the next successful proof.
+  → The after-hook records a missing enable from the trail, not from
+  in-memory `wasEnabled`. `audit.append.lost` still fires when the
+  append throws. Do not reverse the flag.
 - **[Risk]** `CREATE INDEX` locks writes on a live chain. → `-- lock:`
   comment; busy tables built `CONCURRENTLY` by hand.
 - **[Risk]** `personId` OR may miss the actor index if the planner only
