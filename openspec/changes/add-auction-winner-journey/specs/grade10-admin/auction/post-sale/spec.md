@@ -287,20 +287,20 @@ three times with a declining card is a different case from one who never
 engaged, and the difference SHALL be visible to whoever decides on
 reinstatement.
 
-#### Scenario: grade10-admin-auction-post-sale-SC-34 - Failed payment attempts appear in the invoice history
+#### Scenario: grade10-admin-auction-post-sale-SC-34 - Failed payment attempts appear in the invoice log
 
 - **GIVEN** a winner whose card was declined three times before the deadline
   elapsed
-- **WHEN** an operator reads the invoice history
+- **WHEN** an operator reads the invoice log
 - **THEN** it shows three failed payment attempts with their timestamps
 - **AND** the buyer is distinguishable from one whose history holds only the
-  issued event
+  issued log entry
 
 #### Scenario: grade10-admin-auction-post-sale-SC-35 - An amendment's amount change is on the record
 
 - **GIVEN** an auction order whose winner amended the address, changing the
   final amount from 312000 to 316000 minor units in HKD
-- **WHEN** an operator reads the invoice history
+- **WHEN** an operator reads the invoice log
 - **THEN** it shows the reissued event at 316000 minor units in HKD
 - **AND** the delta from the prior event
 
@@ -329,7 +329,7 @@ cross-referenceable, so an amount change can be explained afterwards.
 
 - **GIVEN** an auction order dispatched to one address, whose address an
   operator later corrects
-- **WHEN** an operator reads the fulfilment history
+- **WHEN** an operator reads the fulfilment log
 - **THEN** the dispatch event still shows the full address as it stood at
   dispatch
 - **AND** the correction is a separate later event with its own snapshot
@@ -406,7 +406,7 @@ Recording a delivery address SHALL NOT dispatch the lot.
 
 ### Requirement: History is append-only and retained
 
-Grade10 SHALL retain every invoice and fulfilment history record for the life
+Grade10 SHALL retain every invoice and fulfilment log record for the life
 of the account, whatever the order's outcome, including cancelled orders
 whose lots have been relisted. No record SHALL be deleted or edited in place.
 
@@ -418,7 +418,7 @@ A system-initiated log entry SHALL record the event that triggered it.
 - **GIVEN** a cancelled auction order whose lot has since been relisted and
   sold again
 - **WHEN** an operator opens the cancelled order
-- **THEN** its full invoice and fulfilment history is still readable
+- **THEN** its full invoice and fulfilment log is still readable
 - **AND** no record has been deleted or edited in place
 
 #### Scenario: grade10-admin-auction-post-sale-SC-43 - An operator event without a reason is refused

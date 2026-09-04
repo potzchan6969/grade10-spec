@@ -2,7 +2,7 @@
 
 ## Context
 
-The auction service currently models winner capture as a payment settlement tied to a listing. The winner journey needs a durable order and invoice history instead: a lot closes once, the winner receives a payable invoice, payment uses a fresh charge after the winning hold is released, and fulfilment continues through dispatch and delivery. The same record must support buyer reads, operator decisions, reminders, suspension, and audit.
+The auction service currently models winner capture as a payment settlement tied to a listing. The winner journey needs a durable order and invoice log instead: a lot closes once, the winner receives a payable invoice, payment uses a fresh charge after the winning hold is released, and fulfilment continues through dispatch and delivery. The same record must support buyer reads, operator decisions, reminders, suspension, and audit.
 
 The auction service owns auction orders, invoices, bids, payment holds, fulfilment, and auction-specific suspension. The platform auth service owns the account-wide shipping address book because the same verified account can use it across storefronts and products. There is no auction-to-auth database join: address reads and writes use the authenticated `AuthServiceBinding`, while the auction order stores an immutable delivery snapshot. The application repo updates its `external/grade10-spec` pin only after this change is merged to the spec store's main branch.
 
