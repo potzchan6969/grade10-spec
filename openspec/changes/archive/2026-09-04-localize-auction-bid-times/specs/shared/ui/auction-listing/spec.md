@@ -8,6 +8,13 @@
 `ListingUserBidHistoryRow` SHALL carry `acceptedAtMs: number` and MAY carry
 `timeOverride?: string`.
 
+#### Scenario: auction-listing-SC-22 - A bid row preserves its accepted instant
+
+- **GIVEN** a bid history row with an accepted instant and a row representing a non-timestamp state
+- **WHEN** the rows are passed to the bid history surface
+- **THEN** the accepted row provides its `acceptedAtMs` for activity-time formatting
+- **AND** the non-timestamp row may provide `timeOverride` for its displayed state
+
 ### Requirement: Bid history components format activity time
 
 `ListingBidHistoryList` and `ListingUserBidHistory` SHALL require `locale`,

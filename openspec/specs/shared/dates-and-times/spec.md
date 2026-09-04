@@ -13,19 +13,22 @@ It also governs the one place the traffic runs the other way — a calendar day
 an operator types into a date field, which carries no time and no zone and
 has to become instants before a worker can store it.
 
-Which zone a reader is in is not consulted anywhere: the platform states one
-zone and every surface uses it.
+Collector-facing activity time and local moments use the reader's stated zone.
+Operator tables, admin surfaces, and sent messages use the platform's UTC zone,
+so a stored instant has one stable operator and message representation.
 
 ## Feature set
 
 - Reading shapes
-  - Four shapes: a day, a moment, an event, and a deadline, one per the reader's task
+  - Platform shapes: a day, a moment, an event, and a deadline, one per the reader's task
+  - Collector shapes: relative activity time and local moment for recent and historical activity
   - Shape consistency: two surfaces showing one instant in one shape show identical text
 - Format and language
   - Platform format: ordering and punctuation are the platform's, not a browser's configuration
   - Named language: every rendering accepts the language its words are drawn from, English where none is named
 - One stated zone
-  - UTC everywhere: every rendering states Coordinated Universal Time, never the reader's machine zone
+  - UTC for operators and messages: administrative and sent text states Coordinated Universal Time
+  - Reader zone for collectors: activity time and local moments use the stated reader time zone
   - Named deadlines: an instant a reader is expected to act before names the zone it is stated in
 - Refusals
   - Unshipped language: a language the platform has no words for fails rather than degrading quietly
@@ -39,9 +42,10 @@ zone and every surface uses it.
   - Empty field: a date field left empty produces no instant at all
 
 ## Requirements
-### Requirement: A date takes one of four shapes
 
-The platform SHALL render an instant in exactly four shapes, and every
+### Requirement: A date takes a platform-defined shape
+
+The platform SHALL render an instant in a platform-defined shape, and every
 surface SHALL use the shape its reader's task calls for. No surface SHALL
 produce a date by its own local formatting.
 
@@ -95,6 +99,10 @@ happens to be configured.
 The language a date's words are drawn from SHALL be an input every rendering
 accepts. Where a caller names none, the rendering SHALL use English.
 
+Collector-facing activity time and local moment renderings SHALL accept a
+shipped platform locale only; unsupported browser languages SHALL be resolved
+to the brand default before formatting.
+
 #### Scenario: shared-dates-and-times-SC-06 - A month name in another language
 
 - **GIVEN** a date rendered with a language named by the caller
@@ -110,7 +118,7 @@ accepts. Where a caller names none, the rendering SHALL use English.
 
 #### Scenario: shared-dates-and-times-SC-08 - A language the platform does not ship
 
-- **WHEN** a date is rendered with a language the platform has no words for
+- **WHEN** a low-level operator or message formatter is called with a language the platform has no words for
 - **THEN** the rendering fails with an error naming that language
 
 ### Requirement: A date that is not a date stops the render
@@ -124,22 +132,24 @@ with an error. No surface SHALL render placeholder text in place of a date.
 - **THEN** the rendering fails with an error
 - **AND** no placeholder date text is shown to the reader
 
-### Requirement: Every rendering states one zone
+### Requirement: Each rendering states the zone its surface requires
 
-Every instant the platform renders SHALL be stated in Coordinated Universal
-Time, on every surface, for every reader. No rendering SHALL use the zone the
-reader's machine is set to.
+Operator tables, admin surfaces, and sent messages SHALL render instants in
+Coordinated Universal Time. Collector-facing activity time and local moments
+SHALL render instants in the reader's stated `timeZone`. No rendering SHALL
+use the zone the reader's machine is set to without that zone being supplied as
+the reader's stated zone.
 
-#### Scenario: shared-dates-and-times-SC-10 - Two readers in different zones
+#### Scenario: shared-dates-and-times-SC-10 - Operator readers in different zones
 
 - **GIVEN** the same instant rendered for a reader whose machine is set east of UTC and one set west of it
-- **WHEN** each renders it
+- **WHEN** each renders it in an operator table
 - **THEN** both show identical text
 
-#### Scenario: shared-dates-and-times-SC-11 - An instant near midnight
+#### Scenario: shared-dates-and-times-SC-11 - An operator instant near midnight
 
 - **GIVEN** an instant that falls on one calendar date in UTC and the next in the reader's own zone
-- **WHEN** it is rendered as a day
+- **WHEN** it is rendered as a day in an operator table
 - **THEN** the day shown is the UTC one
 
 ### Requirement: A deadline names its time zone
@@ -224,3 +234,57 @@ day, from any machine.
 - **WHEN** the form is read
 - **THEN** no instant is produced for it
 
+### Requirement: A relative rendering uses platform tiers
+
+A **relative** rendering SHALL turn a past instant into a short label using
+platform-owned tier thresholds and copy from the shared `dates` namespace.
+
+- **justNow** — elapsed `< 45 seconds`
+- **seconds** — `45s` through `59s`
+- **minutes** — `1` through `59` whole minutes
+- **hours** — `1` through `23` whole hours
+- **days** — `1` through `6` whole days
+
+The `locale` argument SHALL be a shipped platform locale. Callers on collector
+surfaces MUST resolve unsupported browser languages to the brand default before
+invoking.
+
+#### Scenario: shared-dates-and-times-SC-21 - Just now does not show zero seconds
+
+- **GIVEN** an instant 30 seconds in the past
+- **WHEN** it is rendered as relative activity time in English
+- **THEN** the label is `Just now`
+
+#### Scenario: shared-dates-and-times-SC-22 - An unsupported browser language reads English
+
+- **GIVEN** a collector whose browser prefers Thai and whose site locale resolved to English
+- **WHEN** a relative activity time renders
+- **THEN** its words are English
+
+### Requirement: A local moment renders for collectors without naming UTC
+
+A **local moment** SHALL render an instant on collector-facing surfaces in the
+reader's stated `timeZone` with shape `DD Mon YYYY, HH:MM`, month names from
+`locale`, and no zone suffix.
+
+Operator tables, admin surfaces, and sent messages SHALL continue to use the UTC
+moment and deadline shapes that name the zone.
+
+#### Scenario: shared-dates-and-times-SC-23 - Two zones read different clocks
+
+- **GIVEN** the same instant rendered for readers in `Asia/Hong_Kong` and `America/New_York`
+- **WHEN** each reads it as a local moment in English
+- **THEN** the clock values differ
+- **AND** neither string contains `UTC`
+
+### Requirement: Activity time composes relative and local moment
+
+**Activity time** SHALL apply relative tiers when elapsed is less than seven
+days and SHALL fall back to local moment otherwise.
+
+#### Scenario: shared-dates-and-times-SC-24 - Older activity uses a local moment
+
+- **GIVEN** one instant two minutes in the past and another instant eight days in the past
+- **WHEN** both are rendered as activity time in English for `Asia/Hong_Kong`
+- **THEN** the recent instant uses the relative minutes tier
+- **AND** the older instant uses the local moment shape `DD Mon YYYY, HH:MM`
