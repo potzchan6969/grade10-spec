@@ -55,7 +55,7 @@ Frontend builds against fixtures for the Listings editor path.
   `grade10-admin-auction-listing-SC-60` pass on admin-frontend fixtures — draft, create, and
   publish from that editor with campaign empty.
 - [x] 3.3 Make `grade10-admin-auction-listing-SC-62` pass — confirm `campaignLabel` renders
-  "on its own" for null-campaign rows in the Listings table.
+  "-" for null-campaign rows in the Listings table.
 - [x] 3.4 Add `listStandaloneFixtureListings` and
   `dropStandaloneFixtureListing` to `AuctionAdminDevFixturesClient`,
   `DevListingFixturesApiService`, and `DevListingFixturesRepository`.

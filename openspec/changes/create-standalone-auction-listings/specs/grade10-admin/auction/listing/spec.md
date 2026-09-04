@@ -7,8 +7,7 @@
     Listings section with no campaign selected
   - Empty campaign through lifecycle: draft, create, and publish all succeed
     with no campaign; public slug lookup returns the listing
-  - Listings table unattached label: a row with no campaign shows it stands
-    on its own
+  - Listings table unattached label: a row with no campaign shows "-"
 - Test fixture standalone seed
   - Listings tab: a developer selects fixture ids and seeds them with no
     campaign, product reserved, media attached
@@ -29,8 +28,8 @@ saving a draft, creating, or publishing. Campaign attachment remains optional.
 
 A listing saved, created, or published with no campaign SHALL persist with
 `campaign_id` null. A collector SHALL open that listing by its slug on the
-public catalogue. The Listings table SHALL show that such a row stands on its
-own when it has no campaign.
+public catalogue. The Listings table SHALL show "-" in the campaign column
+when a row has no campaign.
 
 An operator without the `auction:operate` grant SHALL NOT be offered Create
 listing. A draft save sent without that grant SHALL be refused.
@@ -81,7 +80,7 @@ listing. A draft save sent without that grant SHALL be refused.
 
 - **GIVEN** a listing with no campaign
 - **WHEN** an authorized operator reads the Listings section table
-- **THEN** that row's campaign column shows the listing stands on its own
+- **THEN** that row's campaign column shows "-"
 - **AND** it does not display a campaign id as a label
 
 #### Scenario: grade10-admin-auction-listing-SC-63 - Create listing is not offered to an unauthorized operator
@@ -133,7 +132,7 @@ locally enabled dev environment (`assertDevEndpointsAllowed`).
 - **GIVEN** a fixture listing seeded from the Test panel Listings tab
 - **WHEN** an authorized operator reads the Listings section
 - **THEN** that listing appears in the table
-- **AND** its campaign column shows it stands on its own
+- **AND** its campaign column shows "-"
 
 #### Scenario: grade10-admin-auction-listing-SC-67 - Developer drops standalone fixture listings
 

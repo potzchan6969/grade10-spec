@@ -9,8 +9,8 @@ Behavior: [`grade10-admin/auction/listing`](specs/grade10-admin/auction/listing/
 Same panel as today. A Plus icon button labeled "Create listing" appears in
 the section heading row for an operator with `auction:operate`. Activating it
 opens the existing `ListingEditor` with no campaign pre-filled. The Campaign
-column in the table shows "on its own" (the existing `campaignLabel` fallback)
-for rows with no campaign.
+column in the table shows "-" (the existing `campaignLabel` fallback) for rows
+with no campaign.
 
 ### Test panel — Listings tab
 
@@ -54,8 +54,7 @@ From `@grade10/ui`: **none new.**
 - **Editor opens empty** — `grade10-admin-auction-listing-SC-69`: Campaign control blank.
 - **Draft / create / publish with no campaign** — `grade10-admin-auction-listing-SC-58`,
   `grade10-admin-auction-listing-SC-59`, `grade10-admin-auction-listing-SC-60`.
-- **Unattached row** — `grade10-admin-auction-listing-SC-62`: campaign column shows "on its
-  own".
+- **Unattached row** — `grade10-admin-auction-listing-SC-62`: campaign column shows "-".
 
 ### Test panel Listings tab
 
