@@ -364,7 +364,8 @@ export function userBidHistoryForState(
         {
           id: "user-bid-manual-prior",
           amountLabel: fixtureAmount(
-            BID_FIXTURE_LOT.currentBidMinor - BID_FIXTURE_LOT.incrementMinor * 2,
+            BID_FIXTURE_LOT.currentBidMinor -
+              BID_FIXTURE_LOT.incrementMinor * 2,
           ),
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,

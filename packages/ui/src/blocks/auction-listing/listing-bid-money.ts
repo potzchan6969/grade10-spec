@@ -1,6 +1,6 @@
 import {
-  DEFAULT_LISTING_CURRENCY,
   currencyExponent,
+  DEFAULT_LISTING_CURRENCY,
   formatMoney,
   parseMoneyInputToMinor,
   toMinorUnits,
@@ -127,7 +127,7 @@ export function isMaximumBelowFloor(
  */
 export function sanitizeMoneyDraft(raw: string, currency: string): string {
   const exponent = currencyExponent(currency);
-  let cleaned = raw.replace(/[^\d.]/g, "");
+  const cleaned = raw.replace(/[^\d.]/g, "");
   const dot = cleaned.indexOf(".");
   if (dot === -1) return cleaned;
   if (exponent === 0) return cleaned.slice(0, dot);
@@ -184,10 +184,7 @@ export function moneyDraftFromMinor(minor: number, currency: string): string {
   const exponent = currencyExponent(currency);
   const major = minor / 10 ** exponent;
   if (exponent === 0 || Number.isInteger(major)) return String(major);
-  return major
-    .toFixed(exponent)
-    .replace(/0+$/, "")
-    .replace(/\.$/, "");
+  return major.toFixed(exponent).replace(/0+$/, "").replace(/\.$/, "");
 }
 
 export { parseMoneyInputToMinor };

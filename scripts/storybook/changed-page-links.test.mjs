@@ -76,6 +76,20 @@ async function workspace() {
   });
 }
 
+async function starBarrelWorkspace() {
+  return fixture({
+    "apps/preview/src/pages/button.stories.tsx":
+      'import { Button } from "@grade10/design-system"; export const Default = {};',
+    "apps/preview/src/pages/card.stories.tsx":
+      'import { Card } from "@grade10/design-system"; export const Default = {};',
+    "packages/design-system/src/index.ts":
+      'export * from "./components/button"; export * from "./components/card";',
+    "packages/design-system/src/components/button.tsx":
+      "export const Button = {};",
+    "packages/design-system/src/components/card.tsx": "export const Card = {};",
+  });
+}
+
 test("finds pages through selected workspace exports and their dependencies", async () => {
   const root = await workspace();
 
@@ -153,6 +167,25 @@ test("does not treat a workspace barrel rewrite as affecting every page", async 
   );
 });
 
+test("follows only the requested export through a star barrel", async () => {
+  const root = await starBarrelWorkspace();
+
+  assert.deepEqual(
+    await affectedPageStories({
+      changedFiles: ["packages/design-system/src/components/button.tsx"],
+      root,
+    }),
+    ["apps/preview/src/pages/button.stories.tsx"],
+  );
+  assert.deepEqual(
+    await affectedPageStories({
+      changedFiles: ["packages/design-system/src/components/card.tsx"],
+      root,
+    }),
+    ["apps/preview/src/pages/card.stories.tsx"],
+  );
+});
+
 test("does not treat package or vite config as affecting every page", async () => {
   const root = await workspace();
 
@@ -212,7 +245,7 @@ test("includes workbench stories outside Pages/", async () => {
   );
 });
 
-test("creates a compact payload containing current affected page states only", () => {
+test("groups current affected page states by story file", () => {
   const payload = slackPayload({
     affectedPages: ["apps/preview/src/pages/store.stories.tsx"],
     commitSha: "abc",
@@ -245,7 +278,7 @@ test("creates a compact payload containing current affected page states only", (
       },
       {
         text: {
-          text: `- Auction Listing\n${"\u00a0".repeat(4)}- Bid Panel > Flows > Countdown ❌\n- Pages\n${"\u00a0".repeat(4)}- Store > <https://storybook.grade10-stg.com/?path=/story/pages-store--default|Default>\n${"\u00a0".repeat(4)}- Store > <https://storybook.grade10-stg.com/?path=/story/pages-store--empty|Empty>`,
+          text: `- Auction Listing\n${"\u00a0".repeat(4)}- Bid Panel > Flows — 1 story ❌\n- Pages\n${"\u00a0".repeat(4)}- <https://storybook.grade10-stg.com/?path=/story/pages-store--default|Store> — 2 stories`,
           type: "mrkdwn",
         },
         type: "section",
@@ -272,7 +305,7 @@ test("omits merge metadata when it is unavailable", () => {
 
   assert.deepEqual(payload.blocks.at(-1), {
     text: {
-      text: `- Pages\n${"\u00a0".repeat(4)}- Store > <https://storybook.grade10-stg.com/?path=/story/pages-store--default|Default>\n${"\u00a0".repeat(4)}- Store > <https://storybook.grade10-stg.com/?path=/story/pages-store--empty|Empty>`,
+      text: `- Pages\n${"\u00a0".repeat(4)}- <https://storybook.grade10-stg.com/?path=/story/pages-store--default|Store> — 2 stories`,
       type: "mrkdwn",
     },
     type: "section",
@@ -295,7 +328,7 @@ test("links added workbench stories outside Pages/", () => {
 
   assert.deepEqual(payload.blocks.at(-1), {
     text: {
-      text: `- Auction Listing\n${"\u00a0".repeat(4)}- Bid Card > <https://storybook.grade10-stg.com/?path=/story/blocks-auction-listing-card--default|Default> 🆕\n${"\u00a0".repeat(4)}- Bid Panel > <https://storybook.grade10-stg.com/?path=/story/auction-listing-bid-panel--default|Default> 🆕`,
+      text: `- Auction Listing\n${"\u00a0".repeat(4)}- <https://storybook.grade10-stg.com/?path=/story/blocks-auction-listing-card--default|Bid Card> — 1 story 🆕\n${"\u00a0".repeat(4)}- <https://storybook.grade10-stg.com/?path=/story/auction-listing-bid-panel--default|Bid Panel> — 1 story 🆕`,
       type: "mrkdwn",
     },
     type: "section",
