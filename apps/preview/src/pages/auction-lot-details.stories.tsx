@@ -37,7 +37,7 @@ export const LiveAutoLeading: Story = {
     expect(canvas.getByRole("heading", { name: /Charizard/ })).toBeVisible();
     expect(canvas.getByText("Raise your private maximum")).toBeVisible();
     expect(canvas.getByText(/Current: HK\$8,000/)).toBeVisible();
-    expect(canvas.getByText(/Leading · HK\$8,000/)).toBeVisible();
+    expect(canvas.getByText(/Leading · HK\$4,800/)).toBeVisible();
     expect(canvas.getByText("Min. bid")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: /^Raise maximum to/ }),

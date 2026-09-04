@@ -235,7 +235,7 @@ export const Outbid: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText(/Outbid · HK\$8,000/)).toBeInTheDocument();
+    expect(canvas.getByText(/Outbid · HK\$8,250/)).toBeInTheDocument();
   },
 };
 
@@ -248,7 +248,7 @@ export const Leading: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText(/Leading · HK\$8,000/)).toBeInTheDocument();
+    expect(canvas.getByText(/Leading · HK\$4,800/)).toBeInTheDocument();
     expect(canvas.getByText("Raise your private maximum")).toBeInTheDocument();
     expect(canvas.getByText(/Current: HK\$8,000/)).toBeInTheDocument();
     expect(

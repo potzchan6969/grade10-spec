@@ -177,7 +177,8 @@ one locale rule:
   reads as generated filler. Prefer a colon (`Current: HK$8,000`), a dedicated
   line, or visual hierarchy. Prefer a short action sentence for primary CTAs
   that include an amount (`Raise maximum to HK$8,501`). Reserve `·` for compact
-  chips where two peer facts share one badge (for example `Leading · HK$8,000`).
+  chips where two peer facts share one badge (for example
+  `Leading · HK$4,800`).
 
 See [`packages/i18n/README.md`](../../packages/i18n/README.md) for where
 catalogued copy lives and how layers merge.

@@ -151,17 +151,16 @@ function StandingStatusBadge({
     return null;
   }
 
-  const maximumLabel =
-    view.viewerMaximumMinor != null
-      ? formatMoney(view.viewerMaximumMinor, view.currency, { locale })
-      : null;
+  const standingAmountLabel = formatMoney(
+    view.currentBidMinor,
+    view.currency,
+    { locale },
+  );
 
   if (view.standing === "outbid") {
     return (
       <Badge variant="warning">
-        {maximumLabel != null
-          ? `${copy.outbid} · ${maximumLabel}`
-          : copy.outbid}
+        {`${copy.outbid} · ${standingAmountLabel}`}
       </Badge>
     );
   }
@@ -169,9 +168,7 @@ function StandingStatusBadge({
   if (view.standing === "leading-max" || view.standing === "leading-manual") {
     return (
       <Badge variant="success">
-        {maximumLabel != null
-          ? `${copy.highestBid} · ${maximumLabel}`
-          : copy.highestBid}
+        {`${copy.highestBid} · ${standingAmountLabel}`}
       </Badge>
     );
   }
