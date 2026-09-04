@@ -11,7 +11,7 @@ it,
 **so that** the appointment starts at the item, and I can see at a glance
 whether a check is on file, still out, or refused.
 
-### grade10-site-vault-identity-check-US1-TC1-1: Booking an intake visit invites the user
+### grade10-site-vault-identity-check-US1-TC1-2: Booking an intake visit invites the user
 
 **Classification:**
 
@@ -27,30 +27,35 @@ whether a check is on file, still out, or refused.
 * **Trace:** grade10-site-vault-identity-check-US-01
 
 **Pre-conditions:**
-`<an unverified case>` holds no verified identity and has nothing to reuse, and carries an email address and a mobile number.
+
+* `<a case with no check>` holds no verified identity and has nothing to reuse.
+* The case holds `<the case's email address>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<an unverified case>` | A pre-custody vault case with no verified identity and no earlier check to reuse |
+| `<a case with no check>` | A pre-custody vault case with no verified identity, nothing to reuse and no live check |
+| `<the case's email address>` | The email address the case holds for its user |
 
 **Steps:**
 
-1. Book an intake visit for `<an unverified case>`.
-2. Read the contact details the invitation went to.
+1. Book an intake visit for `<a case with no check>`.
+2. Read where the invitation was sent.
 
 **Expected Results:**
 
 * The user is invited to verify.
-* The invitation goes to the contact details the case holds.
+* The invitation goes to `<the case's email address>`.
 
-### grade10-site-vault-identity-check-US1-TC2-1: Case with no contact details is reported, not left silently unchecked
+### grade10-site-vault-identity-check-US1-TC2-2: Case nobody can be invited on is reported
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** high
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
@@ -61,20 +66,28 @@ whether a check is on file, still out, or refused.
 * **Trace:** grade10-site-vault-identity-check-US-01
 
 **Pre-conditions:**
-`<an unverified case>` holds neither an email address nor a mobile number.
+
+* A pre-custody vault case holds no verified identity and is missing what the row names.
+
+**Test data:**
+
+| What the case is missing | Outcome |
+| --- | --- |
+| It names no person | No check is raised; the admin is told why |
+| It holds no email address | No check is raised; the admin is told why |
 
 **Steps:**
 
-1. Book an intake visit for `<an unverified case>`.
+1. Book an intake visit for that case.
 2. Read the case at `<grade10 admin vault case url>` as the admin.
 
 **Expected Results:**
 
 * No check is raised.
-* The admin is told the contact details are missing.
+* The admin is told why it could not be raised.
 * The case does not read as a check nobody answered.
 
-### grade10-site-vault-identity-check-US1-TC3-1: Collector already verified is not asked again
+### grade10-site-vault-identity-check-US1-TC3-1: User already verified is not asked again
 
 **Classification:**
 
@@ -90,11 +103,19 @@ whether a check is on file, still out, or refused.
 * **Trace:** grade10-site-vault-identity-check-US-01
 
 **Pre-conditions:**
-The user on `<an unverified case>` holds a verified identity that is still valid.
+
+* `<a case whose user is verified>` holds no bound identity.
+* Its user holds a verified identity that is still valid.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<a case whose user is verified>` | A pre-custody vault case with no bound identity, whose user holds a valid verified identity |
 
 **Steps:**
 
-1. Book an intake visit for `<an unverified case>`.
+1. Book an intake visit for `<a case whose user is verified>`.
 2. Read the case's identity at `<grade10 admin vault case url>`.
 3. Read what was sent to the user.
 
@@ -107,7 +128,7 @@ The user on `<an unverified case>` holds a verified identity that is still valid
 
 **Classification:**
 
-* **Severity:** blocker
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -119,7 +140,9 @@ The user on `<an unverified case>` holds a verified identity that is still valid
 * **Trace:** grade10-site-vault-identity-check-US-01
 
 **Pre-conditions:**
-`<a verified case>` is bound to a verified identity, and the admin holds `kyc:read`.
+
+* `<a verified case>` is bound to a verified identity.
+* The admin holds `kyc:read`.
 
 **Test data:**
 
@@ -137,7 +160,7 @@ The user on `<an unverified case>` holds a verified identity that is still valid
 * The case shows whether Grade10 staff or a provider performed the check.
 * The case shows when it was performed and what the provider found.
 
-### grade10-site-vault-identity-check-US1-TC5-1: Case with a check out is not shown as unverified, and nothing waits on it
+### grade10-site-vault-identity-check-US1-TC5-2: Case with a check out is not shown as unverified
 
 **Classification:**
 
@@ -153,27 +176,36 @@ The user on `<an unverified case>` holds a verified identity that is still valid
 * **Trace:** grade10-site-vault-identity-check-US-01
 
 **Pre-conditions:**
-`<an unverified case>` holds a hosted check that has been invited and not decided.
+
+* `<a case with a check out>` holds a hosted check that has been invited and not decided.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<a case with a check out>` | A pre-custody vault case whose hosted check is Invited and undecided |
 
 **Steps:**
 
-1. Open `<an unverified case>` at `<grade10 admin vault case url>`.
+1. Open `<a case with a check out>` at `<grade10 admin vault case url>`.
 2. Read what the case says about its identity.
-3. Book it, value it, and move it through the pre-custody statuses.
+3. Book an intake visit for it.
+4. Record a valuation on it.
+5. Move it through the pre-custody statuses.
 
 **Expected Results:**
 
 * The case shows the check as out, not as having no identity.
-* Booking, valuing and every pre-custody move are allowed while the check is out.
+* The case can be booked, valued and moved exactly as a case with no check out.
 
 ### grade10-site-vault-identity-check-US1-TC6-1: Binding a verdict voids an outstanding packet
 
 **Classification:**
 
-* **Severity:** blocker
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** destructive
+* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
@@ -182,7 +214,14 @@ The user on `<an unverified case>` holds a verified identity that is still valid
 * **Trace:** grade10-site-vault-identity-check-US-01
 
 **Pre-conditions:**
-`<a verified case>` has a signing packet still out, rendered from an earlier identity.
+
+* `<a verified case with a packet out>` has a signing packet still out, rendered from an earlier identity.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<a verified case with a packet out>` | A pre-custody vault case bound to an earlier identity, its signing packet still out |
 
 **Steps:**
 
@@ -199,7 +238,7 @@ The user on `<an unverified case>` holds a verified identity that is still valid
 
 **Classification:**
 
-* **Severity:** blocker
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
@@ -211,7 +250,14 @@ The user on `<an unverified case>` holds a verified identity that is still valid
 * **Trace:** grade10-site-vault-identity-check-US-01
 
 **Pre-conditions:**
-`<an unverified case>` holds no verified identity.
+
+* `<a case with no check>` holds no verified identity.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<a case with no check>` | A pre-custody vault case with no verified identity, nothing to reuse and no live check |
 
 **Steps:**
 
@@ -228,7 +274,7 @@ The user on `<an unverified case>` holds a verified identity that is still valid
 **Classification:**
 
 * **Severity:** critical
-* **Priority:** high
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -239,7 +285,14 @@ The user on `<an unverified case>` holds a verified identity that is still valid
 * **Trace:** grade10-site-vault-identity-check-US-01
 
 **Pre-conditions:**
-`<a verified case>` is bound to a verified identity whose legal name differs from the name an admin typed on the case.
+
+* `<a verified case with a typed name>` is bound to a verified identity whose legal name differs from the name an admin typed on the case.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<a verified case with a typed name>` | A pre-custody vault case bound to a verified identity whose legal name differs from the name typed on the case |
 
 **Steps:**
 
@@ -255,8 +308,8 @@ The user on `<an unverified case>` holds a verified identity that is still valid
 
 **Classification:**
 
-* **Severity:** blocker
-* **Priority:** high
+* **Severity:** critical
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
@@ -267,7 +320,14 @@ The user on `<an unverified case>` holds a verified identity that is still valid
 * **Trace:** grade10-site-vault-identity-check-US-01
 
 **Pre-conditions:**
-`<a verified case>` holds a rendered packet that has not been sealed.
+
+* `<a verified case with a rendered packet>` holds a rendered packet that has not been sealed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<a verified case with a rendered packet>` | A pre-custody vault case bound to a verified identity, holding a rendered packet that is not sealed |
 
 **Steps:**
 
@@ -277,9 +337,9 @@ The user on `<an unverified case>` holds a verified identity that is still valid
 **Expected Results:**
 
 * Sealing is refused.
-* The refusal says the paper names a person the case no longer says it is about.
+* The packet is not sealed.
 
-### grade10-site-vault-identity-check-US1-TC10-1: Case identity state reads without the identity grant, its details do not
+### grade10-site-vault-identity-check-US1-TC10-2: Case identity state reads without the identity grant, its details do not
 
 **Classification:**
 
@@ -295,17 +355,25 @@ The user on `<an unverified case>` holds a verified identity that is still valid
 * **Trace:** grade10-site-vault-identity-check-US-01
 
 **Pre-conditions:**
-`<a verified case>` is bound to a verified identity, and the admin holds `vault:read` and not `kyc:read`.
+
+* `<a verified case>` is bound to a verified identity.
+* The admin holds `vault:read` and not `kyc:read`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<a verified case>` | A pre-custody vault case bound to an identity a provider verified |
 
 **Steps:**
 
-1. Open `<a verified case>` at `<grade10 admin vault case url>`.
-2. Read everything the case returns.
+1. Request `<a verified case>` as that admin.
+2. Read every field the case returns.
 
 **Expected Results:**
 
 * The case shows that an identity is on file and who performed the check.
-* No name, birth date, masked number, document image or refusal reason is returned.
+* No name, birth date, masked number, document image, provider finding or refusal reason is returned.
 
 ---
 
@@ -316,7 +384,7 @@ The user on `<an unverified case>` holds a verified identity that is still valid
 **so that** a refused, lapsed or never-started check costs the visit nothing,
 and a check that overrides a refusal says so on the case.
 
-### grade10-site-vault-identity-check-US2-TC1-1: Operator asks for a check on a case that needs one
+### grade10-site-vault-identity-check-US2-TC1-1: Admin asks for a check on a case that needs one
 
 **Classification:**
 
@@ -332,18 +400,27 @@ and a check that overrides a refusal says so on the case.
 * **Trace:** grade10-site-vault-identity-check-US-02
 
 **Pre-conditions:**
-`<an unverified case>` holds no verified identity and no live check, and the admin holds `vault:operate`.
+
+* `<a case with no check>` holds no verified identity and no live check.
+* The admin holds `vault:operate`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<a case with no check>` | A pre-custody vault case with no verified identity, nothing to reuse and no live check |
 
 **Steps:**
 
-1. Open `<an unverified case>` at `<grade10 admin vault case url>`.
+1. Open `<a case with no check>` at `<grade10 admin vault case url>`.
 2. Ask for an identity check.
 
 **Expected Results:**
 
 * The user is invited.
+* The case shows the check as out.
 
-### grade10-site-vault-identity-check-US2-TC2-1: Staff verify a collector who arrives unverified
+### grade10-site-vault-identity-check-US2-TC2-1: Admin verifies a user who arrives unverified
 
 **Classification:**
 
@@ -359,11 +436,19 @@ and a check that overrides a refusal says so on the case.
 * **Trace:** grade10-site-vault-identity-check-US-02
 
 **Pre-conditions:**
-`<an unverified case>` has a user arriving with no verified identity, and the admin holds `vault:operate`.
+
+* `<a case with no check>` has a user arriving with no verified identity.
+* The admin holds `vault:operate`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<a case with no check>` | A pre-custody vault case with no verified identity, nothing to reuse and no live check |
 
 **Steps:**
 
-1. Open `<an unverified case>` at `<grade10 admin vault case url>`.
+1. Open `<a case with no check>` at `<grade10 admin vault case url>`.
 2. Record the identity check with the document in hand.
 3. Move the case on to signing.
 
@@ -372,7 +457,9 @@ and a check that overrides a refusal says so on the case.
 * The case holds a verified identity.
 * The case can proceed to signing.
 
-### grade10-site-vault-identity-check-US2-TC3-1: Counter check is refused once the item is in custody
+### grade10-site-vault-identity-check-US2-TC3-2: Counter check is refused once the item is in custody
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -388,18 +475,22 @@ and a check that overrides a refusal says so on the case.
 * **Trace:** grade10-site-vault-identity-check-US-02
 
 **Pre-conditions:**
-The case holds the status named by the row, and the admin holds `vault:operate`.
 
-Runs once per row of **Test data**.
+* A vault case holds the status named by the row.
+* The admin holds `vault:operate`.
 
 **Test data:**
 
-| Case status |
-| --- |
-| `vaulted` |
-| `active` |
-| `repaid` |
-| `released` |
+| Case status | Outcome |
+| --- | --- |
+| `vaulted` | Refused; the case's identity is unchanged |
+| `active` | Refused; the case's identity is unchanged |
+| `repaid` | Refused; the case's identity is unchanged |
+| `released` | Refused; the case's identity is unchanged |
+| `declined` | Refused; the case's identity is unchanged |
+| `cancelled` | Refused; the case's identity is unchanged |
+| `expired` | Refused; the case's identity is unchanged |
+| `forfeited` | Refused; the case's identity is unchanged |
 
 **Steps:**
 
@@ -409,17 +500,17 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Recording is refused.
-* The refusal says a release reads the identity the executed agreement already holds.
+* The case's identity is unchanged.
 
-### grade10-site-vault-identity-check-US2-TC4-1: Override of a refused check takes the approving grant
+### grade10-site-vault-identity-check-US2-TC4-2: Override of a refused check carries a reason
 
 **Classification:**
 
-* **Severity:** blocker
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** security
+* **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
@@ -427,19 +518,28 @@ Runs once per row of **Test data**.
 * **Trace:** grade10-site-vault-identity-check-US-02
 
 **Pre-conditions:**
-`<an unverified case>` is pre-custody and its last hosted check was Declined.
+
+* `<a case declined>` is pre-custody and its last hosted check was Declined.
+* The admin holds `vault:operate` and is on `<grade10 admin vault case url>` for that case.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<a case declined>` | A pre-custody vault case whose last hosted check was Declined |
+| `<the override reason>` | The reason the admin gives for checking the document at the counter |
 
 **Steps:**
 
-1. Record a counter check as an admin holding `vault:operate` and not `vault:approve`.
-2. Record it again as an admin holding `vault:approve`, giving a reason.
+1. Record a counter check giving no reason.
+2. Record the same counter check giving `<the override reason>`.
 3. Read the case at `<grade10 admin vault case url>`.
 
 **Expected Results:**
 
-* Step 1 is refused.
-* Step 2 is recorded.
-* The reason shows on the case beside the declined check.
+* The check offered with no reason is refused.
+* The check carrying `<the override reason>` is recorded, naming the admin who gave it.
+* `<the override reason>` shows on the case beside the declined check.
 
 ---
 
@@ -451,105 +551,9 @@ landed,
 **so that** nothing signed, vaulted or erased is disturbed by a check that
 finished too late.
 
-### grade10-site-vault-identity-check-US3-TC1-1: Verdict landing after custody begins is refused
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-identity-check-US-03
-
-**Pre-conditions:**
-The case holds the status named by the row and an identity it was vaulted under, and a hosted check raised while it was pre-custody is still out.
+### grade10-site-vault-identity-check-US3-TC1-2: Verdict landing on a case that has moved is refused
 
 Runs once per row of **Test data**.
-
-**Test data:**
-
-| Case status |
-| --- |
-| `vaulted` |
-| `active` |
-| `repaid` |
-| `released` |
-
-**Steps:**
-
-1. Deliver an approved verdict for that case.
-2. Read the case's identity at `<grade10 admin vault case url>`.
-3. Read what the admin was told.
-
-**Expected Results:**
-
-* The case keeps the identity it was vaulted under.
-* The identity the verdict created is discarded.
-* The admin is told the check landed and was refused, and why.
-
-### grade10-site-vault-identity-check-US3-TC2-1: Verdict landing on sealed evidence is refused
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-identity-check-US-03
-
-**Pre-conditions:**
-The case holds a sealed signing packet and a hosted check that is still out.
-
-**Steps:**
-
-1. Deliver an approved verdict for that case.
-2. Read the case's identity.
-
-**Expected Results:**
-
-* The case keeps the identity that evidence was executed under.
-* The new identity is discarded.
-
-### grade10-site-vault-identity-check-US3-TC3-1: Verdict landing on an erased case is refused
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-identity-check-US-03
-
-**Pre-conditions:**
-The case's personal data has been erased, and a hosted check raised before the erasure is still out.
-
-**Steps:**
-
-1. Deliver an approved verdict for that case.
-2. Read the case's identity and the evidence store.
-
-**Expected Results:**
-
-* Nothing is bound.
-* The identity the verdict created is discarded with its evidence.
-* The erasure is not undone by the check that was in flight.
-
-### grade10-site-vault-identity-check-US3-TC4-1: Verdict landing on a case verified elsewhere is refused
 
 **Classification:**
 
@@ -565,36 +569,56 @@ The case's personal data has been erased, and a hosted check raised before the e
 * **Trace:** grade10-site-vault-identity-check-US-03
 
 **Pre-conditions:**
-The case bound an identity at the counter after its hosted check was raised, and holds a packet rendered from it.
+
+* A vault case is in the condition the row names.
+* A hosted check raised before the case moved is still out.
+
+**Test data:**
+
+| Landing condition | Outcome |
+| --- | --- |
+| Past recording — `vaulted`, `active`, `repaid`, `released`, `declined`, `cancelled`, `expired` or `forfeited` | The case keeps the identity it was vaulted under, and the admin is told |
+| A sealed signing packet on the case | The case keeps the identity that evidence was executed under |
+| The case's personal data erased | Nothing is bound, and the erasure is not undone |
+| An identity bound at the counter since the check was raised | The case keeps the identity the admin recorded, and no packet is voided |
 
 **Steps:**
 
-1. Deliver the hosted check's approved verdict.
-2. Read the case's identity and its packets.
+1. Deliver an approved verdict for that case.
+2. Read the case's identity.
+3. Read the identity the verdict created and its evidence.
+4. Read the check's state and what the admin was told.
 
 **Expected Results:**
 
-* The case keeps the identity the admin recorded.
-* The verdict's identity is discarded.
-* No packet is voided.
+* The row's outcome holds.
+* The case's identity is the one it held before, and the identity the verdict created is purged with its evidence.
+* The check reads Declined with the reason recorded, and no identity is left bound to nothing.
 
 ### grade10-site-vault-identity-check-US3-TC5-1: Displaced identity is settled rather than left behind
 
 **Classification:**
 
 * **Severity:** critical
-* **Priority:** high
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-identity-check-US-03
 
 **Pre-conditions:**
-`<a verified case>` is bound to one identity and holds a hosted check that is still out.
+
+* `<a verified case with a check out>` is bound to one identity and holds a hosted check that is still out.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<a verified case with a check out>` | A pre-custody vault case bound to one identity, its hosted check still out |
 
 **Steps:**
 
@@ -607,33 +631,3 @@ The case bound an identity at the counter after its hosted check was raised, and
 * The displaced identity is on file until the vault settles it.
 * It is discarded once the new binding stands.
 * No image of a document is left behind unbound.
-
-### grade10-site-vault-identity-check-US3-TC6-1: Refused landing leaves no half-finished state
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-identity-check-US-03
-
-**Pre-conditions:**
-An approved verdict has been refused on landing.
-
-**Steps:**
-
-1. Read the case's identity.
-2. Read the identity the verdict created and its evidence.
-3. Read the check's state and reason.
-
-**Expected Results:**
-
-* The case's identity is the one it held before.
-* The identity the verdict created is purged with its evidence.
-* The check reads Declined with the reason recorded, and no identity is left bound to nothing.
