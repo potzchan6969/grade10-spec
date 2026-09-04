@@ -2,116 +2,66 @@
 title: Finance
 ---
 
-Grade10 Finance is the loan against graded cards the owner announced for
-Q4 2026, and the application repository holds two things under that name: a
-financed lane inside the vault that already runs the loan, and an empty
-service shell reserved for a product nobody has defined.
+Grade10 Finance is the loan the vault's financed lane runs: a collector's
+graded card in the shop's vault, an offer, a signature, and a bank transfer a
+treasurer records. It is a lane on a case rather than a service of its own,
+and the lender it is made under is not the entity that holds the item.
 
-- **The owner's product** — a loan against graded cards from a separate legal
-  entity, **~40%** loan to value, **1.5% to 2.5%** interest, the shop opening
-  mid October and Finance in **Q4 2026**, licences obtained; the notes are
-  [Grade10 Finance](/references/grade10-finance)
-- **Where the loan runs today** — the vault's financed lane, under the shop's
-  name and in the shop's database; every page of
-  [the vault](/p/grade10-site/vault) describes that product
-- **The shell** — a deployed worker with its own database, an hourly
-  audit-chain walk, the session and permission ladder, and no business logic:
-  no tables, no procedures, no customer or operator surface, no console
-  section; its permission map is empty and pinned that way by a test
-- **The grants** — `finance:read`, `finance:operate`, `finance:approve` and
-  `finance:payout` already exist in the shared vocabulary; staff hold the
-  first three, treasurers read and pay out, so a disbursement would take two
-  people the day a procedure exists
+- **The product** — a loan against graded cards at **~40%** loan to value and
+  **1.5% to 2.5%** interest per **30 days**, announced for **Q4 2026**; the
+  owner's notes are [Grade10 Finance](/references/grade10-finance)
+- **Where it runs** — the vault's financed lane, on the case that holds the
+  collateral; every page of [the vault](/p/grade10-site/vault) describes it
+- **Who lends** — the lender named in the brand's legal identity, whose name
+  and licence print on the loan agreement; the custodian holds the item and
+  signs the custody agreement
+- **Where it answers** — `grade10.com/vault`, one host and a path, with a
+  vanity domain redirecting to it
+- **One of everything** — one case, one database, one worker, one console
+  section: the loan lives where its collateral does, and infrastructure held
+  in reserve for a product nobody has described is a moving part with no owner
 
 ## The owner's flow against what is built
 
 | Step | Built | Gap |
 | --- | --- | --- |
-| Sign in with Google or a magic link | yes, plus an emailed code | a `finance.grade.com` host would not share the `.grade10.com` session cookie |
+| Sign in with Google or a magic link | yes, plus an emailed code | — |
 | Verify the phone by SMS | no; the number is stored in E.164 and confirmed by nothing | an SMS provider and a verified-phone fact |
-| Submit photos, amount, items | the vault wizard, one item per case | a multi-card request is several cases |
-| Preliminary authentication and valuation | staff valuation on the case | a **100%** ceiling only until the brand's loan-to-value cap is set; the owner's ~40% is one unset value |
-| e-KYC at the request step ❓ | no; identity is checked at the counter by staff | online capture, a hosted provider, screening |
-| The offer and contact on WhatsApp | an offer email and a click-to-chat link staff press | no WhatsApp Business API, no inbound channel |
-| Choose the custodian, Grade10 Vault or Tiny | no; a location is a shop to visit, and a case with none named prints the brand's own store rather than a custodian | a custodian entity, a recorded legal choice, an agreement per custodian |
-| Book a time slot | the diary, for the vault only | a finance entrypoint and binding if finance books on its own |
+| Submit photos, amount, items | the vault wizard, one item per case | a multi-card request is several requests, with one visit booked on the first |
+| Preliminary authentication and valuation | staff valuation on the case, capped at the brand's **40%** of it | — |
+| e-KYC at the request step | no; identity is checked at the counter by staff | online capture, a hosted provider, screening |
+| The offer and contact on WhatsApp | an offer email the collector answers from their own case page, and a click-to-chat link staff press | no WhatsApp Business API, no inbound channel |
+| Choose the custodian, Grade10 Vault or Tiny | no; the item is held at the shop the case names | a second custodian entity, its own agreement and its own staff |
+| Book a time slot | the diary, at every live status but a draft | — |
 | Visit, e-KYC, inspection | yes | — |
-| Recorded call explaining key terms | no | telephony, storage as sealed evidence, a precondition to signing |
-| Both sign, staff from the admin and the user on the iPad or their own account | the collector alone signs, on any device holding the link | a staff signer role and its ceremony leg |
-| Manual FPS payout with proof recorded | a payout record with a required bank reference and the date the money left, correctable by a second money holder | a proof attachment, a reference format |
+| Recorded call explaining key terms | the counter records that the terms were explained, with a recording reference where there is one, before the loan packet may be prepared | telephony and the storage of the recording itself |
+| Both sign, staff from the admin and the user on the iPad or their own account | the borrower signs; the agreement states the lender executes it on the advance | a staff signer role and its ceremony leg |
+| Manual FPS payout with proof recorded | a payout record with a required bank reference and the date the money left, correctable by a second money holder | — |
 | Repayment recorded manually | yes | — |
-| Automated reminders | no; every other event mails | the two reminder kinds on the existing map, a scheduled pass, the cadence, a channel beyond email |
-
-## What a first lending procedure needs
-
-- **Tables** — cases, items, valuations, offers, payouts, repayments,
-  custodians, and the signing tables the document package publishes as
-  factories
-- **Bindings** — a finance entrypoint on the diary and on the identity store,
-  each one line where the vault's is minted, plus the two service bindings
-  the worker does not declare
-- **Storage** — buckets for documents, photos and a locked archive; the fonts
-  a Chinese name needs to seal
-- **Surfaces** — a public tier, a console section with its grant and nav
-  entry, an admin-frontend package, a customer surface or a new site id
-- **Wiring** — the notification channel and its mail key, retention classes,
-  erasure fan-out, a development Hyperdrive id
-- **Policy** — values for the entity and lending tables the platform carries
-  unset: legal name and licence, loan to value, rate band, term
-  presets, offer validity, grace, an accrual ceiling; fees. Every one of them
-  is already enforced where it is read, and the legal name refuses a
-  production deploy until it is given
-
-:::callout{kind="warning"}
-The shell is reserved for a product nobody has described. The owner's notes,
-the one primary source, name graded cards as the collateral and describe step
-for step what the vault's financed lane does. Three resolutions are open and
-none is chosen: Finance is the vault's lane re-papered under the lending
-entity; Finance is a second product rebuilt on vault machinery with its own
-cases and database; or Finance is genuinely something else and the Q4 loan
-ships from the vault regardless.
-:::
-
-:::callout{kind="warning"}
-The lender on the paper is a string. The custody, loan and release documents
-print "Grade10", the email catalogue is the shop's, and the loan rows live in
-the vault's database, while the account-data policy walls Finance in a project
-of its own. A separately licensed lender cannot sign paper that says "Grade10
-lends you the principal".
-:::
+| Automated reminders | **7** and **1** days before the due date, then every **7** days overdue, by email | a channel beyond email |
 
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| A shell from day one | Decided | The first procedure lands behind a database, session, permission ladder and audit sink with no wiring change | Engineering |
-| Own database | Decided | A wall around money beside auth, the identity store and the vault | Engineering |
-| Two people on a disbursement | Decided | Staff approve, treasurers pay; disjoint on payout | Product |
-| Which product Finance is | ❓ Open | The vault's lane re-papered under the lending entity, a second product on vault machinery, or something else | Owner |
-| Entity as data | Decided | A per-brand table carrying trading name, legal name, licence number and wording, read by the templates; every legal field is unset and production refuses paper until it is named | Engineering |
-| Custodian | ❓ Open | Whether Tiny runs the same ceremony and console or its own staff under its own name | Owner |
-| Host | ❓ Open | `finance.grade.com` or a path on `grade10.com`; the notes say one domain and the registry another | Owner |
-| Online e-KYC | ❓ Open | Required at the request step, or is the counter check sufficient for the licence | Legal |
-| Recorded call | ❓ Open | Vendor, storage, retention | Owner |
-| Ledger | ❓ Open | The account-data policy promises append-only double entry; the vault, the live lender, keeps single-entry records and the shell keeps none | Finance |
+| Finance is the vault's financed lane | Decided | The owner's notes describe the vault's flow step for step, and the collateral is the item the vault itself holds; a second service would be a second copy of one product | Owner |
+| Two entities, one table | Decided | The custodian holds and the lender lends, each printing on its own paper; the lender's name refuses an offer in production, so custody opens while the lender is still being registered | Legal |
+| Host | Decided | One host and a path, `grade10.com/vault`; a vanity domain redirects, because a second host would not share the session cookie | Owner |
+| A second custodian | Deferred | Tiny holding items under its own name, agreement and staff. Reopens with a signed custody contract | Owner |
+| Online e-KYC at the request step | Deferred | The counter check stands. Reopens when Legal names a duty that the counter cannot meet | Legal |
+| The recorded call | Decided | The counter records that the key terms were explained and the borrower signs a line saying so; the telephony and the recording's storage are a vendor's, and no packet is prepared without the record | Owner |
+| The book | Decided | Single entry with derived balances is the product's book; double entry is the general ledger, kept in the firm's accounting system from a ledger export | Finance |
 :::
 
 :::detail{title="For engineers" for="engineer"}
-- **Shell** — `packages/grade10-finance/{contracts,backend}` and
-  `apps/backend/grade10/finance`, deployed as `grade10-finance-service`;
-  migrations `0000` to `0006` create `audit_logs`, its genesis row, the verify
-  cursor and their guards; the router mounts `audit` only; secrets are empty
-- **Reachable** — the gateway routes `/finance`; the console lists its chain
-  in the audit section, and its diary erasure client for finance works today
-  because erasure takes the product as an argument; what is unminted is the
-  booking entrypoint
-- **Reusable** — the diary and the identity store mint services per product
-  from class factories and already name `finance`; the document package is a
-  host contract the vault alone implements
-- **Vault-coupled** — the three templates, the `customer` signer role, the
-  lane packet sets, the `/vault/sign` route and the shop's email catalogue
+- **The lane** — `packages/vault/{contracts,backend,frontend,admin-frontend}`;
+  the financing amount at intake is the lane, and every guard reads it off the
+  case
+- **The entity** — `packages/app-env/src/legalIdentity.ts` carries both
+  parties; `documents/legalEntity.ts` answers which one a document prints
+- **The policy** — `packages/app-env/src/lending.ts`, seeded for grade10
 - **Background** —
+  [vault architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/vault.md)
+  for the case machine and the two lanes, and
   [account data](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
-  for the isolation and ledger policy, and
-  [operations](https://github.com/9gag/grade10/blob/main/docs/operations.md)
-  for the chain walk
+  for the isolation and ledger policy
 :::

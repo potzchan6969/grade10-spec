@@ -19,8 +19,8 @@ vendor is involved.
   against the digest taken at preparation, a certificate page appended to
   each PDF, one entry anchored in the hash-chained audit log
 - **Copies** — a download while the seal's short grant lives, an email with
-  the PDFs attached when the case has an address, the case page for account
-  holders; a walk-in with no email has no durable copy path
+  the PDFs attached, and the case page itself; every case belongs to an
+  account, so every signer has a durable copy path
 - **Verification** — anyone holding a PDF's SHA-256 can check it at
   `api.grade10.com/vault/api/documents/verify/<sha256>`; an operator re-checks
   a whole packet from the Documents tab, and the answer is computed fresh
@@ -30,26 +30,29 @@ vendor is involved.
 
 | Document | Facts printed | Terms |
 | --- | --- | --- |
-| Custody agreement | case, customer (the verified legal name), item and category, valued at, held at (the booked shop by name), dated | custody until release; the valuation is for custody and insurance and is not an offer to buy; storage carries no fee and any later charge applies only from notice; collection in person against a signed release |
-| Loan agreement | case, customer, collateral, principal, interest as `X.XX% for a N-day term`, repayable by, repayable amount, dated | the item stays in custody; the term's interest is payable even on early repayment and keeps accruing daily after the due date, uncompounded; release on full repayment; forfeiture is decided by a person and never automatic |
-| Release of custody | case, customer, item, settled (an amount or "nothing was owed"), released | handed back in the condition inspected; nothing outstanding; the custody agreement ends |
+| Custody agreement | case, customer (the verified legal name), item and category, valued at, held at (the shop by name), dated, complaints | the custodian keeps the item in a secured vault until release; the valuation is what staff recorded and is not an offer to buy; reasonable care while it is held; storage carries no fee; collection in person against a signed release |
+| Loan agreement | case, customer, collateral, principal, interest as `X.XX% for a N-day term`, the same rate stated per annum, `Fees: None`, the term as `N days from the Advance Date`, repayable amount, dated, licence, complaints | the lender lends against collateral the custody agreement holds; the term runs from the day the principal is advanced and the date is confirmed in writing then; after it the same daily rate continues, uncompounded and with no further fee; early repayment any day with the term's interest payable in full; release on full repayment; a written notice naming a final date at least **14 days** off before ownership may be taken, and forfeiture is always a person's decision; Hong Kong SAR law; executed by the lender on the advance; the borrower's own line that the key terms were explained before signing |
+| Release of custody | case, customer, item, settled (an amount or "nothing was owed"), released, complaints | handed back in the condition inspected; nothing outstanding; the custody agreement ends |
 
-- **Counterparty** — the brand's legal name and licence line where the
-  brand's legal identity is set, its trading name otherwise. One function
-  answers what a document may print, so both mint paths refuse in production
-  while the legal name is unset rather than each remembering to ask
-- **Held at** — the shop the case is booked at, read from the diary; a case
-  with no booking takes one from the operator, which the console insists on
-  before it will prepare. The worker itself does not: with neither, the
-  agreement names a store of the brand's and no shop in particular
+- **Two counterparties** — the custodian signs the custody agreement and the
+  release, the lender signs the loan agreement, and the licence prints on the
+  lender's paper alone. One function answers what a document may print, so
+  every mint path refuses in production while the party it needs is unnamed
+  rather than each remembering to ask
+- **Held at** — the shop the case is booked at, read from the diary, or one
+  the operator names; a packet that can name no shop is refused, by the
+  worker as by the console, because an agreement that does not say where the
+  item is held is not one anybody can be held to
+- **Terms explained first** — the counter records that the key terms were
+  explained, with a recording reference where there is one, before a loan
+  packet may be prepared; the borrower signs a line saying it happened
 - **Signature** — the customer's alone; no staff countersignature or witness
-  line
-- **Dates** — through the platform's one date module in its one zone: a day
-  for the dating and the release, a deadline naming UTC for the repayable-by
-  instant, so the paper and every console state one instant the same way;
-  whether any surface leaves UTC is open on [Vault](/p/grade10-site/vault)
-- **Not printed** — an annualised rate, a fee statement, governing law, a
-  complaints route, cooling-off
+  line, and the loan agreement states that the lender executes it on the
+  advance
+- **Dates** — through the platform's one date module: a document is dated the
+  day it was signed on the shop's own clock, and a deadline names the zone it
+  is stated in
+- **Not printed** — cooling-off, and a redemption period no regime has named
 
 ## Consent and identity on the certificate
 
@@ -71,19 +74,12 @@ vendor is involved.
 - **Release** — does not re-check adulthood or document expiry; a lapsed
   passport is no reason to keep somebody's property
 
-:::callout{kind="warning"}
-Everything legally operative is English only. Agreements, disclosure, consent
-lines and every email are English in the application repository; the
-ceremony chrome is half in the catalogue and half English literals; and the
-signing link carries no language prefix, so a collector who chose Chinese
-signs an English contract under English consent text.
-:::
-
-:::callout{kind="warning"}
-The owner's notes require a recorded call explaining the key terms before
-signing. Nothing models a call, a recording or a precondition rung for one;
-the seal ladder's rungs are token, packet, turn, name, disclosure, document,
-identity, verified name, pages viewed and consent.
+:::callout{kind="note"}
+English governs the paper. The agreements, the e-sign disclosure, the
+per-document consent lines and every email are English, and the certificate
+attests to the exact words that were shown; the screen's own chrome speaks
+the collector's language. Bilingual templates and consent copy are Legal's to
+supply.
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -96,15 +92,16 @@ identity, verified name, pages viewed and consent.
 | The wording travels with the copy | Decided | The certificate prints the disclosure and consent text, not only their digests | Legal |
 | The entity is data, answered once | Decided | Legal name, licence and trading name per brand in one table, read through one function by every path that mints paper, so the production refusal cannot be forgotten at the next one | Engineering |
 | The shop is the booked location | Decided | Read from the diary, never typed | Engineering |
-| A packet without a shop | ❓ Open | The console will not prepare one, the worker will, and the agreement then names no shop — the same question as whether custody is recorded per shop, open on [Operator Console](/p/grade10-site/vault/operator-console) | Product |
-| Lender's legal name and licence | ❓ Open | The values for the table; "Grade10" prints as the trading name until then, and no production packet is possible | Legal |
-| Mandatory particulars | ❓ Open | Annualised rate, fees, governing law, complaints, cooling-off, redemption period | Legal |
-| Chinese versions | ❓ Open | Bilingual templates and consent copy; which language governs | Legal |
-| Staff countersignature | ❓ Open | The notes say both sign; the packet has one signer role, and the ceremony supports a second | Legal |
-| Recorded call | ❓ Open | A precondition event carrying a recording reference, its storage and retention class | Owner |
-| Walk-in copies | ❓ Open | A recoverable retrieval route for a signer with no account and no email | Engineering |
-| Digital signature and timestamp | ❓ Open | PAdES/PKCS#7 and RFC 3161; the certificate is printed text, stated rather than proved | Legal |
-| Ceremony chrome and signing-link language | ❓ Open | The remaining English literals move to the catalogue and a case records a locale; needs a submodule bump | Design |
+| A packet names its shop or is refused | Decided | The worker refuses exactly where the console refuses, so no agreement prints a place nobody can be held to | Product |
+| Two entities on the paper | Decided | The custodian on custody and release, the lender on the loan, the licence on the lender's alone; the values are Legal's | Legal |
+| The particulars that are computable | Decided | The annualised simple rate, `Fees: None`, Hong Kong SAR governing law, the complaints contact and the early-repayment line print today; the exact wording a regime prescribes is Legal's | Legal |
+| Cooling-off | Decided | None: no cooling-off is recalled for a secured loan, and early repayment is open any day | Legal |
+| Staff countersignature | Deferred | The borrower signs; the agreement states that the lender executes it on the advance, the certificate names the verifying staff member, and the payout row evidences execution. Reopens if counsel asks, or if the owner's "both sign" means countersign | Legal |
+| The terms are explained before the paper | Decided | A recorded event at the counter, an optional recording reference, a refusal to prepare the loan packet without it, and a line the borrower signs; telephony and its storage are a vendor's | Owner |
+| Every signer has a copy | Decided | Every case belongs to an account, so the sealed set reaches an address, the case page and the download alike | Engineering |
+| Digital signature and timestamp | Decided | The hash chain and the witnessed head stand; RFC 3161 on the head export is the first upgrade if counsel asks | Legal |
+| Chinese versions | TBC Legal | Bilingual templates and consent copy, and which language governs; English governs until then | Legal |
+| E-sign adequacy | TBC Legal | In person on the iPad, staff present, identity verified, the disclosure and consent printed in full on the certificate | Legal |
 :::
 
 :::detail{title="For engineers" for="engineer"}

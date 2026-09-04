@@ -4,9 +4,9 @@ order: 6
 ---
 
 What the vault keeps, who may see it, how long it lives, which controls run,
-and the checklist between the code and a first production case. Every legal
-requirement here is a question for counsel with the code fact beside it,
-never an assertion of law.
+and the checklist between the code and a first production case. Where the law
+might bind, the page states the posture the code holds and names who confirms
+it; no statute here is asserted.
 
 ## Identity
 
@@ -14,9 +14,9 @@ never an assertion of law.
   typed character for character, date of birth, document type (passport,
   national ID, driving licence, residence permit), number, expiry, one
   photograph; the method is in person or from an upload
-- **Refused** — under **18**, or a document expired on the day of the check;
-  both judged again when the paper is prepared and when a check is reused,
-  and never at release
+- **Refused** — under **18**, or a document expired on the day of the check,
+  each judged on the shop's own day; both judged again when the paper is
+  prepared and when a check is reused, and never at release
 - **Stored** — the name, birth date, expiry, type, a masked number and a keyed
   digest of it, the photograph, who verified by id and name, and when; the
   raw number never lands
@@ -30,17 +30,23 @@ never an assertion of law.
 - **Not checked** — liveness, face match, address, nationality, sanctions or
   politically exposed persons, source of funds, occupation, purpose, ongoing
   monitoring, thresholds, suspicious-activity reporting
-- **A walk-in** — has no account, so the identity is keyed to the case, never
-  to a person, and no erasure request can reach it
+- **Whose it is** — every case belongs to an account, so every identity is
+  keyed to a person and every erasure request reaches it
 - **Who sees the photograph** — every `staff` and `admin`, each download on
   the audit chain; item photos, the owner and any `vault:read`, each read in
   an append-only ledger
 
 ## Retention and erasure
 
-- **Retention windows** — none set for any class (agreements, identity,
-  photos), for either brand; nothing is ever deleted on a clock, and the
-  review sweep flags nothing because nothing is set
+- **Retention windows** — days after a case ends, per class: agreements
+  **2,555**, photos **2,555**, identity **1,825**. Seven years is the
+  business-record window recalled for Hong Kong, and the photograph is the
+  collateral the agreement describes; five years is the AML window recalled.
+  Legal confirms them
+- **The review is a review** — the sweep flags a case past its window,
+  gauges each class, writes nothing and deletes nothing; deletion on expiry
+  is a second decision, and a class nobody has set a window for is flagged as
+  unset rather than treated as zero
 - **Legal hold** — the reason written on a case, not the guard; the guard is
   whether sealed evidence exists, read under the row lock
 - **Erasure, in flight** — a signed case that is not yet `released` or
@@ -66,46 +72,48 @@ never an assertion of law.
 | Archive copy of sealed bytes | yes, hourly, digest-checked, through a port that cannot delete | the bucket's lock rule, set by hand and verified by nothing |
 | Integrity re-hash | yes, **200** rows per pass | — |
 | Database backups | one check grades the gaps file against the registry, run by the build and by the nightly alike, across every environment | two age recipients, one green nightly, a restore drill |
-| Second factor | required in production, optional in staging | a decision on staging; a fresh challenge on payout |
+| Second factor | required in production and staging, optional in development | — |
+| A read that names a person | yes — a search records who searched, when, the kind of term and how many cases matched, never the term | — |
 | Identity rebind under a sealed case | closed; a case with sealed evidence refuses a re-record, and a displaced unbound check is purged durably | — |
 
-## What is not written down anywhere
+## What the code leaves to a person
 
-- **Jurisdiction** — no jurisdiction or governing law appears in code,
-  configuration or documents; the legal identity table exists and every legal
-  field is null; all instants are UTC
+- **The regime** — the loan agreement states Hong Kong SAR governing law, the
+  annualised rate, `Fees: None` and the complaints contact; which regime
+  governs the loan, and any particular it prescribes, is Legal's to name, and
+  no licence line prints until Legal writes one
 - **Terms and privacy** — the site's Terms of Service and Privacy Policy pages
-  read "Being prepared"
-- **Processors and residency** — Cloudflare, Neon with its region unpinned,
-  Datadog in the US, Resend; no register, no residency choice
-- **Disputes** — no path for a collector to dispute a valuation, an interest
-  figure or a forfeiture; no complaint route; no cooling-off after signing;
-  the only refusal is declining the packet before the seal
-- **The recorded call** — the owner's notes require a recorded call explaining
-  key terms before signing; nothing models a call, a recording or a
-  precondition for one, and what it must retain is open on
-  [Documents and Signing](/p/grade10-site/vault/documents-and-signing)
-- **Insurance** — the custody agreement says the valuation is used for
-  insurance; no policy, insurer or cover limit appears anywhere
+  read "Being prepared", and the personal information collection statement
+  with them
+- **Processors and residency** — Cloudflare, Neon in `ap-southeast-1`, Datadog
+  in the US carrying no personal data, Resend; no processor register
+- **Disputes** — beyond the complaints contact the paper prints, no path for a
+  collector to dispute a valuation, an interest figure or a forfeiture; the
+  only refusal in the flow is declining the packet before the seal
+- **Insurance** — no policy, no insurer and no cover limit; the paper claims
+  none and states the custodian's duty of reasonable care instead
 
 ## Before the first production case
 
-Every item here is outside the code, with who closes it and how the closure
-is seen. `pnpm run check:libs` in the application repository prints the
-first three until they are done; the rest live outside any check.
+Every item here is a value or an act outside the code, with who closes it and
+how the closure is seen. `pnpm run check:libs` in the application repository
+prints the first until it is done; the rest live outside any check.
 
-1. *Legal* — **Name the lending entity** — legal name, licence number and
-   licence wording per brand in `packages/app-env/src/legalIdentity.ts`;
-   until then production refuses every packet, a production deploy of the
-   brand is refused before the first worker uploads, and `check:libs` names
-   the three unset fields
-2. *Owner* — **Set the lending policy** — loan to value, rate band and
-   period, term presets, offer validity, grace days, the accrual ceiling in
-   `packages/app-env/src/lending.ts`; every one of them is enforced where it
-   is read, an unset bound allows everything, and `check:libs` names each
-3. *Legal* — **Set retention windows** — days per class in
-   `packages/app-env/src/retention.ts`; then decide what deletion on expiry
-   does
+1. *Legal* — **Name the two entities and their licence** — the custodian's
+   registered name, the lender's, the lender's licence number and the exact
+   wording beside it, the complaints contact and the repayment instructions,
+   in `packages/app-env/src/legalIdentity.ts`. Until then a production deploy
+   of the brand is refused before the first worker uploads, no offer may be
+   written in production, and a live loan's balance prints nowhere to pay
+2. *Legal* — **Confirm the postures** — the regime and any particular it
+   prescribes, the e-sign ceremony's adequacy, a document upload as a
+   verification method, whether an AML duty applies, the retention windows,
+   and whether the hash chain with a witnessed head is evidence enough. Each
+   has a posture the code holds meanwhile, stated in the decisions below
+3. *Legal* — **Counsel's wording** — the e-sign disclosure, the per-document
+   consent text, the personal information collection statement, and the
+   Chinese versions of each; the ceremony records whatever is served, so the
+   change is evidenced
 4. *Operations* — **Backups** — two age public keys into
    `neondb/backup-recipients.txt`, one green nightly, a restore drill with
    the chain verifying on the restored copy
@@ -115,73 +123,60 @@ first three until they are done; the rest live outside any check.
 6. *Operations* — **Keys and assets** — the Datadog key with monitors and
    named recipients, the mail key, the CJK font asset per environment (a
    missing font fails the seal for any Chinese name)
-7. *Owner* — **Staging second factor** — required as the compliance plan
-   asked, or optional as the code states; three documents follow the choice
-8. *Owner* — **Who records money** — whether `admin` may hold both sides of
-   the split, and whether a payout demands a fresh factor; whatever the
-   answer, provision **two** people who can move money, because a reversal
-   refuses the row's own recorder — with a single recorder a bounced
-   transfer strands the case in `active` and forfeiture is its only exit
-9. *Legal* — **Counsel's wording** — the e-sign disclosure and per-document
-   consent text; the ceremony records whatever is served, so the change is
-   evidenced
-10. *Legal* — **The particulars on the paper** — annualised rate, fees,
-    governing law, complaints, cooling-off, redemption period, and whether a
-    countersignature or a recorded call is required
-11. *Owner* — **Which product is Grade10 Finance** — the vault's lane under
-    the lending entity, a second product, or something else; the shell's
-    name follows the answer
-12. *Engineering* — **Bump the catalogue** — the spec store carries the
-    corrected vault copy and three event names the application's pinned
-    submodule does not: the two money corrections and a missed visit. Until
-    the pointer moves after the upstream merge, those three stay off a
-    collector's timeline, though the email still tells them
-13. *Engineering* — **Write the vault's specs** — no capability, change or
-    test suite in this store covers the vault, so every page carries the
-    planned pip and nothing validates the timers, the arithmetic, the grants
-    or the twenty mail kinds
-14. *Product* — **A brand time zone** — a delta to the shared
-    dates-and-times contract before any surface leaves UTC
-15. *Owner* — **Reminders** — days before due, cadence when overdue,
-    channel; the highest-value decision left on this list, because every
-    other event reaches the borrower and the due date reaches nobody. The
-    message map and the sweep pattern are ready for the two kinds, and the
-    question is open on
-    [Collector Pages](/p/grade10-site/vault/collector-pages)
+7. *Operations* — **The region** — every Neon project in `ap-southeast-1`,
+   the one home residency answers with; a project created elsewhere is
+   replaced, never moved
+8. *Owner* — **Two people who can move money** — a reversal refuses the row's
+   own recorder and a payout refuses the offer's own maker, so with a single
+   money holder a bounced transfer strands the case in `active` and
+   forfeiture is its only exit
+9. *Engineering* — **Bump the catalogue** — the collector's own words live in
+   this store and not in the submodule the application pins: the offer's
+   total and what a late day costs, accepting, declining and cancelling,
+   where to pay, the ceremony's chrome in Chinese, and the timeline entries
+   for a reminder, a forfeiture notice, a missed visit and the two money
+   corrections. Until the pointer moves after the upstream merge, the worker
+   answers all of it and the collector's page does not show it: the acts are
+   not on the page, the signing screen serves English to a Chinese reader,
+   and those entries stay off the timeline — the email tells them either way
+10. *Engineering* — **Write the vault's specs** — the capabilities behind
+    these pages, so the timers, the arithmetic, the grants and the
+    twenty-three mail kinds are validated rather than described
 
 :::callout{kind="warning"}
-`check:libs` lists **46** unset values, twenty of them the entity and policy
-fields items 1 and 2 name and none of them a database or a Hyperdrive id the
-vault depends on. One blocks a deploy: without the registered legal name a
-production run is refused before it uploads anything.
+`check:libs` lists **43** unset values. Six are Grade10's own and every one is
+item 1's: the two registered names, the licence number and its wording, the
+complaints contact and the repayment instructions. One of the six blocks a
+deploy — without the custodian's registered name a production run is refused
+before it uploads anything — and a second stops the lane, because no offer is
+written without the lender's. The rest belong to zzz, which lends nothing.
 :::
 
 :::detail{title="Product decisions" for="pm"}
-Questions for counsel, each with the fact the code holds today.
+Where the law might bind, the borrower-favourable rule is the one taken — and
+"more" never means a charge. Every statute below is as engineering recalls it,
+never asserted; a TBC row names who supplies the fact and the posture the code
+holds until they do.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Regime and licence | ❓ Open | Which regime governs a loan secured on a collectible held in a shop locker in Hong Kong, and whether it prescribes particulars, a licence number on the paper, a rate ceiling or a redemption period; the code permits **0% to 100%** per term until a band is set | Legal |
-| Lender entity | ❓ Open | The legal name and licence for the identity table | Legal |
-| E-sign adequacy | ❓ Open | Whether the ceremony and its interim wording bind a consumer loan and a custody contract | Legal |
-| Countersignature | ❓ Open | Company signature or witness; one signer today | Legal |
-| Cooling-off and complaints | ❓ Open | None today | Legal |
-| Forfeiture | ❓ Open | Notice, grace, surplus return | Legal |
-| AML and customer due diligence | ❓ Open | Whether duties apply and how deep identification must go; today name, birth date, document, photograph, and a count of the other accounts holding the same document | Legal |
-| A document held under another account | ❓ Open | Today the counter is told and nothing is refused. A refusal needs an override the vault has nowhere, and the accounts behind the count are ones an operator may not look up — so a refusal would strand a legitimate customer with no path | Owner |
-| Upload as a method | ❓ Open | Whether a document upload is an acceptable verification | Legal |
-| Retention per class | ❓ Open | Days for agreements, identity and photos, and a lawful basis for indefinite identity retention on held cases | Legal |
-| Walk-in erasure | ❓ Open | A case-scoped erasure path, since a walk-in's case has no account to erase by | Engineering |
-| Collection statement | ❓ Open | Whether a personal information collection statement must be published before the first capture; the privacy page is a placeholder | Legal |
-| Residency | ❓ Open | Where the data may live; Neon region unpinned, Datadog in the US | Legal |
-| Language | ❓ Open | Whether a Chinese-speaking consumer may be bound by English-only paper, and a Chinese version | Legal |
-| Dates | ❓ Open | Whether UTC on a Hong Kong contract, and an expiry or birthday judged on the UTC day, is acceptable | Legal |
-| Custody duties | ❓ Open | Bailment, warehousing or insurance disclosure for free storage of a third party's goods | Legal |
-| Staff-recorded acceptance | ❓ Open | Whether a staff click evidences the collector's agreement before the signed paper | Legal |
-| Step-up on money | ❓ Open | A fresh factor per payout, or the **12-hour** stamp | Owner |
-| Integrity artefacts | ❓ Open | A hash chain plus an unsigned head export, or a qualified signature and timestamp | Legal |
-| Capacity | ❓ Open | Any duty beyond age 18 | Legal |
-| Reads that carry personal data | ❓ Open | The elevated ladder audits mutations only, so a search by phone or email leaves no trail of who was looked for; the term itself travels in the request body and never in an address | Engineering |
+| Regime and licence | TBC Legal | Which regime governs a loan secured on a collectible in a shop locker in Hong Kong. Posture: the seeded band, presets no longer than **120 days**, the term's own daily rate after the due date, no fee and no compounding — which satisfies both the pawnbroking and the money-lending reading | Legal |
+| The two registered names and the licence line | TBC Legal | The custodian, the lender, the licence number and its wording. Until they are given, production refuses the paper and the offer | Legal |
+| E-sign adequacy | TBC Legal | Posture: in person on the shop's iPad, staff present, identity verified, the disclosure and each consent printed in full on the certificate above their digests | Legal |
+| Upload as a verification method | TBC Legal | Posture: in person and from an upload both stand, and the certificate says which was used | Legal |
+| AML and customer due diligence | TBC Legal | Posture: name, birth date, document, photograph and a count of the other accounts holding the same document; as recalled, money lenders sit under licence conditions rather than the AMLO schedule, and screening is added the day a duty is named | Legal |
+| Retention windows | TBC Legal | Posture: the seeded review windows, flagging only, with no deletion act to build until the numbers are confirmed | Legal |
+| Integrity artefacts | TBC Legal | Posture: the hash chain and the witnessed head export; RFC 3161 over the head is the first upgrade if counsel asks | Legal |
+| The collection statement | TBC Legal | The personal information collection statement the wizard links; the privacy page reads "Being prepared" until it exists | Legal |
+| Bilingual paper | TBC Legal | Templates and consent copy in Chinese, and which language governs; English governs meanwhile | Legal |
+| Forfeiture | Decided | Past due, a written notice naming a cure date at least **14 days** off, and only then a person's decision to take the item; the surplus and the accounting after it are the firm's books | Legal |
+| A document held under another account | Decided | Flag, never refuse: a refusal needs an override the vault has nowhere and would strand a customer with two accounts | Owner |
+| Residency | Decided | Every Neon project in `ap-southeast-1`, the nearest region to Hong Kong and one stated home; Datadog stays in the US on the standing rule that logs carry no personal data | Legal |
+| Dates | Decided | A calendar day — a contract's date, a due date, an age, an expiry — is judged on `Asia/Hong_Kong`; instants stay UTC on the wire and in the database | Legal |
+| Custody duties | Decided | The bailee's duty of reasonable care, stated on the paper; storage is free, no cover is claimed because none is held, and a fee later would be a new agreement rather than a unilateral variation | Legal |
+| Acceptance | Decided | Acceptance moves the case and the signature binds, so either the collector or the counter may record it | Legal |
+| Capacity | Decided | Eighteen is the age of majority; nothing beyond it is asked | Legal |
+| Reads that carry personal data | Decided | The elevated ladder records any call that declares audit details, not only a mutation; a search leaves who searched, when, the kind of term and the hit count, and never the term | Engineering |
 :::
 
 :::detail{title="For engineers" for="engineer"}
