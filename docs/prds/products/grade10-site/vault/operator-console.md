@@ -1,5 +1,6 @@
 ---
 title: Operator Console
+spec: grade10-admin/vault/operator-queue
 audience: operator
 order: 5
 ---
@@ -132,6 +133,20 @@ A borrower who arrives with cash on the due date still waits for a treasurer:
 recording money needs `vault:payout`, which staff do not hold. The visit
 itself is bookable on a live loan.
 :::
+
+## Specs and journeys
+
+**Specs** — this page documents `grade10-admin/vault/operator-queue` and
+`grade10-admin/vault/money-book`. The requirements are theirs; this page holds
+the decision behind them.
+
+::spec{id="grade10-admin/vault/operator-queue"}
+
+::spec{id="grade10-admin/vault/money-book"}
+
+::journeys{id="grade10-admin/vault/operator-queue"}
+
+::journeys{id="grade10-admin/vault/money-book"}
 
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |

@@ -2,8 +2,9 @@
 
 The grade10 site — the collector-facing application. It holds the shell every
 page renders in, how the site answers an address, and every surface inside it:
-the store, the auction, and the loyalty programme. The operator surfaces that
-publish and close out an auction listing belong to `grade10-admin`.
+the store, the auction, the loyalty programme, and the vault. The operator
+surfaces that publish and close out an auction listing, and the ones that work
+the vault's queue and its book, belong to `grade10-admin`.
 
 Capabilities are grouped one level further, by the domain inside the site they
 belong to.
@@ -39,6 +40,20 @@ belong to.
 | Capability | What it governs |
 | --- | --- |
 | [`loyalty/programme`](loyalty/programme/spec.md) | The points-and-tiers membership programme: earning, expiry, tiers, the reward menu, and the operator actions that run it. |
+
+## `vault`
+
+| Capability | What it governs |
+| --- | --- |
+| [`vault/case-intake`](vault/case-intake/spec.md) | How a collector opens a request for one item, photographs it, and which lane the financing question puts it on. |
+| [`vault/case-lifecycle`](vault/case-lifecycle/spec.md) | The fourteen statuses, the two lanes, the clocks that end an abandoned case, and the exits that are not a release. |
+| [`vault/visit-booking`](vault/visit-booking/spec.md) | The shop visit a case is worked at: when one may be booked, how it is moved, and what a missed one costs. |
+| [`vault/valuation-and-offer`](vault/valuation-and-offer/spec.md) | What the item is worth, the bounds the brand lends under, and how the collector answers an offer. |
+| [`vault/loan-and-settlement`](vault/loan-and-settlement/spec.md) | The advance, what a loan owes at any instant, repayments, corrections, forfeiture and release. |
+| [`vault/documents-and-signing`](vault/documents-and-signing/spec.md) | The three documents, the packet, the ceremony on the shop iPad, the seal and the copies. |
+| [`vault/identity-verification`](vault/identity-verification/spec.md) | The counter's identity check, its two refusals, reuse, and the duplicate-document flag. |
+| [`vault/collector-notifications`](vault/collector-notifications/spec.md) | What the collector hears about their case, the reminders, and the ladder a failed message rides. |
+| [`vault/retention-and-erasure`](vault/retention-and-erasure/spec.md) | What the vault keeps after a case ends, and what an erasure removes and holds. |
 
 A capability's OpenSpec ID is `grade10-site/<domain>/<capability>`. Add one as a
 change under `openspec/changes/` rather than directly.

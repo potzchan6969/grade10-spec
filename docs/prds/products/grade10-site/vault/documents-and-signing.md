@@ -1,5 +1,6 @@
 ---
 title: Documents and Signing
+spec: grade10-site/vault/documents-and-signing
 order: 4
 ---
 
@@ -81,6 +82,15 @@ attests to the exact words that were shown; the screen's own chrome speaks
 the collector's language. Bilingual templates and consent copy are Legal's to
 supply.
 :::
+
+## Specs and journeys
+
+**Specs** — this page documents `grade10-site/vault/documents-and-signing`.
+The requirements are its; this page holds the decision behind them.
+
+::spec{id="grade10-site/vault/documents-and-signing"}
+
+::journeys{id="grade10-site/vault/documents-and-signing"}
 
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |

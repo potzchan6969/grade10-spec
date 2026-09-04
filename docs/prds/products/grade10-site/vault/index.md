@@ -27,8 +27,8 @@ made.
   own zone, `Asia/Hong_Kong`, so a due date, a dated page and the day's
   queue are the day the shop is standing on ([[shared/dates-and-times]])
 - **Specs** — the capability requirements are this store's
-  `openspec/specs/grade10-site/vault`, and each page names the one it
-  documents
+  `openspec/specs/grade10-site/vault` and, for the operator's surfaces,
+  `openspec/specs/grade10-admin/vault`; each page names the ones it documents
 
 | Page | What it holds |
 | --- | --- |

@@ -1,5 +1,6 @@
 ---
 title: Case Lifecycle
+spec: grade10-site/vault/case-lifecycle
 order: 2
 ---
 
@@ -154,6 +155,15 @@ released`, guarded on nothing outstanding and no packet open.
   in, which is the one thing a forfeiture establishes did not happen
 - **Nothing unwinds past a live payout** — from `active` the way out is
   repayment, forfeiture, or a recorded reversal of the payout itself
+
+## Specs and journeys
+
+**Specs** — this page documents `grade10-site/vault/case-lifecycle`. The
+requirements are its; this page holds the decision behind them.
+
+::spec{id="grade10-site/vault/case-lifecycle"}
+
+::journeys{id="grade10-site/vault/case-lifecycle"}
 
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |

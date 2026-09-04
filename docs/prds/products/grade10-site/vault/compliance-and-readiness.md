@@ -1,5 +1,6 @@
 ---
 title: Compliance and Readiness
+spec: grade10-site/vault/identity-verification
 order: 6
 ---
 
@@ -151,6 +152,20 @@ deploy — without the custodian's registered name a production run is refused
 before it uploads anything — and a second stops the lane, because no offer is
 written without the lender's. The rest belong to zzz, which lends nothing.
 :::
+
+## Specs and journeys
+
+**Specs** — this page documents `grade10-site/vault/identity-verification`
+and `grade10-site/vault/retention-and-erasure`. The requirements are theirs;
+this page holds the decision behind them.
+
+::spec{id="grade10-site/vault/identity-verification"}
+
+::spec{id="grade10-site/vault/retention-and-erasure"}
+
+::journeys{id="grade10-site/vault/identity-verification"}
+
+::journeys{id="grade10-site/vault/retention-and-erasure"}
 
 :::detail{title="Product decisions" for="pm"}
 Where the law might bind, the borrower-favourable rule is the one taken — and

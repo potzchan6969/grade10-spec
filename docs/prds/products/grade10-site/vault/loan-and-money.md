@@ -1,5 +1,6 @@
 ---
 title: Loan and Money
+spec: grade10-site/vault/loan-and-settlement
 order: 3
 ---
 
@@ -147,6 +148,20 @@ offer in production.
   repayment, a correction of either, settlement, a reminder a week and a day
   before the due date and every seventh day it stays overdue, the forfeiture
   notice with its cure date, and the forfeiture itself
+
+## Specs and journeys
+
+**Specs** — this page documents `grade10-site/vault/valuation-and-offer` and
+`grade10-site/vault/loan-and-settlement`. The requirements are theirs; this
+page holds the decision behind them.
+
+::spec{id="grade10-site/vault/valuation-and-offer"}
+
+::spec{id="grade10-site/vault/loan-and-settlement"}
+
+::journeys{id="grade10-site/vault/valuation-and-offer"}
+
+::journeys{id="grade10-site/vault/loan-and-settlement"}
 
 :::detail{title="Product decisions" for="pm"}
 The loan exists so a collector can raise cash against a card without selling

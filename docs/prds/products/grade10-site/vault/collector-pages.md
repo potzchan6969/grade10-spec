@@ -1,5 +1,6 @@
 ---
 title: Collector Pages
+spec: grade10-site/vault/case-intake
 order: 1
 ---
 
@@ -137,6 +138,25 @@ arrived, and the balance at any date is the quote. There is no extension to
 ask for — a renewal is a new offer somebody writes down, and nobody has
 written one yet.
 :::
+
+## Specs and journeys
+
+**Specs** — this page documents `grade10-site/vault/case-intake`,
+`grade10-site/vault/visit-booking` and
+`grade10-site/vault/collector-notifications`. The requirements are theirs; this
+page holds the decision behind them.
+
+::spec{id="grade10-site/vault/case-intake"}
+
+::spec{id="grade10-site/vault/visit-booking"}
+
+::spec{id="grade10-site/vault/collector-notifications"}
+
+::journeys{id="grade10-site/vault/case-intake"}
+
+::journeys{id="grade10-site/vault/visit-booking"}
+
+::journeys{id="grade10-site/vault/collector-notifications"}
 
 :::detail{title="Product decisions" for="pm"}
 The collector's pages exist so an item can be handed over with the paperwork
