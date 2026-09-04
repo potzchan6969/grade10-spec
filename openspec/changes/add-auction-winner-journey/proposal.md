@@ -38,12 +38,15 @@ what separates a working self-service journey from a faster phone call.
 ## What Changes
 
 - **A won lot becomes an invoice at close.** One invoice and one auction
-  order per lot, issued immediately, priced from the winner's profile address
-  with shipping, insurance and tax **labelled as estimates** until the
-  delivery address is confirmed.
+  order per lot, issued immediately, priced from the account's default
+  shipping address when one exists, with shipping, insurance and tax
+  **labelled as estimates** until the delivery address is confirmed.
 - **The bid-time hold is released, never captured.** The final amount is a
   single fresh charge. Releasing an already-expired hold is a no-op, not an
   error.
+- **The platform keeps an account-wide address book.** A winner can manage
+  multiple named shipping addresses, choose a default, and select any saved
+  address for an order. The selected order snapshot locks at payment.
 - **The winner confirms or amends a delivery address** before payment
   completes. Amending recalculates and reissues at a revised total, shown as a
   delta. The address locks at payment.
@@ -67,9 +70,9 @@ what separates a working self-service journey from a faster phone call.
   wire does not have to default first. The admin confirms the address and
   recalculates before committing, and the payment record carries the revised
   amount with a pointer to the invoice it supersedes.
-- **Every status change is an append-only event.** The admin panel shows the
-  invoice history and the fulfilment history — including failed payment
-  attempts and a full address snapshot per event — not just current state.
+- **Every status change is an append-only log entry.** The admin panel shows
+  the invoice log and the fulfilment log — including failed payment attempts
+  and a full address snapshot per entry — not just current state.
 - **Ten post-close letters**, per order, identifying their lot.
 
 This change **supersedes the archived `add-auction-payment-fulfillment`**

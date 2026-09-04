@@ -33,8 +33,10 @@ explanation, and both immutable histories from existing primitives.
 - **Actions** — `Button` opens orders, confirms addresses, pays, reissues,
   settles, cancels, dispatches, records delivery, and reinstates a bidder
 - **Filtering** — `Select` filters the admin queue to one derived outcome
-- **Address input** — `TextInput` carries the formatted delivery address;
-  multiline reasons and event details use semantic textareas where needed
+- **Address book** — existing `Select`, `TextInput`, and `Button` primitives
+  let the winner choose, add, edit, archive, and set a default among multiple
+  account-wide shipping addresses; multiline reasons and log details use
+  semantic textareas where needed
 - **Loading** — `Skeleton` keeps the existing admin and site loading treatment
 - **Confirmation** — `Dialog` confirms payment, settlement, cancellation,
   dispatch, delivery, reissue, and reinstatement
@@ -69,7 +71,7 @@ ISO 4217 currency code.
   treatment
 - **Grant-disabled actions** — payment and shipment controls stay visible and
   disabled when the caller lacks the corresponding grant
-- **History** — invoice and fulfilment events remain chronological, immutable,
+- **History** — invoice and fulfilment logs remain chronological, immutable,
   and address-snapshot based
 - **Loading and transport error** — existing admin `Skeleton` and error `Text`
   treatments; a detail retry does not select a different order

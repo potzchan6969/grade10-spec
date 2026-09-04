@@ -9,7 +9,7 @@
 **Accepted by:**
 
 - `winner-order-SC-01` — An invoice is issued at lot close
-- `winner-order-SC-02` — A winner with no profile address cannot yet pay
+- `winner-order-SC-02` — A winner with no default address cannot yet pay
 - `winner-order-SC-22` — An account keeps multiple shipping addresses
 - `winner-order-SC-23` — The account has one optional default
 - `winner-order-SC-24` — Editing a saved address does not rewrite an order
