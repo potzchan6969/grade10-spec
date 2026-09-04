@@ -348,7 +348,8 @@ function archivedIds(root) {
 const idsIn = (text) => text.match(ISSUED_ID) ?? [];
 
 /** The `user-journeys.md` beside a delta, as written — empty when the
- * capability is one nobody walks. */
+ * change leans on the durable journeys, and holding `**Walked by:** nobody`
+ * for a capability no end user reaches (rule `walked` asks which). */
 const journeysBeside = (root, file) =>
   readTextIfExists(join(root, file.replace(/spec\.md$/, "user-journeys.md"))) ??
   "";

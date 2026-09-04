@@ -34,13 +34,14 @@ export const LiveAutoLeading: Story = {
   args: { state: "live-auto-leading" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("heading", { name: /Charizard/ })).toBeVisible();
+    expect(canvas.getByRole("heading", { name: /Carddass/ })).toBeVisible();
+    expect(canvas.getByText("Raise your private maximum")).toBeVisible();
+    expect(canvas.getByText(/Max: HK\$95,000/)).toBeVisible();
+    expect(canvas.getByText(/Leading · HK\$58,000/)).toBeVisible();
+    expect(canvas.queryByText("Min. bid")).not.toBeInTheDocument();
+    expect(canvas.getAllByText(/vs max/)).toHaveLength(3);
     expect(
-      canvas.getByText(/Raise your private maximum \(current: HK\$8,000\)/),
-    ).toBeVisible();
-    expect(canvas.getByText("Min. bid")).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: /^Raise maximum ·/ }),
+      canvas.getByRole("button", { name: /^Raise maximum to/ }),
     ).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Your bid history" }),
@@ -62,7 +63,7 @@ export const LiveNoBids: Story = {
     expect(canvas.getAllByText("No bids yet").length).toBeGreaterThan(0);
     expect(canvas.getByText("Set your private maximum")).toBeVisible();
     expect(canvas.getByText("Min. bid")).toBeVisible();
-    expect(canvas.getByRole("button", { name: /^Place Bid/ })).toBeVisible();
+    expect(canvas.getByRole("button", { name: /^Set maximum/ })).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Your bid history" }),
     ).not.toBeInTheDocument();
@@ -75,16 +76,25 @@ export const LiveAutoOutbid: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getAllByText(/vs current/)).toHaveLength(2);
     expect(
-      canvas.getByRole("button", { name: /^Raise maximum ·/ }),
+      canvas.getByRole("button", { name: /^Raise maximum to/ }),
     ).toBeVisible();
   },
 };
-export const ClosedSold: Story = { args: { state: "closed-sold" } };
+export const ClosedSold: Story = {
+  args: { state: "closed-sold" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Winning bid")).toBeVisible();
+    expect(canvas.getByText("Closed")).toBeVisible();
+    expect(canvas.getByText("30 Aug 2026")).toBeVisible();
+    expect(canvas.getByText("Closed at 17:15. Ran 7d 15h")).toBeVisible();
+  },
+};
 export const ClosedWonPaymentDue: Story = {
   args: { state: "closed-won-payment-due" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Pay Invoice" })).toBeVisible();
+    expect(canvas.getByRole("button", { name: "Continue" })).toBeVisible();
   },
 };
 export const ClosedWonSettled: Story = {

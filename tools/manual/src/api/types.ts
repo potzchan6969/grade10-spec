@@ -98,6 +98,10 @@ export type SpecEntry = {
   featureSet?: string;
   requirements: Requirement[];
   journeys?: Journey[];
+  /** The journeys file says `**Walked by:** nobody`: no end user reaches
+   * this capability on its own, so it has no stories by decision rather
+   * than by omission. */
+  unwalked?: boolean;
   testCases?: TestCase[];
   testCasesStatus?: TestSuiteStatus;
   /** Scenario ids the suite deliberately leaves uncovered

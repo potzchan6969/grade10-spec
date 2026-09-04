@@ -1,3 +1,4 @@
+import { Alert } from "@grade10/design-system/components/display/alert";
 import { Card } from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
@@ -51,8 +52,8 @@ function PaymentMethodDialog({
       description:
         "Your payment method is being authorized. Keep this dialog open while Stripe completes the request.",
       footer: (
-        <Button disabled size="md">
-          Authorizing payment method
+        <Button loading size="md">
+          Authorizing…
         </Button>
       ),
     },
@@ -86,9 +87,16 @@ function PaymentMethodDialog({
                 Stripe securely collects your payment details here.
               </Text>
             </Card>
+            {current.refusal != null ? (
+              <Alert
+                dismissible={false}
+                layout="inline"
+                status="error"
+                title={current.refusal}
+              />
+            ) : null}
           </VStack>
         </DialogBody>
-        {current.refusal ? <Text role="alert">{current.refusal}</Text> : null}
         <DialogFooter>{current.footer}</DialogFooter>
       </DialogContent>
     </Dialog>

@@ -29,7 +29,7 @@ the thing it acts on.
 | --- | --- | --- | --- | --- |
 | 1 | `proposal.md` | Product manager | `/planning-pm` | Always |
 | 2 | `specs/<capability>/spec.md` | Product manager | `/planning-pm` | Always |
-| 3 | `specs/<capability>/user-journeys.md` | Product manager | `/planning-pm` | Unless nobody walks it |
+| 3 | `specs/<capability>/user-journeys.md` | Product manager | `/planning-pm` | Always — one nobody walks says so in it |
 | 4 | `specs/<capability>/test-cases.md` | QA | `/planning-qa` | Optional |
 | 5 | `ui-design.md` | Designer | `/planning-design` | Optional |
 | 6 | `tech-design.md` | Engineer | `/planning-dev` | Optional |
@@ -223,7 +223,7 @@ Nobody sends a message. The files themselves are the signal.
 | What you see | What it means | Whose turn |
 | --- | --- | --- |
 | `proposal.md` alone | A reason, no requirements yet | PM |
-| Deltas, no `user-journeys.md` | The capability may be one nobody walks — check before assuming | PM |
+| Deltas, no `user-journeys.md` | The stories are owed — a capability nobody walks says `**Walked by:** nobody` in the file, so a missing one is never the exemption | PM |
 | Journeys, no `test-cases.md` | Nothing has been derived yet | QA |
 | A user-facing change, no `ui-design.md` | Screens unmapped | Designer |
 | No `tasks.md` | Still being planned — the only handover signal there is | Engineer |

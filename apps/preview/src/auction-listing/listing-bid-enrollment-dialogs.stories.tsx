@@ -46,7 +46,7 @@ SetupModal.play = async () => {
     ),
   ).toBeInTheDocument();
   expect(
-    within(dialog).getByRole("button", { name: "Continue" }),
+    within(dialog).getByRole("button", { name: "Confirm" }),
   ).toBeDisabled();
 };
 
@@ -70,9 +70,7 @@ SetupModalFromChange.play = async () => {
       name: "I confirm I am 18 years of age or older.",
     }),
   ).toBeChecked();
-  expect(
-    within(dialog).getByRole("button", { name: "Continue" }),
-  ).toBeEnabled();
+  expect(within(dialog).getByRole("button", { name: "Confirm" })).toBeEnabled();
 };
 
 export const PaymentAuthorizationPending: Story = {
@@ -85,7 +83,7 @@ export const PaymentAuthorizationPending: Story = {
     );
     expect(
       within(dialog).getByRole("button", {
-        name: "Authorizing payment method",
+        name: "Authorizing…",
       }),
     ).toBeDisabled();
   },

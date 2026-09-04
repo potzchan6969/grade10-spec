@@ -98,9 +98,11 @@ Do not stop, and do not invent flows. `/spec-to-tcs` writes the missing
 existing SHALL and scenario clause, adding no requirements — then derives the
 suite, and reports the new journeys file in the same run.
 
-A capability nobody reaches on its own has no journeys by design — a
-cross-cutting policy, a package contract, a backend convention. It gets no
-suite either. Never invent an actor to justify one.
+A capability nobody reaches on its own says so in its `user-journeys.md` —
+`**Walked by:** nobody` in place of the stories — for a cross-cutting policy,
+a package contract, a backend convention. It gets no suite either. Never
+invent an actor to justify one. A capability with no journeys file at all is
+not exempt: `pnpm check:manual` fails it, and the PM owes the file.
 
 ## Keeping drafts current
 

@@ -15,6 +15,7 @@ import {
   AUCTION_LOT,
   AUCTION_LOT_BADGES,
   AUCTION_LOT_DETAILS_COPY,
+  AUCTION_LOT_FACTS,
   AUCTION_LOT_LINKED_PAYMENT_METHOD,
   type AuctionTiming,
   applyBidExtension,
@@ -30,12 +31,16 @@ import {
   userBidHistoryForState,
 } from "./auction-lot-details-content";
 import { AuctionLotDetailsPageShell } from "./auction-lot-details-page-shell";
+import {
+  navigateToStory,
+  ORDER_DETAILS_STORY_ID,
+} from "./workbench-account-nav";
 
 const LIVE_BID_INTERVAL_MS = 8_000;
 
 const AUCTION_LOT_MARKET_COMPS = {
-  title: "Recent verified PSA 10 sales",
-  range: "HK$14,600–HK$16,200",
+  title: "Market price",
+  range: "HK$46,800–HK$171,600",
 };
 
 type AuctionLotDetailsPageProps = {
@@ -136,7 +141,6 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
       >
         <ListingLotGallery images={AUCTION_LOT.images} />
         <ListingAuctionCardSidebar
-          authenticationBody={AUCTION_LOT_DETAILS_COPY.authenticationBody}
           badges={AUCTION_LOT_BADGES}
           bidCardFooter={
             auctionLotShowsLinkedPaymentMethod(state) && paymentLinked ? (
@@ -149,12 +153,14 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
           }
           copy={AUCTION_LOT_DETAILS_COPY.sidebar}
           description={AUCTION_LOT.description}
+          facts={AUCTION_LOT_FACTS}
           history={history}
           historyResetKey={state}
           locale={FIXTURE_SHIPPED_LOCALE}
-          marketComps={AUCTION_LOT_MARKET_COMPS}
+          marketComps={view.closed ? undefined : AUCTION_LOT_MARKET_COMPS}
           onCommitMaximum={requestBidAction}
           onPlaceBid={requestBidAction}
+          onViewOrderDetails={() => navigateToStory(ORDER_DETAILS_STORY_ID)}
           recentBidsAccessory={
             <ListingUserBidHistory
               activityTimeCopy={FIXTURE_ACTIVITY_TIME_COPY}

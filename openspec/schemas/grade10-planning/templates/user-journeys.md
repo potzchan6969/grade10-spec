@@ -1,8 +1,11 @@
 <!-- The journeys this capability's scenarios accept. At most five across every
      capability the change touches. Title each one actor first, then the action,
      in the third person. A capability no end user reaches on its own - a
-     cross-cutting policy, a package contract, a backend convention - writes no
-     file at all; never invent an actor to fill one. -->
+     cross-cutting policy, a package contract, a backend convention - keeps the
+     `## User journeys` heading and replaces every story with one line:
+     `**Walked by:** nobody on their own - <who inherits it, and which
+     capability's journeys reach it instead>`. Never invent an actor to fill
+     one; never leave the file out either - `pnpm check:manual` fails both. -->
 
 <!-- <capability> is the capability's path with slashes as hyphens:
      grade10-site/store/product-listing issues

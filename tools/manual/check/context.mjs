@@ -41,6 +41,11 @@ export const RULES = [
     title: "Journeys accepted by a scenario the spec does not issue",
   },
   {
+    key: "walked",
+    level: "fail",
+    title: "Capabilities that never say who walks them",
+  },
+  {
     key: "grouping",
     level: "fail",
     title: "Durable specs holding a heading the archive would fold",

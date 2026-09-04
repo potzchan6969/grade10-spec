@@ -1,7 +1,9 @@
 import {
+  currencyExponent,
   DEFAULT_LISTING_CURRENCY,
   formatMoney,
   parseMoneyInputToMinor,
+  toMinorUnits,
 } from "../../lib/format-money";
 import type { ListingAuctionStanding } from "./types";
 
@@ -117,6 +119,72 @@ export function isMaximumBelowFloor(
   floorMaximumMinor: number,
 ): boolean {
   return valueMinor == null || valueMinor < floorMaximumMinor;
+}
+
+/**
+ * Keep digits and at most one decimal point, capped to the currency's minor
+ * exponent so HKD cannot accept `.00001`.
+ */
+export function sanitizeMoneyDraft(raw: string, currency: string): string {
+  const exponent = currencyExponent(currency);
+  const cleaned = raw.replace(/[^\d.]/g, "");
+  const dot = cleaned.indexOf(".");
+  if (dot === -1) return cleaned;
+  if (exponent === 0) return cleaned.slice(0, dot);
+  const whole = cleaned.slice(0, dot);
+  const fraction = cleaned
+    .slice(dot + 1)
+    .replace(/\./g, "")
+    .slice(0, exponent);
+  return `${whole}.${fraction}`;
+}
+
+/**
+ * Parse a draft to minor units only when it matches the currency's precision
+ * exactly (no silent rounding of excess fraction digits).
+ */
+export function parseExactMoneyDraftToMinor(
+  draft: string,
+  currency: string,
+): number | null {
+  const normalized = draft.trim().replace(/,/g, "");
+  if (!normalized || normalized === ".") return null;
+  try {
+    return toMinorUnits(normalized, currency);
+  } catch {
+    return null;
+  }
+}
+
+export type CommittedMaximumValidation =
+  | { ok: true; amountMinor: number }
+  | { ok: false; reason: "invalid" | "below-floor" };
+
+/**
+ * Guard for UI commit and application/server accept paths. Amount must be a
+ * safe integer of minor units at or above the floor. Any exact minor amount
+ * above the floor is allowed (not limited to the listing increment grid).
+ */
+export function validateCommittedMaximumMinor(input: {
+  amountMinor: number;
+  floorMinor: number;
+}): CommittedMaximumValidation {
+  const { amountMinor, floorMinor } = input;
+  if (!Number.isSafeInteger(amountMinor) || amountMinor < 0) {
+    return { ok: false, reason: "invalid" };
+  }
+  if (amountMinor < floorMinor) {
+    return { ok: false, reason: "below-floor" };
+  }
+  return { ok: true, amountMinor };
+}
+
+/** Editable major-unit draft for a minor amount (no grouping separators). */
+export function moneyDraftFromMinor(minor: number, currency: string): string {
+  const exponent = currencyExponent(currency);
+  const major = minor / 10 ** exponent;
+  if (exponent === 0 || Number.isInteger(major)) return String(major);
+  return major.toFixed(exponent).replace(/0+$/, "").replace(/\.$/, "");
 }
 
 export { parseMoneyInputToMinor };

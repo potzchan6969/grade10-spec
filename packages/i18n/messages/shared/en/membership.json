@@ -7,7 +7,13 @@
     "qrAlt": "Your member code, as a scannable square",
     "refresh": "New code",
     "secondsUnit": "s",
-    "used": "This code has already been used"
+    "used": "This code has already been used",
+    "walletAdd": "Add to {wallet}",
+    "walletEnd": "End this pass",
+    "walletFailed": "That did not go through. Try again.",
+    "walletHeading": "Carry your card on your phone",
+    "walletHeld": "You are carrying a pass in {wallet}",
+    "walletName": "Google Wallet"
   },
   "page": {
     "title": "Membership",

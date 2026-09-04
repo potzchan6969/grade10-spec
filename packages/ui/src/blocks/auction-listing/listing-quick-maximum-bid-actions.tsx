@@ -15,12 +15,18 @@ import { Info } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import type { ShippedLocale } from "../../lib/format-datetime";
 import {
-  currencyExponent,
   formatMoney,
   formatMoneyNumeric,
   formatMoneyPrefix,
 } from "../../lib/format-money";
-import { isMaximumBelowFloor, resolveMaximumFloor } from "./listing-bid-money";
+import {
+  isMaximumBelowFloor,
+  moneyDraftFromMinor,
+  parseExactMoneyDraftToMinor,
+  resolveMaximumFloor,
+  sanitizeMoneyDraft,
+  validateCommittedMaximumMinor,
+} from "./listing-bid-money";
 import type { ListingAuctionBidView } from "./types";
 
 const PRESET_INCREMENTS = [
@@ -31,11 +37,17 @@ const PRESET_INCREMENTS = [
 
 type ListingQuickMaximumBidActionsCopy = {
   setPrivateMaximum: string;
+  /** Mode title when a maximum is already committed — no amount; use `currentMaximum`. */
   raisePrivateMaximum: string;
-  /** e.g. "Place Bid · {amount}" — first maximum commit. */
+  /** Shown under the raise title, e.g. "Max: {amount}". */
+  currentMaximum: string;
+  /** e.g. "Set maximum to {amount}" — first maximum above the floor. */
   reviewMaximum: string;
-  /** e.g. "Raise maximum · {amount}" — when a maximum is already committed. */
+  /** e.g. "Raise maximum to {amount}" — when a maximum is already committed and above the floor. */
   raiseMaximumReview: string;
+  /** e.g. "Bid now at {amount}" — when the commit amount is the minimum eligible bid. */
+  bidNowReview: string;
+  /** Privacy + ceiling; mechanism is a short reinforcing line. */
   privateMaximumTooltip: string;
   /**
    * Always-on mechanism line under the primary action — e.g. we bid as needed,
@@ -44,8 +56,10 @@ type ListingQuickMaximumBidActionsCopy = {
   maximumMechanismSubtext: string;
   /** Placeholder when the custom field is empty, e.g. "Custom amount (min. {amount})". */
   customAmountPlaceholder: string;
-  /** Shown under the custom field only when the typed amount is invalid, e.g. "Min.: {amount}". */
+  /** Shown under the custom field when the typed amount is below the floor, e.g. "Min.: {amount}". */
   stepperMessage: string;
+  /** Shown when the draft cannot be parsed as a money amount. */
+  invalidAmount: string;
   useMinimum: string;
   bidImmediate: string;
   bidUpTo: string;
@@ -53,6 +67,8 @@ type ListingQuickMaximumBidActionsCopy = {
   nextEligibleBid: string;
   /** e.g. "{amount} vs current" — money delta above the current bid. */
   amountAboveCurrent: string;
+  /** e.g. "{amount} vs max" — money delta above the viewer's private maximum. */
+  amountAboveMaximum: string;
 };
 
 type ListingQuickMaximumBidActionsProps = {
@@ -69,21 +85,9 @@ type MaximumPreset = {
   immediate: boolean;
 };
 
-function toMinor(major: number, currency: string): number {
-  return Math.round(major * 10 ** currencyExponent(currency));
-}
-
 function defaultPresetKey(presets: MaximumPreset[]): string | null {
   if (presets.length === 0) return null;
   return presets[Math.floor(presets.length / 2)]?.key ?? null;
-}
-
-function parseCustomMinor(draft: string, currency: string): number | null {
-  const normalized = draft.trim().replace(/,/g, "");
-  if (!normalized) return null;
-  const major = Number(normalized);
-  if (!Number.isFinite(major) || major < 0) return null;
-  return toMinor(major, currency);
 }
 
 function ListingQuickMaximumBidActions({
@@ -93,6 +97,8 @@ function ListingQuickMaximumBidActions({
   onCommitMaximum,
 }: ListingQuickMaximumBidActionsProps) {
   const hasCommittedMaximum = view.viewerMaximumMinor != null;
+  /** Already leading under a private maximum — raise only; floor chip is not a bid. */
+  const isLeadingWithMaximum = view.standing === "leading-max";
   const maximumFloor = resolveMaximumFloor({
     minBidMinor: view.minBidMinor,
     incrementMinor: view.incrementMinor,
@@ -110,54 +116,66 @@ function ListingQuickMaximumBidActions({
   const presets = useMemo((): MaximumPreset[] => {
     const formatDelta = (deltaMinor: number) =>
       `$${formatMoneyNumeric(deltaMinor, view.currency, locale)}`;
+    const raiseDeltaTemplate = isLeadingWithMaximum
+      ? copy.amountAboveMaximum
+      : copy.amountAboveCurrent;
 
-    const fromCurrent = PRESET_INCREMENTS.map(({ multiples, captionKey }) => {
-      const amountMinor =
-        multiples === 1 && !view.hasBids
-          ? floorMaximumMinor
-          : view.currentBidMinor + view.incrementMinor * multiples;
-      const caption =
-        captionKey === "nextEligible"
-          ? copy.nextEligibleBid
-          : copy.amountAboveCurrent.replace(
-              "{amount}",
-              formatDelta(view.incrementMinor * multiples),
-            );
-      return {
-        key: `current-${multiples}`,
-        caption,
-        amountMinor,
-        immediate: multiples === 1,
-      };
-    }).filter((preset) => preset.amountMinor >= floorMaximumMinor);
+    const fromCurrent = PRESET_INCREMENTS.flatMap(
+      ({ multiples, captionKey }): MaximumPreset[] => {
+        // Skip "Min. bid" while leading — the custom field already states the
+        // raise floor, and a $1 nudge is not a useful quick pick.
+        if (isLeadingWithMaximum && captionKey === "nextEligible") {
+          return [];
+        }
+        const amountMinor =
+          multiples === 1 && !view.hasBids
+            ? floorMaximumMinor
+            : view.currentBidMinor + view.incrementMinor * multiples;
+        if (amountMinor < floorMaximumMinor) return [];
+        const caption =
+          captionKey === "nextEligible"
+            ? copy.nextEligibleBid
+            : raiseDeltaTemplate.replace(
+                "{amount}",
+                formatDelta(view.incrementMinor * multiples),
+              );
+        return [
+          {
+            key: `current-${multiples}`,
+            caption,
+            amountMinor,
+            immediate: multiples === 1,
+          },
+        ];
+      },
+    );
 
     if (fromCurrent.length > 0) return fromCurrent;
 
-    // Raise floor sits above current+step presets — keep the same caption voice
-    // (Min. bid / vs current) with amounts anchored to the floor.
-    return [0, 2, 4].map((steps, index) => {
+    // Raise floor sits above current+step presets. While leading, skip the
+    // floor chip and offer increments above it with "vs max" captions.
+    const fallbackSteps = isLeadingWithMaximum ? [1, 2, 4] : [0, 2, 4];
+    return fallbackSteps.map((steps) => {
       const amountMinor = floorMaximumMinor + view.incrementMinor * steps;
-      const deltaMinor = view.hasBids
-        ? amountMinor - view.currentBidMinor
-        : view.incrementMinor * steps;
+      const deltaMinor = view.incrementMinor * steps;
+      const isFloor = steps === 0;
       const caption =
-        steps === 0
+        isFloor && !isLeadingWithMaximum
           ? copy.nextEligibleBid
-          : copy.amountAboveCurrent.replace(
-              "{amount}",
-              formatDelta(deltaMinor),
-            );
+          : raiseDeltaTemplate.replace("{amount}", formatDelta(deltaMinor));
       return {
         key: `floor-${steps}`,
         caption,
         amountMinor,
-        immediate: index === 0,
+        immediate: isFloor && !isLeadingWithMaximum,
       };
     });
   }, [
     copy.amountAboveCurrent,
+    copy.amountAboveMaximum,
     copy.nextEligibleBid,
     floorMaximumMinor,
+    isLeadingWithMaximum,
     locale,
     view.currency,
     view.currentBidMinor,
@@ -167,7 +185,7 @@ function ListingQuickMaximumBidActions({
 
   const customActive = customDraft.trim() !== "";
   const customMinor = customActive
-    ? parseCustomMinor(customDraft, view.currency)
+    ? parseExactMoneyDraftToMinor(customDraft, view.currency)
     : null;
   const resolvedPresetKey = customActive
     ? null
@@ -181,27 +199,49 @@ function ListingQuickMaximumBidActions({
   const commitMinor = customActive
     ? customMinor
     : (selectedPreset?.amountMinor ?? null);
+  const commitValidation =
+    commitMinor != null
+      ? validateCommittedMaximumMinor({
+          amountMinor: commitMinor,
+          floorMinor: floorMaximumMinor,
+        })
+      : null;
   const maximumInvalid =
     commitMinor != null && isMaximumBelowFloor(commitMinor, floorMaximumMinor);
-  const canPlaceBid = commitMinor != null && !maximumInvalid;
+  const canPlaceBid = commitValidation?.ok === true;
 
   const heading = hasCommittedMaximum
-    ? copy.raisePrivateMaximum.replace(
-        "{amount}",
-        formatMoney(view.viewerMaximumMinor ?? 0, view.currency, { locale }),
-      )
+    ? copy.raisePrivateMaximum
     : copy.setPrivateMaximum;
+  const currentMaximumLabel =
+    hasCommittedMaximum && view.viewerMaximumMinor != null
+      ? copy.currentMaximum.replace(
+          "{amount}",
+          formatMoney(view.viewerMaximumMinor, view.currency, { locale }),
+        )
+      : null;
 
-  const actionTemplate = hasCommittedMaximum
-    ? copy.raiseMaximumReview
-    : copy.reviewMaximum;
+  // Floor amount while leading is a maximum raise, not an immediate bid.
+  const isMinimumBid =
+    commitMinor != null &&
+    commitMinor === floorMaximumMinor &&
+    !isLeadingWithMaximum;
+  const actionTemplate = isMinimumBid
+    ? copy.bidNowReview
+    : hasCommittedMaximum
+      ? copy.raiseMaximumReview
+      : copy.reviewMaximum;
   const placeBidLabel =
     commitMinor != null
       ? actionTemplate.replace(
           "{amount}",
           formatMoney(commitMinor, view.currency, { locale }),
         )
-      : actionTemplate.replace(" · {amount}", "").replace("{amount}", "");
+      : actionTemplate
+          .replace(" to {amount}", "")
+          .replace(" at {amount}", "")
+          .replace(" · {amount}", "")
+          .replace("{amount}", "");
 
   const floorAmountLabel = formatMoney(floorMaximumMinor, view.currency, {
     locale,
@@ -210,7 +250,7 @@ function ListingQuickMaximumBidActions({
     "{amount}",
     formatMoneyNumeric(floorMaximumMinor, view.currency, locale),
   );
-  const helperBase = copy.stepperMessage.replace("{amount}", floorAmountLabel);
+  const floorHelper = copy.stepperMessage.replace("{amount}", floorAmountLabel);
 
   function handleSelectPreset(preset: MaximumPreset) {
     setSelectedPresetKey(preset.key);
@@ -218,8 +258,9 @@ function ListingQuickMaximumBidActions({
   }
 
   function handleCustomChange(next: string) {
-    setCustomDraft(next);
-    if (next.trim() === "") {
+    const sanitized = sanitizeMoneyDraft(next, view.currency);
+    setCustomDraft(sanitized);
+    if (sanitized.trim() === "") {
       setSelectedPresetKey(defaultPresetKey(presets));
     } else {
       setSelectedPresetKey(null);
@@ -227,9 +268,7 @@ function ListingQuickMaximumBidActions({
   }
 
   function handleUseMinimum() {
-    setCustomDraft(
-      String(floorMaximumMinor / 10 ** currencyExponent(view.currency)),
-    );
+    setCustomDraft(moneyDraftFromMinor(floorMaximumMinor, view.currency));
     setSelectedPresetKey(null);
   }
 
@@ -239,33 +278,31 @@ function ListingQuickMaximumBidActions({
   }
 
   function handlePlaceBid() {
-    if (commitMinor == null || maximumInvalid) return;
-    onCommitMaximum(commitMinor);
+    if (commitValidation?.ok !== true) return;
+    onCommitMaximum(commitValidation.amountMinor);
   }
 
   const customInvalid = customActive && (customMinor == null || maximumInvalid);
-  const helperMessage = customInvalid ? (
+  const helperMessage = !customActive ? undefined : customMinor == null ? (
+    copy.invalidAmount
+  ) : maximumInvalid ? (
     <>
-      {helperBase}
-      {maximumInvalid ? (
-        <>
-          {" · "}
-          <Link
-            className="align-baseline"
-            onClick={handleUseMinimum}
-            render={<button type="button" />}
-            size="xs"
-            variant="secondary"
-          >
-            {copy.useMinimum}
-          </Link>
-        </>
-      ) : null}
+      {floorHelper}
+      {" · "}
+      <Link
+        className="align-baseline"
+        onClick={handleUseMinimum}
+        render={<button type="button" />}
+        size="xs"
+        variant="secondary"
+      >
+        {copy.useMinimum}
+      </Link>
     </>
   ) : undefined;
 
   return (
-    <VStack className="w-full" gap="sm">
+    <VStack className="w-full" gap="md">
       <VStack className="w-full" gap="xs">
         <HStack gap="xs" vAlign="center">
           <Text
@@ -288,59 +325,69 @@ function ListingQuickMaximumBidActions({
             </Tooltip>
           </TooltipProvider>
         </HStack>
+        {currentMaximumLabel != null ? (
+          <Text
+            className="tabular-nums text-foreground"
+            size="sm"
+            weight="medium"
+          >
+            {currentMaximumLabel}
+          </Text>
+        ) : null}
         <Text className="text-secondary-foreground" size="xs">
           {copy.maximumMechanismSubtext}
         </Text>
       </VStack>
 
-      <HStack className="w-full" gap="sm" role="group">
-        {presets.map((preset) => {
-          const amountLabel = formatMoney(preset.amountMinor, view.currency, {
-            locale,
-          });
-          const selected = selectedPreset?.key === preset.key;
-          const accessibleName = (
-            preset.immediate ? copy.bidImmediate : copy.bidUpTo
-          ).replace("{amount}", amountLabel);
-          return (
-            <Button
-              aria-label={accessibleName}
-              aria-pressed={selected}
-              className={cn(
-                "h-auto min-w-0 flex-1 flex-col items-center gap-0.5 rounded-(--radius-xl) px-1.5 py-3 text-center whitespace-normal",
-                customActive && "opacity-50",
-                !customActive && !selected && "opacity-50",
-                selected &&
-                  "border-success-ring hover:border-success-ring focus-visible:border-success-ring focus-visible:ring-success-ring/50",
-              )}
-              key={preset.key}
-              onClick={() => handleSelectPreset(preset)}
-              size="md"
-              variant="outline"
-            >
-              <span className="text-xs font-normal leading-tight text-secondary-foreground text-balance">
-                {preset.caption}
-              </span>
-              <span className="text-sm font-medium leading-tight tabular-nums">
-                {amountLabel}
-              </span>
-            </Button>
-          );
-        })}
-      </HStack>
+      <VStack className="w-full" gap="sm">
+        <HStack className="w-full" gap="sm" role="group">
+          {presets.map((preset) => {
+            const amountLabel = formatMoney(preset.amountMinor, view.currency, {
+              locale,
+            });
+            const selected = selectedPreset?.key === preset.key;
+            const accessibleName = (
+              preset.immediate ? copy.bidImmediate : copy.bidUpTo
+            ).replace("{amount}", amountLabel);
+            return (
+              <Button
+                aria-label={accessibleName}
+                aria-pressed={selected}
+                className={cn(
+                  "h-auto min-w-0 flex-1 flex-col items-center gap-0.5 rounded-(--radius-xl) px-1.5 py-3 text-center whitespace-normal",
+                  customActive && "opacity-50",
+                  selected &&
+                    "border-success-ring hover:border-success-ring focus-visible:border-success-ring focus-visible:ring-success-ring/50",
+                )}
+                key={preset.key}
+                onClick={() => handleSelectPreset(preset)}
+                size="md"
+                variant="outline"
+              >
+                <span className="text-xs font-normal leading-tight text-secondary-foreground text-balance">
+                  {preset.caption}
+                </span>
+                <span className="text-sm font-medium leading-tight tabular-nums">
+                  {amountLabel}
+                </span>
+              </Button>
+            );
+          })}
+        </HStack>
 
-      <NumberInput
-        aria-label={customPlaceholder}
-        className={cn("w-full", !customActive && "opacity-50")}
-        inputMode="decimal"
-        message={helperMessage}
-        onChange={(event) => handleCustomChange(event.target.value)}
-        onClear={customActive ? handleClearCustom : undefined}
-        placeholder={customPlaceholder}
-        prefix={formatMoneyPrefix(view.currency, { locale })}
-        status={customInvalid ? "error" : "default"}
-        value={customDraft}
-      />
+        <NumberInput
+          aria-label={customPlaceholder}
+          className={cn("w-full", !customActive && "opacity-50")}
+          inputMode="decimal"
+          message={helperMessage}
+          onChange={(event) => handleCustomChange(event.target.value)}
+          onClear={customActive ? handleClearCustom : undefined}
+          placeholder={customPlaceholder}
+          prefix={formatMoneyPrefix(view.currency, { locale })}
+          status={customInvalid ? "error" : "default"}
+          value={customDraft}
+        />
+      </VStack>
 
       <Button
         className="w-full"

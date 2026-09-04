@@ -12,7 +12,7 @@ backend.
 - [x] 1.1 Update `docs/prds/products/grade10-admin/auction/listing.md` to
   record that an operator can create a listing from the Listings section with
   no campaign, and that the Test panel's Listings tab seeds standalone fixtures.
-- [ ] 1.2 At archive time, copy `## Feature set` and `## User journeys`
+- [x] 1.2 At archive time, copy `## Feature set` and `## User journeys`
   (`grade10-admin-auction-listing-US-06`, `grade10-admin-auction-listing-US-07`) from this delta into the
   durable `grade10-admin/auction/listing` spec beside the existing journeys.
 - [x] 1.3 Verify with `pnpm check:manual` and

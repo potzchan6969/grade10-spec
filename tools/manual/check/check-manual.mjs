@@ -14,7 +14,8 @@
  *        no landing page, or a store file the readers could not parse. One
  *        family is about acceptance: a case tracing a scenario the spec does
  *        not issue, an approved suite holding a draft, a journey accepted by
- *        a scenario its own spec never issued. One is aimed at
+ *        a scenario its own spec never issued, a capability whose journeys
+ *        file neither holds a story nor says nobody walks it. One is aimed at
  *        `openspec archive` rather than at a page: a durable spec carrying a
  *        heading the fold would absorb, and every way an in-flight delta
  *        breaks the fold — a heading it cannot carry, a heading no durable
@@ -70,6 +71,7 @@ import {
   checkUnwritten,
 } from "./shape.mjs";
 import { checkStale } from "./stale.mjs";
+import { checkWalked } from "./walked.mjs";
 
 const EMPTY_CONFIG = {
   storybookBase: "",
@@ -140,6 +142,7 @@ export async function runChecks(target, git) {
     checkCoverage(ctx, shape);
     checkUnwritten(ctx, changes, shape);
     checkAcceptance(ctx, shape);
+    checkWalked(ctx, shape, changes);
     const folded = checkSpecShape(roots.store, shape, add);
     checkSpecMap(roots.store, shape, add);
     checkDeltas(ctx, { changes, shape, pages });

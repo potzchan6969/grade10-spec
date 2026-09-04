@@ -105,7 +105,7 @@ export const Loading: Story = {
     ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.queryByRole("button", { name: /^Place Bid/ })).toBeNull();
+    expect(canvas.queryByRole("button", { name: /^Set maximum/ })).toBeNull();
   },
 };
 
@@ -114,21 +114,21 @@ export const PreAuction: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Starting bid")).toBeInTheDocument();
-    expect(canvas.queryByRole("button", { name: /^Place Bid/ })).toBeNull();
+    expect(canvas.queryByRole("button", { name: /^Set maximum/ })).toBeNull();
   },
 };
 
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("img", { name: /Charizard/ })).toBeInTheDocument();
+    expect(canvas.getByRole("img", { name: /Carddass/ })).toBeInTheDocument();
     expect(
       canvas.getByRole("heading", { name: "Description" }),
     ).toBeInTheDocument();
     expect(canvas.getByText("Set your private maximum")).toBeInTheDocument();
     expect(canvas.getByText("Min. bid")).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: /^Place Bid/ }),
+      canvas.getByRole("button", { name: /^Set maximum/ }),
     ).toBeInTheDocument();
   },
   render: () => lotPage("live-manual"),
@@ -139,7 +139,7 @@ export const PostSold: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Winning bid")).toBeInTheDocument();
-    expect(canvas.queryByRole("button", { name: /^Place Bid/ })).toBeNull();
+    expect(canvas.queryByRole("button", { name: /^Set maximum/ })).toBeNull();
   },
 };
 
@@ -147,7 +147,7 @@ export const PostWonPaymentDue: Story = {
   render: () => lotPage("closed-won-payment-due", soldDetails),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Pay Invoice" })).toBeVisible();
+    expect(canvas.getByRole("button", { name: "Continue" })).toBeVisible();
   },
 };
 
@@ -156,7 +156,7 @@ export const PostWonSettled: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText(/auction won/i)).toBeInTheDocument();
-    expect(canvas.queryByRole("button", { name: "Pay Invoice" })).toBeNull();
+    expect(canvas.queryByRole("button", { name: "Continue" })).toBeNull();
   },
 };
 
@@ -165,7 +165,7 @@ export const PostLost: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText(/did not win/i)).toBeInTheDocument();
-    expect(canvas.queryByRole("button", { name: /^Place Bid/ })).toBeNull();
+    expect(canvas.queryByRole("button", { name: /^Set maximum/ })).toBeNull();
   },
 };
 

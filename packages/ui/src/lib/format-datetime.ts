@@ -177,6 +177,24 @@ export function formatLocalMoment(
   return `${day} ${month} ${year}, ${hours}:${minutes}`;
 }
 
+/** Collector local calendar day: `24 Aug 2026`. */
+export function formatLocalDay(
+  at: Date | number,
+  { locale = "en", timeZone }: { locale?: ShippedLocale; timeZone: string },
+): string {
+  const { day, month, year } = localParts(parseInstant(at), locale, timeZone);
+  return `${day} ${month} ${year}`;
+}
+
+/** Collector local clock: `18:00`. */
+export function formatLocalTime(
+  at: Date | number,
+  { locale = "en", timeZone }: { locale?: ShippedLocale; timeZone: string },
+): string {
+  const { hours, minutes } = localParts(parseInstant(at), locale, timeZone);
+  return `${hours}:${minutes}`;
+}
+
 export function formatCollectorDeadline(
   at: Date | number,
   {
