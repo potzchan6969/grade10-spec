@@ -149,9 +149,14 @@ actor the spec already knows and scenarios that already exist.
   the engineer who plans delivery.
 - Every accepted-by id names a scenario the `spec.md` beside it issues.
   `pnpm check:manual` fails on one that resolves to nothing.
-- **A capability nobody reaches on its own writes no file at all** — a
-  cross-cutting policy, a package contract, a backend convention. Never invent
-  an actor to fill one.
+- **A capability nobody reaches on its own says so in place of the stories**
+  — a cross-cutting policy, a package contract, a backend convention. Its file
+  keeps the `## User journeys` heading and holds one line and no story:
+  `**Walked by:** nobody on their own - <who inherits it, and which
+  capability's journeys reach it instead>`. Never invent an actor to fill one,
+  and never leave the file out: `pnpm check:manual` fails a capability with
+  neither stories nor the declaration, so the exemption is always a decision
+  on record.
 
 ## Where a statement belongs
 

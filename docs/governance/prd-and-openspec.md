@@ -74,7 +74,7 @@ For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 
 - `proposal.md` — scope, why now, consumer impact, non-goals, and a link to the capability's page when one exists;
 - `specs/<capability>/spec.md` — only the requirement deltas against `openspec/specs/`;
-- `specs/<capability>/user-journeys.md` — the stories those requirements accept, unless nobody walks the capability;
+- `specs/<capability>/user-journeys.md` — the stories those requirements accept, or the one line `**Walked by:** nobody on their own - <why>` when no end user reaches the capability;
 - `specs/<capability>/test-cases.md` — QA's derived suite, when the journeys are worth walking;
 - `ui-design.md` — screens, exports and states, when the change alters something a user sees;
 - `tech-design.md` — implementation choices, interfaces, compatibility, and validation approach; and

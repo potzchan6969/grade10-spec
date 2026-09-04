@@ -283,17 +283,25 @@ artifacts:
       judgements and belong to the engineer who plans delivery.
 
 
-      A capability no end user reaches on its own writes no file at all: a
+      A capability no end user reaches on its own still writes the file, and
 
-      cross-cutting policy every other spec inherits (money amounts, dates and
+      says so in place of the stories: a cross-cutting policy every other spec
 
-      times, localization), a package or composition contract, a backend
+      inherits (money amounts, dates and times, localization), a package or
 
-      convention. Never invent an actor to satisfy the artifact - the journeys
+      composition contract, a backend convention. Its `## User journeys`
+
+      section holds one line and no story - `**Walked by:** nobody on their
+
+      own - <who inherits it, and which capability's journeys reach it
+
+      instead>`. Never invent an actor to satisfy the artifact - the journeys
 
       live in the capability the reader actually reaches, which inherits the
 
-      policy.
+      policy. `pnpm check:manual` fails a capability with no journeys file, and
+
+      one whose file neither holds a story nor says nobody walks it.
     requires:
       - specs
   - id: test-cases
