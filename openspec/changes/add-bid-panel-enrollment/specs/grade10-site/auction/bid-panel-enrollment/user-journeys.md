@@ -45,4 +45,4 @@
 **Accepted by:**
 
 - `grade10-site-auction-bid-panel-enrollment-SC-10` — Change is hidden after the first bid
-- `grade10-site-auction-bid-panel-enrollment-SC-11` — First auto bid may open confirm-maximum
+- `grade10-site-auction-bid-panel-enrollment-SC-11` — First maximum does not reopen setup

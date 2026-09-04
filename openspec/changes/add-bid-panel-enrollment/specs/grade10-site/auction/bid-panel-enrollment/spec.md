@@ -142,11 +142,10 @@ selection.
 - **THEN** the linked card is shown
 - **AND** change is not offered
 
-#### Scenario: grade10-site-auction-bid-panel-enrollment-SC-11 - First auto bid may open confirm-maximum
+#### Scenario: grade10-site-auction-bid-panel-enrollment-SC-11 - First maximum does not reopen setup
 
-- **GIVEN** a collector enrolled on a lot in auto-bid mode who has not yet
-  acknowledged the auto-bid introduction on that listing
+- **GIVEN** a collector enrolled on a lot who has not yet placed a bid on it
 - **WHEN** they activate the primary bid action with a valid maximum
-- **THEN** the confirm-maximum step defined in `grade10-auction/auto-bidding`
-  opens
-- **AND** the setup modal does not open
+- **THEN** the setup modal does not open
+- **AND** the commitment proceeds under `grade10-auction/auto-bidding` and
+  `grade10-auction/bid-payment-method`
