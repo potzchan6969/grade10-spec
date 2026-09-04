@@ -29,10 +29,13 @@ follow from there.
   what the order took, and the excess is said out loud
 
 ❓ **A mixed sale's return is priced by share, not by line** — an order that sold
-a gift card beside graded cards prices a return as a fraction of both, so
-returning the gift card alone claws back some earning and returning the cards
-alone does not return the whole tender. The change that fixes it prices a refund
-against the lines the order earned on.
+a gift card or a grading fee beside graded cards prices a return as a fraction
+of both. Goods back between what earned and the order's whole are two returns
+totals cannot tell apart — every card back with the fee kept, where the tender is
+owed, and the fee back alone, where it is not — and the share answers no to
+both. Counted as `commerce.order.refund_estimated` so the population is
+findable. The change that fixes it prices a refund against the lines the order
+earned on.
 
 ❓ **A physical card coming back** — an operator's move with a record of its own.
 `TBC`

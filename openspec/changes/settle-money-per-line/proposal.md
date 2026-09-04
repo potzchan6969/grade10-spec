@@ -31,9 +31,12 @@ earned**.
   product or gift coupon is spent whenever the sale sold that variant, so a cut
   staff took off after the apply still burns the member's coupon.
 - **A discount is worth what the shop allocated to it**, not what this store
-  minted — for an order code adopted from a sale the till never reported, and
-  for the shop's own automatic promotions, which reach the order's applied total
-  today and belong to no instrument.
+  minted — the points tender included. Today the points captured are the
+  order's whole applied discount less every other instrument, so a shopkeeper's
+  own manual cut is read as points wherever the shop honoured less than the
+  Store promised. The same subtraction stands in for an order code adopted from
+  a sale the till never reported, and for the shop's own automatic promotions,
+  which reach the applied total and belong to no instrument.
 - **BREAKING** — `PaymentOrderLine` and `PaymentRefundFact` gain the provider's
   line handles and allocations. Every payment provider states them or says it
   cannot; a provider that cannot keeps today's pro-rated answer, named as such.
@@ -67,10 +70,12 @@ earned**.
 
 ## Impact
 
-- **When it must land** — before the first production order. The record is
-  written at settlement from a webhook body that is gone afterwards, so every
-  order settled before it exists keeps the pro-rated answer forever, and two
-  pricing rules coexist for the life of the table.
+- **When it must land** — before the first production order, or behind a
+  backfill of every order settled without it. The record is written at
+  settlement; the shop keeps the lines afterwards, and the Admin sweep already
+  asks for `lineItems.nodes.id` and `discountAllocations`, so the fallback is a
+  sweep and a re-pricing rather than a loss. What no sweep undoes is a refund
+  already priced from the estimate and a coupon already spent on it.
 - **Schema** — one table of settled lines, keyed by order and the provider's own
   line handle. The refund and coupon totals already on `orders` and
   `order_coupons` stay as they are.
