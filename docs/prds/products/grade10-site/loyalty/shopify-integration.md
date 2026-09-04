@@ -103,9 +103,8 @@ programme thinks, so every unhappy answer lands staff in a normal sale.
 
 :::flow{title="Points at the till"}
 ## Identify the member
-Scan the code on the member card — from the site or from either wallet pass —
-type the same value beneath it, or type the exact email on the account. A miss
-says only that no member was found.
+Scan the QR on the member card, type its eight-character short code, or type
+the exact email on the account. A miss says only that no member was found.
 Either identification opens a ten-minute session bound to the shop and the
 member — never to the staff label, which changes when staff switch by PIN.
 
@@ -165,12 +164,10 @@ console.
 | Phone spend | Off | Spending on a phone session; pinned off until numbers are verified |
 | Cart identify | Off | A customer already on the sale identifies the member with no scan |
 | Cart spend | Off | Spending on a cart session |
-| Card spend | On | Spending on a session opened by a scanned or typed member card |
 
-The card's two arms — scanned and typed — share one spend switch, because they
-carry one code. Neither has a switch of its own for identification: stopping
-the counter means the terminal switch, which also removes the undo staff need
-for spends already on carts.
+The QR and short-code arms carry no switch of their own: stopping the counter
+means the terminal switch, which also removes the undo staff need for spends
+already on carts.
 
 ## Discounts and shipping
 

@@ -14,7 +14,7 @@ component exports: [`ui-design.md`](ui-design.md).
 ## 1. Store blocks (grade10-spec)
 
 - [ ] 1.1 Draw the member-card and till frames in Figma and link them from `ui-design.md`
-- [ ] 1.2 Export `MemberCard` from `@grade10/ui` — the identification code, rendered scannable and as a typed fallback
+- [ ] 1.2 Export `MemberCard` from `@grade10/ui` — the dynamic identification code, rendered scannable and as a short typed fallback
 - [ ] 1.3 Export `PendingCollectionList` from `@grade10/ui` — rewards paid for and awaiting collection, each with its window and where to collect it
 - [ ] 1.4 Extend `RewardMenu` to take a quantity for a per-unit reward and to state a physical reward's collection window
 - [ ] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:stories:ui`, `pnpm run design-sync:check`
@@ -39,8 +39,8 @@ Shares the account-deletion signal with `revise-loyalty-programme-rules` group
 
 ## 4. In-store identification and the till session (grade10)
 
-- [ ] 4.1 Carry an identification code on the member card, rendered scannable and as a typed fallback
-- [ ] 4.2 Pause code entry for a shop after repeated failures, so *Guessing at a code pauses that shop* passes
+- [ ] 4.1 Mint a short-lived, single-use identification code on the member card, refusing a replay with where and when it was first used, so *A replayed code is refused with its history* passes
+- [ ] 4.2 Render it scannable and as a typed fallback infeasible to guess, pausing entry for a shop after repeated failures
 - [ ] 4.3 Look a member up by exact email, disclosing nothing on a miss, so *An email miss discloses nothing* passes, and rate-limit identifier-typed lookups
 - [ ] 4.4 Record the account identity and never the email address
 - [ ] 4.5 Open a time-limited till session on either identification, recording how the member was identified and labelling every read and act with staff and location, so *A lookup is recorded* passes
@@ -109,7 +109,7 @@ apps, one metafield definition, and customer and order webhook subscriptions.
 
 Depends on group 1 shipping and the submodule bump.
 
-- [ ] 10.1 Show the member card's identification code on the membership page
+- [ ] 10.1 Show the member card's dynamic code on the membership page
 - [ ] 10.2 List rewards awaiting collection with their window and where to collect them
 - [ ] 10.3 Take a quantity for a per-unit reward, refusing one above the bound by name
 - [ ] 10.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`

@@ -31,8 +31,8 @@ member**, and **staff-assisted redemptions completed per week**.
   way that never blocks sign-up and either converges or parks visibly. The
   record carries an opaque key, adopts only verified identity, and erasure
   removes it irreversibly.
-- **A member is identified at the till** by the code on their member card or by
-  their exact email, opening a time-limited session that
+- **A member is identified at the till** by a dynamic single-use code from their
+  member card or by their exact email, opening a time-limited session that
   authorizes staff to read and act for them with no confirmation on the member's
   device. Every act is audited and the member is notified.
 - **Staff spend points and hand over rewards on a member's behalf**, and a sale
@@ -55,8 +55,7 @@ member**, and **staff-assisted redemptions completed per week**.
   worth all belong to `revise-loyalty-programme-rules`.
 - **Phone numbers, SMS verification, and phone lookup** — the member card and
   email carry identification.
-- **Wallet passes** (Apple/Google) — `add-wallet-member-card` carries them, and
-  the durable card they need.
+- **Wallet passes** (Apple/Google) — post-launch at most.
 - **A member-facing guest-claim flow** — attributing a past guest order is an
   operator action here.
 - **The physical reward menu's content** — which items, their point prices, the

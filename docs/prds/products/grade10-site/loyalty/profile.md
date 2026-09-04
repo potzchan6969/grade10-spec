@@ -26,7 +26,7 @@ and shown the points already waiting ([[grade10-site-loyalty-programme-SC-01]]).
 | Section | What it shows |
 | --- | --- |
 | Summary | Tier, points to spend, points earned this year against the next threshold, when the tier renews, and when the points stay active until |
-| Your member card | The code the till scans, the same value typed beneath it, where it was last used, and the two wallet actions |
+| Your member card | The QR the till scans, the short code beneath it, and a countdown |
 | Rewards | The live menu, priced in points, with what the balance affords |
 | Spend on your basket | Points against the current basket — an offer of a code, or a pointer to checkout where the shop takes points there |
 | Waiting at the counter | Collect-in-store rewards with their deadline; a closed window says so |
@@ -39,32 +39,23 @@ Every date reads in the programme's own time zone.
 
 ## The member card
 
-The card is one code and never expires — the same value on every scan, drawn
-from a space too large to guess against. Nothing has to be minted, so it opens
-from a lock screen, scans with no signal, and survives being read out before
-staff are ready.
+The card is how a member proves they are standing at the till. Each
+presentation is one QR and one eight-character short code backing the same
+record: it lives ten minutes, and whichever of the two a till takes first
+consumes it — the other is refused, naming where and when the first was used.
+The card renews on demand, and an earlier presentation stays alive until it is
+used or expires, so reopening the page mid-queue does not kill the code a
+member just read out. The QR's payload is answered once and never stored; a
+leaked database cannot replay it.
 
-It travels three ways, all showing the same code:
-
-1. `/membership` — the card on the site
-2. **Apple Wallet** — a pass added from the card
-3. **Google Wallet** — the same
-
-A pass carries the member's name, tier and balance beside the code, and
-follows a change to any of them within **15 minutes**; several changes inside
-that window cost one refresh.
-
-**Replacement** is the control a durable card needs, and it sits beside the
-card's own use history: one action kills the code everywhere at once, the
-passes included. A till reading a replaced code says the card was replaced,
-never that no member was found. An operator can replace a card for a member
-who asks, on the operator record.
-
-The typed form under the code is for a camera that will not read a dim screen —
-the same value, grouped to be read aloud, in an alphabet with nothing
-confusable in it. Repeated failed attempts pause code entry for that shop.
+The short code exists for a camera that will not read a dim screen. Its
+alphabet has no digits and none of I, L, O or U, so nothing typed is
+confusable, and ten failed attempts in five minutes pause code entry for that
+shop.
 
 ::story{id="loyalty-membership-membercard--default" title="The member card"}
+
+::story{id="loyalty-membership-membercard--already-used" title="A code a till has taken"}
 
 ## Histories
 
@@ -82,10 +73,10 @@ operator's reason, retry keys and the pricing behind an entry kept out of view
 | Points revoked | A refund's claw-back |
 | Points returned | A reversal |
 
-Beside it sit the redemptions — each with its outcome — and the card's own use
-history: where and when the card identified them, whether or not any act
-followed. An identification staff typed, by email at the counter, notifies
-them the moment it happens.
+Beside it sit the redemptions — each with its outcome — and the card's own
+history: the last twenty presentations and, for each one a till took, where
+and when. An identification the member did not present for, by email at the
+counter, notifies them the moment it happens.
 
 ## What a member never sees
 
@@ -96,12 +87,10 @@ lives in the identity system and never in the programme, which holds only an
 opaque user id.
 
 :::callout{kind="warning"}
-Four things decided for this surface are not built. The card still mints a
-single-use code per presentation and counts it down, and neither wallet pass
-exists — both in flight under `add-wallet-member-card`. No welcome bonus is
+Two things decided for this surface are not built. No welcome bonus is
 granted at enrolment — the deployed programme sets none. And deleting the
 account does not yet tear the membership down; the ledger has no
-account-deletion pass; both in flight under `revise-loyalty-programme-rules`.
+account-deletion pass. Both are in flight under `revise-loyalty-programme-rules`.
 :::
 
 :::callout{kind="note"}
@@ -123,8 +112,8 @@ The page is `apps/frontend/grade10/src/pages/membership` composing the
 `member`, `offer`, `rewards`, `spending` — installed through the app's DI
 container. Joining calls the store worker's `membership.join`, not loyalty's
 `me.enroll` directly, so enrolment and pairing land together. The card is the
-store's too: the store worker answers the member's code, the uses behind it and
-the replacement, and mints both wallet passes from that same record. The
+store's too: `membership.presentCard` mints a `pos_handles` row, storing only
+the QR token's digest, and `membership.presentations` reads the history. The
 loyalty `me.*` surface answers summary, history, redemptions, redeem, quote,
 undo and enrol, all off the session.
 :::

@@ -15,7 +15,7 @@ attribution.
   - Opaque key: the platform account identifier never leaves Grade10
   - Erasure: deleting a member deletes the customer irreversibly
 - Till identification
-  - Card or email: guessing is paused; a miss discloses nothing
+  - Dynamic code or email: a replay is refused; a miss discloses nothing
 - Spending
   - Staff session: a double tap spends once; points become a single-use money-off code
 - Attribution
@@ -110,12 +110,14 @@ state.
   member's erasure is completing
 - **THEN** that customer is found and removed
 
-### Requirement: A member identifies at the till by their card or their email
+### Requirement: A member identifies at the till by a dynamic code or their email
 
-The member card SHALL present an identification code rendered both scannable
-and as a typed form, with repeated failed attempts at typing one pausing entry
-for that shop. Staff SHALL also be able to identify a member by their exact
-email address; a miss SHALL disclose nothing beyond that no member was found.
+The member card SHALL present a dynamic identification code — short-lived,
+usable exactly once, refused on reuse naming where and when it was first
+used — rendered both scannable and as a short typed fallback that is
+infeasible to guess, with repeated failed attempts pausing entry for that
+shop. Staff SHALL also be able to identify a member by their exact email
+address; a miss SHALL disclose nothing beyond that no member was found.
 Either way the programme SHALL record the account identity and SHALL NOT
 store the email address.
 
@@ -126,12 +128,11 @@ identified, and every read and act inside it SHALL be recorded with the
 claimed staff and location labels; identifier-typed lookups SHALL be
 rate-limited.
 
-#### Scenario: grade10-site-store-membership-SC-09 - Guessing at a code pauses that shop
+#### Scenario: grade10-site-store-membership-SC-09 - A replayed code is refused with its history
 
-- **WHEN** staff at one shop type identification codes that no member holds,
-  repeatedly
-- **THEN** code entry pauses for that shop
-- **AND** every other shop is unaffected
+- **WHEN** an identification code is presented a second time
+- **THEN** it is refused, naming where and when it was first used
+- **AND** the member's own card shows the same
 
 #### Scenario: grade10-site-store-membership-SC-10 - An email miss discloses nothing
 
