@@ -381,8 +381,9 @@ Storage rules:
   already there and start meaning something.
 - One new table, `kyc_checks`, which carries its own erasure debt rather than
   handing it to a second one.
-- `vault_cases` gains a cached check state, kept the way the booking cache
-  already is, so reading a case does not reach across the binding.
+- `vault_cases` — in the vault's own database, not this one — gains a cached
+  check state, kept the way the booking cache already is, so reading a case
+  does not reach across the binding.
 
 ### `ekyc.kyc_verifications` — one additive column
 
@@ -697,10 +698,11 @@ instead of a no-op.
 
 ## Migration Plan
 
-1. **`ekyc` migration** — one new table with its indexes, one nullable column
-   on `kyc_verifications`, and one cached-state column on `vault_cases`.
-   Additive only, so no expand/contract phase: `pnpm run check:migrations` has
-   nothing destructive to gate.
+1. **Two migrations, one per database.** In `ekyc`: the new `kyc_checks` table
+   with its indexes, and one nullable column on `kyc_verifications`. In the
+   vault's own: one nullable cached-state column on `vault_cases`. Both
+   additive, so neither needs an expand/contract phase and
+   `pnpm run check:migrations` has nothing destructive to gate.
 2. **`KYC_PROVIDER_KINDS` widens** — existing rows stay `manual`; no backfill.
 3. **Deploy dark** — with no provider secret set, `raiseCheck` is never
    called: booking does not invite, the case screen shows `None`, and the
