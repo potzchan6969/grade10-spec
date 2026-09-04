@@ -99,6 +99,19 @@ until they are set.
 - **THEN** it is refused as expired, and the collector is told how to be invited
   again
 
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-23 - A second device cannot continue an invitation
+
+- **GIVEN** an invitation already opened on one device
+- **WHEN** the same invitation is opened on a second device
+- **THEN** the second device continues no check, and the device that opened it
+  still can
+
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-24 - The invitation's secret is left nowhere it can be read
+
+- **WHEN** a collector opens their invitation and is handed on to the provider
+- **THEN** the secret is in no request path, no query string, no log line, and
+  no referrer the provider receives
+
 ### Requirement: An identity check moves through these states
 
 The system SHALL hold one hosted check in exactly one of these states, and SHALL

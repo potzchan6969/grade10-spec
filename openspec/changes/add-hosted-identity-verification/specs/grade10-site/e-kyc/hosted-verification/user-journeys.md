@@ -12,9 +12,11 @@ document problem reaches me while I can still do something about it.
 - `grade10-site-e-kyc-hosted-verification-SC-01` — A collector completes the check before arriving
 - `grade10-site-e-kyc-hosted-verification-SC-02` — Grade10 asks for nothing the provider collects
 - `grade10-site-e-kyc-hosted-verification-SC-03` — An invitation opens the check it names
+- `grade10-site-e-kyc-hosted-verification-SC-23` — A second device cannot continue an invitation
+- `grade10-site-e-kyc-hosted-verification-SC-24` — The invitation's secret is left nowhere it can be read
 - `grade10-site-e-kyc-hosted-verification-SC-09` — Asking twice does not invite twice
-- `grade10-site-e-kyc-hosted-verification-SC-11` — An unproven verdict changes nothing
-- `grade10-site-e-kyc-hosted-verification-SC-12` — A verdict for a check nobody issued changes nothing
+- `grade10-site-e-kyc-hosted-verification-SC-11` — An unproven verdict changes nothing and is not recorded
+- `grade10-site-e-kyc-hosted-verification-SC-12` — A verdict for a check nobody raised changes nothing
 - `grade10-site-e-kyc-hosted-verification-SC-13` — A repeated verdict is applied once
 - `grade10-site-e-kyc-hosted-verification-SC-14` — A verdict for a check that is no longer the case's live check binds nothing
 - `grade10-site-e-kyc-hosted-verification-SC-15` — An approved verdict for a minor is Declined

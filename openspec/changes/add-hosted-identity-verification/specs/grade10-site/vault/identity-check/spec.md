@@ -67,6 +67,14 @@ reported to an operator rather than passing as a check nobody answered.
 - **WHEN** an operator holding `vault:operate` asks for one
 - **THEN** the collector is invited
 
+#### Scenario: grade10-site-vault-identity-check-SC-19 - A case with no contact details is reported, not left silently unchecked
+
+- **GIVEN** a pre-custody case holding neither an email address nor a mobile
+  number
+- **WHEN** an intake visit is booked for it
+- **THEN** no check is raised, and an operator is told the contact details are
+  missing rather than the case reading as a check nobody answered
+
 ### Requirement: The case shows where its identity stands
 
 The system SHALL show an operator, on the case, which of these the case's
@@ -206,6 +214,14 @@ collector types.
 - **WHEN** the case's identity is replaced before the packet is sealed
 - **THEN** sealing is refused, because the paper names a person the case no
   longer says it is about
+
+#### Scenario: grade10-site-vault-identity-check-SC-20 - A prepared document carries the bound identity's name
+
+- **GIVEN** a case bound to a verified identity whose legal name differs from
+  the name an operator typed on the case
+- **WHEN** its signing documents are prepared
+- **THEN** the name printed is the bound identity's, and nothing typed reaches
+  the paper
 
 ### Requirement: Staff record a check at the counter before custody begins
 

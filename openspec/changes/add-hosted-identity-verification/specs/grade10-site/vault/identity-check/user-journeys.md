@@ -11,13 +11,15 @@ whether a check is on file, still out, or refused.
 **Accepted by:**
 
 - `grade10-site-vault-identity-check-SC-01` — Booking an intake visit invites the collector
-- `grade10-site-vault-identity-check-SC-02` — A case that already holds an identity is not asked again
-- `grade10-site-vault-identity-check-SC-04` — A case with a check out is not shown as unverified
+- `grade10-site-vault-identity-check-SC-19` — A case with no contact details is reported, not left silently unchecked
+- `grade10-site-vault-identity-check-SC-02` — A collector already verified is not asked again
+- `grade10-site-vault-identity-check-SC-04` — A case with a check out is not shown as unverified, and nothing waits on it
 - `grade10-site-vault-identity-check-SC-05` — A verified case names who performed the check
 - `grade10-site-vault-identity-check-SC-06` — Binding a verdict voids an outstanding packet
 - `grade10-site-vault-identity-check-SC-12` — Preparing documents without an identity is refused
 - `grade10-site-vault-identity-check-SC-13` — A packet whose identity moved cannot be sealed
-- `grade10-site-vault-identity-check-SC-16` — Reading a case's identity takes the identity grant
+- `grade10-site-vault-identity-check-SC-20` — A prepared document carries the bound identity's name
+- `grade10-site-vault-identity-check-SC-16` — A case's identity state is readable, its details are not
 
 ### grade10-site-vault-identity-check-US-02: Operator records a check at the counter
 
@@ -31,7 +33,7 @@ and a check that overrides a refusal says so on the case.
 - `grade10-site-vault-identity-check-SC-03` — An operator asks for a check on a case that needs one
 - `grade10-site-vault-identity-check-SC-14` — Staff verify a collector who arrives unverified
 - `grade10-site-vault-identity-check-SC-15` — A counter check is refused once the item is in custody
-- `grade10-site-vault-identity-check-SC-17` — An override of a refused check takes the approving grant
+- `grade10-site-vault-identity-check-SC-17` — An override of a refused check takes `vault:approve`
 
 ### grade10-site-vault-identity-check-US-03: Operator settles a verdict that lands after the case has moved
 
