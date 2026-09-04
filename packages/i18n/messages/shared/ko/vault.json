@@ -39,6 +39,7 @@
     "booking_booked": "방문 예약됨",
     "booking_rescheduled": "방문 일정 변경됨",
     "booking_cancelled": "방문 예약 취소됨",
+    "booking_no_show": "방문 예약 미이행",
     "booking_cache_repaired": "예약 정보 갱신됨",
     "contact_set": "연락처 변경됨",
     "valuation_started": "감정 시작됨",

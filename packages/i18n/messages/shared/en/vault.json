@@ -39,6 +39,7 @@
     "booking_booked": "Visit booked",
     "booking_rescheduled": "Visit moved",
     "booking_cancelled": "Visit cancelled",
+    "booking_no_show": "Visit missed",
     "booking_cache_repaired": "Visit details refreshed",
     "contact_set": "Contact details updated",
     "valuation_started": "Valuation started",

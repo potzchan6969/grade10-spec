@@ -39,6 +39,7 @@
     "booking_booked": "已預約到店",
     "booking_rescheduled": "已改期",
     "booking_cancelled": "已取消預約",
+    "booking_no_show": "未到訪預約",
     "booking_cache_repaired": "預約資料已更新",
     "contact_set": "聯絡資料已更新",
     "valuation_started": "已開始估值",
