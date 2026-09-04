@@ -118,7 +118,8 @@ and its derived order status own the replacement behaviour.
 
 - `grade10-site/auction/winner-order`: what a winner is issued at lot close
   and what they do with it — the one-invoice-per-lot rule, estimate-first
-  pricing, delivery-address confirmation and amendment, recalculation and
+  pricing from the account-wide address book, multiple saved shipping
+  addresses, delivery-address confirmation and amendment, recalculation and
   reissue, hold release and single-charge settlement, the 7-day deadline and
   its reminders, and the receipt, tracker and delivery proof the order keeps.
 - `grade10-site/auction/order-status`: the auction order's two writable
@@ -140,7 +141,7 @@ and its derived order status own the replacement behaviour.
 - `grade10-admin/auction/post-sale`: the operator's queue and order detail —
   expired-order resolution, uncapped reissue logging, manual settlement with
   address confirmation and recalculation, cancellation and lot reopen, the
-  append-only invoice and fulfilment histories, and the split payment and
+  append-only invoice and fulfilment logs, and the split payment and
   shipment grants.
 
 ### Modified Capabilities
@@ -156,7 +157,7 @@ and its derived order status own the replacement behaviour.
 | Consumer | Change |
 | --- | --- |
 | `apps/frontend/grade10` | A winner's order surface: invoice, address confirm and amend with a total delta, pay, receipt, tracker, delivery proof. |
-| `apps/admin/grade10` | The Auction section becomes the post-sale queue and order detail, with invoice and fulfilment histories, and the three expired-order actions. |
+| `apps/admin/grade10` | The Auction section becomes the post-sale queue and order detail, with invoice and fulfilment logs, and the three expired-order actions. |
 | Auction service | Issues invoices at close, releases holds, charges once, holds the deadline, derives status, refuses dispatch before payment, retracts bids on suspension. |
 | Auction bidding engine | Retraction and re-resolution on suspension; a `bid_retracted_suspension` event alongside the normal resolution. |
 | Stripe | Hold release for winner and losers alike, a fresh charge per invoice, webhooks for confirmation. Never a capture or increment of a bid-time hold. |
