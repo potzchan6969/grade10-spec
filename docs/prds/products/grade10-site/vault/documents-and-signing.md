@@ -43,7 +43,8 @@ vendor is involved.
   line
 - **Dates** — through the platform's one date module in its one zone: a day
   for the dating and the release, a deadline naming UTC for the repayable-by
-  instant, so the paper and every console state one instant the same way
+  instant, so the paper and every console state one instant the same way;
+  whether any surface leaves UTC is open on [Vault](/p/grade10-site/vault)
 - **Not printed** — an annualised rate, a fee statement, governing law, a
   complaints route, cooling-off
 
@@ -93,7 +94,6 @@ identity, verified name, pages viewed and consent.
 | Lender's legal name and licence | ❓ Open | The values for the table; "Grade10" prints as the trading name until then, and no production packet is possible | Legal |
 | Mandatory particulars | ❓ Open | Annualised rate, fees, governing law, complaints, cooling-off, redemption period | Legal |
 | Chinese versions | ❓ Open | Bilingual templates and consent copy; which language governs | Legal |
-| Zone on the paper | ❓ Open | Hong Kong time is a delta to the platform's dates-and-times contract | Product |
 | Staff countersignature | ❓ Open | The notes say both sign; the packet has one signer role, and the ceremony supports a second | Legal |
 | Recorded call | ❓ Open | A precondition event carrying a recording reference, its storage and retention class | Owner |
 | Walk-in copies | ❓ Open | A recoverable retrieval route for a signer with no account and no email | Engineering |

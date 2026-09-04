@@ -61,14 +61,13 @@ service shell reserved for a product nobody has defined.
   presets, offer validity, grace, an accrued cap; fees
 
 :::callout{kind="warning"}
-The shell is reserved for a product nobody has described. The application
-repository called it mortgage lending on its own authority and no longer
-does; the owner's notes, the one primary source, name graded cards as the
-collateral and describe step for step what the vault's financed lane does. Three resolutions
-are open and none is chosen: Finance is the vault's lane re-papered under the
-lending entity; Finance is a second product rebuilt on vault machinery with
-its own cases and database; or Finance is genuinely something else and the Q4
-loan ships from the vault regardless.
+The shell is reserved for a product nobody has described. The owner's notes,
+the one primary source, name graded cards as the collateral and describe step
+for step what the vault's financed lane does. Three resolutions are open and
+none is chosen: Finance is the vault's lane re-papered under the lending
+entity; Finance is a second product rebuilt on vault machinery with its own
+cases and database; or Finance is genuinely something else and the Q4 loan
+ships from the vault regardless.
 :::
 
 :::callout{kind="warning"}
@@ -85,7 +84,7 @@ lends you the principal".
 | A shell from day one | Decided | The first procedure lands behind a database, session, permission ladder and audit sink with no wiring change | Engineering |
 | Own database | Decided | A wall around money beside auth, the identity store and the vault | Engineering |
 | Two people on a disbursement | Decided | Staff approve, treasurers pay; disjoint on payout | Product |
-| Which product Finance is | ❓ Open | The lane, a second product, or mortgages | Owner |
+| Which product Finance is | ❓ Open | The vault's lane re-papered under the lending entity, a second product on vault machinery, or something else | Owner |
 | Entity as data | Decided | A per-brand table carrying trading name, legal name, licence number and wording, read by the templates; every legal field is unset and production refuses paper until it is named | Engineering |
 | Custodian | ❓ Open | Whether Tiny runs the same ceremony and console or its own staff under its own name | Owner |
 | Host | ❓ Open | `finance.grade.com` or a path on `grade10.com`; the notes say one domain and the registry another | Owner |
@@ -108,9 +107,6 @@ lends you the principal".
   host contract the vault alone implements
 - **Vault-coupled** — the three templates, the `customer` signer role, the
   lane packet sets, the `/vault/sign` route and the shop's email catalogue
-- **Where "mortgage" was written** — the application repository no longer
-  names the shell's product anywhere; [Vault Custody](/platform/vault-custody)
-  still repeats the old sentence
 - **Background** —
   [account data](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
   for the isolation and ledger policy, and

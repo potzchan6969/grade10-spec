@@ -7,8 +7,10 @@ The collector's side of the vault is one signed-in section: the cases they
 hold, a wizard to open another, and each case's own page with its offer, its
 balance, its documents and its visit.
 
-- **URL** — `grade10.com/vault`, also `/tc/vault` and `/sc/vault`; signing in
-  is asked for in a dialog over the address, never a redirect
+- **URL** — `grade10.com/vault`, unprefixed: a session surface answers at one
+  address and reads the language off the collector's cookie, so `/tc/vault`
+  and `/sc/vault` match nothing; signing in is asked for in a dialog over the
+  address, never a redirect
   1. `grade10.com/vault` — the list and the wizard
   2. `grade10.com/vault/cases/<id>` — one case, the address every email links
      to
@@ -115,7 +117,8 @@ offer is out.
 A borrower cannot pay online, is never given bank details or a payoff quote
 with a validity, and cannot ask for an extension. Repayment is recorded by a
 treasurer after the fact, against the date the money reached the bank; the
-balance steps at midnight UTC, which is 08:00 in Hong Kong.
+balance steps at midnight UTC, which is 08:00 in Hong Kong — whether any
+surface leaves UTC is open on [Vault](/p/grade10-site/vault).
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -139,7 +142,7 @@ phone. The owner's brief is [Grade10 Finance](/references/grade10-finance).
 | Accept online | ❓ Open | A collector-side accept and decline, recorded as the collector's act; today acceptance is a staff click | Product |
 | How to pay | ❓ Open | Bank details, a payoff quote with a stated validity, and where each is shown | Product |
 | Reminders | ❓ Open | Due-soon and overdue kinds on the same map, a sweep over the due calculation, and the cadence and channel | Owner |
-| Zone | ❓ Open | Hong Kong time on collector surfaces is a delta to the platform's dates-and-times contract, which states UTC on every surface | Product |
+| SMS and WhatsApp automation | ❓ Open | Both are in the notes; the number is unverified free text and the chat link is a staff press | Owner |
 | Total and lateness on the offer card | ❓ Open | The wire now carries the total to term; the words need catalogue keys and a submodule bump | Design |
 | Cancel a case | ❓ Open | No collector cancel; a change of mind waits **30 days** to expire | Product |
 | Several items | ❓ Open | One visit for a binder: book on the lead case (nothing says so), or a multi-item case | Product |
@@ -153,8 +156,8 @@ phone. The owner's brief is [Grade10 Finance](/references/grade10-finance).
   `CASE_PATH` in `packages/vault/contracts/src/paths.ts`, which the emails
   fill
 - **Slices** — `packages/vault/frontend/src/features/custody/{request,cases,booking}`;
-  refusals branch on `VaultFailureCode`; the timeline keeps
-  `CUSTOMER_EVENT_KINDS` and drops staff-only events
+  refusals branch on `VaultFailureCode`; the timeline keeps what
+  `isCustomerEvent` admits and drops staff-only kinds
 - **Customer router** — `packages/vault/backend/src/trpc/routers/cases.ts`:
   create, submit, mine, detail, locations, slots, book, reschedule,
   cancelBooking, requestRelease; no accept, no cancel, no repayment

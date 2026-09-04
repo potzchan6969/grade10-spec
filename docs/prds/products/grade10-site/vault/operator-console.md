@@ -76,7 +76,8 @@ One line per tab, as `Surface: verb, verb, verb`.
 
 - **Two people move money** — staff and treasurer share no money grant;
   `admin` holds both sides, so one admin can value, offer, accept, vault and
-  pay out alone
+  pay out alone (whether that stands, and whether a payout takes a fresh
+  factor, are open on [Loan and Money](/p/grade10-site/vault/loan-and-money))
 - **One grant prices and forfeits** — `vault:approve` covers the valuer, the
   offer-maker and the person who forfeits
 - **Second factor** — required in production, optional in staging and
@@ -112,7 +113,7 @@ customer with no account is keyed to the case rather than to a person.
 :::callout{kind="warning"}
 A borrower who arrives with cash on the due date still waits for a treasurer:
 recording money needs `vault:payout`, which staff do not hold. The visit
-itself can now be booked on a live loan.
+itself is bookable on a live loan.
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -130,8 +131,6 @@ itself can now be booked on a live loan.
 | Forfeited stock | ❓ Open | Whether a forfeited item stays visible as shop-owned stock; today it leaves the custody record | Owner |
 | Staff notifications | ❓ Open | Email or push on submission, booking and release request beyond the queue's badges | Product |
 | Valuer versus approver | ❓ Open | A separate valuing grant; a guard that the payout recorder is not the offer-maker | Owner |
-| Admin records money | ❓ Open | Whether `admin` may hold both sides of the split | Owner |
-| Fresh challenge on payout | ❓ Open | A second factor per payout, or the **12-hour** stamp | Owner |
 | Staging second factor | ❓ Open | Optional today against the compliance plan; the decision changes three documents | Owner |
 | No-show and late | ❓ Open | A different item brought cannot be corrected on the case | Product |
 :::

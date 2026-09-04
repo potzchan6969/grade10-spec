@@ -77,7 +77,8 @@ never an assertion of law.
   the only refusal is declining the packet before the seal
 - **The recorded call** — the owner's notes require a recorded call explaining
   key terms before signing; nothing models a call, a recording or a
-  precondition for one
+  precondition for one, and what it must retain is open on
+  [Documents and Signing](/p/grade10-site/vault/documents-and-signing)
 - **Insurance** — the custody agreement says the valuation is used for
   insurance; no policy, insurer or cover limit appears anywhere
 
@@ -85,7 +86,7 @@ never an assertion of law.
 
 Every item here is outside the code, with who closes it and how the closure
 is seen. `pnpm run check:libs` in the application repository prints the
-first eight until they are done.
+first three until they are done; the rest live outside any check.
 
 1. *Legal* — **Name the lending entity** — legal name, licence number and
    licence wording per brand in `packages/app-env/src/legalIdentity.ts`;
@@ -110,7 +111,10 @@ first eight until they are done.
 7. *Owner* — **Staging second factor** — required as the compliance plan
    asked, or optional as the code states; three documents follow the choice
 8. *Owner* — **Who records money** — whether `admin` may hold both sides of
-   the split, and whether a payout demands a fresh factor
+   the split, and whether a payout demands a fresh factor; whatever the
+   answer, provision **two** people who can move money, because a reversal
+   refuses the row's own recorder — with a single recorder a bounced
+   transfer strands the case in `active` and forfeiture is its only exit
 9. *Legal* — **Counsel's wording** — the e-sign disclosure and per-document
    consent text; the ceremony records whatever is served, so the change is
    evidenced
@@ -124,18 +128,19 @@ first eight until they are done.
     corrected vault copy and the two reversal event names; the application
     reads the pinned submodule until its pointer moves after the upstream
     merge
-13. *Product* — **A brand time zone** — a delta to the shared
+13. *Engineering* — **Write the vault's specs** — no capability, change or
+    test suite in this store covers the vault, so every page carries the
+    planned pip and nothing validates the timers, the arithmetic, the grants
+    or the seventeen mail kinds
+14. *Product* — **A brand time zone** — a delta to the shared
     dates-and-times contract before any surface leaves UTC
-14. *Owner* — **Reminders** — days before due, cadence when overdue, channel;
+15. *Owner* — **Reminders** — days before due, cadence when overdue, channel;
     the message map and the sweep pattern are ready for the two kinds
 
 :::callout{kind="warning"}
-The two audits in the application repository read as of their dates. The
-document-handling audit's blocker prose describes what was found and its
-checklist the current state; the production-readiness review's provisioning
-counts are superseded by `check:libs`, which now lists **46** unset values,
-none of them a database or a Hyperdrive id the vault depends on and twenty of
-them the entity and policy fields above.
+`check:libs` lists **46** unset values, none of them a database or a
+Hyperdrive id the vault depends on and twenty of them the entity and policy
+fields items 1 and 2 name.
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -145,7 +150,6 @@ Questions for counsel, each with the fact the code holds today.
 | --- | --- | --- | --- |
 | Regime and licence | ❓ Open | Which regime governs a loan secured on a collectible held in a shop locker in Hong Kong, and whether it prescribes particulars, a licence number on the paper, a rate ceiling or a redemption period; the code permits **0% to 100%** per term until a band is set | Legal |
 | Lender entity | ❓ Open | The legal name and licence for the identity table | Legal |
-| Recorded call | ❓ Open | A precondition to signing, and what it must retain | Owner |
 | E-sign adequacy | ❓ Open | Whether the ceremony and its interim wording bind a consumer loan and a custody contract | Legal |
 | Countersignature | ❓ Open | Company signature or witness; one signer today | Legal |
 | Cooling-off and complaints | ❓ Open | None today | Legal |
@@ -181,8 +185,10 @@ Questions for counsel, each with the fact the code holds today.
   `apps/backend/grade10/vault/wrangler.jsonc`
 - **Backups** — `neondb/scripts/backup.sh`, `neondb/backup-expected-gaps.txt`
   guarded by `scripts/checks/check-backup-gaps.mjs`, `neondb/registry.sh`
-- **Two-factor** — `packages/app-env/src/twoFactor.ts`; the step-up stamp in
-  `packages/grade10-auth/contracts/src/elevation.ts`
+- **Two-factor** — `packages/app-env/src/twoFactor.ts`; the step-up stamp is
+  read on `packages/grade10-auth/contracts/src/elevation.ts` and its
+  **12-hour** life is `STEP_UP_TTL_SECONDS` in
+  `packages/grade10-auth/backend/src/core/stepUp.ts`
 - **Audits** —
   [document-handling audit](https://github.com/9gag/grade10/blob/main/docs/qa/vault.md),
   [production-readiness review](https://github.com/9gag/grade10/blob/main/docs/qa/vault-production-review.md),

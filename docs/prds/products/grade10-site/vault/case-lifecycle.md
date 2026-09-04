@@ -135,7 +135,9 @@ released`, guarded on nothing outstanding and no packet open.
 Four moves a pawn counter makes have no transition: renew or extend a live
 loan (an offer can only be made from `under_valuation` or `offer_made`),
 accept an offer as the collector, open a case at the counter for a walk-in,
-and let a collector cancel their own request.
+and let a collector cancel their own request. Renewal is open on
+[Loan and Money](/p/grade10-site/vault/loan-and-money) and counter intake on
+[Operator Console](/p/grade10-site/vault/operator-console).
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -149,8 +151,6 @@ and let a collector cancel their own request.
 | A reversal moves the case back | Decided | A reversed payout returns the case to `vaulted`; a reversed repayment reopens the loan | Product |
 | Unwind stops at a live payout | Decided | Once money left and stands, the exits are repayment or forfeiture | Product |
 | Order of the flow | ❓ Open | Built book-first; the owner's notes are offer-first (remote valuation, WhatsApp offer, acceptance, then a booking). Offer-first needs `under_valuation`, `offer_made`, `accepted` and `signing` bookable, and "valuation started" to stop meaning "visit happened" | Owner |
-| Renewal | ❓ Open | A move that settles interest to date and appends an offer to an `active` case; it waits on the allocation rule for a partial payment | Owner |
-| Counter intake | ❓ Open | An operator intake for a walk-in, with or without an account, plus sibling cases and item edits; the draft cap is keyed on the account and would not apply | Product |
 | Collector cancel | ❓ Open | No collector-side cancel before the visit | Product |
 | Grace and notice before forfeiture | ❓ Open | Grace days are a lending-policy value, unset; notice needs the reminder kinds | Owner |
 :::
