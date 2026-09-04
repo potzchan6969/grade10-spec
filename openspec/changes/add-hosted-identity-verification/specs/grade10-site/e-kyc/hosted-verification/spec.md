@@ -265,7 +265,8 @@ withdraw the hosted check.
 
 A counter check recorded on a case whose last hosted check was Declined SHALL be
 an override: it SHALL carry a reason, SHALL name the staff member who gave it,
-and SHALL show on the case beside the declined check.
+SHALL take `vault:approve` rather than `vault:operate`, and SHALL show on the
+case beside the declined check.
 
 The system SHALL support requiring an approved hosted check before a case's
 documents are prepared, for a class of case policy defines, and SHALL record any

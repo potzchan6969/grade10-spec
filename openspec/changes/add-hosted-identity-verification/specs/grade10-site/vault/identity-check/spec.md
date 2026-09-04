@@ -18,7 +18,7 @@ beyond** at `vaulted`, `active`, `repaid` or `released`.
   - On demand: an operator asks again for a case that needs one
 - While it is out
   - Nothing waits: the case carries the state and the visit is arranged around it
-  - Visible to staff: the case screen says whether an identity is on file, out, refused or lapsed
+  - Visible to staff: the case screen says whether an identity is on file, out, stalled, refused or lapsed
 - When the verdict lands
   - Bound to the case: under the case's own guard, and paperwork rendered from an older identity is voided
   - Refused when the case has moved: a sealed, erased, post-custody or otherwise-verified case keeps the identity it has
@@ -27,7 +27,7 @@ beyond** at `vaulted`, `active`, `repaid` or `released`.
 - The counter
   - Always open: staff record a check on the document itself, before custody begins
 - Who may
-  - Grants: reading an identity, asking for a check, and overriding a refusal are each granted
+  - Grants: `kyc:read` sees an identity, `vault:operate` asks for and records a check, `vault:approve` overrides a refusal
 
 ## ADDED Requirements
 
@@ -49,7 +49,7 @@ SHALL invite.
 The system SHALL invite the collector to complete a hosted identity check when a
 pre-custody vault case books an intake visit, holds no verified identity and has
 nothing to reuse, using the contact details the case holds. An operator holding
-the identity grant SHALL be able to ask for a check on such a case at any time
+`vault:operate` SHALL be able to ask for a check on such a case at any time
 before custody begins. A case holding neither an email address nor a mobile
 number SHALL be left with no check, and the missing contact details SHALL be
 reported to an operator rather than passing as a check nobody answered.
@@ -64,7 +64,7 @@ reported to an operator rather than passing as a check nobody answered.
 #### Scenario: grade10-site-vault-identity-check-SC-03 - An operator asks for a check on a case that needs one
 
 - **GIVEN** a pre-custody case with no verified identity and no live check
-- **WHEN** an operator holding the identity grant asks for one
+- **WHEN** an operator holding `vault:operate` asks for one
 - **THEN** the collector is invited
 
 ### Requirement: The case shows where its identity stands
@@ -98,20 +98,23 @@ pre-custody status while a check is out; no case action SHALL wait on a verdict.
 - **THEN** the case shows whether Grade10 staff or a verification provider
   performed it, when, and what the provider found
 
-### Requirement: Reading a case's identity takes the identity grant
+### Requirement: Seeing an identity takes `kyc:read`
 
-The system SHALL require the identity grant to show a case's identity state, the
-reason a hosted check was refused, or a verified identity's details, and SHALL
-refuse a caller without it while still answering the rest of the case. Asking for
-a check and recording one at the counter SHALL take the same grant.
+The system SHALL require `kyc:read` to show a verified identity's details, the
+document image, or the reason a hosted check was refused, and SHALL answer the
+rest of the case to a caller holding `vault:read` alone. Whether a case holds an
+identity, and which of the states below it is in, SHALL be readable under
+`vault:read`, because an operator arranging a visit needs to know that much
+without being shown the person.
 
-#### Scenario: grade10-site-vault-identity-check-SC-16 - Reading a case's identity takes the identity grant
+#### Scenario: grade10-site-vault-identity-check-SC-16 - A case's identity state is readable, its details are not
 
-- **GIVEN** an operator holding the grant that reads a case but not the identity
-  grant
+- **GIVEN** an operator holding `vault:read` and not `kyc:read`
 - **WHEN** they open a case bound to a verified identity
-- **THEN** the case is shown, no identity field and no refusal reason is
-  returned, and asking for a check is refused
+- **THEN** the case shows that an identity is on file and who performed the
+  check
+- **AND** no name, birth date, masked number, document image or refusal reason
+  is returned
 
 ### Requirement: A landed verdict binds the identity and voids paperwork written from an older one
 
@@ -206,12 +209,12 @@ collector types.
 
 ### Requirement: Staff record a check at the counter before custody begins
 
-The system SHALL let a member of staff holding the identity grant record an
-identity check with the document in front of them while the case is pre-custody,
-and SHALL refuse one once the item is in custody or beyond. Neither a hosted
-check's state nor the absence of one SHALL be a precondition. Recording a counter
-check on a case whose last hosted check was Declined SHALL take the grant that
-approves, not the grant that operates, and SHALL carry the override reason
+The system SHALL let a member of staff holding `vault:operate` record an identity
+check with the document in front of them while the case is pre-custody, and SHALL
+refuse one once the item is in custody or beyond. Neither a hosted check's state
+nor the absence of one SHALL be a precondition. Recording a counter check on a
+case whose last hosted check was Declined SHALL take `vault:approve` rather than
+`vault:operate`, and SHALL carry the override reason
 `grade10-site/e-kyc/hosted-verification` requires.
 
 #### Scenario: grade10-site-vault-identity-check-SC-14 - Staff verify a collector who arrives unverified
@@ -227,10 +230,11 @@ approves, not the grant that operates, and SHALL carry the override reason
 - **THEN** it is refused, because a release reads the identity the executed
   agreement already holds
 
-#### Scenario: grade10-site-vault-identity-check-SC-17 - An override of a refused check takes the approving grant
+#### Scenario: grade10-site-vault-identity-check-SC-17 - An override of a refused check takes `vault:approve`
 
 - **GIVEN** a pre-custody case whose last hosted check was Declined
-- **WHEN** a member of staff holding only the operating grant records a counter
-  check
-- **THEN** it is refused, and a member of staff holding the approving grant may
-  record it with a reason that shows on the case
+- **WHEN** a member of staff holding `vault:operate` and not `vault:approve`
+  records a counter check
+- **THEN** it is refused
+- **AND** a member of staff holding `vault:approve` records it with a reason that
+  shows on the case beside the decline

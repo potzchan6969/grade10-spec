@@ -113,9 +113,9 @@ vendor: they describe a hosted check, so a replacement is a delivery decision.
 
 ### Modified Capabilities
 
-None. The grants this change names are stated in `grade10-site/vault/identity-check`
-in the vocabulary that capability owns; see the open question below on why they
-are not written into `shared/auth/roles` here.
+None. The grants this change needs already exist and already mean what it needs
+them to mean: `kyc:read` reaches an identity document, `vault:operate` runs the
+flow that records one, and `vault:approve` covers what an action can cost.
 
 ## Impact
 
@@ -131,6 +131,10 @@ are not written into `shared/auth/roles` here.
 - **The provider integration** — a raised check, a signed verdict, an evidence
   fetch, a redaction command, and a retention policy read back and checked.
 - **No ZZZ surface.** ZZZ runs auth and store only, and verifies nobody.
+- **No new permission.** `kyc:read`, `vault:operate` and `vault:approve` already
+  carry this change's grants. Separately, `shared/auth/roles` describes neither
+  those grants nor the `treasurer` role the code ships — a divergence older than
+  this change, and not its to close.
 
 ## Open questions
 
@@ -159,8 +163,3 @@ are not written into `shared/auth/roles` here.
 - ❓ **Whether an approved check may be bound to a second case without asking the
   collector again.** The record is person-wide by design, so this is a purpose
   and consent question rather than a capability one. *Owner: Compliance.*
-- ❓ **Where the vault's permissions are written down.** `shared/auth/roles`
-  carries no vault or identity grant today, though the code ships several — a
-  divergence older than this change. Writing this change's grants into that spec
-  means first specifying the ones already shipped. *Owner: whoever picks up the
-  auth roles divergence.*
