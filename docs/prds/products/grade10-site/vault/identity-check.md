@@ -88,7 +88,7 @@ while their item is in custody.
 | Late verdict | Decided | Refused, discarded, and reported. The case keeps what it had. | Engineering |
 | Packet voiding | Decided | A bind voids an outstanding packet, whichever path produced the identity. | Product |
 | Operator visibility | Decided | The case distinguishes out, stalled, refused and lapsed from none. | Design |
-| Where the state is shown | ❓ Open | Case detail alone, or also the case list, so a queue can be worked by readiness. | Design |
+| Where the state is shown | Decided | Case detail alone. A column across every row would put a person's verification status on a screen nobody opened for it. | Design |
 
 **Risks.** The asynchronous verdict gives the existing rebind machinery a new
 way to be raced. It already settles a displaced check — discarding or restoring

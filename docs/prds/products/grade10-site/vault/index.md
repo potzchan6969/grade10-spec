@@ -31,11 +31,11 @@ the siblings in the shop.
 - **Admins** hold everything, as everywhere else.
 
 :::callout{kind="note"}
-The vault has no spec. There is no OpenSpec capability, no PRD, and no change —
-active or archived — carrying a vault delta, even though the product ships a full
-custody lifecycle, four operator feature slices and two QA audits. Everything on
-these pages comes from the architecture and QA docs and the code they describe,
-so nothing here can be embedded as a requirement the way other products' pages
+The vault has one capability, and it is new: `grade10-site/vault/identity-check`,
+which `add-hosted-identity-verification` adds. Everything else on these pages —
+the custody lifecycle, four operator feature slices, two QA audits — still comes
+from the architecture and QA docs and the code they describe, so the rest cannot
+be embedded as a requirement the way other products' pages
 embed theirs.
 :::
 

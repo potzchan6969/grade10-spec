@@ -52,9 +52,11 @@ storage lane arrives here from `under_valuation` instead. Either lane can exit a
 # Signing and custody
 Who the collector is, what they sign, and where the item goes.
 
-## Record the identity check
+## Bind the identity check
 A verification id is bound to the case. No name, birth date or document number is
-stored on the case, only the reference.
+stored on the case, only the reference. The check behind it may have been walked
+by the collector days earlier, reused from one they already passed, or recorded
+by staff at the counter — the case holds the same reference either way.
 
 ## Prepare documents
 `accepted → signing`, opening one packet — the custody agreement always, the loan

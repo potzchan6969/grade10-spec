@@ -50,10 +50,11 @@ The provider's copy runs on two clocks, because one is not enough. A release
 **commands** the provider to erase its copy and keeps asking until it
 acknowledges — and Grade10's own purge never waits on that answer, because a
 provider under a retention duty of its own would otherwise turn a person's
-erasure into a job that never finishes. A standing retention window at the
-provider erases the copy anyway, which is what covers the majority of checks:
-declined, expired, withdrawn, or refused on landing, none of which ever became
-a record here to release.
+erasure into a job that never finishes. A check whose document image reached
+Grade10 is commanded away at its ending, whichever ending it was — declined and
+refused-on-landing among them, because both fetched one. A standing retention
+window at the provider covers what never got that far: an invitation nobody
+opened, a check abandoned part-way.
 
 :::detail{title="Product decisions" for="pm"}
 The record is the one place a person's checked identity lives, so every decision

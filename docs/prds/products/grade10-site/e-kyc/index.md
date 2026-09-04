@@ -65,8 +65,9 @@ There is no deletion-log sweep here at all — erasure arrives as the owning
 product releasing its binding, because only that product knows whether the
 evidence is under legal hold.
 
-The record already carries a provider and a provider reference, both constant
-today. A case binds exactly one identity, enforced by the bindings table's
+The record already carries a provider and a provider reference. Both are
+constant until `add-hosted-identity-verification` ships; the hosted flow the
+capability pages describe is planned, not deployed. A case binds exactly one identity, enforced by the bindings table's
 primary key; the document-number digest carries no unique index and nothing
 queries it.
 

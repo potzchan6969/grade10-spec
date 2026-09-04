@@ -14,8 +14,9 @@ verdict when it arrives.
 :::flow{title="Verifying before the visit"}
 ## The invitation arrives
 Booking an intake visit on a case with no verified identity sends the collector a
-link, at the contact details the case already holds. Signing in is not required —
-a case can exist before its collector ever has an account.
+link, at the email address the case already holds. The collector signs in to
+nothing: the link is the whole credential, and a case may exist before its
+collector ever has an account.
 ## The provider runs the check
 The link opens the provider's own ceremony: photograph the document, photograph
 your face, done. It is resumable, so a collector who stops halfway comes back to
@@ -65,9 +66,15 @@ requires a hosted check to have been tried first. Recording at the counter
 withdraws whatever hosted check was out.
 
 A counter check over a check the provider *declined* is different: it is an
-override. It carries a reason, it takes the grant that approves rather than the
-grant that operates, and it shows on the case beside the decline. Otherwise the
-control is one the person it exists to stop can simply decline.
+override. It carries a reason, names who gave it, is refused without one, and
+shows on the case beside the decline.
+
+What it is *not*, yet, is four eyes. The intent was that an override take a
+higher grant than an ordinary counter check — but `staff` holds `vault:approve`
+wherever it holds `vault:operate`, and no other role holds either, so a grant
+would separate nobody. The recorded reason is the control that works; the grant
+becomes one the day a role separates the two, which is a `shared/auth/roles`
+change and this change's open question.
 
 :::detail{title="Product decisions" for="pm"}
 The check is the collector's to complete, on their own device, because a
