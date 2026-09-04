@@ -840,6 +840,20 @@ all. Where an expected value is derived rather than fixed, state the
 derivation: "Highest bid reads `<user B maximum>` plus `<increment>`" survives
 a change of seed, "Highest bid reads 530000" does not.
 
+**A name means one thing in the whole file.** A placeholder stands for one
+record in one state, and two cases that need the same subject in different
+states name them apart — `<listing_1>` for the draft with an empty gallery,
+`<listing_6>` for the live one led by user A — numbered in the order they
+first appear. Cases that genuinely need the same state share the name and
+repeat its row. Reusing one name for two states is how a suite acquires cases
+that cannot all pass against one seeded environment.
+
+**A row defines the state, not just the label.** Write what the placeholder
+stands for — "`<listing_6>` | A live listing led by user A, current bid
+`<leader price>`" — so the case is runnable without reading the case above it.
+This is what makes independence checkable: a case that inherits its setup from
+its neighbour has no row saying so, and its absence is visible.
+
 **A case that runs per row says so.** When the steps are identical and only
 the data differs, write one case with a row per run, a column for each varying
 value and one for the outcome, and a line under the title: "Runs once per row

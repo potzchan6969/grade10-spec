@@ -293,6 +293,14 @@ each case traces scenario ids.
      arithmetic: "Highest bid reads `<user B maximum>` plus `<increment>`"
      survives a change of seed; "Highest bid reads 530000" does not.
 
+     **One name, one state.** A placeholder stands for one record in one
+     state across the whole file: `<listing_1>` and `<listing_6>` when two
+     cases need a listing in different states, numbered in order of first
+     appearance, each row defining what it stands for ("A live listing led by
+     user A, current bid `<leader price>`"). Cases needing the same state
+     share the name and repeat the row. One name for two states produces a
+     suite that cannot pass against one seeded environment.
+
      **One case, many rows.** When the steps are identical and only the data
      differs, write one case with a row per run — a column per varying value
      and one for the outcome — and put "Runs once per row of **Test data**."
