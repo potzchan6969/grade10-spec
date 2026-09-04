@@ -33,7 +33,6 @@ export type ListingBidEnrollmentSnapshot = {
     defaultAgeAttested?: boolean;
   };
   signInOpen?: boolean;
-  autoConfirmOpen?: boolean;
   staleFloor?: boolean;
   viewOverride?: Partial<ListingAuctionBidView>;
 };
@@ -92,16 +91,6 @@ export const ENROLLMENT_SNAPSHOT_READY: ListingBidEnrollmentSnapshot = {
   },
 };
 
-export const ENROLLMENT_SNAPSHOT_AUTO_BID_CONFIRM: ListingBidEnrollmentSnapshot =
-  {
-    submitUsesSignInLabel: false,
-    linkedPaymentMethod: {
-      ...ENROLLMENT_DEMO_SAVED_PAYMENT,
-      editable: false,
-    },
-    autoConfirmOpen: true,
-  };
-
 export const LISTING_BID_ENROLLMENT_SNAPSHOTS = {
   signedOut: ENROLLMENT_SNAPSHOT_SIGNED_OUT,
   needsPayment: ENROLLMENT_SNAPSHOT_NEEDS_PAYMENT,
@@ -110,5 +99,4 @@ export const LISTING_BID_ENROLLMENT_SNAPSHOTS = {
   setupSheet: ENROLLMENT_SNAPSHOT_SETUP_SHEET,
   setupSheetFromChange: ENROLLMENT_SNAPSHOT_SETUP_SHEET_FROM_CHANGE,
   ready: ENROLLMENT_SNAPSHOT_READY,
-  autoBidConfirm: ENROLLMENT_SNAPSHOT_AUTO_BID_CONFIRM,
 } as const;

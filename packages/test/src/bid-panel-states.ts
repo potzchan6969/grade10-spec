@@ -19,7 +19,6 @@ type BidPanelScenarioId =
   | "bid-panel/setup-change-payment"
   | "bid-panel/stale-floor"
   | "bid-panel/manual-bid-accepted"
-  | "bid-panel/maximum-confirmation-required"
   | "bid-panel/maximum-accepted";
 
 type PaymentAuthorizationScenarioId =
@@ -44,7 +43,6 @@ type BidPanelState = {
     maskedNumber: string;
     editable: boolean;
   };
-  autoConfirmOpen?: boolean;
   staleFloor?: boolean;
   /** Rendering this state opens the payment-setup dialog. */
   paymentSetup?: {
@@ -332,22 +330,10 @@ const BID_PANEL_STATE_RESPONSES = {
     },
     expectedText: "•••• 4242",
   },
-  maximumConfirmationRequired: {
-    scenarioId: "bid-panel/maximum-confirmation-required",
-    source: "mutation",
-    operation: "commitMaximum",
-    state: {
-      bidMode: "auto",
-      submitUsesSignInLabel: false,
-      linkedPaymentMethod: linkedCard(false),
-      autoConfirmOpen: true,
-    },
-    expectedText: "Confirm Auto-Bidding",
-  },
   maximumAccepted: {
     scenarioId: "bid-panel/maximum-accepted",
     source: "mutation",
-    operation: "confirmAutoBid",
+    operation: "commitMaximum",
     state: {
       bidMode: "auto",
       submitUsesSignInLabel: false,

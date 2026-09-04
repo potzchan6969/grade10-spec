@@ -309,7 +309,7 @@ The collector is enrolled on <an open listing> and has placed at least one bid o
 * The linked card is shown.
 * Change is not offered.
 
-### grade10-site-auction-bid-panel-enrollment-US4-TC2-1: First auto bid may open confirm-maximum
+### grade10-site-auction-bid-panel-enrollment-US4-TC2-1: First maximum does not reopen setup
 
 **Classification:**
 
@@ -324,7 +324,7 @@ The collector is enrolled on <an open listing> and has placed at least one bid o
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-04, grade10-site-auction-bid-panel-enrollment-SC-11
 
 **Pre-conditions:**
-The collector is enrolled on <an open listing> in auto-bid mode and has not acknowledged the auto-bid introduction on that listing.
+The collector is enrolled on <an open listing> and has not placed a bid on it.
 
 **Steps:**
 
@@ -333,5 +333,5 @@ The collector is enrolled on <an open listing> in auto-bid mode and has not ackn
 
 **Expected Results:**
 
-* The confirm-maximum step opens per auto-bidding.
 * The setup modal does not open.
+* The commitment proceeds under auto-bidding and payment authorization.

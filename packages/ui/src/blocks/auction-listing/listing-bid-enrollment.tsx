@@ -298,103 +298,6 @@ function EnrollmentSetupSheet({
   );
 }
 
-type AutoBidConfirmationDialogCopy = {
-  autoConfirmTitle: string;
-  autoConfirmIntro: string;
-  autoConfirmActive: string;
-  autoConfirmRaiseOnly: string;
-  autoConfirmMaximum: string;
-  autoConfirmAction: string;
-  autoConfirmCancel: string;
-};
-
-type AutoBidConfirmationDialogProps = {
-  copy: AutoBidConfirmationDialogCopy;
-  open: boolean;
-  onOpenChange?: (open: boolean) => void;
-  onConfirm?: () => void;
-  presentation?: OverlayPresentation;
-  maximumLabel: string;
-};
-
-function AutoBidConfirmationBody({
-  copy,
-  maximumLabel,
-}: {
-  copy: AutoBidConfirmationDialogCopy;
-  maximumLabel: string;
-}) {
-  return (
-    <VStack className="w-full" gap="md">
-      <div className="flex flex-col gap-4 text-sm leading-5 font-normal text-foreground">
-        <p>{copy.autoConfirmIntro}</p>
-        <p>{copy.autoConfirmActive}</p>
-        <p>{copy.autoConfirmRaiseOnly}</p>
-      </div>
-      <p className="w-full rounded-md border border-border bg-muted/30 p-3 text-sm font-medium text-foreground">
-        {copy.autoConfirmMaximum.replace("{amount}", maximumLabel)}
-      </p>
-    </VStack>
-  );
-}
-
-function AutoBidConfirmationDialog({
-  copy,
-  open,
-  onOpenChange,
-  onConfirm,
-  presentation = "modal",
-  maximumLabel,
-}: AutoBidConfirmationDialogProps) {
-  const body = (
-    <AutoBidConfirmationBody copy={copy} maximumLabel={maximumLabel} />
-  );
-  const footer = (
-    <HStack gap="sm" hAlign="end">
-      <Button
-        onClick={() => onOpenChange?.(false)}
-        size="md"
-        type="button"
-        variant="outline"
-      >
-        {copy.autoConfirmCancel}
-      </Button>
-      <Button
-        onClick={() => {
-          onConfirm?.();
-          onOpenChange?.(false);
-        }}
-        size="md"
-        type="button"
-      >
-        {copy.autoConfirmAction}
-      </Button>
-    </HStack>
-  );
-
-  if (presentation === "inline") {
-    if (!open) return null;
-    return (
-      <InlineOverlayPreview label={copy.autoConfirmTitle}>
-        {body}
-        <div className="mt-4">{footer}</div>
-      </InlineOverlayPreview>
-    );
-  }
-
-  return (
-    <Dialog onOpenChange={(next) => onOpenChange?.(next)} open={open}>
-      <DialogContent showCloseButton>
-        <DialogHeader>
-          <DialogTitle>{copy.autoConfirmTitle}</DialogTitle>
-        </DialogHeader>
-        <DialogBody>{body}</DialogBody>
-        <DialogFooter>{footer}</DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
 function InlineOverlayPreview({
   label,
   children,
@@ -413,8 +316,6 @@ function InlineOverlayPreview({
 }
 
 export type {
-  AutoBidConfirmationDialogCopy,
-  AutoBidConfirmationDialogProps,
   EnrollmentSetupSheetCopy,
   EnrollmentSetupSheetProps,
   OverlayPresentation,
@@ -424,7 +325,6 @@ export type {
   PaymentMethodRowProps,
 };
 export {
-  AutoBidConfirmationDialog,
   EnrollmentSetupSheet,
   InlineOverlayPreview,
   PaymentMethodEmptyState,

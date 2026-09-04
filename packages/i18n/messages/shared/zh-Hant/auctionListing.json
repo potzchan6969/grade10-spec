@@ -2,6 +2,7 @@
   "auctionWon": "競投成功",
   "automaticBidExplanation": "我們只會在需要時自動出價，最高不超過你的最高出價金額。",
   "automaticBidHoldExplanation": "你的銀行卡預授權金額涵蓋最高出價金額。如果拍賣以低於最高出價金額的價格結束，你實際支付的金額可能較少。",
+  "maximumMechanismSubtext": "我們只會按需出價至你的最高金額。預授權與該金額一致；只能上調，不能下調或取消。",
   "automaticMaximum": "你的最高出價金額",
   "automaticMaximumAmount": "最高出價金額",
   "automaticMaximumConfirmed": "已設定最高出價金額 {amount}。你的銀行卡預授權金額涵蓋最高出價金額；如果拍賣以較低價格結束，你實際支付的金額可能較少。",

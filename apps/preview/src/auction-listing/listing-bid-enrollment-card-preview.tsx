@@ -1,7 +1,6 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
-  AutoBidConfirmationDialog,
   EnrollmentSetupSheet,
   formatMoney,
   InlineOverlayPreview,
@@ -34,9 +33,6 @@ type ListingBidEnrollmentCardPreviewProps = {
   onPaymentSetupDismissed?: () => void;
   onLinkPayment?: () => void;
   onChangePayment?: () => void;
-  autoConfirmOpen?: boolean;
-  onAutoConfirmOpenChange?: (open: boolean) => void;
-  onAutoBidConfirm?: () => void;
   history?: readonly ListingBidHistoryRow[];
   historyResetKey?: string;
 };
@@ -52,9 +48,6 @@ function ListingBidEnrollmentCardPreview({
   onPaymentSetupDismissed,
   onLinkPayment,
   onChangePayment,
-  autoConfirmOpen: autoConfirmOpenProp,
-  onAutoConfirmOpenChange,
-  onAutoBidConfirm,
   history: historyProp,
   historyResetKey = "enrollment-demo",
 }: ListingBidEnrollmentCardPreviewProps) {
@@ -88,14 +81,6 @@ function ListingBidEnrollmentCardPreview({
     bidHistoryForState(fixtureState).map((row) =>
       snapshot.submitUsesSignInLabel ? { ...row, isViewer: false } : row,
     );
-  const maximumLabel = formatMoney(
-    view.viewerMaximumMinor ?? view.suggestedMaxMinor ?? 500_000,
-    view.currency,
-    { locale: "en-HK" },
-  );
-
-  const autoConfirmOpen =
-    autoConfirmOpenProp ?? snapshot.autoConfirmOpen ?? false;
 
   function handleBidSubmit(_amountMinor?: number) {
     onBidSubmit?.();
@@ -199,17 +184,6 @@ function ListingBidEnrollmentCardPreview({
             />
           </SignInCard>
         )
-      ) : null}
-
-      {autoConfirmOpen ? (
-        <AutoBidConfirmationDialog
-          copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
-          maximumLabel={maximumLabel}
-          onConfirm={onAutoBidConfirm}
-          onOpenChange={onAutoConfirmOpenChange}
-          open
-          presentation={overlayPresentation}
-        />
       ) : null}
     </VStack>
   );

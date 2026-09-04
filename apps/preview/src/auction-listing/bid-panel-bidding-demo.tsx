@@ -303,11 +303,8 @@ function BiddingPreview({
 
   return (
     <ListingBidEnrollmentCardPreview
-      autoConfirmOpen={session.autoConfirmOpen}
       history={history}
       historyResetKey={`${title}:${view.standing}:${view.currentBidMinor}`}
-      onAutoBidConfirm={actions.confirmAutoBidIntro}
-      onAutoConfirmOpenChange={actions.setAutoConfirmOpen}
       onBidSubmit={actions.handleBidSubmit}
       onChangePayment={actions.openChangePayment}
       onLinkPayment={actions.openSetup}
@@ -338,8 +335,9 @@ function BidPanelBiddingDemo() {
           lead. Each card must replace price, history, standing, and the safe
           next action together so a private maximum is never mistaken for the
           current bid or a guarantee of winning. Quick-maximum presets and
-          Review maximum are live: they use the same enrollment session as Bid
-          Panel Interactive, including auto-bid confirmation.
+          Place Bid are live: they use the same enrollment session as Bid
+          Panel Interactive. Mechanism copy stays as always-on subtext under
+          the section heading.
         </p>
       }
     >

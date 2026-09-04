@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, waitFor, within } from "storybook/test";
+import { expect, userEvent, within } from "storybook/test";
 import { BIDDING_CASES, BidPanelBiddingDemo } from "./bid-panel-bidding-demo";
 import { BidPanelCountdownDemo } from "./bid-panel-countdown-demo";
 import { ListingBidEnrollmentInteractiveDemo } from "./listing-bid-enrollment-demo";
@@ -60,28 +60,15 @@ export const Bidding: Story = {
     expect(canvas.getAllByText("Starting bid").length).toBeGreaterThan(0);
     expect(canvas.getByText("Set your private maximum")).toBeVisible();
     expect(canvas.getByText("Min. bid")).toBeVisible();
+    expect(
+      canvas.getByText(
+        "We bid only as needed up to your maximum. Hold matches it; you can raise, not lower or cancel.",
+      ),
+    ).toBeVisible();
     expect(canvas.queryByText("Highest bid")).not.toBeInTheDocument();
     expect(canvas.queryByText("Outbid")).not.toBeInTheDocument();
 
     await userEvent.click(canvas.getByRole("button", { name: /^Place Bid/ }));
-    await waitFor(() => {
-      expect(
-        within(document.body).getByRole("dialog", {
-          name: "Confirm Auto-Bidding",
-        }),
-      ).toBeVisible();
-    });
-    const autoConfirm = within(document.body).getByRole("dialog", {
-      name: "Confirm Auto-Bidding",
-    });
-    await userEvent.click(
-      within(autoConfirm).getByRole("button", { name: "Cancel" }),
-    );
-    expect(
-      within(document.body).queryByRole("dialog", {
-        name: "Confirm Auto-Bidding",
-      }),
-    ).not.toBeInTheDocument();
 
     await userEvent.click(next);
     expect(canvas.getAllByText(/HK\$1,200/).length).toBeGreaterThan(0);

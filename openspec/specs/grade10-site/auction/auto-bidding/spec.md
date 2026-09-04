@@ -44,8 +44,9 @@ A bidder SHALL:
 
 1. Open an open listing.
 2. Enter a **maximum**: the most they authorize Grade10 to bid for them.
-3. Confirm. Grade10 accepts only after a card authorization for that
-   maximum is recorded.
+3. Confirm with the primary bid action. Grade10 accepts only after a card
+   authorization for that maximum is recorded. The panel discloses the
+   mechanism in always-on copy.
 4. See their own maximum, distinct from the current bid, and whether they
    lead.
 5. Raise that maximum later, or leave it standing.
