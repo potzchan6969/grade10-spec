@@ -52,6 +52,7 @@ carrying these fields and no free-text copy of the person beyond them.
 | Provider reference | The provider's own identifier for the check, absent for a check Grade10 staff performed |
 | Performed by | The staff member who checked, or, for a provider's check, the person who asked for it |
 | Performed at | When the check was decided — the staff member's clock, or the provider's decision instant |
+| Provider findings | What a provider checked and what each check found, in Grade10's own words; absent for a check Grade10 staff performed |
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-01 - A staff check names the staff member who made it
 
