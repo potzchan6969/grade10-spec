@@ -8,10 +8,11 @@
     "refresh": "새 코드",
     "secondsUnit": "초",
     "used": "이 코드는 이미 사용되었습니다",
-    "walletAdd": "추가",
+    "walletAdd": "{wallet}에 추가",
     "walletEnd": "이 패스 종료",
+    "walletFailed": "처리되지 않았습니다. 다시 시도해 주세요.",
     "walletHeading": "휴대폰에 멤버십 카드 담기",
-    "walletHeld": "다음 지갑에 패스를 보유하고 있습니다:",
+    "walletHeld": "{wallet}에 패스를 보유하고 있습니다",
     "walletName": "Google 월렛"
   },
   "page": {

@@ -8,10 +8,11 @@
     "refresh": "換一組新碼",
     "secondsUnit": "秒",
     "used": "此碼已被使用",
-    "walletAdd": "加入",
+    "walletAdd": "新增至{wallet}",
     "walletEnd": "停用此卡",
+    "walletFailed": "操作未成功，請重試。",
     "walletHeading": "把會員卡放進手機",
-    "walletHeld": "你已在以下錢包持有會員卡：",
+    "walletHeld": "你已在{wallet}持有會員卡",
     "walletName": "Google 錢包"
   },
   "page": {
