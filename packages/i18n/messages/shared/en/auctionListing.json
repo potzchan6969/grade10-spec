@@ -2,6 +2,7 @@
   "auctionWon": "Auction won",
   "automaticBidExplanation": "We’ll bid automatically only as needed, up to your maximum.",
   "automaticBidHoldExplanation": "Your card hold covers the maximum. You may pay less if the auction ends below it.",
+  "maximumMechanismSubtext": "We bid only as needed up to your maximum. Hold matches it; you can raise, not lower or cancel.",
   "automaticMaximum": "Your maximum",
   "automaticMaximumAmount": "Maximum amount",
   "automaticMaximumConfirmed": "Your maximum of {amount} is set. Your card hold covers the maximum, and you may pay less if the auction ends below it.",

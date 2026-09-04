@@ -2,6 +2,7 @@
   "auctionWon": "竞拍成功",
   "automaticBidExplanation": "我们只会在需要时自动出价，最高不超过你的最高出价金额。",
   "automaticBidHoldExplanation": "你的银行卡预授权金额覆盖最高出价金额。如果拍卖以低于最高出价金额的价格结束，你实际支付的金额可能更少。",
+  "maximumMechanismSubtext": "我们只会按需出价至你的最高金额。预授权与该金额一致；只能上调，不能下调或取消。",
   "automaticMaximum": "你的最高出价金额",
   "automaticMaximumAmount": "最高出价金额",
   "automaticMaximumConfirmed": "已设置最高出价金额 {amount}。你的银行卡预授权金额覆盖最高出价金额；如果拍卖以较低价格结束，你实际支付的金额可能更少。",

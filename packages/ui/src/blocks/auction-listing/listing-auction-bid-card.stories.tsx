@@ -52,6 +52,8 @@ const COPY = {
   raiseMaximumReview: "Raise maximum · {amount}",
   privateMaximumTooltip:
     "Your maximum is the most you are willing to pay before buyer fees. We place the lowest bid needed to keep you in the lead. Other bidders cannot see your maximum.",
+  maximumMechanismSubtext:
+    "We bid only as needed up to your maximum. Hold matches it; you can raise, not lower or cancel.",
   customAmountPlaceholder: "Custom amount (min. {amount})",
   stepperMessage: "Min.: {amount}",
   useMinimum: "Use minimum",

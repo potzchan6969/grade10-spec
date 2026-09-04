@@ -37,6 +37,11 @@ type ListingQuickMaximumBidActionsCopy = {
   /** e.g. "Raise maximum · {amount}" — when a maximum is already committed. */
   raiseMaximumReview: string;
   privateMaximumTooltip: string;
+  /**
+   * Always-on mechanism line under the primary action — e.g. we bid as needed,
+   * hold matches the maximum, raise only.
+   */
+  maximumMechanismSubtext: string;
   /** Placeholder when the custom field is empty, e.g. "Custom amount (min. {amount})". */
   customAmountPlaceholder: string;
   /** Shown under the custom field only when the typed amount is invalid, e.g. "Min.: {amount}". */
@@ -261,27 +266,32 @@ function ListingQuickMaximumBidActions({
 
   return (
     <VStack className="w-full" gap="sm">
-      <HStack gap="xs" vAlign="center">
-        <Text
-          className="text-secondary-foreground"
-          size="sm"
-          tone="secondary"
-          weight="medium"
-        >
-          {heading}
+      <VStack className="w-full" gap="xs">
+        <HStack gap="xs" vAlign="center">
+          <Text
+            className="text-secondary-foreground"
+            size="sm"
+            tone="secondary"
+            weight="medium"
+          >
+            {heading}
+          </Text>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger
+                aria-label={copy.privateMaximumTooltip}
+                className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                onPointerDown={(event) => event.preventDefault()}
+                render={<Info aria-hidden size={12} />}
+              />
+              <TooltipContent>{copy.privateMaximumTooltip}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </HStack>
+        <Text className="text-secondary-foreground" size="xs">
+          {copy.maximumMechanismSubtext}
         </Text>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger
-              aria-label={copy.privateMaximumTooltip}
-              className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-              onPointerDown={(event) => event.preventDefault()}
-              render={<Info aria-hidden size={12} />}
-            />
-            <TooltipContent>{copy.privateMaximumTooltip}</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </HStack>
+      </VStack>
 
       <HStack className="w-full" gap="sm" role="group">
         {presets.map((preset) => {
