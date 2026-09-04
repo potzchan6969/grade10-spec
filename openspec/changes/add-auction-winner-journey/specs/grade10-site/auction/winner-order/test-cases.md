@@ -19,7 +19,8 @@ can see.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -49,6 +50,7 @@ An open lot whose leading bidder holds a profile address, with one second until 
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -78,6 +80,7 @@ An open lot whose leading bidder holds no profile address, with one second until
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -105,6 +108,7 @@ An auction order whose delivery address is pre-filled from the winner's profile 
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -141,6 +145,7 @@ An unpaid auction order whose final amount is 312000 minor units in HKD, and an 
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
@@ -169,6 +174,7 @@ An open lot whose leading bidder holds an open bid-time authorization, with one 
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -197,6 +203,7 @@ An unpaid auction order inside its payment deadline, and a payment method mocked
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
@@ -240,6 +247,7 @@ records.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -267,6 +275,7 @@ An auction order paid at a final amount of 316000 minor units in HKD.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -294,6 +303,7 @@ A paid auction order the warehouse has just dispatched with a tracking number at
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual

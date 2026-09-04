@@ -18,6 +18,7 @@
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -47,6 +48,7 @@ An auction order deriving as Expired, and an operator holding payment-processing
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -75,6 +77,7 @@ An unpaid auction order whose delivery address is unchanged from the profile def
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -111,6 +114,7 @@ An auction order deriving as Pending Payment three days from its deadline, with 
 * **Status:** draft
 * **Behaviour:** destructive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -139,6 +143,7 @@ An auction order deriving as Expired, and an operator holding payment-processing
 * **Status:** draft
 * **Behaviour:** destructive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -177,6 +182,7 @@ engaged.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -205,6 +211,7 @@ An expired auction order whose winner was declined three times before the deadli
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -233,6 +240,7 @@ An auction order dispatched to one address, and an operator holding shipment-pro
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -260,6 +268,7 @@ An auction order whose invoice is `pending` and whose deadline elapsed two days 
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual

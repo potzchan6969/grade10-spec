@@ -10,6 +10,10 @@
 
 - `winner-order-SC-01` — An invoice is issued at lot close
 - `winner-order-SC-02` — A winner with no profile address cannot yet pay
+- `winner-order-SC-22` — An account keeps multiple shipping addresses
+- `winner-order-SC-23` — The account has one optional default
+- `winner-order-SC-24` — Editing a saved address does not rewrite an order
+- `winner-order-SC-25` — A selected address cannot be archived silently
 - `winner-order-SC-07` — A pre-filled address still needs confirming
 - `winner-order-SC-09` — An amendment shows the total delta before payment
 - `winner-order-SC-12` — The winning hold is released and the invoice is a fresh charge

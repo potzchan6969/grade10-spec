@@ -72,12 +72,14 @@ what separates a working self-service journey from a faster phone call.
   attempts and a full address snapshot per event — not just current state.
 - **Ten post-close letters**, per order, identifying their lot.
 
-This change **supersedes `add-auction-payment-fulfillment`**, which is
-undelivered (0/32) and specifies the opposite money model: automatic capture
-of the bid-time hold, a stored per-listing outcome, and `Awaiting wire`. Its
-still-correct parts — the operator queue, the split payment and shipment
-grants, the listing trail — are carried into this change's post-sale delta.
-That change should be withdrawn rather than archived.
+This change **supersedes the archived `add-auction-payment-fulfillment`**
+implementation. That change shipped and its 32 tasks are checked off in the
+archive, but it records the opposite money model: automatic capture of the
+bid-time hold, a stored per-listing outcome, and `Awaiting wire`. The shipped
+operator surface is therefore a predecessor to migrate, not evidence that this
+winner journey is complete. The split payment and shipment grants, operator
+queue, and operational history remain the useful boundary; the winner journey
+and its derived order status own the replacement behaviour.
 
 ## Non-Goals
 
@@ -163,8 +165,10 @@ That change should be withdrawn rather than archived.
 
 **Ordering and required amendments.**
 
-- `add-auction-payment-fulfillment` — **withdraw.** Superseded here; nothing
-  it specifies is durable, so nothing is lost by not archiving it.
+- `add-auction-payment-fulfillment` — **retain as the shipped predecessor.**
+  Its checked-off task record and archive remain historical evidence. Its
+  automatic-capture, `Awaiting wire`, and stored-outcome rules do not satisfy
+  this change and require migration before the winner journey can archive.
 - `add-account-auction-record` — its **"A winner reads their own payment and
   shipment state"** requirement shows `Awaiting payment / Payment problem /
   Paid / Shipped / Delivered`, a second buyer-facing vocabulary for the same
