@@ -26,7 +26,7 @@ Task 2.5 depends on the contracts in group 1; it uses fixtures rather than a run
 - [x] 3.4 Make `A staff refund is reflected in payment status` and `A customer cannot start a dispute or refund request` pass in Store order reads.
 - [x] 3.5 Verify every payment, refund, shipping, and authorization scenario in this group through Store backend, storefront, and admin feature lanes.
 
-## 4. Delivery and review (grade10)
+## 4. Delivery and review (grade10) (owner: @kinisworking)
 
 - [ ] 4.1 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run build` after the relevant Shopify, Store backend, storefront, and admin feature lanes pass.
 - [ ] 4.2 Verify every scenario in this change, run `openspec validate add-grade10-shopify-store`, and run `openspec validate --specs`.
