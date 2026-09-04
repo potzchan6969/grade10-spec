@@ -67,13 +67,13 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile, o
 10. **The extension keeps watching** — every cart signal is read against what the sale was promised, because anybody at the terminal can take a benefit off without telling it (POS's own "remove all discounts", a staff discount replacing ours, the customer lifted off the sale). What the cart stops showing goes back to the member, our own gift line comes off once it stops being free, and staff are told in a sentence
 11. **Staff tender** — Shopify POS takes the payment; nothing of ours runs
 12. **The paid order arrives** by webhook or sweep, carrying the attribute, and binds to the row only when the row is a till promise with no payment yet, the order came through the POS channel (a cart permalink could write our attribute on a web order), its customer is the member's, and the currency matches. Anything else counts `store.pos.sale.unbound` for an operator's claw-back, never silence
-13. **Settlement** — points leave the balance now, up to what the shop actually took off; a coupon settles only where the order corroborates it (an order code on the order, a product or gift variant among the lines) and the rest are freed; earning is on the goods, as online
+13. **Settlement** — points leave the balance now, up to what the shop took off less what every other instrument did; a coupon settles only where the order corroborates it (an order code on the order, a product or gift variant among the lines) and the rest are freed and counted; earning is on the goods, as online
 
 ### Undo
 
 - **Before tender** — Clear takes this sale's benefits off, targeted: gift lines by their property, product coupons by their variant, the `Points` discount by its title; then the store is told what is left. The balance was never touched. A discount code comes off only with every other discount (the platform offers nothing narrower), so staff are told; "Remove every discount" is the last resort
-- **A coupon that would not come off** — the order id stays on the sale while one does, so the landed order still binds and settlement spends what it corroborates. Take the id off and the shop goes on honouring the code against a sale nobody can settle: the member keeps a coupon they used, and the shop pays for it twice
-- **The member taken off the sale** — nothing on it can reach them any more, so the promise goes back and what can still be removed is
+- **A coupon that would not come off** — it stays on the sale and the store is told so: the order id stays, so the landed order still binds, and the coupon's ride stays, so settlement has something to spend. Drop either and the shop goes on honouring the cut against a sale nobody can settle — the member keeps a coupon they used, and the shop pays for it twice
+- **The member taken off the sale** — the promise goes back for everything the sale no longer shows, and what can still be removed is. A cut nobody can remove keeps its ride and the order id with it: no sale binds while the cart names no customer, and the member coming back is what spends it
 - **After tender** — a refund, on the refund's own rule
 - **Walked away** — the promise lives an hour, then the row goes `expired`, never `canceled`: the shop's cart can still collect, and `expired → paid` stays legal
 - **A second person steps up** — a reopened modal reads the cart back; a sale the shop's open promises name as this member's stays, points and all, anybody else's benefits are stripped before the new session
@@ -90,6 +90,10 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile, o
 - **A row that closed cannot be rewritten** — a sale that landed, or whose own hour ran out, refuses the next plan and asks for a fresh scan rather than reopening itself
 
 ❓ **Points and stored value** — an order-level discount is the only instrument a counter has, and the shop allocates one across every line it sold, so on a sale that also carries a gift card a share of the points lands on stored value. Counted today (`store.points_tender.gift_card_on_sale`); the fix is to spend points as line discounts on the qualifying lines, which is a change of its own.
+
+❓ **A welded coupon is corroborated by its variant, not by its cut** — a sale that sold the variant spends the coupon, whether or not the line still carries the cut, because the settled order says what it sold and not what each line was discounted by. So a cut staff take off after the apply burns the member's coupon. The change that fixes it records what each instrument allocated to each line.
+
+❓ **A code counts at what the store minted** — an order code adopted from a sale the till never reported is priced at its face value rather than at what the shop took off, and the shop's own automatic promotions belong to no instrument at all. Both land in the money a points capture subtracts.
 
 ### Collection
 
@@ -112,3 +116,7 @@ Per shop, flipped from the admin console, enforced on the next request: terminal
   `services/pointsTender.ts`, `adapters/shopify/shopifyProvider.ts`,
   `services/shipping/rates.ts`, `worker/routes/carrier.ts`
 :::
+
+## In flight
+
+::changes{spec="grade10-site/store/order-settlement"}
