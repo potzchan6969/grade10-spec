@@ -5,7 +5,7 @@ except where a heading says otherwise.
 
 Before group 4 can be exercised end to end, the Google issuer account and its
 publishing access must exist — the operational follow-ups are recorded on
-[the programme's manual page](../../../docs/prds/products/grade10-site/loyalty/index.md).
+[the membership page](../../../docs/prds/products/grade10-site/loyalty/profile.md).
 Every group below is testable without them: the wallet is reached through one
 port with a fixture on the production graph.
 
@@ -47,7 +47,7 @@ Needs groups 2 and 3.
 Needs group 3.
 
 - [x] 5.1 Issue a pass for the signed-in member — secret, row and wallet object — and answer the address that saves it, so *A member adds their card to their wallet* passes
-- [x] 5.2 Put the wallet behind one port with a fixture on the production graph, so every group below is testable with no vendor in the loop
+- [x] 5.2 Put the wallet behind one port with a fixture on the production graph, and exercise the sweep, the expiry arm and the counter through it, so every group below is tested with no vendor in the loop
 - [x] 5.3 End a pass on the member's own action, at once, so *An ended pass identifies nobody* passes, and let them add another
 - [ ] 5.4 End a pass from the operator console under the permission an elevated act requires, recorded in the operator log and refused rather than hidden without it, so *An operator ends a pass under the permission it requires* passes
 - [x] 5.5 Leave the membership untouched when a member deletes the pass from their wallet, so *Removing a pass leaves the membership intact* passes
@@ -58,10 +58,11 @@ Needs group 3.
 
 Needs group 5.
 
-- [x] 6.1 Sweep the passes that are due, oldest first, reading the member's name, tier and points to spend in one batched call per lap
+- [x] 6.1 Sweep the passes that are due, oldest first, reading each member's name, tier and points to spend from the panel the counter already asks for
+- [ ] 6.9 Read the lap's members in one call rather than one per row — the panel answers a single member, so this needs a narrow `memberStanding` on the commerce contract
 - [x] 6.2 Stamp each row's next due instant from the tier term's end and the balance's expiry, so a change nobody recorded still reaches the pass, and *A change nobody recorded reaches the pass* passes
 - [x] 6.3 Send only a difference, hashing what was last rendered, so *A burst costs one update* passes
-- [x] 6.4 Mark a member's passes due from the writes that already run in their transaction, logged and never thrown, so *A recorded change reaches the pass* passes inside the interval
+- [ ] 6.4 Mark a member's passes due from the writes that already run in their transaction, logged and never thrown, so *A recorded change reaches the pass* passes inside the interval — `kickWalletRefresh` is written and reaches no caller, so a recorded spend reaches the pass on the daily floor instead. The writes are the loyalty worker's and the row is the store's, so there is no shared transaction to hang it on: it wants a post-commit kick after the loyalty call returns
 - [x] 6.5 Carry the instant a pass was rendered onto the pass itself, so *A pass says how current it is* passes
 - [x] 6.6 Add the sweep to the store worker's cron beside the others, reported whatever the rest did, with its backlog's depth and age counted together
 - [x] 6.7 Hold the sweep's wallet calls under a ceiling that leaves room for a member saving a pass
@@ -81,7 +82,7 @@ Needs group 1's submodule bump and group 5. `pnpm run build` is the one check
 still owed: it cannot pass until the submodule pin and this change's store
 branch agree, because the auction's bid-card copy moved between them.
 
-- [x] 8.1 Add the pass to the member's card feature — the save action, the pass they hold, and ending it — behind the feature's own tokens
+- [x] 8.1 Add the pass to the member's card feature — the save action, the pass they hold, read from the server so a returning member still finds it, and ending it — behind the feature's own tokens
 - [x] 8.2 Compose `WalletPassLinks` beside the member card on the membership page, taking every word from the application's catalog
 - [ ] 8.3 Offer the same save address in the message that welcomes a new member
 - [ ] 8.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`

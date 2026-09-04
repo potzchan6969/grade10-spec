@@ -106,7 +106,7 @@ programme thinks, so every unhappy answer lands staff in a normal sale.
 Scan the QR on the member card — from the site or from the member's Google
 Wallet pass — type its eight-character short code, or type the exact email on
 the account. A miss says only that no member was found.
-Either identification opens a ten-minute session bound to the shop and the
+Any of these opens a ten-minute session bound to the shop and the
 member — never to the staff label, which changes when staff switch by PIN.
 
 ## Read their standing

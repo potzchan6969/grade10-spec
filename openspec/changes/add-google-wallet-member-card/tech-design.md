@@ -50,14 +50,17 @@ engineer would otherwise have to make twice.
 Google's `valuePattern` takes literal text beside its substitutions, so the
 whole payload is expressible in the object.
 
-### Single use is an insert, not a check
+### Single use is a conditional update, not a check
 
-- **A use is a row** in `pos_pass_uses`, unique on `(pass, period)` — the
-  insert is the guarantee, the way the guarded claim is for a presentation
-- **A duplicate insert is the refusal**, so two tills scanning one screen at the
+- **A use moves `last_period` forward** on the pass — the update is the
+  guarantee, the way the guarded claim is for a presentation
+- **Zero rows back is the refusal**, so two tills scanning one screen at the
   same instant open exactly one session between them
-- **Three periods are candidates** — the named one and one either side — and the
-  row is inserted for whichever verifies
+- **Monotonic, not per-period** — the window is three periods wide, so a ledger
+  keyed on the period would let a photograph of the code before last spend after
+  the member's own scan. Only ever forward closes that
+- **No second table**, and nothing that grows per scan: what a session was
+  opened by is already on the session row, under provenance `pass`
 
 ### The secret is encrypted, because it must be recoverable
 
@@ -99,7 +102,6 @@ a brand with a till fills them, which is what `pos_handles` already does.
 ```
 account (auth)
    └── pos_passes         one per pass a member holds
-          └── pos_pass_uses   one per code a till accepted
 ```
 
 ### `pos_passes`
@@ -127,50 +129,52 @@ account (auth)
   scan
 - **CHECK `ck_pos_passes_ended`** — `(state = 'live') = (ended_at is null)`, so a
   row cannot claim to be live and carry an ending
+- **`last_period`** — the single-use guarantee, a conditional update rather
+  than a read. Monotonic, so a photograph of the code before last cannot spend
+  behind the member's own scan while both are inside the window
+- **`idx_pos_passes_expiry_owed`** on `(next_attempt_at) where state <> 'live'`
+  — the expiry arm's scan. A non-live row with an attempt stamped is a copy the
+  vendor still holds, so the debt needs no column of its own
 - **Authoritative** — the secret, the state, and the digest. Everything the pass
   shows is read from the programme at send time and stored only as that digest
 
-### `pos_pass_uses`
-
-| Column | Type | Null | Default | Notes |
-| --- | --- | --- | --- | --- |
-| `id` | `text` | no | — | primary key |
-| `pass_id` | `text` | no | — | the pass whose code was accepted |
-| `period` | `bigint` | no | — | the counter the code was made for |
-| `at` | `timestamptz` | no | — | when the till took it |
-| `session_id` | `text` | yes | — | the session it opened |
-
-- **`uq_pos_pass_uses_period`** on `(pass_id, period)` — the single-use
-  guarantee, enforced by the index rather than by a read
-- **Append-only.** No column is ever updated
-
 ## Service interfaces
 
-All of it lives beside the till gateway's other writes, under the directory
-`check:libs` already pins.
+All of it lives beside the till gateway's other writes, in `services/pos`.
 
 | Function | In | Out |
 | --- | --- | --- |
-| `issueWalletPass` | member | the pass reference and the address that saves it |
-| `verifyWalletCode` | the scanned payload, the instant | the member, or `expired`, `used`, `not_found` |
-| `endWalletPass` | the pass, who ended it | the ended row, or a refusal it was already ended |
+| `issuePass` | member | the pass reference and the secret its phone will use |
+| `verifyPassCode` | the scanned payload | the member and the period, or `expired`, `used`, `paused`, `not_found` |
+| `spendPassCode` | the pass, the period | whether this caller is the one that spent it |
+| `endLivePasses` | member | the rows it ended, each now owing the vendor a call |
+| `erasePasses` | member | the rows it stripped, each now owing the vendor a call |
 | `runWalletRefresh` | the sweep's dependencies | what it read, sent and skipped |
-| `eraseWalletPasses` | member | what is still owed |
+| `runWalletExpiry` | the sweep's dependencies | what it filed away, and what is still owed |
 
-### `verifyWalletCode` — the hot path
+### `verifyPassCode` — the hot path
 
 1. **Shape first** — a payload without the prefix returns `not_found` before any
    read, so a scanned product never becomes a lookup
-2. **One indexed read** on the pass reference; a row not `live` answers
+2. **The period the payload names**, against the server's, before any secret is
+   touched
+3. **One indexed read** on the pass reference; a row not `live` answers
    `not_found`, never why
-3. **Three candidate periods** verified against the decrypted secret in constant
-   time; none matching answers `expired`
-4. **Insert the use** on `(pass, period)`; a unique violation answers `used`
-5. **Then, and only then**, the session opens on the arm's capabilities
+4. **A guess cap** — ten wrong codes in five minutes and the pass stops
+   answering. The code is six digits and the reference travels in cleartext in
+   every barcode, so the cap is what stands between a photographed reference and
+   an offline search
+5. **Candidate periods** — the claim's neighbourhood intersected with the
+   server's, so a device that names a period cannot widen the window; verified
+   against the decrypted secret in constant time, none matching answers
+   `expired`
+6. **The spend, inside the session's own transaction**, beside the guarded
+   handle claim: `last_period` moves only forward, and zero rows back answers
+   `used`
 
-The insert precedes the session for the reason the guarded claim does: a throw
-downstream of a consumed code would leave a member's code dead with no session
-opened, which is also a plausible cover story for a replay.
+The spend is last for the reason the guarded claim is: a presentation is never
+burned by a failure downstream of it, so a programme that could not be read
+leaves the member's next scan working.
 
 ### `runWalletRefresh` — one lap
 
@@ -199,15 +203,19 @@ Nothing else on the wire changes.
 
 ## Risks / Trade-offs
 
-- **[Publishing access is not granted before the counter opens]** → the save
-  action sits behind the till's own flag registry, so a brand can carry the code
-  with the action dark and turn it on the day the class is approved
-- **[A member's phone clock drifts]** → one period either side of the named one,
-  so a **60-second** period accepts a three-minute window; the payload names its
-  period, so the tolerance is a constant and not a search
-- **[The wallet's request ceiling starves interactive saves]** → the sweep holds
-  its own limiter well under the issuer's ceiling, so a member saving a pass is
-  never behind a tier review's backlog
+- **[Publishing access is not granted before the counter opens]** → the port
+  answers nothing until the issuer is recorded and its key is set, and the
+  member's surface asks before it offers, so a brand carries the code with the
+  action undrawn and turns it on the day the class is approved
+- **[A member's phone clock drifts]** → one period either side of the server's,
+  so a **60-second** period accepts a three-minute window. The payload names the
+  period its phone made the code for, which spares two HMACs — but the accepted
+  set is intersected with the server's own, so a named period buys tolerance and
+  never widens it
+- **[The wallet's request ceiling starves interactive saves]** → the lap cap
+  and the cron's interval together hold the sweep well under any issuer's
+  allowance, and one access token is held for its hour rather than minted per
+  call, so a member saving a pass is never behind a tier review's backlog
 - **[A tier review makes every pass due at one instant]** → the claim is capped
   per lap and ordered oldest-due-first, so the backlog drains across laps rather
   than one lap trying to carry it; depth and age are reported beside each other

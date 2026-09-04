@@ -132,6 +132,14 @@ current.
 - **THEN** the pass is updated once
 - **AND** it carries what stands after the last of those changes
 
+#### Scenario: grade10-site-store-membership-SC-61 - A pass nobody marked due is still read
+
+- **GIVEN** a member whose standing has not moved and nothing has marked their
+  pass due
+- **WHEN** a day has passed since it was last read
+- **THEN** the pass is read again
+- **AND** it is sent nothing if what it shows has not changed
+
 #### Scenario: grade10-site-store-membership-SC-55 - A pass says how current it is
 
 - **WHEN** a member opens their pass
@@ -159,9 +167,12 @@ still shows.
 ### Requirement: The wallet pass's exports
 
 The shared UI package SHALL export, from its public entry, exactly these
-components for adding a pass — `WalletPassLinks` — and its props and copy type.
-It SHALL receive every word it shows and every address it points at from its
-consumer, and SHALL hold no wallet, no member and no product state of its own.
+components for adding a pass — `WalletPassLinks` — with its props, copy, offer
+and state types. It SHALL receive every word it shows and every address it
+points at from its consumer, and SHALL hold no wallet, no member and no product
+state of its own. Each offer SHALL carry its own whole label rather than a word
+the component joins to a wallet's name, so a language that orders its verb
+differently is not assembled out of order.
 
 The consuming application is the Grade10 site.
 
@@ -170,3 +181,16 @@ The consuming application is the Grade10 site.
 - **WHEN** a member opens their card on the membership surface
 - **THEN** the action that adds the pass is offered beside it
 - **AND** every word it shows came from the application
+
+#### Scenario: grade10-site-store-membership-SC-59 - A deployment with no wallet offers nothing
+
+- **WHEN** a member opens their card on a deployment that has no wallet issuer
+- **THEN** no action to add a pass is offered
+- **AND** nothing is asked of the wallet to find that out
+
+#### Scenario: grade10-site-store-membership-SC-60 - A member who returns still finds the pass they hold
+
+- **GIVEN** a member added a pass on an earlier visit
+- **WHEN** they open their card again
+- **THEN** the surface says they are carrying one
+- **AND** the action that ends it is offered

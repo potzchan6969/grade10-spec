@@ -66,8 +66,9 @@ of a sign-in.
   no signal, and it changes on its own rather than being fetched
 - **Beside it** — the member's name, the tier they hold, and the points they can
   spend, following their standing without them opening anything
-- **Ending one** — the member ends a pass whenever they like and adds another;
-  an operator ends it for a member who has lost the phone
+- **Ending one** — the member ends a pass whenever they like and adds another.
+  Ending it *for* somebody who has lost the phone is an operator act nobody can
+  perform yet
 - **Apple Wallet** — not offered. Apple has no rotating code, so an Apple pass
   would mean carrying one permanent code, which is a different decision
 
@@ -94,10 +95,11 @@ same-day. In this order, because each step needs the one above it:
 7. *Engineering* — **Set the two secrets** with `pnpm run secrets`:
    `WALLET_GOOGLE_SERVICE_ACCOUNT_KEY`, and `WALLET_PASS_KEY`, which is this
    platform's own and seals every pass secret at rest
-8. *Engineering* — **Set the three ids** as variables:
-   `WALLET_GOOGLE_ISSUER_ID`, `WALLET_GOOGLE_CLASS_ID`,
-   `WALLET_GOOGLE_SERVICE_ACCOUNT_EMAIL`. Half a configuration offers nothing:
-   the save action is hidden until all five are set
+8. *Engineering* — **Record the issuer, the class and the service account** in
+   `packages/app-env` — none of the three is a secret, and all three appear in
+   every save link a member opens. Half a configuration offers nothing: the
+   member's surface asks whether a wallet exists before it offers anything, so
+   until the issuer and the key are both set no save action is drawn
 
 **Standing obligations.**
 
@@ -105,10 +107,13 @@ same-day. In this order, because each step needs the one above it:
   member tapping Save draw on the same allowance, so a backlog must never be
   allowed to starve somebody standing at a counter
 - **Rotating `WALLET_PASS_KEY` invalidates every pass** — nothing re-seals the
-  rows today, so a rotation is a re-issue for every member who holds one ❓ who
-  owns that runbook
-- **A pass Google cannot be told about stays owed** — the sweep counts its
-  backlog's depth and its age together, and the age is the one to alarm on
+  rows today, so a rotation is a re-issue for every member who holds one. The
+  key must be 32 random bytes, base64 — it is used as key material directly,
+  not stretched from a phrase ❓ who owns that runbook
+- **A pass Google cannot be told about stays owed** — the sweep carries two
+  arms and reports both: what is stale, and what a member's ending or erasure
+  still owes the vendor. Depth and age go together, and the age is the one to
+  alarm on. An erasure names the debt until Google confirms it
 :::
 
 ## Histories
@@ -141,12 +146,16 @@ lives in the identity system and never in the programme, which holds only an
 opaque user id.
 
 :::callout{kind="warning"}
-Two things decided for this surface are not built, and one is built but not
+Three things decided for this surface are not built, and one is built but not
 switched on.
 
-- **The wallet pass** — built, and offered to nobody: the issuer account, its
-  class and its keys do not exist yet, so the save action stays hidden until
-  operations stands them up
+- **The wallet pass** — the member's pass, its rotating code, the counter that
+  reads it and the sweep that keeps it current are built, and offered to
+  nobody: the issuer account, its class and its key do not exist yet. Three
+  parts are not built at all — an operator cannot end a pass for a member who
+  lost the phone; a spend at a counter reaches the pass on the daily floor
+  rather than inside five minutes; and the welcome message carries no save
+  action (`add-google-wallet-member-card`)
 - **The welcome bonus** — the deployed programme grants none
   (`revise-loyalty-programme-rules`)
 - **Account deletion** — the ledger has no account-deletion pass

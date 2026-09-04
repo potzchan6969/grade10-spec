@@ -103,12 +103,14 @@ file but goes blind on the feature set once one exists durably, so merging this
 delta's feature-set group into the durable one is hand work nothing will ask
 for.
 
-**Scenario ids start at SC-44 and journeys at US-07.** An earlier draft of this
-change, since removed, issued SC-28 to SC-43 and US-04 to US-06 for a durable
-member card the owner did not adopt. Those numbers are not reused.
+**Scenario ids run SC-44 to SC-61 and journeys US-07 to US-09.** An earlier
+draft of this change, since removed, issued SC-28 to SC-43 and US-04 to US-06
+for a durable member card the owner did not adopt. Those numbers are not
+reused.
 
 ## Open questions
 
+- ❓ Whether an Apple pass is wanted at all, given it means one permanent code
 - ❓ How long a rotating code stays valid either side of its own period. Stated
   here as one period's tolerance; a wider window is kinder to a slow queue and
   longer-lived to a photograph.
