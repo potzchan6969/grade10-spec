@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * Validate every `test-cases.md` in the store against
+ * Validate every feature suite (`feature-tcs.md`, or `test-cases.md` where a
+ * suite predates that name) and every domain `domain-tcs.md` against
  * `docs/governance/specs-to-test-cases.md`.
  *
  *   pnpm run tcs:validate            # errors fail the run; warnings are printed
@@ -45,6 +46,8 @@ const cyan = (s) => c("36", s);
 
 const FILE_STATUSES = ["pending-review", "in-review", "approved"];
 const CASE_STATUSES = ["draft", "actual", "deprecated"];
+/** Values that were `Type` before tcs-rules r2 and are `Suites` now. */
+const LEGACY_TYPES = ["smoke", "regression"];
 const PROPERTIES = [
   ["Severity", ["blocker", "critical", "major", "normal", "minor", "trivial"]],
   ["Priority", ["high", "medium", "low"]],
@@ -54,8 +57,6 @@ const PROPERTIES = [
     "Type",
     [
       "functional",
-      "smoke",
-      "regression",
       "acceptance",
       "usability",
       "security",
@@ -64,8 +65,16 @@ const PROPERTIES = [
       "integration",
     ],
   ],
+  // Added in tcs-rules r2. Missing on a suite written before it: a warning,
+  // not an error, so the store migrates one reviewed suite at a time.
+  [
+    "Suites",
+    ["smoke", "regression", "release", "exploratory", "none"],
+    true,
+    true,
+  ],
   ["Layer", ["e2e", "api", "unit"]],
-  ["Automation status", ["manual", "automated", "to-be-automated"]],
+  ["Automation status", ["manual", "automated"]],
   [
     "Testability",
     ["automation", "manual", "automation, manual", "manual, automation"],
@@ -388,20 +397,51 @@ function issuedPrefix(spec) {
   return id ? id.replace(/-(?:US|SC)-\d+$/, "") : null;
 }
 
+/** A domain suite (`domain-tcs.md`) has no `spec.md` beside it: it reads the journeys
+ * every capability in that domain issues. Collect them from each capability one
+ * level down, so a domain case can trace the journeys it crosses. */
+function readDomainIds(dir) {
+  const journeys = new Map();
+  const scenarios = new Set();
+  let found = false;
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    if (!e.isDirectory()) continue;
+    const ids = readSpecIds(join(dir, e.name, "spec.md"));
+    if (!ids) continue;
+    found = true;
+    for (const [id, title] of ids.journeys) journeys.set(id, title);
+    for (const id of ids.scenarios) scenarios.add(id);
+  }
+  return found ? { journeys, scenarios, hasJourneySection: true } : null;
+}
+
+/** `openspec/specs/grade10-site/auction/` issues `grade10-site-auction-e2e-*`. */
+function domainPrefix(root, dir) {
+  const rel = relative(root, dir)
+    .replace(/^openspec\/specs\//, "")
+    .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
+  return `${rel.split("/").join("-")}-e2e`;
+}
+
 function checkSuite(root, filePath, rulesRev) {
   const rel = relative(root, filePath);
   const text = readFileSync(filePath, "utf8");
   const dir = dirname(filePath);
   const suite = parseSuite(text);
-  const spec = readSpecIds(join(dir, "spec.md"));
-  const capability = issuedPrefix(spec) ?? basename(dir);
+  const domain = basename(filePath) === "domain-tcs.md";
+  const spec = domain ? readDomainIds(dir) : readSpecIds(join(dir, "spec.md"));
+  const capability = domain
+    ? domainPrefix(root, dir)
+    : (issuedPrefix(spec) ?? basename(dir));
   const err = (line, msg) => record("error", rel, line, msg);
   const warn = (line, msg) => record("warning", rel, line, msg);
 
   if (!spec)
     err(
       1,
-      "no spec.md beside this suite — a suite is a reading of a spec, not a standalone file",
+      domain
+        ? "no capability with a spec.md under this domain — a domain suite reads the journeys its capabilities issue"
+        : "no spec.md beside this suite — a suite is a reading of a spec, not a standalone file",
     );
 
   const cases = [];
@@ -487,6 +527,7 @@ function checkSuite(root, filePath, rulesRev) {
       err(j.line, `journey ${j.num} appears more than once`);
     seenJourneys.add(j.num);
     if (
+      !domain &&
       spec &&
       spec.journeys.size > 0 &&
       !spec.journeys.has(canonical) &&
@@ -534,14 +575,47 @@ function checkSuite(root, filePath, rulesRev) {
           err(at, `case \`${tc.id}\` has version ${tc.version}`);
       }
 
-      for (const [name, vocab] of PROPERTIES) {
+      for (const [name, vocab, multi, optional] of PROPERTIES) {
         const raw = tc.props.get(name);
         if (raw === undefined) {
-          err(at, `case \`${tc.id}\` is missing its **${name}** property`);
+          if (optional)
+            warn(
+              at,
+              `case \`${tc.id}\` is missing its **${name}** property (added in tcs-rules r2)`,
+            );
+          else err(at, `case \`${tc.id}\` is missing its **${name}** property`);
           continue;
         }
         const value = raw.trim().toLowerCase();
-        if (vocab && !vocab.includes(value))
+        if (name === "Type" && LEGACY_TYPES.includes(value)) {
+          warn(
+            at,
+            `case \`${tc.id}\` has **Type:** \`${value}\` — that is a **Suites** value now; move it and give Type the kind of verification`,
+          );
+          continue;
+        }
+        if (!vocab) continue;
+        if (multi) {
+          const parts = value
+            .split(",")
+            .map((v) => v.trim())
+            .filter(Boolean);
+          if (parts.length === 0) {
+            err(
+              at,
+              `case \`${tc.id}\` has an empty **${name}:** — write \`none\` when it belongs to no run`,
+            );
+            continue;
+          }
+          for (const part of parts)
+            if (!vocab.includes(part))
+              err(
+                at,
+                `case \`${tc.id}\` has **${name}:** \`${part}\` — expected one or more of ${vocab.join(", ")}`,
+              );
+          if (parts.includes("none") && parts.length > 1)
+            err(at, `case \`${tc.id}\` lists \`none\` beside another suite`);
+        } else if (!vocab.includes(value))
           err(
             at,
             `case \`${tc.id}\` has **${name}:** \`${raw}\` — expected one of ${vocab.join(", ")}`,
@@ -573,10 +647,15 @@ function checkSuite(root, filePath, rulesRev) {
             `case \`${tc.id}\` traces \`${id}\`, which the spec beside it does not define`,
           );
         }
-        if (ids.length > 1)
+        if (ids.length > 1 && !domain)
           warn(
             at,
             `case \`${tc.id}\` traces ${ids.length} ids — one journey per case`,
+          );
+        if (domain && ids.length === 1)
+          warn(
+            at,
+            `case \`${tc.id}\` traces one journey — a domain case crosses capabilities, or it belongs in that capability's own suite`,
           );
       }
 
@@ -594,7 +673,7 @@ function checkSuite(root, filePath, rulesRev) {
     }
   }
 
-  if (spec) {
+  if (spec && !domain) {
     for (const [id] of spec.journeys) {
       const num = Number(id.match(/-US-(\d+)$/)?.[1]);
       if (!seenJourneys.has(num))
@@ -611,10 +690,20 @@ const args = parseArgs(process.argv.slice(2));
 const rulesRev = currentRulesRev();
 const inScope = (d) =>
   args.scope ? relative(ROOT, d).includes(args.scope) : true;
-const suites = dirsHolding(ROOT, "test-cases.md")
-  .filter(inScope)
-  .map((d) => join(d, "test-cases.md"))
-  .sort();
+/** A feature suite is `feature-tcs.md`; suites written before that name was
+ * settled are `test-cases.md` and keep it until someone renames them
+ * deliberately. Both are read. */
+const FEATURE_SUITE_NAMES = ["feature-tcs.md", "test-cases.md"];
+const suites = [
+  ...FEATURE_SUITE_NAMES.flatMap((name) =>
+    dirsHolding(ROOT, name)
+      .filter(inScope)
+      .map((d) => join(d, name)),
+  ),
+  ...dirsHolding(ROOT, "domain-tcs.md")
+    .filter(inScope)
+    .map((d) => join(d, "domain-tcs.md")),
+].sort();
 const specs = dirsHolding(ROOT, "spec.md").filter(inScope);
 
 if (args.stale) {
@@ -660,7 +749,7 @@ if (args.stale) {
 if (suites.length === 0) {
   console.log(
     dim(
-      "No test-cases.md found" +
+      "No suite found" +
         (args.scope ? ` for scope "${args.scope}"` : "") +
         ".",
     ),
@@ -672,14 +761,14 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
 
 if (args.requireSuites) {
   for (const d of specs) {
-    if (existsSync(join(d, "test-cases.md"))) continue;
+    if (FEATURE_SUITE_NAMES.some((name) => existsSync(join(d, name)))) continue;
     const spec = readSpecIds(join(d, "spec.md"));
     if (spec?.hasJourneySection && spec.journeys.size > 0)
       record(
         "warning",
         relative(ROOT, join(d, "user-journeys.md")),
         1,
-        "has user journeys but no test-cases.md beside it",
+        "has user journeys but no feature suite beside it",
       );
   }
 }
