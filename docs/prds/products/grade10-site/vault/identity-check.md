@@ -10,8 +10,10 @@ the record itself lives in [the identity store](/p/grade10-site/e-kyc).
 
 ## How a case gets one
 
-- **Booking asks** — an intake visit booked on a case with no identity invites
-  the collector to [verify before travelling](/p/grade10-site/e-kyc/hosted-verification)
+- **Reuse first** — a check the collector already passed is bound rather than
+  asked for again
+- **Booking asks** — an intake visit booked on a case with nothing to reuse
+  invites the collector to [verify before travelling](/p/grade10-site/e-kyc/hosted-verification)
 - **An operator asks** — again, on a case that needs one, any time before
   custody
 - **The counter records** — staff read the document in front of them, from the
@@ -23,7 +25,8 @@ the record itself lives in [the identity store](/p/grade10-site/e-kyc).
 | --- | --- |
 | Verified | An identity is bound — who checked it, and when |
 | Out | A hosted check is invited, started or submitted |
-| Refused | The last hosted check was declined |
+| Stalled | A hosted check was submitted and the provider has not decided |
+| Refused | The last hosted check was declined, and why |
 | Lapsed | The last hosted check expired or was withdrawn |
 | None | Nothing has been asked for |
 
@@ -38,8 +41,8 @@ bind displaces is settled rather than dropped — discarded when the new binding
 stands, restored when it does not.
 
 A verdict can arrive after the case has moved. A case in custody or beyond, one
-holding sealed signing evidence, and one whose personal data has been erased all
-refuse it: the case keeps the identity it had, the late check is discarded, and
+holding sealed signing evidence, one whose personal data has been erased, and
+one verified at the counter in the meantime all refuse it: the case keeps the identity it had, the late check is discarded, and
 the operator is told. A release packet reads the identity the executed agreement
 already holds, and an erased case takes no new personal data at all.
 
@@ -79,10 +82,12 @@ while their item is in custody.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Invitation trigger | Decided | Booking an intake visit on a case with no identity. | Product |
-| Pre-custody only | Decided | Unchanged. A check is recordable from draft through signing, never once the item is in the vault. | Compliance |
+| Pre-custody only | Decided | A check is recordable from draft through signing, never once the item is in the vault. | Compliance |
+| Reuse before asking | Decided | A case binds a check the collector already passed rather than paying for a second one. | Product |
+| Override on a decline | Decided | The counter stays open, but over a decline it takes the approving grant and a recorded reason. | Compliance |
 | Late verdict | Decided | Refused, discarded, and reported. The case keeps what it had. | Engineering |
-| Packet voiding | Decided | Unchanged. A bind voids an outstanding packet, whichever path produced the identity. | Product |
-| Operator visibility | Decided | The case distinguishes out, refused and lapsed from none. | Design |
+| Packet voiding | Decided | A bind voids an outstanding packet, whichever path produced the identity. | Product |
+| Operator visibility | Decided | The case distinguishes out, stalled, refused and lapsed from none. | Design |
 | Where the state is shown | ❓ Open | Case detail alone, or also the case list, so a queue can be worked by readiness. | Design |
 
 **Risks.** The asynchronous verdict gives the existing rebind machinery a new

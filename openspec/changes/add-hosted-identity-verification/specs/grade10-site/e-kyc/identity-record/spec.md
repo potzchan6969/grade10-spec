@@ -2,24 +2,33 @@
 
 The verified identity of a person — their legal name, date of birth, document
 type, masked document number, its expiry, and a photograph of the document —
-held once and reused by every Grade10 product that needs to know who somebody
+held once and reused by every Grade10 service that needs to know who somebody
 is, so the same human is never asked for the same document twice.
+
+A **consumer** is a Grade10 service that records identity checks and binds them
+to its own cases: the vault today. A **person** is the account
+`shared/auth/users` identifies. A date of birth and a document expiry are
+calendar days as `shared/dates-and-times` defines them, judged in the
+platform's UTC day.
 
 ## Feature set
 
 - What a record holds
   - Identity fields: the name a document prints, the day a person was born, and what proved it
-  - Provenance: which product recorded the check and who performed it, so a reader can weigh it
-  - Evidence: the photograph the check was made against, held by Grade10
+  - Provenance: which consumer recorded the check and who performed it, so a reader can weigh it
+  - Provider findings: what a verification provider checked and what it found, kept in Grade10's own words
 - What never lands
   - Document number: only a mask a person is shown and a keyed digest a repeat is recognised by
-- Reuse across products
-  - Person-wide read: the most recent check, whichever product recorded it
+  - The person's face: a provider may capture one; Grade10 keeps the finding, never the image
+- Reuse across consumers
+  - Person-wide read: the most recent check, whichever consumer recorded it
   - Case binding: one case holds one identity, so what displaces is settled rather than lost
 - Refusals
-  - Age and validity: an adult, holding a document still valid on the day of asking
+  - Age and validity: an adult, holding a document still valid at the instant the check is applied
+- Evidence
+  - Held by Grade10: one image of the document, in Grade10's own store, before the identity is readable
 - Erasure
-  - Release: the owning product drops its binding, and the last release purges everything the check left anywhere
+  - Two clocks: the consumer's release commands the provider to erase its copy, and a standing window erases it anyway
 
 ## ADDED Requirements
 
@@ -37,12 +46,12 @@ carrying these fields and no free-text copy of the person beyond them.
 | Document number, masked | What a person is shown in place of the number |
 | Document number, digest | A keyed digest, so a repeat of the same document is a question that can be asked |
 | Document expiry | The day the document stops being valid, or absent for one that never expires |
-| Evidence | The photograph of the document, held by Grade10 |
-| Recorded by product | Which product's surface the check was made on |
+| Evidence | One image of the document, held by Grade10 |
+| Recorded by consumer | Which consumer's surface the check was made on |
 | Provider | Who performed the check — Grade10 staff, or a named verification provider |
 | Provider reference | The provider's own identifier for the check, absent for a check Grade10 staff performed |
-| Performed by | The staff member who checked, or the provider's check when no person did |
-| Performed at | When the check was made |
+| Performed by | The staff member who checked, or, for a provider's check, the person who asked for it |
+| Performed at | When the check was decided — the staff member's clock, or the provider's decision instant |
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-01 - A staff check names the staff member who made it
 
@@ -51,54 +60,61 @@ carrying these fields and no free-text copy of the person beyond them.
 - **THEN** the verified identity names Grade10 staff as the provider, names that
   staff member as who performed it, and carries no provider reference
 
-#### Scenario: grade10-site-e-kyc-identity-record-SC-02 - A provider check names the provider and its reference
+#### Scenario: grade10-site-e-kyc-identity-record-SC-02 - A provider check names the provider, its reference, and who asked
 
 - **WHEN** a verification provider's approved verdict becomes a verified
   identity
 - **THEN** the verified identity names that provider, carries the provider's own
-  identifier for the check, and names no staff member as having performed it
+  identifier for the check, and names the person who asked for the check as who
+  performed it
 
 ### Requirement: The raw document number never lands
 
 The system SHALL derive a mask and a keyed digest from a document number and
-retain neither the number itself nor anything it can be recovered from. The
-number SHALL NOT be stored, returned to any caller, or written to any log or
-audit entry, whoever supplied it — a member of staff, a collector, or a
-verification provider.
+retain neither the number itself nor anything it can be recovered from. The mask
+SHALL show the last four characters of the number and replace every earlier
+character with a fixed masking character. The number SHALL NOT be stored,
+returned to any caller, or written to any log or audit entry, whoever supplied
+it — a member of staff, a collector, or a verification provider — and a verdict
+carrying one SHALL NOT be retained in the form it arrived in.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-03 - A recorded check answers with a mask
 
 - **WHEN** an identity check is recorded from a document number
-- **THEN** what is stored and what is returned is the masked number and the
-  digest
-- **AND** no surface, log or audit entry holds the number itself
+- **THEN** what is stored and returned is a mask showing the last four
+  characters, every earlier character replaced, and a keyed digest
+- **AND** no stored record, response, log or audit entry written while recording
+  the check holds any other character of the number
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-04 - The same document is recognisable across two records
 
 - **GIVEN** two verified identities recorded from the same document number
 - **WHEN** their digests are compared
 - **THEN** they match, so a repeated document can be found
-- **AND** neither digest yields the number it was derived from
+- **AND** the digest is derived with a secret the identity store holds, so the
+  same number digested without that secret does not match
 
 ### Requirement: A verified identity belongs to the person, not to a case
 
 The system SHALL answer a request for a person's most recent verified identity
-across every product, regardless of which product recorded it. Recording,
-binding and releasing SHALL be scoped to the asking product's own cases, and a
-product SHALL NOT bind, read or release a binding belonging to another product.
+across every consumer, regardless of which one recorded it, resolving "most
+recent" by when the check was performed and, where two are equal, by a stable
+order that answers the same way every time. Recording, binding and releasing
+SHALL be scoped to the asking consumer's own cases, and a consumer SHALL NOT
+bind, read or release a binding belonging to another consumer.
 
-#### Scenario: grade10-site-e-kyc-identity-record-SC-05 - A second product reads a check the first recorded
+#### Scenario: grade10-site-e-kyc-identity-record-SC-05 - A second consumer reads a check the first recorded
 
 - **GIVEN** a verified identity recorded on a vault case
-- **WHEN** another product asks for that person's most recent verified identity
+- **WHEN** another consumer asks for that person's most recent verified identity
 - **THEN** it is answered with that record, without a second document check
 
-#### Scenario: grade10-site-e-kyc-identity-record-SC-06 - A product cannot reach another product's case binding
+#### Scenario: grade10-site-e-kyc-identity-record-SC-06 - A consumer cannot reach another consumer's case binding
 
-- **GIVEN** a case belonging to one product
-- **WHEN** another product asks to read, bind or release the identity on that
+- **GIVEN** a case belonging to one consumer
+- **WHEN** another consumer asks to read, bind or release the identity on that
   case
-- **THEN** the request is refused, and no input the asking product supplies
+- **THEN** the request is refused, and no input the asking consumer supplies
   selects a case it does not own
 
 ### Requirement: A case binds exactly one verified identity
@@ -106,58 +122,60 @@ product SHALL NOT bind, read or release a binding belonging to another product.
 The system SHALL allow a case to hold one verified identity at a time. Binding
 an identity to a case that already holds one SHALL replace the binding rather
 than add a second, SHALL leave the displaced identity on file, and SHALL name
-the displaced identity to the caller so the owning product decides whether it is
-evidence to restore or a leftover to discard. A verified identity nothing binds
-any more SHALL be purged when the product that displaced it says so.
+the displaced identity to the caller so the owning consumer decides whether it is
+evidence to restore or a leftover to discard.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-07 - Re-recording a case replaces its identity
 
 - **GIVEN** a case bound to a verified identity
 - **WHEN** a second identity is bound to that case
 - **THEN** the case holds the second identity alone
-- **AND** the first is still on file and is named to the product that displaced
+- **AND** the first is still on file and is named to the consumer that displaced
   it
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-08 - A repeated bind converges on one binding
 
-- **GIVEN** a bind that failed after the identity was stored
-- **WHEN** the product retries it
-- **THEN** the case holds one binding, not two, and one identity is left
-  unbound rather than a second photograph kept
+- **GIVEN** a case with no identity, and a bind carrying a request key
+- **WHEN** the same request key is submitted twice, the first attempt having
+  stored the identity before failing
+- **THEN** the case holds one binding, the second attempt answers with the
+  first's result, and exactly one identity and one image exist
 
 ### Requirement: An identity check refuses a minor and an expired document
 
 The system SHALL refuse to record or bind a verified identity when the person
 had not reached 18 years of age, or when the document had expired, judged at the
-time the asking product states. A document with no expiry SHALL be treated as
+instant the check is applied — the staff member's clock at the counter, and the
+instant a verdict is read for a provider's check, never the instant the collector
+submitted or the provider decided. A document with no expiry SHALL be treated as
 valid. Both refusals SHALL be applied to a verification provider's verdict as
-they are to a check Grade10 staff performed, on Grade10's own reading of the
-date of birth and expiry rather than on the provider's verdict alone.
+they are to a check Grade10 staff performed, on Grade10's own reading of the date
+of birth and expiry rather than on the provider's verdict.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-09 - A person under 18 is refused
 
 - **WHEN** an identity check is recorded for a person who had not reached 18 on
-  the day of the check
+  the day the check is applied
 - **THEN** it is refused as under age, and no verified identity and no evidence
   are stored
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-10 - A document that expired before today is refused
 
 - **WHEN** an identity check is recorded from a document whose expiry is before
-  the day of the check
+  the day the check is applied
 - **THEN** it is refused as expired, and no verified identity and no evidence are
   stored
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-11 - A document valid on its last day is accepted
 
-- **WHEN** an identity check is recorded on the day the document expires
+- **WHEN** an identity check is applied on the day the document expires
 - **THEN** it is accepted, because a document is honoured on the date it reads
   valid until
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-12 - An aged record is refused on reuse
 
 - **GIVEN** a verified identity whose document has expired since it was recorded
-- **WHEN** a product asks to bind it to a new case
+- **WHEN** a consumer asks to bind it to a new case
 - **THEN** it is refused as expired, judged at the day of the request rather
   than the day of the check
 
@@ -167,64 +185,106 @@ date of birth and expiry rather than on the provider's verdict alone.
 - **WHEN** the verdict is read
 - **THEN** it is refused as under age, and no verified identity is created
 
-### Requirement: Every verified identity names evidence Grade10 holds
+### Requirement: Every verified identity names one document image Grade10 holds
 
-The system SHALL store the photograph of the document the check was made
-against, in Grade10's own evidence store, and SHALL NOT hold a verified identity
-that names none. Where a verification provider performed the check, its copies
-of the document images SHALL be fetched into that store before the identity
-becomes readable; a verdict whose images cannot be fetched SHALL NOT become a
-verified identity and SHALL be retried until they are.
+The system SHALL store one image of the document the check was made against, in
+Grade10's own evidence store, and SHALL NOT hold a verified identity that names
+none. Where a verification provider performed the check, that image SHALL be
+fetched into that store before the identity becomes readable. The capture of the
+person's face SHALL NOT be fetched or stored by Grade10.
 
-#### Scenario: grade10-site-e-kyc-identity-record-SC-14 - Evidence is stored before the identity is readable
+A verdict whose document image cannot be fetched SHALL create no verified
+identity and SHALL be retried; when retrying stops helping, the check SHALL
+become visible to an operator rather than retried indefinitely. A verdict whose
+image the evidence store may not hold — the wrong kind of file, or one larger
+than the store accepts — SHALL leave the check declined rather than retried.
 
-- **WHEN** an identity check is recorded
-- **THEN** the photograph is in Grade10's evidence store before any product can
-  read the verified identity
+#### Scenario: grade10-site-e-kyc-identity-record-SC-14 - A read never answers before the evidence is stored
 
-#### Scenario: grade10-site-e-kyc-identity-record-SC-15 - A provider verdict whose images cannot be fetched creates nothing
+- **WHEN** a consumer reads a verified identity at any time after it is recorded
+- **THEN** it is answered only once that identity's document image is
+  retrievable from Grade10's evidence store
+
+#### Scenario: grade10-site-e-kyc-identity-record-SC-15 - A provider verdict whose image cannot be fetched creates nothing
 
 - **GIVEN** an approved verdict from a verification provider
-- **WHEN** its document images cannot be fetched
+- **WHEN** its document image cannot be fetched
 - **THEN** no verified identity exists and no case is bound
-- **AND** the fetch is retried, so a provider outage delays the check rather
-  than losing it
+- **AND** the fetch is retried, and the check is reported to an operator once
+  the attempts allowed for it are spent
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-16 - The evidence is reachable only through the case that holds it
 
-- **GIVEN** a verified identity bound to one product's case
-- **WHEN** a product asks for the photograph naming a case it has not bound to
-  that identity
-- **THEN** nothing is returned, because naming an identity is not what
-  authorizes reading its evidence
+- **GIVEN** a verified identity bound to one consumer's case
+- **WHEN** a consumer asks for the document image naming a case it has not bound
+  to that identity
+- **THEN** the request is refused, no image and no identity field are returned,
+  and the refusal says nothing about whether that identity exists
 
-### Requirement: Releasing the last binding erases the check everywhere
+#### Scenario: grade10-site-e-kyc-identity-record-SC-21 - An image the evidence store may not hold declines rather than retries
 
-The system SHALL purge a verified identity, its evidence, and — where a
-verification provider performed the check — the provider's own copy of it, once
-no case binding names that identity. A release SHALL be repeatable without
-error, and SHALL NOT report itself complete while any copy remains, in Grade10's
-store or at the provider.
+- **GIVEN** an approved verdict whose document image is not one of the kinds the
+  evidence store accepts, or is larger than it accepts
+- **WHEN** the image is fetched
+- **THEN** the check is declined with that reason recorded, no verified identity
+  exists, and the fetch is not retried
 
-#### Scenario: grade10-site-e-kyc-identity-record-SC-17 - The last release purges the record and its evidence
+#### Scenario: grade10-site-e-kyc-identity-record-SC-22 - No face capture is stored
+
+- **GIVEN** a verification provider that captured the person's face
+- **WHEN** its approved verdict becomes a verified identity
+- **THEN** Grade10's evidence store holds the document image and no image of the
+  person's face
+
+### Requirement: A provider-performed check records what was checked and what was found
+
+The system SHALL record, for a check a verification provider performed, which
+checks the provider ran and what each returned — whether the document was found
+genuine, whether the person was found live, and whether their face matched the
+document — and SHALL make them readable to an operator reading the case. They
+SHALL be readable without asking the provider.
+
+#### Scenario: grade10-site-e-kyc-identity-record-SC-23 - The provider's findings survive the provider
+
+- **GIVEN** a verified identity a verification provider performed
+- **WHEN** an operator reads it, with the provider unreachable
+- **THEN** they are shown what the provider checked and what each check found
+
+### Requirement: Erasure reaches the provider that performed the check
+
+The system SHALL purge a verified identity and its evidence once no case binding
+names that identity, and SHALL command the verification provider that performed
+it to erase its own copy of the check. It SHALL retain what it needs to name that
+check to the provider until the provider has acknowledged the command, and SHALL
+keep asking until one does. Purging the record, its evidence, and the erasing
+consumer's own data SHALL NOT wait on the provider's answer. A completion report
+SHALL name what is still outstanding at a provider rather than reporting the
+erasure whole. A release SHALL be repeatable without error.
+
+The command SHALL be issued for every check whose document image Grade10 fetched,
+whatever the check's ending — declined, expired, withdrawn, refused on landing,
+or displaced by another check — not only for a released identity.
+
+#### Scenario: grade10-site-e-kyc-identity-record-SC-17 - The last release purges the record and commands the provider
 
 - **GIVEN** a verified identity bound to one case
-- **WHEN** that product releases its binding
-- **THEN** the record and its photograph are purged
+- **WHEN** that consumer releases its binding
+- **THEN** the record and its document image are purged, and the provider is
+  commanded to erase its copy
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-18 - A record another case still binds survives a release
 
-- **GIVEN** a verified identity bound to two products' cases
-- **WHEN** one product releases its binding
-- **THEN** the record and its photograph are kept, because a live binding still
-  names them
+- **GIVEN** a verified identity bound to two consumers' cases
+- **WHEN** one consumer releases its binding
+- **THEN** the record and its document image are kept, because a live binding
+  still names them
 
-#### Scenario: grade10-site-e-kyc-identity-record-SC-19 - A provider's copy is erased with ours
+#### Scenario: grade10-site-e-kyc-identity-record-SC-19 - A provider that cannot be reached does not hold up the erasure
 
-- **GIVEN** a verified identity a verification provider performed
-- **WHEN** its last binding is released
-- **THEN** the provider is asked to erase its copy of that check
-- **AND** the release is not complete until the provider confirms it
+- **GIVEN** a released verified identity a verification provider performed
+- **WHEN** the provider cannot be reached
+- **THEN** Grade10's own record and image are already gone
+- **AND** the command stays outstanding and is asked again until acknowledged
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-20 - A release repeats without error
 
@@ -232,3 +292,36 @@ store or at the provider.
 - **WHEN** the release is asked for again
 - **THEN** it succeeds and changes nothing, so an interrupted erasure finishes
   when it is retried
+
+#### Scenario: grade10-site-e-kyc-identity-record-SC-24 - A provider that refuses is reported rather than dropped
+
+- **GIVEN** a provider that refuses to erase its copy, under a retention duty of
+  its own
+- **WHEN** the refusal is read
+- **THEN** the refusal and its reason are recorded against the outstanding
+  command, and a completion report names it as outstanding at the provider
+
+#### Scenario: grade10-site-e-kyc-identity-record-SC-25 - A check that never became an identity is still commanded away
+
+- **GIVEN** a check whose document image Grade10 fetched and which was declined
+- **WHEN** the check reaches its ending
+- **THEN** the provider is commanded to erase its copy, exactly as for a
+  released identity
+
+### Requirement: A provider holds its copy no longer than a stated window
+
+The system SHALL configure every verification provider it uses to erase its own
+copy of a check within a stated window, so a check nobody erases still stops
+existing at the provider. The configured window SHALL be read back from the
+provider and compared against the stated one; a window that is absent, or longer
+than stated, SHALL be reported as a fault.
+
+❓ The window's length awaits Compliance — it must outlive an operator's need to
+review a disputed check, and it is `TBC` until they set it.
+
+#### Scenario: grade10-site-e-kyc-identity-record-SC-26 - A provider's window is checked, not assumed
+
+- **WHEN** the configured erasure window is read back from a verification
+  provider
+- **THEN** a window that is absent, or longer than the stated one, is reported as
+  a fault

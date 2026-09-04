@@ -9,11 +9,6 @@ days before they travel. A verification provider hosts the check and decides it;
 Grade10 renders none of it, asks for nothing the provider collects, and reads the
 verdict when it arrives.
 
-:::callout{kind="warning"}
-Specified, not built. Today every verified identity is a member of staff typing
-a document at a counter. This page describes the intended product.
-:::
-
 ## What the collector does
 
 :::flow{title="Verifying before the visit"}
@@ -30,8 +25,9 @@ Minutes later, usually. Nobody waits for it — not the collector, not the case,
 not an operator.
 ## Grade10 judges it again
 Age and document validity are refused here, on the dates the provider returns,
-not taken on the provider's word. The document images are pulled into Grade10's
-own bucket before the identity is readable.
+not taken on the provider's word. One image of the document is pulled into
+Grade10's own bucket before the identity is readable; the face capture stays
+with the provider, and what the record keeps of it is the finding.
 ## The case is bound
 The verified identity lands on the case the invitation named, and any signing
 packet still out is voided — its paperwork was written from the identity this
@@ -40,18 +36,22 @@ replaces.
 
 ## Where a check stands
 
-| State | What it means | What the collector is told |
-| --- | --- | --- |
-| Invited | Asked, not started | Start it |
-| Started | Opened, not finished | Carry on where you left off |
-| Submitted | Finished, being decided | Nothing to do |
-| Approved | Vouched for, and our own refusals passed | You are verified |
-| Declined | Refused, by the provider or by us | Bring the document to the store |
-| Expired | Ran out of time | Ask to be invited again |
-| Withdrawn | The case no longer needs it | Nothing to do |
+| State | What it means |
+| --- | --- |
+| Invited | Asked, not started |
+| Started | Opened, not finished |
+| Submitted | Finished, being decided |
+| Stalled | Submitted, and the provider has not decided in the time it usually takes |
+| Approved | Vouched for, and our own refusals passed |
+| Declined | Refused, by the provider, by us, or because the case could not take it |
+| Expired | Ran out of time |
+| Withdrawn | The case no longer needs it |
 
-The last four are final. A collector who needs another chance is invited again,
-as a new check — a decided check never moves.
+Approved, Declined, Expired and Withdrawn are final. A collector who needs
+another chance is invited again, as a new check — a decided check never moves.
+Submitted never expires on its own, because a verdict may still arrive; it goes
+stalled instead, so an operator can tell a check that is coming from one that is
+not.
 
 One case holds one live check. Asking again while one is out hands back the one
 the collector already has, so nobody ends up holding two invitations and
@@ -60,17 +60,20 @@ guessing.
 ## The counter is never gated
 
 A collector with no smartphone, a document the provider cannot read, a provider
-outage, a refused check — all of them are served by the check staff perform at
-the counter, and none of them requires a hosted check to have been tried first.
-Recording at the counter withdraws whatever hosted check was out.
+outage — all served by the check staff perform at the counter, and none of them
+requires a hosted check to have been tried first. Recording at the counter
+withdraws whatever hosted check was out.
+
+A counter check over a check the provider *declined* is different: it is an
+override. It carries a reason, it takes the grant that approves rather than the
+grant that operates, and it shows on the case beside the decline. Otherwise the
+control is one the person it exists to stop can simply decline.
 
 :::detail{title="Product decisions" for="pm"}
-Every identity check today happens inside an appointment: the collector hands
-over a passport, staff type it, and a lapsed document is discovered with the
-collector already in the shop. Moving the check to the collector's own phone
-gives back the appointment, moves a document problem to somewhere it can be
-fixed, and adds the liveness and tamper signals a person reading a document
-cannot produce.
+The check is the collector's to complete, on their own device, because a
+document read by a person at a counter produces no liveness or tamper signal,
+cannot fail early enough to be fixed, and puts a legal name through a keyboard
+on its way to a signature page.
 
 | User | Situation | Desired outcome |
 | --- | --- | --- |
@@ -97,20 +100,23 @@ a browser in front of the identity store.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Vendor | Decided | Persona — hosted government-ID and selfie check, verdict by webhook, and a redaction API, which is what makes vendor-side erasure deliverable. | Product |
+| Vendor | Decided | Persona — hosted government-ID and selfie check, verdict by webhook, a redaction command, and org-level retention policies. | Product |
+| The face stays with the provider | Decided | Grade10 runs no matching engine, so a stored selfie could never be re-compared. The record keeps what the provider checked and found. | Product |
+| A decline is overridable, and recorded | Decided | The counter is never blocked, but an override carries a reason and takes the approving grant. | Compliance |
 | Vendor-neutral requirements | Decided | The spec describes a hosted check and names no vendor, so replacing one is a delivery decision. | Product |
 | When it is asked for | Decided | On booking an intake visit, and on demand by an operator before custody. | Product |
 | Sign-in | Decided | Not required. A case can exist before its collector has an account. | Product |
 | Trust in a verdict | Decided | Proven to come from the provider, about a check we issued, acted on once. Anything else changes nothing and is recorded as rejected. | Engineering |
 | Counter fallback | Decided | Permanent, and never gated on a hosted attempt. | Operations |
-| Invitation and check lifetimes | ❓ Open | Days from invitation, hours from start. Must outlive a collector who books two weeks ahead. | Product |
+| Invitation and check lifetimes | ❓ Open | 14 days and 24 hours provisionally. Must outlive a collector who books two weeks ahead. | Product |
+| Which cases must hold an approved hosted check | ❓ Open | Until a class is named, no case is in it and the override is the only control. | Compliance |
+| Lawful basis for the biometric processing | ❓ Open | A processor's face match on our instruction is special-category processing however it is stored. | Compliance |
 | What a decline says | ❓ Open | A repeated reason teaches a fraudster what to fix; the operator and the collector may not see the same words. | Compliance |
-| Whether a decline stands | ❓ Open | Whether staff may record a counter check on a case the provider declined, and what that is recorded as. | Compliance |
 | Documents and countries | ❓ Open | Which of the four document types, and which issuing countries, the provider is configured for. | Compliance |
 
 **Risks.** A verdict is a trust boundary the estate has never had — every
 identity today is written by an authenticated operator. And a verdict can land
-on a case that moved while it was in flight: sealed, erased, or past custody.
-The case keeps the identity it had, and the check that arrived too late is
-discarded rather than bound.
+on a case that moved while it was in flight: sealed, erased, past custody, or
+verified at the counter in the meantime. The case keeps the identity it had, and
+the check that arrived too late is discarded rather than bound.
 :::

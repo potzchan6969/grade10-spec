@@ -16,18 +16,36 @@ whether a check is on file, still out, or refused.
 - `grade10-site-vault-identity-check-SC-05` — A verified case names who performed the check
 - `grade10-site-vault-identity-check-SC-06` — Binding a verdict voids an outstanding packet
 - `grade10-site-vault-identity-check-SC-12` — Preparing documents without an identity is refused
+- `grade10-site-vault-identity-check-SC-13` — A packet whose identity moved cannot be sealed
+- `grade10-site-vault-identity-check-SC-16` — Reading a case's identity takes the identity grant
 
-### grade10-site-vault-identity-check-US-02: Operator verifies a collector the hosted check could not
+### grade10-site-vault-identity-check-US-02: Operator records a check at the counter
 
 **As a** vault operator whose collector arrives unverified,
 **I want** to check the document in front of me and carry on,
-**so that** a refused, lapsed or never-started check costs the visit nothing.
+**so that** a refused, lapsed or never-started check costs the visit nothing,
+and a check that overrides a refusal says so on the case.
 
 **Accepted by:**
 
 - `grade10-site-vault-identity-check-SC-03` — An operator asks for a check on a case that needs one
 - `grade10-site-vault-identity-check-SC-14` — Staff verify a collector who arrives unverified
 - `grade10-site-vault-identity-check-SC-15` — A counter check is refused once the item is in custody
+- `grade10-site-vault-identity-check-SC-17` — An override of a refused check takes the approving grant
+
+### grade10-site-vault-identity-check-US-03: Operator settles a verdict that lands after the case has moved
+
+**As a** vault operator on a case whose hosted verdict arrived late,
+**I want** the case to keep the identity it already holds and to tell me what
+landed,
+**so that** nothing signed, vaulted or erased is disturbed by a check that
+finished too late.
+
+**Accepted by:**
+
+- `grade10-site-vault-identity-check-SC-07` — The displaced identity is settled
 - `grade10-site-vault-identity-check-SC-08` — A verdict landing after custody begins is refused
+- `grade10-site-vault-identity-check-SC-09` — A verdict landing on sealed evidence is refused
+- `grade10-site-vault-identity-check-SC-10` — A verdict landing on an erased case is refused
 - `grade10-site-vault-identity-check-SC-11` — A refused landing leaves no half-finished state
-- `grade10-site-vault-identity-check-SC-13` — A packet whose identity moved cannot be sealed
+- `grade10-site-vault-identity-check-SC-18` — A verdict landing on a case verified elsewhere is refused

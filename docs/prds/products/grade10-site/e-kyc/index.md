@@ -8,11 +8,11 @@ the document — and exists to enforce one idea: **the same human is the same
 human**. A product that needs to know who somebody is binds the check another
 product already recorded instead of photographing the passport again.
 
-It is the most tightly walled service in the estate. Its own worker, its own
-database, its own bucket, and no public route of any kind — a product reaches it
-only over a service binding. The reason is in its own source: a route here would
-put the legal names and passport photographs of every customer of every product
-one misconfigured origin away from a browser.
+It is the most tightly walled service in the estate: it is reached only by
+Grade10's own services, and no address of it answers a browser. The reason is in
+its own source — a route here would put the legal names and passport photographs
+of every customer of every product one misconfigured origin away from a
+browser.
 
 ## Two ways to be verified
 
@@ -29,27 +29,19 @@ visit still works.
 
 Nobody signs into the store itself. The people it serves are the collector, who
 verifies before travelling and whose document is what is being kept, and vault
-staff, who read a case's identity, record one at the counter, and download the
-photograph under an audited grant.
+staff, who read a case's identity, record one at the counter, and look at the
+document image.
 
 The raw document number never lands. It crosses the binding in memory, becomes a
 mask and a keyed digest, and is never stored, returned or logged. The digest is
 keyed rather than a bare hash, because a document number's whole space is small
 enough to walk offline — a bare digest of one *is* the number.
 
-:::callout{kind="warning"}
-The hosted check is specified and not yet built. Every verified identity in the
-estate today is a member of staff typing a document at a counter — one provider
-kind exists, and it means exactly that. Read every page describing a collector
-who verifies themselves as the intended product, not the shipped one.
-:::
-
 :::callout{kind="note"}
-"One verified identity per person" is a property the data model makes
-*checkable*, not one the database enforces. A case binds exactly one identity
-and that is enforced by a primary key. But the document-number digest carries no
-unique index, and nothing queries it yet — so the same document turning up under
-a second account is a query somebody could run, not an alarm that fires.
+"One verified identity per person" is checkable, not enforced. A case holds one
+identity and that much is guaranteed. The document-number digest makes a
+repeated document findable, and nothing looks — so the same document under a
+second account is a query somebody could run, not an alarm that fires.
 :::
 
 :::detail{title="For engineers" for="engineer"}
@@ -73,10 +65,10 @@ There is no deletion-log sweep here at all — erasure arrives as the owning
 product releasing its binding, because only that product knows whether the
 evidence is under legal hold.
 
-The record already carries a provider and a provider reference, and both are
-constant today. A hosted provider is not another value behind the same write: it
-inverts the flow with its own ceremony and verdict, so the seam is the package
-boundary rather than an adapter inside the counter check.
+The record already carries a provider and a provider reference, both constant
+today. A case binds exactly one identity, enforced by the bindings table's
+primary key; the document-number digest carries no unique index and nothing
+queries it.
 
 Background:
 [account data](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
