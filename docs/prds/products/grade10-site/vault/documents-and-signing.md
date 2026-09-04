@@ -35,10 +35,13 @@ vendor is involved.
 | Release of custody | case, customer, item, settled (an amount or "nothing was owed"), released | handed back in the condition inspected; nothing outstanding; the custody agreement ends |
 
 - **Counterparty** — the brand's legal name and licence line where the
-  brand's legal identity is set, its trading name otherwise; in production a
-  packet is refused while the legal name is unset
-- **Held at** — the shop the case is booked at, read from the diary; a
-  walk-in's case takes a shop from the operator when the packet is prepared
+  brand's legal identity is set, its trading name otherwise. One function
+  answers what a document may print, so both mint paths refuse in production
+  while the legal name is unset rather than each remembering to ask
+- **Held at** — the shop the case is booked at, read from the diary; a case
+  with no booking takes one from the operator, which the console insists on
+  before it will prepare. The worker itself does not: with neither, the
+  agreement names a store of the brand's and no shop in particular
 - **Signature** — the customer's alone; no staff countersignature or witness
   line
 - **Dates** — through the platform's one date module in its one zone: a day
@@ -52,7 +55,9 @@ vendor is involved.
 
 - **Two consents** — one e-sign disclosure for the packet, one consent per
   document; both stored as full text and digest, both printed in full on the
-  certificate above their digests, and anchored
+  certificate above their digests, and anchored. The certificate says so in
+  print: the wording is reflowed to fit the page, and each digest is over the
+  stored text rather than over the lines as they appear
 - **Wording** — interim English, pending counsel, served by the ceremony from
   one per-brand table with no fallback
 - **Certificate** — typed name, consent and signing instants, pages viewed, IP
@@ -89,8 +94,9 @@ identity, verified name, pages viewed and consent.
 | Release is its own packet | Decided | A pickup weeks later is a separate execution | Product |
 | Executed is two records agreeing | Decided | Packet completed and every document sealed in one transaction; no guard rests on a status alone | Engineering |
 | The wording travels with the copy | Decided | The certificate prints the disclosure and consent text, not only their digests | Legal |
-| The entity is data | Decided | Legal name, licence and trading name per brand in one table; production refuses paper while the legal name is unset | Engineering |
+| The entity is data, answered once | Decided | Legal name, licence and trading name per brand in one table, read through one function by every path that mints paper, so the production refusal cannot be forgotten at the next one | Engineering |
 | The shop is the booked location | Decided | Read from the diary, never typed | Engineering |
+| A packet without a shop | ❓ Open | The console will not prepare one, the worker will, and the agreement then names no shop — the same question as whether custody is recorded per shop, open on [Operator Console](/p/grade10-site/vault/operator-console) | Product |
 | Lender's legal name and licence | ❓ Open | The values for the table; "Grade10" prints as the trading name until then, and no production packet is possible | Legal |
 | Mandatory particulars | ❓ Open | Annualised rate, fees, governing law, complaints, cooling-off, redemption period | Legal |
 | Chinese versions | ❓ Open | Bilingual templates and consent copy; which language governs | Legal |

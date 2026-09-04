@@ -22,8 +22,11 @@ never an assertion of law.
   raw number never lands
 - **Reused** — a returning customer's latest check binds to a new case
   without a new photograph
-- **The same document elsewhere** — the store answers which other accounts a
-  document was verified under, ids only; nothing acts on the answer yet
+- **The same document elsewhere** — every binding is answered with how many
+  other accounts hold the same document. A hit writes a staff-only event
+  carrying the count, badges the case in the queue as **Document seen
+  before**, and refuses nothing; which accounts they are never leaves the
+  identity store
 - **Not checked** — liveness, face match, address, nationality, sanctions or
   politically exposed persons, source of funds, occupation, purpose, ongoing
   monitoring, thresholds, suspicious-activity reporting
@@ -47,6 +50,9 @@ never an assertion of law.
   photograph, the item photos and the item text stay under the hold, with no
   clock
 - **Erasure, never signed** — everything is purged and the identity released
+- **Messages never sent** — a case's queued and parked mail is deleted
+  whichever class the case falls in; a held case keeps the agreement, not the
+  outbox
 - **Process** — the account holder asks on the auth side, a **7-day** window
   runs, then an admin runs each product from the console
 
@@ -59,7 +65,7 @@ never an assertion of law.
 | Hash-chained audit log | yes, every case mutation filed under its case, walked hourly in **1,000**-row budgets, verified heads exported to the archive | the Datadog key and monitors with named recipients |
 | Archive copy of sealed bytes | yes, hourly, digest-checked, through a port that cannot delete | the bucket's lock rule, set by hand and verified by nothing |
 | Integrity re-hash | yes, **200** rows per pass | — |
-| Database backups | the gaps file is consistent with the registry and a build check keeps it so | two age recipients, one green nightly, a restore drill |
+| Database backups | one check grades the gaps file against the registry, run by the build and by the nightly alike, across every environment | two age recipients, one green nightly, a restore drill |
 | Second factor | required in production, optional in staging | a decision on staging; a fresh challenge on payout |
 | Identity rebind under a sealed case | closed; a case with sealed evidence refuses a re-record, and a displaced unbound check is purged durably | — |
 
@@ -90,12 +96,13 @@ first three until they are done; the rest live outside any check.
 
 1. *Legal* — **Name the lending entity** — legal name, licence number and
    licence wording per brand in `packages/app-env/src/legalIdentity.ts`;
-   until then production refuses every packet and `check:libs` names the
-   three unset fields
+   until then production refuses every packet, a production deploy of the
+   brand is refused before the first worker uploads, and `check:libs` names
+   the three unset fields
 2. *Owner* — **Set the lending policy** — loan to value, rate band and
-   period, term presets, offer validity, grace days, accrued cap in
-   `packages/app-env/src/lending.ts`; an unset bound allows everything, and
-   `check:libs` names each
+   period, term presets, offer validity, grace days, the accrual ceiling in
+   `packages/app-env/src/lending.ts`; every one of them is enforced where it
+   is read, an unset bound allows everything, and `check:libs` names each
 3. *Legal* — **Set retention windows** — days per class in
    `packages/app-env/src/retention.ts`; then decide what deletion on expiry
    does
@@ -125,22 +132,28 @@ first three until they are done; the rest live outside any check.
     the lending entity, a second product, or something else; the shell's
     name follows the answer
 12. *Engineering* — **Bump the catalogue** — the spec store carries the
-    corrected vault copy and the two reversal event names; the application
-    reads the pinned submodule until its pointer moves after the upstream
-    merge
+    corrected vault copy and three event names the application's pinned
+    submodule does not: the two money corrections and a missed visit. Until
+    the pointer moves after the upstream merge, those three stay off a
+    collector's timeline, though the email still tells them
 13. *Engineering* — **Write the vault's specs** — no capability, change or
     test suite in this store covers the vault, so every page carries the
     planned pip and nothing validates the timers, the arithmetic, the grants
-    or the seventeen mail kinds
+    or the twenty mail kinds
 14. *Product* — **A brand time zone** — a delta to the shared
     dates-and-times contract before any surface leaves UTC
-15. *Owner* — **Reminders** — days before due, cadence when overdue, channel;
-    the message map and the sweep pattern are ready for the two kinds
+15. *Owner* — **Reminders** — days before due, cadence when overdue,
+    channel; the highest-value decision left on this list, because every
+    other event reaches the borrower and the due date reaches nobody. The
+    message map and the sweep pattern are ready for the two kinds, and the
+    question is open on
+    [Collector Pages](/p/grade10-site/vault/collector-pages)
 
 :::callout{kind="warning"}
-`check:libs` lists **46** unset values, none of them a database or a
-Hyperdrive id the vault depends on and twenty of them the entity and policy
-fields items 1 and 2 name.
+`check:libs` lists **46** unset values, twenty of them the entity and policy
+fields items 1 and 2 name and none of them a database or a Hyperdrive id the
+vault depends on. One blocks a deploy: without the registered legal name a
+production run is refused before it uploads anything.
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -154,7 +167,8 @@ Questions for counsel, each with the fact the code holds today.
 | Countersignature | ❓ Open | Company signature or witness; one signer today | Legal |
 | Cooling-off and complaints | ❓ Open | None today | Legal |
 | Forfeiture | ❓ Open | Notice, grace, surplus return | Legal |
-| AML and customer due diligence | ❓ Open | Whether duties apply and how deep identification must go; today name, birth date, document, photograph, and a same-document lookup nothing acts on | Legal |
+| AML and customer due diligence | ❓ Open | Whether duties apply and how deep identification must go; today name, birth date, document, photograph, and a count of the other accounts holding the same document | Legal |
+| A document held under another account | ❓ Open | Today the counter is told and nothing is refused. A refusal needs an override the vault has nowhere, and the accounts behind the count are ones an operator may not look up — so a refusal would strand a legitimate customer with no path | Owner |
 | Upload as a method | ❓ Open | Whether a document upload is an acceptable verification | Legal |
 | Retention per class | ❓ Open | Days for agreements, identity and photos, and a lawful basis for indefinite identity retention on held cases | Legal |
 | Walk-in erasure | ❓ Open | A case-scoped erasure path, since a walk-in's case has no account to erase by | Engineering |
@@ -167,13 +181,14 @@ Questions for counsel, each with the fact the code holds today.
 | Step-up on money | ❓ Open | A fresh factor per payout, or the **12-hour** stamp | Owner |
 | Integrity artefacts | ❓ Open | A hash chain plus an unsigned head export, or a qualified signature and timestamp | Legal |
 | Capacity | ❓ Open | Any duty beyond age 18 | Legal |
-| Reads that carry personal data | ❓ Open | The elevated ladder audits mutations only; a search by phone or email is a read | Engineering |
+| Reads that carry personal data | ❓ Open | The elevated ladder audits mutations only, so a search by phone or email leaves no trail of who was looked for; the term itself travels in the request body and never in an address | Engineering |
 :::
 
 :::detail{title="For engineers" for="engineer"}
 - **Identity** — `packages/e-kyc` (contracts `identity.ts`, `vocabulary.ts`,
-  `masking.ts`; `sameDocumentOtherUsers` and `findByIdNumberHash` over the
-  new index) and `packages/vault/backend/src/kyc/{record,reuse}.ts`
+  `masking.ts`; `otherUserIdsByIdNumberHash` behind every bind, so the count
+  rides the answer and no caller can forget to ask) and
+  `packages/vault/backend/src/kyc/{record,reuse}.ts`
 - **Retention and erasure** — `packages/app-env/src/retention.ts`,
   `packages/vault/backend/src/sweeps/retention.ts`, `erasure/eraseUser.ts`
   (held statuses are `released` and `forfeited`; the entrypoint keys on the

@@ -36,9 +36,10 @@ Three steps, one per thing the collector does.
 
 1. *Collector* — **Describe the item** — category (trading card, coin,
    bullion, watch, jewellery, other), title (≤ **200** characters),
-   description (≤ **2,000**), WhatsApp number (optional, free text, never
-   verified), and the one question that decides the lane: storage only, or a
-   loan and how much
+   description (≤ **2,000**), WhatsApp number (optional and never verified,
+   stored in E.164 against the brand's numbering plan however it was typed),
+   and the one question that decides the lane: storage only, or a loan and
+   how much
 2. *Collector* — **Photograph it** — **1 to 10** photos, JPEG, PNG or WebP,
    ≤ **20 MB** each, several per tap uploaded one after another; location
    metadata is stripped in the browser and again by the worker
@@ -71,7 +72,10 @@ What a collector reads on one case, top to bottom.
   `active` or `repaid`, so a borrower can book the visit they repay and
   collect on
 - **History** — every event the collector may see, actor kind only, never a
-  staff id; an operator's correction of a money row is not among them
+  staff id. A correction of a money row and a missed visit are staff-only
+  until the shared catalogue reaches the application, and a document already
+  held under another account stays staff-only for good; the email tells the
+  collector either way
 - **Clocks** — every time on this page and in every email is printed in UTC,
   the platform's one zone; only the booking picker speaks the shop's clock
 
@@ -90,15 +94,20 @@ What a collector reads on one case, top to bottom.
 
 ## What the collector hears
 
-- **Email, English, seventeen kinds** — visit booked, moved, cancelled; offer
-  made, offer expired; item vaulted; payout recorded; repayment recorded;
-  loan repaid; item released; forfeited; declined; cancelled; expired
-  untouched; expired unbooked; visit missed; signed documents with the PDFs
-  attached
+- **Email, English, twenty kinds** — visit booked, moved, cancelled, missed;
+  offer made, offer expired; item vaulted; payout recorded; repayment
+  recorded; payout corrected; repayment corrected; loan repaid; item
+  released; forfeited; declined; cancelled; expired untouched; expired
+  unbooked; request closed after a missed visit; signed documents with the
+  PDFs attached
 - **One decision per event** — what each event tells the collector is
   written down once, so a new event cannot ship silent
 - **A failed send is kept** — the message is queued and retried on a ladder
-  from **5 minutes** to **6 hours**, and given up loudly after **5** attempts
+  from **5 minutes** to **6 hours**; after **5** attempts the row is parked
+  with the reason on it, the case badges for staff, and an operator can hand
+  every parked message on that case back to the queue. The queue names the
+  message and never its reader: the address, the item's title and the
+  currency are read off the case again at each attempt
 - **WhatsApp** — a click-to-chat link staff press, with six templates; no
   automation, no inbound channel
 - **No reminders** — nothing tells a borrower the due date is near or the
@@ -143,10 +152,13 @@ phone. The owner's brief is [Grade10 Finance](/references/grade10-finance).
 | How to pay | ❓ Open | Bank details, a payoff quote with a stated validity, and where each is shown | Product |
 | Reminders | ❓ Open | Due-soon and overdue kinds on the same map, a sweep over the due calculation, and the cadence and channel | Owner |
 | SMS and WhatsApp automation | ❓ Open | Both are in the notes; the number is unverified free text and the chat link is a staff press | Owner |
-| Total and lateness on the offer card | ❓ Open | The wire now carries the total to term; the words need catalogue keys and a submodule bump | Design |
+| Total and lateness on the offer card | ❓ Open | The wire carries the total to term; the words need catalogue keys and a submodule bump | Design |
 | Cancel a case | ❓ Open | No collector cancel; a change of mind waits **30 days** to expire | Product |
 | Several items | ❓ Open | One visit for a binder: book on the lead case (nothing says so), or a multi-item case | Product |
-| Phone number | ❓ Open | Optional, unverified, unformatted; the brand's numbering plan exists and the intake does not use it | Product |
+| Phone number | ❓ Open | Stored in one form and reachable by search, and still confirmed by nothing — no channel ever writes to it | Product |
+| Two vocabularies for one list | ❓ Open | What happens to a case and what the collector is told are separate lists a map joins; collapsing them is one rename across the worker, the console and four locales | Engineering |
+| A copy that never arrives | ❓ Open | The sealed-documents mail is retried by its own sweep with no attempt count, no ceiling and no parking, so a permanently failing address is retried for ever | Engineering |
+| A send that never returns | ❓ Open | The mail port carries no per-send deadline, so one hung request holds a sweep pass | Engineering |
 | Chinese operative text | ❓ Open | Emails, ceremony wording and documents are English; half the ceremony chrome is already in the catalogue | Legal |
 :::
 

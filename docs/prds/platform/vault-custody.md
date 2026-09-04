@@ -57,10 +57,10 @@ terminal: declined | cancelled | expired | forfeited
 | `under_valuation → declined` | staff `vault:approve` | the item is refused; nothing has been signed |
 | `accepted → signing` | staff `vault:operate` | a verification is bound to the case, its subject is an adult and their document has not expired; opens one packet — the custody agreement always, the loan agreement second when financed |
 | `signing → vaulted` | staff `vault:operate` | an executed packet holding every document the lane requires, and nothing still open; writes custody |
-| `vaulted → active` | treasurer `vault:payout` | financed lane; the transfer already happened and is being recorded |
+| `vaulted → active` | treasurer `vault:payout` | financed lane; the transfer already happened and is being recorded. Reachable again after a payout is taken back, guarded on there being no live payout rather than on a constraint |
 | `active → repaid` | treasurer `vault:payout` | recorded repayments satisfy `computeDue` at the recording clock |
 | `repaid → released`, `vaulted → released` | staff `vault:operate` | nothing outstanding, no packet open, and an executed packet holding the release document; closes custody |
-| `active → forfeited` | staff `vault:approve` | past due and the loan was paid out; manual, financed lane only; closes custody, and the item settles what was owed |
+| `active → forfeited` | staff `vault:approve` | past due and the loan was paid out; manual, financed lane only; closes custody, and the item settles what was owed. A visit still ahead is cancelled in the diary and one already past is marked a no-show — calling it completed would say the borrower came in, which is the one thing a forfeiture establishes did not happen |
 | `draft → expired`, `submitted → expired` | sweep | untouched past its window, and for a submitted case only after confirming it holds no live booking |
 | `accepted → cancelled`, `signing → cancelled` | staff `vault:operate`, or the packet-expiry sweep | the sweep cancels only a case with no path left to `vaulted` — no ceremony open and no executed packet covering the lane — because `cancelled` is terminal |
 | `vaulted → cancelled` | staff `vault:operate` | no payout has been recorded; runs the release machinery, because an item leaves custody exactly one way — but signs no release document, because the custody is being undone rather than discharged, and there is no receipt for an agreement that is being called off |
@@ -90,6 +90,8 @@ terminal: declined | cancelled | expired | forfeited
 - No call names a product: the named entrypoint the caller bound to is its identity, so speaking for another product is not expressible.
 - The remote call runs outside any vault transaction, and the guarded transition plus the cache write then commit together.
 - Nothing is ended on the cache alone: expiring a submitted case and recording a no-show both ask the diary first and repair the cache where the two disagree. With no diary to ask, nothing is ended at all — a case whose booking cannot be ruled out is left where it is.
+- A slot already behind us is not a customer who is coming in. The expiry lists ask whether the visit is still ahead, not merely whether one is booked; the no-show list closes a passed slot, and a case whose visit went by would otherwise sit outside every window for ever.
+- A missed visit before custody ends the case, and a missed visit on a case already in the vault ends the visit alone: the first is told its request has closed, the second that we did not see them and the item is still here. One ending, one word for it.
 - Repair lists close the gap the two databases leave from both sides: a terminal case still holding a future booking is cancelled idempotently until it sticks, and a case whose cache was lost between the remote call and the local write is found among recently touched cases and refilled from the diary.
 - Every diary refusal folds into one vault code, `BOOKING_UNAVAILABLE`, so a customer screen cannot tell a slot that filled from one that is already in the past — the copy says to pick another time, and separating them would mean carrying the appointment service's own codes through the vault's vocabulary.
 
@@ -128,6 +130,7 @@ terminal: declined | cancelled | expired | forfeited
 - Recording runs in two phases, because the store is another worker. The RPC happens first with no transaction open; a short transaction then takes the case row's lock, re-judges the case, voids any packet still out — its documents were rendered from the record the rebind replaces, and nothing on a packet names a verification — and writes the reference beside the event. Re-recording rebinds rather than duplicating — a case binds exactly one verification — so a retry converges on one binding instead of leaving a second photograph behind.
 - Recording is gated, on both reads of the case row, because a rebind purges what it displaces. It is allowed at the pre-custody statuses only (`KYC_RECORDABLE_STATUSES`): post-custody there is nothing left to record for — a release packet reads the binding the executed agreement already holds. A case with sealed evidence refuses `IDENTITY_SEALED` at any status: the recorded identity is what the legal hold names. And an erased case takes no new personal data at all — a binding made after erasure would sit outside the machinery that erases, retained forever on a held case and silently released on a purged one.
 - Every name a template prints is the verified legal name, read over the binding at render time. There is no free-text customer name to type: the name on the paper is the name on the document somebody checked, or the document is not written.
+- Every binding answers how many other accounts hold the same document, in the same round trip that made it, so no caller can forget to ask and the raw ids cross the boundary once. A hit writes a staff-only case event carrying the count alone and badges the case for the counter; nothing is refused, because the accounts behind the count are ones an operator may not look up and the vault has no supervisor override to refuse under.
 - The gate on preparing documents reads the reference off the locked case row, so it stays inside the transaction while the record itself is read outside one. A verification rebound while a preparation was rendering refuses that preparation — the paper names a person the case no longer says it is about.
 - The seal ladder checks again rather than trusting the earlier gate, and the certificate page names the verified person — name, document type, masked number, who verified it and when — so the sealed PDF proves who was in the room.
 
@@ -192,9 +195,11 @@ terminal: declined | cancelled | expired | forfeited
 
 ### `computeDue` is the one authority for what is owed
 
-- Every screen, guard, and sweep that names an amount owed calls it with a clock; nothing derives interest a second time.
+- Every screen, guard, and sweep that names an amount owed calls it with a clock and the brand's accrual — grace days and the ceiling on everything interest may ever add — so nothing derives interest a second time and no caller decides for itself what an unset bound means.
+- One load answers a whole page: a case's offer, payout, repayments and corrections come back in four set queries and the due is folded purely over them, so a case screen, the position and the arrears list cannot give three answers.
 - Amounts are integer minor units, and the currency lives on the case alone — money child rows carry none, so a case whose payout and repayment disagree about currency is not expressible. It must be a currency the platform can price, refused at intake rather than by the renderer that cannot format it.
 - What is owed follows the money that moved, never the terms agreed: a case with no payout owes nothing, which is what leaves the unwind open to it, and a forfeited case owes nothing because the item settled it.
+- A balance asked about an instant counts only the money valued by then, and floors at zero. A read never throws over an invariant: raising the brand's grace after a loan settled recomputes a larger debt than the customer paid, and a screen that refused would be a configuration dial bricking every read of a closed case.
 - Interest is one rounding of one exact figure. A daily rate taken off an already-rounded term would carry that rounding into every overdue day, and rounding is half-up, so the drift would only ever run toward the lender.
 
 ### Accrual stops at the instant the loan settled, and never restarts
@@ -221,11 +226,16 @@ terminal: declined | cancelled | expired | forfeited
 ### Every money operation in v1 is recorded by a person
 
 - Payout, repayment, and settlement are elevated, audited actions taken by a `vault:payout` holder after the bank transfer happened; the offer's terms are set by staff under `vault:approve`.
-- Each is reconciled against what was written down: a principal may not exceed the valuation it cites, a payout must be the accepted offer's principal, and a repayment may not exceed the balance. Different terms are another offer somebody records, not a looser guard.
+- Each is reconciled against what was written down: a principal may not exceed the valuation it cites, a payout must be the accepted offer's principal, and no repayment may leave the loan over-repaid. Different terms are another offer somebody records, not a looser guard.
+- The over-repayment rule is the writer's, because only the writer can hold it: `recordRepayment` walks the candidate into the rows sorted by value date and refuses if any prefix exceeds what was owed on that row's own date. Checking the end alone would miss the middle of the walk, where interest accruing afterwards absorbs an earlier overpayment — and a backdated payment can land anywhere in that order.
 - The loan ≤ valuation bound is enforced on both writes that could break it. A valuation written under the offer already on the table is refused, because one signing set would otherwise print that valuation on one page and a larger loan on the next; withdrawing the offer is the way down.
 - A payout reads its evidence again under the case row's lock rather than inheriting it from `vaulted`: the executed packet holding the documents the lane requires, the item still in custody, and the accepted offer whose principal it must equal. A status is one column anybody with a connection can write, and a disbursement has to stay provable long after the person who recorded it has gone.
 - A repayment carries an idempotency key, unique on the case, and it comes from the caller: the audit append runs after the resolver has committed and fails the request loudly, so an operator can be shown an error for money that is already recorded, and the retry must not record it twice. A key the server minted would be a different key on every retry, which is no protection at all.
 - A repayment also names the balance the caller was quoting. Where the two disagree the money is refused by name, never recorded as a partial payment nobody meant to make — a customer told a payoff figure either pays it or hears why it changed.
+- A key naming a row a correction has since taken back is refused by name rather than replayed onto it. The console folds the case's newest event into the key it mints, so a recording made after a correction is a different recording, not the old one arriving twice.
+- A correction is an INSERT like everything else, and the row it names simply stops counting: one place decides which rows are live, and every balance, ledger and position reads through it. The row being taken back is located through that same netted read, so a second attempt at the same row is a refusal by name rather than a constraint violation nobody can branch on.
+- A correction is refused unless the case is `active` or `repaid`. A `released` case whose repayment was taken back would owe money with the item already gone, no move out of that status on the table, and no way to record the corrected money either.
+- A reversed payout returns the case to `vaulted`, where it can be paid out again against the same accepted offer — which is why "one live payout per case" is a guard on the netted read rather than a constraint. New terms are not reachable from there: an offer is written from `under_valuation` or `offer_made`, so the way to different terms is unwinding the custody.
 - The three seams automation will land on need no new schema: the one due calculation, the append-only offers, and the money procedures a future payout provider would call the way the store's payment port wraps its provider.
 - That provider port is deliberately not built before the first real provider, because an interface with no implementation encodes a guess.
 
@@ -235,13 +245,15 @@ terminal: declined | cancelled | expired | forfeited
 
 | Grant | Covers | Held by |
 | --- | --- | --- |
-| `vault:read` | seeing cases, items, documents, and what is owed | staff, treasurer, admin |
-| `vault:operate` | running the flow: valuation start, acceptance, document prepare and mint, vaulting, release, unwinds | staff, admin |
+| `vault:read` | seeing cases, items, documents, and what one case owes | staff, treasurer, admin |
+| `vault:operate` | running the flow: valuation start, acceptance, document prepare and mint, vaulting, release, unwinds, re-arming a parked message | staff, admin |
 | `vault:approve` | what a loan costs: valuations, offers, declines, forfeiture | staff, admin |
-| `vault:payout` | money moving: payouts, repayments, settlement | treasurer, admin |
+| `vault:payout` | money: recording it, taking it back, and reading the book — the ledger and the position across every case | treasurer, admin |
 | `appointment:read`, `appointment:manage` | the booking surfaces | staff, admin |
 
 - Staff and treasurer are disjoint on money, so a payout takes two people, and `admin` holds everything as it does everywhere.
+- The ledger and the position are the firm's accounts rather than the case in front of the operator, so they sit on `vault:payout` while a quote and the arrears list stay on `vault:read`.
+- A correction is `vault:payout` plus a recorder who is not the reverser — the two-person rule enforced on the procedure, not by demanding `vault:approve` as well, which would have made every correction admin-only given that staff and treasurer share no money grant.
 - `treasurer` reaches the local dev sign-in widget with no further wiring, because that widget lists whatever roles the shared vocabulary declares.
 - The admin panel's payout tab lives inside case detail and is gated on `vault:payout`, so the split is visible in the panel rather than only in a refusal.
 
@@ -249,6 +261,8 @@ terminal: declined | cancelled | expired | forfeited
 
 - The audit chain records raw input by default and the shared redaction does not know about identity numbers, phone numbers, or bank references, so each such procedure ships a selector that names what may be written.
 - A test walks the router and fails any elevated mutation whose input schema names one of those fields without a selector, because the chain is append-only and a secret in it cannot be removed.
+- One wrapper files every case mutation under its case, so the audit subject cannot be forgotten on the next one and an auditor pulls one case's whole trail by its id.
+- A read is not audited, so the console's transport sends every call as a POST: a counter search is a phone number or an email address, and a query string would put it in the browser's history, the Worker's request log and every proxy on the way — undoing on the way in what the selectors protect on the way out.
 
 ## Retention and erasure
 
@@ -262,6 +276,7 @@ Erasure is an admin calling `erasure.erase`, which asks auth's guard first, as e
 | A signed case, financed or storage-only | keep the sealed documents and the identity binding under a named legal hold — and with them what the agreement is evidence about: the item photos (collateral-condition evidence under the same hold), the customer's own item title and description, and staff notes. What goes is the person around the agreement: contact details, the decline reason, and their id in the history |
 | A case that finished after custody but carries no executed packet | should not exist — the vaulting guard wants one. Keeps the data, under `custody_closed` rather than `signed_documents`, so a retention nobody can explain is not recorded as an agreement |
 | Bookings | anonymize: the person is unlinked, the occupancy stays so past availability still adds up |
+| Mail the vault owed and never sent | delete, in every class: the queue is a message waiting to be posted to a person, not evidence about a case |
 
 - The legal hold is what makes the exception reviewable: sealed documents and the identity behind them are evidence of an agreement, and erasing them would erase the record of a debt that existed. On a held case the binding is the hold — it is what keeps the store's record and its capture alive, and the named hold on the case row is where an operator reads why.
 - What enforces keeping is the sealed-evidence check, never the column: `legal_hold` is the operator-readable reason, CHECK-constrained to the two names `erasure/eraseUser.ts` writes, and the retention review sweep only flags what is past a set window — deleting anything on expiry is a second decision once legal sets the per-class values.
@@ -301,6 +316,13 @@ Erasure is an admin calling `erasure.erase`, which asks auth's guard first, as e
 
 - The case stores the customer's phone number and the admin panel renders a `wa.me` link from it; the conversation happens in the operator's own client.
 - Automated messages have a notification channel port behind them with an email adapter today.
+- A number reaches the row in one form. Every writer — the customer's own draft and the operator's contact edit alike — canonicalizes to E.164 against the brand's numbering plan and refuses what will not, and a search term is canonicalized the same way before the phone leg runs, so `5123 4567` and `+852 5123-4567` find the same case. A term that is not a number falls through to the email and case-id legs rather than refusing; a write refuses, because an operator can retype it. The refusal never quotes the number back — an error message is the one path that would carry it into a log.
+
+### A message that could not be sent is an outbox row, not a lost fact
+
+- The row names the message and nothing about its reader: the address, the item's title and the currency are read off the case again at each attempt, so a corrected address gets the retry and an erased customer is not posted to the address the failure froze. What it stores is only what cannot be re-derived — the money that message named and the visit it named.
+- The ladder runs from **5 minutes** to **6 hours** and is spent after **5** attempts, at which point the row is parked with the reason on it and leaves the queue's predicate. A parked row is a stamp rather than a count, so nothing has to compare a number against a limit to know it is done trying.
+- A parked row is not a silent loss: it badges its case in the operator's queue, and one mutation hands every parked message on that case back to the queue with the ladder started over.
 
 ## Where it lives
 
@@ -345,4 +367,5 @@ Erasure is an admin calling `erasure.erase`, which asks auth's guard first, as e
 - The legal retention period per jurisdiction, decided before the first production case.
 - The storage fee schedule, if storage stops being free — the release guard is already the place it lands.
 - Whether photo metadata keeps its location data once any of it is shown outside a staff surface.
+- Whether custody is recorded per shop. The custody row names a locker and no location; the only shop on the case is the booking cache's `location_id`, which a completed visit keeps and a cancelled or missed one clears; and a packet can be prepared with no shop at all. Nothing can be asked which vault holds what, and clearing the cache on an outcome would erase the one record there is.
 - Finance's own flow, cases, and documents, which start with its first real feature.

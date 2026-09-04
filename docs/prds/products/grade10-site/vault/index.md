@@ -15,7 +15,7 @@ made.
   for the shop, `grade10.com/vault/sign#<token>` for the iPad
 - **Money** — the brand's currency in whole cents, recorded by a person
   after the bank moved it and against the date it moved; a payout takes two
-  people, and a correction takes both money grants
+  people, and a correction takes a second holder of the money grant
 - **Paper** — three one-page English documents sealed in-house, anchored in
   a hash chain, naming the shop and the brand's entity
 - **Dates** — every screen, console and page of paper states UTC, the
@@ -75,7 +75,7 @@ insures. The owner's brief is [Grade10 Finance](/references/grade10-finance).
 e-signature vendor; online identity verification; a second custodian; storage
 fees; multi-item cases.
 
-**Measurement.** ❓ None defined. Candidates the ledger and position now
+**Measurement.** ❓ None defined. Candidates the ledger and the position
 answer: financed cases per week, redemption rate, days from submission to
 payout, days from a money row's value date to its recording, loans
 outstanding at a date.
@@ -84,12 +84,12 @@ outstanding at a date.
 | --- | --- | --- | --- |
 | Custody is the product, financing an attachment | Decided | One case, two lanes, decided by the financing amount at intake | Product |
 | One case is one item | Decided | A unique index; siblings are separate cases booked on the lead case | Product |
-| A payout takes two people; a correction takes two hats | Decided | Staff and treasurer share no money grant; a reversal needs both money grants and never the row's own recorder | Product |
-| Entity and lending policy are data | Decided | Two per-brand tables, every undecided field null and reported by the checks; a null bound allows, a set bound refuses | Engineering |
+| A payout takes two people; a correction takes a second one | Decided | Staff and treasurer share no money grant, and nobody may take back a row they recorded | Product |
+| Entity, retention and lending policy are data | Decided | Three per-brand tables on one mechanism, every undecided field null and named by the checks with its owner and its cost; a null bound allows, a set bound refuses, and a field marked blocking refuses a production deploy | Engineering |
 | Storage is free | Decided | The obligations seam is where a fee schedule lands | Owner |
 | Which product is Grade10 Finance | ❓ Open | The vault's financed lane under the lending entity, a second product on vault machinery, or something else | Owner |
 | Which entity lends and which holds | ❓ Open | On a Grade10 Vault case, and on a Tiny case | Owner |
-| Loan policy values | ❓ Open | Loan to value, rate band and period, term presets, offer validity, grace, an accrued cap, renewal | Owner |
+| Loan policy values | ❓ Open | Loan to value, rate band and period, term presets, offer validity, grace, an accrual ceiling, renewal | Owner |
 | Hong Kong time | ❓ Open | Whether any surface leaves UTC, on screen and on the paper; the delta to the platform's dates-and-times contract comes first | Product |
 :::
 

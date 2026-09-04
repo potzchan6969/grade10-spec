@@ -23,20 +23,27 @@ status.
 | In custody | `vaulted`, `active`, `repaid` |
 | Closed | `released`, `declined`, `cancelled`, `expired`, `forfeited` |
 | Drafts | `draft` |
-| Today | every open case with a visit on the platform's day |
+| Today | every open case whose visit falls on the worker's own day, cut where the rows are read rather than in the browser |
 | Overdue | every live loan past its due date: due date, days overdue, outstanding |
 
 - **Rows** — case id, the item's name, status, lane, amount asked,
   appointment, last updated, and a badge naming why the case waits on a
-  person: a release request unanswered, a submission nobody started, a visit
-  today
+  person: a release request unanswered, a submission nobody started, an offer
+  that ran out, a message that ran out of attempts, a document already on
+  file under another account, a visit today
 - **Paging** — **50** rows a page, newest-touched first, a backlog count and
-  a load-more control on a keyset cursor
-- **Search** — exact on phone or email, prefix on case id; the term stays
-  out of the audit chain
-- **Money tab** — the position now (principal and interest owed across live
-  loans, repaid to date) and the ledger over payouts, repayments and
-  corrections for a UTC date range, filtered by method, paged, with totals
+  a load-more control on a keyset cursor; a page with no rows over a backlog
+  says so and offers the control anyway
+- **Search** — exact on phone or email, prefix on case id; a number is
+  matched in its E.164 form however it was typed, the term travels in the
+  request body rather than in an address, and it stays out of the audit
+  chain. The answer is one page and says when more matched than were handed
+  back
+- **Money tab** (`vault:payout` only) — the position at this instant
+  (principal and interest owed across live loans, repaid to date, in the
+  currency the position itself names) and the ledger over payouts,
+  repayments and corrections for a UTC date range, filtered by method,
+  paged, with totals
 - **Held items tab** — everything in a locker, oldest first, paged
 
 ## One case
@@ -46,7 +53,8 @@ One line per tab, as `Surface: verb, verb, verb`.
 - **Header**: back, the customer's email and phone with the WhatsApp
   click-to-chat link and six templates, set or change the contact, book,
   move or cancel the visit while the case is `submitted`, `vaulted`, `active`
-  or `repaid`
+  or `repaid`, the badges saying what this case is waiting on, and **Send
+  again** beside a message that ran out of attempts
 - **Case tab**: start valuation, record valuation, make or counter an offer,
   withdraw the offer, customer accepts, agree custody terms, decline, cancel;
   the timeline with the figures each money event carried
@@ -58,8 +66,9 @@ One line per tab, as `Surface: verb, verb, verb`.
   locker, release with notes, unwind with a reason, forfeit with a reason
 - **Payouts tab** (`vault:payout` only): record the payout with its bank
   reference and the date it left, record a repayment by bank transfer, cash or
-  card with the date it reached us against the quote for that date, and take a
-  wrong row back with a reason when the session also holds `vault:approve`
+  card against the quote for the date it reached us — which has to answer
+  before the repayment can be sent — and take a wrong row back with a reason,
+  offered only on a row this operator did not record
 - **Appointments section**: add or retire a shop, weekly rules, exceptions,
   the day's offered slots and bookings, each booking opening its case
 
@@ -67,17 +76,18 @@ One line per tab, as `Surface: verb, verb, verb`.
 
 | Grant | Roles | Opens |
 | --- | --- | --- |
-| `vault:read` | staff, treasurer, admin | cases, the contact, items, documents, what is owed, the ledger, the position, held items, overdue loans, search |
-| `vault:operate` | staff, admin | start valuation, accept, record or reuse identity, prepare, mint, vault, move, release, unwind, cancel, the visit |
+| `vault:read` | staff, treasurer, admin | cases, the contact, items, documents, what one case owes, held items, overdue loans, search |
+| `vault:operate` | staff, admin | start valuation, accept, record or reuse identity, prepare, mint, vault, move, release, unwind, cancel, the visit, hand a parked message back to the queue |
 | `vault:approve` | staff, admin | record valuation, make or withdraw an offer, decline, forfeit |
-| `vault:payout` | treasurer, admin | payout, repayment |
-| `vault:payout` with `vault:approve` | admin, or a person holding both roles | take a money row back, never one's own |
+| `vault:payout` | treasurer, admin | payout, repayment, taking a row back, and the book: the ledger and the position |
 | `kyc:read` | staff, admin | the identity photograph, each download on the audit chain |
 
-- **Two people move money** — staff and treasurer share no money grant;
-  `admin` holds both sides, so one admin can value, offer, accept, vault and
-  pay out alone (whether that stands, and whether a payout takes a fresh
-  factor, are open on [Loan and Money](/p/grade10-site/vault/loan-and-money))
+- **Two people move money** — staff and treasurer share no money grant, and a
+  correction takes a second `vault:payout` holder because nobody may reverse
+  their own row; `admin` holds both sides, so one admin can value, offer,
+  accept, vault and pay out alone (whether that stands, and whether a payout
+  takes a fresh factor, are open on
+  [Loan and Money](/p/grade10-site/vault/loan-and-money))
 - **One grant prices and forfeits** — `vault:approve` covers the valuer, the
   offer-maker and the person who forfeits
 - **Second factor** — required in production, optional in staging and
@@ -122,15 +132,19 @@ itself is bookable on a live loan.
 | Queue by wait, not by status | Decided | A shop asks what a case is waiting for; every status belongs to exactly one status view, and Today and Overdue are queries | Product |
 | Buttons follow the machine | Decided | Each move shows only at the statuses the contract publishes, and the worker refuses independently | Engineering |
 | Treasurer split | Decided | Nothing a single staff member can do moves money out of the business | Product |
-| A correction takes two hats | Decided | Both money grants, and never the row's own recorder | Product |
+| A correction takes a second money holder | Decided | `vault:payout` and never the row's own recorder; asking for the approve grant as well would have made corrections admin-only, because staff and treasurer are disjoint on money | Product |
+| The book sits behind the money grant | Decided | A ledger and a position across every case are the firm's accounts; `vault:read` still sees what one case owes | Product |
+| "Today" is cut where the rows are read | Decided | The worker's clock decides the day, so the queue and the badges beside it cannot disagree across UTC midnight | Engineering |
 | The console never moves a visit from the diary | Decided | A case's visit is moved on the case, so the cached booking and the diary have one writer | Engineering |
 | Staff see the contact; the verified name stays in the identity store | Decided | The console shows what staff set and never the legal name | Product |
 | Counter intake | ❓ Open | Open a case for a walk-in, add a sibling, edit the item, attach a photograph; the draft cap keys on the account | Product |
 | Valuation record | ❓ Open | Grading company and certificate number, grade, condition, market reference and source, second valuer, counter photographs | Product |
-| Locker registry and stock-take | ❓ Open | Lockers per shop with capacity, a stock-take against the shelf, condition and photograph at in and out, damage and loss, a declared value per locker | Owner |
+| Locker registry and stock-take | ❓ Open | Lockers per shop with capacity, a stock-take against the shelf, condition and photograph at in and out, damage and loss, a declared value per locker. The custody row names a locker and no shop, and a packet can be prepared without one, so nothing can be asked which vault holds what | Owner |
 | Forfeited stock | ❓ Open | Whether a forfeited item stays visible as shop-owned stock; today it leaves the custody record | Owner |
 | Staff notifications | ❓ Open | Email or push on submission, booking and release request beyond the queue's badges | Product |
 | Valuer versus approver | ❓ Open | A separate valuing grant; a guard that the payout recorder is not the offer-maker | Owner |
+| A case nobody is valuing | ❓ Open | A submission badges the moment it lands, and a case left in `under_valuation` badges nothing however long it sits; how many days is too many | Product |
+| Paging the arrears and stepping back | ❓ Open | The arrears list answers one page and offers no cursor, and the ledger's pager steps older and back to newest with nothing in between | Engineering |
 | Staging second factor | ❓ Open | Optional today against the compliance plan; the decision changes three documents | Owner |
 | No-show and late | ❓ Open | A different item brought cannot be corrected on the case | Product |
 :::
@@ -143,11 +157,15 @@ itself is bookable on a live loan.
 - **Slices** —
   `packages/vault/admin-frontend/src/features/custody/{cases,valuation,compliance,settlement}`;
   pages in `apps/admin/grade10/src/pages/vault`; addresses in the panel's
-  `surfaces.ts`; the overdue codec lives in the console until the contracts
-  declare it
-- **Reads** — `admin.list` pages on `(updatedAt, id)`; `admin.search`,
-  `admin.overdueLoans`, `admin.custodyList`, `admin.moneyLedger`,
+  `surfaces.ts`; every wire shape, the arrears row included, is declared in
+  `packages/vault/contracts`, and the console's fixture folds the contracts'
+  own `needsStaffReasonsOf` rather than a copy
+- **Reads** — `admin.list` pages on `(updatedAt, id)` and takes the
+  `visitToday` cut; `admin.search`, `admin.overdueLoans`,
+  `admin.custodyList`, `admin.moneyLedger` (with its optional `caseId`),
   `admin.financePosition`, `admin.quote`
+- **Money moves** — `admin.recordPayout`, `admin.recordRepayment`,
+  `admin.reverseMoney`, and `admin.retryNotifications` for a parked message
 - **Custody** — `packages/vault/backend/src/custody/{vaulting,move,release,forfeit}.ts`;
   `closeCustody` is the one way an item leaves
 - **Two-factor** — `packages/app-env/src/twoFactor.ts`

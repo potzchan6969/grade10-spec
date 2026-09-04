@@ -28,19 +28,19 @@ service shell reserved for a product nobody has defined.
 | Step | Built | Gap |
 | --- | --- | --- |
 | Sign in with Google or a magic link | yes, plus an emailed code | a `finance.grade.com` host would not share the `.grade10.com` session cookie |
-| Verify the phone by SMS | no; the WhatsApp number is free text | an SMS provider and a verified-phone fact |
+| Verify the phone by SMS | no; the number is stored in E.164 and confirmed by nothing | an SMS provider and a verified-phone fact |
 | Submit photos, amount, items | the vault wizard, one item per case | a multi-card request is several cases |
 | Preliminary authentication and valuation | staff valuation on the case | a **100%** ceiling only until the brand's loan-to-value cap is set; the owner's ~40% is one unset value |
 | e-KYC at the request step ❓ | no; identity is checked at the counter by staff | online capture, a hosted provider, screening |
 | The offer and contact on WhatsApp | an offer email and a click-to-chat link staff press | no WhatsApp Business API, no inbound channel |
-| Choose the custodian, Grade10 Vault or Tiny | no; a location is a shop to visit, and the paper says "a Grade10 store vault" | a custodian entity, a recorded legal choice, an agreement per custodian |
+| Choose the custodian, Grade10 Vault or Tiny | no; a location is a shop to visit, and a case with none named prints the brand's own store rather than a custodian | a custodian entity, a recorded legal choice, an agreement per custodian |
 | Book a time slot | the diary, for the vault only | a finance entrypoint and binding if finance books on its own |
 | Visit, e-KYC, inspection | yes | — |
 | Recorded call explaining key terms | no | telephony, storage as sealed evidence, a precondition to signing |
 | Both sign, staff from the admin and the user on the iPad or their own account | the collector alone signs, on any device holding the link | a staff signer role and its ceremony leg |
-| Manual FPS payout with proof recorded | a payout record with a required bank reference and the date the money left | a proof attachment, a reference format |
+| Manual FPS payout with proof recorded | a payout record with a required bank reference and the date the money left, correctable by a second money holder | a proof attachment, a reference format |
 | Repayment recorded manually | yes | — |
-| Automated reminders | no; every other event now mails | the two reminder kinds on the existing map, a scheduled pass, the cadence, a channel beyond email |
+| Automated reminders | no; every other event mails | the two reminder kinds on the existing map, a scheduled pass, the cadence, a channel beyond email |
 
 ## What a first lending procedure needs
 
@@ -56,9 +56,11 @@ service shell reserved for a product nobody has defined.
   entry, an admin-frontend package, a customer surface or a new site id
 - **Wiring** — the notification channel and its mail key, retention classes,
   erasure fan-out, a development Hyperdrive id
-- **Policy** — values for the entity and lending tables the platform now
-  carries unset: legal name and licence, loan to value, rate band, term
-  presets, offer validity, grace, an accrued cap; fees
+- **Policy** — values for the entity and lending tables the platform carries
+  unset: legal name and licence, loan to value, rate band, term
+  presets, offer validity, grace, an accrual ceiling; fees. Every one of them
+  is already enforced where it is read, and the legal name refuses a
+  production deploy until it is given
 
 :::callout{kind="warning"}
 The shell is reserved for a product nobody has described. The owner's notes,

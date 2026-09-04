@@ -15,7 +15,9 @@ decided at intake by one question: does the collector want a loan against it.
 - **Exits that are not a release** — `declined`, `cancelled`, `expired`,
   `forfeited`
 - **Two moves back** — a reversed payout returns `active → vaulted` while no
-  repayment is live; a reversed repayment reopens `repaid → active`
+  repayment is live, and the item may be paid out again from there; a
+  reversed repayment reopens `repaid → active`. The machine holds no other
+  move back, so a correction anywhere else has nowhere to land
 - **What is not a status** — a booking (a relationship the diary holds) and
   overdue (a computation against the clock)
 - **One case, one item** — a unique index; a collector with three items has
@@ -48,9 +50,10 @@ offer is refused.
 
 ## Staff — Make an offer
 Financed lane: `under_valuation → offer_made`. Principal at most the
-valuation, and within the brand's loan-to-value cap, rate band and term
-presets where those are set; the expiry must fall after now and before the
-loan's own due date. A counter-offer supersedes and inserts in one
+valuation, and inside every bound the brand has set — loan to value, the rate
+band, the term presets, the accrual ceiling and how long an offer may stay
+open; the expiry must fall after now and before the loan's own due date. One
+gate applies all of them. A counter-offer supersedes and inserts in one
 transaction; staff can also withdraw it back to `under_valuation`.
 
 ## Staff — Record the acceptance
@@ -108,9 +111,9 @@ released`, guarded on nothing outstanding and no packet open.
 | --- | --- | --- |
 | Draft untouched | **7 days** | the case, as `expired`, with the untouched email |
 | Submitted with no live booking | **30 days** | the case, as `expired`, with the unbooked email |
-| Signing with no live booking and nothing executed | **30 days** | the case, as `cancelled`, with the cancelled email |
+| Signing with no live booking and nothing executed | **30 days** from the move into `signing` | the case, as `cancelled`, with the cancelled email |
 | No-show before custody | **24 hours** after the slot | the case, as `expired`, with the missed-visit email |
-| No-show for a pickup | **24 hours** after the slot | the visit only; the case stays and can book again |
+| No-show on a case in custody | **24 hours** after the slot | the visit only, with the visit-missed email; the case stays and can book again |
 | Offer open | a day staff pick, ending at midnight UTC, never past the due date | the offer, with an email; the case stays `offer_made` |
 | Signing packet | **24 hours**, or a day past the booked visit | the packet only; staff prepare again |
 | Signing link | **30 minutes**, one device | the link |
@@ -126,8 +129,10 @@ released`, guarded on nothing outstanding and no packet open.
   runs the release machinery but signs no release document
 - **Forfeited** — `active → forfeited`, by staff, any time after the due
   date; no grace period, no notice, no materiality test; the item settles the
-  debt, the figure it settled reaches the audit chain, the diary closes any
-  visit, and the collector is told
+  debt, the figure it settled reaches the audit chain, and the collector is
+  told. A visit still ahead is cancelled in the diary and one already past is
+  marked a no-show, because calling it completed would say the borrower came
+  in, which is the one thing a forfeiture establishes did not happen
 - **Nothing unwinds past a live payout** — from `active` the way out is
   repayment, forfeiture, or a recorded reversal of the payout itself
 
@@ -152,6 +157,8 @@ and let a collector cancel their own request. Renewal is open on
 | Unwind stops at a live payout | Decided | Once money left and stands, the exits are repayment or forfeiture | Product |
 | Order of the flow | ❓ Open | Built book-first; the owner's notes are offer-first (remote valuation, WhatsApp offer, acceptance, then a booking). Offer-first needs `under_valuation`, `offer_made`, `accepted` and `signing` bookable, and "valuation started" to stop meaning "visit happened" | Owner |
 | Collector cancel | ❓ Open | No collector-side cancel before the visit | Product |
+| No clock on `accepted` or `repaid` | ❓ Open | Terms agreed but never prepared, and a loan repaid but never collected, sit indefinitely; `draft`, `submitted` and `signing` each run out, and these two never do | Product |
+| An ended case still names its visit | ❓ Open | Nothing clears the cached booking when a case ends, so the shop it last named is the only record of where the item went; clearing it would erase that and write a cancellation nobody made | Engineering |
 | Grace and notice before forfeiture | ❓ Open | Grace days are a lending-policy value, unset; notice needs the reminder kinds | Owner |
 :::
 

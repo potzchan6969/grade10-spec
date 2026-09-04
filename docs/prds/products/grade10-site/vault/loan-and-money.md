@@ -19,14 +19,16 @@ and when.
   is past due
 - **A repayment** — any number, by bank transfer (reference required), cash
   or card, each carrying the date the money reached the bank, the recorder's
-  key and the balance quoted at that date; partial allowed, overpayment
-  refused
+  key and the balance quoted at that date; partial allowed, and refused when
+  the money in value-date order would put the loan over what it owed on any
+  of those days
 - **A correction** — an append-only row that takes one payout or repayment
-  back in full, with a reason, recorded by someone holding both the payout
-  and the approve grants who is not the row's own recorder
+  back in full, with a reason, recorded by a second `vault:payout` holder who
+  is not the row's own recorder, only while the case is `active` or `repaid`;
+  the borrower is emailed
 - **What is owed** — computed at every read by one function from the offer,
-  the live money rows and the brand's grace days; never stored, never a
-  status; a quote at any instant is a query
+  the money valued by the instant asked about, and the brand's accrual; never
+  stored, never a status, never below zero; a quote at any instant is a query
 - **Forfeiture** — a person's decision, any instant after the due date; the
   item settles the debt, and the figure it settled is on the audit chain
 - **Release** — refused while anything is outstanding; storage is free, so a
@@ -38,11 +40,12 @@ and when.
 | --- | --- |
 | Interest for the term | principal × rate, owed in full from day one; early repayment earns no rebate |
 | Due instant | the last millisecond of the UTC day `termDays` after the offer was written; fixed then because the signed agreement prints it |
-| Overdue | one `termDays`th of the term's interest per started UTC day after the due date plus the brand's grace days, on the full principal, simple, uncapped |
+| Overdue | one `termDays`th of the term's interest per started UTC day after the due date plus the brand's grace days, on the full principal, simple |
+| Ceiling | the term's interest and the overdue interest together never pass the brand's accrual ceiling, in basis points of the principal; unset today, so nothing binds |
 | Rounding | one half-up rounding of the exact figure; the total is principal plus interest exactly |
 | Value date | each money row's own date the money moved, or its recording instant for rows written before the field existed |
 | Settlement | the first live recording whose running sum covers the balance at its own value date; interest stops there and never restarts |
-| Bounds | rate **0% to 100%** per term, term **1 to 3,650 days**, principal ≤ valuation; the brand's cap, band and presets narrow these only when set, and every one is unset |
+| Bounds | rate **0% to 100%** per term, term **1 to 3,650 days**, principal ≤ valuation, an expiry after now and no later than the loan's own due date; the brand's loan-to-value cap, rate band, term presets, offer-validity window and accrual ceiling narrow these only when set, and every one is unset |
 
 Worked at **HKD 100,000**, **3%** for **30 days**, due 1 October, no grace.
 
@@ -60,8 +63,8 @@ Worked at **HKD 100,000**, **3%** for **30 days**, due 1 October, no grace.
 | Record | Who | Fields | Guards |
 | --- | --- | --- | --- |
 | Payout | treasurer or admin | amount, bank reference, the date it left | one live payout; the amount equals the accepted principal; the offer is not past due; the executed packet and the item in custody are re-read under the row lock |
-| Repayment | treasurer or admin | amount, method, bank reference (required for a transfer), the date it reached us, the recorder's key, the balance quoted for that date | the same key replays the same recording; a moved balance is refused by name; more than the balance is refused; a date in the future or before the payout is refused |
-| Correction | a holder of both `vault:payout` and `vault:approve` | the row taken back, a reason | the whole row, once; not by the row's own recorder; a reversed payout returns the case to `vaulted` while no repayment is live, a reversed repayment reopens a repaid loan |
+| Repayment | treasurer or admin | amount, method, bank reference (required for a transfer), the date it reached us, the recorder's key, the balance quoted for that date | the same key replays the same recording, and a key naming a row a correction took back is refused by name; a moved balance is refused by name; a payment that leaves the loan over-repaid at its own value date is refused wherever it lands in the order; a date in the future or before the payout is refused |
+| Correction | a second `vault:payout` holder | the row taken back, a reason | the whole row, once; never by the row's own recorder; the case is `active` or `repaid` and nothing else; a payout comes back only after its repayments have, and returns the case to `vaulted`, where it may be paid out again; a reversed repayment reopens a repaid loan |
 | Forfeiture | staff or admin | reason (optional) | past the due date; a disbursed loan exists |
 
 - **Provenance and value** — every money row keeps who recorded it and when
@@ -74,33 +77,43 @@ Worked at **HKD 100,000**, **3%** for **30 days**, due 1 October, no grace.
   case, with case id, amount and method, and forfeiture with the figure it
   settled; the bank reference and staff notes stay out of it, and the
   reference is shown to staff only
-- **The key** — the recorder's key is derived from the day, method, amount
-  and quoted balance, so reopening the dialog reproduces it and the same
-  transfer cannot land twice
-- **The split** — staff set terms and forfeit; treasurers record money; the
-  two roles share no grant, and `admin` holds both
+- **The key** — the recorder's key is derived from the day, method, amount,
+  quoted balance and the case's newest event, so reopening the dialog
+  reproduces it and the same transfer cannot land twice, while a recording
+  made after a correction is a new one rather than the old one arriving
+  again
+- **The split** — staff set terms and forfeit; treasurers record money,
+  correct it and read the book; the two roles share no grant, and `admin`
+  holds both
 
 ## Reading the book
 
 - **Per case** — the payout, every repayment and every correction, the due
   breakdown at the read instant, and each repayment's own breakdown in the
   history
-- **Across cases** — a ledger over payouts, repayments and corrections for a
-  period, paged on a keyset cursor with totals per method; a position at any
-  instant summing principal, interest owed and repaid over active and repaid
-  loans; the overdue loans past their due date
+- **The book** — every payout, repayment and correction in a period,
+  narrowable to one case, paged on a keyset cursor with totals per method,
+  the page and its totals read as one answer; `vault:payout`, because a
+  ledger across every case is the firm's rather than the case in front of the
+  operator
+- **The position** — at any instant, principal, interest owed and repaid
+  across active and repaid loans, in the brand's own currency; a book holding
+  a second currency is refused by name rather than summed
+- **The arrears** — every live loan past its due date, longest overdue
+  first, judged on the newest accepted offer the case holds
 - **What the collector sees** — outstanding of total, repaid, due date, days
   overdue, the instant computed, the rate for the term; no total repayable on
   the offer, no annualised rate, no daily late cost, no payoff quote with a
-  validity, no bank details; by email, the payout, each repayment, settlement
-  and forfeiture, but no reminder
+  validity, no bank details; by email, the payout, each repayment, a
+  correction of either, settlement and forfeiture, but no reminder
 
 :::callout{kind="warning"}
-The allocation of a partial payment, the cap on overdue interest, the grace
+The allocation of a partial payment, the ceiling on interest, the grace
 before forfeiture, a renewal, and what happens to a forfeited item are all
-policy nobody has set. Until then a borrower who pays part of the loan keeps
-accruing on the full principal, and a forfeited item leaves no record of its
-sale, surplus or write-off.
+policy nobody has set. Each bound binds the day a number is written into the
+brand's table; until then a borrower who pays part of the loan keeps accruing
+on the full principal with nothing capping it, and a forfeited item leaves no
+record of its sale, surplus or write-off.
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -122,14 +135,19 @@ The owner's numbers are [Grade10 Finance](/references/grade10-finance):
 | Whole-term interest | Decided | Redeeming early buys the item back, not the interest; stated on the paper | Product |
 | Interest stops at settlement | Decided | The instant is replayed from the live rows at their value dates | Engineering |
 | Term anchored at the offer | Decided | The date on the signed page is the date that binds; a payout past that date is refused instead | Product |
+| When the term starts running | ❓ Open | That date is fixed when the offer is written, so a customer who accepts three days later borrows for three days less than the term says; acceptance and the payout are the alternatives | Product |
 | Value date | Decided | The date the money moved is recorded beside the recording instant and the arithmetic follows it | Finance |
-| Corrections | Decided | An append-only reversal of a whole row, two grants, never the row's own recorder | Finance |
+| Corrections | Decided | An append-only reversal of a whole row by a second `vault:payout` holder, never its own recorder; the borrower is told | Finance |
+| The book is the treasurer's | Decided | The ledger and the position are the firm's accounts, so `vault:payout`; what one case owes stays on `vault:read` | Product |
 | Bank reference | Decided | Required on every payout and every transfer, shown to staff only | Finance |
-| Lending policy lives in one table | Decided | Loan to value, rate band, term presets, offer validity, grace and an accrued cap per brand; unset allows, set refuses | Engineering |
+| Lending policy lives in one table | Decided | Loan to value, rate band, term presets, offer validity, grace and an accrual ceiling per brand; every one of them enforced, unset allows and set refuses | Engineering |
 | Loan to value, rate band, term presets | ❓ Open | The values: **~40%** and **1.5% to 2.5%** from the notes, and their period | Owner |
-| Grace and accrued cap | ❓ Open | Days before overdue accrues and a ceiling on it; both unset | Legal |
+| Grace and the accrual ceiling | ❓ Open | Days before overdue accrues and the ceiling on everything interest may add; both unset | Legal |
 | Partial repayment | ❓ Open | Whether overdue interest runs on the remaining principal, and the allocation order | Legal |
-| Renewal | ❓ Open | An interest-only roll into a new term, its limits and fee; waits on the allocation rule | Owner |
+| Renewal | ❓ Open | An interest-only roll into a new term, its limits and fee; waits on the allocation rule. A case whose payout was taken back holds only the offer it already accepted, so new terms mean unwinding the custody first | Owner |
+| Accrual after a correction | ❓ Open | A reversed repayment reopens the loan and interest runs on from the printed due date as though the money never came; whether a corrected record re-dates the accrual is undecided | Finance |
+| What a correction says in the book | ❓ Open | A ledger movement does not name the row it took back, and the totals do not split corrections from payments | Finance |
+| A book in two currencies | ❓ Open | The position takes the brand's currency and refuses a second; the ledger's totals carry none, so a page mixing currencies prints no total at all | Finance |
 | Overpayment | ❓ Open | A refund-due obligation for transfers; change for cash | Finance |
 | Forfeiture accounting | ❓ Open | Sale proceeds, surplus owed back, deficit, write-off; a collateral register | Finance |
 | Receipts and cash | ❓ Open | Whether cash is taken at all; a receipt per repayment; a till | Owner |
@@ -142,14 +160,20 @@ The owner's numbers are [Grade10 Finance](/references/grade10-finance):
 :::
 
 :::detail{title="For engineers" for="engineer"}
-- **The one function** — `packages/vault/backend/src/money/computeDue.ts`
-  with `graceDays`; `obligations.ts` replays settlement from the live rows
-  at `valueDateOf` and holds the empty fee seam; `payout.ts`, `repayment.ts`,
-  `reverse.ts` hold the guards; `adjustments.ts` decides which rows are live
-  for every reader; `ledger.ts` pages the register and sums the position
+- **The one function** — `packages/vault/backend/src/money/computeDue.ts`,
+  taking the brand's `Accrual`; `loanFacts.ts` loads a page of cases' offers
+  and money in four set queries and folds the due purely, so a case screen,
+  the position and the arrears list cannot answer differently;
+  `obligations.ts` replays settlement at `valueDateOf` and holds both the
+  over-repayment walk and the empty fee seam; `payout.ts`, `repayment.ts` and
+  `reverse.ts` hold the guards; `adjustments.ts` is the one place a corrected
+  row stops counting; `ledger.ts` pages the register and `position.ts` sums
+  the book
 - **Offers** — `packages/vault/backend/src/valuation/offers.ts`; the due
-  instant is fixed at `makeOffer`; the guard reads `lendingPolicy(brand)`
+  instant is fixed at `makeOffer`, and `refuseOutsidePolicy` is the one gate
+  every bound is applied in
 - **Policy** — `packages/app-env/src/lending.ts`, every bound null;
+  `accrualOf` is the only accessor allowed to read a null as a decision, and
   `check:libs` names each unset field with its owner
 - **Immutability** —
   `apps/backend/grade10/vault/src/db/migrations/0001_append_only.sql`,
@@ -158,5 +182,7 @@ The owner's numbers are [Grade10 Finance](/references/grade10-finance):
 - **Audit** — every case mutation declares `auditSubject` on the elevated
   ladder; a walker test fails the next one that forgets
 - **Console** — `PayoutsPanel.tsx` and `MoneyDialog.tsx` carry the value
-  date, the quote for it and the reverse action
+  date, the quote for it and the correction; a repayment cannot be sent until
+  the quote for its date has answered, and no row offers a correction to the
+  operator who recorded it
 :::
