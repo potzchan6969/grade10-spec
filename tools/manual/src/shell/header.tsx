@@ -43,6 +43,16 @@ export function Header({ navOpen, onToggleNav, onNavigate }: HeaderProps) {
         </Link>
 
         <div className="ml-auto flex items-center gap-2 max-sm:gap-1">
+          {/* The OpenSpec viewer is its own page under /viewer/, written beside
+              the manual at build time, so this is a plain anchor rather than a
+              route: the router owns nothing there, and a full navigation is the
+              honest one. Absent from the dev server, which never builds it. */}
+          <a
+            className="rounded-(--radius-md) px-2 py-1 text-muted-foreground text-sm outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 max-sm:hidden"
+            href="/viewer/"
+          >
+            Plan board
+          </a>
           <ManualSearch />
           <RecentBell />
           <ThemeToggle />

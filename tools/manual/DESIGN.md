@@ -350,6 +350,14 @@ Two transports, one client code path:
 - Static build: `build-snapshot.mts` writes the artifacts — one file per
   change under `api/change/`, one per reference under `api/reference/`; the
   hosted site is static files only.
+- The OpenSpec viewer rides along under `dist/viewer/`, written by
+  `scripts/openspec-viewer/snapshot.sh` from the pinned submodule after the
+  manual's own build: the same page `pnpm spec:view` serves, with every
+  answer it would give filed as JSON where the page will ask for it, and its
+  search run in the browser over the text it ships. It is the viewer's page,
+  not the manual's — its own bundle, its own design system — reached from the
+  header's `Plan board` link and nothing else, and absent from the dev
+  server, which never builds it.
 
 ## Editing
 
