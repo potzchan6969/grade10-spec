@@ -27,7 +27,7 @@ can see.
 * **Trace:** winner-order-US-01
 
 **Pre-conditions:**
-An open lot whose leading bidder holds a profile address, with one second until its recorded close.
+An open lot whose account holds a default shipping address, with one second until its recorded close.
 
 **Steps:**
 
@@ -41,7 +41,7 @@ An open lot whose leading bidder holds a profile address, with one second until 
 * Shipping, insurance and tax are labelled as estimates.
 * The invoice can be paid.
 
-### winner-order-US1-TC2-1: No profile address leaves the invoice unpayable
+### winner-order-US1-TC2-1: No default shipping address leaves the invoice unpayable
 
 **Classification:**
 
@@ -57,7 +57,7 @@ An open lot whose leading bidder holds a profile address, with one second until 
 * **Trace:** winner-order-US-01
 
 **Pre-conditions:**
-An open lot whose leading bidder holds no profile address, with one second until its recorded close.
+An open lot whose account holds no default shipping address, with one second until its recorded close.
 
 **Steps:**
 
@@ -71,7 +71,7 @@ An open lot whose leading bidder holds no profile address, with one second until
 * Shipping, insurance and tax show as still to be calculated.
 * Grade10 refuses the payment until a delivery address is supplied.
 
-### winner-order-US1-TC3-1: Pre-filled address still needs confirming
+### winner-order-US1-TC3-1: Pre-filled default address still needs confirming
 
 **Classification:**
 
@@ -87,7 +87,7 @@ An open lot whose leading bidder holds no profile address, with one second until
 * **Trace:** winner-order-US-01
 
 **Pre-conditions:**
-An auction order whose delivery address is pre-filled from the winner's profile and not yet confirmed.
+An auction order whose delivery address is pre-filled from the account's default shipping address and not yet confirmed.
 
 **Steps:**
 

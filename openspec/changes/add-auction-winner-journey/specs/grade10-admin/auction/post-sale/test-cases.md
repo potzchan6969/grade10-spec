@@ -55,7 +55,7 @@ An auction order deriving as Expired, and an operator holding payment-processing
 * **Trace:** post-sale-US-01
 
 **Pre-conditions:**
-An unpaid auction order whose delivery address is unchanged from the profile default, and an operator holding payment-processing.
+An unpaid auction order whose delivery address is unchanged from the account's default shipping address, and an operator holding payment-processing.
 
 **Steps:**
 
@@ -168,12 +168,12 @@ An auction order deriving as Expired whose lot had a second-highest bidder, and 
 ## post-sale-US2: Operator reconstructs an order's history
 
 **As an** operator deciding whether to reinstate a buyer,
-**I want** every invoice and fulfilment event on the order, including the
+**I want** every invoice and fulfilment log entry on the order, including the
 payments that failed,
 **so that** I can tell a buyer who tried and could not from one who never
 engaged.
 
-### post-sale-US2-TC1-1: Failed payment attempts appear in the invoice history
+### post-sale-US2-TC1-1: Failed payment attempts appear in the invoice log
 
 **Classification:**
 
@@ -194,8 +194,8 @@ An expired auction order whose winner was declined three times before the deadli
 **Steps:**
 
 1. Navigate to <grade10 auction admin orders url> and open the first order.
-2. Read its invoice history.
-3. Open the second order and read its invoice history.
+2. Read its invoice log.
+3. Open the second order and read its invoice log.
 
 **Expected Results:**
 
@@ -224,7 +224,7 @@ An auction order dispatched to one address, and an operator holding shipment-pro
 
 1. Navigate to <grade10 auction admin orders url> and open that order.
 2. Correct the delivery address.
-3. Read the fulfilment history.
+3. Read the fulfilment log.
 
 **Expected Results:**
 

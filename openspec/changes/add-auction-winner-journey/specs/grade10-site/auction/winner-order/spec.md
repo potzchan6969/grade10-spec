@@ -42,7 +42,7 @@ At lot close Grade10 SHALL, for the winner:
    `grade10-site/auction/order-notifications`.
 
 The invoice SHALL be payable from the moment it is issued. Grade10 SHALL
-label every component priced from a profile address as an estimate until the
+label every component priced from the account's default shipping address as an estimate until the
 winner confirms a delivery address.
 
 Where the account has no default shipping address, Grade10 SHALL issue the invoice

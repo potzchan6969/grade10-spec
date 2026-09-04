@@ -17,13 +17,13 @@
 ### post-sale-US-02: Operator reconstructs an order's history
 
 **As an** operator deciding whether to reinstate a buyer,
-**I want** every invoice and fulfilment event on the order, including the
+**I want** every invoice and fulfilment log entry on the order, including the
 payments that failed,
 **so that** I can tell a buyer who tried and could not from one who never engaged.
 
 **Accepted by:**
 
-- `grade10-admin-auction-post-sale-SC-34` — Failed payment attempts appear in the invoice history
+- `grade10-admin-auction-post-sale-SC-34` — Failed payment attempts appear in the invoice log
 - `grade10-admin-auction-post-sale-SC-36` — The address at dispatch survives a later edit
 - `grade10-admin-auction-post-sale-SC-37` — The detail explains the status it derived
 - `grade10-admin-auction-post-sale-SC-38` — A buyer's reissue history spans all their orders
