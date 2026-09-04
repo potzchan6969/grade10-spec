@@ -71,6 +71,46 @@ of a sign-in.
 - **Apple Wallet** — not offered. Apple has no rotating code, so an Apple pass
   would mean carrying one permanent code, which is a different decision
 
+:::detail{title="Standing up the wallet" for="operator"}
+Nobody can be offered a pass until Google says so, and none of it is
+same-day. In this order, because each step needs the one above it:
+
+1. *Operations* — **Create the issuer account** in the Google Pay & Wallet
+   Console. It opens in Demo Mode, which issues only to accounts named on it,
+   so the counter can be rehearsed long before the public can save anything
+2. *Operations* — **Complete the Business Profile and the payments profile**.
+   Publishing access is refused without both, and the refusal names neither
+3. *Operations* — **Request publishing access**. A Google review with no
+   published turnaround — start it the day the issuer exists, not the week the
+   shop opens
+4. *Design* — **Give the class its artwork and words**: the programme's logo,
+   the issuer's name, the programme's name, and one background colour. A class
+   with none of these is what a member sees on their lock screen
+5. *Operations* — **Create the class** and carry it from draft through review
+   to approved. A draft class issues to nobody real
+6. *Engineering* — **Create the service account**, grant it the wallet issuer
+   scope, and take its key as PKCS#8. Anything else needs ciphers the workers
+   do not carry
+7. *Engineering* — **Set the two secrets** with `pnpm run secrets`:
+   `WALLET_GOOGLE_SERVICE_ACCOUNT_KEY`, and `WALLET_PASS_KEY`, which is this
+   platform's own and seals every pass secret at rest
+8. *Engineering* — **Set the three ids** as variables:
+   `WALLET_GOOGLE_ISSUER_ID`, `WALLET_GOOGLE_CLASS_ID`,
+   `WALLET_GOOGLE_SERVICE_ACCOUNT_EMAIL`. Half a configuration offers nothing:
+   the save action is hidden until all five are set
+
+**Standing obligations.**
+
+- **The request ceiling is per issuer, not per pass** — the refresh sweep and a
+  member tapping Save draw on the same allowance, so a backlog must never be
+  allowed to starve somebody standing at a counter
+- **Rotating `WALLET_PASS_KEY` invalidates every pass** — nothing re-seals the
+  rows today, so a rotation is a re-issue for every member who holds one ❓ who
+  owns that runbook
+- **A pass Google cannot be told about stays owed** — the sweep counts its
+  backlog's depth and its age together, and the age is the one to alarm on
+:::
+
 ## Histories
 
 A member's activity is their own ledger, in their own words, with the
@@ -101,10 +141,12 @@ lives in the identity system and never in the programme, which holds only an
 opaque user id.
 
 :::callout{kind="warning"}
-Three things decided for this surface are not built.
+Two things decided for this surface are not built, and one is built but not
+switched on.
 
-- **The wallet pass** — no pass exists; the card is the site's only rendering
-  (`add-google-wallet-member-card`)
+- **The wallet pass** — built, and offered to nobody: the issuer account, its
+  class and its keys do not exist yet, so the save action stays hidden until
+  operations stands them up
 - **The welcome bonus** — the deployed programme grants none
   (`revise-loyalty-programme-rules`)
 - **Account deletion** — the ledger has no account-deletion pass
@@ -132,6 +174,10 @@ container. Joining calls the store worker's `membership.join`, not loyalty's
 `me.enroll` directly, so enrolment and pairing land together. The card is the
 store's too: `membership.presentCard` mints a `pos_handles` row, storing only
 the QR token's digest, and `membership.presentations` reads the history. The
-loyalty `me.*` surface answers summary, history, redemptions, redeem, quote,
-undo and enrol, all off the session.
+wallet rides the same slice: `membership.addWalletPass` mints a `pos_passes`
+row whose rotating secret is sealed under the worker's own key, the till spends
+one of its codes by inserting `(pass, period)` under a unique index, and the
+store worker's cron keeps every pass current from a digest of what it last
+sent. The loyalty `me.*` surface answers summary, history, redemptions, redeem,
+quote, undo and enrol, all off the session.
 :::
