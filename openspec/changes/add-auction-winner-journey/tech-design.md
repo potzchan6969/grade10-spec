@@ -11,7 +11,7 @@ The auction service owns auction orders, invoices, bids, payment holds, fulfilme
 ### Goals
 
 - **Order identity** — Create exactly one order for the winning bid on a closed lot and keep the winner snapshot immutable
-- **Invoice history** — Keep every issued invoice revision, payment attempt, failure, amendment, reissue, settlement, cancellation, and refund event
+- **Invoice log** — Keep every issued invoice revision, payment attempt, failure, amendment, reissue, settlement, cancellation, and refund log entry
 - **Payment safety** — Release all auction holds at close and charge the invoice independently with idempotent retries
 - **Address truth** — Read the platform address book, allow multiple saved addresses and one default, require explicit confirmation, reprice shipping-sensitive amendments, and lock the dispatch snapshot
 - **Derived status** — Derive buyer and operator status from invoice, fulfilment, suspension, and auction state instead of storing a second mutable order status
@@ -40,7 +40,7 @@ At issue, the auction worker claims closed-winner work, resolves the account's d
 
 ### Fresh charge after hold release
 
-At close, the winning and losing holds transition to release work. The order invoice is payable only after its address and amount are confirmed. A payment attempt uses the invoice revision as its idempotency scope and records provider references and failures in the invoice event history. The old one-row winner-capture path becomes a legacy adapter during migration; new orders do not capture the winning hold.
+At close, the winning and losing holds transition to release work. The order invoice is payable only after its address and amount are confirmed. A payment attempt uses the invoice revision as its idempotency scope and records provider references and failures in the invoice log. The old one-row winner-capture path becomes a legacy adapter during migration; new orders do not capture the winning hold.
 
 ### Locks and atomic boundaries
 
@@ -79,8 +79,10 @@ auth_users 1──* shipping_addresses
 | `auction_invoice_log` | Append-only invoice, payment-attempt, failure, amendment, settlement, cancellation, refund, and address log entries; event type, actor, reason, amount/address snapshot, provider reference, and unique idempotency key |
 | `fulfilments` | One current row per order/listing; `unfulfilled`, `fulfilled`, or cancelled state; tracking number; dispatch address snapshot; delivery timestamp and proof reference |
 | `fulfilment_log` | Append-only dispatch, delivery, proof, and address-at-dispatch log entries; proof objects refer to private storage or provider references rather than public URLs |
-| `bidder_suspensions` | Unique `(storefront, user_id)` active record with cause order, deadline, reason, lifted-by and timestamps; suspension log preserves history |
-| `auction_order_notification_log` | Append-only notification log keyed by order, invoice revision, notification type, and schedule; attempt count, last error, and `next_attempt_at` |
+| `bidder_suspensions` | Unique `(storefront, user_id)` active record with cause order, deadline, reason, lifted-by and timestamps |
+| `bidder_suspension_log` | Append-only suspension log preserving expiry, retraction, and reinstatement records |
+| `auction_order_notification_work` | Mutable retry state keyed by order, invoice revision, notification type, and schedule; attempt count, last error, and `next_attempt_at` |
+| `auction_order_notification_log` | Append-only send log keyed by notification work and delivery attempt; provider response, timestamp, and idempotency key |
 
 Existing `bids` and `payment_holds` remain authoritative for the auction close. Bids gain an explicit retracted-by-suspension outcome and bid log entry. Holds retain provider intent references and move through release work; they are not reused as invoice payment records. Existing settlement rows remain readable as legacy data until active legacy work is drained. Append-only persistence uses `log` in the table name; `event` remains the term for a domain trigger or provider callback.
 
@@ -94,13 +96,13 @@ All operations carry `storefront` and an authenticated or worker-derived identit
 | `saveShippingAddress` / `updateShippingAddress` / `archiveShippingAddress` / `setDefaultShippingAddress` | Auth input carries `{ userId, addressId?, label, recipient, address, makeDefault, at }`; output the account address book with exactly one optional default; refuses `FORBIDDEN`, `ADDRESS_NOT_FOUND`, `DUPLICATE_ADDRESS`, or `LAST_DEFAULT_REQUIRED` |
 | `claimClosedWinnerOrders` | Input `{ storefront, limit, at }`; output `{ items: [{ listingId, winningBidId, userId, email, closedAt }], cursor }`; claim state prevents duplicate enrichment; refuses `UNAVAILABLE` with retryable worker state |
 | `issueWinnerOrder` | Input `{ storefront, listingId, winningBidId, userId, email, name, addressBookEntryId?, shippingAddress?, at }`; output `{ orderId, invoiceId, paymentDeadline, finalAmount, currency, estimated, selectedAddress }`; refuses `ALREADY_ISSUED`, `WINNER_MISMATCH`, or `LISTING_NOT_CLOSED` |
-| `readWinnerOrder` | Input `{ storefront, userId, orderId }`; output order, current invoice, invoice history, fulfilment, and suspension-safe actions; refuses `NOT_FOUND` or `FORBIDDEN` |
+| `readWinnerOrder` | Input `{ storefront, userId, orderId }`; output order, current invoice, invoice log, fulfilment log, and suspension-safe actions; refuses `NOT_FOUND` or `FORBIDDEN` |
 | `amendAddress` | Input `{ storefront, userId, orderId, addressBookEntryId?, address?, saveToAddressBook?, at }`; output `{ orderId, invoiceId, previousTotal, newTotal, delta, deadline, selectedAddress }`; refuses `PAYMENT_LOCKED`, `DEADLINE_ELAPSED`, or `RATE_UNAVAILABLE` |
 | `payInvoice` | Input `{ storefront, userId, orderId, invoiceId, paymentMethodRef, idempotencyKey, at }`; output `{ paymentId, invoiceId, status: "paid" }`; refuses `ADDRESS_UNCONFIRMED`, `INVOICE_EXPIRED`, `PAYMENT_DECLINED`, `ALREADY_PAID`, or `PAYMENT_PENDING` |
 | `reissueInvoice` | Admin input `{ orderId, reason, at, actor }`; output new invoice revision and deadline; refuses `ORDER_NOT_PAYABLE`, `ADDRESS_UNCONFIRMED`, or `ALREADY_PROCESSING` |
 | `manuallySettleOrder` | Admin input `{ orderId, address, paymentReference, reason, at, actor }`; output paid invoice and fulfilment-ready order; refuses `ADDRESS_UNCONFIRMED`, `ORDER_EXPIRED`, or `ALREADY_PAID` |
 | `cancelUnpaidOrder` | Admin input `{ orderId, reason, at, actor }`; output cancelled order and returned listing; refuses `ORDER_PAID`, `ORDER_DISPATCHED`, or `ALREADY_CANCELLED` |
-| `recordDispatch` / `recordDelivery` | Shipment-admin input with tracking, dispatch address, carrier result, proof reference, actor, and idempotency key; output fulfilment event and derived order status; refuses `NOT_PAID`, `ALREADY_DISPATCHED`, `PROOF_INVALID`, or `ALREADY_DELIVERED` |
+| `recordDispatch` / `recordDelivery` | Shipment-admin input with tracking, dispatch address, carrier result, proof reference, actor, and idempotency key; output fulfilment log entry and derived order status; refuses `NOT_PAID`, `ALREADY_DISPATCHED`, `PROOF_INVALID`, or `ALREADY_DELIVERED` |
 | `reinstateBidder` | Admin input `{ storefront, userId, reason, at, actor }`; output active bidder standing and audit event; refuses `NOT_SUSPENDED` or `FORBIDDEN` |
 
 The scheduled service interfaces claim due release, suspension, reminder, and notification work using the same state-row pattern. Each claim has a lease or attempt timestamp, and each completion records the provider result before the row can be claimed again.
