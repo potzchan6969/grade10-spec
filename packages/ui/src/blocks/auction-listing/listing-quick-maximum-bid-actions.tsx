@@ -15,12 +15,18 @@ import { Info } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import type { ShippedLocale } from "../../lib/format-datetime";
 import {
-  currencyExponent,
   formatMoney,
   formatMoneyNumeric,
   formatMoneyPrefix,
 } from "../../lib/format-money";
-import { isMaximumBelowFloor, resolveMaximumFloor } from "./listing-bid-money";
+import {
+  isMaximumBelowFloor,
+  moneyDraftFromMinor,
+  parseExactMoneyDraftToMinor,
+  resolveMaximumFloor,
+  sanitizeMoneyDraft,
+  validateCommittedMaximumMinor,
+} from "./listing-bid-money";
 import type { ListingAuctionBidView } from "./types";
 
 const PRESET_INCREMENTS = [
@@ -50,8 +56,10 @@ type ListingQuickMaximumBidActionsCopy = {
   maximumMechanismSubtext: string;
   /** Placeholder when the custom field is empty, e.g. "Custom amount (min. {amount})". */
   customAmountPlaceholder: string;
-  /** Shown under the custom field only when the typed amount is invalid, e.g. "Min.: {amount}". */
+  /** Shown under the custom field when the typed amount is below the floor, e.g. "Min.: {amount}". */
   stepperMessage: string;
+  /** Shown when the draft cannot be parsed as a money amount. */
+  invalidAmount: string;
   useMinimum: string;
   bidImmediate: string;
   bidUpTo: string;
@@ -75,21 +83,9 @@ type MaximumPreset = {
   immediate: boolean;
 };
 
-function toMinor(major: number, currency: string): number {
-  return Math.round(major * 10 ** currencyExponent(currency));
-}
-
 function defaultPresetKey(presets: MaximumPreset[]): string | null {
   if (presets.length === 0) return null;
   return presets[Math.floor(presets.length / 2)]?.key ?? null;
-}
-
-function parseCustomMinor(draft: string, currency: string): number | null {
-  const normalized = draft.trim().replace(/,/g, "");
-  if (!normalized) return null;
-  const major = Number(normalized);
-  if (!Number.isFinite(major) || major < 0) return null;
-  return toMinor(major, currency);
 }
 
 function ListingQuickMaximumBidActions({
@@ -173,7 +169,7 @@ function ListingQuickMaximumBidActions({
 
   const customActive = customDraft.trim() !== "";
   const customMinor = customActive
-    ? parseCustomMinor(customDraft, view.currency)
+    ? parseExactMoneyDraftToMinor(customDraft, view.currency)
     : null;
   const resolvedPresetKey = customActive
     ? null
@@ -187,9 +183,16 @@ function ListingQuickMaximumBidActions({
   const commitMinor = customActive
     ? customMinor
     : (selectedPreset?.amountMinor ?? null);
+  const commitValidation =
+    commitMinor != null
+      ? validateCommittedMaximumMinor({
+          amountMinor: commitMinor,
+          floorMinor: floorMaximumMinor,
+        })
+      : null;
   const maximumInvalid =
     commitMinor != null && isMaximumBelowFloor(commitMinor, floorMaximumMinor);
-  const canPlaceBid = commitMinor != null && !maximumInvalid;
+  const canPlaceBid = commitValidation?.ok === true;
 
   const heading = hasCommittedMaximum
     ? copy.raisePrivateMaximum
@@ -228,7 +231,7 @@ function ListingQuickMaximumBidActions({
     "{amount}",
     formatMoneyNumeric(floorMaximumMinor, view.currency, locale),
   );
-  const helperBase = copy.stepperMessage.replace("{amount}", floorAmountLabel);
+  const floorHelper = copy.stepperMessage.replace("{amount}", floorAmountLabel);
 
   function handleSelectPreset(preset: MaximumPreset) {
     setSelectedPresetKey(preset.key);
@@ -236,8 +239,9 @@ function ListingQuickMaximumBidActions({
   }
 
   function handleCustomChange(next: string) {
-    setCustomDraft(next);
-    if (next.trim() === "") {
+    const sanitized = sanitizeMoneyDraft(next, view.currency);
+    setCustomDraft(sanitized);
+    if (sanitized.trim() === "") {
       setSelectedPresetKey(defaultPresetKey(presets));
     } else {
       setSelectedPresetKey(null);
@@ -245,9 +249,7 @@ function ListingQuickMaximumBidActions({
   }
 
   function handleUseMinimum() {
-    setCustomDraft(
-      String(floorMaximumMinor / 10 ** currencyExponent(view.currency)),
-    );
+    setCustomDraft(moneyDraftFromMinor(floorMaximumMinor, view.currency));
     setSelectedPresetKey(null);
   }
 
@@ -257,28 +259,27 @@ function ListingQuickMaximumBidActions({
   }
 
   function handlePlaceBid() {
-    if (commitMinor == null || maximumInvalid) return;
-    onCommitMaximum(commitMinor);
+    if (commitValidation?.ok !== true) return;
+    onCommitMaximum(commitValidation.amountMinor);
   }
 
-  const customInvalid = customActive && (customMinor == null || maximumInvalid);
-  const helperMessage = customInvalid ? (
+  const customInvalid =
+    customActive && (customMinor == null || maximumInvalid);
+  const helperMessage = !customActive ? undefined : customMinor == null ? (
+    copy.invalidAmount
+  ) : maximumInvalid ? (
     <>
-      {helperBase}
-      {maximumInvalid ? (
-        <>
-          {" · "}
-          <Link
-            className="align-baseline"
-            onClick={handleUseMinimum}
-            render={<button type="button" />}
-            size="xs"
-            variant="secondary"
-          >
-            {copy.useMinimum}
-          </Link>
-        </>
-      ) : null}
+      {floorHelper}
+      {" · "}
+      <Link
+        className="align-baseline"
+        onClick={handleUseMinimum}
+        render={<button type="button" />}
+        size="xs"
+        variant="secondary"
+      >
+        {copy.useMinimum}
+      </Link>
     </>
   ) : undefined;
 

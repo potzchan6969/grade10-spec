@@ -159,6 +159,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
     "We bid only as needed up to your maximum. Hold matches it; you can raise, not lower or cancel.",
   customAmountPlaceholder: "Custom amount (min. {amount})",
   stepperMessage: "Min.: {amount}",
+  invalidAmount: "Enter a valid amount.",
   useMinimum: "Use minimum",
   bidImmediate: "Maximum {amount}",
   bidUpTo: "Maximum {amount}",
