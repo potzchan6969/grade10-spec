@@ -60,8 +60,10 @@
     "repayment_recorded": "已記錄還款",
     "payout_reversed": "已撤銷放款記錄",
     "repayment_reversed": "已撤銷還款記錄",
+    "reminder_sent": "已發出提醒",
     "repaid": "貸款已還清",
     "released": "物品已交回",
+    "forfeiture_notice": "已發出沒收通知",
     "forfeited": "物品已沒收",
     "cancelled": "個案已取消",
     "expired": "個案已過期",
@@ -94,6 +96,7 @@
     "heading": "請我們保管物品",
     "financedIntro": "我們會為物品估值，再向你提出借貸報價。",
     "storageIntro": "只作保管，不就物品借貸。",
+    "severalItems": "有多件物品？每件物品分開申請，只需在第一宗預約一次到店，然後一併帶來。",
     "categoryLabel": "這是甚麼？",
     "titleLabel": "我們該怎樣稱呼它？",
     "descriptionLabel": "還有甚麼要告訴我們？",
@@ -127,20 +130,36 @@
     "itemDescription": "{category} — {description}",
     "offerTitle": "我們的報價",
     "offerTerms": "{amount}，為期 {days} 天，全期利率 {rate}%。",
+    "offerRepayAfter": "款項到手後 {days} 天內還款。",
     "offerRepayBy": "請於 {when} 前還款。",
+    "offerTotal": "還款總額：{amount}。",
+    "offerLate": "如逾期，利息按同一利率繼續計算，尚欠金額每日 {amount}。",
     "offerExpired": "這份報價已於 {when} 到期。請向我們索取新報價。",
     "offerOpen": "有效至 {when}。請在門市由職員為你記錄回覆。",
+    "acceptOffer": "接受這份報價",
+    "acceptConfirm": "你接受 {amount}，為期 {days} 天，全期利率 {rate}%。我們會為你的到店預約準備文件。",
+    "offerAccepted": "已接受報價。請預約到店簽署。",
+    "declineOffer": "婉拒這份報價",
+    "declineConfirm": "婉拒這份報價？物品的申請仍然保留，我們可以再為你提出另一份。",
+    "offerDeclined": "已婉拒報價。",
+    "offerGone": "這份報價已過期。請向職員索取新報價。",
     "agreedTerms": "已議定條款：{amount}，為期 {days} 天，{when} 到期。",
+    "agreedTermsFromAdvance": "已議定條款：{amount}，為期 {days} 天，由款項到手當日起計。",
     "dueTitle": "尚欠金額",
     "dueOutstanding": "尚欠 {outstanding}，總額 {total}。",
     "dueRepaid": "已還 {repaid}。{when} 到期。",
     "dueRepaidLate": "已還 {repaid}。{when} 到期 — 已逾期 {days} 天。",
     "dueAsOf": "截至 {when}。",
+    "payTitle": "還款方法",
+    "payHolds": "此結餘有效至 {when}。",
     "holding": "我們正為你保管物品。",
     "holdingSince": "我們自 {day} 起為你保管物品。",
     "settled": "已無欠款，下次到店即可取回。",
     "owedEntry": "{detail}：{amount}",
     "askForItBack": "要求取回",
+    "cancelRequest": "取消這宗申請",
+    "cancelConfirm": "取消這宗申請？已預約的到店會一併取消，物品仍然由你保管。",
+    "cancelled": "申請已取消。",
     "documents": "文件",
     "packetLine": "{title} — {status}",
     "manifestFingerprint": "簽署指紋碼",
@@ -169,6 +188,20 @@
     "documentFailed": "這份文件無法顯示，請告知職員。",
     "emptyPacketTitle": "這裡沒有需要簽署的文件",
     "emptyPacketMessage": "請告知身旁的職員 — 這批文件未準備妥當。",
+    "disclosureTitle": "電子簽署前請留意",
+    "disclosureFallback": "你即將以電子方式閱讀並簽署文件。如不願意，請告知身旁的職員。",
+    "agreeLabel": "同意並繼續",
+    "agreeingLabel": "正在記錄你的同意…",
+    "packetExpiry": "這批文件可於 {when} 前簽署。",
+    "declineLabel": "拒絕簽署",
+    "declineConfirmTitle": "確定拒絕簽署？",
+    "declineConfirmMessage": "這會撤回今天準備的全部文件 — 是整批，不是其中一份。所有文件都不會簽署，身旁的職員會為你跟進。",
+    "declineReasonLabel": "如願意，可告訴我們原因（可選填 — 只顯示在這個畫面，不會儲存）",
+    "declineConfirmLabel": "是，全部拒絕簽署",
+    "declineCancelLabel": "返回",
+    "decliningLabel": "正在拒絕…",
+    "declinedTitle": "沒有簽署任何文件",
+    "declinedMessage": "文件已撤回，你的簽署連結亦已失效。身旁的職員會協助你安排下一步。",
     "rosterLabel": "今天需要簽署：共 {total} 份文件",
     "rosterEntry": "{position}. {title} — {state}",
     "rosterStateSigned": "已簽署",
@@ -178,6 +211,8 @@
     "movedOn": "你已簽署{signed}。下一份是{next}。",
     "pageLabel": "文件第 {page} 頁，共 {pageCount} 頁",
     "pageStatus": "第 {page} 頁，共 {pageCount} 頁",
+    "pageNoText": "這一頁是掃描件，沒有可朗讀的文字。簽署前請身旁的職員讀給你聽。",
+    "pageFailed": "這一頁無法顯示。未能顯示前請勿簽署 — 請告知身旁的職員。",
     "previousLabel": "上一頁",
     "nextLabel": "下一頁",
     "readStatus": "已閱讀 {viewed} 頁，共 {pageCount} 頁",
@@ -185,6 +220,13 @@
     "consentLabel": "我已閱讀{title}並同意簽署",
     "signatureLabel": "在此簽署{title}",
     "clearSignatureLabel": "清除簽名",
+    "signatureDrawOption": "手寫簽名",
+    "signatureTypeOption": "輸入簽名",
+    "signatureTypedNameLabel": "在此輸入姓名作為簽名",
+    "signatureCaptured": "已記下你的簽名。",
+    "signatureEmpty": "尚未簽名。",
+    "signatureTypedFailed": "這部裝置無法把你輸入的文字轉成簽名。請告知身旁的職員。",
+    "signatureTypedCaption": "輸入的簽名",
     "fullNameLabel": "你的姓名，須與出示證件上的完全相同",
     "submitLabel": "簽署{title}",
     "submittingLabel": "正在簽署…",
@@ -193,11 +235,108 @@
     "missingConsent": "請勾選方格，確認你已閱讀。",
     "missingSignature": "請在上方方格內簽名。",
     "missingName": "請輸入與證件相同的姓名。",
+    "signUnconfirmed": "你的簽名送出後我們未收到回覆，暫時無法確定是否已記錄。請勿再簽一次 — 請先查看結果。",
+    "signRecheckLabel": "查看結果",
     "sealedTitle": "已簽署並封存",
     "sealedMessage": "已簽署的副本在你的個案頁面。請保留下方的指紋碼 — 它正是這一組文件的識別碼。",
     "sealedManifestLabel": "你所簽署全部文件的指紋碼",
     "sealedDocumentsLabel": "你簽署了甚麼",
+    "downloadLabel": "下載{title}",
+    "downloadingLabel": "正在下載…",
+    "downloadFailed": "下載未能完成。已簽署的副本在你的個案頁面，身旁的職員也可以在櫃檯為你列印。",
+    "downloadExpiry": "你可於 {when} 前在這個畫面下載。之後請由身旁的職員在櫃檯為你列印副本。",
+    "sealedIntegrityWarning": "下載到的副本與你所簽署文件的指紋碼不符，因此並未儲存。你的簽名已經記錄 — 請向身旁的職員索取列印本。",
     "signedTitle": "你的簽名已記錄",
-    "signedMessage": "文件封存前，還有其他人需要簽署。"
+    "signedMessage": "文件封存前，還有其他人需要簽署。",
+    "refusal": {
+      "TOKEN_INVALID": {
+        "title": "這條簽署連結無效",
+        "message": "請身旁的職員為你開啟新的簽署連結。"
+      },
+      "TOKEN_EXPIRED": {
+        "title": "這條簽署連結已過期",
+        "message": "為保障你的安全，簽署連結的有效時間很短。請索取新的連結。"
+      },
+      "TOKEN_CONSUMED": {
+        "title": "這次簽署已經完成",
+        "message": "如果你剛剛簽署完畢，就不用再做甚麼 — 已簽署的副本在你的個案頁面，身旁的職員也可以為你列印。否則就是這條連結已經用過，請索取新的連結。"
+      },
+      "TOKEN_CONFLICT": {
+        "title": "這條連結已在另一部裝置開啟",
+        "message": "簽署連結只能在首次開啟的裝置上使用。請為這部裝置索取新的連結。"
+      },
+      "PACKET_VOIDED": {
+        "title": "這批文件已撤回",
+        "message": "已由新的一批取代。請索取現行文件的連結。"
+      },
+      "PACKET_EXPIRED": {
+        "title": "這批文件已過期",
+        "message": "文件準備至今太久，現在不能簽署。請要求重新準備。"
+      },
+      "PACKET_COMPLETED": {
+        "title": "這批文件已經簽妥",
+        "message": "所有需要簽署的人都已簽妥。你可以關閉這個頁面。"
+      },
+      "DOCUMENT_UNKNOWN": {
+        "title": "這份文件不屬於今次簽署",
+        "message": "請重新載入頁面，查看需要你簽署的文件。"
+      },
+      "DOCUMENT_ALREADY_SIGNED": {
+        "title": "這一份你已經簽署",
+        "message": "請重新載入頁面，繼續簽署尚未完成的文件。"
+      },
+      "PAGES_NOT_VIEWED": {
+        "title": "請先閱讀每一頁",
+        "message": "把整份文件看完，然後才簽署。"
+      },
+      "PAGE_OUT_OF_RANGE": {
+        "title": "這份文件沒有這一頁",
+        "message": "請重新載入頁面，再從頭閱讀文件。"
+      },
+      "CONSENT_REQUIRED": {
+        "title": "請先確認你同意",
+        "message": "請勾選方格，確認你已閱讀文件並同意簽署。"
+      },
+      "ESIGN_CONSENT_REQUIRED": {
+        "title": "請先同意以電子方式簽署",
+        "message": "簽署任何文件前，請先閱讀關於電子簽署的說明並表示同意。"
+      },
+      "KYC_REQUIRED": {
+        "title": "尚未記錄你的身分核對",
+        "message": "簽署前，身旁的職員需要先記錄核對你的證件。"
+      },
+      "IDENTITY_NAME_MISMATCH": {
+        "title": "這不是你證件上的姓名",
+        "message": "請完全按照職員核對過的證件輸入姓名。如果證件上是另一個姓名，職員需要重新記錄核對。"
+      },
+      "SIGNER_OUT_OF_ORDER": {
+        "title": "還未輪到你",
+        "message": "這批文件要由其他人先簽署。"
+      },
+      "SIGNER_ALREADY_SIGNED": {
+        "title": "你已經全部簽妥",
+        "message": "你不用再做甚麼。可以關閉這個頁面。"
+      },
+      "SIGNER_NAME_MISMATCH": {
+        "title": "這不是你開始簽署時所用的姓名",
+        "message": "今次簽署的所有文件都用同一個姓名。請用你之前簽署時的姓名，或索取一批新文件。"
+      },
+      "SIGNATURE_INVALID": {
+        "title": "無法辨識這個簽名",
+        "message": "請清除簽名方格，再簽一次。"
+      },
+      "SOURCE_MISSING": {
+        "title": "無法載入文件",
+        "message": "請身旁的職員重新準備文件。"
+      },
+      "SOURCE_TAMPERED": {
+        "title": "文件與準備好的版本不符",
+        "message": "請勿簽署。請身旁的職員重新準備文件。"
+      },
+      "CONFLICT": {
+        "title": "今次簽署已在別處完成",
+        "message": "這個頁面開啟期間，另一部裝置已完成或撤回簽署。"
+      }
+    }
   }
 }
