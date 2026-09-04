@@ -15,7 +15,7 @@ A customer submits an item online, books a visit to a physical store, staff valu
 
 ### `grade10-finance` is a different product, not this one's lending half
 
-- Finance is mortgage lending with its own cases, its own database, and its own worker, deployed from day one as a minimal but honest shell.
+- Finance is a separate service with its own database and worker, deployed from day one as a minimal but honest shell; which product it carries is undecided (❓ — the owner's notes describe a loan against graded cards, which the vault's financed lane already runs).
 - It shares the generic packages (booking, signing) and nothing else: no vault code, no vault tables, no shared case.
 - The identity store is built for finance to share too — it lists `finance` as a product — but nothing in finance verifies anybody yet, so no entrypoint is minted for it and no binding is declared. The reuse is enabled, not wired.
 - The pawn loan on a vault case belongs to the vault product because its collateral is the item the vault itself holds.
@@ -279,7 +279,7 @@ Erasure is an admin calling `erasure.erase`, which asks auth's guard first, as e
 | `packages/doc-sign` | packets, their documents, signers, tokens, signatures, sign events, templates, the ceremony routes, and both the signer's ceremony and the operator's mint surface | which product it signs for; it is a library with no worker and no database of its own |
 | `packages/e-kyc` | the identity store: the verified record and its per-product case bindings, the vocabulary, masking and hashing, the adult and expiry predicates, the per-product entrypoints, and the worker that owns the database and the capture bucket | anything about vaults, loans, or cases — a case reference is an opaque string |
 | `packages/vault` | the case, its transitions, valuation, custody, money, documents, uploads, notifications, sweeps, and the customer-facing slices | how a slot is derived or how a PDF is sealed |
-| `packages/grade10-finance` | the mortgage product's own contracts and worker | the vault's tables, cases, and money |
+| `packages/grade10-finance` | the finance shell's own contracts and worker, reserved for a product the owner has not yet defined | the vault's tables, cases, and money |
 
 ### A generic package never learns what a case is
 
@@ -306,14 +306,14 @@ Erasure is an admin calling `erasure.erase`, which asks auth's guard first, as e
 
 | Where | What |
 | --- | --- |
-| `packages/vault/{contracts,backend,frontend}` | the case vocabulary and wire schemas, the service, and the customer-facing slices |
+| `packages/vault/{contracts,backend,frontend,admin-frontend}` | the case vocabulary and wire schemas, the service, and both sides' feature slices — customer-facing and operator-facing |
 | `packages/appointment/{contracts,backend}` | the booking contract and the service, including its named per-product entrypoints |
 | `packages/doc-sign/{contracts,backend,frontend}` | the packet model, the tables and routes, and the ceremony UI |
 | `packages/e-kyc/{contracts,backend}` | the verified record, its case bindings, and the store's worker |
-| `packages/grade10-finance/{contracts,backend}` | the mortgage product's scaffold |
+| `packages/grade10-finance/{contracts,backend}` | the finance shell's scaffold |
 | `apps/backend/grade10/{vault,appointment,e-kyc,finance}` | the deployments: migrations, buckets, cron triggers, Hyperdrive, and the bindings between them. `e-kyc` has no route and no `ServiceId` — every caller reaches it over `KYC_SERVICE` |
 | `apps/frontend/grade10/src/pages/vault` | the request wizard, a customer's cases, booking, and the signing page |
-| `apps/admin/grade10/src/pages/{vault,appointments}` | the operator pages, the payout tab, and the `wa.me` link builder |
+| `apps/admin/grade10/src/pages/{vault,appointments}` | the route shells that mount the panels; the case panels, the payout tab and the `wa.me` link builder live in `packages/vault/admin-frontend` |
 | `packages/grade10-auth/contracts/src/schemas.ts` | the `vault` and `appointment` statements and the roles that hold them |
 | `neondb/registry.sh` | the four databases and their nightly backups; the vault and the identity store are Neon projects of their own |
 
