@@ -4,9 +4,9 @@ order: 6
 ---
 
 What the vault keeps, who may see it, how long it lives, which controls run,
-and what stands between the code and a first production case. Every legal
-requirement here is a question for counsel with the code fact beside it, never
-an assertion of law.
+and the checklist between the code and a first production case. Every legal
+requirement here is a question for counsel with the code fact beside it,
+never an assertion of law.
 
 ## Identity
 
@@ -15,21 +15,23 @@ an assertion of law.
   national ID, driving licence, residence permit), number, expiry, one
   photograph; the method is in person or from an upload
 - **Refused** — under **18**, or a document expired on the day of the check;
-  both judged again when the paper is prepared, and never at release
+  both judged again when the paper is prepared and when a check is reused,
+  and never at release
 - **Stored** — the name, birth date, expiry, type, a masked number and a keyed
-  digest of it, the photograph, who verified and when; the raw number never
-  lands
+  digest of it, the photograph, who verified by id and name, and when; the
+  raw number never lands
+- **Reused** — a returning customer's latest check binds to a new case
+  without a new photograph
+- **The same document elsewhere** — the store answers which other accounts a
+  document was verified under, ids only; nothing acts on the answer yet
 - **Not checked** — liveness, face match, address, nationality, sanctions or
   politically exposed persons, source of funds, occupation, purpose, ongoing
   monitoring, thresholds, suspicious-activity reporting
-- **Reuse** — the identity store answers the latest check for a person across
-  products; the vault never asks, so a returning customer shows the passport
-  again
 - **A walk-in** — has no account, so the identity is keyed to the case, never
-  to a person
-- **Who sees the photograph** — every `staff` and `admin`, each download on the
-  audit chain; item photos, the owner and any `vault:read`, each read in an
-  append-only ledger
+  to a person, and no erasure request can reach it
+- **Who sees the photograph** — every `staff` and `admin`, each download on
+  the audit chain; item photos, the owner and any `vault:read`, each read in
+  an append-only ledger
 
 ## Retention and erasure
 
@@ -52,19 +54,20 @@ an assertion of law.
 
 | Control | Runs | Still owed |
 | --- | --- | --- |
-| Seal ladder and certificate | yes | counsel's consent wording; PAdES/PKCS#7 and RFC 3161 unbuilt, so the certificate is printed text |
-| Append-only tables | yes, armed always | — |
-| Hash-chained audit log | yes, walked hourly in **1,000**-row budgets, verified heads exported to the archive | the Datadog key and monitors with named recipients |
+| Seal ladder and certificate | yes, with the consent wording printed in full | counsel's wording; PAdES/PKCS#7 and RFC 3161 unbuilt, so the certificate is printed text |
+| Append-only tables | yes, armed always, on money rows, corrections, valuations, movements, history and the chain; proved by a test that an update raises | — |
+| Hash-chained audit log | yes, every case mutation filed under its case, walked hourly in **1,000**-row budgets, verified heads exported to the archive | the Datadog key and monitors with named recipients |
 | Archive copy of sealed bytes | yes, hourly, digest-checked, through a port that cannot delete | the bucket's lock rule, set by hand and verified by nothing |
 | Integrity re-hash | yes, **200** rows per pass | — |
-| Database backups | no: the nightly exits before dumping anything | four stale lines in the gaps file, two age recipients, one green run, a restore drill |
-| Second factor | required in production, optional in staging | a fresh challenge on payout; two documents still say staging is required |
-| Identity rebind under a sealed case | closed; non-destructive, with an outbox | the architecture doc still describes the old behaviour |
+| Database backups | the gaps file is consistent with the registry and a build check keeps it so | two age recipients, one green nightly, a restore drill |
+| Second factor | required in production, optional in staging | a decision on staging; a fresh challenge on payout |
+| Identity rebind under a sealed case | closed; a case with sealed evidence refuses a re-record, and a displaced unbound check is purged durably | — |
 
 ## What is not written down anywhere
 
-- **Jurisdiction** — no jurisdiction, governing law, legal entity or licence
-  appears in code, configuration or documents; all instants are UTC
+- **Jurisdiction** — no jurisdiction or governing law appears in code,
+  configuration or documents; the legal identity table exists and every legal
+  field is null; all instants are UTC
 - **Terms and privacy** — the site's Terms of Service and Privacy Policy pages
   read "Being prepared"
 - **Processors and residency** — Cloudflare, Neon with its region unpinned,
@@ -78,30 +81,61 @@ an assertion of law.
 - **Insurance** — the custody agreement says the valuation is used for
   insurance; no policy, insurer or cover limit appears anywhere
 
-## Provisioning
+## Before the first production case
 
-| Item | State |
-| --- | --- |
-| Neon projects (vault, identity, finance, auth, brand) | provisioned; only ZZZ's four are placeholders |
-| Hyperdrive ids, staging and production | filled on every worker the vault depends on; development ids are placeholders |
-| Archive bucket binding | declared in every environment |
-| Backup recipients | still the placeholder, so no encrypted dump can land |
-| Backup gaps file | lists the vault and identity databases as unprovisioned while the registry holds their ids, so the run exits before dumping |
-| Restore drill | never run |
-| Retention windows | six nulls |
-| Datadog key, Resend key, the CJK font asset, the archive lock | set by hand outside the repository and unverifiable from it; a missing font fails the seal for any Chinese name |
-| Product policy | none: no loan-to-value cap, rate band, term presets, offer validity, grace days, fee schedule, custodian or entity table; currencies hard-coded to HKD and USD |
-| Analytics | no vault events anywhere; the funnel is SQL over case history |
-| Tests | **42** backend test files across two lanes; no end-to-end spec, no stories, and no spec or test cases in this store |
+Every item here is outside the code, with who closes it and how the closure
+is seen. `pnpm run check:libs` in the application repository prints the
+first eight until they are done.
+
+1. *Legal* — **Name the lending entity** — legal name, licence number and
+   licence wording per brand in `packages/app-env/src/legalIdentity.ts`;
+   until then production refuses every packet and `check:libs` names the
+   three unset fields
+2. *Owner* — **Set the lending policy** — loan to value, rate band and
+   period, term presets, offer validity, grace days, accrued cap in
+   `packages/app-env/src/lending.ts`; an unset bound allows everything, and
+   `check:libs` names each
+3. *Legal* — **Set retention windows** — days per class in
+   `packages/app-env/src/retention.ts`; then decide what deletion on expiry
+   does
+4. *Operations* — **Backups** — two age public keys into
+   `neondb/backup-recipients.txt`, one green nightly, a restore drill with
+   the chain verifying on the restored copy
+5. *Operations* — **The archive bucket lock** — the R2 lock rule on the
+   documents archive per environment; nothing in the repository can assert
+   it
+6. *Operations* — **Keys and assets** — the Datadog key with monitors and
+   named recipients, the mail key, the CJK font asset per environment (a
+   missing font fails the seal for any Chinese name)
+7. *Owner* — **Staging second factor** — required as the compliance plan
+   asked, or optional as the code states; three documents follow the choice
+8. *Owner* — **Who records money** — whether `admin` may hold both sides of
+   the split, and whether a payout demands a fresh factor
+9. *Legal* — **Counsel's wording** — the e-sign disclosure and per-document
+   consent text; the ceremony records whatever is served, so the change is
+   evidenced
+10. *Legal* — **The particulars on the paper** — annualised rate, fees,
+    governing law, complaints, cooling-off, redemption period, and whether a
+    countersignature or a recorded call is required
+11. *Owner* — **Which product is Grade10 Finance** — the vault's lane under
+    the lending entity, a second product, or something else; the shell's
+    name follows the answer
+12. *Engineering* — **Bump the catalogue** — the spec store carries the
+    corrected vault copy and the two reversal event names; the application
+    reads the pinned submodule until its pointer moves after the upstream
+    merge
+13. *Product* — **A brand time zone** — a delta to the shared
+    dates-and-times contract before any surface leaves UTC
+14. *Owner* — **Reminders** — days before due, cadence when overdue, channel;
+    the message map and the sweep pattern are ready for the two kinds
 
 :::callout{kind="warning"}
-The two audits in the application repository read as current and in places
-are not. The document-handling audit's nine blockers describe a pre-fix state
-and its checklist marks the code side delivered; the "eight Hyperdrive
-placeholders", "thirty-six unprovisioned values" and "all registry ids TODO"
-sentences are stale; the security architecture doc still says staging requires
-a second factor; and the vault architecture doc still describes the
-destructive identity rebind.
+The two audits in the application repository read as of their dates. The
+document-handling audit's blocker prose describes what was found and its
+checklist the current state; the production-readiness review's provisioning
+counts are superseded by `check:libs`, which now lists **46** unset values,
+none of them a database or a Hyperdrive id the vault depends on and twenty of
+them the entity and policy fields above.
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -109,46 +143,46 @@ Questions for counsel, each with the fact the code holds today.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Regime and licence | ❓ Open | Which regime governs a loan secured on a collectible held in a shop locker in Hong Kong, and whether it prescribes particulars, a licence number on the paper, a rate ceiling or a redemption period; code permits **0% to 100%** per term and prints term rate, due date and repayable amount | Legal |
-| Lender entity | ❓ Open | Whose name is on the paper; "Grade10" today while the notes say Finance is a separate entity | Legal |
+| Regime and licence | ❓ Open | Which regime governs a loan secured on a collectible held in a shop locker in Hong Kong, and whether it prescribes particulars, a licence number on the paper, a rate ceiling or a redemption period; the code permits **0% to 100%** per term until a band is set | Legal |
+| Lender entity | ❓ Open | The legal name and licence for the identity table | Legal |
 | Recorded call | ❓ Open | A precondition to signing, and what it must retain | Owner |
 | E-sign adequacy | ❓ Open | Whether the ceremony and its interim wording bind a consumer loan and a custody contract | Legal |
 | Countersignature | ❓ Open | Company signature or witness; one signer today | Legal |
 | Cooling-off and complaints | ❓ Open | None today | Legal |
 | Forfeiture | ❓ Open | Notice, grace, surplus return | Legal |
-| AML and customer due diligence | ❓ Open | Whether duties apply and how deep identification must go; today name, birth date, document, photograph | Legal |
+| AML and customer due diligence | ❓ Open | Whether duties apply and how deep identification must go; today name, birth date, document, photograph, and a same-document lookup nothing acts on | Legal |
 | Upload as a method | ❓ Open | Whether a document upload is an acceptable verification | Legal |
 | Retention per class | ❓ Open | Days for agreements, identity and photos, and a lawful basis for indefinite identity retention on held cases | Legal |
+| Walk-in erasure | ❓ Open | A case-scoped erasure path, since a walk-in's case has no account to erase by | Engineering |
 | Collection statement | ❓ Open | Whether a personal information collection statement must be published before the first capture; the privacy page is a placeholder | Legal |
 | Residency | ❓ Open | Where the data may live; Neon region unpinned, Datadog in the US | Legal |
 | Language | ❓ Open | Whether a Chinese-speaking consumer may be bound by English-only paper, and a Chinese version | Legal |
-| Dates | ❓ Open | Whether "(UTC)" on a Hong Kong contract, and an expiry or birthday judged on the UTC day, is acceptable | Legal |
+| Dates | ❓ Open | Whether UTC on a Hong Kong contract, and an expiry or birthday judged on the UTC day, is acceptable | Legal |
 | Custody duties | ❓ Open | Bailment, warehousing or insurance disclosure for free storage of a third party's goods | Legal |
 | Staff-recorded acceptance | ❓ Open | Whether a staff click evidences the collector's agreement before the signed paper | Legal |
 | Step-up on money | ❓ Open | A fresh factor per payout, or the **12-hour** stamp | Owner |
 | Integrity artefacts | ❓ Open | A hash chain plus an unsigned head export, or a qualified signature and timestamp | Legal |
 | Capacity | ❓ Open | Any duty beyond age 18 | Legal |
-| Backups and drill | ❓ Open | Who owns the recipients, the gaps file and the first restore | Engineering |
+| Reads that carry personal data | ❓ Open | The elevated ladder audits mutations only; a search by phone or email is a read | Engineering |
 :::
 
 :::detail{title="For engineers" for="engineer"}
 - **Identity** — `packages/e-kyc` (contracts `identity.ts`, `vocabulary.ts`,
-  `masking.ts`) and `packages/vault/backend/src/kyc/record.ts`;
-  `latestForUser` and `bind` are exposed in `kyc/binding.ts` and called by
-  nothing
+  `masking.ts`; `sameDocumentOtherUsers` and `findByIdNumberHash` over the
+  new index) and `packages/vault/backend/src/kyc/{record,reuse}.ts`
 - **Retention and erasure** — `packages/app-env/src/retention.ts`,
   `packages/vault/backend/src/sweeps/retention.ts`, `erasure/eraseUser.ts`
-  (held statuses are `released` and `forfeited`)
+  (held statuses are `released` and `forfeited`; the entrypoint keys on the
+  account id)
+- **Entity and policy** — `packages/app-env/src/{legalIdentity,lending}.ts`;
+  findings in `scripts/config/audit.mjs`, printed by `check:libs`
 - **Evidence** — `sweeps/{archive,integrity,auditChain}.ts`,
   `packages/postgres/src/auditChain.ts`, the archive binding in
   `apps/backend/grade10/vault/wrangler.jsonc`
-- **Backups** — `neondb/scripts/backup.sh` (`audit_gaps`,
-  `require_recipients`), `neondb/backup-expected-gaps.txt`,
-  `neondb/backup-recipients.txt`, `neondb/registry.sh`
+- **Backups** — `neondb/scripts/backup.sh`, `neondb/backup-expected-gaps.txt`
+  guarded by `scripts/checks/check-backup-gaps.mjs`, `neondb/registry.sh`
 - **Two-factor** — `packages/app-env/src/twoFactor.ts`; the step-up stamp in
   `packages/grade10-auth/contracts/src/elevation.ts`
-- **Ledger of what is unset** — `pnpm run check:libs` and
-  `scripts/checks/check-config.mjs`
 - **Audits** —
   [document-handling audit](https://github.com/9gag/grade10/blob/main/docs/qa/vault.md),
   [production-readiness review](https://github.com/9gag/grade10/blob/main/docs/qa/vault-production-review.md),

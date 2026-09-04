@@ -3,30 +3,27 @@ title: Collector Pages
 order: 1
 ---
 
-The collector's side of the vault is one signed-in page: the cases they hold,
-a wizard to open another, and each case's own screen with its offer, its
+The collector's side of the vault is one signed-in section: the cases they
+hold, a wizard to open another, and each case's own page with its offer, its
 balance, its documents and its visit.
 
 - **URL** — `grade10.com/vault`, also `/tc/vault` and `/sc/vault`; signing in
   is asked for in a dialog over the address, never a redirect
-  1. `grade10.com/vault` — the list, the wizard and every case screen, all on
-     one address, so no case can be linked or bookmarked
-  2. `grade10.com/vault/sign#<token>` — the signing ceremony, opened from the
+  1. `grade10.com/vault` — the list and the wizard
+  2. `grade10.com/vault/cases/<id>` — one case, the address every email links
+     to
+  3. `grade10.com/vault/sign#<token>` — the signing ceremony, opened from the
      QR code or link staff hand over; no account needed
-  3. `grade10.com/vault/cases/<id>` — what every email links to; it opens the
-     list, not the case, because the page keeps its place in memory rather
-     than in the address
 - **Sign-in** — magic link or emailed code, Google where enabled; no phone
   number and no SMS anywhere
-- **Language** — the page, the wizard and every refusal answer in English,
-  traditional and simplified Chinese; the ceremony, the documents and every
-  email are English only
+- **Language** — the section, the wizard and every refusal answer in English,
+  traditional and simplified Chinese; the ceremony's operative wording, the
+  documents and every email are English only
 
 ## The case list
 
-- **One card per case** — status, when it opened, the lane, the amount asked;
-  the item's name is not on the card, so three cards sent the same day read
-  alike
+- **One card per case** — the item's name, status, when it opened, the lane,
+  the amount asked
 - **Start a request** — opens the wizard; **3** unsent drafts at most per
   account
 - **A draft** — reopens on its photo step from the list
@@ -41,16 +38,17 @@ Three steps, one per thing the collector does.
    verified), and the one question that decides the lane: storage only, or a
    loan and how much
 2. *Collector* — **Photograph it** — **1 to 10** photos, JPEG, PNG or WebP,
-   ≤ **20 MB** each, one file per tap; location metadata is stripped in the
-   browser and again by the worker
+   ≤ **20 MB** each, several per tap uploaded one after another; location
+   metadata is stripped in the browser and again by the worker
 3. *Collector* — **Send it in** — needs at least one photo; the case becomes
    `submitted` and the page offers the visit booking
 
-- **Currency** — the brand's (HKD for Grade10), never the collector's choice
+- **Currency** — the brand's (HKD for Grade10); a request naming another
+  currency is refused
 - **One item per case** — a binder of twelve cards is twelve wizards, in
   batches of three, and as built twelve visits
 
-## The case screen
+## The case page
 
 What a collector reads on one case, top to bottom.
 
@@ -63,52 +61,61 @@ What a collector reads on one case, top to bottom.
 - **What is owed** — outstanding of total, repaid so far, due date, days
   overdue, and the instant it was computed at; nothing says how to pay
 - **Custody** — held since when, settled or what is outstanding, and **Ask
-  for it back**, which records the ask and moves nothing
+  for it back**, which records one ask while the item is held and refuses
+  otherwise
 - **Documents** — each packet with its fingerprint, each sealed document with
   its fingerprint and a download
-- **Visit** — the booking picker, only while the case is `submitted`,
-  `vaulted` or `repaid`; a case with a live loan has no picker
-- **History** — every event, actor kind only, never a staff id
-- **Clocks** — every time on this page and in every email is printed in UTC;
-  only the booking picker speaks the shop's clock, so one visit reads
-  `03:00 UTC` on the list and `11:00` in the picker
+- **Visit** — the booking picker while the case is `submitted`, `vaulted`,
+  `active` or `repaid`, so a borrower can book the visit they repay and
+  collect on
+- **History** — every event the collector may see, actor kind only, never a
+  staff id; an operator's correction of a money row is not among them
+- **Clocks** — every time on this page and in every email is printed in UTC,
+  the platform's one zone; only the booking picker speaks the shop's clock
 
 ## Booking a visit
 
 - **Where and when** — shops and free slots come from the diary; a
   **14-day** window in the shop's own zone; a slot in the past is refused
-- **Move or cancel** — any time up to the slot, an email each
-- **No-show** — **24 hours** after the slot the case ends as `expired`, and
-  the email says the request "sat unfinished"
+- **Move or cancel** — any time up to the slot, an email each, whether the
+  collector or staff moved it
+- **No-show before custody** — **24 hours** after the slot the case ends as
+  `expired`, and the email says the visit was missed
+- **No-show for a pickup** — the visit is closed in the diary and the case
+  stays where it is, so the next visit can be booked
 - **Starting the valuation** marks the visit completed, whether or not the
   collector was there
 
 ## What the collector hears
 
-- **Email only, English only, nine kinds** — visit booked, moved, cancelled;
-  offer made; item vaulted; item released; declined; expired; signed
-  documents, with the PDFs attached
+- **Email, English, seventeen kinds** — visit booked, moved, cancelled; offer
+  made, offer expired; item vaulted; payout recorded; repayment recorded;
+  loan repaid; item released; forfeited; declined; cancelled; expired
+  untouched; expired unbooked; visit missed; signed documents with the PDFs
+  attached
+- **One decision per event** — what each event tells the collector is
+  written down once, so a new event cannot ship silent
+- **A failed send is kept** — the message is queued and retried on a ladder
+  from **5 minutes** to **6 hours**, and given up loudly after **5** attempts
 - **WhatsApp** — a click-to-chat link staff press, with six templates; no
   automation, no inbound channel
-- **Silence** — nothing tells a borrower that the payout landed, that a
-  repayment was recorded, that the due date is near, that the loan is
-  overdue, or that the item was forfeited
+- **No reminders** — nothing tells a borrower the due date is near or the
+  loan is overdue
 
 :::callout{kind="warning"}
 The owner's flow and the built flow disagree on order. The notes run
 valuation, then the offer on WhatsApp, then acceptance, then a booked visit;
-the code is book-first: a case can be booked only while `submitted`, starting
-the valuation marks the visit done, and the collector cannot accept from their
+the code is book-first: a case is booked while `submitted`, starting the
+valuation marks the visit done, and the collector cannot accept from their
 phone. Walked as the notes describe, nobody can book the drop-off once the
 offer is out.
 :::
 
 :::callout{kind="warning"}
-A live loan dead-ends on this page. The borrower cannot book a visit to repay
-and collect, cannot pay online, is never given bank details or a payoff quote
+A borrower cannot pay online, is never given bank details or a payoff quote
 with a validity, and cannot ask for an extension. Repayment is recorded by a
-treasurer after the fact, and the balance the treasurer must quote steps at
-midnight UTC, which is 08:00 in Hong Kong.
+treasurer after the fact, against the date the money reached the bank; the
+balance steps at midnight UTC, which is 08:00 in Hong Kong.
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -126,33 +133,37 @@ phone. The owner's brief is [Grade10 Finance](/references/grade10-finance).
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| One address for the whole section | Decided today | `/vault` keeps its view in memory; a case has no address of its own | Engineering |
-| Case address | ❓ Open | A `/vault/cases/<id>` surface the emails already link to | Engineering |
+| A case has an address | Decided | `/vault/cases/<id>`, pinned to the path the emails are built from | Engineering |
+| Every event tells the collector or is decided silent | Decided | One map from event to message; a failed send is retried, never dropped | Engineering |
+| A live loan can book its visit | Decided | `active` is bookable; a missed pickup closes the visit and keeps the case | Product |
 | Accept online | ❓ Open | A collector-side accept and decline, recorded as the collector's act; today acceptance is a staff click | Product |
-| Repay and collect | ❓ Open | `active` bookable, payment instructions and a payoff quote with a stated validity on the page | Product |
-| Reminders | ❓ Open | Due-soon, overdue, payout recorded, repayment recorded, forfeited; channel (email, WhatsApp Business) | Product |
-| Zone | ❓ Open | Hong Kong time on every collector surface and email; UTC today | Product |
-| Copy | ❓ Open | `submitted` reads "With us" while the card is at home; a no-show is mailed as "sat unfinished"; the refusal promises AVIF and refuses it; an English balance line sits inside a Chinese page | Design |
+| How to pay | ❓ Open | Bank details, a payoff quote with a stated validity, and where each is shown | Product |
+| Reminders | ❓ Open | Due-soon and overdue kinds on the same map, a sweep over the due calculation, and the cadence and channel | Owner |
+| Zone | ❓ Open | Hong Kong time on collector surfaces is a delta to the platform's dates-and-times contract, which states UTC on every surface | Product |
+| Total and lateness on the offer card | ❓ Open | The wire now carries the total to term; the words need catalogue keys and a submodule bump | Design |
 | Cancel a case | ❓ Open | No collector cancel; a change of mind waits **30 days** to expire | Product |
 | Several items | ❓ Open | One visit for a binder: book on the lead case (nothing says so), or a multi-item case | Product |
-| Phone number | ❓ Open | Optional, unverified, unformatted; no `+852` guidance, and staff see no link for a number under eight digits | Product |
+| Phone number | ❓ Open | Optional, unverified, unformatted; the brand's numbering plan exists and the intake does not use it | Product |
+| Chinese operative text | ❓ Open | Emails, ceremony wording and documents are English; half the ceremony chrome is already in the catalogue | Legal |
 :::
 
 :::detail{title="For engineers" for="engineer"}
-- **Pages** — `apps/frontend/grade10/src/pages/vault/{VaultPage,SignPage}.tsx`;
-  the address table is `surfaces.ts`, `/vault/*` all lands on `VaultPage`,
-  and its view is React state
+- **Pages** — `apps/frontend/grade10/src/pages/vault/{VaultPage,CasePage,SignPage}.tsx`;
+  the address table is `surfaces.ts`, and `ROUTES.vaultCase` is pinned to
+  `CASE_PATH` in `packages/vault/contracts/src/paths.ts`, which the emails
+  fill
 - **Slices** — `packages/vault/frontend/src/features/custody/{request,cases,booking}`;
-  refusals branch on `VaultFailureCode`, never on a message
+  refusals branch on `VaultFailureCode`; the timeline keeps
+  `CUSTOMER_EVENT_KINDS` and drops staff-only events
 - **Customer router** — `packages/vault/backend/src/trpc/routers/cases.ts`:
   create, submit, mine, detail, locations, slots, book, reschedule,
   cancelBooking, requestRelease; no accept, no cancel, no repayment
-- **Copy** — `packages/i18n/messages/shared/{en,zh-Hant,zh-Hans}/vault.json`
-  in this store, fully answered; email copy and ceremony chrome are English in
-  the application repository (`packages/vault/backend/src/email/messages.ts`,
-  `SignPage.tsx`)
-- **Clocks** — `@grade10/utils/dates` sets `PLATFORM_ZONE = "UTC"`; the
-  booking picker alone renders in the location's zone
+- **Notifications** — `packages/vault/backend/src/notify/vocabulary.ts` holds
+  `NOTIFY_FOR_EVENT`; copy in `email/messages.ts`; retries in
+  `db/schema/notificationRetries.ts` and `sweeps/notify.ts`
+- **Copy** — `packages/i18n/messages/shared/{en,zh-Hant,zh-Hans,ko}/vault.json`
+  in this store; the app reads the pinned submodule, so a catalogue change
+  reaches it with the next submodule bump
 - **Photos** — `packages/vault/contracts/src/photos.ts` holds the limits;
   reads are owner-only, uncached and written to an append-only ledger
 :::
