@@ -2,6 +2,9 @@
 
 - Closed role set
   - Named roles: user, staff, support, treasurer, auditor, admin; unknown names are dropped
+- Permission checks
+  - Grants not names: a product checks permission, never the role string at the call site
+  - Stacking: combined roles stack; an operator cannot widen what a role grants
 - The vocabulary
   - Resources and actions: a closed list every product shares, so a permission nobody declared grants nothing
 - What a role holds

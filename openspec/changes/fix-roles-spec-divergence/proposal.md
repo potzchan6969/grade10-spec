@@ -10,10 +10,10 @@ cosmetic — it is whole roles and whole resources.
 
 - **A role nobody documented.** `treasurer` ships in `ROLE_PERMISSIONS` and
   appears in no requirement, so the spec's "closed set" is not the set.
-- **Six resources missing from the vocabulary.** `vault`, `finance`, `kyc`,
-  `appointment`, `inventory` and the money-shaped auction actions are all
-  enforced and none is written down. A product reading this spec alone cannot
-  tell what `kyc:read` is, or that it exists.
+- **Five resources missing from the vocabulary.** `vault`, `finance`, `kyc`,
+  `appointment` and `inventory` are enforced and none is written down, and
+  neither are auction's two money-shaped actions. A product reading this spec
+  alone cannot tell what `kyc:read` is, or that it exists.
 - **The role table is a sketch.** `staff` is recorded as holding six grants and
   holds eighteen; `admin` is recorded as "every permission any role grants",
   which is not what the code computes.
@@ -22,7 +22,7 @@ An engineer building from this spec alone — which is what a durable spec is fo
 — would build the wrong authorization.
 
 **Metric:** resources in the spec's vocabulary against resources in
-`PERMISSION_STATEMENTS` — from five of eleven to eleven of eleven.
+`PERMISSION_STATEMENTS` — from six of eleven to eleven of eleven.
 
 ## What Changes
 
@@ -67,6 +67,9 @@ An engineer building from this spec alone — which is what a durable spec is fo
 - **Every product that checks a grant** gains a spec it can build from.
 - **`docs/prds/products/shared/auth/roles.md`** — the page renders the
   capability and follows it.
+- **The suite beside the delta is a merge, not a replacement.** It carries the
+  two journeys this change touches; `US2` holds the cases it adds, not the
+  seven the durable suite already has. Archive appends them and adds `US3`.
 
 ## Open questions
 
