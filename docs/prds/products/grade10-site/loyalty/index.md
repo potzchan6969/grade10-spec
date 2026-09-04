@@ -56,9 +56,9 @@ notes](/references/shopify-membership-pos). The checkable rules are
 Earning outside Grade10 store and counter purchases, beyond operator-granted
 campaign points; auction wins and credit top-ups are later-phase candidates
 and earn nothing today. Redeeming against an auction — points and coupons buy
-nothing there, in any phase. SMS verification and wallet passes; the member
-card and email carry identification at the counter, and the phone arm ships
-dark. Tier-based discounts beyond the earn multiplier — no tier gets a
+nothing there, in any phase. SMS verification; the member card and email carry
+identification at the counter, and the phone arm ships dark. NFC tap in either
+wallet, which needs certified reader hardware. Tier-based discounts beyond the earn multiplier — no tier gets a
 percentage off or free shipping. Cross-brand membership — ZZZ buyers are a
 separate population with no programme.
 
@@ -73,6 +73,8 @@ separate population with no programme.
 | Tier retention | Share of Gold members who earn the retention threshold inside their validity period | Product |
 | Point redemption | Share of earned points redeemed before the balance expires | Product |
 | Coupon usage | Share of issued codes used before their own validity ends | Product |
+| Wallet adoption | Share of members holding an Apple or Google Wallet pass | Product |
+| Wallet identification | Share of in-store identifications made from a wallet pass | Product |
 | Points outstanding | Unexpired, unredeemed points, plus the money out in unused codes, as a liability | Finance |
 | Earning delivery | Money events awaiting delivery to the programme, and their age | Engineering |
 
@@ -100,7 +102,10 @@ separate population with no programme.
 | An artifact left to expire stays spent | Decided | An unused code that reaches its own end date, or a collection window that closes, returns nothing by itself. What members forfeit is counted as breakage where Finance can read it | Owner |
 | Coupon validity is set per reward | Decided | A code's life is a property of what it buys, so the menu carries it per item and a redemption remembers the validity it was issued with | Product |
 | A claw-back re-evaluates the tier at once | Decided | Refunded spend is spend that never happened, so the tier it bought does not survive it | Owner |
-| In-store identification | Decided | A dynamic single-use code on the member card, its typed short code, or the member's exact email. One scan or lookup authorizes the till for ten minutes with no confirmation on the member's phone; the member is notified on every act they did not present for. An unrecognised member never blocks a sale | Owner |
+| In-store identification | Decided | One durable code on the member card, the same value typed beneath it, or the member's exact email. One scan or lookup authorizes the till for ten minutes with no confirmation on the member's phone; the member is notified on every act they did not present for. An unrecognised member never blocks a sale | Owner |
+| The card is an identifier, not a secret | Decided | A code that dies after one scan cannot live in a wallet, on a lock screen or in a basement with no signal, and that distribution is worth more than the replay it prevented. What protects a member is that every act on their points is read back at the counter, notified, audited and reversible — plus the card's own use history and a one-action replacement. The cost is honest: the code is a durable bearer identifier, so a leak identifies a member until they replace it | Owner |
+| Wallet passes | Decided | Apple Wallet and Google Wallet, added from the membership page and the welcome message, carrying name, tier, balance and the code. Both follow a change within fifteen minutes and a burst costs one refresh. No NFC tap — Apple VAS and Google Smart Tap both need certified readers the counter does not have | Owner |
+| Spending on a scanned card is a switch | Decided | Card identification spends by default and the owner can withdraw it without a deploy, leaving lookup and collection working — the same lever email spending already has | Owner |
 | Phone lookup at the till | ❓ Deferred | Grade10 asks for a mobile number at join and mirrors it to the Shopify customer, but the till's phone arm ships switched off until numbers are verified | Owner |
 | Points at the online checkout are a merchant discount, not a code | Decided | Every online checkout is a Shopify draft order, and the points come off as its one order-level fixed discount, chosen against the priced basket. Nothing is held until the invoice is paid | Engineering |
 | Points at the till are a cart discount, or a code | Decided | Which instrument the till uses is a per-shop switch: a fixed amount off the sale, or a customer-scoped single-use code. The code instrument is the default until the switch is flipped | Engineering |
@@ -130,6 +135,10 @@ a parked pairing, or an unreachable programme all end in a completed sale
 attributable afterwards. Staff act for members with no confirmation on the
 member's own device; the controls are the instant notification, the audit on
 every till act, the session's ten-minute life, and the per-shop switches. The
+member card is a durable bearer identifier, so a photograph of one identifies
+that member until they replace it; the controls are the card's own use
+history, the one-action replacement that reaches every pass, and the switch
+that withdraws spending from card identification without a deploy. The
 top tier earns at 1.7× with no cap on how many exist and no forced end date;
 until the cap lands, the control is the operator log and who holds the
 invitation permission. A member's identity never enters the programme, so a

@@ -20,7 +20,7 @@ block covers them. Both are work in **grade10-spec** and they block groups 9 and
 
 | Export | Carries |
 | --- | --- |
-| `MemberCard` | The dynamic identification code, rendered scannable and as a short typed fallback |
+| `MemberCard` | The identification code, rendered scannable and as a typed fallback |
 | `PendingCollectionList` | Rewards paid for and awaiting collection, each with its window and where to collect it |
 | `RewardMenu` | Extended: takes a quantity for a per-unit reward, and states a physical reward's collection window |
 

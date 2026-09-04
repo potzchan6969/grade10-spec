@@ -45,8 +45,8 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 ### The sale, step by step
 
 1. **Staff ring the goods** — barcode scanner into Shopify POS's own cart; the extension adds nothing here
-2. **Staff identify the member** — the QR on the member card (profile page), the short code under it, or the exact account email; phone number and "the customer already on the sale" are switches, off by default. A miss says only that no member was found
-   - A card presentation lives ten minutes and is consumed once; a second till scanning the same screenshot is refused, naming where the first was used
+2. **Staff identify the member** — the code on the member card (profile page, Apple Wallet or Google Wallet), the same value typed under it, or the exact account email; phone number and "the customer already on the sale" are switches, off by default. A miss says only that no member was found
+   - The card is one durable code the member replaces in one action; a replaced code is refused saying so, and every pass they hold carries the replacement
 3. **A session opens** — ten minutes from the server's clock, bound to the shop and the member, never to the staff label; a second identify of the same member at the same shop ends the first; a switch flipped mid-session only ever takes capability away
    - A scanned session outlives the modal: reopening it resumes, and it ends only when the customer on the sale becomes somebody else
 4. **The member goes on the sale** — the extension sets the cart's customer to the member's paired Shopify customer and confirms it against the cart; an attach that did not take is retried on apply
@@ -80,8 +80,8 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 - **The cart decides** — capture is bounded by what the shop took off; a wrong claim only moves the member's own money, and the attribute first means a bare discount can never bind
 - **One session, one row; one member, one open promise** — the row is rewritten, never duplicated, and the newer promise retires the older
 - **Every unhappy answer is a value** — the sale is happening whatever the programme thinks; nothing throws, nothing leaves staff on a spinner
-- **Replay is dead** — a card presentation is consumed by one guarded update, so two tills scanning at once open exactly one session
-- **Throttles** — short-code misses ten per five minutes per shop, email and phone twenty, plans twenty per session
+- **One session at a time** — a second identify of the same member at the same shop retires the first, so two tills scanning one card never both hold it
+- **Throttles** — typed-card misses ten per five minutes per shop, email and phone twenty, plans twenty per session
 
 ### Collection
 

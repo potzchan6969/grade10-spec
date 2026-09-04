@@ -20,12 +20,12 @@
 ### grade10-site-store-membership-US-02: Member identifies and spends at the till
 
 **As a** member,
-**I want** a dynamic code or my email to identify me, and staff to spend my points once,
-**so that** a replayed code is refused, a miss discloses nothing, and a cancel after tender is caught.
+**I want** my card or my email to identify me, and staff to spend my points once,
+**so that** guessing is paused, a miss discloses nothing, and a cancel after tender is caught.
 
 **Accepted by:**
 
-- `grade10-site-store-membership-SC-09` — A replayed code is refused with its history
+- `grade10-site-store-membership-SC-09` — Guessing at a code pauses that shop
 - `grade10-site-store-membership-SC-10` — An email miss discloses nothing
 - `grade10-site-store-membership-SC-11` — A lookup is recorded
 - `grade10-site-store-membership-SC-12` — A double tap spends once
