@@ -1,0 +1,34 @@
+name: grade10-planning
+version: 1
+description: Grade10 planning workflow - proposal → specs → user journeys → test cases → ui design → tech design → tasks
+artifacts:
+  - id: proposal
+    generates: proposal.md
+    instruction: |
+      Why, what changes, and what does not.
+  - id: specs
+    generates: specs/**/spec.md
+    instruction: |
+      One delta per capability.
+  - id: user-journeys
+    generates: specs/**/user-journeys.md
+    instruction: |
+      Who walks the requirements.
+  - id: test-cases
+    generates: specs/**/test-cases.md
+    instruction: |
+      QA's suite, derived from the journeys.
+  - id: ui-design
+    generates: ui-design.md
+    instruction: |
+      The visual plan.
+  - id: tech-design
+    generates: tech-design.md
+    instruction: |
+      The technical design.
+  - id: tasks
+    generates: tasks.md
+    instruction: |
+      The plan, group by group.
+apply:
+  instruction: Work the tasks.

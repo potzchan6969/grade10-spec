@@ -18,7 +18,7 @@ const REPOSITORY_BY_SCOPE = Object.freeze({
   product: "grade10",
   spec: "grade10-spec",
 });
-const PLANNING_LANES = new Set(["pm-planning", "full-planning"]);
+const PLANNING_LANES = new Set(["grade10-planning"]);
 const IMPLEMENTATION_REPOSITORIES = new Set(["grade10", "grade10-spec"]);
 
 export class ImpactValidationError extends Error {

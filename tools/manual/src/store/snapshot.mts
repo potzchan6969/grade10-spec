@@ -123,7 +123,7 @@ function markIssuedIds(root: string, specs: SpecEntry[]): void {
  * segment of the spec id, but an id is issued once and never reissued, so a
  * capability that has since been renamed or regrouped keeps writing the token
  * it started with — `grade10-site/loyalty/programme` still issues
- * `loyalty-SC-12`. Its own ids are therefore the authority, and the path is
+ * `grade10-site-loyalty-programme-SC-12`. Its own ids are therefore the authority, and the path is
  * only the fallback for a capability that has issued none yet. */
 function tokenOf(spec: SpecEntry): string {
   for (const requirement of spec.requirements) {

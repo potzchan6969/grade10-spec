@@ -34,7 +34,8 @@ rather than refuses the bid.
 
 They register a payment method against the lot, then name an amount. In one
 step the auction checks the lot is open, the bidder is allowed to bid, and the
-amount clears the standing top plus the minimum increment.
+amount clears the standing top plus the next minimum from the [bid increment
+schedule](/p/grade10-site/auction/bid-increments).
 
 ## Grade10 holds the money
 
@@ -67,7 +68,7 @@ received, and can cancel it.
 :::callout{kind="note"}
 No Figma frame exists for any auction surface — not the listing details page, not the bid
 panel, not the admin queue. Every in-flight auction change says so in its own
-`ui.md` and names the screens still to be produced. The frames are being made;
+`ui-design.md` and names the screens still to be produced. The frames are being made;
 until they land, the shipped Storybook stories are the reference.
 :::
 

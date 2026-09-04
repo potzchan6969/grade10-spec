@@ -6,7 +6,7 @@ A change's `tasks.md` is written here and checked off from the application repos
 
 `openspec/changes/<change-id>/tasks.md` in this store. Nothing else reads the convention, and no other file in this repository carries owners.
 
-A change has no `tasks.md` until it is planned that far, and both boards render that state as "still being planned". A `pm-planning` change stays in it by design until it is promoted to `full-planning` — see [`prd-and-openspec.md`](prd-and-openspec.md) — so a promotion, not a message, is what puts the work in front of an engineer.
+A change has no `tasks.md` until it is planned that far, and both boards render that state as "still being planned". A change whose author finished at the requirements stays in it by design until an engineer picks it up and writes the plan — see [`prd-and-openspec.md`](prd-and-openspec.md) — so someone picking it up, not a message, is what puts the work in front of an engineer.
 
 ## The format
 
@@ -52,7 +52,7 @@ Group headings are free for us to use because OpenSpec parses only the checkbox 
 | Owner tag | The engineer taking the group | `pnpm plan claim` / `pnpm plan unclaim` in the application repository |
 | Checkbox state | The engineer who did the work | `pnpm plan done` / `pnpm plan undone` in the application repository |
 
-A PM or designer writes the proposal and the specs, and nothing else: a change of theirs carries no `tasks.md` until an engineer plans the delivery, either by promoting it to `full-planning` or by authoring it that way from the start. Whoever writes the task text is therefore the person who will implement it, which is why groups carry no owner tags at that point — an engineer claims a group at pickup, and may be claiming their own.
+A PM or designer writes the proposal, the specs and the journeys, and nothing else: a change of theirs carries no `tasks.md` until an engineer plans the delivery, whether by picking their change up or by writing the whole thing themselves. Whoever writes the task text is therefore the person who will implement it, which is why groups carry no owner tags at that point — an engineer claims a group at pickup, and may be claiming their own.
 
 Both sides commit to this store from their own clone of it, and nothing merges the two automatically. Whoever is editing should commit and push promptly; the longer `tasks.md` is held, the more there is to conflict.
 

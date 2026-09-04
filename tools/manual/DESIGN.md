@@ -93,7 +93,7 @@ start at `##`; raw HTML is never rendered). Directives sit at column 0:
 | Block | Form | Renders |
 | --- | --- | --- |
 | `spec` | `::spec{id="grade10-store/loyalty"}` | every requirement of that spec as expandable rows |
-| `spec` | `::spec{id="…" requirement="…"}` | one requirement with its scenarios; also `scenario="loyalty-SC-04"` or `story="loyalty-US-01"` selectors — prefer these, the ids are permanent |
+| `spec` | `::spec{id="…" requirement="…"}` | one requirement with its scenarios; also `scenario="grade10-site-loyalty-programme-SC-04"` or `story="grade10-site-loyalty-programme-US-01"` selectors — prefer these, the ids are permanent |
 | `journeys` | `::journeys{id="grade10-store/loyalty"}` | the spec's user journeys, each story with its accepted-by scenarios |
 | `cases` | `::cases{id="grade10-store/loyalty"}` | the capability's test-case suite with coverage against its scenarios |
 | `changes` | `::changes{spec="grade10-store/loyalty"}` | ribbon of in-flight changes whose deltas touch that spec: status first, then tasks done/total, owners, last-moved age, link |
@@ -107,7 +107,7 @@ start at `##`; raw HTML is never rendered). Directives sit at column 0:
 
 Unknown directives are a parse error, not a silent pass-through.
 
-Prose may carry inline references: `[[loyalty-SC-23]]` renders the current
+Prose may carry inline references: `[[grade10-site-loyalty-programme-SC-23]]` renders the current
 title of the scenario, story, or test case it names as a deep link, so a
 renamed heading can never orphan the prose that cites it. A bare id
 resolves inside the page's own `spec:`; one that could mean two things
@@ -391,9 +391,9 @@ New pages are created from the editor (path picker constrained to the
 manual's tree); deleting a page is offered the same way.
 
 Any requirement row or page header can propose a change: the browser
-drafts `openspec/changes/<slug>/` with exactly what the pm-planning
+drafts `openspec/changes/<slug>/` with exactly what a proposal
 schema needs and nothing that misfiles it — `.openspec.yaml`
-(`schema: pm-planning`), `proposal.md` with the author line and the
+(`schema: grade10-planning`), `proposal.md` with the author line and the
 proposer's own words under `## Why`, citing the requirement and scenario
 ids the row knows. No delta and no tasks.md: the delta is what
 discussion is for, and a tasks.md would make the board read a thought as

@@ -44,9 +44,9 @@ function filesOf(draft: ProposalDraft = DRAFT): Record<string, string> {
 }
 
 describe("the draft a proposal writes", () => {
-  it("writes the pm-planning manifest and nothing else in it", () => {
+  it("writes the manifest and nothing else in it", () => {
     expect(filesOf()[MANIFEST]).toBe(
-      "schema: pm-planning\ncreated: 2026-08-30\n",
+      "schema: grade10-planning\ncreated: 2026-08-30\n",
     );
   });
 
@@ -99,7 +99,7 @@ describe("the draft read back through the store reader", () => {
   });
 
   it("carries the schema, the created date and the author", () => {
-    expect(change.schema).toBe("pm-planning");
+    expect(change.schema).toBe("grade10-planning");
     expect(change.created).toBe("2026-08-30");
     expect(change.author).toBe("echo");
   });

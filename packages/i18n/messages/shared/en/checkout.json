@@ -3,7 +3,6 @@
   "empty": "There is nothing in your basket.",
   "browse": "Browse the store",
   "subtotal": "Subtotal",
-  "quantity": "× {count}",
   "pay": "Pay",
   "paying": "Setting up your payment",
   "leaving": "Taking you to pay",
@@ -24,15 +23,26 @@
   "reason": {
     "emptyCart": "There is nothing in your basket.",
     "invalidQuantity": "One of these lines asks for a quantity the shop cannot sell.",
-    "unknownProduct": "The shop no longer lists one of these cards.",
-    "unknownVariant": "The shop no longer lists one of these grades.",
-    "unavailable": "One of these is no longer for sale.",
     "quantityClamped": "The shop has fewer of one of these than your basket asks for.",
     "currencyMismatch": "The shop is quoting a currency this store does not sell in. Nothing you can do here — tell us and we will fix it.",
     "catalog_unavailable": "The shop did not answer. Try again in a moment.",
     "payment_declined": "That payment was declined. Try again with another method.",
     "payment_error": "The payment could not be set up. Try again in a moment.",
     "points_refused": "The programme would not put that many points against this basket. Choose a different amount.",
-    "coupon_refused": "That coupon cannot ride this basket. Remove it or change the basket and try again."
+    "coupon_refused": "That coupon cannot ride this basket. Remove it or change the basket and try again.",
+    "contradicted": "The shop's answer changed your basket. Fix the marked lines and try again."
+  },
+  "review": {
+    "checking": "Checking your basket with the shop…",
+    "failed": "The shop did not answer, so your basket is unconfirmed. Try again.",
+    "retry": "Check again",
+    "blocked": "Fix the marked lines before paying.",
+    "removed": "{count} line(s) the shop no longer sells came out of your basket.",
+    "remove": "Remove",
+    "writeFailed": "Your change did not reach the shop. Try again."
+  },
+  "line": {
+    "soldOut": "Sold out",
+    "adjusted": "Only {count} left — quantity adjusted"
   }
 }

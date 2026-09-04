@@ -35,18 +35,18 @@ prop.
 `Nav` and `Footer` SHALL each be renderable on their own, in either order, and
 neither SHALL require the other.
 
-#### Scenario: site-chrome-SC-01 - An application imports the chrome
+#### Scenario: shared-ui-site-chrome-SC-01 - An application imports the chrome
 
 - **WHEN** an application imports each name above from the design system's public entry
 - **THEN** every import resolves
 
-#### Scenario: site-chrome-SC-02 - A page renders one without the other
+#### Scenario: shared-ui-site-chrome-SC-02 - A page renders one without the other
 
 - **WHEN** an application renders the header without the footer, or the footer
   without the header
 - **THEN** it renders as specified, with no missing-context error
 
-#### Scenario: site-chrome-SC-03 - The chrome's words arrive as one group
+#### Scenario: shared-ui-site-chrome-SC-03 - The chrome's words arrive as one group
 
 - **WHEN** an application supplies the chrome's words
 - **THEN** it passes one object per component, typed by that component's copy type
@@ -64,25 +64,25 @@ visually disabled.
 The locale control SHALL always display the supplied locale label, and SHALL
 be interactive only when a handler is supplied.
 
-#### Scenario: site-chrome-SC-04 - A storefront with no cart
+#### Scenario: shared-ui-site-chrome-SC-04 - A storefront with no cart
 
 - **GIVEN** an application that supplies no cart handler
 - **WHEN** the header renders
 - **THEN** no cart control appears in it, and no space is reserved for one
 
-#### Scenario: site-chrome-SC-05 - Only the supplied controls appear
+#### Scenario: shared-ui-site-chrome-SC-05 - Only the supplied controls appear
 
 - **GIVEN** an application that supplies a handler for the account control alone
 - **WHEN** the header renders
 - **THEN** the account control appears
 - **AND** the search and cart controls do not
 
-#### Scenario: site-chrome-SC-06 - Wishlist is not a header control
+#### Scenario: shared-ui-site-chrome-SC-06 - Wishlist is not a header control
 
 - **WHEN** the header renders
 - **THEN** no wishlist control appears, and no space is reserved for one
 
-#### Scenario: site-chrome-SC-07 - The locale label without a handler
+#### Scenario: shared-ui-site-chrome-SC-07 - The locale label without a handler
 
 - **GIVEN** an application that supplies a locale label and no locale handler
 - **WHEN** the header renders
@@ -95,12 +95,12 @@ be interactive only when a handler is supplied.
 content, and SHALL omit the utility row when the application supplies no
 utility links. An omitted region SHALL occupy no height.
 
-#### Scenario: site-chrome-SC-08 - No promo content
+#### Scenario: shared-ui-site-chrome-SC-08 - No promo content
 
 - **WHEN** the header renders with no promo content
 - **THEN** no promotional bar appears and the header is shorter by its height
 
-#### Scenario: site-chrome-SC-09 - No utility links
+#### Scenario: shared-ui-site-chrome-SC-09 - No utility links
 
 - **WHEN** the header renders with an empty set of utility links
 - **THEN** no utility row appears, and no empty strip is left in its place
@@ -111,7 +111,7 @@ utility links. An omitted region SHALL occupy no height.
 both visually and to assistive technology, and SHALL mark no item when the
 application identifies none.
 
-#### Scenario: site-chrome-SC-10 - A surface is current
+#### Scenario: shared-ui-site-chrome-SC-10 - A surface is current
 
 - **GIVEN** navigation items of which one is marked current
 - **WHEN** the header renders
@@ -119,7 +119,7 @@ application identifies none.
   current page
 - **AND** no other item is
 
-#### Scenario: site-chrome-SC-11 - No surface is current
+#### Scenario: shared-ui-site-chrome-SC-11 - No surface is current
 
 - **WHEN** the header renders with no item marked current
 - **THEN** no item is announced as the current page
@@ -131,13 +131,13 @@ copyright, legal links, and locale, and SHALL omit any of the columns, social
 links, or legal links the application supplies none of, rather than rendering
 an empty heading or an empty row.
 
-#### Scenario: site-chrome-SC-12 - Every section is supplied
+#### Scenario: shared-ui-site-chrome-SC-12 - Every section is supplied
 
 - **WHEN** the footer renders with a brand block, columns, social links,
   copyright, legal links, and a locale
 - **THEN** all of them are displayed
 
-#### Scenario: site-chrome-SC-13 - A section has no content
+#### Scenario: shared-ui-site-chrome-SC-13 - A section has no content
 
 - **WHEN** the footer renders with no social links, no legal links, or an
   empty set of columns
@@ -150,7 +150,7 @@ an empty heading or an empty row.
 supply — no brand name, no navigation label, no link text, and no fallback for
 an omitted value.
 
-#### Scenario: site-chrome-SC-14 - Nothing is defaulted
+#### Scenario: shared-ui-site-chrome-SC-14 - Nothing is defaulted
 
 - **WHEN** the chrome renders
 - **THEN** every visible string is one the application supplied

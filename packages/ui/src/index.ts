@@ -21,9 +21,6 @@ export {
   type ListingAuctionCardSidebarProps,
 } from "./blocks/auction-listing/listing-auction-card-sidebar";
 export {
-  AutoBidConfirmationDialog,
-  type AutoBidConfirmationDialogCopy,
-  type AutoBidConfirmationDialogProps,
   EnrollmentSetupSheet,
   type EnrollmentSetupSheetCopy,
   type EnrollmentSetupSheetProps,
@@ -79,8 +76,8 @@ export {
   LISTING_LOT_SIDEBAR_CLASS,
 } from "./blocks/auction-listing/listing-lot-layout";
 export {
-  ListingLotMeta,
   type ListingLotMarketComps,
+  ListingLotMeta,
   type ListingLotMetaCopy,
   type ListingLotMetaProps,
 } from "./blocks/auction-listing/listing-lot-meta";

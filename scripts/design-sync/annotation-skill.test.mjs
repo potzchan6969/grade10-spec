@@ -18,7 +18,7 @@ test("a supported harness opens the spec-owned annotation workflow", async () =>
   assert.match(skill, /figma:annotations:impact/);
   assert.match(skill, /implemented.*no-impact.*covered.*gap.*blocked/s);
   assert.match(skill, /fresh live observation/i);
-  assert.match(skill, /pm-planning.*full-planning/s);
+  assert.match(skill, /planning-pm/);
   assert.match(skill, /grade10-spec/);
   assert.doesNotMatch(skill, /--scope product/);
   assert.doesNotMatch(skill, /external\/grade10-spec/);

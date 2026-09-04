@@ -2,6 +2,7 @@
   "auctionWon": "낙찰되었습니다",
   "automaticBidExplanation": "필요한 만큼만 최대 금액까지 자동으로 입찰합니다.",
   "automaticBidHoldExplanation": "카드 승인 보류 금액은 최대 금액입니다. 경매가 그보다 낮은 금액으로 끝나면 실제 결제 금액은 더 적을 수 있습니다.",
+  "maximumMechanismSubtext": "필요한 만큼만 최대 금액까지 입찰합니다. 보류 금액은 최대 금액과 같고, 올리기만 가능하며 낮추거나 취소할 수 없습니다.",
   "automaticMaximum": "내 최대 금액",
   "automaticMaximumAmount": "최대 금액",
   "automaticMaximumConfirmed": "최대 금액 {amount}이(가) 설정되었습니다. 카드 승인 보류 금액은 최대 금액이며, 경매가 더 낮은 금액으로 끝나면 실제 결제 금액은 더 적을 수 있습니다.",

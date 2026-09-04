@@ -19,6 +19,8 @@ import {
   Layout,
   Lightbulb,
   ListChecks,
+  Path,
+  TestTube,
 } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
@@ -68,8 +70,10 @@ import { JourneyCard } from "./spec-block";
 const ICONS: Record<string, Icon> = {
   proposal: Lightbulb,
   specs: ListChecks,
-  design: Blueprint,
-  ui: Layout,
+  "user-journeys": Path,
+  "test-cases": TestTube,
+  "ui-design": Layout,
+  "tech-design": Blueprint,
   tasks: CheckSquare,
 };
 
@@ -87,6 +91,20 @@ function artifactCount(
 ): string | null {
   if (artifact.kind === "specs")
     return document.deltas.length > 0 ? String(document.deltas.length) : null;
+  if (artifact.kind === "journeys") {
+    const stories = document.deltas.reduce(
+      (sum, delta) => sum + (delta.journeys?.length ?? 0),
+      0,
+    );
+    return stories > 0 ? String(stories) : null;
+  }
+  if (artifact.kind === "cases") {
+    const cases = document.deltas.reduce(
+      (sum, delta) => sum + (delta.suite?.cases.length ?? 0),
+      0,
+    );
+    return cases > 0 ? String(cases) : null;
+  }
   if (artifact.kind === "tasks") {
     const { done, total } = taskTotals(change);
     return total > 0 ? `${done}/${total}` : null;
@@ -95,7 +113,12 @@ function artifactCount(
 }
 
 function fileName(artifact: ChangeArtifact): string {
-  return artifact.path?.split("/").pop() ?? `${artifact.name}/`;
+  if (artifact.path) return artifact.path.split("/").pop() as string;
+  // The per-capability artifacts have no one path — they are a file apiece
+  // beside every delta — so they are named by the file, not the directory.
+  if (artifact.kind === "journeys") return "user-journeys.md";
+  if (artifact.kind === "cases") return "test-cases.md";
+  return `${artifact.name}/`;
 }
 
 /**
@@ -265,9 +288,13 @@ function ArtifactPanel({
   index: ManualIndex;
 }) {
   if (artifact.kind === "specs") {
-    return (
-      <RequirementsPanel change={change} document={document} index={index} />
-    );
+    return <RequirementsPanel document={document} index={index} />;
+  }
+  if (artifact.kind === "journeys") {
+    return <JourneysPanel document={document} index={index} />;
+  }
+  if (artifact.kind === "cases") {
+    return <CasesPanel change={change} document={document} index={index} />;
   }
   if (artifact.kind === "tasks") {
     return <TasksPanel artifact={artifact} change={change} />;
@@ -381,29 +408,22 @@ function TasksPanel({
 
 /** Three ways to read a delta: as the contract it proposes, as the file it
  * is, or as the test plan QA wrote against it. */
-type Reading = "contract" | "full" | "test-plan";
+type Reading = "contract" | "full";
 
 const READINGS: { value: Reading; label: string; title: string }[] = [
   {
     value: "contract",
     label: "Contract",
     title:
-      "Purpose, journeys and requirements, as the durable spec will read them",
+      "Purpose, feature set and requirements, as the durable spec will read them",
   },
   { value: "full", label: "Full", title: "The delta file as written" },
-  {
-    value: "test-plan",
-    label: "Test plan",
-    title: "The test cases beside the delta, traced to its scenarios",
-  },
 ];
 
 function RequirementsPanel({
-  change,
   document,
   index,
 }: {
-  change: ChangeEntry;
   document: ChangeDocument;
   index: ManualIndex;
 }) {
@@ -444,7 +464,6 @@ function RequirementsPanel({
       <div className="space-y-6">
         {document.deltas.map((delta) => (
           <DeltaCard
-            change={change}
             delta={delta}
             index={index}
             key={delta.spec}
@@ -453,6 +472,119 @@ function RequirementsPanel({
         ))}
       </div>
     </BlockScopeProvider>
+  );
+}
+
+/**
+ * The stories each capability's `user-journeys.md` issues, capability by
+ * capability. Its own tab because it is its own file: the requirements say
+ * what the system does, and this says who walks it.
+ */
+function JourneysPanel({
+  document,
+  index,
+}: {
+  document: ChangeDocument;
+  index: ManualIndex;
+}) {
+  const written = document.deltas.filter(
+    (delta) => (delta.journeys?.length ?? 0) > 0 || delta.journeysError,
+  );
+  if (written.length === 0) {
+    return (
+      <Text as="p" size="sm" tone="secondary">
+        No capability in this change carries user journeys.
+      </Text>
+    );
+  }
+  return (
+    <BlockScopeProvider value={{ index, pagePath: document.dir }}>
+      <div className="space-y-6">
+        {written.map((delta) => (
+          <CapabilitySection delta={delta} key={delta.spec}>
+            {delta.journeysError ? (
+              <BrokenCard
+                error={delta.journeysError}
+                what={`Journeys for ${delta.spec}`}
+              />
+            ) : (
+              <div className="space-y-3">
+                {(delta.journeys ?? []).map((journey) => (
+                  <JourneyCard
+                    journey={journey}
+                    key={journey.id}
+                    spec={deltaAsSpec(delta)}
+                  />
+                ))}
+              </div>
+            )}
+          </CapabilitySection>
+        ))}
+      </div>
+    </BlockScopeProvider>
+  );
+}
+
+/** QA's suites, capability by capability, each traced to the scenarios the
+ * delta beside it issues. */
+function CasesPanel({
+  change,
+  document,
+  index,
+}: {
+  change: ChangeEntry;
+  document: ChangeDocument;
+  index: ManualIndex;
+}) {
+  if (document.deltas.length === 0) {
+    return (
+      <Text as="p" size="sm" tone="secondary">
+        This change has no spec deltas, so there is nothing to derive cases
+        from.
+      </Text>
+    );
+  }
+  return (
+    <BlockScopeProvider value={{ index, pagePath: document.dir }}>
+      <div className="space-y-6">
+        {document.deltas.map((delta) => (
+          <CapabilitySection delta={delta} key={delta.spec}>
+            <DeltaTestPlan change={change} delta={delta} />
+          </CapabilitySection>
+        ))}
+      </div>
+    </BlockScopeProvider>
+  );
+}
+
+/** One capability's card on a per-capability tab: which spec it is about,
+ * where the file lives, and whatever that tab reads out of it. */
+function CapabilitySection({
+  delta,
+  children,
+}: {
+  delta: ChangeDeltaDocument;
+  children: ReactNode;
+}) {
+  const slug = slugify(delta.spec);
+  return (
+    <section
+      aria-labelledby={`${slug}-title`}
+      className="overflow-hidden rounded-(--radius-2xl) border border-border bg-card"
+    >
+      <header className="border-border-subtle border-b bg-background-subtle px-4 py-3">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <h2
+            className="font-heading font-semibold text-base"
+            id={`${slug}-title`}
+          >
+            {delta.title ?? delta.spec}
+          </h2>
+          <DeltaSpec spec={delta.spec} />
+        </div>
+      </header>
+      <div className="px-4 py-4">{children}</div>
+    </section>
   );
 }
 
@@ -484,12 +616,10 @@ function deltaAsSpec(delta: ChangeDeltaDocument): SpecEntry {
 }
 
 function DeltaCard({
-  change,
   delta,
   index,
   reading,
 }: {
-  change: ChangeEntry;
   delta: ChangeDeltaDocument;
   index: ManualIndex;
   reading: Reading;
@@ -546,9 +676,6 @@ function DeltaCard({
             text={delta.text}
           />
         ) : null}
-        {reading === "test-plan" ? (
-          <DeltaTestPlan change={change} delta={delta} />
-        ) : null}
       </div>
     </section>
   );
@@ -576,7 +703,6 @@ function DeltaContract({
   index: ManualIndex;
   slug: string;
 }) {
-  const spec = deltaAsSpec(delta);
   const durable = index.specById.get(delta.spec);
   const baseDir = dirOf(delta.path);
 
@@ -600,15 +726,6 @@ function DeltaContract({
             index={index}
             text={delta.featureSet}
           />
-        </ContractSection>
-      ) : null}
-      {delta.journeys && delta.journeys.length > 0 ? (
-        <ContractSection id={`${slug}-user-journeys`} title="User journeys">
-          <div className="space-y-3">
-            {delta.journeys.map((journey) => (
-              <JourneyCard journey={journey} key={journey.id} spec={spec} />
-            ))}
-          </div>
         </ContractSection>
       ) : null}
       {delta.sections.map((section) => (

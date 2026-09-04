@@ -169,7 +169,7 @@ describe("what the index now holds", () => {
       changes: [
         {
           id: "add-gift-cards",
-          schema: "pm-planning",
+          schema: "grade10-planning",
           status: "in-flight",
           owners: [],
           created: "2026-01-01",

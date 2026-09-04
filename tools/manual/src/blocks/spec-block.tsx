@@ -378,13 +378,13 @@ export function JourneyCard({
             {accepted.map((scenario) => (
               <li key={scenario.id}>
                 <a
-                  className="flex h-full items-baseline gap-1.5 rounded-(--radius-lg) border border-border bg-card px-2 py-1 text-xs transition-colors hover:border-border-strong hover:bg-muted"
+                  className="flex h-full flex-col gap-0.5 rounded-(--radius-lg) border border-border bg-card px-2 py-1.5 text-xs transition-colors hover:border-border-strong hover:bg-muted"
                   href={`#${scenario.id}`}
                 >
-                  <span className="shrink-0 font-mono text-secondary-foreground">
+                  <span className="font-mono text-secondary-foreground">
                     {scenario.id}
                   </span>
-                  <span className="min-w-0 leading-snug">
+                  <span className="leading-snug">
                     {scenario.name ?? (
                       <span className="text-destructive line-through">
                         not in this spec

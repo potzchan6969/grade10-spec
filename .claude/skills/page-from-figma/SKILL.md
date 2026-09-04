@@ -30,7 +30,7 @@ Working in this repository, the deliverable is therefore at most new or changed 
 
 - **The capability's directory exists** → add files there.
 - **A spec exists but no directory** → create one.
-- **No spec** → the section is unmatched; a `pm-planning` change mints the capability first. Never mint a directory ahead of its spec.
+- **No spec** → the section is unmatched; an OpenSpec change mints the capability first. Never mint a directory ahead of its spec.
 
 The filing and naming conventions — the `<product-context>-<capability>` directory slug, the capability prefix on component names, basename-shared satellite files, the spec-named barrel group, and `shared/` earned on a second consumer — are recorded in [`ui-component-contracts.md`, "Where a block lives and what it is named"](../../../docs/governance/ui-component-contracts.md#where-a-block-lives-and-what-it-is-named). Follow that section; do not improvise a layout mid-conversion — the per-page directory it prohibits is exactly the one that feels natural here.
 
@@ -44,7 +44,7 @@ The filing and naming conventions — the `<product-context>-<capability>` direc
    - **Primitive** — an instance of a published design-system set. Same rule.
    - **Layout** — a plain auto-layout frame. Translate through the layout-primitive tables in `figma-component-to-code.md`: `VStack`/`HStack`/`Center`, gap read from the **bound variable**, never measured in pixels.
    - **Unmatched** — anything else: a detached instance, a hand-drawn section, a component with no published counterpart.
-3. Report the table back — section name → classification → the component or primitive you intend — and **wait for a go-ahead**. Do not start coding a page whose inventory has unmatched rows; each one is either a design-side fix (reattach the instance) or a scoped proposal (a new block via `pm-planning`/OpenSpec), decided by a human.
+3. Report the table back — section name → classification → the component or primitive you intend — and **wait for a go-ahead**. Do not start coding a page whose inventory has unmatched rows; each one is either a design-side fix (reattach the instance) or a scoped proposal (a new block via an OpenSpec change), decided by a human.
 
 The gate is the skill. Skipping it is how a page ships with three private reimplementations of `ProductCard`, each subtly off-contract, none reachable by the design-sync checker.
 

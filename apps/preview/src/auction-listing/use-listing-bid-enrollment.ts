@@ -12,14 +12,11 @@ type ListingBidEnrollmentSession = {
   hasPlacedBid: boolean;
   signInOpen: boolean;
   paymentSetup: "none" | "required" | "change-required";
-  autoConfirmOpen: boolean;
 };
 
 type ListingBidEnrollmentActions = {
   setSignInOpen: (open: boolean) => void;
   dismissPaymentSetup: () => void;
-  setAutoConfirmOpen: (open: boolean) => void;
-  confirmAutoBidIntro: () => void;
   reset: () => void;
   handleBidSubmit: () => void;
   completeSignIn: () => void;
@@ -43,7 +40,6 @@ const INITIAL_SESSION: ListingBidEnrollmentSession = {
   hasPlacedBid: false,
   signInOpen: false,
   paymentSetup: "none",
-  autoConfirmOpen: false,
 };
 
 function accountLinkedPayment(editable: boolean): LinkedPaymentMethod {
@@ -54,34 +50,20 @@ function accountLinkedPayment(editable: boolean): LinkedPaymentMethod {
 }
 
 function useListingBidEnrollment(
-  listingId = "demo-lot",
+  _listingId = "demo-lot",
   initialSession: Partial<ListingBidEnrollmentSession> = {},
 ) {
   const [session, setSession] = useState<ListingBidEnrollmentSession>(() => ({
     ...INITIAL_SESSION,
     ...initialSession,
   }));
-  const [
-    autoBidIntroAcknowledgedListingIds,
-    setAutoBidIntroAcknowledgedListingIds,
-  ] = useState<ReadonlySet<string>>(() => new Set());
 
   const needsSetup = session.signedIn && !session.paymentLinked;
   const ready = session.signedIn && session.paymentLinked;
 
   const reset = useCallback(() => {
     setSession(INITIAL_SESSION);
-    setAutoBidIntroAcknowledgedListingIds(new Set());
   }, []);
-
-  const confirmAutoBidIntro = useCallback(() => {
-    setAutoBidIntroAcknowledgedListingIds((current) => {
-      const next = new Set(current);
-      next.add(listingId);
-      return next;
-    });
-    setSession((current) => ({ ...current, hasPlacedBid: true }));
-  }, [listingId]);
 
   const setSignInOpen = useCallback((signInOpen: boolean) => {
     setSession((current) => ({ ...current, signInOpen }));
@@ -92,10 +74,6 @@ function useListingBidEnrollment(
       ...current,
       paymentSetup: "none",
     }));
-  }, []);
-
-  const setAutoConfirmOpen = useCallback((autoConfirmOpen: boolean) => {
-    setSession((current) => ({ ...current, autoConfirmOpen }));
   }, []);
 
   const openSetup = useCallback(() => {
@@ -123,18 +101,12 @@ function useListingBidEnrollment(
           paymentSetup: "required",
         };
       }
-      if (
-        current.paymentLinked &&
-        !autoBidIntroAcknowledgedListingIds.has(listingId)
-      ) {
-        return { ...current, autoConfirmOpen: true };
-      }
       if (current.paymentLinked) {
         return { ...current, hasPlacedBid: true };
       }
       return current;
     });
-  }, [autoBidIntroAcknowledgedListingIds, listingId]);
+  }, []);
 
   const completeSignIn = useCallback(() => {
     setSession((current) => ({
@@ -184,8 +156,6 @@ function useListingBidEnrollment(
     actions: {
       setSignInOpen,
       dismissPaymentSetup,
-      setAutoConfirmOpen,
-      confirmAutoBidIntro,
       reset,
       handleBidSubmit,
       completeSignIn,

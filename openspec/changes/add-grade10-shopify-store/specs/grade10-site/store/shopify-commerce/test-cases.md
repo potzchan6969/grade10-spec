@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-03, tcs-rules r1
 
-## shopify-commerce-US1: Shopper browses the live Shopify catalogue
+## grade10-site-store-shopify-commerce-US1: Shopper browses the live Shopify catalogue
 
 **As a** shopper,
 **I want** the store catalogue to show current Shopify products and availability,
 **so that** a product change is not served from a stale cache, and an outage does not invent a price.
 
-### shopify-commerce-US1-TC1-1: Current catalogue shows live product facts
+### grade10-site-store-shopify-commerce-US1-TC1-1: Current catalogue shows live product facts
 
 **Classification:**
 
@@ -21,7 +21,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shopify-commerce-US-01
+* **Trace:** grade10-site-store-shopify-commerce-US-01
 
 **Pre-conditions:**
 Shopify has a published product with a purchasable variant.
@@ -36,7 +36,7 @@ Shopify has a published product with a purchasable variant.
 * The catalogue response includes the product and its current variant price, currency, media, and availability.
 * The response contains no Shopify credential or raw Admin API data.
 
-### shopify-commerce-US1-TC2-1: Product changes leave no stale catalogue copy
+### grade10-site-store-shopify-commerce-US1-TC2-1: Product changes leave no stale catalogue copy
 
 **Classification:**
 
@@ -48,7 +48,7 @@ Shopify has a published product with a purchasable variant.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shopify-commerce-US-01
+* **Trace:** grade10-site-store-shopify-commerce-US-01
 
 **Pre-conditions:**
 A cached Store response contains a product.
@@ -62,7 +62,7 @@ A cached Store response contains a product.
 
 * The later catalogue response does not serve the product from the invalidated cached response.
 
-### shopify-commerce-US1-TC3-1: Catalogue outage reports an explicit failure
+### grade10-site-store-shopify-commerce-US1-TC3-1: Catalogue outage reports an explicit failure
 
 **Classification:**
 
@@ -74,7 +74,7 @@ A cached Store response contains a product.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shopify-commerce-US-01
+* **Trace:** grade10-site-store-shopify-commerce-US-01
 
 **Pre-conditions:**
 Shopify cannot answer the catalogue request, and no usable cached copy exists.
@@ -91,13 +91,13 @@ Shopify cannot answer the catalogue request, and no usable cached copy exists.
 
 ---
 
-## shopify-commerce-US2: Shopper checks out with a fifteen-minute hold
+## grade10-site-store-shopify-commerce-US2: Shopper checks out with a fifteen-minute hold
 
 **As a** shopper,
 **I want** checkout to use live price and inventory and hold finite stock for fifteen minutes,
 **so that** an unavailable variant cannot enter, a retry is one handoff, and an expired hold cannot be paid as reserved.
 
-### shopify-commerce-US2-TC1-1: Unavailable variant is refused at checkout
+### grade10-site-store-shopify-commerce-US2-TC1-1: Unavailable variant is refused at checkout
 
 **Classification:**
 
@@ -109,7 +109,7 @@ Shopify cannot answer the catalogue request, and no usable cached copy exists.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shopify-commerce-US-02
+* **Trace:** grade10-site-store-shopify-commerce-US-02
 
 **Pre-conditions:**
 Browsing previously showed a variant available, but Shopify now reports it unavailable or insufficient for the requested quantity during checkout.
@@ -124,7 +124,7 @@ Browsing previously showed a variant available, but Shopify now reports it unava
 * The Store refuses checkout naming that item as unavailable.
 * No payable local order or Shopify draft order is created.
 
-### shopify-commerce-US2-TC2-1: Checkout uses Shopify's current price
+### grade10-site-store-shopify-commerce-US2-TC2-1: Checkout uses Shopify's current price
 
 **Classification:**
 
@@ -136,7 +136,7 @@ Browsing previously showed a variant available, but Shopify now reports it unava
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shopify-commerce-US-02
+* **Trace:** grade10-site-store-shopify-commerce-US-02
 
 **Pre-conditions:**
 A shopper supplies a cached price for a variant, and Shopify returns a different current price during checkout.
@@ -151,7 +151,7 @@ A shopper supplies a cached price for a variant, and Shopify returns a different
 * The pending order uses Shopify's current price.
 * The browser-supplied price has no effect.
 
-### shopify-commerce-US2-TC3-1: Checkout retry returns one handoff
+### grade10-site-store-shopify-commerce-US2-TC3-1: Checkout retry returns one handoff
 
 **Classification:**
 
@@ -163,7 +163,7 @@ A shopper supplies a cached price for a variant, and Shopify returns a different
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shopify-commerce-US-02
+* **Trace:** grade10-site-store-shopify-commerce-US-02
 
 **Pre-conditions:**
 The Store has accepted a checkout under an idempotency key.
@@ -178,7 +178,7 @@ The Store has accepted a checkout under an idempotency key.
 * The Store returns the same pending order and Shopify checkout URL.
 * Exactly one local order, Shopify draft order, and reservation exist for the request.
 
-### shopify-commerce-US2-TC4-1: Finite stock stays held for fifteen minutes
+### grade10-site-store-shopify-commerce-US2-TC4-1: Finite stock stays held for fifteen minutes
 
 **Classification:**
 
@@ -190,7 +190,7 @@ The Store has accepted a checkout under an idempotency key.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shopify-commerce-US-02
+* **Trace:** grade10-site-store-shopify-commerce-US-02
 
 **Pre-conditions:**
 A shopper requests a purchasable finite-stock Shopify variant.
@@ -205,7 +205,7 @@ A shopper requests a purchasable finite-stock Shopify variant.
 * Shopify reserves the requested quantity for fifteen minutes.
 * That quantity is unavailable to another checkout for the reservation's lifetime.
 
-### shopify-commerce-US2-TC5-1: Expired reservation is not recreated
+### grade10-site-store-shopify-commerce-US2-TC5-1: Expired reservation is not recreated
 
 **Classification:**
 
@@ -217,7 +217,7 @@ A shopper requests a purchasable finite-stock Shopify variant.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shopify-commerce-US-02
+* **Trace:** grade10-site-store-shopify-commerce-US-02
 
 **Pre-conditions:**
 A checkout reservation's fifteen-minute window has elapsed.
@@ -232,7 +232,7 @@ A checkout reservation's fifteen-minute window has elapsed.
 * The Store does not extend or recreate the reservation automatically.
 * The buyer is told to begin checkout again and the unavailable item is identified.
 
-### shopify-commerce-US2-TC6-1: Backorder is refused when stock cannot be held
+### grade10-site-store-shopify-commerce-US2-TC6-1: Backorder is refused when stock cannot be held
 
 **Classification:**
 
@@ -244,7 +244,7 @@ A checkout reservation's fifteen-minute window has elapsed.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shopify-commerce-US-02
+* **Trace:** grade10-site-store-shopify-commerce-US-02
 
 **Pre-conditions:**
 A shopper requests checkout with one or more items, and Shopify cannot reserve the requested quantity of one checkout line.
@@ -259,7 +259,7 @@ A shopper requests checkout with one or more items, and Shopify cannot reserve t
 * The Store refuses checkout naming that item as unavailable.
 * The Store does not offer a backorder, create a payable draft order, or create a replacement reservation.
 
-### shopify-commerce-US2-TC7-1: Checkout handoff exposes only a Shopify URL
+### grade10-site-store-shopify-commerce-US2-TC7-1: Checkout handoff exposes only a Shopify URL
 
 **Classification:**
 
@@ -271,7 +271,7 @@ A shopper requests checkout with one or more items, and Shopify cannot reserve t
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shopify-commerce-US-02
+* **Trace:** grade10-site-store-shopify-commerce-US-02
 
 **Pre-conditions:**
 The Store has accepted a checkout.
@@ -288,13 +288,13 @@ The Store has accepted a checkout.
 
 ---
 
-## shopify-commerce-US3: Shopper is signed in or linked after payment
+## grade10-site-store-shopify-commerce-US3: Shopper is signed in or linked after payment
 
 **As a** shopper,
 **I want** an existing Grade10 email to sign in before handoff, and a guest email to become an account after payment,
 **so that** I am not duplicated and I can read the order through magic-link sign-in.
 
-### shopify-commerce-US3-TC1-1: Existing customer signs in before handoff
+### grade10-site-store-shopify-commerce-US3-TC1-1: Existing customer signs in before handoff
 
 **Classification:**
 
@@ -306,7 +306,7 @@ The Store has accepted a checkout.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shopify-commerce-US-03
+* **Trace:** grade10-site-store-shopify-commerce-US-03
 
 **Pre-conditions:**
 A shopper begins checkout and supplies an email belonging to an existing Grade10 account.
@@ -321,7 +321,7 @@ A shopper begins checkout and supplies an email belonging to an existing Grade10
 * The Store prompts Grade10 email magic-link sign-in before it creates a Shopify checkout handoff.
 * No additional Grade10 account or Shopify customer link is created.
 
-### shopify-commerce-US3-TC2-1: Guest payment creates one linked account
+### grade10-site-store-shopify-commerce-US3-TC2-1: Guest payment creates one linked account
 
 **Classification:**
 
@@ -333,7 +333,7 @@ A shopper begins checkout and supplies an email belonging to an existing Grade10
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shopify-commerce-US-03
+* **Trace:** grade10-site-store-shopify-commerce-US-03
 
 **Pre-conditions:**
 A guest checkout email belongs to no Grade10 account.
@@ -349,7 +349,7 @@ A guest checkout email belongs to no Grade10 account.
 * The Store creates or links exactly one Grade10 account to that Shopify customer.
 * The buyer can access the order through Grade10 email magic-link sign-in.
 
-### shopify-commerce-US3-TC3-1: Paid buyer returns to the protected order URL
+### grade10-site-store-shopify-commerce-US3-TC3-1: Paid buyer returns to the protected order URL
 
 **Classification:**
 
@@ -361,7 +361,7 @@ A guest checkout email belongs to no Grade10 account.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shopify-commerce-US-03
+* **Trace:** grade10-site-store-shopify-commerce-US-03
 
 **Pre-conditions:**
 A shopper completes a Shopify checkout with a Grade10 order, and Shopify confirms payment.
@@ -376,7 +376,7 @@ A shopper completes a Shopify checkout with a Grade10 order, and Shopify confirm
 * The buyer is returned to that order's permanent Grade10 URL.
 * The order page is available only through the matching Grade10 account.
 
-### shopify-commerce-US3-TC4-1: Missing Shopify configuration fails loudly
+### grade10-site-store-shopify-commerce-US3-TC4-1: Missing Shopify configuration fails loudly
 
 **Classification:**
 
@@ -388,7 +388,7 @@ A shopper completes a Shopify checkout with a Grade10 order, and Shopify confirm
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shopify-commerce-US-03
+* **Trace:** grade10-site-store-shopify-commerce-US-03
 
 **Pre-conditions:**
 The Store attempts an operation requiring Shopify configuration, but a required credential or API-version setting is missing.
@@ -405,13 +405,13 @@ The Store attempts an operation requiring Shopify configuration, but a required 
 
 ---
 
-## shopify-commerce-US4: Customer reads their own orders
+## grade10-site-store-shopify-commerce-US4: Customer reads their own orders
 
 **As a** signed-in customer,
 **I want** to list my orders and open one by its permanent URL,
 **so that** I cannot read another customer's order, and payment is shown apart from shipping.
 
-### shopify-commerce-US4-TC1-1: Paid order stays separate from shipping
+### grade10-site-store-shopify-commerce-US4-TC1-1: Paid order stays separate from shipping
 
 **Classification:**
 
@@ -423,7 +423,7 @@ The Store attempts an operation requiring Shopify configuration, but a required 
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shopify-commerce-US-04
+* **Trace:** grade10-site-store-shopify-commerce-US-04
 
 **Pre-conditions:**
 Shopify reports an order paid but with no fulfilment.
@@ -438,7 +438,7 @@ Shopify reports an order paid but with no fulfilment.
 * Payment is reported as paid and shipping as unfulfilled or not-ready.
 * The order is not reported shipped or delivered.
 
-### shopify-commerce-US4-TC2-1: Partial fulfilment shows every shipment
+### grade10-site-store-shopify-commerce-US4-TC2-1: Partial fulfilment shows every shipment
 
 **Classification:**
 
@@ -450,7 +450,7 @@ Shopify reports an order paid but with no fulfilment.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shopify-commerce-US-04
+* **Trace:** grade10-site-store-shopify-commerce-US-04
 
 **Pre-conditions:**
 Shopify reports two fulfilments for an order, one shipped with tracking and one unfulfilled.
@@ -465,7 +465,7 @@ Shopify reports two fulfilments for an order, one shipped with tracking and one 
 * Shipping is reported as partially fulfilled.
 * Both fulfilments are exposed, and tracking facts are exposed only for the shipped fulfilment.
 
-### shopify-commerce-US4-TC3-1: Unconfirmed delivery keeps the last shipment state
+### grade10-site-store-shopify-commerce-US4-TC3-1: Unconfirmed delivery keeps the last shipment state
 
 **Classification:**
 
@@ -477,7 +477,7 @@ Shopify reports two fulfilments for an order, one shipped with tracking and one 
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shopify-commerce-US-04
+* **Trace:** grade10-site-store-shopify-commerce-US-04
 
 **Pre-conditions:**
 Shopify reports a tracked shipment without carrier delivery confirmation.
@@ -492,7 +492,7 @@ Shopify reports a tracked shipment without carrier delivery confirmation.
 * The shipment's last reported state is displayed.
 * The order and shipment are not displayed as delivered.
 
-### shopify-commerce-US4-TC4-1: Another customer's order is refused
+### grade10-site-store-shopify-commerce-US4-TC4-1: Another customer's order is refused
 
 **Classification:**
 
@@ -504,7 +504,7 @@ Shopify reports a tracked shipment without carrier delivery confirmation.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shopify-commerce-US-04
+* **Trace:** grade10-site-store-shopify-commerce-US-04
 
 **Pre-conditions:**
 A customer is signed in to Grade10 and an order belongs to another customer.
@@ -519,7 +519,7 @@ A customer is signed in to Grade10 and an order belongs to another customer.
 * The Store refuses the request.
 * The response contains no payment, shipping, tracking, or address information.
 
-### shopify-commerce-US4-TC5-1: Permanent order URL prompts for its account
+### grade10-site-store-shopify-commerce-US4-TC5-1: Permanent order URL prompts for its account
 
 **Classification:**
 
@@ -531,7 +531,7 @@ A customer is signed in to Grade10 and an order belongs to another customer.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shopify-commerce-US-04
+* **Trace:** grade10-site-store-shopify-commerce-US-04
 
 **Pre-conditions:**
 A customer copies a permanent Grade10 order URL and no authenticated session for that order's Grade10 account exists.
@@ -546,7 +546,7 @@ A customer copies a permanent Grade10 order URL and no authenticated session for
 * Grade10 prompts email magic-link sign-in.
 * No order, payment, shipping, tracking, or address information is returned.
 
-### shopify-commerce-US4-TC6-1: Order history lists only the account's orders
+### grade10-site-store-shopify-commerce-US4-TC6-1: Order history lists only the account's orders
 
 **Classification:**
 
@@ -558,7 +558,7 @@ A customer copies a permanent Grade10 order URL and no authenticated session for
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shopify-commerce-US-04
+* **Trace:** grade10-site-store-shopify-commerce-US-04
 
 **Pre-conditions:**
 An authenticated customer has ongoing or past Grade10 orders.
@@ -573,7 +573,7 @@ An authenticated customer has ongoing or past Grade10 orders.
 * The Store lists that account's ongoing and past orders.
 * Every order belonging to another account is excluded.
 
-### shopify-commerce-US4-TC7-1: Customer order view has no dispute action
+### grade10-site-store-shopify-commerce-US4-TC7-1: Customer order view has no dispute action
 
 **Classification:**
 
@@ -585,7 +585,7 @@ An authenticated customer has ongoing or past Grade10 orders.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shopify-commerce-US-04
+* **Trace:** grade10-site-store-shopify-commerce-US-04
 
 **Pre-conditions:**
 A customer views an order in this release.
@@ -601,13 +601,13 @@ A customer views an order in this release.
 
 ---
 
-## shopify-commerce-US5: Staff refund is reflected without a customer-started dispute
+## grade10-site-store-shopify-commerce-US5: Staff refund is reflected without a customer-started dispute
 
 **As a** staff operator,
 **I want** a refund I take in Shopify to show on the Grade10 order,
 **so that** a duplicate or invalid webhook cannot rewrite it, and a miss is repaired.
 
-### shopify-commerce-US5-TC1-1: Invalid webhook changes no order state
+### grade10-site-store-shopify-commerce-US5-TC1-1: Invalid webhook changes no order state
 
 **Classification:**
 
@@ -619,7 +619,7 @@ A customer views an order in this release.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shopify-commerce-US-05
+* **Trace:** grade10-site-store-shopify-commerce-US-05
 
 **Pre-conditions:**
 The Store receives a Shopify webhook request with a missing or invalid signature.
@@ -634,7 +634,7 @@ The Store receives a Shopify webhook request with a missing or invalid signature
 * The Store rejects the request before parsing its payload.
 * No order, payment, or shipping state changes.
 
-### shopify-commerce-US5-TC2-1: Duplicate webhook applies only once
+### grade10-site-store-shopify-commerce-US5-TC2-1: Duplicate webhook applies only once
 
 **Classification:**
 
@@ -646,7 +646,7 @@ The Store receives a Shopify webhook request with a missing or invalid signature
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shopify-commerce-US-05
+* **Trace:** grade10-site-store-shopify-commerce-US-05
 
 **Pre-conditions:**
 The Store has already processed a verified Shopify event.
@@ -662,7 +662,7 @@ The Store has already processed a verified Shopify event.
 * The Store records and applies the event once.
 * Every later delivery returns without repeating a transition.
 
-### shopify-commerce-US5-TC3-1: Missed webhook is repaired from Shopify
+### grade10-site-store-shopify-commerce-US5-TC3-1: Missed webhook is repaired from Shopify
 
 **Classification:**
 
@@ -674,7 +674,7 @@ The Store has already processed a verified Shopify event.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shopify-commerce-US-05
+* **Trace:** grade10-site-store-shopify-commerce-US-05
 
 **Pre-conditions:**
 A pending Store order's Shopify order is paid and fulfilled, and its corresponding webhook was not processed.
@@ -688,7 +688,7 @@ A pending Store order's Shopify order is paid and fulfilled, and its correspondi
 
 * The Store updates the order from Shopify's payment and fulfilment facts.
 
-### shopify-commerce-US5-TC4-1: Staff refund appears in payment status
+### grade10-site-store-shopify-commerce-US5-TC4-1: Staff refund appears in payment status
 
 **Classification:**
 
@@ -700,7 +700,7 @@ A pending Store order's Shopify order is paid and fulfilled, and its correspondi
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shopify-commerce-US-05
+* **Trace:** grade10-site-store-shopify-commerce-US-05
 
 **Pre-conditions:**
 Shopify confirms a refund initiated by staff for a paid order.

@@ -2,9 +2,9 @@
 
 ## Purpose
 The shared listing product-page blocks every auction storefront composes: the
-media gallery, the bid panel, and the details section. This change records the
-export contract and the gallery's distinct sources for thumbnail, main frame,
-and zoom.
+media gallery, the bid panel, the bid history, and the details section. The
+bid history carries accepted instants so collector activity can be localized
+without changing the listing's authoritative event data.
 
 ## Feature set
 
@@ -18,6 +18,9 @@ and zoom.
   - Several items: more than one image shows a strip; one item does not
 - Consumer labels
   - Supplied copy: accessible names come from the application
+- Bid history
+  - Accepted instants: bid rows retain the accepted time needed for formatting
+  - Localized activity: recent and historical rows use the collector's locale and stated time zone
 
 ## Requirements
 
@@ -33,13 +36,13 @@ for the listing product page — `ListingGallery`, `ListingAuctionBidCard`, and
 Each of those components SHALL be renderable on its own, so a later surface can
 reuse the gallery without the bid panel.
 
-#### Scenario: auction-listing-SC-01 - An application imports the surface
+#### Scenario: shared-ui-auction-listing-SC-01 - An application imports the surface
 
 - **WHEN** an application imports each name above from the shared UI package's
   public entry
 - **THEN** every import resolves
 
-#### Scenario: auction-listing-SC-02 - A part is reused alone
+#### Scenario: shared-ui-auction-listing-SC-02 - A part is reused alone
 
 - **WHEN** an application renders `ListingGallery` without `ListingAuctionBidCard`
   or `ListingDetails`
@@ -53,7 +56,7 @@ name, and optional `thumbLabel` as the thumbnail's accessible name (falling
 back to `alt`). When `thumbSrc` or `zoomSrc` is omitted, that slot SHALL use
 `src`. The gallery SHALL NOT fetch, derive, or rewrite those addresses.
 
-#### Scenario: auction-listing-SC-03 - Distinct sources are used in each slot
+#### Scenario: shared-ui-auction-listing-SC-03 - Distinct sources are used in each slot
 
 - **GIVEN** a gallery image whose `thumbSrc`, `src`, and `zoomSrc` are three
   different addresses
@@ -63,7 +66,7 @@ back to `alt`). When `thumbSrc` or `zoomSrc` is omitted, that slot SHALL use
 - **AND** the main frame requests `src`
 - **AND** the zoom dialog requests `zoomSrc`
 
-#### Scenario: auction-listing-SC-04 - Omitted sources fall back to src
+#### Scenario: shared-ui-auction-listing-SC-04 - Omitted sources fall back to src
 
 - **GIVEN** a gallery image that supplies only `src` and `alt`
 - **WHEN** it is rendered
@@ -76,14 +79,14 @@ two or more items it SHALL show a thumbnail strip and enable previous/next.
 With exactly one item it SHALL hide the strip and disable previous/next. With
 none it SHALL render no item and SHALL NOT present previous/next as available.
 
-#### Scenario: auction-listing-SC-05 - Several gallery items show a strip
+#### Scenario: shared-ui-auction-listing-SC-05 - Several gallery items show a strip
 
 - **GIVEN** two or more gallery items
 - **WHEN** the gallery renders
 - **THEN** a thumbnail exists for each item
 - **AND** previous and next are enabled
 
-#### Scenario: auction-listing-SC-06 - One gallery item has no strip
+#### Scenario: shared-ui-auction-listing-SC-06 - One gallery item has no strip
 
 - **GIVEN** exactly one gallery item
 - **WHEN** the gallery renders
@@ -91,7 +94,7 @@ none it SHALL render no item and SHALL NOT present previous/next as available.
 - **AND** no thumbnail strip is shown
 - **AND** previous and next are disabled
 
-#### Scenario: auction-listing-SC-07 - No gallery items
+#### Scenario: shared-ui-auction-listing-SC-07 - No gallery items
 
 - **GIVEN** an empty gallery list
 - **WHEN** the gallery renders
@@ -104,7 +107,7 @@ none it SHALL render no item and SHALL NOT present previous/next as available.
 (`ListingGalleryCopy`) with `zoom`, `previous`, and `next` from the consumer.
 It SHALL NOT supply default user-visible copy for those slots.
 
-#### Scenario: auction-listing-SC-08 - Labels come from the consumer
+#### Scenario: shared-ui-auction-listing-SC-08 - Labels come from the consumer
 
 - **GIVEN** a gallery rendered with
   `copy={{ zoom: "Click to zoom", previous: "Previous image", next: "Next image" }}`
@@ -122,7 +125,7 @@ Time left explanation and any extended-bidding row that names that listing's
 extension window and extension duration. The shared components SHALL render
 the supplied strings as given.
 
-#### Scenario: auction-listing-SC-14 - Extension copy comes from the consumer
+#### Scenario: shared-ui-auction-listing-SC-14 - Extension copy comes from the consumer
 
 - **GIVEN** a live listing whose extension window is 300 seconds and extension
   duration is 900 seconds
@@ -130,3 +133,35 @@ the supplied strings as given.
   window and a 15-minute extension
 - **THEN** the Time left explanation shows those values
 - **AND** no hardcoded "30 minutes" appears in that slot
+
+### Requirement: Bid history rows carry accepted instants
+
+`ListingBidHistoryRow` SHALL carry `acceptedAtMs: number` and MAY carry
+`timeOverride?: string` for states that are not a timestamp.
+
+`ListingUserBidHistoryRow` SHALL carry `acceptedAtMs: number` and MAY carry
+`timeOverride?: string`.
+
+#### Scenario: auction-listing-SC-22 - A bid row preserves its accepted instant
+
+- **GIVEN** a bid history row with an accepted instant and a row representing a non-timestamp state
+- **WHEN** the rows are passed to the bid history surface
+- **THEN** the accepted row provides its `acceptedAtMs` for activity-time formatting
+- **AND** the non-timestamp row may provide `timeOverride` for its displayed state
+
+### Requirement: Bid history components format activity time
+
+`ListingBidHistoryList` and `ListingUserBidHistory` SHALL require `locale`,
+`timeZone`, and `activityTimeCopy` and SHALL format each row with the platform
+activity-time rules unless `timeOverride` is set.
+
+`ListingAuctionBidCard` and `ListingAuctionCardSidebar` SHALL require `locale`
+and `timeZone` and SHALL thread them to bid history and the collector deadline
+line.
+
+#### Scenario: auction-listing-SC-13 - Recent bids show localized activity time
+
+- **GIVEN** a bid card with history rows carrying `acceptedAtMs`
+- **WHEN** it renders with a shipped locale and time zone
+- **THEN** each row shows a formatted activity time
+- **AND** no row shows a raw millisecond value

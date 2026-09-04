@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, waitFor, within } from "storybook/test";
 import { ListingBidEnrollmentCardPreview } from "./listing-bid-enrollment-card-preview";
 import {
-  ENROLLMENT_SNAPSHOT_AUTO_BID_CONFIRM,
   ENROLLMENT_SNAPSHOT_SETUP_SHEET,
   ENROLLMENT_SNAPSHOT_SETUP_SHEET_FROM_CHANGE,
   type ListingBidEnrollmentSnapshot,
@@ -75,10 +74,6 @@ SetupModalFromChange.play = async () => {
     within(dialog).getByRole("button", { name: "Continue" }),
   ).toBeEnabled();
 };
-
-export const AutoBidConfirmation = enrollmentDialogStory(
-  ENROLLMENT_SNAPSHOT_AUTO_BID_CONFIRM,
-);
 
 export const PaymentAuthorizationPending: Story = {
   render: () => <PaymentAuthorizationDialogPreview state="pending" />,

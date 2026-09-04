@@ -16,7 +16,7 @@
  *          naming who and why. Either lands in the archive commit message.
  *
  * JOURNEYS `openspec archive` folds `## Requirements` and nothing else, so a
- *          delta's `## Feature set` and `## User journeys` — and every `-US-`
+ *          delta's `## Feature set` and its `user-journeys.md` — and every `-US-`
  *          id in them — die with the change unless someone copies them into
  *          the durable spec. This checks whether they were carried, and
  *          refuses while they are not. `--journeys-copied` acknowledges a
@@ -43,7 +43,7 @@ const cyan = (s) => c("36", s);
 const ROOT = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const CHANGES = join(ROOT, "openspec", "changes");
 
-const DOOMED = ["Feature set", "User journeys"];
+const DOOMED = ["Feature set"];
 const US_ID = /[a-z0-9][a-z0-9-]*-US-\d+/g;
 
 function changeIds() {
@@ -103,7 +103,7 @@ function help() {
     dim("  The archive's two gates, mechanical: proof of deploy, and the"),
   );
   console.log(
-    dim("  Feature set / User journeys hand-copy the fold would discard."),
+    dim("  Feature set / user-journeys.md hand-copy the fold would discard."),
   );
   const ids = changeIds();
   console.log("\nChanges in flight");
@@ -185,20 +185,43 @@ if (deployWaived !== null && deployWaived.trim() === "") {
 // ── Journeys gate ───────────────────────────────────────────────────────────
 const uncarried = [];
 for (const { file, capability } of deltaFiles(changeId)) {
-  const sections = doomedSections(readFileSync(file, "utf8"));
-  if (sections.length === 0) continue;
-
   const durableFile = join(ROOT, "openspec", "specs", capability, "spec.md");
   const durable = existsSync(durableFile)
     ? readFileSync(durableFile, "utf8")
     : null;
 
-  for (const section of sections) {
+  for (const section of doomedSections(readFileSync(file, "utf8"))) {
     const carried =
       durable !== null &&
       durable.match(new RegExp(`^##\\s+${section.name}\\s*$`, "m")) !== null &&
       [...section.ids].every((id) => durable.includes(id));
     if (!carried) uncarried.push({ capability, section, durable });
+  }
+
+  // The stories are their own file on both sides, so the fold never touches
+  // them: the change's user-journeys.md has to be copied across whole.
+  const journeysFile = file.replace(/spec\.md$/, "user-journeys.md");
+  if (!existsSync(journeysFile)) continue;
+  const stories = readFileSync(journeysFile, "utf8");
+  const ids = new Set(stories.match(US_ID) ?? []);
+  const durableJourneys = join(
+    ROOT,
+    "openspec",
+    "specs",
+    capability,
+    "user-journeys.md",
+  );
+  const landed = existsSync(durableJourneys)
+    ? readFileSync(durableJourneys, "utf8")
+    : null;
+  const carried =
+    landed !== null && [...ids].every((id) => landed.includes(id));
+  if (!carried) {
+    uncarried.push({
+      capability,
+      section: { name: "User journeys", ids },
+      durable: landed,
+    });
   }
 }
 
@@ -211,14 +234,14 @@ if (uncarried.length > 0 && !journeysCopied) {
   for (const { capability, section, durable } of uncarried) {
     const ids = [...section.ids];
     console.error(
-      `  ${capability} — \`## ${section.name}\`${ids.length ? ` (${ids.join(", ")})` : ""}${durable === null ? dim("  · no durable spec yet") : ""}`,
+      `  ${capability} — \`${section.name}\`${ids.length ? ` (${ids.join(", ")})` : ""}${durable === null ? dim("  · nothing durable yet") : ""}`,
     );
   }
   fail(
     "",
-    "`openspec archive` folds `## Requirements` and nothing else — these sections",
-    "and every `-US-` id in them die with the change unless they are copied into",
-    "the durable spec. Copy them, then re-run this.",
+    "`openspec archive` folds `## Requirements` and nothing else — the feature",
+    "set, the journeys file, and every `-US-` id in it die with the change unless",
+    "they are copied across to the durable capability. Copy them, then re-run this.",
     "",
     "A capability with no durable spec yet can only receive the copy after the",
     `fold creates it. Acknowledge that with ${cyan("--journeys-copied")} — the sections`,

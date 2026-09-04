@@ -3,7 +3,7 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-01, tcs-rules r1
 
-## listing-media-US1: Operator attaches an image to a listing gallery
+## grade10-site-auction-listing-media-US1: Operator attaches an image to a listing gallery
 
 **As an** operator with catalogue grant,
 **I want** to upload a supported image into a listing's gallery and confirm it
@@ -11,7 +11,7 @@ from a preview,
 **so that** only the file I meant to store is sent, and the gallery stays
 within the cap admin-listing sets.
 
-### listing-media-US1-TC1-1: One-image listing publishes with no empty slots
+### grade10-site-auction-listing-media-US1-TC1-1: One-image listing publishes with no empty slots
 
 **Classification:**
 
@@ -23,7 +23,7 @@ within the cap admin-listing sets.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-01
+* **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
 A draft listing holds only one JPEG in the gallery. Operator has catalogue grant.
@@ -41,7 +41,7 @@ A draft listing holds only one JPEG in the gallery. Operator has catalogue grant
 * The details page shows that one image.
 * No empty gallery slots are invented.
 
-### listing-media-US1-TC2-1: Accepted JPEG becomes a gallery image
+### grade10-site-auction-listing-media-US1-TC2-1: Accepted JPEG becomes a gallery image
 
 **Classification:**
 
@@ -53,7 +53,7 @@ A draft listing holds only one JPEG in the gallery. Operator has catalogue grant
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-01
+* **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
 A draft listing has fewer than eight media items. Operator has catalogue grant.
@@ -70,7 +70,7 @@ A draft listing has fewer than eight media items. Operator has catalogue grant.
 * That image is stored in gallery order.
 * The admin listings surface can show it on that listing.
 
-### listing-media-US1-TC3-1: Choosing a file shows a preview without uploading
+### grade10-site-auction-listing-media-US1-TC3-1: Choosing a file shows a preview without uploading
 
 **Classification:**
 
@@ -82,7 +82,7 @@ A draft listing has fewer than eight media items. Operator has catalogue grant.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-01
+* **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
 A draft listing has an empty gallery slot the operator is filling.
@@ -99,7 +99,7 @@ A draft listing has an empty gallery slot the operator is filling.
 * The admin media manager shows a preview of that file.
 * The listing still has no new stored image for that slot.
 
-### listing-media-US1-TC4-1: Confirming the preview stores the image
+### grade10-site-auction-listing-media-US1-TC4-1: Confirming the preview stores the image
 
 **Classification:**
 
@@ -111,7 +111,7 @@ A draft listing has an empty gallery slot the operator is filling.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-01
+* **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
 An operator has selected a JPEG for a draft listing gallery slot and sees its preview.
@@ -126,7 +126,7 @@ An operator has selected a JPEG for a draft listing gallery slot and sees its pr
 * That slot holds the image.
 * The preview is cleared.
 
-### listing-media-US1-TC5-1: Discarding the preview leaves the gallery unchanged
+### grade10-site-auction-listing-media-US1-TC5-1: Discarding the preview leaves the gallery unchanged
 
 **Classification:**
 
@@ -138,7 +138,7 @@ An operator has selected a JPEG for a draft listing gallery slot and sees its pr
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-01
+* **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
 An operator has selected an image for a draft listing gallery slot and sees its preview.
@@ -154,7 +154,7 @@ An operator has selected an image for a draft listing gallery slot and sees its 
 * The preview is cleared.
 * No upload was sent.
 
-### listing-media-US1-TC6-1: Ninth media item is refused
+### grade10-site-auction-listing-media-US1-TC6-1: Ninth media item is refused
 
 **Classification:**
 
@@ -166,7 +166,7 @@ An operator has selected an image for a draft listing gallery slot and sees its 
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-01
+* **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
 A draft listing has eight media items.
@@ -182,7 +182,7 @@ A draft listing has eight media items.
 * The upload is refused.
 * The gallery still has eight items.
 
-### listing-media-US1-TC7-1: Unsupported type is refused
+### grade10-site-auction-listing-media-US1-TC7-1: Unsupported type is refused
 
 **Classification:**
 
@@ -194,7 +194,7 @@ A draft listing has eight media items.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-01
+* **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
 A draft listing is open in the admin media manager.
@@ -208,7 +208,7 @@ A draft listing is open in the admin media manager.
 * The upload is refused.
 * The gallery is unchanged.
 
-### listing-media-US1-TC8-1: Oversized image is refused
+### grade10-site-auction-listing-media-US1-TC8-1: Oversized image is refused
 
 **Classification:**
 
@@ -220,7 +220,7 @@ A draft listing is open in the admin media manager.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-01
+* **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
 A draft listing is open in the admin media manager.
@@ -240,7 +240,7 @@ A draft listing is open in the admin media manager.
 * The upload is refused.
 * The gallery is unchanged.
 
-### listing-media-US1-TC9-1: Published listing can gain another image
+### grade10-site-auction-listing-media-US1-TC9-1: Published listing can gain another image
 
 **Classification:**
 
@@ -252,7 +252,7 @@ A draft listing is open in the admin media manager.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-01
+* **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
 A published listing has one gallery image and room under the eight-item cap.
@@ -269,7 +269,7 @@ A published listing has one gallery image and room under the eight-item cap.
 * The details page shows both images in gallery order.
 * The first image is unchanged.
 
-### listing-media-US1-TC10-1: Adding after close is refused
+### grade10-site-auction-listing-media-US1-TC10-1: Adding after close is refused
 
 **Classification:**
 
@@ -281,7 +281,7 @@ A published listing has one gallery image and room under the eight-item cap.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-01
+* **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
 A closed listing has one gallery image.
@@ -299,14 +299,14 @@ A closed listing has one gallery image.
 
 ---
 
-## listing-media-US2: Operator inspects a stored image at zoom size
+## grade10-site-auction-listing-media-US2: Operator inspects a stored image at zoom size
 
 **As an** operator with catalogue grant,
 **I want** the admin media manager to show each stored image at card size and
 reveal it at zoom size on hover,
 **so that** I can judge a card's condition without clicking through to it.
 
-### listing-media-US2-TC1-1: Media manager shows stored image at card size
+### grade10-site-auction-listing-media-US2-TC1-1: Media manager shows stored image at card size
 
 **Classification:**
 
@@ -318,7 +318,7 @@ reveal it at zoom size on hover,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-02
+* **Trace:** grade10-site-auction-listing-media-US-02
 
 **Pre-conditions:**
 A draft listing has a stored gallery image. Operator has catalogue grant.
@@ -333,7 +333,7 @@ A draft listing has a stored gallery image. Operator has catalogue grant.
 
 * That image shows at card size.
 
-### listing-media-US2-TC2-1: Hovering the magnify control shows zoom size
+### grade10-site-auction-listing-media-US2-TC2-1: Hovering the magnify control shows zoom size
 
 **Classification:**
 
@@ -345,7 +345,7 @@ A draft listing has a stored gallery image. Operator has catalogue grant.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-02
+* **Trace:** grade10-site-auction-listing-media-US-02
 
 **Pre-conditions:**
 A draft listing with a stored gallery image is open in the media manager.
@@ -360,7 +360,7 @@ A draft listing with a stored gallery image is open in the media manager.
 * A zoom-size preview of that image is shown.
 * That preview is at least three-quarters of the viewport height.
 
-### listing-media-US2-TC3-1: Leaving the magnify control hides zoom
+### grade10-site-auction-listing-media-US2-TC3-1: Leaving the magnify control hides zoom
 
 **Classification:**
 
@@ -372,7 +372,7 @@ A draft listing with a stored gallery image is open in the media manager.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-02
+* **Trace:** grade10-site-auction-listing-media-US-02
 
 **Pre-conditions:**
 The zoom-size preview is visible from hovering the magnify control.
@@ -387,7 +387,7 @@ The zoom-size preview is visible from hovering the magnify control.
 
 ---
 
-## listing-media-US3: Operator corrects a listing's gallery images
+## grade10-site-auction-listing-media-US3: Operator corrects a listing's gallery images
 
 **As an** operator with catalogue grant,
 **I want** to replace and remove gallery images while the listing is still
@@ -395,7 +395,7 @@ writable,
 **so that** I can fix a bad photograph without ever leaving a published
 listing with no image at all.
 
-### listing-media-US3-TC1-1: Replacing a gallery image on a published listing
+### grade10-site-auction-listing-media-US3-TC1-1: Replacing a gallery image on a published listing
 
 **Classification:**
 
@@ -407,7 +407,7 @@ listing with no image at all.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-03
+* **Trace:** grade10-site-auction-listing-media-US-03
 
 **Pre-conditions:**
 A published listing has a gallery image at a position. Operator has catalogue grant.
@@ -424,7 +424,7 @@ A published listing has a gallery image at a position. Operator has catalogue gr
 * That position holds the new image.
 * Other gallery items are unchanged.
 
-### listing-media-US3-TC2-1: Removing the last image after create is refused
+### grade10-site-auction-listing-media-US3-TC2-1: Removing the last image after create is refused
 
 **Classification:**
 
@@ -436,7 +436,7 @@ A published listing has a gallery image at a position. Operator has catalogue gr
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-03
+* **Trace:** grade10-site-auction-listing-media-US-03
 
 **Pre-conditions:**
 A published listing has one JPEG.
@@ -452,7 +452,7 @@ A published listing has one JPEG.
 * The removal is refused.
 * The gallery still has that JPEG.
 
-### listing-media-US3-TC3-1: Draft gallery image can be replaced and removed
+### grade10-site-auction-listing-media-US3-TC3-1: Draft gallery image can be replaced and removed
 
 **Classification:**
 
@@ -464,7 +464,7 @@ A published listing has one JPEG.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-03
+* **Trace:** grade10-site-auction-listing-media-US-03
 
 **Pre-conditions:**
 A draft listing has one gallery image.
@@ -482,14 +482,14 @@ A draft listing has one gallery image.
 
 ---
 
-## listing-media-US4: Operator describes a gallery image with alt text
+## grade10-site-auction-listing-media-US4: Operator describes a gallery image with alt text
 
 **As an** operator with catalogue grant,
 **I want** to supply and later change optional alt text on a gallery image,
 **so that** each image has an accessible name, falling back to the listing
 title when I have written none.
 
-### listing-media-US4-TC1-1: Missing alt uses the listing title
+### grade10-site-auction-listing-media-US4-TC1-1: Missing alt uses the listing title
 
 **Classification:**
 
@@ -501,7 +501,7 @@ title when I have written none.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-04
+* **Trace:** grade10-site-auction-listing-media-US-04
 
 **Pre-conditions:**
 A published listing titled "1999 Charizard, PSA 10" whose first gallery image has no alt text.
@@ -521,7 +521,7 @@ A published listing titled "1999 Charizard, PSA 10" whose first gallery image ha
 
 * That image's accessible name is "1999 Charizard, PSA 10".
 
-### listing-media-US4-TC2-1: Supplied alt is shown
+### grade10-site-auction-listing-media-US4-TC2-1: Supplied alt is shown
 
 **Classification:**
 
@@ -533,7 +533,7 @@ A published listing titled "1999 Charizard, PSA 10" whose first gallery image ha
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-04
+* **Trace:** grade10-site-auction-listing-media-US-04
 
 **Pre-conditions:**
 A published listing whose first gallery image has alt text "Holo Charizard, front of slab".
@@ -553,7 +553,7 @@ A published listing whose first gallery image has alt text "Holo Charizard, fron
 
 * That image's accessible name is "Holo Charizard, front of slab".
 
-### listing-media-US4-TC3-1: Alt can be edited on a published listing
+### grade10-site-auction-listing-media-US4-TC3-1: Alt can be edited on a published listing
 
 **Classification:**
 
@@ -565,7 +565,7 @@ A published listing whose first gallery image has alt text "Holo Charizard, fron
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-04
+* **Trace:** grade10-site-auction-listing-media-US-04
 
 **Pre-conditions:**
 A published listing has a gallery image. Operator has catalogue grant.
@@ -582,7 +582,7 @@ A published listing has a gallery image. Operator has catalogue grant.
 * The image bytes are unchanged.
 * The details page uses the new alt text.
 
-### listing-media-US4-TC4-1: Over-length alt is refused
+### grade10-site-auction-listing-media-US4-TC4-1: Over-length alt is refused
 
 **Classification:**
 
@@ -594,7 +594,7 @@ A published listing has a gallery image. Operator has catalogue grant.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-04
+* **Trace:** grade10-site-auction-listing-media-US-04
 
 **Pre-conditions:**
 A draft listing is open. The gallery image already has alt text.
@@ -610,14 +610,14 @@ A draft listing is open. The gallery image already has alt text.
 
 ---
 
-## listing-media-US5: Collector views a listing's gallery images
+## grade10-site-auction-listing-media-US5: Collector views a listing's gallery images
 
 **As a** collector,
 **I want** a listing's images at the size the surface needs, in gallery order,
 **so that** I can pick a listing off the catalogue and study its images on the
 details page.
 
-### listing-media-US5-TC1-1: Catalogue shows the first gallery image at card size
+### grade10-site-auction-listing-media-US5-TC1-1: Catalogue shows the first gallery image at card size
 
 **Classification:**
 
@@ -629,7 +629,7 @@ details page.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-05
+* **Trace:** grade10-site-auction-listing-media-US-05
 
 **Pre-conditions:**
 A published listing whose gallery is image A then image B.
@@ -646,7 +646,7 @@ A published listing whose gallery is image A then image B.
 * It does not show image B on the card.
 * That listing's card image is requested at size `card`.
 
-### listing-media-US5-TC2-1: Details gallery uses thumb, detail, and zoom
+### grade10-site-auction-listing-media-US5-TC2-1: Details gallery uses thumb, detail, and zoom
 
 **Classification:**
 
@@ -658,7 +658,7 @@ A published listing whose gallery is image A then image B.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-05
+* **Trace:** grade10-site-auction-listing-media-US-05
 
 **Pre-conditions:**
 A published listing with two gallery images.
@@ -674,7 +674,7 @@ A published listing with two gallery images.
 * The main frame requests size `detail`.
 * Zoom requests size `zoom`.
 
-### listing-media-US5-TC3-1: Unknown size is not found
+### grade10-site-auction-listing-media-US5-TC3-1: Unknown size is not found
 
 **Classification:**
 
@@ -686,7 +686,7 @@ A published listing with two gallery images.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** listing-media-US-05
+* **Trace:** grade10-site-auction-listing-media-US-05
 
 **Pre-conditions:**
 A published gallery image is available at `card`, `detail`, `thumb`, and `zoom`.
@@ -700,7 +700,7 @@ A published gallery image is available at `card`, `detail`, `thumb`, and `zoom`.
 
 * The unknown-size response matches a missing image.
 
-### listing-media-US5-TC4-1: Listing without a catalogue image still lists
+### grade10-site-auction-listing-media-US5-TC4-1: Listing without a catalogue image still lists
 
 **Classification:**
 
@@ -712,7 +712,7 @@ A published gallery image is available at `card`, `detail`, `thumb`, and `zoom`.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-05
+* **Trace:** grade10-site-auction-listing-media-US-05
 
 **Pre-conditions:**
 A published listing has no gallery images.
@@ -727,7 +727,7 @@ A published listing has no gallery images.
 * The listing appears with its title and price.
 * No image is shown for it by this capability.
 
-### listing-media-US5-TC5-1: Several images appear in gallery order
+### grade10-site-auction-listing-media-US5-TC5-1: Several images appear in gallery order
 
 **Classification:**
 
@@ -739,7 +739,7 @@ A published listing has no gallery images.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-05
+* **Trace:** grade10-site-auction-listing-media-US-05
 
 **Pre-conditions:**
 A published listing with three gallery images uploaded in order A, B, C.
@@ -753,7 +753,7 @@ A published listing with three gallery images uploaded in order A, B, C.
 
 * The gallery shows three images in the order A, B, C.
 
-### listing-media-US5-TC6-1: One image has no thumbnail strip
+### grade10-site-auction-listing-media-US5-TC6-1: One image has no thumbnail strip
 
 **Classification:**
 
@@ -765,7 +765,7 @@ A published listing with three gallery images uploaded in order A, B, C.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-05
+* **Trace:** grade10-site-auction-listing-media-US-05
 
 **Pre-conditions:**
 A published listing with only one gallery image.
@@ -780,7 +780,7 @@ A published listing with only one gallery image.
 * The gallery shows that image.
 * It does not show a thumbnail strip.
 
-### listing-media-US5-TC7-1: No images still shows the listing
+### grade10-site-auction-listing-media-US5-TC7-1: No images still shows the listing
 
 **Classification:**
 
@@ -792,7 +792,7 @@ A published listing with only one gallery image.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-media-US-05
+* **Trace:** grade10-site-auction-listing-media-US-05
 
 **Pre-conditions:**
 A published listing with no gallery images.

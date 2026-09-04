@@ -11,22 +11,6 @@ When a cart line's product has left the catalogue, the drawer drops it after ope
   - Unavailable status: Mark a line whose product is no longer in the store catalogue, distinct from sold out and adjusted.
   - Toast copy field: Carry the removal message on drawer copy the consumer supplies.
 
-## User journeys
-
-### store-cart-US-06: Shopper opens a cart that held a delisted product
-
-**As a** shopper,
-**I want** a product that left the catalogue to disappear after the drawer finishes loading, with one toast,
-**so that** I am not shown a sold-out row for something the store no longer sells.
-
-**Accepted by:**
-
-- `store-cart-SC-01` — An application imports the cart drawer
-- `store-cart-SC-10` — Delisted items clear after loading with one toast
-- `store-cart-SC-11` — No unavailable items means no removal toast
-- `store-cart-SC-12` — Status values are the four named states
-- `store-cart-SC-13` — Drawer copy carries the unavailable-removal toast message
-
 ## ADDED Requirements
 
 ### Requirement: Unavailable items are removed silently after open loading
@@ -42,7 +26,7 @@ SHALL NOT show that toast.
 `unavailable` means the product is no longer in the store catalogue (taken off
 sale). It is not `soldOut` and not `adjusted`.
 
-#### Scenario: store-cart-SC-10 - Delisted items clear after loading with one toast
+#### Scenario: shared-ui-store-cart-SC-10 - Delisted items clear after loading with one toast
 
 - **GIVEN** an open cart drawer whose status-and-price loading has finished
 - **AND** the cart includes at least one item with status `unavailable` and at
@@ -53,7 +37,7 @@ sale). It is not `soldOut` and not `adjusted`.
 - **AND** exactly one toast appears with the `unavailableItemsRemoved` message
 - **AND** non-unavailable items remain in the cart
 
-#### Scenario: store-cart-SC-11 - No unavailable items means no removal toast
+#### Scenario: shared-ui-store-cart-SC-11 - No unavailable items means no removal toast
 
 - **GIVEN** an open cart drawer whose status-and-price loading has finished
 - **AND** no cart item has status `unavailable`
@@ -73,7 +57,7 @@ sale). It is not `soldOut` and not `adjusted`.
 | `soldOut` | Variant has no stock; row stays visible with sold-out treatment |
 | `unavailable` | Product is no longer in the store catalogue; removed after open loading |
 
-#### Scenario: store-cart-SC-12 - Status values are the four named states
+#### Scenario: shared-ui-store-cart-SC-12 - Status values are the four named states
 
 - **WHEN** a consumer assigns `CartItemStatus` on a cart line
 - **THEN** the allowed values are only `default`, `adjusted`, `soldOut`, and
@@ -94,12 +78,12 @@ components for the store cart surface: `CartDrawer`, `CartDrawerHeader`,
 `CartDrawerCopy` SHALL include `unavailableItemsRemoved` for the toast shown
 when unavailable lines are cleared after open loading.
 
-#### Scenario: store-cart-SC-01 - An application imports the cart drawer
+#### Scenario: shared-ui-store-cart-SC-01 - An application imports the cart drawer
 
 - **WHEN** an application imports any export named above from the shared UI package's public entry
 - **THEN** the import resolves without error
 
-#### Scenario: store-cart-SC-13 - Drawer copy carries the unavailable-removal toast message
+#### Scenario: shared-ui-store-cart-SC-13 - Drawer copy carries the unavailable-removal toast message
 
 - **WHEN** a consumer supplies `CartDrawerCopy`
 - **THEN** the copy includes `unavailableItemsRemoved`

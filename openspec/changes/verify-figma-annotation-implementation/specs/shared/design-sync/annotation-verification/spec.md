@@ -34,7 +34,7 @@ SHALL use `grade10` implementation evidence. A spec-scope finding SHALL use
 `grade10-spec` implementation evidence. Evidence from the other repository is
 dependency context only and SHALL NOT prove the owning implementation complete.
 
-#### Scenario: annotation-implementation-verification-SC-01 - Selected behavior is fully implemented
+#### Scenario: shared-design-sync-annotation-verification-SC-01 - Selected behavior is fully implemented
 
 - **GIVEN** a selected finding's expected behavior is present in its owning repository
 - **AND** the finding has one exact existing association
@@ -44,21 +44,21 @@ dependency context only and SHALL NOT prove the owning implementation complete.
 - **THEN** it records the exact implementation location, test command and result, and runtime observation
 - **AND** it classifies the finding as `implemented`
 
-#### Scenario: annotation-implementation-verification-SC-02 - Claimed implementation lacks evidence
+#### Scenario: shared-design-sync-annotation-verification-SC-02 - Claimed implementation lacks evidence
 
 - **GIVEN** a selected finding has code or test evidence but not the complete implementation, focused-test, and runtime evidence set
 - **WHEN** the workflow validates the implementation-impact review
 - **THEN** it refuses an `implemented` outcome
 - **AND** it keeps the finding visible as `gap` or `blocked`
 
-#### Scenario: annotation-implementation-verification-SC-03 - Review stays within the owning repository
+#### Scenario: shared-design-sync-annotation-verification-SC-03 - Review stays within the owning repository
 
 - **GIVEN** a selected finding belongs to one registered annotation scope
 - **WHEN** its implementation is reviewed
 - **THEN** the workflow uses the repository assigned to that scope as the implementation authority
 - **AND** it does not infer completion from similarly named code in another repository
 
-#### Scenario: annotation-implementation-verification-SC-04 - Selection and review digests disagree
+#### Scenario: shared-design-sync-annotation-verification-SC-04 - Selection and review digests disagree
 
 - **GIVEN** an impact review names a different observation digest from the selected report
 - **WHEN** the workflow validates the review
@@ -82,28 +82,28 @@ file-name similarity, Git authorship, or a test unrelated to the expected
 behavior. `gap` and `blocked` findings SHALL NOT be eligible for annotation
 acceptance in the current run.
 
-#### Scenario: annotation-implementation-verification-SC-05 - Active work exactly covers a finding
+#### Scenario: shared-design-sync-annotation-verification-SC-05 - Active work exactly covers a finding
 
 - **GIVEN** one active change or task group exactly plans a selected finding's missing behavior
 - **WHEN** the workflow classifies its impact
 - **THEN** it records `covered` with that exact association
 - **AND** it does not propose a duplicate OpenSpec change
 
-#### Scenario: annotation-implementation-verification-SC-06 - Finding has no implementation impact
+#### Scenario: shared-design-sync-annotation-verification-SC-06 - Finding has no implementation impact
 
 - **GIVEN** a selected finding does not require code, requirement, or delivery-plan changes
 - **WHEN** the workflow classifies its impact
 - **THEN** it requires a specific non-empty reason before recording `no-impact`
 - **AND** it does not infer the reason from the annotation body
 
-#### Scenario: annotation-implementation-verification-SC-07 - Finding exposes an implementation gap
+#### Scenario: shared-design-sync-annotation-verification-SC-07 - Finding exposes an implementation gap
 
 - **GIVEN** the expected behavior is absent or only partially implemented
 - **WHEN** the workflow classifies its impact
 - **THEN** it records `gap` with the missing behavior and available evidence
 - **AND** it excludes the finding from the current acceptance set
 
-#### Scenario: annotation-implementation-verification-SC-08 - Evidence remains ambiguous
+#### Scenario: shared-design-sync-annotation-verification-SC-08 - Evidence remains ambiguous
 
 - **GIVEN** the workflow cannot establish one reliable implementation outcome
 - **WHEN** review completes
@@ -118,21 +118,22 @@ SHALL group remaining gaps by coherent capability and delivery outcome rather
 than by annotation count.
 
 For every proposed group, the workflow SHALL preview the selected finding IDs,
-expected behavior, capability path, proposed change name, recommended planning
-lane, affected repositories, and non-goals. It SHALL require explicit
-confirmation before starting planning. It SHALL use `pm-planning` when work ends
-at requirements and `full-planning` when delivery is being planned. The
-planning workflow SHALL retain its own validation, commit, push, merge, and
+expected behavior, capability path, proposed change name, how far the change is
+to be planned, affected repositories, and non-goals. It SHALL require explicit
+confirmation before starting planning. It SHALL hand the group to
+`grade10-planning`, stopping at the requirements when that is where the work
+ends and continuing to the delivery plan when it does not. The planning
+workflow SHALL retain its own validation, commit, push, merge, and
 implementation gates.
 
-#### Scenario: annotation-implementation-verification-SC-09 - Active task group already owns the gap
+#### Scenario: shared-design-sync-annotation-verification-SC-09 - Active task group already owns the gap
 
 - **GIVEN** an exact active change and task group already plan the missing behavior
 - **WHEN** the workflow prepares the planning handoff
 - **THEN** it records `covered` with that task group
 - **AND** it does not create another change
 
-#### Scenario: annotation-implementation-verification-SC-10 - Related gaps form one planning change
+#### Scenario: shared-design-sync-annotation-verification-SC-10 - Related gaps form one planning change
 
 - **GIVEN** several selected findings describe one capability and delivery outcome
 - **AND** no exact existing work covers them
@@ -140,21 +141,21 @@ implementation gates.
 - **THEN** it proposes one grouped change containing every related finding ID
 - **AND** it does not create one change per annotation
 
-#### Scenario: annotation-implementation-verification-SC-11 - Delivery planning is requested
+#### Scenario: shared-design-sync-annotation-verification-SC-11 - Delivery planning is requested
 
 - **GIVEN** a confirmed gap is intended to proceed toward implementation
 - **WHEN** the developer confirms the planning preview
-- **THEN** the workflow routes the grouped evidence to `full-planning`
-- **AND** the resulting change includes proposal, spec, design, and task artifacts as required by that lane
+- **THEN** the workflow routes the grouped evidence to `grade10-planning`
+- **AND** the resulting change carries proposal, specs, journeys, tech design, and tasks
 
-#### Scenario: annotation-implementation-verification-SC-12 - Requirements-only planning is requested
+#### Scenario: shared-design-sync-annotation-verification-SC-12 - Requirements-only planning is requested
 
 - **GIVEN** a confirmed gap is intended to stop after its requirements are settled
 - **WHEN** the developer confirms the planning preview
-- **THEN** the workflow routes the grouped evidence to `pm-planning`
-- **AND** it does not invent delivery tasks
+- **THEN** the workflow routes the grouped evidence to `grade10-planning`
+- **AND** the resulting change stops at its specs and journeys, inventing no delivery tasks
 
-#### Scenario: annotation-implementation-verification-SC-13 - Developer declines planning
+#### Scenario: shared-design-sync-annotation-verification-SC-13 - Developer declines planning
 
 - **GIVEN** the workflow has previewed one or more planning groups
 - **WHEN** the developer declines the planning write
@@ -175,28 +176,28 @@ observation, report, selection, and impact review before the gap can receive an
 exact association and become eligible for acceptance. Planning failure or
 partial planning SHALL leave the annotation baseline unchanged.
 
-#### Scenario: annotation-implementation-verification-SC-14 - Mixed outcomes continue safely
+#### Scenario: shared-design-sync-annotation-verification-SC-14 - Mixed outcomes continue safely
 
 - **GIVEN** one selection contains acceptance-eligible findings and gaps
 - **WHEN** the impact review completes
 - **THEN** only the eligible findings continue to the existing acceptance preview
 - **AND** every gap remains visible for planning and a later reconciliation
 
-#### Scenario: annotation-implementation-verification-SC-15 - Planning completes for a gap
+#### Scenario: shared-design-sync-annotation-verification-SC-15 - Planning completes for a gap
 
 - **GIVEN** confirmed planning artifacts now describe a previously selected gap
 - **WHEN** the developer returns to annotation reconciliation
 - **THEN** the workflow takes a fresh live observation and generates new stable findings
 - **AND** it requires a new selection and impact review before accepting an association
 
-#### Scenario: annotation-implementation-verification-SC-16 - Planning fails or remains incomplete
+#### Scenario: shared-design-sync-annotation-verification-SC-16 - Planning fails or remains incomplete
 
 - **GIVEN** a planning workflow fails validation or stops before its required artifacts are complete
 - **WHEN** control returns to annotation reconciliation
 - **THEN** the original gap remains unaccepted
 - **AND** the annotation baseline and unrelated OpenSpec files remain unchanged
 
-#### Scenario: annotation-implementation-verification-SC-17 - Permissions remain independent
+#### Scenario: shared-design-sync-annotation-verification-SC-17 - Permissions remain independent
 
 - **WHEN** a developer confirms implementation review or planning
 - **THEN** that confirmation does not authorize annotation acceptance, a Git commit, a push, a merge, task claiming, or implementation

@@ -37,68 +37,6 @@ when a close extends stay `grade10-site/auction/auction`'s.
   - No lot in the sitemap: which lots the auction publishes is unknown at build
     time, so no entry is a lot address
 
-## User journeys
-
-### listing-page-US-01: Collector opens a lot at its own address
-
-**As a** collector,
-**I want** a lot's address to answer with that lot's own page in the response
-HTML,
-**so that** I can read its name, its description and where its bidding stands
-without waiting for a script to run.
-
-**Accepted by:**
-
-- `listing-page-SC-01` — A lot answers whole
-- `listing-page-SC-02` — Two lots, two pages
-- `listing-page-SC-05` — A lot the catalogue publishes answers
-
-### listing-page-US-02: Collector shares a lot link
-
-**As a** collector,
-**I want** a lot link to unfurl as that lot and its own canonical address,
-**so that** a link I pass on names the lot it points at instead of the auction
-catalogue.
-
-**Accepted by:**
-
-- `listing-page-SC-03` — A preview fetcher reads a lot
-
-### listing-page-US-03: Collector opens an address that names no lot
-
-**As a** collector,
-**I want** an address under the auction's lots that names no published lot to
-answer with the site's not-found surface,
-**so that** I am never shown an empty lot page or the catalogue in its place.
-
-**Accepted by:**
-
-- `listing-page-SC-04` — An id the catalogue publishes no lot for
-- `listing-page-SC-05` — A lot the catalogue publishes answers
-
-### listing-page-US-04: Collector reads a live lot while scripts load
-
-**As a** collector,
-**I want** the lot I was served to stay on screen once scripts finish loading,
-**so that** nothing I was reading blanks into a placeholder and no value
-disagrees with what the document carried.
-
-**Accepted by:**
-
-- `listing-page-SC-06` — The served lot stays on screen
-- `listing-page-SC-07` — A value that follows the clock carries on
-
-### listing-page-US-05: Collector reaches a lot from the catalogue
-
-**As a** collector,
-**I want** to open a lot's own address from the catalogue without a page load,
-**so that** the lot I picked out of the list is the page I land on.
-
-**Accepted by:**
-
-- `listing-page-SC-08` — A lot is opened from the catalogue
-- `listing-page-SC-09` — The sitemap names no lot
-
 ## Requirements
 ### Requirement: A lot answers at its own address
 
@@ -109,13 +47,13 @@ response HTML without any script executing.
 Two lot addresses SHALL answer with their own lot — the page a collector
 reads is the one the address names, not the catalogue it was reached from.
 
-#### Scenario: listing-page-SC-01 - A lot answers whole
+#### Scenario: grade10-site-auction-listing-page-SC-01 - A lot answers whole
 
 - **WHEN** a lot address is fetched and no script executes
 - **THEN** the response HTML contains that lot's name, its description, and
   where its bidding stands
 
-#### Scenario: listing-page-SC-02 - Two lots, two pages
+#### Scenario: grade10-site-auction-listing-page-SC-02 - Two lots, two pages
 
 - **WHEN** two lot addresses are fetched
 - **THEN** each response carries its own lot's name and standing, and its own
@@ -127,7 +65,7 @@ A lot address SHALL carry Open Graph title, description and URL naming that
 lot and its own canonical address, readable without executing scripts. A
 shared lot link SHALL NOT unfurl as the auction catalogue.
 
-#### Scenario: listing-page-SC-03 - A preview fetcher reads a lot
+#### Scenario: grade10-site-auction-listing-page-SC-03 - A preview fetcher reads a lot
 
 - **WHEN** a lot address is fetched and no script executes
 - **THEN** the response carries `og:title`, `og:description` and `og:url`
@@ -141,14 +79,14 @@ asked when the address is asked for. An address under the auction's lots
 naming no published lot SHALL answer with status 404 and the site's not-found
 surface, never an empty lot page and never the catalogue.
 
-#### Scenario: listing-page-SC-04 - An id the catalogue publishes no lot for
+#### Scenario: grade10-site-auction-listing-page-SC-04 - An id the catalogue publishes no lot for
 
 - **WHEN** an address under the auction's lots naming no published lot is
   fetched
 - **THEN** the response has status 404
 - **AND** a collector opening it sees the site's not-found surface
 
-#### Scenario: listing-page-SC-05 - A lot the catalogue publishes answers
+#### Scenario: grade10-site-auction-listing-page-SC-05 - A lot the catalogue publishes answers
 
 - **GIVEN** a lot the catalogue publishes
 - **WHEN** its address is fetched
@@ -163,7 +101,7 @@ its served content still present. Nothing the document showed SHALL be
 replaced by a loading placeholder, and a value that follows the clock SHALL
 carry on from what was served rather than disagreeing with it.
 
-#### Scenario: listing-page-SC-06 - The served lot stays on screen
+#### Scenario: grade10-site-auction-listing-page-SC-06 - The served lot stays on screen
 
 - **GIVEN** a lot address served with that lot in the document
 - **WHEN** scripts finish loading
@@ -171,7 +109,7 @@ carry on from what was served rather than disagreeing with it.
   standing still present
 - **AND** none of them is replaced by a loading placeholder
 
-#### Scenario: listing-page-SC-07 - A value that follows the clock carries on
+#### Scenario: grade10-site-auction-listing-page-SC-07 - A value that follows the clock carries on
 
 - **GIVEN** a lot whose page shows how long its bidding has left
 - **WHEN** scripts finish loading
@@ -187,13 +125,13 @@ The sitemap lists the surfaces the build writes a document for, and a lot is
 not one of them: which lots the auction publishes is not known when the site
 is built.
 
-#### Scenario: listing-page-SC-08 - A lot is opened from the catalogue
+#### Scenario: grade10-site-auction-listing-page-SC-08 - A lot is opened from the catalogue
 
 - **GIVEN** a collector reading the auction catalogue
 - **WHEN** they open a lot it lists
 - **THEN** that lot's address is what they are on, showing that lot's page
 
-#### Scenario: listing-page-SC-09 - The sitemap names no lot
+#### Scenario: grade10-site-auction-listing-page-SC-09 - The sitemap names no lot
 
 - **WHEN** the sitemap is fetched
 - **THEN** no entry is a lot address

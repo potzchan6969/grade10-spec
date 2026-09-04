@@ -93,7 +93,7 @@ By what conflicted:
   that landed, and dropping one under-reports the board with nothing to catch
   it. `pnpm run plan:preflight <change-id>` prints the state you are resolving
   against.
-- **`proposal.md`, `design.md`, `ui.md`** — prose. Both sides usually belong;
+- **`proposal.md`, `tech-design.md`, `ui-design.md`** — prose. Both sides usually belong;
   say the merged thing once rather than stacking two paragraphs.
 - **Generated files** — never resolved by hand. Take either side, regenerate,
   commit the output: `packages/design-system/src/theme.css` and
@@ -126,10 +126,26 @@ On the rebased commits, not the ones you started with:
   an id the spec no longer issues.
 
 **A delta with journeys and no suite does not push.** If a `spec.md` on this
-branch has `## User journeys` and no `test-cases.md` beside it, stop and run
+branch has a `user-journeys.md` and no `test-cases.md` beside it, stop and run
 `/spec-to-tcs <change-id>`, then commit the suites before pushing —
 `pnpm run tcs:validate --require-suites` names them. Generation belongs in the
 spec's own pull request; see `docs/governance/specs-to-test-cases.md`.
+
+**A change that moves a cross-feature path settles its domain suite.** Do not
+ask; compute it. For each domain the branch touches that holds an
+`openspec/specs/<product>/<domain>/domain-tcs.md`, intersect the journeys of the
+capabilities the change carries with the `**Trace:**` lines in that `domain-tcs.md`.
+A hit — or a capability new to a domain that already has an `domain-tcs.md` — means
+the change either carries an `domain-tcs.md` edit or one line in its `proposal.md`:
+
+```text
+No domain impact: <why>
+```
+
+Neither present, no push: run `/spec-to-tcs domain <domain>`, or write the
+line. No hit, nothing to say — most changes never trip this. `## Impact` is
+not the signal; it records affected code and packages, not the paths a person
+walks.
 
 A regenerated file is a commit, not a dirty tree left behind.
 
@@ -208,5 +224,5 @@ Then say the handoff out loud: the change is on `main`, so an engineer can
 ## Related
 
 - `/pr-push` — opens the PR this one lands.
-- `/pm-planning`, `/full-planning`, `/openspec-propose` — where the change was
+- `/planning-pm`, `/planning-dev`, `/openspec-propose` — where the change was
   written.

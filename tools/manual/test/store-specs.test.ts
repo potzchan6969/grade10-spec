@@ -114,6 +114,7 @@ describe("error containment", () => {
 });
 
 const SPEC = "openspec/specs/demo-product/alpha/spec.md";
+const JOURNEYS = "openspec/specs/demo-product/alpha/user-journeys.md";
 const CASES = "openspec/specs/demo-product/alpha/test-cases.md";
 
 const written = (files: Record<string, string>) =>
@@ -163,6 +164,14 @@ describe("a spec issuing one id twice", () => {
         "",
         "Alpha exists.",
         "",
+        "## Requirements",
+        "",
+        "### Requirement: Alpha does things",
+        "",
+        "Alpha SHALL do the thing.",
+        "",
+      ].join("\n"),
+      [JOURNEYS]: [
         "## User journeys",
         "",
         "### alpha-US-01: Someone does the thing",
@@ -173,16 +182,10 @@ describe("a spec issuing one id twice", () => {
         "",
         "**Accepted by:** alpha-SC-01",
         "",
-        "## Requirements",
-        "",
-        "### Requirement: Alpha does things",
-        "",
-        "Alpha SHALL do the thing.",
-        "",
       ].join("\n"),
     });
-    expect(entry.error?.message).toMatch(
-      /story `alpha-US-01` is issued twice, at line 9 and line 13/,
+    expect(entry.journeysError?.message).toMatch(
+      /story `alpha-US-01` is issued twice, at line 3 and line 7/,
     );
   });
 

@@ -7,7 +7,7 @@ order: 5
 A member runs their whole membership from one page at `/membership`: what they
 hold, what they can spend it on, what is waiting for them at the counter, the
 codes they own, their own history, and the card a till reads
-([[loyalty-SC-62]], [[loyalty-SC-63]], [[loyalty-SC-64]]). Every section
+([[grade10-site-loyalty-programme-SC-62]], [[grade10-site-loyalty-programme-SC-63]], [[grade10-site-loyalty-programme-SC-64]]). Every section
 reads for itself, so a menu that failed to load is no reason to hide a
 balance.
 
@@ -17,9 +17,9 @@ A member joins at `/join`, signed in. Grade10 asks for a mobile number as part
 of joining — the number travels with the request, so a refused number enrols
 nobody. One request enrols the member in the programme and seeds their Shopify
 customer pairing behind the account; neither step waits on Shopify. A second
-tap replays the first, so joining is safe to retry ([[loyalty-SC-02]]).
+tap replays the first, so joining is safe to retry ([[grade10-site-loyalty-programme-SC-02]]).
 Someone whose purchases were recorded before they joined is invited to join
-and shown the points already waiting ([[loyalty-SC-01]]).
+and shown the points already waiting ([[grade10-site-loyalty-programme-SC-01]]).
 
 ## The membership page
 
@@ -61,7 +61,7 @@ shop.
 
 A member's activity is their own ledger, in their own words, with the
 operator's reason, retry keys and the pricing behind an entry kept out of view
-([[loyalty-SC-59]], [[loyalty-SC-60]]).
+([[grade10-site-loyalty-programme-SC-59]], [[grade10-site-loyalty-programme-SC-60]]).
 
 | Entry | Meaning |
 | --- | --- |

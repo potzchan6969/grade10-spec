@@ -34,55 +34,6 @@ their record.
   - Landing, empty, and failed reads: makes an unused record and a broken one
     tell the collector different things.
 
-## User journeys
-
-### account-auction-record-US-01: Mark a listing now and find it again later
-
-As a collector, I want to watch listings I am interested in before bidding
-opens, so that I can find them again when it does without searching the
-catalogue a second time.
-
-**Accepted by:** `account-auction-record-SC-01`,
-`account-auction-record-SC-02`, `account-auction-record-SC-03`,
-`account-auction-record-SC-04`, `account-auction-record-SC-05`,
-`account-auction-record-SC-06`, `account-auction-record-SC-07`,
-`account-auction-record-SC-08`, `account-auction-record-SC-09`,
-`account-auction-record-SC-10`, `account-auction-record-SC-11`,
-`account-auction-record-SC-12`, `account-auction-record-SC-13`,
-`account-auction-record-SC-32`
-
-### account-auction-record-US-02: See where I stand across every listing I bid on
-
-As a bidder, I want one place that says which of my listings I still lead and
-which I have lost, so that I can act on the ones that still need me before they
-close.
-
-**Accepted by:** `account-auction-record-SC-14`,
-`account-auction-record-SC-15`, `account-auction-record-SC-16`,
-`account-auction-record-SC-17`, `account-auction-record-SC-18`,
-`account-auction-record-SC-19`, `account-auction-record-SC-28`,
-`account-auction-record-SC-29`, `account-auction-record-SC-30`,
-`account-auction-record-SC-31`, `account-auction-record-SC-33`,
-`account-auction-record-SC-34`
-
-### account-auction-record-US-03: Follow a listing I won through to delivery
-
-As a winner, I want to see what I owe and where my card is, so that I do not
-have to ask Grade10 what happens next.
-
-**Accepted by:** `account-auction-record-SC-20`,
-`account-auction-record-SC-21`, `account-auction-record-SC-22`,
-`account-auction-record-SC-23`, `account-auction-record-SC-24`
-
-### account-auction-record-US-04: Know my money is coming back when I lose
-
-As a losing bidder, I want to see that my card hold is released, so that a
-pending authorization on my statement does not read as a charge for a listing I
-did not win.
-
-**Accepted by:** `account-auction-record-SC-25`,
-`account-auction-record-SC-26`, `account-auction-record-SC-27`
-
 ## ADDED Requirements
 
 ### Requirement: A collector watches a listing from where it is shown
@@ -98,35 +49,35 @@ finding the listing again.
 A watch attempt carrying no session SHALL record no watch. Grade10 SHALL NOT
 hold a watch for an anonymous visitor.
 
-#### Scenario: account-auction-record-SC-01 - A collector watches from a listing's page
+#### Scenario: grade10-site-auction-account-record-SC-01 - A collector watches from a listing's page
 
 - **GIVEN** a signed-in collector reading a published listing's own page
 - **WHEN** they watch it
 - **THEN** that listing is on their Watching page
 - **AND** the listing's page shows it as watched
 
-#### Scenario: account-auction-record-SC-02 - A collector watches from the catalogue
+#### Scenario: grade10-site-auction-account-record-SC-02 - A collector watches from the catalogue
 
 - **GIVEN** a signed-in collector reading the auction catalogue
 - **WHEN** they watch a listing without opening it
 - **THEN** that listing is on their Watching page
 - **AND** they are still on the catalogue
 
-#### Scenario: account-auction-record-SC-03 - Unwatching can be undone
+#### Scenario: grade10-site-auction-account-record-SC-03 - Unwatching can be undone
 
 - **GIVEN** a collector who has just unwatched a listing
 - **WHEN** they undo that act
 - **THEN** the listing is on their Watching page again
 - **AND** they did not have to find the listing a second time
 
-#### Scenario: account-auction-record-SC-04 - A watch without a session is not recorded
+#### Scenario: grade10-site-auction-account-record-SC-04 - A watch without a session is not recorded
 
 - **GIVEN** a visitor carrying no session
 - **WHEN** they attempt to watch a listing
 - **THEN** Grade10 records no watch
 - **AND** no watch appears for any collector
 
-#### Scenario: account-auction-record-SC-05 - A watch is private
+#### Scenario: grade10-site-auction-account-record-SC-05 - A watch is private
 
 - **GIVEN** one collector who watches a listing and a second collector who does
   not
@@ -146,14 +97,14 @@ watch beyond that maximum SHALL be refused, SHALL record no watch, and SHALL
 tell the collector the maximum has been reached. The maximum's value is a
 design decision and is not fixed by this requirement.
 
-#### Scenario: account-auction-record-SC-06 - The watch maximum refuses a further watch
+#### Scenario: grade10-site-auction-account-record-SC-06 - The watch maximum refuses a further watch
 
 - **GIVEN** a collector holding the maximum number of watches
 - **WHEN** they watch another listing
 - **THEN** Grade10 refuses it and records no watch
 - **AND** the collector is told the maximum has been reached
 
-#### Scenario: account-auction-record-SC-07 - An unpublished listing stays on the page
+#### Scenario: grade10-site-auction-account-record-SC-07 - An unpublished listing stays on the page
 
 - **GIVEN** a collector watching a listing that Grade10 then stops publishing
 - **WHEN** they open their Watching page
@@ -173,21 +124,21 @@ Bidding page's.
 | Ending soon | Bidding open, 60 minutes or less to the recorded close |
 | Ended | Bidding is over, however it ended — sold, unsold, or called off |
 
-#### Scenario: account-auction-record-SC-08 - A scheduled listing says when it opens
+#### Scenario: grade10-site-auction-account-record-SC-08 - A scheduled listing says when it opens
 
 - **GIVEN** a watched listing that is published and whose start has not arrived
 - **WHEN** the collector opens their Watching page
 - **THEN** that listing's state is Scheduled
 - **AND** the row carries when bidding opens
 
-#### Scenario: account-auction-record-SC-09 - Ending soon begins at 60 minutes
+#### Scenario: grade10-site-auction-account-record-SC-09 - Ending soon begins at 60 minutes
 
 - **GIVEN** a watched listing whose recorded close is 60 minutes or less away
   and has not passed
 - **WHEN** the collector opens their Watching page
 - **THEN** that listing's state is Ending soon
 
-#### Scenario: account-auction-record-SC-10 - Every way of ending reads as Ended
+#### Scenario: grade10-site-auction-account-record-SC-10 - Every way of ending reads as Ended
 
 - **GIVEN** three watched listings — one sold, one that closed with no winner,
   and one called off
@@ -205,7 +156,7 @@ on and SHALL open that listing's row on the Bidding page in one step.
 Unwatching a listing SHALL NOT change any bid the collector placed on it, and
 SHALL NOT remove it from the Bidding page.
 
-#### Scenario: account-auction-record-SC-11 - The next close is first
+#### Scenario: grade10-site-auction-account-record-SC-11 - The next close is first
 
 - **GIVEN** watched listings closing in two hours, in ten minutes, and one that
   closed yesterday
@@ -214,14 +165,14 @@ SHALL NOT remove it from the Bidding page.
   hours
 - **AND** the listing that closed yesterday is after both
 
-#### Scenario: account-auction-record-SC-12 - A watched listing they bid on is marked
+#### Scenario: grade10-site-auction-account-record-SC-12 - A watched listing they bid on is marked
 
 - **GIVEN** a collector who watches a listing and has placed a bid on it
 - **WHEN** they open their Watching page
 - **THEN** that listing is marked as one they bid on
 - **AND** opening the mark takes them to that listing on the Bidding page
 
-#### Scenario: account-auction-record-SC-13 - Unwatching leaves the bid alone
+#### Scenario: grade10-site-auction-account-record-SC-13 - Unwatching leaves the bid alone
 
 - **GIVEN** a collector who watches a listing and has bid on it
 - **WHEN** they unwatch it
@@ -244,13 +195,13 @@ one of these states.
 Every amount SHALL be an integer count of minor units with an ISO 4217 currency
 code.
 
-#### Scenario: account-auction-record-SC-14 - The highest bidder is Leading
+#### Scenario: grade10-site-auction-account-record-SC-14 - The highest bidder is Leading
 
 - **GIVEN** an open listing on which the collector holds the highest valid bid
 - **WHEN** they open their Bidding page
 - **THEN** that listing's state is Leading
 
-#### Scenario: account-auction-record-SC-15 - Outbid carries the minimum next bid
+#### Scenario: grade10-site-auction-account-record-SC-15 - Outbid carries the minimum next bid
 
 - **GIVEN** an open listing on which a higher valid bid than the collector's
   stands
@@ -259,7 +210,7 @@ code.
 - **AND** the row carries the minimum next valid bid as an integer count of
   minor units with its ISO 4217 currency code
 
-#### Scenario: account-auction-record-SC-16 - A refused bid says why it was refused
+#### Scenario: grade10-site-auction-account-record-SC-16 - A refused bid says why it was refused
 
 - **GIVEN** a collector whose last bid on an open listing was refused for being
   below the minimum next bid
@@ -267,7 +218,7 @@ code.
 - **THEN** that listing's state is Bid not accepted
 - **AND** the row says the bid was below the minimum next bid
 
-#### Scenario: account-auction-record-SC-17 - A bid awaiting acceptance is not a standing
+#### Scenario: grade10-site-auction-account-record-SC-17 - A bid awaiting acceptance is not a standing
 
 - **GIVEN** a collector who has placed a bid Grade10 has not yet accepted
 - **WHEN** they open their Bidding page
@@ -281,13 +232,13 @@ exactly one of three groups: **Active** while its bidding window is open, **Won*
 when the collector is its winner, and **Didn't win** for every other closed
 listing they bid on.
 
-#### Scenario: account-auction-record-SC-18 - A won listing sits under Won
+#### Scenario: grade10-site-auction-account-record-SC-18 - A won listing sits under Won
 
 - **GIVEN** a closed listing whose winner is the collector
 - **WHEN** they open their Bidding page
 - **THEN** that listing is under Won
 
-#### Scenario: account-auction-record-SC-19 - A listing lost at close sits under Didn't win
+#### Scenario: grade10-site-auction-account-record-SC-19 - A listing lost at close sits under Didn't win
 
 - **GIVEN** a closed listing the collector bid on whose winner is someone else
 - **WHEN** they open their Bidding page
@@ -311,13 +262,13 @@ manual record.
 This surface SHALL be read-only. It SHALL offer no control that records
 payment, requests a wire, or records shipment.
 
-#### Scenario: account-auction-record-SC-20 - Card capture reads as Paid
+#### Scenario: grade10-site-auction-account-record-SC-20 - Card capture reads as Paid
 
 - **GIVEN** a won listing whose card capture succeeded and which has not shipped
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Paid
 
-#### Scenario: account-auction-record-SC-21 - Manual collection reads as the same Paid
+#### Scenario: grade10-site-auction-account-record-SC-21 - Manual collection reads as the same Paid
 
 - **GIVEN** a won listing whose collection an operator recorded outside Stripe,
   and which has not shipped
@@ -326,21 +277,21 @@ payment, requests a wire, or records shipment.
 - **AND** it is the same state a card capture produces, distinguished nowhere on
   this surface
 
-#### Scenario: account-auction-record-SC-22 - A payment problem says how to reach Grade10
+#### Scenario: grade10-site-auction-account-record-SC-22 - A payment problem says how to reach Grade10
 
 - **GIVEN** a won listing whose card capture gave up
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Payment problem
 - **AND** the row carries how to reach Grade10
 
-#### Scenario: account-auction-record-SC-23 - Shipment states reach the winner
+#### Scenario: grade10-site-auction-account-record-SC-23 - Shipment states reach the winner
 
 - **GIVEN** one won listing whose shipment has started and one whose shipment is
   complete
 - **WHEN** the winner opens their Bidding page
 - **THEN** the first listing's state is Shipped and the second's is Delivered
 
-#### Scenario: account-auction-record-SC-24 - The winner is offered no write
+#### Scenario: grade10-site-auction-account-record-SC-24 - The winner is offered no write
 
 - **GIVEN** a won listing in any payment or shipment state
 - **WHEN** the winner opens their Bidding page
@@ -357,7 +308,7 @@ still in flight.
 A listing the collector bid on that was called off SHALL appear under Didn't
 win carrying the same statement about their authorization.
 
-#### Scenario: account-auction-record-SC-25 - A release in flight says so
+#### Scenario: grade10-site-auction-account-record-SC-25 - A release in flight says so
 
 - **GIVEN** a closed listing the collector did not win, whose authorization
   Grade10 has marked for release and whose release is not complete
@@ -365,13 +316,13 @@ win carrying the same statement about their authorization.
 - **THEN** the row says the hold is being released
 - **AND** it does not say the hold is released
 
-#### Scenario: account-auction-record-SC-26 - A completed release says so
+#### Scenario: grade10-site-auction-account-record-SC-26 - A completed release says so
 
 - **GIVEN** the same listing once its release is complete
 - **WHEN** the collector opens their Bidding page
 - **THEN** the row says the hold is released
 
-#### Scenario: account-auction-record-SC-27 - A called-off listing tells the bidder about the hold
+#### Scenario: grade10-site-auction-account-record-SC-27 - A called-off listing tells the bidder about the hold
 
 - **GIVEN** a listing the collector bid on that Grade10 called off
 - **WHEN** they open their Bidding page
@@ -384,14 +335,14 @@ Grade10 SHALL resolve an auction record from the caller's session and no other
 input. A request carrying no session SHALL be refused and SHALL return no
 record. No input a collector supplies SHALL select another collector's record.
 
-#### Scenario: account-auction-record-SC-28 - A signed-out request is refused
+#### Scenario: grade10-site-auction-account-record-SC-28 - A signed-out request is refused
 
 - **GIVEN** a request carrying no session
 - **WHEN** it reads an auction record
 - **THEN** Grade10 refuses it as unauthenticated
 - **AND** returns no watch and no bid
 
-#### Scenario: account-auction-record-SC-29 - A collector cannot address another record
+#### Scenario: grade10-site-auction-account-record-SC-29 - A collector cannot address another record
 
 - **GIVEN** a signed-in collector
 - **WHEN** they read an auction record
@@ -414,33 +365,33 @@ A value that follows the clock — a close, a current bid, a minimum next bid �
 that Grade10 could not refresh SHALL be shown as not current rather than
 presented as current.
 
-#### Scenario: account-auction-record-SC-30 - A bidder lands on Bidding
+#### Scenario: grade10-site-auction-account-record-SC-30 - A bidder lands on Bidding
 
 - **GIVEN** a collector who has bid on at least one listing
 - **WHEN** they open their auction record
 - **THEN** they are on the Bidding page
 
-#### Scenario: account-auction-record-SC-31 - A collector who has never bid lands on Watching
+#### Scenario: grade10-site-auction-account-record-SC-31 - A collector who has never bid lands on Watching
 
 - **GIVEN** a collector who has never placed a bid
 - **WHEN** they open their auction record
 - **THEN** they are on the Watching page
 
-#### Scenario: account-auction-record-SC-32 - An empty Watching page offers the catalogue
+#### Scenario: grade10-site-auction-account-record-SC-32 - An empty Watching page offers the catalogue
 
 - **GIVEN** a collector watching no listing
 - **WHEN** they open their Watching page
 - **THEN** the page offers a way into the auction catalogue
 - **AND** it does not report an error
 
-#### Scenario: account-auction-record-SC-33 - A failed read is not an empty record
+#### Scenario: grade10-site-auction-account-record-SC-33 - A failed read is not an empty record
 
 - **GIVEN** a collector whose record Grade10 cannot read
 - **WHEN** they open it
 - **THEN** the page reports that the read failed and offers to retry
 - **AND** it does not show an empty record
 
-#### Scenario: account-auction-record-SC-34 - A value that could not be refreshed says so
+#### Scenario: grade10-site-auction-account-record-SC-34 - A value that could not be refreshed says so
 
 - **GIVEN** a record whose rows are shown but whose current bid could not be
   refreshed

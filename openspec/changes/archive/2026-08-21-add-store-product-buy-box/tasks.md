@@ -2,7 +2,7 @@
 
 Every group lands in grade10. Nothing here touches grade10-spec: every
 component the buy box needs is already exported, and the page composes them
-itself — design.md, *The buy box is composed in the app*.
+itself — tech-design.md, *The buy box is composed in the app*.
 
 Group 1 is the whole of the behaviour; group 2 confirms it where a collector
 would meet it. There is no shared-interface group, because no contract

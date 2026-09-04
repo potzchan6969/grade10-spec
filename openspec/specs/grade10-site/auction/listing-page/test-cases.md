@@ -3,7 +3,7 @@
 **Status:** approved
 **Reviewed:** 2026-09-01
 
-## listing-page-US1: Collector opens a lot at its own address
+## grade10-site-auction-listing-page-US1: Collector opens a lot at its own address
 
 **As a** collector,
 **I want** a lot's address to answer with that lot's own page in the response
@@ -11,7 +11,7 @@ HTML,
 **so that** I can read its name, its description and where its bidding stands
 without waiting for a script to run.
 
-### listing-page-US1-TC1-1: Lot answers whole before scripts run
+### grade10-site-auction-listing-page-US1-TC1-1: Lot answers whole before scripts run
 
 **Classification:**
 
@@ -23,7 +23,7 @@ without waiting for a script to run.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-page-US-01
+* **Trace:** grade10-site-auction-listing-page-US-01
 
 **Pre-conditions:**
 The catalogue publishes <a published lot>. JavaScript disabled in the browser.
@@ -40,7 +40,7 @@ The catalogue publishes <a published lot>. JavaScript disabled in the browser.
 * URL contains <lang>.
 * Page source carries that lot's name, description, and bidding standing.
 
-### listing-page-US1-TC2-1: Two lots answer as two pages
+### grade10-site-auction-listing-page-US1-TC2-1: Two lots answer as two pages
 
 **Classification:**
 
@@ -52,7 +52,7 @@ The catalogue publishes <a published lot>. JavaScript disabled in the browser.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** listing-page-US-01
+* **Trace:** grade10-site-auction-listing-page-US-01
 
 **Pre-conditions:**
 The catalogue publishes two lots.
@@ -69,14 +69,14 @@ The catalogue publishes two lots.
 
 ---
 
-## listing-page-US2: Collector shares a lot link
+## grade10-site-auction-listing-page-US2: Collector shares a lot link
 
 **As a** collector,
 **I want** a lot link to unfurl as that lot and its own canonical address,
 **so that** a link I pass on names the lot it points at instead of the auction
 catalogue.
 
-### listing-page-US2-TC1-1: Shared lot link unfurls as that lot
+### grade10-site-auction-listing-page-US2-TC1-1: Shared lot link unfurls as that lot
 
 **Classification:**
 
@@ -88,7 +88,7 @@ catalogue.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** listing-page-US-02
+* **Trace:** grade10-site-auction-listing-page-US-02
 
 **Pre-conditions:**
 JavaScript disabled in the browser.
@@ -105,14 +105,14 @@ JavaScript disabled in the browser.
 
 ---
 
-## listing-page-US3: Collector opens an address that names no lot
+## grade10-site-auction-listing-page-US3: Collector opens an address that names no lot
 
 **As a** collector,
 **I want** an address under the auction's lots that names no published lot to
 answer with the site's not-found surface,
 **so that** I am never shown an empty lot page or the catalogue in its place.
 
-### listing-page-US3-TC1-1: Unknown lot address returns not-found
+### grade10-site-auction-listing-page-US3-TC1-1: Unknown lot address returns not-found
 
 **Classification:**
 
@@ -124,7 +124,7 @@ answer with the site's not-found surface,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-page-US-03
+* **Trace:** grade10-site-auction-listing-page-US-03
 
 **Pre-conditions:**
 The catalogue publishes no lot for <a lot address naming no published lot>.
@@ -140,7 +140,7 @@ The catalogue publishes no lot for <a lot address naming no published lot>.
 * Response status is 404.
 * The site's not-found surface is on screen.
 
-### listing-page-US3-TC2-1: Published lot address returns the lot page
+### grade10-site-auction-listing-page-US3-TC2-1: Published lot address returns the lot page
 
 **Classification:**
 
@@ -152,7 +152,7 @@ The catalogue publishes no lot for <a lot address naming no published lot>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** listing-page-US-03
+* **Trace:** grade10-site-auction-listing-page-US-03
 
 **Pre-conditions:**
 The catalogue publishes <a published lot>.
@@ -169,14 +169,14 @@ The catalogue publishes <a published lot>.
 
 ---
 
-## listing-page-US4: Collector reads a live lot while scripts load
+## grade10-site-auction-listing-page-US4: Collector reads a live lot while scripts load
 
 **As a** collector,
 **I want** the lot I was served to stay on screen once scripts finish loading,
 **so that** nothing I was reading blanks into a placeholder and no value
 disagrees with what the document carried.
 
-### listing-page-US4-TC1-1: Served lot stays on screen after scripts
+### grade10-site-auction-listing-page-US4-TC1-1: Served lot stays on screen after scripts
 
 **Classification:**
 
@@ -188,7 +188,7 @@ disagrees with what the document carried.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-page-US-04
+* **Trace:** grade10-site-auction-listing-page-US-04
 
 **Pre-conditions:**
 <a published lot> is on the catalogue.
@@ -205,7 +205,7 @@ disagrees with what the document carried.
 * The same lot is on screen with its served name, description and standing still present.
 * None of them is replaced by a loading placeholder.
 
-### listing-page-US4-TC2-1: Clock value continues from the served document
+### grade10-site-auction-listing-page-US4-TC2-1: Clock value continues from the served document
 
 **Classification:**
 
@@ -217,7 +217,7 @@ disagrees with what the document carried.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-page-US-04
+* **Trace:** grade10-site-auction-listing-page-US-04
 
 **Pre-conditions:**
 a bidding countdown is shown on <a published lot>.
@@ -235,13 +235,13 @@ a bidding countdown is shown on <a published lot>.
 
 ---
 
-## listing-page-US5: Collector reaches a lot from the catalogue
+## grade10-site-auction-listing-page-US5: Collector reaches a lot from the catalogue
 
 **As a** collector,
 **I want** to open a lot's own address from the catalogue without a page load,
 **so that** the lot I picked out of the list is the page I land on.
 
-### listing-page-US5-TC1-1: Catalogue opens the lot's own address
+### grade10-site-auction-listing-page-US5-TC1-1: Catalogue opens the lot's own address
 
 **Classification:**
 
@@ -253,7 +253,7 @@ a bidding countdown is shown on <a published lot>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** listing-page-US-05
+* **Trace:** grade10-site-auction-listing-page-US-05
 
 **Pre-conditions:**
 The collector is viewing the auction catalogue, which lists <a published lot>.
@@ -267,7 +267,7 @@ The collector is viewing the auction catalogue, which lists <a published lot>.
 
 * The browser is on that lot's address, showing that lot's page.
 
-### listing-page-US5-TC2-1: Sitemap names no lot address
+### grade10-site-auction-listing-page-US5-TC2-1: Sitemap names no lot address
 
 **Classification:**
 
@@ -279,7 +279,7 @@ The collector is viewing the auction catalogue, which lists <a published lot>.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** listing-page-US-05
+* **Trace:** grade10-site-auction-listing-page-US-05
 
 **Pre-conditions:**
 None.

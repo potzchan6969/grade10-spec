@@ -24,85 +24,6 @@ contract for leaving a session.
   - One email a minute: a second send in a minute is told to wait
   - Trusted return: an untrusted redirect is ignored
 
-## User journeys
-
-### sign-in-US-01: Collector asks for and follows a sign-in link
-
-**As a** collector,
-**I want** a link emailed to the address I submit to sign me in once,
-**so that** I reach my account without a password, and a used or expired link cannot.
-
-**Accepted by:**
-
-- `sign-in-SC-01` — Activating again during flight does nothing
-- `sign-in-SC-02` — One sign-in email per intent
-- `sign-in-SC-03` — Only the running command looks busy
-- `sign-in-SC-04` — A settled request frees the step
-- `sign-in-SC-05` — A valid link creates a session
-- `sign-in-SC-06` — A used link does not sign in again
-- `sign-in-SC-07` — An expired link does not sign in
-- `sign-in-SC-08` — A failed send is reported
-- `sign-in-SC-09` — A first send does not disclose whether the address is new
-- `sign-in-SC-29` — A new link kills the earlier link
-
-### sign-in-US-02: Collector signs in with an emailed code
-
-**As a** collector,
-**I want** a code emailed to the address I submit to sign me in,
-**so that** I can finish on the same device, and a wrong or spent code cannot.
-
-**Accepted by:**
-
-- `sign-in-SC-10` — A correct code creates a session
-- `sign-in-SC-11` — An incorrect code is refused
-- `sign-in-SC-12` — An expired code is refused
-- `sign-in-SC-13` — Too many wrong codes kill the code
-- `sign-in-SC-30` — A new code kills the earlier link
-
-### sign-in-US-03: Collector signs in with Google when the brand offers it
-
-**As a** collector,
-**I want** Google sign-in when this brand offers it,
-**so that** I can use an account I already have, and a brand that does not offer it does not show it.
-
-**Accepted by:**
-
-- `sign-in-SC-14` — A brand with Google sign-in offers it
-- `sign-in-SC-15` — An unverified Google email does not sign in
-- `sign-in-SC-16` — A brand without Google sign-in hides it
-
-### sign-in-US-04: Collector keeps one account for one verified address
-
-**As a** collector,
-**I want** every successful sign-in at an address to be the same person,
-**so that** a later visit, a product-created account, or letter case does not split me.
-
-**Accepted by:**
-
-- `sign-in-SC-17` — A first visit creates the account
-- `sign-in-SC-18` — A later visit is the same account
-- `sign-in-SC-19` — Letter case does not create a second account
-- `sign-in-SC-20` — A plus-tag is a different address
-- `sign-in-SC-21` — A new verified email creates the account
-- `sign-in-SC-22` — A known verified email is the same account
-- `sign-in-SC-23` — A trusted product can sign the person in
-- `sign-in-SC-24` — A client cannot claim an email
-- `sign-in-SC-25` — Sign-in after a product-created account is the same person
-
-### sign-in-US-05: Collector is not spammed or sent off-brand
-
-**As a** collector,
-**I want** a second email within a minute to wait, and a return only to this brand,
-**so that** I am not flooded and not delivered to an untrusted address.
-
-**Accepted by:**
-
-- `sign-in-SC-26` — A second link send in a minute is told to wait
-- `sign-in-SC-27` — A second code send in a minute is told to wait
-- `sign-in-SC-28` — A code send after a link in a minute is told to wait
-- `sign-in-SC-31` — An untrusted redirect is ignored
-- `sign-in-SC-32` — A missing redirect stays on the brand
-
 ## Requirements
 
 ### Requirement: A sign-in command in flight cannot be duplicated
@@ -113,7 +34,7 @@ reaches the auth service, and every activation settles with that one
 request's outcome. Input edited during the flight SHALL NOT be sent — the
 running request's input stands until it settles.
 
-#### Scenario: sign-in-SC-01 - Activating again during flight does nothing
+#### Scenario: shared-auth-sign-in-SC-01 - Activating again during flight does nothing
 
 - **GIVEN** a sign-in command whose request is in flight
 - **WHEN** the person activates the same command again
@@ -126,21 +47,21 @@ The email step offers two ways to sign in — an emailed link and an emailed
 code. WHILE either request is in flight, the step SHALL refuse activation of
 both, and only the command that is running SHALL show its busy state.
 
-#### Scenario: sign-in-SC-02 - One sign-in email per intent
+#### Scenario: shared-auth-sign-in-SC-02 - One sign-in email per intent
 
 - **GIVEN** a collector on the email step whose send-link request is in
   flight
 - **WHEN** they activate the send-code control
 - **THEN** no code request starts and no second email is sent
 
-#### Scenario: sign-in-SC-03 - Only the running command looks busy
+#### Scenario: shared-auth-sign-in-SC-03 - Only the running command looks busy
 
 - **GIVEN** a collector on the email step whose send-code request is in
   flight
 - **THEN** the send-code control shows its busy state
 - **AND** the send-link control is refusing activation without looking busy
 
-#### Scenario: sign-in-SC-04 - A settled request frees the step
+#### Scenario: shared-auth-sign-in-SC-04 - A settled request frees the step
 
 - **GIVEN** an email step whose in-flight request has settled
 - **WHEN** the collector activates either control
@@ -153,31 +74,31 @@ SHALL create a session for the account of that address when they follow a
 valid unused, unexpired link. A link SHALL sign in at most once. An expired
 or already-used link SHALL NOT create a session.
 
-#### Scenario: sign-in-SC-05 - A valid link creates a session
+#### Scenario: shared-auth-sign-in-SC-05 - A valid link creates a session
 
 - **GIVEN** a person who asked for a sign-in link at an email address
 - **WHEN** they follow the unused, unexpired link from that email
 - **THEN** they are signed in as the account for that address
 
-#### Scenario: sign-in-SC-06 - A used link does not sign in again
+#### Scenario: shared-auth-sign-in-SC-06 - A used link does not sign in again
 
 - **GIVEN** a sign-in link that has already created a session
 - **WHEN** anyone follows that link again
 - **THEN** no new session is created
 
-#### Scenario: sign-in-SC-07 - An expired link does not sign in
+#### Scenario: shared-auth-sign-in-SC-07 - An expired link does not sign in
 
 - **GIVEN** a sign-in link whose time to live has ended
 - **WHEN** anyone follows that link
 - **THEN** no session is created
 
-#### Scenario: sign-in-SC-08 - A failed send is reported
+#### Scenario: shared-auth-sign-in-SC-08 - A failed send is reported
 
 - **WHEN** a sign-in link cannot be sent
 - **THEN** the surface states that the link was not sent
 - **AND** the person is not signed in
 
-#### Scenario: sign-in-SC-09 - A first send does not disclose whether the address is new
+#### Scenario: shared-auth-sign-in-SC-09 - A first send does not disclose whether the address is new
 
 - **GIVEN** an email that has never signed in
 - **WHEN** they ask for a sign-in link and the send goes out
@@ -192,27 +113,27 @@ for that address. An incorrect, already-used, or expired code SHALL NOT
 create a session, and SHALL be reported. Three incorrect submits for the
 same unused code SHALL invalidate that code.
 
-#### Scenario: sign-in-SC-10 - A correct code creates a session
+#### Scenario: shared-auth-sign-in-SC-10 - A correct code creates a session
 
 - **GIVEN** a person who asked for a sign-in code at an email address
 - **WHEN** they submit the unused, unexpired code from that email
 - **THEN** they are signed in as the account for that address
 
-#### Scenario: sign-in-SC-11 - An incorrect code is refused
+#### Scenario: shared-auth-sign-in-SC-11 - An incorrect code is refused
 
 - **WHEN** a person submits a code that is not the unused code for that
   address
 - **THEN** the surface states that the code did not work
 - **AND** they are not signed in
 
-#### Scenario: sign-in-SC-12 - An expired code is refused
+#### Scenario: shared-auth-sign-in-SC-12 - An expired code is refused
 
 - **GIVEN** a sign-in code whose time to live has ended
 - **WHEN** a person submits that code
 - **THEN** the surface states that the code did not work
 - **AND** they are not signed in
 
-#### Scenario: sign-in-SC-13 - Too many wrong codes kill the code
+#### Scenario: shared-auth-sign-in-SC-13 - Too many wrong codes kill the code
 
 - **GIVEN** a person who has submitted three incorrect codes for the unused
   code sent to an address
@@ -228,7 +149,7 @@ account or a session when the provider did not verify the email. WHEN the
 brand does not have Google sign-in, the surface SHALL NOT show that
 control.
 
-#### Scenario: sign-in-SC-14 - A brand with Google sign-in offers it
+#### Scenario: shared-auth-sign-in-SC-14 - A brand with Google sign-in offers it
 
 - **GIVEN** a brand that has Google sign-in
 - **WHEN** a person opens sign-in
@@ -236,7 +157,7 @@ control.
 - **AND** completing Google sign-in with a verified email signs them in as
   the account for that address
 
-#### Scenario: sign-in-SC-15 - An unverified Google email does not sign in
+#### Scenario: shared-auth-sign-in-SC-15 - An unverified Google email does not sign in
 
 - **GIVEN** a brand that has Google sign-in
 - **WHEN** a person completes Google sign-in with an email Google has not
@@ -244,7 +165,7 @@ control.
 - **THEN** no account is created from that request
 - **AND** they are not signed in
 
-#### Scenario: sign-in-SC-16 - A brand without Google sign-in hides it
+#### Scenario: shared-auth-sign-in-SC-16 - A brand without Google sign-in hides it
 
 - **GIVEN** a brand that does not have Google sign-in
 - **WHEN** a person opens sign-in
@@ -259,27 +180,27 @@ SHALL NOT share an email address. Addresses that differ only by letter case
 SHALL be the same address. A plus-tag or a provider-specific alias SHALL NOT
 be folded into another address.
 
-#### Scenario: sign-in-SC-17 - A first visit creates the account
+#### Scenario: shared-auth-sign-in-SC-17 - A first visit creates the account
 
 - **GIVEN** an email address that has never signed in
 - **WHEN** that address completes any offered sign-in method
 - **THEN** an account exists for that address
 - **AND** the person is signed in as it
 
-#### Scenario: sign-in-SC-18 - A later visit is the same account
+#### Scenario: shared-auth-sign-in-SC-18 - A later visit is the same account
 
 - **GIVEN** an account that signed in with an emailed link
 - **WHEN** that same address later signs in with an emailed code, or with
   Google when the brand has it
 - **THEN** they enter the same account, not a second one
 
-#### Scenario: sign-in-SC-19 - Letter case does not create a second account
+#### Scenario: shared-auth-sign-in-SC-19 - Letter case does not create a second account
 
 - **GIVEN** an account that signed in at `Collector@example.com`
 - **WHEN** that person later signs in at `collector@example.com`
 - **THEN** they enter the same account, not a second one
 
-#### Scenario: sign-in-SC-20 - A plus-tag is a different address
+#### Scenario: shared-auth-sign-in-SC-20 - A plus-tag is a different address
 
 - **GIVEN** an account at `collector@example.com`
 - **WHEN** `collector+shop@example.com` completes sign-in
@@ -293,7 +214,7 @@ when one does. It SHALL be able to sign that person in. The person SHALL
 NOT need to complete a link, code, or Google sign-in for that to happen.
 The client SHALL NOT create an account or a session by naming an email.
 
-#### Scenario: sign-in-SC-21 - A new verified email creates the account
+#### Scenario: shared-auth-sign-in-SC-21 - A new verified email creates the account
 
 - **GIVEN** an email that has never signed in
 - **WHEN** a product of this brand that has verified that email asks to
@@ -301,27 +222,27 @@ The client SHALL NOT create an account or a session by naming an email.
 - **THEN** an account exists for that address
 - **AND** the product receives that account's user id
 
-#### Scenario: sign-in-SC-22 - A known verified email is the same account
+#### Scenario: shared-auth-sign-in-SC-22 - A known verified email is the same account
 
 - **GIVEN** an account that signed in with an emailed link
 - **WHEN** a product of this brand that has verified that same email asks
   to create or enter the account
 - **THEN** they receive that same account, not a second one
 
-#### Scenario: sign-in-SC-23 - A trusted product can sign the person in
+#### Scenario: shared-auth-sign-in-SC-23 - A trusted product can sign the person in
 
 - **WHEN** a product of this brand that has verified an email asks to sign
   that account in
 - **THEN** the person is signed in as that account on this brand
 
-#### Scenario: sign-in-SC-24 - A client cannot claim an email
+#### Scenario: shared-auth-sign-in-SC-24 - A client cannot claim an email
 
 - **WHEN** a client names an email and asks to create an account or a
   session
 - **THEN** no account is created from that request
 - **AND** the person is not signed in
 
-#### Scenario: sign-in-SC-25 - Sign-in after a product-created account is the same person
+#### Scenario: shared-auth-sign-in-SC-25 - Sign-in after a product-created account is the same person
 
 - **GIVEN** an account created when a product verified an email
 - **WHEN** that address later signs in with an emailed link, an emailed
@@ -336,7 +257,7 @@ send another email. The surface SHALL tell the person to wait. It SHALL NOT
 use the copy of a failed send. After a send that went out, the resend
 control SHALL wait out the same window.
 
-#### Scenario: sign-in-SC-26 - A second link send in a minute is told to wait
+#### Scenario: shared-auth-sign-in-SC-26 - A second link send in a minute is told to wait
 
 - **GIVEN** a sign-in-link email already sent to one address in the last
   sixty seconds
@@ -345,7 +266,7 @@ control SHALL wait out the same window.
 - **AND** the surface tells them to wait
 - **AND** it does not state that the link was not sent
 
-#### Scenario: sign-in-SC-27 - A second code send in a minute is told to wait
+#### Scenario: shared-auth-sign-in-SC-27 - A second code send in a minute is told to wait
 
 - **GIVEN** a sign-in-code email already sent to one address in the last
   sixty seconds
@@ -354,7 +275,7 @@ control SHALL wait out the same window.
 - **AND** the surface tells them to wait
 - **AND** it does not state that the code was not sent
 
-#### Scenario: sign-in-SC-28 - A code send after a link in a minute is told to wait
+#### Scenario: shared-auth-sign-in-SC-28 - A code send after a link in a minute is told to wait
 
 - **GIVEN** a sign-in-link email already sent to one address in the last
   sixty seconds
@@ -367,13 +288,13 @@ control SHALL wait out the same window.
 WHEN a sign-in-link or sign-in-code email is sent to an address, any earlier
 unused link or code for that address SHALL NOT create a session.
 
-#### Scenario: sign-in-SC-29 - A new link kills the earlier link
+#### Scenario: shared-auth-sign-in-SC-29 - A new link kills the earlier link
 
 - **GIVEN** an unused unexpired sign-in link for an address
 - **WHEN** a later sign-in-link email is sent to that address
 - **THEN** following the earlier link creates no session
 
-#### Scenario: sign-in-SC-30 - A new code kills the earlier link
+#### Scenario: shared-auth-sign-in-SC-30 - A new code kills the earlier link
 
 - **GIVEN** an unused unexpired sign-in link for an address
 - **WHEN** a later sign-in-code email is sent to that address
@@ -385,14 +306,14 @@ WHEN sign-in names no location, or would send the person to a location that
 is not this brand, the system SHALL ignore that location and SHALL leave
 them on this brand.
 
-#### Scenario: sign-in-SC-31 - An untrusted redirect is ignored
+#### Scenario: shared-auth-sign-in-SC-31 - An untrusted redirect is ignored
 
 - **GIVEN** a sign-in that names a location off this brand
 - **WHEN** the person completes sign-in
 - **THEN** they are on this brand
 - **AND** they are not sent to that location
 
-#### Scenario: sign-in-SC-32 - A missing redirect stays on the brand
+#### Scenario: shared-auth-sign-in-SC-32 - A missing redirect stays on the brand
 
 - **GIVEN** a sign-in that names no location
 - **WHEN** the person completes sign-in

@@ -31,9 +31,6 @@ function ListingBidEnrollmentInteractiveDemo() {
       </VStack>
 
       <ListingBidEnrollmentCardPreview
-        autoConfirmOpen={session.autoConfirmOpen}
-        onAutoBidConfirm={actions.confirmAutoBidIntro}
-        onAutoConfirmOpenChange={actions.setAutoConfirmOpen}
         onChangePayment={actions.openChangePayment}
         onLinkPayment={actions.openSetup}
         onBidSubmit={actions.handleBidSubmit}

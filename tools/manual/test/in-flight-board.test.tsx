@@ -195,14 +195,15 @@ describe("what a card tells a review", () => {
 /** The loop's continuation used to live nowhere: its first casualty guessed a
  * skill name off a badge. Every lane but in-progress names its next action. */
 describe("the loop's continuation on the card", () => {
-  it("hands a proposed pm-planning change to /pm-planning", () => {
+  it("hands a proposed change to /planning-pm for its deltas", () => {
     const html = render([changeEntry("an-idea", [], {})]);
-    expect(html).toContain("/pm-planning an-idea");
+    expect(html).toContain("/planning-pm an-idea");
   });
 
-  it("hands a specified change to /full-planning", () => {
+  it("hands a specified change to /planning-dev for its delivery plan", () => {
     const html = render([changeEntry("written-up", [delta()], {})]);
-    expect(html).toContain("/full-planning written-up");
+    expect(html).toContain("/planning-dev written-up");
+    expect(html).toContain("writes the delivery plan");
   });
 
   it("hands a complete change to /archive-change", () => {

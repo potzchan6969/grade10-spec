@@ -13,6 +13,12 @@ falls back to the main source when a thumb or a zoom is not given — one image
 can therefore be a small file in the strip and a large one under the magnifier.
 With a single item the gallery shows no thumbnail strip; with several it does.
 
+The bid history keeps each accepted instant as data and lets the collector read
+recent activity in relative form and older activity in the stated local time
+zone. The application supplies the locale, time zone, and activity copy; a
+non-timestamp state may supply its own display text. Collector deadline lines
+use the same locale and stated time zone.
+
 Every accessible name and every label comes from the application. What a bid
 does, and what it must clear, belongs to [the auction](/p/grade10-site/auction).
 
@@ -28,9 +34,4 @@ does, and what it must clear, belongs to [the auction](/p/grade10-site/auction).
 No auction block is mapped to a Figma node — no frame, no audit table, no code
 mapping. The listing details page is the largest surface in the system with no design
 counterpart, so these stories are its reference until frames are produced.
-:::
-
-:::callout{kind="note"}
-This spec's purpose still opens "This change records…", language left over from
-the change it was folded in from. It describes a durable contract, not a change.
 :::

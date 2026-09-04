@@ -291,20 +291,20 @@ function BiddingPreview({
 }: BiddingCase & { title: string }) {
   const hasPlacedBid =
     view.viewerMaximumMinor != null || history.some((row) => row.isViewer);
-  const { session, actions, snapshot } = useListingBidEnrollment(`bidding:`, {
-    hasAccountPayment: true,
-    hasPlacedBid,
-    paymentLinked: true,
-    signedIn: true,
-  });
+  const { session, actions, snapshot } = useListingBidEnrollment(
+    `bidding:${title}`,
+    {
+      hasAccountPayment: true,
+      hasPlacedBid,
+      paymentLinked: true,
+      signedIn: true,
+    },
+  );
 
   return (
     <ListingBidEnrollmentCardPreview
-      autoConfirmOpen={session.autoConfirmOpen}
       history={history}
-      historyResetKey={`::`}
-      onAutoBidConfirm={actions.confirmAutoBidIntro}
-      onAutoConfirmOpenChange={actions.setAutoConfirmOpen}
+      historyResetKey={`${title}:${view.standing}:${view.currentBidMinor}`}
       onBidSubmit={actions.handleBidSubmit}
       onChangePayment={actions.openChangePayment}
       onLinkPayment={actions.openSetup}
@@ -334,9 +334,10 @@ function BidPanelBiddingDemo() {
           overtaken maximum, and a maximum that was accepted without taking the
           lead. Each card must replace price, history, standing, and the safe
           next action together so a private maximum is never mistaken for the
-          current bid or a guarantee of winning. Quick-maximum presets and
-          Review maximum are live: they use the same enrollment session as Bid
-          Panel Interactive, including auto-bid confirmation.
+          current bid or a guarantee of winning. Quick-maximum presets and Place
+          Bid are live: they use the same enrollment session as Bid Panel
+          Interactive. Mechanism copy stays as always-on subtext under the
+          section heading.
         </p>
       }
     >

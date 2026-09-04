@@ -43,8 +43,8 @@ The listing bid panel is \`ListingAuctionBidCard\`. The consumer owns product
 state and every action. The card presents \`view\`, \`history\`, and
 \`bidEnrollment\`. Every live bid action commits a private maximum.
 
-Enrollment chrome (linked card, setup sheet, auto-bid confirmation, sign-in)
-sits around the card in the preview. The full lot page is
+Enrollment chrome (linked card, setup sheet, sign-in) sits around the card in
+the preview. The full lot page is
 [Auction Lot Details](?path=/story/pages-auction-lot-details--live-auto-leading).
 
 ## Enrollment states
@@ -55,7 +55,7 @@ sits around the card in the preview. The full lot page is
 | Need a card | [Need Card](?path=/story/auction-listing-bid-panel--need-card) | Empty linked-card slot. Quick-maximum presets are visible; linking is the next step. |
 | Linked card, editable | [Linked Card Editable](?path=/story/auction-listing-bid-panel--linked-card-editable) | Masked card with Change, before the first bid on this lot. |
 | Linked card, locked | [Linked Card](?path=/story/auction-listing-bid-panel--linked-card) | Masked card without Change, after the first bid. |
-| Ready | [Ready](?path=/story/auction-listing-bid-panel--ready) | Enrollment complete. Quick-maximum presets and Review maximum. |
+| Ready | [Ready](?path=/story/auction-listing-bid-panel--ready) | Enrollment complete. Quick-maximum presets, Place Bid, and always-on maximum mechanism subtext. |
 | Payment authorization | [Payment Authorization](?path=/story/auction-listing-bid-panel--payment-authorization) | Committing a maximum opens the authorize-your-bid dialog. |
 
 ## Dialogs
@@ -64,7 +64,6 @@ sits around the card in the preview. The full lot page is
 | --- | --- | --- |
 | Setup | [Setup Modal](?path=/story/auction-listing-bid-panel-dialogs--setup-modal) | Card-link iframe and age attestation. Continue stays disabled until both are done. |
 | Setup from Change | [Setup Modal From Change](?path=/story/auction-listing-bid-panel-dialogs--setup-modal-from-change) | Same sheet after Change. Age attestation stays checked when already given. |
-| Auto-bid confirm | [Auto Bid Confirmation](?path=/story/auction-listing-bid-panel-dialogs--auto-bid-confirmation) | First auto-bid on a listing asks the collector to confirm the hold. |
 | Payment authorization pending | [Payment Authorization Pending](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-pending) | Authorize-your-bid dialog while Stripe is authorizing. |
 | Payment authorization refused | [Payment Authorization Refused](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-refused) | Authorize-your-bid dialog after the method is declined. |
 
@@ -115,8 +114,6 @@ around it.
 | \`PaymentMethodRow.onChange\` | Change on an editable linked card | Opening setup to replace the card, only before the first bid on this lot. |
 | \`EnrollmentSetupSheet.onContinue\` | Setup Continue | Persisting the linked card and age attestation, then closing setup. |
 | \`EnrollmentSetupSheet.onOpenChange\` | Setup open state changes | Whether the setup sheet is shown. |
-| \`AutoBidConfirmationDialog.onConfirm\` | Auto-bid confirmation is accepted | Recording that this listing has shown first-auto-bid confirmation. |
-| \`AutoBidConfirmationDialog.onOpenChange\` | Auto-bid confirmation open state changes | Whether that dialog is shown. |
 | \`SignInCard.onOpenChange\` | Sign-in overlay open state changes | Whether sign-in is shown. |
 | \`SignInEmailForm.onSubmit\` | Sign-in email is submitted | Completing sign-in, then moving enrollment to ready. |
         `,
@@ -253,7 +250,7 @@ SignedOut.play = async ({ canvasElement }) => {
   expect(canvas.queryByText("Highest bid")).not.toBeInTheDocument();
   expect(canvas.queryByText("Outbid")).not.toBeInTheDocument();
   expect(
-    canvas.queryByRole("button", { name: "Place Bid" }),
+    canvas.queryByRole("button", { name: /^Place Bid/ }),
   ).not.toBeInTheDocument();
 };
 
@@ -267,11 +264,11 @@ NeedCard.play = async ({ canvasElement }) => {
     canvas.getByRole("button", { name: "Link a card to place a bid." }),
   ).toBeVisible();
   expect(canvas.getByText("Linked Card")).toBeVisible();
-  expect(canvas.getByText("Next eligible bid")).toBeVisible();
+  expect(canvas.getByText("Min. bid")).toBeVisible();
   expect(
     canvas.queryByRole("button", { name: "Sign In to Bid" }),
   ).not.toBeInTheDocument();
-  await userEvent.click(canvas.getByRole("button", { name: /^Bid HK\$/ }));
+  await userEvent.click(canvas.getByRole("button", { name: /^Place Bid/ }));
   await waitFor(() => {
     expect(
       within(document.body).getByRole("dialog", {
@@ -283,7 +280,7 @@ NeedCard.play = async ({ canvasElement }) => {
   expect(
     canvas.getByRole("button", { name: "Link a card to place a bid." }),
   ).toBeVisible();
-  expect(canvas.getByText("Next eligible bid")).toBeVisible();
+  expect(canvas.getByText("Min. bid")).toBeVisible();
 };
 
 export const LinkedCardEditable: Story = {
@@ -329,6 +326,11 @@ Ready.play = async ({ canvasElement }) => {
   expect(
     canvas.queryByRole("button", { name: "Change" }),
   ).not.toBeInTheDocument();
+  expect(
+    canvas.getByText(
+      "We bid only as needed up to your maximum. Hold matches it; you can raise, not lower or cancel.",
+    ),
+  ).toBeVisible();
 };
 
 export const PaymentAuthorization: Story = {
@@ -336,8 +338,8 @@ export const PaymentAuthorization: Story = {
   render: () => <PaymentAuthorizationPreview />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Next eligible bid")).toBeVisible();
-    await userEvent.click(canvas.getByRole("button", { name: /^Bid HK\$/ }));
+    expect(canvas.getByText("Min. bid")).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: /^Place Bid/ }));
     expect(
       within(document.body).getByRole("dialog", {
         name: "Authorize your bid",
@@ -355,6 +357,6 @@ export const PaymentAuthorization: Story = {
       }),
     ).toBeDisabled();
     await dismissDialog("Authorize your bid");
-    expect(canvas.getByText("Next eligible bid")).toBeVisible();
+    expect(canvas.getByText("Min. bid")).toBeVisible();
   },
 };

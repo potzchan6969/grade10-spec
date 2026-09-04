@@ -32,7 +32,7 @@ function checkAcceptedBy(ctx, spec, dir) {
       if (issued.has(id)) continue;
       ctx.add(
         "accepted",
-        `${dir}/spec.md`,
+        `${dir}/user-journeys.md`,
         `${journey.id} is accepted by \`${id}\`, which this spec issues nowhere`,
       );
     }

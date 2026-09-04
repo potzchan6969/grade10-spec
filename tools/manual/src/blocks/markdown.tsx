@@ -94,7 +94,7 @@ export function classifyHref(
 
 /**
  * The page that shows a store file, where one does. A change's own artifacts
- * are its page's tabs — a proposal that says "see design.md" lands on the
+ * are its page's tabs — a proposal that says "see tech-design.md" lands on the
  * design — a durable spec is the capability page that embeds it, and a
  * reference is its own page. A change that is not in flight, a spec no page
  * shows, or a reference the snapshot does not list is read where it lives.

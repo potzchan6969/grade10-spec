@@ -23,7 +23,7 @@ import {
   deltaSections,
   renamedPairs,
 } from "./read-changes.mts";
-import { readJourney, readRequirement, readTestCases } from "./read-specs.mts";
+import { readJourneys, readRequirement, readTestCases } from "./read-specs.mts";
 
 /**
  * A change, whole. The snapshot's entry is the board's row — lane facts,
@@ -40,9 +40,11 @@ import { readJourney, readRequirement, readTestCases } from "./read-specs.mts";
  * missing. */
 const FALLBACK: { id: string; generates: string }[] = [
   { id: "proposal", generates: "proposal.md" },
-  { id: "specs", generates: "specs/**/*.md" },
-  { id: "design", generates: "design.md" },
-  { id: "ui", generates: "ui.md" },
+  { id: "specs", generates: "specs/**/spec.md" },
+  { id: "user-journeys", generates: "specs/**/user-journeys.md" },
+  { id: "test-cases", generates: "specs/**/test-cases.md" },
+  { id: "ui-design", generates: "ui-design.md" },
+  { id: "tech-design", generates: "tech-design.md" },
   { id: "tasks", generates: "tasks.md" },
 ];
 
@@ -65,16 +67,17 @@ export function readChangeDocument(
   const rel = storePath(root, dir);
   const schema = schemaOf(dir);
   const declared = schema === "" ? undefined : schemaArtifacts(root, schema);
+  const deltas = deltaFiles(root, dir).map(({ spec, file }) =>
+    readDelta(root, spec, file, git),
+  );
 
   return {
     id,
     dir: rel,
     schema,
     schemaKnown: declared !== undefined,
-    artifacts: readArtifacts(root, dir, rel, declared ?? FALLBACK, git),
-    deltas: deltaFiles(root, dir).map(({ spec, file }) =>
-      readDelta(root, spec, file, git),
-    ),
+    artifacts: readArtifacts(dir, rel, declared ?? FALLBACK, deltas, git, root),
+    deltas,
   };
 }
 
@@ -119,13 +122,36 @@ export function schemaArtifacts(
   return artifacts;
 }
 
-/** How an artifact renders, from what the schema says it generates: a
- * directory of deltas and the checklist are read structurally, everything
- * else is prose whatever it is called. */
+/** How an artifact renders, from what the schema says it generates: the
+ * three files a capability directory holds and the checklist are read
+ * structurally, everything else is prose whatever it is called. */
 function kindOf(generates: string): ChangeArtifactKind {
-  if (generates.startsWith("specs/")) return "specs";
+  if (generates.startsWith("specs/")) {
+    if (generates.endsWith("/user-journeys.md")) return "journeys";
+    if (generates.endsWith("/test-cases.md")) return "cases";
+    return "specs";
+  }
   if (generates === "tasks.md") return "tasks";
   return "doc";
+}
+
+/** Whether a per-capability artifact exists, read off the deltas that were
+ * already parsed rather than the disk a second time. The deltas are the
+ * capability directories, so an artifact is present when any of them
+ * carries its file. */
+function inDeltas(
+  kind: ChangeArtifactKind,
+  deltas: ChangeDeltaDocument[],
+): boolean {
+  if (kind === "journeys")
+    return deltas.some(
+      (delta) => (delta.journeys?.length ?? 0) > 0 || delta.journeysError,
+    );
+  if (kind === "cases")
+    return deltas.some(
+      (delta) => delta.suite !== undefined || delta.suiteError,
+    );
+  return deltas.length > 0;
 }
 
 /**
@@ -135,11 +161,12 @@ function kindOf(generates: string): ChangeArtifactKind {
  * change. Those come last, since nothing says where they belong.
  */
 function readArtifacts(
-  root: string,
   dir: string,
   rel: string,
   order: { id: string; generates: string }[],
+  deltas: ChangeDeltaDocument[],
   git: GitIndex,
+  root: string,
 ): ChangeArtifact[] {
   const unclaimed = new Set(
     readdirSync(dir, { withFileTypes: true })
@@ -155,12 +182,8 @@ function readArtifacts(
 
   for (const { id, generates } of order) {
     const kind = kindOf(generates);
-    if (kind === "specs") {
-      artifacts.push({
-        name: id,
-        kind,
-        present: deltaFiles(root, dir).length > 0,
-      });
+    if (kind === "specs" || kind === "journeys" || kind === "cases") {
+      artifacts.push({ name: id, kind, present: inDeltas(kind, deltas) });
       continue;
     }
     const present = unclaimed.delete(generates);
@@ -224,8 +247,6 @@ function readDelta(
     if (purpose) document.purpose = purpose.body;
     const featureSet = findSection(sections, "Feature set");
     if (featureSet) document.featureSet = featureSet.body;
-    const journeys = findSection(sections, "User journeys");
-    if (journeys) document.journeys = journeys.children.map(readJourney);
 
     for (const section of sections) {
       const kind = deltaKindOf(section.heading);
@@ -243,6 +264,16 @@ function readDelta(
     }
   } catch (cause) {
     document.error = toItemError(file, cause);
+  }
+
+  const journeysFile = file.replace(/spec\.md$/, "user-journeys.md");
+  const journeys = readTextIfExists(join(root, journeysFile));
+  if (journeys !== undefined) {
+    try {
+      document.journeys = readJourneys(journeys);
+    } catch (cause) {
+      document.journeysError = toItemError(journeysFile, cause);
+    }
   }
 
   const casesFile = file.replace(/spec\.md$/, "test-cases.md");

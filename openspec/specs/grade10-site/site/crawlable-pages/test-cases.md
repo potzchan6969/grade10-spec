@@ -3,7 +3,7 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## crawlable-pages-US1: Collector reads a public surface before scripts run
+## grade10-site-site-crawlable-pages-US1: Collector reads a public surface before scripts run
 
 **As a** collector,
 **I want** a public address to answer with its title, description, headline,
@@ -11,7 +11,7 @@ and static copy in the first response,
 **so that** I can read the surface immediately and still have it once scripts
 make the page interactive.
 
-### crawlable-pages-US1-TC1-1: Marketing page answers whole before scripts run
+### grade10-site-site-crawlable-pages-US1-TC1-1: Marketing page answers whole before scripts run
 
 **Classification:**
 
@@ -23,7 +23,7 @@ make the page interactive.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** crawlable-pages-US-01
+* **Trace:** grade10-site-site-crawlable-pages-US-01
 
 **Pre-conditions:**
 JavaScript disabled in the browser.
@@ -39,7 +39,7 @@ JavaScript disabled in the browser.
 * Response HTML contains the marketing page's title, meta description, headline, and static copy.
 * URL contains <lang>.
 
-### crawlable-pages-US1-TC2-1: Catalogue answers its identity before scripts run
+### grade10-site-site-crawlable-pages-US1-TC2-1: Catalogue answers its identity before scripts run
 
 **Classification:**
 
@@ -51,7 +51,7 @@ JavaScript disabled in the browser.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** crawlable-pages-US-01
+* **Trace:** grade10-site-site-crawlable-pages-US-01
 
 **Pre-conditions:**
 JavaScript disabled in the browser.
@@ -67,7 +67,7 @@ JavaScript disabled in the browser.
 * Each response HTML contains that surface's title, meta description, headline, and static copy.
 * Listings themselves may be absent until scripts run.
 
-### crawlable-pages-US1-TC3-1: Scripts only add to the served surface
+### grade10-site-site-crawlable-pages-US1-TC3-1: Scripts only add to the served surface
 
 **Classification:**
 
@@ -79,7 +79,7 @@ JavaScript disabled in the browser.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** crawlable-pages-US-01
+* **Trace:** grade10-site-site-crawlable-pages-US-01
 
 **Pre-conditions:**
 A public surface is served with its content in the HTML.
@@ -97,7 +97,7 @@ A public surface is served with its content in the HTML.
 
 ---
 
-## crawlable-pages-US2: Collector tells one surface from another by name
+## grade10-site-site-crawlable-pages-US2: Collector tells one surface from another by name
 
 **As a** collector,
 **I want** every public surface to carry its own title and meta description,
@@ -105,7 +105,7 @@ and the document title to follow an in-page navigation,
 **so that** the surface I am on is named distinctly from every other, even
 after a navigation with no page load.
 
-### crawlable-pages-US2-TC1-1: Two public surfaces carry two names
+### grade10-site-site-crawlable-pages-US2-TC1-1: Two public surfaces carry two names
 
 **Classification:**
 
@@ -117,7 +117,7 @@ after a navigation with no page load.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** crawlable-pages-US-02
+* **Trace:** grade10-site-site-crawlable-pages-US-02
 
 **Pre-conditions:**
 None.
@@ -132,7 +132,7 @@ None.
 * Titles differ.
 * Meta descriptions differ.
 
-### crawlable-pages-US2-TC2-1: Document title follows in-page navigation
+### grade10-site-site-crawlable-pages-US2-TC2-1: Document title follows in-page navigation
 
 **Classification:**
 
@@ -144,7 +144,7 @@ None.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** crawlable-pages-US-02
+* **Trace:** grade10-site-site-crawlable-pages-US-02
 
 **Pre-conditions:**
 A collector is on one public surface.
@@ -161,14 +161,14 @@ A collector is on one public surface.
 
 ---
 
-## crawlable-pages-US3: Preview fetcher unfurls a shared link
+## grade10-site-site-crawlable-pages-US3: Preview fetcher unfurls a shared link
 
 **As a** preview fetcher,
 **I want** Open Graph title, description, and URL readable without executing
 scripts,
 **so that** a shared link unfurls as the surface it points at.
 
-### crawlable-pages-US3-TC1-1: Shared public link unfurls without scripts
+### grade10-site-site-crawlable-pages-US3-TC1-1: Shared public link unfurls without scripts
 
 **Classification:**
 
@@ -180,7 +180,7 @@ scripts,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** crawlable-pages-US-03
+* **Trace:** grade10-site-site-crawlable-pages-US-03
 
 **Pre-conditions:**
 JavaScript disabled in the browser.
@@ -196,7 +196,7 @@ JavaScript disabled in the browser.
 
 ---
 
-## crawlable-pages-US4: Crawler discovers every public address
+## grade10-site-site-crawlable-pages-US4: Crawler discovers every public address
 
 **As a** crawler,
 **I want** a robots.txt naming a sitemap that is read from the catalogue when
@@ -204,7 +204,7 @@ it is fetched,
 **so that** I fetch every public address the site answers, and none it would
 refuse.
 
-### crawlable-pages-US4-TC1-1: robots.txt permits public surfaces and names the sitemap
+### grade10-site-site-crawlable-pages-US4-TC1-1: robots.txt permits public surfaces and names the sitemap
 
 **Classification:**
 
@@ -216,7 +216,7 @@ refuse.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** crawlable-pages-US-04
+* **Trace:** grade10-site-site-crawlable-pages-US-04
 
 **Pre-conditions:**
 None.
@@ -230,7 +230,7 @@ None.
 * It permits crawling the public surfaces.
 * It names the sitemap's absolute URL.
 
-### crawlable-pages-US4-TC2-1: Sitemap lists public addresses and no session-gated ones
+### grade10-site-site-crawlable-pages-US4-TC2-1: Sitemap lists public addresses and no session-gated ones
 
 **Classification:**
 
@@ -242,7 +242,7 @@ None.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** crawlable-pages-US-04
+* **Trace:** grade10-site-site-crawlable-pages-US-04
 
 **Pre-conditions:**
 None.
@@ -258,7 +258,7 @@ None.
 * Neither the profile nor sign-in appears.
 * Every entry is an address a collector can fetch, with no unfilled parameter in place of a card or a lot.
 
-### crawlable-pages-US4-TC3-1: Catalogue-gained card appears in the sitemap without a deploy
+### grade10-site-site-crawlable-pages-US4-TC3-1: Catalogue-gained card appears in the sitemap without a deploy
 
 **Classification:**
 
@@ -270,7 +270,7 @@ None.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** crawlable-pages-US-04
+* **Trace:** grade10-site-site-crawlable-pages-US-04
 
 **Pre-conditions:**
 A card the catalogue did not hold when the site was built is now in the catalogue.
@@ -283,7 +283,7 @@ A card the catalogue did not hold when the site was built is now in the catalogu
 
 * That card's address appears, with no deploy in between.
 
-### crawlable-pages-US4-TC4-1: Every listed sitemap address answers 200
+### grade10-site-site-crawlable-pages-US4-TC4-1: Every listed sitemap address answers 200
 
 **Classification:**
 
@@ -295,7 +295,7 @@ A card the catalogue did not hold when the site was built is now in the catalogu
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** crawlable-pages-US-04
+* **Trace:** grade10-site-site-crawlable-pages-US-04
 
 **Pre-conditions:**
 None.
@@ -311,7 +311,7 @@ None.
 
 ---
 
-## crawlable-pages-US5: Collector opens an address the site may not hold
+## grade10-site-site-crawlable-pages-US5: Collector opens an address the site may not hold
 
 **As a** collector,
 **I want** an address to answer with its true status — the deepest surface
@@ -319,7 +319,7 @@ naming it, or a 404 that still shows me the not-found surface,
 **so that** I land on the surface that owns the address and am never told
 nothing is wrong when the site holds no such thing.
 
-### crawlable-pages-US5-TC1-1: Nested store address answers as the store
+### grade10-site-site-crawlable-pages-US5-TC1-1: Nested store address answers as the store
 
 **Classification:**
 
@@ -331,7 +331,7 @@ nothing is wrong when the site holds no such thing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** crawlable-pages-US-05
+* **Trace:** grade10-site-site-crawlable-pages-US-05
 
 **Pre-conditions:**
 None.
@@ -346,7 +346,7 @@ None.
 * Response status is 200.
 * The response carries the store's identity.
 
-### crawlable-pages-US5-TC2-1: Nested lot address answers as that lot
+### grade10-site-site-crawlable-pages-US5-TC2-1: Nested lot address answers as that lot
 
 **Classification:**
 
@@ -358,7 +358,7 @@ None.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** crawlable-pages-US-05
+* **Trace:** grade10-site-site-crawlable-pages-US-05
 
 **Pre-conditions:**
 The catalogue publishes <a published lot>.
@@ -373,7 +373,7 @@ The catalogue publishes <a published lot>.
 * Response status is 200.
 * The response carries that lot's identity, not the auction's.
 
-### crawlable-pages-US5-TC3-1: Missing named thing answers 404 with not-found
+### grade10-site-site-crawlable-pages-US5-TC3-1: Missing named thing answers 404 with not-found
 
 **Classification:**
 
@@ -385,7 +385,7 @@ The catalogue publishes <a published lot>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** crawlable-pages-US-05
+* **Trace:** grade10-site-site-crawlable-pages-US-05
 
 **Pre-conditions:**
 None.
@@ -400,7 +400,7 @@ None.
 * Response status is 404.
 * A collector opening it still sees the site's not-found surface.
 
-### crawlable-pages-US5-TC4-1: Unknown address answers 404 with not-found
+### grade10-site-site-crawlable-pages-US5-TC4-1: Unknown address answers 404 with not-found
 
 **Classification:**
 
@@ -412,7 +412,7 @@ None.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** crawlable-pages-US-05
+* **Trace:** grade10-site-site-crawlable-pages-US-05
 
 **Pre-conditions:**
 None.

@@ -3,7 +3,7 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## navigation-US1: Collector opens a ZZZ address directly
+## zzz-site-site-navigation-US1: Collector opens a ZZZ address directly
 
 **As a** collector,
 **I want** sign-in and the profile to answer at addresses of their own, and an
@@ -11,7 +11,7 @@ address under no surface to answer as not-found,
 **so that** a link or a refresh puts me back on the surface I was on rather
 than at home.
 
-### navigation-US1-TC1-1: Sign-in and profile answer at their own addresses
+### zzz-site-site-navigation-US1-TC1-1: Sign-in and profile answer at their own addresses
 
 **Classification:**
 
@@ -23,7 +23,7 @@ than at home.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-01
+* **Trace:** zzz-site-site-navigation-US-01
 
 **Pre-conditions:**
 None.
@@ -38,7 +38,7 @@ None.
 * Sign-in renders at the sign-in address.
 * The profile renders at the profile address.
 
-### navigation-US1-TC2-1: Refresh keeps the collector on sign-in
+### zzz-site-site-navigation-US1-TC2-1: Refresh keeps the collector on sign-in
 
 **Classification:**
 
@@ -50,7 +50,7 @@ None.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-01
+* **Trace:** zzz-site-site-navigation-US-01
 
 **Pre-conditions:**
 A collector who moved from home to sign-in.
@@ -65,7 +65,7 @@ A collector who moved from home to sign-in.
 
 * Sign-in renders, not home.
 
-### navigation-US1-TC3-1: Unknown address resolves to not-found, never home
+### zzz-site-site-navigation-US1-TC3-1: Unknown address resolves to not-found, never home
 
 **Classification:**
 
@@ -77,7 +77,7 @@ A collector who moved from home to sign-in.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-01
+* **Trace:** zzz-site-site-navigation-US-01
 
 **Pre-conditions:**
 None.
@@ -93,7 +93,7 @@ None.
 
 ---
 
-## navigation-US2: Collector asks for a session-decided address
+## zzz-site-site-navigation-US2: Collector asks for a session-decided address
 
 **As a** collector,
 **I want** home, sign-in, and the profile to answer with what my session
@@ -101,7 +101,7 @@ allows, replacing the entry they correct,
 **so that** I land on the surface I am actually allowed, and going back never
 bounces me forward again.
 
-### navigation-US2-TC1-1: Signed-in collector landing on home is sent to the profile
+### zzz-site-site-navigation-US2-TC1-1: Signed-in collector landing on home is sent to the profile
 
 **Classification:**
 
@@ -113,7 +113,7 @@ bounces me forward again.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-02
+* **Trace:** zzz-site-site-navigation-US-02
 
 **Pre-conditions:**
 Signed in as a collector on ZZZ.
@@ -128,7 +128,7 @@ Signed in as a collector on ZZZ.
 * Their profile renders.
 * The address reads as the profile.
 
-### navigation-US2-TC2-1: Signed-in collector asking for sign-in is sent to the profile
+### zzz-site-site-navigation-US2-TC2-1: Signed-in collector asking for sign-in is sent to the profile
 
 **Classification:**
 
@@ -140,7 +140,7 @@ Signed in as a collector on ZZZ.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-02
+* **Trace:** zzz-site-site-navigation-US-02
 
 **Pre-conditions:**
 Signed in as a collector on ZZZ.
@@ -155,7 +155,7 @@ Signed in as a collector on ZZZ.
 * Their profile renders.
 * The address reads as the profile.
 
-### navigation-US2-TC3-1: Signed-out collector asking for the profile is sent to sign-in
+### zzz-site-site-navigation-US2-TC3-1: Signed-out collector asking for the profile is sent to sign-in
 
 **Classification:**
 
@@ -167,7 +167,7 @@ Signed in as a collector on ZZZ.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-02
+* **Trace:** zzz-site-site-navigation-US-02
 
 **Pre-conditions:**
 The collector is not signed in.
@@ -182,7 +182,7 @@ The collector is not signed in.
 * The sign-in surface renders.
 * The address reads as sign-in.
 
-### navigation-US2-TC4-1: Back never returns to a corrected address
+### zzz-site-site-navigation-US2-TC4-1: Back never returns to a corrected address
 
 **Classification:**
 
@@ -194,7 +194,7 @@ The collector is not signed in.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** navigation-US-02
+* **Trace:** zzz-site-site-navigation-US-02
 
 **Pre-conditions:**
 A collector whose navigation was just corrected.
@@ -209,7 +209,7 @@ A collector whose navigation was just corrected.
 
 * They arrive where they were before asking, never at the address that corrected them forward.
 
-### navigation-US2-TC5-1: Not-found does not wait for the session
+### zzz-site-site-navigation-US2-TC5-1: Not-found does not wait for the session
 
 **Classification:**
 
@@ -221,7 +221,7 @@ A collector whose navigation was just corrected.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** navigation-US-02
+* **Trace:** zzz-site-site-navigation-US-02
 
 **Pre-conditions:**
 The session has not yet resolved.
@@ -237,7 +237,7 @@ The session has not yet resolved.
 
 ---
 
-## navigation-US3: Collector moves between surfaces without a page load
+## zzz-site-site-navigation-US3: Collector moves between surfaces without a page load
 
 **As a** collector,
 **I want** movement between the site's surfaces to stay in the page, with
@@ -245,7 +245,7 @@ history stepping back through it and my own click modifiers left alone,
 **so that** moving around the site is immediate without taking away the
 browser behavior I asked for.
 
-### navigation-US3-TC1-1: Sign-in opens in place from home
+### zzz-site-site-navigation-US3-TC1-1: Sign-in opens in place from home
 
 **Classification:**
 
@@ -257,7 +257,7 @@ browser behavior I asked for.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-03
+* **Trace:** zzz-site-site-navigation-US-03
 
 **Pre-conditions:**
 A collector is on home.
@@ -271,7 +271,7 @@ A collector is on home.
 
 * The sign-in surface renders at its address without a full document load.
 
-### navigation-US3-TC2-1: Back steps back into the site without a page load
+### zzz-site-site-navigation-US3-TC2-1: Back steps back into the site without a page load
 
 **Classification:**
 
@@ -283,7 +283,7 @@ A collector is on home.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** navigation-US-03
+* **Trace:** zzz-site-site-navigation-US-03
 
 **Pre-conditions:**
 A collector who moved from home to sign-in.
@@ -298,7 +298,7 @@ A collector who moved from home to sign-in.
 
 * Home renders, still without a full document load.
 
-### navigation-US3-TC3-1: Modified click stays the browser's
+### zzz-site-site-navigation-US3-TC3-1: Modified click stays the browser's
 
 **Classification:**
 
@@ -310,7 +310,7 @@ A collector who moved from home to sign-in.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** navigation-US-03
+* **Trace:** zzz-site-site-navigation-US-03
 
 **Pre-conditions:**
 None.
@@ -324,7 +324,7 @@ None.
 
 * The browser's own behavior happens, unaltered.
 
-### navigation-US3-TC4-1: Other-origin link is a normal page load
+### zzz-site-site-navigation-US3-TC4-1: Other-origin link is a normal page load
 
 **Classification:**
 
@@ -336,7 +336,7 @@ None.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** navigation-US-03
+* **Trace:** zzz-site-site-navigation-US-03
 
 **Pre-conditions:**
 A surface shows a link to another origin.
@@ -352,7 +352,7 @@ A surface shows a link to another origin.
 
 ---
 
-## navigation-US4: Collector resumes a surface where they left it
+## zzz-site-site-navigation-US4: Collector resumes a surface where they left it
 
 **As a** collector,
 **I want** back and forward to return me to the scroll position I left an
@@ -360,7 +360,7 @@ entry at, and a new entry to start at the top,
 **so that** I keep my place in a surface I return to instead of finding it
 from the beginning.
 
-### navigation-US4-TC1-1: Back returns to the left scroll position
+### zzz-site-site-navigation-US4-TC1-1: Back returns to the left scroll position
 
 **Classification:**
 
@@ -372,7 +372,7 @@ from the beginning.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** navigation-US-04
+* **Trace:** zzz-site-site-navigation-US-04
 
 **Pre-conditions:**
 A collector who scrolled partway down a surface and navigated from there.
@@ -387,7 +387,7 @@ A collector who scrolled partway down a surface and navigated from there.
 
 * The surface is scrolled to where they left it.
 
-### navigation-US4-TC2-1: New surface starts at the top
+### zzz-site-site-navigation-US4-TC2-1: New surface starts at the top
 
 **Classification:**
 
@@ -399,7 +399,7 @@ A collector who scrolled partway down a surface and navigated from there.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** navigation-US-04
+* **Trace:** zzz-site-site-navigation-US-04
 
 **Pre-conditions:**
 A collector scrolled partway down a surface.
@@ -415,14 +415,14 @@ A collector scrolled partway down a surface.
 
 ---
 
-## navigation-US5: Collector downloads only the surface they open
+## zzz-site-site-navigation-US5: Collector downloads only the surface they open
 
 **As a** collector,
 **I want** a surface to cost only its own page code, loaded when I move to it,
 **so that** opening one surface does not make me pay for the ones I did not
 open.
 
-### navigation-US5-TC1-1: Cold home visit downloads no profile or sign-in page code
+### zzz-site-site-navigation-US5-TC1-1: Cold home visit downloads no profile or sign-in page code
 
 **Classification:**
 
@@ -434,7 +434,7 @@ open.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** navigation-US-05
+* **Trace:** zzz-site-site-navigation-US-05
 
 **Pre-conditions:**
 A cold browser with an empty cache.
@@ -449,7 +449,7 @@ A cold browser with an empty cache.
 
 * No script containing the profile's or sign-in's page code is downloaded.
 
-### navigation-US5-TC2-1: Sign-in page code loads on arrival
+### zzz-site-site-navigation-US5-TC2-1: Sign-in page code loads on arrival
 
 **Classification:**
 
@@ -461,7 +461,7 @@ A cold browser with an empty cache.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** navigation-US-05
+* **Trace:** zzz-site-site-navigation-US-05
 
 **Pre-conditions:**
 A collector is on home.

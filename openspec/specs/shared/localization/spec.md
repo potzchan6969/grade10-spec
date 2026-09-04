@@ -50,19 +50,19 @@ Every user-facing string a brand's site renders SHALL come from that brand's
 message catalogs in the active locale. No surface SHALL carry its own
 hardcoded copy, including the surfaces both brands share.
 
-#### Scenario: localization-SC-01 - A shared surface renders each brand's language
+#### Scenario: shared-localization-SC-01 - A shared surface renders each brand's language
 
 - **GIVEN** the store surface rendered on the grade10 site in Traditional Chinese and on the ZZZ site
 - **WHEN** each page renders
 - **THEN** the grade10 page's copy is Traditional Chinese
 - **AND** the ZZZ page's copy is Korean
 
-#### Scenario: localization-SC-02 - Every ZZZ surface is Korean
+#### Scenario: shared-localization-SC-02 - Every ZZZ surface is Korean
 
 - **WHEN** any page of the ZZZ site renders
 - **THEN** its copy is Korean
 
-#### Scenario: localization-SC-03 - Commerce content stays in its source language
+#### Scenario: shared-localization-SC-03 - Commerce content stays in its source language
 
 - **GIVEN** a product listing whose title was authored in English
 - **WHEN** it renders on a Traditional Chinese page
@@ -88,50 +88,50 @@ For a brand with several locales, a non-default locale MAY omit a key it
 answers elsewhere, and the rendered string SHALL then be that brand's default
 locale's value. A raw message key SHALL never render.
 
-#### Scenario: localization-SC-04 - A brand says nothing of its own
+#### Scenario: shared-localization-SC-04 - A brand says nothing of its own
 
 - **GIVEN** a key no brand states a value for
 - **WHEN** a page of any brand renders it in any of that brand's locales
 - **THEN** the vocabulary's own value in that locale renders
 
-#### Scenario: localization-SC-05 - A brand names itself
+#### Scenario: shared-localization-SC-05 - A brand names itself
 
 - **GIVEN** a key one brand states its own value for
 - **WHEN** that brand's page renders it
 - **THEN** the brand's value renders
 - **AND** every other brand's page renders the vocabulary's value
 
-#### Scenario: localization-SC-06 - A brand leaves a key unanswered
+#### Scenario: shared-localization-SC-06 - A brand leaves a key unanswered
 
 - **GIVEN** a key no brand-neutral value answers
 - **WHEN** a brand that does not answer it either is built
 - **THEN** the build fails naming the brand, the key, and the language
 
-#### Scenario: localization-SC-07 - A brand's own words are missing a language
+#### Scenario: shared-localization-SC-07 - A brand's own words are missing a language
 
 - **GIVEN** a brand that answers a key in one of its locales and not another
 - **WHEN** the build runs
 - **THEN** it fails naming the brand, the key, and the language
 
-#### Scenario: localization-SC-08 - A single-locale brand is missing a string
+#### Scenario: shared-localization-SC-08 - A single-locale brand is missing a string
 
 - **GIVEN** the shared vocabulary gains a key with no Korean value
 - **WHEN** the build runs
 - **THEN** it fails naming the gap, and no page ever renders it
 
-#### Scenario: localization-SC-09 - A partial translation falls back key by key
+#### Scenario: shared-localization-SC-09 - A partial translation falls back key by key
 
 - **GIVEN** a key whose Simplified Chinese value is absent
 - **WHEN** a grade10 page renders it in Simplified Chinese
 - **THEN** the English value renders in its place
 - **AND** every key with a Simplified Chinese value still renders it
 
-#### Scenario: localization-SC-10 - No raw key on screen
+#### Scenario: shared-localization-SC-10 - No raw key on screen
 
 - **WHEN** any page of either brand renders in any of its locales
 - **THEN** no message key renders as visible text
 
-#### Scenario: localization-SC-11 - A new brand answers only for itself
+#### Scenario: shared-localization-SC-11 - A new brand answers only for itself
 
 - **GIVEN** a brand added to the platform
 - **WHEN** it states what it calls itself and nothing more
@@ -150,25 +150,25 @@ An explicit pick in the site's locale switcher SHALL apply immediately,
 follow the collector across the site, and win over the browser's preferences
 on every return visit until they pick again.
 
-#### Scenario: localization-SC-12 - A Hong Kong browser arrives
+#### Scenario: shared-localization-SC-12 - A Hong Kong browser arrives
 
 - **GIVEN** a first visit from a browser preferring `zh-HK`
 - **WHEN** the site renders
 - **THEN** the page is Traditional Chinese
 
-#### Scenario: localization-SC-13 - An explicit pick outlives the visit
+#### Scenario: shared-localization-SC-13 - An explicit pick outlives the visit
 
 - **GIVEN** a collector whose browser prefers `zh-HK` and who picked Simplified Chinese
 - **WHEN** they return to the site later
 - **THEN** the page is Simplified Chinese
 
-#### Scenario: localization-SC-14 - An unsupported language falls to the default
+#### Scenario: shared-localization-SC-14 - An unsupported language falls to the default
 
 - **GIVEN** a first visit from a browser preferring only Japanese
 - **WHEN** the site renders
 - **THEN** the page is English
 
-#### Scenario: localization-SC-15 - One language needs no switcher
+#### Scenario: shared-localization-SC-15 - One language needs no switcher
 
 - **WHEN** the ZZZ site's header renders
 - **THEN** its locale label displays Korean and invites no interaction
@@ -200,71 +200,71 @@ carries no remembered locale, so a crawler is answered in the default locale
 deterministically. Session-shaped surfaces SHALL stay unprefixed and render
 the remembered locale.
 
-#### Scenario: localization-SC-16 - A Chinese address answers whole
+#### Scenario: shared-localization-SC-16 - A Chinese address answers whole
 
 - **WHEN** the Traditional Chinese store address is fetched and no script executes
 - **THEN** the response HTML carries the store's title, meta description, headline, and static copy in Traditional Chinese
 
-#### Scenario: localization-SC-17 - A card answers under a prefix as itself
+#### Scenario: shared-localization-SC-17 - A card answers under a prefix as itself
 
 - **WHEN** the Traditional Chinese address of a card the catalogue holds is fetched and no script executes
 - **THEN** the response has status 200 and carries that card's own name, description, and prices
 - **AND** the platform's own copy around it is Traditional Chinese
 - **AND** the storefront's page is not what answered
 
-#### Scenario: localization-SC-18 - A lot answers under a prefix as itself
+#### Scenario: shared-localization-SC-18 - A lot answers under a prefix as itself
 
 - **WHEN** the Simplified Chinese address of a lot the auction holds is fetched and no script executes
 - **THEN** the response has status 200 and carries that lot's own identity
 - **AND** the platform's own copy around it is Simplified Chinese
 
-#### Scenario: localization-SC-19 - A prefixed address naming nothing is refused
+#### Scenario: shared-localization-SC-19 - A prefixed address naming nothing is refused
 
 - **WHEN** a Simplified Chinese address under the store's cards naming no card in the catalogue is fetched
 - **THEN** the response has status 404
 - **AND** a collector opening it sees the not-found surface in Simplified Chinese
 
-#### Scenario: localization-SC-20 - A variant declares its alternates
+#### Scenario: shared-localization-SC-20 - A variant declares its alternates
 
 - **WHEN** any public address is fetched and no script executes
 - **THEN** the response names each language variant of that surface and its address, the default among them
 
-#### Scenario: localization-SC-21 - The sitemap lists every variant
+#### Scenario: shared-localization-SC-21 - The sitemap lists every variant
 
 - **WHEN** the sitemap is fetched
 - **THEN** each address the sitemap names appears once per grade10 locale
 - **AND** no session-shaped address appears
 
-#### Scenario: localization-SC-22 - A crawler reads an unprefixed address in the default locale
+#### Scenario: shared-localization-SC-22 - A crawler reads an unprefixed address in the default locale
 
 - **WHEN** an unprefixed public address is fetched carrying no remembered locale and no script executes
 - **THEN** the response's own copy is English and the document declares it
 
-#### Scenario: localization-SC-23 - The address wins over the memory
+#### Scenario: shared-localization-SC-23 - The address wins over the memory
 
 - **GIVEN** a collector whose remembered locale is Simplified Chinese
 - **WHEN** they open a `/tc` address
 - **THEN** the page is Traditional Chinese
 
-#### Scenario: localization-SC-24 - A prefixed visit stays in its language
+#### Scenario: shared-localization-SC-24 - A prefixed visit stays in its language
 
 - **GIVEN** a collector on the Traditional Chinese store address
 - **WHEN** they navigate to the auction
 - **THEN** they arrive at the auction's Traditional Chinese address
 
-#### Scenario: localization-SC-25 - A prefixed catalogue opens a prefixed card
+#### Scenario: shared-localization-SC-25 - A prefixed catalogue opens a prefixed card
 
 - **GIVEN** a collector on the Traditional Chinese store address
 - **WHEN** they open a card from the grid
 - **THEN** they arrive at that card's Traditional Chinese address
 
-#### Scenario: localization-SC-26 - The memory redirects an unprefixed arrival
+#### Scenario: shared-localization-SC-26 - The memory redirects an unprefixed arrival
 
 - **GIVEN** a collector whose remembered locale is Traditional Chinese
 - **WHEN** they open the unprefixed marketing address, and then an unprefixed card address
 - **THEN** they end at the Traditional Chinese address of each
 
-#### Scenario: localization-SC-27 - An unknown prefixed address is refused honestly
+#### Scenario: shared-localization-SC-27 - An unknown prefixed address is refused honestly
 
 - **WHEN** an address under a locale prefix that matches no surface is fetched
 - **THEN** the response has status 404
@@ -276,12 +276,12 @@ Every page of either brand SHALL declare the active locale as the document's
 language, so assistive technology and text rendering follow the language on
 screen.
 
-#### Scenario: localization-SC-28 - A Chinese page says so
+#### Scenario: shared-localization-SC-28 - A Chinese page says so
 
 - **WHEN** a grade10 page renders in Traditional Chinese
 - **THEN** the document declares `zh-Hant`
 
-#### Scenario: localization-SC-29 - The ZZZ document is Korean
+#### Scenario: shared-localization-SC-29 - The ZZZ document is Korean
 
 - **WHEN** any ZZZ page renders
 - **THEN** the document declares `ko`
@@ -293,13 +293,13 @@ from, falling back to the brand's default locale when none was carried. The
 message vocabulary's email strings SHALL be answered in every locale of both
 brands.
 
-#### Scenario: localization-SC-30 - A Chinese sign-in gets a Chinese email
+#### Scenario: shared-localization-SC-30 - A Chinese sign-in gets a Chinese email
 
 - **GIVEN** a collector on a Traditional Chinese grade10 page
 - **WHEN** they request a sign-in email
 - **THEN** the email's subject and body are Traditional Chinese
 
-#### Scenario: localization-SC-31 - The ZZZ email is Korean
+#### Scenario: shared-localization-SC-31 - The ZZZ email is Korean
 
 - **WHEN** a collector requests a sign-in email on the ZZZ site
 - **THEN** the email's subject and body are Korean
@@ -311,7 +311,7 @@ language input the dates-and-times capability accepts, and nothing else about
 that capability changes: the shapes, the format, and the zone stay as
 specified there.
 
-#### Scenario: localization-SC-32 - A month in Traditional Chinese
+#### Scenario: shared-localization-SC-32 - A month in Traditional Chinese
 
 - **GIVEN** a date shown on a Traditional Chinese page
 - **WHEN** it renders

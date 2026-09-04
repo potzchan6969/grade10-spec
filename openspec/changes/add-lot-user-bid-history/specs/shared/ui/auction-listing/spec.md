@@ -18,7 +18,7 @@ badge whose variant is `outline` when `bidType` is `manual` and `info` when
 `bidType` is `auto`, and `timeLabel`. Long histories SHALL scroll inside the
 dialog body while the dialog title and close control remain fixed.
 
-#### Scenario: auction-listing-SC-09 - A signed-in user opens personal bid history
+#### Scenario: shared-ui-auction-listing-SC-09 - A signed-in user opens personal bid history
 
 - **GIVEN** `ListingUserBidHistory` rendered with at least one row
 - **WHEN** the collector activates the link
@@ -26,13 +26,13 @@ dialog body while the dialog title and close control remain fixed.
   each supplied row
 - **AND** the dialog closes via the close control or Escape
 
-#### Scenario: auction-listing-SC-10 - No rows means no link
+#### Scenario: shared-ui-auction-listing-SC-10 - No rows means no link
 
 - **GIVEN** `ListingUserBidHistory` rendered with an empty `rows` array
 - **WHEN** it renders
 - **THEN** no link or dialog is shown
 
-#### Scenario: auction-listing-SC-11 - Long history scrolls inside the dialog
+#### Scenario: shared-ui-auction-listing-SC-11 - Long history scrolls inside the dialog
 
 - **GIVEN** `ListingUserBidHistory` rendered with more rows than fit the dialog
   viewport and the dialog open
@@ -46,7 +46,7 @@ dialog body while the dialog title and close control remain fixed.
 When supplied, it SHALL render that node on the trailing edge of the recent-bids
 section header. It SHALL NOT require `recentBidsAccessory` to render.
 
-#### Scenario: auction-listing-SC-12 - An accessory composes beside recent bids
+#### Scenario: shared-ui-auction-listing-SC-12 - An accessory composes beside recent bids
 
 - **GIVEN** a bid card with a recent-bids section and a non-empty
   `recentBidsAccessory`

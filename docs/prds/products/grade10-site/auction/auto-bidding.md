@@ -9,10 +9,16 @@ there at the end. Auto-bidding is the answer: they name the most they will
 pay, and Grade10 bids for them only as far as needed to lead.
 
 The maximum is private. The public price is what it takes to beat the field —
-the second-highest maximum plus the listing increment — never the leader's
-cap, so the price stays honest and a maximum is never burned by being seen. A
-bidder sees their own maximum, distinct from the current bid, and whether they
-lead; they can raise it at any time or leave it standing.
+the second-highest maximum plus the [price-tier increment](/p/grade10-site/auction/bid-increments) —
+never the leader's cap, so the price stays honest and a maximum is never burned
+by being seen. A bidder sees their own maximum, distinct from the current bid,
+and whether they lead; they can raise it at any time or leave it standing.
+
+**Bid panel.** Under Set your private maximum, a short always-on line in
+secondary text states that Grade10 bids only as needed up to the maximum,
+that the card hold matches that amount, and that the maximum can be raised
+but not lowered or cancelled. Place Bid is the commitment; a moved floor
+uses stale-floor recovery on the panel.
 
 One card authorization covers the whole commitment. The hold is taken for the
 maximum when it is set, so a bid Grade10 places on the collector's behalf
@@ -56,8 +62,9 @@ stands.
 | Hold | Decided | The card hold is the maximum, not the current bid. One active hold per bidder per listing. | Product |
 | Raise only | Decided | A maximum can go up, never down. Lowering would withdraw a commitment others have already bid against. | Product |
 | Hidden cap | Decided | A leading maximum is not public. Other bidders learn it only by beating it. | Product |
-| Increment | Decided | The listing's own configured increment. No price-banded schedule. | Product |
+| Increment | Decided | The Grade10-owned USD, HKD, and JPY schedule selects the increment from the amount being beaten. No listing-level override. | Product |
 | Bid action carries a maximum | Decided | A consumer sending a bare bid amount is broken by this contract. Money stays integer minor units plus ISO 4217. | Product |
+| Mechanism disclosure | Decided | Always-on secondary subtext under Set your private maximum: bid as needed, hold matches maximum, raise only (no lower or cancel). | Product |
 | Admin history filter | ❓ Open | Whether history can hide platform-placed bids. An operator can already see both. | Product |
 | Preset amounts | ❓ Open | Whether the bid surface offers presets alongside free entry. Presentation only. | Design |
 

@@ -3,7 +3,6 @@
   "empty": "你的购物车是空的。",
   "browse": "浏览商店",
   "subtotal": "小计",
-  "quantity": "× {count}",
   "pay": "付款",
   "paying": "正在准备付款",
   "leaving": "正前往付款页面",
@@ -24,15 +23,26 @@
   "reason": {
     "emptyCart": "你的购物车是空的。",
     "invalidQuantity": "其中一项的数量超出商店可售的范围。",
-    "unknownProduct": "商店已不再提供其中一款卡。",
-    "unknownVariant": "商店已不再提供其中一个评级。",
-    "unavailable": "其中一项已停售。",
     "quantityClamped": "商店的其中一项库存少于你购物车所需的数量。",
     "currencyMismatch": "商店报价的货币并非本店销售的货币。这里无法处理——请告诉我们，我们会修正。",
     "catalog_unavailable": "商店没有响应，请稍后再试。",
     "payment_declined": "付款被拒绝，请改用其他付款方式再试。",
     "payment_error": "未能建立付款，请稍后再试。",
     "points_refused": "计划不接受在此购物车使用这么多积分，请改用其他数量。",
-    "coupon_refused": "该优惠券不能用于此购物车。请移除优惠券或调整购物车后再试。"
+    "coupon_refused": "该优惠券不能用于此购物车。请移除优惠券或调整购物车后再试。",
+    "contradicted": "商店的回复改变了你的购物车。请修正标记的项目后再试。"
+  },
+  "review": {
+    "checking": "正在向商店确认你的购物车…",
+    "failed": "商店没有响应，购物车尚未确认。请再试一次。",
+    "retry": "再次确认",
+    "blocked": "付款前请先修正标记的项目。",
+    "removed": "商店已不再销售的 {count} 项已从购物车中移除。",
+    "remove": "移除",
+    "writeFailed": "你的更改没有送达商店。请再试一次。"
+  },
+  "line": {
+    "soldOut": "已售罄",
+    "adjusted": "仅剩 {count} 件，已调整数量"
   }
 }

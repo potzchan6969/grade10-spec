@@ -23,7 +23,7 @@ quantity from one through three, the page SHALL show the remaining quantity.
 It SHALL hide that low-inventory message when quantity is greater than three,
 unknown, or the variant is sold out.
 
-#### Scenario: product-page-SC-13 - A product page shows its media and price context
+#### Scenario: grade10-site-store-product-page-SC-13 - A product page shows its media and price context
 
 - **GIVEN** a product with two images and a priced variant whose current price is 10500 minor units, compare-at price is 12300 minor units, and finite quantity is 3
 - **WHEN** a collector opens the product page
@@ -31,14 +31,14 @@ unknown, or the variant is sold out.
 - **AND** it renders the current price and the greater compare-at price
 - **AND** it says that only 3 remain
 
-#### Scenario: product-page-SC-14 - A product without media has an honest placeholder
+#### Scenario: grade10-site-store-product-page-SC-14 - A product without media has an honest placeholder
 
 - **GIVEN** a product with no catalogue images
 - **WHEN** a collector opens the product page
 - **THEN** the page renders one accessible placeholder in the media gallery
 - **AND** it does not render an empty image or an image URL made by the page
 
-#### Scenario: product-page-SC-15 - A product page shows supplied item facts
+#### Scenario: grade10-site-store-product-page-SC-15 - A product page shows supplied item facts
 
 - **GIVEN** a product with supplied product-type, world, and language badges, shipping guidance, pickup location, and a SKU
 - **WHEN** a collector opens the product page
@@ -55,7 +55,7 @@ description region with `aria-controls`. Activating it SHALL expand the full
 description and change the button to the collapse action; activating it again
 SHALL restore the collapsed state without navigating away.
 
-#### Scenario: product-page-SC-16 - A collector expands and collapses the description
+#### Scenario: grade10-site-store-product-page-SC-16 - A collector expands and collapses the description
 
 - **GIVEN** a product with a description longer than three lines
 - **WHEN** a collector opens the product page
@@ -79,7 +79,7 @@ The existing product-page variant rules remain in force: the page opens on the
 priced variant, a collector may choose another available variant, unavailable
 variants cannot be added, and adding the same variant increases one cart line.
 
-#### Scenario: product-page-SC-17 - A collector adds a chosen quantity in place
+#### Scenario: grade10-site-store-product-page-SC-17 - A collector adds a chosen quantity in place
 
 - **GIVEN** a product with a selected available variant and finite quantity 3
 - **WHEN** a collector changes the stepper to 2 and activates Add to cart
@@ -88,7 +88,7 @@ variants cannot be added, and adding the same variant increases one cart line.
 - **AND** the cart records quantity 2 for the selected variant after the add settles
 - **AND** the action reports that the item was added
 
-#### Scenario: product-page-SC-18 - A sold-out product offers no add action
+#### Scenario: grade10-site-store-product-page-SC-18 - A sold-out product offers no add action
 
 - **GIVEN** a product whose variants are all unavailable for sale
 - **WHEN** a collector opens the product page

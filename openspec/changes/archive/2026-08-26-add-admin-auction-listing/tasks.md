@@ -105,7 +105,7 @@ reaches the network. Dialog is an ordered gallery (≤ eight), not six sides.
 
 Depends on groups 2 and 8. Fixtures, not a running backend.
 
-- [x] 10.1 Make the admin form scenarios for empty-draft save, required-field create feedback, editable-field updates, publish-now/schedule, and permission-gated call-off pass using the contract-backed listing feature and the UI source recorded in `ui.md`.
+- [x] 10.1 Make the admin form scenarios for empty-draft save, required-field create feedback, editable-field updates, publish-now/schedule, and permission-gated call-off pass using the contract-backed listing feature and the UI source recorded in `ui-design.md`.
 - [x] 10.2 Make the gallery form scenarios for mixed ordered image/video uploads, eighth-item acceptance, ninth-item refusal, reorder/removal, and closed-listing refusal pass without reaching the worker transport from the app.
 - [x] 10.3 Make the collector listing-page scenarios for slug routing, not-found private states, and ordered image/video gallery rendering pass using the public listing contract.
 - [x] 10.4 Verify the admin and storefront lifecycle integration with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`.

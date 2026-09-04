@@ -18,13 +18,22 @@ const KNOWN: Record<string, { label: string; meaning: string }> = {
     meaning:
       "The detailed illustration of the proposal — the deltas each capability's spec will fold in.",
   },
-  design: {
-    label: "Tech Design",
-    meaning: "The technical implementation's high-level design.",
+  "user-journeys": {
+    label: "Journeys",
+    meaning:
+      "Who walks the requirements, and which scenarios accept each story.",
   },
-  ui: {
+  "test-cases": {
+    label: "Test Cases",
+    meaning: "QA's suite, derived from the journeys and the scenarios.",
+  },
+  "ui-design": {
     label: "UI",
     meaning: "The visual plan: screens, exports, and states.",
+  },
+  "tech-design": {
+    label: "Tech Design",
+    meaning: "The technical implementation's high-level design.",
   },
   tasks: {
     label: "Tasks",
@@ -63,19 +72,50 @@ export function resolveTab(
 }
 
 /** The tab a deep link lands in. A permanent id — a scenario, a story, a
- * requirement row — lives in a delta, so a hash naming one opens the
- * requirements whatever tab the link was copied from. */
+ * requirement row, a test case — belongs to one of the three files a
+ * capability directory holds, so a hash naming one opens that file's tab
+ * whatever tab the link was copied from. */
 export function tabForHash(
   document: ChangeDocument,
   hash: string,
 ): string | null {
   const id = decodeURIComponent(hash.replace(/^#/, ""));
   if (id === "") return null;
-  const specs = document.artifacts.find(
-    (artifact) => artifact.kind === "specs" && artifact.present,
-  );
-  if (!specs) return null;
-  return deltaIds(document).has(id) ? specs.name : null;
+  for (const kind of ["journeys", "cases", "specs"] as const) {
+    if (!idsOfKind(document, kind).has(id)) continue;
+    const artifact = document.artifacts.find(
+      (one) => one.kind === kind && one.present,
+    );
+    if (artifact) return artifact.name;
+  }
+  return null;
+}
+
+/** The ids one of the per-capability files issues, across every delta. */
+function idsOfKind(
+  document: ChangeDocument,
+  kind: "specs" | "journeys" | "cases",
+): Set<string> {
+  const ids = new Set<string>();
+  for (const delta of document.deltas) {
+    if (kind === "journeys") {
+      for (const journey of delta.journeys ?? []) ids.add(journey.id);
+      continue;
+    }
+    if (kind === "cases") {
+      for (const testCase of delta.suite?.cases ?? []) ids.add(testCase.id);
+      continue;
+    }
+    for (const section of delta.sections) {
+      for (const requirement of section.requirements) {
+        ids.add(requirementAnchor(requirement));
+        for (const scenario of requirement.scenarios) {
+          if (scenario.id) ids.add(scenario.id);
+        }
+      }
+    }
+  }
+  return ids;
 }
 
 /** Every id the requirements reading renders: rows, scenarios, stories, and

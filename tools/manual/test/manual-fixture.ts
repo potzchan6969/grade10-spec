@@ -28,7 +28,7 @@ export function changeEntry(
 ): ChangeEntry {
   return {
     id,
-    schema: "pm-planning",
+    schema: "grade10-planning",
     status: "in-flight",
     owners: [],
     created: "2026-01-01",

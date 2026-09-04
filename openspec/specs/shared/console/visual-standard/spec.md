@@ -24,31 +24,6 @@ capabilities.
   - Stated floor: the runtime's version discipline is fixed rather than left to a range
   - A way back: reverting is a described route, not a rediscovery
 
-## User journeys
-
-### visual-standard-US-01: Operator moves between consoles in one shift
-
-**As an** operator,
-**I want** every console I open to arrange the same kinds of fact the same way,
-**so that** moving between nine of them costs me no re-reading.
-
-**Accepted by:**
-
-- `visual-standard-SC-01` — Two consoles render one vocabulary
-- `visual-standard-SC-03` — A shared surface appears as its console does
-- `visual-standard-SC-06` — An operator reads the same states after the swap
-
-### visual-standard-US-02: Operator recognises which brand they are administering
-
-**As an** operator who administers both brands,
-**I want** each console to look like the brand it belongs to,
-**so that** I never act on one brand's data believing it is the other's.
-
-**Accepted by:**
-
-- `visual-standard-SC-04` — Two brands render one console
-- `visual-standard-SC-05` — A brand's identity has one source
-
 ## Requirements
 
 ### Requirement: Every admin surface renders one component vocabulary
@@ -61,13 +36,13 @@ from it. Where a needed component has no counterpart in that vocabulary, the
 console package SHALL provide it composed from what the vocabulary does offer,
 so a gap never becomes a second supplier.
 
-#### Scenario: visual-standard-SC-01 - Two consoles render one vocabulary
+#### Scenario: shared-console-visual-standard-SC-01 - Two consoles render one vocabulary
 
 - **WHEN** two admin consoles render the same kind of control
 - **THEN** both render it from the same vocabulary
 - **AND THEN** no admin surface renders a component from a second vocabulary
 
-#### Scenario: visual-standard-SC-02 - A vocabulary gap is filled once
+#### Scenario: shared-console-visual-standard-SC-02 - A vocabulary gap is filled once
 
 - **WHEN** an admin surface needs a control the vocabulary does not offer
 - **THEN** the console package provides it, composed from that vocabulary
@@ -81,7 +56,7 @@ renders its own vocabulary. Where such a component appears inside an admin
 surface, that appearance SHALL be stated by this capability rather than left to
 whichever vocabulary the component happens to be written in.
 
-#### Scenario: visual-standard-SC-03 - A shared surface appears as its console does
+#### Scenario: shared-console-visual-standard-SC-03 - A shared surface appears as its console does
 
 - **WHEN** an admin console renders a component that customer surfaces also render
 - **THEN** one definition serves both
@@ -95,14 +70,14 @@ claim to set the same visual value. Admin blocks SHALL remain brand-neutral:
 what distinguishes one brand's console from another's is what that mechanism
 supplies, never a value written into a block.
 
-#### Scenario: visual-standard-SC-04 - Two brands render one console
+#### Scenario: shared-console-visual-standard-SC-04 - Two brands render one console
 
 - **GIVEN** the two brands' admin applications rendering the same console
 - **WHEN** each renders it
 - **THEN** every visual difference between the two comes from the brand mechanism
 - **AND THEN** neither rendering carries a brand value written into a block
 
-#### Scenario: visual-standard-SC-05 - A brand's identity has one source
+#### Scenario: shared-console-visual-standard-SC-05 - A brand's identity has one source
 
 - **WHEN** an admin application sets a brand's visual value
 - **THEN** exactly one mechanism sets it
@@ -118,19 +93,19 @@ filter announced as one segmented choice with its selected option announced, a
 tabular amount naming its ISO 4217 code, and a queue longer than its page
 offering the way on and back.
 
-#### Scenario: visual-standard-SC-06 - An operator reads the same states after the swap
+#### Scenario: shared-console-visual-standard-SC-06 - An operator reads the same states after the swap
 
 - **WHEN** an admin surface's read is refused after the vocabulary changed
 - **THEN** the failure renders in the error tone, distinguishable from the empty state
 - **AND THEN** the loading, refused, and empty states remain three distinguishable answers
 
-#### Scenario: visual-standard-SC-07 - Announced selection survives the swap
+#### Scenario: shared-console-visual-standard-SC-07 - Announced selection survives the swap
 
 - **WHEN** an operator reaches a panel switch or a row filter with assistive technology
 - **THEN** the panel switch is announced as tabs and the filter as one choice
 - **AND THEN** the active panel and the selected option are announced as selected
 
-#### Scenario: visual-standard-SC-08 - A confirmation stays a rendered dialog
+#### Scenario: shared-console-visual-standard-SC-08 - A confirmation stays a rendered dialog
 
 - **WHEN** an operator confirms an irreversible move after the vocabulary changed
 - **THEN** the confirmation is a dialog the surface renders
@@ -144,7 +119,7 @@ be a deliberate change that re-establishes this capability's scenarios before
 it lands. Where the runtime's own versioning does not promise compatibility
 between releases, the admin SHALL treat every upgrade as breaking.
 
-#### Scenario: visual-standard-SC-09 - An upgrade is not silent
+#### Scenario: shared-console-visual-standard-SC-09 - An upgrade is not silent
 
 - **WHEN** the admin runtime publishes a new version
 - **THEN** no admin application takes it without a change that re-establishes this capability's scenarios
@@ -157,7 +132,7 @@ and what it costs, and that statement SHALL be true when written rather than
 derived later under pressure. A surface SHALL NOT depend on the runtime in a
 way that makes the described route impossible.
 
-#### Scenario: visual-standard-SC-10 - The way back is known before it is needed
+#### Scenario: shared-console-visual-standard-SC-10 - The way back is known before it is needed
 
 - **WHEN** the admin runtime becomes unusable — abandoned, relicensed, or broken beyond an upgrade
 - **THEN** the route back to the previous vocabulary is already described

@@ -3,7 +3,7 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## store-order-history-US1: Collector reviews active and past orders
+## shared-ui-store-order-history-US1: Collector reviews active and past orders
 
 **As a** signed-in collector,
 **I want** my active and past orders on one page, with status, lines, and track
@@ -11,7 +11,7 @@ when a shipment is underway,
 **so that** I can follow a live order or reopen an older one without the
 surface inventing which orders belong where.
 
-### store-order-history-US1-TC1-1: Active and past sections both render when non-empty
+### shared-ui-store-order-history-US1-TC1-1: Active and past sections both render when non-empty
 
 **Classification:**
 
@@ -23,7 +23,7 @@ surface inventing which orders belong where.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** store-order-history-US-01
+* **Trace:** shared-ui-store-order-history-US-01
 
 **Pre-conditions:**
 The consumer supplies a non-empty active list and a non-empty past list.
@@ -38,7 +38,7 @@ The consumer supplies a non-empty active list and a non-empty past list.
 * Both section headings and their order cards appear.
 * The empty state does not appear.
 
-### store-order-history-US1-TC2-1: Empty section is omitted
+### shared-ui-store-order-history-US1-TC2-1: Empty section is omitted
 
 **Classification:**
 
@@ -50,7 +50,7 @@ The consumer supplies a non-empty active list and a non-empty past list.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** store-order-history-US-01
+* **Trace:** shared-ui-store-order-history-US-01
 
 **Pre-conditions:**
 The consumer supplies a non-empty active list and an empty past list.
@@ -66,7 +66,7 @@ The consumer supplies a non-empty active list and an empty past list.
 * The Past Orders heading does not appear.
 * The empty state does not appear.
 
-### store-order-history-US1-TC3-1: Track order appears only when enabled
+### shared-ui-store-order-history-US1-TC3-1: Track order appears only when enabled
 
 **Classification:**
 
@@ -78,7 +78,7 @@ The consumer supplies a non-empty active list and an empty past list.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** store-order-history-US-01
+* **Trace:** shared-ui-store-order-history-US-01
 
 **Pre-conditions:**
 A card header is supplied with `trackOrder` true and Track copy.
@@ -93,7 +93,7 @@ A card header is supplied with `trackOrder` true and Track copy.
 * The Track Order control appears.
 * Activating it reports through the Track callback.
 
-### store-order-history-US1-TC4-1: Track order is hidden when disabled
+### shared-ui-store-order-history-US1-TC4-1: Track order is hidden when disabled
 
 **Classification:**
 
@@ -105,7 +105,7 @@ A card header is supplied with `trackOrder` true and Track copy.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** store-order-history-US-01
+* **Trace:** shared-ui-store-order-history-US-01
 
 **Pre-conditions:**
 A card header is supplied with `trackOrder` false and a View Details handler.
@@ -119,7 +119,7 @@ A card header is supplied with `trackOrder` false and a View Details handler.
 * No Track Order control appears.
 * View Details still appears.
 
-### store-order-history-US1-TC5-1: Card lists supplied lines with status labels
+### shared-ui-store-order-history-US1-TC5-1: Card lists supplied lines with status labels
 
 **Classification:**
 
@@ -131,7 +131,7 @@ A card header is supplied with `trackOrder` false and a View Details handler.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** store-order-history-US-01
+* **Trace:** shared-ui-store-order-history-US-01
 
 **Pre-conditions:**
 An order card is supplied with header props, a status label, and one or more line items that include image, product text, and total.
@@ -148,7 +148,7 @@ An order card is supplied with header props, a status label, and one or more lin
 * Each status displays the supplied label.
 * Each line shows image, product text, and total.
 
-### store-order-history-US1-TC6-1: Application imports the surface and reuses a part alone
+### shared-ui-store-order-history-US1-TC6-1: Application imports the surface and reuses a part alone
 
 **Classification:**
 
@@ -160,7 +160,7 @@ An order card is supplied with header props, a status label, and one or more lin
 * **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** store-order-history-US-01
+* **Trace:** shared-ui-store-order-history-US-01
 
 **Pre-conditions:**
 None.
@@ -177,13 +177,13 @@ None.
 
 ---
 
-## store-order-history-US2: Collector starts shopping when there are no orders
+## shared-ui-store-order-history-US2: Collector starts shopping when there are no orders
 
 **As a** signed-in collector with no orders,
 **I want** an empty state that sends me to the store,
 **so that** I know where my first order will appear and can browse.
 
-### store-order-history-US2-TC1-1: Zero orders shows empty state with shop now
+### shared-ui-store-order-history-US2-TC1-1: Zero orders shows empty state with shop now
 
 **Classification:**
 
@@ -195,7 +195,7 @@ None.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** store-order-history-US-02
+* **Trace:** shared-ui-store-order-history-US-02
 
 **Pre-conditions:**
 The consumer supplies empty active and past lists, empty-state copy, and a Shop Now handler.

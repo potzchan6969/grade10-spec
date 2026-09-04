@@ -4,14 +4,33 @@ spec: grade10-admin/inventory/catalog
 order: 1
 ---
 
-An admin creates a draft product with one inventory row, marks it created, and
-intakes quantities as stock physically arrives. From there the ledger answers
-the operational questions: every hold is listed with its kind, remarks,
-reference and remaining quantity; a hold's quantity can be adjusted; remaining
-stock moves between states without losing the arithmetic.
+An admin creates and classifies products, then records the stock physically
+received. The catalogue keeps card identity, operational inventory, and a
+traceable current market reference together without turning the reference into
+product history.
 
-The consumers are explicit. Auction settles a hold by selling; Vault settles
-one by vaulting — custody, not a sale — and the ledger records which because
-the hold says so itself, never because something guessed from an id. Partial
-settlement is the normal case, not the exception: part of a hold sells, part
-releases, and the remainder stays held.
+## Product identity
+
+- **Collectible Cards** — the controlled product type for card stock
+- **Required classification** — one reusable IP, Item, and Category tag
+- **PriceCharting identity** — a confirmed provider match with its canonical
+  link and stable provider id
+
+## Current reference
+
+- **PSA-oriented prices** — the supplied ungraded baseline and numeric grades
+- **Freshness** — source, successful update time, and fresh, stale, or
+  unavailable state
+- **Retention** — the replaceable current cache only; no history chart,
+  population report, certificate facts, or other grading data
+
+## Intake
+
+- **Single product** — create or edit the card identity before stock arrives
+- **Bulk import** — upload a bounded CSV, review each taxonomy and provider
+  match, confirm every row, and commit the batch as one operation
+- **Inventory ledger** — track stock, holds, sales, withdrawals, and vaulting
+  without losing the arithmetic
+
+::journeys{id="grade10-admin/inventory/card-price-reference"}
+::cases{id="grade10-admin/inventory/card-price-reference"}

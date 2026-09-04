@@ -73,7 +73,7 @@ function responseStory(response: BidPanelStateResponse): Story {
       await userEvent.click(
         canvas.getByRole("button", { name: "Apply response" }),
       );
-      if (response.state.autoConfirmOpen || response.dialogName) {
+      if (response.dialogName) {
         await waitFor(() => {
           expect(
             within(document.body).getByRole("dialog", {
@@ -164,9 +164,6 @@ export const SetupChangePayment = responseStory(
 export const StaleFloor = responseStory(BID_PANEL_STATE_RESPONSES.staleFloor);
 export const ManualBidAccepted = responseStory(
   BID_PANEL_STATE_RESPONSES.manualBidAccepted,
-);
-export const MaximumConfirmationRequired = responseStory(
-  BID_PANEL_STATE_RESPONSES.maximumConfirmationRequired,
 );
 export const MaximumAccepted = responseStory(
   BID_PANEL_STATE_RESPONSES.maximumAccepted,

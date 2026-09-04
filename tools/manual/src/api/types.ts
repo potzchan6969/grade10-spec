@@ -48,7 +48,7 @@ export type PageEntry = {
 export type WarningSignature = { author: string; date: string } | null;
 
 export type Scenario = {
-  /** Permanent store id like `loyalty-SC-04`, when the spec carries one. */
+  /** Permanent store id like `grade10-site-loyalty-programme-SC-04`, when the spec carries one. */
   id?: string;
   name: string;
   text: string;
@@ -61,7 +61,7 @@ export type Requirement = {
 };
 
 export type Journey = {
-  /** Permanent store id like `loyalty-US-01`. */
+  /** Permanent store id like `grade10-site-loyalty-programme-US-01`. */
   id: string;
   title: string;
   text: string;
@@ -74,12 +74,12 @@ export type Journey = {
 export type TestCaseStatus = "draft" | "actual" | "deprecated";
 
 export type TestCase = {
-  /** Permanent store id like `loyalty-US1-TC3-1`, or the flat
-   * `loyalty-TC-03` an older suite issued. */
+  /** Permanent store id like `grade10-site-loyalty-programme-US1-TC3-1`, or the flat
+   * `grade10-site-loyalty-programme-TC-03` an older suite issued. */
   id: string;
   title: string;
   /** Ids this case traces to, as written: the journey it walks
-   * (`loyalty-US-01`), or a scenario id where an older suite named those. A
+   * (`grade10-site-loyalty-programme-US-01`), or a scenario id where an older suite named those. A
    * journey trace reaches the scenarios its `Accepted by` lists. */
   traces: string[];
   status: TestCaseStatus;
@@ -115,6 +115,9 @@ export type SpecEntry = {
    * test-cases.md never blanks the spec's requirements or takes down the
    * pages that embed them. */
   testCasesError?: ItemError;
+  /** The journeys beside it were malformed — its own channel for the same
+   * reason: a broken user-journeys.md is the PM's file, not the contract. */
+  journeysError?: ItemError;
 };
 
 /** One checkbox line of a task group. Carried for in-flight changes only —
@@ -234,7 +237,7 @@ export type ChangeEntry = {
    * is not who owns it. Named only when no owner claimed a task. */
   author?: string;
   /** Handle from `.openspec.yaml` `promoted_by:` — the engineer who promoted
-   * a pm-planning change and wrote its delivery plan. */
+   * a change somebody else specified and wrote its delivery plan. */
   promotedBy?: string;
   created: string;
   /** Optional `target:` date from `.openspec.yaml`. */
@@ -249,8 +252,12 @@ export type ChangeEntry = {
   cites?: string[];
   taskGroups: TaskGroup[];
   /** ISO date of the last commit touching any file of the change — a
-   * pm-planning change with no tasks.md still moves. */
+   * change with no tasks.md still moves. */
   lastMoved?: string;
+  /** Archived only: the day the change shipped, from the `YYYY-MM-DD-` prefix
+   * of its archive directory. `openspec archive` writes that prefix once and a
+   * rebase cannot move it, which the commit dates under it cannot promise. */
+  shippedOn?: string;
   deltas: Delta[];
   /** In-flight only: the suites sitting beside this change's deltas. */
   suites?: ChangeSuite[];
@@ -261,15 +268,23 @@ export type ChangeEntry = {
 };
 
 /** How a change's artifact renders: a prose document, the directory of
- * spec deltas, or the task checklist — from what the schema says the
- * artifact generates, never from its name. */
-export type ChangeArtifactKind = "doc" | "specs" | "tasks";
+ * spec deltas, the stories or the suites beside them, or the task
+ * checklist — from what the schema says the artifact generates, never from
+ * its name. The three spec-directory kinds are all per-capability, so each
+ * reads out of the deltas rather than out of a file of its own. */
+export type ChangeArtifactKind =
+  | "doc"
+  | "specs"
+  | "journeys"
+  | "cases"
+  | "tasks";
 
 /** One artifact a change's schema asks for, or a file the change carries that
  * the schema never named. Present or not, in the schema's own order. */
 export type ChangeArtifact = {
-  /** The schema's artifact id — `proposal`, `specs`, `design`, `ui`,
-   * `tasks` — or an undeclared file's name without its extension. */
+  /** The schema's artifact id — `proposal`, `specs`, `user-journeys`,
+   * `test-cases`, `ui-design`, `tech-design`, `tasks` — or an undeclared
+   * file's name without its extension. */
   name: string;
   kind: ChangeArtifactKind;
   /** Store-relative path of the file, for a file artifact. */
@@ -302,6 +317,8 @@ export type ChangeDeltaDocument = {
   purpose?: string;
   featureSet?: string;
   journeys?: Journey[];
+  /** The `user-journeys.md` beside the delta was malformed. */
+  journeysError?: ItemError;
   sections: DeltaSection[];
   /** The `test-cases.md` beside the delta, when QA has written one. */
   suite?: {

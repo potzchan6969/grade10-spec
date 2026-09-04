@@ -105,7 +105,7 @@ export const Loading: Story = {
     ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.queryByRole("button", { name: "Place Bid" })).toBeNull();
+    expect(canvas.queryByRole("button", { name: /^Place Bid/ })).toBeNull();
   },
 };
 
@@ -114,7 +114,7 @@ export const PreAuction: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Starting bid")).toBeInTheDocument();
-    expect(canvas.queryByRole("button", { name: "Place Bid" })).toBeNull();
+    expect(canvas.queryByRole("button", { name: /^Place Bid/ })).toBeNull();
   },
 };
 
@@ -126,7 +126,10 @@ export const Default: Story = {
       canvas.getByRole("heading", { name: "Description" }),
     ).toBeInTheDocument();
     expect(canvas.getByText("Set your private maximum")).toBeInTheDocument();
-    expect(canvas.getByText("Choose another amount")).toBeInTheDocument();
+    expect(canvas.getByText("Min. bid")).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: /^Place Bid/ }),
+    ).toBeInTheDocument();
   },
   render: () => lotPage("live-manual"),
 };
@@ -136,7 +139,7 @@ export const PostSold: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Winning bid")).toBeInTheDocument();
-    expect(canvas.queryByRole("button", { name: "Place Bid" })).toBeNull();
+    expect(canvas.queryByRole("button", { name: /^Place Bid/ })).toBeNull();
   },
 };
 
@@ -162,7 +165,7 @@ export const PostLost: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText(/did not win/i)).toBeInTheDocument();
-    expect(canvas.queryByRole("button", { name: "Place Bid" })).toBeNull();
+    expect(canvas.queryByRole("button", { name: /^Place Bid/ })).toBeNull();
   },
 };
 

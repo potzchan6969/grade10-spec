@@ -3,7 +3,7 @@
 **Status:** approved
 **Reviewed:** 2026-09-01
 
-## home-US1: Collector arrives at the store front door
+## grade10-site-store-home-US1: Collector arrives at the store front door
 
 **As a** collector,
 **I want** the store address to answer with a marketing hero and two ways on
@@ -11,7 +11,7 @@ before any script runs,
 **so that** I understand what the store sells and can move straight into
 browsing or bidding.
 
-### home-US1-TC1-1: Front door answers whole before scripts run
+### grade10-site-store-home-US1-TC1-1: Front door answers whole before scripts run
 
 **Classification:**
 
@@ -21,9 +21,9 @@ browsing or bidding.
 * **Behaviour:** positive
 * **Type:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** home-US-01
+* **Trace:** grade10-site-store-home-US-01
 
 **Pre-conditions:**
 JavaScript disabled in the browser.
@@ -41,7 +41,7 @@ JavaScript disabled in the browser.
 * Page source carries the hero's eyebrow, headline, copy and image.
 * Page source carries both ways on — browse listing and auction.
 
-### home-US1-TC2-1: Front door and browse listing are two surfaces
+### grade10-site-store-home-US1-TC2-1: Front door and browse listing are two surfaces
 
 **Classification:**
 
@@ -51,9 +51,9 @@ JavaScript disabled in the browser.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
-* **Trace:** home-US-01
+* **Trace:** grade10-site-store-home-US-01
 
 **Pre-conditions:**
 None.
@@ -68,7 +68,7 @@ None.
 * Titles differ.
 * Meta descriptions differ.
 
-### home-US1-TC3-1: Shopping affordance opens the unscoped listing
+### grade10-site-store-home-US1-TC3-1: Shopping affordance opens the unscoped listing
 
 **Classification:**
 
@@ -78,9 +78,9 @@ None.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** home-US-01
+* **Trace:** grade10-site-store-home-US-01
 
 **Pre-conditions:**
 Catalogue holds at least two collections.
@@ -96,7 +96,7 @@ Catalogue holds at least two collections.
 * The listing URL names no collection.
 * Cards from the whole catalogue are listed.
 
-### home-US1-TC4-1: Auction button opens the auction surface
+### grade10-site-store-home-US1-TC4-1: Auction button opens the auction surface
 
 **Classification:**
 
@@ -106,9 +106,9 @@ Catalogue holds at least two collections.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** home-US-01
+* **Trace:** grade10-site-store-home-US-01
 
 **Pre-conditions:**
 None.
@@ -122,7 +122,7 @@ None.
 
 * The browser navigates to <grade10 auction url>.
 
-### home-US1-TC5-1: Hero works while the catalogue is still loading
+### grade10-site-store-home-US1-TC5-1: Hero works while the catalogue is still loading
 
 **Classification:**
 
@@ -132,9 +132,9 @@ None.
 * **Behaviour:** positive
 * **Type:** performance
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** home-US-01
+* **Trace:** grade10-site-store-home-US-01
 
 **Pre-conditions:**
 <the catalogue endpoint> delayed 5 seconds by network manipulation.
@@ -153,14 +153,14 @@ None.
 
 ---
 
-## home-US2: Collector enters the catalogue through a collection
+## grade10-site-store-home-US2: Collector enters the catalogue through a collection
 
 **As a** collector,
 **I want** every collection the shop lists as a tile on the front door,
 **so that** I can open a scoped browse listing without the application
 deciding which collections appear.
 
-### home-US2-TC1-1: Every collection is a tile, in catalogue order
+### grade10-site-store-home-US2-TC1-1: Every collection is a tile, in catalogue order
 
 **Classification:**
 
@@ -170,9 +170,9 @@ deciding which collections appear.
 * **Behaviour:** positive
 * **Type:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** home-US-02
+* **Trace:** grade10-site-store-home-US-02
 
 **Pre-conditions:**
 Catalogue holds at least three collections, each with a name and artwork.
@@ -190,7 +190,7 @@ Catalogue holds at least three collections, each with a name and artwork.
 * Tile order matches the catalogue.
 * First collection fills the large cell.
 
-### home-US2-TC2-1: Tile opens that collection's listing
+### grade10-site-store-home-US2-TC2-1: Tile opens that collection's listing
 
 **Classification:**
 
@@ -200,9 +200,9 @@ Catalogue holds at least three collections, each with a name and artwork.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** home-US-02
+* **Trace:** grade10-site-store-home-US-02
 
 **Pre-conditions:**
 Collector is on the front door, viewing the collection tiles.
@@ -218,7 +218,7 @@ Collector is on the front door, viewing the collection tiles.
 * The listing URL names that collection.
 * Only that collection's cards are listed.
 
-### home-US2-TC3-1: Collection added to the shop appears with no deploy
+### grade10-site-store-home-US2-TC3-1: Collection added to the shop appears with no deploy
 
 **Classification:**
 
@@ -230,7 +230,7 @@ Collector is on the front door, viewing the collection tiles.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** home-US-02
+* **Trace:** grade10-site-store-home-US-02
 
 **Pre-conditions:**
 Front door already seen without <a new collection>.
@@ -246,7 +246,7 @@ Front door already seen without <a new collection>.
 * The new collection is a tile.
 * No application change was needed.
 
-### home-US2-TC4-1: Collection with no artwork still gets a tile
+### grade10-site-store-home-US2-TC4-1: Collection with no artwork still gets a tile
 
 **Classification:**
 
@@ -256,9 +256,9 @@ Front door already seen without <a new collection>.
 * **Behaviour:** negative
 * **Type:** usability
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** home-US-02
+* **Trace:** grade10-site-store-home-US-02
 
 **Pre-conditions:**
 Catalogue holds <a collection with no artwork>.
@@ -274,7 +274,7 @@ Catalogue holds <a collection with no artwork>.
 * Tile renders, named by its collection.
 * No gap where the artwork goes, and no missing tile.
 
-### home-US2-TC5-1: Catalogue has no collections
+### grade10-site-store-home-US2-TC5-1: Catalogue has no collections
 
 **Classification:**
 
@@ -286,7 +286,7 @@ Catalogue holds <a collection with no artwork>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** home-US-02
+* **Trace:** grade10-site-store-home-US-02
 
 **Pre-conditions:**
 Catalogue holds no collections.
@@ -304,14 +304,14 @@ Catalogue holds no collections.
 
 ---
 
-## home-US3: Collector browses the merchandised collection
+## grade10-site-store-home-US3: Collector browses the merchandised collection
 
 **As a** collector,
 **I want** a row of cards from the first collection the catalogue lists,
 **so that** I can open a card's page or the rest of that collection from the
 front door.
 
-### home-US3-TC1-1: Row shows the first collection's cards
+### grade10-site-store-home-US3-TC1-1: Row shows the first collection's cards
 
 **Classification:**
 
@@ -321,9 +321,9 @@ front door.
 * **Behaviour:** positive
 * **Type:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** home-US-03
+* **Trace:** grade10-site-store-home-US-03
 
 **Pre-conditions:**
 Catalogue lists <a collection with cards> first.
@@ -340,7 +340,7 @@ Catalogue lists <a collection with cards> first.
 * Cards belong to that collection.
 * Each card shows name, image and price.
 
-### home-US3-TC2-1: Card opens its own page
+### grade10-site-store-home-US3-TC2-1: Card opens its own page
 
 **Classification:**
 
@@ -350,9 +350,9 @@ Catalogue lists <a collection with cards> first.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** home-US-03
+* **Trace:** grade10-site-store-home-US-03
 
 **Pre-conditions:**
 Collector is on the front door, viewing the merchandised row.
@@ -365,7 +365,7 @@ Collector is on the front door, viewing the merchandised row.
 
 * That card's page opens.
 
-### home-US3-TC3-1: Row reaches the rest of its collection
+### grade10-site-store-home-US3-TC3-1: Row reaches the rest of its collection
 
 **Classification:**
 
@@ -375,9 +375,9 @@ Collector is on the front door, viewing the merchandised row.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** home-US-03
+* **Trace:** grade10-site-store-home-US-03
 
 **Pre-conditions:**
 Collector is on the front door, viewing the merchandised row.
@@ -393,7 +393,7 @@ Collector is on the front door, viewing the merchandised row.
 * The listing URL names that collection.
 * Only that collection's cards are listed.
 
-### home-US3-TC4-1: Row follows whichever collection is listed first
+### grade10-site-store-home-US3-TC4-1: Row follows whichever collection is listed first
 
 **Classification:**
 
@@ -405,7 +405,7 @@ Collector is on the front door, viewing the merchandised row.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** home-US-03
+* **Trace:** grade10-site-store-home-US-03
 
 **Pre-conditions:**
 Front door already seen merchandising the current first collection.
@@ -421,7 +421,7 @@ Front door already seen merchandising the current first collection.
 * Row is now the second collection's, titled as the catalogue names it.
 * No application change was needed.
 
-### home-US3-TC5-1: No collection holds any cards
+### grade10-site-store-home-US3-TC5-1: No collection holds any cards
 
 **Classification:**
 
@@ -433,7 +433,7 @@ Front door already seen merchandising the current first collection.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** home-US-03
+* **Trace:** grade10-site-store-home-US-03
 
 **Pre-conditions:**
 No collection in the catalogue holds cards.
@@ -451,14 +451,14 @@ No collection in the catalogue holds cards.
 
 ---
 
-## home-US4: Collector keeps using the front door while the catalogue lags
+## grade10-site-store-home-US4: Collector keeps using the front door while the catalogue lags
 
 **As a** collector,
 **I want** the hero usable while catalogue sections load or fail, and a way
 to retry a failed read without a full page load,
 **so that** a slow or broken catalogue does not block the front door.
 
-### home-US4-TC1-1: Sections show they are loading
+### grade10-site-store-home-US4-TC1-1: Sections show they are loading
 
 **Classification:**
 
@@ -468,9 +468,9 @@ to retry a failed read without a full page load,
 * **Behaviour:** positive
 * **Type:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** home-US-04
+* **Trace:** grade10-site-store-home-US-04
 
 **Pre-conditions:**
 <the catalogue endpoint> delayed 5 seconds by network manipulation.
@@ -486,7 +486,7 @@ to retry a failed read without a full page load,
 * Both sections show they are loading.
 * No empty grid and no empty row.
 
-### home-US4-TC2-1: Failed read retries without a page load
+### grade10-site-store-home-US4-TC2-1: Failed read retries without a page load
 
 **Classification:**
 
@@ -496,9 +496,9 @@ to retry a failed read without a full page load,
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** home-US-04
+* **Trace:** grade10-site-store-home-US-04
 
 **Pre-conditions:**
 Collections read mocked to fail, so the section shows its failure; mock then removed.
@@ -517,14 +517,14 @@ Collections read mocked to fail, so the section shows its failure; mock then rem
 
 ---
 
-## home-US5: Collector moves around the store from the chrome
+## grade10-site-store-home-US5: Collector moves around the store from the chrome
 
 **As a** collector,
 **I want** the site chrome to mark the store on every store surface and to
 reach the front door or the unscoped listing,
 **so that** I can navigate the store without guessing destinations.
 
-### home-US5-TC1-1: Chrome marks the store on the browse listing
+### grade10-site-store-home-US5-TC1-1: Chrome marks the store on the browse listing
 
 **Classification:**
 
@@ -534,9 +534,9 @@ reach the front door or the unscoped listing,
 * **Behaviour:** positive
 * **Type:** usability
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** home-US-05
+* **Trace:** grade10-site-store-home-US-05
 
 **Pre-conditions:**
 None.
@@ -550,7 +550,7 @@ None.
 
 * Chrome marks the store, as it does on the front door.
 
-### home-US5-TC2-1: Chrome reaches the front door and the full listing
+### grade10-site-store-home-US5-TC2-1: Chrome reaches the front door and the full listing
 
 **Classification:**
 
@@ -560,9 +560,9 @@ None.
 * **Behaviour:** positive
 * **Type:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** home-US-05
+* **Trace:** grade10-site-store-home-US-05
 
 **Pre-conditions:**
 Catalogue holds at least two collections.

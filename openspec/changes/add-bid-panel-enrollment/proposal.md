@@ -3,12 +3,12 @@
 ## Why
 
 A collector who reaches a live lot's bid panel cannot tell what they must do
-before their first bid is accepted — sign in, link a card, attest their age,
-or confirm auto-bidding — or when those steps are finished. That ambiguity
-shows up as abandoned setup after sign-in and support questions about whether
-a saved card from another auction already counts on this lot. The success
-measure is the share of signed-in collectors who complete lot enrollment and
-reach a bid-ready panel without abandoning setup.
+before their first bid is accepted — sign in, link a card, or attest their
+age — or when those steps are finished. That ambiguity shows up as abandoned
+setup after sign-in and support questions about whether a saved card from
+another auction already counts on this lot. The success measure is the share
+of signed-in collectors who complete lot enrollment and reach a bid-ready
+panel without abandoning setup.
 
 ## What Changes
 
@@ -25,8 +25,8 @@ reach a bid-ready panel without abandoning setup.
   linked-card slot, and how the bid card signals signed-out versus
   bid-ready enrollment.
 - Cross-reference `grade10-auction/bid-payment-method` for authorization and
-  `grade10-auction/auto-bidding` for the first auto-bid confirmation on a
-  listing.
+  `grade10-auction/auto-bidding` for maximum mechanism disclosure on the bid
+  panel.
 
 ## Non-Goals
 
@@ -59,7 +59,7 @@ reach a bid-ready panel without abandoning setup.
   contract they must satisfy.
 - `apps/preview` and Storybook: static stories under
   `Auction Listing/Bid Panel` become the review surface once an engineer
-  promotes this change and writes `ui.md`.
+  promotes this change and writes `ui-design.md`.
 - `@grade10/auction-frontend` (consumer): owns session, enrollment
   completion, and when each state is passed into the shared blocks.
 - `add-auction-bid-card-authorization`: its non-goal on card replacement

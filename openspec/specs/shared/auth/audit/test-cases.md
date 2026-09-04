@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## audit-US1: Operator's identity action is recorded
+## shared-auth-audit-US1: Operator's identity action is recorded
 
 **As an** operator,
 **I want** a ban, unban, set-role, or revoke — including a refusal — on the identity trail,
 **so that** a dispute can name who did what, by user id, without secrets.
 
-### audit-US1-TC1-1: Successful ban is on the trail by user id
+### shared-auth-audit-US1-TC1-1: Successful ban is on the trail by user id
 
 **Classification:**
 
@@ -21,7 +21,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** audit-US-01
+* **Trace:** shared-auth-audit-US-01
 
 **Pre-conditions:**
 Signed in as an operator who can ban. <a subject user id> is unbanned.
@@ -37,7 +37,7 @@ Signed in as an operator who can ban. <a subject user id> is unbanned.
 * The entry names actor and subject by user id, not email.
 * The entry keeps the ban reason and keeps no secret.
 
-### audit-US1-TC2-1: Refused ban is on the trail as unsuccessful
+### shared-auth-audit-US1-TC2-1: Refused ban is on the trail as unsuccessful
 
 **Classification:**
 
@@ -49,7 +49,7 @@ Signed in as an operator who can ban. <a subject user id> is unbanned.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** audit-US-01
+* **Trace:** shared-auth-audit-US-01
 
 **Pre-conditions:**
 Signed in as a caller who cannot ban.
@@ -64,7 +64,7 @@ Signed in as a caller who cannot ban.
 * The trail records that attempt.
 * It records that it did not succeed.
 
-### audit-US1-TC3-1: Session revoke is on the trail
+### shared-auth-audit-US1-TC3-1: Session revoke is on the trail
 
 **Classification:**
 
@@ -76,7 +76,7 @@ Signed in as a caller who cannot ban.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** audit-US-01
+* **Trace:** shared-auth-audit-US-01
 
 **Pre-conditions:**
 Signed in as an operator who can revoke. <a subject user id> has a live session.
@@ -90,7 +90,7 @@ Signed in as an operator who can revoke. <a subject user id> has a live session.
 
 * The trail records that actor, that subject, and the revoke.
 
-### audit-US1-TC4-1: Directory and session lists write no trail entry
+### shared-auth-audit-US1-TC4-1: Directory and session lists write no trail entry
 
 **Classification:**
 
@@ -102,7 +102,7 @@ Signed in as an operator who can revoke. <a subject user id> has a live session.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** audit-US-01
+* **Trace:** shared-auth-audit-US-01
 
 **Pre-conditions:**
 Signed in as an operator who can list users and sessions.
@@ -120,13 +120,13 @@ Signed in as an operator who can list users and sessions.
 
 ---
 
-## audit-US2: Auditor reads the identity trail
+## shared-auth-audit-US2: Auditor reads the identity trail
 
 **As an** auditor,
 **I want** to read the trail and check it is consistent,
 **so that** I can answer whether the record holds without being shown the proof.
 
-### audit-US2-TC1-1: Auditor with the grant reads recorded identity actions
+### shared-auth-audit-US2-TC1-1: Auditor with the grant reads recorded identity actions
 
 **Classification:**
 
@@ -138,7 +138,7 @@ Signed in as an operator who can list users and sessions.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** audit-US-02
+* **Trace:** shared-auth-audit-US-02
 
 **Pre-conditions:**
 Signed in as a person who holds `audit:read`. At least one identity action is already on the trail.
@@ -152,7 +152,7 @@ Signed in as a person who holds `audit:read`. At least one identity action is al
 
 * They receive the recorded identity actions.
 
-### audit-US2-TC2-1: Consistency check reports without returning the proof
+### shared-auth-audit-US2-TC2-1: Consistency check reports without returning the proof
 
 **Classification:**
 
@@ -164,7 +164,7 @@ Signed in as a person who holds `audit:read`. At least one identity action is al
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** audit-US-02
+* **Trace:** shared-auth-audit-US-02
 
 **Pre-conditions:**
 Signed in as a person who holds `audit:read`.
@@ -178,7 +178,7 @@ Signed in as a person who holds `audit:read`.
 * They receive whether it is internally consistent.
 * They do not receive the proof of that check.
 
-### audit-US2-TC3-1: Caller without audit read is refused
+### shared-auth-audit-US2-TC3-1: Caller without audit read is refused
 
 **Classification:**
 
@@ -190,7 +190,7 @@ Signed in as a person who holds `audit:read`.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** audit-US-02
+* **Trace:** shared-auth-audit-US-02
 
 **Pre-conditions:**
 Signed in as a person who does not hold `audit:read`.
@@ -205,13 +205,13 @@ Signed in as a person who does not hold `audit:read`.
 
 ---
 
-## audit-US3: Operator cannot act off the trail
+## shared-auth-audit-US3: Operator cannot act off the trail
 
 **As an** operator,
 **I want** an action that cannot be recorded to be refused,
 **so that** the trail is not a best-effort log of what already happened.
 
-### audit-US3-TC1-1: Trail entry cannot be rewritten or removed
+### shared-auth-audit-US3-TC1-1: Trail entry cannot be rewritten or removed
 
 **Classification:**
 
@@ -223,7 +223,7 @@ Signed in as a person who does not hold `audit:read`.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** audit-US-03
+* **Trace:** shared-auth-audit-US-03
 
 **Pre-conditions:**
 An identity action is already on the trail.
@@ -236,7 +236,7 @@ An identity action is already on the trail.
 
 * The entry is unchanged.
 
-### audit-US3-TC2-1: Unrecorded ban does not take effect
+### shared-auth-audit-US3-TC2-1: Unrecorded ban does not take effect
 
 **Classification:**
 
@@ -248,7 +248,7 @@ An identity action is already on the trail.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** audit-US-03
+* **Trace:** shared-auth-audit-US-03
 
 **Pre-conditions:**
 Signed in as an operator who can ban. The identity trail cannot accept an entry.
@@ -261,7 +261,7 @@ Signed in as an operator who can ban. The identity trail cannot accept an entry.
 
 * The account is not banned.
 
-### audit-US3-TC3-1: Unrecorded revoke does not take effect
+### shared-auth-audit-US3-TC3-1: Unrecorded revoke does not take effect
 
 **Classification:**
 
@@ -273,7 +273,7 @@ Signed in as an operator who can ban. The identity trail cannot accept an entry.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** audit-US-03
+* **Trace:** shared-auth-audit-US-03
 
 **Pre-conditions:**
 Signed in as an operator who can revoke. <a subject user id> has a live session. The identity trail cannot accept an entry.

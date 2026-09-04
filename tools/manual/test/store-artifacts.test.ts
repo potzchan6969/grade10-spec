@@ -16,13 +16,7 @@ const LANDING = "---\ntitle: Demo product\n---\n\nThe one product.\n";
 const ALPHA_PAGE =
   "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\nAlpha is a demo capability.\n";
 
-const ALPHA_SPEC = [
-  "# Alpha",
-  "",
-  "## Purpose",
-  "",
-  "Alpha exists so a page has something to embed.",
-  "",
+const ALPHA_JOURNEYS = [
   "## User journeys",
   "",
   "### alpha-US-01: Someone does the thing",
@@ -32,6 +26,15 @@ const ALPHA_SPEC = [
   "**Accepted by:**",
   "",
   "- alpha-SC-01",
+  "",
+].join("\n");
+
+const ALPHA_SPEC = [
+  "# Alpha",
+  "",
+  "## Purpose",
+  "",
+  "Alpha exists so a page has something to embed.",
   "",
   "## Requirements",
   "",
@@ -52,6 +55,7 @@ const BASE = {
   "docs/prds/products/demo-product/index.md": LANDING,
   "docs/prds/products/demo-product/alpha.md": ALPHA_PAGE,
   "openspec/specs/demo-product/alpha/spec.md": ALPHA_SPEC,
+  "openspec/specs/demo-product/alpha/user-journeys.md": ALPHA_JOURNEYS,
 };
 
 const snapshotOfStore = async (root: string) =>

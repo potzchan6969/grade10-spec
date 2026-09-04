@@ -40,7 +40,7 @@ A Draft Order is created for each checkout, with the following discounts (if any
 
 ## On-site Mechanism
 
-Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile, one modal, a badge on Shopify's customer details) puts the member's benefits on that cart, and the store records one order per till session. The cart decides what landed, never the plan, and nothing is held until the sale is paid.
+Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) puts the member's benefits on that cart, and the store records one order per till session. The cart decides what landed, never the plan, and nothing is held until the sale is paid.
 
 ### The sale, step by step
 

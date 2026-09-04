@@ -34,7 +34,7 @@ describe("which lane a change is in", () => {
     );
   });
 
-  /** A finished pm-planning change is proposal plus deltas and no tasks.md.
+  /** A change finished at its requirements is proposal plus deltas and no tasks.md.
    * Filing it as an unplanned thought hides the queue somebody has to
    * promote. */
   it("is specified once it has written its deltas and no task list", () => {

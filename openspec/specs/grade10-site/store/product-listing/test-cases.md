@@ -3,7 +3,7 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-01, tcs-rules r1
 
-## product-listing-US1: Collector opens the listing at its own address
+## grade10-site-store-product-listing-US1: Collector opens the listing at its own address
 
 **As a** collector,
 **I want** the browse listing to answer at an address of its own, with its own
@@ -11,7 +11,7 @@ title and metadata, before any script runs,
 **so that** I can link to, share and bookmark the catalogue rather than click
 into it.
 
-### product-listing-US1-TC1-1: Listing answers at its own address before scripts run
+### grade10-site-store-product-listing-US1-TC1-1: Listing answers at its own address before scripts run
 
 **Classification:**
 
@@ -23,7 +23,7 @@ into it.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-listing-US-01
+* **Trace:** grade10-site-store-product-listing-US-01
 
 **Pre-conditions:**
 JavaScript disabled in the browser.
@@ -41,7 +41,7 @@ JavaScript disabled in the browser.
 * Tab title and meta description are the listing's own, not the store's.
 * Share metadata is present, so the link previews as the listing.
 
-### product-listing-US1-TC2-1: Sitemap lists the listing in every language
+### grade10-site-store-product-listing-US1-TC2-1: Sitemap lists the listing in every language
 
 **Classification:**
 
@@ -53,7 +53,7 @@ JavaScript disabled in the browser.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** product-listing-US-01
+* **Trace:** grade10-site-store-product-listing-US-01
 
 **Pre-conditions:**
 None.
@@ -71,7 +71,7 @@ None.
 
 ---
 
-## product-listing-US2: Collector opens a collection from its address
+## grade10-site-store-product-listing-US2: Collector opens a collection from its address
 
 **As a** collector,
 **I want** an address that names a collection to open the listing already
@@ -79,7 +79,7 @@ narrowed to it,
 **so that** a way into the catalogue can be linked, shared and bookmarked
 rather than clicked into.
 
-### product-listing-US2-TC1-1: Address naming a collection opens narrowed
+### grade10-site-store-product-listing-US2-TC1-1: Address naming a collection opens narrowed
 
 **Classification:**
 
@@ -91,7 +91,7 @@ rather than clicked into.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-listing-US-02
+* **Trace:** grade10-site-store-product-listing-US-02
 
 **Pre-conditions:**
 Catalogue carries <a collection>.
@@ -108,7 +108,7 @@ Catalogue carries <a collection>.
 * Narrowing in force is the collection the address names.
 * Only that collection's cards are listed.
 
-### product-listing-US2-TC2-1: Address naming no collection lists everything
+### grade10-site-store-product-listing-US2-TC2-1: Address naming no collection lists everything
 
 **Classification:**
 
@@ -120,7 +120,7 @@ Catalogue carries <a collection>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** product-listing-US-02
+* **Trace:** grade10-site-store-product-listing-US-02
 
 **Pre-conditions:**
 Catalogue carries at least two collections.
@@ -135,7 +135,7 @@ Catalogue carries at least two collections.
 * Whole catalogue is listed.
 * No collection narrowing in force.
 
-### product-listing-US2-TC3-1: Address names a collection the catalogue lacks
+### grade10-site-store-product-listing-US2-TC3-1: Address names a collection the catalogue lacks
 
 **Classification:**
 
@@ -147,7 +147,7 @@ Catalogue carries at least two collections.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-listing-US-02
+* **Trace:** grade10-site-store-product-listing-US-02
 
 **Pre-conditions:**
 Catalogue has nothing for <an unknown collection>.
@@ -164,14 +164,14 @@ Catalogue has nothing for <an unknown collection>.
 
 ---
 
-## product-listing-US3: Collector keeps a narrowing in the address
+## grade10-site-store-product-listing-US3: Collector keeps a narrowing in the address
 
 **As a** collector,
 **I want** a narrowing I make on the page to live in the address,
 **so that** I can link to what I am looking at and return to the previous
 narrowing.
 
-### product-listing-US3-TC1-1: Narrowing made in the page is linkable
+### grade10-site-store-product-listing-US3-TC1-1: Narrowing made in the page is linkable
 
 **Classification:**
 
@@ -183,7 +183,7 @@ narrowing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-listing-US-03
+* **Trace:** grade10-site-store-product-listing-US-03
 
 **Pre-conditions:**
 Catalogue carries at least two collections.
@@ -200,7 +200,7 @@ Catalogue carries at least two collections.
 * Address now names the collection narrowed to.
 * Step 4 shows the same narrowing and the same cards.
 
-### product-listing-US3-TC2-1: Back undoes a narrowing
+### grade10-site-store-product-listing-US3-TC2-1: Back undoes a narrowing
 
 **Classification:**
 
@@ -212,7 +212,7 @@ Catalogue carries at least two collections.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** product-listing-US-03
+* **Trace:** grade10-site-store-product-listing-US-03
 
 **Pre-conditions:**
 Catalogue carries at least two collections.

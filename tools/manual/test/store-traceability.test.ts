@@ -56,7 +56,7 @@ function changeWith(manifest: string, extra: Record<string, string> = {}) {
 describe("the manifest a board reads", () => {
   const entry = changeWith(
     [
-      "schema: full-planning",
+      "schema: grade10-planning",
       "created: 2026-08-20",
       "target: 2026-09-15",
       "owners:",
@@ -90,7 +90,7 @@ describe("the manifest a board reads", () => {
   });
 
   it("names nobody and waits on nothing when the manifest says nothing", () => {
-    const bare = changeWith("schema: pm-planning\n");
+    const bare = changeWith("schema: grade10-planning\n");
     expect(bare.owners).toEqual([]);
     expect(bare.target).toBeUndefined();
     expect(bare.dependsOn).toBeUndefined();
@@ -111,7 +111,7 @@ describe("the manifest a board reads", () => {
 
 describe("what a proposal cites", () => {
   it("reads the References bullets back, ids and headings alike", () => {
-    expect(changeWith("schema: pm-planning\n").cites).toEqual([
+    expect(changeWith("schema: grade10-planning\n").cites).toEqual([
       "grade10-store/loyalty",
       "loyalty-SC-89",
       "A purchase earns points",
@@ -209,7 +209,7 @@ describe("the ids a capability has issued", () => {
   });
 });
 
-/** A pm-planning change writes specs and no tasks.md, so a lastMoved keyed to
+/** A change that stops at its requirements writes specs and no tasks.md, so a lastMoved keyed to
  * tasks.md reports it as never having moved however much it churns. */
 describe("when a change last moved", () => {
   it("answers from any file of the change, not only its tasks.md", async () => {

@@ -8,20 +8,6 @@ When a cart line was reduced for low stock, the low-stock warning hides after th
   - Shown when adjusted: the consumer-supplied warning is visible on an adjusted line
   - Hidden after edit: a quantity change hides it for the rest of that mount
 
-## User journeys
-
-### store-cart-US-07: Shopper edits a low-stock line and the warning quiets
-
-**As a** shopper,
-**I want** the low-stock warning to hide after I change that line's quantity,
-**so that** it does not keep shouting after I have acted, and it returns if the line is adjusted again.
-
-**Accepted by:**
-
-- `store-cart-SC-14` — Adjusted line shows the low-stock warning
-- `store-cart-SC-15` — Quantity change hides the warning
-- `store-cart-SC-16` — New adjusted status shows the warning again
-
 ## ADDED Requirements
 
 ### Requirement: Low-stock adjustment warning hides after the shopper edits quantity
@@ -37,13 +23,13 @@ When the line’s status leaves `adjusted` and later becomes `adjusted` again,
 `adjusted`, it SHALL show the warning (a remount with status still `adjusted`
 shows the warning again).
 
-#### Scenario: store-cart-SC-14 - Adjusted line shows the low-stock warning
+#### Scenario: shared-ui-store-cart-SC-14 - Adjusted line shows the low-stock warning
 
 - **GIVEN** a cart line with status `adjusted`
 - **WHEN** `CartItem` renders
 - **THEN** the low-stock warning copy is visible
 
-#### Scenario: store-cart-SC-15 - Quantity change hides the warning
+#### Scenario: shared-ui-store-cart-SC-15 - Quantity change hides the warning
 
 - **GIVEN** a cart line with status `adjusted` showing the low-stock warning
 - **AND** the stepper can change quantity without removing the line
@@ -51,7 +37,7 @@ shows the warning again).
 - **THEN** the low-stock warning is no longer visible
 - **AND** `onQuantityChange` is invoked with the new quantity
 
-#### Scenario: store-cart-SC-16 - New adjusted status shows the warning again
+#### Scenario: shared-ui-store-cart-SC-16 - New adjusted status shows the warning again
 
 - **GIVEN** a cart line that was `adjusted` and whose warning was hidden after
   a quantity change

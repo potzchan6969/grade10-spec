@@ -82,9 +82,5 @@ function ListingLotMeta({
   );
 }
 
-export type {
-  ListingLotMarketComps,
-  ListingLotMetaCopy,
-  ListingLotMetaProps,
-};
+export type { ListingLotMarketComps, ListingLotMetaCopy, ListingLotMetaProps };
 export { ListingLotMeta };

@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-01, tcs-rules r1
 
-## auto-bidding-US1: Collector commits a maximum on an open listing
+## grade10-site-auction-auto-bidding-US1: Collector commits a maximum on an open listing
 
 **As a** collector,
 **I want** to commit the most I will pay and raise it later,
 **so that** Grade10 bids for me only as far as needed to lead.
 
-### auto-bidding-US1-TC1-1: First maximum opens bidding at the starting price
+### grade10-site-auction-auto-bidding-US1-TC1-1: First maximum opens bidding at the starting price
 
 **Classification:**
 
@@ -21,7 +21,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-01
+* **Trace:** grade10-site-auction-auto-bidding-US-01
 
 **Pre-conditions:**
 An open listing with a starting price of 20000 minor units and no bids.
@@ -45,7 +45,7 @@ An open listing with a starting price of 20000 minor units and no bids.
 * The current bid is 20000 minor units.
 * That bidder leads.
 
-### auto-bidding-US1-TC2-1: Maximum below the minimum next bid is refused
+### grade10-site-auction-auto-bidding-US1-TC2-1: Maximum below the minimum next bid is refused
 
 **Classification:**
 
@@ -57,7 +57,7 @@ An open listing with a starting price of 20000 minor units and no bids.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-01
+* **Trace:** grade10-site-auction-auto-bidding-US-01
 
 **Pre-conditions:**
 An open listing whose current bid is 22500 minor units and whose minimum increment is 2500 minor units.
@@ -82,7 +82,7 @@ An open listing whose current bid is 22500 minor units and whose minimum increme
 * Grade10 refuses the commitment.
 * The current bid and the leader are unchanged.
 
-### auto-bidding-US1-TC3-1: Leader raises their own maximum
+### grade10-site-auction-auto-bidding-US1-TC3-1: Leader raises their own maximum
 
 **Classification:**
 
@@ -94,7 +94,7 @@ An open listing whose current bid is 22500 minor units and whose minimum increme
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-01
+* **Trace:** grade10-site-auction-auto-bidding-US-01
 
 **Pre-conditions:**
 Bidder A leads with a committed maximum of 50000 minor units.
@@ -118,7 +118,7 @@ Bidder A leads with a committed maximum of 50000 minor units.
 * Bidder A still leads.
 * The current bid is unchanged.
 
-### auto-bidding-US1-TC4-1: Lowering a maximum is refused
+### grade10-site-auction-auto-bidding-US1-TC4-1: Lowering a maximum is refused
 
 **Classification:**
 
@@ -130,7 +130,7 @@ Bidder A leads with a committed maximum of 50000 minor units.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-01
+* **Trace:** grade10-site-auction-auto-bidding-US-01
 
 **Pre-conditions:**
 A bidder with a committed maximum of 50000 minor units on an open listing.
@@ -156,13 +156,13 @@ A bidder with a committed maximum of 50000 minor units on an open listing.
 
 ---
 
-## auto-bidding-US2: Collector reads their own maximum and standing
+## grade10-site-auction-auto-bidding-US2: Collector reads their own maximum and standing
 
 **As a** collector,
 **I want** to see my own maximum, the current bid, and whether I lead,
 **so that** I know where I stand without my cap being shown to anyone else.
 
-### auto-bidding-US2-TC1-1: Bidder reads their own maximum beside the current bid
+### grade10-site-auction-auto-bidding-US2-TC1-1: Bidder reads their own maximum beside the current bid
 
 **Classification:**
 
@@ -174,7 +174,7 @@ A bidder with a committed maximum of 50000 minor units on an open listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-02
+* **Trace:** grade10-site-auction-auto-bidding-US-02
 
 **Pre-conditions:**
 Bidder A has committed a maximum of 50000 minor units while the current bid is 25000 minor units.
@@ -197,7 +197,7 @@ Bidder A has committed a maximum of 50000 minor units while the current bid is 2
 * They see the current bid of 25000 minor units as a separate fact.
 * They see that they lead.
 
-### auto-bidding-US2-TC2-1: Overtaken bidder sees they no longer lead
+### grade10-site-auction-auto-bidding-US2-TC2-1: Overtaken bidder sees they no longer lead
 
 **Classification:**
 
@@ -209,7 +209,7 @@ Bidder A has committed a maximum of 50000 minor units while the current bid is 2
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-02
+* **Trace:** grade10-site-auction-auto-bidding-US-02
 
 **Pre-conditions:**
 Bidder A has been overtaken on a listing.
@@ -224,7 +224,7 @@ Bidder A has been overtaken on a listing.
 * They see that they do not lead.
 * They see their own committed maximum unchanged.
 
-### auto-bidding-US2-TC3-1: Leader's maximum is not public
+### grade10-site-auction-auto-bidding-US2-TC3-1: Leader's maximum is not public
 
 **Classification:**
 
@@ -236,7 +236,7 @@ Bidder A has been overtaken on a listing.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-02
+* **Trace:** grade10-site-auction-auto-bidding-US-02
 
 **Pre-conditions:**
 Bidder A leads with a committed maximum of 50000 minor units while the current bid is 25000.
@@ -258,7 +258,7 @@ Bidder A leads with a committed maximum of 50000 minor units while the current b
 * Those facts carry the current bid of 25000 minor units.
 * They do not carry, and do not allow deriving, A's maximum of 50000.
 
-### auto-bidding-US2-TC4-1: Matching maximum is accepted without taking the lead
+### grade10-site-auction-auto-bidding-US2-TC4-1: Matching maximum is accepted without taking the lead
 
 **Classification:**
 
@@ -270,7 +270,7 @@ Bidder A leads with a committed maximum of 50000 minor units while the current b
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-02
+* **Trace:** grade10-site-auction-auto-bidding-US-02
 
 **Pre-conditions:**
 Bidder B leads a listing with a committed maximum of 60000 minor units. Bidder C has committed a matching maximum of 60000 minor units.
@@ -293,14 +293,14 @@ Bidder B leads a listing with a committed maximum of 60000 minor units. Bidder C
 
 ---
 
-## auto-bidding-US3: Collector competes through two maxima
+## grade10-site-auction-auto-bidding-US3: Collector competes through two maxima
 
 **As a** collector,
 **I want** the current bid to come from the two highest maxima,
 **so that** I take the lead only when my maximum is higher, and a tie stays
 with whoever committed first.
 
-### auto-bidding-US3-TC1-1: Challenger below the leader raises the price only
+### grade10-site-auction-auto-bidding-US3-TC1-1: Challenger below the leader raises the price only
 
 **Classification:**
 
@@ -312,7 +312,7 @@ with whoever committed first.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-03
+* **Trace:** grade10-site-auction-auto-bidding-US-03
 
 **Pre-conditions:**
 A listing whose minimum increment is 2500 minor units. Bidder A leads with a committed maximum of 50000 minor units.
@@ -336,7 +336,7 @@ A listing whose minimum increment is 2500 minor units. Bidder A leads with a com
 * Bidder A still leads.
 * The current bid is 25000 minor units.
 
-### auto-bidding-US3-TC2-1: Challenger raises again, still below the leader
+### grade10-site-auction-auto-bidding-US3-TC2-1: Challenger raises again, still below the leader
 
 **Classification:**
 
@@ -348,7 +348,7 @@ A listing whose minimum increment is 2500 minor units. Bidder A leads with a com
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-03
+* **Trace:** grade10-site-auction-auto-bidding-US-03
 
 **Pre-conditions:**
 Bidder A leads with a committed maximum of 50000 minor units. Bidder B has a committed maximum of 22500 minor units. The current bid is 25000 minor units. The minimum increment is 2500 minor units.
@@ -370,7 +370,7 @@ Bidder A leads with a committed maximum of 50000 minor units. Bidder B has a com
 * Bidder A still leads.
 * The current bid is 32500 minor units.
 
-### auto-bidding-US3-TC3-1: Challenger above the leader takes the lead
+### grade10-site-auction-auto-bidding-US3-TC3-1: Challenger above the leader takes the lead
 
 **Classification:**
 
@@ -382,7 +382,7 @@ Bidder A leads with a committed maximum of 50000 minor units. Bidder B has a com
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-03
+* **Trace:** grade10-site-auction-auto-bidding-US-03
 
 **Pre-conditions:**
 Bidder A leads with a committed maximum of 50000 minor units. The increment is 2500 minor units.
@@ -405,7 +405,7 @@ Bidder A leads with a committed maximum of 50000 minor units. The increment is 2
 * Bidder B leads.
 * The current bid is 52500 minor units.
 
-### auto-bidding-US3-TC4-1: First bidder is overtaken by a higher maximum
+### grade10-site-auction-auto-bidding-US3-TC4-1: First bidder is overtaken by a higher maximum
 
 **Classification:**
 
@@ -417,7 +417,7 @@ Bidder A leads with a committed maximum of 50000 minor units. The increment is 2
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-03
+* **Trace:** grade10-site-auction-auto-bidding-US-03
 
 **Pre-conditions:**
 An open listing with a starting price of 20000 minor units and a minimum increment of 2500 minor units. Bidder A has committed a maximum of 22500 minor units and leads at 20000 minor units.
@@ -442,7 +442,7 @@ An open listing with a starting price of 20000 minor units and a minimum increme
 * Bidder B leads.
 * The current bid is 25000 minor units.
 
-### auto-bidding-US3-TC5-1: Overtaken bidder raises but stays below
+### grade10-site-auction-auto-bidding-US3-TC5-1: Overtaken bidder raises but stays below
 
 **Classification:**
 
@@ -454,7 +454,7 @@ An open listing with a starting price of 20000 minor units and a minimum increme
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-03
+* **Trace:** grade10-site-auction-auto-bidding-US-03
 
 **Pre-conditions:**
 Bidder B leads with a maximum of 50000 minor units. Bidder A has a committed maximum below that. The minimum increment is 2500 minor units.
@@ -477,7 +477,7 @@ Bidder B leads with a maximum of 50000 minor units. Bidder A has a committed max
 * Bidder B still leads.
 * The current bid is 32500 minor units.
 
-### auto-bidding-US3-TC6-1: Overtaken bidder raises past the leader
+### grade10-site-auction-auto-bidding-US3-TC6-1: Overtaken bidder raises past the leader
 
 **Classification:**
 
@@ -489,7 +489,7 @@ Bidder B leads with a maximum of 50000 minor units. Bidder A has a committed max
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-03
+* **Trace:** grade10-site-auction-auto-bidding-US-03
 
 **Pre-conditions:**
 Bidder B's maximum is 50000 minor units and the increment is 2500. Bidder A is not leading.
@@ -512,7 +512,7 @@ Bidder B's maximum is 50000 minor units and the increment is 2500. Bidder A is n
 * Bidder A leads.
 * The current bid is 52500 minor units.
 
-### auto-bidding-US3-TC7-1: Step to lead cannot exceed the new leader's maximum
+### grade10-site-auction-auto-bidding-US3-TC7-1: Step to lead cannot exceed the new leader's maximum
 
 **Classification:**
 
@@ -524,7 +524,7 @@ Bidder B's maximum is 50000 minor units and the increment is 2500. Bidder A is n
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-03
+* **Trace:** grade10-site-auction-auto-bidding-US-03
 
 **Pre-conditions:**
 A listing whose minimum increment is 2500 minor units. Bidder A leads with a committed maximum of 50000 minor units.
@@ -548,7 +548,7 @@ A listing whose minimum increment is 2500 minor units. Bidder A leads with a com
 * Bidder B leads.
 * The current bid is 51000 minor units.
 
-### auto-bidding-US3-TC8-1: Challenge lands at the two-maximum price, not a ladder
+### grade10-site-auction-auto-bidding-US3-TC8-1: Challenge lands at the two-maximum price, not a ladder
 
 **Classification:**
 
@@ -560,7 +560,7 @@ A listing whose minimum increment is 2500 minor units. Bidder A leads with a com
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-03
+* **Trace:** grade10-site-auction-auto-bidding-US-03
 
 **Pre-conditions:**
 A listing whose minimum increment is 2500 minor units, starting price 20000 minor units, and no bids. Bidder A has committed a maximum of 50000 minor units.
@@ -586,7 +586,7 @@ A listing whose minimum increment is 2500 minor units, starting price 20000 mino
 * The current bid is 52500 minor units.
 * Grade10 has not accepted bids at the intermediate increment amounts between 20000 and 52500.
 
-### auto-bidding-US3-TC9-1: Tie goes to the earlier commitment
+### grade10-site-auction-auto-bidding-US3-TC9-1: Tie goes to the earlier commitment
 
 **Classification:**
 
@@ -598,7 +598,7 @@ A listing whose minimum increment is 2500 minor units, starting price 20000 mino
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-03
+* **Trace:** grade10-site-auction-auto-bidding-US-03
 
 **Pre-conditions:**
 Bidder B leads a listing with a committed maximum of 60000 minor units.
@@ -622,13 +622,13 @@ Bidder B leads a listing with a committed maximum of 60000 minor units.
 
 ---
 
-## auto-bidding-US4: Operator traces every committed maximum
+## grade10-site-auction-auto-bidding-US4: Operator traces every committed maximum
 
 **As an** operator,
 **I want** to read every committed maximum and when it was accepted,
 **so that** I can answer a dispute about who committed what.
 
-### auto-bidding-US4-TC1-1: Operator reads each committed maximum and Accepted At
+### grade10-site-auction-auto-bidding-US4-TC1-1: Operator reads each committed maximum and Accepted At
 
 **Classification:**
 
@@ -640,7 +640,7 @@ Bidder B leads a listing with a committed maximum of 60000 minor units.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-04
+* **Trace:** grade10-site-auction-auto-bidding-US-04
 
 **Pre-conditions:**
 A listing with several committed maximums. An authorized operator.
@@ -657,7 +657,7 @@ A listing with several committed maximums. An authorized operator.
 
 ---
 
-## auto-bidding-US5: Collector's auto-bid counts as a bid
+## grade10-site-auction-auto-bidding-US5: Collector's auto-bid counts as a bid
 
 **As a** collector,
 **I want** the hold to cover my maximum and every bid Grade10 places for me to
@@ -665,7 +665,7 @@ count as a bid,
 **so that** I am authorized once and still extend the close when I auto-bid in
 the window.
 
-### auto-bidding-US5-TC1-1: Hold is the maximum, not the price
+### grade10-site-auction-auto-bidding-US5-TC1-1: Hold is the maximum, not the price
 
 **Classification:**
 
@@ -677,7 +677,7 @@ the window.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-05
+* **Trace:** grade10-site-auction-auto-bidding-US-05
 
 **Pre-conditions:**
 A listing whose current bid is 22500 minor units.
@@ -700,7 +700,7 @@ A listing whose current bid is 22500 minor units.
 * Grade10 holds an authorization for 50000 minor units.
 * It holds exactly one active authorization for that bidder and listing.
 
-### auto-bidding-US5-TC2-1: Raise that cannot be authorized changes nothing
+### grade10-site-auction-auto-bidding-US5-TC2-1: Raise that cannot be authorized changes nothing
 
 **Classification:**
 
@@ -712,7 +712,7 @@ A listing whose current bid is 22500 minor units.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-05
+* **Trace:** grade10-site-auction-auto-bidding-US-05
 
 **Pre-conditions:**
 Bidder A leads with a committed maximum of 50000 minor units. Card authorization for 80000 minor units is set to fail.
@@ -736,7 +736,7 @@ Bidder A leads with a committed maximum of 50000 minor units. Card authorization
 * A's committed maximum remains 50000 minor units.
 * The leader and the current bid are unchanged.
 
-### auto-bidding-US5-TC3-1: Auto-bid step needs no new card check
+### grade10-site-auction-auto-bidding-US5-TC3-1: Auto-bid step needs no new card check
 
 **Classification:**
 
@@ -748,7 +748,7 @@ Bidder A leads with a committed maximum of 50000 minor units. Card authorization
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-05
+* **Trace:** grade10-site-auction-auto-bidding-US-05
 
 **Pre-conditions:**
 Bidder A leads with an authorized maximum of 50000 minor units and the current bid is 25000.
@@ -772,7 +772,7 @@ Bidder A leads with an authorized maximum of 50000 minor units and the current b
 * The current bid is 32500 minor units.
 * A's authorization remains 50000 minor units.
 
-### auto-bidding-US5-TC4-1: Auto bid in the extension window extends once
+### grade10-site-auction-auto-bidding-US5-TC4-1: Auto bid in the extension window extends once
 
 **Classification:**
 
@@ -784,7 +784,7 @@ Bidder A leads with an authorized maximum of 50000 minor units and the current b
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-05
+* **Trace:** grade10-site-auction-auto-bidding-US-05
 
 **Pre-conditions:**
 A listing inside its extension window, and a leader whose committed maximum has room left.
@@ -801,7 +801,7 @@ A listing inside its extension window, and a leader whose committed maximum has 
 * The listing does not close while that extension stands.
 * Grade10 places no further bid until another commitment is accepted.
 
-### auto-bidding-US5-TC5-1: Auto bid is counted and recorded
+### grade10-site-auction-auto-bidding-US5-TC5-1: Auto bid is counted and recorded
 
 **Classification:**
 
@@ -813,7 +813,7 @@ A listing inside its extension window, and a leader whose committed maximum has 
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-05
+* **Trace:** grade10-site-auction-auto-bidding-US-05
 
 **Pre-conditions:**
 Grade10 has raised a bidder's bid on their behalf.
@@ -828,7 +828,7 @@ Grade10 has raised a bidder's bid on their behalf.
 * The bid count includes that bid.
 * The history shows it as placed on that bidder's behalf, not as a manual bid.
 
-### auto-bidding-US5-TC6-1: Standing maxima do not keep bidding
+### grade10-site-auction-auto-bidding-US5-TC6-1: Standing maxima do not keep bidding
 
 **Classification:**
 
@@ -840,7 +840,7 @@ Grade10 has raised a bidder's bid on their behalf.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auto-bidding-US-05
+* **Trace:** grade10-site-auction-auto-bidding-US-05
 
 **Pre-conditions:**
 Two bidders have committed maxima and the listing has been resolved to the two-maximum price.

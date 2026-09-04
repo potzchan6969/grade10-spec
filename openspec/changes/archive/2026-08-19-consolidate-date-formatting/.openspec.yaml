@@ -1,4 +1,4 @@
-schema: full-planning
+schema: grade10-planning
 created: 2026-08-19
 goal: Every surface renders a stored instant through one date-fns module, in
   UTC, so the same moment reads the same way for every reader and a deadline
