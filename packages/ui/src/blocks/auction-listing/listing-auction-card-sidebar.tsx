@@ -28,9 +28,10 @@ type ListingAuctionCardSidebarProps = {
   bidEnrollment?: BidEnrollment;
   onPlaceBid: () => void;
   onCommitMaximum: (amountMinor: number) => void;
+  onCompletePurchase?: () => void;
+  onViewOrderDetails?: () => void;
   badges: readonly ListingLotMetaBadge[];
   description: string;
-  showMoreHref?: string;
   vaultShippingBody: string;
   recentBidsAccessory?: ReactNode;
   /** Renders directly under the bid card (e.g. linked payment method). */
@@ -49,9 +50,10 @@ function ListingAuctionCardSidebar({
   bidEnrollment,
   onPlaceBid,
   onCommitMaximum,
+  onCompletePurchase,
+  onViewOrderDetails,
   badges,
   description,
-  showMoreHref,
   vaultShippingBody,
   recentBidsAccessory,
   bidCardFooter,
@@ -74,7 +76,9 @@ function ListingAuctionCardSidebar({
           historyResetKey={historyResetKey}
           locale={locale}
           onCommitMaximum={onCommitMaximum}
+          onCompletePurchase={onCompletePurchase}
           onPlaceBid={onPlaceBid}
+          onViewOrderDetails={onViewOrderDetails}
           recentBidsAccessory={recentBidsAccessory}
           timeZone={timeZone}
           view={view}
@@ -88,7 +92,6 @@ function ListingAuctionCardSidebar({
         facts={facts}
         marketComps={marketComps}
         resultFact={view.resultFact}
-        showMoreHref={showMoreHref}
         vaultShippingBody={vaultShippingBody}
       />
     </VStack>
