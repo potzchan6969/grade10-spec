@@ -128,7 +128,7 @@ const BID_PANEL_STATE_RESPONSES = {
       linkedPaymentMethod: linkedCard(false),
       viewOverride: LEADING_AUTO_VIEW,
     },
-    expectedText: "Highest bid",
+    expectedText: "Leading",
   },
   autoOutbid: {
     scenarioId: "bid-panel/auto-outbid",
@@ -167,7 +167,7 @@ const BID_PANEL_STATE_RESPONSES = {
       submitUsesSignInLabel: false,
       fixtureState: "live-manual",
     },
-    expectedText: "Highest bid",
+    expectedText: "Leading",
   },
   opens: {
     scenarioId: "bid-panel/opens",
@@ -340,7 +340,7 @@ const BID_PANEL_STATE_RESPONSES = {
       linkedPaymentMethod: linkedCard(false),
       viewOverride: LEADING_AUTO_VIEW,
     },
-    expectedText: "Highest bid",
+    expectedText: "Leading",
   },
 } as const satisfies Record<string, BidPanelStateResponse>;
 

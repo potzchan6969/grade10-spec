@@ -15,6 +15,7 @@ import {
   formatLocalMoment,
   type ShippedLocale,
 } from "../../lib/format-datetime";
+import { formatMoney } from "../../lib/format-money";
 import { ListingCountdownDisplay } from "./listing-countdown-display";
 import {
   ListingQuickMaximumBidActions,
@@ -138,22 +139,41 @@ function StandingBanner({
 function StandingStatusBadge({
   copy,
   view,
+  locale,
   bidEnrollment = "ready",
 }: {
   copy: ListingAuctionBidFieldsCopy;
   view: ListingAuctionBidView;
+  locale: ShippedLocale;
   bidEnrollment?: BidEnrollment;
 }) {
   if (!viewerHasAuctionStanding(view, bidEnrollment)) {
     return null;
   }
 
+  const maximumLabel =
+    view.viewerMaximumMinor != null
+      ? formatMoney(view.viewerMaximumMinor, view.currency, { locale })
+      : null;
+
   if (view.standing === "outbid") {
-    return <Badge variant="warning">{copy.outbid}</Badge>;
+    return (
+      <Badge variant="warning">
+        {maximumLabel != null
+          ? `${copy.outbid} · ${maximumLabel}`
+          : copy.outbid}
+      </Badge>
+    );
   }
 
   if (view.standing === "leading-max" || view.standing === "leading-manual") {
-    return <Badge variant="success">{copy.highestBid}</Badge>;
+    return (
+      <Badge variant="success">
+        {maximumLabel != null
+          ? `${copy.highestBid} · ${maximumLabel}`
+          : copy.highestBid}
+      </Badge>
+    );
   }
 
   return null;

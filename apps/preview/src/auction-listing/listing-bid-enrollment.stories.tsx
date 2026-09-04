@@ -76,7 +76,7 @@ maximum; there is no manual vs auto mode toggle.
 | State | Story | What it shows |
 | --- | --- | --- |
 | Live, no bids | [Live No Bids](?path=/story/auction-listing-listingauctionbidcard--live-no-bids) | Starting bid, empty history. |
-| Leading with a maximum | [Leading](?path=/story/auction-listing-listingauctionbidcard--leading) | \`standing="leading-max"\`. Highest bid. Raise presets are the next action. |
+| Leading with a maximum | [Leading](?path=/story/auction-listing-listingauctionbidcard--leading) | \`standing="leading-max"\`. Leading badge. Raise presets are the next action. |
 | Outbid | [Outbid](?path=/story/auction-listing-listingauctionbidcard--outbid) | \`standing="outbid"\`. Current bid is above the viewer's maximum. |
 | Live sequence + auto cases | [Flows / Bidding](?path=/story/auction-listing-bid-panel-flows--bidding) | Bids through leading and outbid, then first maximum, leading maximum, overtaken, and accepted without leading. Preset and Review maximum actions open the enrollment dialogs. |
 | Interactive enrollment | [Flows / Interactive](?path=/story/auction-listing-bid-panel-flows--interactive) | Walks sign-in → card link → ready on one card. |
@@ -247,10 +247,10 @@ SignedOut.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
   expect(canvas.getByRole("button", { name: "Sign In to Bid" })).toBeVisible();
   expect(canvas.getByText("Recent Bids")).toBeVisible();
-  expect(canvas.queryByText("Highest bid")).not.toBeInTheDocument();
+  expect(canvas.queryByText("Leading")).not.toBeInTheDocument();
   expect(canvas.queryByText("Outbid")).not.toBeInTheDocument();
   expect(
-    canvas.queryByRole("button", { name: /^Set Maximum/ }),
+    canvas.queryByRole("button", { name: /^Set maximum/ }),
   ).not.toBeInTheDocument();
 };
 
@@ -268,7 +268,7 @@ NeedCard.play = async ({ canvasElement }) => {
   expect(
     canvas.queryByRole("button", { name: "Sign In to Bid" }),
   ).not.toBeInTheDocument();
-  await userEvent.click(canvas.getByRole("button", { name: /^Set Maximum/ }));
+  await userEvent.click(canvas.getByRole("button", { name: /^Set maximum/ }));
   await waitFor(() => {
     expect(
       within(document.body).getByRole("dialog", {
@@ -339,7 +339,7 @@ export const PaymentAuthorization: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Min. bid")).toBeVisible();
-    await userEvent.click(canvas.getByRole("button", { name: /^Set Maximum/ }));
+    await userEvent.click(canvas.getByRole("button", { name: /^Set maximum/ }));
     expect(
       within(document.body).getByRole("dialog", {
         name: "Authorize your bid",

@@ -176,6 +176,7 @@ function ListingAuctionBidCard({
         <StandingStatusBadge
           bidEnrollment={bidEnrollment}
           copy={copy}
+          locale={locale}
           view={view}
         />
       </HStack>

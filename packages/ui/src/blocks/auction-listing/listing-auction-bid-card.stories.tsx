@@ -23,7 +23,7 @@ const COPY = {
   didNotWin: "Did not win",
   cardRelease: "Your card authorization will be released.",
   outbid: "Outbid",
-  highestBid: "Highest bid",
+  highestBid: "Leading",
   yourMaximum: "Your maximum",
   setMaximumLabel: "Set Maximum",
   setMaximumCurrentLabel: "Set Maximum (current: {amount})",
@@ -47,10 +47,11 @@ const COPY = {
   autoBiddingTooltip:
     "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
   setPrivateMaximum: "Set your private maximum",
-  raisePrivateMaximum: "Raise your private maximum (current: {amount})",
-  reviewMaximum: "Set Maximum · {amount}",
-  raiseMaximumReview: "Raise Maximum · {amount}",
-  bidNowReview: "Bid Now · {amount}",
+  raisePrivateMaximum: "Raise your private maximum",
+  currentMaximum: "Current: {amount}",
+  reviewMaximum: "Set maximum to {amount}",
+  raiseMaximumReview: "Raise maximum to {amount}",
+  bidNowReview: "Bid now at {amount}",
   privateMaximumTooltip:
     "Your maximum is the most you are willing to pay before buyer fees. Other bidders cannot see it. We only bid as needed to keep you leading.",
   maximumMechanismSubtext:
@@ -173,7 +174,7 @@ const meta = {
     onCommitMaximum: {
       control: false,
       description:
-        "Fires when Bid Now / Set Maximum / Raise Maximum commits the selected preset or custom amount. The consumer validates the maximum, takes the hold, and writes the cap.",
+        "Fires when Bid now / Set maximum / Raise maximum commits the selected preset or custom amount. The consumer validates the maximum, takes the hold, and writes the cap.",
     },
   },
   decorators: [
@@ -198,7 +199,7 @@ export const Default: Story = {
       canvas.getByPlaceholderText(/Custom amount \(min\./),
     ).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: /^Set Maximum ·/ }),
+      canvas.getByRole("button", { name: /^Set maximum to/ }),
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: /^Maximum /, pressed: true }),
@@ -218,7 +219,7 @@ export const SignedOut: Story = {
       canvas.getByRole("button", { name: "Sign In to Bid" }),
     ).toBeInTheDocument();
     expect(canvas.queryByText("Min. bid")).not.toBeInTheDocument();
-    expect(canvas.queryByText("Highest bid")).not.toBeInTheDocument();
+    expect(canvas.queryByText("Leading")).not.toBeInTheDocument();
     expect(canvas.queryByText("Outbid")).not.toBeInTheDocument();
   },
 };
@@ -234,7 +235,7 @@ export const Outbid: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Outbid")).toBeInTheDocument();
+    expect(canvas.getByText(/Outbid · HK\$8,000/)).toBeInTheDocument();
   },
 };
 
@@ -247,12 +248,11 @@ export const Leading: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Highest bid")).toBeInTheDocument();
+    expect(canvas.getByText(/Leading · HK\$8,000/)).toBeInTheDocument();
+    expect(canvas.getByText("Raise your private maximum")).toBeInTheDocument();
+    expect(canvas.getByText(/Current: HK\$8,000/)).toBeInTheDocument();
     expect(
-      canvas.getByText(/Raise your private maximum \(current: HK\$8,000\)/),
-    ).toBeInTheDocument();
-    expect(
-      canvas.getByRole("button", { name: /^Raise Maximum ·/ }),
+      canvas.getByRole("button", { name: /^Raise maximum to/ }),
     ).toBeInTheDocument();
     expect(canvas.getAllByText(/vs current/)).toHaveLength(2);
   },

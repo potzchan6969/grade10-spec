@@ -31,12 +31,15 @@ const PRESET_INCREMENTS = [
 
 type ListingQuickMaximumBidActionsCopy = {
   setPrivateMaximum: string;
+  /** Mode title when a maximum is already committed — no amount; use `currentMaximum`. */
   raisePrivateMaximum: string;
-  /** e.g. "Set Maximum · {amount}" — first maximum above the floor. */
+  /** Shown under the raise title, e.g. "Current: {amount}". */
+  currentMaximum: string;
+  /** e.g. "Set maximum to {amount}" — first maximum above the floor. */
   reviewMaximum: string;
-  /** e.g. "Raise Maximum · {amount}" — when a maximum is already committed and above the floor. */
+  /** e.g. "Raise maximum to {amount}" — when a maximum is already committed and above the floor. */
   raiseMaximumReview: string;
-  /** e.g. "Bid Now · {amount}" — when the commit amount is the minimum eligible bid. */
+  /** e.g. "Bid now at {amount}" — when the commit amount is the minimum eligible bid. */
   bidNowReview: string;
   /** Privacy + ceiling; mechanism is a short reinforcing line. */
   privateMaximumTooltip: string;
@@ -189,11 +192,15 @@ function ListingQuickMaximumBidActions({
   const canPlaceBid = commitMinor != null && !maximumInvalid;
 
   const heading = hasCommittedMaximum
-    ? copy.raisePrivateMaximum.replace(
-        "{amount}",
-        formatMoney(view.viewerMaximumMinor ?? 0, view.currency, { locale }),
-      )
+    ? copy.raisePrivateMaximum
     : copy.setPrivateMaximum;
+  const currentMaximumLabel =
+    hasCommittedMaximum && view.viewerMaximumMinor != null
+      ? copy.currentMaximum.replace(
+          "{amount}",
+          formatMoney(view.viewerMaximumMinor, view.currency, { locale }),
+        )
+      : null;
 
   const isMinimumBid =
     commitMinor != null && commitMinor === floorMaximumMinor;
@@ -208,7 +215,11 @@ function ListingQuickMaximumBidActions({
           "{amount}",
           formatMoney(commitMinor, view.currency, { locale }),
         )
-      : actionTemplate.replace(" · {amount}", "").replace("{amount}", "");
+      : actionTemplate
+          .replace(" to {amount}", "")
+          .replace(" at {amount}", "")
+          .replace(" · {amount}", "")
+          .replace("{amount}", "");
 
   const floorAmountLabel = formatMoney(floorMaximumMinor, view.currency, {
     locale,
@@ -295,6 +306,15 @@ function ListingQuickMaximumBidActions({
             </Tooltip>
           </TooltipProvider>
         </HStack>
+        {currentMaximumLabel != null ? (
+          <Text
+            className="tabular-nums text-foreground"
+            size="sm"
+            weight="medium"
+          >
+            {currentMaximumLabel}
+          </Text>
+        ) : null}
         <Text className="text-secondary-foreground" size="xs">
           {copy.maximumMechanismSubtext}
         </Text>

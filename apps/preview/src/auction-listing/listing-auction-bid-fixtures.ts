@@ -111,7 +111,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   didNotWin: "Did not win",
   cardRelease: "Your card authorization will be released.",
   outbid: "Outbid",
-  highestBid: "Highest bid",
+  highestBid: "Leading",
   yourMaximum: "Your maximum",
   setMaximumLabel: "Set maximum",
   setMaximumCurrentLabel: "Set maximum (current: {amount})",
@@ -135,10 +135,11 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   autoBiddingTooltip:
     "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
   setPrivateMaximum: "Set your private maximum",
-  raisePrivateMaximum: "Raise your private maximum (current: {amount})",
-  reviewMaximum: "Set Maximum · {amount}",
-  raiseMaximumReview: "Raise Maximum · {amount}",
-  bidNowReview: "Bid Now · {amount}",
+  raisePrivateMaximum: "Raise your private maximum",
+  currentMaximum: "Current: {amount}",
+  reviewMaximum: "Set maximum to {amount}",
+  raiseMaximumReview: "Raise maximum to {amount}",
+  bidNowReview: "Bid now at {amount}",
   privateMaximumTooltip:
     "Your maximum is the most you are willing to pay before buyer fees. Other bidders cannot see it. We only bid as needed to keep you leading.",
   maximumMechanismSubtext:
