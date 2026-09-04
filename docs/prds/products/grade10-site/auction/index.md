@@ -34,7 +34,8 @@ rather than refuses the bid.
 
 They register a payment method against the lot, then name an amount. In one
 step the auction checks the lot is open, the bidder is allowed to bid, and the
-amount clears the standing top plus the minimum increment.
+amount clears the standing top plus the next minimum from the [bid increment
+schedule](/p/grade10-site/auction/bid-increments).
 
 ## Grade10 holds the money
 

@@ -26,149 +26,115 @@ while it has not closed. Named image sizes and optional alt live in
   - Closed is frozen: a closed listing cannot be rewritten here
 - Gallery
   - One to eight uploads: images or videos, stored as uploaded, ordered, first item as the catalogue card
-
 ## Requirements
-
 ### Requirement: Operator saves a listing as a draft
 
-An authorized operator SHALL save an Auction listing as a draft from the
-Grade10 auction admin section without filling every field. A successful draft
-save SHALL persist the listing in `draft` and, on the first save, SHALL mint
-a new auctionable unit that has no other live listing.
+An authorized operator SHALL save an Auction listing as a draft without every
+required field. A draft save SHALL NOT require title, slug, starting price,
+currency, starts at, scheduled close at, or media. A supplied currency SHALL
+be USD, HKD, or JPY; Grade10 SHALL refuse another currency and leave the draft
+unchanged.
 
-A draft SHALL allow every required field to be empty. Saving a draft SHALL
-NOT refuse a missing title, slug, starting price, minimum increment, starts
-at, scheduled close at, or media. A field the operator does send SHALL still
-match that field's shape (a starting price that is present MUST be integer
-minor units greater than zero; a slug that is present MUST be lower-case
-words joined by hyphens).
-
-A draft listing SHALL NOT be visible on the public catalogue.
-
-A draft save from an operator who is not authorized to set an auction's
-prices and window SHALL be refused.
+The draft form and write contract SHALL NOT offer or accept a listing-level
+minimum increment.
 
 #### Scenario: grade10-admin-auction-listing-SC-01 - Operator saves an empty draft
 
-- **GIVEN** an authorized operator on the Grade10 auction listings section
-- **WHEN** they save a new listing with no title, no prices, and no window
-- **THEN** Grade10 persists a draft listing with those fields empty
-- **AND** the listing is absent from the public catalogue
+- **GIVEN** an authorized operator on the auction listings section
+- **WHEN** they save a listing with no title, prices, or window
+- **THEN** Grade10 persists a draft that is absent from the public catalogue
 
 #### Scenario: grade10-admin-auction-listing-SC-02 - Operator saves a partial draft
 
 - **GIVEN** an authorized operator
 - **WHEN** they save a draft with a title and no starting price
-- **THEN** Grade10 persists the title
-- **AND** the listing remains a draft
-- **AND** starting price stays empty
+- **THEN** Grade10 persists the title and leaves the listing a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-03 - Draft rejects a malformed price
 
 - **GIVEN** a draft listing
-- **WHEN** an operator sets starting price to a non-positive or non-integer
-  amount
-- **THEN** Grade10 refuses the write
-- **AND** starting price is unchanged
+- **WHEN** an operator sets its starting price to a non-positive or non-integer amount
+- **THEN** Grade10 refuses the write and leaves the starting price unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-04 - Draft rejects a malformed slug
 
 - **GIVEN** a draft listing
-- **WHEN** an operator sets slug to `Charizard PSA 9`
-- **THEN** Grade10 refuses the write
-- **AND** the slug is unchanged
+- **WHEN** an operator sets its slug to `Charizard PSA 9`
+- **THEN** Grade10 refuses the write and leaves the slug unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-05 - Unauthorized draft save is refused
 
-- **GIVEN** a signed-in operator who may not set an auction's prices and window
-- **WHEN** they save a new draft
-- **THEN** Grade10 refuses the save
-- **AND** it persists no listing
+- **GIVEN** a signed-in operator without auction price-and-window permission
+- **WHEN** they save a draft
+- **THEN** Grade10 refuses and persists no listing
+
+#### Scenario: grade10-admin-auction-listing-SC-56 - Draft rejects an unsupported currency
+
+- **GIVEN** a draft listing
+- **WHEN** an operator sets its currency to EUR
+- **THEN** Grade10 refuses the write
+- **AND** the currency is unchanged
 
 ### Requirement: Create validates required fields on the form and the API
 
-An authorized operator SHALL create a `draft` listing. Create is the
-validation gate: it SHALL succeed only when every required field is present
-and valid. A successful create SHALL move the listing to `created`. The
-listing SHALL still be absent from the public catalogue.
+Create SHALL require a title, slug, starting price, starts at, scheduled close
+at, media, and one supported currency. When omitted, currency SHALL default to
+HKD. The form and API SHALL reject an unsupported currency independently.
 
-Required at create:
-
-- **Title** — trimmed, 1 to 200 characters
-- **Slug** — trimmed, 1 to 64 characters, lower-case words joined by hyphens
-  (`charizard-psa-9`). Unique among listings that currently hold a slug.
-- **Starting price** — integer minor units greater than zero
-- **Minimum increment** — integer minor units greater than zero
-- **Starts at** — the scheduled bidding open
-- **Scheduled close at** — after starts at, and after the moment of create
-- **Media** — at least one and at most eight images or videos
-
-Optional fields, when omitted at create, take these defaults: currency
-`HKD`; sort index `0`; copy empty; no sale; no categories; extension window
-and extension duration both `1800` (30 minutes); no extension cap; no
-publish at; sandbox `false`.
-
-The admin form SHALL prevent submitting create while a required field is
-empty or invalid, and SHALL name the fields that fail. The API SHALL refuse
-the same create independently of the form. A created listing SHALL reject a
-later write that leaves a required field empty or invalid.
-
-Create of a listing that is not `draft` SHALL be refused. Create from an
-operator who is not authorized to set an auction's prices and window SHALL
-be refused.
+The form SHALL present USD, HKD, and JPY as its only currency choices and
+SHALL NOT display a minimum-increment field. The selected currency's Grade10
+schedule governs the listing's bid floor.
 
 #### Scenario: grade10-admin-auction-listing-SC-06 - Operator creates a filled draft
 
-- **GIVEN** a draft listing with a title, slug `charizard-psa-9`, a starting
-  price of 100000 minor units, a minimum increment of 5000 minor units,
-  currency `HKD`, a start in the future, a scheduled close at after that
-  start, and one JPEG
+- **GIVEN** a complete draft with currency JPY and no minimum-increment value
 - **WHEN** an authorized operator creates the listing
-- **THEN** Grade10 moves it to `created`
-- **AND** the listing is still absent from the public catalogue
+- **THEN** Grade10 creates it
+- **AND** its bid floor uses the JPY schedule
 
 #### Scenario: grade10-admin-auction-listing-SC-07 - Create without a title is refused on the form and the API
 
-- **GIVEN** a draft listing with no title and every other required field set
-- **WHEN** the operator submits create
-- **THEN** the admin form does not send create and names title as missing
-- **AND** a create sent to the API without a title is refused
-- **AND** the listing remains a draft
+- **GIVEN** a draft with every required field except title
+- **WHEN** the operator creates it
+- **THEN** the form and API refuse it and the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-08 - Create without a slug is refused
 
-- **GIVEN** a draft listing with every required field set except slug
-- **WHEN** the operator creates the listing
-- **THEN** Grade10 refuses the create
-- **AND** the listing remains a draft
+- **GIVEN** a draft with every required field except slug
+- **WHEN** the operator creates it
+- **THEN** Grade10 refuses and the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-09 - Create without a starting price is refused
 
-- **GIVEN** a draft listing with a title, a window, and no starting price
-- **WHEN** the operator creates the listing
-- **THEN** Grade10 refuses the create
-- **AND** the listing remains a draft
+- **GIVEN** a draft with every required field except starting price
+- **WHEN** the operator creates it
+- **THEN** Grade10 refuses and the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-10 - Create without media is refused
 
-- **GIVEN** a draft listing with every required field set except media
-- **WHEN** the operator creates the listing
-- **THEN** Grade10 refuses the create
-- **AND** the listing remains a draft
+- **GIVEN** a draft with every required field except media
+- **WHEN** the operator creates it
+- **THEN** Grade10 refuses and the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-11 - Created listing cannot clear a required field
 
 - **GIVEN** a created listing with a title
 - **WHEN** an operator clears the title
-- **THEN** Grade10 refuses the write
-- **AND** the title is unchanged
+- **THEN** Grade10 refuses and leaves the title unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-12 - Create of a published listing is refused
 
 - **GIVEN** a published listing
 - **WHEN** an operator creates it
-- **THEN** Grade10 refuses the create
-- **AND** the listing remains published
+- **THEN** Grade10 refuses and leaves it published
+
+#### Scenario: grade10-admin-auction-listing-SC-57 - Create refuses an unsupported currency on the form and API
+
+- **GIVEN** a complete draft with currency EUR
+- **WHEN** an operator creates the listing
+- **THEN** the form prevents the request and names currency
+- **AND** an API create with EUR is refused
+- **AND** the listing remains a draft
 
 ### Requirement: Catalogue fields an operator may write
 
