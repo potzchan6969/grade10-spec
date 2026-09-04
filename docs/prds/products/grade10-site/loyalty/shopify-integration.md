@@ -103,8 +103,9 @@ programme thinks, so every unhappy answer lands staff in a normal sale.
 
 :::flow{title="Points at the till"}
 ## Identify the member
-Scan the QR on the member card, type its eight-character short code, or type
-the exact email on the account. A miss says only that no member was found.
+Scan the QR on the member card — from the site or from the member's Google
+Wallet pass — type its eight-character short code, or type the exact email on
+the account. A miss says only that no member was found.
 Either identification opens a ten-minute session bound to the shop and the
 member — never to the staff label, which changes when staff switch by PIN.
 

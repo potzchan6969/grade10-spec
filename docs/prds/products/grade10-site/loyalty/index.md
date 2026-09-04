@@ -56,9 +56,9 @@ notes](/references/shopify-membership-pos). The checkable rules are
 Earning outside Grade10 store and counter purchases, beyond operator-granted
 campaign points; auction wins and credit top-ups are later-phase candidates
 and earn nothing today. Redeeming against an auction — points and coupons buy
-nothing there, in any phase. SMS verification and wallet passes; the member
-card and email carry identification at the counter, and the phone arm ships
-dark. Tier-based discounts beyond the earn multiplier — no tier gets a
+nothing there, in any phase. SMS verification; the member card, its pass and
+email carry identification at the counter, and the phone arm ships dark. Apple
+Wallet, and NFC tap in any wallet. Tier-based discounts beyond the earn multiplier — no tier gets a
 percentage off or free shipping. Cross-brand membership — ZZZ buyers are a
 separate population with no programme.
 
@@ -73,6 +73,8 @@ separate population with no programme.
 | Tier retention | Share of Gold members who earn the retention threshold inside their validity period | Product |
 | Point redemption | Share of earned points redeemed before the balance expires | Product |
 | Coupon usage | Share of issued codes used before their own validity ends | Product |
+| Arriving by pass | Share of counter identifications made from a wallet pass | Product |
+| Codes that never landed | Counter identifications that expired or replayed before staff scanned them | Product |
 | Points outstanding | Unexpired, unredeemed points, plus the money out in unused codes, as a liability | Finance |
 | Earning delivery | Money events awaiting delivery to the programme, and their age | Engineering |
 
@@ -101,6 +103,7 @@ separate population with no programme.
 | Coupon validity is set per reward | Decided | A code's life is a property of what it buys, so the menu carries it per item and a redemption remembers the validity it was issued with | Product |
 | A claw-back re-evaluates the tier at once | Decided | Refunded spend is spend that never happened, so the tier it bought does not survive it | Owner |
 | In-store identification | Decided | A dynamic single-use code on the member card, its typed short code, or the member's exact email. One scan or lookup authorizes the till for ten minutes with no confirmation on the member's phone; the member is notified on every act they did not present for. An unrecognised member never blocks a sale | Owner |
+| The card in a phone wallet | Decided | Google Wallet only. Its pass regenerates the barcode on the phone from a secret it already holds, so the code is current with no signal and a photograph of it is worthless within the minute — the card keeps the security it has and gains a lock screen. Apple has no rotating code, so an Apple pass would mean carrying one permanent code; that is a decision about a durable bearer credential, not about wallets, and it is not made | Owner |
 | Phone lookup at the till | ❓ Deferred | Grade10 asks for a mobile number at join and mirrors it to the Shopify customer, but the till's phone arm ships switched off until numbers are verified | Owner |
 | Points at the online checkout are a merchant discount, not a code | Decided | Every online checkout is a Shopify draft order, and the points come off as its one order-level fixed discount, chosen against the priced basket. Nothing is held until the invoice is paid | Engineering |
 | Points at the till are a cart discount, or a code | Decided | Which instrument the till uses is a per-shop switch: a fixed amount off the sale, or a customer-scoped single-use code. The code instrument is the default until the switch is flipped | Engineering |

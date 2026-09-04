@@ -26,7 +26,7 @@ and shown the points already waiting ([[grade10-site-loyalty-programme-SC-01]]).
 | Section | What it shows |
 | --- | --- |
 | Summary | Tier, points to spend, points earned this year against the next threshold, when the tier renews, and when the points stay active until |
-| Your member card | The QR the till scans, the short code beneath it, and a countdown |
+| Your member card | The QR the till scans, the short code beneath it, a countdown, and the action that adds the card to Google Wallet |
 | Rewards | The live menu, priced in points, with what the balance affords |
 | Spend on your basket | Points against the current basket — an offer of a code, or a pointer to checkout where the shop takes points there |
 | Waiting at the counter | Collect-in-store rewards with their deadline; a closed window says so |
@@ -56,6 +56,20 @@ shop.
 ::story{id="loyalty-membership-membercard--default" title="The member card"}
 
 ::story{id="loyalty-membership-membercard--already-used" title="A code a till has taken"}
+
+## In a phone wallet
+
+The same card, added to Google Wallet, so it opens from a lock screen instead
+of a sign-in.
+
+- **The code** — made on the phone itself, so a pass is scannable where there is
+  no signal, and it changes on its own rather than being fetched
+- **Beside it** — the member's name, the tier they hold, and the points they can
+  spend, following their standing without them opening anything
+- **Ending one** — the member ends a pass whenever they like and adds another;
+  an operator ends it for a member who has lost the phone
+- **Apple Wallet** — not offered. Apple has no rotating code, so an Apple pass
+  would mean carrying one permanent code, which is a different decision
 
 ## Histories
 
@@ -87,10 +101,14 @@ lives in the identity system and never in the programme, which holds only an
 opaque user id.
 
 :::callout{kind="warning"}
-Two things decided for this surface are not built. No welcome bonus is
-granted at enrolment — the deployed programme sets none. And deleting the
-account does not yet tear the membership down; the ledger has no
-account-deletion pass. Both are in flight under `revise-loyalty-programme-rules`.
+Three things decided for this surface are not built.
+
+- **The wallet pass** — no pass exists; the card is the site's only rendering
+  (`add-google-wallet-member-card`)
+- **The welcome bonus** — the deployed programme grants none
+  (`revise-loyalty-programme-rules`)
+- **Account deletion** — the ledger has no account-deletion pass
+  (`revise-loyalty-programme-rules`)
 :::
 
 :::callout{kind="note"}
