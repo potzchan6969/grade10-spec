@@ -1,0 +1,33 @@
+## User journeys
+
+### grade10-site-vault-identity-check-US-01: Operator opens a case for a collector who verified before arriving
+
+**As a** vault operator meeting a collector for their intake visit,
+**I want** the case to already hold a verified identity and to say who checked
+it,
+**so that** the appointment starts at the item, and I can see at a glance
+whether a check is on file, still out, or refused.
+
+**Accepted by:**
+
+- `grade10-site-vault-identity-check-SC-01` — Booking an intake visit invites the collector
+- `grade10-site-vault-identity-check-SC-02` — A case that already holds an identity is not asked again
+- `grade10-site-vault-identity-check-SC-04` — A case with a check out is not shown as unverified
+- `grade10-site-vault-identity-check-SC-05` — A verified case names who performed the check
+- `grade10-site-vault-identity-check-SC-06` — Binding a verdict voids an outstanding packet
+- `grade10-site-vault-identity-check-SC-12` — Preparing documents without an identity is refused
+
+### grade10-site-vault-identity-check-US-02: Operator verifies a collector the hosted check could not
+
+**As a** vault operator whose collector arrives unverified,
+**I want** to check the document in front of me and carry on,
+**so that** a refused, lapsed or never-started check costs the visit nothing.
+
+**Accepted by:**
+
+- `grade10-site-vault-identity-check-SC-03` — An operator asks for a check on a case that needs one
+- `grade10-site-vault-identity-check-SC-14` — Staff verify a collector who arrives unverified
+- `grade10-site-vault-identity-check-SC-15` — A counter check is refused once the item is in custody
+- `grade10-site-vault-identity-check-SC-08` — A verdict landing after custody begins is refused
+- `grade10-site-vault-identity-check-SC-11` — A refused landing leaves no half-finished state
+- `grade10-site-vault-identity-check-SC-13` — A packet whose identity moved cannot be sealed
