@@ -153,7 +153,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
     "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
   setPrivateMaximum: "Set your private maximum",
   raisePrivateMaximum: "Raise your private maximum",
-  currentMaximum: "Current: {amount}",
+  currentMaximum: "Max: {amount}",
   reviewMaximum: "Set maximum to {amount}",
   raiseMaximumReview: "Raise maximum to {amount}",
   bidNowReview: "Bid now at {amount}",
@@ -169,6 +169,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   bidUpTo: "Maximum {amount}",
   nextEligibleBid: "Min. bid",
   amountAboveCurrent: "{amount} vs current",
+  amountAboveMaximum: "{amount} vs max",
   minimumMaximumFloor: "At least {amount} (current bid + {increment})",
   minimumMaximumLeadingNudge: "At least {amount} (your maximum + {increment})",
   minimumMaximumLeadingIncrement:
@@ -181,6 +182,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   endsLabel: "Ends",
   opensLabel: "Opens",
   closedAt: "Closed {when}",
+  closedSummary: "Closed at {time}. Ran {duration}",
   activityTimeCopy: FIXTURE_ACTIVITY_TIME_COPY,
 } satisfies Omit<
   ListingAuctionBidCardCopy,
@@ -526,6 +528,7 @@ export function buildListingAuctionBidView(
     countdownFormat: meta.countdownFormat,
     extended: liveTiming?.extended ?? false,
     deadlineAtMs,
+    opensAtMs: meta.closed || meta.opens ? FIXTURE_AUCTION_OPENS_AT_MS : null,
     standing: resolveListingStanding(
       state,
       currentBidMinor,

@@ -51,6 +51,12 @@ export type ListingAuctionBidView = {
   closesAtMs?: number | null;
   /** Instant for the collector deadline line under the countdown. */
   deadlineAtMs?: number | null;
+  /**
+   * When the lot opened for bidding. With `deadlineAtMs` on a closed lot, the
+   * time block shows the close date as the primary value and a single subtext
+   * line with the close time and how long the auction ran.
+   */
+  opensAtMs?: number | null;
   countdownFormat: "short" | "long";
   /** Recorded close has moved past the listing's scheduled close. */
   extended: boolean;

@@ -27,8 +27,8 @@ import { PaymentAuthorizationPreview } from "./payment-authorization-demo";
  * Bid Panel (`ListingAuctionBidCard` plus enrollment chrome).
  *
  * States live as stories under this title and under Bid Panel / Dialogs,
- * Flows, and State Tests. Controls in this Docs page are the card's `onX`
- * callbacks.
+ * Flows, and State Tests (Enrollment, Standing, Lifecycle, Setup). Controls
+ * in this Docs page are the card's `onX` callbacks.
  */
 const meta = {
   title: "Auction Listing/Bid Panel",
@@ -62,7 +62,7 @@ the preview. The full lot page is
 
 | State | Story | What it shows |
 | --- | --- | --- |
-| Setup | [Setup Modal](?path=/story/auction-listing-bid-panel-dialogs--setup-modal) | Card-link iframe and age attestation. Continue stays disabled until both are done. |
+| Setup | [Setup Modal](?path=/story/auction-listing-bid-panel-dialogs--setup-modal) | Card-link iframe and age attestation. Confirm stays disabled until both are done. |
 | Setup from Change | [Setup Modal From Change](?path=/story/auction-listing-bid-panel-dialogs--setup-modal-from-change) | Same sheet after Change. Age attestation stays checked when already given. |
 | Payment authorization pending | [Payment Authorization Pending](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-pending) | Authorize-your-bid dialog while Stripe is authorizing. |
 | Payment authorization refused | [Payment Authorization Refused](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-refused) | Authorize-your-bid dialog after the method is declined. |
@@ -90,8 +90,9 @@ and already-extended.
 
 \`view.extended\` switches the time label to Time left (auto-extended).
 \`view.countdownSeconds\` (and optional \`closesAtMs\`) drives the rolling
-countdown. Closed lots pass \`countdownSeconds: null\` and show the closed
-moment.
+countdown. Closed lots pass \`countdownSeconds: null\`, \`opensAtMs\`, and
+\`deadlineAtMs\` so the primary value is the close date and the subtext is one
+line: close time and how long the auction ran.
 
 ## Card callbacks
 
@@ -112,7 +113,7 @@ around it.
 | --- | --- | --- |
 | \`PaymentMethodEmptyState.onLink\` | Empty linked-card slot is pressed | Opening setup (iframe + age attestation). |
 | \`PaymentMethodRow.onChange\` | Change on an editable linked card | Opening setup to replace the card, only before the first bid on this lot. |
-| \`EnrollmentSetupSheet.onContinue\` | Setup Continue | Persisting the linked card and age attestation, then closing setup. |
+| \`EnrollmentSetupSheet.onContinue\` | Setup Confirm | Persisting the linked card and age attestation, then closing setup. |
 | \`EnrollmentSetupSheet.onOpenChange\` | Setup open state changes | Whether the setup sheet is shown. |
 | \`SignInCard.onOpenChange\` | Sign-in overlay open state changes | Whether sign-in is shown. |
 | \`SignInEmailForm.onSubmit\` | Sign-in email is submitted | Completing sign-in, then moving enrollment to ready. |
@@ -353,7 +354,7 @@ export const PaymentAuthorization: Story = {
     );
     expect(
       within(document.body).getByRole("button", {
-        name: "Authorizing payment method",
+        name: "Authorizing…",
       }),
     ).toBeDisabled();
     await dismissDialog("Authorize your bid");

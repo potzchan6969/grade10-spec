@@ -33,7 +33,6 @@ export type ListingBidEnrollmentSnapshot = {
     defaultAgeAttested?: boolean;
   };
   signInOpen?: boolean;
-  staleFloor?: boolean;
   viewOverride?: Partial<ListingAuctionBidView>;
 };
 

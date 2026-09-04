@@ -39,7 +39,7 @@ type ListingQuickMaximumBidActionsCopy = {
   setPrivateMaximum: string;
   /** Mode title when a maximum is already committed — no amount; use `currentMaximum`. */
   raisePrivateMaximum: string;
-  /** Shown under the raise title, e.g. "Current: {amount}". */
+  /** Shown under the raise title, e.g. "Max: {amount}". */
   currentMaximum: string;
   /** e.g. "Set maximum to {amount}" — first maximum above the floor. */
   reviewMaximum: string;
@@ -67,6 +67,8 @@ type ListingQuickMaximumBidActionsCopy = {
   nextEligibleBid: string;
   /** e.g. "{amount} vs current" — money delta above the current bid. */
   amountAboveCurrent: string;
+  /** e.g. "{amount} vs max" — money delta above the viewer's private maximum. */
+  amountAboveMaximum: string;
 };
 
 type ListingQuickMaximumBidActionsProps = {
@@ -95,6 +97,8 @@ function ListingQuickMaximumBidActions({
   onCommitMaximum,
 }: ListingQuickMaximumBidActionsProps) {
   const hasCommittedMaximum = view.viewerMaximumMinor != null;
+  /** Already leading under a private maximum — raise only; floor chip is not a bid. */
+  const isLeadingWithMaximum = view.standing === "leading-max";
   const maximumFloor = resolveMaximumFloor({
     minBidMinor: view.minBidMinor,
     incrementMinor: view.incrementMinor,
@@ -112,54 +116,66 @@ function ListingQuickMaximumBidActions({
   const presets = useMemo((): MaximumPreset[] => {
     const formatDelta = (deltaMinor: number) =>
       `$${formatMoneyNumeric(deltaMinor, view.currency, locale)}`;
+    const raiseDeltaTemplate = isLeadingWithMaximum
+      ? copy.amountAboveMaximum
+      : copy.amountAboveCurrent;
 
-    const fromCurrent = PRESET_INCREMENTS.map(({ multiples, captionKey }) => {
-      const amountMinor =
-        multiples === 1 && !view.hasBids
-          ? floorMaximumMinor
-          : view.currentBidMinor + view.incrementMinor * multiples;
-      const caption =
-        captionKey === "nextEligible"
-          ? copy.nextEligibleBid
-          : copy.amountAboveCurrent.replace(
-              "{amount}",
-              formatDelta(view.incrementMinor * multiples),
-            );
-      return {
-        key: `current-${multiples}`,
-        caption,
-        amountMinor,
-        immediate: multiples === 1,
-      };
-    }).filter((preset) => preset.amountMinor >= floorMaximumMinor);
+    const fromCurrent = PRESET_INCREMENTS.flatMap(
+      ({ multiples, captionKey }): MaximumPreset[] => {
+        // Skip "Min. bid" while leading — the custom field already states the
+        // raise floor, and a $1 nudge is not a useful quick pick.
+        if (isLeadingWithMaximum && captionKey === "nextEligible") {
+          return [];
+        }
+        const amountMinor =
+          multiples === 1 && !view.hasBids
+            ? floorMaximumMinor
+            : view.currentBidMinor + view.incrementMinor * multiples;
+        if (amountMinor < floorMaximumMinor) return [];
+        const caption =
+          captionKey === "nextEligible"
+            ? copy.nextEligibleBid
+            : raiseDeltaTemplate.replace(
+                "{amount}",
+                formatDelta(view.incrementMinor * multiples),
+              );
+        return [
+          {
+            key: `current-${multiples}`,
+            caption,
+            amountMinor,
+            immediate: multiples === 1,
+          },
+        ];
+      },
+    );
 
     if (fromCurrent.length > 0) return fromCurrent;
 
-    // Raise floor sits above current+step presets — keep the same caption voice
-    // (Min. bid / vs current) with amounts anchored to the floor.
-    return [0, 2, 4].map((steps, index) => {
+    // Raise floor sits above current+step presets. While leading, skip the
+    // floor chip and offer increments above it with "vs max" captions.
+    const fallbackSteps = isLeadingWithMaximum ? [1, 2, 4] : [0, 2, 4];
+    return fallbackSteps.map((steps) => {
       const amountMinor = floorMaximumMinor + view.incrementMinor * steps;
-      const deltaMinor = view.hasBids
-        ? amountMinor - view.currentBidMinor
-        : view.incrementMinor * steps;
+      const deltaMinor = view.incrementMinor * steps;
+      const isFloor = steps === 0;
       const caption =
-        steps === 0
+        isFloor && !isLeadingWithMaximum
           ? copy.nextEligibleBid
-          : copy.amountAboveCurrent.replace(
-              "{amount}",
-              formatDelta(deltaMinor),
-            );
+          : raiseDeltaTemplate.replace("{amount}", formatDelta(deltaMinor));
       return {
         key: `floor-${steps}`,
         caption,
         amountMinor,
-        immediate: index === 0,
+        immediate: isFloor && !isLeadingWithMaximum,
       };
     });
   }, [
     copy.amountAboveCurrent,
+    copy.amountAboveMaximum,
     copy.nextEligibleBid,
     floorMaximumMinor,
+    isLeadingWithMaximum,
     locale,
     view.currency,
     view.currentBidMinor,
@@ -205,8 +221,11 @@ function ListingQuickMaximumBidActions({
         )
       : null;
 
+  // Floor amount while leading is a maximum raise, not an immediate bid.
   const isMinimumBid =
-    commitMinor != null && commitMinor === floorMaximumMinor;
+    commitMinor != null &&
+    commitMinor === floorMaximumMinor &&
+    !isLeadingWithMaximum;
   const actionTemplate = isMinimumBid
     ? copy.bidNowReview
     : hasCommittedMaximum

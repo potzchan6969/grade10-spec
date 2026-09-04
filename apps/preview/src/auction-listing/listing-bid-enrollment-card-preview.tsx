@@ -1,8 +1,6 @@
-import { Text } from "@grade10/design-system/components/display/text";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   EnrollmentSetupSheet,
-  formatMoney,
   InlineOverlayPreview,
   ListingAuctionBidCard,
   type ListingBidHistoryRow,
@@ -121,15 +119,6 @@ function ListingBidEnrollmentCardPreview({
             onLink={onLinkPayment}
           />
         </div>
-      ) : null}
-
-      {snapshot.staleFloor ? (
-        <Text className="px-4" size="sm" tone="secondary">
-          {LISTING_BID_ENROLLMENT_DEMO_COPY.staleFloorNotice.replace(
-            "{amount}",
-            formatMoney(505_000, view.currency, { locale: "en-HK" }),
-          )}
-        </Text>
       ) : null}
 
       <EnrollmentSetupSheet

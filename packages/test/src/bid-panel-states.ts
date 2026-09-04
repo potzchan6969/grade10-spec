@@ -17,7 +17,6 @@ type BidPanelScenarioId =
   | "bid-panel/linked-card-locked"
   | "bid-panel/setup-required"
   | "bid-panel/setup-change-payment"
-  | "bid-panel/stale-floor"
   | "bid-panel/manual-bid-accepted"
   | "bid-panel/maximum-accepted";
 
@@ -43,7 +42,6 @@ type BidPanelState = {
     maskedNumber: string;
     editable: boolean;
   };
-  staleFloor?: boolean;
   /** Rendering this state opens the payment-setup dialog. */
   paymentSetup?: {
     requiresIframeLink?: boolean;
@@ -72,6 +70,11 @@ type BidPanelStateResponse = {
   dialogName?: string;
   /** Stable user-facing consequence asserted by the Storybook interaction. */
   expectedText: string;
+  /**
+   * When set, this mutation yields the same panel render as another scenario.
+   * Storybook State Tests cover that target once; Vitest checks the alias.
+   */
+  rendersAs?: BidPanelScenarioId;
 };
 
 const SAVED_PAYMENT = {
@@ -245,6 +248,7 @@ const BID_PANEL_STATE_RESPONSES = {
       paymentEmptyState: true,
     },
     expectedText: "Link a card to place a bid.",
+    rendersAs: "bid-panel/needs-payment",
   },
   paymentLinked: {
     scenarioId: "bid-panel/payment-linked",
@@ -256,6 +260,7 @@ const BID_PANEL_STATE_RESPONSES = {
       linkedPaymentMethod: linkedCard(true),
     },
     expectedText: "Change",
+    rendersAs: "bid-panel/linked-card-editable",
   },
   linkedCardEditable: {
     scenarioId: "bid-panel/linked-card-editable",
@@ -286,6 +291,7 @@ const BID_PANEL_STATE_RESPONSES = {
     state: {
       bidMode: "manual",
       submitUsesSignInLabel: false,
+      paymentEmptyState: true,
       paymentSetup: { requiresIframeLink: true },
     },
     dialogName: "Get Ready to Bid",
@@ -308,17 +314,6 @@ const BID_PANEL_STATE_RESPONSES = {
     dialogName: "Get Ready to Bid",
     expectedText: "Stripe card form (iframe) — linked card on file",
   },
-  staleFloor: {
-    scenarioId: "bid-panel/stale-floor",
-    source: "mutation",
-    operation: "placeBid",
-    state: {
-      bidMode: "manual",
-      submitUsesSignInLabel: false,
-      staleFloor: true,
-    },
-    expectedText: "The minimum bid is now HK$5,050.",
-  },
   manualBidAccepted: {
     scenarioId: "bid-panel/manual-bid-accepted",
     source: "mutation",
@@ -329,6 +324,7 @@ const BID_PANEL_STATE_RESPONSES = {
       linkedPaymentMethod: linkedCard(false),
     },
     expectedText: "•••• 4242",
+    rendersAs: "bid-panel/linked-card-locked",
   },
   maximumAccepted: {
     scenarioId: "bid-panel/maximum-accepted",
@@ -341,8 +337,29 @@ const BID_PANEL_STATE_RESPONSES = {
       viewOverride: LEADING_AUTO_VIEW,
     },
     expectedText: "Leading",
+    rendersAs: "bid-panel/auto-leading",
   },
 } as const satisfies Record<string, BidPanelStateResponse>;
+
+/** Responses that own a State Tests story — one per distinct panel render. */
+const BID_PANEL_STATE_TEST_RESPONSES = [
+  BID_PANEL_STATE_RESPONSES.signedOut,
+  BID_PANEL_STATE_RESPONSES.needsPayment,
+  BID_PANEL_STATE_RESPONSES.linkedCardEditable,
+  BID_PANEL_STATE_RESPONSES.linkedCardLocked,
+  BID_PANEL_STATE_RESPONSES.autoLeading,
+  BID_PANEL_STATE_RESPONSES.autoOutbid,
+  BID_PANEL_STATE_RESPONSES.autoMaximumNotLeading,
+  BID_PANEL_STATE_RESPONSES.manualLeading,
+  BID_PANEL_STATE_RESPONSES.opens,
+  BID_PANEL_STATE_RESPONSES.closedSold,
+  BID_PANEL_STATE_RESPONSES.closedWonPaymentDue,
+  BID_PANEL_STATE_RESPONSES.closedWonSettled,
+  BID_PANEL_STATE_RESPONSES.closedLost,
+  BID_PANEL_STATE_RESPONSES.closedUnsold,
+  BID_PANEL_STATE_RESPONSES.setupRequired,
+  BID_PANEL_STATE_RESPONSES.setupChangePayment,
+] as const;
 
 const PAYMENT_AUTHORIZATION_STATE_RESPONSES = {
   pending: {
@@ -371,4 +388,8 @@ export type {
   PaymentAuthorizationResponseState,
   PaymentAuthorizationScenarioId,
 };
-export { BID_PANEL_STATE_RESPONSES, PAYMENT_AUTHORIZATION_STATE_RESPONSES };
+export {
+  BID_PANEL_STATE_RESPONSES,
+  BID_PANEL_STATE_TEST_RESPONSES,
+  PAYMENT_AUTHORIZATION_STATE_RESPONSES,
+};
