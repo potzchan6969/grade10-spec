@@ -227,8 +227,12 @@ Non-Goals, on the delivery side:
   than orphaned — when the case bound an identity after the check was raised.
   A binding made before the raise stays replaceable, which is what reuse and
   re-record need.
-- **`finishCheck({ caseRef, outcome, reason })`** moves the check to
-  `approved` or `declined` after the vault has answered. Without it a refused
+- **`finishCheck({ checkId, outcome, reason })`** moves that check to
+  `approved` or `declined` after the vault has answered. Keyed on the check
+  rather than the case: a withdraw and a fresh raise are two rows, and a
+  decision addressed to the case lands on whichever happens to be live. The
+  check id comes back on the settle's own answer, with the `invitedAt` the
+  third refusal arm reads. Without it a refused
   landing leaves the check reading `approved` for ever, and the discard's
   `ON DELETE SET NULL` then nulls its verification link — a row asserting an
   approval that produced nothing. It is called outside `bindToCase`'s own
@@ -307,16 +311,25 @@ Non-Goals, on the delivery side:
 
 ### The provider is a port in the backend, not a name in contracts
 
-- One interface beside `KycStorePort`: `raise`, `read`, `fetchDocument`,
-  `redact`, `retentionWindow`. `raise` answers the provider's reference **and**
-  its hosted URL together, which is how a hosted provider answers; a fifth
-  method for a value the first call handed over would be a call that never
-  needed making.
+- One interface beside `KycStorePort`: `raise`, `resume`, `read`,
+  `fetchDocument`, `redact`, `retentionWindow`. `raise` answers the provider's
+  reference **and** its hosted URL together, which is how a hosted provider
+  answers; a method for a value the first call handed over would be a call that
+  never needed making.
+- **`resume(reference)`** answers a fresh hosted URL for a check already
+  raised. A collector who closed the tab is handed back to the ceremony they
+  left rather than to a second one — a hosted link is short-lived, and raising
+  again would leave the first inquiry live with nothing to settle it.
 - `read` answers what `kyc_verifications` requires and nothing more:
   `legalName`, `dateOfBirth`, `idType`, `idNumber` (raw, for the mask and the
   peppered digest, never stored), `documentExpiresAt`, `findings`, and the
   provider's decision. A document type outside `KYC_ID_TYPES` **declines** the
   check with that reason rather than sticking it in `submitted` for ever.
+- **Four decisions, not three** — `pending`, `submitted`, `approved`,
+  `declined`. `submitted` is the collector-finished, nobody-judged window, and
+  it is a decision of its own because the two states it sits between poll at
+  different rates and read differently on a case screen: without it a check the
+  collector had finished still said they were in the ceremony.
 - `KYC_METHODS` gains `hosted_capture`. `method` is `NOT NULL` and neither
   `in_person` nor `document_upload` is true of a provider-hosted ceremony, so
   the settle has no value to write without it.
@@ -423,7 +436,7 @@ Storage rules:
 | `submitted_at` | `timestamptz(3)` | yes | `NULL` | |
 | `decided_at` | `timestamptz(3)` | yes | `NULL` | |
 | `expires_at` | `timestamptz(3)` | no | — | The **earlier** of the invitation's own deadline and, once started, the started-check window — a started check never outlives its invitation. |
-| `settle_due_at` | `timestamptz(3)` | no | `now()` | When the work list next picks it up. Also the claim lease. |
+| `settle_due_at` | `timestamptz(3)` | no | `now()` | When the work list next picks it up. Also the claim lease. The interval follows the state — an hour `invited`, five minutes `started`, a minute `submitted` — so an idle invitation costs one read a day and a check the provider is judging is read at the rate somebody is waiting at. |
 | `settle_attempts` | `integer` | no | `0` | The backoff's counter, and the ceiling that reports to an operator. |
 
 No `user_id`. The vault holds who the case is about and passes it at settle
@@ -442,7 +455,7 @@ the vault's copy, and nothing in the specs reads a person's check history.
 | Index | `(redaction_queued_at) WHERE redaction_state = 'owed'` | The redaction drain, oldest due first. |
 | Check | `state IN ('invited','started','submitted','stalled','approved','declined','expired','withdrawn')` | The closed vocabulary. |
 | Check | `(state IN ('approved','declined')) = (decided_at IS NOT NULL)` | A decision and its instant are one fact. |
-| Check | `verification_id IS NULL OR state = 'approved'` | Only an approved check made a record. |
+| Check | `verification_id IS NULL OR state IN ('submitted','stalled','approved')` | Only a check that reached the provider made a record. The settle stages the id while the check is still `submitted` — the state moves later, in `finishCheck`, once the vault has judged it — so a constraint naming `approved` alone would refuse the settle's own write. |
 | Check | `state = 'approved' OR provider_ref IS NOT NULL OR state IN ('invited','expired','withdrawn')` | A check the provider decided has the provider's reference. |
 | Check | `started_at IS NULL OR state <> 'invited'` | A started check is not still invited. |
 | Check | `submitted_at IS NULL OR state NOT IN ('invited','started')` | A submitted check has left the collector. |
@@ -545,6 +558,9 @@ pretending to be `staff`.
 
 ### `raiseCheck`
 
+- **`returnUrl` travels on the input**, not in the identity store's own
+  configuration: where a collector lands after the ceremony is the calling
+  product's fact, and the store serves finance as well as the vault.
 - **Reads** — the live check for `(product, case_ref)`.
 - **Writes** — one insert; then one update carrying the provider reference.
 - **Transaction** — the insert alone. The provider call is outside it.
