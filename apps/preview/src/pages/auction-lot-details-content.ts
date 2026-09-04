@@ -82,7 +82,7 @@ export const AUCTION_LOT = {
   saleName: "September Slabs",
   category: "Pokémon",
   description:
-    "Bandai Carddass checklist and starters slab from the Pocket Monsters set.",
+    "Bandai Carddass checklist and starters slab from the Pocket Monsters set. Printed in 1997 for the early Bandai Carddass series, this PSA 10 example covers the starter trio and checklist art collectors look for when building a first-wave Japanese set. Surfaces stay sharp under the slab; corners and edges grade clean. A strong reference piece for Carddass-era Pokémon in top grade.",
   images: [
     {
       src: IMAGE,
@@ -98,14 +98,13 @@ export const AUCTION_LOT = {
 };
 
 export const AUCTION_LOT_BADGES: readonly ListingLotMetaBadge[] = [
-  { label: `Listing ${AUCTION_LOT.listingNumber}` },
   { label: AUCTION_LOT.category },
-  { label: AUCTION_LOT.saleName },
+  { label: "Bandai Starters" },
 ];
 
 export const AUCTION_LOT_FACTS = [
   { label: "Year", value: "1997" },
-  { label: "Set", value: "POCKET MONSTERS CARDDASS" },
+  { label: "Set", value: "Pocket Monsters Carddass" },
   { label: "Grade", value: "PSA 10" },
   { label: "Cert number", value: "95109007" },
 ] as const;
@@ -168,6 +167,7 @@ export const AUCTION_LOT_DETAILS_COPY = {
     vaultShipping: "Vault shipping",
     result: "Result",
     showMore: "Show more",
+    showLess: "Show less",
   },
   vaultShippingBody:
     "Stored in Grade10 Vault. Ships from our facility within 1 business day of payment.",

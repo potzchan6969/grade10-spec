@@ -39,7 +39,7 @@ import {
 const LIVE_BID_INTERVAL_MS = 8_000;
 
 const AUCTION_LOT_MARKET_COMPS = {
-  title: "Marketplace price range",
+  title: "Market price",
   range: "HK$46,800–HK$171,600",
 };
 
@@ -157,7 +157,7 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
           history={history}
           historyResetKey={state}
           locale={FIXTURE_SHIPPED_LOCALE}
-          marketComps={AUCTION_LOT_MARKET_COMPS}
+          marketComps={view.closed ? undefined : AUCTION_LOT_MARKET_COMPS}
           onCommitMaximum={requestBidAction}
           onPlaceBid={requestBidAction}
           onViewOrderDetails={() => navigateToStory(ORDER_DETAILS_STORY_ID)}
