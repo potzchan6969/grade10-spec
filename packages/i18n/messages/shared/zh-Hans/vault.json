@@ -3,7 +3,7 @@
   "intro": "把贵重物品交给我们保管，可以借贷，也可以只作保管。每件物品都在门店估值，并签妥文件后才存入。",
   "status": {
     "draft": "尚未送出",
-    "submitted": "已交到我们手上",
+    "submitted": "已送出",
     "under_valuation": "估值中",
     "offer_made": "报价等你回复",
     "accepted": "条款已议定",
@@ -103,7 +103,7 @@
     "asking": "申请 {amount}。",
     "continue": "继续",
     "photoLimitReached": "这宗申请的照片已达上限。",
-    "invalidContentType": "只接受照片：JPEG、PNG、WebP 或 AVIF。",
+    "invalidContentType": "只接受照片：JPEG、PNG 或 WebP。",
     "emptyBody": "这个文件是空的。",
     "tooLarge": "这张照片太大了。",
     "photoFailed": "无法附上这张照片（{reason}）。",

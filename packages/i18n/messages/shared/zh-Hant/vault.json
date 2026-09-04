@@ -3,7 +3,7 @@
   "intro": "把貴重物品交給我們保管，可借貸，也可以只作保管。每件物品都在門市估值，並簽妥文件後才存入。",
   "status": {
     "draft": "尚未送出",
-    "submitted": "已交到我們手上",
+    "submitted": "已送出",
     "under_valuation": "估值中",
     "offer_made": "報價等你回覆",
     "accepted": "條款已議定",
@@ -14,7 +14,7 @@
     "released": "已交回給你",
     "declined": "已婉拒",
     "cancelled": "已取消",
-    "expired": "已逾期",
+    "expired": "已過期",
     "forfeited": "已沒收"
   },
   "category": {
@@ -30,7 +30,7 @@
     "signing": "簽署中",
     "completed": "已簽妥",
     "voided": "已作廢",
-    "expired": "已逾期"
+    "expired": "已過期"
   },
   "event": {
     "draft_opened": "已開立申請",
@@ -47,12 +47,12 @@
     "offer_made": "已提出報價",
     "offer_withdrawn": "已撤回報價",
     "offer_accepted": "已接受報價",
-    "offer_expired": "報價已逾期",
+    "offer_expired": "報價已過期",
     "terms_accepted": "已議定條款",
     "case_declined": "申請已婉拒",
     "documents_prepared": "文件已準備好",
     "signing_token_minted": "已發出簽署連結",
-    "signing_expired": "簽署連結已逾期",
+    "signing_expired": "簽署連結已過期",
     "vaulted": "物品已存入金庫",
     "release_requested": "已要求取回",
     "payout_recorded": "已記錄放款",
@@ -61,7 +61,7 @@
     "released": "物品已交回",
     "forfeited": "物品已沒收",
     "cancelled": "個案已取消",
-    "expired": "個案已逾期",
+    "expired": "個案已過期",
     "erased": "個人資料已刪除"
   },
   "list": {
@@ -103,7 +103,7 @@
     "asking": "申請 {amount}。",
     "continue": "繼續",
     "photoLimitReached": "這宗申請的相片已達上限。",
-    "invalidContentType": "只接受相片：JPEG、PNG、WebP 或 AVIF。",
+    "invalidContentType": "只接受相片：JPEG、PNG 或 WebP。",
     "emptyBody": "這個檔案是空的。",
     "tooLarge": "這張相片太大了。",
     "photoFailed": "無法附上這張相片（{reason}）。",

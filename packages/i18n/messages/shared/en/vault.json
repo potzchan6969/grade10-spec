@@ -3,7 +3,7 @@
   "intro": "Leave something valuable with us, with or without a loan against it. Every item is valued in the shop and signed for before it goes in.",
   "status": {
     "draft": "Not sent yet",
-    "submitted": "With us",
+    "submitted": "Request sent",
     "under_valuation": "Being valued",
     "offer_made": "Offer waiting for you",
     "accepted": "Terms agreed",
@@ -103,7 +103,7 @@
     "asking": "Asking for {amount}.",
     "continue": "Continue",
     "photoLimitReached": "This request already has as many photographs as we take.",
-    "invalidContentType": "Photographs only — JPEG, PNG, WebP or AVIF.",
+    "invalidContentType": "Photographs only — JPEG, PNG or WebP.",
     "emptyBody": "That file was empty.",
     "tooLarge": "That photograph is too large.",
     "photoFailed": "We could not attach that photograph ({reason}).",

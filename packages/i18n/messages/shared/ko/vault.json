@@ -3,7 +3,7 @@
   "intro": "귀중품을 맡겨 주세요. 대출을 받을 수도, 보관만 맡길 수도 있습니다. 모든 물품은 매장에서 감정하고 서류에 서명한 뒤에 보관됩니다.",
   "status": {
     "draft": "아직 보내지 않음",
-    "submitted": "접수됨",
+    "submitted": "요청 보냄",
     "under_valuation": "감정 중",
     "offer_made": "제안 확인 필요",
     "accepted": "조건 합의됨",
@@ -103,7 +103,7 @@
     "asking": "{amount} 신청 중입니다.",
     "continue": "계속",
     "photoLimitReached": "이 신청서의 사진이 이미 최대 개수입니다.",
-    "invalidContentType": "사진만 가능합니다: JPEG, PNG, WebP 또는 AVIF.",
+    "invalidContentType": "사진만 가능합니다: JPEG, PNG 또는 WebP.",
     "emptyBody": "빈 파일입니다.",
     "tooLarge": "사진 용량이 너무 큽니다.",
     "photoFailed": "사진을 첨부하지 못했습니다({reason}).",
