@@ -106,7 +106,9 @@ function importNames(clause) {
     return null;
   }
   return new Set(
-    clause.namedBindings?.elements.map((element) => element.name.text) ?? [],
+    clause.namedBindings?.elements.map(
+      (element) => (element.propertyName ?? element.name).text,
+    ) ?? [],
   );
 }
 
@@ -150,7 +152,9 @@ function moduleReferences(source, requested) {
     }
     if (ts.isExportDeclaration(statement) && statement.moduleSpecifier) {
       if (ts.isStringLiteral(statement.moduleSpecifier)) {
-        const names = exportNames(statement, requested);
+        const names = statement.exportClause
+          ? exportNames(statement, requested)
+          : requested;
         if (names === null || names.size) {
           references.push({ names, specifier: statement.moduleSpecifier.text });
         }
@@ -198,18 +202,96 @@ async function workbenchStories(root) {
 async function dependencies(root, entry) {
   const found = new Set();
   const visited = new Set();
+  const sources = new Map();
+  const exports = new Map();
+
+  async function readSource(path) {
+    if (!sources.has(path)) {
+      sources.set(
+        path,
+        ts.createSourceFile(
+          path,
+          await readFile(path, "utf8"),
+          ts.ScriptTarget.Latest,
+          true,
+        ),
+      );
+    }
+    return sources.get(path);
+  }
+
+  async function exportedNames(path, ancestors = new Set()) {
+    if (ancestors.has(path)) return new Set();
+    if (exports.has(path)) return exports.get(path);
+
+    const pending = (async () => {
+      const source = await readSource(path);
+      const names = new Set();
+      const nextAncestors = new Set(ancestors).add(path);
+
+      for (const statement of source.statements) {
+        if (ts.isExportDeclaration(statement)) {
+          if (statement.exportClause) {
+            for (const element of statement.exportClause.elements) {
+              names.add(element.name.text);
+            }
+          } else if (statement.moduleSpecifier) {
+            const specifier = statement.moduleSpecifier;
+            if (ts.isStringLiteral(specifier)) {
+              const target = await resolveImport(root, path, specifier.text);
+              if (target) {
+                for (const name of await exportedNames(target, nextAncestors))
+                  names.add(name);
+              }
+            }
+          }
+          continue;
+        }
+
+        const modifiers = ts.canHaveModifiers(statement)
+          ? ts.getModifiers(statement)
+          : undefined;
+        if (
+          modifiers?.some(
+            (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword,
+          )
+        ) {
+          if (
+            modifiers.some(
+              (modifier) => modifier.kind === ts.SyntaxKind.DefaultKeyword,
+            )
+          ) {
+            names.add("default");
+          }
+          if ("name" in statement && statement.name?.text) {
+            names.add(statement.name.text);
+          }
+          if (ts.isVariableStatement(statement)) {
+            for (const declaration of statement.declarationList.declarations) {
+              if (ts.isIdentifier(declaration.name))
+                names.add(declaration.name.text);
+            }
+          }
+        }
+      }
+      return names;
+    })();
+    exports.set(path, pending);
+    return pending;
+  }
 
   async function visit(path, requested) {
     const key = `${path}\0${requested ? [...requested].sort().join(",") : "*"}`;
     if (visited.has(key)) return;
     visited.add(key);
 
-    const source = ts.createSourceFile(
-      path,
-      await readFile(path, "utf8"),
-      ts.ScriptTarget.Latest,
-      true,
-    );
+    const source = await readSource(path);
+    if (
+      requested &&
+      ![...(await exportedNames(path))].some((name) => requested.has(name))
+    ) {
+      return;
+    }
     if (!isBarrel(source)) found.add(repositoryPath(root, path));
     for (const reference of moduleReferences(source, requested)) {
       const target = await resolveImport(root, path, reference.specifier);
@@ -258,17 +340,17 @@ function textBlocks(lines) {
   return blocks;
 }
 
-function storyItem(story, storybookUrl) {
+function storyGroupItem(story, count, storybookUrl) {
   const [root = "Stories", ...path] = story.title.split("/");
-  const segments = [...path, story.name].filter(Boolean);
-  const last = segments.pop() ?? "";
+  const label = path.length ? path.join(" > ") : root;
   const linked = story.id
-    ? `<${storybookUrl}/?path=/story/${story.id}|${last}>`
-    : last;
-  const item = [...segments, linked].join(" > ");
+    ? `<${storybookUrl}/?path=/story/${story.id}|${label}>`
+    : label;
+  const status = story.status ? ` ${story.status}` : "";
   return {
-    item: `${item}${story.status ? ` ${story.status}` : ""}`,
+    item: `${linked} — ${count} ${count === 1 ? "story" : "stories"}${status}`,
     root,
+    sortKey: label,
   };
 }
 
@@ -309,17 +391,31 @@ export function slackPayload({
   const states = [...stories, ...removedStories];
   if (!states.length) return { blocks: [] };
 
-  const groups = new Map();
+  const files = new Map();
   for (const story of states) {
-    const { item, root } = storyItem(story, storybookUrl);
-    groups.set(root, [...(groups.get(root) ?? []), item]);
+    const key = story.importPath ?? `removed:${story.title}`;
+    const file = files.get(key) ?? { stories: [] };
+    file.stories.push(story);
+    files.set(key, file);
+  }
+  const groups = new Map();
+  for (const file of files.values()) {
+    const first = file.stories[0];
+    const { item, root, sortKey } = storyGroupItem(
+      first,
+      file.stories.length,
+      storybookUrl,
+    );
+    groups.set(root, [...(groups.get(root) ?? []), { item, sortKey }]);
   }
   const nested = `${"\u00a0".repeat(4)}- `;
   const links = [...groups]
     .sort(([left], [right]) => left.localeCompare(right))
     .flatMap(([root, items]) => [
       `- ${root}`,
-      ...items.sort().map((item) => `${nested}${item}`),
+      ...items
+        .sort((left, right) => left.sortKey.localeCompare(right.sortKey))
+        .map(({ item }) => `${nested}${item}`),
     ]);
   const merged = mergedLine({
     commitSha,

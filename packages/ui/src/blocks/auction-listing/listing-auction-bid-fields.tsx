@@ -18,11 +18,11 @@ import {
   type ShippedLocale,
 } from "../../lib/format-datetime";
 import { formatMoney } from "../../lib/format-money";
-import { ListingCountdownDisplay } from "./listing-countdown-display";
 import {
   elapsedDurationParts,
   formatAccessibleText,
 } from "./listing-countdown-digit";
+import { ListingCountdownDisplay } from "./listing-countdown-display";
 import {
   ListingQuickMaximumBidActions,
   type ListingQuickMaximumBidActionsCopy,
@@ -219,10 +219,7 @@ function StandingStatusBadge({
     );
   }
 
-  if (
-    view.standing === "won-payment-due" ||
-    view.standing === "won-settled"
-  ) {
+  if (view.standing === "won-payment-due" || view.standing === "won-settled") {
     return <Badge variant="success">{copy.auctionWon}</Badge>;
   }
 

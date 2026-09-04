@@ -12,6 +12,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+function getStandingText(
+  canvas: ReturnType<typeof within>,
+  standing: "Leading" | "Outbid",
+) {
+  return canvas.getByText(
+    (text: string) => text === standing || text.startsWith(`${standing} ·`),
+  );
+}
+
 export const Countdown: Story = {
   render: () => <BidPanelCountdownDemo />,
   play: async ({ canvasElement }) => {
@@ -78,19 +87,19 @@ export const Bidding: Story = {
     expect(canvas.getByText("2 bids")).toBeVisible();
 
     await userEvent.click(next);
-    expect(canvas.getByText(/Leading/)).toBeVisible();
+    expect(getStandingText(canvas, "Leading")).toBeVisible();
     expect(canvas.getAllByText(/HK\$53,000/).length).toBeGreaterThan(0);
     expect(canvas.getByText("You")).toBeVisible();
 
     await userEvent.click(next);
-    expect(canvas.getByText(/Outbid/)).toBeVisible();
+    expect(getStandingText(canvas, "Outbid")).toBeVisible();
     expect(canvas.getAllByText(/HK\$55,500/).length).toBeGreaterThan(0);
 
     await userEvent.click(next);
-    expect(canvas.getByText(/Leading/)).toBeVisible();
+    expect(getStandingText(canvas, "Leading")).toBeVisible();
 
     await userEvent.click(next);
-    expect(canvas.getByText(/Outbid/)).toBeVisible();
+    expect(getStandingText(canvas, "Outbid")).toBeVisible();
     expect(canvas.getAllByText(/HK\$60,500/).length).toBeGreaterThan(0);
     expect(canvas.getByText("6 bids")).toBeVisible();
 
@@ -101,16 +110,16 @@ export const Bidding: Story = {
 
     await userEvent.click(next);
     expect(canvas.getByText("Leading with a maximum")).toBeVisible();
-    expect(canvas.getByText(/Leading/)).toBeVisible();
+    expect(getStandingText(canvas, "Leading")).toBeVisible();
     expect(canvas.getByText(/Raise your private maximum/)).toBeVisible();
 
     await userEvent.click(next);
     expect(canvas.getByText("Maximum overtaken")).toBeVisible();
-    expect(canvas.getByText(/Outbid/)).toBeVisible();
+    expect(getStandingText(canvas, "Outbid")).toBeVisible();
 
     await userEvent.click(next);
     expect(canvas.getByText("Maximum accepted · not leading")).toBeVisible();
-    expect(canvas.getByText(/Outbid/)).toBeVisible();
+    expect(getStandingText(canvas, "Outbid")).toBeVisible();
 
     await userEvent.click(canvas.getByRole("tab", { name: "Expanded" }));
     expect(

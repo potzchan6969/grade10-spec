@@ -282,8 +282,7 @@ function ListingQuickMaximumBidActions({
     onCommitMaximum(commitValidation.amountMinor);
   }
 
-  const customInvalid =
-    customActive && (customMinor == null || maximumInvalid);
+  const customInvalid = customActive && (customMinor == null || maximumInvalid);
   const helperMessage = !customActive ? undefined : customMinor == null ? (
     copy.invalidAmount
   ) : maximumInvalid ? (

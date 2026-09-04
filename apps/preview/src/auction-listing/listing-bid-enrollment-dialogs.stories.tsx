@@ -70,9 +70,7 @@ SetupModalFromChange.play = async () => {
       name: "I confirm I am 18 years of age or older.",
     }),
   ).toBeChecked();
-  expect(
-    within(dialog).getByRole("button", { name: "Confirm" }),
-  ).toBeEnabled();
+  expect(within(dialog).getByRole("button", { name: "Confirm" })).toBeEnabled();
 };
 
 export const PaymentAuthorizationPending: Story = {
