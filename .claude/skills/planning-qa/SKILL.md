@@ -9,6 +9,7 @@ One of the seven artifacts in `grade10-planning` is yours:
 
 | Artifact | What it holds |
 | --- | --- |
+| `specs/<product>/<domain>/domain-tcs.md` | The paths a person walks across that domain's capabilities |
 | `specs/<capability>/test-cases.md` | The classified suite the journeys and scenarios imply |
 
 Optional, and derived: a capability with no `user-journeys.md` has nothing to
@@ -26,9 +27,23 @@ nothing that contradicts it.
 Two skills do the work, and they are the whole workflow:
 
 ```text
-/spec-to-tcs <capability-or-change>    derive or restyle the drafts
-/tcs-review  [<capability-or-change>]  walk them with a human, record verdicts
+/spec-to-tcs [feature|domain] <target>   derive or restyle the drafts
+/tcs-review  [<capability-or-change>]    walk them with a human, record verdicts
 ```
+
+**Domain before feature, both times.** Deriving, the domain file names the
+paths and the feature suites then cover what those paths do not reach — the
+refusals, the empty states — rather than re-testing the path from each
+capability's side; a trim made before the domain file exists is a guess.
+Reviewing, the same order: `domain-tcs.md` first, so a feature suite is trimmed
+against something approved, and so the domain's approved cases are the
+house-style evidence the feature reviews inherit.
+
+A domain run reads more than the change: every sibling capability's
+`user-journeys.md` under `openspec/specs/<product>/<domain>/`, and the
+domain's product record under `docs/prds/products/<product>/<domain>/` — the
+decisions, the product's own names for surfaces and controls, and the seeded
+values a pass is written against.
 
 `/spec-to-tcs` learns this store's conventions from every `actual` case in the
 corpus before it writes, so a hand-written suite is both more work and less
