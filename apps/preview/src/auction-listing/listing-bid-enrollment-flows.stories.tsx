@@ -25,7 +25,7 @@ export const Countdown: Story = {
     expect(canvas.getByText("Time left")).toBeVisible();
     expect(canvas.getByText("Recent Bids")).toBeVisible();
     expect(
-      canvas.queryByRole("button", { name: /^Place Bid/ }),
+      canvas.queryByRole("button", { name: /^Set Maximum/ }),
     ).not.toBeInTheDocument();
 
     await userEvent.click(next);
@@ -68,7 +68,7 @@ export const Bidding: Story = {
     expect(canvas.queryByText("Highest bid")).not.toBeInTheDocument();
     expect(canvas.queryByText("Outbid")).not.toBeInTheDocument();
 
-    await userEvent.click(canvas.getByRole("button", { name: /^Place Bid/ }));
+    await userEvent.click(canvas.getByRole("button", { name: /^Set Maximum/ }));
 
     await userEvent.click(next);
     expect(canvas.getAllByText(/HK\$1,200/).length).toBeGreaterThan(0);
@@ -115,7 +115,7 @@ export const Bidding: Story = {
     await userEvent.click(canvas.getByRole("tab", { name: "Expanded" }));
     expect(
       canvas.getAllByRole("button", {
-        name: /^(Place Bid|Raise maximum)/,
+        name: /^(Bid Now|Set Maximum|Raise Maximum)/,
       }),
     ).toHaveLength(BIDDING_CASES.length);
   },

@@ -55,7 +55,7 @@ the preview. The full lot page is
 | Need a card | [Need Card](?path=/story/auction-listing-bid-panel--need-card) | Empty linked-card slot. Quick-maximum presets are visible; linking is the next step. |
 | Linked card, editable | [Linked Card Editable](?path=/story/auction-listing-bid-panel--linked-card-editable) | Masked card with Change, before the first bid on this lot. |
 | Linked card, locked | [Linked Card](?path=/story/auction-listing-bid-panel--linked-card) | Masked card without Change, after the first bid. |
-| Ready | [Ready](?path=/story/auction-listing-bid-panel--ready) | Enrollment complete. Quick-maximum presets, Place Bid, and always-on maximum mechanism subtext. |
+| Ready | [Ready](?path=/story/auction-listing-bid-panel--ready) | Enrollment complete. Quick-maximum presets, Set Maximum, and always-on maximum mechanism subtext. |
 | Payment authorization | [Payment Authorization](?path=/story/auction-listing-bid-panel--payment-authorization) | Committing a maximum opens the authorize-your-bid dialog. |
 
 ## Dialogs
@@ -142,7 +142,7 @@ around it.
       control: "select",
       options: ["signed-out", "ready"],
       description:
-        "How far the collector has progressed through bid enrollment. signed-out replaces Place Bid with Sign In to Bid and hides standing.",
+        "How far the collector has progressed through bid enrollment. signed-out replaces Set Maximum with Sign In to Bid and hides standing.",
     },
     onPlaceBid: {
       control: false,
@@ -250,7 +250,7 @@ SignedOut.play = async ({ canvasElement }) => {
   expect(canvas.queryByText("Highest bid")).not.toBeInTheDocument();
   expect(canvas.queryByText("Outbid")).not.toBeInTheDocument();
   expect(
-    canvas.queryByRole("button", { name: /^Place Bid/ }),
+    canvas.queryByRole("button", { name: /^Set Maximum/ }),
   ).not.toBeInTheDocument();
 };
 
@@ -268,7 +268,7 @@ NeedCard.play = async ({ canvasElement }) => {
   expect(
     canvas.queryByRole("button", { name: "Sign In to Bid" }),
   ).not.toBeInTheDocument();
-  await userEvent.click(canvas.getByRole("button", { name: /^Place Bid/ }));
+  await userEvent.click(canvas.getByRole("button", { name: /^Set Maximum/ }));
   await waitFor(() => {
     expect(
       within(document.body).getByRole("dialog", {
@@ -339,7 +339,7 @@ export const PaymentAuthorization: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Min. bid")).toBeVisible();
-    await userEvent.click(canvas.getByRole("button", { name: /^Place Bid/ }));
+    await userEvent.click(canvas.getByRole("button", { name: /^Set Maximum/ }));
     expect(
       within(document.body).getByRole("dialog", {
         name: "Authorize your bid",

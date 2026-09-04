@@ -25,8 +25,8 @@ const COPY = {
   outbid: "Outbid",
   highestBid: "Highest bid",
   yourMaximum: "Your maximum",
-  setMaximumLabel: "Set maximum",
-  setMaximumCurrentLabel: "Set maximum (current: {amount})",
+  setMaximumLabel: "Set Maximum",
+  setMaximumCurrentLabel: "Set Maximum (current: {amount})",
   opensIn: "Opens in",
   closed: "Closed",
   timeLeft: "Time left",
@@ -48,17 +48,18 @@ const COPY = {
     "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
   setPrivateMaximum: "Set your private maximum",
   raisePrivateMaximum: "Raise your private maximum (current: {amount})",
-  reviewMaximum: "Place Bid · {amount}",
-  raiseMaximumReview: "Raise maximum · {amount}",
+  reviewMaximum: "Set Maximum · {amount}",
+  raiseMaximumReview: "Raise Maximum · {amount}",
+  bidNowReview: "Bid Now · {amount}",
   privateMaximumTooltip:
-    "Your maximum is the most you are willing to pay before buyer fees. We place the lowest bid needed to keep you in the lead. Other bidders cannot see your maximum.",
+    "Your maximum is the most you are willing to pay before buyer fees. Other bidders cannot see it. We only bid as needed to keep you leading.",
   maximumMechanismSubtext:
     "We bid only as needed up to your maximum. Hold matches it; you can raise, not lower or cancel.",
   customAmountPlaceholder: "Custom amount (min. {amount})",
   stepperMessage: "Min.: {amount}",
   useMinimum: "Use minimum",
-  bidImmediate: "Bid {amount}",
-  bidUpTo: "Bid up to {amount}",
+  bidImmediate: "Maximum {amount}",
+  bidUpTo: "Maximum {amount}",
   nextEligibleBid: "Min. bid",
   amountAboveCurrent: "{amount} vs current",
   minimumMaximumFloor: "At least {amount} (current bid + {increment})",
@@ -162,7 +163,7 @@ const meta = {
       control: "select",
       options: ["signed-out", "ready"],
       description:
-        "signed-out replaces Place Bid with Sign In to Bid and hides standing.",
+        "signed-out replaces Set Maximum with Sign In to Bid and hides standing.",
     },
     onPlaceBid: {
       control: false,
@@ -172,7 +173,7 @@ const meta = {
     onCommitMaximum: {
       control: false,
       description:
-        "Fires when Place Bid / Raise maximum commits the selected preset or custom amount. The consumer validates the maximum, takes the hold, and writes the cap.",
+        "Fires when Bid Now / Set Maximum / Raise Maximum commits the selected preset or custom amount. The consumer validates the maximum, takes the hold, and writes the cap.",
     },
   },
   decorators: [
@@ -197,10 +198,10 @@ export const Default: Story = {
       canvas.getByPlaceholderText(/Custom amount \(min\./),
     ).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: /^Place Bid ·/ }),
+      canvas.getByRole("button", { name: /^Set Maximum ·/ }),
     ).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: /^Bid /, pressed: true }),
+      canvas.getByRole("button", { name: /^Maximum /, pressed: true }),
     ).toBeInTheDocument();
     expect(canvas.getByText("Recent Bids")).toBeInTheDocument();
   },
@@ -251,7 +252,7 @@ export const Leading: Story = {
       canvas.getByText(/Raise your private maximum \(current: HK\$8,000\)/),
     ).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: /^Raise maximum ·/ }),
+      canvas.getByRole("button", { name: /^Raise Maximum ·/ }),
     ).toBeInTheDocument();
     expect(canvas.getAllByText(/vs current/)).toHaveLength(2);
   },
