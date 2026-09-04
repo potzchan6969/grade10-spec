@@ -7,8 +7,7 @@ export const LISTING_BID_ENROLLMENT_DEMO_COPY = {
   linkCardDescription:
     "Link a card to bid on this lot. You are only charged if you win this lot.",
   ageAttestation: "I confirm I am 18 years of age or older.",
-  continue: "Continue",
-  staleFloorNotice: "The minimum bid is now {amount}.",
+  continue: "Confirm",
   iframePlaceholder: "Stripe card link (iframe)",
   iframeLinkedCardPlaceholder:
     "Stripe card form (iframe) — linked card on file",
