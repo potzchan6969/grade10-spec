@@ -18,7 +18,7 @@ Task 2.5 depends on the contracts in group 1; it uses fixtures rather than a run
 - [x] 2.5 Make `A checkout URL is safe to follow`, `A permanent order URL requires its account`, and `An account lists its orders` pass in the Grade10 storefront against Store contracts and fixtures, composing the filled, section-omitted, empty, and tracking states in `ui-design.md`.
 - [x] 2.6 Verify every catalogue, identity, checkout, and order-access scenario in this group through the Store backend and storefront feature lanes.
 
-## 3. Payment and shipping projection (grade10)
+## 3. Payment and shipping projection (grade10) (owner: @kinisworking)
 
 - [ ] 3.1 Make `A paid order reports payment separately from shipping`, `A partially fulfilled order shows every shipment`, and `Only carrier confirmation reports delivery` pass in the Store order projection.
 - [ ] 3.2 Make `An invalid webhook changes nothing` and `A duplicate webhook is harmless` pass by verifying the raw-body HMAC and deduplicating accepted events.
