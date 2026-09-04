@@ -30,7 +30,7 @@ Task 2.5 depends on the contracts in group 1; it uses fixtures rather than a run
 
 - [ ] 4.1 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run build` after the relevant Shopify, Store backend, storefront, and admin feature lanes pass.
 - [ ] 4.2 Verify every scenario in this change, run `openspec validate add-grade10-shopify-store`, and run `openspec validate --specs`.
-- [ ] 4.3 Review Shopify app scopes, webhook subscriptions, secret provisioning, cache invalidation, logging/redaction, and the Continue shopping return before staging deployment.
+- [x] 4.3 Review Shopify app scopes, webhook subscriptions, secret provisioning, cache invalidation, logging/redaction, and the Continue shopping return before staging deployment.
 - [ ] 4.4 Record the staging rollout evidence needed by the documentation and archive handoff without checking off implementation tasks before the relevant code is deployed.
 - [ ] 4.5 After rollout is confirmed, fold the accepted delta into `openspec/specs/grade10-store/`, update the Grade10 foundation PRD if its recorded decision changed, and archive this change.
 
