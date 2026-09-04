@@ -7,7 +7,12 @@
     "qrAlt": "你的會員碼，可供掃描的方格",
     "refresh": "換一組新碼",
     "secondsUnit": "秒",
-    "used": "此碼已被使用"
+    "used": "此碼已被使用",
+    "walletAdd": "加入",
+    "walletEnd": "停用此卡",
+    "walletHeading": "把會員卡放進手機",
+    "walletHeld": "你已在以下錢包持有會員卡：",
+    "walletName": "Google 錢包"
   },
   "page": {
     "title": "會員",
