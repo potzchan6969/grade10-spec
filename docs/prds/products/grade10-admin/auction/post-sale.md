@@ -42,3 +42,18 @@ one order — a delivery address recorded when obtained offline, started when
 the card leaves Grade10, completed when the winner has it — and recording it
 never rewrites who won or how they paid. The winner reads the same facts from
 their own side on [My Auctions](/p/grade10-site/auction/account-record).
+
+::journeys{id="grade10-admin/auction/post-sale"}
+
+:::detail{title="Product decisions" for="pm"}
+The queue is the operator's close-out surface: payment and shipment are
+separate jobs, while one listing detail keeps the winner contact, money,
+delivery state, and operational trail together.
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Payment source | Decided | The queue distinguishes Paid via Stripe from Paid via Manual, and a wire request releases the card hold before collection. | Product and Finance |
+| Shipment authority | Decided | Payment and shipment use separate grants; staff may ship, finance may collect, and publishing remains catalogue work. | Operations |
+| Shipping model | Decided | Grade10 records an offline formatted address and two manual milestones; carrier integration and tracking remain follow-on work. | Operations |
+| Operational history | Decided | Status changes and comments share one immutable listing trail, separate from the compliance audit chain. | Product and Engineering |
+:::
