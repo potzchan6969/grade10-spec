@@ -53,12 +53,23 @@ export const BIDDING_STATE_LABELS: Record<BiddingState, string> = {
 /** Numeric lot facts shared by bid-card fixtures and preview page content. */
 export const BID_FIXTURE_LOT = {
   currency: DEFAULT_LISTING_CURRENCY,
-  startingBidMinor: 120_000,
-  currentBidMinor: 480_000,
-  incrementMinor: 25_000,
+  /** Near the low end of the lot's historical comps. */
+  startingBidMinor: 4_800_000,
+  /** Live mid-ladder current bid (a few increments above start). */
+  currentBidMinor: 5_800_000,
+  /** Step sized for a mid–six-figure HKD lot. */
+  incrementMinor: 250_000,
   bidCount: 6,
-  viewerMaximumMinor: 800_000,
+  /** Private maximum below the high comps band while still leading. */
+  viewerMaximumMinor: 9_500_000,
 } as const;
+
+/** Live-auto-outbid: market above the viewer's maximum. */
+const OUTBID_CURRENT_MINOR =
+  BID_FIXTURE_LOT.viewerMaximumMinor + BID_FIXTURE_LOT.incrementMinor;
+
+/** Closed hammer for sold / won / lost fixtures. */
+const CLOSED_SOLD_MINOR = 7_250_000;
 
 const FIXTURE_LOCALE = "en-HK";
 
@@ -78,22 +89,24 @@ function msAgo(minutes: number, nowMs = Date.now()): number {
 
 const BID_HISTORY: ListingBidHistoryRow[] = [
   {
-    id: "bid-john-480",
+    id: "bid-john-5800",
     initials: VIEWER_INITIALS,
-    amountMinor: 480_000,
+    amountMinor: BID_FIXTURE_LOT.currentBidMinor,
     acceptedAtMs: msAgo(2),
     isViewer: true,
   },
   {
-    id: "bid-mike-455",
+    id: "bid-mike-5550",
     initials: "mike@example.com",
-    amountMinor: 455_000,
+    amountMinor:
+      BID_FIXTURE_LOT.currentBidMinor - BID_FIXTURE_LOT.incrementMinor,
     acceptedAtMs: msAgo(6),
   },
   {
-    id: "bid-alex-430",
+    id: "bid-alex-5300",
     initials: "alex@example.com",
-    amountMinor: 430_000,
+    amountMinor:
+      BID_FIXTURE_LOT.currentBidMinor - BID_FIXTURE_LOT.incrementMinor * 2,
     acceptedAtMs: msAgo(12),
   },
 ];
@@ -111,7 +124,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   didNotWin: "Did not win",
   cardRelease: "Your card authorization will be released.",
   outbid: "Outbid",
-  highestBid: "Highest bid",
+  highestBid: "Leading",
   yourMaximum: "Your maximum",
   setMaximumLabel: "Set maximum",
   setMaximumCurrentLabel: "Set maximum (current: {amount})",
@@ -135,18 +148,20 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   autoBiddingTooltip:
     "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
   setPrivateMaximum: "Set your private maximum",
-  raisePrivateMaximum: "Raise your private maximum (current: {amount})",
-  reviewMaximum: "Place Bid · {amount}",
-  raiseMaximumReview: "Raise maximum · {amount}",
+  raisePrivateMaximum: "Raise your private maximum",
+  currentMaximum: "Current: {amount}",
+  reviewMaximum: "Set maximum to {amount}",
+  raiseMaximumReview: "Raise maximum to {amount}",
+  bidNowReview: "Bid now at {amount}",
   privateMaximumTooltip:
-    "Your maximum is the most you are willing to pay before buyer fees. We place the lowest bid needed to keep you in the lead. Other bidders cannot see your maximum.",
+    "Your maximum is the most you are willing to pay before buyer fees. Other bidders cannot see it. We only bid as needed to keep you leading.",
   maximumMechanismSubtext:
     "We bid only as needed up to your maximum. Hold matches it; you can raise, not lower or cancel.",
   customAmountPlaceholder: "Custom amount (min. {amount})",
   stepperMessage: "Min.: {amount}",
   useMinimum: "Use minimum",
-  bidImmediate: "Bid {amount}",
-  bidUpTo: "Bid up to {amount}",
+  bidImmediate: "Maximum {amount}",
+  bidUpTo: "Maximum {amount}",
   nextEligibleBid: "Min. bid",
   amountAboveCurrent: "{amount} vs current",
   minimumMaximumFloor: "At least {amount} (current bid + {increment})",
@@ -229,12 +244,12 @@ export function stateMeta(state: BiddingState) {
         : state === "live-no-bids"
           ? BID_FIXTURE_LOT.startingBidMinor
           : state === "live-auto-outbid"
-            ? 825_000
+            ? OUTBID_CURRENT_MINOR
             : state === "closed-sold" ||
                 state === "closed-won-payment-due" ||
                 state === "closed-won-settled" ||
                 state === "closed-lost"
-              ? 310_000
+              ? CLOSED_SOLD_MINOR
               : BID_FIXTURE_LOT.currentBidMinor,
     bidCount:
       state === "live-no-bids" || state === "closed-unsold"
@@ -244,7 +259,7 @@ export function stateMeta(state: BiddingState) {
       state === "closed-unsold"
         ? "Unsold"
         : closed && !state.includes("unsold")
-          ? `Sold · ${fixtureAmount(310_000)}`
+          ? `Sold · ${fixtureAmount(CLOSED_SOLD_MINOR)}`
           : undefined,
   };
 }
@@ -257,22 +272,23 @@ export function bidHistoryForState(
   if (state === "live-auto-outbid") {
     return [
       {
-        id: "bid-mike-825",
+        id: "bid-mike-outbid",
         initials: "mike@example.com",
-        amountMinor: 825_000,
+        amountMinor: OUTBID_CURRENT_MINOR,
         acceptedAtMs: msAgo(1),
       },
       {
-        id: "bid-john-800",
+        id: "bid-john-max",
         initials: "john@example.com",
-        amountMinor: 800_000,
+        amountMinor: BID_FIXTURE_LOT.viewerMaximumMinor,
         acceptedAtMs: msAgo(5),
         isViewer: true,
       },
       {
-        id: "bid-alex-775",
+        id: "bid-alex-prior",
         initials: "alex@example.com",
-        amountMinor: 775_000,
+        amountMinor:
+          BID_FIXTURE_LOT.viewerMaximumMinor - BID_FIXTURE_LOT.incrementMinor,
         acceptedAtMs: msAgo(10),
       },
     ];
@@ -281,16 +297,16 @@ export function bidHistoryForState(
   if (state.startsWith("closed")) {
     return [
       {
-        id: "bid-mike-310",
+        id: "bid-mike-sold",
         initials: "mike@example.com",
-        amountMinor: 310_000,
+        amountMinor: CLOSED_SOLD_MINOR,
         acceptedAtMs: msAgo(60),
         timeOverride: "Closed",
       },
       {
-        id: "bid-john-295",
+        id: "bid-john-closed",
         initials: "john@example.com",
-        amountMinor: 295_000,
+        amountMinor: CLOSED_SOLD_MINOR - BID_FIXTURE_LOT.incrementMinor,
         acceptedAtMs: msAgo(90),
         timeOverride: "Closed",
         isViewer: state === "closed-lost",
@@ -313,15 +329,17 @@ export function userBidHistoryForState(
     case "live-manual":
       return [
         {
-          id: "user-bid-manual-480",
-          amountLabel: fixtureAmount(480_000),
+          id: "user-bid-manual-current",
+          amountLabel: fixtureAmount(BID_FIXTURE_LOT.currentBidMinor),
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(2),
         },
         {
-          id: "user-bid-manual-455",
-          amountLabel: fixtureAmount(455_000),
+          id: "user-bid-manual-prior",
+          amountLabel: fixtureAmount(
+            BID_FIXTURE_LOT.currentBidMinor - BID_FIXTURE_LOT.incrementMinor,
+          ),
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(12),
@@ -330,15 +348,17 @@ export function userBidHistoryForState(
     case "live-auto-leading":
       return [
         {
-          id: "user-bid-auto-480",
-          amountLabel: fixtureAmount(480_000),
+          id: "user-bid-auto-current",
+          amountLabel: fixtureAmount(BID_FIXTURE_LOT.currentBidMinor),
           bidType: "auto",
           bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
           acceptedAtMs: msAgo(2),
         },
         {
-          id: "user-bid-manual-430",
-          amountLabel: fixtureAmount(430_000),
+          id: "user-bid-manual-prior",
+          amountLabel: fixtureAmount(
+            BID_FIXTURE_LOT.currentBidMinor - BID_FIXTURE_LOT.incrementMinor * 2,
+          ),
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(25),
@@ -347,15 +367,17 @@ export function userBidHistoryForState(
     case "live-auto-outbid":
       return [
         {
-          id: "user-bid-auto-800",
-          amountLabel: fixtureAmount(800_000),
+          id: "user-bid-auto-max",
+          amountLabel: fixtureAmount(BID_FIXTURE_LOT.viewerMaximumMinor),
           bidType: "auto",
           bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
           acceptedAtMs: msAgo(5),
         },
         {
-          id: "user-bid-manual-775",
-          amountLabel: fixtureAmount(775_000),
+          id: "user-bid-manual-prior",
+          amountLabel: fixtureAmount(
+            BID_FIXTURE_LOT.viewerMaximumMinor - BID_FIXTURE_LOT.incrementMinor,
+          ),
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(18),
@@ -365,16 +387,18 @@ export function userBidHistoryForState(
     case "closed-won-settled":
       return [
         {
-          id: "user-bid-won-310",
-          amountLabel: fixtureAmount(310_000),
+          id: "user-bid-won",
+          amountLabel: fixtureAmount(CLOSED_SOLD_MINOR),
           bidType: "auto",
           bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
           acceptedAtMs: msAgo(60),
           timeOverride: "Closed",
         },
         {
-          id: "user-bid-won-285",
-          amountLabel: fixtureAmount(285_000),
+          id: "user-bid-won-prior",
+          amountLabel: fixtureAmount(
+            CLOSED_SOLD_MINOR - BID_FIXTURE_LOT.incrementMinor,
+          ),
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(90),
@@ -384,8 +408,10 @@ export function userBidHistoryForState(
     case "closed-lost":
       return [
         {
-          id: "user-bid-lost-295",
-          amountLabel: fixtureAmount(295_000),
+          id: "user-bid-lost",
+          amountLabel: fixtureAmount(
+            CLOSED_SOLD_MINOR - BID_FIXTURE_LOT.incrementMinor,
+          ),
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(120),

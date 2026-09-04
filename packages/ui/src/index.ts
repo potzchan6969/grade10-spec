@@ -79,6 +79,7 @@ export {
   type ListingLotMarketComps,
   ListingLotMeta,
   type ListingLotMetaCopy,
+  type ListingLotMetaFact,
   type ListingLotMetaProps,
 } from "./blocks/auction-listing/listing-lot-meta";
 export {

@@ -7,6 +7,7 @@ import { LISTING_LOT_SIDEBAR_CLASS } from "./listing-lot-layout";
 import type {
   ListingLotMarketComps,
   ListingLotMetaCopy,
+  ListingLotMetaFact,
 } from "./listing-lot-meta";
 import { ListingLotMeta } from "./listing-lot-meta";
 import type {
@@ -31,10 +32,10 @@ type ListingAuctionCardSidebarProps = {
   description: string;
   showMoreHref?: string;
   vaultShippingBody: string;
-  authenticationBody: string;
   recentBidsAccessory?: ReactNode;
   /** Renders directly under the bid card (e.g. linked payment method). */
   bidCardFooter?: ReactNode;
+  facts?: readonly ListingLotMetaFact[];
   marketComps?: ListingLotMarketComps;
   locale: ShippedLocale;
   timeZone: string;
@@ -52,9 +53,9 @@ function ListingAuctionCardSidebar({
   description,
   showMoreHref,
   vaultShippingBody,
-  authenticationBody,
   recentBidsAccessory,
   bidCardFooter,
+  facts,
   marketComps,
   locale,
   timeZone,
@@ -81,10 +82,10 @@ function ListingAuctionCardSidebar({
         {bidCardFooter ? <div className="mt-1">{bidCardFooter}</div> : null}
       </VStack>
       <ListingLotMeta
-        authenticationBody={authenticationBody}
         badges={badges}
         copy={copy}
         description={description}
+        facts={facts}
         marketComps={marketComps}
         resultFact={view.resultFact}
         showMoreHref={showMoreHref}

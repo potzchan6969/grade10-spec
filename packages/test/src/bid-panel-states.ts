@@ -85,14 +85,14 @@ function linkedCard(editable: boolean) {
 
 const LEADING_AUTO_VIEW: BidPanelViewState = {
   standing: "leading-max",
-  viewerMaximumMinor: 800_000,
+  viewerMaximumMinor: 9_500_000,
 };
 
 const OUTBID_AUTO_VIEW: BidPanelViewState = {
   standing: "outbid",
-  currentBidMinor: 825_000,
-  minBidMinor: 850_000,
-  viewerMaximumMinor: 800_000,
+  currentBidMinor: 9_750_000,
+  minBidMinor: 10_000_000,
+  viewerMaximumMinor: 9_500_000,
 };
 
 const BID_PANEL_STATE_RESPONSES = {
@@ -128,7 +128,7 @@ const BID_PANEL_STATE_RESPONSES = {
       linkedPaymentMethod: linkedCard(false),
       viewOverride: LEADING_AUTO_VIEW,
     },
-    expectedText: "Highest bid",
+    expectedText: "Leading",
   },
   autoOutbid: {
     scenarioId: "bid-panel/auto-outbid",
@@ -152,8 +152,8 @@ const BID_PANEL_STATE_RESPONSES = {
       linkedPaymentMethod: linkedCard(false),
       viewOverride: {
         standing: "outbid",
-        currentBidMinor: 480_000,
-        viewerMaximumMinor: 480_000,
+        currentBidMinor: 5_800_000,
+        viewerMaximumMinor: 5_800_000,
       },
     },
     expectedText: "Outbid",
@@ -167,7 +167,7 @@ const BID_PANEL_STATE_RESPONSES = {
       submitUsesSignInLabel: false,
       fixtureState: "live-manual",
     },
-    expectedText: "Highest bid",
+    expectedText: "Leading",
   },
   opens: {
     scenarioId: "bid-panel/opens",
@@ -340,7 +340,7 @@ const BID_PANEL_STATE_RESPONSES = {
       linkedPaymentMethod: linkedCard(false),
       viewOverride: LEADING_AUTO_VIEW,
     },
-    expectedText: "Highest bid",
+    expectedText: "Leading",
   },
 } as const satisfies Record<string, BidPanelStateResponse>;
 

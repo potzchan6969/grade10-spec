@@ -31,11 +31,17 @@ const PRESET_INCREMENTS = [
 
 type ListingQuickMaximumBidActionsCopy = {
   setPrivateMaximum: string;
+  /** Mode title when a maximum is already committed — no amount; use `currentMaximum`. */
   raisePrivateMaximum: string;
-  /** e.g. "Place Bid · {amount}" — first maximum commit. */
+  /** Shown under the raise title, e.g. "Current: {amount}". */
+  currentMaximum: string;
+  /** e.g. "Set maximum to {amount}" — first maximum above the floor. */
   reviewMaximum: string;
-  /** e.g. "Raise maximum · {amount}" — when a maximum is already committed. */
+  /** e.g. "Raise maximum to {amount}" — when a maximum is already committed and above the floor. */
   raiseMaximumReview: string;
+  /** e.g. "Bid now at {amount}" — when the commit amount is the minimum eligible bid. */
+  bidNowReview: string;
+  /** Privacy + ceiling; mechanism is a short reinforcing line. */
   privateMaximumTooltip: string;
   /**
    * Always-on mechanism line under the primary action — e.g. we bid as needed,
@@ -186,22 +192,34 @@ function ListingQuickMaximumBidActions({
   const canPlaceBid = commitMinor != null && !maximumInvalid;
 
   const heading = hasCommittedMaximum
-    ? copy.raisePrivateMaximum.replace(
-        "{amount}",
-        formatMoney(view.viewerMaximumMinor ?? 0, view.currency, { locale }),
-      )
+    ? copy.raisePrivateMaximum
     : copy.setPrivateMaximum;
+  const currentMaximumLabel =
+    hasCommittedMaximum && view.viewerMaximumMinor != null
+      ? copy.currentMaximum.replace(
+          "{amount}",
+          formatMoney(view.viewerMaximumMinor, view.currency, { locale }),
+        )
+      : null;
 
-  const actionTemplate = hasCommittedMaximum
-    ? copy.raiseMaximumReview
-    : copy.reviewMaximum;
+  const isMinimumBid =
+    commitMinor != null && commitMinor === floorMaximumMinor;
+  const actionTemplate = isMinimumBid
+    ? copy.bidNowReview
+    : hasCommittedMaximum
+      ? copy.raiseMaximumReview
+      : copy.reviewMaximum;
   const placeBidLabel =
     commitMinor != null
       ? actionTemplate.replace(
           "{amount}",
           formatMoney(commitMinor, view.currency, { locale }),
         )
-      : actionTemplate.replace(" · {amount}", "").replace("{amount}", "");
+      : actionTemplate
+          .replace(" to {amount}", "")
+          .replace(" at {amount}", "")
+          .replace(" · {amount}", "")
+          .replace("{amount}", "");
 
   const floorAmountLabel = formatMoney(floorMaximumMinor, view.currency, {
     locale,
@@ -265,7 +283,7 @@ function ListingQuickMaximumBidActions({
   ) : undefined;
 
   return (
-    <VStack className="w-full" gap="sm">
+    <VStack className="w-full" gap="md">
       <VStack className="w-full" gap="xs">
         <HStack gap="xs" vAlign="center">
           <Text
@@ -288,59 +306,69 @@ function ListingQuickMaximumBidActions({
             </Tooltip>
           </TooltipProvider>
         </HStack>
+        {currentMaximumLabel != null ? (
+          <Text
+            className="tabular-nums text-foreground"
+            size="sm"
+            weight="medium"
+          >
+            {currentMaximumLabel}
+          </Text>
+        ) : null}
         <Text className="text-secondary-foreground" size="xs">
           {copy.maximumMechanismSubtext}
         </Text>
       </VStack>
 
-      <HStack className="w-full" gap="sm" role="group">
-        {presets.map((preset) => {
-          const amountLabel = formatMoney(preset.amountMinor, view.currency, {
-            locale,
-          });
-          const selected = selectedPreset?.key === preset.key;
-          const accessibleName = (
-            preset.immediate ? copy.bidImmediate : copy.bidUpTo
-          ).replace("{amount}", amountLabel);
-          return (
-            <Button
-              aria-label={accessibleName}
-              aria-pressed={selected}
-              className={cn(
-                "h-auto min-w-0 flex-1 flex-col items-center gap-0.5 rounded-(--radius-xl) px-1.5 py-3 text-center whitespace-normal",
-                customActive && "opacity-50",
-                !customActive && !selected && "opacity-50",
-                selected &&
-                  "border-success-ring hover:border-success-ring focus-visible:border-success-ring focus-visible:ring-success-ring/50",
-              )}
-              key={preset.key}
-              onClick={() => handleSelectPreset(preset)}
-              size="md"
-              variant="outline"
-            >
-              <span className="text-xs font-normal leading-tight text-secondary-foreground text-balance">
-                {preset.caption}
-              </span>
-              <span className="text-sm font-medium leading-tight tabular-nums">
-                {amountLabel}
-              </span>
-            </Button>
-          );
-        })}
-      </HStack>
+      <VStack className="w-full" gap="sm">
+        <HStack className="w-full" gap="sm" role="group">
+          {presets.map((preset) => {
+            const amountLabel = formatMoney(preset.amountMinor, view.currency, {
+              locale,
+            });
+            const selected = selectedPreset?.key === preset.key;
+            const accessibleName = (
+              preset.immediate ? copy.bidImmediate : copy.bidUpTo
+            ).replace("{amount}", amountLabel);
+            return (
+              <Button
+                aria-label={accessibleName}
+                aria-pressed={selected}
+                className={cn(
+                  "h-auto min-w-0 flex-1 flex-col items-center gap-0.5 rounded-(--radius-xl) px-1.5 py-3 text-center whitespace-normal",
+                  customActive && "opacity-50",
+                  selected &&
+                    "border-success-ring hover:border-success-ring focus-visible:border-success-ring focus-visible:ring-success-ring/50",
+                )}
+                key={preset.key}
+                onClick={() => handleSelectPreset(preset)}
+                size="md"
+                variant="outline"
+              >
+                <span className="text-xs font-normal leading-tight text-secondary-foreground text-balance">
+                  {preset.caption}
+                </span>
+                <span className="text-sm font-medium leading-tight tabular-nums">
+                  {amountLabel}
+                </span>
+              </Button>
+            );
+          })}
+        </HStack>
 
-      <NumberInput
-        aria-label={customPlaceholder}
-        className={cn("w-full", !customActive && "opacity-50")}
-        inputMode="decimal"
-        message={helperMessage}
-        onChange={(event) => handleCustomChange(event.target.value)}
-        onClear={customActive ? handleClearCustom : undefined}
-        placeholder={customPlaceholder}
-        prefix={formatMoneyPrefix(view.currency, { locale })}
-        status={customInvalid ? "error" : "default"}
-        value={customDraft}
-      />
+        <NumberInput
+          aria-label={customPlaceholder}
+          className={cn("w-full", !customActive && "opacity-50")}
+          inputMode="decimal"
+          message={helperMessage}
+          onChange={(event) => handleCustomChange(event.target.value)}
+          onClear={customActive ? handleClearCustom : undefined}
+          placeholder={customPlaceholder}
+          prefix={formatMoneyPrefix(view.currency, { locale })}
+          status={customInvalid ? "error" : "default"}
+          value={customDraft}
+        />
+      </VStack>
 
       <Button
         className="w-full"

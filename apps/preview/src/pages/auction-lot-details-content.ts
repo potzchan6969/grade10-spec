@@ -77,15 +77,21 @@ export function applyBidExtension(
 }
 
 export const AUCTION_LOT = {
-  title: "1999 Charizard, PSA 10",
+  title: "1997 Pocket Monsters Carddass #000 Bandai Starters, PSA 10",
   listingNumber: "12",
   saleName: "September Slabs",
   category: "Pokémon",
   description:
-    "Shadowless 1st Ed. Authenticated and vaulted. Stored in Grade10 Vault — ships within one business day of payment.",
+    "Bandai Carddass checklist and starters slab from the Pocket Monsters set.",
   images: [
-    { src: IMAGE, alt: "1999 Charizard, PSA 10 — front" },
-    { src: IMAGE, alt: "1999 Charizard, PSA 10 — back" },
+    {
+      src: IMAGE,
+      alt: "1997 Pocket Monsters Carddass #000 Bandai Starters, PSA 10, front",
+    },
+    {
+      src: IMAGE,
+      alt: "1997 Pocket Monsters Carddass #000 Bandai Starters, PSA 10, back",
+    },
   ],
   ...BID_FIXTURE_LOT,
   currency: "HKD",
@@ -96,6 +102,13 @@ export const AUCTION_LOT_BADGES: readonly ListingLotMetaBadge[] = [
   { label: AUCTION_LOT.category },
   { label: AUCTION_LOT.saleName },
 ];
+
+export const AUCTION_LOT_FACTS = [
+  { label: "Year", value: "1997" },
+  { label: "Set", value: "POCKET MONSTERS CARDDASS" },
+  { label: "Grade", value: "PSA 10" },
+  { label: "Cert number", value: "95109007" },
+] as const;
 
 /** Demo linked card — matches Auction Listing → Bid Panel → Ready. */
 export const AUCTION_LOT_LINKED_PAYMENT_METHOD = {
@@ -153,13 +166,11 @@ export const AUCTION_LOT_DETAILS_COPY = {
     ),
     aboutThisLot: "About this lot",
     vaultShipping: "Vault shipping",
-    authentication: "Authentication",
     result: "Result",
     showMore: "Show more",
   },
   vaultShippingBody:
-    "Stored in Grade10 Vault — ships from our facility within 1 business day of payment.",
-  authenticationBody: "Authenticated by Grade10 Marketplace",
+    "Stored in Grade10 Vault. Ships from our facility within 1 business day of payment.",
   userBidHistory: {
     link: "Your bid history",
     title: "Bid History",
@@ -176,6 +187,18 @@ const SIMULATED_RIVALS = [
 ] as const;
 
 const MAX_RECENT_BIDS = 5;
+/** Demo spacing so rapid simulate-next clicks still read as aged history. */
+const DEMO_BID_STAGGER_MS = 2 * 60_000;
+
+function withStaggeredAcceptedAt(
+  rows: readonly ListingBidHistoryRow[],
+  nowMs = Date.now(),
+): ListingBidHistoryRow[] {
+  return rows.map((row, index) => ({
+    ...row,
+    acceptedAtMs: nowMs - index * DEMO_BID_STAGGER_MS,
+  }));
+}
 
 export function initialLiveListingFacts(state: BiddingState): LiveListingFacts {
   const meta = stateMeta(state);
@@ -248,7 +271,7 @@ export function simulateNextLiveBid(
     };
 
     return {
-      history: [newBid],
+      history: withStaggeredAcceptedAt([newBid]),
       facts: {
         currentBidMinor: AUCTION_LOT.startingBidMinor,
         bidCount: 1,
@@ -281,7 +304,9 @@ export function simulateNextLiveBid(
       };
 
       return {
-        history: [viewerBid, rivalBid, ...history].slice(0, MAX_RECENT_BIDS),
+        history: withStaggeredAcceptedAt(
+          [viewerBid, rivalBid, ...history].slice(0, MAX_RECENT_BIDS),
+        ),
         facts: {
           currentBidMinor: counterAmount,
           bidCount: facts.bidCount + 2,
@@ -292,7 +317,9 @@ export function simulateNextLiveBid(
   }
 
   return {
-    history: [rivalBid, ...history].slice(0, MAX_RECENT_BIDS),
+    history: withStaggeredAcceptedAt(
+      [rivalBid, ...history].slice(0, MAX_RECENT_BIDS),
+    ),
     facts: {
       currentBidMinor: rivalAmount,
       bidCount: facts.bidCount + 1,
