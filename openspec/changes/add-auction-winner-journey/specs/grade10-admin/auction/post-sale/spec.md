@@ -23,36 +23,6 @@ happened to the money and to the goods.
   - Payment processing: recording money is a grant catalogue work does not carry
   - Shipment processing: recording dispatch is a separate grant again
 
-## User journeys
-
-### post-sale-US-01: Operator resolves an unpaid order
-
-**As an** operator,
-**I want** to reissue, settle, or cancel an unpaid order from the order itself,
-**so that** a lot whose winner did not pay stops being an open-ended obligation.
-
-**Accepted by:**
-
-- `post-sale-SC-05` — Reissue returns an expired order to Pending Payment
-- `post-sale-SC-08` — Manual settlement requires an address confirmation
-- `post-sale-SC-11` — Manual settlement is available before expiry
-- `post-sale-SC-13` — Cancelling returns the lot to available
-- `post-sale-SC-14` — No runner-up is offered the cancelled lot
-
-### post-sale-US-02: Operator reconstructs an order's history
-
-**As an** operator deciding whether to reinstate a buyer,
-**I want** every invoice and fulfilment event on the order, including the
-payments that failed,
-**so that** I can tell a buyer who tried and could not from one who never engaged.
-
-**Accepted by:**
-
-- `post-sale-SC-16` — Failed payment attempts appear in the invoice history
-- `post-sale-SC-18` — The address at dispatch survives a later edit
-- `post-sale-SC-19` — The detail explains the status it derived
-- `post-sale-SC-20` — A buyer's reissue history spans all their orders
-
 ## ADDED Requirements
 
 ### Requirement: The queue shows one outcome per lot
@@ -83,42 +53,27 @@ a visual mark showing this label rather than an internal code, and two
 families SHALL NOT share a mark. A row whose outcome needs action SHALL carry
 an additional highlight.
 
-#### Scenario: post-sale-SC-01 - A lot inside its last hour is Ending soon
+#### Scenario: post-sale-SC-26 - A lot inside its last hour is Ending soon
 
 - **GIVEN** a published lot whose close is 60 minutes or less away and has not
   passed
 - **WHEN** an operator reads the queue
 - **THEN** that lot's outcome is Ending soon
 
-#### Scenario: post-sale-SC-02 - A won lot's outcome is its derived order status
+#### Scenario: post-sale-SC-27 - A won lot's outcome is its derived order status
 
 - **GIVEN** a closed lot whose auction order derives as Processing
 - **WHEN** an operator reads the queue
 - **THEN** that lot's outcome is Processing
 - **AND** it is the same value the winner reads on their own order
 
-#### Scenario: post-sale-SC-03 - Expired and Processing are highlighted as needing action
+#### Scenario: post-sale-SC-28 - Expired and Processing are highlighted as needing action
 
 - **GIVEN** a queue holding one Expired order, one Processing order, and one
   Delivered order
 - **WHEN** an operator reads it
 - **THEN** the Expired and Processing rows carry the needs-action highlight
 - **AND** the Delivered row does not
-
-### Requirement: Winner fields
-
-An order's detail SHALL show the winner with their contact details
-emphasised: the name on the account, the registered account email, and any
-phone number Grade10 already holds. Grade10 SHALL NOT show a payment-provider
-customer or payment identifier as the winner's contact.
-
-#### Scenario: post-sale-SC-04 - The winner's email is the contact
-
-- **GIVEN** an auction order with a winner
-- **WHEN** an operator opens it
-- **THEN** the winner's name and registered account email are shown as the
-  contact
-- **AND** no payment-provider identifier is shown in their place
 
 ### Requirement: An operator resolves an unpaid order
 
@@ -142,7 +97,7 @@ Reissuing an invoice SHALL NOT lift the winner's account suspension, per
 `grade10-site/auction/bidder-suspension`. Reinstatement is a separate,
 explicit action.
 
-#### Scenario: post-sale-SC-05 - Reissue returns an expired order to Pending Payment
+#### Scenario: post-sale-SC-30 - Reissue returns an expired order to Pending Payment
 
 - **GIVEN** an auction order deriving as Expired
 - **AND** an operator holding payment-processing
@@ -150,14 +105,14 @@ explicit action.
 - **THEN** the invoice status is still `pending` with a new 7-day deadline
 - **AND** the derived order status is Pending Payment
 
-#### Scenario: post-sale-SC-06 - Reissue leaves the suspension standing
+#### Scenario: post-sale-SC-31 - Reissue leaves the suspension standing
 
 - **GIVEN** a suspended winner whose expired order an operator reissues
 - **WHEN** the reissue is committed
 - **THEN** the account is still suspended
 - **AND** the operator is not offered reinstatement as part of the reissue
 
-#### Scenario: post-sale-SC-07 - An operator without the grant is refused
+#### Scenario: post-sale-SC-32 - An operator without the grant is refused
 
 - **GIVEN** an operator who does not hold payment-processing
 - **WHEN** they open an Expired order
@@ -193,7 +148,7 @@ Grade10 SHALL log the operator, the timestamp, the prior address, the new
 address, the prior final amount, the revised final amount, the settlement
 method, and the external reference.
 
-#### Scenario: post-sale-SC-08 - Settlement cannot proceed without confirming the address
+#### Scenario: post-sale-SC-33 - Settlement cannot proceed without confirming the address
 
 - **GIVEN** an unpaid auction order whose delivery address is unchanged from
   the profile default
@@ -202,7 +157,7 @@ method, and the external reference.
 - **THEN** Grade10 refuses the settlement
 - **AND** the invoice status is still `pending`
 
-#### Scenario: post-sale-SC-09 - Updating the address recalculates before commit
+#### Scenario: post-sale-SC-34 - Updating the address recalculates before commit
 
 - **GIVEN** an unpaid auction order whose final amount is 312000 minor units
   in HKD
@@ -211,7 +166,7 @@ method, and the external reference.
 - **THEN** Grade10 shows 312000 minor units and 316000 minor units in HKD
   before the operator commits
 
-#### Scenario: post-sale-SC-10 - The payment record carries the revised amount
+#### Scenario: post-sale-SC-35 - The payment record carries the revised amount
 
 - **GIVEN** that same order, committed at a revised final amount of 316000
   minor units in HKD against a last invoice of 312000 minor units in HKD
@@ -221,7 +176,7 @@ method, and the external reference.
   invoice
 - **AND** the delivery address is locked
 
-#### Scenario: post-sale-SC-11 - Manual settlement is available before expiry
+#### Scenario: post-sale-SC-36 - Manual settlement is available before expiry
 
 - **GIVEN** an auction order deriving as Pending Payment, three days from its
   deadline, whose winner has said they will pay by bank transfer
@@ -230,7 +185,7 @@ method, and the external reference.
 - **THEN** Grade10 accepts the settlement
 - **AND** the order derives as Processing without having expired first
 
-#### Scenario: post-sale-SC-12 - A settled order refuses a second settlement
+#### Scenario: post-sale-SC-37 - A settled order refuses a second settlement
 
 - **GIVEN** an auction order whose invoice status is `paid`
 - **WHEN** an operator attempts to record a second settlement against it
@@ -257,7 +212,7 @@ Grade10 SHALL surface an order's reissue count on that order, and a buyer's
 reissue history across **all** their orders on the account record, so a
 reviewer sees the pattern before granting another.
 
-#### Scenario: post-sale-SC-15 - A third reissue is accepted and numbered
+#### Scenario: post-sale-SC-40 - A third reissue is accepted and numbered
 
 - **GIVEN** an auction order already reissued twice
 - **WHEN** an operator reissues it a third time with a reason
@@ -278,14 +233,14 @@ On cancellation Grade10 SHALL:
 - Retain the lot's prior auction history — hammer price and bid history — for
   audit, and SHALL NOT carry it into the new listing.
 
-#### Scenario: post-sale-SC-13 - Cancelling returns the lot to available
+#### Scenario: post-sale-SC-38 - Cancelling returns the lot to available
 
 - **GIVEN** an auction order deriving as Expired
 - **WHEN** an operator cancels it with a reason
 - **THEN** the invoice status is `cancelled` and the order derives as Cancelled
 - **AND** the lot's inventory status is available and it can be listed again
 
-#### Scenario: post-sale-SC-14 - No runner-up is offered the cancelled lot
+#### Scenario: post-sale-SC-39 - No runner-up is offered the cancelled lot
 
 - **GIVEN** a cancelled auction order whose lot had a second-highest bidder
 - **WHEN** the cancellation completes
@@ -317,7 +272,7 @@ three times with a declining card is a different case from one who never
 engaged, and the difference SHALL be visible to whoever decides on
 reinstatement.
 
-#### Scenario: post-sale-SC-16 - Failed payment attempts appear in the invoice history
+#### Scenario: post-sale-SC-41 - Failed payment attempts appear in the invoice history
 
 - **GIVEN** a winner whose card was declined three times before the deadline
   elapsed
@@ -326,7 +281,7 @@ reinstatement.
 - **AND** the buyer is distinguishable from one whose history holds only the
   issued event
 
-#### Scenario: post-sale-SC-17 - An amendment's amount change is on the record
+#### Scenario: post-sale-SC-42 - An amendment's amount change is on the record
 
 - **GIVEN** an auction order whose winner amended the address, changing the
   final amount from 312000 to 316000 minor units in HKD
@@ -354,7 +309,7 @@ Because amending an address changes the final amount, the address history and
 the invoice amount history SHALL be independently reconstructable and
 cross-referenceable, so an amount change can be explained afterwards.
 
-#### Scenario: post-sale-SC-18 - The address at dispatch survives a later edit
+#### Scenario: post-sale-SC-43 - The address at dispatch survives a later edit
 
 - **GIVEN** an auction order dispatched to one address, whose address an
   operator later corrects
@@ -456,3 +411,36 @@ system-initiated event SHALL record the event that triggered it.
 - **WHEN** they attempt to reissue an invoice without giving a reason
 - **THEN** Grade10 refuses the action
 - **AND** writes no history event
+
+## MODIFIED Requirements
+
+### Requirement: Winner fields
+
+When a listing has a winner, the detail SHALL show this block with the
+winner's contact details emphasised. Queue access is enough to see it. It
+SHALL NOT require the grant that bans bidders. It SHALL NOT show a Stripe
+customer identifier, payment-method identifier, or card fingerprint, and
+SHALL NOT show any payment-provider identifier in place of the contact.
+
+| Field | Meaning |
+| --- | --- |
+| Email | Registered account email. Primary contact, shown first |
+| Name | The name on the account, when the identity directory has one |
+| Phone | Any number Grade10 already holds |
+| Storefront | Storefront the winner bid through |
+
+#### Scenario: post-sale-SC-08 - Winner email is the contact without Stripe identifiers
+
+- **GIVEN** a won listing whose winner email is on file
+- **WHEN** an operator who can open the queue views the detail
+- **THEN** the winner block shows that email first
+- **AND** it shows the storefront the winner bid through
+- **AND** it does not show a Stripe customer or payment-method identifier
+
+#### Scenario: post-sale-SC-29 - The winner's name is shown beside the email
+
+- **GIVEN** an auction order with a winner the identity directory names
+- **WHEN** an operator opens it
+- **THEN** the winner's name and registered account email are shown as the
+  contact
+- **AND** no payment-provider identifier is shown in their place
