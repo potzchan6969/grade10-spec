@@ -15,13 +15,13 @@ The `locale` argument SHALL be a shipped platform locale. Callers on collector
 surfaces MUST resolve unsupported browser languages to the brand default before
 invoking.
 
-#### Scenario: dates-and-times-SC-21 - Just now does not show zero seconds
+#### Scenario: shared-dates-and-times-SC-21 - Just now does not show zero seconds
 
 - **GIVEN** an instant 30 seconds in the past
 - **WHEN** it is rendered as relative activity time in English
 - **THEN** the label is `Just now`
 
-#### Scenario: dates-and-times-SC-22 - An unsupported browser language reads English
+#### Scenario: shared-dates-and-times-SC-22 - An unsupported browser language reads English
 
 - **GIVEN** a collector whose browser prefers Thai and whose site locale resolved to English
 - **WHEN** a relative activity time renders
@@ -36,7 +36,7 @@ reader's stated `timeZone` with shape `DD Mon YYYY, HH:MM`, month names from
 Operator tables, admin surfaces, and sent messages SHALL continue to use the UTC
 moment and deadline shapes that name the zone.
 
-#### Scenario: dates-and-times-SC-23 - Two zones read different clocks
+#### Scenario: shared-dates-and-times-SC-23 - Two zones read different clocks
 
 - **GIVEN** the same instant rendered for readers in `Asia/Hong_Kong` and `America/New_York`
 - **WHEN** each reads it as a local moment in English
@@ -63,20 +63,20 @@ Collector-facing activity time and local moment renderings SHALL accept a
 shipped platform locale only; unsupported browser languages SHALL be resolved
 to the brand default before formatting.
 
-#### Scenario: dates-and-times-SC-06 - A month name in another language
+#### Scenario: shared-dates-and-times-SC-06 - A month name in another language
 
 - **GIVEN** a date rendered with a language named by the caller
 - **WHEN** it is rendered
 - **THEN** the month's wording is drawn from that language
 - **AND** the ordering and punctuation are unchanged from the platform's format
 
-#### Scenario: dates-and-times-SC-07 - No language named
+#### Scenario: shared-dates-and-times-SC-07 - No language named
 
 - **GIVEN** a date rendered with no language named by the caller
 - **WHEN** it is rendered
 - **THEN** its words are English
 
-#### Scenario: dates-and-times-SC-08 - A language the platform does not ship
+#### Scenario: shared-dates-and-times-SC-08 - A language the platform does not ship
 
 - **WHEN** a low-level operator or message formatter is called with a language the platform has no words for
 - **THEN** the rendering fails with an error naming that language

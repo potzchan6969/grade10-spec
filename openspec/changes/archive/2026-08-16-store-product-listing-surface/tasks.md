@@ -45,7 +45,7 @@ Lands first and stands alone as its own pull request.
 ## 6. Records and handoff
 
 - [x] 6.1 Add the `store-product-listing` capability to `openspec/specs/shared-ui/README.md` as incoming, alongside `component-package`
-- [x] 6.2 Record the shared-versus-application boundary test from `design.md` in `docs/governance/ui-component-contracts.md`, since it applies beyond this feature
+- [x] 6.2 Record the shared-versus-application boundary test from `tech-design.md` in `docs/governance/ui-component-contracts.md`, since it applies beyond this feature
 - [x] 6.3 Run `openspec validate --specs` and `openspec validate store-product-listing-surface`
 - [ ] 6.4 Confirm each consuming application builds against the moved submodule SHA and supplies the chrome content the removed defaults used to provide
 - [x] 6.5 After delivery is confirmed, fold the accepted deltas into `openspec/specs/` and archive this change

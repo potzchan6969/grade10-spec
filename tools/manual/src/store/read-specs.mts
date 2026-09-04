@@ -132,6 +132,19 @@ function readSpec(
     entry.error = toItemError(specPath, cause);
   }
 
+  // The journeys are their own file beside the spec, so a capability nobody
+  // walks — a policy, a package contract — simply has none, and a malformed
+  // one cannot blank the requirements the whole store reads.
+  const journeysPath = `${dir}/user-journeys.md`;
+  const journeys = readTextIfExists(join(root, journeysPath));
+  if (journeys !== undefined) {
+    try {
+      entry.journeys = readJourneys(journeys);
+    } catch (cause) {
+      entry.journeysError = toItemError(journeysPath, cause);
+    }
+  }
+
   // The suite has its own channel: a `test-cases.md` nobody can parse is QA's
   // file, and hanging it on the spec would blank the engineering contract on
   // every page that embeds it — and blind every rule that reads requirements.
@@ -166,12 +179,6 @@ function fillSpec(entry: SpecEntry, text: string): void {
 
   const featureSet = findSection(sections, "Feature set");
   if (featureSet) entry.featureSet = featureSet.body;
-
-  const journeys = findSection(sections, "User journeys");
-  if (journeys) {
-    entry.journeys = journeys.children.map(readJourney);
-    refuseRepeats("story", issuedIn(journeys.children, JOURNEY_HEADING));
-  }
 
   const requirements = findSection(sections, "Requirements");
   if (!requirements) {
@@ -237,6 +244,24 @@ export function readJourney(section: Section): Journey {
     text: text.trimEnd(),
     acceptedBy: [...new Set(accepted.match(SCENARIO_ID) ?? [])],
   };
+}
+
+/**
+ * A `user-journeys.md`, whole: one `## User journeys` section holding a `###`
+ * story apiece. The heading is required rather than assumed, so a file that
+ * grew a second section says so instead of silently dropping it.
+ */
+export function readJourneys(text: string): Journey[] {
+  const roots = outline(text);
+  const section = findSection(roots, "User journeys");
+  if (!section) {
+    throw new StoreFileError(
+      1,
+      "a journeys file needs a `## User journeys` heading",
+    );
+  }
+  refuseRepeats("story", issuedIn(section.children, JOURNEY_HEADING));
+  return section.children.map(readJourney);
 }
 
 export function readRequirement(section: Section): Requirement {

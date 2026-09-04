@@ -3,13 +3,13 @@
 **Status:** approved
 **Reviewed:** 2026-09-02
 
-## auction-US2: Collector places a card-backed bid inside the window
+## grade10-site-auction-auction-US2: Collector places a card-backed bid inside the window
 
 **As a** bidder,
 **I want** a bid accepted only when it meets the increment inside the scheduled window,
 **so that** a late valid bid can extend the close without passing the cap.
 
-### auction-US2-TC1-1: Late bid extends the close by the listing duration
+### grade10-site-auction-auction-US2-TC1-1: Late bid extends the close by the listing duration
 
 **Classification:**
 
@@ -21,7 +21,7 @@
 * **Layer:** api
 * **Automation status:** automated
 * **Testability:** automation
-* **Trace:** auction-US-02
+* **Trace:** grade10-site-auction-auction-US-02
 
 **Pre-conditions:**
 An open listing whose extension window is 1800 seconds and extension duration is 1800 seconds, with 1800 seconds or less until its recorded close.
@@ -36,7 +36,7 @@ An open listing whose extension window is 1800 seconds and extension duration is
 * Grade10 accepts the bid.
 * The listing close becomes T plus 1800 seconds.
 
-### auction-US2-TC2-1: Extension cap limits an otherwise eligible extension
+### grade10-site-auction-auction-US2-TC2-1: Extension cap limits an otherwise eligible extension
 
 **Classification:**
 
@@ -48,7 +48,7 @@ An open listing whose extension window is 1800 seconds and extension duration is
 * **Layer:** api
 * **Automation status:** automated
 * **Testability:** automation
-* **Trace:** auction-US-02
+* **Trace:** grade10-site-auction-auction-US-02
 
 **Pre-conditions:**
 An open listing with an extension cap and a recorded close already at that cap.
@@ -63,7 +63,7 @@ An open listing with an extension cap and a recorded close already at that cap.
 * Grade10 accepts the bid.
 * The recorded close does not move beyond the configured cap.
 
-### auction-US2-TC3-1: Window and duration may differ
+### grade10-site-auction-auction-US2-TC3-1: Window and duration may differ
 
 **Classification:**
 
@@ -75,7 +75,7 @@ An open listing with an extension cap and a recorded close already at that cap.
 * **Layer:** api
 * **Automation status:** automated
 * **Testability:** automation
-* **Trace:** auction-US-02
+* **Trace:** grade10-site-auction-auction-US-02
 
 **Pre-conditions:**
 An open listing whose extension window is 300 seconds and extension duration is 1800 seconds, with 300 seconds or less remaining.
@@ -91,7 +91,7 @@ An open listing whose extension window is 300 seconds and extension duration is 
 * The first bid moves the close to T plus 1800 seconds.
 * The second bid does not extend the close.
 
-### auction-US2-TC4-1: Extension off does not move the close
+### grade10-site-auction-auction-US2-TC4-1: Extension off does not move the close
 
 **Classification:**
 
@@ -103,7 +103,7 @@ An open listing whose extension window is 300 seconds and extension duration is 
 * **Layer:** api
 * **Automation status:** automated
 * **Testability:** automation
-* **Trace:** auction-US-02
+* **Trace:** grade10-site-auction-auction-US-02
 
 **Pre-conditions:**
 An open listing whose extension window and extension duration are both zero, with one second remaining.
@@ -120,13 +120,13 @@ An open listing whose extension window and extension duration are both zero, wit
 
 ---
 
-## auction-US1: Collector browses Auction listings
+## grade10-site-auction-auction-US1: Collector browses Auction listings
 
 **As a** collector,
 **I want** the catalogue to show Auction listings with money in minor units,
 **so that** I am not offered Buy Now and a close with bids is absolute.
 
-### auction-US1-TC1-1: Public listing read exposes extension policy
+### grade10-site-auction-auction-US1-TC1-1: Public listing read exposes extension policy
 
 **Classification:**
 
@@ -138,7 +138,7 @@ An open listing whose extension window and extension duration are both zero, wit
 * **Layer:** api
 * **Automation status:** automated
 * **Testability:** automation
-* **Trace:** auction-US-01
+* **Trace:** grade10-site-auction-auction-US-01
 
 **Pre-conditions:**
 A published listing with extension window 1800 seconds, extension duration 1800 seconds, and an optional extension cap.

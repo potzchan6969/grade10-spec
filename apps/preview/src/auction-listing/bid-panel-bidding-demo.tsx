@@ -291,18 +291,21 @@ function BiddingPreview({
 }: BiddingCase & { title: string }) {
   const hasPlacedBid =
     view.viewerMaximumMinor != null || history.some((row) => row.isViewer);
-  const { session, actions, snapshot } = useListingBidEnrollment(`bidding:`, {
-    hasAccountPayment: true,
-    hasPlacedBid,
-    paymentLinked: true,
-    signedIn: true,
-  });
+  const { session, actions, snapshot } = useListingBidEnrollment(
+    `bidding:${title}`,
+    {
+      hasAccountPayment: true,
+      hasPlacedBid,
+      paymentLinked: true,
+      signedIn: true,
+    },
+  );
 
   return (
     <ListingBidEnrollmentCardPreview
       autoConfirmOpen={session.autoConfirmOpen}
       history={history}
-      historyResetKey={`::`}
+      historyResetKey={`${title}:${view.standing}:${view.currentBidMinor}`}
       onAutoBidConfirm={actions.confirmAutoBidIntro}
       onAutoConfirmOpenChange={actions.setAutoConfirmOpen}
       onBidSubmit={actions.handleBidSubmit}

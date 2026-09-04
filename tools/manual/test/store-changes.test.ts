@@ -19,7 +19,7 @@ describe("in-flight changes", () => {
   });
 
   it("takes schema and created from .openspec.yaml", () => {
-    expect(change.schema).toBe("full-planning");
+    expect(change.schema).toBe("grade10-planning");
     expect(change.created).toBe("2026-01-01");
   });
 
@@ -116,9 +116,10 @@ describe("in-flight changes", () => {
 describe("archived changes", () => {
   const archived = readArchivedChanges(FIXTURE, NO_GIT);
 
-  it("strips the archive date prefix from the id", () => {
+  it("strips the archive date prefix from the id, and keeps it as the shipped day", () => {
     expect(archived.map((one) => one.id)).toEqual(["old-thing"]);
     expect(archived[0].status).toBe("archived");
+    expect(archived[0].shippedOn).toBe("2026-01-02");
   });
 
   it("falls back to the author line for created, and the id for a title", () => {
@@ -204,7 +205,7 @@ describe("a promoted change carrying its suites", () => {
   const [entry] = readChanges(
     writeStore({
       "openspec/changes/promoted-thing/.openspec.yaml":
-        "schema: full-planning\npromoted_by: '@devon'\ncreated: 2026-01-01\n",
+        "schema: grade10-planning\npromoted_by: '@devon'\ncreated: 2026-01-01\n",
       "openspec/changes/promoted-thing/proposal.md":
         "# Promoted thing\n\n**Author:** @priya - 2026-01-01\n\n## Why\n\nIt was time.\n",
       "openspec/changes/promoted-thing/specs/demo-product/alpha/spec.md":

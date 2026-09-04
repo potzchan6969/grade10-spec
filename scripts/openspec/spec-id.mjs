@@ -2,11 +2,11 @@
 /**
  * Resolve a permanent id to what it says and everywhere it is named.
  *
- *   pnpm run spec:id loyalty-SC-04        # the scenario, its requirement, its mentions
- *   pnpm run spec:id listing-page-US-01   # the story and the scenarios accepting it
+ *   pnpm run spec:id grade10-site-loyalty-programme-SC-04        # the scenario, its requirement, its mentions
+ *   pnpm run spec:id grade10-site-auction-listing-page-US-01   # the story and the scenarios accepting it
  *   pnpm run spec:id listing-page         # every id that capability issues
- *   pnpm run spec:id loyalty-SC-04 --path # `file:line` alone, for an editor
- *   pnpm run spec:id loyalty-SC-04 --archive   # include archived changes
+ *   pnpm run spec:id grade10-site-loyalty-programme-SC-04 --path # `file:line` alone, for an editor
+ *   pnpm run spec:id grade10-site-loyalty-programme-SC-04 --archive   # include archived changes
  *
  * The store asks everyone to cite an id rather than retype a requirement —
  * `openspec/config.yaml` makes that a rule, and the manual renders each id as
@@ -71,9 +71,9 @@ const EXTENSIONS = new Set([
   ".json",
 ]);
 
-/** An id is a prefix, a kind, and a number: `listing-page-SC-01`,
- * `listing-page-US-01`. Suites in the store carry a case id as
- * `listing-page-US1-TC1-1` — a shape the spec rules do not describe and the
+/** An id is a prefix, a kind, and a number: `grade10-site-auction-listing-page-SC-01`,
+ * `grade10-site-auction-listing-page-US-01`. Suites in the store carry a case id as
+ * `grade10-site-auction-listing-page-US1-TC1-1` — a shape the spec rules do not describe and the
  * manual's own reader does not match — so the kind's dash and the prefix's
  * case are both optional here. Reading an id nobody governs is better than
  * refusing to look it up. */

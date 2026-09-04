@@ -35,14 +35,14 @@ components for the account auction record — `AuctionRecordTabs`,
 Each of those components SHALL be renderable on its own, outside
 `AuctionRecordTabs`, so a surface may use the row or the watch control alone.
 
-#### Scenario: auction-record-SC-01 - An application imports the surface
+#### Scenario: shared-ui-auction-record-SC-01 - An application imports the surface
 
 - **WHEN** an application imports each name above from the shared UI package's
   public entry
 - **THEN** every import resolves
 - **AND** no other component or type is exported for this surface
 
-#### Scenario: auction-record-SC-02 - A part is reused alone
+#### Scenario: shared-ui-auction-record-SC-02 - A part is reused alone
 
 - **WHEN** an application renders `AuctionRecordRow` or `WatchButton` without
   `AuctionRecordTabs`
@@ -56,7 +56,7 @@ label, no empty-state copy, no watch or unwatch label, and no default for any
 of them. A string not supplied SHALL be absent rather than replaced by a
 built-in value.
 
-#### Scenario: auction-record-SC-03 - No label is invented
+#### Scenario: shared-ui-auction-record-SC-03 - No label is invented
 
 - **WHEN** an application renders the surface without supplying a state label
 - **THEN** no built-in label appears in its place
@@ -69,14 +69,14 @@ it to, and SHALL NOT change what it shows on its own when the collector acts.
 Acting SHALL report the collector's intent to the application through a
 callback named for the event.
 
-#### Scenario: auction-record-SC-04 - The watch control reports and waits
+#### Scenario: shared-ui-auction-record-SC-04 - The watch control reports and waits
 
 - **GIVEN** a `WatchButton` told it is not watched
 - **WHEN** the collector activates it
 - **THEN** the component reports the collector's intent to the application
 - **AND** it still shows not watched until the application tells it otherwise
 
-#### Scenario: auction-record-SC-05 - A change in progress is shown when told
+#### Scenario: shared-ui-auction-record-SC-05 - A change in progress is shown when told
 
 - **GIVEN** a `WatchButton` told a change is in progress
 - **WHEN** it renders

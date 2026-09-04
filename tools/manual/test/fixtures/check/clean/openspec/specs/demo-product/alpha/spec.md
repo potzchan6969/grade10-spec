@@ -9,16 +9,6 @@ Alpha exists so the checker has a spec with every part filled in.
 - Doing the thing
   - The thing: so the spec carries a map above its requirements
 
-## User journeys
-
-### alpha-US-01: Someone does the thing
-
-They open alpha and do the thing.
-
-**Accepted by:**
-
-- alpha-SC-01
-
 ## Requirements
 
 ### Requirement: Alpha does things

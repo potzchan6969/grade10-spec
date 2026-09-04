@@ -3,14 +3,14 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-03, tcs-rules r1
 
-## admin-listing-US6: Operator creates and publishes a listing with no campaign
+## grade10-admin-auction-listing-US6: Operator creates and publishes a listing with no campaign
 
 **As an** auction operator,
 **I want** to start a listing from the Listings section without picking a
 campaign,
 **so that** a one-off lot can go live without inventing a cover I do not need.
 
-### admin-listing-US6-TC1-1: Create listing control appears for an authorized operator
+### grade10-admin-auction-listing-US6-TC1-1: Create listing control appears for an authorized operator
 
 **Classification:**
 
@@ -22,7 +22,7 @@ campaign,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-06
+* **Trace:** grade10-admin-auction-listing-US-06
 
 **Pre-conditions:**
 An authorized operator (holding `auction:operate`) on the Grade10 auction Listings section.
@@ -36,7 +36,7 @@ An authorized operator (holding `auction:operate`) on the Grade10 auction Listin
 
 * A Create listing action is present.
 
-### admin-listing-US6-TC2-1: Listing editor opens with no campaign
+### grade10-admin-auction-listing-US6-TC2-1: Listing editor opens with no campaign
 
 **Classification:**
 
@@ -48,7 +48,7 @@ An authorized operator (holding `auction:operate`) on the Grade10 auction Listin
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-06
+* **Trace:** grade10-admin-auction-listing-US-06
 
 **Pre-conditions:**
 An authorized operator on <grade10 auction admin listings url>.
@@ -63,7 +63,7 @@ An authorized operator on <grade10 auction admin listings url>.
 * The listing editor opens.
 * No campaign is selected in the Campaign control.
 
-### admin-listing-US6-TC3-1: Full lifecycle with no campaign — draft, create, publish, slug lookup
+### grade10-admin-auction-listing-US6-TC3-1: Full lifecycle with no campaign — draft, create, publish, slug lookup
 
 **Classification:**
 
@@ -75,7 +75,7 @@ An authorized operator on <grade10 auction admin listings url>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-06
+* **Trace:** grade10-admin-auction-listing-US-06
 
 **Pre-conditions:**
 A new listing opened from <grade10 auction admin listings url> with no campaign, every required create field set, slug `standalone-lot-1`, and no publish at.
@@ -101,7 +101,7 @@ A new listing opened from <grade10 auction admin listings url> with no campaign,
 * Step 3 moves the listing to `published`; it still has no campaign.
 * Step 4 returns that listing.
 
-### admin-listing-US6-TC4-1: Listings table shows an unattached row
+### grade10-admin-auction-listing-US6-TC4-1: Listings table shows an unattached row
 
 **Classification:**
 
@@ -113,7 +113,7 @@ A new listing opened from <grade10 auction admin listings url> with no campaign,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-06
+* **Trace:** grade10-admin-auction-listing-US-06
 
 **Pre-conditions:**
 A listing with no campaign exists. An authorized operator is on <grade10 auction admin listings url>.
@@ -127,7 +127,7 @@ A listing with no campaign exists. An authorized operator is on <grade10 auction
 * The column shows the listing stands on its own.
 * A campaign id is not the only label shown for that row.
 
-### admin-listing-US6-TC5-1: Create listing is withheld from an unauthorized operator
+### grade10-admin-auction-listing-US6-TC5-1: Create listing is withheld from an unauthorized operator
 
 **Classification:**
 
@@ -139,7 +139,7 @@ A listing with no campaign exists. An authorized operator is on <grade10 auction
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-06
+* **Trace:** grade10-admin-auction-listing-US-06
 
 **Pre-conditions:**
 A signed-in operator without `auction:operate` on <grade10 auction admin listings url>.
@@ -156,14 +156,14 @@ A signed-in operator without `auction:operate` on <grade10 auction admin listing
 
 ---
 
-## admin-listing-US7: Developer seeds and drops standalone fixture listings
+## grade10-admin-auction-listing-US7: Developer seeds and drops standalone fixture listings
 
 **As a** developer running the auction service locally,
 **I want** to seed fixture listings with no campaign from the Test panel,
 **so that** I can test the standalone listing lifecycle without a campaign
 cover.
 
-### admin-listing-US7-TC1-1: Listings tab is present in the Test panel
+### grade10-admin-auction-listing-US7-TC1-1: Listings tab is present in the Test panel
 
 **Classification:**
 
@@ -175,7 +175,7 @@ cover.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-07
+* **Trace:** grade10-admin-auction-listing-US-07
 
 **Pre-conditions:**
 The grade10 admin is running locally with `LOCAL_FIXTURES_ENABLED` true.
@@ -189,7 +189,7 @@ The grade10 admin is running locally with `LOCAL_FIXTURES_ENABLED` true.
 
 * A Listings tab is present beside the Campaign tab.
 
-### admin-listing-US7-TC2-1: Developer seeds standalone fixture listings
+### grade10-admin-auction-listing-US7-TC2-1: Developer seeds standalone fixture listings
 
 **Classification:**
 
@@ -201,7 +201,7 @@ The grade10 admin is running locally with `LOCAL_FIXTURES_ENABLED` true.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-07
+* **Trace:** grade10-admin-auction-listing-US-07
 
 **Pre-conditions:**
 The Listings tab is open in the Test panel. No standalone fixture listings exist.
@@ -219,7 +219,7 @@ The Listings tab is open in the Test panel. No standalone fixture listings exist
 * The instance counts on the Listings tab update.
 * Step 4 shows each seeded listing in the Listings table with no campaign.
 
-### admin-listing-US7-TC3-1: Developer drops a standalone fixture listing
+### grade10-admin-auction-listing-US7-TC3-1: Developer drops a standalone fixture listing
 
 **Classification:**
 
@@ -231,7 +231,7 @@ The Listings tab is open in the Test panel. No standalone fixture listings exist
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** admin-listing-US-07
+* **Trace:** grade10-admin-auction-listing-US-07
 
 **Pre-conditions:**
 At least one standalone fixture listing exists (seeded from the Listings tab).

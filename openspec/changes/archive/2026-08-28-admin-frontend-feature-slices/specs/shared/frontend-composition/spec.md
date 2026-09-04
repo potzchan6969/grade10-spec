@@ -28,7 +28,7 @@ operator-only client ports already assumes. An application MUST NOT define a
 product's browser data layer in its own source, whether or not that product has
 a package already.
 
-#### Scenario: frontend-composition-SC-15 - A product gains an operator surface
+#### Scenario: shared-frontend-composition-SC-15 - A product gains an operator surface
 
 - **WHEN** a product that already publishes a collector-facing frontend package
   gains a surface only an operator reaches
@@ -36,14 +36,14 @@ a package already.
   frontend package
 - **AND THEN** the collector-facing package gains neither the slice nor its port
 
-#### Scenario: frontend-composition-SC-16 - A product's first surface serves operators
+#### Scenario: shared-frontend-composition-SC-16 - A product's first surface serves operators
 
 - **WHEN** a product's only browser surface is one an operator reaches
 - **THEN** that product publishes an operator-facing frontend package for it
 - **AND THEN** no collector-facing package is created to hold work no collector
   reaches
 
-#### Scenario: frontend-composition-SC-17 - Only one brand shows the surface
+#### Scenario: shared-frontend-composition-SC-17 - Only one brand shows the surface
 
 - **WHEN** a surface is shown by one brand's application and no other
 - **THEN** its slice still lives in the product's frontend package, and the
@@ -60,21 +60,21 @@ which a backend's response is checked. A transport client MAY be constructed in
 the application's client directory and handed to a package's port at the
 composition root, and nowhere else may name it.
 
-#### Scenario: frontend-composition-SC-18 - A page renders data from a backend
+#### Scenario: shared-frontend-composition-SC-18 - A page renders data from a backend
 
 - **WHEN** an application's page shows data a backend answers with
 - **THEN** it resolves the feature slice's published handle from the container
 - **AND THEN** no transport client, request, or response schema is named in the
   application's page code
 
-#### Scenario: frontend-composition-SC-19 - A page carries out an operator command
+#### Scenario: shared-frontend-composition-SC-19 - A page carries out an operator command
 
 - **WHEN** an operator's action changes state a backend owns
 - **THEN** the command is a feature slice's handle the page resolves
 - **AND THEN** the decision the command protects lives in the package, not in
   the surface that triggered it
 
-#### Scenario: frontend-composition-SC-20 - An application constructs a transport client
+#### Scenario: shared-frontend-composition-SC-20 - An application constructs a transport client
 
 - **WHEN** an application builds a typed client for a product's backend
 - **THEN** the composition root is the only place that hands it to a port
@@ -89,13 +89,13 @@ code for the same surface. Where a brand differs, the difference MUST be
 expressed as configuration the application supplies or as a value the surface is
 handed, not as a duplicated file.
 
-#### Scenario: frontend-composition-SC-21 - Two brands show the same operator surface
+#### Scenario: shared-frontend-composition-SC-21 - Two brands show the same operator surface
 
 - **WHEN** two brands' applications both show a surface for the same product
 - **THEN** one slice in that product's package serves both
 - **AND THEN** neither application holds a copy of the other's version of it
 
-#### Scenario: frontend-composition-SC-22 - A brand needs the surface to differ
+#### Scenario: shared-frontend-composition-SC-22 - A brand needs the surface to differ
 
 - **WHEN** one brand's version of a shared surface must differ from another's
 - **THEN** the difference is supplied by the application as configuration or as
@@ -112,7 +112,7 @@ rule on purpose MUST be named in that check with the reason it is exempt, and a
 named exemption that no longer matches a real path MUST fail the check rather
 than being ignored.
 
-#### Scenario: frontend-composition-SC-23 - Application code reaches a transport directly
+#### Scenario: shared-frontend-composition-SC-23 - Application code reaches a transport directly
 
 - **WHEN** page, view or component code in an application names a transport
   client, issues its own request to a product's backend, or declares a schema
@@ -120,7 +120,7 @@ than being ignored.
 - **THEN** the repository's checks fail, naming the file and the rule
 - **AND THEN** the failure is visible before review rather than during it
 
-#### Scenario: frontend-composition-SC-24 - A path is exempt on purpose
+#### Scenario: shared-frontend-composition-SC-24 - A path is exempt on purpose
 
 - **WHEN** a path must reach a backend outside the container
 - **THEN** the check names that path with the reason it is allowed to

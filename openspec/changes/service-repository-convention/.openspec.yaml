@@ -1,4 +1,4 @@
-schema: spec-driven
+schema: grade10-planning
 created: 2026-08-18
 goal: Make backend business logic and persistence independently testable while
   proving SQL behavior against migrated Postgres

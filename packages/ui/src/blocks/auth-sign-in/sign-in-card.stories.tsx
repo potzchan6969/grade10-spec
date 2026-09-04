@@ -172,7 +172,7 @@ export const LegalIsCentred: Story = {
   },
 };
 
-/** Scenario: auth-sign-in-SC-08 - the block draws no legal node of its own,
+/** Scenario: shared-ui-auth-sign-in-SC-08 - the block draws no legal node of its own,
  * so a consumer that supplies no wording gets none. */
 export const WithoutLegal: Story = {
   play: async () => {

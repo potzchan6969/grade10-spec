@@ -46,7 +46,7 @@ Depends on nothing in group 1. May land beside it.
   cancellation answer shape
   (`Operator opens a draft campaign`, `Operator creates a draft campaign`,
   `Operator publishes a created campaign`, `Operator cancels a published
-  campaign`) per `design.md` Contracts.
+  campaign`) per `tech-design.md` Contracts.
 
 ## 3. Migrate campaign status and verify authoritative lifecycle (grade10)
 

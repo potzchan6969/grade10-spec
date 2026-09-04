@@ -4,7 +4,7 @@ Every group lands in the grade10 repository, in order — each builds on the
 one before. The framework, its conventions and its worked example are already
 in the repository: `apps/frontend/grade10` runs it, `docs/architecture/serving.md`
 and the `frontend-structure` skill say what the shape is. ZZZ takes the
-navigating half of it and no worker — see design.md.
+navigating half of it and no worker — see tech-design.md.
 
 ## 1. The framework and the document (owner: @sean)
 

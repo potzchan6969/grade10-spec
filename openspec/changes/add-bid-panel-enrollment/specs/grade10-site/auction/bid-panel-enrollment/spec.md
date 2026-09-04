@@ -26,55 +26,6 @@ card may change. Authorization and holds belong to
     first bid on this lot
   - Locked after first bid: the linked card stays visible without change
 
-## User journeys
-
-### bid-panel-enrollment-US-01: Collector signs in to bid on a lot
-
-**As a** signed-out collector on a live lot,
-**I want** the bid panel to offer sign-in when I try to bid,
-**so that** I can authenticate before enrollment begins.
-
-**Accepted by:**
-
-- `bid-panel-enrollment-SC-01` — Sign-in is offered instead of place bid
-- `bid-panel-enrollment-SC-02` — Standing badges stay hidden while signed out
-
-### bid-panel-enrollment-US-02: Collector enrolls for a lot before bidding
-
-**As a** signed-in collector who has not enrolled on this lot,
-**I want** to link a card and attest my age in one setup step,
-**so that** I know this lot is ready before I bid.
-
-**Accepted by:**
-
-- `bid-panel-enrollment-SC-03` — Place bid opens setup before enrollment
-- `bid-panel-enrollment-SC-04` — Setup requires card and attestation
-- `bid-panel-enrollment-SC-05` — Dismissing setup leaves the lot unenrolled
-- `bid-panel-enrollment-SC-06` — Completing setup shows the linked card
-
-### bid-panel-enrollment-US-03: Collector changes the linked card before their first bid
-
-**As a** collector enrolled on a lot who has not yet bid on it,
-**I want** to change the linked card from the panel,
-**so that** I can update payment before my first bid without a separate flow.
-
-**Accepted by:**
-
-- `bid-panel-enrollment-SC-07` — Change opens the setup modal
-- `bid-panel-enrollment-SC-08` — Change reuses setup copy with prior card shown
-- `bid-panel-enrollment-SC-09` — Attestation is pre-checked when already given
-
-### bid-panel-enrollment-US-04: Collector bids after enrolling on a lot
-
-**As a** collector who has enrolled on a lot,
-**I want** the linked card to lock after my first bid on that lot,
-**so that** my committed payment method stays stable while I raise bids.
-
-**Accepted by:**
-
-- `bid-panel-enrollment-SC-10` — Change is hidden after the first bid
-- `bid-panel-enrollment-SC-11` — First auto bid may open confirm-maximum
-
 ## ADDED Requirements
 
 ### Requirement: The bid panel enrollment states
@@ -97,35 +48,35 @@ MAY remain visible while signed out.
 Sign-in behavior SHALL follow `shared-auth/session`. Card authorization
 SHALL follow `grade10-auction/bid-payment-method` once enrollment completes.
 
-#### Scenario: bid-panel-enrollment-SC-01 - Sign-in is offered instead of place bid
+#### Scenario: grade10-site-auction-bid-panel-enrollment-SC-01 - Sign-in is offered instead of place bid
 
 - **GIVEN** a signed-out collector on a live lot's bid panel
 - **WHEN** they view the primary bid action
 - **THEN** it offers sign-in to bid
 - **AND** it does not offer place bid
 
-#### Scenario: bid-panel-enrollment-SC-02 - Standing badges stay hidden while signed out
+#### Scenario: grade10-site-auction-bid-panel-enrollment-SC-02 - Standing badges stay hidden while signed out
 
 - **GIVEN** a signed-out collector on a lot where recent bids are shown
 - **WHEN** the bid panel renders
 - **THEN** highest-bid and outbid standing badges are not shown
 - **AND** recent bids remain visible
 
-#### Scenario: bid-panel-enrollment-SC-03 - Place bid opens setup before enrollment
+#### Scenario: grade10-site-auction-bid-panel-enrollment-SC-03 - Place bid opens setup before enrollment
 
 - **GIVEN** a signed-in collector who has not enrolled on an open listing
 - **WHEN** they activate the primary bid action
 - **THEN** the setup modal opens
 - **AND** the bid is not treated as placed
 
-#### Scenario: bid-panel-enrollment-SC-04 - Setup requires card and attestation
+#### Scenario: grade10-site-auction-bid-panel-enrollment-SC-04 - Setup requires card and attestation
 
 - **GIVEN** a signed-in collector in the first-link setup modal
 - **WHEN** they have not completed provider card entry and age attestation
 - **THEN** continue is disabled
 - **AND** when both are complete, continue is enabled
 
-#### Scenario: bid-panel-enrollment-SC-05 - Dismissing setup leaves the lot unenrolled
+#### Scenario: grade10-site-auction-bid-panel-enrollment-SC-05 - Dismissing setup leaves the lot unenrolled
 
 - **GIVEN** a signed-in collector who opened setup for a lot they have not
   enrolled on
@@ -134,7 +85,7 @@ SHALL follow `grade10-auction/bid-payment-method` once enrollment completes.
 - **AND** the linked-card slot shows the empty link prompt
 - **AND** no linked card row is shown
 
-#### Scenario: bid-panel-enrollment-SC-06 - Completing setup shows the linked card
+#### Scenario: grade10-site-auction-bid-panel-enrollment-SC-06 - Completing setup shows the linked card
 
 - **GIVEN** a signed-in collector who completes setup for a lot
 - **WHEN** the modal closes
@@ -154,14 +105,14 @@ The setup modal SHALL use the same title and description for first link and
 change card. Card entry SHALL use a provider-hosted field; card details SHALL
 not pass through Grade10.
 
-#### Scenario: bid-panel-enrollment-SC-07 - Change opens the setup modal
+#### Scenario: grade10-site-auction-bid-panel-enrollment-SC-07 - Change opens the setup modal
 
 - **GIVEN** a collector enrolled on a lot who has not bid on it
 - **WHEN** they activate change on the linked card
 - **THEN** the setup modal opens
 - **AND** the linked-card row remains visible behind the modal
 
-#### Scenario: bid-panel-enrollment-SC-08 - Change reuses setup copy with prior card shown
+#### Scenario: grade10-site-auction-bid-panel-enrollment-SC-08 - Change reuses setup copy with prior card shown
 
 - **GIVEN** a collector changing the linked card before their first bid
 - **WHEN** the setup modal opens
@@ -169,7 +120,7 @@ not pass through Grade10.
 - **AND** the provider field area indicates the previously linked card on
   file rather than an empty first-link placeholder
 
-#### Scenario: bid-panel-enrollment-SC-09 - Attestation is pre-checked when already given
+#### Scenario: grade10-site-auction-bid-panel-enrollment-SC-09 - Attestation is pre-checked when already given
 
 - **GIVEN** a collector who already attested on a prior lot
 - **WHEN** they open setup to change card on a new lot
@@ -183,7 +134,7 @@ SHALL continue to show the committed card and SHALL NOT offer change on that
 listing. Raising a bid on the same listing SHALL NOT reopen setup for card
 selection.
 
-#### Scenario: bid-panel-enrollment-SC-10 - Change is hidden after the first bid
+#### Scenario: grade10-site-auction-bid-panel-enrollment-SC-10 - Change is hidden after the first bid
 
 - **GIVEN** a collector enrolled on a lot who has placed at least one bid on
   it
@@ -191,7 +142,7 @@ selection.
 - **THEN** the linked card is shown
 - **AND** change is not offered
 
-#### Scenario: bid-panel-enrollment-SC-11 - First auto bid may open confirm-maximum
+#### Scenario: grade10-site-auction-bid-panel-enrollment-SC-11 - First auto bid may open confirm-maximum
 
 - **GIVEN** a collector enrolled on a lot in auto-bid mode who has not yet
   acknowledged the auto-bid introduction on that listing

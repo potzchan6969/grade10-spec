@@ -46,7 +46,7 @@
     },
     {
       "path": "docs/prds/products/grade10-store/loyalty.md",
-      "source": "---\ntitle: Loyalty\nsummary: Points a shopper earns on what they spend, and the tiers those points move them through.\nspec: grade10-store/loyalty\norder: 1\n---\n\nA member earns points on qualifying spend, the points expire on a schedule the\nprogramme sets, and what a member has earned over a window decides their tier.\nTier decides the rate they earn at next. That loop is the whole programme.\n\n## How a point comes to exist\n\nA settled sale reaches the programme exactly once, carrying a money amount and\nthe identity that paid it. The amount is priced into points at the programme's\nrate multiplied by the member's tier multiplier, rounded once, and written to\nthe ledger as a dated credit. Nothing is ever edited afterwards — a balance is\na question asked of the ledger, never a number kept beside it.\n\n### Why the ledger is never edited\n\nAn edited row is a row nobody can audit. A claw-back is a new debit that names\nthe credit it reverses, so the history of a member's balance reads forwards and\nreconciles against the money that caused it.\n\nThe programme's own money rules follow the platform's\n[money amounts](../../platform/money-amounts.md) topic; the product decision\nbehind the rates lives in the\n[loyalty programme PRD](../../../docs/prds/loyalty/programme.md), and the\nreview that signed it off is in\n[spec review](../../../docs/governance/spec-review.md). An older draft at\n[tier maths](./tier-maths.md) is gone and this link proves it.\n\n## The ladder Grade10 deploys\n\n| Tier | Earned in 12 months | Multiplier | Expiry | Invitation only | Reward menu | Support queue |\n| --- | --- | --- | --- | --- | --- | --- |\n| Bronze | 0 | 1.0x | 12 months | no | standard | standard |\n| Silver | 5,000 | 1.25x | 12 months | no | standard | standard |\n| Gold | 20,000 | 1.5x | 18 months | no | extended | priority |\n| Onyx | not earnable | 2.0x | 24 months | yes | full | concierge |\n\n::spec{id=\"grade10-store/loyalty\"}\n\n:::detail{title=\"How a balance is derived at an instant\" for=\"engineer\"}\nA balance is the sum of credits that are unspent and unexpired at the instant\nasked about. There is no sweep job: expiry is a comparison against the credit's\nown window, evaluated at read time, so a balance read a millisecond after a\ncredit expires is already correct.\n\nDebits draw on credits oldest-first, and each debit records which credits it\ndrew from. That record is what makes a reversal able to return each credit\ncarrying its original expiry rather than a fresh one.\n:::\n\n::journeys{id=\"grade10-store/loyalty\"}\n\n::cases{id=\"grade10-store/loyalty\"}\n\nThe one scenario people ask about most often, on its own:\n\n::spec{id=\"grade10-store/loyalty\" scenario=\"loyalty-SC-04\"}\n\nCheckout is the surface points are spent on, so what is moving there matters\nhere too:\n\n::changes{spec=\"grade10-store/checkout\"}\n\n::image{src=\"assets/loyalty-tiers.png\" alt=\"The four tiers as a ladder, with the earning threshold and multiplier of each\" caption=\"The ladder Grade10 deploys. Onyx sits outside the earning path on purpose.\"}\n",
+      "source": "---\ntitle: Loyalty\nsummary: Points a shopper earns on what they spend, and the tiers those points move them through.\nspec: grade10-store/loyalty\norder: 1\n---\n\nA member earns points on qualifying spend, the points expire on a schedule the\nprogramme sets, and what a member has earned over a window decides their tier.\nTier decides the rate they earn at next. That loop is the whole programme.\n\n## How a point comes to exist\n\nA settled sale reaches the programme exactly once, carrying a money amount and\nthe identity that paid it. The amount is priced into points at the programme's\nrate multiplied by the member's tier multiplier, rounded once, and written to\nthe ledger as a dated credit. Nothing is ever edited afterwards — a balance is\na question asked of the ledger, never a number kept beside it.\n\n### Why the ledger is never edited\n\nAn edited row is a row nobody can audit. A claw-back is a new debit that names\nthe credit it reverses, so the history of a member's balance reads forwards and\nreconciles against the money that caused it.\n\nThe programme's own money rules follow the platform's\n[money amounts](../../platform/money-amounts.md) topic; the product decision\nbehind the rates lives in the\n[loyalty programme PRD](../../../docs/prds/loyalty/programme.md), and the\nreview that signed it off is in\n[spec review](../../../docs/governance/spec-review.md). An older draft at\n[tier maths](./tier-maths.md) is gone and this link proves it.\n\n## The ladder Grade10 deploys\n\n| Tier | Earned in 12 months | Multiplier | Expiry | Invitation only | Reward menu | Support queue |\n| --- | --- | --- | --- | --- | --- | --- |\n| Bronze | 0 | 1.0x | 12 months | no | standard | standard |\n| Silver | 5,000 | 1.25x | 12 months | no | standard | standard |\n| Gold | 20,000 | 1.5x | 18 months | no | extended | priority |\n| Onyx | not earnable | 2.0x | 24 months | yes | full | concierge |\n\n::spec{id=\"grade10-store/loyalty\"}\n\n:::detail{title=\"How a balance is derived at an instant\" for=\"engineer\"}\nA balance is the sum of credits that are unspent and unexpired at the instant\nasked about. There is no sweep job: expiry is a comparison against the credit's\nown window, evaluated at read time, so a balance read a millisecond after a\ncredit expires is already correct.\n\nDebits draw on credits oldest-first, and each debit records which credits it\ndrew from. That record is what makes a reversal able to return each credit\ncarrying its original expiry rather than a fresh one.\n:::\n\n::journeys{id=\"grade10-store/loyalty\"}\n\n::cases{id=\"grade10-store/loyalty\"}\n\nThe one scenario people ask about most often, on its own:\n\n::spec{id=\"grade10-store/loyalty\" scenario=\"grade10-site-loyalty-programme-SC-04\"}\n\nCheckout is the surface points are spent on, so what is moving there matters\nhere too:\n\n::changes{spec=\"grade10-store/checkout\"}\n\n::image{src=\"assets/loyalty-tiers.png\" alt=\"The four tiers as a ladder, with the earning threshold and multiplier of each\" caption=\"The ladder Grade10 deploys. Onyx sits outside the earning path on purpose.\"}\n",
       "lastCommit": {
         "sha": "c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f7",
         "date": "2026-08-29T08:45:00.000Z"
@@ -142,7 +142,7 @@
     },
     {
       "path": "docs/prds/guides/writing-a-page.md",
-      "source": "---\ntitle: Writing a page\nsummary: The block grammar, and the two ways a page breaks.\norder: 2\n---\n\nA page is YAML frontmatter followed by a sequence of blocks. Everything between\ndirectives is markdown; directives sit at column zero and never indent.\n\n## The frontmatter\n\nFour keys, in this order, and no others. An unknown key is a parse error rather\nthan a silently dropped field, because the editor writes this file back.\n\n~~~yaml\ntitle: Loyalty\nsummary: Points a shopper earns on what they spend.\nspec: grade10-store/loyalty\norder: 1\n~~~\n\n## Leaves and containers\n\nA leaf is one line. A container opens with three colons and closes with a bare\nthree colons, and containers never nest.\n\n~~~markdown\n::spec{id=\"grade10-store/loyalty\" scenario=\"loyalty-SC-04\"}\n\n:::callout{kind=\"note\"}\nOne level of body, markdown plus leaf directives.\n:::\n~~~\n\n## What a broken reference looks like\n\nA reference that does not resolve is never silently blank. This page asks for a\nuser story that does not exist, on purpose:\n\n::spec{id=\"grade10-auction/bidding\" story=\"bidding-US-99\"}\n\nThe same rule holds for links. A relative link out of the manual into the\nproduct briefs resolves to the file on GitHub, a link to another manual page\nbecomes a route, and [anything else](../../nowhere/at-all.md) is struck through\nwhere it stands.\n",
+      "source": "---\ntitle: Writing a page\nsummary: The block grammar, and the two ways a page breaks.\norder: 2\n---\n\nA page is YAML frontmatter followed by a sequence of blocks. Everything between\ndirectives is markdown; directives sit at column zero and never indent.\n\n## The frontmatter\n\nFour keys, in this order, and no others. An unknown key is a parse error rather\nthan a silently dropped field, because the editor writes this file back.\n\n~~~yaml\ntitle: Loyalty\nsummary: Points a shopper earns on what they spend.\nspec: grade10-store/loyalty\norder: 1\n~~~\n\n## Leaves and containers\n\nA leaf is one line. A container opens with three colons and closes with a bare\nthree colons, and containers never nest.\n\n~~~markdown\n::spec{id=\"grade10-store/loyalty\" scenario=\"grade10-site-loyalty-programme-SC-04\"}\n\n:::callout{kind=\"note\"}\nOne level of body, markdown plus leaf directives.\n:::\n~~~\n\n## What a broken reference looks like\n\nA reference that does not resolve is never silently blank. This page asks for a\nuser story that does not exist, on purpose:\n\n::spec{id=\"grade10-auction/bidding\" story=\"bidding-US-99\"}\n\nThe same rule holds for links. A relative link out of the manual into the\nproduct briefs resolves to the file on GitHub, a link to another manual page\nbecomes a route, and [anything else](../../nowhere/at-all.md) is struck through\nwhere it stands.\n",
       "lastCommit": {
         "sha": "5566778899aabbccddeeff0011223344556677aa",
         "date": "2026-08-30T07:15:00.000Z"
@@ -165,12 +165,12 @@
           "text": "The programme SHALL hold exactly one member record per user identity, created the first time anything is recorded for that user, and SHALL treat joining as a separate act from having activity recorded.\n\nThe member record SHALL hold no personal data beyond the user identity. Names, email addresses and every other identity attribute stay in the identity system.",
           "scenarios": [
             {
-              "id": "loyalty-SC-01",
+              "id": "grade10-site-loyalty-programme-SC-01",
               "name": "Activity precedes joining",
               "text": "- **WHEN** points are recorded for a user who has never joined\n- **THEN** a member record exists and holds those points\n- **AND** the member is reported as not joined until they join"
             },
             {
-              "id": "loyalty-SC-02",
+              "id": "grade10-site-loyalty-programme-SC-02",
               "name": "Joining is idempotent",
               "text": "- **WHEN** a member joins more than once\n- **THEN** the first join date stands and later attempts change nothing"
             }
@@ -181,17 +181,17 @@
           "text": "Every point movement SHALL be recorded as a dated entry that is never edited or deleted. A balance SHALL be derived by asking the ledger, never stored as a running total.",
           "scenarios": [
             {
-              "id": "loyalty-SC-03",
+              "id": "grade10-site-loyalty-programme-SC-03",
               "name": "Balance excludes expired and spent points",
               "text": "- **WHEN** a balance is asked for at a given instant\n- **THEN** it counts only credits that are unspent and unexpired at that instant"
             },
             {
-              "id": "loyalty-SC-04",
+              "id": "grade10-site-loyalty-programme-SC-04",
               "name": "A balance never goes negative",
               "text": "- **WHEN** any debit is recorded\n- **THEN** it draws only on credits that have points remaining\n- **AND** no sequence of recorded activity can drive a member below zero"
             },
             {
-              "id": "loyalty-SC-05",
+              "id": "grade10-site-loyalty-programme-SC-05",
               "name": "Every debit is fully accounted",
               "text": "- **GIVEN** a debit that draws on more than one credit\n- **WHEN** the debit is recorded\n- **THEN** the sum of what it drew from each credit equals the debit"
             }
@@ -202,12 +202,12 @@
           "text": "A tier earned over the programme's measurement window SHALL hold even after the points that won it expire. A tier SHALL never fall because a balance fell.",
           "scenarios": [
             {
-              "id": "loyalty-SC-14",
+              "id": "grade10-site-loyalty-programme-SC-14",
               "name": "Earned tier holds after points expire",
               "text": "- **GIVEN** a member who reached Gold on points that have since expired\n- **WHEN** their tier is evaluated\n- **THEN** they are still Gold"
             },
             {
-              "id": "loyalty-SC-16",
+              "id": "grade10-site-loyalty-programme-SC-16",
               "name": "Tier history records each move",
               "text": "- **WHEN** a member's tier changes\n- **THEN** the move is recorded with its date and the reason that caused it"
             }
@@ -218,17 +218,17 @@
           "text": "What the member paid SHALL be recorded on the redemption, so repricing a reward never rewrites what an earlier redemption cost.",
           "scenarios": [
             {
-              "id": "loyalty-SC-29",
+              "id": "grade10-site-loyalty-programme-SC-29",
               "name": "Repricing does not rewrite history",
               "text": "- **GIVEN** a reward redeemed at 500 points and later repriced to 800\n- **WHEN** the earlier redemption is read\n- **THEN** it still reads 500"
             },
             {
-              "id": "loyalty-SC-30",
+              "id": "grade10-site-loyalty-programme-SC-30",
               "name": "Stock is not oversold",
               "text": "- **WHEN** two redemptions race for the last unit of a stocked reward\n- **THEN** exactly one succeeds and the other is refused"
             },
             {
-              "id": "loyalty-SC-33",
+              "id": "grade10-site-loyalty-programme-SC-33",
               "name": "Restored points keep their original expiry",
               "text": "- **WHEN** a redemption is reversed\n- **THEN** each credit it drew from is restored carrying its own original expiry"
             }
@@ -237,44 +237,58 @@
       ],
       "journeys": [
         {
-          "id": "loyalty-US-01",
+          "id": "grade10-site-loyalty-programme-US-01",
           "title": "Member earns points on qualifying spend",
           "text": "**As a** member,\n**I want** my balance to follow the money I spend and keep spent, priced once at my tier's rate,\n**so that** what I can redeem is exactly what my qualifying spend earned.",
           "acceptedBy": [
-            "loyalty-SC-01",
-            "loyalty-SC-03",
-            "loyalty-SC-04",
-            "loyalty-SC-05"
+            "grade10-site-loyalty-programme-SC-01",
+            "grade10-site-loyalty-programme-SC-03",
+            "grade10-site-loyalty-programme-SC-04",
+            "grade10-site-loyalty-programme-SC-05"
           ]
         },
         {
-          "id": "loyalty-US-02",
+          "id": "grade10-site-loyalty-programme-US-02",
           "title": "Member advances through the tier ladder",
           "text": "**As a** member,\n**I want** my tier derived from what I earned and kept when those points expire,\n**so that** the rate I earn at reflects the standing I reached rather than what my balance happens to be today.",
-          "acceptedBy": ["loyalty-SC-14", "loyalty-SC-16"]
+          "acceptedBy": [
+            "grade10-site-loyalty-programme-SC-14",
+            "grade10-site-loyalty-programme-SC-16"
+          ]
         },
         {
-          "id": "loyalty-US-03",
+          "id": "grade10-site-loyalty-programme-US-03",
           "title": "Member redeems points for a reward",
           "text": "**As a** member,\n**I want** to spend my points at the price the reward carried when I redeemed it,\n**so that** a later reprice, a sell-out or a reversal never changes what that redemption cost me.",
-          "acceptedBy": ["loyalty-SC-29", "loyalty-SC-30", "loyalty-SC-33"]
+          "acceptedBy": [
+            "grade10-site-loyalty-programme-SC-29",
+            "grade10-site-loyalty-programme-SC-30",
+            "grade10-site-loyalty-programme-SC-33"
+          ]
         }
       ],
       "testCases": [
         {
-          "id": "loyalty-TC-01",
+          "id": "grade10-site-loyalty-programme-TC-01",
           "title": "Membership is created by activity, not by joining",
-          "traces": ["loyalty-SC-01", "loyalty-SC-02"]
+          "traces": [
+            "grade10-site-loyalty-programme-SC-01",
+            "grade10-site-loyalty-programme-SC-02"
+          ]
         },
         {
-          "id": "loyalty-TC-02",
+          "id": "grade10-site-loyalty-programme-TC-02",
           "title": "Ledger arithmetic holds under concurrent debits",
-          "traces": ["loyalty-SC-03", "loyalty-SC-04", "loyalty-SC-05"]
+          "traces": [
+            "grade10-site-loyalty-programme-SC-03",
+            "grade10-site-loyalty-programme-SC-04",
+            "grade10-site-loyalty-programme-SC-05"
+          ]
         },
         {
-          "id": "loyalty-TC-03",
+          "id": "grade10-site-loyalty-programme-TC-03",
           "title": "A repriced reward does not rewrite an earlier redemption",
-          "traces": ["loyalty-SC-29"]
+          "traces": ["grade10-site-loyalty-programme-SC-29"]
         }
       ]
     },
@@ -392,7 +406,7 @@
           "text": "A session SHALL carry an expiry and SHALL stop being accepted at it, with no revocation call required.",
           "scenarios": [
             {
-              "id": "sessions-SC-01",
+              "id": "shared-auth-sessions-SC-01",
               "name": "An expired token is refused",
               "text": "- **WHEN** a token is presented after its expiry\n- **THEN** it is refused and no renewal is offered"
             }
@@ -403,7 +417,7 @@
           "text": "Changing the secret that proves an identity SHALL invalidate every session created before the change.",
           "scenarios": [
             {
-              "id": "sessions-SC-02",
+              "id": "shared-auth-sessions-SC-02",
               "name": "Other devices are signed out",
               "text": "- **WHEN** a member changes their password on one device\n- **THEN** sessions on every other device stop being accepted"
             }
@@ -486,7 +500,7 @@
   "changes": [
     {
       "id": "rotate-session-keys",
-      "schema": "full-planning",
+      "schema": "grade10-planning",
       "status": "in-flight",
       "owners": ["@echo"],
       "created": "2026-08-14",
@@ -520,7 +534,7 @@
     },
     {
       "id": "tiered-loyalty",
-      "schema": "full-planning",
+      "schema": "grade10-planning",
       "status": "in-flight",
       "owners": ["@echo", "@mira"],
       "created": "2026-08-12",
@@ -556,7 +570,7 @@
     },
     {
       "id": "express-checkout",
-      "schema": "full-planning",
+      "schema": "grade10-planning",
       "status": "in-flight",
       "owners": ["@dana"],
       "created": "2026-08-05",
@@ -580,7 +594,7 @@
     },
     {
       "id": "auction-auto-bidding",
-      "schema": "pm-planning",
+      "schema": "grade10-planning",
       "status": "in-flight",
       "owners": ["@sam"],
       "created": "2026-07-22",
@@ -597,7 +611,7 @@
     },
     {
       "id": "manual-authoring",
-      "schema": "full-planning",
+      "schema": "grade10-planning",
       "status": "in-flight",
       "owners": ["@echo"],
       "created": "2026-08-26",

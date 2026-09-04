@@ -7,19 +7,19 @@ order: 1
 A point is HKD 10 of qualifying goods, priced once when a paid order reaches
 the programme. Behind every member is an append-only ledger of dated point
 lots, and a balance is a query over it — nothing is edited, so nothing can
-quietly drift ([[loyalty-SC-03]], [[loyalty-SC-04]], [[loyalty-SC-05]]). A
+quietly drift ([[grade10-site-loyalty-programme-SC-03]], [[grade10-site-loyalty-programme-SC-04]], [[grade10-site-loyalty-programme-SC-05]]). A
 purchase recorded twice under its own key answers once and records nothing
-twice ([[loyalty-SC-10]], [[loyalty-SC-11]]).
+twice ([[grade10-site-loyalty-programme-SC-10]], [[grade10-site-loyalty-programme-SC-11]]).
 
 ## The rate
 
 | Rule | Value |
 | --- | --- |
-| Currency and clock | HKD, Asia/Hong_Kong. A foreign currency is refused ([[loyalty-SC-07]]) |
+| Currency and clock | HKD, Asia/Hong_Kong. A foreign currency is refused ([[grade10-site-loyalty-programme-SC-07]]) |
 | Base rate | 1 point per HKD 10 of qualifying goods after discounts |
 | Multiplier | The tier held when the purchase is processed — Silver 1×, Gold 1.2×, Black 1.7× |
 | Rounding | Base points floor first, then the multiplier, floored again: HKD 139 at 1.2× earns 15 |
-| Event date | The seller's own date, so a late webhook keeps its day ([[loyalty-SC-08]]); more than five minutes ahead is refused ([[loyalty-SC-09]]) |
+| Event date | The seller's own date, so a late webhook keeps its day ([[grade10-site-loyalty-programme-SC-08]]); more than five minutes ahead is refused ([[grade10-site-loyalty-programme-SC-09]]) |
 
 Every credit records the money, the base points and the multiplier it was
 priced with, so what an entry granted is explained by the entry alone. Earning
@@ -49,11 +49,11 @@ guess, and an order priced at zero is settled without a call.
 The store never waits on loyalty at the moment of sale. When an order becomes
 paid, the same transaction writes an order event; a drain delivers it, and the
 event's own id is the idempotency key, which is what makes a redelivery free
-([[loyalty-SC-39]], [[loyalty-SC-40]], [[loyalty-SC-41]]). Before a drain
+([[grade10-site-loyalty-programme-SC-39]], [[grade10-site-loyalty-programme-SC-40]], [[grade10-site-loyalty-programme-SC-41]]). Before a drain
 delivers anything it checks the programme's currency and earn basis against
 its own, and a mismatch stops the drain rather than earning on two different
-bases under one name ([[loyalty-SC-43]]). A refusal is reported, not swallowed
-([[loyalty-SC-44]]).
+bases under one name ([[grade10-site-loyalty-programme-SC-43]]). A refusal is reported, not swallowed
+([[grade10-site-loyalty-programme-SC-44]]).
 
 Retries back off from a minute to an hour. After twelve attempts an event
 parks where an operator can retry it, and the age of the oldest undelivered
@@ -63,14 +63,14 @@ online or in-store — and one balance holds across both.
 ## Refunds
 
 A refund claws back what the refunded money earned, and never more than the
-member still holds from it ([[loyalty-SC-35]], [[loyalty-SC-36]],
-[[loyalty-SC-42]]). The seller sends the goods share of a refund, priced from
+member still holds from it ([[grade10-site-loyalty-programme-SC-35]], [[grade10-site-loyalty-programme-SC-36]],
+[[grade10-site-loyalty-programme-SC-42]]). The seller sends the goods share of a refund, priced from
 the same basis the earn used, so refunding a delivery removes no points. A
 refund that arrives before its earn is not lost; it claws back once the earn
-lands ([[loyalty-SC-37]]). Points already spent or expired cannot be reached,
+lands ([[grade10-site-loyalty-programme-SC-37]]). Points already spent or expired cannot be reached,
 and the gap is counted by cause rather than driving anyone negative.
 
-A claw-back also cancels the tier contribution it removes ([[loyalty-SC-38]])
+A claw-back also cancels the tier contribution it removes ([[grade10-site-loyalty-programme-SC-38]])
 and re-evaluates the tier at once — [Tiers](/p/grade10-site/loyalty/tiers).
 
 ## Expiry
@@ -82,11 +82,11 @@ correction and a reversal are not activity. Whatever is already dead is
 settled before the clock moves, so a lapse that has happened is never
 revived. Expiry needs no sweep to be true: a lot past its date stops counting
 the instant it is read, and the nightly sweep only writes the record
-([[loyalty-SC-13]]).
+([[grade10-site-loyalty-programme-SC-13]]).
 
 :::callout{kind="warning"}
 The durable spec still says a credit expires twelve months after the activity
-that earned it ([[loyalty-SC-12]]). What runs is the activity clock above — the
+that earned it ([[grade10-site-loyalty-programme-SC-12]]). What runs is the activity clock above — the
 whole balance lives while the member keeps buying or redeeming. The rewrite is
 in flight under `revise-loyalty-programme-rules`.
 :::
@@ -95,9 +95,9 @@ in flight under `revise-loyalty-programme-rules`.
 
 An operator can add points two ways, and the difference is the whole point.
 A **campaign grant** — a sign-up promotion, a goodwill gift — credits both
-counts, so it can move a member up a tier ([[loyalty-SC-49]]). A
+counts, so it can move a member up a tier ([[grade10-site-loyalty-programme-SC-49]]). A
 **correction** credits or debits the redeemable balance alone, so fixing a
-mistake never promotes anyone ([[loyalty-SC-48]]). Neither keeps the balance
+mistake never promotes anyone ([[grade10-site-loyalty-programme-SC-48]]). Neither keeps the balance
 alive. The reason an operator types goes to the audit trail; the ledger
 carries only its digest.
 

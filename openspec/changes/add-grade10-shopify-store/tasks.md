@@ -15,7 +15,7 @@ Task 2.5 depends on the contracts in group 1; it uses fixtures rather than a run
 - [ ] 2.2 Make `A Shopify product change invalidates browsing data` pass with tagged cache invalidation and bounded expiry.
 - [ ] 2.3 Make `A shopper checks out signed in` and `A guest receives a linked Grade10 account after payment` pass through the Grade10 session and one-to-one Shopify customer association behavior.
 - [ ] 2.4 Make `Checkout uses live Shopify price and inventory`, `An item that sold out before payment is named`, `Backorders are refused`, and `A retry returns one checkout handoff` pass with one local order and one Shopify draft order.
-- [ ] 2.5 Make `A checkout URL is safe to follow`, `A permanent order URL requires its account`, and `An account lists its orders` pass in the Grade10 storefront against Store contracts and fixtures, composing the filled, section-omitted, empty, and tracking states in `ui.md`.
+- [ ] 2.5 Make `A checkout URL is safe to follow`, `A permanent order URL requires its account`, and `An account lists its orders` pass in the Grade10 storefront against Store contracts and fixtures, composing the filled, section-omitted, empty, and tracking states in `ui-design.md`.
 - [ ] 2.6 Verify every catalogue, identity, checkout, and order-access scenario in this group through the Store backend and storefront feature lanes.
 
 ## 3. Payment and shipping projection (grade10)

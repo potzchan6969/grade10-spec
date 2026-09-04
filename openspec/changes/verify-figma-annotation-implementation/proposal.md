@@ -23,7 +23,7 @@ leave the reconciliation workflow.
 - Group genuine gaps into coherent planning handoffs rather than creating one
   change per annotation.
 - Preview the proposed OpenSpec lane and artifacts, then require explicit
-  confirmation before running `pm-planning` or `full-planning`.
+  confirmation before running `grade10-planning`.
 - End reconciliation without accepting gap findings when planning is required;
   require a fresh observation and selection after the plan exists.
 - Preserve separate consent for annotation acceptance, local commits, planning

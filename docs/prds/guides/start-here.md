@@ -21,6 +21,8 @@ the first hour is different depending on what you came to do, so pick a path.
   done over total, straight out of git.
 - [How we plan](/guides/how-we-plan) — where a proposal stops and a spec
   starts.
+- [Working a change](/guides/working-a-change) — `/planning-pm`, and what to
+  leave the three hands after you.
 
 ## If you are a designer
 
@@ -47,6 +49,8 @@ over, or hand the change id to a PM or engineer.
   survive.
 - [Dates and times](/platform/shared/dates-and-times) — the four shapes a date takes
   on screen, before you invent a fifth.
+- [Working a change](/guides/working-a-change) — `/planning-design`, and when a
+  change needs no `ui-design.md` at all.
 
 ## If you are in QA
 
@@ -71,6 +75,8 @@ classified cases, is
   what a passing verification does not claim.
 - [In Flight](/in-flight) — what is moving, so a test plan is written against the
   right version.
+- [Working a change](/guides/working-a-change) — `/planning-qa`, and the two
+  pull requests a suite rides in.
 
 ## If you are an engineer
 
@@ -82,6 +88,8 @@ classified cases, is
   checks against.
 - [Document signing](/p/grade10-site/doc-sign) and [Identity store](/p/grade10-site/e-kyc) — the two
   services with the most decisions per line of code.
+- [Working a change](/guides/working-a-change) — `/planning-dev`, taking a
+  change in hand, and the archive debt `tasks.md` has to carry.
 - [Writing the manual](/guides/writing-the-manual) — the page grammar, for when
   you document what you built.
 

@@ -34,51 +34,6 @@ count transition.
     release admin holds from the product page; read-only oversight of Auction
     and Vault holds by `holder_kind`; history
 
-## User journeys
-
-### catalog-US-01: Record received stock
-
-As an inventory admin, I want to create a product and intake quantity into its
-inventory, so that the snapshot and derived lifetime ledger reflect what
-Grade10 accepted.
-
-Accepted by: catalog-SC-01, catalog-SC-05, catalog-SC-06, catalog-SC-07,
-catalog-SC-52, catalog-SC-54.
-
-### catalog-US-02: Oversee holds and settle them from holder apps
-
-As an inventory admin, I want to see Auction and Vault holds with remaining
-quantity on the product page, reserve house stock under `admin` holds, release
-those admin holds when done, while adjust, release for Auction/Vault,
-sell-from-reservation, change-product, and vault-from-reservation run from the
-owning listing or Vault console, so that house stock is not over-promised and
-settlement stays with the application that owns the hold.
-
-Accepted by: catalog-SC-14, catalog-SC-17, catalog-SC-18, catalog-SC-22,
-catalog-SC-35, catalog-SC-36, catalog-SC-37, catalog-SC-38, catalog-SC-47,
-catalog-SC-48, catalog-SC-49, catalog-SC-50, catalog-SC-51, catalog-SC-53,
-catalog-SC-59, catalog-SC-60, catalog-SC-63, catalog-SC-64, catalog-SC-65,
-catalog-SC-67, catalog-SC-68.
-
-### catalog-US-03: Use inventory through a holder-kind boundary
-
-As a consuming application, I want to reserve, adjust, partially settle, and
-release my quantity without seeing another kind's holds, so that I can safely
-use my hold. Auction sells; Vault vaults.
-
-Accepted by: catalog-SC-15, catalog-SC-16, catalog-SC-19, catalog-SC-20,
-catalog-SC-21, catalog-SC-39, catalog-SC-40, catalog-SC-61, catalog-SC-62,
-catalog-SC-66.
-
-### catalog-US-04: Reconstruct stock changes
-
-As an inventory admin, I want every stock and reservation transition recorded,
-so that I can explain how the latest snapshot was reached.
-
-Accepted by: catalog-SC-23, catalog-SC-24, catalog-SC-25, catalog-SC-26,
-catalog-SC-27, catalog-SC-28, catalog-SC-41, catalog-SC-42, catalog-SC-43,
-catalog-SC-44, catalog-SC-45.
-
 ## ADDED Requirements
 
 ### Requirement: Product record fields
@@ -101,7 +56,7 @@ product status `created`.
 | Created by | Operator user id at create, immutable |
 | Remarks | Trimmed text, may be empty |
 
-#### Scenario: catalog-SC-01 - Operator creates a draft product with empty inventory
+#### Scenario: grade10-admin-inventory-catalog-SC-01 - Operator creates a draft product with empty inventory
 
 - **GIVEN** an authorized inventory admin
 - **WHEN** they create a product with a valid name
@@ -109,14 +64,14 @@ product status `created`.
 - **AND** creates exactly one inventory snapshot whose counts are zero
 - **AND** created by is that operator
 
-#### Scenario: catalog-SC-02 - Product create without a name is refused
+#### Scenario: grade10-admin-inventory-catalog-SC-02 - Product create without a name is refused
 
 - **GIVEN** an authorized inventory admin
 - **WHEN** they create a product with an empty name
 - **THEN** Grade10 refuses the create
 - **AND** no product or inventory is persisted
 
-#### Scenario: catalog-SC-52 - Operator marks a draft product created
+#### Scenario: grade10-admin-inventory-catalog-SC-52 - Operator marks a draft product created
 
 - **GIVEN** a draft product
 - **WHEN** an authorized inventory admin marks it created
@@ -124,7 +79,7 @@ product status `created`.
 - **AND** updated at advances
 - **AND** one `product-update` history entry records the transition
 
-#### Scenario: catalog-SC-53 - Reserve requires a created product
+#### Scenario: grade10-admin-inventory-catalog-SC-53 - Reserve requires a created product
 
 - **GIVEN** a draft product whose inventory has available stock
 - **WHEN** Auction reserves quantity one
@@ -137,7 +92,7 @@ product status `created`.
 - **THEN** Grade10 refuses for the same reason
 - **AND** no reservation is written
 
-#### Scenario: catalog-SC-54 - Created to draft is refused
+#### Scenario: grade10-admin-inventory-catalog-SC-54 - Created to draft is refused
 
 - **GIVEN** a created product
 - **WHEN** an authorized inventory admin attempts to set status to `draft`
@@ -175,7 +130,7 @@ mutation — not by database triggers that sync counters from reservations.
 Holder-facing available on a **`created`** product is that inventory's
 available.
 
-#### Scenario: catalog-SC-03 - Counts reconcile across current and terminal stock
+#### Scenario: grade10-admin-inventory-catalog-SC-03 - Counts reconcile across current and terminal stock
 
 - **GIVEN** an inventory with stock five, reserved two, vaulted one, sold three,
   and withdrawn one
@@ -183,7 +138,7 @@ available.
 - **THEN** available is three
 - **AND** derived ledger is ten
 
-#### Scenario: catalog-SC-04 - Product owns only one inventory
+#### Scenario: grade10-admin-inventory-catalog-SC-04 - Product owns only one inventory
 
 - **GIVEN** an existing product and its inventory
 - **WHEN** more stock is received for that product
@@ -198,35 +153,35 @@ quantity in one transaction (derived ledger rises by the same amount). It
 SHALL NOT change reserved, vaulted, sold, or withdrawn. Intake for an unknown
 product SHALL be refused.
 
-#### Scenario: catalog-SC-05 - Operator intakes three
+#### Scenario: grade10-admin-inventory-catalog-SC-05 - Operator intakes three
 
 - **GIVEN** a product with stock two and derived ledger four
 - **WHEN** an authorized inventory admin intakes quantity three
 - **THEN** the same inventory has stock five and derived ledger seven
 - **AND** reserved, vaulted, sold, and withdrawn are unchanged
 
-#### Scenario: catalog-SC-06 - Repeated intakes accumulate in one inventory
+#### Scenario: grade10-admin-inventory-catalog-SC-06 - Repeated intakes accumulate in one inventory
 
 - **GIVEN** a product whose inventory counts are zero
 - **WHEN** an authorized inventory admin intakes two and later intakes three
 - **THEN** the product still has one inventory
 - **AND** stock is five and derived ledger is five
 
-#### Scenario: catalog-SC-07 - Intake appends one quantity change
+#### Scenario: grade10-admin-inventory-catalog-SC-07 - Intake appends one quantity change
 
 - **GIVEN** an existing product
 - **WHEN** an authorized inventory admin intakes quantity ten
 - **THEN** one `intake` change is appended with quantity ten
 - **AND** its before and after snapshots show stock increasing by ten
 
-#### Scenario: catalog-SC-08 - Invalid intake quantity is refused
+#### Scenario: grade10-admin-inventory-catalog-SC-08 - Invalid intake quantity is refused
 
 - **GIVEN** an existing product
 - **WHEN** an authorized inventory admin intakes quantity zero or quantity 501
 - **THEN** Grade10 refuses the intake
 - **AND** the inventory and history are unchanged
 
-#### Scenario: catalog-SC-09 - Intake for unknown product is refused
+#### Scenario: grade10-admin-inventory-catalog-SC-09 - Intake for unknown product is refused
 
 - **GIVEN** no product with the requested id
 - **WHEN** an authorized inventory admin intakes stock for that id
@@ -246,21 +201,21 @@ A sale or withdrawal exceeding available SHALL be refused. Reserved quantity
 SHALL be settled through the reservation before it can leave stock via these
 free-pool transitions.
 
-#### Scenario: catalog-SC-10 - Operator records a sale
+#### Scenario: grade10-admin-inventory-catalog-SC-10 - Operator records a sale
 
 - **GIVEN** an inventory with stock five and reserved one
 - **WHEN** an authorized caller sells quantity two for 10000 minor units in HKD
 - **THEN** stock decreases to three and sold increases by two
 - **AND** reserved and derived ledger are unchanged
 
-#### Scenario: catalog-SC-11 - Operator records a withdrawal
+#### Scenario: grade10-admin-inventory-catalog-SC-11 - Operator records a withdrawal
 
 - **GIVEN** an inventory with three available stock
 - **WHEN** an authorized caller withdraws quantity one with a reason
 - **THEN** stock decreases by one and withdrawn increases by one
 - **AND** derived ledger is unchanged
 
-#### Scenario: catalog-SC-12 - Terminal transition cannot consume reserved stock
+#### Scenario: grade10-admin-inventory-catalog-SC-12 - Terminal transition cannot consume reserved stock
 
 - **GIVEN** an inventory with stock three and reserved two
 - **WHEN** an authorized caller sells or withdraws quantity two
@@ -275,7 +230,7 @@ SHALL update a product's name, description, and remarks without changing
 inventory counts, id, created at, created by, or status. An update SHALL
 refresh product updated at.
 
-#### Scenario: catalog-SC-13 - Operator lists products with aggregate counts
+#### Scenario: grade10-admin-inventory-catalog-SC-13 - Operator lists products with aggregate counts
 
 - **GIVEN** two products with different inventory snapshots and statuses
 - **WHEN** an authorized inventory admin lists products
@@ -283,7 +238,7 @@ refresh product updated at.
   available and ledger
 - **AND** each row's counts satisfy both reconciliation equations
 
-#### Scenario: catalog-SC-57 - Operator edits product fields
+#### Scenario: grade10-admin-inventory-catalog-SC-57 - Operator edits product fields
 
 - **GIVEN** a draft or created product
 - **WHEN** an authorized inventory admin updates name, description, and
@@ -330,7 +285,7 @@ SHALL be refused. For `admin`, each reserve SHALL mint a new unique
 reservation is `closed`, the same kind and reference MAY create a new
 reservation (holder apps only; admin references are not reused).
 
-#### Scenario: catalog-SC-14 - Auction reserves a quantity
+#### Scenario: grade10-admin-inventory-catalog-SC-14 - Auction reserves a quantity
 
 - **GIVEN** a **created** product with available three
 - **WHEN** Auction reserves quantity two with holder reference `listing-42`
@@ -339,7 +294,7 @@ reservation (holder apps only; admin references are not reused).
 - **AND** reserved increases by two while stock and derived ledger remain
   unchanged
 
-#### Scenario: catalog-SC-15 - Same active reference retries idempotently
+#### Scenario: grade10-admin-inventory-catalog-SC-15 - Same active reference retries idempotently
 
 - **GIVEN** Auction already has an active reservation of quantity two under
   holder reference `listing-42`
@@ -347,7 +302,7 @@ reservation (holder apps only; admin references are not reused).
 - **THEN** Grade10 returns the existing reservation
 - **AND** reserved count and history do not change
 
-#### Scenario: catalog-SC-16 - Closed reference may reserve again
+#### Scenario: grade10-admin-inventory-catalog-SC-16 - Closed reference may reserve again
 
 - **GIVEN** an Auction reservation under holder reference `listing-42` is closed
 - **WHEN** Auction reserves again with the same reference, product, and quantity
@@ -363,14 +318,14 @@ SHALL be refused. Inventory `reserved` SHALL equal the sum of `remaining` on
 active reservations for that product. Different `holder_kind` values MAY
 reserve the same product.
 
-#### Scenario: catalog-SC-17 - Auction and Vault reserve the same product
+#### Scenario: grade10-admin-inventory-catalog-SC-17 - Auction and Vault reserve the same product
 
 - **GIVEN** a **created** product with stock five and no reservations
 - **WHEN** Auction reserves two and Vault reserves two
 - **THEN** both reservations succeed with their respective `holder_kind`
 - **AND** reserved is four and available is one
 
-#### Scenario: catalog-SC-18 - Concurrent reservations cannot oversubscribe stock
+#### Scenario: grade10-admin-inventory-catalog-SC-18 - Concurrent reservations cannot oversubscribe stock
 
 - **GIVEN** a product with available one
 - **WHEN** Auction and Vault concurrently reserve quantity one
@@ -378,7 +333,7 @@ reserve the same product.
 - **AND** the other is refused for insufficient available inventory
 - **AND** reserved and the sum of active remaining are one
 
-#### Scenario: catalog-SC-19 - Insufficient stock reserves nothing
+#### Scenario: grade10-admin-inventory-catalog-SC-19 - Insufficient stock reserves nothing
 
 - **GIVEN** a product with available one
 - **WHEN** Auction reserves quantity two
@@ -402,7 +357,7 @@ also offer a listing's **current** product when that listing's active hold
 accounts for the product's remaining free pool (consumed by
 [`add-admin-auction-campaigns`](../../../../../add-admin-auction-campaigns/proposal.md)).
 
-#### Scenario: catalog-SC-66 - Own reservation counts toward effective available on edit
+#### Scenario: grade10-admin-inventory-catalog-SC-66 - Own reservation counts toward effective available on edit
 
 - **GIVEN** an active Auction reservation of remaining three on a created
   product whose global available is zero
@@ -411,7 +366,7 @@ accounts for the product's remaining free pool (consumed by
 - **THEN** effective available is three and the save is allowed
 - **AND** global available remains zero until the hold changes
 
-#### Scenario: catalog-SC-20 - Vault cannot see Auction reservations
+#### Scenario: grade10-admin-inventory-catalog-SC-20 - Vault cannot see Auction reservations
 
 - **GIVEN** Auction reserves two and Vault reserves one of the same product
 - **WHEN** Vault reads that product through its holder entrypoint
@@ -419,14 +374,14 @@ accounts for the product's remaining free pool (consumed by
   `holder_kind` `grade10-vault`
 - **AND** no Auction reservation, quantity, remarks, or reference is returned
 
-#### Scenario: catalog-SC-21 - Another kind cannot release a reservation
+#### Scenario: grade10-admin-inventory-catalog-SC-21 - Another kind cannot release a reservation
 
 - **GIVEN** Auction has an active reservation
 - **WHEN** Vault attempts to release its id
 - **THEN** Grade10 responds as though the reservation does not exist
 - **AND** the Auction reservation and reserved remain unchanged
 
-#### Scenario: catalog-SC-61 - Auction eligibility list omits draft and out-of-stock
+#### Scenario: grade10-admin-inventory-catalog-SC-61 - Auction eligibility list omits draft and out-of-stock
 
 - **GIVEN** a draft product with available stock, a created product with
   available zero, and a created product with available at least one
@@ -434,7 +389,7 @@ accounts for the product's remaining free pool (consumed by
 - **THEN** only the created in-stock product is returned
 - **AND** the draft and out-of-stock products are omitted
 
-#### Scenario: catalog-SC-62 - Eligibility available matches inventory available
+#### Scenario: grade10-admin-inventory-catalog-SC-62 - Eligibility available matches inventory available
 
 - **GIVEN** a created product whose inventory has stock ten and reserved three
 - **WHEN** Auction lists eligibility for that product
@@ -449,7 +404,7 @@ all remaining. Release SHALL atomically increase `released`, decrease
 derived ledger unchanged. When remaining reaches zero, the reservation SHALL
 become `closed`.
 
-#### Scenario: catalog-SC-22 - Vault releases a full remaining hold
+#### Scenario: grade10-admin-inventory-catalog-SC-22 - Vault releases a full remaining hold
 
 - **GIVEN** Vault has an active reservation of quantity two and remaining two
 - **WHEN** Vault releases it without specifying a quantity
@@ -457,7 +412,7 @@ become `closed`.
 - **AND** reserved decreases by two and available increases by two
 - **AND** stock and derived ledger remain unchanged
 
-#### Scenario: catalog-SC-35 - Partial release leaves remaining active
+#### Scenario: grade10-admin-inventory-catalog-SC-35 - Partial release leaves remaining active
 
 - **GIVEN** Auction has an active reservation of quantity five and remaining five
 - **WHEN** Auction releases quantity two
@@ -487,7 +442,7 @@ SHALL:
 Every successful adjust SHALL append one `adjust` changelog with the new
 quantity and before/after snapshots of inventory and reservation.
 
-#### Scenario: catalog-SC-47 - Increase listing reservation 3 to 5 acquires more stock
+#### Scenario: grade10-admin-inventory-catalog-SC-47 - Increase listing reservation 3 to 5 acquires more stock
 
 - **GIVEN** a **created** product with available five
 - **AND** an active Auction reservation for listing `listing-42` with quantity
@@ -500,7 +455,7 @@ quantity and before/after snapshots of inventory and reservation.
 - **AND** no second reservation is created for `listing-42`
 - **AND** `released` is unchanged
 
-#### Scenario: catalog-SC-48 - Decrease listing reservation 5 to 2 frees remaining
+#### Scenario: grade10-admin-inventory-catalog-SC-48 - Decrease listing reservation 5 to 2 frees remaining
 
 - **GIVEN** an active Auction reservation with quantity five and remaining five
 - **WHEN** it is adjusted to quantity two
@@ -510,7 +465,7 @@ quantity and before/after snapshots of inventory and reservation.
 - **AND** `released` remains zero
 - **AND** the reservation is not closed
 
-#### Scenario: catalog-SC-49 - Increase refused when not enough available stock
+#### Scenario: grade10-admin-inventory-catalog-SC-49 - Increase refused when not enough available stock
 
 - **GIVEN** an active Auction reservation with quantity three and remaining three
 - **AND** product available is one
@@ -518,7 +473,7 @@ quantity and before/after snapshots of inventory and reservation.
 - **THEN** Grade10 refuses for insufficient available inventory
 - **AND** quantity, remaining, and reserved are unchanged
 
-#### Scenario: catalog-SC-50 - Cannot adjust below sold plus vaulted plus released
+#### Scenario: grade10-admin-inventory-catalog-SC-50 - Cannot adjust below sold plus vaulted plus released
 
 - **GIVEN** an Auction reservation with quantity five, sold two, remaining three,
   released zero
@@ -559,7 +514,7 @@ Under one database transaction the service SHALL:
 Auction listing explicit Saves call this RPC when product changes; quantity-only
 changes on the same product SHALL use `adjustReservation` instead.
 
-#### Scenario: catalog-SC-51 - Listing product change moves hold in one transaction
+#### Scenario: grade10-admin-inventory-catalog-SC-51 - Listing product change moves hold in one transaction
 
 - **GIVEN** an active Auction reservation for listing `listing-42` on product A
   with quantity three and remaining three
@@ -573,7 +528,7 @@ changes on the same product SHALL use `adjustReservation` instead.
 - **AND** stock and derived ledger on both products are unchanged
 - **AND** exactly one reservation remains active for `listing-42`
 
-#### Scenario: catalog-SC-63 - Product change refused when new product lacks stock
+#### Scenario: grade10-admin-inventory-catalog-SC-63 - Product change refused when new product lacks stock
 
 - **GIVEN** an active Auction reservation on product A with remaining three
 - **AND** product B available is one
@@ -583,14 +538,14 @@ changes on the same product SHALL use `adjustReservation` instead.
 - **AND** the reservation stays on product A with remaining three
 - **AND** both products' **reserved** counts are unchanged
 
-#### Scenario: catalog-SC-64 - Product change refused for draft target product
+#### Scenario: grade10-admin-inventory-catalog-SC-64 - Product change refused for draft target product
 
 - **GIVEN** an active Auction reservation on a **created** product
 - **WHEN** Auction calls `changeReservationProduct` to a **draft** product
 - **THEN** Grade10 refuses
 - **AND** the reservation is unchanged
 
-#### Scenario: catalog-SC-65 - Product change refused below settled floor
+#### Scenario: grade10-admin-inventory-catalog-SC-65 - Product change refused below settled floor
 
 - **GIVEN** an Auction reservation with quantity five, sold two, remaining three
 - **WHEN** it is changed to another product with quantity one
@@ -607,7 +562,7 @@ derived ledger unchanged; require price and currency. When remaining reaches
 zero, the reservation SHALL become `closed`. Vault entrypoints SHALL NOT
 expose sell-from-reservation.
 
-#### Scenario: catalog-SC-36 - Auction partially sells from a reservation
+#### Scenario: grade10-admin-inventory-catalog-SC-36 - Auction partially sells from a reservation
 
 - **GIVEN** Auction has an active reservation of quantity five, remaining five,
   and the product has stock five and reserved five
@@ -617,7 +572,7 @@ expose sell-from-reservation.
 - **AND** inventory stock is three, reserved is three, sold is two
 - **AND** vaulted and derived ledger are unchanged
 
-#### Scenario: catalog-SC-37 - Partial sell then release closes the reservation
+#### Scenario: grade10-admin-inventory-catalog-SC-37 - Partial sell then release closes the reservation
 
 - **GIVEN** Auction has remaining three after a prior partial sell on a
   quantity-five reservation
@@ -634,7 +589,7 @@ quantity; increase reservation vaulted and inventory vaulted; leave sold and
 derived ledger unchanged. When remaining reaches zero, the reservation SHALL
 become `closed`. Auction entrypoints SHALL NOT expose vault-from-reservation.
 
-#### Scenario: catalog-SC-38 - Vault partially vaults from a reservation
+#### Scenario: grade10-admin-inventory-catalog-SC-38 - Vault partially vaults from a reservation
 
 - **GIVEN** Vault has an active reservation of quantity five, remaining five,
   and the product has stock five and reserved five
@@ -643,13 +598,13 @@ become `closed`. Auction entrypoints SHALL NOT expose vault-from-reservation.
 - **AND** inventory stock is three, reserved is three, vaulted is two
 - **AND** sold and derived ledger are unchanged
 
-#### Scenario: catalog-SC-39 - Vault cannot sell from reservation
+#### Scenario: grade10-admin-inventory-catalog-SC-39 - Vault cannot sell from reservation
 
 - **GIVEN** Vault has an active reservation
 - **WHEN** a caller uses the Vault entrypoint and attempts sell-from-reservation
 - **THEN** no sell-from-reservation method is exposed on that entrypoint
 
-#### Scenario: catalog-SC-40 - Auction cannot vault from reservation
+#### Scenario: grade10-admin-inventory-catalog-SC-40 - Auction cannot vault from reservation
 
 - **GIVEN** Auction has an active reservation
 - **WHEN** a caller uses the Auction entrypoint and attempts vault-from-reservation
@@ -687,7 +642,7 @@ An elevated operator request SHALL also append one platform audit entry.
 Failed, refused, and idempotent no-op writes SHALL append neither history nor
 audit.
 
-#### Scenario: catalog-SC-23 - Product update records operator and snapshots
+#### Scenario: grade10-admin-inventory-catalog-SC-23 - Product update records operator and snapshots
 
 - **GIVEN** an existing product named `Card A`
 - **WHEN** an authorized inventory admin renames it to `Card B`
@@ -695,7 +650,7 @@ audit.
 - **AND** its changed entity is `product`
 - **AND** before contains `Card A` and after contains `Card B`
 
-#### Scenario: catalog-SC-24 - Intake history carries the added quantity
+#### Scenario: grade10-admin-inventory-catalog-SC-24 - Intake history carries the added quantity
 
 - **GIVEN** an inventory with stock two (derived ledger two)
 - **WHEN** an authorized inventory admin intakes quantity three
@@ -703,21 +658,21 @@ audit.
 - **AND** its changed entity is `inventory`
 - **AND** before and after show stock increasing by three
 
-#### Scenario: catalog-SC-25 - Reserve history records hold and snapshot
+#### Scenario: grade10-admin-inventory-catalog-SC-25 - Reserve history records hold and snapshot
 
 - **GIVEN** Auction requests a valid quantity-two reservation
 - **WHEN** the reservation succeeds
 - **THEN** one `reserve` change records quantity two and the reservation id
 - **AND** before and after show reserved increasing by two
 
-#### Scenario: catalog-SC-26 - Release history records hold and snapshot
+#### Scenario: grade10-admin-inventory-catalog-SC-26 - Release history records hold and snapshot
 
 - **GIVEN** Vault has an active reservation with remaining two
 - **WHEN** Vault releases it
 - **THEN** one `release` change records quantity two and the reservation id
 - **AND** before and after show reserved decreasing by two
 
-#### Scenario: catalog-SC-27 - Terminal history records action details
+#### Scenario: grade10-admin-inventory-catalog-SC-27 - Terminal history records action details
 
 - **GIVEN** an inventory with available stock
 - **WHEN** an authorized inventory admin records a free-pool sale and later a
@@ -725,13 +680,13 @@ audit.
 - **THEN** one `sell` change records the sold quantity, price, and currency
 - **AND** one `withdraw` change records the withdrawn quantity and reason
 
-#### Scenario: catalog-SC-28 - Refused write leaves history unchanged
+#### Scenario: grade10-admin-inventory-catalog-SC-28 - Refused write leaves history unchanged
 
 - **GIVEN** a product with available one
 - **WHEN** Auction attempts to reserve quantity two and Grade10 refuses
 - **THEN** no new change is appended
 
-#### Scenario: catalog-SC-41 - Sell-from-reservation history
+#### Scenario: grade10-admin-inventory-catalog-SC-41 - Sell-from-reservation history
 
 - **GIVEN** Auction has an active reservation with remaining five
 - **WHEN** Auction sells quantity two from that reservation
@@ -740,7 +695,7 @@ audit.
 - **AND** before and after show inventory sold increasing by two and reserved
   decreasing by two
 
-#### Scenario: catalog-SC-42 - Vault-from-reservation history
+#### Scenario: grade10-admin-inventory-catalog-SC-42 - Vault-from-reservation history
 
 - **GIVEN** Vault has an active reservation with remaining five
 - **WHEN** Vault vaults quantity two from that reservation
@@ -749,7 +704,7 @@ audit.
 - **AND** before and after show inventory vaulted increasing by two and reserved
   decreasing by two
 
-#### Scenario: catalog-SC-43 - Adjust history records new quantity
+#### Scenario: grade10-admin-inventory-catalog-SC-43 - Adjust history records new quantity
 
 - **GIVEN** an active Auction reservation with quantity three
 - **WHEN** it is adjusted to quantity five
@@ -757,14 +712,14 @@ audit.
 - **AND** before and after show reserved increasing by two and remaining
   increasing by two
 
-#### Scenario: catalog-SC-44 - Adjust decrease records freed quantity
+#### Scenario: grade10-admin-inventory-catalog-SC-44 - Adjust decrease records freed quantity
 
 - **GIVEN** an active Auction reservation with quantity five and remaining five
 - **WHEN** it is adjusted to quantity two
 - **THEN** one `adjust` change records quantity two and the reservation id
 - **AND** before and after show reserved decreasing by three
 
-#### Scenario: catalog-SC-45 - Change-product history records both inventories
+#### Scenario: grade10-admin-inventory-catalog-SC-45 - Change-product history records both inventories
 
 - **GIVEN** an active Auction reservation on product A with quantity three and
   remaining three
@@ -790,15 +745,15 @@ Operators SHALL intake stock and reserve admin holds from the product page.
 Admin reserve SHALL always use `holder_kind` `admin` and SHALL mint
 `holder_reference` server-side; operators supply quantity and optional remarks
 only. Operators SHALL release active `admin` holds from the reservations table on
-the product page (partial or full, per catalog-SC-35). Free-pool sell and
+the product page (partial or full, per grade10-admin-inventory-catalog-SC-35). Free-pool sell and
 withdraw, adjust, change reservation product, release,
 sell-from-reservation, and vault-from-reservation for Auction and Vault holds
 SHALL be triggered from holder consoles or elevated APIs, not from the inventory
 product page. Auction and Vault reservation rows on the product page are
 read-only oversight; only `admin` rows MAY offer Release on this page
-(catalog-SC-68). Loading, empty, and error states SHALL be visible.
+(grade10-admin-inventory-catalog-SC-68). Loading, empty, and error states SHALL be visible.
 
-#### Scenario: catalog-SC-59 - Operator reserves admin hold from product page
+#### Scenario: grade10-admin-inventory-catalog-SC-59 - Operator reserves admin hold from product page
 
 - **GIVEN** a created product with stock five and reserved zero
 - **WHEN** an authorized inventory admin reserves quantity two from the product
@@ -808,7 +763,7 @@ read-only oversight; only `admin` rows MAY offer Release on this page
 - **AND** reserved increases by two while stock and derived ledger remain
   unchanged
 
-#### Scenario: catalog-SC-60 - Operator releases admin hold from product page
+#### Scenario: grade10-admin-inventory-catalog-SC-60 - Operator releases admin hold from product page
 
 - **GIVEN** a created product with an active `admin` reservation of quantity two
   and remaining two
@@ -824,7 +779,7 @@ read-only oversight; only `admin` rows MAY offer Release on this page
 - **THEN** remaining is three, released is two, and status stays `active`
 - **AND** reserved decreases by two
 
-#### Scenario: catalog-SC-68 - Product page release is limited to admin holds
+#### Scenario: grade10-admin-inventory-catalog-SC-68 - Product page release is limited to admin holds
 
 - **GIVEN** a created product with active Auction, Vault, and `admin`
   reservations on the product page
@@ -832,7 +787,7 @@ read-only oversight; only `admin` rows MAY offer Release on this page
 - **THEN** only `admin` rows offer a Release action
 - **AND** Auction and Vault rows show no settlement actions on this page
 
-#### Scenario: catalog-SC-29 - Operator oversees inventory and holds on the product page
+#### Scenario: grade10-admin-inventory-catalog-SC-29 - Operator oversees inventory and holds on the product page
 
 - **GIVEN** a created product with Auction, Vault, and `admin` reservations and
   prior vaulted and sold transitions
@@ -841,20 +796,20 @@ read-only oversight; only `admin` rows MAY offer Release on this page
   remaining, and change history appear
 - **AND** both count equations reconcile
 
-#### Scenario: catalog-SC-30 - Empty products table
+#### Scenario: grade10-admin-inventory-catalog-SC-30 - Empty products table
 
 - **GIVEN** no products
 - **WHEN** an authorized inventory admin opens Inventory
 - **THEN** the products table shows an empty state
 
-#### Scenario: catalog-SC-31 - Intake form updates the snapshot on the product page
+#### Scenario: grade10-admin-inventory-catalog-SC-31 - Intake form updates the snapshot on the product page
 
 - **GIVEN** a product page for an existing product
 - **WHEN** an authorized inventory admin intakes quantity two
 - **THEN** its stock increases by two (derived ledger likewise)
 - **AND** one intake entry appears in history
 
-#### Scenario: catalog-SC-58 - Operator creates a product from the products list
+#### Scenario: grade10-admin-inventory-catalog-SC-58 - Operator creates a product from the products list
 
 - **GIVEN** an authorized inventory admin on the products list
 - **WHEN** they create a product with a valid name
@@ -865,12 +820,12 @@ read-only oversight; only `admin` rows MAY offer Release on this page
 
 The inventory worker's elevated `reservations.reserve` and `reservations.release`
 procedures SHALL implement the same `admin` hold semantics as the product page
-(`catalog-SC-59`, `catalog-SC-60`). `reservations.reserve` SHALL NOT accept
+(`grade10-admin-inventory-catalog-SC-59`, `grade10-admin-inventory-catalog-SC-60`). `reservations.reserve` SHALL NOT accept
 `holder_kind` or `holder_reference` from the caller; it SHALL always create
 `holder_kind` `admin` with a server-minted `holder_reference`. Each call SHALL
 create a new active reservation (no idempotent retry on reference).
 
-#### Scenario: catalog-SC-67 - Elevated admin reserve mints holder reference
+#### Scenario: grade10-admin-inventory-catalog-SC-67 - Elevated admin reserve mints holder reference
 
 - **GIVEN** a created product with stock five and reserved zero
 - **WHEN** an authorized inventory admin calls `reservations.reserve` with
@@ -893,19 +848,19 @@ signed-in person without those grants SHALL be refused and SHALL NOT see the
 Inventory section. Holder-scoped service entrypoints are machine-only
 capability grants and SHALL NOT be reachable through the public API gateway.
 
-#### Scenario: catalog-SC-32 - Unauthorized inventory read is refused
+#### Scenario: grade10-admin-inventory-catalog-SC-32 - Unauthorized inventory read is refused
 
 - **GIVEN** a signed-in person without inventory admin grants
 - **WHEN** they request the product list
 - **THEN** Grade10 refuses the request
 
-#### Scenario: catalog-SC-33 - Inventory section hidden without grants
+#### Scenario: grade10-admin-inventory-catalog-SC-33 - Inventory section hidden without grants
 
 - **GIVEN** a signed-in person without inventory admin grants
 - **WHEN** they use the Grade10 admin panel
 - **THEN** the Inventory section is not offered
 
-#### Scenario: catalog-SC-34 - Public caller cannot reach holder methods
+#### Scenario: grade10-admin-inventory-catalog-SC-34 - Public caller cannot reach holder methods
 
 - **GIVEN** a collector or unauthenticated caller
 - **WHEN** they request an inventory HTTP route

@@ -96,7 +96,7 @@ its archive must make.
 | `@grade10/auction-contracts` | The bid action carries a maximum. Listing facts gain the viewer's own maximum. **BREAKING** for any consumer sending a bare bid amount. |
 | `@grade10/stripe-backend` | Authorizes the committed maximum instead of the current bid. Release behaviour is unchanged. |
 | `apps/frontend/grade10` | The bid control asks for a maximum and explains that the collector may pay less. |
-| `@grade10/ui` `ListingBidPanel` | Needs a slot for the viewer's own maximum. See `ui.md`. |
+| `@grade10/ui` `ListingBidPanel` | Needs a slot for the viewer's own maximum. See `ui-design.md`. |
 | `apps/admin/grade10` | Bid history shows both the maximum committed and the resulting current bid, so an operator can answer a dispute. |
 
 **Reconciliation `add-grade10-auction` must make at archive.** Its requirement
@@ -105,7 +105,7 @@ displays "their highest accepted bid" to an authenticated bidder. Under auto
 bidding a bidder's highest accepted bid and their committed maximum are
 different numbers, and the useful one is the maximum. When that change folds
 into `openspec/specs/`, that sentence needs updating to match
-`auto-bidding-SC-05`. Recorded here so it is not lost.
+`grade10-site-auction-auto-bidding-SC-05`. Recorded here so it is not lost.
 
 **Ordering.** Independent of `add-auction-watchlist` and
 `add-auction-notifications`. It shares no capability with either and can land

@@ -6,12 +6,12 @@ contract every backend group reads; once it lands, groups 3 through 8 are
 independent and can be claimed in any order.
 
 Survey the engine on the grade10 **mainline**. Design decisions, what is already
-built, and the open questions: [`design.md`](design.md). Screens and component
-exports: [`ui.md`](ui.md).
+built, and the open questions: [`tech-design.md`](tech-design.md). Screens and component
+exports: [`ui-design.md`](ui-design.md).
 
 ## 1. Loyalty blocks (grade10-spec)
 
-- [ ] 1.1 Draw the membership and console frames in Figma and link them from `ui.md`
+- [ ] 1.1 Draw the membership and console frames in Figma and link them from `ui-design.md`
 - [ ] 1.2 Export `MembershipSummary` from `@grade10/ui` — two counts shown as two counts, the tier's validity end, and retention progress
 - [ ] 1.3 Export `RewardMenu` from `@grade10/ui` — each reward priced in points, money-off rewards stating their code's validity period
 - [ ] 1.4 Export `CouponList` from `@grade10/ui` — code, purpose, own expiry, and spent or void

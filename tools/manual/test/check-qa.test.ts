@@ -13,6 +13,7 @@ const lines = (result: Result, rule: string) =>
     .sort();
 
 const SPEC_FILE = "openspec/specs/demo-product/alpha/spec.md";
+const JOURNEYS_FILE = "openspec/specs/demo-product/alpha/user-journeys.md";
 const CASES_FILE = "openspec/specs/demo-product/alpha/test-cases.md";
 const PAGE = "docs/prds/products/demo-product/alpha.md";
 
@@ -37,7 +38,6 @@ const journey = (id: string, accepted: string[]) => [
 
 const specText = ({
   scenarios = [["alpha-SC-01", "it does the thing"]] as [string, string][],
-  journeys = [] as string[][],
 } = {}) =>
   [
     "# Alpha",
@@ -46,9 +46,6 @@ const specText = ({
     "",
     "Alpha exists so the checker has a spec to read.",
     "",
-    ...(journeys.length > 0
-      ? ["## User journeys", "", ...journeys.flat()]
-      : []),
     "## Requirements",
     "",
     "### Requirement: Alpha does things",
@@ -100,13 +97,19 @@ const pageText = (blocks: string[] = shown) =>
     ...blocks,
   ].join("\n");
 
+/** The stories beside the spec, as their own file. */
+const journeysText = (journeys: string[][]) =>
+  ["## User journeys", "", ...journeys.flat()].join("\n");
+
 const store = ({
   spec = specText(),
+  journeys,
   cases,
   page = pageText(),
   extra = {},
 }: {
   spec?: string;
+  journeys?: string;
   cases?: string;
   page?: string;
   extra?: Record<string, string>;
@@ -119,6 +122,7 @@ const store = ({
       "---\ntitle: Demo product\n---\n\nThe landing.\n",
     [PAGE]: page,
     [SPEC_FILE]: spec,
+    ...(journeys === undefined ? {} : { [JOURNEYS_FILE]: journeys }),
     ...(cases === undefined ? {} : { [CASES_FILE]: cases }),
     ...extra,
   });
@@ -266,12 +270,15 @@ describe("a case tracing the journey it walks", () => {
       ["alpha-SC-01", "it does the thing"],
       ["alpha-SC-02", "it says so"],
     ],
-    journeys: [journey("alpha-US-01", ["alpha-SC-01", "alpha-SC-02"])],
   });
+  const both = journeysText([
+    journey("alpha-US-01", ["alpha-SC-01", "alpha-SC-02"]),
+  ]);
 
   it("lands, and covers what the journey is accepted by", async () => {
     const root = store({
       spec: two,
+      journeys: both,
       cases: suiteText({
         cases: [["alpha-US1-TC1-1", "actual", "alpha-US-01"]],
       }),
@@ -300,8 +307,8 @@ describe("a case tracing the journey it walks", () => {
           ["alpha-SC-01", "it does the thing"],
           ["alpha-SC-02", "it says so"],
         ],
-        journeys: [journey("alpha-US-01", ["alpha-SC-01"])],
       }),
+      journeys: journeysText([journey("alpha-US-01", ["alpha-SC-01"])]),
       cases: suiteText({
         cases: [["alpha-US1-TC1-1", "actual", "alpha-US-01"]],
       }),
@@ -363,18 +370,18 @@ describe("a suite no page shows", () => {
 describe("a journey accepted by a scenario the spec never issued", () => {
   it("fails naming the journey, the id and the spec file", async () => {
     const root = store({
-      spec: specText({
-        journeys: [journey("alpha-US-01", ["alpha-SC-01", "alpha-SC-88"])],
-      }),
+      journeys: journeysText([
+        journey("alpha-US-01", ["alpha-SC-01", "alpha-SC-88"]),
+      ]),
     });
     expect(lines(await check(root), "accepted")).toEqual([
-      `${SPEC_FILE} — alpha-US-01 is accepted by \`alpha-SC-88\`, which this spec issues nowhere`,
+      `${JOURNEYS_FILE} — alpha-US-01 is accepted by \`alpha-SC-88\`, which this spec issues nowhere`,
     ]);
   });
 
   it("says nothing when every accepted-by id resolves", async () => {
     const root = store({
-      spec: specText({ journeys: [journey("alpha-US-01", ["alpha-SC-01"])] }),
+      journeys: journeysText([journey("alpha-US-01", ["alpha-SC-01"])]),
     });
     expect(lines(await check(root), "accepted")).toEqual([]);
   });

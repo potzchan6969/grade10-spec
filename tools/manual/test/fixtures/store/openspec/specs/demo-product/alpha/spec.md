@@ -9,19 +9,6 @@ Alpha does one thing, and this fixture is what proves the reader sees it.
   - Once only: the thing happens exactly once
   - Written down: the thing leaves a record
 
-## User journeys
-
-### alpha-US-01: Reader follows the thing end to end
-
-**As a** reader,
-**I want** the thing to happen once and leave a record,
-**so that** I can tell whether it already happened.
-
-**Accepted by:**
-
-- `alpha-SC-01` — The thing happens
-- `alpha-SC-02` — The thing is refused a second time
-
 ## Requirements
 ### Requirement: The thing happens once
 

@@ -40,7 +40,7 @@ Needs group 1's admin lists landed — an application cannot load a list its pac
 
 Added after groups 1–5 were planned. Sign-out bound nothing, so `auth-frontend`'s
 published list could not carry it and the convention had one slice it did not
-reach; the decision and its cost are in `design.md`.
+reach; the decision and its cost are in `tech-design.md`.
 
 - [x] 6.1 Give the sign-out slice a repository port over the client, one use case and its own tokens, and a module that joins the auth list — satisfies "A product gains a feature slice"
 - [x] 6.2 Resolve the use case from the command hook, keeping its state, its in-flight guard and its resolved-boolean contract so the existing hook tests pass unchanged

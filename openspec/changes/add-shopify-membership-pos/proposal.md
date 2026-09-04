@@ -3,7 +3,7 @@
 **Author:** @ecchochan - 2026-08-22
 
 Product context: [Grade10 loyalty programme](../../../docs/prds/products/membership/index.md).
-The engineering design record is [`design.md`](design.md);
+The engineering design record is [`tech-design.md`](tech-design.md);
 [`docs/references/shopify-membership-pos.md`](../../../docs/references/shopify-membership-pos.md)
 and
 [`docs/references/shopify-pos-extension.md`](../../../docs/references/shopify-pos-extension.md)

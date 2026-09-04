@@ -251,7 +251,7 @@ export const Leading: Story = {
     expect(
       canvas.getByRole("button", { name: /^Raise maximum ·/ }),
     ).toBeInTheDocument();
-    expect(canvas.getByText(/vs current/)).toBeInTheDocument();
+    expect(canvas.getAllByText(/vs current/)).toHaveLength(2);
   },
 };
 

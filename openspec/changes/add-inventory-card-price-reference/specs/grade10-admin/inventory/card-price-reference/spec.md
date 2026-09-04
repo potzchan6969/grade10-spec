@@ -23,52 +23,6 @@ traceable PriceCharting market reference without retaining a price history.
   - Import preview: shows every match and validation result before any product exists
   - Atomic commit: creates every reviewed row or none of them
 
-## User journeys
-
-### card-price-US-01: Inventory admin classifies a card product
-
-**As an** inventory admin,
-**I want** to create or edit a collectible-card product with its required tags
-and a confirmed PriceCharting match,
-**so that** the catalogue identifies the card consistently and can retrieve the
-right price reference.
-
-**Accepted by:**
-
-- `card-price-SC-01` — Operator creates a tagged Collectible Card
-- `card-price-SC-02` — Product missing a required tag role is refused
-- `card-price-SC-03` — Operator confirms a PriceCharting search match
-- `card-price-SC-04` — Non-card product cannot attach PriceCharting
-
-### card-price-US-02: Inventory admin reads a current card reference
-
-**As an** inventory admin,
-**I want** to see the current PSA-focused PriceCharting reference and its
-freshness,
-**so that** I can use an attributable market signal without mistaking it for
-permanent product value or PSA certification data.
-
-**Accepted by:**
-
-- `card-price-SC-05` — Operator reads a fresh PSA-focused price reference
-- `card-price-SC-06` — Expired regular cache refreshes before display
-- `card-price-SC-07` — Failed refresh preserves and labels stale data
-- `card-price-SC-08` — Active auction requests shorter refresh eligibility
-
-### card-price-US-03: Inventory admin imports card products
-
-**As an** inventory admin,
-**I want** to preview and confirm a CSV of classified card products,
-**so that** I can add a large collection without creating partial or
-misidentified catalogue data.
-
-**Accepted by:**
-
-- `card-price-SC-10` — Operator previews a valid card CSV
-- `card-price-SC-11` — Invalid CSV row blocks confirmation
-- `card-price-SC-12` — Operator confirms every PriceCharting match
-- `card-price-SC-13` — Import commits every reviewed row atomically
-
 ## ADDED Requirements
 
 ### Requirement: Product collectible classification and tags
@@ -94,7 +48,7 @@ an existing tag or create one inline while creating or editing a product.
 | Label | Required trimmed text; case-insensitively unique |
 | Created at | Set when the tag is first created; immutable |
 
-#### Scenario: card-price-SC-01 - Operator creates a tagged Collectible Card
+#### Scenario: grade10-admin-inventory-card-price-reference-SC-01 - Operator creates a tagged Collectible Card
 
 - **GIVEN** an authorized inventory admin
 - **WHEN** they create a `Collectible Cards` product with tags `IP: Pokémon`,
@@ -102,7 +56,7 @@ an existing tag or create one inline while creating or editing a product.
 - **THEN** Grade10 persists the product and its three controlled-role tags
 - **AND** each product read returns its collectible type and tags
 
-#### Scenario: card-price-SC-02 - Product missing a required tag role is refused
+#### Scenario: grade10-admin-inventory-card-price-reference-SC-02 - Product missing a required tag role is refused
 
 - **GIVEN** an authorized inventory admin
 - **WHEN** they create or update a product without an `IP`, `Item`, or
@@ -110,7 +64,7 @@ an existing tag or create one inline while creating or editing a product.
 - **THEN** Grade10 refuses the write
 - **AND** the product's prior classification remains unchanged
 
-#### Scenario: card-price-SC-09 - Inline tag creation reuses a matching tag
+#### Scenario: grade10-admin-inventory-card-price-reference-SC-09 - Inline tag creation reuses a matching tag
 
 - **GIVEN** a tag `Pokémon` already exists
 - **WHEN** an authorized inventory admin supplies `pokemon` inline as the IP tag
@@ -135,14 +89,14 @@ an unconfirmed match, or a provider id already attached to another product.
 | Confirmed at | Set when the operator confirms or replaces the match |
 | Confirmed by | Operator user id that confirmed or replaced the match |
 
-#### Scenario: card-price-SC-03 - Operator confirms a PriceCharting search match
+#### Scenario: grade10-admin-inventory-card-price-reference-SC-03 - Operator confirms a PriceCharting search match
 
 - **GIVEN** a `Collectible Cards` product and a valid pasted PriceCharting link
 - **WHEN** an authorized inventory admin selects a matching provider search result
 - **THEN** Grade10 persists the canonical link and selected stable provider id
 - **AND** future price reads use that confirmed identity
 
-#### Scenario: card-price-SC-04 - Non-card product cannot attach PriceCharting
+#### Scenario: grade10-admin-inventory-card-price-reference-SC-04 - Non-card product cannot attach PriceCharting
 
 - **GIVEN** a product whose collectible type is not `Collectible Cards` in a
   future type-vocabulary release
@@ -179,7 +133,7 @@ state; when no successful result exists, it SHALL return an unavailable state.
 | Freshness | Fresh for 24 hours; stale thereafter unless a valid shorter auction refresh succeeds |
 | Retention | Current cache only; no historical observations |
 
-#### Scenario: card-price-SC-05 - Operator reads a fresh PSA-focused price reference
+#### Scenario: grade10-admin-inventory-card-price-reference-SC-05 - Operator reads a fresh PSA-focused price reference
 
 - **GIVEN** a matched Collectible Cards product with a successful PriceCharting
   result fetched within 24 hours
@@ -188,7 +142,7 @@ state; when no successful result exists, it SHALL return an unavailable state.
   each supplied PSA-oriented grade in USD minor units
 - **AND** returns the successful fetch time and fresh state
 
-#### Scenario: card-price-SC-06 - Expired regular cache refreshes before display
+#### Scenario: grade10-admin-inventory-card-price-reference-SC-06 - Expired regular cache refreshes before display
 
 - **GIVEN** a matched Collectible Cards product whose last successful price
   result is older than 24 hours and has no active auction refresh eligibility
@@ -196,7 +150,7 @@ state; when no successful result exists, it SHALL return an unavailable state.
 - **THEN** Grade10 requests a current provider result before answering
 - **AND** replaces the cached result only when the request succeeds
 
-#### Scenario: card-price-SC-07 - Failed refresh preserves and labels stale data
+#### Scenario: grade10-admin-inventory-card-price-reference-SC-07 - Failed refresh preserves and labels stale data
 
 - **GIVEN** a matched Collectible Cards product with a cached price result
 - **AND** its next eligible provider refresh fails
@@ -204,7 +158,7 @@ state; when no successful result exists, it SHALL return an unavailable state.
 - **THEN** Grade10 returns the last successful values with their fetch time
 - **AND** identifies the result as stale
 
-#### Scenario: card-price-SC-08 - Active auction requests shorter refresh eligibility
+#### Scenario: grade10-admin-inventory-card-price-reference-SC-08 - Active auction requests shorter refresh eligibility
 
 - **GIVEN** a matched Collectible Cards product with an active Grade10 auction
 - **WHEN** the auction lifecycle requests a price refresh
@@ -245,7 +199,7 @@ PriceCharting references in one transaction. If any row cannot be created,
 Grade10 SHALL create none of the batch. A successful import SHALL not fetch a
 price; the normal price-cache policy applies to its new products.
 
-#### Scenario: card-price-SC-10 - Operator previews a valid card CSV
+#### Scenario: grade10-admin-inventory-card-price-reference-SC-10 - Operator previews a valid card CSV
 
 - **GIVEN** an authorized inventory admin has a CSV with no more than 500 rows
   and every required column
@@ -254,7 +208,7 @@ price; the normal price-cache policy applies to its new products.
   PriceCharting candidate for confirmation
 - **AND** creates no product, inventory snapshot, or confirmed reference
 
-#### Scenario: card-price-SC-11 - Invalid CSV row blocks confirmation
+#### Scenario: grade10-admin-inventory-card-price-reference-SC-11 - Invalid CSV row blocks confirmation
 
 - **GIVEN** an uploaded CSV has a missing required field, malformed link,
   unmatched/ambiguous provider result, duplicate provider item, or more than
@@ -263,14 +217,14 @@ price; the normal price-cache policy applies to its new products.
 - **THEN** Grade10 identifies the invalid row and reason
 - **AND** refuses confirmation and creates no product from the CSV
 
-#### Scenario: card-price-SC-12 - Operator confirms every PriceCharting match
+#### Scenario: grade10-admin-inventory-card-price-reference-SC-12 - Operator confirms every PriceCharting match
 
 - **GIVEN** a CSV preview has valid rows with PriceCharting candidates
 - **WHEN** an authorized inventory admin confirms every row's selected candidate
 - **THEN** Grade10 marks the preview ready for commit
 - **AND** retains the selected canonical link and stable provider id for each row
 
-#### Scenario: card-price-SC-13 - Import commits every reviewed row atomically
+#### Scenario: grade10-admin-inventory-card-price-reference-SC-13 - Import commits every reviewed row atomically
 
 - **GIVEN** a ready CSV preview of two valid, confirmed rows
 - **WHEN** an authorized inventory admin commits the import

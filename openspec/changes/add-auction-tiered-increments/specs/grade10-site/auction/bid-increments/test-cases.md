@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-03, tcs-rules r1
 
-## bid-increments-US1: Collector places a bid across a price tier
+## grade10-site-auction-bid-increments-US1: Collector places a bid across a price tier
 
 **As a** collector,
 **I want** the minimum next bid to scale with the lot's price,
 **so that** I can enter an affordable opening bid and a sensible later bid.
 
-### bid-increments-US1-TC1-1: First bid clears the starting-price tier
+### grade10-site-auction-bid-increments-US1-TC1-1: First bid clears the starting-price tier
 
 **Classification:**
 
@@ -21,7 +21,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bid-increments-US-01
+* **Trace:** grade10-site-auction-bid-increments-US-01
 
 **Pre-conditions:**
 An open HKD listing has a 20000-minor-unit starting price and no accepted bid.
@@ -35,7 +35,7 @@ An open HKD listing has a 20000-minor-unit starting price and no accepted bid.
 
 * Minimum next amount is 21000 HKD minor units.
 
-### bid-increments-US1-TC2-1: Boundary price takes the higher tier
+### grade10-site-auction-bid-increments-US1-TC2-1: Boundary price takes the higher tier
 
 **Classification:**
 
@@ -47,7 +47,7 @@ An open HKD listing has a 20000-minor-unit starting price and no accepted bid.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bid-increments-US-01
+* **Trace:** grade10-site-auction-bid-increments-US-01
 
 **Pre-conditions:**
 An open USD listing has a current bid of 10000 minor units.
@@ -61,7 +61,7 @@ An open USD listing has a current bid of 10000 minor units.
 
 * Minimum next amount is 10500 USD minor units.
 
-### bid-increments-US1-TC3-1: Amount above the minimum is accepted
+### grade10-site-auction-bid-increments-US1-TC3-1: Amount above the minimum is accepted
 
 **Classification:**
 
@@ -73,7 +73,7 @@ An open USD listing has a current bid of 10000 minor units.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bid-increments-US-01
+* **Trace:** grade10-site-auction-bid-increments-US-01
 
 **Pre-conditions:**
 The collector is enrolled on an open USD listing whose minimum bid is 10500 minor units.
@@ -94,7 +94,7 @@ The collector is enrolled on an open USD listing whose minimum bid is 10500 mino
 
 * The bid is accepted.
 
-### bid-increments-US1-TC4-1: Amount below the minimum is refused
+### grade10-site-auction-bid-increments-US1-TC4-1: Amount below the minimum is refused
 
 **Classification:**
 
@@ -106,7 +106,7 @@ The collector is enrolled on an open USD listing whose minimum bid is 10500 mino
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bid-increments-US-01
+* **Trace:** grade10-site-auction-bid-increments-US-01
 
 **Pre-conditions:**
 The collector is enrolled on an open USD listing whose minimum bid is 10500 minor units.
@@ -128,7 +128,7 @@ The collector is enrolled on an open USD listing whose minimum bid is 10500 mino
 * The bid is refused.
 * The refusal names 10500 USD minor units as the minimum.
 
-### bid-increments-US1-TC5-1: Listing publishes the next minimum
+### grade10-site-auction-bid-increments-US1-TC5-1: Listing publishes the next minimum
 
 **Classification:**
 
@@ -140,7 +140,7 @@ The collector is enrolled on an open USD listing whose minimum bid is 10500 mino
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** bid-increments-US-01
+* **Trace:** grade10-site-auction-bid-increments-US-01
 
 **Pre-conditions:**
 An open listing is available in its listing currency.

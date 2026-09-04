@@ -18,7 +18,8 @@ This repository is the versioned source of truth for product requirements and th
 | The product record: a capability's page, and the decision behind its requirements | `docs/prds/products/<product>/<capability>.md` | The manual (`pnpm manual`) renders these pages; each names its spec and carries the shape in prose, with problem, users, non-goals, measurement and decisions in its `Product decisions` block. Explanatory, never authoritative over a requirement. Page grammar: `docs/prds/guides/writing-the-manual.md`. |
 | Source material behind a decision | `docs/references/<doc>.md` | Owner's drafts, competitor research, vendor-integration working notes — what a page or change cites as evidence; the manual renders them under References. Explanatory, never authoritative. See `docs/references/README.md`. |
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
-| Test cases for a capability | `test-cases.md` beside its `spec.md` | A derived reading of that spec's user journeys, never a second source of truth. See `docs/governance/specs-to-test-cases.md`. |
+| Who walks a capability, and what accepts their story | `user-journeys.md` beside its `spec.md` | The INVEST stories and the scenario ids that accept each. A capability nobody reaches on its own — a cross-cutting policy, a package contract — has no such file. |
+| Test cases for a capability | `test-cases.md` beside its `spec.md` | A derived reading of that capability's journeys and scenarios, never a second source of truth. See `docs/governance/specs-to-test-cases.md`. |
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
 | User-facing copy and translations | `packages/i18n/messages/{shared,<brand>}/<locale>/<namespace>.json` | `shared/` answers every key no brand claims, once per language; a brand answers only what says something about itself, in every language it speaks. Assembled in `src/catalogs.ts`. Types refuse a key the vocabulary does not name; `pnpm run test` refuses layers that leave one unanswered, or answer one twice. |
 | Design-system primitive | `packages/design-system/src/components/` | shadcn primitives and their colocated stories. |
@@ -33,9 +34,21 @@ Read [`docs/governance/design-system-workflows.md`](docs/governance/design-syste
 
 ## Product specification workflow
 
-Two workflow schemas exist under `openspec/schemas/`, both sharing the same proposal and spec templates. `full-planning` (the default: proposal → specs → design → ui → tasks) is for changes that carry their implementation plan here. `pm-planning` (proposal → specs) is for product planning that is complete once the requirements are specified — create one with `openspec new change <name> --schema pm-planning`. A change records its schema in its `.openspec.yaml` at creation.
+One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the whole lifecycle in seven artifacts. `openspec new change <name>` records it in the change's `.openspec.yaml`.
 
-A PM or designer writes the proposal and the specs and stops there; `design.md`, `ui.md`, and `tasks.md` belong to the engineer planning the delivery. So the schema recorded at creation is not final: a `pm-planning` change is **promoted** by the engineer who picks it up — set `schema: full-planning`, add `design.md` and `tasks.md`, and the proposal and deltas carry over untouched. Promotion is the only route, because engineering never opens a change in the application repository: that repository's `openspec/` is config-only and resolves to this store, and until a change has a `tasks.md` it shows on the engineer's board as still being planned.
+| # | Artifact | Written by | Skill | Required |
+| --- | --- | --- | --- | --- |
+| 1 | `proposal.md` | Product manager | `planning-pm` | Always |
+| 2 | `specs/<capability>/spec.md` | Product manager | `planning-pm` | Always |
+| 3 | `specs/<capability>/user-journeys.md` | Product manager | `planning-pm` | Unless nobody walks the capability |
+| 4 | `specs/<capability>/test-cases.md` | QA | `planning-qa` | Optional |
+| 5 | `ui-design.md` | Designer | `planning-design` | Optional |
+| 6 | `tech-design.md` | Engineer | `planning-dev` | Optional |
+| 7 | `tasks.md` | Engineer | `planning-dev` | Before the change can be applied |
+
+Each hand writes its own artifacts on the one change and stops: a PM finishes at the journeys, QA derives the suites, a designer writes `ui-design.md`, and the engineer who picks the work up adds `tech-design.md` and `tasks.md` to the same change rather than opening a second one. That is the only route, because engineering never opens a change in the application repository: that repository's `openspec/` is config-only and resolves to this store, and until a change has a `tasks.md` it shows on the engineer's board as still being planned.
+
+The journeys are their own file beside each `spec.md`, never a `## User journeys` section inside it — `pnpm check:manual` refuses a spec that holds one, and the archive copies the file across by hand alongside the feature set.
 
 For a new product feature:
 

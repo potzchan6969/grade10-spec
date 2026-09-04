@@ -55,7 +55,7 @@ own words — the ids travel along on their own. The proposal lands in
 [In Flight](/in-flight)'s Proposed lane.
 ## An agent drafts the change
 Someone points an agent at the proposal — the card names the command to
-paste, `/pm-planning <change>` or `/full-planning <change>`. The agent writes
+paste, `/planning-pm <change>`. The agent writes
 the change: the reasoning, and a delta against each spec it touches — never a
 rewritten copy of the file. People discuss the delta, because the delta is
 what there is to decide.
@@ -78,7 +78,7 @@ The store is the agent's memory as much as yours: point it at a change or a
 capability by id and it reads the same files this site renders. Two habits
 make that work.
 
-Cite permanent ids — `loyalty-SC-04`, not "the expiry rule" — in proposals,
+Cite permanent ids — `grade10-site-loyalty-programme-SC-04`, not "the expiry rule" — in proposals,
 bug reports, and prompts. Ids survive renames; prose does not.
 
 Never retype a requirement into a proposal or a prompt. Cite its id; a copy

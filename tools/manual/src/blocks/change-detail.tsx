@@ -272,13 +272,13 @@ function NextAction({ change }: { change: ChangeEntry }) {
   const action =
     lane === "proposed"
       ? {
-          command: `/${change.schema === "full-planning" ? "full-planning" : "pm-planning"} ${change.id}`,
+          command: `/planning-pm ${change.id}`,
           note: "point an agent at the proposal — it interviews the author, then writes the deltas",
         }
       : lane === "specified"
         ? {
-            command: `/full-planning ${change.id}`,
-            note: "the engineer picking this up promotes it and plans delivery",
+            command: `/planning-dev ${change.id}`,
+            note: "the engineer picking this up writes the delivery plan",
           }
         : {
             command: `/archive-change ${change.id}`,

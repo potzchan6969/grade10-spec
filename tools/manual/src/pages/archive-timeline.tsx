@@ -3,7 +3,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Archive } from "@phosphor-icons/react";
 import { useState } from "react";
-import { byLastMoved, taskTotals } from "../api/derive";
+import { byShipped, shippedDate, taskTotals } from "../api/derive";
 import { slugify } from "../api/paths";
 import { monthKey, relativeTime } from "../api/time";
 import type { ChangeEntry } from "../api/types";
@@ -92,13 +92,13 @@ function Timeline({
 
   // Years of archive is a scroll nobody asked for; the newest months open, the
   // rest arrive on request.
-  const ordered = [...changes].sort(byLastMoved);
+  const ordered = [...changes].sort(byShipped);
   const shown = full ? ordered : ordered.slice(0, FIRST_PAGE);
   const hidden = ordered.length - shown.length;
 
   const months = new Map<string, ChangeEntry[]>();
   for (const change of shown) {
-    const key = monthKey(change.lastMoved ?? change.created);
+    const key = monthKey(shippedDate(change) ?? "");
     const list = months.get(key) ?? [];
     list.push(change);
     months.set(key, list);
@@ -121,6 +121,7 @@ function Timeline({
             <ul className="space-y-px border-border border-l pl-4">
               {entries.map((change) => {
                 const { done, total } = taskTotals(change);
+                const shipped = shippedDate(change);
                 return (
                   <li
                     className="relative py-2 before:absolute before:top-4 before:-left-[1.3125rem] before:size-2 before:rounded-full before:bg-border-strong"
@@ -144,9 +145,7 @@ function Timeline({
                         size="xs"
                         tone="secondary"
                       >
-                        {change.lastMoved
-                          ? relativeTime(change.lastMoved)
-                          : change.created}
+                        {shipped ? relativeTime(shipped) : "undated"}
                       </Text>
                     </div>
                     <ClampedText lines={2} text={change.why} />

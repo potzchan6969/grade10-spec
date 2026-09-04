@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## api-docs-US1: Engineer reads what a procedure needs before wiring a call
+## grade10-admin-console-api-docs-US1: Engineer reads what a procedure needs before wiring a call
 
 **As an** engineer wiring a console or storefront feature to a backend call,
 **I want** to open the procedure and read its caller, grant, input and output in one place,
 **so that** I wire the call correctly without reading the backend's source.
 
-### api-docs-US1-TC1-1: API docs entry appears under Dev on a staging build
+### grade10-admin-console-api-docs-US1-TC1-1: API docs entry appears under Dev on a staging build
 
 **Classification:**
 
@@ -21,7 +21,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** api-docs-US-01
+* **Trace:** grade10-admin-console-api-docs-US-01
 
 **Pre-conditions:**
 The operator is signed in to <grade10 staging admin url> with a role that opens the console and no other grant.
@@ -37,7 +37,7 @@ The operator is signed in to <grade10 staging admin url> with a role that opens 
 * Dev heading lists API docs.
 * Step 3 opens the API docs surface with the services rail.
 
-### api-docs-US1-TC2-1: API docs address is not answered on a production build
+### grade10-admin-console-api-docs-US1-TC2-1: API docs address is not answered on a production build
 
 **Classification:**
 
@@ -49,7 +49,7 @@ The operator is signed in to <grade10 staging admin url> with a role that opens 
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** api-docs-US-01
+* **Trace:** grade10-admin-console-api-docs-US-01
 
 **Pre-conditions:**
 The operator is signed in to <grade10 production admin url> as an admin.
@@ -64,7 +64,7 @@ The operator is signed in to <grade10 production admin url> as an admin.
 * The console's not-found surface renders.
 * No Dev heading offers API docs.
 
-### api-docs-US1-TC3-1: Router list shows kind, caller and summaries
+### grade10-admin-console-api-docs-US1-TC3-1: Router list shows kind, caller and summaries
 
 **Classification:**
 
@@ -76,7 +76,7 @@ The operator is signed in to <grade10 production admin url> as an admin.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** api-docs-US-01
+* **Trace:** grade10-admin-console-api-docs-US-01
 
 **Pre-conditions:**
 The API docs surface is open on <grade10 staging admin url>.
@@ -92,7 +92,7 @@ The API docs surface is open on <grade10 staging admin url>.
 * Every checkout procedure is listed once.
 * Each row shows kind, caller, an input summary and an output summary.
 
-### api-docs-US1-TC4-1: Procedure detail shows wire path and bounded fields
+### grade10-admin-console-api-docs-US1-TC4-1: Procedure detail shows wire path and bounded fields
 
 **Classification:**
 
@@ -104,7 +104,7 @@ The API docs surface is open on <grade10 staging admin url>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** api-docs-US-01
+* **Trace:** grade10-admin-console-api-docs-US-01
 
 **Pre-conditions:**
 The store checkout router is listed on <grade10 staging admin url>.
@@ -128,7 +128,7 @@ The store checkout router is listed on <grade10 staging admin url>.
 * Input table lists items, spendPoints and couponCodes, with items required and its 1–50 bound shown.
 * Output table shows each outcome alternative apart, named by its outcome value.
 
-### api-docs-US1-TC5-1: Elevated procedure shows its grant beside the caller
+### grade10-admin-console-api-docs-US1-TC5-1: Elevated procedure shows its grant beside the caller
 
 **Classification:**
 
@@ -140,7 +140,7 @@ The store checkout router is listed on <grade10 staging admin url>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** api-docs-US-01
+* **Trace:** grade10-admin-console-api-docs-US-01
 
 **Pre-conditions:**
 The API docs surface is open on <grade10 staging admin url>.
@@ -156,7 +156,7 @@ The API docs surface is open on <grade10 staging admin url>.
 * Caller reads elevated.
 * The grant auction:shipment is shown beside it.
 
-### api-docs-US1-TC6-1: Fresh-session call is told apart from a session call
+### grade10-admin-console-api-docs-US1-TC6-1: Fresh-session call is told apart from a session call
 
 **Classification:**
 
@@ -168,7 +168,7 @@ The API docs surface is open on <grade10 staging admin url>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** api-docs-US-01
+* **Trace:** grade10-admin-console-api-docs-US-01
 
 **Pre-conditions:**
 The store checkout router is listed on <grade10 staging admin url>.
@@ -185,7 +185,7 @@ The store checkout router is listed on <grade10 staging admin url>.
 
 ---
 
-### api-docs-US1-TC7-1: Forwarded router names the worker that does its work
+### grade10-admin-console-api-docs-US1-TC7-1: Forwarded router names the worker that does its work
 
 **Classification:**
 
@@ -197,7 +197,7 @@ The store checkout router is listed on <grade10 staging admin url>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** api-docs-US-01
+* **Trace:** grade10-admin-console-api-docs-US-01
 
 **Pre-conditions:**
 The API docs surface is open on <grade10 staging admin url>.
@@ -215,13 +215,13 @@ The API docs surface is open on <grade10 staging admin url>.
 * Step 3 shows a badge reading forwards to auction beside the caller.
 * Step 4 shows no forwards badge.
 
-## api-docs-US2: QA reviewer traces what a grant unlocks
+## grade10-admin-console-api-docs-US2: QA reviewer traces what a grant unlocks
 
 **As a** QA reviewer planning a pass for one operator role,
 **I want** to filter every service at once by a grant,
 **so that** I see each procedure that role reaches and nothing it does not.
 
-### api-docs-US2-TC1-1: Rail names every service with its procedure count
+### grade10-admin-console-api-docs-US2-TC1-1: Rail names every service with its procedure count
 
 **Classification:**
 
@@ -233,7 +233,7 @@ The API docs surface is open on <grade10 staging admin url>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** api-docs-US-02
+* **Trace:** grade10-admin-console-api-docs-US-02
 
 **Pre-conditions:**
 The API docs surface is open on <grade10 staging admin url>.
@@ -248,7 +248,7 @@ The API docs surface is open on <grade10 staging admin url>.
 * Rail names store, auction, auth, loyalty, vault, appointment, finance and inventory, each with a procedure count.
 * Store unfolds its routers, each with its own count, the till ladder named apart.
 
-### api-docs-US2-TC2-1: Grant filter narrows every service and the counts follow
+### grade10-admin-console-api-docs-US2-TC2-1: Grant filter narrows every service and the counts follow
 
 **Classification:**
 
@@ -260,7 +260,7 @@ The API docs surface is open on <grade10 staging admin url>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** api-docs-US-02
+* **Trace:** grade10-admin-console-api-docs-US-02
 
 **Pre-conditions:**
 The API docs surface is open on <grade10 staging admin url>.
@@ -282,7 +282,7 @@ The API docs surface is open on <grade10 staging admin url>.
 * Only procedures requiring auction:settle are listed under every service.
 * Rail counts match the narrowed lists.
 
-### api-docs-US2-TC3-1: Path filter narrows the same way as a grant
+### grade10-admin-console-api-docs-US2-TC3-1: Path filter narrows the same way as a grant
 
 **Classification:**
 
@@ -294,7 +294,7 @@ The API docs surface is open on <grade10 staging admin url>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** api-docs-US-02
+* **Trace:** grade10-admin-console-api-docs-US-02
 
 **Pre-conditions:**
 The API docs surface is open on <grade10 staging admin url>.
@@ -315,7 +315,7 @@ The API docs surface is open on <grade10 staging admin url>.
 * Only procedures whose dotted path contains coupons are listed.
 * Rail counts match the narrowed lists.
 
-### api-docs-US2-TC4-1: Filter with no match leaves every service empty
+### grade10-admin-console-api-docs-US2-TC4-1: Filter with no match leaves every service empty
 
 **Classification:**
 
@@ -327,7 +327,7 @@ The API docs surface is open on <grade10 staging admin url>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** api-docs-US-02
+* **Trace:** grade10-admin-console-api-docs-US-02
 
 **Pre-conditions:**
 The API docs surface is open on <grade10 staging admin url>.
@@ -350,13 +350,13 @@ The API docs surface is open on <grade10 staging admin url>.
 
 ---
 
-## api-docs-US3: Engineer relies on the page after a contract changed
+## grade10-admin-console-api-docs-US3: Engineer relies on the page after a contract changed
 
 **As an** engineer who changed a procedure's input,
 **I want** the repository to refuse the change until the document is regenerated,
 **so that** the page never lags behind the server it describes.
 
-### api-docs-US3-TC1-1: Document lists exactly the mounted procedures
+### grade10-admin-console-api-docs-US3-TC1-1: Document lists exactly the mounted procedures
 
 **Classification:**
 
@@ -368,7 +368,7 @@ The API docs surface is open on <grade10 staging admin url>.
 * **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** api-docs-US-03
+* **Trace:** grade10-admin-console-api-docs-US-03
 
 **Pre-conditions:**
 A checkout of <grade10 repository> at the commit under test, with the store router mounting a known set of procedures.
@@ -383,7 +383,7 @@ A checkout of <grade10 repository> at the commit under test, with the store rout
 * The two sets are equal.
 * Every entry carries kind and caller.
 
-### api-docs-US3-TC2-1: Changed input fails the check until regenerated
+### grade10-admin-console-api-docs-US3-TC2-1: Changed input fails the check until regenerated
 
 **Classification:**
 
@@ -395,7 +395,7 @@ A checkout of <grade10 repository> at the commit under test, with the store rout
 * **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** api-docs-US-03
+* **Trace:** grade10-admin-console-api-docs-US-03
 
 **Pre-conditions:**
 A checkout of <grade10 repository> with committed documents matching the routers.
@@ -412,7 +412,7 @@ A checkout of <grade10 repository> with committed documents matching the routers
 * Step 2 fails and names the store service and the changed procedure.
 * Step 4 passes.
 
-### api-docs-US3-TC3-1: Two runs over unchanged routers are byte-identical
+### grade10-admin-console-api-docs-US3-TC3-1: Two runs over unchanged routers are byte-identical
 
 **Classification:**
 
@@ -424,7 +424,7 @@ A checkout of <grade10 repository> with committed documents matching the routers
 * **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** api-docs-US-03
+* **Trace:** grade10-admin-console-api-docs-US-03
 
 **Pre-conditions:**
 A checkout of <grade10 repository> with unchanged routers.
@@ -439,7 +439,7 @@ A checkout of <grade10 repository> with unchanged routers.
 
 * Every pair is identical.
 
-### api-docs-US3-TC4-1: Page names the commit its documents came from
+### grade10-admin-console-api-docs-US3-TC4-1: Page names the commit its documents came from
 
 **Classification:**
 
@@ -451,7 +451,7 @@ A checkout of <grade10 repository> with unchanged routers.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** api-docs-US-03
+* **Trace:** grade10-admin-console-api-docs-US-03
 
 **Pre-conditions:**
 The API docs surface is open on <grade10 staging admin url>, deployed from a known commit.
@@ -467,13 +467,13 @@ The API docs surface is open on <grade10 staging admin url>, deployed from a kno
 
 ---
 
-## api-docs-US4: Backend reviewer finds the outputs left undeclared
+## grade10-admin-console-api-docs-US4: Backend reviewer finds the outputs left undeclared
 
 **As a** backend reviewer,
 **I want** each procedure without an output shape marked as such, with a count per service,
 **so that** I know where to add one rather than discovering it from a consumer's bug.
 
-### api-docs-US4-TC1-1: Undeclared output is said in the detail and counted on the service
+### grade10-admin-console-api-docs-US4-TC1-1: Undeclared output is said in the detail and counted on the service
 
 **Classification:**
 
@@ -485,7 +485,7 @@ The API docs surface is open on <grade10 staging admin url>, deployed from a kno
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** api-docs-US-04
+* **Trace:** grade10-admin-console-api-docs-US-04
 
 **Pre-conditions:**
 The API docs surface is open on <grade10 staging admin url>; the auction fulfillment router holds a procedure with no declared output.

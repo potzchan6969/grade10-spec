@@ -18,10 +18,10 @@
 
 ## 4. Repaint the footer to its design source (grade10-spec)
 
-- [x] 4.1 Move the `Footer` frame onto `primary` with `primary-foreground` strings throughout, per ui.md — Site footer.
-- [x] 4.2 Move the outer stroke off the `<footer>` element and onto the bottom bar's top edge only, and settle the stroke token question ui.md — Components leaves open: settled as the primitive bound directly, because that is what Figma binds — the stroke aliases the Foundation primitive, not a Semantic slot.
+- [x] 4.1 Move the `Footer` frame onto `primary` with `primary-foreground` strings throughout, per ui-design.md — Site footer.
+- [x] 4.2 Move the outer stroke off the `<footer>` element and onto the bottom bar's top edge only, and settle the stroke token question ui-design.md — Components leaves open: settled as the primitive bound directly, because that is what Figma binds — the stroke aliases the Foundation primitive, not a Semantic slot.
 - [x] 4.3 Remove the divergence note from `footer.tsx`'s JSDoc and describe the palette the component now renders.
-- [x] 4.4 Re-check every footer story against the dark palette, including the absent-section states ui.md — States lists; no story may show a string at the same tone as its ground.
+- [x] 4.4 Re-check every footer story against the dark palette, including the absent-section states ui-design.md — States lists; no story may show a string at the same tone as its ground.
 - [x] 4.5 Run `pnpm run figma:audit --all-blocks` and confirm it is green with the chrome covered.
 
 ## 5. Record the product and verify (grade10-spec)

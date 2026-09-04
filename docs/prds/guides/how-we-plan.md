@@ -27,10 +27,11 @@ the durable specs, the change filed under the archive. Merging a pull request
 deploys nothing, so archiving asks the application repository whether the code
 is live, not whether the branch is closed.
 
-There are two shapes of change, and they are a handoff. A PM change ends at the
-requirements: a proposal and specs, no delivery plan. A full change adds
-design, UI and tasks. The first is promoted into the second when somebody picks
-up the work.
+One change passes through four hands. A PM writes the proposal, the specs and
+the journeys and stops; QA derives the test cases; a designer maps the screens;
+the engineer who picks the work up adds the tech design and the tasks — to the
+same change, never a second one. [Working a change](/guides/working-a-change)
+walks one feature through all four.
 
 ## The rules themselves
 

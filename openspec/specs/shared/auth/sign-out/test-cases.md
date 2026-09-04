@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## sign-out-US1: Collector or operator signs out and lands signed out
+## shared-auth-sign-out-US1: Collector or operator signs out and lands signed out
 
 **As a** signed-in person,
 **I want** the control to show the request in flight and, on success, leave the signed-in surface,
 **so that** I know the tap registered and I am not still looking at my account.
 
-### sign-out-US1-TC1-1: Sign-out control is busy until the request settles
+### shared-auth-sign-out-US1-TC1-1: Sign-out control is busy until the request settles
 
 **Classification:**
 
@@ -21,7 +21,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-out-US-01
+* **Trace:** shared-auth-sign-out-US-01
 
 **Pre-conditions:**
 Signed in on <grade10 profile url>. Network manipulation holds the sign-out request in flight.
@@ -37,7 +37,7 @@ Signed in on <grade10 profile url>. Network manipulation holds the sign-out requ
 * The control shows a busy state until the auth service answers.
 * The second activation starts no second request.
 
-### sign-out-US1-TC2-1: Operator sign-out returns the admin panel to sign-in
+### shared-auth-sign-out-US1-TC2-1: Operator sign-out returns the admin panel to sign-in
 
 **Classification:**
 
@@ -49,7 +49,7 @@ Signed in on <grade10 profile url>. Network manipulation holds the sign-out requ
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-out-US-01
+* **Trace:** shared-auth-sign-out-US-01
 
 **Pre-conditions:**
 Signed in as an operator on <grade10 admin console url>.
@@ -63,7 +63,7 @@ Signed in as an operator on <grade10 admin console url>.
 
 * The panel shows its sign-in page.
 
-### sign-out-US1-TC3-1: Collector sign-out returns the grade10 site to marketing
+### shared-auth-sign-out-US1-TC3-1: Collector sign-out returns the grade10 site to marketing
 
 **Classification:**
 
@@ -75,7 +75,7 @@ Signed in as an operator on <grade10 admin console url>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-out-US-01
+* **Trace:** shared-auth-sign-out-US-01
 
 **Pre-conditions:**
 Signed in as a collector on <grade10 profile url>.
@@ -91,13 +91,13 @@ Signed in as a collector on <grade10 profile url>.
 
 ---
 
-## sign-out-US2: Collector or operator retries a refused sign-out
+## shared-auth-sign-out-US2: Collector or operator retries a refused sign-out
 
 **As a** signed-in person,
 **I want** a refused sign-out named as a failure I can retry,
 **so that** a network miss does not leave me signed in with no explanation.
 
-### sign-out-US2-TC1-1: Refused sign-out is reported beside the control
+### shared-auth-sign-out-US2-TC1-1: Refused sign-out is reported beside the control
 
 **Classification:**
 
@@ -109,7 +109,7 @@ Signed in as a collector on <grade10 profile url>.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-out-US-02
+* **Trace:** shared-auth-sign-out-US-02
 
 **Pre-conditions:**
 Signed in on <grade10 profile url>. <The sign-out endpoint> is mocked to refuse the request.
@@ -124,7 +124,7 @@ Signed in on <grade10 profile url>. <The sign-out endpoint> is mocked to refuse 
 * The surface stays signed in.
 * Failure feedback appears beside the sign-out control.
 
-### sign-out-US2-TC2-1: Retry clears the failure and can complete
+### shared-auth-sign-out-US2-TC2-1: Retry clears the failure and can complete
 
 **Classification:**
 
@@ -136,7 +136,7 @@ Signed in on <grade10 profile url>. <The sign-out endpoint> is mocked to refuse 
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** sign-out-US-02
+* **Trace:** shared-auth-sign-out-US-02
 
 **Pre-conditions:**
 Signed in on <grade10 profile url> with sign-out failure feedback showing. <The sign-out endpoint> then confirms.

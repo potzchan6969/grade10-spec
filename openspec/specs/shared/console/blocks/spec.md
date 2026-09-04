@@ -28,42 +28,6 @@ shapes and drifting apart.
 - Tables tell the truth
   - Currency named: a tabular amount is minor units plus an ISO 4217 code, rendered naming the code
   - Queues are walkable: a queue longer than its page offers the way to the next page and back
-## User journeys
-
-### console-blocks-US-01: Operator distinguishes a failed read from an empty queue
-
-**As an** operator
-**I want** a queue that failed to load to say it failed
-**so that** I never mistake an outage for having nothing to do.
-
-**Accepted by:**
-
-- `console-blocks-SC-05` — A read is in flight
-- `console-blocks-SC-06` — A read is refused
-- `console-blocks-SC-07` — A read returns no rows
-
-### console-blocks-US-02: Operator confirms an irreversible move deliberately
-
-**As an** operator
-**I want** every irreversible move to pass through a confirmation that names it and can be cancelled
-**so that** a slip of the hand never commits something I cannot take back.
-
-**Accepted by:**
-
-- `console-blocks-SC-08` — An operator cancels a confirmation
-- `console-blocks-SC-09` — No move uses the native confirm
-
-### console-blocks-US-03: Operator narrows a queue with an announced control
-
-**As an** operator
-**I want** panel switches and row filters to announce what is selected
-**so that** I can tell where I am and what I am looking at, with or without sight of the toggled styling.
-
-**Accepted by:**
-
-- `console-blocks-SC-10` — A panel switch is announced as tabs
-- `console-blocks-SC-11` — A filter announces its selected option
-
 ## Requirements
 ### Requirement: Console shapes ship once, from the console package
 
@@ -73,14 +37,14 @@ cursor pager — SHALL be provided by the console package, and an admin console
 surface SHALL render these shapes from the package rather than maintaining a
 local implementation of them.
 
-#### Scenario: console-blocks-SC-01 - Two consoles render one source
+#### Scenario: shared-console-blocks-SC-01 - Two consoles render one source
 
 - **GIVEN** two admin surfaces that render the same console shape
 - **WHEN** each surface renders it
 - **THEN** both render the same block source from the console package
 - **AND** every difference between the two renderings is produced by the props and theme each surface supplies, not by diverging copies
 
-#### Scenario: console-blocks-SC-02 - A contract change lands once
+#### Scenario: shared-console-blocks-SC-02 - A contract change lands once
 
 - **WHEN** a requirement of a shared console shape changes
 - **THEN** one implementation change in the console package satisfies it for every console
@@ -96,7 +60,7 @@ that takes props, named after it — together with its existing utility
 exports for debounced input and for keeping a command's refusal with the
 command.
 
-#### Scenario: console-blocks-SC-03 - A console imports the blocks
+#### Scenario: shared-console-blocks-SC-03 - A console imports the blocks
 
 - **WHEN** an admin surface imports any export named above from the console package's public entry
 - **THEN** the import resolves without error
@@ -108,7 +72,7 @@ render. A component serving customer surfaces as well — signing in,
 two-factor enrollment — stays a shared UI export even when an admin
 application also renders it.
 
-#### Scenario: console-blocks-SC-04 - The shared UI entry offers no admin-only component
+#### Scenario: shared-console-blocks-SC-04 - The shared UI entry offers no admin-only component
 
 - **WHEN** an application inspects the shared UI package's public entry
 - **THEN** no admin-only console component is offered there
@@ -123,7 +87,7 @@ persist, navigate, or import an application. A block SHALL carry no brand:
 what distinguishes one brand's console from another's is the theme its
 application supplies.
 
-#### Scenario: console-blocks-SC-12 - Two brands theme one block
+#### Scenario: shared-console-blocks-SC-12 - Two brands theme one block
 
 - **GIVEN** the two brands' admin applications rendering the same block with the same props
 - **WHEN** each renders it under its own stylesheet
@@ -137,18 +101,18 @@ one while the read is in flight, one when the read is refused, and one when
 the read succeeds with no rows. The refused state SHALL render in the error
 tone, distinct from the tone of secondary or empty text.
 
-#### Scenario: console-blocks-SC-05 - A read is in flight
+#### Scenario: shared-console-blocks-SC-05 - A read is in flight
 
 - **WHEN** a console surface's read has not yet resolved
 - **THEN** the surface says it is loading, and offers no rows and no empty message
 
-#### Scenario: console-blocks-SC-06 - A read is refused
+#### Scenario: shared-console-blocks-SC-06 - A read is refused
 
 - **WHEN** a console surface's read fails
 - **THEN** the failure renders in the error tone
 - **AND** the rendering is distinguishable from the empty state at a glance
 
-#### Scenario: console-blocks-SC-07 - A read returns no rows
+#### Scenario: shared-console-blocks-SC-07 - A read returns no rows
 
 - **WHEN** a console surface's read succeeds with nothing to show
 - **THEN** the surface says there is nothing, in the secondary tone, and renders no error
@@ -159,13 +123,13 @@ An operator move that cannot be undone SHALL confirm through a dialog the
 surface renders — naming the move in words the console supplies, and
 offering cancel — and SHALL NOT use the platform's native confirmation.
 
-#### Scenario: console-blocks-SC-08 - An operator cancels a confirmation
+#### Scenario: shared-console-blocks-SC-08 - An operator cancels a confirmation
 
 - **WHEN** an operator opens a confirmation for an irreversible move and cancels it
 - **THEN** the move is not reported to the console
 - **AND** the surface returns to where the operator was
 
-#### Scenario: console-blocks-SC-09 - No move uses the native confirm
+#### Scenario: shared-console-blocks-SC-09 - No move uses the native confirm
 
 - **WHEN** any console surface asks an operator to confirm a move
 - **THEN** the confirmation is a dialog the surface renders
@@ -177,7 +141,7 @@ A control that switches which panel of a surface is visible SHALL announce
 tab semantics: the group is announced as tabs, and the active panel's control
 is announced as selected.
 
-#### Scenario: console-blocks-SC-10 - A panel switch is announced as tabs
+#### Scenario: shared-console-blocks-SC-10 - A panel switch is announced as tabs
 
 - **WHEN** an operator moves through a panel-switching control with assistive technology
 - **THEN** the control group is announced as tabs
@@ -189,7 +153,7 @@ A control that narrows which rows a surface shows SHALL present its options
 as one segmented choice whose selected option is announced, rather than as
 independent buttons distinguished only by styling.
 
-#### Scenario: console-blocks-SC-11 - A filter announces its selected option
+#### Scenario: shared-console-blocks-SC-11 - A filter announces its selected option
 
 - **WHEN** an operator reaches a row filter with assistive technology
 - **THEN** the options are announced as one choice
@@ -201,7 +165,7 @@ An amount a console table renders SHALL arrive as an integer count of minor
 units plus an ISO 4217 currency code, and SHALL render naming that code
 rather than a symbol two currencies could share.
 
-#### Scenario: console-blocks-SC-13 - Two currencies share a column
+#### Scenario: shared-console-blocks-SC-13 - Two currencies share a column
 
 - **WHEN** a table column renders amounts in two different currencies
 - **THEN** each amount names its own ISO 4217 code
@@ -213,7 +177,7 @@ When more rows exist than a console surface's page shows, the surface SHALL
 offer moving to the next page and back, rather than only saying more rows
 exist.
 
-#### Scenario: console-blocks-SC-14 - A queue exceeds its page
+#### Scenario: shared-console-blocks-SC-14 - A queue exceeds its page
 
 - **WHEN** a console queue holds more rows than one page shows
 - **THEN** the surface offers moving to the older rows

@@ -7,7 +7,7 @@ order: 3
 A reward is an item on the menu priced in points. Redeeming one is a
 redemption: a single debit of the balance, oldest points first, refused whole
 when the balance is short, and remembered at the price paid so repricing the
-menu never rewrites what an earlier redemption cost ([[loyalty-SC-29]]). What
+menu never rewrites what an earlier redemption cost ([[grade10-site-loyalty-programme-SC-29]]). What
 the member then holds depends on what the reward is — a physical item waiting
 at the counter, a money-off code, or nothing further to deliver.
 
@@ -16,14 +16,14 @@ at the counter, a money-off code, or nothing further to deliver.
 | Field | Meaning |
 | --- | --- |
 | Cost | Points per redemption; copied onto each redemption when it is made |
-| Stock | Optional; a stocked reward is never oversold ([[loyalty-SC-30]]) |
-| Window | Optional; outside it the reward cannot be redeemed ([[loyalty-SC-31]]) |
+| Stock | Optional; a stocked reward is never oversold ([[grade10-site-loyalty-programme-SC-30]]) |
+| Window | Optional; outside it the reward cannot be redeemed ([[grade10-site-loyalty-programme-SC-31]]) |
 | Kind | How a redemption is handed over — see the table below |
-| Archived | Retired from the menu, still readable in history ([[loyalty-SC-61]]) |
+| Archived | Retired from the menu, still readable in history ([[grade10-site-loyalty-programme-SC-61]]) |
 
 The public menu shows only what a member can buy: in stock, inside its window,
 not archived, with stock shown as a yes or no and never a count
-([[loyalty-SC-32]]).
+([[grade10-site-loyalty-programme-SC-32]]).
 
 | Kind | What the member holds | When it is theirs |
 | --- | --- | --- |
@@ -82,8 +82,8 @@ each channel carries it is on
 ## Reversing a redemption
 
 Reversal restores each consumed lot as its own credit on that lot's original
-date ([[loyalty-SC-33]]), so it cannot extend the life of points, and it
-restocks only when the redemption took a unit ([[loyalty-SC-34]]). A member
+date ([[grade10-site-loyalty-programme-SC-33]]), so it cannot extend the life of points, and it
+restocks only when the redemption took a unit ([[grade10-site-loyalty-programme-SC-34]]). A member
 can reverse their own unused code from the membership page; an operator can
 reverse anything a member is still owed. A used code and a collected item are
 never reversed — the reward was consumed, and giving the points back would

@@ -67,7 +67,7 @@ received, and can cancel it.
 :::callout{kind="note"}
 No Figma frame exists for any auction surface — not the listing details page, not the bid
 panel, not the admin queue. Every in-flight auction change says so in its own
-`ui.md` and names the screens still to be produced. The frames are being made;
+`ui-design.md` and names the screens still to be produced. The frames are being made;
 until they land, the shipped Storybook stories are the reference.
 :::
 

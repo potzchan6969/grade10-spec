@@ -15,10 +15,10 @@ import { Info } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import type { ShippedLocale } from "../../lib/format-datetime";
 import {
+  currencyExponent,
   formatMoney,
   formatMoneyNumeric,
   formatMoneyPrefix,
-  currencyExponent,
 } from "../../lib/format-money";
 import { isMaximumBelowFloor, resolveMaximumFloor } from "./listing-bid-money";
 import type { ListingAuctionBidView } from "./types";
@@ -73,10 +73,7 @@ function defaultPresetKey(presets: MaximumPreset[]): string | null {
   return presets[Math.floor(presets.length / 2)]?.key ?? null;
 }
 
-function parseCustomMinor(
-  draft: string,
-  currency: string,
-): number | null {
+function parseCustomMinor(draft: string, currency: string): number | null {
   const normalized = draft.trim().replace(/,/g, "");
   if (!normalized) return null;
   const major = Number(normalized);
@@ -141,7 +138,10 @@ function ListingQuickMaximumBidActions({
       const caption =
         steps === 0
           ? copy.nextEligibleBid
-          : copy.amountAboveCurrent.replace("{amount}", formatDelta(deltaMinor));
+          : copy.amountAboveCurrent.replace(
+              "{amount}",
+              formatDelta(deltaMinor),
+            );
       return {
         key: `floor-${steps}`,
         caption,
@@ -164,20 +164,20 @@ function ListingQuickMaximumBidActions({
   const customMinor = customActive
     ? parseCustomMinor(customDraft, view.currency)
     : null;
-  const resolvedPresetKey =
-    customActive
-      ? null
-      : selectedPresetKey != null &&
-          presets.some((preset) => preset.key === selectedPresetKey)
-        ? selectedPresetKey
-        : defaultPresetKey(presets);
+  const resolvedPresetKey = customActive
+    ? null
+    : selectedPresetKey != null &&
+        presets.some((preset) => preset.key === selectedPresetKey)
+      ? selectedPresetKey
+      : defaultPresetKey(presets);
   const selectedPreset =
     presets.find((preset) => preset.key === resolvedPresetKey) ?? null;
 
-  const commitMinor = customActive ? customMinor : (selectedPreset?.amountMinor ?? null);
+  const commitMinor = customActive
+    ? customMinor
+    : (selectedPreset?.amountMinor ?? null);
   const maximumInvalid =
-    commitMinor != null &&
-    isMaximumBelowFloor(commitMinor, floorMaximumMinor);
+    commitMinor != null && isMaximumBelowFloor(commitMinor, floorMaximumMinor);
   const canPlaceBid = commitMinor != null && !maximumInvalid;
 
   const heading = hasCommittedMaximum
@@ -238,8 +238,7 @@ function ListingQuickMaximumBidActions({
     onCommitMaximum(commitMinor);
   }
 
-  const customInvalid =
-    customActive && (customMinor == null || maximumInvalid);
+  const customInvalid = customActive && (customMinor == null || maximumInvalid);
   const helperMessage = customInvalid ? (
     <>
       {helperBase}

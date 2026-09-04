@@ -20,7 +20,7 @@ exports yet.
 - [x] 1.4 Run `pnpm run typecheck` and `pnpm run lint` (pass).
       `pnpm run check:design-system` is blocked on `FIGMA_TOKEN` (or
       `FIGMA_DUMP`); the known `xs` vs Figma `md` / `sm` mismatch is recorded
-      in design.md.
+      in tech-design.md.
 
 ## 2. Product card image
 
@@ -54,7 +54,7 @@ Depends on group 2.
       `A tile SHALL NOT display metadata badges` instead.
 - [x] 3.2 Make `The product list displays product tiles and delegates every
       product action` pass by reshaping `ProductSummary` to the fields in
-      design.md and mapping them through `ProductList`, reporting tile
+      tech-design.md and mapping them through `ProductList`, reporting tile
       activation and the cart action only.
 - [x] 3.3 Make `A cart action is reported, not performed` pass on `ProductList`
       without an `Add` button, and drop `onProductWishlistClick` and

@@ -1,7 +1,7 @@
 ---
 title: Writing the manual
 summary: The voice, the block palette, canonical form, and what happens when you save.
-order: 4
+order: 5
 ---
 
 Every page here is a markdown file in the spec store under `docs/prds/` — a
@@ -196,15 +196,15 @@ Prose can cite the store by id, and the reference stays honest when the
 store moves. Write the id in double brackets:
 
 ```md
-Expiry is exact — [[loyalty-SC-12]] — and a balance is never negative
-([[grade10-site/loyalty/programme#loyalty-SC-04]]).
+Expiry is exact — [[grade10-site-loyalty-programme-SC-12]] — and a balance is never negative
+([[grade10-site/loyalty/programme#grade10-site-loyalty-programme-SC-04]]).
 ```
 
 A reference renders the target's current title as a link, so a renamed
 scenario can never orphan the prose that cites it. On a page with a `spec`
 in its frontmatter, a bare id resolves inside that spec; anywhere else —
 this guide, say — qualify it as `spec-id#item-id`, like
-[[grade10-site/loyalty/programme#loyalty-SC-04]]. A reference that resolves to
+[[grade10-site/loyalty/programme#grade10-site-loyalty-programme-SC-04]]. A reference that resolves to
 nothing renders as a marked dead link and draws a check warning.
 
 ## Canonical form

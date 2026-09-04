@@ -2,7 +2,7 @@ import type { SpecEntry } from "../api/types.ts";
 
 /**
  * A proposal is a change with nothing in it but the reason for one: the
- * pm-planning manifest and `proposal.md`, and not a byte more. No delta, no
+ * manifest and `proposal.md`, and not a byte more. No delta, no
  * tasks.md — the delta is what discussion is for, and a task list would make
  * the board read a thought as ready to implement.
  *
@@ -13,7 +13,7 @@ import type { SpecEntry } from "../api/types.ts";
 export const CHANGES_DIR = "openspec/changes";
 export const MANIFEST = ".openspec.yaml";
 export const PROPOSAL = "proposal.md";
-export const PROPOSAL_SCHEMA = "pm-planning";
+export const PROPOSAL_SCHEMA = "grade10-planning";
 
 /** The only names a proposal directory may hold. */
 export const PROPOSAL_FILES = [MANIFEST, PROPOSAL] as const;

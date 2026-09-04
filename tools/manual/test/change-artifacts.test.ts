@@ -10,24 +10,26 @@ import {
 import type { ChangeDocument } from "../src/api/types";
 
 /** The change page's tabs are the change's own files, named for who reads
- * them; which one opens follows the URL, and a permanent id opens the
- * requirements wherever the link was copied from. */
+ * them; which one opens follows the URL, and a permanent id opens the file
+ * that issues it wherever the link was copied from. */
 
 const document: ChangeDocument = {
   id: "pos",
   dir: "openspec/changes/pos",
-  schema: "full-planning",
+  schema: "grade10-planning",
   schemaKnown: true,
   artifacts: [
     { name: "proposal", kind: "doc", present: true, text: "# Pos" },
     { name: "specs", kind: "specs", present: true },
-    { name: "design", kind: "doc", present: false },
+    { name: "user-journeys", kind: "journeys", present: true },
+    { name: "test-cases", kind: "cases", present: true },
     {
-      name: "ui",
+      name: "ui-design",
       kind: "doc",
       present: false,
-      path: "openspec/changes/pos/ui.md",
+      path: "openspec/changes/pos/ui-design.md",
     },
+    { name: "tech-design", kind: "doc", present: false },
     { name: "tasks", kind: "tasks", present: true },
   ],
   deltas: [
@@ -66,17 +68,37 @@ const document: ChangeDocument = {
 };
 
 describe("what each artifact is called", () => {
-  it("names the five artifacts for who reads them", () => {
+  it("names the seven artifacts for who reads them", () => {
     expect(
-      ["proposal", "specs", "design", "ui", "tasks"].map(artifactLabel),
-    ).toEqual(["Product", "Requirements", "Tech Design", "UI", "Tasks"]);
+      [
+        "proposal",
+        "specs",
+        "user-journeys",
+        "test-cases",
+        "ui-design",
+        "tech-design",
+        "tasks",
+      ].map(artifactLabel),
+    ).toEqual([
+      "Product",
+      "Requirements",
+      "Journeys",
+      "Test Cases",
+      "UI",
+      "Tech Design",
+      "Tasks",
+    ]);
   });
 
   it("says what each is for", () => {
     expect(artifactMeaning("proposal")).toContain("PM-driven proposal");
     expect(artifactMeaning("specs")).toContain("detailed illustration");
-    expect(artifactMeaning("design")).toContain("high-level design");
-    expect(artifactMeaning("ui")).toContain("visual plan");
+    expect(artifactMeaning("user-journeys")).toContain(
+      "walks the requirements",
+    );
+    expect(artifactMeaning("test-cases")).toContain("QA's suite");
+    expect(artifactMeaning("ui-design")).toContain("visual plan");
+    expect(artifactMeaning("tech-design")).toContain("high-level design");
     expect(artifactMeaning("tasks")).toContain("agent-driven implementation");
   });
 
@@ -92,7 +114,7 @@ describe("which tab opens", () => {
   });
 
   it("falls back to the first artifact for a tab this change lacks", () => {
-    expect(resolveTab(document, "design")).toBe("proposal");
+    expect(resolveTab(document, "tech-design")).toBe("proposal");
     expect(resolveTab(document, null)).toBe("proposal");
   });
 
@@ -104,15 +126,11 @@ describe("which tab opens", () => {
 });
 
 describe("where a deep link lands", () => {
-  it("opens the requirements for a scenario, a story, a row, or a case", () => {
-    for (const hash of [
-      "#alpha-SC-65",
-      "#alpha-US-06",
-      "#req-a-per-unit-reward",
-      "#alpha-TC-09",
-    ]) {
-      expect(tabForHash(document, hash)).toBe("specs");
-    }
+  it("opens the file that issues the id — scenario, row, story, or case", () => {
+    expect(tabForHash(document, "#alpha-SC-65")).toBe("specs");
+    expect(tabForHash(document, "#req-a-per-unit-reward")).toBe("specs");
+    expect(tabForHash(document, "#alpha-US-06")).toBe("user-journeys");
+    expect(tabForHash(document, "#alpha-TC-09")).toBe("test-cases");
   });
 
   it("leaves any other hash to the tab it was written for", () => {
@@ -133,8 +151,8 @@ describe("where a deep link lands", () => {
 describe("what is still to write", () => {
   it("names the declared artifacts nobody has written", () => {
     expect(missingArtifacts(document).map((one) => one.name)).toEqual([
-      "design",
-      "ui",
+      "ui-design",
+      "tech-design",
     ]);
   });
 

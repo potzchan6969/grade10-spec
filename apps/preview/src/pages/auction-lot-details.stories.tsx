@@ -73,7 +73,7 @@ export const LiveAutoOutbid: Story = {
   args: { state: "live-auto-outbid" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText(/vs current/)).toBeVisible();
+    expect(canvas.getAllByText(/vs current/)).toHaveLength(2);
     expect(
       canvas.getByRole("button", { name: /^Raise maximum ·/ }),
     ).toBeVisible();

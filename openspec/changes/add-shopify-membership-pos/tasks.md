@@ -8,12 +8,12 @@ Group 1 lands in **grade10-spec** and the submodule bump is the boundary:
 groups 7 and 8 cannot start until it has shipped. Groups 2 and 4 are the
 foundations — pairing and the till session — and everything else reads them.
 
-Design decisions and open questions: [`design.md`](design.md). Screens and
-component exports: [`ui.md`](ui.md).
+Design decisions and open questions: [`tech-design.md`](tech-design.md). Screens and
+component exports: [`ui-design.md`](ui-design.md).
 
 ## 1. Store blocks (grade10-spec)
 
-- [ ] 1.1 Draw the member-card and till frames in Figma and link them from `ui.md`
+- [ ] 1.1 Draw the member-card and till frames in Figma and link them from `ui-design.md`
 - [ ] 1.2 Export `MemberCard` from `@grade10/ui` — the dynamic identification code, rendered scannable and as a short typed fallback
 - [ ] 1.3 Export `PendingCollectionList` from `@grade10/ui` — rewards paid for and awaiting collection, each with its window and where to collect it
 - [ ] 1.4 Extend `RewardMenu` to take a quantity for a per-unit reward and to state a physical reward's collection window

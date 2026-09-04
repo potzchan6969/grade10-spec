@@ -57,7 +57,7 @@ const tasksMd = (owner: string, done: number, note = "") =>
     "",
   ].join("\n");
 
-const MANIFEST = "schema: full-planning\n";
+const MANIFEST = "schema: grade10-planning\n";
 const PROPOSAL = "# Gift cards\n\n## Why\n\nNobody can buy one.\n";
 
 /** A store whose `tasks.md` has a history, committed at fixed dates so an
