@@ -50,7 +50,9 @@ afterwards from wherever the Store put them.
   settlement would leave the coupon uncorroborated. → The fallback is the
   variant match that answered before, so a mismatch costs corroboration rather
   than spending a coupon wrongly; and `store.pos.sale.coupon_not_taken` counts
-  it. ❓ Unverified against a live shop.
+  it. ❓ Unverified against a live shop — `tasks.md` group 5 is the staging
+  sale that settles it, and no allocation-fed rule should be trusted in
+  production until it has run.
 - **A partial removal is still ambiguous.** Two lines of one variant, with
   staff removing the cut from one, reads as corroborated. → Accepted: the weld
   goes on every line carrying the variant, so no per-line answer is available
