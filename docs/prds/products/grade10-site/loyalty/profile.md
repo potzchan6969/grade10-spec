@@ -26,7 +26,7 @@ and shown the points already waiting ([[grade10-site-loyalty-programme-SC-01]]).
 | Section | What it shows |
 | --- | --- |
 | Summary | Tier, points to spend, points earned this year against the next threshold, when the tier renews, and when the points stay active until |
-| Your member card | The QR the till scans, the short code beneath it, and a countdown |
+| Your member card | The QR the till scans, the short code beneath it, a countdown, and the action that adds the card to Google Wallet |
 | Rewards | The live menu, priced in points, with what the balance affords |
 | Spend on your basket | Points against the current basket — an offer of a code, or a pointer to checkout where the shop takes points there |
 | Waiting at the counter | Collect-in-store rewards with their deadline; a closed window says so |
@@ -56,6 +56,65 @@ shop.
 ::story{id="loyalty-membership-membercard--default" title="The member card"}
 
 ::story{id="loyalty-membership-membercard--already-used" title="A code a till has taken"}
+
+## In a phone wallet
+
+The same card, added to Google Wallet, so it opens from a lock screen instead
+of a sign-in.
+
+- **The code** — made on the phone itself, so a pass is scannable where there is
+  no signal, and it changes on its own rather than being fetched
+- **Beside it** — the member's name, the tier they hold, and the points they can
+  spend, following their standing without them opening anything
+- **Ending one** — the member ends a pass whenever they like and adds another.
+  Ending it *for* somebody who has lost the phone is an operator act nobody can
+  perform yet
+- **Apple Wallet** — not offered. Apple has no rotating code, so an Apple pass
+  would mean carrying one permanent code, which is a different decision
+
+:::detail{title="Standing up the wallet" for="operator"}
+Nobody can be offered a pass until Google says so, and none of it is
+same-day. In this order, because each step needs the one above it:
+
+1. *Operations* — **Create the issuer account** in the Google Pay & Wallet
+   Console. It opens in Demo Mode, which issues only to accounts named on it,
+   so the counter can be rehearsed long before the public can save anything
+2. *Operations* — **Complete the Business Profile and the payments profile**.
+   Publishing access is refused without both, and the refusal names neither
+3. *Operations* — **Request publishing access**. A Google review with no
+   published turnaround — start it the day the issuer exists, not the week the
+   shop opens
+4. *Design* — **Give the class its artwork and words**: the programme's logo,
+   the issuer's name, the programme's name, and one background colour. A class
+   with none of these is what a member sees on their lock screen
+5. *Operations* — **Create the class** and carry it from draft through review
+   to approved. A draft class issues to nobody real
+6. *Engineering* — **Create the service account**, grant it the wallet issuer
+   scope, and take its key as PKCS#8. Anything else needs ciphers the workers
+   do not carry
+7. *Engineering* — **Set the two secrets** with `pnpm run secrets`:
+   `WALLET_GOOGLE_SERVICE_ACCOUNT_KEY`, and `WALLET_PASS_KEY`, which is this
+   platform's own and seals every pass secret at rest
+8. *Engineering* — **Record the issuer, the class and the service account** in
+   `packages/app-env` — none of the three is a secret, and all three appear in
+   every save link a member opens. Half a configuration offers nothing: the
+   member's surface asks whether a wallet exists before it offers anything, so
+   until the issuer and the key are both set no save action is drawn
+
+**Standing obligations.**
+
+- **The request ceiling is per issuer, not per pass** — the refresh sweep and a
+  member tapping Save draw on the same allowance, so a backlog must never be
+  allowed to starve somebody standing at a counter
+- **Rotating `WALLET_PASS_KEY` invalidates every pass** — nothing re-seals the
+  rows today, so a rotation is a re-issue for every member who holds one. The
+  key must be 32 random bytes, base64 — it is used as key material directly,
+  not stretched from a phrase ❓ who owns that runbook
+- **A pass Google cannot be told about stays owed** — the sweep carries two
+  arms and reports both: what is stale, and what a member's ending or erasure
+  still owes the vendor. Depth and age go together, and the age is the one to
+  alarm on. An erasure names the debt until Google confirms it
+:::
 
 ## Histories
 
@@ -87,10 +146,20 @@ lives in the identity system and never in the programme, which holds only an
 opaque user id.
 
 :::callout{kind="warning"}
-Two things decided for this surface are not built. No welcome bonus is
-granted at enrolment — the deployed programme sets none. And deleting the
-account does not yet tear the membership down; the ledger has no
-account-deletion pass. Both are in flight under `revise-loyalty-programme-rules`.
+Three things decided for this surface are not built, and one is built but not
+switched on.
+
+- **The wallet pass** — the member's pass, its rotating code, the counter that
+  reads it and the sweep that keeps it current are built, and offered to
+  nobody: the issuer account, its class and its key do not exist yet. Three
+  parts are not built at all — an operator cannot end a pass for a member who
+  lost the phone; a spend at a counter reaches the pass on the daily floor
+  rather than inside five minutes; and the welcome message carries no save
+  action (`add-google-wallet-member-card`)
+- **The welcome bonus** — the deployed programme grants none
+  (`revise-loyalty-programme-rules`)
+- **Account deletion** — the ledger has no account-deletion pass
+  (`revise-loyalty-programme-rules`)
 :::
 
 :::callout{kind="note"}
@@ -114,6 +183,10 @@ container. Joining calls the store worker's `membership.join`, not loyalty's
 `me.enroll` directly, so enrolment and pairing land together. The card is the
 store's too: `membership.presentCard` mints a `pos_handles` row, storing only
 the QR token's digest, and `membership.presentations` reads the history. The
-loyalty `me.*` surface answers summary, history, redemptions, redeem, quote,
-undo and enrol, all off the session.
+wallet rides the same slice: `membership.addWalletPass` mints a `pos_passes`
+row whose rotating secret is sealed under the worker's own key, the till spends
+one of its codes by inserting `(pass, period)` under a unique index, and the
+store worker's cron keeps every pass current from a digest of what it last
+sent. The loyalty `me.*` surface answers summary, history, redemptions, redeem,
+quote, undo and enrol, all off the session.
 :::

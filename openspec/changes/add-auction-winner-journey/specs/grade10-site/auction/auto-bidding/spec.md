@@ -33,7 +33,7 @@ bidder's account is suspended from auction activity, per
 the bidder's — a bidder SHALL still have no way to lower or withdraw their
 own maximum, whether or not they are suspended.
 
-#### Scenario: auto-bidding-SC-01 - A first maximum opens the bidding
+#### Scenario: grade10-site-auction-auto-bidding-SC-01 - A first maximum opens the bidding
 
 - **GIVEN** an open listing with a starting price of 20000 minor units and no bids
 - **WHEN** a bidder commits a maximum of 50000 minor units
@@ -41,14 +41,14 @@ own maximum, whether or not they are suspended.
 - **AND** the current bid is 20000 minor units
 - **AND** that bidder leads
 
-#### Scenario: auto-bidding-SC-02 - A maximum below the minimum next bid is refused
+#### Scenario: grade10-site-auction-auto-bidding-SC-02 - A maximum below the minimum next bid is refused
 
 - **GIVEN** an open listing whose current bid is 22500 minor units and whose minimum increment is 2500 minor units
 - **WHEN** a bidder commits a maximum of 24000 minor units
 - **THEN** Grade10 refuses the commitment
 - **AND** the current bid and the leader are unchanged
 
-#### Scenario: auto-bidding-SC-03 - A leader raises their own maximum
+#### Scenario: grade10-site-auction-auto-bidding-SC-03 - A leader raises their own maximum
 
 - **GIVEN** bidder A leads with a committed maximum of 50000 minor units
 - **WHEN** bidder A raises their maximum to 80000 minor units
@@ -56,14 +56,14 @@ own maximum, whether or not they are suspended.
 - **AND** bidder A still leads
 - **AND** the current bid is unchanged
 
-#### Scenario: auto-bidding-SC-04 - Lowering a maximum is refused
+#### Scenario: grade10-site-auction-auto-bidding-SC-04 - Lowering a maximum is refused
 
 - **GIVEN** a bidder with a committed maximum of 50000 minor units on an open listing
 - **WHEN** they commit a maximum of 30000 minor units on that listing
 - **THEN** Grade10 refuses it
 - **AND** their committed maximum remains 50000 minor units
 
-#### Scenario: auto-bidding-SC-25 - A suspended bidder cannot withdraw their own maximum
+#### Scenario: grade10-site-auction-auto-bidding-SC-25 - A suspended bidder cannot withdraw their own maximum
 
 - **GIVEN** a suspended bidder with a committed maximum on an open listing that
   Grade10 has not yet retracted

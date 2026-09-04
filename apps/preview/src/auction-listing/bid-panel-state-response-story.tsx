@@ -91,9 +91,24 @@ function responseStory(
       expect(
         response.expectedText === "Change"
           ? canvas.getByRole("button", { name: response.expectedText })
-          : canvas.getByText(response.expectedText),
+          : canvas.getByText(labelled(response.expectedText)),
       ).toBeVisible();
     },
+  };
+}
+
+/**
+ * Finds the element whose own text opens with a scenario's expected text.
+ *
+ * A standing badge reads `Leading · HK$58,000` — the label names the state and
+ * the amount qualifies it, so an exact match would tie every standing scenario
+ * to a fixture's money. Leaves only, so an ancestor carrying the same text is
+ * never a second match.
+ */
+function labelled(expected: string) {
+  return (_content: string, element: Element | null) => {
+    if (!element || element.children.length > 0) return false;
+    return (element.textContent ?? "").trimStart().startsWith(expected);
   };
 }
 

@@ -172,6 +172,13 @@ export type {
   PendingCollectionItem,
   RewardMenuItem,
 } from "./blocks/loyalty-membership/types";
+export {
+  WalletPassLinks,
+  type WalletPassLinksCopy,
+  type WalletPassLinksProps,
+  type WalletPassOffer,
+  type WalletPassState,
+} from "./blocks/loyalty-membership/wallet-pass-links";
 // shared cross-capability types
 export type { AsyncAction, AsyncState } from "./blocks/shared/async";
 // shared/ui/store-cart
