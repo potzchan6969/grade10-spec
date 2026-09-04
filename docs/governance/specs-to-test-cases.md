@@ -1071,6 +1071,17 @@ stands for — "`<listing_6>` | A live listing led by user A, current bid
 This is what makes independence checkable: a case that inherits its setup from
 its neighbour has no row saying so, and its absence is visible.
 
+**Turn the spec's markers into concrete assumptions.** A spec names a moment
+or a quantity abstractly — "a valid bid at time T", "inside the extension
+window" — because it is stating a rule. A tester needs a number. Give it one
+as test data, derived from the rule rather than invented against it: `<bid
+time>` is "5 minutes before the recorded close, inside `<extension window>`",
+and the expected `<new time left>` is "30 minutes, one `<extension duration>`
+from the accepted bid" — not 35, because the spec sets the close *to* T plus
+the duration rather than adding the duration to the close it had. Write the
+assumption in the row, keep the derivation in the expected result, and never
+let a concrete value contradict the rule it came from.
+
 **A case that runs per row says so.** When the steps are identical and only
 the data differs, write one case with a row per run, a column for each varying
 value and one for the outcome, and a line under the title: "Runs once per row

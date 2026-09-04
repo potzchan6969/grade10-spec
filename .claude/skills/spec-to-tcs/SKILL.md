@@ -362,6 +362,14 @@ each case traces scenario ids.
      share the name and repeat the row. One name for two states produces a
      suite that cannot pass against one seeded environment.
 
+     **Make the spec's markers concrete.** Where the spec names a moment or a
+     quantity abstractly ("a valid bid at time T"), give the tester a number
+     as test data, derived from the rule rather than invented against it:
+     `<bid time>` "5 minutes before the recorded close", and the expected
+     `<new time left>` "one `<extension duration>` from the accepted bid".
+     Keep the derivation in the expected result, and never let the concrete
+     value contradict the rule it came from.
+
      **One case, many rows.** When the steps are identical and only the data
      differs, write one case with a row per run — a column per varying value
      and one for the outcome — and put "Runs once per row of **Test data**."
