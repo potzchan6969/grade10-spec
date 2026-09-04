@@ -20,11 +20,11 @@ Task 2.5 depends on the contracts in group 1; it uses fixtures rather than a run
 
 ## 3. Payment and shipping projection (grade10) (owner: @kinisworking)
 
-- [ ] 3.1 Make `A paid order reports payment separately from shipping`, `A partially fulfilled order shows every shipment`, and `Only carrier confirmation reports delivery` pass in the Store order projection.
-- [ ] 3.2 Make `An invalid webhook changes nothing` and `A duplicate webhook is harmless` pass by verifying the raw-body HMAC and deduplicating accepted events.
-- [ ] 3.3 Make `A missed webhook is repaired` pass through an on-read and scheduled reconciliation query to Shopify Admin.
-- [ ] 3.4 Make `A staff refund is reflected in payment status` and `A customer cannot start a dispute or refund request` pass in Store order reads.
-- [ ] 3.5 Verify every payment, refund, shipping, and authorization scenario in this group through Store backend, storefront, and admin feature lanes.
+- [x] 3.1 Make `A paid order reports payment separately from shipping`, `A partially fulfilled order shows every shipment`, and `Only carrier confirmation reports delivery` pass in the Store order projection.
+- [x] 3.2 Make `An invalid webhook changes nothing` and `A duplicate webhook is harmless` pass by verifying the raw-body HMAC and deduplicating accepted events.
+- [x] 3.3 Make `A missed webhook is repaired` pass through an on-read and scheduled reconciliation query to Shopify Admin.
+- [x] 3.4 Make `A staff refund is reflected in payment status` and `A customer cannot start a dispute or refund request` pass in Store order reads.
+- [x] 3.5 Verify every payment, refund, shipping, and authorization scenario in this group through Store backend, storefront, and admin feature lanes.
 
 ## 4. Delivery and review (grade10)
 
