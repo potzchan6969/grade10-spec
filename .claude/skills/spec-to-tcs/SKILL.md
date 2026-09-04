@@ -1,6 +1,6 @@
 ---
 name: spec-to-tcs
-description: Derive a capability's classified test-cases.md from the user-journeys.md beside its spec under openspec/specs/ or openspec/changes/. Use when QA or a PM asks to turn a durable capability or an OpenSpec change into test cases, or when a change's specs are finished and auto-generate suites. Invoke as /spec-to-tcs <capability-or-change>.
+description: Derive classified test cases from the user journeys - a capability's test-cases.md at feature level, or a domain's cross-feature domain-tcs.md at domain level. Use when QA or a PM asks to turn a durable capability, a domain, or an OpenSpec change into test cases, or when a change's specs are finished and auto-generate suites. Invoke as /spec-to-tcs [feature|domain] <target>.
 ---
 
 # Generate test cases from a capability's user journeys
@@ -8,7 +8,49 @@ description: Derive a capability's classified test-cases.md from the user-journe
 Follow `docs/governance/specs-to-test-cases.md` — this skill is that
 document's workflow, automated, ensuring strict traceability, NLP automation readiness, and comprehensive behavior coverage. Read it in full before the first run in a session; it defines the format, the property vocabularies, and the review lifecycle this skill produces.
 
-Invoke as `/spec-to-tcs <capability-or-change>`. Reviewing a suite and transitioning it to actual/approved is handled strictly by `/tcs-review` (`.cursor/skills/tcs-review/SKILL.md`). Manual "peer review" is deprecated.
+Invoke as `/spec-to-tcs [feature|domain] <target>`. Reviewing a suite and transitioning it to actual/approved is handled strictly by `/tcs-review` (`.cursor/skills/tcs-review/SKILL.md`). Manual "peer review" is deprecated.
+
+## The level comes first
+
+| Level | Writes | Covers |
+| --- | --- | --- |
+| `feature` (default) | `<capability>/feature-tcs.md` | one capability's own journeys, its refusals and edge cases |
+| `domain` | `<product>/<domain>/domain-tcs.md` | the paths a person walks across the capabilities of one domain |
+| `application` | nothing yet | reserved; answer that no application suite is defined and stop |
+
+A new feature suite is written as `feature-tcs.md`. A capability whose suite
+already exists as `test-cases.md` keeps that name — update it in place, and
+never write a second file beside it.
+
+The level is the first argument. Without one, take `feature` — and say which
+level you took. Ask only when the target itself is ambiguous (a path that
+names both a capability and a domain).
+
+**Run `domain` before `feature`** when a change touches both. The domain file
+names the paths; the feature suites then cover what those paths do not reach,
+and trim what they now do. Deriving in the other order makes every feature
+trim a guess. Say so and offer the domain run first when the user asks for a
+feature suite in a domain whose `domain-tcs.md` is missing or older than the change.
+
+### What a domain run reads and writes
+
+Read all of it before writing:
+
+- the changed capability's `user-journeys.md` in whichever tree the change owns;
+- every sibling capability's `user-journeys.md` under
+  `openspec/specs/<product>/<domain>/`;
+- the domain's product record — `docs/prds/products/<product>/<domain>/index.md`
+  and each capability page — for the decisions, the product's own names for
+  surfaces and controls, and the seeded values a pass is written against.
+
+Reading only the change loses the siblings that make a path cross-feature;
+reading only `openspec/specs/` misses the change the run exists to cover.
+
+A domain suite issues `<product>-<domain>-e2e-US<n>-TC<m>-<v>`, its journeys
+numbered its own way — an `e2e` journey is a path, not a copy of a capability's
+story — and each case's `**Trace:**` names every capability journey it crosses,
+in the order the case reaches them. A case whose pre-conditions and steps all
+sit inside one capability does not belong there: it is that capability's.
 
 Works against **both** trees equally — durable specs and in-flight change
 deltas. The suite always lands beside the `spec.md` you resolved, next to the
@@ -200,8 +242,8 @@ each case traces scenario ids.
      append a trailing bracketed tag like `(Negative)`.
    - **Classification Block** — Immediately following the title, under the
      label `**Classification:**` and a blank line, a bulleted list (`*`) of
-     all nine required properties (Severity, Priority, Status, Behaviour,
-     Type, Layer, Automation status, Testability, Trace). Nothing comes
+     all ten required properties (Severity, Priority, Status, Behaviour,
+     Type, Suites, Layer, Automation status, Testability, Trace). Nothing comes
      between the title and this block — no description, no summary sentence.
      See step 7 for the property vocabulary.
    - **Pre-conditions** — Label exactly `**Pre-conditions:**`, with the
@@ -217,19 +259,60 @@ each case traces scenario ids.
      collections"), or where the actor already is ("The collector is viewing
      the collection tiles on the front door"). Never state that the feature
      exists — a suite is written for a built site, so that is assumed; state
-     only what state it is in. One sentence where one will do, two when the
-     setup has a second half; short bullets when several conditions are
-     genuinely independent. `None.` only when the case truly needs
-     nothing.
+     only what state it is in. Write them as bullets, one condition each,
+     holding five rules: **state, not actions** (where the system is and what
+     data exists — never a click, a submit or a navigation); **specific**
+     (qualified by what the rule under test needs, not "a signed-in user");
+     **domain words** (no endpoint names, tables or provider product names);
+     **independent** (each case sets up everything it needs, and never
+     describes another case's outcome); **reusable** (the same condition
+     phrased identically everywhere it appears, so one step definition binds
+     it). `None.` only when the case truly needs nothing.
+
+     A suite whose cases genuinely all share a setup may carry one
+     `## Background` section before the first journey holding those
+     conditions and their data once; each case then adds only what is its
+     own. Background is optional and belongs only where *every* case shares
+     what it holds.
+   - **Roles** — inside a case the actor is `admin` or `user` (`user A` and
+     `user B` when two act), never a product persona — no operator,
+     collector, bidder or rival. Journey titles and stories keep the
+     product's words; the cases under them do not. A role is never a test
+     data row.
    - **Test data (Optional)** — A `Field | Value` table of the values the
      case uses, taken from the scenario. Do not use hard-coded PII. When the
      case takes no input, omit the whole section — no empty table, no "None"
      line.
+
+     **Name the data, then use the name.** Any value a run could reasonably
+     change — a file, an amount, a seeded record, a moment on the clock —
+     gets a `<placeholder>` row and is referred to by that name from the
+     pre-conditions, the steps and the expected results. A literal in a step
+     is a value the next tester cannot vary and a script cannot vary at all.
+     Where an expected value is derived, state the derivation rather than the
+     arithmetic: "Highest bid reads `<user B maximum>` plus `<increment>`"
+     survives a change of seed; "Highest bid reads 530000" does not.
+
+     **One name, one state.** A placeholder stands for one record in one
+     state across the whole file: `<listing_1>` and `<listing_6>` when two
+     cases need a listing in different states, numbered in order of first
+     appearance, each row defining what it stands for ("A live listing led by
+     user A, current bid `<leader price>`"). Cases needing the same state
+     share the name and repeat the row. One name for two states produces a
+     suite that cannot pass against one seeded environment.
+
+     **One case, many rows.** When the steps are identical and only the data
+     differs, write one case with a row per run — a column per varying value
+     and one for the outcome — and put "Runs once per row of **Test data**."
+     on the line under the title. Two refusals with one set of steps are one
+     case.
    - **Steps** — Under `**Steps:**` and a blank line, a numbered list of
      atomic actions the tester performs, in the order a person performs
-     them: **arrive, look, act**. The first step is almost always the
-     arrival (`Navigate to <store front door URL>`), because a case that
-     starts mid-surface cannot be run cold; then the looking (`Observe the
+     them: **arrive, look, act**. A case must be runnable cold, so the
+     arrival is stated somewhere — either as the first step (`Navigate to
+     <store front door URL>`) or as a pre-condition placing the actor there
+     (`The admin is on <admin listings url>`), in which case the steps start
+     at the first action under test; one or the other, never neither; then the looking (`Observe the
      hero section area`, `Scroll to the collections section`, `Inspect the
      page source for the metadata tags`) and the acting (`Click the
      incomplete collection tile`, `Click the browser's Back button`, `Wait
@@ -311,6 +394,7 @@ each case traces scenario ids.
    * **Status:** draft
    * **Behaviour:** negative
    * **Type:** functional
+   * **Suites:** regression
    * **Layer:** e2e
    * **Automation status:** manual
    * **Testability:** automation, manual
@@ -346,7 +430,7 @@ each case traces scenario ids.
    and **NLP automation readiness** (standardized phrasing, no blank
    expected results).
 
-7. **Classify every case** with all nine properties inside the Classification Block, using asterisks (`*`) for bullets, in this exact order:
+7. **Classify every case** with all ten properties inside the Classification Block, using asterisks (`*`) for bullets, in this exact order:
    - **Severity** — `blocker`, `critical`, `major`, `normal`, `minor`,
      `trivial`. Usual shapes: a core positive path is `critical`, a
      degradation the journey survives `major`, an empty state `normal`, a
@@ -358,7 +442,12 @@ each case traces scenario ids.
      pre-condition feeds the product something broken, missing, stubbed out
      or cut off is `negative` even when the expected result is that it
      carries on gracefully.
-   - **Type** — exactly one of `functional`, `smoke`, `regression`, `acceptance`, `usability`, `security`, `performance`, `compatibility`, `integration`.
+   - **Type** — exactly one of `functional`, `acceptance`, `usability`,
+     `security`, `performance`, `compatibility`, `integration`. What kind of
+     verification this is, never which run it belongs to.
+   - **Suites** — which runs it belongs to: zero or more of `smoke`,
+     `regression`, `release`, comma-separated, or `none`. At most one `smoke`
+     per journey. Never write `exploratory`; only a reviewer adds those.
    - **Layer** — `e2e`, `api`, or `unit`.
    - **Automation status** — always `manual` on generation.
    - **Testability** — `automation`, `manual`, or `automation, manual`.
@@ -426,6 +515,7 @@ each case traces scenario ids.
    * **Status:** draft
    * **Behaviour:** …
    * **Type:** …
+   * **Suites:** …
    * **Layer:** …
    * **Automation status:** manual
    * **Testability:** …
@@ -460,7 +550,7 @@ each case traces scenario ids.
    ````
 
    `**Test data:**` is the only section a case may leave out. Everything
-   else — the classification block with all nine bullets, the pre-conditions
+   else — the classification block with all ten bullets, the pre-conditions
    line, at least one step, at least one expected result — is on every case.
 
    In **update mode** (a suite already existed and the user chose update):
@@ -515,7 +605,7 @@ each case traces scenario ids.
   another case having run.
 - Never put a `**Description:**` paragraph, a `**Covers:**` list, or a
   summary sentence into a generated case or journey section, never move the
-  nine properties to the end of the case under a `**Properties:**` heading,
+  ten properties to the end of the case under a `**Properties:**` heading,
   and never write a `**Test data:**` section for a case that takes no
   input.
 - Never invent a journey the upgraded spec does not justify from existing

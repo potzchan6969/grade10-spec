@@ -1,6 +1,6 @@
 ---
 name: tcs-review
-description: Walk a QA reviewer through a pending test-cases.md suite one user journey at a time - every draft case in that journey together, with the spec's scenarios quoted on request - and record each verdict as actual, deprecated, or still draft. Use when QA asks to review, approve, or sign off test cases for a capability or an OpenSpec change. Invoke as /tcs-review [<capability-or-change>].
+description: Walk a QA reviewer through a pending test-cases.md or domain domain-tcs.md suite one user journey at a time - every draft case in that journey together, with the spec's scenarios quoted on request - and record each verdict as actual, deprecated, or still draft. Use when QA asks to review, approve, or sign off test cases for a capability or an OpenSpec change. Invoke as /tcs-review [<capability-or-change>].
 ---
 
 # Review a capability's test cases with QA
@@ -40,9 +40,9 @@ of them: the phrasing they approve is the phrasing generation will copy.
    on `main`. Above roughly fifteen `draft` cases, offer to split by journey
    and take one journey per branch; below that, take the file.
 
-1. **Find the suites awaiting review.** Search both trees —
-   `openspec/specs/**/test-cases.md` and
-   `openspec/changes/*/specs/**/test-cases.md`, never
+1. **Find the suites awaiting review.** Search both trees, both levels —
+   `openspec/specs/**/test-cases.md` and `openspec/specs/**/domain-tcs.md`, plus the
+   same two under `openspec/changes/*/specs/`, never
    `openspec/changes/archive/`. A suite is awaiting review when its
    `**Status:**` is `pending-review`, or when any case in it has
    `**Status:** draft`. Narrow to the argument when one was given (a change
@@ -57,7 +57,16 @@ of them: the phrasing they approve is the phrasing generation will copy.
    status is derived precisely so the line they both touch merges without
    judgement.
 
-2. **Pick one suite:**
+2. **Take a domain before the features under it.** When the drafts you found
+   include a domain's `domain-tcs.md` and feature suites in that same domain, offer
+   the `domain-tcs.md` first: it settles which paths are covered end to end, so a
+   feature suite can then be trimmed against something approved rather than
+   something hoped for, and its approved cases become the house-style evidence
+   the feature reviews inherit. When the last feature suite in a domain reaches
+   `approved` and that domain's `domain-tcs.md` still holds drafts, say so and offer
+   it as the next run.
+
+3. **Pick one suite:**
 
    | Found | Do |
    | --- | --- |
@@ -65,13 +74,29 @@ of them: the phrasing they approve is the phrasing generation will copy.
    | Exactly one | Say which one, and start reviewing it — no menu for a single choice. |
    | More than one | List them and ask which to take: capability or change name, path, file status, and how many cases are `draft` out of the total. Review one suite per run unless the reviewer asks to continue into the next. |
 
-3. **Open the suite and its spec together.** Read the whole
+4. **Restyle before you present anything.** Bring the file to the current
+   `tcs_rules_rev` first — the reviewer's attention belongs on coverage, not
+   on wording the rules already settle. What may be re-worded depends on the
+   case:
+
+   | Case | Re-wording |
+   | --- | --- |
+   | `draft` | Restyle freely. `<v>` unchanged, status stays `draft`. |
+   | `actual`, **Automation status:** `manual` | Offer the restyle; on their yes, re-word in place. `<v>` unchanged, stays `actual`. |
+   | `actual`, **Automation status:** `automated` | Leave it exactly as it is. Its script asserts that wording; changing it is a behaviour change, not a restyle. |
+   | `deprecated` | Never touched. |
+
+   Report what you restyled before the first journey. A behaviour change is
+   not a restyle: that is `/spec-to-tcs`, which rewrites the case, bumps its
+   `<v>` and sets it back to `draft` for review.
+
+5. **Open the suite and its journeys together.** For a domain `domain-tcs.md`, that is every `user-journeys.md` its traces name, plus the domain's pages under `docs/prds/`. Read the whole
    `test-cases.md` and the `spec.md` beside it, end to end, before the first
    question. You cannot answer "where does the spec say that?" from a
    truncated read. Then orient the reviewer: the capability, the journeys,
    how many cases each holds, and how many are `draft`.
 
-4. **Walk the suite one journey at a time,** in file order. A journey is the
+6. **Walk the suite one journey at a time,** in file order. A journey is the
    unit of review: a reviewer holds a whole user flow in their head at once
    and judges its cases against each other — is anything missing, does the
    negative case belong here, do two of these say the same thing — which
@@ -103,7 +128,7 @@ of them: the phrasing they approve is the phrasing generation will copy.
    - **A verdict never carries forward.** Finishing one journey says nothing
      about the next. Ask again.
 
-5. **Answer their questions from the spec.** A reviewer will ask why a case
+7. **Answer their questions from the spec.** A reviewer will ask why a case
    is `critical`, where a number came from, why two scenarios share one case,
    what happens in a case the suite does not cover. Answer by quoting the
    requirement or scenario clause, naming its id. When the spec does not
@@ -112,7 +137,7 @@ of them: the phrasing they approve is the phrasing generation will copy.
    Never talk the reviewer out of a doubt; if they think a case is wrong,
    the case is wrong until the spec says otherwise.
 
-6. **Record each verdict in the file as you go,** so an interrupted review
+8. **Record each verdict in the file as you go,** so an interrupted review
    is not lost. **Re-read the file from disk immediately before each write** —
    a session runs for hours, another reviewer may have landed a verdict in
    another journey, and writing back a copy held in memory would silently
@@ -134,7 +159,7 @@ of them: the phrasing they approve is the phrasing generation will copy.
    is never a judgement you or the reviewer makes. `pnpm run tcs:validate`
    fails a file whose header and cases disagree.
 
-7. **Close the run — and land the work.** When the last journey in scope has
+9. **Close the run — and land the work.** When the last journey in scope has
    its verdicts, or the reviewer stops for the day:
 
    - Run `pnpm run tcs:validate` and fix anything it names before committing.
