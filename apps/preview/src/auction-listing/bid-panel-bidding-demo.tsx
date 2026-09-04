@@ -334,10 +334,10 @@ function BidPanelBiddingDemo() {
           overtaken maximum, and a maximum that was accepted without taking the
           lead. Each card must replace price, history, standing, and the safe
           next action together so a private maximum is never mistaken for the
-          current bid or a guarantee of winning. Quick-maximum presets and
-          Place Bid are live: they use the same enrollment session as Bid
-          Panel Interactive. Mechanism copy stays as always-on subtext under
-          the section heading.
+          current bid or a guarantee of winning. Quick-maximum presets and Place
+          Bid are live: they use the same enrollment session as Bid Panel
+          Interactive. Mechanism copy stays as always-on subtext under the
+          section heading.
         </p>
       }
     >
