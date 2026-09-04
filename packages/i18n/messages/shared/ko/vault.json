@@ -57,6 +57,8 @@
     "release_requested": "반환 요청됨",
     "payout_recorded": "지급 기록됨",
     "repayment_recorded": "상환 기록됨",
+    "payout_reversed": "지급 기록 취소됨",
+    "repayment_reversed": "상환 기록 취소됨",
     "repaid": "대출 상환 완료",
     "released": "물품 반환됨",
     "forfeited": "물품 소유권 상실",

@@ -57,6 +57,8 @@
     "release_requested": "Release requested",
     "payout_recorded": "Payout recorded",
     "repayment_recorded": "Repayment recorded",
+    "payout_reversed": "Payout reversed",
+    "repayment_reversed": "Repayment reversed",
     "repaid": "Loan repaid",
     "released": "Item released",
     "forfeited": "Item forfeited",

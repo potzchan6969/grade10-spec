@@ -57,6 +57,8 @@
     "release_requested": "已要求取回",
     "payout_recorded": "已记录放款",
     "repayment_recorded": "已记录还款",
+    "payout_reversed": "已撤销放款记录",
+    "repayment_reversed": "已撤销还款记录",
     "repaid": "贷款已还清",
     "released": "物品已交回",
     "forfeited": "物品已没收",
