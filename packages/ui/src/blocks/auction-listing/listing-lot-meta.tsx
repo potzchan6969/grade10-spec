@@ -8,9 +8,13 @@ import type { ListingLotMetaBadge } from "./types";
 type ListingLotMetaCopy = {
   aboutThisLot: string;
   vaultShipping: string;
-  authentication: string;
   result: string;
   showMore: string;
+};
+
+type ListingLotMetaFact = {
+  label: string;
+  value: string;
 };
 
 type ListingLotMarketComps = {
@@ -24,8 +28,9 @@ type ListingLotMetaProps = {
   description: string;
   showMoreHref?: string;
   vaultShippingBody: string;
-  authenticationBody: string;
   resultFact?: string;
+  /** Cataloguing facts under About this lot (year, set, grade, cert, …). */
+  facts?: readonly ListingLotMetaFact[];
   /** Comparable sales, shown as a section under About this lot. */
   marketComps?: ListingLotMarketComps;
 };
@@ -36,8 +41,8 @@ function ListingLotMeta({
   description,
   showMoreHref = "#description",
   vaultShippingBody,
-  authenticationBody,
   resultFact,
+  facts,
   marketComps,
 }: ListingLotMetaProps) {
   return (
@@ -57,6 +62,24 @@ function ListingLotMeta({
             <Badge key={badge.label}>{badge.label}</Badge>
           ))}
         </HStack>
+        {facts && facts.length > 0 ? (
+          <VStack gap="sm">
+            {facts.map((fact) => (
+              <HStack
+                className="w-full"
+                gap="sm"
+                hAlign="space-between"
+                key={fact.label}
+                wrap
+              >
+                <Text size="sm" tone="secondary">
+                  {fact.label}
+                </Text>
+                <Text size="sm">{fact.value}</Text>
+              </HStack>
+            ))}
+          </VStack>
+        ) : null}
       </VStack>
       {marketComps ? (
         <VStack gap="sm">
@@ -68,10 +91,6 @@ function ListingLotMeta({
         <Text className="font-semibold">{copy.vaultShipping}</Text>
         <Text size="base">{vaultShippingBody}</Text>
       </VStack>
-      <VStack gap="sm">
-        <Text className="font-semibold">{copy.authentication}</Text>
-        <Text size="base">{authenticationBody}</Text>
-      </VStack>
       {resultFact ? (
         <VStack gap="sm">
           <Text className="font-semibold">{copy.result}</Text>
@@ -82,5 +101,10 @@ function ListingLotMeta({
   );
 }
 
-export type { ListingLotMarketComps, ListingLotMetaCopy, ListingLotMetaProps };
+export type {
+  ListingLotMarketComps,
+  ListingLotMetaCopy,
+  ListingLotMetaFact,
+  ListingLotMetaProps,
+};
 export { ListingLotMeta };

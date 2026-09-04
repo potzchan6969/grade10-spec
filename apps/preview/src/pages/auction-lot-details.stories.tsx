@@ -34,10 +34,10 @@ export const LiveAutoLeading: Story = {
   args: { state: "live-auto-leading" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("heading", { name: /Charizard/ })).toBeVisible();
+    expect(canvas.getByRole("heading", { name: /Carddass/ })).toBeVisible();
     expect(canvas.getByText("Raise your private maximum")).toBeVisible();
-    expect(canvas.getByText(/Current: HK\$8,000/)).toBeVisible();
-    expect(canvas.getByText(/Leading · HK\$4,800/)).toBeVisible();
+    expect(canvas.getByText(/Current: HK\$95,000/)).toBeVisible();
+    expect(canvas.getByText(/Leading · HK\$58,000/)).toBeVisible();
     expect(canvas.getByText("Min. bid")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: /^Raise maximum to/ }),

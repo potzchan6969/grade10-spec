@@ -170,8 +170,11 @@ one locale rule:
 - **Typography** — use curly apostrophes (`’`, U+2019) and curly quotation
   marks (`“` `”`, U+201C/U+201D) in rendered copy. Do not use straight ASCII
   `'` or `"` for contractions or quoted speech.
-- **Locale** — use American English spelling and punctuation (for example
-  `authorized`, `color`, em dashes without spaces).
+- **Locale** — use American English spelling (for example `authorized`,
+  `color`).
+- **Em dashes** — do not use the em dash (`—`, U+2014) in user-facing copy.
+  Prefer a period, comma, colon, or a new sentence. Em dashes clutter short UI
+  text and read as generated filler.
 - **Separators** — do not default to the middle dot (`·`) as a generic joiner.
   Overusing it for label–value pairs, titles with amounts, and stacked metadata
   reads as generated filler. Prefer a colon (`Current: HK$8,000`), a dedicated
@@ -179,6 +182,10 @@ one locale rule:
   that include an amount (`Raise maximum to HK$8,501`). Reserve `·` for compact
   chips where two peer facts share one badge (for example
   `Leading · HK$4,800`).
+- **One fact, one place** — do not restate cataloguing facts (year, set, grade,
+  cert) or logistics (vault shipping, authentication) in the About blurb when
+  those sections already carry them. The blurb is editorial context; facts and
+  dedicated sections own the structured and operational details.
 
 See [`packages/i18n/README.md`](../../packages/i18n/README.md) for where
 catalogued copy lives and how layers merge.

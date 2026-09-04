@@ -6,12 +6,14 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 export const IMAGE = new URL("../pages/product.fixture.png", import.meta.url)
   .href;
 
-export const TITLE = "1999 Charizard, PSA 10";
-export const DESCRIPTION = "Shadowless 1st Ed. Authenticated and vaulted.";
+export const TITLE =
+  "1997 Pocket Monsters Carddass #000 Bandai Starters, PSA 10";
+export const DESCRIPTION =
+  "Bandai Carddass checklist and starters slab from the Pocket Monsters set.";
 
 export const GALLERY_IMAGES = [
   { src: IMAGE, alt: TITLE, thumbLabel: "front" },
-  { src: IMAGE, alt: `${TITLE} back`, thumbLabel: "back" },
+  { src: IMAGE, alt: `${TITLE}, back`, thumbLabel: "back" },
 ] as const;
 
 export const BASE_FACTS = [
@@ -22,7 +24,7 @@ export const BASE_FACTS = [
 
 export const VAULT_SECTION = {
   heading: "Vault shipping",
-  body: "Stored in Grade10 Vault — ships from our facility within 1 business day of payment.",
+  body: "Stored in Grade10 Vault. Ships from our facility within 1 business day of payment.",
 } as const;
 
 /** Gallery column while the listing payload loads. */

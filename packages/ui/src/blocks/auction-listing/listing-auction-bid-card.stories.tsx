@@ -83,16 +83,16 @@ const CLOSES_AT_MS = NOW_MS + (6 * 60 + 9) * 1000;
 
 const HISTORY: ListingBidHistoryRow[] = [
   {
-    id: "bid-john-480",
+    id: "bid-john-5800",
     initials: "john@example.com",
-    amountMinor: 480_000,
+    amountMinor: 5_800_000,
     acceptedAtMs: NOW_MS - 2 * 60_000,
     isViewer: true,
   },
   {
-    id: "bid-mike-455",
+    id: "bid-mike-5550",
     initials: "mike@example.com",
-    amountMinor: 455_000,
+    amountMinor: 5_550_000,
     acceptedAtMs: NOW_MS - 8 * 60_000,
   },
 ];
@@ -109,7 +109,7 @@ function liveView(
     isUnsold: false,
     showBidActions: true,
     priceLabel: "Current Bid",
-    currentBidMinor: 480_000,
+    currentBidMinor: 5_800_000,
     bidCount: 6,
     bidCountLabel: "6 bids",
     countdown: "6m 9s",
@@ -119,9 +119,9 @@ function liveView(
     extended: false,
     deadlineAtMs: CLOSES_AT_MS,
     standing: "none",
-    minBidMinor: 505_000,
-    incrementMinor: 25_000,
-    suggestedMaxMinor: 800_000,
+    minBidMinor: 6_050_000,
+    incrementMinor: 250_000,
+    suggestedMaxMinor: 9_500_000,
     ...overrides,
     currency: overrides.currency ?? DEFAULT_LISTING_CURRENCY,
   };
@@ -228,14 +228,14 @@ export const Outbid: Story = {
   args: {
     view: liveView({
       standing: "outbid",
-      currentBidMinor: 825_000,
-      minBidMinor: 850_000,
-      viewerMaximumMinor: 800_000,
+      currentBidMinor: 9_750_000,
+      minBidMinor: 10_000_000,
+      viewerMaximumMinor: 9_500_000,
     }),
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText(/Outbid · HK\$8,250/)).toBeInTheDocument();
+    expect(canvas.getByText(/Outbid · HK\$97,500/)).toBeInTheDocument();
   },
 };
 
@@ -243,14 +243,14 @@ export const Leading: Story = {
   args: {
     view: liveView({
       standing: "leading-max",
-      viewerMaximumMinor: 800_000,
+      viewerMaximumMinor: 9_500_000,
     }),
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText(/Leading · HK\$4,800/)).toBeInTheDocument();
+    expect(canvas.getByText(/Leading · HK\$58,000/)).toBeInTheDocument();
     expect(canvas.getByText("Raise your private maximum")).toBeInTheDocument();
-    expect(canvas.getByText(/Current: HK\$8,000/)).toBeInTheDocument();
+    expect(canvas.getByText(/Current: HK\$95,000/)).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: /^Raise maximum to/ }),
     ).toBeInTheDocument();
@@ -264,11 +264,11 @@ export const LiveNoBids: Story = {
     view: liveView({
       hasBids: false,
       priceLabel: "Starting bid",
-      currentBidMinor: 120_000,
+      currentBidMinor: 4_800_000,
       bidCount: 0,
       bidCountLabel: "0 bids",
       standing: "none",
-      minBidMinor: 120_000,
+      minBidMinor: 4_800_000,
     }),
   },
   play: async ({ canvasElement }) => {

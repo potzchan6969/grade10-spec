@@ -121,7 +121,7 @@ export const PreAuction: Story = {
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("img", { name: /Charizard/ })).toBeInTheDocument();
+    expect(canvas.getByRole("img", { name: /Carddass/ })).toBeInTheDocument();
     expect(
       canvas.getByRole("heading", { name: "Description" }),
     ).toBeInTheDocument();
