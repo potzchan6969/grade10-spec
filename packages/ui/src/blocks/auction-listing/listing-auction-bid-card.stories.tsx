@@ -17,9 +17,13 @@ const COPY = {
   recentBids: "Recent Bids",
   bidHistory: { you: "You", empty: "No bids yet" },
   auctionWon: "Auction won",
-  paymentDue: "Payment due",
-  paymentDueBody: "Please pay your invoice to complete this purchase.",
-  payInvoice: "Pay Invoice",
+  completePurchase: "Confirm shipping and payment",
+  completePurchaseBody:
+    "Choose where we ship and how you pay. You cannot pay until both are confirmed.",
+  completePurchaseAction: "Continue",
+  paid: "Paid",
+  paidBody: "Track shipping and delivery for this lot.",
+  viewOrderDetails: "View order details",
   didNotWin: "Did not win",
   cardRelease: "Your card authorization will be released.",
   outbid: "Outbid",
@@ -236,7 +240,7 @@ export const Outbid: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText(/Outbid · HK\$97,500/)).toBeInTheDocument();
+    expect(canvas.getByText(/Outbid · HK\$95,000/)).toBeInTheDocument();
   },
 };
 

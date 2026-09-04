@@ -200,7 +200,7 @@ const BID_PANEL_STATE_RESPONSES = {
       submitUsesSignInLabel: false,
       fixtureState: "closed-won-payment-due",
     },
-    expectedText: "Pay Invoice",
+    expectedText: "Continue",
   },
   closedWonSettled: {
     scenarioId: "bid-panel/closed-won-settled",

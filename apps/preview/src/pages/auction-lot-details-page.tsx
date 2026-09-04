@@ -31,6 +31,10 @@ import {
   userBidHistoryForState,
 } from "./auction-lot-details-content";
 import { AuctionLotDetailsPageShell } from "./auction-lot-details-page-shell";
+import {
+  navigateToStory,
+  ORDER_DETAILS_STORY_ID,
+} from "./workbench-account-nav";
 
 const LIVE_BID_INTERVAL_MS = 8_000;
 
@@ -156,6 +160,7 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
           marketComps={AUCTION_LOT_MARKET_COMPS}
           onCommitMaximum={requestBidAction}
           onPlaceBid={requestBidAction}
+          onViewOrderDetails={() => navigateToStory(ORDER_DETAILS_STORY_ID)}
           recentBidsAccessory={
             <ListingUserBidHistory
               activityTimeCopy={FIXTURE_ACTIVITY_TIME_COPY}

@@ -44,7 +44,7 @@ export const BIDDING_STATE_LABELS: Record<BiddingState, string> = {
   "live-auto-leading": "Live — auto leading",
   "live-auto-outbid": "Live — auto outbid",
   "closed-sold": "Closed — sold",
-  "closed-won-payment-due": "Closed — won payment due",
+  "closed-won-payment-due": "Closed — confirm purchase",
   "closed-won-settled": "Closed — won settled",
   "closed-lost": "Closed — lost",
   "closed-unsold": "Closed — unsold",
@@ -118,9 +118,13 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
     empty: "No bids yet",
   },
   auctionWon: "Auction won",
-  paymentDue: "Payment due",
-  paymentDueBody: "Please pay your invoice to complete this purchase.",
-  payInvoice: "Pay Invoice",
+  completePurchase: "Confirm shipping and payment",
+  completePurchaseBody:
+    "Choose where we ship and how you pay. You cannot pay until both are confirmed.",
+  completePurchaseAction: "Continue",
+  paid: "Paid",
+  paidBody: "Track shipping and delivery for this lot.",
+  viewOrderDetails: "View order details",
   didNotWin: "Did not win",
   cardRelease: "Your card authorization will be released.",
   outbid: "Outbid",
@@ -180,7 +184,12 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   activityTimeCopy: FIXTURE_ACTIVITY_TIME_COPY,
 } satisfies Omit<
   ListingAuctionBidCardCopy,
-  "aboutThisLot" | "vaultShipping" | "authentication" | "result" | "showMore"
+  | "aboutThisLot"
+  | "vaultShipping"
+  | "authentication"
+  | "result"
+  | "showMore"
+  | "showLess"
 >;
 
 export const LISTING_AUCTION_BID_AGE_VERIFICATION_COPY = {
@@ -256,12 +265,6 @@ export function stateMeta(state: BiddingState) {
       state === "live-no-bids" || state === "closed-unsold"
         ? 0
         : BID_FIXTURE_LOT.bidCount,
-    resultFact:
-      state === "closed-unsold"
-        ? "Unsold"
-        : closed && !state.includes("unsold")
-          ? `Sold · ${fixtureAmount(CLOSED_SOLD_MINOR)}`
-          : undefined,
   };
 }
 
@@ -296,20 +299,21 @@ export function bidHistoryForState(
   }
 
   if (state.startsWith("closed")) {
+    const viewerWon =
+      state === "closed-won-payment-due" || state === "closed-won-settled";
     return [
       {
-        id: "bid-mike-sold",
-        initials: "mike@example.com",
+        id: viewerWon ? "bid-john-sold" : "bid-mike-sold",
+        initials: viewerWon ? VIEWER_INITIALS : "mike@example.com",
         amountMinor: CLOSED_SOLD_MINOR,
         acceptedAtMs: msAgo(60),
-        timeOverride: "Closed",
+        isViewer: viewerWon,
       },
       {
-        id: "bid-john-closed",
-        initials: "john@example.com",
+        id: viewerWon ? "bid-mike-prior" : "bid-john-closed",
+        initials: viewerWon ? "mike@example.com" : VIEWER_INITIALS,
         amountMinor: CLOSED_SOLD_MINOR - BID_FIXTURE_LOT.incrementMinor,
         acceptedAtMs: msAgo(90),
-        timeOverride: "Closed",
         isViewer: state === "closed-lost",
       },
     ];
@@ -393,7 +397,6 @@ export function userBidHistoryForState(
           bidType: "auto",
           bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
           acceptedAtMs: msAgo(60),
-          timeOverride: "Closed",
         },
         {
           id: "user-bid-won-prior",
@@ -403,7 +406,6 @@ export function userBidHistoryForState(
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(90),
-          timeOverride: "Closed",
         },
       ];
     case "closed-lost":
@@ -416,7 +418,6 @@ export function userBidHistoryForState(
           bidType: "manual",
           bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(120),
-          timeOverride: "Closed",
         },
       ];
     default:
@@ -539,6 +540,5 @@ export function buildListingAuctionBidView(
     ),
     incrementMinor: BID_FIXTURE_LOT.incrementMinor,
     suggestedMaxMinor: BID_FIXTURE_LOT.viewerMaximumMinor ?? 0,
-    resultFact: meta.resultFact,
   };
 }

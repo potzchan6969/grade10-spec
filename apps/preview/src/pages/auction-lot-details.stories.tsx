@@ -84,7 +84,7 @@ export const ClosedWonPaymentDue: Story = {
   args: { state: "closed-won-payment-due" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Pay Invoice" })).toBeVisible();
+    expect(canvas.getByRole("button", { name: "Continue" })).toBeVisible();
   },
 };
 export const ClosedWonSettled: Story = {

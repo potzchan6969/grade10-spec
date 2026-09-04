@@ -26,9 +26,18 @@ import type { BidEnrollment, ListingAuctionBidView } from "./types";
 
 type ListingAuctionBidFieldsCopy = ListingQuickMaximumBidActionsCopy & {
   auctionWon: string;
-  paymentDue: string;
-  paymentDueBody: string;
-  payInvoice: string;
+  /** Title when the win still needs shipping and payment choices. */
+  completePurchase: string;
+  /** Supporting line under `completePurchase`. */
+  completePurchaseBody: string;
+  /** CTA into shipping and payment confirmation. */
+  completePurchaseAction: string;
+  /** Title when the win is paid and fulfilment is in progress or complete. */
+  paid: string;
+  /** Supporting line under `paid`, e.g. track shipping and delivery. */
+  paidBody: string;
+  /** CTA into order / delivery status for a paid win. */
+  viewOrderDetails: string;
   didNotWin: string;
   cardRelease: string;
   outbid: string;
@@ -68,6 +77,8 @@ type StandingBannerProps = {
   copy: ListingAuctionBidFieldsCopy;
   view: ListingAuctionBidView;
   bidEnrollment?: BidEnrollment;
+  onCompletePurchase?: () => void;
+  onViewOrderDetails?: () => void;
 };
 
 function viewerHasAuctionStanding(
@@ -82,6 +93,8 @@ function StandingBanner({
   copy,
   view,
   bidEnrollment = "ready",
+  onCompletePurchase,
+  onViewOrderDetails,
 }: StandingBannerProps) {
   if (!viewerHasAuctionStanding(view, bidEnrollment)) {
     return null;
@@ -93,18 +106,44 @@ function StandingBanner({
         className="w-full border-b border-border bg-muted/50 px-4 py-4"
         gap="sm"
       >
-        <Badge variant="success">{copy.auctionWon}</Badge>
-        <Text weight="medium">{copy.paymentDue}</Text>
-        <Text size="sm" tone="secondary">
-          {copy.paymentDueBody}
-        </Text>
-        <Button onClick={() => undefined}>{copy.payInvoice}</Button>
+        <VStack className="w-full gap-0.5" gap="none">
+          <Text weight="medium">{copy.completePurchase}</Text>
+          <Text
+            className="text-secondary-foreground"
+            size="sm"
+            tone="secondary"
+          >
+            {copy.completePurchaseBody}
+          </Text>
+        </VStack>
+        <Button onClick={onCompletePurchase} size="md">
+          {copy.completePurchaseAction}
+        </Button>
       </VStack>
     );
   }
 
   if (view.standing === "won-settled") {
-    return <Badge variant="success">{copy.auctionWon}</Badge>;
+    return (
+      <VStack
+        className="w-full border-b border-border bg-muted/50 px-4 py-4"
+        gap="sm"
+      >
+        <VStack className="w-full gap-0.5" gap="none">
+          <Text weight="medium">{copy.paid}</Text>
+          <Text
+            className="text-secondary-foreground"
+            size="sm"
+            tone="secondary"
+          >
+            {copy.paidBody}
+          </Text>
+        </VStack>
+        <Button onClick={onViewOrderDetails} size="md">
+          {copy.viewOrderDetails}
+        </Button>
+      </VStack>
+    );
   }
 
   if (view.standing === "lost") {
@@ -113,8 +152,7 @@ function StandingBanner({
         className="w-full border-b border-border bg-muted/50 px-4 py-4"
         gap="xs"
       >
-        <Badge variant="warning">{copy.didNotWin}</Badge>
-        <Text size="sm" tone="secondary">
+        <Text size="sm" tone="secondary" className="text-secondary-foreground">
           {copy.cardRelease}
         </Text>
       </VStack>
@@ -151,16 +189,13 @@ function StandingStatusBadge({
     return null;
   }
 
-  const standingAmountLabel = formatMoney(
-    view.currentBidMinor,
-    view.currency,
-    { locale },
-  );
-
   if (view.standing === "outbid") {
+    const outbidAmountMinor = view.viewerMaximumMinor;
     return (
       <Badge variant="warning">
-        {`${copy.outbid} · ${standingAmountLabel}`}
+        {outbidAmountMinor != null
+          ? `${copy.outbid} · ${formatMoney(outbidAmountMinor, view.currency, { locale })}`
+          : copy.outbid}
       </Badge>
     );
   }
@@ -168,9 +203,20 @@ function StandingStatusBadge({
   if (view.standing === "leading-max" || view.standing === "leading-manual") {
     return (
       <Badge variant="success">
-        {`${copy.highestBid} · ${standingAmountLabel}`}
+        {`${copy.highestBid} · ${formatMoney(view.currentBidMinor, view.currency, { locale })}`}
       </Badge>
     );
+  }
+
+  if (
+    view.standing === "won-payment-due" ||
+    view.standing === "won-settled"
+  ) {
+    return <Badge variant="success">{copy.auctionWon}</Badge>;
+  }
+
+  if (view.standing === "lost") {
+    return <Badge variant="warning">{copy.didNotWin}</Badge>;
   }
 
   return null;

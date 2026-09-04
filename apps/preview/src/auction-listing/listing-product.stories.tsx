@@ -147,7 +147,7 @@ export const PostWonPaymentDue: Story = {
   render: () => lotPage("closed-won-payment-due", soldDetails),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Pay Invoice" })).toBeVisible();
+    expect(canvas.getByRole("button", { name: "Continue" })).toBeVisible();
   },
 };
 
@@ -156,7 +156,7 @@ export const PostWonSettled: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText(/auction won/i)).toBeInTheDocument();
-    expect(canvas.queryByRole("button", { name: "Pay Invoice" })).toBeNull();
+    expect(canvas.queryByRole("button", { name: "Continue" })).toBeNull();
   },
 };
 
