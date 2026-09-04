@@ -21,4 +21,4 @@
 
 ## 5. Application follow-up
 
-- [ ] 5.1 Wire grade10 frontend locale resolver and browser time zone into lot details and `/bids`.
+- [x] 5.1 Wire grade10 frontend locale resolver and browser time zone into lot details and `/bids` — **Deferred**: the shared UI and preview wiring shipped; the production grade10 application still passes `UTC` for lot details and uses UTC moment formatting on `/bids`. Move this work to a follow-up change before claiming collector-local timezone support in that application.

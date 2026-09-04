@@ -2,9 +2,9 @@
 
 ## Purpose
 The shared listing product-page blocks every auction storefront composes: the
-media gallery, the bid panel, and the details section. This change records the
-export contract and the gallery's distinct sources for thumbnail, main frame,
-and zoom.
+media gallery, the bid panel, the bid history, and the details section. The
+bid history carries accepted instants so collector activity can be localized
+without changing the listing's authoritative event data.
 
 ## Feature set
 
@@ -18,6 +18,9 @@ and zoom.
   - Several items: more than one image shows a strip; one item does not
 - Consumer labels
   - Supplied copy: accessible names come from the application
+- Bid history
+  - Accepted instants: bid rows retain the accepted time needed for formatting
+  - Localized activity: recent and historical rows use the collector's locale and stated time zone
 
 ## Requirements
 
@@ -130,3 +133,35 @@ the supplied strings as given.
   window and a 15-minute extension
 - **THEN** the Time left explanation shows those values
 - **AND** no hardcoded "30 minutes" appears in that slot
+
+### Requirement: Bid history rows carry accepted instants
+
+`ListingBidHistoryRow` SHALL carry `acceptedAtMs: number` and MAY carry
+`timeOverride?: string` for states that are not a timestamp.
+
+`ListingUserBidHistoryRow` SHALL carry `acceptedAtMs: number` and MAY carry
+`timeOverride?: string`.
+
+#### Scenario: auction-listing-SC-22 - A bid row preserves its accepted instant
+
+- **GIVEN** a bid history row with an accepted instant and a row representing a non-timestamp state
+- **WHEN** the rows are passed to the bid history surface
+- **THEN** the accepted row provides its `acceptedAtMs` for activity-time formatting
+- **AND** the non-timestamp row may provide `timeOverride` for its displayed state
+
+### Requirement: Bid history components format activity time
+
+`ListingBidHistoryList` and `ListingUserBidHistory` SHALL require `locale`,
+`timeZone`, and `activityTimeCopy` and SHALL format each row with the platform
+activity-time rules unless `timeOverride` is set.
+
+`ListingAuctionBidCard` and `ListingAuctionCardSidebar` SHALL require `locale`
+and `timeZone` and SHALL thread them to bid history and the collector deadline
+line.
+
+#### Scenario: auction-listing-SC-13 - Recent bids show localized activity time
+
+- **GIVEN** a bid card with history rows carrying `acceptedAtMs`
+- **WHEN** it renders with a shipped locale and time zone
+- **THEN** each row shows a formatted activity time
+- **AND** no row shows a raw millisecond value

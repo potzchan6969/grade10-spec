@@ -749,9 +749,7 @@ if (args.stale) {
 if (suites.length === 0) {
   console.log(
     dim(
-      "No suite found" +
-        (args.scope ? ` for scope "${args.scope}"` : "") +
-        ".",
+      "No suite found" + (args.scope ? ` for scope "${args.scope}"` : "") + ".",
     ),
   );
   process.exit(0);

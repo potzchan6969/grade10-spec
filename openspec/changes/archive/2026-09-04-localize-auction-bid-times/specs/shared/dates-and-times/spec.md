@@ -48,6 +48,13 @@ moment and deadline shapes that name the zone.
 **Activity time** SHALL apply relative tiers when elapsed is less than seven
 days and SHALL fall back to local moment otherwise.
 
+#### Scenario: dates-and-times-SC-24 - Older activity uses a local moment
+
+- **GIVEN** one instant two minutes in the past and another instant eight days in the past
+- **WHEN** both are rendered as activity time in English for `Asia/Hong_Kong`
+- **THEN** the recent instant uses the relative minutes tier
+- **AND** the older instant uses the local moment shape `DD Mon YYYY, HH:MM`
+
 ## MODIFIED Requirements
 
 ### Requirement: The platform states the format, and can be told the language
