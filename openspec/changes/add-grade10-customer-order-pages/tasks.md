@@ -10,7 +10,7 @@
 This group uses the landed `grade10-spec` component and catalog contract, but
 tests against typed fixtures rather than a running backend.
 
-- [ ] 2.1 Advance `external/grade10-spec` to the landed change while preserving unrelated nested work, and make `pnpm run check:submodules` pass.
+- [x] 2.1 Advance `external/grade10-spec` to the landed change while preserving unrelated nested work, and make `pnpm run check:submodules` pass.
 - [ ] 2.2 Extend the frontend `Order` model and mapper with the typed fulfilment status, fulfilments, estimate, and tracking fields already carried by `StoreOrder`; add fixture coverage that fails on a contract mismatch.
 - [ ] 2.3 Add pure history and detail projections that consume the customer-status badge, keep quoted, paid, and refunded amounts distinct, calculate line totals in minor units, and omit unsupported facts so `grade10-site-store-order-history-SC-03` through `grade10-site-store-order-history-SC-05` and `grade10-site-store-order-detail-SC-04` through `grade10-site-store-order-detail-SC-08` pass in unit tests.
 - [ ] 2.4 Add the safe tracking-target helper and route-effect tests so `grade10-site-store-order-history-SC-07`, `grade10-site-store-order-history-SC-08`, `grade10-site-store-order-detail-SC-09`, and `grade10-site-store-order-detail-SC-10` pass for valid, absent, relative, credential-bearing, and non-HTTPS targets.
