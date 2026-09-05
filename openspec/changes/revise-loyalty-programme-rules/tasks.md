@@ -49,7 +49,7 @@ a test, not a change. The clock behaviour in 4.2 is the reverse of what
 
 - [ ] 4.1 Cover that a correction credits the redeemable balance alone and a campaign grant credits both counts, so *A correction does not move a member up* and *A campaign grant moves a member up* pass
 - [ ] 4.2 Reset the inactivity window on a campaign grant and leave it alone on a correction, so *A campaign grant keeps the balance alive* and *A correction does not extend the balance's life* pass together
-- [ ] 4.3 Add an operator action that removes a tier inside its validity period, recorded with who and why, so *An operator removes a tier granted in error* passes — with a named permission, extending *Operators act through named permissions*. `tier_changes` already allows the `revocation` cause, so `ck_tier_changes_cause` needs no migration
+- [ ] 4.3 Add an operator action that removes a tier inside its validity period, recorded with who and why, so *An operator removes a tier granted in error* passes — behind the tier grant's own permission (`loyalty:invite`, never `loyalty:adjust`), extending *Operators act through named permissions*. `tier_changes` already allows the `revocation` cause, so `ck_tier_changes_cause` needs no migration
 - [ ] 4.4 Require `channel` on every earning and redemption write path, so no sale can be recorded without saying which channel sold — corrections and expiry sold nothing, so they carry an explicit non-sale value added to the closed set rather than the `online` default they fall to today
 - [ ] 4.5 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 - [ ] 4.6 Keep one balance and one tier whatever channel wrote the entry, and make a channel's own copy of a balance non-authoritative, so *One balance across both channels* and *The channel's copy is not the balance* pass
@@ -63,7 +63,7 @@ a test, not a change. The clock behaviour in 4.2 is the reverse of what
 - [ ] 5.5 Read usage before deactivating and again after, so a refused reversal does not kill a coupon the member can still use and a use between the two reads still refuses, and make the gate fire on manual redemptions with no fulfiller wired, so *A used coupon cannot be reversed* holds in every deployment
 - [ ] 5.6 Return restored points as entries pointing back at the credits they came from, so a later claw-back can still reach them
 - [ ] 5.7 Make a code that cannot be turned back into points, so *A member cannot undo a redemption* passes
-- [ ] 5.8 Add the operator cancellation that credits points back for an unused expired artifact, so *An operator cancellation is the credit path* passes, and refuse it on a used one, so *A used artifact is never reversed* passes
+- [ ] 5.8 Make the reversal the operator cancellation: it credits points back for an unused expired artifact with a required reason the audit chain records, so *An operator cancellation is the credit path* passes, and refuses a used one, so *A used artifact is never reversed* passes
 - [ ] 5.9 Count what members forfeit to expiry where an operator can read it, so *An expired unused code returns nothing by itself* passes
 - [ ] 5.10 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run build`
 - [ ] 5.11 Refuse a reversal once what the redemption produced has been consumed and cancel it while it is still waiting, so *A collected reward cannot be reversed* and *A waiting collection is cancelled by the reversal* pass — the states an item owed moves through are `add-shopify-membership-pos`; this is the gate over them
@@ -146,7 +146,7 @@ surfaces land in groups 4 and 5.
 Needs the account-deletion signal from the auth service — coordinate the hook
 with the auth track before claiming.
 
-- [ ] 12.1 On account deletion, zero the balance and tier progress, void unexpired coupons, and cancel anything a member is still owed, in one recorded pass, so *Deletion clears what the member held* passes
+- [ ] 12.1 On account deletion, zero the balance and tier progress, void unexpired coupons, and cancel anything a member is still owed, in one recorded pass behind the loyalty worker's `erasure` router the console's checklist fans out to, so *Deletion clears what the member held* passes
 - [ ] 12.2 Keep the ledger record intact and make the pass idempotent, and act without waiting for any window, so *Deletion does not wait for a window* passes
 - [ ] 12.3 Verify: `pnpm run test:backend`
 
