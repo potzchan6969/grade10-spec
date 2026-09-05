@@ -37,7 +37,9 @@
     "noExpiry": "유효기간 없음",
     "noActivity": "계정에 아직 내역이 없습니다.",
     "notAMember": "아직 프로그램에 가입하지 않았습니다.",
-    "join": "프로그램 가입"
+    "join": "프로그램 가입",
+    "coupons": "내 쿠폰",
+    "noCoupons": "보유한 쿠폰이 없습니다."
   },
   "collectWithin": "{days}일 이내에 매장에서 수령",
   "outcome": {
@@ -55,7 +57,9 @@
     "balance": "사용 가능 포인트",
     "qualifying": "올해 적립 포인트",
     "renewal": "등급 갱신",
-    "pointsActiveUntil": "포인트 유효기간"
+    "pointsActiveUntil": "포인트 유효기간",
+    "expiringSoon": "곧 소멸",
+    "expiringSoonLine": "{date}까지 {points}P 소멸 예정"
   },
   "rewards": {
     "label": "리워드",
@@ -111,5 +115,20 @@
       "invalid": "휴대폰 번호 형식이 아닙니다.",
       "rateLimited": "방금 번호를 변경했습니다. 1분 후에 다시 시도해 주세요."
     }
+  },
+  "coupons": {
+    "label": "쿠폰",
+    "maskedCode": "••••••",
+    "spent": "사용됨",
+    "void": "취소됨",
+    "expired": "기한 만료",
+    "validUntil": "{date}까지 유효",
+    "noExpiry": "유효기간 없음",
+    "percentOff": "{percent}% 할인"
+  },
+  "tierValidity": {
+    "until": "{tier} 등급 {date}까지",
+    "kept": "{until} — 유지에 필요한 포인트를 이미 적립했습니다",
+    "earnMore": "{until} — 그때까지 {remaining}P를 더 적립하면 유지됩니다"
   }
 }
