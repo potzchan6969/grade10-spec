@@ -66,6 +66,16 @@
   main [id] {
     scroll-margin-top: 5.5rem;
   }
+
+  /* An open nav drawer owns the screen: the page behind it holds still so a
+     touch meant for the rail never scrolls the article instead. The scrim
+     lives only as long as the drawer, and the query only below `lg`, so a
+     resize onto the desktop rail releases the page on its own. */
+  @media (width < 64rem) {
+    body:has([data-slot="manual-nav-scrim"]) {
+      overflow: hidden;
+    }
+  }
 }
 
 @layer components {
