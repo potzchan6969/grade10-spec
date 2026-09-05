@@ -1,7 +1,7 @@
 # grade10-site/store/order-history Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-05, tcs-rules r2
+**Drafts styled:** 2026-09-06, tcs-rules r2
 
 ## grade10-site-store-order-history-US1: Collector reviews active and past orders
 
@@ -9,7 +9,7 @@
 **I want** my newest active and past Store orders in one place,
 **so that** I can understand an order and decide whether to open it.
 
-### grade10-site-store-order-history-US1-TC1-1: Owned orders group and open newest first
+### grade10-site-store-order-history-US1-TC1-2: Owned orders group and open newest first
 
 **Classification:**
 
@@ -38,7 +38,7 @@ The signed-in user owns active and past Store orders with different creation tim
 
 * Only the signed-in user's orders appear, with Active above Past and each group newest first.
 * The selected summary shows the paid total, not the quoted subtotal.
-* Step 4 opens `/store/orders/<order-id>` for the selected order.
+* Step 4 opens `/profile/orders/<order-id>` for the selected order.
 
 ### grade10-site-store-order-history-US1-TC2-1: Unknown total stays pending
 

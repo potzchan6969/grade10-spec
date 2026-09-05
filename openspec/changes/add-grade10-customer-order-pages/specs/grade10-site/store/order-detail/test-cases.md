@@ -1,7 +1,7 @@
 # grade10-site/store/order-detail Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-05, tcs-rules r2
+**Drafts styled:** 2026-09-06, tcs-rules r2
 
 ## grade10-site-store-order-detail-US1: Collector inspects one owned order
 
@@ -9,7 +9,7 @@
 **I want** one trustworthy account of my Store order,
 **so that** I can understand its items, money, fulfilment, refund, and tracking.
 
-### grade10-site-store-order-detail-US1-TC1-1: Owned web order preserves quoted and paid totals
+### grade10-site-store-order-detail-US1-TC1-2: Owned web order preserves quoted and paid totals
 
 **Classification:**
 
@@ -29,7 +29,7 @@ The signed-in user owns <web order>, quoted at 10000 minor units `HKD` and paid 
 
 **Steps:**
 
-1. Navigate to `/store/orders/<web order id>`.
+1. Navigate to `/profile/orders/<web order id>`.
 2. Check the order header, items, and money summary.
 
 **Expected Results:**
@@ -38,7 +38,7 @@ The signed-in user owns <web order>, quoted at 10000 minor units `HKD` and paid 
 * Quoted subtotal shows 10000 minor units `HKD`.
 * Paid total shows 11200 minor units `HKD` separately.
 
-### grade10-site-store-order-detail-US1-TC2-1: Missing and unowned ids share not-found
+### grade10-site-store-order-detail-US1-TC2-2: Missing and unowned ids share not-found
 
 Runs once per row of **Test data**.
 
@@ -67,7 +67,7 @@ The user is signed in; the selected order id is in the state named by **Test dat
 
 **Steps:**
 
-1. Navigate to `/store/orders/<selected order id>`.
+1. Navigate to `/profile/orders/<selected order id>`.
 2. Check the rendered page.
 
 **Expected Results:**
@@ -282,7 +282,7 @@ The first owned-order read is made to fail and the next read is allowed to compl
 **I want** sign-in to keep the order address I opened,
 **so that** I can continue to that order after proving my account.
 
-### grade10-site-store-order-detail-US2-TC1-1: Sign-in preserves the requested order address
+### grade10-site-store-order-detail-US2-TC1-2: Sign-in preserves the requested order address
 
 **Classification:**
 
@@ -302,7 +302,7 @@ The user has no signed-in session and owns <requested order>.
 
 **Steps:**
 
-1. Navigate to `/store/orders/<requested order id>`.
+1. Navigate to `/profile/orders/<requested order id>`.
 2. Complete sign-in.
 
 **Expected Results:**
