@@ -189,7 +189,7 @@ Then buy something end to end — staging pays through Bogus Gateway. Watch the
 network tab for any request to this host that answers 302 to `/store`; each
 one is a keep-list row missing from rule 3. Confirm the thank-you page renders
 with the order-link extension on it, and that the link it shows goes to
-`/store/orders/<id>` on our site.
+`/profile/orders/<id>` on our site.
 
 One flow to check on purpose: **click "Log in" inside checkout**. Rule 1 sends
 that buyer to our profile page and their checkout is gone. That is the trade we

@@ -17,12 +17,12 @@ styling resolves through design tokens one way, so a token-named utility always
 means that token's value.
 
 :::callout{kind="warning"}
-Seven block groups ship in the package without a durable spec. Three have no
-written contract anywhere — two-factor, loyalty membership, and order detail —
-though all three ship components, types and stories. Four more are specified
-only inside an in-flight change: order history, profile, sign-in, and the
-auction record. A reader should not take the capability list below as the list
-of what the package contains.
+Six block groups ship in the package without a durable spec. Two have no
+written contract anywhere — two-factor and loyalty membership — though both
+ship components, types and stories. Four more are specified only inside an
+in-flight change: order detail, profile, sign-in, and the auction record. A
+reader should not take the capability list below as the list of what the package
+contains.
 :::
 
 :::detail{title="How it is laid out" for="engineer"}

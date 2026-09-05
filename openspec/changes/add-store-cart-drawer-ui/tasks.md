@@ -1,12 +1,16 @@
-## 1. Grade10 locale vocabulary (grade10-spec)
+## 1. Grade10 Cart Drawer copy (grade10-spec)
 
-- [ ] 1.1 Add the Cart Drawer header, item, footer, refresh-placeholder, empty-state, and toast copy under the existing Grade10 `store` catalog for `en`, `zh-Hant`, and `zh-Hans`, preserving the shared `CartDrawerCopy` shape and existing catalog fallback rules.
-- [ ] 1.2 Make the catalog resolution suite prove the new Cart Drawer vocabulary resolves for every supported Grade10 locale; verify with the affected `@grade10/i18n` tests and typecheck.
+- [ ] 1.1 Add the Cart Drawer header, item, footer, empty-state, loading, unresolved-review, and unavailable-removal copy under the Grade10 `store` catalog for `en`, `zh-Hant`, and `zh-Hans`, preserving `CartDrawerCopy` and existing fallback rules.
+- [ ] 1.2 Make catalog resolution prove the Cart Drawer vocabulary for every supported Grade10 locale; verify with the affected `@grade10/i18n` tests, typecheck, and build.
 
-## 2. Store Cart Drawer host (grade10)
+## 2. Live Cart Drawer integration (grade10)
 
-- [ ] 2.1 Advance `external/grade10-spec` to the landed catalog commit, preserving unrelated nested checkout changes, and make the submodule boundary pass with `pnpm run check:submodules`.
-- [ ] 2.2 Add the route-gated root composition that supplies the localized `chrome.cartLabel`, `Nav.onCartClick`, and one application-level `Toaster` only on store home, store collections, store product, and checkout surfaces; make the navigation entry and route visibility behavior pass the relevant store shell tests.
-- [ ] 2.3 Implement the app-owned Cart Drawer refresh adapter and display snapshot from the existing browser cart: call it through `CartDrawer.onFetchStatusAndPrice` on every open, project current lines with minor-unit formatting and provisional totals, and keep the promise boundary replaceable for future live status/calculation data; make `shared-ui-store-cart-SC-08`, `shared-ui-store-cart-SC-02`, `shared-ui-store-cart-SC-03`, `shared-ui-store-cart-SC-04`, and `shared-ui-store-cart-SC-07` pass in focused tests.
-- [ ] 2.4 Wire Cart Drawer quantity changes and removals to the existing cart feature, product-item navigation to the existing product route, and checkout to provisional navigation at `/checkout`; make `shared-ui-store-cart-SC-06` and `shared-ui-store-cart-SC-09` pass without changing the persisted cart schema.
-- [ ] 2.5 Verify the affected Grade10 app with focused Cart Drawer and shell tests, `pnpm run typecheck`, `pnpm run lint`, and `pnpm run build`.
+This group uses the landed catalog change and tests the Store frontend against
+typed fixtures rather than a running backend.
+
+- [ ] 2.1 Advance `external/grade10-spec` to the landed catalog commit while preserving unrelated nested work, and make `pnpm run check:submodules` pass.
+- [ ] 2.2 Add backwards-compatible `enabled` and `removeUnavailable` options to `useCartReview`, keeping checkout defaults unchanged; make one open review, one cleanup owner, scope changes, review failure, and post-write invalidation pass in focused hook tests.
+- [ ] 2.3 Add the Store-route-gated root host with `Nav.onCartClick`, one `Toaster`, the current scoped cart, controlled live-review loading, and one localized failure toast per open while stale values and Checkout stay disabled; make `shared-ui-store-cart-SC-08`, `shared-ui-store-cart-SC-02`, `shared-ui-store-cart-SC-03`, `shared-ui-store-cart-SC-04`, `shared-ui-store-cart-SC-07`, and `grade10-site-store-cart-validation-SC-21` pass in focused shell tests.
+- [ ] 2.4 Map reviewed lines and minor-unit subtotal into the drawer, leave unsupported calculation fields absent, and let `CartDrawer` own unavailable removal and its one toast so `shared-ui-store-cart-SC-11` and `shared-ui-store-cart-SC-12` pass without duplicate writes.
+- [ ] 2.5 Wire quantity and removal actions to the scoped cart, product and Browse More actions to existing Store addresses, and Checkout to the existing `/checkout` route; make `shared-ui-store-cart-SC-06` and `shared-ui-store-cart-SC-09` pass without changing cart persistence or checkout creation.
+- [ ] 2.6 Verify the affected Grade10 app with focused cart, shell, and route tests, `pnpm run typecheck`, `pnpm run lint`, and `pnpm run build`.

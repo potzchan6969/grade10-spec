@@ -1,6 +1,5 @@
 ---
 title: Checkout
-spec: grade10-site/store/shopify-commerce
 order: 5
 ---
 
@@ -52,3 +51,7 @@ In Your Orders.
 - **The order machine, recovery, refunds** — [commerce](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
 - **Test page** — under an **Overrider** nav heading, development and staging only; drives the real checkout procedures against a real shop, as the signed-in buyer or with a typed email
 :::
+
+## In flight
+
+::changes{spec="grade10-site/store/cart-validation"}
