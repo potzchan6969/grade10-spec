@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { WalletPassLinks } from "./wallet-pass-links";
 
@@ -243,6 +244,51 @@ export const OneWalletFailed: Story = {
     await expect(canvas.getByRole("alert")).toHaveTextContent(
       "Your Google Wallet pass could not be ended. Try again.",
     );
+    await expect(
+      canvas.getByRole("button", { name: "Add to Apple Wallet" }),
+    ).toBeEnabled();
+  },
+};
+
+/**
+ * A mint replaces the button with a link, under the member's own focus. The
+ * link takes that focus: without it a keyboard member is dropped to the page
+ * body by the button unmounting, with nothing said.
+ */
+export const FocusFollowsTheMint: Story = {
+  render: (args) => {
+    const [minted, setMinted] = useState(false);
+    return (
+      <WalletPassLinks
+        {...args}
+        onAdd={(id) => {
+          if (id === "google") setMinted(true);
+        }}
+        wallets={[
+          minted
+            ? {
+                id: "google",
+                offer: {
+                  label: "Open in Google Wallet",
+                  saveUrl: "https://pay.google.com/gp/v/save/x",
+                },
+              }
+            : google,
+          apple,
+        ]}
+      />
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Add to Google Wallet" }),
+    );
+    const link = await canvas.findByRole("link", {
+      name: "Open in Google Wallet",
+    });
+    await expect(link).toHaveFocus();
+    // The other wallet's control is untouched by the swap.
     await expect(
       canvas.getByRole("button", { name: "Add to Apple Wallet" }),
     ).toBeEnabled();

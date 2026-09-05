@@ -4,6 +4,7 @@ import { Link } from "@grade10/design-system/components/forms/link";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
+import { useEffect, useRef } from "react";
 
 /** The words the block says, whichever wallets a brand offers. */
 type WalletPassLinksCopy = {
@@ -105,6 +106,25 @@ function WalletPassLinks({
   onEnd,
   className,
 }: WalletPassLinksProps) {
+  // Which wallet's add was pressed, and the links that could replace it.
+  // A successful mint unmounts the button under the member's own focus, which
+  // drops a keyboard or screen-reader user to the page body with no notice —
+  // so the link that takes its place takes the focus too. Presentation and DOM
+  // behaviour, which is the one thing a block of this kind may hold.
+  const pressed = useRef<string | null>(null);
+  const links = useRef(new Map<string, HTMLAnchorElement | null>());
+
+  useEffect(() => {
+    const id = pressed.current;
+    if (!id) return;
+    // Still minting: the button is where the member left their focus.
+    if (wallets.find((wallet) => wallet.id === id)?.adding) return;
+    pressed.current = null;
+    // No link means the mint failed. The button is still there and still
+    // focused, and the failure is announced, so nothing should move.
+    links.current.get(id)?.focus();
+  });
+
   if (state.status === "unknown") return null;
 
   const drawn = wallets.filter(drawable);
@@ -134,6 +154,9 @@ function WalletPassLinks({
                   data-wallet={wallet.id}
                   href={wallet.offer.saveUrl}
                   key={wallet.id}
+                  ref={(node: HTMLAnchorElement | null) => {
+                    links.current.set(wallet.id, node);
+                  }}
                   size="sm"
                 >
                   {wallet.offer.label}
@@ -144,7 +167,10 @@ function WalletPassLinks({
                   data-wallet={wallet.id}
                   key={wallet.id}
                   loading={wallet.adding ?? false}
-                  onClick={() => onAdd(wallet.id)}
+                  onClick={() => {
+                    pressed.current = wallet.id;
+                    onAdd(wallet.id);
+                  }}
                   size="sm"
                   type="button"
                   variant="outline"
