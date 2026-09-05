@@ -6,7 +6,8 @@
   "nav": {
     "store": "STORE",
     "auction": "AUCTION",
-    "vault": "VAULT"
+    "vault": "VAULT",
+    "book": "BOOK A VISIT"
   },
   "footer": {
     "shopHeading": "SHOP",

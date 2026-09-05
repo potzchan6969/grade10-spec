@@ -6,7 +6,8 @@
   "nav": {
     "store": "商店",
     "auction": "拍賣",
-    "vault": "金庫"
+    "vault": "金庫",
+    "book": "預約到店"
   },
   "footer": {
     "shopHeading": "購買",
