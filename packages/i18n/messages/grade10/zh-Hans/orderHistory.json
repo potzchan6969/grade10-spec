@@ -1,0 +1,28 @@
+{
+  "title": "您的订单",
+  "activeHeading": "进行中的订单",
+  "pastHeading": "历史订单",
+  "empty": {
+    "title": "暂无订单",
+    "description": "下单后，订单会显示在这里",
+    "shopNow": "开始购物"
+  },
+  "loading": "正在加载您的订单…",
+  "error": "无法加载订单。请重试。",
+  "retry": "再试一次",
+  "pendingTotal": "总额待定",
+  "placedOn": "下单日期：{date}",
+  "total": "总额：{money}",
+  "actions": {
+    "viewDetails": "查看详情",
+    "trackOrder": "跟踪订单"
+  },
+  "status": {
+    "completed": "已完成",
+    "shipped": "已发货",
+    "processing": "处理中",
+    "pickup": "可取货",
+    "canceled": "已取消",
+    "refunded": "已退款"
+  }
+}

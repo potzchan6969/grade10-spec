@@ -1,0 +1,28 @@
+{
+  "title": "您的訂單",
+  "activeHeading": "進行中的訂單",
+  "pastHeading": "過往訂單",
+  "empty": {
+    "title": "尚未有訂單",
+    "description": "當您下第一張訂單後，訂單會顯示在這裡",
+    "shopNow": "開始購物"
+  },
+  "loading": "正在載入您的訂單…",
+  "error": "無法載入訂單。請再試一次。",
+  "retry": "再試一次",
+  "pendingTotal": "總額待定",
+  "placedOn": "下單日期：{date}",
+  "total": "總額：{money}",
+  "actions": {
+    "viewDetails": "查看詳情",
+    "trackOrder": "追蹤訂單"
+  },
+  "status": {
+    "completed": "已完成",
+    "shipped": "已出貨",
+    "processing": "處理中",
+    "pickup": "可取貨",
+    "canceled": "已取消",
+    "refunded": "已退款"
+  }
+}

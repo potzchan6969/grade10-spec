@@ -21,16 +21,17 @@ const flatten = (tree: Tree, prefix = ""): Record<string, string> =>
 
 const brandNames = Object.keys(brands) as Brand[];
 
-/** Every key the vocabulary names, from whichever layer answers it. */
-const VOCABULARY = [
-  ...new Set(
-    brandNames.flatMap((brand) =>
-      localesOf(brand).flatMap((locale) =>
-        Object.keys(flatten(getMessages(brand, locale) as Tree)),
-      ),
-    ),
-  ),
-].sort();
+/** Every key a brand can answer, from the shared and owned layers. */
+const vocabularyFor = (brand: Brand) => {
+  const sharedKeys = Object.values(layers(sharedCatalogs)).flatMap((catalog) =>
+    Object.keys(flatten(catalog)),
+  );
+  const ownedKeys = Object.values(layers(brandCatalogs[brand])).flatMap(
+    (catalog) => Object.keys(flatten(catalog)),
+  );
+
+  return [...new Set([...sharedKeys, ...ownedKeys])].sort();
+};
 
 const spoken = brandNames.flatMap((brand) =>
   localesOf(brand).map((locale) => ({ brand, locale })),
@@ -52,6 +53,64 @@ const PRODUCT_DETAIL_KEYS = [
 ];
 
 const STORE_PRODUCT_DETAIL_KEYS = ["adding", "addedToCart"];
+
+const ORDER_HISTORY_KEYS = [
+  "title",
+  "activeHeading",
+  "pastHeading",
+  "empty.title",
+  "empty.description",
+  "empty.shopNow",
+  "loading",
+  "error",
+  "retry",
+  "pendingTotal",
+  "placedOn",
+  "total",
+  "actions.viewDetails",
+  "actions.trackOrder",
+  "status.completed",
+  "status.shipped",
+  "status.processing",
+  "status.pickup",
+  "status.canceled",
+  "status.refunded",
+].sort();
+
+const ORDER_DETAIL_KEYS = [
+  "title",
+  "loading",
+  "error",
+  "retry",
+  "notFound",
+  "needHelp",
+  "table.items",
+  "table.subtotal",
+  "table.quantity",
+  "table.total",
+  "sidebar.orderSummary",
+  "sidebar.paymentMethod",
+  "sidebar.shippingAddress",
+  "sidebar.pickupAddress",
+  "sidebar.loyaltyPointsToEarn",
+  "sidebar.loyaltyPointsEarned",
+  "money.subtotal",
+  "money.paidTotal",
+  "money.refund",
+  "fulfilment.title",
+  "fulfilment.orderPlaced",
+  "fulfilment.shipped",
+  "fulfilment.pickup",
+  "fulfilment.completed",
+  "fulfilment.estimate",
+  "tracking.trackOrder",
+  "status.completed",
+  "status.shipped",
+  "status.processing",
+  "status.pickup",
+  "status.canceled",
+  "status.refunded",
+].sort();
 
 const AUCTION_BIDDING_HISTORY_KEYS = [
   "title",
@@ -123,6 +182,26 @@ describe("what a brand and a language answer between them", () => {
     },
   );
 
+  it.each(localesOf("grade10"))(
+    "resolves customer order copy for Grade10 in %s",
+    (locale) => {
+      const messages = getMessages("grade10", locale);
+
+      expect(Object.keys(flatten(messages.orderHistory)).sort()).toEqual(
+        ORDER_HISTORY_KEYS,
+      );
+      expect(Object.keys(flatten(messages.orderDetail)).sort()).toEqual(
+        ORDER_DETAIL_KEYS,
+      );
+
+      for (const namespace of [messages.orderHistory, messages.orderDetail]) {
+        for (const value of Object.values(flatten(namespace))) {
+          expect(value).not.toBe("");
+        }
+      }
+    },
+  );
+
   /* Scenario: Every supported language exposes the shared bidding-history
      vocabulary through the assembled catalog. */
   it.each(locales)("exposes auction bidding history in %s", (locale) => {
@@ -140,7 +219,7 @@ describe("what a brand and a language answer between them", () => {
     "answers every key for $brand in $locale",
     ({ brand, locale }) => {
       const resolved = flatten(getMessages(brand, locale) as Tree);
-      const unanswered = VOCABULARY.filter(
+      const unanswered = vocabularyFor(brand).filter(
         (key) => typeof resolved[key] !== "string" || resolved[key] === "",
       );
 
@@ -218,18 +297,15 @@ describe("what each layer is answerable for", () => {
     },
   );
 
-  /* Scenario: A new brand answers only for itself. Every brand owes the same
-     keys, so what a new one has to write is knowable before it exists. */
-  it("asks every brand for the same words", () => {
-    const owed = brandNames.map((brand) => ({
-      brand,
-      keys: [
-        ...keysIn(layers(brandCatalogs[brand])[localesOf(brand)[0]] ?? {}),
-      ].sort(),
-    }));
-
-    for (const one of owed) expect(one.keys).toEqual(owed[0].keys);
-    expect(owed[0].keys.length).toBeLessThan(VOCABULARY.length / 4);
+  /* Scenario: a brand can own a product surface without adding its words to
+     another brand's vocabulary. */
+  it("measures brand-owned words separately", () => {
+    expect(vocabularyFor("grade10")).toEqual(
+      expect.arrayContaining(["orderDetail.title", "orderHistory.title"]),
+    );
+    expect(vocabularyFor("zzz")).not.toEqual(
+      expect.arrayContaining(["orderDetail.title", "orderHistory.title"]),
+    );
   });
 
   /* Scenario: a language is declared and nobody speaks it. The shipped list
@@ -252,7 +328,9 @@ describe("what each layer is answerable for", () => {
         ...keysIn(layers(sharedCatalogs)[locale] ?? {}),
         ...keysIn(layers(brandCatalogs[brand])[locale] ?? {}),
       ]);
-      const untranslated = VOCABULARY.filter((key) => !answered.has(key));
+      const untranslated = vocabularyFor(brand).filter(
+        (key) => !answered.has(key),
+      );
 
       expect({ brand, locale, untranslated }).toEqual({
         brand,
