@@ -233,8 +233,9 @@ check with the document in front of them while the case is pre-custody, and SHAL
 refuse one once the case is past recording. Neither a hosted check's state
 nor the absence of one SHALL be a precondition. Recording a counter check on a
 case whose last hosted check was Declined SHALL be an override: it SHALL carry a
-reason, SHALL name the staff member who gave it, SHALL show on the case beside
-the declined check, and SHALL be refused when no reason is given.
+reason, SHALL be recorded on the case's history naming the staff member who
+gave it, SHALL leave the declined check on record beside the counter check, and
+SHALL be refused when no reason is given.
 
 ❓ Whether an override should also take a grant an ordinary counter check does
 not is `TBC` — *Owner: Product, with Compliance*. No role the platform ships
@@ -260,5 +261,6 @@ until the role set changes, which is a `shared/auth/roles` change of its own.
 - **GIVEN** a pre-custody case whose last hosted check was Declined
 - **WHEN** staff record a counter check giving no reason
 - **THEN** it is refused
-- **AND** the same check recorded with a reason is accepted, and the reason shows
-  on the case beside the decline, naming the staff member who gave it
+- **AND** the same check recorded with a reason is accepted, the reason is
+  recorded on the case's history naming the staff member who gave it, and the
+  case shows the counter check standing over the declined check

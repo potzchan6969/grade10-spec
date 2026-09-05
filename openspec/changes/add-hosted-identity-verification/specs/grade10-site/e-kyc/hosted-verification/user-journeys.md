@@ -12,7 +12,6 @@ document problem reaches me while I can still do something about it.
 - `grade10-site-e-kyc-hosted-verification-SC-01` — A collector completes the check before arriving
 - `grade10-site-e-kyc-hosted-verification-SC-02` — Grade10 asks for nothing the provider collects
 - `grade10-site-e-kyc-hosted-verification-SC-03` — An invitation opens the check it names
-- `grade10-site-e-kyc-hosted-verification-SC-23` — A second device cannot continue an invitation
 - `grade10-site-e-kyc-hosted-verification-SC-24` — The invitation's secret is left nowhere it can be read
 - `grade10-site-e-kyc-hosted-verification-SC-09` — Asking twice does not invite twice
 - `grade10-site-e-kyc-hosted-verification-SC-27` — A check that cannot be raised invites nobody and is reported

@@ -539,7 +539,7 @@ Runs once per row of **Test data**.
 
 * The check offered with no reason is refused.
 * The check carrying `<the override reason>` is recorded, naming the admin who gave it.
-* `<the override reason>` shows on the case beside the declined check.
+* `<the override reason>` is recorded on the case's history, and the case shows the counter check standing over the declined check.
 
 ---
 

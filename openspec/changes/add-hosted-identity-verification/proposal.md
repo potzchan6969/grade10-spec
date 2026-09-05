@@ -134,7 +134,8 @@ flow that records one, and `vault:approve` covers what an action can cost.
 - **Customer notifications** — a new kind, in a catalogue that is English-only
   today while the site serves traditional and simplified Chinese.
 - **The provider integration** — a raised check, a signed verdict, an evidence
-  fetch, a redaction command, and a retention policy read back and checked.
+  fetch, a redaction command, and a retention policy set with the provider and
+  recorded in the deployment checklist.
 - **No ZZZ surface.** ZZZ runs auth and store only, and verifies nobody.
 - **No new permission, and no grant separates an override.** `kyc:read` and
   `vault:operate` carry this change's grants. `staff` holds `vault:approve`

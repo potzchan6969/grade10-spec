@@ -84,9 +84,10 @@ no other, and SHALL refuse an invitation that has been completed, withdrawn or
 expired. The invitation SHALL carry a secret that cannot be guessed from another
 invitation, a case reference, or anything a collector is shown, and that secret
 SHALL NOT appear in a request path, a query string, a log, or a referrer sent to
-the provider. The first device that opens an invitation SHALL be the only device
-that may continue it. What a link-holder can read SHALL be the state and what to
-do next, and SHALL carry no identity field and no reason a check was refused.
+the provider. Which device continues a check is the provider's own session to
+decide — its ceremony hands itself from one device to another. What a
+link-holder can read SHALL be the state and what to do next, and SHALL carry no
+identity field and no reason a check was refused.
 
 An invitation SHALL expire 14 days after it is issued. A check the collector has
 opened and not yet submitted SHALL expire 24 hours after it was opened or when
@@ -116,13 +117,6 @@ set.
 - **THEN** it is refused as expired, and the collector is told how to be invited
   again
 
-#### Scenario: grade10-site-e-kyc-hosted-verification-SC-23 - A second device cannot continue an invitation
-
-- **GIVEN** an invitation already opened on one device
-- **WHEN** the same invitation is opened on a second device
-- **THEN** the second device continues no check, and the device that opened it
-  still can
-
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-24 - The invitation's secret is left nowhere it can be read
 
 - **WHEN** a collector opens their invitation and is handed on to the provider
@@ -139,7 +133,7 @@ show the collector and the case which.
 | Invited | The collector has been asked and has not started | Started, Expired, Withdrawn |
 | Started | The collector opened the check and has not finished it | Submitted, Expired, Withdrawn |
 | Submitted | The collector finished; the provider has not decided | Approved, Declined, Stalled, Withdrawn |
-| Stalled | The provider has not decided within the time it usually takes | Approved, Declined, Expired, Withdrawn |
+| Stalled | A submitted check the provider has not decided within the time it usually takes — a reading of Submitted from the check's own instants, not a state of its own | Approved, Declined, Expired, Withdrawn |
 | Approved | The provider vouched, and Grade10's own refusals passed | — |
 | Declined | The provider refused, Grade10's own refusals did, or the case could not take the verdict | — |
 | Expired | The invitation or the started check ran out of time | — |
@@ -149,9 +143,9 @@ Approved, Declined, Expired and Withdrawn SHALL be final: a collector who needs
 another chance is invited again, as a new check. A check in Submitted SHALL NOT
 expire on its own — a verdict may still arrive — and SHALL become Stalled
 instead, so an operator can see the difference between a check that is arriving
-and one that is not coming. A check in Stalled SHALL become Expired once reading
-it back from the provider has failed for a stated period, so no check stays live
-for ever on a provider that never answers.
+and one that is not coming. A check in Stalled SHALL become Expired once the
+provider has left it undecided for a stated period, so no check stays live for
+ever on a provider that never answers.
 
 ❓ The time a verdict usually takes, and the period a stalled read-back is given
 before the check expires, are both `TBC` — *Owner: Product*, with the two windows
@@ -187,7 +181,8 @@ above.
 
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-25 - A check the provider never settles stops being live
 
-- **GIVEN** a check in Stalled whose read-back has failed for the stated period
+- **GIVEN** a check in Stalled the provider has left undecided for the stated
+  period
 - **WHEN** that period passes
 - **THEN** the check is Expired, the case shows it as lapsed, and the case can be
   invited again
@@ -225,8 +220,10 @@ withdrawal SHALL issue a new one with its own invitation.
 ### Requirement: A verdict is trusted only as the provider's, about the case's live check, once
 
 The system SHALL act on a verdict only when it is proven to come from the
-verification provider, in the provider environment this deployment serves, and
-names a check Grade10 itself raised which is still that case's live check. A
+verification provider and names a check Grade10 itself raised which is still
+that case's live check. An approval SHALL be the provider's own decision: a
+check whose ceremony the collector has finished but the provider has not
+decided is Submitted, never Approved. A
 verdict SHALL be acted on once, keyed on the provider's own identifier for the
 check rather than on the delivery that carried it, so one check decided under
 several deliveries is applied once. A verdict repeated by the provider SHALL
@@ -241,8 +238,7 @@ against the check it names.
 
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-11 - An unproven verdict changes nothing and is not recorded
 
-- **WHEN** a verdict arrives that cannot be proven to come from the provider, or
-  is signed for a provider environment this deployment does not serve
+- **WHEN** a verdict arrives that cannot be proven to come from the provider
 - **THEN** nothing about any check changes, no identity is created, and the
   attempt is counted rather than stored
 

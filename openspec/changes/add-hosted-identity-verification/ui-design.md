@@ -46,7 +46,6 @@ Each state below exists because a scenario defines it.
 | Verification | Approved — nothing further | *A completed invitation does not open again* |
 | Verification | Declined — bring the document to the store, and no reason shown | *A declined collector is told what to do next* |
 | Verification | Expired or Withdrawn — ask to be invited again | *An expired invitation is refused* |
-| Verification | Opened on a second device — continues nothing | *A second device cannot continue an invitation* |
 | Case detail | A check is out; the case is not shown as unverified and nothing waits | *A case with a check out is not shown as unverified, and nothing waits on it* |
 | Case detail | Verified — who performed it, when, and what the provider found | *A verified case names who performed the check* |
 | Case detail | The same panel under `vault:read` alone — state and performer, no person | *A case's identity state is readable, its details are not* |

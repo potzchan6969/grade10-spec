@@ -17,7 +17,7 @@ platform's UTC day.
 - What a record holds
   - Identity fields: the name a document prints, the day a person was born, and what proved it
   - Provenance: which consumer recorded the check and who performed it, so a reader can weigh it
-  - Provider findings: what a verification provider checked and what it found, kept in Grade10's own words
+  - Provider findings: each check a verification provider ran, under the provider's own name, and whether it passed
 - What never lands
   - Document number: only a mask a person is shown and a keyed digest a repeat is recognised by
   - The person's face: a provider may capture one; Grade10 keeps the finding, never the image
@@ -55,7 +55,7 @@ beside them and SHALL NOT be returned to any consumer.
 | Provider reference | The provider's own identifier for the check, absent for a check Grade10 staff performed |
 | Performed by | The staff member who checked, or, for a provider's check, the person who asked for it |
 | Performed at | When the check was decided — the staff member's clock, or the provider's decision instant |
-| Provider findings | What a provider checked and what each check found; absent for a check Grade10 staff performed |
+| Provider findings | Each check the provider ran, under the provider's own name, and whether it passed or failed; absent for a check Grade10 staff performed |
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-01 - A staff check names the staff member who made it
 
@@ -266,11 +266,12 @@ than the store accepts — SHALL leave the check declined rather than retried.
 
 ### Requirement: A provider-performed check records what was checked and what was found
 
-The system SHALL record, for a check a verification provider performed, which
-checks the provider ran and what each returned — whether the document was found
-genuine, whether the person was found live, and whether their face matched the
-document — and SHALL make them readable to an operator reading the case. They
-SHALL be readable without asking the provider.
+The system SHALL record, for a check a verification provider performed, each
+check the provider ran under the provider's own name for it and whether it
+passed or failed — nothing dropped for want of a translation, and nothing the
+provider attached to a finding beyond its name and outcome — and SHALL make
+them readable to an operator reading the case, without asking the provider. A
+declined check that produced no record SHALL keep its findings on the check.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-23 - The provider's findings survive the provider
 
@@ -289,14 +290,16 @@ consumer's own data SHALL NOT wait on the provider's answer. A completion report
 SHALL name what is still outstanding at a provider rather than reporting the
 erasure whole. A release SHALL be repeatable without error.
 
-The command SHALL be issued for every check whose document image Grade10 fetched,
-whatever the check's ending — declined, expired, withdrawn, refused on landing,
-or displaced by another check — not only for a released identity.
+The command SHALL be issued when a released identity's record is purged. A
+check that ended without becoming an identity — declined, expired, withdrawn or
+refused on landing — SHALL be left to the provider's standing window, so a
+disputed decline stays reviewable at the provider until that window closes.
 
-Erasing a consumer's own data SHALL also end any check still live for that case
-and purge what that check holds about the person, so no invitation outlives the
-erasure and no identifier of an erased person is left on a check nobody will
-finish.
+Erasing a consumer's own data SHALL also end any check still live for that case,
+purge what that check holds about the person, and command the provider to erase
+everything it holds on that person — every check of theirs at once — so no
+invitation outlives the erasure and no identifier of an erased person is left
+on a check nobody will finish.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-17 - The last release purges the record and commands the provider
 
@@ -342,27 +345,36 @@ finish.
 - **THEN** the check is ended, its invitation opens nothing, and the check keeps
   no identifier of the person it was about
 
-#### Scenario: grade10-site-e-kyc-identity-record-SC-25 - A check that never became an identity is still commanded away
+#### Scenario: grade10-site-e-kyc-identity-record-SC-25 - A check that never became an identity is left to the provider's window
 
-- **GIVEN** a check whose document image Grade10 fetched and which was declined
+- **GIVEN** a check the provider declined, whose findings an operator may still
+  need to review
 - **WHEN** the check reaches its ending
-- **THEN** the provider is commanded to erase its copy, exactly as for a
-  released identity
+- **THEN** no erasure is commanded for it, and the provider's standing window is
+  what erases its copy
+
+#### Scenario: grade10-site-e-kyc-identity-record-SC-28 - Erasing a person commands their whole account away
+
+- **GIVEN** a person with checks at the provider, on one or more cases
+- **WHEN** their personal data is erased
+- **THEN** the provider is commanded to erase everything it holds on that person,
+  and the command stays outstanding until acknowledged
 
 ### Requirement: A provider holds its copy no longer than a stated window
 
-The system SHALL configure every verification provider it uses to erase its own
-copy of a check within a stated window, so a check nobody erases still stops
-existing at the provider. The configured window SHALL be read back from the
-provider and compared against the stated one; a window that is absent, or longer
-than stated, SHALL be reported as a fault.
+The system SHALL have every verification provider it uses configured to erase
+its own copy of a check within a stated window, so a check nobody erases still
+stops existing at the provider. The provider offers no way to read that window
+back, so it SHALL be set with the provider and recorded in the deployment
+checklist before a deployment is enabled, and a deployment SHALL NOT be enabled
+without it.
 
 ❓ The window's length awaits Compliance — it must outlive an operator's need to
 review a disputed check, and it is `TBC` until they set it.
 
-#### Scenario: grade10-site-e-kyc-identity-record-SC-26 - A provider's window is checked, not assumed
+#### Scenario: grade10-site-e-kyc-identity-record-SC-26 - A provider's window is set before a deployment is enabled
 
-- **WHEN** the configured erasure window is read back from a verification
-  provider
-- **THEN** a window that is absent, or longer than the stated one, is reported as
-  a fault
+- **WHEN** a deployment is enabled against a verification provider
+- **THEN** the deployment checklist records the provider's erasure window as set
+  to the stated one, and a deployment whose window is absent or longer is not
+  enabled

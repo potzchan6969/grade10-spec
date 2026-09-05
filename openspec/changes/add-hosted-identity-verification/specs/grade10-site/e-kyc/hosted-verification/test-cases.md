@@ -88,43 +88,6 @@ document problem reaches me while I can still do something about it.
 * The check that opens is the one raised for `<a case in invited>`.
 * The surface offers nothing that selects `<a second case in invited>` or its user.
 
-### grade10-site-e-kyc-hosted-verification-US1-TC3-1: Second device cannot continue an invitation
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-e-kyc-hosted-verification-US-01
-
-**Pre-conditions:**
-
-* `<a case in started>` holds a check in Started.
-* `<the started invitation>` has already been opened on one device.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<a case in started>` | A pre-custody vault case whose hosted check is Started, opened on one device and not finished |
-| `<the started invitation>` | The invitation issued for `<a case in started>`'s check, opened on that device |
-
-**Steps:**
-
-1. Open `<the started invitation>` on a second device.
-2. Return to the first device and open it again.
-
-**Expected Results:**
-
-* The second device continues no check.
-* The first device still continues it.
-
 ### grade10-site-e-kyc-hosted-verification-US1-TC4-1: Invitation secret is left nowhere it can be read
 
 **Classification:**
@@ -230,7 +193,7 @@ Runs once per row of **Test data**.
 | Verdict delivered | Outcome |
 | --- | --- |
 | Approved, with a signature that cannot be proven | Nothing changes; the attempt is counted, not stored |
-| Approved, signed for a provider environment this deployment does not serve | Nothing changes; the attempt is counted, not stored |
+| Approved, signed with a secret this deployment does not hold | Nothing changes; the attempt is counted, not stored |
 
 **Steps:**
 
@@ -894,15 +857,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<a case in stalled>` holds a check in Stalled whose read-back has failed throughout `<the stalled read-back period>`.
+* `<a case in stalled>` holds a check in Stalled the provider has left undecided throughout `<the stalled period>`.
 * The service clock is advanced past that period.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<a case in stalled>` | A pre-custody vault case whose hosted check is Stalled, its read-back failing |
-| `<the stalled read-back period>` | The period a stalled read-back is given before the check expires — ❓ `TBC`, awaiting Product |
+| `<a case in stalled>` | A pre-custody vault case whose hosted check is Stalled, the provider still undecided |
+| `<the stalled period>` | The period a stalled check is given before it expires — ❓ `TBC`, awaiting Product |
 
 **Steps:**
 
