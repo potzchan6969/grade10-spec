@@ -9,7 +9,7 @@ call: [`tech-design.md`](tech-design.md).
 
 - [x] 1.1 Add `store` and `auction` to the products the store serves, declare the three standings and the standing's shape, and publish the gate surface with its binding resolver, so *A person nobody verified reads unverified* passes at the contract
 - [x] 1.2 Answer a person's standing off the latest record at the store's clock, on the service and on a gate of its own, so *A gating product reads a standing the vault made* and *A lapsed document reads expired* pass
-- [x] 1.3 Mint the gate entrypoint per product and export `StoreKycGate` and `AuctionKycGate` beside `VaultKycService`, so *A gate cannot be walked onto the record* passes
+- [x] 1.3 Publish the gate entrypoint factory and prove its surface, and mint `StoreKycService` beside `VaultKycService` for the store that hosts checks, so *A gate cannot be walked onto the record* passes
 - [x] 1.4 Read the hosted template per brand and environment, so *A brand's consumer reaches its own brand's store or none* and *A person verified on one brand is unknown to another* hold at the deployment
 - [x] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, `pnpm run check:handbook`
 

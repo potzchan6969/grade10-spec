@@ -27,8 +27,8 @@ Goals:
 
 Non-Goals:
 
-- **No consumer code** — the store and the auction bind their gate in the
-  change that first gates on it
+- **No consumer behaviour** — what the store gates on is
+  `add-account-identity-gate`
 - **No standing on a route** — the store keeps no HTTP surface
 
 ## Decisions
@@ -57,8 +57,9 @@ Non-Goals:
   spreads it, so the service holds the read too and the behavior suite drives
   one implementation for both
 - `createKycGateEntrypoint(product)` mints the entrypoint; the deployment
-  exports `StoreKycGate` and `AuctionKycGate` beside `VaultKycService`. The
-  product tags the `ekyc.standing` count and scopes nothing
+  mints none today, because the store hosts checks and holds the service
+  (`StoreKycService` beside `VaultKycService`) and the auction reads nothing.
+  The product tags the `ekyc.standing` count and scopes nothing
 - A consumer narrows its binding with `getKycGate`, which throws by name when
   the binding is missing — the refusal `getKycService` gives, for the same
   reason: `unverified` read off a missing binding lets through a person nobody
@@ -88,8 +89,9 @@ Non-Goals:
 | `standingForUser` | `userId`, trimmed and non-empty | `{ standing: "unverified" }`, or `{ standing: "verified" or "expired", verifiedAt, documentExpiresAt, provider }` | One read of `kyc_verifications`, newest `verified_at` first; no transaction, no write; an empty id is refused before a connection opens |
 
 - **Entrypoint → stub → service → repository** —
-  `StoreKycGate.createKycGate()` → `KycGate.standingForUser` →
-  `kycGate().standingForUser` → `KycStorePort.latestForUser`
+  `StoreKycService.createKycService()` → `KycService.standingForUser` →
+  `kycGate().standingForUser` → `KycStorePort.latestForUser`; a gate
+  entrypoint takes the same path through `KycGate`
 
 ## Contracts
 
@@ -110,7 +112,8 @@ Non-Goals:
 
 ## Migration Plan
 
-1. **Deploy the identity store** with the two gate exports. Nothing binds
-   them, so nothing changes
-2. **A consumer's first gate** adds `KYC_GATE` to its wrangler config, reads it
-   through `getKycGate`, and ships with its own change
+1. **Deploy the identity store** with `StoreKycService` beside
+   `VaultKycService`; the store binds it in `add-account-identity-gate`
+2. **A read-only consumer's first gate**, the day one exists, mints its
+   entrypoint, adds `KYC_GATE` to its wrangler config, and reads it through
+   `getKycGate`

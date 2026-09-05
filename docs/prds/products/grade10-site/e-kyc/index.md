@@ -30,9 +30,9 @@ visit still works.
 Nobody signs into the store itself. The people it serves are the collector, who
 verifies before travelling and whose document is what is being kept, vault
 staff, who read a case's identity, record one at the counter, and look at the
-document image, and every product that asks whether a signed-in person is
-verified — the store at a checkout, the auction at a bid — and is told a
-standing, never a name.
+document image, and the collector again on their own account page, where they
+verify with no visit and the store reads a standing — never a name — before a
+checkout or a bid above the bar.
 
 One store per brand. A collector verified on grade10.com is unknown to ZZZ,
 which verifies nobody and runs none.
@@ -55,10 +55,11 @@ second account is a query somebody could run, not an alarm that fires.
 a `BRAND` var that selects the hosted template. Its entire HTTP surface is a
 health route and dev setup; everything a product asks arrives over a service
 binding, minted per product by a class factory in two kinds. The service —
-the record, its case bindings and the five hosted calls — is what the vault
-holds as `KYC_SERVICE`. The gate — one method, a person's standing and no
-identity field — is minted for the store and the auction, and each binds its
-own as `KYC_GATE` in the change that first gates a checkout or a bid on it.
+the record, its case bindings and the five hosted calls — is what a host
+holds as `KYC_SERVICE`: the vault for its cases, the store for the site's own
+accounts. The gate — one method, a person's standing and no identity field —
+is what a product that only reads would hold; none does today, and the
+factory is published for the day one does.
 
 Writes and case bindings are scoped to the calling product by the entrypoint its
 binding names. What cannot be scoped is the person: `latestForUser` and the

@@ -32,9 +32,12 @@ Two costs follow.
   performed it. No name, no birth date, no document, no case. Judged when it is
   read, so a document that has lapsed since the check reads as expired rather
   than verified.
-- **The store and the auction are consumers.** Each is issued a gate of its
-  own, so what a worker holds says who is asking, exactly as the vault's
-  service does.
+- **The store is the second host.** It verifies the site's own accounts and
+  gates a checkout on the standing it reads back, so it holds the service the
+  vault holds, minted for the store. The auction gates a bid through the
+  storefront that forwards it and holds nothing of its own. A gate — the
+  standing alone — is what a product that only reads would hold; none does
+  today, and the factory that mints one is published for the day one does.
 - **A verified identity is a brand's own.** One identity store per brand,
   reached only by that brand's products; a brand that verifies nobody deploys
   none, and nothing crosses.
@@ -42,9 +45,9 @@ Two costs follow.
 ## Non-Goals
 
 - **What the store or the auction gate on.** Which checkout, which bid, and
-  what a person is told: each product's own change, with its own journeys.
-- **Binding a case outside the vault.** The store and the auction hold a gate,
-  not the service; a product that records or binds brings its own change.
+  what a person is told: `add-account-identity-gate`, with its own journeys.
+- **A counter check outside the vault.** The store records nothing at a
+  counter; a product that does brings its own change.
 - **A standing in the browser.** Nothing here publishes a route; a product's
   own backend reads the gate and decides what its pages say.
 - **Re-verification on a schedule.** An expired standing tells a product to ask
@@ -70,17 +73,18 @@ None.
 
 - **The identity store** — a second, narrower surface beside the service,
   issued per consuming product.
-- **The store and auction backends** — each binds its gate in the change that
-  first gates a checkout or a bid on it; nothing in either reads it yet.
+- **The store backend** — holds the service and hosts checks for the site's
+  accounts; `add-account-identity-gate` is where that lands.
+- **The auction backend** — unchanged; the storefront gates the bid.
 - **No ZZZ surface.** ZZZ runs auth and store only and verifies nobody.
 - **No new permission.** A standing is read by a product's own backend for the
   signed-in person; no operator surface changes.
 
-## Open questions
+## Decisions taken
 
-- ❓ **What the store gates on, and what the auction gates on.** A checkout
-  above a value, a bid above a value, a category of item — and what the person
-  is told. *Owner: Product.*
-- ❓ **Whether a ZZZ identity store is ever deployed.** Only once a ZZZ product
+- **What the store and the auction gate on** — settled in
+  `add-account-identity-gate`: an order's goods and a bid of HKD 120,000.00 or
+  more. *Product.*
+- **Whether a ZZZ identity store is ever deployed** — not until a ZZZ product
   verifies somebody, and then under ZZZ's own vendor account and template.
-  *Owner: Product.*
+  *Product.*
