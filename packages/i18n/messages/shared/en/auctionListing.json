@@ -46,6 +46,7 @@
   "hideBidHistory": "Hide bid history",
   "highestBidder": "Highest Bid",
   "home": "Home",
+  "identityRequired": "Bids this high need a verified identity. Verify from your account, then bid again.",
   "invalidAmount": "Enter a valid amount.",
   "listingNumber": "Listing {label}",
   "lot": "Lot",

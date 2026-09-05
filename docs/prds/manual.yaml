@@ -15,10 +15,12 @@ groups:
     - zzz-site/site
   Shared:
     - shared/auth
+    - shared/appointment
   Admin:
     - grade10-admin/audit
     - grade10-admin/inventory
     - grade10-admin/auction
+    - grade10-admin/appointment
   Platform:
     - shared/ui
     - shared/console

@@ -1,6 +1,5 @@
 ---
 title: Checkout
-spec: grade10-site/store/shopify-commerce
 order: 5
 ---
 
@@ -40,6 +39,9 @@ In Your Orders.
 
 - **Members only** — checkout is signed in; guest checkout is in the code,
   launching with it `TBC`
+- **The bar** — goods worth **HKD 120,000** or more need a verified buyer;
+  an unverified one is sent to [verify from their account](/p/grade10-site/store/account-identity)
+  before any order is made
 - **The cart** — kept while the collector is at Shopify; cleared once the
   order is paid
 - **A second press** — returns the same checkout, never a second order
@@ -49,3 +51,7 @@ In Your Orders.
 - **The order machine, recovery, refunds** — [commerce](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
 - **Test page** — under an **Overrider** nav heading, development and staging only; drives the real checkout procedures against a real shop, as the signed-in buyer or with a typed email
 :::
+
+## In flight
+
+::changes{spec="grade10-site/store/cart-validation"}

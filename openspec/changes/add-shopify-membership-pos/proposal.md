@@ -75,15 +75,6 @@ member**, and **staff-assisted redemptions completed per week**.
 - `grade10-site/loyalty/programme`: redemption gains a per-unit quantity and a
   collect-in-person lifecycle. Nothing else about the programme changes here.
 
-### Capabilities this one must agree with
-
-- `grade10-site/store/shopify-commerce` (active change `add-grade10-shopify-store`)
-  owns the online store's one-to-one account-to-customer link, including the
-  guest checkout that creates both. This change owns what that pairing means to
-  a member — the opaque key, erasure, and what may be adopted into an account
-  that already existed. Neither may redefine the other's half, and whichever
-  archives second reads the other first.
-
 ## Impact
 
 | Application | What it must do |

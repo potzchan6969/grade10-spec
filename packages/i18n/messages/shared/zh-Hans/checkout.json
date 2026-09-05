@@ -44,5 +44,10 @@
   "line": {
     "soldOut": "已售罄",
     "adjusted": "仅剩 {count} 件，已调整数量"
+  },
+  "identity": {
+    "title": "请先核验身份才能购买",
+    "message": "订单金额达 {threshold} 或以上需先核验身份，而此购物车的金额为 {goods}。请先在你的账户核验身份，再回来付款。",
+    "action": "前往你的账户"
   }
 }

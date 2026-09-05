@@ -22,6 +22,7 @@ const meta = {
       maskedCode: "••••••••",
       spent: "Used",
       void: "Void",
+      expired: "Expired",
     },
     state: {
       status: "ready",
@@ -44,14 +45,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Open, spent, and void each say so; the action slot rides only where the
- * consumer put one. */
+/** Open, spent, void and expired each say so; the action slot rides only
+ * where the consumer put one. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("GRD-50-7Q2M")).toBeInTheDocument();
     expect(canvas.getByText("Used")).toBeInTheDocument();
     expect(canvas.getByText("Void")).toBeInTheDocument();
+    expect(canvas.getByText("Expired")).toBeInTheDocument();
     expect(canvas.getAllByRole("button", { name: "Copy code" })).toHaveLength(
       1,
     );
@@ -65,7 +67,7 @@ export const Masked: Story = {
     const canvas = within(canvasElement);
     expect(canvas.queryByText("GRD-50-7Q2M")).not.toBeInTheDocument();
     expect(canvas.queryByText("GRD-100-XK4P")).not.toBeInTheDocument();
-    expect(canvas.getAllByText("••••••••")).toHaveLength(3);
+    expect(canvas.getAllByText("••••••••")).toHaveLength(4);
   },
 };
 

@@ -31,5 +31,17 @@
   "auctionListing": {
     "title": "{name} — ZZZ Store",
     "description": "{name}, ZZZ 경매에 나온 카드입니다."
+  },
+  "book": {
+    "title": "방문 예약 — ZZZ Store",
+    "description": "서비스, 매장, 시간을 골라 카드를 들고 방문하세요. 계정은 필요 없습니다."
+  },
+  "bookManage": {
+    "title": "내 방문 — ZZZ Store",
+    "description": "ZZZ 스토어에 예약한 방문을 확인하거나 옮기거나 취소하세요."
+  },
+  "bookMine": {
+    "title": "내 모든 방문 — ZZZ Store",
+    "description": "내 이메일로 ZZZ 스토어에 예약한 모든 방문."
   }
 }
