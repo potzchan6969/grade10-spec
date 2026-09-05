@@ -11,6 +11,7 @@ taken.
 **Accepted by:**
 
 - `grade10-site-vault-collector-notifications-SC-05` — A week before, and the day before
+- `grade10-site-vault-collector-notifications-SC-19` — The reminder waits for the morning
 - `grade10-site-vault-collector-notifications-SC-07` — A long-overdue loan is told once where it stands
 - `grade10-site-vault-collector-notifications-SC-08` — The notice stops the reminders
 

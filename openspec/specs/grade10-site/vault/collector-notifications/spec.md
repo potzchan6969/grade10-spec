@@ -99,7 +99,10 @@ address, each carrying an action link to the case:
 ### Requirement: A borrower is reminded before the due date and while it is overdue
 
 A borrower with a live loan SHALL be sent a reminder 7 days and 1 day before
-the due date, and one every 7 days after it while anything is outstanding.
+the due date, and one every 7 days after it while anything is outstanding. The
+days SHALL be counted on the brand's calendar, so a week before a due date is
+the seventh day before it however the hours fall, and no reminder SHALL be
+sent before 09:00 on the brand's clock.
 
 Each reminder SHALL name the balance at the reading and the due date, and the
 overdue one SHALL say that interest keeps running at the same daily rate with
@@ -122,6 +125,13 @@ further reminder SHALL be sent.
 - **WHEN** the reminders are swept
 - **THEN** the borrower is sent one reminder naming the balance and the due date
 - **AND** one more is sent the day before it
+
+#### Scenario: grade10-site-vault-collector-notifications-SC-19 - The reminder waits for the morning
+
+- **GIVEN** a live loan whose 7-day offset the brand's calendar reaches at midnight
+- **WHEN** the reminders are swept in the small hours
+- **THEN** nothing is sent
+- **AND** the first sweep after 09:00 on the brand's clock sends it
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-06 - A pass that runs twice sends once
 
