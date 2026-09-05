@@ -37,7 +37,9 @@
     "noExpiry": "沒有期限",
     "noActivity": "你的帳戶尚未有任何紀錄。",
     "notAMember": "你尚未加入此計劃。",
-    "join": "加入計劃"
+    "join": "加入計劃",
+    "coupons": "你的優惠券",
+    "noCoupons": "你沒有持有優惠券。"
   },
   "collectWithin": "須於 {days} 天內到門市領取",
   "outcome": {
@@ -55,7 +57,9 @@
     "balance": "可用積分",
     "qualifying": "本年度累積積分",
     "renewal": "等級續期",
-    "pointsActiveUntil": "積分有效至"
+    "pointsActiveUntil": "積分有效至",
+    "expiringSoon": "即將到期",
+    "expiringSoonLine": "{points} 分將於 {date} 前到期"
   },
   "rewards": {
     "label": "獎賞",
@@ -64,7 +68,8 @@
     "atQuantityBound": "單次兌換最多就是這個數量。",
     "insufficient": "積分尚未足夠",
     "decreaseQuantity": "減少一件",
-    "increaseQuantity": "增加一件"
+    "increaseQuantity": "增加一件",
+    "validFor": "兌換後 {days} 天內有效"
   },
   "quantityRefusal": {
     "wholeUnits": "{name} 只能以整件兌換。",
@@ -111,5 +116,20 @@
       "invalid": "這看來不是有效的手機號碼。",
       "rateLimited": "你剛更改過號碼，請一分鐘後再試。"
     }
+  },
+  "coupons": {
+    "label": "優惠券",
+    "maskedCode": "••••••",
+    "spent": "已使用",
+    "void": "已取消",
+    "expired": "已過期",
+    "validUntil": "有效至 {date}",
+    "noExpiry": "沒有期限",
+    "percentOff": "{percent}% 折扣"
+  },
+  "tierValidity": {
+    "until": "{tier} 有效至 {date}",
+    "kept": "{until}——你已累積足夠積分保留此等級",
+    "earnMore": "{until}——屆時再累積 {remaining} 分即可保留"
   }
 }

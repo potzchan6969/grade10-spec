@@ -64,6 +64,14 @@ const COUPONS: CouponItem[] = [
     expiry: `Expired ${formatDay(Date.UTC(2026, 5, 30))}`,
     status: "void",
   },
+  {
+    id: "coupon-expired",
+    amount: "10%",
+    code: "GRD-10-M3RT",
+    description: "10% off graded cards",
+    expiry: `Expired ${formatDay(Date.UTC(2026, 4, 1))}`,
+    status: "expired",
+  },
 ];
 
 const ACTIVITY: ActivityEntry[] = [

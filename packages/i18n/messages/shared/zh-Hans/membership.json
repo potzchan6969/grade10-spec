@@ -37,7 +37,9 @@
     "noExpiry": "没有期限",
     "noActivity": "你的账户尚未有任何记录。",
     "notAMember": "你尚未加入此计划。",
-    "join": "加入计划"
+    "join": "加入计划",
+    "coupons": "你的优惠券",
+    "noCoupons": "你没有持有优惠券。"
   },
   "collectWithin": "须在 {days} 天内到门店领取",
   "outcome": {
@@ -55,7 +57,9 @@
     "balance": "可用积分",
     "qualifying": "本年度累计积分",
     "renewal": "等级续期",
-    "pointsActiveUntil": "积分有效至"
+    "pointsActiveUntil": "积分有效至",
+    "expiringSoon": "即将到期",
+    "expiringSoonLine": "{points} 分将于 {date} 前到期"
   },
   "rewards": {
     "label": "奖励",
@@ -64,7 +68,8 @@
     "atQuantityBound": "单次兑换最多就是这个数量。",
     "insufficient": "积分尚未足够",
     "decreaseQuantity": "减少一件",
-    "increaseQuantity": "增加一件"
+    "increaseQuantity": "增加一件",
+    "validFor": "兑换后 {days} 天内有效"
   },
   "quantityRefusal": {
     "wholeUnits": "{name} 只能以整件兑换。",
@@ -111,5 +116,20 @@
       "invalid": "这看起来不是有效的手机号码。",
       "rateLimited": "你刚更改过号码，请一分钟后再试。"
     }
+  },
+  "coupons": {
+    "label": "优惠券",
+    "maskedCode": "••••••",
+    "spent": "已使用",
+    "void": "已取消",
+    "expired": "已过期",
+    "validUntil": "有效至 {date}",
+    "noExpiry": "没有期限",
+    "percentOff": "{percent}% 折扣"
+  },
+  "tierValidity": {
+    "until": "{tier} 有效至 {date}",
+    "kept": "{until}——你已累计足够积分保留此等级",
+    "earnMore": "{until}——届时再累计 {remaining} 分即可保留"
   }
 }

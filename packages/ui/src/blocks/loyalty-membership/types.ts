@@ -19,14 +19,15 @@ type RewardMenuItem = {
   validity?: string;
 };
 
-type CouponStatus = "open" | "spent" | "void";
+type CouponStatus = "open" | "spent" | "void" | "expired";
 
 /** One issued discount code and what remains of it. */
 type CouponItem = {
   id: string;
   /** What the code takes off, already formatted. */
   amount: string;
-  code: string;
+  /** The code a shop takes at its till; absent for a coupon spent from the wallet by id. */
+  code?: string;
   /** What the coupon is for. */
   description?: string;
   /** When the code stops working, already formatted. */

@@ -72,12 +72,12 @@ The change adds `earn.rounding` to the config schema with two values.
 multiplier to those; `once_at_end` keeps today's behaviour. Grade10 deploys
 `base_points_first` — HKD 139 at 1.2× earns 15, where once-at-end pays 16.
 
-Keeping both is what makes this a business lever rather than a one-way rewrite,
-and it lets the change land without silently repricing anyone: a deployment
-that says nothing keeps the order it already had. `base_points` and
-`multiplier_x100` are stamped on every earn, and under floor-first that stamp
-and the granted points finally agree — today `base_points` is floored from the
-money while the total is not, so the two disagree on every multiplied earn.
+Keeping both is what makes this a business lever rather than a one-way rewrite.
+The default when the key is absent is `base_points_first` — the owner's order,
+so a programme that names nothing earns the way Grade10 does, and one that wants
+`once_at_end` says so. `base_points` and `multiplier_x100` are stamped on every
+earn; the ledger invariant checks the granted points against that stamp under
+the deployed order, so the two cannot disagree quietly.
 
 ### Balance expiry is one date per member, not a rewrite of every lot
 
@@ -116,22 +116,27 @@ Rejected: deriving it from `written_by`. That column records which surface
 wrote the row, not which channel sold — the shop and the online store can
 reach the programme through the same surface.
 
-### A money-off reward is a provider discount code; a physical one is not
+### A money-off reward is a Coupon the programme holds; a physical one is not
 
-A reward that takes money off settles as a discount code at the commerce
-provider, landing as a `RewardFulfiller` implementation in the app assembly
-rather than in the loyalty package: the port already has `fulfill`, `deactivate`,
-`usage`, `kinds` and `validateTemplate`, which is exactly what issuing, voiding
-and gating a reversal need. The provider is Shopify — recorded here, and in no
-requirement, because no spec in this repository names a vendor.
+A reward that takes money off mints a `coupon_instances` row inside the redeem
+transaction — the built-in `coupon` kind — carrying its own validity and a
+snapshot of the definition it was made from. The store honours it through its
+`CouponTender` port: reserve at checkout, settle on the authoritative order
+outcome, release when the order dies. No vendor issues the code, so nothing
+external has to be voided on reversal; the row is.
+
+The `RewardFulfiller` port stays for kinds a vendor makes. No shipped
+deployment wires one, so the drain, its retry ladder and the artifact arms of a
+reversal run against an empty set today; they are kept because a vendor-issued
+reward is one config edit away, not because anything reaches them.
 
 A physical reward is handed over instead and never becomes a code. Where it
 waits in between is `add-shopify-membership-pos`, with the shop that hands it
 over.
 
-Rejected: keeping the self-generated code that `fulfillment.ts` produces today.
-Nothing at checkout would honour it, so a member would hold a code that does
-not work.
+Rejected: a discount code minted at the commerce provider. The provider's
+code is scoped to that provider's checkout, while the same coupon has to pay
+at the till and online from one wallet.
 
 ### Tier ids match their public names before launch
 
