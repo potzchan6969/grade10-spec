@@ -18,7 +18,8 @@
     "walletHeading": "把會員卡放進手機",
     "walletHeld": "你已在{wallet}持有會員卡",
     "walletInstall": "在{wallet}中開啟",
-    "walletUnreachable": "暫時無法確認你的會員卡狀態，以下內容可能不是最新的。"
+    "walletUnreachable": "暫時無法確認你的會員卡狀態，以下內容可能不是最新的。",
+    "walletUpdated": "更新日期"
   },
   "page": {
     "title": "會員",

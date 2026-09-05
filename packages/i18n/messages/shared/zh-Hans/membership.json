@@ -18,7 +18,8 @@
     "walletHeading": "把会员卡放进手机",
     "walletHeld": "你已在{wallet}持有会员卡",
     "walletInstall": "在{wallet}中打开",
-    "walletUnreachable": "暂时无法确认你的会员卡状态，以下内容可能不是最新的。"
+    "walletUnreachable": "暂时无法确认你的会员卡状态，以下内容可能不是最新的。",
+    "walletUpdated": "更新日期"
   },
   "page": {
     "title": "会员",

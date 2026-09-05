@@ -18,7 +18,8 @@
     "walletHeading": "Carry your card on your phone",
     "walletHeld": "You are carrying a pass in {wallet}",
     "walletInstall": "Open in {wallet}",
-    "walletUnreachable": "We could not check your passes just now. This may be out of date."
+    "walletUnreachable": "We could not check your passes just now. This may be out of date.",
+    "walletUpdated": "Updated"
   },
   "page": {
     "title": "Membership",

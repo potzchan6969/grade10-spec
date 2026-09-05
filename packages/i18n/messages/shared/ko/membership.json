@@ -18,7 +18,8 @@
     "walletHeading": "휴대폰에 멤버십 카드 담기",
     "walletHeld": "{wallet}에 패스를 보유하고 있습니다",
     "walletInstall": "{wallet}에서 열기",
-    "walletUnreachable": "패스 상태를 확인하지 못했습니다. 아래 내용은 최신이 아닐 수 있습니다."
+    "walletUnreachable": "패스 상태를 확인하지 못했습니다. 아래 내용은 최신이 아닐 수 있습니다.",
+    "walletUpdated": "업데이트"
   },
   "page": {
     "title": "멤버십",
