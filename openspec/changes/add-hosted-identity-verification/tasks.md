@@ -18,12 +18,12 @@ counter is what it is today.
 
 ## 1. Screens, blocks and words (grade10-spec)
 
-- [ ] 1.1 Write `ui-design.md` — the two surfaces, the exports they compose, and each state tied to the scenario behind it
+- [x] 1.1 Write `ui-design.md` — the two surfaces, the exports they compose, and each state tied to the scenario behind it
 - [ ] 1.2 Draw the collector's verification page in Figma — a frame per check state, including what a declined collector is shown — and link the frames
 - [ ] 1.3 Draw the case screen's identity panel: the six states, who performed a bound check, and the override beside a decline
 - [ ] 1.4 Inventory the `@grade10/design-system` and `@grade10/ui` exports both surfaces compose; where one does not exist, add the variant, the token, or the block — and a block brings its own `shared/ui/<block>` delta carrying the exports requirement
 - [ ] 1.5 Add the collector page's and the invitation's `en` catalogue to `@grade10/i18n`
-- [ ] 1.6 Bump the submodule pointer so group 12 can start
+- [x] 1.6 Bump the submodule pointer so group 12 can start
 - [ ] 1.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:stories:ui`, `pnpm run design-sync:check`, `pnpm run check:submodules`
 
 ## 2. Identity check contracts (grade10)
@@ -32,7 +32,7 @@ counter is what it is today.
 - [x] 2.2 Declare the closed finding vocabulary — what a provider checks, and what an outcome may be — and add `providerFindings` to `KycVerification` and `toKycVerification`
 - [x] 2.3 Declare the check's eight states and `KycCheckView` in `@grade10/e-kyc-contracts` — state, instants, decline reason and override, and no identity field, no secret, no vendor name
 - [x] 2.4 Declare the new `KycServiceApi` methods and their outcomes: `raiseCheck`, `checkForCase`, `receiveVerdict`, `dueChecks`, `settleCheck`, `finishCheck`, `withdrawCheck`, `openInvitation`, `startCheck` — refusals named as `SCREAMING_SNAKE` failure codes, and both exhaustive maps that translate them grown to match
-- [x] 2.5 Add `admin.caseIdentity` (`kyc:read`), `admin.recordKycOverride` (`vault:approve`), `admin.raiseIdentityCheck` and `admin.withdrawIdentityCheck` (`vault:operate`) to `ADMIN_PERMISSIONS`, and the three identity routes to `VAULT_PATHS`
+- [x] 2.5 Add `admin.caseIdentity` (`kyc:read`), `admin.raiseIdentityCheck` and `admin.withdrawIdentityCheck` (`vault:operate`) to `ADMIN_PERMISSIONS`, an optional override reason on `admin.recordKyc`, and the three identity routes, the invitation header and the refusal codes a collector's page branches on to `@grade10/e-kyc-contracts`, as every host mounts them
 - [x] 2.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run check:handbook`
 
 ## 3. The check's table (grade10)
@@ -67,13 +67,14 @@ Needs group 3's table: 5.1 rests on the live-check unique index.
 ## 6. The collector's invitation (grade10)
 
 - [x] 6.1 Answer the state and the next step for every state, stalled read off the check's own instants, and nothing else, so *A completed invitation does not open again* and *A declined collector is told what to do next* pass
-- [x] 6.2 Keep the secret out of every path, query string, log and referrer — including `referrer-policy: no-referrer` on the vault's own secure headers — so *The invitation's secret is left nowhere it can be read* passes
+- [x] 6.2 Keep the secret out of every path, query string, log and referrer — including `referrer-policy: no-referrer` on the headers the published routes set, wherever a product mounts them — so *The invitation's secret is left nowhere it can be read* passes
 - [x] 6.3 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
 ## 7. The verdict and the settle (grade10)
 
-Nothing here reads a delivery's body as fact: the vault forwards it unparsed,
-the store proves it and answers the reference, and the settle asks the provider.
+Nothing here reads a delivery's body as fact: the host's route forwards it
+unparsed, the store proves it and answers the reference, and the settle asks
+the provider.
 
 - [x] 7.1 Forward the raw delivery and its headers to `receiveVerdict`, prove the signature in the store, and count an unproven one without writing anything, so *An unproven verdict changes nothing and is not recorded* passes
 - [x] 7.2 Resolve a proven reference to the vault's own row and answer 204 either way, so *A verdict for a check nobody raised changes nothing* passes
@@ -134,7 +135,7 @@ Needs group 1's submodule bump and group 6's routes.
 - [x] 12.1 Add `/vault/verify` to `SURFACES` with its kind, its route and its pinned address, beside the signing page it is a sibling of
 - [x] 12.2 Render each check state and its next step from `ui-design.md`, reading the secret from the fragment and never putting it in a request path, showing no identity field and no refusal reason, so *An invitation opens the check it names* and *A declined collector is told what to do next* pass
 - [x] 12.3 Add the identity panel to the admin case screen — the state, who performed a bound check, the findings and decline reason behind `kyc:read`, and the override reason on the counter dialog over a decline
-- [x] 12.4 Add both feature slices to `@grade10/vault-frontend` and `@grade10/vault-admin-frontend` behind DI tokens, and register them in the two containers
+- [x] 12.4 Add the collector's slice to `@grade10/e-kyc-frontend` and the panel's to `@grade10/vault-admin-frontend`, behind DI tokens, and register them in the two containers
 - [ ] 12.5 Wire the collector page's catalogue through `@grade10/i18n` — blocked on 1.5; the page holds its English copy in one hook meanwhile, exactly as the signing ceremony does, with the keys it wants listed there
 - [x] 12.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run check:frontend-layers`, `pnpm run check:admin-bundle`, `pnpm run build`
 
