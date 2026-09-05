@@ -53,7 +53,7 @@ function utcParts(date: Date, locale: ShippedLocale = "en") {
   };
 }
 
-function intlLocale(locale: ShippedLocale): string {
+export function intlLocale(locale: ShippedLocale): string {
   switch (locale) {
     case "zh-Hant":
       return "zh-Hant-HK";
