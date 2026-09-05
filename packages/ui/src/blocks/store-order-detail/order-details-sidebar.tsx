@@ -16,8 +16,8 @@ import type {
 
 type OrderDetailsSidebarProps = {
   copy: OrderDetailsSidebarCopy;
-  summary: OrderDetailsSummary;
-  payment: OrderDetailsPayment;
+  summary?: OrderDetailsSummary;
+  payment?: OrderDetailsPayment;
   status: OrderDetailsFulfillmentStatus;
   shippingAddress?: OrderDetailsAddress;
   pickupAddress?: OrderDetailsAddress;
@@ -109,6 +109,23 @@ function OrderDetailsSidebar({
   loyaltyPoints,
   className,
 }: OrderDetailsSidebarProps) {
+  const hasSummary =
+    summary != null &&
+    [
+      summary.subtotal,
+      summary.discount,
+      summary.refund,
+      summary.shipping,
+      summary.tax,
+      summary.total,
+    ].some((row) => row != null);
+  const hasAddress = shippingAddress != null || pickupAddress != null;
+  const hasSecondaryGroups =
+    payment != null || hasAddress || loyaltyPoints != null;
+  const hasSidebar = hasSummary || hasSecondaryGroups;
+
+  if (!hasSidebar) return null;
+
   const loyaltyHeading =
     loyaltyPoints != null ? loyaltyPointsHeading(copy, status) : null;
 
@@ -118,99 +135,117 @@ function OrderDetailsSidebar({
       data-slot="order-details-sidebar"
     >
       <Card className="gap-0 overflow-hidden p-0" padding={false}>
-        <VStack
-          className="w-full border-b border-border bg-background-subtle p-6"
-          gap="md"
-          hAlign="stretch"
-        >
-          <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
-            {copy.orderSummary}
-          </h3>
-          <VStack className="w-full" gap="sm" hAlign="stretch">
-            <SummaryRow
-              label={summary.subtotal.label}
-              value={summary.subtotal.value}
-            />
-            {summary.discount ? (
-              <SummaryRow
-                label={summary.discount.label}
-                value={summary.discount.value}
-                valueClassName="text-success"
-              />
-            ) : null}
-            {summary.refund ? (
-              <SummaryRow
-                label={summary.refund.label}
-                value={summary.refund.value}
-                valueClassName="text-secondary-foreground"
-              />
-            ) : null}
-            {summary.shipping ? (
-              <SummaryRow
-                label={summary.shipping.label}
-                value={summary.shipping.value}
-              />
-            ) : null}
-            {summary.tax ? (
-              <SummaryRow label={summary.tax.label} value={summary.tax.value} />
-            ) : null}
-          </VStack>
-          <hr className="w-full border-border" />
-          <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-            <span className="text-base leading-6 font-semibold text-foreground">
-              {summary.total.label}
-            </span>
-            <span className="text-right text-base leading-6 font-semibold whitespace-nowrap text-foreground tabular-nums">
-              {summary.total.value}
-            </span>
-          </div>
-        </VStack>
-        <VStack className="w-full p-6" gap="lg" hAlign="stretch">
-          <VStack className="w-full" gap="sm" hAlign="stretch">
+        {hasSummary ? (
+          <VStack
+            className="w-full border-b border-border bg-background-subtle p-6"
+            gap="md"
+            hAlign="stretch"
+          >
             <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
-              {copy.paymentMethod}
+              {copy.orderSummary}
             </h3>
-            <Card className="gap-0 p-3" padding={false}>
-              <HStack className="w-full" gap="sm" vAlign="center">
-                <OrderDetailsPaymentLogo brand={payment.brand} />
-                {payment.maskedNumber != null ? (
-                  <>
-                    <span aria-hidden className="h-5 w-px shrink-0 bg-border" />
-                    <span className="text-sm leading-5 font-medium text-foreground">
-                      {payment.maskedNumber}
-                    </span>
-                  </>
-                ) : null}
-              </HStack>
-            </Card>
-          </VStack>
-          {pickupAddress ? (
-            <AddressSection
-              address={pickupAddress}
-              heading={copy.pickupAddress}
-            />
-          ) : shippingAddress ? (
-            <AddressSection
-              address={shippingAddress}
-              heading={copy.shippingAddress}
-            />
-          ) : null}
-          {loyaltyHeading != null ? (
-            <Card
-              className="gap-1 border-border bg-gradient-to-r from-background-subtle to-muted p-3"
-              padding={false}
-            >
-              <VStack className="w-full" gap="xs" hAlign="stretch">
-                <p className="text-sm leading-5 font-medium text-secondary-foreground">
-                  {loyaltyHeading}
-                </p>
-                <div className="text-base leading-6 font-semibold text-foreground">
-                  {loyaltyPoints}
+            <VStack className="w-full" gap="sm" hAlign="stretch">
+              {summary?.subtotal ? (
+                <SummaryRow
+                  label={summary.subtotal.label}
+                  value={summary.subtotal.value}
+                />
+              ) : null}
+              {summary?.discount ? (
+                <SummaryRow
+                  label={summary.discount.label}
+                  value={summary.discount.value}
+                  valueClassName="text-success"
+                />
+              ) : null}
+              {summary?.refund ? (
+                <SummaryRow
+                  label={summary.refund.label}
+                  value={summary.refund.value}
+                  valueClassName="text-secondary-foreground"
+                />
+              ) : null}
+              {summary?.shipping ? (
+                <SummaryRow
+                  label={summary.shipping.label}
+                  value={summary.shipping.value}
+                />
+              ) : null}
+              {summary?.tax ? (
+                <SummaryRow
+                  label={summary.tax.label}
+                  value={summary.tax.value}
+                />
+              ) : null}
+            </VStack>
+            {summary?.total ? (
+              <>
+                <hr className="w-full border-border" />
+                <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
+                  <span className="text-base leading-6 font-semibold text-foreground">
+                    {summary.total.label}
+                  </span>
+                  <span className="text-right text-base leading-6 font-semibold whitespace-nowrap text-foreground tabular-nums">
+                    {summary.total.value}
+                  </span>
                 </div>
+              </>
+            ) : null}
+          </VStack>
+        ) : null}
+        {hasSecondaryGroups ? (
+          <VStack className="w-full p-6" gap="lg" hAlign="stretch">
+            {payment ? (
+              <VStack className="w-full" gap="sm" hAlign="stretch">
+                <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+                  {copy.paymentMethod}
+                </h3>
+                <Card className="gap-0 p-3" padding={false}>
+                  <HStack className="w-full" gap="sm" vAlign="center">
+                    <OrderDetailsPaymentLogo brand={payment.brand} />
+                    {payment.maskedNumber != null ? (
+                      <>
+                        <span
+                          aria-hidden
+                          className="h-5 w-px shrink-0 bg-border"
+                        />
+                        <span className="text-sm leading-5 font-medium text-foreground">
+                          {payment.maskedNumber}
+                        </span>
+                      </>
+                    ) : null}
+                  </HStack>
+                </Card>
               </VStack>
-            </Card>
-          ) : null}
-        </VStack>
+            ) : null}
+            {pickupAddress ? (
+              <AddressSection
+                address={pickupAddress}
+                heading={copy.pickupAddress}
+              />
+            ) : shippingAddress ? (
+              <AddressSection
+                address={shippingAddress}
+                heading={copy.shippingAddress}
+              />
+            ) : null}
+            {loyaltyHeading != null ? (
+              <Card
+                className="gap-1 border-border bg-gradient-to-r from-background-subtle to-muted p-3"
+                padding={false}
+              >
+                <VStack className="w-full" gap="xs" hAlign="stretch">
+                  <p className="text-sm leading-5 font-medium text-secondary-foreground">
+                    {loyaltyHeading}
+                  </p>
+                  <div className="text-base leading-6 font-semibold text-foreground">
+                    {loyaltyPoints}
+                  </div>
+                </VStack>
+              </Card>
+            ) : null}
+          </VStack>
+        ) : null}
       </Card>
     </div>
   );

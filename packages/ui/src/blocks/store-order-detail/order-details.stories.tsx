@@ -160,3 +160,60 @@ export const InStore: Story = {
     expect(canvas.queryByText("Delivery Status")).not.toBeInTheDocument();
   },
 };
+
+export const NoOptionalGroups: Story = {
+  args: {
+    delivery: undefined,
+    loyaltyPoints: undefined,
+    onTrackOrder: undefined,
+    payment: undefined,
+    pickupAddress: undefined,
+    shippingAddress: undefined,
+    summary: undefined,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await waitFor(() =>
+      expect(
+        canvas.getByRole("heading", { level: 1, name: "Order #G10-10482" }),
+      ).toBeVisible(),
+    );
+    await waitFor(() =>
+      expect(
+        canvasElement.querySelector('[data-slot="order-details-order-table"]')
+          ?.parentElement,
+      ).toHaveStyle({ opacity: "1" }),
+    );
+    expect(
+      canvas.getByText("Pokémon TCG Sealed Booster Box – Ninja Spinner (M4)"),
+    ).toBeVisible();
+    expect(
+      canvasElement.querySelector('[data-slot="order-details-sidebar"]'),
+    ).toBeNull();
+    expect(canvas.queryByText("Order Summary")).not.toBeInTheDocument();
+    expect(canvas.queryByText("Payment Method")).not.toBeInTheDocument();
+  },
+};
+
+export const PaidTotalWithoutSubtotal: Story = {
+  args: {
+    delivery: undefined,
+    loyaltyPoints: undefined,
+    onTrackOrder: undefined,
+    payment: undefined,
+    pickupAddress: undefined,
+    shippingAddress: undefined,
+    summary: { total: { label: "Total", value: "HK$1,654.50" } },
+  },
+  play: async ({ canvasElement }) => {
+    await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
+    const sidebar = canvasElement.querySelector(
+      '[data-slot="order-details-sidebar"]',
+    );
+    expect(sidebar).not.toBeNull();
+    const sidebarCanvas = within(sidebar as HTMLElement);
+    expect(sidebarCanvas.getByText("HK$1,654.50")).toBeVisible();
+    expect(sidebarCanvas.queryByText("Subtotal")).not.toBeInTheDocument();
+    expect(sidebarCanvas.queryByText("Payment Method")).not.toBeInTheDocument();
+  },
+};

@@ -48,14 +48,14 @@ type OrderDetailsSummaryRow = {
 };
 
 type OrderDetailsSummary = {
-  subtotal: OrderDetailsSummaryRow;
+  subtotal?: OrderDetailsSummaryRow;
   /** Order-level promo only — omit when every discount is on its line. Label
    *  should name the code, e.g. `Discount (WELCOME10)`. */
   discount?: OrderDetailsSummaryRow;
   refund?: OrderDetailsSummaryRow;
   shipping?: OrderDetailsSummaryRow;
   tax?: OrderDetailsSummaryRow;
-  total: OrderDetailsSummaryRow;
+  total?: OrderDetailsSummaryRow;
 };
 
 type OrderDetailsPaymentBrand =
