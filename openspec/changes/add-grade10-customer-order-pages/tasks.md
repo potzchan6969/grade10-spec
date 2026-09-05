@@ -5,7 +5,7 @@
 - [x] 1.3 Add Your Orders, Order Details, pending-total, query-state, money-row, fulfilment, tracking, and empty-state copy to the Grade10 `en`, `zh-Hant`, and `zh-Hans` catalogs; make catalog resolution and type tests pass for every supported Grade10 locale.
 - [ ] 1.4 Update the order-history, order-detail, and shared Order Details product records for the shipped surfaces, then at archive carry each delta's Feature set and User journeys into its durable capability without changing issued ids; verify with `pnpm check:manual` and the archive preflight.
 
-## 2. Customer order projections (grade10)
+## 2. Customer order projections (grade10) (owner: @kinisworking)
 
 This group uses the landed `grade10-spec` component and catalog contract, but
 tests against typed fixtures rather than a running backend.
