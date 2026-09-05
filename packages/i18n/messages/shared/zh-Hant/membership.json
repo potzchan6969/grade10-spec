@@ -68,7 +68,8 @@
     "atQuantityBound": "單次兌換最多就是這個數量。",
     "insufficient": "積分尚未足夠",
     "decreaseQuantity": "減少一件",
-    "increaseQuantity": "增加一件"
+    "increaseQuantity": "增加一件",
+    "validFor": "兌換後 {days} 天內有效"
   },
   "quantityRefusal": {
     "wholeUnits": "{name} 只能以整件兌換。",

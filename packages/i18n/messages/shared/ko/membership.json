@@ -68,7 +68,8 @@
     "atQuantityBound": "1회 교환으로 가능한 최대 수량입니다.",
     "insufficient": "포인트가 부족합니다",
     "decreaseQuantity": "하나 줄이기",
-    "increaseQuantity": "하나 늘리기"
+    "increaseQuantity": "하나 늘리기",
+    "validFor": "교환 후 {days}일간 유효"
   },
   "quantityRefusal": {
     "wholeUnits": "{name}은(는) 낱개 단위로만 교환할 수 있습니다.",

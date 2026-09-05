@@ -68,7 +68,8 @@
     "atQuantityBound": "That is as many as one redemption takes.",
     "insufficient": "Not enough points yet",
     "decreaseQuantity": "One fewer",
-    "increaseQuantity": "One more"
+    "increaseQuantity": "One more",
+    "validFor": "Valid for {days, plural, one {# day} other {# days}} from redemption"
   },
   "quantityRefusal": {
     "wholeUnits": "{name} is redeemed in whole units.",
