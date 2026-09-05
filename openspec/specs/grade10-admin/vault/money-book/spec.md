@@ -97,9 +97,14 @@ between them cannot put the totals outside the range they claim.
 
 ### Requirement: The position is folded from the same arithmetic every screen reads
 
-The position SHALL answer, at any instant: how many loans are live, and their
-principal, interest, total, repaid and outstanding, across cases that are
-`active` or `repaid`, together with how many are overdue and by how much.
+The position SHALL answer, at an instant — now unless a past one is named, and
+never a future one: how many loans were on the book, and their principal,
+interest, total, repaid and outstanding, together with how many were overdue
+and by how much.
+
+A loan SHALL be on the book from its advance's value date until the item left
+custody, released or forfeited, judged at the instant asked about and not by
+the status the case holds when the question is asked.
 
 It SHALL be derived from the same arithmetic a case screen answers with, so no
 two surfaces can disagree, and it SHALL be stored nowhere.
@@ -118,6 +123,13 @@ SHALL be refused by name rather than summed.
 - **GIVEN** live loans in two currencies
 - **WHEN** the position is read
 - **THEN** it is refused by name
+
+#### Scenario: grade10-admin-vault-money-book-SC-11 - A past instant replays the book as it stood
+
+- **GIVEN** a loan advanced in June, settled in July and its item released in August
+- **WHEN** the position is read as at the end of June, as at the end of July, and now
+- **THEN** June carries the loan with its whole term outstanding, July carries it settled, and now carries no such loan
+- **AND** a position as at a future instant is refused
 
 ### Requirement: The arrears list every live loan past its due date
 

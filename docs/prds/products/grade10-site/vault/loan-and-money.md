@@ -171,7 +171,7 @@ The owner's numbers are [Grade10 Finance](/references/grade10-finance):
 
 | Signal | Definition | Owner |
 | --- | --- | --- |
-| Loans outstanding | the position as of now: principal and interest owed across `active` cases. At a past date ❓ unbuilt — the position folds the cases live today | Finance |
+| Loans outstanding | the position at an instant: principal and interest owed across the loans on the book then — advanced by that instant, item not yet out of custody. A month-end is read the week after from the same rows | Finance |
 | Redemption rate | share of financed cases reaching `repaid` rather than `forfeited` | Product |
 | Days to record | gap between a money row's value date and its recording | Finance |
 | Days to payout | gap between a case's submission and the payout's value date | Finance |

@@ -18,15 +18,16 @@ figures moving as I page.
 ### grade10-admin-vault-money-book-US-02: Treasurer reads what the loan book stands at
 
 **As a** treasurer,
-**I want** the principal and interest outstanding across every live loan at an
-instant, in one unit,
+**I want** the principal and interest outstanding across every loan on the
+book at an instant — now, or a month-end I name — in one unit,
 **so that** what the business is owed is one figure I can quote and check
-against the cases behind it.
+against the cases behind it, and tie to the month it belongs to.
 
 **Accepted by:**
 
 - `grade10-admin-vault-money-book-SC-05` — The position agrees with the case screens
 - `grade10-admin-vault-money-book-SC-06` — A second currency is refused, not summed
+- `grade10-admin-vault-money-book-SC-11` — A past instant replays the book as it stood
 - `grade10-admin-vault-money-book-SC-10` — A treasurer reads the book
 
 ### grade10-admin-vault-money-book-US-03: Operator works the loans that are running late

@@ -42,9 +42,10 @@ status.
   the audit chain — who searched, when, what kind of term it was and how many
   cases matched — and never the term itself. The answer is one page and says
   when more matched than were handed back
-- **Money tab** (`vault:payout` only) — the position at this instant
-  (principal and interest owed across live loans, repaid to date, in the
-  currency the position itself names) and the ledger over payouts,
+- **Money tab** (`vault:payout` only) — the position at an instant, now or
+  the end of a day the operator names (principal and interest owed across
+  the loans then on the book, repaid to date, in the currency the position
+  itself names) and the ledger over payouts,
   repayments and corrections for a date range on the shop's own calendar,
   filtered by method, paged, with totals per method and currency; a
   correction names the row it took back
