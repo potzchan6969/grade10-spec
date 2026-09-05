@@ -145,35 +145,28 @@ flow that records one, and `vault:approve` covers what an action can cost.
   those grants nor the `treasurer` role the code ships — a divergence older than
   this change, and not its to close.
 
-## Open questions
+## Decisions taken
 
-- ❓ **How long an invitation lives, and how long a started check has.** The spec
-  states 14 days and 24 hours provisionally; both are `TBC` and must outlive a
-  collector who books two weeks ahead. *Owner: Product.*
-- ❓ **What a declined verdict tells the collector.** A repeated reason teaches a
-  fraudster what to fix, and the collector and the operator may not see the same
-  words. *Owner: Compliance, with Product.*
-- ❓ **Whether any case must hold an approved hosted check before its documents
-  are prepared.** No requirement carries this: a gate nobody can name a case for
-  does nothing, so it stays unwritten until Compliance names the class. Until
-  then the recorded override is the only control on a decline, and naming the
-  class is a change of its own. *Owner: Compliance.*
-- ❓ **Whether an override should take a grant an ordinary counter check does
-  not.** No operator role separates `vault:operate` from `vault:approve`, so a
-  four-eyes override needs a `shared/auth/roles` change before a grant could
-  refuse anybody. *Owner: whoever owns operator provisioning.*
-- ❓ **The lawful basis for the biometric processing.** A face match run by a
-  processor on Grade10's instruction is special-category processing whichever
-  way the image is stored. Explicit consent or a substantial-public-interest
-  route, what the collector is shown and agreed to, whether a DPIA is required,
-  and the transfer mechanism to a US processor. *Owner: Compliance, with
-  counsel.*
-- ❓ **How long the provider may hold its copy.** The window has to outlive an
-  operator's need to review a disputed check. *Owner: Compliance.*
-- ❓ **Which documents and which issuing countries the provider is configured
-  for.** The record names four document types; a provider template accepts a set
-  of its own, and a document most collectors carry that it cannot authenticate
-  would leave the counter running every visit. *Owner: Compliance.*
-- ❓ **Whether an approved check may be bound to a second case without asking the
-  collector again.** The record is person-wide by design, so this is a purpose
-  and consent question rather than a capability one. *Owner: Compliance.*
+The questions this proposal opened, and how each was settled; the specs and
+the manual carry the settled facts.
+
+- **Invitation and check lifetimes** — 14 days and 24 hours; stalled after a
+  day submitted, expired after 7 days undecided. *Product.*
+- **What a declined verdict tells the collector** — that the check could not be
+  completed online and the counter is another way; no reason. The findings
+  stay behind `kyc:read`. *Compliance.*
+- **Which cases must hold an approved hosted check** — none. The counter is
+  equal evidence and the recorded override is the control. *Compliance.*
+- **A grant for an override** — none; the reason and the audit entry are the
+  control until `shared/auth/roles` separates the roles. *Product.*
+- **Lawful basis** — explicit consent on the page that starts the check,
+  stamped on the check; a DPIA before production; the provider's DPA governs
+  the transfer. *Compliance.*
+- **The provider's window** — 30 days. *Compliance.*
+- **Documents and countries** — passports of any issuing country; national
+  identity cards from Hong Kong, Macau, mainland China, Taiwan, Japan, South
+  Korea and Singapore; driving licences and residence permits from those same
+  places, as the provider authenticates them. Configured on the template and
+  recorded in the deployment checklist. *Compliance.*
+- **Reuse without re-consent** — yes; one consent covers every Grade10
+  service and says so. *Compliance.*

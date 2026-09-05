@@ -221,9 +221,8 @@ fetched into that store before the identity becomes readable. The capture of the
 person's face SHALL NOT be fetched or stored by Grade10.
 
 A verdict whose document image cannot be fetched SHALL create no verified
-identity and SHALL be retried a stated number of times, and SHALL then become
-visible to an operator rather than retried indefinitely. ❓ How many attempts a
-fetch is given is `TBC` — *Owner: Product*. A verdict whose
+identity and SHALL be retried eight times, each wait longer than the last, and
+SHALL then become visible to an operator rather than retried again. A verdict whose
 image the evidence store may not hold — the wrong kind of file, or one larger
 than the store accepts — SHALL leave the check declined rather than retried.
 
@@ -371,8 +370,8 @@ back, so it SHALL be set with the provider and recorded in the deployment
 checklist before a deployment is enabled, and a deployment SHALL NOT be enabled
 without it.
 
-❓ The window's length awaits Compliance — it must outlive an operator's need to
-review a disputed check, and it is `TBC` until they set it.
+The window is 30 days: long enough for an operator to review a disputed
+check, short enough to be a control on a copy Grade10 does not hold.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-26 - A provider's window is set before a deployment is enabled
 

@@ -21,7 +21,7 @@ counter is what it is today.
 - [x] 1.1 Write `ui-design.md` — the two surfaces, the exports they compose, and each state tied to the scenario behind it
 - [ ] 1.2 Draw the collector's verification page in Figma — a frame per check state, including what a declined collector is shown — and link the frames
 - [ ] 1.3 Draw the case screen's identity panel: the six states, who performed a bound check, and the override beside a decline
-- [ ] 1.4 Inventory the `@grade10/design-system` and `@grade10/ui` exports both surfaces compose; where one does not exist, add the variant, the token, or the block — and a block brings its own `shared/ui/<block>` delta carrying the exports requirement
+- [x] 1.4 Inventory the `@grade10/design-system` and `@grade10/ui` exports both surfaces compose; where one does not exist, add the variant, the token, or the block — and a block brings its own `shared/ui/<block>` delta carrying the exports requirement
 - [ ] 1.5 Add the collector page's and the invitation's `en` catalogue to `@grade10/i18n`
 - [x] 1.6 Bump the submodule pointer so group 12 can start
 - [ ] 1.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:stories:ui`, `pnpm run design-sync:check`, `pnpm run check:submodules`

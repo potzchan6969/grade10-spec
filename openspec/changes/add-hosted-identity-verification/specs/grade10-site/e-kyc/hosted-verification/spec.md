@@ -93,9 +93,7 @@ An invitation SHALL expire 14 days after it is issued. A check the collector has
 opened and not yet submitted SHALL expire 24 hours after it was opened or when
 the invitation's own life runs out, whichever comes first — a started check
 SHALL NOT outlive the invitation that carried it. A submitted check SHALL NOT
-expire on either clock. ❓ Both windows are `TBC` — they await Product (the
-proposal's first open question), and no other value may be built until they are
-set.
+expire on either clock.
 
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-03 - An invitation opens the check it names
 
@@ -145,11 +143,9 @@ expire on its own — a verdict may still arrive — and SHALL become Stalled
 instead, so an operator can see the difference between a check that is arriving
 and one that is not coming. A check in Stalled SHALL become Expired once the
 provider has left it undecided for a stated period, so no check stays live for
-ever on a provider that never answers.
-
-❓ The time a verdict usually takes, and the period a stalled read-back is given
-before the check expires, are both `TBC` — *Owner: Product*, with the two windows
-above.
+ever on a provider that never answers. A verdict usually takes a day: a
+submitted check reads as Stalled 24 hours after it was submitted, and becomes
+Expired once the provider has left it undecided for 7 days.
 
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-06 - An unopened invitation expires
 
@@ -297,9 +293,11 @@ their invitation, and SHALL tell them what to do next for every state.
 | Expired | Ask to be invited again |
 | Withdrawn | Ask to be invited again |
 
-❓ What a declined collector is told awaits Compliance (the proposal's second
-open question); the words are `TBC` and the collector and the operator may not
-be shown the same ones.
+A declined collector SHALL be told that the check could not be completed
+online and that the counter is another way, and nothing else: no reason, no
+finding, and no test the document failed. What the provider found SHALL be
+readable only by an operator holding the grant that reads the record, so the
+collector and the operator are never shown the same words.
 
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-17 - A collector returning mid-check is shown where they are
 
@@ -314,6 +312,25 @@ be shown the same ones.
 - **WHEN** the collector opens the invitation
 - **THEN** they are told the check did not pass and that the document can be
   checked at the store, and are shown no reason it did not pass
+
+### Requirement: A check starts only on the collector's explicit consent
+
+The system SHALL start no check — mint no link into the provider's ceremony —
+until the collector has agreed, on the page that starts it, to the provider's
+check of their document and their face, to Grade10 keeping the document and
+the result, to that result counting across Grade10's services, and to their
+right to erasure. The instant of the agreement SHALL be recorded on the check
+when it is first given and SHALL NOT be re-stamped when the collector returns
+to continue. A start carrying no agreement SHALL be refused, and SHALL change
+nothing.
+
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-27 - A check starts only once the collector agrees
+
+- **GIVEN** a check in Invited
+- **WHEN** the collector tries to start it without agreeing, and then agrees
+  and starts it
+- **THEN** the first attempt is refused and reaches the provider with nothing,
+  and the second records when they agreed and hands them to the provider
 
 ### Requirement: The hosted check never gates the counter, and an override is recorded
 

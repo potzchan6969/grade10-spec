@@ -107,9 +107,9 @@ document number in any form.
 | A gate reads a standing | Decided | A product that only asks whether a person is verified holds a gate — verified, expired or unverified — and never the record. | Product |
 | One store per brand | Decided | A brand's identities live in a store of its own, reached only by its products; a brand that verifies nobody deploys none. | Product |
 | What the store and the auction gate on | ❓ Open | Which checkout or bid asks for a verified person, and what the person is told. | Product |
-| Reuse without re-consent | ❓ Open | Whether an approved check may be bound to a second case without asking the collector again. | Compliance |
+| Reuse without re-consent | Decided | One consent covers every Grade10 service and says so; an approved check is bound to a second case, and read as a standing by a second product, without asking again. | Compliance |
 | Retention windows | ❓ Open | Unset for every class, so nothing is deleted on a schedule — see [account data](/platform/account-data). | Compliance |
-| The provider's window | ❓ Open | Long enough to review a disputed check, short enough to be a control. | Compliance |
+| The provider's window | Decided | 30 days: long enough to review a disputed check, short enough to be a control on a copy Grade10 does not hold. | Compliance |
 
 **Risks.** Pulling the image home means the same document exists in two places
 until the provider's window closes. The alternative — leaving the evidence at
