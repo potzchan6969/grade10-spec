@@ -12,7 +12,8 @@
   "back": "返回",
   "service": {
     "title": "你想辦理哪項服務？",
-    "duration": "{minutes} 分鐘"
+    "duration": "{minutes} 分鐘",
+    "none": "目前尚無可線上預約的服務。"
   },
   "location": {
     "title": "到哪間門市？",

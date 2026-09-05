@@ -12,7 +12,8 @@
   "back": "返回",
   "service": {
     "title": "你想办理哪项服务？",
-    "duration": "{minutes} 分钟"
+    "duration": "{minutes} 分钟",
+    "none": "目前还没有可在线预约的服务。"
   },
   "location": {
     "title": "到哪家门店？",

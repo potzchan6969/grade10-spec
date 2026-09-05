@@ -12,7 +12,8 @@
   "back": "뒤로",
   "service": {
     "title": "어떤 서비스로 방문하시나요?",
-    "duration": "{minutes}분"
+    "duration": "{minutes}분",
+    "none": "아직 온라인으로 예약할 수 있는 서비스가 없습니다."
   },
   "location": {
     "title": "어느 매장으로 가시나요?",

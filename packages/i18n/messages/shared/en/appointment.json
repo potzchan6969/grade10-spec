@@ -12,7 +12,8 @@
   "back": "Back",
   "service": {
     "title": "What are you coming in for?",
-    "duration": "{minutes} min"
+    "duration": "{minutes} min",
+    "none": "Nothing can be booked online yet."
   },
   "location": {
     "title": "Which shop?",
