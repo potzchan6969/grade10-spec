@@ -35,6 +35,8 @@ type RewardMenuProps = {
   quantities?: Readonly<Record<string, number>>;
   onQuantityChange?: (rewardId: string, quantity: number) => void;
   onRedeem: (rewardId: string, quantity: number) => void;
+  /** The reward whose redemption is in flight; its control shows busy. */
+  busyRewardId?: string;
   className?: string;
 };
 
@@ -43,6 +45,7 @@ type RewardRowProps = {
   item: RewardMenuItem;
   balance: number;
   quantity: number;
+  busy: boolean;
   onQuantityChange?: (rewardId: string, quantity: number) => void;
   onRedeem: (rewardId: string, quantity: number) => void;
 };
@@ -52,6 +55,7 @@ function RewardRow({
   item,
   balance,
   quantity,
+  busy,
   onQuantityChange,
   onRedeem,
 }: RewardRowProps) {
@@ -108,7 +112,8 @@ function RewardRow({
       ) : null}
       <HStack align="center" gap="sm">
         <Button
-          disabled={!affordable}
+          disabled={!affordable || busy}
+          loading={busy}
           onClick={() => onRedeem(item.id, quantity)}
           size="sm"
           type="button"
@@ -145,6 +150,7 @@ function RewardMenu({
   quantities,
   onQuantityChange,
   onRedeem,
+  busyRewardId,
   className,
 }: RewardMenuProps) {
   return (
@@ -173,6 +179,7 @@ function RewardMenu({
             >
               <RewardRow
                 balance={balance}
+                busy={busyRewardId === item.id}
                 copy={copy}
                 item={item}
                 onQuantityChange={onQuantityChange}
