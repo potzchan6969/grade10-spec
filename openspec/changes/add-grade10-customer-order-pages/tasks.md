@@ -1,4 +1,4 @@
-## 1. Shared order presentation (grade10-spec)
+## 1. Shared order presentation (grade10-spec) (owner: @kinisworking)
 
 - [ ] 1.1 Make Order Details summary, payment, and individual money rows optional; omit each absent group and the empty sidebar while preserving complete existing consumers so `shared-ui-store-order-detail-SC-03`, `shared-ui-store-order-detail-SC-04`, and `shared-ui-store-order-detail-SC-07` through `shared-ui-store-order-detail-SC-10` pass in component tests and stories.
 - [ ] 1.2 Prove every public Order Details export and standalone part remains available, and prove tracking reports only through its supplied callback, so `shared-ui-store-order-detail-SC-01`, `shared-ui-store-order-detail-SC-02`, `shared-ui-store-order-detail-SC-05`, and `shared-ui-store-order-detail-SC-06` pass; verify with the focused UI tests, Storybook tests, typecheck, and build.
