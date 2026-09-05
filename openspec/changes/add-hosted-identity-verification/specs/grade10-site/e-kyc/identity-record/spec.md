@@ -5,8 +5,10 @@ type, masked document number, its expiry, and a photograph of the document —
 held once and reused by every Grade10 service that needs to know who somebody
 is, so the same human is never asked for the same document twice.
 
-A **consumer** is a Grade10 service that records identity checks and binds them
-to its own cases: the vault today. A **person** is the account
+A **consumer** is a Grade10 service that asks the store about a person: one
+that records identity checks and binds them to its own cases, as the vault
+does, or one that only asks whether a person is verified, as the store and
+the auction do. A **person** is the account
 `shared/auth/users` identifies, or, where a consumer's case names no account,
 the case itself — and a record made for such a case is reusable only by it. A date of birth and a document expiry are
 calendar days as `shared/dates-and-times` defines them, judged in the

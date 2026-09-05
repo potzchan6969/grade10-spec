@@ -28,9 +28,14 @@ no smartphone, an unreadable document, a provider outage, a refused check — th
 visit still works.
 
 Nobody signs into the store itself. The people it serves are the collector, who
-verifies before travelling and whose document is what is being kept, and vault
+verifies before travelling and whose document is what is being kept, vault
 staff, who read a case's identity, record one at the counter, and look at the
-document image.
+document image, and every product that asks whether a signed-in person is
+verified — the store at a checkout, the auction at a bid — and is told a
+standing, never a name.
+
+One store per brand. A collector verified on grade10.com is unknown to ZZZ,
+which verifies nobody and runs none.
 
 The raw document number never lands. It crosses the binding in memory, becomes a
 mask and a keyed digest, and is never stored, returned or logged. The digest is
@@ -45,16 +50,20 @@ second account is a query somebody could run, not an alarm that fires.
 :::
 
 :::detail{title="For engineers" for="engineer"}
-`packages/e-kyc/` in the application repository, deployed as
-`grade10-e-kyc-service`. Its entire HTTP surface is a health route and dev
-setup; the eight real methods are RPC over a `KYC_SERVICE` binding, minted per
-product by a class factory. The vault is the only consumer today — the
-cross-product reuse is built end to end and wired to exactly one product.
+`packages/e-kyc/` in the application repository, deployed once per brand —
+`grade10-e-kyc-service` for Grade10, with its own Neon project and bucket, and
+a `BRAND` var that selects the hosted template. Its entire HTTP surface is a
+health route and dev setup; everything a product asks arrives over a service
+binding, minted per product by a class factory in two kinds. The service —
+the record, its case bindings and the five hosted calls — is what the vault
+holds as `KYC_SERVICE`. The gate — one method, a person's standing and no
+identity field — is minted for the store and the auction, and each binds its
+own as `KYC_GATE` in the change that first gates a checkout or a bid on it.
 
 Writes and case bindings are scoped to the calling product by the entrypoint its
-binding names. What cannot be scoped is the person: `latestForUser` reads across
-every product deliberately, and that read is the whole reason this store left the
-vault.
+binding names. What cannot be scoped is the person: `latestForUser` and the
+standing read across every product deliberately, and that read is the whole
+reason this store left the vault.
 
 Capture keys are content-addressed, so the object name is the digest of its
 bytes and no folder scheme exists. Two mechanisms move bytes out, and only one is
@@ -65,11 +74,14 @@ There is no deletion-log sweep here at all — erasure arrives as the owning
 product releasing its binding, because only that product knows whether the
 evidence is under legal hold.
 
-The record already carries a provider and a provider reference. Both are
-constant until `add-hosted-identity-verification` ships; the hosted flow the
-capability pages describe is planned, not deployed. A case binds exactly one identity, enforced by the bindings table's
-primary key; the document-number digest carries no unique index and nothing
-queries it.
+The record carries a provider and a provider reference: constants on a counter
+check, the vendor's on a hosted one. The hosted check's own life — raise with
+reuse first, open, start, settle, withdraw, the two sweeps and the three
+routes — is published by the package over a host port the product supplies,
+and the collector's page is the package's own slice; the vault is the first
+host, and a second product mounts the same hundred lines. A case binds exactly
+one identity, enforced by the bindings table's primary key; the document-number
+digest carries no unique index and nothing queries it.
 
 Background:
 [account data](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
