@@ -136,7 +136,7 @@ Needs group 1's submodule bump and group 6's routes.
 - [x] 12.2 Render each check state and its next step from `ui-design.md`, reading the secret from the fragment and never putting it in a request path, showing no identity field and no refusal reason, so *An invitation opens the check it names* and *A declined collector is told what to do next* pass
 - [x] 12.3 Add the identity panel to the admin case screen — the state, who performed a bound check, the findings and decline reason behind `kyc:read`, and the override reason on the counter dialog over a decline
 - [x] 12.4 Add the collector's slice to `@grade10/e-kyc-frontend` and the panel's to `@grade10/vault-admin-frontend`, behind DI tokens, and register them in the two containers
-- [ ] 12.5 Wire the collector page's catalogue through `@grade10/i18n` — blocked on 1.5; the page holds its English copy in one hook meanwhile, exactly as the signing ceremony does, with the keys it wants listed there
+- [x] 12.5 Wire the collector page's catalogue through `@grade10/i18n`
 - [x] 12.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run check:frontend-layers`, `pnpm run check:admin-bundle`, `pnpm run build`
 
 ## 13. Archive hand-off (grade10-spec)
