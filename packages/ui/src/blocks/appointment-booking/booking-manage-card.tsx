@@ -141,35 +141,37 @@ function BookingManageCard({
           ) : null}
         </VStack>
       </CardContent>
-      <Dialog onOpenChange={setConfirming} open={confirming}>
-        <DialogContent showCloseButton={false}>
-          <DialogHeader showCloseButton={false}>
-            <DialogTitle>{copy.cancelTitle}</DialogTitle>
-          </DialogHeader>
-          <DialogBody>
-            <DialogDescription>{copy.cancelBody}</DialogDescription>
-          </DialogBody>
-          <DialogFooter>
-            <Button
-              onClick={() => setConfirming(false)}
-              size="md"
-              type="button"
-              variant="outline"
-            >
-              {copy.cancelKeep}
-            </Button>
-            <Button
-              loading={pending}
-              onClick={confirmCancel}
-              size="md"
-              type="button"
-              variant="destructive"
-            >
-              {copy.cancelConfirm}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {confirming ? (
+        <Dialog onOpenChange={setConfirming} open>
+          <DialogContent showCloseButton={false}>
+            <DialogHeader showCloseButton={false}>
+              <DialogTitle>{copy.cancelTitle}</DialogTitle>
+            </DialogHeader>
+            <DialogBody>
+              <DialogDescription>{copy.cancelBody}</DialogDescription>
+            </DialogBody>
+            <DialogFooter>
+              <Button
+                onClick={() => setConfirming(false)}
+                size="md"
+                type="button"
+                variant="outline"
+              >
+                {copy.cancelKeep}
+              </Button>
+              <Button
+                loading={pending}
+                onClick={confirmCancel}
+                size="md"
+                type="button"
+                variant="destructive"
+              >
+                {copy.cancelConfirm}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      ) : null}
     </Card>
   );
 }
