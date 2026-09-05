@@ -14,7 +14,7 @@ exports: [`ui-design.md`](ui-design.md).
 - [ ] 1.1 Draw the membership and console frames in Figma and link them from `ui-design.md`
 - [ ] 1.2 Export `MembershipSummary` from `@grade10/ui` — two counts shown as two counts, the tier's validity end, and retention progress
 - [ ] 1.3 Export `RewardMenu` from `@grade10/ui` — each reward priced in points, money-off rewards stating their code's validity period
-- [ ] 1.4 Export `CouponList` from `@grade10/ui` — code, purpose, own expiry, and spent or void
+- [ ] 1.4 Export `CouponList` from `@grade10/ui` — code where the shop takes one, purpose, own expiry, and spent, void or expired
 - [ ] 1.5 Export `ActivityList` from `@grade10/ui` — entries named in terms a member reads, carrying no operator reason, retry key or internal pricing
 - [ ] 1.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:stories:ui`, `pnpm run design-sync:check`
 

@@ -199,7 +199,10 @@ as qualifying SHALL NOT be qualifying spend.
 Paying with a gift card or with store credit SHALL NOT change what a purchase
 earns: qualifying goods bought with either earn as any other purchase does.
 
-Every ledger entry SHALL record the channel the activity came from.
+Every ledger entry SHALL record the channel the activity came from, valued
+from one closed set: the channels that sell, and one non-sale value for a
+row no channel sold — a correction, an expiry, a campaign grant. Nothing
+defaults: a writer that names no channel is refused.
 
 #### Scenario: grade10-site-loyalty-programme-SC-88 - Shipping and service fees earn nothing
 
@@ -234,6 +237,7 @@ Every ledger entry SHALL record the channel the activity came from.
 - **WHEN** any earning or redemption is recorded
 - **THEN** the entry carries the channel that sold, taken from the programme's closed set
 - **AND** a recording naming no channel, or one outside that set, is refused
+- **AND** a correction, an expiry or a campaign grant carries the non-sale value, never a selling channel
 
 ### Requirement: The redeemable balance expires after a period of inactivity
 
@@ -514,7 +518,8 @@ components for the membership surface — `MembershipSummary`, `RewardMenu`,
 total, alongside the tier held, the date its validity ends, and progress
 toward retention. `RewardMenu` SHALL price each reward in points and state a
 money-off reward's own validity period. `CouponList` SHALL carry each issued
-code, what it is for, its own expiry, and whether it is spent or void.
+coupon — its code where the shop takes one — what it is for, its own expiry,
+and whether it is spent, void or expired.
 `ActivityList` SHALL name entries in terms a member reads, and SHALL NOT carry
 an operator reason, a retry key, or internal pricing.
 

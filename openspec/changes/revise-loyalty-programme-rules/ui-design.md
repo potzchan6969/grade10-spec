@@ -22,7 +22,7 @@ The set **grade10-spec** exports from `@grade10/ui`:
 | --- | --- |
 | `MembershipSummary` | Both counts as two counts, the tier held, its validity end, and progress toward retention |
 | `RewardMenu` | The live menu, each reward priced in points, a money-off reward stating its code's validity period |
-| `CouponList` | Issued codes — the code, what it is for, its own expiry, and whether it is spent or void |
+| `CouponList` | Issued coupons — the code where the shop takes one, what it is for, its own expiry, and whether it is spent, void or expired |
 | `ActivityList` | The member's own entries, named in member-readable terms |
 
 No design-system token or primitive changes. The store checkout gains a

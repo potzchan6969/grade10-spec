@@ -121,6 +121,7 @@ separate population with no programme.
 | Physical reward menu | ❓ Open | Which items, their point prices and the collection window's length. Per-unit quantities stay off until the per-redemption and per-day bounds are chosen | Product |
 | Welcome bonus | ❓ Open | The draft posts a welcome bonus at enrolment; the deployed programme grants none until the size is set | Owner |
 | Public names for the two counts | ❓ Open | The membership page says "Points to spend" and "Points earned this year"; whether those are the launch names is undecided | Product |
+| Non-sale ledger rows name `internal` | Decided | A correction, an expiry and a campaign grant sold nothing, so they carry a third value in the closed channel set rather than the online store's — the counter's share finance reads is never overstated by rows no channel sold | Engineering |
 | ZZZ has no programme | Decided | The second brand's loyalty product is retired rather than kept as an unused placeholder | Owner |
 
 **Risks.** Earning is delivered at least once and retried, so a member who
