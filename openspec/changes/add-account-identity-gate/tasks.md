@@ -49,8 +49,8 @@ Design decisions, the data model and the service contracts:
 
 Needs group 1's submodule bump.
 
-- [ ] 6.1 Read the card's, the panel's, the dialog's and the collector's page's copy through `@grade10/i18n` and drop the interim English hooks
-- [ ] 6.2 Verify: `pnpm run typecheck`, `pnpm run test`
+- [x] 6.1 Read the card's, the panel's, the dialog's and the collector's page's copy through `@grade10/i18n` and drop the interim English hooks
+- [x] 6.2 Verify: `pnpm run typecheck`, `pnpm run test`
 
 ## 7. Archive hand-off (grade10-spec)
 
