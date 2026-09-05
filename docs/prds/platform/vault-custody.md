@@ -204,7 +204,7 @@ terminal: declined | cancelled | expired | forfeited
 
 ### Accrual stops at the instant the loan settled, and never restarts
 
-- The settlement instant is replayed from the repayment rows: the recording that first covered the balance, judged at its own clock reading. It is the same arithmetic `recordRepayment` did when it decided that recording settled the loan, so the two cannot disagree.
+- The settlement instant is replayed from the repayment rows: the recording that first covered the balance, judged at its own value date. `recordRepayment` decides the move off that same fold with the new recording walked into its place, so a transfer backdated behind money already recorded settles the loan where the replay says it did, and the two cannot disagree.
 - Not a column and not the `repaid` event. A status is one row anybody with a connection can write, and a case walked into `repaid` by hand would then read as a loan somebody paid; the money is the fact.
 - So a customer who pays a late loan in full and collects the item a week later owes what they owed the day they paid. Without that, release refuses over interest nobody owes and `recordRepayment` refuses to take it — the only exit left is forfeiting their own property.
 
