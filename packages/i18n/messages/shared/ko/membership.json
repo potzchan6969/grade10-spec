@@ -9,13 +9,16 @@
     "secondsUnit": "초",
     "used": "이 코드는 이미 사용되었습니다",
     "walletAdd": "{wallet}에 추가",
+    "walletAddFailed": "{wallet}에 추가하지 못했습니다. 다시 시도해 주세요.",
+    "walletApple": "Apple 지갑",
+    "walletAppleNote": "카운터에서 본인 확인용입니다. 포인트 사용은 이 페이지에서 하세요.",
+    "walletEndFailed": "{wallet} 패스를 해지하지 못했습니다. 다시 시도해 주세요.",
     "walletEndOne": "{wallet} 패스 해지",
-    "walletFailed": "처리되지 않았습니다. 다시 시도해 주세요.",
+    "walletGoogle": "Google 월렛",
     "walletHeading": "휴대폰에 멤버십 카드 담기",
     "walletHeld": "{wallet}에 패스를 보유하고 있습니다",
-    "walletGoogle": "Google 월렛",
-    "walletApple": "Apple 지갑",
-    "walletAppleNote": "카운터에서 본인 확인용입니다. 포인트 사용은 이 페이지에서 하세요."
+    "walletInstall": "{wallet}에서 열기",
+    "walletUnreachable": "패스 상태를 확인하지 못했습니다. 아래 내용은 최신이 아닐 수 있습니다."
   },
   "page": {
     "title": "멤버십",
