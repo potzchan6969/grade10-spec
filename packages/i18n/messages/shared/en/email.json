@@ -5,5 +5,20 @@
     "action": "Sign in",
     "otpHint": "Or enter this code: {otp}",
     "ignore": "If you didn’t request this, you can ignore this email."
+  },
+  "appointment": {
+    "greeting": "Hi {name},",
+    "bookedSubject": "Your visit is booked: {service}",
+    "bookedBody": "You’re booked for {service} at {location}.",
+    "movedSubject": "Your visit has moved: {service}",
+    "movedBody": "Your {service} visit at {location} now has a new time.",
+    "cancelledSubject": "Your visit is cancelled: {service}",
+    "cancelledBody": "Your {service} visit at {location} is cancelled. Book again any time.",
+    "reminderSubject": "Reminder: {service} on {when}",
+    "reminderBody": "A reminder of your {service} visit at {location}.",
+    "when": "When",
+    "where": "Where",
+    "manage": "Move or cancel this visit",
+    "calendar": "A calendar file is attached, so you can add the visit to your calendar."
   }
 }

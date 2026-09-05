@@ -1,0 +1,118 @@
+{
+  "title": "預約到店",
+  "intro": "選擇服務、門市與時間，無需帳戶。",
+  "nav": "預約到店",
+  "steps": {
+    "service": "服務",
+    "location": "門市",
+    "day": "日期",
+    "time": "時間",
+    "details": "資料"
+  },
+  "back": "返回",
+  "service": {
+    "title": "你想辦理哪項服務？",
+    "duration": "{minutes} 分鐘",
+    "none": "目前尚無可線上預約的服務。"
+  },
+  "location": {
+    "title": "到哪間門市？",
+    "none": "暫時沒有門市提供此服務。"
+  },
+  "slots": {
+    "dayTitle": "選擇日期",
+    "timeTitle": "選擇時間",
+    "previousMonth": "上一個月",
+    "nextMonth": "下一個月",
+    "weekdays": {
+      "mon": "一",
+      "tue": "二",
+      "wed": "三",
+      "thu": "四",
+      "fri": "五",
+      "sat": "六",
+      "sun": "日"
+    },
+    "timesIn": "時間以此時區顯示：",
+    "pickADay": "選擇日期以查看可預約的時間。",
+    "noTimes": "這一天已沒有空檔。"
+  },
+  "details": {
+    "title": "你的資料",
+    "name": "姓名",
+    "email": "電郵",
+    "phone": "電話",
+    "notes": "有什麼需要我們知道？",
+    "optional": "選填",
+    "nameMissing": "請填寫姓名。",
+    "emailMissing": "請填寫接收確認的電郵。",
+    "emailInvalid": "這看來不是有效的電郵地址。",
+    "answerMissing": "請選擇一項以繼續。",
+    "submit": "確認預約"
+  },
+  "summary": {
+    "title": "你的預約",
+    "service": "服務",
+    "location": "門市",
+    "when": "時間"
+  },
+  "confirmation": {
+    "title": "預約成功",
+    "body": "詳情已連同行事曆檔案發送至你的電郵。",
+    "service": "服務",
+    "location": "門市",
+    "when": "時間",
+    "manage": "更改或取消此預約",
+    "calendar": "加入行事曆"
+  },
+  "manage": {
+    "title": "你的預約",
+    "service": "服務",
+    "location": "門市",
+    "when": "時間",
+    "move": "更改時間",
+    "cancel": "取消預約",
+    "cancelTitle": "取消此預約？",
+    "cancelBody": "空檔會重新開放，我們會發電郵通知你。",
+    "cancelConfirm": "是，取消",
+    "cancelKeep": "保留預約",
+    "moveTitle": "選擇新時間",
+    "moveConfirm": "改到這個時間",
+    "moveBack": "保留原有時間",
+    "moved": "你的預約已更改。",
+    "cancelled": "你的預約已取消。",
+    "notFoundTitle": "此連結無法開啟預約",
+    "notFoundBody": "連結可能複製有誤，或它指向的預約已不存在。"
+  },
+  "mine": {
+    "title": "你的預約",
+    "upcoming": "即將到來",
+    "past": "過往",
+    "emptyTitle": "尚未有預約",
+    "emptyDescription": "預約到店後會在這裡顯示。",
+    "open": "查看",
+    "signInTitle": "登入以查看你的預約",
+    "signInBody": "預約會按你預約時使用的電郵列出。",
+    "signIn": "登入"
+  },
+  "state": {
+    "booked": "已預約",
+    "cancelled": "已取消",
+    "completed": "已完成",
+    "no_show": "未到"
+  },
+  "errors": {
+    "servicesUnavailable": "無法讀取服務。",
+    "locationsUnavailable": "無法讀取門市。",
+    "daysUnavailable": "無法讀取日曆。",
+    "timesUnavailable": "無法讀取時間。",
+    "bookingUnavailable": "無法讀取預約。",
+    "retry": "再試一次",
+    "slotTaken": "這個時間剛被預約了，請另選一個。",
+    "slotNotOffered": "這個時間已不再提供，請另選一個。",
+    "alreadyBooked": "你在 {when} 已有此服務的預約。",
+    "bookingFailed": "無法完成預約，請再試一次。",
+    "moveFailed": "無法更改預約，請再試一次。",
+    "cancelFailed": "無法取消預約，請再試一次。"
+  }
+}

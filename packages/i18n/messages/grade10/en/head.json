@@ -31,5 +31,17 @@
   "auctionListing": {
     "title": "{name} — Grade10",
     "description": "{name}, up for auction at Grade10."
+  },
+  "book": {
+    "title": "Book a visit — Grade10",
+    "description": "Pick a service, a shop and a time to bring a card in. No account needed."
+  },
+  "bookManage": {
+    "title": "Your visit — Grade10",
+    "description": "See, move or cancel a visit you booked with Grade10."
+  },
+  "bookMine": {
+    "title": "Your visits — Grade10",
+    "description": "Every visit booked with Grade10 under your email address."
   }
 }
