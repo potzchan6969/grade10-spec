@@ -21,7 +21,7 @@ shopping path, not a blank account page.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4923-3424" title="Order history, empty"}
 
-::story{id="pages-order-history-page--filled" title="Your Orders, whole"}
+::story{id="pages-order-history-page--filled" title="Your Orders, filled"}
 
 ::story{id="store-order-history-orderhistory--empty" title="An account with no orders"}
 

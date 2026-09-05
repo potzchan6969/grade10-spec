@@ -22,6 +22,8 @@ than filling the designed page with claims the frontend cannot prove.
 
 ::story{id="store-order-detail-orderdetails--item-coupon" title="One order, in detail"}
 
+::story{id="store-order-detail-orderdetails--no-optional-groups" title="An order with only supplied facts"}
+
 ## In flight
 
 ::changes{spec="grade10-site/store/order-detail"}
