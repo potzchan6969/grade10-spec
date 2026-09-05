@@ -3,7 +3,7 @@
   "intro": "귀중품을 맡겨 주세요. 대출을 받을 수도, 보관만 맡길 수도 있습니다. 모든 물품은 매장에서 감정하고 서류에 서명한 뒤에 보관됩니다.",
   "status": {
     "draft": "아직 보내지 않음",
-    "submitted": "접수됨",
+    "submitted": "요청 보냄",
     "under_valuation": "감정 중",
     "offer_made": "제안 확인 필요",
     "accepted": "조건 합의됨",
@@ -39,6 +39,7 @@
     "booking_booked": "방문 예약됨",
     "booking_rescheduled": "방문 일정 변경됨",
     "booking_cancelled": "방문 예약 취소됨",
+    "booking_no_show": "방문 예약 미이행",
     "booking_cache_repaired": "예약 정보 갱신됨",
     "contact_set": "연락처 변경됨",
     "valuation_started": "감정 시작됨",
@@ -57,8 +58,12 @@
     "release_requested": "반환 요청됨",
     "payout_recorded": "지급 기록됨",
     "repayment_recorded": "상환 기록됨",
+    "payout_reversed": "지급 기록 취소됨",
+    "repayment_reversed": "상환 기록 취소됨",
+    "reminder_sent": "안내 알림 발송됨",
     "repaid": "대출 상환 완료",
     "released": "물품 반환됨",
+    "forfeiture_notice": "소유권 상실 통지 발송됨",
     "forfeited": "물품 소유권 상실",
     "cancelled": "건 취소됨",
     "expired": "건 기한 만료",
@@ -91,6 +96,7 @@
     "heading": "물품 보관 신청",
     "financedIntro": "감정 후 물품을 담보로 한 대출 조건을 제안해 드립니다.",
     "storageIntro": "대출 없이 보관만 합니다.",
+    "severalItems": "물품이 여러 개인가요? 물품마다 신청서를 하나씩 보내시고, 방문은 첫 신청에서 한 번만 예약한 뒤 함께 가져오시면 됩니다.",
     "categoryLabel": "어떤 물품인가요?",
     "titleLabel": "무엇이라고 부를까요?",
     "descriptionLabel": "더 알려주실 내용이 있나요?",
@@ -103,7 +109,7 @@
     "asking": "{amount} 신청 중입니다.",
     "continue": "계속",
     "photoLimitReached": "이 신청서의 사진이 이미 최대 개수입니다.",
-    "invalidContentType": "사진만 가능합니다: JPEG, PNG, WebP 또는 AVIF.",
+    "invalidContentType": "사진만 가능합니다: JPEG, PNG 또는 WebP.",
     "emptyBody": "빈 파일입니다.",
     "tooLarge": "사진 용량이 너무 큽니다.",
     "photoFailed": "사진을 첨부하지 못했습니다({reason}).",
@@ -124,20 +130,36 @@
     "itemDescription": "{category} — {description}",
     "offerTitle": "제안 조건",
     "offerTerms": "{amount}, 기간 {days}일, 기간 전체 이율 {rate}%.",
+    "offerRepayAfter": "대출금을 받으신 날부터 {days}일 뒤에 상환하시면 됩니다.",
     "offerRepayBy": "{when}까지 상환해 주세요.",
+    "offerTotal": "총 상환액: {amount}.",
+    "offerLate": "연체하시면 같은 이율로 이자가 계속 붙어, 남은 금액에 하루 {amount}씩 더해집니다.",
     "offerExpired": "이 제안은 {when}에 만료되었습니다. 새 제안을 요청해 주세요.",
     "offerOpen": "{when}까지 유효합니다. 매장에서 직원이 답변을 기록해 드립니다.",
+    "acceptOffer": "이 제안 수락하기",
+    "acceptConfirm": "{amount}, 기간 {days}일, 기간 전체 이율 {rate}% 조건을 수락하십니다. 방문에 맞춰 서류를 준비해 두겠습니다.",
+    "offerAccepted": "제안을 수락했습니다. 서명하실 방문을 예약해 주세요.",
+    "declineOffer": "이 제안 거절하기",
+    "declineConfirm": "이 제안을 거절하시겠습니까? 물품 신청은 그대로 두고, 다른 제안을 다시 드릴 수 있습니다.",
+    "offerDeclined": "제안을 거절했습니다.",
+    "offerGone": "이 제안은 기한이 지났습니다. 직원에게 새 제안을 요청해 주세요.",
     "agreedTerms": "합의된 조건: {amount}, 기간 {days}일, {when} 만기.",
+    "agreedTermsFromAdvance": "합의된 조건: {amount}, 기간 {days}일, 대출금을 받으신 날부터 계산합니다.",
     "dueTitle": "남은 금액",
     "dueOutstanding": "총 {total} 중 {outstanding} 남았습니다.",
     "dueRepaid": "{repaid} 상환됨. {when} 만기.",
     "dueRepaidLate": "{repaid} 상환됨. {when} 만기 — {days}일 연체.",
     "dueAsOf": "{when} 기준.",
+    "payTitle": "상환 방법",
+    "payHolds": "이 금액은 {when}까지 유효합니다.",
     "holding": "물품을 보관하고 있습니다.",
     "holdingSince": "{day}부터 물품을 보관하고 있습니다.",
     "settled": "남은 금액이 없으므로 다음 방문 때 가져가실 수 있습니다.",
     "owedEntry": "{detail}: {amount}",
     "askForItBack": "반환 요청하기",
+    "cancelRequest": "이 신청 취소하기",
+    "cancelConfirm": "이 신청을 취소하시겠습니까? 예약한 방문도 함께 취소되며, 물품은 고객님이 그대로 보관하십니다.",
+    "cancelled": "신청이 취소되었습니다.",
     "documents": "서류",
     "packetLine": "{title} — {status}",
     "manifestFingerprint": "서명 지문",
@@ -169,40 +191,11 @@
     "documentFailed": "이 서류를 표시할 수 없습니다. 직원에게 알려 주세요.",
     "emptyPacketTitle": "서명할 서류가 없습니다",
     "emptyPacketMessage": "옆에 있는 직원에게 알려 주세요 — 서류가 제대로 준비되지 않았습니다.",
-    "rosterLabel": "오늘 서명할 서류: 총 {total}건",
-    "rosterEntry": "{position}. {title} — {state}",
-    "rosterStateSigned": "서명 완료",
-    "rosterStateCurrent": "현재 서류",
-    "rosterStatePending": "서명 예정",
-    "documentStep": "{title} — {total}건 중 {position}번째",
-    "movedOn": "{signed} 서명이 끝났습니다. 다음은 {next}입니다.",
-    "pageLabel": "서류 {pageCount}쪽 중 {page}쪽",
-    "pageStatus": "{pageCount}쪽 중 {page}쪽",
-    "previousLabel": "이전 쪽",
-    "nextLabel": "다음 쪽",
-    "readStatus": "{pageCount}쪽 중 {viewed}쪽 읽음",
-    "integrityWarning": "이 서류는 저희가 준비한 것과 일치하지 않습니다. 서명을 멈추고 직원에게 알려 주세요.",
-    "consentLabel": "{title}을(를) 읽었으며 서명에 동의합니다",
-    "signatureLabel": "여기에 {title} 서명",
-    "clearSignatureLabel": "서명 지우기",
-    "fullNameLabel": "제시하신 신분증에 적힌 것과 똑같은 성명",
-    "submitLabel": "{title} 서명하기",
-    "submittingLabel": "서명 중…",
-    "retryLabel": "다시 시도",
-    "missingPages": "서명하기 전에 모든 쪽을 읽어 주세요.",
-    "missingConsent": "읽으셨음을 확인하는 상자에 표시해 주세요.",
-    "missingSignature": "위 상자에 서명해 주세요.",
-    "missingName": "신분증에 적힌 대로 성명을 입력해 주세요.",
-    "sealedTitle": "서명 및 봉인 완료",
-    "sealedMessage": "서명된 사본은 보관 건 페이지에 있습니다. 아래 지문을 보관해 주세요 — 바로 이 서류 묶음을 식별하는 값입니다.",
-    "sealedManifestLabel": "서명하신 전체 서류의 지문",
-    "sealedDocumentsLabel": "서명하신 서류",
-    "signedTitle": "서명이 기록되었습니다",
-    "signedMessage": "서류가 봉인되기 전에 다른 분들의 서명이 남아 있습니다.",
     "disclosureTitle": "전자 서명을 하시기 전에",
     "disclosureFallback": "지금부터 서류를 전자적으로 검토하고 서명하게 됩니다. 원하지 않으시면 옆에 있는 직원에게 말씀해 주세요.",
     "agreeLabel": "동의하고 계속",
     "agreeingLabel": "동의를 기록하는 중…",
+    "packetExpiry": "이 서류는 {when}까지 서명하실 수 있습니다.",
     "declineLabel": "서명 거부",
     "declineConfirmTitle": "서명을 거부하시겠습니까?",
     "declineConfirmMessage": "오늘 준비된 서류가 모두 철회됩니다 — 한 건이 아니라 전체입니다. 아무것도 서명되지 않으며, 이후는 옆에 있는 직원이 도와드립니다.",
@@ -212,14 +205,24 @@
     "decliningLabel": "거부하는 중…",
     "declinedTitle": "서명된 서류가 없습니다",
     "declinedMessage": "서류가 철회되었으며 서명 링크는 더 이상 유효하지 않습니다. 다음 절차는 옆에 있는 직원이 도와드립니다.",
-    "downloadLabel": "{title} 내려받기",
-    "downloadingLabel": "내려받는 중…",
-    "downloadFailed": "내려받기를 완료하지 못했습니다. 서명된 사본은 보관 건 페이지에 있으며, 옆에 있는 직원이 카운터에서 인쇄해 드릴 수 있습니다.",
-    "downloadExpiry": "{when}까지 이 화면에서 내려받으실 수 있습니다. 그 이후에는 옆에 있는 직원이 카운터에서 사본을 인쇄해 드립니다.",
-    "sealedIntegrityWarning": "내려받은 사본이 서명하신 서류의 지문과 일치하지 않아 저장되지 않았습니다. 서명은 기록되어 있습니다 — 옆에 있는 직원에게 인쇄본을 요청해 주세요.",
-    "packetExpiry": "이 서류는 {when}까지 서명하실 수 있습니다.",
+    "rosterLabel": "오늘 서명할 서류: 총 {total}건",
+    "rosterEntry": "{position}. {title} — {state}",
+    "rosterStateSigned": "서명 완료",
+    "rosterStateCurrent": "현재 서류",
+    "rosterStatePending": "서명 예정",
+    "documentStep": "{title} — {total}건 중 {position}번째",
+    "movedOn": "{signed} 서명이 끝났습니다. 다음은 {next}입니다.",
+    "pageLabel": "서류 {pageCount}쪽 중 {page}쪽",
+    "pageStatus": "{pageCount}쪽 중 {page}쪽",
     "pageNoText": "이 쪽은 스캔본이라 읽어 드릴 수 있는 글자가 없습니다. 서명하기 전에 옆에 있는 직원에게 읽어 달라고 요청해 주세요.",
     "pageFailed": "이 쪽을 표시할 수 없습니다. 표시되기 전까지는 서명하지 마세요 — 옆에 있는 직원에게 알려 주세요.",
+    "previousLabel": "이전 쪽",
+    "nextLabel": "다음 쪽",
+    "readStatus": "{pageCount}쪽 중 {viewed}쪽 읽음",
+    "integrityWarning": "이 서류는 저희가 준비한 것과 일치하지 않습니다. 서명을 멈추고 직원에게 알려 주세요.",
+    "consentLabel": "{title}을(를) 읽었으며 서명에 동의합니다",
+    "signatureLabel": "여기에 {title} 서명",
+    "clearSignatureLabel": "서명 지우기",
     "signatureDrawOption": "서명 그리기",
     "signatureTypeOption": "서명 입력하기",
     "signatureTypedNameLabel": "서명하시려면 여기에 성명을 입력해 주세요",
@@ -227,8 +230,117 @@
     "signatureEmpty": "아직 서명이 없습니다.",
     "signatureTypedFailed": "이 기기에서 입력하신 내용을 서명으로 만들지 못했습니다. 옆에 있는 직원에게 알려 주세요.",
     "signatureTypedCaption": "입력한 서명",
+    "fullNameLabel": "제시하신 신분증에 적힌 것과 똑같은 성명",
+    "submitLabel": "{title} 서명하기",
+    "submittingLabel": "서명 중…",
+    "retryLabel": "다시 시도",
+    "missingPages": "서명하기 전에 모든 쪽을 읽어 주세요.",
+    "missingConsent": "읽으셨음을 확인하는 상자에 표시해 주세요.",
+    "missingSignature": "위 상자에 서명해 주세요.",
+    "missingName": "신분증에 적힌 대로 성명을 입력해 주세요.",
     "signUnconfirmed": "서명을 보낸 뒤 응답을 받지 못해 아직 기록 여부를 확인할 수 없습니다. 다시 서명하지 마세요 — 대신 결과를 확인해 주세요.",
-    "signRecheckLabel": "결과 확인"
+    "signRecheckLabel": "결과 확인",
+    "sealedTitle": "서명 및 봉인 완료",
+    "sealedMessage": "서명된 사본은 보관 건 페이지에 있습니다. 아래 지문을 보관해 주세요 — 바로 이 서류 묶음을 식별하는 값입니다.",
+    "sealedManifestLabel": "서명하신 전체 서류의 지문",
+    "sealedDocumentsLabel": "서명하신 서류",
+    "downloadLabel": "{title} 내려받기",
+    "downloadingLabel": "내려받는 중…",
+    "downloadFailed": "내려받기를 완료하지 못했습니다. 서명된 사본은 보관 건 페이지에 있으며, 옆에 있는 직원이 카운터에서 인쇄해 드릴 수 있습니다.",
+    "downloadExpiry": "{when}까지 이 화면에서 내려받으실 수 있습니다. 그 이후에는 옆에 있는 직원이 카운터에서 사본을 인쇄해 드립니다.",
+    "sealedIntegrityWarning": "내려받은 사본이 서명하신 서류의 지문과 일치하지 않아 저장되지 않았습니다. 서명은 기록되어 있습니다 — 옆에 있는 직원에게 인쇄본을 요청해 주세요.",
+    "signedTitle": "서명이 기록되었습니다",
+    "signedMessage": "서류가 봉인되기 전에 다른 분들의 서명이 남아 있습니다.",
+    "refusal": {
+      "TOKEN_INVALID": {
+        "title": "이 서명 링크는 유효하지 않습니다",
+        "message": "옆에 있는 직원에게 새 서명 링크를 열어 달라고 요청해 주세요."
+      },
+      "TOKEN_EXPIRED": {
+        "title": "이 서명 링크는 기한이 지났습니다",
+        "message": "안전을 위해 서명 링크는 짧은 시간만 유효합니다. 새 링크를 요청해 주세요."
+      },
+      "TOKEN_CONSUMED": {
+        "title": "이 서명 절차는 끝났습니다",
+        "message": "방금 서명을 마치셨다면 더 하실 일은 없습니다 — 서명된 사본은 보관 건 페이지에 있고, 옆에 있는 직원이 출력해 드릴 수도 있습니다. 그렇지 않다면 이미 사용된 링크이니 새 링크를 요청해 주세요."
+      },
+      "TOKEN_CONFLICT": {
+        "title": "이 링크는 다른 기기에서 열렸습니다",
+        "message": "서명 링크는 처음 연 기기에서만 사용할 수 있습니다. 이 기기용으로 새 링크를 요청해 주세요."
+      },
+      "PACKET_VOIDED": {
+        "title": "이 서류는 철회되었습니다",
+        "message": "새로 준비된 서류로 대체되었습니다. 현재 서류의 링크를 요청해 주세요."
+      },
+      "PACKET_EXPIRED": {
+        "title": "이 서류는 기한이 지났습니다",
+        "message": "준비한 지 오래되어 지금은 서명할 수 없습니다. 다시 준비해 달라고 요청해 주세요."
+      },
+      "PACKET_COMPLETED": {
+        "title": "이 서류는 이미 서명이 끝났습니다",
+        "message": "서명하실 분이 모두 서명했습니다. 이 페이지를 닫으셔도 됩니다."
+      },
+      "DOCUMENT_UNKNOWN": {
+        "title": "그 서류는 이번 서명에 포함되어 있지 않습니다",
+        "message": "페이지를 새로 고쳐 서명하셔야 할 서류를 확인해 주세요."
+      },
+      "DOCUMENT_ALREADY_SIGNED": {
+        "title": "그 서류에는 이미 서명하셨습니다",
+        "message": "페이지를 새로 고쳐 남은 서류를 이어서 서명해 주세요."
+      },
+      "PAGES_NOT_VIEWED": {
+        "title": "먼저 모든 쪽을 읽어 주세요",
+        "message": "서류를 끝까지 넘겨 보신 뒤에 서명해 주세요."
+      },
+      "PAGE_OUT_OF_RANGE": {
+        "title": "그 쪽은 이 서류에 없습니다",
+        "message": "페이지를 새로 고친 뒤 서류를 처음부터 다시 읽어 주세요."
+      },
+      "CONSENT_REQUIRED": {
+        "title": "먼저 동의를 확인해 주세요",
+        "message": "서류를 읽었고 서명에 동의한다는 상자에 표시해 주세요."
+      },
+      "ESIGN_CONSENT_REQUIRED": {
+        "title": "먼저 전자 서명에 동의해 주세요",
+        "message": "어떤 서류든 서명하시기 전에 전자 서명 안내를 읽고 동의해 주세요."
+      },
+      "KYC_REQUIRED": {
+        "title": "신원 확인이 아직 기록되지 않았습니다",
+        "message": "서명하시기 전에 옆에 있는 직원이 신분증 확인을 기록해야 합니다."
+      },
+      "IDENTITY_NAME_MISMATCH": {
+        "title": "신분증에 적힌 성명과 다릅니다",
+        "message": "옆에 있는 직원이 확인한 신분증에 적힌 그대로 성명을 입력해 주세요. 신분증의 성명이 다르다면 직원이 확인을 다시 기록해야 합니다."
+      },
+      "SIGNER_OUT_OF_ORDER": {
+        "title": "아직 차례가 아닙니다",
+        "message": "이 서류에는 다른 분이 먼저 서명해야 합니다."
+      },
+      "SIGNER_ALREADY_SIGNED": {
+        "title": "모든 서류에 서명하셨습니다",
+        "message": "더 하실 일은 없습니다. 이 페이지를 닫으셔도 됩니다."
+      },
+      "SIGNER_NAME_MISMATCH": {
+        "title": "서명을 시작하신 성명과 다릅니다",
+        "message": "이번 절차의 모든 서류는 같은 성명으로 서명합니다. 앞서 서명하신 성명을 사용하시거나, 새 서류를 요청해 주세요."
+      },
+      "SIGNATURE_INVALID": {
+        "title": "서명을 읽지 못했습니다",
+        "message": "서명 상자를 지우고 다시 서명해 주세요."
+      },
+      "SOURCE_MISSING": {
+        "title": "서류를 불러오지 못했습니다",
+        "message": "옆에 있는 직원에게 서류를 다시 준비해 달라고 요청해 주세요."
+      },
+      "SOURCE_TAMPERED": {
+        "title": "서류가 준비된 내용과 일치하지 않습니다",
+        "message": "서명하지 마세요. 옆에 있는 직원에게 서류를 다시 준비해 달라고 요청해 주세요."
+      },
+      "CONFLICT": {
+        "title": "이 서명은 다른 곳에서 마무리되었습니다",
+        "message": "이 페이지가 열려 있는 동안 다른 기기에서 완료하거나 철회했습니다."
+      }
+    }
   },
   "verify": {
     "loading": "진행 상태를 확인하는 중…",

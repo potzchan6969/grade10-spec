@@ -13,9 +13,12 @@ It also governs the one place the traffic runs the other way — a calendar day
 an operator types into a date field, which carries no time and no zone and
 has to become instants before a worker can store it.
 
-Collector-facing activity time and local moments use the reader's stated zone.
-Operator tables, admin surfaces, and sent messages use the platform's UTC zone,
-so a stored instant has one stable operator and message representation.
+Which zone a reader's machine is in is not consulted anywhere. An instant is
+stated in the zone the surface names: operator tables and admin surfaces state
+the platform's UTC, a collector's activity time and local moments state the
+zone the reader has told us, and a message states the brand's. A calendar day
+is always judged on the brand's own zone, because a day is a fact about where
+the business stands rather than about where its reader does.
 
 ## Feature set
 
@@ -26,9 +29,11 @@ so a stored instant has one stable operator and message representation.
 - Format and language
   - Platform format: ordering and punctuation are the platform's, not a browser's configuration
   - Named language: every rendering accepts the language its words are drawn from, English where none is named
-- One stated zone
-  - UTC for operators and messages: administrative and sent text states Coordinated Universal Time
+- Stated zones
+  - No reader's zone: no rendering uses the zone the reader's machine is set to; a collector's zone is one they stated
+  - UTC for operators: operator tables and admin surfaces state Coordinated Universal Time
   - Reader zone for collectors: activity time and local moments use the stated reader time zone
+  - The brand's day: a calendar judgement — a contract's date, a due date, a "today" queue, an age, a document's expiry, a report's month — is made on the brand's zone
   - Named deadlines: an instant a reader is expected to act before names the zone it is stated in
 - Refusals
   - Unshipped language: a language the platform has no words for fails rather than degrading quietly
@@ -134,11 +139,14 @@ with an error. No surface SHALL render placeholder text in place of a date.
 
 ### Requirement: Each rendering states the zone its surface requires
 
-Operator tables, admin surfaces, and sent messages SHALL render instants in
-Coordinated Universal Time. Collector-facing activity time and local moments
-SHALL render instants in the reader's stated `timeZone`. No rendering SHALL
-use the zone the reader's machine is set to without that zone being supplied as
-the reader's stated zone.
+Every instant the platform renders SHALL be stated in one named zone, and no
+rendering SHALL use the zone the reader's machine is set to unless that zone
+was supplied as the reader's stated zone. Operator tables and admin surfaces
+SHALL state Coordinated Universal Time. Collector-facing activity time and
+local moments SHALL state the reader's stated `timeZone`.
+
+A surface that states a calendar day SHALL name the brand's zone, so the day
+it shows is the day the brand's own counter, paper and records are on.
 
 #### Scenario: shared-dates-and-times-SC-10 - Operator readers in different zones
 
@@ -146,17 +154,59 @@ the reader's stated zone.
 - **WHEN** each renders it in an operator table
 - **THEN** both show identical text
 
-#### Scenario: shared-dates-and-times-SC-11 - An operator instant near midnight
+#### Scenario: shared-dates-and-times-SC-11 - An instant near midnight
 
-- **GIVEN** an instant that falls on one calendar date in UTC and the next in the reader's own zone
-- **WHEN** it is rendered as a day in an operator table
-- **THEN** the day shown is the UTC one
+- **GIVEN** an instant that falls on one calendar date in UTC and the next in the brand's zone
+- **WHEN** it is rendered as a day on that brand's surface
+- **THEN** the day shown is the brand's
+- **AND** every surface of that brand shows the same one
+
+### Requirement: A brand judges a calendar day on its own zone
+
+Every judgement about which calendar day an instant falls on SHALL be made on
+the zone of the brand the judgement belongs to. This binds, at least: when a
+loan term ends, when a written notice's cure period ends, which cases count as
+visited today, whether a person has reached an age, whether an identity
+document has expired, the day a document is dated, and the month a report is
+cut to.
+
+The brand's zone SHALL be held once, per brand, and passed explicitly by the
+code that means a calendar day. It SHALL NOT be read from a reader's machine,
+and SHALL NOT be stored on a record: a record holds an instant, and which day
+it falls on is a question asked when it is read.
+
+#### Scenario: shared-dates-and-times-SC-25 - A term ends at the borrower's midnight
+
+- **GIVEN** a loan advanced on a day at a brand's shop
+- **WHEN** its term ends
+- **THEN** the due instant is the last moment of that calendar day in the brand's zone
+
+#### Scenario: shared-dates-and-times-SC-26 - A queue cut in the morning
+
+- **GIVEN** a visit booked for later today at the shop, read at seven in the morning there
+- **WHEN** the day's queue is cut
+- **THEN** the visit is in it, though UTC's date is still yesterday's
+
+#### Scenario: shared-dates-and-times-SC-27 - A birthday at the counter
+
+- **GIVEN** a person whose eighteenth birthday is today at the shop and yesterday's date in UTC
+- **WHEN** their identity is judged
+- **THEN** they are an adult
+
+#### Scenario: shared-dates-and-times-SC-28 - A document expiring today
+
+- **GIVEN** a document whose expiry day has ended at the shop but not in UTC
+- **WHEN** it is judged
+- **THEN** it is expired
 
 ### Requirement: A deadline names its time zone
 
 Any rendering of an instant a reader is expected to act before SHALL name the
 time zone it is stated in. An auction's close is such an instant on every
 surface that shows it.
+
+The name SHALL be the one the language gives that zone, which for a zone
+English has no abbreviation for is its offset (`GMT+8` for Hong Kong).
 
 #### Scenario: shared-dates-and-times-SC-12 - The auction page shows a close
 
@@ -185,7 +235,8 @@ A date rendered into a message the platform sends — an email, a notification
 regardless of where the message is opened.
 
 A message is composed once and read anywhere, so it has no reader whose
-language could be used, and the zone it states is the platform's.
+language could be used, and the zone it states is the brand's, so the date a
+borrower reads in a message is the date their shop's paper names.
 
 #### Scenario: shared-dates-and-times-SC-15 - An auction email states its zone
 
@@ -203,12 +254,13 @@ language could be used, and the zone it states is the platform's.
 ### Requirement: A typed calendar day covers that whole day
 
 A calendar day a person types into a date field SHALL become the instant that
-day begins and the instant it ends, both in the platform's zone, so a window
-stated as two days includes every moment of both.
+day begins and the instant it ends, both in the zone the surface states, which
+on a brand's own surface is the brand's, so a window stated as two days
+includes every moment of both.
 
 An instant shown back in such a field SHALL be the calendar day that instant
-falls on in the platform's zone, so a day typed in and read back is the same
-day, from any machine.
+falls on in the zone the surface states, so a day typed in and read back is the
+same day, from any machine.
 
 #### Scenario: shared-dates-and-times-SC-17 - A window includes the last moment of its final day
 

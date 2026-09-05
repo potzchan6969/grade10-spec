@@ -3,7 +3,7 @@
   "intro": "把贵重物品交给我们保管，可以借贷，也可以只作保管。每件物品都在门店估值，并签妥文件后才存入。",
   "status": {
     "draft": "尚未送出",
-    "submitted": "已交到我们手上",
+    "submitted": "已送出",
     "under_valuation": "估值中",
     "offer_made": "报价等你回复",
     "accepted": "条款已议定",
@@ -39,6 +39,7 @@
     "booking_booked": "已预约到店",
     "booking_rescheduled": "已改期",
     "booking_cancelled": "已取消预约",
+    "booking_no_show": "未到访预约",
     "booking_cache_repaired": "预约资料已更新",
     "contact_set": "联系资料已更新",
     "valuation_started": "已开始估值",
@@ -57,8 +58,12 @@
     "release_requested": "已要求取回",
     "payout_recorded": "已记录放款",
     "repayment_recorded": "已记录还款",
+    "payout_reversed": "已撤销放款记录",
+    "repayment_reversed": "已撤销还款记录",
+    "reminder_sent": "已发出提醒",
     "repaid": "贷款已还清",
     "released": "物品已交回",
+    "forfeiture_notice": "已发出没收通知",
     "forfeited": "物品已没收",
     "cancelled": "个案已取消",
     "expired": "个案已过期",
@@ -91,6 +96,7 @@
     "heading": "请我们保管物品",
     "financedIntro": "我们会为物品估值，再向你提出借贷报价。",
     "storageIntro": "只作保管，不就物品借贷。",
+    "severalItems": "有多件物品？每件物品分开申请，只需在第一宗预约一次到店，然后一并带来。",
     "categoryLabel": "这是什么？",
     "titleLabel": "我们该怎样称呼它？",
     "descriptionLabel": "还有什么要告诉我们？",
@@ -103,7 +109,7 @@
     "asking": "申请 {amount}。",
     "continue": "继续",
     "photoLimitReached": "这宗申请的照片已达上限。",
-    "invalidContentType": "只接受照片：JPEG、PNG、WebP 或 AVIF。",
+    "invalidContentType": "只接受照片：JPEG、PNG 或 WebP。",
     "emptyBody": "这个文件是空的。",
     "tooLarge": "这张照片太大了。",
     "photoFailed": "无法附上这张照片（{reason}）。",
@@ -124,20 +130,36 @@
     "itemDescription": "{category} — {description}",
     "offerTitle": "我们的报价",
     "offerTerms": "{amount}，为期 {days} 天，全期利率 {rate}%。",
+    "offerRepayAfter": "款项到手后 {days} 天内还款。",
     "offerRepayBy": "请于 {when} 前还款。",
+    "offerTotal": "还款总额：{amount}。",
+    "offerLate": "如逾期，利息按同一利率继续计算，尚欠金额每日 {amount}。",
     "offerExpired": "这份报价已于 {when} 到期。请向我们索取新报价。",
     "offerOpen": "有效至 {when}。请在门店由员工为你记录回复。",
+    "acceptOffer": "接受这份报价",
+    "acceptConfirm": "你接受 {amount}，为期 {days} 天，全期利率 {rate}%。我们会为你的到店预约准备文件。",
+    "offerAccepted": "已接受报价。请预约到店签署。",
+    "declineOffer": "婉拒这份报价",
+    "declineConfirm": "婉拒这份报价？物品的申请仍然保留，我们可以再为你提出另一份。",
+    "offerDeclined": "已婉拒报价。",
+    "offerGone": "这份报价已过期。请向员工索取新报价。",
     "agreedTerms": "已议定条款：{amount}，为期 {days} 天，{when} 到期。",
+    "agreedTermsFromAdvance": "已议定条款：{amount}，为期 {days} 天，由款项到手当日起计。",
     "dueTitle": "尚欠金额",
     "dueOutstanding": "尚欠 {outstanding}，总额 {total}。",
     "dueRepaid": "已还 {repaid}。{when} 到期。",
     "dueRepaidLate": "已还 {repaid}。{when} 到期 — 已逾期 {days} 天。",
     "dueAsOf": "截至 {when}。",
+    "payTitle": "还款方法",
+    "payHolds": "此结余有效至 {when}。",
     "holding": "我们正为你保管物品。",
     "holdingSince": "我们自 {day} 起为你保管物品。",
     "settled": "已无欠款，下次到店即可取回。",
     "owedEntry": "{detail}：{amount}",
     "askForItBack": "要求取回",
+    "cancelRequest": "取消这宗申请",
+    "cancelConfirm": "取消这宗申请？已预约的到店会一并取消，物品仍然由你保管。",
+    "cancelled": "申请已取消。",
     "documents": "文件",
     "packetLine": "{title} — {status}",
     "manifestFingerprint": "签署指纹码",
@@ -169,40 +191,11 @@
     "documentFailed": "这份文件无法显示，请告知员工。",
     "emptyPacketTitle": "这里没有需要签署的文件",
     "emptyPacketMessage": "请告知身旁的员工 — 这批文件未准备妥当。",
-    "rosterLabel": "今天需要签署：共 {total} 份文件",
-    "rosterEntry": "{position}. {title} — {state}",
-    "rosterStateSigned": "已签署",
-    "rosterStateCurrent": "现在这份",
-    "rosterStatePending": "尚待签署",
-    "documentStep": "{title} — 第 {position} 份，共 {total} 份",
-    "movedOn": "你已签署{signed}。下一份是{next}。",
-    "pageLabel": "文件第 {page} 页，共 {pageCount} 页",
-    "pageStatus": "第 {page} 页，共 {pageCount} 页",
-    "previousLabel": "上一页",
-    "nextLabel": "下一页",
-    "readStatus": "已阅读 {viewed} 页，共 {pageCount} 页",
-    "integrityWarning": "这份文件与我们准备的版本不符。请停止签署并告知员工。",
-    "consentLabel": "我已阅读{title}并同意签署",
-    "signatureLabel": "在此签署{title}",
-    "clearSignatureLabel": "清除签名",
-    "fullNameLabel": "你的姓名，须与出示证件上的完全相同",
-    "submitLabel": "签署{title}",
-    "submittingLabel": "正在签署…",
-    "retryLabel": "再试一次",
-    "missingPages": "签署前请阅读每一页。",
-    "missingConsent": "请勾选方格，确认你已阅读。",
-    "missingSignature": "请在上方方格内签名。",
-    "missingName": "请输入与证件相同的姓名。",
-    "sealedTitle": "已签署并封存",
-    "sealedMessage": "已签署的副本在你的个案页面。请保留下方的指纹码 — 它正是这一组文件的识别码。",
-    "sealedManifestLabel": "你所签署全部文件的指纹码",
-    "sealedDocumentsLabel": "你签署了什么",
-    "signedTitle": "你的签名已记录",
-    "signedMessage": "文件封存前，还有其他人需要签署。",
     "disclosureTitle": "电子签署之前",
     "disclosureFallback": "你即将以电子方式阅览并签署文件。如你不想这样做，请告知身旁的员工。",
     "agreeLabel": "同意并继续",
     "agreeingLabel": "正在记录你的同意…",
+    "packetExpiry": "这些文件可于 {when} 前签署。",
     "declineLabel": "拒绝签署",
     "declineConfirmTitle": "拒绝签署？",
     "declineConfirmMessage": "这会撤回今天准备的所有文件 — 是整套，而非其中一份。不会签署任何文件，之后由身旁的员工为你跟进。",
@@ -212,14 +205,24 @@
     "decliningLabel": "正在拒绝…",
     "declinedTitle": "没有签署任何文件",
     "declinedMessage": "文件已撤回，你的签署链接也已失效。身旁的员工可协助你处理下一步。",
-    "downloadLabel": "下载{title}",
-    "downloadingLabel": "正在下载…",
-    "downloadFailed": "无法完成下载。已签署的副本在你的个案页面，身旁的员工也可在柜台为你打印。",
-    "downloadExpiry": "你可在 {when} 前于此屏幕下载。之后，身旁的员工可在柜台为你打印副本。",
-    "sealedIntegrityWarning": "下载的副本与你所签署文件的指纹码不符，因此并未保存。你的签名已记录 — 请向身旁的员工索取打印副本。",
-    "packetExpiry": "这些文件可于 {when} 前签署。",
+    "rosterLabel": "今天需要签署：共 {total} 份文件",
+    "rosterEntry": "{position}. {title} — {state}",
+    "rosterStateSigned": "已签署",
+    "rosterStateCurrent": "现在这份",
+    "rosterStatePending": "尚待签署",
+    "documentStep": "{title} — 第 {position} 份，共 {total} 份",
+    "movedOn": "你已签署{signed}。下一份是{next}。",
+    "pageLabel": "文件第 {page} 页，共 {pageCount} 页",
+    "pageStatus": "第 {page} 页，共 {pageCount} 页",
     "pageNoText": "此页是扫描件，没有可朗读的文字。签署前，请身旁的员工为你读出内容。",
     "pageFailed": "此页无法显示。在显示之前请勿签署 — 请告知身旁的员工。",
+    "previousLabel": "上一页",
+    "nextLabel": "下一页",
+    "readStatus": "已阅读 {viewed} 页，共 {pageCount} 页",
+    "integrityWarning": "这份文件与我们准备的版本不符。请停止签署并告知员工。",
+    "consentLabel": "我已阅读{title}并同意签署",
+    "signatureLabel": "在此签署{title}",
+    "clearSignatureLabel": "清除签名",
     "signatureDrawOption": "手写签名",
     "signatureTypeOption": "输入签名",
     "signatureTypedNameLabel": "在此输入你的姓名以签署",
@@ -227,8 +230,117 @@
     "signatureEmpty": "尚未签名。",
     "signatureTypedFailed": "此设备无法将你输入的内容转成签名。请告知身旁的员工。",
     "signatureTypedCaption": "输入式签名",
+    "fullNameLabel": "你的姓名，须与出示证件上的完全相同",
+    "submitLabel": "签署{title}",
+    "submittingLabel": "正在签署…",
+    "retryLabel": "再试一次",
+    "missingPages": "签署前请阅读每一页。",
+    "missingConsent": "请勾选方格，确认你已阅读。",
+    "missingSignature": "请在上方方格内签名。",
+    "missingName": "请输入与证件相同的姓名。",
     "signUnconfirmed": "送出签名后我们未收到回应，因此暂时无法确定是否已记录。请勿再次签署 — 请先查看结果。",
-    "signRecheckLabel": "查看结果"
+    "signRecheckLabel": "查看结果",
+    "sealedTitle": "已签署并封存",
+    "sealedMessage": "已签署的副本在你的个案页面。请保留下方的指纹码 — 它正是这一组文件的识别码。",
+    "sealedManifestLabel": "你所签署全部文件的指纹码",
+    "sealedDocumentsLabel": "你签署了什么",
+    "downloadLabel": "下载{title}",
+    "downloadingLabel": "正在下载…",
+    "downloadFailed": "无法完成下载。已签署的副本在你的个案页面，身旁的员工也可在柜台为你打印。",
+    "downloadExpiry": "你可在 {when} 前于此屏幕下载。之后，身旁的员工可在柜台为你打印副本。",
+    "sealedIntegrityWarning": "下载的副本与你所签署文件的指纹码不符，因此并未保存。你的签名已记录 — 请向身旁的员工索取打印副本。",
+    "signedTitle": "你的签名已记录",
+    "signedMessage": "文件封存前，还有其他人需要签署。",
+    "refusal": {
+      "TOKEN_INVALID": {
+        "title": "这条签署链接无效",
+        "message": "请身旁的员工为你打开新的签署链接。"
+      },
+      "TOKEN_EXPIRED": {
+        "title": "这条签署链接已过期",
+        "message": "为保障你的安全，签署链接的有效时间很短。请索取新的链接。"
+      },
+      "TOKEN_CONSUMED": {
+        "title": "这次签署已经完成",
+        "message": "如果你刚刚签署完毕，就不用再做什么 — 已签署的副本在你的个案页面，身旁的员工也可以为你打印。否则就是这条链接已经用过，请索取新的链接。"
+      },
+      "TOKEN_CONFLICT": {
+        "title": "这条链接已在另一台设备打开",
+        "message": "签署链接只能在首次打开的设备上使用。请为这台设备索取新的链接。"
+      },
+      "PACKET_VOIDED": {
+        "title": "这批文件已撤回",
+        "message": "已由新的一批取代。请索取现行文件的链接。"
+      },
+      "PACKET_EXPIRED": {
+        "title": "这批文件已过期",
+        "message": "文件准备至今太久，现在不能签署。请要求重新准备。"
+      },
+      "PACKET_COMPLETED": {
+        "title": "这批文件已经签妥",
+        "message": "所有需要签署的人都已签妥。你可以关闭这个页面。"
+      },
+      "DOCUMENT_UNKNOWN": {
+        "title": "这份文件不属于本次签署",
+        "message": "请重新加载页面，查看需要你签署的文件。"
+      },
+      "DOCUMENT_ALREADY_SIGNED": {
+        "title": "这一份你已经签署",
+        "message": "请重新加载页面，继续签署尚未完成的文件。"
+      },
+      "PAGES_NOT_VIEWED": {
+        "title": "请先阅读每一页",
+        "message": "把整份文件看完，然后才签署。"
+      },
+      "PAGE_OUT_OF_RANGE": {
+        "title": "这份文件没有这一页",
+        "message": "请重新加载页面，再从头阅读文件。"
+      },
+      "CONSENT_REQUIRED": {
+        "title": "请先确认你同意",
+        "message": "请勾选方格，确认你已阅读文件并同意签署。"
+      },
+      "ESIGN_CONSENT_REQUIRED": {
+        "title": "请先同意以电子方式签署",
+        "message": "签署任何文件前，请先阅读关于电子签署的说明并表示同意。"
+      },
+      "KYC_REQUIRED": {
+        "title": "尚未记录你的身份核对",
+        "message": "签署前，身旁的员工需要先记录核对你的证件。"
+      },
+      "IDENTITY_NAME_MISMATCH": {
+        "title": "这不是你证件上的姓名",
+        "message": "请完全按照员工核对过的证件输入姓名。如果证件上是另一个姓名，员工需要重新记录核对。"
+      },
+      "SIGNER_OUT_OF_ORDER": {
+        "title": "还未轮到你",
+        "message": "这批文件要由其他人先签署。"
+      },
+      "SIGNER_ALREADY_SIGNED": {
+        "title": "你已经全部签妥",
+        "message": "你不用再做什么。可以关闭这个页面。"
+      },
+      "SIGNER_NAME_MISMATCH": {
+        "title": "这不是你开始签署时所用的姓名",
+        "message": "本次签署的所有文件都用同一个姓名。请用你之前签署时的姓名，或索取一批新文件。"
+      },
+      "SIGNATURE_INVALID": {
+        "title": "无法辨识这个签名",
+        "message": "请清除签名方格，再签一次。"
+      },
+      "SOURCE_MISSING": {
+        "title": "无法加载文件",
+        "message": "请身旁的员工重新准备文件。"
+      },
+      "SOURCE_TAMPERED": {
+        "title": "文件与准备好的版本不符",
+        "message": "请勿签署。请身旁的员工重新准备文件。"
+      },
+      "CONFLICT": {
+        "title": "本次签署已在别处完成",
+        "message": "这个页面打开期间，另一台设备已完成或撤回签署。"
+      }
+    }
   },
   "verify": {
     "loading": "正在查看你的进度…",

@@ -2,74 +2,66 @@
 title: Finance
 ---
 
-Finance is a scaffold. There is no lending product yet, and nobody uses it,
-because there is nothing to use.
+Grade10 Finance is the loan the vault's financed lane runs: a collector's
+graded card in the shop's vault, an offer, a signature, and a bank transfer a
+treasurer records. It is a lane on a case rather than a service of its own,
+and the lender it is made under is not the entity that holds the item.
 
-What exists is real: a deployed worker, its own database, an audit chain, an
-hourly cron, and the session and permission ladder every procedure will mount
-behind. What does not exist is any business logic at all — no lending tables, no
-repositories, no services, no customer surface, no operator surface, and no
-section in the admin console. Its permission map is literally empty, pinned that
-way by a test, and its only other test proves the app assembles.
+- **The product** — a loan against graded cards at **~40%** loan to value and
+  **1.5% to 2.5%** interest per **30 days**, announced for **Q4 2026**; the
+  owner's notes are [Grade10 Finance](/references/grade10-finance)
+- **Where it runs** — the vault's financed lane, on the case that holds the
+  collateral; every page of [the vault](/p/grade10-site/vault) describes it
+- **Who lends** — the lender named in the brand's legal identity, whose name
+  and licence print on the loan agreement; the custodian holds the item and
+  signs the custody agreement
+- **Where it answers** — `grade10.com/vault`, one host and a path, with a
+  vanity domain redirecting to it
+- **One of everything** — one case, one database, one worker, one console
+  section: the loan lives where its collateral does, and infrastructure held
+  in reserve for a product nobody has described is a moving part with no owner
 
-That is deliberate rather than abandoned. The shell exists so the first
-mortgage-lending procedure lands behind the database, session, permission ladder
-and audit sink it needs, with no wiring change and no scramble to give a new
-service a home.
+## The owner's flow against what is built
 
-The intended product is mortgage lending, split the way the vault's pawn lending
-is split: whoever agrees what a loan costs is not whoever moves the money. That
-split is already in the shared permission vocabulary even though nothing checks
-it yet — staff can read, operate and approve; the treasurer can read and pay
-out; the two are disjoint on payout, so a disbursement takes two people.
+| Step | Built | Gap |
+| --- | --- | --- |
+| Sign in with Google or a magic link | yes, plus an emailed code | — |
+| Verify the phone by SMS | no; the number is stored in E.164 and confirmed by nothing | an SMS provider and a verified-phone fact |
+| Submit photos, amount, items | the vault wizard, one item per case | a multi-card request is several requests, with one visit booked on the first |
+| Preliminary authentication and valuation | staff valuation on the case, capped at the brand's **40%** of it | — |
+| e-KYC at the request step | no; identity is checked at the counter by staff | online capture, a hosted provider, screening |
+| The offer and contact on WhatsApp | an offer email the collector answers from their own case page, and a click-to-chat link staff press | no WhatsApp Business API, no inbound channel |
+| Choose the custodian, Grade10 Vault or Tiny | no; the item is held at the shop the case names | a second custodian entity, its own agreement and its own staff |
+| Book a time slot | the diary, at every live status but a draft | — |
+| Visit, e-KYC, inspection | yes | — |
+| Recorded call explaining key terms | the counter records that the terms were explained, with a recording reference where there is one, before the loan packet may be prepared | telephony and the storage of the recording itself |
+| Both sign, staff from the admin and the user on the iPad or their own account | the borrower signs; the agreement states the lender executes it on the advance | a staff signer role and its ceremony leg |
+| Manual FPS payout with proof recorded | a payout record with a required bank reference and the date the money left, correctable by a second money holder | — |
+| Repayment recorded manually | yes | — |
+| Automated reminders | **7** and **1** days before the due date, then every **7** days overdue, by email | a channel beyond email |
 
-:::flow{title="The only path a request can take today"}
-## An operator asks for the audit trail
-The single mounted surface is the shared audit read — list the chain, or verify
-it.
-## The session is resolved through the auth worker
-An auth outage fails the request in staging and production. Only development is
-allowed to degrade to signed out.
-## The elevated ladder checks the operator
-Named permission, second factor, and a place to record the action.
-## The chain is read or walked
-And that is the end of it. There is nothing else to reach.
-:::
-
-:::callout{kind="warning"}
-Treat every plan that names finance as unbuilt. It carries a chain and a
-gateway path so it is visible from day one, and the other services already list
-it as a product they could serve — the diary and the identity store both name it
-in their vocabulary — but none of them has an entrypoint for it, because there
-is no feature that books a visit or checks an identity. The owner's notes for
-the lending product are [the finance reference](/references/grade10-finance);
-no spec carries them yet.
-:::
-
-:::callout{kind="note"}
-No spec covers finance. The store has no finance spec and no change that
-mentions mortgage lending. It appears in the application repository only as an
-isolation and ledger policy sentence, a line about its hourly chain walk, and
-its own permission comments.
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Finance is the vault's financed lane | Decided | The owner's notes describe the vault's flow step for step, and the collateral is the item the vault itself holds; a second service would be a second copy of one product | Owner |
+| Two entities, one table | Decided | The custodian holds and the lender lends, each printing on its own paper; the lender's name refuses an offer in production, so custody opens while the lender is still being registered | Legal |
+| Host | Decided | One host and a path, `grade10.com/vault`; a vanity domain redirects, because a second host would not share the session cookie | Owner |
+| A second custodian | Deferred | Tiny holding items under its own name, agreement and staff. Reopens with a signed custody contract | Owner |
+| Online e-KYC at the request step | Deferred | The counter check stands. Reopens when Legal names a duty that the counter cannot meet | Legal |
+| The recorded call | Decided | The counter records that the key terms were explained and the borrower signs a line saying so; the telephony and the recording's storage are a vendor's, and no packet is prepared without the record | Owner |
+| The book | Decided | Single entry with derived balances is the product's book; double entry is the general ledger, kept in the firm's accounting system from a ledger export | Finance |
 :::
 
 :::detail{title="For engineers" for="engineer"}
-`packages/grade10-finance/` and `apps/backend/grade10/finance/` in the
-application repository, deployed as `grade10-finance-service`. It owns
-`audit_logs` and its verify cursor and nothing else. Its database is its own
-project — a wall around money, alongside auth, the identity store and the vault
-— so a leaked application credential cannot reach it and it restores on its own
-clock. It walks its chain hourly but writes no verified head to the archive the
-way the vault does, so the outside witness is missing.
-
-Every future ledger is already stated in advance: append-only double entry,
-erasure that anonymizes rather than deletes, scheduled logical dumps to object
-storage, and money movement behind a step-up re-auth on a cache-bypassed
-session.
-
-Background:
-[account data](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
-for the isolation and ledger policy, and
-[operations](https://github.com/9gag/grade10/blob/main/docs/operations.md) for
-the chain walk.
+- **The lane** — `packages/vault/{contracts,backend,frontend,admin-frontend}`;
+  the financing amount at intake is the lane, and every guard reads it off the
+  case
+- **The entity** — `packages/app-env/src/legalIdentity.ts` carries both
+  parties; `documents/legalEntity.ts` answers which one a document prints
+- **The policy** — `packages/app-env/src/lending.ts`, seeded for grade10
+- **Background** —
+  [vault architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/vault.md)
+  for the case machine and the two lanes, and
+  [account data](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
+  for the isolation and ledger policy
 :::

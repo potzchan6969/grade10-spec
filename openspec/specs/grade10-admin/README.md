@@ -11,5 +11,12 @@ holds only the operator surfaces specific to Grade10, grouped by domain.
 | --- | --- |
 | [`auction/listing`](auction/listing/spec.md) | How an authorized operator drafts, creates, publishes, and calls off an auction listing, with its ordered media gallery. |
 
+## `vault`
+
+| Capability | What it governs |
+| --- | --- |
+| [`vault/operator-queue`](vault/operator-queue/spec.md) | The queue cut by what each case waits for, one case's tabs, the grants behind every act, and the physical vault. |
+| [`vault/money-book`](vault/money-book/spec.md) | The register of every money record in a period, the position the loan book stands at, and the loans in arrears. |
+
 A capability's OpenSpec ID is `grade10-admin/<domain>/<capability>`. Add one as
 a change under `openspec/changes/` rather than directly.

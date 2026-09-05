@@ -3,7 +3,7 @@
   "intro": "Leave something valuable with us, with or without a loan against it. Every item is valued in the shop and signed for before it goes in.",
   "status": {
     "draft": "Not sent yet",
-    "submitted": "With us",
+    "submitted": "Request sent",
     "under_valuation": "Being valued",
     "offer_made": "Offer waiting for you",
     "accepted": "Terms agreed",
@@ -39,6 +39,7 @@
     "booking_booked": "Visit booked",
     "booking_rescheduled": "Visit moved",
     "booking_cancelled": "Visit cancelled",
+    "booking_no_show": "Visit missed",
     "booking_cache_repaired": "Visit details refreshed",
     "contact_set": "Contact details updated",
     "valuation_started": "Valuation started",
@@ -57,8 +58,12 @@
     "release_requested": "Release requested",
     "payout_recorded": "Payout recorded",
     "repayment_recorded": "Repayment recorded",
+    "payout_reversed": "Payout reversed",
+    "repayment_reversed": "Repayment reversed",
+    "reminder_sent": "Reminder sent",
     "repaid": "Loan repaid",
     "released": "Item released",
+    "forfeiture_notice": "Forfeiture notice sent",
     "forfeited": "Item forfeited",
     "cancelled": "Case cancelled",
     "expired": "Case expired",
@@ -91,6 +96,7 @@
     "heading": "Ask us to hold something",
     "financedIntro": "We will value it and come back with an offer to lend against it.",
     "storageIntro": "Storage alone, with no loan against the item.",
+    "severalItems": "Several items? Send one request per item and book one visit on the first; bring them all together.",
     "categoryLabel": "What is it?",
     "titleLabel": "What should we call it?",
     "descriptionLabel": "Anything we should know?",
@@ -103,7 +109,7 @@
     "asking": "Asking for {amount}.",
     "continue": "Continue",
     "photoLimitReached": "This request already has as many photographs as we take.",
-    "invalidContentType": "Photographs only — JPEG, PNG, WebP or AVIF.",
+    "invalidContentType": "Photographs only — JPEG, PNG or WebP.",
     "emptyBody": "That file was empty.",
     "tooLarge": "That photograph is too large.",
     "photoFailed": "We could not attach that photograph ({reason}).",
@@ -124,20 +130,36 @@
     "itemDescription": "{category} — {description}",
     "offerTitle": "Our offer",
     "offerTerms": "{amount} over {days} days at {rate}% for the term.",
+    "offerRepayAfter": "Repayable {days} days after the money reaches you.",
     "offerRepayBy": "Repay by {when}.",
+    "offerTotal": "Total to repay: {amount}.",
+    "offerLate": "If you are late, interest keeps running at {amount} a day on what is still outstanding, at the same rate.",
     "offerExpired": "This offer ran out on {when}. Ask us for a new one.",
     "offerOpen": "Open until {when}. Our staff record your answer in the shop.",
+    "acceptOffer": "Accept this offer",
+    "acceptConfirm": "You accept {amount} over {days} days at {rate}% for the term. We prepare the papers for your visit.",
+    "offerAccepted": "Offer accepted. Book a visit to sign.",
+    "declineOffer": "Decline this offer",
+    "declineConfirm": "Decline this offer? We keep the item's request open and can make you another one.",
+    "offerDeclined": "Offer declined.",
+    "offerGone": "This offer has run out. Ask our staff for a new one.",
     "agreedTerms": "Agreed terms: {amount} over {days} days, due {when}.",
+    "agreedTermsFromAdvance": "Agreed terms: {amount} over {days} days, counted from the day the money reaches you.",
     "dueTitle": "What is owed",
     "dueOutstanding": "{outstanding} outstanding of {total}.",
     "dueRepaid": "{repaid} repaid. Due {when}.",
     "dueRepaidLate": "{repaid} repaid. Due {when} — {days} days late.",
     "dueAsOf": "As at {when}.",
+    "payTitle": "How to pay",
+    "payHolds": "This balance holds until {when}.",
     "holding": "We are holding your item.",
     "holdingSince": "We are holding your item since {day}.",
     "settled": "Nothing is owed, so it can go home with you at your next visit.",
     "owedEntry": "{detail}: {amount}",
     "askForItBack": "Ask for it back",
+    "cancelRequest": "Cancel this request",
+    "cancelConfirm": "Cancel this request? Any visit is cancelled with it, and the item stays with you.",
+    "cancelled": "Request cancelled.",
     "documents": "Documents",
     "packetLine": "{title} — {status}",
     "manifestFingerprint": "Signing fingerprint",
@@ -169,40 +191,11 @@
     "documentFailed": "This document could not be displayed. Please ask our staff.",
     "emptyPacketTitle": "There is nothing here to sign",
     "emptyPacketMessage": "Please tell the member of staff with you — these documents were not prepared properly.",
-    "rosterLabel": "What you are signing today: {total} documents",
-    "rosterEntry": "{position}. {title} — {state}",
-    "rosterStateSigned": "signed",
-    "rosterStateCurrent": "you are here",
-    "rosterStatePending": "still to sign",
-    "documentStep": "{title} — document {position} of {total}",
-    "movedOn": "You have signed the {signed}. Next is the {next}.",
-    "pageLabel": "Document page {page} of {pageCount}",
-    "pageStatus": "Page {page} of {pageCount}",
-    "previousLabel": "Previous page",
-    "nextLabel": "Next page",
-    "readStatus": "{viewed} of {pageCount} pages read",
-    "integrityWarning": "This document does not match what we prepared. Stop and tell our staff before signing.",
-    "consentLabel": "I have read the {title} and agree to sign it",
-    "signatureLabel": "Sign the {title} here",
-    "clearSignatureLabel": "Clear signature",
-    "fullNameLabel": "Your name, exactly as printed on the ID you showed us",
-    "submitLabel": "Sign the {title}",
-    "submittingLabel": "Signing…",
-    "retryLabel": "Try again",
-    "missingPages": "Please read every page before signing.",
-    "missingConsent": "Please tick the box to confirm you have read it.",
-    "missingSignature": "Please sign in the box above.",
-    "missingName": "Please type your name as it appears on your ID.",
-    "sealedTitle": "Signed and sealed",
-    "sealedMessage": "Your signed copies are on your case page. Keep the fingerprint below — it identifies this exact set of documents.",
-    "sealedManifestLabel": "Fingerprint of everything you signed",
-    "sealedDocumentsLabel": "What you signed",
-    "signedTitle": "Your signatures are recorded",
-    "signedMessage": "Others still have to sign before these documents are sealed.",
     "disclosureTitle": "Before you sign electronically",
     "disclosureFallback": "You are about to review and sign documents electronically. Ask the member of staff with you if you would rather not.",
     "agreeLabel": "Agree and continue",
     "agreeingLabel": "Recording your agreement…",
+    "packetExpiry": "These documents can be signed until {when}.",
     "declineLabel": "Decline to sign",
     "declineConfirmTitle": "Decline to sign?",
     "declineConfirmMessage": "This withdraws every document prepared for today — the whole set, not one of them. Nothing will be signed, and the member of staff with you can take it from there.",
@@ -212,14 +205,24 @@
     "decliningLabel": "Declining…",
     "declinedTitle": "Nothing was signed",
     "declinedMessage": "The documents were withdrawn and your signing link is no longer valid. The member of staff with you can help with what happens next.",
-    "downloadLabel": "Download the {title}",
-    "downloadingLabel": "Downloading…",
-    "downloadFailed": "The download could not be completed. Your signed copies are on your case page, and the member of staff with you can print them at the counter.",
-    "downloadExpiry": "You can download from this screen until {when}. After that, the member of staff with you can print your copies at the counter.",
-    "sealedIntegrityWarning": "The copy that downloaded does not match the fingerprint of what you signed, so it has not been saved. Your signature is recorded — ask the member of staff with you for a printed copy.",
-    "packetExpiry": "These documents can be signed until {when}.",
+    "rosterLabel": "What you are signing today: {total} documents",
+    "rosterEntry": "{position}. {title} — {state}",
+    "rosterStateSigned": "signed",
+    "rosterStateCurrent": "you are here",
+    "rosterStatePending": "still to sign",
+    "documentStep": "{title} — document {position} of {total}",
+    "movedOn": "You have signed the {signed}. Next is the {next}.",
+    "pageLabel": "Document page {page} of {pageCount}",
+    "pageStatus": "Page {page} of {pageCount}",
     "pageNoText": "This page is a scan, so there is no text on it to read out. Ask the member of staff with you to read it to you before you sign.",
     "pageFailed": "This page could not be shown. Do not sign until it has — ask the member of staff with you.",
+    "previousLabel": "Previous page",
+    "nextLabel": "Next page",
+    "readStatus": "{viewed} of {pageCount} pages read",
+    "integrityWarning": "This document does not match what we prepared. Stop and tell our staff before signing.",
+    "consentLabel": "I have read the {title} and agree to sign it",
+    "signatureLabel": "Sign the {title} here",
+    "clearSignatureLabel": "Clear signature",
     "signatureDrawOption": "Draw my signature",
     "signatureTypeOption": "Type my signature",
     "signatureTypedNameLabel": "Type your name here to sign",
@@ -227,8 +230,117 @@
     "signatureEmpty": "No signature yet.",
     "signatureTypedFailed": "This device could not turn what you typed into a signature. Ask the member of staff with you.",
     "signatureTypedCaption": "Typed signature",
+    "fullNameLabel": "Your name, exactly as printed on the ID you showed us",
+    "submitLabel": "Sign the {title}",
+    "submittingLabel": "Signing…",
+    "retryLabel": "Try again",
+    "missingPages": "Please read every page before signing.",
+    "missingConsent": "Please tick the box to confirm you have read it.",
+    "missingSignature": "Please sign in the box above.",
+    "missingName": "Please type your name as it appears on your ID.",
     "signUnconfirmed": "We did not hear back after your signature was sent, so we cannot yet say whether it was recorded. Do not sign again — check what happened instead.",
-    "signRecheckLabel": "Check what happened"
+    "signRecheckLabel": "Check what happened",
+    "sealedTitle": "Signed and sealed",
+    "sealedMessage": "Your signed copies are on your case page. Keep the fingerprint below — it identifies this exact set of documents.",
+    "sealedManifestLabel": "Fingerprint of everything you signed",
+    "sealedDocumentsLabel": "What you signed",
+    "downloadLabel": "Download the {title}",
+    "downloadingLabel": "Downloading…",
+    "downloadFailed": "The download could not be completed. Your signed copies are on your case page, and the member of staff with you can print them at the counter.",
+    "downloadExpiry": "You can download from this screen until {when}. After that, the member of staff with you can print your copies at the counter.",
+    "sealedIntegrityWarning": "The copy that downloaded does not match the fingerprint of what you signed, so it has not been saved. Your signature is recorded — ask the member of staff with you for a printed copy.",
+    "signedTitle": "Your signatures are recorded",
+    "signedMessage": "Others still have to sign before these documents are sealed.",
+    "refusal": {
+      "TOKEN_INVALID": {
+        "title": "This signing link is not valid",
+        "message": "Ask the member of staff with you to open a new signing link."
+      },
+      "TOKEN_EXPIRED": {
+        "title": "This signing link has expired",
+        "message": "Signing links last a short while for your safety. Ask for a new one."
+      },
+      "TOKEN_CONSUMED": {
+        "title": "This signing session is finished",
+        "message": "If you have just signed, nothing more is needed — your signed copies are on your case page and the member of staff with you can print them. Otherwise this link has been used already; ask for a new one."
+      },
+      "TOKEN_CONFLICT": {
+        "title": "This link was opened on another device",
+        "message": "A signing link stays on the device it was first opened on. Ask for a new link for this device."
+      },
+      "PACKET_VOIDED": {
+        "title": "These documents were withdrawn",
+        "message": "A newer set replaced them. Ask for the link to the current documents."
+      },
+      "PACKET_EXPIRED": {
+        "title": "These documents have expired",
+        "message": "They were prepared too long ago to sign now. Ask for them to be prepared again."
+      },
+      "PACKET_COMPLETED": {
+        "title": "These documents are already signed",
+        "message": "Everyone who had to sign has signed. You can close this page."
+      },
+      "DOCUMENT_UNKNOWN": {
+        "title": "That document is not part of this signing",
+        "message": "Reload the page to see the documents you were asked to sign."
+      },
+      "DOCUMENT_ALREADY_SIGNED": {
+        "title": "You have already signed that one",
+        "message": "Reload the page to carry on with whatever is still left to sign."
+      },
+      "PAGES_NOT_VIEWED": {
+        "title": "Please read every page first",
+        "message": "Move through the whole document, then sign."
+      },
+      "PAGE_OUT_OF_RANGE": {
+        "title": "That page is not in this document",
+        "message": "Reload the page and read the document through again."
+      },
+      "CONSENT_REQUIRED": {
+        "title": "Please confirm you agree first",
+        "message": "Tick the box confirming you have read the document and agree to sign it."
+      },
+      "ESIGN_CONSENT_REQUIRED": {
+        "title": "Please agree to sign electronically first",
+        "message": "Read the notice about signing electronically and agree to it before signing anything."
+      },
+      "KYC_REQUIRED": {
+        "title": "Your identity check is not recorded yet",
+        "message": "The member of staff with you needs to record your ID check before you sign."
+      },
+      "IDENTITY_NAME_MISMATCH": {
+        "title": "That is not the name on your ID",
+        "message": "Type your name exactly as it appears on the ID the member of staff with you checked. If the ID is in another name, they need to record the check again."
+      },
+      "SIGNER_OUT_OF_ORDER": {
+        "title": "It is not your turn yet",
+        "message": "Someone else has to sign these documents before you do."
+      },
+      "SIGNER_ALREADY_SIGNED": {
+        "title": "You have already signed everything",
+        "message": "Nothing further is needed from you. You can close this page."
+      },
+      "SIGNER_NAME_MISMATCH": {
+        "title": "That is not the name you started signing under",
+        "message": "Everything in this session is signed under one name. Use the name on your earlier signature, or ask for a fresh set of documents."
+      },
+      "SIGNATURE_INVALID": {
+        "title": "That signature could not be read",
+        "message": "Clear the signature box and sign again."
+      },
+      "SOURCE_MISSING": {
+        "title": "The document could not be loaded",
+        "message": "Ask the member of staff with you to prepare it again."
+      },
+      "SOURCE_TAMPERED": {
+        "title": "The document does not match what was prepared",
+        "message": "Do not sign. Ask the member of staff with you to prepare it again."
+      },
+      "CONFLICT": {
+        "title": "This signing was finished elsewhere",
+        "message": "Another device completed or withdrew it while this page was open."
+      }
+    }
   },
   "verify": {
     "loading": "Checking where you are…",

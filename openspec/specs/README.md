@@ -11,10 +11,10 @@ Grade10 ships four applications, and they are the four product directories:
 
 - `grade10-site` — the grade10 site: the shell every page renders in, how it answers
   an address, and every collector-facing surface inside it — the store, the
-  auction, and the loyalty programme.
+  auction, the loyalty programme, and the vault.
 - `grade10-admin` — the grade10 admin site: the operator surfaces that draft and
-  publish auction listings and campaigns, close out a won listing, and hold the
-  stock count behind them.
+  publish auction listings and campaigns, close out a won listing, hold the
+  stock count behind them, and work the vault's queue and its book.
 - `zzz-site` — the ZZZ site: the ZZZ brand's own collector-facing surfaces.
 - `zzz-admin` — the ZZZ admin site. No capability is specified yet; add its
   first as `openspec/specs/zzz-admin/<domain>/<capability>/spec.md`.
@@ -30,9 +30,9 @@ A fifth directory is not an application:
   `localization`, `frontend-composition`).
 
 Inside a product, capabilities are grouped one level further by the domain they
-belong to, so a product with twenty capabilities reads as four groups rather than
+belong to, so a product with twenty capabilities reads as five groups rather than
 one alphabetical run: `grade10-site/site/*`, `grade10-site/store/*`, `grade10-site/auction/*`,
-`grade10-site/loyalty/*`. The `shared` layer groups the same way — `shared/auth/*`,
+`grade10-site/loyalty/*`, `grade10-site/vault/*`. The `shared` layer groups the same way — `shared/auth/*`,
 `shared/ui/*`, `shared/console/*`, `shared/design-sync/*` — except for the
 platform-wide formats, which sit bare because they belong to no group smaller
 than everything.
