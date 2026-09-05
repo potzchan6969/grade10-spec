@@ -74,7 +74,7 @@ collector.
 
 ### Requirement: Order actions use settled Grade10 and carrier addresses
 
-View Details SHALL open `/store/orders/<order-id>` for the selected order. Track
+View Details SHALL open `/profile/orders/<order-id>` for the selected order. Track
 Order SHALL appear only when the order supplies an absolute `https` carrier URL
 with no embedded credentials. Activating Track Order SHALL open that URL in a
 new browser context without giving the destination access to the Grade10 page.
@@ -83,7 +83,7 @@ A tracking number or carrier name alone SHALL NOT create a tracking action.
 #### Scenario: grade10-site-store-order-history-SC-06 - View Details opens one order
 
 - **WHEN** a collector activates View Details for an order
-- **THEN** `/store/orders/<order-id>` opens for that order
+- **THEN** `/profile/orders/<order-id>` opens for that order
 
 #### Scenario: grade10-site-store-order-history-SC-07 - A safe carrier URL enables tracking
 

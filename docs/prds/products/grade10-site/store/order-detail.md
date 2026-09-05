@@ -14,6 +14,8 @@ Payment method, address, discounts, shipping, tax, product images, and loyalty
 stay absent until the Store supplies them. Omitting those groups is more useful
 than filling the designed page with claims the frontend cannot prove.
 
+- **URL** — `grade10.com/profile/orders/<order-id>`
+
 ## What it looks like
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4835-1654" title="Order details"}

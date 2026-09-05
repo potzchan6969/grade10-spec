@@ -41,10 +41,10 @@ neither.
 ### Add two explicit session surfaces
 
 Add `orderHistory` at `/profile/orders` and `orderDetail` at
-`/store/orders/:orderId` to `apps/frontend/grade10/src/surfaces.ts`, then add one
-route module per surface. Both modules compose the existing `SessionDecided`
-boundary. The parameterized detail route is registered before the broader Store
-route, following the existing product-detail route.
+`/profile/orders/:orderId` to `apps/frontend/grade10/src/surfaces.ts`, then add
+one route module per surface. Both modules compose the existing
+`SessionDecided` boundary. The parameterized detail route is registered before
+the broader profile routes, following the existing product-detail route.
 
 The route modules own browser effects: app navigation and opening a carrier URL.
 The page components receive callbacks, so they remain renderable in focused

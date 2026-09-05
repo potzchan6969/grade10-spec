@@ -16,7 +16,7 @@ refund, or tracking information. The first delivery establishes the baseline.
 - Add a signed-in Your Orders surface at `/profile/orders`, with Active orders
   above Past orders, the designed empty state, loading and recoverable error
   states, and links to one order.
-- Add an owner-only order detail surface at `/store/orders/<order-id>`, composed
+- Add an owner-only order detail surface at `/profile/orders/<order-id>`, composed
   from the existing shared Order Details block and the current Store order read.
 - Integrate both pages through `@grade10/store-frontend`; the Grade10
   application does not call the Store transport or Shopify directly.
@@ -78,8 +78,9 @@ None.
   existing Order Details block, with stories and component tests.
 - Grade10 catalogs in this store: customer-order copy for `en`, `zh-Hant`, and
   `zh-Hans`.
-- `docs/prds/products/grade10-site/store/orders.md`: settled addresses and
-  current in-flight capability links.
+- `docs/prds/products/grade10-site/store/order-history.md` and
+  `docs/prds/products/grade10-site/store/order-detail.md`: settled addresses
+  and current in-flight capability links.
 
 This change contains no backend or admin implementation task. Frontend tests
 exercise the typed Store contract through fixtures; live integration evidence

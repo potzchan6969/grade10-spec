@@ -13,6 +13,8 @@ frontend. It keeps Active above Past and sends a collector into one order or to
 the carrier when the Store supplies a safe tracking address. No-orders is a
 shopping path, not a blank account page.
 
+- **URL** — `grade10.com/profile/orders`
+
 ## What it looks like
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4835-1534" title="Order history, filled"}

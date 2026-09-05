@@ -19,7 +19,7 @@ Store order without revealing another customer's order or inventing absent facts
 
 ### Requirement: One private address shows one owned order
 
-The Grade10 site SHALL serve an order at `/store/orders/<order-id>`. It SHALL
+The Grade10 site SHALL serve an order at `/profile/orders/<order-id>`. It SHALL
 show the order only when it belongs to the signed-in collector. A missing order
 and an order owned by another account SHALL use the same not-found treatment and
 SHALL NOT disclose whether the id exists. A collector without a decided session
@@ -29,7 +29,7 @@ the session.
 #### Scenario: grade10-site-store-order-detail-SC-01 - An owner opens one order
 
 - **GIVEN** a signed-in collector who owns an order
-- **WHEN** they open `/store/orders/<order-id>` for it
+- **WHEN** they open `/profile/orders/<order-id>` for it
 - **THEN** that order's detail appears
 
 #### Scenario: grade10-site-store-order-detail-SC-02 - Missing and unowned orders look the same
@@ -42,7 +42,7 @@ the session.
 #### Scenario: grade10-site-store-order-detail-SC-03 - A signed-out collector keeps the requested order address
 
 - **GIVEN** a collector without a signed-in session
-- **WHEN** they open `/store/orders/<order-id>`
+- **WHEN** they open `/profile/orders/<order-id>`
 - **THEN** the sign-in surface opens without replacing that address
 - **AND** a successful sign-in reads that order at the same address
 
