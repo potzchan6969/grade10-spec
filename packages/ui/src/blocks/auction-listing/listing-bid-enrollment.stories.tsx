@@ -14,7 +14,7 @@ const COPY = {
   linkCardDescription:
     "Link a card to bid on this lot. You are only charged if you win this lot.",
   ageAttestation: "I confirm I am 18 years of age or older.",
-  continue: "Continue",
+  continue: "Confirm",
   iframePlaceholder: "Stripe card link (iframe)",
   iframeLinkedCardPlaceholder:
     "Stripe card form (iframe) — linked card on file",
@@ -87,7 +87,7 @@ export const SetupSheet: Story = {
       within(dialog).getByText("Stripe card link (iframe)"),
     ).toBeInTheDocument();
     expect(
-      within(dialog).getByRole("button", { name: "Continue" }),
+      within(dialog).getByRole("button", { name: "Confirm" }),
     ).toBeDisabled();
   },
 };
@@ -117,7 +117,7 @@ export const SetupSheetFromChange: Story = {
       }),
     ).toBeChecked();
     expect(
-      within(dialog).getByRole("button", { name: "Continue" }),
+      within(dialog).getByRole("button", { name: "Confirm" }),
     ).toBeEnabled();
   },
 };

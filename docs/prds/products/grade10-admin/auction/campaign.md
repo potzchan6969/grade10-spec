@@ -29,3 +29,5 @@ optional, up to four thousand. Create, publish and cancel appear exactly when
 the campaign's status and the operator's grants allow them: authoring takes
 the catalogue grant, calling off takes the call-off grant. The listing editor
 offers a campaign picker, so a lot joins its event where the lot is authored.
+
+::journeys{id="grade10-admin/auction/campaign"}

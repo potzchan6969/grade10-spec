@@ -21,7 +21,7 @@ browsing or bidding.
 * **Behaviour:** positive
 * **Type:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-01
 
@@ -51,7 +51,7 @@ JavaScript disabled in the browser.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-store-home-US-01
 
@@ -78,7 +78,7 @@ None.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-01
 
@@ -106,7 +106,7 @@ Catalogue holds at least two collections.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-01
 
@@ -132,7 +132,7 @@ None.
 * **Behaviour:** positive
 * **Type:** performance
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-01
 
@@ -170,7 +170,7 @@ deciding which collections appear.
 * **Behaviour:** positive
 * **Type:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-02
 
@@ -200,7 +200,7 @@ Catalogue holds at least three collections, each with a name and artwork.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-02
 
@@ -256,7 +256,7 @@ Front door already seen without <a new collection>.
 * **Behaviour:** negative
 * **Type:** usability
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-02
 
@@ -321,7 +321,7 @@ front door.
 * **Behaviour:** positive
 * **Type:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-03
 
@@ -350,7 +350,7 @@ Catalogue lists <a collection with cards> first.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-03
 
@@ -375,7 +375,7 @@ Collector is on the front door, viewing the merchandised row.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-03
 
@@ -468,7 +468,7 @@ to retry a failed read without a full page load,
 * **Behaviour:** positive
 * **Type:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-04
 
@@ -496,7 +496,7 @@ to retry a failed read without a full page load,
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-04
 
@@ -534,7 +534,7 @@ reach the front door or the unscoped listing,
 * **Behaviour:** positive
 * **Type:** usability
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-05
 
@@ -560,7 +560,7 @@ None.
 * **Behaviour:** positive
 * **Type:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-05
 

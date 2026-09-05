@@ -1,0 +1,5 @@
+schema: grade10-planning
+promoted_by: "@ecchochan"
+created: 2026-09-04
+depends_on:
+  - add-shopify-membership-pos

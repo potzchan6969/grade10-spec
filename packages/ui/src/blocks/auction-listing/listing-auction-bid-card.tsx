@@ -52,6 +52,8 @@ type ListingAuctionBidCardProps = {
   timeZone: string;
   onPlaceBid: () => void;
   onCommitMaximum: (amountMinor: number) => void;
+  onCompletePurchase?: () => void;
+  onViewOrderDetails?: () => void;
   recentBidsAccessory?: ReactNode;
 };
 
@@ -150,6 +152,8 @@ function ListingAuctionBidCard({
   timeZone,
   onPlaceBid,
   onCommitMaximum,
+  onCompletePurchase,
+  onViewOrderDetails,
   recentBidsAccessory,
 }: ListingAuctionBidCardProps) {
   const hasFooter = view.showBidActions;
@@ -176,11 +180,18 @@ function ListingAuctionBidCard({
         <StandingStatusBadge
           bidEnrollment={bidEnrollment}
           copy={copy}
+          locale={locale}
           view={view}
         />
       </HStack>
 
-      <StandingBanner bidEnrollment={bidEnrollment} copy={copy} view={view} />
+      <StandingBanner
+        bidEnrollment={bidEnrollment}
+        copy={copy}
+        onCompletePurchase={onCompletePurchase}
+        onViewOrderDetails={onViewOrderDetails}
+        view={view}
+      />
 
       <div
         className={cn(

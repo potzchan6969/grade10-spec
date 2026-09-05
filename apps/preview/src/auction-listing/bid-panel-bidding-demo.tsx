@@ -13,11 +13,12 @@ import { ListingBidEnrollmentCardPreview } from "./listing-bid-enrollment-card-p
 import { useListingBidEnrollment } from "./use-listing-bid-enrollment";
 
 const YOU = "you@example.com";
-const STARTING_BID_MINOR = 120_000;
-const LIVE_INCREMENT_MINOR = 5_000;
+const STARTING_BID_MINOR = BID_FIXTURE_LOT.startingBidMinor;
+const LIVE_INCREMENT_MINOR = BID_FIXTURE_LOT.incrementMinor;
 const AUTO_CURRENT_MINOR = BID_FIXTURE_LOT.currentBidMinor;
 const AUTO_MAXIMUM_MINOR = BID_FIXTURE_LOT.viewerMaximumMinor;
-const AUTO_OVERTAKEN_MINOR = 825_000;
+const AUTO_OVERTAKEN_MINOR =
+  BID_FIXTURE_LOT.viewerMaximumMinor + BID_FIXTURE_LOT.incrementMinor;
 
 type ScriptBid = {
   initials: string;
@@ -34,64 +35,64 @@ type BiddingCase = {
 const SCRIPT: readonly ScriptBid[] = [
   {
     initials: "alex@example.com",
-    amountMinor: 120_000,
+    amountMinor: STARTING_BID_MINOR,
     acceptedAtMs: FIXTURE_LIVE_BID_AT_MS[0],
   },
   {
     initials: "mike@example.com",
-    amountMinor: 125_000,
+    amountMinor: STARTING_BID_MINOR + LIVE_INCREMENT_MINOR,
     acceptedAtMs: FIXTURE_LIVE_BID_AT_MS[1],
   },
   {
     initials: YOU,
-    amountMinor: 130_000,
+    amountMinor: STARTING_BID_MINOR + LIVE_INCREMENT_MINOR * 2,
     acceptedAtMs: FIXTURE_LIVE_BID_AT_MS[2],
     isViewer: true,
   },
   {
     initials: "sam@example.com",
-    amountMinor: 140_000,
+    amountMinor: STARTING_BID_MINOR + LIVE_INCREMENT_MINOR * 3,
     acceptedAtMs: FIXTURE_LIVE_BID_AT_MS[3],
   },
   {
     initials: YOU,
-    amountMinor: 150_000,
+    amountMinor: STARTING_BID_MINOR + LIVE_INCREMENT_MINOR * 4,
     acceptedAtMs: FIXTURE_LIVE_BID_AT_MS[4],
     isViewer: true,
   },
   {
     initials: "alex@example.com",
-    amountMinor: 160_000,
+    amountMinor: STARTING_BID_MINOR + LIVE_INCREMENT_MINOR * 5,
     acceptedAtMs: FIXTURE_LIVE_BID_AT_MS[5],
   },
 ];
 
-const AUTO_YOU_480: ListingBidHistoryRow = {
-  id: "bid-you-480",
+const AUTO_YOU_CURRENT: ListingBidHistoryRow = {
+  id: "bid-you-current",
   initials: YOU,
   amountMinor: AUTO_CURRENT_MINOR,
   acceptedAtMs: FIXTURE_LIVE_BID_AT_MS[4],
   isViewer: true,
 };
 
-const AUTO_MIKE_455: ListingBidHistoryRow = {
-  id: "bid-mike-455",
+const AUTO_MIKE_PRIOR: ListingBidHistoryRow = {
+  id: "bid-mike-prior",
   initials: "mike@example.com",
-  amountMinor: 455_000,
+  amountMinor: AUTO_CURRENT_MINOR - LIVE_INCREMENT_MINOR,
   acceptedAtMs: FIXTURE_LIVE_BID_AT_MS[1],
 };
 
-const AUTO_ALEX_430: ListingBidHistoryRow = {
-  id: "bid-alex-430",
+const AUTO_ALEX_PRIOR: ListingBidHistoryRow = {
+  id: "bid-alex-prior",
   initials: "alex@example.com",
-  amountMinor: 430_000,
+  amountMinor: AUTO_CURRENT_MINOR - LIVE_INCREMENT_MINOR * 2,
   acceptedAtMs: FIXTURE_LIVE_BID_AT_MS[0],
 };
 
 const AUTO_HISTORY: ListingBidHistoryRow[] = [
-  AUTO_YOU_480,
-  AUTO_MIKE_455,
-  AUTO_ALEX_430,
+  AUTO_YOU_CURRENT,
+  AUTO_MIKE_PRIOR,
+  AUTO_ALEX_PRIOR,
 ];
 
 function money(minor: number) {
@@ -272,8 +273,8 @@ const AUTO_CASES: ReadonlyArray<readonly [string, BiddingCase]> = [
           amountMinor: AUTO_CURRENT_MINOR,
           acceptedAtMs: FIXTURE_LIVE_BID_AT_MS[5],
         },
-        AUTO_MIKE_455,
-        AUTO_ALEX_430,
+        AUTO_MIKE_PRIOR,
+        AUTO_ALEX_PRIOR,
       ],
     }),
   ],
@@ -334,10 +335,10 @@ function BidPanelBiddingDemo() {
           overtaken maximum, and a maximum that was accepted without taking the
           lead. Each card must replace price, history, standing, and the safe
           next action together so a private maximum is never mistaken for the
-          current bid or a guarantee of winning. Quick-maximum presets and
-          Place Bid are live: they use the same enrollment session as Bid
-          Panel Interactive. Mechanism copy stays as always-on subtext under
-          the section heading.
+          current bid or a guarantee of winning. Quick-maximum presets and Place
+          Bid are live: they use the same enrollment session as Bid Panel
+          Interactive. Mechanism copy stays as always-on subtext under the
+          section heading.
         </p>
       }
     >

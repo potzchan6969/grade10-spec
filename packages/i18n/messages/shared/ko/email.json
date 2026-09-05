@@ -5,5 +5,20 @@
     "action": "로그인",
     "otpHint": "또는 이 코드를 입력하세요: {otp}",
     "ignore": "본인이 요청하지 않았다면 이 이메일을 무시하셔도 됩니다."
+  },
+  "appointment": {
+    "greeting": "{name}님, 안녕하세요.",
+    "bookedSubject": "방문이 예약됐습니다: {service}",
+    "bookedBody": "{location}에서 {service} 방문이 예약됐습니다.",
+    "movedSubject": "방문이 옮겨졌습니다: {service}",
+    "movedBody": "{location}의 {service} 방문 시간이 바뀌었습니다.",
+    "cancelledSubject": "방문이 취소됐습니다: {service}",
+    "cancelledBody": "{location}의 {service} 방문이 취소됐습니다. 언제든 다시 예약하세요.",
+    "reminderSubject": "알림: {when} {service}",
+    "reminderBody": "{location}의 {service} 방문을 알려 드립니다.",
+    "when": "일시",
+    "where": "장소",
+    "manage": "방문 옮기기 또는 취소",
+    "calendar": "캘린더 파일을 첨부했으니 방문 일정을 캘린더에 추가하세요."
   }
 }

@@ -122,16 +122,21 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "w-72 shrink-0 border-border border-r bg-sidebar",
+        // The rail scrolls itself at every width. As a drawer it is a fixed
+        // box the page cannot scroll for it, so its own overflow is the only
+        // way to the rows past the fold. It clears the header and stops at the
+        // dynamic viewport, so a mobile browser's own chrome never covers the
+        // last row and the safe-area pad clears the home indicator.
+        "top-16 h-[calc(100dvh-4rem)] w-72 shrink-0 overflow-y-auto overscroll-contain border-border border-r bg-sidebar pb-[env(safe-area-inset-bottom)]",
         "[scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]",
-        // Below the header's z-50 so its close button stays reachable.
-        "max-lg:fixed max-lg:inset-y-0 max-lg:left-0 max-lg:z-40 max-lg:pt-16 max-lg:transition-transform max-lg:duration-200 max-lg:ease-out",
+        // Drawer. Below the header's z-50 so its close button stays reachable.
+        "max-lg:fixed max-lg:left-0 max-lg:z-40 max-lg:transition-transform max-lg:duration-200 max-lg:ease-out",
         // `invisible` rather than a bare translate: an off-screen drawer must
         // also be out of the focus order.
         open
           ? "max-lg:translate-x-0"
           : "max-lg:invisible max-lg:-translate-x-full",
-        "lg:visible lg:sticky lg:top-16 lg:h-[calc(100dvh-4rem)] lg:w-64 lg:translate-x-0 lg:overflow-y-auto motion-reduce:transition-none",
+        "lg:visible lg:sticky lg:w-64 lg:translate-x-0 motion-reduce:transition-none",
       )}
       data-slot="manual-sidebar"
     >

@@ -1,0 +1,17 @@
+{
+  "title": "Identity",
+  "description": "Orders of {order} or more and bids of {bid} or more need a verified identity. Verify once and it counts everywhere with us.",
+  "loading": "Checking where you stand…",
+  "loadFailed": "We could not read your identity status. Try again in a moment.",
+  "verifiedUntil": "Verified. Your document is valid until {day}.",
+  "verified": "Verified.",
+  "expired": "Your verified document has expired. Verify again with a current one.",
+  "unverified": "Not verified yet.",
+  "checking": "We are checking your ID — this usually takes a minute or two. You can leave this page; come back to see the result.",
+  "declined": "We could not verify your ID online. Try again with a clearer photo, or bring your ID to a visit and we will check it at the counter.",
+  "verifyAction": "Verify my identity",
+  "continueAction": "Continue verifying",
+  "verifyAgainAction": "Try again",
+  "recheckAction": "Check again",
+  "unavailable": "Verification is not available right now. Try again in a moment."
+}

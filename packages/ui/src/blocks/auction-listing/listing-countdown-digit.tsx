@@ -119,8 +119,42 @@ function countdownParts(
   ];
 }
 
+/** Compact elapsed span for a closed lot — stays on one line in the bid card. */
+function elapsedDurationParts(seconds: number): CountdownPart[] {
+  const DAY_SECONDS = 24 * 60 * 60;
+  const HOUR_SECONDS = 60 * 60;
+  const safe = Math.max(0, Math.floor(seconds));
+  const days = Math.floor(safe / DAY_SECONDS);
+  const hours = Math.floor((safe % DAY_SECONDS) / HOUR_SECONDS);
+  const minutes = Math.floor((safe % HOUR_SECONDS) / 60);
+  const secs = safe % 60;
+
+  if (days >= 1) {
+    return [
+      { value: days, unit: "d" },
+      { value: hours, unit: "h" },
+    ];
+  }
+  if (hours >= 1) {
+    return [
+      { value: hours, unit: "h" },
+      { value: minutes, unit: "m" },
+    ];
+  }
+  return [
+    { value: minutes, unit: "m" },
+    { value: secs, unit: "s" },
+  ];
+}
+
 function formatAccessibleText(parts: CountdownPart[]): string {
   return parts.map((part) => `${part.value}${part.unit}`).join(" ");
 }
 
-export { countdownParts, formatAccessibleText, RollingCountdown, RollingDigit };
+export {
+  countdownParts,
+  elapsedDurationParts,
+  formatAccessibleText,
+  RollingCountdown,
+  RollingDigit,
+};

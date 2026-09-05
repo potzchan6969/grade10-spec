@@ -31,5 +31,17 @@
   "auctionListing": {
     "title": "{name} — Grade10",
     "description": "{name}，正在 Grade10 拍卖中。"
+  },
+  "book": {
+    "title": "预约到店 — Grade10",
+    "description": "选择服务、门店与时间，带卡到店。无需账户。"
+  },
+  "bookManage": {
+    "title": "你的预约 — Grade10",
+    "description": "查看、更改或取消你在 Grade10 的到店预约。"
+  },
+  "bookMine": {
+    "title": "你的所有预约 — Grade10",
+    "description": "以你的邮箱在 Grade10 预约的每一次到店。"
   }
 }

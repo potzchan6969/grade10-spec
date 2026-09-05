@@ -1,148 +1,133 @@
 ## Context
 
-The existing `shared-ui/store-cart` capability already defines the Cart Drawer
-contract and the `@grade10/ui` package already exports `CartDrawer`, its
-subcomponents, and the required states. The Grade10 application has the
-browser-owned cart feature and an existing `/checkout` route, but its root
-shell currently supplies no cart handler to `Nav` and renders no drawer.
+The durable `shared/ui/store-cart` capability and `@grade10/ui` already own the
+Cart Drawer states and interactions. The Grade10 app has no drawer host or
+navigation callback.
 
-The browser cart stores variant id, product handle, title, display price,
-currency, and quantity. It does not yet store enriched product imagery,
-availability, live prices, discounts, shipping, or tax. Grade10 currently
-speaks English, Traditional Chinese, and Simplified Chinese; Korean belongs
-to the separate ZZZ brand.
+The live data path now exists. `useCart` selects browser storage for a guest and
+the member cart for a signed-in collector. `useCartReview` calls the typed live
+review, applies current quantity and price to the cart, removes unavailable
+lines, and exposes reviewed lines and readiness. `/checkout` already rechecks
+the cart and creates the hosted checkout handoff.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Make the existing Cart Drawer reachable from the navigation on store home,
-  product listing, product detail, and checkout surfaces.
-- Preserve the shared drawer's dismissal, transition, empty-baseline,
-  loading, scroll-lock, and cart-edit behavior.
-- Call one refresh method whenever the drawer opens and keep its result behind
-  a replaceable application boundary.
-- Localize all application-supplied drawer and navigation copy in every
-  supported Grade10 locale.
+- Compose one route-gated drawer host without duplicating shared UI behavior.
+- Run live review only for an open drawer and keep cleanup ownership singular.
+- Reuse the current scoped cart, product routes, and checkout route.
 
 **Non-Goals:**
 
-- Changing the `shared-ui/store-cart` requirements or the existing shared UI
-  component implementation.
-- Adding backend reads, repricing, availability, promotion, shipping, tax, or
-  checkout-session APIs.
-- Changing the persisted browser cart model or making it server-owned.
-- Defining the final checkout handoff beyond navigating to `/checkout`.
+- Adding a local review snapshot or a second cart store.
+- Calling a backend procedure from the application layer.
+- Moving hosted checkout creation into the drawer.
 
 ## Decisions
 
-### Route-gated root composition
+### Keep one route-gated host at the application root
 
-The application root remains the composition owner. It derives a
-`cartSurface` condition from the current route: store, store collections,
-store product, and checkout opt in; unrelated surfaces do not. The root
-passes an optional `onCartClick` and translated cart label to `SiteShell`, and
-renders one Cart Drawer host alongside the shell while the same providers and
-cart query remain mounted.
+The root derives a Cart-enabled condition with the existing surface relation:
+every surface within Store, plus checkout. It passes `Nav.onCartClick` only on
+those surfaces and mounts one drawer host beside the shell so navigation does
+not duplicate or reset cart state. Leaving those surfaces closes the drawer.
 
-This uses the existing `Nav.onCartClick` seam and keeps the drawer available
-across store navigation. A page-local trigger is rejected because the drawer
-would disappear during navigation and would need duplicate wiring. Supplying
-the handler on every site surface is rejected because auction, profile,
-membership, and marketing routes have not opted into the store cart.
+**Alternative rejected:** mount one drawer per page. Navigation would unmount
+the current drawer and repeat cart wiring on every Store route.
 
-### Existing shared drawer owns interaction behavior
+### Drive the drawer from the scoped cart
 
-The host composes the existing `@grade10/ui` `CartDrawer` and mounts the
-existing `@grade10/design-system` `Toaster` once at the application root. It
-passes the existing callbacks for quantity changes, removals, product links,
-and checkout. It does not reproduce the overlay, Escape listener, body scroll
-lock, five-slot baseline, or drawer transition in application code.
+The host calls `useCart` and maps its current scope, item count, lines, writes,
+and currency into the drawer adapter. It does not read browser storage, call a
+procedure, or decide whether the collector is a guest or member.
 
-Rebuilding an application-specific overlay is rejected because it would split
-the `shared-ui/store-cart` contract from its tested implementation and make
-the Figma interaction drift likely.
+Quantity and removal callbacks use the existing optimistic, scope-keyed cart
+writes. Product activation uses the existing product-address helper. Browse
+More opens the current Store collections route.
 
-### Open-time refresh adapter
+**Alternative rejected:** preserve the old browser-only adapter. It would show
+a different cart after sign-in and bypass the member cart already implemented.
 
-The host keeps a display snapshot separate from the persisted cart record. It
-passes one app-owned `refresh` method to `CartDrawer.onFetchStatusAndPrice`.
-The shared drawer already calls this callback from its open effect and holds
-its loading state until the returned promise settles, so the app does not add
-a second open effect.
+### Let open state enable live review
 
-The initial method projects the current browser cart into the drawer's
-display-ready shape:
+Extend `useCartReview` with backwards-compatible options:
 
-| Drawer value | Initial source | Future replacement |
+| Option | Drawer | Existing checkout |
 | --- | --- | --- |
-| item id, title, quantity | browser cart line | backend-enriched line |
-| unit price and currency | browser cart line | current backend price |
-| status | `default` placeholder | availability/stock result |
-| subtotal | local minor-unit sum | backend calculation |
-| estimated total | local subtotal placeholder | backend calculation |
-| shipping, discount, tax | omitted or existing provisional copy | backend calculation |
-| image | omitted until enrichment exists | backend product image |
+| `enabled` | Drawer open state | Default `true` |
+| `removeUnavailable` | `false` | Default `true` |
 
-The method updates the snapshot before resolving and is the only place that
-will later call the backend refresh. Cart mutations update the browser cart
-through the existing `useCart` feature and refresh the local snapshot so the
-drawer does not display stale quantity or subtotal values. A production delay
-is not introduced merely to make skeletons visible; stories and focused tests
-control an unresolved refresh promise when they need to assert loading.
+When the drawer opens, the enabled query performs a fresh Store review and the
+host passes review fetching as controlled `CartDrawer.loading`. The host maps
+every reviewed status, including unavailable, into `CartItemSummary`. The
+shared drawer then invokes the scoped removal callback and emits its single
+toast; the hook does not race it. Closing disables the observer, and reopening
+rechecks because the review result is stale and has zero garbage-collection
+time.
 
-An app-level refresh method is preferred over a new data package or an effect
-that watches `open`: the shared component already owns the lifecycle, while
-the application owns the source of the data.
+Checkout keeps the default behavior: its hook removes unavailable lines and
+reports them in the checkout page. Cart writes continue invalidating the
+scope-keyed review so the next open cannot reuse a pre-write answer.
 
-### Provisional checkout handoff
+If the open review fails, the host emits one localized failure toast for that
+open and keeps the drawer in its controlled loading treatment, so stale lines
+are not presented as confirmed and Checkout stays disabled. Closing and
+reopening starts another review.
 
-The host supplies `onCheckout` that navigates to `ROUTES.checkout`. The shared
-drawer remains responsible for its redirecting button state, while the app
-owns navigation. The callback is deliberately isolated so the final checkout
-session flow can replace it without changing the drawer contract.
+**Alternative rejected:** let both the hook and drawer remove unavailable
+lines. Two cleanup owners can issue duplicate writes and split the one-toast
+contract.
 
-Calling a new backend checkout endpoint from the drawer is rejected because
-the final payment/session handling is not confirmed and the existing route is
-already the application boundary.
+### Map only reviewed Store facts
 
-### Localized application copy
+The adapter maps reviewed title, quantity, current unit price, currency, and
+status. It computes subtotal from reviewed minor-unit values and uses the same
+amount as the pre-hosted-checkout estimate. Shipping, tax, discount, promotion,
+and unavailable imagery are omitted rather than guessed.
 
-Add a nested Cart Drawer vocabulary to the existing Grade10 `store` catalog
-for `en`, `zh-Hant`, and `zh-Hans`, and pass the resolved strings into the
-shared `CartDrawerCopy` shape. Keep the existing `chrome.cartLabel` for the
-navigation control unless catalog validation shows it is missing in a
-supported locale.
+The drawer never treats the cart's recorded display price as current while a
+review is pending. A failed review remains visibly unresolved; Checkout still
+opens `/checkout`, whose existing review blocks a handoff until it succeeds.
 
-Adding literals in the host is rejected because collector-facing strings must
-come through `@grade10/i18n`, and adding Korean is rejected because it is not a
-Grade10 locale.
+**Alternative rejected:** keep a deterministic local display snapshot while
+live review is available. That would present stale availability and price at
+the moment this surface exists to recheck them.
+
+### Navigate to the existing checkout surface
+
+The drawer's Checkout callback closes the drawer and navigates to
+`ROUTES.checkout`. The checkout page remains responsible for session gating,
+its own current review, points, and the hosted provider redirect.
+
+**Alternative rejected:** create checkout from the drawer. It would duplicate
+the established checkout page and mix a payment side effect into shared cart
+review.
+
+### Keep copy in Grade10 catalogs
+
+Add the application-supplied drawer and navigation vocabulary to the `store`
+catalog for `en`, `zh-Hant`, and `zh-Hans`. Continue using the existing Grade10
+locale fallback and one root `Toaster`. Korean remains a ZZZ-only locale.
 
 ## Risks / Trade-offs
 
-- **[Risk]** The placeholder can be mistaken for live availability or price.
-  **Mitigation:** keep it in a named refresh adapter, use explicit provisional
-  totals/copy, and document the backend replacement boundary in the host.
-- **[Risk]** A cart mutation can race an open refresh and briefly restore an
-  older snapshot. **Mitigation:** the host updates the snapshot from the
-  mutation result/current cart after each mutation, and the refresh method
-  reads the latest cart value captured for that open.
-- **[Risk]** The drawer is mounted outside a store route after navigation.
-  **Mitigation:** close the drawer when the route leaves `cartSurface` and do
-  not pass a navigation handler on non-store surfaces.
-- **[Risk]** Advancing the spec submodule could disturb unrelated nested work.
-  **Mitigation:** advance only the parent gitlink after the spec-store commit
-  is available and run the repository submodule check; preserve unrelated
-  nested checkout changes.
+- **[Risk] A cart write lands while review is in flight.** → Keep both queries
+  scope-keyed, use the cart feature's serialized writes, and invalidate review
+  after every settled write.
+- **[Risk] Guest-to-member scope changes while the drawer is open.** → Derive
+  review from the same `useCart` scope and let the query key move with it.
+- **[Risk] Review failure leaves old values visible.** → Keep the drawer in
+  controlled loading, emit one failure toast per open, and recheck on reopen.
+- **[Risk] The spec-store pointer overlaps unrelated nested work.** → Advance
+  only the parent gitlink after the catalog commit lands and run the submodule
+  check.
 
 ## Migration Plan
 
-1. Land the Grade10 catalog additions in the standalone `grade10-spec` store.
-2. Advance the Grade10 application's `external/grade10-spec` gitlink to that
-   store commit without touching unrelated nested work.
-3. Land the root shell Cart Drawer host and focused application tests.
-4. Later replace only the host's refresh adapter with the backend status and
-   calculation call, then add the confirmed checkout handoff. No persisted
-   cart migration is required.
-5. Roll back by removing the route-gated host and gitlink advancement; the
-   existing browser cart and checkout route remain usable.
+1. Land Grade10 catalog additions in `grade10-spec`.
+2. Advance `external/grade10-spec` to that landed commit.
+3. Add the review options, root host, routes, and focused tests in `grade10`.
+4. Roll back by removing the host and gitlink advancement; the existing scoped
+   cart and `/checkout` page remain unchanged. No data or backend migration is
+   involved.

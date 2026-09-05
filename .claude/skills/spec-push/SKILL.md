@@ -131,6 +131,22 @@ branch has a `user-journeys.md` and no `test-cases.md` beside it, stop and run
 `pnpm run tcs:validate --require-suites` names them. Generation belongs in the
 spec's own pull request; see `docs/governance/specs-to-test-cases.md`.
 
+**A change that moves a cross-feature path settles its domain suite.** Do not
+ask; compute it. For each domain the branch touches that holds an
+`openspec/specs/<product>/<domain>/domain-tcs.md`, intersect the journeys of the
+capabilities the change carries with the `**Trace:**` lines in that `domain-tcs.md`.
+A hit — or a capability new to a domain that already has an `domain-tcs.md` — means
+the change either carries an `domain-tcs.md` edit or one line in its `proposal.md`:
+
+```text
+No domain impact: <why>
+```
+
+Neither present, no push: run `/spec-to-tcs domain <domain>`, or write the
+line. No hit, nothing to say — most changes never trip this. `## Impact` is
+not the signal; it records affected code and packages, not the paths a person
+walks.
+
 A regenerated file is a commit, not a dirty tree left behind.
 
 ## Push

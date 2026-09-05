@@ -1,7 +1,7 @@
 ---
 title: Account Profile
 spec: grade10-site/store/account-profile
-order: 7
+order: 8
 ---
 
 The profile is what a collector says about themselves in the store, on their

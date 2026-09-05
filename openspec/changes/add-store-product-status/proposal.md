@@ -2,20 +2,18 @@
 
 ## Why
 
-Grade10 runs its own storefront, so the cart is ours. A line sits in the
-collector's browser holding the availability and price it recorded when it was
-added, and nothing in `openspec/specs/` says when the store must look again or
-what it owes the collector when the answer has moved. Three surfaces answer
-availability today and none from a stated rule: the listing draws a tile from a
-supplied sold-out boolean, a card's page says for sale or not, and the cart
-drawer keeps its own `CartItemStatus` vocabulary.
+Grade10 runs its own storefront, so the cart is ours. A line sits in a guest's
+browser or a signed-in collector's member cart holding the availability and
+price recorded when it was added, and nothing in `openspec/specs/` says when the
+Store must look again or what it owes the collector when the answer has moved.
+Three surfaces answer availability today and none from a stated rule: the
+listing draws a tile from a supplied sold-out boolean, a card's page says for
+sale or not, and the cart drawer keeps its own `CartItemStatus` vocabulary.
 
-The store already refuses a stale line at the last step.
-`grade10-site/store/shopify-commerce` prices every line live when a checkout is
-requested and refuses a variant the shop no longer sells or a quantity above
-what it counts. That refusal reaches the collector as one sentence on the
-checkout page, with no line named and nothing to press, for a problem the store
-could have shown when they opened the cart.
+The Store already reviews every line live when checkout is requested and
+refuses a variant it no longer sells or a quantity above what it can fill. That
+refusal reaches the collector at the last step, for a problem the Store could
+have shown when they opened the cart.
 
 **Metric:** share of checkout requests refused for a line the cart had shown as
 fine. A stated derivation and stated re-read moments move it toward zero; it is
@@ -93,16 +91,14 @@ states what the store puts into them.
 - **Low stock as a cue to buy.** Browse surfaces state availability and nothing
   about quantity. The cart's `adjusted` warning explains a quantity the store
   already changed; it is not a scarcity badge.
-- **Checkout order creation, draft orders, and the fifteen-minute reservation.**
-  Already `grade10-site/store/shopify-commerce`. This change stops at the
-  handoff.
+- **Checkout order creation and the hosted checkout lifecycle.** This change
+  stops at the handoff and does not define a reservation window.
 - **Multi-location inventory.** Available quantity is read as one number.
 - **How money is formatted.** Already `money-amounts`; this change only requires
   that a price read be minor units plus an ISO 4217 code.
 - **Refresh cadence for browse surfaces.** Whether the listing reads live or
-  from cache is engineering's, bounded by the invalidation
-  `grade10-site/store/shopify-commerce` requires. The two cart reads are not
-  cadence — they are stated moments, and they are live.
+  from cache is engineering's. The two cart reads are not cadence — they are
+  stated moments, and they are live.
 - **Visual treatment.** Whether out of stock and unavailable are drawn alike is
   design's.
 
@@ -129,18 +125,12 @@ comes from.
 
 ## Impact
 
-No change to `packages/ui` or `packages/i18n`. The work is in the storefront
-application and its store backend: one availability rule that the checkout's
-own pricing and the cart's open-time read both answer from, reported per line
-rather than stopping at the first refusal, and the storefront mapping those
-answers onto the statuses the drawer and the checkout page already render.
-
-Depends on `add-grade10-shopify-store` for
-`grade10-site/store/shopify-commerce`, which establishes the shop as
-authoritative for inventory and owns everything
-from the handoff onward. The cart drawer's statuses and the low-stock warning's
-lifecycle are durable in `shared/ui/store-cart`; this change owns what the
-store puts into them. No Figma change.
+No change to `packages/ui` or `packages/i18n`. The typed Store review already
+returns current availability and price per line. The work is the storefront
+mapping those answers onto the statuses the drawer and checkout page render.
+The cart drawer's statuses and warning lifecycle are durable in
+`shared/ui/store-cart`; this change owns what the storefront puts into them.
+No backend implementation or Figma change is part of this plan.
 
 The change directory is named `add-store-product-status` and carries two
 capabilities; the name is left alone so the open pull request keeps its

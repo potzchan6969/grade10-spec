@@ -9,21 +9,21 @@ Survey the engine on the grade10 **mainline**. Design decisions, what is already
 built, and the open questions: [`tech-design.md`](tech-design.md). Screens and component
 exports: [`ui-design.md`](ui-design.md).
 
-## 1. Loyalty blocks (grade10-spec)
+## 1. Loyalty blocks (grade10-spec) (owner: @brianchacha6969)
 
 - [ ] 1.1 Draw the membership and console frames in Figma and link them from `ui-design.md`
-- [ ] 1.2 Export `MembershipSummary` from `@grade10/ui` — two counts shown as two counts, the tier's validity end, and retention progress
-- [ ] 1.3 Export `RewardMenu` from `@grade10/ui` — each reward priced in points, money-off rewards stating their code's validity period
-- [ ] 1.4 Export `CouponList` from `@grade10/ui` — code, purpose, own expiry, and spent or void
-- [ ] 1.5 Export `ActivityList` from `@grade10/ui` — entries named in terms a member reads, carrying no operator reason, retry key or internal pricing
+- [x] 1.2 Export `MembershipSummary` from `@grade10/ui` — two counts shown as two counts, the tier's validity end, and retention progress
+- [x] 1.3 Export `RewardMenu` from `@grade10/ui` — each reward priced in points, money-off rewards stating their code's validity period
+- [x] 1.4 Export `CouponList` from `@grade10/ui` — code where the shop takes one, purpose, own expiry, and spent, void or expired
+- [x] 1.5 Export `ActivityList` from `@grade10/ui` — entries named in terms a member reads, carrying no operator reason, retry key or internal pricing
 - [ ] 1.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:stories:ui`, `pnpm run design-sync:check`
 
-## 2. Recording contract (grade10)
+## 2. Recording contract (grade10) (owner: @brianchacha6969)
 
-- [ ] 2.1 Add a required `channel` to the recording contract in `@grade10/loyalty-contracts`, valued from a closed set, and refuse a recording naming none or one outside it, so *An entry names its channel* passes
-- [ ] 2.2 Carry `channel` onto `ledger_entries` and regenerate the migration
-- [ ] 2.3 Extend the redemption contract with what a redemption produced — a code with its own validity period and void state, or an item owed — so *A coupon expires on its own terms* passes
-- [ ] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run db:drizzle:generate` with the output committed, `pnpm run check:migrations`
+- [x] 2.1 Add a required `channel` to the recording contract in `@grade10/loyalty-contracts`, valued from a closed set, and refuse a recording naming none or one outside it, so *An entry names its channel* passes
+- [x] 2.2 Carry `channel` onto `ledger_entries` and regenerate the migration
+- [x] 2.3 Extend the redemption contract with what a redemption produced — a code with its own validity period and void state, or an item owed — so *A coupon expires on its own terms* passes
+- [x] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run db:drizzle:generate` with the output committed, `pnpm run check:migrations`
 
 ## 3. Migration of members already holding tiers and points (grade10)
 
@@ -41,32 +41,32 @@ nothing — they run because a throw on read is a bad way to find out otherwise.
 - [ ] 3.5 Assert row counts before and after each step, fail loudly on any shrink, and report how many rows each repair pass actually touched
 - [ ] 3.6 Verify: `pnpm run test:backend`, `pnpm run check:migrations`, and each migration run against a seeded local Postgres with counts reported
 
-## 4. Operator grants, tier removal, and channel on the ledger (grade10)
+## 4. Operator grants, tier removal, and channel on the ledger (grade10) (owner: @brianchacha6969)
 
 `adjustments.ts` and `earning.ts` already split the two counts correctly; 4.1 is
 a test, not a change. The clock behaviour in 4.2 is the reverse of what
 `earning.ts` does today ("a gift is not activity, so it moves no clock").
 
-- [ ] 4.1 Cover that a correction credits the redeemable balance alone and a campaign grant credits both counts, so *A correction does not move a member up* and *A campaign grant moves a member up* pass
+- [x] 4.1 Cover that a correction credits the redeemable balance alone and a campaign grant credits both counts, so *A correction does not move a member up* and *A campaign grant moves a member up* pass
 - [ ] 4.2 Reset the inactivity window on a campaign grant and leave it alone on a correction, so *A campaign grant keeps the balance alive* and *A correction does not extend the balance's life* pass together
-- [ ] 4.3 Add an operator action that removes a tier inside its validity period, recorded with who and why, so *An operator removes a tier granted in error* passes — with a named permission, extending *Operators act through named permissions*. `tier_changes` already allows the `revocation` cause, so `ck_tier_changes_cause` needs no migration
-- [ ] 4.4 Require `channel` on every write path into the ledger, so no row can be recorded without saying which channel sold
+- [x] 4.3 Add an operator action that removes a tier inside its validity period, recorded with who and why, so *An operator removes a tier granted in error* passes — behind the tier grant's own permission (`loyalty:invite`, never `loyalty:adjust`), extending *Operators act through named permissions*. `tier_changes` already allows the `revocation` cause, so `ck_tier_changes_cause` needs no migration
+- [x] 4.4 Require `channel` on every earning and redemption write path, so no sale can be recorded without saying which channel sold — corrections and expiry sold nothing, so they carry an explicit non-sale value added to the closed set rather than the `online` default they fall to today
 - [ ] 4.5 Verify: `pnpm run typecheck`, `pnpm run test:backend`
-- [ ] 4.6 Keep one balance and one tier whatever channel wrote the entry, and make a channel's own copy of a balance non-authoritative, so *One balance across both channels* and *The channel's copy is not the balance* pass
+- [x] 4.6 Keep one balance and one tier whatever channel wrote the entry, and make a channel's own copy of a balance non-authoritative, so *One balance across both channels* and *The channel's copy is not the balance* pass
 
-## 5. Reward fulfilment (grade10)
+## 5. Reward fulfilment (grade10) (owner: @brianchacha6969)
 
 - [ ] 5.1 Add discount-code creation, deactivation and usage lookup to `@grade10/shopify-backend`
 - [ ] 5.2 Implement `RewardFulfiller` against it in the loyalty worker assembly and wire it in, for rewards that take money off; the port needs `fulfill`, `deactivate`, `usage`, `kinds` and `validateTemplate`
-- [ ] 5.3 Record a physical reward as an item owed instead of issuing a code, so *A physical reward is not a discount code* passes
-- [ ] 5.4 Void the issued code on reversal and gate the reversal on its usage, so *A reversal voids the coupon* passes
-- [ ] 5.5 Read usage before deactivating, so a refused reversal does not kill a coupon the member can still use, and make the gate fire on manual redemptions with no fulfiller wired, so *A used coupon cannot be reversed* holds in every deployment
-- [ ] 5.6 Return restored points as entries pointing back at the credits they came from, so a later claw-back can still reach them
-- [ ] 5.7 Make a code that cannot be turned back into points, so *A member cannot undo a redemption* passes
-- [ ] 5.8 Add the operator cancellation that credits points back for an unused expired artifact, so *An operator cancellation is the credit path* passes, and refuse it on a used one, so *A used artifact is never reversed* passes
-- [ ] 5.9 Count what members forfeit to expiry where an operator can read it, so *An expired unused code returns nothing by itself* passes
+- [x] 5.3 Record a physical reward as an item owed instead of issuing a code, so *A physical reward is not a discount code* passes
+- [x] 5.4 Void the issued code on reversal and gate the reversal on its usage, so *A reversal voids the coupon* passes
+- [x] 5.5 Read usage before deactivating and again after, so a refused reversal does not kill a coupon the member can still use and a use between the two reads still refuses, and make the gate fire on manual redemptions with no fulfiller wired, so *A used coupon cannot be reversed* holds in every deployment
+- [x] 5.6 Return restored points as entries pointing back at the credits they came from, so a later claw-back can still reach them
+- [x] 5.7 Make a code that cannot be turned back into points, so *A member cannot undo a redemption* passes
+- [x] 5.8 Make the reversal the operator cancellation: it credits points back for an unused expired artifact with a required reason the audit chain records, so *An operator cancellation is the credit path* passes, and refuses a used one, so *A used artifact is never reversed* passes
+- [x] 5.9 Count what members forfeit to expiry where an operator can read it, so *An expired unused code returns nothing by itself* passes
 - [ ] 5.10 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run build`
-- [ ] 5.11 Refuse a reversal once what the redemption produced has been consumed and cancel it while it is still waiting, so *A collected reward cannot be reversed* and *A waiting collection is cancelled by the reversal* pass — the states an item owed moves through are `add-shopify-membership-pos`; this is the gate over them
+- [x] 5.11 Refuse a reversal once what the redemption produced has been consumed and cancel it while it is still waiting, so *A collected reward cannot be reversed* and *A waiting collection is cancelled by the reversal* pass — the states an item owed moves through are `add-shopify-membership-pos`; this is the gate over them
 
 ## 6. Qualifying spend at the seller (grade10) (owner: @gareth0712)
 
@@ -81,13 +81,13 @@ missing is per-line eligibility and whole-order apportionment.
 - [ ] 6.5 Send `channel` on every recording from the store
 - [x] 6.6 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
-## 7. The auction refuses points (grade10)
+## 7. The auction refuses points (grade10) (owner: @brianchacha6969)
 
 `packages/grade10-auction` has no loyalty binding today, so 7.2 is a guard
 against one being added, not a change to existing behaviour.
 
-- [ ] 7.1 Refuse points and coupons against an auction purchase, so *Points buy nothing at an auction* passes
-- [ ] 7.2 Assert no earning is recorded for an auction win, so *An auction win earns nothing* passes
+- [x] 7.1 Refuse points and coupons against an auction purchase, so *Points buy nothing at an auction* passes
+- [x] 7.2 Assert no earning is recorded for an auction win, so *An auction win earns nothing* passes
 - [ ] 7.3 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
 ## 8. Tier rules the owner settled (grade10) (owner: @gareth0712)
@@ -116,38 +116,38 @@ rate on the config and no debit path outside the reward menu.
 - [ ] 9.5 Surface the points payment option in the store checkout flow
 - [ ] 9.6 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run test`
 
-## 10. Membership surface (grade10)
+## 10. Membership surface (grade10) (owner: @brianchacha6969)
 
 Depends on group 1 shipping and the submodule bump.
 
-- [ ] 10.1 Add the membership page to `@grade10/web-spa`, composing the `@grade10/ui` exports over the existing `membership` and `rewards` feature slices
-- [ ] 10.2 Show both counts as two counts, never summed, so *The two counts are shown as two counts* passes
-- [ ] 10.3 Show the tier's validity end and what keeps it, rendering `tierValidityLine` rather than re-deriving the wording
-- [ ] 10.4 Show the balance's lapse date from the inactivity clock, and every date in the programme's time zone, so *Dates read in the programme's time zone* passes
-- [ ] 10.5 List issued coupons with their own expiry, readable the moment one is issued, so *A coupon is readable as soon as it is issued* passes
-- [ ] 10.6 Invite a member with recorded activity but no join date to join, showing their existing points, so *A member who never joined is invited to* passes
-- [ ] 10.7 Cost one redemption for a double submit across a reload, so *A double redemption costs one* passes
+- [x] 10.1 Add the membership page to `@grade10/web-spa`, composing the `@grade10/ui` exports over the existing `membership` and `rewards` feature slices
+- [x] 10.2 Show both counts as two counts, never summed, so *The two counts are shown as two counts* passes
+- [x] 10.3 Show the tier's validity end and what keeps it, rendering `tierValidityLine` rather than re-deriving the wording
+- [x] 10.4 Show the balance's lapse date from the inactivity clock, and every date in the programme's time zone, so *Dates read in the programme's time zone* passes
+- [x] 10.5 List issued coupons with their own expiry, readable the moment one is issued, so *A coupon is readable as soon as it is issued* passes
+- [x] 10.6 Invite a member with recorded activity but no join date to join, showing their existing points, so *A member who never joined is invited to* passes
+- [x] 10.7 Cost one redemption for a double submit across a reload, so *A double redemption costs one* passes
 - [ ] 10.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
 
-## 11. Console (grade10)
+## 11. Console (grade10) (owner: @brianchacha6969)
 
 Depends on group 1 shipping and the submodule bump. The backend rules it
 surfaces land in groups 4 and 5.
 
-- [ ] 11.1 Show a member's tier validity end and retention progress on the members page
-- [ ] 11.2 Show both counts and the coupons a member holds
-- [ ] 11.3 State on the reversal action that it voids the coupon, leaving the action itself unchanged
-- [ ] 11.4 Surface the tier-removal and redemption-cancellation actions behind their permissions, extending *An operator runs the programme from one console*
-- [ ] 11.5 Show what members forfeit to expiry
+- [x] 11.1 Show a member's tier validity end and retention progress on the members page
+- [x] 11.2 Show both counts and the coupons a member holds
+- [x] 11.3 State on the reversal action that it voids the coupon, leaving the action itself unchanged
+- [x] 11.4 Surface the tier-removal and redemption-cancellation actions behind their permissions, extending *An operator runs the programme from one console*
+- [x] 11.5 Show what members forfeit to expiry
 - [ ] 11.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
 
-## 12. Account deletion ends the membership (grade10)
+## 12. Account deletion ends the membership (grade10) (owner: @brianchacha6969)
 
 Needs the account-deletion signal from the auth service — coordinate the hook
 with the auth track before claiming.
 
-- [ ] 12.1 On account deletion, zero the balance and tier progress, void unexpired coupons, and cancel anything a member is still owed, in one recorded pass, so *Deletion clears what the member held* passes
-- [ ] 12.2 Keep the ledger record intact and make the pass idempotent, and act without waiting for any window, so *Deletion does not wait for a window* passes
+- [x] 12.1 On account deletion, zero the balance and tier progress, void unexpired coupons, and cancel anything a member is still owed, in one recorded pass behind the loyalty worker's `erasure` router the console's checklist fans out to, so *Deletion clears what the member held* passes
+- [x] 12.2 Keep the ledger record intact and make the pass idempotent, and act without waiting for any window, so *Deletion does not wait for a window* passes
 - [ ] 12.3 Verify: `pnpm run test:backend`
 
 ## 13. Tier renaming (grade10) (owner: @gareth0712)
@@ -162,7 +162,7 @@ post-launch rename would require an atomic migration over
 - [x] 13.3 Assert through the deployed programme and a real database that config, member state and tier history use `silver` and `gold`, with no `platinum` or `diamond` compatibility ids
 - [x] 13.4 Verify: `pnpm run typecheck`, `pnpm run test`
 
-## 14. Earning floors base points before the multiplier (grade10)
+## 14. Earning floors base points before the multiplier (grade10) (owner: @brianchacha6969)
 
 The one owner decision the engine does the opposite of today.
 `computeEarnedPoints` rounds once at the end — its own comment says so — and
@@ -171,9 +171,9 @@ Its own group, appended rather than folded into the earning work in group 6:
 that group is about which money counts, this one is about how counted money
 becomes points, and this one alone reprices every earn.
 
-- [ ] 14.1 Add `earn.rounding` to the programme config schema, valued `base_points_first` or `once_at_end` and defaulting to `once_at_end` when absent, so an existing deployment keeps the order it already had
-- [ ] 14.2 Implement `base_points_first` in `computeEarnedPoints` — floor money into whole base points, then apply the multiplier to those — leaving `once_at_end` as it is, so *Base points floor before the multiplier* and *A single floor at the end* both pass
-- [ ] 14.3 Make the `base_points` stamp agree with the points actually granted under floor-first; today it is floored from the money while the total is not, so the two disagree on every multiplied earn
-- [ ] 14.4 Set `rounding: "base_points_first"` in Grade10's deployed programme config, so *Grade10 floors base points before the multiplier* passes and HKD 139 at 1.2× earns 15
-- [ ] 14.5 Invert `rounds once, at the end` in `test/services/earning/earning.test.ts` and the `rounding` case in `testing/suites/earning.ts` — both assert the order this group changes for Grade10; keep a case covering `once_at_end` so the config stays a real choice
+- [x] 14.1 Add `earn.rounding` to the programme config schema, valued `base_points_first` or `once_at_end` and defaulting to `base_points_first` when absent — the owner's order, which the parser, its comment and its test all pin
+- [x] 14.2 Implement `base_points_first` in `computeEarnedPoints` — floor money into whole base points, then apply the multiplier to those — leaving `once_at_end` as it is, so *Base points floor before the multiplier* and *A single floor at the end* both pass
+- [x] 14.3 Make the `base_points` stamp agree with the points actually granted under floor-first; today it is floored from the money while the total is not, so the two disagree on every multiplied earn
+- [x] 14.4 Set `rounding: "base_points_first"` in Grade10's deployed programme config, so *Grade10 floors base points before the multiplier* passes and HKD 139 at 1.2× earns 15
+- [x] 14.5 Invert `rounds once, at the end` in `test/services/earning/earning.test.ts` and the `rounding` case in `testing/suites/earning.ts` — both assert the order this group changes for Grade10; keep a case covering `once_at_end` so the config stays a real choice
 - [ ] 14.6 Verify: `pnpm run typecheck`, `pnpm run test:backend`

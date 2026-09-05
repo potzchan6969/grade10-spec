@@ -48,6 +48,10 @@ const JOURNEY_HEADING = /^([a-z0-9][a-z0-9-]*-US-\d+):\s*(.+)$/;
 const CASE_HEADING =
   /^([a-z0-9][a-z0-9-]*?-(?:US-?\d+-)?TC-?\d+(?:-\d+)?):\s*(.+)$/;
 const ACCEPTED_BY = /^\*\*Accepted by:\*\*\s*$/m;
+/** The one line a journeys file holds in place of stories when no end user
+ * reaches the capability on its own (`openspec/config.yaml`,
+ * `rules.user-journeys`): a policy, a package contract, a convention. */
+const WALKED_BY_NOBODY = /^\*\*Walked by:\*\*\s+nobody\b/m;
 const TRACE = /^\s*(?:[-*]\s+)?\*\*Trace:\*\*(.*)$/m;
 /** What a `**Trace:**` names: the journey the case walks, in the spec's
  * canonical `-US-<n>` form. A scenario id is the older shape, and still
@@ -133,13 +137,15 @@ function readSpec(
   }
 
   // The journeys are their own file beside the spec, so a capability nobody
-  // walks — a policy, a package contract — simply has none, and a malformed
-  // one cannot blank the requirements the whole store reads.
+  // walks — a policy, a package contract — says so there in place of the
+  // stories, and a malformed file cannot blank the requirements the whole
+  // store reads. A missing file is `pnpm check:manual`'s to name.
   const journeysPath = `${dir}/user-journeys.md`;
   const journeys = readTextIfExists(join(root, journeysPath));
   if (journeys !== undefined) {
     try {
       entry.journeys = readJourneys(journeys);
+      if (walkedByNobody(journeys)) entry.unwalked = true;
     } catch (cause) {
       entry.journeysError = toItemError(journeysPath, cause);
     }
@@ -262,6 +268,13 @@ export function readJourneys(text: string): Journey[] {
   }
   refuseRepeats("story", issuedIn(section.children, JOURNEY_HEADING));
   return section.children.map(readJourney);
+}
+
+/** Whether a journeys file declares, in place of stories, that no end user
+ * reaches the capability on its own. The declaration is the file's only
+ * line under `## User journeys`; a file holding both is a check finding. */
+export function walkedByNobody(text: string): boolean {
+  return WALKED_BY_NOBODY.test(text);
 }
 
 export function readRequirement(section: Section): Requirement {

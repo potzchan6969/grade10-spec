@@ -7,6 +7,7 @@ import { LISTING_LOT_SIDEBAR_CLASS } from "./listing-lot-layout";
 import type {
   ListingLotMarketComps,
   ListingLotMetaCopy,
+  ListingLotMetaFact,
 } from "./listing-lot-meta";
 import { ListingLotMeta } from "./listing-lot-meta";
 import type {
@@ -27,14 +28,15 @@ type ListingAuctionCardSidebarProps = {
   bidEnrollment?: BidEnrollment;
   onPlaceBid: () => void;
   onCommitMaximum: (amountMinor: number) => void;
+  onCompletePurchase?: () => void;
+  onViewOrderDetails?: () => void;
   badges: readonly ListingLotMetaBadge[];
   description: string;
-  showMoreHref?: string;
   vaultShippingBody: string;
-  authenticationBody: string;
   recentBidsAccessory?: ReactNode;
   /** Renders directly under the bid card (e.g. linked payment method). */
   bidCardFooter?: ReactNode;
+  facts?: readonly ListingLotMetaFact[];
   marketComps?: ListingLotMarketComps;
   locale: ShippedLocale;
   timeZone: string;
@@ -48,13 +50,14 @@ function ListingAuctionCardSidebar({
   bidEnrollment,
   onPlaceBid,
   onCommitMaximum,
+  onCompletePurchase,
+  onViewOrderDetails,
   badges,
   description,
-  showMoreHref,
   vaultShippingBody,
-  authenticationBody,
   recentBidsAccessory,
   bidCardFooter,
+  facts,
   marketComps,
   locale,
   timeZone,
@@ -73,7 +76,9 @@ function ListingAuctionCardSidebar({
           historyResetKey={historyResetKey}
           locale={locale}
           onCommitMaximum={onCommitMaximum}
+          onCompletePurchase={onCompletePurchase}
           onPlaceBid={onPlaceBid}
+          onViewOrderDetails={onViewOrderDetails}
           recentBidsAccessory={recentBidsAccessory}
           timeZone={timeZone}
           view={view}
@@ -81,13 +86,12 @@ function ListingAuctionCardSidebar({
         {bidCardFooter ? <div className="mt-1">{bidCardFooter}</div> : null}
       </VStack>
       <ListingLotMeta
-        authenticationBody={authenticationBody}
         badges={badges}
         copy={copy}
         description={description}
+        facts={facts}
         marketComps={marketComps}
         resultFact={view.resultFact}
-        showMoreHref={showMoreHref}
         vaultShippingBody={vaultShippingBody}
       />
     </VStack>

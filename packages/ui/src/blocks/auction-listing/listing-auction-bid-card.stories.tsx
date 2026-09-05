@@ -17,16 +17,20 @@ const COPY = {
   recentBids: "Recent Bids",
   bidHistory: { you: "You", empty: "No bids yet" },
   auctionWon: "Auction won",
-  paymentDue: "Payment due",
-  paymentDueBody: "Please pay your invoice to complete this purchase.",
-  payInvoice: "Pay Invoice",
+  completePurchase: "Confirm shipping and payment",
+  completePurchaseBody:
+    "Choose where we ship and how you pay. You cannot pay until both are confirmed.",
+  completePurchaseAction: "Continue",
+  paid: "Paid",
+  paidBody: "Track shipping and delivery for this lot.",
+  viewOrderDetails: "View order details",
   didNotWin: "Did not win",
   cardRelease: "Your card authorization will be released.",
   outbid: "Outbid",
-  highestBid: "Highest bid",
+  highestBid: "Leading",
   yourMaximum: "Your maximum",
-  setMaximumLabel: "Set maximum",
-  setMaximumCurrentLabel: "Set maximum (current: {amount})",
+  setMaximumLabel: "Set Maximum",
+  setMaximumCurrentLabel: "Set Maximum (current: {amount})",
   opensIn: "Opens in",
   closed: "Closed",
   timeLeft: "Time left",
@@ -47,20 +51,24 @@ const COPY = {
   autoBiddingTooltip:
     "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
   setPrivateMaximum: "Set your private maximum",
-  raisePrivateMaximum: "Raise your private maximum (current: {amount})",
-  reviewMaximum: "Place Bid · {amount}",
-  raiseMaximumReview: "Raise maximum · {amount}",
+  raisePrivateMaximum: "Raise your private maximum",
+  currentMaximum: "Max: {amount}",
+  reviewMaximum: "Set maximum to {amount}",
+  raiseMaximumReview: "Raise maximum to {amount}",
+  bidNowReview: "Bid now at {amount}",
   privateMaximumTooltip:
-    "Your maximum is the most you are willing to pay before buyer fees. We place the lowest bid needed to keep you in the lead. Other bidders cannot see your maximum.",
+    "Your maximum is the most you are willing to pay before buyer fees. Other bidders cannot see it. We only bid as needed to keep you leading.",
   maximumMechanismSubtext:
     "We bid only as needed up to your maximum. Hold matches it; you can raise, not lower or cancel.",
   customAmountPlaceholder: "Custom amount (min. {amount})",
   stepperMessage: "Min.: {amount}",
+  invalidAmount: "Enter a valid amount.",
   useMinimum: "Use minimum",
-  bidImmediate: "Bid {amount}",
-  bidUpTo: "Bid up to {amount}",
+  bidImmediate: "Maximum {amount}",
+  bidUpTo: "Maximum {amount}",
   nextEligibleBid: "Min. bid",
   amountAboveCurrent: "{amount} vs current",
+  amountAboveMaximum: "{amount} vs max",
   minimumMaximumFloor: "At least {amount} (current bid + {increment})",
   minimumMaximumLeadingNudge: "At least {amount} (your maximum + {increment})",
   minimumMaximumLeadingIncrement:
@@ -73,6 +81,7 @@ const COPY = {
   endsLabel: "Ends",
   opensLabel: "Opens",
   closedAt: "Closed {when}",
+  closedSummary: "Closed at {time}. Ran {duration}",
   activityTimeCopy: FIXTURE_ACTIVITY_TIME_COPY,
 } as const;
 
@@ -81,16 +90,16 @@ const CLOSES_AT_MS = NOW_MS + (6 * 60 + 9) * 1000;
 
 const HISTORY: ListingBidHistoryRow[] = [
   {
-    id: "bid-john-480",
+    id: "bid-john-5800",
     initials: "john@example.com",
-    amountMinor: 480_000,
+    amountMinor: 5_800_000,
     acceptedAtMs: NOW_MS - 2 * 60_000,
     isViewer: true,
   },
   {
-    id: "bid-mike-455",
+    id: "bid-mike-5550",
     initials: "mike@example.com",
-    amountMinor: 455_000,
+    amountMinor: 5_550_000,
     acceptedAtMs: NOW_MS - 8 * 60_000,
   },
 ];
@@ -107,7 +116,7 @@ function liveView(
     isUnsold: false,
     showBidActions: true,
     priceLabel: "Current Bid",
-    currentBidMinor: 480_000,
+    currentBidMinor: 5_800_000,
     bidCount: 6,
     bidCountLabel: "6 bids",
     countdown: "6m 9s",
@@ -117,9 +126,9 @@ function liveView(
     extended: false,
     deadlineAtMs: CLOSES_AT_MS,
     standing: "none",
-    minBidMinor: 505_000,
-    incrementMinor: 25_000,
-    suggestedMaxMinor: 800_000,
+    minBidMinor: 6_050_000,
+    incrementMinor: 250_000,
+    suggestedMaxMinor: 9_500_000,
     ...overrides,
     currency: overrides.currency ?? DEFAULT_LISTING_CURRENCY,
   };
@@ -162,7 +171,7 @@ const meta = {
       control: "select",
       options: ["signed-out", "ready"],
       description:
-        "signed-out replaces Place Bid with Sign In to Bid and hides standing.",
+        "signed-out replaces Set Maximum with Sign In to Bid and hides standing.",
     },
     onPlaceBid: {
       control: false,
@@ -172,7 +181,7 @@ const meta = {
     onCommitMaximum: {
       control: false,
       description:
-        "Fires when Place Bid / Raise maximum commits the selected preset or custom amount. The consumer validates the maximum, takes the hold, and writes the cap.",
+        "Fires when Bid now / Set maximum / Raise maximum commits the selected preset or custom amount. The consumer validates the maximum, takes the hold, and writes the cap.",
     },
   },
   decorators: [
@@ -197,10 +206,10 @@ export const Default: Story = {
       canvas.getByPlaceholderText(/Custom amount \(min\./),
     ).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: /^Place Bid ·/ }),
+      canvas.getByRole("button", { name: /^Set maximum to/ }),
     ).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: /^Bid /, pressed: true }),
+      canvas.getByRole("button", { name: /^Maximum /, pressed: true }),
     ).toBeInTheDocument();
     expect(canvas.getByText("Recent Bids")).toBeInTheDocument();
   },
@@ -217,7 +226,7 @@ export const SignedOut: Story = {
       canvas.getByRole("button", { name: "Sign In to Bid" }),
     ).toBeInTheDocument();
     expect(canvas.queryByText("Min. bid")).not.toBeInTheDocument();
-    expect(canvas.queryByText("Highest bid")).not.toBeInTheDocument();
+    expect(canvas.queryByText("Leading")).not.toBeInTheDocument();
     expect(canvas.queryByText("Outbid")).not.toBeInTheDocument();
   },
 };
@@ -226,14 +235,14 @@ export const Outbid: Story = {
   args: {
     view: liveView({
       standing: "outbid",
-      currentBidMinor: 825_000,
-      minBidMinor: 850_000,
-      viewerMaximumMinor: 800_000,
+      currentBidMinor: 9_750_000,
+      minBidMinor: 10_000_000,
+      viewerMaximumMinor: 9_500_000,
     }),
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Outbid")).toBeInTheDocument();
+    expect(canvas.getByText(/Outbid · HK\$95,000/)).toBeInTheDocument();
   },
 };
 
@@ -241,19 +250,20 @@ export const Leading: Story = {
   args: {
     view: liveView({
       standing: "leading-max",
-      viewerMaximumMinor: 800_000,
+      viewerMaximumMinor: 9_500_000,
     }),
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Highest bid")).toBeInTheDocument();
+    expect(canvas.getByText(/Leading · HK\$58,000/)).toBeInTheDocument();
+    expect(canvas.getByText("Raise your private maximum")).toBeInTheDocument();
+    expect(canvas.getByText(/Max: HK\$95,000/)).toBeInTheDocument();
+    expect(canvas.queryByText("Min. bid")).not.toBeInTheDocument();
     expect(
-      canvas.getByText(/Raise your private maximum \(current: HK\$8,000\)/),
+      canvas.getByRole("button", { name: /^Raise maximum to/ }),
     ).toBeInTheDocument();
-    expect(
-      canvas.getByRole("button", { name: /^Raise maximum ·/ }),
-    ).toBeInTheDocument();
-    expect(canvas.getAllByText(/vs current/)).toHaveLength(2);
+    expect(canvas.getAllByText(/vs max/)).toHaveLength(3);
+    expect(canvas.queryByText(/vs current/)).not.toBeInTheDocument();
   },
 };
 
@@ -263,11 +273,11 @@ export const LiveNoBids: Story = {
     view: liveView({
       hasBids: false,
       priceLabel: "Starting bid",
-      currentBidMinor: 120_000,
+      currentBidMinor: 4_800_000,
       bidCount: 0,
       bidCountLabel: "0 bids",
       standing: "none",
-      minBidMinor: 120_000,
+      minBidMinor: 4_800_000,
     }),
   },
   play: async ({ canvasElement }) => {

@@ -26,149 +26,128 @@ while it has not closed. Named image sizes and optional alt live in
   - Closed is frozen: a closed listing cannot be rewritten here
 - Gallery
   - One to eight uploads: images or videos, stored as uploaded, ordered, first item as the catalogue card
+- Independent create
+  - Listings create: an authorized operator starts a listing from the
+    Listings section with no campaign selected
+  - Empty campaign through lifecycle: draft, create, and publish all succeed
+    with no campaign; public slug lookup returns the listing
+  - Listings table unattached label: a row with no campaign shows "-"
+- Test fixture standalone seed
+  - Listings tab: a developer selects fixture ids and seeds them with no
+    campaign, product reserved, media attached
+  - Drop standalone fixtures: a developer removes standalone fixture listings
+    and releases their inventory holds from the same tab
 
 ## Requirements
 
 ### Requirement: Operator saves a listing as a draft
 
-An authorized operator SHALL save an Auction listing as a draft from the
-Grade10 auction admin section without filling every field. A successful draft
-save SHALL persist the listing in `draft` and, on the first save, SHALL mint
-a new auctionable unit that has no other live listing.
+An authorized operator SHALL save an Auction listing as a draft without every
+required field. A draft save SHALL NOT require title, slug, starting price,
+currency, starts at, scheduled close at, or media. A supplied currency SHALL
+be USD, HKD, or JPY; Grade10 SHALL refuse another currency and leave the draft
+unchanged.
 
-A draft SHALL allow every required field to be empty. Saving a draft SHALL
-NOT refuse a missing title, slug, starting price, minimum increment, starts
-at, scheduled close at, or media. A field the operator does send SHALL still
-match that field's shape (a starting price that is present MUST be integer
-minor units greater than zero; a slug that is present MUST be lower-case
-words joined by hyphens).
-
-A draft listing SHALL NOT be visible on the public catalogue.
-
-A draft save from an operator who is not authorized to set an auction's
-prices and window SHALL be refused.
+The draft form and write contract SHALL NOT offer or accept a listing-level
+minimum increment.
 
 #### Scenario: grade10-admin-auction-listing-SC-01 - Operator saves an empty draft
 
-- **GIVEN** an authorized operator on the Grade10 auction listings section
-- **WHEN** they save a new listing with no title, no prices, and no window
-- **THEN** Grade10 persists a draft listing with those fields empty
-- **AND** the listing is absent from the public catalogue
+- **GIVEN** an authorized operator on the auction listings section
+- **WHEN** they save a listing with no title, prices, or window
+- **THEN** Grade10 persists a draft that is absent from the public catalogue
 
 #### Scenario: grade10-admin-auction-listing-SC-02 - Operator saves a partial draft
 
 - **GIVEN** an authorized operator
 - **WHEN** they save a draft with a title and no starting price
-- **THEN** Grade10 persists the title
-- **AND** the listing remains a draft
-- **AND** starting price stays empty
+- **THEN** Grade10 persists the title and leaves the listing a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-03 - Draft rejects a malformed price
 
 - **GIVEN** a draft listing
-- **WHEN** an operator sets starting price to a non-positive or non-integer
-  amount
-- **THEN** Grade10 refuses the write
-- **AND** starting price is unchanged
+- **WHEN** an operator sets its starting price to a non-positive or non-integer amount
+- **THEN** Grade10 refuses the write and leaves the starting price unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-04 - Draft rejects a malformed slug
 
 - **GIVEN** a draft listing
-- **WHEN** an operator sets slug to `Charizard PSA 9`
-- **THEN** Grade10 refuses the write
-- **AND** the slug is unchanged
+- **WHEN** an operator sets its slug to `Charizard PSA 9`
+- **THEN** Grade10 refuses the write and leaves the slug unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-05 - Unauthorized draft save is refused
 
-- **GIVEN** a signed-in operator who may not set an auction's prices and window
-- **WHEN** they save a new draft
-- **THEN** Grade10 refuses the save
-- **AND** it persists no listing
+- **GIVEN** a signed-in operator without auction price-and-window permission
+- **WHEN** they save a draft
+- **THEN** Grade10 refuses and persists no listing
+
+#### Scenario: grade10-admin-auction-listing-SC-56 - Draft rejects an unsupported currency
+
+- **GIVEN** a draft listing
+- **WHEN** an operator sets its currency to EUR
+- **THEN** Grade10 refuses the write
+- **AND** the currency is unchanged
 
 ### Requirement: Create validates required fields on the form and the API
 
-An authorized operator SHALL create a `draft` listing. Create is the
-validation gate: it SHALL succeed only when every required field is present
-and valid. A successful create SHALL move the listing to `created`. The
-listing SHALL still be absent from the public catalogue.
+Create SHALL require a title, slug, starting price, starts at, scheduled close
+at, media, and one supported currency. When omitted, currency SHALL default to
+HKD. The form and API SHALL reject an unsupported currency independently.
 
-Required at create:
-
-- **Title** — trimmed, 1 to 200 characters
-- **Slug** — trimmed, 1 to 64 characters, lower-case words joined by hyphens
-  (`charizard-psa-9`). Unique among listings that currently hold a slug.
-- **Starting price** — integer minor units greater than zero
-- **Minimum increment** — integer minor units greater than zero
-- **Starts at** — the scheduled bidding open
-- **Scheduled close at** — after starts at, and after the moment of create
-- **Media** — at least one and at most eight images or videos
-
-Optional fields, when omitted at create, take these defaults: currency
-`HKD`; sort index `0`; copy empty; no sale; no categories; extension window
-and extension duration both `1800` (30 minutes); no extension cap; no
-publish at; sandbox `false`.
-
-The admin form SHALL prevent submitting create while a required field is
-empty or invalid, and SHALL name the fields that fail. The API SHALL refuse
-the same create independently of the form. A created listing SHALL reject a
-later write that leaves a required field empty or invalid.
-
-Create of a listing that is not `draft` SHALL be refused. Create from an
-operator who is not authorized to set an auction's prices and window SHALL
-be refused.
+The form SHALL present USD, HKD, and JPY as its only currency choices and
+SHALL NOT display a minimum-increment field. The selected currency's Grade10
+schedule governs the listing's bid floor.
 
 #### Scenario: grade10-admin-auction-listing-SC-06 - Operator creates a filled draft
 
-- **GIVEN** a draft listing with a title, slug `charizard-psa-9`, a starting
-  price of 100000 minor units, a minimum increment of 5000 minor units,
-  currency `HKD`, a start in the future, a scheduled close at after that
-  start, and one JPEG
+- **GIVEN** a complete draft with currency JPY and no minimum-increment value
 - **WHEN** an authorized operator creates the listing
-- **THEN** Grade10 moves it to `created`
-- **AND** the listing is still absent from the public catalogue
+- **THEN** Grade10 creates it
+- **AND** its bid floor uses the JPY schedule
 
 #### Scenario: grade10-admin-auction-listing-SC-07 - Create without a title is refused on the form and the API
 
-- **GIVEN** a draft listing with no title and every other required field set
-- **WHEN** the operator submits create
-- **THEN** the admin form does not send create and names title as missing
-- **AND** a create sent to the API without a title is refused
-- **AND** the listing remains a draft
+- **GIVEN** a draft with every required field except title
+- **WHEN** the operator creates it
+- **THEN** the form and API refuse it and the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-08 - Create without a slug is refused
 
-- **GIVEN** a draft listing with every required field set except slug
-- **WHEN** the operator creates the listing
-- **THEN** Grade10 refuses the create
-- **AND** the listing remains a draft
+- **GIVEN** a draft with every required field except slug
+- **WHEN** the operator creates it
+- **THEN** Grade10 refuses and the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-09 - Create without a starting price is refused
 
-- **GIVEN** a draft listing with a title, a window, and no starting price
-- **WHEN** the operator creates the listing
-- **THEN** Grade10 refuses the create
-- **AND** the listing remains a draft
+- **GIVEN** a draft with every required field except starting price
+- **WHEN** the operator creates it
+- **THEN** Grade10 refuses and the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-10 - Create without media is refused
 
-- **GIVEN** a draft listing with every required field set except media
-- **WHEN** the operator creates the listing
-- **THEN** Grade10 refuses the create
-- **AND** the listing remains a draft
+- **GIVEN** a draft with every required field except media
+- **WHEN** the operator creates it
+- **THEN** Grade10 refuses and the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-11 - Created listing cannot clear a required field
 
 - **GIVEN** a created listing with a title
 - **WHEN** an operator clears the title
-- **THEN** Grade10 refuses the write
-- **AND** the title is unchanged
+- **THEN** Grade10 refuses and leaves the title unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-12 - Create of a published listing is refused
 
 - **GIVEN** a published listing
 - **WHEN** an operator creates it
-- **THEN** Grade10 refuses the create
-- **AND** the listing remains published
+- **THEN** Grade10 refuses and leaves it published
+
+#### Scenario: grade10-admin-auction-listing-SC-57 - Create refuses an unsupported currency on the form and API
+
+- **GIVEN** a complete draft with currency EUR
+- **WHEN** an operator creates the listing
+- **THEN** the form prevents the request and names currency
+- **AND** an API create with EUR is refused
+- **AND** the listing remains a draft
 
 ### Requirement: Catalogue fields an operator may write
 
@@ -1079,3 +1058,128 @@ Grade10 SHALL release any **active** inventory reservation for that listing
 - **THEN** the reservation becomes **closed**
 - **AND** inventory **reserved** decreases by three
 - **AND** the listing moves to **canceled**
+
+### Requirement: Listings section creates an independent listing
+
+An authorized operator SHALL start a new Auction listing from the Grade10
+auction **Listings** section. The Listings section SHALL expose a **Create
+listing** action for an operator who holds the `auction:operate` grant.
+
+Activating Create listing SHALL open the listing editor with **no Campaign**
+selected. The operator SHALL NOT be required to choose a campaign before
+saving a draft, creating, or publishing. Campaign attachment remains optional.
+
+A listing saved, created, or published with no campaign SHALL persist with
+`campaign_id` null. A collector SHALL open that listing by its slug on the
+public catalogue. The Listings table SHALL show "-" in the campaign column
+when a row has no campaign.
+
+An operator without the `auction:operate` grant SHALL NOT be offered Create
+listing. A draft save sent without that grant SHALL be refused.
+
+#### Scenario: grade10-admin-auction-listing-SC-68 - Create listing is offered on the Listings section
+
+- **GIVEN** an authorized operator on the Grade10 auction Listings section
+- **WHEN** they read the section heading row
+- **THEN** a Create listing action is present
+
+#### Scenario: grade10-admin-auction-listing-SC-69 - Listing editor opens with no campaign selected
+
+- **GIVEN** an authorized operator who activates Create listing on the
+  Listings section
+- **WHEN** the listing editor opens
+- **THEN** the Campaign control has no campaign selected
+
+#### Scenario: grade10-admin-auction-listing-SC-58 - Draft saves with the campaign left empty
+
+- **GIVEN** a new listing opened from the Listings section with no campaign
+- **WHEN** an authorized operator saves a draft with a title and no campaign
+- **THEN** Grade10 persists a draft listing with no campaign
+- **AND** the listing is absent from the public catalogue
+
+#### Scenario: grade10-admin-auction-listing-SC-59 - Listing creates with no campaign
+
+- **GIVEN** a draft listing with every required create field set and no campaign
+- **WHEN** an authorized operator creates the listing
+- **THEN** Grade10 moves it to `created`
+- **AND** the listing has no campaign
+- **AND** it is still absent from the public catalogue
+
+#### Scenario: grade10-admin-auction-listing-SC-60 - Listing publishes with no campaign
+
+- **GIVEN** a created listing with no campaign and no publish at
+- **WHEN** an authorized operator publishes it
+- **THEN** Grade10 moves it to `published`
+- **AND** the listing still has no campaign
+
+#### Scenario: grade10-admin-auction-listing-SC-61 - Collector opens the published listing by slug
+
+- **GIVEN** a published listing with no campaign whose slug is
+  `standalone-lot-1`
+- **WHEN** a collector opens `/auction/listings/standalone-lot-1`
+- **THEN** Grade10 returns that listing
+
+#### Scenario: grade10-admin-auction-listing-SC-62 - Listings table shows an unattached listing
+
+- **GIVEN** a listing with no campaign
+- **WHEN** an authorized operator reads the Listings section table
+- **THEN** that row's campaign column shows "-"
+- **AND** it does not display a campaign id as a label
+
+#### Scenario: grade10-admin-auction-listing-SC-63 - Create listing is not offered to an unauthorized operator
+
+- **GIVEN** a signed-in operator without the `auction:operate` grant
+- **WHEN** they read the Grade10 auction Listings section
+- **THEN** Create listing is not offered
+- **AND** a draft save sent for a new listing is refused
+
+### Requirement: Test panel seeds and drops standalone fixture listings
+
+The Grade10 auction **Test** panel (visible only when `LOCAL_FIXTURES_ENABLED`
+is true) SHALL expose a **Listings** tab beside the existing **Campaign** tab.
+
+The Listings tab SHALL let a developer select one or more fixture ids from the
+same list used by the Campaign tab, then seed those fixtures as standalone
+listings with no campaign. Each seeded listing SHALL receive:
+
+- An inventory product with reserved stock (quantity 1), via the same
+  inventory seed path the Campaign tab uses.
+- A media item attached, via the same upload path.
+- `campaign_id` null — no campaign is created or attached.
+
+The tab SHALL show how many instances of each fixture have been seeded. A
+**Drop listings** control SHALL let the developer select a standalone fixture
+listing from the existing ones and remove it along with any hold on its
+inventory product. The drop removes only listings whose slug matches the
+standalone fixture slug pattern and whose `campaign_id` is null.
+
+This surface and its backend procedures SHALL NOT be reachable outside a
+locally enabled dev environment (`assertDevEndpointsAllowed`).
+
+#### Scenario: grade10-admin-auction-listing-SC-64 - Listings tab is present in the Test panel
+
+- **GIVEN** the Grade10 auction Test panel with `LOCAL_FIXTURES_ENABLED` true
+- **WHEN** a developer opens the Test panel
+- **THEN** a Listings tab is present beside the Campaign tab
+
+#### Scenario: grade10-admin-auction-listing-SC-65 - Developer seeds fixture listings with no campaign
+
+- **GIVEN** the Listings tab in the Test panel
+- **WHEN** a developer selects one or more fixture ids and clicks Add listings
+- **THEN** Grade10 creates each selected fixture as a listing with no campaign
+- **AND** each listing has a reserved inventory product and a media item
+- **AND** the instance counts on the tab update
+
+#### Scenario: grade10-admin-auction-listing-SC-66 - Seeded standalone listings appear in the Listings section with no campaign
+
+- **GIVEN** a fixture listing seeded from the Test panel Listings tab
+- **WHEN** an authorized operator reads the Listings section
+- **THEN** that listing appears in the table
+- **AND** its campaign column shows "-"
+
+#### Scenario: grade10-admin-auction-listing-SC-67 - Developer drops standalone fixture listings
+
+- **GIVEN** one or more standalone fixture listings seeded from the Listings tab
+- **WHEN** a developer selects one and clicks Drop listing
+- **THEN** Grade10 removes that listing and releases its inventory hold
+- **AND** the listing no longer appears in the Listings section

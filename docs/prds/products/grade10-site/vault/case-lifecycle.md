@@ -74,9 +74,11 @@ request the shop is not yet lending against — and either lane may end at
 # Signing and custody
 Who the collector is, what they sign, where the item goes.
 
-## Staff — Record the identity check
-A verification id bound to the case, or the collector's last check reused
-under the same refusals; nothing about the person is stored on the case.
+## Bind the identity check
+A verification id is bound to the case. No name, birth date or document number is
+stored on the case, only the reference. The check behind it may have been walked
+by the collector days earlier, reused from one they already passed, or recorded
+by staff at the counter — the case holds the same reference either way.
 
 ## Staff — Explain the key terms
 Financed lane: staff record that the terms were explained, with a recording

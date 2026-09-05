@@ -106,12 +106,19 @@ describe("a store that has drifted", () => {
     ]);
   });
 
+  it("names the capabilities that never say who walks them", async () => {
+    expect(lines(await result, "walked")).toEqual([
+      "openspec/changes/add-gamma/specs/demo-product/gamma/user-journeys.md — missing, and `demo-product/gamma` has no durable journeys: name who walks it, or say `**Walked by:** nobody` and why",
+      "openspec/specs/demo-product/beta/user-journeys.md — missing: name who walks `demo-product/beta`, or say `**Walked by:** nobody` and why",
+    ]);
+  });
+
   it("exits 1 with the counts in the summary", async () => {
     const root = fixture("broken");
     const report = formatReport(root, await result);
-    expect(report.failures).toBe(9);
+    expect(report.failures).toBe(11);
     expect(report.warnings).toBe(3);
-    expect(report.text).toContain("9 failures, 3 warnings");
+    expect(report.text).toContain("11 failures, 3 warnings");
   });
 });
 
@@ -167,6 +174,86 @@ const spec = (title: string, ...requirements: string[][]) =>
 
 const proposal = (title: string) =>
   `# ${title}\n\n## Why\n\nSomething had to move.\n`;
+
+const NOBODY =
+  "## User journeys\n\n**Walked by:** nobody on their own — a policy every product inherits\n";
+
+const story = (id: string, accepted: string) =>
+  [
+    `### ${id}: Collector does the thing`,
+    "",
+    "**As a** collector,",
+    "**I want** the thing,",
+    "**so that** it is done.",
+    "",
+    "**Accepted by:**",
+    "",
+    `- \`${accepted}\` — the thing`,
+  ].join("\n");
+
+/** A journeys file holds stories, or says nobody walks the capability: the
+ * exemption is written down, so a missing file is an omission and never a
+ * decision. */
+describe("who walks a capability", () => {
+  const alpha = spec(
+    "Alpha",
+    requirement("Alpha does things", "alpha-SC-01", "the thing"),
+  );
+
+  it("passes stories, and passes the declaration", async () => {
+    const root = writeStore({
+      "openspec/specs/demo-product/alpha/spec.md": alpha,
+      "openspec/specs/demo-product/alpha/user-journeys.md": `## User journeys\n\n${story("alpha-US-01", "alpha-SC-01")}\n`,
+      "openspec/specs/demo-topic/spec.md": spec(
+        "Topic",
+        requirement("The topic holds", "demo-topic-SC-01", "it holds"),
+      ),
+      "openspec/specs/demo-topic/user-journeys.md": NOBODY,
+    });
+    expect(lines(await runChecks(root, NO_GIT), "walked")).toEqual([]);
+  });
+
+  it("fails a section that is neither, and one that is both", async () => {
+    const root = writeStore({
+      "openspec/specs/demo-product/alpha/spec.md": alpha,
+      "openspec/specs/demo-product/alpha/user-journeys.md":
+        "## User journeys\n\nSomeone should write these.\n",
+      "openspec/specs/demo-product/beta/spec.md": spec(
+        "Beta",
+        requirement("Beta holds", "beta-SC-01", "it holds"),
+      ),
+      "openspec/specs/demo-product/beta/user-journeys.md": `${NOBODY}\n${story("beta-US-01", "beta-SC-01")}\n`,
+    });
+    expect(lines(await runChecks(root, NO_GIT), "walked")).toEqual([
+      "openspec/specs/demo-product/alpha/user-journeys.md — holds no story and does not say `**Walked by:** nobody`: one or the other",
+      "openspec/specs/demo-product/beta/user-journeys.md — says `**Walked by:** nobody` and holds 1 story: one of the two is wrong",
+    ]);
+  });
+
+  it("asks a delta only while its capability has no durable journeys", async () => {
+    const root = writeStore({
+      "openspec/specs/demo-product/alpha/spec.md": alpha,
+      "openspec/specs/demo-product/alpha/user-journeys.md": `## User journeys\n\n${story("alpha-US-01", "alpha-SC-01")}\n`,
+      "openspec/changes/lean/proposal.md": proposal("Lean"),
+      "openspec/changes/lean/specs/demo-product/alpha/spec.md":
+        "## MODIFIED Requirements\n\n### Requirement: Alpha does things\n\nAlpha SHALL do the thing.\n",
+      "openspec/changes/lean/specs/demo-product/gamma/spec.md":
+        "## ADDED Requirements\n\n### Requirement: Gamma exists\n\nGamma SHALL exist.\n",
+      "openspec/changes/lean/specs/demo-product/gamma/user-journeys.md": NOBODY,
+      "openspec/changes/bare/proposal.md": proposal("Bare"),
+      "openspec/changes/bare/specs/demo-product/delta/spec.md":
+        "## ADDED Requirements\n\n### Requirement: Delta exists\n\nDelta SHALL exist.\n",
+      "openspec/changes/bare/specs/demo-product/epsilon/spec.md":
+        "## ADDED Requirements\n\n### Requirement: Epsilon exists\n\nEpsilon SHALL exist.\n",
+      "openspec/changes/bare/specs/demo-product/epsilon/user-journeys.md":
+        "## User journeys\n",
+    });
+    expect(lines(await runChecks(root, NO_GIT), "walked")).toEqual([
+      "openspec/changes/bare/specs/demo-product/delta/user-journeys.md — missing, and `demo-product/delta` has no durable journeys: name who walks it, or say `**Walked by:** nobody` and why",
+      "openspec/changes/bare/specs/demo-product/epsilon/user-journeys.md — holds no story and does not say `**Walked by:** nobody`: one or the other",
+    ]);
+  });
+});
 
 /** The fold carries `## Requirements` alone. A durable spec with requirements
  * and no `## Feature set` is an archive that dropped the map and a hand copy
@@ -824,6 +911,9 @@ function stalenessRepo(): string {
     "openspec/specs/demo-product/elsewhere/spec.md",
     spec("Moved", requirement("Moved does things", "moved-SC-01", "the thing")),
   );
+  // Both say who walks them, so the only findings left are the stale ones.
+  write("openspec/specs/demo-product/alpha/user-journeys.md", NOBODY);
+  write("openspec/specs/demo-product/elsewhere/user-journeys.md", NOBODY);
   git(["add", "-A"]);
   git(["commit", "--quiet", "-m", "the pages"], "2026-01-01T00:00:00+00:00");
 

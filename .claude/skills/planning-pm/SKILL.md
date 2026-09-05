@@ -68,8 +68,12 @@ assuming someone will find it.
    openspec status --change <change-name>
    ```
 
-   With the specs valid, run `/spec-to-tcs <change-name>` — the suites belong
-   in this same pull request, as their own commit. See `/planning-qa`.
+   With the specs valid, run `/spec-to-tcs domain <domain>` for each domain a
+   cross-feature path runs through, then `/spec-to-tcs feature <capability>`
+   for each capability the change carries — in that order, because the domain
+   file names the paths the feature suites are trimmed against. The suites
+   belong in this same pull request, as their own commits. See
+   `/planning-qa`.
 
 ## proposal.md
 
@@ -145,9 +149,14 @@ actor the spec already knows and scenarios that already exist.
   the engineer who plans delivery.
 - Every accepted-by id names a scenario the `spec.md` beside it issues.
   `pnpm check:manual` fails on one that resolves to nothing.
-- **A capability nobody reaches on its own writes no file at all** — a
-  cross-cutting policy, a package contract, a backend convention. Never invent
-  an actor to fill one.
+- **A capability nobody reaches on its own says so in place of the stories**
+  — a cross-cutting policy, a package contract, a backend convention. Its file
+  keeps the `## User journeys` heading and holds one line and no story:
+  `**Walked by:** nobody on their own - <who inherits it, and which
+  capability's journeys reach it instead>`. Never invent an actor to fill one,
+  and never leave the file out: `pnpm check:manual` fails a capability with
+  neither stories nor the declaration, so the exemption is always a decision
+  on record.
 
 ## Where a statement belongs
 

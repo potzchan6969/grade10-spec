@@ -56,9 +56,9 @@ notes](/references/shopify-membership-pos). The checkable rules are
 Earning outside Grade10 store and counter purchases, beyond operator-granted
 campaign points; auction wins and credit top-ups are later-phase candidates
 and earn nothing today. Redeeming against an auction — points and coupons buy
-nothing there, in any phase. SMS verification and wallet passes; the member
-card and email carry identification at the counter, and the phone arm ships
-dark. Tier-based discounts beyond the earn multiplier — no tier gets a
+nothing there, in any phase. SMS verification; the member card, its pass and
+email carry identification at the counter, and the phone arm ships dark. Apple
+Wallet, and NFC tap in any wallet. Tier-based discounts beyond the earn multiplier — no tier gets a
 percentage off or free shipping. Cross-brand membership — ZZZ buyers are a
 separate population with no programme.
 
@@ -73,6 +73,8 @@ separate population with no programme.
 | Tier retention | Share of Gold members who earn the retention threshold inside their validity period | Product |
 | Point redemption | Share of earned points redeemed before the balance expires | Product |
 | Coupon usage | Share of issued codes used before their own validity ends | Product |
+| Arriving by pass | Share of counter identifications made from a wallet pass | Product |
+| Codes that never landed | Counter identifications that expired or replayed before staff scanned them | Product |
 | Points outstanding | Unexpired, unredeemed points, plus the money out in unused codes, as a liability | Finance |
 | Earning delivery | Money events awaiting delivery to the programme, and their age | Engineering |
 
@@ -85,35 +87,42 @@ separate population with no programme.
 | Silver, Gold, Black | Decided | Metal names read as status without implying a price. Persisted ids are `silver`, `gold`, `black`; no record uses the pre-launch names | Owner |
 | Gold at 500 points, earning 1.2×; Black at 1.7× | Decided | Roughly HKD 5,000 of spend at the entry rate reaches Gold. The step to Gold is small enough to be worth chasing; Black's is large because it is a gift, not a target. Both are integer percentages, so earning never computes on a float | Product |
 | A tier is valid for twelve months | Decided | A permanent tier pays 1.2× forever to a member who bought once and left. Re-qualification is measured on tier points earned in the period, so spending points never demotes anyone, and a retained term keeps its anniversary | Owner |
-| Retention threshold | ❓ Decided at 500, under review | The deployed programme sets no separate retention figure, so keeping Gold costs the same 500 that reaches it. A softer figure around 400 is one config value, but it changes the size of the first downgrade cohort | Owner |
+| Retention threshold | ❓ Decided at 500, under review | The deployed programme sets no separate retention figure, so keeping Gold falls back to the same 500 that reaches it. A softer figure around 400 is a new `retentionPoints` key on the Gold rung, not a changed value, and it changes the size of the first downgrade cohort | Owner |
 | Upgrade is immediate, the higher rate is not | Decided | A member is promoted the instant they cross the threshold, including on their first purchase. The rate applies from the next purchase, because the multiplier is read before the purchase is priced | Product |
 | Demotion resets tier progress | Decided | Earnings dated before a drop count toward nothing afterwards, so a demoted member is not re-promoted the next day out of the window that just lapsed | Owner |
+| A claw-back demotion resets progress too | ❓ Open | The engine stamps the demotion on a claw-back drop as on a lapse, so a member refunded down from a higher rung reads zero retention progress while still holding the unrefunded points that landed them on the lower rung — and their term columns keep the higher rung's dates. Whether "losing a tier" covers the one demotion whose fuel the claw-back already netted out, and whether the lower rung gets a fresh term, is the owner's call | Owner |
+| Re-qualifying early banks nothing until the next period | ❓ Open | Re-earning the retention threshold in month two extends the term from its own end, and the new period counts from zero at that end — so earnings for the rest of the year count toward neither retention nor the next rung. The requirement says so; whether that is the intended nudge is unrecorded | Owner |
 | Tier points and redeemable points are counted separately | Decided | Two counts derived from one append-only ledger: earning credits both, a redemption spends only the balance, and there is nothing to reconcile between them | Product |
-| Points expire on inactivity, not per purchase | Decided | The whole balance lapses after twelve months with no purchase or redemption; each of those resets the clock. A campaign grant does not | Owner |
+| Points expire on inactivity, not per purchase | Decided | The whole balance lapses after twelve months with no purchase or redemption; each of those resets the clock. Each credit also keeps its own date, and counts while the later of the two is ahead — which is what lets a correction or a restored redemption live under a lapsed window | Owner |
+| A campaign grant keeps the balance alive | ❓ Contradicted | The requirement says any reward grant resets the window (the delta's *A campaign grant keeps the balance alive*); the engine moves no clock for a grant and a suite asserts that. Task 4.2 carries the fix; until it lands a dormant member cannot be revived by a goodwill grant | Owner |
 | Earning is priced on the after-discount, after-coupon value | Decided | Points earned on a coupon's face value would let a redemption earn back part of what it spent | Product |
 | Earning floors base points before the multiplier | Decided | HKD 139 at 1.2× earns 15, never 16. The floor's place is deployed configuration, and every earn records the base points and multiplier it was priced with | Owner |
 | Order-level discounts are apportioned by line | Decided | A whole-order discount splits across every line in proportion to line value, so it cannot be attributed to the non-earning part of a basket | Product |
 | Gift cards, top-ups and grading fees earn nothing | Decided | Excluded as products, by SKU prefix and by product type or tag, not as a tender. Shipping and tax never enter the basis at all | Product |
 | Exchange rate | Decided | A point is worth HKD 1 when it settles. With earning at a point per HKD 10 the programme returns 10% at Silver, 12% at Gold and 17% at Black — the number that sets the liability Finance reports | Owner |
 | How points settle | Decided | By what the reward is: a money-off code either checkout accepts, a physical item collected at the counter, or points straight off the bill at checkout. A physical reward is never dressed up as a code | Owner |
-| Members can undo an unused code; nobody can undo a used one | Decided | A code is money in a wallet, so the member's own surface offers the points back while the code is unused. A used code is never reversed. An operator reversal is the support remedy for anything else | Product |
+| Nobody can undo a used code; only an operator can undo an unused one | ❓ Contradicted | This row once offered the member their points back while a code was unused. The requirement now says no member surface offers a reversal (the delta's *A member cannot reverse their own redemption*) and an operator's recorded cancellation is the one credit path; the engine does the latter. Which of the two the product wants is the owner's to settle | Product |
 | An artifact left to expire stays spent | Decided | An unused code that reaches its own end date, or a collection window that closes, returns nothing by itself. What members forfeit is counted as breakage where Finance can read it | Owner |
 | Coupon validity is set per reward | Decided | A code's life is a property of what it buys, so the menu carries it per item and a redemption remembers the validity it was issued with | Product |
 | A claw-back re-evaluates the tier at once | Decided | Refunded spend is spend that never happened, so the tier it bought does not survive it | Owner |
 | In-store identification | Decided | A dynamic single-use code on the member card, its typed short code, or the member's exact email. One scan or lookup authorizes the till for ten minutes with no confirmation on the member's phone; the member is notified on every act they did not present for. An unrecognised member never blocks a sale | Owner |
+| The card in a phone wallet | Decided | Google Wallet. Its pass regenerates the barcode on the phone from a secret it already holds, so the code is current with no signal and a photograph of it is worthless within the minute — the card keeps the security it has and gains a lock screen | Product |
+| A pass in Apple Wallet | ❓ Open | Apple has no rotating code, so an Apple pass means one permanent code a member carries. The question is that credential, not the wallet | Owner |
 | Phone lookup at the till | ❓ Deferred | Grade10 asks for a mobile number at join and mirrors it to the Shopify customer, but the till's phone arm ships switched off until numbers are verified | Owner |
 | Points at the online checkout are a merchant discount, not a code | Decided | Every online checkout is a Shopify draft order, and the points come off as its one order-level fixed discount, chosen against the priced basket. Nothing is held until the invoice is paid | Engineering |
 | Points at the till are a cart discount, or a code | Decided | Which instrument the till uses is a per-shop switch: a fixed amount off the sale, or a customer-scoped single-use code. The code instrument is the default until the switch is flipped | Engineering |
 | One Shopify customer per member | Decided | Paired server-side behind the account, keyed on an opaque member id in a unique customer metafield. Pairing never blocks sign-up; it converges on retry or parks where an operator can see it. Erasure removes the vendor record irreversibly | Engineering |
 | Account deletion clears the membership | Decided | Balance, tier progress, coupons and pending collections end immediately; the ledger record survives for audit | Owner |
 | An operator can always remove a tier | Decided | A tier granted or reached in error is removable on the record, whatever its term says | Owner |
-| The loyalty engine is in-house | Decided | Built on Grade10 auth. Shopify and the POS are channels; the one Shopify-shaped piece of the loyalty product is the fulfiller that mints a code | Engineering |
+| The loyalty engine is in-house | Decided | Built on Grade10 auth. Shopify and the POS are channels; a money-off reward is a Coupon the programme holds and the store spends through its own port, so no vendor mints a code. The fulfiller port stays for a vendor-issued kind, and no deployment wires one | Engineering |
 | Top tier by invitation | Decided | Black is given deliberately to a named member with a reason, is revocable, and is never reachable by spending | Owner |
 | Annual cap and approval on the top tier | ❓ Open | The draft caps it annually and requires CEO approval. Neither is fixed, and the programme enforces neither. An invitation granted with no end date holds until revoked | Owner |
-| Campaign points count toward tier | Decided | A campaign grant counts toward the next tier and toward retention. A correction does neither, and neither keeps the balance alive | Product |
+| Campaign points count toward tier | Decided | A campaign grant counts toward the next tier and toward retention. A correction does neither — and a correction never keeps the balance alive, where a grant is meant to (the contradicted row above) | Product |
 | Physical reward menu | ❓ Open | Which items, their point prices and the collection window's length. Per-unit quantities stay off until the per-redemption and per-day bounds are chosen | Product |
 | Welcome bonus | ❓ Open | The draft posts a welcome bonus at enrolment; the deployed programme grants none until the size is set | Owner |
 | Public names for the two counts | ❓ Open | The membership page says "Points to spend" and "Points earned this year"; whether those are the launch names is undecided | Product |
+| Tier removal sits on the tier grant | Decided | Taking back an earned tier is the same axis as granting or revoking an invitation (`loyalty:invite`), so an operator who may only move points cannot demote anyone | Engineering |
+| Non-sale ledger rows name `internal` | Decided | A correction, an expiry and a campaign grant sold nothing, so they carry a third value in the closed channel set rather than the online store's — the counter's share finance reads is never overstated by rows no channel sold | Engineering |
 | ZZZ has no programme | Decided | The second brand's loyalty product is retired rather than kept as an unused placeholder | Owner |
 
 **Risks.** Earning is delivered at least once and retried, so a member who

@@ -18,6 +18,8 @@ type CouponListCopy = {
   spent: string;
   /** Names a void coupon. */
   void: string;
+  /** Names a coupon whose own validity has passed. */
+  expired: string;
 };
 
 type CouponListProps = {
@@ -57,14 +59,21 @@ function CouponRow({
               {copy.void}
             </Badge>
           ) : null}
+          {item.status === "expired" ? (
+            <Badge size="sm" variant="outline">
+              {copy.expired}
+            </Badge>
+          ) : null}
         </HStack>
-        <Text
-          className="shrink-0 font-mono"
-          data-slot="coupon-list-code"
-          size="sm"
-        >
-          {masked ? copy.maskedCode : item.code}
-        </Text>
+        {item.code ? (
+          <Text
+            className="shrink-0 font-mono"
+            data-slot="coupon-list-code"
+            size="sm"
+          >
+            {masked ? copy.maskedCode : item.code}
+          </Text>
+        ) : null}
       </HStack>
       {item.description ? (
         <Text size="sm" tone="secondary">
@@ -84,8 +93,9 @@ function CouponRow({
 /**
  * The coupons a member holds. Codes render as supplied; `masked` swaps every
  * one for the masked word, for a surface that may state a coupon exists but
- * must not hand its code over. Spent and void stay listed and say so — the
- * consumer decides how long history stays.
+ * must not hand its code over; a coupon spent from the wallet by id carries
+ * none. Spent, void and expired stay listed and say so — the consumer decides
+ * how long history stays.
  */
 function CouponList({
   copy,

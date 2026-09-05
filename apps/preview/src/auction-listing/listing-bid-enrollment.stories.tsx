@@ -27,8 +27,8 @@ import { PaymentAuthorizationPreview } from "./payment-authorization-demo";
  * Bid Panel (`ListingAuctionBidCard` plus enrollment chrome).
  *
  * States live as stories under this title and under Bid Panel / Dialogs,
- * Flows, and State Tests. Controls in this Docs page are the card's `onX`
- * callbacks.
+ * Flows, and State Tests (Enrollment, Standing, Lifecycle, Setup). Controls
+ * in this Docs page are the card's `onX` callbacks.
  */
 const meta = {
   title: "Auction Listing/Bid Panel",
@@ -55,14 +55,14 @@ the preview. The full lot page is
 | Need a card | [Need Card](?path=/story/auction-listing-bid-panel--need-card) | Empty linked-card slot. Quick-maximum presets are visible; linking is the next step. |
 | Linked card, editable | [Linked Card Editable](?path=/story/auction-listing-bid-panel--linked-card-editable) | Masked card with Change, before the first bid on this lot. |
 | Linked card, locked | [Linked Card](?path=/story/auction-listing-bid-panel--linked-card) | Masked card without Change, after the first bid. |
-| Ready | [Ready](?path=/story/auction-listing-bid-panel--ready) | Enrollment complete. Quick-maximum presets, Place Bid, and always-on maximum mechanism subtext. |
+| Ready | [Ready](?path=/story/auction-listing-bid-panel--ready) | Enrollment complete. Quick-maximum presets, Set Maximum, and always-on maximum mechanism subtext. |
 | Payment authorization | [Payment Authorization](?path=/story/auction-listing-bid-panel--payment-authorization) | Committing a maximum opens the authorize-your-bid dialog. |
 
 ## Dialogs
 
 | State | Story | What it shows |
 | --- | --- | --- |
-| Setup | [Setup Modal](?path=/story/auction-listing-bid-panel-dialogs--setup-modal) | Card-link iframe and age attestation. Continue stays disabled until both are done. |
+| Setup | [Setup Modal](?path=/story/auction-listing-bid-panel-dialogs--setup-modal) | Card-link iframe and age attestation. Confirm stays disabled until both are done. |
 | Setup from Change | [Setup Modal From Change](?path=/story/auction-listing-bid-panel-dialogs--setup-modal-from-change) | Same sheet after Change. Age attestation stays checked when already given. |
 | Payment authorization pending | [Payment Authorization Pending](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-pending) | Authorize-your-bid dialog while Stripe is authorizing. |
 | Payment authorization refused | [Payment Authorization Refused](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-refused) | Authorize-your-bid dialog after the method is declined. |
@@ -76,7 +76,7 @@ maximum; there is no manual vs auto mode toggle.
 | State | Story | What it shows |
 | --- | --- | --- |
 | Live, no bids | [Live No Bids](?path=/story/auction-listing-listingauctionbidcard--live-no-bids) | Starting bid, empty history. |
-| Leading with a maximum | [Leading](?path=/story/auction-listing-listingauctionbidcard--leading) | \`standing="leading-max"\`. Highest bid. Raise presets are the next action. |
+| Leading with a maximum | [Leading](?path=/story/auction-listing-listingauctionbidcard--leading) | \`standing="leading-max"\`. Leading badge. Raise presets are the next action. |
 | Outbid | [Outbid](?path=/story/auction-listing-listingauctionbidcard--outbid) | \`standing="outbid"\`. Current bid is above the viewer's maximum. |
 | Live sequence + auto cases | [Flows / Bidding](?path=/story/auction-listing-bid-panel-flows--bidding) | Bids through leading and outbid, then first maximum, leading maximum, overtaken, and accepted without leading. Preset and Review maximum actions open the enrollment dialogs. |
 | Interactive enrollment | [Flows / Interactive](?path=/story/auction-listing-bid-panel-flows--interactive) | Walks sign-in → card link → ready on one card. |
@@ -90,8 +90,9 @@ and already-extended.
 
 \`view.extended\` switches the time label to Time left (auto-extended).
 \`view.countdownSeconds\` (and optional \`closesAtMs\`) drives the rolling
-countdown. Closed lots pass \`countdownSeconds: null\` and show the closed
-moment.
+countdown. Closed lots pass \`countdownSeconds: null\`, \`opensAtMs\`, and
+\`deadlineAtMs\` so the primary value is the close date and the subtext is one
+line: close time and how long the auction ran.
 
 ## Card callbacks
 
@@ -112,7 +113,7 @@ around it.
 | --- | --- | --- |
 | \`PaymentMethodEmptyState.onLink\` | Empty linked-card slot is pressed | Opening setup (iframe + age attestation). |
 | \`PaymentMethodRow.onChange\` | Change on an editable linked card | Opening setup to replace the card, only before the first bid on this lot. |
-| \`EnrollmentSetupSheet.onContinue\` | Setup Continue | Persisting the linked card and age attestation, then closing setup. |
+| \`EnrollmentSetupSheet.onContinue\` | Setup Confirm | Persisting the linked card and age attestation, then closing setup. |
 | \`EnrollmentSetupSheet.onOpenChange\` | Setup open state changes | Whether the setup sheet is shown. |
 | \`SignInCard.onOpenChange\` | Sign-in overlay open state changes | Whether sign-in is shown. |
 | \`SignInEmailForm.onSubmit\` | Sign-in email is submitted | Completing sign-in, then moving enrollment to ready. |
@@ -142,7 +143,7 @@ around it.
       control: "select",
       options: ["signed-out", "ready"],
       description:
-        "How far the collector has progressed through bid enrollment. signed-out replaces Place Bid with Sign In to Bid and hides standing.",
+        "How far the collector has progressed through bid enrollment. signed-out replaces Set Maximum with Sign In to Bid and hides standing.",
     },
     onPlaceBid: {
       control: false,
@@ -247,10 +248,10 @@ SignedOut.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
   expect(canvas.getByRole("button", { name: "Sign In to Bid" })).toBeVisible();
   expect(canvas.getByText("Recent Bids")).toBeVisible();
-  expect(canvas.queryByText("Highest bid")).not.toBeInTheDocument();
+  expect(canvas.queryByText("Leading")).not.toBeInTheDocument();
   expect(canvas.queryByText("Outbid")).not.toBeInTheDocument();
   expect(
-    canvas.queryByRole("button", { name: /^Place Bid/ }),
+    canvas.queryByRole("button", { name: /^Set maximum/ }),
   ).not.toBeInTheDocument();
 };
 
@@ -268,7 +269,7 @@ NeedCard.play = async ({ canvasElement }) => {
   expect(
     canvas.queryByRole("button", { name: "Sign In to Bid" }),
   ).not.toBeInTheDocument();
-  await userEvent.click(canvas.getByRole("button", { name: /^Place Bid/ }));
+  await userEvent.click(canvas.getByRole("button", { name: /^Set maximum/ }));
   await waitFor(() => {
     expect(
       within(document.body).getByRole("dialog", {
@@ -339,7 +340,7 @@ export const PaymentAuthorization: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Min. bid")).toBeVisible();
-    await userEvent.click(canvas.getByRole("button", { name: /^Place Bid/ }));
+    await userEvent.click(canvas.getByRole("button", { name: /^Set maximum/ }));
     expect(
       within(document.body).getByRole("dialog", {
         name: "Authorize your bid",
@@ -353,7 +354,7 @@ export const PaymentAuthorization: Story = {
     );
     expect(
       within(document.body).getByRole("button", {
-        name: "Authorizing payment method",
+        name: "Authorizing…",
       }),
     ).toBeDisabled();
     await dismissDialog("Authorize your bid");

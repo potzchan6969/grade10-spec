@@ -33,11 +33,14 @@ export function AppShell() {
       />
 
       {/* Scrim. The header's toggle is the named control, so this one stays out
-          of the accessibility tree rather than answering to the same name. */}
+          of the accessibility tree rather than answering to the same name. Its
+          presence is also what holds the page behind still — see the drawer
+          rule in `index.css`. */}
       {navOpen ? (
         <button
           aria-hidden="true"
           className="fixed inset-0 z-30 bg-overlay lg:hidden"
+          data-slot="manual-nav-scrim"
           onClick={closeNav}
           tabIndex={-1}
           type="button"

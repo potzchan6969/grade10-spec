@@ -1,0 +1,118 @@
+{
+  "title": "预约到店",
+  "intro": "选择服务、门店与时间，无需账户。",
+  "nav": "预约到店",
+  "steps": {
+    "service": "服务",
+    "location": "门店",
+    "day": "日期",
+    "time": "时间",
+    "details": "资料"
+  },
+  "back": "返回",
+  "service": {
+    "title": "你想办理哪项服务？",
+    "duration": "{minutes} 分钟",
+    "none": "目前还没有可在线预约的服务。"
+  },
+  "location": {
+    "title": "到哪家门店？",
+    "none": "暂时没有门店提供此服务。"
+  },
+  "slots": {
+    "dayTitle": "选择日期",
+    "timeTitle": "选择时间",
+    "previousMonth": "上一个月",
+    "nextMonth": "下一个月",
+    "weekdays": {
+      "mon": "一",
+      "tue": "二",
+      "wed": "三",
+      "thu": "四",
+      "fri": "五",
+      "sat": "六",
+      "sun": "日"
+    },
+    "timesIn": "时间以此时区显示：",
+    "pickADay": "选择日期以查看可预约的时间。",
+    "noTimes": "这一天已没有空档。"
+  },
+  "details": {
+    "title": "你的资料",
+    "name": "姓名",
+    "email": "邮箱",
+    "phone": "电话",
+    "notes": "有什么需要我们知道？",
+    "optional": "选填",
+    "nameMissing": "请填写姓名。",
+    "emailMissing": "请填写接收确认的邮箱。",
+    "emailInvalid": "这看起来不是有效的邮箱地址。",
+    "answerMissing": "请选择一项以继续。",
+    "submit": "确认预约"
+  },
+  "summary": {
+    "title": "你的预约",
+    "service": "服务",
+    "location": "门店",
+    "when": "时间"
+  },
+  "confirmation": {
+    "title": "预约成功",
+    "body": "详情已连同日历文件发送至你的邮箱。",
+    "service": "服务",
+    "location": "门店",
+    "when": "时间",
+    "manage": "更改或取消此预约",
+    "calendar": "加入日历"
+  },
+  "manage": {
+    "title": "你的预约",
+    "service": "服务",
+    "location": "门店",
+    "when": "时间",
+    "move": "更改时间",
+    "cancel": "取消预约",
+    "cancelTitle": "取消此预约？",
+    "cancelBody": "空档会重新开放，我们会发邮件通知你。",
+    "cancelConfirm": "是，取消",
+    "cancelKeep": "保留预约",
+    "moveTitle": "选择新时间",
+    "moveConfirm": "改到这个时间",
+    "moveBack": "保留原有时间",
+    "moved": "你的预约已更改。",
+    "cancelled": "你的预约已取消。",
+    "notFoundTitle": "此链接无法打开预约",
+    "notFoundBody": "链接可能复制有误，或它指向的预约已不存在。"
+  },
+  "mine": {
+    "title": "你的预约",
+    "upcoming": "即将到来",
+    "past": "过往",
+    "emptyTitle": "尚无预约",
+    "emptyDescription": "预约到店后会在这里显示。",
+    "open": "查看",
+    "signInTitle": "登录以查看你的预约",
+    "signInBody": "预约会按你预约时使用的邮箱列出。",
+    "signIn": "登录"
+  },
+  "state": {
+    "booked": "已预约",
+    "cancelled": "已取消",
+    "completed": "已完成",
+    "no_show": "未到"
+  },
+  "errors": {
+    "servicesUnavailable": "无法读取服务。",
+    "locationsUnavailable": "无法读取门店。",
+    "daysUnavailable": "无法读取日历。",
+    "timesUnavailable": "无法读取时间。",
+    "bookingUnavailable": "无法读取预约。",
+    "retry": "再试一次",
+    "slotTaken": "这个时间刚被预约了，请另选一个。",
+    "slotNotOffered": "这个时间已不再提供，请另选一个。",
+    "alreadyBooked": "你在 {when} 已有此服务的预约。",
+    "bookingFailed": "无法完成预约，请再试一次。",
+    "moveFailed": "无法更改预约，请再试一次。",
+    "cancelFailed": "无法取消预约，请再试一次。"
+  }
+}
