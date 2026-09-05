@@ -42,3 +42,14 @@ ask for.
 - `grade10-site-vault-valuation-and-offer-SC-03` — Terms need a valuation
 - `grade10-site-vault-valuation-and-offer-SC-12` — Custody still opens
 - `grade10-site-vault-valuation-and-offer-SC-19` — Storage terms need only the valuation
+
+### grade10-site-vault-valuation-and-offer-US-04: Collector whose loan request the shop cannot yet price still gets the item stored
+
+**As a** collector who asked for a loan the shop is not lending against yet,
+**I want** custody terms agreed against the valuation instead,
+**so that** the item is taken in on the same paper rather than my request being
+declined or cancelled for want of a lender.
+
+**Accepted by:**
+
+- `grade10-site-vault-valuation-and-offer-SC-20` — A loan request is stored while the shop is not lending

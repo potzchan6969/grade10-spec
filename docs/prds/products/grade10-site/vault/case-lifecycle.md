@@ -66,8 +66,10 @@ supersedes and inserts in one transaction; staff can also withdraw it back to
 `offer_made → accepted`, from the collector's own case page or from the
 counter, guarded on the offer not having expired. Declining the offer returns
 the case to `under_valuation` with the offer closed, and the request stays
-open for another. The storage lane goes `under_valuation → accepted` on
-agreed terms, and either lane may end at `declined` by staff here.
+open for another. Custody terms agreed at the counter take either lane
+`under_valuation → accepted` with no offer — a storage case always, and a loan
+request the shop is not yet lending against — and either lane may end at
+`declined` by staff here.
 
 # Signing and custody
 Who the collector is, what they sign, where the item goes.

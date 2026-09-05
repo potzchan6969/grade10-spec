@@ -40,7 +40,7 @@ draft → submitted → under_valuation → [offer_made →] accepted → signin
 terminal: declined | cancelled | expired | forfeited
 ```
 
-- The bracketed statuses exist only when financing was requested; a storage-only case goes `under_valuation → accepted` and later `vaulted → released` directly.
+- The bracketed statuses exist only where an offer was accepted and advanced; a storage-only case, and a loan request stored on custody terms while the shop is not lending, go `under_valuation → accepted` and later `vaulted → released` directly.
 - Lane membership is a transition guard read off the case, not a second set of statuses.
 - There is no `overdue` status: overdue is `computeDue` and a clock, and a status would be a cached answer that can be wrong.
 
@@ -52,9 +52,9 @@ terminal: declined | cancelled | expired | forfeited
 | `offer_made → offer_made` | staff `vault:approve` | counter-offer: supersede the open offer and insert the new one in one transaction |
 | `offer_made → under_valuation` | staff `vault:approve` | dispute; supersedes the open offer in the same transaction |
 | `offer_made → accepted` | the case's owner, or staff `vault:operate` | the open offer has not passed its expiry; the actor is recorded, and the signature is what binds either way |
-| `under_valuation → accepted` | staff `vault:operate` | storage-only lane; custody terms agreed with no offer |
+| `under_valuation → accepted` | staff `vault:operate` | either lane; custody terms agreed with no offer, so a loan request the shop is not yet lending against is stored on the same paper |
 | `under_valuation → declined` | staff `vault:approve` | the item is refused; nothing has been signed |
-| `accepted → signing` | staff `vault:operate` | a verification is bound to the case, its subject is an adult and their document has not expired on the brand's day; the shop the item will be held at is known; on the financed lane the key terms are recorded as explained. Opens one packet — the custody agreement always, the loan agreement second when financed |
+| `accepted → signing` | staff `vault:operate` | a verification is bound to the case, its subject is an adult and their document has not expired on the brand's day; the shop the item will be held at is known; on the financed lane the key terms are recorded as explained. Opens one packet — the custody agreement always, the loan agreement second where an offer was accepted |
 | `signing → vaulted` | staff `vault:operate` | an executed packet holding every document the lane requires, and nothing still open; writes custody, naming the shop the item is kept at |
 | `vaulted → active` | treasurer `vault:payout` | financed lane; the transfer already happened and is being recorded, at a value date no earlier than the seal and not in the future, by somebody other than the offer's maker. The term starts here: the due date is computed from the value date and written on the payout row. Reachable again after a payout is taken back, guarded on there being no live payout rather than on a constraint |
 | `active → repaid` | treasurer `vault:payout` | recorded repayments satisfy `computeDue` at the recording clock |

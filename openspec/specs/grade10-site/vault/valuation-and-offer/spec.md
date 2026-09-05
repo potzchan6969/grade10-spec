@@ -245,12 +245,21 @@ interest accrues until the advance is recorded.
 
 ### Requirement: The storage lane agrees terms without an offer
 
-A storage case SHALL move from being valued to `accepted` on custody terms
-agreed at the counter, against a recorded valuation and with no offer, no
-principal and no interest.
+A case on either lane SHALL move from being valued to `accepted` on custody
+terms agreed at the counter, against a recorded valuation and with no offer, no
+principal and no interest. A financed case stored this way SHALL sign the
+custody agreement alone and SHALL never hold an advance or a balance, so a loan
+request the shop is not yet lending against leaves valuation as stored rather
+than only as declined or cancelled.
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-19 - Storage terms need only the valuation
 
 - **GIVEN** a valued storage case
 - **WHEN** staff agree its custody terms
 - **THEN** the case is `accepted` and no offer exists on it
+
+#### Scenario: grade10-site-vault-valuation-and-offer-SC-20 - A loan request is stored while the shop is not lending
+
+- **GIVEN** a valued financed case with no offer on the table
+- **WHEN** staff agree its custody terms
+- **THEN** the case is `accepted` with no offer, its packet holds the custody agreement alone, and nothing is ever advanced or owed on it

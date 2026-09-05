@@ -88,11 +88,20 @@ A storage case SHALL walk `draft → submitted → under_valuation → accepted 
 signing → vaulted → released`, and SHALL never hold an offer, an advance or a
 balance.
 
+A financed case whose terms are agreed as custody alone SHALL walk the storage
+case's path from `under_valuation`, and SHALL hold no offer, advance or balance.
+
 #### Scenario: grade10-site-vault-case-lifecycle-SC-02 - A storage case agrees terms without an offer
 
 - **GIVEN** a storage case being valued
 - **WHEN** its custody terms are agreed at the counter
 - **THEN** the case is `accepted` with no offer against it
+
+#### Scenario: grade10-site-vault-case-lifecycle-SC-15 - A loan request stored on custody terms walks the storage path
+
+- **GIVEN** a financed case being valued, with no offer on the table
+- **WHEN** its custody terms are agreed at the counter
+- **THEN** the case is `accepted` with no offer, signs the custody agreement alone, and is released from `vaulted` owing nothing
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-03 - A storage case owes nothing
 
