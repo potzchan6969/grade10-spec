@@ -1,0 +1,117 @@
+{
+  "title": "Book a visit",
+  "intro": "Pick a service, a shop and a time. No account needed.",
+  "nav": "Book a visit",
+  "steps": {
+    "service": "Service",
+    "location": "Shop",
+    "day": "Day",
+    "time": "Time",
+    "details": "Details"
+  },
+  "back": "Back",
+  "service": {
+    "title": "What are you coming in for?",
+    "duration": "{minutes} min"
+  },
+  "location": {
+    "title": "Which shop?",
+    "none": "No shop offers this service yet."
+  },
+  "slots": {
+    "dayTitle": "Pick a day",
+    "timeTitle": "Pick a time",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "weekdays": {
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "sun": "Sun"
+    },
+    "timesIn": "Times in",
+    "pickADay": "Pick a day to see its times.",
+    "noTimes": "Nothing is free on this day any more."
+  },
+  "details": {
+    "title": "Your details",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "notes": "Anything we should know?",
+    "optional": "optional",
+    "nameMissing": "Tell us your name.",
+    "emailMissing": "Tell us where to send the confirmation.",
+    "emailInvalid": "That doesn’t look like an email address.",
+    "answerMissing": "Pick one to continue.",
+    "submit": "Book the visit"
+  },
+  "summary": {
+    "title": "Your visit",
+    "service": "Service",
+    "location": "Shop",
+    "when": "When"
+  },
+  "confirmation": {
+    "title": "You’re booked",
+    "body": "We’ve sent the details to your email, with a calendar file.",
+    "service": "Service",
+    "location": "Shop",
+    "when": "When",
+    "manage": "Move or cancel this visit",
+    "calendar": "Add to calendar"
+  },
+  "manage": {
+    "title": "Your visit",
+    "service": "Service",
+    "location": "Shop",
+    "when": "When",
+    "move": "Move the visit",
+    "cancel": "Cancel the visit",
+    "cancelTitle": "Cancel this visit?",
+    "cancelBody": "The desk goes back to being free, and we’ll send you a note.",
+    "cancelConfirm": "Yes, cancel it",
+    "cancelKeep": "Keep it",
+    "moveTitle": "Pick a new time",
+    "moveConfirm": "Move it here",
+    "moveBack": "Keep the current time",
+    "moved": "Your visit has moved.",
+    "cancelled": "Your visit is cancelled.",
+    "notFoundTitle": "This link doesn’t open a visit",
+    "notFoundBody": "It may have been copied wrongly, or the visit it opened is gone."
+  },
+  "mine": {
+    "title": "Your visits",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "emptyTitle": "No visits yet",
+    "emptyDescription": "Book a visit and it shows up here.",
+    "open": "Open",
+    "signInTitle": "Sign in to see your visits",
+    "signInBody": "Your visits are listed under the email you booked with.",
+    "signIn": "Sign in"
+  },
+  "state": {
+    "booked": "Booked",
+    "cancelled": "Cancelled",
+    "completed": "Completed",
+    "no_show": "No show"
+  },
+  "errors": {
+    "servicesUnavailable": "The services could not be read.",
+    "locationsUnavailable": "The shops could not be read.",
+    "daysUnavailable": "The calendar could not be read.",
+    "timesUnavailable": "The times could not be read.",
+    "bookingUnavailable": "The visit could not be read.",
+    "retry": "Try again",
+    "slotTaken": "That time was just taken. Pick another.",
+    "slotNotOffered": "That time isn’t offered any more. Pick another.",
+    "alreadyBooked": "You already have a visit for this service on {when}.",
+    "bookingFailed": "The visit could not be booked. Try again.",
+    "moveFailed": "The visit could not be moved. Try again.",
+    "cancelFailed": "The visit could not be cancelled. Try again."
+  }
+}

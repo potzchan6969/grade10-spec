@@ -5,5 +5,20 @@
     "action": "登入",
     "otpHint": "或輸入此驗證碼：{otp}",
     "ignore": "如果這並非你本人的要求，請忽略此電郵。"
+  },
+  "appointment": {
+    "greeting": "{name} 你好，",
+    "bookedSubject": "預約成功：{service}",
+    "bookedBody": "你已預約於 {location} 辦理{service}。",
+    "movedSubject": "預約已更改：{service}",
+    "movedBody": "你於 {location} 的{service}預約已改為新時間。",
+    "cancelledSubject": "預約已取消：{service}",
+    "cancelledBody": "你於 {location} 的{service}預約已取消，隨時可以再預約。",
+    "reminderSubject": "提醒：{when} 的{service}",
+    "reminderBody": "提醒你於 {location} 的{service}預約。",
+    "when": "時間",
+    "where": "地點",
+    "manage": "更改或取消此預約",
+    "calendar": "已附上行事曆檔案，方便你將預約加入行事曆。"
   }
 }
