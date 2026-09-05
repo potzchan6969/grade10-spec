@@ -1,0 +1,17 @@
+{
+  "title": "身份核實",
+  "description": "訂單金額達 {order} 或以上，以及出價達 {bid} 或以上，均需先核實身份。核實一次，即可在我們的所有服務中通用。",
+  "loading": "正在查看你的核實狀態…",
+  "loadFailed": "無法讀取你的身份核實狀態。請稍後再試。",
+  "verifiedUntil": "已核實。你的證件有效至 {day}。",
+  "verified": "已核實。",
+  "expired": "你已核實的證件已過期。請以有效證件重新核實。",
+  "unverified": "尚未核實。",
+  "checking": "我們正在核實你的身份證明文件 — 通常只需一兩分鐘。你可以離開此頁面，稍後回來查看結果。",
+  "declined": "我們無法在網上核實你的身份證明文件。請以更清晰的相片再試一次，或於到店時攜同證件，我們會在櫃檯為你核實。",
+  "verifyAction": "核實我的身份",
+  "continueAction": "繼續核實",
+  "verifyAgainAction": "再試一次",
+  "recheckAction": "再次查看",
+  "unavailable": "身份核實服務暫時無法使用。請稍後再試。"
+}

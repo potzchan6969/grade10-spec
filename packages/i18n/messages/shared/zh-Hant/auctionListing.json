@@ -46,6 +46,7 @@
   "hideBidHistory": "隱藏出價紀錄",
   "highestBidder": "最高出價",
   "home": "首頁",
+  "identityRequired": "這個金額的出價需先核實身份。請先在你的帳戶核實身份，再重新出價。",
   "invalidAmount": "請輸入有效金額。",
   "listingNumber": "拍品 {label}",
   "lot": "拍品編號",

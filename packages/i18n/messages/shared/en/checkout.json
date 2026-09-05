@@ -44,5 +44,10 @@
   "line": {
     "soldOut": "Sold out",
     "adjusted": "Only {count} left — quantity adjusted"
+  },
+  "identity": {
+    "title": "Verify your identity to buy this",
+    "message": "Orders of {threshold} or more need a verified identity, and this basket comes to {goods}. Verify from your account, then come back to pay.",
+    "action": "Go to your account"
   }
 }

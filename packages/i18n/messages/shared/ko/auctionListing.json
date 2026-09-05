@@ -46,6 +46,7 @@
   "hideBidHistory": "입찰 내역 숨기기",
   "highestBidder": "최고 입찰",
   "home": "홈",
+  "identityRequired": "이 금액의 입찰에는 신원 확인이 필요합니다. 계정에서 신원을 확인하신 뒤 다시 입찰해 주세요.",
   "invalidAmount": "올바른 금액을 입력해 주세요.",
   "listingNumber": "출품 {label}",
   "lot": "로트",
