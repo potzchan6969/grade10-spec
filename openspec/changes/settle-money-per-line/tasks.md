@@ -34,12 +34,27 @@ wrote. What a fake cannot settle is whether Shopify states these fields the
 way the decoders read them. Ring one staging sale carrying a points tender, a
 welded product coupon and a manual staff discount, then refund one line of it.
 
-- [ ] 5.1 A settled order records one `order_lines` row per line the shop sold, each with a distinct `line_ref` — an empty table means the webhook stated no `line_items[].id`, and the pro-rated share is silently answering everything
-- [ ] 5.2 `order_discounts` holds a row titled `Points` whose `amount_minor` is what the shop took off for the tender, not what was promised
+- [x] 5.1 A settled order records one `order_lines` row per line the shop sold, each with a distinct `line_ref` — an empty table means the webhook stated no `line_items[].id`, and the pro-rated share is silently answering everything
+- [x] 5.2 `order_discounts` holds a row titled `Points` whose `amount_minor` is what the shop took off for the tender, not what was promised
 - [ ] 5.3 The welded coupon's row carries the title the till applied it under — the same string as `coupons.title`. A different one is the risk `design.md` names, and it costs corroboration rather than spending the coupon wrongly
-- [ ] 5.4 The staff discount appears under its own title and is neither captured as points nor counted in `store.points_tender.unexplained`
-- [ ] 5.5 Refunding one line reverses what that line earned, and `commerce.order.refund_estimated` does not fire — if it does, the refund body named no `line_item_id`
+- [x] 5.4 The staff discount appears under its own title and is neither captured as points nor counted in `store.points_tender.unexplained`
+- [x] 5.5 Refunding one line reverses what that line earned, and `commerce.order.refund_estimated` does not fire — if it does, the refund body named no `line_item_id`
 - [ ] 5.6 The sweep arm agrees with the webhook arm on the same order: same lines, same allocations, same claw-back
+
+Rung on the staging shop as store order `d5842039` / Shopify `#1014`: two
+lines, a welded product coupon on one, a manual staff discount on the other, a
+100-point tender, then one line refunded.
+
+- **5.3 and 5.6 need a till.** Both turn on the arm a web sale never takes. A
+  welded cut is corroborated only for `origin = pos`, and the till is what
+  sends the coupon's own title — a web sale titles every welded cut `Coupon`
+  and reads no title back. Likewise only a till sale is settled by both arms:
+  a draft sale's `orders/paid` is an unbound claim the webhook hands to the
+  sweep, so one arm settles it and there is nothing to compare.
+- **What the two arms did agree on.** The sweep settled this sale and the
+  webhook priced its refund, against the same line handles and to the exact
+  per-line claw-back — the cross-arm half `refund_estimated` used to stand in
+  for.
 
 Where a title does not match, the fix is the mapping in the decoders, not the
 rules that read it — every rule already falls back to what it did before this
