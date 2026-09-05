@@ -15,7 +15,7 @@ tests against typed fixtures rather than a running backend.
 - [ ] 2.3 Add pure history and detail projections that consume the customer-status badge, keep quoted, paid, and refunded amounts distinct, calculate line totals in minor units, and omit unsupported facts so `grade10-site-store-order-history-SC-03` through `grade10-site-store-order-history-SC-05` and `grade10-site-store-order-detail-SC-04` through `grade10-site-store-order-detail-SC-08` pass in unit tests.
 - [ ] 2.4 Add the safe tracking-target helper and route-effect tests so `grade10-site-store-order-history-SC-07`, `grade10-site-store-order-history-SC-08`, `grade10-site-store-order-detail-SC-09`, and `grade10-site-store-order-detail-SC-10` pass for valid, absent, relative, credential-bearing, and non-HTTPS targets.
 
-## 3. Customer order pages (grade10)
+## 3. Customer order pages (grade10) (owner: @kinisworking)
 
 - [ ] 3.1 Register `/profile/orders` and `/profile/orders/:orderId` as session surfaces, add route modules through `SessionDecided`, and make `grade10-site-store-order-history-SC-01`, `grade10-site-store-order-history-SC-02`, `grade10-site-store-order-detail-SC-01`, and `grade10-site-store-order-detail-SC-03` pass in route tests.
 - [ ] 3.2 Compose the Your Orders page from `useOrders` and `OrderHistory`, including Active/Past grouping, newest-first summaries, View Details, tracking, loading, retry, and empty states; make `grade10-site-store-order-history-SC-03` through `grade10-site-store-order-history-SC-11` pass in focused page tests.
