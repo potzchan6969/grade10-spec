@@ -178,8 +178,14 @@ pos_pass_push_tokens          the APNs credential, one row per key
 - **`idx_pos_passes_expiry_owed`** on `(next_attempt_at) where state <> 'live'`
   — the expiry arm's scan. A non-live row with an attempt stamped is a copy the
   vendor still holds, so the debt needs no column of its own
-- **Authoritative** — the secret, the state, and the digest. Everything the pass
-  shows is read from the programme at send time and stored only as that digest
+- **Authoritative** — the secret, the state, and the digest. What a pass shows
+  is read from the programme at send time; the digest is what decides whether
+  it moved, and the rendered fields beside it are what a device's own fetch is
+  answered from
+- **`pos_pass_cursor`** — how far the sweep has read the programme's change
+  logs. No row is the seeding case: a first lap is told today's high-water mark
+  rather than replaying a programme's whole history onto passes the daily floor
+  already covers
 
 ## Service interfaces
 
@@ -221,16 +227,31 @@ leaves the member's next scan working.
 
 ### `runWalletRefresh` — one lap
 
+0. **Pull** the members the programme recorded a change for since the cursor,
+   and bring their passes forward — before the claim, so a change lands in this
+   lap rather than the next
 1. **Claim** the due rows oldest first, `for update skip locked`, counting the
    attempt and pushing the next one out one rung
-2. **Read** the four facts for the claimed batch in one call to the programme,
-   capped so a lap stays inside one request's budget
+2. **Read** the facts for the claimed batch in one call to the programme —
+   `memberStanding`, not the counter's panel, under a grant that carries
+   nothing else. The rolling tier window inside it is read once per distinct
+   floor, through the one implementation the counter's own tier read runs
 3. **Digest** them; equal, stamp `rendered_at` and the next `due_at` and send
    nothing
 4. **Send** the difference to the wallet, then stamp
 5. **A crash between claim and stamp** leaves the row due, so the next lap
    re-reads and re-sends — the wallet is last-writer-wins on a pass's contents,
    so sending twice is a wake-up, not a fault
+
+- **The lap cap and the backoff ladder are code, not registry** — both follow
+  the cron's tick and the invocation's budget, which no brand changes; a second
+  brand's worker runs its own invocation and takes the same values
+- **The words on a pass** — `WalletPassCopy`: the membership page's own keys
+  (`summary.balance`, `summary.tier`, `card.walletUpdated`, `page.title`) in
+  every language the brand speaks. Google takes them as a `LocalizedString`
+  per label; Apple as a `pass.strings` per language, keyed by the default's
+  words in `pass.json`. Not in the digest, so a pass already issued takes new
+  words with its next change
 
 ## Contracts
 
@@ -379,11 +400,3 @@ minutes and the store cron ticks every five.
   dropped in one migration, and the old values stay accepted forever because
   sessions recorded under them must remain readable
 - **No contract step.** Nothing is dropped by this change
-
-## Open questions
-
-- ❓ Whether a member may hold more than one live pass at a time. The schema
-  admits one per wallet today; lifting it is an index change and no requirement
-  moves
-- ❓ Whether the sweep's batch cap and its limiter belong in the brand registry
-  rather than in code, once a second brand carries passes

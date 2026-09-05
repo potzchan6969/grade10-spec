@@ -17,7 +17,8 @@ physical-store orders earning through attribution.
     it spends nothing and collects nothing
   - One pass per wallet: ending or adding in one leaves the other alone
   - Ending one: immediate, by the member or an operator
-  - Staying current: a change reaches it within **5 minutes**, a burst costs one update
+  - Staying current: one sweep behind, sweeps **5 minutes** apart at most; a burst costs one update
+  - In the phone's language: the surface's own words, in every language it speaks
 
 ## ADDED Requirements
 
@@ -121,6 +122,22 @@ membership surface SHALL say which passes they are carrying.
 - **THEN** the other still identifies them
 - **AND** the surface still offers the action that ends it
 
+### Requirement: A pass speaks the languages the membership surface does
+
+The words a pass carries beside the member's facts SHALL be the membership
+surface's own, offered in every language the surface speaks. A phone set to one
+of those languages SHALL be shown it; a phone set to any other SHALL read the
+surface's default.
+
+#### Scenario: grade10-site-store-membership-SC-71 - A pass speaks the phone's language
+
+- **GIVEN** a member whose phone is set to a language the membership surface
+  speaks
+- **WHEN** they add a pass
+- **THEN** the words beside their name, tier and points are in that language
+- **AND** a phone set to a language the surface does not speak reads them in
+  the surface's default
+
 ### Requirement: A pass identification is recorded as its own kind
 
 The programme SHALL record that a member was identified from a wallet pass,
@@ -161,32 +178,52 @@ be able to add a new pass afterwards.
 - **THEN** the act is recorded in the operator log with who and when
 - **AND** an operator without that permission sees it refused, not hidden
 
-### Requirement: A pass follows the member's standing within five minutes
+### Requirement: A pass follows the member's standing, one sweep behind
 
-Within **5 minutes** of a member's name, tier or points to spend changing, the
-pass SHALL carry what they then are. This SHALL hold whether the change was
-recorded — a spend, a redemption, an operator's correction — or happened on its
-own, as points reaching their expiry and a tier term running out do.
+A member's standing is their name, their tier and the points they can spend.
+The sweep SHALL run at least every **5 minutes**, and by the end of the first
+sweep beginning after a member's standing moves, the wallet SHALL hold what
+they then are. This SHALL hold whether the change was recorded — a spend, a
+redemption, an operator's correction — or happened on its own, as points
+reaching their expiry, a tier term running out and an invitation lapsing do.
+
+The wallet's copy is what this bounds. When a member's phone shows an update
+SHALL be the wallet's affair and the phone's, and nothing SHALL be required of
+either. The pass SHALL say when what it shows was current.
+
+A change nobody records SHALL name the instant it happens at, and the pass
+SHALL be due at that instant rather than on the daily floor. Every clock that
+can move a shown fact SHALL name its own instant, and the earliest of them
+SHALL be the one the pass waits on.
+
+Every live pass SHALL be read at least once a day whatever else marked it due,
+and a sweep with more due than it reads SHALL report how far behind its oldest
+due pass is.
 
 Only a difference SHALL cost an update: a pass re-read and found unchanged
-SHALL cost nothing, so several changes inside the interval cost one update
+SHALL cost nothing, so several changes between two reads cost one update
 carrying what stands after the last of them.
 
-When a member's phone shows an update SHALL be the phone's own affair, and
-nothing SHALL be required of it. The pass SHALL say when what it shows was
-current.
-
-#### Scenario: grade10-site-store-membership-SC-52 - A recorded change reaches the pass
+#### Scenario: grade10-site-store-membership-SC-52 - A recorded change reaches the wallet on the next sweep
 
 - **WHEN** staff spend a member's points
-- **THEN** within 5 minutes the pass carries the points left after that spend
+- **THEN** the first sweep beginning after that spend sends the wallet the
+  points left after it
+- **AND** it does so whether or not the spend itself marked the pass due
 
-#### Scenario: grade10-site-store-membership-SC-53 - A change nobody recorded reaches the pass
+#### Scenario: grade10-site-store-membership-SC-53 - A change nobody recorded is due at the instant it happens
 
-- **WHEN** a member's points reach their expiry, or their tier term runs out,
-  with nothing written
-- **THEN** within 5 minutes the pass carries the tier and points the member's
-  own surfaces now read
+- **WHEN** a member's points reach their expiry, their earned tier term runs
+  out, or an invitation holding their tier lapses, with nothing written
+- **THEN** the pass is due at that instant rather than on the daily floor
+- **AND** the first sweep after it sends the wallet the tier and points the
+  member's own surfaces then read
+
+#### Scenario: grade10-site-store-membership-SC-70 - A sweep that has fallen behind says so
+
+- **GIVEN** more passes due than one sweep reads
+- **WHEN** the sweep runs
+- **THEN** it reports the age of its oldest due pass
 
 #### Scenario: grade10-site-store-membership-SC-54 - A burst costs one update
 

@@ -64,6 +64,9 @@ instead of a sign-in.
 
 - **Beside the code** — the member's name, the tier they hold, and the points
   they can spend, following their standing without them opening anything
+- **In the phone's language** — the words beside them are the membership
+  page's own, in every language the site speaks; the phone picks, and one set
+  to none of them reads English
 - **Google's code** — made on the phone itself, so it is scannable where there
   is no signal, changes on its own rather than being fetched, and identifies
   once
@@ -156,8 +159,8 @@ brand carrying both wallets seals both their secrets under the one key:
   rows today, so a rotation is a re-issue for every member who holds one. The
   key must be at least 32 random bytes, base64 — `openssl rand -base64 32`.
   A shorter one, or a phrase, is refused by name at the first read rather than
-  digested silently, and the same rule holds `WALLET_PASS_AUTH_KEY`
-  ❓ who owns that runbook
+  digested silently, and the same rule holds `WALLET_PASS_AUTH_KEY`.
+  Engineering owns the rotation, scheduled as the re-issue it is
 - **A pass Google cannot be told about stays owed** — the sweep carries two
   arms and reports both: what is stale, and what a member's ending or erasure
   still owes the vendor. Depth and age go together, and the age is the one to
@@ -177,7 +180,9 @@ brand carrying both wallets seals both their secrets under the one key:
   at all — a brand with a certificate but no APNs key sweeps nothing, so it
   reports nothing. A certificate that will not parse counts
   `store.wallet.apple.cert_unreadable` instead, and stops there rather than
-  taking the other wallet's lap down with it
+  taking the other wallet's lap down with it. Engineering owns the calendar:
+  the gauge is the alarm, and renewal is the certificate, key and secrets
+  steps of standing the wallet up, run again against the same identifiers
 - **Pushes with no fetches is the alarm worth waking somebody for** — APNs
   answers 200 for a device that then does nothing, so it is which
   `store.wallet.apple.*` counter stops that names the fault:
