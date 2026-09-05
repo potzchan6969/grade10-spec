@@ -6,9 +6,9 @@ reads before the visit.
 
 ## Screens
 
-Neither frame exists in Figma, and no `@grade10/ui` block covers either. Both
-are work in **grade10-spec** and they block group 11 in `tasks.md`. Nothing
-below describes a layout — that is the frame's job.
+Neither frame exists in Figma; both are `TBC` with Design and block nothing,
+because every state below composes primitives the design system already
+ships. Nothing below describes a layout — that is the frame's job.
 
 | Surface | App | What changes |
 | --- | --- | --- |
@@ -21,18 +21,15 @@ status on a screen nobody opened for it.
 
 ## Components
 
-| Export | Carries |
-| --- | --- |
-| `IdentityCheckStatus` | One of the case's six states — verified, out, stalled, refused, lapsed, none — with who performed a bound check and when |
-| `IdentityCheckPanel` | The case panel: the status, the actions an operator holds a grant for, and the override reason beside a decline |
-| `VerificationStep` | The collector's page: the state of their check and the one thing to do next |
+| Export | Package | Carries |
+| --- | --- | --- |
+| `VerifyFlow` | `@grade10/e-kyc-frontend/verify` | The collector's page: the state of their check, the consent, and the one thing to do next; every word a prop |
+| `Button`, `CheckboxButton`, `Center`, `VStack` | `@grade10/design-system` | What the page composes — no variant, token or block had to be added |
+| `IdentityPanel` | `@grade10/vault-admin-frontend` | The case panel: the state, who performed a bound check, the findings and decline reason behind `kyc:read`, and the override reason beside a decline; composed from the console vocabulary in `@grade10/frontend-console` |
 
-`IdentityCheckStatus` and `VerificationStep` are brand-neutral and belong in
-`@grade10/ui`; `IdentityCheckPanel` composes them as console view code. Whether
-`VerificationStep` needs a design-system primitive that does not exist yet is
-group 1's to find and say — the answer is a variant, a token, or a new block,
-and a new block brings a `shared/ui/<block>` delta with its exports
-requirement.
+No `@grade10/ui` block was needed: the collector's page is one column of
+words and one control, and the panel is console view code over the vocabulary
+every console shares.
 
 ## States
 

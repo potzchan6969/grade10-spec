@@ -45,7 +45,8 @@ Goals:
 Non-Goals:
 
 - **No route on the e-kyc worker** — the collector's surface and the
-  provider's callback mount on the vault
+  provider's callback mount on the product that raised the check; the vault
+  is the first host
 - **No vendor name in `packages/e-kyc/contracts`** — the provider is a port in
   the backend
 - **No second erasure clock of Grade10's own** — a check that never became an
@@ -63,9 +64,15 @@ Non-Goals:
   and its digest, and the view projections. The vault instantiates the table
   into `vault` as `identity_checks` and drizzle generates the migration there.
 - The queries take `(db, tables)` rather than closing over a port, exactly as
-  `voidOpenPackets(tx, SIGN_TABLES, …)` does. The flow — raise, start, settle,
-  withdraw, the two work lists, the three routes — is the vault's, because
-  every fact it needs is the case's: the email, the gate, the lock, the packet.
+  `voidOpenPackets(tx, SIGN_TABLES, …)` does. The flow — raise with reuse
+  first, open, start, settle, withdraw, the two work lists and the three
+  routes — is published by the store over a `CheckHost` the product supplies:
+  the case behind a reference, why it can no longer take an identity, who it
+  is about, how the person is reached, and landing an approval under the
+  product's own lock. Every fact the flow needs is the case's — the email,
+  the gate, the lock, the packet — and the host is where they come from, so
+  the vault's host is a hundred lines and a second product's is the same
+  hundred.
 - **Transitions are data.** `CHECK_TRANSITIONS` is the spec's own "moves to"
   table, and `transition(tx, tables, id, to, set)` derives the guard from it,
   so a flow cannot invent a move and a settle racing a withdraw discards what
@@ -130,11 +137,11 @@ Non-Goals:
 - The signature header is parsed as whitespace-separated sets, each with its
   own timestamp, so a secret rotation proves under either secret.
 
-### The vendor's clocks run first; the vault's are the fallback
+### The vendor's clocks run first; the host's are the fallback
 
 - The raise passes the invitation window and the started window to the
   vendor as its own expiry intervals, so `inquiry.expired` is the normal path.
-- The vault's `expires_at` is those windows plus a grace hour, so its expiry
+- The host's `expires_at` is those windows plus a grace hour, so its expiry
   list only ever fires where the callback was lost. A started check is read
   back once before it expires: the collector may have finished and the
   callback been lost. A submitted check is never expired by the clock the
@@ -143,16 +150,20 @@ Non-Goals:
 - **Stalled is derived**, from `submitted_at` and the stall window, wherever a
   check is shown. No stored state, no stall sweep.
 - **Continue on a vendor-expired check is an expiry.** `resumeHosted` answers
-  null, the vault expires the row, the collector is told to ask again. The
+  null, the host expires the row, the collector is told to ask again. The
   vendor's resume call is never used: a new one is a new check.
 
-### Both public surfaces mount on the vault worker
+### Both public surfaces mount on the host product's worker
 
-- `/vault/api/identity/*`, beside the signing ceremony's `/api/sign`. The
-  collector's page is an SPA route at `/vault/verify`, reading the secret from
-  the URL fragment and sending it in a header. No path parameter, no cookie.
+- The three paths are the contracts' (`IDENTITY_CHECK_PATHS`), mounted by
+  `registerIdentityRoutes` on whichever worker hosts the check — for the
+  vault, `/vault/api/identity/*` beside the signing ceremony's `/api/sign`.
+  The collector's page is `@grade10/e-kyc-frontend`'s `verify` slice, mounted
+  by the site at `/vault/verify`, reading the secret from the URL fragment and
+  sending it in the contracts' header. No path parameter, no cookie. Every
+  word on it is the site's, handed in as a prop.
 - The callback proves through the store, resolves the reference to the
-  vault's own row, and settles in `waitUntil` after answering 204 — for any
+  host's own row, and settles in `waitUntil` after answering 204 — for any
   proven delivery, so the sender learns nothing about which references exist.
 - No redirect back from the vendor: the ceremony ends on the vendor's own
   completion screen, and a return would land on a page that no longer holds
@@ -160,11 +171,11 @@ Non-Goals:
 
 ### The settle lands under the case lock, and the check row moves with it
 
-- `settleHostedCheck` calls `settleHosted`, then `bindToCase` — the same
-  locked transaction the counter uses. Inside it, before anything else is
-  written, the check row moves to approved with the verification id and the
-  findings; zero rows means it was withdrawn while the verdict was landing, and
-  the verdict binds nothing.
+- `settleIdentityCheck` calls `settleHosted`, then the host's `land` — for
+  the vault, `bindToCase`, the same locked transaction the counter uses.
+  Inside it, before anything else is written, the check row moves to approved
+  with the verification id and the findings; zero rows means it was withdrawn
+  while the verdict was landing, and the verdict binds nothing.
 - **The refusal chain gains one arm**: a case that bound an identity after the
   check was raised keeps what staff recorded, and the verdict's record is
   discarded through the `identity_discards` outbox as any refused landing is.
@@ -262,31 +273,39 @@ row above at read time.
   `releaseCaseBinding`, `restoreCaseBinding`, `discardUnboundVerification`.
   Failure codes: `VERIFICATION_NOT_FOUND`, `IDENTITY_UNDERAGE`,
   `IDENTITY_DOCUMENT_EXPIRED`, `PROVIDER_UNREACHABLE`, `SIGNATURE_INVALID`.
-- **Vault flow** — `raiseIdentityCheck` (gate → reuse → insert on the partial
-  index → `raiseHosted` with the row id → write the reference and account →
-  mail; a raise or a send that fails withdraws the row and reports),
-  `inviteOnBooking` (what a customer's or an operator's booking calls, off the
-  customer's response path), `openIdentityCheck`, `startIdentityCheck`,
+- **Host flow**, published from `@grade10/e-kyc-backend/checks` over the
+  `CheckHost` — `raiseIdentityCheck` (reuse the person's latest record →
+  insert on the partial index → `raiseHosted` with the row id → write the
+  reference and account → the host invites; a raise or a send that fails
+  withdraws the row and reports), `openIdentityCheck`, `startIdentityCheck`,
   `settleIdentityCheck` (answers the row's state afterwards, or null where the
   vendor could not be reached and the row backs off), `withdrawIdentityCheck`.
-- **Work lists**, on the vault's fast lane: `identityChecks` (submitted rows
-  due a read-back, leased rather than row-locked so the settle's case lock
-  cannot deadlock with a counter record) and `identityCheckExpiry`.
-- **Routes**: `POST /api/identity/verdicts`, `GET /api/identity/invitation`,
-  `POST /api/identity/invitation/start`. A refusal carries a code and one
-  message.
+  `inviteOnBooking` stays the vault's: what a customer's or an operator's
+  booking calls, off the customer's response path.
+- **Work lists**, published as `settleDueChecks` and `expireIdentityChecks`
+  and registered on the host's fast lane — the vault's: submitted rows due a
+  read-back, leased rather than row-locked so the settle's case lock cannot
+  deadlock with a counter record, and the expiry list.
+- **Routes**, published from `@grade10/e-kyc-backend/routes`:
+  `POST /api/identity/verdicts`, `GET /api/identity/invitation`,
+  `POST /api/identity/invitation/start`. A refusal carries a code from the
+  identity contracts and one message.
 
 ## Contracts
 
 - `@grade10/e-kyc-contracts`: `KycFinding = { name, outcome }`; seven stored
   states and `stalled` as a view state; `KycCheckView` with `findings` and no
-  override; the five hosted methods; five failure codes.
+  override; the five hosted methods; five failure codes. Also the hosted
+  check's public surface as every host mounts it: the three paths, the
+  invitation header, the invitation refusal codes, and the `{ error }` codec
+  the collector's page decodes.
 - `@grade10/vault-contracts`: `admin.recordKyc` takes an optional
   `overrideReason`; no `admin.recordKycOverride`; no device-conflict refusal.
-- `@grade10/app-env`: `identityCheckConfig` (API base, pinned API version,
-  template) and `identityCheckWindows` (invitation 14 d, check 24 h, stall
-  24 h, abandon 7 d, grace 1 h — the last three provisional, `TBC` with
-  Product).
+- `@grade10/app-env`: `identityCheckConfig(brand, env)` — the template, per
+  brand and environment, read off the worker's `BRAND` var; the vendor's
+  address and pinned API version live with its adapter — and
+  `identityCheckWindows` (invitation 14 d, check 24 h, stall 24 h, abandon
+  7 d, grace 1 h — the last three provisional, `TBC` with Product).
 
 ## Risks / Trade-offs
 

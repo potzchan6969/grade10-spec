@@ -57,8 +57,7 @@ ordered rule specified here reproduces all thirty confirmed PRD rows.
   change with a Figma dependency, and belongs to whoever plans that delivery.
 - **No custom badges** beyond the five, and no merchant-configurable thresholds.
 - **Completed does not mean delivered.** It means fulfilled, paid, and archived.
-  Carrier-confirmed delivery remains outside what the Store may report, per
-  `grade10-site/store/shopify-commerce`.
+  Carrier-confirmed delivery remains outside what the Store reports.
 
 ## Capabilities
 
@@ -79,22 +78,21 @@ owns, and changes no existing requirement.
 application must derive their badge from this mapping. Neither surface's
 component contract changes; what changes is which value the application passes.
 
-**A conflict to resolve at archive.** The in-flight `add-store-order-history`
-change defines its `completed` badge as "delivered for an online order". That
-wording contradicts this capability, where Completed means fulfilled, paid, and
-archived — never carrier-confirmed delivery. `shared/ui/store-order-history`
-is not yet in `openspec/specs/`, so this change cannot carry a delta against
-it.
-Whoever archives `add-store-order-history` should correct that definition.
+**A conflict to resolve before archive.** The durable
+`shared/ui/store-order-history` capability defines its `completed` badge as
+delivered for an online order. That wording conflicts with this capability,
+where Completed means fulfilled, paid, and archived — never carrier-confirmed
+delivery. The order-status change needs its own delta against that shared
+component contract before it can archive.
 
-**Two open questions for delivery.** Neither blocks the requirements.
+**Delivery facts to preserve:**
 
 1. `returned` is not a member of `OrderDisplayFulfillmentStatus`; Shopify tracks
    returns on a separate field. The two PRD rows keyed on `returned` are
    specified here against the order's return status instead.
-2. Whether the Store already projects `displayFinancialStatus` and
-   `displayFulfillmentStatus` verbatim, or normalises them, decides how much
-   adapter work sits between `shopify-commerce` and this mapping.
+2. The current typed Store order exposes normalized lifecycle status,
+   fulfilment status, and fulfilment display status. Delivery planning decides
+   how that projection feeds this mapping without copying rules into each page.
 
 **No design-system or token impact.** No primitive changes, no Figma component
 set changes, no `tokens.json` change.

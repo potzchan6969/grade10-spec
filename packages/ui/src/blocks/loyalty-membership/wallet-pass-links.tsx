@@ -4,13 +4,29 @@ import { Link } from "@grade10/design-system/components/forms/link";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
+import { useEffect, useRef } from "react";
 
 /** The words the block says, whichever wallets a brand offers. */
 type WalletPassLinksCopy = {
   /** Names what the actions beneath it are for. */
   heading: string;
-  /** Says an add or an ending did not complete, and that trying again is fine. */
-  failed: string;
+  /** Says the member's standing could not be read, and what is drawn is stale. */
+  unreachable: string;
+};
+
+/**
+ * The offer to carry the card in one wallet.
+ *
+ * A label and its address are one fact rather than two optional fields: an
+ * address with no label renders a link nothing can name, which a screen reader
+ * announces as an empty anchor. The address arrives only once the consumer has
+ * minted a pass, so before that this is a button and after it a link.
+ */
+type WalletPassOffer = {
+  /** The whole label. Never a word this block joins to a wallet's name. */
+  label: string;
+  /** Where the member goes to install it, once there is something to install. */
+  saveUrl?: string;
 };
 
 /**
@@ -19,12 +35,12 @@ type WalletPassLinksCopy = {
  * A row rather than a status, because a member can carry a pass in one wallet
  * while adding one in the other, and can be offered a third they hold nothing
  * in. A single status for the whole block cannot say that, and what it does
- * instead is contradict itself — spinning every button for one mint, or hiding
- * every offer because one wallet is held.
+ * instead is contradict itself — spinning every button for one mint, hiding
+ * every offer because one wallet is held, or wiping one wallet's complaint
+ * when another wallet succeeds.
  *
- * Every label is a whole label rather than a word this block joins to a
- * wallet's name: a language that puts its verb last cannot be assembled from
- * two fragments in the order English wants them.
+ * Every label is a whole label: a language that puts its verb last cannot be
+ * assembled from two fragments in the order English wants them.
  */
 type WalletPassWallet = {
   /**
@@ -33,10 +49,8 @@ type WalletPassWallet = {
    * rather than by a display name a translation moves.
    */
   id: string;
-  /** The add action's whole label. Absent where it is no longer offered. */
-  addLabel?: string;
-  /** Where the member goes to save it, once the consumer has minted one. */
-  saveUrl?: string;
+  /** The offer to add it here. Absent where it is no longer offered. */
+  offer?: WalletPassOffer;
   /** This wallet's mint is in flight. Only this wallet's control waits. */
   adding?: boolean;
   /** The whole sentence saying the member carries a pass here. */
@@ -45,15 +59,17 @@ type WalletPassWallet = {
   endLabel?: string;
   /** This wallet's ending is in flight. */
   ending?: boolean;
+  /** What did not complete for this wallet, in words the member reads. */
+  failedLabel?: string;
 };
 
 /**
- * Whether the member's standing has been read yet, and whether the last act
- * failed. Nothing per-wallet lives here.
+ * Whether the member's standing has been read, and whether it is current.
+ * Nothing per-wallet lives here.
  */
 type WalletPassState =
   | { status: "unknown" }
-  | { status: "read"; failed?: boolean };
+  | { status: "read"; unreachable?: boolean };
 
 type WalletPassLinksProps = {
   copy: WalletPassLinksCopy;
@@ -67,9 +83,9 @@ type WalletPassLinksProps = {
   className?: string;
 };
 
-/** Whether this wallet has anything for the member to act on. */
+/** Whether this wallet has anything for the member to act on or read. */
 function drawable(wallet: WalletPassWallet): boolean {
-  return Boolean(wallet.saveUrl || wallet.addLabel || wallet.heldLabel);
+  return Boolean(wallet.offer || wallet.heldLabel || wallet.failedLabel);
 }
 
 /**
@@ -90,16 +106,31 @@ function WalletPassLinks({
   onEnd,
   className,
 }: WalletPassLinksProps) {
+  // Which wallet's add was pressed, and the links that could replace it.
+  // A successful mint unmounts the button under the member's own focus, which
+  // drops a keyboard or screen-reader user to the page body with no notice —
+  // so the link that takes its place takes the focus too. Presentation and DOM
+  // behaviour, which is the one thing a block of this kind may hold.
+  const pressed = useRef<string | null>(null);
+  const links = useRef(new Map<string, HTMLAnchorElement | null>());
+
+  useEffect(() => {
+    const id = pressed.current;
+    if (!id) return;
+    // Still minting: the button is where the member left their focus.
+    if (wallets.find((wallet) => wallet.id === id)?.adding) return;
+    pressed.current = null;
+    // No link means the mint failed. The button is still there and still
+    // focused, and the failure is announced, so nothing should move.
+    links.current.get(id)?.focus();
+  });
+
   if (state.status === "unknown") return null;
 
   const drawn = wallets.filter(drawable);
-  if (drawn.length === 0) return null;
+  if (drawn.length === 0 && !state.unreachable) return null;
 
-  // A save address is the install, and a row existing is not a pass being
-  // carried — so the link survives the member being recorded as holding one.
-  // Held here rather than in each consumer's own filter, because a consumer
-  // that got it wrong would hand somebody a card they cannot install.
-  const offers = drawn.filter((wallet) => wallet.saveUrl || wallet.addLabel);
+  const offers = drawn.filter((wallet) => wallet.offer);
 
   return (
     <VStack
@@ -112,17 +143,23 @@ function WalletPassLinks({
           <Text size="sm" tone="secondary">
             {copy.heading}
           </Text>
-          <HStack align="center" gap="sm" wrap>
+          {/* Announced, because a successful mint replaces the button with a
+              link and a member who cannot see that swap has no other signal
+              that their tap did anything. */}
+          <HStack align="center" aria-live="polite" gap="sm" wrap>
             {offers.map((wallet) =>
-              wallet.saveUrl ? (
+              wallet.offer?.saveUrl ? (
                 <Link
                   data-slot="wallet-pass-save"
                   data-wallet={wallet.id}
-                  href={wallet.saveUrl}
+                  href={wallet.offer.saveUrl}
                   key={wallet.id}
+                  ref={(node: HTMLAnchorElement | null) => {
+                    links.current.set(wallet.id, node);
+                  }}
                   size="sm"
                 >
-                  {wallet.addLabel}
+                  {wallet.offer.label}
                 </Link>
               ) : (
                 <Button
@@ -130,12 +167,15 @@ function WalletPassLinks({
                   data-wallet={wallet.id}
                   key={wallet.id}
                   loading={wallet.adding ?? false}
-                  onClick={() => onAdd(wallet.id)}
+                  onClick={() => {
+                    pressed.current = wallet.id;
+                    onAdd(wallet.id);
+                  }}
                   size="sm"
                   type="button"
                   variant="outline"
                 >
-                  {wallet.addLabel}
+                  {wallet.offer?.label}
                 </Button>
               ),
             )}
@@ -169,9 +209,28 @@ function WalletPassLinks({
             ) : null}
           </HStack>
         ))}
-      {state.failed ? (
-        <Text data-slot="wallet-pass-failed" size="sm" tone="error">
-          {copy.failed}
+      {drawn
+        .filter((wallet) => wallet.failedLabel)
+        .map((wallet) => (
+          <Text
+            data-slot="wallet-pass-failed"
+            data-wallet={wallet.id}
+            key={wallet.id}
+            role="alert"
+            size="sm"
+            tone="error"
+          >
+            {wallet.failedLabel}
+          </Text>
+        ))}
+      {state.unreachable ? (
+        <Text
+          data-slot="wallet-pass-unreachable"
+          role="alert"
+          size="sm"
+          tone="error"
+        >
+          {copy.unreachable}
         </Text>
       ) : null}
     </VStack>
@@ -181,6 +240,7 @@ function WalletPassLinks({
 export type {
   WalletPassLinksCopy,
   WalletPassLinksProps,
+  WalletPassOffer,
   WalletPassState,
   WalletPassWallet,
 };

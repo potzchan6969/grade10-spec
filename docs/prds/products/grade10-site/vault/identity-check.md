@@ -84,7 +84,7 @@ while their item is in custody.
 | Invitation trigger | Decided | Booking an intake visit on a case with no identity. | Product |
 | Pre-custody only | Decided | A check is recordable from draft through signing, never once the item is in the vault. | Compliance |
 | Reuse before asking | Decided | A case binds a check the collector already passed rather than paying for a second one. | Product |
-| Override on a decline | Decided | The counter stays open, but over a decline it takes the approving grant and a recorded reason. | Compliance |
+| Override on a decline | Decided | The counter stays open, but over a decline it takes a recorded reason naming who gave it. No separate grant: no shipped role holds `vault:operate` without `vault:approve`, so one would separate nobody until the roles do. | Compliance |
 | Late verdict | Decided | Refused, discarded, and reported. The case keeps what it had. | Engineering |
 | Packet voiding | Decided | A bind voids an outstanding packet, whichever path produced the identity. | Product |
 | Operator visibility | Decided | The case distinguishes out, stalled, refused and lapsed from none. | Design |

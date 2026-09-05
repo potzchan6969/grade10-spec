@@ -1,0 +1,17 @@
+{
+  "title": "身份核验",
+  "description": "订单金额达 {order} 或以上，以及出价达 {bid} 或以上，均需先核验身份。核验一次，即可在我们的所有服务中通用。",
+  "loading": "正在查看你的核验状态…",
+  "loadFailed": "无法读取你的身份核验状态。请稍后再试。",
+  "verifiedUntil": "已核验。你的证件有效期至 {day}。",
+  "verified": "已核验。",
+  "expired": "你已核验的证件已过期。请使用有效证件重新核验。",
+  "unverified": "尚未核验。",
+  "checking": "我们正在核验你的身份证件 — 通常只需一两分钟。你可以离开此页面，稍后回来查看结果。",
+  "declined": "我们无法在线核验你的身份证件。请用更清晰的照片再试一次，或到店时携带证件，我们会在柜台为你核验。",
+  "verifyAction": "核验我的身份",
+  "continueAction": "继续核验",
+  "verifyAgainAction": "再试一次",
+  "recheckAction": "再次查看",
+  "unavailable": "身份核验服务暂时不可用。请稍后再试。"
+}

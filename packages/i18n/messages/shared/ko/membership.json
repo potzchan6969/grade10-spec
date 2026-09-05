@@ -9,13 +9,16 @@
     "secondsUnit": "초",
     "used": "이 코드는 이미 사용되었습니다",
     "walletAdd": "{wallet}에 추가",
+    "walletAddFailed": "{wallet}에 추가하지 못했습니다. 다시 시도해 주세요.",
+    "walletApple": "Apple 지갑",
+    "walletAppleNote": "카운터에서 본인 확인용입니다. 포인트 사용은 이 페이지에서 하세요.",
+    "walletEndFailed": "{wallet} 패스를 해지하지 못했습니다. 다시 시도해 주세요.",
     "walletEndOne": "{wallet} 패스 해지",
-    "walletFailed": "처리되지 않았습니다. 다시 시도해 주세요.",
+    "walletGoogle": "Google 월렛",
     "walletHeading": "휴대폰에 멤버십 카드 담기",
     "walletHeld": "{wallet}에 패스를 보유하고 있습니다",
-    "walletGoogle": "Google 월렛",
-    "walletApple": "Apple 지갑",
-    "walletAppleNote": "카운터에서 본인 확인용입니다. 포인트 사용은 이 페이지에서 하세요."
+    "walletInstall": "{wallet}에서 열기",
+    "walletUnreachable": "패스 상태를 확인하지 못했습니다. 아래 내용은 최신이 아닐 수 있습니다."
   },
   "page": {
     "title": "멤버십",
@@ -34,7 +37,9 @@
     "noExpiry": "유효기간 없음",
     "noActivity": "계정에 아직 내역이 없습니다.",
     "notAMember": "아직 프로그램에 가입하지 않았습니다.",
-    "join": "프로그램 가입"
+    "join": "프로그램 가입",
+    "coupons": "내 쿠폰",
+    "noCoupons": "보유한 쿠폰이 없습니다."
   },
   "collectWithin": "{days}일 이내에 매장에서 수령",
   "outcome": {
@@ -52,7 +57,9 @@
     "balance": "사용 가능 포인트",
     "qualifying": "올해 적립 포인트",
     "renewal": "등급 갱신",
-    "pointsActiveUntil": "포인트 유효기간"
+    "pointsActiveUntil": "포인트 유효기간",
+    "expiringSoon": "곧 소멸",
+    "expiringSoonLine": "{date}까지 {points}P 소멸 예정"
   },
   "rewards": {
     "label": "리워드",
@@ -61,7 +68,8 @@
     "atQuantityBound": "1회 교환으로 가능한 최대 수량입니다.",
     "insufficient": "포인트가 부족합니다",
     "decreaseQuantity": "하나 줄이기",
-    "increaseQuantity": "하나 늘리기"
+    "increaseQuantity": "하나 늘리기",
+    "validFor": "교환 후 {days}일간 유효"
   },
   "quantityRefusal": {
     "wholeUnits": "{name}은(는) 낱개 단위로만 교환할 수 있습니다.",
@@ -108,5 +116,20 @@
       "invalid": "휴대폰 번호 형식이 아닙니다.",
       "rateLimited": "방금 번호를 변경했습니다. 1분 후에 다시 시도해 주세요."
     }
+  },
+  "coupons": {
+    "label": "쿠폰",
+    "maskedCode": "••••••",
+    "spent": "사용됨",
+    "void": "취소됨",
+    "expired": "기한 만료",
+    "validUntil": "{date}까지 유효",
+    "noExpiry": "유효기간 없음",
+    "percentOff": "{percent}% 할인"
+  },
+  "tierValidity": {
+    "until": "{tier} 등급 {date}까지",
+    "kept": "{until} — 유지에 필요한 포인트를 이미 적립했습니다",
+    "earnMore": "{until} — 그때까지 {remaining}P를 더 적립하면 유지됩니다"
   }
 }

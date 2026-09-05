@@ -46,8 +46,7 @@ SHALL NOT rely on what a line recorded when it was added, however recently.
 
 Each read SHALL be answered by the shop at that moment. A cached read that
 serves the listing or a card's page SHALL NOT answer for a cart line: a browse
-surface is allowed to lag the shop within the invalidation
-`grade10-site/store/shopify-commerce` requires, and the cart is not.
+surface may use its normal catalogue cache, and the cart may not.
 
 Availability SHALL be answered for the line's variant and its requested
 quantity together, as `grade10-site/store/product-status` defines it. Price

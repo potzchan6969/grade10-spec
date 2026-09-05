@@ -28,7 +28,7 @@ port with a fixture on the production graph.
 ## 3. Where a pass lives (grade10)
 
 - [x] 3.1 Add the pass table — the member, the wallet, the encrypted secret, the state, the digest and the sweep's own instants — with at most one live pass per member per wallet
-- [x] 3.2 Add the pass-use table, unique on the pass and the period, append-only
+- [x] 3.2 Make a rotating code one-time by advancing the pass's own period in one guarded update — no second table
 - [x] 3.3 Widen the session's provenance constraint to accept a pass, keeping every value already recorded
 - [x] 3.4 Verify: `pnpm run db:drizzle:generate` and commit the output, `pnpm run check:migrations`, `pnpm run test:backend`
 
@@ -73,14 +73,13 @@ Needs group 5.
 Needs group 5.
 
 - [x] 7.1 Strip every member fact from the pass and put it beyond use when a member is erased, so *An erased member's pass identifies nobody* passes
-- [ ] 7.2 Retry until the wallet confirms, and report the erasure as still owed until then, so *An erasure the wallet has not confirmed is still owed* passes
+- [x] 7.2 Retry until the wallet confirms, and report the erasure as still owed until then, so *An erasure the wallet has not confirmed is still owed* passes
 - [x] 7.3 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
 ## 8. The membership surface (grade10)
 
-Needs group 1's submodule bump and group 5. `pnpm run build` is the one check
-still owed: it cannot pass until the submodule pin and this change's store
-branch agree, because the auction's bid-card copy moved between them.
+Needs group 1's submodule bump and group 5. The pin and the store branch now
+agree, so nothing blocks the checks.
 
 - [x] 8.1 Add the pass to the member's card feature — the save action, the pass they hold, read from the server so a returning member still finds it, and ending it — behind the feature's own tokens
 - [x] 8.2 Compose `WalletPassLinks` beside the member card on the membership page, taking every word from the application's catalog
@@ -111,7 +110,7 @@ Needs group 9.
 - [x] 10.4 Issue an Apple pass and answer where the member saves it, under their own session, so *A member adds their card to Apple Wallet* passes
 - [x] 10.5 Identify from a durable code with no counter and no clock, so *An Apple pass identifies every time* passes
 - [x] 10.6 Let an Apple session read the panel and refuse to spend or collect, behind a switch that is off, so *An Apple pass cannot move value* passes
-- [x] 10.7 Record which wallet identified on the session, the audit record and the metrics, without adding a seventh arm to the till's vocabulary
+- [x] 10.7 Record which wallet identified, on the `wallet:` tag every identify metric carries, without adding a seventh arm to the till's vocabulary
 - [x] 10.8 Widen the wallet the pass table accepts, and carry the migration into both brands byte for byte
 - [x] 10.9 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run check:migrations`
 
@@ -138,3 +137,14 @@ Needs group 10.
 - [x] 12.3 End one wallet's pass from the surface, leaving the other identifying, so *Ending one wallet's pass leaves the other alive* passes
 - [ ] 12.4 Draw Apple's own save artwork, which its guidelines require and a generic button does not satisfy — the badge is licensed only while the organisation is an Apple Developer Program member, and downloaded from the developer site under the Wallet Marketing Agreement, so it waits on the enrolment named in the [Apple runbook](../../../docs/prds/products/grade10-site/loyalty/profile.md)
 - [x] 12.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:stories:ui`
+
+## 13. What the second audit left standing (grade10)
+
+Needs nothing. Each was found by an auditor, argued against by a reviewer, and
+deliberately not fixed in that round — recorded here so the reasoning is not
+re-derived and the cost is not paid twice.
+
+- [x] 13.1 Give `pos_pass_registrations` its two foreign keys — the device with `ON DELETE CASCADE`, the pass with no action. Row hygiene rather than a fix: scoping the orphan sweep to the device it just touched already closed the reachable defect. Landed while the tables are empty, which is when a key is free; the three tables are now built by one factory, as the coupon tables already were, because a key needs both sides in scope
+- [x] 13.2 Drop `pos_pass_push_tokens.token`, superseded by the sealed pair beside it. The contract half of 0031: safe without waiting on a deploy, because the only writer is the APNs provider-token path and no environment has the key that reaches it
+- [ ] 13.3 Settle the push credential and the push type against one enrolled device, which no documentation can answer: Apple documents the pass certificate while the shipped default is a team key, and pins `apns-push-type: background` to a bundle id while a pass topic is not one. Record which of the three attempts makes the device come back and ask, never which returns 200 — a silent drop returns 200 too. The [Apple runbook](../../../docs/prds/products/grade10-site/loyalty/profile.md) carries the method
+- [x] 13.4 Move focus to the save link when a mint replaces the add button with it, so a keyboard member is not dropped to the page body by the button unmounting under them. Waits while the mint is in flight, and moves nothing when it fails — the button is still there, still focused, and the failure is announced

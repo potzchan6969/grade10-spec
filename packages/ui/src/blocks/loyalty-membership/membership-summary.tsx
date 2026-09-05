@@ -22,6 +22,8 @@ type MembershipSummaryCopy = {
   renewal: string;
   /** Names the date inactivity empties the balance. */
   pointsActiveUntil: string;
+  /** Names the points about to expire; shown only with `expiringSoon`. */
+  expiringSoon?: string;
 };
 
 type MembershipSummaryProps = {
@@ -38,6 +40,10 @@ type MembershipSummaryProps = {
   renewalDate: string;
   /** Already formatted by the consumer. */
   pointsActiveUntil: string;
+  /** The earned tier's validity and what keeps it, as one sentence. */
+  tierValidity?: string;
+  /** Points expiring inside the consumer's horizon, already worded. */
+  expiringSoon?: string;
   className?: string;
 };
 
@@ -66,6 +72,8 @@ function MembershipSummary({
   qualifyingThreshold,
   renewalDate,
   pointsActiveUntil,
+  tierValidity,
+  expiringSoon,
   className,
 }: MembershipSummaryProps) {
   const bounded = Math.min(qualifyingPoints, qualifyingThreshold);
@@ -123,10 +131,18 @@ function MembershipSummary({
           </VStack>
           <VStack gap="xs">
             <SummaryRow label={copy.renewal} value={renewalDate} />
+            {tierValidity ? (
+              <Text data-slot="membership-tier-validity" size="sm">
+                {tierValidity}
+              </Text>
+            ) : null}
             <SummaryRow
               label={copy.pointsActiveUntil}
               value={pointsActiveUntil}
             />
+            {expiringSoon && copy.expiringSoon ? (
+              <SummaryRow label={copy.expiringSoon} value={expiringSoon} />
+            ) : null}
           </VStack>
         </VStack>
       </CardContent>

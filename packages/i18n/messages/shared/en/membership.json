@@ -9,13 +9,16 @@
     "secondsUnit": "s",
     "used": "This code has already been used",
     "walletAdd": "Add to {wallet}",
+    "walletAddFailed": "{wallet} could not be added. Try again.",
+    "walletApple": "Apple Wallet",
+    "walletAppleNote": "Identifies you at the counter. Points are spent from this page.",
+    "walletEndFailed": "Your {wallet} pass could not be ended. Try again.",
     "walletEndOne": "End your {wallet} pass",
-    "walletFailed": "That did not go through. Try again.",
+    "walletGoogle": "Google Wallet",
     "walletHeading": "Carry your card on your phone",
     "walletHeld": "You are carrying a pass in {wallet}",
-    "walletGoogle": "Google Wallet",
-    "walletApple": "Apple Wallet",
-    "walletAppleNote": "Identifies you at the counter. Points are spent from this page."
+    "walletInstall": "Open in {wallet}",
+    "walletUnreachable": "We could not check your passes just now. This may be out of date."
   },
   "page": {
     "title": "Membership",
@@ -34,7 +37,9 @@
     "noExpiry": "No expiry",
     "noActivity": "Nothing has happened on your account yet.",
     "notAMember": "You have not joined the programme yet.",
-    "join": "Join the programme"
+    "join": "Join the programme",
+    "coupons": "Your coupons",
+    "noCoupons": "You hold no coupons."
   },
   "collectWithin": "Collect in store within {days, plural, one {# day} other {# days}}",
   "outcome": {
@@ -52,7 +57,9 @@
     "balance": "Points to spend",
     "qualifying": "Points earned this year",
     "renewal": "Tier renews",
-    "pointsActiveUntil": "Points active until"
+    "pointsActiveUntil": "Points active until",
+    "expiringSoon": "Expiring soon",
+    "expiringSoonLine": "{points, plural, one {# point expires} other {# points expire}} by {date}"
   },
   "rewards": {
     "label": "Rewards",
@@ -61,7 +68,8 @@
     "atQuantityBound": "That is as many as one redemption takes.",
     "insufficient": "Not enough points yet",
     "decreaseQuantity": "One fewer",
-    "increaseQuantity": "One more"
+    "increaseQuantity": "One more",
+    "validFor": "Valid for {days, plural, one {# day} other {# days}} from redemption"
   },
   "quantityRefusal": {
     "wholeUnits": "{name} is redeemed in whole units.",
@@ -108,5 +116,20 @@
       "invalid": "That does not look like a mobile number.",
       "rateLimited": "You just changed your number. Try again in a minute."
     }
+  },
+  "coupons": {
+    "label": "Coupons",
+    "maskedCode": "••••••",
+    "spent": "Used",
+    "void": "Cancelled",
+    "expired": "Expired",
+    "validUntil": "Valid until {date}",
+    "noExpiry": "No expiry",
+    "percentOff": "{percent}% off"
+  },
+  "tierValidity": {
+    "until": "{tier} until {date}",
+    "kept": "{until} — you have earned enough to keep it",
+    "earnMore": "{until} — earn {remaining} more points by then to keep it"
   }
 }

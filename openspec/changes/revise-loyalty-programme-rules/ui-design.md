@@ -5,26 +5,24 @@ console.
 
 ## Screens
 
-**No Figma frame exists for any of them, and no `@grade10/ui` block covers
-loyalty.** The blocks are work in **grade10-spec** and they block the frontend
-groups in `tasks.md`, which carry them as their first tasks. Nothing below
+**No Figma frame exists for either surface.** The `@grade10/ui` blocks below
+are shipped under `packages/ui/src/blocks/loyalty-membership/`; nothing here
 describes a layout — that is the frame's job once it exists.
 
 | Surface | App | State today |
 | --- | --- | --- |
-| Membership | `@grade10/web-spa` | No page. The feature slices exist (`packages/loyalty/frontend/src/features/programme/{membership,rewards}`) with data, hooks and DI wiring; nothing renders them. |
-| Console | `@grade10/admin` (grade10) | Pages exist: `members`, `rewards`, `invitations`, `liability`. They show one balance and a tier with no term. |
+| Membership | `@grade10/web-spa` | `pages/membership` composes the blocks over the slices in `packages/loyalty/frontend/src/features/programme/{member,offer,rewards}`. Coupons have no view yet (10.5). |
+| Console | `@grade10/admin` (grade10) | Pages exist: `members`, `rewards`, `invitations`, `liability`. Members show both counts, the tier's validity end and retention progress; no coupon wallet, tier removal or cancellation yet (11.2–11.5). |
 
 ## Components
 
-Every component this change needs is new. The set to author in
-**grade10-spec**, exported from `@grade10/ui`:
+The set **grade10-spec** exports from `@grade10/ui`:
 
 | Export | Carries |
 | --- | --- |
 | `MembershipSummary` | Both counts as two counts, the tier held, its validity end, and progress toward retention |
 | `RewardMenu` | The live menu, each reward priced in points, a money-off reward stating its code's validity period |
-| `CouponList` | Issued codes — the code, what it is for, its own expiry, and whether it is spent or void |
+| `CouponList` | Issued coupons — the code where the shop takes one, what it is for, its own expiry, and whether it is spent, void or expired |
 | `ActivityList` | The member's own entries, named in member-readable terms |
 
 No design-system token or primitive changes. The store checkout gains a

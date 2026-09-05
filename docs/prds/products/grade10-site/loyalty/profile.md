@@ -26,7 +26,7 @@ and shown the points already waiting ([[grade10-site-loyalty-programme-SC-01]]).
 | Section | What it shows |
 | --- | --- |
 | Summary | Tier, points to spend, points earned this year against the next threshold, when the tier renews, and when the points stay active until |
-| Your member card | The QR the till scans, the short code beneath it, a countdown, and the action that adds the card to Google Wallet |
+| Your member card | The QR the till scans, the short code beneath it, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The live menu, priced in points, with what the balance affords |
 | Spend on your basket | Points against the current basket — an offer of a code, or a pointer to checkout where the shop takes points there |
 | Waiting at the counter | Collect-in-store rewards with their deadline; a closed window says so |
@@ -80,7 +80,7 @@ instead of a sign-in.
   perform yet
 
 :::detail{title="Standing up the wallet" for="operator"}
-Nobody can be offered a pass until Google says so, and none of it is
+Nobody can be offered a pass until the wallet's own account exists, and none of it is
 same-day. In this order, because each step needs the one above it:
 
 1. *Operations* — **Create the issuer account** in the Google Pay & Wallet
@@ -154,8 +154,10 @@ brand carrying both wallets seals both their secrets under the one key:
   allowed to starve somebody standing at a counter
 - **Rotating `WALLET_PASS_KEY` invalidates every pass** — nothing re-seals the
   rows today, so a rotation is a re-issue for every member who holds one. The
-  key must be 32 random bytes, base64 — it is used as key material directly,
-  not stretched from a phrase ❓ who owns that runbook
+  key must be at least 32 random bytes, base64 — `openssl rand -base64 32`.
+  A shorter one, or a phrase, is refused by name at the first read rather than
+  digested silently, and the same rule holds `WALLET_PASS_AUTH_KEY`
+  ❓ who owns that runbook
 - **A pass Google cannot be told about stays owed** — the sweep carries two
   arms and reports both: what is stale, and what a member's ending or erasure
   still owes the vendor. Depth and age go together, and the age is the one to
@@ -171,8 +173,11 @@ brand carrying both wallets seals both their secrets under the one key:
   woke those devices still answer 200. A 503 rather than a 401, because the
   device's token is perfectly good and a refusal that blames it is one a renewal
   may not undo. The remaining life is on the
-  `store.wallet.apple.cert_days_left` gauge every sweep lap, because nothing
-  else would say
+  `store.wallet.apple.cert_days_left` gauge on every lap that sweeps a wallet
+  at all — a brand with a certificate but no APNs key sweeps nothing, so it
+  reports nothing. A certificate that will not parse counts
+  `store.wallet.apple.cert_unreadable` instead, and stops there rather than
+  taking the other wallet's lap down with it
 - **Pushes with no fetches is the alarm worth waking somebody for** — APNs
   answers 200 for a device that then does nothing, so it is which
   `store.wallet.apple.*` counter stops that names the fault:
@@ -186,8 +191,10 @@ brand carrying both wallets seals both their secrets under the one key:
     expiry, or its key or artwork will not load, and every fetch answers 503. A
     pass served and then discarded by the phone is a broken chain instead
   - **`push{outcome:refused}` or `{outcome:gone}`** — the topic, the provider
-    key, or a dead device token, each named on the tag. A wrong topic deletes
-    every registration it touches, after which the pushes stop too
+    key, or a dead device token. Which of the three is in the worker log, not
+    on the tag: an APNs reason is not a closed set, so tagging with it would
+    be unbounded. A wrong topic deletes every registration it touches, after
+    which the pushes stop too
   - **The list is the one that stays quiet** — its refusals are all the same
     204, deliberately, so a scanner cannot tell an unknown device from a
     foreign pass type. Read it against the fetch rather than on its own
@@ -232,10 +239,43 @@ pass drives to zero. Apple identifications followed by a spend on the site's
 card in the same visit — what the durable code costs a member, and the number
 that would reopen this decision.
 
+**Settled: the code does not rotate.** Rotating the proof on a slow window —
+say thirty days, accepting the current and previous — would bound a
+photographed barcode instead of leaving it good for the life of the pass, and
+the machinery exists: the digest already covers the barcode, so a rotation
+costs one push. It is not worth it, for three reasons worth recording so the
+question is not re-derived. A pass that stops updating today shows a stale
+balance; under rotation it **stops identifying**, and every reason a device
+stops updating — automatic updates switched off, no re-registration after a
+restore, Apple throttling the pass — becomes a dead card the member discovers
+at a counter. The horizon is set by the last successful fetch rather than by
+the outage, so a second window does not rescue an offline member, it only
+chooses which thirty days they lose. And a boundary makes the whole fleet due
+inside one floor period, which is the opposite of a sweep whose cost is
+proportional to change. What does bound the same blast radius, at no such
+cost: trim the Apple session's panel, since a session that cannot collect has
+no use for a redemption id.
+
+**Owed at enrolment.** Two things nothing here can settle without a real
+device and a real Developer Program account:
+
+- **Which credential a pass push takes** — Apple documents the pass
+  certificate; the shipped default is a team-scoped key. `TopicDisallowed` on
+  the push counter is the signal that decides it
+- **Whether `apns-push-type: background` is right for a pass topic** — Apple
+  pins that value to a bundle id, and documents that a mismatch may be dropped
+  silently. Push to one enrolled device three ways — as shipped, with the
+  header omitted, and over the certificate — and record which produces a list
+  request, not which returns 200
+
+Create the APNs key **topic-specific**, scoped to the pass type identifier: a
+team-scoped one pushes to every app under the team, and nothing needs that.
+
 **Risk.** An Apple pass that identifies but cannot spend is a worse pass than
-Google's, and a member who does not know that reads it as broken. The surface
-has to say what each pass is for rather than offering two identical-looking
-buttons. ❓ who writes that line.
+Google's, and a member who does not know that reads it as broken. So the
+surface says what the Apple pass is for rather than offering two
+identical-looking buttons: *"Identifies you at the counter. Points are spent
+from this page."*
 :::
 
 ## Histories
@@ -268,19 +308,21 @@ lives in the identity system and never in the programme, which holds only an
 opaque user id.
 
 :::callout{kind="warning"}
-One thing decided for this surface is built and offered to nobody, one is being
-built, and five are not built.
+Two things decided for this surface are built and offered to nobody, and five
+are not built.
 
 - **The Google pass** — the pass, its rotating code, the counter that reads it
   and the sweep that keeps it current are built, and offered to nobody: the
   issuer account, its class and its key do not exist yet
-- **The Apple pass** — specified and being built, and offered to nobody: the
-  Developer Program enrolment, the pass type identifiers and the signing
-  certificate do not exist yet
+- **The Apple pass** — built, and offered to nobody: the Developer Program
+  enrolment, the pass type identifiers and the signing certificate do not
+  exist yet. The artwork shipped is placeholder squares in the card's own
+  background colour, which Design owes before the first pass reaches anybody
 - **A spend reaching the pass** — nothing wakes the sweep when a member's
   standing moves, so a counter spend reaches a pass on the daily floor rather
   than inside the five minutes this page promises. It costs a Google pass a
-  stale balance; an Apple code is durable, so it costs that one nothing
+  stale balance, and an Apple pass the same: durability protects the scan,
+  never the facts, and only the facts a pass shows wait on this
 - **Ending a pass for a member** — an operator cannot end a pass for somebody
   who lost their phone
 - **The welcome message** — carries no save action, for either wallet
@@ -313,8 +355,9 @@ container. Joining calls the store worker's `membership.join`, not loyalty's
 store's too: `membership.presentCard` mints a `pos_handles` row, storing only
 the QR token's digest, and `membership.presentations` reads the history. The
 wallet rides the same slice: `membership.addWalletPass` mints a `pos_passes`
-row whose rotating secret is sealed under the worker's own key, the till spends
-one of its codes by inserting `(pass, period)` under a unique index, and the
+row whose code secret is sealed under the worker's own key, the till spends a
+rotating code by advancing the pass's own `last_period` in one guarded update —
+no second table, and nothing that grows per scan — and the
 store worker's cron keeps every pass current from a digest of what it last
 sent. The loyalty `me.*` surface answers summary, history, redemptions, redeem,
 quote, undo and enrol, all off the session.
