@@ -9,6 +9,7 @@
 **Accepted by:**
 
 - `grade10-site-store-membership-SC-44` — A member adds their card to their wallet
+- `grade10-site-store-membership-SC-71` — A pass speaks the phone's language
 - `grade10-site-store-membership-SC-45` — A pass identifies as the card does
 - `grade10-site-store-membership-SC-47` — A pass identifies with no signal
 - `grade10-site-store-membership-SC-52` — A recorded change reaches the wallet on the next sweep

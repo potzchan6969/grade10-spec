@@ -234,13 +234,24 @@ leaves the member's next scan working.
    attempt and pushing the next one out one rung
 2. **Read** the facts for the claimed batch in one call to the programme —
    `memberStanding`, not the counter's panel, under a grant that carries
-   nothing else
+   nothing else. The rolling tier window inside it is read once per distinct
+   floor, through the one implementation the counter's own tier read runs
 3. **Digest** them; equal, stamp `rendered_at` and the next `due_at` and send
    nothing
 4. **Send** the difference to the wallet, then stamp
 5. **A crash between claim and stamp** leaves the row due, so the next lap
    re-reads and re-sends — the wallet is last-writer-wins on a pass's contents,
    so sending twice is a wake-up, not a fault
+
+- **The lap cap and the backoff ladder are code, not registry** — both follow
+  the cron's tick and the invocation's budget, which no brand changes; a second
+  brand's worker runs its own invocation and takes the same values
+- **The words on a pass** — `WalletPassCopy`: the membership page's own keys
+  (`summary.balance`, `summary.tier`, `card.walletUpdated`, `page.title`) in
+  every language the brand speaks. Google takes them as a `LocalizedString`
+  per label; Apple as a `pass.strings` per language, keyed by the default's
+  words in `pass.json`. Not in the digest, so a pass already issued takes new
+  words with its next change
 
 ## Contracts
 
@@ -389,11 +400,3 @@ minutes and the store cron ticks every five.
   dropped in one migration, and the old values stay accepted forever because
   sessions recorded under them must remain readable
 - **No contract step.** Nothing is dropped by this change
-
-## Open questions
-
-- ❓ Whether a member may hold more than one live pass at a time. The schema
-  admits one per wallet today; lifting it is an index change and no requirement
-  moves
-- ❓ Whether the sweep's batch cap and its limiter belong in the brand registry
-  rather than in code, once a second brand carries passes

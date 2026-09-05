@@ -53,13 +53,14 @@ Needs group 3.
 - [x] 5.5 Leave the membership untouched when a member deletes the pass from their wallet, so *Removing a pass leaves the membership intact* passes
 - [x] 5.6 Declare the secret that encrypts a pass's own secret in the worker's secret list, and read it there
 - [x] 5.7 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run secrets --check`
+- [x] 5.8 Carry the words on a pass in every language the brand speaks, from the membership page's own catalog keys, so *A pass speaks the phone's language* passes
 
 ## 6. A pass stays current (grade10)
 
 Needs group 5.
 
 - [x] 6.1 Sweep the passes that are due, oldest first, reading each member's name, tier and points to spend from the panel the counter already asks for
-- [x] 6.9 Read the lap's members in one call rather than one per row, over a narrow `memberStanding` on the commerce contract under a `membership:standing` grant — the panel is the counter's answer and cost a round trip and some seventeen statements a row to yield three fields. ❓ The rolling tier window is still read one member at a time, because `evaluateTier` promotes on fuel no write has recorded yet and a batched re-derivation of it is the one thing that could disagree with the till; that is what `LAP_LIMIT` now bounds
+- [x] 6.9 Read the lap's members in one call rather than one per row, over a narrow `memberStanding` on the commerce contract under a `membership:standing` grant — the panel is the counter's answer and cost a round trip and some seventeen statements a row to yield three fields. The rolling tier window inside it is read once per distinct floor through the one implementation every tier read runs, so the pass cannot disagree with the till; what bounds `LAP_LIMIT` is the vendor wakes a full lap can cost, not the read
 - [x] 6.2 Stamp each row's next due instant from the tier term's end and the balance's expiry, so a change nobody recorded still reaches the pass, and *A change nobody recorded reaches the pass* passes
 - [x] 6.3 Send only a difference, hashing what was last rendered, so *A burst costs one update* passes
 - [x] 6.4 Mark a member's passes due from the change that moved them, logged and never thrown, so *A recorded change reaches the wallet on the next sweep* passes — the store's databases are separate from the programme's, so there is no shared transaction and no push either: the sweep reads `listStandingChanges` off the ledger and the tier log, which is what makes it total, and holds a cursor of its own. The name is the store's own row and no feed can carry it, so the rename kicks locally
@@ -137,6 +138,7 @@ Needs group 10.
 - [x] 12.3 End one wallet's pass from the surface, leaving the other identifying, so *Ending one wallet's pass leaves the other alive* passes
 - [ ] 12.4 Draw Apple's own save artwork, which its guidelines require and a generic button does not satisfy — the badge is licensed only while the organisation is an Apple Developer Program member, and downloaded from the developer site under the Wallet Marketing Agreement, so it waits on the enrolment named in the [Apple runbook](../../../docs/prds/products/grade10-site/loyalty/profile.md)
 - [x] 12.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:stories:ui`
+- [ ] 12.6 Draw the pass's own artwork — the icon and logo at every scale that `appleAssets.ts` ships as flat squares, and the class artwork the Google console takes — before the first pass is offered to anybody. Design's, and needs no enrolment
 
 ## 13. What the second audit left standing (grade10)
 

@@ -17,7 +17,8 @@ physical-store orders earning through attribution.
     it spends nothing and collects nothing
   - One pass per wallet: ending or adding in one leaves the other alone
   - Ending one: immediate, by the member or an operator
-  - Staying current: a change reaches it within **5 minutes**, a burst costs one update
+  - Staying current: one sweep behind, sweeps **5 minutes** apart at most; a burst costs one update
+  - In the phone's language: the surface's own words, in every language it speaks
 
 ## ADDED Requirements
 
@@ -120,6 +121,22 @@ membership surface SHALL say which passes they are carrying.
 - **WHEN** they end one
 - **THEN** the other still identifies them
 - **AND** the surface still offers the action that ends it
+
+### Requirement: A pass speaks the languages the membership surface does
+
+The words a pass carries beside the member's facts SHALL be the membership
+surface's own, offered in every language the surface speaks. A phone set to one
+of those languages SHALL be shown it; a phone set to any other SHALL read the
+surface's default.
+
+#### Scenario: grade10-site-store-membership-SC-71 - A pass speaks the phone's language
+
+- **GIVEN** a member whose phone is set to a language the membership surface
+  speaks
+- **WHEN** they add a pass
+- **THEN** the words beside their name, tier and points are in that language
+- **AND** a phone set to a language the surface does not speak reads them in
+  the surface's default
 
 ### Requirement: A pass identification is recorded as its own kind
 

@@ -56,9 +56,12 @@ durable code costs a member.
 - **A member ends a pass in one action**, and an operator can end it for a
   member who asks. Ending is immediate: codes the ended pass makes identify
   nobody.
-- **The pass follows the member's standing** — a change to name, tier or
-  balance reaches it within five minutes, whether it was recorded or happened
-  on its own, and a burst of changes costs one update.
+- **The pass follows the member's standing, one sweep behind** — the wallet
+  holds a member's name, tier and balance by the end of the first sweep after
+  they move, sweeps five minutes apart at most, whether the change was recorded
+  or happened on its own; a burst of changes costs one update.
+- **A pass speaks the languages the membership surface does** — its words are
+  the surface's own, in every language the brand speaks, and the phone picks.
 - **Erasing a member erases the pass**, retried until the wallet confirms it.
 
 ## Non-Goals
@@ -123,18 +126,9 @@ file but goes blind on the feature set once one exists durably, so merging this
 delta's feature-set group into the durable one is hand work nothing will ask
 for.
 
-**Scenario ids run SC-44 to SC-67 and journeys US-07 to US-10** — Google's took
-SC-44 to SC-61, Apple's take SC-62 to SC-67 and US-10. An earlier draft of this
+**Scenario ids run SC-44 to SC-71 and journeys US-07 to US-10** — Google's took
+SC-44 to SC-61, Apple's SC-62 to SC-69 and US-10, the sweep's report SC-70 and
+the pass's languages SC-71. An earlier draft of this
 change, since removed, issued SC-28 to SC-43 and US-04 to US-06 for a durable
 member card the owner did not adopt. Those numbers stay burned, and the durable
 spec carries that fact forward at archive so it outlives this change.
-
-## Open questions
-
-- ❓ How long a rotating code stays valid either side of its own period. Stated
-  here as one period's tolerance; a wider window is kinder to a slow queue and
-  longer-lived to a photograph.
-- ❓ Whether ending a pass and replacing the card should be one act or two, once
-  a member can hold more than one pass.
-- ❓ Who owns the calendar for the Apple certificate's yearly expiry. A lapsed
-  certificate signs nothing and every new install fails, silently.
