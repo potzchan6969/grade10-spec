@@ -50,7 +50,7 @@ a test, not a change. The clock behaviour in 4.2 is the reverse of what
 - [ ] 4.1 Cover that a correction credits the redeemable balance alone and a campaign grant credits both counts, so *A correction does not move a member up* and *A campaign grant moves a member up* pass
 - [ ] 4.2 Reset the inactivity window on a campaign grant and leave it alone on a correction, so *A campaign grant keeps the balance alive* and *A correction does not extend the balance's life* pass together
 - [ ] 4.3 Add an operator action that removes a tier inside its validity period, recorded with who and why, so *An operator removes a tier granted in error* passes — with a named permission, extending *Operators act through named permissions*. `tier_changes` already allows the `revocation` cause, so `ck_tier_changes_cause` needs no migration
-- [ ] 4.4 Require `channel` on every write path into the ledger, so no row can be recorded without saying which channel sold
+- [ ] 4.4 Require `channel` on every earning and redemption write path, so no sale can be recorded without saying which channel sold — corrections and expiry sold nothing, so they carry an explicit non-sale value added to the closed set rather than the `online` default they fall to today
 - [ ] 4.5 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 - [ ] 4.6 Keep one balance and one tier whatever channel wrote the entry, and make a channel's own copy of a balance non-authoritative, so *One balance across both channels* and *The channel's copy is not the balance* pass
 
@@ -60,7 +60,7 @@ a test, not a change. The clock behaviour in 4.2 is the reverse of what
 - [ ] 5.2 Implement `RewardFulfiller` against it in the loyalty worker assembly and wire it in, for rewards that take money off; the port needs `fulfill`, `deactivate`, `usage`, `kinds` and `validateTemplate`
 - [ ] 5.3 Record a physical reward as an item owed instead of issuing a code, so *A physical reward is not a discount code* passes
 - [ ] 5.4 Void the issued code on reversal and gate the reversal on its usage, so *A reversal voids the coupon* passes
-- [ ] 5.5 Read usage before deactivating, so a refused reversal does not kill a coupon the member can still use, and make the gate fire on manual redemptions with no fulfiller wired, so *A used coupon cannot be reversed* holds in every deployment
+- [ ] 5.5 Read usage before deactivating and again after, so a refused reversal does not kill a coupon the member can still use and a use between the two reads still refuses, and make the gate fire on manual redemptions with no fulfiller wired, so *A used coupon cannot be reversed* holds in every deployment
 - [ ] 5.6 Return restored points as entries pointing back at the credits they came from, so a later claw-back can still reach them
 - [ ] 5.7 Make a code that cannot be turned back into points, so *A member cannot undo a redemption* passes
 - [ ] 5.8 Add the operator cancellation that credits points back for an unused expired artifact, so *An operator cancellation is the credit path* passes, and refuse it on a used one, so *A used artifact is never reversed* passes
@@ -171,7 +171,7 @@ Its own group, appended rather than folded into the earning work in group 6:
 that group is about which money counts, this one is about how counted money
 becomes points, and this one alone reprices every earn.
 
-- [ ] 14.1 Add `earn.rounding` to the programme config schema, valued `base_points_first` or `once_at_end` and defaulting to `once_at_end` when absent, so an existing deployment keeps the order it already had
+- [ ] 14.1 Add `earn.rounding` to the programme config schema, valued `base_points_first` or `once_at_end` and defaulting to `base_points_first` when absent — the owner's order, which the parser, its comment and its test all pin
 - [ ] 14.2 Implement `base_points_first` in `computeEarnedPoints` — floor money into whole base points, then apply the multiplier to those — leaving `once_at_end` as it is, so *Base points floor before the multiplier* and *A single floor at the end* both pass
 - [ ] 14.3 Make the `base_points` stamp agree with the points actually granted under floor-first; today it is floored from the money while the total is not, so the two disagree on every multiplied earn
 - [ ] 14.4 Set `rounding: "base_points_first"` in Grade10's deployed programme config, so *Grade10 floors base points before the multiplier* passes and HKD 139 at 1.2× earns 15
