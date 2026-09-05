@@ -25,4 +25,4 @@ Task 3.4 depends on the contracts in group 1; it uses fixtures rather than a run
 - [x] 4.1 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and `pnpm run build` after the relevant Auction and Stripe feature lanes pass.
 - [x] 4.2 Verify every scenario in this change, run `openspec validate add-grade10-auction`, and run `openspec validate --specs`.
 - [x] 4.3 Review Stripe webhook secret provisioning, idempotency, reconciliation, reserve removal, extension-cap behavior, and public-contract migration before staging deployment.
-- [ ] 4.4 After rollout is confirmed, fold the accepted delta into `openspec/specs/grade10-auction/`, update the Auction PRD if its decision changed, and archive this change.
+- [x] 4.4 After rollout is confirmed, fold the accepted delta into `openspec/specs/grade10-auction/`, update the Auction PRD if its decision changed, and archive this change. — Done: the delta was folded into `openspec/specs/grade10-site/auction/` and the change archived on 2026-09-05.
