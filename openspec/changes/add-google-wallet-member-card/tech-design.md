@@ -178,8 +178,14 @@ pos_pass_push_tokens          the APNs credential, one row per key
 - **`idx_pos_passes_expiry_owed`** on `(next_attempt_at) where state <> 'live'`
   — the expiry arm's scan. A non-live row with an attempt stamped is a copy the
   vendor still holds, so the debt needs no column of its own
-- **Authoritative** — the secret, the state, and the digest. Everything the pass
-  shows is read from the programme at send time and stored only as that digest
+- **Authoritative** — the secret, the state, and the digest. What a pass shows
+  is read from the programme at send time; the digest is what decides whether
+  it moved, and the rendered fields beside it are what a device's own fetch is
+  answered from
+- **`pos_pass_cursor`** — how far the sweep has read the programme's change
+  logs. No row is the seeding case: a first lap is told today's high-water mark
+  rather than replaying a programme's whole history onto passes the daily floor
+  already covers
 
 ## Service interfaces
 
@@ -221,10 +227,14 @@ leaves the member's next scan working.
 
 ### `runWalletRefresh` — one lap
 
+0. **Pull** the members the programme recorded a change for since the cursor,
+   and bring their passes forward — before the claim, so a change lands in this
+   lap rather than the next
 1. **Claim** the due rows oldest first, `for update skip locked`, counting the
    attempt and pushing the next one out one rung
-2. **Read** the four facts for the claimed batch in one call to the programme,
-   capped so a lap stays inside one request's budget
+2. **Read** the facts for the claimed batch in one call to the programme —
+   `memberStanding`, not the counter's panel, under a grant that carries
+   nothing else
 3. **Digest** them; equal, stamp `rendered_at` and the next `due_at` and send
    nothing
 4. **Send** the difference to the wallet, then stamp

@@ -11,8 +11,9 @@
 - `grade10-site-store-membership-SC-44` — A member adds their card to their wallet
 - `grade10-site-store-membership-SC-45` — A pass identifies as the card does
 - `grade10-site-store-membership-SC-47` — A pass identifies with no signal
-- `grade10-site-store-membership-SC-52` — A recorded change reaches the pass
-- `grade10-site-store-membership-SC-53` — A change nobody recorded reaches the pass
+- `grade10-site-store-membership-SC-52` — A recorded change reaches the wallet on the next sweep
+- `grade10-site-store-membership-SC-53` — A change nobody recorded is due at the instant it happens
+- `grade10-site-store-membership-SC-70` — A sweep that has fallen behind says so
 - `grade10-site-store-membership-SC-55` — A pass says how current it is
 - `grade10-site-store-membership-SC-58` — The save action is offered beside the card
 - `grade10-site-store-membership-SC-63` — A member adds their card to Apple Wallet
