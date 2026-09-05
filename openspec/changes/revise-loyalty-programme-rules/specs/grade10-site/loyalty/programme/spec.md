@@ -222,11 +222,12 @@ Every ledger entry SHALL record the channel the activity came from.
 - **WHEN** a member tops up store credit
 - **THEN** no points are granted
 
-#### Scenario: grade10-site-loyalty-programme-SC-92 - An unlisted category earns nothing
+#### Scenario: grade10-site-loyalty-programme-SC-92 - A non-earning line earns nothing
 
-- **WHEN** a purchase carries a line in a category the programme does not list as qualifying
+- **WHEN** a purchase carries a line the programme names as non-earning — a grading service fee, a gift card, a credit top-up
 - **THEN** that line is excluded from qualifying spend
 - **AND** the rest of the purchase earns
+- **AND** ❓ a line in no named category earns until a catalogue taxonomy exists to list qualifying categories; the seller reads a reserved SKU-prefix blocklist, and the white list this rule was drafted as is revisited when the taxonomy lands
 
 #### Scenario: grade10-site-loyalty-programme-SC-93 - An entry names its channel
 
@@ -250,6 +251,13 @@ The balance SHALL stop counting at the instant the window passes, without
 waiting for any scheduled process. A refund, a claw-back, or an operator
 correction SHALL NOT reset the window. Points already expired SHALL NOT be
 revived by later activity.
+
+Each credit SHALL also carry its own expiry date, set when it is recorded, and a
+credit SHALL count while the later of that date and the member's inactivity
+window is still ahead. The two agree for every credit an activity records; they
+differ for a credit no activity moved the window for — a correction, a
+restored redemption — which lives out its own date under a window that has
+already passed.
 
 Expiry SHALL be recorded as a dated entry like any other movement, naming the
 whole amount it removed.
