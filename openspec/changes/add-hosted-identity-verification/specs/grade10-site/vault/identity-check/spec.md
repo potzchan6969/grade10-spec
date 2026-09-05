@@ -237,10 +237,11 @@ reason, SHALL be recorded on the case's history naming the staff member who
 gave it, SHALL leave the declined check on record beside the counter check, and
 SHALL be refused when no reason is given.
 
-❓ Whether an override should also take a grant an ordinary counter check does
-not is `TBC` — *Owner: Product, with Compliance*. No role the platform ships
-holds `vault:operate` without `vault:approve`, so a grant would separate nobody
-until the role set changes, which is a `shared/auth/roles` change of its own.
+An override takes no grant an ordinary counter check does not: the recorded
+reason, naming who gave it, is the control. No role the platform ships holds
+`vault:operate` without `vault:approve`, so a separate grant would separate
+nobody; the day the role set separates them is a `shared/auth/roles` change,
+and this requirement stands until then.
 
 #### Scenario: grade10-site-vault-identity-check-SC-14 - Staff verify a collector who arrives unverified
 

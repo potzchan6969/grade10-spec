@@ -32,6 +32,19 @@ A case binds exactly one identity. Binding a second replaces the first rather
 than adding to it, and what is displaced stays on file until the product that
 displaced it decides: keep it as evidence, or discard it.
 
+A product that needs only a yes or no — the store at a checkout, the auction
+at a bid — reads a **standing** instead: verified, expired or unverified,
+judged on the day it asks, with when the check was decided and who performed
+it, and nothing that names the person. Only a product that records or binds
+holds the record.
+
+## Brand
+
+Each brand runs an identity store of its own, and nothing crosses. A collector
+verified on grade10.com is unknown to ZZZ, which verifies nobody and deploys
+none; the day a ZZZ product verifies somebody, it gets a store, a vendor
+account and a template of its own.
+
 ## The two refusals
 
 Under age and an expired document, both judged at the instant the check is
@@ -50,11 +63,12 @@ The provider's copy runs on two clocks, because one is not enough. A release
 **commands** the provider to erase its copy and keeps asking until it
 acknowledges — and Grade10's own purge never waits on that answer, because a
 provider under a retention duty of its own would otherwise turn a person's
-erasure into a job that never finishes. A check whose document image reached
-Grade10 is commanded away at its ending, whichever ending it was — declined and
-refused-on-landing among them, because both fetched one. A standing retention
-window at the provider covers what never got that far: an invitation nobody
-opened, a check abandoned part-way.
+erasure into a job that never finishes. The command is issued when a released
+record is purged. A check that ended without becoming an identity — declined,
+expired, withdrawn, refused on landing — is left to a standing retention
+window at the provider, so a disputed decline stays reviewable there until
+the window closes. Erasing a person ends their live check and commands their
+whole account away, every check of theirs at once.
 
 :::detail{title="Product decisions" for="pm"}
 The record is the one place a person's checked identity lives, so every decision
@@ -63,6 +77,7 @@ here is about keeping it small, reusable, and erasable.
 | User | Situation | Desired outcome |
 | --- | --- | --- |
 | Collector | Verified once, opens a second case | Not asked for the document again. |
+| Collector | Checks out or bids after verifying for a visit | Recognised as verified, without a second document and without the store learning who they are. |
 | Collector | Asks to be forgotten | Every copy goes, including the provider's. |
 | Vault operator | Reading a case's identity | Can tell a counter check from a hosted one, and how old it is. |
 | Compliance | Auditing a signed agreement years later | The evidence is readable without a vendor. |
@@ -89,9 +104,12 @@ document number in any form.
 | Refusals are ours | Decided | Age and expiry are judged by Grade10 on the returned dates, never taken from the provider's verdict. | Compliance |
 | Raw number | Decided | Never stored, returned or logged, whoever supplied it. | Product |
 | Person-wide read | Decided | A read of a person crosses products; every write stays scoped to the caller's own cases. | Product |
-| Reuse without re-consent | ❓ Open | Whether an approved check may be bound to a second case without asking the collector again. | Compliance |
+| A gate reads a standing | Decided | A product that only asks whether a person is verified holds a gate — verified, expired or unverified — and never the record. | Product |
+| One store per brand | Decided | A brand's identities live in a store of its own, reached only by its products; a brand that verifies nobody deploys none. | Product |
+| What the store and the auction gate on | ❓ Open | Which checkout or bid asks for a verified person, and what the person is told. | Product |
+| Reuse without re-consent | Decided | One consent covers every Grade10 service and says so; an approved check is bound to a second case, and read as a standing by a second product, without asking again. | Compliance |
 | Retention windows | ❓ Open | Unset for every class, so nothing is deleted on a schedule — see [account data](/platform/account-data). | Compliance |
-| The provider's window | ❓ Open | Long enough to review a disputed check, short enough to be a control. | Compliance |
+| The provider's window | Decided | 30 days: long enough to review a disputed check, short enough to be a control on a copy Grade10 does not hold. | Compliance |
 
 **Risks.** Pulling the image home means the same document exists in two places
 until the provider's window closes. The alternative — leaving the evidence at

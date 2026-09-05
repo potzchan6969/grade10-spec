@@ -4,17 +4,17 @@ import { WalletPassLinks } from "./wallet-pass-links";
 
 const copy = {
   heading: "Carry your card on your phone",
-  failed: "That did not go through. Try again.",
+  unreachable: "We could not check your passes just now.",
 };
 
 const google = {
   id: "google",
-  addLabel: "Add to Google Wallet",
+  offer: { label: "Add to Google Wallet" },
 };
 
 const apple = {
   id: "apple",
-  addLabel: "Add to Apple Wallet",
+  offer: { label: "Add to Apple Wallet" },
 };
 
 const meta = {
@@ -45,11 +45,16 @@ export const Default: Story = {
   },
 };
 
-/** One mint in flight. Only that wallet's control waits. */
+/** One mint in flight. That wallet's control waits, and only that one. */
 export const AddingOne: Story = {
   args: { wallets: [{ ...google, adding: true }, apple] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    // The busy half is the assertion that matters: it is what stops a second
+    // tap minting a second pass and voiding the first.
+    await expect(
+      canvas.getByRole("button", { name: "Add to Google Wallet" }),
+    ).toBeDisabled();
     await expect(
       canvas.getByRole("button", { name: "Add to Apple Wallet" }),
     ).toBeEnabled();
@@ -60,31 +65,38 @@ export const AddingOne: Story = {
 export const Saveable: Story = {
   args: {
     wallets: [
-      { ...google, saveUrl: "https://pay.google.com/gp/v/save/x" },
+      {
+        id: "google",
+        offer: {
+          label: "Open in Google Wallet",
+          saveUrl: "https://pay.google.com/gp/v/save/x",
+        },
+      },
       apple,
     ],
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    // A link, not a button: the minting already happened.
     await expect(
-      canvas.getByRole("link", { name: "Add to Google Wallet" }),
+      canvas.getByRole("link", { name: "Open in Google Wallet" }),
     ).toHaveAttribute("href", "https://pay.google.com/gp/v/save/x");
   },
 };
 
 /**
- * The address survives the member being recorded as holding one.
- *
- * A row existing is not a pass installed: the member has tapped Add and has
- * not yet opened the link, and taking it away there would leave them holding
- * a pass they cannot install and cannot ask for again.
+ * Held, and the address still standing. The install survives the member being
+ * recorded as holding one — the row existing is not the pass being installed.
  */
 export const SaveableWhileHeld: Story = {
   args: {
     wallets: [
       {
-        ...google,
-        saveUrl: "https://pay.google.com/gp/v/save/x",
+        id: "google",
+        offer: {
+          label: "Open in Google Wallet",
+          saveUrl: "https://pay.google.com/gp/v/save/x",
+        },
         heldLabel: "You are carrying a pass in Google Wallet",
         endLabel: "End your Google Wallet pass",
       },
@@ -94,50 +106,51 @@ export const SaveableWhileHeld: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(
-      canvas.getByRole("link", { name: "Add to Google Wallet" }),
-    ).toBeInTheDocument();
+      canvas.getByRole("link", { name: "Open in Google Wallet" }),
+    ).toBeVisible();
     await expect(
       canvas.getByRole("button", { name: "End your Google Wallet pass" }),
-    ).toBeInTheDocument();
+    ).toBeVisible();
   },
 };
 
-/** Carrying one, offered the other: each is its own row. */
+/**
+ * One held, the other still offered. No add beside a held pass: minting ends
+ * whatever is carried there, so the offer is withdrawn rather than repeated.
+ */
 export const HeldOneOfferedTheOther: Story = {
   args: {
     wallets: [
       {
-        ...google,
-        addLabel: undefined,
+        id: "google",
         heldLabel: "You are carrying a pass in Google Wallet",
         endLabel: "End your Google Wallet pass",
       },
       apple,
     ],
   },
-  play: async ({ args, canvasElement }) => {
+  play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // The wallet they hold does not hide the one they do not.
-    await userEvent.click(
+    await expect(
+      canvas.queryByRole("button", { name: "Add to Google Wallet" }),
+    ).toBeNull();
+    await expect(
       canvas.getByRole("button", { name: "Add to Apple Wallet" }),
-    );
-    await expect(args.onAdd).toHaveBeenCalledWith("apple");
+    ).toBeVisible();
   },
 };
 
-/** Carrying both: one row each, and each ends on its own. */
+/** Both held: one ending each, and no offer anywhere. */
 export const HeldBothEndsEach: Story = {
   args: {
     wallets: [
       {
-        ...google,
-        addLabel: undefined,
+        id: "google",
         heldLabel: "You are carrying a pass in Google Wallet",
         endLabel: "End your Google Wallet pass",
       },
       {
-        ...apple,
-        addLabel: undefined,
+        id: "apple",
         heldLabel: "You are carrying a pass in Apple Wallet",
         endLabel: "End your Apple Wallet pass",
       },
@@ -149,24 +162,21 @@ export const HeldBothEndsEach: Story = {
       canvas.getByRole("button", { name: "End your Apple Wallet pass" }),
     );
     await expect(args.onEnd).toHaveBeenCalledWith("apple");
-    await expect(args.onEnd).not.toHaveBeenCalledWith("google");
   },
 };
 
-/** One ending in flight. The other row is untouched. */
+/** One ending in flight while the other stays actionable. */
 export const EndingOne: Story = {
   args: {
     wallets: [
       {
-        ...google,
-        addLabel: undefined,
+        id: "google",
         heldLabel: "You are carrying a pass in Google Wallet",
         endLabel: "End your Google Wallet pass",
         ending: true,
       },
       {
-        ...apple,
-        addLabel: undefined,
+        id: "apple",
         heldLabel: "You are carrying a pass in Apple Wallet",
         endLabel: "End your Apple Wallet pass",
       },
@@ -175,59 +185,121 @@ export const EndingOne: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(
+      canvas.getByRole("button", { name: "End your Google Wallet pass" }),
+    ).toBeDisabled();
+    await expect(
       canvas.getByRole("button", { name: "End your Apple Wallet pass" }),
     ).toBeEnabled();
   },
 };
 
 /**
- * A brand that has withdrawn its offer still owes a member who holds one the
- * control that ends it.
+ * One wallet held and mid-ending, the other mid-add. Every per-wallet state at
+ * once, which is the case a single block-level status cannot express.
  */
-export const HeldWithNothingOffered: Story = {
+export const EachWalletItsOwnState: Story = {
   args: {
     wallets: [
       {
         id: "google",
         heldLabel: "You are carrying a pass in Google Wallet",
         endLabel: "End your Google Wallet pass",
+        ending: true,
+      },
+      { ...apple, adding: true },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(
+      canvas.getByRole("button", { name: "End your Google Wallet pass" }),
+    ).toBeDisabled();
+    await expect(
+      canvas.getByRole("button", { name: "Add to Apple Wallet" }),
+    ).toBeDisabled();
+  },
+};
+
+/**
+ * One wallet's act failed while the other is fine. The complaint names the
+ * wallet, so an unrelated success cannot wipe it and the member is never told
+ * something went through when it did not.
+ */
+export const OneWalletFailed: Story = {
+  args: {
+    wallets: [
+      {
+        id: "google",
+        heldLabel: "You are carrying a pass in Google Wallet",
+        endLabel: "End your Google Wallet pass",
+        failedLabel: "Your Google Wallet pass could not be ended. Try again.",
+      },
+      apple,
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // Announced, or a member who cannot see it has no reason to look.
+    await expect(canvas.getByRole("alert")).toHaveTextContent(
+      "Your Google Wallet pass could not be ended. Try again.",
+    );
+    await expect(
+      canvas.getByRole("button", { name: "Add to Apple Wallet" }),
+    ).toBeEnabled();
+  },
+};
+
+/** Held, with nothing on offer: the ending is the whole block. */
+export const HeldWithNothingOffered: Story = {
+  args: {
+    wallets: [
+      {
+        id: "apple",
+        heldLabel: "You are carrying a pass in Apple Wallet",
+        endLabel: "End your Apple Wallet pass",
       },
     ],
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(
-      canvas.queryByRole("button", { name: /^Add to/ }),
-    ).not.toBeInTheDocument();
+      canvas.queryByText("Carry your card on your phone"),
+    ).toBeNull();
     await expect(
-      canvas.getByRole("button", { name: "End your Google Wallet pass" }),
-    ).toBeInTheDocument();
+      canvas.getByRole("button", { name: "End your Apple Wallet pass" }),
+    ).toBeVisible();
   },
 };
 
-/** A deployment carrying no wallet draws nothing at all. */
+/** A brand carrying no wallet draws nothing at all. */
 export const NoneOffered: Story = {
   args: { wallets: [] },
   play: async ({ canvasElement }) => {
-    await expect(canvasElement).toBeEmptyDOMElement();
+    await expect(canvasElement.querySelector("[data-slot]")).toBeNull();
   },
 };
 
-/** Not read yet: nothing is claimed either way. */
+/** Before the answer arrives, nothing is claimed either way. */
 export const Unknown: Story = {
   args: { state: { status: "unknown" } },
   play: async ({ canvasElement }) => {
-    await expect(canvasElement).toBeEmptyDOMElement();
+    await expect(canvasElement.querySelector("[data-slot]")).toBeNull();
   },
 };
 
-/** An add or an ending that did not complete, said once. */
-export const Failed: Story = {
-  args: { state: { status: "read", failed: true } },
+/**
+ * The standing could not be read. Said out loud rather than drawn as an empty
+ * block, which a member would read as carrying nothing.
+ */
+export const Unreachable: Story = {
+  args: {
+    wallets: [],
+    state: { status: "read", unreachable: true },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(
-      canvas.getByText("That did not go through. Try again."),
-    ).toBeInTheDocument();
+    await expect(canvas.getByRole("alert")).toHaveTextContent(
+      "We could not check your passes just now.",
+    );
   },
 };

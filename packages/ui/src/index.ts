@@ -176,6 +176,7 @@ export {
   WalletPassLinks,
   type WalletPassLinksCopy,
   type WalletPassLinksProps,
+  type WalletPassOffer,
   type WalletPassState,
   type WalletPassWallet,
 } from "./blocks/loyalty-membership/wallet-pass-links";

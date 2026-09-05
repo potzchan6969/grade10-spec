@@ -9,13 +9,16 @@
     "secondsUnit": "秒",
     "used": "此碼已被使用",
     "walletAdd": "新增至{wallet}",
+    "walletAddFailed": "未能新增至{wallet}，請重試。",
+    "walletApple": "Apple 錢包",
+    "walletAppleNote": "用於在櫃檯核實身分，積分請在本頁使用。",
+    "walletEndFailed": "未能結束{wallet}中的卡，請重試。",
     "walletEndOne": "結束{wallet}中的卡",
-    "walletFailed": "操作未成功，請重試。",
+    "walletGoogle": "Google 錢包",
     "walletHeading": "把會員卡放進手機",
     "walletHeld": "你已在{wallet}持有會員卡",
-    "walletGoogle": "Google 錢包",
-    "walletApple": "Apple 錢包",
-    "walletAppleNote": "用於在櫃檯核實身分，積分請在本頁使用。"
+    "walletInstall": "在{wallet}中開啟",
+    "walletUnreachable": "暫時無法確認你的會員卡狀態，以下內容可能不是最新的。"
   },
   "page": {
     "title": "會員",

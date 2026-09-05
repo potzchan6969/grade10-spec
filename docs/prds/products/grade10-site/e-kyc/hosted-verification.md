@@ -115,11 +115,12 @@ a browser in front of the identity store.
 | Sign-in | Decided | Not required. A case can exist before its collector has an account. | Product |
 | Trust in a verdict | Decided | Proven to come from the provider, about a check we issued, acted on once. Anything else changes nothing and is recorded as rejected. | Engineering |
 | Counter fallback | Decided | Permanent, and never gated on a hosted attempt. | Operations |
-| Invitation and check lifetimes | ❓ Open | 14 days and 24 hours provisionally. Must outlive a collector who books two weeks ahead. | Product |
-| Which cases must hold an approved hosted check | ❓ Open | Until a class is named, no case is in it and the override is the only control. | Compliance |
-| Lawful basis for the biometric processing | ❓ Open | A processor's face match on our instruction is special-category processing however it is stored. | Compliance |
-| What a decline says | ❓ Open | A repeated reason teaches a fraudster what to fix; the operator and the collector may not see the same words. | Compliance |
-| Documents and countries | ❓ Open | Which of the four document types, and which issuing countries, the provider is configured for. | Compliance |
+| Invitation and check lifetimes | Decided | 14 days and 24 hours; stalled a day after submission, expired after 7 days undecided. Outlives a collector who books two weeks ahead. | Product |
+| Which cases must hold an approved hosted check | Decided | None. The counter is equal evidence and the recorded override is the control. | Compliance |
+| Consent | Decided | Explicit, on the page that starts the check, stamped on the check; the text names the document and face check, what is kept, reuse across Grade10, and erasure. A DPIA is completed before production; the provider's DPA governs the transfer. | Compliance |
+| What a decline says | Decided | That the check could not be completed online and the counter is another way — no reason. The findings are an operator's, behind `kyc:read`. | Compliance |
+| Documents and countries | Decided | Passports of any country; national ID cards, driving licences and residence permits from Hong Kong, Macau, mainland China, Taiwan, Japan, South Korea and Singapore, as the provider authenticates them. Set on the template, recorded in the deployment checklist. | Compliance |
+| The second host | Decided | The store hosts the same check for the site's accounts, so a collector verifies with no visit — see [identity on the account](/p/grade10-site/store/account-identity). | Product |
 
 **Risks.** A verdict is a trust boundary the estate has never had — every
 identity today is written by an authenticated operator. And a verdict can land

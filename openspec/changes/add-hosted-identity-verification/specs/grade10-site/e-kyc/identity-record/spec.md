@@ -5,8 +5,10 @@ type, masked document number, its expiry, and a photograph of the document —
 held once and reused by every Grade10 service that needs to know who somebody
 is, so the same human is never asked for the same document twice.
 
-A **consumer** is a Grade10 service that records identity checks and binds them
-to its own cases: the vault today. A **person** is the account
+A **consumer** is a Grade10 service that asks the store about a person: one
+that records identity checks and binds them to its own cases, as the vault
+does, or one that only asks whether a person is verified, as the store and
+the auction do. A **person** is the account
 `shared/auth/users` identifies, or, where a consumer's case names no account,
 the case itself — and a record made for such a case is reusable only by it. A date of birth and a document expiry are
 calendar days as `shared/dates-and-times` defines them, judged in the
@@ -219,9 +221,8 @@ fetched into that store before the identity becomes readable. The capture of the
 person's face SHALL NOT be fetched or stored by Grade10.
 
 A verdict whose document image cannot be fetched SHALL create no verified
-identity and SHALL be retried a stated number of times, and SHALL then become
-visible to an operator rather than retried indefinitely. ❓ How many attempts a
-fetch is given is `TBC` — *Owner: Product*. A verdict whose
+identity and SHALL be retried eight times, each wait longer than the last, and
+SHALL then become visible to an operator rather than retried again. A verdict whose
 image the evidence store may not hold — the wrong kind of file, or one larger
 than the store accepts — SHALL leave the check declined rather than retried.
 
@@ -369,8 +370,8 @@ back, so it SHALL be set with the provider and recorded in the deployment
 checklist before a deployment is enabled, and a deployment SHALL NOT be enabled
 without it.
 
-❓ The window's length awaits Compliance — it must outlive an operator's need to
-review a disputed check, and it is `TBC` until they set it.
+The window is 30 days: long enough for an operator to review a disputed
+check, short enough to be a control on a copy Grade10 does not hold.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-26 - A provider's window is set before a deployment is enabled
 

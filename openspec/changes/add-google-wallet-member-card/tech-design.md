@@ -22,21 +22,36 @@ engineer would otherwise have to make twice.
 
 ### The pass is its own identification arm
 
-- **`pass` joins the five arms**, with the same rights as a scanned card:
-  identifies, spends, collects, no switch of its own
-- **It proves the member's device was present** — a code is made on that device
-  from a secret only it and the programme hold, so it belongs beside `qr` and
-  `code` among the arms that need no lookup notice
+- **`pass` joins the five arms**, but what it may do is the wallet's, not the
+  arm's. A code the member's own phone made for one period identifies, spends
+  and collects, as a scanned card does. A code the programme printed into the
+  pass identifies and nothing else, with no switch that could widen it
+- **Only one of them proves the member's device was present** — a rotating code
+  is made on that device from a secret only it and the programme hold, so it
+  belongs beside `qr` and `code`. A durable code proves the pass reached a
+  phone once and nothing about who holds it now, so every scan of one notifies
+  the member
 - **Why an arm and not a payload shape** — the arm is the dimension the session
   row, every audit row and every `store.pos.*` metric already carry, so counting
   arrivals by pass is free. Routing inside `qr` would leave the wallet's share
   unmeasurable, which is the mistake this change exists to avoid
-- **It is not throttled**, for the reason `qr` is not: a code is unguessable,
-  bound to a period, and dead once used
+- **It is not throttled**, for the reason `qr` is not: a rotating code is
+  unguessable, bound to a period and dead once used, and a durable one is a
+  128-bit proof. The per-pass guess cap holds the rotating code alone — on a
+  durable one it would buy no bits and would let anybody who photographed a
+  barcode pause the member's own card
 
 ### The payload names itself, its pass, and its period
 
-`G10P.<pass>.<period>.<code>` — four fields, in that order.
+Two schemes, because the two wallets carry different codes. The prefix names
+which, so a reader knows how to parse before it looks anything up — and so a
+rotating code retyped under the durable prefix is refused by shape.
+
+- **`G10P.<pass>.<period>.<code>`** — four fields, the rotating code Google's
+  device derives
+- **`G10A.<pass>.<proof>`** — three fields, the durable code the programme
+  prints into an Apple pass. The pass row is the only authority on which
+  scheme it carries
 
 - **`G10P.`** — a counter scanning goods is discarded before any lookup, so an
   ordinary barcode never reaches the gateway or a metric
@@ -64,8 +79,11 @@ whole payload is expressible in the object.
 
 ### The secret is encrypted, because it must be recoverable
 
-- **Google needs it twice** — in the object at mint, and again when a member
-  ends a pass and adds another — so a one-way digest cannot serve
+- **Three readers need it back**, so a one-way digest cannot serve: the
+  counter verifying a presented code, the sweep deriving an Apple pass's
+  barcode, and every device fetch that rebuilds one. Issuing needs none of
+  them — a re-issue mints a fresh secret — so the argument is the readers,
+  not the mint
 - **AES-GCM under one worker secret**, held in the store worker's secret list
   beside the POS app's
 - **Rejected: deriving it from a member key.** The programme would still hold
@@ -80,7 +98,8 @@ whole payload is expressible in the object.
 - **A kick on write** marks a member's passes due inside the transaction that
   changed them; failure is logged, never thrown, because the sweep is the
   guarantee and the kick only accelerates it
-- **A digest decides whether anything is sent** — four rendered facts hashed, so
+- **A digest decides whether anything is sent** — everything the pass shows,
+  hashed, so
   a re-read that finds nothing moved costs no wallet call, and a burst inside
   one interval costs one update by construction
 - **A 24-hour floor** catches a bug in either arm
@@ -94,14 +113,38 @@ whole payload is expressible in the object.
 The row stays. It is what lets the object be expired at Google afterwards, what
 erasure walks, and what stops a pass reference being reissued.
 
+### The list cursor advances, and cannot be made to advance in commit order
+
+A device asks what changed since a tag it echoes back, and that tag is a
+sequence. Postgres hands out a sequence value before the transaction commits,
+so two writers can commit out of order and a device that lists in between
+records the higher tag and never hears about the lower one.
+
+Left as it is, on purpose. Every allocation that could lose an update is inline
+in its own statement, so the window is one statement's commit latency, and it
+needs a device holding two passes that both move inside it. The pass self-heals
+on its next change. Every correct fix — a transaction-id cursor, an
+advisory-locked counter — costs a migration and a reader rewritten to tolerate
+duplicates, which is more than the exposure.
+
+What the cursor cannot be replaced by is `updated_at`: an HTTP date carries one
+second, and two writes inside one second are indistinguishable. That is why the
+conditional pass fetch was removed rather than repaired, and why the sequence
+stays.
+
 ## Database schema
 
-Two new tables in the store's schema. Both brands' migrations create them; only
-a brand with a till fills them, which is what `pos_handles` already does.
+Four new tables in the store's schema, and one sequence. Both brands'
+migrations create them; only a brand with a till fills them, which is what
+`pos_handles` already does. The three beyond `pos_passes` exist for Apple
+alone, whose devices pull rather than being pushed to, so we hold who asked.
 
 ```
 account (auth)
-   └── pos_passes         one per pass a member holds
+   └── pos_passes             one per pass a member holds
+        └── pos_pass_registrations   which device holds which pass
+             └── pos_pass_devices    where to wake each device
+pos_pass_push_tokens          the APNs credential, one row per key
 ```
 
 ### `pos_passes`
@@ -110,11 +153,11 @@ account (auth)
 | --- | --- | --- | --- | --- |
 | `id` | `text` | no | — | primary key; the pass reference in the payload and the wallet object's id |
 | `user_id` | `text` | no | — | the member |
-| `platform` | `text` | no | — | `google`; a CHECK, so a second wallet is a migration and a decision |
-| `secret_ciphertext` | `text` | no | — | the rotating code's secret, AES-GCM |
+| `platform` | `text` | no | — | `google` or `apple`; a CHECK rendered from the list, so a third is a migration and a decision |
+| `secret_ciphertext` | `text` | no | — | the secret both schemes run over, AES-GCM |
 | `secret_nonce` | `text` | no | — | its nonce |
 | `state` | `text` | no | `'live'` | `live`, `ended`, `erased`; a CHECK |
-| `rendered_digest` | `text` | yes | — | the four facts last sent; null until the first send |
+| `rendered_digest` | `text` | yes | — | everything last sent, hashed; null until the first send |
 | `rendered_at` | `timestamptz` | yes | — | when they were read |
 | `due_at` | `timestamptz` | no | `now()` | when to read again — the sweep's only ordering |
 | `attempts` | `integer` | no | `0` | rungs spent on the current failure |

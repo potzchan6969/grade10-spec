@@ -9,13 +9,16 @@
     "secondsUnit": "s",
     "used": "This code has already been used",
     "walletAdd": "Add to {wallet}",
+    "walletAddFailed": "{wallet} could not be added. Try again.",
+    "walletApple": "Apple Wallet",
+    "walletAppleNote": "Identifies you at the counter. Points are spent from this page.",
+    "walletEndFailed": "Your {wallet} pass could not be ended. Try again.",
     "walletEndOne": "End your {wallet} pass",
-    "walletFailed": "That did not go through. Try again.",
+    "walletGoogle": "Google Wallet",
     "walletHeading": "Carry your card on your phone",
     "walletHeld": "You are carrying a pass in {wallet}",
-    "walletGoogle": "Google Wallet",
-    "walletApple": "Apple Wallet",
-    "walletAppleNote": "Identifies you at the counter. Points are spent from this page."
+    "walletInstall": "Open in {wallet}",
+    "walletUnreachable": "We could not check your passes just now. This may be out of date."
   },
   "page": {
     "title": "Membership",

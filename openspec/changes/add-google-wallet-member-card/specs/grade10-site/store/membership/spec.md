@@ -255,6 +255,14 @@ A wallet the member holds SHALL NOT hide what is offered in another, and an
 address already answered SHALL stand until the member has used it — a pass
 recorded is not a pass installed.
 
+An offer SHALL carry its label and its address together, so an address with no
+words to name it cannot be expressed. Whether an act is in flight, and whether
+one did not complete, SHALL both be stated per wallet: one status for the whole
+component cannot say that a member is adding in one wallet while ending in
+another, and a failure it cannot attribute is one an unrelated success erases.
+A standing the component could not read SHALL be said out loud rather than
+drawn as an empty offer, which a member reads as carrying nothing.
+
 The consuming application is the Grade10 site.
 
 #### Scenario: grade10-site-store-membership-SC-58 - The save action is offered beside the card
@@ -262,6 +270,18 @@ The consuming application is the Grade10 site.
 - **WHEN** a member opens their card on the membership surface
 - **THEN** the action that adds the pass is offered beside it
 - **AND** every word it shows came from the application
+
+#### Scenario: grade10-site-store-membership-SC-68 - A failure names the wallet it belongs to
+
+- **GIVEN** a member carrying a pass in each of two wallets
+- **WHEN** ending one fails and an act on the other then succeeds
+- **THEN** the failure is still shown, and it names the wallet it belongs to
+
+#### Scenario: grade10-site-store-membership-SC-69 - A standing that could not be read says so
+
+- **GIVEN** a member who carries a pass
+- **WHEN** the surface cannot read what they hold
+- **THEN** it says so, and the control that ends the pass is not taken away
 
 #### Scenario: grade10-site-store-membership-SC-59 - A deployment offers only the wallets it carries
 
