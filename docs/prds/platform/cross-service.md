@@ -47,7 +47,7 @@ The reason is not that a cycle is impossible — store and loyalty are one, and 
 These two are the poles of the refusal rule, and they disagree on purpose.
 
 ```ts
-// packages/grade10-store/backend/src/worker/commerce/loyaltySink.ts
+// packages/grade10-store/backend/src/services/loyalty/sink.ts
 // A queued money fact. A refusal is a fault, or the drain marks it delivered
 // and the points are gone; a fault about the deployment stops the pass.
 throw new Error(`loyalty refused ${event.kind}: ${code} — ${result.error}`);

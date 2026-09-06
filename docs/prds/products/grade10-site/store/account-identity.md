@@ -93,7 +93,7 @@ recognition of a vault check are what keep that a one-time cost.
 :::
 
 :::detail{title="For engineers" for="engineer"}
-- **The host** — `packages/grade10-store/backend/src/worker/identity/`: the
+- **The host** — `packages/grade10-store/backend/src/identity/`: the
   account as the case, the published lifecycle, the gate, the sweeps, the
   erasure
 - **The card** — `@grade10/store-frontend/identity`, one slice; every word a
