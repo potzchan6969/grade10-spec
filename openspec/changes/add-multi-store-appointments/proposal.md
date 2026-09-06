@@ -49,6 +49,9 @@ outcomes already produce.
   service, shop, day, time and details, confirms by email with a calendar
   file, and hands the collector a private link to reschedule or cancel. A
   signed-in collector also sees every booking made under their address.
+- **The anonymous write passes a gate.** No account behind the public booking
+  surface means no rate limit an account would otherwise carry, so the write
+  passes a challenge and a per-address budget before anything is written.
 - **Operators run the diary from the console.** Services, shops, resources,
   opening rules, special dates and blocks; a shop's day laid out by resource;
   a booking made, moved, cancelled and closed out on behalf of a walk-in or a

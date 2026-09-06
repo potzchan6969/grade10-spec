@@ -16,6 +16,7 @@ address.
   - Honest times: only what the diary offers, in the shop's zone with the zone named
   - Stale picks: a time taken between the picker and the confirmation is refused and the times refresh
   - Direct link: an address naming a service opens the flow at that service
+  - Protected from scripts: the write passes a challenge and a per-address budget before anything is written
 - After booking
   - Confirmation: what was booked, where, when, and the link that manages it
   - Private link: moves or cancels the visit without an account, and stays out of every server log
@@ -219,11 +220,11 @@ write through and SHALL log it once per isolate, which is the development
 path only. A spent budget SHALL answer `TOO_MANY_REQUESTS` and a failed
 challenge SHALL answer `FORBIDDEN`.
 
-#### Scenario: grade10-site-appointment-booking-SC-21 - An address that has spent its budget is refused and told when it lifts
+#### Scenario: grade10-site-appointment-booking-SC-21 - An address that has spent its budget is refused
 
 - **GIVEN** an address that has made 10 booking attempts in the last 24 hours
 - **WHEN** it attempts an 11th
-- **THEN** the attempt is refused `TOO_MANY_REQUESTS`, naming when the window lifts
+- **THEN** the attempt is refused `TOO_MANY_REQUESTS`, and the refusal carries the reason `budget` so the site can word the wait itself
 
 #### Scenario: grade10-site-appointment-booking-SC-22 - A request with no challenge token is refused where the secret is set
 
