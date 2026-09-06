@@ -56,6 +56,7 @@ const STORE_PRODUCT_DETAIL_KEYS = ["adding", "addedToCart"];
 
 const ORDER_HISTORY_KEYS = [
   "title",
+  "orderId",
   "activeHeading",
   "pastHeading",
   "empty.title",
@@ -79,6 +80,7 @@ const ORDER_HISTORY_KEYS = [
 
 const ORDER_DETAIL_KEYS = [
   "title",
+  "orderId",
   "loading",
   "error",
   "retry",
