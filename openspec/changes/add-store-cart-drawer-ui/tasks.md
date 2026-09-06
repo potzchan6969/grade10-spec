@@ -3,7 +3,7 @@
 - [ ] 1.1 Add and register a Grade10 brand `store` catalog overlay for `en`, `zh-Hant`, and `zh-Hans` with the `CartDrawerCopy` header, item, footer, and cleanup vocabulary, while reusing the existing shared `chrome.cartLabel` for navigation.
 - [ ] 1.2 Make catalog resolution prove the Cart Drawer vocabulary for every supported Grade10 locale, including existing shared fallback behavior; verify with the affected `@grade10/i18n` tests, typecheck, and build.
 
-## 2. Cart Drawer UI and existing Store integration (grade10)
+## 2. Cart Drawer UI and existing Store integration (grade10) (owner: @kinisworking)
 
 This group depends on the landed catalog commit and integrates the UI with the
 existing typed Store cart/review backend boundary. It makes no backend changes
