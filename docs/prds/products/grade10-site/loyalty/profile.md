@@ -359,7 +359,7 @@ container. Joining calls the store worker's `membership.join`, not loyalty's
 `me.enroll` directly, so enrolment and pairing land together. The card is the
 store's too: `membership.presentCard` mints a `pos_handles` row, storing only
 the QR token's digest, and `membership.presentations` reads the history. The
-wallet rides the same slice: `membership.addWalletPass` mints a `pos_passes`
+wallet rides the same slice: `membership.addWalletPass` mints a `wallet_passes`
 row whose code secret is sealed under the worker's own key, the till spends a
 rotating code by advancing the pass's own `last_period` in one guarded update —
 no second table, and nothing that grows per scan — and the
