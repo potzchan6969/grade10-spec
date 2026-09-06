@@ -112,6 +112,27 @@ const ORDER_DETAIL_KEYS = [
   "status.refunded",
 ].sort();
 
+const CART_DRAWER_KEYS = [
+  "header.title",
+  "header.closeCartLabel",
+  "item.lowStockWarning",
+  "item.soldOutLabel",
+  "item.removeItemLabel",
+  "item.decreaseQtyLabel",
+  "item.increaseQtyLabel",
+  "footer.subtotalLabel",
+  "footer.shippingLabel",
+  "footer.shippingValue",
+  "footer.estimatedTotalLabel",
+  "footer.usePromoCode",
+  "footer.applyPromo",
+  "footer.promoPlaceholder",
+  "footer.removePromo",
+  "footer.checkoutButton",
+  "footer.checkoutRedirecting",
+  "unavailableItemsRemoved",
+].sort();
+
 const AUCTION_BIDDING_HISTORY_KEYS = [
   "title",
   "active",
@@ -202,6 +223,30 @@ describe("what a brand and a language answer between them", () => {
     },
   );
 
+  it.each(localesOf("grade10"))(
+    "resolves Cart Drawer copy for Grade10 in %s",
+    (locale) => {
+      const messages = getMessages("grade10", locale);
+      const cartDrawer = (
+        messages.store as typeof messages.store & { cartDrawer?: Tree }
+      ).cartDrawer;
+
+      expect(cartDrawer).toEqual(expect.any(Object));
+      expect(Object.keys(cartDrawer ?? {}).length).toBeGreaterThan(0);
+      expect(Object.keys(flatten(cartDrawer ?? {})).sort()).toEqual(
+        CART_DRAWER_KEYS,
+      );
+
+      expect(messages.chrome.cartLabel).toBe(
+        ((layers(sharedCatalogs)[locale] as Tree).chrome as Tree).cartLabel,
+      );
+
+      for (const value of Object.values(flatten(cartDrawer ?? {}))) {
+        expect(value).not.toBe("");
+      }
+    },
+  );
+
   /* Scenario: Every supported language exposes the shared bidding-history
      vocabulary through the assembled catalog. */
   it.each(locales)("exposes auction bidding history in %s", (locale) => {
@@ -254,6 +299,14 @@ describe("what a brand and a language answer between them", () => {
       }
     },
   );
+
+  it("falls back to the English Grade10 Cart Drawer copy for an unsupported locale", () => {
+    const english = getMessages("grade10", "en");
+    const fallback = getMessages("grade10", "fr");
+
+    expect(fallback.store.cartDrawer).toEqual(english.store.cartDrawer);
+    expect(fallback.chrome.cartLabel).toBe(english.chrome.cartLabel);
+  });
 
   /* Scenario: A brand names itself. What a brand states wins over the
      brand-neutral answer, in the language being read. */

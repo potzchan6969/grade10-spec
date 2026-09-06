@@ -30,6 +30,7 @@ import grade10EnOrderDetail from "../messages/grade10/en/orderDetail.json";
 import grade10EnOrderHistory from "../messages/grade10/en/orderHistory.json";
 import grade10EnProfile from "../messages/grade10/en/profile.json";
 import grade10EnSignIn from "../messages/grade10/en/signIn.json";
+import grade10EnStore from "../messages/grade10/en/store.json";
 import grade10EnStoreHome from "../messages/grade10/en/storeHome.json";
 import grade10EnVault from "../messages/grade10/en/vault.json";
 import grade10ZhHansAuctionListing from "../messages/grade10/zh-Hans/auctionListing.json";
@@ -42,6 +43,7 @@ import grade10ZhHansOrderDetail from "../messages/grade10/zh-Hans/orderDetail.js
 import grade10ZhHansOrderHistory from "../messages/grade10/zh-Hans/orderHistory.json";
 import grade10ZhHansProfile from "../messages/grade10/zh-Hans/profile.json";
 import grade10ZhHansSignIn from "../messages/grade10/zh-Hans/signIn.json";
+import grade10ZhHansStore from "../messages/grade10/zh-Hans/store.json";
 import grade10ZhHansStoreHome from "../messages/grade10/zh-Hans/storeHome.json";
 import grade10ZhHansVault from "../messages/grade10/zh-Hans/vault.json";
 import grade10ZhHantAuctionListing from "../messages/grade10/zh-Hant/auctionListing.json";
@@ -54,6 +56,7 @@ import grade10ZhHantOrderDetail from "../messages/grade10/zh-Hant/orderDetail.js
 import grade10ZhHantOrderHistory from "../messages/grade10/zh-Hant/orderHistory.json";
 import grade10ZhHantProfile from "../messages/grade10/zh-Hant/profile.json";
 import grade10ZhHantSignIn from "../messages/grade10/zh-Hant/signIn.json";
+import grade10ZhHantStore from "../messages/grade10/zh-Hant/store.json";
 import grade10ZhHantStoreHome from "../messages/grade10/zh-Hant/storeHome.json";
 import grade10ZhHantVault from "../messages/grade10/zh-Hant/vault.json";
 import sharedEnAppointment from "../messages/shared/en/appointment.json";
@@ -270,6 +273,7 @@ export const brandCatalogs = {
       orderHistory: grade10EnOrderHistory,
       profile: grade10EnProfile,
       signIn: grade10EnSignIn,
+      store: grade10EnStore,
       storeHome: grade10EnStoreHome,
       vault: grade10EnVault,
     },
@@ -284,6 +288,7 @@ export const brandCatalogs = {
       orderHistory: grade10ZhHantOrderHistory,
       profile: grade10ZhHantProfile,
       signIn: grade10ZhHantSignIn,
+      store: grade10ZhHantStore,
       storeHome: grade10ZhHantStoreHome,
       vault: grade10ZhHantVault,
     },
@@ -298,6 +303,7 @@ export const brandCatalogs = {
       orderHistory: grade10ZhHansOrderHistory,
       profile: grade10ZhHansProfile,
       signIn: grade10ZhHansSignIn,
+      store: grade10ZhHansStore,
       storeHome: grade10ZhHansStoreHome,
       vault: grade10ZhHansVault,
     },
