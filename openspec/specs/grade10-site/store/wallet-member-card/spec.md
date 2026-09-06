@@ -60,7 +60,8 @@ the other's by accident.
 
 - **GIVEN** a member holding a live Google Wallet pass
 - **WHEN** they try to add a second Google Wallet pass
-- **THEN** the existing one is ended first, or the add is refused, never two live at once
+- **THEN** the pass they held is ended first and exactly one live pass for that wallet remains
+- **AND** the partial unique index `uq_wallet_passes_live_member` is the backstop that refuses a second live row on any path that forgets
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-03 - Ending one wallet's pass leaves the other's untouched
 
