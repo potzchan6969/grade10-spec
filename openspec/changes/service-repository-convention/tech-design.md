@@ -66,7 +66,9 @@ inventory, by product, and where each path now lives.
 - **Store** — `worker/{wallet,commerce,push,erasure,orders,analytics,db}/`
   held roughly 4,800 lines of product behaviour and SQL outside
   `repositories/`. Now: `services/` by capability, `repositories/` for the
-  account profile and push subscriptions, `src/erasure/`, `sweeps/` for the
+  account profile, cart lines, orders and their events, external orders,
+  payment events, coupon releases, push subscriptions, sweep cursors and the
+  claim backoff, `src/erasure/`, `sweeps/` for the
   wallet refresh and the pairing arms; `worker/` keeps `app.ts`, `appEnv.ts`,
   `config.ts`, `entrypoint.ts`, `env.ts`, `secrets.ts`,
   `db/{client,schema}`, `trpc/`, `routes/`, `pos/mount.ts` and the
