@@ -1,0 +1,46 @@
+{
+  "title": "订单详情",
+  "loading": "正在加载订单详情…",
+  "error": "无法加载此订单。请重试。",
+  "retry": "再试一次",
+  "notFound": "找不到订单",
+  "needHelp": "需要帮助？",
+  "table": {
+    "items": "商品",
+    "subtotal": "小计",
+    "quantity": "数量",
+    "total": "总额"
+  },
+  "sidebar": {
+    "orderSummary": "订单摘要",
+    "paymentMethod": "付款方式",
+    "shippingAddress": "配送地址",
+    "pickupAddress": "取货地址",
+    "loyaltyPointsToEarn": "可获得积分",
+    "loyaltyPointsEarned": "已获得积分"
+  },
+  "money": {
+    "subtotal": "报价小计",
+    "paidTotal": "已支付总额",
+    "refund": "退款"
+  },
+  "fulfilment": {
+    "title": "配送状态",
+    "orderPlaced": "已下单",
+    "shipped": "已发货",
+    "pickup": "可取货",
+    "completed": "已完成",
+    "estimate": "预计送达"
+  },
+  "tracking": {
+    "trackOrder": "跟踪订单"
+  },
+  "status": {
+    "completed": "已完成",
+    "shipped": "已发货",
+    "processing": "处理中",
+    "pickup": "可取货",
+    "canceled": "已取消",
+    "refunded": "已退款"
+  }
+}

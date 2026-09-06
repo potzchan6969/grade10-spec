@@ -1,0 +1,28 @@
+{
+  "title": "Your Orders",
+  "activeHeading": "Active Orders",
+  "pastHeading": "Past Orders",
+  "empty": {
+    "title": "No orders yet",
+    "description": "When you place your first order, it will appear here",
+    "shopNow": "Shop Now"
+  },
+  "loading": "Loading your orders…",
+  "error": "We couldn’t load your orders. Try again.",
+  "retry": "Try again",
+  "pendingTotal": "Total pending",
+  "placedOn": "Placed on {date}",
+  "total": "Total: {money}",
+  "actions": {
+    "viewDetails": "View Details",
+    "trackOrder": "Track Order"
+  },
+  "status": {
+    "completed": "Completed",
+    "shipped": "Shipped",
+    "processing": "Processing",
+    "pickup": "Ready for Pickup",
+    "canceled": "Canceled",
+    "refunded": "Refunded"
+  }
+}

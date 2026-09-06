@@ -1,5 +1,13 @@
 import { brandCatalogs, sharedCatalogs } from "./catalogs.ts";
 
+/** Which languages a brand speaks, and which it falls back to. */
+export const brands = {
+  grade10: { locales: ["en", "zh-Hant", "zh-Hans"], defaultLocale: "en" },
+  zzz: { locales: ["ko"], defaultLocale: "ko" },
+} as const;
+
+export type Brand = keyof typeof brands;
+
 /**
  * The vocabulary: every user-facing string either site renders, named once.
  *
@@ -16,16 +24,10 @@ import { brandCatalogs, sharedCatalogs } from "./catalogs.ts";
  * on another brand's page when an override is forgotten. What each layer is
  * made of — one file per namespace — is `catalogs.ts`.
  */
-export type Messages = typeof sharedCatalogs.en &
-  typeof brandCatalogs.grade10.en;
-
-/** Which languages a brand speaks, and which it falls back to. */
-export const brands = {
-  grade10: { locales: ["en", "zh-Hant", "zh-Hans"], defaultLocale: "en" },
-  zzz: { locales: ["ko"], defaultLocale: "ko" },
-} as const;
-
-export type Brand = keyof typeof brands;
+export type Messages<B extends Brand = "grade10"> = typeof sharedCatalogs.en &
+  (B extends "grade10"
+    ? typeof brandCatalogs.grade10.en
+    : typeof brandCatalogs.zzz.ko);
 
 /** The locales one brand speaks. */
 export type LocaleOf<B extends Brand> = (typeof brands)[B]["locales"][number];
@@ -156,7 +158,10 @@ export function resolveShippedLocale<B extends Brand>(
   return isLocale(brand, input) ? input : defaultLocaleOf(brand);
 }
 
-export function getMessages(brand: Brand, locale: string): Messages {
+export function getMessages<B extends Brand>(
+  brand: B,
+  locale: string,
+): Messages<B> {
   const fallback = brands[brand].defaultLocale;
   const active = isLocale(brand, locale) ? locale : fallback;
   const brandLayer = owned[brand] as Record<string, unknown>;
@@ -167,5 +172,5 @@ export function getMessages(brand: Brand, locale: string): Messages {
       layer(brandLayer, fallback),
     ),
     layer(brandLayer, active),
-  ) as Messages;
+  ) as Messages<B>;
 }

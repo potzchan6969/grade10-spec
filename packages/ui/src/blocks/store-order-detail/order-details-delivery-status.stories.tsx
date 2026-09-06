@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { fn } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import {
   FILLED_DELIVERY,
   ORDER_DETAILS_COPY,
@@ -20,17 +20,30 @@ const meta = {
   },
 } satisfies Meta<typeof OrderDetailsDeliveryStatus>;
 
+const trackOrder = meta.args.onTrackOrder;
+
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** Order Placed → Shipped → Completed, with Track Order. */
-export const ShippedDelivery: Story = {};
+export const ShippedDelivery: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Track Order" }));
+    expect(trackOrder).toHaveBeenCalledOnce();
+  },
+};
 
 /** Order Placed → Shipped → Completed, past the tracking window. */
 export const ShippedDeliveryWithoutTrack: Story = {
   args: {
     trackOrder: false,
     onTrackOrder: undefined,
+  },
+  play: async ({ canvasElement }) => {
+    expect(
+      within(canvasElement).queryByRole("button", { name: "Track Order" }),
+    ).not.toBeInTheDocument();
   },
 };
 

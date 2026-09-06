@@ -1,0 +1,46 @@
+{
+  "title": "Order Details",
+  "loading": "Loading order details…",
+  "error": "We couldn’t load this order. Try again.",
+  "retry": "Try again",
+  "notFound": "Order not found",
+  "needHelp": "Need help?",
+  "table": {
+    "items": "Items",
+    "subtotal": "Subtotal",
+    "quantity": "Qty",
+    "total": "Total"
+  },
+  "sidebar": {
+    "orderSummary": "Order Summary",
+    "paymentMethod": "Payment Method",
+    "shippingAddress": "Shipping Address",
+    "pickupAddress": "Pickup Address",
+    "loyaltyPointsToEarn": "Points to Earn",
+    "loyaltyPointsEarned": "Points Earned"
+  },
+  "money": {
+    "subtotal": "Quoted subtotal",
+    "paidTotal": "Paid total",
+    "refund": "Refund"
+  },
+  "fulfilment": {
+    "title": "Delivery Status",
+    "orderPlaced": "Order Placed",
+    "shipped": "Shipped",
+    "pickup": "Ready for Pickup",
+    "completed": "Completed",
+    "estimate": "Estimated delivery"
+  },
+  "tracking": {
+    "trackOrder": "Track Order"
+  },
+  "status": {
+    "completed": "Completed",
+    "shipped": "Shipped",
+    "processing": "Processing",
+    "pickup": "Ready for Pickup",
+    "canceled": "Canceled",
+    "refunded": "Refunded"
+  }
+}

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, within } from "storybook/test";
 import {
   FILLED_ADDRESS,
   FILLED_PAYMENT,
@@ -83,5 +84,21 @@ export const Minimal: Story = {
     },
     shippingAddress: undefined,
     loyaltyPoints: undefined,
+  },
+};
+
+export const PaidTotalOnly: Story = {
+  args: {
+    loyaltyPoints: undefined,
+    payment: undefined,
+    pickupAddress: undefined,
+    shippingAddress: undefined,
+    summary: { total: { label: "Total", value: "HK$1,704.50" } },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("HK$1,704.50")).toBeVisible();
+    expect(canvas.queryByText("Subtotal")).not.toBeInTheDocument();
+    expect(canvas.queryByText("Payment Method")).not.toBeInTheDocument();
   },
 };

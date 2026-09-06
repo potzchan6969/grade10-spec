@@ -26,6 +26,8 @@ import grade10EnEmail from "../messages/grade10/en/email.json";
 import grade10EnHead from "../messages/grade10/en/head.json";
 import grade10EnIdentity from "../messages/grade10/en/identity.json";
 import grade10EnMarketing from "../messages/grade10/en/marketing.json";
+import grade10EnOrderDetail from "../messages/grade10/en/orderDetail.json";
+import grade10EnOrderHistory from "../messages/grade10/en/orderHistory.json";
 import grade10EnProfile from "../messages/grade10/en/profile.json";
 import grade10EnSignIn from "../messages/grade10/en/signIn.json";
 import grade10EnStoreHome from "../messages/grade10/en/storeHome.json";
@@ -36,6 +38,8 @@ import grade10ZhHansEmail from "../messages/grade10/zh-Hans/email.json";
 import grade10ZhHansHead from "../messages/grade10/zh-Hans/head.json";
 import grade10ZhHansIdentity from "../messages/grade10/zh-Hans/identity.json";
 import grade10ZhHansMarketing from "../messages/grade10/zh-Hans/marketing.json";
+import grade10ZhHansOrderDetail from "../messages/grade10/zh-Hans/orderDetail.json";
+import grade10ZhHansOrderHistory from "../messages/grade10/zh-Hans/orderHistory.json";
 import grade10ZhHansProfile from "../messages/grade10/zh-Hans/profile.json";
 import grade10ZhHansSignIn from "../messages/grade10/zh-Hans/signIn.json";
 import grade10ZhHansStoreHome from "../messages/grade10/zh-Hans/storeHome.json";
@@ -46,6 +50,8 @@ import grade10ZhHantEmail from "../messages/grade10/zh-Hant/email.json";
 import grade10ZhHantHead from "../messages/grade10/zh-Hant/head.json";
 import grade10ZhHantIdentity from "../messages/grade10/zh-Hant/identity.json";
 import grade10ZhHantMarketing from "../messages/grade10/zh-Hant/marketing.json";
+import grade10ZhHantOrderDetail from "../messages/grade10/zh-Hant/orderDetail.json";
+import grade10ZhHantOrderHistory from "../messages/grade10/zh-Hant/orderHistory.json";
 import grade10ZhHantProfile from "../messages/grade10/zh-Hant/profile.json";
 import grade10ZhHantSignIn from "../messages/grade10/zh-Hant/signIn.json";
 import grade10ZhHantStoreHome from "../messages/grade10/zh-Hant/storeHome.json";
@@ -260,6 +266,8 @@ export const brandCatalogs = {
       head: grade10EnHead,
       identity: grade10EnIdentity,
       marketing: grade10EnMarketing,
+      orderDetail: grade10EnOrderDetail,
+      orderHistory: grade10EnOrderHistory,
       profile: grade10EnProfile,
       signIn: grade10EnSignIn,
       storeHome: grade10EnStoreHome,
@@ -272,6 +280,8 @@ export const brandCatalogs = {
       head: grade10ZhHantHead,
       identity: grade10ZhHantIdentity,
       marketing: grade10ZhHantMarketing,
+      orderDetail: grade10ZhHantOrderDetail,
+      orderHistory: grade10ZhHantOrderHistory,
       profile: grade10ZhHantProfile,
       signIn: grade10ZhHantSignIn,
       storeHome: grade10ZhHantStoreHome,
@@ -284,6 +294,8 @@ export const brandCatalogs = {
       head: grade10ZhHansHead,
       identity: grade10ZhHansIdentity,
       marketing: grade10ZhHansMarketing,
+      orderDetail: grade10ZhHansOrderDetail,
+      orderHistory: grade10ZhHansOrderHistory,
       profile: grade10ZhHansProfile,
       signIn: grade10ZhHansSignIn,
       storeHome: grade10ZhHansStoreHome,

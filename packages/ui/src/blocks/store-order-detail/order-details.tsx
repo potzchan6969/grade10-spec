@@ -38,8 +38,8 @@ type OrderDetailsProps = {
   };
   delivery?: OrderDetailsDelivery;
   lines: readonly OrderDetailsLineItem[];
-  summary: OrderDetailsSummary;
-  payment: OrderDetailsPayment;
+  summary?: OrderDetailsSummary;
+  payment?: OrderDetailsPayment;
   shippingAddress?: OrderDetailsAddress;
   pickupAddress?: OrderDetailsAddress;
   loyaltyPoints?: ReactNode;
@@ -108,6 +108,22 @@ function OrderDetails({
 }: OrderDetailsProps) {
   const revealed = useFirstPaintReveal();
   const hasDelivery = delivery != null;
+  const hasSummary =
+    summary != null &&
+    [
+      summary.subtotal,
+      summary.discount,
+      summary.refund,
+      summary.shipping,
+      summary.tax,
+      summary.total,
+    ].some((row) => row != null);
+  const hasSidebar =
+    hasSummary ||
+    payment != null ||
+    shippingAddress != null ||
+    pickupAddress != null ||
+    loyaltyPoints != null;
   const tableStaggerIndex = hasDelivery ? 2 : 1;
   const sidebarStaggerIndex = hasDelivery ? 3 : 2;
 
@@ -141,7 +157,14 @@ function OrderDetails({
           statusLabel={copy.status[status]}
         />
       </RevealGroup>
-      <div className="grid w-full grid-cols-[minmax(0,2fr)_minmax(0,1fr)] items-start gap-12">
+      <div
+        className={cn(
+          "grid w-full items-start gap-12",
+          hasSidebar
+            ? "grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
+            : "grid-cols-1",
+        )}
+      >
         <VStack className="min-w-0" gap="lg" hAlign="stretch">
           {delivery ? (
             <RevealGroup revealed={revealed} staggerIndex={1}>
@@ -161,21 +184,23 @@ function OrderDetails({
             />
           </RevealGroup>
         </VStack>
-        <RevealGroup
-          className="min-w-0"
-          revealed={revealed}
-          staggerIndex={sidebarStaggerIndex}
-        >
-          <OrderDetailsSidebar
-            copy={copy.sidebar}
-            loyaltyPoints={loyaltyPoints}
-            payment={payment}
-            pickupAddress={pickupAddress}
-            shippingAddress={shippingAddress}
-            status={status}
-            summary={summary}
-          />
-        </RevealGroup>
+        {hasSidebar ? (
+          <RevealGroup
+            className="min-w-0"
+            revealed={revealed}
+            staggerIndex={sidebarStaggerIndex}
+          >
+            <OrderDetailsSidebar
+              copy={copy.sidebar}
+              loyaltyPoints={loyaltyPoints}
+              payment={payment}
+              pickupAddress={pickupAddress}
+              shippingAddress={shippingAddress}
+              status={status}
+              summary={summary}
+            />
+          </RevealGroup>
+        ) : null}
       </div>
     </VStack>
   );

@@ -1,0 +1,46 @@
+{
+  "title": "訂單詳情",
+  "loading": "正在載入訂單詳情…",
+  "error": "無法載入此訂單。請再試一次。",
+  "retry": "再試一次",
+  "notFound": "找不到訂單",
+  "needHelp": "需要協助？",
+  "table": {
+    "items": "商品",
+    "subtotal": "小計",
+    "quantity": "數量",
+    "total": "總額"
+  },
+  "sidebar": {
+    "orderSummary": "訂單摘要",
+    "paymentMethod": "付款方式",
+    "shippingAddress": "運送地址",
+    "pickupAddress": "取貨地址",
+    "loyaltyPointsToEarn": "可獲得積分",
+    "loyaltyPointsEarned": "已獲得積分"
+  },
+  "money": {
+    "subtotal": "報價小計",
+    "paidTotal": "已付款總額",
+    "refund": "退款"
+  },
+  "fulfilment": {
+    "title": "配送狀態",
+    "orderPlaced": "已下單",
+    "shipped": "已出貨",
+    "pickup": "可取貨",
+    "completed": "已完成",
+    "estimate": "預計送達"
+  },
+  "tracking": {
+    "trackOrder": "追蹤訂單"
+  },
+  "status": {
+    "completed": "已完成",
+    "shipped": "已出貨",
+    "processing": "處理中",
+    "pickup": "可取貨",
+    "canceled": "已取消",
+    "refunded": "已退款"
+  }
+}
