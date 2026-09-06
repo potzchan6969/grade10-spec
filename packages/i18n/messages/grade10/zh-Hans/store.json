@@ -1,0 +1,28 @@
+{
+  "cartDrawer": {
+    "header": {
+      "title": "购物车",
+      "closeCartLabel": "关闭购物车"
+    },
+    "item": {
+      "lowStockWarning": "库存不足。数量已调整",
+      "soldOutLabel": "售罄",
+      "removeItemLabel": "移除商品",
+      "decreaseQtyLabel": "减少数量",
+      "increaseQtyLabel": "增加数量"
+    },
+    "footer": {
+      "subtotalLabel": "小计",
+      "shippingLabel": "运费",
+      "shippingValue": "待定",
+      "estimatedTotalLabel": "预计总额",
+      "usePromoCode": "使用优惠码",
+      "applyPromo": "应用",
+      "promoPlaceholder": "输入优惠码",
+      "removePromo": "移除",
+      "checkoutButton": "前往结账",
+      "checkoutRedirecting": "正在跳转…"
+    },
+    "unavailableItemsRemoved": "部分商品因不再可用而已移除"
+  }
+}

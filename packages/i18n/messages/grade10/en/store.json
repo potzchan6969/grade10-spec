@@ -1,0 +1,28 @@
+{
+  "cartDrawer": {
+    "header": {
+      "title": "Cart",
+      "closeCartLabel": "Close cart"
+    },
+    "item": {
+      "lowStockWarning": "Low stock. Quantity adjusted",
+      "soldOutLabel": "Sold Out",
+      "removeItemLabel": "Remove item",
+      "decreaseQtyLabel": "Decrease quantity",
+      "increaseQtyLabel": "Increase quantity"
+    },
+    "footer": {
+      "subtotalLabel": "Subtotal",
+      "shippingLabel": "Shipping",
+      "shippingValue": "TBD",
+      "estimatedTotalLabel": "Estimated Total",
+      "usePromoCode": "Use promo code",
+      "applyPromo": "Apply",
+      "promoPlaceholder": "Enter promo code",
+      "removePromo": "Remove",
+      "checkoutButton": "Proceed to Checkout",
+      "checkoutRedirecting": "Redirecting…"
+    },
+    "unavailableItemsRemoved": "Some item(s) have been removed as they’re no longer available"
+  }
+}
