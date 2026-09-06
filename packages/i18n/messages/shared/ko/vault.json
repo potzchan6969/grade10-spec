@@ -156,6 +156,11 @@
     "holdingSince": "{day}부터 물품을 보관하고 있습니다.",
     "settled": "남은 금액이 없으므로 다음 방문 때 가져가실 수 있습니다.",
     "owedEntry": "{detail}: {amount}",
+    "owed": {
+      "financing_outstanding": "대출 잔액 있음",
+      "financing_overdue": "대출 잔액 있음, {overdueDays}일 연체",
+      "fee": "미납 수수료 있음"
+    },
     "askForItBack": "반환 요청하기",
     "cancelRequest": "이 신청 취소하기",
     "cancelConfirm": "이 신청을 취소하시겠습니까? 예약한 방문도 함께 취소되며, 물품은 고객님이 그대로 보관하십니다.",

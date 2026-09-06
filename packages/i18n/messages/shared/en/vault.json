@@ -156,6 +156,11 @@
     "holdingSince": "We are holding your item since {day}.",
     "settled": "Nothing is owed, so it can go home with you at your next visit.",
     "owedEntry": "{detail}: {amount}",
+    "owed": {
+      "financing_outstanding": "Loan outstanding",
+      "financing_overdue": "Loan outstanding, {overdueDays, plural, one {# day} other {# days}} past due",
+      "fee": "Fee outstanding"
+    },
     "askForItBack": "Ask for it back",
     "cancelRequest": "Cancel this request",
     "cancelConfirm": "Cancel this request? Any visit is cancelled with it, and the item stays with you.",
