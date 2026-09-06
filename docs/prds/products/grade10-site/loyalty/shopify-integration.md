@@ -103,9 +103,9 @@ programme thinks, so every unhappy answer lands staff in a normal sale.
 
 :::flow{title="Points at the till"}
 ## Identify the member
-Scan the QR on the member card — from the site or from the member's Google
-Wallet pass — type its eight-character short code, or type the exact email on
-the account. A miss says only that no member was found.
+Scan the QR on the member card — from the site or from either wallet pass —
+type its eight-character short code, or type the exact email on the account. A
+miss says only that no member was found.
 Any of these opens a ten-minute session bound to the shop and the
 member — never to the staff label, which changes when staff switch by PIN.
 
@@ -202,7 +202,7 @@ the `payment_customers` table; the metafield is `membership.member_id`, type
 `draftOrders.ts` — create, read and delete only. The points tender is
 `services/pointsTender.ts` and `services/loyalty/pointsSpend.ts`, gated by
 `POINTS_TENDER` in `packages/app-env`. Webhooks land on one route in the
-store worker; the loyalty sink is `worker/commerce/loyaltySink.ts`.
+store worker; the loyalty sink is `services/loyalty/sink.ts`.
 
 The extension is `integrations/shopify-pos/grade10`, outside `apps/` with its
 own publish lane, rendering Polaris web components on API 2026-07 with a byte
@@ -214,7 +214,7 @@ exactly config, identify, plan and confirm a sale, collect, and end. The gateway
 and the gateway refuses below its minimum. Short-code entry is capped at ten
 misses in five minutes per shop, email and phone at twenty. Flags are the
 `pos_flags` table behind a typed registry; a till sale is one `orders` row
-per session (`services/pos/sale.ts`), rewritten on every plan and trimmed to
+per session (`services/pos/sale/sale.ts`), rewritten on every plan and trimmed to
 what the cart took, so one sale never carries two. The longer working notes are
 [the Shopify membership and POS plan](/references/shopify-membership-pos)
 and [the POS extension notes](/references/shopify-pos-extension).
