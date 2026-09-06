@@ -135,7 +135,8 @@ SHALL be refused by name rather than summed.
 
 An operator holding the vault read grant SHALL be able to read every live loan
 past its due date, longest overdue first, each row carrying the due date, the
-days overdue and what is outstanding.
+days overdue, what is outstanding, and the currency it is outstanding in, so
+that a book holding two currencies prints each row in its own unit.
 
 The list SHALL be judged on the due date the advance fixed, and SHALL page on
 a cursor over that due date and the case, so that no loan can hide behind a
@@ -156,6 +157,12 @@ worklist SHALL never let one hide the other.
 - **GIVEN** a loan in arrears whose advance is taken back
 - **WHEN** the arrears are read
 - **THEN** the case is not in them
+
+#### Scenario: grade10-admin-vault-money-book-SC-12 - A two-currency book prints each row in its own currency
+
+- **GIVEN** loans in arrears in two different currencies
+- **WHEN** the arrears are read
+- **THEN** each row carries its own currency, and no row is read in the book's default currency
 
 ### Requirement: The book sits behind the money grant, and one case's balance does not
 
