@@ -200,3 +200,39 @@ index them.
 - **WHEN** a crawler reads the sitemap and fetches `/book/manage` and `/book/mine`
 - **THEN** neither address is in the sitemap
 - **AND** each answers with a directive not to index it
+
+### Requirement: The anonymous write passes a gate
+
+`public.book` is the platform's only write nobody is signed in to make that
+consumes a physical resource and triggers a send, so it SHALL pass two brakes
+before anything is written: a challenge token the site's widget answers,
+verified once against the provider, and a per-address budget of **10 asks in
+24 hours** counted on the address folded the way the bookings table stores
+it.
+
+The budget SHALL be checked first, and the attempt SHALL be recorded
+whichever way the challenge goes, so the count is what one address asked for
+rather than what it got.
+
+An unreachable challenge provider SHALL refuse. An unset secret SHALL let the
+write through and SHALL log it once per isolate, which is the development
+path only. A spent budget SHALL answer `TOO_MANY_REQUESTS` and a failed
+challenge SHALL answer `FORBIDDEN`.
+
+#### Scenario: grade10-site-appointment-booking-SC-21 - An address that has spent its budget is refused and told when it lifts
+
+- **GIVEN** an address that has made 10 booking attempts in the last 24 hours
+- **WHEN** it attempts an 11th
+- **THEN** the attempt is refused `TOO_MANY_REQUESTS`, naming when the window lifts
+
+#### Scenario: grade10-site-appointment-booking-SC-22 - A request with no challenge token is refused where the secret is set
+
+- **GIVEN** a deployment with the challenge secret set
+- **WHEN** a booking request carries no challenge token
+- **THEN** it is refused `FORBIDDEN`
+
+#### Scenario: grade10-site-appointment-booking-SC-23 - A refused request holds no seat
+
+- **GIVEN** a booking request that fails the gate
+- **WHEN** it is refused
+- **THEN** no row was written and no slot was held

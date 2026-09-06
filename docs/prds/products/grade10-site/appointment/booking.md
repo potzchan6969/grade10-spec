@@ -55,4 +55,5 @@ gave.
 | Phone number | ❓ Open | Optional today; a shop that calls the morning of a visit may want it required. | Operations |
 | Reminder lead | ❓ Open | One day by default; a same-day drop-off may want an hour. | Product |
 | Payment at booking | Decided | None; what the visit costs is settled in the shop. | Product |
+| Anonymous write | Decided | A challenge plus a per-address budget of ten asks a day. A booking holds a desk and sends mail on nobody's authority, and the two brakes answer different questions: whether a person is there at all, and how much one address may spend however convincingly it asks. | Product |
 :::
