@@ -57,3 +57,49 @@ This requires red-green-refactor evidence without forcing a test category that c
 - Narrow repository ports can become needless indirection if they mirror a single query without serving a use case. Reviews should remove those wrappers.
 - PGlite is Postgres-compatible but not production infrastructure; database-specific behavior that it cannot represent still needs the existing integration or deployment validation.
 - Existing code will be migrated incrementally. A change touching legacy persistence must improve the touched path; untouched paths are inventory work, not a reason to block unrelated delivery.
+
+## Appendix — the persistent-path inventory (task 3.1)
+
+The application repository's architecture refactor answers task 3.1's
+inventory, by product, and where each path now lives.
+
+- **Store** — `worker/{wallet,commerce,push,erasure,orders,analytics,db}/`
+  held roughly 4,800 lines of product behaviour and SQL outside
+  `repositories/`. Now: `services/` by capability, `repositories/` for the
+  account profile, cart lines, orders and their events, external orders,
+  payment events, coupon releases, push subscriptions, sweep cursors and the
+  claim backoff, `src/erasure/`, `sweeps/` for the
+  wallet refresh and the pairing arms; the assembly — `app.ts`, `appEnv.ts`,
+  `config.ts`, `entrypoint.ts`, `env.ts`, `secrets.ts`,
+  `db/{client,schema}`, `trpc/`, `routes/`, `pos/mount.ts` and the
+  brand-wired `identity/` — sits at the package root, with `./worker` the
+  assembly barrel; no `worker/` folder remains, and no owner in
+  `check-write-surfaces.mjs` is a `worker/` path any more.
+- **Vault** — the money tables were the only vault tables with no
+  repository: 25 SQL sites across `money/`, `cases/`, `sweeps/` and
+  `valuation/`, with "the offer the loan runs on" derived twice and "newest
+  payout per active case" written twice. Now
+  `repositories/{offers,payouts,repayments,moneyAdjustments}.ts`. Four
+  entrypoints wrote directly — `cases.requestRelease` (a whole service in a
+  resolver), `routes/uploads.ts` (inserting `photo_reads` from the handler),
+  `routes/documents.ts` (two unsequenced appends), and `admin.ts`'s own
+  select over `case_events` — each is in its service now, and `admin.ts` is
+  split by scope.
+- **Loyalty** — the writing services group by capability under
+  `services/{earning,finance,ledger,members,rewards,tiers}`, and
+  `ledger_entries`, the table every guarantee rests on, has an owning module
+  (`repositories/ledgerEntries.ts`) so `check-write-surfaces.mjs` can pin it.
+- **Appointment** — the SQL that sat in routers is in
+  `repositories/{availability,blocks,bookingAttempts,bookingEvents,bookings,locations,resources,services}.ts`,
+  and the `diary.ts` forwarders were deleted rather than added to, which is
+  this design's own rule against pass-through wrappers.
+- **Apple pass route** — the pull protocol's three tables are owned by
+  `packages/wallet-pass/src/apple`, which is where the route writes them;
+  the host answers only which passes it has.
+- **Representatives for 3.2** — the vault's money tables and loyalty's
+  `ledger_entries`, as this design's "one representative persistent use case
+  in each affected product" asks.
+- **Still open** — a check that *requires* a touched persistent path to
+  meet the convention exists only per-table (`check-write-surfaces.mjs`),
+  not per-layer (task 3.3); and the worked example task 1.3 asks for is not
+  written.

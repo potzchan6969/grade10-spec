@@ -108,7 +108,7 @@ accepts a fabricated default label.
 
 - `packages/shopify/contracts/src/catalog.ts` adds the provider-neutral
   compare-at and badge shapes.
-- `packages/shopify/backend/src/wire/queries.ts`, codecs, mappers, and
+- `packages/shopify/backend/src/catalog/{queries,codecs,mappers}.ts` and the
   catalog fixtures carry the fields from Shopify.
 - `packages/grade10-store/contracts/src/schemas.ts` exposes them through the
   Store catalogue response.

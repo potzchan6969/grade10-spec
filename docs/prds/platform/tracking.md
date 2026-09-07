@@ -93,7 +93,7 @@ browser client ──POST /api/track──▶ backend route ──POST /import�
 
 ### Web: stub through DI
 
-- Components bind `createTrackingStub()` (`src/core/analytics/testing.ts`) through the DI container
+- `createTrackingClient` (`@grade10/mixpanel/browser`) posts each batch to `/api/track` and retries; a test hands it a `fetch` of its own that records the batches
 
 ## Adding tracking to a product
 

@@ -55,7 +55,8 @@ group 4 alone and run against fixtures, never a live worker.
 - [x] 7.1 Make `A product sees only its own services and bookings`, `A product cannot book a service not bound to it` and `A case holds one live booking at a time` pass over the vault entrypoint.
 - [x] 7.2 Add the public tier and its procedures so `Collector books a grading visit`, `Only customer-bookable services are listed`, `A time taken meanwhile is refused and the times refresh` and `A second live visit for the same service is told so` can pass: services, shops offering one, slots, book with a guest attendee and a manage secret, and the signed-in own list.
 - [x] 7.3 Make `The link opens the booking`, `The collector moves the visit from the link`, `The collector cancels from the link`, `A link naming nothing answers not found` and `The secret never leaves the browser` pass: secret-keyed read, reschedule and cancel that take the secret in the request body only.
-- [x] 7.4 Verification: run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend` and `pnpm run build`.
+- [x] 7.4 Make `An address that has spent its budget is refused`, `A request with no challenge token is refused where the secret is set` and `A refused request holds no seat` pass: a challenge token check and a per-address budget in front of `public.book`, refusing before anything is written.
+- [x] 7.5 Verification: run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend` and `pnpm run build`.
 
 ## 8. Operator surfaces of the worker (grade10)
 

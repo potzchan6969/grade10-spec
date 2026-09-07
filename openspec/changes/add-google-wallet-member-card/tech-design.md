@@ -136,18 +136,18 @@ stays.
 
 Four new tables in the store's schema, and one sequence. Both brands'
 migrations create them; only a brand with a till fills them, which is what
-`pos_handles` already does. The three beyond `pos_passes` exist for Apple
+`pos_handles` already does. The three beyond `wallet_passes` exist for Apple
 alone, whose devices pull rather than being pushed to, so we hold who asked.
 
 ```
 account (auth)
-   └── pos_passes             one per pass a member holds
-        └── pos_pass_registrations   which device holds which pass
-             └── pos_pass_devices    where to wake each device
-pos_pass_push_tokens          the APNs credential, one row per key
+   └── wallet_passes             one per pass a member holds
+        └── wallet_pass_registrations   which device holds which pass
+             └── wallet_pass_devices    where to wake each device
+wallet_pass_push_tokens          the APNs credential, one row per key
 ```
 
-### `pos_passes`
+### `wallet_passes`
 
 | Column | Type | Null | Default | Notes |
 | --- | --- | --- | --- | --- |
@@ -166,23 +166,23 @@ pos_pass_push_tokens          the APNs credential, one row per key
 | `created_at` | `timestamptz` | no | `now()` | |
 | `ended_at` | `timestamptz` | yes | — | set once, with `state` |
 
-- **Keys and indexes** — `uq_pos_passes_live_member` on `(user_id, platform)`
+- **Keys and indexes** — `uq_wallet_passes_live_member` on `(user_id, platform)`
   where `state = 'live'`, so a member holds at most one live pass per wallet;
-  `idx_pos_passes_due` on `(due_at)` where `state = 'live'`, the sweep's only
+  `idx_wallet_passes_due` on `(due_at)` where `state = 'live'`, the sweep's only
   scan
-- **CHECK `ck_pos_passes_ended`** — `(state = 'live') = (ended_at is null)`, so a
+- **CHECK `ck_wallet_passes_ended`** — `(state = 'live') = (ended_at is null)`, so a
   row cannot claim to be live and carry an ending
 - **`last_period`** — the single-use guarantee, a conditional update rather
   than a read. Monotonic, so a photograph of the code before last cannot spend
   behind the member's own scan while both are inside the window
-- **`idx_pos_passes_expiry_owed`** on `(next_attempt_at) where state <> 'live'`
+- **`idx_wallet_passes_expiry_owed`** on `(next_attempt_at) where state <> 'live'`
   — the expiry arm's scan. A non-live row with an attempt stamped is a copy the
   vendor still holds, so the debt needs no column of its own
 - **Authoritative** — the secret, the state, and the digest. What a pass shows
   is read from the programme at send time; the digest is what decides whether
   it moved, and the rendered fields beside it are what a device's own fetch is
   answered from
-- **`pos_pass_cursor`** — how far the sweep has read the programme's change
+- **`wallet_change_cursor`** — how far the sweep has read the programme's change
   logs. No row is the seeding case: a first lap is told today's high-water mark
   rather than replaying a programme's whole history onto passes the daily floor
   already covers

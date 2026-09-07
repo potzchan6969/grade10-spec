@@ -37,3 +37,16 @@
 - `grade10-site-appointment-booking-SC-17` — The list holds the visits under the collector's address
 - `grade10-site-appointment-booking-SC-18` — Signed out, the list invites sign-in
 - `grade10-site-appointment-booking-SC-20` — The private addresses are never indexed
+
+### grade10-site-appointment-booking-US-03: A script tries to book the shop out
+
+**As a** shop protecting its booking capacity,
+**I want** an anonymous booking attempt to pass a challenge and a per-address
+budget,
+**so that** a script cannot flood the diary or hold every seat for itself.
+
+**Accepted by:**
+
+- `grade10-site-appointment-booking-SC-21` — An address that has spent its budget is refused and told when it lifts
+- `grade10-site-appointment-booking-SC-22` — A request with no challenge token is refused where the secret is set
+- `grade10-site-appointment-booking-SC-23` — A refused request holds no seat

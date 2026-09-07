@@ -97,7 +97,7 @@ blocks rather than the runtime.
 Each step's reference implementation exists twice (grade10, zzz):
 
 1. **Spec submodule** — add `external/<product>-spec`, add its packages glob to `pnpm-workspace.yaml`; mint a deploy key for the submodule, add its `SUBMODULES_DEPLOY_KEY_<REPO>` secret, and give `.github/actions/setup-workspace` one more input and `add_key` block (`docs/deployment.md` step 1)
-2. **Auth worker** — scaffold `apps/backend/<product>/auth` from `apps/backend/grade10/auth`: product wrangler.jsonc, `src/i18n.ts`, drizzle config pointing at `packages/grade10-auth/backend/src/schema.ts`, `pnpm run db:drizzle:generate`, copy the identity spec suite, register in the deploy workflow
+2. **Auth worker** — scaffold `apps/backend/<product>/auth` from `apps/backend/grade10/auth`: product wrangler.jsonc, `src/i18n.ts`, drizzle config pointing at `packages/grade10-auth/backend/src/db/schema/index.ts`, `pnpm run db:drizzle:generate`, copy the identity spec suite, register in the deploy workflow
 3. **Apps** — product backends bind AUTH_SERVICE to the product's auth worker; session middleware and the tRPC ladder come from `@grade10/worker` unchanged; app data follows `account-data.md`
 4. **SPAs** — scaffold the product's site at `apps/frontend/<product>` from `apps/frontend/grade10`, restyled with the product's design system; the imported logic stays the same
 5. **Admin** — add the brand's merged panel at `apps/admin/<product>`, derived from `apps/admin/grade10`; it composes every product's admin sections as brand-owned view code

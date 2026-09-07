@@ -156,6 +156,11 @@
     "holdingSince": "我們自 {day} 起為你保管物品。",
     "settled": "已無欠款，下次到店即可取回。",
     "owedEntry": "{detail}：{amount}",
+    "owed": {
+      "financing_outstanding": "尚欠貸款",
+      "financing_overdue": "尚欠貸款，已逾期 {overdueDays} 天",
+      "fee": "尚欠費用"
+    },
     "askForItBack": "要求取回",
     "cancelRequest": "取消這宗申請",
     "cancelConfirm": "取消這宗申請？已預約的到店會一併取消，物品仍然由你保管。",
