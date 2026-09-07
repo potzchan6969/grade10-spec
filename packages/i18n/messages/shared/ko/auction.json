@@ -1,6 +1,6 @@
 {
   "title": "경매",
-  "intro": "공개된 모든 캠페인입니다. 둘러보는 데 계정은 필요 없지만, 입찰에는 필요합니다.",
+  "intro": "인증된 출품작을 둘러보고 마감 전에 입찰하세요.",
   "loadingCampaigns": "캠페인을 불러오는 중…",
   "noCampaigns": "지금 진행 중인 캠페인이 없습니다.",
   "viewListings": "출품작 보기",
@@ -11,7 +11,23 @@
   "listingPrefix": "출품 {label} — ",
   "closes": "{when} 마감",
   "closed": "{when} 종료",
+  "opens": "{when} 시작",
   "open": "입찰 중",
+  "live": "진행 중",
+  "upcoming": "예정",
+  "extended": "연장 입찰",
+  "closedStatus": "종료",
   "topBid": "최고 {amount}",
-  "fromBid": "시작가 {amount}"
+  "fromBid": "시작가 {amount}",
+  "lotCount": "{count, plural, one {출품 #건} other {출품 #건}}",
+  "listingsLabel": "경매 출품작",
+  "searchLots": "출품작 검색",
+  "filter": "필터",
+  "filterStatus": "상태",
+  "filterCategory": "카테고리",
+  "filterGrade": "등급",
+  "allLots": "전체 출품",
+  "endingSoon": "마감 임박",
+  "endsIn": "{remaining} 남음",
+  "opensIn": "{remaining} 후 시작"
 }

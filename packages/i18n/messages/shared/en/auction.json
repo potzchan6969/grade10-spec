@@ -1,6 +1,6 @@
 {
   "title": "Auctions",
-  "intro": "Every published campaign. Browsing needs no account; bidding does.",
+  "intro": "Browse authenticated lots and place bids before the sale closes.",
   "loadingCampaigns": "Loading campaigns…",
   "noCampaigns": "No campaigns are running right now.",
   "viewListings": "View listings",
@@ -11,7 +11,23 @@
   "listingPrefix": "Listing {label} — ",
   "closes": "Closes {when}",
   "closed": "Closed {when}",
+  "opens": "Opens {when}",
   "open": "Open",
+  "live": "Live",
+  "upcoming": "Upcoming",
+  "extended": "Extended",
+  "closedStatus": "Closed",
   "topBid": "Top {amount}",
-  "fromBid": "From {amount}"
+  "fromBid": "From {amount}",
+  "lotCount": "{count, plural, one {# lot} other {# lots}}",
+  "listingsLabel": "Auction listings",
+  "searchLots": "Search lots",
+  "filter": "Filter",
+  "filterStatus": "Status",
+  "filterCategory": "Category",
+  "filterGrade": "Grade",
+  "allLots": "All lots",
+  "endingSoon": "Ending soon",
+  "endsIn": "Ends in {remaining}",
+  "opensIn": "Opens in {remaining}"
 }
