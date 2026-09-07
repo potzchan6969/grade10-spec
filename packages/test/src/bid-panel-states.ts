@@ -294,7 +294,7 @@ const BID_PANEL_STATE_RESPONSES = {
       paymentEmptyState: true,
       paymentSetup: { requiresIframeLink: true },
     },
-    dialogName: "Get Ready to Bid",
+    dialogName: "Authorize a card to bid",
     expectedText: "Stripe card link (iframe)",
   },
   setupChangePayment: {
@@ -311,7 +311,7 @@ const BID_PANEL_STATE_RESPONSES = {
         defaultAgeAttested: true,
       },
     },
-    dialogName: "Get Ready to Bid",
+    dialogName: "Authorize a card to bid",
     expectedText: "Stripe card form (iframe) — linked card on file",
   },
   manualBidAccepted: {

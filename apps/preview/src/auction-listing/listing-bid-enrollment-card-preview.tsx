@@ -122,6 +122,8 @@ function ListingBidEnrollmentCardPreview({
       ) : null}
 
       <EnrollmentSetupSheet
+        authorizationRefused={snapshot.paymentSetup?.authorizationRefused}
+        authorizing={snapshot.paymentSetup?.authorizing}
         copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
         defaultAgeAttested={snapshot.paymentSetup?.defaultAgeAttested}
         iframeLinkedPayment={snapshot.paymentSetup?.iframeLinkedPayment}

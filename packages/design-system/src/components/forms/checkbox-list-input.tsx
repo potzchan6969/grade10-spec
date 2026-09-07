@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import type { ReactNode } from "react";
 
 const checkboxListInputVariants = cva(
-  "group/checkbox-item flex w-full items-start gap-2 has-data-disabled:text-disabled-foreground",
+  "group/checkbox-item flex w-full items-start gap-2 text-foreground",
   {
     variants: {
       size: {
@@ -41,8 +41,9 @@ type CheckboxListInputProps = CheckboxPrimitive.Root.Props &
  * is what makes the text clickable — Figma draws the row but cannot express
  * the association.
  *
- * `disabled` dims the label and count as well as the control. `size` is the
- * only cva axis; checked is owned by the control.
+ * Disabled is `Opacity/opacity-50` over the row; the label stays
+ * `Base/foreground` and the count stays `Base/secondary-foreground`. `size`
+ * is the only cva axis; checked is owned by the control.
  */
 function CheckboxListInput({
   className,
@@ -59,7 +60,7 @@ function CheckboxListInput({
       data-disabled={disabled || undefined}
       className={cn(
         checkboxListInputVariants({ size }),
-        disabled ? "cursor-not-allowed" : "cursor-pointer",
+        disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
         className,
       )}
     >
@@ -67,13 +68,21 @@ function CheckboxListInput({
         data-slot="checkbox-button-hit"
         className="flex shrink-0 items-center justify-center"
       >
-        <CheckboxButton disabled={disabled} {...props} />
+        <CheckboxButton
+          {...props}
+          disabled={disabled}
+          className={
+            disabled
+              ? "disabled:opacity-100 data-disabled:opacity-100"
+              : undefined
+          }
+        />
       </span>
-      <span className="min-w-0 flex-1 text-foreground">{children}</span>
+      <span className="min-w-0 flex-1">{children}</span>
       {count != null ? (
         <span
           data-slot="checkbox-list-input-count"
-          className="shrink-0 text-secondary-foreground group-has-data-disabled/checkbox-item:text-disabled-foreground"
+          className="shrink-0 text-secondary-foreground"
         >
           {count}
         </span>

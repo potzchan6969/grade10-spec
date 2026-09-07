@@ -29,7 +29,7 @@
   {
     "label": "checkbox-list-input/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2176-3980",
-    "classes": "group/checkbox-item flex w-full items-start gap-2 has-data-disabled:text-disabled-foreground"
+    "classes": "group/checkbox-item flex w-full items-start gap-2 text-foreground"
   },
   {
     "label": "radio-list-item/root",

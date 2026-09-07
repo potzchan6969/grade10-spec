@@ -10,11 +10,16 @@ const COPY = {
   paymentMethod: "Linked Card",
   changeCard: "Change",
   linkCardEmptyState: "Link a card to place a bid.",
-  getReadyToBid: "Get Ready to Bid",
+  getReadyToBid: "Authorize a card to bid",
   linkCardDescription:
-    "Link a card to bid on this lot. You are only charged if you win this lot.",
+    "Link a card and authorize a hold for this lot. You are only charged if you win.",
   ageAttestation: "I confirm I am 18 years of age or older.",
-  continue: "Confirm",
+  continue: "Authorize",
+  authorizing: "Authorizing",
+  authorizingCaption:
+    "Your card is being authorized. Keep this dialog open while Stripe completes the request.",
+  authorizationRefused:
+    "Your card could not be authorized. Try another card.",
   iframePlaceholder: "Stripe card link (iframe)",
   iframeLinkedCardPlaceholder:
     "Stripe card form (iframe) — linked card on file",
@@ -81,13 +86,13 @@ export const SetupSheet: Story = {
   render: () => <EnrollmentSetupSheet copy={COPY} open requiresIframeLink />,
   play: async () => {
     const dialog = within(document.body).getByRole("dialog", {
-      name: "Get Ready to Bid",
+      name: "Authorize a card to bid",
     });
     expect(
       within(dialog).getByText("Stripe card link (iframe)"),
     ).toBeInTheDocument();
     expect(
-      within(dialog).getByRole("button", { name: "Confirm" }),
+      within(dialog).getByRole("button", { name: "Authorize" }),
     ).toBeDisabled();
   },
 };
@@ -104,7 +109,7 @@ export const SetupSheetFromChange: Story = {
   ),
   play: async () => {
     const dialog = within(document.body).getByRole("dialog", {
-      name: "Get Ready to Bid",
+      name: "Authorize a card to bid",
     });
     expect(
       within(dialog).getByText(
@@ -117,7 +122,60 @@ export const SetupSheetFromChange: Story = {
       }),
     ).toBeChecked();
     expect(
-      within(dialog).getByRole("button", { name: "Confirm" }),
+      within(dialog).getByRole("button", { name: "Authorize" }),
+    ).toBeEnabled();
+  },
+};
+
+export const SetupSheetAuthorizing: Story = {
+  render: () => (
+    <EnrollmentSetupSheet
+      authorizing
+      copy={COPY}
+      defaultAgeAttested
+      iframeLinkedPayment={{ brand: "visa", maskedNumber: "•••• 4242" }}
+      open
+      requiresIframeLink
+    />
+  ),
+  play: async () => {
+    const dialog = within(document.body).getByRole("dialog", {
+      name: "Authorize a card to bid",
+    });
+    expect(
+      within(dialog).getByRole("button", { name: "Authorizing" }),
+    ).toBeDisabled();
+    expect(
+      within(dialog).getByRole("checkbox", {
+        name: "I confirm I am 18 years of age or older.",
+      }),
+    ).toBeDisabled();
+    expect(within(dialog).getByRole("alert")).toHaveTextContent(
+      "Your card is being authorized. Keep this dialog open while Stripe completes the request.",
+    );
+  },
+};
+
+export const SetupSheetRefused: Story = {
+  render: () => (
+    <EnrollmentSetupSheet
+      authorizationRefused
+      copy={COPY}
+      defaultAgeAttested
+      iframeLinkedPayment={{ brand: "visa", maskedNumber: "•••• 4242" }}
+      open
+      requiresIframeLink
+    />
+  ),
+  play: async () => {
+    const dialog = within(document.body).getByRole("dialog", {
+      name: "Authorize a card to bid",
+    });
+    expect(within(dialog).getByRole("alert")).toHaveTextContent(
+      "Your card could not be authorized.",
+    );
+    expect(
+      within(dialog).getByRole("button", { name: "Authorize" }),
     ).toBeEnabled();
   },
 };
