@@ -3,11 +3,16 @@ export const LISTING_BID_ENROLLMENT_DEMO_COPY = {
   paymentMethod: "Linked Card",
   linkCardEmptyState: "Link a card to place a bid.",
   changeCard: "Change",
-  getReadyToBid: "Get Ready to Bid",
+  getReadyToBid: "Authorize a card to bid",
   linkCardDescription:
-    "Link a card to bid on this lot. You are only charged if you win this lot.",
+    "Link a card and authorize a hold for this lot. You are only charged if you win.",
   ageAttestation: "I confirm I am 18 years of age or older.",
-  continue: "Confirm",
+  continue: "Authorize",
+  authorizing: "Authorizing",
+  authorizingCaption:
+    "Your card is being authorized. Keep this dialog open while Stripe completes the request.",
+  authorizationRefused:
+    "Your payment method was declined. No bid has been placed.",
   iframePlaceholder: "Stripe card link (iframe)",
   iframeLinkedCardPlaceholder:
     "Stripe card form (iframe) — linked card on file",

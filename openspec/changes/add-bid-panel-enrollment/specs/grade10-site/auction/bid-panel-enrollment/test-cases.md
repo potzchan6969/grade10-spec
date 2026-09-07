@@ -124,8 +124,8 @@ The collector is signed in and the first-link setup modal is open on <an open li
 
 **Expected Results:**
 
-* Confirm is disabled while card entry or attestation is incomplete.
-* Confirm is enabled when both are complete.
+* Authorize is disabled while card entry or attestation is incomplete.
+* Authorize is enabled when both are complete.
 
 ### grade10-site-auction-bid-panel-enrollment-US2-TC3-1: Dismissing setup leaves the lot unenrolled
 
@@ -272,7 +272,7 @@ The collector already attested on a prior lot and is changing card on <a new ope
 **Expected Results:**
 
 * Age attestation is pre-checked.
-* Confirm is enabled once provider card entry is satisfied.
+* Authorize is enabled once provider card entry is satisfied.
 
 ---
 

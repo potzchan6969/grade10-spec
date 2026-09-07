@@ -31,6 +31,10 @@ export type ListingBidEnrollmentSnapshot = {
     iframeLinkedPayment?: EnrollmentPaymentMethod;
     /** Age attestation already given on a prior lot. */
     defaultAgeAttested?: boolean;
+    /** Stripe authorization in flight on the setup sheet. */
+    authorizing?: boolean;
+    /** Authorization refused — shows the inline error on the setup sheet. */
+    authorizationRefused?: boolean;
   };
   signInOpen?: boolean;
   viewOverride?: Partial<ListingAuctionBidView>;
@@ -82,6 +86,36 @@ export const ENROLLMENT_SNAPSHOT_SETUP_SHEET_FROM_CHANGE: ListingBidEnrollmentSn
     },
   };
 
+export const ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_PENDING: ListingBidEnrollmentSnapshot =
+  {
+    submitUsesSignInLabel: false,
+    linkedPaymentMethod: {
+      ...ENROLLMENT_DEMO_SAVED_PAYMENT,
+      editable: true,
+    },
+    paymentSetup: {
+      requiresIframeLink: true,
+      iframeLinkedPayment: ENROLLMENT_DEMO_SAVED_PAYMENT,
+      defaultAgeAttested: true,
+      authorizing: true,
+    },
+  };
+
+export const ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_REFUSED: ListingBidEnrollmentSnapshot =
+  {
+    submitUsesSignInLabel: false,
+    linkedPaymentMethod: {
+      ...ENROLLMENT_DEMO_SAVED_PAYMENT,
+      editable: true,
+    },
+    paymentSetup: {
+      requiresIframeLink: true,
+      iframeLinkedPayment: ENROLLMENT_DEMO_SAVED_PAYMENT,
+      defaultAgeAttested: true,
+      authorizationRefused: true,
+    },
+  };
+
 export const ENROLLMENT_SNAPSHOT_READY: ListingBidEnrollmentSnapshot = {
   submitUsesSignInLabel: false,
   linkedPaymentMethod: {
@@ -97,5 +131,9 @@ export const LISTING_BID_ENROLLMENT_SNAPSHOTS = {
   linkedCard: ENROLLMENT_SNAPSHOT_LINKED_CARD,
   setupSheet: ENROLLMENT_SNAPSHOT_SETUP_SHEET,
   setupSheetFromChange: ENROLLMENT_SNAPSHOT_SETUP_SHEET_FROM_CHANGE,
+  paymentAuthorizationPending:
+    ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_PENDING,
+  paymentAuthorizationRefused:
+    ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_REFUSED,
   ready: ENROLLMENT_SNAPSHOT_READY,
 } as const;

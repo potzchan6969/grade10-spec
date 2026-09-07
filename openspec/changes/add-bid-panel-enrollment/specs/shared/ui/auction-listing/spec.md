@@ -8,9 +8,16 @@ The shared UI package SHALL export, from its public entry,
 `EnrollmentSetupSheet` SHALL receive `open`, optional `onOpenChange`, optional
 `onContinue`, optional `requiresIframeLink`, optional
 `iframeLinkedPayment` (brand and masked number for the change-card
-placeholder), and optional `defaultAgeAttested`. It SHALL receive all
-user-visible copy through props or a dedicated copy object the export names;
-it SHALL supply no default user-visible copy.
+placeholder), optional `defaultAgeAttested`, optional `authorizing`, and
+optional `authorizationRefused`. When `authorizing` is true, it SHALL keep
+the same title and description copy, disable the provider field and age
+attestation, show the authorizing continue label in a loading state, and
+show the authorizing status as an inline alert. When
+`authorizationRefused` is true, it SHALL keep the same title and description
+copy, show the refused authorization alert inline, keep the provider field
+and age attestation interactive, and keep continue available. It SHALL
+receive all user-visible copy through props or a dedicated copy object the
+export names; it SHALL supply no default user-visible copy.
 
 `PaymentMethodRow` SHALL receive a payment brand, masked number, and optional
 `onChange`. When `onChange` is omitted, it SHALL render the linked card
@@ -42,6 +49,22 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **WHEN** it renders
 - **THEN** continue is enabled without further attestation action
 - **AND** the provider field area uses the linked-card placeholder copy
+
+#### Scenario: shared-ui-auction-listing-SC-22 - Authorizing locks setup controls
+
+- **GIVEN** `EnrollmentSetupSheet` open with `authorizing` true
+- **WHEN** it renders
+- **THEN** continue shows the authorizing label in a loading state
+- **AND** the provider field and age attestation are not interactive
+- **AND** the authorizing status alert is shown inline
+
+#### Scenario: shared-ui-auction-listing-SC-23 - Refused authorization keeps setup interactive
+
+- **GIVEN** `EnrollmentSetupSheet` open with `authorizationRefused` true
+- **WHEN** it renders
+- **THEN** the refused authorization alert is shown
+- **AND** continue remains available as Authorize
+- **AND** the provider field and age attestation stay interactive
 
 #### Scenario: shared-ui-auction-listing-SC-18 - Payment row hides change when not editable
 

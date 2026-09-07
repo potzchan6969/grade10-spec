@@ -56,16 +56,16 @@ the preview. The full lot page is
 | Linked card, editable | [Linked Card Editable](?path=/story/auction-listing-bid-panel--linked-card-editable) | Masked card with Change, before the first bid on this lot. |
 | Linked card, locked | [Linked Card](?path=/story/auction-listing-bid-panel--linked-card) | Masked card without Change, after the first bid. |
 | Ready | [Ready](?path=/story/auction-listing-bid-panel--ready) | Enrollment complete. Quick-maximum presets, Set Maximum, and always-on maximum mechanism subtext. |
-| Payment authorization | [Payment Authorization](?path=/story/auction-listing-bid-panel--payment-authorization) | Committing a maximum opens the authorize-your-bid dialog. |
+| Payment authorization | [Payment Authorization](?path=/story/auction-listing-bid-panel--payment-authorization) | Committing a maximum opens Authorize a card to bid; Authorize starts the Stripe hold. |
 
 ## Dialogs
 
 | State | Story | What it shows |
 | --- | --- | --- |
-| Setup | [Setup Modal](?path=/story/auction-listing-bid-panel-dialogs--setup-modal) | Card-link iframe and age attestation. Confirm stays disabled until both are done. |
+| Setup | [Setup Modal](?path=/story/auction-listing-bid-panel-dialogs--setup-modal) | Card-link iframe and age attestation. Authorize stays disabled until both are done. |
 | Setup from Change | [Setup Modal From Change](?path=/story/auction-listing-bid-panel-dialogs--setup-modal-from-change) | Same sheet after Change. Age attestation stays checked when already given. |
-| Payment authorization pending | [Payment Authorization Pending](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-pending) | Authorize-your-bid dialog while Stripe is authorizing. |
-| Payment authorization refused | [Payment Authorization Refused](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-refused) | Authorize-your-bid dialog after the method is declined. |
+| Payment authorization pending | [Payment Authorization Pending](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-pending) | Same Authorize a card to bid sheet while Stripe authorizes: Authorizing CTA, locked iframe and checkbox, inline keep-open alert. |
+| Payment authorization refused | [Payment Authorization Refused](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-refused) | Same Authorize a card to bid sheet after decline: iframe, inline error, Authorize CTA. |
 
 ## Bidding and standing
 
@@ -113,7 +113,7 @@ around it.
 | --- | --- | --- |
 | \`PaymentMethodEmptyState.onLink\` | Empty linked-card slot is pressed | Opening setup (iframe + age attestation). |
 | \`PaymentMethodRow.onChange\` | Change on an editable linked card | Opening setup to replace the card, only before the first bid on this lot. |
-| \`EnrollmentSetupSheet.onContinue\` | Setup Confirm | Persisting the linked card and age attestation, then closing setup. |
+| \`EnrollmentSetupSheet.onContinue\` | Setup Authorize | Persisting the linked card and age attestation, then starting authorization. |
 | \`EnrollmentSetupSheet.onOpenChange\` | Setup open state changes | Whether the setup sheet is shown. |
 | \`SignInCard.onOpenChange\` | Sign-in overlay open state changes | Whether sign-in is shown. |
 | \`SignInEmailForm.onSubmit\` | Sign-in email is submitted | Completing sign-in, then moving enrollment to ready. |
@@ -273,11 +273,11 @@ NeedCard.play = async ({ canvasElement }) => {
   await waitFor(() => {
     expect(
       within(document.body).getByRole("dialog", {
-        name: "Get Ready to Bid",
+        name: "Authorize a card to bid",
       }),
     ).toBeVisible();
   });
-  await dismissDialog("Get Ready to Bid");
+  await dismissDialog("Authorize a card to bid");
   expect(
     canvas.getByRole("button", { name: "Link a card to place a bid." }),
   ).toBeVisible();
@@ -296,18 +296,18 @@ LinkedCardEditable.play = async ({ canvasElement }) => {
   await waitFor(() => {
     expect(
       within(document.body).getByRole("dialog", {
-        name: "Get Ready to Bid",
+        name: "Authorize a card to bid",
       }),
     ).toBeVisible();
   });
   expect(
     within(
       within(document.body).getByRole("dialog", {
-        name: "Get Ready to Bid",
+        name: "Authorize a card to bid",
       }),
     ).getByText("Stripe card form (iframe) — linked card on file"),
   ).toBeVisible();
-  await dismissDialog("Get Ready to Bid");
+  await dismissDialog("Authorize a card to bid");
   expect(canvas.getByRole("button", { name: "Change" })).toBeVisible();
 };
 
@@ -341,23 +341,25 @@ export const PaymentAuthorization: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Min. bid")).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: /^Set maximum/ }));
+    const dialog = within(document.body).getByRole("dialog", {
+      name: "Authorize a card to bid",
+    });
     expect(
-      within(document.body).getByRole("dialog", {
-        name: "Authorize your bid",
-      }),
-    ).toBeInTheDocument();
-    expect(
-      within(document.body).getByText("Secure payment field"),
+      within(dialog).getByText(
+        "Link a card and authorize a hold for this lot. You are only charged if you win.",
+      ),
     ).toBeInTheDocument();
     await userEvent.click(
-      within(document.body).getByRole("button", { name: /Authorize HK\$/ }),
+      within(dialog).getByRole("button", { name: "Authorize" }),
     );
     expect(
-      within(document.body).getByRole("button", {
-        name: "Authorizing…",
+      within(dialog).getByRole("button", {
+        name: "Authorizing",
       }),
     ).toBeDisabled();
-    await dismissDialog("Authorize your bid");
+    expect(within(dialog).getByRole("alert")).toHaveTextContent(
+      "Your card is being authorized. Keep this dialog open while Stripe completes the request.",
+    );
     expect(canvas.getByText("Min. bid")).toBeVisible();
   },
 };

@@ -1,3 +1,4 @@
+import { Alert } from "@grade10/design-system/components/display/alert";
 import { Card } from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
@@ -129,6 +130,9 @@ type EnrollmentSetupSheetCopy = {
   linkCardDescription: string;
   ageAttestation: string;
   continue: string;
+  authorizing: string;
+  authorizingCaption: string;
+  authorizationRefused: string;
   iframePlaceholder: string;
   iframeLinkedCardPlaceholder: string;
 };
@@ -137,10 +141,12 @@ function CardLinkIframePlaceholder({
   copy,
   onSimulateComplete,
   showsLinkedCard = false,
+  disabled = false,
 }: {
   copy: EnrollmentSetupSheetCopy;
   onSimulateComplete?: () => void;
   showsLinkedCard?: boolean;
+  disabled?: boolean;
 }) {
   const className =
     "flex h-32 w-full items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-secondary-foreground";
@@ -149,7 +155,7 @@ function CardLinkIframePlaceholder({
     ? copy.iframeLinkedCardPlaceholder
     : copy.iframePlaceholder;
 
-  if (onSimulateComplete) {
+  if (onSimulateComplete && !disabled) {
     return (
       <button
         aria-label={label}
@@ -162,7 +168,16 @@ function CardLinkIframePlaceholder({
     );
   }
 
-  return <div className={className}>{label}</div>;
+  return (
+    <div
+      aria-disabled={disabled || undefined}
+      className={
+        disabled ? `${className} pointer-events-none opacity-60` : className
+      }
+    >
+      {label}
+    </div>
+  );
 }
 
 type EnrollmentSetupSheetProps = {
@@ -180,17 +195,25 @@ type EnrollmentSetupSheetProps = {
   };
   /** Age attestation already given on a prior lot. */
   defaultAgeAttested?: boolean;
+  /** Stripe authorization in flight — locks the sheet and shows pending copy. */
+  authorizing?: boolean;
+  /** Authorization refused — shows the inline error; controls stay interactive. */
+  authorizationRefused?: boolean;
 };
 
 function SetupSheetBody({
   copy,
   ageAttested,
+  authorizing,
+  authorizationRefused,
   iframeLinkedPayment,
   onAgeAttestedChange,
   onSimulateCardLinkComplete,
 }: {
   copy: EnrollmentSetupSheetCopy;
   ageAttested: boolean;
+  authorizing: boolean;
+  authorizationRefused: boolean;
   iframeLinkedPayment?: {
     brand: OrderDetailsPaymentBrand;
     maskedNumber: string;
@@ -203,11 +226,29 @@ function SetupSheetBody({
       <DialogDescription>{copy.linkCardDescription}</DialogDescription>
       <CardLinkIframePlaceholder
         copy={copy}
+        disabled={authorizing}
         onSimulateComplete={onSimulateCardLinkComplete}
         showsLinkedCard={iframeLinkedPayment != null}
       />
+      {authorizing ? (
+        <Alert
+          dismissible={false}
+          layout="inline"
+          status="default"
+          title={copy.authorizingCaption}
+        />
+      ) : null}
+      {authorizationRefused ? (
+        <Alert
+          dismissible={false}
+          layout="inline"
+          status="error"
+          title={copy.authorizationRefused}
+        />
+      ) : null}
       <CheckboxListInput
         checked={ageAttested}
+        disabled={authorizing}
         onCheckedChange={(checked) => onAgeAttestedChange(checked === true)}
         size="sm"
       >
@@ -226,6 +267,8 @@ function EnrollmentSetupSheet({
   requiresIframeLink = true,
   iframeLinkedPayment,
   defaultAgeAttested = false,
+  authorizing = false,
+  authorizationRefused = false,
 }: EnrollmentSetupSheetProps) {
   const [ageAttested, setAgeAttested] = useState(defaultAgeAttested);
   const [iframeLinked, setIframeLinked] = useState(iframeLinkedPayment != null);
@@ -243,17 +286,20 @@ function EnrollmentSetupSheet({
   }, [defaultAgeAttested, iframeLinkedPayment, open]);
 
   function handleSimulateCardLinkComplete() {
+    if (authorizing) return;
     setIframeLinked(true);
   }
 
   function handleContinue() {
-    if (!cardReady || !ageAttested) return;
+    if (authorizing || !cardReady || !ageAttested) return;
     onContinue?.();
   }
 
   const body = (
     <SetupSheetBody
       ageAttested={ageAttested}
+      authorizationRefused={authorizationRefused}
+      authorizing={authorizing}
       copy={copy}
       iframeLinkedPayment={iframeLinkedPayment}
       onAgeAttestedChange={setAgeAttested}
@@ -267,11 +313,12 @@ function EnrollmentSetupSheet({
   const footer = (
     <Button
       disabled={!cardReady || !ageAttested}
+      loading={authorizing}
       onClick={handleContinue}
       size="md"
       type="button"
     >
-      {copy.continue}
+      {authorizing ? copy.authorizing : copy.continue}
     </Button>
   );
 
@@ -286,9 +333,15 @@ function EnrollmentSetupSheet({
   }
 
   return (
-    <Dialog onOpenChange={(next) => onOpenChange?.(next)} open={open}>
-      <DialogContent showCloseButton>
-        <DialogHeader>
+    <Dialog
+      onOpenChange={(next) => {
+        if (authorizing && !next) return;
+        onOpenChange?.(next);
+      }}
+      open={open}
+    >
+      <DialogContent>
+        <DialogHeader showCloseButton={!authorizing}>
           <DialogTitle>{copy.getReadyToBid}</DialogTitle>
         </DialogHeader>
         <DialogBody>{body}</DialogBody>
