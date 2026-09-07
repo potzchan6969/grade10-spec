@@ -1,7 +1,7 @@
 # Shopify membership & POS
 
 Plan for physical-store membership on top of what is built: the store's order
-machine and the loyalty engine ([the commerce page](../prds/platform/commerce.md)
+machine and the loyalty engine ([the commerce page](../prds/products/grade10-site/commerce/commerce.md)
 and [the loyalty service page](../prds/platform/loyalty-service.md)), and the online checkout identity flow
 (`shopify-checkout-identity.md`). The program itself — tiers, earn math,
 expiry, in-store flows — is the owner's draft in

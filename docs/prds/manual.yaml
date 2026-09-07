@@ -2,6 +2,7 @@ storybookBase: https://storybook.grade10-stg.com
 
 groups:
   Grade10:
+    - grade10-site/account
     - grade10-site/store
     - grade10-site/loyalty
     - grade10-site/auction
@@ -27,6 +28,8 @@ groups:
     - shared/ui
     - shared/console
     - shared/design-sync
+  Shopify:
+    - grade10-site/commerce
 
 platform:
   Conventions:
@@ -41,10 +44,6 @@ platform:
     - edge-cache
     - shared/frontend-composition
     - shared/backend-service-repository
-  Commerce:
-    - commerce
-    - checkout-domain
-    - content
   Services:
     - auction-service
     - vault-custody

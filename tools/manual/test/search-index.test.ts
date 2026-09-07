@@ -97,7 +97,7 @@ describe("a short word is not a near miss for a different one", () => {
             "Every edit lands in git, because git is the only state this app has.",
           ),
           page(
-            "docs/prds/platform/commerce.md",
+            "docs/prds/products/grade10-site/commerce/commerce.md",
             "Commerce",
             "A gift card is bought at a listed denomination.",
           ),

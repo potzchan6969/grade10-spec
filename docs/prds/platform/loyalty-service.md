@@ -146,7 +146,7 @@ One Postgres schema (`loyalty`) per product database (`stg-/prd-<product>-loyalt
 - It reaches the unspent, still-live part of that money's lineage — those credits plus whatever a reversed redemption restored from them
 - It never touches a bonus that merely shares the reference, and never drives a member negative
 - What it cannot reach is counted by cause, spent-first: `loyalty.clawback.shortfall` carries `cause:redeemed` — the pricing signal for the redeem-then-refund loop — or `cause:expired`
-- It prices the goods that came back, at the rate the earn used: the seller sends the goods share of a refund, never the charge, so refunding a delivery removes no points ([Commerce](/platform/commerce))
+- It prices the goods that came back, at the rate the earn used: the seller sends the goods share of a refund, never the charge, so refunding a delivery removes no points ([Commerce](/p/grade10-site/commerce/commerce))
 
 ### Claw-backs age out with their earn
 

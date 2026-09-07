@@ -3,7 +3,7 @@ title: Account Data
 order: 4
 ---
 
-Where account data lives and how apps reach it. Applies to every brand; examples use Grade10. Commerce flows: [Commerce](/platform/commerce). Hostnames and ports: `packages/app-env`.
+Where account data lives and how apps reach it. Applies to every brand; examples use Grade10. Commerce flows: [Commerce](/p/grade10-site/commerce/commerce). Hostnames and ports: `packages/app-env`.
 
 ## Ownership
 

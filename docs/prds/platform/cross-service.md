@@ -32,7 +32,7 @@ Synchronous RPC, inside the request. The answer is renderable: a refusal is a va
 
 ### Tell-push when the fact is the caller's and the consumer must not miss it
 
-The fact is written in the same transaction as the state change that made it true, and delivery is a separate at-least-once pass claimed off the row. The consumer is a function the brand supplies, so the producing library never names it — `order_events` is the worked example ([Commerce](/platform/commerce)).
+The fact is written in the same transaction as the state change that made it true, and delivery is a separate at-least-once pass claimed off the row. The consumer is a function the brand supplies, so the producing library never names it — `order_events` is the worked example ([Commerce](/p/grade10-site/commerce/commerce)).
 
 Two things a queued consumer must get right, and the compiler holds it to both: it answers a total verdict, so a refusal it swallowed cannot read as a delivery; and it answers `unreachable` for a fault about the deployment rather than the row, so a binding nobody wired does not burn every queued fact's ladder before somebody notices.
 
