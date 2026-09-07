@@ -16,7 +16,7 @@ function CheckboxButton({ className, ...props }: CheckboxPrimitive.Root.Props) {
     <CheckboxPrimitive.Root
       data-slot="checkbox-button"
       className={cn(
-        "group/checkbox flex size-4 shrink-0 items-center justify-center rounded-(--radius-full) border border-border bg-background text-primary-foreground transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 data-checked:border-primary data-checked:bg-primary disabled:cursor-not-allowed disabled:opacity-50",
+        "group/checkbox flex size-4 shrink-0 items-center justify-center rounded-(--radius-full) border border-border bg-background text-primary-foreground transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 data-checked:border-primary data-checked:bg-primary disabled:cursor-not-allowed disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50",
         className,
       )}
       {...props}
