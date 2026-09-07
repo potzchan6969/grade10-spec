@@ -69,11 +69,12 @@ inventory, by product, and where each path now lives.
   account profile, cart lines, orders and their events, external orders,
   payment events, coupon releases, push subscriptions, sweep cursors and the
   claim backoff, `src/erasure/`, `sweeps/` for the
-  wallet refresh and the pairing arms; `worker/` keeps `app.ts`, `appEnv.ts`,
+  wallet refresh and the pairing arms; the assembly — `app.ts`, `appEnv.ts`,
   `config.ts`, `entrypoint.ts`, `env.ts`, `secrets.ts`,
   `db/{client,schema}`, `trpc/`, `routes/`, `pos/mount.ts` and the
-  brand-wired `identity/`. No owner in `check-write-surfaces.mjs` is a
-  `worker/` path any more.
+  brand-wired `identity/` — sits at the package root, with `./worker` the
+  assembly barrel; no `worker/` folder remains, and no owner in
+  `check-write-surfaces.mjs` is a `worker/` path any more.
 - **Vault** — the money tables were the only vault tables with no
   repository: 25 SQL sites across `money/`, `cases/`, `sweeps/` and
   `valuation/`, with "the offer the loan runs on" derived twice and "newest
