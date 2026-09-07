@@ -6,7 +6,6 @@ import { buildIndex } from "../src/api/derive";
 import type { SpecEntry, TestCase, TestSuiteStatus } from "../src/api/types";
 import { BlockScopeProvider } from "../src/blocks/block-scope";
 import { CasesBlockView } from "../src/blocks/cases-block";
-import { JourneysBlockView } from "../src/blocks/journeys-block";
 import { SpecBlockView } from "../src/blocks/spec-block";
 import { snapshotOf } from "./manual-fixture";
 
@@ -110,16 +109,6 @@ describe("a suite the readers could not parse", () => {
     );
 
     expect(html).toContain("Alpha does things");
-    expect(html).not.toContain("could not be read");
-  });
-
-  it("leaves the journeys alone", () => {
-    const html = renderBlock(
-      broken,
-      <JourneysBlockView block={{ type: "journeys", id: SPEC }} />,
-    );
-
-    expect(html).toContain("Someone does the thing");
     expect(html).not.toContain("could not be read");
   });
 });

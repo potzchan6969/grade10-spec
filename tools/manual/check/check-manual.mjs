@@ -25,10 +25,9 @@
  * WARN = hygiene with no broken pointer behind it: a page committed before
  *        the specs it embeds, named requirement by requirement, a `[[ref]]`
  *        in prose that names nothing, a `::figma` link off figma.com, a spec
- *        whose journeys or test cases no page shows, a scenario no case
- *        traces, a suite quoting wording the spec has since moved, a delta
- *        section the fold discards, a delta-introduced capability no page
- *        documents. Exits 0.
+ *        whose test cases no page shows, a scenario no case traces, a suite
+ *        quoting wording the spec has since moved, a delta section the fold
+ *        discards, a delta-introduced capability no page documents. Exits 0.
  *
  * The readers in ../src are the only parser — this script never
  * grows a second one, so the check and the app can never disagree.

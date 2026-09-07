@@ -28,7 +28,3 @@ is [the site's crawlable-pages contract](/p/grade10-site/site/crawlable-pages),
 applied per lot.
 
 ::story{id="auction-listing-listing-product--default" title="A live lot page, gallery and bid panel assembled"}
-
-## What a collector does
-
-::journeys{id="grade10-site/auction/listing-page"}

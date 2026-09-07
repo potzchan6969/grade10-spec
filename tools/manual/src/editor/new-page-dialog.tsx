@@ -78,7 +78,7 @@ export function NewPageDialog({
   const taken = index.pageByPath.has(path);
 
   // A capability page documents the spec its own path names, and gets that
-  // spec's shelf — spec, journeys, cases — when the store already has one.
+  // spec's shelf — spec, cases — when the store already has one.
   const capability = kind === "capability page";
   const specId = capability ? `${product}/${effectiveSlug}` : undefined;
   const known = specId !== undefined && index.specById.has(specId);
@@ -162,7 +162,7 @@ export function NewPageDialog({
           {capability ? (
             <Text as="p" size="xs" tone="secondary">
               {known
-                ? `Starts on the shelf for ${specId}: prose, spec, journeys, cases.`
+                ? `Starts on the shelf for ${specId}: prose, spec, cases.`
                 : `No spec \`${specId}\` in the store yet — the page starts on prose alone.`}
             </Text>
           ) : null}

@@ -25,7 +25,3 @@ A passing consistency check says the chain is internally consistent. It does not
 say the chain is intact — that is what the offsite copies are for. Store,
 auction and loyalty each keep their own trail; this one is identity's.
 :::
-
-## What an operator and an auditor do
-
-::journeys{id="shared/auth/audit"}

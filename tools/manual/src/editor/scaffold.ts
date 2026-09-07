@@ -37,10 +37,5 @@ export function newPageSource({ title, capability, spec }: NewPage): string {
 function shelf(spec: string | undefined): Block[] {
   const opening: Block = { type: "prose", markdown: OPENING };
   if (!spec) return [opening];
-  return [
-    opening,
-    { type: "spec", id: spec },
-    { type: "journeys", id: spec },
-    { type: "cases", id: spec },
-  ];
+  return [opening, { type: "spec", id: spec }, { type: "cases", id: spec }];
 }

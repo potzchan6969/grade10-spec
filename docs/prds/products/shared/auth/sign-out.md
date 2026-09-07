@@ -19,5 +19,3 @@ surface. On the grade10 site there is exactly one place: the profile. The header
 deliberately offers no second one.
 
 ## What a collector or operator does
-
-::journeys{id="shared/auth/sign-out"}

@@ -103,8 +103,6 @@ carries only its digest.
 
 ## Journeys
 
-::journeys{id="grade10-site/loyalty/programme"}
-
 ::cases{id="grade10-site/loyalty/programme"}
 
 :::detail{title="For engineers" for="engineer"}

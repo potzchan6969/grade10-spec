@@ -24,5 +24,3 @@ discipline is a stated floor, and reverting it is a described route, not a
 rediscovery.
 
 ## What an operator relies on
-
-::journeys{id="shared/console/visual-standard"}

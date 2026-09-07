@@ -74,7 +74,6 @@ describe("the rules the app can now name", () => {
       "ref",
       "figma",
       "fold",
-      "journeys",
       "suite",
       "coverage",
       "design",

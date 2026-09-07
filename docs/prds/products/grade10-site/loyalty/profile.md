@@ -345,10 +345,6 @@ No Figma frame exists for any membership surface. The `@grade10/ui` blocks —
 record.
 :::
 
-## Journeys
-
-::journeys{id="grade10-site/loyalty/programme"}
-
 ::cases{id="grade10-site/loyalty/programme"}
 
 :::detail{title="For engineers" for="engineer"}

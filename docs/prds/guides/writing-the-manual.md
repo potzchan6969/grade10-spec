@@ -77,14 +77,15 @@ The page itself carries the shape we want — plain prose and the visuals below.
 Requirement text stays in the store: cite it by id where one matters (see
 Citing the spec), and never embed the contract into the page.
 
-What a page does embed is acceptance. Journeys and test cases come out of the
-spec named in the frontmatter, and journeys are usually the best thing on a
-capability page:
+What a page does embed is acceptance: the spec's test-case suite, out of the
+spec named in the frontmatter.
 
 ```md
-::journeys{id="grade10-site/loyalty/programme"}
 ::cases{id="grade10-site/loyalty/programme"}
 ```
+
+User journeys are derivative of the page's own content and stay in the
+capability's `user-journeys.md` — a page never embeds them.
 
 A page that names a spec in its frontmatter already shows that spec's in-flight
 changes. Author this block only to show a *different* spec's:
@@ -99,9 +100,16 @@ another Figma file, or a frame the nightly design sync no longer finds, is a
 warning. `alt` on an image is required:
 
 ```md
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493" title="Cart drawer"}
 ::story{id="blocks-store-cart--default" title="The cart block" height="480"}
 ::image{src="assets/tier-ladder.png" alt="The four tiers and their thresholds"}
+```
+
+A `::figma` card is a placeholder for a component still being built. Once a
+`::story` card exists for it, drop the `::figma` card for that same
+component — Storybook is the live reference from then on:
+
+```md
+::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493" title="Cart drawer"}
 ```
 
 A figma card badges what the nightly found for the component set behind it,

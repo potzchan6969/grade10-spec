@@ -22,7 +22,6 @@ export type SpecBlock = {
   scenario?: string;
   story?: string;
 };
-export type JourneysBlock = { type: "journeys"; id: string };
 export type CasesBlock = { type: "cases"; id: string };
 export type ChangesBlock = { type: "changes"; spec: string };
 export type FigmaBlock = {
@@ -50,7 +49,6 @@ export type ChildrenBlock = { type: "children" };
 
 export type LeafBlock =
   | SpecBlock
-  | JourneysBlock
   | CasesBlock
   | ChangesBlock
   | FigmaBlock
@@ -141,7 +139,6 @@ export const BLOCK_SPECS: Record<string, BlockSpec> = {
         : null;
     },
   },
-  journeys: { container: false, attrs: [{ name: "id", required: true }] },
   cases: { container: false, attrs: [{ name: "id", required: true }] },
   changes: { container: false, attrs: [{ name: "spec", required: true }] },
   figma: {

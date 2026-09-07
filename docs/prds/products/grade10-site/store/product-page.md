@@ -26,10 +26,6 @@ the button to buy it.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4098-2423" title="Product detail"}
 
-## Journeys
-
-::journeys{id="grade10-site/store/product-page"}
-
 :::detail{title="Product decisions" for="pm"}
 A card travels as a pasted address — a group chat, a Discord, a reply — more
 often than it is found by search, and the preview is the whole of what the

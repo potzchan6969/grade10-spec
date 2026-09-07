@@ -152,7 +152,7 @@ describe("a case tracing a scenario the spec no longer issues", () => {
     const result = await check(
       store({
         cases: dead,
-        page: pageText(['::journeys{id="demo-product/alpha"}', ""]),
+        page: pageText([]),
       }),
     );
     expect(lines(result, "trace")).toHaveLength(1);
@@ -346,13 +346,12 @@ describe("coverage when a scenario loses its last living case", () => {
   });
 });
 
-/** The mirror of the journeys rule: written and shown nowhere is written and
- * lost. */
+/** Written and shown nowhere is written and lost. */
 describe("a suite no page shows", () => {
   it("warns naming the suite file", async () => {
     const root = store({
       cases: suiteText(),
-      page: pageText(['::journeys{id="demo-product/alpha"}', ""]),
+      page: pageText([]),
     });
     expect(lines(await check(root), "suite")).toEqual([
       `${CASES_FILE} — holds 1 test case and no page shows them`,

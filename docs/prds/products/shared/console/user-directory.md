@@ -36,7 +36,3 @@ This surface used to live in the shared-UI package as `auth-user-directory`. It
 carries those requirements forward unchanged in behaviour; only its home moved,
 to where admin UI belongs.
 :::
-
-## Journeys
-
-::journeys{id="shared/console/user-directory"}

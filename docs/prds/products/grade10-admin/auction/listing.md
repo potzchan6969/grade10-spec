@@ -38,8 +38,6 @@ is no minimum-increment field for an operator to set.
 
 ## What an operator does
 
-::journeys{id="grade10-admin/auction/listing"}
-
 :::detail{title="Grants and the trail" for="operator"}
 Catalogue work — drafting, editing, publishing, calling off — sits behind
 `auction:write` and `auction:operate`, which `staff` hold. `auction:reserve`

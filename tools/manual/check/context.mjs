@@ -99,11 +99,6 @@ export const RULES = [
   },
   { key: "figma", level: "warn", title: "Figma links" },
   {
-    key: "journeys",
-    level: "warn",
-    title: "Specs whose journeys no page shows",
-  },
-  {
     key: "suite",
     level: "warn",
     title: "Specs whose test cases no page shows",
@@ -145,7 +140,6 @@ export function createContext(roots, report, { specs, changes, stories }) {
     changing: new Set(changes.flatMap((one) => one.deltas.map((d) => d.spec))),
     stories,
     referenced: new Set(),
-    journeyed: new Set(),
     cased: new Set(),
     storyIds: new Set(),
     add: report.add,

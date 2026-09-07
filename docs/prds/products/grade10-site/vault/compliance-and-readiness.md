@@ -163,10 +163,6 @@ this page holds the decision behind them.
 
 ::spec{id="grade10-site/vault/retention-and-erasure"}
 
-::journeys{id="grade10-site/vault/identity-verification"}
-
-::journeys{id="grade10-site/vault/retention-and-erasure"}
-
 :::detail{title="Product decisions" for="pm"}
 Where the law might bind, the borrower-favourable rule is the one taken — and
 "more" never means a charge. Every statute below is as engineering recalls it,

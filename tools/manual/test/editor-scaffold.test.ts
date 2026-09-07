@@ -21,7 +21,6 @@ describe("newPageSource", () => {
     expect(ast.blocks.map((block) => block.type)).toEqual([
       "prose",
       "spec",
-      "journeys",
       "cases",
     ]);
     // The ribbon and the timeline come from the frontmatter, never a block.

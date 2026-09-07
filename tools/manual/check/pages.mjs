@@ -93,13 +93,6 @@ function checkBlock(ctx, path, block) {
       }
       break;
     }
-    case "journeys": {
-      ctx.journeyed.add(block.id);
-      if (!specs.has(block.id)) {
-        add("reference", path, `${label(block, "id")} names no spec on disk`);
-      }
-      break;
-    }
     // What a page can get wrong about a suite is the id it names; whether the
     // suite itself holds together is asked of the store directory, so it is
     // asked once and asked even where no page shows it.
@@ -170,25 +163,24 @@ const capabilityPage = (manual, path) => {
  * and a page that states a contract without it leaves QA nothing to read. A
  * warning, never a failure: the shelf is a habit, not a pointer that rotted.
  * A page claiming a spec that is still a delta is exempt — the acceptance
- * blocks can only embed a durable spec, and the change carries its own suite.
- * So is a page whose spec holds neither journeys nor a test suite: an empty
- * shelf shows nothing, the same bar the QA board applies. */
+ * block can only embed a durable spec, and the change carries its own suite.
+ * So is a page whose spec holds no test suite: an empty shelf shows nothing,
+ * the same bar the QA board applies. */
 export function checkSkeleton(ctx, pages) {
   for (const page of pages) {
     if (!capabilityPage(ctx.roots.manual, page.path)) continue;
     const spec = ctx.specs.get(page.ast.frontmatter.spec);
     if (!spec) continue;
-    const showable =
-      spec.journeys?.length || spec.testCases?.length || spec.testCasesError;
+    const showable = spec.testCases?.length || spec.testCasesError;
     if (!showable) continue;
     const shelved = [...everyBlock(page.ast.blocks)].some(
-      (block) => block.type === "journeys" || block.type === "cases",
+      (block) => block.type === "cases",
     );
     if (shelved) continue;
     ctx.add(
       "skeleton",
       page.path,
-      "has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
+      "has a `spec` and no `::cases` block — missing its acceptance shelf",
     );
   }
 }

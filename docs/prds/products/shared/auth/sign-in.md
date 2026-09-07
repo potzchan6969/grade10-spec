@@ -41,8 +41,4 @@ is what closes that gap, so a collector asked to sign in mid-flow comes back to
 what they were doing.
 :::
 
-## What a collector does
-
-::journeys{id="shared/auth/sign-in"}
-
 ::cases{id="shared/auth/sign-in"}

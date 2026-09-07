@@ -24,5 +24,3 @@ at, while a navigation to a new entry starts at the top. And a surface costs
 only itself: opening one downloads no other surface's page code.
 
 ## What a collector does
-
-::journeys{id="grade10-site/site/navigation"}

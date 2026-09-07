@@ -47,8 +47,6 @@ Only USD, HKD, and JPY can price an auction. Operators select the currency but
 do not edit the schedule, and unsupported currencies are refused before a
 listing is scheduled.
 
-::journeys{id="grade10-site/auction/bid-increments"}
-
 :::detail{title="Product decisions" for="pm"}
 The auction starts with a price that invites participation and increases in
 steps that stay proportionate as competition grows. A shared schedule keeps

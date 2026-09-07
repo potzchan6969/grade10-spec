@@ -28,7 +28,3 @@ the gallery in order.
 ::story{id="auction-listing-listinggallery--default" title="The lot gallery with its thumbnail strip"}
 
 ::story{id="auction-listing-listinggallery--mixed-media" title="A gallery holding both images and video"}
-
-## What an operator and a collector do
-
-::journeys{id="grade10-site/auction/listing-media"}

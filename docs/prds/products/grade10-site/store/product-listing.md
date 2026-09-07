@@ -16,8 +16,6 @@ product.
 
 ## What it looks like
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4098-1868" title="Product listing"}
-
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4396-5424" title="Product list filter bar"}
 
 ::story{id="pages-product-list-page--default" title="The listing, whole"}
@@ -25,7 +23,3 @@ product.
 ::story{id="store-product-listing-productbrowse--no-match" title="A narrowing nothing matches"}
 
 ::story{id="store-product-listing-productbrowse--empty-catalog" title="A catalogue with nothing in it"}
-
-## Journeys
-
-::journeys{id="grade10-site/store/product-listing"}

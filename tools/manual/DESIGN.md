@@ -94,11 +94,10 @@ start at `##`; raw HTML is never rendered). Directives sit at column 0:
 | --- | --- | --- |
 | `spec` | `::spec{id="grade10-store/loyalty"}` | every requirement of that spec as expandable rows |
 | `spec` | `::spec{id="…" requirement="…"}` | one requirement with its scenarios; also `scenario="grade10-site-loyalty-programme-SC-04"` or `story="grade10-site-loyalty-programme-US-01"` selectors — prefer these, the ids are permanent |
-| `journeys` | `::journeys{id="grade10-store/loyalty"}` | the spec's user journeys, each story with its accepted-by scenarios |
 | `cases` | `::cases{id="grade10-store/loyalty"}` | the capability's test-case suite with coverage against its scenarios |
 | `changes` | `::changes{spec="grade10-store/loyalty"}` | ribbon of in-flight changes whose deltas touch that spec: status first, then tasks done/total, owners, last-moved age, link |
 | `figma` | `::figma{url="…" title="…" set="…"}` | titled card, embed loads on click, open-in-Figma link, design-sync verdict; optional `set` names the component set an assembly frame is about, validated against the report |
-| `story` | `::story{id="blocks-store-cart--default" title="…" height="480"}` | titled card, workbench Storybook iframe loads on click |
+| `story` | `::story{id="blocks-store-cart--default" title="…" height="480"}` | titled card, workbench Storybook iframe loads eagerly |
 | `image` | `::image{src="assets/…" alt="…" caption="…"}` | image from `manual/assets/`; missing `alt` is a parse error |
 | `children` | `::children` | cards for the child pages of this directory, from their frontmatter |
 | `callout` | `:::callout{kind="note"}` … `:::` | kinds: `note`, `decision`, `warning`; a `warning` shows a signature — `author`/`date` when written in, else who last changed it and when, derived from git at build |
@@ -134,10 +133,11 @@ Grammar edge rules (each has a test):
 
 A capability page keeps one shelf order, so every role finds theirs in
 the same place on every page: what it is → how it looks (figma, stories)
-→ the contract (spec blocks) → acceptance (journeys, cases) → in flight
-→ history. The editor scaffolds a new capability page with that skeleton;
-a page with a `spec` but no journeys or cases block draws a warning,
-never a failure.
+→ the contract (spec blocks) → acceptance (cases) → in flight → history.
+The editor scaffolds a new capability page with that skeleton; a page
+with a `spec` but no `cases` block draws a warning, never a failure.
+User journeys stay in each capability's `user-journeys.md` — derivative
+of the page's own content, so the page never re-embeds them.
 
 ### Canonical form
 
@@ -572,9 +572,9 @@ elsewhere can neither cause nor fix a hole in the store. The rules:
   at the page's commit versus head, one `git cat-file --batch` pass); a
   spec moved since that commit is reported as moved, never as an
   everything-changed diff; a page with no commit yet is skipped
-- warning: a capability page with a `spec` but no journeys or cases block
-  is missing its acceptance shelf — asked only where the spec has
-  journeys or a suite to show, the same bar the QA board applies
+- warning: a capability page with a `spec` but no `cases` block is
+  missing its acceptance shelf — asked only where the spec has a suite
+  to show, the same bar the QA board applies
 - warning: a `[[ref]]` in prose that resolves to nothing or to more than
   one thing, scanned with the grammar's fence tracking, inline code
   skipped

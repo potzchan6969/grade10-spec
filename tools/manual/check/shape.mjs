@@ -8,20 +8,12 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { readText, subdirectories } from "../src/store/disk.mts";
 import { groupHeadings } from "../src/store/read-specs.mts";
-import { manualYaml, plural } from "./context.mjs";
+import { manualYaml } from "./context.mjs";
 
 export function checkCoverage(ctx, shape) {
   for (const [id, dir] of shape.dirs) {
-    const spec = ctx.specs.get(id);
     if (!ctx.referenced.has(id)) {
       ctx.add("unreferenced", `${dir}/spec.md`, `no page names \`${id}\``);
-    }
-    if (spec?.journeys?.length && !ctx.journeyed.has(id)) {
-      ctx.add(
-        "journeys",
-        `${dir}/spec.md`,
-        `has ${plural(spec.journeys.length, "journey")} and no page shows them`,
-      );
     }
   }
 }

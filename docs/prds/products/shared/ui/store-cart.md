@@ -26,7 +26,3 @@ actually creates the checkout session.
 ::story{id="store-cart-cartdrawer--empty-state" title="An empty cart, still five rows tall"}
 
 ::story{id="store-cart-cartdrawer--fetching-on-open" title="The skeleton state while the drawer re-reads prices"}
-
-## What a shopper does
-
-::journeys{id="shared/ui/store-cart"}

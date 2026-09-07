@@ -12,10 +12,6 @@ const INFO: Record<string, BlockInfo> = {
     label: "Spec",
     hint: "A spec's requirements, or one requirement, scenario or story.",
   },
-  journeys: {
-    label: "Journeys",
-    hint: "The spec's user stories with the scenarios that accept them.",
-  },
   cases: {
     label: "Test cases",
     hint: "The capability's test suite and what it covers.",

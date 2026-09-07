@@ -43,7 +43,3 @@ staging and production, a QA doc says it is optional in every environment
 deliberately, and the environment package currently sets staging to optional and
 production to required. Two of the three are stale.
 :::
-
-## What a collector and an operator hold
-
-::journeys{id="shared/auth/roles"}

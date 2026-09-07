@@ -89,21 +89,11 @@ describe("a store that has drifted", () => {
     ]);
   });
 
-  it("warns rather than fails on a link, an unshown journey and a bare shelf", async () => {
+  it("warns rather than fails on a link", async () => {
     const warnings = (await result).findings.filter(
       (one) => one.level === "warn",
     );
-    expect(warnings.map((one) => one.rule).sort()).toEqual([
-      "figma",
-      "journeys",
-      "skeleton",
-    ]);
-  });
-
-  it("names the capability page whose spec has no acceptance shelf", async () => {
-    expect(lines(await result, "skeleton")).toEqual([
-      "docs/prds/products/demo-product/alpha.md — has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
-    ]);
+    expect(warnings.map((one) => one.rule).sort()).toEqual(["figma"]);
   });
 
   it("names the capabilities that never say who walks them", async () => {
@@ -117,8 +107,8 @@ describe("a store that has drifted", () => {
     const root = fixture("broken");
     const report = formatReport(root, await result);
     expect(report.failures).toBe(11);
-    expect(report.warnings).toBe(3);
-    expect(report.text).toContain("11 failures, 3 warnings");
+    expect(report.warnings).toBe(1);
+    expect(report.text).toContain("11 failures, 1 warning");
   });
 });
 
@@ -319,7 +309,7 @@ describe("a durable spec carrying a group heading", () => {
   });
 });
 
-/** The shelf warning is aimed at capability pages only, and either acceptance
+/** The shelf warning is aimed at capability pages only, and a `::cases`
  * block answers it — including one nested inside a container. */
 describe("the acceptance shelf a capability page keeps", () => {
   const shelved = (blocks: string) =>
@@ -351,6 +341,47 @@ describe("the acceptance shelf a capability page keeps", () => {
     "",
   ].join("\n");
 
+  const CASES = [
+    "# demo-product/alpha Test Cases",
+    "",
+    "**Status:** pending-review",
+    "",
+    "## alpha-US-01: Someone does the thing",
+    "",
+    "**As a** someone,",
+    "**I want** the thing to happen,",
+    "**so that** it is done.",
+    "",
+    "### alpha-TC-01: Someone asks for the thing and it happens",
+    "",
+    "**Description:** Proves the thing happens on ask.",
+    "",
+    "**Preconditions:**",
+    "",
+    "- None.",
+    "",
+    "**Test data:** None — the case takes no input.",
+    "",
+    "**Steps:**",
+    "",
+    "| # | Action | Expected result |",
+    "| --- | --- | --- |",
+    "| 1 | Ask for the thing. | The thing happens. |",
+    "",
+    "**Properties:**",
+    "",
+    "- **Severity:** major",
+    "- **Priority:** high",
+    "- **Status:** draft",
+    "- **Behaviour:** positive",
+    "- **Type:** smoke",
+    "- **Layer:** e2e",
+    "- **Automation status:** manual",
+    "- **Testability:** automation",
+    "- **Trace:** alpha-SC-01",
+    "",
+  ].join("\n");
+
   const store = (alpha: string, extra: Record<string, string> = {}) =>
     writeStore({
       "docs/prds/manual.yaml":
@@ -365,12 +396,9 @@ describe("the acceptance shelf a capability page keeps", () => {
     });
 
   it("says nothing when the page shows its cases", async () => {
-    const root = store(shelved('::cases{id="demo-product/alpha"}'));
-    expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([]);
-  });
-
-  it("says nothing when the page shows its journeys", async () => {
-    const root = store(shelved('::journeys{id="demo-product/alpha"}'));
+    const root = store(shelved('::cases{id="demo-product/alpha"}'), {
+      "openspec/specs/demo-product/alpha/test-cases.md": CASES,
+    });
     expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([]);
   });
 
@@ -379,12 +407,14 @@ describe("the acceptance shelf a capability page keeps", () => {
       shelved(
         ':::callout{kind="note"}\nStill a shelf.\n\n::cases{id="demo-product/alpha"}\n:::',
       ),
+      { "openspec/specs/demo-product/alpha/test-cases.md": CASES },
     );
     expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([]);
   });
 
   it("leaves a landing page and a platform page alone", async () => {
     const root = store(shelved('::cases{id="demo-product/alpha"}'), {
+      "openspec/specs/demo-product/alpha/test-cases.md": CASES,
       "docs/prds/platform/demo-topic.md":
         "---\ntitle: Topic\nspec: demo-topic\n---\n\nA topic page.\n",
       "openspec/specs/demo-topic/spec.md": spec(
@@ -395,12 +425,13 @@ describe("the acceptance shelf a capability page keeps", () => {
     expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([]);
   });
 
-  it("warns on a capability page carrying a spec and neither block", async () => {
+  it("warns on a capability page carrying a spec and no cases block", async () => {
     const root = store(
       "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\nAlpha, with no shelf.\n",
+      { "openspec/specs/demo-product/alpha/test-cases.md": CASES },
     );
     expect(lines(await runChecks(root, NO_GIT), "skeleton")).toEqual([
-      "docs/prds/products/demo-product/alpha.md — has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
+      "docs/prds/products/demo-product/alpha.md — has a `spec` and no `::cases` block — missing its acceptance shelf",
     ]);
   });
 
@@ -803,7 +834,7 @@ describe("a page selecting a requirement a change is about to move", () => {
         "",
         '::spec{id="demo-product/alpha" requirement="Alpha keeps a record"}',
         "",
-        '::journeys{id="demo-product/alpha"}',
+        '::cases{id="demo-product/alpha"}',
         "",
       ].join("\n"),
     });

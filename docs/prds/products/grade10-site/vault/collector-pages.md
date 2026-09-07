@@ -152,12 +152,6 @@ page holds the decision behind them.
 
 ::spec{id="grade10-site/vault/collector-notifications"}
 
-::journeys{id="grade10-site/vault/case-intake"}
-
-::journeys{id="grade10-site/vault/visit-booking"}
-
-::journeys{id="grade10-site/vault/collector-notifications"}
-
 :::detail{title="Product decisions" for="pm"}
 The collector's pages exist so an item can be handed over with the paperwork
 already agreed, and so the collector can watch their own property from their

@@ -15,7 +15,6 @@ const RULE_TITLES: Record<string, string> = {
   skeleton: "Capability pages missing their acceptance shelf",
   figma: "Figma links naming a file, frame or set that is not there",
   fold: "Delta sections the archive discards",
-  journeys: "Specs whose journeys no page shows",
   suite: "Specs whose test cases no page shows",
   coverage: "Scenarios no test case traces",
   ref: "References that resolve to nothing, or to two things",

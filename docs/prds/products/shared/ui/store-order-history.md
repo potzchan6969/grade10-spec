@@ -19,5 +19,3 @@ application enables it, and each part is importable alone, so a console that
 needs just the badge or just a card takes that and no more.
 
 ## What a collector does
-
-::journeys{id="shared/ui/store-order-history"}

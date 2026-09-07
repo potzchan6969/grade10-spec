@@ -35,5 +35,3 @@ a queue longer than its page is walkable in both directions, rather than merely
 told it has more.
 
 ## Journeys
-
-::journeys{id="shared/console/blocks"}

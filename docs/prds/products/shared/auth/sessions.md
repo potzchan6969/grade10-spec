@@ -19,5 +19,3 @@ in again, which is what a lost laptop needs. Signing out of the surface you are
 on is a different capability again.
 
 ## What an operator does
-
-::journeys{id="shared/auth/sessions"}

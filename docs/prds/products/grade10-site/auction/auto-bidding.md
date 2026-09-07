@@ -26,8 +26,6 @@ never needs a fresh card check mid-auction.
 
 ## Journeys
 
-::journeys{id="grade10-site/auction/auto-bidding"}
-
 :::detail{title="Product decisions" for="pm"}
 The extension rule exists because bidders arrive at the last minute, so every
 collector who cannot be there for a moving close is a bid the lot never

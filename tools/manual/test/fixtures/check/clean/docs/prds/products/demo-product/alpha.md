@@ -14,8 +14,6 @@ Alpha is the demo capability, and this page reaches every kind of reference.
 
 ::spec{id="demo-product/alpha" story="alpha-US-01"}
 
-::journeys{id="demo-product/alpha"}
-
 ::cases{id="demo-product/alpha"}
 
 ::changes{spec="demo-product/alpha"}

@@ -18,8 +18,6 @@ than filling the designed page with claims the frontend cannot prove.
 
 ## What it looks like
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4835-1654" title="Order details"}
-
 ::story{id="store-order-detail-orderdetails--item-coupon" title="One order, in detail"}
 
 ::story{id="store-order-detail-orderdetails--no-optional-groups" title="An order with only supplied facts"}

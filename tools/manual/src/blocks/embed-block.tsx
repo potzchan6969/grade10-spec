@@ -30,15 +30,16 @@ type EmbedCardProps = {
   openLabel: string;
   height: number;
   verdict?: DesignVerdict;
+  /** A third-party frame costs a network round trip and a lot of main
+   * thread, so a page full of them loads none of them: the frame arrives on
+   * click. Our own Storybook workbench is worth seeing without that click,
+   * so it loads eagerly instead. A frame that arrived broken — Storybook
+   * still building, Figma timing out — reloads from its own header without
+   * a full page load; remounting the iframe is the one way to make a
+   * cross-origin frame fetch again. */
+  lazy?: boolean;
 };
 
-/**
- * Third-party frames cost a network round trip and a lot of main thread, so a
- * page full of them loads none of them: the frame arrives on click. A frame
- * that arrived broken — Storybook still building, Figma timing out — reloads
- * from its own header without a full page load; remounting the iframe is the
- * one way to make a cross-origin frame fetch again.
- */
 function EmbedCard({
   title,
   kind,
@@ -48,8 +49,9 @@ function EmbedCard({
   openLabel,
   height,
   verdict,
+  lazy = true,
 }: EmbedCardProps) {
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(!lazy);
   const [generation, setGeneration] = useState(0);
   const [why, setWhy] = useState(false);
 
@@ -158,6 +160,7 @@ export function StoryBlockView({ block }: { block: StoryBlock }) {
       height={block.height ?? DEFAULT_HEIGHT}
       icon={<Play aria-hidden size={16} />}
       kind="Storybook story"
+      lazy={false}
       openLabel="Open in Storybook"
       openUrl={`${base}/?path=/story/${encodeURIComponent(block.id)}`}
       src={`${base}/iframe.html?id=${encodeURIComponent(block.id)}&viewMode=story`}

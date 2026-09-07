@@ -12,7 +12,7 @@ const HOME = "---\ntitle: Demo\n---\n\nA demo store.\n";
 const LANDING = "---\ntitle: Demo product\n---\n\nThe one product.\n";
 
 /** A capability page that names its spec and never gets to acceptance — the
- * shelf gap and the unshown journeys, which is two warning rules in one store. */
+ * shelf gap the skeleton rule warns about. */
 const ALPHA_PAGE =
   "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\nAlpha is a demo capability.\n";
 
@@ -49,6 +49,47 @@ const ALPHA_SPEC = [
   "",
 ].join("\n");
 
+const ALPHA_CASES = [
+  "# demo-product/alpha Test Cases",
+  "",
+  "**Status:** pending-review",
+  "",
+  "## alpha-US-01: Someone does the thing",
+  "",
+  "**As a** someone,",
+  "**I want** the thing to happen,",
+  "**so that** it is done.",
+  "",
+  "### alpha-TC-01: Someone asks for the thing and it happens",
+  "",
+  "**Description:** Proves the thing happens on ask.",
+  "",
+  "**Preconditions:**",
+  "",
+  "- None.",
+  "",
+  "**Test data:** None — the case takes no input.",
+  "",
+  "**Steps:**",
+  "",
+  "| # | Action | Expected result |",
+  "| --- | --- | --- |",
+  "| 1 | Ask for the thing. | The thing happens. |",
+  "",
+  "**Properties:**",
+  "",
+  "- **Severity:** major",
+  "- **Priority:** high",
+  "- **Status:** draft",
+  "- **Behaviour:** positive",
+  "- **Type:** smoke",
+  "- **Layer:** e2e",
+  "- **Automation status:** manual",
+  "- **Testability:** automation",
+  "- **Trace:** alpha-SC-01",
+  "",
+].join("\n");
+
 const BASE = {
   "docs/prds/manual.yaml": CONFIG,
   "docs/prds/index.md": HOME,
@@ -56,6 +97,7 @@ const BASE = {
   "docs/prds/products/demo-product/alpha.md": ALPHA_PAGE,
   "openspec/specs/demo-product/alpha/spec.md": ALPHA_SPEC,
   "openspec/specs/demo-product/alpha/user-journeys.md": ALPHA_JOURNEYS,
+  "openspec/specs/demo-product/alpha/test-cases.md": ALPHA_CASES,
 };
 
 const snapshotOfStore = async (root: string) =>
@@ -103,13 +145,13 @@ describe("the warnings the snapshot carries", () => {
       {
         rule: "skeleton",
         message:
-          "has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
+          "has a `spec` and no `::cases` block — missing its acceptance shelf",
         page: "docs/prds/products/demo-product/alpha.md",
       },
       {
-        rule: "journeys",
+        rule: "suite",
         message:
-          "openspec/specs/demo-product/alpha/spec.md: has 1 journey and no page shows them",
+          "openspec/specs/demo-product/alpha/test-cases.md: holds 1 test case and no page shows them",
       },
     ]);
   });
@@ -119,7 +161,7 @@ describe("the warnings the snapshot carries", () => {
       ...BASE,
       "docs/prds/products/demo-product/alpha.md": ALPHA_PAGE.replace(
         "Alpha is a demo capability.",
-        '::journeys{id="demo-product/alpha"}',
+        '::cases{id="demo-product/alpha"}',
       ),
     });
 

@@ -108,10 +108,6 @@ member's own undo are specified only in the in-flight
 `revise-loyalty-programme-rules` and `add-shopify-membership-pos` changes.
 :::
 
-## Journeys
-
-::journeys{id="grade10-site/loyalty/programme"}
-
 ::cases{id="grade10-site/loyalty/programme"}
 
 :::detail{title="For engineers" for="engineer"}

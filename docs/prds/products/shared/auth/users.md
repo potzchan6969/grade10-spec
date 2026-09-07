@@ -59,7 +59,3 @@ fails, the ban does not happen.
 Every session it holds ends, new sign-ins are refused, money stops. The account
 stays in the directory, marked banned, so it can be found and unbanned later.
 :::
-
-## What an operator does
-
-::journeys{id="shared/auth/users"}

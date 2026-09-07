@@ -167,8 +167,6 @@ requirements are its; this page holds the decision behind them.
 
 ::spec{id="grade10-site/vault/case-lifecycle"}
 
-::journeys{id="grade10-site/vault/case-lifecycle"}
-
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |

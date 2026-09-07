@@ -93,8 +93,6 @@ describe("save-time references", () => {
         "",
         '::spec{id="demo/alpha" story="alpha-US-01"}',
         "",
-        '::journeys{id="demo/alpha"}',
-        "",
         '::cases{id="demo/alpha"}',
         "",
         '::changes{spec="demo/gamma"}',
@@ -113,9 +111,6 @@ describe("save-time references", () => {
     const index = indexOf({ pages: [page(PAGE, "Prose.")] });
 
     expect(said(problemsFor(index, '::spec{id="demo/ghost"}'))).toEqual([
-      "no spec `demo/ghost` in the store",
-    ]);
-    expect(said(problemsFor(index, '::journeys{id="demo/ghost"}'))).toEqual([
       "no spec `demo/ghost` in the store",
     ]);
     expect(said(problemsFor(index, '::cases{id="demo/ghost"}'))).toEqual([

@@ -145,10 +145,6 @@ the decision behind them.
 
 ::spec{id="grade10-admin/vault/money-book"}
 
-::journeys{id="grade10-admin/vault/operator-queue"}
-
-::journeys{id="grade10-admin/vault/money-book"}
-
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |

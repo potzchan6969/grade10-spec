@@ -90,8 +90,6 @@ The requirements are its; this page holds the decision behind them.
 
 ::spec{id="grade10-site/vault/documents-and-signing"}
 
-::journeys{id="grade10-site/vault/documents-and-signing"}
-
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |

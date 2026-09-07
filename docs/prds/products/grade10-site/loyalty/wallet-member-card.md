@@ -25,8 +25,6 @@ requirements are its; this page holds the decision behind them.
 
 ::spec{id="grade10-site/store/wallet-member-card"}
 
-::journeys{id="grade10-site/store/wallet-member-card"}
-
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |

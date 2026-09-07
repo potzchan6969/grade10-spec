@@ -32,15 +32,14 @@ const STALE: CheckWarning = {
 
 const SHELF: CheckWarning = {
   rule: "skeleton",
-  message:
-    "has a `spec` and neither a `::journeys` nor a `::cases` block — missing its acceptance shelf",
+  message: "has a `spec` and no `::cases` block — missing its acceptance shelf",
   page: "docs/prds/products/demo-product/beta.md",
 };
 
 const UNSHOWN: CheckWarning = {
-  rule: "journeys",
+  rule: "suite",
   message:
-    "openspec/specs/demo-product/alpha/spec.md: has 2 journeys and no page shows them",
+    "openspec/specs/demo-product/alpha/test-cases.md: holds 2 test cases and no page shows them",
 };
 
 describe("the maintenance panel", () => {
@@ -61,7 +60,7 @@ describe("the maintenance panel", () => {
 
     expect(html).toContain("Pages older than the specs they embed");
     expect(html).toContain("Capability pages missing their acceptance shelf");
-    expect(html).toContain("Specs whose journeys no page shows");
+    expect(html).toContain("Specs whose test cases no page shows");
   });
 
   it("links a page warning to the page's own route", () => {
@@ -75,7 +74,7 @@ describe("the maintenance panel", () => {
   it("names a store file that has no page to link to, and links nothing", () => {
     const html = render([UNSHOWN]);
 
-    expect(html).toContain("openspec/specs/demo-product/alpha/spec.md");
+    expect(html).toContain("openspec/specs/demo-product/alpha/test-cases.md");
     expect(html).not.toContain("<a ");
   });
 

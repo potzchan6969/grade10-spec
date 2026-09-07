@@ -73,10 +73,6 @@ with no settlement. Everything on this page is specified in the in-flight
 `revise-loyalty-programme-rules` and `add-shopify-membership-pos` changes.
 :::
 
-## Journeys
-
-::journeys{id="grade10-site/loyalty/programme"}
-
 ::cases{id="grade10-site/loyalty/programme"}
 
 :::detail{title="For engineers" for="engineer"}

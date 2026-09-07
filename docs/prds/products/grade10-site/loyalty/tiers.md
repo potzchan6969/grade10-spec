@@ -86,8 +86,6 @@ cap and the approval step the owner's draft asks for are not enforced.
 
 ## Journeys
 
-::journeys{id="grade10-site/loyalty/programme"}
-
 ::cases{id="grade10-site/loyalty/programme"}
 
 :::detail{title="For engineers" for="engineer"}

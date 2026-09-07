@@ -26,5 +26,3 @@ ZZZ is served as one shell for every address; the day it has a public surface,
 whatever specs that surface will own it.
 
 ## What a collector does
-
-::journeys{id="zzz-site/site/navigation"}

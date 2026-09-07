@@ -48,6 +48,26 @@ function render(node: React.ReactNode, designSync?: DesignSyncReport): string {
 
 const story = <StoryBlockView block={{ type: "story", id: STORY }} />;
 
+describe("which frames load without a click", () => {
+  it("loads a Storybook story straight away", () => {
+    const html = render(story);
+
+    expect(html).toContain("<iframe");
+    expect(html).not.toContain("Load Storybook story");
+  });
+
+  it("still gates a Figma frame behind a click", () => {
+    const html = render(
+      <FigmaBlockView
+        block={{ type: "figma", url: frame("4735-6493"), title: "Cart Drawer" }}
+      />,
+    );
+
+    expect(html).not.toContain("<iframe");
+    expect(html).toContain("Load Figma frame");
+  });
+});
+
 describe("the drift badge on a story card", () => {
   it("badges a card whose component set the report marks warn", () => {
     const html = render(story, report({ "Cart Drawer": "warn" }));

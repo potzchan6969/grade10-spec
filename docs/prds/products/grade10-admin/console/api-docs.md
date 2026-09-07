@@ -98,6 +98,4 @@ version bump that changes either fails the drift test loudly rather than
 emitting a document that is quietly wrong.
 :::
 
-::journeys{id="grade10-admin/console/api-docs"}
-
 ::cases{id="grade10-admin/console/api-docs"}

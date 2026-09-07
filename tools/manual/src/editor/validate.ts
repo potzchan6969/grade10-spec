@@ -75,7 +75,6 @@ function blockProblems(index: ManualIndex, leaf: DraftLeaf): BlockProblem[] {
       }
       break;
     }
-    case "journeys":
     case "cases": {
       if (!index.specById.has(value("id"))) {
         said("id", `no spec \`${value("id")}\` in the store`);

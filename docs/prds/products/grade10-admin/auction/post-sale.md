@@ -43,8 +43,6 @@ the card leaves Grade10, completed when the winner has it — and recording it
 never rewrites who won or how they paid. The winner reads the same facts from
 their own side on [My Auctions](/p/grade10-site/auction/account-record).
 
-::journeys{id="grade10-admin/auction/post-sale"}
-
 :::detail{title="Product decisions" for="pm"}
 The queue is the operator's close-out surface: payment and shipment are
 separate jobs, while one listing detail keeps the winner contact, money,

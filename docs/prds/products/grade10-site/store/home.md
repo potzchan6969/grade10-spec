@@ -30,7 +30,3 @@ row of cards. Links people already hold still land here.
 ::story{id="pages-store-home-page--default" title="The main page, whole"}
 
 ::story{id="store-home-storecollectiongrid--default" title="The collection grid"}
-
-## Journeys
-
-::journeys{id="grade10-site/store/home"}

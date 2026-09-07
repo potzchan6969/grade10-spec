@@ -22,5 +22,3 @@ person so a visit does not read as two strangers. Which events a product records
 is that product's business.
 
 ## What a collector does
-
-::journeys{id="shared/auth/session"}

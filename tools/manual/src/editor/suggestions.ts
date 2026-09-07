@@ -52,10 +52,7 @@ export function suggestionsForAttr(
   type: string,
   attr: string,
 ): string[] {
-  if (
-    attr === "id" &&
-    (type === "spec" || type === "journeys" || type === "cases")
-  ) {
+  if (attr === "id" && (type === "spec" || type === "cases")) {
     return suggestions.specIds;
   }
   if (type === "changes" && attr === "spec") return suggestions.specIds;

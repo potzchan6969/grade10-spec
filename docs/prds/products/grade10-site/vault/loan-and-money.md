@@ -159,10 +159,6 @@ page holds the decision behind them.
 
 ::spec{id="grade10-site/vault/loan-and-settlement"}
 
-::journeys{id="grade10-site/vault/valuation-and-offer"}
-
-::journeys{id="grade10-site/vault/loan-and-settlement"}
-
 :::detail{title="Product decisions" for="pm"}
 The loan exists so a collector can raise cash against a card without selling
 it, and so the shop can lend against an item it already holds and has valued.

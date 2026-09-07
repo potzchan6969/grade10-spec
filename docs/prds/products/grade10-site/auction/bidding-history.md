@@ -34,5 +34,3 @@ facts stay private: another bidder's maximum never appears, only the public
 consequence that displaced them.
 
 ## Journeys
-
-::journeys{id="grade10-site/auction/bidding-history"}

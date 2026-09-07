@@ -37,8 +37,6 @@ lot pages are in scope, and apply every requirement below per lot.
 
 ## What a collector, a crawler and a link preview do
 
-::journeys{id="grade10-site/site/crawlable-pages"}
-
 :::detail{title="Where this is implemented" for="engineer"}
 An SPA's server-rendered half lives in its `src/serving/` directory; read
 [docs/architecture/serving.md](https://github.com/9gag/grade10/blob/main/docs/architecture/serving.md)
