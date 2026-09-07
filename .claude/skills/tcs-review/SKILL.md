@@ -148,6 +148,16 @@ of them: the phrasing they approve is the phrasing generation will copy.
    any of them, or for the scenarios behind one case. When they ask, quote the
    **whole clause** from `spec.md`, never a summary of it.
 
+   **Report duplicates before asking for verdicts.** Compare the journey's
+   cases against each other, and against the domain suite's `actual` cases:
+   two cases asserting the same outcomes on the same surface from the same
+   starting state are one case, however differently they are worded, as is one
+   whose expected results are a subset of another's. A variation in data alone
+   is a row, not a case. Name the pair, quote both sets of expected results,
+   and ask — never merge or drop on your own. A feature case wholly covered by
+   an `approved` domain case is a trim candidate; say so and let the reviewer
+   decide.
+
    Then ask for the journey's verdicts and wait. The reviewer answers however
    suits them — "all good", "approve except TC3", "TC2: change the
    pre-condition to …, rest fine". Two rules make that safe:
@@ -169,7 +179,27 @@ of them: the phrasing they approve is the phrasing generation will copy.
    Never talk the reviewer out of a doubt; if they think a case is wrong,
    the case is wrong until the spec says otherwise.
 
-8. **Record each verdict in the file as you go,** so an interrupted review
+8. **Adding a case the reviewer asks for.** A reviewer may want a case the
+   suite does not hold. Before writing it:
+
+   - **Check the spec.** It must be built from a scenario that accepts this
+     journey. A case with no scenario behind it is a new requirement in
+     disguise: say so, and route it to the spec's author rather than into the
+     file.
+   - **Check for one that already covers it** — this journey's cases first,
+     then the rest of the file, then the domain suite. On a hit, show the
+     existing case in full beside what the reviewer described, and ask:
+     update that case, add this one because it is genuinely distinct, or drop
+     it because it is covered.
+   - **Write it as a `draft`** at the next unused `TC<m>` under that journey,
+     `<v>` at `1`, in the current style — then walk it like any other draft
+     and take the reviewer's verdict. Never write a case straight to `actual`,
+     even one the reviewer dictated.
+
+   Record what the reviewer said distinguishes a case they added over a
+   duplicate you raised, so the next run does not re-raise it.
+
+9. **Record each verdict in the file as you go,** so an interrupted review
    is not lost. **Re-read the file from disk immediately before each write** —
    a session runs for hours, another reviewer may have landed a verdict in
    another journey, and writing back a copy held in memory would silently
@@ -194,7 +224,7 @@ of them: the phrasing they approve is the phrasing generation will copy.
    is never a judgement you or the reviewer makes. `pnpm run tcs:validate`
    fails a file whose header and cases disagree.
 
-9. **Close the run — and land the work.** When the last journey in scope has
+10. **Close the run — and land the work.** When the last journey in scope has
    its verdicts, or the reviewer stops for the day:
 
    - Run `pnpm run tcs:validate` and fix anything it names before committing.

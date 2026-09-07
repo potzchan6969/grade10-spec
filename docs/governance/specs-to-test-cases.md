@@ -1099,6 +1099,48 @@ variations the spec never stated. A case that takes no input omits the
 `**Test data:**` section entirely — it carries neither an empty table nor a
 "None" line.
 
+## A case that already exists is not written twice
+
+A duplicate case is a defect, not redundancy that pays for itself. It doubles
+the cost of every pass, and when the two copies drift — one edited, one not —
+a suite states two answers to the same question and the run that catches it is
+the one that fails for the wrong reason. So before any case is added, by an
+agent or by hand, the suite is read for one that already covers it.
+
+**What counts as a duplicate.** Not identical wording — identical *claims*.
+Two cases are the same case when they assert the same outcomes on the same
+surface from the same starting state, however differently they are phrased.
+Two cases are the same case when one's expected results are a subset of the
+other's and neither reaches the product differently to get there. And a
+variation of a case is not a new case: same steps, different data is one case
+with a row per run.
+
+Genuinely distinct: a different way of *reaching* the same behaviour where the
+spec states what should happen on each route; the same assertion at a
+different layer, where the spec states both; and a refusal beside the
+acceptance it mirrors.
+
+**What to do when one is found.** Show the reviewer the case that already
+exists — its id, its title, its steps and expected results — beside the one
+being proposed, and ask which they want:
+
+| Choice | Do |
+| --- | --- |
+| Update the existing case | Extend it — a step, a row, one more expected result — under the re-wording rules for its status. No new id. |
+| Add it anyway | It is not a duplicate after all. Record in the report what distinguishes it, so the next run does not re-raise it. |
+| Drop it | Say which case covers it, and move on. |
+
+Never add silently, and never resolve it by deleting the older case: a
+duplicate is retired as `deprecated` only when the spec no longer states the
+behaviour, exactly like any other retirement.
+
+**Across levels, too.** A feature case whose assertions are wholly covered by
+an approved domain case is a trim candidate — that is the whole point of the
+domain level — and the check runs the same way, against the domain suite's
+cases as well as the journey's own. Trim only against an `approved` domain
+case: while the domain file is `draft`, its coverage is not yet real, and
+deleting underneath it leaves a hole.
+
 ## Step 5: classify the case
 
 Ten properties, in this order, every one of them on every case. The

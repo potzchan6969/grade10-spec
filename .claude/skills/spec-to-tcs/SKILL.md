@@ -525,6 +525,15 @@ each case traces scenario ids.
      heading above it uses the compact `grade10-site-store-home-US1`. One journey per case. A
      case with no trace does not belong in the file.
 
+   **Never add a case the suite already holds.** In update mode, read what is
+   there before writing: two cases asserting the same outcomes on the same
+   surface from the same starting state are one case, and a variation in data
+   alone is a row, not a case. Where a scenario looks uncovered but an existing
+   case already asserts it, extend that case rather than adding a second, and
+   report the pair either way. Check the domain suite too — a feature case
+   wholly covered by an `approved` domain case is reported as a trim
+   candidate, never deleted by this skill.
+
    **Coverage shape:** A journey whose `Accepted by` list includes refusal,
    empty-state, or failure scenarios must not ship with only `positive`
    cases — add the matching `negative` (and `destructive` when the
