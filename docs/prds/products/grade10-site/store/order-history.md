@@ -1,5 +1,5 @@
 ---
-title: Your Orders
+title: Orders
 spec: grade10-site/store/order-history
 order: 6
 ---
@@ -25,4 +25,4 @@ shopping path, not a blank account page.
 
 ::changes{spec="grade10-site/store/order-history"}
 
-::changes{spec="grade10-site/store/order-status"}
+::changes{spec="grade10-site/commerce/order-status"}

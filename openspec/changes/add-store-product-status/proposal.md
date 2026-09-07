@@ -106,7 +106,7 @@ states what the store puts into them.
 
 ### New Capabilities
 
-- `grade10-site/store/product-status`: what availability means — the shop's answer
+- `grade10-site/commerce/product-status`: what availability means — the shop's answer
   for a variant, the answer for a requested quantity, the variant-to-card
   rollup, and what a browse surface communicates.
 - `grade10-site/store/cart-validation`: when the store re-reads availability and

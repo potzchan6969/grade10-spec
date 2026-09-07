@@ -49,7 +49,7 @@ serves the listing or a card's page SHALL NOT answer for a cart line: a browse
 surface may use its normal catalogue cache, and the cart may not.
 
 Availability SHALL be answered for the line's variant and its requested
-quantity together, as `grade10-site/store/product-status` defines it. Price
+quantity together, as `grade10-site/commerce/product-status` defines it. Price
 SHALL be read as an integer count of minor units and an ISO 4217 currency code,
 as
 `money-amounts` requires.

@@ -26,6 +26,6 @@ than filling the designed page with claims the frontend cannot prove.
 
 ::changes{spec="grade10-site/store/order-detail"}
 
-::changes{spec="grade10-site/store/order-status"}
+::changes{spec="grade10-site/commerce/order-status"}
 
 ::changes{spec="shared/ui/store-order-detail"}

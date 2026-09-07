@@ -27,7 +27,7 @@ they are where the mapping does the most work.
 
 ## What Changes
 
-- Introduces `grade10-site/store/order-status`: the mapping from an order's Shopify
+- Introduces `grade10-site/commerce/order-status`: the mapping from an order's Shopify
   facts to one customer-facing badge and an optional secondary note.
 - Defines five badges for this phase — Processing, Shipped, Completed, Canceled,
   Refunded — derived by an ordered rule that resolves **every** combination of
@@ -63,7 +63,7 @@ ordered rule specified here reproduces all thirty confirmed PRD rows.
 
 ### New Capabilities
 
-- `grade10-site/store/order-status`: how an order's Shopify payment, fulfilment, and
+- `grade10-site/commerce/order-status`: how an order's Shopify payment, fulfilment, and
   order facts resolve to one customer-facing badge and an optional secondary
   note, and the obligation on every surface that shows order status to use it.
 
