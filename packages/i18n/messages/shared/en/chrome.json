@@ -4,10 +4,10 @@
   "searchLabel": "Search",
   "cartLabel": "Cart",
   "nav": {
-    "store": "STORE",
-    "auction": "AUCTION",
-    "vault": "VAULT",
-    "book": "BOOK A VISIT"
+    "store": "Store",
+    "auction": "Auction",
+    "vault": "Vault",
+    "book": "Book a Visit"
   },
   "footer": {
     "shopHeading": "SHOP",
