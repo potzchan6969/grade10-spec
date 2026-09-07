@@ -22,7 +22,8 @@ production build drops it.
 ## Who a call is for
 
 Three audiences, read off the caller word each procedure carries and named
-beside the filter, which narrows to one of them:
+beside the filter, which narrows to one of them —
+[[grade10-admin-console-api-docs-SC-16]]:
 
 - **Site** — `public`, `session`, `session · fresh`; the brand's
   customer-facing sites, signed in or not
@@ -96,3 +97,7 @@ schema AST surviving conversion and on the shape of its JSON Schema output. A
 version bump that changes either fails the drift test loudly rather than
 emitting a document that is quietly wrong.
 :::
+
+::journeys{id="grade10-admin/console/api-docs"}
+
+::cases{id="grade10-admin/console/api-docs"}
