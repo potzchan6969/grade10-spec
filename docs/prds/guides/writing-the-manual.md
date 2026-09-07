@@ -48,6 +48,10 @@ copy. Its application here is short:
   surface is, none of which the items then repeat, then items leading with
   their key term in bold, fragments rather than paragraphs, one concern per
   `##` section, enumerable facts in a table
+- **A heading is a label** — the rail lists every `##` and `###`, so each
+  names what it holds in the reader's words (`Refunds`, `Designs`, `Test
+  cases`), never a question stub (`What earns`), a sentence, or a leading
+  article (`The rate`)
 - **Define the thing flatly**, in present tense, so a reader infers the
   rules from what it is
 - **Answer the reader, not the spec** — what the surface is for, what it
@@ -135,14 +139,19 @@ git, so writing one costs nothing; add `author` and `date` only to sign a
 judgment git cannot attribute, such as one recorded on someone's behalf. A
 detail block is depth for one audience —
 `pm`, `designer`, `qa`, `engineer` or `operator` — collapsed but never hidden,
-so it stays searchable and deep-linkable:
+so it stays searchable and deep-linkable. Its title names what it holds: the
+title is all a collapsed block shows, the badge already says who it is for,
+and the block's link is made from the title, so `Data model`, never
+`For engineers`, and never two alike on one page. Engineer depth sits under
+the section it deepens; a fact another page owns is a link, not a
+restatement:
 
 ```md
 :::callout{kind="warning" author="@echo" date="2026-08-30"}
 What ships and what the spec says have parted company here.
 :::
 
-:::detail{title="For engineers" for="engineer"}
+:::detail{title="Data model" for="engineer"}
 The data shape, the architecture link, the thing a PM does not need.
 :::
 ```

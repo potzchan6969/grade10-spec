@@ -29,6 +29,15 @@ Outline first. A document is a heading and an outline, never an essay.
 - **Open in two sentences at most** — what the document is and what the
   reader leaves with. Then the outline. The opening says nothing the
   outline then repeats: a fact belongs in one of the two, never both.
+- **A heading is a label** — the name of what its section holds, in the
+  reader's words, the way a contents list reads: `Refunds`, `Expiry`,
+  `Paying with points`. Not a question or its stub (`What earns`, `Who uses
+  it`), not a sentence (`Bids are holds, not payments`), not a leading
+  article (`The rate`). A gerund names a repeatable activity, never one
+  occurrence. A `###` beneath it labels a part or, on a rule list, states
+  one rule — all of a section's `###` the same way. A flow's title, phases
+  and steps keep their own form. Test: reading the headings alone, each
+  still says what it holds.
 - **Only what the page owns** — a fact a child page, a sibling, or a
   platform page states is a link away, never repeated; a product's index
   says what no capability page carries, and nothing true of every product
@@ -97,8 +106,7 @@ Outline first. A document is a heading and an outline, never an essay.
 - The reader's word, not the code's or the designer's. A page says "a small
   label above the headline" even where the component and the spec call it
   an eyebrow; the term belongs to the spec, the plain word to the page.
-- Group one concern per section; the heading names the concern in plain
-  words.
+- Group one concern per section.
 - The roadmap, stated as the product. A decided plan reads in the present
   tense as though shipped; where it stands is a status card or a ❓, never
   an apology in the prose that a spec is still being written.
