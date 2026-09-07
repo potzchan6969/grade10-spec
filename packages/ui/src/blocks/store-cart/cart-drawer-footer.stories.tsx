@@ -50,6 +50,7 @@ function FooterWithPromoNest({
  * Enter/held-list UI lives on the nested `CartPromoSheet` hosted by
  * [`CartDrawer`](?path=/docs/store-cart-cartdrawer--docs) (or the nest host
  * in these stories). Shopper copy uses **promo code** only — never coupon.
+ * Checkout is members-only; there is no guest checkout path.
  */
 const meta = {
   title: "Store Cart/CartDrawerFooter",
@@ -61,6 +62,8 @@ const meta = {
     estimatedTotal: "HK$42,700.00",
     shippingEstimate: "TBD",
     promoState: { status: "collapsed" },
+    pointsState: { status: "collapsed" },
+    pointsBalanceLabel: "1,200 pts · up to HK$1,200",
     copy: DEFAULT_CART_COPY.footer,
     onPromoStateChange: fn(),
     onRemovePromo: fn(),
@@ -75,7 +78,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Guest / default: compact promo row only — no nested sheet, no points */
+/** Signed-in default: compact promo row + Use points (checkout is members-only) */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -85,15 +88,15 @@ export const Default: Story = {
     ).toBeInTheDocument();
     expect(canvas.getByText("Promo code")).toBeInTheDocument();
     expect(
-      canvas.queryByRole("button", { name: /Use points/i }),
-    ).not.toBeInTheDocument();
+      canvas.getByRole("button", { name: /Use points/i }),
+    ).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: "Proceed to Checkout" }),
     ).toBeInTheDocument();
   },
 };
 
-/** Nested promo sheet open (guest — enter only) */
+/** Nested promo sheet open — enter field (held list optional) */
 export const PromoSheetOpen: Story = {
   render: (args) => {
     const promo: PromoState = { status: "expanded" };
@@ -445,7 +448,7 @@ export const InteractiveMember: Story = {
   },
 };
 
-/** Guest interactive: open sheet, try SAVE10 / invalid */
+/** Interactive: open sheet, try SAVE10 / invalid (typed promo only) */
 export const Interactive: Story = {
   render: (args) => {
     const [promo, setPromo] = useState<PromoState>({ status: "collapsed" });

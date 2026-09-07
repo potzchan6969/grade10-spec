@@ -27,8 +27,9 @@ import type {
  * - [`CartItem`](?path=/docs/store-cart-cartitem--docs) — sold out / adjusted / row bones
  * - [`CartItemSlot`](?path=/docs/store-cart-cartitemslot--docs) — empty placeholder
  *
- * App handoff: wire `onApplyPromo` / `onSelectHeldPromo` / `onApplyPoints` onto
- * the Shopify draft; `onCheckout` redirects. Copy must say promo code, not coupon.
+ * App handoff: checkout is members-only (no guest checkout). Wire
+ * `onApplyPromo` / `onSelectHeldPromo` / `onApplyPoints` onto the Shopify
+ * draft; `onCheckout` redirects. Copy must say promo code, not coupon.
  */
 const meta = {
   title: "Store Cart/CartDrawer",
@@ -45,6 +46,9 @@ const meta = {
     estimatedTotal: "HK$42,700.00",
     shippingEstimate: "TBD",
     copy: DEFAULT_CART_COPY,
+    pointsState: { status: "collapsed" },
+    pointsBalanceLabel: "1,200 pts · up to HK$1,200",
+    heldPromoCodes: SAMPLE_HELD_PROMO_CODES,
   },
 } satisfies Meta<typeof CartDrawer>;
 
@@ -82,6 +86,12 @@ export const Default: Story = {
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: "Proceed to Checkout" }),
+    ).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: /Select or enter code/i }),
+    ).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: /Use points/i }),
     ).toBeInTheDocument();
     // 2 items + 3 placeholder slots
     const slots = canvas.getAllByLabelText("Add more items to cart");
@@ -262,19 +272,6 @@ export const MemberPromoAndPoints: Story = {
       canvas.getByRole("button", { name: /Use points/i }),
     ).toBeInTheDocument();
     expect(canvas.queryByText(/coupon/i)).not.toBeInTheDocument();
-  },
-};
-
-/** Guest: compact promo row only — no held list, no points */
-export const GuestPromoOnly: Story = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("button", { name: /Select or enter code/i }),
-    ).toBeInTheDocument();
-    expect(
-      canvas.queryByRole("button", { name: /Use points/i }),
-    ).not.toBeInTheDocument();
   },
 };
 

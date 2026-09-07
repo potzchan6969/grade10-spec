@@ -561,9 +561,10 @@ type CartDrawerFooterProps = {
    */
   promoNotice?: string;
   /**
-   * Points tender for signed-in members. `null` / omit hides points UI
-   * (guests). Does not debit the loyalty ledger — consumer applies a draft
-   * discount only; balance moves when the order is paid.
+   * Points tender. Pass a state object to show Use points; omit or `null` to
+   * hide (e.g. while balance is loading). Checkout is members-only — there is
+   * no guest checkout path. Does not debit the loyalty ledger; the consumer
+   * applies a draft discount only, and the balance moves when the order is paid.
    */
   pointsState?: PointsState | null;
   /** e.g. "1,200 pts · up to HK$1,200" shown while points UI is expanded. */
@@ -577,10 +578,11 @@ type CartDrawerFooterProps = {
   onRemovePoints?: () => void;
   /**
    * Starts checkout. May return a promise (e.g. create Shopify session).
-   * Attach the one applied promo code (typed or held) and any points amount
-   * to the draft order, then redirect to Shopify. The button stays on the
-   * redirecting label until navigation or rejection; the shared component
-   * does not perform the redirect itself.
+   * Checkout is members-only — the app authenticates before opening this
+   * drawer or before `onCheckout` runs. Attach the one applied promo code
+   * (typed or held) and any points amount to the draft order, then redirect
+   * to Shopify. The button stays on the redirecting label until navigation
+   * or rejection; the shared component does not perform the redirect itself.
    */
   onCheckout?: () => Promise<void> | void;
   className?: string;
