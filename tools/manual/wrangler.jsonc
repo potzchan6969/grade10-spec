@@ -5,9 +5,9 @@
   // so the site is static assets, nothing else — editing happens only against
   // a local dev server, never here. dist/_headers gives the JSON artifacts
   // their content type; SPA fallback keeps /p/... deep links working.
-  // dist/viewer/ is the OpenSpec viewer's own page and its answers as files
+  // dist/openspec/ is the OpenSpec viewer's own page and its answers as files
   // (scripts/openspec-viewer/snapshot.sh); it routes by hash, so the one URL
-  // it needs is /viewer/, and the fallback never has to know about it.
+  // it needs is /openspec/, and the fallback never has to know about it.
   "name": "grade10-manual",
   "compatibility_date": "2026-08-01",
   "account_id": "de021143aac704ccbda9c3cd00be261d",

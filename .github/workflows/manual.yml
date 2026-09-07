@@ -5,8 +5,8 @@ name: Manual
 # from the store and redeploys, so the hosted manual is exactly as fresh as
 # the data — all state lives in commits.
 #
-# The OpenSpec viewer rides along under /viewer/: the same page `pnpm spec:view`
-# serves, written by the pinned submodule as files into dist/viewer with every
+# The OpenSpec viewer rides along under /openspec/: the same page `pnpm spec:view`
+# serves, written by the pinned submodule as files into dist/openspec with every
 # answer it would give filed as JSON beside it. It needs the openspec CLI, which
 # the viewer resolves the store through, and the store's full history, which
 # dates every document and every claim on the page.
@@ -115,9 +115,9 @@ jobs:
             echo "## Grade10 Manual → staging"
             echo
             echo "https://spec.grade10-stg.com"
-            echo "https://spec.grade10-stg.com/viewer/"
+            echo "https://spec.grade10-stg.com/openspec/"
             echo
-            echo "Snapshot baked from this commit's store state; the viewer under /viewer/ from the same read."
+            echo "Snapshot baked from this commit's store state; the viewer under /openspec/ from the same read."
             echo
             echo "Ref: \`${{ github.sha }}\`"
           } >> "$GITHUB_STEP_SUMMARY"

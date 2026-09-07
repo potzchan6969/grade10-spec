@@ -12,7 +12,7 @@ type Mount = { hasPage: () => boolean; mounted: () => Handler };
 const VIEWER = new URL("../../../openspec-viewer/", import.meta.url);
 
 /**
- * The OpenSpec viewer under `/viewer/` on the dev server, live.
+ * The OpenSpec viewer under `/openspec/` on the dev server, live.
  *
  * The built site carries the viewer as files a snapshot wrote; the dev server
  * has no build, and a snapshot on disk would show the spec as it was before
@@ -23,7 +23,7 @@ const VIEWER = new URL("../../../openspec-viewer/", import.meta.url);
  *
  * Loaded on the first request rather than at startup, and never fatal: a
  * clone without the submodule initialised, or one that has not built it, gets
- * a page under `/viewer/` saying what to run, and the manual is unaffected.
+ * a page under `/openspec/` saying what to run, and the manual is unaffected.
  * The viewer resolves the store through the openspec CLI, which walks up from
  * wherever it is run to the repository, so starting under `tools/manual` reads
  * the same store `pnpm spec:view` does.
@@ -70,7 +70,7 @@ export function viewerMount(roots: Roots): Handler {
   };
 }
 
-/** A page under `/viewer/` that says what to run, in place of the viewer. */
+/** A page under `/openspec/` that says what to run, in place of the viewer. */
 function explain(title: string, detail: string): Handler {
   const html = `<!doctype html>
 <html lang="en">
