@@ -147,7 +147,7 @@ Which lane a piece of code tests in, and the rules that keep the suites honest.
 
 ### Fake at the boundary the composition root fakes
 
-- Bind `createFixtureApiClient` / `createTrackingStub` through the DI container (`installTestContainer`), keeping the feature's real graph in between
+- Bind the fixture clients through the DI container — `installTestContainer` from `@grade10/frontend-di/testing`, which each package wraps in its own `test/harness.tsx` — keeping the feature's real graph in between
 - Mock a module (`vi.mock("../../auth")`) only for app-shell clients that reach the network at import time
 
 ### Queries and setup
