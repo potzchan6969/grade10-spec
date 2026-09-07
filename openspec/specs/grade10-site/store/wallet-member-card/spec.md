@@ -147,19 +147,21 @@ about anybody.
 - **WHEN** the device fetches it
 - **THEN** the answer names no member, tier or balance
 
-### Requirement: The tables are the store's, and only the wallet service writes them
+### Requirement: The tables are the store's, and each names one writer
 
 `wallet_passes`, `wallet_change_cursor`, and the three Apple pull tables
 `@grade10/wallet-pass/schema` instantiates (`wallet_pass_devices`,
 `wallet_pass_registrations`, `wallet_pass_push_tokens`) SHALL be owned by the
 store, created by both brands' migrations even where only a brand with an
-issuer fills one, and SHALL be pinned to the wallet service as their only
-writer.
+issuer fills one, and each SHALL be pinned to exactly one writer: the pass
+table and the push credential to the store's wallet service, the two Apple
+pull tables to `@grade10/wallet-pass`'s Apple adapter, and the cursor to the
+store's sweeps.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-11 - A write-surface check pins every wallet table's writer
 
 - **WHEN** the write-surfaces check runs
-- **THEN** every wallet table names the wallet service as its sole writer
+- **THEN** every wallet table names exactly one writer
 
 ### Requirement: A half-configured wallet says which secret is missing
 
