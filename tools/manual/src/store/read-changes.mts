@@ -13,6 +13,8 @@ import type {
   TaskLine,
 } from "../api/types.ts";
 import {
+  featureSuitePath,
+  readText,
   readTextIfExists,
   StoreFileError,
   storePath,
@@ -181,15 +183,16 @@ function readChange(
   return entry;
 }
 
-/** The `test-cases.md` beside each delta — the suite QA reviews while the
+/** The feature suite beside each delta — the suite QA reviews while the
  * change is in flight, invisible on every durable surface until archive day.
  * A malformed one is its own channel, the same as a durable suite's. */
 function readSuites(root: string, dir: string): ChangeSuite[] {
   const suites: ChangeSuite[] = [];
   for (const { spec, file } of deltaFiles(root, dir)) {
-    const casesFile = file.replace(/spec\.md$/, "test-cases.md");
-    const text = readTextIfExists(join(root, casesFile));
-    if (text === undefined) continue;
+    const capabilityDir = file.replace(/\/spec\.md$/, "");
+    const casesFile = featureSuitePath(root, capabilityDir);
+    if (casesFile === undefined) continue;
+    const text = readText(join(root, casesFile));
     try {
       const suite = readTestCases(text);
       suites.push({

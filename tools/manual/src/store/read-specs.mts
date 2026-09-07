@@ -10,6 +10,7 @@ import type {
   TestSuiteStatus,
 } from "../api/types.ts";
 import {
+  featureSuitePath,
   readText,
   readTextIfExists,
   StoreFileError,
@@ -151,14 +152,13 @@ function readSpec(
     }
   }
 
-  // The suite has its own channel: a `test-cases.md` nobody can parse is QA's
-  // file, and hanging it on the spec would blank the engineering contract on
-  // every page that embeds it — and blind every rule that reads requirements.
-  const casesPath = `${dir}/test-cases.md`;
-  const cases = readTextIfExists(join(root, casesPath));
-  if (cases !== undefined) {
+  // The suite has its own channel: a suite nobody can parse is QA's file, and
+  // hanging it on the spec would blank the engineering contract on every page
+  // that embeds it — and blind every rule that reads requirements.
+  const casesPath = featureSuitePath(root, dir);
+  if (casesPath !== undefined) {
     try {
-      const suite = readTestCases(cases);
+      const suite = readTestCases(readText(join(root, casesPath)));
       entry.testCases = suite.cases;
       entry.testCasesStatus = suite.status;
       if (suite.outOfSuite.length > 0) entry.outOfSuite = suite.outOfSuite;

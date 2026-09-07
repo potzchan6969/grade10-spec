@@ -9,6 +9,8 @@ import type {
   DeltaSection,
 } from "../api/types.ts";
 import {
+  featureSuitePath,
+  readText,
   readTextIfExists,
   storePath,
   subdirectories,
@@ -276,11 +278,11 @@ function readDelta(
     }
   }
 
-  const casesFile = file.replace(/spec\.md$/, "test-cases.md");
-  const cases = readTextIfExists(join(root, casesFile));
-  if (cases !== undefined) {
+  const capabilityDir = file.replace(/\/spec\.md$/, "");
+  const casesFile = featureSuitePath(root, capabilityDir);
+  if (casesFile !== undefined) {
     try {
-      const suite = readTestCases(cases);
+      const suite = readTestCases(readText(join(root, casesFile)));
       document.suite = {
         status: suite.status,
         cases: suite.cases,

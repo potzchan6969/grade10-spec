@@ -160,7 +160,7 @@ function origin(path) {
     const rest = parts.slice(2);
     const file = rest.pop();
     const capability = rest.join("/");
-    if (file === "test-cases.md") {
+    if (file === "feature-tcs.md" || file === "test-cases.md") {
       return { kind: "test cases", capability, durable: true };
     }
     return { kind: "durable spec", capability, durable: true };
