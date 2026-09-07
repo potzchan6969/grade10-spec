@@ -153,8 +153,11 @@ of them: the phrasing they approve is the phrasing generation will copy.
    Then **recompute the file's header** from the cases, every time:
    `**Status:**` is `approved` when no `draft` remains, `in-review` when at
    least one `actual` or `deprecated` sits beside a `draft`, `pending-review`
-   otherwise. Add `**Reviewed:** <today>` when — and only when — the file
-   reaches `approved`, and remove it if it ever falls back out. Drop the
+   otherwise. Add `**Reviewed:** <today>, tcs-rules r<n>` — the revision the
+   cases were approved under — when and only when the file reaches
+   `approved`, and remove it if it ever falls back out. That revision is what
+   lets the next `/spec-to-tcs` run tell a suite that teaches the current
+   conventions from one frozen under older ones. Drop the
    `**Drafts styled:**` line once no draft is left. The status is derived; it
    is never a judgement you or the reviewer makes. `pnpm run tcs:validate`
    fails a file whose header and cases disagree.

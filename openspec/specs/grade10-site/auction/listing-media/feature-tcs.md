@@ -1,7 +1,7 @@
 # grade10-site/auction/listing-media Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-01, tcs-rules r1
+**Status:** approved
+**Reviewed:** 2026-09-07
 
 ## grade10-site-auction-listing-media-US1: Operator attaches an image to a listing gallery
 
@@ -17,27 +17,36 @@ within the cap admin-listing sets.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
-A draft listing holds only one JPEG in the gallery. Operator has catalogue grant.
+
+* An admin holds the catalogue grant.
+* <listing_1> is a draft with only one JPEG in the gallery.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_1>` | A draft auction listing whose gallery holds exactly one JPEG |
 
 **Steps:**
 
 1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft listing.
-3. Create the listing, then publish it.
-4. Open the listing's public details page.
+2. Open <listing_1>.
+3. Create <listing_1>, then publish it.
+4. Navigate to <listing_1 public url>.
 
 **Expected Results:**
 
-* The listing is published.
+* <listing_1> is published.
 * The details page shows that one image.
 * No empty gallery slots are invented.
 
@@ -47,28 +56,38 @@ A draft listing holds only one JPEG in the gallery. Operator has catalogue grant
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
-A draft listing has fewer than eight media items. Operator has catalogue grant.
+
+* An admin holds the catalogue grant.
+* <listing_2> is a draft with fewer than eight media items.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_2>` | A draft auction listing with fewer than eight media items |
+| `<jpeg_ok>` | charizard-front.jpg, JPEG, under the media size bound |
 
 **Steps:**
 
 1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft listing.
-3. Upload a JPEG under the media size bound into the gallery.
-4. Check the listing on the admin listings surface.
+2. Open <listing_2>.
+3. Upload <jpeg_ok> into the gallery and confirm.
+4. Check <listing_2> on the admin listings surface.
 
 **Expected Results:**
 
-* That image is stored in gallery order.
-* The admin listings surface can show it on that listing.
+* <jpeg_ok> is stored in gallery order.
+* The admin listings surface can show it on <listing_2>.
 
 ### grade10-site-auction-listing-media-US1-TC3-1: Choosing a file shows a preview without uploading
 
@@ -76,28 +95,38 @@ A draft listing has fewer than eight media items. Operator has catalogue grant.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
-A draft listing has an empty gallery slot the operator is filling.
+
+* An admin holds the catalogue grant.
+* <listing_3> is a draft with an empty gallery slot the admin is filling.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_3>` | A draft auction listing with an empty gallery slot being filled |
+| `<jpeg_ok>` | charizard-front.jpg, JPEG, under the media size bound |
 
 **Steps:**
 
 1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft listing's media manager.
-3. Select a JPEG under the media size bound.
+2. Open the media manager for <listing_3>.
+3. Select <jpeg_ok>.
 4. Check the preview and the stored gallery.
 
 **Expected Results:**
 
-* The admin media manager shows a preview of that file.
-* The listing still has no new stored image for that slot.
+* The media manager shows a preview of <jpeg_ok>.
+* <listing_3> still has no new stored image for that slot.
 
 ### grade10-site-auction-listing-media-US1-TC4-1: Confirming the preview stores the image
 
@@ -105,16 +134,26 @@ A draft listing has an empty gallery slot the operator is filling.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
-An operator has selected a JPEG for a draft listing gallery slot and sees its preview.
+
+* An admin holds the catalogue grant.
+* The admin has selected <jpeg_ok> for a <listing_4> gallery slot and sees its preview.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_4>` | A draft auction listing with a selected JPEG preview in one gallery slot |
+| `<jpeg_ok>` | charizard-front.jpg, JPEG, under the media size bound |
 
 **Steps:**
 
@@ -123,7 +162,7 @@ An operator has selected a JPEG for a draft listing gallery slot and sees its pr
 
 **Expected Results:**
 
-* That slot holds the image.
+* That slot holds <jpeg_ok>.
 * The preview is cleared.
 
 ### grade10-site-auction-listing-media-US1-TC5-1: Discarding the preview leaves the gallery unchanged
@@ -132,16 +171,25 @@ An operator has selected a JPEG for a draft listing gallery slot and sees its pr
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
-An operator has selected an image for a draft listing gallery slot and sees its preview.
+
+* An admin holds the catalogue grant.
+* The admin has selected an image for a <listing_5> gallery slot and sees its preview.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_5>` | A draft auction listing with a selected image preview in one gallery slot |
 
 **Steps:**
 
@@ -160,22 +208,32 @@ An operator has selected an image for a draft listing gallery slot and sees its 
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
-A draft listing has eight media items.
+
+* An admin holds the catalogue grant.
+* <listing_6> is a draft with eight media items.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_6>` | A draft auction listing with eight media items |
+| `<jpeg_ok>` | charizard-front.jpg, JPEG, under the media size bound |
 
 **Steps:**
 
 1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft listing.
-3. Upload a ninth image.
+2. Open <listing_6>.
+3. Upload <jpeg_ok> as a ninth image.
 
 **Expected Results:**
 
@@ -188,20 +246,30 @@ A draft listing has eight media items.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
-A draft listing is open in the admin media manager.
+
+* An admin holds the catalogue grant.
+* <listing_7> is a draft open in the admin media manager.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_7>` | A draft auction listing open in the media manager |
+| `<pdf_file>` | grading-report.pdf, PDF |
 
 **Steps:**
 
-1. Upload a PDF as gallery media.
+1. Upload <pdf_file> as gallery media.
 
 **Expected Results:**
 
@@ -214,26 +282,30 @@ A draft listing is open in the admin media manager.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
-A draft listing is open in the admin media manager.
+
+* An admin holds the catalogue grant.
+* <listing_8> is a draft open in the admin media manager.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| File size | larger than 104857600 bytes |
+| `<listing_8>` | A draft auction listing open in the media manager |
+| `<oversized_image>` | An image larger than 100 mebibytes |
 
 **Steps:**
 
-1. Upload an image larger than 104857600 bytes.
+1. Upload <oversized_image>.
 
 **Expected Results:**
 
@@ -246,23 +318,33 @@ A draft listing is open in the admin media manager.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
-A published listing has one gallery image and room under the eight-item cap.
+
+* An admin holds the catalogue grant.
+* <listing_9> is published with one gallery image and room under the eight-item cap.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_9>` | A published auction listing with one gallery image and room under the cap |
+| `<jpeg_second>` | A second JPEG under the media size bound |
 
 **Steps:**
 
 1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Upload a second JPEG.
-4. Open the listing's public details page.
+2. Open <listing_9>.
+3. Upload <jpeg_second> and confirm.
+4. Navigate to <listing_9 public url>.
 
 **Expected Results:**
 
@@ -275,22 +357,32 @@ A published listing has one gallery image and room under the eight-item cap.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
-A closed listing has one gallery image.
+
+* An admin holds the catalogue grant.
+* <listing_10> is closed with one gallery image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_10>` | A closed auction listing with one gallery image |
+| `<jpeg_ok>` | charizard-front.jpg, JPEG, under the media size bound |
 
 **Steps:**
 
 1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Upload another image.
+2. Open <listing_10>.
+3. Upload <jpeg_ok>.
 
 **Expected Results:**
 
@@ -312,21 +404,30 @@ reveal it at zoom size on hover,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-02
 
 **Pre-conditions:**
-A draft listing has a stored gallery image. Operator has catalogue grant.
+
+* An admin holds the catalogue grant.
+* <listing_11> is a draft with a stored gallery image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_11>` | A draft auction listing with one stored gallery image |
 
 **Steps:**
 
 1. Navigate to <grade10 auction admin listings url>.
-2. Open the media manager for that listing.
+2. Open the media manager for <listing_11>.
 3. Check the stored image.
 
 **Expected Results:**
@@ -339,16 +440,25 @@ A draft listing has a stored gallery image. Operator has catalogue grant.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-02
 
 **Pre-conditions:**
-A draft listing with a stored gallery image is open in the media manager.
+
+* An admin holds the catalogue grant.
+* <listing_26> is open in the media manager with a stored gallery image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_26>` | A draft auction listing with one stored gallery image, open in the media manager |
 
 **Steps:**
 
@@ -366,16 +476,25 @@ A draft listing with a stored gallery image is open in the media manager.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-02
 
 **Pre-conditions:**
-The zoom-size preview is visible from hovering the magnify control.
+
+* An admin holds the catalogue grant.
+* The zoom-size preview for <listing_27> is visible from hovering the magnify control.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_27>` | A draft auction listing with one stored gallery image; zoom preview is visible |
 
 **Steps:**
 
@@ -401,27 +520,37 @@ listing with no image at all.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-03
 
 **Pre-conditions:**
-A published listing has a gallery image at a position. Operator has catalogue grant.
+
+* An admin holds the catalogue grant.
+* <listing_12> is published with a gallery image at a position.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_12>` | A published auction listing with at least one gallery image |
+| `<jpeg_replacement>` | A replacement JPEG under the media size bound |
 
 **Steps:**
 
 1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Replace that image.
+2. Open <listing_12>.
+3. Replace that image with <jpeg_replacement> and confirm.
 4. Check that position and the other gallery items.
 
 **Expected Results:**
 
-* That position holds the new image.
+* That position holds <jpeg_replacement>.
 * Other gallery items are unchanged.
 
 ### grade10-site-auction-listing-media-US3-TC2-1: Removing the last image after create is refused
@@ -430,21 +559,30 @@ A published listing has a gallery image at a position. Operator has catalogue gr
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-03
 
 **Pre-conditions:**
-A published listing has one JPEG.
+
+* An admin holds the catalogue grant.
+* <listing_13> is published with one JPEG.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_13>` | A published auction listing with exactly one JPEG |
 
 **Steps:**
 
 1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
+2. Open <listing_13>.
 3. Remove that JPEG.
 
 **Expected Results:**
@@ -458,27 +596,37 @@ A published listing has one JPEG.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-03
 
 **Pre-conditions:**
-A draft listing has one gallery image.
+
+* An admin holds the catalogue grant.
+* <listing_14> is a draft with one gallery image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_14>` | A draft auction listing with one gallery image |
+| `<jpeg_replacement>` | A replacement JPEG under the media size bound |
 
 **Steps:**
 
 1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft listing.
-3. Replace the gallery image.
+2. Open <listing_14>.
+3. Replace the gallery image with <jpeg_replacement> and confirm.
 4. Remove it.
 
 **Expected Results:**
 
-* The listing has no gallery images.
+* <listing_14> has no gallery images.
 
 ---
 
@@ -495,31 +643,35 @@ title when I have written none.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
+* **Status:** actual
+* **Behaviour:** positive
 * **Type:** usability
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-04
 
 **Pre-conditions:**
-A published listing titled "1999 Charizard, PSA 10" whose first gallery image has no alt text.
+
+* <listing_15> is published titled "1999 Charizard, PSA 10".
+* Its first gallery image has no alt text.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Listing title | 1999 Charizard, PSA 10 |
+| `<listing_15>` | A published auction listing titled "1999 Charizard, PSA 10"; first gallery image has no alt |
+| `<listing title>` | 1999 Charizard, PSA 10 |
 
 **Steps:**
 
-1. Navigate to <that listing's public url>.
+1. Navigate to <listing_15 public url>.
 2. Check the first gallery image's accessible name.
 
 **Expected Results:**
 
-* That image's accessible name is "1999 Charizard, PSA 10".
+* That image's accessible name is <listing title>.
 
 ### grade10-site-auction-listing-media-US4-TC2-1: Supplied alt is shown
 
@@ -527,31 +679,35 @@ A published listing titled "1999 Charizard, PSA 10" whose first gallery image ha
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-04
 
 **Pre-conditions:**
-A published listing whose first gallery image has alt text "Holo Charizard, front of slab".
+
+* <listing_16> is published.
+* Its first gallery image has alt text <alt text>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Alt text | Holo Charizard, front of slab |
+| `<listing_16>` | A published auction listing whose first gallery image has alt text |
+| `<alt text>` | Holo Charizard, front of slab |
 
 **Steps:**
 
-1. Navigate to <that listing's public url>.
+1. Navigate to <listing_16 public url>.
 2. Check the first gallery image's accessible name.
 
 **Expected Results:**
 
-* That image's accessible name is "Holo Charizard, front of slab".
+* That image's accessible name is <alt text>.
 
 ### grade10-site-auction-listing-media-US4-TC3-1: Alt can be edited on a published listing
 
@@ -559,28 +715,38 @@ A published listing whose first gallery image has alt text "Holo Charizard, fron
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-04
 
 **Pre-conditions:**
-A published listing has a gallery image. Operator has catalogue grant.
+
+* An admin holds the catalogue grant.
+* <listing_17> is published with a gallery image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_17>` | A published auction listing with a gallery image |
+| `<alt text>` | Updated accessible name for the image |
 
 **Steps:**
 
 1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Change only that image's alt text.
-4. Check the image bytes and the public details page.
+2. Open <listing_17>.
+3. Change only that image's alt text to <alt text>.
+4. Check the image bytes and <listing_17 public url>.
 
 **Expected Results:**
 
 * The image bytes are unchanged.
-* The details page uses the new alt text.
+* The details page uses <alt text>.
 
 ### grade10-site-auction-listing-media-US4-TC4-1: Over-length alt is refused
 
@@ -588,25 +754,36 @@ A published listing has a gallery image. Operator has catalogue grant.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-04
 
 **Pre-conditions:**
-A draft listing is open. The gallery image already has alt text.
+
+* An admin holds the catalogue grant.
+* <listing_18> is a draft open with a gallery image that already has alt text.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_18>` | A draft auction listing open; gallery image already has alt text |
+| `<previous alt>` | The alt text already stored on that image |
+| `<alt text>` | A string longer than 200 characters |
 
 **Steps:**
 
-1. Set alt text longer than 200 characters.
+1. Set alt text to <alt text>.
 
 **Expected Results:**
 
 * The edit is refused.
-* Any previous alt text is unchanged.
+* The stored alt remains <previous alt>.
 
 ---
 
@@ -623,21 +800,30 @@ details page.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
 
 **Pre-conditions:**
-A published listing whose gallery is image A then image B.
+
+* <listing_19> is published.
+* Its gallery is image A then image B.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_19>` | A published auction listing whose gallery is image A then image B |
 
 **Steps:**
 
 1. Navigate to <grade10 auction url>.
-2. Find that listing's row.
+2. Find <listing_19>'s row.
 3. Check which image is requested and shown.
 
 **Expected Results:**
@@ -652,20 +838,28 @@ A published listing whose gallery is image A then image B.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
 
 **Pre-conditions:**
-A published listing with two gallery images.
+
+* <listing_20> is published with two gallery images.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_20>` | A published auction listing with two gallery images |
 
 **Steps:**
 
-1. Navigate to <that listing's public url>.
+1. Navigate to <listing_20 public url>.
 2. Check the thumbnail strip, the main frame, and zoom.
 
 **Expected Results:**
@@ -680,20 +874,29 @@ A published listing with two gallery images.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-media-US-05
 
 **Pre-conditions:**
-A published gallery image is available at `card`, `detail`, `thumb`, and `zoom`.
+
+* A published gallery image on <listing_21> is available at `card`, `detail`, `thumb`, and `zoom`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_21>` | A published auction listing with a gallery image |
+| `<unknown size>` | A size name other than `card`, `detail`, `thumb`, or `zoom` |
 
 **Steps:**
 
-1. Request that image at a size other than `card`, `detail`, `thumb`, or `zoom`.
+1. Request that image at <unknown size>.
 2. Request an image that does not exist.
 
 **Expected Results:**
@@ -706,21 +909,29 @@ A published gallery image is available at `card`, `detail`, `thumb`, and `zoom`.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
 
 **Pre-conditions:**
-A published listing has no gallery images.
+
+* <listing_22> is published with no gallery images.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_22>` | A published auction listing with no gallery images |
 
 **Steps:**
 
 1. Navigate to <grade10 auction url>.
-2. Find that listing's row.
+2. Find <listing_22>'s row.
 
 **Expected Results:**
 
@@ -733,20 +944,28 @@ A published listing has no gallery images.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
 
 **Pre-conditions:**
-A published listing with three gallery images uploaded in order A, B, C.
+
+* <listing_23> is published with three gallery images uploaded in order A, B, C.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_23>` | A published auction listing with gallery images A, B, C in that order |
 
 **Steps:**
 
-1. Navigate to <that listing's public url>.
+1. Navigate to <listing_23 public url>.
 2. Check the gallery.
 
 **Expected Results:**
@@ -759,20 +978,28 @@ A published listing with three gallery images uploaded in order A, B, C.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
 
 **Pre-conditions:**
-A published listing with only one gallery image.
+
+* <listing_24> is published with only one gallery image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_24>` | A published auction listing with exactly one gallery image |
 
 **Steps:**
 
-1. Navigate to <that listing's public url>.
+1. Navigate to <listing_24 public url>.
 2. Check the gallery.
 
 **Expected Results:**
@@ -786,20 +1013,28 @@ A published listing with only one gallery image.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
 
 **Pre-conditions:**
-A published listing with no gallery images.
+
+* <listing_25> is published with no gallery images.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_25>` | A published auction listing with no gallery images |
 
 **Steps:**
 
-1. Navigate to <that listing's public url>.
+1. Navigate to <listing_25 public url>.
 2. Check the page and the gallery.
 
 **Expected Results:**

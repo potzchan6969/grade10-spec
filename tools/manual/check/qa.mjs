@@ -51,8 +51,10 @@ function suiteOf(spec) {
 }
 
 function checkSuite(ctx, spec, dir) {
-  const file = `${dir}/test-cases.md`;
-  if (spec.testCasesError || !existsSync(join(ctx.roots.store, file))) return;
+  const file = ["feature-tcs.md", "test-cases.md"]
+    .map((name) => `${dir}/${name}`)
+    .find((path) => existsSync(join(ctx.roots.store, path)));
+  if (!file || spec.testCasesError) return;
   const suite = suiteOf(spec);
   const issued = scenarioIds(spec);
   // A case traces the journey it walks, and reaches the scenarios that

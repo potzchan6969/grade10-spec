@@ -1,7 +1,7 @@
 # grade10-site/auction Cross-Feature E2E Test Cases
 
 **Status:** approved
-**Reviewed:** 2026-09-04
+**Reviewed:** 2026-09-04, tcs-rules r2
 
 ## grade10-site-auction-e2e-US01: Operator publishes a gallery a collector can shop
 

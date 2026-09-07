@@ -81,6 +81,20 @@ export function readTextIfExists(file: string): string | undefined {
   return existsSync(file) ? readText(file) : undefined;
 }
 
+/** Feature suite beside a capability: prefer `feature-tcs.md`, keep reading
+ * legacy `test-cases.md` until that file is renamed. Returns the
+ * store-relative path when one exists. */
+export function featureSuitePath(
+  root: string,
+  dir: string,
+): string | undefined {
+  for (const name of ["feature-tcs.md", "test-cases.md"] as const) {
+    const relative = `${dir}/${name}`;
+    if (existsSync(join(root, relative))) return relative;
+  }
+  return undefined;
+}
+
 export function subdirectories(dir: string): string[] {
   if (!existsSync(dir)) return [];
   return readdirSync(dir, { withFileTypes: true })
