@@ -63,6 +63,8 @@ auth_users 1──* shipping_addresses
     └──(selected address snapshot)── auction_orders 1──* auction_invoices 1──* auction_invoice_log
                                       │ 1──1 fulfilments 1──* fulfilment_log
                                       └──* auction_order_notification_log
+
+listings 1──1 auction_orders
     ├──* bids ──* payment_holds
     └──* close_work / release_work state rows
 
