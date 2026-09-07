@@ -10,6 +10,11 @@ at the account's bids address and belongs to the storefront account alone —
 no input a collector supplies reads anyone else's record, and there is no
 control to delete or hide an entry, because the record is the audit.
 
+In My Auctions, this is the Bidding tab. The [auction
+record](/p/grade10-site/auction/account-record) owns the surrounding account
+navigation, the Watching tab, and its account-level presentation; this
+capability owns the Bidding index and the detailed story behind each listing.
+
 ## The index
 
 Every listing the account bid on — by hand or through an auto-bid — appears

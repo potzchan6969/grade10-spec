@@ -3,8 +3,11 @@
 A signed-in collector's own record of the auction listings they watch and the
 listings they have bid on: how a watch is made and removed, what each page
 tells them about a listing's standing, and what a winner and a losing bidder
-are told once a listing closes. Owner-only — nobody but the collector sees
-their record.
+are told once a listing closes. The record owns the Watching tab, the
+account-level Bidding grouping, and the post-close projections; the detailed
+Bidding index and listing history remain the contract of
+`grade10-site/auction/bidding-history`. Owner-only — nobody but the collector
+sees their record.
 
 ## Feature set
 
@@ -20,6 +23,9 @@ their record.
   - Ordering and the bid marker: puts the next close first and hands a listing
     the collector already bid on over to the Bidding page.
 - **The Bidding page**
+  - Tab boundary: provides the account entry point and account-level groups;
+    the detailed index, filters, and listing story come from
+    `grade10-site/auction/bidding-history`.
   - Standing while open: says whether the collector still leads, and what the
     next valid bid must clear when they do not.
   - Three groups: separates the listings that still need the collector from the
@@ -181,6 +187,11 @@ SHALL NOT remove it from the Bidding page.
 
 ### Requirement: A bidder's standing while a listing is open
 
+A Bidding page row SHALL be an account-facing summary. The detailed index,
+private action log, and listing chronology SHALL follow the
+`grade10-site/auction/bidding-history` contract; this capability SHALL NOT
+create a second bidding history or event log.
+
 A listing on the Bidding page whose bidding window is open SHALL carry exactly
 one of these states.
 
@@ -227,10 +238,12 @@ code.
 
 ### Requirement: The Bidding page groups by what is still owed
 
-The Bidding page SHALL place every listing the collector has bid on into
-exactly one of three groups: **Active** while its bidding window is open, **Won**
-when the collector is its winner, and **Didn't win** for every other closed
-listing they bid on.
+The account record SHALL place every listing the collector has bid on into
+exactly one of three account-level groups: **Active** while its bidding window
+is open, **Won** when the collector is its winner, and **Didn't win** for every
+other closed listing they bid on. The durable Bidding History index remains the
+source for listing-level history and its Active/Completed filtering; these
+groups are the My Auctions presentation of that record.
 
 #### Scenario: grade10-site-auction-account-record-SC-18 - A won listing sits under Won
 
