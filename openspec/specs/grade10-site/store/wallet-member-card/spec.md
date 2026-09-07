@@ -27,8 +27,8 @@ asks to be erased.
     discharges it
 - Erasure
   - A scrub plus the same debt: the row stays armed and empty
-- Shared tables, one writer
-  - The store's schema holds them; only the wallet service writes them
+- Shared tables, one writer each
+  - The store's schema holds them; each names exactly one writer
 - Configuration
   - A half-configured wallet names the missing secret rather than issuing a
     pass nobody can read
