@@ -65,6 +65,17 @@ export type NavProduct = NavItem & {
 
 export type NavGroup = { title: string; products: NavProduct[] };
 
+/**
+ * A group holding exactly one product whose own title repeats the group's —
+ * the group already says what a product branch would, so nesting one under
+ * it doubles a row for nothing. The nav renders this group's product flat,
+ * with no branch of its own to expand.
+ */
+export function soleProduct(group: NavGroup): NavProduct | null {
+  const [only, second] = group.products;
+  return only && !second && only.title === group.title ? only : null;
+}
+
 export type NavTopicGroup = { title: string; topics: NavItem[] };
 
 export type ManualIndex = {

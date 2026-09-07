@@ -14,7 +14,7 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router";
 import type { Incubating, NavGroup, NavItem, NavProduct } from "../api/derive";
-import { buildIndex, REFERENCES_ROUTE } from "../api/derive";
+import { buildIndex, REFERENCES_ROUTE, soleProduct } from "../api/derive";
 import { useSnapshot } from "../api/snapshot-provider";
 import { CapabilityPip } from "../blocks/capability-status";
 import { browserKeyStore, STORAGE } from "../editor/config";
@@ -250,6 +250,7 @@ function GroupSection({
   onNavigate: () => void;
 }) {
   const collapsed = memory.memory.shut.includes(group.title);
+  const flat = soleProduct(group);
 
   return (
     <div>
@@ -260,18 +261,47 @@ function GroupSection({
       />
       {collapsed ? null : (
         <ul className="mt-1 space-y-0.5 pl-5">
-          {group.products.map((product) => (
-            <ProductBranch
-              branchKey={`${group.title}/${product.id}`}
-              key={product.id}
-              memory={memory}
-              onNavigate={onNavigate}
-              product={product}
-            />
-          ))}
+          {flat ? (
+            <CapabilityRows onNavigate={onNavigate} product={flat} />
+          ) : (
+            group.products.map((product) => (
+              <ProductBranch
+                branchKey={`${group.title}/${product.id}`}
+                key={product.id}
+                memory={memory}
+                onNavigate={onNavigate}
+                product={product}
+              />
+            ))
+          )}
         </ul>
       )}
     </div>
+  );
+}
+
+/** A product's capabilities and incubating entries, as the `<li>` rows either
+ * a branch nests or a flattened group lists directly. */
+function CapabilityRows({
+  product,
+  onNavigate,
+}: {
+  product: NavProduct;
+  onNavigate: () => void;
+}) {
+  return (
+    <>
+      {product.capabilities.map((capability) => (
+        <li key={capability.id}>
+          <LeafLink item={capability} onNavigate={onNavigate} />
+        </li>
+      ))}
+      {product.incubating.map((one) => (
+        <li key={one.specId}>
+          <IncubatingLink incubating={one} onNavigate={onNavigate} />
+        </li>
+      ))}
+    </>
   );
 }
 
@@ -340,16 +370,7 @@ function ProductBranch({
 
       {expanded && expandable ? (
         <ul className="mt-0.5 ml-3 space-y-0.5 border-border-subtle border-l pl-2">
-          {product.capabilities.map((capability) => (
-            <li key={capability.id}>
-              <LeafLink item={capability} onNavigate={onNavigate} />
-            </li>
-          ))}
-          {product.incubating.map((one) => (
-            <li key={one.specId}>
-              <IncubatingLink incubating={one} onNavigate={onNavigate} />
-            </li>
-          ))}
+          <CapabilityRows onNavigate={onNavigate} product={product} />
         </ul>
       ) : null}
     </li>
