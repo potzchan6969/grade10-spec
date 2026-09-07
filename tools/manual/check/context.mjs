@@ -13,6 +13,11 @@ import { readText } from "../src/store/disk.mts";
 export const RULES = [
   { key: "canonical", level: "fail", title: "Pages parse and are canonical" },
   { key: "reference", level: "fail", title: "References resolve" },
+  {
+    key: "detail",
+    level: "fail",
+    title: "Detail blocks whose titles collide",
+  },
   { key: "unreferenced", level: "fail", title: "Durable specs no page shows" },
   {
     key: "page",

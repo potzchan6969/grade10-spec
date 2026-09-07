@@ -1,9 +1,11 @@
 /*
  * RULES: a page parses and is canonical, every pointer in it names something
- * on disk, and a capability page keeps its acceptance shelf.
+ * on disk, no two of its details anchor alike, and a capability page keeps its
+ * acceptance shelf.
  */
 import { existsSync } from "node:fs";
 import { join } from "node:path";
+import { slugify } from "../src/api/paths.ts";
 import { findRequirement } from "../src/api/requirements.ts";
 import { fileKeyOf } from "../src/blocks/design-drift.ts";
 import { parsePage, serializePage } from "../src/content/grammar.ts";
@@ -50,7 +52,29 @@ export function checkPages(ctx, pages) {
     for (const block of everyBlock(page.ast.blocks)) {
       checkBlock(ctx, page.path, block);
     }
+    checkDetails(ctx, page);
     checkRefs(ctx, page);
+  }
+}
+
+/** The renderer anchors a detail at `detail-<slug of its title>`, so two
+ * titles that slug alike on one page take the same anchor and a deep link
+ * opens whichever came first. */
+function checkDetails(ctx, page) {
+  const seen = new Map();
+  for (const block of everyBlock(page.ast.blocks)) {
+    if (block.type !== "detail") continue;
+    const anchor = slugify(block.title);
+    const earlier = seen.get(anchor);
+    if (earlier === undefined) {
+      seen.set(anchor, block);
+      continue;
+    }
+    ctx.add(
+      "detail",
+      page.path,
+      `${label(earlier, "title")} and ${label(block, "title")} share the anchor \`#detail-${anchor}\``,
+    );
   }
 }
 

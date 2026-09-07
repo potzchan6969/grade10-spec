@@ -10,7 +10,8 @@
  *
  * FAIL = a page lies about the store: it does not parse, it is not the
  *        canonical text the editor would write back, a reference names
- *        nothing on disk, a durable spec has no page, a product or topic has
+ *        nothing on disk, two of its details anchor alike, a durable spec has
+ *        no page, a product or topic has
  *        no landing page, or a store file the readers could not parse. One
  *        family is about acceptance: a case tracing a scenario the spec does
  *        not issue, an approved suite holding a draft, a journey accepted by
