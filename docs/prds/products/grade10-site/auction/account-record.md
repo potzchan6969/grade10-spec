@@ -23,6 +23,12 @@ Bidding in one step; the page never reports bidder standing itself.
 
 ## Bidding
 
+The Bidding tab is the account entry point for the durable [Bidding
+History](/p/grade10-site/auction/bidding-history) record. Account record owns
+the tabs, account-level groups, and collector-facing post-close projections;
+Bidding History owns the one-per-listing index, its filters, and the private
+chronological story.
+
 While a lot is open, the row answers where the collector stands: Leading,
 Outbid with the minimum next valid bid, Bid submitted, or Bid not accepted —
 naming whether the bid was below the minimum, the window had closed, or the

@@ -90,8 +90,11 @@ No breaking changes. No existing requirement's behavior changes; the
 
 - `grade10-site/auction/account-record`: a signed-in collector's own record
   of the listings they watch and the listings they have bid on — what it holds,
-  how a watch is added and removed, the states each page distinguishes, and what
-  a winner and a losing bidder are told after a close.
+  how a watch is added and removed, the account-level states and groups each
+  page distinguishes, and what a winner and a losing bidder are told after a
+  close. Its Bidding tab is the account entry point to the existing
+  `grade10-site/auction/bidding-history` contract, which owns the detailed
+  index, filters, private events, and listing chronology.
 - `shared/ui/auction-record`: the components `@grade10/ui` exports for the
   surface and what each is responsible for. Content and product state reach them
   through props, as with every block in that package. Named `auction-record`,
