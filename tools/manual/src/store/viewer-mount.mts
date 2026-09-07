@@ -5,7 +5,7 @@ import type { Roots } from "./roots.mts";
 type Next = () => void;
 type Handler = (req: IncomingMessage, res: ServerResponse, next?: Next) => void;
 
-/** The half of the viewer's `server/mount.mjs` this reads. */
+/** The half of the viewer's `lib/mount.mjs` this reads. */
 type Mount = { hasPage: () => boolean; mounted: () => Handler };
 
 /** The submodule, from here: `tools/manual/src/store` up to `tools/`. */
@@ -39,7 +39,7 @@ export function viewerMount(roots: Roots): Handler {
     let mount: Mount;
     try {
       mount = (await import(
-        pathToFileURL(new URL("server/mount.mjs", VIEWER).pathname).href
+        pathToFileURL(new URL("lib/mount.mjs", VIEWER).pathname).href
       )) as Mount;
     } catch {
       return explain(
