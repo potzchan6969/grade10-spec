@@ -12,7 +12,7 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Info } from "@phosphor-icons/react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type FormEvent, type KeyboardEvent } from "react";
 import type { ShippedLocale } from "../../lib/format-datetime";
 import {
   formatMoney,
@@ -21,11 +21,11 @@ import {
 } from "../../lib/format-money";
 import {
   isMaximumBelowFloor,
-  moneyDraftFromMinor,
   parseExactMoneyDraftToMinor,
   resolveMaximumFloor,
   sanitizeMoneyDraft,
   validateCommittedMaximumMinor,
+  wholeMajorDraftFromMinor,
 } from "./listing-bid-money";
 import type { ListingAuctionBidView } from "./types";
 
@@ -267,8 +267,21 @@ function ListingQuickMaximumBidActions({
     }
   }
 
+  function handleCustomKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "." || event.key === ",") {
+      event.preventDefault();
+    }
+  }
+
+  function handleCustomBeforeInput(event: FormEvent<HTMLInputElement>) {
+    const data = (event.nativeEvent as InputEvent).data;
+    if (data === "." || data === ",") {
+      event.preventDefault();
+    }
+  }
+
   function handleUseMinimum() {
-    setCustomDraft(moneyDraftFromMinor(floorMaximumMinor, view.currency));
+    setCustomDraft(wholeMajorDraftFromMinor(floorMaximumMinor, view.currency));
     setSelectedPresetKey(null);
   }
 
@@ -378,10 +391,12 @@ function ListingQuickMaximumBidActions({
         <NumberInput
           aria-label={customPlaceholder}
           className={cn("w-full", !customActive && "opacity-50")}
-          inputMode="decimal"
+          inputMode="numeric"
           message={helperMessage}
+          onBeforeInput={handleCustomBeforeInput}
           onChange={(event) => handleCustomChange(event.target.value)}
           onClear={customActive ? handleClearCustom : undefined}
+          onKeyDown={handleCustomKeyDown}
           placeholder={customPlaceholder}
           prefix={formatMoneyPrefix(view.currency, { locale })}
           status={customInvalid ? "error" : "default"}

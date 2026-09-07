@@ -101,6 +101,7 @@ export {
   resolveMaximumFloor,
   sanitizeMoneyDraft,
   validateCommittedMaximumMinor,
+  wholeMajorDraftFromMinor,
 } from "./blocks/auction-listing/listing-bid-money";
 // shared/ui/auction-listing
 export {
