@@ -108,8 +108,9 @@ carries only its digest.
 ::cases{id="grade10-site/loyalty/programme"}
 
 :::detail{title="For engineers" for="engineer"}
-The programme is one config, `apps/backend/grade10/loyalty/src/program.ts`,
-parsed for every environment at assembly; an unknown key fails the boot.
+The programme is one config, `GRADE10_LOYALTY_PROGRAM` in `packages/app-env`,
+handed to the worker in `apps/backend/grade10/loyalty/src/index.ts` and parsed
+for every environment at assembly; an unknown key fails the boot.
 Eligibility is computed at the order's paid transition and stamped once onto
 the order — from the provider's itemised lines where it itemises, otherwise
 from the store's own items with the whole-order discount apportioned by
