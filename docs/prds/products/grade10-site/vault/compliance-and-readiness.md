@@ -213,7 +213,7 @@ holds until they do.
 - **Two-factor** — `packages/app-env/src/twoFactor.ts`; the step-up stamp is
   read on `packages/grade10-auth/contracts/src/elevation.ts` and its
   **12-hour** life is `STEP_UP_TTL_SECONDS` in
-  `packages/grade10-auth/backend/src/core/stepUp.ts`
+  `packages/grade10-auth/backend/src/stepUp.ts`
 - **Audits** —
   [document-handling audit](https://github.com/9gag/grade10/blob/main/docs/qa/vault.md),
   [production-readiness review](https://github.com/9gag/grade10/blob/main/docs/qa/vault-production-review.md),

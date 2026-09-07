@@ -3,7 +3,7 @@ title: Admin Access Control
 order: 1
 ---
 
-Three layers gate every admin surface, all fail-closed: role permissions, a second factor, and a tamper-evident audit trail. Enforcement lives in `packages/grade10-auth/contracts/src/rbac.ts`, `packages/worker/src/trpc.ts` (elevated ladder), and `packages/grade10-auth/backend/src/core/securityHooks.ts`.
+Three layers gate every admin surface, all fail-closed: role permissions, a second factor, and a tamper-evident audit trail. Enforcement lives in `packages/grade10-auth/contracts/src/rbac.ts`, `packages/worker/src/trpc.ts` (elevated ladder), and `packages/grade10-auth/backend/src/securityHooks.ts`.
 
 ## Roles and permissions
 
