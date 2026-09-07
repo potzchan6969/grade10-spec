@@ -14,6 +14,7 @@
 - `grade10-admin-console-api-docs-SC-07` — A procedure's detail shows its wire path and fields
 - `grade10-admin-console-api-docs-SC-09` — An elevated procedure names its grant
 - `grade10-admin-console-api-docs-SC-10` — A fresh-session call is told apart from a session call
+- `grade10-admin-console-api-docs-SC-16` — The page says who each caller word means
 - `grade10-admin-console-api-docs-SC-14` — A forwarded procedure names the service that does its work
 
 ### grade10-admin-console-api-docs-US-02: QA reviewer traces what a grant unlocks
@@ -26,6 +27,7 @@
 
 - `grade10-admin-console-api-docs-SC-03` — The rail names every service with its count
 - `grade10-admin-console-api-docs-SC-08` — A filter narrows every service by path or grant
+- `grade10-admin-console-api-docs-SC-15` — An audience narrows every service
 
 ### grade10-admin-console-api-docs-US-03: Engineer relies on the page after a contract changed
 

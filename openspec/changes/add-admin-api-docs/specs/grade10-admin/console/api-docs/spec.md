@@ -19,7 +19,8 @@ non-production builds, composed from the console's own vocabulary
   - Services and routers: a rail naming each service, the routers under it, and how many procedures each holds
   - Procedure list: a router's procedures with kind, caller, and a summary of input and output
   - Procedure detail: one procedure's wire path, caller, and field tables for input and output
-  - Filter: narrow every service at once by procedure path or by grant
+  - Filter: narrow every service at once by procedure path, by grant, or to one audience
+  - Audience: who each caller word means — the sites, this console, or a machine — said beside the filter
 - Honesty of the record
   - Caller in four words: public, session, session · fresh, elevated with its grant
   - Undeclared output: a procedure with no output shape says so, and the service counts how many do
@@ -111,7 +112,7 @@ An engineer reads the surface in this order:
 1. Pick a service in the rail; its routers unfold beneath it with their counts.
 2. Pick a router; its procedures list with kind, caller, and a one-line summary of input fields and of output.
 3. Pick a procedure; its detail shows the dotted path, the wire path the call lands on, the caller with any grant, and a field table each for input and output.
-4. Type in the filter to narrow every service at once by dotted path or by grant; the rail counts and the list follow the filter.
+4. Type in the filter to narrow every service at once by dotted path or by grant, or pick an audience to keep only the procedures it calls; the rail counts and the list follow the filter.
 
 A field table SHALL show, per field: the name, whether it is required, its
 type, and its constraints — bounds, length, pattern, allowed values, and
@@ -140,6 +141,13 @@ named by the value that tells them apart where there is one.
 - **AND** the rail's counts follow the narrowed lists
 - **AND** typing part of a dotted path narrows the same way
 
+#### Scenario: grade10-admin-console-api-docs-SC-15 - An audience narrows every service
+
+- **WHEN** the engineer picks the console audience
+- **THEN** every service's list narrows to its elevated procedures
+- **AND** the rail's counts follow the narrowed lists
+- **AND** typed text narrows what the audience left
+
 ### Requirement: The caller is said in four words
 
 Each procedure SHALL name its caller with exactly one of the words below.
@@ -155,6 +163,17 @@ An elevated caller SHALL always carry its grant beside the word.
 A call made by a service principal rather than a person SHALL be named as
 such, with the principal's kind, in place of the four words.
 
+The surface SHALL say who each caller word means — which app holds the
+client — as an audience, in the reader's words beside the filter. A worker
+never calls another over these ladders, so the surface SHALL say that no
+procedure it lists is internal.
+
+| Audience | Caller words | Who holds the client |
+| --- | --- | --- |
+| Site | public, session, session · fresh | The brand's customer-facing sites, signed in or not |
+| Console | elevated | This console, holding the grant beside the word |
+| Machine | a service principal | A service principal in place of a person; the till today |
+
 #### Scenario: grade10-admin-console-api-docs-SC-09 - An elevated procedure names its grant
 
 - **WHEN** the engineer reads a procedure that requires an operator grant
@@ -166,6 +185,12 @@ such, with the principal's kind, in place of the four words.
 - **GIVEN** two procedures on one router, one accepting any signed-in session and one requiring a recently proven session
 - **WHEN** both are listed
 - **THEN** the first reads session and the second reads session · fresh
+
+#### Scenario: grade10-admin-console-api-docs-SC-16 - The page says who each caller word means
+
+- **WHEN** an engineer opens the surface
+- **THEN** the page names the three audiences, each with the caller words under it and who holds the client
+- **AND** the page says that no procedure it lists is internal
 
 ### Requirement: An undeclared output is said, not invented
 

@@ -26,7 +26,8 @@ committed documents, never a running backend.
 - [x] 3.2 Build the page under `src/pages/api-docs/` from the console vocabulary per `ui-design.md`: `SectionHeader` naming the build commit (`grade10-admin-console-api-docs-SC-12`); the services rail with counts and unfolding routers (`grade10-admin-console-api-docs-SC-03`); the procedure table with kind, caller, input and output summaries (`grade10-admin-console-api-docs-SC-06`). Documents load lazily behind the route.
 - [x] 3.3 Build the detail panel and the schema renderer for the subset `tech-design.md` names: wire path, caller badges, field tables with required, type and constraints, alternatives named by discriminator (`grade10-admin-console-api-docs-SC-07`); elevated with its grant (`grade10-admin-console-api-docs-SC-09`); `session` apart from `session · fresh` (`grade10-admin-console-api-docs-SC-10`); the undeclared-output `Notice` and per-service count (`grade10-admin-console-api-docs-SC-11`); raw schema behind `InfoDialog` and `Payload`.
 - [x] 3.4 Add the filter: narrows every service by dotted path or grant, counts follow, empty copy when nothing matches (`grade10-admin-console-api-docs-SC-08`).
-- [x] 3.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build` for the admin app, `pnpm run check:frontend-layers`.
+- [x] 3.5 Add the audience: `audienceOf` reads site, console or machine off the caller; a `Filter` beside the search narrows to one, composed with the typed text (`grade10-admin-console-api-docs-SC-15`); the legend names each audience's caller words and who holds the client, and says nothing listed is internal (`grade10-admin-console-api-docs-SC-16`).
+- [x] 3.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build` for the admin app, `pnpm run check:frontend-layers`.
 
 ## 4. Documentation (grade10) (owner: @sean)
 

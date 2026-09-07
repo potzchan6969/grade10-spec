@@ -23,7 +23,7 @@ directly, and nothing new is needed in `grade10-spec`.
 | Region | Exports |
 | --- | --- |
 | Section | `Stack` (`gap="lg"`) opening with `SectionHeader` — title `API docs`, description, `actions` holding the build commit as `Text` and a `Button` (`Copy JSON`) |
-| Services rail | `Panel` holding `Search` (the filter), then the services as a list: each service and router a `Button`-styled row is not in the vocabulary, so rows are `Inline` with `Text` and the count as `Badge` (`tone="default"`); the selected row marks itself the way the nav marks a selected item |
+| Services rail | `Panel` holding `Search` (the text filter), `Filter` / `FilterOption` (the audience: All, Site, Console, Machine), the audience legend as `EntryList` / `Entry` (the audience as the entry, its caller words and who holds the client as the `detail`) with the not-internal note as `Text size="xs"`, then the services as a list: each service and router a `Button`-styled row is not in the vocabulary, so rows are `Inline` with `Text` and the count as `Badge` (`tone="default"`); the selected row marks itself the way the nav marks a selected item |
 | Procedure list | `Panel` (title `<service> · <router>`, description carrying the mount path and the `superjson` note) holding `Table` / `Row` / `Cell`; kind and caller as `Badge`; summaries as `Text color="secondary"`; a router that forwards every call to another worker says so in one `Text` line above the table, and a forwarding procedure carries `forwards to <service>` as a `Badge` in its detail |
 | Procedure detail | `Panel` (title is the dotted path, `titleAfter` the kind and caller badges, `actions` the copy buttons) holding a two-column `Grid` of field tables (`Table` / `Row` / `Cell`); raw schema behind `InfoDialog` rendering `Payload` |
 | Undeclared output | `Notice` (`tone="warning"`) in the output column, with the count on the panel description |
@@ -49,6 +49,8 @@ console package, because one surface renders it.
 | Procedure list | Rows with kind, caller, input and output summaries | `grade10-admin-console-api-docs-SC-06` |
 | Procedure list | Filter narrows every service; counts follow | `grade10-admin-console-api-docs-SC-08` |
 | Procedure list | Filter matches nothing: counts read zero, list renders the empty copy | `grade10-admin-console-api-docs-SC-08` |
+| Procedure list | Audience narrows every service; typed text narrows what it left | `grade10-admin-console-api-docs-SC-15` |
+| Rail | Audience legend names the three audiences, their caller words, and that nothing is internal | `grade10-admin-console-api-docs-SC-16` |
 | Detail | Wire path, caller, field tables; alternatives named by discriminator | `grade10-admin-console-api-docs-SC-07` |
 | Detail | Elevated caller with grant beside it | `grade10-admin-console-api-docs-SC-09` |
 | Detail | `session` and `session · fresh` told apart | `grade10-admin-console-api-docs-SC-10` |

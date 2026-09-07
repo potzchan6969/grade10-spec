@@ -215,6 +215,34 @@ The API docs surface is open on <grade10 staging admin url>.
 * Step 3 shows a badge reading forwards to auction beside the caller.
 * Step 4 shows no forwards badge.
 
+### grade10-admin-console-api-docs-US1-TC8-1: Audience legend names who each caller word means
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-console-api-docs-US-01
+
+**Pre-conditions:**
+The API docs surface is open on <grade10 staging admin url>.
+
+**Steps:**
+
+1. Read the services rail beneath the filter.
+
+**Expected Results:**
+
+* Three audiences are named: Site, Console and Machine.
+* Site lists public, session and session · fresh; Console lists elevated; Machine lists a service principal.
+* Each audience says who holds the client.
+* The rail says no procedure listed is internal.
+
 ## grade10-admin-console-api-docs-US2: QA reviewer traces what a grant unlocks
 
 **As a** QA reviewer planning a pass for one operator role,
@@ -349,6 +377,43 @@ The API docs surface is open on <grade10 staging admin url>.
 * Clearing the filter restores every list and count.
 
 ---
+
+### grade10-admin-console-api-docs-US2-TC5-1: Audience filter narrows every service and the counts follow
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-console-api-docs-US-02
+
+**Pre-conditions:**
+The API docs surface is open on <grade10 staging admin url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Audience | Console |
+| Filter | coupons |
+
+**Steps:**
+
+1. Pick Console in the audience filter.
+2. Read the rail counts.
+3. Click the store service and read the listed rows.
+4. Type coupons into the filter.
+
+**Expected Results:**
+
+* Only elevated procedures are listed under every service; the till ladder shows none.
+* Rail counts match the narrowed lists.
+* Typing coupons keeps only the elevated procedures whose dotted path contains coupons.
 
 ## grade10-admin-console-api-docs-US3: Engineer relies on the page after a contract changed
 
