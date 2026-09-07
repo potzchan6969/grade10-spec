@@ -4,17 +4,19 @@ import {
   parseExactMoneyDraftToMinor,
   sanitizeMoneyDraft,
   validateCommittedMaximumMinor,
+  wholeMajorDraftFromMinor,
 } from "./listing-bid-money";
 
 const FLOOR = 20_800_000; // HK$208,000
 
 describe("sanitizeMoneyDraft", () => {
-  it("strips non-digits and caps fraction digits to the currency exponent", () => {
-    expect(sanitizeMoneyDraft("208,000.00001", "HKD")).toBe("208000.00");
-    expect(sanitizeMoneyDraft("208000.999", "HKD")).toBe("208000.99");
+  it("strips non-digits and discards any decimal fraction", () => {
+    expect(sanitizeMoneyDraft("208,000.00001", "HKD")).toBe("208000");
+    expect(sanitizeMoneyDraft("208000.999", "HKD")).toBe("208000");
+    expect(sanitizeMoneyDraft("100.", "HKD")).toBe("100");
   });
 
-  it("rejects decimals for zero-exponent currencies", () => {
+  it("strips decimals for zero-exponent currencies", () => {
     expect(sanitizeMoneyDraft("1500.5", "JPY")).toBe("1500");
   });
 });
@@ -61,5 +63,19 @@ describe("moneyDraftFromMinor", () => {
   it("formats an editable draft without grouping", () => {
     expect(moneyDraftFromMinor(FLOOR, "HKD")).toBe("208000");
     expect(moneyDraftFromMinor(20_800_050, "HKD")).toBe("208000.5");
+  });
+});
+
+describe("wholeMajorDraftFromMinor", () => {
+  it("returns whole major units when already on a boundary", () => {
+    expect(wholeMajorDraftFromMinor(FLOOR, "HKD")).toBe("208000");
+  });
+
+  it("ceils a fractional floor to the next whole major unit", () => {
+    expect(wholeMajorDraftFromMinor(20_800_050, "HKD")).toBe("208001");
+  });
+
+  it("passes through zero-exponent amounts unchanged", () => {
+    expect(wholeMajorDraftFromMinor(1500, "JPY")).toBe("1500");
   });
 });

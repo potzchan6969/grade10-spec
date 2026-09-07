@@ -122,21 +122,30 @@ export function isMaximumBelowFloor(
 }
 
 /**
- * Keep digits and at most one decimal point, capped to the currency's minor
- * exponent so HKD cannot accept `.00001`.
+ * Digits only for the custom maximum draft. A decimal mark and everything
+ * after it are dropped (no rounding) so a paste like `100.50` becomes `100`.
+ * `currency` is retained for call-site symmetry with parse helpers.
  */
-export function sanitizeMoneyDraft(raw: string, currency: string): string {
-  const exponent = currencyExponent(currency);
+export function sanitizeMoneyDraft(raw: string, _currency: string): string {
   const cleaned = raw.replace(/[^\d.]/g, "");
-  const dot = cleaned.indexOf(".");
+  const dot = cleaned.search(/[.]/);
   if (dot === -1) return cleaned;
-  if (exponent === 0) return cleaned.slice(0, dot);
-  const whole = cleaned.slice(0, dot);
-  const fraction = cleaned
-    .slice(dot + 1)
-    .replace(/\./g, "")
-    .slice(0, exponent);
-  return `${whole}.${fraction}`;
+  return cleaned.slice(0, dot);
+}
+
+/**
+ * Editable whole-major draft for a minor floor — ceils when the floor is not
+ * already on a major-unit boundary so stripping cannot drop below the floor.
+ */
+export function wholeMajorDraftFromMinor(
+  minor: number,
+  currency: string,
+): string {
+  const exponent = currencyExponent(currency);
+  if (exponent === 0) return String(minor);
+  const factor = 10 ** exponent;
+  const wholeMinor = Math.ceil(minor / factor) * factor;
+  return String(wholeMinor / factor);
 }
 
 /**
