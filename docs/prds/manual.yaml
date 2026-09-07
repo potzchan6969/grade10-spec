@@ -22,6 +22,7 @@ groups:
     - grade10-admin/auction
     - grade10-admin/vault
     - grade10-admin/appointment
+    - grade10-admin/console
   Platform:
     - shared/ui
     - shared/console
