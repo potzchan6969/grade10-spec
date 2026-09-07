@@ -221,8 +221,9 @@ attempt rows outright, while its bookings are anonymized the way
 `shared/appointment/scheduling` says.
 
 An unreachable challenge provider SHALL refuse. An unset secret SHALL let the
-write through and SHALL log it once per isolate, which is the development
-path only. A spent budget SHALL answer `TOO_MANY_REQUESTS` and a failed
+write through and SHALL log it once per isolate — the development path, and
+the deployed path until a Turnstile site is registered and its key lands in
+app-env, the per-address budget holding meanwhile. A spent budget SHALL answer `TOO_MANY_REQUESTS` and a failed
 challenge SHALL answer `FORBIDDEN`.
 
 #### Scenario: grade10-site-appointment-booking-SC-21 - An address that has spent its budget is refused
