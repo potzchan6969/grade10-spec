@@ -64,6 +64,7 @@ stands.
 | Hidden cap | Decided | A leading maximum is not public. Other bidders learn it only by beating it. | Product |
 | Increment | Decided | The Grade10-owned USD, HKD, and JPY schedule selects the increment from the amount being beaten. No listing-level override. | Product |
 | Bid action carries a maximum | Decided | A consumer sending a bare bid amount is broken by this contract. Money stays integer minor units plus ISO 4217. | Product |
+| Custom maximum entry | Decided | Whole major units only on the bid panel custom field; typed `.` is refused, pasted fractions are discarded. | Product |
 | Mechanism disclosure | Decided | Always-on secondary subtext under Set your private maximum: bid as needed, hold matches maximum, raise only (no lower or cancel). | Product |
 | Admin history filter | ❓ Open | Whether history can hide platform-placed bids. An operator can already see both. | Product |
 | Preset amounts | ❓ Open | Whether the bid surface offers presets alongside free entry. Presentation only. | Design |
