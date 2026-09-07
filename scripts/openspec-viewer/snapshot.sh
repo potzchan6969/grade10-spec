@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 # Writes the OpenSpec viewer into the manual's build as files, so the hosted
-# manual serves the same page `pnpm spec:view` does under /viewer/, with every
+# manual serves the same page `pnpm spec:view` does under /openspec/, with every
 # answer it would give filed as JSON beside it and nothing running behind them.
 #
 #   bash scripts/openspec-viewer/snapshot.sh [<out-dir>] [--no-validate]
 #
-# The out directory defaults to tools/manual/dist/viewer, which is where the
+# The out directory defaults to tools/manual/dist/openspec, which is where the
 # manual's deploy picks it up; `pnpm run manual:build` runs this after the
 # manual's own build. The openspec CLI has to be on PATH — the viewer resolves
 # the store through it, and validates each change in development with it.
@@ -17,7 +17,7 @@ root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$root_dir"
 
 viewer="tools/openspec-viewer"
-out="${1:-tools/manual/dist/viewer}"
+out="${1:-tools/manual/dist/openspec}"
 shift $(( $# > 0 ? 1 : 0 ))
 
 # The pinned pointer, not the newest release. `spec:view` moves the submodule

@@ -47,10 +47,10 @@ export function manualStorePlugin(): Plugin {
     configureServer(server) {
       ensureAssetsDir(roots);
       watchStore(server, roots);
-      // Before the manual's own handler and Vite's fallback, or `/viewer/`
+      // Before the manual's own handler and Vite's fallback, or `/openspec/`
       // would be the manual's not-found page. The built site has the viewer
       // as files at the same address, so a link works on both.
-      server.middlewares.use("/viewer", viewerMount(roots));
+      server.middlewares.use("/openspec", viewerMount(roots));
       server.middlewares.use(middleware(roots, live(roots)));
     },
     configurePreviewServer(server) {

@@ -350,7 +350,7 @@ Two transports, one client code path:
 - Static build: `build-snapshot.mts` writes the artifacts — one file per
   change under `api/change/`, one per reference under `api/reference/`; the
   hosted site is static files only.
-- The OpenSpec viewer rides along under `dist/viewer/`, written by
+- The OpenSpec viewer rides along under `dist/openspec/`, written by
   `scripts/openspec-viewer/snapshot.sh` from the pinned submodule after the
   manual's own build: the same page `pnpm spec:view` serves, with every
   answer it would give filed as JSON where the page will ask for it, and its
