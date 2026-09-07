@@ -19,7 +19,7 @@ checkout SHALL leave no order behind. Below the bar a checkout SHALL ask
 nothing about identity. On a brand that deploys no identity store the bar
 SHALL not exist.
 
-#### Scenario: grade10-site-store-shopify-commerce-SC-26 - An unverified buyer above the bar is sent to verify
+#### Scenario: grade10-site-commerce-commerce-SC-26 - An unverified buyer above the bar is sent to verify
 
 - **GIVEN** a signed-in buyer whose standing is `unverified` or `expired`, and a
   basket whose goods are worth the bar or more
@@ -27,20 +27,20 @@ SHALL not exist.
 - **THEN** the checkout is refused naming the bar and the goods' value, no
   order is made, and they are sent to their account to verify
 
-#### Scenario: grade10-site-store-shopify-commerce-SC-27 - A verified buyer above the bar checks out
+#### Scenario: grade10-site-commerce-commerce-SC-27 - A verified buyer above the bar checks out
 
 - **GIVEN** a signed-in buyer whose standing is `verified`, and a basket whose
   goods are worth the bar or more
 - **WHEN** they check out
 - **THEN** the checkout proceeds as any other
 
-#### Scenario: grade10-site-store-shopify-commerce-SC-28 - A basket below the bar asks nothing
+#### Scenario: grade10-site-commerce-commerce-SC-28 - A basket below the bar asks nothing
 
 - **GIVEN** a basket whose goods are worth less than the bar
 - **WHEN** any buyer checks out
 - **THEN** no standing is read and the checkout proceeds as any other
 
-#### Scenario: grade10-site-store-shopify-commerce-SC-29 - A guest above the bar is asked to sign in
+#### Scenario: grade10-site-commerce-commerce-SC-29 - A guest above the bar is asked to sign in
 
 - **GIVEN** a buyer with no session, and a basket whose goods are worth the bar
   or more

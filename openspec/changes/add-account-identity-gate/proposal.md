@@ -75,7 +75,7 @@ was recognised for a second time.
 
 ### Modified Capabilities
 
-- `grade10-site/store/shopify-commerce` — the identity bar at checkout: goods
+- `grade10-site/commerce/commerce` — the identity bar at checkout: goods
   priced live before an order, a verified buyer above the bar, a guest sent to
   sign in.
 - `grade10-site/auction/auction` — the identity bar on a bid: held at the

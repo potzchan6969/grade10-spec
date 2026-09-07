@@ -1,15 +1,15 @@
-# grade10-site/store/shopify-commerce Test Cases
+# grade10-site/commerce/commerce Test Cases
 
 **Status:** pending-review
 **Drafts styled:** 2026-09-05, tcs-rules r2
 
-## grade10-site-store-shopify-commerce-US6: Shopper meets the identity bar at checkout
+## grade10-site-commerce-commerce-US6: Shopper meets the identity bar at checkout
 
 **As a** shopper buying goods worth the bar or more,
 **I want** to be told before paying that a verified identity is needed, and where to get one,
 **so that** I am not charged for an order the store cannot complete, and I know what to do next.
 
-### grade10-site-store-shopify-commerce-US6-TC1-1: Verified buyer checks out at the bar as any other
+### grade10-site-commerce-commerce-US6-TC1-1: Verified buyer checks out at the bar as any other
 
 **Classification:**
 
@@ -22,7 +22,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-store-shopify-commerce-US-06
+* **Trace:** grade10-site-commerce-commerce-US-06
 
 **Pre-conditions:**
 
@@ -47,7 +47,7 @@
 * The checkout proceeds as any other: the browser is handed to Shopify's checkout page.
 * No refusal names `<bar>`.
 
-### grade10-site-store-shopify-commerce-US6-TC2-1: Buyer without a verified standing is sent to verify at and above the bar
+### grade10-site-commerce-commerce-US6-TC2-1: Buyer without a verified standing is sent to verify at and above the bar
 
 Runs once per row of **Test data**.
 
@@ -62,7 +62,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-store-shopify-commerce-US-06
+* **Trace:** grade10-site-commerce-commerce-US-06
 
 **Pre-conditions:**
 
@@ -92,7 +92,7 @@ Runs once per row of **Test data**.
 * Step 4 opens `<grade10 account page url>`.
 * No order was made for the checkout — none appears at `<grade10 order history url>`.
 
-### grade10-site-store-shopify-commerce-US6-TC3-1: Basket below the bar asks nothing of any buyer
+### grade10-site-commerce-commerce-US6-TC3-1: Basket below the bar asks nothing of any buyer
 
 Runs once per row of **Test data**.
 
@@ -107,7 +107,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-store-shopify-commerce-US-06
+* **Trace:** grade10-site-commerce-commerce-US-06
 
 **Pre-conditions:**
 
@@ -133,7 +133,7 @@ Runs once per row of **Test data**.
 * The checkout proceeds as any other: the browser is handed to Shopify's checkout page.
 * No standing was read.
 
-### grade10-site-store-shopify-commerce-US6-TC4-1: Guest at the bar is asked to sign in and no order is made
+### grade10-site-commerce-commerce-US6-TC4-1: Guest at the bar is asked to sign in and no order is made
 
 **Classification:**
 
@@ -146,7 +146,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-store-shopify-commerce-US-06
+* **Trace:** grade10-site-commerce-commerce-US-06
 
 **Pre-conditions:**
 
