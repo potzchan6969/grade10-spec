@@ -1,0 +1,8 @@
+schema: grade10-planning
+created: 2026-08-20
+promoted_by: "@tester"
+ui_waived: "the fixture is about the On staging stage, not the designs"
+design_waived: "the fixture is about the On staging stage, not the designs"
+skip_specs: true
+skip_specs_why: "the fixture is about the On staging stage and the Idle overlay, not the requirements"
+deployed_env: staging
