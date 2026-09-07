@@ -22,7 +22,7 @@ books into its own shops with the same screens.
 - **Bookings** — one visit on one resource, `booked` until it is `cancelled`,
   `completed` or a `no_show`; every change appends an event
 
-## Who uses it
+## Users
 
 - **Collectors** book a grading visit at [`grade10.com/book`](/p/grade10-site/appointment/booking)
   with a name and an email, and hold a private link that moves or cancels it
@@ -33,7 +33,7 @@ books into its own shops with the same screens.
 - **Products** book over a service binding, naming the case and the service;
   a product's visit is moved from the product, never from the diary
 
-## What a booking tells its owner
+## Notifications
 
 A booking with an email address is told everything that happens to it, with a
 calendar file attached: a confirmation, an update when it moves, a

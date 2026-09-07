@@ -12,7 +12,7 @@ product at boot rather than at the moment a member is evaluated
 ([[grade10-site-loyalty-programme-SC-17]], [[grade10-site-loyalty-programme-SC-18]], [[grade10-site-loyalty-programme-SC-19]], [[grade10-site-loyalty-programme-SC-20]],
 [[grade10-site-loyalty-programme-SC-21]]).
 
-## The ladder
+## Ladder
 
 | Tier | Earns | Reached by | Kept by |
 | --- | --- | --- | --- |
@@ -22,7 +22,7 @@ product at boot rather than at the moment a member is evaluated
 
 These are deployed values, changed by a deploy and never by an operator.
 
-## Two counts
+## Tier points and balance
 
 Earning credits both **tier points** and the **redeemable balance**; a
 redemption spends only the balance. Tier points are the sum of what a member
@@ -84,11 +84,11 @@ term. An invitation whose end date passes is observed, not scheduled
 An invitation granted with no end date holds until it is revoked. The annual
 cap and the approval step the owner's draft asks for are not enforced.
 
-## Journeys
+## Test cases
 
 ::cases{id="grade10-site/loyalty/programme"}
 
-:::detail{title="For engineers" for="engineer"}
+:::detail{title="Data model" for="engineer"}
 The member row stores the earned tier, the day it was reached, and both ends of
 its period — all four set or all four null — plus the demotion date. The period
 start is stored rather than inverted from the end, because month arithmetic
@@ -97,7 +97,9 @@ back would open the period a day before the earn that bought it. The tier
 window is open-ended above so a backdated earn counts the moment it lands, and
 floored at the demotion date, or at a virtual one for a term that has lapsed
 and not yet been reviewed.
+:::
 
+:::detail{title="Nightly sweeps and metrics" for="engineer"}
 The nightly cron runs the expiry sweep, then the tier review, then the
 reward-template audit, then the lapsed-collection sweep, each on its own
 budget. Metrics: `loyalty.tier.changed` by tier and cause, and per review

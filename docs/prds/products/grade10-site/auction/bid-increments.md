@@ -8,7 +8,7 @@ Every auction currency has one Grade10-owned price schedule. A collector sees
 the next minimum for the lot, not the policy table, and can enter any whole
 amount at or above that minimum.
 
-## The three schedules
+## Schedules
 
 The schedule selects the increment from the amount being beaten. Each threshold
 includes its lower bound, and amounts are integer minor units.
@@ -34,7 +34,7 @@ includes its lower bound, and amounts are integer minor units.
 | JPY | 750000 | 8000 |
 | JPY | 1500000 | 15000 |
 
-## How a bid is priced
+## Bid pricing
 
 - **Opening bid:** starting price plus the increment selected for that price.
 - **Manual bid:** current public price plus the increment selected for that price.

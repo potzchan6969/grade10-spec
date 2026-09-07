@@ -14,7 +14,7 @@ product.
   2. `grade10.com/store/collections?collection=<handle>` — one collection
   3. `grade10.com/store/products/<handle>` — a product's details page
 
-## What it looks like
+## Designs
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4396-5424" title="Product list filter bar"}
 

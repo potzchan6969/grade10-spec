@@ -25,7 +25,7 @@ reader should not take the capability list below as the list of what the package
 contains.
 :::
 
-:::detail{title="How it is laid out" for="engineer"}
+:::detail{title="Layout" for="engineer"}
 The package composes the design system's primitives; the design system owns
 tokens and single-purpose controls, and this package owns the compound blocks
 built from them. Conventions are in

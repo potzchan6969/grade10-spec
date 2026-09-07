@@ -21,7 +21,7 @@ tap replays the first, so joining is safe to retry ([[grade10-site-loyalty-progr
 Someone whose purchases were recorded before they joined is invited to join
 and shown the points already waiting ([[grade10-site-loyalty-programme-SC-01]]).
 
-## The membership page
+## Membership page
 
 | Section | What it shows |
 | --- | --- |
@@ -37,7 +37,7 @@ Every date reads in the programme's own time zone.
 
 ::story{id="loyalty-membership-membershipsummary--default" title="Tier, balance and progress"}
 
-## The member card
+## Member card
 
 The card is how a member proves they are standing at the till. Each
 presentation is one QR and one eight-character short code backing the same
@@ -213,6 +213,89 @@ brand carrying both wallets seals both their secrets under the one key:
   every pass issued. There is only a re-issue for everybody
 :::
 
+## Histories
+
+A member's activity is their own ledger, in their own words, with the
+operator's reason, retry keys and the pricing behind an entry kept out of view
+([[grade10-site-loyalty-programme-SC-59]], [[grade10-site-loyalty-programme-SC-60]]).
+
+| Entry | Meaning |
+| --- | --- |
+| Points earned | A purchase, or a campaign grant |
+| Points spent | A reward redeemed |
+| Points put toward a purchase | Points paid against a bill |
+| Points expired | The balance lapsed |
+| Points added, Points taken off | An operator's correction |
+| Points revoked | A refund's claw-back |
+| Points returned | A reversal |
+
+Beside it sit the redemptions — each with its outcome — and the card's own
+history: the last twenty presentations and, for each one a till took, where
+and when. An identification the member did not present for, by email at the
+counter, notifies them the moment it happens.
+
+## Privacy
+
+An operator's reason, a retry key, the fulfilment attempts behind a code, who
+settled or reversed something, stock counts, and anyone else's anything. The
+member's surface takes no user id; it reads the session. A member's identity
+lives in the identity system and never in the programme, which holds only an
+opaque user id.
+
+:::callout{kind="warning"}
+Two things decided for this surface are built and offered to nobody, and five
+are not built.
+
+- **The Google pass** — the pass, its rotating code, the counter that reads it
+  and the sweep that keeps it current are built, and offered to nobody: the
+  issuer account, its class and its key do not exist yet
+- **The Apple pass** — built, and offered to nobody: the Developer Program
+  enrolment, the pass type identifiers and the signing certificate do not
+  exist yet. The artwork shipped is placeholder squares in the card's own
+  background colour, which Design owes before the first pass reaches anybody
+- **A spend reaching the pass** — nothing wakes the sweep when a member's
+  standing moves, so a counter spend reaches a pass on the daily floor rather
+  than inside the five minutes this page promises. It costs a Google pass a
+  stale balance, and an Apple pass the same: durability protects the scan,
+  never the facts, and only the facts a pass shows wait on this
+- **Ending a pass for a member** — an operator cannot end a pass for somebody
+  who lost their phone
+- **The welcome message** — carries no save action, for either wallet
+  (`add-google-wallet-member-card`)
+- **The welcome bonus** — the deployed programme grants none
+  (`revise-loyalty-programme-rules`)
+- **Account deletion** — the ledger has no account-deletion pass
+  (`revise-loyalty-programme-rules`)
+:::
+
+:::callout{kind="note"}
+No Figma frame exists for any membership surface. The `@grade10/ui` blocks —
+`MembershipSummary`, `MemberCard`, `RewardMenu`, `CouponList`,
+`PendingCollectionList` and `ActivityList` — and their stories are the visual
+record.
+:::
+
+## Test cases
+
+::cases{id="grade10-site/loyalty/programme"}
+
+:::detail{title="Code map" for="engineer"}
+The page is `apps/frontend/grade10/src/pages/membership` composing the
+`@grade10/ui` blocks over `@grade10/loyalty-frontend`'s feature slices —
+`member`, `offer`, `rewards`, `spending` — installed through the app's DI
+container. Joining calls the store worker's `membership.join`, not loyalty's
+`me.enroll` directly, so enrolment and pairing land together. The card is the
+store's too: `membership.presentCard` mints a `pos_handles` row, storing only
+the QR token's digest, and `membership.presentations` reads the history. The
+wallet rides the same slice: `membership.addWalletPass` mints a `wallet_passes`
+row whose code secret is sealed under the worker's own key, the till spends a
+rotating code by advancing the pass's own `last_period` in one guarded update —
+no second table, and nothing that grows per scan — and the
+store worker's cron keeps every pass current from a digest of what it last
+sent. The loyalty `me.*` surface answers summary, history, redemptions, redeem,
+quote, undo and enrol, all off the session.
+:::
+
 :::detail{title="Product decisions" for="pm"}
 A member at the counter unlocks their phone, signs in, opens the membership
 page and reads a code against a countdown with a queue behind them. The problem
@@ -281,85 +364,4 @@ Google's, and a member who does not know that reads it as broken. So the
 surface says what the Apple pass is for rather than offering two
 identical-looking buttons: *"Identifies you at the counter. Points are spent
 from this page."*
-:::
-
-## Histories
-
-A member's activity is their own ledger, in their own words, with the
-operator's reason, retry keys and the pricing behind an entry kept out of view
-([[grade10-site-loyalty-programme-SC-59]], [[grade10-site-loyalty-programme-SC-60]]).
-
-| Entry | Meaning |
-| --- | --- |
-| Points earned | A purchase, or a campaign grant |
-| Points spent | A reward redeemed |
-| Points put toward a purchase | Points paid against a bill |
-| Points expired | The balance lapsed |
-| Points added, Points taken off | An operator's correction |
-| Points revoked | A refund's claw-back |
-| Points returned | A reversal |
-
-Beside it sit the redemptions — each with its outcome — and the card's own
-history: the last twenty presentations and, for each one a till took, where
-and when. An identification the member did not present for, by email at the
-counter, notifies them the moment it happens.
-
-## What a member never sees
-
-An operator's reason, a retry key, the fulfilment attempts behind a code, who
-settled or reversed something, stock counts, and anyone else's anything. The
-member's surface takes no user id; it reads the session. A member's identity
-lives in the identity system and never in the programme, which holds only an
-opaque user id.
-
-:::callout{kind="warning"}
-Two things decided for this surface are built and offered to nobody, and five
-are not built.
-
-- **The Google pass** — the pass, its rotating code, the counter that reads it
-  and the sweep that keeps it current are built, and offered to nobody: the
-  issuer account, its class and its key do not exist yet
-- **The Apple pass** — built, and offered to nobody: the Developer Program
-  enrolment, the pass type identifiers and the signing certificate do not
-  exist yet. The artwork shipped is placeholder squares in the card's own
-  background colour, which Design owes before the first pass reaches anybody
-- **A spend reaching the pass** — nothing wakes the sweep when a member's
-  standing moves, so a counter spend reaches a pass on the daily floor rather
-  than inside the five minutes this page promises. It costs a Google pass a
-  stale balance, and an Apple pass the same: durability protects the scan,
-  never the facts, and only the facts a pass shows wait on this
-- **Ending a pass for a member** — an operator cannot end a pass for somebody
-  who lost their phone
-- **The welcome message** — carries no save action, for either wallet
-  (`add-google-wallet-member-card`)
-- **The welcome bonus** — the deployed programme grants none
-  (`revise-loyalty-programme-rules`)
-- **Account deletion** — the ledger has no account-deletion pass
-  (`revise-loyalty-programme-rules`)
-:::
-
-:::callout{kind="note"}
-No Figma frame exists for any membership surface. The `@grade10/ui` blocks —
-`MembershipSummary`, `MemberCard`, `RewardMenu`, `CouponList`,
-`PendingCollectionList` and `ActivityList` — and their stories are the visual
-record.
-:::
-
-::cases{id="grade10-site/loyalty/programme"}
-
-:::detail{title="For engineers" for="engineer"}
-The page is `apps/frontend/grade10/src/pages/membership` composing the
-`@grade10/ui` blocks over `@grade10/loyalty-frontend`'s feature slices —
-`member`, `offer`, `rewards`, `spending` — installed through the app's DI
-container. Joining calls the store worker's `membership.join`, not loyalty's
-`me.enroll` directly, so enrolment and pairing land together. The card is the
-store's too: `membership.presentCard` mints a `pos_handles` row, storing only
-the QR token's digest, and `membership.presentations` reads the history. The
-wallet rides the same slice: `membership.addWalletPass` mints a `wallet_passes`
-row whose code secret is sealed under the worker's own key, the till spends a
-rotating code by advancing the pass's own `last_period` in one guarded update —
-no second table, and nothing that grows per scan — and the
-store worker's cron keeps every pass current from a digest of what it last
-sent. The loyalty `me.*` surface answers summary, history, redemptions, redeem,
-quote, undo and enrol, all off the session.
 :::

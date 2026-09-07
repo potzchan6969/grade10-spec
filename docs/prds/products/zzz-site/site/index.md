@@ -7,7 +7,7 @@ otherwise a separate world: its own domain, its own auth worker, its own users,
 its own databases, its own email sender, and its own language. A person with a
 grade10 account has no ZZZ account, and sessions never cross.
 
-## What it shares, and what it drops
+## Code and theme
 
 It shares the code — the same design system, the same shared blocks, the same
 auth contract, the same admin packages. What it does not take is grade10's
@@ -25,7 +25,7 @@ The one deliberate exception to the brand wall runs the other way: the auction
 service is shared, so a grade10 collector and a ZZZ collector bid against each
 other on the same lot while their identities, sessions and money stay apart.
 
-## Who uses it
+## Users
 
 A **collector** opens the site, signs in, and reaches their profile. An
 **operator** works the ZZZ console, which has exactly three sections — users,
@@ -54,7 +54,7 @@ nothing, which is a named follow-up rather than a decision. See
 [docs/architecture/account-data.md](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md).
 :::
 
-:::detail{title="The brand boundary, concretely" for="engineer"}
+:::detail{title="Brand boundary" for="engineer"}
 One product means one domain, one auth worker, one user base
 ([docs/architecture/multi-product.md](https://github.com/9gag/grade10/blob/main/docs/architecture/multi-product.md)).
 ZZZ has its own session cookie domain, auth worker and secret, trusted origins,

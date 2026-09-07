@@ -13,7 +13,7 @@ It lives in the application repository rather than the shared-UI package,
 because admin surfaces carry no brand design — what distinguishes one brand's
 console from another's is the theme its application supplies, and nothing else.
 
-## What it covers
+## Scope
 
 Two capabilities today. **Console blocks** is the furniture: the table, the
 three async states, the confirmation dialog, the section header, the operator
@@ -41,7 +41,7 @@ There are no Figma frames for the admin, by decision. The in-flight change
 both brands' consoles and the seven operator packages they assemble from.
 :::
 
-:::detail{title="How a console is assembled" for="engineer"}
+:::detail{title="Console assembly" for="engineer"}
 Each console is a thin application over the operator packages: one dependency
 container loads the feature modules published by each product's
 `admin-frontend` package, and the console's own pages stay thin. Grants come

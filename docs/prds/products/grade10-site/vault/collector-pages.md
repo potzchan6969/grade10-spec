@@ -24,7 +24,7 @@ balance, its documents and its visit.
   the ceremony's operative wording, the documents and every email are English
   only, because the trail attests to the exact words that were shown
 
-## The case list
+## Case list
 
 - **One card per case** — the item's name, status, when it opened, the lane,
   the amount asked
@@ -32,7 +32,7 @@ balance, its documents and its visit.
   account
 - **A draft** — reopens on its photo step from the list
 
-## The request wizard
+## Request wizard
 
 Three steps, one per thing the collector does.
 
@@ -54,7 +54,7 @@ Three steps, one per thing the collector does.
   batches of three; the wizard says to book one visit on the first and bring
   them all together, because a case has never needed a booking of its own
 
-## The case page
+## Case page
 
 What a collector reads on one case, top to bottom.
 
@@ -102,7 +102,7 @@ What a collector reads on one case, top to bottom.
   valuation being started, or the item being vaulted — so a valuation from
   photographs leaves a future visit open
 
-## What the collector hears
+## Messages
 
 - **Email, English, twenty-three kinds** — visit booked, moved, cancelled,
   missed; offer made, offer expired; item vaulted; payout recorded with the
@@ -152,6 +152,28 @@ page holds the decision behind them.
 
 ::spec{id="grade10-site/vault/collector-notifications"}
 
+:::detail{title="Code map" for="engineer"}
+- **Pages** — `apps/frontend/grade10/src/pages/vault/{VaultPage,CasePage,SignPage}.tsx`;
+  the address table is `surfaces.ts`, and `ROUTES.vaultCase` is pinned to
+  `CASE_PATH` in `packages/vault/contracts/src/paths.ts`, which the emails
+  fill
+- **Slices** — `packages/vault/frontend/src/features/custody/{request,cases,booking}`;
+  refusals branch on `VaultFailureCode`; the timeline keeps what
+  `isCustomerEvent` admits and drops staff-only kinds
+- **Customer router** — `packages/vault/backend/src/trpc/routers/cases.ts`:
+  create, submit, mine, detail, locations, slots, book, reschedule,
+  cancelBooking, accept, decline, cancel, requestRelease; no money ever
+- **Notifications** — `packages/vault/backend/src/notify/vocabulary.ts` holds
+  `NOTIFY_FOR_EVENT`; copy in `email/messages.ts`; reminders in
+  `sweeps/remind.ts`; retries in `db/schema/notificationRetries.ts`,
+  `notify/sealed.ts` and `sweeps/notify.ts`
+- **Copy** — `packages/i18n/messages/shared/{en,zh-Hant,zh-Hans,ko}/vault.json`
+  in this store; the app reads the pinned submodule, so a catalogue change
+  reaches it with the next submodule bump
+- **Photos** — `packages/vault/contracts/src/photos.ts` holds the limits;
+  reads are owner-only, uncached and written to an append-only ledger
+:::
+
 :::detail{title="Product decisions" for="pm"}
 The collector's pages exist so an item can be handed over with the paperwork
 already agreed, and so the collector can watch their own property from their
@@ -182,26 +204,4 @@ phone. The owner's brief is [Grade10 Finance](/references/grade10-finance).
 | Every copy rides one ladder | Decided | The signed set retries on the same rungs as every other message and parks with its reason, rather than being retried for ever by a sweep of its own | Engineering |
 | A send that never returns | Decided | Ten seconds, then the attempt has failed like any other | Engineering |
 | Chinese operative text | TBC Legal | English governs the paper; the ceremony's chrome, the wizard and every refusal answer in the collector's language, and bilingual templates and consent copy are Legal's to supply | Legal |
-:::
-
-:::detail{title="For engineers" for="engineer"}
-- **Pages** — `apps/frontend/grade10/src/pages/vault/{VaultPage,CasePage,SignPage}.tsx`;
-  the address table is `surfaces.ts`, and `ROUTES.vaultCase` is pinned to
-  `CASE_PATH` in `packages/vault/contracts/src/paths.ts`, which the emails
-  fill
-- **Slices** — `packages/vault/frontend/src/features/custody/{request,cases,booking}`;
-  refusals branch on `VaultFailureCode`; the timeline keeps what
-  `isCustomerEvent` admits and drops staff-only kinds
-- **Customer router** — `packages/vault/backend/src/trpc/routers/cases.ts`:
-  create, submit, mine, detail, locations, slots, book, reschedule,
-  cancelBooking, accept, decline, cancel, requestRelease; no money ever
-- **Notifications** — `packages/vault/backend/src/notify/vocabulary.ts` holds
-  `NOTIFY_FOR_EVENT`; copy in `email/messages.ts`; reminders in
-  `sweeps/remind.ts`; retries in `db/schema/notificationRetries.ts`,
-  `notify/sealed.ts` and `sweeps/notify.ts`
-- **Copy** — `packages/i18n/messages/shared/{en,zh-Hant,zh-Hans,ko}/vault.json`
-  in this store; the app reads the pinned submodule, so a catalogue change
-  reaches it with the next submodule bump
-- **Photos** — `packages/vault/contracts/src/photos.ts` holds the limits;
-  reads are owner-only, uncached and written to an append-only ledger
 :::

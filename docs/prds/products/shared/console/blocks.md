@@ -15,7 +15,7 @@ primitives, receives everything already resolved by the console — copy, dates,
 amounts — and reports every interaction through a callback. It never fetches,
 persists, navigates, or imports an application.
 
-## The behaviours worth knowing
+## Behaviours
 
 Loading, refused and empty are three distinct states that never collapse into
 one. A surface that is still reading says so and offers no rows and no empty
@@ -33,5 +33,3 @@ currency code, and renders naming that code — never a symbol two currencies
 could share, in a console where two currencies routinely sit in one column. And
 a queue longer than its page is walkable in both directions, rather than merely
 told it has more.
-
-## Journeys

@@ -15,7 +15,7 @@ far it reaches. A backend is the one caller outside it — a package may not
 import an app, so mail that links to a site types its own path against
 `siteUrl`, and moving a surface means moving that too.
 
-## What answers an address
+## Answering an address
 
 ### The assets answer what the build wrote
 
@@ -131,7 +131,7 @@ while leaving a typed address working:
   chosen before anything renders, so `serveAddress` reads the address: the
   manifest path the build carries, and the framework's `.data` suffix
 
-## A site with no worker
+## Sites with no worker
 
 The ZZZ site has three session-shaped surfaces and nothing a crawler reads, so
 nothing sits in front of its assets. Every address is answered with the one

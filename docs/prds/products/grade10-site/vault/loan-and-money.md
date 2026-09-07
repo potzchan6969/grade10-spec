@@ -38,7 +38,7 @@ and when.
 - **Release** — refused while anything is outstanding; storage is free, so a
   storage case owes nothing
 
-## The arithmetic
+## Arithmetic
 
 | Rule | Value |
 | --- | --- |
@@ -65,7 +65,7 @@ grace.
   — the treasurer records it against 1 October, the quote for that date is
   HKD 103,000, and the loan settles on time
 
-## What the brand lends under
+## Lending policy
 
 One per-brand table, read at the offer. Grade10's numbers are the owner's
 own; a brand that lends nothing leaves every one of them unset and writes no
@@ -91,7 +91,7 @@ offer in production.
 - **The period is the one inference** — the owner's notes name a rate and no
   period, and a month is how Hong Kong lending is quoted
 
-## What a person records
+## Records
 
 | Record | Who | Fields | Guards |
 | --- | --- | --- | --- |
@@ -159,6 +159,35 @@ page holds the decision behind them.
 
 ::spec{id="grade10-site/vault/loan-and-settlement"}
 
+:::detail{title="Code map" for="engineer"}
+- **The one function** — `packages/vault/backend/src/money/computeDue.ts`,
+  taking the brand's `Accrual`; `loanFacts.ts` loads a page of cases' offers
+  and money in four set queries and folds the due purely, so a case screen,
+  the position and the arrears list cannot answer differently;
+  one fold answers what is owed, when it settled and whether a recording
+  over-repaid it; `obligations.ts` holds the fee seam; `payout.ts`,
+  `repayment.ts` and `reverse.ts` hold the guards; `adjustments.ts` is the one place a corrected
+  row stops counting; `ledger.ts` pages the register and `position.ts` sums
+  the book
+- **Offers** — `packages/vault/backend/src/valuation/offers.ts`;
+  `refuseUnsetPolicy` is the production refusal and `refuseOutsidePolicy` the
+  one gate every bound is applied in. The due instant is fixed in
+  `money/payout.ts` and stored on `payouts.due_at`
+- **Policy** — `packages/app-env/src/lending.ts`, seeded for grade10 and null
+  for zzz; `accrualOf` is the only accessor allowed to read a null as a
+  decision, and `check:libs` names each unset field with its owner
+- **Immutability** —
+  `apps/backend/grade10/vault/src/db/migrations/0001_append_only.sql`,
+  `0015_guards_always_on.sql`, and `0019` for the adjustments; a real-Postgres
+  test proves the triggers refuse
+- **Audit** — every case mutation declares `auditSubject` on the elevated
+  ladder; a walker test fails the next one that forgets
+- **Console** — `PayoutsPanel.tsx` and `MoneyDialog.tsx` carry the value
+  date, the quote for it and the correction; a repayment cannot be sent until
+  the quote for its date has answered, and no row offers a correction to the
+  operator who recorded it
+:::
+
 :::detail{title="Product decisions" for="pm"}
 The loan exists so a collector can raise cash against a card without selling
 it, and so the shop can lend against an item it already holds and has valued.
@@ -203,33 +232,4 @@ The owner's numbers are [Grade10 Finance](/references/grade10-finance):
 | Interest policy | Decided | The book answers both bases — the ledger is cash, the position derives accrued interest — and recognition is the firm's accountant's choice | Finance |
 | A reader of the books and the chain | Deferred | A `vault:book` read grant for treasurer, admin and an auditor. Reopens at the first external audit | Owner |
 | Double entry | Decided | Single entry with derived balances is the product's book; double entry is the general ledger, kept in the firm's accounting system from a ledger export | Finance |
-:::
-
-:::detail{title="For engineers" for="engineer"}
-- **The one function** — `packages/vault/backend/src/money/computeDue.ts`,
-  taking the brand's `Accrual`; `loanFacts.ts` loads a page of cases' offers
-  and money in four set queries and folds the due purely, so a case screen,
-  the position and the arrears list cannot answer differently;
-  one fold answers what is owed, when it settled and whether a recording
-  over-repaid it; `obligations.ts` holds the fee seam; `payout.ts`,
-  `repayment.ts` and `reverse.ts` hold the guards; `adjustments.ts` is the one place a corrected
-  row stops counting; `ledger.ts` pages the register and `position.ts` sums
-  the book
-- **Offers** — `packages/vault/backend/src/valuation/offers.ts`;
-  `refuseUnsetPolicy` is the production refusal and `refuseOutsidePolicy` the
-  one gate every bound is applied in. The due instant is fixed in
-  `money/payout.ts` and stored on `payouts.due_at`
-- **Policy** — `packages/app-env/src/lending.ts`, seeded for grade10 and null
-  for zzz; `accrualOf` is the only accessor allowed to read a null as a
-  decision, and `check:libs` names each unset field with its owner
-- **Immutability** —
-  `apps/backend/grade10/vault/src/db/migrations/0001_append_only.sql`,
-  `0015_guards_always_on.sql`, and `0019` for the adjustments; a real-Postgres
-  test proves the triggers refuse
-- **Audit** — every case mutation declares `auditSubject` on the elevated
-  ladder; a walker test fails the next one that forgets
-- **Console** — `PayoutsPanel.tsx` and `MoneyDialog.tsx` carry the value
-  date, the quote for it and the correction; a repayment cannot be sent until
-  the quote for its date has answered, and no row offers a correction to the
-  operator who recorded it
 :::

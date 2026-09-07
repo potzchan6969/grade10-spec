@@ -30,7 +30,7 @@ they read, and what they do for a collector at the counter.
 - **Product bookings** — shown with their product and case, read-only; the
   vault moves its own visits
 
-## Who may do what
+## Permissions
 
 - **Read** — `appointment:read` sees every shop, service, day and booking and
   renders no write control

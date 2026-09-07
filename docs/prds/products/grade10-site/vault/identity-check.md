@@ -8,7 +8,7 @@ The identity a case's agreements are signed under. The vault holds a reference
 to it and nothing else — no name, no birth date, no document number — because
 the record itself lives in [the identity store](/p/grade10-site/e-kyc).
 
-## How a case gets one
+## Getting an identity
 
 - **Reuse first** — a check the collector already passed is bound rather than
   asked for again
@@ -19,7 +19,7 @@ the record itself lives in [the identity store](/p/grade10-site/e-kyc).
 - **The counter records** — staff read the document in front of them, from the
   case screen
 
-## What the case shows
+## Identity states
 
 | Shown | Meaning |
 | --- | --- |
@@ -33,7 +33,7 @@ the record itself lives in [the identity store](/p/grade10-site/e-kyc).
 A case with a check still out is not a case with no identity, and the screen
 says which — an operator arranging a visit needs to know the difference.
 
-## When the verdict lands
+## Verdict
 
 The identity binds under the case's own guard, and any signing packet still out
 is voided: its documents were written from the identity this replaces. What the
@@ -46,7 +46,7 @@ one verified at the counter in the meantime all refuse it: the case keeps the id
 the operator is told. A release packet reads the identity the executed agreement
 already holds, and an erased case takes no new personal data at all.
 
-## The gate
+## Gate
 
 No identity, no paperwork. Documents are never rendered for a case with no
 bound identity, and a packet whose identity changed between rendering and

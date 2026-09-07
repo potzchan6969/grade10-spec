@@ -21,7 +21,7 @@ and the lender it is made under is not the entity that holds the item.
   section: the loan lives where its collateral does, and infrastructure held
   in reserve for a product nobody has described is a moving part with no owner
 
-## The owner's flow against what is built
+## Owner's flow and gaps
 
 | Step | Built | Gap |
 | --- | --- | --- |
@@ -40,19 +40,7 @@ and the lender it is made under is not the entity that holds the item.
 | Repayment recorded manually | yes | — |
 | Automated reminders | **7** and **1** days before the due date, then every **7** days overdue, by email | a channel beyond email |
 
-:::detail{title="Product decisions" for="pm"}
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| Finance is the vault's financed lane | Decided | The owner's notes describe the vault's flow step for step, and the collateral is the item the vault itself holds; a second service would be a second copy of one product | Owner |
-| Two entities, one table | Decided | The custodian holds and the lender lends, each printing on its own paper; the lender's name refuses an offer in production, so custody opens while the lender is still being registered | Legal |
-| Host | Decided | One host and a path, `grade10.com/vault`; a vanity domain redirects, because a second host would not share the session cookie | Owner |
-| A second custodian | Deferred | Tiny holding items under its own name, agreement and staff. Reopens with a signed custody contract | Owner |
-| Online e-KYC at the request step | Deferred | The counter check stands. Reopens when Legal names a duty that the counter cannot meet | Legal |
-| The recorded call | Decided | The counter records that the key terms were explained and the borrower signs a line saying so; the telephony and the recording's storage are a vendor's, and no packet is prepared without the record | Owner |
-| The book | Decided | Single entry with derived balances is the product's book; double entry is the general ledger, kept in the firm's accounting system from a ledger export | Finance |
-:::
-
-:::detail{title="For engineers" for="engineer"}
+:::detail{title="Code map" for="engineer"}
 - **The lane** — `packages/vault/{contracts,backend,frontend,admin-frontend}`;
   the financing amount at intake is the lane, and every guard reads it off the
   case
@@ -64,4 +52,16 @@ and the lender it is made under is not the entity that holds the item.
   for the case machine and the two lanes, and
   [account data](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
   for the isolation and ledger policy
+:::
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Finance is the vault's financed lane | Decided | The owner's notes describe the vault's flow step for step, and the collateral is the item the vault itself holds; a second service would be a second copy of one product | Owner |
+| Two entities, one table | Decided | The custodian holds and the lender lends, each printing on its own paper; the lender's name refuses an offer in production, so custody opens while the lender is still being registered | Legal |
+| Host | Decided | One host and a path, `grade10.com/vault`; a vanity domain redirects, because a second host would not share the session cookie | Owner |
+| A second custodian | Deferred | Tiny holding items under its own name, agreement and staff. Reopens with a signed custody contract | Owner |
+| Online e-KYC at the request step | Deferred | The counter check stands. Reopens when Legal names a duty that the counter cannot meet | Legal |
+| The recorded call | Decided | The counter records that the key terms were explained and the borrower signs a line saying so; the telephony and the recording's storage are a vendor's, and no packet is prepared without the record | Owner |
+| The book | Decided | Single entry with derived balances is the product's book; double entry is the general ledger, kept in the firm's accounting system from a ledger export | Finance |
 :::

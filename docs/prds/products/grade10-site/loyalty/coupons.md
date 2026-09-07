@@ -11,7 +11,7 @@ mints one code. The engine that debits the points names no vendor; the one
 Shopify-shaped piece of the loyalty product is the fulfiller that asks the
 store to mint.
 
-## What a code is
+## Codes
 
 | Property | Value |
 | --- | --- |
@@ -31,7 +31,7 @@ redemption reads as preparing until the pairing lands, and a member whose
 pairing was erased is parked for an operator. When a pairing moves to a
 different customer, that member's live codes are re-scoped in the same pass.
 
-## The life of a code
+## Code states
 
 | State | Meaning |
 | --- | --- |
@@ -46,7 +46,7 @@ is counted as breakage in the liability register rather than silently
 returned. A code used after its redemption was reversed, used twice, or used by
 another customer raises a mismatch an operator settles.
 
-## What the member sees
+## Member's view
 
 The membership page lists every code in full, with its value and expiry — a
 masked code cannot be read out at a till. Used and cancelled codes stay on the
@@ -56,7 +56,7 @@ something, in which case the points stay spent and the page says why.
 
 ::story{id="loyalty-membership-couponlist--default" title="The codes a member holds"}
 
-## Where a code is accepted
+## Spending a code
 
 Online, the buyer types the code at Shopify's checkout, or the membership page
 attaches it to the basket where the shop allows. At the till, staff apply a
@@ -73,9 +73,11 @@ with no settlement. Everything on this page is specified in the in-flight
 `revise-loyalty-programme-rules` and `add-shopify-membership-pos` changes.
 :::
 
+## Test cases
+
 ::cases{id="grade10-site/loyalty/programme"}
 
-:::detail{title="For engineers" for="engineer"}
+:::detail{title="Code map" for="engineer"}
 The loyalty worker's fulfiller for the `money_off_code` kind calls the store
 worker's `MembershipEntrypoint` over a service binding — mint, deactivate,
 usage, liability — so loyalty holds no Shopify credential. The store's
@@ -86,7 +88,9 @@ and eligibility through `context` rather than the deprecated
 `customerSelection`. Usage is written by order ingestion matching the paid
 order's discount codes case-insensitively, and the vendor's `asyncUsageCount`
 is deliberately unreachable from the port.
+:::
 
+:::detail{title="Liability and metrics" for="engineer"}
 The liability register reports outstanding points as a count and the money
 out in codes as money, answering `none` where nothing mints and `unavailable`
 with a reason where the register cannot be read — never a zero. Metrics:

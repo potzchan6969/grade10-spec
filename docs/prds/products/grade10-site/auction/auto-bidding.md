@@ -24,8 +24,6 @@ One card authorization covers the whole commitment. The hold is taken for the
 maximum when it is set, so a bid Grade10 places on the collector's behalf
 never needs a fresh card check mid-auction.
 
-## Journeys
-
 :::detail{title="Product decisions" for="pm"}
 The extension rule exists because bidders arrive at the last minute, so every
 collector who cannot be there for a moving close is a bid the lot never

@@ -8,7 +8,7 @@ A verified identity is one identity check, kept. It belongs to the person, not
 to the case it was made for, which is what lets a second product reuse it
 instead of asking for the passport again.
 
-## What it holds
+## Contents
 
 - **The person** — the legal name as the document prints it, and the date of
   birth as a calendar day with no time and no zone
@@ -45,7 +45,7 @@ verified on grade10.com is unknown to ZZZ, which verifies nobody and deploys
 none; the day a ZZZ product verifies somebody, it gets a store, a vendor
 account and a template of its own.
 
-## The two refusals
+## Refusals
 
 Under age and an expired document, both judged at the instant the check is
 applied — a check made two years ago may have aged past its document's expiry

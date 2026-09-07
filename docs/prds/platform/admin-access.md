@@ -58,13 +58,13 @@ Three layers gate every admin surface, all fail-closed: role permissions, a seco
 
 The bootstrap write bypasses the audit chain, which is exactly why it is accepted once per product database and never again: any later raw role write counts as tampering that the chain and the offsite backups exist to catch. The one other accepted raw write is lockout recovery: an operator who loses both authenticator and backup codes gets their `two_factors` row deleted — they re-enroll at their next admin call — recorded as an incident, never routine.
 
-## Dev endpoints stop at the laptop
+## Dev endpoints
 
 `POST /dev/login` mints a real session for any email at any role, and `POST /dev/setup` applies migrations; neither asks who is calling. So `allowsDevEndpoints` in `@grade10/utils/env` allows exactly `development`, `testing`, and `e2e` — every deployed environment, staging included, answers 403, and an unset or misspelled `ENVIRONMENT` fails closed. The SPA's dev sign-in widget reads the same predicate, so it offers nothing the server would refuse.
 
 That module holds one predicate per decision, because a single "is this dev?" boolean is what put an open session minter on staging. `allowsSandboxProviders` is the separate rule for money — everything but `production`, so staging keeps rehearsing payments on test keys — `allowsRawErrorDetail` is the rule for what a log may carry, narrow because staging logs ship to Datadog too, and `allowsRawErrorResponse` is the separate rule for what an ERROR RESPONSE may carry — separate because a log is read by operators who already hold the data while a response goes to whoever made the request.
 
-## What leaves the worker
+## Errors and logs
 
 ### An error answers with a code, never a message
 

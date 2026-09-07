@@ -17,5 +17,3 @@ heading, and when both lists are empty it shows the empty state that sends a
 collector to the store. Track Order appears on a card only when the
 application enables it, and each part is importable alone, so a console that
 needs just the badge or just a card takes that and no more.
-
-## What a collector does

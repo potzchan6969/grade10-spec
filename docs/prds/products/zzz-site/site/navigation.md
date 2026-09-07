@@ -24,5 +24,3 @@ and opening a surface downloads no other surface's code.
 What a response says before scripts run is deliberately not this capability's.
 ZZZ is served as one shell for every address; the day it has a public surface,
 whatever specs that surface will own it.
-
-## What a collector does

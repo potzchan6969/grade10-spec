@@ -5,7 +5,7 @@ order: 2
 
 A customer submits an item online, books a visit to a physical store, staff value it and sign documents with them on an in-store iPad, and the item is vaulted until its obligations are settled. One backend (`apps/backend/grade10/vault`) runs the case from intake to release; bookings live in `apps/backend/grade10/appointment` and verified identities in `apps/backend/grade10/e-kyc`, and booking, signing and identity are generic packages the vault composes. Builds on [Account Data](/platform/account-data) (data ownership and deletion), [Admin Access Control](/platform/admin-access) (the elevated ladder and the audit chain), and [Multi-Product Assembly](/platform/multi-product) (why a brand assembles services instead of forking them). The core: **`cases/transitions.ts` is the only writer of a case status, a booking is a relationship rather than a status, and no money moves in v1 without a person recording that it did.**
 
-## Two lanes, one product
+## Lanes
 
 ### Vault is custody; financing is an attachment on a case
 
@@ -19,7 +19,7 @@ A customer submits an item online, books a visit to a physical store, staff valu
 - What separates it is the counterparty, not the infrastructure: the custody agreement is the custodian's and the loan agreement is the lender's, two registered entities read out of one per-brand table.
 - The identity store serves whatever product binds it, and the vault is the only one that does; a second product would join by minting its own entrypoint and declaring the binding.
 
-## The case
+## Case
 
 ### One case is one item
 
@@ -326,7 +326,7 @@ Erasure is an admin calling `erasure.erase`, which asks auth's guard first, as e
 - The ladder runs from **5 minutes** to **6 hours** and is spent after **5** attempts, at which point the row is parked with the reason on it and leaves the queue's predicate. A parked row is a stamp rather than a count, so nothing has to compare a number against a limit to know it is done trying.
 - A parked row is not a silent loss: it badges its case in the operator's queue, and one mutation hands every parked message on that case back to the queue with the ladder started over.
 
-## Where it lives
+## Code map
 
 | Where | What |
 | --- | --- |

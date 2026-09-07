@@ -17,7 +17,7 @@ grants lives in reviewed code.
 That split is what makes a compromised operator account a limited problem: it
 can hold roles it should not, but it cannot invent a permission for one.
 
-:::detail{title="How the gate is walked" for="operator"}
+:::detail{title="Gate layers" for="operator"}
 Permissions are only the first of three layers, all fail-closed. An elevated
 call re-reads the session straight from the auth worker with no cookie cache,
 so a ban or a role change acts immediately; then it checks every named

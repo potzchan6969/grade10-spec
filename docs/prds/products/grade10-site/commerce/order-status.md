@@ -10,7 +10,7 @@ stands. [Orders](/p/grade10-site/store/order-history) and
 Shopify's own order, payment, and fulfilment facts, so the two never disagree
 about the same order.
 
-## The badges
+## Badges
 
 | Badge | Reads as |
 | --- | --- |
@@ -25,7 +25,7 @@ next, so a partially refunded order never shows as Shipped or Completed.
 Every combination Shopify can report resolves to one of the five — never a
 blank badge.
 
-## The note
+## Secondary note
 
 A badge may carry one secondary note under it — an order on hold, a scheduled
 fulfilment, a partial refund already shipped — read from an identifier the

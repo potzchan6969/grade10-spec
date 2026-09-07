@@ -14,7 +14,7 @@ its own source — a route here would put the legal names and passport photograp
 of every customer of every product one misconfigured origin away from a
 browser.
 
-## Two ways to be verified
+## Verification routes
 
 - **Before the visit** — the collector completes a check on their own phone,
   hosted and decided by a verification provider, and the verdict comes back on
@@ -49,7 +49,7 @@ repeated document findable, and nothing looks — so the same document under a
 second account is a query somebody could run, not an alarm that fires.
 :::
 
-:::detail{title="For engineers" for="engineer"}
+:::detail{title="Service design" for="engineer"}
 `packages/e-kyc/` in the application repository, deployed once per brand —
 `grade10-e-kyc-service` for Grade10, with its own Neon project and bucket, and
 a `BRAND` var that selects the hosted template. Its entire HTTP surface is a

@@ -12,7 +12,7 @@ or at a set time, and calls it off if something is wrong. A **collector**
 browses, bids, and after the close either pays for the card or gets their money
 back.
 
-## Bids are holds, not payments
+## Holds
 
 A bid is backed by an authorization on the bidder's card. The money is held,
 not taken. Only the winner's hold is ever captured; every other hold is
@@ -80,6 +80,23 @@ release retries, and the manual fulfilment ladder those two files describe are
 therefore not operator-reachable today — the queue replaced them.
 :::
 
+:::detail{title="Design record" for="engineer"}
+The three capabilities here cover the operator's listing, its media, and the
+public lot page. What a bid must clear, how a hold moves, and when a close extends live in
+`grade10-site/auction/auction` and, in more detail, in
+[docs/architecture/auction.md](https://github.com/9gag/grade10/blob/main/docs/architecture/auction.md),
+which carries the full state tables, the money invariants and the sweeps.
+[docs/architecture/auction-gaps.md](https://github.com/9gag/grade10/blob/main/docs/architecture/auction-gaps.md)
+lists what is not built, verified against the code.
+
+The auction backend is the one service deliberately shared between brands: a
+card is auctioned once, and grade10 and ZZZ collectors bid against each other
+on the same lot. Identities, sessions and money never cross; only the lot, the
+amounts and per-auction pseudonyms do, so a display says Bidder 4 and never a
+name. See
+[docs/architecture/multi-product.md](https://github.com/9gag/grade10/blob/main/docs/architecture/multi-product.md).
+:::
+
 :::detail{title="Product decisions" for="pm"}
 Grade10 owns the catalogue and the bid outcome; Stripe supplies card
 authorization. What the auction is for, who it serves, what it leaves out and
@@ -140,21 +157,4 @@ authorization is still open is a double-charge risk if capture is not
 suppressed; release-not-capture is the decision that closes it. Winner email
 and delivery address on the operator detail are operational contact, not a
 reason to put those values on the platform-wide audit hashes.
-:::
-
-:::detail{title="Where the lifecycle is written down" for="engineer"}
-The three capabilities here cover the operator's listing, its media, and the
-public lot page. What a bid must clear, how a hold moves, and when a close extends live in
-`grade10-site/auction/auction` and, in more detail, in
-[docs/architecture/auction.md](https://github.com/9gag/grade10/blob/main/docs/architecture/auction.md),
-which carries the full state tables, the money invariants and the sweeps.
-[docs/architecture/auction-gaps.md](https://github.com/9gag/grade10/blob/main/docs/architecture/auction-gaps.md)
-lists what is not built, verified against the code.
-
-The auction backend is the one service deliberately shared between brands: a
-card is auctioned once, and grade10 and ZZZ collectors bid against each other
-on the same lot. Identities, sessions and money never cross; only the lot, the
-amounts and per-auction pseudonyms do, so a display says Bidder 4 and never a
-name. See
-[docs/architecture/multi-product.md](https://github.com/9gag/grade10/blob/main/docs/architecture/multi-product.md).
 :::

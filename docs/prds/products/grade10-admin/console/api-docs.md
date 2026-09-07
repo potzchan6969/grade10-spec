@@ -19,7 +19,7 @@ production build drops it.
   one audience
 - **URL** — `admin.grade10.com/api-docs`, under the Dev heading
 
-## Who a call is for
+## Audiences
 
 Three audiences, read off the caller word each procedure carries and named
 beside the filter, which narrows to one of them —
@@ -34,7 +34,7 @@ Nothing listed is internal: no worker calls another over these ladders. Where
 one worker only fronts a call — the store's `auction.*` hands bidding to the
 auction worker — the procedure names the service that does the work.
 
-## What keeps it true
+## Accuracy
 
 - **Generated** — one document per service, walked off the router it mounts;
   no line of it is written by hand
@@ -48,12 +48,16 @@ auction worker — the procedure names the service that does the work.
   and its service counts how many do; nothing is inferred from what the code
   happens to return
 
-## What it looks like
+## Designs
 
 There are no Figma frames for the admin, by decision. The layout is drawn on a
 canvas: [Grade10 API Docs](https://claude.ai/code/artifact/9b0c8ff4-71ca-4132-80c8-4e12369580c6)
 — the console shell with the surface under Dev, the services rail, one
 router's procedure table, and the detail panel for one procedure.
+
+## Test cases
+
+::cases{id="grade10-admin/console/api-docs"}
 
 :::detail{title="Product decisions" for="pm"}
 Reading a backend contract means reading its router. Over two hundred
@@ -97,5 +101,3 @@ schema AST surviving conversion and on the shape of its JSON Schema output. A
 version bump that changes either fails the drift test loudly rather than
 emitting a document that is quietly wrong.
 :::
-
-::cases{id="grade10-admin/console/api-docs"}

@@ -20,7 +20,7 @@ warnings, and does not end on unwatch — a participant is owed those whatever
 they do with the watch. A collector who both watches and bids still receives
 exactly one copy of anything.
 
-## The six messages
+## Messages
 
 | Message | When | Who |
 | --- | --- | --- |

@@ -16,7 +16,7 @@ the container, which is the one place ports are bound and outbound clients are
 built. One slice serves every brand that shows the surface, and the boundaries
 are enforced by a check rather than by review.
 
-:::detail{title="For engineers" for="engineer"}
+:::detail{title="Code map" for="engineer"}
 The layout is `packages/<product>/frontend/src/features/<area>/<feature>/`,
 each slice holding its own `domain/`, `data/` and `presentation/` behind DI
 tokens, with `src/core/` for the client ports. The reserved subpath a package

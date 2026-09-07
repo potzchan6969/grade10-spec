@@ -33,7 +33,7 @@ leaves holding a link that manages it.
 - **One live visit per service** — booking the same service twice under one
   address is told about the visit already held
 
-## What it looks like
+## Designs
 
 ::story{id="appointment-booking-bookingslotpicker--default" title="Picking a day and a time"}
 

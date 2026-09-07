@@ -42,7 +42,7 @@ None free is full.
 The booking, its occupation, and its first event.
 :::
 
-## Where a booking stands
+## Booking states
 
 | State | Live | Means |
 | --- | --- | --- |
@@ -56,7 +56,7 @@ exactly as a new booking. A closed booking refuses every further move,
 cancellation or outcome, and repeating the same cancellation or outcome
 answers the booking unchanged.
 
-## What a booking tells its owner
+## Notifications
 
 A booking with an address gets a confirmation, an update when it moves, a
 cancellation, and one reminder at the service's lead, each with a calendar
@@ -69,7 +69,7 @@ A person's bookings lose the person, keep the occupancy: the shop, the
 resource, the start, the state and the events stay; the name, address,
 phone, notes and answers go, and the manage link stops answering.
 
-:::detail{title="For engineers" for="engineer"}
+:::detail{title="Design guarantees" for="engineer"}
 Two guarantees carry the design. **Availability is derived, never stored**:
 one pure derivation, parameterized by the clock, serves the public picker,
 the operator's day view and the booking processor, which runs it again under

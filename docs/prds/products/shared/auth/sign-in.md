@@ -41,4 +41,6 @@ is what closes that gap, so a collector asked to sign in mid-flow comes back to
 what they were doing.
 :::
 
+## Test cases
+
 ::cases{id="shared/auth/sign-in"}

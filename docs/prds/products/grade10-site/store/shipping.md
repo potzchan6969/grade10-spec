@@ -10,7 +10,7 @@ Shopify takes the address at checkout; after that the buyer's order history
 has no shipment state, no tracking, and no answer to the only question a
 buyer has between paying and holding the card.
 
-## The intended shape
+## Intended shape
 
 The order of record carries a shipment state the order page and the order
 history both render, a tracking reference lands on the order when the parcel

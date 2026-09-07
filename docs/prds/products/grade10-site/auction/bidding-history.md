@@ -15,7 +15,7 @@ record](/p/grade10-site/auction/account-record) owns the surrounding account
 navigation, the Watching tab, and its account-level presentation; this
 capability owns the Bidding index and the detailed story behind each listing.
 
-## The index
+## Index
 
 Every listing the account bid on — by hand or through an auto-bid — appears
 exactly once, ordered by its latest activity, carrying the listing's
@@ -32,5 +32,3 @@ bid accepted, a bid refused and why, a private maximum set or raised —
 interleaved with the public movements that changed their standing. Private
 facts stay private: another bidder's maximum never appears, only the public
 consequence that displaced them.
-
-## Journeys

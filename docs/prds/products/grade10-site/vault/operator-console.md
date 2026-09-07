@@ -15,7 +15,7 @@ status.
 - **Who** — staff run the flow, treasurers record money, admins hold every
   grant; the queue shows who is waiting on a person, and nobody is emailed
 
-## The queue
+## Queue
 
 | View | What it lists |
 | --- | --- |
@@ -81,7 +81,7 @@ One line per tab, as `Surface: verb, verb, verb`.
 - **Appointments section**: add or retire a shop, weekly rules, exceptions,
   the day's offered slots and bookings, each booking opening its case
 
-## Who may do what
+## Permissions
 
 | Grant | Roles | Opens |
 | --- | --- | --- |
@@ -106,7 +106,7 @@ One line per tab, as `Surface: verb, verb, verb`.
 - **Staff hear nothing** — no email or push to staff; the queue's badges and
   the Today and Overdue views are the signal
 
-## The physical vault
+## Physical vault
 
 - **Locker** — the shop is required at vaulting and the locker is optional
   free text; a move between lockers writes a movement, and everything held is
@@ -145,31 +145,7 @@ the decision behind them.
 
 ::spec{id="grade10-admin/vault/money-book"}
 
-:::detail{title="Product decisions" for="pm"}
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| Queue by wait, not by status | Decided | A shop asks what a case is waiting for; every status belongs to exactly one status view, and Today and Overdue are queries | Product |
-| Buttons follow the machine | Decided | Each move shows only at the statuses the contract publishes, and the worker refuses independently | Engineering |
-| Treasurer split | Decided | Nothing a single staff member can do moves money out of the business | Product |
-| A correction takes a second money holder | Decided | `vault:payout` and never the row's own recorder; asking for the approve grant as well would have made corrections admin-only, because staff and treasurer are disjoint on money | Product |
-| The book sits behind the money grant | Decided | A ledger and a position across every case are the firm's accounts; `vault:read` still sees what one case owes | Product |
-| "Today" is cut where the rows are read | Decided | The shop's own day decides it, in the query rather than in the browser, so the queue and the badges beside it cannot disagree across a midnight | Engineering |
-| The console never moves a visit from the diary | Decided | A case's visit is moved on the case, so the cached booking and the diary have one writer | Engineering |
-| Staff see the contact; the verified name stays in the identity store | Decided | The console shows what staff set and never the legal name | Product |
-| Counter intake | Decided | Every case is the collector's own account, opened in the shop if need be; the console has no intake, and no identity is keyed to a case | Product |
-| The shop is on the custody row | Decided | Vaulting names the shop the item is kept at, so the held-items list answers which vault holds what | Owner |
-| Valuation record | Deferred | Grading company, certificate number and grade ride the note until the inventory catalogue links; a second valuer, a condition report and counter photographs with it | Product |
-| Locker registry and stock-take | Deferred | Lockers per shop with capacity, a stock-take against the shelf, damage and loss. Reopens when a shop outgrows free-text lockers | Owner |
-| Forfeited stock | Decided | A forfeited item leaves custody and becomes the shop's stock; the chain keeps the figure it settled and the rest is inventory's | Owner |
-| Staff notifications | Decided | The queue is the inbox: badges, Today and Overdue, and nothing emailed to staff. Revisited when a shop asks | Product |
-| A case nobody is valuing | Decided | `under_valuation` badges after **7 days** untouched, derived where every other badge is | Product |
-| Valuer versus approver | Decided | One grant prices, offers and forfeits; the split that matters is per case — the payout's recorder is not the offer's maker — and a separate valuing grant would over-split a shop of three | Owner |
-| Paging the arrears | Decided | A keyset cursor over the payout's due date and the case id, the same idiom the ledger pages on; the ledger's own pager stays as it is | Engineering |
-| Staging second factor | Decided | Required, because staging rehearses production; development stays optional so a local stack never locks an operator out | Owner |
-| No-show and late | Decided | The case is the item, so a different item is a new case and this one is declined or cancelled | Product |
-:::
-
-:::detail{title="For engineers" for="engineer"}
+:::detail{title="Code map" for="engineer"}
 - **Grants** — `packages/vault/contracts/src/permissions.ts` maps every admin
   procedure to its grant; `packages/grade10-auth/contracts/src/schemas.ts`
   maps roles to grants; the router's meta is pinned to both by tests, and a
@@ -194,4 +170,28 @@ the decision behind them.
   [vault.md](https://github.com/9gag/grade10/blob/main/docs/architecture/vault.md)
   and
   [the elevated-procedure ladder](https://github.com/9gag/grade10/blob/main/docs/architecture/security.md)
+:::
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Queue by wait, not by status | Decided | A shop asks what a case is waiting for; every status belongs to exactly one status view, and Today and Overdue are queries | Product |
+| Buttons follow the machine | Decided | Each move shows only at the statuses the contract publishes, and the worker refuses independently | Engineering |
+| Treasurer split | Decided | Nothing a single staff member can do moves money out of the business | Product |
+| A correction takes a second money holder | Decided | `vault:payout` and never the row's own recorder; asking for the approve grant as well would have made corrections admin-only, because staff and treasurer are disjoint on money | Product |
+| The book sits behind the money grant | Decided | A ledger and a position across every case are the firm's accounts; `vault:read` still sees what one case owes | Product |
+| "Today" is cut where the rows are read | Decided | The shop's own day decides it, in the query rather than in the browser, so the queue and the badges beside it cannot disagree across a midnight | Engineering |
+| The console never moves a visit from the diary | Decided | A case's visit is moved on the case, so the cached booking and the diary have one writer | Engineering |
+| Staff see the contact; the verified name stays in the identity store | Decided | The console shows what staff set and never the legal name | Product |
+| Counter intake | Decided | Every case is the collector's own account, opened in the shop if need be; the console has no intake, and no identity is keyed to a case | Product |
+| The shop is on the custody row | Decided | Vaulting names the shop the item is kept at, so the held-items list answers which vault holds what | Owner |
+| Valuation record | Deferred | Grading company, certificate number and grade ride the note until the inventory catalogue links; a second valuer, a condition report and counter photographs with it | Product |
+| Locker registry and stock-take | Deferred | Lockers per shop with capacity, a stock-take against the shelf, damage and loss. Reopens when a shop outgrows free-text lockers | Owner |
+| Forfeited stock | Decided | A forfeited item leaves custody and becomes the shop's stock; the chain keeps the figure it settled and the rest is inventory's | Owner |
+| Staff notifications | Decided | The queue is the inbox: badges, Today and Overdue, and nothing emailed to staff. Revisited when a shop asks | Product |
+| A case nobody is valuing | Decided | `under_valuation` badges after **7 days** untouched, derived where every other badge is | Product |
+| Valuer versus approver | Decided | One grant prices, offers and forfeits; the split that matters is per case — the payout's recorder is not the offer's maker — and a separate valuing grant would over-split a shop of three | Owner |
+| Paging the arrears | Decided | A keyset cursor over the payout's due date and the case id, the same idiom the ledger pages on; the ledger's own pager stays as it is | Engineering |
+| Staging second factor | Decided | Required, because staging rehearses production; development stays optional so a local stack never locks an operator out | Owner |
+| No-show and late | Decided | The case is the item, so a different item is a new case and this one is declined or cancelled | Product |
 :::

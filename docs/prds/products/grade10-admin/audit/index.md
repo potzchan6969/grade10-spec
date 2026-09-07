@@ -66,7 +66,7 @@ the verify cursor and its sweep, the archive witness, the merged console and the
 signing anchor are all unspecified.
 :::
 
-:::detail{title="For engineers" for="engineer"}
+:::detail{title="Chain internals" for="engineer"}
 The table and the chain live in `packages/postgres`, shared by every service
 that carries one. A row holds a dense sequence number, the actor and the roles
 they held at the time, the action, its subject, canonical JSON details stored as

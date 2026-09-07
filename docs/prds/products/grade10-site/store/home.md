@@ -19,7 +19,7 @@ row of cards. Links people already hold still land here.
    2. **Merchandised row** — cards from whichever collection the shop lists
       first ([[grade10-site-store-home-SC-11]])
 
-## What it looks like
+## Designs
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9051" title="Hero section"}
 

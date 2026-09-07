@@ -7,7 +7,7 @@ What every backend-to-backend edge in this repo is, and which shape a new one ta
 
 There is no message bus and no Cloudflare Queue. An edge is a service binding, and a queue here is a state row with `attempts` and `next_attempt_at` that a cron re-reads.
 
-## The edges
+## Edges
 
 Twenty-three bindings: eight are auth, nine are a gateway's, and the taxonomy below is about the other six — the only cross-service decisions this platform has actually made.
 
@@ -42,7 +42,7 @@ The consumer's cron claims; the producer stamps as it hands over. At most once b
 
 The reason is not that a cycle is impossible — store and loyalty are one, and it is declared in [the membership and POS plan](/references/shopify-membership-pos). It is that a cycle costs a deploy-order coupling, and pulling also makes the brand split structural: a storefront that never calls gets nothing, with no flag naming it.
 
-## The same call, opposite policies
+## Refusal policies
 
 These two are the poles of the refusal rule, and they disagree on purpose.
 

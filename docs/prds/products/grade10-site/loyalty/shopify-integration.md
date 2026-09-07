@@ -85,7 +85,7 @@ reconciling sweep, and is attributed to a member through the customer on the
 sale — or later, by an operator, when the sale was rung up before the member
 joined.
 
-## The POS extension
+## POS extension
 
 The loyalty terminal is a Shopify POS UI extension: one tile on the POS home
 screen, one modal that holds the whole staff flow, and a read-only badge on
@@ -195,7 +195,7 @@ before or after discounts is unanswered, so preview and charge can diverge
 exactly where points or coupons straddle the free bar.
 :::
 
-:::detail{title="For engineers" for="engineer"}
+:::detail{title="Code map" for="engineer"}
 Pairing lives in `packages/grade10-store/backend/src/services/pairing` over
 the `payment_customers` table; the metafield is `membership.member_id`, type
 `id`, unique. The draft-order client is `packages/shopify/backend`'s

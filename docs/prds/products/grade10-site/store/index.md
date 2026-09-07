@@ -15,7 +15,7 @@ The Grade10 store is the trading-card and collectibles shop at
   2. Membership and loyalty program
   3. Rewards
 
-## Who uses it
+## Users
 
 - **Collectors** — browse and buy
 - **Shopkeepers** — sell at the till in the physical shop, through the
@@ -24,7 +24,7 @@ The Grade10 store is the trading-card and collectibles shop at
 - **Admins** — manage store-wide configuration in the admin panel: account
   suspension, discount promotions, the coupon catalog
 
-:::detail{title="Where the code lives" for="engineer"}
+:::detail{title="Code map" for="engineer"}
 - **Storefront** — `apps/frontend/grade10`, composing `@grade10/ui` blocks
 - **Data layers** — `packages/grade10-store/frontend`
 - **Backend** — grade10's `store` worker, also mounting the till gateway and

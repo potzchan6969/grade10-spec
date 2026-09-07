@@ -27,7 +27,7 @@ vendor is involved.
   a whole packet from the Documents tab, and the answer is computed fresh
   every time
 
-## What the paper says
+## Document terms
 
 | Document | Facts printed | Terms |
 | --- | --- | --- |
@@ -90,29 +90,7 @@ The requirements are its; this page holds the decision behind them.
 
 ::spec{id="grade10-site/vault/documents-and-signing"}
 
-:::detail{title="Product decisions" for="pm"}
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| In-house signing | Decided | No vendor port until a vendor is chosen; an interface with no implementation encodes a guess | Engineering |
-| Token in the fragment | Decided | A fragment reaches no server, log or referrer | Engineering |
-| Release is its own packet | Decided | A pickup weeks later is a separate execution | Product |
-| Executed is two records agreeing | Decided | Packet completed and every document sealed in one transaction; no guard rests on a status alone | Engineering |
-| The wording travels with the copy | Decided | The certificate prints the disclosure and consent text, not only their digests | Legal |
-| The entity is data, answered once | Decided | Legal name, licence and trading name per brand in one table, read through one function by every path that mints paper, so the production refusal cannot be forgotten at the next one | Engineering |
-| The shop is the booked location | Decided | Read from the diary, never typed | Engineering |
-| A packet names its shop or is refused | Decided | The worker refuses exactly where the console refuses, so no agreement prints a place nobody can be held to | Product |
-| Two entities on the paper | Decided | The custodian on custody and release, the lender on the loan, the licence on the lender's alone; the values are Legal's | Legal |
-| The particulars that are computable | Decided | The annualised simple rate, `Fees: None`, Hong Kong SAR governing law, the complaints contact and the early-repayment line print today; the exact wording a regime prescribes is Legal's | Legal |
-| Cooling-off | Decided | None: no cooling-off is recalled for a secured loan, and early repayment is open any day | Legal |
-| Staff countersignature | Deferred | The borrower signs; the agreement states that the lender executes it on the advance, the certificate names the verifying staff member, and the payout row evidences execution. Reopens if counsel asks, or if the owner's "both sign" means countersign | Legal |
-| The terms are explained before the paper | Decided | A recorded event at the counter, an optional recording reference, a refusal to prepare the loan packet without it, and a line the borrower signs; telephony and its storage are a vendor's | Owner |
-| Every signer has a copy | Decided | Every case belongs to an account, so the sealed set reaches an address, the case page and the download alike | Engineering |
-| Digital signature and timestamp | Decided | The hash chain and the witnessed head stand; RFC 3161 on the head export is the first upgrade if counsel asks | Legal |
-| Chinese versions | TBC Legal | Bilingual templates and consent copy, and which language governs; English governs until then | Legal |
-| E-sign adequacy | TBC Legal | In person on the iPad, staff present, identity verified, the disclosure and consent printed in full on the certificate | Legal |
-:::
-
-:::detail{title="For engineers" for="engineer"}
+:::detail{title="Code map" for="engineer"}
 - **Templates** —
   `packages/vault/backend/src/documents/templates/{custodyAgreement,loanAgreement,releaseDocument,page}.ts`;
   the entity comes from `documents/legalEntity.ts` over
@@ -135,4 +113,26 @@ The requirements are its; this page holds the decision behind them.
   [compliance audit](https://github.com/9gag/grade10/blob/main/docs/qa/vault.md)
   (read as of its date; the checklist is current) and
   [production-readiness review](https://github.com/9gag/grade10/blob/main/docs/qa/vault-production-review.md)
+:::
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| In-house signing | Decided | No vendor port until a vendor is chosen; an interface with no implementation encodes a guess | Engineering |
+| Token in the fragment | Decided | A fragment reaches no server, log or referrer | Engineering |
+| Release is its own packet | Decided | A pickup weeks later is a separate execution | Product |
+| Executed is two records agreeing | Decided | Packet completed and every document sealed in one transaction; no guard rests on a status alone | Engineering |
+| The wording travels with the copy | Decided | The certificate prints the disclosure and consent text, not only their digests | Legal |
+| The entity is data, answered once | Decided | Legal name, licence and trading name per brand in one table, read through one function by every path that mints paper, so the production refusal cannot be forgotten at the next one | Engineering |
+| The shop is the booked location | Decided | Read from the diary, never typed | Engineering |
+| A packet names its shop or is refused | Decided | The worker refuses exactly where the console refuses, so no agreement prints a place nobody can be held to | Product |
+| Two entities on the paper | Decided | The custodian on custody and release, the lender on the loan, the licence on the lender's alone; the values are Legal's | Legal |
+| The particulars that are computable | Decided | The annualised simple rate, `Fees: None`, Hong Kong SAR governing law, the complaints contact and the early-repayment line print today; the exact wording a regime prescribes is Legal's | Legal |
+| Cooling-off | Decided | None: no cooling-off is recalled for a secured loan, and early repayment is open any day | Legal |
+| Staff countersignature | Deferred | The borrower signs; the agreement states that the lender executes it on the advance, the certificate names the verifying staff member, and the payout row evidences execution. Reopens if counsel asks, or if the owner's "both sign" means countersign | Legal |
+| The terms are explained before the paper | Decided | A recorded event at the counter, an optional recording reference, a refusal to prepare the loan packet without it, and a line the borrower signs; telephony and its storage are a vendor's | Owner |
+| Every signer has a copy | Decided | Every case belongs to an account, so the sealed set reaches an address, the case page and the download alike | Engineering |
+| Digital signature and timestamp | Decided | The hash chain and the witnessed head stand; RFC 3161 on the head export is the first upgrade if counsel asks | Legal |
+| Chinese versions | TBC Legal | Bilingual templates and consent copy, and which language governs; English governs until then | Legal |
+| E-sign adequacy | TBC Legal | In person on the iPad, staff present, identity verified, the disclosure and consent printed in full on the certificate | Legal |
 :::

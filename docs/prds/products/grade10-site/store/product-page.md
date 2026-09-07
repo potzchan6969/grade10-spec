@@ -22,7 +22,7 @@ the button to buy it.
 - **URL** — `grade10.com/store/products/<handle>`; a handle that is not a
   card answers 404 with the site's not-found page
 
-## What it looks like
+## Designs
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4098-2423" title="Product detail"}
 

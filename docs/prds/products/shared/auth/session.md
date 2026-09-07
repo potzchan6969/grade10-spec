@@ -20,5 +20,3 @@ Analytics follows the same key: a signed-in event names the person by user id,
 an anonymous one names the device, and signing in links that device to the
 person so a visit does not read as two strangers. Which events a product records
 is that product's business.
-
-## What a collector does

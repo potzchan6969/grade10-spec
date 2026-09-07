@@ -442,7 +442,7 @@ Two accounts — one per storefront: the receiver of the winner's payment is the
 - `staff` holds `read`, `catalog` and `operate`; `admin` holds everything
 - A test reads the grants off the built router, so a procedure added without one, or with a permission the vocabulary never declared, fails rather than quietly locking an admin out
 
-## Where it lives
+## Code map
 
 | Where | What |
 | --- | --- |

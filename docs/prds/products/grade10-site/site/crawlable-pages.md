@@ -35,9 +35,9 @@ and still shows the not-found surface rather than a bare error page.
 The profile and sign-in are session-shaped and out of scope here. The auction's
 lot pages are in scope, and apply every requirement below per lot.
 
-## What a collector, a crawler and a link preview do
+## Server rendering
 
-:::detail{title="Where this is implemented" for="engineer"}
+:::detail{title="Code map" for="engineer"}
 An SPA's server-rendered half lives in its `src/serving/` directory; read
 [docs/architecture/serving.md](https://github.com/9gag/grade10/blob/main/docs/architecture/serving.md)
 before touching it. Per-locale addresses, alternates and the document language

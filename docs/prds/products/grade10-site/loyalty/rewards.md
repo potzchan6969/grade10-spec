@@ -11,7 +11,7 @@ menu never rewrites what an earlier redemption cost ([[grade10-site-loyalty-prog
 the member then holds depends on what the reward is — a physical item waiting
 at the counter, a money-off code, or nothing further to deliver.
 
-## The menu
+## Menu
 
 | Field | Meaning |
 | --- | --- |
@@ -108,9 +108,11 @@ member's own undo are specified only in the in-flight
 `revise-loyalty-programme-rules` and `add-shopify-membership-pos` changes.
 :::
 
+## Test cases
+
 ::cases{id="grade10-site/loyalty/programme"}
 
-:::detail{title="For engineers" for="engineer"}
+:::detail{title="Redeeming and draining" for="engineer"}
 The redemption snapshots the reward's cost, quantity, fulfilment kind and
 template. Lock order is member row then reward row; stock decrements by a
 guarded update that rolls the whole transaction back on zero rows. The drain
@@ -119,7 +121,9 @@ transaction, and completes with a single guarded update — a reversal landing
 mid-attempt reads as zero rows, and the just-made artifact is deactivated. The
 code is random, committed before the first vendor call, so a crash leaves a
 code a retry can ask for again.
+:::
 
+:::detail{title="Spending and metrics" for="engineer"}
 Paying with points is its own ledger kind, `pay`, with `capture` for the
 settlement debit and a keyed return; nothing is ever reserved — a `point_holds`
 table was added and dropped again. Operator moves sit behind

@@ -39,7 +39,7 @@ made.
 | [Operator Console](/p/grade10-site/vault/operator-console) | The queue and its views, one case's tabs, grants, the physical vault |
 | [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness) | Identity, retention, evidence, the checklist before the first production case, what counsel supplies |
 
-## Who uses it
+## Users
 
 - **Collectors** — open a request, photograph the item, book the visit,
   accept or decline the offer, sign on the shop's iPad, watch the case, ask
@@ -51,6 +51,24 @@ made.
 - **Treasurers** — record money and nothing else: the payout, each
   repayment, and with an approver's grant a correction
 - **Admins** — everything, including both sides of the money split
+
+:::detail{title="Design record" for="engineer"}
+- [Vault architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/vault.md)
+  — the case machine, the lanes, the vocabulary and the decisions
+- [Document-handling compliance audit](https://github.com/9gag/grade10/blob/main/docs/qa/vault.md)
+  — read as of its date; the checklist is current
+- [Production-readiness review](https://github.com/9gag/grade10/blob/main/docs/qa/vault-production-review.md)
+  — vault, doc-sign and auth together
+- [Account data](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
+  — who owns the verified identity the case only references
+- **Code** — `packages/vault/{contracts,backend,frontend,admin-frontend}` with
+  `packages/appointment`, `packages/doc-sign` and `packages/e-kyc` beside it;
+  the collector's pages in the grade10 SPA, the console pages in the grade10
+  admin panel; deployed as `grade10-vault-service`
+- **Platform pages** — [Vault Custody](/platform/vault-custody),
+  [Admin Access Control](/platform/admin-access),
+  [Account Data](/platform/account-data)
+:::
 
 :::detail{title="Product decisions" for="pm"}
 The vault turns a collector's graded card into cash without a sale, and gives
@@ -86,22 +104,4 @@ a date.
 | Two legal identities, one table | Decided | The custodian holds and the lender lends; the custodian's name blocks a production deploy and the lender's refuses an offer, so custody opens while the lender is still being registered | Legal |
 | Lending policy is seeded from the owner's numbers | Decided | Loan to value, the rate band per 30 days, term presets and offer validity in one per-brand table; in production a null bound refuses the offer, never the deploy | Owner |
 | A day is the brand's, an instant is UTC | Decided | `Asia/Hong_Kong` decides every calendar judgement — the due date, a dated page, the day's queue, an age, an expiry — and the wire, the database and every comparison stay UTC | Product |
-:::
-
-:::detail{title="Where the design is written down" for="engineer"}
-- [Vault architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/vault.md)
-  — the case machine, the lanes, the vocabulary and the decisions
-- [Document-handling compliance audit](https://github.com/9gag/grade10/blob/main/docs/qa/vault.md)
-  — read as of its date; the checklist is current
-- [Production-readiness review](https://github.com/9gag/grade10/blob/main/docs/qa/vault-production-review.md)
-  — vault, doc-sign and auth together
-- [Account data](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
-  — who owns the verified identity the case only references
-- **Code** — `packages/vault/{contracts,backend,frontend,admin-frontend}` with
-  `packages/appointment`, `packages/doc-sign` and `packages/e-kyc` beside it;
-  the collector's pages in the grade10 SPA, the console pages in the grade10
-  admin panel; deployed as `grade10-vault-service`
-- **Platform pages** — [Vault Custody](/platform/vault-custody),
-  [Admin Access Control](/platform/admin-access),
-  [Account Data](/platform/account-data)
 :::

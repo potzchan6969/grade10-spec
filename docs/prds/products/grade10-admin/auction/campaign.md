@@ -10,7 +10,7 @@ a title and copy of its own and deliberately no clocks and no money. The
 console calls it a campaign everywhere and never a sale: that word is kept
 for store checkout and sold stock, which a cover is neither.
 
-## The lifecycle
+## Lifecycle
 
 A campaign walks draft → created → published, and any of the three can be
 called off to canceled. A draft is an operator's private start and appears on
@@ -21,7 +21,7 @@ under [the listing rules](/p/grade10-admin/auction/listing), and a canceled
 campaign opens read-only: title and copy visible, nothing writable, no second
 cancel.
 
-## The editor
+## Editor
 
 One editor authors a campaign end to end. Title is required — trimmed, one to
 two hundred characters, and a write that clears it is refused; copy is

@@ -17,5 +17,3 @@ This is the surgical version of a ban. A ban disables the whole account and
 refuses new sign-ins; a revoke ends a session and leaves the person able to sign
 in again, which is what a lost laptop needs. Signing out of the surface you are
 on is a different capability again.
-
-## What an operator does

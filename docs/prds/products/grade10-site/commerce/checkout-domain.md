@@ -40,7 +40,7 @@ Run staging first and hold it through one certificate renewal before
 production follows. A stalled renewal is the only failure this setup can
 cause, and it does not show up on the day you make the change.
 
-## What Shopify must still serve
+## Keep list
 
 The redirects are written as "everything except this list". Get the list wrong
 and checkout breaks, so it is the part to review, not the rules.
@@ -57,8 +57,8 @@ every buyer to the store page instead of to checkout. The last row is
 precaution — settle it by watching a real staging checkout in the network tab
 and adding anything on this host that comes back 302 to `/store`.
 
-## 1. Connect the domain while the record is DNS only
-
+:::flow{title="Standing up the host"}
+## *Operator* — **Connect the domain** while the record is DNS only
 Shopify proves ownership over plain HTTP on `/.well-known/acme-challenge/*`
 and issues the certificate there. A proxy in the way at this point is what
 breaks it.
@@ -79,8 +79,7 @@ Enterprise zones only: a zone hold blocks Shopify from attaching the hostname
 ("The hostname is associated with a held zone"). Zone homepage → **Quick
 Actions → Zone Hold** → off, or turn off just **Also prevent subdomains**.
 
-## 2. Proxy the record
-
+## *Operator* — **Proxy the record**
 Edit the same CNAME → proxy status **Proxied**. The target does not change.
 
 A small Shopify icon appears beside the record. That icon is O2O engaging —
@@ -88,15 +87,13 @@ Cloudflare recognising the target as another Cloudflare zone and running our
 zone first, theirs second. If it does not appear, roll back: a proxied record
 without O2O is a plain origin fetch and the shop breaks.
 
-## 3. Leave Always Use HTTPS off
-
+## *Operator* — **Leave Always Use HTTPS off**
 **SSL/TLS → Edge Certificates → Always Use HTTPS** stays **off**. It redirects
 every request including `/.well-known/acme-challenge/*`, the path Shopify
 renews the certificate over, so turning it on kills renewal quietly, weeks
 later. Rule 4 below enforces HTTPS without touching that path.
 
-## 4. The redirect rules
-
+## *Operator* — **Create the redirect rules**
 **Rules → Overview → Create rule → Redirect Rule** (newer dashboards list
 Redirect Rules directly under Rules). Pick **Custom filter expression** for
 each. Rules are evaluated top to bottom and the first match wins, so the order
@@ -170,8 +167,7 @@ settled — browsers cache a 301 hard and you cannot take it back. Rule 4 is a
 
 Nothing else goes on this host.
 
-## 5. Verify
-
+## *Operator* — **Verify** the host end to end
 ```bash
 host=checkout.grade10-stg.com
 
@@ -202,14 +198,15 @@ run that check from [the Shopify verification list](https://github.com/9gag/grad
 
 Come back to Shopify → **Settings → Domains** a day later, and again after the
 next renewal, to confirm the domain still reads SSL available.
+:::
 
-## 6. Rollback
+## Rollback
 
 Flip the record back to **DNS only**. Every rule stops matching and Shopify
 serves the whole host again — one click, no deploy, no code. Do it the moment
 Shopify reports a certificate problem.
 
-## What never goes on this host
+## Host restrictions
 
 - No Workers, Snippets, Page Rules or Transform Rules. Cloudflare marks each
   as compatible with caution on an O2O hostname: they can block the flow of
@@ -222,7 +219,7 @@ Shopify reports a certificate problem.
   documents it. That is the trade this page makes: real response-level
   redirects, against a support answer we may not get.
 
-## If we back out of the proxy
+## Backing out of the proxy
 
 The DNS-only fallback is a theme edit — `layout/theme.liquid` emitting a meta
 refresh per `request.page_type`. Client-side, not a response code, and it

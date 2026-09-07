@@ -22,5 +22,3 @@ what an operator may do — that stays with each product's own capabilities. The
 runtime underneath is held to terms rather than trusted: its version
 discipline is a stated floor, and reverting it is a described route, not a
 rediscovery.
-
-## What an operator relies on

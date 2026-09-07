@@ -10,7 +10,7 @@ engineering reviewed drift apart. Monitoring is the workflow that notices:
 the `reconcile-figma-annotations` skill, driven end to end by a developer,
 never by an unattended job.
 
-## The observation
+## Observation
 
 A run reads annotations only from registered engineering surfaces, with each
 file's category catalog fetched once so findings speak in the designer's own
@@ -18,7 +18,7 @@ labels — Content, Interaction — rather than ids. The observation is
 temporary and carries a digest that pins its evidence; no current-state file
 is written to either repository.
 
-## The reconciliation
+## Reconciliation
 
 The live observation is compared against the reviewed baseline, and every
 finding names the registered engineering work it touches. Missing or

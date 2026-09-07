@@ -8,7 +8,7 @@ browse page, a product card, a cart drawer, an auction lot page. Rather than
 each application drawing those again, they are drawn once and each application
 supplies its own words, images, catalogue and callbacks.
 
-## What a block is
+## Blocks
 
 A block is a compound component named by a capability spec. It renders what it
 is given and reports what was pressed, and that is all it does. It fetches
@@ -21,14 +21,14 @@ re-brands it without touching its source. They are also what makes every visible
 state reachable from a Storybook story with props alone — if a state needs a
 running backend to see, the block is doing too much.
 
-## Who consumes it
+## Consumers
 
 Both brands' storefront applications, and the page workbench that assembles
 whole pages from them. A shopper sees its output on every screen; an engineer
 building a page is the direct consumer; a designer owns the Figma frames each
 block was converted from, and an automated audit holds the two together.
 
-## How the capabilities fit
+## Capabilities
 
 One capability is the rulebook for the package itself. The rest are surfaces, in
 the order a shopper meets them: the chrome around every page, the store main

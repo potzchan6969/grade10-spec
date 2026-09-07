@@ -32,4 +32,6 @@ product history.
 - **Inventory ledger** — track stock, holds, sales, withdrawals, and vaulting
   without losing the arithmetic
 
+## Test cases
+
 ::cases{id="grade10-admin/inventory/catalog"}

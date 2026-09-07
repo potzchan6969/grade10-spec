@@ -74,7 +74,7 @@ design lives in the vault's architecture doc and in the host contract written as
 prose at the top of the package's own ports file.
 :::
 
-:::detail{title="For engineers" for="engineer"}
+:::detail{title="Package design" for="engineer"}
 `packages/doc-sign/` owns no database, no bucket and no worker. It publishes
 table factories, route registrars, DI modules and a template contract; the host
 worker makes them real, which is what lets a seal and a case event commit in one

@@ -7,7 +7,7 @@ order: 1
 This capability governs the rail's obligations, not any component's appearance.
 It answers two questions: what the run must find, and where it must look.
 
-## Omission counts as a finding
+## Omissions
 
 Silence is not agreement. If a Figma node draws a visible fill or stroke and no
 audited element claims it, that is reported — and so is the reverse, code
@@ -18,7 +18,7 @@ claims the value, so splitting a div never hides an omission.
 The exception is narrow and deliberate: a property a node is permitted to leave
 unstated is reported as unchecked, not as a finding.
 
-## Everywhere, and honestly
+## Scope
 
 The sweep audits every component directory carrying an audit table, in the
 shared component package and the design system alike — no component is excluded
@@ -31,7 +31,7 @@ like one where everything matched. Coverage is named by component rather than by
 directory, so a directory the other rail already covers is not reported as a
 gap.
 
-## What fails the run
+## Failures
 
 A value that disagrees with Figma fails, in both rails. A finding that does not
 claim the code draws the wrong thing — a missing description, an unmapped axis

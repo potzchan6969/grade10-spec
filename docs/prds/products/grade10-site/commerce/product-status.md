@@ -21,7 +21,7 @@ the cart never derive their own answer.
 - **Priced either way** — an out-of-stock variant keeps its price and offers
   no control that cannot be used
 
-## What browsing never shows
+## Browsing limits
 
 The listing and a product's own page say whether a variant can be bought and
 nothing about how many are left — no remaining count, no scarcity label, no
@@ -29,7 +29,7 @@ difference between a variant with one left and one with four hundred. An
 unpublished product carries no unavailable tile; it is absent from the
 listing, and its own address answers as any missing product's does.
 
-## A quantity, once one is asked for
+## Quantity requests
 
 Only the cart and checkout ask for a quantity, and the shop answers one of
 three ways:

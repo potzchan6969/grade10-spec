@@ -77,7 +77,7 @@ it; no statute here is asserted.
 | A read that names a person | yes — a search records who searched, when, the kind of term and how many cases matched, never the term | — |
 | Identity rebind under a sealed case | closed; a case with sealed evidence refuses a re-record, and a displaced unbound check is purged durably | — |
 
-## What the code leaves to a person
+## Outside the code
 
 - **The regime** — the loan agreement states Hong Kong SAR governing law, the
   annualised rate, `Fees: None` and the complaints contact; which regime
@@ -163,6 +163,32 @@ this page holds the decision behind them.
 
 ::spec{id="grade10-site/vault/retention-and-erasure"}
 
+:::detail{title="Code map" for="engineer"}
+- **Identity** — `packages/e-kyc` (contracts `identity.ts`, `vocabulary.ts`,
+  `masking.ts`; `otherUserIdsByIdNumberHash` behind every bind, so the count
+  rides the answer and no caller can forget to ask) and
+  `packages/vault/backend/src/kyc/{record,reuse}.ts`
+- **Retention and erasure** — `packages/app-env/src/retention.ts`,
+  `packages/vault/backend/src/sweeps/retention.ts`, `erasure/eraseUser.ts`
+  (held statuses are `released` and `forfeited`; the entrypoint keys on the
+  account id)
+- **Entity and policy** — `packages/app-env/src/{legalIdentity,lending}.ts`;
+  findings in `scripts/config/audit.mjs`, printed by `check:libs`
+- **Evidence** — `sweeps/{archive,integrity,auditChain}.ts`,
+  `packages/postgres/src/auditChain.ts`, the archive binding in
+  `apps/backend/grade10/vault/wrangler.jsonc`
+- **Backups** — `neondb/scripts/backup.sh`, `neondb/backup-expected-gaps.txt`
+  guarded by `scripts/checks/check-backup-gaps.mjs`, `neondb/registry.sh`
+- **Two-factor** — `packages/app-env/src/twoFactor.ts`; the step-up stamp is
+  read on `packages/grade10-auth/contracts/src/elevation.ts` and its
+  **12-hour** life is `STEP_UP_TTL_SECONDS` in
+  `packages/grade10-auth/backend/src/stepUp.ts`
+- **Audits** —
+  [document-handling audit](https://github.com/9gag/grade10/blob/main/docs/qa/vault.md),
+  [production-readiness review](https://github.com/9gag/grade10/blob/main/docs/qa/vault-production-review.md),
+  and the decision record `docs/temp/vault-compliance-decision.md`
+:::
+
 :::detail{title="Product decisions" for="pm"}
 Where the law might bind, the borrower-favourable rule is the one taken — and
 "more" never means a charge. Every statute below is as engineering recalls it,
@@ -188,30 +214,4 @@ holds until they do.
 | Acceptance | Decided | Acceptance moves the case and the signature binds, so either the collector or the counter may record it | Legal |
 | Capacity | Decided | Eighteen is the age of majority; nothing beyond it is asked | Legal |
 | Reads that carry personal data | Decided | The elevated ladder records any call that declares audit details, not only a mutation; a search leaves who searched, when, the kind of term and the hit count, and never the term | Engineering |
-:::
-
-:::detail{title="For engineers" for="engineer"}
-- **Identity** — `packages/e-kyc` (contracts `identity.ts`, `vocabulary.ts`,
-  `masking.ts`; `otherUserIdsByIdNumberHash` behind every bind, so the count
-  rides the answer and no caller can forget to ask) and
-  `packages/vault/backend/src/kyc/{record,reuse}.ts`
-- **Retention and erasure** — `packages/app-env/src/retention.ts`,
-  `packages/vault/backend/src/sweeps/retention.ts`, `erasure/eraseUser.ts`
-  (held statuses are `released` and `forfeited`; the entrypoint keys on the
-  account id)
-- **Entity and policy** — `packages/app-env/src/{legalIdentity,lending}.ts`;
-  findings in `scripts/config/audit.mjs`, printed by `check:libs`
-- **Evidence** — `sweeps/{archive,integrity,auditChain}.ts`,
-  `packages/postgres/src/auditChain.ts`, the archive binding in
-  `apps/backend/grade10/vault/wrangler.jsonc`
-- **Backups** — `neondb/scripts/backup.sh`, `neondb/backup-expected-gaps.txt`
-  guarded by `scripts/checks/check-backup-gaps.mjs`, `neondb/registry.sh`
-- **Two-factor** — `packages/app-env/src/twoFactor.ts`; the step-up stamp is
-  read on `packages/grade10-auth/contracts/src/elevation.ts` and its
-  **12-hour** life is `STEP_UP_TTL_SECONDS` in
-  `packages/grade10-auth/backend/src/stepUp.ts`
-- **Audits** —
-  [document-handling audit](https://github.com/9gag/grade10/blob/main/docs/qa/vault.md),
-  [production-readiness review](https://github.com/9gag/grade10/blob/main/docs/qa/vault-production-review.md),
-  and the decision record `docs/temp/vault-compliance-decision.md`
 :::

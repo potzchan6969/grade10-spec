@@ -10,7 +10,7 @@ asked to sign in mid-flow — adding a card to the cart, placing a bid — comes
 back to exactly what they were doing, on every surface of either brand.
 Leaving the dialog is always possible and lands them where they were.
 
-## The shell
+## Shell
 
 The dialog holds no open state of its own: the application controls
 visibility through a required `open` prop and `onOpenChange` callback, which
@@ -19,7 +19,7 @@ body renders in the order design draws it — the provider slot above the
 divider, the email step below it — and closes on a legal line the
 application supplies as the last node.
 
-## What it does not decide
+## Boundaries
 
 The dialog is the surface; what a successful sign-in creates is
 [the sign-in capability](/p/shared/auth/sign-in). Every word arrives through

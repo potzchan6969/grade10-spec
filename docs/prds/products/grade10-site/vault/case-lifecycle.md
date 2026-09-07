@@ -141,7 +141,7 @@ released`, guarded on nothing outstanding and no packet open.
 | Signing link | **30 minutes**, one device | the link |
 | Sweeps | every **15 minutes** and hourly | liveness only; every deadline is also enforced where it is read |
 
-## The exits
+## Exits
 
 - **Declined** — from `under_valuation`, by staff, with a reason the
   collector reads verbatim
@@ -167,27 +167,7 @@ requirements are its; this page holds the decision behind them.
 
 ::spec{id="grade10-site/vault/case-lifecycle"}
 
-:::detail{title="Product decisions" for="pm"}
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| Lane at intake | Decided | The financing amount's presence is the lane; nothing later asks which kind of case this is | Product |
-| No `overdue` status | Decided | Overdue is the due calculation against a clock; a status would be a cached answer that can be wrong | Engineering |
-| No booking status | Decided | A booking is the diary's row; the case caches it for display and a sweep repairs drift | Engineering |
-| A packet expiring ends nothing | Decided | The ceremony's window and the case's abandonment are two clocks; only the second is terminal | Engineering |
-| A live loan books its visit | Decided | `active` is bookable; a missed pickup closes the visit, never the case | Product |
-| A reversal moves the case back | Decided | A reversed payout returns the case to `vaulted`; a reversed repayment reopens the loan | Product |
-| Unwind stops at a live payout | Decided | Once money left and stands, the exits are repayment or forfeiture | Product |
-| The order of the flow is the customer's | Decided | Every live status but a draft takes a visit, so valuing from photographs, offering, accepting and then booking the drop-off walks without a forbidden step; the visit completes on the first counter act after its slot | Owner |
-| A missed visit closes a visit | Decided | Only the abandonment clocks end a case, because a customer who rebooked must not lose their case overnight; the one exception is a submitted case, which has nothing to hold | Product |
-| Collector cancel | Decided | The owner of a case may cancel it in every status before custody; the open offer closes and the visit is cancelled in the same move | Product |
-| A clock on `accepted`, none on `repaid` | Decided | Terms agreed and never prepared run out on the same **30-day** abandonment clock as signing, anchored on the event that moved the case; a repaid loan keeps no clock, because the item is the collector's and storage is free | Product |
-| What waits on a person, and what waits on a clock | Decided | Before acceptance a case badges somebody — nobody started it, nobody valued it in a week, the offer lapsed; after acceptance it runs a clock | Product |
-| An ended case still names its visit | Decided | The cached booking is the record of where the item went; clearing it would erase that and write a cancellation nobody made | Engineering |
-| Notice before forfeiture | Decided | No grace on the interest, and a written notice naming a cure date at least **14 days** off before anything may be taken | Owner |
-| A different item at the counter | Decided | The case is the item, so a different one is a new case; this one is declined or cancelled | Product |
-:::
-
-:::detail{title="For engineers" for="engineer"}
+:::detail{title="Code map" for="engineer"}
 - **Vocabulary** — `packages/vault/contracts/src/vocabulary.ts`: statuses,
   terminal and bookable subsets, lanes, the from-column of every move, offer
   statuses, event kinds with the staff-only subset, categories, movement
@@ -207,4 +187,24 @@ requirements are its; this page holds the decision behind them.
   loans
 - **Architecture** —
   [vault.md](https://github.com/9gag/grade10/blob/main/docs/architecture/vault.md)
+:::
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Lane at intake | Decided | The financing amount's presence is the lane; nothing later asks which kind of case this is | Product |
+| No `overdue` status | Decided | Overdue is the due calculation against a clock; a status would be a cached answer that can be wrong | Engineering |
+| No booking status | Decided | A booking is the diary's row; the case caches it for display and a sweep repairs drift | Engineering |
+| A packet expiring ends nothing | Decided | The ceremony's window and the case's abandonment are two clocks; only the second is terminal | Engineering |
+| A live loan books its visit | Decided | `active` is bookable; a missed pickup closes the visit, never the case | Product |
+| A reversal moves the case back | Decided | A reversed payout returns the case to `vaulted`; a reversed repayment reopens the loan | Product |
+| Unwind stops at a live payout | Decided | Once money left and stands, the exits are repayment or forfeiture | Product |
+| The order of the flow is the customer's | Decided | Every live status but a draft takes a visit, so valuing from photographs, offering, accepting and then booking the drop-off walks without a forbidden step; the visit completes on the first counter act after its slot | Owner |
+| A missed visit closes a visit | Decided | Only the abandonment clocks end a case, because a customer who rebooked must not lose their case overnight; the one exception is a submitted case, which has nothing to hold | Product |
+| Collector cancel | Decided | The owner of a case may cancel it in every status before custody; the open offer closes and the visit is cancelled in the same move | Product |
+| A clock on `accepted`, none on `repaid` | Decided | Terms agreed and never prepared run out on the same **30-day** abandonment clock as signing, anchored on the event that moved the case; a repaid loan keeps no clock, because the item is the collector's and storage is free | Product |
+| What waits on a person, and what waits on a clock | Decided | Before acceptance a case badges somebody — nobody started it, nobody valued it in a week, the offer lapsed; after acceptance it runs a clock | Product |
+| An ended case still names its visit | Decided | The cached booking is the record of where the item went; clearing it would erase that and write a cancellation nobody made | Engineering |
+| Notice before forfeiture | Decided | No grace on the interest, and a written notice naming a cure date at least **14 days** off before anything may be taken | Owner |
+| A different item at the counter | Decided | The case is the item, so a different one is a new case; this one is declined or cancelled | Product |
 :::

@@ -10,7 +10,7 @@ while both sides keep moving. Design sync is what notices when they stop
 agreeing — long after whoever converted the component has moved on, and without
 anyone remembering to look.
 
-## How it works, in plain words
+## Mechanism
 
 Each component directory carries a small table saying which Figma node each
 element was converted from. An unattended run reads the node's real values —
@@ -24,7 +24,7 @@ axes is compared by the variant-set comparison; one that defines none is
 compared by an audit table. Never both, so no component ever has two
 disagreeing sources of truth.
 
-## Who it serves
+## Users
 
 Designers, because a drifted value is reported against the frame they own.
 Engineers, because the audit is the thing that lets them change a component
