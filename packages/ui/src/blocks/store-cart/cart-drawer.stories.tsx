@@ -8,8 +8,14 @@ import {
   DEFAULT_CART_COPY,
   OVERFLOW_CART_ITEMS,
   SAMPLE_CART_ITEMS,
+  SAMPLE_HELD_PROMO_CODES,
 } from "./fixtures";
-import type { CartItemSummary, PromoState } from "./types";
+import type {
+  CartItemSummary,
+  HeldPromoCode,
+  PointsState,
+  PromoState,
+} from "./types";
 
 /**
  * Product / Cart / Cart Drawer (`4735:6493` & `4674:3831`).
@@ -17,9 +23,12 @@ import type { CartItemSummary, PromoState } from "./types";
  * Composition and end-to-end flows only. Layer-owned states live on:
  * - [`CartDrawerHeader`](?path=/docs/store-cart-cartdrawerheader--docs) — badge / close / badge bones
  * - [`CartDrawerBody`](?path=/docs/store-cart-cartdrawerbody--docs) — baseline / overflow / empty / mixed list
- * - [`CartDrawerFooter`](?path=/docs/store-cart-cartdrawerfooter--docs) — promo axes, checkout redirecting, amount bones
+ * - [`CartDrawerFooter`](?path=/docs/store-cart-cartdrawerfooter--docs) — promo (type + held), points, checkout
  * - [`CartItem`](?path=/docs/store-cart-cartitem--docs) — sold out / adjusted / row bones
  * - [`CartItemSlot`](?path=/docs/store-cart-cartitemslot--docs) — empty placeholder
+ *
+ * App handoff: wire `onApplyPromo` / `onSelectHeldPromo` / `onApplyPoints` onto
+ * the Shopify draft; `onCheckout` redirects. Copy must say promo code, not coupon.
  */
 const meta = {
   title: "Store Cart/CartDrawer",
@@ -115,7 +124,7 @@ export const EmptyState: Story = {
   },
 };
 
-/** Interactive promo flow in the composed drawer (static promo axes live on Footer) */
+/** Interactive promo: open nested sheet, submit invalid code */
 export const PromoCodeInteraction: Story = {
   render: (args) => {
     const [promo, setPromo] = useState<PromoState>({ status: "collapsed" });
@@ -145,16 +154,127 @@ export const PromoCodeInteraction: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const promoToggle = canvas.getByRole("button", {
-      name: /Use promo code/i,
-    });
-    await userEvent.click(promoToggle);
+    await userEvent.click(
+      canvas.getByRole("button", { name: /Select or enter code/i }),
+    );
     const input = canvas.getByPlaceholderText("Enter promo code");
     expect(input).toBeInTheDocument();
     await userEvent.type(input, "WRONGCODE");
     const applyBtn = canvas.getByRole("button", { name: "Apply" });
     await userEvent.click(applyBtn);
     expect(canvas.getByText("This promo code is invalid")).toBeInTheDocument();
+  },
+};
+
+/** Member: held promo codes + points in the composed drawer */
+export const MemberPromoAndPoints: Story = {
+  render: (args) => {
+    const [promo, setPromo] = useState<PromoState>({ status: "collapsed" });
+    const [points, setPoints] = useState<PointsState>({ status: "collapsed" });
+    const [held] = useState<readonly HeldPromoCode[]>(SAMPLE_HELD_PROMO_CODES);
+    const [selectedHeldId, setSelectedHeldId] = useState<string | null>(null);
+    const [total, setTotal] = useState("HK$42,700.00");
+
+    return (
+      <CartDrawer
+        {...args}
+        estimatedTotal={total}
+        promoState={promo}
+        heldPromoCodes={held}
+        selectedHeldPromoId={selectedHeldId}
+        pointsState={points}
+        pointsBalanceLabel="1,200 pts · up to HK$1,200"
+        onPromoStateChange={setPromo}
+        onRemovePromo={() => {
+          setPromo({ status: "collapsed" });
+          setSelectedHeldId(null);
+          setTotal(
+            points.status === "applied" ? "HK$42,200.00" : "HK$42,700.00",
+          );
+        }}
+        onSelectHeldPromo={(id) => {
+          const code = held.find((c) => c.id === id);
+          if (!code?.applicable) return;
+          setSelectedHeldId(id);
+          setPromo({
+            status: "applied",
+            code: code.label,
+            discountAmount:
+              id === "held-welcome" ? "-HK$100.00" : "-HK$50.00",
+          });
+          setTotal(id === "held-welcome" ? "HK$42,600.00" : "HK$42,650.00");
+        }}
+        onApplyPromo={(code) => {
+          if (code.toUpperCase() === "SAVE10") {
+            setSelectedHeldId(null);
+            setPromo({
+              status: "applied",
+              code: "SAVE10",
+              discountAmount: "-HK$4,270.00",
+            });
+            setTotal("HK$38,430.00");
+            return true;
+          }
+          setPromo({
+            status: "expanded",
+            error: "This promo code is invalid",
+          });
+          return false;
+        }}
+        onPointsStateChange={setPoints}
+        onRemovePoints={() => {
+          setPoints({ status: "collapsed" });
+          setTotal(
+            promo.status === "applied" ? "HK$38,430.00" : "HK$42,700.00",
+          );
+        }}
+        onApplyPoints={(amount) => {
+          const n = Number(amount.replace(/[^0-9.]/g, ""));
+          if (!Number.isFinite(n) || n <= 0 || n > 1200) {
+            setPoints({
+              status: "expanded",
+              error: "Enter an amount up to HK$1,200",
+            });
+            return false;
+          }
+          setPoints({
+            status: "applied",
+            amountLabel: `-HK$${n.toFixed(2)}`,
+          });
+          return true;
+        }}
+        onUseMaxPoints={() => {
+          setPoints({ status: "applied", amountLabel: "-HK$1,200.00" });
+          setTotal("HK$41,500.00");
+        }}
+      />
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: /Select or enter code/i }),
+    );
+    expect(canvas.getByText("Your promo codes")).toBeInTheDocument();
+    expect(canvas.getByText("Not valid for this order")).toBeInTheDocument();
+    expect(canvas.getByRole("button", { name: "Back" })).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: /Use points/i }),
+    ).toBeInTheDocument();
+    expect(canvas.queryByText(/coupon/i)).not.toBeInTheDocument();
+  },
+};
+
+/** Guest: compact promo row only — no held list, no points */
+export const GuestPromoOnly: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("button", { name: /Select or enter code/i }),
+    ).toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: /Use points/i }),
+    ).not.toBeInTheDocument();
   },
 };
 

@@ -1,4 +1,8 @@
-import type { CartDrawerCopy, CartItemSummary } from "./types";
+import type {
+  CartDrawerCopy,
+  CartItemSummary,
+  HeldPromoCode,
+} from "./types";
 
 const DEFAULT_CART_COPY: CartDrawerCopy = {
   header: {
@@ -17,16 +21,62 @@ const DEFAULT_CART_COPY: CartDrawerCopy = {
     shippingLabel: "Shipping",
     shippingValue: "TBD",
     estimatedTotalLabel: "Estimated Total",
-    usePromoCode: "Use promo code",
+    usePromoCode: "Promo code",
+    selectOrEnterPromoCode: "Select or enter code",
+    promoSheetTitle: "Promo code",
+    promoSheetBackLabel: "Back",
     applyPromo: "Apply",
     promoPlaceholder: "Enter promo code",
     removePromo: "Remove",
+    yourPromoCodes: "Your promo codes",
+    notValidPromoCodes: "Not valid for this order",
+    applyHeldPromo: "Apply",
+    usePoints: "Use points",
+    applyPoints: "Apply",
+    pointsPlaceholder: "Enter amount (HK$)",
+    useMaxPoints: "Use max",
+    removePoints: "Remove",
+    pointsLabel: "Points",
     checkoutButton: "Proceed to Checkout",
     checkoutRedirecting: "Redirecting...",
   },
   unavailableItemsRemoved:
     "Some item(s) have been removed as they’re no longer available",
 };
+
+/** Sample held promo codes for Storybook — mix of applicable and not valid. */
+const SAMPLE_HELD_PROMO_CODES: readonly HeldPromoCode[] = [
+  {
+    id: "held-welcome",
+    label: "WELCOME100",
+    valueLabel: "HK$100 off",
+    expiryLabel: "Use by 31 Dec 2026",
+    applicable: true,
+  },
+  {
+    id: "held-tier",
+    label: "TIER50",
+    valueLabel: "HK$50 off",
+    expiryLabel: "Use by 30 Jun 2026",
+    applicable: true,
+  },
+  {
+    id: "held-min-spend",
+    label: "SAVE200",
+    valueLabel: "HK$200 off",
+    expiryLabel: "Use by 31 Mar 2026",
+    applicable: false,
+    inapplicableReason: "Add ~HK$7,300 more to use this promo code",
+  },
+  {
+    id: "held-stack",
+    label: "STACK10",
+    valueLabel: "10% off",
+    expiryLabel: "Use by 15 Apr 2026",
+    applicable: false,
+    inapplicableReason: "Cannot combine with another promo code on this order",
+  },
+];
 
 const SAMPLE_CART_ITEMS: CartItemSummary[] = [
   {
@@ -80,4 +130,9 @@ const OVERFLOW_CART_ITEMS: CartItemSummary[] = [
   },
 ];
 
-export { DEFAULT_CART_COPY, OVERFLOW_CART_ITEMS, SAMPLE_CART_ITEMS };
+export {
+  DEFAULT_CART_COPY,
+  OVERFLOW_CART_ITEMS,
+  SAMPLE_CART_ITEMS,
+  SAMPLE_HELD_PROMO_CODES,
+};

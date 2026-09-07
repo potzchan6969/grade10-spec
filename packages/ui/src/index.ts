@@ -255,6 +255,8 @@ export {
   type CartItemProps,
   CartItemSlot,
   type CartItemSlotProps,
+  CartPromoSheet,
+  type CartPromoSheetProps,
 } from "./blocks/store-cart/cart-drawer";
 export type {
   CartDrawerCopy,
@@ -263,6 +265,8 @@ export type {
   CartItemCopy,
   CartItemStatus,
   CartItemSummary,
+  HeldPromoCode,
+  PointsState,
   PromoState,
 } from "./blocks/store-cart/types";
 // shared/ui/store-home
