@@ -215,6 +215,11 @@ The budget SHALL be checked first, and the attempt SHALL be recorded
 whichever way the challenge goes, so the count is what one address asked for
 rather than what it got.
 
+An attempt row SHALL be kept for the budget's own window, 24 hours, and
+pruned by the diary's sweep after it. Erasing an address SHALL delete its
+attempt rows outright, while its bookings are anonymized the way
+`shared/appointment/scheduling` says.
+
 An unreachable challenge provider SHALL refuse. An unset secret SHALL let the
 write through and SHALL log it once per isolate, which is the development
 path only. A spent budget SHALL answer `TOO_MANY_REQUESTS` and a failed

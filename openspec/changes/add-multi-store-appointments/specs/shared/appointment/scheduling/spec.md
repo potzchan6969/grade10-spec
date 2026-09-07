@@ -400,7 +400,7 @@ address has no identity, so it neither replays nor conflicts.
 | `SLOT_FULL` | Every resource that could take it is occupied |
 | `RESOURCE_NOT_AVAILABLE` | The named resource is not assigned, retired, closed or occupied |
 | `ANSWERS_INVALID` | A required question is unanswered or a choice is not an option |
-| `ALREADY_BOOKED` | The identity holds a live booking of this service elsewhere |
+| `ALREADY_BOOKED` | The identity holds a live booking of this service elsewhere; the refusal carries that booking's start as `heldSlotStart`, so a screen can word the clash |
 
 #### Scenario: shared-appointment-scheduling-SC-31 - Two requests for the last resource resolve to one booking
 
@@ -468,8 +468,9 @@ the same outcome SHALL answer with the booking unchanged.
 A booking request naming the same service, shop and start as a live booking
 of the same identity SHALL answer with that booking and `created: false`. A
 request for the same service and identity at another shop or start SHALL be
-refused with `ALREADY_BOOKED` while that booking is live, and SHALL be
-accepted once it has closed.
+refused with `ALREADY_BOOKED`, carrying the live booking's start as
+`heldSlotStart`, while that booking is live, and SHALL be accepted once it
+has closed.
 
 #### Scenario: shared-appointment-scheduling-SC-38 - A repeated request replays
 
@@ -481,7 +482,7 @@ accepted once it has closed.
 
 - **GIVEN** a live booking for a service tomorrow at 10:00
 - **WHEN** the same identity requests the same service the day after
-- **THEN** the diary refuses it with `ALREADY_BOOKED`
+- **THEN** the diary refuses it with `ALREADY_BOOKED`, naming tomorrow at 10:00 as `heldSlotStart`
 
 #### Scenario: shared-appointment-scheduling-SC-40 - A closed booking no longer blocks a new one
 
@@ -640,7 +641,9 @@ no link.
 Erasing a person SHALL clear the attendee name, email address and phone, the
 notes, the answers and the account from every booking of theirs, SHALL stop
 the booking's manage link from answering, and SHALL keep the booking's
-service, shop, resource, start, end, state and events.
+service, shop, resource, start, end, state and events. The address's booking
+attempts are `grade10-site/appointment/booking`'s rows, and that capability
+says how erasure and retention treat them.
 
 #### Scenario: shared-appointment-scheduling-SC-54 - An erased person's booking keeps its occupancy
 
