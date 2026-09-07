@@ -24,6 +24,8 @@ shared blocks, the console kit, design sync — and conventions every product
 inherits, like how money is written, have their own groups below.
 **References** is the store's evidence — the owner's drafts, competitor
 research, vendor working notes — read here as written, never edited here.
+The row of the page you are reading opens to its sections, and the one you
+are in is marked as you scroll.
 
 A capability's page is its PRD. The prose states the shape; the
 `Product decisions` detail at the end of the page carries who it is for,

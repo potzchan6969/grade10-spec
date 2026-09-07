@@ -502,11 +502,15 @@ control.
 Navigation is computed from disk taxonomy + `manual.yaml` order + page
 frontmatter, never hand-listed: group → product → capability, with a
 product's in-flight change count as a badge, and one section per topic
-group. A product or topic on disk that `manual.yaml` never lists appears
-under "Not in manual.yaml" rather than vanishing. Home groups products by
-audience, gathers the topic groups under one Cross-cutting heading, and
-shows a what's-moving strip. Capability pages end with an archived-changes
-timeline derived from the archive artifact.
+group. The row of the page being read opens one level further, to that
+page's H2s — read from the rendered page and shared with the On this
+page column, so the two can never mark different sections; a product row
+is a branch of pages and lists none of its own. A product or topic on
+disk that `manual.yaml` never lists appears under "Not in manual.yaml"
+rather than vanishing. Home groups products by audience, gathers the
+topic groups under one Cross-cutting heading, and shows a what's-moving
+strip. Capability pages end with an archived-changes timeline derived
+from the archive artifact.
 
 The header carries a bell against `/recent`: the badge counts events newer
 than the marker this reader last stored, capped at 9+, and a reader with no
