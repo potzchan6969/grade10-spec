@@ -12,9 +12,10 @@ order keeps afterwards.
   - Estimate-first pricing: the invoice is payable from the moment of close rather than waiting on an address
   - Final amount: names every component a winner is asked to pay, so a total is explicable line by line
 - Delivery address
-  - Confirmation before payment: Grade10 never ships to an address nobody affirmed
+  - Account-wide address book: the platform keeps multiple named shipping addresses and one optional default for the account
+  - Selection and confirmation: a winner chooses a saved address or adds one, then affirms it before payment
   - Amendment and recalculation: a winner corrects the destination and sees what it costs before paying
-  - Locking at payment: the destination stops moving once money has changed hands
+  - Locking at payment: the order snapshot stops moving once money has changed hands
 - Settlement
   - Hold release: the bid-time authorization verified a bidder and is not the instrument that settles
   - Single fresh charge: one transaction for the final amount, retryable on failure
@@ -35,16 +36,16 @@ At lot close Grade10 SHALL, for the winner:
    fulfilment status `unfulfilled`, per
    `grade10-site/auction/order-status`.
 2. Release the winner's bid-time authorization.
-3. Issue one invoice for the final amount, priced from the winner's profile
-   address.
+3. Issue one invoice for the final amount, priced from the account's default
+   shipping address when one exists.
 4. Notify the winner that they have won and what they owe, per
    `grade10-site/auction/order-notifications`.
 
 The invoice SHALL be payable from the moment it is issued. Grade10 SHALL
-label every component priced from a profile address as an estimate until the
+label every component priced from the account's default shipping address as an estimate until the
 winner confirms a delivery address.
 
-Where the winner holds no profile address, Grade10 SHALL issue the invoice
+Where the account has no default shipping address, Grade10 SHALL issue the invoice
 showing hammer price and buyer's premium, SHALL show shipping, insurance and
 tax as still to be calculated, and SHALL refuse payment until a delivery
 address is supplied.
@@ -55,7 +56,8 @@ invoice.
 
 #### Scenario: winner-order-SC-01 - An invoice is issued at lot close
 
-- **GIVEN** a lot closing with a winner whose profile address is on file
+- **GIVEN** a lot closing with a winner whose account default shipping address
+  is on file
 - **WHEN** the lot closes
 - **THEN** Grade10 creates one auction order with invoice status `pending`
   and fulfilment status `unfulfilled`
@@ -63,9 +65,9 @@ invoice.
 - **AND** shipping, insurance and tax on that invoice are labelled as
   estimates
 
-#### Scenario: winner-order-SC-02 - A winner with no profile address cannot yet pay
+#### Scenario: winner-order-SC-02 - A winner with no default address cannot yet pay
 
-- **GIVEN** a lot closing with a winner who holds no profile address
+- **GIVEN** a lot closing with an account that has no default shipping address
 - **WHEN** the lot closes
 - **THEN** the invoice shows the hammer price and the buyer's premium
 - **AND** shows shipping, insurance and tax as still to be calculated
@@ -131,33 +133,77 @@ deadline, its own shipping charge, and its own fulfilment lifecycle.
   close
 - **AND** each is charged its own shipping
 
+### Requirement: The account owns a reusable shipping address book
+
+The platform auth service SHALL own the account's shipping address book. One
+account SHALL be able to keep multiple named shipping addresses and SHALL have
+at most one default. The address book SHALL be available across storefronts
+that the account can use.
+
+The winner order SHALL allow the winner to choose any saved address, add a new
+address, edit an unused address, archive an address, and change the default.
+An address selected for an order SHALL be copied into the order as a snapshot;
+editing or archiving the saved address later SHALL NOT change that order.
+The platform SHALL refuse to archive the address currently selected by an
+unpaid order unless the winner first selects another address for that order.
+
+#### Scenario: winner-order-SC-22 - An account keeps multiple shipping addresses
+
+- **GIVEN** an account with no saved shipping addresses
+- **WHEN** the winner saves a home address and a work address
+- **THEN** both named addresses are available in the account address book
+- **AND** the winner can choose either address for an auction order
+
+#### Scenario: winner-order-SC-23 - The account has one optional default
+
+- **GIVEN** an account with a home address set as its default
+- **WHEN** the winner makes the work address the default
+- **THEN** the work address is the only default
+- **AND** a later order is pre-filled from the work address
+
+#### Scenario: winner-order-SC-24 - Editing a saved address does not rewrite an order
+
+- **GIVEN** an unpaid order whose delivery snapshot uses the home address
+- **WHEN** the winner edits the saved home address in the account address book
+- **THEN** the saved home address has the new value
+- **AND** the order keeps the address snapshot it already showed
+
+#### Scenario: winner-order-SC-25 - A selected address cannot be archived silently
+
+- **GIVEN** an unpaid order whose delivery snapshot uses the work address
+- **WHEN** the winner tries to archive the work address
+- **THEN** Grade10 asks the winner to select another address for that order
+- **AND** does not remove the address while it remains selected
+
 ### Requirement: The delivery address is confirmed before payment
 
 Grade10 SHALL require the winner to confirm a delivery address on the auction
-order before payment can complete, and SHALL treat the profile address as a
-default to price and pre-fill from rather than as the destination.
+order before payment can complete. When an account default exists, Grade10
+SHALL price and pre-fill from it, but the default SHALL not become the order's
+destination until the winner confirms or selects an address.
 
 | Condition | Behaviour |
 | --- | --- |
-| Winner holds a profile address | Grade10 pre-fills it and prices the estimate from it. The winner still confirms explicitly |
-| Winner holds no profile address | The address is empty and shipping, insurance and tax are still to be calculated. Payment is refused |
+| Account has a default shipping address | Grade10 pre-fills it and prices the estimate from it. The winner still confirms explicitly |
+| Account has no default shipping address | The address is empty and shipping, insurance and tax are still to be calculated. Payment is refused |
+| Account has multiple saved addresses | Grade10 lets the winner choose one, then confirms the selected address for this order |
 | Winner amends the address | Grade10 recalculates shipping, insurance and tax and reissues the invoice at the revised final amount |
-| Winner amends the address | Grade10 offers to update their profile default. The offer is off by default and the amendment applies to this order alone |
+| Winner adds or edits an address | Grade10 offers to save it to the account address book. The order amendment remains a snapshot |
 
-#### Scenario: winner-order-SC-07 - A pre-filled address still needs confirming
+#### Scenario: winner-order-SC-07 - A pre-filled default still needs confirming
 
-- **GIVEN** an auction order pre-filled from the winner's profile address
+- **GIVEN** an auction order pre-filled from the account's default shipping address
 - **WHEN** the winner attempts to pay without confirming that address
 - **THEN** Grade10 refuses the payment
 - **AND** asks the winner to confirm the delivery address
 
-#### Scenario: winner-order-SC-08 - An amendment does not touch the profile default
+#### Scenario: winner-order-SC-08 - An amendment does not touch the address book by default
 
 - **GIVEN** a winner amending the delivery address on one auction order
-- **AND** they leave the offer to update their profile default untaken
+- **AND** they leave the offer to save the amendment to the account address book untaken
 - **WHEN** they confirm the amendment
 - **THEN** that auction order carries the amended address
-- **AND** their profile address is unchanged
+- **AND** their saved address book is unchanged
 
 ### Requirement: Amending the address recalculates and reissues
 

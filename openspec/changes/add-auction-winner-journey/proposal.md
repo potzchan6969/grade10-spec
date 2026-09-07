@@ -38,12 +38,15 @@ what separates a working self-service journey from a faster phone call.
 ## What Changes
 
 - **A won lot becomes an invoice at close.** One invoice and one auction
-  order per lot, issued immediately, priced from the winner's profile address
-  with shipping, insurance and tax **labelled as estimates** until the
-  delivery address is confirmed.
+  order per lot, issued immediately, priced from the account's default
+  shipping address when one exists, with shipping, insurance and tax
+  **labelled as estimates** until the delivery address is confirmed.
 - **The bid-time hold is released, never captured.** The final amount is a
   single fresh charge. Releasing an already-expired hold is a no-op, not an
   error.
+- **The platform keeps an account-wide address book.** A winner can manage
+  multiple named shipping addresses, choose a default, and select any saved
+  address for an order. The selected order snapshot locks at payment.
 - **The winner confirms or amends a delivery address** before payment
   completes. Amending recalculates and reissues at a revised total, shown as a
   delta. The address locks at payment.
@@ -67,17 +70,19 @@ what separates a working self-service journey from a faster phone call.
   wire does not have to default first. The admin confirms the address and
   recalculates before committing, and the payment record carries the revised
   amount with a pointer to the invoice it supersedes.
-- **Every status change is an append-only event.** The admin panel shows the
-  invoice history and the fulfilment history — including failed payment
-  attempts and a full address snapshot per event — not just current state.
+- **Every status change is an append-only log entry.** The admin panel shows
+  the invoice log and the fulfilment log — including failed payment attempts
+  and a full address snapshot per entry — not just current state.
 - **Ten post-close letters**, per order, identifying their lot.
 
-This change **supersedes `add-auction-payment-fulfillment`**, which is
-undelivered (0/32) and specifies the opposite money model: automatic capture
-of the bid-time hold, a stored per-listing outcome, and `Awaiting wire`. Its
-still-correct parts — the operator queue, the split payment and shipment
-grants, the listing trail — are carried into this change's post-sale delta.
-That change should be withdrawn rather than archived.
+This change **supersedes the archived `add-auction-payment-fulfillment`**
+implementation. That change shipped and its 32 tasks are checked off in the
+archive, but it records the opposite money model: automatic capture of the
+bid-time hold, a stored per-listing outcome, and `Awaiting wire`. The shipped
+operator surface is therefore a predecessor to migrate, not evidence that this
+winner journey is complete. The split payment and shipment grants, operator
+queue, and operational history remain the useful boundary; the winner journey
+and its derived order status own the replacement behaviour.
 
 ## Non-Goals
 
@@ -113,7 +118,8 @@ That change should be withdrawn rather than archived.
 
 - `grade10-site/auction/winner-order`: what a winner is issued at lot close
   and what they do with it — the one-invoice-per-lot rule, estimate-first
-  pricing, delivery-address confirmation and amendment, recalculation and
+  pricing from the account-wide address book, multiple saved shipping
+  addresses, delivery-address confirmation and amendment, recalculation and
   reissue, hold release and single-charge settlement, the 7-day deadline and
   its reminders, and the receipt, tracker and delivery proof the order keeps.
 - `grade10-site/auction/order-status`: the auction order's two writable
@@ -135,7 +141,7 @@ That change should be withdrawn rather than archived.
 - `grade10-admin/auction/post-sale`: the operator's queue and order detail —
   expired-order resolution, uncapped reissue logging, manual settlement with
   address confirmation and recalculation, cancellation and lot reopen, the
-  append-only invoice and fulfilment histories, and the split payment and
+  append-only invoice and fulfilment logs, and the split payment and
   shipment grants.
 
 ### Modified Capabilities
@@ -151,7 +157,7 @@ That change should be withdrawn rather than archived.
 | Consumer | Change |
 | --- | --- |
 | `apps/frontend/grade10` | A winner's order surface: invoice, address confirm and amend with a total delta, pay, receipt, tracker, delivery proof. |
-| `apps/admin/grade10` | The Auction section becomes the post-sale queue and order detail, with invoice and fulfilment histories, and the three expired-order actions. |
+| `apps/admin/grade10` | The Auction section becomes the post-sale queue and order detail, with invoice and fulfilment logs, and the three expired-order actions. |
 | Auction service | Issues invoices at close, releases holds, charges once, holds the deadline, derives status, refuses dispatch before payment, retracts bids on suspension. |
 | Auction bidding engine | Retraction and re-resolution on suspension; a `bid_retracted_suspension` event alongside the normal resolution. |
 | Stripe | Hold release for winner and losers alike, a fresh charge per invoice, webhooks for confirmation. Never a capture or increment of a bid-time hold. |
@@ -163,8 +169,10 @@ That change should be withdrawn rather than archived.
 
 **Ordering and required amendments.**
 
-- `add-auction-payment-fulfillment` — **withdraw.** Superseded here; nothing
-  it specifies is durable, so nothing is lost by not archiving it.
+- `add-auction-payment-fulfillment` — **retain as the shipped predecessor.**
+  Its checked-off task record and archive remain historical evidence. Its
+  automatic-capture, `Awaiting wire`, and stored-outcome rules do not satisfy
+  this change and require migration before the winner journey can archive.
 - `add-account-auction-record` — its **"A winner reads their own payment and
   shipment state"** requirement shows `Awaiting payment / Payment problem /
   Paid / Shipped / Delivered`, a second buyer-facing vocabulary for the same

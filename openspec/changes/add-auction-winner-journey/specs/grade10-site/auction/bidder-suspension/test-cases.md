@@ -20,6 +20,7 @@ again.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -50,6 +51,7 @@ An auction order whose invoice is `pending` and whose payment deadline is one se
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -78,6 +80,7 @@ A suspended account holding one outstanding invoice.
 * **Status:** draft
 * **Behaviour:** destructive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -107,6 +110,7 @@ A collector leading two open lots and holding a standing maximum on a third, wit
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -135,6 +139,7 @@ A collector who won a lot before being suspended, with a second unpaid auction o
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual

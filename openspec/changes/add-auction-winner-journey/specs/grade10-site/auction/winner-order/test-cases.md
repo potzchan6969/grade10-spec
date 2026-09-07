@@ -19,14 +19,15 @@ can see.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
 
 **Pre-conditions:**
-An open lot whose leading bidder holds a profile address, with one second until its recorded close.
+An open lot whose account holds a default shipping address, with one second until its recorded close.
 
 **Steps:**
 
@@ -40,7 +41,7 @@ An open lot whose leading bidder holds a profile address, with one second until 
 * Shipping, insurance and tax are labelled as estimates.
 * The invoice can be paid.
 
-### winner-order-US1-TC2-1: No profile address leaves the invoice unpayable
+### winner-order-US1-TC2-1: No default shipping address leaves the invoice unpayable
 
 **Classification:**
 
@@ -49,13 +50,14 @@ An open lot whose leading bidder holds a profile address, with one second until 
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
 
 **Pre-conditions:**
-An open lot whose leading bidder holds no profile address, with one second until its recorded close.
+An open lot whose account holds no default shipping address, with one second until its recorded close.
 
 **Steps:**
 
@@ -69,7 +71,7 @@ An open lot whose leading bidder holds no profile address, with one second until
 * Shipping, insurance and tax show as still to be calculated.
 * Grade10 refuses the payment until a delivery address is supplied.
 
-### winner-order-US1-TC3-1: Pre-filled address still needs confirming
+### winner-order-US1-TC3-1: Pre-filled default address still needs confirming
 
 **Classification:**
 
@@ -78,13 +80,14 @@ An open lot whose leading bidder holds no profile address, with one second until
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
 
 **Pre-conditions:**
-An auction order whose delivery address is pre-filled from the winner's profile and not yet confirmed.
+An auction order whose delivery address is pre-filled from the account's default shipping address and not yet confirmed.
 
 **Steps:**
 
@@ -105,6 +108,7 @@ An auction order whose delivery address is pre-filled from the winner's profile 
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -141,6 +145,7 @@ An unpaid auction order whose final amount is 312000 minor units in HKD, and an 
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
@@ -169,6 +174,7 @@ An open lot whose leading bidder holds an open bid-time authorization, with one 
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -197,6 +203,7 @@ An unpaid auction order inside its payment deadline, and a payment method mocked
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
@@ -224,6 +231,120 @@ A lot extended twice whose recorded close is 2026-09-03T12:00:00Z.
 
 ---
 
+### winner-order-US1-TC8-1: An account manages multiple shipping addresses
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+An authenticated account with no saved shipping addresses.
+
+**Steps:**
+
+1. Open the account shipping-address settings.
+2. Save a home address and a work address with distinct names.
+3. Open an unpaid auction order and open its address selector.
+
+**Expected Results:**
+
+* Both named addresses are available in the account address book.
+* The winner can choose either address for the auction order.
+
+### winner-order-US1-TC9-1: The account has one optional default address
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+An account with home and work addresses, with home set as the default.
+
+**Steps:**
+
+1. Set work as the default shipping address.
+2. Open a newly issued unpaid auction order.
+
+**Expected Results:**
+
+* Work is the only default address.
+* The new order is pre-filled from work.
+
+### winner-order-US1-TC10-1: Editing an address does not rewrite an order
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+An unpaid order using a saved home address and an account address book containing that address.
+
+**Steps:**
+
+1. Edit the saved home address in account settings.
+2. Return to the unpaid auction order.
+
+**Expected Results:**
+
+* The address book shows the edited home address.
+* The order still shows the address snapshot selected for it.
+
+### winner-order-US1-TC11-1: A selected address cannot be archived silently
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+An unpaid order whose selected delivery address is the account's work address.
+
+**Steps:**
+
+1. Try to archive the work address in account settings.
+
+**Expected Results:**
+
+* Grade10 asks the winner to select another address for that order.
+* The work address remains available while it is selected by the order.
+
+---
+
 ## winner-order-US2: Winner follows a settled lot to delivery
 
 **As a** winner who has paid,
@@ -240,6 +361,7 @@ records.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -267,6 +389,7 @@ An auction order paid at a final amount of 316000 minor units in HKD.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -294,6 +417,7 @@ A paid auction order the warehouse has just dispatched with a tracking number at
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
