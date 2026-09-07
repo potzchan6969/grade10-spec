@@ -4,6 +4,11 @@
 - See
   [`grade10-site/auction/watchlist`](specs/grade10-site/auction/watchlist/spec.md)
   for the observable contract.
+- **Listing** is the domain entity — tables, processors, contracts, and
+  every function name in this design. **Lot** is only the collector-facing
+  label for a listing (`listingLabel` on the wire, rendered through copy
+  such as `lotLabel`). There is no separate lot entity and no `*Lot*`
+  processor.
 - Auction listings are shared across Grade10 and ZZZ. Bidder identity is
   `(storefront, user_id)`. Each storefront backend is the identity oracle;
   the named Auction entrypoint pins storefront.
@@ -14,7 +19,8 @@
   transaction as the bid, so "watched it or bid on it" is one predicate
   for ending-soon mail.
 - `ListingLotHeader` already ships watch and unwatch. This
-  change fills those props; it does not add an export.
+  change fills those props; it does not add an export. The export name
+  keeps "Lot" because that block shows the listing's label.
 - Screens and Figma sources belong in [ui-design.md](ui-design.md).
 
 ## Goals / Non-Goals
@@ -85,8 +91,8 @@
 
 ### The catalogue control stays application-owned
 
-- The lot page fills `ListingLotHeader`'s existing watch control. The catalogue
-  tile's control is built in each application.
+- The listing page fills `ListingLotHeader`'s existing watch control. The
+  catalogue tile's control is built in each application.
 - Alternatives rejected:
   - Adding a watch control to the shared auction tile now — a second
     consumer is what justifies promoting it.
@@ -178,7 +184,7 @@ erDiagram
 
 ```mermaid
 flowchart LR
-    Browser[Lot page / catalogue / watched list] --> Store[Authenticated Store procedure]
+    Browser[Listing page / catalogue / watched list] --> Store[Authenticated Store procedure]
     Store -->|adds session userId email| Entrypoint[Storefront-pinned Auction entrypoint]
     Entrypoint -->|adds storefront| WatchService[Watch processor]
     WatchService --> Repos[Watch / listing repositories]
