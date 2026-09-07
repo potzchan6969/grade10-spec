@@ -12,7 +12,7 @@ export const LISTING_BID_ENROLLMENT_DEMO_COPY = {
   authorizingCaption:
     "Your card is being authorized. Keep this dialog open while Stripe completes the request.",
   authorizationRefused:
-    "Your payment method was declined. No bid has been placed.",
+    "Your card could not be authorized. Try another card.",
   iframePlaceholder: "Stripe card link (iframe)",
   iframeLinkedCardPlaceholder:
     "Stripe card form (iframe) — linked card on file",

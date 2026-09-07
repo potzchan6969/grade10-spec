@@ -19,7 +19,7 @@ const COPY = {
   authorizingCaption:
     "Your card is being authorized. Keep this dialog open while Stripe completes the request.",
   authorizationRefused:
-    "Your payment method was declined. No bid has been placed.",
+    "Your card could not be authorized. Try another card.",
   iframePlaceholder: "Stripe card link (iframe)",
   iframeLinkedCardPlaceholder:
     "Stripe card form (iframe) — linked card on file",
@@ -172,7 +172,7 @@ export const SetupSheetRefused: Story = {
       name: "Authorize a card to bid",
     });
     expect(within(dialog).getByRole("alert")).toHaveTextContent(
-      "Your payment method was declined.",
+      "Your card could not be authorized.",
     );
     expect(
       within(dialog).getByRole("button", { name: "Authorize" }),

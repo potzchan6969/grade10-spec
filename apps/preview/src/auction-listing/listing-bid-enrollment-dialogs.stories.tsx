@@ -110,7 +110,7 @@ PaymentAuthorizationRefused.play = async () => {
     }),
   );
   expect(within(dialog).getByRole("alert")).toHaveTextContent(
-    "Your payment method was declined.",
+    "Your card could not be authorized.",
   );
   expect(
     within(dialog).getByText("Stripe card form (iframe) — linked card on file"),
