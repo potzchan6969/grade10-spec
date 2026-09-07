@@ -5,7 +5,10 @@ services, shops, resources and hours the diary runs on, closes a room or a
 day, reads a shop's day by resource, and books, moves, cancels and closes out
 a visit on a collector's behalf. Every rule it applies is
 `shared/appointment/scheduling`'s; every block it renders is
-`shared/console/blocks`'.
+`shared/console/blocks`'. The anonymous-write gate — the challenge and the
+budget in front of a booking nobody signs in to make — is
+`grade10-site/appointment/booking`'s, not this capability's: every diary
+surface is authenticated.
 
 ## Feature set
 
