@@ -33,7 +33,7 @@ const INFO: Record<string, BlockInfo> = {
   },
   detail: {
     label: "Detail",
-    hint: "Depth for one audience — collapsed, never hidden.",
+    hint: "Depth for one audience, titled by what it holds — collapsed, never hidden.",
   },
   flow: {
     label: "Flow",
