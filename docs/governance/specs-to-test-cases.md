@@ -846,6 +846,11 @@ restating a value:
 | Auction button | the auction surface |
 ```
 
+**Prefer a readable unit for sizes and durations.** Write `100 mebibytes` or
+`30 minutes`, not `104857600 bytes` or `1800000 ms`. Keep the unit the
+requirement names — mebibyte when the spec says mebibyte, not a rounded
+megabyte that would move the bound.
+
 **Name the data, then use the name.** A value that a run could reasonably
 change — a file, an amount, a seeded record, a moment on the clock — gets a
 `<placeholder>` row and is referred to by that name from the pre-conditions,
