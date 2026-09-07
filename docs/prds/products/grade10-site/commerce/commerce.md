@@ -158,7 +158,7 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 - `order_events` rows are written in the transaction that changes the status, so the fact exists if the order moved. Delivery is a separate, at-least-once pass
 - Three things ask the queue to move, and all three defer it on a connection of their own so nothing waits on a consumer: the provider webhook, the reconcile pass, and a buyer's own read of their order. Every settlement path drains what it queued — a `refunded` transition queues a claw-back exactly as `paid` queues an earn, and `queuesOrderEvent` is the one place that says which do
 - Deferring only accelerates: the row is durable and the cron reaches it regardless, so a drain that never runs costs a buyer one tick, never their points
-- Past the attempt cap the drain stops offering a row. `storeAdmin.orderEvents.retryStuck` is how a person hands them back once whatever refused them is fixed — it rewinds the count, so a released row gets the whole ladder again
+- Retries double from a minute to an hour; past the twelfth attempt the drain stops offering a row. `storeAdmin.orderEvents.retryStuck` is how a person hands them back once whatever refused them is fixed — it rewinds the count, so a released row gets the whole ladder again
 
 ### What to watch
 
@@ -290,7 +290,7 @@ muted, and a muted alert is worse than none.
 - Why does the refund path trust `order_events.amount_minor` over the order's line amounts?
   - With Shopify the store's quote is a pre-check; only the settled amount is the money.
 
-## Deferred, deliberately
+## Deferred
 
 - Verifying the shop itself. Several behaviours only a real store can answer, and each one changes code rather than confidence: [the Shopify verification list](https://github.com/9gag/grade10/blob/main/docs/architecture/shopify-verification.md) says what they are, what each answer changes, and how to capture a real payload from a browser
 - Cutting a brand over to Shopify — the adapter is built and both stores can bind it; it waits until that brand's app carries the order scopes and subscriptions
