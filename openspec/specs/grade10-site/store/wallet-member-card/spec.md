@@ -28,7 +28,8 @@ asks to be erased.
 - Erasure
   - A scrub plus the same debt: the row stays armed and empty
 - Shared tables, one writer each
-  - The store's schema holds them; each names exactly one writer
+  - The store's schema holds them; each names exactly one owner, plus the
+    writers the registry exempts by name with a reason
 - Configuration
   - A half-configured wallet names the missing secret rather than issuing a
     pass nobody can read
@@ -153,10 +154,11 @@ about anybody.
 `@grade10/wallet-pass/schema` instantiates (`wallet_pass_devices`,
 `wallet_pass_registrations`, `wallet_pass_push_tokens`) SHALL be owned by the
 store, created by both brands' migrations even where only a brand with an
-issuer fills one, and each SHALL be pinned to exactly one writer: the pass
-table and the push credential to the store's wallet service, the two Apple
-pull tables to `@grade10/wallet-pass`'s Apple adapter, and the cursor to the
-store's sweeps.
+issuer fills one, and each SHALL be pinned to exactly one owner: the pass
+table and the push credential to the store's wallet service (a directory,
+`src/services/wallet`), the two Apple pull tables to `@grade10/wallet-pass`'s
+Apple adapter, and the cursor to the store's sweeps — plus the writers the
+registry exempts by name, each with a reason.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-11 - A write-surface check pins every wallet table's writer
 
