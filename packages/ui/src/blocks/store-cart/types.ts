@@ -26,13 +26,17 @@ type PromoState =
 /**
  * A live promo code the member already holds (minted from Loyalty).
  * Shopper-facing copy must say “promo code”, never “coupon”.
+ * The consumer SHALL NOT pass expired or void codes — only live held codes
+ * appear in the nested sheet.
  */
 type HeldPromoCode = {
   id: string;
-  /** Display name or code string shown in the list and in `Discount (…)` when applied. */
+  /** Promo code string — tag row on the ticket; `Discount (…)` when applied. */
   label: string;
-  valueLabel: ReactNode;
-  expiryLabel?: string;
+  /** Ticket title — e.g. “HK$100 discount”. */
+  title: ReactNode;
+  /** Expiry and/or conditions under the title. */
+  detailLabel?: ReactNode;
   applicable: boolean;
   /** Shown when `applicable` is false — prefer actionable copy. */
   inapplicableReason?: string;
@@ -73,6 +77,7 @@ type CartDrawerFooterCopy = {
   promoSheetTitle: string;
   /** Nested sheet back / close control. */
   promoSheetBackLabel: string;
+  /** Apply action next to the promo code text field. */
   applyPromo: string;
   promoPlaceholder: string;
   removePromo: string;
@@ -80,18 +85,28 @@ type CartDrawerFooterCopy = {
   yourPromoCodes: string;
   /** Partition heading for held codes that cannot apply to this cart. */
   notValidPromoCodes: string;
+  /** Empty held list — no live codes to pick. */
+  noHeldPromoCodes: string;
+  /** CTA when the held list is empty — opens Loyalty (new tab when wired). */
+  browseLoyaltyOffers: string;
   /** Apply action on an applicable held promo row. */
   applyHeldPromo: string;
   usePoints: string;
   applyPoints: string;
   pointsPlaceholder: string;
+  /** Trailing unit on the points field — e.g. "pt". */
+  pointsUnit: string;
   useMaxPoints: string;
+  /** Conversion rate under the points field — e.g. "1 pt = HK$1". */
+  pointsRateLabel: string;
   removePoints: string;
   /** Summary line label when points credit is applied. */
   pointsLabel: string;
   checkoutButton: string;
   /** Label while checkout is pending a redirect (e.g. to Shopify). */
   checkoutRedirecting: string;
+  /** Toast when checkout redirect fails (e.g. Shopify session error). */
+  checkoutFailed: string;
 };
 
 type CartDrawerCopy = {

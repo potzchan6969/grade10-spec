@@ -25,15 +25,20 @@
       "removePromo": "移除",
       "yourPromoCodes": "你的優惠碼",
       "notValidPromoCodes": "不適用於此訂單",
+      "noHeldPromoCodes": "你還沒有任何優惠碼。",
+      "browseLoyaltyOffers": "瀏覽會員優惠",
       "applyHeldPromo": "套用",
       "usePoints": "使用積分",
       "applyPoints": "套用",
-      "pointsPlaceholder": "輸入金額（港元）",
+      "pointsPlaceholder": "0",
+      "pointsUnit": "pt",
       "useMaxPoints": "全部使用",
+      "pointsRateLabel": "1 積分 = HK$1",
       "removePoints": "移除",
       "pointsLabel": "積分",
       "checkoutButton": "前往結帳",
-      "checkoutRedirecting": "重新導向中…"
+      "checkoutRedirecting": "重新導向中…",
+      "checkoutFailed": "無法開啟結帳，請再試一次。"
     },
     "unavailableItemsRemoved": "部分商品已因不再提供而移除"
   }

@@ -258,6 +258,10 @@ export {
   CartPromoSheet,
   type CartPromoSheetProps,
 } from "./blocks/store-cart/cart-drawer";
+export {
+  PromoTicket,
+  type PromoTicketProps,
+} from "./blocks/store-cart/promo-ticket";
 export type {
   CartDrawerCopy,
   CartDrawerFooterCopy,

@@ -1,11 +1,32 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
+import { Toaster } from "@grade10/design-system/components/overlays/sonner";
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 import { type ReactNode, useState } from "react";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { CartDrawerFooter, CartPromoSheet } from "./cart-drawer";
-import { DEFAULT_CART_COPY, SAMPLE_HELD_PROMO_CODES } from "./fixtures";
+import {
+  DEFAULT_CART_COPY,
+  SAMPLE_HELD_DISCOUNTS,
+  SAMPLE_HELD_INAPPLICABLE_ONLY,
+  SAMPLE_HELD_PROMO_CODES,
+  STORY_POINTS_MAX_HKD,
+  applyTypedPromoInStories,
+  formatStoryCreditHkd,
+  parseStoryMoney,
+  storyCartEstimatedTotal,
+} from "./fixtures";
 import type { HeldPromoCode, PointsState, PromoState } from "./types";
+
+function promoDiscountAmount(promo: PromoState): string | null {
+  return promo.status === "applied" ? String(promo.discountAmount) : null;
+}
+
+function pointsCreditHkd(points: PointsState): number | null {
+  return points.status === "applied"
+    ? parseStoryMoney(String(points.amountLabel))
+    : null;
+}
 
 const container: Decorator[] = [
   (Story) => (
@@ -51,6 +72,10 @@ function FooterWithPromoNest({
  * [`CartDrawer`](?path=/docs/store-cart-cartdrawer--docs) (or the nest host
  * in these stories). Shopper copy uses **promo code** only — never coupon.
  * Checkout is members-only; there is no guest checkout path.
+ *
+ * `InteractiveMember` is the one interactive playground. Static stories cover
+ * the promo/points/checkout state matrix; `PromoSheetOpen` is typed-only (no
+ * held section).
  */
 const meta = {
   title: "Store Cart/CartDrawerFooter",
@@ -63,7 +88,7 @@ const meta = {
     shippingEstimate: "TBD",
     promoState: { status: "collapsed" },
     pointsState: { status: "collapsed" },
-    pointsBalanceLabel: "1,200 pts · up to HK$1,200",
+    pointsBalanceLabel: "You’ve 1,200 pts.",
     copy: DEFAULT_CART_COPY.footer,
     onPromoStateChange: fn(),
     onRemovePromo: fn(),
@@ -96,7 +121,7 @@ export const Default: Story = {
   },
 };
 
-/** Nested promo sheet open — enter field (held list optional) */
+/** Nested promo sheet open — typed entry only (no held section) */
 export const PromoSheetOpen: Story = {
   render: (args) => {
     const promo: PromoState = { status: "expanded" };
@@ -163,14 +188,14 @@ export const PromoAppliedSuccess: Story = {
     promoState: {
       status: "applied",
       code: "GRADE10",
-      discountAmount: "-HK$4,270.00",
+      discountAmount: "−HK$4,270.00",
     },
     estimatedTotal: "HK$38,430.00",
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Discount (GRADE10)")).toBeInTheDocument();
-    expect(canvas.getByText("-HK$4,270.00")).toBeInTheDocument();
+    expect(canvas.getByText("−HK$4,270.00")).toBeInTheDocument();
     expect(canvas.getByRole("button", { name: "Remove" })).toBeInTheDocument();
     expect(
       canvas.queryByRole("button", { name: /Select or enter code/i }),
@@ -214,49 +239,112 @@ export const HeldPromoSheet: Story = {
   },
 };
 
-/** Held promo applied on first layer */
-export const HeldPromoApplied: Story = {
-  args: {
-    promoState: {
-      status: "applied",
-      code: "WELCOME100",
-      discountAmount: "-HK$100.00",
-    },
-    estimatedTotal: "HK$42,600.00",
+/** Nested sheet: empty held list with Loyalty CTA stub */
+export const HeldPromoEmpty: Story = {
+  render: (args) => {
+    const promo: PromoState = { status: "expanded" };
+    return (
+      <FooterWithPromoNest
+        promoOpen
+        sheet={
+          <CartPromoSheet
+            open
+            copy={DEFAULT_CART_COPY.footer}
+            promoState={promo}
+            heldPromoCodes={[]}
+            onClose={() => {}}
+            onPromoStateChange={() => {}}
+            onApplyPromo={() => false}
+            onBrowseLoyalty={fn()}
+          />
+        }
+      >
+        <CartDrawerFooter {...args} promoState={promo} />
+      </FooterWithPromoNest>
+    );
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Discount (WELCOME100)")).toBeInTheDocument();
+    expect(
+      canvas.getByText("You don’t have any promo codes yet."),
+    ).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: "Browse loyalty offers" }),
+    ).toBeInTheDocument();
+    expect(canvas.queryByText("Your promo codes")).not.toBeInTheDocument();
   },
 };
 
-/** Cleared notice on first-layer row */
+/** Nested sheet: every held code is inapplicable */
+export const HeldPromoAllInapplicable: Story = {
+  render: (args) => {
+    const promo: PromoState = { status: "expanded" };
+    return (
+      <FooterWithPromoNest
+        promoOpen
+        sheet={
+          <CartPromoSheet
+            open
+            copy={DEFAULT_CART_COPY.footer}
+            promoState={promo}
+            heldPromoCodes={SAMPLE_HELD_INAPPLICABLE_ONLY}
+            onClose={() => {}}
+            onPromoStateChange={() => {}}
+            onApplyPromo={() => false}
+          />
+        }
+      >
+        <CartDrawerFooter {...args} promoState={promo} />
+      </FooterWithPromoNest>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Not valid for this order")).toBeInTheDocument();
+    expect(canvas.queryByText("Your promo codes")).not.toBeInTheDocument();
+    expect(canvas.getByText("SAVE200")).toBeInTheDocument();
+  },
+};
+
+/** Promo cleared — toast (same rail as unavailable item removal) */
 export const PromoClearedNotice: Story = {
   args: {
     promoState: { status: "collapsed" },
     promoNotice:
       "Your promo code was removed because it no longer applies to this cart.",
   },
+  render: (args) => (
+    <>
+      <Toaster position="bottom-right" />
+      <CartDrawerFooter {...args} />
+    </>
+  ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByText(
-        "Your promo code was removed because it no longer applies to this cart.",
-      ),
-    ).toBeInTheDocument();
+    expect(canvas.getByText("Promo code")).toBeInTheDocument();
+    const body = within(document.body);
+    await waitFor(() => {
+      expect(
+        body.getByText(
+          "Your promo code was removed because it no longer applies to this cart.",
+        ),
+      ).toBeInTheDocument();
+    });
   },
 };
 
-/** Points collapsed (member) */
-export const PointsCollapsed: Story = {
+/** Points UI omitted — balance loading or member without points tender */
+export const WithoutPoints: Story = {
   args: {
-    pointsState: { status: "collapsed" },
-    pointsBalanceLabel: "1,200 pts · up to HK$1,200",
+    pointsState: null,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("button", { name: /Use points/i }),
+      canvas.queryByRole("button", { name: /Use points/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: /Select or enter code/i }),
     ).toBeInTheDocument();
   },
 };
@@ -265,14 +353,15 @@ export const PointsCollapsed: Story = {
 export const PointsExpanded: Story = {
   args: {
     pointsState: { status: "expanded" },
-    pointsBalanceLabel: "1,200 pts · up to HK$1,200",
+    pointsBalanceLabel: "You’ve 1,200 pts.",
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByPlaceholderText("Enter amount (HK$)"),
+      canvas.getByPlaceholderText("0"),
     ).toBeInTheDocument();
-    expect(canvas.getByText("1,200 pts · up to HK$1,200")).toBeInTheDocument();
+    expect(canvas.getByText(/1 pt = HK\$1\./)).toBeInTheDocument();
+    expect(canvas.getByText(/You’ve 1,200 pts\./)).toBeInTheDocument();
     expect(canvas.getByRole("button", { name: "Use max" })).toBeInTheDocument();
   },
 };
@@ -282,14 +371,14 @@ export const PointsError: Story = {
   args: {
     pointsState: {
       status: "expanded",
-      error: "Enter an amount up to HK$1,200",
+      error: "Enter up to 1,200 pt",
     },
-    pointsBalanceLabel: "1,200 pts · up to HK$1,200",
+    pointsBalanceLabel: "You’ve 1,200 pts.",
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByText("Enter an amount up to HK$1,200"),
+      canvas.getByText("Enter up to 1,200 pt"),
     ).toBeInTheDocument();
   },
 };
@@ -299,15 +388,15 @@ export const PointsApplied: Story = {
   args: {
     pointsState: {
       status: "applied",
-      amountLabel: "-HK$500.00",
+      amountLabel: "−HK$500.00",
     },
-    pointsBalanceLabel: "1,200 pts · up to HK$1,200",
+    pointsBalanceLabel: "You’ve 1,200 pts.",
     estimatedTotal: "HK$42,200.00",
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Points")).toBeInTheDocument();
-    expect(canvas.getByText("-HK$500.00")).toBeInTheDocument();
+    expect(canvas.getByText("−HK$500.00")).toBeInTheDocument();
   },
 };
 
@@ -317,11 +406,11 @@ export const PromoAndPointsStacked: Story = {
     promoState: {
       status: "applied",
       code: "SAVE10",
-      discountAmount: "-HK$4,270.00",
+      discountAmount: "−HK$4,270.00",
     },
     pointsState: {
       status: "applied",
-      amountLabel: "-HK$500.00",
+      amountLabel: "−HK$500.00",
     },
     estimatedTotal: "HK$37,930.00",
   },
@@ -332,7 +421,7 @@ export const PromoAndPointsStacked: Story = {
   },
 };
 
-/** Interactive member: open nested sheet, pick held, apply points */
+/** Interactive playground: nested sheet, held pick, typed apply, points */
 export const InteractiveMember: Story = {
   render: (args) => {
     const [promo, setPromo] = useState<PromoState>({ status: "collapsed" });
@@ -346,11 +435,7 @@ export const InteractiveMember: Story = {
     const applyHeld = (id: string) => {
       const code = held.find((c) => c.id === id);
       if (!code?.applicable) return;
-      const discountById: Record<string, { amount: string; total: string }> = {
-        "held-welcome": { amount: "-HK$100.00", total: "HK$42,600.00" },
-        "held-tier": { amount: "-HK$50.00", total: "HK$42,650.00" },
-      };
-      const applied = discountById[id];
+      const applied = SAMPLE_HELD_DISCOUNTS[id];
       if (!applied) return;
       setSelectedHeldId(id);
       setPromo({
@@ -358,7 +443,9 @@ export const InteractiveMember: Story = {
         code: code.label,
         discountAmount: applied.amount,
       });
-      setTotal(applied.total);
+      setTotal(
+        storyCartEstimatedTotal(applied.amount, pointsCreditHkd(points)),
+      );
       setNotice(undefined);
     };
 
@@ -372,25 +459,30 @@ export const InteractiveMember: Story = {
             promoState={promo}
             heldPromoCodes={held}
             selectedHeldPromoId={selectedHeldId}
-            promoNotice={notice}
             onClose={() => setPromo({ status: "collapsed" })}
             onPromoStateChange={setPromo}
             onSelectHeldPromo={applyHeld}
             onApplyPromo={(code) => {
-              if (code.toUpperCase() === "SAVE10") {
-                setSelectedHeldId(null);
+              const result = applyTypedPromoInStories(code, held);
+              if (result.ok) {
+                setSelectedHeldId(result.heldId);
                 setPromo({
                   status: "applied",
-                  code: "SAVE10",
-                  discountAmount: "-HK$4,270.00",
+                  code: result.label,
+                  discountAmount: result.amount,
                 });
-                setTotal("HK$38,430.00");
+                setTotal(
+                  storyCartEstimatedTotal(
+                    result.amount,
+                    pointsCreditHkd(points),
+                  ),
+                );
                 setNotice(undefined);
                 return true;
               }
               setPromo({
                 status: "expanded",
-                error: "This promo code is invalid",
+                error: result.error,
               });
               return false;
             }}
@@ -403,95 +495,47 @@ export const InteractiveMember: Story = {
           promoState={promo}
           promoNotice={notice}
           pointsState={points}
-          pointsBalanceLabel="1,200 pts · up to HK$1,200"
+          pointsBalanceLabel="You’ve 1,200 pts."
           onPromoStateChange={setPromo}
           onRemovePromo={() => {
             setPromo({ status: "collapsed" });
             setSelectedHeldId(null);
-            setTotal(
-              points.status === "applied" ? "HK$42,200.00" : "HK$42,700.00",
-            );
+            setTotal(storyCartEstimatedTotal(null, pointsCreditHkd(points)));
           }}
           onPointsStateChange={setPoints}
           onRemovePoints={() => {
             setPoints({ status: "collapsed" });
-            setTotal("HK$42,700.00");
+            setTotal(storyCartEstimatedTotal(promoDiscountAmount(promo), null));
           }}
           onApplyPoints={(amount) => {
             const n = Number(amount.replace(/[^0-9.]/g, ""));
-            if (!Number.isFinite(n) || n <= 0 || n > 1200) {
+            if (!Number.isFinite(n) || n <= 0 || n > STORY_POINTS_MAX_HKD) {
               setPoints({
                 status: "expanded",
-                error: "Enter an amount up to HK$1,200",
+                error: `Enter up to ${STORY_POINTS_MAX_HKD.toLocaleString("en-HK")} pt`,
               });
               return false;
             }
             setPoints({
               status: "applied",
-              amountLabel: `-HK$${n.toLocaleString("en-HK", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}`,
+              amountLabel: formatStoryCreditHkd(n),
             });
+            setTotal(
+              storyCartEstimatedTotal(promoDiscountAmount(promo), n),
+            );
             return true;
           }}
           onUseMaxPoints={() => {
             setPoints({
               status: "applied",
-              amountLabel: "-HK$1,200.00",
+              amountLabel: formatStoryCreditHkd(STORY_POINTS_MAX_HKD),
             });
-            setTotal("HK$41,500.00");
-          }}
-        />
-      </FooterWithPromoNest>
-    );
-  },
-};
-
-/** Interactive: open sheet, try SAVE10 / invalid (typed promo only) */
-export const Interactive: Story = {
-  render: (args) => {
-    const [promo, setPromo] = useState<PromoState>({ status: "collapsed" });
-    const [total, setTotal] = useState("HK$42,700.00");
-    const sheetOpen = promo.status === "expanded";
-
-    return (
-      <FooterWithPromoNest
-        promoOpen={sheetOpen}
-        sheet={
-          <CartPromoSheet
-            open={sheetOpen}
-            copy={DEFAULT_CART_COPY.footer}
-            promoState={promo}
-            onClose={() => setPromo({ status: "collapsed" })}
-            onPromoStateChange={setPromo}
-            onApplyPromo={(code) => {
-              if (code.toUpperCase() === "SAVE10") {
-                setPromo({
-                  status: "applied",
-                  code: "SAVE10",
-                  discountAmount: "-HK$4,270.00",
-                });
-                setTotal("HK$38,430.00");
-                return true;
-              }
-              setPromo({
-                status: "expanded",
-                error: "This promo code is invalid",
-              });
-              return false;
-            }}
-          />
-        }
-      >
-        <CartDrawerFooter
-          {...args}
-          estimatedTotal={total}
-          promoState={promo}
-          onPromoStateChange={setPromo}
-          onRemovePromo={() => {
-            setPromo({ status: "collapsed" });
-            setTotal("HK$42,700.00");
+            setTotal(
+              storyCartEstimatedTotal(
+                promoDiscountAmount(promo),
+                STORY_POINTS_MAX_HKD,
+              ),
+            );
           }}
         />
       </FooterWithPromoNest>
@@ -551,11 +595,11 @@ export const Loading: Story = {
     promoState: {
       status: "applied",
       code: "GRADE10",
-      discountAmount: "-HK$4,270.00",
+      discountAmount: "−HK$4,270.00",
     },
     pointsState: {
       status: "applied",
-      amountLabel: "-HK$500.00",
+      amountLabel: "−HK$500.00",
     },
   },
   play: async ({ canvasElement }) => {
@@ -582,5 +626,37 @@ export const CheckoutRedirecting: Story = {
     expect(
       canvas.getByRole("button", { name: "Redirecting..." }),
     ).toBeDisabled();
+  },
+};
+
+/** Checkout redirect fails — button restores and a toast explains the error */
+export const CheckoutFailed: Story = {
+  render: (args) => (
+    <>
+      <Toaster position="bottom-right" />
+      <CartDrawerFooter
+        {...args}
+        onCheckout={async () => {
+          throw new Error("Shopify session failed");
+        }}
+      />
+    </>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Proceed to Checkout" }),
+    );
+    await waitFor(() => {
+      expect(
+        canvas.getByRole("button", { name: "Proceed to Checkout" }),
+      ).toBeEnabled();
+    });
+    const body = within(document.body);
+    await waitFor(() => {
+      expect(
+        body.getByText("Couldn’t open checkout. Try again."),
+      ).toBeInTheDocument();
+    });
   },
 };

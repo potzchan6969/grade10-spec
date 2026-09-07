@@ -8,7 +8,13 @@ import {
   DEFAULT_CART_COPY,
   OVERFLOW_CART_ITEMS,
   SAMPLE_CART_ITEMS,
+  SAMPLE_HELD_DISCOUNTS,
   SAMPLE_HELD_PROMO_CODES,
+  STORY_POINTS_MAX_HKD,
+  applyTypedPromoInStories,
+  formatStoryCreditHkd,
+  parseStoryMoney,
+  storyCartEstimatedTotal,
 } from "./fixtures";
 import type {
   CartItemSummary,
@@ -16,6 +22,16 @@ import type {
   PointsState,
   PromoState,
 } from "./types";
+
+function promoDiscountAmount(promo: PromoState): string | null {
+  return promo.status === "applied" ? String(promo.discountAmount) : null;
+}
+
+function pointsCreditHkd(points: PointsState): number | null {
+  return points.status === "applied"
+    ? parseStoryMoney(String(points.amountLabel))
+    : null;
+}
 
 /**
  * Product / Cart / Cart Drawer (`4735:6493` & `4674:3831`).
@@ -26,6 +42,9 @@ import type {
  * - [`CartDrawerFooter`](?path=/docs/store-cart-cartdrawerfooter--docs) — promo (type + held), points, checkout
  * - [`CartItem`](?path=/docs/store-cart-cartitem--docs) — sold out / adjusted / row bones
  * - [`CartItemSlot`](?path=/docs/store-cart-cartitemslot--docs) — empty placeholder
+ *
+ * `Default` is the one interactive composed story (promo sheet + points).
+ * Typed/held/points state matrix stays on CartDrawerFooter.
  *
  * App handoff: checkout is members-only (no guest checkout). Wire
  * `onApplyPromo` / `onSelectHeldPromo` / `onApplyPoints` onto the Shopify
@@ -47,7 +66,7 @@ const meta = {
     shippingEstimate: "TBD",
     copy: DEFAULT_CART_COPY,
     pointsState: { status: "collapsed" },
-    pointsBalanceLabel: "1,200 pts · up to HK$1,200",
+    pointsBalanceLabel: "You’ve 1,200 pts.",
     heldPromoCodes: SAMPLE_HELD_PROMO_CODES,
   },
 } satisfies Meta<typeof CartDrawer>;
@@ -55,11 +74,24 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Default state with 2 items and 3 placeholder slots */
+/** Default: signed-in cart with interactive promo sheet and points */
 export const Default: Story = {
   render: (args) => {
     const [open, setOpen] = useState(true);
     const [items, setItems] = useState<readonly CartItemSummary[]>(args.items);
+    const [promo, setPromo] = useState<PromoState>({ status: "collapsed" });
+    const [points, setPoints] = useState<PointsState>(
+      args.pointsState ?? { status: "collapsed" },
+    );
+    const [held] = useState<readonly HeldPromoCode[]>(
+      args.heldPromoCodes ?? SAMPLE_HELD_PROMO_CODES,
+    );
+    const [selectedHeldId, setSelectedHeldId] = useState<string | null>(null);
+    const [total, setTotal] = useState(
+      typeof args.estimatedTotal === "string"
+        ? args.estimatedTotal
+        : "HK$42,700.00",
+    );
 
     return (
       <CartDrawer
@@ -67,6 +99,12 @@ export const Default: Story = {
         open={open}
         onClose={() => setOpen(false)}
         items={items}
+        estimatedTotal={total}
+        promoState={promo}
+        heldPromoCodes={held}
+        selectedHeldPromoId={selectedHeldId}
+        pointsState={points}
+        onPromoStateChange={setPromo}
         onQuantityChange={(id, qty) =>
           setItems((prev) =>
             prev.map((i) => (i.id === id ? { ...i, quantity: qty } : i)),
@@ -75,6 +113,81 @@ export const Default: Story = {
         onRemoveItem={(id) =>
           setItems((prev) => prev.filter((i) => i.id !== id))
         }
+        onRemovePromo={() => {
+          setPromo({ status: "collapsed" });
+          setSelectedHeldId(null);
+          setTotal(storyCartEstimatedTotal(null, pointsCreditHkd(points)));
+        }}
+        onSelectHeldPromo={(id) => {
+          const code = held.find((c) => c.id === id);
+          if (!code?.applicable) return;
+          const discount = SAMPLE_HELD_DISCOUNTS[id];
+          if (!discount) return;
+          setSelectedHeldId(id);
+          setPromo({
+            status: "applied",
+            code: code.label,
+            discountAmount: discount.amount,
+          });
+          setTotal(
+            storyCartEstimatedTotal(discount.amount, pointsCreditHkd(points)),
+          );
+        }}
+        onApplyPromo={(code) => {
+          const result = applyTypedPromoInStories(code, held);
+          if (result.ok) {
+            setSelectedHeldId(result.heldId);
+            setPromo({
+              status: "applied",
+              code: result.label,
+              discountAmount: result.amount,
+            });
+            setTotal(
+              storyCartEstimatedTotal(result.amount, pointsCreditHkd(points)),
+            );
+            return true;
+          }
+          setPromo({
+            status: "expanded",
+            error: result.error,
+          });
+          return false;
+        }}
+        onPointsStateChange={setPoints}
+        onRemovePoints={() => {
+          setPoints({ status: "collapsed" });
+          setTotal(storyCartEstimatedTotal(promoDiscountAmount(promo), null));
+        }}
+        onApplyPoints={(amount) => {
+          const n = Number(amount.replace(/[^0-9.]/g, ""));
+          if (!Number.isFinite(n) || n <= 0 || n > STORY_POINTS_MAX_HKD) {
+            setPoints({
+              status: "expanded",
+              error: `Enter up to ${STORY_POINTS_MAX_HKD.toLocaleString("en-HK")} pt`,
+            });
+            return false;
+          }
+          setPoints({
+            status: "applied",
+            amountLabel: formatStoryCreditHkd(n),
+          });
+          setTotal(
+            storyCartEstimatedTotal(promoDiscountAmount(promo), n),
+          );
+          return true;
+        }}
+        onUseMaxPoints={() => {
+          setPoints({
+            status: "applied",
+            amountLabel: formatStoryCreditHkd(STORY_POINTS_MAX_HKD),
+          });
+          setTotal(
+            storyCartEstimatedTotal(
+              promoDiscountAmount(promo),
+              STORY_POINTS_MAX_HKD,
+            ),
+          );
+        }}
       />
     );
   },
@@ -96,6 +209,9 @@ export const Default: Story = {
     // 2 items + 3 placeholder slots
     const slots = canvas.getAllByLabelText("Add more items to cart");
     expect(slots).toHaveLength(3);
+    expect(
+      canvas.queryByRole("dialog", { name: "Promo code" }),
+    ).not.toBeInTheDocument();
   },
 };
 
@@ -134,144 +250,62 @@ export const EmptyState: Story = {
   },
 };
 
-/** Interactive promo: open nested sheet, submit invalid code */
-export const PromoCodeInteraction: Story = {
-  render: (args) => {
-    const [promo, setPromo] = useState<PromoState>({ status: "collapsed" });
-
-    return (
-      <CartDrawer
-        {...args}
-        promoState={promo}
-        onPromoStateChange={setPromo}
-        onApplyPromo={(code) => {
-          if (code.toUpperCase() === "SAVE10") {
-            setPromo({
-              status: "applied",
-              code: "SAVE10",
-              discountAmount: "-HK$4,270.00",
-            });
-            return true;
-          }
-          setPromo({
-            status: "expanded",
-            error: "This promo code is invalid",
-          });
-          return false;
-        }}
-      />
-    );
+/** Points tender omitted — balance loading or no points on this member */
+export const WithoutPoints: Story = {
+  args: {
+    pointsState: null,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(
+    expect(
+      canvas.queryByRole("button", { name: /Use points/i }),
+    ).not.toBeInTheDocument();
+    expect(
       canvas.getByRole("button", { name: /Select or enter code/i }),
-    );
-    const input = canvas.getByPlaceholderText("Enter promo code");
-    expect(input).toBeInTheDocument();
-    await userEvent.type(input, "WRONGCODE");
-    const applyBtn = canvas.getByRole("button", { name: "Apply" });
-    await userEvent.click(applyBtn);
-    expect(canvas.getByText("This promo code is invalid")).toBeInTheDocument();
+    ).toBeInTheDocument();
   },
 };
 
-/** Member: held promo codes + points in the composed drawer */
-export const MemberPromoAndPoints: Story = {
+/**
+ * Esc / backdrop close the nested promo sheet first, then the cart.
+ */
+export const NestedPromoDismiss: Story = {
   render: (args) => {
-    const [promo, setPromo] = useState<PromoState>({ status: "collapsed" });
-    const [points, setPoints] = useState<PointsState>({ status: "collapsed" });
-    const [held] = useState<readonly HeldPromoCode[]>(SAMPLE_HELD_PROMO_CODES);
-    const [selectedHeldId, setSelectedHeldId] = useState<string | null>(null);
-    const [total, setTotal] = useState("HK$42,700.00");
+    const [open, setOpen] = useState(true);
+    const [promo, setPromo] = useState<PromoState>({ status: "expanded" });
 
     return (
       <CartDrawer
         {...args}
-        estimatedTotal={total}
+        open={open}
+        onClose={() => setOpen(false)}
         promoState={promo}
-        heldPromoCodes={held}
-        selectedHeldPromoId={selectedHeldId}
-        pointsState={points}
-        pointsBalanceLabel="1,200 pts · up to HK$1,200"
+        heldPromoCodes={SAMPLE_HELD_PROMO_CODES}
+        pointsState={null}
         onPromoStateChange={setPromo}
-        onRemovePromo={() => {
-          setPromo({ status: "collapsed" });
-          setSelectedHeldId(null);
-          setTotal(
-            points.status === "applied" ? "HK$42,200.00" : "HK$42,700.00",
-          );
-        }}
-        onSelectHeldPromo={(id) => {
-          const code = held.find((c) => c.id === id);
-          if (!code?.applicable) return;
-          setSelectedHeldId(id);
-          setPromo({
-            status: "applied",
-            code: code.label,
-            discountAmount:
-              id === "held-welcome" ? "-HK$100.00" : "-HK$50.00",
-          });
-          setTotal(id === "held-welcome" ? "HK$42,600.00" : "HK$42,650.00");
-        }}
-        onApplyPromo={(code) => {
-          if (code.toUpperCase() === "SAVE10") {
-            setSelectedHeldId(null);
-            setPromo({
-              status: "applied",
-              code: "SAVE10",
-              discountAmount: "-HK$4,270.00",
-            });
-            setTotal("HK$38,430.00");
-            return true;
-          }
-          setPromo({
-            status: "expanded",
-            error: "This promo code is invalid",
-          });
-          return false;
-        }}
-        onPointsStateChange={setPoints}
-        onRemovePoints={() => {
-          setPoints({ status: "collapsed" });
-          setTotal(
-            promo.status === "applied" ? "HK$38,430.00" : "HK$42,700.00",
-          );
-        }}
-        onApplyPoints={(amount) => {
-          const n = Number(amount.replace(/[^0-9.]/g, ""));
-          if (!Number.isFinite(n) || n <= 0 || n > 1200) {
-            setPoints({
-              status: "expanded",
-              error: "Enter an amount up to HK$1,200",
-            });
-            return false;
-          }
-          setPoints({
-            status: "applied",
-            amountLabel: `-HK$${n.toFixed(2)}`,
-          });
-          return true;
-        }}
-        onUseMaxPoints={() => {
-          setPoints({ status: "applied", amountLabel: "-HK$1,200.00" });
-          setTotal("HK$41,500.00");
-        }}
       />
     );
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(
-      canvas.getByRole("button", { name: /Select or enter code/i }),
-    );
-    expect(canvas.getByText("Your promo codes")).toBeInTheDocument();
-    expect(canvas.getByText("Not valid for this order")).toBeInTheDocument();
-    expect(canvas.getByRole("button", { name: "Back" })).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: /Use points/i }),
+      canvas.getByRole("dialog", { name: "Promo code" }),
     ).toBeInTheDocument();
-    expect(canvas.queryByText(/coupon/i)).not.toBeInTheDocument();
+
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() => {
+      expect(
+        canvas.queryByRole("dialog", { name: "Promo code" }),
+      ).not.toBeInTheDocument();
+    });
+    expect(canvas.getByRole("dialog", { name: "Cart" })).toBeInTheDocument();
+
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() => {
+      expect(
+        canvas.queryByRole("dialog", { name: "Cart" }),
+      ).not.toBeInTheDocument();
+    });
   },
 };
 
