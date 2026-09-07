@@ -50,7 +50,7 @@ one repayment method, each row carrying:
 | Method | how a repayment reached us; none on an advance or a correction |
 | Bank reference | where one was given, shown to staff only |
 | Recorded by, recorded at | who wrote it down and when |
-| Value date | the day the money moved, where the recorder stated one |
+| Value date | the day the money moved; an advance and a repayment always state one, a correction none |
 | Takes back | the kind and record a correction reverses; none otherwise |
 
 Rows SHALL be ordered by when they were recorded, not by their value date, so
@@ -75,10 +75,11 @@ and a correction have no method to be one of.
 The register SHALL page on a cursor over what the page stopped reading, and
 SHALL say whether more remain.
 
-Its totals SHALL be given per kind, per method and per currency, over the
-whole range and never over the page, so that a total does not change as
-somebody pages. Each total SHALL carry the currency it is in and SHALL be
-shown in that unit; no total SHALL be a bare number.
+Its totals SHALL be given per kind, per method, per the kind a correction
+reverses, and per currency, over the whole range and never over the page, so
+that a total does not change as somebody pages. Each total SHALL carry the
+currency it is in and SHALL be shown in that unit; no total SHALL be a bare
+number.
 
 The page and the totals SHALL be read as one answer, so a record landing
 between them cannot put the totals outside the range they claim.
