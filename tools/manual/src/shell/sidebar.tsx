@@ -11,7 +11,7 @@ import {
   Kanban,
   PenNib,
 } from "@phosphor-icons/react";
-import { useCallback, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router";
 import type { Incubating, NavGroup, NavItem, NavProduct } from "../api/derive";
 import { buildIndex, REFERENCES_ROUTE, soleProduct } from "../api/derive";
@@ -19,6 +19,11 @@ import { useSnapshot } from "../api/snapshot-provider";
 import { CapabilityPip } from "../blocks/capability-status";
 import { browserKeyStore, STORAGE } from "../editor/config";
 import { NewPageAction } from "../editor/edit-actions";
+import {
+  navSections,
+  PageSectionsContext,
+  SectionLinks,
+} from "./page-sections";
 
 const FIXED_ENTRIES: { to: string; label: string; icon: Icon }[] = [
   { to: "/", label: "Home", icon: House },
@@ -156,6 +161,7 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
                   <entry.icon aria-hidden size={16} />
                   {entry.label}
                 </NavLink>
+                <RowSections onNavigate={onNavigate} to={entry.to} />
               </li>
             ))}
           </ul>
@@ -441,6 +447,7 @@ function FlatSection({
                 <BookOpenText aria-hidden size={16} />
                 What a reference is
               </NavLink>
+              <RowSections onNavigate={onNavigate} to={to} />
             </li>
           ) : null}
           {items.map((item) => (
@@ -497,19 +504,50 @@ function LeafLink({
   onNavigate: () => void;
 }) {
   return (
-    <NavLink
-      className={({ isActive }: { isActive: boolean }) =>
-        cn(
-          ROW,
-          "text-secondary-foreground hover:text-foreground",
-          isActive && "bg-muted font-medium text-foreground",
-        )
-      }
-      onClick={onNavigate}
-      to={item.to}
-    >
-      <span className="min-w-0 flex-1 truncate">{item.title}</span>
-      <CapabilityPip status={item.status} />
-    </NavLink>
+    <>
+      <NavLink
+        className={({ isActive }: { isActive: boolean }) =>
+          cn(
+            ROW,
+            "text-secondary-foreground hover:text-foreground",
+            isActive && "bg-muted font-medium text-foreground",
+          )
+        }
+        onClick={onNavigate}
+        to={item.to}
+      >
+        <span className="min-w-0 flex-1 truncate">{item.title}</span>
+        <CapabilityPip status={item.status} />
+      </NavLink>
+      <RowSections onNavigate={onNavigate} to={item.to} />
+    </>
+  );
+}
+
+/**
+ * The third level: the sections of the page being read, under its own row.
+ * Only a page has them — a product branch is a shelf of pages, and an
+ * incubating entry points at a change rather than at a page.
+ */
+function RowSections({
+  to,
+  onNavigate,
+}: {
+  to: string;
+  onNavigate: () => void;
+}) {
+  const { pathname } = useLocation();
+  const { sections, active } = use(PageSectionsContext);
+  const listed = navSections(sections);
+
+  if (to !== pathname || listed.length === 0) return null;
+
+  return (
+    <SectionLinks
+      active={active}
+      className="mt-0.5 mb-1 ml-4 pl-1"
+      onNavigate={onNavigate}
+      sections={listed}
+    />
   );
 }
