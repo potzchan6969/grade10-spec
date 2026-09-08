@@ -31,6 +31,10 @@ exactly one copy of anything.
 | New bid on a lot you bid on | A bid is accepted | Every other bidder |
 | You have been outbid | The leader stops leading | The displaced leader |
 
+Outbid is losing the lead. A competing maximum that raises the current bid
+while their own maximum still holds is not outbid — Grade10 keeps bidding
+for them.
+
 Each progress message goes once per lot per collector, and the closing
 warning keys to the scheduled close on purpose — a close the extension rule
 keeps moving would otherwise never warn. Nobody hears about their own bid,
@@ -43,9 +47,10 @@ leading bid rather than one per increment.
 A watch-driven letter carries a way to stop further mail about that lot — a
 signed-in page where the collector unwatches, never an unauthenticated
 one-click stop. A letter owed for the collector's own bid carries none,
-because stopping a watch could not honour it. A temporary send failure
-retries with backoff under a bounded budget; a permanent refusal stops at
-once, and an operator can put a given-up letter back on the ladder. A
+because stopping a watch could not honour it. Each letter's lot block shows
+**one** primary picture of the item when the listing has one. A temporary
+send failure retries with backoff under a bounded budget; a permanent refusal
+stops at once, and an operator can put a given-up letter back on the ladder. A
 called-off lot sends nothing further, and a letter that would state
 something no longer true is not sent late.
 
@@ -84,6 +89,8 @@ signed-in page. Mail about winning, paying, invoicing, or shipping.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Channel | Decided | Email first. Push kinds are named so a follow-on does not rename them, and are not delivered. | Product |
+| Lot image | Decided | Every letter's lot block shows one primary listing image when available; omit when none. Not a gallery. | Design |
+| Letter stack | Decided | emailcn on React Email; shared email shell components; preview with `email dev`. Map Grade10 tokens into an email theme — do not import site CSS. | Engineering |
 | 24h close vs 1h reminder | Decided | Additive. "Closes in 24 hours" is a new letter; the one-hour watcher reminder stays. | Product |
 | Audiences | Decided | Start letters are watchers only. Close-in-24h and extended-bidding reach a participant who unwatched, by their bid. | Product |
 | New-bid volume | Decided | Coalesce: tell a previous bidder about the current leading bid they have not yet been told about, not about every increment. The previous leader gets the outbid letter, not both. | Product |

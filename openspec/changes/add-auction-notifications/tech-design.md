@@ -61,20 +61,34 @@
 
 ### Keep the existing auction letter; new kinds are copy branches
 
-- Markup stays heading, body, listing button, footer, optional
-  unsubscribe. The listing shape the letter renders grows `startsAt`
-  and `scheduledEndsAt` beside the effective close.
-- Copy stays in the auction English catalog.
+- Markup stays subject, preheader, heading, body, lot block (one primary
+  image when available), listing button, footer, optional unsubscribe.
+  The listing shape the letter renders grows `startsAt`,
+  `scheduledEndsAt`, and optional `primaryImageUrl` beside the
+  effective close.
+- Templates are composed with [emailcn](https://www.emailcn.run/) on
+  React Email: the previewable sources live in
+  [`apps/auction-emails`](../../../apps/auction-emails/), with an
+  emailcn-shaped `EmailTheme` mapped from Grade10 token hex values.
+  Shared pieces are under `emails/_components/`; each kind is a thin
+  copy branch. Day-to-day preview: `pnpm email:dev` (React Email
+  `email dev` on port 3333). Storybook is optional secondary;
+  Litmus-class tools are pre-ship client QA.
+- Copy stays in the auction English catalog; draft strings are in
+  `ui-design.md`.
 - `canUnsubscribe` is true for start-soon and has-started; false for
   outbid and new-bid; true for close-soon and extended only when the
   recipient is a watcher who never bid. The control points at a
-  signed-in listing page, not a one-click token.
+  signed-in listing or watched-list page, not a one-click token.
 - Alternatives rejected:
   - A template per kind — the eight kinds already share one file.
   - Move the letter into `@grade10/email` — login mail lives there
     because auth is brand-neutral; auction copy and listing links are
     not.
-  - Restyle onto design-system tokens — inboxes do not load that CSS.
+  - Restyle by importing design-system CSS — inboxes do not load that
+    CSS; token values are copied into the email theme instead.
+  - Storybook as the only preview — emailcn assumes React Email's
+    preview; Storybook shows browser HTML, not inbox clients.
 
 ### Classify provider errors in `@grade10/email`; retry on the existing ladder
 
@@ -401,12 +415,15 @@ type SendBatchInput = {
   listing: {
     id: string;
     title: string;
+    primaryImageUrl: string | null;
     startsAt: Date;
     scheduledEndsAt: Date;
     endsAt: Date;
     topAmountMinor: number;
     currency: string;
     stillBiddable: boolean;
+    /** Outbid only: standing amount when they lost the lead. Never the maximum. */
+    yourStandingBidMinor?: number;
   };
 };
 
@@ -592,8 +609,8 @@ Extend `AuctionPushKind` / `EmailKind` with
 Existing `listing_ending_soon` stays the one-hour push slug; new
 `mail_sends` rows use `closes_in_24h`.
 
-The listing shape the letter renders gains `startsAt` and
-`scheduledEndsAt`. Additive.
+The listing shape the letter renders gains `startsAt`,
+`scheduledEndsAt`, and optional `primaryImageUrl`. Additive.
 
 Admin gains the send-log read above. No public storefront contract
 beyond the kinds.

@@ -46,9 +46,10 @@ their maximum before the lot closes.
   in 24 hours" is measured against the scheduled close, and extended bidding
   announces itself when it begins. A snipe war produces one new-bid letter
   about the current lead, not one per increment.
-- **One letter shape** for every auction email: heading, body, listing
-  action, footer. Watch-driven letters offer a signed-in way to unwatch;
-  bid-activity letters do not.
+- **One letter shape** for every auction email: subject, preheader,
+  heading, body, lot block with one primary image when available,
+  listing action, footer. Watch-driven letters offer a signed-in way to
+  unwatch; bid-activity letters do not.
 - **A temporary provider failure is retried; a permanent one stops.** A
   statement that has become false is not sent late.
 - **Nothing is sent about a lot that was called off** before the collector
