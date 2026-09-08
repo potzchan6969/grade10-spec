@@ -16,8 +16,6 @@ product.
 
 ## Designs
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4396-5424" title="Product list filter bar"}
-
 ::story{id="pages-product-list-page--default" title="The listing, whole"}
 
 ::story{id="store-product-listing-productbrowse--no-match" title="A narrowing nothing matches"}
