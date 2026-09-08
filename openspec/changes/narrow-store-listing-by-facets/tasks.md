@@ -8,7 +8,7 @@ be in force: [`tech-design.md`](tech-design.md). Frames, exports and states:
 [`ui-design.md`](ui-design.md) — no component, variant or token is missing, so
 `packages/` carries none of this.
 
-## 1. Words for the facets (grade10-spec)
+## 1. Words for the facets (grade10-spec) (owner: @sean)
 
 - [ ] 1.1 Name the two facet groups in the shared store catalog, in every language the site answers, so the sidebar has a heading for each group the catalogue returns
 - [ ] 1.2 Name the invitation that opens a capped group, in every language, so *A long facet group is capped* (`SC-16`) has words for it
