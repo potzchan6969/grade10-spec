@@ -1,11 +1,10 @@
 import type { EmailTheme } from "./email-theme";
 
 /**
- * Grade10 email theme — emailcn EmailTheme shape, values from
- * `packages/design-system/tokens.json` (orange primary, stone grays).
- * Inboxes do not load design-system CSS; these are copied hex values.
+ * Grade10 tokens mapped into the emailcn `EmailTheme` shape.
+ * Values from `packages/design-system/tokens.json` (orange primary, stone).
  */
-export const grade10EmailTheme: EmailTheme = {
+export const grade10Theme: EmailTheme = {
   borderRadius: "6px",
   borderRadiusLg: "12px",
   button: {
@@ -45,7 +44,7 @@ export const grade10EmailTheme: EmailTheme = {
   colorWarning: "#C4903D",
   containerWidth: "600px",
   fontFamily:
-    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+    'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
   fontFamilyMono: '"Menlo", "Monaco", "Courier New", monospace',
   fontSizeBase: "14px",
   fontSizeHeading: "24px",
@@ -60,3 +59,6 @@ export const grade10EmailTheme: EmailTheme = {
   spacingLg: "32px",
   spacingXl: "48px",
 };
+
+/** @deprecated Prefer `grade10Theme`. */
+export const grade10EmailTheme = grade10Theme;

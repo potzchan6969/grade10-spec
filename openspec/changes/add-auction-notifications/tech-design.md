@@ -67,12 +67,13 @@
   `scheduledEndsAt`, and optional `primaryImageUrl` beside the
   effective close.
 - Templates are composed with [emailcn](https://www.emailcn.run/) on
-  React Email: the previewable sources live in
-  [`apps/auction-emails`](../../../apps/auction-emails/), with an
-  emailcn-shaped `EmailTheme` mapped from Grade10 token hex values.
-  Shared pieces are under `emails/_components/`; each kind is a thin
-  copy branch. Day-to-day preview: `pnpm email:dev` (React Email
-  `email dev` on port 3333). Storybook is optional secondary;
+  React Email via the shadcn registry (`@emailcn` in
+  `apps/auction-emails/components.json`). Previewable sources live in
+  [`apps/auction-emails`](../../../apps/auction-emails/): emailcn’s
+  `createEmailTailwindConfig` plus Grade10 `grade10Theme`, shared
+  pieces under `emails/_components/`, each kind a thin copy branch.
+  Day-to-day preview: `pnpm email:dev` (React Email `email dev` on
+  port 3333). Storybook is optional secondary;
   Litmus-class tools are pre-ship client QA.
 - Copy stays in the auction English catalog; draft strings are in
   `ui-design.md`.
