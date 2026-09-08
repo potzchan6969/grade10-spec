@@ -71,6 +71,8 @@ function FooterWithPromoNest({
  * Enter/held-list UI lives on the nested `CartPromoSheet` hosted by
  * [`CartDrawer`](?path=/docs/store-cart-cartdrawer--docs) (or the nest host
  * in these stories). Shopper copy uses **promo code** only — never coupon.
+ * `PromoState` `applied` is for order-level codes; a product coupon updates the
+ * matching line’s `couponCode` / `price` instead — not a footer discount row.
  * Checkout is members-only; there is no guest checkout path.
  *
  * `InteractiveMember` is the one interactive playground. Static stories cover

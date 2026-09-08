@@ -135,7 +135,6 @@ const CART_ITEM_SKELETON_FIXTURE: CartItemSummary = {
   id: "skeleton",
   name: "1999 Pokémon Base Set #4 Charizard Holo PSA 10",
   price: "HK$24,500.00",
-  originalPrice: "HK$26,000.00",
   quantity: 1,
   maxQuantity: 3,
   status: "default",
@@ -145,7 +144,9 @@ const CART_ITEM_SKELETON_FIXTURE: CartItemSummary = {
  * Product / Cart / Cart Item (`4761:1494`, `4765:2301`, `4761:1486`).
  *
  * Displays a single line item in the cart drawer across default,
- * adjusted-quantity, and sold-out states.
+ * adjusted-quantity, sold-out, catalogue-sale, and product-coupon states.
+ * Product coupons show `couponCode` under the price line with the discounted
+ * unit price; that cut must not also appear as a footer `PromoState` discount.
  */
 function CartItemContent({
   item,
@@ -237,6 +238,21 @@ function CartItemContent({
             </span>
           ) : null}
         </HStack>
+
+        {item.couponCode != null ? (
+          <HStack
+            gap="xs"
+            vAlign="center"
+            className={cn("w-full", isSoldOut && "opacity-50")}
+          >
+            <span aria-hidden className="shrink-0 text-secondary-foreground">
+              <Tag size={14} weight="bold" />
+            </span>
+            <span className="text-xs leading-4 text-secondary-foreground">
+              {item.couponCode}
+            </span>
+          </HStack>
+        ) : null}
 
         {isSoldOut ? (
           <span className="w-full text-xs font-semibold leading-4 text-destructive">
