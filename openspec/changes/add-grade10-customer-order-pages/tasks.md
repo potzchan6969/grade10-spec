@@ -28,7 +28,7 @@ tests against typed fixtures rather than a running backend.
 - [ ] 4.2 Add Discount, Shipping, and Tax labels to each supported Grade10 `orderDetail` catalog, and update the `orderHistory` and `orderDetail` order-label templates so a supplied shop number keeps its own prefix; make catalog resolution and type tests pass for `en`, `zh-Hant`, and `zh-Hans`.
 - [ ] 4.3 Verify the widened shared contract and catalog additions with `pnpm --filter @grade10/ui run test:stories`, `pnpm --filter @grade10/ui run typecheck`, `pnpm --filter @grade10/i18n run test`, `pnpm --filter @grade10/i18n run typecheck`, and `pnpm run lint`.
 
-## 5. Rich customer order facts (grade10)
+## 5. Rich customer order facts (grade10) (owner: @kinisworking)
 
 This group uses the landed group 4 component and catalog contract and the
 existing typed buyer reads. It adds no Store backend, database, provider,
