@@ -45,11 +45,11 @@
 - `grade10-admin-inventory-catalog-SC-67` — Elevated admin reserve mints holder reference
 - `grade10-admin-inventory-catalog-SC-68` — Product page release is limited to admin holds
 
-### grade10-admin-inventory-catalog-US-03: Use inventory through a holder-kind boundary
+### grade10-admin-inventory-catalog-US-03: Auction operator holds stock the vault cannot touch
 
-**As a** consuming application,
-**I want** to reserve, adjust, partially settle, and release my quantity without seeing another kind's holds,
-**so that** I can safely use my hold. Auction sells; Vault vaults.
+**As an** auction operator reserving house stock against a listing,
+**I want** to reserve, adjust, partially sell, and release only Auction's own hold, with the vault's holds on that product invisible to me and mine to it,
+**so that** both draw on one product's stock without either spending what the other reserved. Auction sells; Vault vaults.
 
 **Accepted by:**
 
