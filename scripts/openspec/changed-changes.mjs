@@ -180,7 +180,17 @@ export function classifyCapabilities(changed) {
 async function changedFiles(base, head) {
   const { stdout } = await exec(
     "git",
-    ["diff", "--name-status", "--find-renames", "-z", base, head, "--", CHANGE_ROOT],
+    [
+      "diff",
+      "--name-status",
+      "--find-renames",
+      "-z",
+      base,
+      head,
+      "--",
+      CHANGE_ROOT,
+      SPEC_ROOT,
+    ],
     { cwd: rootDirectory },
   );
   return parseChangedFiles(stdout);
