@@ -1,5 +1,6 @@
 ---
 title: Accounts
+icon: key
 ---
 
 `shared-auth` is how a person gets into a brand's site or console, and what

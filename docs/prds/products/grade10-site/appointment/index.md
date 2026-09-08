@@ -1,5 +1,6 @@
 ---
 title: Appointments
+icon: calendar-check
 ---
 
 The appointment service is the diary every visit to a shop is booked into: a

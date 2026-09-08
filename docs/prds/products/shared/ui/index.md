@@ -1,5 +1,6 @@
 ---
 title: Shared UI
+icon: palette
 ---
 
 `shared-ui` is not a product a shopper opens. It is the component layer both

@@ -1,5 +1,6 @@
 ---
 title: Finance
+icon: bank
 ---
 
 Grade10 Finance is the loan the vault's financed lane runs: a collector's

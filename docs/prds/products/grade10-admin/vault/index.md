@@ -1,6 +1,7 @@
 ---
 title: Vault operations
 summary: The queue a shop works, and the book behind the loans it writes.
+icon: vault
 ---
 
 The operator half of the vault. A case is picked up from a queue cut by what

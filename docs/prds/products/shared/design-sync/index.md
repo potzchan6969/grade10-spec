@@ -1,5 +1,6 @@
 ---
 title: Design Sync
+icon: arrows-clockwise
 ---
 
 Design sync is not a product surface. It is the set of rails that hold code and

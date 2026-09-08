@@ -1,5 +1,6 @@
 ---
 title: Membership
+icon: medal
 ---
 
 One points programme across every Grade10 door. A member earns on qualifying
