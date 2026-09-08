@@ -1,5 +1,5 @@
-import type { PropsWithChildren } from "react";
 import { cn } from "@grade10/design-system/lib/utils";
+import type { PropsWithChildren } from "react";
 import type { AuctionRecordTabsProps } from "./types";
 
 function AuctionRecordTabs({
@@ -11,7 +11,11 @@ function AuctionRecordTabs({
 }: PropsWithChildren<AuctionRecordTabsProps>) {
   return (
     <section className={cn("w-full", className)} data-slot="auction-record">
-      <div aria-label={copy.watching ?? ""} className="flex gap-2" role="tablist">
+      <div
+        aria-label={copy.watching ?? ""}
+        className="flex gap-2"
+        role="tablist"
+      >
         {(["watching", "bidding"] as const).map((tab) => {
           const label = copy[tab];
           if (!label) return null;

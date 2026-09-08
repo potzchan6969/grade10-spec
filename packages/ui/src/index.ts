@@ -150,23 +150,6 @@ export {
   type ListingUserBidHistoryCopy,
   type ListingUserBidHistoryProps,
 } from "./blocks/auction-listing/listing-user-bid-history";
-// shared/ui/auction-record
-export { AuctionRecordEmpty } from "./blocks/auction-record/auction-record-empty";
-export { BiddingList, WatchingList } from "./blocks/auction-record/auction-record-lists";
-export { AuctionRecordRow } from "./blocks/auction-record/auction-record-row";
-export { AuctionRecordTabs } from "./blocks/auction-record/auction-record-tabs";
-export { WatchButton } from "./blocks/auction-record/watch-button";
-export type {
-  AuctionRecordCopy,
-  AuctionRecordEmptyProps,
-  AuctionRecordRowProps,
-  AuctionRecordRowState,
-  AuctionRecordTabsProps,
-  BiddingListProps,
-  WatchingListProps,
-  WatchButtonCopy,
-  WatchButtonProps,
-} from "./blocks/auction-record/types";
 export type {
   BidEnrollment,
   ListingAuctionBidView,
@@ -176,6 +159,26 @@ export type {
   ListingLotMetaBadge,
   ListingUserBidHistoryRow,
 } from "./blocks/auction-listing/types";
+// shared/ui/auction-record
+export { AuctionRecordEmpty } from "./blocks/auction-record/auction-record-empty";
+export {
+  BiddingList,
+  WatchingList,
+} from "./blocks/auction-record/auction-record-lists";
+export { AuctionRecordRow } from "./blocks/auction-record/auction-record-row";
+export { AuctionRecordTabs } from "./blocks/auction-record/auction-record-tabs";
+export type {
+  AuctionRecordCopy,
+  AuctionRecordEmptyProps,
+  AuctionRecordRowProps,
+  AuctionRecordRowState,
+  AuctionRecordTabsProps,
+  BiddingListProps,
+  WatchButtonCopy,
+  WatchButtonProps,
+  WatchingListProps,
+} from "./blocks/auction-record/types";
+export { WatchButton } from "./blocks/auction-record/watch-button";
 // shared/ui/auth-sign-in
 export {
   SignInCard,

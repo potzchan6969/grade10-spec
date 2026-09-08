@@ -16,7 +16,9 @@ function AuctionRecordRow({
     <>
       <span className="min-w-0 flex-1">
         <span className="block truncate font-medium">{title}</span>
-        {detail ? <span className="block text-sm text-muted-foreground">{detail}</span> : null}
+        {detail ? (
+          <span className="block text-sm text-muted-foreground">{detail}</span>
+        ) : null}
       </span>
       <span className="shrink-0 text-sm text-muted-foreground">
         {stateLabel ?? state}
@@ -35,7 +37,10 @@ function AuctionRecordRow({
     </a>
   ) : (
     <button
-      className={cn("flex w-full items-center gap-4 rounded-md border p-4 text-left", className)}
+      className={cn(
+        "flex w-full items-center gap-4 rounded-md border p-4 text-left",
+        className,
+      )}
       onClick={onOpen}
       type="button"
     >

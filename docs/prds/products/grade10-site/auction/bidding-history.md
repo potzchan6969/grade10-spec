@@ -50,7 +50,3 @@ these boundary outcomes as follows:
 | 1001 | Challenger leads at 1001 |
 | 1100 | Challenger leads at 1100 |
 | 1120 | Challenger leads at 1100, one increment above the earlier maximum |
-
-## Journeys
-
-::journeys{id="grade10-site/auction/bidding-history"}

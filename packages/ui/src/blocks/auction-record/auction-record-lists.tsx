@@ -15,8 +15,8 @@ function RecordList({
   if (items.length === 0 && empty) return <AuctionRecordEmpty {...empty} />;
   return (
     <VStack className={className} gap="sm" hAlign="stretch">
-      {items.map((item, index) => (
-        <AuctionRecordRow key={`${item.title}-${index}`} {...item} />
+      {items.map((item) => (
+        <AuctionRecordRow key={item.href ?? item.title} {...item} />
       ))}
     </VStack>
   );

@@ -16,7 +16,10 @@ function WatchButton({
     <button
       aria-busy={pending || undefined}
       aria-pressed={watched}
-      className={cn("rounded-md border px-3 py-2 text-sm font-medium", className)}
+      className={cn(
+        "rounded-md border px-3 py-2 text-sm font-medium",
+        className,
+      )}
       disabled={disabled || pending}
       onClick={onPress}
       type="button"
