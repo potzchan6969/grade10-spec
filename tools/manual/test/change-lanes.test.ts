@@ -208,10 +208,10 @@ describe("the real store's board", () => {
     ).toBe(true);
   });
 
-  /** The durable file's own ceiling understates what has been issued: the
-   * fold drops a delta's journeys, so nothing but the delta files remembers
-   * them. */
-  it("states an id ceiling no durable spec could reach alone", async () => {
+  /** The durable file alone understates what has been issued: the fold
+   * drops a delta's journeys, so nothing but the delta files remembers
+   * them. The ceiling covers both. */
+  it("states an id ceiling covering the durable file and every delta", async () => {
     const { snapshot } = await readStore(rootsOf(root));
     const loyalty = snapshot.specs.find(
       (one) => one.id === "grade10-site/loyalty/programme",
@@ -223,8 +223,24 @@ describe("the real store's board", () => {
         ),
       ) ?? [0]),
     );
+    const inFlight = Math.max(
+      0,
+      ...snapshot.changes.flatMap((one) =>
+        one.deltas
+          .filter((delta) => delta.spec === loyalty?.id)
+          .flatMap((delta) => delta.requirements)
+          .flatMap((requirement) =>
+            [...(requirement.text ?? "").matchAll(/programme-SC-(\d+)/g)].map(
+              (match) => Number(match[1]),
+            ),
+          ),
+      ),
+    );
 
-    expect(loyalty?.issuedThrough?.sc).toBeGreaterThan(durable);
+    expect(inFlight).toBeGreaterThan(0);
+    expect(loyalty?.issuedThrough?.sc).toBeGreaterThanOrEqual(
+      Math.max(durable, inFlight),
+    );
     // A spec whose scenarios carry no permanent ids has issued nothing and
     // owes no ceiling; every spec that has issued one states it.
     const issuing = snapshot.specs.filter((one) =>

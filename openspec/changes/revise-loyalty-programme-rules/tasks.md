@@ -43,12 +43,12 @@ nothing — they run because a throw on read is a bad way to find out otherwise.
 
 ## 4. Operator grants, tier removal, and channel on the ledger (grade10) (owner: @brianchacha6969)
 
-`adjustments.ts` and `earning.ts` already split the two counts correctly; 4.1 is
-a test, not a change. The clock behaviour in 4.2 is the reverse of what
-`earning.ts` does today ("a gift is not activity, so it moves no clock").
+`adjustments.ts` and `earning.ts` already split the two counts correctly, and
+neither a grant nor a correction moves the inactivity clock; 4.1 and 4.2 are
+tests, not changes.
 
 - [x] 4.1 Cover that a correction credits the redeemable balance alone and a campaign grant credits both counts, so *A correction does not move a member up* and *A campaign grant moves a member up* pass
-- [ ] 4.2 Reset the inactivity window on a campaign grant and leave it alone on a correction, so *A campaign grant keeps the balance alive* and *A correction does not extend the balance's life* pass together
+- [ ] 4.2 Cover that neither a campaign grant nor a correction moves the inactivity window, and that a grant lives out its own date under a lapsed one, so *A campaign grant does not keep the balance alive* and *A correction does not extend the balance's life* pass together
 - [x] 4.3 Add an operator action that removes a tier inside its validity period, recorded with who and why, so *An operator removes a tier granted in error* passes — behind the tier grant's own permission (`loyalty:invite`, never `loyalty:adjust`), extending *Operators act through named permissions*. `tier_changes` already allows the `revocation` cause, so `ck_tier_changes_cause` needs no migration
 - [x] 4.4 Require `channel` on every earning and redemption write path, so no sale can be recorded without saying which channel sold — corrections and expiry sold nothing, so they carry an explicit non-sale value added to the closed set rather than the `online` default they fall to today
 - [ ] 4.5 Verify: `pnpm run typecheck`, `pnpm run test:backend`

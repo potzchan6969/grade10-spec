@@ -260,7 +260,7 @@ Prose can cite the store by id, and the reference stays honest when the
 store moves. Write the id in double brackets:
 
 ```md
-Expiry is exact — [[grade10-site-loyalty-programme-SC-12]] — and a balance is never negative
+Expiry is exact — [[grade10-site-loyalty-programme-SC-96]] — and a balance is never negative
 ([[grade10-site/loyalty/programme#grade10-site-loyalty-programme-SC-04]]).
 ```
 
