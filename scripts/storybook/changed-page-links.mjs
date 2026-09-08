@@ -343,12 +343,13 @@ function textBlocks(lines) {
 function storyGroupItem(story, count, storybookUrl) {
   const [root = "Stories", ...path] = story.title.split("/");
   const label = path.length ? path.join(" > ") : root;
-  const linked = story.id
-    ? `<${storybookUrl}/?path=/story/${story.id}|${label}>`
-    : label;
+  const storyCount = `${count} ${count === 1 ? "story" : "stories"}`;
+  const linkedCount = story.id
+    ? `<${storybookUrl}/?path=/story/${story.id}|${storyCount}>`
+    : storyCount;
   const status = story.status ? ` ${story.status}` : "";
   return {
-    item: `${linked} — ${count} ${count === 1 ? "story" : "stories"}${status}`,
+    item: `${label} — ${linkedCount}${status}`,
     root,
     sortKey: label,
   };
