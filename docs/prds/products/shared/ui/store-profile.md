@@ -18,5 +18,5 @@ submitted; what is valid, what is stored, and every word on screen belong to
 the application.
 
 The rules those props carry — the field limits, what falls back where — are
-[the account profile](/p/grade10-site/store/account-profile); this capability is
+[the account profile](/p/grade10-site/account/profile); this capability is
 the component contract underneath it.

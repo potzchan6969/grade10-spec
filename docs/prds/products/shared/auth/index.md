@@ -8,7 +8,7 @@ product: one contract serves grade10 and ZZZ alike, so a collector signing in on
 the grade10 site and an operator signing in to the ZZZ console meet the same
 rules.
 
-## The collector half
+## Collector half
 
 There is no password anywhere. A person signs in with an emailed link, an
 emailed six-digit code, or — where the brand offers it — Google. One verified
@@ -17,12 +17,13 @@ later visit is the same person. A session covers every site of that brand and
 none of another, and signing out happens in exactly one place per surface,
 always with feedback.
 
-Four capabilities carry that: **sign-in** (the methods and their limits),
+Three capabilities carry that: **sign-in** (the methods and their limits),
 **session** (who the caller is, once they are in), and **sign-out** (leaving
-one). Between them they cover a collector's whole relationship with their
-account.
+one). A product's own account page — a profile, a verified identity — is
+product data, not this contract: see Grade10's
+[Account](/p/grade10-site/account).
 
-## The operator half
+## Operator half
 
 An operator is a person holding a role above `user`. **Roles** names the closed
 set and what each grants. **Users** is the identity directory — listing
@@ -40,7 +41,7 @@ singular one is who the caller is; the plural one is an operator listing and
 ending somebody else's sessions.
 :::
 
-:::detail{title="Where the enforcement lives" for="engineer"}
+:::detail{title="Enforcement" for="engineer"}
 Three fail-closed layers gate every admin surface: role permissions, a second
 factor, and a tamper-evident trail
 ([docs/architecture/security.md](https://github.com/9gag/grade10/blob/main/docs/architecture/security.md)).

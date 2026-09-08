@@ -9,7 +9,7 @@ days before they travel. A verification provider hosts the check and decides it;
 Grade10 renders none of it, asks for nothing the provider collects, and reads the
 verdict when it arrives.
 
-## What the collector does
+## Collector actions
 
 :::flow{title="Verifying before the visit"}
 ## The invitation arrives
@@ -35,7 +35,7 @@ packet still out is voided — its paperwork was written from the identity this
 replaces.
 :::
 
-## Where a check stands
+## Check states
 
 | State | What it means |
 | --- | --- |
@@ -58,7 +58,7 @@ One case holds one live check. Asking again while one is out hands back the one
 the collector already has, so nobody ends up holding two invitations and
 guessing.
 
-## The counter is never gated
+## Counter check
 
 A collector with no smartphone, a document the provider cannot read, a provider
 outage — all served by the check staff perform at the counter, and none of them
@@ -120,7 +120,7 @@ a browser in front of the identity store.
 | Consent | Decided | Explicit, on the page that starts the check, stamped on the check; the text names the document and face check, what is kept, reuse across Grade10, and erasure. A DPIA is completed before production; the provider's DPA governs the transfer. | Compliance |
 | What a decline says | Decided | That the check could not be completed online and the counter is another way — no reason. The findings are an operator's, behind `kyc:read`. | Compliance |
 | Documents and countries | Decided | Passports of any country; national ID cards, driving licences and residence permits from Hong Kong, Macau, mainland China, Taiwan, Japan, South Korea and Singapore, as the provider authenticates them. Set on the template, recorded in the deployment checklist. | Compliance |
-| The second host | Decided | The store hosts the same check for the site's accounts, so a collector verifies with no visit — see [identity on the account](/p/grade10-site/store/account-identity). | Product |
+| The second host | Decided | The store hosts the same check for the site's accounts, so a collector verifies with no visit — see [identity on the account](/p/grade10-site/account/identity). | Product |
 
 **Risks.** A verdict is a trust boundary the estate has never had — every
 identity today is written by an authenticated operator. And a verdict can land

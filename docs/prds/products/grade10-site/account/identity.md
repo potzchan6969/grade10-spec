@@ -1,7 +1,7 @@
 ---
 title: Identity
 spec: grade10-site/store/account-identity
-order: 8
+order: 2
 ---
 
 A collector verifies who they are once, from their own account, and is
@@ -55,6 +55,17 @@ Verified, until the document's expiry.
 - **Erased with the account** — a check ends, keeps nothing about the person,
   and the provider is told to erase its copies
 
+:::detail{title="Code map" for="engineer"}
+- **The host** — `packages/grade10-store/backend/src/identity/`: the
+  account as the case, the published lifecycle, the gate, the sweeps, the
+  erasure
+- **The card** — `@grade10/store-frontend/identity`, one slice; every word a
+  prop until the application's submodule carries the `identity` catalogue
+- **The gates** — `checkout.createCheckout`, `createCheckoutWithEmail` and
+  `auction.placeBid` in the store's tRPC routers, on `identityGates` from
+  `@grade10/app-env`
+:::
+
 :::detail{title="Product decisions" for="pm"}
 The store is the second host of a hosted check, after the vault, and the
 first place a person verifies with nobody else involved.
@@ -90,15 +101,4 @@ Inviting by email from the store. Sanctions and watchlist screening.
 **Risks.** A collector reaching the bar for the first time at checkout meets a
 verification they did not plan for; the card on the account page and the
 recognition of a vault check are what keep that a one-time cost.
-:::
-
-:::detail{title="For engineers" for="engineer"}
-- **The host** — `packages/grade10-store/backend/src/identity/`: the
-  account as the case, the published lifecycle, the gate, the sweeps, the
-  erasure
-- **The card** — `@grade10/store-frontend/identity`, one slice; every word a
-  prop until the application's submodule carries the `identity` catalogue
-- **The gates** — `checkout.createCheckout`, `createCheckoutWithEmail` and
-  `auction.placeBid` in the store's tRPC routers, on `identityGates` from
-  `@grade10/app-env`
 :::

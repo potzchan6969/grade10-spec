@@ -1,7 +1,7 @@
 ---
-title: Account Profile
+title: Profile
 spec: grade10-site/store/account-profile
-order: 8
+order: 1
 ---
 
 The profile is what a collector says about themselves in the store, on their
@@ -22,14 +22,10 @@ own account page and shown to nobody else.
   the display name is refused, and a failed save keeps what was typed
 - **URL** — `grade10.com/profile`; signed out, it asks for sign-in
 
-## What it looks like
+## Designs
 
 ::story{id="store-profile-profilecard--default" title="The profile, read"}
 
 ::story{id="store-profile-profilecard--editing-body" title="The profile, being edited"}
 
 ::story{id="store-profile-profilecard--error-state" title="A read that failed"}
-
-## In flight
-
-::changes{spec="grade10-site/store/account-profile"}
