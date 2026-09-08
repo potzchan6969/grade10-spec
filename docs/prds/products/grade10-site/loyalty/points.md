@@ -40,30 +40,60 @@ Points are earned from the **net paid amount after any discount, excluding shipp
 An order is priced once, when it is paid, and the number written then is the
 one every point and every refund is read against.
 
-:::flow{title="From a paid order to points" diagram="assets/diagrams/loyalty-pricing-an-order.svg"}
+:::flow{title="From a paid order to points" case="Normal" diagram="assets/diagrams/loyalty-pricing-an-order.svg"}
 ## *Shop* — **Order paid**
 The shop sends the paid order: its lines, their discounts, and the goods total it stated
 
-## *Store* — **Which lines earn**
-Line by line: earns points, is left out (a gift card, a fee), or is set aside until the shop says what the line is — [Line verdicts](#detail-line-verdicts)
-- **Priced** — every line answered, so the points come from the lines that earn
-- **Set aside** — a line the shop has not classified yet holds back the points, never the sale
+## *Store* — **Order recorded**
+The order read back from Shopify for what each line is — the paid webhook states the money and nothing else — then the lines judged, a gift card, a fee, a grading service left out, and the earning amount written on the order once, never re-priced — [Line verdicts](#detail-line-verdicts)
 
-## *Store* — **Fallback when a line cannot answer**
-When a line cannot say whether it earns, tried in this order
-1. **Store's own item prices** — the whole-order discount shared across the lines by value
-2. **Shop's stated goods total** — only where the shop itemised nothing
-3. **Nothing** — the points wait, counted, until a source can classify the sale
-
-## *Store* — **Earning amount fixed on the order**
-One amount, written once, never re-priced
-
-## *Loyalty* — **Points worked out**
-**$10** a base point, rounded down, then the tier rate, rounded down again — **$139** at **1.2×** = **15**
-
-## *Loyalty* — **Points recorded**
-A dated entry in the ledger, never edited, carrying its base points and multiplier
+## *Loyalty* — **Points granted**
+Reached by an order event, not by the sale waiting: **$10** a base point, rounded down, then the tier rate, rounded down again — **$139** at **1.2×** = **15** — as a dated entry, never edited
 :::
+
+:::flow{title="From a paid order to points" case="A line the shop cannot classify" diagram="assets/diagrams/loyalty-pricing-unclassified.svg"}
+## *Shop* — **Order paid**
+A line states no product type and no tags, so the rule cannot tell goods from a gift card or a fee
+
+## *Store* — **Order recorded**
+The read back from Shopify is what would answer for the line. A read that answers prices the order as usual; a read that fails writes no earning amount, and the sale still stands
+
+## *Loyalty* — **Points granted**
+No amount, so no order event and no points — counted, and granted when a retry classifies the sale
+:::
+
+:::flow{title="From a paid order to points" case="Nothing itemised" diagram="assets/diagrams/loyalty-pricing-unitemised.svg"}
+## *Shop* — **Order paid**
+One goods total and no lines at all
+
+## *Store* — **Order recorded**
+The store's own item prices, the whole-order discount shared across them by value; the shop's stated goods total only where the store has no prices of its own
+
+## *Loyalty* — **Points granted**
+As usual, on the amount the order carries
+:::
+
+:::flow{title="From a paid order to points" case="A custom sale" diagram="assets/diagrams/loyalty-pricing-custom-sale.svg"}
+## *Shop* — **Order paid**
+A line rung at the till names no catalog product — a consignment, a repair, a price override
+
+## *Store* — **Order recorded**
+Nothing can ever classify that line, so it is left out and the rest of the order is priced; waiting would hold the sale for a fact that is never coming
+
+## *Loyalty* — **Points granted**
+As usual, on the lines that earn; the custom line earns nothing
+:::
+
+### When a line cannot be priced
+
+The shop says what a line is, and can pay an order before it has said
+everything — the case picker on the flow walks each way that happens. A line
+whose tax-free money the shop never states lands there too. What prices the
+order then, in order:
+
+1. **Store's own item prices** — the whole-order discount shared across the lines by value
+2. **Shop's stated goods total** — only where the shop itemised nothing; the total still holds a line the rule threw out, so an unanswered line never falls here
+3. **Nothing** — the points wait, counted, until a source can classify the sale
 
 :::detail{title="Line verdicts" for="engineer"}
 - **Config** — one programme config, `GRADE10_LOYALTY_PROGRAM` in `packages/app-env`

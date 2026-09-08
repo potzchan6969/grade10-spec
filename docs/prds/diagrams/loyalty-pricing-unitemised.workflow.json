@@ -2,7 +2,7 @@
   "schema_version": 2,
   "diagram_type": "workflow",
   "meta": {
-    "title": "Pricing an order",
+    "title": "Nothing itemised",
     "animation": "none",
     "visual_preset": "editorial",
     "legend": {
@@ -35,16 +35,16 @@
       "col": 0,
       "type": "external",
       "label": "Order paid",
-      "sublabel": "lines, discounts, total",
+      "sublabel": "one goods total, no lines",
       "width": 132
     },
     {
-      "id": "store-order-recorded_read",
+      "id": "store-order-recorded_stated",
       "lane": "shop",
       "col": 1,
       "type": "external",
-      "label": "Read back",
-      "sublabel": "product type, tags",
+      "label": "Shop's goods total",
+      "sublabel": "where the store has none",
       "width": 132
     },
     {
@@ -53,7 +53,7 @@
       "col": 0,
       "type": "database",
       "label": "Order recorded",
-      "sublabel": "earning amount, written once",
+      "sublabel": "the store's own item prices",
       "width": 132
     },
     {
@@ -62,7 +62,7 @@
       "col": 0,
       "type": "backend",
       "label": "Points granted",
-      "sublabel": "rounded down, then tier rate",
+      "sublabel": "on the amount recorded",
       "width": 132
     }
   ],
@@ -74,8 +74,8 @@
     },
     {
       "from": "store-order-recorded",
-      "to": "store-order-recorded_read",
-      "label": "asks Shopify",
+      "to": "store-order-recorded_stated",
+      "label": "no store prices",
       "variant": "dashed"
     },
     {

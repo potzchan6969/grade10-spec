@@ -2,7 +2,7 @@
   "schema_version": 2,
   "diagram_type": "workflow",
   "meta": {
-    "title": "Pricing an order",
+    "title": "A custom sale",
     "animation": "none",
     "visual_preset": "editorial",
     "legend": {
@@ -35,25 +35,16 @@
       "col": 0,
       "type": "external",
       "label": "Order paid",
-      "sublabel": "lines, discounts, total",
-      "width": 132
-    },
-    {
-      "id": "store-order-recorded_read",
-      "lane": "shop",
-      "col": 1,
-      "type": "external",
-      "label": "Read back",
-      "sublabel": "product type, tags",
+      "sublabel": "a line names no product",
       "width": 132
     },
     {
       "id": "store-order-recorded",
       "lane": "store",
       "col": 0,
-      "type": "database",
+      "type": "security",
       "label": "Order recorded",
-      "sublabel": "earning amount, written once",
+      "sublabel": "the custom line left out",
       "width": 132
     },
     {
@@ -62,7 +53,7 @@
       "col": 0,
       "type": "backend",
       "label": "Points granted",
-      "sublabel": "rounded down, then tier rate",
+      "sublabel": "on the lines that earn",
       "width": 132
     }
   ],
@@ -71,12 +62,6 @@
       "from": "shop-order-paid",
       "to": "store-order-recorded",
       "variant": "emphasis"
-    },
-    {
-      "from": "store-order-recorded",
-      "to": "store-order-recorded_read",
-      "label": "asks Shopify",
-      "variant": "dashed"
     },
     {
       "from": "store-order-recorded",

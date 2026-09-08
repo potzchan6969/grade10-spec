@@ -2,7 +2,7 @@
   "schema_version": 2,
   "diagram_type": "workflow",
   "meta": {
-    "title": "Pricing an order",
+    "title": "A line the shop cannot classify",
     "animation": "none",
     "visual_preset": "editorial",
     "legend": {
@@ -35,34 +35,34 @@
       "col": 0,
       "type": "external",
       "label": "Order paid",
-      "sublabel": "lines, discounts, total",
+      "sublabel": "a line states no type, no tags",
       "width": 132
     },
     {
-      "id": "store-order-recorded_read",
+      "id": "store-order-recorded_unread",
       "lane": "shop",
       "col": 1,
       "type": "external",
-      "label": "Read back",
-      "sublabel": "product type, tags",
+      "label": "Read fails",
+      "sublabel": "the facts stay unread",
       "width": 132
     },
     {
       "id": "store-order-recorded",
       "lane": "store",
       "col": 0,
-      "type": "database",
+      "type": "security",
       "label": "Order recorded",
-      "sublabel": "earning amount, written once",
+      "sublabel": "no earning amount written",
       "width": 132
     },
     {
       "id": "loyalty-points-granted",
       "lane": "loyalty",
       "col": 0,
-      "type": "backend",
-      "label": "Points granted",
-      "sublabel": "rounded down, then tier rate",
+      "type": "messagebus",
+      "label": "Points wait",
+      "sublabel": "counted, until a retry",
       "width": 132
     }
   ],
@@ -74,14 +74,14 @@
     },
     {
       "from": "store-order-recorded",
-      "to": "store-order-recorded_read",
+      "to": "store-order-recorded_unread",
       "label": "asks Shopify",
       "variant": "dashed"
     },
     {
       "from": "store-order-recorded",
       "to": "loyalty-points-granted",
-      "label": "order event \u00b7 async",
+      "label": "no order event",
       "variant": "dashed",
       "channelX": 210,
       "labelAt": [195, 283]
