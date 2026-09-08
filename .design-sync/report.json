@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-08T07:26:33.969Z",
+  "generatedAt": "2026-09-08T07:55:01.544Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -87,8 +87,8 @@
     "Table Row": "ok",
     "Text Area": "warn",
     "Text Input": "skipped",
-    "Toast": "warn",
-    "Toast / Close": "warn",
+    "Toast": "ok",
+    "Toast / Close": "skipped",
     "Tooltip": "ok",
     "auth-sign-in: sign-in-card/body": "ok",
     "display: card/slot": "ok",
@@ -901,12 +901,6 @@
     ],
     "Text Area": [
       "Text Area: no code component (looked for src/components/**/textarea.tsx or textarea.tsx)"
-    ],
-    "Toast": [
-      "Toast: no code component (looked for src/components/**/toast.tsx or toast.tsx)"
-    ],
-    "Toast / Close": [
-      "Toast / Close: no code component (looked for src/components/**/toastclose.tsx or close.tsx)"
     ]
   }
 }
