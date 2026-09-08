@@ -4,7 +4,6 @@ import { useSnapshot } from "../api/snapshot-provider";
 import { useHashFlash } from "../blocks/anchor";
 import { SnapshotFooter } from "./footer";
 import { Header } from "./header";
-import { PageRail } from "./page-rail";
 import { PageSectionsProvider } from "./page-sections";
 import { useScrollMemory } from "./scroll-memory";
 import { Sidebar } from "./sidebar";
@@ -53,22 +52,19 @@ export function AppShell() {
 
           <div className="flex min-w-0 flex-1 flex-col">
             <main className="min-w-0 flex-1 px-5 py-10 lg:px-12">
-              <div className="mx-auto flex w-full max-w-[74rem] gap-10">
-                <div className="mx-auto w-full min-w-0 max-w-3xl">
-                  {snapshot.status === "loading" ? <SnapshotLoading /> : null}
-                  {snapshot.status === "error" ? (
-                    <SnapshotUnavailable message={snapshot.message} />
-                  ) : null}
-                  {snapshot.status === "ready" ? (
-                    <>
-                      {snapshot.source === "fixture" ? (
-                        <FixtureNotice reason={snapshot.reason} />
-                      ) : null}
-                      <Outlet />
-                    </>
-                  ) : null}
-                </div>
-                <PageRail />
+              <div className="mx-auto w-full min-w-0 max-w-4xl">
+                {snapshot.status === "loading" ? <SnapshotLoading /> : null}
+                {snapshot.status === "error" ? (
+                  <SnapshotUnavailable message={snapshot.message} />
+                ) : null}
+                {snapshot.status === "ready" ? (
+                  <>
+                    {snapshot.source === "fixture" ? (
+                      <FixtureNotice reason={snapshot.reason} />
+                    ) : null}
+                    <Outlet />
+                  </>
+                ) : null}
               </div>
             </main>
 
