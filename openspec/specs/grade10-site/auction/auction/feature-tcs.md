@@ -1,7 +1,7 @@
 # grade10-site/auction/auction Test Cases
 
-**Status:** approved
-**Reviewed:** 2026-09-02
+**Status:** in-review
+**Drafts styled:** 2026-09-08, tcs-rules r3.0
 
 ## grade10-site-auction-auction-US2: Collector places a card-backed bid inside the window
 
@@ -157,3 +157,216 @@ A published listing with extension window 1800 seconds, extension duration 1800 
 * The contract uses listing and extension terminology.
 * It exposes extension window, extension duration, and extension cap when set.
 * It exposes no reserve state.
+
+---
+
+## grade10-site-auction-auction-US3: Collector's card hold is released when they are outbid
+
+**As a** bidder,
+**I want** one authorization per listing, released when I am outbid,
+**so that** a delayed lower hold or a duplicate Stripe event cannot take a second bite.
+
+### grade10-site-auction-auction-US3-TC1-1: Outbid authorization is marked for release
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auction-US-03
+
+**Pre-conditions:**
+
+* customer A holds the active authorization for open listing `<listing_1>`.
+* customer B is able to bid on `<listing_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_1>` | An open listing whose current bid is customer A's |
+| `<higher bid>` | A valid amount above customer A's current bid |
+
+**Steps:**
+
+1. Submit `<higher bid>` for customer B against `<listing_1>`.
+2. Read customer A's authorization state for `<listing_1>`.
+3. Read the recorded Stripe release outcome once it arrives.
+
+**Expected Results:**
+
+* Grade10 marks customer A's authorization for asynchronous release.
+* Customer A no longer holds an eligible top authorization for `<listing_1>`.
+* Grade10 records the Stripe release outcome when it arrives.
+
+### grade10-site-auction-auction-US3-TC2-1: Concurrent bids keep the highest valid outcome
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auction-US-03
+
+**Pre-conditions:**
+
+* `<listing_1>` is open and both customers read the same current listing state.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<bid A>` | A valid amount from customer A |
+| `<bid B>` | A different valid amount from customer B, above `<bid A>` |
+
+**Steps:**
+
+1. Submit `<bid A>` and `<bid B>` against `<listing_1>` concurrently.
+2. Read the listing's recorded bid order and current bid.
+
+**Expected Results:**
+
+* Grade10 records the bid outcomes in one listing order.
+* The current bid is the highest valid accepted amount.
+* No lower bid overwrites that current bid.
+
+### grade10-site-auction-auction-US3-TC3-1: Delayed lower authorization cannot land
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auction-US-03
+
+**Pre-conditions:**
+
+* Customer A's card authorization for `<listing_1>` is pending at Stripe.
+* Grade10 has accepted customer B's higher valid bid before Stripe confirms it.
+
+**Steps:**
+
+1. Let Stripe confirm customer A's lower authorization.
+2. Read the authorization state and the listing's current bid.
+
+**Expected Results:**
+
+* Grade10 releases the lower authorization.
+* It does not record that lower bid as accepted.
+* The current bid is unchanged.
+
+### grade10-site-auction-auction-US3-TC4-1: Invalid or duplicate Stripe event changes nothing twice
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auction-US-03
+
+**Pre-conditions:**
+
+* `<listing_1>` has an authorization, release or capture already recorded.
+
+**Test data:**
+
+Runs once per row of **Test data**.
+
+| `<event>` | Grade10 answers |
+| --- | --- |
+| A webhook whose signature is invalid | rejects the event |
+| A webhook whose provider event was already processed | returns the duplicate outcome without another state transition |
+
+**Steps:**
+
+1. Deliver `<event>` to the Stripe webhook endpoint.
+2. Read the bid, hold, release, capture, invoice and order state for `<listing_1>`.
+
+**Expected Results:**
+
+* Grade10 answers as the row states.
+* No bid, hold, release, capture, invoice or order state is duplicated.
+
+### grade10-site-auction-auction-US3-TC5-1: Incomplete Stripe configuration fails the operation explicitly
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auction-US-03
+
+**Pre-conditions:**
+
+* Required Stripe configuration is absent, or does not support the authorization or capture action the operation needs.
+
+**Steps:**
+
+1. Attempt an Auction operation that requires Stripe against `<listing_1>`.
+2. Read the recorded bids and outcomes for `<listing_1>`.
+
+**Expected Results:**
+
+* Grade10 fails the operation, naming the unavailable capability.
+* No bid or fixture-backed outcome is created.
+
+### grade10-site-auction-auction-US3-TC6-1: Missed authorization webhook is repaired once
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auction-US-03
+
+**Pre-conditions:**
+
+* Stripe has confirmed customer A's bid authorization for `<listing_1>`.
+* Grade10 has not processed that webhook, and holds the provider reference.
+
+**Steps:**
+
+1. Run scheduled reconciliation over the recorded provider reference.
+2. Read the authorization outcome for `<listing_1>`.
+3. Run the reconciliation a second time.
+
+**Expected Results:**
+
+* Grade10 reads the authorization outcome from Stripe.
+* It applies that outcome exactly once.

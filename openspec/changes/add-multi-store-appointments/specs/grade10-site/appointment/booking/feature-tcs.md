@@ -673,3 +673,105 @@ None.
 
 * Neither address is in the sitemap.
 * Steps 2 and 3 each carry a directive not to index the page.
+
+---
+
+## grade10-site-appointment-booking-US3: A script tries to book the shop out
+
+**As a** shop protecting its booking capacity,
+**I want** an anonymous booking attempt to pass a challenge and a per-address
+budget,
+**so that** a script cannot flood the diary or hold every seat for itself.
+
+### grade10-site-appointment-booking-US3-TC1-1: Address that has spent its budget is refused at the limit
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** smoke
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-appointment-booking-US-03
+
+**Pre-conditions:**
+
+* `<address>` has made 10 booking attempts against `<shop>` in the last 24 hours.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<address>` | The network address the attempts are made from |
+| `<budget>` | 10 booking attempts per 24 hours |
+
+**Steps:**
+
+1. Submit an 11th booking attempt from `<address>`.
+2. Read the refusal's code and reason.
+
+**Expected Results:**
+
+* The attempt is refused `TOO_MANY_REQUESTS`.
+* The refusal carries the reason `budget`, so the site can word the wait itself.
+
+### grade10-site-appointment-booking-US3-TC2-1: Request with no challenge token is refused where the secret is set
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-appointment-booking-US-03
+
+**Pre-conditions:**
+
+* The deployment under test has the challenge secret set.
+
+**Steps:**
+
+1. Submit a booking request carrying no challenge token.
+2. Read the refusal's code.
+
+**Expected Results:**
+
+* The request is refused `FORBIDDEN`.
+
+### grade10-site-appointment-booking-US3-TC3-1: Refused request holds no seat
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-appointment-booking-US-03
+
+**Pre-conditions:**
+
+* A booking request that fails the gate — over `<budget>`, or carrying no challenge token where the secret is set.
+
+**Steps:**
+
+1. Submit that request against `<slot>`.
+2. Read the booking rows and the hold on `<slot>`.
+
+**Expected Results:**
+
+* No booking row was written.
+* No slot was held.
