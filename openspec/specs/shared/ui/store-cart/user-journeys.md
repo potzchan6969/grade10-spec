@@ -1,17 +1,5 @@
 ## User journeys
 
-### shared-ui-store-cart-US-01: Application imports the cart drawer surface
-
-**As an** application,
-**I want** every cart drawer component and type available from the shared UI
-package's public entry,
-**so that** I compose the drawer from its parts rather than defining them
-myself.
-
-**Accepted by:**
-
-- `shared-ui-store-cart-SC-01` — An application imports the cart drawer
-
 ### shared-ui-store-cart-US-02: Shopper reviews what the cart holds
 
 **As a** shopper,
@@ -73,7 +61,6 @@ sells.
 
 **Accepted by:**
 
-- `shared-ui-store-cart-SC-01` — An application imports the cart drawer
 - `shared-ui-store-cart-SC-10` — Delisted items clear after loading with one toast
 - `shared-ui-store-cart-SC-11` — No unavailable items means no removal toast
 - `shared-ui-store-cart-SC-12` — Status values are the four named states
