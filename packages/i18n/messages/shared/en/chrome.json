@@ -27,6 +27,9 @@
     "privacyPolicy": "PRIVACY POLICY",
     "termsOfService": "TERMS of SERVICE",
     "privacy": "PRIVACY",
-    "terms": "TERMS"
+    "terms": "TERMS",
+    "help": "Help",
+    "shipping": "Shipping",
+    "orders": "Orders & Returns"
   }
 }
