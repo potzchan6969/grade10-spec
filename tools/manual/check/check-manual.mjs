@@ -62,6 +62,7 @@ import {
 import { checkDeltas } from "./deltas.mjs";
 import { checkIcons, checkPages, checkSkeleton, readPages } from "./pages.mjs";
 import { checkAcceptance } from "./qa.mjs";
+import { checkRole } from "./role.mjs";
 import {
   checkCoverage,
   checkDependencies,
@@ -145,6 +146,7 @@ export async function runChecks(target, git) {
     checkUnwritten(ctx, changes, shape);
     checkAcceptance(ctx, shape);
     checkWalked(ctx, shape, changes);
+    checkRole(ctx, shape);
     const folded = checkSpecShape(roots.store, shape, add);
     checkSpecMap(roots.store, shape, add);
     checkDeltas(ctx, { changes, shape, pages });

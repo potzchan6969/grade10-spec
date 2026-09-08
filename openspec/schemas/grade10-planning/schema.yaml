@@ -274,6 +274,23 @@ artifacts:
       exists in the `spec.md` beside this file.
 
 
+      Two kinds are never the role. Software this repository ships is the
+
+      system's side of the story - a consuming application, a service, a
+
+      caller, a package - and the journey belongs to whoever operates it. The
+
+      people who build the product are its makers, not its users: an engineer
+
+      wiring a call, a developer seeding fixtures, a reviewer reading a
+
+      contract, each walking a test or a working step rather than a journey.
+
+      An outside agent that acts on its own is a role - a crawler, a preview
+
+      fetcher, a provider calling back.
+
+
       Hold every story to the four criteria its author owns: Independent,
 
       Negotiable, Valuable, Testable. A story that fails one of the four is
@@ -301,7 +318,24 @@ artifacts:
 
       policy. `pnpm check:manual` fails a capability with no journeys file, and
 
-      one whose file neither holds a story nor says nobody walks it.
+      one whose file neither holds a story nor says nobody walks it. A surface
+
+      only its makers reach says the same thing - an internal reference, a
+
+      dev-build-only page, a fixture panel.
+
+
+      The exemption is capability-wide, and a single scenario needs no journey
+
+      of its own. A walked capability still issues some no story reaches - a
+
+      package's export list, a copy shape, a defaulting rule no surface shows.
+
+      Leave those out of every `**Accepted by:**`, for QA to name under
+
+      `**Out of suite:**`. Widening a story to cover one is how an actor gets
+
+      invented inside a capability that has real ones.
     requires:
       - specs
   - id: test-cases

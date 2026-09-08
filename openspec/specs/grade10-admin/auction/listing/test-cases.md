@@ -3,6 +3,8 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-01, tcs-rules r1
 
+**Out of suite:** grade10-admin-auction-listing-SC-64, grade10-admin-auction-listing-SC-65, grade10-admin-auction-listing-SC-66, grade10-admin-auction-listing-SC-67
+
 ## grade10-admin-auction-listing-US1: Operator saves an unfinished listing and comes back to it
 
 **As an** auction operator,
@@ -1852,97 +1854,3 @@ A signed-in operator without `auction:operate` on <grade10 auction admin listing
 
 * Create listing is not offered.
 * The draft save is refused.
-
----
-
-## grade10-admin-auction-listing-US7: Developer seeds and drops standalone fixture listings
-
-**As a** developer running the auction service locally,
-**I want** to seed fixture listings with no campaign from the Test panel,
-**so that** I can test the standalone listing lifecycle without a campaign
-cover.
-
-### grade10-admin-auction-listing-US7-TC1-1: Listings tab is present in the Test panel
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** smoke
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-listing-US-07
-
-**Pre-conditions:**
-The grade10 admin is running locally with `LOCAL_FIXTURES_ENABLED` true.
-
-**Steps:**
-
-1. Navigate to <grade10 auction admin test panel url>.
-2. Check the tab bar.
-
-**Expected Results:**
-
-* A Listings tab is present beside the Campaign tab.
-
-### grade10-admin-auction-listing-US7-TC2-1: Developer seeds standalone fixture listings
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-listing-US-07
-
-**Pre-conditions:**
-The Listings tab is open in the Test panel. No standalone fixture listings exist.
-
-**Steps:**
-
-1. Open the Listings tab.
-2. Select one or more fixture ids.
-3. Click Add listings.
-4. Navigate to <grade10 auction admin listings url>.
-
-**Expected Results:**
-
-* Step 3 creates each selected fixture as a listing with no campaign, a reserved inventory product, and a media item.
-* The instance counts on the Listings tab update.
-* Step 4 shows each seeded listing in the Listings table with no campaign.
-
-### grade10-admin-auction-listing-US7-TC3-1: Developer drops a standalone fixture listing
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-listing-US-07
-
-**Pre-conditions:**
-At least one standalone fixture listing exists (seeded from the Listings tab).
-
-**Steps:**
-
-1. Open the Listings tab in the Test panel.
-2. Select a standalone fixture listing from the drop select.
-3. Click Drop listing and confirm.
-4. Navigate to <grade10 auction admin listings url>.
-
-**Expected Results:**
-
-* The listing is removed and its inventory hold is released.
-* Step 4 shows the listing is no longer in the Listings table.
