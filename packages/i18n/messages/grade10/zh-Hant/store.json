@@ -38,8 +38,9 @@
       "pointsLabel": "積分",
       "checkoutButton": "前往結帳",
       "checkoutRedirecting": "重新導向中…",
-      "checkoutFailed": "無法開啟結帳，請再試一次。"
+      "checkoutFailed": "無法開啟結帳"
     },
-    "unavailableItemsRemoved": "部分商品已因不再提供而移除"
+    "unavailableItemsRemoved": "商品已從購物車移除",
+    "unavailableItemsRemovedDescription": "部分商品已不再提供"
   }
 }

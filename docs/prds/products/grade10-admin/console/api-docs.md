@@ -55,10 +55,6 @@ canvas: [Grade10 API Docs](https://claude.ai/code/artifact/9b0c8ff4-71ca-4132-80
 — the console shell with the surface under Dev, the services rail, one
 router's procedure table, and the detail panel for one procedure.
 
-## Test cases
-
-::cases{id="grade10-admin/console/api-docs"}
-
 :::detail{title="Product decisions" for="pm"}
 Reading a backend contract means reading its router. Over two hundred
 procedures across eight services already declare their caller, their grants

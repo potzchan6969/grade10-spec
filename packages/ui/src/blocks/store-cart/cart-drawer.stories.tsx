@@ -1,5 +1,5 @@
 import { Button } from "@grade10/design-system/components/forms/button";
-import { Toaster } from "@grade10/design-system/components/overlays/sonner";
+import { Toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
@@ -354,7 +354,7 @@ export const UnavailableItemsRemoved: Story = {
 
     return (
       <>
-        <Toaster position="bottom-right" />
+        <Toast position="bottom-right" />
         <div className="p-8">
           <Button type="button" onClick={() => setOpen(true)}>
             Open Cart
@@ -412,11 +412,10 @@ export const UnavailableItemsRemoved: Story = {
 
     const body = within(document.body);
     await waitFor(() => {
-      expect(
-        body.getByText(
-          "Some item(s) have been removed as they’re no longer available",
-        ),
-      ).toBeInTheDocument();
+      expect(body.getByText("Items removed from cart")).toBeInTheDocument();
     });
+    expect(
+      body.getByText("Some products are no longer available"),
+    ).toBeInTheDocument();
   },
 };

@@ -119,6 +119,11 @@ export const RULES = [
     title: "Scenarios no test case traces",
   },
   {
+    key: "role",
+    level: "warn",
+    title: "Journeys walked by the system, not an actor",
+  },
+  {
     key: "unwritten",
     level: "warn",
     title: "Delta-introduced capabilities no page documents",

@@ -44,12 +44,13 @@ badge defined by `grade10-site/store/order-status` to every order summary. It
 SHALL classify `processing`, `shipped`, and `pickup` as Active, and `completed`,
 `canceled`, and `refunded` as Past.
 
-Each summary SHALL show the order id, placed date, customer-facing status,
-available line items, and the best known total. The best known total SHALL be
-the paid amount when present, otherwise the quoted subtotal when present, and
-otherwise an explicit pending-total treatment. Amounts SHALL remain integer
-minor units paired with their ISO 4217 currency code until formatted for the
-collector.
+Each summary SHALL show the Store-supplied shop order number when it is present
+and non-empty, otherwise the Store order id. It SHALL also show the placed date,
+customer-facing status, available line items, and the best known total. The best
+known total SHALL be the paid amount when present, otherwise the quoted subtotal
+when present, and otherwise an explicit pending-total treatment. Amounts SHALL
+remain integer minor units paired with their ISO 4217 currency code until
+formatted for the collector.
 
 #### Scenario: grade10-site-store-order-history-SC-03 - Active and past orders are grouped newest first
 
@@ -72,13 +73,29 @@ collector.
 - **THEN** it says the total is pending
 - **AND** it does not show a zero amount
 
+#### Scenario: grade10-site-store-order-history-SC-12 - A shop order number identifies a summary
+
+- **GIVEN** an order with a Store-supplied shop order number
+- **WHEN** its summary renders
+- **THEN** the shop order number identifies the order
+- **AND** View Details still targets the order's immutable Store order id
+
+#### Scenario: grade10-site-store-order-history-SC-13 - An older order falls back to its Store id
+
+- **GIVEN** an order with no non-empty shop order number
+- **WHEN** its summary renders
+- **THEN** the Store order id identifies the order
+- **AND** no shop order number is invented
+
 ### Requirement: Order actions use settled Grade10 and carrier addresses
 
-View Details SHALL open `/profile/orders/<order-id>` for the selected order. Track
-Order SHALL appear only when the order supplies an absolute `https` carrier URL
-with no embedded credentials. Activating Track Order SHALL open that URL in a
-new browser context without giving the destination access to the Grade10 page.
-A tracking number or carrier name alone SHALL NOT create a tracking action.
+View Details SHALL open `/profile/orders/<order-id>` using the selected order's
+immutable Store order id, including when the summary displays a different shop
+order number. Track Order SHALL appear only when the order supplies an absolute
+`https` carrier URL with no embedded credentials. Activating Track Order SHALL
+open that URL in a new browser context without giving the destination access to
+the Grade10 page. A tracking number or carrier name alone SHALL NOT create a
+tracking action.
 
 #### Scenario: grade10-site-store-order-history-SC-06 - View Details opens one order
 

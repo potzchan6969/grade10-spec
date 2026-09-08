@@ -54,8 +54,24 @@ const PRODUCT_DETAIL_KEYS = [
 
 const STORE_PRODUCT_DETAIL_KEYS = ["adding", "addedToCart"];
 
+/* What the listing's filter panel says for itself. A facet choice is named by
+   the shop and travels with the catalogue; the group it sits in is not named
+   there at all, and neither is the invitation that opens a capped one. */
+const STORE_FILTER_KEYS = ["filterWorlds", "filterTypes", "seeAllWorlds"];
+
+/* What a tile says about itself. The card draws each badge only where the
+   word for it is supplied, so a missing one is a badge that never appears
+   rather than an error. */
+const STORE_CARD_KEYS = ["soldOut", "sale"];
+
+/* The short names the panel's utility row draws, beside the full ones the
+   footer's help column already carries — the way the legal bar already
+   shortens its two. */
+const FOOTER_UTILITY_KEYS = ["footer.help", "footer.shipping", "footer.orders"];
+
 const ORDER_HISTORY_KEYS = [
   "title",
+  "orderId",
   "activeHeading",
   "pastHeading",
   "empty.title",
@@ -79,6 +95,7 @@ const ORDER_HISTORY_KEYS = [
 
 const ORDER_DETAIL_KEYS = [
   "title",
+  "orderId",
   "loading",
   "error",
   "retry",
@@ -148,6 +165,7 @@ const CART_DRAWER_KEYS = [
   "footer.checkoutRedirecting",
   "footer.checkoutFailed",
   "unavailableItemsRemoved",
+  "unavailableItemsRemovedDescription",
 ].sort();
 
 const AUCTION_BIDDING_HISTORY_KEYS = [
@@ -216,6 +234,24 @@ describe("what a brand and a language answer between them", () => {
 
       for (const key of STORE_PRODUCT_DETAIL_KEYS) {
         expect(store[key as keyof typeof store]).toEqual(expect.any(String));
+      }
+    },
+  );
+
+  /* Scenario: The listing's filter panel names its facet groups, its
+     invitation and its utility row in every language it serves. */
+  it.each(spoken)(
+    "resolves listing filter copy for $brand in $locale",
+    ({ brand, locale }) => {
+      const store = getMessages(brand, locale).store;
+      const chrome = flatten(getMessages(brand, locale).chrome);
+
+      for (const key of [...STORE_FILTER_KEYS, ...STORE_CARD_KEYS]) {
+        expect(store[key as keyof typeof store]).toEqual(expect.any(String));
+      }
+
+      for (const key of FOOTER_UTILITY_KEYS) {
+        expect(chrome[key]).toEqual(expect.any(String));
       }
     },
   );

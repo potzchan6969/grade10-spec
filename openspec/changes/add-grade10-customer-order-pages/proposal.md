@@ -22,11 +22,17 @@ refund, or tracking information. The first delivery establishes the baseline.
   application does not call the Store transport or Shopify directly.
 - Derive every displayed badge from `grade10-site/store/order-status`, and keep
   quoted, paid, refunded, fulfilment, and delivery facts distinct.
+- Prefer the Store-supplied shop order number in customer-facing order labels,
+  while keeping the immutable Store order id as the route and action key.
+- Present the supplied discount, shipping charge, tax, shipping address, and
+  payment instrument on the owner-only detail without turning absent values
+  into zeroes, empty sections, or guessed facts.
 - Open a valid carrier tracking URL from either page when the order is
   trackable, and never invent a tracking action from a carrier number alone.
 - Let the shared Order Details block omit payment, address, loyalty, delivery,
-  summary, or individual money rows that the current typed order contract does
-  not supply.
+  summary, or individual money rows that the typed order contract does not
+  supply, and render partial addresses or unrecognized payment methods without
+  requiring invented display data.
 - Add all page, state, action, and order-field copy to the Grade10 English,
   Traditional Chinese, and Simplified Chinese catalogs.
 - Update the Orders product record with the two settled addresses and the
@@ -42,14 +48,14 @@ refund, or tracking information. The first delivery establishes the baseline.
 - Defining the order-status mapping; `add-store-order-status` owns that
   customer-facing rule.
 - Redesigning the shared order blocks, the design system, Figma components, or
-  tokens. The only shared UI change is making unavailable detail sections
-  optional.
+  tokens. Shared UI changes remain backwards-compatible extensions to optional
+  detail data.
 - Adding a secondary status-note slot to either shared order block.
 - Guest order lookup, customer-initiated cancellation, refund, return, or
   address editing.
-- Displaying a payment method, shipping or pickup address, discount, shipping
-  charge, tax, product image, or loyalty amount before the typed Store order
-  contract supplies that fact.
+- Displaying a product image or loyalty amount before the typed Store order
+  contract supplies that fact, or inventing a pickup address from the supplied
+  shipping address.
 
 ## Capabilities
 
@@ -59,9 +65,11 @@ refund, or tracking information. The first delivery establishes the baseline.
   Active/Past composition, empty and failure states, and navigation to tracking
   or one order.
 - `grade10-site/store/order-detail`: owner-only rendering of one order's
-  items, quoted and paid money, refunds, fulfilment, and tracking facts.
+  identity, items, supplied settlement breakdown, shipping address, payment,
+  refunds, fulfilment, and tracking facts.
 - `shared/ui/store-order-detail`: the reusable Order Details block and its
-  optional data sections, so an application can omit facts it does not hold.
+  optional data sections, including partial addresses and payment methods with
+  or without a recognized brand logo.
 
 ### Modified Capabilities
 
@@ -74,8 +82,9 @@ None.
 - `packages/grade10-store/frontend`: customer-order presentation models and
   adapters over the typed `listOrders` and `getOrder` procedures, with fixture
   and hook coverage.
-- `packages/ui`: a backwards-compatible optional-section contract for the
-  existing Order Details block, with stories and component tests.
+- `packages/ui`: a backwards-compatible optional-section, partial-address, and
+  payment-fallback contract for the existing Order Details block, with stories
+  and component tests.
 - Grade10 catalogs in this store: customer-order copy for `en`, `zh-Hant`, and
   `zh-Hans`.
 - `docs/prds/products/grade10-site/store/order-history.md` and

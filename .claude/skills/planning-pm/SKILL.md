@@ -157,6 +157,22 @@ actor the spec already knows and scenarios that already exist.
   and never leave the file out: `pnpm check:manual` fails a capability with
   neither stories nor the declaration, so the exemption is always a decision
   on record.
+- **The role is a person, or an agent that acts on its own** — a crawler, a
+  preview fetcher, a provider calling back. Never software this repository
+  ships: a consuming application, a service, a caller, a package is the
+  system's side of the story, and the journey belongs to whoever operates it.
+- **Whoever builds the product is not walking it.** An engineer wiring a
+  call, a developer seeding fixtures, a reviewer reading a contract — that is
+  a test or a working step. A capability only they reach is unwalked and says
+  so: an internal reference, a dev-build-only surface, a fixture panel. Its
+  scenarios stand on their own.
+- **A single scenario needs no journey.** The exemption above is
+  capability-wide, but a walked capability still issues some no story reaches
+  — a package's export list, a copy shape, a defaulting rule no surface shows.
+  Leave those out of every `**Accepted by:**`, and tell QA to name them under
+  `**Out of suite:**`. Widening a shopper's story to cover one, or inventing
+  an application to import it, is how an actor gets invented inside a
+  capability that has real ones.
 
 ## Where a statement belongs
 

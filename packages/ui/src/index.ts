@@ -271,6 +271,7 @@ export type {
   CartItemSummary,
   HeldPromoCode,
   PointsState,
+  PromoNotice,
   PromoState,
 } from "./blocks/store-cart/types";
 // shared/ui/store-home

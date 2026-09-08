@@ -82,9 +82,16 @@ open a URL or turn an upcoming step into a completed step.
 
 The order summary SHALL render only when at least one money row is supplied.
 Subtotal, discount, refund, shipping, tax, and total rows SHALL each render only
-when supplied. Payment, one shipping or pickup address, and loyalty SHALL each
-render only when supplied, independently of the other optional groups. When no
-sidebar group is supplied, `OrderDetails` SHALL omit the sidebar.
+when supplied. A shipping or pickup address SHALL accept an omitted recipient
+name and render only its supplied lines. A payment method SHALL accept an
+optional recognized brand, text label, and masked number; it SHALL render only
+when at least one of those display facts is supplied. A recognized brand SHALL
+render its logo, while a method without a recognized brand SHALL remain
+renderable through its text label or masked number without an unrelated logo.
+When both a wallet label and masked number are supplied, they SHALL remain
+visibly associated. Payment, one shipping or pickup address, and loyalty SHALL
+each render independently of the other optional groups. When no sidebar group
+is supplied, `OrderDetails` SHALL omit the sidebar.
 
 #### Scenario: shared-ui-store-order-detail-SC-07 - A refund renders without other optional money rows
 
@@ -112,3 +119,23 @@ sidebar group is supplied, `OrderDetails` SHALL omit the sidebar.
 - **GIVEN** an order detail with no summary, payment, address, or loyalty data
 - **WHEN** `OrderDetails` renders
 - **THEN** no sidebar or empty sidebar card appears
+
+#### Scenario: shared-ui-store-order-detail-SC-11 - An address needs no recipient placeholder
+
+- **GIVEN** an address with supplied lines and no recipient name
+- **WHEN** the sidebar renders
+- **THEN** the supplied address lines appear
+- **AND** no empty or placeholder recipient appears
+
+#### Scenario: shared-ui-store-order-detail-SC-12 - An unrecognized payment method needs no logo
+
+- **GIVEN** a payment method with a text label and masked number but no recognized brand
+- **WHEN** the sidebar renders
+- **THEN** the text label and masked number appear
+- **AND** no unrelated payment logo appears
+
+#### Scenario: shared-ui-store-order-detail-SC-13 - A wallet label stays associated with its mask
+
+- **GIVEN** a payment method with a wallet label and masked device-account number
+- **WHEN** the sidebar renders
+- **THEN** the wallet label and masked number appear together in the Payment Method section

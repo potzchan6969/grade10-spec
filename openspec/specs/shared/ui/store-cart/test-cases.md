@@ -3,40 +3,7 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
-## shared-ui-store-cart-US1: Application imports the cart drawer surface
-
-**As an** application,
-**I want** every cart drawer component and type available from the shared UI
-package's public entry,
-**so that** I compose the drawer from its parts rather than defining them
-myself.
-
-### shared-ui-store-cart-US1-TC1-1: Public entry exports the cart drawer
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** smoke
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-ui-store-cart-US-01
-
-**Pre-conditions:**
-None.
-
-**Steps:**
-
-1. Import any named cart-drawer export from the shared UI package's public entry.
-
-**Expected Results:**
-
-* The import resolves without error.
-
----
+**Out of suite:** shared-ui-store-cart-SC-01
 
 ## shared-ui-store-cart-US2: Shopper reviews what the cart holds
 

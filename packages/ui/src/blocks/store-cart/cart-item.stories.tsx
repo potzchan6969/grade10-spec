@@ -16,7 +16,9 @@ const container: Decorator[] = [
 /**
  * Cart line item (`4761:1494`, `4765:2301`, `4761:1486`).
  *
- * Owns per-row visuals: default/stepper input, sold out, quantity adjusted, and row bones.
+ * Owns per-row visuals: default/stepper, catalogue sale, product coupon, sold
+ * out, quantity adjusted, and row bones. Product coupons show the code on the
+ * line with the discounted unit price — not as a footer discount row.
  * List composition lives on [`CartDrawerBody`](?path=/docs/store-cart-cartdrawerbody--docs).
  */
 const meta = {
@@ -36,7 +38,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Default active item with stepper input and price */
+/** Default active item with stepper — catalogue price only, no sale or coupon */
 export const Default: Story = {
   args: {
     item: {
@@ -51,13 +53,55 @@ export const Default: Story = {
       canvas.getByText("1999 Pokémon Base Set #4 Charizard Holo PSA 10"),
     ).toBeInTheDocument();
     expect(canvas.getByText("HK$24,500.00")).toBeInTheDocument();
-    expect(canvas.getByText("HK$26,000.00")).toBeInTheDocument();
+    expect(canvas.queryByText("HK$26,000.00")).not.toBeInTheDocument();
 
     const increaseBtn = canvas.getByRole("button", {
       name: "Increase quantity",
     });
     await userEvent.click(increaseBtn);
     expect(args.onQuantityChange).toHaveBeenCalledWith(3);
+  },
+};
+
+/** Catalogue sale — compare-at struck through; no promo code on the line */
+export const SalePrice: Story = {
+  args: {
+    item: {
+      ...SAMPLE_CART_ITEMS[0],
+      price: "HK$24,500.00",
+      originalPrice: "HK$26,000.00",
+      quantity: 1,
+      maxQuantity: 5,
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("HK$24,500.00")).toBeInTheDocument();
+    expect(canvas.getByText("HK$26,000.00")).toBeInTheDocument();
+    expect(canvas.queryByText("POKEMON")).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * Product promo/coupon — code under the price line with the discounted unit price.
+ * That cut must not also appear as a footer `PromoState` discount row.
+ */
+export const ProductCoupon: Story = {
+  args: {
+    item: {
+      ...SAMPLE_CART_ITEMS[0],
+      couponCode: "POKEMON",
+      price: "HK$22,050.00",
+      originalPrice: "HK$24,500.00",
+      quantity: 1,
+      maxQuantity: 5,
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("POKEMON")).toBeInTheDocument();
+    expect(canvas.getByText("HK$22,050.00")).toBeInTheDocument();
+    expect(canvas.getByText("HK$24,500.00")).toBeInTheDocument();
   },
 };
 

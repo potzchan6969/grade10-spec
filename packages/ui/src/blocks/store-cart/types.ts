@@ -5,12 +5,27 @@ type CartItemStatus = "default" | "adjusted" | "soldOut" | "unavailable";
 /**
  * One line item in the shopping cart.
  * All amounts and strings are display-ready presentation values.
+ *
+ * Discount display (each dollar once):
+ * - **Catalogue sale** — `price` + optional `originalPrice` (compare-at); no
+ *   `couponCode`.
+ * - **Product promo/coupon** — `couponCode` on this line with the discounted
+ *   unit `price` (and optional pre-coupon `originalPrice`). That cut MUST NOT
+ *   also appear as `PromoState` `applied` on the footer.
+ * - **Order-level promo/coupon/points** — lines stay at catalogue/sale prices
+ *   with no `couponCode`; the footer summary carries the cut.
  */
 type CartItemSummary = {
   id: string;
   name: string;
   price: ReactNode;
+  /** Compare-at / pre-discount unit price; struck through when set. */
   originalPrice?: ReactNode;
+  /**
+   * Product (item-level) promo/coupon code shown under the price line.
+   * Order-level codes belong on the footer, not here.
+   */
+  couponCode?: ReactNode;
   imageSrc?: string;
   imageAlt?: string;
   quantity: number;
@@ -18,6 +33,10 @@ type CartItemSummary = {
   status?: CartItemStatus;
 };
 
+/**
+ * Footer promo affordance. `applied` is for **order-level** codes only —
+ * product coupons update the matching line’s `couponCode` / `price` instead.
+ */
 type PromoState =
   | { status: "collapsed" }
   | { status: "expanded"; error?: string }
@@ -105,16 +124,24 @@ type CartDrawerFooterCopy = {
   checkoutButton: string;
   /** Label while checkout is pending a redirect (e.g. to Shopify). */
   checkoutRedirecting: string;
-  /** Toast when checkout redirect fails (e.g. Shopify session error). */
+  /** Toast title when checkout redirect fails (e.g. Shopify session error). */
   checkoutFailed: string;
 };
+
+/**
+ * Promo-cleared toast content. A bare string is the title only; an object may
+ * add an optional description line.
+ */
+type PromoNotice = string | { title: string; description?: string };
 
 type CartDrawerCopy = {
   header: CartDrawerHeaderCopy;
   item: CartItemCopy;
   footer: CartDrawerFooterCopy;
-  /** Toast when delisted catalogue lines are cleared after open loading. */
+  /** Toast title when delisted catalogue lines are cleared after open loading. */
   unavailableItemsRemoved: string;
+  /** Optional description under `unavailableItemsRemoved`. */
+  unavailableItemsRemovedDescription?: string;
 };
 
 export type {
@@ -126,5 +153,6 @@ export type {
   CartItemSummary,
   HeldPromoCode,
   PointsState,
+  PromoNotice,
   PromoState,
 };

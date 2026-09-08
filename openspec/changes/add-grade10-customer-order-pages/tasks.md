@@ -21,3 +21,20 @@ tests against typed fixtures rather than a running backend.
 - [x] 3.2 Compose the Your Orders page from `useOrders` and `OrderHistory`, including Active/Past grouping, newest-first summaries, View Details, tracking, loading, retry, and empty states; make `grade10-site-store-order-history-SC-03` through `grade10-site-store-order-history-SC-11` pass in focused page tests.
 - [x] 3.3 Compose the owner-only Order Details page from `useOrder` and `OrderDetails`, keeping null, error, loading, web, point-of-sale, partial-refund, optional-section, fulfilment, and tracking states distinct; make `grade10-site-store-order-detail-SC-02` and `grade10-site-store-order-detail-SC-04` through `grade10-site-store-order-detail-SC-12` pass in focused page tests.
 - [x] 3.4 Add profile-to-orders and history-to-detail navigation, update the checkout-domain return-link reference, add surface identity, localized-address coverage, and the derived customer-order browser cases; verify the affected app with focused unit and browser tests, `pnpm run typecheck`, `pnpm run lint`, and `pnpm run build`.
+
+## 4. Partial address and payment presentation (grade10-spec) (owner: @kinisworking)
+
+- [x] 4.1 Make `OrderDetailsAddress.name` optional and let `OrderDetailsPayment` accept an optional recognized brand, text label, and masked number; omit all-empty payment data while preserving existing consumers so `shared-ui-store-order-detail-SC-11` through `shared-ui-store-order-detail-SC-13` pass in component tests and stories.
+- [x] 4.2 Add Discount, Shipping, and Tax labels to each supported Grade10 `orderDetail` catalog, and update the `orderHistory` and `orderDetail` order-label templates so a supplied shop number keeps its own prefix; make catalog resolution and type tests pass for `en`, `zh-Hant`, and `zh-Hans`.
+- [x] 4.3 Verify the widened shared contract and catalog additions with `pnpm --filter @grade10/ui run test:stories`, `pnpm --filter @grade10/ui run typecheck`, `pnpm --filter @grade10/i18n run test`, `pnpm --filter @grade10/i18n run typecheck`, and `pnpm run lint`.
+
+## 5. Rich customer order facts (grade10) (owner: @kinisworking)
+
+This group uses the landed group 4 component and catalog contract and the
+existing typed buyer reads. It adds no Store backend, database, provider,
+webhook, reconciliation, deployment, or order-status rule.
+
+- [ ] 5.1 Advance `external/grade10-spec` to the landed group 4 change while preserving unrelated nested work, and make `pnpm run check:submodules` pass.
+- [x] 5.2 Align the frontend `Order` model with `orderName`, `discountAppliedMinor`, `shippingMinor`, `taxMinor`, `shippingAddress`, and `paymentInstrument` from `StoreOrder`; keep the repository's direct decoded return and make typed fixture coverage fail on contract drift.
+- [x] 5.3 Extend the pure history and detail projections with the shop-number fallback, supplied settlement rows, partial shipping address, and truthful known, unknown, and wallet payment presentation so `grade10-site-store-order-history-SC-12`, `grade10-site-store-order-history-SC-13`, and `grade10-site-store-order-detail-SC-13` through `grade10-site-store-order-detail-SC-16` pass in unit tests.
+- [x] 5.4 Pass the new projections and localized copy through the existing owner pages, add or update the derived browser cases without exposing address or payment data outside detail, and verify the affected app with focused unit and browser tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, `pnpm run check:libs`, and `pnpm run check:submodules`.
