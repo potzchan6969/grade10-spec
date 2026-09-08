@@ -27,7 +27,7 @@ running worker. Passes no scenario on its own — it is what group 3 draws.
 - [ ] 2.4 Make the fixture procedure client answer the taxonomy with counts and narrow, search and order its products the way the backend does, so every scenario in group 3 is decidable without a worker
 - [ ] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 3. The listing surface (grade10)
+## 3. The listing surface (grade10) (owner: @sean)
 
 Needs group 1's keys and group 2's reads landed.
 
