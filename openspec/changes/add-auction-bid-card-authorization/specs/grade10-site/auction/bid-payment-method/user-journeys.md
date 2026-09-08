@@ -1,18 +1,21 @@
 ## User journeys
 
-### grade10-site-auction-bid-payment-method-US-01: Collector authorizes a first bid
+### grade10-site-auction-bid-payment-method-US-01: Collector authorizes a first bid on commit
 
-**As a** signed-in collector,
-**I want** to select a card and authorize my maximum before placing my first
-bid on a listing,
-**so that** I know the bid is backed by the card I chose.
+**As a** signed-in collector with a linked card,
+**I want** my maximum to authorize in the background when I commit,
+**so that** I am not asked to confirm a hold in a separate modal.
 
 **Accepted by:**
 
-- `grade10-site-auction-bid-payment-method-SC-01` — First bid requires a payment method
-- `grade10-site-auction-bid-payment-method-SC-02` — A selected payment method authorizes the maximum
-- `grade10-site-auction-bid-payment-method-SC-03` — Payment authentication stays in the dialog
+- `grade10-site-auction-bid-payment-method-SC-01` — Commit without a linked method is refused
+- `grade10-site-auction-bid-payment-method-SC-02` — Linked method authorizes the maximum on commit
+- `grade10-site-auction-bid-payment-method-SC-03` — Payment authentication stays on the bid surface
 - `grade10-site-auction-bid-payment-method-SC-04` — A refused authorization does not place a bid
+- `grade10-site-auction-bid-payment-method-SC-09` — Provider failure on commit does not place a bid
+- `grade10-site-auction-bid-payment-method-SC-10` — Linked method carries over to a new listing
+- `grade10-site-auction-bid-payment-method-SC-12` — Decline copy on the bid action
+- `grade10-site-auction-bid-payment-method-SC-13` — Provider-failure copy on the bid action
 
 ### grade10-site-auction-bid-payment-method-US-02: Collector raises a bid on the same card
 
@@ -24,6 +27,7 @@ bid on a listing,
 
 - `grade10-site-auction-bid-payment-method-SC-05` — A later bid retains the listing's payment method
 - `grade10-site-auction-bid-payment-method-SC-06` — Raising a maximum raises the authorization
+- `grade10-site-auction-bid-payment-method-SC-11` — Raise authorization failure keeps the prior maximum
 
 ### grade10-site-auction-bid-payment-method-US-03: Collector is released when outbid
 
