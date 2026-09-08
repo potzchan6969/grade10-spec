@@ -41,6 +41,23 @@ afterwards from wherever the Store put them.
   by share and counted as an estimate; a sale naming no allocations corroborates
   a coupon by variant alone; a points slot with no allocation falls back to the
   subtraction. Each is the old behaviour, reached deliberately.
+- **The goods basis is what the shop sold, never what is left.** Both decoders
+  read the pre-return subtotal; tax and shipping stay post-return, because they
+  are what the buyer still holds rather than a basis. Read post-return, an order
+  first seen after a refund states goods a claw-back has already taken, and
+  every rule that divides by them answers on a smaller sale — the tender's
+  threshold included, where it mints. The lines and the stated total are
+  compared on every settlement to say when they disagree.
+- **The tender is measured on the whole sale, not on what earned.** One
+  threshold, `refunded_goods_raw_minor` against the goods the provider stated,
+  and the charge where it stated none. Alternatives considered: refusing a
+  tender on a sale carrying stored value — rejected, because it costs the sale
+  and misses a gift card sold as a custom line; returning the tender per line —
+  rejected here as the change of its own it is, since it needs the tender
+  placed per line at the till first. What the earn basis cannot do is act as
+  the threshold: the tender paid for the excluded lines too, so a member
+  returning every card and keeping a gift card would be handed points that
+  bought the card.
 
 ## Risks / Trade-offs
 
@@ -57,6 +74,19 @@ afterwards from wherever the Store put them.
   staff removing the cut from one, reads as corroborated. → Accepted: the weld
   goes on every line carrying the variant, so no per-line answer is available
   to be had.
+- **A member the whole-sale threshold leaves short gets nothing back.** Two
+  ways to reach it: everything that earned came back and a gift card stayed, or
+  a sale rung as a typed amount and a ticked delivery paid back every penny
+  while the estimate left the goods short. → Accepted: a shortfall a person can
+  pay back is not a mint nobody can unwind. Both are counted as
+  `store.points_tender.return_held`, tagged by whether the sale stated goods or
+  only a charge, and an operator returns the points by hand.
+- **The money may not decide what the goods decide.** Reading the closed charge
+  as the whole sale would answer the second case without an operator — and mint
+  on every one where money closes without a good moving: goodwill typed beside
+  a delivery, a discrepancy adjustment, a refund that overran a charge the order
+  recorded too low. → The threshold stays on the goods; the money is read only
+  to report.
 - **Orders settled before this lands keep the estimate.** → The shop keeps the
   lines and the Admin sweep already asks for them, so a backfill is possible;
   a refund already priced from the estimate is not undone by it.

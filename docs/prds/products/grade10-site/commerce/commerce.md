@@ -79,22 +79,22 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 - The adapter creates a cart from variant ids and redirects to `checkoutUrl`
 - Shopify prices its own checkout, so the store's line amounts are a pre-check, not the charge
 - `subtotal_minor` is what the store quoted; `total_paid_minor` is what the buyer was charged once payment settled; `goods_minor` is the goods out of that charge
-- Every consumer of the money — loyalty earn, refund claw-back, analytics — reads `order_events.amount_minor`
+- `order_events.amount_minor` is not the money: it is what the fact earns on — the qualifying goods on a settlement, the goods that came back on a refund. Everything that touches it says `earningMinor`, and analytics reads the order's own money instead. Three readers besides loyalty: a claim copies it into `order_claims.earn_basis_minor`, the stuck-events admin endpoint returns it, and the POS simulator prices a rehearsal's replay off it
 - Shopify offers no embedded checkout (`client_secret` is null forever) and no per-cart return URL, so a paid buyer lands on Shopify's order status page
 
 ### Points pay through a draft order, not the cart
 
 - A basket with points on it is priced by Shopify as a **draft order** carrying one merchant-applied fixed-amount discount worth exactly the points chosen, and the buyer pays its `invoiceUrl`. Everything else keeps the Storefront cart
 - Points buy eligible goods only, capped at `min(chosen, spendable goods)` — never shipping, never tax, and never a gift card, which would mint itself
-- The DraftOrder GID is the whole correlation, recorded as `payment_checkout_ref` before the invoice URL leaves the worker. An invoice-completed order carries no `cart_token`, so no webhook can bind it: draft settlements land through the reconcile pass, and the pass is what captures the points
-- The programme is asked for a **hold** before the draft exists — points promised, no lot moved. The balance a member reads is unchanged; what they may promise next goes down, so the same points cannot be spent again at a till
-- Capture is `payWithPoints` on `paid`, keyed on the order, for what the shop says it actually took off. A shop that applied less debits less; a shop that stated nothing debits nothing and says so
+- The DraftOrder GID is the whole correlation, recorded as `payment_checkout_ref` before the invoice URL leaves the worker. An invoice-completed order carries no `cart_token`, so no webhook can bind it on the token alone — the paid webhook hands the order id it names to the same read the cron sweep runs, and that read settles the sale on the webhook's own round trip. The sweep is the net behind it
+- **Nothing is ever held** — the order row records what was promised and no lot moves until settlement. A member starting another checkout retires the open promise instead, so the same points cannot be spent twice
+- Capture is on `paid`, keyed on the order, for what the shop says it actually took off. A shop that applied less debits less; a shop that stated nothing debits nothing and says so
 - Giving up on an unpaid invoice deletes the draft first. Deleted, it can never collect — which is `canceled`, and `canceled` is where the promise is given back. A draft Shopify refuses to delete has already collected, and the order settles instead
-- A full return of the qualifying goods gives every point back, once, keyed on the refund's own id. Nothing is prorated: the discount was never allocated to a line anyone could return
+- A return of everything the sale is measured in — the goods the shop states, or the whole charge where it states none — gives every point back, once, keyed on the refund's own id. Nothing is prorated: the discount was spread over every line the shop sold, so no part of the sale carried it. A member who returns everything that earned and keeps a gift card is counted (`store.points_tender.return_held`) and paid back by hand
 
 ### Loyalty earns on the goods, not the whole charge
 
-- `order_events.amount_minor` for a paid order is `goods_minor`, falling back to the store's quote when the provider reports no split — never the charge
+- A paid order's earning is the provider's own lines put through the eligible-goods rule, then this store's priced items, then the goods total the provider stated. Never the charge, and never the goods total where the lines answer: the rule drops a gift card and a grading fee, and the first rung is smaller than the last exactly where it does
 - Earning on the charge would pay a buyer for their own delivery and make the rate depend on the shipping they picked; a discount they entered at checkout is theirs and lowers it
 - A refund's event carries the goods that came back, priced the way the earn was — a refund of the delivery alone removes no points
 - A refund nothing itemised — an operator's amount, a total read back off the provider — gets the share of it that the earn basis is of the charge, and never more than the order earned on
@@ -172,7 +172,10 @@ nothing counts a settlement landing.
   **Alert when the rate is zero.** This is the one monitor that catches money
   no longer landing, whatever the cause
 - `commerce.order_event.undelivered` — the drain gauge, emitted every pass
-  including zero. **Alert above a backlog threshold.** A stuck loyalty or
+  including zero. **Alert above a backlog threshold**, and above one refused
+  fact's whole ladder: a row that keeps its place climbs for about six hours
+  before it parks, holding `commerce.order_event.backlog_age_seconds` up with
+  it, so a tighter threshold pages somebody for one sale. A stuck loyalty or
   analytics write is invisible otherwise
 - `commerce.order_event.stuck` — events the drain has stopped offering after
   the attempt cap. Not a retry problem; only a person clears these, through
@@ -201,7 +204,7 @@ nothing counts a settlement landing.
   corroborating it. Rising alone is an attack or a payload change, with
   reconcile covering the settlement; rising alongside `commerce.order.abandoned`
   means `cart_token` is gone platform-wide and the binding needs replacing
-- `store.points_tender.unstated` / `store.points_tender.short` — a settled order whose points discount the shop states as missing, or as less than was promised. **Alert on any.** Both are the instrument misfiring on a sale a person has to find: `unstated` debits nothing at all, `short` debits what the shop actually took
+- `store.points_tender.unstated` / `store.points_tender.short` — a settled order whose points discount the shop states as missing, or as less than was promised. **Alert on any.** Both are the instrument misfiring on a sale a person has to find: `short` debits what the shop actually took and delivers; `unstated` debits nothing and keeps the fact queued, since the discount is re-read every pass and a delivered fact would leave the promise standing with nothing to reverse it
 - `commerce.order.settlement_refused` — the shop says a sale collected and the row will not take it. On a points order (`points:true`) the promise is held against a sale nobody captured, so alert on that tag rather than on the counter
 - `store.points_tender.release_failed` — a dead order that could not give its points back. **Alert on any**; the member is short until somebody releases it from the admin surface
 - `commerce.order.amount_drift` — an order this store settled that the shop no
@@ -287,8 +290,8 @@ muted, and a muted alert is worse than none.
   - We don't own catalog data, and a mirror is a second store with sync obligations. The accepted price: Shopify down means checkout down, while display keeps serving from cache.
 - Why Checkout Sessions instead of raw PaymentIntents?
   - One server surface serves hosted, embedded, and Payment Element frontends; the UX can change without a backend change.
-- Why does the refund path trust `order_events.amount_minor` over the order's line amounts?
-  - With Shopify the store's quote is a pre-check; only the settled amount is the money.
+- Why does a refund's event carry the goods rather than the money that moved?
+  - Loyalty earned on the goods, so a claw-back priced on the whole refund takes back points the tax and the delivery never paid for. The money stays on the order, as `refunded_minor`, which is what finance reads.
 
 ## Deferred
 
