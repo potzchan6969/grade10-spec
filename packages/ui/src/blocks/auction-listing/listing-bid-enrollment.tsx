@@ -139,15 +139,19 @@ type EnrollmentSetupSheetCopy = {
 
 function CardLinkIframePlaceholder({
   copy,
+  content,
   onSimulateComplete,
   showsLinkedCard = false,
   disabled = false,
 }: {
   copy: EnrollmentSetupSheetCopy;
+  content?: ReactNode;
   onSimulateComplete?: () => void;
   showsLinkedCard?: boolean;
   disabled?: boolean;
 }) {
+  if (content) return <div className="w-full">{content}</div>;
+
   const className =
     "flex h-32 w-full items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-secondary-foreground";
 
@@ -185,6 +189,10 @@ type EnrollmentSetupSheetProps = {
   open: boolean;
   onOpenChange?: (open: boolean) => void;
   onContinue?: () => void;
+  /** Stripe card field rendered inside the shared setup body. */
+  stripePaymentMethodField?: ReactNode;
+  /** Whether the Stripe card field is ready to submit. */
+  paymentMethodReady?: boolean;
   presentation?: OverlayPresentation;
   /** When false, a card is already on file and only attestation is required. */
   requiresIframeLink?: boolean;
@@ -206,6 +214,7 @@ function SetupSheetBody({
   ageAttested,
   authorizing,
   authorizationRefused,
+  stripePaymentMethodField,
   iframeLinkedPayment,
   onAgeAttestedChange,
   onSimulateCardLinkComplete,
@@ -214,6 +223,7 @@ function SetupSheetBody({
   ageAttested: boolean;
   authorizing: boolean;
   authorizationRefused: boolean;
+  stripePaymentMethodField?: ReactNode;
   iframeLinkedPayment?: {
     brand: OrderDetailsPaymentBrand;
     maskedNumber: string;
@@ -227,6 +237,7 @@ function SetupSheetBody({
       <CardLinkIframePlaceholder
         copy={copy}
         disabled={authorizing}
+        content={stripePaymentMethodField}
         onSimulateComplete={onSimulateCardLinkComplete}
         showsLinkedCard={iframeLinkedPayment != null}
       />
@@ -269,11 +280,17 @@ function EnrollmentSetupSheet({
   defaultAgeAttested = false,
   authorizing = false,
   authorizationRefused = false,
+  stripePaymentMethodField,
+  paymentMethodReady,
 }: EnrollmentSetupSheetProps) {
   const [ageAttested, setAgeAttested] = useState(defaultAgeAttested);
   const [iframeLinked, setIframeLinked] = useState(iframeLinkedPayment != null);
 
-  const cardReady = requiresIframeLink ? iframeLinked : true;
+  const cardReady = requiresIframeLink
+    ? stripePaymentMethodField
+      ? paymentMethodReady === true
+      : iframeLinked
+    : true;
 
   useEffect(() => {
     if (open) {
@@ -301,6 +318,7 @@ function EnrollmentSetupSheet({
       authorizationRefused={authorizationRefused}
       authorizing={authorizing}
       copy={copy}
+      stripePaymentMethodField={stripePaymentMethodField}
       iframeLinkedPayment={iframeLinkedPayment}
       onAgeAttestedChange={setAgeAttested}
       onSimulateCardLinkComplete={
