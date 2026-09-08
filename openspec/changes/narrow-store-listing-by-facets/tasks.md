@@ -16,7 +16,7 @@ be in force: [`tech-design.md`](tech-design.md). Frames, exports and states:
 - [ ] 1.4 Retire the collection group's name and the popularity order's two words, which no surface asks for once the panel is facets and the menu is what the catalogue answers
 - [ ] 1.5 Verify: `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`
 
-## 2. Catalogue reads (grade10)
+## 2. Catalogue reads (grade10) (owner: @sean)
 
 The storefront's catalogue data layer, verified against fixtures rather than a
 running worker. Passes no scenario on its own — it is what group 3 draws.
