@@ -54,7 +54,7 @@ export * from "./components/layout/stack";
 export * from "./components/layout/vstack";
 export * from "./components/overlays/dialog";
 export * from "./components/overlays/dropdown-menu";
-export * from "./components/overlays/sonner";
+export * from "./components/overlays/toast";
 export * from "./components/overlays/tooltip";
 export * from "./components/providers/color-theme-provider";
 export * from "./components/providers/icon-provider";

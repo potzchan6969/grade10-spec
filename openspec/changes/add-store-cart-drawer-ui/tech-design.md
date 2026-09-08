@@ -169,7 +169,7 @@ require a running backend because no backend code changes. Coverage must prove:
 - `useCartReview` defaults preserve checkout behavior while drawer options
   disable removal, preserve unavailable rows, and follow `open`.
 - The root exposes Cart only on Store surfaces and checkout, with one drawer and
-  one `Toaster`.
+  one `Toast`.
 - Pending and failed reviews keep stale values unresolved and Checkout disabled.
 - The shared drawer owns one unavailable cleanup and one toast.
 - Scoped quantity/removal writes, product links, Browse More, Checkout, empty
