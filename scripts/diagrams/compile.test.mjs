@@ -57,9 +57,18 @@ test("ids are the diagram's own, and every reference follows", () => {
   for (const id of ids) assert.match(id, /^tool-call-/);
   for (const [, ref] of svg.matchAll(/url\(#([^)]+)\)/g))
     assert.ok(ids.includes(ref), ref);
-  for (const [, list] of svg.matchAll(/aria-labelledby="([^"]+)"/g)) {
+  for (const [, list] of svg.matchAll(
+    /aria-(?:labelledby|describedby)="([^"]+)"/g,
+  )) {
     for (const ref of list.split(" ")) assert.ok(ids.includes(ref), ref);
   }
+});
+
+test("the title names the drawing and the desc describes it", () => {
+  const [, label] = /<svg[^>]*aria-labelledby="([^"]+)"/.exec(svg);
+  const [, described] = /<svg[^>]*aria-describedby="([^"]+)"/.exec(svg);
+  assert.match(svg, new RegExp(`<title id="${label}">`));
+  assert.match(svg, new RegExp(`<desc id="${described}">`));
 });
 
 test("nodes claim their step by id, edges the step they point at", () => {
