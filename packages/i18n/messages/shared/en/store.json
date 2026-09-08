@@ -15,6 +15,7 @@
   "resultCount": "{count, plural, one {# product} other {# products}}",
   "resultsLabel": "Products",
   "retry": "Try again",
+  "sale": "SALE",
   "searchLabel": "Search products",
   "searchPlaceholder": "Search…",
   "seeAllWorlds": "See all worlds",

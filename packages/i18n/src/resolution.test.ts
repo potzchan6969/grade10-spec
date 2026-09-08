@@ -59,6 +59,11 @@ const STORE_PRODUCT_DETAIL_KEYS = ["adding", "addedToCart"];
    there at all, and neither is the invitation that opens a capped one. */
 const STORE_FILTER_KEYS = ["filterWorlds", "filterTypes", "seeAllWorlds"];
 
+/* What a tile says about itself. The card draws each badge only where the
+   word for it is supplied, so a missing one is a badge that never appears
+   rather than an error. */
+const STORE_CARD_KEYS = ["soldOut", "sale"];
+
 /* The short names the panel's utility row draws, beside the full ones the
    footer's help column already carries — the way the legal bar already
    shortens its two. */
@@ -240,7 +245,7 @@ describe("what a brand and a language answer between them", () => {
       const store = getMessages(brand, locale).store;
       const chrome = flatten(getMessages(brand, locale).chrome);
 
-      for (const key of STORE_FILTER_KEYS) {
+      for (const key of [...STORE_FILTER_KEYS, ...STORE_CARD_KEYS]) {
         expect(store[key as keyof typeof store]).toEqual(expect.any(String));
       }
 
