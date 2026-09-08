@@ -1,22 +1,24 @@
 ## Context
 
-See [proposal.md](proposal.md) for the product reason. The current Grade10
-application has session-gated checkout and profile routes, but no customer
-order routes. `@grade10/store-frontend/checkout` already exposes `useOrders`
-and `useOrder` over the typed `checkout.listOrders` and `checkout.getOrder`
-reads.
+See [proposal.md](proposal.md) for the product reason. The feature branch now
+has session-gated customer order routes composed over
+`@grade10/store-frontend/checkout`'s `useOrders` and `useOrder` hooks. Those
+hooks use the typed `checkout.listOrders` and `checkout.getOrder` reads.
 
-The wire order already carries id, lifecycle status, origin, currency, quoted
-subtotal, eligible goods, paid total, refunded amount, fulfilment status,
-fulfilments, timestamps, and line items. The frontend `Order` model currently
-drops fulfilment fields because its mapper returns the DTO through a narrower
-type. It carries no payment method, address, discount, shipping charge, tax,
-product image, or loyalty amount.
+The typed buyer order now carries id, shop order number, lifecycle status,
+origin, currency, quoted subtotal, eligible goods, discount, shipping charge,
+tax, paid total, refunded amount, fulfilment status, fulfilments, shipping
+address, payment instrument, timestamps, and line items. The frontend `Order`
+model still exposes the earlier subset, so TypeScript permits the decoded
+`StoreOrder` to pass through the repository while the new fields disappear at
+the domain and presentation boundaries. The typed buyer order still carries no
+product image or loyalty amount.
 
 `@grade10/ui` already exports both page blocks. `OrderHistory` accepts supplied
-active and past lists. `OrderDetails` can omit delivery, address, and loyalty,
-but currently requires summary and payment even when the source order has
-neither.
+active and past lists. The completed optional-section work lets `OrderDetails`
+omit summary, delivery, payment, address, and loyalty, but its address type
+still requires a recipient name and its payment type still requires a
+recognized brand.
 
 ## Goals / Non-Goals
 
@@ -56,10 +58,12 @@ surfaces.
 
 ### Keep one typed order read path
 
-Extend the existing frontend `Order` model and explicit mapper with the
-fulfilment fields already present on `StoreOrder`. Keep `useOrders` and
-`useOrder` as the only query hooks; do not add duplicate repositories or
-procedures for the pages.
+Align the existing frontend `Order` model with the buyer fields these pages
+consume: `orderName`, `discountAppliedMinor`, `shippingMinor`, `taxMinor`,
+`shippingAddress`, and `paymentInstrument`. Reuse the exported
+`StoreShippingAddress` and `StorePaymentInstrument` value types. Keep the
+repository's direct decoded return, `useOrders`, and `useOrder`; do not restore
+an identity mapper or add duplicate repositories or procedures.
 
 Add pure customer-order projections beside the order presentation layer:
 
@@ -67,12 +71,18 @@ Add pure customer-order projections beside the order presentation layer:
 | --- | --- | --- |
 | History summary | `Order`, customer badge, localized formatters | `OrderHistoryOrderSummary` |
 | Detail props | `Order`, customer badge, localized formatters | `OrderDetailsProps` data |
+| Customer order label | shop order number and Store id | non-empty shop order number or Store id |
+| Shipping address | typed shipping address | optional `OrderDetailsAddress` |
+| Payment method | typed payment instrument | optional `OrderDetailsPayment` |
 | Tracking target | tracking URL string or null | safe absolute `https` URL or null |
 
 The status badge comes from `grade10-site/store/order-status`; these pages
 consume that frontend rule and do not copy it. Formatting stays at the
 application boundary where locale is known. Arithmetic uses minor units before
-formatting.
+formatting. Both pages display a trimmed, non-empty `orderName` when supplied
+and otherwise the Store id, but maps, callbacks, and routes remain keyed by the
+Store id. Change the catalog templates from `Order #{id}` to `Order {id}` so a
+provider value such as `#G10-10482` does not acquire a second prefix.
 
 **Alternative rejected:** map the DTO directly in each page. That would hide
 wire fields behind the narrower domain type and duplicate money, status, and
@@ -80,24 +90,44 @@ tracking decisions.
 
 ### Treat absent data as absent UI
 
-Make `summary` and `payment` optional on `OrderDetails`; make payment and every
-money row optional on `OrderDetailsSidebar`. The compound omits an absent group
-and omits the full sidebar when no sidebar facts remain. Existing consumers
-that pass the complete objects keep the same rendering and type compatibility.
+Keep the existing optional summary, payment, money-row, and sidebar behavior.
+The compound continues to omit an absent group and the full sidebar when no
+sidebar facts remain. Existing consumers that pass complete objects keep the
+same rendering and type compatibility.
 
 The Grade10 detail projection supplies only facts present on `Order`:
 
 - **Lines:** title, quantity, captured unit price, and derived line total.
-- **Money:** quoted subtotal when non-null, paid total when non-null, and refund
-  when positive.
+- **Money:** quoted subtotal, discount, shipping, tax, and paid total when each
+  is non-null, plus refund when positive. Format discount and refund as
+  deductions; normalize a zero deduction before formatting so it does not
+  become negative zero.
+- **Address:** join the supplied first and last names only when present, then
+  render non-empty street, locality, country, and phone lines in postal order.
+  Keep the address on the owner-only detail and never project it into history.
+- **Payment:** omit a null or all-null instrument. When `wallet` is supplied,
+  derive a known wallet brand from it and do not fall back to a card logo;
+  retain the wallet identity beside any mask. Without a wallet, normalize
+  known Visa, Mastercard, and American Express values to their shared logo.
+  For every other value, use the first non-empty company or provider method as
+  a text label beside the supplied mask.
 - **Fulfilment:** status, display status, estimated delivery, and tracking.
 
-No generic card brand, zero subtotal, empty line, delivery event, or product
-image stands in for a missing fact.
+Null discount, shipping, tax, address, and payment values remain absent. A
+supplied numeric zero remains a visible statement. No generic card brand, zero
+subtotal, empty line, pickup address, delivery event, product image, or loyalty
+value stands in for a missing fact.
 
-**Alternative rejected:** pass a generic payment label to satisfy the current
-required prop. It would present checkout origin as a payment method the Store
-does not know.
+Extend `OrderDetailsAddress.name` to be optional. Extend
+`OrderDetailsPayment` so `brand`, `label`, and `maskedNumber` are independently
+optional, and omit an all-empty payment section. The shared sidebar renders a
+logo only for a supplied recognized brand and renders a supplied label without
+requiring a logo. Existing consumers that provide `name` and `brand` remain
+source-compatible.
+
+**Alternative rejected:** map every unknown provider to a generic or nearest
+card logo. That would turn incomplete provider data into a claim the Store did
+not make and can mislabel a wallet's device-account digits as a card number.
 
 ### Validate tracking before exposing an action
 
@@ -122,11 +152,10 @@ blocks are prop-driven and used by more than this application.
 
 ### Localize only application-supplied copy
 
-Add Your Orders, Order Details, pending-total, loading, error, retry, money-row,
-fulfilment, tracking, and empty-state copy to the
-Grade10 `en`, `zh-Hant`, and `zh-Hans` catalogs. Keep dates and money on the
-existing shared formatters; no Korean entries are added because Korean is a ZZZ
-locale.
+Add Discount, Shipping, and Tax money-row copy, and update the order-label
+template, in the Grade10 `en`, `zh-Hant`, and `zh-Hans` catalogs. Keep dates,
+money, provider names, and masks on the existing formatters or supplied data;
+no Korean entries are added because Korean is a ZZZ locale.
 
 ## Risks / Trade-offs
 
@@ -136,20 +165,36 @@ locale.
 - **[Risk] A later order contract adds richer detail fields.** → Optional UI
   groups remain additive; a later frontend change can map new typed facts
   without changing these routes or fabricating data now.
+- **[Risk] Older orders and ingestion arms carry null or partial settlement
+  facts.** → Test null separately from numeric zero and let each address or
+  payment part render independently.
+- **[Risk] Provider payment names do not match the shared brand union.** → Keep
+  normalization explicit and case-insensitive, then fall back to supplied text
+  without a guessed logo.
+- **[Risk] Shipping address and payment data escape the owner surface.** → Keep
+  both projections detail-only, exclude them from logs and analytics, and rely
+  on the existing owner-scoped read and not-found treatment.
 - **[Risk] A malformed carrier URL creates an unsafe navigation.** → Centralize
   URL parsing, reject credentials and non-HTTPS schemes, and test the browser
   flags at the route boundary.
 - **[Risk] A null owner read is mistaken for a transport failure.** → Keep null,
   error, and pending branches explicit in the detail page tests.
+- **[Risk] The buyer read shape drifts again before implementation.** → Compile
+  frontend fixtures against `StoreOrder` and keep the domain model structurally
+  aligned with the decoded contract.
 
 ## Migration Plan
 
-1. Land the optional Order Details prop and Grade10 catalog additions in
-   `grade10-spec`, with component stories and catalog tests.
+1. Land the widened Order Details address and payment contract plus Grade10
+   catalog additions in `grade10-spec`, with component stories and catalog
+   tests.
 2. Advance the Grade10 app's `external/grade10-spec` pointer to that landed
    commit.
-3. Extend the frontend order model and projections, then add the two routes and
-   pages against fixtures.
-4. Roll back by removing the two route registrations and reverting the gitlink;
-   existing checkout and owner-scoped reads remain unchanged. No data migration
-   or backend rollout is involved.
+3. Align the frontend order model, fixtures, and projections, then pass the new
+   optional props through the existing history and detail pages.
+4. Land the separate `add-store-order-status` dependency before claiming the
+   customer pages complete; this change continues to consume that capability
+   rather than defining a temporary status rule.
+5. Roll back the rich-field presentation by reverting the app projections and
+   gitlink together; the existing owner-scoped reads remain unchanged. No data
+   migration or backend rollout is involved.

@@ -1,7 +1,7 @@
 # grade10-site/store/order-detail Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-06, tcs-rules r2
+**Drafts styled:** 2026-09-08, tcs-rules r2
 
 ## grade10-site-store-order-detail-US1: Collector inspects one owned order
 
@@ -9,7 +9,7 @@
 **I want** one trustworthy account of my Store order,
 **so that** I can understand its items, money, fulfilment, refund, and tracking.
 
-### grade10-site-store-order-detail-US1-TC1-2: Owned web order preserves quoted and paid totals
+### grade10-site-store-order-detail-US1-TC1-3: Owned web order presents supplied settlement facts
 
 **Classification:**
 
@@ -25,18 +25,21 @@
 * **Trace:** grade10-site-store-order-detail-US-01
 
 **Pre-conditions:**
-The signed-in user owns <web order>, quoted at 10000 minor units `HKD` and paid at 11200 minor units `HKD`.
+The signed-in user owns <web order> with shop order number `#G10-10482`, quoted subtotal 10000, discount 500, shipping 1000, tax 700, and paid total 11200 minor units `HKD`. The order carries items, a complete shipping address, and a recognized Visa instrument with a masked number.
 
 **Steps:**
 
 1. Navigate to `/profile/orders/<web order id>`.
-2. Check the order header, items, and money summary.
+2. Check the order header, items, money summary, shipping address, and payment method.
 
 **Expected Results:**
 
-* <web order> appears with its id, placed date, status, and items.
+* <web order> appears with `#G10-10482`, its placed date, status, and items.
 * Quoted subtotal shows 10000 minor units `HKD`.
-* Paid total shows 11200 minor units `HKD` separately.
+* Discount shows 500 minor units `HKD` as a deduction, shipping shows 1000 minor units `HKD`, and tax shows 700 minor units `HKD`.
+* Paid total remains 11200 minor units `HKD` separately.
+* The supplied shipping address appears without a pickup claim.
+* The Visa logo and masked number identify the supplied payment instrument.
 
 ### grade10-site-store-order-detail-US1-TC2-2: Missing and unowned ids share not-found
 
@@ -273,6 +276,139 @@ The first owned-order read is made to fail and the next read is allowed to compl
 
 * A localized error and Retry action appear after the first read.
 * Step 2 reads the same order again without changing its address.
+
+### grade10-site-store-order-detail-US1-TC10-1: Customer label keeps the Store route id
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-order-detail-US-01
+
+**Pre-conditions:**
+The signed-in user owns an order with Store id <store order id> and the shop order number state named by **Test data**.
+
+**Test data:**
+
+| Run | Shop order number | Expected customer label |
+| --- | --- | --- |
+| 1 | `#G10-10482` | `#G10-10482` |
+| 2 | null | <store order id> |
+| 3 | empty | <store order id> |
+
+**Steps:**
+
+1. Navigate to `/profile/orders/<store order id>`.
+2. Check the order header and browser address.
+
+**Expected Results:**
+
+* The header shows <expected customer label> and invents no other order number.
+* The browser remains at `/profile/orders/<store order id>` in every run.
+
+### grade10-site-store-order-detail-US1-TC11-1: Zero settlement rows differ from absent rows
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-order-detail-US-01
+
+**Pre-conditions:**
+The signed-in user owns two otherwise equivalent paid orders. <stated-zero order> supplies zero discount, shipping, and tax; <unstated order> supplies null for all three.
+
+**Steps:**
+
+1. Open <stated-zero order> and check its money summary.
+2. Open <unstated order> and check its money summary.
+
+**Expected Results:**
+
+* Step 1 shows Discount, Shipping, and Tax as stated zeroes.
+* Step 2 omits Discount, Shipping, and Tax.
+* Each order's paid total remains the charge.
+
+### grade10-site-store-order-detail-US1-TC12-1: Partial shipping address draws no blanks
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-order-detail-US-01
+
+**Pre-conditions:**
+The signed-in user owns an order whose shipping address supplies address line 1, city, and country, but no recipient, address line 2, province, postal code, or phone.
+
+**Steps:**
+
+1. Navigate to that order's detail address.
+2. Check the address section.
+
+**Expected Results:**
+
+* The supplied address line 1, city, and country appear in postal order.
+* No blank recipient, placeholder line, or pickup-address claim appears.
+
+### grade10-site-store-order-detail-US1-TC13-1: Payment presentation preserves provider identity
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-order-detail-US-01
+
+**Pre-conditions:**
+The signed-in user owns an order with the payment instrument named by **Test data**.
+
+**Test data:**
+
+| Run | Instrument | Expected presentation |
+| --- | --- | --- |
+| 1 | Visa company and masked card number | Visa logo and masked number |
+| 2 | Apple Pay wallet, Mastercard company, and masked device-account number | Apple Pay identity and masked number together |
+| 3 | Unrecognized `UnionPay` company and masked number | `UnionPay` text and masked number, with no unrelated logo |
+
+**Steps:**
+
+1. Navigate to that order's detail address.
+2. Check the Payment Method section.
+
+**Expected Results:**
+
+* The section matches <expected presentation>.
+* No card or wallet identity is inferred beyond the supplied instrument.
 
 ---
 

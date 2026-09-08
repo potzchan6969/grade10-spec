@@ -1,7 +1,7 @@
 # grade10-site/store/order-history Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-06, tcs-rules r2
+**Drafts styled:** 2026-09-08, tcs-rules r2
 
 ## grade10-site-store-order-history-US1: Collector reviews active and past orders
 
@@ -179,6 +179,45 @@ The signed-in user's first order read is made to fail and the next read is allow
 
 * A localized error and Retry action appear after the first read.
 * Step 2 reads the orders again at `/profile/orders`.
+
+### grade10-site-store-order-history-US1-TC7-1: Customer label keeps the Store action id
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-order-history-US-01
+
+**Pre-conditions:**
+The signed-in user owns an order with Store id <store order id> and the shop order number state named by **Test data**.
+
+**Test data:**
+
+| Run | Shop order number | Expected customer label |
+| --- | --- | --- |
+| 1 | `#G10-10482` | `#G10-10482` |
+| 2 | null | <store order id> |
+| 3 | empty | <store order id> |
+
+**Steps:**
+
+1. Navigate to `/profile/orders`.
+2. Check the selected order's customer label.
+3. Click View Details for that order.
+
+**Expected Results:**
+
+* Step 2 shows <expected customer label> and invents no other order number.
+* Step 3 opens `/profile/orders/<store order id>` in every run.
 
 ---
 

@@ -19,6 +19,10 @@
 - `grade10-site-store-order-detail-SC-10` — Unsafe tracking data creates no action
 - `grade10-site-store-order-detail-SC-11` — The first read is still loading
 - `grade10-site-store-order-detail-SC-12` — A failed read can be retried
+- `grade10-site-store-order-detail-SC-13` — Customer-facing identity does not replace the route id
+- `grade10-site-store-order-detail-SC-14` — Supplied settlement rows preserve zero and absence
+- `grade10-site-store-order-detail-SC-15` — A partial shipping address remains truthful
+- `grade10-site-store-order-detail-SC-16` — Payment identity remains truthful
 
 ### grade10-site-store-order-detail-US-02: Collector signs in to the requested order
 

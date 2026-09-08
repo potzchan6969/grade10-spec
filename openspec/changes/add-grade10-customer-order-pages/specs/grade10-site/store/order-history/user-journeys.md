@@ -17,6 +17,8 @@
 - `grade10-site-store-order-history-SC-08` — A tracking number alone stays text-only
 - `grade10-site-store-order-history-SC-09` — The first read is still loading
 - `grade10-site-store-order-history-SC-10` — A failed read can be retried
+- `grade10-site-store-order-history-SC-12` — A shop order number identifies a summary
+- `grade10-site-store-order-history-SC-13` — An older order falls back to its Store id
 
 ### grade10-site-store-order-history-US-02: Collector signs in to the intended order page
 
