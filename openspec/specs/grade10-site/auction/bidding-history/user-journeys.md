@@ -3,7 +3,7 @@
 ### grade10-site-auction-bidding-history-US-01: Collector reads their bidding index
 
 **As a** collector,
-**I want** every listing I bid on in one private index,
+**I want** every listing with my retained maximum activity in one private index,
 **so that** I can see my standing without hunting through the catalogue.
 
 **Accepted by:**
@@ -14,26 +14,25 @@
 - `grade10-site-auction-bidding-history-SC-04` — Paging does not repeat or skip a listing
 - `grade10-site-auction-bidding-history-SC-05` — An account with no bidding activity has an empty index
 
-### grade10-site-auction-bidding-history-US-02: Collector audits every retained bidding action
+### grade10-site-auction-bidding-history-US-02: Collector audits every retained maximum action
 
 **As a** collector,
-**I want** every bid Grade10 evaluated for me kept as a private event,
-**so that** I can see what was accepted, refused, or placed automatically without
-exposing my maximum to a rival.
+**I want** every maximum Grade10 evaluates for me kept as a private event,
+**so that** I can see what was accepted, refused, or placed automatically without exposing my maximum to a rival.
 
 **Accepted by:**
 
-- `grade10-site-auction-bidding-history-SC-06` — A manual bid is accepted
-- `grade10-site-auction-bidding-history-SC-07` — A server-evaluated bid fails
-- `grade10-site-auction-bidding-history-SC-08` — Browser-only validation creates no Auction event
-- `grade10-site-auction-bidding-history-SC-09` — An automatic maximum is configured and raised
-- `grade10-site-auction-bidding-history-SC-10` — The engine bids for the collector
+- `grade10-site-auction-bidding-history-SC-37` — A manual bid is not accepted
+- `grade10-site-auction-bidding-history-SC-38` — A server-evaluated maximum fails
+- `grade10-site-auction-bidding-history-SC-39` — Browser-only validation creates no Auction event
+- `grade10-site-auction-bidding-history-SC-40` — An automatic maximum is configured and raised
+- `grade10-site-auction-bidding-history-SC-41` — The engine bids for the collector
 
 ### grade10-site-auction-bidding-history-US-03: Collector reads one listing's combined history
 
 **As a** collector,
 **I want** one chronology of public price movement and my private standing,
-**so that** I can see how I was outbid without seeing anyone's maximum.
+**so that** I can see how I was outbid without seeing anyone's hidden maximum.
 
 **Accepted by:**
 
@@ -41,13 +40,20 @@ exposing my maximum to a rival.
 - `grade10-site-auction-bidding-history-SC-12` — An automatic response is attributed to You
 - `grade10-site-auction-bidding-history-SC-13` — A failed attempt sits beside the unchanged auction state
 - `grade10-site-auction-bidding-history-SC-14` — Full retained history remains pageable
+- `grade10-site-auction-bidding-history-SC-29` — A maximum below the next bid is refused
+- `grade10-site-auction-bidding-history-SC-30` — A matching minimum creates challenger and response records
+- `grade10-site-auction-bidding-history-SC-31` — A lower maximum below A's cap creates two ordered records
+- `grade10-site-auction-bidding-history-SC-32` — A maximum one increment below A's cap stops at A's maximum
+- `grade10-site-auction-bidding-history-SC-33` — An equal maximum is accepted without changing the earlier leader
+- `grade10-site-auction-bidding-history-SC-34` — A maximum just above A's cap takes the lead
+- `grade10-site-auction-bidding-history-SC-35` — A maximum equal to the next increment takes the lead once
+- `grade10-site-auction-bidding-history-SC-36` — A higher maximum is capped at one increment above A's cap
 
 ### grade10-site-auction-bidding-history-US-04: Collector's bidding history stays on their storefront account
 
 **As a** collector,
 **I want** only my Grade10 account's history,
-**so that** another storefront or an unsigned visitor cannot read my maxima or
-failed attempts.
+**so that** another storefront or an unsigned visitor cannot read my maximums or failed attempts.
 
 **Accepted by:**
 
@@ -59,8 +65,7 @@ failed attempts.
 ### grade10-site-auction-bidding-history-US-05: Collector opens their bids at /bids
 
 **As a** collector,
-**I want** `/bids` to show my active and completed summaries and expand each
-listing's history,
+**I want** `/bids` to show my active and completed summaries and expand each listing's history,
 **so that** I can audit standing without leaving the page.
 
 **Accepted by:**
