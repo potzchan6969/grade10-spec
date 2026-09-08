@@ -99,7 +99,22 @@ export type FlowBlock = {
   body: BodyItem[];
 };
 
-export type ContainerBlock = CalloutBlock | DetailBlock | FlowBlock;
+/** A worked case: what is bought, then a ledger of steps with a running
+ * balance, then the why. `readExample` in blocks/example-shape.ts holds the
+ * shape. */
+export type ExampleBlock = {
+  type: "example";
+  title: string;
+  tier?: string;
+  shipping?: string;
+  body: BodyItem[];
+};
+
+export type ContainerBlock =
+  | CalloutBlock
+  | DetailBlock
+  | FlowBlock
+  | ExampleBlock;
 export type Block = ProseBlock | LeafBlock | ContainerBlock;
 
 export type PageAst = { frontmatter: Frontmatter; blocks: Block[] };
@@ -204,6 +219,14 @@ export const BLOCK_SPECS: Record<string, BlockSpec> = {
   flow: {
     container: true,
     attrs: [{ name: "title", required: true }, { name: "diagram" }],
+  },
+  example: {
+    container: true,
+    attrs: [
+      { name: "title", required: true },
+      { name: "tier" },
+      { name: "shipping" },
+    ],
   },
 };
 

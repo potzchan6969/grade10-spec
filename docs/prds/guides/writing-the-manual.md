@@ -127,6 +127,34 @@ Lit while the reader is here, with the node `the-check-is-raised`.
 ::image{src="assets/diagrams/vault-identity-states.svg" alt="How a case moves between its identity states"}
 ```
 
+An example is one worked case. It opens with the cart, a list of priced
+lines, and `tier` badges the member while `shipping` names the fee on the
+order. Then comes a ledger, a table whose columns are
+`Step | Event | Points | Balance`, each row a thing that happened in order,
+points signed (`+15`, `−10`, or blank where none moved), the balance running
+from zero or from the first one stated. Where the day is what the reader
+follows, the first column is `When` instead: a day written `3 Jan 2026`, or
+blank to share the day above, and the rows hang on a timeline. Prose after the
+table is the why. Examples that follow one another fold behind one `Examples`
+toggle, collapsed until opened or deep-linked into, each case open beneath it.
+The check refuses a cart line without a price, a timeline that runs back in
+time, and a balance the points do not reach, so an example cannot rot when a
+rule changes:
+
+```md
+:::example{title="Refund in two parts" tier="Gold" shipping="$30"}
+- Gengar single $139
+
+| Step | Event | Points | Balance |
+| --- | --- | --- | --- |
+| Earns | 13 pts × 1.2 | +15 | 15 |
+| Refunds | $100 of the single | −10 | 5 |
+| Refunds | $39 more | −5 | 0 |
+
+Priced apart the two would take 14.
+:::
+```
+
 A `::figma` card is a placeholder for a component still being built. Once a
 `::story` card exists for it, drop the `::figma` card for that same
 component — Storybook is the live reference from then on:

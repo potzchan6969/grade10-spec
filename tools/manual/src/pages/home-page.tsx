@@ -7,8 +7,8 @@ import { byLastMoved, isProposal, taskTotals } from "../api/derive";
 import { pagePath } from "../api/paths";
 import { relativeTime } from "../api/time";
 import { useManualIndex } from "../api/use-manual-index";
+import { BlockList } from "../blocks/block-list";
 import { BlockScopeProvider } from "../blocks/block-scope";
-import { BlockView } from "../blocks/block-view";
 import { TaskProgress } from "../blocks/change-views";
 import { InlineMarkdown } from "../blocks/inline-markdown";
 import { browserKeyStore, STORAGE } from "../editor/config";
@@ -41,10 +41,7 @@ export function HomePage() {
 
       {home?.ast ? (
         <BlockScopeProvider value={{ index, pagePath: homePath }}>
-          {home.ast.blocks.map((block, position) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
-            <BlockView block={block} key={`${block.type}-${position}`} />
-          ))}
+          <BlockList blocks={home.ast.blocks} />
         </BlockScopeProvider>
       ) : null}
 
