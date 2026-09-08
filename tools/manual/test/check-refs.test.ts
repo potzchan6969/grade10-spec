@@ -136,10 +136,15 @@ describe("where the check must not look", () => {
   });
 });
 
-describe("the manual as it stands", () => {
-  it("carries no reference the store cannot answer", async () => {
-    const root = findStoreRoot(fileURLToPath(new URL(".", import.meta.url)));
+/** Checked once at import: the run grows with the store, so a case that waits
+ * for it fails on the clock rather than on the references. */
+const live = await runChecks(
+  findStoreRoot(fileURLToPath(new URL(".", import.meta.url))),
+  NO_GIT,
+);
 
-    expect(refs(await runChecks(root, NO_GIT))).toEqual([]);
+describe("the manual as it stands", () => {
+  it("carries no reference the store cannot answer", () => {
+    expect(refs(live)).toEqual([]);
   });
 });

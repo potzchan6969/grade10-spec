@@ -1,4 +1,3 @@
-import { fileURLToPath } from "node:url";
 import type { SearchResult } from "minisearch";
 import { describe, expect, it } from "vitest";
 import { buildIndex } from "../src/api/derive";
@@ -8,10 +7,8 @@ import {
   runSearch,
   type SearchDoc,
 } from "../src/api/search";
-import { findStoreRoot } from "../src/store/disk.mts";
-import { rootsOf } from "../src/store/roots.mts";
-import { readStore } from "../src/store/snapshot.mts";
 import { pageEntry, snapshotOf, specEntry } from "./manual-fixture";
+import { realStore } from "./real-store";
 
 /** Search over the store as it stands. The PM's probe was `gift card`: it came
  * back with eighteen confident results, not one of them about gift cards,
@@ -21,10 +18,9 @@ const hit = (result: SearchResult) =>
   result as unknown as SearchDoc & { score: number };
 
 describe("the query that found nothing it was about", () => {
-  const root = findStoreRoot(fileURLToPath(new URL(".", import.meta.url)));
+  const { snapshot } = realStore;
 
-  it("surfaces the changes that issue the gift-card scenarios, and little else", async () => {
-    const { snapshot } = await readStore(rootsOf(root));
+  it("surfaces the changes that issue the gift-card scenarios, and little else", () => {
     const index = buildIndex(snapshot);
     const engine = buildSearchIndex(index);
     const { hits, partial } = runSearch(engine, "gift card");
@@ -53,8 +49,7 @@ describe("the query that found nothing it was about", () => {
   });
 
   /** One common word must not carry a two-word query. */
-  it("refuses to answer both words with either one of them", async () => {
-    const { snapshot } = await readStore(rootsOf(root));
+  it("refuses to answer both words with either one of them", () => {
     const engine = buildSearchIndex(buildIndex(snapshot));
 
     const card = runSearch(engine, "card").hits.length;
@@ -66,8 +61,7 @@ describe("the query that found nothing it was about", () => {
 
   /** Nothing matching every word is worth saying out loud, but it is not worth
    * showing an empty screen over. */
-  it("says so when it falls back to the words it could match", async () => {
-    const { snapshot } = await readStore(rootsOf(root));
+  it("says so when it falls back to the words it could match", () => {
     const engine = buildSearchIndex(buildIndex(snapshot));
 
     expect(runSearch(engine, "gift zzzzznotaword").partial).toBe(true);
