@@ -20,7 +20,7 @@ message is transactional mail to their registered account email.
   - Outbid: the collector who just lost the lead hears that, not also the new-bid
 - Delivery
   - Registered email: every message goes to the account email
-  - Shared letter: heading, body, listing action, footer
+  - Shared letter: subject, preheader, heading, body, lot block (one primary image when available), listing action, footer
   - Stop watch mail: watch-driven letters offer a signed-in way to unwatch
   - Failed send: a temporary failure is retried; a permanent one stops; a false statement is not sent
   - Call-off suppresses: a called-off listing sends nothing further
@@ -145,7 +145,15 @@ message.
 | You have been outbid | A collector who was leading stops leading | That collector |
 
 An outbid message SHALL carry the listing's current bid after the bid
-that displaced them, and its effective close.
+that displaced them, and its effective close. When their standing bid
+amount at the displacement is supplied, the message SHALL name that
+amount as well. It SHALL NOT name their maximum.
+
+A collector SHALL NOT receive the outbid message when a competing
+maximum is accepted but they still lead. Grade10 is still bidding for
+them; the current bid rising is not losing the lead. That case is
+`grade10-site/auction/auto-bidding` (a challenger below the leader's
+maximum raises the price only).
 
 Grade10 SHALL NOT send a new-bid message for every increment in a short
 span. A collector owed a new-bid message SHALL be told about the current
@@ -169,6 +177,7 @@ a listing that has stopped taking bids.
 - **WHEN** Grade10 accepts a bid that takes the lead from them
 - **THEN** it sends them the outbid message
 - **AND** the message carries the lot's current bid and its effective close
+- **AND** when their standing bid amount is supplied, the message names that amount as well (not their maximum)
 
 #### Scenario: grade10-site-auction-notifications-SC-13 - An outbid collector gets one message, not two
 
@@ -188,6 +197,13 @@ a listing that has stopped taking bids.
 - **GIVEN** a collector leading a lot
 - **WHEN** the lot is called off
 - **THEN** Grade10 does not send them the outbid message
+
+#### Scenario: grade10-site-auction-notifications-SC-31 - A challenge that leaves them leading is not an outbid
+
+- **GIVEN** a collector leading a lot whose committed maximum still exceeds a challenger's
+- **WHEN** Grade10 accepts that competing maximum and they still lead
+- **THEN** Grade10 does not send them the outbid message
+- **AND** Grade10 does not send them the new-bid message for the bid it placed on their behalf
 
 #### Scenario: grade10-site-auction-notifications-SC-16 - A snipe war does not mail every increment
 
@@ -211,10 +227,18 @@ registered account email. Identity SHALL be the recipient's user id, per
 
 ### Requirement: Every auction letter shares one shape
 
-Every auction email Grade10 sends SHALL use one layout: a heading, a
-body, a single action that opens the listing, and a footer. Kinds SHALL
-differ in their words and in whether a way to stop further mail is
-present, not in a second layout.
+Every auction email Grade10 sends SHALL use one layout: a subject, a
+preheader, a heading, a body, a lot block, a single action that opens
+the listing, and a footer. Kinds SHALL differ in their words and in
+whether a way to stop further mail is present, not in a second layout.
+
+The lot block SHALL carry the listing's identity and the times or
+amounts that kind requires. When the listing has a primary image, the
+lot block SHALL show exactly one picture of that item — not a gallery.
+When no primary image is available, Grade10 SHALL omit the picture and
+SHALL still send the letter with the text facts and listing action.
+That picture, when shown, MAY link to the same listing URL as the
+listing action.
 
 A kind whose words name the reader's own bid amount SHALL NOT print if
 that amount was not supplied. Copy and listing links SHALL follow the
@@ -224,8 +248,22 @@ storefront the collector bid or watched on.
 
 - **GIVEN** an outbid letter and an open-bidding-has-started letter about the same listing
 - **WHEN** both are rendered
-- **THEN** both have a heading, a body, one listing action, and a footer
+- **THEN** both have a subject, a preheader, a heading, a body, a lot block, one listing action, and a footer
 - **AND** they differ in their words, not in a second structure
+
+#### Scenario: grade10-site-auction-notifications-SC-29 - The lot block shows one primary image
+
+- **GIVEN** a listing with a primary image
+- **WHEN** Grade10 renders any message in this capability about that listing
+- **THEN** the lot block shows exactly one picture of that item
+- **AND** it does not show a second image or a gallery
+
+#### Scenario: grade10-site-auction-notifications-SC-30 - A listing without an image still mails
+
+- **GIVEN** a listing with no primary image
+- **WHEN** Grade10 renders a message about that listing
+- **THEN** the letter has no lot picture
+- **AND** it still carries the lot identity, the kind's required facts, and the listing action
 
 ### Requirement: Watch-driven letters can be stopped; bid-activity letters cannot
 

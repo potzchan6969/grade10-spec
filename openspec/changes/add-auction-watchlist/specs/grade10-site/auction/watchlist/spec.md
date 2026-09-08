@@ -13,6 +13,7 @@ speak of listings; they do not invent a lot entity.
 
 - Watching a listing
   - Watch and unwatch: a signed-in collector marks a listing to come back to
+  - Unwatch surfaces: listing page, catalogue, and the watched listings list
   - Sign-in required: a signed-out viewer is offered sign-in, not a local watch
   - Idempotent watch: watching twice leaves one watch with the original Watched At
 - Watch privacy
@@ -32,7 +33,9 @@ A signed-in collector SHALL:
 
 1. Watch a listing from the catalogue or from that listing's own page.
 2. See it as watched wherever it is shown to them.
-3. Unwatch it, including after it has closed or been called off.
+3. Unwatch it from that listing's own page, from the catalogue, or from
+   the watched listings surface, including after it has closed or been
+   called off.
 
 Watching SHALL require a signed-in collector. A viewer who is not signed
 in SHALL be offered sign-in rather than a watch that cannot be stored.
@@ -172,6 +175,14 @@ A collector SHALL be able to unwatch such a listing.
 - **WHEN** they unwatch it
 - **THEN** the watch is removed
 - **AND** the listing no longer appears in the listings they watch
+
+#### Scenario: grade10-site-auction-watchlist-SC-18 - A collector unwatches from the watched list
+
+- **GIVEN** a signed-in collector reading the listings they watch
+- **WHEN** they unwatch an entry on that list
+- **THEN** Grade10 removes the watch
+- **AND** that listing no longer appears in the listings they watch
+- **AND** they did not have to open the listing's own page
 
 ### Requirement: Watched-list entry fields
 

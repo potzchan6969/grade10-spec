@@ -13,7 +13,7 @@ Independent of groups 2–7.
 ## 2. Shared vocabulary (grade10)
 
 - [ ] 2.1 Add `listing_opens_in_24h`, `listing_opened`, `listing_closes_in_24h`, `listing_extended`, and `listing_new_bid` to `AuctionPushKind` so `grade10-site-auction-notifications-SC-18` has names both ports can carry; keep push claiming on the existing eight kinds.
-- [ ] 2.2 Extend the listing shape the letter renders (`startsAt` and `scheduledEndsAt` beside the effective close) so `grade10-site-auction-notifications-SC-06` and `grade10-site-auction-notifications-SC-08` can name the instants the spec requires.
+- [ ] 2.2 Extend the listing shape the letter renders (`startsAt`, `scheduledEndsAt`, and optional `primaryImageUrl` beside the effective close) so `grade10-site-auction-notifications-SC-06`, `grade10-site-auction-notifications-SC-08`, `grade10-site-auction-notifications-SC-29`, and `grade10-site-auction-notifications-SC-30` can name the instants and show or omit the lot picture the spec requires.
 - [ ] 2.3 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`.
 
 ## 3. Stamps and send log (grade10)
@@ -29,7 +29,7 @@ Needs groups 1–3.
 
 - [ ] 4.1 Resolve a lot's enrolled collectors from its watches and its bids, making `grade10-site-auction-notifications-SC-01`, `grade10-site-auction-notifications-SC-03`, and `grade10-site-auction-notifications-SC-04` pass.
 - [ ] 4.2 Make `grade10-site-auction-notifications-SC-05`, `grade10-site-auction-notifications-SC-06`, `grade10-site-auction-notifications-SC-07`, `grade10-site-auction-notifications-SC-08`, `grade10-site-auction-notifications-SC-09`, and `grade10-site-auction-notifications-SC-10` pass through batched watcher lists (50 recipients, one rendering) that drop a false statement and stamp per chunk; close-soon and extended include bid participants with no watch, anchored to `scheduled_ends_at` / first extension.
-- [ ] 4.3 Make `grade10-site-auction-notifications-SC-11`, `grade10-site-auction-notifications-SC-12`, `grade10-site-auction-notifications-SC-13`, `grade10-site-auction-notifications-SC-14`, `grade10-site-auction-notifications-SC-15`, and `grade10-site-auction-notifications-SC-16` pass: new-bid list after the existing outbid list, skip the live overtake still owed outbid, stamp `new_bid_told_bid_id` to the current leading bid, drop when the listing no longer takes bids.
+- [ ] 4.3 Make `grade10-site-auction-notifications-SC-11`, `grade10-site-auction-notifications-SC-12`, `grade10-site-auction-notifications-SC-13`, `grade10-site-auction-notifications-SC-14`, `grade10-site-auction-notifications-SC-15`, `grade10-site-auction-notifications-SC-16`, and `grade10-site-auction-notifications-SC-31` pass: new-bid list after the existing outbid list, skip the live overtake still owed outbid, skip a leader whose maximum still holds, stamp `new_bid_told_bid_id` to the current leading bid, drop when the listing no longer takes bids.
 - [ ] 4.4 Make `grade10-site-auction-notifications-SC-02`, `grade10-site-auction-notifications-SC-23`, `grade10-site-auction-notifications-SC-27`, and `grade10-site-auction-notifications-SC-28` pass: one copy however enrolled; drop-and-stamp when no longer biddable; suppress every unsent message from call-off; leave the one-hour ending-soon list in place and after these lists in `WORK_LISTS`.
 - [ ] 4.5 Verify every scenario in this group through auction backend feature tests, including a lot whose close has moved.
 
@@ -37,10 +37,11 @@ Needs groups 1–3.
 
 Needs group 2. Claimable against the events from group 4. Auction emits; `@grade10/email` sends.
 
-- [ ] 5.1 Make `grade10-site-auction-notifications-SC-18`, `grade10-site-auction-notifications-SC-19`, and `grade10-site-auction-notifications-SC-20` pass by adding English copy branches for the five new kinds, keeping one template; `canUnsubscribe` true for start-soon and has-started; false for outbid and new-bid; close-soon and extended only when the recipient is a watcher who never bid.
+- [ ] 5.0 Produce the shared auction-letter Figma frame set named in `ui-design.md` (chrome + six bodies, one primary lot image) and link it there.
+- [ ] 5.1 Make `grade10-site-auction-notifications-SC-18`, `grade10-site-auction-notifications-SC-19`, `grade10-site-auction-notifications-SC-20`, `grade10-site-auction-notifications-SC-29`, and `grade10-site-auction-notifications-SC-30` pass by adding English copy branches for the five new kinds on the shared emailcn / React Email template; `canUnsubscribe` true for start-soon and has-started; false for outbid and new-bid; close-soon and extended only when the recipient is a watcher who never bid; lot block shows one primary image when present and omits it when absent.
 - [ ] 5.2 Make `grade10-site-auction-notifications-SC-17` pass, resolving the recipient by user id and sending to their registered account email.
 - [ ] 5.3 Render money and times using the sent-message shapes in `money-amounts` and `dates-and-times`.
-- [ ] 5.4 Verify the six rendered messages against those shapes, with amounts in more than one currency exponent.
+- [ ] 5.4 Verify the six rendered messages against those shapes (including preheader and lot image), with amounts in more than one currency exponent, using React Email `email dev` for authoring preview.
 
 ## 6. ZZZ delivery (grade10)
 

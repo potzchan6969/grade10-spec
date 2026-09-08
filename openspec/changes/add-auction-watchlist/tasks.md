@@ -28,7 +28,8 @@ Claimable against the contracts and fixtures from group 1.
 - [x] 3.2 Make `grade10-site-auction-watchlist-SC-11`, `grade10-site-auction-watchlist-SC-15`, and `grade10-site-auction-watchlist-SC-13` pass, rendering the close with its time zone.
 - [x] 3.3 Make `grade10-site-auction-watchlist-SC-12` pass as an explained empty state, not an error.
 - [x] 3.4 Make `grade10-site-auction-watchlist-SC-16`, `grade10-site-auction-watchlist-SC-17`, and `grade10-site-auction-watchlist-SC-14` pass.
-- [ ] 3.5 Verify the watched-listings feature lane, including the empty, closed, and called-off states.
+- [ ] 3.5 Make `grade10-site-auction-watchlist-SC-18` pass: unwatch from the watched list without opening the listing.
+- [ ] 3.6 Verify the watched-listings feature lane, including the empty, closed, called-off, and list-unwatch states.
 
 ## 4. ZZZ auction surface (grade10)
 
