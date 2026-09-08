@@ -374,6 +374,37 @@ counted behind any of them.
 * Search field and sort menu are both still offered.
 * Catalogue is listed as normal.
 
+### grade10-site-store-product-listing-US4-TC5-1: Worlds are capped and types are shown whole
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-listing-US-04
+
+**Pre-conditions:**
+Catalogue names more than five worlds and more than five collectible types.
+
+**Steps:**
+
+1. Navigate to <grade10 browse listing url>, unscoped.
+2. Count the worlds offered and check for an invitation to show the rest.
+3. Count the collectible types offered.
+4. Take the invitation and count the worlds offered again.
+
+**Expected Results:**
+
+* Step 2 offers five worlds and an invitation naming the group.
+* Step 3 offers every collectible type the catalogue names, with no invitation.
+* Step 4 offers every world the catalogue names.
+
 ---
 
 ## grade10-site-store-product-listing-US5: Collector orders and searches the whole shop

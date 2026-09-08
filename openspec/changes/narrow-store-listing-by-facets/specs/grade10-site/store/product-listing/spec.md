@@ -117,6 +117,12 @@ What each group is called SHALL be the site's own words in the language the
 listing is read in; what each choice is called SHALL be the catalogue's, and
 SHALL render as the shop authored it.
 
+The worlds a shop carries grow without bound, so the panel SHALL offer the
+first five and an invitation to show the rest, named for the group; taking it
+SHALL offer every world the catalogue names. The collectible types are a
+taxonomy the platform closes rather than one a shop grows, and SHALL be offered
+whole however many the catalogue names.
+
 The facets in force SHALL be reflected in the address, so the collector can
 link to what they are looking at, and going back SHALL return the listing to
 the previous narrowing.
@@ -146,6 +152,17 @@ the previous narrowing.
 - **THEN** the catalogue is listed, and no facet group is drawn
 - **AND** nothing is said in place of the groups
 - **AND** the search field and the sort menu are still offered
+
+#### Scenario: grade10-site-store-product-listing-SC-16 - A long facet group is capped
+
+- **GIVEN** a catalogue naming more than five worlds, and more than five
+  collectible types
+- **WHEN** a collector opens the listing
+- **THEN** five worlds are offered, with an invitation to show the rest named
+  for the group
+- **AND** every collectible type the catalogue names is offered
+- **WHEN** the collector takes that invitation
+- **THEN** every world the catalogue names is offered
 
 ### Requirement: Order and free text describe the whole catalogue
 
