@@ -82,6 +82,10 @@ Outline first. A document is a heading and an outline, never an essay.
 
 - **Numbers stay visible** — bold, with unit and range, `~` for an
   estimate: `**~40% loan to value**`, `**1.5% to 2.5% interest**`.
+- **Symbols over words in a cell** — a table or ledger cell says one thing
+  in the fewest marks: `+15 pts`, `13 pts × 1.2`, `earn → lapses 3 Jan
+  2027`, `·` between facts. `earns 15 points, alive to 3 January 2027` is
+  prose in a cell; the arrow, the unit and the number carry it.
 - **A table** when every row carries the same three or more attributes —
   tiers, statuses, messages. A cell that needs a paragraph belongs outside
   the table.
