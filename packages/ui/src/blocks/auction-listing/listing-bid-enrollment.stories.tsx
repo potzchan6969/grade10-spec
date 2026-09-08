@@ -144,11 +144,14 @@ export const SetupSheetAuthorizing: Story = {
     expect(
       within(dialog).getByRole("button", { name: "Authorizing" }),
     ).toBeDisabled();
+    // The checkbox is a span carrying the role, so the disabled state it
+    // publishes is `aria-disabled`. `toBeDisabled` reads only the native
+    // attribute and would call every such control enabled.
     expect(
       within(dialog).getByRole("checkbox", {
         name: "I confirm I am 18 years of age or older.",
       }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-disabled", "true");
     expect(within(dialog).getByRole("alert")).toHaveTextContent(
       "Your card is being authorized. Keep this dialog open while Stripe completes the request.",
     );
