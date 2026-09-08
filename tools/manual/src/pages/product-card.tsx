@@ -11,10 +11,9 @@ export function ProductCard({ product }: { product: NavProduct }) {
       to={product.to}
     >
       <div className="flex items-start gap-2">
-        <PageIcon
-          className="mt-0.5 shrink-0 text-secondary-foreground"
-          name={product.icon}
-        />
+        <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center text-secondary-foreground">
+          <PageIcon name={product.icon} />
+        </span>
         <Text as="span" className="min-w-0 flex-1" weight="bold">
           {product.title}
         </Text>

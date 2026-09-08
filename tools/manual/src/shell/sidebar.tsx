@@ -7,7 +7,7 @@ import {
   CaretRight,
   type Icon,
 } from "@phosphor-icons/react";
-import { use, useCallback, useEffect, useState } from "react";
+import { type MouseEvent, use, useCallback, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router";
 import type { Incubating, NavGroup, NavItem, NavProduct } from "../api/derive";
 import { buildIndex, REFERENCES_ROUTE, soleProduct } from "../api/derive";
@@ -346,7 +346,7 @@ function ProductBranch({
         aria-expanded={expandable ? expanded : undefined}
         className={cn(ROW, active && "bg-muted font-medium")}
         end
-        onClick={(event) => {
+        onClick={(event: MouseEvent<HTMLAnchorElement>) => {
           if (active) {
             event.preventDefault();
             memory.toggleBranch(branchKey);

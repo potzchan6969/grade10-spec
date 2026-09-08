@@ -46,16 +46,16 @@ const GLYPHS: Record<PageIconName, Icon> = {
   vault: Vault,
 };
 
+/** The glyph alone — a caller that needs it placed or coloured wraps it, the
+ * way every row in the rail already does. */
 export function PageIcon({
   name,
-  className,
   size = 16,
 }: {
   name: PageIconName | undefined;
-  className?: string;
   size?: number;
 }) {
   if (!name) return null;
   const Glyph = GLYPHS[name];
-  return <Glyph aria-hidden className={className} size={size} />;
+  return <Glyph aria-hidden size={size} />;
 }
