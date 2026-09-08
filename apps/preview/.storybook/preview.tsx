@@ -4,6 +4,12 @@ import type { ReactNode } from "react";
 import "@grade10/ui/bones/registry";
 import "./tailwind.css";
 
+Element.prototype.scrollIntoView = () => {};
+const nativeFocus = HTMLElement.prototype.focus;
+HTMLElement.prototype.focus = function focus(options?: FocusOptions) {
+  nativeFocus.call(this, { ...options, preventScroll: true });
+};
+
 function MotionBoundary({
   children,
   paused,
