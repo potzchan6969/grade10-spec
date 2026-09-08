@@ -22,7 +22,7 @@ tests against typed fixtures rather than a running backend.
 - [x] 3.3 Compose the owner-only Order Details page from `useOrder` and `OrderDetails`, keeping null, error, loading, web, point-of-sale, partial-refund, optional-section, fulfilment, and tracking states distinct; make `grade10-site-store-order-detail-SC-02` and `grade10-site-store-order-detail-SC-04` through `grade10-site-store-order-detail-SC-12` pass in focused page tests.
 - [x] 3.4 Add profile-to-orders and history-to-detail navigation, update the checkout-domain return-link reference, add surface identity, localized-address coverage, and the derived customer-order browser cases; verify the affected app with focused unit and browser tests, `pnpm run typecheck`, `pnpm run lint`, and `pnpm run build`.
 
-## 4. Partial address and payment presentation (grade10-spec)
+## 4. Partial address and payment presentation (grade10-spec) (owner: @kinisworking)
 
 - [ ] 4.1 Make `OrderDetailsAddress.name` optional and let `OrderDetailsPayment` accept an optional recognized brand, text label, and masked number; omit all-empty payment data while preserving existing consumers so `shared-ui-store-order-detail-SC-11` through `shared-ui-store-order-detail-SC-13` pass in component tests and stories.
 - [ ] 4.2 Add Discount, Shipping, and Tax labels to each supported Grade10 `orderDetail` catalog, and update the `orderHistory` and `orderDetail` order-label templates so a supplied shop number keeps its own prefix; make catalog resolution and type tests pass for `en`, `zh-Hant`, and `zh-Hans`.
