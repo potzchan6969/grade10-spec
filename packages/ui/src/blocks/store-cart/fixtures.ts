@@ -88,7 +88,6 @@ const SAMPLE_CART_ITEMS: CartItemSummary[] = [
     id: "item-1",
     name: "1999 Pokémon Base Set #4 Charizard Holo PSA 10",
     price: "HK$24,500.00",
-    originalPrice: "HK$26,000.00",
     quantity: 1,
     maxQuantity: 1,
     status: "default",

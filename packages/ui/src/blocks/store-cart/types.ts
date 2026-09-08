@@ -5,12 +5,27 @@ type CartItemStatus = "default" | "adjusted" | "soldOut" | "unavailable";
 /**
  * One line item in the shopping cart.
  * All amounts and strings are display-ready presentation values.
+ *
+ * Discount display (each dollar once):
+ * - **Catalogue sale** — `price` + optional `originalPrice` (compare-at); no
+ *   `couponCode`.
+ * - **Product promo/coupon** — `couponCode` on this line with the discounted
+ *   unit `price` (and optional pre-coupon `originalPrice`). That cut MUST NOT
+ *   also appear as `PromoState` `applied` on the footer.
+ * - **Order-level promo/coupon/points** — lines stay at catalogue/sale prices
+ *   with no `couponCode`; the footer summary carries the cut.
  */
 type CartItemSummary = {
   id: string;
   name: string;
   price: ReactNode;
+  /** Compare-at / pre-discount unit price; struck through when set. */
   originalPrice?: ReactNode;
+  /**
+   * Product (item-level) promo/coupon code shown under the price line.
+   * Order-level codes belong on the footer, not here.
+   */
+  couponCode?: ReactNode;
   imageSrc?: string;
   imageAlt?: string;
   quantity: number;
@@ -18,6 +33,10 @@ type CartItemSummary = {
   status?: CartItemStatus;
 };
 
+/**
+ * Footer promo affordance. `applied` is for **order-level** codes only —
+ * product coupons update the matching line’s `couponCode` / `price` instead.
+ */
 type PromoState =
   | { status: "collapsed" }
   | { status: "expanded"; error?: string }
