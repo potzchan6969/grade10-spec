@@ -12,7 +12,9 @@ function AuctionRecordEmpty({
   return (
     <VStack className={className} gap="sm" hAlign="center">
       <h2 className="text-lg font-semibold">{title}</h2>
-      {description ? <p className="text-sm text-muted-foreground">{description}</p> : null}
+      {description ? (
+        <p className="text-sm text-muted-foreground">{description}</p>
+      ) : null}
       {actionLabel && onAction ? (
         <Button onClick={onAction} variant="secondary">
           {actionLabel}

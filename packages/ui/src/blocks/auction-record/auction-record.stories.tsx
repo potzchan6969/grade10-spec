@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
-import { AuctionRecordTabs } from "./auction-record-tabs";
 import { BiddingList, WatchingList } from "./auction-record-lists";
+import { AuctionRecordTabs } from "./auction-record-tabs";
 import { WatchButton } from "./watch-button";
 
 const copy = {
@@ -25,7 +25,10 @@ export const Watching: Story = {
   render: (args) => (
     <AuctionRecordTabs {...args}>
       <WatchingList
-        empty={{ title: "Nothing watched", description: "Browse the catalogue to find a lot." }}
+        empty={{
+          title: "Nothing watched",
+          description: "Browse the catalogue to find a lot.",
+        }}
         items={[
           {
             title: "Vintage Camera",
@@ -68,7 +71,9 @@ export const WatchControl: Story = {
     />
   ),
   play: async ({ canvasElement }) => {
-    await userEvent.click(within(canvasElement).getByRole("button", { name: "Watch" }));
+    await userEvent.click(
+      within(canvasElement).getByRole("button", { name: "Watch" }),
+    );
     expect(watchPressed).toHaveBeenCalled();
   },
 };
