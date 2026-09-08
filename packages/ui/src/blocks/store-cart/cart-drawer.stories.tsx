@@ -412,11 +412,10 @@ export const UnavailableItemsRemoved: Story = {
 
     const body = within(document.body);
     await waitFor(() => {
-      expect(
-        body.getByText(
-          "Some item(s) have been removed as they’re no longer available",
-        ),
-      ).toBeInTheDocument();
+      expect(body.getByText("Items removed from cart")).toBeInTheDocument();
     });
+    expect(
+      body.getByText("Some products are no longer available"),
+    ).toBeInTheDocument();
   },
 };
