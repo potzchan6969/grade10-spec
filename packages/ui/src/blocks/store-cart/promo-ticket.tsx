@@ -66,12 +66,7 @@ function PromoTicket({
   return (
     <div
       data-slot="promo-ticket"
-      className={cn(
-        "w-full",
-        muted && "opacity-70",
-        TICKET_SHADOW,
-        className,
-      )}
+      className={cn("w-full", muted && "opacity-70", TICKET_SHADOW, className)}
     >
       <div
         className={cn(
@@ -114,10 +109,7 @@ function PromoTicket({
       >
         <HStack gap="sm" vAlign="center" className="w-full">
           <HStack gap="xs" vAlign="center" className="min-w-0 flex-1">
-            <span
-              aria-hidden
-              className="shrink-0 text-secondary-foreground"
-            >
+            <span aria-hidden className="shrink-0 text-secondary-foreground">
               <Tag size={14} weight="bold" />
             </span>
             <span className="truncate text-xs font-normal leading-4 text-secondary-foreground">

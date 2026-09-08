@@ -41,7 +41,7 @@
 @media (prefers-reduced-motion: reduce) {
   .auto-bid-reveal,
   .auto-bid-reveal-inner {
-    transition: none !important;
+    transition: none;
   }
 
   .auto-bid-reveal-inner {

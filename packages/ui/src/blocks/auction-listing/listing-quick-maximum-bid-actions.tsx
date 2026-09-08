@@ -12,7 +12,7 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Info } from "@phosphor-icons/react";
-import { useMemo, useState, type FormEvent, type KeyboardEvent } from "react";
+import { type FormEvent, type KeyboardEvent, useMemo, useState } from "react";
 import type { ShippedLocale } from "../../lib/format-datetime";
 import {
   formatMoney,

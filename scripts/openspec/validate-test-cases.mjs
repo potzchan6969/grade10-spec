@@ -753,7 +753,7 @@ if (args.stale) {
     rows.push({ rel: relative(ROOT, p), drafts, rev });
   }
   if (rows.length === 0) {
-    console.log(green("✓") + " every suite's drafts are at the current rev.");
+    console.log(`${green("✓")} every suite's drafts are at the current rev.`);
     process.exit(0);
   }
   const w = Math.max(...rows.map((r) => r.rel.length));
@@ -771,9 +771,7 @@ if (args.stale) {
 
 if (suites.length === 0) {
   console.log(
-    dim(
-      "No suite found" + (args.scope ? ` for scope "${args.scope}"` : "") + ".",
-    ),
+    dim(`No suite found${args.scope ? ` for scope "${args.scope}"` : ""}.`),
   );
   process.exit(0);
 }
@@ -844,7 +842,7 @@ print(
 console.log("");
 if (errors.length > 0 || (args.strict && warnings.length > 0)) {
   console.log(
-    red("✗") + " suites do not match docs/governance/specs-to-test-cases.md",
+    `${red("✗")} suites do not match docs/governance/specs-to-test-cases.md`,
   );
   process.exit(1);
 }

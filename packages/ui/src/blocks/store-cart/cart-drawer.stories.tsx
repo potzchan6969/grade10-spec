@@ -5,15 +5,15 @@ import { useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { CartDrawer } from "./cart-drawer";
 import {
+  applyTypedPromoInStories,
   DEFAULT_CART_COPY,
+  formatStoryCreditHkd,
   OVERFLOW_CART_ITEMS,
+  parseStoryMoney,
   SAMPLE_CART_ITEMS,
   SAMPLE_HELD_DISCOUNTS,
   SAMPLE_HELD_PROMO_CODES,
   STORY_POINTS_MAX_HKD,
-  applyTypedPromoInStories,
-  formatStoryCreditHkd,
-  parseStoryMoney,
   storyCartEstimatedTotal,
 } from "./fixtures";
 import type {
@@ -171,9 +171,7 @@ export const Default: Story = {
             status: "applied",
             amountLabel: formatStoryCreditHkd(n),
           });
-          setTotal(
-            storyCartEstimatedTotal(promoDiscountAmount(promo), n),
-          );
+          setTotal(storyCartEstimatedTotal(promoDiscountAmount(promo), n));
           return true;
         }}
         onUseMaxPoints={() => {

@@ -1,8 +1,4 @@
-import type {
-  CartDrawerCopy,
-  CartItemSummary,
-  HeldPromoCode,
-} from "./types";
+import type { CartDrawerCopy, CartItemSummary, HeldPromoCode } from "./types";
 
 const DEFAULT_CART_COPY: CartDrawerCopy = {
   header: {
@@ -140,13 +136,11 @@ const OVERFLOW_CART_ITEMS: CartItemSummary[] = [
 ];
 
 /** Demo totals when a sample held code is applied in Storybook. */
-const SAMPLE_HELD_DISCOUNTS: Record<
-  string,
-  { amount: string; total: string }
-> = {
-  "held-welcome": { amount: "−HK$100.00", total: "HK$42,600.00" },
-  "held-tier": { amount: "−HK$50.00", total: "HK$42,650.00" },
-};
+const SAMPLE_HELD_DISCOUNTS: Record<string, { amount: string; total: string }> =
+  {
+    "held-welcome": { amount: "−HK$100.00", total: "HK$42,600.00" },
+    "held-tier": { amount: "−HK$50.00", total: "HK$42,650.00" },
+  };
 
 /**
  * Storybook stub: accept SAVE10, or a live applicable held label, the way the
@@ -156,7 +150,13 @@ function applyTypedPromoInStories(
   code: string,
   held: readonly HeldPromoCode[],
 ):
-  | { ok: true; heldId: string | null; label: string; amount: string; total: string }
+  | {
+      ok: true;
+      heldId: string | null;
+      label: string;
+      amount: string;
+      total: string;
+    }
   | { ok: false; error: string } {
   const trimmed = code.trim().toUpperCase();
   if (trimmed === "SAVE10") {
@@ -184,7 +184,9 @@ function applyTypedPromoInStories(
   if (match && !match.applicable) {
     return {
       ok: false,
-      error: match.inapplicableReason ?? "This promo code cannot be used on this order",
+      error:
+        match.inapplicableReason ??
+        "This promo code cannot be used on this order",
     };
   }
   return { ok: false, error: "This promo code is invalid" };
@@ -230,17 +232,17 @@ function storyCartEstimatedTotal(
 }
 
 export {
+  applyTypedPromoInStories,
   DEFAULT_CART_COPY,
+  formatStoryCreditHkd,
+  formatStoryHkd,
   OVERFLOW_CART_ITEMS,
+  parseStoryMoney,
   SAMPLE_CART_ITEMS,
   SAMPLE_HELD_DISCOUNTS,
   SAMPLE_HELD_INAPPLICABLE_ONLY,
   SAMPLE_HELD_PROMO_CODES,
   STORY_CART_SUBTOTAL_HKD,
   STORY_POINTS_MAX_HKD,
-  applyTypedPromoInStories,
-  formatStoryCreditHkd,
-  formatStoryHkd,
-  parseStoryMoney,
   storyCartEstimatedTotal,
 };

@@ -3,15 +3,23 @@ import { EmptyState } from "@grade10/design-system/components/display/empty-stat
 import { Button } from "@grade10/design-system/components/forms/button";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { Link } from "@grade10/design-system/components/forms/link";
-import { StepperInput } from "@grade10/design-system/components/forms/stepper-input";
 import { NumberInput } from "@grade10/design-system/components/forms/number-input";
+import { StepperInput } from "@grade10/design-system/components/forms/stepper-input";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { Center } from "@grade10/design-system/components/layout/center";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { toast } from "@grade10/design-system/components/overlays/sonner";
 import { cn } from "@grade10/design-system/lib/utils";
-import { CaretDown, CaretLeft, CaretRight, Plus, Tag, Trash, X } from "@phosphor-icons/react";
+import {
+  CaretDown,
+  CaretLeft,
+  CaretRight,
+  Plus,
+  Tag,
+  Trash,
+  X,
+} from "@phosphor-icons/react";
 import { Skeleton } from "boneyard-js/react";
 import {
   type KeyboardEvent as ReactKeyboardEvent,
@@ -635,9 +643,8 @@ function CartDrawerFooter({
   const showPoints = pointsState != null;
   const isPointsApplied = pointsState?.status === "applied";
   const isPointsExpanded = pointsState?.status === "expanded";
-  const [pointsCreditMounted, setPointsCreditMounted] = useState(
-    isPointsApplied,
-  );
+  const [pointsCreditMounted, setPointsCreditMounted] =
+    useState(isPointsApplied);
   const lastToastedPromoNoticeRef = useRef<string | null>(null);
   const [pointsTriggerMounted, setPointsTriggerMounted] = useState(
     showPoints && !isPointsApplied,
@@ -1081,11 +1088,7 @@ function CartPromoSheet({
           : "pointer-events-none translate-x-full motion-reduce:translate-x-0 motion-reduce:opacity-0",
       )}
     >
-      <HStack
-        gap="sm"
-        vAlign="center"
-        className="w-full shrink-0 px-6 pt-4"
-      >
+      <HStack gap="sm" vAlign="center" className="w-full shrink-0 px-6 pt-4">
         <IconButton
           size="md"
           variant="outline"

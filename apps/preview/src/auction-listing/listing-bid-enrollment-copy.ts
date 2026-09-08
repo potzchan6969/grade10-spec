@@ -11,8 +11,7 @@ export const LISTING_BID_ENROLLMENT_DEMO_COPY = {
   authorizing: "Authorizing",
   authorizingCaption:
     "Your card is being authorized. Keep this dialog open while Stripe completes the request.",
-  authorizationRefused:
-    "Your card could not be authorized. Try another card.",
+  authorizationRefused: "Your card could not be authorized. Try another card.",
   iframePlaceholder: "Stripe card link (iframe)",
   iframeLinkedCardPlaceholder:
     "Stripe card form (iframe) — linked card on file",

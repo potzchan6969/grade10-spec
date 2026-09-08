@@ -6,14 +6,14 @@ import { type ReactNode, useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { CartDrawerFooter, CartPromoSheet } from "./cart-drawer";
 import {
+  applyTypedPromoInStories,
   DEFAULT_CART_COPY,
+  formatStoryCreditHkd,
+  parseStoryMoney,
   SAMPLE_HELD_DISCOUNTS,
   SAMPLE_HELD_INAPPLICABLE_ONLY,
   SAMPLE_HELD_PROMO_CODES,
   STORY_POINTS_MAX_HKD,
-  applyTypedPromoInStories,
-  formatStoryCreditHkd,
-  parseStoryMoney,
   storyCartEstimatedTotal,
 } from "./fixtures";
 import type { HeldPromoCode, PointsState, PromoState } from "./types";
@@ -357,9 +357,7 @@ export const PointsExpanded: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByPlaceholderText("0"),
-    ).toBeInTheDocument();
+    expect(canvas.getByPlaceholderText("0")).toBeInTheDocument();
     expect(canvas.getByText(/1 pt = HK\$1\./)).toBeInTheDocument();
     expect(canvas.getByText(/You’ve 1,200 pts\./)).toBeInTheDocument();
     expect(canvas.getByRole("button", { name: "Use max" })).toBeInTheDocument();
@@ -377,9 +375,7 @@ export const PointsError: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByText("Enter up to 1,200 pt"),
-    ).toBeInTheDocument();
+    expect(canvas.getByText("Enter up to 1,200 pt")).toBeInTheDocument();
   },
 };
 
@@ -520,9 +516,7 @@ export const InteractiveMember: Story = {
               status: "applied",
               amountLabel: formatStoryCreditHkd(n),
             });
-            setTotal(
-              storyCartEstimatedTotal(promoDiscountAmount(promo), n),
-            );
+            setTotal(storyCartEstimatedTotal(promoDiscountAmount(promo), n));
             return true;
           }}
           onUseMaxPoints={() => {
