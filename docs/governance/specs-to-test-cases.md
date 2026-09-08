@@ -677,13 +677,13 @@ journeys but predate these ids get the same upgrade pass for ids only.
 
 Do not invent flows. Each `### <capability>-US-<n>` in `user-journeys.md`
 becomes one `## <capability>-US<n>: <journey title>` section in
-`test-cases.md` — the compact heading id from Naming, the journey's title
+`feature-tcs.md` — the compact heading id from Naming, the journey's title
 copied unchanged — in the order that file states them, carrying the same
 three-line story it carries. **Do not include a `Covers:` bullet list
 of scenario ids**, and do not add a section description, a summary, or a
-case count. The actor is the role the story names — an end user of the
-product (operator, admin, collector, customer), never a developer, worker,
-or "the system".
+case count. The actor is the role the story names, and it resolves to one of
+the two classes in **Who the actor is** — never a developer, a worker, or
+"the system".
 
 Separate one journey section from the next with a horizontal rule (`---`) on
 its own line, so a reader can see where a journey ends.
@@ -1056,11 +1056,12 @@ the data differs, write one case with a row per run, a column for each varying
 value and one for the outcome, and a line under the title: "Runs once per row
 of **Test data**." Two refusals with one set of steps is one case, not two.
 
-**Roles are `admin` and `user`.** Inside a case an actor is the admin or the
-user — `user A` and `user B` when two of them act — never a product persona
-such as operator, collector, bidder or rival. Journey titles and stories keep
-the product's own words; the cases under them do not. A role is not test data
-and gets no row.
+**Roles are `customer` and `admin`.** Inside a case an actor is one of the two
+classes from **Who the actor is**, with the state or grant the case needs in
+brackets after it — `customer(gold member)`, `admin(shop staff)` — stated in
+the pre-conditions, never left to the reader. Journey titles and stories keep
+the product's own words; the cases under them carry the class. A role is not
+test data and gets no row.
 
 Every value comes from a scenario. A data table is not a place to generate
 variations the spec never stated. A case that takes no input omits the
