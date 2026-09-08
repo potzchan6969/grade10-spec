@@ -1,6 +1,6 @@
 ---
 name: tcs-review
-description: Walk a QA reviewer through a pending test-cases.md or domain domain-tcs.md suite one user journey at a time - every draft case in that journey together, with the spec's scenarios quoted on request - and record each verdict as actual, deprecated, or still draft. Use when QA asks to review, approve, or sign off test cases for a capability or an OpenSpec change. Invoke as /tcs-review [<capability-or-change>].
+description: Walk a QA reviewer through a pending feature-tcs.md, domain-tcs.md, product-tcs.md or platform-tcs.md suite one user journey at a time - every draft case in that journey together, with the spec's scenarios quoted on request - and record each verdict as actual, deprecated, or still draft. Use when QA asks to review, approve, or sign off test cases for a capability or an OpenSpec change. Invoke as /tcs-review [<capability-or-change>].
 ---
 
 # Review a capability's test cases with QA
@@ -40,9 +40,10 @@ of them: the phrasing they approve is the phrasing generation will copy.
    on `main`. Above roughly fifteen `draft` cases, offer to split by journey
    and take one journey per branch; below that, take the file.
 
-1. **Find the suites awaiting review.** Search both trees, both levels —
-   `openspec/specs/**/test-cases.md` and `openspec/specs/**/domain-tcs.md`, plus the
-   same two under `openspec/changes/*/specs/`, never
+1. **Find the suites awaiting review.** Search both trees, every level —
+   `openspec/specs/**/feature-tcs.md`, `openspec/specs/**/domain-tcs.md`,
+   `openspec/specs/*/product-tcs.md` and `openspec/specs/platform-tcs.md`, plus
+   the first two under `openspec/changes/*/specs/`, never
    `openspec/changes/archive/`. A suite is awaiting review when its
    `**Status:**` is `pending-review`, or when any case in it has
    `**Status:** draft`. Narrow to the argument when one was given (a change
@@ -57,14 +58,43 @@ of them: the phrasing they approve is the phrasing generation will copy.
    status is derived precisely so the line they both touch merges without
    judgement.
 
-2. **Take a domain before the features under it.** When the drafts you found
-   include a domain's `domain-tcs.md` and feature suites in that same domain, offer
-   the `domain-tcs.md` first: it settles which paths are covered end to end, so a
-   feature suite can then be trimmed against something approved rather than
-   something hoped for, and its approved cases become the house-style evidence
-   the feature reviews inherit. When the last feature suite in a domain reaches
-   `approved` and that domain's `domain-tcs.md` still holds drafts, say so and offer
-   it as the next run.
+2. **Complete the level stack before reviewing anything.** A suite is judged
+   against the paths the levels above it already own, so a missing level above
+   is not a detail to note in passing — it makes every judgement below it a
+   guess. Before opening the suite the reviewer named, look at what sits above
+   and beside it:
+
+   | Level above | The suite itself | Do |
+   | --- | --- | --- |
+   | missing | missing | Offer to derive both, top down, before any review starts |
+   | missing | present | Offer to derive the level above. Do not review the lower suite this run — it is judged against the higher one once that is approved |
+   | present | missing | Offer to derive it, covering what the level above does not already own |
+   | present | present | Review it, once both are current (step 4) |
+
+   Levels run top down: `platform-tcs.md`, then that product's
+   `product-tcs.md`, then a domain's `domain-tcs.md`, then the features under
+   it. A level with no path to hold has no suite, and that absence is not a gap
+   to raise. When the last feature suite in a domain reaches `approved` and
+   that domain's `domain-tcs.md` still holds drafts, say so and offer it as the
+   next run — and the same upward.
+
+   **A `product` or `platform` suite is a smoke pass**, not coverage: a handful
+   of long paths, every case `**Suites:** smoke`. Review it as such — the
+   question is whether the seam still holds, not whether every scenario is
+   covered, which is the feature suite's job.
+
+   **Never derive silently.** Say which file you would write, at which level,
+   from which journeys, and roughly how many cases it will hold — then wait for
+   a yes. Generation is `/spec-to-tcs`'s work, it lands as its own commit with
+   the `test(<domain>): derive <capability> test cases` message before the
+   first verdict, and it writes `draft` and nothing else. `actual` still comes
+   only from a human answering step 6.
+
+   **Never author another capability's journeys.** Deriving a domain or
+   platform suite reads every sibling `user-journeys.md`, and a sibling may not
+   have one. That is a gap for the spec's author: report it and stop. Writing
+   journeys for a capability the reviewer never named is PM's work done in QA's
+   branch, on a file nobody asked you to open.
 
 3. **Pick one suite:**
 
@@ -76,7 +106,9 @@ of them: the phrasing they approve is the phrasing generation will copy.
 
 4. **Restyle before you present anything.** Bring the file to the current
    `tcs_rules_rev` first — the reviewer's attention belongs on coverage, not
-   on wording the rules already settle. What may be re-worded depends on the
+   on wording the rules already settle. This is the minor path only: a major
+   bump has already swept every suite in its own commit, so after one the file
+   is current by construction. What may be re-worded depends on the
    case:
 
    | Case | Re-wording |
@@ -91,7 +123,7 @@ of them: the phrasing they approve is the phrasing generation will copy.
    `<v>` and sets it back to `draft` for review.
 
 5. **Open the suite and its journeys together.** For a domain `domain-tcs.md`, that is every `user-journeys.md` its traces name, plus the domain's pages under `docs/prds/`. Read the whole
-   `test-cases.md` and the `spec.md` beside it, end to end, before the first
+   suite and the `spec.md` beside it, end to end, before the first
    question. You cannot answer "where does the spec say that?" from a
    truncated read. Then orient the reviewer: the capability, the journeys,
    how many cases each holds, and how many are `draft`.
@@ -211,8 +243,11 @@ of them: the phrasing they approve is the phrasing generation will copy.
 - Never edit a step, precondition, or expected result into something the
   traced scenario does not say, even when the reviewer asks — that is a spec
   change; say so and route it to `/spec-to-tcs` after the spec is fixed.
-- Never delete a case or a `test-cases.md` file. Retirement is
+- Never delete a case or a suite file. Retirement is
   `deprecated`.
 - Never regenerate the suite from the spec mid-review. If it is badly out of
   date, stop and hand back to `/spec-to-tcs`.
 - Never review under `openspec/changes/archive/`.
+- Never derive a suite without naming what you would write and waiting for a
+  yes, and never let generation and verdicts share a commit.
+- Never write a `user-journeys.md` for a capability the reviewer did not name.
