@@ -5,11 +5,7 @@ import {
   BookOpenText,
   CaretDown,
   CaretRight,
-  ClipboardText,
-  House,
   type Icon,
-  Kanban,
-  PenNib,
 } from "@phosphor-icons/react";
 import { use, useCallback, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router";
@@ -25,12 +21,7 @@ import {
   SectionLinks,
 } from "./page-sections";
 
-const FIXED_ENTRIES: { to: string; label: string; icon: Icon }[] = [
-  { to: "/", label: "Home", icon: House },
-  { to: "/in-flight", label: "In Flight", icon: Kanban },
-  { to: "/qa", label: "QA", icon: ClipboardText },
-  { to: "/design", label: "Design", icon: PenNib },
-];
+const FIXED_ENTRIES: { to: string; label: string; icon: Icon }[] = [];
 
 /** One row shape for everything in the rail — the fixed views, products and
  * leaves differ in tone, never in geometry. */
@@ -146,26 +137,28 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
       data-slot="manual-sidebar"
     >
       <div className="flex flex-col gap-5 px-3 py-6">
-        <nav aria-label="Manual">
-          <ul className="space-y-0.5">
-            {FIXED_ENTRIES.map((entry) => (
-              <li key={entry.to}>
-                <NavLink
-                  className={({ isActive }: { isActive: boolean }) =>
-                    cn(ROW, isActive && "bg-muted font-medium")
-                  }
-                  end
-                  onClick={onNavigate}
-                  to={entry.to}
-                >
-                  <entry.icon aria-hidden size={16} />
-                  {entry.label}
-                </NavLink>
-                <RowSections onNavigate={onNavigate} to={entry.to} />
-              </li>
-            ))}
-          </ul>
-        </nav>
+        {FIXED_ENTRIES.length > 0 ? (
+          <nav aria-label="Manual">
+            <ul className="space-y-0.5">
+              {FIXED_ENTRIES.map((entry) => (
+                <li key={entry.to}>
+                  <NavLink
+                    className={({ isActive }: { isActive: boolean }) =>
+                      cn(ROW, isActive && "bg-muted font-medium")
+                    }
+                    end
+                    onClick={onNavigate}
+                    to={entry.to}
+                  >
+                    <entry.icon aria-hidden size={16} />
+                    {entry.label}
+                  </NavLink>
+                  <RowSections onNavigate={onNavigate} to={entry.to} />
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ) : null}
 
         {index === null ? (
           <Text as="p" className="px-4" size="xs" tone="secondary">
@@ -174,7 +167,7 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
         ) : (
           <nav
             aria-label="Manual contents"
-            className="flex flex-col gap-5 border-border-subtle border-t pt-4"
+            className={cn("flex flex-col gap-5", FIXED_ENTRIES.length > 0 ? "pt-4 border-t border-border-subtle" : "")}
           >
             {index.groups.map((group) => (
               <GroupSection
