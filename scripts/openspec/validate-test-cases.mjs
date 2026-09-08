@@ -28,7 +28,12 @@
  * Zero dependencies: Node built-ins only, matching the other scripts here.
  */
 
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -93,6 +98,12 @@ Flags:
                     current tcs-rules rev, for a per-capability update run
   --require-suites  Also report a capability that has journeys but no suite
                     beside it (warning)
+  --capture-baseline=<file>
+                    Write every case id and its traces to <file>, before a
+                    sweep, and exit
+  --swept=<file>    Assert the store still holds exactly the case ids and
+                    traces <file> recorded. A sweep may re-word a draft; it
+                    may never change what a case claims
   --help            Print this help and exit
 `);
 }
@@ -103,6 +114,8 @@ function parseArgs(argv) {
     stale: false,
     requireSuites: false,
     scope: null,
+    captureBaseline: null,
+    swept: null,
   };
   const rest = [];
   for (const a of argv) {
@@ -112,6 +125,9 @@ function parseArgs(argv) {
     } else if (a === "--strict") args.strict = true;
     else if (a === "--stale-report") args.stale = true;
     else if (a === "--require-suites") args.requireSuites = true;
+    else if (a.startsWith("--capture-baseline="))
+      args.captureBaseline = a.slice("--capture-baseline=".length);
+    else if (a.startsWith("--swept=")) args.swept = a.slice("--swept=".length);
     else rest.push(a);
   }
   args.scope = rest[0] ?? null;
@@ -823,11 +839,207 @@ if (suites.length === 0) {
   process.exit(0);
 }
 
+/** Every case in the store as `id -> { level, traces }`, read straight from the
+ *  text so a sweep is checked against what the files say rather than against a
+ *  parse that a sweep might itself have changed. Case ids are permanent and
+ *  unique store-wide, so this survives a file being renamed or a case moving
+ *  between levels. */
+function caseIndex(paths) {
+  const index = new Map();
+  for (const p of paths) {
+    const level = levelOf(p);
+    const rel = relative(ROOT, p);
+    let id = null;
+    let lineNo = 0;
+    for (const line of readFileSync(p, "utf8").split("\n")) {
+      lineNo += 1;
+      const h = line.match(/^###\s+(\S+?):/);
+      if (h) {
+        id = h[1];
+        if (!index.has(id))
+          index.set(id, { level, rel, line: lineNo, traces: [] });
+        continue;
+      }
+      const t = line.match(/^\*\s+\*\*Trace:\*\*\s*(.+?)\s*$/);
+      if (t && id && index.has(id))
+        index.get(id).traces = t[1]
+          .split(",")
+          .map((v) => v.trim().replace(/^`|`$/g, ""))
+          .filter(Boolean)
+          .sort();
+    }
+  }
+  return index;
+}
+
+const index = caseIndex(suites);
+
+if (args.captureBaseline) {
+  const out = {};
+  for (const [id, v] of index) out[id] = v.traces;
+  writeFileSync(args.captureBaseline, JSON.stringify(out, null, 2) + "\n");
+  console.log(
+    `${green("✓")} baseline captured: ${index.size} cases across ${suites.length} suites ` +
+      `${dim(`→ ${args.captureBaseline}`)}`,
+  );
+  process.exit(0);
+}
+
+if (args.swept) {
+  const before = JSON.parse(readFileSync(args.swept, "utf8"));
+  const drift = [];
+  for (const id of Object.keys(before))
+    if (!index.has(id)) drift.push(`case \`${id}\` disappeared`);
+  for (const [id, v] of index) {
+    if (!(id in before)) {
+      drift.push(`case \`${id}\` is new`);
+      continue;
+    }
+    const a = before[id].join(", ");
+    const b = v.traces.join(", ");
+    if (a !== b) drift.push(`case \`${id}\` traced "${a}", now traces "${b}"`);
+  }
+  console.log(
+    `${bold("Sweep check")}  ${dim(`${index.size} cases against ${args.swept}`)}\n`,
+  );
+  if (drift.length === 0) {
+    console.log(
+      `${green("✓")} every case id and trace is unchanged — the sweep changed no claim.`,
+    );
+    process.exit(0);
+  }
+  console.log(red(`${drift.length} change${drift.length === 1 ? "" : "s"} a sweep may not make`));
+  for (const d of drift.slice(0, 40)) console.log(`  ${d}`);
+  if (drift.length > 40) console.log(dim(`  … and ${drift.length - 40} more`));
+  process.exit(1);
+}
+
 const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
+
+// --- every journey is walked by a customer or an admin -----------------
+// The classes are the store's two end users. Every other role a spec names is
+// one of them holding a state or a grant, and that belongs in a case's
+// pre-conditions. A capability no end user reaches writes `**Walked by:**
+// nobody on their own` instead of inventing one.
+{
+  /** Checked first: a role that names one of these is not an end user at all,
+   *  however many end-user words sit beside it ("QA reviewer planning a pass
+   *  for one operator role"). */
+  const NOT_AN_END_USER =
+    /\b(engineer|developer|qa|reviewer|application|crawler|fetcher|bot|script|scraper|service|system|tester|integrator|consumer)\b/;
+  const ADMIN =
+    /\b(admin|administrator|operator|staff|treasurer|controller|auditor|manager|moderator|clerk|shopkeeper)\b/;
+  const CUSTOMER =
+    /\b(customer|collector|member|shopper|buyer|bidder|borrower|guest|person|visitor|user|winner|bidder|watcher)\b/;
+
+  for (const dir of dirsHolding(ROOT, "user-journeys.md").filter(inScope)) {
+    const file = join(dir, "user-journeys.md");
+    const rel = relative(ROOT, file);
+    const lines = readFileSync(file, "utf8").split("\n");
+    for (let i = 0; i < lines.length; i++) {
+      const m = lines[i].match(/^\*\*As an?\*\*\s+(.+?),?\s*$/);
+      if (!m) continue;
+      const role = m[1].toLowerCase();
+      if (NOT_AN_END_USER.test(role))
+        record(
+          "error",
+          rel,
+          i + 1,
+          `journey is walked by "${m[1]}", which is not an end user — a journey is walked by a customer or an admin, ` +
+            "and a capability no end user reaches writes `**Walked by:** nobody on their own` instead",
+        );
+      else if (!ADMIN.test(role) && !CUSTOMER.test(role))
+        record(
+          "error",
+          rel,
+          i + 1,
+          `journey is walked by "${m[1]}", which resolves to neither \`customer\` nor \`admin\` — ` +
+            "name the class the role belongs to, and put its state or grant in the case's pre-conditions",
+        );
+    }
+  }
+}
+
+// --- composed levels trace what they compose ---------------------------
+// A case above `feature` exists because no single spec states its path end to
+// end. One trace means it is a feature case written at the wrong level.
+{
+  const need = {
+    domain: ["capabilities of that domain", (t) => t],
+    product: ["domains of that product", domainOf],
+    platform: ["products", productOf],
+  };
+  for (const [id, v] of index) {
+    const rule = need[v.level];
+    if (!rule) continue;
+    const [what, key] = rule;
+    if (v.traces.length < 2) {
+      record(
+        "error",
+        v.rel,
+        v.line,
+        `case \`${id}\` is a ${v.level} case tracing ${v.traces.length === 1 ? "one journey" : "no journey"} — ` +
+          `a ${v.level} case composes two or more, from two or more ${what}`,
+      );
+      continue;
+    }
+    const distinct = new Set(v.traces.map((t) => key(t) ?? t));
+    if (distinct.size < 2)
+      record(
+        "error",
+        v.rel,
+        v.line,
+        `case \`${id}\` traces ${v.traces.length} journeys but only one of the ${what} — ` +
+          `a ${v.level} case crosses two or more`,
+      );
+  }
+}
+
+// --- one purpose, one case ---------------------------------------------
+// Reported, never enforced: a shared trace is evidence of duplication, not
+// proof of it. Two cases may cross one journey to verify different things.
+{
+  const byTraceSet = new Map();
+  for (const [id, v] of index) {
+    if (v.level === "feature" || v.traces.length === 0) continue;
+    const key = `${v.level}::${v.traces.join(", ")}`;
+    if (!byTraceSet.has(key)) byTraceSet.set(key, []);
+    byTraceSet.get(key).push({ id, rel: v.rel });
+  }
+  for (const [key, group] of byTraceSet) {
+    if (group.length < 2) continue;
+    record(
+      "warning",
+      group[0].rel,
+      1,
+      `${group.length} cases walk the identical path (${key.split("::")[1]}): ` +
+        `${group.map((g) => `\`${g.id}\``).join(", ")} — one purpose, one case`,
+    );
+  }
+
+  const levelsByJourney = new Map();
+  for (const [id, v] of index)
+    for (const t of v.traces) {
+      if (!levelsByJourney.has(t)) levelsByJourney.set(t, new Map());
+      const m = levelsByJourney.get(t);
+      m.set(v.level, (m.get(v.level) ?? 0) + 1);
+    }
+  const crossed = [...levelsByJourney].filter(([, m]) => m.size > 1);
+  if (crossed.length > 0) {
+    console.log(
+      `${bold("Traced at more than one level")}  ${dim("— check the lower cases do not re-test the path the higher one owns")}\n`,
+    );
+    for (const [journey, m] of crossed.sort())
+      console.log(
+        `  ${journey.padEnd(52)}${dim([...m].map(([lvl, n]) => `${n} ${lvl}`).join(", "))}`,
+      );
+    console.log("");
+  }
+}
 
 if (args.requireSuites) {
   for (const d of specs) {
-    if (FEATURE_SUITE_NAMES.some((name) => existsSync(join(d, name)))) continue;
+    if (existsSync(join(d, "feature-tcs.md"))) continue;
     const spec = readSpecIds(join(d, "spec.md"));
     if (spec?.hasJourneySection && spec.journeys.size > 0)
       record(
