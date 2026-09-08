@@ -165,7 +165,6 @@ export const AUCTION_LOT_DETAILS_COPY = {
     ),
     aboutThisLot: "About this lot",
     vaultShipping: "Vault shipping",
-    result: "Result",
     showMore: "Show more",
     showLess: "Show less",
   },
@@ -174,8 +173,9 @@ export const AUCTION_LOT_DETAILS_COPY = {
   userBidHistory: {
     link: "Your bid history",
     title: "Bid History",
+    samePricePriority:
+      "When bidders set the same maximum, the earlier submission takes priority.",
     amount: "Your bid",
-    type: "Type",
     time: "Time",
   },
 };

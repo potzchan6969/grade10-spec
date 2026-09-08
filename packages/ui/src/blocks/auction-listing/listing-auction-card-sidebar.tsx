@@ -91,7 +91,6 @@ function ListingAuctionCardSidebar({
         description={description}
         facts={facts}
         marketComps={marketComps}
-        resultFact={view.resultFact}
         vaultShippingBody={vaultShippingBody}
       />
     </VStack>

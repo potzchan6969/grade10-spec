@@ -1,4 +1,3 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   Table,
   TableBody,
@@ -12,6 +11,7 @@ import {
   Dialog,
   DialogBody,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
@@ -29,8 +29,9 @@ import type { ListingUserBidHistoryRow } from "./types";
 type ListingUserBidHistoryCopy = {
   link: string;
   title: string;
+  /** Clarifies chronological priority when maxima match. */
+  samePricePriority: string;
   amount: string;
-  type: string;
   time: string;
 };
 
@@ -41,12 +42,6 @@ type ListingUserBidHistoryProps = {
   timeZone: string;
   activityTimeCopy: ActivityTimeCopy;
 };
-
-function bidTypeBadgeVariant(
-  bidType: ListingUserBidHistoryRow["bidType"],
-): "outline" | "info" {
-  return bidType === "manual" ? "outline" : "info";
-}
 
 function ListingUserBidHistory({
   copy,
@@ -71,7 +66,6 @@ function ListingUserBidHistory({
     (row) =>
       !row.timeOverride && isPastActivityCap(row.acceptedAtMs, referenceNow),
   );
-  const typeColumnClass = "w-28 shrink-0";
   const timeColumnClass = cn(
     "shrink-0 whitespace-nowrap",
     showFullTime ? "w-48" : "w-28",
@@ -104,13 +98,13 @@ function ListingUserBidHistory({
             <DialogHeader showCloseButton={false}>
               <DialogTitle>{copy.title}</DialogTitle>
             </DialogHeader>
-            <DialogBody className="min-h-0 flex-1 overflow-hidden p-0">
-              <Table className="flex h-full min-h-0 flex-col overflow-hidden">
+            <DialogBody className="min-h-0 flex-1 overflow-hidden">
+              <DialogDescription>{copy.samePricePriority}</DialogDescription>
+              <Table className="flex min-h-0 flex-1 flex-col overflow-hidden">
                 <TableHeader className="shrink-0">
                   <TableHead className="min-w-0 flex-1">
                     {copy.amount}
                   </TableHead>
-                  <TableHead className={typeColumnClass}>{copy.type}</TableHead>
                   <TableHead align="end" className={timeColumnClass}>
                     {copy.time}
                   </TableHead>
@@ -123,14 +117,6 @@ function ListingUserBidHistory({
                     <TableRow className="shrink-0" key={row.id}>
                       <TableCell className="min-w-0 flex-1">
                         {row.amountLabel}
-                      </TableCell>
-                      <TableCell className={typeColumnClass}>
-                        <Badge
-                          size="sm"
-                          variant={bidTypeBadgeVariant(row.bidType)}
-                        >
-                          {row.bidTypeLabel}
-                        </Badge>
                       </TableCell>
                       <TableCell align="end" className={timeColumnClass}>
                         {row.timeOverride ??
