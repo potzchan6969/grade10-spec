@@ -16,6 +16,7 @@ import { baselineDigestFor } from "./annotation-core.mjs";
 import { runCli as runDiffCli } from "./annotation-diff.mjs";
 import { buildInventory } from "./annotation-inventory.mjs";
 import { runCli as runInventoryCli } from "./annotation-inventory-cli.mjs";
+import { liveAssociation } from "./annotation-live.mjs";
 import {
   acceptSnapshot as acceptSnapshotImplementation,
   renderHuman,
@@ -37,6 +38,10 @@ import {
   applyAcceptanceTransaction,
   contentDigest,
 } from "./annotation-store.mjs";
+
+const { change: LIVE_CHANGE } = liveAssociation(
+  new URL("../../", import.meta.url).pathname.replace(/\/$/, ""),
+);
 
 const fileKey = "ABCDEFGHIJKLMNOPQRSTUV";
 const fileUrl = `https://www.figma.com/design/${fileKey}/Grade10-DS-2026`;
@@ -1072,7 +1077,7 @@ test("One of several annotations changes text", () => {
             text: "Review the old content contract.",
             categoryId: "content",
             pinnedProperties: ["width"],
-            associations: { change: "track-figma-annotation-changes" },
+            associations: { change: LIVE_CHANGE },
           },
           {
             annotationKey: "interaction-note",
@@ -1279,7 +1284,7 @@ test("Existing text edit is accepted", () => {
             text: "Review the old content contract.",
             categoryId: "content",
             pinnedProperties: ["width"],
-            associations: { change: "track-figma-annotation-changes" },
+            associations: { change: LIVE_CHANGE },
           },
           {
             annotationKey: "interaction-note",
@@ -1305,7 +1310,7 @@ test("Existing text edit is accepted", () => {
       decisions: [
         {
           findingId: selected.id,
-          associations: { change: "track-figma-annotation-changes" },
+          associations: { change: LIVE_CHANGE },
         },
       ],
     },
@@ -1320,7 +1325,7 @@ test("Existing text edit is accepted", () => {
       text: "Keep the content contract.",
       categoryId: "content",
       pinnedProperties: ["width"],
-      associations: { change: "track-figma-annotation-changes" },
+      associations: { change: LIVE_CHANGE },
     },
     {
       annotationKey: "interaction-note",
