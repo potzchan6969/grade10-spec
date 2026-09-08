@@ -109,7 +109,9 @@ SHALL admit more than one choice at once.
 A group the catalogue names no choices for, and a group whose every choice the
 catalogue counts nothing behind, SHALL NOT be drawn: a control whose only
 effect is to empty the grid is worse than no control. A listing left with no
-group to draw SHALL list the catalogue with no filter panel.
+group to draw SHALL draw no facet group and SHALL say nothing in place of one —
+a shop that has configured no facets is not a fault the collector is told
+about. Searching and ordering are not facets and SHALL stay offered either way.
 
 What each group is called SHALL be the site's own words in the language the
 listing is read in; what each choice is called SHALL be the catalogue's, and
@@ -141,8 +143,9 @@ the previous narrowing.
 
 - **WHEN** a collector opens the listing and the catalogue names no facet
   group, or counts nothing behind every choice of every group it names
-- **THEN** the catalogue is listed with no filter panel
-- **AND** no facet control is offered
+- **THEN** the catalogue is listed, and no facet group is drawn
+- **AND** nothing is said in place of the groups
+- **AND** the search field and the sort menu are still offered
 
 ### Requirement: Order and free text describe the whole catalogue
 

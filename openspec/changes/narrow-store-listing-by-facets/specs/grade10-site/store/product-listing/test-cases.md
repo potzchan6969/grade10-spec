@@ -19,7 +19,8 @@ rather than clicked into.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -49,6 +50,7 @@ Catalogue carries <a collection>.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -76,6 +78,7 @@ Catalogue carries at least two collections.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -111,7 +114,8 @@ from.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -146,6 +150,7 @@ from.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -177,6 +182,7 @@ from.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -208,6 +214,7 @@ from.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -244,7 +251,8 @@ pick one,
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -276,6 +284,7 @@ each carrying choices with cards counted behind them.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -309,6 +318,7 @@ catalogue holds.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -321,12 +331,14 @@ group.
 **Steps:**
 
 1. Navigate to <grade10 browse listing url>, unscoped.
-2. Check the page for a filter panel.
-3. Check the cards listed.
+2. Check the sidebar for facet groups and for any message in place of them.
+3. Check that the search field and the sort menu are still offered.
+4. Check the cards listed.
 
 **Expected Results:**
 
-* No filter panel is drawn, and no facet control is offered.
+* No facet group is drawn, and nothing is said in place of the groups.
+* Search field and sort menu are both still offered.
 * Catalogue is listed as normal.
 
 ### grade10-site-store-product-listing-US4-TC4-1: Facet groups with nothing counted behind them
@@ -338,6 +350,7 @@ group.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -350,13 +363,15 @@ counted behind any of them.
 **Steps:**
 
 1. Navigate to <grade10 browse listing url>, unscoped.
-2. Check the page for a filter panel.
-3. Check the cards listed.
+2. Check the sidebar for facet groups and for any message in place of them.
+3. Check that the search field and the sort menu are still offered.
+4. Check the cards listed.
 
 **Expected Results:**
 
-* No filter panel is drawn — no choice is offered that could only empty the
+* No facet group is drawn — no choice is offered that could only empty the
   grid.
+* Search field and sort menu are both still offered.
 * Catalogue is listed as normal.
 
 ---
@@ -376,7 +391,8 @@ than the ones already on screen,
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -407,6 +423,7 @@ among those listed when the page first loads.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -440,6 +457,7 @@ loads.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
