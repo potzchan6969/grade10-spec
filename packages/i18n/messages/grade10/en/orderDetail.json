@@ -1,5 +1,6 @@
 {
   "title": "Order Details",
+  "orderId": "Order #{id}",
   "loading": "Loading order details…",
   "error": "We couldn’t load this order. Try again.",
   "retry": "Try again",
