@@ -4,6 +4,11 @@ Lets a collector mark an auction listing to come back to without bidding
 on it. A watch is a private signal that confers no standing in the sale,
 and it is the trigger auction mail fires on.
 
+**Terminology.** **Listing** is the domain entity this capability names.
+**Lot** is only the collector-facing label for a listing
+(`listingLabel` / copy such as `lotLabel`). Requirements and scenarios
+speak of listings; they do not invent a lot entity.
+
 ## Feature set
 
 - Watching a listing
@@ -21,7 +26,7 @@ and it is the trigger auction mail fires on.
 
 ## ADDED Requirements
 
-### Requirement: A signed-in collector watches and unwatches a lot
+### Requirement: A signed-in collector watches and unwatches a listing
 
 A signed-in collector SHALL:
 
@@ -35,38 +40,38 @@ Grade10 SHALL NOT hold a watch only in the browser. Watching the same
 listing again SHALL leave one watch, and SHALL NOT create a second or
 change the Watched At of the first.
 
-#### Scenario: grade10-site-auction-watchlist-SC-01 - A collector watches a lot
+#### Scenario: grade10-site-auction-watchlist-SC-01 - A collector watches a listing
 
-- **GIVEN** a signed-in collector viewing an open lot they do not watch
+- **GIVEN** a signed-in collector viewing an open listing they do not watch
 - **WHEN** they watch it
-- **THEN** Grade10 records the watch against that collector and lot
-- **AND** the lot shows as watched to them
+- **THEN** Grade10 records the watch against that collector and listing
+- **AND** the listing shows as watched to them
 
-#### Scenario: grade10-site-auction-watchlist-SC-02 - A collector unwatches a lot
+#### Scenario: grade10-site-auction-watchlist-SC-02 - A collector unwatches a listing
 
-- **GIVEN** a signed-in collector viewing a lot they watch
+- **GIVEN** a signed-in collector viewing a listing they watch
 - **WHEN** they unwatch it
 - **THEN** Grade10 removes the watch
-- **AND** the lot shows as not watched to them
+- **AND** the listing shows as not watched to them
 
 #### Scenario: grade10-site-auction-watchlist-SC-03 - Watching twice leaves one watch
 
-- **GIVEN** a collector who already watches a lot
-- **WHEN** a second watch for the same collector and lot is submitted
-- **THEN** the collector watches that lot exactly once
+- **GIVEN** a collector who already watches a listing
+- **WHEN** a second watch for the same collector and listing is submitted
+- **THEN** the collector watches that listing exactly once
 - **AND** the Watched At of the original watch is unchanged
 
 #### Scenario: grade10-site-auction-watchlist-SC-04 - A signed-out viewer is offered sign-in
 
-- **GIVEN** a viewer who is not signed in, on a lot
+- **GIVEN** a viewer who is not signed in, on a listing
 - **WHEN** they attempt to watch it
 - **THEN** Grade10 does not record a watch
 - **AND** the viewer is offered sign-in
 
 #### Scenario: grade10-site-auction-watchlist-SC-05 - A watch follows the collector, not the browser
 
-- **GIVEN** a collector who watched a lot in one browser
-- **WHEN** they sign in on another device and open that lot
+- **GIVEN** a collector who watched a listing in one browser
+- **WHEN** they sign in on another device and open that listing
 - **THEN** it shows as watched
 
 ### Requirement: Watch fields
@@ -85,9 +90,9 @@ be the collector's user id, per `shared/auth/session`.
 
 #### Scenario: grade10-site-auction-watchlist-SC-06 - A watch belongs to one collector
 
-- **GIVEN** a lot watched by a collector on one brand and by a different collector on the other
-- **WHEN** each reads the lots they watch
-- **THEN** each sees that lot listed once
+- **GIVEN** a listing watched by a collector on one brand and by a different collector on the other
+- **WHEN** each reads the listings they watch
+- **THEN** each sees that listing listed once
 - **AND** neither sees the other's watch
 
 ### Requirement: A watch is private and confers nothing
@@ -108,30 +113,30 @@ a watch as a commitment to buy.
 
 #### Scenario: grade10-site-auction-watchlist-SC-07 - A watch count is not public
 
-- **GIVEN** a lot watched by several collectors
+- **GIVEN** a listing watched by several collectors
 - **WHEN** any collector or unauthenticated reader reads its public facts
 - **THEN** those facts carry no watch count and no watcher identity
 
 #### Scenario: grade10-site-auction-watchlist-SC-08 - One collector cannot see another's watch
 
-- **GIVEN** two signed-in collectors, one of whom watches a lot
-- **WHEN** the other opens that lot
+- **GIVEN** two signed-in collectors, one of whom watches a listing
+- **WHEN** the other opens that listing
 - **THEN** it shows as not watched to them
 
 #### Scenario: grade10-site-auction-watchlist-SC-09 - Watching does not change the sale
 
-- **GIVEN** an open lot with a current bid and a leader
+- **GIVEN** an open listing with a current bid and a leader
 - **WHEN** a collector watches it
 - **THEN** the current bid, the leader, and the close are unchanged
 - **AND** no bid validity rule is affected
 
-#### Scenario: grade10-site-auction-watchlist-SC-10 - An operator counts every watch on a lot
+#### Scenario: grade10-site-auction-watchlist-SC-10 - An operator counts every watch on a listing
 
-- **GIVEN** a lot watched by two collectors on one brand and one collector on the other
-- **WHEN** an authorized operator reads that lot's watch count
+- **GIVEN** a listing watched by two collectors on one brand and one collector on the other
+- **WHEN** an authorized operator reads that listing's watch count
 - **THEN** the count is 3
 
-### Requirement: A collector reads the lots they watch
+### Requirement: A collector reads the listings they watch
 
 Grade10 SHALL show a signed-in collector the listings they watch, most
 recently watched first. A collector who watches nothing SHALL be shown
@@ -144,29 +149,29 @@ A collector SHALL be able to unwatch such a listing.
 
 #### Scenario: grade10-site-auction-watchlist-SC-11 - The list is ordered by when each watch was made
 
-- **GIVEN** a collector who watched lot A, then lot B, then lot C
-- **WHEN** they read the lots they watch
+- **GIVEN** a collector who watched listing A, then listing B, then listing C
+- **WHEN** they read the listings they watch
 - **THEN** the order is C, B, A
 
 #### Scenario: grade10-site-auction-watchlist-SC-12 - A collector watching nothing
 
-- **GIVEN** a signed-in collector who watches no lot
-- **WHEN** they read the lots they watch
+- **GIVEN** a signed-in collector who watches no listing
+- **WHEN** they read the listings they watch
 - **THEN** they are told they watch nothing
 - **AND** no error is shown
 
-#### Scenario: grade10-site-auction-watchlist-SC-13 - An entry leads to its lot
+#### Scenario: grade10-site-auction-watchlist-SC-13 - An entry leads to its listing
 
-- **GIVEN** a collector reading the lots they watch
+- **GIVEN** a collector reading the listings they watch
 - **WHEN** they open an entry
-- **THEN** they arrive at that lot
+- **THEN** they arrive at that listing
 
-#### Scenario: grade10-site-auction-watchlist-SC-14 - A collector unwatches a closed lot
+#### Scenario: grade10-site-auction-watchlist-SC-14 - A collector unwatches a closed listing
 
-- **GIVEN** a collector watching a closed lot
+- **GIVEN** a collector watching a closed listing
 - **WHEN** they unwatch it
 - **THEN** the watch is removed
-- **AND** the lot no longer appears in the lots they watch
+- **AND** the listing no longer appears in the listings they watch
 
 ### Requirement: Watched-list entry fields
 
@@ -184,19 +189,19 @@ as still open. A close SHALL follow `dates-and-times`.
 
 #### Scenario: grade10-site-auction-watchlist-SC-15 - An entry carries the facts needed to act
 
-- **GIVEN** a collector watching an open lot
-- **WHEN** they read the lots they watch
-- **THEN** that entry shows the lot's identity, its current bid, and its close
+- **GIVEN** a collector watching an open listing
+- **WHEN** they read the listings they watch
+- **THEN** that entry shows the listing's identity, its current bid, and its close
 
-#### Scenario: grade10-site-auction-watchlist-SC-16 - A closed lot stays in the list
+#### Scenario: grade10-site-auction-watchlist-SC-16 - A closed listing stays in the list
 
-- **GIVEN** a collector watching a lot that then closes
-- **WHEN** they read the lots they watch
-- **THEN** that lot is still listed
+- **GIVEN** a collector watching a listing that then closes
+- **WHEN** they read the listings they watch
+- **THEN** that listing is still listed
 - **AND** it is shown as closed
 
-#### Scenario: grade10-site-auction-watchlist-SC-17 - A called-off lot is shown as called off
+#### Scenario: grade10-site-auction-watchlist-SC-17 - A called-off listing is shown as called off
 
-- **GIVEN** a collector watching a lot an operator then calls off
-- **WHEN** they read the lots they watch
-- **THEN** that lot is shown as called off, not as open
+- **GIVEN** a collector watching a listing an operator then calls off
+- **WHEN** they read the listings they watch
+- **THEN** that listing is shown as called off, not as open

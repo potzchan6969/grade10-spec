@@ -1,6 +1,6 @@
 {
   "title": "拍卖",
-  "intro": "所有已公开的活动。浏览无需账户，出价则需要。",
+  "intro": "浏览已认证拍品，并在结拍前出价。",
   "loadingCampaigns": "正在加载活动…",
   "noCampaigns": "当前没有进行中的活动。",
   "viewListings": "查看拍品",
@@ -11,7 +11,23 @@
   "listingPrefix": "拍品 {label} — ",
   "closes": "{when}截止",
   "closed": "已于{when}结束",
+  "opens": "{when}开拍",
   "open": "竞拍中",
+  "live": "进行中",
+  "upcoming": "即将开拍",
+  "extended": "延时竞拍",
+  "closedStatus": "已结束",
   "topBid": "最高 {amount}",
-  "fromBid": "起拍 {amount}"
+  "fromBid": "起拍 {amount}",
+  "lotCount": "{count, plural, one {# 件拍品} other {# 件拍品}}",
+  "listingsLabel": "拍卖拍品列表",
+  "searchLots": "搜索拍品",
+  "filter": "筛选",
+  "filterStatus": "状态",
+  "filterCategory": "分类",
+  "filterGrade": "评级",
+  "allLots": "全部拍品",
+  "endingSoon": "即将结拍",
+  "endsIn": "剩余 {remaining}",
+  "opensIn": "{remaining}后开拍"
 }

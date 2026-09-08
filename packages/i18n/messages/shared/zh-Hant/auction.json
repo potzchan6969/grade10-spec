@@ -1,6 +1,6 @@
 {
   "title": "拍賣",
-  "intro": "所有已公開的活動。瀏覽無需帳戶，出價則需要。",
+  "intro": "瀏覽已認證拍品，並在結拍前出價。",
   "loadingCampaigns": "正在載入活動…",
   "noCampaigns": "目前沒有進行中的活動。",
   "viewListings": "查看拍品",
@@ -11,7 +11,23 @@
   "listingPrefix": "拍品 {label} — ",
   "closes": "{when}截止",
   "closed": "已於{when}結束",
+  "opens": "{when}開拍",
   "open": "競投中",
+  "live": "進行中",
+  "upcoming": "即將開拍",
+  "extended": "延時競投",
+  "closedStatus": "已結束",
   "topBid": "最高 {amount}",
-  "fromBid": "起標 {amount}"
+  "fromBid": "起標 {amount}",
+  "lotCount": "{count, plural, one {# 件拍品} other {# 件拍品}}",
+  "listingsLabel": "拍賣拍品列表",
+  "searchLots": "搜尋拍品",
+  "filter": "篩選",
+  "filterStatus": "狀態",
+  "filterCategory": "分類",
+  "filterGrade": "評級",
+  "allLots": "全部拍品",
+  "endingSoon": "即將結拍",
+  "endsIn": "剩餘 {remaining}",
+  "opensIn": "{remaining}後開拍"
 }
