@@ -165,7 +165,6 @@ export const AUCTION_LOT_DETAILS_COPY = {
     ),
     aboutThisLot: "About this lot",
     vaultShipping: "Vault shipping",
-    result: "Result",
     showMore: "Show more",
     showLess: "Show less",
   },

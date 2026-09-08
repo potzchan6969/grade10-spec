@@ -17,7 +17,6 @@ import type { ListingLotMetaBadge } from "./types";
 type ListingLotMetaCopy = {
   aboutThisLot: string;
   vaultShipping: string;
-  result: string;
   showMore: string;
   showLess: string;
 };
@@ -37,7 +36,6 @@ type ListingLotMetaProps = {
   badges: readonly ListingLotMetaBadge[];
   description: string;
   vaultShippingBody: string;
-  resultFact?: string;
   /** Cataloguing facts under About this lot (year, set, grade, cert, …). */
   facts?: readonly ListingLotMetaFact[];
   /** Comparable sales, shown as a section under About this lot. */
@@ -59,7 +57,6 @@ function ListingLotMeta({
   badges,
   description,
   vaultShippingBody,
-  resultFact,
   facts,
   marketComps,
 }: ListingLotMetaProps) {
@@ -251,13 +248,6 @@ function ListingLotMeta({
         <Text className="font-semibold">{copy.vaultShipping}</Text>
         <Text size="sm">{vaultShippingBody}</Text>
       </VStack>
-
-      {resultFact ? (
-        <VStack className="border-t border-border pt-6" gap="sm">
-          <Text className="font-semibold">{copy.result}</Text>
-          <Text size="sm">{resultFact}</Text>
-        </VStack>
-      ) : null}
     </VStack>
   );
 }
