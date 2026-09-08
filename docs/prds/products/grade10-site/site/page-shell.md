@@ -16,10 +16,11 @@ the page never jumps under someone's finger. The account control simply leads
 somewhere different: the profile when they are signed in, sign-in when they are
 not.
 
-Controls exist only when there is something behind them. No cart control until
-the site answers a cart, no search until there is a search surface, no link to
-a page the site does not hold. The header marks the item that owns the current
-address, and marks nothing when no item owns it.
+Controls exist only when there is something behind them. The Cart Drawer gives
+Store surfaces and checkout a Cart control; unrelated surfaces have none.
+Search still waits for a search surface, and no link points to a page the site
+does not hold. The header marks the item that owns the current address, and
+marks nothing when no item owns it.
 
 Sign-out has exactly one home — the profile. The header offers no way to do it,
 so a collector never has to guess which of two controls ended their session.
@@ -31,3 +32,7 @@ so a collector never has to guess which of two controls ended their session.
 ::story{id="components-nav--without-cart" title="The same header where the site answers no cart"}
 
 ::story{id="components-nav--narrow" title="The header reflowed at a small width"}
+
+## Test cases
+
+::cases{id="grade10-site/site/page-shell"}

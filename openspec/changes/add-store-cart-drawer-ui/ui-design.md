@@ -28,22 +28,34 @@ No new component, variant, primitive, or token is required.
 
 ## States
 
-States remain defined by
-[`shared/ui/store-cart`](../../specs/shared/ui/store-cart/spec.md):
+States combine the Grade10 product deltas with the durable
+[`shared/ui/store-cart`](../../specs/shared/ui/store-cart/spec.md) contract:
 
-- **Open live review** — `shared-ui-store-cart-SC-08`.
-- **Failed live review** — `grade10-site-store-cart-validation-SC-21`.
+- **Route-gated Cart control** — `grade10-site-site-page-shell-SC-09` and
+  `grade10-site-site-page-shell-SC-16`.
+- **Open live review** — `grade10-site-store-cart-drawer-SC-05` and
+  `shared-ui-store-cart-SC-08`.
+- **Pending and failed live review** —
+  `grade10-site-store-cart-drawer-SC-06` through
+  `grade10-site-store-cart-drawer-SC-08`.
 - **Populated baseline and overflow** — `shared-ui-store-cart-SC-02`,
   `shared-ui-store-cart-SC-03`, and `shared-ui-store-cart-SC-07`.
 - **Empty drawer** — `shared-ui-store-cart-SC-04`.
-- **Unavailable cleanup and one toast** — `shared-ui-store-cart-SC-11` and
-  `shared-ui-store-cart-SC-12`.
-- **Display-only promo affordance** — the drawer keeps the collapsed Figma
-  control visible, but this change supplies no promo callbacks or calculation.
-- **Current-contract item content** — reviewed title, quantity, price, status,
-  and currency are mapped; image fields remain absent because the existing
-  reviewed contract does not provide them.
+- **Unavailable cleanup and one toast** — `shared-ui-store-cart-SC-10`,
+  `shared-ui-store-cart-SC-11`, and
+  `grade10-site-store-cart-drawer-SC-12`.
+- **Display-only promo and absent points** —
+  `grade10-site-store-cart-drawer-SC-10`; the collapsed Figma promo control is
+  visible, with no promo callbacks, points state, or calculation.
+- **Current-contract item content** —
+  `grade10-site-store-cart-drawer-SC-09` and
+  `grade10-site-store-cart-drawer-SC-10`; reviewed title, quantity, price,
+  status, and currency are mapped, while image fields remain absent.
 - **Close, backdrop, Escape, and scroll lock** —
   `shared-ui-store-cart-SC-06`.
-- **Quantity, removal, product, browse, and checkout actions** —
+- **Quantity and removal actions** —
+  `grade10-site-store-cart-drawer-SC-11` and the shared item callbacks.
+- **Product, browse, and checkout actions** —
+  `grade10-site-store-cart-drawer-SC-13` through
+  `grade10-site-store-cart-drawer-SC-15`; the redirecting button remains
   `shared-ui-store-cart-SC-09`.
