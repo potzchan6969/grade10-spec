@@ -13,7 +13,7 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 - Everyone else goes through its API (service binding or tRPC)
 - Postgres roles enforce it
 
-### Auth owns sign-in; the identity store owns the verified record
+### Auth owns sign-in; the KYC service owns the verified record
 
 - Sign-in identity, display name, avatar live in auth
 - The verified record — legal name, date of birth, document type, masked number, expiry, and the photograph of the document — lives in `grade10-e-kyc-service`: its own worker, its own Neon project, its own R2 bucket. It has no gateway route and no `ServiceId`, so no browser reaches it; a product reaches it over a `KYC_SERVICE` binding
@@ -32,8 +32,8 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 ### Postgres by default
 
 - One shared Neon project per brand and environment (`stg-grade10`, `prd-grade10`); a database and role per service inside it, reached through Hyperdrive
-- Auth (per brand), the identity store, finance and the vault are their own projects — walls around PII and money, so a leaked app credential cannot reach them and each restores on its own clock
-- The identity store is the widest of those walls: it holds the legal name, the birth date and the document photograph of every customer of every product, so nothing else shares a credential with it
+- Auth (per brand), the KYC service, finance and the vault are their own projects — walls around PII and money, so a leaked app credential cannot reach them and each restores on its own clock
+- The KYC service is the widest of those walls: it holds the legal name, the birth date and the document photograph of every customer of every product, so nothing else shares a credential with it
 
 ### Tables
 
@@ -171,7 +171,7 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 - Why Postgres and not D1?
   - Account data needs interactive transactions, real joins, and constraints; one engine across apps beats two. Dev and tests use docker Postgres and pglite, never another dialect.
 - Why one shared Neon project?
-  - One warm compute, one restore story, one bill; a database and role per service keeps ownership enforceable — Postgres cannot even join across databases. Co-tenants share restore blast radius — fine everywhere except the four walled projects: auth, the identity store, finance and the vault.
+  - One warm compute, one restore story, one bill; a database and role per service keeps ownership enforceable — Postgres cannot even join across databases. Co-tenants share restore blast radius — fine everywhere except the four walled projects: auth, the KYC service, finance and the vault.
 - Is Neon fast enough?
   - Single-region; the first query after idle costs ~0.5–2 s. Hot session-free reads use the cached tRPC procedure; admin tolerates cold starts.
 - Why not make a DO the source of truth?

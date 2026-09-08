@@ -27,7 +27,7 @@ it; no statute here is asserted.
   other accounts hold the same document. A hit writes a staff-only event
   carrying the count, badges the case in the queue as **Document seen
   before**, and refuses nothing; which accounts they are never leaves the
-  identity store
+  KYC service
 - **Not checked** — liveness, face match, address, nationality, sanctions or
   politically exposed persons, source of funds, occupation, purpose, ongoing
   monitoring, thresholds, suspicious-activity reporting

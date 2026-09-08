@@ -182,7 +182,7 @@ the decision behind them.
 | The book sits behind the money grant | Decided | A ledger and a position across every case are the firm's accounts; `vault:read` still sees what one case owes | Product |
 | "Today" is cut where the rows are read | Decided | The shop's own day decides it, in the query rather than in the browser, so the queue and the badges beside it cannot disagree across a midnight | Engineering |
 | The console never moves a visit from the diary | Decided | A case's visit is moved on the case, so the cached booking and the diary have one writer | Engineering |
-| Staff see the contact; the verified name stays in the identity store | Decided | The console shows what staff set and never the legal name | Product |
+| Staff see the contact; the verified name stays in the KYC service | Decided | The console shows what staff set and never the legal name | Product |
 | Counter intake | Decided | Every case is the collector's own account, opened in the shop if need be; the console has no intake, and no identity is keyed to a case | Product |
 | The shop is on the custody row | Decided | Vaulting names the shop the item is kept at, so the held-items list answers which vault holds what | Owner |
 | Valuation record | Deferred | Grading company, certificate number and grade ride the note until the inventory catalogue links; a second valuer, a condition report and counter photographs with it | Product |

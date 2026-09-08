@@ -103,7 +103,7 @@ The requirements are its; this page holds the decision behind them.
 - **Ceremony** — `packages/doc-sign` (refusals, seal, certificate, decline);
   the vault reaches it through `signing.signers` (`vault:read`) and
   `signing.mint` (`vault:operate`)
-- **Identity reuse** — `admin.reuseKyc` over the identity store's
+- **Identity reuse** — `admin.reuseKyc` over the KYC service's
   `latestForUser` and `bind`; the verifier's name rides `verifiedByName`
 - **Durability** — `sweeps/archive.ts` copies sealed bytes to a delete-less
   archive bucket with digest, `sweeps/integrity.ts` re-hashes 200 rows per

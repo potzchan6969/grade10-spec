@@ -8,7 +8,6 @@ groups:
     - grade10-site/auction
     - grade10-site/vault
     - grade10-site/appointment
-    - grade10-site/e-kyc
     - grade10-site/doc-sign
     - grade10-site/finance
     - grade10-site/site
