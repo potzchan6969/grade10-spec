@@ -10,6 +10,7 @@ import type {
   ListingLotMetaFact,
 } from "./listing-lot-meta";
 import { ListingLotMeta } from "./listing-lot-meta";
+import type { BidAuthorizationStatus } from "./listing-quick-maximum-bid-actions";
 import type {
   BidEnrollment,
   ListingAuctionBidView,
@@ -40,6 +41,8 @@ type ListingAuctionCardSidebarProps = {
   marketComps?: ListingLotMarketComps;
   locale: ShippedLocale;
   timeZone: string;
+  authorizationStatus?: BidAuthorizationStatus;
+  authorizationMessage?: string;
 };
 
 function ListingAuctionCardSidebar({
@@ -61,6 +64,8 @@ function ListingAuctionCardSidebar({
   marketComps,
   locale,
   timeZone,
+  authorizationStatus,
+  authorizationMessage,
 }: ListingAuctionCardSidebarProps) {
   return (
     <VStack
@@ -70,6 +75,8 @@ function ListingAuctionCardSidebar({
     >
       <VStack className="w-full" gap="sm">
         <ListingAuctionBidCard
+          authorizationMessage={authorizationMessage}
+          authorizationStatus={authorizationStatus}
           bidEnrollment={bidEnrollment}
           copy={copy}
           history={history}

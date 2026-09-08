@@ -8,17 +8,16 @@ import {
 
 const COPY = {
   paymentMethod: "Linked Card",
+  paymentMethodTooltip:
+    "We authorize a hold for your maximum each time you bid. You're only charged if you win.",
   changeCard: "Change",
   linkCardEmptyState: "Link a card to place a bid.",
-  getReadyToBid: "Authorize a card to bid",
+  getReadyToBid: "Link a card to bid",
   linkCardDescription:
-    "Link a card and authorize a hold for this lot. You are only charged if you win.",
+    "Link a card for bidding. When you set a maximum, we authorize a hold for that amount. You are only charged if you win.",
   ageAttestation: "I confirm I am 18 years of age or older.",
-  continue: "Authorize",
-  authorizing: "Authorizing",
-  authorizingCaption:
-    "Your card is being authorized. Keep this dialog open while Stripe completes the request.",
-  authorizationRefused: "Your card could not be authorized. Try another card.",
+  continue: "Link Card",
+  linking: "Linking",
   iframePlaceholder: "Stripe card link (iframe)",
   iframeLinkedCardPlaceholder:
     "Stripe card form (iframe) — linked card on file",
@@ -52,6 +51,9 @@ export const LinkedCardEditable: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("•••• 4242")).toBeVisible();
     expect(canvas.getByRole("button", { name: "Change" })).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: COPY.paymentMethodTooltip }),
+    ).toBeVisible();
   },
 };
 
@@ -85,13 +87,13 @@ export const SetupSheet: Story = {
   render: () => <EnrollmentSetupSheet copy={COPY} open requiresIframeLink />,
   play: async () => {
     const dialog = within(document.body).getByRole("dialog", {
-      name: "Authorize a card to bid",
+      name: "Link a card to bid",
     });
     expect(
       within(dialog).getByText("Stripe card link (iframe)"),
     ).toBeInTheDocument();
     expect(
-      within(dialog).getByRole("button", { name: "Authorize" }),
+      within(dialog).getByRole("button", { name: "Link Card" }),
     ).toBeDisabled();
   },
 };
@@ -108,7 +110,7 @@ export const SetupSheetFromChange: Story = {
   ),
   play: async () => {
     const dialog = within(document.body).getByRole("dialog", {
-      name: "Authorize a card to bid",
+      name: "Link a card to bid",
     });
     expect(
       within(dialog).getByText(
@@ -121,17 +123,17 @@ export const SetupSheetFromChange: Story = {
       }),
     ).toBeChecked();
     expect(
-      within(dialog).getByRole("button", { name: "Authorize" }),
+      within(dialog).getByRole("button", { name: "Link Card" }),
     ).toBeEnabled();
   },
 };
 
-export const SetupSheetAuthorizing: Story = {
+export const SetupSheetError: Story = {
   render: () => (
     <EnrollmentSetupSheet
-      authorizing
       copy={COPY}
       defaultAgeAttested
+      errorMessage="Could not link that card. Check the details and try again."
       iframeLinkedPayment={{ brand: "visa", maskedNumber: "•••• 4242" }}
       open
       requiresIframeLink
@@ -139,45 +141,43 @@ export const SetupSheetAuthorizing: Story = {
   ),
   play: async () => {
     const dialog = within(document.body).getByRole("dialog", {
-      name: "Authorize a card to bid",
+      name: "Link a card to bid",
     });
     expect(
-      within(dialog).getByRole("button", { name: "Authorizing" }),
-    ).toBeDisabled();
-    // The checkbox is a span carrying the role, so the disabled state it
-    // publishes is `aria-disabled`. `toBeDisabled` reads only the native
-    // attribute and would call every such control enabled.
+      within(dialog).getByText(
+        "Could not link that card. Check the details and try again.",
+      ),
+    ).toBeVisible();
+    expect(
+      within(dialog).getByRole("button", { name: "Link Card" }),
+    ).toBeEnabled();
+  },
+};
+
+export const SetupSheetLinking: Story = {
+  render: () => (
+    <EnrollmentSetupSheet
+      copy={COPY}
+      defaultAgeAttested
+      iframeLinkedPayment={{ brand: "visa", maskedNumber: "•••• 4242" }}
+      linking
+      open
+      requiresIframeLink
+    />
+  ),
+  play: async () => {
+    const dialog = within(document.body).getByRole("dialog", {
+      name: "Link a card to bid",
+    });
+    const continueButton = within(dialog).getByRole("button", {
+      name: "Linking",
+    });
+    expect(continueButton).toBeDisabled();
+    expect(continueButton).toHaveAttribute("aria-busy", "true");
     expect(
       within(dialog).getByRole("checkbox", {
         name: "I confirm I am 18 years of age or older.",
       }),
-    ).toHaveAttribute("aria-disabled", "true");
-    expect(within(dialog).getByRole("alert")).toHaveTextContent(
-      "Your card is being authorized. Keep this dialog open while Stripe completes the request.",
-    );
-  },
-};
-
-export const SetupSheetRefused: Story = {
-  render: () => (
-    <EnrollmentSetupSheet
-      authorizationRefused
-      copy={COPY}
-      defaultAgeAttested
-      iframeLinkedPayment={{ brand: "visa", maskedNumber: "•••• 4242" }}
-      open
-      requiresIframeLink
-    />
-  ),
-  play: async () => {
-    const dialog = within(document.body).getByRole("dialog", {
-      name: "Authorize a card to bid",
-    });
-    expect(within(dialog).getByRole("alert")).toHaveTextContent(
-      "Your card could not be authorized.",
-    );
-    expect(
-      within(dialog).getByRole("button", { name: "Authorize" }),
-    ).toBeEnabled();
+    ).toBeDisabled();
   },
 };

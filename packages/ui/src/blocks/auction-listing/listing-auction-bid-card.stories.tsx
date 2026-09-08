@@ -41,6 +41,7 @@ const COPY = {
   placeBidSection: "Place bid",
   placeBid: "Place Bid",
   signInToBid: "Sign In to Bid",
+  linkACardToBid: "Link a card to bid",
   confirmMaximum: "Confirm",
   raiseMaximum: "Raise",
   confirmMaximumTooltip:
@@ -169,14 +170,14 @@ const meta = {
     timeZone: { table: { disable: true } },
     bidEnrollment: {
       control: "select",
-      options: ["signed-out", "ready"],
+      options: ["signed-out", "needs-card", "ready"],
       description:
-        "signed-out replaces Set Maximum with Sign In to Bid and hides standing.",
+        "signed-out → Sign In to Bid; needs-card → disabled amount entry and Link a card to bid; ready → commit maximum.",
     },
     onPlaceBid: {
       control: false,
       description:
-        "Fires on Sign In to Bid when signed out. The consumer opens sign-in.",
+        "Fires on Sign In to Bid when signed out, or Link a card to bid when needs-card.",
     },
     onCommitMaximum: {
       control: false,

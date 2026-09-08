@@ -26,6 +26,7 @@ import {
 } from "./listing-auction-bid-fields";
 import { ListingAutoBidReveal } from "./listing-auto-bid-reveal";
 import { ListingBidHistoryList } from "./listing-bid-history-list";
+import type { BidAuthorizationStatus } from "./listing-quick-maximum-bid-actions";
 import type {
   BidEnrollment,
   ListingAuctionBidView,
@@ -55,6 +56,8 @@ type ListingAuctionBidCardProps = {
   onCompletePurchase?: () => void;
   onViewOrderDetails?: () => void;
   recentBidsAccessory?: ReactNode;
+  authorizationStatus?: BidAuthorizationStatus;
+  authorizationMessage?: string;
 };
 
 function RecentBidsScrollArea({
@@ -155,6 +158,8 @@ function ListingAuctionBidCard({
   onCompletePurchase,
   onViewOrderDetails,
   recentBidsAccessory,
+  authorizationStatus,
+  authorizationMessage,
 }: ListingAuctionBidCardProps) {
   const hasFooter = view.showBidActions;
   const showRecentBids = history.length > 0;
@@ -258,6 +263,8 @@ function ListingAuctionBidCard({
         <div className="px-4 py-4">
           <VStack className="w-full" gap="md">
             <BidActions
+              authorizationMessage={authorizationMessage}
+              authorizationStatus={authorizationStatus}
               bidEnrollment={bidEnrollment}
               copy={copy}
               locale={locale}

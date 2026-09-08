@@ -69,7 +69,7 @@ export type ListingAuctionBidView = {
 };
 
 /** How far the collector has progressed through bid enrollment on this listing. */
-export type BidEnrollment = "signed-out" | "ready";
+export type BidEnrollment = "signed-out" | "needs-card" | "ready";
 
 export type ListingLotMetaBadge = {
   label: string;
