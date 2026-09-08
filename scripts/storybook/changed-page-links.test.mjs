@@ -278,7 +278,7 @@ test("groups current affected page states by story file", () => {
       },
       {
         text: {
-          text: `- Auction Listing\n${"\u00a0".repeat(4)}- Bid Panel > Flows — 1 story ❌\n- Pages\n${"\u00a0".repeat(4)}- <https://storybook.grade10-stg.com/?path=/story/pages-store--default|Store> — 2 stories`,
+          text: `- Auction Listing\n${"\u00a0".repeat(4)}- Bid Panel > Flows — 1 story ❌\n- Pages\n${"\u00a0".repeat(4)}- Store — <https://storybook.grade10-stg.com/?path=/story/pages-store--default|2 stories>`,
           type: "mrkdwn",
         },
         type: "section",
@@ -305,7 +305,7 @@ test("omits merge metadata when it is unavailable", () => {
 
   assert.deepEqual(payload.blocks.at(-1), {
     text: {
-      text: `- Pages\n${"\u00a0".repeat(4)}- <https://storybook.grade10-stg.com/?path=/story/pages-store--default|Store> — 2 stories`,
+      text: `- Pages\n${"\u00a0".repeat(4)}- Store — <https://storybook.grade10-stg.com/?path=/story/pages-store--default|2 stories>`,
       type: "mrkdwn",
     },
     type: "section",
@@ -328,7 +328,33 @@ test("links added workbench stories outside Pages/", () => {
 
   assert.deepEqual(payload.blocks.at(-1), {
     text: {
-      text: `- Auction Listing\n${"\u00a0".repeat(4)}- <https://storybook.grade10-stg.com/?path=/story/blocks-auction-listing-card--default|Bid Card> — 1 story 🆕\n${"\u00a0".repeat(4)}- <https://storybook.grade10-stg.com/?path=/story/auction-listing-bid-panel--default|Bid Panel> — 1 story 🆕`,
+      text: `- Auction Listing\n${"\u00a0".repeat(4)}- Bid Card — <https://storybook.grade10-stg.com/?path=/story/blocks-auction-listing-card--default|1 story> 🆕\n${"\u00a0".repeat(4)}- Bid Panel — <https://storybook.grade10-stg.com/?path=/story/auction-listing-bid-panel--default|1 story> 🆕`,
+      type: "mrkdwn",
+    },
+    type: "section",
+  });
+});
+
+test("links the story count and keeps hierarchy separators outside the link", () => {
+  const payload = slackPayload({
+    affectedPages: ["apps/preview/src/auction-listing/bid-panel.stories.tsx"],
+    index: {
+      entries: {
+        "auction-listing-bid-panel--dialogs": {
+          id: "auction-listing-bid-panel--dialogs",
+          importPath: "./src/auction-listing/bid-panel.stories.tsx",
+          name: "Dialogs",
+          title: "Auction Listing/Bid Panel/Dialogs",
+          type: "story",
+        },
+      },
+    },
+    storybookUrl: "https://storybook.grade10-stg.com",
+  });
+
+  assert.deepEqual(payload.blocks.at(-1), {
+    text: {
+      text: `- Auction Listing\n${"\u00a0".repeat(4)}- Bid Panel > Dialogs — <https://storybook.grade10-stg.com/?path=/story/auction-listing-bid-panel--dialogs|1 story>`,
       type: "mrkdwn",
     },
     type: "section",

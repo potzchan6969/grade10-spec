@@ -107,7 +107,7 @@ jobs:
         if: steps.changed-pages.outputs.has-pages == 'true'
         uses: slackapi/slack-github-action@v1.26.0
         with:
-          channel-id: ${{ vars.STORYBOOK_SLACK_CHANNEL_ID }}
+          channel-id: ${{ vars.SLACK_CHANNEL_ID }}
           payload: ${{ steps.changed-pages.outputs.payload }}
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
