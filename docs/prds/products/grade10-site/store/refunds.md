@@ -19,30 +19,34 @@ follow from there.
   1. **Earning** — clawed back for the goods that came back, never for the
      delivery, and never for goods that earned nothing
   2. **The tender** — all the goods back, or none of it. One discount the shop
-     spread across every line it sold, so no part of the sale carried it. The
-     goods decide and the money never does: money closes on goodwill, on an
-     amount typed beside a delivery, and on a refund that overran a charge
-     recorded too low, and reading any of those as the whole sale hands points
-     back on goods the member still holds. A member the threshold leaves short
-     — everything that earned back with a gift card kept, or every penny back
-     with the goods still short — is counted as
-     `store.points_tender.return_held`, and an operator gives the points back
-     by hand
+     spread across every line it sold, so no part of the sale carried it. Only
+     goods a refund states count towards it, so a sale returned as a typed
+     amount holds its tender whichever order its parts are rung in. A member
+     the threshold leaves short — everything that earned back, a gift card
+     kept — is counted as `store.points_tender.return_held`, and an operator
+     gives the points back by hand
 - **What it is priced on** — what the refund names came back, read against what
   the order earned on. A refund naming only the delivery moved no goods; one
   naming nothing at all gets the goods' share of its amount instead, counted as
   `commerce.order.refund_by_share`
 - **Money cannot come back that never went out** — the money refunded stops at
   the charge and the claw-back at what the order earned on, and the excess is
-  said out loud. The goods total the tender is measured against carries no
-  ceiling of its own: more back than the order sold is a sale edited after it
-  was paid, and it is the only signal that says so
+  counted (`commerce.order.refund_over_ceiling`). The goods totals carry no
+  ceiling of their own: more back than the sale sold is a sale edited after it
+  was paid, so the evidence stays in the total and is counted instead of being
+  clipped away — tagged `basis:goods`, whichever arm priced the return.
+  `commerce.order.amount_drift` says the same about the charge
+- **Every penny back over goods still held is reported** — goodwill, an amount
+  typed beside a delivery, or a refund that overran a charge recorded too low,
+  counted as `commerce.order.charge_closed_short` on any sale, tendered or not
 
-❓ **A mixed sale's return is priced by share, not by line** — an order that sold
-a gift card or a grading fee beside graded cards prices a return as a fraction
-of both, so a return of the fee alone claws back earning nobody earned. Counted
-as `commerce.order.refund_estimated` so the population is findable. Pricing a
-refund against the lines the order earned on is what retires it.
+❓ **A return the refund names no lines for is priced by share** — an operator's
+typed amount, a refund the store asked for itself, a sale whose shop named no
+line handles, one naming a line the sale never settled, or one settled before
+the record existed. The share prices a return of the fee alone as a fraction of
+everything the sale sold, so it claws back earning nobody earned. Counted as
+`commerce.order.refund_by_share`, and the ones the share cannot price either
+way as `commerce.order.refund_estimated`.
 
 ❓ **A shop that states no goods split** measures a tender's return against the
 whole charge, shipping and tax included, so a return of the goods alone never
@@ -58,9 +62,11 @@ member keeps the earning either way.
 typed amount, so it is priced as a share and claws back goods that never came
 back. Unreachable from the payload; the reach is inside
 `commerce.order.refund_by_share`. It is also why a sale rung as a typed amount
-and a ticked delivery leaves the goods short of a sale that came back whole,
-and why which part lands last changes the answer — the return is reported,
-never estimated into a tender.
+and a ticked delivery leaves the goods short of a sale that came back whole.
+The tender is held either way round; what moves with the order the parts are
+rung in is the earn the share claws back, so `commerce.order.charge_closed_short`
+reports such a sale on both permutations and `store.points_tender.return_held`
+on one.
 
 ❓ **A physical card coming back** — an operator's move with a record of its own.
 `TBC`

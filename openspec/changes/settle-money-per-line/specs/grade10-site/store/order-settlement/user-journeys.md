@@ -23,6 +23,7 @@
 - `grade10-site-store-order-settlement-SC-12` — Every good back returns the whole tender
 - `grade10-site-store-order-settlement-SC-13` — A refund of the delivery alone claws back nothing
 - `grade10-site-store-order-settlement-SC-14` — A sale paid back in full whose goods stop short is reported
+- `grade10-site-store-order-settlement-SC-15` — A sale returned as a typed amount holds its tender
 
 ### grade10-site-store-order-settlement-US-02: Shopkeeper takes a coupon's cut off before tender
 

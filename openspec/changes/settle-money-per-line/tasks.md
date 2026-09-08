@@ -38,7 +38,7 @@ welded product coupon and a manual staff discount, then refund one line of it.
 
 - [x] 5.1 A settled order records one `order_lines` row per line the shop sold, each with a distinct `line_ref` — an empty table means the webhook stated no `line_items[].id`, and the pro-rated share is silently answering everything
 - [x] 5.2 `order_discounts` holds a row titled `Points` whose `amount_minor` is what the shop took off for the tender, not what was promised
-- [ ] 5.3 The welded coupon's row carries the title the till applied it under — the same string as `coupons.title`. A different one is the risk `design.md` names, and it costs corroboration rather than spending the coupon wrongly
+- [ ] 5.3 The welded coupon's row carries the title the till applied it under — the same string as `coupons.title`. A different one costs corroboration rather than spending the coupon wrongly: the variant match answers instead
 - [x] 5.4 The staff discount appears under its own title and is neither captured as points nor counted in `store.points_tender.unexplained`
 - [x] 5.5 Refunding one line reverses what that line earned, and `commerce.order.refund_estimated` does not fire — if it does, the refund body named no `line_item_id`
 - [ ] 5.6 The sweep arm agrees with the webhook arm on the same order: same lines, same allocations, same claw-back
@@ -81,5 +81,4 @@ change, so a mismatch is a lost improvement rather than a regression.
 - **A delivery an operator types the amount for is unreachable.** It states
   the same body as any other typed amount, so it is priced as a share and
   claws back goods that never came back — counted as
-  `commerce.order.refund_by_share`, which is the population the estimate rate
-  is read against.
+  `commerce.order.refund_by_share`, which is where that case is counted.
