@@ -102,3 +102,6 @@ jobs:
       # committing its own fixes first.
       - name: Check manual
         run: pnpm run check:manual
+
+      - name: Check diagrams
+        run: pnpm run diagrams:check

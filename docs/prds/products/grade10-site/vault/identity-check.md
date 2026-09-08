@@ -50,6 +50,8 @@ withdrawn.
 
 ## Identity states
 
+::image{src="assets/diagrams/vault-identity-states.svg" alt="How a case moves between None, Out, Stalled, Verified, Lapsed and Refused"}
+
 | Shown | Meaning |
 | --- | --- |
 | Verified | An identity is bound — who checked it, and when |

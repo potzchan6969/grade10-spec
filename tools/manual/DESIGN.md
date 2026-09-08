@@ -105,7 +105,7 @@ start at `##`; raw HTML is never rendered). Directives sit at column 0:
 | `children` | `::children` | cards for the child pages of this directory, from their frontmatter |
 | `callout` | `:::callout{kind="note"}` … `:::` | kinds: `note`, `decision`, `warning`; a `warning` shows a signature — `author`/`date` when written in, else who last changed it and when, derived from git at build |
 | `detail` | `:::detail{for="engineer" title="…"}` … `:::` | collapsed-but-present depth for one audience; searchable, deep-linkable, never hidden from the DOM |
-| `flow` | `:::flow{title="Checkout" diagram="assets/…"}` … `:::` | steps read top to bottom, all open; `##` starts a step, `#` groups the steps under it into a phase, and numbering runs straight through; optional SVG whose `data-step` elements light while their step is pointed at |
+| `flow` | `:::flow{title="Checkout" diagram="assets/…"}` … `:::` | steps read top to bottom, all open; `##` starts a step, `#` groups the steps under it into a phase, and numbering runs straight through; optional SVG drawn at one and a half times its own size in a strip that pans under the mouse or a swipe, never a scrollbar, holding still while the mouse rests on the box at either end; with one on screen the steps fold behind their count, a part under the mouse lights and tells its step on a card, a click on one opens the list at that step, and a deep link to a step opens it too; a pointed-at row lights its `data-step` elements and the strip pans to show them |
 
 Unknown directives are a parse error, not a silent pass-through.
 

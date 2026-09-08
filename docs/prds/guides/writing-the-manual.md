@@ -110,6 +110,23 @@ warning. `alt` on an image is required:
 ::image{src="assets/tier-ladder.png" alt="The four tiers and their thresholds"}
 ```
 
+A chart is an SVG the build renders from a source under `docs/prds/diagrams/`
+— archify's JSON, named `<slug>.<workflow|lifecycle|sequence|dataflow|architecture>.json`
+— into `assets/diagrams/<slug>.svg` with `pnpm diagrams`, and CI refuses a
+chart that is stale against its source. A flow names its chart and lights, at
+each step, every node whose id is that step's slug (an id's tail after `_`
+lets several nodes share one) and every edge pointing at such a node; an
+`::image` shows a chart anywhere else, in the page's own theme:
+
+```md
+:::flow{title="The hosted check" diagram="assets/diagrams/kyc-hosted-check.svg"}
+## The check is raised
+Lit while the reader is here, with the node `the-check-is-raised`.
+:::
+
+::image{src="assets/diagrams/vault-identity-states.svg" alt="How a case moves between its identity states"}
+```
+
 A `::figma` card is a placeholder for a component still being built. Once a
 `::story` card exists for it, drop the `::figma` card for that same
 component — Storybook is the live reference from then on:

@@ -154,27 +154,24 @@ days before a vault visit. A verification provider hosts the check and decides
 it; Grade10 renders none of it, asks for nothing the provider collects, and
 reads the verdict when it arrives.
 
-:::flow{title="The hosted check"}
+:::flow{title="The hosted check" diagram="assets/diagrams/kyc-hosted-check.svg"}
 ## The check is raised
-From the account card, or by the link a vault case sends when a visit is booked,
-at the email address the case already holds. That link is the whole credential:
-the collector signs in to nothing, and a case may exist before its collector
-ever has an account.
+From the account card, or by the link a vault case emails when a visit is
+booked. The link is the whole credential: the collector signs in to nothing,
+and a case may exist before its collector has an account.
 ## The provider runs the check
-The link opens the provider's own ceremony: photograph the document, photograph
-your face, done. It is resumable, so a collector who stops halfway comes back to
-where they were rather than to the beginning.
+Photograph the document, photograph your face, done — resumable, so a collector
+who stops halfway comes back to where they were.
 ## The verdict comes back on its own
-Minutes later, usually. Nobody waits for it — not the collector, not the case,
-not an operator.
+Minutes later, usually. Nobody waits for it.
 ## Grade10 judges it again
-Age and document validity are refused here, on the dates the provider returns,
-not taken on the provider's word. One image of the document is pulled into
-Grade10's own bucket before the identity is readable; the face capture stays
-with the provider, and what the record keeps of it is the finding.
+Age and document validity are refused here, on the dates the provider returns.
+One image of the document is pulled into Grade10's own bucket; the face
+capture stays with the provider, and what the record keeps of it is the
+finding.
 ## The identity is bound
-The verified identity lands on whatever raised the check — the account, or the
-vault case the link named, which settles its own paperwork
+To whatever raised the check — the account, or the vault case the link named,
+which settles its own paperwork
 ([Identity Check](/p/grade10-site/vault/identity-check)).
 :::
 

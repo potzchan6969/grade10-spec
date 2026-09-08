@@ -130,3 +130,20 @@ export function flowSteps(phases: FlowPhase[]): FlowStep[] {
 export function stepTokens(step: FlowStep): Set<string> {
   return new Set([String(step.number), step.id, slugify(step.title)]);
 }
+
+/** The tokens a diagram element claims in its `data-step` attribute. */
+export const stepClaims = (value: string | null): string[] =>
+  (value ?? "").split(/[\s,]+/).filter(Boolean);
+
+/** The first step any of these claims names. */
+export function claimedStep(
+  steps: FlowStep[],
+  claims: string[],
+): FlowStep | null {
+  return (
+    steps.find((step) => {
+      const tokens = stepTokens(step);
+      return claims.some((claim) => tokens.has(claim));
+    }) ?? null
+  );
+}

@@ -1,0 +1,156 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Pricing an order",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "shop",
+      "label": "Shop"
+    },
+    {
+      "id": "store",
+      "label": "Store"
+    },
+    {
+      "id": "loyalty",
+      "label": "Loyalty"
+    }
+  ],
+  "mainPath": [
+    "shop-order-paid",
+    "store-which-lines-earn",
+    "store-earning-amount-fixed-on-the-order",
+    "loyalty-points-worked-out",
+    "loyalty-points-recorded"
+  ],
+  "nodes": [
+    {
+      "id": "shop-order-paid",
+      "lane": "shop",
+      "col": 0,
+      "type": "external",
+      "label": "Order paid",
+      "sublabel": "lines, discounts, total",
+      "width": 132
+    },
+    {
+      "id": "store-which-lines-earn",
+      "lane": "store",
+      "col": 1,
+      "type": "security",
+      "label": "Which lines earn",
+      "sublabel": "gift card, fees left out",
+      "width": 132
+    },
+    {
+      "id": "store-fallback-when-a-line-cannot-answer",
+      "lane": "store",
+      "col": 2,
+      "type": "backend",
+      "label": "Store item prices",
+      "sublabel": "discount shared by line",
+      "width": 132
+    },
+    {
+      "id": "store-fallback-when-a-line-cannot-answer_stated",
+      "lane": "shop",
+      "col": 2,
+      "type": "external",
+      "label": "Shop's goods total",
+      "sublabel": "when nothing itemised",
+      "width": 132
+    },
+    {
+      "id": "store-fallback-when-a-line-cannot-answer_waits",
+      "lane": "loyalty",
+      "col": 2,
+      "type": "messagebus",
+      "label": "Points wait",
+      "sublabel": "a line not yet classified",
+      "width": 132
+    },
+    {
+      "id": "store-earning-amount-fixed-on-the-order",
+      "lane": "store",
+      "col": 3,
+      "type": "database",
+      "label": "Amount fixed",
+      "sublabel": "on the order, once",
+      "width": 132
+    },
+    {
+      "id": "loyalty-points-worked-out",
+      "lane": "loyalty",
+      "col": 4,
+      "type": "backend",
+      "label": "Points worked out",
+      "sublabel": "rounded down, then tier rate",
+      "width": 132
+    },
+    {
+      "id": "loyalty-points-recorded",
+      "lane": "loyalty",
+      "col": 5,
+      "type": "database",
+      "label": "Points recorded",
+      "sublabel": "dated, never edited",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "from": "shop-order-paid",
+      "to": "store-which-lines-earn"
+    },
+    {
+      "from": "store-which-lines-earn",
+      "to": "store-earning-amount-fixed-on-the-order",
+      "label": "all lines priced",
+      "variant": "emphasis"
+    },
+    {
+      "from": "store-which-lines-earn",
+      "to": "store-fallback-when-a-line-cannot-answer",
+      "label": "a line missing",
+      "variant": "dashed"
+    },
+    {
+      "from": "store-fallback-when-a-line-cannot-answer",
+      "to": "store-fallback-when-a-line-cannot-answer_stated",
+      "label": "no store prices",
+      "variant": "dashed"
+    },
+    {
+      "from": "store-fallback-when-a-line-cannot-answer",
+      "to": "store-earning-amount-fixed-on-the-order"
+    },
+    {
+      "from": "store-fallback-when-a-line-cannot-answer_stated",
+      "to": "store-earning-amount-fixed-on-the-order"
+    },
+    {
+      "from": "store-which-lines-earn",
+      "to": "store-fallback-when-a-line-cannot-answer_waits",
+      "label": "unclassified, no prices",
+      "variant": "dashed"
+    },
+    {
+      "from": "store-earning-amount-fixed-on-the-order",
+      "to": "loyalty-points-worked-out",
+      "label": "order event",
+      "variant": "emphasis"
+    },
+    {
+      "from": "loyalty-points-worked-out",
+      "to": "loyalty-points-recorded",
+      "variant": "emphasis"
+    }
+  ]
+}

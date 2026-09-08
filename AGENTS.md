@@ -98,6 +98,7 @@ Run the appropriate checks before handoff:
 - `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
 - `pnpm run tcs:validate` after a `test-cases.md` changes; CI runs it on every push.
 - `pnpm run design-sync:check` after a design-system primitive changes.
+- `pnpm run diagrams` after a chart source under `docs/prds/diagrams/` changes; commit the rendered SVG, which `pnpm run diagrams:check` holds to its source in CI.
 - `pnpm run tokens:build` after `tokens.json` or `tokens.config.json` changes; commit the regenerated theme CSS.
 - `pnpm run lint` for repository formatting and static checks.
 - `pnpm run typecheck` after any TypeScript change.
