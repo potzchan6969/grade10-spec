@@ -161,6 +161,11 @@ actor the spec already knows and scenarios that already exist.
   preview fetcher, a provider calling back. Never software this repository
   ships: a consuming application, a service, a caller, a package is the
   system's side of the story, and the journey belongs to whoever operates it.
+- **Whoever builds the product is not walking it.** An engineer wiring a
+  call, a developer seeding fixtures, a reviewer reading a contract — that is
+  a test or a working step. A capability only they reach is unwalked and says
+  so: an internal reference, a dev-build-only surface, a fixture panel. Its
+  scenarios stand on their own.
 - **A single scenario needs no journey.** The exemption above is
   capability-wide, but a walked capability still issues some no story reaches
   — a package's export list, a copy shape, a defaulting rule no surface shows.
