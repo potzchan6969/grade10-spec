@@ -39,8 +39,10 @@ Needs group 1's keys and group 2's reads landed.
 - [ ] 3.6 Choose the collection read only for an address naming a collection and nothing else, so *An address opens the listing narrowed* (`SC-03`), *No collection named* (`SC-04`), *A collection the catalogue has nothing for* (`SC-05`) and *An address carrying both* (`SC-09`) pass
 - [ ] 3.7 Name the collection in force among the applied narrowings, dismissible, and drop it whenever a facet, free text or an order is applied, so *Narrowing in the page is linkable* (`SC-06`), *Back undoes a narrowing* (`SC-07`) and *The collection in force can be dismissed* (`SC-08`) pass
 - [ ] 3.8 Cap the worlds at five with the invitation that opens the group, and offer the collectible types whole, so *A long facet group is capped* (`SC-16`) passes
-- [ ] 3.9 Name the three utility links where the site's other chrome links are named, each with no destination yet, and hand the panel only those the site answers — none today, so no row renders and it fills itself when a page lands behind one
+- [ ] 3.9 Name the three utility links where the site's other chrome links are named, each with no destination yet, and draw the row against the placeholder the site already gives a link it owes, so the links become real addresses as the pages land
 - [ ] 3.10 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [ ] 3.11 Open the body on the browse block, as the frame does, and hold the listing's served copy to the floor every public document is held to — the surface names itself in the document's head
+- [ ] 3.12 Hold the panel and the grid through a narrowing rather than emptying both on every tick, and keep every group the catalogue names once a query is in force, so *A narrowing that starves the catalogue* (`SC-17`) passes
 
 ## 4. The manual (grade10-spec) (owner: @sean)
 
