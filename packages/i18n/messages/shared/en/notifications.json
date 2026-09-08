@@ -14,7 +14,7 @@
   "push": {
     "outbid": "Someone bid {amount}. Bid again to stay in.",
     "nowTop": "Your {amount} is the top bid.",
-    "holdFailed": "Your bid did not go through — the card was not authorized.",
+    "holdFailed": "Your bid did not go through. The card was not authorized.",
     "lostAtClose": "This lot closed without you.",
     "listingCanceled": "This lot was withdrawn.",
     "winner": "You won this lot.",

@@ -14,7 +14,7 @@
   "push": {
     "outbid": "有人出價 {amount}，再出價才能保住領先。",
     "nowTop": "你的 {amount} 目前是最高出價。",
-    "holdFailed": "你的出價未能成立 — 信用卡未獲授權。",
+    "holdFailed": "你的出價未能成立。信用卡未獲授權。",
     "lostAtClose": "此拍品已結束，你未有得標。",
     "listingCanceled": "此拍品已撤回。",
     "winner": "你已得標。",
