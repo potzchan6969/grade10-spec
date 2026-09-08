@@ -1,649 +1,255 @@
 {
-  "generatedAt": "2026-08-30T09:12:00.000Z",
-  "storeHead": "5f3a1c9e7b204d68af1c3e5079b2d4681ac9e037",
+  "generatedAt": "2026-01-01T00:00:00.000Z",
+  "storeHead": "",
   "config": {
-    "storybookBase": "https://storybook.grade10-stg.com",
+    "storybookBase": "https://storybook.example",
     "groups": [
       {
-        "title": "Customer products",
-        "products": ["grade10-store", "grade10-auction", "vault"]
+        "title": "Products",
+        "products": [
+          "demo-product",
+          "page-only"
+        ]
       },
       {
         "title": "Platform",
-        "products": ["shared-auth", "shared-ui"]
+        "products": [
+          "demo-shared"
+        ]
       }
     ],
-    "platform": ["money-amounts", "dates-and-times"],
-    "guides": ["start-here", "writing-a-page"]
+    "platform": [
+      {
+        "title": "Conventions",
+        "topics": [
+          "demo-topic"
+        ]
+      }
+    ],
+    "guides": [
+      "getting-started"
+    ]
   },
   "taxonomy": {
     "products": [
-      "grade10-store",
-      "grade10-auction",
-      "vault",
-      "shared-auth",
-      "shared-ui"
+      "demo-product",
+      "page-only",
+      "demo-shared"
     ],
-    "topics": ["money-amounts", "dates-and-times"]
+    "topics": [
+      "demo-topic"
+    ]
   },
   "manualDir": "docs/prds",
   "pages": [
     {
       "path": "docs/prds/index.md",
-      "source": "---\ntitle: Grade10\nsummary: One platform behind every storefront, read in one place.\n---\n\nGrade10 is one platform wearing several faces. A store, an auction house, a\nvault for what a member owns, and the brands that assemble from the same parts\nall sit on shared sign-in, shared money handling, and one design system.\n\nThis manual explains those parts to a person rather than to a compiler.\nRequirements come from the specs, progress from the task lists, visuals from\nFigma and the deployed Storybook. The manual points at them and never restates\nthem, so a page cannot quietly fall out of date with what the platform does.\n\n:::callout{kind=\"note\"}\nNew here, read [Start here](guides/start-here.md) first. It names the five\nminutes each role needs before the rest of this site makes sense.\n:::\n",
-      "lastCommit": {
-        "sha": "9f2c1ab7d4e5c6b8a90123456789abcdef012345",
-        "date": "2026-08-27T10:04:00.000Z"
-      }
+      "source": "---\ntitle: Demo manual\nsummary: A fixture store, small enough to assert on.\n---\n\nThe home page of a fixture manual.\n\n::children\n"
     },
     {
-      "path": "docs/prds/products/grade10-store/index.md",
-      "source": "---\ntitle: Store\nsummary: The storefront a shopper buys from, and the programme that brings them back.\norder: 1\n---\n\nThe store is the front door. A shopper browses a catalogue, fills a cart,\npays, and is rewarded for coming back. Everything below that sentence is\ndetail, and every piece of detail lives on its own page.\n\n## What the store owns\n\nThe store owns the catalogue, the cart, the checkout, and the loyalty\nprogramme. It does not own identity, money formatting, or the design system —\nthose are platform concerns, and the store reads them the same way every other\nproduct does.\n\n## What it does not own\n\nPayment capture belongs to the payment provider, and the store never sees a\ncard number. Sign-in belongs to [shared sign-in](../shared-auth/index.md), and\nthe store only ever receives a user identity that has already been proved.\n",
-      "lastCommit": {
-        "sha": "3b7e88c1d9a04f2e5b6c7d8e9f0a1b2c3d4e5f60",
-        "date": "2026-08-25T16:20:00.000Z"
-      }
-    },
-    {
-      "path": "docs/prds/products/grade10-store/loyalty.md",
-      "source": "---\ntitle: Loyalty\nsummary: Points a shopper earns on what they spend, and the tiers those points move them through.\nspec: grade10-store/loyalty\norder: 1\n---\n\nA member earns points on qualifying spend, the points expire on a schedule the\nprogramme sets, and what a member has earned over a window decides their tier.\nTier decides the rate they earn at next. That loop is the whole programme.\n\n## How a point comes to exist\n\nA settled sale reaches the programme exactly once, carrying a money amount and\nthe identity that paid it. The amount is priced into points at the programme's\nrate multiplied by the member's tier multiplier, rounded once, and written to\nthe ledger as a dated credit. Nothing is ever edited afterwards — a balance is\na question asked of the ledger, never a number kept beside it.\n\n### Why the ledger is never edited\n\nAn edited row is a row nobody can audit. A claw-back is a new debit that names\nthe credit it reverses, so the history of a member's balance reads forwards and\nreconciles against the money that caused it.\n\nThe programme's own money rules follow the platform's\n[money amounts](../../platform/money-amounts.md) topic; the product decision\nbehind the rates lives in the\n[loyalty programme PRD](../../../docs/prds/loyalty/programme.md), and the\nreview that signed it off is in\n[spec review](../../../docs/governance/spec-review.md). An older draft at\n[tier maths](./tier-maths.md) is gone and this link proves it.\n\n## The ladder Grade10 deploys\n\n| Tier | Earned in 12 months | Multiplier | Expiry | Invitation only | Reward menu | Support queue |\n| --- | --- | --- | --- | --- | --- | --- |\n| Bronze | 0 | 1.0x | 12 months | no | standard | standard |\n| Silver | 5,000 | 1.25x | 12 months | no | standard | standard |\n| Gold | 20,000 | 1.5x | 18 months | no | extended | priority |\n| Onyx | not earnable | 2.0x | 24 months | yes | full | concierge |\n\n::spec{id=\"grade10-store/loyalty\"}\n\n:::detail{title=\"How a balance is derived at an instant\" for=\"engineer\"}\nA balance is the sum of credits that are unspent and unexpired at the instant\nasked about. There is no sweep job: expiry is a comparison against the credit's\nown window, evaluated at read time, so a balance read a millisecond after a\ncredit expires is already correct.\n\nDebits draw on credits oldest-first, and each debit records which credits it\ndrew from. That record is what makes a reversal able to return each credit\ncarrying its original expiry rather than a fresh one.\n:::\n\n::journeys{id=\"grade10-store/loyalty\"}\n\n::cases{id=\"grade10-store/loyalty\"}\n\nThe one scenario people ask about most often, on its own:\n\n::spec{id=\"grade10-store/loyalty\" scenario=\"grade10-site-loyalty-programme-SC-04\"}\n\nCheckout is the surface points are spent on, so what is moving there matters\nhere too:\n\n::changes{spec=\"grade10-store/checkout\"}\n\n::image{src=\"assets/loyalty-tiers.png\" alt=\"The four tiers as a ladder, with the earning threshold and multiplier of each\" caption=\"The ladder Grade10 deploys. Onyx sits outside the earning path on purpose.\"}\n",
-      "lastCommit": {
-        "sha": "c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f7",
-        "date": "2026-08-29T08:45:00.000Z"
-      }
-    },
-    {
-      "path": "docs/prds/products/grade10-store/checkout.md",
-      "source": "---\ntitle: Checkout\nsummary: Pricing a cart, taking the money, and turning both into an order.\nspec: grade10-store/checkout\norder: 2\n---\n\nCheckout is the shortest path between a filled cart and a settled order, and\nthe place where the most can go wrong. It is written as a sequence because it\nruns as one: each step either completes or the whole attempt is abandoned.\n\n:::flow{title=\"Placing an order\" diagram=\"assets/checkout-flow.svg\"}\n## Cart is priced\n\nThe cart is priced in one pass: line prices, then promotions, then the\nmember's point balance if they choose to spend it, then tax and shipping. The\nresult is a quote with an expiry, and nothing downstream re-prices.\n\n::spec{id=\"grade10-store/checkout\" requirement=\"A quote is priced once and expires\"}\n\n## Payment is authorised\n\nThe quote is handed to the payment provider with an idempotency key derived\nfrom the quote id. An authorisation holds the money without capturing it, so a\nfailure after this point costs the shopper nothing.\n\n## Order is settled\n\nCapture and order creation happen together. The order is the receipt: it\ncarries the quote it was priced from, the authorisation it was paid by, and the\npoints it earned. A repeated settle answers with the same order.\n:::\n\n:::callout{kind=\"decision\"}\nAuthorise then capture, rather than a single charge. A single charge is one\nfewer call, but it makes every failure after payment a refund instead of a\nreleased hold — and a refund is visible on the shopper's statement.\n:::\n\n:::callout{kind=\"warning\"}\nA quote that has expired is never silently re-priced. The shopper is shown the\nnew price and asked again. Re-pricing behind their back is how a checkout\ncharges more than the screen said.\n:::\n\n::figma{url=\"https://www.figma.com/design/9aXqZ2mQ/Grade10-Store?node-id=412-1180\" title=\"Checkout, mobile\"}\n\n::story{id=\"blocks-store-cart--default\" title=\"Cart block, default state\" height=\"420\"}\n\n::spec{id=\"grade10-store/checkout\"}\n\n::cases{id=\"grade10-store/checkout\"}\n",
-      "lastCommit": {
-        "sha": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
-        "date": "2026-08-26T11:02:00.000Z"
-      }
-    },
-    {
-      "path": "docs/prds/products/grade10-auction/index.md",
-      "source": "---\ntitle: Auction\nsummary: Timed sales where the price is set by the people who want the thing.\norder: 2\n---\n\nThe auction house runs timed sales. A lot opens, bids arrive, the clock runs\ndown, and the highest bid at the close wins. Everything else — extensions,\nproxy bidding, payment holds — exists to make that sentence survive contact\nwith real bidders.\n\n::children\n",
-      "lastCommit": {
-        "sha": "dd11ee22ff33445566778899aabbccddeeff0011",
-        "date": "2026-08-18T09:30:00.000Z"
-      }
-    },
-    {
-      "path": "docs/prds/products/grade10-auction/bidding.md",
-      "source": "---\ntitle: Bidding\nsummary: What a bid is, when it counts, and what stops a sniper from deciding every sale.\nspec: grade10-auction/bidding\norder: 1\n---\n\nA bid is an irrevocable offer at a price, timestamped by the server and never\nby the bidder. Two bids at the same price are ordered by arrival, and the\nearlier one wins — which is why the server clock is the only clock that counts.\n\n::spec{id=\"grade10-auction/bidding\"}\n\n::journeys{id=\"grade10-auction/bidding\"}\n",
-      "lastCommit": {
-        "sha": "77aa88bb99cc00dd11ee22ff33445566778899aa",
-        "date": "2026-08-19T14:12:00.000Z"
-      }
-    },
-    {
-      "path": "docs/prds/products/vault/secrets.md",
-      "source": "---\ntitle: Stored items\nsummary: What a member keeps in the vault, and who can ever see it.\norder: 1\n---\n\nThe vault holds what a member has bought and chosen not to take delivery of.\nIt is a custody record, not a wallet: every item in it has a real thing behind\nit, and the record names where that thing physically is.\n\nNothing here has a spec yet. The product is listed in the manual so the shape\nof it is written down before the requirements are.\n",
-      "lastCommit": {
-        "sha": "beef00112233445566778899aabbccddeeff0011",
-        "date": "2026-08-11T13:00:00.000Z"
-      }
-    },
-    {
-      "path": "docs/prds/products/shared-auth/index.md",
-      "source": "---\ntitle: Sign-in\nsummary: One identity across every storefront, proved once.\norder: 1\n---\n\nEvery product reads identity from the same place and none of them store a\npassword. A member signs in once and is known everywhere the brand reaches.\n\n::children\n",
-      "lastCommit": {
-        "sha": "0011223344556677889900aabbccddeeff001122",
-        "date": "2026-08-20T07:41:00.000Z"
-      }
-    },
-    {
-      "path": "docs/prds/products/shared-auth/sessions.md",
-      "source": "---\ntitle: Sessions\nsummary: How long a proved identity stays proved, and what ends it early.\nspec: shared-auth/sessions\norder: 1\n---\n\nA session is a claim that an identity was proved at a moment, carried by a\ntoken with an expiry. It is renewable while it is alive and worthless once it\nis not.\n\n::spec{id=\"shared-auth/sessions\"}\n",
-      "lastCommit": {
-        "sha": "445566778899aabbccddeeff00112233445566aa",
-        "date": "2026-08-29T18:03:00.000Z"
-      }
-    },
-    {
-      "path": "docs/prds/products/shared-ui/index.md",
-      "source": "---\ntitle: Design system\nsummary: The controls every console and storefront is built from.\norder: 1\n---\n\nOne set of components, themed per brand. A product picks no brand's colours —\nit composes the primitives and lets the app it ships in decide how they look.\n\n::children\n",
-      "lastCommit": {
-        "sha": "99887766554433221100ffeeddccbbaa99887766",
-        "date": "2026-08-22T12:15:00.000Z"
-      }
-    },
-    {
-      "path": "docs/prds/products/shared-ui/tokens.md",
-      "source": "---\ntitle: Tokens and themes\nsummary: Where a colour, a radius, or a spacing value is allowed to be decided.\nspec: shared-ui/tokens\norder: 1\n---\n\nA component never names a colour. It names a token, and a theme decides what\nthat token is worth. That is the whole rule, and every deviation from it is a\nbrand leaking into shared code.\n\n::spec{id=\"shared-ui/tokens\"}\n\n::figma{url=\"https://www.figma.com/design/7bTkL9pR/Grade10-Design-System?node-id=86-3459\" title=\"Button, every variant\"}\n\n::story{id=\"components-forms-button--all-variants\" title=\"Button, every variant\"}\n",
-      "lastCommit": {
-        "sha": "1122334455667788990011223344556677889900",
-        "date": "2026-08-23T15:48:00.000Z"
-      }
-    },
-    {
-      "path": "docs/prds/platform/money-amounts.md",
-      "source": "---\ntitle: Money amounts\nsummary: One representation of money, so no product invents a second one.\nspec: money-amounts\norder: 1\n---\n\nMoney is an integer of minor units plus a currency code. It is never a float,\nnever a string at rest, and never a bare number without its currency beside it.\n\n:::detail{title=\"What a rounding bug actually costs\" for=\"qa\"}\nA half-cent lost per line on a ten-line order is five cents. Five cents across\na hundred thousand orders a month is five thousand dollars a year that nobody\ncan account for, and an auditor will find it before finance does.\n\nRounding happens once, at the last step that produces a number a person sees.\nEvery intermediate value keeps full precision.\n:::\n\n::spec{id=\"money-amounts\"}\n",
-      "lastCommit": {
-        "sha": "aabbccddeeff00112233445566778899aabbccdd",
-        "date": "2026-08-24T10:30:00.000Z"
-      }
-    },
-    {
-      "path": "docs/prds/platform/dates-and-times.md",
-      "source": "---\ntitle: Dates and times\nsummary: One clock, one representation, and one place a timezone is allowed to matter.\nspec: dates-and-times\norder: 2\n---\n\nEvery timestamp is stored in UTC and rendered in the reader's zone. A date\nwithout a zone is a bug, and a date parsed from a string without a format is\ntwo bugs.\n\nThe spec below is currently unreadable — the manual mirrors it rather than\nhiding the break.\n\n::spec{id=\"dates-and-times\"}\n",
-      "lastCommit": {
-        "sha": "ccddeeff00112233445566778899aabbccddeeff",
-        "date": "2026-08-15T09:00:00.000Z"
-      }
-    },
-    {
-      "path": "docs/prds/guides/start-here.md",
-      "source": "---\ntitle: Start here\nsummary: Five minutes per role, and what to read after them.\norder: 1\n---\n\nThis manual is read by four different jobs and it does not reorder itself for\nany of them. What changes is where you start.\n\n## If you write requirements\n\nStart at a product landing page, read its capability pages top to bottom, and\nignore every collapsed row. The prose above a spec block is the part a person\nwrote for you; the rows below it are the machine-checkable version of the same\nthing.\n\n## If you build it\n\nStart at the spec block and expand everything. Every requirement row and every\nscenario carries a permanent id and a copy-link — paste those into a pull\nrequest instead of quoting the text, because the text can be edited and the id\ncannot.\n\n## If you test it\n\nStart at the test cases block. It names which scenarios are traced and, more\nusefully, how many are not.\n\n## If you design it\n\nStart at the Figma and Storybook cards. They load on click, so a page full of\nthem still opens instantly.\n\n:::callout{kind=\"warning\"}\nNothing on this site is the source of truth. The specs, the task lists, and the\nFigma files are. If a page here disagrees with them, the page is wrong and the\nfix belongs in the page.\n:::\n",
-      "lastCommit": {
-        "sha": "2233445566778899aabbccddeeff001122334455",
-        "date": "2026-08-28T16:55:00.000Z"
-      }
-    },
-    {
-      "path": "docs/prds/guides/writing-a-page.md",
-      "source": "---\ntitle: Writing a page\nsummary: The block grammar, and the two ways a page breaks.\norder: 2\n---\n\nA page is YAML frontmatter followed by a sequence of blocks. Everything between\ndirectives is markdown; directives sit at column zero and never indent.\n\n## The frontmatter\n\nFour keys, in this order, and no others. An unknown key is a parse error rather\nthan a silently dropped field, because the editor writes this file back.\n\n~~~yaml\ntitle: Loyalty\nsummary: Points a shopper earns on what they spend.\nspec: grade10-store/loyalty\norder: 1\n~~~\n\n## Leaves and containers\n\nA leaf is one line. A container opens with three colons and closes with a bare\nthree colons, and containers never nest.\n\n~~~markdown\n::spec{id=\"grade10-store/loyalty\" scenario=\"grade10-site-loyalty-programme-SC-04\"}\n\n:::callout{kind=\"note\"}\nOne level of body, markdown plus leaf directives.\n:::\n~~~\n\n## What a broken reference looks like\n\nA reference that does not resolve is never silently blank. This page asks for a\nuser story that does not exist, on purpose:\n\n::spec{id=\"grade10-auction/bidding\" story=\"bidding-US-99\"}\n\nThe same rule holds for links. A relative link out of the manual into the\nproduct briefs resolves to the file on GitHub, a link to another manual page\nbecomes a route, and [anything else](../../nowhere/at-all.md) is struck through\nwhere it stands.\n",
-      "lastCommit": {
-        "sha": "5566778899aabbccddeeff0011223344556677aa",
-        "date": "2026-08-30T07:15:00.000Z"
-      }
+      "path": "docs/prds/products/demo-product/index.md",
+      "source": "---\ntitle: Demo product\nsummary: The product the fixture spec belongs to.\nspec: demo-product/alpha\nicon: storefront\norder: 1\n---\n\nWhat the product is for, in a person's words.\n\n::spec{id=\"demo-product/alpha\"}\n"
     }
   ],
   "specs": [
     {
-      "id": "grade10-store/loyalty",
-      "title": "Loyalty",
-      "purpose": "A points-and-tiers membership programme: members earn points on qualifying spend, points expire, tiers change what a member earns, and points buy items from a reward menu.",
-      "featureSet": "Membership and ledger, earning and expiry, tiers and invitations, rewards and redemption, operator console, member surface.",
-      "lastCommit": {
-        "sha": "c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f7",
-        "date": "2026-08-29T08:45:00.000Z"
-      },
+      "id": "demo-product/alpha",
+      "title": "demo-product/alpha Specification",
+      "purpose": "Alpha does one thing, and this fixture is what proves the reader sees it.",
       "requirements": [
         {
-          "name": "One member record per user, created on first activity",
-          "text": "The programme SHALL hold exactly one member record per user identity, created the first time anything is recorded for that user, and SHALL treat joining as a separate act from having activity recorded.\n\nThe member record SHALL hold no personal data beyond the user identity. Names, email addresses and every other identity attribute stay in the identity system.",
+          "name": "The thing happens once",
+          "text": "The system SHALL do the thing exactly once and SHALL refuse a second ask.",
           "scenarios": [
             {
-              "id": "grade10-site-loyalty-programme-SC-01",
-              "name": "Activity precedes joining",
-              "text": "- **WHEN** points are recorded for a user who has never joined\n- **THEN** a member record exists and holds those points\n- **AND** the member is reported as not joined until they join"
+              "name": "The thing happens",
+              "text": "- **WHEN** a reader asks for the thing\n- **THEN** the thing happens",
+              "id": "alpha-SC-01"
             },
             {
-              "id": "grade10-site-loyalty-programme-SC-02",
-              "name": "Joining is idempotent",
-              "text": "- **WHEN** a member joins more than once\n- **THEN** the first join date stands and later attempts change nothing"
+              "name": "The thing is refused a second time",
+              "text": "- **GIVEN** the thing already happened\n- **WHEN** a reader asks again\n- **THEN** nothing happens and the record is unchanged",
+              "id": "alpha-SC-02"
             }
           ]
         },
         {
-          "name": "The ledger is the only source of a balance",
-          "text": "Every point movement SHALL be recorded as a dated entry that is never edited or deleted. A balance SHALL be derived by asking the ledger, never stored as a running total.",
+          "name": "The thing is written down",
+          "text": "The system SHALL record the thing.",
           "scenarios": [
             {
-              "id": "grade10-site-loyalty-programme-SC-03",
-              "name": "Balance excludes expired and spent points",
-              "text": "- **WHEN** a balance is asked for at a given instant\n- **THEN** it counts only credits that are unspent and unexpired at that instant"
-            },
-            {
-              "id": "grade10-site-loyalty-programme-SC-04",
-              "name": "A balance never goes negative",
-              "text": "- **WHEN** any debit is recorded\n- **THEN** it draws only on credits that have points remaining\n- **AND** no sequence of recorded activity can drive a member below zero"
-            },
-            {
-              "id": "grade10-site-loyalty-programme-SC-05",
-              "name": "Every debit is fully accounted",
-              "text": "- **GIVEN** a debit that draws on more than one credit\n- **WHEN** the debit is recorded\n- **THEN** the sum of what it drew from each credit equals the debit"
-            }
-          ]
-        },
-        {
-          "name": "A tier reached by earning ratchets up",
-          "text": "A tier earned over the programme's measurement window SHALL hold even after the points that won it expire. A tier SHALL never fall because a balance fell.",
-          "scenarios": [
-            {
-              "id": "grade10-site-loyalty-programme-SC-14",
-              "name": "Earned tier holds after points expire",
-              "text": "- **GIVEN** a member who reached Gold on points that have since expired\n- **WHEN** their tier is evaluated\n- **THEN** they are still Gold"
-            },
-            {
-              "id": "grade10-site-loyalty-programme-SC-16",
-              "name": "Tier history records each move",
-              "text": "- **WHEN** a member's tier changes\n- **THEN** the move is recorded with its date and the reason that caused it"
-            }
-          ]
-        },
-        {
-          "name": "A redemption keeps the price it was made at",
-          "text": "What the member paid SHALL be recorded on the redemption, so repricing a reward never rewrites what an earlier redemption cost.",
-          "scenarios": [
-            {
-              "id": "grade10-site-loyalty-programme-SC-29",
-              "name": "Repricing does not rewrite history",
-              "text": "- **GIVEN** a reward redeemed at 500 points and later repriced to 800\n- **WHEN** the earlier redemption is read\n- **THEN** it still reads 500"
-            },
-            {
-              "id": "grade10-site-loyalty-programme-SC-30",
-              "name": "Stock is not oversold",
-              "text": "- **WHEN** two redemptions race for the last unit of a stocked reward\n- **THEN** exactly one succeeds and the other is refused"
-            },
-            {
-              "id": "grade10-site-loyalty-programme-SC-33",
-              "name": "Restored points keep their original expiry",
-              "text": "- **WHEN** a redemption is reversed\n- **THEN** each credit it drew from is restored carrying its own original expiry"
+              "name": "A scenario that predates permanent ids",
+              "text": "- **WHEN** a spec omits the scenario id\n- **THEN** the reader still carries the scenario, without one"
             }
           ]
         }
       ],
+      "featureSet": "- Doing the thing\n  - Once only: the thing happens exactly once\n  - Written down: the thing leaves a record",
       "journeys": [
         {
-          "id": "grade10-site-loyalty-programme-US-01",
-          "title": "Member earns points on qualifying spend",
-          "text": "**As a** member,\n**I want** my balance to follow the money I spend and keep spent, priced once at my tier's rate,\n**so that** what I can redeem is exactly what my qualifying spend earned.",
+          "id": "alpha-US-01",
+          "title": "Reader follows the thing end to end",
+          "text": "**As a** reader,\n**I want** the thing to happen once and leave a record,\n**so that** I can tell whether it already happened.",
           "acceptedBy": [
-            "grade10-site-loyalty-programme-SC-01",
-            "grade10-site-loyalty-programme-SC-03",
-            "grade10-site-loyalty-programme-SC-04",
-            "grade10-site-loyalty-programme-SC-05"
-          ]
-        },
-        {
-          "id": "grade10-site-loyalty-programme-US-02",
-          "title": "Member advances through the tier ladder",
-          "text": "**As a** member,\n**I want** my tier derived from what I earned and kept when those points expire,\n**so that** the rate I earn at reflects the standing I reached rather than what my balance happens to be today.",
-          "acceptedBy": [
-            "grade10-site-loyalty-programme-SC-14",
-            "grade10-site-loyalty-programme-SC-16"
-          ]
-        },
-        {
-          "id": "grade10-site-loyalty-programme-US-03",
-          "title": "Member redeems points for a reward",
-          "text": "**As a** member,\n**I want** to spend my points at the price the reward carried when I redeemed it,\n**so that** a later reprice, a sell-out or a reversal never changes what that redemption cost me.",
-          "acceptedBy": [
-            "grade10-site-loyalty-programme-SC-29",
-            "grade10-site-loyalty-programme-SC-30",
-            "grade10-site-loyalty-programme-SC-33"
+            "alpha-SC-01",
+            "alpha-SC-02"
           ]
         }
       ],
       "testCases": [
         {
-          "id": "grade10-site-loyalty-programme-TC-01",
-          "title": "Membership is created by activity, not by joining",
+          "id": "alpha-TC-01",
+          "title": "Reader asks for the thing and it happens",
           "traces": [
-            "grade10-site-loyalty-programme-SC-01",
-            "grade10-site-loyalty-programme-SC-02"
-          ]
+            "alpha-SC-01"
+          ],
+          "status": "draft"
         },
         {
-          "id": "grade10-site-loyalty-programme-TC-02",
-          "title": "Ledger arithmetic holds under concurrent debits",
+          "id": "alpha-TC-02",
+          "title": "Reader asks a second time and is refused",
           "traces": [
-            "grade10-site-loyalty-programme-SC-03",
-            "grade10-site-loyalty-programme-SC-04",
-            "grade10-site-loyalty-programme-SC-05"
-          ]
-        },
-        {
-          "id": "grade10-site-loyalty-programme-TC-03",
-          "title": "A repriced reward does not rewrite an earlier redemption",
-          "traces": ["grade10-site-loyalty-programme-SC-29"]
+            "alpha-SC-01",
+            "alpha-SC-02"
+          ],
+          "status": "draft"
         }
-      ]
+      ],
+      "testCasesStatus": "pending-review",
+      "issuedThrough": {
+        "sc": 3,
+        "us": 1,
+        "tc": 2
+      }
     },
     {
-      "id": "grade10-store/checkout",
-      "title": "Checkout",
-      "purpose": "Turning a priced cart into a paid order exactly once, with every failure leaving the shopper no worse off than before they started.",
-      "lastCommit": {
-        "sha": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
-        "date": "2026-08-26T11:02:00.000Z"
-      },
-      "requirements": [
-        {
-          "name": "A quote is priced once and expires",
-          "text": "Pricing SHALL happen in one pass and produce a quote with an expiry. No step after pricing SHALL recompute a price.",
-          "scenarios": [
-            {
-              "id": "checkout-SC-01",
-              "name": "A quote outlives no more than its window",
-              "text": "- **WHEN** a quote is presented after its expiry\n- **THEN** it is refused and the shopper is re-quoted"
-            },
-            {
-              "id": "checkout-SC-02",
-              "name": "A re-quote is shown before it is charged",
-              "text": "- **GIVEN** an expired quote whose new price is higher\n- **WHEN** the shopper continues\n- **THEN** the new price is shown and confirmed before any money moves"
-            }
-          ]
-        },
-        {
-          "name": "Payment is authorised before it is captured",
-          "text": "The provider SHALL be asked for an authorisation, and capture SHALL happen only as part of settling the order.",
-          "scenarios": [
-            {
-              "id": "checkout-SC-03",
-              "name": "A failure after authorisation releases the hold",
-              "text": "- **WHEN** settling fails after an authorisation\n- **THEN** the hold is released and nothing is captured"
-            }
-          ]
-        },
-        {
-          "name": "Settling is idempotent",
-          "text": "A repeated settle for the same quote SHALL answer with the order the first settle created, and SHALL NOT create a second one.",
-          "scenarios": [
-            {
-              "id": "checkout-SC-04",
-              "name": "A repeated settle answers once",
-              "text": "- **WHEN** settle is called twice for one quote\n- **THEN** both calls answer with the same order id"
-            },
-            {
-              "id": "checkout-SC-05",
-              "name": "A retried settle captures once",
-              "text": "- **WHEN** settle is retried after a network timeout\n- **THEN** the provider captures exactly one payment"
-            }
-          ]
-        }
-      ]
+      "id": "demo-product/broken",
+      "title": "demo-product/broken Specification",
+      "purpose": "",
+      "requirements": [],
+      "error": {
+        "file": "openspec/specs/demo-product/broken/spec.md",
+        "line": 1,
+        "message": "spec has no `## Purpose`"
+      }
     },
     {
-      "id": "grade10-auction/bidding",
-      "title": "Bidding",
-      "purpose": "Accepting offers on a lot, ordering them by the server's clock, and closing on the highest one standing.",
-      "lastCommit": {
-        "sha": "77aa88bb99cc00dd11ee22ff33445566778899aa",
-        "date": "2026-08-19T14:12:00.000Z"
-      },
+      "id": "demo-topic",
+      "title": "demo-topic Specification",
+      "purpose": "A cross-cutting topic: a directory holding `spec.md` directly, so the reader\nfiles it under topics rather than products.",
       "requirements": [
         {
-          "name": "A bid is timestamped by the server",
-          "text": "The server SHALL stamp every bid on arrival. A timestamp supplied by a client SHALL be ignored.",
+          "name": "Every surface reads the topic the same way",
+          "text": "Every surface SHALL read the topic through one module.",
           "scenarios": [
             {
-              "id": "bidding-SC-01",
-              "name": "Two equal bids are ordered by arrival",
-              "text": "- **WHEN** two bids at the same price arrive\n- **THEN** the one the server stamped first stands"
-            }
-          ]
-        },
-        {
-          "name": "A late bid extends the close",
-          "text": "A bid inside the extension window SHALL push the close out by the window, so no lot can be decided by arrival timing alone.",
-          "scenarios": [
-            {
-              "id": "bidding-SC-02",
-              "name": "A bid in the last seconds extends the lot",
-              "text": "- **GIVEN** a lot with ten seconds left and a thirty second extension window\n- **WHEN** a bid arrives\n- **THEN** the close moves to thirty seconds after that bid"
-            },
-            {
-              "id": "bidding-SC-03",
-              "name": "Extensions do not compound without bids",
-              "text": "- **WHEN** no further bid arrives inside the window\n- **THEN** the lot closes at the extended time and not later"
+              "name": "One module answers",
+              "text": "- **WHEN** a surface reads the topic\n- **THEN** it goes through the one module",
+              "id": "demo-topic-SC-01"
             }
           ]
         }
       ],
-      "journeys": [
-        {
-          "id": "bidding-US-01",
-          "title": "Bidder is not beaten by the clock",
-          "text": "**As a** bidder,\n**I want** a late bid to extend the lot,\n**so that** winning is a matter of what I will pay rather than how close to the close I clicked.",
-          "acceptedBy": ["bidding-SC-02", "bidding-SC-03"]
-        }
-      ]
-    },
-    {
-      "id": "shared-auth/sessions",
-      "title": "Sessions",
-      "purpose": "Carrying a proved identity for a bounded time, renewable while alive and worthless once expired.",
-      "lastCommit": {
-        "sha": "445566778899aabbccddeeff00112233445566aa",
-        "date": "2026-08-29T18:03:00.000Z"
-      },
-      "requirements": [
-        {
-          "name": "A session expires on its own",
-          "text": "A session SHALL carry an expiry and SHALL stop being accepted at it, with no revocation call required.",
-          "scenarios": [
-            {
-              "id": "shared-auth-sessions-SC-01",
-              "name": "An expired token is refused",
-              "text": "- **WHEN** a token is presented after its expiry\n- **THEN** it is refused and no renewal is offered"
-            }
-          ]
-        },
-        {
-          "name": "A password change ends every session",
-          "text": "Changing the secret that proves an identity SHALL invalidate every session created before the change.",
-          "scenarios": [
-            {
-              "id": "shared-auth-sessions-SC-02",
-              "name": "Other devices are signed out",
-              "text": "- **WHEN** a member changes their password on one device\n- **THEN** sessions on every other device stop being accepted"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "shared-ui/tokens",
-      "title": "Tokens and themes",
-      "purpose": "Keeping every literal colour, radius and spacing value in a theme, so a component carries no brand.",
-      "lastCommit": {
-        "sha": "1122334455667788990011223344556677889900",
-        "date": "2026-08-23T15:48:00.000Z"
-      },
-      "requirements": [
-        {
-          "name": "A component names a token, never a value",
-          "text": "A shared component SHALL reference design tokens only. A literal colour, radius or spacing value in shared code SHALL fail review.",
-          "scenarios": [
-            {
-              "id": "tokens-SC-01",
-              "name": "A brand swap changes nothing but the theme",
-              "text": "- **WHEN** a second brand's theme is applied\n- **THEN** every shared component renders in that brand with no component change"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "money-amounts",
-      "title": "Money amounts",
-      "purpose": "One representation of money across every product: an integer of minor units and a currency code.",
-      "lastCommit": {
-        "sha": "aabbccddeeff00112233445566778899aabbccdd",
-        "date": "2026-08-24T10:30:00.000Z"
-      },
-      "requirements": [
-        {
-          "name": "Money is minor units plus a currency",
-          "text": "A money amount SHALL be an integer of minor units together with an ISO currency code. A floating point number SHALL never represent money.",
-          "scenarios": [
-            {
-              "id": "money-SC-01",
-              "name": "A bare number is refused",
-              "text": "- **WHEN** an amount arrives without a currency\n- **THEN** it is refused rather than defaulted"
-            },
-            {
-              "id": "money-SC-02",
-              "name": "Mixed currencies do not add",
-              "text": "- **WHEN** two amounts in different currencies are added\n- **THEN** the operation is refused"
-            }
-          ]
-        },
-        {
-          "name": "Rounding happens once",
-          "text": "Intermediate values SHALL keep full precision. Rounding SHALL happen at the last step producing a number a person sees.",
-          "scenarios": [
-            {
-              "id": "money-SC-03",
-              "name": "A split total matches the whole",
-              "text": "- **WHEN** a total is split across lines and re-added\n- **THEN** the sum equals the total exactly"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "dates-and-times",
-      "title": "Dates and times",
-      "purpose": "",
-      "requirements": [],
-      "error": {
-        "file": "openspec/specs/dates-and-times/spec.md",
-        "line": 41,
-        "message": "scenario `dates-SC-04` is declared twice; the second one at line 41 would silently replace the first"
+      "issuedThrough": {
+        "sc": 1
       }
     }
   ],
   "changes": [
     {
-      "id": "rotate-session-keys",
+      "id": "add-thing",
       "schema": "grade10-planning",
       "status": "in-flight",
-      "owners": ["@echo"],
-      "created": "2026-08-14",
-      "title": "Rotate session signing keys without signing anyone out",
-      "why": "A key rotation today invalidates every live session, so it only ever happens during an incident — which is the worst moment to do it.",
-      "taskGroups": [
-        {
-          "title": "Auth worker",
-          "repo": "grade10",
-          "done": 6,
-          "total": 8
-        },
-        {
-          "title": "Money formatting",
-          "repo": "grade10",
-          "done": 2,
-          "total": 2
-        }
+      "owners": [
+        "tester",
+        "other"
       ],
-      "lastMoved": "2026-08-29",
-      "deltas": [
-        {
-          "spec": "shared-auth/sessions",
-          "kinds": ["MODIFIED"]
-        },
-        {
-          "spec": "money-amounts",
-          "kinds": ["MODIFIED"]
-        }
-      ]
-    },
-    {
-      "id": "tiered-loyalty",
-      "schema": "grade10-planning",
-      "status": "in-flight",
-      "owners": ["@echo", "@mira"],
-      "created": "2026-08-12",
-      "title": "Tiered loyalty",
-      "why": "A flat earn rate rewards the first order and the hundredth the same, so the programme gives its best customers no reason to stay.",
+      "created": "2026-01-01",
+      "title": "Add the thing",
+      "why": "Nothing does the thing yet, so nobody can tell whether it happened.",
       "taskGroups": [
         {
-          "title": "Store backend",
-          "repo": "grade10",
-          "done": 3,
-          "total": 7
+          "num": "1",
+          "title": "Contracts",
+          "repo": "grade10-spec",
+          "owner": "tester",
+          "done": 2,
+          "total": 3,
+          "tasks": [
+            {
+              "text": "1.1 Publish the contract.",
+              "done": true
+            },
+            {
+              "text": "1.2 Adopt it.",
+              "done": false
+            },
+            {
+              "text": "1.3 A nested checkbox still counts toward this group.",
+              "done": true
+            }
+          ]
         },
         {
-          "title": "Store frontend",
+          "num": "2",
+          "title": "Surface",
           "repo": "grade10",
+          "owner": "other",
           "done": 0,
-          "total": 4
+          "total": 2,
+          "tasks": [
+            {
+              "text": "2.1 Render the thing.",
+              "done": false
+            },
+            {
+              "text": "2.2 Verify the lane.",
+              "done": false
+            }
+          ]
         },
         {
-          "title": "Spec",
-          "repo": "grade10-spec",
-          "done": 2,
-          "total": 2
+          "num": "3",
+          "title": "Review",
+          "repo": "",
+          "done": 0,
+          "total": 0,
+          "tasks": []
         }
       ],
-      "lastMoved": "2026-08-28",
       "deltas": [
         {
-          "spec": "grade10-store/loyalty",
-          "kinds": ["ADDED", "MODIFIED"]
-        }
-      ]
-    },
-    {
-      "id": "express-checkout",
-      "schema": "grade10-planning",
-      "status": "in-flight",
-      "owners": ["@dana"],
-      "created": "2026-08-05",
-      "title": "Express checkout for a saved payment method",
-      "why": "A returning shopper re-enters details the store already holds, and abandons at the step that asks for them.",
-      "taskGroups": [
-        {
-          "title": "Store backend",
-          "repo": "grade10",
-          "done": 5,
-          "total": 5
+          "spec": "demo-product/alpha",
+          "kinds": [
+            "ADDED",
+            "MODIFIED"
+          ],
+          "requirements": [
+            {
+              "name": "The thing is watched",
+              "kind": "added",
+              "text": "### Requirement: The thing is watched\n\nThe system SHALL let a reader watch the thing.\n\n#### Scenario: alpha-SC-03 - A reader watches the thing\n\n- **WHEN** a reader watches the thing\n- **THEN** the watch is recorded"
+            },
+            {
+              "name": "The thing happens once",
+              "kind": "modified",
+              "text": "### Requirement: The thing happens once\n\nThe system SHALL do the thing exactly once, and SHALL say so.\n\n#### Scenario: alpha-SC-01 - The thing happens\n\n- **WHEN** a reader asks for the thing\n- **THEN** the thing happens and the system says so"
+            }
+          ]
         }
       ],
-      "lastMoved": "2026-08-21",
-      "deltas": [
-        {
-          "spec": "grade10-store/checkout",
-          "kinds": ["MODIFIED"]
-        }
-      ]
-    },
-    {
-      "id": "auction-auto-bidding",
-      "schema": "grade10-planning",
-      "status": "in-flight",
-      "owners": ["@sam"],
-      "created": "2026-07-22",
-      "title": "Proxy bidding up to a limit",
-      "why": "Bidders sit on a lot for its final hour because there is no way to say what they would pay without saying it out loud.",
-      "taskGroups": [],
-      "lastMoved": "2026-07-30",
-      "deltas": [
-        {
-          "spec": "grade10-auction/bidding",
-          "kinds": ["ADDED"]
-        }
-      ]
-    },
-    {
-      "id": "manual-authoring",
-      "schema": "grade10-planning",
-      "status": "in-flight",
-      "owners": ["@echo"],
-      "created": "2026-08-26",
-      "title": "Edit a manual page in the browser",
-      "why": "A page nobody can fix in the moment they notice it is wrong stays wrong.",
-      "taskGroups": [
-        {
-          "title": "Editor",
-          "repo": "grade10-spec",
-          "done": 1,
-          "total": 9
-        }
-      ],
-      "lastMoved": "2026-08-30",
-      "deltas": []
-    },
-    {
-      "id": "unreadable-change",
-      "schema": "unknown",
-      "status": "in-flight",
-      "owners": [],
-      "created": "2026-08-08",
-      "title": "unreadable-change",
-      "why": "",
-      "taskGroups": [],
-      "deltas": [],
-      "error": {
-        "file": "openspec/changes/unreadable-change/tasks.md",
-        "line": 12,
-        "message": "task group `Store backend` has a checkbox that is neither `[ ]` nor `[x]`; progress cannot be counted"
-      }
+      "author": "tester"
     }
   ],
-  "references": []
+  "assets": [],
+  "references": [
+    {
+      "slug": "owner-draft",
+      "path": "docs/references/owner-draft.md",
+      "title": "The owner's draft"
+    }
+  ],
+  "referencesReadme": "# References\n\nSource material behind a decision. A reference explains and preserves; it is\nnever authoritative.\n",
+  "history": [],
+  "warnings": []
 }

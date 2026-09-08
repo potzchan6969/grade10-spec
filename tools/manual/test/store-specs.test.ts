@@ -4,7 +4,7 @@ import { NO_GIT } from "../src/store/git.mts";
 import { discoverSpecs, readSpecs } from "../src/store/read-specs.mts";
 import { writeStore } from "./tmp-store";
 
-const FIXTURE = fileURLToPath(new URL("./fixtures/store", import.meta.url));
+const FIXTURE = fileURLToPath(new URL("../demo-store", import.meta.url));
 
 const specs = readSpecs(FIXTURE, NO_GIT);
 const alpha = specs.find((spec) => spec.id === "demo-product/alpha");

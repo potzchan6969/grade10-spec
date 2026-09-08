@@ -14,7 +14,7 @@ import { writeStore } from "./tmp-store";
  * asks for and which exist, the prose as written, each delta as the contract
  * it proposes. This is that reading, off the fixture store. */
 
-const FIXTURE = fileURLToPath(new URL("./fixtures/store", import.meta.url));
+const FIXTURE = fileURLToPath(new URL("../demo-store", import.meta.url));
 
 const [document] = readChangeDocuments(FIXTURE, NO_GIT);
 

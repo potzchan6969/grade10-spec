@@ -14,7 +14,7 @@ import { writeStore } from "./tmp-store";
  * it waits on, what it cites, which line is open, and what its delta will
  * say. Every one of them is read off a file that has to exist anyway. */
 
-const FIXTURE = fileURLToPath(new URL("./fixtures/store", import.meta.url));
+const FIXTURE = fileURLToPath(new URL("../demo-store", import.meta.url));
 
 const PROPOSAL = [
   "# Gift cards",

@@ -7,7 +7,7 @@ import {
 } from "../src/store/read-changes.mts";
 import { writeStore } from "./tmp-store";
 
-const FIXTURE = fileURLToPath(new URL("./fixtures/store", import.meta.url));
+const FIXTURE = fileURLToPath(new URL("../demo-store", import.meta.url));
 
 const changes = readChanges(FIXTURE, NO_GIT);
 const change = changes[0];

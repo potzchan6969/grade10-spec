@@ -14,7 +14,7 @@ import { writeStore } from "./tmp-store";
  * snapshot, each document is its own artifact, and the README is the landing
  * rather than a document. */
 
-const FIXTURE = fileURLToPath(new URL("./fixtures/store", import.meta.url));
+const FIXTURE = fileURLToPath(new URL("../demo-store", import.meta.url));
 
 describe("the references a store holds", () => {
   const references = readReferences(FIXTURE, NO_GIT);

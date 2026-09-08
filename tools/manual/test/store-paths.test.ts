@@ -89,9 +89,9 @@ describe("confine against a store that exists", () => {
 describe("store paths", () => {
   it("finds the root by the openspec directory above it", () => {
     const root = findStoreRoot(
-      join(import.meta.dirname, "fixtures/store/docs/prds"),
+      join(import.meta.dirname, "../demo-store/docs/prds"),
     );
-    expect(root).toBe(join(import.meta.dirname, "fixtures/store"));
+    expect(root).toBe(join(import.meta.dirname, "../demo-store"));
   });
 
   it("writes store-relative paths with forward slashes", () => {

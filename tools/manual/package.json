@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && node src/store/build-snapshot.mts",
+    "fixture": "node src/store/build-fixture.mts",
     "deploy": "wrangler deploy -c wrangler.jsonc",
     "preview": "vite preview",
     "typecheck": "tsc -b",

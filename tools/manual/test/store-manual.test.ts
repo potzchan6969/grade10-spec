@@ -10,7 +10,7 @@ import { discoverSpecs } from "../src/store/read-specs.mts";
 import { rootsOf } from "../src/store/roots.mts";
 import { writeStore as write } from "./tmp-store";
 
-const FIXTURE = fileURLToPath(new URL("./fixtures/store", import.meta.url));
+const FIXTURE = fileURLToPath(new URL("../demo-store", import.meta.url));
 const BROKEN_PAGE = fileURLToPath(
   new URL("./fixtures/broken-page", import.meta.url),
 );
