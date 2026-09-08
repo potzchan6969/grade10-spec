@@ -9,7 +9,8 @@ Store order without revealing another customer's order or inventing absent facts
   - Owner-only address: Show one order only to its associated collector.
   - Safe absence: Give missing and unowned ids the same answer.
 - Order facts
-  - Items and money: Keep quoted, paid, and refunded amounts distinct.
+  - Identity and money: Prefer the shop order number and keep every supplied money fact distinct.
+  - Shipping and payment: Present buyer-safe settlement facts without filling gaps.
   - Fulfilment and tracking: Show current progress and safe carrier links.
   - Partial records: Omit facts the typed order does not provide.
 - Page states
@@ -49,20 +50,41 @@ the session.
 ### Requirement: The detail preserves the order facts the Store supplies
 
 The page SHALL pass the customer-facing badge defined by
-`grade10-site/store/order-status` to the detail block. It SHALL show the order
-id, placed date, available line items, fulfilment facts, and these money facts
-when present:
+`grade10-site/store/order-status` to the detail block. It SHALL identify the
+order by its Store-supplied shop order number when that value is present and
+non-empty, otherwise by its Store order id. The immutable Store order id SHALL
+remain the route key in either case. The page SHALL show the placed date,
+available line items, fulfilment facts, and these money facts when present:
 
 | Fact | Meaning |
 | --- | --- |
 | Quoted subtotal | What the Store quoted before the hosted checkout |
+| Discount | What the settled order states was deducted |
+| Shipping charge | What the settled order states was charged for shipping |
+| Tax | What the settled order states was charged as tax |
 | Paid total | What the collector was charged after hosted shipping and tax |
 | Refunded amount | What has been returned from the paid total |
 
 Every amount SHALL remain integer minor units paired with its ISO 4217 currency
-code until formatted. A line total SHALL be its captured unit price multiplied
-by quantity. The page SHALL NOT infer a payment method, address, discount,
-shipping charge, tax, image, or loyalty amount from another fact.
+code until formatted. A supplied zero discount, shipping charge, or tax SHALL
+render as a stated zero; a null value SHALL omit that row. Discount and refund
+values SHALL read as deductions without changing the paid total. A line total
+SHALL be its captured unit price multiplied by quantity.
+
+The owner-only detail SHALL render the supplied shipping-address parts in postal
+order and omit null or empty parts. A recipient name SHALL appear only when a
+first or last name is supplied. The page SHALL NOT turn a shipping address into
+a pickup address.
+
+The owner-only detail SHALL render a supplied payment instrument only when at
+least one displayable payment fact is present. A recognized card or wallet SHALL
+use its corresponding logo. An unrecognized provider value SHALL remain visible
+as text beside any supplied mask instead of receiving an unrelated logo. When a
+wallet and masked number are both supplied, the wallet identity SHALL appear
+beside that mask so the device-account digits are not presented as the card's.
+
+The page SHALL NOT infer a payment method, address, discount, shipping charge,
+tax, image, loyalty amount, or other missing value from another fact.
 
 #### Scenario: grade10-site-store-order-detail-SC-04 - A web order keeps quoted and paid totals distinct
 
@@ -91,6 +113,37 @@ shipping charge, tax, image, or loyalty amount from another fact.
 - **WHEN** its detail renders
 - **THEN** those sections or rows are omitted
 - **AND** no placeholder is presented as a known order fact
+
+#### Scenario: grade10-site-store-order-detail-SC-13 - Customer-facing identity does not replace the route id
+
+- **GIVEN** an owned order with or without a non-empty Store-supplied shop order number
+- **WHEN** its detail renders at `/profile/orders/<order-id>`
+- **THEN** the shop order number identifies the order when supplied
+- **AND** the Store order id identifies it otherwise
+- **AND** the address continues to use the immutable Store order id
+
+#### Scenario: grade10-site-store-order-detail-SC-14 - Supplied settlement rows preserve zero and absence
+
+- **GIVEN** two equivalent orders where one supplies zero discount, shipping, and tax and the other supplies null for all three
+- **WHEN** their money summaries render
+- **THEN** the first order shows all three rows as stated zeroes
+- **AND** the second order omits all three rows
+- **AND** each paid total remains the charge
+
+#### Scenario: grade10-site-store-order-detail-SC-15 - A partial shipping address remains truthful
+
+- **GIVEN** an owned order with a shipping address whose recipient and optional address parts are absent
+- **WHEN** its detail renders
+- **THEN** the supplied non-empty address parts appear in postal order
+- **AND** no blank recipient, placeholder line, or pickup address appears
+
+#### Scenario: grade10-site-store-order-detail-SC-16 - Payment identity remains truthful
+
+- **GIVEN** an owned order with a supplied card, wallet, or unrecognized payment provider
+- **WHEN** its payment method renders
+- **THEN** a recognized card or wallet uses its corresponding logo
+- **AND** an unrecognized provider remains visible as text without an unrelated logo
+- **AND** any wallet identity appears beside its supplied masked device-account number
 
 ### Requirement: Fulfilment and tracking use supplied order facts
 
