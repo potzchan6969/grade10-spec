@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import {
+  classifyCapabilities,
   classifyChanges,
   parseChangedFiles,
   slackPayload,
@@ -27,77 +28,155 @@ test("parses regular and renamed OpenSpec files from git's NUL format", () => {
   );
 });
 
-test("classifies new, updated, archived, and removed changes", () => {
+test("classifies file additions, updates, archive moves, and removals by scope", () => {
   const changes = classifyChanges(
     [
       { oldPath: null, path: "openspec/changes/new-change/proposal.md", status: "A" },
-      { oldPath: "openspec/changes/active-change/spec.md", path: "openspec/changes/active-change/spec.md", status: "M" },
-      { oldPath: "openspec/changes/old-change/proposal.md", path: null, status: "D" },
+      { oldPath: null, path: "openspec/changes/active-change/tech-design.md", status: "A" },
+      { oldPath: null, path: "openspec/changes/active-change/specs/store/spec.md", status: "M" },
+      { oldPath: null, path: "openspec/changes/old-change/proposal.md", status: "D" },
       {
         oldPath: "openspec/changes/finished-change/tasks.md",
         path: "openspec/changes/archive/2026-09-08-finished-change/tasks.md",
         status: "R",
       },
     ],
-    {
-      beforeActiveIds: new Set(["active-change", "old-change", "finished-change"]),
-      afterActiveIds: new Set(["new-change", "active-change"]),
-      beforeArchiveIds: new Set(),
-      afterArchiveIds: new Set(["finished-change"]),
-    },
   );
 
   assert.deepEqual(changes, {
-    new: [{ id: "new-change", path: "new-change" }],
-    updated: [{ id: "active-change", path: "active-change" }],
-    archived: [{ id: "finished-change", path: "2026-09-08-finished-change" }],
-    removed: [{ id: "old-change", path: "old-change" }],
+    new: [
+      { id: "active-change", path: "active-change", scopes: ["tech-design"] },
+      { id: "new-change", path: "new-change", scopes: ["proposal"] },
+    ],
+    updated: [
+      { id: "active-change", path: "active-change", scopes: ["spec"] },
+    ],
+    archived: [
+      {
+        id: "finished-change",
+        path: "2026-09-08-finished-change",
+        scopes: ["tasks"],
+      },
+    ],
+    removed: [{ id: "old-change", path: "old-change", scopes: ["proposal"] }],
   });
 });
 
-test("a deleted file inside an existing change is an update", () => {
+test("classifies a deleted file inside an existing change as removed", () => {
   assert.deepEqual(
     classifyChanges(
-      [{ oldPath: "openspec/changes/active-change/spec.md", path: null, status: "D" }],
-      {
-        beforeActiveIds: new Set(["active-change"]),
-        afterActiveIds: new Set(["active-change"]),
-      },
+      [{ oldPath: null, path: "openspec/changes/active-change/spec.md", status: "D" }],
     ),
     {
       new: [],
-      updated: [{ id: "active-change", path: "active-change" }],
+      updated: [],
       archived: [],
-      removed: [],
+      removed: [{ id: "active-change", path: "active-change", scopes: ["spec"] }],
     },
   );
 });
 
 test("does not report untouched changes when the diff is empty", () => {
+  assert.deepEqual(classifyChanges([]), {
+    new: [],
+    updated: [],
+    archived: [],
+    removed: [],
+  });
+});
+
+test("classifies durable capability files by capability and scope", () => {
   assert.deepEqual(
-    classifyChanges([], {
-      beforeActiveIds: new Set(["existing-change"]),
-      afterActiveIds: new Set(["existing-change"]),
-    }),
-    { new: [], updated: [], archived: [], removed: [] },
+    classifyCapabilities([
+      {
+        oldPath: null,
+        path: "openspec/specs/grade10-site/auction/winner-journey/spec.md",
+        status: "A",
+      },
+      {
+        oldPath: null,
+        path: "openspec/specs/grade10-site/auction/winner-journey/user-journeys.md",
+        status: "M",
+      },
+      {
+        oldPath: null,
+        path: "openspec/specs/grade10-site/auction/winner-journey/test-cases.md",
+        status: "D",
+      },
+    ]),
+    {
+      new: [
+        {
+          id: "grade10-site/auction/winner-journey",
+          path: "grade10-site/auction/winner-journey",
+          scopes: ["spec"],
+        },
+      ],
+      updated: [
+        {
+          id: "grade10-site/auction/winner-journey",
+          path: "grade10-site/auction/winner-journey",
+          scopes: ["user-journeys"],
+        },
+      ],
+      archived: [],
+      removed: [
+        {
+          id: "grade10-site/auction/winner-journey",
+          path: "grade10-site/auction/winner-journey",
+          scopes: ["test-cases"],
+        },
+      ],
+    },
   );
 });
 
 test("builds one Slack section for each changed status", () => {
   const payload = slackPayload({
     changes: {
-      new: [{ id: "new-change", title: "Add a cart" }],
-      updated: [{ id: "active-change", title: "Update <copy>" }],
-      archived: [{ id: "finished-change", title: "Finish a change" }],
-      removed: [{ id: "old-change", title: "Remove a change" }],
+      new: [{ id: "new-change", title: "Add a cart", scopes: ["proposal", "spec"] }],
+      updated: [{ id: "active-change", title: "Update <copy>", scopes: ["tech-design"] }],
+      archived: [{ id: "finished-change", title: "Finish a change", scopes: ["tasks"] }],
+      removed: [{ id: "old-change", title: "Remove a change", scopes: ["proposal"] }],
     },
     commitSha: "1234567890",
     commitUrl: "https://github.com/9gag/grade10-spec/commit/1234567890",
     manualUrl: "https://spec.grade10-stg.com/planning",
+    openspecUrl: "https://spec.grade10-stg.com/openspec/",
   });
 
   assert.equal(payload.blocks.length, 6);
-  assert.match(payload.blocks[1].text.text, /\*Add a cart\*/);
-  assert.match(payload.blocks[2].text.text, /Update &lt;copy&gt;/);
+  assert.match(
+    payload.blocks[1].text.text,
+    /<https:\/\/spec\.grade10-stg\.com\/openspec\/#\/change\/new-change\|Add a cart> \(`new-change`\) — `proposal`, `spec`/,
+  );
+  assert.match(payload.blocks[2].text.text, /Update &lt;copy&gt;.*`tech-design`/);
   assert.match(payload.blocks.at(-1).elements[0].text, /1234567/);
+});
+
+test("includes durable capability links in the Slack payload", () => {
+  const payload = slackPayload({
+    changes: { new: [], updated: [], archived: [], removed: [] },
+    capabilities: {
+      new: [
+        {
+          id: "grade10-site/auction/winner-journey",
+          path: "grade10-site/auction/winner-journey",
+          scopes: ["spec"],
+        },
+      ],
+      updated: [],
+      archived: [],
+      removed: [],
+    },
+    commitSha: "1234567890",
+    commitUrl: "https://github.com/9gag/grade10-spec/commit/1234567890",
+    manualUrl: "https://spec.grade10-stg.com/planning",
+    openspecUrl: "https://spec.grade10-stg.com/openspec/",
+  });
+
+  assert.match(
+    payload.blocks[1].text.text,
+    /<https:\/\/spec\.grade10-stg\.com\/openspec\/#\/spec\/grade10-site\/auction\/winner-journey\|grade10-site\/auction\/winner-journey> — `spec`/,
+  );
 });

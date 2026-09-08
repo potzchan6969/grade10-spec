@@ -7,6 +7,7 @@ import { parseArgs, promisify } from "node:util";
 const exec = promisify(execFile);
 const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const CHANGE_ROOT = "openspec/changes/";
+const SPEC_ROOT = "openspec/specs/";
 
 function location(path) {
   if (!path?.startsWith(CHANGE_ROOT)) return null;
@@ -47,79 +48,133 @@ export function parseChangedFiles(output) {
   return changed;
 }
 
-function addLocation(target, path, kind) {
+function artifact(path) {
   const item = location(path);
-  if (!item || item.kind !== kind) return;
-  target.set(item.id, item);
+  if (!item) return null;
+  const prefix =
+    item.kind === "archive"
+      ? `${CHANGE_ROOT}archive/${item.directory}/`
+      : `${CHANGE_ROOT}${item.directory}/`;
+  const relative = path.slice(prefix.length);
+  const scope = artifactScope(relative);
+  return { ...item, path, scope };
 }
 
-export function classifyChanges(
-  changed,
-  { beforeActiveIds = new Set(), afterActiveIds = new Set(), beforeArchiveIds = new Set(), afterArchiveIds = new Set() } = {},
-) {
-  const activeBefore = new Map();
-  const activeAfter = new Map();
-  const archiveBefore = new Map();
-  const archiveAfter = new Map();
-
-  for (const item of changed) {
-    addLocation(activeBefore, item.oldPath, "active");
-    addLocation(activeAfter, item.path, "active");
-
-    const oldLocation = location(item.oldPath);
-    const newLocation = location(item.path);
-    if (oldLocation?.kind === "archive") archiveBefore.set(oldLocation.id, oldLocation);
-    if (newLocation?.kind === "archive") archiveAfter.set(newLocation.id, newLocation);
-  }
-
-  const ids = new Set([
-    ...activeBefore.keys(),
-    ...activeAfter.keys(),
-    ...archiveBefore.keys(),
-    ...archiveAfter.keys(),
-  ]);
-  const result = { new: [], archived: [], removed: [], updated: [] };
-
-  for (const id of ids) {
-    const wasActive = beforeActiveIds.has(id);
-    const isActive = afterActiveIds.has(id);
-    const wasArchived = beforeArchiveIds.has(id);
-    const isArchived = afterArchiveIds.has(id);
-    const movedToArchive = wasActive && !isActive && isArchived;
-    const addedArchive = !wasActive && !wasArchived && isArchived;
-    const item = {
-      id,
-      path:
-        activeAfter.get(id)?.directory ??
-        archiveAfter.get(id)?.directory ??
-        activeBefore.get(id)?.directory ??
-        archiveBefore.get(id)?.directory ??
-        id,
-    };
-
-    if (movedToArchive || addedArchive) result.archived.push(item);
-    else if (!wasActive && isActive) result.new.push(item);
-    else if (wasActive && !isActive) result.removed.push(item);
-    else if (wasArchived && !isArchived) result.removed.push(item);
-    else if (wasActive && isActive) result.updated.push(item);
-  }
-
-  for (const items of Object.values(result)) items.sort((left, right) => left.id.localeCompare(right.id));
-  return result;
+function artifactScope(relative) {
+  let scope = relative;
+  if (relative === "proposal.md") scope = "proposal";
+  else if (relative === "tech-design.md") scope = "tech-design";
+  else if (relative === "ui-design.md") scope = "ui-design";
+  else if (relative === "tasks.md") scope = "tasks";
+  else if (relative === "feature-tcs.md" || relative === "test-cases.md")
+    scope = "test-cases";
+  else if (relative === "spec.md" || relative.endsWith("/spec.md")) scope = "spec";
+  else if (
+    relative === "user-journeys.md" ||
+    relative.endsWith("/user-journeys.md")
+  )
+    scope = "user-journeys";
+  return scope;
 }
 
-async function treeChangeIds(ref, kind) {
-  const { stdout } = await exec(
-    "git",
-    ["ls-tree", "-r", "--name-only", ref, "--", CHANGE_ROOT],
-    { cwd: rootDirectory },
+function capabilityArtifact(path) {
+  if (!path?.startsWith(SPEC_ROOT)) return null;
+  const parts = path.slice(SPEC_ROOT.length).split("/");
+  if (parts.length < 4) return null;
+  const directory = parts.slice(0, 3).join("/");
+  return {
+    directory,
+    id: directory,
+    kind: "capability",
+    path,
+    scope: artifactScope(parts.slice(3).join("/")),
+  };
+}
+
+function addChange(groups, status, item) {
+  const change = groups[status].get(item.id) ?? {
+    id: item.id,
+    path: item.directory,
+    scopes: new Set(),
+  };
+  change.scopes.add(item.scope);
+  groups[status].set(item.id, change);
+}
+
+function finishChanges(groups) {
+  return Object.fromEntries(
+    Object.entries(groups).map(([status, changes]) => [
+      status,
+      [...changes.values()]
+        .map((change) => ({ ...change, scopes: [...change.scopes].sort() }))
+        .sort((left, right) => left.id.localeCompare(right.id)),
+    ]),
   );
-  const ids = new Set();
-  for (const path of stdout.split("\n").filter(Boolean)) {
-    const item = location(path);
-    if (item?.kind === kind) ids.add(item.id);
+}
+
+export function classifyChanges(changed) {
+  const groups = {
+    new: new Map(),
+    archived: new Map(),
+    removed: new Map(),
+    updated: new Map(),
+  };
+
+  for (const record of changed) {
+    const oldPath = record.status === "D" ? record.path : record.oldPath;
+    const newPath = record.status === "D" ? null : record.path;
+    const oldItem = artifact(oldPath);
+    const newItem = artifact(newPath);
+
+    if (oldItem?.kind === "active" && newItem?.kind === "archive") {
+      addChange(groups, "archived", { ...newItem, id: oldItem.id });
+      continue;
+    }
+
+    if (newItem?.kind === "active") {
+      if (record.status === "M") addChange(groups, "updated", newItem);
+      else if (record.status === "R" && oldItem?.kind === "active") {
+        addChange(groups, "removed", oldItem);
+        addChange(groups, "new", newItem);
+      } else addChange(groups, "new", newItem);
+      continue;
+    }
+
+    if (oldItem?.kind === "active") addChange(groups, "removed", oldItem);
+    else if (newItem?.kind === "archive") addChange(groups, "archived", newItem);
+    else if (oldItem?.kind === "archive") {
+      if (record.status === "M") addChange(groups, "updated", oldItem);
+      else addChange(groups, "removed", oldItem);
+    }
   }
-  return ids;
+
+  return finishChanges(groups);
+}
+
+export function classifyCapabilities(changed) {
+  const groups = {
+    new: new Map(),
+    archived: new Map(),
+    removed: new Map(),
+    updated: new Map(),
+  };
+
+  for (const record of changed) {
+    const oldPath = record.status === "D" ? record.path : record.oldPath;
+    const newPath = record.status === "D" ? null : record.path;
+    const oldItem = capabilityArtifact(oldPath);
+    const newItem = capabilityArtifact(newPath);
+
+    if (newItem) {
+      if (record.status === "M") addChange(groups, "updated", newItem);
+      else if (record.status === "R" && oldItem) {
+        addChange(groups, "removed", oldItem);
+        addChange(groups, "new", newItem);
+      } else addChange(groups, "new", newItem);
+    } else if (oldItem) addChange(groups, "removed", oldItem);
+  }
+
+  return finishChanges(groups);
 }
 
 async function changedFiles(base, head) {
@@ -137,6 +192,23 @@ function humanize(id) {
 
 function escapeSlackText(text) {
   return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+}
+
+function scopesText(scopes = []) {
+  return scopes.length
+    ? ` — ${scopes.map((scope) => `\`${escapeSlackText(scope)}\``).join(", ")}`
+    : "";
+}
+
+function changeLink(id, title, openspecUrl) {
+  const baseUrl = openspecUrl.replace(/\/$/, "");
+  return `<${baseUrl}/#/change/${encodeURIComponent(id)}|${escapeSlackText(title)}>`;
+}
+
+function capabilityLink(id, openspecUrl) {
+  const baseUrl = openspecUrl.replace(/\/$/, "");
+  const path = id.split("/").map(encodeURIComponent).join("/");
+  return `<${baseUrl}/#/spec/${path}|${escapeSlackText(id)}>`;
 }
 
 async function titleAt(ref, directory, fallback) {
@@ -165,7 +237,14 @@ export async function titledChanges(changes, { base, head }) {
   return titled;
 }
 
-export function slackPayload({ changes, commitSha, commitUrl, manualUrl }) {
+export function slackPayload({
+  changes,
+  capabilities = { new: [], updated: [], archived: [], removed: [] },
+  commitSha,
+  commitUrl,
+  manualUrl,
+  openspecUrl = "https://spec.grade10-stg.com/openspec/",
+}) {
   const sections = [
     ["new", "New", ":new:"],
     ["updated", "Updated", ":pencil2:"],
@@ -177,17 +256,38 @@ export function slackPayload({ changes, commitSha, commitUrl, manualUrl }) {
     blocks: [
       {
         type: "section",
-        text: { type: "mrkdwn", text: ":memo: OpenSpec changes updated" },
+        text: { type: "mrkdwn", text: ":memo: OpenSpec updates" },
       },
       ...sections.map(([status, label, icon]) => ({
         type: "section",
         text: {
           type: "mrkdwn",
           text: `${icon} *${label}*\n${changes[status]
-            .map(({ id, title }) => `- *${escapeSlackText(title)}* (\`${id}\`)`)
+            .map(
+              ({ id, title, scopes }) =>
+                `- ${changeLink(id, title, openspecUrl)} (\`${id}\`)${scopesText(scopes)}`,
+            )
             .join("\n")}`,
         },
       })),
+      ...[
+        ["new", "New", ":new:"],
+        ["updated", "Updated", ":pencil2:"],
+        ["removed", "Removed", ":wastebasket:"],
+      ]
+        .filter(([status]) => capabilities[status]?.length)
+        .map(([status, label, icon]) => ({
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `${icon} *${label} capabilities*\n${capabilities[status]
+              .map(
+                ({ id, scopes }) =>
+                  `- ${capabilityLink(id, openspecUrl)}${scopesText(scopes)}`,
+              )
+              .join("\n")}`,
+          },
+        })),
       {
         type: "context",
         elements: [
@@ -209,6 +309,7 @@ async function main() {
       head: { type: "string", default: "HEAD" },
       "commit-url": { type: "string", default: "" },
       "manual-url": { type: "string", default: "https://spec.grade10-stg.com/planning" },
+      "openspec-url": { type: "string", default: "https://spec.grade10-stg.com/openspec/" },
       "github-output": { type: "string" },
     },
   });
@@ -216,24 +317,23 @@ async function main() {
 
   const changed = await changedFiles(values.base, values.head);
   const changedPaths = changed.flatMap(({ oldPath, path }) => [oldPath, path]).filter(Boolean);
-  const [beforeActiveIds, afterActiveIds, beforeArchiveIds, afterArchiveIds] = await Promise.all([
-    treeChangeIds(values.base, "active"),
-    treeChangeIds(values.head, "active"),
-    treeChangeIds(values.base, "archive"),
-    treeChangeIds(values.head, "archive"),
-  ]);
   const changes = await titledChanges(
-    classifyChanges(changed, { beforeActiveIds, afterActiveIds, beforeArchiveIds, afterArchiveIds }),
+    classifyChanges(changed),
     { base: values.base, head: values.head },
   );
+  const capabilities = classifyCapabilities(changed);
   const { stdout: commitSha } = await exec("git", ["rev-parse", values.head], { cwd: rootDirectory });
   const payload = slackPayload({
     changes,
+    capabilities,
     commitSha: commitSha.trim(),
     commitUrl: values["commit-url"],
     manualUrl: values["manual-url"],
+    openspecUrl: values["openspec-url"],
   });
-  const hasChanges = Object.values(changes).some((items) => items.length);
+  const hasChanges =
+    Object.values(changes).some((items) => items.length) ||
+    Object.values(capabilities).some((items) => items.length);
 
   if (values["github-output"]) {
     await appendFile(
@@ -241,7 +341,7 @@ async function main() {
       `has-changes=${hasChanges}\npayload=${JSON.stringify(payload)}\n`,
     );
   }
-  process.stdout.write(JSON.stringify({ changedPaths, changes, payload }));
+  process.stdout.write(JSON.stringify({ changedPaths, changes, capabilities, payload }));
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
