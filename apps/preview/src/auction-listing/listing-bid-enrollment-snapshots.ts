@@ -11,6 +11,11 @@ export type LinkedPaymentMethod = EnrollmentPaymentMethod & {
   editable: boolean;
 };
 
+export type BidAuthorizationSnapshot = {
+  status: "pending" | "error";
+  message?: string;
+};
+
 export const ENROLLMENT_DEMO_SAVED_PAYMENT: EnrollmentPaymentMethod = {
   brand: "visa",
   maskedNumber: "•••• 4242",
@@ -19,23 +24,27 @@ export const ENROLLMENT_DEMO_SAVED_PAYMENT: EnrollmentPaymentMethod = {
 export type ListingBidEnrollmentSnapshot = {
   /** Override place/confirm button via sidebar copy */
   submitUsesSignInLabel: boolean;
+  /** No linked card — amount controls disabled; Link a card to bid CTA. */
+  needsCard?: boolean;
   /** Fixture lot state for bid card view and recent-bids history. */
   fixtureState?: BiddingState;
   /** No account card on file — show the empty linked-card slot. */
   paymentEmptyState?: boolean;
   linkedPaymentMethod?: LinkedPaymentMethod;
-  /** Rendering this state opens the payment-setup dialog. */
+  /** Rendering this state opens the link-card setup dialog. */
   paymentSetup?: {
     requiresIframeLink?: boolean;
     /** Stripe iframe prefilled with an account card (change-card flow). */
     iframeLinkedPayment?: EnrollmentPaymentMethod;
     /** Age attestation already given on a prior lot. */
     defaultAgeAttested?: boolean;
-    /** Stripe authorization in flight on the setup sheet. */
-    authorizing?: boolean;
-    /** Authorization refused — shows the inline error on the setup sheet. */
-    authorizationRefused?: boolean;
+    /** Link/continue error shown under the provider card field. */
+    errorMessage?: string;
+    /** Provider link in flight — locks the sheet and shows the linking CTA. */
+    linking?: boolean;
   };
+  /** Silent authorize-on-commit status on the bid CTA. */
+  bidAuthorization?: BidAuthorizationSnapshot;
   signInOpen?: boolean;
   viewOverride?: Partial<ListingAuctionBidView>;
 };
@@ -47,6 +56,7 @@ export const ENROLLMENT_SNAPSHOT_SIGNED_OUT: ListingBidEnrollmentSnapshot = {
 
 export const ENROLLMENT_SNAPSHOT_NEEDS_PAYMENT: ListingBidEnrollmentSnapshot = {
   submitUsesSignInLabel: false,
+  needsCard: true,
   paymentEmptyState: true,
 };
 
@@ -69,6 +79,8 @@ export const ENROLLMENT_SNAPSHOT_LINKED_CARD: ListingBidEnrollmentSnapshot = {
 
 export const ENROLLMENT_SNAPSHOT_SETUP_SHEET: ListingBidEnrollmentSnapshot = {
   submitUsesSignInLabel: false,
+  needsCard: true,
+  paymentEmptyState: true,
   paymentSetup: { requiresIframeLink: true },
 };
 
@@ -86,7 +98,7 @@ export const ENROLLMENT_SNAPSHOT_SETUP_SHEET_FROM_CHANGE: ListingBidEnrollmentSn
     },
   };
 
-export const ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_PENDING: ListingBidEnrollmentSnapshot =
+export const ENROLLMENT_SNAPSHOT_SETUP_SHEET_ERROR: ListingBidEnrollmentSnapshot =
   {
     submitUsesSignInLabel: false,
     linkedPaymentMethod: {
@@ -97,8 +109,31 @@ export const ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_PENDING: ListingBidEnroll
       requiresIframeLink: true,
       iframeLinkedPayment: ENROLLMENT_DEMO_SAVED_PAYMENT,
       defaultAgeAttested: true,
-      authorizing: true,
+      errorMessage: "Could not link that card. Check the details and try again.",
     },
+  };
+
+export const ENROLLMENT_SNAPSHOT_SETUP_SHEET_LINKING: ListingBidEnrollmentSnapshot =
+  {
+    submitUsesSignInLabel: false,
+    needsCard: true,
+    paymentEmptyState: true,
+    paymentSetup: {
+      requiresIframeLink: true,
+      iframeLinkedPayment: ENROLLMENT_DEMO_SAVED_PAYMENT,
+      defaultAgeAttested: true,
+      linking: true,
+    },
+  };
+
+export const ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_PENDING: ListingBidEnrollmentSnapshot =
+  {
+    submitUsesSignInLabel: false,
+    linkedPaymentMethod: {
+      ...ENROLLMENT_DEMO_SAVED_PAYMENT,
+      editable: true,
+    },
+    bidAuthorization: { status: "pending" },
   };
 
 export const ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_REFUSED: ListingBidEnrollmentSnapshot =
@@ -108,11 +143,9 @@ export const ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_REFUSED: ListingBidEnroll
       ...ENROLLMENT_DEMO_SAVED_PAYMENT,
       editable: true,
     },
-    paymentSetup: {
-      requiresIframeLink: true,
-      iframeLinkedPayment: ENROLLMENT_DEMO_SAVED_PAYMENT,
-      defaultAgeAttested: true,
-      authorizationRefused: true,
+    bidAuthorization: {
+      status: "error",
+      message: "Your card could not be authorized. Try another card.",
     },
   };
 
@@ -131,6 +164,8 @@ export const LISTING_BID_ENROLLMENT_SNAPSHOTS = {
   linkedCard: ENROLLMENT_SNAPSHOT_LINKED_CARD,
   setupSheet: ENROLLMENT_SNAPSHOT_SETUP_SHEET,
   setupSheetFromChange: ENROLLMENT_SNAPSHOT_SETUP_SHEET_FROM_CHANGE,
+  setupSheetError: ENROLLMENT_SNAPSHOT_SETUP_SHEET_ERROR,
+  setupSheetLinking: ENROLLMENT_SNAPSHOT_SETUP_SHEET_LINKING,
   paymentAuthorizationPending:
     ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_PENDING,
   paymentAuthorizationRefused:

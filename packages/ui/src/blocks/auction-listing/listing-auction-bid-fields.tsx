@@ -25,6 +25,7 @@ import {
 import { ListingCountdownDisplay } from "./listing-countdown-display";
 import {
   ListingQuickMaximumBidActions,
+  type BidAuthorizationStatus,
   type ListingQuickMaximumBidActionsCopy,
 } from "./listing-quick-maximum-bid-actions";
 import { ListingRollingMoneyDisplay } from "./listing-rolling-money-display";
@@ -417,6 +418,8 @@ type BidActionsProps = {
   locale: ShippedLocale;
   onPlaceBid: () => void;
   onCommitMaximum: (amountMinor: number) => void;
+  authorizationStatus?: BidAuthorizationStatus;
+  authorizationMessage?: string;
 };
 
 function SignedOutBidAction({
@@ -440,6 +443,8 @@ function BidActions({
   locale,
   onPlaceBid,
   onCommitMaximum,
+  authorizationStatus,
+  authorizationMessage,
 }: BidActionsProps) {
   if (!view.showBidActions) return null;
 
@@ -449,9 +454,13 @@ function BidActions({
 
   return (
     <ListingQuickMaximumBidActions
+      amountEntryLocked={bidEnrollment === "needs-card"}
+      authorizationMessage={authorizationMessage}
+      authorizationStatus={authorizationStatus}
       copy={copy}
       locale={locale}
       onCommitMaximum={onCommitMaximum}
+      onLinkCard={bidEnrollment === "needs-card" ? onPlaceBid : undefined}
       view={view}
     />
   );

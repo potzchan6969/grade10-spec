@@ -69,13 +69,25 @@ type ListingQuickMaximumBidActionsCopy = {
   amountAboveCurrent: string;
   /** e.g. "{amount} vs max" — money delta above the viewer's private maximum. */
   amountAboveMaximum: string;
+  /** Primary action when amount entry is locked until a card is linked. */
+  linkACardToBid: string;
 };
+
+type BidAuthorizationStatus = "idle" | "pending" | "error";
 
 type ListingQuickMaximumBidActionsProps = {
   copy: ListingQuickMaximumBidActionsCopy;
   view: ListingAuctionBidView;
   locale: ShippedLocale;
   onCommitMaximum: (amountMinor: number) => void;
+  /** When true, presets and custom amount stay visible but are not interactive. */
+  amountEntryLocked?: boolean;
+  /** Opens link-card setup when amount entry is locked. */
+  onLinkCard?: () => void;
+  /** Silent authorize-on-commit status shown on the bid action. */
+  authorizationStatus?: BidAuthorizationStatus;
+  /** Collector-facing message when `authorizationStatus` is `error`. */
+  authorizationMessage?: string;
 };
 
 type MaximumPreset = {
@@ -95,6 +107,10 @@ function ListingQuickMaximumBidActions({
   view,
   locale,
   onCommitMaximum,
+  amountEntryLocked = false,
+  onLinkCard,
+  authorizationStatus = "idle",
+  authorizationMessage,
 }: ListingQuickMaximumBidActionsProps) {
   const hasCommittedMaximum = view.viewerMaximumMinor != null;
   /** Already leading under a private maximum — raise only; floor chip is not a bid. */
@@ -253,11 +269,13 @@ function ListingQuickMaximumBidActions({
   const floorHelper = copy.stepperMessage.replace("{amount}", floorAmountLabel);
 
   function handleSelectPreset(preset: MaximumPreset) {
+    if (amountEntryLocked) return;
     setSelectedPresetKey(preset.key);
     setCustomDraft("");
   }
 
   function handleCustomChange(next: string) {
+    if (amountEntryLocked) return;
     const sanitized = sanitizeMoneyDraft(next, view.currency);
     setCustomDraft(sanitized);
     if (sanitized.trim() === "") {
@@ -268,12 +286,20 @@ function ListingQuickMaximumBidActions({
   }
 
   function handleCustomKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (amountEntryLocked) {
+      event.preventDefault();
+      return;
+    }
     if (event.key === "." || event.key === ",") {
       event.preventDefault();
     }
   }
 
   function handleCustomBeforeInput(event: FormEvent<HTMLInputElement>) {
+    if (amountEntryLocked) {
+      event.preventDefault();
+      return;
+    }
     const data = (event.nativeEvent as InputEvent).data;
     if (data === "." || data === ",") {
       event.preventDefault();
@@ -281,19 +307,33 @@ function ListingQuickMaximumBidActions({
   }
 
   function handleUseMinimum() {
+    if (amountEntryLocked) return;
     setCustomDraft(wholeMajorDraftFromMinor(floorMaximumMinor, view.currency));
     setSelectedPresetKey(null);
   }
 
   function handleClearCustom() {
+    if (amountEntryLocked) return;
     setCustomDraft("");
     setSelectedPresetKey(defaultPresetKey(presets));
   }
 
   function handlePlaceBid() {
+    if (amountEntryLocked) {
+      onLinkCard?.();
+      return;
+    }
+    if (authorizationStatus === "pending") return;
     if (commitValidation?.ok !== true) return;
     onCommitMaximum(commitValidation.amountMinor);
   }
+
+  const primaryLabel = amountEntryLocked ? copy.linkACardToBid : placeBidLabel;
+  const primaryDisabled = amountEntryLocked
+    ? false
+    : authorizationStatus === "pending"
+      ? true
+      : !canPlaceBid;
 
   const customInvalid = customActive && (customMinor == null || maximumInvalid);
   const helperMessage = !customActive ? undefined : customMinor == null ? (
@@ -358,20 +398,22 @@ function ListingQuickMaximumBidActions({
             const amountLabel = formatMoney(preset.amountMinor, view.currency, {
               locale,
             });
-            const selected = selectedPreset?.key === preset.key;
+            const selected = !amountEntryLocked && selectedPreset?.key === preset.key;
             const accessibleName = (
               preset.immediate ? copy.bidImmediate : copy.bidUpTo
             ).replace("{amount}", amountLabel);
             return (
               <Button
+                aria-disabled={amountEntryLocked || undefined}
                 aria-label={accessibleName}
                 aria-pressed={selected}
                 className={cn(
                   "h-auto min-w-0 flex-1 flex-col items-center gap-0.5 rounded-(--radius-xl) px-1.5 py-3 text-center whitespace-normal",
-                  customActive && "opacity-50",
+                  (customActive || amountEntryLocked) && "opacity-50",
                   selected &&
                     "border-success-ring hover:border-success-ring focus-visible:border-success-ring focus-visible:ring-success-ring/50",
                 )}
+                disabled={amountEntryLocked}
                 key={preset.key}
                 onClick={() => handleSelectPreset(preset)}
                 size="md"
@@ -390,33 +432,54 @@ function ListingQuickMaximumBidActions({
 
         <NumberInput
           aria-label={customPlaceholder}
-          className={cn("w-full", !customActive && "opacity-50")}
+          className={cn(
+            "w-full",
+            (!customActive || amountEntryLocked) && "opacity-50",
+          )}
+          disabled={amountEntryLocked}
           inputMode="numeric"
-          message={helperMessage}
+          message={amountEntryLocked ? undefined : helperMessage}
           onBeforeInput={handleCustomBeforeInput}
           onChange={(event) => handleCustomChange(event.target.value)}
-          onClear={customActive ? handleClearCustom : undefined}
+          onClear={
+            amountEntryLocked || !customActive ? undefined : handleClearCustom
+          }
           onKeyDown={handleCustomKeyDown}
           placeholder={customPlaceholder}
           prefix={formatMoneyPrefix(view.currency, { locale })}
-          status={customInvalid ? "error" : "default"}
+          status={
+            amountEntryLocked || !customInvalid ? "default" : "error"
+          }
           value={customDraft}
         />
       </VStack>
 
-      <Button
-        className="w-full"
-        disabled={!canPlaceBid}
-        onClick={handlePlaceBid}
-        size="md"
-      >
-        {placeBidLabel}
-      </Button>
+      <VStack className="w-full" gap="xs">
+        <Button
+          className="w-full"
+          disabled={primaryDisabled}
+          loading={authorizationStatus === "pending"}
+          onClick={handlePlaceBid}
+          size="md"
+        >
+          {primaryLabel}
+        </Button>
+        {authorizationStatus === "error" && authorizationMessage ? (
+          <p
+            className="text-left text-xs text-destructive"
+            data-slot="input-message"
+            role="alert"
+          >
+            {authorizationMessage}
+          </p>
+        ) : null}
+      </VStack>
     </VStack>
   );
 }
 
 export type {
+  BidAuthorizationStatus,
   ListingQuickMaximumBidActionsCopy,
   ListingQuickMaximumBidActionsProps,
 };

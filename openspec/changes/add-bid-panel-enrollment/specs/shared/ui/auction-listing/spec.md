@@ -8,22 +8,30 @@ The shared UI package SHALL export, from its public entry,
 `EnrollmentSetupSheet` SHALL receive `open`, optional `onOpenChange`, optional
 `onContinue`, optional `requiresIframeLink`, optional
 `iframeLinkedPayment` (brand and masked number for the change-card
-placeholder), optional `defaultAgeAttested`, optional `authorizing`, and
-optional `authorizationRefused`. When `authorizing` is true, it SHALL keep
-the same title and description copy, disable the provider field and age
-attestation, show the authorizing continue label in a loading state, and
-show the authorizing status as an inline alert. When
-`authorizationRefused` is true, it SHALL keep the same title and description
-copy, show the refused authorization alert inline, keep the provider field
-and age attestation interactive, and keep continue available. It SHALL
-receive all user-visible copy through props or a dedicated copy object the
-export names; it SHALL supply no default user-visible copy.
+placeholder), optional `defaultAgeAttested`, optional `errorMessage`,
+optional `linking`, optional `stripePaymentMethodField`, and optional
+`paymentMethodReady`. When `errorMessage` is supplied and `linking` is not
+true, it SHALL render that string as a tiny destructive message left-aligned
+under the provider card field with 8px spacing. When `linking` is true, it
+SHALL lock the provider field and age attestation, hide the dismiss control,
+refuse close via `onOpenChange`, and show a loading primary action using the
+consumer's linking label. When `stripePaymentMethodField` is supplied, it
+SHALL render that node in place of the placeholder and SHALL treat card
+readiness as `paymentMethodReady`. It SHALL receive all user-visible copy
+through props or a dedicated copy object the export names; it SHALL supply no
+default user-visible copy. It SHALL NOT accept `authorizing` or
+`authorizationRefused` props; authorization pending and refusal belong on the
+bid-commit surface under `grade10-site/auction/bid-payment-method`.
 
-`PaymentMethodRow` SHALL receive a payment brand, masked number, and optional
-`onChange`. When `onChange` is omitted, it SHALL render the linked card
-without a change control.
+`PaymentMethodRow` SHALL receive a payment brand, masked number, optional
+`onChange`, and copy that includes `paymentMethod` plus
+`paymentMethodTooltip`. It SHALL render an info control beside the linked-card
+label whose tooltip content is `paymentMethodTooltip`. When `onChange` is
+omitted, it SHALL render the linked card without a change control and SHALL
+keep the same row height as when Change is shown.
 
-`PaymentMethodEmptyState` SHALL receive optional `onLink` and SHALL render an
+`PaymentMethodEmptyState` SHALL receive optional `onLink` and the same
+linked-card label copy including `paymentMethodTooltip`. It SHALL render an
 empty linked-card prompt that activates `onLink` when supplied.
 
 None of these blocks SHALL fetch, persist, or subscribe to product state.
@@ -50,21 +58,20 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **THEN** continue is enabled without further attestation action
 - **AND** the provider field area uses the linked-card placeholder copy
 
-#### Scenario: shared-ui-auction-listing-SC-22 - Authorizing locks setup controls
+#### Scenario: shared-ui-auction-listing-SC-28 - Setup shows a link error under the card field
 
-- **GIVEN** `EnrollmentSetupSheet` open with `authorizing` true
+- **GIVEN** `EnrollmentSetupSheet` open with `errorMessage` supplied
 - **WHEN** it renders
-- **THEN** continue shows the authorizing label in a loading state
+- **THEN** that message appears under the provider card field
+- **AND** continue remains available when card entry and attestation are satisfied
+
+#### Scenario: shared-ui-auction-listing-SC-29 - Setup linking locks the sheet
+
+- **GIVEN** `EnrollmentSetupSheet` open with `linking` true
+- **WHEN** it renders
+- **THEN** the primary action uses the consumer's linking label and is busy
 - **AND** the provider field and age attestation are not interactive
-- **AND** the authorizing status alert is shown inline
-
-#### Scenario: shared-ui-auction-listing-SC-23 - Refused authorization keeps setup interactive
-
-- **GIVEN** `EnrollmentSetupSheet` open with `authorizationRefused` true
-- **WHEN** it renders
-- **THEN** the refused authorization alert is shown
-- **AND** continue remains available as Authorize
-- **AND** the provider field and age attestation stay interactive
+- **AND** dismiss is unavailable
 
 #### Scenario: shared-ui-auction-listing-SC-18 - Payment row hides change when not editable
 
@@ -72,6 +79,13 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **WHEN** it renders
 - **THEN** the masked number and brand are shown
 - **AND** no change control is shown
+- **AND** the row keeps the same height as with Change shown
+
+#### Scenario: shared-ui-auction-listing-SC-30 - Linked-card label exposes hold tooltip
+
+- **GIVEN** `PaymentMethodRow` rendered with `paymentMethodTooltip` copy
+- **WHEN** it renders
+- **THEN** an info control beside the linked-card label exposes that tooltip copy
 
 #### Scenario: shared-ui-auction-listing-SC-19 - Empty linked-card slot activates link
 
@@ -82,12 +96,16 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 ### Requirement: The auction bid card accepts an enrollment signal
 
 `ListingAuctionBidCard` and its field primitives SHALL accept an optional
-`bidEnrollment` value of `signed-out` or `ready`. When `signed-out`, the
-primary bid action SHALL use the consumer's sign-in label and SHALL NOT offer
-place bid. When `ready` or omitted, the card SHALL use the consumer's place-bid
-or commit-maximum labels. Standing banners SHALL render only when
-`bidEnrollment` is not `signed-out` and the consumer supplies standing
-content.
+`bidEnrollment` value of `signed-out`, `needs-card`, or `ready`. When
+`signed-out`, the primary bid action SHALL use the consumer's sign-in label
+and SHALL NOT offer place bid or link a card. When `needs-card`, quick-bid
+presets and the custom maximum field SHALL render disabled; the primary bid
+action SHALL use the consumer's link-card label and SHALL invoke the
+consumer's open-setup callback (for example `onPlaceBid`) rather than
+`onCommitMaximum`. When `ready` or omitted, the card SHALL use the
+consumer's place-bid or commit-maximum labels with enabled amount controls.
+Standing banners SHALL render only when `bidEnrollment` is not `signed-out`
+and the consumer supplies standing content.
 
 #### Scenario: shared-ui-auction-listing-SC-20 - Signed-out enrollment hides standing badges
 
@@ -103,6 +121,20 @@ content.
 - **WHEN** the card renders
 - **THEN** the outbid standing badge is shown
 
+#### Scenario: shared-ui-auction-listing-SC-26 - Needs-card disables amount controls
+
+- **GIVEN** a bid card with `bidEnrollment` `needs-card`
+- **WHEN** it renders
+- **THEN** quick-bid presets and the custom maximum field are visible and not interactive
+- **AND** the primary bid action uses the consumer's link-card label
+
+#### Scenario: shared-ui-auction-listing-SC-27 - Needs-card primary action opens setup
+
+- **GIVEN** a bid card with `bidEnrollment` `needs-card` and an open-setup callback
+- **WHEN** the collector activates the primary bid action
+- **THEN** the open-setup callback is invoked once
+- **AND** `onCommitMaximum` is not invoked
+
 ## MODIFIED Requirements
 
 ### Requirement: The listing surface exports
@@ -115,7 +147,7 @@ for the listing product page — `ListingGallery`, `ListingAuctionBidCard`, and
 `ListingDetailsProps`, and `ListingDetailsCopy`.
 
 Each of those components SHALL be renderable on its own, so a later surface can
-reuse the gallery without the bid card.
+reuse the gallery without the bid panel.
 
 #### Scenario: shared-ui-auction-listing-SC-01 - An application imports the surface
 

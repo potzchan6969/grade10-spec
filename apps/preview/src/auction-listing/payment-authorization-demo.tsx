@@ -1,37 +1,34 @@
 import { useState } from "react";
+import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "./listing-bid-enrollment-copy";
 import { ListingBidEnrollmentCardPreview } from "./listing-bid-enrollment-card-preview";
 import {
   ENROLLMENT_DEMO_SAVED_PAYMENT,
   ENROLLMENT_SNAPSHOT_READY,
+  type BidAuthorizationSnapshot,
 } from "./listing-bid-enrollment-snapshots";
 
 function PaymentAuthorizationPreview() {
-  const [dialogState, setDialogState] = useState<
-    "closed" | "method" | "pending"
-  >("closed");
+  const [authorization, setAuthorization] = useState<
+    BidAuthorizationSnapshot | undefined
+  >(undefined);
 
   return (
     <ListingBidEnrollmentCardPreview
-      onBidSubmit={() => setDialogState("method")}
+      onBidSubmit={() =>
+        setAuthorization({
+          status: "error",
+          message: LISTING_BID_ENROLLMENT_DEMO_COPY.authorizationDeclined,
+        })
+      }
       onChangePayment={() => undefined}
       onLinkPayment={() => undefined}
-      onPaymentSetupDismissed={() => setDialogState("closed")}
-      onSetupContinue={() => setDialogState("pending")}
       snapshot={{
         ...ENROLLMENT_SNAPSHOT_READY,
         linkedPaymentMethod: {
           ...ENROLLMENT_DEMO_SAVED_PAYMENT,
           editable: true,
         },
-        paymentSetup:
-          dialogState === "closed"
-            ? undefined
-            : {
-                requiresIframeLink: true,
-                iframeLinkedPayment: ENROLLMENT_DEMO_SAVED_PAYMENT,
-                defaultAgeAttested: true,
-                authorizing: dialogState === "pending",
-              },
+        bidAuthorization: authorization,
       }}
     />
   );

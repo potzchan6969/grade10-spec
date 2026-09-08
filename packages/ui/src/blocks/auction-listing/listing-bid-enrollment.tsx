@@ -1,8 +1,8 @@
-import { Alert } from "@grade10/design-system/components/display/alert";
 import { Card } from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
+import { Link } from "@grade10/design-system/components/forms/link";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
@@ -14,15 +14,51 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
-import { CreditCard } from "@phosphor-icons/react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@grade10/design-system/components/overlays/tooltip";
+import { CreditCard, Info } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
 import { OrderDetailsPaymentLogo } from "../store-order-detail/order-details-payment-logo";
 import type { OrderDetailsPaymentBrand } from "../store-order-detail/types";
 
 type OverlayPresentation = "modal" | "inline";
 
-type PaymentMethodRowCopy = {
+type PaymentMethodLabelCopy = {
   paymentMethod: string;
+  paymentMethodTooltip: string;
+};
+
+function PaymentMethodLabel({ copy }: { copy: PaymentMethodLabelCopy }) {
+  return (
+    <HStack gap="xs" vAlign="center">
+      <Text
+        className="text-secondary-foreground"
+        size="sm"
+        tone="secondary"
+        weight="medium"
+      >
+        {copy.paymentMethod}
+      </Text>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger
+            aria-label={copy.paymentMethodTooltip}
+            className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            onPointerDown={(event) => event.preventDefault()}
+            render={<Info aria-hidden size={12} />}
+          />
+          <TooltipContent>{copy.paymentMethodTooltip}</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </HStack>
+  );
+}
+
+type PaymentMethodRowCopy = PaymentMethodLabelCopy & {
   changeCard: string;
 };
 
@@ -41,14 +77,7 @@ function PaymentMethodRow({
 }: PaymentMethodRowProps) {
   return (
     <VStack className="w-full" gap="sm">
-      <Text
-        className="text-secondary-foreground"
-        size="sm"
-        tone="secondary"
-        weight="medium"
-      >
-        {copy.paymentMethod}
-      </Text>
+      <PaymentMethodLabel copy={copy} />
       <Card className="gap-0 p-3" padding={false}>
         <HStack
           className="w-full"
@@ -63,19 +92,25 @@ function PaymentMethodRow({
               {maskedNumber}
             </Text>
           </HStack>
-          {onChange ? (
-            <Button onClick={onChange} size="sm" variant="ghost">
-              {copy.changeCard}
-            </Button>
-          ) : null}
+          <div className="flex h-5 shrink-0 items-center justify-end">
+            {onChange ? (
+              <Link
+                onClick={onChange}
+                render={<button type="button" />}
+                size="sm"
+                variant="secondary"
+              >
+                {copy.changeCard}
+              </Link>
+            ) : null}
+          </div>
         </HStack>
       </Card>
     </VStack>
   );
 }
 
-type PaymentMethodEmptyStateCopy = {
-  paymentMethod: string;
+type PaymentMethodEmptyStateCopy = PaymentMethodLabelCopy & {
   linkCardEmptyState: string;
 };
 
@@ -90,14 +125,7 @@ function PaymentMethodEmptyState({
 }: PaymentMethodEmptyStateProps) {
   return (
     <VStack className="w-full" gap="sm">
-      <Text
-        className="text-secondary-foreground"
-        size="sm"
-        tone="secondary"
-        weight="medium"
-      >
-        {copy.paymentMethod}
-      </Text>
+      <PaymentMethodLabel copy={copy} />
       <button
         aria-label={copy.linkCardEmptyState}
         className="w-full cursor-pointer rounded-2xl text-left transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
@@ -130,9 +158,8 @@ type EnrollmentSetupSheetCopy = {
   linkCardDescription: string;
   ageAttestation: string;
   continue: string;
-  authorizing: string;
-  authorizingCaption: string;
-  authorizationRefused: string;
+  /** Primary action label while the provider link request is in flight. */
+  linking: string;
   iframePlaceholder: string;
   iframeLinkedCardPlaceholder: string;
 };
@@ -203,17 +230,17 @@ type EnrollmentSetupSheetProps = {
   };
   /** Age attestation already given on a prior lot. */
   defaultAgeAttested?: boolean;
-  /** Stripe authorization in flight — locks the sheet and shows pending copy. */
-  authorizing?: boolean;
-  /** Authorization refused — shows the inline error; controls stay interactive. */
-  authorizationRefused?: boolean;
+  /** Tiny destructive message under the card field after a refused Link Card. */
+  errorMessage?: string;
+  /** Provider link in flight — locks the sheet and shows the linking CTA. */
+  linking?: boolean;
 };
 
 function SetupSheetBody({
   copy,
   ageAttested,
-  authorizing,
-  authorizationRefused,
+  errorMessage,
+  linking,
   stripePaymentMethodField,
   iframeLinkedPayment,
   onAgeAttestedChange,
@@ -221,8 +248,8 @@ function SetupSheetBody({
 }: {
   copy: EnrollmentSetupSheetCopy;
   ageAttested: boolean;
-  authorizing: boolean;
-  authorizationRefused: boolean;
+  errorMessage?: string;
+  linking: boolean;
   stripePaymentMethodField?: ReactNode;
   iframeLinkedPayment?: {
     brand: OrderDetailsPaymentBrand;
@@ -234,32 +261,27 @@ function SetupSheetBody({
   return (
     <VStack className="w-full" gap="md">
       <DialogDescription>{copy.linkCardDescription}</DialogDescription>
-      <CardLinkIframePlaceholder
-        copy={copy}
-        disabled={authorizing}
-        content={stripePaymentMethodField}
-        onSimulateComplete={onSimulateCardLinkComplete}
-        showsLinkedCard={iframeLinkedPayment != null}
-      />
-      {authorizing ? (
-        <Alert
-          dismissible={false}
-          layout="inline"
-          status="default"
-          title={copy.authorizingCaption}
+      <VStack className="w-full" gap="sm">
+        <CardLinkIframePlaceholder
+          content={stripePaymentMethodField}
+          copy={copy}
+          disabled={linking}
+          onSimulateComplete={onSimulateCardLinkComplete}
+          showsLinkedCard={iframeLinkedPayment != null}
         />
-      ) : null}
-      {authorizationRefused ? (
-        <Alert
-          dismissible={false}
-          layout="inline"
-          status="error"
-          title={copy.authorizationRefused}
-        />
-      ) : null}
+        {errorMessage && !linking ? (
+          <p
+            className="text-left text-xs text-destructive"
+            data-slot="input-message"
+            role="alert"
+          >
+            {errorMessage}
+          </p>
+        ) : null}
+      </VStack>
       <CheckboxListInput
         checked={ageAttested}
-        disabled={authorizing}
+        disabled={linking}
         onCheckedChange={(checked) => onAgeAttestedChange(checked === true)}
         size="sm"
       >
@@ -278,8 +300,8 @@ function EnrollmentSetupSheet({
   requiresIframeLink = true,
   iframeLinkedPayment,
   defaultAgeAttested = false,
-  authorizing = false,
-  authorizationRefused = false,
+  errorMessage,
+  linking = false,
   stripePaymentMethodField,
   paymentMethodReady,
 }: EnrollmentSetupSheetProps) {
@@ -303,40 +325,40 @@ function EnrollmentSetupSheet({
   }, [defaultAgeAttested, iframeLinkedPayment, open]);
 
   function handleSimulateCardLinkComplete() {
-    if (authorizing) return;
+    if (linking) return;
     setIframeLinked(true);
   }
 
   function handleContinue() {
-    if (authorizing || !cardReady || !ageAttested) return;
+    if (linking || !cardReady || !ageAttested) return;
     onContinue?.();
   }
 
   const body = (
     <SetupSheetBody
       ageAttested={ageAttested}
-      authorizationRefused={authorizationRefused}
-      authorizing={authorizing}
       copy={copy}
-      stripePaymentMethodField={stripePaymentMethodField}
+      errorMessage={errorMessage}
       iframeLinkedPayment={iframeLinkedPayment}
+      linking={linking}
       onAgeAttestedChange={setAgeAttested}
       onSimulateCardLinkComplete={
         requiresIframeLink && iframeLinkedPayment == null
           ? handleSimulateCardLinkComplete
           : undefined
       }
+      stripePaymentMethodField={stripePaymentMethodField}
     />
   );
   const footer = (
     <Button
-      disabled={!cardReady || !ageAttested}
-      loading={authorizing}
+      disabled={!cardReady || !ageAttested || linking}
+      loading={linking}
       onClick={handleContinue}
       size="md"
       type="button"
     >
-      {authorizing ? copy.authorizing : copy.continue}
+      {linking ? copy.linking : copy.continue}
     </Button>
   );
 
@@ -353,13 +375,13 @@ function EnrollmentSetupSheet({
   return (
     <Dialog
       onOpenChange={(next) => {
-        if (authorizing && !next) return;
+        if (linking && !next) return;
         onOpenChange?.(next);
       }}
       open={open}
     >
       <DialogContent>
-        <DialogHeader showCloseButton={!authorizing}>
+        <DialogHeader showCloseButton={!linking}>
           <DialogTitle>{copy.getReadyToBid}</DialogTitle>
         </DialogHeader>
         <DialogBody>{body}</DialogBody>

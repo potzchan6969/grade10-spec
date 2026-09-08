@@ -113,7 +113,7 @@ function useListingBidEnrollment(
       ...current,
       signedIn: true,
       signInOpen: false,
-      paymentSetup: "required",
+      paymentSetup: "none",
     }));
   }, []);
 
@@ -128,6 +128,7 @@ function useListingBidEnrollment(
   const snapshot = useMemo((): ListingBidEnrollmentSnapshot => {
     return {
       submitUsesSignInLabel: !session.signedIn,
+      needsCard: needsSetup,
       fixtureState: !session.signedIn ? "live-manual" : undefined,
       paymentEmptyState:
         needsSetup && session.paymentSetup === "none" ? true : undefined,

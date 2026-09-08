@@ -1,11 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, waitFor, within } from "storybook/test";
+import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "./listing-bid-enrollment-copy";
 import { ListingBidEnrollmentCardPreview } from "./listing-bid-enrollment-card-preview";
 import {
   ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_PENDING,
   ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_REFUSED,
   ENROLLMENT_SNAPSHOT_SETUP_SHEET,
+  ENROLLMENT_SNAPSHOT_SETUP_SHEET_ERROR,
   ENROLLMENT_SNAPSHOT_SETUP_SHEET_FROM_CHANGE,
+  ENROLLMENT_SNAPSHOT_SETUP_SHEET_LINKING,
   type ListingBidEnrollmentSnapshot,
 } from "./listing-bid-enrollment-snapshots";
 
@@ -36,18 +39,18 @@ export const SetupModal = enrollmentDialogStory(
 );
 SetupModal.play = async () => {
   const dialog = within(document.body).getByRole("dialog", {
-    name: "Authorize a card to bid",
+    name: "Link a card to bid",
   });
   expect(
     within(dialog).getByText("Stripe card link (iframe)"),
   ).toBeInTheDocument();
   expect(
     within(dialog).getByText(
-      "Link a card and authorize a hold for this lot. You are only charged if you win.",
+      LISTING_BID_ENROLLMENT_DEMO_COPY.linkCardDescription,
     ),
   ).toBeInTheDocument();
   expect(
-    within(dialog).getByRole("button", { name: "Authorize" }),
+    within(dialog).getByRole("button", { name: "Link Card" }),
   ).toBeDisabled();
 };
 
@@ -56,14 +59,14 @@ export const SetupModalFromChange = enrollmentDialogStory(
 );
 SetupModalFromChange.play = async () => {
   const dialog = within(document.body).getByRole("dialog", {
-    name: "Authorize a card to bid",
+    name: "Link a card to bid",
   });
   expect(
     within(dialog).getByText("Stripe card form (iframe) — linked card on file"),
   ).toBeInTheDocument();
   expect(
     within(dialog).getByText(
-      "Link a card and authorize a hold for this lot. You are only charged if you win.",
+      LISTING_BID_ENROLLMENT_DEMO_COPY.linkCardDescription,
     ),
   ).toBeInTheDocument();
   expect(
@@ -72,53 +75,68 @@ SetupModalFromChange.play = async () => {
     }),
   ).toBeChecked();
   expect(
-    within(dialog).getByRole("button", { name: "Authorize" }),
+    within(dialog).getByRole("button", { name: "Link Card" }),
   ).toBeEnabled();
+};
+
+export const SetupModalError = enrollmentDialogStory(
+  ENROLLMENT_SNAPSHOT_SETUP_SHEET_ERROR,
+);
+SetupModalError.play = async () => {
+  const dialog = within(document.body).getByRole("dialog", {
+    name: "Link a card to bid",
+  });
+  expect(
+    within(dialog).getByText(
+      "Could not link that card. Check the details and try again.",
+    ),
+  ).toBeVisible();
+  expect(
+    within(dialog).getByRole("button", { name: "Link Card" }),
+  ).toBeEnabled();
+};
+
+export const SetupModalLinking = enrollmentDialogStory(
+  ENROLLMENT_SNAPSHOT_SETUP_SHEET_LINKING,
+);
+SetupModalLinking.play = async () => {
+  const dialog = within(document.body).getByRole("dialog", {
+    name: "Link a card to bid",
+  });
+  const continueButton = within(dialog).getByRole("button", {
+    name: "Linking",
+  });
+  expect(continueButton).toBeDisabled();
+  expect(continueButton).toHaveAttribute("aria-busy", "true");
+  expect(
+    within(dialog).getByRole("checkbox", {
+      name: "I confirm I am 18 years of age or older.",
+    }),
+  ).toBeDisabled();
 };
 
 export const PaymentAuthorizationPending = enrollmentDialogStory(
   ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_PENDING,
 );
-PaymentAuthorizationPending.play = async () => {
-  const dialog = await waitFor(() =>
-    within(document.body).getByRole("dialog", {
-      name: "Authorize a card to bid",
-    }),
-  );
+PaymentAuthorizationPending.play = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
+  await waitFor(() => {
+    expect(canvas.getByRole("button", { name: /^Set maximum/ })).toBeDisabled();
+  });
   expect(
-    within(dialog).getByRole("button", {
-      name: "Authorizing",
-    }),
-  ).toBeDisabled();
-  // The checkbox is a span carrying the role, so the disabled state it
-  // publishes is `aria-disabled`. `toBeDisabled` reads only the native
-  // attribute and would call every such control enabled.
-  expect(
-    within(dialog).getByRole("checkbox", {
-      name: "I confirm I am 18 years of age or older.",
-    }),
-  ).toHaveAttribute("aria-disabled", "true");
-  expect(within(dialog).getByRole("alert")).toHaveTextContent(
-    "Your card is being authorized. Keep this dialog open while Stripe completes the request.",
-  );
+    canvas.queryByRole("dialog", { name: "Link a card to bid" }),
+  ).not.toBeInTheDocument();
 };
 
 export const PaymentAuthorizationRefused = enrollmentDialogStory(
   ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_REFUSED,
 );
-PaymentAuthorizationRefused.play = async () => {
-  const dialog = await waitFor(() =>
-    within(document.body).getByRole("dialog", {
-      name: "Authorize a card to bid",
-    }),
-  );
-  expect(within(dialog).getByRole("alert")).toHaveTextContent(
-    "Your card could not be authorized.",
-  );
+PaymentAuthorizationRefused.play = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
   expect(
-    within(dialog).getByText("Stripe card form (iframe) — linked card on file"),
-  ).toBeInTheDocument();
+    canvas.getByText("Your card could not be authorized. Try another card."),
+  ).toBeVisible();
   expect(
-    within(dialog).getByRole("button", { name: "Authorize" }),
-  ).toBeEnabled();
+    canvas.queryByRole("dialog", { name: "Link a card to bid" }),
+  ).not.toBeInTheDocument();
 };
