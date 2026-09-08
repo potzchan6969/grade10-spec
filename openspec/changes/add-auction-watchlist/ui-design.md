@@ -14,7 +14,7 @@ them as the first task of each surface group.
 | --- | --- | --- |
 | Auction listing page — header | *to be produced* | The watch control, filling `ListingLotHeader`'s existing slot. |
 | Auction catalogue — listing tile | *to be produced* | A watch control on the tile. |
-| Watched listings | *to be produced* | The collector's watched listings, most recent first, with the empty state. |
+| Watched listings | *to be produced* | The collector's watched listings, most recent first, with the empty state; each entry opens the listing and can unwatch without opening it. Placement (header vs account area) is still open on the capability page. |
 
 ## Components
 
@@ -46,6 +46,7 @@ Each tied to the scenario that defines it.
 | Watched list, empty | `grade10-site-auction-watchlist-SC-12` — an explanation, never a bare page or an error |
 | Watched entry, listing closed | `grade10-site-auction-watchlist-SC-16` |
 | Watched entry, listing called off | `grade10-site-auction-watchlist-SC-17` |
+| Unwatch from the watched list | `grade10-site-auction-watchlist-SC-18` |
 
 A viewer who is not signed in never sees another collector's watch state, per
 `grade10-site-auction-watchlist-SC-08`.

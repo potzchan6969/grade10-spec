@@ -25,7 +25,8 @@ carries enough to act on: the lot, its current bid, its close, and whether the
 sale is open, closed, or called off. A close or a call-off never removes a
 watch — the entry stays, honestly labelled, until its owner unwatches it. A
 collector watching nothing is told so rather than shown an error or an empty
-page.
+page. Unwatch is available on the listing page, the catalogue, and this list —
+email only links into a signed-in surface; it is not the only way out.
 
 ## Visibility
 
@@ -71,6 +72,7 @@ searching the watched list beyond most-recent first.
 | No standing | Decided | Watching does not bid, reserve, or change the sale. | Product |
 | Sign-in | Decided | Signed-out viewers are offered sign-in. Nothing is stored in the browser. | Product |
 | Survives close | Decided | A closed or called-off lot stays in the list until the collector unwatches. | Product |
+| Unwatch surfaces | Decided | Listing page, catalogue tile, and watched list. Email stop links to a signed-in page; not email-only unwatch. | Product |
 | Store heart | Decided | Not restored. This control exists because a list and later mail answer it. | Product |
 | List placement | ❓ Open | Header vs account area. Placement, not behaviour. | Design |
 | Operator count placement | ❓ Open | Listings table vs listing admin page. | Design |
