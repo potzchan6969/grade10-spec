@@ -30,7 +30,7 @@ are Qase's own, so a suite exports without a translation step.
 
 ## The rule
 
-`test-cases.md` is a derived reading of a capability's `spec.md`, not a
+`feature-tcs.md` is a derived reading of a capability's `spec.md`, not a
 second source of truth. It carries no coverage the spec does not already
 state as a scenario, and a change proposal never links it in place of a
 spec delta. Where the two disagree, `spec.md` is correct — regenerate the
@@ -82,7 +82,7 @@ is permanent, and every task, review comment and case naming one would
 otherwise be repointed silently. Read the ids that exist before issuing a new
 one; only a capability issuing its first derives the prefix from its path.
 
-Inside `test-cases.md` a journey id is written in its compact form — the
+Inside `feature-tcs.md` a journey id is written in its compact form — the
 hyphen after `US` dropped, the number not zero-padded — so a section heading
 and the case ids under it read as one family: spec journey
 `grade10-site-store-product-listing-US-01` becomes the section `## grade10-site-store-product-listing-US1: …`,
@@ -220,7 +220,7 @@ human with time, and it gets its own pull request later (see **The review
 lane**).
 
 `/spec-push` refuses to push a change whose capabilities have a
-`user-journeys.md` but no `test-cases.md` beside it, and runs
+`user-journeys.md` but no `feature-tcs.md` beside it, and runs
 `pnpm run tcs:validate` alongside the other checks.
 
 A change that sets `skip_specs: true` has nothing to generate. A capability
@@ -254,12 +254,12 @@ If the resolved capability has no `user-journeys.md` (or an empty one),
 `/spec-to-tcs` writes one to the shape in `openspec/config.yaml` — INVEST
 stories with permanent `<capability>-US-<n>` ids, each accepted by the
 `<capability>-SC-<n>` scenarios already in `spec.md` — **without adding
-requirements**, then continues and writes `test-cases.md`. Report the new
+requirements**, then continues and writes `feature-tcs.md`. Report the new
 journeys file in the same run.
 
 ### When a suite already exists
 
-A second run against a capability that already has `test-cases.md` is never a
+A second run against a capability that already has `feature-tcs.md` is never a
 silent overwrite. `/spec-to-tcs` shows the suite it found — its file status,
 its journeys, its cases and their statuses, and any scenario the spec has
 gained or lost since — and asks what the user wants before writing:
@@ -1149,7 +1149,7 @@ whatever the state of the individual cases inside them.
 ### Drafts styled
 
 ```markdown
-**Drafts styled:** 2026-09-05, tcs-rules r1
+**Drafts styled:** 2026-09-05, tcs-rules r3.0
 ```
 
 The revision of *this document* that the file's `draft` cases were last written
@@ -1274,11 +1274,6 @@ Fixed points, none of them optional:
   every part of a case. A `---` rule separates journey sections.
 - A case with no pre-conditions line, or an empty **Expected Results** list,
   is not finished.
-
-Older suites may still carry a `**Description:**` paragraph, a `**Covers:**`
-list, `**Preconditions:**` (no hyphen), a `**Properties:**` block at the end
-of the case with `-` bullets, or a `| # | Action | Expected result |` steps
-table. New generation writes the shape above; the Qase exporter accepts both.
 
 Execution belongs to the run, not to this file. There is no Actual result and
 no Pass/Fail column here — a suite is the authored artifact, and what happened
