@@ -10,22 +10,22 @@ be in force: [`tech-design.md`](tech-design.md). Frames, exports and states:
 
 ## 1. Words for the facets (grade10-spec) (owner: @sean)
 
-- [ ] 1.1 Name the two facet groups in the shared store catalog, in every language the site answers, so the sidebar has a heading for each group the catalogue returns
-- [ ] 1.2 Name the invitation that opens a capped group, in every language, so *A long facet group is capped* (`SC-16`) has words for it
-- [ ] 1.3 Add the short names of the three utility links beside the full ones the footer's help column already carries, in every language, the way the legal bar already shortens its two
-- [ ] 1.4 Retire the collection group's name and the popularity order's two words, which no surface asks for once the panel is facets and the menu is what the catalogue answers
-- [ ] 1.5 Verify: `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`
+- [x] 1.1 Name the two facet groups in the shared store catalog, in every language the site answers, so the sidebar has a heading for each group the catalogue returns
+- [x] 1.2 Name the invitation that opens a capped group, in every language, so *A long facet group is capped* (`SC-16`) has words for it
+- [x] 1.3 Add the short names of the three utility links beside the full ones the footer's help column already carries, in every language, the way the legal bar already shortens its two
+- [x] 1.4 Retire the collection group's name and the popularity order's two words, which no surface asks for once the panel is facets and the menu is what the catalogue answers
+- [x] 1.5 Verify: `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`
 
 ## 2. Catalogue reads (grade10) (owner: @sean)
 
 The storefront's catalogue data layer, verified against fixtures rather than a
 running worker. Passes no scenario on its own — it is what group 3 draws.
 
-- [ ] 2.1 Build the canonical query — parameters in name order, facet values deduped and sorted, free text folded, default page size omitted — and read it back off an address, so one narrowing has one spelling from the address to the cache key
-- [ ] 2.2 Add the facet taxonomy read to the catalogue reads, keyed on the narrowing alone and never on the cursor, the page size or the order, so paging and re-ordering do not refetch a taxonomy that describes the set
-- [ ] 2.3 Carry the whole query — free text, order and both facets — on the products read, so narrowing, searching and ordering are answers about the catalogue rather than about a loaded page
-- [ ] 2.4 Make the fixture procedure client answer the taxonomy with counts and narrow, search and order its products the way the backend does, so every scenario in group 3 is decidable without a worker
-- [ ] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 2.1 Build the canonical query — parameters in name order, facet values deduped and sorted, free text folded, default page size omitted — and read it back off an address, so one narrowing has one spelling from the address to the cache key
+- [x] 2.2 Add the facet taxonomy read to the catalogue reads, keyed on the narrowing alone and never on the cursor, the page size or the order, so paging and re-ordering do not refetch a taxonomy that describes the set
+- [x] 2.3 Carry the whole query — free text, order and both facets — on the products read, so narrowing, searching and ordering are answers about the catalogue rather than about a loaded page
+- [x] 2.4 Make the fixture procedure client answer the taxonomy with counts and narrow, search and order its products the way the backend does, so every scenario in group 3 is decidable without a worker
+- [x] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 3. The listing surface (grade10) (owner: @sean)
 
