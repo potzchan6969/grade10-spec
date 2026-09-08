@@ -122,10 +122,16 @@ function parseArgs(argv) {
 function currentRulesRev() {
   if (!existsSync(GOVERNANCE)) return null;
   const m = readFileSync(GOVERNANCE, "utf8").match(
-    /^tcs_rules_rev:\s*(\d+)\s*$/m,
+    /^tcs_rules_rev:\s*(\d+)(?:\.(\d+))?\s*$/m,
   );
-  return m ? Number(m[1]) : null;
+  if (!m) return null;
+  return { major: Number(m[1]), minor: m[2] === undefined ? 0 : Number(m[2]) };
 }
+
+/** A revision as it is written in a stamp: `r3.0`. */
+const revText = (r) => (r == null ? "?" : `r${r.major}.${r.minor}`);
+/** Negative when a is older than b, 0 when equal. */
+const revCmp = (a, b) => a.major - b.major || a.minor - b.minor;
 
 /** The roots a suite or a spec may live under: openspec/specs and each
  *  in-flight change's specs/ (archive is never a target). */
@@ -226,18 +232,31 @@ function parseSuite(text) {
         continue;
       }
       const ds = line.match(
-        /^\*\*Drafts styled:\*\*\s*(\d{4}-\d{2}-\d{2}),\s*tcs-rules r(\d+)\s*$/,
+        /^\*\*Drafts styled:\*\*\s*(\d{4}-\d{2}-\d{2}),\s*tcs-rules r(\d+)(?:\.(\d+))?\s*$/,
       );
       if (ds) {
-        suite.draftsStyled = { date: ds[1], rev: Number(ds[2]), line: i + 1 };
+        suite.draftsStyled = {
+          date: ds[1],
+          rev: {
+            major: Number(ds[2]),
+            minor: ds[3] === undefined ? 0 : Number(ds[3]),
+          },
+          line: i + 1,
+        };
         continue;
       }
       const rv = line.match(
-        /^\*\*Reviewed:\*\*\s*(\d{4}-\d{2}-\d{2})(?:,\s*tcs-rules r(\d+))?\s*$/,
+        /^\*\*Reviewed:\*\*\s*(\d{4}-\d{2}-\d{2})(?:,\s*tcs-rules r(\d+)(?:\.(\d+))?)?\s*$/,
       );
       if (rv) {
         suite.reviewed = rv[1];
-        suite.reviewedRev = rv[2] === undefined ? null : Number(rv[2]);
+        suite.reviewedRev =
+          rv[2] === undefined
+            ? null
+            : {
+                major: Number(rv[2]),
+                minor: rv[3] === undefined ? 0 : Number(rv[3]),
+              };
         suite.reviewedLine = i + 1;
         continue;
       }
@@ -498,11 +517,11 @@ function checkSuite(root, filePath, rulesRev) {
   if (
     suite.draftsStyled &&
     rulesRev !== null &&
-    suite.draftsStyled.rev > rulesRev
+    revCmp(suite.draftsStyled.rev, rulesRev) > 0
   )
     err(
       suite.draftsStyled.line,
-      `claims tcs-rules r${suite.draftsStyled.rev}, but the store is at r${rulesRev}`,
+      `claims tcs-rules ${revText(suite.draftsStyled.rev)}, but the store is at ${revText(rulesRev)}`,
     );
   if (derived === "approved" && !suite.reviewed)
     err(
@@ -519,17 +538,17 @@ function checkSuite(root, filePath, rulesRev) {
     suite.reviewedRev !== null &&
     suite.reviewedRev !== undefined &&
     rulesRev !== null &&
-    suite.reviewedRev > rulesRev
+    revCmp(suite.reviewedRev, rulesRev) > 0
   )
     err(
       suite.reviewedLine ?? 1,
-      `claims it was approved under tcs-rules r${suite.reviewedRev}, but the store is at r${rulesRev}`,
+      `claims it was approved under tcs-rules ${revText(suite.reviewedRev)}, but the store is at ${revText(rulesRev)}`,
     );
   if (derived !== "approved" && suite.reviewed)
     err(1, "carries a `**Reviewed:**` line but is not approved");
 
   for (const shape of suite.legacy)
-    warn(1, `written in an older shape: ${shape}`);
+    err(1, `written in an older shape: ${shape}`);
 
   // --- journeys ----------------------------------------------------------
   const seenJourneys = new Set();
@@ -611,7 +630,7 @@ function checkSuite(root, filePath, rulesRev) {
         }
         const value = raw.trim().toLowerCase();
         if (name === "Type" && LEGACY_TYPES.includes(value)) {
-          warn(
+          err(
             at,
             `case \`${tc.id}\` has **Type:** \`${value}\` — that is a **Suites** value now; move it and give Type the kind of verification`,
           );
@@ -739,7 +758,7 @@ if (args.stale) {
     process.exit(0);
   }
   console.log(
-    `${bold("tcs-rules")} r${rulesRev}  ${dim("(docs/governance/specs-to-test-cases.md)")}\n`,
+    `${bold("tcs-rules")} ${revText(rulesRev)}  ${dim("(docs/governance/specs-to-test-cases.md)")}\n`,
   );
   const rows = [];
   for (const p of suites) {
@@ -749,7 +768,7 @@ if (args.stale) {
       .length;
     if (drafts === 0) continue;
     const rev = suite.draftsStyled?.rev ?? null;
-    if (rev === rulesRev) continue;
+    if (rev !== null && revCmp(rev, rulesRev) === 0) continue;
     rows.push({ rel: relative(ROOT, p), drafts, rev });
   }
   if (rows.length === 0) {
@@ -758,7 +777,7 @@ if (args.stale) {
   }
   const w = Math.max(...rows.map((r) => r.rel.length));
   for (const r of rows) {
-    const at = r.rev === null ? "unstamped" : `r${r.rev}`;
+    const at = r.rev === null ? "unstamped" : revText(r.rev);
     console.log(
       `  ${r.rel.padEnd(w + 2)}${yellow(at.padEnd(11))}${dim(`${r.drafts} draft${r.drafts === 1 ? "" : "s"}`)}`,
     );
