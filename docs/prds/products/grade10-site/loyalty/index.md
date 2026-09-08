@@ -14,7 +14,7 @@ a balance, a tier or a code.
 
 | Page | What it holds |
 | --- | --- |
-| [Points Earning](/p/grade10-site/loyalty/points-earning) | The rate, what earns, how a purchase reaches the programme, refunds and expiry |
+| [Points](/p/grade10-site/loyalty/points) | The earning rules, qualifying goods, refunds, expiry and operator grants |
 | [Tiers](/p/grade10-site/loyalty/tiers) | Silver, Gold and Black — how a tier is reached, kept, lost and given |
 | [Rewards](/p/grade10-site/loyalty/rewards) | The menu, redemption, fulfilment, collection at the counter and paying with points |
 | [Coupons](/p/grade10-site/loyalty/coupons) | The money-off code a redemption mints, and its life |
