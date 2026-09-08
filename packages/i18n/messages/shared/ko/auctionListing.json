@@ -101,5 +101,7 @@
   "winningBid": "낙찰가",
   "youDidntWin": "낙찰되지 않았습니다",
   "yourBid": "내 입찰: {amount}",
-  "yourBidLabel": "내 입찰"
+  "yourBidLabel": "내 입찰",
+  "watchAriaLabel": "이 리스팅 관심 등록",
+  "unwatchAriaLabel": "이 리스팅 관심 해제"
 }

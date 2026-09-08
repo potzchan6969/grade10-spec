@@ -1,0 +1,22 @@
+{
+  "title": "關注列表",
+  "intro": "你標記要回來看的拍品，按最近關注排序。",
+  "loading": "正在載入你關注的拍品…",
+  "empty": "你還沒有關注任何拍品。",
+  "loadFailed": "無法載入關注列表。",
+  "retry": "重試",
+  "loadMore": "載入更多",
+  "listingsLabel": "關注列表",
+  "lotCount": "{count, plural, other {# 個關注拍品}}",
+  "lot": "拍品",
+  "live": "進行中",
+  "currentBid": "目前出價",
+  "closesAt": "{when} 結束",
+  "closed": "已結束",
+  "calledOff": "已取消",
+  "openListing": "查看拍品",
+  "unwatch": "取消關注",
+  "unwatchAriaLabel": "取消關注此拍品",
+  "openWatchlistAriaLabel": "開啟關注列表",
+  "backToAuctions": "返回拍賣"
+}

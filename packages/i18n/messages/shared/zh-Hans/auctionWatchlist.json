@@ -1,0 +1,22 @@
+{
+  "title": "关注列表",
+  "intro": "你标记要回来看的拍品，按最近关注排序。",
+  "loading": "正在加载你关注的拍品…",
+  "empty": "你还没有关注任何拍品。",
+  "loadFailed": "无法加载关注列表。",
+  "retry": "重试",
+  "loadMore": "加载更多",
+  "listingsLabel": "关注列表",
+  "lotCount": "{count, plural, other {# 个关注拍品}}",
+  "lot": "拍品",
+  "live": "进行中",
+  "currentBid": "当前出价",
+  "closesAt": "{when} 结束",
+  "closed": "已结束",
+  "calledOff": "已取消",
+  "openListing": "查看拍品",
+  "unwatch": "取消关注",
+  "unwatchAriaLabel": "取消关注此拍品",
+  "openWatchlistAriaLabel": "打开关注列表",
+  "backToAuctions": "返回拍卖"
+}

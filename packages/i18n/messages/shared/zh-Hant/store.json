@@ -22,10 +22,13 @@
   "soldOut": "已售罄",
   "sortByLatest": "以最新上架排序",
   "sortByNothing": "排序",
+  "sortByPopular": "以熱門程度排序",
   "sortByPriceAsc": "以價格由低至高排序",
   "sortByPriceDesc": "以價格由高至低排序",
   "sortLatest": "最新上架",
+  "sortPopular": "熱門程度",
   "sortPriceAsc": "價格由低至高",
   "sortPriceDesc": "價格由高至低",
+  "collections": "系列",
   "title": "商店"
 }

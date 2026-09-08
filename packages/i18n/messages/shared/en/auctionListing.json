@@ -101,5 +101,7 @@
   "winningBid": "Winning bid",
   "youDidntWin": "You didn’t win",
   "yourBid": "Your bid: {amount}",
-  "yourBidLabel": "Your bid"
+  "yourBidLabel": "Your bid",
+  "watchAriaLabel": "Watch this lot",
+  "unwatchAriaLabel": "Stop watching this lot"
 }

@@ -22,10 +22,13 @@
   "soldOut": "품절",
   "sortByLatest": "최신순",
   "sortByNothing": "정렬",
+  "sortByPopular": "인기순",
   "sortByPriceAsc": "낮은 가격순",
   "sortByPriceDesc": "높은 가격순",
   "sortLatest": "최신순",
+  "sortPopular": "인기순",
   "sortPriceAsc": "낮은 가격순",
   "sortPriceDesc": "높은 가격순",
+  "collections": "컬렉션",
   "title": "스토어"
 }

@@ -1,0 +1,22 @@
+{
+  "title": "관심 목록",
+  "intro": "다시 보기로 표시한 리스팅입니다. 최근 관심 순으로 정렬됩니다.",
+  "loading": "관심 목록을 불러오는 중…",
+  "empty": "아직 관심 등록한 리스팅이 없습니다.",
+  "loadFailed": "관심 목록을 불러오지 못했습니다.",
+  "retry": "다시 시도",
+  "loadMore": "더 보기",
+  "listingsLabel": "관심 목록",
+  "lotCount": "{count, plural, other {관심 리스팅 #개}}",
+  "lot": "로트",
+  "live": "진행 중",
+  "currentBid": "현재 입찰가",
+  "closesAt": "{when} 마감",
+  "closed": "마감됨",
+  "calledOff": "취소됨",
+  "openListing": "리스팅 보기",
+  "unwatch": "관심 해제",
+  "unwatchAriaLabel": "이 리스팅 관심 해제",
+  "openWatchlistAriaLabel": "관심 목록 열기",
+  "backToAuctions": "경매로 돌아가기"
+}

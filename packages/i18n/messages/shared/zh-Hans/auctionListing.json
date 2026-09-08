@@ -101,5 +101,7 @@
   "winningBid": "成交价",
   "youDidntWin": "你未能中拍",
   "yourBid": "你的出价：{amount}",
-  "yourBidLabel": "你的出价"
+  "yourBidLabel": "你的出价",
+  "watchAriaLabel": "关注此拍品",
+  "unwatchAriaLabel": "取消关注此拍品"
 }

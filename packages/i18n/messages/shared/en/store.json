@@ -22,10 +22,13 @@
   "soldOut": "SOLD OUT",
   "sortByLatest": "Sort by latest product",
   "sortByNothing": "Sort by",
+  "sortByPopular": "Sort by popularity",
   "sortByPriceAsc": "Sort by lowest price",
   "sortByPriceDesc": "Sort by highest price",
   "sortLatest": "Latest product",
+  "sortPopular": "Popularity",
   "sortPriceAsc": "Lowest price",
   "sortPriceDesc": "Highest price",
+  "collections": "Collections",
   "title": "Store"
 }

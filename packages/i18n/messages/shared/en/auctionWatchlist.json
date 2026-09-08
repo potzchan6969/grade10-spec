@@ -1,0 +1,22 @@
+{
+  "title": "Watched listings",
+  "intro": "Lots you marked to come back to, most recently watched first.",
+  "loading": "Loading the listings you watch…",
+  "empty": "You are not watching any listings yet.",
+  "loadFailed": "Could not load the listings you watch.",
+  "retry": "Try again",
+  "loadMore": "Load more",
+  "listingsLabel": "Watched listings",
+  "lotCount": "{count, plural, one {# watched lot} other {# watched lots}}",
+  "lot": "Lot",
+  "live": "Live",
+  "currentBid": "Current bid",
+  "closesAt": "Closes {when}",
+  "closed": "Closed",
+  "calledOff": "Called off",
+  "openListing": "View listing",
+  "unwatch": "Unwatch",
+  "unwatchAriaLabel": "Stop watching this listing",
+  "openWatchlistAriaLabel": "Open watched listings",
+  "backToAuctions": "Back to auctions"
+}
