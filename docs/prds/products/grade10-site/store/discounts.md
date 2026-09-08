@@ -27,18 +27,18 @@ lands on the order through the same Shopify draft order.
   2. **Where it is on** — everywhere
 
 
-## Online Draft Order Mechanism
+## Online draft order mechanism
 
 A Draft Order is created for each checkout, with the following discounts (if any):
-- Discount code (Shopify Discount code)
-- Order coupon (Shopify Discount code)
-- Per-product coupon (per-product custom discount)
-- Points as credits (order-wise discount)
-- Gift (per-item 100% off custom discount)
-- [Shipping](/p/grade10-site/store/shipping) fee is determined by custom carrier service API, conditionally free
+- **Discount code** (Shopify Discount code)
+- **Order coupon** (Shopify Discount code)
+- **Per-product coupon** (per-product custom discount)
+- **Points as credits** (order-wise discount)
+- **Gift** (per-item 100% off custom discount)
+- **Shipping** ([Shipping](/p/grade10-site/store/shipping)) fee is determined by custom carrier service API, conditionally free
 
 
-## On-site Mechanism
+## On-site mechanism
 
 Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) puts the member's benefits on that cart, and the store records one order per till session. The cart decides what landed, never the plan, and nothing is held until the sale is paid.
 
@@ -103,20 +103,16 @@ A physical reward is handed over through the same session: the pending redemptio
 
 Per shop, flipped from the admin console, enforced on the next request: terminal, email spend, phone identify, phone spend, cart identify, cart spend. QR and short code carry no switch of their own, so stopping the counter means the terminal switch.
 
-## What it looks like
+## Designs
 
-::story{id="store-cart-cartdrawer--promo-code-interaction" title="A code typed in the cart"}
+::story{id="store-cart-cartdrawerfooter--interactive-member" title="A code typed in the cart"}
 
 ::story{id="store-order-detail-orderdetails--item-coupon" title="An order with a product coupon"}
 
 ::story{id="store-order-detail-orderdetails--order-discount" title="An order with an order coupon"}
 
-:::detail{title="How the draft order carries it" for="engineer"}
+:::detail{title="Draft order" for="engineer"}
 - **Where** — `packages/grade10-store/backend/src/services/coupons`,
   `services/pointsTender.ts`, `adapters/shopify/shopifyProvider.ts`,
   `services/shipping/rates.ts`, `worker/routes/carrier.ts`
 :::
-
-## In flight
-
-::changes{spec="grade10-site/store/order-settlement"}

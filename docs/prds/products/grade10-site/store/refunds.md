@@ -39,7 +39,3 @@ earned on.
 
 ❓ **A physical card coming back** — an operator's move with a record of its own.
 `TBC`
-
-## In flight
-
-::changes{spec="grade10-site/store/order-settlement"}

@@ -20,16 +20,10 @@ button to check out.
 - **Checkout** — the button hands the cart to Shopify; every line is checked
   again on the way, and a line that moved comes back named
 
-## What it looks like
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4765-2301" title="Cart item, adjusted row" set="Product / Cart / Cart Item"}
+## Designs
 
 ::story{id="store-cart-cartdrawer--default" title="The cart drawer"}
 
 ::story{id="store-cart-cartdrawer--unavailable-items-removed" title="Lines the store no longer sells, leaving"}
 
 ::story{id="store-cart-cartdrawer--empty-state" title="An empty cart"}
-
-## In flight
-
-::changes{spec="grade10-site/store/cart-validation"}

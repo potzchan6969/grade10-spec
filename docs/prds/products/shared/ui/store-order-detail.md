@@ -13,14 +13,10 @@ loyalty, and optional money rows therefore disappear independently when no fact
 is supplied. The block never fills a designed space with a value the application
 does not know.
 
-## What it looks like
+## Designs
 
 ::story{id="store-order-detail-orderdetails--item-coupon" title="A complete order detail"}
 
 ::story{id="store-order-detail-orderdetails--no-optional-groups" title="Only supplied order facts"}
 
 ::story{id="store-order-detail-orderdetailssidebar--paid-total-only" title="A paid total without a subtotal"}
-
-## In flight
-
-::changes{spec="shared/ui/store-order-detail"}

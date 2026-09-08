@@ -15,14 +15,8 @@ shopping path, not a blank account page.
 
 - **URL** — `grade10.com/profile/orders`
 
-## What it looks like
+## Designs
 
 ::story{id="pages-order-history-page--filled" title="Your Orders, filled"}
 
 ::story{id="store-order-history-orderhistory--empty" title="An account with no orders"}
-
-## In flight
-
-::changes{spec="grade10-site/store/order-history"}
-
-::changes{spec="grade10-site/commerce/order-status"}
