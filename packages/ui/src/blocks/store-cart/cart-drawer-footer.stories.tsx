@@ -312,8 +312,10 @@ export const HeldPromoAllInapplicable: Story = {
 export const PromoClearedNotice: Story = {
   args: {
     promoState: { status: "collapsed" },
-    promoNotice:
-      "Your promo code was removed because it no longer applies to this cart.",
+    promoNotice: {
+      title: "Promo code removed",
+      description: "It no longer applies to this cart",
+    },
   },
   render: (args) => (
     <>
@@ -326,12 +328,11 @@ export const PromoClearedNotice: Story = {
     expect(canvas.getByText("Promo code")).toBeInTheDocument();
     const body = within(document.body);
     await waitFor(() => {
-      expect(
-        body.getByText(
-          "Your promo code was removed because it no longer applies to this cart.",
-        ),
-      ).toBeInTheDocument();
+      expect(body.getByText("Promo code removed")).toBeInTheDocument();
     });
+    expect(
+      body.getByText("It no longer applies to this cart"),
+    ).toBeInTheDocument();
   },
 };
 
@@ -650,9 +651,7 @@ export const CheckoutFailed: Story = {
     });
     const body = within(document.body);
     await waitFor(() => {
-      expect(
-        body.getByText("Couldn’t open checkout. Try again."),
-      ).toBeInTheDocument();
+      expect(body.getByText("Couldn’t open checkout")).toBeInTheDocument();
     });
   },
 };

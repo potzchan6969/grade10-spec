@@ -39,6 +39,7 @@ import type {
   CartItemSummary,
   HeldPromoCode,
   PointsState,
+  PromoNotice,
   PromoState,
 } from "./types";
 
@@ -47,6 +48,20 @@ type AppliedPoints = Extract<PointsState, { status: "applied" }>;
 
 const COLLAPSE_EASE = "cubic-bezier(0.23,1,0.32,1)";
 const CART_ITEM_EXIT_MS = 220;
+
+function normalizePromoNotice(notice: PromoNotice): {
+  title: string;
+  description?: string;
+} {
+  return typeof notice === "string" ? { title: notice } : notice;
+}
+
+function promoNoticeKey(notice: PromoNotice): string {
+  if (typeof notice === "string") return notice;
+  return notice.description
+    ? `${notice.title}\0${notice.description}`
+    : notice.title;
+}
 
 /** Height + opacity reveal for promo discount ↔ “Use promo code” swap. */
 function PromoSectionReveal({
@@ -585,9 +600,10 @@ type CartDrawerFooterProps = {
   /**
    * When set, shown once as a toast (e.g. promo cleared after the cart
    * changed) — same pattern as unavailable item removal. Consumer owns when
-   * to set/clear it; not rendered inline.
+   * to set/clear it; not rendered inline. A bare string is the title; an
+   * object may add an optional description.
    */
-  promoNotice?: string;
+  promoNotice?: PromoNotice;
   /**
    * Points tender. Pass a state object to show Use points; omit or `null` to
    * hide (e.g. while balance is loading). Checkout is members-only — there is
@@ -728,9 +744,11 @@ function CartDrawerFooter({
       lastToastedPromoNoticeRef.current = null;
       return;
     }
-    if (lastToastedPromoNoticeRef.current === promoNotice) return;
-    lastToastedPromoNoticeRef.current = promoNotice;
-    toast(promoNotice);
+    const key = promoNoticeKey(promoNotice);
+    if (lastToastedPromoNoticeRef.current === key) return;
+    lastToastedPromoNoticeRef.current = key;
+    const { title, description } = normalizePromoNotice(promoNotice);
+    toast.warning(title, description ? { description } : undefined);
   }, [promoNotice]);
 
   const handleApplyPoints = async () => {
@@ -754,7 +772,7 @@ function CartDrawerFooter({
       // Stay on Redirecting… — consumer navigates (e.g. Shopify checkout).
     } catch {
       setIsRedirecting(false);
-      toast(copy.checkoutFailed);
+      toast.error(copy.checkoutFailed);
     }
   };
 
@@ -1235,9 +1253,10 @@ type CartDrawerProps = {
   selectedHeldPromoId?: string | null;
   /**
    * When set, the footer shows it once as a toast (promo cleared after cart
-   * change) — same pattern as unavailable item removal.
+   * change) — same pattern as unavailable item removal. A bare string is the
+   * title; an object may add an optional description.
    */
-  promoNotice?: string;
+  promoNotice?: PromoNotice;
   pointsState?: PointsState | null;
   pointsBalanceLabel?: ReactNode;
   onPromoStateChange?: (next: PromoState) => void;
@@ -1372,9 +1391,21 @@ function CartDrawer({
     }
     if (!didToastUnavailableRef.current) {
       didToastUnavailableRef.current = true;
-      toast(copy.unavailableItemsRemoved);
+      toast.warning(
+        copy.unavailableItemsRemoved,
+        copy.unavailableItemsRemovedDescription
+          ? { description: copy.unavailableItemsRemovedDescription }
+          : undefined,
+      );
     }
-  }, [open, isLoading, items, onRemoveItem, copy.unavailableItemsRemoved]);
+  }, [
+    open,
+    isLoading,
+    items,
+    onRemoveItem,
+    copy.unavailableItemsRemoved,
+    copy.unavailableItemsRemovedDescription,
+  ]);
 
   // Never paint unavailable rows (sold-out treatment stays for `soldOut` only).
   const visibleItems = items.filter((item) => item.status !== "unavailable");

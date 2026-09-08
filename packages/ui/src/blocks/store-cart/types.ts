@@ -124,16 +124,24 @@ type CartDrawerFooterCopy = {
   checkoutButton: string;
   /** Label while checkout is pending a redirect (e.g. to Shopify). */
   checkoutRedirecting: string;
-  /** Toast when checkout redirect fails (e.g. Shopify session error). */
+  /** Toast title when checkout redirect fails (e.g. Shopify session error). */
   checkoutFailed: string;
 };
+
+/**
+ * Promo-cleared toast content. A bare string is the title only; an object may
+ * add an optional description line.
+ */
+type PromoNotice = string | { title: string; description?: string };
 
 type CartDrawerCopy = {
   header: CartDrawerHeaderCopy;
   item: CartItemCopy;
   footer: CartDrawerFooterCopy;
-  /** Toast when delisted catalogue lines are cleared after open loading. */
+  /** Toast title when delisted catalogue lines are cleared after open loading. */
   unavailableItemsRemoved: string;
+  /** Optional description under `unavailableItemsRemoved`. */
+  unavailableItemsRemovedDescription?: string;
 };
 
 export type {
@@ -145,5 +153,6 @@ export type {
   CartItemSummary,
   HeldPromoCode,
   PointsState,
+  PromoNotice,
   PromoState,
 };

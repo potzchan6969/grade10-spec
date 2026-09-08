@@ -38,8 +38,9 @@
       "pointsLabel": "积分",
       "checkoutButton": "前往结账",
       "checkoutRedirecting": "正在跳转…",
-      "checkoutFailed": "无法打开结账，请重试。"
+      "checkoutFailed": "无法打开结账"
     },
-    "unavailableItemsRemoved": "部分商品因不再可用而已移除"
+    "unavailableItemsRemoved": "商品已从购物车移除",
+    "unavailableItemsRemovedDescription": "部分商品已不再提供"
   }
 }
