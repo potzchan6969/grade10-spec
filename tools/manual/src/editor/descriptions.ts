@@ -37,7 +37,7 @@ const INFO: Record<string, BlockInfo> = {
   },
   flow: {
     label: "Flow",
-    hint: "Steps in order: ## opens a step, # groups them into a phase.",
+    hint: "Steps in order: ## opens a step, # groups them into a phase; `case` names one of several flows under one title.",
   },
   example: {
     label: "Example",

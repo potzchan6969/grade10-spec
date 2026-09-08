@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { flowSteps, splitFlow, stepTokens } from "../src/blocks/flow-steps";
+import {
+  flowAnchors,
+  flowSteps,
+  splitFlow,
+  stepTokens,
+} from "../src/blocks/flow-steps";
 import type { FlowBlock } from "../src/content/grammar";
 
 const flow = (markdown: string, title = "Intake to release"): FlowBlock => ({
@@ -126,5 +131,28 @@ describe("the tokens a diagram can claim a step with", () => {
     expect([...stepTokens(step)].sort()).toEqual(
       ["1", "intake-to-release-step-1", "open-a-draft"].sort(),
     );
+  });
+});
+
+describe("a flow that walks one case of several", () => {
+  it("names its rows after the case, so two cases never share an id", () => {
+    const normal = { ...flow("## Order paid"), case: "Normal" };
+    const failing = { ...flow("## Order paid"), case: "Nothing itemised" };
+
+    expect(flowAnchors(normal)).toEqual([
+      "intake-to-release-normal-phase-1",
+      "intake-to-release-normal-step-1",
+    ]);
+    expect(flowAnchors(failing)).toEqual([
+      "intake-to-release-nothing-itemised-phase-1",
+      "intake-to-release-nothing-itemised-step-1",
+    ]);
+  });
+
+  it("leaves a flow with no case on the ids it already had", () => {
+    expect(flowAnchors(flow("## Order paid"))).toEqual([
+      "intake-to-release-phase-1",
+      "intake-to-release-step-1",
+    ]);
   });
 });

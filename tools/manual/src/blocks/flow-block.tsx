@@ -2,6 +2,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { CaretDown, FlowArrow } from "@phosphor-icons/react";
 import {
   type CSSProperties,
+  type ReactNode,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -36,7 +37,14 @@ type Point = (step: FlowStep | null) => void;
  * the drawing tells its own step on hover, and a click on one opens the list
  * at that step. Without one, or while a deep link names a step, they stand
  * open. */
-export function FlowBlockView({ block }: { block: FlowBlock }) {
+export function FlowBlockView({
+  block,
+  select,
+}: {
+  block: FlowBlock;
+  /** The case picker, where this flow is one of several (`block-list.tsx`). */
+  select?: ReactNode;
+}) {
   const phases = useMemo(() => splitFlow(block), [block]);
   const steps = useMemo(() => flowSteps(phases), [phases]);
   const [pointed, setPointed] = useState<Pointed | null>(null);
@@ -71,6 +79,7 @@ export function FlowBlockView({ block }: { block: FlowBlock }) {
         <Text as="span" size="sm" weight="bold">
           {block.title}
         </Text>
+        {select}
         {foldable ? (
           <button
             aria-expanded={open}

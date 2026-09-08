@@ -4,10 +4,15 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { seekFrames } from "./seek";
 
+/** The id `location.hash` names, empty where it names none. */
+export function useHashId(): string {
+  const { hash } = useLocation();
+  return decodeURIComponent(hash.replace(/^#/, ""));
+}
+
 /** True while `location.hash` points at any of these ids. Rows open on it. */
 export function useHashTarget(...ids: (string | undefined)[]): boolean {
-  const { hash } = useLocation();
-  const target = decodeURIComponent(hash.replace(/^#/, ""));
+  const target = useHashId();
   return target !== "" && ids.some((id) => id === target);
 }
 

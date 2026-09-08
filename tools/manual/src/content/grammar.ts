@@ -92,9 +92,12 @@ export type DetailBlock = {
   for?: Audience;
   body: BodyItem[];
 };
+/** Steps in order. Neighbouring flows sharing one title are the same flow
+ * under different conditions, and `case` names the one each walks. */
 export type FlowBlock = {
   type: "flow";
   title: string;
+  case?: string;
   diagram?: string;
   body: BodyItem[];
 };
@@ -218,7 +221,11 @@ export const BLOCK_SPECS: Record<string, BlockSpec> = {
   },
   flow: {
     container: true,
-    attrs: [{ name: "title", required: true }, { name: "diagram" }],
+    attrs: [
+      { name: "title", required: true },
+      { name: "case" },
+      { name: "diagram" },
+    ],
   },
   example: {
     container: true,

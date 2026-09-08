@@ -21,6 +21,11 @@ const FENCE = /^(`{3,}|~{3,})/;
 const PHASE = /^#\s+(.*)$/;
 const STEP = /^##\s+(.*)$/;
 
+/** What a flow's steps and phases are named after: its title, and the case it
+ * walks where it is one of several, so two cases never claim one step id. */
+export const flowId = (block: FlowBlock): string =>
+  slugify(block.case ? `${block.title} ${block.case}` : block.title);
+
 /**
  * A flow's body is one run of blocks whose headings are structure rather than
  * prose: `#` opens a phase, `##` opens a step, and every leaf between headings
@@ -28,7 +33,7 @@ const STEP = /^##\s+(.*)$/;
  * phase's lede, so nothing an author writes falls on the floor.
  */
 export function splitFlow(block: FlowBlock): FlowPhase[] {
-  const base = slugify(block.title);
+  const base = flowId(block);
   const phases: FlowPhase[] = [];
   let counted = 0;
 
@@ -124,6 +129,16 @@ export function splitFlow(block: FlowBlock): FlowPhase[] {
 
 export function flowSteps(phases: FlowPhase[]): FlowStep[] {
   return phases.flatMap((phase) => phase.steps);
+}
+
+/** Every id a flow's own rows answer to, for a deep link that has to find
+ * which flow holds the row it names. */
+export function flowAnchors(block: FlowBlock): string[] {
+  const phases = splitFlow(block);
+  return [
+    ...phases.map((phase) => phase.id),
+    ...flowSteps(phases).map((step) => step.id),
+  ];
 }
 
 /** Tokens a diagram element may use to claim a step: its number, id, or slug. */

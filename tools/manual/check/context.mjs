@@ -23,6 +23,11 @@ export const RULES = [
     level: "fail",
     title: "Example ledgers whose balances do not add up",
   },
+  {
+    key: "case",
+    level: "fail",
+    title: "Flow cases a reader could not pick between",
+  },
   { key: "unreferenced", level: "fail", title: "Durable specs no page shows" },
   {
     key: "page",

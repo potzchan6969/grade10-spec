@@ -54,6 +54,7 @@ export function checkPages(ctx, pages) {
       checkBlock(ctx, page.path, block);
     }
     checkDetails(ctx, page);
+    checkFlowCases(ctx, page);
     checkRefs(ctx, page);
   }
 }
@@ -77,6 +78,72 @@ function checkDetails(ctx, page) {
       `${label(earlier, "title")} and ${label(block, "title")} share the anchor \`#detail-${anchor}\``,
     );
   }
+}
+
+/** Neighbouring flows under one title are one flow's cases, and the reader
+ * picks between them by name — so each names its own, no two name the same,
+ * and a flow that stands alone names none. Two same-titled flows apart on a
+ * page are refused outright: their steps would answer to the same ids. */
+function checkFlowCases(ctx, page) {
+  const flows = page.ast.blocks.filter((block) => block.type === "flow");
+  const runs = [];
+  for (const block of page.ast.blocks) {
+    const last = runs.at(-1);
+    if (block.type !== "flow") continue;
+    if (last && last.at(-1) === previous(page.ast.blocks, block)) {
+      last.push(block);
+    } else {
+      runs.push([block]);
+    }
+  }
+
+  for (const run of runs) {
+    const named = new Map();
+    for (const block of run) {
+      if (run.length === 1 && block.case !== undefined) {
+        ctx.add(
+          "case",
+          page.path,
+          `${label(block, "title")} names the case \`${block.case}\` but stands alone`,
+        );
+      }
+      if (run.length > 1 && block.case === undefined) {
+        ctx.add(
+          "case",
+          page.path,
+          `${label(block, "title")} sits with other flows under its title and names no case`,
+        );
+      }
+      if (block.case !== undefined && named.has(block.case)) {
+        ctx.add(
+          "case",
+          page.path,
+          `${label(block, "title")} names the case \`${block.case}\` twice`,
+        );
+      }
+      named.set(block.case, block);
+    }
+  }
+
+  const titles = new Map();
+  for (const block of flows) {
+    const run = runs.find((one) => one.includes(block));
+    const earlier = titles.get(block.title);
+    if (earlier !== undefined && earlier !== run) {
+      ctx.add(
+        "case",
+        page.path,
+        `two flows titled \`${block.title}\` sit apart on this page, so their steps share ids`,
+      );
+    }
+    titles.set(block.title, run);
+  }
+}
+
+/** The block before this one, or null where it opens the page. */
+function previous(blocks, block) {
+  const at = blocks.indexOf(block);
+  return at <= 0 ? null : blocks[at - 1];
 }
 
 function checkBlock(ctx, path, block) {

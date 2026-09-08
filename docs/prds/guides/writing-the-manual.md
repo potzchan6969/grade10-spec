@@ -235,6 +235,28 @@ The next thing.
 :::
 ```
 
+The normal path is the flow; the failures and the odd shapes are its cases.
+Write each as its own flow under the same title, `case` naming the one it
+walks, and they arrive as one flow with a dropdown beside the title. Each
+case keeps its own steps and its own drawing, so nothing exceptional is drawn
+beside the ordinary path, and a link into any case's step opens that case:
+
+```md
+:::flow{title="From a paid order to points" case="Normal" diagram="assets/diagrams/pricing.svg"}
+## *Shop* — **Order paid**
+The shop sends the paid order.
+:::
+
+:::flow{title="From a paid order to points" case="Nothing itemised" diagram="assets/diagrams/pricing-unitemised.svg"}
+## *Shop* — **Order paid**
+One goods total and no lines at all.
+:::
+```
+
+A flow that stands alone names no case, every flow in a run names one, and no
+two name the same — the check refuses each of those, and two same-titled flows
+that sit apart, whose steps would share ids.
+
 A long flow can say which steps belong together. Each `#` opens a phase, and
 whatever you write before its first step says what its scope is. Steps stay
 numbered straight through, so a link to step 5 still lands on step 5:
