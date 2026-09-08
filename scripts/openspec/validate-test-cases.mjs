@@ -732,20 +732,48 @@ const args = parseArgs(process.argv.slice(2));
 const rulesRev = currentRulesRev();
 const inScope = (d) =>
   args.scope ? relative(ROOT, d).includes(args.scope) : true;
-/** A feature suite is `feature-tcs.md`; suites written before that name was
- * settled are `test-cases.md` and keep it until someone renames them
- * deliberately. Both are read. */
-const FEATURE_SUITE_NAMES = ["feature-tcs.md", "test-cases.md"];
-const suites = [
-  ...FEATURE_SUITE_NAMES.flatMap((name) =>
-    dirsHolding(ROOT, name)
-      .filter(inScope)
-      .map((d) => join(d, name)),
-  ),
-  ...dirsHolding(ROOT, "domain-tcs.md")
+/** The file name carries the level (tcs-rules r3.0). `test-cases.md` is not a
+ * suite name: the suites that carried it were renamed when r3.0 landed. */
+const SUITE_NAMES = [
+  "feature-tcs.md",
+  "domain-tcs.md",
+  "product-tcs.md",
+  "platform-tcs.md",
+];
+const LEVEL_BY_NAME = {
+  "platform-tcs.md": "platform",
+  "product-tcs.md": "product",
+  "domain-tcs.md": "domain",
+  "feature-tcs.md": "feature",
+};
+const levelOf = (p) => LEVEL_BY_NAME[basename(p)] ?? "feature";
+
+/** Every `<product>` and `<product>/<domain>` the store actually has, so a
+ *  trace id can be read back to the product and domain that issued it. Ids are
+ *  `<product>-<domain>-<capability>-US-<n>` and every segment may itself hold a
+ *  hyphen, so the only safe parse is the longest known prefix. */
+const specsRoot = join(ROOT, "openspec", "specs");
+const PRODUCTS = existsSync(specsRoot)
+  ? readdirSync(specsRoot, { withFileTypes: true })
+      .filter((e) => e.isDirectory())
+      .map((e) => e.name)
+  : [];
+const DOMAINS = PRODUCTS.flatMap((prod) =>
+  readdirSync(join(specsRoot, prod), { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .map((e) => `${prod}-${e.name}`),
+);
+const longestPrefix = (id, list) =>
+  list
+    .filter((v) => id === v || id.startsWith(`${v}-`))
+    .sort((a, b) => b.length - a.length)[0] ?? null;
+const productOf = (traceId) => longestPrefix(traceId, PRODUCTS);
+const domainOf = (traceId) => longestPrefix(traceId, DOMAINS);
+const suites = SUITE_NAMES.flatMap((name) =>
+  dirsHolding(ROOT, name)
     .filter(inScope)
-    .map((d) => join(d, "domain-tcs.md")),
-].sort();
+    .map((d) => join(d, name)),
+).sort();
 const specs = dirsHolding(ROOT, "spec.md").filter(inScope);
 
 if (args.stale) {
@@ -812,7 +840,7 @@ if (args.requireSuites) {
 }
 
 console.log(
-  `${bold("Test-case suites")}  ${dim(`${suites.length} file${suites.length === 1 ? "" : "s"}, tcs-rules ${rulesRev === null ? "unversioned" : `r${rulesRev}`}`)}\n`,
+  `${bold("Test-case suites")}  ${dim(`${suites.length} file${suites.length === 1 ? "" : "s"}, tcs-rules ${rulesRev === null ? "unversioned" : revText(rulesRev)}`)}\n`,
 );
 const w = Math.max(...summaries.map((s) => s.rel.length));
 for (const s of summaries) {
