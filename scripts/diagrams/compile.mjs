@@ -42,6 +42,7 @@ export function compile(html, name) {
   svg = stampSteps(svg);
   svg = stripInteractivity(svg);
   svg = prefixIds(svg, name);
+  svg = tightenLanes(svg);
   svg = rebuildRoot(svg, name, cropped(svg));
   svg = svg.replace(
     /(<svg\b[^>]*>)/,
@@ -244,11 +245,42 @@ function prefixIds(svg, name) {
 const CROP_MARGIN = 12;
 
 /** Archify lays the drawing on a canvas no smaller than its viewer wants;
- * the page wants the drawing, so the viewBox closes in on what is drawn:
- * rectangles, circles, text, and the points every edge runs through. A glyph
- * inside a transformed group sits wherever its parent put it, so those groups
- * do not count. */
+ * the page wants the drawing, so the viewBox closes in on what is drawn. */
 function cropped(source) {
+  const box = extent(source);
+  if (!box) return undefined;
+  const x = Math.floor(box.minX - CROP_MARGIN);
+  const y = Math.floor(box.minY - CROP_MARGIN);
+  return `${x} ${y} ${Math.ceil(box.maxX + CROP_MARGIN) - x} ${Math.ceil(box.maxY + CROP_MARGIN) - y}`;
+}
+
+const LANE = /<rect\b[^>]*data-composition-frame-kind="lane"[^>]*>/g;
+const LANE_PAD = 8;
+
+/**
+ * A lane band stretches to whatever canvas archify laid it on, so a diagram
+ * with room to spare drags that emptiness onto the page — a strip that pans
+ * past its own last node. Each band is pulled back to the drawing inside the
+ * lanes, which is what the crop then closes on.
+ */
+function tightenLanes(svg) {
+  const box = extent(svg.replace(LANE, ""));
+  if (!box) return svg;
+  return svg.replace(LANE, (tag) => {
+    const x = Number(attribute(tag, "x") ?? 0);
+    const width = Number(attribute(tag, "width"));
+    if (!Number.isFinite(width)) return tag;
+    const wanted = Math.ceil(box.maxX + LANE_PAD - x);
+    return wanted >= width
+      ? tag
+      : tag.replace(/\swidth="[^"]*"/, ` width="${wanted}"`);
+  });
+}
+
+/** What a fragment draws: rectangles, circles, text, and the points every
+ * edge runs through. A glyph inside a transformed group sits wherever its
+ * parent put it, so those groups do not count. */
+function extent(source) {
   const svg = withoutTransformedGroups(source);
   let [minX, minY, maxX, maxY] = [Infinity, Infinity, -Infinity, -Infinity];
   const grow = (x0, y0, x1, y1) => {
@@ -285,10 +317,7 @@ function cropped(source) {
       if (Number.isFinite(x) && Number.isFinite(y)) grow(x, y, x, y);
     }
   }
-  if (!Number.isFinite(minX)) return undefined;
-  const x = Math.floor(minX - CROP_MARGIN);
-  const y = Math.floor(minY - CROP_MARGIN);
-  return `${x} ${y} ${Math.ceil(maxX + CROP_MARGIN) - x} ${Math.ceil(maxY + CROP_MARGIN) - y}`;
+  return Number.isFinite(minX) ? { minX, minY, maxX, maxY } : null;
 }
 
 function withoutTransformedGroups(svg) {

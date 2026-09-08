@@ -87,6 +87,25 @@ test("the viewBox closes in on the drawing, not archify's canvas", () => {
   );
 });
 
+test("a lane band stops at the drawing inside it", () => {
+  const width = (source) =>
+    [
+      ...source.matchAll(
+        /<rect\b[^>]*data-composition-frame-kind="lane"[^>]*>/g,
+      ),
+    ]
+      .map(([tag]) => Number(/\swidth="([\d.]+)"/.exec(tag)?.[1]))
+      .filter((one) => Number.isFinite(one));
+  const before = width(html);
+  const after = width(svg);
+
+  assert.ok(before.length > 0, "the example draws no lanes");
+  assert.equal(after.length, before.length);
+  for (const [at, band] of after.entries()) {
+    assert.ok(band <= before[at], `lane ${at}: ${band} > ${before[at]}`);
+  }
+});
+
 test("the same source compiles to the same bytes", () => {
   assert.equal(compile(html, "tool-call"), svg);
 });

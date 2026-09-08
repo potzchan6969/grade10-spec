@@ -317,10 +317,15 @@
     --diagram-scale: 1.5;
   }
 
+  /* Every drawing is read at the same magnification, whatever its own size:
+     a small chart is not blown up to fill the strip, and one wider than the
+     strip pans. Narrower than the strip, it sits in the middle of it. */
   .manual-flow-diagram svg {
     display: block;
-    width: max(100%, calc(var(--svg-width, 0) * var(--diagram-scale) * 1px));
+    width: calc(var(--svg-width, 720) * var(--diagram-scale) * 1px);
+    max-width: none;
     height: auto;
+    margin-inline: auto;
   }
 
   .manual-flow-diagram [data-step] {
