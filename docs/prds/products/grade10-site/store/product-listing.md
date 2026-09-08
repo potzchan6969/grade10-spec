@@ -78,5 +78,6 @@ collection. The front door's collection grid, which is unchanged.
 | No popularity order | Decided | Nothing ranks products by popularity, so the menu does not claim to. At rest the catalogue's own order stands. | Product |
 | A starved facet is still offered | Decided | Once a query is in force, nothing behind a choice is the query's doing rather than the shop's. Hiding the group would strand the collector, and a selection nobody can undo is a trap. | Design |
 | No facets, no panel | Decided | A shop that has configured none gets no facet group and no message in its place; search and sort stay. It is not a fault the collector is told about. | Product |
-| Utility row | ❓ Open | Help, Shipping and Orders & Returns are drawn in the design and the site answers none of the three. The row appears when a page lands behind one. | Product |
+| Utility row | Decided | Help, Shipping and Orders & Returns are drawn now, each against the placeholder the site already gives a link it owes, and become real addresses as the pages land. | Product |
+| Links the site owes | ❓ Open | Drawing a placeholder departs from `grade10-site/site/page-shell`, which says a link appears only where the site answers it. The footer already departs the same way. Settling it belongs to page-shell. | Product |
 :::
