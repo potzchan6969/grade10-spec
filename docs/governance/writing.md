@@ -26,6 +26,11 @@ Outline first. A document is a heading and an outline, never an essay.
   then one short paragraph.
 - **Order by hierarchy, then by time** — the whole before its parts, the
   first thing that happens first. That is the order a reader perceives in.
+- **The normal path, then the other cases** — a flow, a list or a chart
+  states what happens when everything answers; a failure, a fallback and a
+  shape almost nobody sends sit after it under their own label. Drawn
+  beside the ordinary path they read as an equal fork, and the reader can
+  no longer tell which one is Tuesday.
 - **Open in two sentences at most** — what the document is and what the
   reader leaves with. Then the outline. The opening says nothing the
   outline then repeats: a fact belongs in one of the two, never both.
