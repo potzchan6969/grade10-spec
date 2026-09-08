@@ -26,7 +26,7 @@ tests against typed fixtures rather than a running backend.
 
 - [x] 4.1 Make `OrderDetailsAddress.name` optional and let `OrderDetailsPayment` accept an optional recognized brand, text label, and masked number; omit all-empty payment data while preserving existing consumers so `shared-ui-store-order-detail-SC-11` through `shared-ui-store-order-detail-SC-13` pass in component tests and stories.
 - [x] 4.2 Add Discount, Shipping, and Tax labels to each supported Grade10 `orderDetail` catalog, and update the `orderHistory` and `orderDetail` order-label templates so a supplied shop number keeps its own prefix; make catalog resolution and type tests pass for `en`, `zh-Hant`, and `zh-Hans`.
-- [ ] 4.3 Verify the widened shared contract and catalog additions with `pnpm --filter @grade10/ui run test:stories`, `pnpm --filter @grade10/ui run typecheck`, `pnpm --filter @grade10/i18n run test`, `pnpm --filter @grade10/i18n run typecheck`, and `pnpm run lint`.
+- [x] 4.3 Verify the widened shared contract and catalog additions with `pnpm --filter @grade10/ui run test:stories`, `pnpm --filter @grade10/ui run typecheck`, `pnpm --filter @grade10/i18n run test`, `pnpm --filter @grade10/i18n run typecheck`, and `pnpm run lint`.
 
 ## 5. Rich customer order facts (grade10) (owner: @kinisworking)
 
