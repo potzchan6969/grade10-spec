@@ -4,7 +4,7 @@ spec: grade10-site/loyalty/programme
 order: 1
 ---
 
-A point is HKD 10 of qualifying goods, priced once when a paid order reaches
+A point is $10 of qualifying goods, priced once when a paid order reaches
 the programme. Behind every member is an append-only ledger of dated point
 lots, and a balance is a query over it — nothing is edited, so nothing can
 quietly drift ([[grade10-site-loyalty-programme-SC-03]], [[grade10-site-loyalty-programme-SC-04]], [[grade10-site-loyalty-programme-SC-05]]). A
@@ -15,72 +15,299 @@ twice ([[grade10-site-loyalty-programme-SC-10]], [[grade10-site-loyalty-programm
 
 | Rule | Value |
 | --- | --- |
-| Currency and clock | HKD, Asia/Hong_Kong. A foreign currency is refused |
-| Base rate | 1 point / HKD 10 (qualifying goods after discounts) |
-| Multiplier | Silver 1×, Gold 1.2×, Black 1.7× |
-| Rounding | HKD 139 at 1.2× = 1.2×13 = 15 points |
-| Timing | After payment, not at the till; online and in-store purchases feed one balance |
+| Currency | **HKD**. A foreign currency is refused |
+| Clock | **Asia/Hong_Kong** |
+| Base rate | **1 point / $10** (qualifying goods after discounts) |
+| Multiplier | **Silver** 1×, **Gold** 1.2×, **Black** 1.7× |
+| Rounding | **$139** at **1.2×** = **1.2×13** = **15 points** |
+| Timing | **After fulfillment** |
 
-## Qualifying goods
+## Qualification criteria
 
-Qualifying goods are the lines of a paid order at their after-discount,
-tax-free value. A coupon has already lowered that figure, and a whole-order
-discount is split across every line in proportion to line value, so it cannot
-be pushed onto the non-earning part of a basket.
+Points are earned from the **net paid amount after any discount, excluding shipping and tax**.
 
-| Earns | Earns nothing |
+| Item | Earns points |
 | --- | --- |
-| Online store purchases | Shipping and tax — never a line item |
-| Physical-store purchases attributed to a member | Gift cards, credit top-ups and grading services, by SKU prefix and by product type or tag |
-|  | The part of an order paid with points, or with a points code |
-|  | Auction wins and credit top-ups, in this phase |
+| Products | **Yes** |
+| Shipping and tax | **No**, never in the basis |
+| Gift cards | **No**, excluded as a product rather than as a tender |
+| Credit top-ups | **No**, excluded as a product |
+| Grading fees | **No**, excluded as a product |
+| Auction wins | **No** today, a later-phase candidate |
 
-The exclusion list is a blocklist: a product nothing names earns. A line the
-rule cannot classify leaves the whole order unpriced rather than earning on a
-guess, and an order priced at zero is settled without a call.
+## Pricing an order
 
-:::detail{title="Pricing an order" for="engineer"}
-The programme is one config, `GRADE10_LOYALTY_PROGRAM` in `packages/app-env`,
-handed to the worker in `apps/backend/grade10/loyalty/src/index.ts` and parsed
-for every environment at assembly; an unknown key fails the boot.
-Eligibility is computed at the order's paid transition and stamped once onto
-the order — from the provider's itemised lines where it itemises, otherwise
-from the store's own items with the whole-order discount apportioned by
-largest remainder. The design record is
-[loyalty architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md)
-and the commerce side is
-[commerce architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md).
+An order is priced once, when it is paid, and the number written then is the
+one every point and every refund is read against.
+
+:::flow{title="From a paid order to points" diagram="assets/diagrams/loyalty-pricing-an-order.svg"}
+## *Shop* — **Order paid**
+The shop sends the paid order: its lines, their discounts, and the goods total it stated
+
+## *Store* — **Which lines earn**
+Line by line: earns points, is left out (a gift card, a fee), or is set aside until the shop says what the line is — [Line verdicts](#detail-line-verdicts)
+- **Priced** — every line answered, so the points come from the lines that earn
+- **Set aside** — a line the shop has not classified yet holds back the points, never the sale
+
+## *Store* — **Fallback when a line cannot answer**
+When a line cannot say whether it earns, tried in this order
+1. **Store's own item prices** — the whole-order discount shared across the lines by value
+2. **Shop's stated goods total** — only where the shop itemised nothing
+3. **Nothing** — the points wait, counted, until a source can classify the sale
+
+## *Store* — **Earning amount fixed on the order**
+One amount, written once, never re-priced
+
+## *Loyalty* — **Points worked out**
+**$10** a base point, rounded down, then the tier rate, rounded down again — **$139** at **1.2×** = **15**
+
+## *Loyalty* — **Points recorded**
+A dated entry in the ledger, never edited, carrying its base points and multiplier
+:::
+
+:::detail{title="Line verdicts" for="engineer"}
+- **Config** — one programme config, `GRADE10_LOYALTY_PROGRAM` in `packages/app-env`
+- **Design records** —
+  [loyalty architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md)
+  and
+  [commerce architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
 :::
 
 ## Refunds
 
-A refund claws back what the refunded money earned, and never more than the
-member still holds from it ([[grade10-site-loyalty-programme-SC-35]], [[grade10-site-loyalty-programme-SC-36]],
-[[grade10-site-loyalty-programme-SC-42]]). The seller sends the goods share of a refund, priced from
-the same basis the earn used, so refunding a delivery removes no points. A
-refund that arrives before its earn is not lost; it claws back once the earn
-lands ([[grade10-site-loyalty-programme-SC-37]]). Points already spent or expired cannot be reached,
-and the gap is counted by cause rather than driving anyone negative.
+A refund takes back the points the refunded goods earned, and never more than
+the member still holds from them.
 
-A claw-back also cancels the tier contribution it removes ([[grade10-site-loyalty-programme-SC-38]])
-and re-evaluates the tier at once — [Tiers](/p/grade10-site/loyalty/tiers).
+- **Goods only** — the store sends the goods share of a refund, priced the
+  way the earn was, so refunding the shipping removes no points
+- **Same rate** — money comes back at the rate the credit that earned it
+  charged, the last money at the last rate ([[grade10-site-loyalty-programme-SC-42]])
+- **Once over the whole** — each refund resumes where the last stopped, so
+  two halves take exactly what one refund of the whole takes
+  ([[grade10-site-loyalty-programme-SC-35]])
+- **Never below zero** — a claw-back takes only what the member still holds
+  from that money; the gap is counted, spent points first, expired next
+  ([[grade10-site-loyalty-programme-SC-36]])
+- **Early refund waits** — a refund that arrives before its earn is refused
+  and retried until the earn lands, then claws back once
+  ([[grade10-site-loyalty-programme-SC-37]])
+- **Tier** — the contribution the points made leaves with them, and the tier
+  is judged again at once ([[grade10-site-loyalty-programme-SC-38]]) —
+  [Tiers](/p/grade10-site/loyalty/tiers)
+
+:::example{title="Shipping refunded" tier="Gold" shipping="$30"}
+- Gengar single $139
+
+| Step | Event | Points | Balance |
+| --- | --- | --- | --- |
+| Earns | 13 pts × 1.2 | +15 | 15 |
+| Refunds | the shipping, $30 | 0 | 15 |
+
+The store sends no goods for shipping, so nothing comes back.
+:::
+
+:::example{title="Part of the goods refunded" tier="Gold" shipping="$30"}
+- Gengar single $139
+
+| Step | Event | Points | Balance |
+| --- | --- | --- | --- |
+| Earns | 13 pts × 1.2 | +15 | 15 |
+| Refunds | $39 of the single, a price match | −4 | 11 |
+
+39 of the 139 that earned 15, floored.
+:::
+
+:::example{title="Whole order refunded" tier="Gold" shipping="$30"}
+- Gengar single $139
+
+| Step | Event | Points | Balance |
+| --- | --- | --- | --- |
+| Earns | 13 pts × 1.2 | +15 | 15 |
+| Refunds | the single and the shipping, $169 | −15 | 0 |
+
+The goods share is the whole single, $139, and 15 is all it earned.
+:::
+
+:::example{title="Refund in two parts" tier="Gold" shipping="$30"}
+- Gengar single $139
+
+| Step | Event | Points | Balance |
+| --- | --- | --- | --- |
+| Earns | 13 pts × 1.2 | +15 | 15 |
+| Refunds | $100 of the single | −10 | 5 |
+| Refunds | $39 more, priced from $100 on | −5 | 0 |
+
+Priced apart the two would take 14. Together they take what one refund of
+$139 takes.
+:::
+
+:::example{title="Refund before the earn" tier="Gold" shipping="$30"}
+- Gengar single $139
+
+| Step | Event | Points | Balance |
+| --- | --- | --- | --- |
+| Refunds | $39 of the single, before the earn has landed | 0 | 0 |
+| Earns | the earn lands, 13 pts × 1.2 | +15 | 15 |
+| Refunds | the same refund, retried by the store | −4 | 11 |
+
+Loyalty refuses a refund of money it has not priced. The store keeps
+retrying, and the retry claws back once.
+:::
+
+:::example{title="Points already spent" tier="Gold" shipping="$30"}
+- Gengar single $139
+
+| Step | Event | Points | Balance |
+| --- | --- | --- | --- |
+| Earns | 13 pts × 1.2 | +15 | 15 |
+| Redeems | a reward for 12 points | −12 | 3 |
+| Refunds | the single and the shipping, $169 | −3 | 0 |
+
+3 is all the member still holds from the order. The missing 12 are counted
+as spent, and the balance stays at 0.
+:::
+
+:::example{title="Points already expired" tier="Gold" shipping="$30"}
+- Gengar single $139
+
+| Step | Event | Points | Balance |
+| --- | --- | --- | --- |
+| Earns | 13 pts × 1.2 | +15 | 15 |
+| Lapses | a year on, nothing bought or redeemed | −15 | 0 |
+| Refunds | the single and the shipping, $169 | 0 | 0 |
+
+Nothing is held from the order, so nothing comes back. The missing 15 are
+counted as expired.
+:::
+
+:::example{title="Gift card returned" tier="Gold"}
+- Gengar single $139
+- Gift card $500
+
+| Step | Event | Points | Balance |
+| --- | --- | --- | --- |
+| Earns | 13 pts × 1.2, the single alone | +15 | 15 |
+| Refunds | the gift card, $500 | 0 | 15 |
+
+A gift card never earned, so the store sends no goods for it.
+:::
+
+:::example{title="Two rates on one order" tier="Silver"}
+- PSA 10 Charizard slab $6,000
+- Booster box $1,000
+
+| Step | Event | Points | Balance |
+| --- | --- | --- | --- |
+| Earns | the slab, 600 pts × 1, which crosses the Gold gate | +600 | 600 |
+| Earns | the booster box, 100 pts × 1.2 | +120 | 720 |
+| Refunds | the booster box, $1,000 | −120 | 600 |
+
+The booster box is the money that earned at 1.2×, so it costs 120 back, not
+the 100 the slab's rate would price.
+:::
 
 ## Expiry
 
-The redeemable balance lapses after twelve months with no activity. Every
-purchase and every redemption pushes that date to twelve months from its own
-day, forwards only, so a late record shortens nothing. A campaign grant, a
-correction and a reversal are not activity. Whatever is already dead is
-settled before the clock moves, so a lapse that has happened is never
-revived. Expiry needs no sweep to be true: a lot past its date stops counting
-the instant it is read, and the nightly sweep only writes the record
-([[grade10-site-loyalty-programme-SC-13]]).
+The redeemable balance lapses after twelve months with no activity, and a
+lapse that has happened is never undone.
 
-:::callout{kind="warning"}
-The durable spec still says a credit expires twelve months after the activity
-that earned it ([[grade10-site-loyalty-programme-SC-12]]). What runs is the activity clock above — the
-whole balance lives while the member keeps buying or redeeming. The rewrite is
-in flight under `revise-loyalty-programme-rules`.
+- **Window** — twelve calendar months on the Hong Kong clock: the same day
+  and time a year on, 365 or 366 days, never a day count; a 29 February lapses
+  on the 28th ([[grade10-site-loyalty-programme-SC-150]])
+- **Activity** — a purchase or a redemption, even a spend too small to earn a
+  point; each pushes the whole balance's date to twelve months from its own
+  day ([[grade10-site-loyalty-programme-SC-94]], [[grade10-site-loyalty-programme-SC-95]], [[grade10-site-loyalty-programme-SC-100]])
+- **Not activity** — a campaign grant, a correction, a claw-back, a reversal;
+  none moves the date, and the points a grant or a correction adds live out
+  their own twelve months ([[grade10-site-loyalty-programme-SC-98]], [[grade10-site-loyalty-programme-SC-99]])
+- **Forwards only** — a late record shortens nothing; the date sits where the
+  latest activity put it ([[grade10-site-loyalty-programme-SC-101]])
+- **Born lapsed** — a record older than a year is written with its date already
+  past: on the ledger, counting nothing, moving nothing ([[grade10-site-loyalty-programme-SC-151]])
+- **Settled first** — whatever is already dead is written off before the date
+  moves, so no extension reaches back ([[grade10-site-loyalty-programme-SC-97]])
+- **No sweep needed** — a lot past its date stops counting the instant it is
+  read; the nightly sweep only writes the record, and a run cut short
+  converges ([[grade10-site-loyalty-programme-SC-96]], [[grade10-site-loyalty-programme-SC-102]])
+
+:::example{title="Buying or redeeming keeps the balance alive"}
+| When | Event | Points | Balance |
+| --- | --- | --- | --- |
+| 3 Jan 2026 | earn → lapses 3 Jan 2027 | +15 | 15 |
+| 1 Jun 2026 | earn → lapses 1 Jun 2027 | +10 | 25 |
+| 20 Nov 2026 | redeem → lapses 20 Nov 2027 | −5 | 20 |
+| 3 Jan 2027 | first earn's own year ends · date stays 20 Nov 2027 | 0 | 20 |
+| 20 Nov 2027 | lapse | −20 | 0 |
+
+Every purchase and every redemption moves one date for the whole balance,
+so the January points live as long as the November redemption does. The
+date after the arrow is when the balance lapses if nothing else happens.
+:::
+
+:::example{title="A spend too small to earn still counts"}
+| When | Event | Points | Balance |
+| --- | --- | --- | --- |
+| 3 Jan 2026 | earn → lapses 3 Jan 2027 | +15 | 15 |
+| 1 Dec 2026 | $8 order, under a point → lapses 1 Dec 2027 | 0 | 15 |
+| 3 Jan 2027 | earn's own year ends · date stays 1 Dec 2027 | 0 | 15 |
+| 1 Dec 2027 | lapse | −15 | 0 |
+
+The purchase is activity even when it credits nothing.
+:::
+
+:::example{title="Expired points do not come back"}
+| When | Event | Points | Balance |
+| --- | --- | --- | --- |
+| 3 Jan 2026 | earn → lapses 3 Jan 2027 | +15 | 15 |
+| 3 Jan 2027 | lapse | −15 | 0 |
+| 8 Mar 2027 | earn → lapses 8 Mar 2028 | +15 | 15 |
+
+The new purchase starts a fresh balance. The fifteen that lapsed stay
+lapsed.
+:::
+
+:::example{title="A grant or a correction is not activity"}
+| When | Event | Points | Balance |
+| --- | --- | --- | --- |
+| 3 Jan 2026 | earn → lapses 3 Jan 2027 | +15 | 15 |
+| 1 Jun 2026 | campaign grant · own date 1 Jun 2027 · balance date stays 3 Jan 2027 | +100 | 115 |
+| 3 Jan 2027 | lapse, the January earn | −15 | 100 |
+| 1 Jun 2027 | lapse, the grant on its own date | −100 | 0 |
+
+A grant moves no date, and neither does an operator correction. Each lives
+out its own year under a window that has already passed.
+:::
+
+:::example{title="A late record shortens nothing"}
+| When | Event | Points | Balance |
+| --- | --- | --- | --- |
+| 8 Mar 2026 | earn → lapses 8 Mar 2027 | +15 | 15 |
+| 10 Apr 2026 | order of 3 Jan, arriving late · date stays 8 Mar 2027 | +12 | 27 |
+| 8 Mar 2027 | lapse, both | −27 | 0 |
+
+The date only moves forward. The January order would have put it at 3 Jan
+2027, so it moves nothing.
+:::
+
+:::example{title="A record older than a year is written already lapsed"}
+| When | Event | Points | Balance |
+| --- | --- | --- | --- |
+| 3 Jan 2026 | earn → lapses 3 Jan 2027 | +15 | 15 |
+| 3 Jan 2027 | lapse | −15 | 0 |
+| 10 Feb 2027 | order of 1 Jan 2026 · 12 pts written lapsed · date stays 3 Jan 2027 | 0 | 0 |
+
+A record whose own year has run out buys nothing: the points are on the
+ledger for the audit, and count nothing.
+:::
+
+:::example{title="A leap day lapses on the 28th"}
+| When | Event | Points | Balance |
+| --- | --- | --- | --- |
+| 29 Feb 2028 | earn → lapses 28 Feb 2029 | +15 | 15 |
+| 28 Feb 2029 | lapse | −15 | 0 |
+
+The window is calendar months, so a day the next year does not have lands
+on the last day of that month.
 :::
 
 ## Grants by operators

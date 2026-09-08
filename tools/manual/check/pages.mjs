@@ -8,6 +8,7 @@ import { join } from "node:path";
 import { slugify } from "../src/api/paths.ts";
 import { findRequirement } from "../src/api/requirements.ts";
 import { fileKeyOf } from "../src/blocks/design-drift.ts";
+import { readExample } from "../src/blocks/example-shape.ts";
 import { parsePage, serializePage } from "../src/content/grammar.ts";
 import { readDesignSync } from "../src/store/design-sync.mts";
 import { confine, readText } from "../src/store/disk.mts";
@@ -124,6 +125,13 @@ function checkBlock(ctx, path, block) {
       ctx.cased.add(block.id);
       if (!specs.has(block.id)) {
         add("reference", path, `${label(block, "id")} names no spec on disk`);
+      }
+      break;
+    }
+    case "example": {
+      const read = readExample(block);
+      if ("problem" in read) {
+        add("example", path, `${label(block, "title")}: ${read.problem}`);
       }
       break;
     }

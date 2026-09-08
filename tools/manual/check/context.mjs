@@ -18,6 +18,11 @@ export const RULES = [
     level: "fail",
     title: "Detail blocks whose titles collide",
   },
+  {
+    key: "example",
+    level: "fail",
+    title: "Example ledgers whose balances do not add up",
+  },
   { key: "unreferenced", level: "fail", title: "Durable specs no page shows" },
   {
     key: "page",
@@ -112,6 +117,11 @@ export const RULES = [
     key: "coverage",
     level: "warn",
     title: "Scenarios no test case traces",
+  },
+  {
+    key: "role",
+    level: "warn",
+    title: "Journeys walked by the system, not an actor",
   },
   {
     key: "unwritten",

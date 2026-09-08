@@ -24,7 +24,7 @@ the button to buy it.
 
 ## Designs
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4098-2423" title="Product detail"}
+::story{id="pages-product-detail-page--docs" title="Product details"}
 
 :::detail{title="Product decisions" for="pm"}
 A card travels as a pasted address — a group chat, a Discord, a reply — more

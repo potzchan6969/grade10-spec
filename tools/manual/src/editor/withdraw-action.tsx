@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useSnapshotReload } from "../api/snapshot-provider";
 import type { ChangeEntry } from "../api/types";
 import { ConfirmDialog } from "./confirm-dialog";
-import { noteWrite, useEditorSession } from "./session";
+import { useEditorSession } from "./session";
 import { describeCause } from "./store";
 
 /** Taking a proposal back — whoever is at the dev server's keyboard may. */
@@ -24,7 +24,6 @@ export function WithdrawAction({ change }: { change: ChangeEntry }) {
     store
       .withdraw(change.id)
       .then(() => {
-        noteWrite();
         reload();
         setAsking(false);
       })

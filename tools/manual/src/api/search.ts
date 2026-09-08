@@ -61,7 +61,7 @@ function bodyText(items: (Block | BodyItem)[]): string {
     else if (item.type === "callout") parts.push(bodyText(item.body));
     else if (item.type === "detail") {
       parts.push(item.title, bodyText(item.body));
-    } else if (item.type === "flow") {
+    } else if (item.type === "flow" || item.type === "example") {
       parts.push(item.title, bodyText(item.body));
     } else if (item.type === "figma") {
       parts.push(item.title, item.set ?? "");

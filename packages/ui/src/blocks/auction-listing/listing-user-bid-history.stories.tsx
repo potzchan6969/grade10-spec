@@ -12,8 +12,9 @@ import type { ListingUserBidHistoryRow } from "./types";
 const COPY = {
   link: "Your bid history",
   title: "Bid History",
+  samePricePriority:
+    "When bidders set the same maximum, the earlier submission takes priority.",
   amount: "Your bid",
-  type: "Type",
   time: "Time",
 } as const;
 
@@ -23,22 +24,16 @@ const SAMPLE_ROWS: ListingUserBidHistoryRow[] = [
   {
     id: "bid-1",
     amountLabel: "HK$4,800",
-    bidType: "auto",
-    bidTypeLabel: "Automatic",
     acceptedAtMs: STORY_NOW_MS - 2 * 60_000,
   },
   {
     id: "bid-2",
     amountLabel: "HK$4,550",
-    bidType: "manual",
-    bidTypeLabel: "Manual",
     acceptedAtMs: STORY_NOW_MS - 18 * 60_000,
   },
   {
     id: "bid-3",
     amountLabel: "HK$4,300",
-    bidType: "auto",
-    bidTypeLabel: "Automatic",
     acceptedAtMs: STORY_NOW_MS - 60 * 60_000,
   },
 ];
@@ -49,8 +44,6 @@ function createLongRows(count: number): ListingUserBidHistoryRow[] {
   return Array.from({ length: count }, (_, index) => ({
     id: `bid-long-${index}`,
     amountLabel: `HK$${(4_800 - index * 100).toLocaleString("en-HK")}`,
-    bidType: index % 2 === 0 ? "auto" : "manual",
-    bidTypeLabel: index % 2 === 0 ? "Automatic" : "Manual",
     acceptedAtMs:
       index === 0
         ? baseMs - 30_000
@@ -115,6 +108,14 @@ export const DialogOpen: Story = {
     });
     expect(within(dialog).getByText("HK$4,800")).toBeVisible();
     expect(within(dialog).getByText("2 min ago")).toBeVisible();
+    expect(
+      within(dialog).getByText(
+        /When bidders set the same maximum, the earlier submission takes priority/,
+      ),
+    ).toBeVisible();
+    expect(within(dialog).queryByText("Type")).not.toBeInTheDocument();
+    expect(within(dialog).queryByText("Automatic")).not.toBeInTheDocument();
+    expect(within(dialog).queryByText("Manual")).not.toBeInTheDocument();
   },
 };
 

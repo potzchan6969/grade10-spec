@@ -1,13 +1,9 @@
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { findStoreRoot } from "../src/store/disk.mts";
-import { rootsOf } from "../src/store/roots.mts";
-import { readStore } from "../src/store/snapshot.mts";
+import { realStore } from "./real-store";
 
-/** The one test that reads the real store: the readers have to survive the
- * files people actually write, not only the fixture. */
-const root = findStoreRoot(fileURLToPath(new URL(".", import.meta.url)));
-const { snapshot, archive } = await readStore(rootsOf(root));
+/** The readers have to survive the files people actually write, not only the
+ * fixture. */
+const { snapshot, archive } = realStore;
 
 describe("the real store", () => {
   it("names the commit it was read at", () => {

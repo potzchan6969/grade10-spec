@@ -15,7 +15,6 @@ import { changeEntry, pageEntry, snapshotOf } from "./manual-fixture";
 // The row carries a Propose control; this page is not what is under test.
 vi.mock("../src/editor/session", () => ({
   useEditorSession: () => ({ store: null }),
-  noteWrite: () => {},
 }));
 
 /** The two things a capability page could not say: that somebody proposed

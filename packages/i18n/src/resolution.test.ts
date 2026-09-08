@@ -165,6 +165,7 @@ const CART_DRAWER_KEYS = [
   "footer.checkoutRedirecting",
   "footer.checkoutFailed",
   "unavailableItemsRemoved",
+  "unavailableItemsRemovedDescription",
 ].sort();
 
 const AUCTION_BIDDING_HISTORY_KEYS = [

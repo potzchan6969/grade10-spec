@@ -19,8 +19,6 @@ at my tier's rate in the programme's own currency,
 - `grade10-site-loyalty-programme-SC-09` — Future-dated activity is refused
 - `grade10-site-loyalty-programme-SC-10` — A retry is free
 - `grade10-site-loyalty-programme-SC-11` — A reused key with new input is refused
-- `grade10-site-loyalty-programme-SC-12` — Expiry needs no sweep
-- `grade10-site-loyalty-programme-SC-13` — A partial sweep converges
 - `grade10-site-loyalty-programme-SC-23` — A purchase earns at the member's rate
 - `grade10-site-loyalty-programme-SC-35` — A split refund matches a single refund
 - `grade10-site-loyalty-programme-SC-36` — A member who already spent the points is not driven negative
@@ -32,6 +30,17 @@ at my tier's rate in the programme's own currency,
 - `grade10-site-loyalty-programme-SC-42` — A partial refund claws back only its own part
 - `grade10-site-loyalty-programme-SC-43` — A currency mismatch stops the product from starting
 - `grade10-site-loyalty-programme-SC-44` — A refused recording is reported, not swallowed
+- `grade10-site-loyalty-programme-SC-94` — Buying keeps the whole balance alive
+- `grade10-site-loyalty-programme-SC-95` — Redeeming also resets the window
+- `grade10-site-loyalty-programme-SC-96` — Expiry needs no sweep
+- `grade10-site-loyalty-programme-SC-97` — Expired points do not come back
+- `grade10-site-loyalty-programme-SC-98` — A correction does not extend the balance's life
+- `grade10-site-loyalty-programme-SC-99` — A campaign grant does not keep the balance alive
+- `grade10-site-loyalty-programme-SC-100` — A spend too small to earn still counts as activity
+- `grade10-site-loyalty-programme-SC-101` — A late record cannot shorten the balance's life
+- `grade10-site-loyalty-programme-SC-102` — A partial sweep converges
+- `grade10-site-loyalty-programme-SC-150` — The window is calendar months, not a day count
+- `grade10-site-loyalty-programme-SC-151` — A record older than the window is written already lapsed
 
 ### grade10-site-loyalty-programme-US-02: Member advances through the tier ladder
 

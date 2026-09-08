@@ -105,7 +105,8 @@ start at `##`; raw HTML is never rendered). Directives sit at column 0:
 | `children` | `::children` | cards for the child pages of this directory, from their frontmatter |
 | `callout` | `:::callout{kind="note"}` … `:::` | kinds: `note`, `decision`, `warning`; a `warning` shows a signature — `author`/`date` when written in, else who last changed it and when, derived from git at build |
 | `detail` | `:::detail{for="engineer" title="…"}` … `:::` | collapsed-but-present depth for one audience; searchable, deep-linkable, never hidden from the DOM |
-| `flow` | `:::flow{title="Checkout" diagram="assets/…"}` … `:::` | steps read top to bottom, all open; `##` starts a step, `#` groups the steps under it into a phase, and numbering runs straight through; optional SVG whose `data-step` elements light while their step is pointed at |
+| `flow` | `:::flow{title="Checkout" diagram="assets/…"}` … `:::` | steps read top to bottom, all open; `##` starts a step, `#` groups the steps under it into a phase, and numbering runs straight through; optional SVG drawn at one and a half times its own size in a strip that pans under the mouse or a swipe, never a scrollbar, holding still while the mouse rests on the box at either end; with one on screen the steps fold behind their count, a part under the mouse lights and tells its step on a card, a click on one opens the list at that step, and a deep link to a step opens it too; a pointed-at row lights its `data-step` elements and the strip pans to show them |
+| `example` | `:::example{title="Refund in two parts" tier="Gold" shipping="$30"}` … `:::` | one worked case: the body opens with the cart as a list (`- Gengar single $139`), then a `Step \| Event \| Points \| Balance` table — or `When \| …` for a timeline, days that never run backwards, a blank day sharing the one above — points signed, balance running; prose after the table is the why; neighbouring examples fold behind one collapsed `Examples` toggle; `tier` badges the member, `shipping` is the fee on the order; `check:manual` refuses a cart line without a price and a balance the points do not reach |
 
 Unknown directives are a parse error, not a silent pass-through.
 
@@ -386,14 +387,13 @@ the one `ContentStore`, `LocalStore`:
 read(path)                            -> { source, version }
 write(path, source, baseVersion)      -> ok | conflict { current }
 writeBinary(path, bytes, baseVersion?) -> same as write
-dirty() / commit(message)             -> the working tree's status, and landing it
 propose(files) / withdraw(id)         -> their own atomic commits, never staged
 ```
 
 `version` is a content hash of the file — what turns two concurrent editors
 into a rendered conflict diff instead of a silent overwrite. A save writes
-the working tree directly; the commit bar appears once the tree has manual
-edits and commits them all in one go.
+the working tree directly; committing it is on the author, same as any other
+change to the repo.
 
 Staging validates client-side what the snapshot can prove: canonical
 form, spec and scenario ids, image paths against `assets`, and that a

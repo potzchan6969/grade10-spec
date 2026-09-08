@@ -3,9 +3,7 @@ import {
   assertManualPath,
   assertProposal,
   base64FromBytes,
-  type CommitOutcome,
   type ContentStore,
-  type DirtyState,
   type StoredFile,
   StoreError,
   type Version,
@@ -161,32 +159,6 @@ export class LocalStore implements ContentStore {
       return { status: "conflict", current: currentOf(answer) };
     }
     throw new StoreError(answer.status, errorOf(answer, "the store refused"));
-  }
-
-  async dirty(): Promise<DirtyState> {
-    const answer = await call(this.http, "/api/dirty");
-    if (answer.status !== 200) {
-      throw new StoreError(
-        answer.status,
-        errorOf(answer, "cannot read status"),
-      );
-    }
-    const files = Array.isArray(answer.body.files)
-      ? (answer.body.files as string[])
-      : [];
-    return { dirty: answer.body.dirty === true, files };
-  }
-
-  async commit(message: string): Promise<CommitOutcome> {
-    const answer = await call(this.http, "/api/commit", json({ message }));
-    if (answer.status !== 200) {
-      throw new StoreError(answer.status, errorOf(answer, "commit refused"));
-    }
-    const sha = answer.body.sha;
-    return {
-      committed: answer.body.committed === true,
-      sha: typeof sha === "string" ? sha : undefined,
-    };
   }
 
   async deletePage(path: string, baseVersion: Version): Promise<void> {

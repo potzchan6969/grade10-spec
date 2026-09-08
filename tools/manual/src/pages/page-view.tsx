@@ -5,8 +5,8 @@ import {
   type ParsedPage,
   proposalsForSpec,
 } from "../api/derive";
+import { BlockList } from "../blocks/block-list";
 import { BlockScopeProvider } from "../blocks/block-scope";
-import { BlockView } from "../blocks/block-view";
 import { BrokenCard } from "../blocks/broken-card";
 import { ChangeRibbon } from "../blocks/change-views";
 import { PageActions } from "../editor/edit-actions";
@@ -62,10 +62,7 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
       ) : null}
 
       <BlockScopeProvider value={{ index, pagePath: path }}>
-        {blocks.map((block, position) => (
-          // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
-          <BlockView block={block} key={`${block.type}-${position}`} />
-        ))}
+        <BlockList blocks={blocks} />
         {children}
       </BlockScopeProvider>
 

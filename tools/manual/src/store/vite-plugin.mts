@@ -248,13 +248,13 @@ async function route(
   if (path === "/api/asset") return writeAsset(roots, body);
   if (path === "/api/propose") return propose(roots.store, body);
   if (path === "/api/withdraw") return withdraw(roots.store, body);
-  if (path === "/api/commit") return commit(roots, body);
   return reply(404, { error: `no such endpoint: ${path}` });
 }
 
 // --- reads ---------------------------------------------------------------
 
-/** What the commit bar watches: the manual edits sitting in the working tree. */
+/** Cheap and side-effect free, so `probeLocalStore` uses it to tell whether a
+ * dev store answers at all. */
 async function readDirty(
   roots: Roots,
 ): Promise<{ dirty: boolean; files: string[] }> {
@@ -528,31 +528,6 @@ function writeAtomically(file: string, bytes: Buffer): void {
     rmSync(temp, { force: true });
     throw cause;
   }
-}
-
-async function commit(roots: Roots, body: unknown): Promise<Reply> {
-  const message = ((body ?? {}) as Record<string, unknown>).message;
-  if (typeof message !== "string" || message.trim() === "") {
-    return reply(400, { error: "`message` is required" });
-  }
-  const root = roots.content;
-  await git(root, ["add", "-A", "--", roots.manual]);
-  const staged = await git(root, [
-    "diff",
-    "--cached",
-    "--name-only",
-    "--",
-    roots.manual,
-  ]);
-  if (staged.trim() === "") return reply(200, { committed: false });
-
-  await git(root, ["commit", "-m", message, "--", roots.manual]);
-  const sha = (await git(root, ["rev-parse", "HEAD"])).trim();
-  return reply(200, {
-    committed: true,
-    sha,
-    files: staged.trim().split("\n"),
-  });
 }
 
 // --- plumbing ------------------------------------------------------------

@@ -39,6 +39,10 @@ const INFO: Record<string, BlockInfo> = {
     label: "Flow",
     hint: "Steps in order: ## opens a step, # groups them into a phase.",
   },
+  example: {
+    label: "Example",
+    hint: "One worked case: the cart as a list, a ledger of Step | Event | Points | Balance (When, for a timeline), then the why.",
+  },
 };
 
 export function blockLabel(type: string): string {

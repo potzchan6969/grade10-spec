@@ -110,6 +110,51 @@ warning. `alt` on an image is required:
 ::image{src="assets/tier-ladder.png" alt="The four tiers and their thresholds"}
 ```
 
+A chart is an SVG the build renders from a source under `docs/prds/diagrams/`
+— archify's JSON, named `<slug>.<workflow|lifecycle|sequence|dataflow|architecture>.json`
+— into `assets/diagrams/<slug>.svg` with `pnpm diagrams`, and CI refuses a
+chart that is stale against its source. A flow names its chart and lights, at
+each step, every node whose id is that step's slug (an id's tail after `_`
+lets several nodes share one) and every edge pointing at such a node; an
+`::image` shows a chart anywhere else, in the page's own theme:
+
+```md
+:::flow{title="The hosted check" diagram="assets/diagrams/kyc-hosted-check.svg"}
+## The check is raised
+Lit while the reader is here, with the node `the-check-is-raised`.
+:::
+
+::image{src="assets/diagrams/vault-identity-states.svg" alt="How a case moves between its identity states"}
+```
+
+An example is one worked case. It opens with the cart, a list of priced
+lines, and `tier` badges the member while `shipping` names the fee on the
+order. Then comes a ledger, a table whose columns are
+`Step | Event | Points | Balance`, each row a thing that happened in order,
+points signed (`+15`, `−10`, or blank where none moved), the balance running
+from zero or from the first one stated. Where the day is what the reader
+follows, the first column is `When` instead: a day written `3 Jan 2026`, or
+blank to share the day above, and the rows hang on a timeline. Prose after the
+table is the why. Examples that follow one another fold behind one `Examples`
+toggle, collapsed until opened or deep-linked into, each case open beneath it.
+The check refuses a cart line without a price, a timeline that runs back in
+time, and a balance the points do not reach, so an example cannot rot when a
+rule changes:
+
+```md
+:::example{title="Refund in two parts" tier="Gold" shipping="$30"}
+- Gengar single $139
+
+| Step | Event | Points | Balance |
+| --- | --- | --- | --- |
+| Earns | 13 pts × 1.2 | +15 | 15 |
+| Refunds | $100 of the single | −10 | 5 |
+| Refunds | $39 more | −5 | 0 |
+
+Priced apart the two would take 14.
+:::
+```
+
 A `::figma` card is a placeholder for a component still being built. Once a
 `::story` card exists for it, drop the `::figma` card for that same
 component — Storybook is the live reference from then on:
@@ -215,7 +260,7 @@ Prose can cite the store by id, and the reference stays honest when the
 store moves. Write the id in double brackets:
 
 ```md
-Expiry is exact — [[grade10-site-loyalty-programme-SC-12]] — and a balance is never negative
+Expiry is exact — [[grade10-site-loyalty-programme-SC-96]] — and a balance is never negative
 ([[grade10-site/loyalty/programme#grade10-site-loyalty-programme-SC-04]]).
 ```
 
@@ -243,10 +288,9 @@ directive on this page renders as text instead of as a block: inside a fence,
 ## Saving
 
 The block editor only saves when the manual is running locally (`pnpm dev`):
-a commit bar appears as soon as the working tree has manual edits, and
-pressing it stages `docs/prds/` and commits. Push and open a PR like any other
-change in the repo. The hosted site is a static build of the store and is
-always read-only.
+a save writes straight to the working tree. Commit and push like any other
+change in the repo, and open a PR. The hosted site is a static build of the
+store and is always read-only.
 
 Each read carries a version — a content hash of the file. If somebody saved
 before you, you get their version and yours side by side rather than a

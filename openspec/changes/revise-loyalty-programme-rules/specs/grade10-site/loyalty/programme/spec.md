@@ -239,83 +239,6 @@ defaults: a writer that names no channel is refused.
 - **AND** a recording naming no channel, or one outside that set, is refused
 - **AND** a correction, an expiry or a campaign grant carries the non-sale value, never a selling channel
 
-### Requirement: The redeemable balance expires after a period of inactivity
-
-A member's whole redeemable balance SHALL expire once the programme's inactivity
-window has passed with no earning and no redemption. Any qualifying spend, any
-reward grant, and any redemption SHALL reset that window for the whole balance,
-whatever the age of the points in it — including a spend too small to earn a
-whole point, which is activity even when it credits nothing.
-
-Resetting SHALL only ever push the window out. An activity dated in the past
-SHALL NOT pull a member's expiry earlier than an activity already recorded, so a
-late-arriving record can shorten no balance.
-
-The balance SHALL stop counting at the instant the window passes, without
-waiting for any scheduled process. A refund, a claw-back, or an operator
-correction SHALL NOT reset the window. Points already expired SHALL NOT be
-revived by later activity.
-
-Each credit SHALL also carry its own expiry date, set when it is recorded, and a
-credit SHALL count while the later of that date and the member's inactivity
-window is still ahead. The two agree for every credit an activity records; they
-differ for a credit no activity moved the window for — a correction, a
-restored redemption — which lives out its own date under a window that has
-already passed.
-
-Expiry SHALL be recorded as a dated entry like any other movement, naming the
-whole amount it removed.
-
-#### Scenario: grade10-site-loyalty-programme-SC-94 - Buying keeps the whole balance alive
-
-- **WHEN** a member earns points eleven months after their previous activity
-- **THEN** the whole balance, oldest points included, expires an inactivity window after this earning
-- **AND** not an inactivity window after the earning that produced those older points
-
-#### Scenario: grade10-site-loyalty-programme-SC-95 - Redeeming also resets the window
-
-- **WHEN** a member redeems and records no other activity
-- **THEN** the remaining balance expires an inactivity window after that redemption
-
-#### Scenario: grade10-site-loyalty-programme-SC-96 - Expiry needs no sweep
-
-- **WHEN** a member's inactivity window passes
-- **THEN** their balance stops counting toward what they can spend immediately
-
-#### Scenario: grade10-site-loyalty-programme-SC-97 - Expired points do not come back
-
-- **WHEN** a member whose balance has expired makes a purchase
-- **THEN** the new earning starts a fresh balance and a fresh inactivity window
-- **AND** nothing that expired returns
-
-#### Scenario: grade10-site-loyalty-programme-SC-98 - A correction does not extend the balance's life
-
-- **WHEN** an operator corrects a balance, or a refund claws points back
-- **THEN** the member's inactivity window is unchanged
-
-#### Scenario: grade10-site-loyalty-programme-SC-99 - A campaign grant keeps the balance alive
-
-- **WHEN** an operator grants campaign points as a reward
-- **THEN** the whole balance expires an inactivity window after that grant
-
-#### Scenario: grade10-site-loyalty-programme-SC-100 - A spend too small to earn still counts as activity
-
-- **WHEN** a member's qualifying spend is below the price of one point
-- **THEN** no points are credited
-- **AND** the member's inactivity window is reset from that spend
-
-#### Scenario: grade10-site-loyalty-programme-SC-101 - A late record cannot shorten the balance's life
-
-- **WHEN** a purchase dated before the member's most recent activity is recorded
-- **THEN** the balance's expiry is left where the later activity put it
-- **AND** it is never pulled back toward the older date
-
-#### Scenario: grade10-site-loyalty-programme-SC-102 - A partial sweep converges
-
-- **WHEN** a scheduled expiry pass stops before reaching every member
-- **THEN** it reports how many members it did not reach
-- **AND** the next pass covers them, with no state carried between passes
-
 ### Requirement: A redemption settles by what the reward is, and never turns back into points
 
 A reward that takes money off SHALL be delivered as a coupon carrying a discount
@@ -1035,21 +958,6 @@ rule.
 **Migration**: Replaced by "Earning is priced in the programme's own currency,
 on its deployed rounding order". The currency, backdating, and future-dating
 rules carry over unchanged.
-
-### Requirement: Points expire on a fixed window and stop counting immediately
-
-**Reason**: The programme moves to activity-based expiry. The whole redeemable
-balance now expires after twelve months carrying no earning and no redemption,
-rather than each credit expiring twelve months after the activity that earned
-it. Replaced by "The redeemable balance expires after a period of inactivity",
-which carries the scheduled-pass scenario forward unchanged.
-
-**Migration**: Hold one last-activity date per member, taken from that member's
-most recent earning or redemption. Each credit keeps its own date, and a credit
-counts while either date is still ahead, so the member's date is what binds from
-the change-over on. Credits already past their own date at the change-over SHALL
-be settled as expired before the member's date is written, so nothing the old
-rule had already taken comes back.
 
 ### Requirement: Tier is derived, ratchets up on earning, and never silently drops
 

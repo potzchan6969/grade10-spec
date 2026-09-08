@@ -1,4 +1,3 @@
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
   buildIndex,
@@ -8,10 +7,8 @@ import {
   proposalsForSpec,
 } from "../src/api/derive";
 import type { Delta } from "../src/api/types";
-import { findStoreRoot } from "../src/store/disk.mts";
-import { rootsOf } from "../src/store/roots.mts";
-import { readStore } from "../src/store/snapshot.mts";
 import { changeEntry, snapshotOf, specEntry } from "./manual-fixture";
+import { realStore } from "./real-store";
 
 /** The board's status column, derived from the artifacts a change has written
  * and nothing else — so it cannot drift from what is on disk. */
@@ -161,10 +158,9 @@ describe("the proposals a capability should know about", () => {
  * this suite on every merge, so it holds only the invariants a moving
  * store keeps — never a census of today's counts. */
 describe("the real store's board", () => {
-  const root = findStoreRoot(fileURLToPath(new URL(".", import.meta.url)));
+  const { snapshot, archive } = realStore;
 
-  it("puts every change in exactly one lane, misfiling none", async () => {
-    const { snapshot, archive } = await readStore(rootsOf(root));
+  it("puts every change in exactly one lane, misfiling none", () => {
     const lanes = ["proposed", "specified", "in-progress", "complete"];
 
     for (const change of snapshot.changes) {
@@ -186,8 +182,7 @@ describe("the real store's board", () => {
 
   /** Delta blocks and task lines are what search has to index and the change
    * detail has to render; both reach the client on the snapshot. */
-  it("carries every in-flight delta block and task line", async () => {
-    const { snapshot } = await readStore(rootsOf(root));
+  it("carries every in-flight delta block and task line", () => {
     const requirements = snapshot.changes.flatMap((one) =>
       one.deltas.flatMap((delta) => delta.requirements),
     );
@@ -208,11 +203,10 @@ describe("the real store's board", () => {
     ).toBe(true);
   });
 
-  /** The durable file's own ceiling understates what has been issued: the
-   * fold drops a delta's journeys, so nothing but the delta files remembers
-   * them. */
-  it("states an id ceiling no durable spec could reach alone", async () => {
-    const { snapshot } = await readStore(rootsOf(root));
+  /** The durable file alone understates what has been issued: the fold
+   * drops a delta's journeys, so nothing but the delta files remembers
+   * them. The ceiling covers both. */
+  it("states an id ceiling covering the durable file and every delta", () => {
     const loyalty = snapshot.specs.find(
       (one) => one.id === "grade10-site/loyalty/programme",
     );
@@ -223,8 +217,24 @@ describe("the real store's board", () => {
         ),
       ) ?? [0]),
     );
+    const inFlight = Math.max(
+      0,
+      ...snapshot.changes.flatMap((one) =>
+        one.deltas
+          .filter((delta) => delta.spec === loyalty?.id)
+          .flatMap((delta) => delta.requirements)
+          .flatMap((requirement) =>
+            [...(requirement.text ?? "").matchAll(/programme-SC-(\d+)/g)].map(
+              (match) => Number(match[1]),
+            ),
+          ),
+      ),
+    );
 
-    expect(loyalty?.issuedThrough?.sc).toBeGreaterThan(durable);
+    expect(inFlight).toBeGreaterThan(0);
+    expect(loyalty?.issuedThrough?.sc).toBeGreaterThanOrEqual(
+      Math.max(durable, inFlight),
+    );
     // A spec whose scenarios carry no permanent ids has issued nothing and
     // owes no ceiling; every spec that has issued one states it.
     const issuing = snapshot.specs.filter((one) =>

@@ -38,8 +38,9 @@
       "pointsLabel": "Points",
       "checkoutButton": "Proceed to Checkout",
       "checkoutRedirecting": "Redirecting…",
-      "checkoutFailed": "Couldn’t open checkout. Try again."
+      "checkoutFailed": "Couldn’t open checkout"
     },
-    "unavailableItemsRemoved": "Some item(s) have been removed as they’re no longer available"
+    "unavailableItemsRemoved": "Items removed from cart",
+    "unavailableItemsRemovedDescription": "Some products are no longer available"
   }
 }

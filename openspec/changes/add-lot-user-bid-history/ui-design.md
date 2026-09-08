@@ -10,18 +10,16 @@ stories are the review source.
 `ListingUserBidHistory` composes existing `@grade10/design-system` exports:
 
 - `Link` — opens the dialog (button semantics).
-- `Dialog`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogBody` —
-  modal shell; body scrolls for long histories.
+- `Dialog`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogDescription`,
+  `DialogBody` — modal shell; body holds the priority note and a scrolling table.
 - `Table`, `TableHeader`, `TableHead`, `TableBody`, `TableRow`, `TableCell` —
-  bid history table.
-- `Badge` — bid type column (`outline` manual, `info` automatic, `size="sm"`).
-- `Text` — not required if table cells carry plain strings; use where helpful.
+  bid history table (amount and time only).
 
 `ListingAuctionBidCard` gains optional `recentBidsAccessory` for composition.
 
 ## States
 
-- **Rows present** — link visible; dialog shows table.
+- **Rows present** — link visible; dialog shows priority note and table.
 - **Empty rows** — block renders nothing.
-- **Long history** — dialog body scrolls; header pinned.
+- **Long history** — dialog body scrolls; header and priority note pinned.
 - **Dialog open** — focus trapped; Escape and close dismiss.

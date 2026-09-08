@@ -149,18 +149,96 @@ conflict.
 - **WHEN** a caller repeats a key with input that differs from the first call
 - **THEN** the call is refused as a conflict
 
-### Requirement: Points expire on a fixed window and stop counting immediately
+### Requirement: The redeemable balance expires after a period of inactivity
 
-Credits SHALL expire after the programme's expiry window, measured from the date
-of the activity that earned them. An expired credit SHALL stop counting toward a
-balance at the instant it expires, without waiting for any scheduled process.
+A member's whole redeemable balance SHALL expire once the programme's inactivity
+window has passed with no earning and no redemption. Any qualifying spend and
+any redemption SHALL reset that window for the whole balance, whatever the age
+of the points in it — including a spend too small to earn a whole point, which
+is activity even when it credits nothing.
 
-#### Scenario: grade10-site-loyalty-programme-SC-12 - Expiry needs no sweep
+The window SHALL be counted in calendar months on the programme's clock — the
+same day of the month and time of day, the programme's months on — and a day
+the target month does not have SHALL land on that month's last day. It is never
+a count of days.
 
-- **WHEN** a credit's expiry instant passes
-- **THEN** it stops counting toward the balance immediately
+Resetting SHALL only ever push the window out. An activity dated in the past
+SHALL NOT pull a member's expiry earlier than an activity already recorded, so a
+late-arriving record can shorten no balance.
 
-#### Scenario: grade10-site-loyalty-programme-SC-13 - A partial sweep converges
+The balance SHALL stop counting at the instant the window passes, without
+waiting for any scheduled process. A refund, a claw-back, an operator
+correction, or a campaign grant SHALL NOT reset the window. Points already
+expired SHALL NOT be revived by later activity.
+
+Each credit SHALL also carry its own expiry date, set when it is recorded, and a
+credit SHALL count while the later of that date and the member's inactivity
+window is still ahead. The two agree for every credit an activity records; they
+differ for a credit no activity moved the window for — a campaign grant, a
+correction, a restored redemption — which lives out its own date under a window
+that has already passed.
+
+Expiry SHALL be recorded as a dated entry like any other movement, naming the
+whole amount it removed.
+
+#### Scenario: grade10-site-loyalty-programme-SC-94 - Buying keeps the whole balance alive
+
+- **WHEN** a member earns points eleven months after their previous activity
+- **THEN** the whole balance, oldest points included, expires an inactivity window after this earning
+- **AND** not an inactivity window after the earning that produced those older points
+
+#### Scenario: grade10-site-loyalty-programme-SC-95 - Redeeming also resets the window
+
+- **WHEN** a member redeems and records no other activity
+- **THEN** the remaining balance expires an inactivity window after that redemption
+
+#### Scenario: grade10-site-loyalty-programme-SC-96 - Expiry needs no sweep
+
+- **WHEN** a member's inactivity window passes
+- **THEN** their balance stops counting toward what they can spend immediately
+
+#### Scenario: grade10-site-loyalty-programme-SC-97 - Expired points do not come back
+
+- **WHEN** a member whose balance has expired makes a purchase
+- **THEN** the new earning starts a fresh balance and a fresh inactivity window
+- **AND** nothing that expired returns
+
+#### Scenario: grade10-site-loyalty-programme-SC-98 - A correction does not extend the balance's life
+
+- **WHEN** an operator corrects a balance, or a refund claws points back
+- **THEN** the member's inactivity window is unchanged
+
+#### Scenario: grade10-site-loyalty-programme-SC-99 - A campaign grant does not keep the balance alive
+
+- **WHEN** an operator grants campaign points as a reward
+- **THEN** the member's inactivity window is unchanged
+- **AND** the granted points count until their own expiry date, even under a window that has already passed
+
+#### Scenario: grade10-site-loyalty-programme-SC-100 - A spend too small to earn still counts as activity
+
+- **WHEN** a member's qualifying spend is below the price of one point
+- **THEN** no points are credited
+- **AND** the member's inactivity window is reset from that spend
+
+#### Scenario: grade10-site-loyalty-programme-SC-101 - A late record cannot shorten the balance's life
+
+- **WHEN** a purchase dated before the member's most recent activity is recorded
+- **THEN** the balance's expiry is left where the later activity put it
+- **AND** it is never pulled back toward the older date
+
+#### Scenario: grade10-site-loyalty-programme-SC-150 - The window is calendar months, not a day count
+
+- **WHEN** a member's last activity is 3 January at 10:00 in the programme's zone
+- **THEN** the balance lapses on 3 January the next year at 10:00, whether that is 365 or 366 days on
+- **AND** an activity on 29 February lapses on 28 February the next year
+
+#### Scenario: grade10-site-loyalty-programme-SC-151 - A record older than the window is written already lapsed
+
+- **WHEN** an earning dated more than an inactivity window ago is recorded
+- **THEN** its points are recorded with their own date already past, and count nothing
+- **AND** the member's inactivity window is unchanged
+
+#### Scenario: grade10-site-loyalty-programme-SC-102 - A partial sweep converges
 
 - **WHEN** a scheduled expiry pass stops before reaching every member
 - **THEN** it reports how many members it did not reach

@@ -184,15 +184,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   closedAt: "Closed {when}",
   closedSummary: "Closed at {time}. Ran {duration}",
   activityTimeCopy: FIXTURE_ACTIVITY_TIME_COPY,
-} satisfies Omit<
-  ListingAuctionBidCardCopy,
-  | "aboutThisLot"
-  | "vaultShipping"
-  | "authentication"
-  | "result"
-  | "showMore"
-  | "showLess"
->;
+} satisfies ListingAuctionBidCardCopy;
 
 export const LISTING_AUCTION_BID_AGE_VERIFICATION_COPY = {
   title: "Confirm your age",
@@ -324,11 +316,6 @@ export function bidHistoryForState(
   return BID_HISTORY;
 }
 
-const USER_BID_HISTORY_LABELS = {
-  manual: "Manual",
-  automatic: "Automatic",
-} as const;
-
 export function userBidHistoryForState(
   state: BiddingState,
 ): ListingUserBidHistoryRow[] {
@@ -338,8 +325,6 @@ export function userBidHistoryForState(
         {
           id: "user-bid-manual-current",
           amountLabel: fixtureAmount(BID_FIXTURE_LOT.currentBidMinor),
-          bidType: "manual",
-          bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(2),
         },
         {
@@ -347,8 +332,6 @@ export function userBidHistoryForState(
           amountLabel: fixtureAmount(
             BID_FIXTURE_LOT.currentBidMinor - BID_FIXTURE_LOT.incrementMinor,
           ),
-          bidType: "manual",
-          bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(12),
         },
       ];
@@ -357,8 +340,6 @@ export function userBidHistoryForState(
         {
           id: "user-bid-auto-current",
           amountLabel: fixtureAmount(BID_FIXTURE_LOT.currentBidMinor),
-          bidType: "auto",
-          bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
           acceptedAtMs: msAgo(2),
         },
         {
@@ -367,8 +348,6 @@ export function userBidHistoryForState(
             BID_FIXTURE_LOT.currentBidMinor -
               BID_FIXTURE_LOT.incrementMinor * 2,
           ),
-          bidType: "manual",
-          bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(25),
         },
       ];
@@ -377,8 +356,6 @@ export function userBidHistoryForState(
         {
           id: "user-bid-auto-max",
           amountLabel: fixtureAmount(BID_FIXTURE_LOT.viewerMaximumMinor),
-          bidType: "auto",
-          bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
           acceptedAtMs: msAgo(5),
         },
         {
@@ -386,8 +363,6 @@ export function userBidHistoryForState(
           amountLabel: fixtureAmount(
             BID_FIXTURE_LOT.viewerMaximumMinor - BID_FIXTURE_LOT.incrementMinor,
           ),
-          bidType: "manual",
-          bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(18),
         },
       ];
@@ -397,8 +372,6 @@ export function userBidHistoryForState(
         {
           id: "user-bid-won",
           amountLabel: fixtureAmount(CLOSED_SOLD_MINOR),
-          bidType: "auto",
-          bidTypeLabel: USER_BID_HISTORY_LABELS.automatic,
           acceptedAtMs: msAgo(60),
         },
         {
@@ -406,8 +379,6 @@ export function userBidHistoryForState(
           amountLabel: fixtureAmount(
             CLOSED_SOLD_MINOR - BID_FIXTURE_LOT.incrementMinor,
           ),
-          bidType: "manual",
-          bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(90),
         },
       ];
@@ -418,8 +389,6 @@ export function userBidHistoryForState(
           amountLabel: fixtureAmount(
             CLOSED_SOLD_MINOR - BID_FIXTURE_LOT.incrementMinor,
           ),
-          bidType: "manual",
-          bidTypeLabel: USER_BID_HISTORY_LABELS.manual,
           acceptedAtMs: msAgo(120),
         },
       ];

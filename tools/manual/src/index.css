@@ -209,9 +209,11 @@
     border-radius: var(--radius-xl);
   }
 
-  /* A wide table scrolls in its own box; the page never does. */
+  /* A table is as wide as its content: short columns hug, prose wraps at the
+     measure, and only a cell that cannot break scrolls. The page never does. */
   .manual-table-scroll {
     margin: 1.25rem 0;
+    width: fit-content;
     max-width: 100%;
     overflow-x: auto;
     border: 1px solid var(--border);
@@ -219,10 +221,8 @@
   }
 
   .manual-table-scroll table {
-    width: 100%;
     border-collapse: collapse;
     font-size: 0.875rem;
-    white-space: nowrap;
   }
 
   .manual-table-scroll th,
@@ -231,11 +231,13 @@
     padding: 0.5rem 0.75rem;
     text-align: left;
     vertical-align: top;
+    text-wrap: pretty;
   }
 
   .manual-table-scroll thead th {
     background-color: var(--background-subtle);
     font-weight: 600;
+    white-space: nowrap;
   }
 
   .manual-table-scroll tbody tr:last-child td {
@@ -282,14 +284,47 @@
     line-height: 1.65;
   }
 
-  /* Flow diagrams: whole and lit, until a step is pointed at — then everything
-     that step does not claim recedes. */
+  /* A strip wider than its room: no scrollbar, the side holding more fades.
+     Vertical touches still scroll the page; sideways ones drag the strip. */
+  .manual-pan {
+    --pan-fade-start: black;
+    --pan-fade-end: black;
+    overflow: hidden;
+    touch-action: pan-y;
+    user-select: none;
+    mask-image: linear-gradient(
+      to right,
+      var(--pan-fade-start),
+      black 3rem,
+      black calc(100% - 3rem),
+      var(--pan-fade-end)
+    );
+  }
+
+  .manual-pan[data-before] {
+    --pan-fade-start: transparent;
+  }
+
+  .manual-pan[data-after] {
+    --pan-fade-end: transparent;
+  }
+
+  /* Flow diagrams draw at one and a half times their own size, so their
+     labels read at body scale, and never narrower than the room they have.
+     Whole and lit, until a step is pointed at — then everything that step
+     does not claim recedes. */
+  .manual-flow-diagram {
+    --diagram-scale: 1.5;
+  }
+
   .manual-flow-diagram svg {
-    width: 100%;
+    display: block;
+    width: max(100%, calc(var(--svg-width, 0) * var(--diagram-scale) * 1px));
     height: auto;
   }
 
   .manual-flow-diagram [data-step] {
+    cursor: pointer;
     transition: opacity 200ms ease-out;
   }
 

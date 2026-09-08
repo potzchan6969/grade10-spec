@@ -11,8 +11,6 @@ export type ListingBidHistoryRow = {
 export type ListingUserBidHistoryRow = {
   id: string;
   amountLabel: string;
-  bidType: "manual" | "auto";
-  bidTypeLabel: string;
   acceptedAtMs: number;
   timeOverride?: string;
 };
@@ -68,7 +66,6 @@ export type ListingAuctionBidView = {
   incrementMinor: number;
   suggestedMaxMinor: number;
   bidCountLabel: string;
-  resultFact?: string;
 };
 
 /** How far the collector has progressed through bid enrollment on this listing. */

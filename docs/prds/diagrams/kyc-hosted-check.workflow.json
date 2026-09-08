@@ -1,0 +1,117 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "The hosted check",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "collector",
+      "label": "Collector"
+    },
+    {
+      "id": "grade10",
+      "label": "Grade10"
+    },
+    {
+      "id": "provider",
+      "label": "Provider"
+    }
+  ],
+  "mainPath": [
+    "the-check-is-raised",
+    "the-check-is-raised_link",
+    "the-provider-runs-the-check",
+    "the-verdict-comes-back-on-its-own",
+    "grade10-judges-it-again",
+    "the-identity-is-bound"
+  ],
+  "nodes": [
+    {
+      "id": "the-check-is-raised",
+      "lane": "grade10",
+      "col": 0,
+      "type": "backend",
+      "label": "Check raised",
+      "sublabel": "card or vault case",
+      "width": 132
+    },
+    {
+      "id": "the-check-is-raised_link",
+      "lane": "collector",
+      "col": 0,
+      "type": "frontend",
+      "label": "Link opened",
+      "sublabel": "the link signs in",
+      "width": 132
+    },
+    {
+      "id": "the-provider-runs-the-check",
+      "lane": "provider",
+      "col": 1,
+      "type": "external",
+      "label": "Document and face",
+      "sublabel": "resumable, on the phone",
+      "width": 132
+    },
+    {
+      "id": "the-verdict-comes-back-on-its-own",
+      "lane": "provider",
+      "col": 2,
+      "type": "messagebus",
+      "label": "Verdict sent",
+      "sublabel": "minutes later",
+      "width": 132
+    },
+    {
+      "id": "grade10-judges-it-again",
+      "lane": "grade10",
+      "col": 3,
+      "type": "security",
+      "label": "Judged again",
+      "sublabel": "age, expiry, one image",
+      "width": 132
+    },
+    {
+      "id": "the-identity-is-bound",
+      "lane": "grade10",
+      "col": 4,
+      "type": "database",
+      "label": "Identity bound",
+      "sublabel": "account or case",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "from": "the-check-is-raised",
+      "to": "the-check-is-raised_link",
+      "label": "email"
+    },
+    {
+      "from": "the-check-is-raised_link",
+      "to": "the-provider-runs-the-check"
+    },
+    {
+      "from": "the-provider-runs-the-check",
+      "to": "the-verdict-comes-back-on-its-own",
+      "variant": "dashed"
+    },
+    {
+      "from": "the-verdict-comes-back-on-its-own",
+      "to": "grade10-judges-it-again",
+      "label": "callback",
+      "variant": "emphasis"
+    },
+    {
+      "from": "grade10-judges-it-again",
+      "to": "the-identity-is-bound",
+      "variant": "emphasis"
+    }
+  ]
+}

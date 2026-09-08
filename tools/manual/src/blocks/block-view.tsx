@@ -5,6 +5,7 @@ import { ChangesBlockView } from "./changes-block";
 import { ChildrenBlockView } from "./children-block";
 import { DetailBlockView } from "./detail-block";
 import { FigmaBlockView, StoryBlockView } from "./embed-block";
+import { ExampleBlockView } from "./example-block";
 import { FlowBlockView } from "./flow-block";
 import { ImageBlockView } from "./image-block";
 import { ProseBlockView } from "./prose-block";
@@ -35,5 +36,7 @@ export function BlockView({ block }: { block: Block | BodyItem }) {
       return <DetailBlockView block={block} />;
     case "flow":
       return <FlowBlockView block={block} />;
+    case "example":
+      return <ExampleBlockView block={block} />;
   }
 }

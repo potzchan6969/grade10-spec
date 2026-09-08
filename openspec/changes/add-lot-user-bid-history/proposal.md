@@ -3,26 +3,27 @@
 ## Why
 
 A signed-in collector who has bid on a lot can see public recent bids inline,
-but has no way to review their own accepted bids on that lot — manual or
-automatic — with amount, type, and time in one place. A link on the lot bid
-card that opens a personal bid-history dialog closes that gap without exposing
-rival identity or private maximums.
+but has no way to review their own accepted maxima on that lot with amount and
+time in one place. A link on the lot bid card that opens a personal bid-history
+dialog closes that gap without exposing rival identity or private maximums.
 
 ## What Changes
 
 - Add `ListingUserBidHistory`, a shared auction-listing block that renders a
   link when the consumer supplies accepted-bid rows and opens a scrollable
-  dialog table (amount, type badge, time).
+  dialog table (amount, time) with a note that equal maxima are ranked by
+  earlier submission.
 - Add an optional `recentBidsAccessory` slot on `ListingAuctionBidCard` so the
   block composes beside the public recent-bids label without coupling bid-card
   internals to user history.
-- Add shared `auctionListing` copy for the dialog and table headers in every
-  supported language.
+- Add shared `auctionListing` copy for the dialog, priority note, and table
+  headers in every supported language.
 - Wire the block in the preview lot-details page and Storybook stories.
 
 ## Non-Goals
 
 - Failed bid attempts, automatic-maximum configuration events, or rival bids.
+- A manual-vs-automatic type column (every bid is a private maximum).
 - Data fetching, authentication, or Auction API contracts (consumer-owned).
 - Account-level `/bids` index (see `add-account-bidding-history`).
 

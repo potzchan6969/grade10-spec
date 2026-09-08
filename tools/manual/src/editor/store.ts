@@ -17,10 +17,6 @@ export type WriteOutcome =
   | { status: "ok"; version: Version }
   | { status: "conflict"; current: StoredFile | null };
 
-export type DirtyState = { dirty: boolean; files: string[] };
-
-export type CommitOutcome = { committed: boolean; sha?: string };
-
 export type ContentStore = {
   /** Named in the editor chrome, so an author always knows where a save goes. */
   readonly label: string;
@@ -43,9 +39,6 @@ export type ContentStore = {
   /** Take a proposal back — whoever is at the keyboard may. */
   withdraw(id: string): Promise<void>;
 
-  /** What the working tree is holding, and how to land it. */
-  dirty(): Promise<DirtyState>;
-  commit(message: string): Promise<CommitOutcome>;
   deletePage(path: string, baseVersion: Version): Promise<void>;
 };
 

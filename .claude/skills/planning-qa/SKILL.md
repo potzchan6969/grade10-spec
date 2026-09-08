@@ -100,9 +100,12 @@ suite, and reports the new journeys file in the same run.
 
 A capability nobody reaches on its own says so in its `user-journeys.md` —
 `**Walked by:** nobody` in place of the stories — for a cross-cutting policy,
-a package contract, a backend convention. It gets no suite either. Never
-invent an actor to justify one. A capability with no journeys file at all is
-not exempt: `pnpm check:manual` fails it, and the PM owes the file.
+a package contract, a backend convention, or a surface only the product's
+makers reach: an internal reference, a dev-build-only page, a fixture panel.
+It gets no suite either. Never invent an actor to justify one — not an
+application importing a package, and not the engineer, developer or reviewer
+who built the thing. A capability with no journeys file at all is not exempt:
+`pnpm check:manual` fails it, and the PM owes the file.
 
 ## Keeping drafts current
 

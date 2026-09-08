@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Identity states",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [980, 660]
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "Case"
+    },
+    {
+      "id": "waiting",
+      "label": "Check out"
+    },
+    {
+      "id": "terminal",
+      "label": "Check ended"
+    }
+  ],
+  "states": [
+    {
+      "id": "none",
+      "type": "start",
+      "label": "None",
+      "sublabel": "nothing asked for",
+      "lane": "main",
+      "col": 0
+    },
+    {
+      "id": "verified",
+      "type": "success",
+      "label": "Verified",
+      "sublabel": "who checked, and when",
+      "lane": "main",
+      "col": 2
+    },
+    {
+      "id": "out",
+      "type": "waiting",
+      "label": "Out",
+      "sublabel": "invited, started, submitted",
+      "lane": "waiting",
+      "col": 0
+    },
+    {
+      "id": "stalled",
+      "type": "waiting",
+      "label": "Stalled",
+      "sublabel": "provider undecided",
+      "lane": "waiting",
+      "col": 2
+    },
+    {
+      "id": "lapsed",
+      "type": "neutral",
+      "label": "Lapsed",
+      "sublabel": "expired or withdrawn",
+      "lane": "terminal",
+      "col": 0
+    },
+    {
+      "id": "refused",
+      "type": "failure",
+      "label": "Refused",
+      "sublabel": "declined, and why",
+      "lane": "terminal",
+      "col": 1
+    }
+  ],
+  "transitions": [
+    {
+      "id": "reused",
+      "from": "none",
+      "to": "verified",
+      "label": "reused, or recorded at the counter",
+      "variant": "emphasis"
+    },
+    {
+      "id": "invited",
+      "from": "none",
+      "to": "out"
+    },
+    {
+      "id": "submitted",
+      "from": "out",
+      "to": "stalled"
+    },
+    {
+      "id": "accepted",
+      "from": "out",
+      "to": "verified",
+      "label": "accepted",
+      "variant": "emphasis"
+    },
+    {
+      "id": "accepted-late",
+      "from": "stalled",
+      "to": "verified",
+      "label": "accepted",
+      "variant": "emphasis"
+    },
+    {
+      "id": "expired",
+      "from": "out",
+      "to": "lapsed",
+      "variant": "dashed"
+    },
+    {
+      "id": "declined",
+      "from": "stalled",
+      "to": "refused",
+      "variant": "security"
+    },
+    {
+      "id": "override",
+      "from": "refused",
+      "to": "verified",
+      "label": "counter override",
+      "variant": "dashed",
+      "route": "right-channel",
+      "labelDy": 42,
+      "fromSide": "right",
+      "toSide": "right",
+      "channelX": 900
+    },
+    {
+      "id": "asked-again",
+      "from": "lapsed",
+      "to": "out",
+      "label": "asked again",
+      "variant": "dashed",
+      "route": "left-channel"
+    }
+  ]
+}

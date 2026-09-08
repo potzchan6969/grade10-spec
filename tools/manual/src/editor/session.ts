@@ -76,16 +76,3 @@ export function rememberedHandle(): string {
 export function rememberHandle(handle: string): void {
   if (handle !== "") browserKeyStore.set(STORAGE.handle, handle);
 }
-
-/** Anything that changed the working tree says so here; the commit bar looks
- * again when it hears it. */
-const writeListeners = new Set<() => void>();
-
-export function onStoreWrite(listener: () => void): () => void {
-  writeListeners.add(listener);
-  return () => writeListeners.delete(listener);
-}
-
-export function noteWrite(): void {
-  for (const listener of writeListeners) listener();
-}

@@ -46,7 +46,7 @@
 - `grade10-site-loyalty-programme-SC-96` — Expiry needs no sweep
 - `grade10-site-loyalty-programme-SC-97` — Expired points do not come back
 - `grade10-site-loyalty-programme-SC-98` — A correction does not extend the balance's life
-- `grade10-site-loyalty-programme-SC-99` — A campaign grant keeps the balance alive
+- `grade10-site-loyalty-programme-SC-99` — A campaign grant does not keep the balance alive
 - `grade10-site-loyalty-programme-SC-100` — A spend too small to earn still counts as activity
 - `grade10-site-loyalty-programme-SC-101` — A late record cannot shorten the balance's life
 - `grade10-site-loyalty-programme-SC-102` — A partial sweep converges
