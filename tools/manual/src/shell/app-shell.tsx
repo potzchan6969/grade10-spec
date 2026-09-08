@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Outlet } from "react-router";
 import { useSnapshot } from "../api/snapshot-provider";
 import { useHashFlash } from "../blocks/anchor";
-import { CommitBar } from "../editor/commit-bar";
 import { SnapshotFooter } from "./footer";
 import { Header } from "./header";
 import { PageRail } from "./page-rail";
@@ -76,8 +75,6 @@ export function AppShell() {
             {snapshot.status === "ready" ? (
               <SnapshotFooter snapshot={snapshot.snapshot} />
             ) : null}
-
-            <CommitBar />
           </div>
         </div>
       </PageSectionsProvider>
