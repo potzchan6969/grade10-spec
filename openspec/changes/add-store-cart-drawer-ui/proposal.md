@@ -7,29 +7,29 @@ review, and a working checkout page, but its navigation does not expose the
 designed Cart Drawer. Collectors must leave the page they are browsing before
 they can see whether held lines changed.
 
-Success is that a collector can open the drawer from every Store surface,
-review the current scoped cart through the existing Store backend integration,
-edit it, and continue to the existing checkout without leaving the page first.
+**Metric:** share of Store sessions that open the cart and proceed to checkout
+without first navigating to checkout. The first delivery establishes the
+baseline.
+
+**Acceptance signal:** a collector opens Cart from a Store surface, reviews
+and edits the current cart, and reaches the existing checkout without first
+leaving that surface.
 
 ## What Changes
 
-- Compose the existing `@grade10/ui` Cart Drawer in the Grade10 application
-  shell and expose it from navigation on Store-facing routes.
-- Connect the UI to the existing `@grade10/store-frontend` cart integration:
-  browser storage for a guest and the server cart for a signed-in collector.
-- Run the existing live cart review whenever the drawer opens, showing the
-  shared loading state until current availability and price settle.
-- Keep stale values and Checkout disabled when review fails, report the failure
-  once, and retry on the next open.
-- Let the drawer remove unavailable lines once, report that cleanup once, and
-  keep quantity changes and removals on the current scoped cart.
-- Map reviewed lines, current subtotal, product links, and cart actions into
-  the shared drawer without a local placeholder snapshot.
-- Send Checkout to the existing `/checkout` surface, which owns its own live
-  review and checkout handoff.
-- Add the drawer copy to a Grade10 brand `store` catalog overlay for English,
-  Traditional Chinese, and Simplified Chinese. Reuse the existing shared
-  navigation Cart label.
+- Expose Cart in the site header on Store surfaces and checkout, and open one
+  drawer over the current surface.
+- Connect the drawer to the current guest or member cart through the existing
+  typed Store integration.
+- Run the existing live cart review on every open; keep unconfirmed values and
+  Checkout unavailable while the read is pending or failed.
+- Map only reviewed line and subtotal facts into the shared drawer, and keep
+  shipping, images, promo redemption, points, tax, and discounts neutral or
+  absent where the current integration supplies no answer.
+- Keep edits on the current cart, and send product, browsing, and checkout
+  actions through the site's existing addresses.
+- Add the drawer copy to the Grade10 `store` catalog overlay for English,
+  Traditional Chinese, and Simplified Chinese.
 
 ## Non-Goals
 
@@ -37,11 +37,12 @@ edit it, and continue to the existing checkout without leaving the page first.
 - Any backend implementation or contract change: no Worker, API procedure,
   provider read, database/schema, webhook, persistence, or checkout-creation
   work.
-- Calculating discount, shipping, tax, or promotion values in the drawer. The
-  existing promo affordance remains display-only because promotion behavior is
-  not part of this change.
-- Exposing the Cart control on auction, profile, membership, marketing, or
-  other non-Store routes.
+- Applying promotion codes, loyalty points, shipping, tax, or discounts in the
+  drawer. Checkout now accepts coupon and points inputs and exposes a member
+  points quote, but the drawer has no single applied-quote contract for these
+  choices and its total.
+- Exposing Cart on auction, profile, membership, marketing, or other non-Store
+  routes.
 - Changing Figma annotations, components, or tokens.
 - Adding a dedicated `/cart` route or changing the existing checkout page.
 
@@ -49,24 +50,27 @@ edit it, and continue to the existing checkout without leaving the page first.
 
 ### New Capabilities
 
-None. `shared/ui/store-cart` already defines the Cart Drawer behavior and
-public component contract.
+- `grade10-site/store/cart-drawer` — the Grade10 Store's route-gated drawer,
+  current-cart review, honest summary, cart edits, and existing-address
+  handoffs.
 
 ### Modified Capabilities
 
-None. This change composes existing Store cart, review, checkout, and shared UI
-contracts without changing their durable requirements.
+- `grade10-site/site/page-shell` — the header now offers Cart where the site
+  answers the Store drawer and continues to omit it everywhere else.
 
 ## Impact
 
 - `apps/frontend/grade10`: route-gated navigation trigger, one drawer host,
-  reviewed-line mapping, existing backend-backed cart actions, and focused
-  tests.
-- `packages/grade10-store/frontend`: a small review option that lets the drawer
-  own unavailable-line cleanup while checkout keeps its current behavior.
-- Grade10 catalogs in `grade10-spec`: Cart Drawer copy for `en`, `zh-Hant`, and
-  `zh-Hans`, registered as a brand `store` overlay.
+  reviewed-line mapping, existing cart actions, and focused tests.
+- `packages/grade10-store/frontend`: backwards-compatible review controls that
+  let the drawer own unavailable-line cleanup while checkout keeps its current
+  behavior.
+- Grade10 catalogs and manual pages in `grade10-spec`: localized drawer copy,
+  the Cart Drawer product record, and the corrected Cart validation record.
 
 No backend implementation, database, admin, deployment, or new production
-dependency is part of this change; the frontend consumes the existing typed
-Store integration.
+dependency is part of this change.
+
+No domain impact: the drawer reuses existing product, listing, and checkout
+addresses without changing the journeys those destination capabilities own.

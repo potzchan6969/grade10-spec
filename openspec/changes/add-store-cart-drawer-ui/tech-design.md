@@ -1,10 +1,12 @@
 ## Context
 
-The proposal's motivation is in `proposal.md`. The durable
-`shared/ui/store-cart` capability and `@grade10/ui` already own the drawer's
-visual states, dismissal, slot baseline, item statuses, and interaction
-contract. The Grade10 application currently has no drawer host or
-`Nav.onCartClick` handler.
+The proposal's motivation is in `proposal.md`. The
+[Cart Drawer](specs/grade10-site/store/cart-drawer/spec.md) and
+[page-shell delta](specs/grade10-site/site/page-shell/spec.md) own the Grade10
+behavior. The durable `shared/ui/store-cart` capability and `@grade10/ui`
+already own the drawer's visual states, dismissal, slot baseline, item
+statuses, and interaction contract. The Grade10 application currently has no
+drawer host or `Nav.onCartClick` handler.
 
 The existing frontend integration already reaches the Store backend boundary:
 `useCart` selects the guest browser cart or the signed-in member cart, and its
@@ -20,6 +22,12 @@ Two current contracts shape the adapter:
   subtotal and estimated total, and `CartDrawerCopy`. The current reviewed
   line contract has no image URL, shipping, tax, discount, or promotion data.
 
+The rebased backend can price a points amount for a named member and can accept
+coupon and points inputs when checkout is created. Those are checkout
+capabilities, not a drawer quote: they do not return one applied cart view with
+promotion, points, shipping, tax, and total, and the current drawer hands off
+to `/checkout` instead of creating checkout itself.
+
 ## Goals / Non-Goals
 
 **Goals:**
@@ -30,6 +38,8 @@ Two current contracts shape the adapter:
 - Match the supplied populated, loading, failure, unavailable, and empty UI
   states using existing shared components and tokens.
 - Provide localized Grade10 drawer copy through the existing catalog resolver.
+- Keep the new product scenarios traceable to the shared drawer and
+  cart-validation contracts they consume.
 
 **Non-Goals:**
 
@@ -38,6 +48,8 @@ Two current contracts shape the adapter:
 - Promotion redemption, shipping calculation, tax calculation, or discount
   calculation. The shared promo affordance is rendered in its collapsed,
   display-only form with no promo callbacks.
+- Points quoting or tender selection. The drawer receives no points state; the
+  existing checkout path remains the only owner of checkout creation.
 - A dedicated `/cart` route or changes to the existing checkout page.
 - Changes to the shared `CartDrawer`, design tokens, Figma files, or other
   brands' behavior.
@@ -134,6 +146,23 @@ discount in this change.
 or held-cart data. Those values are not part of the existing reviewed backend
 contract and would reintroduce stale or invented facts.
 
+### Defer tender controls until the drawer has one quote seam
+
+Do not wire `pointsQuote`, coupon inputs, held loyalty codes, or shipping
+services directly into this host. The current points read is member-only and
+prices one tender choice; checkout creation resolves coupon and points inputs
+later; shipping needs the destination collected by checkout. Combining those
+partial answers in the drawer would make its displayed total differ from the
+checkout it opens.
+
+A follow-up contract must define one applied drawer quote, its invalidation
+after cart edits, guest and member behavior, refusal copy, and the exact handoff
+to checkout before the interactive promo or points props are supplied.
+
+**Alternative rejected:** wire the merged endpoints one control at a time.
+That would expose selectable tender without an authoritative combined total or
+a drawer-owned checkout handoff.
+
 ### Keep copy in a Grade10 `store` catalog overlay
 
 Add a new brand-owned `store` namespace for `en`, `zh-Hant`, and `zh-Hans`,
@@ -166,14 +195,18 @@ beyond the supplied design.
 Tests use typed cart/review fixtures and existing DI harnesses. They do not
 require a running backend because no backend code changes. Coverage must prove:
 
-- `useCartReview` defaults preserve checkout behavior while drawer options
-  disable removal, preserve unavailable rows, and follow `open`.
-- The root exposes Cart only on Store surfaces and checkout, with one drawer and
-  one `Toast`.
-- Pending and failed reviews keep stale values unresolved and Checkout disabled.
-- The shared drawer owns one unavailable cleanup and one toast.
-- Scoped quantity/removal writes, product links, Browse More, Checkout, empty
-  state, and locale resolution use the existing contracts.
+- `grade10-site-store-cart-drawer-SC-03` through `SC-08`: review defaults
+  preserve checkout behavior while the drawer follows `open`, keeps the right
+  scope, preserves unavailable rows for its cleanup owner, and withholds stale
+  facts.
+- `grade10-site-site-page-shell-SC-09` and `SC-16`: one root host exposes Cart
+  only on Store surfaces and checkout.
+- `grade10-site-store-cart-drawer-SC-09` through `SC-12`: reviewed facts,
+  neutral totals, scoped writes, and one unavailable cleanup remain honest.
+- `grade10-site-store-cart-drawer-SC-13` through `SC-15`: product, Browse More,
+  and Checkout use existing addresses and close the drawer first.
+- The shared empty, loading, dismissal, baseline, overflow, cleanup, and
+  redirecting behaviors remain covered by `shared/ui/store-cart`.
 
 ## Risks / Trade-offs
 
@@ -185,8 +218,9 @@ require a running backend because no backend code changes. Coverage must prove:
 - **[Risk] Review failure leaves old values visible.** → Keep controlled loading
   true, emit one failure toast per open, and recheck on reopen.
 - **[Risk] The drawer's no-image and display-only promo decisions differ from
-  a future richer backend contract.** → Keep those fields optional in the
-  adapter and add them only with a separate approved contract change.
+  a future applied quote contract.** → Keep image, promo, and points inputs
+  absent or inert in the adapter and add them only with a separate approved
+  product and integration change.
 - **[Risk] The spec-store pointer overlaps unrelated nested work.** → Advance
   only the parent gitlink after the catalog commit lands, preserve nested work,
   and run the submodule check.
