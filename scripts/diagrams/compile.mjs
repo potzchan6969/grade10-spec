@@ -22,7 +22,7 @@ export const TOKENS = {
   "--arrow-emphasis": "--primary",
 };
 
-const ROOT_ATTRS = ["viewBox", "role", "aria-labelledby", "data-preset"];
+const ROOT_ATTRS = ["viewBox", "role", "data-preset"];
 const DROPPED_ATTRS = ["tabindex", "aria-pressed", "data-animate", "lang"];
 
 export function compile(html, name) {
@@ -315,9 +315,24 @@ function rebuildRoot(svg, name, viewBox) {
       const value = key === "viewBox" ? viewBox : attribute(tag, key);
       if (value !== undefined) attrs.push(`${key}="${value}"`);
     }
-    attrs.push(`data-diagram="${name}"`);
+    attrs.push(...naming(svg), `data-diagram="${name}"`);
     return `<svg ${attrs.join(" ")}>`;
   });
+}
+
+/** Archify names the title and the desc together in `aria-labelledby`, which
+ * reads the whole description out as the drawing's name. The title is the
+ * name; the desc is what describes it. Only the root pair carries an id — the
+ * titles on nodes are tooltips. */
+function naming(svg) {
+  const id = (tag) =>
+    new RegExp(`<${tag}\\b[^>]*\\sid="([^"]+)"`).exec(svg)?.[1];
+  return [
+    ["aria-labelledby", id("title")],
+    ["aria-describedby", id("desc")],
+  ]
+    .filter(([, value]) => value !== undefined)
+    .map(([key, value]) => `${key}="${value}"`);
 }
 
 function refuse(svg, name) {

@@ -27,9 +27,9 @@ browser client ──POST /api/track──▶ backend route ──POST /import�
 
 ### `Order Paid` reports the goods and the charge apart
 
-- `Value Minor` is net merchandise value — what the goods came to
-- `Charged Minor` is the whole charge, including the tax and shipping a provider that owns the checkout added
+- `Value Minor` is the goods and `Charged Minor` the whole charge, tax and the shipping a provider that owns the checkout added included
 - Two facts rather than one: tax collected is a liability and shipping is a pass-through, so a revenue chart built on the charge would overstate. They are the same number under a provider that adds nothing
+- Each property's exact definition lives with the typed catalog in `src/analytics/events.ts`, beside the code that writes it
 
 ### Adding an event
 

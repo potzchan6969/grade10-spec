@@ -4,12 +4,15 @@ import {
   IMPACT_SCHEMA_VERSION,
   validateImpactReview,
 } from "./annotation-impact.mjs";
+import { liveAssociation } from "./annotation-live.mjs";
 import { buildReconciliationReport } from "./annotation-report.mjs";
 
 const storeRoot = new URL("../../", import.meta.url).pathname.replace(
   /\/$/,
   "",
 );
+
+const LIVE = liveAssociation(storeRoot);
 
 function reportFor(
   ids,
@@ -181,10 +184,7 @@ test("accepts explicit no-impact, covered, gap, and blocked outcomes", () => {
       implementationEvidence: null,
       testEvidence: null,
       runtimeEvidence: null,
-      association: {
-        change: "verify-figma-annotation-implementation",
-        taskGroup: "1",
-      },
+      association: LIVE,
     },
     {
       findingId: "gap",

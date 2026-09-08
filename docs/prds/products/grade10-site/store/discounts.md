@@ -67,7 +67,11 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 10. **The extension keeps watching** — every cart signal is read against what the sale was promised, because anybody at the terminal can take a benefit off without telling it (POS's own "remove all discounts", a staff discount replacing ours, the customer lifted off the sale). What the cart stops showing goes back to the member, our own gift line comes off once it stops being free, and staff are told in a sentence
 11. **Staff tender** — Shopify POS takes the payment; nothing of ours runs
 12. **The paid order arrives** by webhook or sweep, carrying the attribute, and binds to the row only when the row is a till promise with no payment yet, the order came through the POS channel (a cart permalink could write our attribute on a web order), its customer is the member's, and the currency matches. Anything else counts `store.pos.sale.unbound` for an operator's claw-back, never silence
-13. **Settlement** — points leave the balance now, up to what the shop took off less what every other instrument did; a coupon settles only where the order corroborates it (an order code on the order, a product or gift variant among the lines) and the rest are freed and counted; earning is on the goods, as online
+13. **Settlement** — the shop's own allocations price the sale, line by line
+    - **Points** leave the balance at what the shop allocated to the `Points` cut
+    - **A coupon** settles only where the order corroborates it — an order code among the codes the sale carried, a gift or product variant among the lines still carrying that coupon's own cut — and the rest are freed and counted
+    - **A discount no instrument accounts for**, a promotion the shop ran itself, is counted and never read as points
+    - **Earning** is on the goods, as online
 
 ### Undo
 
@@ -81,19 +85,16 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 ### What guarantees it
 
 - **Nothing is held** — points leave when the paid order lands; an abandoned cart costs nothing
-- **The cart decides, and goes on deciding** — capture is bounded by what the shop took off, the attribute first means a bare discount can never bind, and the sale is read again on every cart signal for as long as it stands: a promise the cart no longer shows is points nobody may be debited for
+- **The cart decides, and goes on deciding** — capture is what the shop allocated to the points, the attribute first means a bare discount can never bind, and the sale is read again on every cart signal for as long as it stands: a promise the cart no longer shows is points nobody may be debited for
 - **A coupon is the member's own** — a code the landed sale carried is adopted onto the row and spent, but only where it belongs to the buyer: a code is a string anybody can carry to a counter
 - **One session, one row; one member, one open promise** — the row is rewritten, never duplicated, and the newer promise retires the older
 - **Every unhappy answer is a value** — the sale is happening whatever the programme thinks; nothing throws, nothing leaves staff on a spinner
 - **Replay is dead** — a card presentation is consumed by one guarded update, so two tills scanning at once open exactly one session
 - **Throttles** — short-code misses ten per five minutes per shop, email and phone twenty, plans twenty per session
 - **A row that closed cannot be rewritten** — a sale that landed, or whose own hour ran out, refuses the next plan and asks for a fresh scan rather than reopening itself
+- **A tender reaches stored value, and comes back only whole** — one discount over every line the shop sold, so a gift card on the sale is part-paid by points (`store.points_tender.gift_card_on_sale`) and nothing comes back while the card is kept; the member left short is counted (`store.points_tender.return_held`) and paid by hand
 
-❓ **Points and stored value** — an order-level discount is the only instrument a counter has, and the shop allocates one across every line it sold, so on a sale that also carries a gift card a share of the points lands on stored value. Counted today (`store.points_tender.gift_card_on_sale`); the fix is to spend points as line discounts on the qualifying lines, which is a change of its own.
-
-❓ **A welded coupon is corroborated by its variant, not by its cut** — a sale that sold the variant spends the coupon, whether or not the line still carries the cut, because the settled order says what it sold and not what each line was discounted by. So a cut staff take off after the apply burns the member's coupon. The change that fixes it records what each instrument allocated to each line.
-
-❓ **A code counts at what the store minted** — an order code adopted from a sale the till never reported is priced at its face value rather than at what the shop took off, and the shop's own automatic promotions belong to no instrument at all. Both land in the money a points capture subtracts.
+❓ **A sale that names no allocations** — settlement falls back to what settlement read before the shop stated them — the variant alone corroborates a welded coupon, so a cut staff took off still spends it, and the points capture is the applied total less every other instrument, in which an adopted order code counts at its face value. A source that cannot name a cut cannot rule one out either, so refusing there would free every coupon on every sale it reports; whether a POS sale ever reaches us that way is the open part.
 
 ### Collection
 

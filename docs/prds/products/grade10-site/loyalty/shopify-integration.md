@@ -181,7 +181,8 @@ till.
 Shipping is the store's flat rule — HKD 60, free at or above HKD 800 — served
 by one function to both the checkout preview and Shopify's carrier callback.
 Points never pay for shipping and shipping never earns, by construction: the
-tender is an order-level pre-tax discount over qualifying lines, and a refund
+tender is an order-level pre-tax discount, capped at the qualifying goods and
+spread by the shop over every line it sells, and a refund
 of the delivery alone returns no points. A shipping promotion could ride
 beside the points discount; none is created today. No draft order carries a shipping line — Shopify prices
 shipping on the invoice page — and the POS has no ship-to-customer flow, no

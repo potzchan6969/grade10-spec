@@ -24,28 +24,35 @@ earned**.
   earned, and what each discount allocated to it, recorded once when the order
   settles and never recomputed — the same record every money rule then reads.
 - **A claw-back is priced on the lines that came back.** A refund names the
-  lines it returns; the points reversed are what those lines earned. Returning
-  a gift card reverses nothing, and returning every qualifying good reverses the
-  whole tender however many refunds the return arrives in.
+  lines it returns; the earning reversed is what those lines earned. Returning
+  a gift card reverses nothing, and a split return reaches the same basis as
+  one refund would.
+- **A points tender returns only when everything it was spread over does.** The
+  tender is one discount the shop spreads across every line it sold, so a member
+  returning every card and keeping a gift card gets none of it back. Reading it
+  against what earned instead hands back the points that bought the card — money
+  minted every time the member repeats it. The member left short is reported,
+  and an operator returns the points by hand.
 - **A welded coupon is corroborated by its cut, not by its variant.** Today a
   product or gift coupon is spent whenever the sale sold that variant, so a cut
   staff took off after the apply still burns the member's coupon.
-- **A discount is worth what the shop allocated to it**, not what this store
-  minted — the points tender included. Today the points captured are the
-  order's whole applied discount less every other instrument, so a shopkeeper's
-  own manual cut is read as points wherever the shop honoured less than the
-  Store promised. The same subtraction stands in for an order code adopted from
-  a sale the till never reported, and for the shop's own automatic promotions,
-  which reach the applied total and belong to no instrument.
+- **The points tender is worth what the shop allocated to it**, not what this
+  store promised. Today the points captured are the order's whole applied
+  discount less every other instrument, so a shopkeeper's own manual cut is read
+  as points wherever the shop honoured less than the Store promised. The same
+  subtraction stands in for an order code adopted from a sale the till never
+  reported, and for the shop's own automatic promotions, which reach the applied
+  total and belong to no instrument.
 - **BREAKING** — `PaymentOrderLine` and `PaymentRefundFact` gain the provider's
   line handles and allocations. Every payment provider states them or says it
   cannot; a provider that cannot keeps today's pro-rated answer, named as such.
 
 ## Non-Goals
 
-- **Points as line discounts.** Spending points across the qualifying lines
-  rather than as one order-level cut is the fix for points landing on a gift
-  card, and is a change of its own.
+- **Points as line discounts.** Spending points across the qualifying lines is
+  what would let a tender be returned line by line, and stop it reaching a gift
+  card at all. A change of its own; until it lands the whole sale is the only
+  honest threshold.
 - **The eligible-goods rule.** What earns and what does not is the loyalty
   capability's, unchanged here; this change only prices it per line.
 - **A member-facing return flow.** A refund is still an operator's move in
@@ -77,12 +84,20 @@ earned**.
   sweep and a re-pricing rather than a loss. What no sweep undoes is a refund
   already priced from the estimate and a coupon already spent on it.
 - **Schema** — settled lines keyed by order and the provider's own line handle,
-  and what each named discount allocated to them beside it. What a welded
-  coupon put on a line is already `order_coupon_cuts`; the refund totals on
-  `orders` stay as they are.
+  and what each named discount allocated to the order beside it. What a welded
+  coupon put on a line is already `order_coupon_cuts`. The order gains one
+  refund total: the goods refunds have stated back, which the tender's threshold
+  reads.
 - **Wire** — the Shopify webhook and Admin decoders keep `line_items[].id`,
-  `discount_allocations[].amount`, `discount_codes[].amount`, and
-  `refund_line_items[].line_item_id`, all of which are read and discarded today.
-- **What it closes** — the gift-card claw-back, a split return never reaching
-  the whole tender, a tax-inclusive shop's goods-only return falling short, a
-  coupon burned for a cut nobody gave, and an adopted code counted at face value.
+  `discount_allocations[].amount`, and `refund_line_items[].line_item_id`, all
+  of which are read and discarded today.
+- **What it closes** — the gift-card claw-back, a tender returned for a sale
+  the member still holds part of, a split return never reaching the whole
+  basis, and a coupon burned for a cut nobody gave.
+- **What it leaves open** — a shop that states no goods split is measured
+  against a charge carrying shipping the goods never did, so a goods-only
+  return of the whole sale falls short of returning the tender. Reported for an
+  operator, and closed for good by spending points per line. A discount code is
+  still worth what the Store minted it for rather than what the shop allocated
+  to it, which needs the applied amount carried through both decoders and a
+  title to record it under.

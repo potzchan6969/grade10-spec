@@ -41,6 +41,30 @@ afterwards from wherever the Store put them.
   by share and counted as an estimate; a sale naming no allocations corroborates
   a coupon by variant alone; a points slot with no allocation falls back to the
   subtraction. Each is the old behaviour, reached deliberately.
+- **The goods basis is what the shop sold, never what is left.** Both decoders
+  read the pre-return subtotal; tax and shipping stay post-return, because they
+  are what the buyer still holds rather than a basis. Read post-return, an order
+  first seen after a refund states goods a claw-back has already taken, and
+  every rule that divides by them answers on a smaller sale — the tender's
+  threshold included, where it mints. The lines and the stated total are
+  compared on every settlement to say when they disagree.
+- **The tender is measured on the whole sale, not on what earned.** One
+  threshold, `refunded_goods_stated_minor` against the goods the provider
+  stated, and the charge where it stated none. Alternatives considered:
+  refusing a tender on a sale carrying stored value — rejected, because it
+  costs the sale and misses a gift card sold as a custom line; returning the
+  tender per line — rejected here as the change of its own it is, since it
+  needs the tender placed per line at the till first. What the earn basis
+  cannot do is act as the threshold: the tender paid for the excluded lines
+  too, so a member returning every card and keeping a gift card would be handed
+  points that bought the card.
+- **Only goods a refund stated reach that threshold.** A total carrying the
+  share's estimate too reaches the whole sale exactly when the whole charge
+  does, so goodwill, an amount typed beside a delivery, and a refund that
+  overran a charge recorded too low would each stand in for a good coming home,
+  and the answer would turn on which part an operator rang last.
+  `refunded_goods_raw_minor` keeps the estimate and prices the claw-back, where
+  a number short by a rounding is recoverable and a minted tender is not.
 
 ## Risks / Trade-offs
 
@@ -57,13 +81,38 @@ afterwards from wherever the Store put them.
   staff removing the cut from one, reads as corroborated. → Accepted: the weld
   goes on every line carrying the variant, so no per-line answer is available
   to be had.
+- **A member the whole-sale threshold leaves short gets nothing back.**
+  Everything that earned came back and a gift card stayed. → Accepted: a
+  shortfall a person can pay back is not a mint nobody can unwind. Counted as
+  `store.points_tender.return_held`, tagged by whether the sale stated goods or
+  only a charge, and an operator returns the points by hand.
+- **A sale returned as a typed amount never returns its tender.** Every penny
+  back and nothing stated about the goods. → Reported as
+  `commerce.order.charge_closed_short` on any sale, tendered or not: the money
+  closed over goods the record still says are held, which is a sale somebody has
+  to look at whoever paid for it.
+- **The money may not decide what the goods decide.** Reading the closed charge
+  as the whole sale would answer that second case without an operator — and mint
+  on every one where money closes without a good moving: goodwill typed beside
+  a delivery, a discrepancy adjustment, a refund that overran a charge the order
+  recorded too low. → The threshold stays on the goods; the money is read only
+  to report.
 - **Orders settled before this lands keep the estimate.** → The shop keeps the
   lines and the Admin sweep already asks for them, so a backfill is possible;
   a refund already priced from the estimate is not undone by it.
 
 ## Migration Plan
 
-- Two additive migrations, both creating tables. Nothing is backfilled: an
-  order with no recorded lines is exactly the "cannot answer" case every rule
-  already handles, so old and new orders coexist without a flag.
-- Rollback is dropping the tables; every rule falls back to what it did before.
+- Two additive migrations create the tables. An order with no recorded lines is
+  exactly the "cannot answer" case every rule already handles, so old and new
+  orders coexist without a flag.
+- A third adds the stated-goods total and backfills it, over orders with money
+  back and only where the column still holds its default, so a re-run is a
+  no-op. A sale already returned whole under the share carries its raw total
+  across, which records the tender decision that was made rather than re-making
+  it; every other row takes its settled lines' own returned sums, or zero. A
+  part return the share had counted therefore falls short until a refund states
+  its goods — reported, and settled by a person, which is the direction this
+  rule always errs in.
+- Rollback is dropping the tables and the column; every rule falls back to what
+  it did before.
