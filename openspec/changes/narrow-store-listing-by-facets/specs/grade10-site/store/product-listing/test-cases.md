@@ -405,6 +405,38 @@ Catalogue names more than five worlds and more than five collectible types.
 * Step 3 offers every collectible type the catalogue names, with no invitation.
 * Step 4 offers every world the catalogue names.
 
+### grade10-site-store-product-listing-US4-TC6-1: Narrowing that leaves nothing behind any choice
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-listing-US-04
+
+**Pre-conditions:**
+Catalogue names both facet groups, and one choice the whole catalogue counts
+nothing behind.
+
+**Steps:**
+
+1. Navigate to <grade10 browse listing url>, unscoped.
+2. Select the choice nothing is counted behind.
+3. Check both groups, their counts, and the state of the choice just selected.
+4. Unselect it.
+
+**Expected Results:**
+
+* Step 3 still offers both groups, counts included, though the grid is empty.
+* Choice selected in step 2 is shown selected and is still selectable.
+* Step 4 widens the listing again.
+
 ---
 
 ## grade10-site-store-product-listing-US5: Collector orders and searches the whole shop

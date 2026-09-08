@@ -74,19 +74,17 @@ short names of three links the footer's HELP column already names in full
 (`contact`, `shippingDelivery`, `orderStatus`), the way the footer's legal bar
 already shortens `privacyPolicy` and `termsOfService` to `privacy` and `terms`.
 
-The site answers none of the three addresses today, and
-`grade10-site/site/page-shell` already governs that: a link appears only when
-its destination is an address the site answers, and one that does not exist yet
-is omitted rather than pointed at a not-found page
-(`grade10-site-site-page-shell-SC-10`, `-SC-11`, `-SC-12`).
+[Figma `Store Utility Links` — `4343:15624`](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4343-15624)
 
-So the row is wired, not filled: the three are named where the site's other
-chrome links are named, each with no destination, and the panel is handed only
-those the site answers. Today that is none and no row renders — the same answer
-the header already gives. The row appears on its own the day a page lands
-behind any of them, with no further change to this surface.
+The site answers none of the three addresses yet, so each is drawn against
+`UNWRITTEN` — the one value the site already gives a link it owes, so a sweep
+for what is still owed has one thing to look for. The footer's own help column
+is drawn the same way. Each becomes a real address as its page lands, with no
+further change to this surface.
 
-❓ Whether `Orders & Returns` should point at the account surface before an
-order list exists there is the page-shell's call, not this listing's — it holds
-for every place that link is drawn, and settling it here would give the site
-two answers.
+❓ `grade10-site/site/page-shell` states that a link appears only where the site
+answers its destination (`grade10-site-site-page-shell-SC-10`, `-SC-11`,
+`-SC-12`). The footer already departs from it under the `UNWRITTEN` convention
+and this row now does too, so the requirement and what ships have parted
+company. Settling that — a carve-out for a link the site openly owes, or
+removing the convention — is the page-shell capability's, not this listing's.
