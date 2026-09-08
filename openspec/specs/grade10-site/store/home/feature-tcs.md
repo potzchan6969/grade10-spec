@@ -19,7 +19,8 @@ browsing or bidding.
 * **Priority:** high
 * **Status:** actual
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -50,6 +51,7 @@ JavaScript disabled in the browser.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
@@ -77,6 +79,7 @@ None.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -105,6 +108,7 @@ Catalogue holds at least two collections.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -131,6 +135,7 @@ None.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** performance
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -168,7 +173,8 @@ deciding which collections appear.
 * **Priority:** high
 * **Status:** actual
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -199,6 +205,7 @@ Catalogue holds at least three collections, each with a name and artwork.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -226,7 +233,8 @@ Collector is on the front door, viewing the collection tiles.
 * **Priority:** medium
 * **Status:** actual
 * **Behaviour:** positive
-* **Type:** regression
+* **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -255,6 +263,7 @@ Front door already seen without <a new collection>.
 * **Status:** actual
 * **Behaviour:** negative
 * **Type:** usability
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -283,6 +292,7 @@ Catalogue holds <a collection with no artwork>.
 * **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -319,7 +329,8 @@ front door.
 * **Priority:** high
 * **Status:** actual
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -349,6 +360,7 @@ Catalogue lists <a collection with cards> first.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -374,6 +386,7 @@ Collector is on the front door, viewing the merchandised row.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -401,7 +414,8 @@ Collector is on the front door, viewing the merchandised row.
 * **Priority:** medium
 * **Status:** actual
 * **Behaviour:** positive
-* **Type:** regression
+* **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -430,6 +444,7 @@ Front door already seen merchandising the current first collection.
 * **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -466,7 +481,8 @@ to retry a failed read without a full page load,
 * **Priority:** high
 * **Status:** actual
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -495,6 +511,7 @@ to retry a failed read without a full page load,
 * **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -533,6 +550,7 @@ reach the front door or the unscoped listing,
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -558,7 +576,8 @@ None.
 * **Priority:** high
 * **Status:** actual
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual

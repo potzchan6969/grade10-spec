@@ -18,6 +18,7 @@
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** automated
 * **Testability:** automation
@@ -45,6 +46,7 @@ An open listing whose extension window is 1800 seconds and extension duration is
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** automated
 * **Testability:** automation
@@ -72,6 +74,7 @@ An open listing with an extension cap and a recorded close already at that cap.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** automated
 * **Testability:** automation
@@ -100,6 +103,7 @@ An open listing whose extension window is 300 seconds and extension duration is 
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** automated
 * **Testability:** automation
@@ -135,6 +139,7 @@ An open listing whose extension window and extension duration are both zero, wit
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** automated
 * **Testability:** automation

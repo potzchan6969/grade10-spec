@@ -19,7 +19,8 @@ without waiting for a script to run.
 * **Priority:** high
 * **Status:** actual
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -49,6 +50,7 @@ The catalogue publishes <a published lot>. JavaScript disabled in the browser.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -85,6 +87,7 @@ catalogue.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -121,6 +124,7 @@ answer with the site's not-found surface,
 * **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -149,6 +153,7 @@ The catalogue publishes no lot for <a lot address naming no published lot>.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -185,6 +190,7 @@ disagrees with what the document carried.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -214,6 +220,7 @@ disagrees with what the document carried.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -249,7 +256,8 @@ a bidding countdown is shown on <a published lot>.
 * **Priority:** high
 * **Status:** actual
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -276,6 +284,7 @@ The collector is viewing the auction catalogue, which lists <a published lot>.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
