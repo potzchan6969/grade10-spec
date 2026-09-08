@@ -28,7 +28,6 @@ vi.mock("../src/api/use-manual-index", () => ({
 }));
 vi.mock("../src/editor/session", () => ({
   useEditorSession: () => ({ store: null }),
-  noteWrite: () => {},
 }));
 vi.mock("../src/api/use-archive", () => ({
   useArchive: () => ({ status: "loading" }),

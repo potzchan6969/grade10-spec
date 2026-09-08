@@ -31,7 +31,6 @@ vi.mock("../src/api/use-manual-index", () => ({
 }));
 vi.mock("../src/editor/session", () => ({
   useEditorSession: () => held.session,
-  noteWrite: () => {},
 }));
 vi.mock("../src/api/use-archive", () => ({
   useArchive: () => held.archive,

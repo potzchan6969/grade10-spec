@@ -14,7 +14,7 @@ import { editHref } from "./edit-mode";
 import { SelectField, TextField } from "./fields";
 import { savePage } from "./save";
 import { newPageSource } from "./scaffold";
-import { noteWrite, useEditorSession } from "./session";
+import { useEditorSession } from "./session";
 import { describeCause } from "./store";
 
 /** New pages are created inside the manual's tree and nowhere else: the
@@ -109,7 +109,6 @@ export function NewPageDialog({
           return;
         }
         if (outcome.status === "ok") {
-          noteWrite();
           reload();
         }
         onOpenChange(false);

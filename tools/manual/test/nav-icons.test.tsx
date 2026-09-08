@@ -45,7 +45,6 @@ vi.mock("../src/api/snapshot-provider", () => ({
 
 vi.mock("../src/editor/session", () => ({
   useEditorSession: () => ({ store: null }),
-  noteWrite: () => {},
 }));
 
 const { Sidebar } = await import("../src/shell/sidebar");

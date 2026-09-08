@@ -21,7 +21,6 @@ vi.mock("../src/api/snapshot-provider", () => ({
 // The rail carries a New page control; the editor is not what is under test.
 vi.mock("../src/editor/session", () => ({
   useEditorSession: () => ({ store: null }),
-  noteWrite: () => {},
 }));
 
 const { Sidebar } = await import("../src/shell/sidebar");

@@ -32,7 +32,6 @@ vi.mock("../src/api/use-manual-index", () => ({
 }));
 vi.mock("../src/editor/session", () => ({
   useEditorSession: () => held.session,
-  noteWrite: () => {},
 }));
 
 const { InFlightPage } = await import("../src/pages/in-flight-page");

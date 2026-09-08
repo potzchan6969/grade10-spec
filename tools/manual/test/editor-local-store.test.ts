@@ -210,9 +210,5 @@ describe("LocalStore", () => {
     }));
 
     expect(await probeLocalStore(http)).toBe(true);
-    expect(await new LocalStore("docs/prds", http).dirty()).toEqual({
-      dirty: true,
-      files: ["docs/prds/index.md"],
-    });
   });
 });

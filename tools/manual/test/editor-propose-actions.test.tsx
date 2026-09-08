@@ -12,7 +12,6 @@ const held = vi.hoisted(() => ({
 
 vi.mock("../src/editor/session", () => ({
   useEditorSession: () => held.session,
-  noteWrite: () => {},
   rememberedHandle: () => "",
   rememberHandle: () => {},
 }));

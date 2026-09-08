@@ -20,7 +20,7 @@ import { useEditMode } from "./edit-mode";
 import { EditorChrome } from "./editor-chrome";
 import { FrontmatterForm } from "./frontmatter-form";
 import { savePage } from "./save";
-import { noteWrite, useEditorSession } from "./session";
+import { useEditorSession } from "./session";
 import { describeCause, type Version } from "./store";
 import { checkReferences, REFERENCE_ID } from "./validate";
 
@@ -132,7 +132,6 @@ export function PageEditor({ path }: { path: string }) {
         return;
       }
       setConflict(null);
-      noteWrite();
       reload();
       exit();
     } catch (cause) {
@@ -166,7 +165,6 @@ export function PageEditor({ path }: { path: string }) {
     try {
       await store.deletePage(path, loaded.version);
       setDeleting(false);
-      noteWrite();
       reload();
       navigate("/");
     } catch (cause) {

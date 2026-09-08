@@ -25,12 +25,7 @@ import {
   slugProblem,
   today,
 } from "./propose";
-import {
-  noteWrite,
-  rememberedHandle,
-  rememberHandle,
-  useEditorSession,
-} from "./session";
+import { rememberedHandle, rememberHandle, useEditorSession } from "./session";
 import { describeCause } from "./store";
 
 /**
@@ -111,7 +106,6 @@ export function ProposeDialog({
       .propose(draftProposal(draft))
       .then(({ id }) => {
         rememberHandle(draft.author);
-        noteWrite();
         reload();
         onOpenChange(false);
         navigate(`/in-flight/${id}`);
