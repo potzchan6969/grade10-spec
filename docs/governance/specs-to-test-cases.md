@@ -1,5 +1,5 @@
 ---
-tcs_rules_rev: 2
+tcs_rules_rev: 3.0
 ---
 
 # Deriving test cases from a capability's spec
@@ -301,20 +301,28 @@ the capability at hand. Below that threshold the pattern is a coincidence and
 the defaults in this document stand. A corpus with fewer than three approved
 cases teaches nothing, and the run says so.
 
-**Only cases approved under the current rules revision teach.** A reviewer's
-yes is a yes to the rules as they stood that day, so a suite approved under
-r1 goes on carrying r1's wording — correctly, because nothing re-words an
-approved case for style alone. It must not teach r2. The `**Reviewed:**` line
-therefore records the revision alongside the date, and the corpus is filtered
-to suites whose revision equals `tcs_rules_rev`; everything older is read for
-nothing and reported as such. When the filtered corpus falls below the
-threshold — which is what a rules bump does to it — the defaults in this
-document stand, and the run says the corpus was too thin rather than reaching
-for stale evidence.
+**Only cases approved under the current major revision teach.** A reviewer's
+yes is a yes to the rules as they stood that day, so a suite approved under an
+older major goes on carrying that major's shape — correctly, because nothing
+re-words an approved case for style alone — and it must not teach the current
+one. The `**Reviewed:**` line records the revision alongside the date, and the
+corpus is filtered to suites whose **major** matches `tcs_rules_rev`.
+
+The match is on the major alone, deliberately. A minor bump moves wording
+conventions a little; filtering on the exact revision would empty the corpus
+every time one landed, leaving this document the only teacher forever and never
+letting the store's own practice accumulate. Matching the major means the
+corpus teaches conventions at most one minor behind, and the defaults here
+override anything it gets wrong.
+
+When the filtered corpus falls below the threshold — which is what a major bump
+does to it — the defaults in this document stand, and the run says the corpus
+was too thin rather than reaching for stale evidence. A file approved before
+the revision was recorded at all carries a bare date and teaches nothing until
+someone reviews it again.
 
 This is what keeps a rules change from being undone one generated suite at a
-time. The corpus re-forms as suites are reviewed under the new revision, and
-until it does, this document is the only teacher.
+time.
 
 **The corpus refines how a case is written, never what it claims.** It cannot
 add coverage a spec does not state, loosen "mechanism is yours, coverage is
@@ -420,30 +428,66 @@ assumption about how the product probably works. Approving sets that case's
 setting it: `in-review` from the first approval, `approved` once no `draft`
 remains — and only then does it export.
 
-## Keeping drafts at the current rules revision
+## Rules revisions: minor and major
 
-Wording and styling rules in this document change while suites already exist.
-When they do, bump `tcs_rules_rev` in the frontmatter and let the change reach
-the drafts the same way every other convention reaches them — through a
-`/spec-to-tcs` run on one capability at a time.
+`tcs_rules_rev` is `<major>.<minor>`, and which part moves is not a judgement
+call:
+
+> Run the store against the new rules. If a file that was valid is now
+> rejected, the change is **major**. If nothing breaks, it is **minor**.
+
+| | Minor | Major |
+| --- | --- | --- |
+| What changed | How a case reads — wording, phrasing, the voice a step is written in | The contract — a property added or retired, a vocabulary value removed, an id form, a file name, a level |
+| Existing suites | Still valid, written in an older voice | Non-conformant until they move |
+| How it reaches them | **Restyle**, one capability at a time | **Sweep**, every suite, in the bump's own commit |
+
+### Minor: drafts drift
+
+Bump the minor and let the change reach the drafts the way every other
+convention reaches them — a `/spec-to-tcs` run on one capability at a time.
 
 ```text
 pnpm run tcs:stale              # which suites' drafts sit below the current rev
 /spec-to-tcs <capability>       # bring one suite's drafts up, one PR each
 ```
 
-The report is a report. There is no sweep that rewrites every stale suite in
-one commit: a diff that large is approved without being read, which is the
-failure this whole pipeline exists to prevent. Run the capabilities you care
-about, in their own pull requests, in the order you plan to review them.
+`draft` cases are re-worded, ids kept, `<v>` unchanged, status still `draft`;
+`actual` and `deprecated` cases are never restyled; only the
+`**Drafts styled:**` line moves. There is no sweep here. Nothing is invalid in
+the meantime, and a wording diff across the whole store buys nothing that a
+capability-sized one does not.
 
-What a run touches is unchanged from **What the approved suites teach the next
-one**: `draft` cases are re-worded, `<v>` bumped, ids kept, status still
-`draft`; `actual` and `deprecated` cases are never restyled. Only the
-`**Drafts styled:**` line moves to the new revision.
+### Major: the store moves at once
 
-This is transitional machinery, and it should decay. If the rules are still
-churning after a year of review, the problem is the rules.
+A contract change leaves every suite that predates it invalid, and a store
+that fails its own validator until each suite is touched individually is worse
+than the diff that was being avoided. A major bump therefore carries its own
+sweep, in one commit, across every suite.
+
+That is safe because it is mechanical. **A sweep may not change what a case
+claims:** same case ids, same traces, same steps, same expected results, no
+`<v>` bump. `pnpm run tcs:validate --swept` asserts exactly that — the set of
+case ids and the set of traces identical before and after — and a sweep that
+cannot satisfy it is not a sweep.
+
+**A major bump may only require what is mechanically derivable on an approved
+case.** That is a constraint on the rules, not on the sweep: a change that
+would need approved cases re-worded to conform is not a rules bump but a
+re-review programme, and it is either scoped to drafts or budgeted
+deliberately. Three outcomes, and the bump states which one it is taking
+before it runs:
+
+| The new rule | The sweep does |
+| --- | --- |
+| Derivable from what the case already carries — a property split, a renamed file, a header line | Migrate it, `actual` cases included |
+| Not derivable, the old shape still readable | Grandfather it: the case keeps its shape, its `**Reviewed:**` revision records why, and it stops teaching the corpus |
+| Not derivable, not readable | That suite goes back to `draft` for re-review — one suite at a time, a human deciding each, never swept |
+
+**An approved case is never migrated silently.** Before touching a case whose
+status is `actual`, the sweep reports what it will derive, on how many cases,
+in which files — and waits for a yes. The migration is mechanical; the decision
+to run it over a reviewer's name is not.
 
 ## Step 1: digest the capability (upgrade journeys if missing)
 
@@ -1071,8 +1115,8 @@ computed rather than chosen:
 # <product>/<domain>/<capability> Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-09-05, tcs-rules r2
-**Reviewed:** 2026-09-12, tcs-rules r2
+**Drafts styled:** 2026-09-05, tcs-rules r3.0
+**Reviewed:** 2026-09-12, tcs-rules r3.0
 ```
 
 ### Status is derived, never claimed
@@ -1119,14 +1163,17 @@ file-level stamp claiming to cover every case would be a lie the moment a suite
 is mixed — half of it re-worded this week, half frozen under whatever rules
 were current when it was approved.
 
-`tcs_rules_rev` in this document's own frontmatter is the current revision.
-Bump it by hand when you change how a case should read; leave it alone for a
-typo. `pnpm run tcs:stale` then lists the suites whose drafts sit below it.
+`tcs_rules_rev` in this document's own frontmatter is the current revision, as
+`<major>.<minor>`. Bump it by hand when you change how a case should read or
+what a file must carry — the minor when nothing that was valid stops being
+valid, the major when something does (see **Rules revisions**) — and leave it
+alone for a typo. `pnpm run tcs:stale` then lists the suites whose drafts sit
+below the current minor; a major is swept instead.
 
 ### Reviewed
 
 ```markdown
-**Reviewed:** 2026-09-12, tcs-rules r2
+**Reviewed:** 2026-09-12, tcs-rules r3.0
 ```
 
 The date the file last reached `approved` and the revision of this document
@@ -1136,10 +1183,11 @@ status is `approved`. No reviewer name: git already records who, and a name in
 the file goes stale the moment a second person touches the suite.
 
 The revision is what makes the approved corpus usable as evidence: a suite
-approved under an older revision keeps its wording and stops teaching, rather
-than quietly propagating rules the store has moved on from. A file approved
-before the revision was recorded carries a bare date; it teaches nothing until
-someone reviews it again.
+approved under an older **major** keeps its wording and stops teaching, rather
+than quietly propagating rules the store has moved on from. A minor behind is
+still evidence — see **What the approved suites teach the next one**. A file
+approved before the revision was recorded carries a bare date; it teaches
+nothing until someone reviews it again.
 
 ## The format
 
@@ -1268,9 +1316,11 @@ Two pull requests, two audiences.
 6. When a delta adds, edits, or removes a scenario or journey, run
    `/spec-to-tcs` in the same PR and take the update path — new cases arrive
    `draft`, retired ones become `deprecated`, reviewed ones keep their ids.
-7. When this document's wording rules change, bump `tcs_rules_rev`. Drafts
-   come up to it when their file is next opened for review — `pnpm run
-   tcs:stale` reports what is behind, and is never swept in one pass.
+7. When this document's rules change, bump `tcs_rules_rev` — the minor when
+   only the wording moves, the major when a file that was valid stops being
+   valid. A minor reaches drafts one capability at a time (`pnpm run
+   tcs:stale` reports what is behind); a major carries its own sweep across
+   every suite, in the bump's own commit.
 8. Only `actual` cases in `approved` suites leave this repository, and only
    when someone runs an export. Nothing exports on its own.
 
