@@ -11,6 +11,7 @@ import {
   type DraftLeaf,
   draftFromSource,
   draftId,
+  FRONTMATTER_ID,
   isContainer,
   newDraftBlock,
   proseProblem,
@@ -75,6 +76,7 @@ function pageOf(blocks: DraftBlock[]): Draft {
       title: "Round trip",
       summary: "",
       spec: "",
+      icon: "",
       audience: "",
       order: "",
     },
@@ -189,6 +191,7 @@ describe("what the forms refuse", () => {
         title: "  ",
         summary: "",
         spec: "",
+        icon: "",
         audience: "",
         order: "",
       },
@@ -246,19 +249,38 @@ describe("what the forms keep", () => {
 });
 
 describe("frontmatter", () => {
-  it("writes the five fields in canonical order and omits the empty ones", () => {
+  it("writes every field in canonical order and omits the empty ones", () => {
     const built = buildPage({
       frontmatter: {
         title: "Loyalty",
         summary: "Points.",
         spec: "grade10-store/loyalty",
+        icon: "medal",
         audience: "operator",
         order: "6",
       },
       blocks: [],
     });
     expect(built.ok && built.source).toBe(
-      "---\ntitle: Loyalty\nsummary: Points.\nspec: grade10-store/loyalty\naudience: operator\norder: 6\n---\n",
+      "---\ntitle: Loyalty\nsummary: Points.\nspec: grade10-store/loyalty\nicon: medal\naudience: operator\norder: 6\n---\n",
+    );
+  });
+
+  it("names an icon outside the vocabulary rather than writing a page the grammar would refuse", () => {
+    const built = buildPage({
+      frontmatter: {
+        title: "Loyalty",
+        summary: "",
+        spec: "",
+        icon: "sparkles",
+        audience: "",
+        order: "",
+      },
+      blocks: [],
+    });
+    expect(built.ok).toBe(false);
+    expect(!built.ok && built.problems.get(FRONTMATTER_ID)?.[0]?.attr).toBe(
+      "icon",
     );
   });
 });

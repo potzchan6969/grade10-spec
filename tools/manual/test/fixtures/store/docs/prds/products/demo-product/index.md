@@ -2,6 +2,7 @@
 title: Demo product
 summary: The product the fixture spec belongs to.
 spec: demo-product/alpha
+icon: storefront
 order: 1
 ---
 

@@ -2,6 +2,7 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Link } from "react-router";
 import type { NavProduct } from "../api/derive";
+import { PageIcon } from "../blocks/page-icon";
 
 export function ProductCard({ product }: { product: NavProduct }) {
   return (
@@ -10,6 +11,10 @@ export function ProductCard({ product }: { product: NavProduct }) {
       to={product.to}
     >
       <div className="flex items-start gap-2">
+        <PageIcon
+          className="mt-0.5 shrink-0 text-secondary-foreground"
+          name={product.icon}
+        />
         <Text as="span" className="min-w-0 flex-1" weight="bold">
           {product.title}
         </Text>

@@ -28,7 +28,8 @@
  *        in prose that names nothing, a `::figma` link off figma.com, a spec
  *        whose test cases no page shows, a scenario no case traces, a suite
  *        quoting wording the spec has since moved, a delta section the fold
- *        discards, a delta-introduced capability no page documents. Exits 0.
+ *        discards, a delta-introduced capability no page documents, a domain
+ *        with no icon for its rail row. Exits 0.
  *
  * The readers in ../src are the only parser — this script never
  * grows a second one, so the check and the app can never disagree.
@@ -59,7 +60,7 @@ import {
   readStoryIndex,
 } from "./context.mjs";
 import { checkDeltas } from "./deltas.mjs";
-import { checkPages, checkSkeleton, readPages } from "./pages.mjs";
+import { checkIcons, checkPages, checkSkeleton, readPages } from "./pages.mjs";
 import { checkAcceptance } from "./qa.mjs";
 import {
   checkCoverage,
@@ -136,6 +137,7 @@ export async function runChecks(target, git) {
 
   checkTaxonomy(ctx.roots, config, shape, paths, add);
   checkSkeleton(ctx, pages);
+  checkIcons(ctx, pages);
   await checkStale(roots.store, pages, specs, shape.dirs, index, add);
 
   if (roots.own) {

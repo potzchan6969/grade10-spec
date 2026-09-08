@@ -13,6 +13,7 @@ import type { Incubating, NavGroup, NavItem, NavProduct } from "../api/derive";
 import { buildIndex, REFERENCES_ROUTE, soleProduct } from "../api/derive";
 import { useSnapshot } from "../api/snapshot-provider";
 import { CapabilityPip } from "../blocks/capability-status";
+import { PageIcon } from "../blocks/page-icon";
 import { browserKeyStore, STORAGE } from "../editor/config";
 import { NewPageAction } from "../editor/edit-actions";
 import {
@@ -123,7 +124,7 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
         // way to the rows past the fold. It clears the header and stops at the
         // dynamic viewport, so a mobile browser's own chrome never covers the
         // last row and the safe-area pad clears the home indicator.
-        "top-16 h-[calc(100dvh-4rem)] w-72 shrink-0 overflow-y-auto overscroll-contain border-border border-r bg-sidebar pb-[env(safe-area-inset-bottom)]",
+        "top-16 h-[calc(100dvh-4rem)] w-76 shrink-0 overflow-y-auto overscroll-contain border-border border-r bg-sidebar pb-[env(safe-area-inset-bottom)]",
         "[scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]",
         // Drawer. Below the header's z-50 so its close button stays reachable.
         "max-lg:fixed max-lg:left-0 max-lg:z-40 max-lg:transition-transform max-lg:duration-200 max-lg:ease-out",
@@ -132,7 +133,7 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
         open
           ? "max-lg:translate-x-0"
           : "max-lg:invisible max-lg:-translate-x-full",
-        "lg:visible lg:sticky lg:w-64 lg:translate-x-0 motion-reduce:transition-none",
+        "lg:visible lg:sticky lg:w-76 lg:translate-x-0 motion-reduce:transition-none",
       )}
       data-slot="manual-sidebar"
     >
@@ -167,7 +168,12 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
         ) : (
           <nav
             aria-label="Manual contents"
-            className={cn("flex flex-col gap-5", FIXED_ENTRIES.length > 0 ? "pt-4 border-t border-border-subtle" : "")}
+            className={cn(
+              "flex flex-col gap-5",
+              FIXED_ENTRIES.length > 0
+                ? "pt-4 border-t border-border-subtle"
+                : "",
+            )}
           >
             {index.groups.map((group) => (
               <GroupSection
@@ -329,43 +335,49 @@ function ProductBranch({
   const expanded = memory.memory.open.includes(branchKey);
   const expandable =
     product.capabilities.length > 0 || product.incubating.length > 0;
+  const active = pathname === product.to;
 
   return (
     <li>
-      <div className="flex items-center gap-0.5">
-        <NavLink
-          className={({ isActive }: { isActive: boolean }) =>
-            cn(ROW, "min-w-0 flex-1", isActive && "bg-muted font-medium")
+      {/* One target: the row opens the product, and folds it only once the
+       * reader is already on it, so a click never both leaves a page and
+       * hides the rows under it. */}
+      <NavLink
+        aria-expanded={expandable ? expanded : undefined}
+        className={cn(ROW, active && "bg-muted font-medium")}
+        end
+        onClick={(event) => {
+          if (active) {
+            event.preventDefault();
+            memory.toggleBranch(branchKey);
+            return;
           }
-          end
-          onClick={onNavigate}
-          to={product.to}
-        >
-          <span className="min-w-0 flex-1 truncate">{product.title}</span>
-          {product.changeCount > 0 ? (
-            <Badge className="tabular-nums" size="sm" variant="outline">
-              {product.changeCount}
-            </Badge>
-          ) : null}
-        </NavLink>
+          openBranch(branchKey);
+          onNavigate();
+        }}
+        to={product.to}
+      >
+        {/* The slot is kept whether or not the domain wears a glyph, so one
+         * missing icon never ragged-edges the titles beside it. */}
+        <span className="flex size-4 shrink-0 items-center justify-center text-secondary-foreground">
+          <PageIcon name={product.icon} />
+        </span>
+        <span className="min-w-0 flex-1 truncate">{product.title}</span>
+        {product.changeCount > 0 ? (
+          <Badge className="tabular-nums" size="sm" variant="outline">
+            {product.changeCount}
+          </Badge>
+        ) : null}
         {expandable ? (
-          <button
-            aria-expanded={expanded}
-            aria-label={`${expanded ? "Collapse" : "Expand"} ${product.title}`}
-            className="flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-(--radius-md) text-secondary-foreground transition-colors hover:bg-muted hover:text-foreground"
-            onClick={() => memory.toggleBranch(branchKey)}
-            type="button"
-          >
+          <span className="flex size-4 shrink-0 items-center justify-center text-secondary-foreground">
             {expanded ? (
               <CaretDown aria-hidden size={12} weight="bold" />
             ) : (
               <CaretRight aria-hidden size={12} weight="bold" />
             )}
-          </button>
-        ) : (
-          <span aria-hidden className="size-6 shrink-0" />
-        )}
-      </div>
+          </span>
+        ) : null}
+      </NavLink>
 
       {expanded && expandable ? (
         <ul className="mt-0.5 ml-3 space-y-0.5 border-border-subtle border-l pl-2">
@@ -509,6 +521,7 @@ function LeafLink({
         onClick={onNavigate}
         to={item.to}
       >
+        <PageIcon name={item.icon} />
         <span className="min-w-0 flex-1 truncate">{item.title}</span>
         <CapabilityPip status={item.status} />
       </NavLink>

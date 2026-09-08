@@ -1,9 +1,10 @@
 import { useManualIndex } from "../api/use-manual-index";
+import { PAGE_ICONS } from "../content/icons";
 import type { BlockProblem, DraftFrontmatter } from "./draft";
 import { TextField } from "./fields";
 import { suggestionsFor } from "./suggestions";
 
-/** The five frontmatter fields, in the order the grammar prints them. */
+/** Every frontmatter field, in the order the grammar prints them. */
 
 export function FrontmatterForm({
   frontmatter,
@@ -45,6 +46,14 @@ export function FrontmatterForm({
             value={frontmatter.summary}
           />
         </div>
+        <TextField
+          hint="Glyph beside the title in the rail and on cards"
+          label="icon"
+          onChange={(icon) => onChange({ ...frontmatter, icon })}
+          problem={problemOf("icon")}
+          suggestions={[...PAGE_ICONS]}
+          value={frontmatter.icon}
+        />
         <TextField
           hint="`operator` files the page under Admin; empty serves the product's own users"
           label="audience"

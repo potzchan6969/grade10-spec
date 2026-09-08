@@ -13,10 +13,12 @@ A page is YAML frontmatter followed by a sequence of blocks. Frontmatter keys
 come in this order. `title` is the surface's plain name — `Main Page`,
 `Product Listing`, `Checkout` — never a metaphor. `summary` is a card
 subtitle the house style leaves out: the title carries the weight, and the
-page shows the rest. `spec` names the spec the page documents. `audience` is
-`operator` or absent — `operator` files the page under the Admin nav group,
-absent means the product's own users. `order` sorts it among its siblings.
-Any other key is a hard error, because an editor that silently drops a field
+page shows the rest. `spec` names the spec the page documents. `icon` is the
+glyph a domain wears in the rail and on its card — one name from the fixed
+list the editor's field offers, and a landing page without one draws a
+warning. `audience` is `operator` or absent — `operator` files the page under
+the Admin nav group, absent means the product's own users. `order` sorts it
+among its siblings. Any other key is a hard error, because an editor that silently drops a field
 you typed is worse than one that refuses to save.
 
 ```yaml

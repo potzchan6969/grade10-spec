@@ -78,8 +78,11 @@ page's first-visit card is its one door.
 A page is YAML frontmatter plus a sequence of blocks. Frontmatter fields, in
 canonical order: `title` (required), `summary`, `spec` (the spec id this
 page documents — `product/capability`, or a bare topic id for platform
-pages), `order` (nav sort). Any other key is a parse error — the editor must
-never silently drop data on save.
+pages), `icon` (the glyph beside the title, one name from the vocabulary in
+`src/content/icons.ts`), `audience` (`operator` files the page under the
+derived Admin group), `order` (nav sort). Any other key is a parse error — the
+editor must never silently drop data on save. So is an icon name the
+vocabulary does not hold: a typo is a refused page, never a blank row.
 
 ### Block grammar
 
@@ -501,8 +504,11 @@ control.
 
 Navigation is computed from disk taxonomy + `manual.yaml` order + page
 frontmatter, never hand-listed: group → product → capability, with a
-product's in-flight change count as a badge, and one section per topic
-group. The row of the page being read opens one level further, to that
+product's in-flight change count as a badge, its landing page's `icon`
+beside its title, and one section per topic group. The icon slot is kept
+whether or not a domain fills it, so one missing glyph never ragged-edges
+the titles beside it; `check:manual` warns about the domain that left it
+empty. The row of the page being read opens one level further, to that
 page's H2s — read from the rendered page and shared with the On this
 page column, so the two can never mark different sections; a product row
 is a branch of pages and lists none of its own. A product or topic on
