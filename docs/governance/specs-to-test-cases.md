@@ -413,6 +413,26 @@ reviewer who genuinely wants a clean rewrite moves the affected cases back to
 `draft` by hand first — the file's own status follows them — and an agent never
 does that on its own.
 
+### When a change moves the ground an approved case stands on
+
+A delta that rewrites or removes a scenario an `actual` case traces has turned
+that case into a claim about a product that no longer exists. Left alone it is
+worse than no coverage: a suite that passes while asserting the behaviour the
+change replaced. The case is resolved in the same change, and there are only
+three ways to resolve it:
+
+| What the change did to the traced scenario | The case becomes |
+| --- | --- |
+| Changed what the case must verify | `<v>` bumped, back to `**Status:** draft`, rewritten, reviewed again |
+| Removed the behaviour | `**Status:** deprecated` |
+| Neither — it did not touch what this case asserts | left `actual`, and the run says so explicitly |
+
+**Deferring defers the review, never the marking.** A case whose scenario moved
+goes back to `draft` at once — which stops it exporting and puts it in front of
+the next `/tcs-review` — and what waits is the reviewer's time, not the file's
+honesty. `/spec-push` refuses a change that moves a scenario an `actual` case
+traces without one of the three resolutions above.
+
 ## What the approved suites teach the next one
 
 Review is not only a gate; it is the store's record of how a case should
