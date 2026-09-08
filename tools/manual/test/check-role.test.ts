@@ -99,12 +99,12 @@ describe("a journey walked by the system rather than an actor", () => {
    * system it works on, the clause that narrows it — pass untouched. */
   it("leaves a person qualified by the system they work on alone", async () => {
     const found = await roles([
-      "backend reviewer",
-      "developer running the auction service locally",
-      "engineer wiring a console feature to a backend call",
+      "auction operator reserving house stock against a listing",
+      "operator watching the platform's health",
       "operator who can ban",
       "member of shop staff",
       "signed-in collector with no orders",
+      "collector standing at the shop counter",
     ]);
 
     expect(found).toEqual([]);
@@ -116,5 +116,24 @@ describe("a journey walked by the system rather than an actor", () => {
     const found = await roles(["crawler", "preview fetcher"]);
 
     expect(found).toEqual([]);
+  });
+
+  /** The people who build the product are its makers, not its users. What
+   * they walk is a test or a working step, and the capability they alone
+   * reach says nobody walks it. */
+  it("names the story walked by whoever builds the product", async () => {
+    const found = await roles([
+      "engineer wiring a console feature to a backend call",
+      "developer running the auction service locally",
+      "backend reviewer",
+      "QA reviewer planning a pass for one operator role",
+    ]);
+
+    expect(found).toHaveLength(4);
+    const all = found.join("\n");
+    expect(all).toContain("`engineer` builds the product rather than uses it");
+    expect(all).toContain("what they walk is a test, not a journey");
+    expect(all).toContain("`developer` builds the product");
+    expect(all).toContain("backend reviewer` — `reviewer` builds the product");
   });
 });

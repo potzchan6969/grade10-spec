@@ -1,9 +1,14 @@
 /*
- * RULE `role`: a journey's actor is somebody, not something. The role is an
- * end user the spec already names, or an outside agent that acts on its own
- * — a crawler, a preview fetcher, a provider calling back. Software this
- * repository ships is never the role: a consuming application, a service, a
- * caller, a package is the system's side of the story.
+ * RULE `role`: a journey's actor is somebody who uses the product. The role
+ * is an end user the spec already names, or an outside agent that acts on
+ * its own — a crawler, a preview fetcher, a provider calling back.
+ *
+ * Two kinds are not roles. Software this repository ships is the system's
+ * side of the story: a consuming application, a service, a caller, a
+ * package. The people who build the product are its makers, not its users:
+ * an engineer wiring a call, a developer seeding fixtures, a reviewer
+ * reading a contract. What those two walk is a test or a working step, and
+ * a capability reached only that way says `**Walked by:** nobody`.
  *
  * The pull is strongest where a capability has real actors and one contract
  * scenario without a home — a package's export list, a copy shape — and a
@@ -39,6 +44,23 @@ const SYSTEM_SIDE = new Set([
   "components",
   "endpoint",
   "endpoints",
+]);
+
+/** The people who build the product rather than use it. A capability they
+ * alone reach is unwalked, and its scenarios stand without a story. */
+const MAKER_SIDE = new Set([
+  "engineer",
+  "engineers",
+  "developer",
+  "developers",
+  "programmer",
+  "programmers",
+  "reviewer",
+  "reviewers",
+  "tester",
+  "testers",
+  "maintainer",
+  "maintainers",
 ]);
 
 /** Where the leading noun phrase stops: the clause that qualifies the actor
@@ -88,12 +110,20 @@ export function checkRole(ctx, shape) {
       const role = AS_A.exec(journey.text)?.[1];
       if (!role) continue;
       const noun = headNoun(role);
-      if (!noun || !SYSTEM_SIDE.has(noun)) continue;
-      ctx.add(
-        "role",
-        `${dir}/user-journeys.md`,
-        `${journey.id} is walked by \`${role}\` — \`${noun}\` names the system's side of the story, not an actor; name whoever operates it, or drop the journey and put its scenarios under \`**Out of suite:**\``,
-      );
+      if (!noun) continue;
+      if (SYSTEM_SIDE.has(noun)) {
+        ctx.add(
+          "role",
+          `${dir}/user-journeys.md`,
+          `${journey.id} is walked by \`${role}\` — \`${noun}\` names the system's side of the story, not an actor; name whoever operates it, or drop the journey and put its scenarios under \`**Out of suite:**\``,
+        );
+      } else if (MAKER_SIDE.has(noun)) {
+        ctx.add(
+          "role",
+          `${dir}/user-journeys.md`,
+          `${journey.id} is walked by \`${role}\` — \`${noun}\` builds the product rather than uses it, and what they walk is a test, not a journey; drop it, and say \`**Walked by:** nobody\` if nobody else reaches the capability`,
+        );
+      }
     }
   }
 }
