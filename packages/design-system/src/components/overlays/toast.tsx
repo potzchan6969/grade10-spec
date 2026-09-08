@@ -141,11 +141,11 @@ function Toast({
             extra?.content,
           ),
           title: cn(
-            "truncate text-sm leading-5 font-medium text-foreground",
+            "text-sm leading-5 font-medium break-words text-foreground",
             extra?.title,
           ),
           description: cn(
-            "text-sm leading-5 font-normal text-secondary-foreground",
+            "text-sm leading-5 font-normal break-words text-secondary-foreground",
             extra?.description,
           ),
           actionButton: cn(
