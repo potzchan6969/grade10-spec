@@ -62,6 +62,7 @@ import grade10ZhHantVault from "../messages/grade10/zh-Hant/vault.json";
 import sharedEnAppointment from "../messages/shared/en/appointment.json";
 import sharedEnAuction from "../messages/shared/en/auction.json";
 import sharedEnAuctionBiddingHistory from "../messages/shared/en/auctionBiddingHistory.json";
+import sharedEnAuctionRecord from "../messages/shared/en/auctionRecord.json";
 import sharedEnAuctionListing from "../messages/shared/en/auctionListing.json";
 import sharedEnCheckout from "../messages/shared/en/checkout.json";
 import sharedEnChrome from "../messages/shared/en/chrome.json";
@@ -84,6 +85,7 @@ import sharedEnVault from "../messages/shared/en/vault.json";
 import sharedKoAppointment from "../messages/shared/ko/appointment.json";
 import sharedKoAuction from "../messages/shared/ko/auction.json";
 import sharedKoAuctionBiddingHistory from "../messages/shared/ko/auctionBiddingHistory.json";
+import sharedKoAuctionRecord from "../messages/shared/ko/auctionRecord.json";
 import sharedKoAuctionListing from "../messages/shared/ko/auctionListing.json";
 import sharedKoCheckout from "../messages/shared/ko/checkout.json";
 import sharedKoChrome from "../messages/shared/ko/chrome.json";
@@ -106,6 +108,7 @@ import sharedKoVault from "../messages/shared/ko/vault.json";
 import sharedZhHansAppointment from "../messages/shared/zh-Hans/appointment.json";
 import sharedZhHansAuction from "../messages/shared/zh-Hans/auction.json";
 import sharedZhHansAuctionBiddingHistory from "../messages/shared/zh-Hans/auctionBiddingHistory.json";
+import sharedZhHansAuctionRecord from "../messages/shared/zh-Hans/auctionRecord.json";
 import sharedZhHansAuctionListing from "../messages/shared/zh-Hans/auctionListing.json";
 import sharedZhHansCheckout from "../messages/shared/zh-Hans/checkout.json";
 import sharedZhHansChrome from "../messages/shared/zh-Hans/chrome.json";
@@ -128,6 +131,7 @@ import sharedZhHansVault from "../messages/shared/zh-Hans/vault.json";
 import sharedZhHantAppointment from "../messages/shared/zh-Hant/appointment.json";
 import sharedZhHantAuction from "../messages/shared/zh-Hant/auction.json";
 import sharedZhHantAuctionBiddingHistory from "../messages/shared/zh-Hant/auctionBiddingHistory.json";
+import sharedZhHantAuctionRecord from "../messages/shared/zh-Hant/auctionRecord.json";
 import sharedZhHantAuctionListing from "../messages/shared/zh-Hant/auctionListing.json";
 import sharedZhHantCheckout from "../messages/shared/zh-Hant/checkout.json";
 import sharedZhHantChrome from "../messages/shared/zh-Hant/chrome.json";
@@ -165,6 +169,7 @@ export const sharedCatalogs = {
     appointment: sharedEnAppointment,
     auction: sharedEnAuction,
     auctionBiddingHistory: sharedEnAuctionBiddingHistory,
+    auctionRecord: sharedEnAuctionRecord,
     auctionListing: sharedEnAuctionListing,
     checkout: sharedEnCheckout,
     chrome: sharedEnChrome,
@@ -189,6 +194,7 @@ export const sharedCatalogs = {
     appointment: sharedZhHantAppointment,
     auction: sharedZhHantAuction,
     auctionBiddingHistory: sharedZhHantAuctionBiddingHistory,
+    auctionRecord: sharedZhHantAuctionRecord,
     auctionListing: sharedZhHantAuctionListing,
     checkout: sharedZhHantCheckout,
     chrome: sharedZhHantChrome,
@@ -213,6 +219,7 @@ export const sharedCatalogs = {
     appointment: sharedZhHansAppointment,
     auction: sharedZhHansAuction,
     auctionBiddingHistory: sharedZhHansAuctionBiddingHistory,
+    auctionRecord: sharedZhHansAuctionRecord,
     auctionListing: sharedZhHansAuctionListing,
     checkout: sharedZhHansCheckout,
     chrome: sharedZhHansChrome,
@@ -237,6 +244,7 @@ export const sharedCatalogs = {
     appointment: sharedKoAppointment,
     auction: sharedKoAuction,
     auctionBiddingHistory: sharedKoAuctionBiddingHistory,
+    auctionRecord: sharedKoAuctionRecord,
     auctionListing: sharedKoAuctionListing,
     checkout: sharedKoCheckout,
     chrome: sharedKoChrome,

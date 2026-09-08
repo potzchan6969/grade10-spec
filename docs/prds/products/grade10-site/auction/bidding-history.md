@@ -17,18 +17,40 @@ capability owns the Bidding index and the detailed story behind each listing.
 
 ## Index
 
-Every listing the account bid on — by hand or through an auto-bid — appears
-exactly once, ordered by its latest activity, carrying the listing's
-identity, its current or final price, and the collector's standing: pending,
-leading, outbid, won, lost, canceled, or failed-only, which means every
+Every listing the account submitted an automatic maximum on appears exactly
+once, ordered by its latest activity, carrying the listing's identity, its
+current or final price, and the collector's standing: pending, leading,
+outbid, won, lost, canceled, or failed-only, which means every maximum
 attempt was refused and nothing was accepted. An Active filter keeps what is
 still running; Completed keeps what is done.
 
 ## One listing's story
 
 An entry opens into a single chronological explanation of that listing.
-Every server-evaluated action the collector took leaves a private event — a
-bid accepted, a bid refused and why, a private maximum set or raised —
-interleaved with the public movements that changed their standing. Private
-facts stay private: another bidder's maximum never appears, only the public
-consequence that displaced them.
+Every server-evaluated maximum action the collector took leaves a private
+event — a maximum accepted, a maximum refused and why, or a private maximum
+set or raised — interleaved with the public movements that changed their
+standing. Private facts stay private: another bidder's maximum never
+appears, only the public consequence that displaced them.
+
+## Boundary outcomes
+
+The auction engine keeps the challenger's accepted action before an automatic
+response, caps a response at one increment above the next maximum, and keeps
+an equal maximum with the earlier leader. The account story therefore reads
+these boundary outcomes as follows:
+
+| Incoming maximum | Public story |
+| --- | --- |
+| 450 | Refused below the next valid amount |
+| 500 | Challenger at 500, then automatic response at 600 |
+| 700 | Challenger at 700, then automatic response at 800 |
+| 950 | Challenger at 950, then automatic response at 1000 |
+| 1000 | One public response at 1000; the earlier leader remains ahead |
+| 1001 | Challenger leads at 1001 |
+| 1100 | Challenger leads at 1100 |
+| 1120 | Challenger leads at 1100, one increment above the earlier maximum |
+
+## Journeys
+
+::journeys{id="grade10-site/auction/bidding-history"}
