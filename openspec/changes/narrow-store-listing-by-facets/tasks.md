@@ -42,7 +42,7 @@ Needs group 1's keys and group 2's reads landed.
 - [ ] 3.9 Name the three utility links where the site's other chrome links are named, each with no destination yet, and hand the panel only those the site answers — none today, so no row renders and it fills itself when a page lands behind one
 - [ ] 3.10 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 4. The manual (grade10-spec)
+## 4. The manual (grade10-spec) (owner: @sean)
 
 - [ ] 4.1 Rewrite the product listing page's shape and its URL list for a listing narrowed by facets, with a collection as a way in rather than a filter, and record on its decisions why one narrowing is in force at a time
 - [ ] 4.2 Verify: `pnpm check:manual`
