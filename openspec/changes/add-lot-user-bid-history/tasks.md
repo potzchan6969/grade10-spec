@@ -6,7 +6,7 @@
 ## 2. Shared UI block (owner: @constancetang)
 
 - [x] 2.1 Add `ListingUserBidHistoryRow` to auction-listing types and export from `@grade10/ui`.
-- [x] 2.2 Implement `ListingUserBidHistory` (link, scrollable dialog, table with type badges).
+- [x] 2.2 Implement `ListingUserBidHistory` (link, scrollable dialog, amount/time table, same-price priority note).
 - [x] 2.3 Add `recentBidsAccessory` to `ListingAuctionBidCard` and `ListingAuctionCardSidebar`.
 
 ## 3. Preview and stories (owner: @constancetang)

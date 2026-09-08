@@ -11,8 +11,6 @@ export type ListingBidHistoryRow = {
 export type ListingUserBidHistoryRow = {
   id: string;
   amountLabel: string;
-  bidType: "manual" | "auto";
-  bidTypeLabel: string;
   acceptedAtMs: number;
   timeOverride?: string;
 };
