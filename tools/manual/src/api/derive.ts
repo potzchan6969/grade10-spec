@@ -6,6 +6,7 @@ import type {
   StoryBlock,
 } from "../content/grammar";
 import { type PageAst, parsePage } from "../content/grammar";
+import type { PageIcon } from "../content/icons";
 import { resolveRef } from "../content/refs";
 import {
   dirOf,
@@ -50,6 +51,8 @@ export type NavItem = {
   summary?: string;
   to: string;
   order: number;
+  /** The glyph beside the title, from the page's own frontmatter. */
+  icon?: PageIcon;
   /** Capability entries only — a guide has no spec to be changing. */
   status?: CapabilityStatus;
   /** Capability entries only — who the page serves, from its frontmatter. */
@@ -238,6 +241,7 @@ function navItem(page: ParsedPage, fallbackId: string): NavItem {
     id: fallbackId,
     title: page.ast?.frontmatter.title ?? humanize(fallbackId),
     summary: page.ast?.frontmatter.summary,
+    icon: page.ast?.frontmatter.icon,
     to: page.route ?? "/",
     order: page.ast?.frontmatter.order ?? Number.MAX_SAFE_INTEGER,
   };
@@ -280,6 +284,7 @@ function productNav(index: ManualIndex, id: string): NavProduct {
     id,
     title: landing?.ast?.frontmatter.title ?? humanize(id),
     summary: landing?.ast?.frontmatter.summary,
+    icon: landing?.ast?.frontmatter.icon,
     to: `/p/${id}`,
     order: landing?.ast?.frontmatter.order ?? Number.MAX_SAFE_INTEGER,
     capabilities,

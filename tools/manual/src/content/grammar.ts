@@ -1,4 +1,7 @@
 import YAML from "yaml";
+// Explicit extension: `check:manual` loads the grammar under plain node, which
+// resolves no extensionless path of its own.
+import { isPageIcon, PAGE_ICONS, type PageIcon } from "./icons.ts";
 
 /** The page grammar: YAML frontmatter plus a sequence of blocks. Directives
  * sit at column 0; everything between them is prose. `parsePage` and
@@ -8,6 +11,9 @@ export type Frontmatter = {
   title: string;
   summary?: string;
   spec?: string;
+  /** The glyph the rail and the cards show beside the title. Named from a
+   * fixed vocabulary so a typo is a parse error, not a blank row. */
+  icon?: PageIcon;
   /** Who a capability page serves. Absent means the product's own users;
    * `operator` moves the page into the derived Admin nav group. */
   audience?: "operator";
@@ -205,6 +211,7 @@ const FRONTMATTER_KEYS = [
   "title",
   "summary",
   "spec",
+  "icon",
   "audience",
   "order",
 ] as const;
@@ -258,6 +265,15 @@ function parseFrontmatter(lines: string[]): {
   if (entries.summary !== undefined)
     fm.summary = requireString(entries, "summary");
   if (entries.spec !== undefined) fm.spec = requireString(entries, "spec");
+  if (entries.icon !== undefined) {
+    if (!isPageIcon(entries.icon)) {
+      throw new GrammarError(
+        1,
+        `\`icon\` must be one of: ${PAGE_ICONS.join(", ")}`,
+      );
+    }
+    fm.icon = entries.icon;
+  }
   if (entries.audience !== undefined) {
     if (entries.audience !== "operator") {
       throw new GrammarError(1, "`audience` must be `operator` when present");

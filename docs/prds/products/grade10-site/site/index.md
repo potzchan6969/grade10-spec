@@ -1,5 +1,6 @@
 ---
 title: Site
+icon: browsers
 ---
 
 `grade10-site` is not a product a collector thinks about — it is the site

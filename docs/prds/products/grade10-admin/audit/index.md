@@ -1,5 +1,6 @@
 ---
 title: Audit Trail
+icon: list-magnifying-glass
 ---
 
 Every operator action across every product is written to a tamper-evident log,

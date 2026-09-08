@@ -1,6 +1,7 @@
 ---
 title: Appointment operations
 summary: The shops, desks, hours and visits behind every booking.
+icon: calendar-check
 ---
 
 The operator half of appointments. A shop is opened here, given its desks and

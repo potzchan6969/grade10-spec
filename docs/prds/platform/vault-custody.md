@@ -17,7 +17,7 @@ A customer submits an item online, books a visit to a physical store, staff valu
 
 - The loan belongs to the product that holds its collateral: one case, one database, one worker, and no second copy of intake, valuation, custody, documents and money.
 - What separates it is the counterparty, not the infrastructure: the custody agreement is the custodian's and the loan agreement is the lender's, two registered entities read out of one per-brand table.
-- The identity store serves whatever product binds it, and the vault is the only one that does; a second product would join by minting its own entrypoint and declaring the binding.
+- The KYC service serves whatever product binds it, and the vault is the only one that does; a second product would join by minting its own entrypoint and declaring the binding.
 
 ## Case
 
@@ -172,7 +172,7 @@ terminal: declined | cancelled | expired | forfeited
 | `DOCUMENTS` | rendered sources, sealed PDFs, signature images, and the Unicode font the sealer loads for CJK names | through the case, never by bare key |
 
 - A prefix convention would put a customer's item photos one typo from their sealed agreements, and a bucket is the only boundary an R2 token scopes to.
-- The photograph of an identity document is in neither: it lives in the identity store's own bucket, and this worker holds no key to one. The audited download route stays here — the download is about a vault case and `kyc:read` is a grant on this product — and fetches the bytes over the binding, which answers only for a case this product itself has bound.
+- The photograph of an identity document is in neither: it lives in the KYC service's own bucket, and this worker holds no key to one. The audited download route stays here — the download is about a vault case and `kyc:read` is a grant on this product — and fetches the bytes over the binding, which answers only for a case this product itself has bound.
 - Keys are content-addressed, one helper mints every key under a named storage area, and one function answers which keys rows still point at — that answer covers document sources, sealed documents, and signature images together.
 - The areas are what the orphan sweep walks, so an object nothing references is found by the same rule in every bucket.
 - The font is an asset in the documents bucket outside every swept area, loaded at seal time and never bundled, so a Chinese name renders instead of throwing.
@@ -295,7 +295,7 @@ Erasure is an admin calling `erasure.erase`, which asks auth's guard first, as e
 | --- | --- | --- |
 | `packages/appointment` | locations' availability rules, slot derivation, bookings, and their outcomes, plus its own worker | what a case is — the case reference is an opaque string |
 | `packages/doc-sign` | packets, their documents, signers, tokens, signatures, sign events, templates, the ceremony routes, and both the signer's ceremony and the operator's mint surface | which product it signs for; it is a library with no worker and no database of its own |
-| `packages/e-kyc` | the identity store: the verified record and its per-product case bindings, the vocabulary, masking and hashing, the adult and expiry predicates, the per-product entrypoints, and the worker that owns the database and the capture bucket | anything about vaults, loans, or cases — a case reference is an opaque string |
+| `packages/e-kyc` | the KYC service: the verified record and its per-product case bindings, the vocabulary, masking and hashing, the adult and expiry predicates, the per-product entrypoints, and the worker that owns the database and the capture bucket | anything about vaults, loans, or cases — a case reference is an opaque string |
 | `packages/vault` | the case, its transitions, valuation, custody, money, documents, uploads, notifications, sweeps, and the customer-facing slices | how a slot is derived or how a PDF is sealed |
 
 ### A generic package never learns what a case is
@@ -338,7 +338,7 @@ Erasure is an admin calling `erasure.erase`, which asks auth's guard first, as e
 | `apps/frontend/grade10/src/pages/vault` | the request wizard, a customer's cases, booking, and the signing page |
 | `apps/admin/grade10/src/pages/{vault,appointments}` | the route shells that mount the panels; the case panels, the payout tab and the `wa.me` link builder live in `packages/vault/admin-frontend` |
 | `packages/grade10-auth/contracts/src/schemas.ts` | the `vault` and `appointment` statements and the roles that hold them |
-| `neondb/registry.sh` | the databases and their nightly backups; the vault and the identity store are Neon projects of their own, all of them in `ap-southeast-1` |
+| `neondb/registry.sh` | the databases and their nightly backups; the vault and the KYC service are Neon projects of their own, all of them in `ap-southeast-1` |
 
 ## Q & A
 

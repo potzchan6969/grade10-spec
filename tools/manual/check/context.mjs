@@ -118,6 +118,7 @@ export const RULES = [
     level: "warn",
     title: "Delta-introduced capabilities no page documents",
   },
+  { key: "icon", level: "warn", title: "Domains with no icon in the rail" },
 ];
 
 const LEVEL = new Map(RULES.map((rule) => [rule.key, rule.level]));

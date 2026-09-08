@@ -1,5 +1,6 @@
 ---
 title: Vault
+icon: vault
 ---
 
 The vault is physical custody with a loan attached: a collector submits an

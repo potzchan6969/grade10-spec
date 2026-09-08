@@ -1,5 +1,6 @@
 ---
 title: Inventory
+icon: package
 ---
 
 Inventory is the house ledger for physical stock more than one application

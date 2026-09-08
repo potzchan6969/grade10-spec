@@ -1,6 +1,7 @@
 ---
 title: Auction operations
 summary: Drafting, publishing and closing out the lots collectors bid on.
+icon: gavel
 ---
 
 The operator half of the auction. A listing is drafted here, filled with

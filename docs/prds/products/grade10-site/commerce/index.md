@@ -1,5 +1,6 @@
 ---
 title: Shopify
+icon: shopping-bag
 ---
 
 Everything the storefronts hand to Shopify or read back from it: the catalog,

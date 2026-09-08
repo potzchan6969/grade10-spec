@@ -1,5 +1,6 @@
 ---
 title: Auction
+icon: gavel
 ---
 
 Grade10 Auction sells graded cards one lot at a time. A collector browses the

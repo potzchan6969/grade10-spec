@@ -1,5 +1,5 @@
 ---
-title: Product Details Page
+title: Product Details
 spec: grade10-site/store/product-page
 order: 3
 ---

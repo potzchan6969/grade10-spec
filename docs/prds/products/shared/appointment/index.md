@@ -1,5 +1,6 @@
 ---
 title: Appointment diary
+icon: calendar-check
 ---
 
 `shared-appointment` is the diary contract every brand's appointment service

@@ -13,7 +13,7 @@ the first hour is different depending on what you came to do, so pick a path.
   have, and the one written most nearly in product language. Read its journeys
   first, then the rest of [Membership](/p/grade10-site/loyalty).
 - [Main Page](/p/grade10-site/store/home) and
-  [Product Details Page](/p/grade10-site/store/product-page) — what a collector
+  [Product Details](/p/grade10-site/store/product-page) — what a collector
   actually meets.
 - [The vault](/p/grade10-site/vault) — the most involved product, where custody, identity
   and signing all meet.
@@ -86,7 +86,7 @@ classified cases, is
   writing a control from scratch.
 - [Roles](/p/shared/auth/roles) — the permission vocabulary every backend
   checks against.
-- [Document signing](/p/grade10-site/doc-sign) and [Identity store](/p/grade10-site/e-kyc) — the two
+- [Document signing](/p/grade10-site/doc-sign) and [KYC](/p/grade10-site/account/kyc) — the two
   services with the most decisions per line of code.
 - [Working a change](/guides/working-a-change) — `/planning-dev`, taking a
   change in hand, and the archive debt `tasks.md` has to carry.

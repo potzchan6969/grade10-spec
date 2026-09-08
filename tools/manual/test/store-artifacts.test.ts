@@ -9,7 +9,8 @@ const CONFIG =
   "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n";
 
 const HOME = "---\ntitle: Demo\n---\n\nA demo store.\n";
-const LANDING = "---\ntitle: Demo product\n---\n\nThe one product.\n";
+const LANDING =
+  "---\ntitle: Demo product\nicon: storefront\n---\n\nThe one product.\n";
 
 /** A capability page that names its spec and never gets to acceptance — the
  * shelf gap the skeleton rule warns about. */

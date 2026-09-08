@@ -1,6 +1,7 @@
 ---
 title: Grade10 Console
 summary: The Grade10 admin's own surfaces, beside the vocabulary every console shares.
+icon: sliders
 ---
 
 Grade10's operators work in one console over seven backends. Its furniture,

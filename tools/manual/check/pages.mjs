@@ -175,12 +175,27 @@ function checkBlock(ctx, path, block) {
   }
 }
 
+/** The segments under `<manual>/products/`, or null for a path that is not a
+ * product page at all. A product id is one segment in a flat store and two —
+ * `<product>/<domain>` — in one that groups specs by application, so both
+ * depths are read wherever a page is classified. */
+const productPage = (manual, path) => {
+  const prefix = `${manual}/products/`;
+  if (!path.startsWith(prefix) || !path.endsWith(".md")) return null;
+  const rest = path.slice(prefix.length).split("/");
+  return rest.length === 2 || rest.length === 3 ? rest : null;
+};
+
 /** `<manual>/products/<product>/<capability>.md` — a landing page is not one. */
 const capabilityPage = (manual, path) => {
-  const prefix = `${manual}/products/`;
-  if (!path.startsWith(prefix) || !path.endsWith(".md")) return false;
-  const rest = path.slice(prefix.length).split("/");
-  return rest.length === 2 && rest[1] !== "index.md";
+  const rest = productPage(manual, path);
+  return rest !== null && rest[rest.length - 1] !== "index.md";
+};
+
+/** `<manual>/products/<product>/index.md` — the domain's own page. */
+const landingPage = (manual, path) => {
+  const rest = productPage(manual, path);
+  return rest !== null && rest[rest.length - 1] === "index.md";
 };
 
 /** The shelf every capability page keeps in the same order ends in acceptance,
@@ -205,6 +220,21 @@ export function checkSkeleton(ctx, pages) {
       "skeleton",
       page.path,
       "has a `spec` and no `::cases` block — missing its acceptance shelf",
+    );
+  }
+}
+
+/** A domain reads as a row in the rail before it reads as a page, and a row
+ * with no glyph is the one thing a reader cannot scan for. A warning, never a
+ * failure: the page is complete, the rail is just harder to use. */
+export function checkIcons(ctx, pages) {
+  for (const page of pages) {
+    if (!landingPage(ctx.roots.manual, page.path)) continue;
+    if (page.ast.frontmatter.icon) continue;
+    ctx.add(
+      "icon",
+      page.path,
+      "no `icon` — the domain's rail row has no glyph",
     );
   }
 }

@@ -1,5 +1,6 @@
 ---
 title: Document Signing
+icon: signature
 ---
 
 A customer sits at a counter with an iPad, reads the documents, draws a

@@ -1,5 +1,6 @@
 ---
 title: Admin Console
+icon: squares-four
 ---
 
 Every operator works in one console per brand, not one console per product.

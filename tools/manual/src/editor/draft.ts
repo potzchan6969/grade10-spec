@@ -8,6 +8,7 @@ import {
   serializePage,
   trimBlankLines,
 } from "../content/grammar";
+import { isPageIcon, PAGE_ICONS } from "../content/icons";
 
 /**
  * What the forms edit. A draft holds every attribute as the string the field
@@ -37,6 +38,7 @@ export type DraftFrontmatter = {
   title: string;
   summary: string;
   spec: string;
+  icon: string;
   audience: string;
   order: string;
 };
@@ -110,6 +112,7 @@ export function draftFromAst(ast: PageAst): Draft {
       title: ast.frontmatter.title,
       summary: ast.frontmatter.summary ?? "",
       spec: ast.frontmatter.spec ?? "",
+      icon: ast.frontmatter.icon ?? "",
       audience: ast.frontmatter.audience ?? "",
       order:
         ast.frontmatter.order === undefined
@@ -259,6 +262,12 @@ export function frontmatterProblems(fm: DraftFrontmatter): BlockProblem[] {
   if (fm.order.trim() !== "" && !Number.isInteger(Number(fm.order.trim()))) {
     problems.push({ attr: "order", message: "order is a whole number" });
   }
+  if (fm.icon.trim() !== "" && !isPageIcon(fm.icon.trim())) {
+    problems.push({
+      attr: "icon",
+      message: `icon is one of: ${PAGE_ICONS.join(", ")}`,
+    });
+  }
   if (fm.audience.trim() !== "" && fm.audience.trim() !== "operator") {
     problems.push({
       attr: "audience",
@@ -272,6 +281,8 @@ function frontmatterOf(fm: DraftFrontmatter): Frontmatter {
   const built: Frontmatter = { title: fm.title.trim() };
   if (fm.summary.trim() !== "") built.summary = fm.summary.trim();
   if (fm.spec.trim() !== "") built.spec = fm.spec.trim();
+  const icon = fm.icon.trim();
+  if (isPageIcon(icon)) built.icon = icon;
   if (fm.audience.trim() === "operator") built.audience = "operator";
   if (fm.order.trim() !== "") built.order = Number(fm.order.trim());
   return built;
