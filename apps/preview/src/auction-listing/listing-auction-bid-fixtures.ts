@@ -142,6 +142,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   placeBidSection: "Place bid",
   placeBid: "Place Bid",
   signInToBid: "Sign In to Bid",
+  linkACardToBid: "Link a card to bid",
   confirmMaximum: "Confirm",
   raiseMaximum: "Raise",
   confirmMaximumTooltip:

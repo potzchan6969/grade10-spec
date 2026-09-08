@@ -3,6 +3,7 @@ import {
   EnrollmentSetupSheet,
   InlineOverlayPreview,
   ListingAuctionBidCard,
+  type BidEnrollment,
   type ListingBidHistoryRow,
   type OverlayPresentation,
   PaymentMethodEmptyState,
@@ -35,6 +36,14 @@ type ListingBidEnrollmentCardPreviewProps = {
   historyResetKey?: string;
 };
 
+function resolveBidEnrollment(
+  snapshot: ListingBidEnrollmentSnapshot,
+): BidEnrollment {
+  if (snapshot.submitUsesSignInLabel) return "signed-out";
+  if (snapshot.needsCard || snapshot.paymentEmptyState) return "needs-card";
+  return "ready";
+}
+
 function ListingBidEnrollmentCardPreview({
   snapshot,
   overlayPresentation = "modal",
@@ -52,6 +61,7 @@ function ListingBidEnrollmentCardPreview({
   const [signInEmail, setSignInEmail] = useState("");
 
   const signInOpen = signInOpenProp ?? snapshot.signInOpen ?? false;
+  const bidEnrollment = resolveBidEnrollment(snapshot);
 
   useEffect(() => {
     if (!signInOpen) {
@@ -67,7 +77,10 @@ function ListingBidEnrollmentCardPreview({
   };
 
   const sidebarCopy = useMemo(() => {
-    const copy = { ...LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY };
+    const copy = {
+      ...LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
+      linkACardToBid: LISTING_BID_ENROLLMENT_DEMO_COPY.linkACardToBid,
+    };
     if (snapshot.submitUsesSignInLabel) {
       copy.signInToBid = LISTING_BID_ENROLLMENT_DEMO_COPY.signInToBid;
     }
@@ -84,16 +97,34 @@ function ListingBidEnrollmentCardPreview({
     onBidSubmit?.();
   }
 
+  function handlePlaceBid() {
+    if (bidEnrollment === "needs-card") {
+      onLinkPayment?.();
+      return;
+    }
+    onBidSubmit?.();
+  }
+
+  const authorizationStatus =
+    snapshot.bidAuthorization?.status === "pending"
+      ? "pending"
+      : snapshot.bidAuthorization?.status === "error"
+        ? "error"
+        : undefined;
+  const authorizationMessage = snapshot.bidAuthorization?.message;
+
   return (
     <VStack className="w-full max-w-md" gap="sm">
       <ListingAuctionBidCard
-        bidEnrollment={snapshot.submitUsesSignInLabel ? "signed-out" : "ready"}
+        authorizationMessage={authorizationMessage}
+        authorizationStatus={authorizationStatus}
+        bidEnrollment={bidEnrollment}
         copy={sidebarCopy}
         history={history}
         historyResetKey={historyResetKey}
         locale="en"
         onCommitMaximum={handleBidSubmit}
-        onPlaceBid={handleBidSubmit}
+        onPlaceBid={handlePlaceBid}
         timeZone="Asia/Hong_Kong"
         view={view}
       />
@@ -122,11 +153,11 @@ function ListingBidEnrollmentCardPreview({
       ) : null}
 
       <EnrollmentSetupSheet
-        authorizationRefused={snapshot.paymentSetup?.authorizationRefused}
-        authorizing={snapshot.paymentSetup?.authorizing}
         copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
         defaultAgeAttested={snapshot.paymentSetup?.defaultAgeAttested}
+        errorMessage={snapshot.paymentSetup?.errorMessage}
         iframeLinkedPayment={snapshot.paymentSetup?.iframeLinkedPayment}
+        linking={snapshot.paymentSetup?.linking}
         onContinue={onSetupContinue}
         onOpenChange={(open) => {
           if (!open) onPaymentSetupDismissed?.();
