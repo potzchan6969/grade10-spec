@@ -31,6 +31,12 @@ a session — is [the identity directory](/p/shared/auth/users) and
 [where a person is signed in](/p/shared/auth/sessions). This capability governs
 only what the components render.
 
+When the console supplies a per-role address, each role name in the Roles cell
+is a link to that role's grants page; the row's sessions, roles, ban or unban,
+and delete actions stay as they are. Grade10 wires those chips to
+[Roles & Permissions](/p/grade10-admin/console/roles-and-permissions); a console
+that supplies no addresses keeps plain chips.
+
 :::callout{kind="note"}
 This surface used to live in the shared-UI package as `auth-user-directory`. It
 carries those requirements forward unchanged in behaviour; only its home moved,

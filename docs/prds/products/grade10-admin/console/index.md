@@ -16,5 +16,7 @@ console carries that neither supplies.
 - **API docs** — the procedure record every Grade10 backend already declares,
   read off the routers and rendered for the engineers and reviewers who build
   against them
+- **Roles & Permissions** — what each closed role grants and what each
+  permission means, derived from the shipped mapping
 - **The Dev heading** — where a surface written for engineers rather than
   operators sits; staging and local builds carry it, a production build drops it
