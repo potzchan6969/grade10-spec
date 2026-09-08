@@ -31,23 +31,23 @@ running worker. Passes no scenario on its own — it is what group 3 draws.
 
 Needs group 1's keys and group 2's reads landed.
 
-- [ ] 3.1 Draw the sidebar from the catalogue's taxonomy, one group per facet in the catalogue's order with its count beside every choice, so *The panel is the catalogue's facets* (`SC-10`) passes
-- [ ] 3.2 Put the facets in force into the address and take the page's own filter state out, so *A facet narrowing is linkable* (`SC-11`) passes
-- [ ] 3.3 Settle the taxonomy as ready-and-empty rather than as an empty state, keeping search and the sort menu, so *A shop with no facets configured* (`SC-12`) passes
-- [ ] 3.4 Send the order and the free text to the catalogue and put both in the address, replacing the entry while the collector types and pushing one when it settles, so *An order covers the whole catalogue* (`SC-13`) and *Free text covers the whole catalogue* (`SC-14`) pass
-- [ ] 3.5 Offer only the orders the catalogue answers, with none in force at rest, so *The menu offers only answerable orders* (`SC-15`) passes
-- [ ] 3.6 Choose the collection read only for an address naming a collection and nothing else, so *An address opens the listing narrowed* (`SC-03`), *No collection named* (`SC-04`), *A collection the catalogue has nothing for* (`SC-05`) and *An address carrying both* (`SC-09`) pass
-- [ ] 3.7 Name the collection in force among the applied narrowings, dismissible, and drop it whenever a facet, free text or an order is applied, so *Narrowing in the page is linkable* (`SC-06`), *Back undoes a narrowing* (`SC-07`) and *The collection in force can be dismissed* (`SC-08`) pass
-- [ ] 3.8 Cap the worlds at five with the invitation that opens the group, and offer the collectible types whole, so *A long facet group is capped* (`SC-16`) passes
-- [ ] 3.9 Name the three utility links where the site's other chrome links are named, each with no destination yet, and draw the row against the placeholder the site already gives a link it owes, so the links become real addresses as the pages land
-- [ ] 3.10 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
-- [ ] 3.11 Open the body on the browse block, as the frame does, and hold the listing's served copy to the floor every public document is held to — the surface names itself in the document's head
-- [ ] 3.12 Hold the panel and the grid through a narrowing rather than emptying both on every tick, and keep every group the catalogue names once a query is in force, so *A narrowing that starves the catalogue* (`SC-17`) passes
+- [x] 3.1 Draw the sidebar from the catalogue's taxonomy, one group per facet in the catalogue's order with its count beside every choice, so *The panel is the catalogue's facets* (`SC-10`) passes
+- [x] 3.2 Put the facets in force into the address and take the page's own filter state out, so *A facet narrowing is linkable* (`SC-11`) passes
+- [x] 3.3 Settle the taxonomy as ready-and-empty rather than as an empty state, keeping search and the sort menu, so *A shop with no facets configured* (`SC-12`) passes
+- [x] 3.4 Send the order and the free text to the catalogue and put both in the address, replacing the entry while the collector types and pushing one when it settles, so *An order covers the whole catalogue* (`SC-13`) and *Free text covers the whole catalogue* (`SC-14`) pass
+- [x] 3.5 Offer only the orders the catalogue answers, with none in force at rest, so *The menu offers only answerable orders* (`SC-15`) passes
+- [x] 3.6 Choose the collection read only for an address naming a collection and nothing else, so *An address opens the listing narrowed* (`SC-03`), *No collection named* (`SC-04`), *A collection the catalogue has nothing for* (`SC-05`) and *An address carrying both* (`SC-09`) pass
+- [x] 3.7 Name the collection in force among the applied narrowings, dismissible, and drop it whenever a facet, free text or an order is applied, so *Narrowing in the page is linkable* (`SC-06`), *Back undoes a narrowing* (`SC-07`) and *The collection in force can be dismissed* (`SC-08`) pass
+- [x] 3.8 Cap the worlds at five with the invitation that opens the group, and offer the collectible types whole, so *A long facet group is capped* (`SC-16`) passes
+- [x] 3.9 Name the three utility links where the site's other chrome links are named, each with no destination yet, and draw the row against the placeholder the site already gives a link it owes, so the links become real addresses as the pages land
+- [x] 3.10 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 3.11 Open the body on the browse block, as the frame does, and hold the listing's served copy to the floor every public document is held to — the surface names itself in the document's head
+- [x] 3.12 Hold the panel and the grid through a narrowing rather than emptying both on every tick, and keep every group the catalogue names once a query is in force, so *A narrowing that starves the catalogue* (`SC-17`) passes
 
 ## 4. The manual (grade10-spec) (owner: @sean)
 
-- [ ] 4.1 Rewrite the product listing page's shape and its URL list for a listing narrowed by facets, with a collection as a way in rather than a filter, and record on its decisions why one narrowing is in force at a time
-- [ ] 4.2 Verify: `pnpm check:manual`
+- [x] 4.1 Rewrite the product listing page's shape and its URL list for a listing narrowed by facets, with a collection as a way in rather than a filter, and record on its decisions why one narrowing is in force at a time
+- [x] 4.2 Verify: `pnpm check:manual`
 
 ## 5. Archive hand-off (grade10-spec)
 
