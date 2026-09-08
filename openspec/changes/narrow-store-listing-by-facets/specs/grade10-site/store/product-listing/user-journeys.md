@@ -42,6 +42,7 @@ pick one,
 - `grade10-site-store-product-listing-SC-11` — A facet narrowing is linkable
 - `grade10-site-store-product-listing-SC-12` — A shop with no facets configured
 - `grade10-site-store-product-listing-SC-16` — A long facet group is capped
+- `grade10-site-store-product-listing-SC-17` — A narrowing that starves the catalogue
 
 ### grade10-site-store-product-listing-US-05: Collector orders and searches the whole shop
 

@@ -106,12 +106,20 @@ narrows to, never counted from the cards on the page.
 Selecting no choice in a group SHALL leave that group unrestricted. A group
 SHALL admit more than one choice at once.
 
-A group the catalogue names no choices for, and a group whose every choice the
-catalogue counts nothing behind, SHALL NOT be drawn: a control whose only
-effect is to empty the grid is worse than no control. A listing left with no
-group to draw SHALL draw no facet group and SHALL say nothing in place of one —
-a shop that has configured no facets is not a fault the collector is told
-about. Searching and ordering are not facets and SHALL stay offered either way.
+A group the catalogue names no choices for SHALL NOT be drawn. On a listing
+nothing narrows, neither SHALL a group the catalogue counts nothing behind any
+choice of: a control whose only effect is to empty the grid is worse than no
+control. A listing left with no group to draw SHALL draw no facet group and
+SHALL say nothing in place of one — a shop that has configured no facets is not
+a fault the collector is told about. Searching and ordering are not facets and
+SHALL stay offered either way.
+
+Once a narrowing is in force, every group the catalogue names choices for SHALL
+be offered however little is counted behind them: nothing behind a choice is
+then the query's doing rather than the shop's, and the collector needs the
+groups to widen by. A choice the collector has selected SHALL remain selected
+and selectable however little is counted behind it, since a selection nobody
+can undo is a trap.
 
 What each group is called SHALL be the site's own words in the language the
 listing is read in; what each choice is called SHALL be the catalogue's, and
@@ -163,6 +171,18 @@ the previous narrowing.
 - **AND** every collectible type the catalogue names is offered
 - **WHEN** the collector takes that invitation
 - **THEN** every world the catalogue names is offered
+
+#### Scenario: grade10-site-store-product-listing-SC-17 - A narrowing that starves the catalogue
+
+- **GIVEN** a collector on the listing who has selected a choice the catalogue
+  now counts nothing behind, leaving every choice of the other group counted
+  at nothing too
+- **WHEN** the listing renders
+- **THEN** both groups are still offered, with their counts as the catalogue
+  answers them
+- **AND** the selected choice is still shown selected, and can be unselected
+- **WHEN** the collector unselects it
+- **THEN** the listing widens again
 
 ### Requirement: Order and free text describe the whole catalogue
 
