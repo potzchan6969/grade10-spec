@@ -386,14 +386,13 @@ the one `ContentStore`, `LocalStore`:
 read(path)                            -> { source, version }
 write(path, source, baseVersion)      -> ok | conflict { current }
 writeBinary(path, bytes, baseVersion?) -> same as write
-dirty() / commit(message)             -> the working tree's status, and landing it
 propose(files) / withdraw(id)         -> their own atomic commits, never staged
 ```
 
 `version` is a content hash of the file — what turns two concurrent editors
 into a rendered conflict diff instead of a silent overwrite. A save writes
-the working tree directly; the commit bar appears once the tree has manual
-edits and commits them all in one go.
+the working tree directly; committing it is on the author, same as any other
+change to the repo.
 
 Staging validates client-side what the snapshot can prove: canonical
 form, spec and scenario ids, image paths against `assets`, and that a

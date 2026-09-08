@@ -243,10 +243,9 @@ directive on this page renders as text instead of as a block: inside a fence,
 ## Saving
 
 The block editor only saves when the manual is running locally (`pnpm dev`):
-a commit bar appears as soon as the working tree has manual edits, and
-pressing it stages `docs/prds/` and commits. Push and open a PR like any other
-change in the repo. The hosted site is a static build of the store and is
-always read-only.
+a save writes straight to the working tree. Commit and push like any other
+change in the repo, and open a PR. The hosted site is a static build of the
+store and is always read-only.
 
 Each read carries a version — a content hash of the file. If somebody saved
 before you, you get their version and yours side by side rather than a
