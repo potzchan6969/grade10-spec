@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-08T02:44:52.460Z",
+  "generatedAt": "2026-09-08T03:18:58.177Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -88,6 +88,7 @@
     "Text Area": "warn",
     "Text Input": "skipped",
     "Toast": "warn",
+    "Toast / Close": "warn",
     "Tooltip": "ok",
     "auth-sign-in: sign-in-card/body": "ok",
     "display: card/slot": "ok",
@@ -774,6 +775,9 @@
     "5896-4522": "Alert",
     "5896-4567": "Alert",
     "5896-4604": "Alert",
+    "6332-3598": "Toast / Close",
+    "6332-3599": "Toast / Close",
+    "6332-3600": "Toast / Close",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -895,6 +899,9 @@
     ],
     "Toast": [
       "Toast: no code component (looked for src/components/**/toast.tsx or toast.tsx)"
+    ],
+    "Toast / Close": [
+      "Toast / Close: no code component (looked for src/components/**/toastclose.tsx or close.tsx)"
     ]
   }
 }
