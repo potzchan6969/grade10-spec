@@ -9,7 +9,7 @@ import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { Center } from "@grade10/design-system/components/layout/center";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { toast } from "@grade10/design-system/components/overlays/sonner";
+import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
   CaretDown,

@@ -15,7 +15,7 @@
 ## Components
 
 - `Nav` from `@grade10/design-system` — Store-route Cart entry.
-- `Toaster` from `@grade10/design-system` — one application toast host.
+- `Toast` from `@grade10/design-system` — one application toast host.
 - `CartDrawer` from `@grade10/ui` — drawer composition and interaction owner.
 - `CartDrawerHeader`, `CartDrawerBody`, `CartDrawerFooter`, `CartItem`, and
   `CartItemSlot` from `@grade10/ui` — existing parts composed by the compound.

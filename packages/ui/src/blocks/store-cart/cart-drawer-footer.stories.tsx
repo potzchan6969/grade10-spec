@@ -1,6 +1,6 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
-import { Toaster } from "@grade10/design-system/components/overlays/sonner";
+import { Toast } from "@grade10/design-system/components/overlays/toast";
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 import { type ReactNode, useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
@@ -315,7 +315,7 @@ export const PromoClearedNotice: Story = {
   },
   render: (args) => (
     <>
-      <Toaster position="bottom-right" />
+      <Toast position="bottom-right" />
       <CartDrawerFooter {...args} />
     </>
   ),
@@ -627,7 +627,7 @@ export const CheckoutRedirecting: Story = {
 export const CheckoutFailed: Story = {
   render: (args) => (
     <>
-      <Toaster position="bottom-right" />
+      <Toast position="bottom-right" />
       <CartDrawerFooter
         {...args}
         onCheckout={async () => {
