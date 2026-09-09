@@ -244,10 +244,10 @@ function SetupSheetBody({
   );
 
   return (
-    <VStack className="w-full" gap="md">
+    <VStack className="min-h-0 w-full flex-1" gap="md">
       <DialogDescription>{copy.linkCardDescription}</DialogDescription>
       {scrollsPaymentField ? (
-        <DialogBody className="max-h-60 flex-none">
+        <DialogBody className="min-h-0 max-h-[28rem] flex-1">
           {paymentFieldSlot}
         </DialogBody>
       ) : (

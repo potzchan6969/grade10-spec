@@ -122,6 +122,18 @@ export const SetupSheet: Story = {
     );
     expect(field).not.toBeNull();
     expect(field).toHaveAttribute("data-state", "empty");
+    const scrollBody = dialog.querySelector<HTMLElement>(
+      '[data-slot="dialog-body"]',
+    );
+    expect(scrollBody).not.toBeNull();
+    expect(scrollBody).toHaveClass("max-h-[28rem]", "flex-1");
+    expect(
+      scrollBody?.querySelector('[data-slot="payment-field"]'),
+    ).not.toBeNull();
+    expect(
+      scrollBody?.querySelector('[data-slot="input-message"]'),
+    ).toBeNull();
+    expect(scrollBody?.querySelector('input[type="checkbox"]')).toBeNull();
     expect(
       within(dialog).getByRole("button", { name: "Link Card" }),
     ).toBeDisabled();
@@ -136,7 +148,7 @@ export const SetupSheetLoadedMockStripe: Story = {
       defaultAgeAttested
       open
       paymentField={
-        <div className="flex h-32 w-full items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-secondary-foreground">
+        <div className="flex h-[28rem] w-full items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-secondary-foreground">
           Stripe card link (iframe)
         </div>
       }
