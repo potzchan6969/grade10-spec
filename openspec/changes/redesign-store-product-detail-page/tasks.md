@@ -22,3 +22,16 @@ Depends on group 2's contract and fixture fields being available.
 - [x] 3.3 Make `grade10-site-store-product-page-SC-17` and existing `grade10-site-store-product-page-SC-07` through `grade10-site-store-product-page-SC-10` pass: add the design-system quantity stepper and pending/added states while preserving chosen-variant and cart-line behavior
 - [x] 3.4 Make `grade10-site-store-product-page-SC-18` and existing `grade10-site-store-product-page-SC-11` through `grade10-site-store-product-page-SC-12` pass: keep prices visible, mark unavailable variants, and disable the sold-out action
 - [x] 3.5 Verify with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and the product serving/hydration tests
+
+## 4. Product facts integration (grade10)
+
+Frontend only. Blocked until the Store contract owner supplies the optional shipping guidance and pickup location required by `grade10-site-store-product-page-SC-15`, or the product owner changes that requirement. No provider, API, database, or contract implementation belongs to this group.
+
+- [ ] 4.1 Carry the agreed optional shipping and pickup facts through the existing product frontend model and decoded repository boundary, with typed fixtures for supplied and absent facts; make `grade10-site-store-product-page-SC-15` pass without parsing arbitrary metadata or inventing a location
+- [ ] 4.2 Render the supplied shipping guidance and pickup location in `ProductPage`, omitting absent facts and using catalog copy for platform labels; make `grade10-site-store-product-page-SC-15` pass while preserving badges and SKU
+- [ ] 4.3 Verify with focused product model, repository, page, serving and hydration tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`
+
+## 5. Description disclosure (grade10)
+
+- [ ] 5.1 Make `grade10-site-store-product-page-SC-16` hold across narrow and wide layouts and supported locales: replace character-count overflow estimation with a disclosure decision based on actual rendered overflow, keeping the first server and client render identical and retaining a usable disclosure while layout is measured
+- [ ] 5.2 Verify short, long, narrow, resized and expanded descriptions with focused page/browser coverage, serving and hydration tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`
