@@ -34,7 +34,7 @@ The application work starts after the change is merged to `grade10-spec` main an
 - [ ] 4.3 Implement the winning-lot, expiry, manual-settlement, reminder, cancellation, and delivery notifications with notification-log idempotency for `order-mail-SC-01`, `order-mail-SC-02`, `order-mail-SC-03`, `order-mail-SC-04`, `order-mail-SC-05`, `order-mail-SC-06`, `order-mail-SC-07`, and `order-mail-SC-08`
 - [ ] 4.4 Verify retry, concurrent-sweep, suspension, auto-bidding, and notification-worker tests, then run `pnpm run test:backend`
 
-## 5. Storefront bridge and account reads (grade10)
+## 5. Storefront bridge and account reads (grade10) (owner: @htonyl)
 
 - [ ] 5.1 Add the authenticated bridge that claims closed winners, reads the platform auth address book through `AuthServiceBinding`, selects the account default, and calls idempotent auction order issue so `winner-order-SC-01`, `winner-order-SC-02`, `winner-order-SC-03`, `winner-order-SC-04`, `winner-order-SC-06`, and `suspension-SC-04` pass without moving address ownership
 - [ ] 5.2 Add account-wide buyer address management and order address selection for multiple saved addresses, one default, edits, archives, and account-scoped access so `winner-order-SC-22`, `winner-order-SC-23`, `winner-order-SC-24`, and `winner-order-SC-25` pass
