@@ -35,7 +35,7 @@ order the catalogue can answer — with a trigger that names that choice.
 - **Grade10 site** — supplies latest as resting sort and `Sort by …` copy
 - **Storybook** — `store-product-listing` fixtures and preview listing page
 - **ZZZ** — unchanged; supplies its own sort options
-- **Scenario ids** — SC-15 modified wording; SC-22 added
+- **Scenario ids** — SC-15 modified wording; SC-29 added
 - **Manual** — Product decisions row “No popularity order / at rest” updates
   when this lands
 

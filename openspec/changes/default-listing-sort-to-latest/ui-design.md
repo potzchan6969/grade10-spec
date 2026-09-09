@@ -23,4 +23,4 @@ no Popularity.
 | State | Spec scenario |
 | --- | --- |
 | Menu without popularity | `grade10-site-store-product-listing-SC-15` |
-| Resting latest selected | `grade10-site-store-product-listing-SC-22` |
+| Resting latest selected | `grade10-site-store-product-listing-SC-29` |
