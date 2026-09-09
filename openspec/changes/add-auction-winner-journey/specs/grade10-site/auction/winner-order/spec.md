@@ -39,7 +39,7 @@ At lot close Grade10 SHALL, for the winner:
 3. Issue one invoice for the final amount, priced from the account's default
    shipping address when one exists.
 4. Notify the winner that they have won and what they owe, per
-   `grade10-site/auction/order-notifications`.
+   `grade10-site/auction/notifications-order`.
 
 The invoice SHALL be payable from the moment it is issued. Grade10 SHALL
 label every component priced from the account's default shipping address as an estimate until the
@@ -97,9 +97,9 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Buyer's premium | The applicable fee. This capability fixes no rate |
 | Shipping | Priced against the address currently on the order |
 | Insurance | Priced against the address currently on the order |
-| Tax | Any tax applicable to the destination. Absent where none applies |
+| Tax | An optional line reserved for the separate tax change; no rate or regime is defined here |
 | Final amount | The total payable — the sum of the components above |
-| Estimated | Whether shipping, insurance and tax are still estimates |
+| Estimated | Whether shipping, insurance, and any tax amount are still estimates |
 | Payment deadline | Stored in UTC, displayed in the winner's own zone |
 | Invoice status | Per `grade10-site/auction/order-status` |
 
@@ -185,9 +185,9 @@ destination until the winner confirms or selects an address.
 | Condition | Behaviour |
 | --- | --- |
 | Account has a default shipping address | Grade10 pre-fills it and prices the estimate from it. The winner still confirms explicitly |
-| Account has no default shipping address | The address is empty and shipping, insurance and tax are still to be calculated. Payment is refused |
+| Account has no default shipping address | The address is empty and shipping, insurance, and any tax amount are still to be calculated. Payment is refused |
 | Account has multiple saved addresses | Grade10 lets the winner choose one, then confirms the selected address for this order |
-| Winner amends the address | Grade10 recalculates shipping, insurance and tax and reissues the invoice at the revised final amount |
+| Winner amends the address | Grade10 recalculates address-based shipping and insurance and reissues the invoice at the revised final amount; tax remains reserved for the separate tax change |
 | Winner adds or edits an address | Grade10 offers to save it to the account address book. The order amendment remains a snapshot |
 
 #### Scenario: winner-order-SC-07 - A pre-filled default still needs confirming
@@ -207,9 +207,11 @@ destination until the winner confirms or selects an address.
 
 ### Requirement: Amending the address recalculates and reissues
 
-On an amendment Grade10 SHALL recalculate shipping, insurance and tax against
-the new address and SHALL reissue the invoice at a revised final amount that
-wholly replaces the prior amount. Grade10 SHALL NOT raise a supplementary
+On an amendment Grade10 SHALL recalculate address-based shipping and
+insurance against the new address and SHALL reissue the invoice at a revised
+final amount that wholly replaces the prior amount. Tax calculation, rates,
+jurisdictions, and exemptions are reserved for a separate tax change; this
+change SHALL NOT infer or apply them. Grade10 SHALL NOT raise a supplementary
 charge for the difference.
 
 Grade10 SHALL show the winner the previous total and the new total before
@@ -335,7 +337,7 @@ the life of their account.
 
 | Record | When | Contents |
 | --- | --- | --- |
-| Payment receipt | Payment confirmed, by either route | Itemised: hammer price, buyer's premium, shipping, insurance, tax, final amount |
+| Payment receipt | Payment confirmed, by either route | Itemised: hammer price, buyer's premium, shipping, insurance, any tax amount, final amount |
 | Shipping tracker | Fulfilment status is `fulfilled` | Carrier name, tracking number, and a link to the carrier |
 | Delivery proof | `delivery_confirmed` is set | Whatever the carrier provided — handover timestamp, signature, proof-of-delivery image |
 
@@ -349,7 +351,8 @@ reference, and a pointer to any invoice it supersedes.
 - **GIVEN** an auction order paid at a final amount of 316000 minor units in HKD
 - **WHEN** the winner opens the order a year later
 - **THEN** the receipt shows the hammer price, buyer's premium, shipping,
-  insurance and tax that compose that amount
+  insurance, any tax amount supplied by the separate tax capability, and the
+  final amount
 
 #### Scenario: winner-order-SC-19 - A manually settled receipt says so
 

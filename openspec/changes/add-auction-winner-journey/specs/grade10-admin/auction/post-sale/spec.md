@@ -145,8 +145,10 @@ require this sequence.
    from the platform address book, from the winner, or is absent.
 3. The operator confirms or updates that address. Confirmation is mandatory
    and SHALL be required even where the address is unchanged.
-4. On an update, Grade10 recalculates shipping, insurance and tax against the
-   new address, producing a revised final amount.
+4. On an update, Grade10 recalculates address-based shipping and insurance
+   against the new address, producing a revised final amount. Tax calculation,
+   rates, jurisdictions, and exemptions remain reserved for a separate tax
+   change.
 5. Grade10 shows the operator the previous total and the new total before
    they commit.
 6. The operator records the settlement method and an external reference.

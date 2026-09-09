@@ -10,7 +10,7 @@ lives.
   - Ten events: one letter per thing that happens to an auction order, from winning it to receiving it
   - Per order, never per winner: a winner of three lots is told about three orders separately
 - Reminder cadence
-  - Three reminders: day 3, day 6 and a final notice on day 7, measured from lot close
+  - Three reminders: day 3, day 6 and a final notice on day 7, measured from the current invoice issue
   - Cancellation on payment: a winner who has paid never hears about a deadline again
 - Delivery discipline
   - Idempotency: a retried webhook or a replayed event sends nothing twice
@@ -26,10 +26,10 @@ collector's registered account email and SHALL follow the letter shape
 
 | Letter | Trigger | Channel |
 | --- | --- | --- |
-| Auction won | The lot closes and the winner is determined | Email and in-app |
-| Payment reminder | Day 3 after lot close, invoice status still `pending` | Email |
-| Payment reminder | Day 6 after lot close, invoice status still `pending` | Email |
-| Final notice | Day 7 after lot close, invoice status still `pending` | Email |
+| Auction won | The lot closes and the winner is determined | Email |
+| Payment reminder | Day 3 after the current invoice is issued while invoice status is `pending` | Email |
+| Payment reminder | Day 6 after the current invoice is issued while invoice status is `pending` | Email |
+| Final notice | Day 7 after the current invoice is issued while invoice status is `pending` | Email |
 | Invoice expired | The payment deadline elapses with the invoice still `pending` | Email |
 | Invoice reissued | An operator reissues an invoice | Email |
 | Payment received | Payment is confirmed, or an operator commits a manual settlement | Email |
@@ -37,11 +37,11 @@ collector's registered account email and SHALL follow the letter shape
 | Delivered | The carrier confirms delivery | Email |
 | Order cancelled | An operator cancels the order | Email |
 
-#### Scenario: order-mail-SC-01 - Winning a lot is announced by email and in-app
+#### Scenario: order-mail-SC-01 - Winning a lot is announced by email
 
 - **WHEN** a lot closes and a winner is determined
 - **THEN** Grade10 sends that winner the auction-won letter by email
-- **AND** shows it in-app
+- **AND** the email identifies the lot and what the winner owes
 
 #### Scenario: order-mail-SC-02 - Expiry is announced with what is owed
 
@@ -58,31 +58,35 @@ collector's registered account email and SHALL follow the letter shape
 - **THEN** Grade10 sends the winner the payment-received letter
 - **AND** it is the same letter a Stripe payment produces
 
-### Requirement: Reminders follow the deadline and stop on payment
+### Requirement: Reminders follow the current invoice deadline
 
-Grade10 SHALL send the day 3, day 6 and day 7 reminders measured from lot
-close, and SHALL send each only while the invoice status is `pending`.
+Grade10 SHALL send the day 3, day 6 and day 7 reminders measured from the
+current invoice's issue time, and SHALL send each only while the invoice status
+is `pending`.
 
 Grade10 SHALL cancel every outstanding reminder the moment payment is
 received. A winner who pays on day 2 SHALL NOT receive the day 3 reminder.
 
-Where an operator reissues an invoice, Grade10 SHALL measure the reminders
-for that order from the reissued invoice's new payment deadline.
+Where an operator reissues an invoice, Grade10 SHALL schedule reminders for
+the reissued invoice's issue time and SHALL not send reminders owed only by the
+superseded invoice.
 
 #### Scenario: order-mail-SC-04 - Paying early cancels the reminders
 
-- **GIVEN** an auction order whose winner pays on day 2 after lot close
+- **GIVEN** an auction order whose winner pays on day 2 after the current
+  invoice was issued
 - **WHEN** day 3 arrives
-- **THEN** Grade10 sends no payment reminder for that order
+- **THEN** Grade10 sends no payment reminder for that invoice
 - **AND** sends none on day 6 or day 7 either
 
-#### Scenario: order-mail-SC-05 - Reminders follow a reissued deadline
+#### Scenario: order-mail-SC-05 - Reminders follow a reissued invoice
 
 - **GIVEN** an expired auction order an operator reissues with a new payment
   deadline
-- **WHEN** the third day after that new deadline's issuance arrives with the
-  invoice still `pending`
-- **THEN** Grade10 sends a payment reminder measured against the new deadline
+- **WHEN** a reminder is due for the reissued invoice while it remains
+  `pending`
+- **THEN** Grade10 sends the reminder for the reissued invoice
+- **AND** sends no reminder owed only by the superseded invoice
 
 ### Requirement: Letters are idempotent and per order
 
@@ -90,10 +94,9 @@ Grade10 SHALL NOT send a letter twice for the same event on the same auction
 order, however many times the triggering event is delivered.
 
 Where a winner holds more than one auction order, Grade10 SHALL send letters
-per order and SHALL name the lot unambiguously in each.
-
-A letter SHALL never be the sole channel of record. Every fact a letter
-carries SHALL be visible on the auction order itself.
+per order and SHALL name the lot unambiguously in each. A letter SHALL never
+be the sole channel of record. Every fact a letter carries SHALL be visible on
+the auction order itself.
 
 #### Scenario: order-mail-SC-06 - A retried webhook sends nothing twice
 
