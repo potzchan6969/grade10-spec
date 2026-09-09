@@ -4,14 +4,6 @@ spec: grade10-site/loyalty/programme
 order: 2
 ---
 
-A tier is the rate a member earns at. It is derived on every read from what
-the member has earned, the period they hold it for, and any live invitation —
-never stored as a decision — so a period that ran out a second ago already
-reads as Silver before any sweep runs. A ladder that is ambiguous stops the
-product at boot rather than at the moment a member is evaluated
-([[grade10-site-loyalty-programme-SC-17]], [[grade10-site-loyalty-programme-SC-18]], [[grade10-site-loyalty-programme-SC-19]], [[grade10-site-loyalty-programme-SC-20]],
-[[grade10-site-loyalty-programme-SC-21]]).
-
 ## Ladder
 
 | Tier | Earns | Reached by | Kept by |
@@ -78,32 +70,6 @@ We have a cron sweep to render the record for analytics purposes.
 | 2028/02/01 | buys $4,000 · 480 at 1.2×, twenty short | +480 | 480 | 480 | |
 | 2028/03/01 | the period ends on 480, short of 500 — **Silver** | | 480 | 0 | Silver |
 | 2028/03/04 | buys $1,000 · 100 at 1× again | +100 | 580 | 100 | |
-
-- **The rate** is $10 a base point, then the tier's own multiplier, and it is
-  read before the order is priced — so the purchase that reaches Gold still
-  earns at 1×, and the first purchase back on Silver earns at 1× again
-- **Progress** is measured over whatever the Period column names: the rolling
-  twelve months while no tier period is running, what the tier period has
-  counted once one is
-- **A rolling twelve months** — in February the balance climbs to 550 while the
-  progress falls to 300, because the opening 250 is older than twelve months by
-  the 14th; by March the member holds 850 points and reaches Gold on the 600
-  still inside the window
-- **Reaching, then keeping** — the 600 that won Gold counts toward nothing
-  afterwards, because a period counts only what is earned after it starts; the
-  same happens on 2027/03/01, so what was earned that September cannot buy a
-  third period
-- **March 2026** — the redemption takes 500 from the balance and nothing from
-  the progress, so it can neither demote the member nor delay the tier
-- **September 2026** — the period extends from its own end, never from that
-  day, so the anniversary is kept
-- **September 2027** — the balance dies of inactivity while the tier lives on:
-  the member holds Gold for five more months with nothing to spend
-- **February 2028** — $4,000 is activity, so the balance lives another year,
-  and 480 is twenty short of 500, so the period is not saved: what keeps the
-  points and what keeps the tier are two different sums
-- **March 2028** — the climb starts again at the period's end, so the 480
-  counts toward nothing and the 100 three days later is the whole of it
 :::
 
 ## Black, by invitation
@@ -130,14 +96,4 @@ We have a cron sweep to render the record for analytics purposes.
 - **The window is open-ended above**, so a backdated earn counts the moment it
   lands, and floored at the demotion date — or at a virtual one for a period
   that has lapsed and not yet been reviewed
-:::
-
-:::detail{title="Nightly sweeps and metrics" for="engineer"}
-- **The nightly cron**, in order and each on its own budget — the expiry sweep,
-  the tier review, the reward-template audit, the lapsed-collection sweep
-- **Metrics** — `loyalty.tier.changed` by tier and cause; per review,
-  `loyalty.tier.review.demoted`, `.retained`, `.failures`, `.skipped` and
-  `.leftover`
-- **Invitations** are granted and revoked behind `loyalty:invite`, and nothing
-  sweeps them
 :::
