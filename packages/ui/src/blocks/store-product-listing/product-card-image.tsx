@@ -76,7 +76,7 @@ function ProductCardImage({
   const quantity = parseCartQuantity(cartCount, inCart);
 
   const photoClassName = cn(
-    "size-full rounded-(--radius-3xl) object-cover mix-blend-multiply",
+    "size-full rounded-(--radius-3xl) object-contain mix-blend-multiply",
     soldOut && "opacity-50",
     !soldOut &&
       "transition-transform duration-200 ease-[ease] motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:group-hover/product-card-image:scale-105",
