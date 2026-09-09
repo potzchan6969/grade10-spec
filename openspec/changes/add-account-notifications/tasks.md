@@ -25,7 +25,7 @@ Needs group 2 for the kind names the columns serve.
 - [x] 3.1 Add nullable `opens_in_24h_notified_at`, `opened_notified_at`, `closes_in_24h_notified_at`, `extended_notified_at`, and `new_bid_told_bid_id` on watches, plus `closes_in_24h_notified_at`, `extended_notified_at`, and `new_bid_told_bid_id` on bids for the participant fallback; add `email_alerts` (default true) on watches and the bid-only mute path; add account auction email alerts master storage; create `auction.mail_sends` per `tech-design.md`; generate and commit the Drizzle migration.
 - [x] 3.2 Run `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`.
 
-## 4. Enrolment, fanout, and coalescing (grade10)
+## 4. Enrolment, fanout, and coalescing (grade10) (owner: @mason5991)
 
 Needs groups 1–3.
 
