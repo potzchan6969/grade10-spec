@@ -15,7 +15,7 @@
 - [ ] 2.5 Update `placeBid` and the listing/enrollment transaction so the first accepted bid means the accepted maximum creates its pending bid and atomically locks the editable enrollment before commit; reject replacement after that lock, preserve the existing asynchronous hold confirmation, and reuse the locked method for later maximums
 - [ ] 2.6 Verify: apply migrations to a clean database, then run `pnpm --filter @grade10/auction-backend run test`, `pnpm --filter @grade10/auction-backend run typecheck`, `pnpm --filter @grade10/auction-contracts run test`, `pnpm --filter @grade10/auction-contracts run typecheck`, and migration/schema checks for the affected database package
 
-## 3. Enrollment state and frontend contracts (grade10)
+## 3. Enrollment state and frontend contracts (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Make `grade10-site-auction-bid-panel-enrollment-SC-01` through `SC-11` pass by implementing the explicit consumer state machine: `signed-out`, `setup-first`, `setup-in-progress`, `setup-editable`, `authorization-in-progress`, `authorization-failed`, `authorization-editable`, and `enrolled`
 - [ ] 3.2 Add the authenticated enrollment read to the listing composition and keep it separate from the public listing response; hydrate/refetch after enrollment upsert, replacement, and bid outcomes, and pass only safe masked-card data, attestation status, editability, and callbacks to `@grade10/ui`
