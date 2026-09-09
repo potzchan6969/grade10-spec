@@ -65,7 +65,7 @@ const meta = {
         searchLabel: "Search products",
       },
       listHeader: {
-        sortTrigger: "Sort by popularity",
+        sortTrigger: "Sort by latest product",
         clearFilters: "Clear filters",
       },
       results: { label: "Products", ...LISTING_COPY },
@@ -79,7 +79,7 @@ const meta = {
     results: { status: "ready", data: PRODUCTS },
     resultCount: "100 Products",
     sortOptions: SORT_OPTIONS,
-    sortValue: "popular",
+    sortValue: "new",
     appliedFilters: [],
     onSortChange: fn(),
     onClearFilters: fn(),

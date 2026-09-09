@@ -60,7 +60,7 @@ function ProductListPage() {
   const [selection, setSelection] =
     useState<FilterSelection>(INITIAL_SELECTION);
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("popular");
+  const [sort, setSort] = useState("new");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [loadingMore, setLoadingMore] = useState(false);
   const [cart, setCart] = useState<Record<string, number>>({ "1": 3 });
