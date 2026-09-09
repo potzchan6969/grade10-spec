@@ -3,11 +3,14 @@ title: Discounts
 order: 20
 ---
 
-A discount is money off the bill. Four kinds reach a collector, and every one
+A discount is money off the bill. Five kinds reach a collector, and every one
 lands on the order through the same Shopify draft order.
 
 - **Sale price** — set on the product in Shopify; the listing, the card, and
   the cart show the price and, struck through, the price it was
+- **Site discounts** — admin-scheduled, auto-applied storewide with no code:
+  a product special sale, a buy-X-get-Y offer, or a spend threshold off the
+  whole order — see [Site discounts](#site-discounts) below
 - **Discount code** — typed in the cart drawer; the total shows the cut, and a
   code the shop refuses stops the checkout with the code named
 - **Rewards** — earned with points, on a birthday, or on registering
@@ -116,6 +119,33 @@ A physical reward is handed over through the same session: the pending redemptio
 
 Per shop, flipped from the admin console, enforced on the next request: terminal, email spend, phone identify, phone spend, cart identify, cart spend. QR and short code carry no switch of their own, so stopping the counter means the terminal switch.
 
+## Site discounts
+
+Admin-scheduled, storewide, and applied automatically — no code, and no
+dependency on Shopify's own Discounts feature. A draft order never evaluates
+Shopify's automatic discounts, so a merchandiser's "50% off" set up there
+stays inert on every real sale; these three types exist in grade10's own
+discount engine instead.
+
+- **Product special sale** — a scheduled cut off chosen products. Unlike an
+  ad hoc Sale price edit, it blocks every other site discount and coupon on
+  that line; a member's points always redeem regardless
+  ([[grade10-site/store/site-discounts#grade10-site-store-site-discounts-SC-01]],
+  [[grade10-site/store/site-discounts#grade10-site-store-site-discounts-SC-02]])
+- **Buy X get Y** — a reward product discounted or free after a trigger
+  purchase; combines with everything, no exclusivity
+  ([[grade10-site/store/site-discounts#grade10-site-store-site-discounts-SC-03]])
+- **Order threshold** — a tier ladder of spend levels and percentages inside
+  one active promotion; a basket gets its highest cleared tier, combines
+  with points and coupons, and both its base and its cut skip a product
+  special sale's line
+  ([[grade10-site/store/site-discounts#grade10-site-store-site-discounts-SC-04]],
+  [[grade10-site/store/site-discounts#grade10-site-store-site-discounts-SC-05]],
+  [[grade10-site/store/site-discounts#grade10-site-store-site-discounts-SC-06]])
+
+Applies on both the online checkout and the POS till
+([[grade10-site/store/site-discounts#grade10-site-store-site-discounts-SC-07]]).
+
 ## Designs
 
 ::story{id="store-cart-cartdrawerfooter--interactive-member" title="A code typed in the cart"}
@@ -128,4 +158,30 @@ Per shop, flipped from the admin console, enforced on the next request: terminal
 - **Where** — `packages/grade10-store/backend/src/services/coupons`,
   `services/pointsTender.ts`, `adapters/shopify/shopifyProvider.ts`,
   `services/shipping/rates.ts`, `worker/routes/carrier.ts`
+:::
+
+:::detail{title="Product decisions" for="pm"}
+Shopify's automatic discounts never reach a real sale: every online checkout
+and every POS sale rides a draft order this store's backend creates, and a
+draft order never evaluates Shopify's automatic discounts — only a staff
+member editing one by hand in Shopify Admin does. A merchandiser who
+configures one believes it is live storewide; it silently does nothing for
+every collector who actually buys.
+
+Non-goals: bridging Shopify's automatic discounts into the draft-order flow
+— it would mean re-implementing Shopify's own eligibility and
+combines-with rules for no payoff, since a merchant-applied draft discount
+sits outside that framework anyway and still couldn't block points or
+coupons from also landing on the same line; and reusing ad hoc Sale price
+editing for the product special sale type, since that carries no schedule
+and no exclusivity rule today.
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Mechanism | Decided | Three site discount types live in grade10's own discount engine, never Shopify's Discounts feature. | Product |
+| Product special sale vs. Sale price | Decided | Kept separate — Sale price stays the ad hoc, unscheduled tool; Product special sale is the scheduled, exclusive one. | Product |
+| Points on an exclusive line | Decided | Points always redeem, even on a product special sale — points is a payment method, not a merchandising discount. | Product |
+| Admin authoring UI | ❓ Open | Not yet designed. | Design |
+| Order threshold cut allocation | ❓ Open | How the per-line split avoids Shopify spreading the cut back onto an excluded product. | Engineering |
+| Two types on one product | ❓ Open | What happens when a product is configured into more than one site discount type at once. | Engineering |
 :::
