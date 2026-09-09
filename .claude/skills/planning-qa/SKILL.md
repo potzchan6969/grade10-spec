@@ -9,8 +9,13 @@ One of the seven artifacts in `grade10-planning` is yours:
 
 | Artifact | What it holds |
 | --- | --- |
+| `platform-tcs.md` | The paths a person walks across products |
+| `specs/<product>/product-tcs.md` | The paths a person walks across that product's domains |
 | `specs/<product>/<domain>/domain-tcs.md` | The paths a person walks across that domain's capabilities |
 | `specs/<capability>/feature-tcs.md` | The classified suite the journeys and scenarios imply |
+
+The upper three are written only where a path exists to hold them, and carry
+no coverage obligation: `product` and `platform` are smoke passes.
 
 Optional, and derived: a capability with no `user-journeys.md` has nothing to
 derive, and a suite is never a second source of truth. Where a suite and its
