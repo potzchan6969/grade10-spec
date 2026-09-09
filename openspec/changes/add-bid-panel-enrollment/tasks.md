@@ -6,7 +6,7 @@
 - [ ] 1.4 Carry each delta's `## Feature set`, the `grade10-site/auction/bid-panel-enrollment/user-journeys.md`, and the reviewed `test-cases.md` into their durable capability locations when the change archives so the feature map, journey ids, and QA evidence survive the fold
 - [ ] 1.5 Verify: `openspec validate add-bid-panel-enrollment --strict`, `pnpm run check:manual`, `pnpm run tcs:validate`, and `pnpm run test:stories:ui`
 
-## 2. Durable enrollment, backend procedures, and contracts (grade10)
+## 2. Durable enrollment, backend procedures, and contracts (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Add the editable/locked lifecycle, safe masked-card projection, lock metadata, and unique storefront/user/listing key to `bidder_listing_payment_methods`; test data may be pruned while the app is not launched, and the migration must apply cleanly to a new database
 - [ ] 2.2 Add nullable `age_attested_at` to the authenticated bidder/account record with one read/write contract; set it on the first successful enrollment with a checked attestation, use it to pre-check later setup, and do not duplicate attestation as a public listing field or competing per-listing source of truth
