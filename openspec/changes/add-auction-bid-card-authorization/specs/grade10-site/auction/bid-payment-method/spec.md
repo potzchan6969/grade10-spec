@@ -71,8 +71,11 @@ receive or persist card number, expiry, CVC, or a provider secret.
 
 A linked method on file SHALL carry over to another listing by default. Grade10
 SHALL NOT require a new method selection on a first bid solely because the
-listing is different. The method committed for a collector and listing after
-the first accepted bid SHALL remain that listing's method for raises.
+listing is different. The linked method's Change action SHALL remain enabled
+until the first bid on that listing is accepted. After that first accepted bid,
+the method SHALL be locked for the listing, and Grade10 SHALL hide or disable
+Change for subsequent raises. The method committed for a collector and listing
+after the first accepted bid SHALL remain that listing's method for raises.
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-01 - Commit without a linked method is refused
 
