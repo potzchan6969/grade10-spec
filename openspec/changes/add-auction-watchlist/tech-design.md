@@ -21,15 +21,15 @@
 - `ListingLotHeader` already ships watch and unwatch. This
   change fills those props; it does not add an export. The export name
   keeps "Lot" because that block shows the listing's label.
-- Screens and Figma sources belong in [ui-design.md](ui-design.md).
+- Screens and Storybook sources belong in [ui-design.md](ui-design.md).
 
 ## Goals / Non-Goals
 
 **Goals:**
 
 - Keep one watch row per collector per listing, keyed like `bidders`.
-- Stop coupling watching to bidding so unwatch can end watcher mail
-  without ending bidder mail.
+- Stop coupling watching to bidding so unwatch can remove list membership
+  (and clear that row's alerts) without ending bidder mail.
 - Serve the watched list from `watches` joined to listing facts at read
   time, keyset-paged, newest first.
 - Keep watch writes out of the money lock except where they already
@@ -41,7 +41,9 @@
 - A second watch table per brand.
 - Browser-local watches or sign-in migration of a local heart.
 - Sorting, filtering, or searching beyond recency.
-- Sending mail. `add-auction-notifications` reads these rows.
+- Sending mail or mute fanout rules. `add-auction-notifications` owns
+  `email_alerts` semantics and account master; this change sets alerts
+  on at watch and deletes the row (alerts with it) on unwatch.
 - A shared `@grade10/ui` catalogue-tile control.
 
 ## Decisions
@@ -69,9 +71,10 @@
 
 ### `placeBid` / `placeCommitment` stop writing `watches`
 
-- Bid-activity mail stays on `bids`. Watcher mail stays on `watches`.
-  That is what makes unwatch end watcher enrolment without ending
-  bidder enrolment (`add-auction-notifications`).
+- List membership stays on `watches`. Bid standing stays on `bids`.
+  Unwatch deletes the watch row (alerts go with it) and does not touch
+  the bid; mute without unwatch is `email_alerts = false` owned by
+  `add-auction-notifications`.
 - Existing rows written by an earlier bid remain; new bids do not
   create one.
 - Alternatives rejected:
@@ -80,6 +83,8 @@
   - Convert a bid into a watch at read time — unwatch could not delete
     a row that does not exist, and the watched list would include every
     bidder whether they meant to follow the listing.
+  - Delete the watch row to mute mail — that removes Watching; mute is
+    a preference flag, not unwatch.
 
 ### Current bid, close, and sale state are not stored on the watch
 
@@ -101,11 +106,12 @@
 
 ### Storage rules
 
-- Schema `auction`. Table `watches` already exists. No new table. No
-  new column from this change.
-- Notify-ladder columns already on this row stay. They belong to
-  `add-auction-notifications` and to the shipped one-hour ending-soon
-  reminder; this change does not rename or duplicate them.
+- Schema `auction`. Table `watches` already exists. No new table from
+  this change.
+- `email_alerts` and notify-ladder stamps on this row belong to
+  `add-auction-notifications`. This change inserts with alerts on
+  (column default `true`) and deletes the whole row on unwatch; it
+  does not implement mute.
 
 ### Existing `auction.watches`
 
@@ -210,7 +216,10 @@ type WatchWriteInput = {
 };
 
 type WatchWriteOutput =
-  | { success: true; data: { watching: boolean } }
+  | {
+      success: true;
+      data: { watching: boolean; emailAlerts?: boolean };
+    }
   | {
       success: false;
       error: string;
@@ -261,15 +270,17 @@ Mutation steps:
 2. Upsert `bidders` for `(storefront, user_id)` with the email
    snapshot when no row exists. Refuse `BANNED` / `BIDDER_DELETED`.
 3. `INSERT … ON CONFLICT (storefront, user_id, listing_id) DO NOTHING`.
-4. Return `{ watching: true }`. A conflict is success with the original
-   `created_at`.
+4. Return `{ watching: true, emailAlerts: true }` on insert. A conflict
+   is success with the original `created_at` and the row's current
+   `email_alerts`.
 
 The processor never:
 
 - takes the listing money lock;
 - writes `bids` or `payment_holds`;
 - changes `created_at` on conflict;
-- sends mail.
+- sends mail;
+- mutes without deleting — mute is `add-auction-notifications`.
 
 ### `unwatchListing`
 
@@ -277,12 +288,13 @@ The processor never:
 function unwatchListing(
   db: AuctionDb,
   input: { bidder: BidderRef; listingId: string },
-): Promise<{ success: true; data: { watching: false } }>;
+): Promise<{ success: true; data: { watching: false; emailAlerts: false } }>;
 ```
 
-Delete the PK if present. Return `{ watching: false }` whether a row
-was deleted or not. Closed and called-off listings unwatch the same
-way.
+Delete the PK if present. Return `{ watching: false, emailAlerts: false }`
+whether a row was deleted or not. Closed and called-off listings unwatch
+the same way. Deleting the row clears alerts; do not leave a muted
+orphan watch.
 
 ### `listMyWatches`
 
@@ -361,10 +373,10 @@ storefronts). Additive admin read.
   saves nothing]** → Persistence, the list, and the control land in
   this one change.
 - **[Stopping auto-watch on bid drops bidders from ending-soon mail]**
-  → Watcher mail is `watches`; bidder mail is `bids`
-  (`add-auction-notifications`). The shipped one-hour ending-soon list
-  stays watch-row only; bidders who never watched stop receiving it,
-  which is the unwatch semantics the spec requires.
+  → Progress mail with alerts on reads `watches`; bidder mail reads
+  `bids` (`add-auction-notifications`). The shipped one-hour ending-soon
+  list stays watch-row only; bidders who never watched stop receiving it.
+  Mute without unwatch is the alerts flag, not watch delete.
 - **[An unbounded watched list grows slow to read]** → The new index;
   the list is already keyset-paged.
 - **[Watch writes race a deletion sweep]** → The bidder FK and

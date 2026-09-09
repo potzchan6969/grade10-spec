@@ -13,7 +13,7 @@
 
 Claimable against the contracts and fixtures from group 1; it does not need a running backend.
 
-- [ ] 2.1 Produce the bid-panel and catalogue-tile Figma frames named in `ui-design.md` and link them there.
+- [ ] 2.1 Preview listing-header and catalogue-tile watch controls in Storybook or the application surfaces named in `ui-design.md` (no Figma).
 - [x] 2.2 Fill `ListingLotHeader`'s existing `watched` and `onWatchToggle` props on the listing page, making `grade10-site-auction-watchlist-SC-01` and `grade10-site-auction-watchlist-SC-02` pass there.
 - [x] 2.3 Add a watch control to the catalogue tile, so watching is available wherever a listing is shown.
 - [x] 2.4 Make `grade10-site-auction-watchlist-SC-04` pass on both surfaces, offering sign-in rather than hiding the control.
@@ -24,7 +24,7 @@ Claimable against the contracts and fixtures from group 1; it does not need a ru
 
 Claimable against the contracts and fixtures from group 1.
 
-- [ ] 3.1 Produce the watched-listings Figma frame named in `ui-design.md` and link it there.
+- [x] 3.1 Extend `@grade10/ui` `AuctionRecordRow` / `WatchingList` for list unwatch, per-row email alerts, bid-on mark, current bid / close slots, and unavailable rows; cover watching + alerts on/muted, master-off, and unwatch side-effect states in Storybook and link them in `ui-design.md`.
 - [x] 3.2 Make `grade10-site-auction-watchlist-SC-11`, `grade10-site-auction-watchlist-SC-15`, and `grade10-site-auction-watchlist-SC-13` pass, rendering the close with its time zone.
 - [x] 3.3 Make `grade10-site-auction-watchlist-SC-12` pass as an explained empty state, not an error.
 - [x] 3.4 Make `grade10-site-auction-watchlist-SC-16`, `grade10-site-auction-watchlist-SC-17`, and `grade10-site-auction-watchlist-SC-14` pass.
