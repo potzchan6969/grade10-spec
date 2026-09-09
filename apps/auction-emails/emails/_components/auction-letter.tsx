@@ -1,5 +1,5 @@
 import { Heading, Text } from "react-email";
-import { grade10EmailTheme } from "@/components/email/theme-grade10";
+
 import { AuctionEmailShell } from "@/emails/_components/auction-email-shell";
 import { EmailFooter } from "@/emails/_components/email-footer";
 import { LotBlock } from "@/emails/_components/lot-block";
@@ -18,7 +18,7 @@ export type AuctionLetterProps = {
     label: string;
     value: string;
   };
-  /** Companion amount (outbid standing bid). Same style, to the right of highlight. */
+  /** Companion amount (outbid standing bid). Same size, to the right of highlight. */
   secondary?: {
     label: string;
     value: string;
@@ -29,8 +29,6 @@ export type AuctionLetterProps = {
   unwatchUrl?: string;
   ctaLabel?: string;
 };
-
-const theme = grade10EmailTheme;
 
 export function AuctionLetter({
   brandName = "Grade10",
@@ -50,28 +48,10 @@ export function AuctionLetter({
 }: AuctionLetterProps) {
   return (
     <AuctionEmailShell preheader={preheader}>
-      <Heading
-        as="h1"
-        style={{
-          color: theme.colorText,
-          fontSize: theme.fontSizeHeading,
-          fontWeight: theme.fontWeightBold,
-          lineHeight: "1.3",
-          margin: "0 0 16px",
-        }}
-      >
+      <Heading as="h1" className="mb-4 mt-0 text-heading font-bold text-fg">
         {heading}
       </Heading>
-      <Text
-        style={{
-          color: theme.colorTextMuted,
-          fontSize: theme.fontSizeLg,
-          lineHeight: theme.lineHeightBase,
-          margin: "0 0 8px",
-        }}
-      >
-        {body}
-      </Text>
+      <Text className="mb-2 mt-0 text-lg leading-base text-fg-2">{body}</Text>
       <LotBlock
         facts={facts}
         highlight={highlight}

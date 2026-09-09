@@ -2,9 +2,10 @@
 
 The collector-facing surface of this change is six email messages. Operators
 also get a send log. Nothing renders in the site shell, and no `@grade10/ui`
-or design-system export changes. Letter markup is built with emailcn on React
-Email in [`apps/auction-emails`](../../../../apps/auction-emails/); preview
-with `pnpm email:dev`. Shared pieces and send details are in `tech-design.md`.
+or design-system export changes. Letter markup is built with emailcn (shadcn
+registry `@emailcn`) on React Email in
+[`apps/auction-emails`](../../../../apps/auction-emails/); preview with
+`pnpm email:dev`. Shared pieces and send details are in `tech-design.md`.
 
 ## Screens
 

@@ -1,19 +1,19 @@
 import { Button, Section } from "react-email";
 
-import { grade10EmailTheme } from "@/components/email/theme-grade10";
+import { grade10Theme } from "@/components/email/theme-grade10";
 
 export type PrimaryCtaProps = {
   href: string;
   label?: string;
 };
 
-const theme = grade10EmailTheme;
+const { primary } = grade10Theme.button;
 
 export function PrimaryCta({ href, label = "View lot" }: PrimaryCtaProps) {
-  const { primary } = theme.button;
   return (
-    <Section style={{ margin: "8px 0 24px", textAlign: "left" }}>
+    <Section className="mb-6 mt-2 text-left">
       <Button
+        className="inline-block rounded-full bg-brand px-6 py-3 text-sm font-medium text-brand-fg no-underline"
         href={href}
         style={{
           backgroundColor: primary.backgroundColor,

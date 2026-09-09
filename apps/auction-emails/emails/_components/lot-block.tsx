@@ -1,7 +1,5 @@
 import { Column, Img, Link, Row, Section, Text } from "react-email";
 
-import { grade10EmailTheme } from "@/components/email/theme-grade10";
-
 export type LotBlockProps = {
   lotTitle: string;
   listingUrl: string;
@@ -11,7 +9,7 @@ export type LotBlockProps = {
     label: string;
     value: string;
   };
-  /** Companion amount (e.g. outbid “Your bid”), same style, to the right. */
+  /** Companion amount (e.g. outbid “Your bid”), same size, to the right. */
   secondary?: {
     label: string;
     value: string;
@@ -19,39 +17,26 @@ export type LotBlockProps = {
   facts: string[];
 };
 
-const theme = grade10EmailTheme;
-
 /** Caps portrait height so the CTA stays near the fold. */
 const IMAGE_MAX_HEIGHT = 240;
-
-const labelStyle = {
-  color: theme.colorTextSubtle,
-  fontSize: theme.fontSizeSm,
-  lineHeight: theme.lineHeightBase,
-  margin: "0 0 2px",
-} as const;
-
-const valueStyle = {
-  color: theme.colorText,
-  fontSize: theme.fontSizeXl,
-  fontWeight: theme.fontWeightBold,
-  lineHeight: "1.3",
-  margin: "0 0 12px",
-} as const;
 
 function AmountColumn({
   label,
   value,
-  valueColor = theme.colorText,
+  valueClassName = "text-fg",
 }: {
   label: string;
   value: string;
-  valueColor?: string;
+  valueClassName?: string;
 }) {
   return (
     <>
-      <Text style={labelStyle}>{label}</Text>
-      <Text style={{ ...valueStyle, color: valueColor }}>{value}</Text>
+      <Text className="mb-0.5 mt-0 text-sm text-fg-3">{label}</Text>
+      <Text
+        className={`mb-3 mt-0 text-xl font-bold leading-tight ${valueClassName}`}
+      >
+        {value}
+      </Text>
     </>
   );
 }
@@ -65,7 +50,7 @@ export function LotBlock({
   facts,
 }: LotBlockProps) {
   return (
-    <Section style={{ margin: "24px 0" }}>
+    <Section className="my-6">
       {primaryImageUrl ? (
         <Link href={listingUrl}>
           <Img
@@ -85,32 +70,21 @@ export function LotBlock({
           />
         </Link>
       ) : null}
-      <Text
-        style={{
-          color: theme.colorText,
-          fontSize: theme.fontSizeLg,
-          fontWeight: theme.fontWeightBold,
-          lineHeight: theme.lineHeightBase,
-          margin: "0 0 12px",
-        }}
-      >
-        <Link
-          href={listingUrl}
-          style={{ color: theme.colorText, textDecoration: "none" }}
-        >
+      <Text className="mb-3 mt-0 text-lg font-bold text-fg">
+        <Link className="text-fg no-underline" href={listingUrl}>
           {lotTitle}
         </Link>
       </Text>
       {highlight && secondary ? (
         <Row>
-          <Column style={{ paddingRight: "16px", verticalAlign: "top", width: "50%" }}>
+          <Column className="w-1/2 align-top pr-4">
             <AmountColumn label={highlight.label} value={highlight.value} />
           </Column>
-          <Column style={{ verticalAlign: "top", width: "50%" }}>
+          <Column className="w-1/2 align-top">
             <AmountColumn
               label={secondary.label}
               value={secondary.value}
-              valueColor={theme.colorDanger}
+              valueClassName="text-danger"
             />
           </Column>
         </Row>
@@ -118,15 +92,7 @@ export function LotBlock({
         <AmountColumn label={highlight.label} value={highlight.value} />
       ) : null}
       {facts.map((fact) => (
-        <Text
-          key={fact}
-          style={{
-            color: theme.colorTextMuted,
-            fontSize: theme.fontSizeBase,
-            lineHeight: theme.lineHeightBase,
-            margin: "0 0 4px",
-          }}
-        >
+        <Text key={fact} className="mb-1 mt-0 text-base text-fg-2">
           {fact}
         </Text>
       ))}

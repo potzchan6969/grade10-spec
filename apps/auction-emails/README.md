@@ -1,24 +1,39 @@
 # Auction email templates
 
-React Email templates for `grade10-site/auction/notifications`, composed with
-the [emailcn](https://www.emailcn.run/) theme shape and Grade10 token values.
+React Email letters for `grade10-site/auction/notifications`, built with
+[emailcn](https://www.emailcn.run/) on the shadcn registry.
+
+## Setup
+
+`components.json` registers `@emailcn`. Add or refresh registry items:
+
+```bash
+pnpm --dir apps/auction-emails dlx shadcn@latest add @emailcn/react-email/<item> --overwrite
+```
+
+Installed so far: `theme-default`, `default-fonts`, `button`, `header-with-logo`,
+`divider`, `call-to-action`, `container`, `content`, `block-notification-default`.
+
+Auction kinds compose Grade10’s `grade10Theme` through emailcn’s
+`createEmailTailwindConfig` (see `emails/_components/auction-email-shell.tsx`).
 
 ## Preview
 
 ```bash
-pnpm --dir apps/auction-emails dev
+pnpm email:dev
 ```
 
-Opens React Email’s preview at http://localhost:3333. Shared pieces live under
-`emails/_components/` (hidden from the sidebar). Copy matches
+http://localhost:3333 — shared pieces under `emails/_components/` (hidden from
+the sidebar). Copy matches
 `openspec/changes/add-auction-notifications/ui-design.md`.
 
 ## Structure
 
 ```
-components/email/     emailcn EmailTheme + Grade10 theme values
+components.json
+components/email/     emailcn registry output + theme-grade10.ts
 emails/
-  _components/        shell, lot block, CTA, footer, stop watching
+  _components/        Grade10 auction letter composition
   *.tsx               one default-export letter per kind
 ```
 
